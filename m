@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AFAEAC47074
-	for <buildroot@archiver.kernel.org>; Tue,  2 Jan 2024 22:39:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67417C46CD2
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jan 2024 22:40:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5AD1360F3B;
-	Tue,  2 Jan 2024 22:39:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5AD1360F3B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2255160EF8;
+	Tue,  2 Jan 2024 22:40:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2255160EF8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7NqHVtDCpENH; Tue,  2 Jan 2024 22:39:57 +0000 (UTC)
+	with ESMTP id xirGiicjnpGb; Tue,  2 Jan 2024 22:40:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 96B3260EF8;
-	Tue,  2 Jan 2024 22:39:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 96B3260EF8
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D65981BF2FB
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3362660FB6;
+	Tue,  2 Jan 2024 22:40:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3362660FB6
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E3C571BF977
  for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 22:39:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B8E4060F3B
+ by smtp1.osuosl.org (Postfix) with ESMTP id BA989815CA
  for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 22:39:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B8E4060F3B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BA989815CA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7uQ66hZAENqX for <buildroot@lists.busybox.net>;
- Tue,  2 Jan 2024 22:39:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id T0UhzZCj0id9 for <buildroot@lists.busybox.net>;
+ Tue,  2 Jan 2024 22:39:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E3DE960DFD
+ by smtp1.osuosl.org (Postfix) with ESMTP id CB2F6813E0
  for <buildroot@buildroot.org>; Tue,  2 Jan 2024 22:39:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3DE960DFD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB2F6813E0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D235783E6F; Tue,  2 Jan 2024 22:39:39 +0000 (UTC)
+ id AC66283E5B; Tue,  2 Jan 2024 22:39:39 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 2 Jan 2024 23:35:38 +0100
+Date: Tue, 2 Jan 2024 23:34:41 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9ffb74fd91bd301f1ec0cc0fbd30da9bbd0f1eac
-X-Git-Newrev: d37766a886a8dc3d49d45e14955411700a5efd26
+X-Git-Oldrev: ea45b95c0e54866134c63e88e60489a012b3d134
+X-Git-Newrev: 3217fedcb8c8006809c1a3d214c97597677a07fd
 X-Patchwork-Hint: ignore
-Message-Id: <20240102223939.D235783E6F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-googleapis-common-protos:
- new package
+Message-Id: <20240102223939.AC66283E5B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-grpcio-reflection: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,72 +64,73 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d37766a886a8dc3d49d45e14955411700a5efd26
+commit: https://git.buildroot.net/buildroot/commit/?id=3217fedcb8c8006809c1a3d214c97597677a07fd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
  package/Config.in                                          |  1 +
- package/python-googleapis-common-protos/Config.in          |  7 +++++++
- .../python-googleapis-common-protos.hash                   |  5 +++++
- .../python-googleapis-common-protos.mk                     | 14 ++++++++++++++
- 4 files changed, 27 insertions(+)
+ package/python-grpcio-reflection/Config.in                 |  8 ++++++++
+ .../python-grpcio-reflection/python-grpcio-reflection.hash |  5 +++++
+ .../python-grpcio-reflection/python-grpcio-reflection.mk   | 14 ++++++++++++++
+ 4 files changed, 28 insertions(+)
 
 diff --git a/package/Config.in b/package/Config.in
-index 422e8a8b40..dd59baad06 100644
+index 69516c8705..d538083b76 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1105,6 +1105,7 @@ menu "External python modules"
- 	source "package/python-gnupg/Config.in"
- 	source "package/python-gobject/Config.in"
- 	source "package/python-google-auth/Config.in"
-+	source "package/python-googleapis-common-protos/Config.in"
+@@ -1106,6 +1106,7 @@ menu "External python modules"
  	source "package/python-gpiozero/Config.in"
  	source "package/python-greenlet/Config.in"
  	source "package/python-grpcio/Config.in"
-diff --git a/package/python-googleapis-common-protos/Config.in b/package/python-googleapis-common-protos/Config.in
++	source "package/python-grpcio-reflection/Config.in"
+ 	source "package/python-gunicorn/Config.in"
+ 	source "package/python-h11/Config.in"
+ 	source "package/python-h2/Config.in"
+diff --git a/package/python-grpcio-reflection/Config.in b/package/python-grpcio-reflection/Config.in
 new file mode 100644
-index 0000000000..8f487f5ee6
+index 0000000000..d2ee039c5f
 --- /dev/null
-+++ b/package/python-googleapis-common-protos/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_GOOGLEAPIS_COMMON_PROTOS
-+	bool "python-googleapis-common-protos"
++++ b/package/python-grpcio-reflection/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_GRPCIO_REFLECTION
++	bool "python-grpcio-reflection"
++	select BR2_PACKAGE_PYTHON_GRPCIO # runtime
 +	select BR2_PACKAGE_PYTHON_PROTOBUF # runtime
 +	help
-+	  Common protobufs used in Google APIs.
++	  Standard Protobuf Reflection Service for gRPC.
 +
-+	  https://github.com/googleapis/python-api-common-protos
-diff --git a/package/python-googleapis-common-protos/python-googleapis-common-protos.hash b/package/python-googleapis-common-protos/python-googleapis-common-protos.hash
++	  https://grpc.io
+diff --git a/package/python-grpcio-reflection/python-grpcio-reflection.hash b/package/python-grpcio-reflection/python-grpcio-reflection.hash
 new file mode 100644
-index 0000000000..1169e945e9
+index 0000000000..d17087d4bb
 --- /dev/null
-+++ b/package/python-googleapis-common-protos/python-googleapis-common-protos.hash
++++ b/package/python-grpcio-reflection/python-grpcio-reflection.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/googleapis-common-protos/json
-+md5  148bfe9b5a92663c5ff0a6700453ebad  googleapis-common-protos-1.62.0.tar.gz
-+sha256  83f0ece9f94e5672cced82f592d2a5edf527a96ed1794f0bab36d5735c996277  googleapis-common-protos-1.62.0.tar.gz
++# md5, sha256 from https://pypi.org/pypi/grpcio-reflection/json
++md5  f93b042f8092cf1818f249518668a78a  grpcio-reflection-1.60.0.tar.gz
++sha256  3f6c0c73ba8f20d1420c5e72fc4dd0389fac346ed8fb32a28e6e1967b44fff35  grpcio-reflection-1.60.0.tar.gz
 +# Locally computed sha256 checksums
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/python-googleapis-common-protos/python-googleapis-common-protos.mk b/package/python-googleapis-common-protos/python-googleapis-common-protos.mk
++sha256  590198e3f305f2c347fde64d637c65492bbef554db6c8364e149cd375e3797ee  LICENSE
+diff --git a/package/python-grpcio-reflection/python-grpcio-reflection.mk b/package/python-grpcio-reflection/python-grpcio-reflection.mk
 new file mode 100644
-index 0000000000..ca943a1cd3
+index 0000000000..b3d2fdffa8
 --- /dev/null
-+++ b/package/python-googleapis-common-protos/python-googleapis-common-protos.mk
++++ b/package/python-grpcio-reflection/python-grpcio-reflection.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-googleapis-common-protos
++# python-grpcio-reflection
 +#
 +################################################################################
 +
-+PYTHON_GOOGLEAPIS_COMMON_PROTOS_VERSION = 1.62.0
-+PYTHON_GOOGLEAPIS_COMMON_PROTOS_SOURCE = googleapis-common-protos-$(PYTHON_GOOGLEAPIS_COMMON_PROTOS_VERSION).tar.gz
-+PYTHON_GOOGLEAPIS_COMMON_PROTOS_SITE = https://files.pythonhosted.org/packages/4a/5f/eb12d721b45d20a977289d674e179995a0ddab1684d2c61b29a63d43a5f1
-+PYTHON_GOOGLEAPIS_COMMON_PROTOS_SETUP_TYPE = setuptools
-+PYTHON_GOOGLEAPIS_COMMON_PROTOS_LICENSE = Apache-2.0
-+PYTHON_GOOGLEAPIS_COMMON_PROTOS_LICENSE_FILES = LICENSE
++PYTHON_GRPCIO_REFLECTION_VERSION = 1.60.0
++PYTHON_GRPCIO_REFLECTION_SOURCE = grpcio-reflection-$(PYTHON_GRPCIO_REFLECTION_VERSION).tar.gz
++PYTHON_GRPCIO_REFLECTION_SITE = https://files.pythonhosted.org/packages/33/3a/e257225b8fd9f05d2af3e363459f0d074ca684438667892ea3215e2162ca
++PYTHON_GRPCIO_REFLECTION_SETUP_TYPE = setuptools
++PYTHON_GRPCIO_REFLECTION_LICENSE = Apache-2.0
++PYTHON_GRPCIO_REFLECTION_LICENSE_FILES = LICENSE
 +
 +$(eval $(python-package))
 _______________________________________________
