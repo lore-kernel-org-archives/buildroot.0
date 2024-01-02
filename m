@@ -4,46 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CFF9BC46CD2
-	for <buildroot@archiver.kernel.org>; Tue,  2 Jan 2024 20:23:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3AE21C46CD2
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jan 2024 20:23:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8031540948;
-	Tue,  2 Jan 2024 20:23:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8031540948
+	by smtp2.osuosl.org (Postfix) with ESMTP id E945340A62;
+	Tue,  2 Jan 2024 20:23:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E945340A62
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aNhZhk4rLFKm; Tue,  2 Jan 2024 20:23:21 +0000 (UTC)
+	with ESMTP id ALYKTWSe8Y1z; Tue,  2 Jan 2024 20:23:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7CAD640A7D;
-	Tue,  2 Jan 2024 20:23:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7CAD640A7D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6F4721BF2B6
- for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 20:23:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CBE9740AF5;
+	Tue,  2 Jan 2024 20:23:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CBE9740AF5
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 492681BF2B6
+ for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 20:23:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 54B5740A62
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1FC0560F93
  for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 20:23:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 54B5740A62
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1FC0560F93
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AphtpXk6TTZT for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3uph5KyHXv4l for <buildroot@lists.busybox.net>;
  Tue,  2 Jan 2024 20:23:05 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 45A8F40948
- for <buildroot@buildroot.org>; Tue,  2 Jan 2024 20:23:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 45A8F40948
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 31EB483CD1; Tue,  2 Jan 2024 20:23:05 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 2 Jan 2024 21:20:23 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1a287945306b8617e144dfb31f4dc4c5af21b256
-X-Git-Newrev: 7f618fb81ab3638995158a12d9bfd5c578f9d58c
-X-Patchwork-Hint: ignore
-Message-Id: <20240102202305.31EB483CD1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/fmt: bump to version 1.2.0
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0346C60F0B
+ for <buildroot@buildroot.org>; Tue,  2 Jan 2024 20:23:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0346C60F0B
+Received: by mail.gandi.net (Postfix) with ESMTPSA id AE82020003;
+ Tue,  2 Jan 2024 20:23:02 +0000 (UTC)
+Date: Tue, 2 Jan 2024 21:23:02 +0100
+To: Michael Nosthoff via buildroot <buildroot@buildroot.org>
+Message-ID: <20240102212302.11e40d25@windsurf>
+In-Reply-To: <20240102124543.69572-1-buildroot@heine.tech>
+References: <20240102124543.69572-1-buildroot@heine.tech>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1704226983;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=C48PXEGIusSQYDrfuTyvvZWdR0sq3Mkon30hdAadNEc=;
+ b=Rx/rlyp/9uLPuMMC8Kp4Z0QJy8s3etz+GzM9qXuXnni5ZlHAWLpexZ5nNY5YMFv0lXFtce
+ Ho/F3jH9brfx20TbFcT5cgZSlsSMc91pjzprwR2jThBpeVUiQKM7yp4qlZYs5f2ZRk3WvQ
+ ocJA7yuBcKN7TjRZV9mtQoDmrMBbYOL2xclekxkDD7OBpzy35BtviQ8fohYgsHJLA/GLnN
+ Dr7DwI5nmTNbBgpQ5vTi8FS+0NFybN1VUhLP+46Q1WQsETEubhoxdV8VlALVmjQU46n3b/
+ 33LYrBEsI+HnqQwNw/zjjBoRo2SmhG2ZspLKba2cX2mTYmK8A3xCSCy7CI41tQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Rx/rlyp/
+Subject: Re: [Buildroot] [PATCH] package/fmt: bump to version 1.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,52 +76,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Semyon Kolganov <semenak94@mail.ru>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7f618fb81ab3638995158a12d9bfd5c578f9d58c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue,  2 Jan 2024 13:45:41 +0100
+Michael Nosthoff via buildroot <buildroot@buildroot.org> wrote:
 
-- LICENSE file dropped the .rst suffix
+> - LICENSE file dropped the .rst suffix
+> 
+> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+> ---
+>  package/fmt/fmt.hash | 4 ++--
+>  package/fmt/fmt.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/fmt/fmt.hash | 4 ++--
- package/fmt/fmt.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/fmt/fmt.hash b/package/fmt/fmt.hash
-index 5f0e06ef30..f9928820ce 100644
---- a/package/fmt/fmt.hash
-+++ b/package/fmt/fmt.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  b84e58a310c9b50196cda48d5678d5fa0849bca19e5fdba6b684f0ee93ed9d1b  fmt-10.1.1.zip
--sha256  07580f2a3b35709ce703d523f447b242f6dfec7582a8c0df102c7fa2849375f8  LICENSE.rst
-+sha256  8a942861a94f8461a280f823041cde8f620a6d8b0e0aacc98c15bb5a9dd92399  fmt-10.2.0.zip
-+sha256  07580f2a3b35709ce703d523f447b242f6dfec7582a8c0df102c7fa2849375f8  LICENSE
-diff --git a/package/fmt/fmt.mk b/package/fmt/fmt.mk
-index 8f8ba4837f..2512657727 100644
---- a/package/fmt/fmt.mk
-+++ b/package/fmt/fmt.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
- 
--FMT_VERSION = 10.1.1
-+FMT_VERSION = 10.2.0
- FMT_SITE = https://github.com/fmtlib/fmt/releases/download/$(FMT_VERSION)
- FMT_SOURCE = fmt-$(FMT_VERSION).zip
- FMT_LICENSE = MIT with exception
--FMT_LICENSE_FILES = LICENSE.rst
-+FMT_LICENSE_FILES = LICENSE
- FMT_CPE_ID_VENDOR = fmt
- FMT_INSTALL_STAGING = YES
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
