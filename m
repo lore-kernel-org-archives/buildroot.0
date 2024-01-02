@@ -4,65 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 489FEC46CD2
-	for <buildroot@archiver.kernel.org>; Tue,  2 Jan 2024 20:33:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D84D7C46CD2
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jan 2024 20:42:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E83F9409F1;
-	Tue,  2 Jan 2024 20:33:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E83F9409F1
+	by smtp2.osuosl.org (Postfix) with ESMTP id 72B98400CB;
+	Tue,  2 Jan 2024 20:42:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 72B98400CB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qZHev_elr94d; Tue,  2 Jan 2024 20:33:42 +0000 (UTC)
+	with ESMTP id KTXDAPsZnoDd; Tue,  2 Jan 2024 20:42:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C068A40A5C;
-	Tue,  2 Jan 2024 20:33:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C068A40A5C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 542764061F;
+	Tue,  2 Jan 2024 20:42:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 542764061F
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 90E401BF2B6
- for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 20:33:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6B5751BF2B6
+ for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 20:42:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 680F540948
- for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 20:33:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 680F540948
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3D6924061F
+ for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 20:42:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3D6924061F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 44EF7-G8RQc5 for <buildroot@lists.busybox.net>;
- Tue,  2 Jan 2024 20:33:30 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 00AE040A5D
- for <buildroot@buildroot.org>; Tue,  2 Jan 2024 20:33:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 00AE040A5D
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2ED2520004;
- Tue,  2 Jan 2024 20:33:28 +0000 (UTC)
-Date: Tue, 2 Jan 2024 21:33:27 +0100
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20240102213327.1cee0244@windsurf>
-In-Reply-To: <20240102110031.737953-1-fontaine.fabrice@gmail.com>
-References: <20240102110031.737953-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+ with ESMTP id ueigMgbOCo7e for <buildroot@lists.busybox.net>;
+ Tue,  2 Jan 2024 20:42:15 +0000 (UTC)
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 474D0400CB
+ for <buildroot@buildroot.org>; Tue,  2 Jan 2024 20:42:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 474D0400CB
+Received: by mail-wr1-x429.google.com with SMTP id
+ ffacd0b85a97d-3366e78d872so9501175f8f.3
+ for <buildroot@buildroot.org>; Tue, 02 Jan 2024 12:42:15 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1704228132; x=1704832932;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=t56oPfTMR0rtSOJBTbkZ+7t9IADKhJ554V3+no9DhCQ=;
+ b=an+JKGUsQsNv6q5SlkfC0CYmvaeHQZqKdIWD++Ci/6aZDlvyl7yZRl+gerpaLdJHlL
+ ecsfHnkgFFS6oYHVf9JNmJZ6aoGKdfRtTVhiPnqtqCDRbP6/00kttuoDCEZ+3OG6dCEL
+ gXKAbrTOd+oZHQfBIJ9QA0J937cZPuHfhusuMSPtdEeNIgDlhxH82TdmoV7VrrQ3Jo1w
+ C/rXfFKSmkFw7a0oM5BcUSwJH7bCVbI4REUF8iyVK2YLmLvZMorHXkilDJg4BLcF9YLT
+ +JOi9eAk7axKtBHLeHzPt7M89hpS11UqTtcadSHiLJv3lFB1x/QZcAVfMzD8+89RCHbY
+ SqWw==
+X-Gm-Message-State: AOJu0YwH+pgWO/3qMav3rYcPBm1h+5ypQ/clGDNb5zJB+bFtckxwAex1
+ 9fWUfItIEKm5Potx3mWQY4AL3ULTNEI=
+X-Google-Smtp-Source: AGHT+IEjMzxMY22sA4L65OibhRMfnYoOoShXutvKathuqo1v16loxyQBgy0lK1moBZfO3ofhpdzIjg==
+X-Received: by 2002:a05:6000:1d90:b0:337:43c2:d17b with SMTP id
+ bk16-20020a0560001d9000b0033743c2d17bmr870337wrb.77.1704228132257; 
+ Tue, 02 Jan 2024 12:42:12 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ r10-20020adfce8a000000b00336781490dcsm29224185wrn.69.2024.01.02.12.42.11
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 02 Jan 2024 12:42:11 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Tue,  2 Jan 2024 21:42:08 +0100
+Message-ID: <20240102204208.1662781-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1704227608;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=jg87urGiUjYtl+LgeQd1nxwtASL9I5cX3yoKqhxmWys=;
- b=Ma4ZfEM29Z2MgmwVFnGl9mxJepI9xobqHA8uDqE9C7b4btxwo+tr0eZTOwWx7hAGEtBof+
- 3P3LgINuHoY0/F40K4FH4uoWIGPm3yLnO0mDfp6bp5z4nw0P6ImtATm67TUhS/7UlKp4VO
- xtOxwo+3J80tIFQXK6pE1vrPeypAK0zF3kTvLqehUU92fLY2apSHVHDvXskw3fQczLL28L
- oyJ9XBZ3WPqTKbwjRyGotLQZ93piBKmnvzwr2fXxUjtEHVaqn/KZhR0bwJiRd4DWxnthbt
- aALk27/BGpD+PHu92omq4ccZtdm9aaJY1ME3Q7ito3yzBu8nKu0a8YIC3TbTvw==
+ d=gmail.com; s=20230601; t=1704228132; x=1704832932; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=t56oPfTMR0rtSOJBTbkZ+7t9IADKhJ554V3+no9DhCQ=;
+ b=S+4NyLkv6SipCLAUnxW8G8PgQLSJf8k8QHj7FylPCUBrCotrVDFZ+kC1L7KJvQfyQx
+ ek0a6VknJ3c8ZQiz3dL8E83y4lbrFCJwU5pAqGIeDGLHRM4T9/2Fmt79XljzftAqx880
+ UaU2FRVvkWyiypVVhHeoDjwaViX700iW2VJEztyV5WJd/ukM3AQCa9lzGflM71FweExo
+ qAmploruSX9oP0hrcqLS6XSriBT57DcwRx+vJo+pTphOaE9QhkZqB8wQZ6uovm7ipUTU
+ i5f0K2XYEuqM5GU6KT+2TaGd/FBzGCo5J4rSyP501FX3P28+ZfomOk1dXsNz7Vlhgcju
+ ixfQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Ma4ZfEM2
-Subject: Re: [Buildroot] [PATCH 1/1] package/vala: bump to version 0.56.14
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=S+4NyLkv
+Subject: [Buildroot] [PATCH 1/1] package/libsigsegv: fix musl build with
+ powerpc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,42 +94,227 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Simon Dawson <spdawson@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue,  2 Jan 2024 12:00:30 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Fix the following musl build failure with powerpc raised since bump to
+version 2.14 in commit c6addf4606c3a41cdad5c6ac4c6508b298b6e92a:
 
-> This bump will fix the following libsoup3 build failure raised since
-> commit 9cbffdf9be622c8ddad3b28106851b3101b3d201:
-> 
-> FAILED: libsoup/libsoup-3.0.vapi
-> /home/buildroot/autobuild/instance-1/output-1/host/bin/vapigen --quiet --library=libsoup-3.0 --directory=/home/buildroot/autobuild/instance-1/output-1/build/libsoup3-3.4.4/build/libsoup --pkg=gio-2.0 --metadatadir=/home/buildroot/autobuild/instance-1/output-1/build/libsoup3-3.4.4/libsoup /home/buildroot/autobuild/instance-1/output-1/build/libsoup3-3.4.4/build/libsoup/Soup-3.0.gir /home/buildroot/autobuild/instance-1/output-1/build/libsoup3-3.4.4/libsoup/Soup-3.0-custom.vala
-> Soup-3.0.gir:6877.95-6877.95: error: The type name `GLib.TlsProtocolVersion' could not be found
-> 
-> https://gitlab.gnome.org/GNOME/vala/-/blob/0.56.14/NEWS
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/732fcd20c2998e7d7b6b8f61871ad104f8d243df
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/vala/vala.hash | 4 ++--
->  package/vala/vala.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+In file included from fault.h:36,
+                 from handler-unix.c:77,
+                 from handler.c:19:
+handler-unix.c: In function 'sigsegv_handler':
+fault-linux-powerpc.h:35:73: error: 'mcontext_t' has no member named 'uc_regs'; did you mean 'gregs'?
+   35 | #  define SIGSEGV_FAULT_STACKPOINTER  ((ucontext_t *) ucp)->uc_mcontext.uc_regs->gregs[1]
+      |                                                                         ^~~~~~~
+handler-unix.c:157:43: note: in expansion of macro 'SIGSEGV_FAULT_STACKPOINTER'
+  157 |           uintptr_t old_sp = (uintptr_t) (SIGSEGV_FAULT_STACKPOINTER);
+      |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Applied to master, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/77b600071f07605be3ec28e2da46d6938e240087
 
-Thomas
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...-Linux-PowerPC-32-bit-with-musl-libc.patch | 114 ++++++++++++++++++
+ package/libsigsegv/0002-add-musl.m4.patch     |  47 ++++++++
+ package/libsigsegv/libsigsegv.mk              |   2 +
+ 3 files changed, 163 insertions(+)
+ create mode 100644 package/libsigsegv/0001-Add-support-for-Linux-PowerPC-32-bit-with-musl-libc.patch
+ create mode 100644 package/libsigsegv/0002-add-musl.m4.patch
+
+diff --git a/package/libsigsegv/0001-Add-support-for-Linux-PowerPC-32-bit-with-musl-libc.patch b/package/libsigsegv/0001-Add-support-for-Linux-PowerPC-32-bit-with-musl-libc.patch
+new file mode 100644
+index 0000000000..dcc2f7c9cb
+--- /dev/null
++++ b/package/libsigsegv/0001-Add-support-for-Linux-PowerPC-32-bit-with-musl-libc.patch
+@@ -0,0 +1,114 @@
++From a6ff69873110c0a8ba6f7fd90532dbc11224828c Mon Sep 17 00:00:00 2001
++From: Bruno Haible <bruno@clisp.org>
++Date: Sun, 13 Mar 2022 15:04:06 +0100
++Subject: [PATCH] Add support for Linux/PowerPC (32-bit) with musl libc.
++
++Reported by Khem Raj <raj.khem@gmail.com> in
++<https://lists.gnu.org/archive/html/m4-patches/2022-03/msg00000.html>.
++
++* autogen.sh: Copy also musl.m4.
++* configure.ac: Invoke gl_MUSL_LIBC.
++* src/fault-linux-powerpc.h (SIGSEGV_FAULT_STACKPOINTER): In the 32-bit
++case, handle musl libc differently.
++* NEWS: Mention it.
++
++Upstream: https://git.savannah.gnu.org/gitweb/?p=libsigsegv.git;a=commit;h=a6ff69873110c0a8ba6f7fd90532dbc11224828c
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ ChangeLog                 | 11 +++++++++++
++ NEWS                      |  4 ++++
++ autogen.sh                |  3 ++-
++ configure.ac              |  2 ++
++ src/fault-linux-powerpc.h | 27 ++++++++++++++++++++++-----
++ 5 files changed, 41 insertions(+), 6 deletions(-)
++
++diff --git a/ChangeLog b/ChangeLog
++index c52b227..7c0a8fa 100644
++--- a/ChangeLog
+++++ b/ChangeLog
++@@ -1,3 +1,14 @@
+++2022-03-13  Bruno Haible  <bruno@clisp.org>
+++
+++	Add support for Linux/PowerPC (32-bit) with musl libc.
+++	Reported by Khem Raj <raj.khem@gmail.com> in
+++	<https://lists.gnu.org/archive/html/m4-patches/2022-03/msg00000.html>.
+++	* autogen.sh: Copy also musl.m4.
+++	* configure.ac: Invoke gl_MUSL_LIBC.
+++	* src/fault-linux-powerpc.h (SIGSEGV_FAULT_STACKPOINTER): In the 32-bit
+++	case, handle musl libc differently.
+++	* NEWS: Mention it.
+++
++ 2022-01-07  Bruno Haible  <bruno@clisp.org>
++ 
++ 	Prepare for version 2.14.
++diff --git a/NEWS b/NEWS
++index 4d012f8..82cc0f4 100644
++--- a/NEWS
+++++ b/NEWS
++@@ -1,3 +1,7 @@
+++New in 2.15:
+++
+++* Added support for Linux/PowerPC (32-bit) with musl libc.
+++
++ New in 2.14:
++ 
++ * Added support for 64-bit Cygwin.
++diff --git a/configure.ac b/configure.ac
++index e87f13b..164786f 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -75,6 +75,8 @@ AC_MSG_RESULT([$sv_cv_host])
++ PLATFORM="$sv_cv_host"
++ AC_SUBST([PLATFORM])
++ 
+++gl_MUSL_LIBC
+++
++ dnl ========================== Done with PLATFORM ==========================
++ 
++ 
++diff --git a/src/fault-linux-powerpc.h b/src/fault-linux-powerpc.h
++index cba6ea7..b3f922a 100644
++--- a/src/fault-linux-powerpc.h
+++++ b/src/fault-linux-powerpc.h
++@@ -1,5 +1,5 @@
++ /* Fault handler information.  Linux/PowerPC version when it supports POSIX.
++-   Copyright (C) 2002, 2009, 2017  Bruno Haible <bruno@clisp.org>
+++   Copyright (C) 2002, 2009, 2017, 2022  Bruno Haible <bruno@clisp.org>
++ 
++    This program is free software: you can redistribute it and/or modify
++    it under the terms of the GNU General Public License as published by
++@@ -28,10 +28,27 @@
++ #if defined(__powerpc64__) || defined(_ARCH_PPC64) /* 64-bit */
++ # define SIGSEGV_FAULT_STACKPOINTER  ((ucontext_t *) ucp)->uc_mcontext.gp_regs[1]
++ #else /* 32-bit */
++-/* both should be equivalent */
++-# if 0
++-#  define SIGSEGV_FAULT_STACKPOINTER  ((ucontext_t *) ucp)->uc_mcontext.regs->gpr[1]
+++# if MUSL_LIBC
+++/* musl libc has a different structure of ucontext_t in
+++   musl/arch/powerpc/bits/signal.h.  */
+++/* The glibc comments say:
+++     "Different versions of the kernel have stored the registers on signal
+++      delivery at different offsets from the ucontext struct.  Programs should
+++      thus use the uc_mcontext.uc_regs pointer to find where the registers are
+++      actually stored."  */
+++#  if 0
+++#   define SIGSEGV_FAULT_STACKPOINTER  ((ucontext_t *) ucp)->uc_mcontext.gregs[1]
+++#  else
+++#   define SIGSEGV_FAULT_STACKPOINTER  ((ucontext_t *) ucp)->uc_regs->gregs[1]
+++#  endif
++ # else
++-#  define SIGSEGV_FAULT_STACKPOINTER  ((ucontext_t *) ucp)->uc_mcontext.uc_regs->gregs[1]
+++/* Assume the structure of ucontext_t in
+++   glibc/sysdeps/unix/sysv/linux/powerpc/sys/ucontext.h.  */
+++/* Because of the union, both definitions should be equivalent.  */
+++#  if 0
+++#   define SIGSEGV_FAULT_STACKPOINTER  ((ucontext_t *) ucp)->uc_mcontext.regs->gpr[1]
+++#  else
+++#   define SIGSEGV_FAULT_STACKPOINTER  ((ucontext_t *) ucp)->uc_mcontext.uc_regs->gregs[1]
+++#  endif
++ # endif
++ #endif
++-- 
++2.17.1
++
+diff --git a/package/libsigsegv/0002-add-musl.m4.patch b/package/libsigsegv/0002-add-musl.m4.patch
+new file mode 100644
+index 0000000000..d6f06d8400
+--- /dev/null
++++ b/package/libsigsegv/0002-add-musl.m4.patch
+@@ -0,0 +1,47 @@
++From a9b07220b986500cfee7777a543494d360964306 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 2 Jan 2024 21:39:24 +0100
++Subject: [PATCH] add musl.m4
++
++Add musl.m4 (retrieved from
++https://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=blob;f=m4/musl.m4;h=34d2c1ff22a148eeb76936410ac497d68b228f59;hb=HEAD)
++
++musl.m4 is needed for gl_MUSL_LIBC since
++https://git.savannah.gnu.org/gitweb/?p=libsigsegv.git;a=commit;h=a6ff69873110c0a8ba6f7fd90532dbc11224828c
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Upstream: sent to Bruno Haible <bruno@clisp.org>
++---
++ m4/musl.m4 | 20 ++++++++++++++++++++
++ 1 file changed, 20 insertions(+)
++ create mode 100644 m4/musl.m4
++
++diff --git a/m4/musl.m4 b/m4/musl.m4
++new file mode 100644
++index 0000000..34d2c1f
++--- /dev/null
+++++ b/m4/musl.m4
++@@ -0,0 +1,20 @@
+++# musl.m4 serial 4
+++dnl Copyright (C) 2019-2024 Free Software Foundation, Inc.
+++dnl This file is free software; the Free Software Foundation
+++dnl gives unlimited permission to copy and/or distribute it,
+++dnl with or without modifications, as long as this notice is preserved.
+++
+++# Test for musl libc, despite the musl libc authors don't like it
+++# <https://wiki.musl-libc.org/faq.html>
+++# <https://lists.gnu.org/archive/html/bug-gnulib/2018-02/msg00079.html>.
+++# From Bruno Haible.
+++
+++AC_DEFUN_ONCE([gl_MUSL_LIBC],
+++[
+++  AC_REQUIRE([AC_CANONICAL_HOST])
+++  case "$host_os" in
+++    *-musl* | midipix*)
+++      AC_DEFINE([MUSL_LIBC], [1], [Define to 1 on musl libc.])
+++      ;;
+++  esac
+++])
++-- 
++2.43.0
++
+diff --git a/package/libsigsegv/libsigsegv.mk b/package/libsigsegv/libsigsegv.mk
+index 98bcd55c8c..0d5875aa95 100644
+--- a/package/libsigsegv/libsigsegv.mk
++++ b/package/libsigsegv/libsigsegv.mk
+@@ -10,5 +10,7 @@ LIBSIGSEGV_INSTALL_STAGING = YES
+ LIBSIGSEGV_CONF_ENV = sv_cv_fault_posix=yes
+ LIBSIGSEGV_LICENSE = GPL-2.0+
+ LIBSIGSEGV_LICENSE_FILES = COPYING
++# We're patching configure.ac
++LIBSIGSEGV_AUTORECONF = YES
+ 
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
