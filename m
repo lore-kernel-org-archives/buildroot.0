@@ -4,46 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 327CFC46CD2
-	for <buildroot@archiver.kernel.org>; Tue,  2 Jan 2024 22:21:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 910DAC47074
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jan 2024 22:21:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DB6104014B;
-	Tue,  2 Jan 2024 22:20:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB6104014B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 201C640A66;
+	Tue,  2 Jan 2024 22:21:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 201C640A66
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jBQFAwut8VvV; Tue,  2 Jan 2024 22:20:58 +0000 (UTC)
+	with ESMTP id VXdOodl7J4re; Tue,  2 Jan 2024 22:21:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9CE1F40A93;
-	Tue,  2 Jan 2024 22:20:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9CE1F40A93
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CBBE81BF276
- for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 22:20:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3D07B40A7B;
+	Tue,  2 Jan 2024 22:21:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3D07B40A7B
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 963611BF276
+ for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 22:20:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9F5FB416D3
- for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 22:20:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F5FB416D3
+ by smtp2.osuosl.org (Postfix) with ESMTP id 36D9840A75
+ for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 22:20:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 36D9840A75
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6A1rJ-zprhUa for <buildroot@lists.busybox.net>;
- Tue,  2 Jan 2024 22:20:00 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0CF4D416BA
- for <buildroot@buildroot.org>; Tue,  2 Jan 2024 22:20:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0CF4D416BA
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EEA0483D84; Tue,  2 Jan 2024 22:19:59 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 2 Jan 2024 23:17:31 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 74f401025d7ffbc5be9191b9c31208e501759edb
-X-Git-Newrev: 8649be9fa6dff661069af6479fc11a7f2208810d
-X-Patchwork-Hint: ignore
-Message-Id: <20240102221959.EEA0483D84@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libcgroup: needs threads
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6FefFz_01DtU for <buildroot@lists.busybox.net>;
+ Tue,  2 Jan 2024 22:20:08 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 93ACB404C2
+ for <buildroot@buildroot.org>; Tue,  2 Jan 2024 22:20:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 93ACB404C2
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DB285FF803;
+ Tue,  2 Jan 2024 22:20:06 +0000 (UTC)
+Date: Tue, 2 Jan 2024 23:20:06 +0100
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20240102232006.2a66c6c5@windsurf>
+In-Reply-To: <20240102204208.1662781-1-fontaine.fabrice@gmail.com>
+References: <20240102204208.1662781-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1704234007;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=WbXpRJ6iH1winnYm3t/yLtFEeRKku6V/MIuWVKfkCYs=;
+ b=gvmwiao/CRVB0hLN7h/1mx4Zkjww+pHPc+4QkkEXHUit+7GoJ9+gYQRMQYtg7sZ6jxCG3H
+ kTjaXJM++shPL4lGwGISV561AZuS+RX/erQgFoCUb7ZVNd6ZJtpYc8Y6KZ2GFpAdnZRqQH
+ p15E8R1DqqyAm3mIWIr33jm4EuHlPlPERYasYct+2QKSsk2RoOweeLYc+fnKT4lV/4dm8X
+ MnfLyJ8Jl5IAbIB2fNRmyoxzeZl6ESotXAYxJQ1x1ulgfXWYqN2TCQJJhfTvWUWnH4KFyY
+ yuDj4V51UreMwfD+u5YxBEoGdPY47wqf1e1ZU1QgVeC4/aSZdU+onbM54w2E/A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=gvmwiao/
+Subject: Re: [Buildroot] [PATCH 1/1] package/libsigsegv: fix musl build with
+ powerpc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,55 +77,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Simon Dawson <spdawson@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8649be9fa6dff661069af6479fc11a7f2208810d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue,  2 Jan 2024 21:42:08 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-threads are mandatory since the addition of the package in commit and
-https://github.com/libcgroup/libcgroup/commit/99ccdf671e9df5b13f646e1487393d562aa7fa62
-resulting in the following build failure since commit
-9d58b525fcfd0d92fcdd3c66d7858213c4b139c6 which enables build on uclibc
-and musl:
+> Fix the following musl build failure with powerpc raised since bump to
+> version 2.14 in commit c6addf4606c3a41cdad5c6ac4c6508b298b6e92a:
+> 
+> In file included from fault.h:36,
+>                  from handler-unix.c:77,
+>                  from handler.c:19:
+> handler-unix.c: In function 'sigsegv_handler':
+> fault-linux-powerpc.h:35:73: error: 'mcontext_t' has no member named 'uc_regs'; did you mean 'gregs'?
+>    35 | #  define SIGSEGV_FAULT_STACKPOINTER  ((ucontext_t *) ucp)->uc_mcontext.uc_regs->gregs[1]
+>       |                                                                         ^~~~~~~
+> handler-unix.c:157:43: note: in expansion of macro 'SIGSEGV_FAULT_STACKPOINTER'
+>   157 |           uintptr_t old_sp = (uintptr_t) (SIGSEGV_FAULT_STACKPOINTER);
+>       |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/77b600071f07605be3ec28e2da46d6938e240087
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...-Linux-PowerPC-32-bit-with-musl-libc.patch | 114 ++++++++++++++++++
+>  package/libsigsegv/0002-add-musl.m4.patch     |  47 ++++++++
+>  package/libsigsegv/libsigsegv.mk              |   2 +
+>  3 files changed, 163 insertions(+)
+>  create mode 100644 package/libsigsegv/0001-Add-support-for-Linux-PowerPC-32-bit-with-musl-libc.patch
+>  create mode 100644 package/libsigsegv/0002-add-musl.m4.patch
 
-In file included from config.c:30:
-./libcgroup-internal.h:29:10: fatal error: pthread.h: No such file or directory
-   29 | #include <pthread.h>
-      |          ^~~~~~~~~~~
+Applied to master, thanks.
 
-Fixes:
- - http://autobuild.buildroot.org/results/87c4454aee97b6955f461651c41c4186a8838c4d
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libcgroup/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/package/libcgroup/Config.in b/package/libcgroup/Config.in
-index b9333be2a2..4f9ec074b4 100644
---- a/package/libcgroup/Config.in
-+++ b/package/libcgroup/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LIBCGROUP
- 	bool "libcgroup"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_MUSL_FTS if !BR2_TOOLCHAIN_USES_GLIBC
- 	help
- 	  libcgroup is a library that abstracts the control
-@@ -17,5 +18,5 @@ config BR2_PACKAGE_LIBCGROUP_TOOLS
- 
- endif
- 
--comment "libcgroup needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "libcgroup needs a toolchain w/ C++, threads"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
