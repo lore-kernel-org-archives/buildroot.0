@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E665FC47073
-	for <buildroot@archiver.kernel.org>; Tue,  2 Jan 2024 08:36:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 930EFC46CD2
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jan 2024 08:36:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7EA9E40743;
-	Tue,  2 Jan 2024 08:36:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7EA9E40743
+	by smtp4.osuosl.org (Postfix) with ESMTP id 341B840743;
+	Tue,  2 Jan 2024 08:36:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 341B840743
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id b9VWZsxKn1tj; Tue,  2 Jan 2024 08:36:14 +0000 (UTC)
+	with ESMTP id Ixryf_hmOuAC; Tue,  2 Jan 2024 08:36:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D494A405D8;
-	Tue,  2 Jan 2024 08:36:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D494A405D8
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 136CE1BF5A6
- for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 08:36:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 727D1405D8;
+	Tue,  2 Jan 2024 08:36:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 727D1405D8
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3C1EA1BF5A6
+ for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 08:36:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DC51D81343
- for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 08:36:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DC51D81343
+ by smtp2.osuosl.org (Postfix) with ESMTP id 064B540370
+ for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 08:36:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 064B540370
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4B1vgqLvlYSe for <buildroot@lists.busybox.net>;
- Tue,  2 Jan 2024 08:36:11 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D4F6C81334
- for <buildroot@buildroot.org>; Tue,  2 Jan 2024 08:36:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D4F6C81334
-Received: by mail.gandi.net (Postfix) with ESMTPA id BE4BB20009;
- Tue,  2 Jan 2024 08:36:07 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KbQetUVeSV9L for <buildroot@lists.busybox.net>;
+ Tue,  2 Jan 2024 08:36:47 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C490F4020B
+ for <buildroot@buildroot.org>; Tue,  2 Jan 2024 08:36:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C490F4020B
+Received: by mail.gandi.net (Postfix) with ESMTPA id 3E28D240006;
+ Tue,  2 Jan 2024 08:36:45 +0000 (UTC)
 To: Buildroot List <buildroot@buildroot.org>
-Date: Tue,  2 Jan 2024 09:36:05 +0100
-Message-ID: <20240102083606.3055201-1-thomas.petazzoni@bootlin.com>
+Date: Tue,  2 Jan 2024 09:36:42 +0100
+Message-ID: <20240102083643.3055484-1-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1704184567;
+ d=bootlin.com; s=gm1; t=1704184605;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
  content-transfer-encoding:content-transfer-encoding;
- bh=+hHDKs8+XLvpY/64hs7uAll0Cnsi553Py/1XBi1cy/Q=;
- b=cpM7jPHzyy6KJ/F2I0ULCzssxq0SjwcfevHD51AraXYLw3ZdnvDP/ZjIFYAd/OTUpOsQNl
- E6loH9cdU8svgeh4TzugLqV6xohuqsLpKa6kwq8jUGS/Xv4kdeoo5K86V8FsZCfsUZzCBN
- QlqbbVYiEpRmtTQRbFu9f/wIi27TWyf2XlbZx2o1/gq9qnbkZEkrDGAlmUBVial2PjVXlD
- KecziKRHlCGtiT0aF5AojsVd9F3ILxVy5/0382BFqVJXBK+ve722aO2zM5o6UjBVqHP0HC
- YuYTxRkYnKrYBkAHTkH3cucivmBvZtOQ3TLFS27OsO0VYHrKSNm2anEq8YNLIA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=BLUgLKpaUOP2m19YSWe+alnkiUn7Xumx1EAZK1OGQBA=;
+ b=RVljY5TAobyDsX9pQqCqT5suXEhB/MCqxWFk7hKMlFVBK0rTqOUAZaKdiD7daan1RZu2ue
+ JM7DF7QGxt2AOmIEXlI8L1xm+iEuSd/WJiJVnEr5WIh1Pd+JelsyonP571W7Z/KHV225st
+ dRvcxr5gAWmi8lNvCS2tQhVaFZ0b9/3bCEpdYflsdq2EJzd0xHvfuBAhNq0Xv6M5qX82Dh
+ PzbgpVmh08frhA7GIckpbJPPsMwiDNqm6AK+TnZkMsBPPakEkT3j2Mo95W20vHe6Ej9Dbj
+ pFNkuSn0mCsFijGuwqRnbRmZBr3D0Ap2WDNTaM2VzmbSnPuRapVcmejMsiZb7Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=cpM7jPHz
-Subject: [Buildroot] [PATCH v2] Config.in: change default optimization level
+ header.s=gm1 header.b=RVljY5TA
+Subject: [Buildroot] [PATCH v3] Config.in: change default optimization level
  from -Os to -O2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -88,7 +88,7 @@ Here are some arguments in favor of this change:
 
 - Most Buildroot users use Buildroot for platforms that have a
   reasonable amount of storage, and the difference between -Os and -O2
-  in terms of code size is no longer than significant compared to the
+  in terms of code size is no longer as significant compared to the
   size of storage available on average embedded Linux devices
   typically found these days.
 
