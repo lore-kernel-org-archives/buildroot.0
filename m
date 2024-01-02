@@ -4,65 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B1B2C47074
-	for <buildroot@archiver.kernel.org>; Tue,  2 Jan 2024 20:21:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00AA3C46CD2
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jan 2024 20:21:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EEE1840A69;
-	Tue,  2 Jan 2024 20:21:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EEE1840A69
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9F0F040948;
+	Tue,  2 Jan 2024 20:21:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9F0F040948
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AvvfVJosInFz; Tue,  2 Jan 2024 20:21:32 +0000 (UTC)
+	with ESMTP id AmP_AFu7u_wB; Tue,  2 Jan 2024 20:21:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2556340948;
-	Tue,  2 Jan 2024 20:21:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2556340948
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 743811BF2B6
- for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 20:18:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A332640A97;
+	Tue,  2 Jan 2024 20:21:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A332640A97
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DA8401BF2B6
+ for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 20:18:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3D40440A5F
- for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 20:18:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3D40440A5F
+ by smtp3.osuosl.org (Postfix) with ESMTP id B176860DB7
+ for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 20:18:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B176860DB7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cHvHUM3qrh5T for <buildroot@lists.busybox.net>;
- Tue,  2 Jan 2024 20:18:33 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DA19740A69
- for <buildroot@buildroot.org>; Tue,  2 Jan 2024 20:18:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA19740A69
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D5BF6FF806;
- Tue,  2 Jan 2024 20:18:30 +0000 (UTC)
-Date: Tue, 2 Jan 2024 21:18:30 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KyaDbcj57T7O for <buildroot@lists.busybox.net>;
+ Tue,  2 Jan 2024 20:18:42 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id ADF5D60DFD
+ for <buildroot@buildroot.org>; Tue,  2 Jan 2024 20:18:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ADF5D60DFD
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A3AD320003;
+ Tue,  2 Jan 2024 20:18:38 +0000 (UTC)
+Date: Tue, 2 Jan 2024 21:18:38 +0100
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20240102211830.1847bf31@windsurf>
-In-Reply-To: <20240102173750.982955-1-fontaine.fabrice@gmail.com>
-References: <20240102173750.982955-1-fontaine.fabrice@gmail.com>
+Message-ID: <20240102211838.1375eb55@windsurf>
+In-Reply-To: <20240102174635.1012997-1-fontaine.fabrice@gmail.com>
+References: <20240102174635.1012997-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1704226711;
+ d=bootlin.com; s=gm1; t=1704226718;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=iKqzKh8gVm26wSpu12dlPyurpdlFIZW96cwiPGaZen8=;
- b=Gy0Ml9wYwImLCeXkh16b7Ng7w/rIjtcD6i9pfsY6JmOy+oA0rag3a22zb+H0mrraYuzfMg
- AciDVbXOEYyMY3bhmhe1PI6SMlUhR8L1gADo83JcCRlypTIIIC9kgKF/RWoW9cfKPsAxJh
- RNt7meQmRWnjJtBWGomvK9jhmjASLtuCsUku7UZr8ooQ3JlxU8kDoZwjkR0zaNqtDpgcMv
- vLDQQM8VZ7sbxtoQX6pGKvVapAgwFozkRMG6b7Uan3QjeRDYDfQxIHBX+5ap6+PQk+tTW9
- 0l1N6m9aPF7kXimPxiaq/zedq7QF27r13CpDYhwzOY+7RQfhHfPg5kY9BGssXA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=TsA/DXijDn/2I80N287ixS/qvjE/YfxnLQB+SM52geU=;
+ b=XigwcwpYDWdECWw4AUOhvAzYLJRrtlT+L9AlN0g4w3gL1oiLrEZY7n8Ipsyg64TTe1S5Sv
+ OQpVsIZslHpNsK/vae6QYcw2cB4/IQ+99G1+PmTqgSXjz+X/nKoiqbBansQabfyk+xl/Zt
+ mFgpJ3Mn4QkpzawHxmf5FUVDEwiShP2GxA2GbQkpWtNfoAbYTK1oWygm5UZWptWKVX4K9m
+ zr8z75YXFYtwiCSCh6ZQMbEsLaJwpdtJ72oOkKlPlK+GEgMWdTpZouR1+9/vn3+ks7aN7v
+ UcMfI8fSnjNCF73MA8xF6u7/A7q1vUKSnxO/SXrFhE0TGSgfFYUqXJu9BQMPLg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Gy0Ml9wY
-Subject: Re: [Buildroot] [PATCH 1/1] package/pax-utils: bump to version 1.3.7
+ header.s=gm1 header.b=XigwcwpY
+Subject: Re: [Buildroot] [PATCH 1/1] package/p11-kit: bump to version 0.25.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,24 +76,22 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue,  2 Jan 2024 18:37:50 +0100
+On Tue,  2 Jan 2024 18:46:35 +0100
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> - Switch site to get latest release
-> - autotools has been replaced by meson since
->   https://gitweb.gentoo.org/proj/pax-utils.git/commit/?id=063fcaeaa05074a9d90acec2f68b25dfb8ecd279
+> https://github.com/p11-glue/p11-kit/blob/0.25.3/NEWS
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/pax-utils/pax-utils.hash |  2 +-
->  package/pax-utils/pax-utils.mk   | 23 +++++++++++++----------
->  2 files changed, 14 insertions(+), 11 deletions(-)
+>  package/p11-kit/p11-kit.hash | 2 +-
+>  package/p11-kit/p11-kit.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
