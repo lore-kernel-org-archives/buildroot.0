@@ -4,65 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16E17C46CD2
-	for <buildroot@archiver.kernel.org>; Tue,  2 Jan 2024 20:26:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4358CC46CD2
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jan 2024 20:33:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BC77D4061F;
-	Tue,  2 Jan 2024 20:26:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BC77D4061F
+	by smtp2.osuosl.org (Postfix) with ESMTP id DF33D408B4;
+	Tue,  2 Jan 2024 20:33:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DF33D408B4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 311fEi0C6I-J; Tue,  2 Jan 2024 20:26:21 +0000 (UTC)
+	with ESMTP id YeYe_ccHaBKI; Tue,  2 Jan 2024 20:33:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A121340A62;
-	Tue,  2 Jan 2024 20:26:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A121340A62
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A714F1BF314
- for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 20:26:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D724E40948;
+	Tue,  2 Jan 2024 20:33:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D724E40948
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C53551BF2B6
+ for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 20:33:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8CC3081E6C
- for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 20:26:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8CC3081E6C
+ by smtp4.osuosl.org (Postfix) with ESMTP id AB69D414D1
+ for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 20:33:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB69D414D1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vlc86TnpLKcH for <buildroot@lists.busybox.net>;
- Tue,  2 Jan 2024 20:26:18 +0000 (UTC)
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5405F81E66
- for <buildroot@buildroot.org>; Tue,  2 Jan 2024 20:26:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5405F81E66
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:4f89:5708:1633:580e])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id B9D46B0053E;
- Tue,  2 Jan 2024 21:26:12 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 02 Jan 2024 21:26:12 +0100
-Date: Tue, 2 Jan 2024 21:26:12 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Waldemar Brodkorb <wbx@openadk.org>
-Message-ID: <ZZRxZPlyXJWTBeFl@landeda>
-References: <ZNOMtm7TTVd12BQ3@waldemar-brodkorb.de>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <ZNOMtm7TTVd12BQ3@waldemar-brodkorb.de>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1704227174;
- bh=ctBieoRGE1a/zPbx1ozHQYuyY5+0+JIOc5R7D/neCug=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=kvbH/4fnOVwgyxRJCwnFwC8V+9R0vPaddejoLDpojQwEURdbW2HyPQjTIXz4lQ/2b
- LYlGhBLXs8OJX6d0dKR5su60RlTLUOBrgi4I0p4Oj5sy9Nmt4OqbfEutM3J3spTVWd
- TAR0cHQgrJrivOPFNKEGpyHj/9l6HcEyT+LTABQRTocPsb+Vv5bbP2luAJsjlhi5wd
- OrCn8VZ8SDkfn0j5ujP657sioORhZ7xGf9zkBfmLH4nviL0j1CJhlkllctFMItKa6/
- Q6CncBtlm+QHxDZHlevIPL94YW4V43tHz2IrxIWv/saBoxSYyOXWGobW8Aj4Ovvq8A
- 3LXGp4Ec/RfkA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=kvbH/4fn
-Subject: Re: [Buildroot] [PATCH] package/perl: threads support needs locales
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 66SuVLqBYasG for <buildroot@lists.busybox.net>;
+ Tue,  2 Jan 2024 20:33:24 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B012E40510
+ for <buildroot@buildroot.org>; Tue,  2 Jan 2024 20:33:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B012E40510
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 96AD283CE7; Tue,  2 Jan 2024 20:33:24 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 2 Jan 2024 21:24:12 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 6b25c3dad2e340f944a977a5ea51ee9d1f8a63f6
+X-Git-Newrev: 6257fa486013538a47313f16e51b8515d189c17b
+X-Patchwork-Hint: ignore
+Message-Id: <20240102203324.96AD283CE7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/vala: bump to version 0.56.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,78 +55,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Waldemar, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=6257fa486013538a47313f16e51b8515d189c17b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2023-08-09 14:55 +0200, Waldemar Brodkorb spake thusly:
-> The thread support in perl needs locales enabled in the C library.
-> Otherwise it fails with:
-> POSIX.xs:3386:13: error: 'MBLEN_LOCK' undeclared (first use in this function); did you mean 'MUTEX_LOCK'?
-> 
-> This failure was introduced in commit 7c1ef8129f37200b046750c6405ecd304fd4f1bf which upgraded
-> perl to 5.34.0.
-> 
-> Fixes:
->  - http://autobuild.buildroot.net/results/13d/13d66e281cb4778f7498f909f5f7c65d4b28bcbb/
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+This bump will fix the following libsoup3 build failure raised since
+commit 9cbffdf9be622c8ddad3b28106851b3101b3d201:
 
-It's been a little while, but I can't reproduce that build failure on
-the newer perl versions we have in the tree now. Besides, as Thomas
-spotted, it is dubious that locales has anything to do with threads.
+FAILED: libsoup/libsoup-3.0.vapi
+/home/buildroot/autobuild/instance-1/output-1/host/bin/vapigen --quiet --library=libsoup-3.0 --directory=/home/buildroot/autobuild/instance-1/output-1/build/libsoup3-3.4.4/build/libsoup --pkg=gio-2.0 --metadatadir=/home/buildroot/autobuild/instance-1/output-1/build/libsoup3-3.4.4/libsoup /home/buildroot/autobuild/instance-1/output-1/build/libsoup3-3.4.4/build/libsoup/Soup-3.0.gir /home/buildroot/autobuild/instance-1/output-1/build/libsoup3-3.4.4/libsoup/Soup-3.0-custom.vala
+Soup-3.0.gir:6877.95-6877.95: error: The type name `GLib.TlsProtocolVersion' could not be found
 
-Myabe that was an oversight from upstream that was fixed in later
-versions. Anyway, not reproducible, so I marked this patch as rejected.
+https://gitlab.gnome.org/GNOME/vala/-/blob/0.56.14/NEWS
 
-Thanks, and sorry for the long delay in replying...
+Fixes:
+ - http://autobuild.buildroot.org/results/732fcd20c2998e7d7b6b8f61871ad104f8d243df
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/vala/vala.hash | 4 ++--
+ package/vala/vala.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-> ---
->  package/perl/Config.in | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/perl/Config.in b/package/perl/Config.in
-> index 0ead1c4a46..9eb6334b9e 100644
-> --- a/package/perl/Config.in
-> +++ b/package/perl/Config.in
-> @@ -27,6 +27,7 @@ config BR2_PACKAGE_PERL_MODULES
->  config BR2_PACKAGE_PERL_THREADS
->  	bool "thread support"
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on BR2_ENABLE_LOCALE
->  	help
->  	  Enable use of threads in Perl scripts
->  
-> @@ -34,4 +35,7 @@ config BR2_PACKAGE_PERL_THREADS
->  	  is officially discouraged.
->  	  See https://perldoc.perl.org/threads.html#WARNING
->  
-> +comment "Threads support needs locales"
-> +	depends on !BR2_ENABLE_LOCALE
-> +
->  endif
-> -- 
-> 2.39.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/vala/vala.hash b/package/vala/vala.hash
+index 7f3a099940..b3716f0854 100644
+--- a/package/vala/vala.hash
++++ b/package/vala/vala.hash
+@@ -1,4 +1,4 @@
+-# From https://download.gnome.org/sources/vala/0.52/vala-0.52.4.sha256sum
+-sha256  ecde520e5160e659ee699f8b1cdc96065edbd44bbd08eb48ef5f2506751fdf31  vala-0.52.4.tar.xz
++# From https://download.gnome.org/sources/vala/0.56/vala-0.56.14.sha256sum
++sha256  9382c268ca9bdc02aaedc8152a9818bf3935273041f629c56de410e360a3f557  vala-0.56.14.tar.xz
+ # Locally computed
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
+diff --git a/package/vala/vala.mk b/package/vala/vala.mk
+index 94e18d349b..415d996faa 100644
+--- a/package/vala/vala.mk
++++ b/package/vala/vala.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-VALA_VERSION_MAJOR = 0.52
+-VALA_VERSION = $(VALA_VERSION_MAJOR).4
++VALA_VERSION_MAJOR = 0.56
++VALA_VERSION = $(VALA_VERSION_MAJOR).14
+ VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
+ VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
+ VALA_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
