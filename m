@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84141C47074
-	for <buildroot@archiver.kernel.org>; Tue,  2 Jan 2024 20:18:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77E2DC47074
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jan 2024 20:18:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2EEB840A5B;
-	Tue,  2 Jan 2024 20:18:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2EEB840A5B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 07F0B40A5B;
+	Tue,  2 Jan 2024 20:18:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 07F0B40A5B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2eZc2E2G8ZKu; Tue,  2 Jan 2024 20:18:01 +0000 (UTC)
+	with ESMTP id We87Gq0vanhN; Tue,  2 Jan 2024 20:18:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 255BE40A5F;
-	Tue,  2 Jan 2024 20:18:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 255BE40A5F
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9DDA51BF97F
- for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 20:17:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D945940A7D;
+	Tue,  2 Jan 2024 20:18:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D945940A7D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1DA9E1BF302
+ for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 20:17:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 776D660FA6
+ by smtp2.osuosl.org (Postfix) with ESMTP id D949C408C0
  for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 20:17:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 776D660FA6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D949C408C0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JFEe-z5geJSs for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id O07v823LSiXG for <buildroot@lists.busybox.net>;
  Tue,  2 Jan 2024 20:17:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 961E460DA5
+ by smtp2.osuosl.org (Postfix) with ESMTP id B434540A5C
  for <buildroot@buildroot.org>; Tue,  2 Jan 2024 20:17:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 961E460DA5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B434540A5C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8490F81DBC; Tue,  2 Jan 2024 20:17:16 +0000 (UTC)
+ id A1BB583CBF; Tue,  2 Jan 2024 20:17:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 2 Jan 2024 21:06:31 +0100
+Date: Tue, 2 Jan 2024 21:08:15 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a5cacb63082b9e58194c4b9f8b2af2c3e38ff15c
-X-Git-Newrev: 98684ba7885b9a62ba05af9093aa0f1010d1ee02
+X-Git-Oldrev: b25176ee9a373d00ab18e46d3e39f6a56dfbbfcf
+X-Git-Newrev: 17fb3f966d400943466440704500fd401080f443
 X-Patchwork-Hint: ignore
-Message-Id: <20240102201716.8490F81DBC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libopenssl: fix build without MMU
+Message-Id: <20240102201716.A1BB583CBF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pax-utils: bump to version 1.3.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +63,81 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=98684ba7885b9a62ba05af9093aa0f1010d1ee02
+commit: https://git.buildroot.net/buildroot/commit/?id=17fb3f966d400943466440704500fd401080f443
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit 973b1eba5a4ee72f040bd471b147267e36be73ad removed third patch
-because of
-https://github.com/openssl/openssl/commit/78634e8ac253a8edf338d329965724dfa8e033ab
-however OPENSSL_NO_MADVISE wasn't updated to reflect the new
-HAVE_MADVISE logic resulting in the following build failure without MMU:
-
-/home/buildroot/autobuild/instance-2/output-1/host/riscv64-buildroot-linux-uclibc/bin/ld.real: libcrypto.a(libcrypto-lib-mem_sec.o): in function `sh_init':
-/home/buildroot/autobuild/instance-2/output-1/build/libopenssl-3.2.0/crypto/mem_sec.c:557: undefined reference to `madvise'
-
-Fixes:
- - http://autobuild.buildroot.org/results/4328c025f6f2bcd2ebc5a4368c78e00da0aea1ae
+- Switch site to get latest release
+- autotools has been replaced by meson since
+  https://gitweb.gentoo.org/proj/pax-utils.git/commit/?id=063fcaeaa05074a9d90acec2f68b25dfb8ecd279
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libopenssl/libopenssl.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/pax-utils/pax-utils.hash |  2 +-
+ package/pax-utils/pax-utils.mk   | 23 +++++++++++++----------
+ 2 files changed, 14 insertions(+), 11 deletions(-)
 
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index 928f3379f8..7dc6d93256 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -26,7 +26,7 @@ LIBOPENSSL_CFLAGS += -DOPENSSL_SMALL_FOOTPRINT
+diff --git a/package/pax-utils/pax-utils.hash b/package/pax-utils/pax-utils.hash
+index 0ef8fad643..464dd14a5b 100644
+--- a/package/pax-utils/pax-utils.hash
++++ b/package/pax-utils/pax-utils.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  9742d2a31d53a4e0f6df0d3721ab6f7cf8b0404c95fee3b00e678c1ff6db7f21  pax-utils-1.2.6.tar.xz
++sha256  907fdcfc6c6c2913a8e42847f8096027b0a953b9344208d14daf2324fd711638  pax-utils-1.3.7.tar.bz2
+ sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
+diff --git a/package/pax-utils/pax-utils.mk b/package/pax-utils/pax-utils.mk
+index 704e50e738..5dd1842df3 100644
+--- a/package/pax-utils/pax-utils.mk
++++ b/package/pax-utils/pax-utils.mk
+@@ -4,28 +4,31 @@
+ #
+ ################################################################################
+ 
+-PAX_UTILS_VERSION = 1.2.6
+-PAX_UTILS_SITE = http://distfiles.gentoo.org/distfiles
+-PAX_UTILS_SOURCE = pax-utils-$(PAX_UTILS_VERSION).tar.xz
++PAX_UTILS_VERSION = 1.3.7
++PAX_UTILS_SITE = https://gitweb.gentoo.org/proj/pax-utils.git/snapshot
++PAX_UTILS_SOURCE = pax-utils-$(PAX_UTILS_VERSION).tar.bz2
+ PAX_UTILS_LICENSE = GPL-2.0
+ PAX_UTILS_LICENSE_FILES = COPYING
+ PAX_UTILS_CPE_ID_VENDOR = gentoo
+ 
+ PAX_UTILS_DEPENDENCIES = host-pkgconf
+-PAX_UTILS_CONF_OPTS = --without-python
++PAX_UTILS_CONF_OPTS = \
++	-Dbuild_manpages=disabled \
++	-Dlddtree_implementation=sh \
++	-Dtests=false
+ 
+ ifeq ($(BR2_PACKAGE_LIBCAP),y)
+ PAX_UTILS_DEPENDENCIES += libcap
+-PAX_UTILS_CONF_OPTS += --with-caps
++PAX_UTILS_CONF_OPTS += -Duse_libcap=enabled
+ else
+-PAX_UTILS_CONF_OPTS += --without-caps
++PAX_UTILS_CONF_OPTS += -Duse_libcap=disabled
  endif
  
- ifeq ($(BR2_USE_MMU),)
--LIBOPENSSL_CFLAGS += -DHAVE_FORK=0 -DOPENSSL_NO_MADVISE
-+LIBOPENSSL_CFLAGS += -DHAVE_FORK=0 -DHAVE_MADVISE=0
+ ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
+ PAX_UTILS_DEPENDENCIES += libseccomp
+-PAX_UTILS_CONF_OPTS += --with-seccomp
++PAX_UTILS_CONF_OPTS += -Duse_seccomp=true
+ else
+-PAX_UTILS_CONF_OPTS += --without-seccomp
++PAX_UTILS_CONF_OPTS += -Duse_seccomp=false
  endif
  
- ifeq ($(BR2_PACKAGE_CRYPTODEV_LINUX),y)
+ # lddtree and symtree need bash
+@@ -36,5 +39,5 @@ endef
+ endif
+ PAX_UTILS_POST_INSTALL_TARGET_HOOKS += PAX_UTILS_REMOVE_BASH_TOOLS
+ 
+-$(eval $(autotools-package))
+-$(eval $(host-autotools-package))
++$(eval $(meson-package))
++$(eval $(host-meson-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
