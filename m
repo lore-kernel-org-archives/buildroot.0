@@ -4,85 +4,103 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13467C46CD2
-	for <buildroot@archiver.kernel.org>; Tue,  2 Jan 2024 13:26:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25368C46CD2
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jan 2024 13:29:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9C610408B1;
-	Tue,  2 Jan 2024 13:26:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9C610408B1
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3A548404DA;
+	Tue,  2 Jan 2024 13:29:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A548404DA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vtTQgoQe6Kh7; Tue,  2 Jan 2024 13:26:27 +0000 (UTC)
+	with ESMTP id V9xrQxysBcBw; Tue,  2 Jan 2024 13:29:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A19C040649;
-	Tue,  2 Jan 2024 13:26:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A19C040649
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BBC6C1BF314
- for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 13:26:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 40C5640649;
+	Tue,  2 Jan 2024 13:29:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 40C5640649
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 149A91BF314
+ for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 13:29:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 953BA40908
- for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 13:26:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 953BA40908
+ by smtp3.osuosl.org (Postfix) with ESMTP id EF14760EC5
+ for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 13:28:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF14760EC5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gp-NV0EF-iom for <buildroot@lists.busybox.net>;
- Tue,  2 Jan 2024 13:26:23 +0000 (UTC)
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 84A96404F5
- for <buildroot@buildroot.org>; Tue,  2 Jan 2024 13:26:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84A96404F5
-Received: by mail-wr1-x42e.google.com with SMTP id
- ffacd0b85a97d-3368b9bbeb4so8806804f8f.2
- for <buildroot@buildroot.org>; Tue, 02 Jan 2024 05:26:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704201981; x=1704806781;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=niWv84JyUC0hzkWNj6C/ti/Ayh4OcHQ5nKnOXopU38k=;
- b=r10XDmwmjnCgvmKe1aMVZvkN+RgcywQk8usFQ7l3shWSfm36fPLPdQvK8rCjPsYnyD
- 6CFSyexLu9YFMj9QC+0V4wElsOmdN2c6UP/PRlnE60lP0Q/jUYaHNdwCnb0kQ1vqfsza
- O7ilxnZNDMfYDVOFU2/KWYvPSqD7JREoX/MgBTDnw07uuAzu44Ghe0rVohn4JJiG1ex7
- kup98CgtpyK6PjfdanrnqpV9v9EA9YhoPKWyUh6UCrUYlH2RluAfFgdYNoHZj3Pt9elb
- fYgMt2r2wzpBBU6p6gdi+YChYw6YXodsnuPNYgx+9ribhxsr2kbgVlvV3sQ0jvEnyMJJ
- cszQ==
-X-Gm-Message-State: AOJu0Yx7T1IwqX5xyQl1hYCFLB97CI7L1I2/uxm9wdZJ/p6e3I7OT0Q3
- Uq/CbS4VsuusuQ8v/ifgBzUFO4KKGB0=
-X-Google-Smtp-Source: AGHT+IE0vR0aURYLOBzQB8F0qA0gqkzH/CC0G5ccX8+mu6SQV/Nmt5duntM7fr8QnMd3y+0V/T6ZRg==
-X-Received: by 2002:adf:f241:0:b0:336:f372:2572 with SMTP id
- b1-20020adff241000000b00336f3722572mr2794037wrp.213.1704201980602; 
- Tue, 02 Jan 2024 05:26:20 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- z5-20020adff1c5000000b003366e974cacsm28453414wro.73.2024.01.02.05.26.20
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 02 Jan 2024 05:26:20 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VEfDdpw6q6Ci for <buildroot@lists.busybox.net>;
+ Tue,  2 Jan 2024 13:28:58 +0000 (UTC)
+Received: from mx0b-00230701.pphosted.com (mx0b-00230701.pphosted.com
+ [148.163.158.9])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E55E160EC4
+ for <buildroot@buildroot.org>; Tue,  2 Jan 2024 13:28:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E55E160EC4
+Received: from pps.filterd (m0098572.ppops.net [127.0.0.1])
+ by mx0b-00230701.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id
+ 4028A8qx008957; Tue, 2 Jan 2024 05:28:57 -0800
+Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com
+ [149.117.73.133])
+ by mx0b-00230701.pphosted.com (PPS) with ESMTPS id 3vajqfs7gm-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+ Tue, 02 Jan 2024 05:28:56 -0800 (PST)
+Received: from mailhost.synopsys.com (badc-mailhost1.synopsys.com
+ [10.192.0.17])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits)
+ client-signature RSA-PSS (2048 bits))
+ (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
+ by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id A6EB94012B;
+ Tue,  2 Jan 2024 13:28:55 +0000 (UTC)
+Received: from us01arcgnu3.internal.synopsys.com
+ (us01arcgnu3.internal.synopsys.com [10.194.34.166])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+ (Client did not present a certificate)
+ by mailhost.synopsys.com (Postfix) with ESMTPSA id 46D08A008E;
+ Tue,  2 Jan 2024 13:28:55 +0000 (UTC)
+X-SNPS-Relay: synopsys.com
 To: buildroot@buildroot.org
-Date: Tue,  2 Jan 2024 14:26:18 +0100
-Message-ID: <20240102132618.1255329-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Date: Tue,  2 Jan 2024 05:28:43 -0800
+Message-Id: <20240102132843.587559-1-abrodkin@synopsys.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
+X-Proofpoint-ORIG-GUID: iAtPAIR6gifE5QFhlNJMfdD6E9BwAuv2
+X-Proofpoint-GUID: iAtPAIR6gifE5QFhlNJMfdD6E9BwAuv2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-09_02,2023-12-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam
+ policy=outbound_active_cloned score=0
+ adultscore=0 impostorscore=0 spamscore=0 lowpriorityscore=0 mlxscore=0
+ clxscore=1015 malwarescore=0 priorityscore=1501 suspectscore=0 bulkscore=0
+ mlxlogscore=966 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2311290000 definitions=main-2401020103
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1704201981; x=1704806781; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=niWv84JyUC0hzkWNj6C/ti/Ayh4OcHQ5nKnOXopU38k=;
- b=UEOWXRaIBnOcymqp0lDwFKisNNCiaWbteKD9fC+QHfM36UtCmTxaaqZFZNDC7kWVRX
- P2FBaaznP1KN0p+9qpmUVj3kwp1VoQKjgoLZ1F0BDfmeE9yVxGrtgdDa0K0sshTajLmn
- bc+q7JYJTkLtMQLQYG8X+7mAtR1rrEXtPuyrSC/qqnF/ckA4okJ/aNqbSaNGF78JJmu5
- UE9hvY1fydCQ7iH/aLXmN0OF04EWcUuHCY51km+8Jj/zvyhlHwJjjLAQ+KVRMsDCo57S
- 1UzHkMts0dHSNuLuFcFYRkr9RxOiDhO56XZBlVxC3Uuvso4ATLr3gnOy6reEL/v9vDaU
- esDQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=UEOWXRaI
-Subject: [Buildroot] [PATCH 1/1] package/python-pysensors: add lm-sensors
- dependency
+ d=synopsys.com; h=
+ from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding; s=pfptdkimsnps; bh=yEWlgzOlaWlncS/p9
+ utXoX+wPNjEmvMvJBNUCZmXD54=; b=CNBDpNnKThuDxx8vEHe3tbwKQbzxNPoB2
+ zd6kRKCZAls9sfPWrPE4F5qhdPvTbRMY80AUIHpgcTfMDRNw3lqq2u8rNZ1oPrI5
+ bVY0YKacTJ7U5cN3e7cwodGqdh0qeKsFxoyH+raEpjoet+sMFR8O62pMYC/9ibfp
+ DmSor5DbZkJq9PTLVX01I0Z3lefQsEctKhl5rptsPeIgum4uwP7xa2G5oFESJbBG
+ DijzYdo/0lptqQZWP2pGGFbqr4LjWVy1sv7CeaKT2HfZNBTx0wID083Hh++j6FwH
+ bWv2LL6zfQqcBpxcOqEUWr/JyOTvyBXjEsHv83QI0ZQhN6GTCMRwQ==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=synopsys.com; s=mail; 
+ t=1704202135; bh=8GEZfzgpXDe1B0yW48n483iRDaFFjQglyYXF3ATjNCg=;
+ h=From:To:Cc:Subject:Date:From;
+ b=lEJiHilKjPCxObvh3aQ4nBhz97PeLqZnNye48k12grUOkw2bhqk1/9s5aaWLIUym4
+ 25mrME/fzeZ1dvdheGkqAtfskfoN+XamuFto2NTMm+5oAWR6XMVRr3eUvoP1WJp+B8
+ VVC63IJTuSlmnC3Rr3ZPXFplic0YXd8e/00TexMfwcG2+FyWfnvkmQlobZ4mLOEJj/
+ lCZUFEoUvq/GaOwj0Gp4pw/XAMR6Rt5H0Sk5JiAuY+GPkKdjy/D3nhFGCbljk49I/b
+ 5BhMrMxmXIkiQ/pnaZi+uViL5R0ZnMbyBpbj8gFxEdiSdG9MCLmLdF5DoG2l/08VL1
+ X0hDwAXLmvq1A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com
+ header.a=rsa-sha256 header.s=pfptdkimsnps header.b=CNBDpNnK; 
+ dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com
+ header.a=rsa-sha256 header.s=mail header.b=lEJiHilK
+Subject: [Buildroot] [PATCH] package/gcc: Enable ARC HS rel 3.10 in vanilla
+ GCC 13+
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,43 +112,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Brandon Maier <brandon.maier@collins.com>, Asaf Kahlon <asafka7@gmail.com>
+From: Alexey Brodkin via buildroot <buildroot@buildroot.org>
+Reply-To: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Alexey Brodkin <Alexey.Brodkin@synopsys.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit c8ff8d41c06f6b1cbc5cf8702a516411084ead16 forgot to add lm-sensors
-dependency resulting in the following build failure:
+For quite some time a special tuning for ARC HS release 3.10
+was only implemented in ARC fork of GCC, thus there was a dependency
+introduced back in the day, see [1].
 
-  File "/home/buildroot/autobuild/instance-2/output-1/build/python-pysensors-0.0.4/setup.py", line 3, in <module>
-    import sensors
-  File "/home/buildroot/autobuild/instance-2/output-1/build/python-pysensors-0.0.4/sensors/__init__.py", line 20, in <module>
-    raise ImportError("can't find the sensors library.")
+But finally that tuning got merged upstream (see [2]) and
+so could be used with vanilla GCC starting from version 13.1.
 
-Fixes:
- - http://autobuild.buildroot.org/results/acd8583fb635ea27811405a2478182ddcd5642f7
+[1] https://git.buildroot.net/buildroot/commit/?id=770c9e5ce3de4ef1743948898a37e9a2ad76ca8f
+[2] https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=7501eec65c60701f72621d04eeb5342bad2fe4fb
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Romain Naour <romain.naour@gmail.com>
 ---
- package/python-pysensors/python-pysensors.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/gcc/Config.in.host | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/python-pysensors/python-pysensors.mk b/package/python-pysensors/python-pysensors.mk
-index b38c47f0c8..6999ee3fa3 100644
---- a/package/python-pysensors/python-pysensors.mk
-+++ b/package/python-pysensors/python-pysensors.mk
-@@ -9,5 +9,6 @@ PYTHON_PYSENSORS_SOURCE = PySensors-$(PYTHON_PYSENSORS_VERSION).tar.gz
- PYTHON_PYSENSORS_SITE = https://files.pythonhosted.org/packages/76/31/d3383a192f31ce1d79f27ec3d047cca23dd82a1bf0939e774386aba37cf5
- PYTHON_PYSENSORS_SETUP_TYPE = setuptools
- PYTHON_PYSENSORS_LICENSE = LGPL-2.1
-+PYTHON_PYSENSORS_DEPENDENCIES = lm-sensors
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index eb553008db..fabc6173f5 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -47,8 +47,6 @@ config BR2_GCC_VERSION_13_X
+ 	# powerpc spe support has been deprecated since gcc 8.x.
+ 	# https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
+ 	depends on !BR2_POWERPC_CPU_HAS_SPE
+-	# ARC HS48 rel 31 only supported by gcc arc fork.
+-	depends on !BR2_archs4x_rel31
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_13
  
- $(eval $(python-package))
+ endchoice
 -- 
-2.43.0
+2.31.1
 
 _______________________________________________
 buildroot mailing list
