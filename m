@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88DF3C46CD2
-	for <buildroot@archiver.kernel.org>; Tue,  2 Jan 2024 20:23:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CFF9BC46CD2
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jan 2024 20:23:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3E59B40948;
-	Tue,  2 Jan 2024 20:23:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E59B40948
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8031540948;
+	Tue,  2 Jan 2024 20:23:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8031540948
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mvLQ35WR9zvy; Tue,  2 Jan 2024 20:23:08 +0000 (UTC)
+	with ESMTP id aNhZhk4rLFKm; Tue,  2 Jan 2024 20:23:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 556F240A62;
-	Tue,  2 Jan 2024 20:23:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 556F240A62
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1F26D1BF2B6
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7CAD640A7D;
+	Tue,  2 Jan 2024 20:23:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7CAD640A7D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6F4721BF2B6
  for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 20:23:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EC13160FA6
- for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 20:23:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC13160FA6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 54B5740A62
+ for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 20:23:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 54B5740A62
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pgsMzKgICJQI for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AphtpXk6TTZT for <buildroot@lists.busybox.net>;
  Tue,  2 Jan 2024 20:23:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 371B360F93
+ by smtp2.osuosl.org (Postfix) with ESMTP id 45A8F40948
  for <buildroot@buildroot.org>; Tue,  2 Jan 2024 20:23:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 371B360F93
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 45A8F40948
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2162783CD0; Tue,  2 Jan 2024 20:23:05 +0000 (UTC)
+ id 31EB483CD1; Tue,  2 Jan 2024 20:23:05 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 2 Jan 2024 21:20:14 +0100
+Date: Tue, 2 Jan 2024 21:20:23 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0aa56a81641862a3613d679bc662bc62cfc6b1e4
-X-Git-Newrev: 1a287945306b8617e144dfb31f4dc4c5af21b256
+X-Git-Oldrev: 1a287945306b8617e144dfb31f4dc4c5af21b256
+X-Git-Newrev: 7f618fb81ab3638995158a12d9bfd5c578f9d58c
 X-Patchwork-Hint: ignore
-Message-Id: <20240102202305.2162783CD0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/hidapi: bump to version 0.14.0
+Message-Id: <20240102202305.31EB483CD1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/fmt: bump to version 1.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +63,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1a287945306b8617e144dfb31f4dc4c5af21b256
+commit: https://git.buildroot.net/buildroot/commit/?id=7f618fb81ab3638995158a12d9bfd5c578f9d58c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/libusb/hidapi/releases/tag/hidapi-0.14.0
-https://github.com/libusb/hidapi/releases/tag/hidapi-0.13.1
-https://github.com/libusb/hidapi/releases/tag/hidapi-0.13.0
-https://github.com/libusb/hidapi/releases/tag/hidapi-0.12.0
+- LICENSE file dropped the .rst suffix
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/hidapi/hidapi.hash | 2 +-
- package/hidapi/hidapi.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/fmt/fmt.hash | 4 ++--
+ package/fmt/fmt.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/hidapi/hidapi.hash b/package/hidapi/hidapi.hash
-index 95046386a7..cc2d13214d 100644
---- a/package/hidapi/hidapi.hash
-+++ b/package/hidapi/hidapi.hash
-@@ -1,5 +1,5 @@
+diff --git a/package/fmt/fmt.hash b/package/fmt/fmt.hash
+index 5f0e06ef30..f9928820ce 100644
+--- a/package/fmt/fmt.hash
++++ b/package/fmt/fmt.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
--sha256  391d8e52f2d6a5cf76e2b0c079cfefe25497ba1d4659131297081fc0cd744632  hidapi-0.11.0.tar.gz
-+sha256  a5714234abe6e1f53647dd8cba7d69f65f71c558b7896ed218864ffcf405bcbd  hidapi-0.14.0.tar.gz
- sha256  7d3b087c34f35d4d538e3bcddd1ff8f66e92f9ef336881999482800ddf840913  LICENSE.txt
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE-gpl3.txt
- sha256  30eb1bef29b46f8ba7ab8b416035dbd93cb034a45481dd97815b944284582cd2  LICENSE-bsd.txt
-diff --git a/package/hidapi/hidapi.mk b/package/hidapi/hidapi.mk
-index 9341f0186c..9f5c0a3df2 100644
---- a/package/hidapi/hidapi.mk
-+++ b/package/hidapi/hidapi.mk
-@@ -4,7 +4,7 @@
+-sha256  b84e58a310c9b50196cda48d5678d5fa0849bca19e5fdba6b684f0ee93ed9d1b  fmt-10.1.1.zip
+-sha256  07580f2a3b35709ce703d523f447b242f6dfec7582a8c0df102c7fa2849375f8  LICENSE.rst
++sha256  8a942861a94f8461a280f823041cde8f620a6d8b0e0aacc98c15bb5a9dd92399  fmt-10.2.0.zip
++sha256  07580f2a3b35709ce703d523f447b242f6dfec7582a8c0df102c7fa2849375f8  LICENSE
+diff --git a/package/fmt/fmt.mk b/package/fmt/fmt.mk
+index 8f8ba4837f..2512657727 100644
+--- a/package/fmt/fmt.mk
++++ b/package/fmt/fmt.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--HIDAPI_VERSION = 0.11.0
-+HIDAPI_VERSION = 0.14.0
- HIDAPI_SITE = $(call github,libusb,hidapi,hidapi-$(HIDAPI_VERSION))
- HIDAPI_INSTALL_STAGING = YES
- # No configure provided, so we need to autoreconf.
+-FMT_VERSION = 10.1.1
++FMT_VERSION = 10.2.0
+ FMT_SITE = https://github.com/fmtlib/fmt/releases/download/$(FMT_VERSION)
+ FMT_SOURCE = fmt-$(FMT_VERSION).zip
+ FMT_LICENSE = MIT with exception
+-FMT_LICENSE_FILES = LICENSE.rst
++FMT_LICENSE_FILES = LICENSE
+ FMT_CPE_ID_VENDOR = fmt
+ FMT_INSTALL_STAGING = YES
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
