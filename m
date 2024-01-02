@@ -4,65 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8482AC47074
-	for <buildroot@archiver.kernel.org>; Tue,  2 Jan 2024 20:24:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E963C46CD2
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jan 2024 20:24:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 38F0840ADD;
-	Tue,  2 Jan 2024 20:24:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 38F0840ADD
+	by smtp2.osuosl.org (Postfix) with ESMTP id B6F4A400CB;
+	Tue,  2 Jan 2024 20:24:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B6F4A400CB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qtuYb2bQiGU1; Tue,  2 Jan 2024 20:24:02 +0000 (UTC)
+	with ESMTP id ZDCBRCDd2UkS; Tue,  2 Jan 2024 20:24:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3075540AB8;
-	Tue,  2 Jan 2024 20:24:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3075540AB8
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6CF7F1BF2B6
- for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 20:23:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B4A7840A62;
+	Tue,  2 Jan 2024 20:24:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4A7840A62
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 91A531BF2B6
+ for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 20:24:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4651580EBC
- for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 20:23:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4651580EBC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 68E9E4061F
+ for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 20:24:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 68E9E4061F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 90F0wMALjfbf for <buildroot@lists.busybox.net>;
- Tue,  2 Jan 2024 20:23:41 +0000 (UTC)
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1E3B280E45
- for <buildroot@buildroot.org>; Tue,  2 Jan 2024 20:23:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1E3B280E45
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6F2A9C0003;
- Tue,  2 Jan 2024 20:23:39 +0000 (UTC)
-Date: Tue, 2 Jan 2024 21:23:38 +0100
-To: Alexey Brodkin via buildroot <buildroot@buildroot.org>
-Message-ID: <20240102212338.2e91809d@windsurf>
-In-Reply-To: <20240102132843.587559-1-abrodkin@synopsys.com>
-References: <20240102132843.587559-1-abrodkin@synopsys.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1704227019;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=nhGIEUSH9e+wvgctFN6lua3ukVVTx5eJrVWtHqP0/Gg=;
- b=C+E2BKpZRQ3hq5hJo7KuY1rT7ZnQ88vcrPv7kPgkhvuWvInBDhGiYhFgaLa4ydBIb2wmHB
- J4RPmChoJCccqi/8tGly6LlgZVARMJ8Znb2+URhik9kciGt8kcvXS2przdDgF/JnOYvodf
- iy48tX4z5IrONN4keaanHQxlR0lhgS9j9Ir+N2LBtvO7150dFw+eW2U/Qlno9JRrwbpEgW
- /GnoMlPl8Ol/rNBYnf3SPKfxGXVzaDqK3g7xCJHBSLYiyyr96ZhGe91JtTeJ5fRCzszLoD
- 8KZsdJP3MMDmG+X7PMfty1xlnh+6qTRJkToqQqVkYlpULNQxgAY8vKsAbHodJw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=C+E2BKpZ
-Subject: Re: [Buildroot] [PATCH] package/gcc: Enable ARC HS rel 3.10 in
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5DwAtmsr97l5 for <buildroot@lists.busybox.net>;
+ Tue,  2 Jan 2024 20:24:41 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5BC6C400CB
+ for <buildroot@buildroot.org>; Tue,  2 Jan 2024 20:24:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5BC6C400CB
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4A7B683CD6; Tue,  2 Jan 2024 20:24:41 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 2 Jan 2024 21:23:20 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7f618fb81ab3638995158a12d9bfd5c578f9d58c
+X-Git-Newrev: 6b25c3dad2e340f944a977a5ea51ee9d1f8a63f6
+X-Patchwork-Hint: ignore
+Message-Id: <20240102202441.4A7B683CD6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gcc: enable ARC HS rel 3.10 in
  vanilla GCC 13+
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -77,41 +58,46 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Alexey Brodkin <Alexey.Brodkin@synopsys.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue,  2 Jan 2024 05:28:43 -0800
-Alexey Brodkin via buildroot <buildroot@buildroot.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=6b25c3dad2e340f944a977a5ea51ee9d1f8a63f6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> For quite some time a special tuning for ARC HS release 3.10
-> was only implemented in ARC fork of GCC, thus there was a dependency
-> introduced back in the day, see [1].
-> 
-> But finally that tuning got merged upstream (see [2]) and
-> so could be used with vanilla GCC starting from version 13.1.
-> 
-> [1] https://git.buildroot.net/buildroot/commit/?id=770c9e5ce3de4ef1743948898a37e9a2ad76ca8f
-> [2] https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=7501eec65c60701f72621d04eeb5342bad2fe4fb
-> 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Romain Naour <romain.naour@gmail.com>
-> ---
->  package/gcc/Config.in.host | 2 --
->  1 file changed, 2 deletions(-)
+For quite some time a special tuning for ARC HS release 3.10
+was only implemented in ARC fork of GCC, thus there was a dependency
+introduced back in the day, see [1].
 
-Applied to master, thanks.
+But finally that tuning got merged upstream (see [2]) and
+so could be used with vanilla GCC starting from version 13.1.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+[1] https://git.buildroot.net/buildroot/commit/?id=770c9e5ce3de4ef1743948898a37e9a2ad76ca8f
+[2] https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=7501eec65c60701f72621d04eeb5342bad2fe4fb
+
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gcc/Config.in.host | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index fd721088ec..ebdcdba62e 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -47,8 +47,6 @@ config BR2_GCC_VERSION_13_X
+ 	# powerpc spe support has been deprecated since gcc 8.x.
+ 	# https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
+ 	depends on !BR2_POWERPC_CPU_HAS_SPE
+-	# ARC HS48 rel 31 only supported by gcc arc fork.
+-	depends on !BR2_archs4x_rel31
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_13
+ 
+ endchoice
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
