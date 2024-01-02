@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2259FC46CD2
-	for <buildroot@archiver.kernel.org>; Tue,  2 Jan 2024 08:52:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC8D0C46CD2
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jan 2024 08:52:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C607840743;
-	Tue,  2 Jan 2024 08:52:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C607840743
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5E4AB40872;
+	Tue,  2 Jan 2024 08:52:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E4AB40872
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jek4uNMk0sop; Tue,  2 Jan 2024 08:52:09 +0000 (UTC)
+	with ESMTP id vGW3sd4EIqMb; Tue,  2 Jan 2024 08:52:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0251A4086C;
-	Tue,  2 Jan 2024 08:52:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0251A4086C
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7DD3C1BF966
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9C50D408BC;
+	Tue,  2 Jan 2024 08:52:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C50D408BC
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 79DB11BF5A6
  for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 08:52:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 63EF981275
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5F9A160864
  for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 08:52:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 63EF981275
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F9A160864
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MW-SWvfdryKu for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jLFLiQ70pavt for <buildroot@lists.busybox.net>;
  Tue,  2 Jan 2024 08:52:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8C33981272
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7F106607F1
  for <buildroot@buildroot.org>; Tue,  2 Jan 2024 08:52:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C33981272
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7F106607F1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7842283BDC; Tue,  2 Jan 2024 08:52:06 +0000 (UTC)
+ id 675F983BD9; Tue,  2 Jan 2024 08:52:06 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 2 Jan 2024 09:48:30 +0100
+Date: Tue, 2 Jan 2024 09:48:20 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f83443e2fc4e44a8deb38d35a27975bb34ca380e
-X-Git-Newrev: e83793705b5436feffc087c7f33e3f455439ede7
+X-Git-Oldrev: 1d5d9279ca47e123ac91a0b7f04cbc231ef4b8a7
+X-Git-Newrev: f83443e2fc4e44a8deb38d35a27975bb34ca380e
 X-Patchwork-Hint: ignore
-Message-Id: <20240102085206.7842283BDC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/proftpd: security bump to version
- 1.3.8b
+Message-Id: <20240102085206.675F983BD9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/tinyssh: security bump to version
+ 20240101
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,48 +64,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e83793705b5436feffc087c7f33e3f455439ede7
+commit: https://git.buildroot.net/buildroot/commit/?id=f83443e2fc4e44a8deb38d35a27975bb34ca380e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-1.3.8b - Released 19-Dec-2023
---------------------------------
-- Issue 1735 - Compiling ProFTPD 1.3.8a mod_sftp, mod_tls using libressl 3.7.3
-  fails.
-- Issue 1756 - Build system fails for specific module names.
-- Issue 1760 - mod_sftp is affected by "Terrapin" Prefix Truncation Attacks in
-  SSH Specification (CVE-2023-48795).
+- License changed from public domain to CC0:
+  https://github.com/janmojzis/tinyssh/commit/39dfb96613660d67ced44cc3995a08797e6c999a
+- Mitigates CVE-2023-48795:
+  https://github.com/advisories/GHSA-45x7-px36-x8w8
 
-https://github.com/proftpd/proftpd/blob/1.3.8/NEWS
+https://github.com/janmojzis/tinyssh/releases/tag/20230101
+https://github.com/janmojzis/tinyssh/releases/tag/20240101
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/proftpd/proftpd.hash | 2 +-
- package/proftpd/proftpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/tinyssh/tinyssh.hash | 4 ++--
+ package/tinyssh/tinyssh.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/proftpd/proftpd.hash b/package/proftpd/proftpd.hash
-index f950f26b86..5a7d153a31 100644
---- a/package/proftpd/proftpd.hash
-+++ b/package/proftpd/proftpd.hash
+diff --git a/package/tinyssh/tinyssh.hash b/package/tinyssh/tinyssh.hash
+index 462ffb9002..bdb1504234 100644
+--- a/package/tinyssh/tinyssh.hash
++++ b/package/tinyssh/tinyssh.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  f7139e7377a2cb059b8b9b14d76a6df5f440e3181cb15ae890d43bbcae574748  proftpd-1.3.8.tar.gz
-+sha256  183ab7c6107de271a2959ff268f55c9b6c76b2cf0029e6584fccc019686601e0  proftpd-1.3.8b.tar.gz
- sha256  391a473d755c29b5326fb726326ff3c37e42512f53a8f5789fc310232150bf80  COPYING
-diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
-index 398155222d..0820822e17 100644
---- a/package/proftpd/proftpd.mk
-+++ b/package/proftpd/proftpd.mk
-@@ -4,7 +4,7 @@
+ # locally computed
+-sha256  234656fc8d369608eb5d0f3a26280e0e38e2e6b134cfc610b6e24bce176acd4f  tinyssh-20220801.tar.gz
+-sha256  b5dc19477e29f4111e1c16cd89ec0782f5a07b1a30e3bdb7c155425b81b12c46  LICENCE
++sha256  d2cd49d0e5e8bdb808d86f07f946a0cfbf2dc9a449a4b8243a82be267d852b62  tinyssh-20240101.tar.gz
++sha256  a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499  LICENCE
+diff --git a/package/tinyssh/tinyssh.mk b/package/tinyssh/tinyssh.mk
+index 1472f7ead1..80b6ccb850 100644
+--- a/package/tinyssh/tinyssh.mk
++++ b/package/tinyssh/tinyssh.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PROFTPD_VERSION = 1.3.8
-+PROFTPD_VERSION = 1.3.8b
- PROFTPD_SITE = ftp://ftp.proftpd.org/distrib/source
- PROFTPD_LICENSE = GPL-2.0+
- PROFTPD_LICENSE_FILES = COPYING
+-TINYSSH_VERSION = 20220801
++TINYSSH_VERSION = 20240101
+ TINYSSH_SITE = $(call github,janmojzis,tinyssh,$(TINYSSH_VERSION))
+-TINYSSH_LICENSE = Public Domain, CC0-1.0
++TINYSSH_LICENSE = CC0-1.0
+ TINYSSH_LICENSE_FILES = LICENCE
+ 
+ define TINYSSH_BUILD_CMDS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
