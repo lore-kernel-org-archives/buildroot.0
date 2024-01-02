@@ -4,65 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92CC0C46CD2
-	for <buildroot@archiver.kernel.org>; Tue,  2 Jan 2024 08:56:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58697C46CD2
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jan 2024 08:56:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4275C40928;
-	Tue,  2 Jan 2024 08:56:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4275C40928
+	by smtp4.osuosl.org (Postfix) with ESMTP id 10B3D40876;
+	Tue,  2 Jan 2024 08:56:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10B3D40876
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Kwo4sa0BIqsN; Tue,  2 Jan 2024 08:56:31 +0000 (UTC)
+	with ESMTP id mgbqsj7dCmZZ; Tue,  2 Jan 2024 08:56:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8537B4092A;
-	Tue,  2 Jan 2024 08:56:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8537B4092A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 277C01BF5A6
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3F13340941;
+	Tue,  2 Jan 2024 08:56:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F13340941
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4FED91BF966
  for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 08:55:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E7AC981279
- for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 08:55:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E7AC981279
+ by smtp4.osuosl.org (Postfix) with ESMTP id 80D4A408F2
+ for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 08:55:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80D4A408F2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UP5gmtZQzaw4 for <buildroot@lists.busybox.net>;
- Tue,  2 Jan 2024 08:55:20 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F119881276
- for <buildroot@buildroot.org>; Tue,  2 Jan 2024 08:55:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F119881276
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4B41140006;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 773NfyN2erL6 for <buildroot@lists.busybox.net>;
  Tue,  2 Jan 2024 08:55:18 +0000 (UTC)
-Date: Tue, 2 Jan 2024 09:55:17 +0100
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20240102095517.19d17a87@windsurf>
-In-Reply-To: <20240101222156.46284-1-fontaine.fabrice@gmail.com>
-References: <20240101222156.46284-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1704185718;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=tupmK6duFIvi2mUkXwNp4R1eUb6LYyUdS+/NzwHkwGw=;
- b=A1U5l/4iBvNhappf5pMQfQFbubcQccPbV7cP8JsBafsZFrcpIQZ/94sChYcVWxjW9W7rm1
- kMjOU8dDF6EjPU/nAw2oWpNqTqd1PG/EbVQK6cmo0p/Kn+BWCAu5SWAuSHnFnw4yo2MPQe
- 6c8bcOBy8i0MXmFdFF/dwPrxAmoKJqPIoUyWLrp5GNk3InQqtRr0lclJ8bjRpRagryph9c
- PMHwqhxomWdQCtIXLVfBjJkyCYrO985q1cpXRlAOmwcNIy6nO2ppqTPBL+ujiQlpj6aL+n
- Vnc4x4GGGeVj/i4issFq8asZVaHhEXWVreeyeRUh0NbA+yD3U8X1sKhnLzTj6g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=A1U5l/4i
-Subject: Re: [Buildroot] [PATCH 1/1] package/highway: bump to version 1.0.7
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8B164408EC
+ for <buildroot@buildroot.org>; Tue,  2 Jan 2024 08:55:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B164408EC
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7AA0F83C2A; Tue,  2 Jan 2024 08:55:18 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 2 Jan 2024 09:54:39 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 280d06236e25a01b7985e2e7951948533306a60e
+X-Git-Newrev: b8bacbfb9762e4c2dc58fd36d2bddc91f033e21e
+X-Patchwork-Hint: ignore
+Message-Id: <20240102085518.7AA0F83C2A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-werkzeug: security bump to
+ version 2.3.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,40 +58,57 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon,  1 Jan 2024 23:21:56 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=b8bacbfb9762e4c2dc58fd36d2bddc91f033e21e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Drop patches (already in version)
-> 
-> https://github.com/google/highway/releases/tag/1.0.7
-> https://github.com/google/highway/releases/tag/1.0.6
-> https://github.com/google/highway/releases/tag/1.0.5
-> https://github.com/google/highway/releases/tag/1.0.4
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  .checkpackageignore                           |   2 -
->  ...Fix-compilation-for-armv7-with-gcc-8.patch |  46 -------
->  ...for-armv7-targets-with-vfp-v4-and-gc.patch | 118 ------------------
->  package/highway/highway.hash                  |   2 +-
->  package/highway/highway.mk                    |   2 +-
->  5 files changed, 2 insertions(+), 168 deletions(-)
->  delete mode 100644 package/highway/0001-Fix-compilation-for-armv7-with-gcc-8.patch
->  delete mode 100644 package/highway/0002-Fix-compilation-for-armv7-targets-with-vfp-v4-and-gc.patch
+Fix slow multipart parsing for large parts potentially enabling DoS
+attacks (CVE-2023-46136):
+https://github.com/pallets/werkzeug/security/advisories/GHSA-hrfv-mqp8-q5rw
 
-Applied to master, thanks.
+https://werkzeug.palletsprojects.com/en/2.3.x/changes/#version-2-3-8
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-werkzeug/python-werkzeug.hash | 4 ++--
+ package/python-werkzeug/python-werkzeug.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/package/python-werkzeug/python-werkzeug.hash b/package/python-werkzeug/python-werkzeug.hash
+index 07b6f2f40d..34adc67088 100644
+--- a/package/python-werkzeug/python-werkzeug.hash
++++ b/package/python-werkzeug/python-werkzeug.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/werkzeug/json
+-md5  de26f240d6f95689a8d15170c2d958b6  Werkzeug-2.3.6.tar.gz
+-sha256  98c774df2f91b05550078891dee5f0eb0cb797a522c757a2452b9cee5b202330  Werkzeug-2.2.3.tar.gz
++md5  3bb49cd2f2b51a1c638532e9a935e207  werkzeug-2.3.8.tar.gz
++sha256  554b257c74bbeb7a0d254160a4f8ffe185243f52a52035060b761ca62d977f03  werkzeug-2.3.8.tar.gz
+ # Locally computed sha256 checksums
+ sha256  3b49dcee4105eb37bac10faf1be260408fe85d252b8e9df2e0979fc1e094437b  LICENSE.rst
+diff --git a/package/python-werkzeug/python-werkzeug.mk b/package/python-werkzeug/python-werkzeug.mk
+index 3b7c663437..e8ef32bb1b 100644
+--- a/package/python-werkzeug/python-werkzeug.mk
++++ b/package/python-werkzeug/python-werkzeug.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_WERKZEUG_VERSION = 2.3.6
+-PYTHON_WERKZEUG_SOURCE = Werkzeug-$(PYTHON_WERKZEUG_VERSION).tar.gz
+-PYTHON_WERKZEUG_SITE = https://files.pythonhosted.org/packages/d1/7e/c35cea5749237d40effc50ed1a1c7518d9f2e768fcf30b4e9ea119e74975
++PYTHON_WERKZEUG_VERSION = 2.3.8
++PYTHON_WERKZEUG_SOURCE = werkzeug-$(PYTHON_WERKZEUG_VERSION).tar.gz
++PYTHON_WERKZEUG_SITE = https://files.pythonhosted.org/packages/3d/4b/d746f1000782c89d6c97df9df43ba8f4d126038608843d3560ae88d201b5
+ PYTHON_WERKZEUG_SETUP_TYPE = setuptools
+ PYTHON_WERKZEUG_LICENSE = BSD-3-Clause
+ PYTHON_WERKZEUG_LICENSE_FILES = LICENSE.rst
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
