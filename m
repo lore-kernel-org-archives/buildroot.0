@@ -4,67 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98816C46CD2
-	for <buildroot@archiver.kernel.org>; Tue,  2 Jan 2024 08:39:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2259FC46CD2
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jan 2024 08:52:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 45C8340743;
-	Tue,  2 Jan 2024 08:39:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 45C8340743
+	by smtp4.osuosl.org (Postfix) with ESMTP id C607840743;
+	Tue,  2 Jan 2024 08:52:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C607840743
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BM2P-mBXEwYs; Tue,  2 Jan 2024 08:39:11 +0000 (UTC)
+	with ESMTP id jek4uNMk0sop; Tue,  2 Jan 2024 08:52:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7E08A405D8;
-	Tue,  2 Jan 2024 08:39:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E08A405D8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0251A4086C;
+	Tue,  2 Jan 2024 08:52:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0251A4086C
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0A6251BF5A6
- for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 08:39:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7DD3C1BF966
+ for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 08:52:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E44B980E46
- for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 08:39:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E44B980E46
+ by smtp1.osuosl.org (Postfix) with ESMTP id 63EF981275
+ for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 08:52:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 63EF981275
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id l8159SGkEjkT for <buildroot@lists.busybox.net>;
- Tue,  2 Jan 2024 08:39:08 +0000 (UTC)
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CB27280E55
- for <buildroot@buildroot.org>; Tue,  2 Jan 2024 08:39:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB27280E55
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C33B81BF204;
- Tue,  2 Jan 2024 08:39:04 +0000 (UTC)
-Date: Tue, 2 Jan 2024 09:39:04 +0100
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Message-ID: <20240102093904.5625d379@windsurf>
-In-Reply-To: <ZYxfxXC4-vKZlmcZ@landeda>
-References: <20231227165840.2900718-1-thomas.petazzoni@bootlin.com>
- <ZYxfxXC4-vKZlmcZ@landeda>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1704184744;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=+3xVnw50YamXTipw6OqCfsSon7JEfn/8Vti9f59OIKM=;
- b=NhUTSxlOE+UjuOgMQfKAzW5mymAa3ewVuIxe96dsbRbaEJrarH+7KJrTmq5HqPiVhhM62d
- pQ7sRF6ijpIB+GD8q8gehiBdFOORgMEvSQK4AxvdfuBTXtcy+EYA/kKAdJhQsyVo7HLFUh
- T65JTORGOmdQFMcqayMXweIQLRneE9Zf6FgDFe0FRmvTMcaqfr3t5jlWU0zHthcqEmqSAu
- /TqKZAUQpR+y4FzSRlcd8VjaQqoyeDipny7W0M4aoE11nelHpLhacEd8TTrpI3WyfZ7lXG
- Z0KJll+mkkNLFtOdzxKqm+WdLxhbChXiTKPgyUNYv2/LiyzP8d0ACVKqAOuAnQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=NhUTSxlO
-Subject: Re: [Buildroot] [PATCH] Config.in: change default optimization
- level from -Os to -O2
+ with ESMTP id MW-SWvfdryKu for <buildroot@lists.busybox.net>;
+ Tue,  2 Jan 2024 08:52:06 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8C33981272
+ for <buildroot@buildroot.org>; Tue,  2 Jan 2024 08:52:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C33981272
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7842283BDC; Tue,  2 Jan 2024 08:52:06 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 2 Jan 2024 09:48:30 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f83443e2fc4e44a8deb38d35a27975bb34ca380e
+X-Git-Newrev: e83793705b5436feffc087c7f33e3f455439ede7
+X-Patchwork-Hint: ignore
+Message-Id: <20240102085206.7842283BDC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/proftpd: security bump to version
+ 1.3.8b
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,69 +58,54 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: louis.chauvet@bootlin.com, Buildroot List <buildroot@buildroot.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=e83793705b5436feffc087c7f33e3f455439ede7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for the feedback.
+1.3.8b - Released 19-Dec-2023
+--------------------------------
+- Issue 1735 - Compiling ProFTPD 1.3.8a mod_sftp, mod_tls using libressl 3.7.3
+  fails.
+- Issue 1756 - Build system fails for specific module names.
+- Issue 1760 - mod_sftp is affected by "Terrapin" Prefix Truncation Attacks in
+  SSH Specification (CVE-2023-48795).
 
-On Wed, 27 Dec 2023 18:32:53 +0100
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+https://github.com/proftpd/proftpd/blob/1.3.8/NEWS
 
-> > Here are some arguments in favor of this change:
-> > 
-> > - Most Buildroot uses use Buildroot for platforms that have a  
-> 
-> s/uses/users/ maybe?
-> 
-> >   reasonable amount of storage, and the difference between -Os and -O2
-> >   in terms of code size is no longer than significant compared to the  
-> 
-> s/than/as/
-> 
-> >   size of storage typically available on average embedded Linux
-> >   devices  
-> 
-> ... nowadays.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/proftpd/proftpd.hash | 2 +-
+ package/proftpd/proftpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I sent a v2 (where I messed up) and then a v3, fixing those. I actually
-made another change: the Config.in help text of BR2_OPTIMIZE_S
-explicitly mentioned that it was the default. So I updated this and
-moved the text to BR2_OPTIMIZE_2.
-
-> 
-> > - -Os can have a pretty bad performance impact, compared to -O2.  
-> 
-> What impact are we speaking of? Basically, -Os is -O2 except for
-> optimisations that increase code size. Also, smaller code fit better
-> in caches, so there can be a speed gain to have smaller code too.
-> 
-> So, stating that -Os has a "pretty bad" performance impact is not that
-> obvious.
-
-I obviously don't have hard numbers, but I definitely remember
-getting reports of performance problems that got solved by moving to
--O2. However, I honestly don't remember if it was a bug report in our
-public bug tracker, or an issue in a customer project. But I had in my
-TODO-list for a long time to send this patch, because on multiple
-occasions I saw people being hit by issues being caused by the default
-setting of -Os.
-
-> Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
-
-Thanks, the v3 has your Acked-by :-)
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/proftpd/proftpd.hash b/package/proftpd/proftpd.hash
+index f950f26b86..5a7d153a31 100644
+--- a/package/proftpd/proftpd.hash
++++ b/package/proftpd/proftpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  f7139e7377a2cb059b8b9b14d76a6df5f440e3181cb15ae890d43bbcae574748  proftpd-1.3.8.tar.gz
++sha256  183ab7c6107de271a2959ff268f55c9b6c76b2cf0029e6584fccc019686601e0  proftpd-1.3.8b.tar.gz
+ sha256  391a473d755c29b5326fb726326ff3c37e42512f53a8f5789fc310232150bf80  COPYING
+diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
+index 398155222d..0820822e17 100644
+--- a/package/proftpd/proftpd.mk
++++ b/package/proftpd/proftpd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PROFTPD_VERSION = 1.3.8
++PROFTPD_VERSION = 1.3.8b
+ PROFTPD_SITE = ftp://ftp.proftpd.org/distrib/source
+ PROFTPD_LICENSE = GPL-2.0+
+ PROFTPD_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
