@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCCF5C46CD2
-	for <buildroot@archiver.kernel.org>; Tue,  2 Jan 2024 20:17:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5849FC46CD2
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jan 2024 20:17:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 57744408C0;
-	Tue,  2 Jan 2024 20:17:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 57744408C0
+	by smtp2.osuosl.org (Postfix) with ESMTP id C249C40A5E;
+	Tue,  2 Jan 2024 20:17:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C249C40A5E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NRiQtrswZtru; Tue,  2 Jan 2024 20:17:20 +0000 (UTC)
+	with ESMTP id OGN-djlCSSzO; Tue,  2 Jan 2024 20:17:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4280240A5C;
-	Tue,  2 Jan 2024 20:17:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4280240A5C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 862801BF302
+	by smtp2.osuosl.org (Postfix) with ESMTP id BADE140A5B;
+	Tue,  2 Jan 2024 20:17:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BADE140A5B
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 92E201BF966
  for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 20:17:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5E90841725
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7835640A5E
  for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 20:17:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E90841725
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7835640A5E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cR0-i0DEf3Oq for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GTFxgLAqTPLe for <buildroot@lists.busybox.net>;
  Tue,  2 Jan 2024 20:17:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8C8114172F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 580E6408C0
  for <buildroot@buildroot.org>; Tue,  2 Jan 2024 20:17:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C8114172F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 580E6408C0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 76A6982AD1; Tue,  2 Jan 2024 20:17:16 +0000 (UTC)
+ id 3E43A82AD1; Tue,  2 Jan 2024 20:17:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 2 Jan 2024 21:06:12 +0100
+Date: Tue, 2 Jan 2024 21:05:39 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 92040c4bf762d4a5e836cb04bc457839fb57f7f9
-X-Git-Newrev: a5cacb63082b9e58194c4b9f8b2af2c3e38ff15c
+X-Git-Oldrev: 3e91de6428bf3dde303ed41b55b4cfe739b353f9
+X-Git-Newrev: 2c81cee61a5d6d477b1081cab7dfba7157c18155
 X-Patchwork-Hint: ignore
-Message-Id: <20240102201716.76A6982AD1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libopenssl: fix s390x build
+Message-Id: <20240102201716.3E43A82AD1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/hawktracer: bump to version 0.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a5cacb63082b9e58194c4b9f8b2af2c3e38ff15c
+commit: https://git.buildroot.net/buildroot/commit/?id=2c81cee61a5d6d477b1081cab7dfba7157c18155
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use linux64-s390x configure target to fix the following s390x build
-failure raised since bump to version 3.2.0 in commit
-973b1eba5a4ee72f040bd471b147267e36be73ad and
-https://github.com/openssl/openssl/commit/79040cf29e011c21789563d74da626b7465a0540:
-
-/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/s390x-buildroot-linux-gnu/13.2.0/../../../../s390x-buildroot-linux-gnu/bin/ld: libcrypto.a(libcrypto-lib-dh_key.o): in function `dh_bn_mod_exp':
-dh_key.c:(.text+0x3c8): undefined reference to `s390x_mod_exp'
-/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/s390x-buildroot-linux-gnu/13.2.0/../../../../s390x-buildroot-linux-gnu/bin/ld: libcrypto.a(libcrypto-lib-rsa_ossl.o): in function `rsa_ossl_s390x_mod_exp':
-rsa_ossl.c:(.text+0xd2c): undefined reference to `s390x_crt'
-
-Fixes:
- - http://autobuild.buildroot.org/results/77c5e13127de67a69782f138aa28c8b0ad951941
+https://github.com/amzn/hawktracer/releases/tag/v0.11.0
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libopenssl/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/hawktracer/hawktracer.hash | 2 +-
+ package/hawktracer/hawktracer.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libopenssl/Config.in b/package/libopenssl/Config.in
-index 49958d9fd6..0c8db52e2e 100644
---- a/package/libopenssl/Config.in
-+++ b/package/libopenssl/Config.in
-@@ -25,6 +25,7 @@ config BR2_PACKAGE_LIBOPENSSL_TARGET_ARCH
- 	default "linux-x86_64"			if BR2_x86_64
- 	default "linux64-riscv64"               if BR2_riscv && BR2_ARCH_IS_64
- 	default "linux32-riscv32"               if BR2_riscv && !BR2_ARCH_IS_64
-+	default "linux64-s390x"                 if BR2_s390x
- 	# no-asm is needed with generic architectures such as
- 	# linux-generic{32,64}, see
- 	# https://github.com/openssl/openssl/issues/9839
+diff --git a/package/hawktracer/hawktracer.hash b/package/hawktracer/hawktracer.hash
+index 29d00e29ec..585b612c49 100644
+--- a/package/hawktracer/hawktracer.hash
++++ b/package/hawktracer/hawktracer.hash
+@@ -1,3 +1,3 @@
+ # Computed locally
+-sha256  099f76d5be18ad5d714fded0c6f889f588986cdde2b31f2c0058413698a5f35c  hawktracer-3c22b3908912e2ec727fd2ddc5dbfe7464e6b4a5.tar.gz
++sha256  12a689a1cfb2ae25ad777b1b2275dbba5cd64905627b0a20d17d6e26de003cef  hawktracer-0.11.0.tar.gz
+ sha256  2f377333e64ad08ad3afec8ed6c2c96ced2a6d7d67443eb2784a931bb7b3fd59  LICENSE
+diff --git a/package/hawktracer/hawktracer.mk b/package/hawktracer/hawktracer.mk
+index 462d073755..8e722080f5 100644
+--- a/package/hawktracer/hawktracer.mk
++++ b/package/hawktracer/hawktracer.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-HAWKTRACER_VERSION = 3c22b3908912e2ec727fd2ddc5dbfe7464e6b4a5
+-HAWKTRACER_SITE = $(call github,amzn,hawktracer,$(HAWKTRACER_VERSION))
++HAWKTRACER_VERSION = 0.11.0
++HAWKTRACER_SITE = $(call github,amzn,hawktracer,v$(HAWKTRACER_VERSION))
+ HAWKTRACER_LICENSE = MIT
+ HAWKTRACER_LICENSE_FILES = LICENSE
+ HAWKTRACER_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
