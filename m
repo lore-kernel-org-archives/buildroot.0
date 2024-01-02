@@ -4,85 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D84D7C46CD2
-	for <buildroot@archiver.kernel.org>; Tue,  2 Jan 2024 20:42:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A208BC46CD2
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jan 2024 20:43:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 72B98400CB;
-	Tue,  2 Jan 2024 20:42:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 72B98400CB
+	by smtp2.osuosl.org (Postfix) with ESMTP id 54A68402F2;
+	Tue,  2 Jan 2024 20:43:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 54A68402F2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KTXDAPsZnoDd; Tue,  2 Jan 2024 20:42:20 +0000 (UTC)
+	with ESMTP id tpr-_5XOeoDw; Tue,  2 Jan 2024 20:43:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 542764061F;
-	Tue,  2 Jan 2024 20:42:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 542764061F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6B5751BF2B6
- for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 20:42:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4A79D408C0;
+	Tue,  2 Jan 2024 20:43:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4A79D408C0
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 252021BF314
+ for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 20:43:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3D6924061F
- for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 20:42:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3D6924061F
+ by smtp4.osuosl.org (Postfix) with ESMTP id F261440118
+ for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 20:43:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F261440118
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ueigMgbOCo7e for <buildroot@lists.busybox.net>;
- Tue,  2 Jan 2024 20:42:15 +0000 (UTC)
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 474D0400CB
- for <buildroot@buildroot.org>; Tue,  2 Jan 2024 20:42:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 474D0400CB
-Received: by mail-wr1-x429.google.com with SMTP id
- ffacd0b85a97d-3366e78d872so9501175f8f.3
- for <buildroot@buildroot.org>; Tue, 02 Jan 2024 12:42:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704228132; x=1704832932;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=t56oPfTMR0rtSOJBTbkZ+7t9IADKhJ554V3+no9DhCQ=;
- b=an+JKGUsQsNv6q5SlkfC0CYmvaeHQZqKdIWD++Ci/6aZDlvyl7yZRl+gerpaLdJHlL
- ecsfHnkgFFS6oYHVf9JNmJZ6aoGKdfRtTVhiPnqtqCDRbP6/00kttuoDCEZ+3OG6dCEL
- gXKAbrTOd+oZHQfBIJ9QA0J937cZPuHfhusuMSPtdEeNIgDlhxH82TdmoV7VrrQ3Jo1w
- C/rXfFKSmkFw7a0oM5BcUSwJH7bCVbI4REUF8iyVK2YLmLvZMorHXkilDJg4BLcF9YLT
- +JOi9eAk7axKtBHLeHzPt7M89hpS11UqTtcadSHiLJv3lFB1x/QZcAVfMzD8+89RCHbY
- SqWw==
-X-Gm-Message-State: AOJu0YwH+pgWO/3qMav3rYcPBm1h+5ypQ/clGDNb5zJB+bFtckxwAex1
- 9fWUfItIEKm5Potx3mWQY4AL3ULTNEI=
-X-Google-Smtp-Source: AGHT+IEjMzxMY22sA4L65OibhRMfnYoOoShXutvKathuqo1v16loxyQBgy0lK1moBZfO3ofhpdzIjg==
-X-Received: by 2002:a05:6000:1d90:b0:337:43c2:d17b with SMTP id
- bk16-20020a0560001d9000b0033743c2d17bmr870337wrb.77.1704228132257; 
- Tue, 02 Jan 2024 12:42:12 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- r10-20020adfce8a000000b00336781490dcsm29224185wrn.69.2024.01.02.12.42.11
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 02 Jan 2024 12:42:11 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GvkviSpNOBxT for <buildroot@lists.busybox.net>;
+ Tue,  2 Jan 2024 20:43:05 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 37F6C400FC
+ for <buildroot@buildroot.org>; Tue,  2 Jan 2024 20:43:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37F6C400FC
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 22AD683CEE; Tue,  2 Jan 2024 20:43:05 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue,  2 Jan 2024 21:42:08 +0100
-Message-ID: <20240102204208.1662781-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1704228132; x=1704832932; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=t56oPfTMR0rtSOJBTbkZ+7t9IADKhJ554V3+no9DhCQ=;
- b=S+4NyLkv6SipCLAUnxW8G8PgQLSJf8k8QHj7FylPCUBrCotrVDFZ+kC1L7KJvQfyQx
- ek0a6VknJ3c8ZQiz3dL8E83y4lbrFCJwU5pAqGIeDGLHRM4T9/2Fmt79XljzftAqx880
- UaU2FRVvkWyiypVVhHeoDjwaViX700iW2VJEztyV5WJd/ukM3AQCa9lzGflM71FweExo
- qAmploruSX9oP0hrcqLS6XSriBT57DcwRx+vJo+pTphOaE9QhkZqB8wQZ6uovm7ipUTU
- i5f0K2XYEuqM5GU6KT+2TaGd/FBzGCo5J4rSyP501FX3P28+ZfomOk1dXsNz7Vlhgcju
- ixfQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=S+4NyLkv
-Subject: [Buildroot] [PATCH 1/1] package/libsigsegv: fix musl build with
- powerpc
+Date: Tue, 2 Jan 2024 21:42:50 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 6257fa486013538a47313f16e51b8515d189c17b
+X-Git-Newrev: 7077476c8c85f23897ce14a203cc91596a63b202
+X-Patchwork-Hint: ignore
+Message-Id: <20240102204305.22AD683CEE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gdb: Remove special handling of
+ libstdc++ for ARC
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,227 +57,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Simon Dawson <spdawson@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following musl build failure with powerpc raised since bump to
-version 2.14 in commit c6addf4606c3a41cdad5c6ac4c6508b298b6e92a:
+commit: https://git.buildroot.net/buildroot/commit/?id=7077476c8c85f23897ce14a203cc91596a63b202
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In file included from fault.h:36,
-                 from handler-unix.c:77,
-                 from handler.c:19:
-handler-unix.c: In function 'sigsegv_handler':
-fault-linux-powerpc.h:35:73: error: 'mcontext_t' has no member named 'uc_regs'; did you mean 'gregs'?
-   35 | #  define SIGSEGV_FAULT_STACKPOINTER  ((ucontext_t *) ucp)->uc_mcontext.uc_regs->gregs[1]
-      |                                                                         ^~~~~~~
-handler-unix.c:157:43: note: in expansion of macro 'SIGSEGV_FAULT_STACKPOINTER'
-  157 |           uintptr_t old_sp = (uintptr_t) (SIGSEGV_FAULT_STACKPOINTER);
-      |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+Effectively that's a revert of a very old fix [1]
+which is no longer needed.
 
-Fixes:
- - http://autobuild.buildroot.org/results/77b600071f07605be3ec28e2da46d6938e240087
+[1] https://git.buildroot.net/buildroot/commit/?id=ca99d0ea925e5a8e42bd270402b0171a39d1d955
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...-Linux-PowerPC-32-bit-with-musl-libc.patch | 114 ++++++++++++++++++
- package/libsigsegv/0002-add-musl.m4.patch     |  47 ++++++++
- package/libsigsegv/libsigsegv.mk              |   2 +
- 3 files changed, 163 insertions(+)
- create mode 100644 package/libsigsegv/0001-Add-support-for-Linux-PowerPC-32-bit-with-musl-libc.patch
- create mode 100644 package/libsigsegv/0002-add-musl.m4.patch
+ package/gdb/gdb.mk | 7 -------
+ 1 file changed, 7 deletions(-)
 
-diff --git a/package/libsigsegv/0001-Add-support-for-Linux-PowerPC-32-bit-with-musl-libc.patch b/package/libsigsegv/0001-Add-support-for-Linux-PowerPC-32-bit-with-musl-libc.patch
-new file mode 100644
-index 0000000000..dcc2f7c9cb
---- /dev/null
-+++ b/package/libsigsegv/0001-Add-support-for-Linux-PowerPC-32-bit-with-musl-libc.patch
-@@ -0,0 +1,114 @@
-+From a6ff69873110c0a8ba6f7fd90532dbc11224828c Mon Sep 17 00:00:00 2001
-+From: Bruno Haible <bruno@clisp.org>
-+Date: Sun, 13 Mar 2022 15:04:06 +0100
-+Subject: [PATCH] Add support for Linux/PowerPC (32-bit) with musl libc.
-+
-+Reported by Khem Raj <raj.khem@gmail.com> in
-+<https://lists.gnu.org/archive/html/m4-patches/2022-03/msg00000.html>.
-+
-+* autogen.sh: Copy also musl.m4.
-+* configure.ac: Invoke gl_MUSL_LIBC.
-+* src/fault-linux-powerpc.h (SIGSEGV_FAULT_STACKPOINTER): In the 32-bit
-+case, handle musl libc differently.
-+* NEWS: Mention it.
-+
-+Upstream: https://git.savannah.gnu.org/gitweb/?p=libsigsegv.git;a=commit;h=a6ff69873110c0a8ba6f7fd90532dbc11224828c
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ ChangeLog                 | 11 +++++++++++
-+ NEWS                      |  4 ++++
-+ autogen.sh                |  3 ++-
-+ configure.ac              |  2 ++
-+ src/fault-linux-powerpc.h | 27 ++++++++++++++++++++++-----
-+ 5 files changed, 41 insertions(+), 6 deletions(-)
-+
-+diff --git a/ChangeLog b/ChangeLog
-+index c52b227..7c0a8fa 100644
-+--- a/ChangeLog
-++++ b/ChangeLog
-+@@ -1,3 +1,14 @@
-++2022-03-13  Bruno Haible  <bruno@clisp.org>
-++
-++	Add support for Linux/PowerPC (32-bit) with musl libc.
-++	Reported by Khem Raj <raj.khem@gmail.com> in
-++	<https://lists.gnu.org/archive/html/m4-patches/2022-03/msg00000.html>.
-++	* autogen.sh: Copy also musl.m4.
-++	* configure.ac: Invoke gl_MUSL_LIBC.
-++	* src/fault-linux-powerpc.h (SIGSEGV_FAULT_STACKPOINTER): In the 32-bit
-++	case, handle musl libc differently.
-++	* NEWS: Mention it.
-++
-+ 2022-01-07  Bruno Haible  <bruno@clisp.org>
-+ 
-+ 	Prepare for version 2.14.
-+diff --git a/NEWS b/NEWS
-+index 4d012f8..82cc0f4 100644
-+--- a/NEWS
-++++ b/NEWS
-+@@ -1,3 +1,7 @@
-++New in 2.15:
-++
-++* Added support for Linux/PowerPC (32-bit) with musl libc.
-++
-+ New in 2.14:
-+ 
-+ * Added support for 64-bit Cygwin.
-+diff --git a/configure.ac b/configure.ac
-+index e87f13b..164786f 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -75,6 +75,8 @@ AC_MSG_RESULT([$sv_cv_host])
-+ PLATFORM="$sv_cv_host"
-+ AC_SUBST([PLATFORM])
-+ 
-++gl_MUSL_LIBC
-++
-+ dnl ========================== Done with PLATFORM ==========================
-+ 
-+ 
-+diff --git a/src/fault-linux-powerpc.h b/src/fault-linux-powerpc.h
-+index cba6ea7..b3f922a 100644
-+--- a/src/fault-linux-powerpc.h
-++++ b/src/fault-linux-powerpc.h
-+@@ -1,5 +1,5 @@
-+ /* Fault handler information.  Linux/PowerPC version when it supports POSIX.
-+-   Copyright (C) 2002, 2009, 2017  Bruno Haible <bruno@clisp.org>
-++   Copyright (C) 2002, 2009, 2017, 2022  Bruno Haible <bruno@clisp.org>
-+ 
-+    This program is free software: you can redistribute it and/or modify
-+    it under the terms of the GNU General Public License as published by
-+@@ -28,10 +28,27 @@
-+ #if defined(__powerpc64__) || defined(_ARCH_PPC64) /* 64-bit */
-+ # define SIGSEGV_FAULT_STACKPOINTER  ((ucontext_t *) ucp)->uc_mcontext.gp_regs[1]
-+ #else /* 32-bit */
-+-/* both should be equivalent */
-+-# if 0
-+-#  define SIGSEGV_FAULT_STACKPOINTER  ((ucontext_t *) ucp)->uc_mcontext.regs->gpr[1]
-++# if MUSL_LIBC
-++/* musl libc has a different structure of ucontext_t in
-++   musl/arch/powerpc/bits/signal.h.  */
-++/* The glibc comments say:
-++     "Different versions of the kernel have stored the registers on signal
-++      delivery at different offsets from the ucontext struct.  Programs should
-++      thus use the uc_mcontext.uc_regs pointer to find where the registers are
-++      actually stored."  */
-++#  if 0
-++#   define SIGSEGV_FAULT_STACKPOINTER  ((ucontext_t *) ucp)->uc_mcontext.gregs[1]
-++#  else
-++#   define SIGSEGV_FAULT_STACKPOINTER  ((ucontext_t *) ucp)->uc_regs->gregs[1]
-++#  endif
-+ # else
-+-#  define SIGSEGV_FAULT_STACKPOINTER  ((ucontext_t *) ucp)->uc_mcontext.uc_regs->gregs[1]
-++/* Assume the structure of ucontext_t in
-++   glibc/sysdeps/unix/sysv/linux/powerpc/sys/ucontext.h.  */
-++/* Because of the union, both definitions should be equivalent.  */
-++#  if 0
-++#   define SIGSEGV_FAULT_STACKPOINTER  ((ucontext_t *) ucp)->uc_mcontext.regs->gpr[1]
-++#  else
-++#   define SIGSEGV_FAULT_STACKPOINTER  ((ucontext_t *) ucp)->uc_mcontext.uc_regs->gregs[1]
-++#  endif
-+ # endif
-+ #endif
-+-- 
-+2.17.1
-+
-diff --git a/package/libsigsegv/0002-add-musl.m4.patch b/package/libsigsegv/0002-add-musl.m4.patch
-new file mode 100644
-index 0000000000..d6f06d8400
---- /dev/null
-+++ b/package/libsigsegv/0002-add-musl.m4.patch
-@@ -0,0 +1,47 @@
-+From a9b07220b986500cfee7777a543494d360964306 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 2 Jan 2024 21:39:24 +0100
-+Subject: [PATCH] add musl.m4
-+
-+Add musl.m4 (retrieved from
-+https://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=blob;f=m4/musl.m4;h=34d2c1ff22a148eeb76936410ac497d68b228f59;hb=HEAD)
-+
-+musl.m4 is needed for gl_MUSL_LIBC since
-+https://git.savannah.gnu.org/gitweb/?p=libsigsegv.git;a=commit;h=a6ff69873110c0a8ba6f7fd90532dbc11224828c
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Upstream: sent to Bruno Haible <bruno@clisp.org>
-+---
-+ m4/musl.m4 | 20 ++++++++++++++++++++
-+ 1 file changed, 20 insertions(+)
-+ create mode 100644 m4/musl.m4
-+
-+diff --git a/m4/musl.m4 b/m4/musl.m4
-+new file mode 100644
-+index 0000000..34d2c1f
-+--- /dev/null
-++++ b/m4/musl.m4
-+@@ -0,0 +1,20 @@
-++# musl.m4 serial 4
-++dnl Copyright (C) 2019-2024 Free Software Foundation, Inc.
-++dnl This file is free software; the Free Software Foundation
-++dnl gives unlimited permission to copy and/or distribute it,
-++dnl with or without modifications, as long as this notice is preserved.
-++
-++# Test for musl libc, despite the musl libc authors don't like it
-++# <https://wiki.musl-libc.org/faq.html>
-++# <https://lists.gnu.org/archive/html/bug-gnulib/2018-02/msg00079.html>.
-++# From Bruno Haible.
-++
-++AC_DEFUN_ONCE([gl_MUSL_LIBC],
-++[
-++  AC_REQUIRE([AC_CANONICAL_HOST])
-++  case "$host_os" in
-++    *-musl* | midipix*)
-++      AC_DEFINE([MUSL_LIBC], [1], [Define to 1 on musl libc.])
-++      ;;
-++  esac
-++])
-+-- 
-+2.43.0
-+
-diff --git a/package/libsigsegv/libsigsegv.mk b/package/libsigsegv/libsigsegv.mk
-index 98bcd55c8c..0d5875aa95 100644
---- a/package/libsigsegv/libsigsegv.mk
-+++ b/package/libsigsegv/libsigsegv.mk
-@@ -10,5 +10,7 @@ LIBSIGSEGV_INSTALL_STAGING = YES
- LIBSIGSEGV_CONF_ENV = sv_cv_fault_posix=yes
- LIBSIGSEGV_LICENSE = GPL-2.0+
- LIBSIGSEGV_LICENSE_FILES = COPYING
-+# We're patching configure.ac
-+LIBSIGSEGV_AUTORECONF = YES
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index af40f7f986..c67a292619 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -182,13 +182,6 @@ else
+ GDB_CONF_OPTS += --disable-gdbserver
+ endif
  
- $(eval $(autotools-package))
--- 
-2.43.0
-
+-# When gdb is built as C++ application for ARC it segfaults at runtime
+-# So we pass --disable-build-with-cxx config option to force gdb not to
+-# be built as C++ app.
+-ifeq ($(BR2_arc),y)
+-GDB_CONF_OPTS += --disable-build-with-cxx
+-endif
+-
+ # gdb 7.12+ by default builds with a C++ compiler, which doesn't work
+ # when we don't have C++ support in the toolchain
+ ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
