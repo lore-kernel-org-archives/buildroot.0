@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED7F9C46CD2
-	for <buildroot@archiver.kernel.org>; Tue,  2 Jan 2024 21:16:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0109C46CD2
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jan 2024 21:16:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 90CEC409E3;
-	Tue,  2 Jan 2024 21:16:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 90CEC409E3
+	by smtp2.osuosl.org (Postfix) with ESMTP id 15B3B409E3;
+	Tue,  2 Jan 2024 21:16:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 15B3B409E3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RXF5b5o7dugC; Tue,  2 Jan 2024 21:16:13 +0000 (UTC)
+	with ESMTP id JfstMwMlrgAy; Tue,  2 Jan 2024 21:16:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 94B6A40A5D;
-	Tue,  2 Jan 2024 21:16:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94B6A40A5D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 25B6C1BF311
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0489740A69;
+	Tue,  2 Jan 2024 21:16:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0489740A69
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 61E191BF966
  for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 21:16:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F335381E71
- for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 21:16:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F335381E71
+ by smtp2.osuosl.org (Postfix) with ESMTP id 39A0240A5D
+ for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 21:16:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 39A0240A5D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3kQWHCO7CWt6 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NMUZGCjMCLEx for <buildroot@lists.busybox.net>;
  Tue,  2 Jan 2024 21:16:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 299B3818CD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 23DBB409E3
  for <buildroot@buildroot.org>; Tue,  2 Jan 2024 21:16:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 299B3818CD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 23DBB409E3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1644B83CEC; Tue,  2 Jan 2024 21:16:10 +0000 (UTC)
+ id 0063683D17; Tue,  2 Jan 2024 21:16:09 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 2 Jan 2024 22:15:49 +0100
+Date: Tue, 2 Jan 2024 22:14:47 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 46fcdf07be310a49d9731031e2c3676c12e2d7f6
-X-Git-Newrev: 951c9a8ebce22f5ff00003fea5ee1ed5d9856fef
+X-Git-Oldrev: 7077476c8c85f23897ce14a203cc91596a63b202
+X-Git-Newrev: 46fcdf07be310a49d9731031e2c3676c12e2d7f6
 X-Patchwork-Hint: ignore
-Message-Id: <20240102211610.1644B83CEC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] DEVELOPERS: remove aduskett@gmail.com
+Message-Id: <20240102211610.0063683D17@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/broadcom_northstar_defconfig:
+ adjust DTS paths
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,39 +59,55 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============4679012437907318321=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=951c9a8ebce22f5ff00003fea5ee1ed5d9856fef
+--===============4679012437907318321==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=46fcdf07be310a49d9731031e2c3676c12e2d7f6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I will only be supporting Buildroot in a professional capacity from now on.
+Starting with kernel release v6.5 ARM DTS files are placed in vendor
+subdirectories (Linux commit 724ba6751532 ("ARM: dts: Move .dts files to
+vendor sub-directories")).
 
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+This fixes:
+make[3]: *** No rule to make target 'arch/arm/boot/dts/bcm4708-smartrg-sr400ac.dtb'.  Stop.
+make[2]: *** [Makefile:1384: bcm4708-smartrg-sr400ac.dtb] Error 2
+make[3]: *** No rule to make target 'arch/arm/boot/dts/bcm47094-luxul-xwr-3150-v1.dtb'.  Stop.
+make[2]: *** [Makefile:1384: bcm47094-luxul-xwr-3150-v1.dtb] Error 2
+
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS | 5 -----
- 1 file changed, 5 deletions(-)
+ configs/broadcom_northstar_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index cc089e8ff6..42a8ed2993 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -26,11 +26,6 @@
- #   infrastructure, and will be CC'ed on all patches that add or
- #   modify packages that use this infrastructure.
- 
--N:	Adam Duskett <aduskett@gmail.com>
--F:	package/firewalld/
--F:	package/vulkan-loader/
--F:	package/vulkan-tools/
--
- N:	Adam Duskett <adam.duskett@amarulasolutions.com>
- F:	package/depot-tools/
- F:	package/dmenu-wayland/
+diff --git a/configs/broadcom_northstar_defconfig b/configs/broadcom_northstar_defconfig
+index 1008de168f..9ae716726d 100644
+--- a/configs/broadcom_northstar_defconfig
++++ b/configs/broadcom_northstar_defconfig
+@@ -5,7 +5,7 @@ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/broadcom/northstar/linux.config"
+ BR2_LINUX_KERNEL_APPENDED_ZIMAGE=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm4708-smartrg-sr400ac bcm47094-luxul-xwr-3150-v1"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm4708-smartrg-sr400ac broadcom/bcm47094-luxul-xwr-3150-v1"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ROOTFS_UBI=y
+ BR2_TARGET_ROOTFS_UBI_SUBSIZE=2048
+
+--===============4679012437907318321==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4679012437907318321==--
