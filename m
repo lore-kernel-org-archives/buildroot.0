@@ -4,80 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0475C3DA6E
-	for <buildroot@archiver.kernel.org>; Wed,  3 Jan 2024 17:30:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0341C4707B
+	for <buildroot@archiver.kernel.org>; Wed,  3 Jan 2024 17:37:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4CE3981DF8;
-	Wed,  3 Jan 2024 17:30:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4CE3981DF8
+	by smtp1.osuosl.org (Postfix) with ESMTP id A7BBC824CE;
+	Wed,  3 Jan 2024 17:37:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A7BBC824CE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UVN2ay3zu8Ow; Wed,  3 Jan 2024 17:30:00 +0000 (UTC)
+	with ESMTP id 0INUBZ5Qec8S; Wed,  3 Jan 2024 17:37:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9D09281E2D;
-	Wed,  3 Jan 2024 17:29:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D09281E2D
+	by smtp1.osuosl.org (Postfix) with ESMTP id F328882157;
+	Wed,  3 Jan 2024 17:37:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F328882157
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 59F031BF4E6
- for <buildroot@lists.busybox.net>; Wed,  3 Jan 2024 17:29:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D2D051BF869
+ for <buildroot@lists.busybox.net>; Wed,  3 Jan 2024 17:37:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3FEBD60AB3
- for <buildroot@lists.busybox.net>; Wed,  3 Jan 2024 17:29:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3FEBD60AB3
+ by smtp3.osuosl.org (Postfix) with ESMTP id ABBDA60AF6
+ for <buildroot@lists.busybox.net>; Wed,  3 Jan 2024 17:37:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABBDA60AF6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xVJqpEfLM7B9 for <buildroot@lists.busybox.net>;
- Wed,  3 Jan 2024 17:29:56 +0000 (UTC)
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com
- [IPv6:2a00:1450:4864:20::136])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 255D360AAE
- for <buildroot@buildroot.org>; Wed,  3 Jan 2024 17:29:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 255D360AAE
-Received: by mail-lf1-x136.google.com with SMTP id
- 2adb3069b0e04-50ea9daac4cso428730e87.3
- for <buildroot@buildroot.org>; Wed, 03 Jan 2024 09:29:55 -0800 (PST)
+ with ESMTP id qYLDpqQRXOuZ for <buildroot@lists.busybox.net>;
+ Wed,  3 Jan 2024 17:37:55 +0000 (UTC)
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E534760AE2
+ for <buildroot@buildroot.org>; Wed,  3 Jan 2024 17:37:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E534760AE2
+Received: by mail-wm1-x331.google.com with SMTP id
+ 5b1f17b1804b1-40d3352b525so116709945e9.1
+ for <buildroot@buildroot.org>; Wed, 03 Jan 2024 09:37:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704302993; x=1704907793;
- h=content-transfer-encoding:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=yxw9vKK5sV5klU5jrRhx1PhKylZs1cHYu/8unMtSleY=;
- b=VObfYC1egIX3YbS6AM24ar+CxjvLIvC4ZtqbkQMC+Pn618vuNMobs9PPll8BYQBdcW
- yMgSuTbe+1uFasbFKfsAs94zDlSaU9++E8SoVs923uN8CpF5S2MpkCujpKT/iL6oLffa
- OLeE0JE9xQ1CjBcy9WXhVrRyD/tmIP4/MNUWmAVUcG/DHlg2U+W+p1RXCUAMBWEhlGX/
- /bDcHGB8MFQ81qCLraGnBCirJxX5rDEWlBa22KIkLP1Zbwgn4KntMF2SdaHMVWKtvcSe
- OlG2wATiiny+euMQ1UcgW1E/YCqrtjUO1PvWZ1qJyoXNEM2+nqkc5krPFwlry3HCB/L2
- cKgA==
-X-Gm-Message-State: AOJu0Yyde3GWfzPN+oL5AT9aXXNGhMsPkH2qF6Scnnm4aKaE5P+xdgdA
- rBlampSMGKuDBU58jpJ1EWg3X44LCNFYMZwmxYFIZ5vaHnH5nagvoxw626W+
-X-Google-Smtp-Source: AGHT+IGn4AVWGDAM4O2vb8K89yeT8O1iH2dQ7EgozCaP8KNhClQ7ROwYNeSw3J8loidWxDBOIyKdQ7VOkP5OzJZ28/w=
-X-Received: by 2002:a19:670b:0:b0:50e:3dcd:3ae7 with SMTP id
- b11-20020a19670b000000b0050e3dcd3ae7mr8418269lfc.34.1704302993374; Wed, 03
- Jan 2024 09:29:53 -0800 (PST)
-MIME-Version: 1.0
-References: <20240103172619.1156235-1-adam.duskett@amarulasolutions.com>
-In-Reply-To: <20240103172619.1156235-1-adam.duskett@amarulasolutions.com>
-From: Adam Duskett <adam.duskett@amarulasolutions.com>
-Date: Wed, 3 Jan 2024 10:29:42 -0700
-Message-ID: <CAHDQB6OMbvoMTqcW4U_su7_O+8f58rDT_f1xEz5B5NeBKGitjg@mail.gmail.com>
+ d=1e100.net; s=20230601; t=1704303472; x=1704908272;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=j3+r80RyQ9rOGN3vJEEpFx+rXnjXA6v3EybxKYNw3JM=;
+ b=SzbVTu4DE+VE+1FqmNtAdp44gD/QYAJOM26a00qrPcVSnvTmyomQR/ZXYMA0OqMgBE
+ w5MpSo+VbbpWEOnSkfM8FPOyMs8IsDiHS43a96MZxS9Gg5g7KlxTjrDfhlPFMflqcTn8
+ BItkdOsXZeJ8Gv6pVMgnJkozGV/3JyjZicITXsHADm52CpoX0yR2HdANZ0V30+vPFxdC
+ rm81NsidPtn7pWK4EuaUwejhZkqiuCV6WLIdVGc4RWhxBpqqUE+SvsxgikaYs2wVHoUn
+ jFEtob2wWtbVeJdfCwzg/9ygCSEXIMk+il91+4isT9n9Pq9CYaKncRJQvqK0VwirxoxG
+ kv/w==
+X-Gm-Message-State: AOJu0YxMEdpIGipDqw+PPrlxqrq2lXt1VoHSO8cNyy3i7r/B3ahHvMhF
+ 7RrAP3YGP3BIzZi0UaOFTfQo6gpsKH8=
+X-Google-Smtp-Source: AGHT+IEWImIyTE5zhOclSfCv91USeHEz0V5A3JVwcYAgrFcM9q/l4AuMKxyQ2F09rNp2/JX6t43kBw==
+X-Received: by 2002:a05:600c:4fcc:b0:40d:5d9a:ac0 with SMTP id
+ o12-20020a05600c4fcc00b0040d5d9a0ac0mr5987152wmq.48.1704303471963; 
+ Wed, 03 Jan 2024 09:37:51 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ z6-20020a05600c0a0600b0040b3d8907fesm2976366wmp.29.2024.01.03.09.37.51
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 03 Jan 2024 09:37:51 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
+Date: Wed,  3 Jan 2024 18:37:40 +0100
+Message-ID: <20240103173741.850916-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1704302993; x=1704907793;
- darn=buildroot.org; 
- h=content-transfer-encoding:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=yxw9vKK5sV5klU5jrRhx1PhKylZs1cHYu/8unMtSleY=;
- b=XoMWHPlo8JS1qBkgQwxg4ga10hXK4TLaKmIjxM7VPpEpqd08uwPqUATIEN5M8pzoKj
- 7ENYy7M7rHHy69L1sM2qGltrLwFtCimWoWfBzV7Ljw9v+Nqza1xrbw9k30DLaFkNCZC5
- KTLCijPH9oqrUw3B5paaJMflEkP4mZZjA4bKE=
+ d=gmail.com; s=20230601; t=1704303472; x=1704908272; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=j3+r80RyQ9rOGN3vJEEpFx+rXnjXA6v3EybxKYNw3JM=;
+ b=imYMz9Zqm2Z9S3SlM034LykvSdb3KC3UQtdu/MwM8y9iZn6kUs5lY/p31W2a+muSvz
+ f2765340XXySmt3e8fjEgg6qjm3iR3k9cQXc3zyznJW5dXRLwLJvo9Kz0arKKeH0wZ/+
+ uRsL9548B5MlxrLqUtdquf5tkLjyz/RfnMxB+X/VKCQ7AXkqOfFKQoRJos7M9ZBP7ODU
+ ha/rEAiVZ3RHXn4pqO6Ezl/winFak/VOBScnQGNEGqXnnn3PSKxi78h8gjF6HoMt/wtl
+ TB+5vHBYkVMWUZquLz7t6RewfJa6/CAT0HBTS79T3RqbwQoWSf7w7wesTdPgYBpLA8Dg
+ hkGg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=XoMWHPlo
-Subject: Re: [Buildroot] [PATCH 1/1] package/fcft: disable uClibc support
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=imYMz9Zq
+Subject: [Buildroot] [PATCH v2,1/2] package/lm-sensors: add host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,67 +93,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Asaf Kahlon <asafka7@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
+ Brandon Maier <brandon.maier@collins.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QWxsOwoKT24gV2VkLCBKYW4gMywgMjAyNCBhdCAxMDoyNuKAr0FNIEFkYW0gRHVza2V0dAo8YWRh
-bS5kdXNrZXR0QGFtYXJ1bGFzb2x1dGlvbnMuY29tPiB3cm90ZToKPgo+IHVDbGliYyBzdXBwb3J0
-IGRvZXMgbm90IGluY2x1ZGUgdGhlIHRocmVhZHMuaCBoZWFkZXIgZmlsZSB0aGF0IGZjZnQuYyBp
-bmNsdWRlcwo+IG9uIGxpbmUgOC4KPgo+IE11c2wgYW5kIEdsaWJDLCBob3dldmVyLCBkbyBpbmNs
-dWRlIHRoZSB0aHJlYWRzIGhlYWRlciBmaWxlLiBBcyBzdWNoLCBpdCBpcwo+IG9ubHkgbmVjZXNz
-YXJ5IHRvIHR1cm4gb2ZmIHN1cHBvcnQgZm9yIHVDbGliYy4gRnVydGhlcm1vcmUsIHRoZSBvbmx5
-IHBhY2thZ2UKPiB0aGF0IGN1cnJlbnRseSBzZWxlY3RzICBCUjJfUEFDS0FHRV9GQ0ZUIGlzIEJS
-Ml9QQUNLQUdFX0ZPT1QuIFRoaXMgcGF0Y2ggYWxzbwo+IHVwZGF0ZXMgdGhlICJmb290IiBwYWNr
-YWdlIHRvIG1hdGNoIHRoZSBkZXBlbmRlbmNpZXMgb2YgQlIyX1BBQ0tBR0VfRkNGVC4KPgo+IEFs
-c28sIHVwZGF0ZSB0aGUgY29tbWVudCBmb3IgQlIyX1BBQ0tBR0VfRkNGVCBhbmQgQlIyX1BBQ0tB
-R0VfRk9PVCB0byBtZW50aW9uCj4gdGhhdCBhIGdsaWJjIG9mIHRoZSBtdXNsIHRvb2xjaGFpbiBp
-cyBuZWVkZWQuIFRoZSB3b3JkaW5nIG9mIHRoZSBtZXNzYWdlCj4gYm9ycm93cyBmcm9tIHRoZSBs
-aXF1aWQtZHNwIHBhY2thZ2UsIHdpdGggdGhlIHdvcmQgInJlcXVpcmVkIiBiZWluZyBzdWJzdGl0
-dXRlZAo+IGZvciB0aGUgd29yZCAibmVlZHMiIGFzIHRoZSB3b3JkICJuZWVkcyIgYWxyZWFkeSBl
-eGlzdGVkIGZvciB0aGUgZmlmdGggYW5kIGZvb3QKVGhpcyBzaG91bGQgcmVhZCAiZmNmdCBhbmQg
-Zm9vdCI7IGhvd2V2ZXIsIEdyYW1tYXJseSBjaGFuZ2VkIGZjZnQgdG8KZm9vdC4gSWYgeW91IHdp
-c2ggZm9yIG1lIHRvCnNlbmQgYSB2MiwgcGxlYXNlIGxldCBtZSBrbm93LCBhbmQgSSB3aWxsIGJl
-IGhhcHB5IHRvIGRvIHNvLgoKPiBwYWNrYWdlcy4KPgo+IEZpeGVzOgo+IGh0dHA6Ly9hdXRvYnVp
-bGQuYnVpbGRyb290Lm5ldC9yZXN1bHRzLzFiMmRkYTMyYTkwZDdkYjgxMTdlZWRlMDlmNDZkNDRj
-ZmZlNjA5OTMKPiBodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5uZXQvcmVzdWx0cy81ZjAzYmI1
-YzBjMTA3YTJiOTA4YmU5NzQ0MjFhZTBhMDMyZDRkZDg5Cj4gaHR0cDovL2F1dG9idWlsZC5idWls
-ZHJvb3QubmV0L3Jlc3VsdHMvMzFhMWYwMjI0MTRhOGExODg4Y2FjNGE1Y2QxNzYxMjU3ZDBmMjE5
-Ngo+IGh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm5ldC9yZXN1bHRzLzQ1MjI3ODFlMDQ0OGIz
-MjViNTRlOTNiYmZiMjBmODI5NWVhNzA2MWQKPgo+IFNpZ25lZC1vZmYtYnk6IEFkYW0gRHVza2V0
-dCA8YWRhbS5kdXNrZXR0QGFtYXJ1bGFzb2x1dGlvbnMuY29tPgo+IC0tLQo+ICBwYWNrYWdlL2Zj
-ZnQvQ29uZmlnLmluIHwgNCArKystCj4gIHBhY2thZ2UvZm9vdC9Db25maWcuaW4gfCA0ICsrKy0K
-PiAgMiBmaWxlcyBjaGFuZ2VkLCA2IGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCj4KPiBk
-aWZmIC0tZ2l0IGEvcGFja2FnZS9mY2Z0L0NvbmZpZy5pbiBiL3BhY2thZ2UvZmNmdC9Db25maWcu
-aW4KPiBpbmRleCBiNjU1MTVhM2YxLi5kNmRhMTAxZDUxIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2Uv
-ZmNmdC9Db25maWcuaW4KPiArKysgYi9wYWNrYWdlL2ZjZnQvQ29uZmlnLmluCj4gQEAgLTEsNSAr
-MSw2IEBACj4gIGNvbmZpZyBCUjJfUEFDS0FHRV9GQ0ZUCj4gICAgICAgICBib29sICJmY2Z0Igo+
-ICsgICAgICAgZGVwZW5kcyBvbiBCUjJfVE9PTENIQUlOX1VTRVNfR0xJQkMgfHwgQlIyX1RPT0xD
-SEFJTl9VU0VTX01VU0wgIyB0aHJlYWRzLmgKPiAgICAgICAgIGRlcGVuZHMgb24gQlIyX1RPT0xD
-SEFJTl9IQVNfVEhSRUFEUwo+ICAgICAgICAgc2VsZWN0IEJSMl9QQUNLQUdFX0ZPTlRDT05GSUcK
-PiAgICAgICAgIHNlbGVjdCBCUjJfUEFDS0FHRV9GUkVFVFlQRQo+IEBAIC00OCw1ICs0OSw2IEBA
-IGNvbmZpZyBCUjJfUEFDS0FHRV9GQ0ZUX1NWR19TVVBQT1JUCj4KPiAgZW5kaWYgIyBCUjJfUEFD
-S0FHRV9GQ0ZUCj4KPiAtY29tbWVudCAiZmNmdCBuZWVkcyBhIHRvb2xjaGFpbiB3LyB0aHJlYWRz
-Igo+ICtjb21tZW50ICJmY2Z0IG5lZWRzIGEgZ2xpYmMgb3IgbXVzbCB0b29sY2hhaW4gdy8gdGhy
-ZWFkcyIKPiArICAgICAgIGRlcGVuZHMgb24gIShCUjJfVE9PTENIQUlOX1VTRVNfR0xJQkMgfHwg
-QlIyX1RPT0xDSEFJTl9VU0VTX01VU0wpCj4gICAgICAgICBkZXBlbmRzIG9uICFCUjJfVE9PTENI
-QUlOX0hBU19USFJFQURTCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvZm9vdC9Db25maWcuaW4gYi9w
-YWNrYWdlL2Zvb3QvQ29uZmlnLmluCj4gaW5kZXggMjRiM2Y3ODgyMS4uYTg4NzY2ZmNhNiAxMDA2
-NDQKPiAtLS0gYS9wYWNrYWdlL2Zvb3QvQ29uZmlnLmluCj4gKysrIGIvcGFja2FnZS9mb290L0Nv
-bmZpZy5pbgo+IEBAIC0xLDYgKzEsNyBAQAo+ICBjb25maWcgQlIyX1BBQ0tBR0VfRk9PVAo+ICAg
-ICAgICAgYm9vbCAiZm9vdCIKPiAgICAgICAgIGRlcGVuZHMgb24gIUJSMl9TVEFUSUNfTElCUyAj
-IHdheWxhbmQKPiArICAgICAgIGRlcGVuZHMgb24gQlIyX1RPT0xDSEFJTl9VU0VTX0dMSUJDIHx8
-IEJSMl9UT09MQ0hBSU5fVVNFU19NVVNMICMgZmNmdAo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJf
-VE9PTENIQUlOX0hBU19USFJFQURTICMgZmNmdCwgd2F5bGFuZAo+ICAgICAgICAgc2VsZWN0IEJS
-Ml9QQUNLQUdFX0ZDRlQKPiAgICAgICAgIHNlbGVjdCBCUjJfUEFDS0FHRV9GT05UQ09ORklHCj4g
-QEAgLTMyLDUgKzMzLDYgQEAgY29uZmlnIEJSMl9QQUNLQUdFX0ZPT1RfVEhFTUVTCj4KPiAgZW5k
-aWYgIyBCUjJfUEFDS0FHRV9GT09UCj4KPiAtY29tbWVudCAiZm9vdCBuZWVkcyBhIHRvb2xjaGFp
-biB3LyBkeW5hbWljIGxpYnJhcnksIHRocmVhZHMiCj4gK2NvbW1lbnQgImZvb3QgbmVlZHMgYSBn
-bGliYyBvciBtdXNsIHRvb2xjaGFpbiB3LyBkeW5hbWljIGxpYnJhcnksIHRocmVhZHMiCj4gKyAg
-ICAgICBkZXBlbmRzIG9uICEoQlIyX1RPT0xDSEFJTl9VU0VTX0dMSUJDIHx8IEJSMl9UT09MQ0hB
-SU5fVVNFU19NVVNMKQo+ICAgICAgICAgZGVwZW5kcyBvbiAhQlIyX1RPT0xDSEFJTl9IQVNfVEhS
-RUFEUyB8fCBCUjJfU1RBVElDX0xJQlMKPiAtLQo+IDIuNDMuMAo+Cl9fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVp
-bGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
-bGlzdGluZm8vYnVpbGRyb290Cg==
+host package is needed by python-pysensors
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/lm-sensors/lm-sensors.mk | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/package/lm-sensors/lm-sensors.mk b/package/lm-sensors/lm-sensors.mk
+index 1bf27fc25a..f085c8acb0 100644
+--- a/package/lm-sensors/lm-sensors.mk
++++ b/package/lm-sensors/lm-sensors.mk
+@@ -9,6 +9,7 @@ LM_SENSORS_SITE = \
+ 	$(call github,lm-sensors,lm-sensors,V$(subst .,-,$(LM_SENSORS_VERSION)))
+ LM_SENSORS_INSTALL_STAGING = YES
+ LM_SENSORS_DEPENDENCIES = host-bison host-flex
++HOST_LM_SENSORS_DEPENDENCIES = host-bison host-flex
+ LM_SENSORS_LICENSE = LGPL-2.1+ (libsensors), GPL-2.0+ (programs)
+ LM_SENSORS_LICENSE_FILES = COPYING.LGPL COPYING
+ 
+@@ -50,4 +51,14 @@ define LM_SENSORS_INSTALL_TARGET_CMDS
+ 	rm -f $(addprefix $(TARGET_DIR)/usr/,$(LM_SENSORS_BINS_))
+ endef
+ 
++define HOST_LM_SENSORS_BUILD_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) PREFIX=/usr -C $(@D)
++endef
++
++define HOST_LM_SENSORS_INSTALL_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) PREFIX=/usr DESTDIR=$(HOST_DIR) install
++	rm -f $(addprefix $(HOST_DIR)/usr/,$(LM_SENSORS_BINS_) $(LM_SENSORS_BINS_y))
++endef
++
+ $(eval $(generic-package))
++$(eval $(host-generic-package))
+-- 
+2.43.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
