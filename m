@@ -4,87 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3F2CC3DA6E
-	for <buildroot@archiver.kernel.org>; Wed,  3 Jan 2024 14:32:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40BA6C3DA6E
+	for <buildroot@archiver.kernel.org>; Wed,  3 Jan 2024 16:49:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5D356404B5;
-	Wed,  3 Jan 2024 14:32:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D356404B5
+	by smtp2.osuosl.org (Postfix) with ESMTP id B7D6C419C2;
+	Wed,  3 Jan 2024 16:49:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B7D6C419C2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gGgBaA2gfEmz; Wed,  3 Jan 2024 14:32:20 +0000 (UTC)
+	with ESMTP id UPZ6pvxD-PWx; Wed,  3 Jan 2024 16:49:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6ED0441758;
-	Wed,  3 Jan 2024 14:32:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6ED0441758
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9C37E1BF2B5
- for <buildroot@lists.busybox.net>; Wed,  3 Jan 2024 14:32:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8DC41419C3;
+	Wed,  3 Jan 2024 16:49:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8DC41419C3
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 22BB11BF283
+ for <buildroot@lists.busybox.net>; Wed,  3 Jan 2024 16:49:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 748BB41859
- for <buildroot@lists.busybox.net>; Wed,  3 Jan 2024 14:32:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 748BB41859
+ by smtp1.osuosl.org (Postfix) with ESMTP id EC83381E72
+ for <buildroot@lists.busybox.net>; Wed,  3 Jan 2024 16:49:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC83381E72
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wpBVtvWuMK2L for <buildroot@lists.busybox.net>;
- Wed,  3 Jan 2024 14:32:16 +0000 (UTC)
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com
- [IPv6:2607:f8b0:4864:20::62f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5C19E41830
- for <buildroot@buildroot.org>; Wed,  3 Jan 2024 14:32:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C19E41830
-Received: by mail-pl1-x62f.google.com with SMTP id
- d9443c01a7336-1d4d4542526so2874715ad.0
- for <buildroot@buildroot.org>; Wed, 03 Jan 2024 06:32:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704292335; x=1704897135;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=FjXZTR8E0Z0hWOXWcSL7FV3TzS84TybZ8vZ/qZeKHvo=;
- b=T+MsqujBbKniuTRMtLP1tIYcb2Z+3Xwlhkjv4P4W5Wz+aqEUUU/iwf6AGDxNfNC58k
- 1aBfnX9GRrkzdtaUviKm/KsUHA+XDp0vrkKT2VrRwE4kNeM9aEfxDpm0P9P6WC+OcIzi
- 154/7NTDXS65GuyUxS4BhJfLRrWwlTGmTAy4BIv5jysqHTuPwHWpojUyJv5ARcWZkoKO
- ZEr9x4xApyd0OcbfXuLdTT1wEPA7ugjZ7WuqaBS4CAbway2PeF+M8SOcGO+pmeXTjmB9
- 6DWsKVILOFc28bihJxFuObbss5a7g+5LhN3D/Ohvc5lclUfsO/ur7slV7ysOMBSzHP/W
- g7Bg==
-X-Gm-Message-State: AOJu0YwyOkxAU7HS5BbsHgQI6hXFiPOA4os0D9aRJJamKf0otSoZCL2G
- d/s81dazr6qCAkUuXd7rfhwE4lAo6MXKOEHx0jHAxXuWGiQ=
-X-Google-Smtp-Source: AGHT+IFhobYG9+l3y8N9PpNvf1irpVoCDsW1ZxCzPIGVtKaxA/MRF/uZ01ihz6SB0mOr9qdPwSsR5Q==
-X-Received: by 2002:a17:902:6e0f:b0:1d4:7381:dc33 with SMTP id
- u15-20020a1709026e0f00b001d47381dc33mr11380231plk.0.1704292335350; 
- Wed, 03 Jan 2024 06:32:15 -0800 (PST)
-Received: from alesmao.newtesc.com ([187.120.6.114])
- by smtp.gmail.com with ESMTPSA id
- z20-20020a170902ee1400b001d3a9676973sm23875148plb.111.2024.01.03.06.32.14
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 03 Jan 2024 06:32:15 -0800 (PST)
-From: =?UTF-8?q?Fl=C3=A1vio=20Tapaj=C3=B3s?= <flavio.tapajos@newtesc.com.br>
-To: buildroot@buildroot.org
-Date: Wed,  3 Jan 2024 11:32:10 -0300
-Message-ID: <20240103143210.902040-1-flavio.tapajos@newtesc.com.br>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id V54hLL2SMtiV for <buildroot@lists.busybox.net>;
+ Wed,  3 Jan 2024 16:49:24 +0000 (UTC)
+Received: from mail.tkos.co.il (hours.tkos.co.il [84.110.109.230])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A64B981B25
+ for <buildroot@busybox.net>; Wed,  3 Jan 2024 16:49:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A64B981B25
+Received: from tarshish.tkos.co.il (unknown [10.0.8.3])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by mail.tkos.co.il (Postfix) with ESMTPS id 4CC16440A96;
+ Wed,  3 Jan 2024 18:47:15 +0200 (IST)
+To: buildroot@busybox.net
+Date: Wed,  3 Jan 2024 18:49:06 +0200
+Message-ID: <7bf9e3705b3b2bfe8d7796551156abd2ddb8ea26.1704300546.git.baruch@tkos.co.il>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=newtesc-com-br.20230601.gappssmtp.com; s=20230601; t=1704292335; x=1704897135;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=FjXZTR8E0Z0hWOXWcSL7FV3TzS84TybZ8vZ/qZeKHvo=;
- b=NY2Ei/YwpQqsGY5b65the59DhYsiJ3DC+80CHUdbzysqE5dxBDSaQ+mq5hGrkCR3sm
- zT6TsSVTjF4Y4wdV22cLbLtgOzO23o2HkkjNYguQ1QRdjJTxghlZRCojwkzXMLYjZil1
- xwBxzYNKjmp5pxjv0Lbuy5RL/Ol5Q6dp8Kh8zaoZocZfvqfdoHgnIIkLWD+xeghvJ3sy
- cItYBJ6nA50gtpVxbWBDx4R43/x0G9B2M9oN4PDsrvUmOBO5K4z9X9EPBPkRiqtIpAsA
- qaKJq1PNFDox7db0p/F55Z2QGZQ9AS/tfdCPpeYmI0lGn9/krx69+L23g9xtOQSpkkqB
- uJ+Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=newtesc-com-br.20230601.gappssmtp.com
- header.i=@newtesc-com-br.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=NY2Ei/Yw
-Subject: [Buildroot] [PATCH 1/1] configs/asus_tinker-s_rk3288: bump Linux to
- 6.1.70
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=tkos.co.il; s=default; t=1704300435;
+ bh=kmoU6IAF0NeA/tFHB7/3ucq/wLb4TTAZ/XS+yaCqb88=;
+ h=From:To:Cc:Subject:Date:From;
+ b=aj3TRB7glNjbP1YN2kWM40rJboFec+4PVa1wa9B0QvDtxaTr+d72t921hIakWg2qQ
+ lr4TCAeKtnDYC5IGCA3v4lCRWBsAL0SYLHdejxB+zULy4iPdm6W4anGmBAzMu0ywm9
+ mMP15gxby5yVJ7vP6oSwetAHUr7lMZBqrAAc0IiROZxp2QEvHhwdJeq+Jz5hyCR+AB
+ cgXuhsWxRfa8KTs/xwi4PaWv0zPP9KwaPkI4gMRm8VP/0a97IZSbskgDSuBRJXucII
+ bQpZuuPw892DiXp6ZLzm7Xzb1VYWKRgYVyZ5Th1VkUTrmwEQA8E32u45+Wv187bQ/m
+ N0RSvzBke53KQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=tkos.co.il header.i=@tkos.co.il
+ header.a=rsa-sha256 header.s=default header.b=aj3TRB7g
+Subject: [Buildroot] [PATCH] package/picocom: bump to version 2023-04
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,26 +69,132 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?Fl=C3=A1vio=20Tapaj=C3=B3s?= <flavio.tapajos@newtesc.com.br>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Baruch Siach via buildroot <buildroot@buildroot.org>
+Reply-To: Baruch Siach <baruch@tkos.co.il>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-U2lnbmVkLW9mZi1ieTogRmzDoXZpbyBUYXBhasOzcyA8ZmxhdmlvLnRhcGFqb3NAbmV3dGVzYy5j
-b20uYnI+Ci0tLQogY29uZmlncy9hc3VzX3Rpbmtlci1zX3JrMzI4OF9kZWZjb25maWcgfCAyICst
-CiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkKCmRpZmYgLS1n
-aXQgYS9jb25maWdzL2FzdXNfdGlua2VyLXNfcmszMjg4X2RlZmNvbmZpZyBiL2NvbmZpZ3MvYXN1
-c190aW5rZXItc19yazMyODhfZGVmY29uZmlnCmluZGV4IDAwYjQyOTkwZjguLmFkMmNjZWM5Zjkg
-MTAwNjQ0Ci0tLSBhL2NvbmZpZ3MvYXN1c190aW5rZXItc19yazMyODhfZGVmY29uZmlnCisrKyBi
-L2NvbmZpZ3MvYXN1c190aW5rZXItc19yazMyODhfZGVmY29uZmlnCkBAIC0yMyw3ICsyMyw3IEBA
-IEJSMl9UQVJHRVRfVUJPT1RfU1BMX05BTUU9InNwbC91LWJvb3Qtc3BsLWR0Yi5iaW4gdHBsL3Ut
-Ym9vdC10cGwuYmluIgogIyBLZXJuZWwKIEJSMl9MSU5VWF9LRVJORUw9eQogQlIyX0xJTlVYX0tF
-Uk5FTF9DVVNUT01fVkVSU0lPTj15Ci1CUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZB
-TFVFPSI2LjEuNjUiCitCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI2LjEu
-NzAiCiBCUjJfTElOVVhfS0VSTkVMX0RFRkNPTkZJRz0ibXVsdGlfdjciCiBCUjJfTElOVVhfS0VS
-TkVMX0RUU19TVVBQT1JUPXkKIEJSMl9MSU5VWF9LRVJORUxfSU5UUkVFX0RUU19OQU1FPSJyazMy
-ODgtdGlua2VyLXMiCi0tIAoyLjQzLjAKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9v
-dC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRy
-b290Cg==
+Switch to new upstream.
+
+Drop upstream patch.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ .checkpackageignore                           |  1 -
+ ...-with-libc-s-without-cispeed-cospeed.patch | 49 -------------------
+ package/picocom/Config.in                     |  2 +-
+ package/picocom/picocom.hash                  |  2 +-
+ package/picocom/picocom.mk                    |  4 +-
+ 5 files changed, 4 insertions(+), 54 deletions(-)
+ delete mode 100644 package/picocom/0001-Compile-with-libc-s-without-cispeed-cospeed.patch
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 40d9fb1ed440..7e15db0d29c4 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1047,7 +1047,6 @@ package/php/0002-iconv-tweak-iconv-detection.patch Upstream
+ package/php/0003-configure-disable-the-phar-tool.patch Upstream
+ package/php/0004-Call-apxs-with-correct-prefix.patch Upstream
+ package/php/0005-allow-opcache-cross-compiling.patch Upstream
+-package/picocom/0001-Compile-with-libc-s-without-cispeed-cospeed.patch Upstream
+ package/pifmrds/0001-Makefile-cross-compile-friendly.patch Upstream
+ package/pifmrds/0002-Makefile-use-LDFLAGS.patch Upstream
+ package/pifmrds/0003-Makefile-fix-static-link.patch Upstream
+diff --git a/package/picocom/0001-Compile-with-libc-s-without-cispeed-cospeed.patch b/package/picocom/0001-Compile-with-libc-s-without-cispeed-cospeed.patch
+deleted file mode 100644
+index 5143e311020a..000000000000
+--- a/package/picocom/0001-Compile-with-libc-s-without-cispeed-cospeed.patch
++++ /dev/null
+@@ -1,49 +0,0 @@
+-From 30c712c5f14306460c44bea70e24419db9d44f8c Mon Sep 17 00:00:00 2001
+-From: Nick Patavalis <npat@efault.net>
+-Date: Thu, 12 Apr 2018 15:16:04 +0300
+-Subject: [PATCH] Compile with libc's without cispeed / cospeed
+-
+-Some libc implementations (e.g. musl) do not define the cispeed and
+-cospeed struct termios fields. So we have to check the
+-_HAVE_STRUCT_TERMIOS_C_ISPEED and _HAVE_STRUCT_TERMIOS_C_OSPEED
+-macros. If not defined, we disable custom baudrate support.
+-
+-[baruch: backported from upstream master to 3.1]
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Upstream status: commit 1acf1ddabaf3
+-
+- custbaud.h | 10 +++++++++-
+- 1 file changed, 9 insertions(+), 1 deletion(-)
+-
+-diff --git a/custbaud.h b/custbaud.h
+-index 48151a4a4e84..ae4ae8daf49e 100644
+---- a/custbaud.h
+-+++ b/custbaud.h
+-@@ -26,6 +26,8 @@
+- #ifndef CUSTBAUD_H
+- #define CUSTBAUD_H
+- 
+-+#include <termios.h>
+-+
+- #ifndef NO_CUSTOM_BAUD
+- 
+- #if defined (__linux__)
+-@@ -33,7 +35,13 @@
+- /* Enable by-default for kernels > 2.6.0 on x86 and x86_64 only */
+- #include <linux/version.h>
+- #if LINUX_VERSION_CODE > KERNEL_VERSION(2,6,0)
+--#if defined (__i386__) || defined (__x86_64__) || defined (USE_CUSTOM_BAUD)
+-+/* Some libc implementations (e.g. musl) do not define the cispeed and
+-+   cospeed struct termios fields. We do not support custom baudrates
+-+   on them. */
+-+#if ( (defined (__i386__) || defined (__x86_64__))  \
+-+      && defined (_HAVE_STRUCT_TERMIOS_C_ISPEED)    \
+-+      && defined (_HAVE_STRUCT_TERMIOS_C_OSPEED) )  \
+-+    || defined (USE_CUSTOM_BAUD)
+- #ifndef USE_CUSTOM_BAUD
+- #define USE_CUSTOM_BAUD
+- #endif
+--- 
+-2.16.3
+-
+diff --git a/package/picocom/Config.in b/package/picocom/Config.in
+index 9f8efc4a9a4b..6db71e1791a7 100644
+--- a/package/picocom/Config.in
++++ b/package/picocom/Config.in
+@@ -6,4 +6,4 @@ config BR2_PACKAGE_PICOCOM
+ 	  in principle, very much like minicom, only it's pico instead
+ 	  of mini!
+ 
+-	  https://github.com/npat-efault/picocom/
++	  https://gitlab.com/wsakernel/picocom
+diff --git a/package/picocom/picocom.hash b/package/picocom/picocom.hash
+index 77c270408c3a..8107f5633a6c 100644
+--- a/package/picocom/picocom.hash
++++ b/package/picocom/picocom.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  e6761ca932ffc6d09bd6b11ff018bdaf70b287ce518b3282d29e0270e88420bb  picocom-3.1.tar.gz
++sha256  107d3e49e502ce63f826525f587826990451bcb39492efe2e0463dd62d64f3ea  picocom-2023-04.tar.gz
+ sha256  9273c6b2c55be95f0f0df292d87e8900e5bfdf5b510a6ea09e80306cf45c10f6  LICENSE.txt
+diff --git a/package/picocom/picocom.mk b/package/picocom/picocom.mk
+index 2d585bb2f5fe..2828c98fb7f9 100644
+--- a/package/picocom/picocom.mk
++++ b/package/picocom/picocom.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-PICOCOM_VERSION = 3.1
+-PICOCOM_SITE = $(call github,npat-efault,picocom,$(PICOCOM_VERSION))
++PICOCOM_VERSION = 2023-04
++PICOCOM_SITE = $(call gitlab,wsakernel,picocom,$(PICOCOM_VERSION))
+ PICOCOM_LICENSE = GPL-2.0+
+ PICOCOM_LICENSE_FILES = LICENSE.txt
+ PICOCOM_CPE_ID_VENDOR = picocom_project
+-- 
+2.43.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
