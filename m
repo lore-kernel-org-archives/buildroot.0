@@ -4,65 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A520EC47077
-	for <buildroot@archiver.kernel.org>; Wed,  3 Jan 2024 07:11:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C196C3DA6E
+	for <buildroot@archiver.kernel.org>; Wed,  3 Jan 2024 07:12:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5369681E90;
-	Wed,  3 Jan 2024 07:11:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5369681E90
+	by smtp1.osuosl.org (Postfix) with ESMTP id C059581E93;
+	Wed,  3 Jan 2024 07:12:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C059581E93
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mnZUujKva67c; Wed,  3 Jan 2024 07:11:48 +0000 (UTC)
+	with ESMTP id ndum2u-k4Wd5; Wed,  3 Jan 2024 07:12:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9EE1381D68;
-	Wed,  3 Jan 2024 07:11:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9EE1381D68
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2DA4D1BF27E
- for <buildroot@lists.busybox.net>; Wed,  3 Jan 2024 07:11:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1C81781E45;
+	Wed,  3 Jan 2024 07:12:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C81781E45
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 75C3A1BF95D
+ for <buildroot@lists.busybox.net>; Wed,  3 Jan 2024 07:12:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 051FF81D68
- for <buildroot@lists.busybox.net>; Wed,  3 Jan 2024 07:11:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 051FF81D68
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4C2D740503
+ for <buildroot@lists.busybox.net>; Wed,  3 Jan 2024 07:12:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C2D740503
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SLO5wDzpuQW3 for <buildroot@lists.busybox.net>;
- Wed,  3 Jan 2024 07:11:44 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ut06TJXojuJp for <buildroot@lists.busybox.net>;
+ Wed,  3 Jan 2024 07:12:12 +0000 (UTC)
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BF0E181AA7
- for <buildroot@buildroot.org>; Wed,  3 Jan 2024 07:11:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF0E181AA7
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 01E9740A95
+ for <buildroot@buildroot.org>; Wed,  3 Jan 2024 07:12:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 01E9740A95
 Received: from fli4l.lan.fli4l (p5b3a0630.dip0.t-ipconnect.de [91.58.6.48])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 4FC3BA4C07F3
- for <buildroot@buildroot.org>; Wed,  3 Jan 2024 08:11:41 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:58942)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 26041A4C0367
+ for <buildroot@buildroot.org>; Wed,  3 Jan 2024 08:12:10 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:42648)
  by fli4l.lan.fli4l with esmtp (Exim 4.97.1)
- (envelope-from <bernd@kuhls.net>) id 1rKvPh-000000001jD-0SoY
- for buildroot@buildroot.org; Wed, 03 Jan 2024 08:11:41 +0100
+ (envelope-from <bernd@kuhls.net>) id 1rKvQ9-000000001oW-3wzo
+ for buildroot@buildroot.org; Wed, 03 Jan 2024 08:12:09 +0100
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Wed,  3 Jan 2024 08:11:41 +0100
-Message-Id: <20240103071141.6147-1-bernd@kuhls.net>
+Date: Wed,  3 Jan 2024 08:12:09 +0100
+Message-Id: <20240103071209.6187-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Spamd-Bar: ++++
+X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202312101026; t=1704265901;
- bh=3iWXAKV+xmMQ/vcxgjSUniHul9JquBLDV15SWtP5sbY=;
+ s=kas202312101026; t=1704265930;
+ bh=fUag98ypB4KI+KDVA0asIKcL9szxd9VNSfkbJa2tnhY=;
  h=From:To:Subject:Date:From;
- b=amuJQ1nBIqHg2HVJmAe3yVtN7uFZ8TUsznG9SFXuF2PJI9c7s+eIMnB/KmIYlrtXP
- 86/KvdkYlsFj/tepxphTkt5+ER0oQrKMBQF+VkEbXgpClNPJH0z1aNvVQalVgqso3A
- S0TYhHXPzHbn5L89wACNn3BWKqKrpJEXPEAQZHBz/WzPZLhUNvxvekgmePdv9rq+iz
- eSgUjXaURB0FiJU2ZRHxqm6c7MSZNhydVs45H12/2wUKeY4KN1KpG/tkrSScYqLkok
- 53GvPHzV2iYgXE0JrCDPear9kn5f2FBeCpJU+YpE17quO5BjVwna/kM7B1J49GgRBe
- TX1APaWC3dfvQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=kpLZf69hXzaNZfW9OM+qa0twKFtbp2hXM7hVfg8D9py++z9NF8h0LwnCVLcMqxmgJ
+ +IkxlvmIHpNeRY72nRxYPGZgDsonvBHjDLHCU5sp3fQ7KTy0UuxnLI04Ln/mepvbNF
+ dj/CLGmJa6VydkrfeABuEsHFpWHLUL5JcOKJi1IJYoneI2ArQYK/utWypnBXB9RQj3
+ Q8fk63WqbS5sKkUwAMA1zICi53Mipi46Nq44asx4mLtxeN0cqamv8nhdGq1uYBaDo4
+ fE5O6TkSA9L3q6vTX6I8kumNrsxtAEg1TfdqFYHzlVQZ5Q9vUyRR/dqNmUS+djpNwP
+ aSDDHSklEPjBg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202312101026 header.b=amuJQ1nB
-Subject: [Buildroot] [PATCH 1/1] package/libdrm: bump version to 2.4.119
+ header.a=rsa-sha256 header.s=kas202312101026 header.b=kpLZf69h
+Subject: [Buildroot] [PATCH 1/1] package/freeswitch: security bump version
+ to 1.10.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,41 +81,40 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Release notes:
-https://lists.x.org/archives/xorg-announce/2023-December/003438.html
+https://developer.signalwire.com/freeswitch/FreeSWITCH-Explained/Release-Notes/FreeSWITCH-1.10.x-Release-notes_25460878/#11011-release-date-22-dec-2023
+https://github.com/signalwire/freeswitch/releases/tag/v1.10.11
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/libdrm/libdrm.hash | 6 +++---
- package/libdrm/libdrm.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/freeswitch/freeswitch.hash | 4 ++--
+ package/freeswitch/freeswitch.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
-index bcbcdccf30..219c2c0712 100644
---- a/package/libdrm/libdrm.hash
-+++ b/package/libdrm/libdrm.hash
-@@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2023-November/003433.html
--sha256  a777bd85f2b5fc9c57f886c82058300578317cafdbc77d0a769d7e9a9567ab88  libdrm-2.4.118.tar.xz
--sha512  2740ec10dfe96b520345c3f6f0d99a30aac95b1f96656bd9cd11269c2a83a9dac423da29d74a3deb55360e3ae2ca4a1de283e1e443667bedd22673f6629c9920  libdrm-2.4.118.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2023-December/003438.html
-+sha256  0a49f12f09b5b6e68eaaaff3f02ca7cff9aa926939b212d343161d3e8ac56291  libdrm-2.4.119.tar.xz
-+sha512  c8dd7665e85c01a67fcce1c1c614bc05a3ec311f31cae7de5fb1cd27d0f11f1801be63de3fa3e33b2f505544fd4b1bc292965c5e8de46a3beaaedb10334945ca  libdrm-2.4.119.tar.xz
- 
- # Hash for license file
- sha256  d0a616a9020dc0271e36e6dd4bad174b4e2c2a42636f13785f8e18dd5f85fd83  data/meson.build
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index 0db0c51284..fd50f4f22e 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
+diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
+index 504be12090..3f16467e22 100644
+--- a/package/freeswitch/freeswitch.hash
++++ b/package/freeswitch/freeswitch.hash
+@@ -1,5 +1,5 @@
+-# From https://files.freeswitch.org/freeswitch-releases/freeswitch-1.10.10.-release.tar.xz.sha256
+-sha256  d2c702c7f4bd6eca539c3981cf859ad5c1846d9283829e24cd75686f2322b9df  freeswitch-1.10.10.-release.tar.xz
++# From https://files.freeswitch.org/freeswitch-releases/freeswitch-1.10.11.-release.tar.xz.sha256
++sha256  7f9603a691220d9f47da42f3b19290b629b69dceb2eee56448f0a7cefcf9d1a1  freeswitch-1.10.11.-release.tar.xz
+ # Locally computed
+ sha256  75c933202f40939cdc3827fce20a1efdaa38291e2b5a65d234eb16e2cffda66a  COPYING
+ sha256  c3e3388768dae8bf4edcc4108f95be815b8a05c0b0aef6e4c3d8df81affdfa34  docs/OPENH264_BINARY_LICENSE.txt
+diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
+index 07d436cf0b..5b9dc49c9b 100644
+--- a/package/freeswitch/freeswitch.mk
++++ b/package/freeswitch/freeswitch.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBDRM_VERSION = 2.4.118
-+LIBDRM_VERSION = 2.4.119
- LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.xz
- LIBDRM_SITE = https://dri.freedesktop.org/libdrm
- LIBDRM_LICENSE = MIT
+-FREESWITCH_VERSION = 1.10.10
++FREESWITCH_VERSION = 1.10.11
+ FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).-release.tar.xz
+ FREESWITCH_SITE = https://files.freeswitch.org/freeswitch-releases
+ # External modules need headers/libs from staging
 -- 
 2.39.2
 
