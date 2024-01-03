@@ -4,84 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E3FCC3DA6E
-	for <buildroot@archiver.kernel.org>; Wed,  3 Jan 2024 19:23:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7379C3DA6E
+	for <buildroot@archiver.kernel.org>; Wed,  3 Jan 2024 19:26:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C82A5417D5;
-	Wed,  3 Jan 2024 19:23:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C82A5417D5
+	by smtp4.osuosl.org (Postfix) with ESMTP id 711634181C;
+	Wed,  3 Jan 2024 19:26:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 711634181C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id J1KeucASsPJ1; Wed,  3 Jan 2024 19:23:22 +0000 (UTC)
+	with ESMTP id wQhytHRjNx5z; Wed,  3 Jan 2024 19:26:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1F4CB40872;
-	Wed,  3 Jan 2024 19:23:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F4CB40872
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 693FB1BF286
- for <buildroot@lists.busybox.net>; Wed,  3 Jan 2024 19:23:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BCD2A417EC;
+	Wed,  3 Jan 2024 19:26:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BCD2A417EC
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 996391BF286
+ for <buildroot@lists.busybox.net>; Wed,  3 Jan 2024 19:26:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3F3D7404CA
- for <buildroot@lists.busybox.net>; Wed,  3 Jan 2024 19:23:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F3D7404CA
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6FF9F82572
+ for <buildroot@lists.busybox.net>; Wed,  3 Jan 2024 19:26:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6FF9F82572
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hCJQBbA4b5RB for <buildroot@lists.busybox.net>;
- Wed,  3 Jan 2024 19:23:18 +0000 (UTC)
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 124F44092F
- for <buildroot@buildroot.org>; Wed,  3 Jan 2024 19:23:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 124F44092F
-Received: by mail-wm1-x32b.google.com with SMTP id
- 5b1f17b1804b1-40d5f40ce04so61501915e9.2
- for <buildroot@buildroot.org>; Wed, 03 Jan 2024 11:23:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704309795; x=1704914595;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=R62EMMXNBVz26xfw+C56NH3J3NIrhfE6UqE9Qqfcz8k=;
- b=id8aWVO8AkL2bvJGZc3v+rQhFHt2junXZahuT+Uth2QKbHxUvPK/y/cgUPOb0gRwsC
- U+m31rivbcSw9NHwTRQz4fH+gJ55JuSmc8epAErAiBRnKwx0uQp+0OKqXVc98EvEnSKN
- K9v5EpCGb05083EtO6zmQHw6Ie1j5byRWfVeRGaKb4IbA7nJGya+xjmdWelzZtuhYYKj
- /4zaycJoKoXo+ufXQ9tFesr22spgGYhFcApuMpYKbOCLT6cc4gvOHn1ghpwTtxZv1qHY
- RPn1L8bfXI0eZQH3NFtgGt87ds+sSUWQRm0xETKOdgCSue5US2I9oLjsw84pBYg0WAgF
- BMwQ==
-X-Gm-Message-State: AOJu0Yw0Ypcfah29ouESDhuCs4t9sJbsSb0ngGwmiUu9OX27+kcthqj8
- iZDLmU9/0gpiSLV1+2DFisQlNqctByo=
-X-Google-Smtp-Source: AGHT+IFN42h0oIHdnDvOH4df1YQmrIQGq6Le52LLF1bK8Yb+97+gDRrrxH6f7oudd8oVfmdNwsYMRA==
-X-Received: by 2002:a05:600c:1c0d:b0:40d:5b7a:e31f with SMTP id
- j13-20020a05600c1c0d00b0040d5b7ae31fmr7151020wms.39.1704309795237; 
- Wed, 03 Jan 2024 11:23:15 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- v10-20020a05600c470a00b0040d579817b0sm3207106wmo.15.2024.01.03.11.23.14
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 03 Jan 2024 11:23:14 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jxGJZPwfy1pE for <buildroot@lists.busybox.net>;
+ Wed,  3 Jan 2024 19:26:28 +0000 (UTC)
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 371AE82425
+ for <buildroot@buildroot.org>; Wed,  3 Jan 2024 19:26:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 371AE82425
+Received: from fli4l.lan.fli4l (p5b3a0630.dip0.t-ipconnect.de [91.58.6.48])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id F097BA4C0A3F;
+ Wed,  3 Jan 2024 20:26:25 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:59648)
+ by fli4l.lan.fli4l with esmtp (Exim 4.97.1)
+ (envelope-from <bernd@kuhls.net>) id 1rL6sj-000000002L7-34hZ;
+ Wed, 03 Jan 2024 20:26:25 +0100
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Wed,  3 Jan 2024 20:23:11 +0100
-Message-ID: <20240103192311.909037-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Date: Wed,  3 Jan 2024 20:26:25 +0100
+Message-Id: <20240103192625.2787462-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
+X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1704309795; x=1704914595; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=R62EMMXNBVz26xfw+C56NH3J3NIrhfE6UqE9Qqfcz8k=;
- b=OYBePlk3/+hjx6z8XxLLNBcDnebgOMmxhLpgW5jixjEvtxa7VZDx527mdx8EOMtke1
- 7mM9Lu0bizLY4l7k4N337uI81521d34XR5gYIE7uHAbwzpB8sM63vjGJUgJZPvsco4Ox
- +vWkMDDo4tQRNmJwhjQHGb5m9fmXb4CQ9sMkyD7JolynqrL/1Fwi5kASg1DykoV5KZAC
- kjODFKGymPUH3lE6RdiyzArbcOtYPH863iFkKyYtJblXZLFuZDtPc93IJDzB4x35xzhb
- Z1FayhtU2LJYvwrF2J3PMnwpFbqHFmdnWUot7a+Q6nqVJpsq4m1EvFDxWIPVLGGnwLy6
- mcwQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=OYBePlk3
-Subject: [Buildroot] [PATCH 1/1] package/stress: bump to version 1.0.7
+ d=kuhls.net; 
+ s=kas202312101026; t=1704309985;
+ bh=D7k8cKEWKEXexyNqnpQdlyXXFRMkqQDhTPvbftPpzwA=;
+ h=From:To:Cc:Subject:Date:From;
+ b=ECe9i9Mck6ov5dE+3o+sHnrJljf0SbfNSKchtJlctmcdcLvaM033VXTrzr7Huo6+Q
+ U5lQE2Jy6zO0BRJjqRLKZJ6NzN0ii20SXaA+5gbuMEhO7SbIIzZqZPyFDcBSCt0o76
+ S7JjUgMh6VwpuZ8GMtUHt4BC7dSXkX47H1fO1T6muCFPQni0ePgZ/FLWvDAOyX3bws
+ ipmoZ0Mds40WDCNkcflwAxEDk+x5HLXvgvh54njnJEQ+AtxkjVZVoq/aiqHp1n9nft
+ 6+cQJdXyf2Y/UeYx8Pt8LV8WfM/2++kNaxV1zqwJI+5eQRCwbU70b60F995XSDYlSV
+ gdphC5FKyHReQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202312101026 header.b=ECe9i9Mc
+Subject: [Buildroot] [PATCH 1/1] package/tvheadend: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,53 +74,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Use official tarball and so drop autoreconf
+Updated license hash due to upstream commit
+https://github.com/tvheadend/tvheadend/commit/3cf5acdc714dc025b2246d2395478fcfd058afeb
 
-https://github.com/resurrecting-open-source-projects/stress/blob/1.0.7/ChangeLog
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/stress/stress.hash | 2 +-
- package/stress/stress.mk   | 7 +++----
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ package/tvheadend/tvheadend.hash | 4 ++--
+ package/tvheadend/tvheadend.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/stress/stress.hash b/package/stress/stress.hash
-index dc1785b6c7..ac36122594 100644
---- a/package/stress/stress.hash
-+++ b/package/stress/stress.hash
+diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
+index 5a9ec3df23..62c954234d 100644
+--- a/package/tvheadend/tvheadend.hash
++++ b/package/tvheadend/tvheadend.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  1798e49ca365d928fb194ba1b8e8d1e09963b49e9edb0a78bcbba15750bb5027  stress-1.0.5.tar.gz
-+sha256  e63adb57597e617c14ecb0d841b5d990460796d9e9ec69bd56fe645ef02eb239  stress-1.0.7.tar.bz2
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/stress/stress.mk b/package/stress/stress.mk
-index 99a50f349e..53f01b3b0a 100644
---- a/package/stress/stress.mk
-+++ b/package/stress/stress.mk
-@@ -4,12 +4,11 @@
+-sha256  98a27a6a5ce2fc800df6d154534f494582418f6b24b3a1c30267785d191e50df  tvheadend-62adbebfd062d7b97829268274aad92df2033784.tar.gz
+-sha256  54dc3cbc00bf126bcba43e2af7f3ad1dc00f335985da1409fa943c7b7256d942  LICENSE.md
++sha256  99a2fd954d8e620029759f5a65dc09271c168cd047a6a152a0fe643de64823cf  tvheadend-b40a62b31e809523d2fe2f7f3f331cc55dfdbd0f.tar.gz
++sha256  16aaf037a2d00e6e7804de64619887fc7539f1ede99e3282c86dfbc61c2af63e  LICENSE.md
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index 1d4e6ee30c..816ec6e161 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--STRESS_VERSION = 1.0.5
--STRESS_SITE = $(call github,resurrecting-open-source-projects,stress,$(STRESS_VERSION))
-+STRESS_VERSION = 1.0.7
-+STRESS_SOURCE = stress-$(STRESS_VERSION).tar.bz2
-+STRESS_SITE = https://github.com/resurrecting-open-source-projects/stress/releases/download/$(STRESS_VERSION)
- STRESS_LICENSE = GPL-2.0+
- STRESS_LICENSE_FILES = COPYING
--# From git
--STRESS_AUTORECONF = YES
- 
- # Stress is linked statically if the --enable-static is specified.
- # However, this option is always specified in the global
+-TVHEADEND_VERSION = 62adbebfd062d7b97829268274aad92df2033784
++TVHEADEND_VERSION = b40a62b31e809523d2fe2f7f3f331cc55dfdbd0f
+ TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
+ TVHEADEND_LICENSE = GPL-3.0+
+ TVHEADEND_LICENSE_FILES = LICENSE.md
 -- 
-2.43.0
+2.39.2
 
 _______________________________________________
 buildroot mailing list
