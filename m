@@ -1,68 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7379C3DA6E
-	for <buildroot@archiver.kernel.org>; Wed,  3 Jan 2024 19:26:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EDB1C3DA6E
+	for <buildroot@archiver.kernel.org>; Wed,  3 Jan 2024 20:32:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 711634181C;
-	Wed,  3 Jan 2024 19:26:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 711634181C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6C66682B34;
+	Wed,  3 Jan 2024 20:32:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C66682B34
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wQhytHRjNx5z; Wed,  3 Jan 2024 19:26:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7pd7Itm5ptWK; Wed,  3 Jan 2024 20:32:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BCD2A417EC;
-	Wed,  3 Jan 2024 19:26:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BCD2A417EC
+	by smtp1.osuosl.org (Postfix) with ESMTP id 058E982A56;
+	Wed,  3 Jan 2024 20:32:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 058E982A56
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 996391BF286
- for <buildroot@lists.busybox.net>; Wed,  3 Jan 2024 19:26:29 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9C5B71BF369
+ for <buildroot@lists.busybox.net>; Wed,  3 Jan 2024 20:32:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6FF9F82572
- for <buildroot@lists.busybox.net>; Wed,  3 Jan 2024 19:26:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6FF9F82572
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7522382549
+ for <buildroot@lists.busybox.net>; Wed,  3 Jan 2024 20:32:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7522382549
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jxGJZPwfy1pE for <buildroot@lists.busybox.net>;
- Wed,  3 Jan 2024 19:26:28 +0000 (UTC)
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 371AE82425
- for <buildroot@buildroot.org>; Wed,  3 Jan 2024 19:26:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 371AE82425
-Received: from fli4l.lan.fli4l (p5b3a0630.dip0.t-ipconnect.de [91.58.6.48])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id F097BA4C0A3F;
- Wed,  3 Jan 2024 20:26:25 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:59648)
- by fli4l.lan.fli4l with esmtp (Exim 4.97.1)
- (envelope-from <bernd@kuhls.net>) id 1rL6sj-000000002L7-34hZ;
- Wed, 03 Jan 2024 20:26:25 +0100
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Wed,  3 Jan 2024 20:26:25 +0100
-Message-Id: <20240103192625.2787462-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
+ with ESMTP id t7SZ1Ik0iFnP for <buildroot@lists.busybox.net>;
+ Wed,  3 Jan 2024 20:32:01 +0000 (UTC)
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DC10A820CE
+ for <buildroot@buildroot.org>; Wed,  3 Jan 2024 20:32:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DC10A820CE
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:4f89:5708:1633:580e])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 079C6B00572;
+ Wed,  3 Jan 2024 21:31:53 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Wed, 03 Jan 2024 21:31:53 +0100
+Date: Wed, 3 Jan 2024 21:31:53 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Message-ID: <ZZXEOQnqVJpzVAVy@landeda>
+References: <20240102155552.1902447-1-abrodkin@synopsys.com>
+ <ZZR2I87QpH7JFOpp@landeda>
+ <DS7PR12MB90419624B8739BAF541F133DA161A@DS7PR12MB9041.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-X-Spamd-Bar: ++
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202312101026; t=1704309985;
- bh=D7k8cKEWKEXexyNqnpQdlyXXFRMkqQDhTPvbftPpzwA=;
- h=From:To:Cc:Subject:Date:From;
- b=ECe9i9Mck6ov5dE+3o+sHnrJljf0SbfNSKchtJlctmcdcLvaM033VXTrzr7Huo6+Q
- U5lQE2Jy6zO0BRJjqRLKZJ6NzN0ii20SXaA+5gbuMEhO7SbIIzZqZPyFDcBSCt0o76
- S7JjUgMh6VwpuZ8GMtUHt4BC7dSXkX47H1fO1T6muCFPQni0ePgZ/FLWvDAOyX3bws
- ipmoZ0Mds40WDCNkcflwAxEDk+x5HLXvgvh54njnJEQ+AtxkjVZVoq/aiqHp1n9nft
- 6+cQJdXyf2Y/UeYx8Pt8LV8WfM/2++kNaxV1zqwJI+5eQRCwbU70b60F995XSDYlSV
- gdphC5FKyHReQ==
+Content-Disposition: inline
+In-Reply-To: <DS7PR12MB90419624B8739BAF541F133DA161A@DS7PR12MB9041.namprd12.prod.outlook.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1704313917;
+ bh=R9sQ6HNikX3DrHQTjIrWimQHInxwVlK9h2RaobwnpX8=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=eejxsG0uiFUWQbrL6cQzpMn0pRoKWUQVmZRrow/u47ARWyT0/Ewe7dUABrxgx8vhJ
+ 3dSlSWW+6yAIir2l7x/Z/93DZjnJOY9WMU8EE7+AOzvLa3sHsQDqihMW7snzYyg4bc
+ rWv3aBYw9Lq6SnX2vp99jFdQyHohxEF6a1kMwz1tBLzjAYuzO8iAqfmdH2FrzFB54u
+ PZ8M6ElxVxdzcFzSijYFarnWbnTkD5Euz++IbHMyAaUrU1d15W86xAXAZ6rbGP+QTT
+ Wfm05z4C0Da5bhjO0LxtTuaUH+nfqRYvrmrq1hqZ1R8Yejx0HcuVGqSuOsefm2YJlG
+ adT1J8Ilzh0LA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202312101026 header.b=ECe9i9Mc
-Subject: [Buildroot] [PATCH 1/1] package/tvheadend: bump version
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=eejxsG0u
+Subject: Re: [Buildroot] [PATCH] package/gdb: Remove special handling of
+ libstdc++ for ARC
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,47 +77,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Updated license hash due to upstream commit
-https://github.com/tvheadend/tvheadend/commit/3cf5acdc714dc025b2246d2395478fcfd058afeb
+Alexey, All,
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- package/tvheadend/tvheadend.hash | 4 ++--
- package/tvheadend/tvheadend.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On 2024-01-02 21:55 +0000, Alexey Brodkin via buildroot spake thusly:
+[--SNIP--]
+> What's moreinteresting, that option "--disable-build-with-cxx" was removed
+> in GDB 8.x in September 2016 as since then C++ is required, see
+> https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=cf6de44d75082116865a85cbf94db2632b679361
+> 
+> That said it's totaly fine to back-port that fix to stable Buildroot branches,
+> but since it's not functional (it doesn't change anyting in reality) I'd say
+> there's no point in back-porting it.
 
-diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
-index 5a9ec3df23..62c954234d 100644
---- a/package/tvheadend/tvheadend.hash
-+++ b/package/tvheadend/tvheadend.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  98a27a6a5ce2fc800df6d154534f494582418f6b24b3a1c30267785d191e50df  tvheadend-62adbebfd062d7b97829268274aad92df2033784.tar.gz
--sha256  54dc3cbc00bf126bcba43e2af7f3ad1dc00f335985da1409fa943c7b7256d942  LICENSE.md
-+sha256  99a2fd954d8e620029759f5a65dc09271c168cd047a6a152a0fe643de64823cf  tvheadend-b40a62b31e809523d2fe2f7f3f331cc55dfdbd0f.tar.gz
-+sha256  16aaf037a2d00e6e7804de64619887fc7539f1ede99e3282c86dfbc61c2af63e  LICENSE.md
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index 1d4e6ee30c..816ec6e161 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TVHEADEND_VERSION = 62adbebfd062d7b97829268274aad92df2033784
-+TVHEADEND_VERSION = b40a62b31e809523d2fe2f7f3f331cc55dfdbd0f
- TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
- TVHEADEND_LICENSE = GPL-3.0+
- TVHEADEND_LICENSE_FILES = LICENSE.md
+OK, that's Peter's call, so your input is going to be helpful to him to
+assess whether to backport or not, thanls!
+
+> Moreover another use of "--disable-build-with-cxx" needs to go away, see
+> https://git.buildroot.net/buildroot/tree/package/gdb/gdb.mk#n188:
+> ------------------------>8-----------------------
+> # gdb 7.12+ by default builds with a C++ compiler, which doesn't work
+> # when we don't have C++ support in the toolchain
+> ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
+> GDB_CONF_OPTS += --disable-build-with-cxx
+> endif
+> ------------------------>8-----------------------
+
+Indeed, and we do have the proper dependency in Buildroot already, since
+d36f2c73331b (package/gdb: remove gdb 7.12.1) in 2019.
+
+Good catch!
+
+> Do you want me to prepare that patch or you prefer to quickly do that yourself?
+
+Please do.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.39.2
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
