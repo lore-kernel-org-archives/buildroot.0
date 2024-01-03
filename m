@@ -4,131 +4,194 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3667BC46CD2
-	for <buildroot@archiver.kernel.org>; Wed,  3 Jan 2024 00:29:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8835C46CD2
+	for <buildroot@archiver.kernel.org>; Wed,  3 Jan 2024 00:34:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D64F440192;
-	Wed,  3 Jan 2024 00:29:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D64F440192
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3389F405FB;
+	Wed,  3 Jan 2024 00:34:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3389F405FB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id u_F-bXXT6ta8; Wed,  3 Jan 2024 00:29:27 +0000 (UTC)
+	with ESMTP id Dtbf75V1J9rN; Wed,  3 Jan 2024 00:34:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8C9E540A98;
-	Wed,  3 Jan 2024 00:29:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8C9E540A98
+	by smtp2.osuosl.org (Postfix) with ESMTP id 18B5E40A62;
+	Wed,  3 Jan 2024 00:34:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 18B5E40A62
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 60E451BF977
- for <buildroot@lists.busybox.net>; Wed,  3 Jan 2024 00:28:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9F15C1BF977
+ for <buildroot@lists.busybox.net>; Wed,  3 Jan 2024 00:34:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E715040A5F
- for <buildroot@lists.busybox.net>; Wed,  3 Jan 2024 00:28:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E715040A5F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6DEEE40A62
+ for <buildroot@lists.busybox.net>; Wed,  3 Jan 2024 00:34:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6DEEE40A62
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 57XdOmTAON6T for <buildroot@lists.busybox.net>;
- Wed,  3 Jan 2024 00:28:30 +0000 (UTC)
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com
- (mail-dm6nam12on20703.outbound.protection.outlook.com
- [IPv6:2a01:111:f400:fe59::703])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2631E405FB
- for <buildroot@buildroot.org>; Wed,  3 Jan 2024 00:28:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2631E405FB
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=R/92V5ULQHIqB9Oj8ed9XvSwnOVeNrWq7Cg8J3QLKW2OLnBC4t3qyI+zrO9P5FfyasRmtstOj4anMds+WfIHBCZwnkjM/qCcFA0mx8p2Nc+9slOk9GYe4wNql1+As3U9vV8xFb2JAfDt1/WfcDFNC7RtsF75LRezNVF4W+HuY03eVrL7K5Iu40Kge6ix3yrCEe9SMjks3hXNqGE5XBFEuhm2D2e0Ob6VWenKlfzs6L5QIk8kAEdZssSqGoQWsekFIXvob2mV62Nbux+b6Zu7deUtiKmQU/SH4WB5FHQp4uT+wEo/XdXg/DgYGUw3JgjSUVZMINleuy+wgc3Z+UkvMA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
+ with ESMTP id ygjIvAUpr_ed for <buildroot@lists.busybox.net>;
+ Wed,  3 Jan 2024 00:34:34 +0000 (UTC)
+Received: from mx0a-00105401.pphosted.com (mx0a-00105401.pphosted.com
+ [67.231.144.184])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D3A17405FB
+ for <buildroot@buildroot.org>; Wed,  3 Jan 2024 00:34:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3A17405FB
+Received: from pps.filterd (m0346906.ppops.net [127.0.0.1])
+ by mx0a-00105401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
+ 402LicRX010449; Wed, 3 Jan 2024 00:34:33 GMT
+Received: from xusxph009rp040.rtx.com (xusxph009rp040.rtx.com [128.13.125.146])
+ by mx0a-00105401.pphosted.com (PPS) with ESMTPS id 3vctnwheny-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Wed, 03 Jan 2024 00:34:33 +0000
+Received: from xusxph008rp010.corp.ray.com ([128.13.124.224])
+ by xusxph009rp040.rtx.com (8.17.1.19/8.17.1.19) with ESMTPS id 4030YUln022149
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+ Wed, 3 Jan 2024 00:34:31 GMT
+Received: from UUSALE29.utcmail.com (uusale29.utcmail.com [10.220.63.19])
+ by xusxph008rp010.corp.ray.com (8.17.1.19/8.17.1.19) with ESMTPS id
+ 4030YT4h019723
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+ Wed, 3 Jan 2024 00:34:30 GMT
+Received: from uusale2a.utcmail.com (10.220.63.20) by UUSALE29.utcmail.com
+ (10.220.63.19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.12; Tue, 2 Jan
+ 2024 19:34:30 -0500
+Received: from UUSALE28.utcmail.com (10.220.63.22) by uusale2a.utcmail.com
+ (10.220.63.20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.12; Tue, 2 Jan
+ 2024 19:34:29 -0500
+Received: from USG02-BN3-obe.outbound.protection.office365.us (23.103.199.151)
+ by UUSALE28.utcmail.com (10.220.63.22) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.12 via Frontend Transport; Tue, 2 Jan 2024 19:34:29 -0500
+Received: from BN0P110MB1673.NAMP110.PROD.OUTLOOK.COM (2001:489a:200:184::20)
+ by BN0P110MB1063.NAMP110.PROD.OUTLOOK.COM (2001:489a:200:16f::15)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7135.25; Wed, 3 Jan
+ 2024 00:34:28 +0000
+Received: from BN0P110MB1673.NAMP110.PROD.OUTLOOK.COM
+ ([fe80::385b:cec6:a646:74f8]) by BN0P110MB1673.NAMP110.PROD.OUTLOOK.COM
+ ([fe80::385b:cec6:a646:74f8%3]) with mapi id 15.20.7135.026; Wed, 3 Jan 2024
+ 00:34:28 +0000
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, "buildroot@buildroot.org"
+ <buildroot@buildroot.org>
+Thread-Topic: [External] [PATCH 1/1] package/python-pysensors: add lm-sensors
+ dependency
+Thread-Index: AQHaPX9JBdCQJLOPdkqjiUp9ec4TZ7DHON3A
+Date: Wed, 3 Jan 2024 00:34:28 +0000
+Message-ID: <BN0P110MB16731E7120325FCC63EBD321EB60A@BN0P110MB1673.NAMP110.PROD.OUTLOOK.COM>
+References: <20240102132618.1255329-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <20240102132618.1255329-1-fontaine.fabrice@gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN0P110MB1673:EE_|BN0P110MB1063:EE_
+x-ms-office365-filtering-correlation-id: 2278ae6e-29af-4e6f-ed6c-08dc0bf3befa
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: rh3t1FIByScfWGgQ2IdLegE4GqCDrwKoVVJ4AOP6P/fKe4C7bo+M8Tw4fUqpn4b5T3aR3/P+HBMqfVRDjhrYJTqcy4OvGUSoKOua09/FLRd59XNPd9C4Pn9C18BwI9dk8wre0z85tsQcDMynGM9BNLbLRGjX1tF4jFd6tUL3hkZNup1PlmIsnuRhcoidPphNEpBr7pk80itbnmU8Rg4XlOruE1eYdm6Y94PPhqvGA0kUQHBcRyGB0GcVg7JqQg+wp4132qP2ljJbV5pG1iPWAhUN2kUimRBmbTFiRv6Ex7fWsDb2rYDLYpRyE3aOmf2RVS4LAJk9z1KBKI/GC8qw3s8TFLwPtHGGCbEWq8xa0qgJPCHXF0eW+Ds67b6Q0YnbWrD4LWmJFQQ0+SoF/2CdytRxC6L+155EsD18J/jtF1f873PXb82Tc+/MhuYN99uD2F9WiNsb6fElqEz1W459kkGb+iO59om2dfQVeAmSF0k05prffqMjQvvkdTuszDjURG+1EWmLFC1wB79u6Up7ZzVQWkad7I3X+eaAaVXBQcVBSVBtE3Zl5pZmUGD0TssK4DR2gRb5+b7MtwiXG24+RSZO9Ug6GayCxvoEBxQAC2XTRug5M4BCjRZAiA30GlmFHxk22EIlnHwQ/bqg+1Ql1yTcOHPzNs8ly1kZKp3HOb0=
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:BN0P110MB1673.NAMP110.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
+ SFS:(13230031)(366004)(230173577357003)(230922051799003)(230273577357003)(451199024)(1800799012)(186009)(66446008)(83380400001)(26005)(122000001)(82960400001)(38100700002)(54906003)(52536014)(8936002)(8676002)(110136005)(71200400001)(498600001)(5660300002)(2906002)(4326008)(6506007)(53546011)(64756008)(76116006)(66556008)(66476007)(9686003)(7696005)(66946007)(86362001)(38070700009)(55016003)(33656002);
+ DIR:OUT; SFP:1101; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?NESq23qEGb2Ktna15l7RlCI/qv8MyrvTHjW6Hv3yUqU49iQdHhZAewFrt5iU?=
+ =?us-ascii?Q?JfM1GFn9gDuaoUpkH1Qvh6V7ilkZEjSiuSMyhT7TaMs3pXO7qeJc3ib8mF4n?=
+ =?us-ascii?Q?dwwP2N1oFytrE7P1r9RV6bfZn8MC3kp+btxsDB7EMLW5F3RwQtaCH7CuPOUY?=
+ =?us-ascii?Q?ziDDHKbJggTrxyWGPECyj+bFERsNH33A+MoOlM6ar+BRtYYb/ZU/umfa4Dqm?=
+ =?us-ascii?Q?wIG+JDz8XBDRPYCaZO3seI65yvqkZPCaf+TXlVvY02vPR6dY6sL8of6cJ1L3?=
+ =?us-ascii?Q?hqXlMc2o/+tYxA+yYmit6y+cJQLyLJ9vEtL0RYE7MWRBHM8yMIRY5BFn5kno?=
+ =?us-ascii?Q?VByU2JpunQciSvpT6efh/8Pfr7ZgfMwHOktsDWdKuOprdO29l2mSO7U+es/i?=
+ =?us-ascii?Q?BJjtWyISCzmqDVKvjInEkAJvsHSaCe1joI0IMyc3oSlLBz37uqHiQlhYYel+?=
+ =?us-ascii?Q?ZGVEkem8C9Ldh8WrCOCBp5ac8QFWhn74f3NxnU/mwW8sE+kv1RFqHGVkQRaH?=
+ =?us-ascii?Q?SpWcKVUnWzR+BVT/DZjliXoD0exC0rxZ1GIYxCnsH34k1KSZmzRwNSwyvjpa?=
+ =?us-ascii?Q?rgT3hk4LnqRImyYgIhjcgkkRqq+qH8BE3gCBI8ugD2DTWIV2oyqQbbh349jF?=
+ =?us-ascii?Q?wS599cFDsZCE8gigX6uygojP8DgcXdAvGRIGhuAbc0MYebY7fnumjR4QAjzt?=
+ =?us-ascii?Q?NcmhN2Stb4kSvQoIQSBuhELe+Z/puPX9VVAqcIDJHUYTZr9uG4O3GrbZ/jn3?=
+ =?us-ascii?Q?epL1EXlYq+Cq6ZIAnQizN/YDtTeoI6SItsSkD2xastVXU4PxEQa7mWo1XmCd?=
+ =?us-ascii?Q?EDVWR2NurKNViJuaoJ1WHtZ9MBmhEmqXxboztp9HTWbA+E2QJ8koZKvBcYkj?=
+ =?us-ascii?Q?1LWxzXWcLvxFkbEKdgeTL7tXh/R1RWBM9WjZEj1xH0rXEAWTpeWG9cULJjgI?=
+ =?us-ascii?Q?5s6Am+a9dX/2azjFviz3MtG+NFtpYXyW2Rfb//lFS+u9lomzEe9GbYWUCnEn?=
+ =?us-ascii?Q?wjfQ3kPgpwiIo6n6VV13nFIon6NBfGd2Y/p+esK3S7Lz+R+NLgfxMLX3DOGj?=
+ =?us-ascii?Q?vQ6QcqJxWhQfwcAHC6emDL7GtqqWYlseQhiCMWU2uPMYHNZATy7mBloHdaPb?=
+ =?us-ascii?Q?gUztQkWwQP56gL84+VoFZqyagQ0xuMFBLSBXCYHXZR/88Pg9PnpBMT8UebH3?=
+ =?us-ascii?Q?CibfJccl4GTWaPHDYo7c/Sfa1r0xH8jt0/jfOKasMD2VqLgyEmFbIGOsEAAQ?=
+ =?us-ascii?Q?2iEYHrkXUbUm/2SUIzBYvT1CNz1CtnmEA+pmnFtZoY3y8KvMQwvoFBVgYHaN?=
+ =?us-ascii?Q?tA35ZIb/d9Slj53BsrfWIWvyT1CsF6RdCtIaI7err93WcdoC4VvIQgk3AgNM?=
+ =?us-ascii?Q?K0QY3fEXO3j6rvBAYR0ItnvIcn9r918/FrV9AvDDPsXa2l24EnqrPOkMbaZT?=
+ =?us-ascii?Q?6hAgsgAC0Bg53Jfq/aaiPQkTkgVibyGKmvmByWfREwvTm4yHao/3Qx9TIfTq?=
+ =?us-ascii?Q?ufnPwKJ8kub/JNsLtAXno+T4WAPvQ8kw1f0b?=
+arc-seal: i=1; a=rsa-sha256; s=arcselector5401; d=microsoft.com; cv=none;
+ b=qy39VEX51xP+4YWNU9MtEFihZgy1GrwLl7OL/726/FSAWjsuQXyQGApW0Tb2HODyLtS7B7nZBoG7qP5h4LtmkXUgfiHJ3DisdBNHJtGXla6UzWcTpTIfpE6WE9jJn2sXcdm2YGG39ML14ZLBGbvDiG1lE8SLrWnyucve2jfgL1SrK/7RUO2/L+UqJU3HyfEk+0sM/8MaQcmfTfq5DQ5XvYtIS7yxBpCpy/TSrhYg3ep6qJEKbdobqdFKzA9c5ffiu/8KtPWUng7VsfXgGPLSi8yPOrOOuzURebXedxJ56C0alDVTYbwvfiGiYdTgLXfx+NqYsJwS2EjIUXMlTJ66zw==
+arc-message-signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector5401;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1HTlRBurPU3+xlPT/D6gsD57y7hNx4QvLUh51g/UFTQ=;
- b=jAhN6U1kCtbUEv5/SopZ3OghncayKihi/9Oh9gLx0FZ4lAAz98e0h2J3o6jI2RCQNmdo4OC5qzL17i0cW7XBT+ZDH6mBI6R/aL4kmfQ54WN26IJamWhsOsvpL/MjuHsfZlX4Ltni71oIGnFSgWtSqVPOmL33uAB/+fCsGBeth8IXmXK0fnSk4nFW07mZs6Cg9Wwpz+AfRxctsA3m53LFjixrgowJQZhvVlCII7sEVWta1FLdfi8kNYjXbJSysxg99C/gHpncuKhfsuPZvlQ7LIOz1XITuTryBXMZyIUNTH4bpzshHCbjD6Dshp6WGXU2yfBcF0IZGxCmX+pYu+aQCg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=in-advantage.com; dmarc=pass action=none
- header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
-Received: from DS0PR10MB6974.namprd10.prod.outlook.com (2603:10b6:8:148::12)
- by MW4PR10MB6346.namprd10.prod.outlook.com (2603:10b6:303:1ec::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7159.13; Wed, 3 Jan
- 2024 00:28:25 +0000
-Received: from DS0PR10MB6974.namprd10.prod.outlook.com
- ([fe80::5a20:2f52:3e09:72b3]) by DS0PR10MB6974.namprd10.prod.outlook.com
- ([fe80::5a20:2f52:3e09:72b3%6]) with mapi id 15.20.7159.013; Wed, 3 Jan 2024
- 00:28:25 +0000
-From: Colin Foster <colin.foster@in-advantage.com>
-To: buildroot@buildroot.org
-Date: Tue,  2 Jan 2024 18:28:09 -0600
-Message-Id: <20240103002810.1055951-3-colin.foster@in-advantage.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240103002810.1055951-1-colin.foster@in-advantage.com>
-References: <20240103002810.1055951-1-colin.foster@in-advantage.com>
-X-ClientProxiedBy: CH0PR03CA0243.namprd03.prod.outlook.com
- (2603:10b6:610:e5::8) To DS0PR10MB6974.namprd10.prod.outlook.com
- (2603:10b6:8:148::12)
+ bh=PE/F2ekCb8EJty2/ryYJrRGRTNrWPOepj6awrv58AV0=;
+ b=YLsYlzUdAiRrHyTQKGkw4iqxmr6xW3gQGNv+54PzSzoYcJAXDa5t9abQbdabE68nbIUA1+0rpV/NcvXNWETDDweaFjzEk4ppWko9ht30BfMmg8+SY3Ea/E/7u/iQuVYZqtIBKXd1sF9naEWJJ9ImzB/pN5TOaf1l7hql3RrBEWLY1GeR6JWUxwAy6Fqev4CP27FOfrKsDkLS6Few7CWTCXqYAVFSM1H181eEVTUEKXe6ifV/tp3xaIszPvc/SMrqQ90QBUC2AeFHqrm7eG82oNUzKuJe8Oz6nPAkjce+0xpIN1FsOHrhtBojjAzu96OfqABkYY2FH8c7+5DTqGEzNQ==
+arc-authentication-results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=collins.com; dmarc=pass action=none header.from=collins.com;
+ dkim=pass header.d=collins.com; arc=none
+x-ms-exchange-antispam-externalhop-messagedata-chunkcount: 1
+x-ms-exchange-antispam-externalhop-messagedata-0: agfhuEMbrWJK7WNvnaYlE0dsbd6zcYVKy891TGXHpTpcWSoNzg8NB1+EA4cuLvjsw9AtO3H9oyHEIczAzLmncaiRdy4BcHDCTr7cIjZtgakaq88U78ny0CNHV305o20VhcueFF5wibokAHAEhjTWxDYsb+ECnvxQAiFIMv0lonyo8ALUAs8CZUh0XTABrCur3xThp5pIvHIqqe6BhJisVMGNeDXfeLXt36sYqUZlXtS+62w7uP4wEwlmdFkJxNzV0jG1ihKr6ynsV8w8FcTSCxcAGmvtQGwbUH/pP2eUaPPH0IxORtzjWqCkz8PCdJ/7u1q5Kd+YSGVvLI9SX06Ac8yURvWC5HLl4DQafs8QNPUUFU16bPmR1CqvkL8HprcYrGTJlnGvGl+jVw/xHzjt1CeB3NRXTMaJvlID7XPvMS2djpriJ9Yjp+KDPVqGByKHBaRRGRjqYbXN12c5twAwhj0HO1csD94h6SrbE60Glx6pFrdTbXKOPRdI1+t4A17h7vahVhasm8HdWzGg6j44CfAjjRny4DwplYayQj8qzyvAFVdKi4FKyutkd/JEMmDdm3wdT59z8Dlq6M1zk9hF7WBkh6xwCPkIFDiMoKrFDR/QeIhK3JZNxqb7vLXdwOq3
+x-ms-exchange-crosstenant-authas: Internal
+x-ms-exchange-crosstenant-authsource: BN0P110MB1673.NAMP110.PROD.OUTLOOK.COM
+x-ms-exchange-crosstenant-network-message-id: 2278ae6e-29af-4e6f-ed6c-08dc0bf3befa
+x-ms-exchange-crosstenant-originalarrivaltime: 03 Jan 2024 00:34:28.8839 (UTC)
+x-ms-exchange-crosstenant-fromentityheader: Hosted
+x-ms-exchange-crosstenant-id: 7a18110d-ef9b-4274-acef-e62ab0fe28ed
+x-ms-exchange-transport-crosstenantheadersstamped: BN0P110MB1063
+x-passedthroughonpremises: Yes
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR10MB6974:EE_|MW4PR10MB6346:EE_
-X-MS-Office365-Filtering-Correlation-Id: 18828421-41c3-40c4-d6ff-08dc0bf2e64f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: TYiZPwshu9iMdRucdpRBYO7ufSatDRRkCEprEwDT2C5qapSE0gn7VDAYj+XA+CemYB7k++eXBEftHCE+D3Mr7fqUDfCSqjctQnzbEgo02x/dicSDJwl5jmwMCkx47L1MU5fSQXExSMzFK/kiQQ9g3wtJbo9V5TjqCTP7Zq1mKeu+fcqGXGTi7h8u2gz0WeBMiqq9bEt/BLuzFgEblVOsRjjOw9YamoIVKkjuWLifJ7AaveXd2c2yjl6xp+h4g+jMRxCvU2nPoeaRD5sc4+Ii92QcBAx8Gio9fz2xL4Klcg87+DHmk4knVVpWDLr/M3bqT/RKhVGVhIyL3vqIRzV746KJ/O4E1pDpm7f6C7miggccs2QraN/5cYvyRFEvYWkG92ZrdCyu++vVHkDhAesV06jcAp61fPqONHkFgPzGhu/k3i0V4IDhFSz2m/3u/YtQTxwnPUMDqHU2tK5FHmEvdRlNZ3obG2gOiCY8nAk9pxngIq9CaGA1yVLFtDNAQ8Sq0Ht3Me8245uD4iNJnM5TwP8to91J+y4jmMKWHcAnzykje5jRMkBLSz2rQuXeNN2ywqOPl98Oydjc+OrspRAEXGMhhW7pYfNUrO8cV13nPHSlCVfFqDrhxzLro0wDbMASgLnWazJhHKw5wBO//JcYrk+3VzUpuFp6i/ultxaP4rZGR+iZ+mrZv7ZwngCSZlOb
-X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:DS0PR10MB6974.namprd10.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230031)(39830400003)(346002)(136003)(366004)(396003)(376002)(230922051799003)(230173577357003)(230273577357003)(186009)(64100799003)(1800799012)(451199024)(5660300002)(4326008)(2906002)(8676002)(8936002)(316002)(6916009)(66476007)(66556008)(66946007)(52116002)(54906003)(2616005)(44832011)(6512007)(26005)(1076003)(83380400001)(41300700001)(38100700002)(36756003)(86362001)(6506007)(6666004)(478600001)(6486002)(38350700005)(41080700001);
- DIR:OUT; SFP:1102; 
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Ykp4GGx1b8SiklJmaK4EWdgvhdyxIp0Wy14kaxO5iZGvWZSN/JcjESI9p7eu?=
- =?us-ascii?Q?JapEuFWD6vmgrL6/4Kofc7G0ydtSH6dV1lrQcEP+EZrXVu9bzeH1lDFbhpLH?=
- =?us-ascii?Q?BsmL5OoFAbWzngLB9HaBSczhJUA6jbOmCIWPi+aumFEkTBRSaRLcZTo1o73H?=
- =?us-ascii?Q?/q+0t0lcB3qbTpNFn0rW2rboKeSsnVT1DJm7qgoqIbn43L5/JtZLfzM7Hbeg?=
- =?us-ascii?Q?kJWEaA9Qkdyi609qoPU+Y7mnD05zdR9Wn2YY4InVUGOCxdsX++HdTahRxV22?=
- =?us-ascii?Q?4OeS9EKX22oOi+wEfkmyS+ZbkRYNnNMH8FmfNOl3EaBa290NHHxne0PUD/Jp?=
- =?us-ascii?Q?YoJDV+wbYGNzwNUKrcfwf1zo8P/KUfoYsGESlPhHVrCbWp7ARaCeXThSZzUX?=
- =?us-ascii?Q?U1OwF8szoybyUW/gNnsGywP/s5ZWjZjS11JGJ/KqwkZt4/oRklX/vX0TQWmk?=
- =?us-ascii?Q?hn5lDvwM/5uEZj6FkjY6iwC/C0SauvucX5Q7dI7o7Rv+lEH90X3NC3VDHpCe?=
- =?us-ascii?Q?3v05PTEqtzvxZQdwW/5KLgotUOpvfqhsi5LwLzlWsCKFLp0OhoHS9rvDwoyI?=
- =?us-ascii?Q?1LV+QFRNUPdXN670OuIWV4schvi8TvnWFs3xNxQNlydLBWUCnhGOqfCTBeMv?=
- =?us-ascii?Q?Vzx0btv/vMw/9BSkcr8JE41HWW+n1fmqBkRLjETOanItbijD7/ejYh2CCbM0?=
- =?us-ascii?Q?FDLZBWnQIeRra3ZIwnO3FJkB+tpzhDMGIWnPvF+mjN1kim8ikRIHoWnqcYyH?=
- =?us-ascii?Q?Qg5OT5tyO3rNIU65QueKxOLI5Zo/ISwkzlCJT0QaXoFt9SEkofdjjCRFw/iY?=
- =?us-ascii?Q?Z60KnpEOwTJyFLYo3kbWhLKcFfZyjB+tz5aGbkzshXV73eB/RKFD02gE7e4a?=
- =?us-ascii?Q?kupuXqbCfpG7Ez/gktZyFazsMrcC/Om2ekGPqffQ6kFTg8SODAteCbK9gtHZ?=
- =?us-ascii?Q?PffdkLmJ5F4hlsYTDYOxtySpcBWc54vcgH0XD1WPG6mlsZkuAlcqfiLvZqox?=
- =?us-ascii?Q?cM59moQANm65dXPcIpwdxiZqWpCHreY6KCxiNvZ5ZugKg0oGi28PuR4o5lXK?=
- =?us-ascii?Q?yZlHmhCSTOFELAoYViYBRWCss6WyvBB6R88O7uAWKV1/ZYD47onkJVO28i0Q?=
- =?us-ascii?Q?8RzpVepp+vBlB9gvXnf3barvb8JuRSBRrDNbxa6oEv2LLAdW5T1Rg1utYSm6?=
- =?us-ascii?Q?Ln233wXqAS18BUcdZxHxJvuUtWO8B/6iYewZSSlqufr/LUCtzIY89rdi5X69?=
- =?us-ascii?Q?AvpB/fN/Ostzogtx5fCHg3DLZ+MBtJfHQIA3pThx74ht/ArGX8dvcntfTUs5?=
- =?us-ascii?Q?aCYVK4i01yoRlmoYfJ3gfkvKuh5datfkwaWMFUOUiP2gi050sTqfXXuxyzJo?=
- =?us-ascii?Q?9qAsFS3DcWft/ConBGY/lP1g97A60bhfliMb8Mv2BTMCoPkhbo2i6M+k13f6?=
- =?us-ascii?Q?Fae5QJkPDqRk6udCM9ZWYxbRtWCZohZ9Zg6pjUnxt40QE9dgIhAjusd12dJY?=
- =?us-ascii?Q?jO/2lCi0h8AXRw0c/UVKCdlBTipjm5c4WWznMnD3YSnhIEyzfRf4ZCN4FFDZ?=
- =?us-ascii?Q?HGoUM9ewz0KBJA1XUZc3c+x8vBDo8aZwjl7pDDEtAKQZRNmk/l9Vjh9Z1ZRd?=
- =?us-ascii?Q?y9ycCS7lg4A2dw+K4Kr/Q1M=3D?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 18828421-41c3-40c4-d6ff-08dc0bf2e64f
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR10MB6974.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jan 2024 00:28:25.6310 (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2jphIyjIOy1FcVqYWzzeunHNxU+M1RGPTJtfmIcbJ1guwXlzZriGVQCcMPZIN2Ix5qQxpSH0O+E0quiQJJGpCtJA+a7gnQjHj1JA+ymV6fA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR10MB6346
+X-OriginatorOrg: Collins.com
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-01-02_10,2024-01-02_01,2023-05-22_02
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-01-02_10,2024-01-02_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999
+ spamscore=0 mlxscore=0
+ bulkscore=0 suspectscore=0 adultscore=0 malwarescore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
+ definitions=main-2401030002
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0
+ spamscore=0
+ mlxlogscore=999 mlxscore=0 adultscore=0 suspectscore=0 bulkscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2401030002
+X-Proofpoint-GUID: j33o9VCSOkE3hM98SIKPOh5csAjWst7v
+X-Proofpoint-ORIG-GUID: j33o9VCSOkE3hM98SIKPOh5csAjWst7v
+X-Proofpoint-Spam-Details: rule=outbound_default_notspam
+ policy=outbound_default score=0
+ malwarescore=0 impostorscore=0 suspectscore=0 mlxlogscore=999 bulkscore=0
+ lowpriorityscore=0 priorityscore=1501 adultscore=0 mlxscore=0 spamscore=0
+ phishscore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2401030002
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ d=collins.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=POD051818;
+ bh=CUE7ZXmKHTdQ41mi9Plhv1mNZlId221jRpJ3rz+N6hU=;
+ b=kpdoBbcnNIFDRVNIn4c2WGoG875TyAvV18EzIo5SbyAw2r8hwZWjYluYo1siS8S/2Sbl
+ or6Mpg3jsjaxJMl8PGk89nSaJLaz2mj9HqxWgqrgi1sXzwAjSEP5P6FOvI2vru9aZCKN
+ ktk7OvfSi+dD9KtSkn/A8eKs2+TXtz+tnFSnz+Shgrqq3+CN8wylLNjvOUEvY2V6rZUD
+ O0HngQhFod6WIFxWQT5fdS0kjybEZ91CAAA094RygbDqXI//Y1O4C5iixMm70A83J0/n
+ FtSaRsyySYxBWlG2wEXh8m0yyl56owpyQ6ucP6mJIhbWPT5t/4G3Y+3ZRGsoqmv+Pslj Bg== 
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=rtxusers.onmicrosoft.us; s=selector1-rtxusers-onmicrosoft-us;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1HTlRBurPU3+xlPT/D6gsD57y7hNx4QvLUh51g/UFTQ=;
- b=cg5VgmsZVSnVLpwaJcSzp2nex+Mfx6gDHWZ9WHbnGEhPJsYIA9TgpR9TBVcTbn5rCXAIc66fjIiA11J2+HMmo0v0q1gksL3M8wPQcNlkdY7+uwUurtcVq0aOxcVHuBAWmeN3UwlElCYYHTpZwVOYz3VKUxNBzYy/zKzvmh0jW/I=
+ bh=PE/F2ekCb8EJty2/ryYJrRGRTNrWPOepj6awrv58AV0=;
+ b=TRPViZHuPHaICLo3S1rORnBEMjFcueSfZo4MskGVkQl8iomHQjkXs5gRJBaPwfOiVSECFEUsvKhWO96uVNuIC2i1FPV6TdJTustLQzfd2V7UabDSOYSemlgRRfRRJFJQCALZiCdgUe7UWNvcNkQ2AoUHwsFmxntW9+zDCLWVFPI=
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key) header.d=inadvantage.onmicrosoft.com
- header.i=@inadvantage.onmicrosoft.com header.a=rsa-sha256
- header.s=selector2-inadvantage-onmicrosoft-com header.b=cg5VgmsZ
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Subject: [Buildroot] [RFC v2 2/3] support/testing/run-tests: run tests from
- temp directory
+ dkim=pass (2048-bit key) header.d=collins.com header.i=@collins.com
+ header.a=rsa-sha256 header.s=POD051818 header.b=kpdoBbcn; 
+ dkim=fail reason="signature verification failed" (1024-bit key)
+ header.d=rtxusers.onmicrosoft.us header.i=@rtxusers.onmicrosoft.us
+ header.a=rsa-sha256 header.s=selector1-rtxusers-onmicrosoft-us
+ header.b=TRPViZHu
+Subject: Re: [Buildroot] [External] [PATCH 1/1] package/python-pysensors:
+ add lm-sensors dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -140,69 +203,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
+From: "Maier, Brandon L Collins via buildroot" <buildroot@buildroot.org>
+Reply-To: "Maier, Brandon L Collins" <Brandon.Maier@collins.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-When building with the BR2_EXTERNAL environment variable set, it becomes
-desirable to have a place where tests from buildroot as well as
-externals can live together.
+Hi Fabrice,
 
-In lieu of having two branches - one where tests are run internally and
-one where they're copied to a temp directory - utilize a temp directory
-for running all tests.
+> -----Original Message-----
+> From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Sent: Tuesday, January 2, 2024 7:26 AM
+> To: buildroot@buildroot.org
+> Cc: James Hilliard <james.hilliard1@gmail.com>; Yegor Yefremov
+> <yegorslists@googlemail.com>; Asaf Kahlon <asafka7@gmail.com>; Maier,
+> Brandon L Collins <Brandon.Maier@collins.com>; Fabrice Fontaine
+> <fontaine.fabrice@gmail.com>
+> Subject: [External] [PATCH 1/1] package/python-pysensors: add lm-sensors
+> dependency
+>
+> Commit c8ff8d41c06f6b1cbc5cf8702a516411084ead16 forgot to add lm-
+> sensors
+> dependency resulting in the following build failure:
+>
+>   File "/home/buildroot/autobuild/instance-2/output-1/build/python-
+> pysensors-0.0.4/setup.py", line 3, in <module>
+>     import sensors
+>   File "/home/buildroot/autobuild/instance-2/output-1/build/python-
+> pysensors-0.0.4/sensors/__init__.py", line 20, in <module>
+>     raise ImportError("can't find the sensors library.")
 
-Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
----
+I tested this patch, but I still get an ImportError. It appears python-pysensors calls Python's ctypes.util.find_library('sensors') to locate libsensors, which searches in the host directories and so misses the target libsensors entirely.
 
-v2: New patch
-
----
- support/testing/run-tests | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
-
-diff --git a/support/testing/run-tests b/support/testing/run-tests
-index 9d1174cb3b..dedb487ffd 100755
---- a/support/testing/run-tests
-+++ b/support/testing/run-tests
-@@ -3,6 +3,8 @@ import argparse
- import multiprocessing
- import os
- import sys
-+import tempfile
-+import shutil
- 
- import nose2
- 
-@@ -40,7 +42,11 @@ def main():
-     args = parser.parse_args()
- 
-     script_path = os.path.realpath(__file__)
--    test_dir = os.path.dirname(script_path)
-+    script_dir = os.path.dirname(script_path)
-+
-+    temp_dir = tempfile.TemporaryDirectory()
-+    shutil.copytree(script_dir, temp_dir.name, dirs_exist_ok=True)
-+    test_dir = temp_dir.name
- 
-     try:
-         if args.stdout:
-@@ -132,8 +138,7 @@ def main():
-         nose2.discover(argv=nose2_args)
- 
-     finally:
--        # Placeholder for try, to be undone shortly
--        pass
-+        shutil.rmtree(temp_dir.name)
- 
- if __name__ == "__main__":
-     sys.exit(main())
--- 
-2.34.1
+Thanks,
+Brandon
 
 _______________________________________________
 buildroot mailing list
