@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76F42C3DA6E
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 07:35:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A192C3DA6E
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 07:35:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 23DB84363C;
-	Fri,  5 Jan 2024 07:35:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 23DB84363C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 058F743685;
+	Fri,  5 Jan 2024 07:35:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 058F743685
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ObS4-xhmki6e; Fri,  5 Jan 2024 07:35:30 +0000 (UTC)
+	with ESMTP id V0LiVNDXeqtB; Fri,  5 Jan 2024 07:35:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3EB5D43650;
-	Fri,  5 Jan 2024 07:35:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3EB5D43650
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1381C1BF995
+	by smtp2.osuosl.org (Postfix) with ESMTP id A822A4363C;
+	Fri,  5 Jan 2024 07:35:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A822A4363C
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5426A1BF40F
  for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 07:32:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B2ADD61063
+ by smtp1.osuosl.org (Postfix) with ESMTP id A2CD183CD5
  for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 07:32:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B2ADD61063
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A2CD183CD5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TursCDwondkO for <buildroot@lists.busybox.net>;
- Fri,  5 Jan 2024 07:32:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eKPomA4Fdspn for <buildroot@lists.busybox.net>;
+ Fri,  5 Jan 2024 07:32:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 015B1613F8
- for <buildroot@buildroot.org>; Fri,  5 Jan 2024 07:32:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 015B1613F8
+ by smtp1.osuosl.org (Postfix) with ESMTP id AEE6A8220C
+ for <buildroot@buildroot.org>; Fri,  5 Jan 2024 07:32:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AEE6A8220C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E35718430F; Fri,  5 Jan 2024 07:32:17 +0000 (UTC)
+ id 98B1F8430D; Fri,  5 Jan 2024 07:32:17 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 4 Jan 2024 21:02:08 +0100
+Date: Wed, 3 Jan 2024 12:05:33 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: e03a8a7375a85a014dccdbe34740b92200b0bd8a
-X-Git-Newrev: 96832b4a7a9b545498191ff6570df40d18f3d96c
+X-Git-Oldrev: bcf9f27caf10e1e79bf4ef1065202fe212435b7c
+X-Git-Newrev: 23ad100915a2ce7d3298c92091393cda55e0b991
 X-Patchwork-Hint: ignore
-Message-Id: <20240105073217.E35718430F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/gst1-libav: bump
- to version 1.22.7
+Message-Id: <20240105073217.98B1F8430D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x]
+ boot/arm-trusted-firmware: fix the RPATH of fiptool
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,41 +63,91 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=96832b4a7a9b545498191ff6570df40d18f3d96c
+commit: https://git.buildroot.net/buildroot/commit/?id=23ad100915a2ce7d3298c92091393cda55e0b991
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+The arm-trusted-firmware package builds a host tool called "fiptool",
+which is used during the build process of arm-trusted-firmware
+itself. This tool links against the OpenSSL host library, and
+therefore needs to be built with the correct RPATH pointing to
+$HOST_DIR/lib.
+
+This is why commit a957d9a90ade4194dffe3eb2fc0136bc5d077c28
+("boot/arm-trusted-firmware: build fiptool separately with dependency
+o n host-openssl") added the ARM_TRUSTED_FIRMWARE_BUILD_FIPTOOL
+variable, which builds the fiptool tool first, with the right
+variables set, before invoking the full build of TF-A. This ensured
+that fiptool was built with the correct RPATH.
+
+However, more recent versions of TF-A have modified their Makefile
+machinery, and fiptool is being rebuilt even if it was built
+before. Unfortunately, this rebuild is no longer done with the right
+flags, so we end up with a fiptool binary that no longer has the right
+RPATH, and fiptool fails to find the OpenSSL libraries from
+$HOST_DIR/lib.
+
+In order to fix this, we take a different approach: we do not build
+fiptool separately first, but we inject the necessary flags through
+the HOSTCC variable. Indeed, there's no HOST_LDFLAGS or HOST_LDLIBS
+variable or similar that would allow us to pass the -Wl,-rpath flag
+that is needed. Shoe-horning this flag into HOSTCC gets the job done,
+and actually simplifies our arm-trusted-firmware.mk.
+
+This patch break the compatibility with version prior to 1.4 (upstream
+commit 72610c4102990 ("build: Introduce HOSTCC flag")). v1.4 is very old
+(July 2017), not used anymore in-tree and probably not used anymore
+outside the tree.
+
+Signed-off-by: Louis Chauvet <louis.chauvet@bootlin.com>
+Co-authored-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit fcf9f0accf6ee5cf679ba8d4f566cee3d00a1b68)
+(cherry picked from commit e7d16c35ae6b219ddb13248ed7d93f99694593df)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-libav/gst1-libav.hash | 4 ++--
- package/gstreamer1/gst1-libav/gst1-libav.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk | 16 ++--------------
+ 1 file changed, 2 insertions(+), 14 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.hash b/package/gstreamer1/gst1-libav/gst1-libav.hash
-index 251e924792..3e83e0dddb 100644
---- a/package/gstreamer1/gst1-libav/gst1-libav.hash
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.hash
-@@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.22.6.tar.xz.sha256sum
--sha256  7789e6408388a25f23cbf948cfc5c6230d735bbcd8b7f37f4a01c9e348a1e3a7  gst-libav-1.22.6.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.22.7.tar.xz.sha256sum
-+sha256  1525b917141b895fe5cf618fe8867622b2528278a0286e9f727b5f37317daca1  gst-libav-1.22.7.tar.xz
- sha256  ad2eec519ebd4b5df86ea84dff24ae3bfa2edea846a703b58902dd221ae375db  COPYING
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
-index 23d4a29799..88b55cd5c9 100644
---- a/package/gstreamer1/gst1-libav/gst1-libav.mk
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+index a2674ec3c4..5b838bbec2 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+@@ -63,7 +63,8 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += \
+ 	BUILD_STRING=$(ARM_TRUSTED_FIRMWARE_VERSION) \
+ 	$(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES)) \
+ 	PLAT=$(ARM_TRUSTED_FIRMWARE_PLATFORM) \
+-	TARGET_BOARD=$(ARM_TRUSTED_FIRMWARE_TARGET_BOARD)
++	TARGET_BOARD=$(ARM_TRUSTED_FIRMWARE_TARGET_BOARD) \
++	HOSTCC="$(HOSTCC) $(HOST_LDFLAGS)"
  
--GST1_LIBAV_VERSION = 1.22.6
-+GST1_LIBAV_VERSION = 1.22.7
- GST1_LIBAV_SOURCE = gst-libav-$(GST1_LIBAV_VERSION).tar.xz
- GST1_LIBAV_SITE = https://gstreamer.freedesktop.org/src/gst-libav
- GST1_LIBAV_LICENSE = LGPL-2.1+
+ ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP),y)
+ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += \
+@@ -141,18 +142,6 @@ ARM_TRUSTED_FIRMWARE_MAKE_TARGETS = all
+ ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP),y)
+ ARM_TRUSTED_FIRMWARE_MAKE_TARGETS += fip
+ ARM_TRUSTED_FIRMWARE_DEPENDENCIES += host-openssl
+-# fiptool only exists in newer (>= 1.3) versions of ATF, so we build
+-# it conditionally. We need to explicitly build it as it requires
+-# OpenSSL, and therefore needs to be passed proper variables to find
+-# the host OpenSSL.
+-define ARM_TRUSTED_FIRMWARE_BUILD_FIPTOOL
+-	if test -d $(@D)/tools/fiptool; then \
+-		$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/tools/fiptool \
+-			$(ARM_TRUSTED_FIRMWARE_MAKE_OPTS) \
+-			CPPFLAGS="$(HOST_CPPFLAGS)" \
+-			LDLIBS="$(HOST_LDFLAGS) -lcrypto" ; \
+-	fi
+-endef
+ endif
+ 
+ ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_RCW),y)
+@@ -200,7 +189,6 @@ define ARM_TRUSTED_FIRMWARE_BUILD_CMDS
+ 	$(if $(ARM_TRUSTED_FIRMWARE_CUSTOM_DTS_PATH),
+ 		cp -f $(ARM_TRUSTED_FIRMWARE_CUSTOM_DTS_PATH) $(@D)/fdts/
+ 	)
+-	$(ARM_TRUSTED_FIRMWARE_BUILD_FIPTOOL)
+ 	$(ARM_TRUSTED_FIRMWARE_MAKE_ENV) $(MAKE) -C $(@D) \
+ 		$(ARM_TRUSTED_FIRMWARE_MAKE_OPTS) \
+ 		$(ARM_TRUSTED_FIRMWARE_MAKE_TARGETS)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
