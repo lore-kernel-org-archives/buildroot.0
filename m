@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A192C3DA6E
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 07:35:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15AC3C3DA6E
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 07:35:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 058F743685;
-	Fri,  5 Jan 2024 07:35:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 058F743685
+	by smtp2.osuosl.org (Postfix) with ESMTP id BC1BD4034B;
+	Fri,  5 Jan 2024 07:35:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BC1BD4034B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id V0LiVNDXeqtB; Fri,  5 Jan 2024 07:35:43 +0000 (UTC)
+	with ESMTP id BHU9qUvwpidN; Fri,  5 Jan 2024 07:35:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A822A4363C;
-	Fri,  5 Jan 2024 07:35:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A822A4363C
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5426A1BF40F
- for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 07:32:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8C22043653;
+	Fri,  5 Jan 2024 07:35:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8C22043653
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 410101BF40F
+ for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 07:32:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A2CD183CD5
- for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 07:32:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A2CD183CD5
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0A92243634
+ for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 07:32:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A92243634
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eKPomA4Fdspn for <buildroot@lists.busybox.net>;
- Fri,  5 Jan 2024 07:32:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id u05RH1miHBpN for <buildroot@lists.busybox.net>;
+ Fri,  5 Jan 2024 07:32:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id AEE6A8220C
- for <buildroot@buildroot.org>; Fri,  5 Jan 2024 07:32:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AEE6A8220C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 13FF14363A
+ for <buildroot@buildroot.org>; Fri,  5 Jan 2024 07:32:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 13FF14363A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 98B1F8430D; Fri,  5 Jan 2024 07:32:17 +0000 (UTC)
+ id 0336C84311; Fri,  5 Jan 2024 07:32:18 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 3 Jan 2024 12:05:33 +0100
+Date: Thu, 4 Jan 2024 21:02:09 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: bcf9f27caf10e1e79bf4ef1065202fe212435b7c
-X-Git-Newrev: 23ad100915a2ce7d3298c92091393cda55e0b991
+X-Git-Oldrev: b87dee72adc71c5a9956dd82ed2c85a62b86aca0
+X-Git-Newrev: 27091936ab7b24eb2d15fb7790f411bd26fef711
 X-Patchwork-Hint: ignore
-Message-Id: <20240105073217.98B1F8430D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x]
- boot/arm-trusted-firmware: fix the RPATH of fiptool
+Message-Id: <20240105073218.0336C84311@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/gst1-rtsp-server:
+ bump to version 1.22.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,91 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=23ad100915a2ce7d3298c92091393cda55e0b991
+commit: https://git.buildroot.net/buildroot/commit/?id=27091936ab7b24eb2d15fb7790f411bd26fef711
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-The arm-trusted-firmware package builds a host tool called "fiptool",
-which is used during the build process of arm-trusted-firmware
-itself. This tool links against the OpenSSL host library, and
-therefore needs to be built with the correct RPATH pointing to
-$HOST_DIR/lib.
-
-This is why commit a957d9a90ade4194dffe3eb2fc0136bc5d077c28
-("boot/arm-trusted-firmware: build fiptool separately with dependency
-o n host-openssl") added the ARM_TRUSTED_FIRMWARE_BUILD_FIPTOOL
-variable, which builds the fiptool tool first, with the right
-variables set, before invoking the full build of TF-A. This ensured
-that fiptool was built with the correct RPATH.
-
-However, more recent versions of TF-A have modified their Makefile
-machinery, and fiptool is being rebuilt even if it was built
-before. Unfortunately, this rebuild is no longer done with the right
-flags, so we end up with a fiptool binary that no longer has the right
-RPATH, and fiptool fails to find the OpenSSL libraries from
-$HOST_DIR/lib.
-
-In order to fix this, we take a different approach: we do not build
-fiptool separately first, but we inject the necessary flags through
-the HOSTCC variable. Indeed, there's no HOST_LDFLAGS or HOST_LDLIBS
-variable or similar that would allow us to pass the -Wl,-rpath flag
-that is needed. Shoe-horning this flag into HOSTCC gets the job done,
-and actually simplifies our arm-trusted-firmware.mk.
-
-This patch break the compatibility with version prior to 1.4 (upstream
-commit 72610c4102990 ("build: Introduce HOSTCC flag")). v1.4 is very old
-(July 2017), not used anymore in-tree and probably not used anymore
-outside the tree.
-
-Signed-off-by: Louis Chauvet <louis.chauvet@bootlin.com>
-Co-authored-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit e7d16c35ae6b219ddb13248ed7d93f99694593df)
+(cherry picked from commit ff76ede773e44cdbd5ecfc9c6d8682686def26a9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/arm-trusted-firmware/arm-trusted-firmware.mk | 16 ++--------------
- 1 file changed, 2 insertions(+), 14 deletions(-)
+ package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash | 4 ++--
+ package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-index a2674ec3c4..5b838bbec2 100644
---- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-+++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-@@ -63,7 +63,8 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += \
- 	BUILD_STRING=$(ARM_TRUSTED_FIRMWARE_VERSION) \
- 	$(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES)) \
- 	PLAT=$(ARM_TRUSTED_FIRMWARE_PLATFORM) \
--	TARGET_BOARD=$(ARM_TRUSTED_FIRMWARE_TARGET_BOARD)
-+	TARGET_BOARD=$(ARM_TRUSTED_FIRMWARE_TARGET_BOARD) \
-+	HOSTCC="$(HOSTCC) $(HOST_LDFLAGS)"
+diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
+index 521a91ddd7..b97125784f 100644
+--- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
++++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
+@@ -1,4 +1,4 @@
+-# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.22.6.tar.xz.sha256sum
+-sha256  0ae33a8b50443b62f11581a9181e906b41cd3877b2d799dbea72912c3eda4bb3  gst-rtsp-server-1.22.6.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.22.7.tar.xz.sha256sum
++sha256  f7fac001e20ad21e36d18397741c4657c5d43571eb1cc3b49f9a93ae127dc88f  gst-rtsp-server-1.22.7.tar.xz
+ sha256  ad2eec519ebd4b5df86ea84dff24ae3bfa2edea846a703b58902dd221ae375db  COPYING
+ sha256  ad2eec519ebd4b5df86ea84dff24ae3bfa2edea846a703b58902dd221ae375db  COPYING.LIB
+diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
+index 46d7606b1d..5995e7cc51 100644
+--- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
++++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP),y)
- ARM_TRUSTED_FIRMWARE_MAKE_OPTS += \
-@@ -141,18 +142,6 @@ ARM_TRUSTED_FIRMWARE_MAKE_TARGETS = all
- ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP),y)
- ARM_TRUSTED_FIRMWARE_MAKE_TARGETS += fip
- ARM_TRUSTED_FIRMWARE_DEPENDENCIES += host-openssl
--# fiptool only exists in newer (>= 1.3) versions of ATF, so we build
--# it conditionally. We need to explicitly build it as it requires
--# OpenSSL, and therefore needs to be passed proper variables to find
--# the host OpenSSL.
--define ARM_TRUSTED_FIRMWARE_BUILD_FIPTOOL
--	if test -d $(@D)/tools/fiptool; then \
--		$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/tools/fiptool \
--			$(ARM_TRUSTED_FIRMWARE_MAKE_OPTS) \
--			CPPFLAGS="$(HOST_CPPFLAGS)" \
--			LDLIBS="$(HOST_LDFLAGS) -lcrypto" ; \
--	fi
--endef
- endif
- 
- ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_RCW),y)
-@@ -200,7 +189,6 @@ define ARM_TRUSTED_FIRMWARE_BUILD_CMDS
- 	$(if $(ARM_TRUSTED_FIRMWARE_CUSTOM_DTS_PATH),
- 		cp -f $(ARM_TRUSTED_FIRMWARE_CUSTOM_DTS_PATH) $(@D)/fdts/
- 	)
--	$(ARM_TRUSTED_FIRMWARE_BUILD_FIPTOOL)
- 	$(ARM_TRUSTED_FIRMWARE_MAKE_ENV) $(MAKE) -C $(@D) \
- 		$(ARM_TRUSTED_FIRMWARE_MAKE_OPTS) \
- 		$(ARM_TRUSTED_FIRMWARE_MAKE_TARGETS)
+-GST1_RTSP_SERVER_VERSION = 1.22.6
++GST1_RTSP_SERVER_VERSION = 1.22.7
+ GST1_RTSP_SERVER_SOURCE = gst-rtsp-server-$(GST1_RTSP_SERVER_VERSION).tar.xz
+ GST1_RTSP_SERVER_SITE = http://gstreamer.freedesktop.org/src/gst-rtsp-server
+ GST1_RTSP_SERVER_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
