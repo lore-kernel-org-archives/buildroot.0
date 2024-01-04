@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C93E1C47073
-	for <buildroot@archiver.kernel.org>; Thu,  4 Jan 2024 19:06:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B188C47074
+	for <buildroot@archiver.kernel.org>; Thu,  4 Jan 2024 19:06:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 740E860C07;
-	Thu,  4 Jan 2024 19:06:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 740E860C07
+	by smtp3.osuosl.org (Postfix) with ESMTP id 92741613BE;
+	Thu,  4 Jan 2024 19:06:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92741613BE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id M6SaNLUO3Im4; Thu,  4 Jan 2024 19:06:11 +0000 (UTC)
+	with ESMTP id hEjBi5CZqC5q; Thu,  4 Jan 2024 19:06:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C8F69613CE;
-	Thu,  4 Jan 2024 19:06:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C8F69613CE
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 83E981BF356
- for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 19:05:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 66E80613D7;
+	Thu,  4 Jan 2024 19:06:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 66E80613D7
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2FB4B1BF356
+ for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 19:05:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5AC6740141
- for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 19:05:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5AC6740141
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0611B61087
+ for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 19:05:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0611B61087
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CU4g2jKT_BbZ for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WKUgSSZ5hNJN for <buildroot@lists.busybox.net>;
  Thu,  4 Jan 2024 19:05:47 +0000 (UTC)
 Received: from mx0a-00230701.pphosted.com (mx0a-00230701.pphosted.com
  [148.163.156.19])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A3CC8400FD
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BCAD260C0C
  for <buildroot@buildroot.org>; Thu,  4 Jan 2024 19:05:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A3CC8400FD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BCAD260C0C
 Received: from pps.filterd (m0098571.ppops.net [127.0.0.1])
  by mx0a-00230701.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id
- 404Ib84J030074; Thu, 4 Jan 2024 11:05:46 -0800
+ 404Ib95k030088; Thu, 4 Jan 2024 11:05:47 -0800
 Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com
- [149.117.73.133])
- by mx0a-00230701.pphosted.com (PPS) with ESMTPS id 3ve158rkam-1
+ [149.117.87.133])
+ by mx0a-00230701.pphosted.com (PPS) with ESMTPS id 3ve158rkak-1
  (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
  Thu, 04 Jan 2024 11:05:46 -0800 (PST)
 Received: from mailhost.synopsys.com (badc-mailhost1.synopsys.com
@@ -49,60 +49,61 @@ Received: from mailhost.synopsys.com (badc-mailhost1.synopsys.com
  key-exchange X25519 server-signature RSA-PSS (2048 bits)
  client-signature RSA-PSS (2048 bits))
  (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
- by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 1306D4013A;
- Thu,  4 Jan 2024 19:05:46 +0000 (UTC)
+ by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id E7AE6401C2;
+ Thu,  4 Jan 2024 19:05:45 +0000 (UTC)
 Received: from us01arcgnu3.internal.synopsys.com
  (us01arcgnu3.internal.synopsys.com [10.194.34.166])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
  (Client did not present a certificate)
- by mailhost.synopsys.com (Postfix) with ESMTPSA id D1E9CA00BC;
- Thu,  4 Jan 2024 19:05:45 +0000 (UTC)
+ by mailhost.synopsys.com (Postfix) with ESMTPSA id A0A42A008D;
+ Thu,  4 Jan 2024 19:05:44 +0000 (UTC)
 X-SNPS-Relay: synopsys.com
 To: buildroot@buildroot.org
-Date: Thu,  4 Jan 2024 11:05:29 -0800
-Message-Id: <20240104190529.1521901-4-abrodkin@synopsys.com>
+Date: Thu,  4 Jan 2024 11:05:27 -0800
+Message-Id: <20240104190529.1521901-2-abrodkin@synopsys.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20240104190529.1521901-1-abrodkin@synopsys.com>
 References: <20240104190529.1521901-1-abrodkin@synopsys.com>
 MIME-Version: 1.0
-X-Proofpoint-ORIG-GUID: -jICy-15wYRoSgsVGV8jcg3O-9cupuWE
-X-Proofpoint-GUID: -jICy-15wYRoSgsVGV8jcg3O-9cupuWE
+X-Proofpoint-ORIG-GUID: CS7-If0qcA98o4B5KaMjinXf9CjIqGNy
+X-Proofpoint-GUID: CS7-If0qcA98o4B5KaMjinXf9CjIqGNy
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-12-09_02,2023-12-07_01,2023-05-22_02
 X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam
  policy=outbound_active_cloned score=0
- mlxlogscore=957 clxscore=1015 mlxscore=0 adultscore=0 lowpriorityscore=0
+ mlxlogscore=999 clxscore=1015 mlxscore=0 adultscore=0 lowpriorityscore=0
  priorityscore=1501 impostorscore=0 malwarescore=0 suspectscore=0
  bulkscore=0 spamscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.19.0-2311290000 definitions=main-2401040149
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=synopsys.com; h=
  from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding; s=pfptdkimsnps; bh=h6F8
- sqO8Fr/Cp9O3P/xG/v9D68BfYNvIwMI910pmmqU=; b=Wi5Qw/Q1tAUkPiCdLQVw
- e7ZmI+77A/04ZiY3r/ANXwVbYmJsjVOQdd1ukAdAsGRwGEJ54C5RmTeECPeuGBUH
- 4e5yTtPn37+fpqUxCxX+QnLkskasGFsLd/yI08ujtFr/tTwmREZDcudpVkk7uSsE
- DfYysUNLJP5BbysFJeI6zERsqPGuUn5jga49292ffR61qEsAEfx/5L1ltSKq2yxj
- cr4UxYeLQeBFLAj4BJQ0nopNxdtTygG9A9yIO4IdVMGv8CX85RyTKswwOBvWjWRW
- 1Bw6hZk2KYtjHJzNFKbGRxsnq7Njfkfklaor7JUgqbhxJzXF1JZYabMp8qmy5cpt
- OA==
+ :mime-version:content-transfer-encoding; s=pfptdkimsnps; bh=Cmyw
+ 39rb+gm65hA9qs375D8SxIdy4GZ+PKbLkLQI4Uk=; b=EP66qw9LahRnLRR3lzaC
+ vNn+JGtDbqj0C6ITVsgVtP0sTm0UC++zbIWpGVlNRno2I+AwMEqhjBZgSmLp6XXd
+ uWjiBrzLf3k2YpcR3OCSZ6kIKi1miTy/bxwEo+6sxvcyxvLIE+yi/MGEGNB6RuVd
+ 43/H+eZLyG07kHi0nhYZrhJcGsx8V4atM2T+4Zde16r9a/dc52Y3tAinCN4d6liJ
+ AFOIg4A0XKhyXjYecNkALCldM2GnJhZnqxjyzkJbW5wohe1gTouP3l8Nm5NIud4h
+ ofYnvG46swope0jaVo47xWSo7EtGz0lM7ab1/R3/SftKvSgGRy38gr45m86V43D4
+ 6Q==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=synopsys.com; s=mail; 
- t=1704395146; bh=ZEtbyNhJf4u7S4zQEuyzZWGKXGWUi35ixlVAOxZAOxo=;
+ t=1704395146; bh=qBdTOtP4WcofREXVxxGy7ma7fGO9qULk5i04I8WjRwU=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=F8fwbkKgW6mM9wlYnt3zJUK/8PhnYyknuq55/WhYs/0MB+z52bTfUcOEah/uO/CV/
- +vllKagdOUIGkkr1QYFppD3DE/P39Ur0Fs/HXKz0Kz3ZdhbxxH/aP/QyAFi/VfNnEN
- rWOwUtZJKbSRNIZc0Ox6HGMHUOJDSqgr4eZ2yL31Oa6XVDYxSobGAVst70ssZ5759r
- GNVAg6zcuzlyrswyB6PKQCF8rASP2X3enH6KOwMf2eANR9xyMCHhNO39H1jYPpcVd6
- RYoSabn8D3/NO8QP+/oNJrhisBZrTSAVEdpvPX1ViVVQ72wCyejtVbKGBZqjakss6L
- u0edXyoWKudOA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=kYeL8FHbJLySQaV8D1c+GBQQNJqOTx50ELhv944laIFvp/vU9HkqJec/Vg2Hd2NCN
+ f2Sa3hSnhGJqdR7uD8pcM9w7+ry19hXeNod/RrNIm1xrQBOxYJ4IlXdqw8UO0ebFXe
+ PI/05UQZH40TCMN/A/bVcW1afqRBtT7GKfg/BbWH/bmyTWoublGKxi+md7C59Ne0Cu
+ c3N1Rg4OLzlU50hHoMTLD5cgVnOwkBTizlMALYR3R+NvJX0Tu4pSaZdZkoM2j6YuWf
+ c3Mka433rZYwJCgTqs4IZ8JUn+Q0eO/W/e0D4+Z18Ho1fQ43ePzb10cahVvduKJAU9
+ EQvpjshPEP56Q==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com
- header.a=rsa-sha256 header.s=pfptdkimsnps header.b=Wi5Qw/Q1; 
+ header.a=rsa-sha256 header.s=pfptdkimsnps header.b=EP66qw9L; 
  dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com
- header.a=rsa-sha256 header.s=mail header.b=F8fwbkKg
-Subject: [Buildroot] [PATCH 3/3] libffi: ARCv3: Switch to upstream version
+ header.a=rsa-sha256 header.s=mail header.b=kYeL8FHb
+Subject: [Buildroot] [PATCH 1/3] ARCv3: Add support of ARCv3 32-bit and
+ 64-bit processors
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -124,899 +125,4379 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-ARCv3 processors support was added to the upstream libffi project
-a while ago, see [1]. Both 32- (ARC HS58) and 64-bit (ARC HS68 ) versions
-are supported.
+These are new generation of high performance ARC HS5x and HS6x
+cores that implement new ARCv3 ISA binary incompatible with
+previous ARCompact & ARCv2.
 
-Unfortunately, there was no release of libffi since October 2022 and
-so our changes got stuck in their development branch. Thus, we need to
-apply that change to the Buildroot separately.
+On top of the ARC GNU toolchain 2023.09 there's an incremental fix [1].
+Also instead of adding a reference to glibc fork there's just a patch
+which adds changes required for ARCv3 support on top of the current
+glibc. Since most of changes are ARC-specific there shouldn't be any
+problems with moving to a newer glibc version and as wit hother
+toolchain components that glibc patch will eventually be gone once
+ARCv3 changes are accepted in the corresponding upstream projects.
 
-[1] https://github.com/libffi/libffi/commit/c4df19c99f8d8841942e3edaadbf331d30e298c8
+Given ARC HS68 may have 64 KiB MMU pages, this patch
+depends on the following fix [2].
 
+[1] https://github.com/foss-for-synopsys-dwc-arc-processors/gcc/commit/9729b848e5e4886f9adf10d2adf9d3358e5bf343
+[2] https://lists.buildroot.org/pipermail/buildroot/2024-January/682140.html
+
+Signed-off-by: Panfilov Artem <artem.panfilov@nokia.com>
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+Signed-off-by: Shahab Vahedi <shahab@synopsys.com>
+Signed-off-by: Vladimir Isaev <VVIsaev@gmail.com>
+Signed-off-by: Vineet Gupta <vgupta@kernel.org>
 Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
 ---
- .../0004-Update-ARC-s-libffi-port-771.patch   | 871 ++++++++++++++++++
- 1 file changed, 871 insertions(+)
- create mode 100644 package/libffi/0004-Update-ARC-s-libffi-port-771.patch
+ arch/Config.in.arc                            |   51 +-
+ arch/arch.mk                                  |    2 +-
+ arch/arch.mk.arc                              |    4 +
+ package/binutils/Config.in.host               |    3 +
+ package/binutils/binutils.mk                  |    8 +
+ package/gcc/Config.in.host                    |    6 +
+ ...01-arc64-Remove-faulty-sub.f-pattern.patch |   47 +
+ package/gdb/Config.in                         |    1 +
+ ...ARC-Add-support-for-ARCv3-processors.patch | 4036 +++++++++++++++++
+ package/uclibc/Config.in                      |    2 +-
+ support/gnuconfig/config.sub                  |    2 +-
+ 11 files changed, 4157 insertions(+), 5 deletions(-)
+ create mode 100644 package/gcc/arc-2023.09-release/0001-arc64-Remove-faulty-sub.f-pattern.patch
+ create mode 100644 package/glibc/0004-ARC-Add-support-for-ARCv3-processors.patch
 
-diff --git a/package/libffi/0004-Update-ARC-s-libffi-port-771.patch b/package/libffi/0004-Update-ARC-s-libffi-port-771.patch
+diff --git a/arch/Config.in.arc b/arch/Config.in.arc
+index 388d3496bc..29b72b4850 100644
+--- a/arch/Config.in.arc
++++ b/arch/Config.in.arc
+@@ -49,18 +49,53 @@ config BR2_archs4x
+ 	   - Dual and Quad multiply and MAC operations
+ 	   - Double-precision FPU
+ 
++config BR2_arc64
++	bool "64-bit ARC HS68"
++	select BR2_ARCH_IS_64
++	help
++	   64-bit ARC HS6x processor
++
++config BR2_arc32
++	bool "32-bit ARC HS58"
++	help
++	   32-bit ARC HS5x processor
++
++endchoice
++
++if BR2_arc64
++
++choice
++	prompt "Floating point strategy"
++
++config BR2_ARC64_SOFT_FLOAT
++	bool "Soft float"
++	help
++	  This option uses software emulated floating point code for ARC
++	  cores with Floating Point unit not configured.
++
++config BR2_ARC64_HARD_FLOAT
++	bool "ARCv3 Floating Point Unit"
++	help
++	  This option uses Hardware Floating Point Unit in ARCv3 ISA
++	  based ARC cores.
++
+ endchoice
+ 
++endif
++
+ # Choice of atomic instructions presence
+ config BR2_ARC_ATOMIC_EXT
+ 	bool "Atomic extension (LLOCK/SCOND instructions)"
+ 	default y if BR2_arc770d
+ 	default y if BR2_archs38 || BR2_archs38_64mpy || BR2_archs38_full
+ 	default y if BR2_archs4x_rel31 || BR2_archs4x
++	default y if BR2_arc64 || BR2_arc32
+ 
+ config BR2_ARCH
+-	default "arc"	if BR2_arcle
+-	default "arceb"	if BR2_arceb
++	default "arc"	if BR2_arcle && !BR2_arc64 && !BR2_arc32
++	default "arceb"	if BR2_arceb && !BR2_arc64 && !BR2_arc32
++	default "arc64" if BR2_arc64
++	default "arc32" if BR2_arc32
+ 
+ config BR2_NORMALIZED_ARCH
+ 	default "arc"
+@@ -81,14 +116,22 @@ config BR2_GCC_TARGET_CPU
+ 	default "hs38_linux"	 if BR2_archs38_full
+ 	default "hs4x_rel31"	 if BR2_archs4x_rel31
+ 	default "hs4x"	 if BR2_archs4x
++	default "hs5x"	 if BR2_arc32
++	default "hs6x"	 if BR2_arc64
++
++config BR2_GCC_TARGET_FPU
++	default "fpud"   if BR2_ARC64_HARD_FLOAT
+ 
+ config BR2_READELF_ARCH_NAME
+ 	default "ARCompact"	if BR2_arc750d || BR2_arc770d
+ 	default "ARCv2"		if BR2_archs38 || BR2_archs38_64mpy || BR2_archs38_full
+ 	default "ARCv2"		if BR2_archs4x_rel31 || BR2_archs4x
++	default "Synopsys ARCv3 64-bit processor"	if BR2_arc64
++	default "Synopsys ARCv3 32-bit processor"	if BR2_arc32
+ 
+ choice
+ 	prompt "MMU Page Size"
++	default BR2_ARC_PAGE_SIZE_4K	if BR2_arc64 || BR2_arc32
+ 	default BR2_ARC_PAGE_SIZE_8K
+ 	help
+ 	  MMU starting from version 3 (found in ARC 770) and now
+@@ -117,6 +160,10 @@ config BR2_ARC_PAGE_SIZE_16K
+ 	bool "16KB"
+ 	depends on !BR2_arc750d
+ 
++config BR2_ARC_PAGE_SIZE_64K
++	bool "64KB"
++	depends on BR2_arc64
++
+ endchoice
+ 
+ config BR2_ARC_PAGE_SIZE
+diff --git a/arch/arch.mk b/arch/arch.mk
+index 23733eb199..102fe8029f 100644
+--- a/arch/arch.mk
++++ b/arch/arch.mk
+@@ -31,7 +31,7 @@ else ifeq ($(BR2_ARC_PAGE_SIZE_16K),y)
+ ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=16384 -Wl,-z,common-page-size=16384
+ TARGET_CFLAGS += -Wl,-z,max-page-size=16384 -Wl,-z,common-page-size=16384
+ TARGET_LDFLAGS += -Wl,-z,max-page-size=16384 -Wl,-z,common-page-size=16384
+-else ifeq ($(BR2_ARM64_PAGE_SIZE_64K),y)
++else ifeq ($(BR2_ARC_PAGE_SIZE_64K)$(BR2_ARM64_PAGE_SIZE_64K),y)
+ ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=65536 -Wl,-z,common-page-size=65536
+ TARGET_CFLAGS += -Wl,-z,max-page-size=65536 -Wl,-z,common-page-size=65536
+ TARGET_LDFLAGS += -Wl,-z,max-page-size=65536 -Wl,-z,common-page-size=65536
+diff --git a/arch/arch.mk.arc b/arch/arch.mk.arc
+index 42037626a6..2d56fe01cf 100644
+--- a/arch/arch.mk.arc
++++ b/arch/arch.mk.arc
+@@ -2,7 +2,11 @@ ifeq ($(BR2_arc),y)
+ 
+ # -matomic is always required when the ARC core has the atomic extensions
+ ifeq ($(BR2_ARC_ATOMIC_EXT),y)
++ifeq ($(BR2_arc64)$(BR2_arc32),y)
++ARCH_TOOLCHAIN_WRAPPER_OPTS += -matomic=1
++else
+ ARCH_TOOLCHAIN_WRAPPER_OPTS += -matomic
+ endif
++endif
+ 
+ endif
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index 2f1ddf4bdc..032152086b 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -18,12 +18,15 @@ choice
+ config BR2_BINUTILS_VERSION_2_39_X
+ 	bool "binutils 2.39"
+ 	select BR2_PACKAGE_BINUTILS_HAS_NO_LIBSFRAME
++	depends on !(BR2_arc32 || BR2_arc64)
+ 
+ config BR2_BINUTILS_VERSION_2_40_X
+ 	bool "binutils 2.40"
++	depends on !(BR2_arc32 || BR2_arc64)
+ 
+ config BR2_BINUTILS_VERSION_2_41_X
+ 	bool "binutils 2.41"
++	depends on !(BR2_arc32 || BR2_arc64)
+ 
+ config BR2_BINUTILS_VERSION_ARC
+ 	bool "binutils arc (2.41)"
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index 6846933646..d15588d952 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -21,6 +21,12 @@ BINUTILS_SOURCE = binutils-gdb-$(BINUTILS_VERSION).tar.gz
+ BINUTILS_FROM_GIT = y
+ endif
+ 
++ifeq ($(BINUTILS_VERSION),arc64)
++BINUTILS_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,binutils-gdb,$(BINUTILS_VERSION))
++BINUTILS_SOURCE = binutils-gdb-$(BINUTILS_VERSION).tar.gz
++BINUTILS_FROM_GIT = y
++endif
++
+ BINUTILS_SITE ?= $(BR2_GNU_MIRROR)/binutils
+ BINUTILS_SOURCE ?= binutils-$(BINUTILS_VERSION).tar.xz
+ BINUTILS_EXTRA_CONFIG_OPTIONS = $(call qstrip,$(BR2_BINUTILS_EXTRA_CONFIG_OPTIONS))
+@@ -31,6 +37,8 @@ BINUTILS_LICENSE = GPL-3.0+, libiberty LGPL-2.1+
+ BINUTILS_LICENSE_FILES = COPYING3 COPYING.LIB
+ BINUTILS_CPE_ID_VENDOR = gnu
+ 
++BR_NO_CHECK_HASH_FOR += $(BINUTILS_SOURCE)
++
+ ifeq ($(BINUTILS_FROM_GIT),y)
+ BINUTILS_DEPENDENCIES += host-flex host-bison
+ HOST_BINUTILS_DEPENDENCIES += host-flex host-bison
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index fabc6173f5..3c3d144d72 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -30,6 +30,8 @@ config BR2_GCC_VERSION_11_X
+ 	depends on !BR2_POWERPC_CPU_HAS_SPE
+ 	# ARC HS48 rel 31 only supported by gcc arc fork.
+ 	depends on !BR2_archs4x_rel31
++	# ARCv3 processors are not yet supported in upstream GCC 11.x
++	depends on !(BR2_arc32 || BR2_arc64)
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
+ 
+ config BR2_GCC_VERSION_12_X
+@@ -40,6 +42,8 @@ config BR2_GCC_VERSION_12_X
+ 	depends on !BR2_POWERPC_CPU_HAS_SPE
+ 	# ARC HS48 rel 31 only supported by gcc arc fork.
+ 	depends on !BR2_archs4x_rel31
++	# ARCv3 processors are not yet supported in upstream GCC 12.x
++	depends on !(BR2_arc32 || BR2_arc64)
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_12
+ 
+ config BR2_GCC_VERSION_13_X
+@@ -47,6 +51,8 @@ config BR2_GCC_VERSION_13_X
+ 	# powerpc spe support has been deprecated since gcc 8.x.
+ 	# https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
+ 	depends on !BR2_POWERPC_CPU_HAS_SPE
++	# ARCv3 processors are not yet supported in upstream GCC 13.x
++	depends on !(BR2_arc32 || BR2_arc64)
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_13
+ 
+ endchoice
+diff --git a/package/gcc/arc-2023.09-release/0001-arc64-Remove-faulty-sub.f-pattern.patch b/package/gcc/arc-2023.09-release/0001-arc64-Remove-faulty-sub.f-pattern.patch
 new file mode 100644
-index 0000000000..a0d93b91db
+index 0000000000..40ffe64440
 --- /dev/null
-+++ b/package/libffi/0004-Update-ARC-s-libffi-port-771.patch
-@@ -0,0 +1,871 @@
-+From 9a494f3902cb9c096c98033311c24a61b6ecb73c Mon Sep 17 00:00:00 2001
++++ b/package/gcc/arc-2023.09-release/0001-arc64-Remove-faulty-sub.f-pattern.patch
+@@ -0,0 +1,47 @@
++From 9729b848e5e4886f9adf10d2adf9d3358e5bf343 Mon Sep 17 00:00:00 2001
 +From: Claudiu Zissulescu <claziss@gmail.com>
-+Date: Sat, 18 Feb 2023 03:33:47 +0200
-+Subject: [PATCH] Update ARC's libffi port (#771)
++Date: Wed, 6 Dec 2023 12:03:01 +0200
++Subject: [PATCH] arc64: Remove faulty sub.f pattern.
 +
-+* Add support for ARC and ARC64
++Original fix in ARC GCC is here [1].
 +
-+Add support for ARC/ARC32/ARC64
++[1] https://github.com/foss-for-synopsys-dwc-arc-processors/gcc/commit/9729b848e5e4886f9adf10d2adf9d3358e5bf343
 +
-+* Implementation of GO Closure for ARC/ARC32/ARC64 Architectures
-+
-+---------
-+
-+Co-authored-by: Nuno Cardoso <cardoso@synopsys.com>
-+Co-authored-by: Luis Silva <luiss@synopsys.com>
++Signed-off-by: Claudiu Zissulescu <claziss@gmail.com>
++Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
 +---
-+ src/arc/arcompact.S | 263 +++++++++++++++---------
-+ src/arc/ffi.c       | 473 ++++++++++++++++++++++++++++++--------------
-+ src/arc/ffitarget.h |  14 ++
-+ 3 files changed, 508 insertions(+), 242 deletions(-)
++ gcc/config/arc64/arith.md | 18 ------------------
++ 1 file changed, 18 deletions(-)
 +
-+diff --git a/src/arc/arcompact.S b/src/arc/arcompact.S
-+index 03715fd..1d7f1a1 100644
-+--- a/src/arc/arcompact.S
-++++ b/src/arc/arcompact.S
-+@@ -33,103 +33,178 @@
-+ #define ENTRY(x) .globl CNAME(x)` .type CNAME(x),%function` CNAME(x):
-+ #endif
++diff --git a/gcc/config/arc64/arith.md b/gcc/config/arc64/arith.md
++index 190b38a5e8f..62c29cede30 100644
++--- a/gcc/config/arc64/arith.md
+++++ b/gcc/config/arc64/arith.md
++@@ -176,24 +176,6 @@
++    (set_attr "length"     "2,*,*,4,4,4,4,4,8")
++    (set_attr "type"       "add")])
 + 
-++#if __SIZEOF_POINTER__ == 8
-++#define PTRS 8
-++#define FLTS 8
-++#define LARG ldl
-++#define SARG stl
-++#define ADDPTR addl
-++#define MOVPTR movl_s
-++#else
-++#define PTRS 4
-++#define FLTS 4
-++#define LARG ld
-++#define SARG st
-++#define ADDPTR add
-++#define MOVPTR mov_s
-++#endif
-++
-++#define FRAME_LEN (8 * PTRS + 16)
-++
-+ .text
++-;; This pattern is needed because the GT (pnz) is not reversible and I
++-;; cannot convert CCmode to CC_ZNmode.
++-(define_insn "*<ADDSUB:optab><GPI:mode>3_f"
++-  [(set (reg:CC CC_REGNUM)
++-	(compare:CC
++-	 (ADDSUB:GPI
++-	  (match_operand:GPI 1 "arc64_nonmem_operand" "0,    0,    0,    r,r,S32S0,    r")
++-	  (match_operand:GPI 2 "arc64_nonmem_operand" "r,U06S0,S12S0,U06S0,r,    r,S32S0"))
++-	 (const_int 0)))
++-   (set (match_operand:GPI 0 "register_operand"      "=r,    r,    r,    r,r,    r,    r")
++-	(ADDSUB:GPI (match_dup 1) (match_dup 2)))]
++-  "register_operand (operands[1], <MODE>mode)
++-   || register_operand (operands[2], <MODE>mode)"
++-  "<ADDSUB:optab><GPI:sfxtab>.f\\t%0,%1,%2"
++-  [(set_attr "predicable" "yes,yes,no,no,no,no,no")
++-   (set_attr "length"     "4,4,4,4,4,8,8")
++-   (set_attr "type"       "<ADDSUB:optab><GPI:sfxtab>")])
++-
++ ;; Arithmetic patterns used by the combiner.
++ (define_insn "*bic<mode>3"
++   [(set (                  match_operand:GPI 0 "register_operand"  "=q,r,r,    r")
++-- 
++2.31.1
++
+diff --git a/package/gdb/Config.in b/package/gdb/Config.in
+index 574ad5462f..bb6bd663d8 100644
+--- a/package/gdb/Config.in
++++ b/package/gdb/Config.in
+@@ -58,6 +58,7 @@ config BR2_PACKAGE_GDB_DEBUGGER
+ 	bool "full debugger"
+ 	depends on BR2_USE_WCHAR
+ 	depends on !BR2_sh
++	depends on !(BR2_arc32 || BR2_arc64)
+ 	select BR2_PACKAGE_GMP
+ 	select BR2_PACKAGE_MPFR if (BR2_GDB_VERSION_14 || BR2_arc)
+ 	select BR2_PACKAGE_NCURSES
+diff --git a/package/glibc/0004-ARC-Add-support-for-ARCv3-processors.patch b/package/glibc/0004-ARC-Add-support-for-ARCv3-processors.patch
+new file mode 100644
+index 0000000000..cf4ca73526
+--- /dev/null
++++ b/package/glibc/0004-ARC-Add-support-for-ARCv3-processors.patch
+@@ -0,0 +1,4036 @@
++From ac6163148698545dd56471edabf97ffc23a519da Mon Sep 17 00:00:00 2001
++From: Alexey Brodkin <abrodkin@synopsys.com>
++Date: Tue, 2 Jan 2024 03:38:32 -0800
++Subject: [PATCH] ARC: Add support for ARCv3 processors
++
++Signed-off-by: Vineet Gupta <vgupta@kernel.org>
++Signed-off-by: Pavel Kozlov <pavel.kozlov@synopsys.com>
++Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
++---
++ config.h.in                                   |    6 +
++ elf/dl-runtime.c                              |    4 +-
++ elf/elf.h                                     |    5 +-
++ nptl/Makefile                                 |    5 +-
++ scripts/build-many-glibcs.py                  |    6 +
++ scripts/config.sub                            |    8 +
++ sysdeps/arc/Implies                           |    1 -
++ sysdeps/arc/__longjmp.S                       |   62 +-
++ sysdeps/arc/arc32/Implies                     |    1 +
++ sysdeps/arc/arc64/Implies                     |    1 +
++ sysdeps/arc/arc64/fpu/libm-test-ulps          | 1141 +++++++++++++++++
++ sysdeps/arc/arc64/fpu/libm-test-ulps-name     |    1 +
++ sysdeps/arc/{ => arc64}/nofpu/libm-test-ulps  |    1 +
++ sysdeps/arc/arc64/nofpu/libm-test-ulps-name   |    1 +
++ sysdeps/arc/atomic-machine.h                  |   41 +-
++ sysdeps/arc/bits/setjmp.h                     |    6 +-
++ sysdeps/arc/configure                         |   80 +-
++ sysdeps/arc/configure.ac                      |   36 +
++ sysdeps/arc/dl-machine.h                      |   75 +-
++ sysdeps/arc/dl-trampoline.S                   |   89 +-
++ sysdeps/arc/fpu/math-use-builtins-fma.h       |   18 +-
++ sysdeps/arc/fpu/math-use-builtins-sqrt.h      |   18 +-
++ sysdeps/arc/isa-asm-macro-32.h                |   61 +
++ sysdeps/arc/isa-asm-macro-64.h                |   86 ++
++ sysdeps/arc/isa-asm-macros.h                  |   35 +
++ sysdeps/arc/nofpu/libm-test-ulps              |    1 +
++ sysdeps/arc/nptl/pthreaddef.h                 |    2 +-
++ sysdeps/arc/preconfigure                      |   18 +-
++ sysdeps/arc/setjmp.S                          |   55 +-
++ sysdeps/arc/sfp-machine.h                     |   55 +-
++ sysdeps/arc/start.S                           |   14 +-
++ sysdeps/arc/sysdep.h                          |    5 +-
++ sysdeps/unix/sysv/linux/arc/Makefile          |    8 +-
++ sysdeps/unix/sysv/linux/arc/arc32/Implies     |    1 +
++ .../sysv/linux/arc/{ => arc32}/arch-syscall.h |    0
++ .../sysv/linux/arc/{ => arc32}/c++-types.data |    0
++ .../linux/arc/{ => arc32}/fixup-asm-unistd.h  |    0
++ .../sysv/linux/arc/{ => arc32}/ld.abilist     |    0
++ .../arc/{ => arc32}/libBrokenLocale.abilist   |    0
++ .../sysv/linux/arc/{ => arc32}/libanl.abilist |    0
++ .../sysv/linux/arc/{ => arc32}/libc.abilist   |    0
++ .../arc/{ => arc32}/libc_malloc_debug.abilist |    0
++ .../linux/arc/{ => arc32}/libcrypt.abilist    |    0
++ .../sysv/linux/arc/{ => arc32}/libdl.abilist  |    0
++ .../sysv/linux/arc/{ => arc32}/libm.abilist   |    0
++ .../linux/arc/{ => arc32}/libpthread.abilist  |    0
++ .../linux/arc/{ => arc32}/libresolv.abilist   |    0
++ .../sysv/linux/arc/{ => arc32}/librt.abilist  |    0
++ .../arc/{ => arc32}/libthread_db.abilist      |    0
++ .../linux/arc/{ => arc32}/libutil.abilist     |    0
++ sysdeps/unix/sysv/linux/arc/arc64/Implies     |    2 +
++ .../sysv/linux/arc/{ => arc64}/arch-syscall.h |   59 +-
++ .../sysv/linux/arc/{ => arc64}/c++-types.data |   48 +-
++ .../sysv/linux/arc/{ => arc64}/ld.abilist     |    8 +-
++ .../arc/{ => arc64}/libBrokenLocale.abilist   |    0
++ .../sysv/linux/arc/{ => arc64}/libanl.abilist |    0
++ .../sysv/linux/arc/{ => arc64}/libc.abilist   |   82 +-
++ .../arc/{ => arc64}/libc_malloc_debug.abilist |    8 +-
++ .../linux/arc/{ => arc64}/libcrypt.abilist    |    0
++ .../sysv/linux/arc/{ => arc64}/libdl.abilist  |    0
++ .../sysv/linux/arc/{ => arc64}/libm.abilist   |    0
++ .../linux/arc/{ => arc64}/libpthread.abilist  |    0
++ .../linux/arc/{ => arc64}/libresolv.abilist   |    4 +-
++ .../sysv/linux/arc/{ => arc64}/librt.abilist  |    0
++ .../arc/{ => arc64}/libthread_db.abilist      |    0
++ .../linux/arc/{ => arc64}/libutil.abilist     |    0
++ sysdeps/unix/sysv/linux/arc/bits/fcntl.h      |   62 +
++ .../sysv/linux/arc/bits/types/__sigset_t.h    |    2 +-
++ sysdeps/unix/sysv/linux/arc/clone.S           |   30 +-
++ sysdeps/unix/sysv/linux/arc/clone3.S          |   14 +-
++ sysdeps/unix/sysv/linux/arc/getcontext.S      |   71 +-
++ sysdeps/unix/sysv/linux/arc/setcontext.S      |   88 +-
++ sysdeps/unix/sysv/linux/arc/shlib-versions    |    8 +
++ sysdeps/unix/sysv/linux/arc/swapcontext.S     |  129 +-
++ sysdeps/unix/sysv/linux/arc/sys/ucontext.h    |    1 +
++ sysdeps/unix/sysv/linux/arc/syscall.S         |   16 +-
++ sysdeps/unix/sysv/linux/arc/sysdep.h          |   16 +-
++ sysdeps/unix/sysv/linux/arc/vfork.S           |    4 +-
++ timezone/zic.c                                |    2 +-
++ 79 files changed, 2211 insertions(+), 390 deletions(-)
++ mode change 100755 => 100644 scripts/config.sub
++ create mode 100644 sysdeps/arc/arc32/Implies
++ create mode 100644 sysdeps/arc/arc64/Implies
++ create mode 100644 sysdeps/arc/arc64/fpu/libm-test-ulps
++ create mode 100644 sysdeps/arc/arc64/fpu/libm-test-ulps-name
++ copy sysdeps/arc/{ => arc64}/nofpu/libm-test-ulps (99%)
++ create mode 100644 sysdeps/arc/arc64/nofpu/libm-test-ulps-name
++ create mode 100644 sysdeps/arc/isa-asm-macro-32.h
++ create mode 100644 sysdeps/arc/isa-asm-macro-64.h
++ create mode 100644 sysdeps/arc/isa-asm-macros.h
++ create mode 100644 sysdeps/unix/sysv/linux/arc/arc32/Implies
++ copy sysdeps/unix/sysv/linux/arc/{ => arc32}/arch-syscall.h (100%)
++ copy sysdeps/unix/sysv/linux/arc/{ => arc32}/c++-types.data (100%)
++ rename sysdeps/unix/sysv/linux/arc/{ => arc32}/fixup-asm-unistd.h (100%)
++ copy sysdeps/unix/sysv/linux/arc/{ => arc32}/ld.abilist (100%)
++ copy sysdeps/unix/sysv/linux/arc/{ => arc32}/libBrokenLocale.abilist (100%)
++ copy sysdeps/unix/sysv/linux/arc/{ => arc32}/libanl.abilist (100%)
++ copy sysdeps/unix/sysv/linux/arc/{ => arc32}/libc.abilist (100%)
++ copy sysdeps/unix/sysv/linux/arc/{ => arc32}/libc_malloc_debug.abilist (100%)
++ copy sysdeps/unix/sysv/linux/arc/{ => arc32}/libcrypt.abilist (100%)
++ copy sysdeps/unix/sysv/linux/arc/{ => arc32}/libdl.abilist (100%)
++ copy sysdeps/unix/sysv/linux/arc/{ => arc32}/libm.abilist (100%)
++ copy sysdeps/unix/sysv/linux/arc/{ => arc32}/libpthread.abilist (100%)
++ copy sysdeps/unix/sysv/linux/arc/{ => arc32}/libresolv.abilist (100%)
++ copy sysdeps/unix/sysv/linux/arc/{ => arc32}/librt.abilist (100%)
++ copy sysdeps/unix/sysv/linux/arc/{ => arc32}/libthread_db.abilist (100%)
++ copy sysdeps/unix/sysv/linux/arc/{ => arc32}/libutil.abilist (100%)
++ create mode 100644 sysdeps/unix/sysv/linux/arc/arc64/Implies
++ rename sysdeps/unix/sysv/linux/arc/{ => arc64}/arch-syscall.h (89%)
++ rename sysdeps/unix/sysv/linux/arc/{ => arc64}/c++-types.data (73%)
++ rename sysdeps/unix/sysv/linux/arc/{ => arc64}/ld.abilist (54%)
++ rename sysdeps/unix/sysv/linux/arc/{ => arc64}/libBrokenLocale.abilist (100%)
++ rename sysdeps/unix/sysv/linux/arc/{ => arc64}/libanl.abilist (100%)
++ rename sysdeps/unix/sysv/linux/arc/{ => arc64}/libc.abilist (97%)
++ rename sysdeps/unix/sysv/linux/arc/{ => arc64}/libc_malloc_debug.abilist (80%)
++ rename sysdeps/unix/sysv/linux/arc/{ => arc64}/libcrypt.abilist (100%)
++ rename sysdeps/unix/sysv/linux/arc/{ => arc64}/libdl.abilist (100%)
++ rename sysdeps/unix/sysv/linux/arc/{ => arc64}/libm.abilist (100%)
++ rename sysdeps/unix/sysv/linux/arc/{ => arc64}/libpthread.abilist (100%)
++ rename sysdeps/unix/sysv/linux/arc/{ => arc64}/libresolv.abilist (95%)
++ rename sysdeps/unix/sysv/linux/arc/{ => arc64}/librt.abilist (100%)
++ rename sysdeps/unix/sysv/linux/arc/{ => arc64}/libthread_db.abilist (100%)
++ rename sysdeps/unix/sysv/linux/arc/{ => arc64}/libutil.abilist (100%)
++ create mode 100644 sysdeps/unix/sysv/linux/arc/bits/fcntl.h
++
++diff --git a/config.h.in b/config.h.in
++index 0dedc124f7..d69b4166c0 100644
++--- a/config.h.in
+++++ b/config.h.in
++@@ -120,6 +120,12 @@
++ /* ARC big endian ABI */
++ #undef HAVE_ARC_BE
 + 
-+-        /* R0:   ffi_prep_args */
-+-        /* R1:   &ecif */
-+-        /* R2:   cif->bytes */
-+-        /* R3:   fig->flags */
-+-        /* R4:   ecif.rvalue */
-+-        /* R5:   fn */
-+-ENTRY(ffi_call_ARCompact)
-++ENTRY(ffi_call_asm)
-++        .cfi_startproc
+++/* ARC64:32 ABI */
+++#undef HAVE_ARC32
 ++
-+         /* Save registers.  */
-+-        st.a       fp, [sp, -4]        /* fp + 20, fp */
-+-        push_s     blink               /* fp + 16, blink */
-+-        st.a       r4, [sp, -4]        /* fp + 12, ecif.rvalue */
-+-        push_s     r3                  /* fp +  8, fig->flags */
-+-        st.a       r5, [sp, -4]        /* fp +  4, fn */
-+-        push_s     r2                  /* fp +  0, cif->bytes */
-+-        mov        fp, sp
-+-
-+-        /* Make room for all of the new args.  */
-+-        sub        sp, sp, r2
-+-
-+-        /* Place all of the ffi_prep_args in position.  */
-+-        /* ffi_prep_args(char *stack, extended_cif *ecif) */
-+-        /* R1 already set.  */
-+-
-+-        /* And call.  */
-+-        jl_s.d     [r0]
-+-        mov_s      r0, sp
-+-
-+-        ld.ab      r12, [fp, 4]        /* cif->bytes */
-+-        ld.ab      r11, [fp, 4]        /* fn */
-+-
-+-        /* Move first 8 parameters in registers...  */
-+-        ld_s       r0, [sp]
-+-        ld_s       r1, [sp, 4]
-+-        ld_s       r2, [sp, 8]
-+-        ld_s       r3, [sp, 12]
-+-        ld         r4, [sp, 16]
-+-        ld         r5, [sp, 20]
-+-        ld         r6, [sp, 24]
-+-        ld         r7, [sp, 28]
-+-
-+-        /* ...and adjust the stack.  */
-+-        min        r12, r12, 32
-++        .cfi_def_cfa r1, FRAME_LEN
-++        SARG    fp, [r1, FRAME_LEN - 2*PTRS]
-++        .cfi_offset fp, -2*PTRS
-++        SARG    blink, [r1, FRAME_LEN - 1*PTRS]
-++        .cfi_offset blink, -1*PTRS
-++        ADDPTR  fp, r1, FRAME_LEN
-++        MOVPTR  sp, r0
-++        .cfi_def_cfa fp, 0
+++/* ARC64:64 ABI */
+++#undef HAVE_ARC64
 ++
-++        /* Load arguments.  */
-++        MOVPTR  r11, r2      /* fn */
-++        MOVPTR  r12, r3      /* closure */
-++
-++        /* Save arguments.  */
-++        LARG    r0, [fp, -FRAME_LEN+0*PTRS]
-++        LARG    r1, [fp, -FRAME_LEN+1*PTRS]
-++        LARG    r2, [fp, -FRAME_LEN+2*PTRS]
-++        LARG    r3, [fp, -FRAME_LEN+3*PTRS]
-++        LARG    r4, [fp, -FRAME_LEN+4*PTRS]
-++        LARG    r5, [fp, -FRAME_LEN+5*PTRS]
-++        LARG    r6, [fp, -FRAME_LEN+6*PTRS]
-++        LARG    r7, [fp, -FRAME_LEN+7*PTRS]
++ /* C-SKY ABI version.  */
++ #undef CSKYABI
 + 
-+         /* Call the function.  */
-+-        jl.d       [r11]
-+-        add        sp, sp, r12 
-+-
-+-        mov        sp, fp        
-+-        pop_s      r3        /* fig->flags, return type */
-+-        pop_s      r2        /* ecif.rvalue, pointer for return value */
-+-
-+-        /* If the return value pointer is NULL, assume no return value.  */
-+-        breq.d     r2, 0, epilogue
-+-        pop_s      blink
-+-
-+-        /* Return INT.  */
-+-        brne       r3, FFI_TYPE_INT, return_double
-+-        b.d        epilogue
-+-        st_s       r0, [r2]        
-+-
-+-return_double:
-+-        brne       r3, FFI_TYPE_DOUBLE, epilogue
-+-        st_s       r0, [r2]        
-+-        st_s       r1, [r2,4]
-+-
-+-epilogue:
-+-        j_s.d      [blink]
-+-        ld.ab      fp, [sp, 4]
-+-
-+-ENTRY(ffi_closure_ARCompact)
-+-        st.a       r0, [sp, -32]
-+-        st_s       r1, [sp, 4]
-+-        st_s       r2, [sp, 8]
-+-        st_s       r3, [sp, 12]
-+-        st         r4, [sp, 16]
-+-        st         r5, [sp, 20]
-+-        st         r6, [sp, 24]
-+-        st         r7, [sp, 28]
-+-
-+-        /* pointer to arguments */
-+-        mov_s      r2, sp
-+-
-+-        /* return value goes here */
-+-        sub        sp, sp, 8
-+-        mov_s      r1, sp
-+-
-+-        push_s     blink
-++        jl         [r11] 
-++
-++        /* Save return value (r0/r1)  */
-++        SARG    r0, [fp, -FRAME_LEN+0*PTRS]
-++        SARG    r1, [fp, -FRAME_LEN+1*PTRS]
-++
-++        /* Restore and return.  */
-++        add     sp, fp, -FRAME_LEN
-++        .cfi_def_cfa sp, FRAME_LEN
-++        LARG    blink, [fp, -1*PTRS]
-++        .cfi_restore blink
-++        LARG    fp, [fp, -2*PTRS]
-++        .cfi_restore fp
-++        j_s     [blink]
-++        .cfi_endproc
-++        .size   ffi_call_asm, .-ffi_call_asm
-++
-++/*
-++  ffi_closure_asm. Expects address of the passed-in ffi_closure in r8.
-++  void ffi_closure_inner (ffi_cif *cif,
-++		          void (*fun) (ffi_cif *, void *, void **, void *),
-++		          void *user_data,
-++		          size_t *stackargs, struct call_context *regargs)
-++*/
-++
-++ENTRY(ffi_closure_asm)
-++        .cfi_startproc
-++
-++        ADDPTR  sp, sp, -FRAME_LEN
-++        .cfi_def_cfa_offset FRAME_LEN
-++
-++        /* Make a frame.  */
-++        SARG    fp, [sp, FRAME_LEN-2*PTRS]
-++        .cfi_offset fp, -2*PTRS
-++        SARG    blink, [sp, FRAME_LEN-1*PTRS]
-++        .cfi_offset blink, -1*PTRS
-++        ADDPTR  fp, sp, FRAME_LEN
-++
-++        /* Save arguments.  */
-++        SARG    r0, [sp, 0*PTRS]
-++        SARG    r1, [sp, 1*PTRS]
-++        SARG    r2, [sp, 2*PTRS]
-++        SARG    r3, [sp, 3*PTRS]
-++        SARG    r4, [sp, 4*PTRS]
-++        SARG    r5, [sp, 5*PTRS]
-++        SARG    r6, [sp, 6*PTRS]
-++        SARG    r7, [sp, 7*PTRS]
-++
-++        /* Enter C.  */
-++        LARG    r0, [r8, FFI_TRAMPOLINE_SIZE+0*PTRS]
-++        LARG    r1, [r8, FFI_TRAMPOLINE_SIZE+1*PTRS]
-++        LARG    r2, [r8, FFI_TRAMPOLINE_SIZE+2*PTRS]
-++        ADDPTR  r3, sp, FRAME_LEN
-++        MOVPTR  r4, sp
-++
-++        /* Call the C code.  */
-++        bl      ffi_closure_inner
-+         
-+-        bl.d       ffi_closure_inner_ARCompact
-+-        mov_s      r0, r8                /* codeloc, set by trampoline */
-+-
-+-        pop_s      blink
-+-
-+-        /* set return value to r1:r0 */
-+-        pop_s      r0
-+-        pop_s      r1
-+-        j_s.d      [blink]
-+-        add_s      sp, sp, 32
-++        /* Return values.  */
-++        LARG    r0, [sp, 0*PTRS]
-++        LARG    r1, [sp, 1*PTRS]
-++
-++        /* Restore and return.  */
-++        LARG    blink, [sp, FRAME_LEN-1*PTRS]
-++        .cfi_restore blink
-++        LARG    fp, [sp, FRAME_LEN-2*PTRS]
-++        .cfi_restore fp
-++        ADDPTR  sp, sp, FRAME_LEN
-++        .cfi_def_cfa_offset 0
-++        j_s     [blink]
-++        .cfi_endproc
-++        .size ffi_closure_asm, .-ffi_closure_asm
-++
-++/*
-++  ffi_go_closure_asm.  Expects address of the passed-in ffi_go_closure in r12.
-++  void ffi_closure_inner (ffi_cif *cif,
-++		          void (*fun) (ffi_cif *, void *, void **, void *),
-++		          void *user_data,
-++		          size_t *stackargs, struct call_context *regargs)
-++*/
-++
-++ENTRY(ffi_go_closure_asm)
-++        .cfi_startproc
-++
-++        ADDPTR  sp, sp, -FRAME_LEN
-++        .cfi_def_cfa_offset FRAME_LEN
-++
-++        /* make a frame */
-++        SARG    fp, [sp, FRAME_LEN-2*PTRS]
-++        .cfi_offset fp, -2*PTRS
-++        SARG    blink, [sp, FRAME_LEN-1*PTRS]
-++        .cfi_offset blink, -1*PTRS
-++        ADDPTR  fp, sp, FRAME_LEN
-++
-++        /* save arguments */
-++        SARG    r0, [sp, 0*PTRS]
-++        SARG    r1, [sp, 1*PTRS]
-++        SARG    r2, [sp, 2*PTRS]
-++        SARG    r3, [sp, 3*PTRS]
-++        SARG    r4, [sp, 4*PTRS]
-++        SARG    r5, [sp, 5*PTRS]
-++        SARG    r6, [sp, 6*PTRS]
-++        SARG    r7, [sp, 7*PTRS]
-++
-++        /* enter C */
-++        LARG    r0, [r12, 1*PTRS]
-++        LARG    r1, [r12, 2*PTRS]
-++        MOVPTR  r2, r12
-++        ADDPTR  r3, sp, FRAME_LEN
-++        MOVPTR  r4, sp
-++
-++        bl      ffi_closure_inner
-++
-++        /* Return values. */
-++        LARG    r0, [sp, 0*PTRS]
-++        LARG    r1, [sp, 1*PTRS]
-++
-++
-++        LARG    blink, [sp, FRAME_LEN-1*PTRS]
-++        .cfi_restore blink
-++        LARG    fp, [sp, FRAME_LEN-2*PTRS]
-++        .cfi_restore fp
-++        ADDPTR  sp, sp, FRAME_LEN
-++        .cfi_def_cfa_offset 0
-++        j_s     [blink]
-++        .cfi_endproc
-++        .size ffi_go_closure_asm, .-ffi_go_closure_asm
-+diff --git a/src/arc/ffi.c b/src/arc/ffi.c
-+index 4d10b21..d729274 100644
-+--- a/src/arc/ffi.c
-++++ b/src/arc/ffi.c
-+@@ -31,6 +31,34 @@
-+ 
-+ #include <sys/cachectl.h>
-+ 
-++#define NARGREG 8
-++#define STKALIGN 4
-++#define MAXCOPYARG (2 * sizeof(double))
-++
-++typedef struct call_context
-++{
-++  size_t r[8];
-++  /* used by the assembly code to in-place construct its own stack frame */
-++  char frame[16];
-++} call_context;
-++
-++typedef struct call_builder
-++{
-++  call_context *aregs;
-++  int used_integer;
-++  //int used_float;
-++  size_t *used_stack;
-++  void *struct_stack;
-++} call_builder;
-++
-++/* integer (not pointer) less than ABI XLEN */
-++/* FFI_TYPE_INT does not appear to be used */
-++#if defined(__ARC64_ARCH64__)
-++#define IS_INT(type) ((type) >= FFI_TYPE_UINT8 && (type) <= FFI_TYPE_SINT64)
-++#else
-++#define IS_INT(type) ((type) >= FFI_TYPE_UINT8 && (type) <= FFI_TYPE_SINT32)
-++#endif
-++
-+ /* for little endian ARC, the code is in fact stored as mixed endian for
-+    performance reasons */
-+ #if __BIG_ENDIAN__
-+@@ -39,94 +67,6 @@
-+ #define CODE_ENDIAN(x) ( (((uint32_t) (x)) << 16) | (((uint32_t) (x)) >> 16))
-+ #endif
-+ 
-+-/* ffi_prep_args is called by the assembly routine once stack
-+-   space has been allocated for the function's arguments.  */
-+-
-+-void
-+-ffi_prep_args (char *stack, extended_cif * ecif)
-+-{
-+-  unsigned int i;
-+-  void **p_argv;
-+-  char *argp;
-+-  ffi_type **p_arg;
-+-
-+-  argp = stack;
-+-
-+-  if (ecif->cif->rtype->type == FFI_TYPE_STRUCT)
-+-    {
-+-      *(void **) argp = ecif->rvalue;
-+-      argp += 4;
-+-    }
-+-
-+-  p_argv = ecif->avalue;
-+-
-+-  for (i = ecif->cif->nargs, p_arg = ecif->cif->arg_types;
-+-       (i != 0); i--, p_arg++)
-+-    {
-+-      size_t z;
-+-      int alignment;
-+-
-+-      /* align alignment to 4 */
-+-      alignment = (((*p_arg)->alignment - 1) | 3) + 1;
-+-
-+-      /* Align if necessary.  */
-+-      if ((alignment - 1) & (unsigned) argp)
-+-	argp = (char *) FFI_ALIGN (argp, alignment);
-+-
-+-      z = (*p_arg)->size;
-+-      if (z < sizeof (int))
-+-	{
-+-	  z = sizeof (int);
-+-
-+-	  switch ((*p_arg)->type)
-+-	    {
-+-	    case FFI_TYPE_SINT8:
-+-	      *(signed int *) argp = (signed int) *(SINT8 *) (*p_argv);
-+-	      break;
-+-
-+-	    case FFI_TYPE_UINT8:
-+-	      *(unsigned int *) argp = (unsigned int) *(UINT8 *) (*p_argv);
-+-	      break;
-+-
-+-	    case FFI_TYPE_SINT16:
-+-	      *(signed int *) argp = (signed int) *(SINT16 *) (*p_argv);
-+-	      break;
-+-
-+-	    case FFI_TYPE_UINT16:
-+-	      *(unsigned int *) argp = (unsigned int) *(UINT16 *) (*p_argv);
-+-	      break;
-+-
-+-	    case FFI_TYPE_STRUCT:
-+-	      memcpy (argp, *p_argv, (*p_arg)->size);
-+-	      break;
-+-
-+-	    default:
-+-	      FFI_ASSERT (0);
-+-	    }
-+-	}
-+-      else if (z == sizeof (int))
-+-	{
-+-	  *(unsigned int *) argp = (unsigned int) *(UINT32 *) (*p_argv);
-+-	}
-+-      else
-+-	{
-+-	  if ((*p_arg)->type == FFI_TYPE_STRUCT)
-+-	    {
-+-	      memcpy (argp, *p_argv, z);
-+-	    }
-+-	  else
-+-	    {
-+-	      /* Double or long long 64bit.  */
-+-	      memcpy (argp, *p_argv, z);
-+-	    }
-+-	}
-+-      p_argv++;
-+-      argp += z;
-+-    }
-+-
-+-  return;
-+-}
-+-
-+ /* Perform machine dependent cif processing.  */
-+ ffi_status
-+ ffi_prep_cif_machdep (ffi_cif * cif)
-+@@ -157,85 +97,250 @@ ffi_prep_cif_machdep (ffi_cif * cif)
-+   return FFI_OK;
-+ }
-+ 
-+-extern void ffi_call_ARCompact (void (*)(char *, extended_cif *),
-+-				extended_cif *, unsigned, unsigned,
-+-				unsigned *, void (*fn) (void));
-+-
-+-void
-+-ffi_call (ffi_cif * cif, void (*fn) (void), void *rvalue, void **avalue)
-+-{
-+-  extended_cif ecif;
-+-
-+-  ecif.cif = cif;
-+-  ecif.avalue = avalue;
-++/* allocates a single register, float register, or XLEN-sized stack slot to a datum */
-++static void marshal_atom(call_builder *cb, int type, void *data) {
-++  size_t value = 0;
-++  switch (type) {
-++    case FFI_TYPE_UINT8: value = *(uint8_t *)data; break;
-++    case FFI_TYPE_SINT8: value = *(int8_t *)data; break;
-++    case FFI_TYPE_UINT16: value = *(uint16_t *)data; break;
-++    case FFI_TYPE_SINT16: value = *(int16_t *)data; break;
-++    /* 32-bit quantities are always sign-extended in the ABI */
-++    case FFI_TYPE_UINT32: value = *(int32_t *)data; break;
-++    case FFI_TYPE_SINT32: value = *(int32_t *)data; break;
-++#if defined(__ARC64_ARCH64__)
-++    case FFI_TYPE_UINT64: value = *(uint64_t *)data; break;
-++    case FFI_TYPE_SINT64: value = *(int64_t *)data; break;
-++#endif
-++    case FFI_TYPE_POINTER: value = *(size_t *)data; break;
-++    default: FFI_ASSERT(0); break;
-++  }
-++
-++  if (cb->used_integer == NARGREG) {
-++    *cb->used_stack++ = value;
-++  } else {
-++    cb->aregs->r[cb->used_integer++] = value;
-++  }
-++}
-+ 
-+-  /* If the return value is a struct and we don't have
-+-     a return value address then we need to make one.  */
-+-  if ((rvalue == NULL) && (cif->rtype->type == FFI_TYPE_STRUCT))
-+-    {
-+-      ecif.rvalue = alloca (cif->rtype->size);
-++/* adds an argument to a call, or a not by reference return value */
-++static void marshal(call_builder *cb, ffi_type *type, int var, void *data) {
-++  size_t realign[2];
-++
-++#if (defined(__ARC64_ARCH64__) || defined(__ARC64_ARCH32__))
-++  if (type->size > 2 * __SIZEOF_POINTER__) {
-++    if (var) {
-++      marshal_atom(cb, FFI_TYPE_POINTER, &data);
-++    } else {
-++      /* copy to stack and pass by reference */
-++      data = memcpy (cb->struct_stack, data, type->size);
-++      cb->struct_stack = (size_t *) FFI_ALIGN ((char *) cb->struct_stack + type->size, __SIZEOF_POINTER__);
-++      marshal_atom(cb, FFI_TYPE_POINTER, &data);
-+     }
-+-  else
-+-    ecif.rvalue = rvalue;
-++  }
-++#else
-++  if (type->type == FFI_TYPE_STRUCT) {
-++    if (var) {
-++      if (type->size > 0)
-++        marshal_atom(cb, FFI_TYPE_POINTER, data);
-++    } else {
-++      int i;
-++      
-++      for (i = 0; i < type->size; i += sizeof(size_t)) {
-++        marshal_atom(cb, FFI_TYPE_POINTER, data);
-++        data += sizeof(size_t);
-++      }
-++    }
-++  }
-++#endif
-++  else if (IS_INT(type->type) || type->type == FFI_TYPE_POINTER) {
-++    marshal_atom(cb, type->type, data);
-++  } else {
-++      memcpy(realign, data, type->size);
-++      if (type->size > 0)
-++        marshal_atom(cb, FFI_TYPE_POINTER, realign);
-++      if (type->size > __SIZEOF_POINTER__)
-++        marshal_atom(cb, FFI_TYPE_POINTER, realign + 1);
-++  }
-++}
-+ 
-+-  switch (cif->abi)
-+-    {
-+-    case FFI_ARCOMPACT:
-+-      ffi_call_ARCompact (ffi_prep_args, &ecif, cif->bytes,
-+-			  cif->flags, ecif.rvalue, fn);
-+-      break;
-++static void unmarshal_atom(call_builder *cb, int type, void *data) {
-++  size_t value;
-++
-++  if (cb->used_integer == NARGREG) {
-++    value = *cb->used_stack++;
-++  } else {
-++    value = cb->aregs->r[cb->used_integer++];
-++  }
-++
-++  switch (type) {
-++    case FFI_TYPE_UINT8: *(uint8_t *)data = value; break;
-++    case FFI_TYPE_SINT8: *(uint8_t *)data = value; break;
-++    case FFI_TYPE_UINT16: *(uint16_t *)data = value; break;
-++    case FFI_TYPE_SINT16: *(uint16_t *)data = value; break;
-++    case FFI_TYPE_UINT32: *(uint32_t *)data = value; break;
-++    case FFI_TYPE_SINT32: *(uint32_t *)data = value; break;
-++#if defined(__ARC64_ARCH64__)
-++    case FFI_TYPE_UINT64: *(uint64_t *)data = value; break;
-++    case FFI_TYPE_SINT64: *(uint64_t *)data = value; break;
-++#endif
-++    case FFI_TYPE_POINTER: *(size_t *)data = value; break;
-++    default: FFI_ASSERT(0); break;
-++  }
-++}
-+ 
-+-    default:
-+-      FFI_ASSERT (0);
-+-      break;
-++/* for arguments passed by reference returns the pointer, otherwise the arg is copied (up to MAXCOPYARG bytes) */
-++static void *unmarshal(call_builder *cb, ffi_type *type, int var, void *data) {
-++  size_t realign[2];
-++  void *pointer;
-++
-++#if defined(__ARC64_ARCH64__)
-++  if (type->size > 2 * __SIZEOF_POINTER__) {
-++        /* pass by reference */
-++        unmarshal_atom(cb, FFI_TYPE_POINTER, (char*)&pointer);
-++        return pointer;
-+     }
-++#elif defined(__ARC64_ARCH32__)
-++  if (type->type == FFI_TYPE_STRUCT) {
-++    if (type->size > 2 * __SIZEOF_POINTER__) {
-++      unmarshal_atom(cb, FFI_TYPE_POINTER, &realign[0]);
-++      memcpy(data, (const void*)realign[0], type->size);
-++      return data;
-++    } else {
-++      int i;
-++      void *pdata = data;
-++
-++      for (i = 0; i < type->size; i += sizeof(size_t)) {
-++        unmarshal_atom(cb, FFI_TYPE_POINTER, pdata);
-++        pdata += sizeof(size_t);
-++      }
-++      return data;
-++    }
-++  }
-++#else
-++  if (type->type == FFI_TYPE_STRUCT) {
-++
-++      if (var) {
-++        int i;
-++        void *pdata = data;
-++
-++        for (i = 0; i < type->size; i += sizeof(size_t)) {
-++          unmarshal_atom(cb, FFI_TYPE_POINTER, pdata);
-++          pdata += sizeof(size_t);
-++        }
-++        return data;
-++      } else {
-++        if (type->size > 0)
-++          unmarshal_atom(cb, FFI_TYPE_POINTER, &realign[0]);
-++        memcpy(data, (const void*)realign[0], type->size);
-++        return data;
-++      }
-++  }
-++#endif
-++  else if (IS_INT(type->type) || type->type == FFI_TYPE_POINTER) {
-++    unmarshal_atom(cb, type->type, data);
-++    return data;
-++  } else {
-++      if (type->size > 0)
-++        unmarshal_atom(cb, FFI_TYPE_POINTER, realign);
-++      if (type->size > __SIZEOF_POINTER__)
-++        unmarshal_atom(cb, FFI_TYPE_POINTER, realign + 1);
-++      memcpy(data, realign, type->size);
-++      return data;
-++  }
-+ }
-+ 
-+-int
-+-ffi_closure_inner_ARCompact (ffi_closure * closure, void *rvalue,
-+-			     ffi_arg * args)
-++static int passed_by_ref(ffi_type *type, int var) {
-++  if (type->type == FFI_TYPE_STRUCT)
-++	  return 1;
-++  
-++  return type->size > 2 * __SIZEOF_POINTER__;
-++}
-++
-++/* Low level routine for calling functions */
-++extern void ffi_call_asm (void *stack, struct call_context *regs,
-++			  void (*fn) (void), void *closure) FFI_HIDDEN;
-++
-++static void
-++ffi_call_int (ffi_cif *cif, void (*fn) (void), void *rvalue, void **avalue,
-++	      void *closure)
++diff --git a/elf/dl-runtime.c b/elf/dl-runtime.c
++index 32a8bfcf74..68ffdb1c24 100644
++--- a/elf/dl-runtime.c
+++++ b/elf/dl-runtime.c
++@@ -42,7 +42,7 @@ _dl_fixup (
++ # ifdef ELF_MACHINE_RUNTIME_FIXUP_ARGS
++ 	   ELF_MACHINE_RUNTIME_FIXUP_ARGS,
++ # endif
++-	   struct link_map *l, ElfW(Word) reloc_arg)
+++	   struct link_map *l, uintptr_t reloc_arg)
 + {
-+-  void **arg_area, **p_argv;
-+-  ffi_cif *cif = closure->cif;
-+-  char *argp = (char *) args;
-+-  ffi_type **p_argt;
-+-  int i;
-++  int return_by_ref = passed_by_ref(cif->rtype, 0);
++   const ElfW(Sym) *const symtab
++     = (const void *) D_PTR (l, l_info[DT_SYMTAB]);
++@@ -170,7 +170,7 @@ _dl_profile_fixup (
++ #ifdef ELF_MACHINE_RUNTIME_FIXUP_ARGS
++ 		   ELF_MACHINE_RUNTIME_FIXUP_ARGS,
++ #endif
++-		   struct link_map *l, ElfW(Word) reloc_arg,
+++		   struct link_map *l, uintptr_t reloc_arg,
++ 		   ElfW(Addr) retaddr, void *regs, long int *framesizep)
++ {
++   void (*mcount_fct) (ElfW(Addr), ElfW(Addr)) = _dl_mcount;
++diff --git a/elf/elf.h b/elf/elf.h
++index 89fc8021e9..05cc75c631 100644
++--- a/elf/elf.h
+++++ b/elf/elf.h
++@@ -358,6 +358,8 @@ typedef struct
 + 
-+-  arg_area = (void **) alloca (cif->nargs * sizeof (void *));
-++  /* Allocate space for stack arg parameters.  */
-++  size_t arg_bytes = FFI_ALIGN(2 * sizeof(size_t) * cif->nargs, STKALIGN);
-++  /* Allocate space for copies of big structures.  */
-++  size_t struct_bytes = FFI_ALIGN(cif->bytes, STKALIGN);
-++  // size_t rval_bytes = 0;
-++  // if (rvalue == NULL && cif->rtype->size > 2*__SIZEOF_POINTER__)
-++  //   rval_bytes = FFI_ALIGN(cif->rtype->size, STKALIGN);
-++  size_t alloc_size = arg_bytes + /*rval_bytes +*/ struct_bytes + sizeof(call_context);
-++  size_t alloc_base = (size_t)alloca(alloc_size);
++ #define EM_BPF		247	/* Linux BPF -- in-kernel virtual machine */
++ #define EM_CSKY		252     /* C-SKY */
+++#define EM_ARCV3	253     /* Synopsys ARCv3 64-bit ISA */
+++#define EM_ARCV3_32	255     /* Synopsys ARCv3 32-bit ISA */
++ #define EM_LOONGARCH	258	/* LoongArch */
 + 
-+-  /* handle hidden argument */
-+-  if (cif->flags == FFI_TYPE_STRUCT)
-+-    {
-+-      rvalue = *(void **) argp;
-+-      argp += 4;
-+-    }
-++  // if (rval_bytes)
-++  //   rvalue = (void*)(alloc_base + arg_bytes);
++ #define EM_NUM		259
++@@ -4216,12 +4218,13 @@ enum
++ /* Processor specific values for the Shdr sh_type field.  */
++ #define SHT_ARC_ATTRIBUTES	(SHT_LOPROC + 1) /* ARC attributes section.  */
 + 
-+-  p_argv = arg_area;
-++  call_builder cb;
-++  cb.used_integer = 0;
-++  cb.aregs = (call_context*)(alloc_base + arg_bytes /*+ rval_bytes*/ + struct_bytes);
-++  cb.used_stack = (void*)alloc_base;
-++  cb.struct_stack = (void *)(alloc_base + arg_bytes /*+ rval_bytes*/);
++-/* ARCompact/ARCv2 specific relocs.  */
+++/* ARCompact/ARCv2/ARCv3 specific relocs.  */
++ #define R_ARC_NONE		0x0
++ #define R_ARC_8			0x1
++ #define R_ARC_16		0x2
++ #define R_ARC_24		0x3
++ #define R_ARC_32		0x4
+++#define R_ARC_64		0x5
 + 
-+-  for (i = 0, p_argt = cif->arg_types; i < cif->nargs;
-+-       i++, p_argt++, p_argv++)
-+-    {
-+-      size_t z;
-+-      int alignment;
-++  // if (cif->rtype->type == FFI_TYPE_STRUCT)
-++  //   marshal(&cb, &ffi_type_pointer, 0, &rvalue);
++ #define R_ARC_B22_PCREL		0x6
++ #define R_ARC_H30		0x7
++diff --git a/nptl/Makefile b/nptl/Makefile
++index ffa5722e48..c8b7674c27 100644
++--- a/nptl/Makefile
+++++ b/nptl/Makefile
++@@ -353,6 +353,7 @@ tests = \
++   tst-thread-exit-clobber \
++   tst-thread-setspecific \
++   tst-thread_local1 \
+++  tst-eintr1 \
++   tst-tsd3 \
++   tst-tsd4 \
++   # tests
++@@ -397,10 +398,6 @@ tests-time64 := \
++   tst-cancel4_2-time64
++   # tests-time64
++ 
++-# This test can run into task limits because of a linux kernel bug
++-# and then cause the make process to fail too, see bug 24537.
++-xtests += tst-eintr1
++-
++ test-srcs = tst-oddstacklimit
++ 
++ gen-as-const-headers = unwindbuf.sym
++diff --git a/scripts/build-many-glibcs.py b/scripts/build-many-glibcs.py
++index 73ffc57c86..6f53c195cd 100755
++--- a/scripts/build-many-glibcs.py
+++++ b/scripts/build-many-glibcs.py
++@@ -172,6 +172,12 @@ class Context(object):
++         self.add_config(arch='arceb',
++                         os_name='linux-gnu',
++                         gcc_cfg=['--disable-multilib', '--with-cpu=hs38'])
+++        self.add_config(arch='arc64',
+++                        os_name='linux-gnu',
+++                        gcc_cfg=['--disable-multilib'])
+++        self.add_config(arch='arc64',
+++                        os_name='linux-gnuhf',
+++                        gcc_cfg=['--disable-multilib', '--with-fpu=fpud'])
++         self.add_config(arch='alpha',
++                         os_name='linux-gnu')
++         self.add_config(arch='arm',
++diff --git a/scripts/config.sub b/scripts/config.sub
++old mode 100755
++new mode 100644
++index dba16e84c7..4d9a117c9c
++--- a/scripts/config.sub
+++++ b/scripts/config.sub
++@@ -1170,6 +1170,14 @@ case $cpu-$vendor in
++ 		cpu=mipsallegrexel
++ 		vendor=sony
++ 		;;
+++	arc32*-*)
+++		cpu=arc32
+++		vendor=linux
+++		;;
+++	arc64*-*)
+++		cpu=arc64
+++		vendor=linux
+++		;;
++ 	tile*-*)
++ 		basic_os=${basic_os:-linux-gnu}
++ 		;;
++diff --git a/sysdeps/arc/Implies b/sysdeps/arc/Implies
++index 780c4e2467..12ca48b4c9 100644
++--- a/sysdeps/arc/Implies
+++++ b/sysdeps/arc/Implies
++@@ -1,3 +1,2 @@
++-wordsize-32
++ ieee754/flt-32
++ ieee754/dbl-64
++diff --git a/sysdeps/arc/__longjmp.S b/sysdeps/arc/__longjmp.S
++index a57054bce0..920e535ffd 100644
++--- a/sysdeps/arc/__longjmp.S
+++++ b/sysdeps/arc/__longjmp.S
++@@ -24,25 +24,49 @@
++ 
++ ENTRY (__longjmp)
++ 
++-	LDR (blink, r0,  0)
++-	LDR (sp,    r0,  1)
++-	LDR (fp,    r0,  2)
++-	LDR (gp,    r0,  3)
++-
++-	LDR (r13,   r0,  4)
++-	LDR (r14,   r0,  5)
++-	LDR (r15,   r0,  6)
++-	LDR (r16,   r0,  7)
++-	LDR (r17,   r0,  8)
++-	LDR (r18,   r0,  9)
++-	LDR (r19,   r0, 10)
++-	LDR (r20,   r0, 11)
++-	LDR (r21,   r0, 12)
++-	LDR (r22,   r0, 13)
++-	LDR (r23,   r0, 14)
++-	LDR (r24,   r0, 15)
++-
++-	mov.f  r0, r1
+++	LDR.as blink, r0,  0
+++	LDR.as sp,    r0,  1
+++	LDR.as fp,    r0,  2
+++	LDR.as gp,    r0,  3
 ++
-++  if (return_by_ref)
-++	  marshal(&cb, &ffi_type_pointer, 0, &rvalue);
+++	LDR.as r13,   r0,  4
+++	LDR.as r14,   r0,  5
+++	LDR.as r15,   r0,  6
+++	LDR.as r16,   r0,  7
+++	LDR.as r17,   r0,  8
+++	LDR.as r18,   r0,  9
+++	LDR.as r19,   r0, 10
+++	LDR.as r20,   r0, 11
+++	LDR.as r21,   r0, 12
+++	LDR.as r22,   r0, 13
+++	LDR.as r23,   r0, 14
+++	LDR.as r24,   r0, 15
+++
+++#if defined(__ARCV3__)
+++	LDR.as r25,   r0, 16
+++	LDR.as r26,   r0, 17
+++#endif
+++
+++#if defined (__ARC_FLOAT_ABI_HARD__)
+++	FLDR.as	f16,  r0, 18
+++	FLDR.as	f17,  r0, 19
+++	FLDR.as	f18,  r0, 20
+++	FLDR.as	f19,  r0, 21
+++	FLDR.as	f20,  r0, 22
+++	FLDR.as	f21,  r0, 23
+++	FLDR.as	f22,  r0, 24
+++	FLDR.as	f23,  r0, 25
+++	FLDR.as	f24,  r0, 26
+++	FLDR.as	f25,  r0, 27
+++	FLDR.as	f26,  r0, 28
+++	FLDR.as	f27,  r0, 29
+++	FLDR.as	f28,  r0, 30
+++	FLDR.as	f29,  r0, 31
+++	FLDR.as	f30,  r0, 32
+++	FLDR.as	f31,  r0, 33
+++#endif
+++
+++	MOVR.f r0, r1
++ 	j.d    [blink]
++ 	mov.z  r0, 1	/* don't return 0 to setjmp callsite from longjmp.  */
 + 
-+-      /* align alignment to 4 */
-+-      alignment = (((*p_argt)->alignment - 1) | 3) + 1;
-++  int i;
-++  for (i = 0; i < cif->nargs; i++)
-++    marshal(&cb, cif->arg_types[i], 0, avalue[i]);
++diff --git a/sysdeps/arc/arc32/Implies b/sysdeps/arc/arc32/Implies
++new file mode 100644
++index 0000000000..39a34c5f57
++--- /dev/null
+++++ b/sysdeps/arc/arc32/Implies
++@@ -0,0 +1 @@
+++wordsize-32
++diff --git a/sysdeps/arc/arc64/Implies b/sysdeps/arc/arc64/Implies
++new file mode 100644
++index 0000000000..a8cae95f9d
++--- /dev/null
+++++ b/sysdeps/arc/arc64/Implies
++@@ -0,0 +1 @@
+++wordsize-64
++diff --git a/sysdeps/arc/arc64/fpu/libm-test-ulps b/sysdeps/arc/arc64/fpu/libm-test-ulps
++new file mode 100644
++index 0000000000..f3b8753c4d
++--- /dev/null
+++++ b/sysdeps/arc/arc64/fpu/libm-test-ulps
++@@ -0,0 +1,1141 @@
+++# Begin of automatic generation
+++
+++# Maximal error of functions:
+++Function: "acos":
+++double: 1
+++float: 1
+++
+++Function: "acos_downward":
+++double: 1
+++float: 1
+++
+++Function: "acos_towardzero":
+++double: 1
+++float: 1
+++
+++Function: "acos_upward":
+++double: 1
+++float: 1
+++
+++Function: "acosh":
+++double: 2
+++float: 2
+++
+++Function: "acosh_downward":
+++double: 2
+++float: 2
+++
+++Function: "acosh_towardzero":
+++double: 2
+++float: 2
+++
+++Function: "acosh_upward":
+++double: 2
+++float: 2
+++
+++Function: "asin":
+++double: 1
+++float: 1
+++
+++Function: "asin_downward":
+++double: 1
+++float: 1
+++
+++Function: "asin_towardzero":
+++double: 1
+++float: 1
+++
+++Function: "asin_upward":
+++double: 2
+++float: 1
+++
+++Function: "asinh":
+++double: 2
+++float: 2
+++
+++Function: "asinh_downward":
+++double: 3
+++float: 3
+++
+++Function: "asinh_towardzero":
+++double: 2
+++float: 2
+++
+++Function: "asinh_upward":
+++double: 3
+++float: 3
+++
+++Function: "atan":
+++double: 1
+++float: 1
+++
+++Function: "atan2":
+++float: 1
+++
+++Function: "atan2_downward":
+++double: 1
+++float: 2
+++
+++Function: "atan2_towardzero":
+++double: 1
+++float: 2
+++
+++Function: "atan2_upward":
+++double: 1
+++float: 1
+++
+++Function: "atan_downward":
+++double: 1
+++float: 2
+++
+++Function: "atan_towardzero":
+++double: 1
+++float: 1
+++
+++Function: "atan_upward":
+++double: 1
+++float: 2
+++
+++Function: "atanh":
+++double: 2
+++float: 2
+++
+++Function: "atanh_downward":
+++double: 3
+++float: 3
+++
+++Function: "atanh_towardzero":
+++double: 2
+++float: 2
+++
+++Function: "atanh_upward":
+++double: 3
+++float: 3
+++
+++Function: "cabs":
+++double: 1
+++
+++Function: "cabs_downward":
+++double: 1
+++
+++Function: "cabs_towardzero":
+++double: 1
+++
+++Function: "cabs_upward":
+++double: 1
+++float: 1
+++
+++Function: Real part of "cacos":
+++double: 1
+++float: 2
+++
+++Function: Imaginary part of "cacos":
+++double: 2
+++float: 2
+++
+++Function: Real part of "cacos_downward":
+++double: 3
+++float: 2
+++
+++Function: Imaginary part of "cacos_downward":
+++double: 5
+++float: 3
+++
+++Function: Real part of "cacos_towardzero":
+++double: 3
+++float: 2
+++
+++Function: Imaginary part of "cacos_towardzero":
+++double: 4
+++float: 2
+++
+++Function: Real part of "cacos_upward":
+++double: 2
+++float: 2
+++
+++Function: Imaginary part of "cacos_upward":
+++double: 5
+++float: 5
+++
+++Function: Real part of "cacosh":
+++double: 2
+++float: 2
+++
+++Function: Imaginary part of "cacosh":
+++double: 1
+++float: 2
+++
+++Function: Real part of "cacosh_downward":
+++double: 4
+++float: 2
+++
+++Function: Imaginary part of "cacosh_downward":
+++double: 3
+++float: 3
+++
+++Function: Real part of "cacosh_towardzero":
+++double: 4
+++float: 2
+++
+++Function: Imaginary part of "cacosh_towardzero":
+++double: 3
+++float: 2
+++
+++Function: Real part of "cacosh_upward":
+++double: 4
+++float: 3
+++
+++Function: Imaginary part of "cacosh_upward":
+++double: 3
+++float: 2
+++
+++Function: "carg":
+++float: 1
+++
+++Function: "carg_downward":
+++double: 1
+++float: 2
+++
+++Function: "carg_towardzero":
+++double: 1
+++float: 2
+++
+++Function: "carg_upward":
+++double: 1
+++float: 1
+++
+++Function: Real part of "casin":
+++double: 1
+++float: 1
+++
+++Function: Imaginary part of "casin":
+++double: 2
+++float: 2
+++
+++Function: Real part of "casin_downward":
+++double: 3
+++float: 2
+++
+++Function: Imaginary part of "casin_downward":
+++double: 5
+++float: 3
+++
+++Function: Real part of "casin_towardzero":
+++double: 3
+++float: 1
+++
+++Function: Imaginary part of "casin_towardzero":
+++double: 4
+++float: 2
+++
+++Function: Real part of "casin_upward":
+++double: 3
+++float: 2
+++
+++Function: Imaginary part of "casin_upward":
+++double: 5
+++float: 5
+++
+++Function: Real part of "casinh":
+++double: 2
+++float: 2
+++
+++Function: Imaginary part of "casinh":
+++double: 1
+++float: 1
+++
+++Function: Real part of "casinh_downward":
+++double: 5
+++float: 3
+++
+++Function: Imaginary part of "casinh_downward":
+++double: 3
+++float: 2
+++
+++Function: Real part of "casinh_towardzero":
+++double: 4
+++float: 2
+++
+++Function: Imaginary part of "casinh_towardzero":
+++double: 3
+++float: 1
+++
+++Function: Real part of "casinh_upward":
+++double: 5
+++float: 5
+++
+++Function: Imaginary part of "casinh_upward":
+++double: 3
+++float: 2
+++
+++Function: Real part of "catan":
+++double: 1
+++float: 1
+++
+++Function: Imaginary part of "catan":
+++double: 1
+++float: 1
+++
+++Function: Real part of "catan_downward":
+++double: 1
+++float: 2
+++
+++Function: Imaginary part of "catan_downward":
+++double: 2
+++float: 2
+++
+++Function: Real part of "catan_towardzero":
+++double: 1
+++float: 2
+++
+++Function: Imaginary part of "catan_towardzero":
+++double: 2
+++float: 2
+++
+++Function: Real part of "catan_upward":
+++double: 1
+++float: 1
+++
+++Function: Imaginary part of "catan_upward":
+++double: 2
+++float: 2
+++
+++Function: Real part of "catanh":
+++double: 1
+++float: 1
+++
+++Function: Imaginary part of "catanh":
+++double: 1
+++float: 1
+++
+++Function: Real part of "catanh_downward":
+++double: 2
+++float: 2
+++
+++Function: Imaginary part of "catanh_downward":
+++double: 1
+++float: 2
+++
+++Function: Real part of "catanh_towardzero":
+++double: 2
+++float: 2
+++
+++Function: Imaginary part of "catanh_towardzero":
+++double: 1
+++float: 2
+++
+++Function: Real part of "catanh_upward":
+++double: 4
+++float: 4
+++
+++Function: Imaginary part of "catanh_upward":
+++double: 1
+++float: 1
+++
+++Function: "cbrt":
+++double: 4
+++float: 1
+++
+++Function: "cbrt_downward":
+++double: 4
+++float: 1
+++
+++Function: "cbrt_towardzero":
+++double: 3
+++float: 1
+++
+++Function: "cbrt_upward":
+++double: 5
+++float: 1
+++
+++Function: Real part of "ccos":
+++double: 1
+++float: 1
+++
+++Function: Imaginary part of "ccos":
+++double: 1
+++float: 1
+++
+++Function: Real part of "ccos_downward":
+++double: 1
+++float: 1
+++
+++Function: Imaginary part of "ccos_downward":
+++double: 3
+++float: 3
+++
+++Function: Real part of "ccos_towardzero":
+++double: 1
+++float: 2
+++
+++Function: Imaginary part of "ccos_towardzero":
+++double: 3
+++float: 3
+++
+++Function: Real part of "ccos_upward":
+++double: 1
+++float: 2
+++
+++Function: Imaginary part of "ccos_upward":
+++double: 2
+++float: 2
+++
+++Function: Real part of "ccosh":
+++double: 1
+++float: 1
+++
+++Function: Imaginary part of "ccosh":
+++double: 1
+++float: 1
+++
+++Function: Real part of "ccosh_downward":
+++double: 2
+++float: 2
+++
+++Function: Imaginary part of "ccosh_downward":
+++double: 3
+++float: 3
+++
+++Function: Real part of "ccosh_towardzero":
+++double: 2
+++float: 3
+++
+++Function: Imaginary part of "ccosh_towardzero":
+++double: 3
+++float: 3
+++
+++Function: Real part of "ccosh_upward":
+++double: 1
+++float: 2
+++
+++Function: Imaginary part of "ccosh_upward":
+++double: 2
+++float: 2
+++
+++Function: Real part of "cexp":
+++double: 2
+++float: 1
+++
+++Function: Imaginary part of "cexp":
+++double: 1
+++float: 2
+++
+++Function: Real part of "cexp_downward":
+++double: 2
+++float: 2
+++
+++Function: Imaginary part of "cexp_downward":
+++double: 3
+++float: 3
+++
+++Function: Real part of "cexp_towardzero":
+++double: 2
+++float: 2
+++
+++Function: Imaginary part of "cexp_towardzero":
+++double: 3
+++float: 3
+++
+++Function: Real part of "cexp_upward":
+++double: 2
+++float: 2
+++
+++Function: Imaginary part of "cexp_upward":
+++double: 3
+++float: 2
+++
+++Function: Real part of "clog":
+++double: 3
+++float: 3
+++
+++Function: Imaginary part of "clog":
+++double: 1
+++float: 1
+++
+++Function: Real part of "clog10":
+++double: 3
+++float: 4
+++
+++Function: Imaginary part of "clog10":
+++double: 2
+++float: 2
+++
+++Function: Real part of "clog10_downward":
+++double: 5
+++float: 5
+++
+++Function: Imaginary part of "clog10_downward":
+++double: 2
+++float: 4
+++
+++Function: Real part of "clog10_towardzero":
+++double: 5
+++float: 6
+++
+++Function: Imaginary part of "clog10_towardzero":
+++double: 2
+++float: 4
+++
+++Function: Real part of "clog10_upward":
+++double: 6
+++float: 5
+++
+++Function: Imaginary part of "clog10_upward":
+++double: 2
+++float: 4
+++
+++Function: Real part of "clog_downward":
+++double: 4
+++float: 3
+++
+++Function: Imaginary part of "clog_downward":
+++double: 1
+++float: 2
+++
+++Function: Real part of "clog_towardzero":
+++double: 4
+++float: 4
+++
+++Function: Imaginary part of "clog_towardzero":
+++double: 1
+++float: 3
+++
+++Function: Real part of "clog_upward":
+++double: 4
+++float: 3
+++
+++Function: Imaginary part of "clog_upward":
+++double: 1
+++float: 2
+++
+++Function: "cos":
+++double: 1
+++float: 1
+++
+++Function: "cos_downward":
+++double: 1
+++float: 1
+++
+++Function: "cos_towardzero":
+++double: 1
+++float: 1
+++
+++Function: "cos_upward":
+++double: 1
+++float: 1
+++
+++Function: "cosh":
+++double: 2
+++float: 2
+++
+++Function: "cosh_downward":
+++double: 3
+++float: 2
+++
+++Function: "cosh_towardzero":
+++double: 3
+++float: 2
+++
+++Function: "cosh_upward":
+++double: 2
+++float: 2
+++
+++Function: Real part of "cpow":
+++double: 2
+++float: 5
+++
+++Function: Imaginary part of "cpow":
+++float: 2
+++
+++Function: Real part of "cpow_downward":
+++double: 5
+++float: 8
+++
+++Function: Imaginary part of "cpow_downward":
+++double: 1
+++float: 2
+++
+++Function: Real part of "cpow_towardzero":
+++double: 5
+++float: 8
+++
+++Function: Imaginary part of "cpow_towardzero":
+++double: 1
+++float: 2
+++
+++Function: Real part of "cpow_upward":
+++double: 4
+++float: 1
+++
+++Function: Imaginary part of "cpow_upward":
+++double: 1
+++float: 2
+++
+++Function: Real part of "csin":
+++double: 1
+++float: 1
+++
+++Function: Real part of "csin_downward":
+++double: 3
+++float: 3
+++
+++Function: Imaginary part of "csin_downward":
+++double: 1
+++float: 1
+++
+++Function: Real part of "csin_towardzero":
+++double: 3
+++float: 3
+++
+++Function: Imaginary part of "csin_towardzero":
+++double: 1
+++float: 1
+++
+++Function: Real part of "csin_upward":
+++double: 2
+++float: 2
+++
+++Function: Imaginary part of "csin_upward":
+++double: 1
+++float: 2
+++
+++Function: Real part of "csinh":
+++float: 1
+++
+++Function: Imaginary part of "csinh":
+++double: 1
+++float: 1
+++
+++Function: Real part of "csinh_downward":
+++double: 2
+++float: 1
+++
+++Function: Imaginary part of "csinh_downward":
+++double: 3
+++float: 3
+++
+++Function: Real part of "csinh_towardzero":
+++double: 2
+++float: 2
+++
+++Function: Imaginary part of "csinh_towardzero":
+++double: 3
+++float: 3
+++
+++Function: Real part of "csinh_upward":
+++double: 1
+++float: 2
+++
+++Function: Imaginary part of "csinh_upward":
+++double: 2
+++float: 2
+++
+++Function: Real part of "csqrt":
+++double: 2
+++float: 2
+++
+++Function: Imaginary part of "csqrt":
+++double: 2
+++float: 2
+++
+++Function: Real part of "csqrt_downward":
+++double: 5
+++float: 4
+++
+++Function: Imaginary part of "csqrt_downward":
+++double: 4
+++float: 3
+++
+++Function: Real part of "csqrt_towardzero":
+++double: 4
+++float: 3
+++
+++Function: Imaginary part of "csqrt_towardzero":
+++double: 4
+++float: 3
+++
+++Function: Real part of "csqrt_upward":
+++double: 5
+++float: 4
+++
+++Function: Imaginary part of "csqrt_upward":
+++double: 3
+++float: 3
+++
+++Function: Real part of "ctan":
+++double: 1
+++float: 1
+++
+++Function: Imaginary part of "ctan":
+++double: 2
+++float: 2
+++
+++Function: Real part of "ctan_downward":
+++double: 6
+++float: 5
+++
+++Function: Imaginary part of "ctan_downward":
+++double: 2
+++float: 2
+++
+++Function: Real part of "ctan_towardzero":
+++double: 5
+++float: 2
+++
+++Function: Imaginary part of "ctan_towardzero":
+++double: 2
+++float: 2
+++
+++Function: Real part of "ctan_upward":
+++double: 2
+++float: 4
+++
+++Function: Imaginary part of "ctan_upward":
+++double: 1
+++float: 2
+++
+++Function: Real part of "ctanh":
+++double: 2
+++float: 2
+++
+++Function: Imaginary part of "ctanh":
+++double: 2
+++float: 2
+++
+++Function: Real part of "ctanh_downward":
+++double: 2
+++float: 2
+++
+++Function: Imaginary part of "ctanh_downward":
+++double: 6
+++float: 5
+++
+++Function: Real part of "ctanh_towardzero":
+++double: 2
+++float: 2
+++
+++Function: Imaginary part of "ctanh_towardzero":
+++double: 5
+++float: 2
+++
+++Function: Real part of "ctanh_upward":
+++double: 1
+++float: 2
+++
+++Function: Imaginary part of "ctanh_upward":
+++double: 3
+++float: 3
+++
+++Function: "erf":
+++double: 1
+++float: 1
+++
+++Function: "erf_downward":
+++double: 1
+++float: 1
+++
+++Function: "erf_towardzero":
+++double: 1
+++float: 1
+++
+++Function: "erf_upward":
+++double: 1
+++float: 1
+++
+++Function: "erfc":
+++double: 3
+++float: 3
+++
+++Function: "erfc_downward":
+++double: 4
+++float: 4
+++
+++Function: "erfc_towardzero":
+++double: 3
+++float: 3
+++
+++Function: "erfc_upward":
+++double: 4
+++float: 4
+++
+++Function: "exp":
+++double: 1
+++float: 1
+++
+++Function: "exp10":
+++double: 2
+++float: 1
+++
+++Function: "exp10_downward":
+++double: 3
+++float: 1
+++
+++Function: "exp10_towardzero":
+++double: 3
+++float: 1
+++
+++Function: "exp10_upward":
+++double: 2
+++float: 1
+++
+++Function: "exp2":
+++double: 1
+++
+++Function: "exp2_downward":
+++double: 1
+++float: 1
+++
+++Function: "exp2_towardzero":
+++double: 1
+++float: 1
+++
+++Function: "exp2_upward":
+++double: 1
+++float: 1
+++
+++Function: "exp_downward":
+++double: 1
+++float: 1
+++
+++Function: "exp_towardzero":
+++double: 1
+++float: 1
+++
+++Function: "exp_upward":
+++double: 1
+++float: 1
+++
+++Function: "expm1":
+++double: 1
+++float: 1
+++
+++Function: "expm1_downward":
+++double: 1
+++float: 1
+++
+++Function: "expm1_towardzero":
+++double: 1
+++float: 2
+++
+++Function: "expm1_upward":
+++double: 1
+++float: 1
+++
+++Function: "gamma":
+++double: 4
+++float: 7
+++
+++Function: "gamma_downward":
+++double: 4
+++float: 4
+++
+++Function: "gamma_towardzero":
+++double: 4
+++float: 3
+++
+++Function: "gamma_upward":
+++double: 4
+++float: 5
+++
+++Function: "hypot":
+++double: 1
+++float: 1
+++
+++Function: "hypot_downward":
+++double: 1
+++float: 1
+++
+++Function: "hypot_towardzero":
+++double: 1
+++float: 1
+++
+++Function: "hypot_upward":
+++double: 1
+++float: 1
+++
+++Function: "j0":
+++double: 4
+++float: 9
+++
+++Function: "j0_downward":
+++double: 6
+++float: 8
+++
+++Function: "j0_towardzero":
+++double: 4
+++float: 9
+++
+++Function: "j0_upward":
+++double: 4
+++float: 9
+++
+++Function: "j1":
+++double: 3
+++float: 9
+++
+++Function: "j1_downward":
+++double: 9
+++float: 9
+++
+++Function: "j1_towardzero":
+++double: 5
+++float: 9
+++
+++Function: "j1_upward":
+++double: 5
+++float: 8
+++
+++Function: "jn":
+++double: 4
+++float: 4
+++
+++Function: "jn_downward":
+++double: 4
+++float: 5
+++
+++Function: "jn_towardzero":
+++double: 4
+++float: 5
+++
+++Function: "jn_upward":
+++double: 5
+++float: 5
+++
+++Function: "lgamma":
+++double: 4
+++float: 7
+++
+++Function: "lgamma_downward":
+++double: 4
+++float: 4
+++
+++Function: "lgamma_towardzero":
+++double: 4
+++float: 3
+++
+++Function: "lgamma_upward":
+++double: 4
+++float: 5
+++
+++Function: "log":
+++double: 1
+++
+++Function: "log10":
+++double: 2
+++float: 2
+++
+++Function: "log10_downward":
+++double: 2
+++float: 3
+++
+++Function: "log10_towardzero":
+++double: 2
+++float: 2
+++
+++Function: "log10_upward":
+++double: 2
+++float: 2
+++
+++Function: "log1p":
+++double: 1
+++float: 1
+++
+++Function: "log1p_downward":
+++double: 1
+++float: 2
+++
+++Function: "log1p_towardzero":
+++double: 2
+++float: 2
+++
+++Function: "log1p_upward":
+++double: 2
+++float: 2
+++
+++Function: "log2":
+++double: 2
+++float: 1
+++
+++Function: "log2_downward":
+++double: 1
+++float: 1
+++
+++Function: "log2_towardzero":
+++double: 1
+++float: 1
+++
+++Function: "log2_upward":
+++double: 1
+++float: 1
+++
+++Function: "log_downward":
+++double: 1
+++float: 1
+++
+++Function: "log_towardzero":
+++double: 1
+++float: 1
+++
+++Function: "log_upward":
+++double: 1
+++float: 1
+++
+++Function: "pow":
+++double: 1
+++
+++Function: "pow_downward":
+++double: 1
+++float: 1
+++
+++Function: "pow_towardzero":
+++double: 1
+++float: 1
+++
+++Function: "pow_upward":
+++double: 1
+++float: 1
+++
+++Function: "sin":
+++double: 1
+++float: 1
+++
+++Function: "sin_downward":
+++double: 1
+++float: 1
+++
+++Function: "sin_towardzero":
+++double: 1
+++float: 1
+++
+++Function: "sin_upward":
+++double: 1
+++float: 1
+++
+++Function: "sincos":
+++double: 1
+++float: 1
+++
+++Function: "sincos_downward":
+++double: 1
+++float: 1
+++
+++Function: "sincos_towardzero":
+++double: 1
+++float: 1
+++
+++Function: "sincos_upward":
+++double: 1
+++float: 1
+++
+++Function: "sinh":
+++double: 2
+++float: 2
+++
+++Function: "sinh_downward":
+++double: 3
+++float: 3
+++
+++Function: "sinh_towardzero":
+++double: 3
+++float: 2
+++
+++Function: "sinh_upward":
+++double: 3
+++float: 3
+++
+++Function: "tan":
+++float: 1
+++
+++Function: "tan_downward":
+++double: 1
+++float: 2
+++
+++Function: "tan_towardzero":
+++double: 1
+++float: 1
+++
+++Function: "tan_upward":
+++double: 1
+++float: 1
+++
+++Function: "tanh":
+++double: 2
+++float: 2
+++
+++Function: "tanh_downward":
+++double: 3
+++float: 3
+++
+++Function: "tanh_towardzero":
+++double: 2
+++float: 2
+++
+++Function: "tanh_upward":
+++double: 3
+++float: 3
+++
+++Function: "tgamma":
+++double: 9
+++float: 8
+++
+++Function: "tgamma_downward":
+++double: 9
+++float: 7
+++
+++Function: "tgamma_towardzero":
+++double: 9
+++float: 7
+++
+++Function: "tgamma_upward":
+++double: 8
+++float: 8
+++
+++Function: "y0":
+++double: 3
+++float: 8
+++
+++Function: "y0_downward":
+++double: 3
+++float: 8
+++
+++Function: "y0_towardzero":
+++double: 3
+++float: 8
+++
+++Function: "y0_upward":
+++double: 2
+++float: 8
+++
+++Function: "y1":
+++double: 3
+++float: 9
+++
+++Function: "y1_downward":
+++double: 6
+++float: 8
+++
+++Function: "y1_towardzero":
+++double: 3
+++float: 9
+++
+++Function: "y1_upward":
+++double: 6
+++float: 9
+++
+++Function: "yn":
+++double: 3
+++float: 3
+++
+++Function: "yn_downward":
+++double: 3
+++float: 4
+++
+++Function: "yn_towardzero":
+++double: 3
+++float: 3
+++
+++Function: "yn_upward":
+++double: 4
+++float: 5
+++
+++# end of automatic generation
++diff --git a/sysdeps/arc/arc64/fpu/libm-test-ulps-name b/sysdeps/arc/arc64/fpu/libm-test-ulps-name
++new file mode 100644
++index 0000000000..8c4fba4f9a
++--- /dev/null
+++++ b/sysdeps/arc/arc64/fpu/libm-test-ulps-name
++@@ -0,0 +1 @@
+++ARC
++diff --git a/sysdeps/arc/nofpu/libm-test-ulps b/sysdeps/arc/arc64/nofpu/libm-test-ulps
++similarity index 99%
++copy from sysdeps/arc/nofpu/libm-test-ulps
++copy to sysdeps/arc/arc64/nofpu/libm-test-ulps
++index 6ac2830b25..26632ff8f2 100644
++--- a/sysdeps/arc/nofpu/libm-test-ulps
+++++ b/sysdeps/arc/arc64/nofpu/libm-test-ulps
++@@ -205,6 +205,7 @@ float: 7
 + 
-+-      /* Align if necessary.  */
-+-      if ((alignment - 1) & (unsigned) argp)
-+-	argp = (char *) FFI_ALIGN (argp, alignment);
-++  ffi_call_asm ((void *) alloc_base, cb.aregs, fn, closure);
++ Function: "hypot":
++ double: 1
+++float: 1
 + 
-+-      z = (*p_argt)->size;
-+-      *p_argv = (void *) argp;
-+-      argp += z;
-++  cb.used_integer = 0;
-++  if (!return_by_ref && rvalue)
-++    {
-++	    if (IS_INT(cif->rtype->type)
-++	        && cif->rtype->size < sizeof (ffi_arg))
-++	    {
-++        /* Integer types smaller than ffi_arg need to be extended.  */
-++	    switch (cif->rtype->type) {
-++	      case FFI_TYPE_SINT8:
-++	      case FFI_TYPE_SINT16:
-++	      case FFI_TYPE_SINT32:
-++		      unmarshal_atom (&cb, (sizeof (ffi_arg) > 4
-++                          ? FFI_TYPE_SINT64 : FFI_TYPE_SINT32),
-++				                  rvalue);
-++		      break;
-++	      case FFI_TYPE_UINT8:
-++	      case FFI_TYPE_UINT16:
-++	      case FFI_TYPE_UINT32:
-++		      unmarshal_atom (&cb, (sizeof (ffi_arg) > 4
-++				                  ? FFI_TYPE_UINT64 : FFI_TYPE_UINT32),
-++				                  rvalue);
-++		      break;
-++	      }
-++	    }
-++	    else
-++	      unmarshal(&cb, cif->rtype, 0, rvalue);
-+     }
-++}
++ Function: "j0":
++ double: 2
++diff --git a/sysdeps/arc/arc64/nofpu/libm-test-ulps-name b/sysdeps/arc/arc64/nofpu/libm-test-ulps-name
++new file mode 100644
++index 0000000000..8a9879ebd6
++--- /dev/null
+++++ b/sysdeps/arc/arc64/nofpu/libm-test-ulps-name
++@@ -0,0 +1 @@
+++ARC soft-float
++diff --git a/sysdeps/arc/atomic-machine.h b/sysdeps/arc/atomic-machine.h
++index 6ac3d87dd9..f1565b317b 100644
++--- a/sysdeps/arc/atomic-machine.h
+++++ b/sysdeps/arc/atomic-machine.h
++@@ -19,7 +19,23 @@
++ #ifndef _ARC_BITS_ATOMIC_H
++ #define _ARC_BITS_ATOMIC_H 1
 + 
-+-  (closure->fun) (cif, rvalue, arg_area, closure->user_data);
-++void
-++ffi_call (ffi_cif *cif, void (*fn) (void), void *rvalue, void **avalue)
-++{
-++  ffi_call_int(cif, fn, rvalue, avalue, NULL);
-++}
++-#define __HAVE_64B_ATOMICS 0
+++#include <stdint.h>
+++
+++typedef int32_t atomic32_t;
+++typedef uint32_t uatomic32_t;
+++typedef int64_t atomic64_t;
+++typedef uint64_t uatomic64_t;
+++
+++typedef intptr_t atomicptr_t;
+++typedef uintptr_t uatomicptr_t;
+++typedef intmax_t atomic_max_t;
+++typedef uintmax_t uatomic_max_t;
+++
+++# if defined(__ARC64_ARCH64__)
+++#  define __HAVE_64B_ATOMICS 1
+++# else
+++#  define __HAVE_64B_ATOMICS 0
+++# endif
++ #define USE_ATOMIC_COMPILER_BUILTINS 1
 + 
-+-  return cif->flags;
-++void
-++ffi_call_go (ffi_cif *cif, void (*fn) (void), void *rvalue,
-++	     void **avalue, void *closure)
-++{
-++  ffi_call_int(cif, fn, rvalue, avalue, closure);
++ /* ARC does have legacy atomic EX reg, [mem] instruction but the micro-arch
++@@ -30,15 +46,16 @@
++   (abort (), 0)
++ #define __arch_compare_and_exchange_bool_16_acq(mem, newval, oldval)	\
++   (abort (), 0)
++-#define __arch_compare_and_exchange_bool_64_acq(mem, newval, oldval)	\
++-  (abort (), 0)
+++
+++# if !defined(__ARC64__)
+++#  define __arch_compare_and_exchange_bool_64_acq(mem, newval, oldval)	\
+++    (abort (), 0)
+++#endif
++ 
++ #define __arch_compare_and_exchange_val_8_int(mem, newval, oldval, model)	\
++   (abort (), (__typeof (*mem)) 0)
++ #define __arch_compare_and_exchange_val_16_int(mem, newval, oldval, model)	\
++   (abort (), (__typeof (*mem)) 0)
++-#define __arch_compare_and_exchange_val_64_int(mem, newval, oldval, model)	\
++-  (abort (), (__typeof (*mem)) 0)
++ 
++ #define __arch_compare_and_exchange_val_32_int(mem, newval, oldval, model)	\
++   ({										\
++@@ -48,6 +65,20 @@
++     __oldval;                                                           	\
++   })
++ 
+++# if defined(__ARC64__)
+++# define __arch_compare_and_exchange_val_64_int(mem, newval, oldval, model)	\
+++  ({										\
+++    typeof (*mem) __oldval = (oldval);                                  	\
+++    __atomic_compare_exchange_n (mem, (void *) &__oldval, newval, 0,    	\
+++                                 model, __ATOMIC_RELAXED);              	\
+++    __oldval;                                                           	\
+++  })
+++# else
+++/* ARCv2 has LOCKD/SCOND but not sure if gcc atomic builtins exist.  */
+++#  define __arch_compare_and_exchange_val_64_int(mem, newval, oldval, model)	\
+++    (abort (), (__typeof (*mem)) 0)
+++#endif
+++
++ #define atomic_compare_and_exchange_val_acq(mem, new, old)		\
++   __atomic_val_bysize (__arch_compare_and_exchange_val, int,		\
++ 		       mem, new, old, __ATOMIC_ACQUIRE)
++diff --git a/sysdeps/arc/bits/setjmp.h b/sysdeps/arc/bits/setjmp.h
++index d1604cde1f..2ca85a679d 100644
++--- a/sysdeps/arc/bits/setjmp.h
+++++ b/sysdeps/arc/bits/setjmp.h
++@@ -20,7 +20,11 @@
++ #define _ARC_BITS_SETJMP_H 1
++ 
++ /* Saves r13-r25 (callee-saved), fp (frame pointer), sp (stack pointer),
++-   blink (branch-n-link).  */
+++   blink (branch-n-link), FP regs.  */
+++#if defined (__ARC_FLOAT_ABI_HARD__)
+++typedef long int __jmp_buf[64];
+++#else
++ typedef long int __jmp_buf[32];
+++#endif
++ 
++ #endif
++diff --git a/sysdeps/arc/configure b/sysdeps/arc/configure
++index 7b27e26490..d7b19db793 100644
++--- a/sysdeps/arc/configure
+++++ b/sysdeps/arc/configure
++@@ -10,7 +10,7 @@ libc_cv_asm_line_sep='`'
++ printf "%s\n" "#define ASM_LINE_SEP $libc_cv_asm_line_sep" >>confdefs.h
++ 
++ 
++-# For big endian ABI, generate a symbol for selecting right dynamic linker
+++# For arc64:64 generate a symbol for selecting right dynamic linker
++ 
++ 
++ { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for grep that handles long lines and -e" >&5
++@@ -155,6 +155,77 @@ printf "%s\n" "$ac_cv_path_EGREP" >&6; }
++  EGREP="$ac_cv_path_EGREP"
++ 
++ 
+++{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for arc64" >&5
+++printf %s "checking for arc64... " >&6; }
+++if test ${libc_cv_arc64+y}
+++then :
+++  printf %s "(cached) " >&6
+++else $as_nop
+++  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+++/* end confdefs.h.  */
+++#ifdef __ARC64_ARCH64__
+++                      yes
+++                     #endif
+++
+++_ACEOF
+++if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
+++  $EGREP "yes" >/dev/null 2>&1
+++then :
+++  libc_cv_arc64=yes
+++else $as_nop
+++  libc_cv_arc64=no
+++fi
+++rm -rf conftest*
+++
+++fi
+++{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $libc_cv_arc64" >&5
+++printf "%s\n" "$libc_cv_arc64" >&6; }
+++if test $libc_cv_arc64 = yes; then
+++  # For shlib-versions.
+++  printf "%s\n" "#define HAVE_ARC64 1" >>confdefs.h
+++
+++  config_vars="$config_vars
+++default-abi = arc64le"
+++
+++else
+++
+++# For arc64:32 generate a symbol for selecting right dynamic linker
+++{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for arc32" >&5
+++printf %s "checking for arc32... " >&6; }
+++if test ${libc_cv_arc32+y}
+++then :
+++  printf %s "(cached) " >&6
+++else $as_nop
+++  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+++/* end confdefs.h.  */
+++#ifdef __ARC64_ARCH32__
+++                      yes
+++                     #endif
+++
+++_ACEOF
+++if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
+++  $EGREP "yes" >/dev/null 2>&1
+++then :
+++  libc_cv_arc32=yes
+++else $as_nop
+++  libc_cv_arc32=no
+++fi
+++rm -rf conftest*
+++
+++fi
+++{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $libc_cv_arc32" >&5
+++printf "%s\n" "$libc_cv_arc32" >&6; }
+++
+++if test $libc_cv_arc32 = yes; then
+++  # For shlib-versions.
+++  printf "%s\n" "#define HAVE_ARC32 1" >>confdefs.h
+++
+++  config_vars="$config_vars
+++default-abi = arc32le"
+++
+++else
+++
+++# For big endian ABI, generate a symbol for selecting right dynamic linker
++ { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for big endian" >&5
++ printf %s "checking for big endian... " >&6; }
++ if test ${libc_cv_arc_be+y}
++@@ -189,5 +260,12 @@ default-abi = arcbe"
++ else
++   config_vars="$config_vars
++ default-abi = arcle"
+++# big endian
+++fi
+++
+++# arc64:32
+++fi
+++
+++# arc64:64
++ fi
++ 
++diff --git a/sysdeps/arc/configure.ac b/sysdeps/arc/configure.ac
++index 619da4e088..4e84f17105 100644
++--- a/sysdeps/arc/configure.ac
+++++ b/sysdeps/arc/configure.ac
++@@ -9,6 +9,35 @@ libc_cv_have_sdata_section=no
++ libc_cv_asm_line_sep='`'
++ AC_DEFINE_UNQUOTED(ASM_LINE_SEP, $libc_cv_asm_line_sep)
++ 
+++# For arc64:64 generate a symbol for selecting right dynamic linker
+++AC_CACHE_CHECK([for arc64],
+++  [libc_cv_arc64],
+++  [AC_EGREP_CPP(yes,[#ifdef __ARC64_ARCH64__
+++                      yes
+++                     #endif
+++  ], libc_cv_arc64=yes, libc_cv_arc64=no)])
+++if test $libc_cv_arc64 = yes; then
+++  # For shlib-versions.
+++  AC_DEFINE(HAVE_ARC64)
+++  LIBC_CONFIG_VAR([default-abi], [arc64le])
+++
+++else
+++
+++# For arc64:32 generate a symbol for selecting right dynamic linker
+++AC_CACHE_CHECK([for arc32],
+++  [libc_cv_arc32],
+++  [AC_EGREP_CPP(yes,[#ifdef __ARC64_ARCH32__
+++                      yes
+++                     #endif
+++  ], libc_cv_arc32=yes, libc_cv_arc32=no)])
+++
+++if test $libc_cv_arc32 = yes; then
+++  # For shlib-versions.
+++  AC_DEFINE(HAVE_ARC32)
+++  LIBC_CONFIG_VAR([default-abi], [arc32le])
+++
+++else
+++
++ # For big endian ABI, generate a symbol for selecting right dynamic linker
++ AC_CACHE_CHECK([for big endian],
++   [libc_cv_arc_be],
++@@ -22,4 +51,11 @@ if test $libc_cv_arc_be = yes; then
++   LIBC_CONFIG_VAR([default-abi], [arcbe])
++ else
++   LIBC_CONFIG_VAR([default-abi], [arcle])
+++# big endian
+++fi
+++
+++# arc64:32
+++fi
+++
+++# arc64:64
++ fi
++diff --git a/sysdeps/arc/dl-machine.h b/sysdeps/arc/dl-machine.h
++index 4dc652a449..dbb7394c27 100644
++--- a/sysdeps/arc/dl-machine.h
+++++ b/sysdeps/arc/dl-machine.h
++@@ -32,18 +32,19 @@
++ #include <dl-tls.h>
++ #include <dl-static-tls.h>
++ #include <dl-machine-rel.h>
+++#include <sysdep.h>
++ 
++ /* Dynamic Linking ABI for ARCv2 ISA.
++ 
++-                        PLT
+++                        .plt
++           --------------------------------	<---- DT_PLTGOT
++           |  ld r11, [pcl, off-to-GOT[1] |  0
++           |                              |  4
++-   plt0   |  ld r10, [pcl, off-to-GOT[2] |  8
+++   PLT0   |  ld r10, [pcl, off-to-GOT[2] |  8
++           |                              | 12
++           |  j [r10]                     | 16
++           --------------------------------
++-          |    Base address of GOT       | 20
+++          |   Base address of .got.plt   | 20
++           --------------------------------
++           |  ld r12, [pcl, off-to-GOT[3] | 24
++    plt1   |                              |
++@@ -69,11 +70,11 @@
++           --------------
++           |    [1]     |  Module info - setup by ld.so
++           --------------
++-          |    [2]     |  resolver entry point
+++          |    [2]     |  resolver entry point: _dl_runtime_resolve
++           --------------
++           |    [3]     |
++           |    ...     |  Runtime address for function symbols
++-          |    [f]     |
+++          |    [f]     |  Initially point to PLT0
++           --------------
++ 
++    For ARCompact, the PLT is 12 bytes due to short instructions
++@@ -91,6 +92,8 @@ static inline int
++ elf_machine_matches_host (const ElfW(Ehdr) *ehdr)
++ {
++   return (ehdr->e_machine == EM_ARCV2		 /* ARC HS.  */
+++	  || ehdr->e_machine == EM_ARCV3         /* ARCv3: ARC64.  */
+++	  || ehdr->e_machine == EM_ARCV3_32      /* ARCv3: ARC32.  */
++ 	  || ehdr->e_machine == EM_ARC_COMPACT); /* ARC 700.  */
 + }
 + 
-+-extern void ffi_closure_ARCompact (void);
-++extern void ffi_closure_asm(void) FFI_HIDDEN;
++@@ -114,7 +117,7 @@ elf_machine_load_address (void)
++   /* For build address, below generates
++      ld  r0, [pcl, _GLOBAL_OFFSET_TABLE_@pcl].  */
++   build_addr = elf_machine_dynamic ();
++-  __asm__ ("add %0, pcl, _DYNAMIC@pcl	\n" : "=r" (run_addr));
+++  __asm__ ("ADDR %0, pcl, _DYNAMIC@pcl	\n" : "=r" (run_addr));
 + 
-+ ffi_status
-+ ffi_prep_closure_loc (ffi_closure * closure, ffi_cif * cif,
-+@@ -243,15 +348,28 @@ ffi_prep_closure_loc (ffi_closure * closure, ffi_cif * cif,
-+ 		      void *user_data, void *codeloc)
-+ {
-+   uint32_t *tramp = (uint32_t *) & (closure->tramp[0]);
-++  size_t address_ffi_closure = (size_t) ffi_closure_asm;
++   return run_addr - build_addr;
++ }
++@@ -131,10 +134,13 @@ elf_machine_runtime_setup (struct link_map *l, struct r_scope_elem *scope[],
 + 
-+   switch (cif->abi)
++   if (l->l_info[DT_JMPREL] && lazy)
 +     {
-++#if defined(__ARC64_ARCH64__)
-++    case FFI_ARC64:
-++      FFI_ASSERT (tramp == codeloc);
-++      tramp[0] = CODE_ENDIAN (0x580a1fc0);	/* movl r8, pcl  */
-++      tramp[1] = CODE_ENDIAN (0x5c0b1f80);	/* movhl r12, limm */
-++      tramp[2] = CODE_ENDIAN ((uint32_t)(address_ffi_closure >> 32));
-++      tramp[3] = CODE_ENDIAN (0x5c051f8c);	/* orl r12, r12, limm */
-++      tramp[4] = CODE_ENDIAN ((uint32_t)(address_ffi_closure & 0xffffffff));
-++      tramp[5] = CODE_ENDIAN (0x20200300);	/* j [r12] */
-++      break;
-++#else
-+     case FFI_ARCOMPACT:
-+       FFI_ASSERT (tramp == codeloc);
-+       tramp[0] = CODE_ENDIAN (0x200a1fc0);	/* mov r8, pcl  */
-+       tramp[1] = CODE_ENDIAN (0x20200f80);	/* j [long imm] */
-+-      tramp[2] = CODE_ENDIAN (ffi_closure_ARCompact);
-++      tramp[2] = CODE_ENDIAN (ffi_closure_asm);
-+       break;
-++#endif
++-      /* On ARC DT_PLTGOT point to .plt whose 5th word (after the PLT header)
++-         contains the address of .got.  */
+++      /* update .got.plt[1] and .got.plt[2].
+++         DT_PLTGOT point to base of .plt and PLT0 is 3 instructions
+++         for total of 20 bytes, see illustration at top.
+++         The word right after contains base address of .got.plt.  */
++       ElfW(Addr) *plt_base = (ElfW(Addr) *) D_PTR (l, l_info[DT_PLTGOT]);
++-      ElfW(Addr) *got = (ElfW(Addr) *) (plt_base[5] + l->l_addr);
+++      ElfW(Addr) *got_build = (ElfW(Addr) *) ((uintptr_t)plt_base + 20);
+++      ElfW(Addr) *got = (ElfW(Addr) *) (*got_build + l->l_addr);
 + 
-+     default:
-+       return FFI_BAD_ABI;
-+@@ -264,3 +382,62 @@ ffi_prep_closure_loc (ffi_closure * closure, ffi_cif * cif,
++       got[1] = (ElfW(Addr)) l;	/* Identify this shared object.  */
 + 
-+   return FFI_OK;
-+ }
++@@ -152,6 +158,8 @@ elf_machine_runtime_setup (struct link_map *l, struct r_scope_elem *scope[],
++     -optionally adjusts argc for executable if exec passed as cmd
++     -calls into app main with address of finaliser.  */
++ 
+++#ifdef __ARC64_ARCH64__
 ++
-++extern void ffi_go_closure_asm (void) FFI_HIDDEN;
-++
-++ffi_status
-++ffi_prep_go_closure (ffi_go_closure *closure, ffi_cif *cif,
-++		     void (*fun) (ffi_cif *, void *, void **, void *))
-++{
-++  if (cif->abi <= FFI_FIRST_ABI || cif->abi >= FFI_LAST_ABI)
-++    return FFI_BAD_ABI;
-++
-++  closure->tramp = (void *) ffi_go_closure_asm;
-++  closure->cif = cif;
-++  closure->fun = fun;
-++
-++  return FFI_OK;
-++}
-++
-++/* Called by the assembly code with aregs pointing to saved argument registers
-++   and stack pointing to the stacked arguments.  Return values passed in
-++   registers will be reloaded from aregs. */
-++void FFI_HIDDEN
-++ffi_closure_inner (ffi_cif *cif,
-++		   void (*fun) (ffi_cif *, void *, void **, void *),
-++		   void *user_data,
-++		   size_t *stack, call_context *aregs)
-++{
-++    void **avalue = alloca(cif->nargs * sizeof(void*));
-++    /* storage for arguments which will be copied by unmarshal().  We could
-++       theoretically avoid the copies in many cases and use at most 128 bytes
-++       of memory, but allocating disjoint storage for each argument is
-++       simpler. */
-++    char *astorage = alloca(cif->bytes);
-++    char *ptr = astorage;
-++    void *rvalue;
-++    call_builder cb;
-++    int i;
-++
-++    cb.aregs = aregs;
-++    cb.used_integer = 0;
-++    cb.used_stack = stack;
-++    
-++    /* handle hidden argument */
-++    if (cif->flags == FFI_TYPE_STRUCT)
-++      unmarshal(&cb, &ffi_type_pointer, 0, &rvalue);
-++    else
-++      rvalue = alloca(cif->rtype->size);
-++
-++    for (i = 0; i < cif->nargs; i++) {
-++      avalue[i] = unmarshal(&cb, cif->arg_types[i], 1, ptr);
-++      ptr += cif->arg_types[i]->size;
-++    }
-++
-++    fun (cif, rvalue, avalue, user_data);
-++
-++    if (cif->rtype->type != FFI_TYPE_VOID) {
-++        cb.used_integer = 0;
-++        marshal(&cb, cif->rtype, 1, rvalue);
-++    }
-++}
-+diff --git a/src/arc/ffitarget.h b/src/arc/ffitarget.h
-+index bf8311b..5b36902 100644
-+--- a/src/arc/ffitarget.h
-++++ b/src/arc/ffitarget.h
-+@@ -40,14 +40,28 @@ typedef signed long ffi_sarg;
-+ typedef enum ffi_abi
-+ {
-+   FFI_FIRST_ABI = 0,
-++#if __SIZEOF_POINTER__ == 8
-++  FFI_ARC64,
++ #define RTLD_START asm ("\
++ .text									\n\
++ .globl __start								\n\
++@@ -159,25 +167,55 @@ elf_machine_runtime_setup (struct link_map *l, struct r_scope_elem *scope[],
++ __start:								\n\
++ 	/* (1). bootstrap ld.so.  */					\n\
++ 	bl.d    _dl_start                                       	\n\
++-	mov_s   r0, sp  /* pass ptr to aux vector tbl.    */    	\n\
++-	mov r13, r0	/* safekeep app elf entry point.  */		\n\
++-	ld_s    r1, [sp]       /* orig argc.  */			\n\
+++	MOVR    r0, sp  /* pass ptr to aux vector tbl.    */    	\n\
+++	MOVR    r14, r0	/* safekeep app elf entry point.  */		\n\
+++	LDR     r1,  sp       	/* orig argc.  */			\n\
++ 									\n\
++ 	/* (2). call preinit stuff.  */					\n\
++-	ld	r0, [pcl, _rtld_local@pcl]				\n\
++-	add	r2, sp, 4	; argv					\n\
++-	add2	r3, r2, r1						\n\
++-	add	r3, r3, 4	; env					\n\
+++	LDR	r0, pcl, _rtld_local@pcl				\n\
+++	ADDR	r2, sp, 8	; argv					\n\
+++	ADD3R	r3, r2, r1						\n\
+++	ADDR	r3, r3, 8	; env					\n\
++ 	bl	_dl_init@plt						\n\
++ 									\n\
++ 	/* (3) call app elf entry point.  */				\n\
++-	add     r0, pcl, _dl_fini@pcl					\n\
++-	j	[r13]							\n\
+++	ADDR    r0, pcl, _dl_fini@pcl					\n\
+++	j	[r14]							\n\
++ 									\n\
++ 	.size  __start,.-__start                               		\n\
++ 	.previous                                               	\n\
++ ");
++ 
 ++#else
-+   FFI_ARCOMPACT,
+++
+++#define RTLD_START asm ("\
+++.text									\n\
+++.globl __start								\n\
+++.type __start, @function						\n\
+++__start:								\n\
+++	/* (1). bootstrap ld.so.  */					\n\
+++	bl.d    _dl_start                                       	\n\
+++	MOVR    r0, sp  /* pass ptr to aux vector tbl.    */    	\n\
+++	MOVR    r14, r0	/* safekeep app elf entry point.  */		\n\
+++	LDR     r1,  sp       	/* orig argc.  */			\n\
+++									\n\
+++	/* (2). call preinit stuff.  */					\n\
+++	LDR	r0, pcl, _rtld_local@pcl				\n\
+++	ADDR	r2, sp, 4	; argv					\n\
+++	ADD2R	r3, r2, r1						\n\
+++	ADDR	r3, r3, 4	; env					\n\
+++	bl	_dl_init@plt						\n\
+++									\n\
+++	/* (3) call app elf entry point.  */				\n\
+++	ADDR    r0, pcl, _dl_fini@pcl					\n\
+++	j	[r14]							\n\
+++									\n\
+++	.size  __start,.-__start                               		\n\
+++	.previous                                               	\n\
+++");
+++
 ++#endif
-+   FFI_LAST_ABI,
-++#if __SIZEOF_POINTER__ == 8
-++  FFI_DEFAULT_ABI = FFI_ARC64
+++
++ /* ELF_RTYPE_CLASS_PLT iff TYPE describes relocation of a PLT entry, so
++    PLT entries should not be allowed to define the value.
++    ELF_RTYPE_CLASS_NOCOPY iff TYPE should not be allowed to resolve to one
++@@ -289,6 +327,7 @@ elf_machine_rela (struct link_map *map, struct r_scope_elem *scope[],
++           break;
++ 
++         case R_ARC_32:
+++        case R_ARC_64:
++           *reloc_addr += value + reloc->r_addend;
++           break;
++ 
++diff --git a/sysdeps/arc/dl-trampoline.S b/sysdeps/arc/dl-trampoline.S
++index 1b307a616f..386009d41e 100644
++--- a/sysdeps/arc/dl-trampoline.S
+++++ b/sysdeps/arc/dl-trampoline.S
++@@ -31,42 +31,71 @@
++ ENTRY (_dl_runtime_resolve)
++ 
++ 	/* save args to func being resolved before entering resolver.  */
++-	push_s	r0
++-	push_s	r1
++-	push_s	r2
++-	push_s	r3
++-	st.a	r4, [sp, -4]
++-	st.a	r5, [sp, -4]
++-	st.a	r6, [sp, -4]
++-	st.a	r7, [sp, -4]
++-	st.a	r8, [sp, -4]
++-	st.a	r9, [sp, -4]
++-	cfi_adjust_cfa_offset (40)
++-	push_s	blink
++-	cfi_adjust_cfa_offset (4)
+++	PUSHR	r0
+++	PUSHR	r1
+++	PUSHR	r2
+++	PUSHR	r3
+++	PUSHR	r4
+++	PUSHR	r5
+++	PUSHR	r6
+++	PUSHR	r7
+++	PUSHR	r8
+++	PUSHR	r9
+++
+++#if defined (__ARC_FLOAT_ABI_HARD__)
+++	FPUSHR	f0
+++	FPUSHR	f1
+++	FPUSHR	f2
+++	FPUSHR	f3
+++	FPUSHR	f4
+++	FPUSHR	f5
+++	FPUSHR	f6
+++	FPUSHR	f7
+++	cfi_adjust_cfa_offset (18*REGSZ)
 ++#else
-+   FFI_DEFAULT_ABI = FFI_ARCOMPACT
+++	cfi_adjust_cfa_offset (10*REGSZ)
 ++#endif
-+ } ffi_abi;
+++
+++	PUSHR	blink
+++	cfi_adjust_cfa_offset (REGSZ)
++ 	cfi_rel_offset (blink, 0)
++ 
++-	mov_s 	r1, r12
+++	MOVR 	r1, r12
++ 	bl.d  	_dl_fixup
++-	mov   	r0, r11
+++	MOVR   	r0, r11
++ 
++ 	/* restore regs back.  */
++-	ld.ab	blink,[sp, 4]
++-	cfi_adjust_cfa_offset (-4)
+++	POPR	blink
+++	cfi_adjust_cfa_offset (-REGSZ)
++ 	cfi_restore (blink)
++-	ld.ab	r9, [sp, 4]
++-	ld.ab	r8, [sp, 4]
++-	ld.ab	r7, [sp, 4]
++-	ld.ab	r6, [sp, 4]
++-	ld.ab	r5, [sp, 4]
++-	ld.ab	r4, [sp, 4]
++-	pop_s   r3
++-	pop_s   r2
++-	pop_s   r1
++-	cfi_adjust_cfa_offset (-36)
++ 
++-	j_s.d   [r0]    /* r0 has resolved function addr.  */
++-	pop_s   r0      /* restore first arg to resolved call.  */
++-	cfi_adjust_cfa_offset (-4)
+++#if defined (__ARC_FLOAT_ABI_HARD__)
+++	FPOPR	f7
+++	FPOPR	f6
+++	FPOPR	f5
+++	FPOPR	f4
+++	FPOPR	f3
+++	FPOPR	f2
+++	FPOPR	f1
+++	FPOPR	f0
+++#endif
+++	POPR    r9
+++	POPR    r8
+++	POPR    r7
+++	POPR    r6
+++	POPR    r5
+++	POPR    r4
+++	POPR    r3
+++	POPR    r2
+++	POPR    r1
+++#if defined (__ARC_FLOAT_ABI_HARD__)
+++	cfi_adjust_cfa_offset (-17*REGSZ)
+++#else
+++	cfi_adjust_cfa_offset (-9*REGSZ)
+++#endif
+++
+++	j.d   [r0]    /* r0 has resolved function addr.  */
+++	POPR    r0      /* restore first arg to resolved call.  */
+++	cfi_adjust_cfa_offset (-REGSZ)
++ 	cfi_restore (r0)
++ END (_dl_runtime_resolve)
++diff --git a/sysdeps/arc/fpu/math-use-builtins-fma.h b/sysdeps/arc/fpu/math-use-builtins-fma.h
++index 2acd8113ce..59c7ed0343 100644
++--- a/sysdeps/arc/fpu/math-use-builtins-fma.h
+++++ b/sysdeps/arc/fpu/math-use-builtins-fma.h
++@@ -1,13 +1,17 @@
++-#if defined __ARC_FPU_DP_FMA__
+++#if defined __ARCV3__
++ # define USE_FMA_BUILTIN 1
++-#else
++-# define USE_FMA_BUILTIN 0
++-#endif
++-
++-#if defined __ARC_FPU_SP_FMA__
++ # define USE_FMAF_BUILTIN 1
++ #else
++-# define USE_FMAF_BUILTIN 0
+++# if defined __ARC_FPU_DP_FMA__
+++#  define USE_FMA_BUILTIN 1
+++# else
+++#  define USE_FMA_BUILTIN 0
+++# endif
+++# if defined __ARC_FPU_SP_FMA__
+++#  define USE_FMAF_BUILTIN 1
+++# else
+++#  define USE_FMAF_BUILTIN 0
+++# endif
 + #endif
 + 
-+ #define FFI_CLOSURES 		1
-++#define FFI_GO_CLOSURES 1
-++#if __SIZEOF_POINTER__ == 8
-++#define FFI_TRAMPOLINE_SIZE	24
++ #define USE_FMAL_BUILTIN 0
++diff --git a/sysdeps/arc/fpu/math-use-builtins-sqrt.h b/sysdeps/arc/fpu/math-use-builtins-sqrt.h
++index a449bc6092..40a07730ea 100644
++--- a/sysdeps/arc/fpu/math-use-builtins-sqrt.h
+++++ b/sysdeps/arc/fpu/math-use-builtins-sqrt.h
++@@ -1,13 +1,17 @@
++-#if defined __ARC_FPU_DP_DIV__
+++#if defined __ARCV3__
++ # define USE_SQRT_BUILTIN 1
++-#else
++-# define USE_SQRT_BUILTIN 0
++-#endif
++-
++-#if defined __ARC_FPU_SP_DIV__
++ # define USE_SQRTF_BUILTIN 1
++ #else
++-# define USE_SQRTF_BUILTIN 0
+++# if defined __ARC_FPU_DP_DIV__
+++#  define USE_SQRT_BUILTIN 1
+++# else
+++#  define USE_SQRT_BUILTIN 0
+++# endif
+++# if defined __ARC_FPU_SP_DIV__
+++#  define USE_SQRTF_BUILTIN 1
+++# else
+++#  define USE_SQRTF_BUILTIN 0
+++# endif
++ #endif
++ 
++ #define USE_SQRTL_BUILTIN 0
++diff --git a/sysdeps/arc/isa-asm-macro-32.h b/sysdeps/arc/isa-asm-macro-32.h
++new file mode 100644
++index 0000000000..98cd249059
++--- /dev/null
+++++ b/sysdeps/arc/isa-asm-macro-32.h
++@@ -0,0 +1,61 @@
+++#  define REGSZ 4
+++
+++.irp    aa,,.as
+++.macro LDR\aa d, s, off=0
+++	ld\aa  \d, [\s, \off]
+++.endm
+++.endr
+++
+++.irp    aa,,.as
+++.macro STR\aa d, s, off=0
+++	st\aa \d, [\s, \off]
+++.endm
+++.endr
+++
+++.macro PUSHR r
+++	push \r
+++.endm
+++
+++.macro POPR r
+++	pop \r
+++.endm
+++
+++.irp    cc,,.f
+++.macro MOVR\cc d, s
+++        mov\cc \d, \s
+++.endm
+++.endr
+++
+++.irp    cc,,.nz
+++.macro ADDR\cc d, s, v
+++	add\cc \d, \s, \v
+++.endm
+++.endr
+++
+++.macro ADD2R d, s, v
+++	add2   \d, \s, \v
+++.endm
+++
+++.macro ADD3R d, s, v
+++	add3   \d, \s, \v
+++.endm
+++
+++.macro SUBR d, s, v
+++	sub    \d, \s, \v
+++.endm
+++
+++.macro ANDR d, s, v
+++	and    \d, \s, \v
+++.endm
+++
+++.irp    cc,,eq,hi
+++.macro BRR\cc d, s, v
+++	br\cc  \d, \s, \v
+++.endm
+++.endr
+++
+++.irp    cc,,.ne
+++.macro CMPR\cc d, s
+++	cmp\cc \d, \s
+++.endm
+++.endr
++diff --git a/sysdeps/arc/isa-asm-macro-64.h b/sysdeps/arc/isa-asm-macro-64.h
++new file mode 100644
++index 0000000000..02b1dc2c37
++--- /dev/null
+++++ b/sysdeps/arc/isa-asm-macro-64.h
++@@ -0,0 +1,86 @@
+++#  define REGSZ 8
+++
+++.irp    aa,,.as
+++.macro LDR\aa d, s, off=0
+++	ldl\aa \d, [\s, \off]
+++.endm
+++.endr
+++
+++.irp    aa,,.as
+++.macro STR\aa d, s, off=0
+++	stl\aa \d, [\s, \off]
+++.endm
+++.endr
+++
+++.macro PUSHR r
+++	pushl \r
+++.endm
+++
+++.macro POPR r
+++	popl \r
+++.endm
+++
+++.irp    cc,,.f
+++.macro MOVR\cc d, s
+++        movl\cc \d, \s
+++.endm
+++.endr
+++
+++.irp    cc,,.nz
+++.macro ADDR\cc d, s, v
+++	addl\cc \d, \s, \v
+++.endm
+++.endr
+++
+++.macro ADD2R d, s, v
+++	add2l   \d, \s, \v
+++.endm
+++
+++.macro ADD3R d, s, v
+++	add3l   \d, \s, \v
+++.endm
+++
+++.macro SUBR d, s, v
+++	subl    \d, \s, \v
+++.endm
+++
+++.macro ANDR d, s, v
+++	andl    \d, \s, \v
+++.endm
+++
+++.irp    cc,eq,hi
+++.macro BRR\cc d, s, v
+++; arc64 gas doesn't support BRHIL pseudo-instruction
+++.ifeqs "\cc","hi"
+++	brlo\()l  \s, \d, \v
+++.else
+++	br\cc\()l \d, \s, \v
+++.endif
+++.endm
+++.endr
+++
+++.irp    cc,,.ne
+++.macro CMPR\cc d, s
+++	cmpl\cc \d, \s
+++.endm
+++.endr
+++
+++.irp    aa,,.as,.aw,.ab
+++.macro FLDR\aa d, s, off=0
+++	fld64\aa \d, [\s, \off]
+++.endm
+++.endr
+++
+++.irp    aa,,.as,.aw,.ab
+++.macro FSTR\aa d, s, off=0
+++	fst64\aa \d, [\s, \off]
+++.endm
+++.endr
+++
+++.macro FPUSHR r
+++	FSTR.aw  \r, sp, -REGSZ
+++.endm
+++
+++.macro FPOPR r
+++	FLDR.ab  \r, sp, REGSZ
+++.endm
++diff --git a/sysdeps/arc/isa-asm-macros.h b/sysdeps/arc/isa-asm-macros.h
++new file mode 100644
++index 0000000000..f9f5e4f630
++--- /dev/null
+++++ b/sysdeps/arc/isa-asm-macros.h
++@@ -0,0 +1,35 @@
+++/* ISA Specific Assembler macros for ARC.
+++   Copyright (C) 2020 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public License as
+++   published by the Free Software Foundation; either version 2.1 of the
+++   License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, see
+++   <https://www.gnu.org/licenses/>.  */
+++
+++#ifdef	__ASSEMBLER__
+++
+++# ifdef __ARC64_ARCH64__
+++# include <sysdeps/arc/isa-asm-macro-64.h>
+++# else
+++# include <sysdeps/arc/isa-asm-macro-32.h>
+++# endif
+++
 ++#else
-+ #define FFI_TRAMPOLINE_SIZE	12
+++
+++# ifdef __ARC64_ARCH64__
+++asm(".include \"sysdeps/arc/isa-asm-macro-64.h\"\n");
+++# else
+++asm(".include \"sysdeps/arc/isa-asm-macro-32.h\"\n");
+++# endif
+++
+++#endif
++diff --git a/sysdeps/arc/nofpu/libm-test-ulps b/sysdeps/arc/nofpu/libm-test-ulps
++index 6ac2830b25..26632ff8f2 100644
++--- a/sysdeps/arc/nofpu/libm-test-ulps
+++++ b/sysdeps/arc/nofpu/libm-test-ulps
++@@ -205,6 +205,7 @@ float: 7
++ 
++ Function: "hypot":
++ double: 1
+++float: 1
++ 
++ Function: "j0":
++ double: 2
++diff --git a/sysdeps/arc/nptl/pthreaddef.h b/sysdeps/arc/nptl/pthreaddef.h
++index 336eded15c..3b51e59a35 100644
++--- a/sysdeps/arc/nptl/pthreaddef.h
+++++ b/sysdeps/arc/nptl/pthreaddef.h
++@@ -23,7 +23,7 @@
++ #define ARCH_MIN_GUARD_SIZE 0
++ 
++ /* Required stack pointer alignment at beginning.  */
++-#define STACK_ALIGN		4
+++#define STACK_ALIGN		8
++ 
++ /* Minimal stack size after allocating thread descriptor and guard size.  */
++ #define MINIMAL_REST_STACK	2048
++diff --git a/sysdeps/arc/preconfigure b/sysdeps/arc/preconfigure
++index a79db0239a..eab4af0eab 100644
++--- a/sysdeps/arc/preconfigure
+++++ b/sysdeps/arc/preconfigure
++@@ -1,14 +1,22 @@
++ case "$machine" in
++ arc*)
++-  base_machine=arc
++-  machine=arc
+++  with_fp_cond=0
+++  isarc64=`$CC $CFLAGS $CPPFLAGS -E -dM -xc /dev/null | grep __LP64__| wc -l`
+++
+++  case "$isarc64" in
+++  0)
+++    base_machine=arc
+++    machine=arc/arc32
+++    ;;
+++  1)
+++    base_machine=arc
+++    machine=arc/arc64
+++    ;;
+++  esac
++ 
++   gccfloat=`$CC $CFLAGS $CPPFLAGS -E -dM -xc /dev/null | grep __ARC_FPU_| wc -l`
++   if test "$gccfloat" != "0"; then
++     with_fp_cond=1
++-  else
++-    with_fp_cond=0
++   fi
++   ;;
++-
++ esac
++diff --git a/sysdeps/arc/setjmp.S b/sysdeps/arc/setjmp.S
++index 9ecdb9daae..e39b526837 100644
++--- a/sysdeps/arc/setjmp.S
+++++ b/sysdeps/arc/setjmp.S
++@@ -41,24 +41,47 @@ ENTRY (__sigsetjmp)
++ 	   that will be right next to this setjmp call-site in BLINK
++ 	   since "C" caller of this routine will do a branch-n-link.  */
++ 
++-	STR (blink, r0,  0)
++-	STR (sp,    r0,  1)
++-	STR (fp,    r0,  2)
++-	STR (gp,    r0,  3)
+++	STR.as blink, r0,  0
+++	STR.as sp,    r0,  1
+++	STR.as fp,    r0,  2
+++	STR.as gp,    r0,  3
++ 
++-	STR (r13,   r0,  4)
++-	STR (r14,   r0,  5)
++-	STR (r15,   r0,  6)
++-	STR (r16,   r0,  7)
++-	STR (r17,   r0,  8)
++-	STR (r18,   r0,  9)
++-	STR (r19,   r0, 10)
++-	STR (r20,   r0, 11)
++-	STR (r21,   r0, 12)
++-	STR (r22,   r0, 13)
++-	STR (r23,   r0, 14)
++-	STR (r24,   r0, 15)
+++	STR.as r13,   r0,  4
+++	STR.as r14,   r0,  5
+++	STR.as r15,   r0,  6
+++	STR.as r16,   r0,  7
+++	STR.as r17,   r0,  8
+++	STR.as r18,   r0,  9
+++	STR.as r19,   r0, 10
+++	STR.as r20,   r0, 11
+++	STR.as r21,   r0, 12
+++	STR.as r22,   r0, 13
+++	STR.as r23,   r0, 14
+++	STR.as r24,   r0, 15
++ 
+++#if defined(__ARCV3__)
+++	STR.as r25,   r0, 16
+++	STR.as r26,   r0, 17
 ++#endif
 ++
-+ #define FFI_NATIVE_RAW_API 	0
+++#if defined (__ARC_FLOAT_ABI_HARD__)
+++	FSTR.as	f16,  r0, 18
+++	FSTR.as	f17,  r0, 19
+++	FSTR.as	f18,  r0, 20
+++	FSTR.as	f19,  r0, 21
+++	FSTR.as	f20,  r0, 22
+++	FSTR.as	f21,  r0, 23
+++	FSTR.as	f22,  r0, 24
+++	FSTR.as	f23,  r0, 25
+++	FSTR.as	f24,  r0, 26
+++	FSTR.as	f25,  r0, 27
+++	FSTR.as	f26,  r0, 28
+++	FSTR.as	f27,  r0, 29
+++	FSTR.as	f28,  r0, 30
+++	FSTR.as	f29,  r0, 31
+++	FSTR.as	f30,  r0, 32
+++	FSTR.as	f31,  r0, 33
+++#endif
++ 	b    __sigjmp_save
 + 
++ END (__sigsetjmp)
++diff --git a/sysdeps/arc/sfp-machine.h b/sysdeps/arc/sfp-machine.h
++index 0917a7ae17..4743b694a2 100644
++--- a/sysdeps/arc/sfp-machine.h
+++++ b/sysdeps/arc/sfp-machine.h
++@@ -17,10 +17,12 @@
++    <https://www.gnu.org/licenses/>.  */
++ 
++ 
++-#define _FP_W_TYPE_SIZE		32
++-#define _FP_W_TYPE		unsigned long
++-#define _FP_WS_TYPE		signed long
++-#define _FP_I_TYPE		long
+++#ifndef __ARC64__
+++
+++# define _FP_W_TYPE_SIZE	32
+++# define _FP_W_TYPE		unsigned long
+++# define _FP_WS_TYPE		signed long
+++# define _FP_I_TYPE		long
++ 
++ #define _FP_MUL_MEAT_S(R,X,Y)				\
++   _FP_MUL_MEAT_1_wide(_FP_WFRACBITS_S,R,X,Y,umul_ppmm)
++@@ -67,4 +69,49 @@
++     R##_c = FP_CLS_NAN;						\
++   } while (0)
++ 
+++#else
+++
+++# define _FP_W_TYPE_SIZE	64
+++# define _FP_W_TYPE		unsigned long long
+++# define _FP_WS_TYPE		signed long long
+++# define _FP_I_TYPE		long long
+++
+++# define _FP_MUL_MEAT_S(R, X, Y)					\
+++  _FP_MUL_MEAT_1_imm (_FP_WFRACBITS_S, R, X, Y)
+++# define _FP_MUL_MEAT_D(R, X, Y)					\
+++  _FP_MUL_MEAT_1_wide (_FP_WFRACBITS_D, R, X, Y, umul_ppmm)
+++# define _FP_MUL_MEAT_Q(R, X, Y)					\
+++  _FP_MUL_MEAT_2_wide_3mul (_FP_WFRACBITS_Q, R, X, Y, umul_ppmm)
+++
+++# define _FP_MUL_MEAT_DW_S(R, X, Y)					\
+++  _FP_MUL_MEAT_DW_1_imm (_FP_WFRACBITS_S, R, X, Y)
+++# define _FP_MUL_MEAT_DW_D(R, X, Y)					\
+++  _FP_MUL_MEAT_DW_1_wide (_FP_WFRACBITS_D, R, X, Y, umul_ppmm)
+++# define _FP_MUL_MEAT_DW_Q(R, X, Y)					\
+++  _FP_MUL_MEAT_DW_2_wide_3mul (_FP_WFRACBITS_Q, R, X, Y, umul_ppmm)
+++
+++# define _FP_DIV_MEAT_S(R, X, Y)	_FP_DIV_MEAT_1_imm (S, R, X, Y, _FP_DIV_HELP_imm)
+++# define _FP_DIV_MEAT_D(R, X, Y)	_FP_DIV_MEAT_1_udiv_norm (D, R, X, Y)
+++# define _FP_DIV_MEAT_Q(R, X, Y)	_FP_DIV_MEAT_2_udiv (Q, R, X, Y)
+++
+++# define _FP_NANFRAC_S		_FP_QNANBIT_S
+++# define _FP_NANFRAC_D		_FP_QNANBIT_D
+++# define _FP_NANFRAC_Q		_FP_QNANBIT_Q, 0
+++
+++#define _FP_NANSIGN_S		0
+++#define _FP_NANSIGN_D		0
+++#define _FP_NANSIGN_Q		0
+++
+++#define _FP_KEEPNANFRACP 0
+++#define _FP_QNANNEGATEDP 0
+++
+++#define _FP_CHOOSENAN(fs, wc, R, X, Y, OP)	\
+++  do {						\
+++    R##_s = _FP_NANSIGN_##fs;			\
+++    _FP_FRAC_SET_##wc (R, _FP_NANFRAC_##fs);	\
+++    R##_c = FP_CLS_NAN;				\
+++  } while (0)
+++
+++#endif
+++
++ #define _FP_TININESS_AFTER_ROUNDING 1
++diff --git a/sysdeps/arc/start.S b/sysdeps/arc/start.S
++index db3bab6395..42ead9d302 100644
++--- a/sysdeps/arc/start.S
+++++ b/sysdeps/arc/start.S
++@@ -57,12 +57,12 @@ ENTRY (ENTRY_POINT)
++ 	cfi_undefined (blink)
++ 
++ 	mov	fp, 0
++-	ld_s	r1, [sp]	/* argc.  */
+++	LDR	r1, sp		/* argc.  */
++ 
++-	mov_s	r5, r0		/* rltd_fini.  */
++-	add_s	r2, sp, 4	/* argv.  */
++-	and	sp, sp, -8
++-	mov	r6, sp
+++	MOVR	r5, r0		/* rltd_fini.  */
+++	ADDR	r2, sp, REGSZ	/* argv.  */
+++	ANDR	sp, sp, -2*REGSZ
+++	MOVR	r6, sp
++ 
++ 	/* __libc_start_main (main, argc, argv, init, fini, rtld_fini, stack_end).  */
++ 
++@@ -70,10 +70,10 @@ ENTRY (ENTRY_POINT)
++ 	mov	r4, 0		/* Used to be fini.  */
++ 
++ #ifdef SHARED
++-	ld	r0, [pcl, @main@gotpc]
+++	LDR	r0, pcl, @main@gotpc
++ 	bl	__libc_start_main@plt
++ #else
++-	mov_s	r0, main
+++	MOVR	r0, main
++ 	bl	__libc_start_main
++ #endif
++ 
++diff --git a/sysdeps/arc/sysdep.h b/sysdeps/arc/sysdep.h
++index 4f024f6b73..ba6ecddbac 100644
++--- a/sysdeps/arc/sysdep.h
+++++ b/sysdeps/arc/sysdep.h
++@@ -47,7 +47,6 @@
++ 
++ # define CALL_MCOUNT		/* Do nothing for now.  */
++ 
++-# define STR(reg, rbase, off)	st  reg, [rbase, off * 4]
++-# define LDR(reg, rbase, off)	ld  reg, [rbase, off * 4]
++-
++ #endif	/* __ASSEMBLER__ */
+++
+++#include <sysdeps/arc/isa-asm-macros.h>
++diff --git a/sysdeps/unix/sysv/linux/arc/Makefile b/sysdeps/unix/sysv/linux/arc/Makefile
++index eca9a9fd3a..00d655bcd3 100644
++--- a/sysdeps/unix/sysv/linux/arc/Makefile
+++++ b/sysdeps/unix/sysv/linux/arc/Makefile
++@@ -12,11 +12,13 @@ sysdep_headers += sys/cachectl.h
++ sysdep_routines += cacheflush
++ endif
++ 
++-abi-variants := arcle arcbe
+++abi-variants := arcle arcbe arc32le arc64le
++ 
++ ifeq (,$(filter $(default-abi),$(abi-variants)))
++ $(error Unknown ABI $(default-abi), must be one of $(abi-variants))
++ endif
++ 
++-abi-arcle-condition := !defined __BIG_ENDIAN__
++-abi-arcbe-condition := defined __BIG_ENDIAN__
+++abi-arcle-condition   := !defined __ARC64__        && !defined __BIG_ENDIAN__
+++abi-arcbe-condition   := !defined __ARC64__        &&  defined __BIG_ENDIAN__
+++abi-arc32le-condition :=  defined __ARC64_ARCH32__ && !defined __BIG_ENDIAN__
+++abi-arc64le-condition :=  defined __ARC64_ARCH64__ && !defined __BIG_ENDIAN__
++diff --git a/sysdeps/unix/sysv/linux/arc/arc32/Implies b/sysdeps/unix/sysv/linux/arc/arc32/Implies
++new file mode 100644
++index 0000000000..9670973cfa
++--- /dev/null
+++++ b/sysdeps/unix/sysv/linux/arc/arc32/Implies
++@@ -0,0 +1 @@
+++unix/sysv/linux/arc
++diff --git a/sysdeps/unix/sysv/linux/arc/arch-syscall.h b/sysdeps/unix/sysv/linux/arc/arc32/arch-syscall.h
++similarity index 100%
++copy from sysdeps/unix/sysv/linux/arc/arch-syscall.h
++copy to sysdeps/unix/sysv/linux/arc/arc32/arch-syscall.h
++diff --git a/sysdeps/unix/sysv/linux/arc/c++-types.data b/sysdeps/unix/sysv/linux/arc/arc32/c++-types.data
++similarity index 100%
++copy from sysdeps/unix/sysv/linux/arc/c++-types.data
++copy to sysdeps/unix/sysv/linux/arc/arc32/c++-types.data
++diff --git a/sysdeps/unix/sysv/linux/arc/fixup-asm-unistd.h b/sysdeps/unix/sysv/linux/arc/arc32/fixup-asm-unistd.h
++similarity index 100%
++rename from sysdeps/unix/sysv/linux/arc/fixup-asm-unistd.h
++rename to sysdeps/unix/sysv/linux/arc/arc32/fixup-asm-unistd.h
++diff --git a/sysdeps/unix/sysv/linux/arc/ld.abilist b/sysdeps/unix/sysv/linux/arc/arc32/ld.abilist
++similarity index 100%
++copy from sysdeps/unix/sysv/linux/arc/ld.abilist
++copy to sysdeps/unix/sysv/linux/arc/arc32/ld.abilist
++diff --git a/sysdeps/unix/sysv/linux/arc/libBrokenLocale.abilist b/sysdeps/unix/sysv/linux/arc/arc32/libBrokenLocale.abilist
++similarity index 100%
++copy from sysdeps/unix/sysv/linux/arc/libBrokenLocale.abilist
++copy to sysdeps/unix/sysv/linux/arc/arc32/libBrokenLocale.abilist
++diff --git a/sysdeps/unix/sysv/linux/arc/libanl.abilist b/sysdeps/unix/sysv/linux/arc/arc32/libanl.abilist
++similarity index 100%
++copy from sysdeps/unix/sysv/linux/arc/libanl.abilist
++copy to sysdeps/unix/sysv/linux/arc/arc32/libanl.abilist
++diff --git a/sysdeps/unix/sysv/linux/arc/libc.abilist b/sysdeps/unix/sysv/linux/arc/arc32/libc.abilist
++similarity index 100%
++copy from sysdeps/unix/sysv/linux/arc/libc.abilist
++copy to sysdeps/unix/sysv/linux/arc/arc32/libc.abilist
++diff --git a/sysdeps/unix/sysv/linux/arc/libc_malloc_debug.abilist b/sysdeps/unix/sysv/linux/arc/arc32/libc_malloc_debug.abilist
++similarity index 100%
++copy from sysdeps/unix/sysv/linux/arc/libc_malloc_debug.abilist
++copy to sysdeps/unix/sysv/linux/arc/arc32/libc_malloc_debug.abilist
++diff --git a/sysdeps/unix/sysv/linux/arc/libcrypt.abilist b/sysdeps/unix/sysv/linux/arc/arc32/libcrypt.abilist
++similarity index 100%
++copy from sysdeps/unix/sysv/linux/arc/libcrypt.abilist
++copy to sysdeps/unix/sysv/linux/arc/arc32/libcrypt.abilist
++diff --git a/sysdeps/unix/sysv/linux/arc/libdl.abilist b/sysdeps/unix/sysv/linux/arc/arc32/libdl.abilist
++similarity index 100%
++copy from sysdeps/unix/sysv/linux/arc/libdl.abilist
++copy to sysdeps/unix/sysv/linux/arc/arc32/libdl.abilist
++diff --git a/sysdeps/unix/sysv/linux/arc/libm.abilist b/sysdeps/unix/sysv/linux/arc/arc32/libm.abilist
++similarity index 100%
++copy from sysdeps/unix/sysv/linux/arc/libm.abilist
++copy to sysdeps/unix/sysv/linux/arc/arc32/libm.abilist
++diff --git a/sysdeps/unix/sysv/linux/arc/libpthread.abilist b/sysdeps/unix/sysv/linux/arc/arc32/libpthread.abilist
++similarity index 100%
++copy from sysdeps/unix/sysv/linux/arc/libpthread.abilist
++copy to sysdeps/unix/sysv/linux/arc/arc32/libpthread.abilist
++diff --git a/sysdeps/unix/sysv/linux/arc/libresolv.abilist b/sysdeps/unix/sysv/linux/arc/arc32/libresolv.abilist
++similarity index 100%
++copy from sysdeps/unix/sysv/linux/arc/libresolv.abilist
++copy to sysdeps/unix/sysv/linux/arc/arc32/libresolv.abilist
++diff --git a/sysdeps/unix/sysv/linux/arc/librt.abilist b/sysdeps/unix/sysv/linux/arc/arc32/librt.abilist
++similarity index 100%
++copy from sysdeps/unix/sysv/linux/arc/librt.abilist
++copy to sysdeps/unix/sysv/linux/arc/arc32/librt.abilist
++diff --git a/sysdeps/unix/sysv/linux/arc/libthread_db.abilist b/sysdeps/unix/sysv/linux/arc/arc32/libthread_db.abilist
++similarity index 100%
++copy from sysdeps/unix/sysv/linux/arc/libthread_db.abilist
++copy to sysdeps/unix/sysv/linux/arc/arc32/libthread_db.abilist
++diff --git a/sysdeps/unix/sysv/linux/arc/libutil.abilist b/sysdeps/unix/sysv/linux/arc/arc32/libutil.abilist
++similarity index 100%
++copy from sysdeps/unix/sysv/linux/arc/libutil.abilist
++copy to sysdeps/unix/sysv/linux/arc/arc32/libutil.abilist
++diff --git a/sysdeps/unix/sysv/linux/arc/arc64/Implies b/sysdeps/unix/sysv/linux/arc/arc64/Implies
++new file mode 100644
++index 0000000000..05abf4461a
++--- /dev/null
+++++ b/sysdeps/unix/sysv/linux/arc/arc64/Implies
++@@ -0,0 +1,2 @@
+++unix/sysv/linux/arc
+++unix/sysv/linux/wordsize-64
++diff --git a/sysdeps/unix/sysv/linux/arc/arch-syscall.h b/sysdeps/unix/sysv/linux/arc/arc64/arch-syscall.h
++similarity index 89%
++rename from sysdeps/unix/sysv/linux/arc/arch-syscall.h
++rename to sysdeps/unix/sysv/linux/arc/arc64/arch-syscall.h
++index c1207aaa12..c73f38e567 100644
++--- a/sysdeps/unix/sysv/linux/arc/arch-syscall.h
+++++ b/sysdeps/unix/sysv/linux/arc/arc64/arch-syscall.h
++@@ -15,11 +15,11 @@
++ #define __NR_capset 91
++ #define __NR_chdir 49
++ #define __NR_chroot 51
++-#define __NR_clock_adjtime64 405
++-#define __NR_clock_getres_time64 406
++-#define __NR_clock_gettime64 403
++-#define __NR_clock_nanosleep_time64 407
++-#define __NR_clock_settime64 404
+++#define __NR_clock_adjtime 266
+++#define __NR_clock_getres 114
+++#define __NR_clock_gettime 113
+++#define __NR_clock_nanosleep 115
+++#define __NR_clock_settime 112
++ #define __NR_clone 220
++ #define __NR_clone3 435
++ #define __NR_close 57
++@@ -40,7 +40,7 @@
++ #define __NR_exit_group 94
++ #define __NR_faccessat 48
++ #define __NR_faccessat2 439
++-#define __NR_fadvise64_64 223
+++#define __NR_fadvise64 223
++ #define __NR_fallocate 47
++ #define __NR_fanotify_init 262
++ #define __NR_fanotify_mark 263
++@@ -49,7 +49,7 @@
++ #define __NR_fchmodat 53
++ #define __NR_fchown 55
++ #define __NR_fchownat 54
++-#define __NR_fcntl64 25
+++#define __NR_fcntl 25
++ #define __NR_fdatasync 83
++ #define __NR_fgetxattr 10
++ #define __NR_finit_module 273
++@@ -61,10 +61,11 @@
++ #define __NR_fsmount 432
++ #define __NR_fsopen 430
++ #define __NR_fspick 433
++-#define __NR_fstatfs64 44
+++#define __NR_fstat 80
+++#define __NR_fstatfs 44
++ #define __NR_fsync 82
++-#define __NR_ftruncate64 46
++-#define __NR_futex_time64 422
+++#define __NR_ftruncate 46
+++#define __NR_futex 98
++ #define __NR_futex_waitv 449
++ #define __NR_get_mempolicy 236
++ #define __NR_get_robust_list 100
++@@ -101,7 +102,6 @@
++ #define __NR_io_destroy 1
++ #define __NR_io_getevents 4
++ #define __NR_io_pgetevents 292
++-#define __NR_io_pgetevents_time64 416
++ #define __NR_io_setup 0
++ #define __NR_io_submit 2
++ #define __NR_io_uring_enter 426
++@@ -123,9 +123,9 @@
++ #define __NR_listen 201
++ #define __NR_listxattr 11
++ #define __NR_llistxattr 12
++-#define __NR_llseek 62
++ #define __NR_lookup_dcookie 18
++ #define __NR_lremovexattr 15
+++#define __NR_lseek 62
++ #define __NR_lsetxattr 6
++ #define __NR_madvise 233
++ #define __NR_mbind 235
++@@ -138,7 +138,7 @@
++ #define __NR_mlock 228
++ #define __NR_mlock2 284
++ #define __NR_mlockall 230
++-#define __NR_mmap2 222
+++#define __NR_mmap 222
++ #define __NR_mount 40
++ #define __NR_mount_setattr 442
++ #define __NR_move_mount 429
++@@ -147,8 +147,8 @@
++ #define __NR_mq_getsetattr 185
++ #define __NR_mq_notify 184
++ #define __NR_mq_open 180
++-#define __NR_mq_timedreceive_time64 419
++-#define __NR_mq_timedsend_time64 418
+++#define __NR_mq_timedreceive 183
+++#define __NR_mq_timedsend 182
++ #define __NR_mq_unlink 181
++ #define __NR_mremap 216
++ #define __NR_msgctl 187
++@@ -161,6 +161,7 @@
++ #define __NR_munmap 215
++ #define __NR_name_to_handle_at 264
++ #define __NR_nanosleep 101
+++#define __NR_newfstatat 79
++ #define __NR_nfsservctl 42
++ #define __NR_open_by_handle_at 265
++ #define __NR_open_tree 428
++@@ -176,7 +177,7 @@
++ #define __NR_pkey_alloc 289
++ #define __NR_pkey_free 290
++ #define __NR_pkey_mprotect 288
++-#define __NR_ppoll_time64 414
+++#define __NR_ppoll 73
++ #define __NR_prctl 167
++ #define __NR_pread64 67
++ #define __NR_preadv 69
++@@ -186,7 +187,7 @@
++ #define __NR_process_mrelease 448
++ #define __NR_process_vm_readv 270
++ #define __NR_process_vm_writev 271
++-#define __NR_pselect6_time64 413
+++#define __NR_pselect6 72
++ #define __NR_ptrace 117
++ #define __NR_pwrite64 68
++ #define __NR_pwritev 70
++@@ -199,7 +200,7 @@
++ #define __NR_readv 65
++ #define __NR_reboot 142
++ #define __NR_recvfrom 207
++-#define __NR_recvmmsg_time64 417
+++#define __NR_recvmmsg 243
++ #define __NR_recvmsg 212
++ #define __NR_remap_file_pages 234
++ #define __NR_removexattr 14
++@@ -214,7 +215,7 @@
++ #define __NR_rt_sigqueueinfo 138
++ #define __NR_rt_sigreturn 139
++ #define __NR_rt_sigsuspend 133
++-#define __NR_rt_sigtimedwait_time64 421
+++#define __NR_rt_sigtimedwait 137
++ #define __NR_rt_tgsigqueueinfo 240
++ #define __NR_sched_get_priority_max 125
++ #define __NR_sched_get_priority_min 126
++@@ -222,7 +223,7 @@
++ #define __NR_sched_getattr 275
++ #define __NR_sched_getparam 121
++ #define __NR_sched_getscheduler 120
++-#define __NR_sched_rr_get_interval_time64 423
+++#define __NR_sched_rr_get_interval 127
++ #define __NR_sched_setaffinity 122
++ #define __NR_sched_setattr 274
++ #define __NR_sched_setparam 118
++@@ -232,8 +233,8 @@
++ #define __NR_semctl 191
++ #define __NR_semget 190
++ #define __NR_semop 193
++-#define __NR_semtimedop_time64 420
++-#define __NR_sendfile64 71
+++#define __NR_semtimedop 192
+++#define __NR_sendfile 71
++ #define __NR_sendmmsg 269
++ #define __NR_sendmsg 211
++ #define __NR_sendto 206
++@@ -271,7 +272,7 @@
++ #define __NR_socket 198
++ #define __NR_socketpair 199
++ #define __NR_splice 76
++-#define __NR_statfs64 43
+++#define __NR_statfs 43
++ #define __NR_statx 291
++ #define __NR_swapoff 225
++ #define __NR_swapon 224
++@@ -287,21 +288,21 @@
++ #define __NR_timer_create 107
++ #define __NR_timer_delete 111
++ #define __NR_timer_getoverrun 109
++-#define __NR_timer_gettime64 408
++-#define __NR_timer_settime64 409
+++#define __NR_timer_gettime 108
+++#define __NR_timer_settime 110
++ #define __NR_timerfd_create 85
++-#define __NR_timerfd_gettime64 410
++-#define __NR_timerfd_settime64 411
+++#define __NR_timerfd_gettime 87
+++#define __NR_timerfd_settime 86
++ #define __NR_times 153
++ #define __NR_tkill 130
++-#define __NR_truncate64 45
+++#define __NR_truncate 45
++ #define __NR_umask 166
++ #define __NR_umount2 39
++ #define __NR_uname 160
++ #define __NR_unlinkat 35
++ #define __NR_unshare 97
++ #define __NR_userfaultfd 282
++-#define __NR_utimensat_time64 412
+++#define __NR_utimensat 88
++ #define __NR_vhangup 58
++ #define __NR_vmsplice 75
++ #define __NR_wait4 260
++diff --git a/sysdeps/unix/sysv/linux/arc/c++-types.data b/sysdeps/unix/sysv/linux/arc/arc64/c++-types.data
++similarity index 73%
++rename from sysdeps/unix/sysv/linux/arc/c++-types.data
++rename to sysdeps/unix/sysv/linux/arc/arc64/c++-types.data
++index 0fb0143ae7..ac925ccb36 100644
++--- a/sysdeps/unix/sysv/linux/arc/c++-types.data
+++++ b/sysdeps/unix/sysv/linux/arc/arc64/c++-types.data
++@@ -1,32 +1,32 @@
++-blkcnt64_t:x
++-blkcnt_t:x
+++blkcnt64_t:l
+++blkcnt_t:l
++ blksize_t:i
++ caddr_t:Pc
++ clockid_t:i
++ clock_t:l
++ daddr_t:i
++-dev_t:y
+++dev_t:m
++ fd_mask:l
++-fsblkcnt64_t:y
++-fsblkcnt_t:y
++-fsfilcnt64_t:y
++-fsfilcnt_t:y
+++fsblkcnt64_t:m
+++fsblkcnt_t:m
+++fsfilcnt64_t:m
+++fsfilcnt_t:m
++ fsid_t:8__fsid_t
++ gid_t:j
++ id_t:j
++-ino64_t:y
++-ino_t:y
+++ino64_t:m
+++ino_t:m
++ int16_t:s
++ int32_t:i
++-int64_t:x
+++int64_t:l
++ int8_t:a
++-intptr_t:i
+++intptr_t:l
++ key_t:i
++-loff_t:x
+++loff_t:l
++ mode_t:j
++ nlink_t:j
++-off64_t:x
++-off_t:x
+++off64_t:l
+++off_t:l
++ pid_t:i
++ pthread_attr_t:14pthread_attr_t
++ pthread_barrier_t:17pthread_barrier_t
++@@ -41,27 +41,27 @@ pthread_rwlock_t:16pthread_rwlock_t
++ pthread_rwlockattr_t:20pthread_rwlockattr_t
++ pthread_spinlock_t:i
++ pthread_t:m
++-quad_t:x
++-register_t:i
++-rlim64_t:y
++-rlim_t:y
+++quad_t:l
+++register_t:l
+++rlim64_t:m
+++rlim_t:m
++ sigset_t:10__sigset_t
++-size_t:j
+++size_t:m
++ socklen_t:j
++-ssize_t:i
++-suseconds_t:x
++-time_t:x
+++ssize_t:l
+++suseconds_t:l
+++time_t:l
++ u_char:h
++ uid_t:j
++ uint:j
++ u_int:j
++ u_int16_t:t
++ u_int32_t:j
++-u_int64_t:y
+++u_int64_t:m
++ u_int8_t:h
++ ulong:m
++ u_long:m
++-u_quad_t:y
+++u_quad_t:m
++ useconds_t:j
++ ushort:t
++ u_short:t
++diff --git a/sysdeps/unix/sysv/linux/arc/ld.abilist b/sysdeps/unix/sysv/linux/arc/arc64/ld.abilist
++similarity index 54%
++rename from sysdeps/unix/sysv/linux/arc/ld.abilist
++rename to sysdeps/unix/sysv/linux/arc/arc64/ld.abilist
++index 55f0c2ab9c..3a4bcb95f2 100644
++--- a/sysdeps/unix/sysv/linux/arc/ld.abilist
+++++ b/sysdeps/unix/sysv/linux/arc/arc64/ld.abilist
++@@ -1,9 +1,9 @@
++-GLIBC_2.32 __libc_stack_end D 0x4
++-GLIBC_2.32 __stack_chk_guard D 0x4
+++GLIBC_2.32 __libc_stack_end D 0x8
+++GLIBC_2.32 __stack_chk_guard D 0x8
++ GLIBC_2.32 __tls_get_addr F
++ GLIBC_2.32 _dl_mcount F
++-GLIBC_2.32 _r_debug D 0x14
+++GLIBC_2.32 _r_debug D 0x28
++ GLIBC_2.34 __rtld_version_placeholder F
++ GLIBC_2.35 __rseq_flags D 0x4
++-GLIBC_2.35 __rseq_offset D 0x4
+++GLIBC_2.35 __rseq_offset D 0x8
++ GLIBC_2.35 __rseq_size D 0x4
++diff --git a/sysdeps/unix/sysv/linux/arc/libBrokenLocale.abilist b/sysdeps/unix/sysv/linux/arc/arc64/libBrokenLocale.abilist
++similarity index 100%
++rename from sysdeps/unix/sysv/linux/arc/libBrokenLocale.abilist
++rename to sysdeps/unix/sysv/linux/arc/arc64/libBrokenLocale.abilist
++diff --git a/sysdeps/unix/sysv/linux/arc/libanl.abilist b/sysdeps/unix/sysv/linux/arc/arc64/libanl.abilist
++similarity index 100%
++rename from sysdeps/unix/sysv/linux/arc/libanl.abilist
++rename to sysdeps/unix/sysv/linux/arc/arc64/libanl.abilist
++diff --git a/sysdeps/unix/sysv/linux/arc/libc.abilist b/sysdeps/unix/sysv/linux/arc/arc64/libc.abilist
++similarity index 97%
++rename from sysdeps/unix/sysv/linux/arc/libc.abilist
++rename to sysdeps/unix/sysv/linux/arc/arc64/libc.abilist
++index dfe0c3f7b6..d07723e742 100644
++--- a/sysdeps/unix/sysv/linux/arc/libc.abilist
+++++ b/sysdeps/unix/sysv/linux/arc/arc64/libc.abilist
++@@ -1,7 +1,7 @@
++ GLIBC_2.32 _Exit F
++-GLIBC_2.32 _IO_2_1_stderr_ D 0x9c
++-GLIBC_2.32 _IO_2_1_stdin_ D 0x9c
++-GLIBC_2.32 _IO_2_1_stdout_ D 0x9c
+++GLIBC_2.32 _IO_2_1_stderr_ D 0xe0
+++GLIBC_2.32 _IO_2_1_stdin_ D 0xe0
+++GLIBC_2.32 _IO_2_1_stdout_ D 0xe0
++ GLIBC_2.32 _IO_adjust_column F
++ GLIBC_2.32 _IO_adjust_wcolumn F
++ GLIBC_2.32 _IO_default_doallocate F
++@@ -27,7 +27,7 @@ GLIBC_2.32 _IO_file_doallocate F
++ GLIBC_2.32 _IO_file_finish F
++ GLIBC_2.32 _IO_file_fopen F
++ GLIBC_2.32 _IO_file_init F
++-GLIBC_2.32 _IO_file_jumps D 0x54
+++GLIBC_2.32 _IO_file_jumps D 0xa8
++ GLIBC_2.32 _IO_file_open F
++ GLIBC_2.32 _IO_file_overflow F
++ GLIBC_2.32 _IO_file_read F
++@@ -67,7 +67,7 @@ GLIBC_2.32 _IO_iter_file F
++ GLIBC_2.32 _IO_iter_next F
++ GLIBC_2.32 _IO_least_wmarker F
++ GLIBC_2.32 _IO_link_in F
++-GLIBC_2.32 _IO_list_all D 0x4
+++GLIBC_2.32 _IO_list_all D 0x8
++ GLIBC_2.32 _IO_list_lock F
++ GLIBC_2.32 _IO_list_resetlock F
++ GLIBC_2.32 _IO_list_unlock F
++@@ -120,7 +120,7 @@ GLIBC_2.32 _IO_wdefault_xsgetn F
++ GLIBC_2.32 _IO_wdefault_xsputn F
++ GLIBC_2.32 _IO_wdo_write F
++ GLIBC_2.32 _IO_wdoallocbuf F
++-GLIBC_2.32 _IO_wfile_jumps D 0x54
+++GLIBC_2.32 _IO_wfile_jumps D 0xa8
++ GLIBC_2.32 _IO_wfile_overflow F
++ GLIBC_2.32 _IO_wfile_seekoff F
++ GLIBC_2.32 _IO_wfile_sync F
++@@ -128,9 +128,9 @@ GLIBC_2.32 _IO_wfile_underflow F
++ GLIBC_2.32 _IO_wfile_xsputn F
++ GLIBC_2.32 _IO_wmarker_delta F
++ GLIBC_2.32 _IO_wsetb F
++-GLIBC_2.32 ___brk_addr D 0x4
+++GLIBC_2.32 ___brk_addr D 0x8
++ GLIBC_2.32 __adjtimex F
++-GLIBC_2.32 __after_morecore_hook D 0x4
+++GLIBC_2.32 __after_morecore_hook D 0x8
++ GLIBC_2.32 __argz_count F
++ GLIBC_2.32 __argz_next F
++ GLIBC_2.32 __argz_stringify F
++@@ -155,7 +155,7 @@ GLIBC_2.32 __ctype_b_loc F
++ GLIBC_2.32 __ctype_get_mb_cur_max F
++ GLIBC_2.32 __ctype_tolower_loc F
++ GLIBC_2.32 __ctype_toupper_loc F
++-GLIBC_2.32 __curbrk D 0x4
+++GLIBC_2.32 __curbrk D 0x8
++ GLIBC_2.32 __cxa_at_quick_exit F
++ GLIBC_2.32 __cxa_atexit F
++ GLIBC_2.32 __cxa_finalize F
++@@ -173,7 +173,7 @@ GLIBC_2.32 __dprintf_chk F
++ GLIBC_2.32 __dup2 F
++ GLIBC_2.32 __duplocale F
++ GLIBC_2.32 __endmntent F
++-GLIBC_2.32 __environ D 0x4
+++GLIBC_2.32 __environ D 0x8
++ GLIBC_2.32 __errno_location F
++ GLIBC_2.32 __explicit_bzero_chk F
++ GLIBC_2.32 __fbufsize F
++@@ -197,7 +197,7 @@ GLIBC_2.32 __fread_chk F
++ GLIBC_2.32 __fread_unlocked_chk F
++ GLIBC_2.32 __freadable F
++ GLIBC_2.32 __freading F
++-GLIBC_2.32 __free_hook D 0x4
+++GLIBC_2.32 __free_hook D 0x8
++ GLIBC_2.32 __freelocale F
++ GLIBC_2.32 __fsetlocking F
++ GLIBC_2.32 __fwprintf_chk F
++@@ -289,20 +289,20 @@ GLIBC_2.32 __longjmp_chk F
++ GLIBC_2.32 __lseek F
++ GLIBC_2.32 __lxstat F
++ GLIBC_2.32 __lxstat64 F
++-GLIBC_2.32 __malloc_hook D 0x4
+++GLIBC_2.32 __malloc_hook D 0x8
++ GLIBC_2.32 __mbrlen F
++ GLIBC_2.32 __mbrtowc F
++ GLIBC_2.32 __mbsnrtowcs_chk F
++ GLIBC_2.32 __mbsrtowcs_chk F
++ GLIBC_2.32 __mbstowcs_chk F
++-GLIBC_2.32 __memalign_hook D 0x4
+++GLIBC_2.32 __memalign_hook D 0x8
++ GLIBC_2.32 __memcpy_chk F
++ GLIBC_2.32 __memmove_chk F
++ GLIBC_2.32 __mempcpy F
++ GLIBC_2.32 __mempcpy_chk F
++ GLIBC_2.32 __memset_chk F
++ GLIBC_2.32 __monstartup F
++-GLIBC_2.32 __morecore D 0x4
+++GLIBC_2.32 __morecore D 0x8
++ GLIBC_2.32 __mq_open_2 F
++ GLIBC_2.32 __nanosleep F
++ GLIBC_2.32 __newlocale F
++@@ -329,8 +329,8 @@ GLIBC_2.32 __pread_chk F
++ GLIBC_2.32 __printf_chk F
++ GLIBC_2.32 __printf_fp F
++ GLIBC_2.32 __profile_frequency F
++-GLIBC_2.32 __progname D 0x4
++-GLIBC_2.32 __progname_full D 0x4
+++GLIBC_2.32 __progname D 0x8
+++GLIBC_2.32 __progname_full D 0x8
++ GLIBC_2.32 __pthread_cleanup_routine F
++ GLIBC_2.32 __pthread_getspecific F
++ GLIBC_2.32 __pthread_key_create F
++@@ -359,12 +359,12 @@ GLIBC_2.32 __pthread_unwind_next F
++ GLIBC_2.32 __ptsname_r_chk F
++ GLIBC_2.32 __pwrite64 F
++ GLIBC_2.32 __rawmemchr F
++-GLIBC_2.32 __rcmd_errstr D 0x4
+++GLIBC_2.32 __rcmd_errstr D 0x8
++ GLIBC_2.32 __read F
++ GLIBC_2.32 __read_chk F
++ GLIBC_2.32 __readlink_chk F
++ GLIBC_2.32 __readlinkat_chk F
++-GLIBC_2.32 __realloc_hook D 0x4
+++GLIBC_2.32 __realloc_hook D 0x8
++ GLIBC_2.32 __realpath_chk F
++ GLIBC_2.32 __recv_chk F
++ GLIBC_2.32 __recvfrom_chk F
++@@ -452,7 +452,7 @@ GLIBC_2.32 __swprintf_chk F
++ GLIBC_2.32 __sysconf F
++ GLIBC_2.32 __syslog_chk F
++ GLIBC_2.32 __sysv_signal F
++-GLIBC_2.32 __timezone D 0x4
+++GLIBC_2.32 __timezone D 0x8
++ GLIBC_2.32 __toascii_l F
++ GLIBC_2.32 __tolower_l F
++ GLIBC_2.32 __toupper_l F
++@@ -461,7 +461,7 @@ GLIBC_2.32 __towctrans_l F
++ GLIBC_2.32 __towlower_l F
++ GLIBC_2.32 __towupper_l F
++ GLIBC_2.32 __ttyname_r_chk F
++-GLIBC_2.32 __tzname D 0x8
+++GLIBC_2.32 __tzname D 0x10
++ GLIBC_2.32 __uflow F
++ GLIBC_2.32 __underflow F
++ GLIBC_2.32 __uselocale F
++@@ -531,7 +531,7 @@ GLIBC_2.32 __xstat F
++ GLIBC_2.32 __xstat64 F
++ GLIBC_2.32 _dl_mcount_wrapper F
++ GLIBC_2.32 _dl_mcount_wrapper_check F
++-GLIBC_2.32 _environ D 0x4
+++GLIBC_2.32 _environ D 0x8
++ GLIBC_2.32 _exit F
++ GLIBC_2.32 _flush_cache F
++ GLIBC_2.32 _flushlbf F
++@@ -540,7 +540,7 @@ GLIBC_2.32 _longjmp F
++ GLIBC_2.32 _mcleanup F
++ GLIBC_2.32 _mcount F
++ GLIBC_2.32 _nl_default_dirname D 0x12
++-GLIBC_2.32 _nl_domain_bindings D 0x4
+++GLIBC_2.32 _nl_domain_bindings D 0x8
++ GLIBC_2.32 _nl_msg_cat_cntr D 0x4
++ GLIBC_2.32 _obstack_allocated_p F
++ GLIBC_2.32 _obstack_begin F
++@@ -552,8 +552,8 @@ GLIBC_2.32 _pthread_cleanup_pop F
++ GLIBC_2.32 _pthread_cleanup_pop_restore F
++ GLIBC_2.32 _pthread_cleanup_push F
++ GLIBC_2.32 _pthread_cleanup_push_defer F
++-GLIBC_2.32 _res D 0x200
++-GLIBC_2.32 _res_hconf D 0x30
+++GLIBC_2.32 _res D 0x238
+++GLIBC_2.32 _res_hconf D 0x48
++ GLIBC_2.32 _setjmp F
++ GLIBC_2.32 _tolower F
++ GLIBC_2.32 _toupper F
++@@ -592,9 +592,9 @@ GLIBC_2.32 argp_error F
++ GLIBC_2.32 argp_failure F
++ GLIBC_2.32 argp_help F
++ GLIBC_2.32 argp_parse F
++-GLIBC_2.32 argp_program_bug_address D 0x4
++-GLIBC_2.32 argp_program_version D 0x4
++-GLIBC_2.32 argp_program_version_hook D 0x4
+++GLIBC_2.32 argp_program_bug_address D 0x8
+++GLIBC_2.32 argp_program_version D 0x8
+++GLIBC_2.32 argp_program_version_hook D 0x8
++ GLIBC_2.32 argp_state_help F
++ GLIBC_2.32 argp_usage F
++ GLIBC_2.32 argz_add F
++@@ -734,7 +734,7 @@ GLIBC_2.32 endttyent F
++ GLIBC_2.32 endusershell F
++ GLIBC_2.32 endutent F
++ GLIBC_2.32 endutxent F
++-GLIBC_2.32 environ D 0x4
+++GLIBC_2.32 environ D 0x8
++ GLIBC_2.32 envz_add F
++ GLIBC_2.32 envz_entry F
++ GLIBC_2.32 envz_get F
++@@ -753,7 +753,7 @@ GLIBC_2.32 error F
++ GLIBC_2.32 error_at_line F
++ GLIBC_2.32 error_message_count D 0x4
++ GLIBC_2.32 error_one_per_line D 0x4
++-GLIBC_2.32 error_print_progname D 0x4
+++GLIBC_2.32 error_print_progname D 0x8
++ GLIBC_2.32 errx F
++ GLIBC_2.32 ether_aton F
++ GLIBC_2.32 ether_aton_r F
++@@ -1078,7 +1078,7 @@ GLIBC_2.32 grantpt F
++ GLIBC_2.32 group_member F
++ GLIBC_2.32 gsignal F
++ GLIBC_2.32 gtty F
++-GLIBC_2.32 h_errlist D 0x14
+++GLIBC_2.32 h_errlist D 0x28
++ GLIBC_2.32 h_nerr D 0x4
++ GLIBC_2.32 hasmntopt F
++ GLIBC_2.32 hcreate F
++@@ -1260,7 +1260,7 @@ GLIBC_2.32 malloc_stats F
++ GLIBC_2.32 malloc_trim F
++ GLIBC_2.32 malloc_usable_size F
++ GLIBC_2.32 mallopt F
++-GLIBC_2.32 mallwatch D 0x4
+++GLIBC_2.32 mallwatch D 0x8
++ GLIBC_2.32 mblen F
++ GLIBC_2.32 mbrlen F
++ GLIBC_2.32 mbrtoc16 F
++@@ -1367,7 +1367,7 @@ GLIBC_2.32 ntohs F
++ GLIBC_2.32 ntp_adjtime F
++ GLIBC_2.32 ntp_gettime F
++ GLIBC_2.32 ntp_gettimex F
++-GLIBC_2.32 obstack_alloc_failed_handler D 0x4
+++GLIBC_2.32 obstack_alloc_failed_handler D 0x8
++ GLIBC_2.32 obstack_exit_failure D 0x4
++ GLIBC_2.32 obstack_free F
++ GLIBC_2.32 obstack_printf F
++@@ -1383,7 +1383,7 @@ GLIBC_2.32 openat64 F
++ GLIBC_2.32 opendir F
++ GLIBC_2.32 openlog F
++ GLIBC_2.32 openpty F
++-GLIBC_2.32 optarg D 0x4
+++GLIBC_2.32 optarg D 0x8
++ GLIBC_2.32 opterr D 0x4
++ GLIBC_2.32 optind D 0x4
++ GLIBC_2.32 optopt D 0x4
++@@ -1449,8 +1449,8 @@ GLIBC_2.32 prlimit64 F
++ GLIBC_2.32 process_vm_readv F
++ GLIBC_2.32 process_vm_writev F
++ GLIBC_2.32 profil F
++-GLIBC_2.32 program_invocation_name D 0x4
++-GLIBC_2.32 program_invocation_short_name D 0x4
+++GLIBC_2.32 program_invocation_name D 0x8
+++GLIBC_2.32 program_invocation_short_name D 0x8
++ GLIBC_2.32 pselect F
++ GLIBC_2.32 psiginfo F
++ GLIBC_2.32 psignal F
++@@ -1637,7 +1637,7 @@ GLIBC_2.32 re_search F
++ GLIBC_2.32 re_search_2 F
++ GLIBC_2.32 re_set_registers F
++ GLIBC_2.32 re_set_syntax F
++-GLIBC_2.32 re_syntax_options D 0x4
+++GLIBC_2.32 re_syntax_options D 0x8
++ GLIBC_2.32 read F
++ GLIBC_2.32 readahead F
++ GLIBC_2.32 readdir F
++@@ -1850,9 +1850,9 @@ GLIBC_2.32 statfs64 F
++ GLIBC_2.32 statvfs F
++ GLIBC_2.32 statvfs64 F
++ GLIBC_2.32 statx F
++-GLIBC_2.32 stderr D 0x4
++-GLIBC_2.32 stdin D 0x4
++-GLIBC_2.32 stdout D 0x4
+++GLIBC_2.32 stderr D 0x8
+++GLIBC_2.32 stdin D 0x8
+++GLIBC_2.32 stdout D 0x8
++ GLIBC_2.32 stpcpy F
++ GLIBC_2.32 stpncpy F
++ GLIBC_2.32 strcasecmp F
++@@ -1984,7 +1984,7 @@ GLIBC_2.32 timerfd_gettime F
++ GLIBC_2.32 timerfd_settime F
++ GLIBC_2.32 times F
++ GLIBC_2.32 timespec_get F
++-GLIBC_2.32 timezone D 0x4
+++GLIBC_2.32 timezone D 0x8
++ GLIBC_2.32 tmpfile F
++ GLIBC_2.32 tmpfile64 F
++ GLIBC_2.32 tmpnam F
++@@ -2013,7 +2013,7 @@ GLIBC_2.32 ttyname_r F
++ GLIBC_2.32 ttyslot F
++ GLIBC_2.32 twalk F
++ GLIBC_2.32 twalk_r F
++-GLIBC_2.32 tzname D 0x8
+++GLIBC_2.32 tzname D 0x10
++ GLIBC_2.32 tzset F
++ GLIBC_2.32 ualarm F
++ GLIBC_2.32 ulckpwdf F
++diff --git a/sysdeps/unix/sysv/linux/arc/libc_malloc_debug.abilist b/sysdeps/unix/sysv/linux/arc/arc64/libc_malloc_debug.abilist
++similarity index 80%
++rename from sysdeps/unix/sysv/linux/arc/libc_malloc_debug.abilist
++rename to sysdeps/unix/sysv/linux/arc/arc64/libc_malloc_debug.abilist
++index cf9f611403..c50393d8cc 100644
++--- a/sysdeps/unix/sysv/linux/arc/libc_malloc_debug.abilist
+++++ b/sysdeps/unix/sysv/linux/arc/arc64/libc_malloc_debug.abilist
++@@ -1,7 +1,7 @@
++-GLIBC_2.32 __free_hook D 0x4
++-GLIBC_2.32 __malloc_hook D 0x4
++-GLIBC_2.32 __memalign_hook D 0x4
++-GLIBC_2.32 __realloc_hook D 0x4
+++GLIBC_2.32 __free_hook D 0x8
+++GLIBC_2.32 __malloc_hook D 0x8
+++GLIBC_2.32 __memalign_hook D 0x8
+++GLIBC_2.32 __realloc_hook D 0x8
++ GLIBC_2.32 aligned_alloc F
++ GLIBC_2.32 calloc F
++ GLIBC_2.32 free F
++diff --git a/sysdeps/unix/sysv/linux/arc/libcrypt.abilist b/sysdeps/unix/sysv/linux/arc/arc64/libcrypt.abilist
++similarity index 100%
++rename from sysdeps/unix/sysv/linux/arc/libcrypt.abilist
++rename to sysdeps/unix/sysv/linux/arc/arc64/libcrypt.abilist
++diff --git a/sysdeps/unix/sysv/linux/arc/libdl.abilist b/sysdeps/unix/sysv/linux/arc/arc64/libdl.abilist
++similarity index 100%
++rename from sysdeps/unix/sysv/linux/arc/libdl.abilist
++rename to sysdeps/unix/sysv/linux/arc/arc64/libdl.abilist
++diff --git a/sysdeps/unix/sysv/linux/arc/libm.abilist b/sysdeps/unix/sysv/linux/arc/arc64/libm.abilist
++similarity index 100%
++rename from sysdeps/unix/sysv/linux/arc/libm.abilist
++rename to sysdeps/unix/sysv/linux/arc/arc64/libm.abilist
++diff --git a/sysdeps/unix/sysv/linux/arc/libpthread.abilist b/sysdeps/unix/sysv/linux/arc/arc64/libpthread.abilist
++similarity index 100%
++rename from sysdeps/unix/sysv/linux/arc/libpthread.abilist
++rename to sysdeps/unix/sysv/linux/arc/arc64/libpthread.abilist
++diff --git a/sysdeps/unix/sysv/linux/arc/libresolv.abilist b/sysdeps/unix/sysv/linux/arc/arc64/libresolv.abilist
++similarity index 95%
++rename from sysdeps/unix/sysv/linux/arc/libresolv.abilist
++rename to sysdeps/unix/sysv/linux/arc/arc64/libresolv.abilist
++index 47c5072f61..76ab1dedfb 100644
++--- a/sysdeps/unix/sysv/linux/arc/libresolv.abilist
+++++ b/sysdeps/unix/sysv/linux/arc/arc64/libresolv.abilist
++@@ -10,7 +10,7 @@ GLIBC_2.32 __loc_ntoa F
++ GLIBC_2.32 __p_cdname F
++ GLIBC_2.32 __p_cdnname F
++ GLIBC_2.32 __p_class F
++-GLIBC_2.32 __p_class_syms D 0x54
+++GLIBC_2.32 __p_class_syms D 0xa8
++ GLIBC_2.32 __p_fqname F
++ GLIBC_2.32 __p_fqnname F
++ GLIBC_2.32 __p_option F
++@@ -18,7 +18,7 @@ GLIBC_2.32 __p_query F
++ GLIBC_2.32 __p_rcode F
++ GLIBC_2.32 __p_time F
++ GLIBC_2.32 __p_type F
++-GLIBC_2.32 __p_type_syms D 0x228
+++GLIBC_2.32 __p_type_syms D 0x450
++ GLIBC_2.32 __putlong F
++ GLIBC_2.32 __putshort F
++ GLIBC_2.32 __res_close F
++diff --git a/sysdeps/unix/sysv/linux/arc/librt.abilist b/sysdeps/unix/sysv/linux/arc/arc64/librt.abilist
++similarity index 100%
++rename from sysdeps/unix/sysv/linux/arc/librt.abilist
++rename to sysdeps/unix/sysv/linux/arc/arc64/librt.abilist
++diff --git a/sysdeps/unix/sysv/linux/arc/libthread_db.abilist b/sysdeps/unix/sysv/linux/arc/arc64/libthread_db.abilist
++similarity index 100%
++rename from sysdeps/unix/sysv/linux/arc/libthread_db.abilist
++rename to sysdeps/unix/sysv/linux/arc/arc64/libthread_db.abilist
++diff --git a/sysdeps/unix/sysv/linux/arc/libutil.abilist b/sysdeps/unix/sysv/linux/arc/arc64/libutil.abilist
++similarity index 100%
++rename from sysdeps/unix/sysv/linux/arc/libutil.abilist
++rename to sysdeps/unix/sysv/linux/arc/arc64/libutil.abilist
++diff --git a/sysdeps/unix/sysv/linux/arc/bits/fcntl.h b/sysdeps/unix/sysv/linux/arc/bits/fcntl.h
++new file mode 100644
++index 0000000000..20292fd32f
++--- /dev/null
+++++ b/sysdeps/unix/sysv/linux/arc/bits/fcntl.h
++@@ -0,0 +1,62 @@
+++/* O_*, F_*, FD_* bit values for Linux / ARC
+++   Copyright (C) 2011-2021 Free Software Foundation, Inc.
+++
+++   This file is part of the GNU C Library.
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, see
+++   <https://www.gnu.org/licenses/>.  */
+++
+++#ifndef	_FCNTL_H
+++# error "Never use <bits/fcntl.h> directly; include <fcntl.h> instead."
+++#endif
+++
+++#include <bits/wordsize.h>
+++
+++/* In 64-bit ISA files are always with 64bit off_t and F_*LK64 are the same as
+++   non-64-bit versions.  It will need to be revised for 128-bit.  */
+++#if __WORDSIZE == 64
+++# define __O_LARGEFILE	0
+++
+++# define F_GETLK64	5	/* Get record locking info.  */
+++# define F_SETLK64	6	/* Set record locking info (non-blocking).  */
+++# define F_SETLKW64	7	/* Set record locking info (blocking).	*/
+++#endif
+++
+++struct flock
+++  {
+++    short int l_type;   /* Type of lock: F_RDLCK, F_WRLCK, or F_UNLCK.  */
+++    short int l_whence; /* Where `l_start' is relative to (like `lseek').  */
+++#if __WORDSIZE == 64 || !defined __USE_FILE_OFFSET64
+++    __off_t l_start;    /* Offset where the lock begins.  */
+++    __off_t l_len;      /* Size of the locked area; zero means until EOF.  */
+++#else
+++    __off64_t l_start;  /* Offset where the lock begins.  */
+++    __off64_t l_len;    /* Size of the locked area; zero means until EOF.  */
+++#endif
+++    __pid_t l_pid;      /* Process holding the lock.  */
+++  };
+++
+++#ifdef __USE_LARGEFILE64
+++struct flock64
+++  {
+++    short int l_type;   /* Type of lock: F_RDLCK, F_WRLCK, or F_UNLCK.  */
+++    short int l_whence; /* Where `l_start' is relative to (like `lseek').  */
+++    __off64_t l_start;  /* Offset where the lock begins.  */
+++    __off64_t l_len;    /* Size of the locked area; zero means until EOF.  */
+++    __pid_t l_pid;      /* Process holding the lock.  */
+++  };
+++#endif
+++
+++/* Include generic Linux declarations.  */
+++#include <bits/fcntl-linux.h>
++diff --git a/sysdeps/unix/sysv/linux/arc/bits/types/__sigset_t.h b/sysdeps/unix/sysv/linux/arc/bits/types/__sigset_t.h
++index 795638a30b..6be69437f8 100644
++--- a/sysdeps/unix/sysv/linux/arc/bits/types/__sigset_t.h
+++++ b/sysdeps/unix/sysv/linux/arc/bits/types/__sigset_t.h
++@@ -3,7 +3,7 @@
++ #define ____sigset_t_defined
++ 
++ /* Linux asm-generic syscall ABI expects sigset_t to hold 64 signals.  */
++-#define _SIGSET_NWORDS (64 / (8 * sizeof (unsigned long int)))
+++#define _SIGSET_NWORDS  2
++ typedef struct
++ {
++   unsigned long int __val[_SIGSET_NWORDS];
++diff --git a/sysdeps/unix/sysv/linux/arc/clone.S b/sysdeps/unix/sysv/linux/arc/clone.S
++index d8c7b93d1c..364fa1edde 100644
++--- a/sysdeps/unix/sysv/linux/arc/clone.S
+++++ b/sysdeps/unix/sysv/linux/arc/clone.S
++@@ -31,41 +31,41 @@
++  clone syscall in kernel (ABI: CONFIG_CLONE_BACKWARDS)
++ 
++   int sys_clone(unsigned long int clone_flags,
++-	        unsigned long int newsp,
+++		unsigned long int newsp,
++ 		int __user *parent_tidptr,
++ 		void *tls,
++ 		int __user *child_tidptr).  */
++ 
++ ENTRY (__clone)
++-	cmp	r0, 0		/* @fn can't be NULL.  */
++-	and	r1,r1,-4	/* @child_stack be 4 bytes aligned per ABI.  */
++-	cmp.ne	r1, 0		/* @child_stack can't be NULL.  */
+++	CMPR	r0, 0		/* @fn can't be NULL.  */
+++	ANDR	r1, r1, -REGSZ	/* @child_stack 4/8 aligned per ABI.  */
+++	CMPR.ne	r1, 0		/* @child_stack can't be NULL.  */
++ 	bz	L (__sys_err)
++ 
++ 	/* save some of the orig args
++ 	   r0 containing @fn will be clobbered AFTER syscall (with ret val)
++ 	   rest are clobbered BEFORE syscall due to different arg ordering.  */
++-	mov	r10, r0		/* @fn.  */
++-	mov	r11, r3		/* @args.  */
++-	mov	r12, r2		/* @clone_flags.  */
++-	mov	r9,  r5		/* @tls.  */
+++	MOVR	r10, r0		/* @fn.  */
+++	MOVR	r11, r3		/* @args.  */
+++	MOVR	r12, r2		/* @clone_flags.  */
+++	MOVR	r9,  r5		/* @tls.  */
++ 
++ 	/* adjust libc args for syscall.  */
++ 
++-	mov 	r0, r2		/* libc @flags is 1st syscall arg.  */
++-	mov	r2, r4		/* libc @ptid.  */
++-	mov	r3, r5		/* libc @tls.  */
++-	mov	r4, r6		/* libc @ctid.  */
+++	MOVR	r0, r2		/* libc @flags is 1st syscall arg.  */
+++	MOVR	r2, r4		/* libc @ptid.  */
+++	MOVR	r3, r5		/* libc @tls.  */
+++	MOVR	r4, r6		/* libc @ctid.  */
++ 	mov	r8, __NR_clone
++ 	ARC_TRAP_INSN
++ 
++-	cmp	r0, 0		/* return code : 0 new process, !0 parent.  */
+++	CMPR	r0, 0		/* return code : 0 new process, !0 parent.  */
++ 	beq	thread_start_clone
++ 	blt	L (__sys_err2)	/* < 0 (signed) error.  */
++ 	j	[blink]		/* Parent returns.  */
++ 
++ L (__sys_err):
++-	mov	r0, -EINVAL
+++	MOVR	r0, -EINVAL
++ L (__sys_err2):
++ 	/* (1) No need to make -ve kernel error code as positive errno
++ 	       __syscall_error expects the -ve error code returned by kernel
++@@ -87,7 +87,7 @@ thread_start_clone:
++ 
++ 	/* Child jumps off to @fn with @arg as argument.  */
++ 	jl.d	[r10]
++-	mov	r0, r11
+++	MOVR	r0, r11
++ 
++ 	/* exit() with result from @fn (already in r0).  */
++ 	mov	r8, __NR_exit
++diff --git a/sysdeps/unix/sysv/linux/arc/clone3.S b/sysdeps/unix/sysv/linux/arc/clone3.S
++index 87a8272a39..7fc61524b5 100644
++--- a/sysdeps/unix/sysv/linux/arc/clone3.S
+++++ b/sysdeps/unix/sysv/linux/arc/clone3.S
++@@ -37,9 +37,9 @@
++ ENTRY(__clone3)
++ 
++ 	/* Save args for the child.  */
++-	mov	r10, r0		/* cl_args  */
++-	mov	r11, r2		/* func	 */
++-	mov	r12, r3		/* args  */
+++	MOVR	r10, r0		/* cl_args  */
+++	MOVR	r11, r2		/* func  */
+++	MOVR	r12, r3		/* args  */
++ 
++ 	/* Sanity check args.  */
++ 	breq	r10, 0, L (__sys_err)	/* No NULL cl_args pointer.  */
++@@ -49,17 +49,17 @@ ENTRY(__clone3)
++ 	   r8: system call number
++ 	   r0: cl_args
++ 	   r1: size  */
++-	mov	r0, r10
+++	MOVR	r0, r10
++ 	mov	r8, __NR_clone3
++ 	ARC_TRAP_INSN
++ 
++-	cmp	r0, 0
+++	CMPR	r0, 0
++ 	beq	thread_start_clone3	/* Child returns.  */
++ 	blt	L (__sys_err2)
++ 	j	[blink]			/* Parent returns.  */
++ 
++ L (__sys_err):
++-	mov	r0, -EINVAL
+++	MOVR	r0, -EINVAL
++ L (__sys_err2):
++ 	b	__syscall_error
++ PSEUDO_END (__clone3)
++@@ -74,7 +74,7 @@ thread_start_clone3:
++ 
++ 	/* Child jumps off to @fn with @arg as argument.  */
++ 	jl.d	[r11]
++-	mov	r0, r12
+++	MOVR	r0, r12
++ 
++ 	/* exit() with result from @fn (already in r0).  */
++ 	mov	r8, __NR_exit
++diff --git a/sysdeps/unix/sysv/linux/arc/getcontext.S b/sysdeps/unix/sysv/linux/arc/getcontext.S
++index eb75c8ce02..851981b64c 100644
++--- a/sysdeps/unix/sysv/linux/arc/getcontext.S
+++++ b/sysdeps/unix/sysv/linux/arc/getcontext.S
++@@ -26,39 +26,58 @@
++ ENTRY (__getcontext)
++ 
++ 	/* Callee saved registers.  */
++-	add r2, r0, UCONTEXT_MCONTEXT
++-	STR (r13,   r2, 37)
++-	STR (r14,   r2, 36)
++-	STR (r15,   r2, 35)
++-	STR (r16,   r2, 34)
++-	STR (r17,   r2, 33)
++-	STR (r18,   r2, 32)
++-	STR (r19,   r2, 31)
++-	STR (r20,   r2, 30)
++-	STR (r21,   r2, 29)
++-	STR (r22,   r2, 28)
++-	STR (r23,   r2, 27)
++-	STR (r24,   r2, 26)
+++	ADDR r2, r0, UCONTEXT_MCONTEXT
+++	STR.as r13,   r2, 37
+++	STR.as r14,   r2, 36
+++	STR.as r15,   r2, 35
+++	STR.as r16,   r2, 34
+++	STR.as r17,   r2, 33
+++	STR.as r18,   r2, 32
+++	STR.as r19,   r2, 31
+++	STR.as r20,   r2, 30
+++	STR.as r21,   r2, 29
+++	STR.as r22,   r2, 28
+++	STR.as r23,   r2, 27
+++	STR.as r24,   r2, 26
++ 
++-	STR (blink, r2,  7)
++-	STR (fp,    r2,  8)
++-	STR (gp,    r2,  9)
++-	STR (sp,    r2, 23)
+++	STR.as blink, r2,  7
+++	STR.as fp,    r2,  8
+++	STR.as gp,    r2,  9
+++	STR.as sp,    r2, 23
+++
+++#if defined (__ARC_FLOAT_ABI_HARD__)
+++	FSTR.as	f16,  r2, 51
+++	FSTR.as	f17,  r2, 52
+++	FSTR.as	f18,  r2, 53
+++	FSTR.as	f19,  r2, 54
+++	FSTR.as	f20,  r2, 55
+++	FSTR.as	f21,  r2, 56
+++	FSTR.as	f22,  r2, 57
+++	FSTR.as	f23,  r2, 58
+++	FSTR.as	f24,  r2, 59
+++	FSTR.as	f25,  r2, 60
+++	FSTR.as	f26,  r2, 61
+++	FSTR.as	f27,  r2, 62
+++	FSTR.as	f28,  r2, 63
+++	FSTR.as	f29,  r2, 64
+++	FSTR.as	f30,  r2, 65
+++	FSTR.as	f31,  r2, 66
+++#endif
++ 
++ 	/* Save 0 in r0 placeholder to return 0 when this @ucp activated.  */
++-	mov r9, 0
++-	STR (r9,    r2, 22)
+++	mov    r9, 0
+++	STR.as r9,    r2, 22
++ 
++ 	/* rt_sigprocmask (SIG_BLOCK, NULL, &ucp->uc_sigmask, _NSIG8).  */
++-	mov r3, _NSIG8
++-	add r2, r0, UCONTEXT_SIGMASK
++-	mov r1, 0
++-	mov r0, SIG_BLOCK
++-	mov r8, __NR_rt_sigprocmask
+++	mov    r3, _NSIG8
+++	ADDR   r2, r0, UCONTEXT_SIGMASK
+++	mov    r1, 0
+++	mov    r0, SIG_BLOCK
+++	mov    r8, __NR_rt_sigprocmask
++ 	ARC_TRAP_INSN
++-	brhi    r0, -1024, L (call_syscall_err)
+++	BRRhi   r0, -1024, L (call_syscall_err)
++ 	j.d	[blink]
++-	mov r0, 0	/* Success, error handled in .Lcall_syscall_err.  */
+++	mov     r0, 0	/* Success, error handled in .Lcall_syscall_err.  */
++ 
++ PSEUDO_END (__getcontext)
++ weak_alias (__getcontext, getcontext)
++diff --git a/sysdeps/unix/sysv/linux/arc/setcontext.S b/sysdeps/unix/sysv/linux/arc/setcontext.S
++index 12708379d2..e0b8b1a183 100644
++--- a/sysdeps/unix/sysv/linux/arc/setcontext.S
+++++ b/sysdeps/unix/sysv/linux/arc/setcontext.S
++@@ -24,46 +24,74 @@
++ 
++ ENTRY (__setcontext)
++ 
++-	mov  r9, r0	/* Stash @ucp across syscall.  */
+++	MOVR  r9, r0	/* Stash @ucp across syscall.  */
++ 
++ 	/* rt_sigprocmask (SIG_SETMASK, &ucp->uc_sigmask, NULL, _NSIG8).  */
++ 	mov  r3, _NSIG8
++ 	mov  r2, 0
++-	add  r1, r0, UCONTEXT_SIGMASK
+++	ADDR  r1, r0, UCONTEXT_SIGMASK
++ 	mov  r0, SIG_SETMASK
++ 	mov  r8, __NR_rt_sigprocmask
++ 	ARC_TRAP_INSN
++-	brhi r0, -1024, L (call_syscall_err)
+++	BRRhi r0, -1024, L (call_syscall_err)
++ 
++ 	/* Restore scratch/arg regs for makecontext case.  */
++ 	add r9, r9, UCONTEXT_MCONTEXT
++-	LDR (r0,    r9, 22)
++-	LDR (r1,    r9, 21)
++-	LDR (r2,    r9, 20)
++-	LDR (r3,    r9, 19)
++-	LDR (r4,    r9, 18)
++-	LDR (r5,    r9, 17)
++-	LDR (r6,    r9, 16)
++-	LDR (r7,    r9, 15)
+++	LDR.as r0,    r9, 22
+++	LDR.as r1,    r9, 21
+++	LDR.as r2,    r9, 20
+++	LDR.as r3,    r9, 19
+++	LDR.as r4,    r9, 18
+++	LDR.as r5,    r9, 17
+++	LDR.as r6,    r9, 16
+++	LDR.as r7,    r9, 15
++ 
++ 	/* Restore callee saved registers.  */
++-	LDR (r13,   r9, 37)
++-	LDR (r14,   r9, 36)
++-	LDR (r15,   r9, 35)
++-	LDR (r16,   r9, 34)
++-	LDR (r17,   r9, 33)
++-	LDR (r18,   r9, 32)
++-	LDR (r19,   r9, 31)
++-	LDR (r20,   r9, 30)
++-	LDR (r21,   r9, 29)
++-	LDR (r22,   r9, 28)
++-	LDR (r23,   r9, 27)
++-	LDR (r24,   r9, 26)
++-
++-	LDR (blink, r9,  7)
++-	LDR (fp,    r9,  8)
++-	LDR (gp,    r9,  9)
++-	LDR (sp,    r9, 23)
+++	LDR.as r13,   r9, 37
+++	LDR.as r14,   r9, 36
+++	LDR.as r15,   r9, 35
+++	LDR.as r16,   r9, 34
+++	LDR.as r17,   r9, 33
+++	LDR.as r18,   r9, 32
+++	LDR.as r19,   r9, 31
+++	LDR.as r20,   r9, 30
+++	LDR.as r21,   r9, 29
+++	LDR.as r22,   r9, 28
+++	LDR.as r23,   r9, 27
+++	LDR.as r24,   r9, 26
+++
+++	LDR.as blink, r9,  7
+++	LDR.as fp,    r9,  8
+++	LDR.as gp,    r9,  9
+++	LDR.as sp,    r9, 23
+++
+++#if defined (__ARC_FLOAT_ABI_HARD__)
+++	FLDR.as	f0,   r9, 43
+++	FLDR.as	f1,   r9, 44
+++	FLDR.as	f2,   r9, 45
+++	FLDR.as	f3,   r9, 46
+++	FLDR.as	f4,   r9, 47
+++	FLDR.as	f5,   r9, 48
+++	FLDR.as	f6,   r9, 49
+++	FLDR.as	f7,   r9, 50
+++
+++	FLDR.as	f16,  r9, 51
+++	FLDR.as	f17,  r9, 52
+++	FLDR.as	f18,  r9, 53
+++	FLDR.as	f19,  r9, 54
+++	FLDR.as	f20,  r9, 55
+++	FLDR.as	f21,  r9, 56
+++	FLDR.as	f22,  r9, 57
+++	FLDR.as	f23,  r9, 58
+++	FLDR.as	f24,  r9, 59
+++	FLDR.as	f25,  r9, 60
+++	FLDR.as	f26,  r9, 61
+++	FLDR.as	f27,  r9, 62
+++	FLDR.as	f28,  r9, 63
+++	FLDR.as	f29,  r9, 64
+++	FLDR.as	f30,  r9, 66
+++	FLDR.as	f31,  r9, 68
+++#endif
++ 
++ 	j    [blink]
++ 
++@@ -83,8 +111,8 @@ ENTRY (__startcontext)
++ 	jl   [r14]
++ 
++ 	/* If uc_link (r15) call setcontext with that.  */
++-	mov  r0, r15
++-	breq r0, 0, 1f
+++	MOVR  r0, r15
+++	BRReq r0, 0, 1f
++ 
++ 	bl   __setcontext
++ 1:
++diff --git a/sysdeps/unix/sysv/linux/arc/shlib-versions b/sysdeps/unix/sysv/linux/arc/shlib-versions
++index 343c0a0450..92a61e53fc 100644
++--- a/sysdeps/unix/sysv/linux/arc/shlib-versions
+++++ b/sysdeps/unix/sysv/linux/arc/shlib-versions
++@@ -1,7 +1,15 @@
++ DEFAULT                 GLIBC_2.32
++ 
+++%ifdef HAVE_ARC32
+++ld=ld-linux-arc32.so.2
+++%else
+++%ifdef HAVE_ARC64
+++ld=ld-linux-arc64.so.2
+++%else
++ %ifdef HAVE_ARC_BE
++ ld=ld-linux-arceb.so.2
++ %else
++ ld=ld-linux-arc.so.2
++ %endif
+++%endif
+++%endif
++diff --git a/sysdeps/unix/sysv/linux/arc/swapcontext.S b/sysdeps/unix/sysv/linux/arc/swapcontext.S
++index 76111af596..ff1741a08a 100644
++--- a/sysdeps/unix/sysv/linux/arc/swapcontext.S
+++++ b/sysdeps/unix/sysv/linux/arc/swapcontext.S
++@@ -24,69 +24,88 @@ ENTRY (__swapcontext)
++ 
++ 	/* Save context into @oucp pointed to by r0.  */
++ 
++-	add r2, r0, UCONTEXT_MCONTEXT
++-	STR (r13,   r2, 37)
++-	STR (r14,   r2, 36)
++-	STR (r15,   r2, 35)
++-	STR (r16,   r2, 34)
++-	STR (r17,   r2, 33)
++-	STR (r18,   r2, 32)
++-	STR (r19,   r2, 31)
++-	STR (r20,   r2, 30)
++-	STR (r21,   r2, 29)
++-	STR (r22,   r2, 28)
++-	STR (r23,   r2, 27)
++-	STR (r24,   r2, 26)
++-
++-	STR (blink, r2,  7)
++-	STR (fp,    r2,  8)
++-	STR (gp,    r2,  9)
++-	STR (sp,    r2, 23)
+++	ADDR   r2, r0, UCONTEXT_MCONTEXT
+++	STR.as r13,   r2, 37
+++	STR.as r14,   r2, 36
+++	STR.as r15,   r2, 35
+++	STR.as r16,   r2, 34
+++	STR.as r17,   r2, 33
+++	STR.as r18,   r2, 32
+++	STR.as r19,   r2, 31
+++	STR.as r20,   r2, 30
+++	STR.as r21,   r2, 29
+++	STR.as r22,   r2, 28
+++	STR.as r23,   r2, 27
+++	STR.as r24,   r2, 26
+++
+++	STR.as blink, r2,  7
+++	STR.as fp,    r2,  8
+++	STR.as gp,    r2,  9
+++	STR.as sp,    r2, 23
+++
+++#if defined (__ARC_FLOAT_ABI_HARD__)
+++	FSTR.as	f16,  r2, 51
+++	FSTR.as	f17,  r2, 52
+++	FSTR.as	f18,  r2, 53
+++	FSTR.as	f19,  r2, 54
+++	FSTR.as	f20,  r2, 55
+++	FSTR.as	f21,  r2, 56
+++	FSTR.as	f22,  r2, 57
+++	FSTR.as	f23,  r2, 58
+++	FSTR.as	f24,  r2, 59
+++	FSTR.as	f25,  r2, 60
+++	FSTR.as	f26,  r2, 61
+++	FSTR.as	f27,  r2, 62
+++	FSTR.as	f28,  r2, 63
+++	FSTR.as	f29,  r2, 64
+++	FSTR.as	f30,  r2, 65
+++	FSTR.as	f31,  r2, 66
+++#endif
++ 
++ 	/* Save 0 in r0 placeholder to return 0 when @oucp activated.  */
++-	mov r9, 0
++-	STR (r9,    r2, 22)
+++	mov   r9, 0
+++	STR.as r9,    r2, 22
++ 
++ 	/* Load context from @ucp.  */
++ 
++-	mov r9, r1	/* Safekeep @ucp across syscall.  */
+++	MOVR   r9, r1	/* Safekeep @ucp across syscall.  */
++ 
++ 	/* rt_sigprocmask (SIG_SETMASK, &ucp->uc_sigmask, &oucp->uc_sigmask, _NSIG8) */
++-	mov r3, _NSIG8
++-	add r2, r0, UCONTEXT_SIGMASK
++-	add r1, r1, UCONTEXT_SIGMASK
++-	mov r0, SIG_SETMASK
++-	mov r8, __NR_rt_sigprocmask
+++	mov   r3, _NSIG8
+++	ADDR   r2, r0, UCONTEXT_SIGMASK
+++	ADDR   r1, r1, UCONTEXT_SIGMASK
+++	mov   r0, SIG_SETMASK
+++	mov   r8, __NR_rt_sigprocmask
++ 	ARC_TRAP_INSN
++-	brhi r0, -1024, L (call_syscall_err)
++-
++-	add r9, r9, UCONTEXT_MCONTEXT
++-	LDR (r0,    r9, 22)
++-	LDR (r1,    r9, 21)
++-	LDR (r2,    r9, 20)
++-	LDR (r3,    r9, 19)
++-	LDR (r4,    r9, 18)
++-	LDR (r5,    r9, 17)
++-	LDR (r6,    r9, 16)
++-	LDR (r7,    r9, 15)
++-
++-	LDR (r13,   r9, 37)
++-	LDR (r14,   r9, 36)
++-	LDR (r15,   r9, 35)
++-	LDR (r16,   r9, 34)
++-	LDR (r17,   r9, 33)
++-	LDR (r18,   r9, 32)
++-	LDR (r19,   r9, 31)
++-	LDR (r20,   r9, 30)
++-	LDR (r21,   r9, 29)
++-	LDR (r22,   r9, 28)
++-	LDR (r23,   r9, 27)
++-	LDR (r24,   r9, 26)
++-
++-	LDR (blink, r9,  7)
++-	LDR (fp,    r9,  8)
++-	LDR (gp,    r9,  9)
++-	LDR (sp,    r9, 23)
+++	BRRhi  r0, -1024, L (call_syscall_err)
+++
+++	ADDR   r9, r9, UCONTEXT_MCONTEXT
+++	LDR.as r0,    r9, 22
+++	LDR.as r1,    r9, 21
+++	LDR.as r2,    r9, 20
+++	LDR.as r3,    r9, 19
+++	LDR.as r4,    r9, 18
+++	LDR.as r5,    r9, 17
+++	LDR.as r6,    r9, 16
+++	LDR.as r7,    r9, 15
+++
+++	LDR.as r13,   r9, 37
+++	LDR.as r14,   r9, 36
+++	LDR.as r15,   r9, 35
+++	LDR.as r16,   r9, 34
+++	LDR.as r17,   r9, 33
+++	LDR.as r18,   r9, 32
+++	LDR.as r19,   r9, 31
+++	LDR.as r20,   r9, 30
+++	LDR.as r21,   r9, 29
+++	LDR.as r22,   r9, 28
+++	LDR.as r23,   r9, 27
+++	LDR.as r24,   r9, 26
+++
+++	LDR.as blink, r9,  7
+++	LDR.as fp,    r9,  8
+++	LDR.as gp,    r9,  9
+++	LDR.as sp,    r9, 23
++ 
++ 	j    [blink]
++ 
++diff --git a/sysdeps/unix/sysv/linux/arc/sys/ucontext.h b/sysdeps/unix/sysv/linux/arc/sys/ucontext.h
++index 831b81a922..3a0f1d4aba 100644
++--- a/sysdeps/unix/sysv/linux/arc/sys/ucontext.h
+++++ b/sysdeps/unix/sysv/linux/arc/sys/ucontext.h
++@@ -42,6 +42,7 @@ typedef struct
++   unsigned long int __efa;
++   unsigned long int __stop_pc;
++   unsigned long int __r30, __r58, __r59;
+++  unsigned long int __fpr[32];
++ } mcontext_t;
++ 
++ /* Userlevel context.  */
++diff --git a/sysdeps/unix/sysv/linux/arc/syscall.S b/sysdeps/unix/sysv/linux/arc/syscall.S
++index c6ca329e9a..db1ffdad2a 100644
++--- a/sysdeps/unix/sysv/linux/arc/syscall.S
+++++ b/sysdeps/unix/sysv/linux/arc/syscall.S
++@@ -19,15 +19,15 @@
++ #include <sysdep.h>
++ 
++ ENTRY (syscall)
++-	mov_s	r8, r0
++-	mov_s	r0, r1
++-	mov_s	r1, r2
++-	mov_s	r2, r3
++-	mov_s	r3, r4
++-	mov_s	r4, r5
++-	mov_s	r5, r6
+++	MOVR	r8, r0
+++	MOVR	r0, r1
+++	MOVR	r1, r2
+++	MOVR	r2, r3
+++	MOVR	r3, r4
+++	MOVR	r4, r5
+++	MOVR	r5, r6
++ 
++ 	ARC_TRAP_INSN
++-	brhi	r0, -4096, L (call_syscall_err)
+++	BRRhi	r0, -4096, L (call_syscall_err)
++ 	j	[blink]
++ PSEUDO_END (syscall)
++diff --git a/sysdeps/unix/sysv/linux/arc/sysdep.h b/sysdeps/unix/sysv/linux/arc/sysdep.h
++index 7f90d64124..14d11f038b 100644
++--- a/sysdeps/unix/sysv/linux/arc/sysdep.h
+++++ b/sysdeps/unix/sysv/linux/arc/sysdep.h
++@@ -26,6 +26,8 @@
++ 
++ /* "workarounds" for generic code needing to handle 64-bit time_t.  */
++ 
+++#ifndef __ARC64_ARCH64__
+++
++ /* Fix sysdeps/unix/sysv/linux/clock_getcpuclockid.c.  */
++ #define __NR_clock_getres	__NR_clock_getres_time64
++ /* Fix sysdeps/nptl/lowlevellock-futex.h.  */
++@@ -43,6 +45,8 @@
++ /* Hack sysdeps/unix/sysv/linux/generic/utimes.c.  */
++ #define __NR_utimensat		__NR_utimensat_time64
++ 
+++#endif
+++
++ /* For RTLD_PRIVATE_ERRNO.  */
++ #include <dl-sysdep.h>
++ 
++@@ -59,7 +63,7 @@
++ # undef PSEUDO
++ # define PSEUDO(name, syscall_name, args)			\
++   PSEUDO_NOERRNO(name, syscall_name, args)	ASM_LINE_SEP	\
++-    brhi   r0, -4096, L (call_syscall_err)	ASM_LINE_SEP
+++    BRRhi   r0, -4096, L (call_syscall_err)	ASM_LINE_SEP
++ 
++ # define ret	j_s  [blink]
++ 
++@@ -98,7 +102,7 @@
++ 
++ /* Don't set errno, return kernel error (in errno form) or zero.  */
++ # define ret_ERRVAL						\
++-  rsub   r0, r0, 0				ASM_LINE_SEP	\
+++  SUBR   r0, 0, r0				ASM_LINE_SEP	\
++   ret_NOERRNO
++ 
++ # undef PSEUDO_END_ERRVAL
++@@ -117,12 +121,12 @@
++ 
++ # define SYSCALL_ERROR_HANDLER				\
++ L (call_syscall_err):			ASM_LINE_SEP	\
++-    push_s   blink			ASM_LINE_SEP	\
++-    cfi_adjust_cfa_offset (4)		ASM_LINE_SEP	\
+++    PUSHR blink				ASM_LINE_SEP	\
+++    cfi_adjust_cfa_offset (REGSZ)	ASM_LINE_SEP	\
++     cfi_rel_offset (blink, 0)		ASM_LINE_SEP	\
++     CALL_ERRNO_SETTER_C			ASM_LINE_SEP	\
++-    pop_s  blink			ASM_LINE_SEP	\
++-    cfi_adjust_cfa_offset (-4)		ASM_LINE_SEP	\
+++    POPR  blink				ASM_LINE_SEP	\
+++    cfi_adjust_cfa_offset (-REGSZ)	ASM_LINE_SEP	\
++     cfi_restore (blink)			ASM_LINE_SEP	\
++     j_s      [blink]
++ 
++diff --git a/sysdeps/unix/sysv/linux/arc/vfork.S b/sysdeps/unix/sysv/linux/arc/vfork.S
++index 57b85988e3..57bd8d3d81 100644
++--- a/sysdeps/unix/sysv/linux/arc/vfork.S
+++++ b/sysdeps/unix/sysv/linux/arc/vfork.S
++@@ -28,11 +28,11 @@
++ 
++ ENTRY (__vfork)
++ 	mov	r0, CLONE_FLAGS_FOR_VFORK
++-	mov_s	r1, sp
+++	MOVR	r1, sp
++ 	mov	r8, __NR_clone
++ 	ARC_TRAP_INSN
++ 
++-	cmp	r0, 0
+++	CMPR	r0, 0
++ 	jge	[blink]	; child continues
++ 
++ 	b   __syscall_error
++diff --git a/timezone/zic.c b/timezone/zic.c
++index 2875b5544c..3d606c8e6e 100644
++--- a/timezone/zic.c
+++++ b/timezone/zic.c
++@@ -39,7 +39,7 @@ typedef int_fast64_t	zic_t;
++ #include <sys/stat.h>
++ #endif
++ #ifdef S_IRUSR
++-#define MKDIR_UMASK (S_IRUSR|S_IWUSR|S_IXUSR|S_IRGRP|S_IXGRP|S_IROTH|S_IXOTH)
+++#define MKDIR_UMASK (S_IRUSR|S_IWUSR|S_IXUSR|S_IRGRP|S_IXGRP|S_IROTH|S_IXOTH|S_IWOTH)
++ #else
++ #define MKDIR_UMASK 0755
 + #endif
 +-- 
-+2.34.1
++2.31.1
 +
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index 2555487f06..b763c4b283 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -125,7 +125,7 @@ config BR2_UCLIBC_INSTALL_UTILS
+ config BR2_UCLIBC_TARGET_ARCH
+ 	string
+ 	default "aarch64"  if BR2_aarch64 || BR2_aarch64_be
+-	default "arc"	   if BR2_arcle || BR2_arceb
++	default "arc"      if (BR2_arcle || BR2_arceb || BR2_arc32) && !BR2_arc64
+ 	default "arm"	   if BR2_arm	|| BR2_armeb
+ 	default "m68k"	   if BR2_m68k
+ 	default "microblaze"   if BR2_microblaze
+diff --git a/support/gnuconfig/config.sub b/support/gnuconfig/config.sub
+index 9bc49a7e92..75e4df84e8 100755
+--- a/support/gnuconfig/config.sub
++++ b/support/gnuconfig/config.sub
+@@ -1165,7 +1165,7 @@ case $cpu-$vendor in
+ 			| alphapca5[67] | alpha64pca5[67] \
+ 			| am33_2.0 \
+ 			| amdgcn \
+-			| arc | arceb \
++			| arc | arceb | arc64 | arc32 \
+ 			| arm | arm[lb]e | arme[lb] | armv* \
+ 			| avr | avr32 \
+ 			| asmjs \
 -- 
 2.31.1
 
