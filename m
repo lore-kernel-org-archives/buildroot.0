@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67052C47073
-	for <buildroot@archiver.kernel.org>; Thu,  4 Jan 2024 21:28:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D016BC47073
+	for <buildroot@archiver.kernel.org>; Thu,  4 Jan 2024 21:28:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0A16A61B27;
-	Thu,  4 Jan 2024 21:28:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A16A61B27
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8C47261AE9;
+	Thu,  4 Jan 2024 21:28:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C47261AE9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eh_8f3Dbpif4; Thu,  4 Jan 2024 21:28:03 +0000 (UTC)
+	with ESMTP id NgDgknfU4BFD; Thu,  4 Jan 2024 21:28:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4FFF061AEB;
-	Thu,  4 Jan 2024 21:28:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4FFF061AEB
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 672751BF977
+	by smtp3.osuosl.org (Postfix) with ESMTP id CE2E860899;
+	Thu,  4 Jan 2024 21:28:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE2E860899
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9C01B1BF414
  for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 21:27:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3E2DE4381E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 748CE61AE3
  for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 21:27:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E2DE4381E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 748CE61AE3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qbrzNMqBl9eQ for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vMcQdor8DFMZ for <buildroot@lists.busybox.net>;
  Thu,  4 Jan 2024 21:27:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0DDCD43806
- for <buildroot@buildroot.org>; Thu,  4 Jan 2024 21:27:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0DDCD43806
+ by smtp3.osuosl.org (Postfix) with ESMTP id 471A161AB3
+ for <buildroot@buildroot.org>; Thu,  4 Jan 2024 21:27:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 471A161AB3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EDE3283D35; Thu,  4 Jan 2024 21:27:46 +0000 (UTC)
+ id 36E4084092; Thu,  4 Jan 2024 21:27:47 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Jan 2024 22:10:37 +0100
+Date: Thu, 4 Jan 2024 22:20:10 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a1dce92c728a8df097dee7400305e116485a120a
-X-Git-Newrev: fd835c3ef667195d5369b8806471293c81a43515
+X-Git-Oldrev: 0ff1235c8ddd33807f263736c46b91d9cc8a7af8
+X-Git-Newrev: a4536589d3989e7324e61fd3f4ccbad547564f1c
 X-Patchwork-Hint: ignore
-Message-Id: <20240104212746.EDE3283D35@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/valijson: bump to version 1.0.2
+Message-Id: <20240104212747.36E4084092@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/exim: security bump version to
+ 4.97.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fd835c3ef667195d5369b8806471293c81a43515
+commit: https://git.buildroot.net/buildroot/commit/?id=a4536589d3989e7324e61fd3f4ccbad547564f1c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update hash of LICENSE file (typo fixed by
-https://github.com/tristanpenman/valijson/commit/c0ce4cde7e89c1a88a82ddc4ae32727e1a01998f)
+Fixes CVE-2023-51766: https://seclists.org/oss-sec/2023/q4/348
 
-https://github.com/tristanpenman/valijson/releases/tag/v1.0.2
-https://github.com/tristanpenman/valijson/releases/tag/v1.0.1
-https://github.com/tristanpenman/valijson/releases/tag/v1.0
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/valijson/valijson.hash | 4 ++--
- package/valijson/valijson.mk   | 2 +-
+ package/exim/exim.hash | 4 ++--
+ package/exim/exim.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/valijson/valijson.hash b/package/valijson/valijson.hash
-index aacdf7dedc..592d2c900e 100644
---- a/package/valijson/valijson.hash
-+++ b/package/valijson/valijson.hash
-@@ -1,3 +1,3 @@
- # Locally Computed:
--sha256  bc24736709acfb252a5fdcb5145f1f2670c7aecaba3356f6f8ba54903800fa5c  valijson-0.7.tar.gz
--sha256  1a0f99926a2dbec30eba3db820236d9953fbe3048976923ac24980e655fbe991  LICENSE
-+sha256  35d86e54fc727f1265226434dc996e33000a570f833537a25c8b702b0b824431  valijson-1.0.2.tar.gz
-+sha256  61b5766db38eaa3f320c366357956d7743424bfbf90fd78f5943866ba237589e  LICENSE
-diff --git a/package/valijson/valijson.mk b/package/valijson/valijson.mk
-index 875c913b09..5b68dc9864 100644
---- a/package/valijson/valijson.mk
-+++ b/package/valijson/valijson.mk
+diff --git a/package/exim/exim.hash b/package/exim/exim.hash
+index 6336a40427..a3822302fb 100644
+--- a/package/exim/exim.hash
++++ b/package/exim/exim.hash
+@@ -1,6 +1,6 @@
+ # From https://ftp.exim.org/pub/exim/exim4/00-sha256sums.txt
+-sha256  428150e67c494fa14fe5195d81b972c1b23e651ee4f9f2ff1788250266d31e9c  exim-4.97.tar.xz
++sha256  bd782057509a793593508528590626d185ea160ce32cb34beda262e99cefdfa9  exim-4.97.1.tar.xz
+ # From https://ftp.exim.org/pub/exim/exim4/00-sha512sums.txt
+-sha512  b28cbb49fa7e143dfcc94e004d57cf98a1945013e676cd103c1ee4cf52933d49d378baa13bea2663353dba97745d6b2ab8b7b66cde870788a2d85d7abd716968  exim-4.97.tar.xz
++sha512  eab7ca28b37f1635c48f5e963ab69fcbad539b2c35a84286ecaad7d7ff5210bbefce86452302e08099afdc0710f9cb7ca6d9b152b0ba88a19292f7c5541e0cfc  exim-4.97.1.tar.xz
+ # Locally calculated
+ sha256  49240db527b7e55b312a46fc59794fde5dd006422e422257f4f057bfd27b3c8f  LICENCE
+diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+index 23d888e6f2..fb9eecd71b 100644
+--- a/package/exim/exim.mk
++++ b/package/exim/exim.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--VALIJSON_VERSION = 0.7
-+VALIJSON_VERSION = 1.0.2
- VALIJSON_SITE = $(call github,tristanpenman,valijson,v$(VALIJSON_VERSION))
- VALIJSON_LICENSE = BSD-2-Clause
- VALIJSON_LICENSE_FILES = LICENSE
+-EXIM_VERSION = 4.97
++EXIM_VERSION = 4.97.1
+ EXIM_SOURCE = exim-$(EXIM_VERSION).tar.xz
+ EXIM_SITE = https://ftp.exim.org/pub/exim/exim4
+ EXIM_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
