@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C9BDC47074
-	for <buildroot@archiver.kernel.org>; Thu,  4 Jan 2024 21:28:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E919C47073
+	for <buildroot@archiver.kernel.org>; Thu,  4 Jan 2024 21:28:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DDC8D61AEC;
-	Thu,  4 Jan 2024 21:28:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DDC8D61AEC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3CF3B615F8;
+	Thu,  4 Jan 2024 21:28:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3CF3B615F8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1qHbre2SCmHV; Thu,  4 Jan 2024 21:28:28 +0000 (UTC)
+	with ESMTP id N8R8MLYF06RM; Thu,  4 Jan 2024 21:28:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 36C11615F8;
-	Thu,  4 Jan 2024 21:28:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36C11615F8
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1525C1BF414
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9A35E61AED;
+	Thu,  4 Jan 2024 21:28:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A35E61AED
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7A4011BF414
  for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 21:27:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ECA5A424FF
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4CE0043825
  for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 21:27:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ECA5A424FF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4CE0043825
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id b4VtnpVKCsV9 for <buildroot@lists.busybox.net>;
- Thu,  4 Jan 2024 21:27:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RlzK-ubT_7d1 for <buildroot@lists.busybox.net>;
+ Thu,  4 Jan 2024 21:27:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7235C4284B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5B5FC43818
  for <buildroot@buildroot.org>; Thu,  4 Jan 2024 21:27:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7235C4284B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5B5FC43818
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5E5B583D35; Thu,  4 Jan 2024 21:27:47 +0000 (UTC)
+ id 4778684093; Thu,  4 Jan 2024 21:27:47 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Jan 2024 22:21:14 +0100
+Date: Thu, 4 Jan 2024 22:20:22 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d8e19f8de8dc7f0e1389515044d584aa4733682a
-X-Git-Newrev: 620cd04da4ae7027923b7be2e071c59ed900897e
+X-Git-Oldrev: a4536589d3989e7324e61fd3f4ccbad547564f1c
+X-Git-Newrev: d8e19f8de8dc7f0e1389515044d584aa4733682a
 X-Patchwork-Hint: ignore
-Message-Id: <20240104212747.5E5B583D35@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/stress: bump to version 1.0.7
+Message-Id: <20240104212747.4778684093@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/tinyxml2: bump to version 10.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +63,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=620cd04da4ae7027923b7be2e071c59ed900897e
+commit: https://git.buildroot.net/buildroot/commit/?id=d8e19f8de8dc7f0e1389515044d584aa4733682a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use official tarball and so drop autoreconf
-
-https://github.com/resurrecting-open-source-projects/stress/blob/1.0.7/ChangeLog
+https://github.com/leethomason/tinyxml2/releases/tag/10.0.0
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/stress/stress.hash | 2 +-
- package/stress/stress.mk   | 7 +++----
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ package/tinyxml2/tinyxml2.hash | 2 +-
+ package/tinyxml2/tinyxml2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/stress/stress.hash b/package/stress/stress.hash
-index dc1785b6c7..ac36122594 100644
---- a/package/stress/stress.hash
-+++ b/package/stress/stress.hash
+diff --git a/package/tinyxml2/tinyxml2.hash b/package/tinyxml2/tinyxml2.hash
+index ff799bc2eb..a131b8624d 100644
+--- a/package/tinyxml2/tinyxml2.hash
++++ b/package/tinyxml2/tinyxml2.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  1798e49ca365d928fb194ba1b8e8d1e09963b49e9edb0a78bcbba15750bb5027  stress-1.0.5.tar.gz
-+sha256  e63adb57597e617c14ecb0d841b5d990460796d9e9ec69bd56fe645ef02eb239  stress-1.0.7.tar.bz2
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/stress/stress.mk b/package/stress/stress.mk
-index 99a50f349e..53f01b3b0a 100644
---- a/package/stress/stress.mk
-+++ b/package/stress/stress.mk
-@@ -4,12 +4,11 @@
+ # Locally calculated
+-sha256  cc2f1417c308b1f6acc54f88eb70771a0bf65f76282ce5c40e54cfe52952702c  tinyxml2-9.0.0.tar.gz
++sha256  3bdf15128ba16686e69bce256cc468e76c7b94ff2c7f391cc5ec09e40bff3839  tinyxml2-10.0.0.tar.gz
+ sha256  9332252e9b9e46db8285d4a3f0bf25f139bf1dca6781b956d57f2302efca6432  LICENSE.txt
+diff --git a/package/tinyxml2/tinyxml2.mk b/package/tinyxml2/tinyxml2.mk
+index 0a857e5732..5ea9e13a4b 100644
+--- a/package/tinyxml2/tinyxml2.mk
++++ b/package/tinyxml2/tinyxml2.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--STRESS_VERSION = 1.0.5
--STRESS_SITE = $(call github,resurrecting-open-source-projects,stress,$(STRESS_VERSION))
-+STRESS_VERSION = 1.0.7
-+STRESS_SOURCE = stress-$(STRESS_VERSION).tar.bz2
-+STRESS_SITE = https://github.com/resurrecting-open-source-projects/stress/releases/download/$(STRESS_VERSION)
- STRESS_LICENSE = GPL-2.0+
- STRESS_LICENSE_FILES = COPYING
--# From git
--STRESS_AUTORECONF = YES
- 
- # Stress is linked statically if the --enable-static is specified.
- # However, this option is always specified in the global
+-TINYXML2_VERSION = 9.0.0
++TINYXML2_VERSION = 10.0.0
+ TINYXML2_SITE = $(call github,leethomason,tinyxml2,$(TINYXML2_VERSION))
+ TINYXML2_LICENSE = Zlib
+ TINYXML2_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
