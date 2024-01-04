@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAD3BC47074
-	for <buildroot@archiver.kernel.org>; Thu,  4 Jan 2024 21:45:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56130C47074
+	for <buildroot@archiver.kernel.org>; Thu,  4 Jan 2024 21:45:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9362561B2F;
-	Thu,  4 Jan 2024 21:45:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9362561B2F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0FB1A61AEB;
+	Thu,  4 Jan 2024 21:45:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FB1A61AEB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OlPlpJloSlCV; Thu,  4 Jan 2024 21:45:31 +0000 (UTC)
+	with ESMTP id G1U6Num8mJbZ; Thu,  4 Jan 2024 21:45:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CBB5C61AED;
-	Thu,  4 Jan 2024 21:45:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CBB5C61AED
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8F8341BF859
- for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 21:45:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3BFFD6F4CE;
+	Thu,  4 Jan 2024 21:45:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3BFFD6F4CE
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3733F1BF859
+ for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 21:45:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 686F642C8D
- for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 21:45:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 686F642C8D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0F59340189
+ for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 21:45:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F59340189
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T8_C7FYRjiNt for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FBuLIBFEA4nP for <buildroot@lists.busybox.net>;
  Thu,  4 Jan 2024 21:45:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8D5AE42C7D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 91BFB400D6
  for <buildroot@buildroot.org>; Thu,  4 Jan 2024 21:45:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D5AE42C7D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 91BFB400D6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 652F984188; Thu,  4 Jan 2024 21:45:27 +0000 (UTC)
+ id 7685E84150; Thu,  4 Jan 2024 21:45:27 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Jan 2024 22:43:22 +0100
+Date: Thu, 4 Jan 2024 22:44:05 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e6ef64d955f34db773addad52c7af17e111d7f13
-X-Git-Newrev: f5eba2ef3a5930cd05ad33741b83af02c1dbf42e
+X-Git-Oldrev: f5eba2ef3a5930cd05ad33741b83af02c1dbf42e
+X-Git-Newrev: d6a5bcf9063fec7e626867636bbe3c3adde9086a
 X-Patchwork-Hint: ignore
-Message-Id: <20240104214527.652F984188@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cryptodev-linux: fix build with
- linux >= 6.4
+Message-Id: <20240104214527.7685E84150@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/picocom: bump to version 2023-04
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,135 +58,130 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0750528236569991003=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0750528236569991003==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=f5eba2ef3a5930cd05ad33741b83af02c1dbf42e
+commit: https://git.buildroot.net/buildroot/commit/?id=d6a5bcf9063fec7e626867636bbe3c3adde9086a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following build failure with linux >= 6.4:
+Switch to new upstream.
 
-/home/autobuild/autobuild/instance-15/output-1/build/cryptodev-linux-1.13/./ioctl.c:1249:18: error: ‘struct ctl_table’ has no member named ‘child’
- 1249 |                 .child          = verbosity_ctl_dir,
-      |                  ^~~~~
+Drop upstream patch.
 
-Fixes:
- - http://autobuild.buildroot.org/results/ecbf426f6b0ff920a51c1674b080c35edf5db859
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-zero-copy-Fix-build-for-Linux-6-4.patch   | 37 ++++++++++++++++++
- ...yptodev_verbosity-Fix-build-for-Linux-6-4.patch | 44 ++++++++++++++++++++++
- 2 files changed, 81 insertions(+)
+ .checkpackageignore                                |  1 -
+ ...mpile-with-libc-s-without-cispeed-cospeed.patch | 49 ----------------------
+ package/picocom/Config.in                          |  2 +-
+ package/picocom/picocom.hash                       |  2 +-
+ package/picocom/picocom.mk                         |  4 +-
+ 5 files changed, 4 insertions(+), 54 deletions(-)
 
-diff --git a/package/cryptodev-linux/0001-zero-copy-Fix-build-for-Linux-6-4.patch b/package/cryptodev-linux/0001-zero-copy-Fix-build-for-Linux-6-4.patch
-new file mode 100644
-index 0000000000..4bea55311c
---- /dev/null
-+++ b/package/cryptodev-linux/0001-zero-copy-Fix-build-for-Linux-6-4.patch
-@@ -0,0 +1,37 @@
-+From 592017c3a910a3905b1925aee88c4674e9a596b7 Mon Sep 17 00:00:00 2001
-+From: Gaurav Jain <gaurav.jain@nxp.com>
-+Date: Tue, 30 May 2023 17:09:42 +0530
-+Subject: [PATCH] zero copy: Fix build for Linux 6.4
-+
-+get_user_pages_remote api prototype is changed in kernel.
-+struct vm_area_struct **vmas argument is removed.
-+Migrate to the new API.
-+
-+Signed-off-by: Gaurav Jain <gaurav.jain@nxp.com>
-+
-+Upstream: https://github.com/cryptodev-linux/cryptodev-linux/commit/592017c3a910a3905b1925aee88c4674e9a596b7
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ zc.c | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/zc.c b/zc.c
-+index fdf7da17..6637945a 100644
-+--- a/zc.c
-++++ b/zc.c
-+@@ -80,10 +80,14 @@ int __get_userbuf(uint8_t __user *addr, uint32_t len, int write,
-+ 	ret = get_user_pages_remote(task, mm,
-+ 			(unsigned long)addr, pgcount, write ? FOLL_WRITE : 0,
-+ 			pg, NULL, NULL);
-+-#else
-++#elif (LINUX_VERSION_CODE < KERNEL_VERSION(6, 4, 0))
-+ 	ret = get_user_pages_remote(mm,
-+ 			(unsigned long)addr, pgcount, write ? FOLL_WRITE : 0,
-+ 			pg, NULL, NULL);
-++#else
-++	ret = get_user_pages_remote(mm,
-++			(unsigned long)addr, pgcount, write ? FOLL_WRITE : 0,
-++			pg, NULL);
-+ #endif
-+ #if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 8, 0))
-+ 	up_read(&mm->mmap_sem);
-diff --git a/package/cryptodev-linux/0002-cryptodev_verbosity-Fix-build-for-Linux-6-4.patch b/package/cryptodev-linux/0002-cryptodev_verbosity-Fix-build-for-Linux-6-4.patch
-new file mode 100644
-index 0000000000..e6022c686f
---- /dev/null
-+++ b/package/cryptodev-linux/0002-cryptodev_verbosity-Fix-build-for-Linux-6-4.patch
-@@ -0,0 +1,44 @@
-+From 99ae2a39ddc3f89c66d9f09783b591c0f2dbf2e9 Mon Sep 17 00:00:00 2001
-+From: Gaurav Jain <gaurav.jain@nxp.com>
-+Date: Wed, 28 Jun 2023 12:44:32 +0530
-+Subject: [PATCH] cryptodev_verbosity: Fix build for Linux 6.4
-+
-+register_sysctl_table api is removed in kernel.
-+migrate to the new api register_sysctl.
-+
-+child is also removed in linux 6.4 ctl_table struct.
-+
-+Signed-off-by: Gaurav Jain <gaurav.jain@nxp.com>
-+
-+Upstream: https://github.com/cryptodev-linux/cryptodev-linux/commit/99ae2a39ddc3f89c66d9f09783b591c0f2dbf2e9
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ ioctl.c | 6 ++++++
-+ 1 file changed, 6 insertions(+)
-+
-+diff --git a/ioctl.c b/ioctl.c
-+index 8f241b86..4262bbd5 100644
-+--- a/ioctl.c
-++++ b/ioctl.c
-+@@ -1246,7 +1246,9 @@ static struct ctl_table verbosity_ctl_root[] = {
-+ 	{
-+ 		.procname       = "ioctl",
-+ 		.mode           = 0555,
-++#if (LINUX_VERSION_CODE < KERNEL_VERSION(6, 4, 0))
-+ 		.child          = verbosity_ctl_dir,
-++#endif
-+ 	},
-+ 	{},
-+ };
-+@@ -1267,7 +1269,11 @@ static int __init init_cryptodev(void)
-+ 		return rc;
-+ 	}
-+ 
-++#if (LINUX_VERSION_CODE < KERNEL_VERSION(6, 4, 0))
-+ 	verbosity_sysctl_header = register_sysctl_table(verbosity_ctl_root);
-++#else
-++	verbosity_sysctl_header = register_sysctl(verbosity_ctl_root->procname, verbosity_ctl_dir);
-++#endif
-+ 
-+ 	pr_info(PFX "driver %s loaded.\n", VERSION);
-+ 
-
---===============0750528236569991003==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 40d9fb1ed4..7e15db0d29 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1047,7 +1047,6 @@ package/php/0002-iconv-tweak-iconv-detection.patch Upstream
+ package/php/0003-configure-disable-the-phar-tool.patch Upstream
+ package/php/0004-Call-apxs-with-correct-prefix.patch Upstream
+ package/php/0005-allow-opcache-cross-compiling.patch Upstream
+-package/picocom/0001-Compile-with-libc-s-without-cispeed-cospeed.patch Upstream
+ package/pifmrds/0001-Makefile-cross-compile-friendly.patch Upstream
+ package/pifmrds/0002-Makefile-use-LDFLAGS.patch Upstream
+ package/pifmrds/0003-Makefile-fix-static-link.patch Upstream
+diff --git a/package/picocom/0001-Compile-with-libc-s-without-cispeed-cospeed.patch b/package/picocom/0001-Compile-with-libc-s-without-cispeed-cospeed.patch
+deleted file mode 100644
+index 5143e31102..0000000000
+--- a/package/picocom/0001-Compile-with-libc-s-without-cispeed-cospeed.patch
++++ /dev/null
+@@ -1,49 +0,0 @@
+-From 30c712c5f14306460c44bea70e24419db9d44f8c Mon Sep 17 00:00:00 2001
+-From: Nick Patavalis <npat@efault.net>
+-Date: Thu, 12 Apr 2018 15:16:04 +0300
+-Subject: [PATCH] Compile with libc's without cispeed / cospeed
+-
+-Some libc implementations (e.g. musl) do not define the cispeed and
+-cospeed struct termios fields. So we have to check the
+-_HAVE_STRUCT_TERMIOS_C_ISPEED and _HAVE_STRUCT_TERMIOS_C_OSPEED
+-macros. If not defined, we disable custom baudrate support.
+-
+-[baruch: backported from upstream master to 3.1]
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Upstream status: commit 1acf1ddabaf3
+-
+- custbaud.h | 10 +++++++++-
+- 1 file changed, 9 insertions(+), 1 deletion(-)
+-
+-diff --git a/custbaud.h b/custbaud.h
+-index 48151a4a4e84..ae4ae8daf49e 100644
+---- a/custbaud.h
+-+++ b/custbaud.h
+-@@ -26,6 +26,8 @@
+- #ifndef CUSTBAUD_H
+- #define CUSTBAUD_H
+- 
+-+#include <termios.h>
+-+
+- #ifndef NO_CUSTOM_BAUD
+- 
+- #if defined (__linux__)
+-@@ -33,7 +35,13 @@
+- /* Enable by-default for kernels > 2.6.0 on x86 and x86_64 only */
+- #include <linux/version.h>
+- #if LINUX_VERSION_CODE > KERNEL_VERSION(2,6,0)
+--#if defined (__i386__) || defined (__x86_64__) || defined (USE_CUSTOM_BAUD)
+-+/* Some libc implementations (e.g. musl) do not define the cispeed and
+-+   cospeed struct termios fields. We do not support custom baudrates
+-+   on them. */
+-+#if ( (defined (__i386__) || defined (__x86_64__))  \
+-+      && defined (_HAVE_STRUCT_TERMIOS_C_ISPEED)    \
+-+      && defined (_HAVE_STRUCT_TERMIOS_C_OSPEED) )  \
+-+    || defined (USE_CUSTOM_BAUD)
+- #ifndef USE_CUSTOM_BAUD
+- #define USE_CUSTOM_BAUD
+- #endif
+--- 
+-2.16.3
+-
+diff --git a/package/picocom/Config.in b/package/picocom/Config.in
+index 9f8efc4a9a..6db71e1791 100644
+--- a/package/picocom/Config.in
++++ b/package/picocom/Config.in
+@@ -6,4 +6,4 @@ config BR2_PACKAGE_PICOCOM
+ 	  in principle, very much like minicom, only it's pico instead
+ 	  of mini!
+ 
+-	  https://github.com/npat-efault/picocom/
++	  https://gitlab.com/wsakernel/picocom
+diff --git a/package/picocom/picocom.hash b/package/picocom/picocom.hash
+index 77c270408c..8107f5633a 100644
+--- a/package/picocom/picocom.hash
++++ b/package/picocom/picocom.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  e6761ca932ffc6d09bd6b11ff018bdaf70b287ce518b3282d29e0270e88420bb  picocom-3.1.tar.gz
++sha256  107d3e49e502ce63f826525f587826990451bcb39492efe2e0463dd62d64f3ea  picocom-2023-04.tar.gz
+ sha256  9273c6b2c55be95f0f0df292d87e8900e5bfdf5b510a6ea09e80306cf45c10f6  LICENSE.txt
+diff --git a/package/picocom/picocom.mk b/package/picocom/picocom.mk
+index 2d585bb2f5..2828c98fb7 100644
+--- a/package/picocom/picocom.mk
++++ b/package/picocom/picocom.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-PICOCOM_VERSION = 3.1
+-PICOCOM_SITE = $(call github,npat-efault,picocom,$(PICOCOM_VERSION))
++PICOCOM_VERSION = 2023-04
++PICOCOM_SITE = $(call gitlab,wsakernel,picocom,$(PICOCOM_VERSION))
+ PICOCOM_LICENSE = GPL-2.0+
+ PICOCOM_LICENSE_FILES = LICENSE.txt
+ PICOCOM_CPE_ID_VENDOR = picocom_project
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0750528236569991003==--
