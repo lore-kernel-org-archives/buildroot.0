@@ -4,67 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F17FC47073
-	for <buildroot@archiver.kernel.org>; Thu,  4 Jan 2024 21:38:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54E06C47073
+	for <buildroot@archiver.kernel.org>; Thu,  4 Jan 2024 21:42:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BC932615D9;
-	Thu,  4 Jan 2024 21:38:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC932615D9
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0B54461AB1;
+	Thu,  4 Jan 2024 21:42:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B54461AB1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Rn2jsLs2DywT; Thu,  4 Jan 2024 21:38:33 +0000 (UTC)
+	with ESMTP id QczRTseRmgmN; Thu,  4 Jan 2024 21:42:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 26316615BD;
-	Thu,  4 Jan 2024 21:38:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 26316615BD
+	by smtp3.osuosl.org (Postfix) with ESMTP id 66640615D9;
+	Thu,  4 Jan 2024 21:42:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 66640615D9
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DA5761BF859
- for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 21:38:29 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B5BD41BF859
+ for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 21:42:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B3370424FF
- for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 21:38:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B3370424FF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8EF6340267
+ for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 21:42:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8EF6340267
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WBDyOHTdeKoz for <buildroot@lists.busybox.net>;
- Thu,  4 Jan 2024 21:38:27 +0000 (UTC)
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6D26C424E2
- for <buildroot@buildroot.org>; Thu,  4 Jan 2024 21:38:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D26C424E2
-Received: by mail.gandi.net (Postfix) with ESMTPSA id ED67B1BF204;
- Thu,  4 Jan 2024 21:38:23 +0000 (UTC)
-Date: Thu, 4 Jan 2024 22:38:23 +0100
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Message-ID: <20240104223823.1bb97896@windsurf>
-In-Reply-To: <ZZckauC7K7-qR0lP@landeda>
-References: <20240103102311.4048759-1-abrodkin@synopsys.com>
- <20240104221941.044adcb5@windsurf> <ZZckauC7K7-qR0lP@landeda>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+ with ESMTP id 1YXG65ATMBKS for <buildroot@lists.busybox.net>;
+ Thu,  4 Jan 2024 21:42:51 +0000 (UTC)
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 906BA401C6
+ for <buildroot@buildroot.org>; Thu,  4 Jan 2024 21:42:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 906BA401C6
+Received: by mail-wm1-x335.google.com with SMTP id
+ 5b1f17b1804b1-40d76fefd6bso8474945e9.2
+ for <buildroot@buildroot.org>; Thu, 04 Jan 2024 13:42:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1704404569; x=1705009369;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=0D2gW8kbgix+mlFd3ERjpwTUFSXOzo1N6kAT0lVbZs0=;
+ b=eOUBf5GaPFBFmedTq8S6RORRT3a/5QP0ZHIsLoP3dfS+4CrGDheTg1wj86oONSgivt
+ R7Sgn7HwbxTytzNZERcBEd82vYBkEoTR4eJbX5laGv0hOgg125R9hSIV7BJ4Wvnd/+8S
+ c4BbCe7KwhioJLteSOwntFj2R+GYbIKHXSJCATlXhbnUqBLLnHzhH3UTXhNkKmKpZZcu
+ 65mOmWDJLFyzJhTV1SeVvGvcSEqwIAyiguGXEIyvGOa0p6SaWt9kv5Qgk5Hq82qXxEfF
+ DmO4BSVd/wI020kvyc8jK/jEseWVMfHVjmxU1gg0OZ1/MqRqNQk1IG6EnTLnQ2RsNHEm
+ pYig==
+X-Gm-Message-State: AOJu0YyGGIYrQAcp5kLfsGvoH1ob1zVWEC4AbmJzTkix/Jqdv7USbq+i
+ Q7o/uTqf96UdhzF6BlIDIw/T3qhu1gU=
+X-Google-Smtp-Source: AGHT+IHwIG45e2T58M74zIV/tpRiKoEtWVVOqSNsv2ubUnsvZNBBjkDDc/lmQeiZetKsO/NOXyiKpA==
+X-Received: by 2002:a05:600c:21d5:b0:40d:7505:917b with SMTP id
+ x21-20020a05600c21d500b0040d7505917bmr360890wmj.34.1704404568796; 
+ Thu, 04 Jan 2024 13:42:48 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ h18-20020a05600c351200b0040c11fbe581sm425867wmq.27.2024.01.04.13.42.48
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 04 Jan 2024 13:42:48 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Thu,  4 Jan 2024 22:42:45 +0100
+Message-ID: <20240104214245.611797-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1704404304;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=CuIBvb3BbK0OwXEc2e6FJm/6dfyn30LjxhQTdIPRqBk=;
- b=nbLWGUUGQN75/W/CJlKCR1D0bnWzfVhqXsZzy7G4/lBfu7y7iXuXDEjtZ3s583QYeMSFmq
- jCwwUojVapTcCkiX8gby2tX+gTdQ/DA4HOBlHQA67pMFD2GIzrqwkfYLBDl9OFt1Q/S/9C
- IJDtpEcuyaEMwD99WwryZ3Yjo9q3EKazSAJegoVrHilulgEqsp/uNe84GfLVwgKgj2QTDt
- 4+Lvy/cs/dHaBnJ8s/EJTxtKz/8xtJorJqNhrNXkbub6CEC4Ik/0WEEMIfmOnSx60FEty1
- 642wdcSVe8x+AVNzCGrWu8n2zOprNZBu4WLQ3aNgeqQ0aPLXFviZkOZkeF2loQ==
+ d=gmail.com; s=20230601; t=1704404569; x=1705009369; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=0D2gW8kbgix+mlFd3ERjpwTUFSXOzo1N6kAT0lVbZs0=;
+ b=le+Ju9FcpUGEGAszTkKcBugVuJJTpiRlczWa8bMrZVYHPNu7JVi0SPp18AfNhSZUyC
+ Nu4pZNu1MR3B4Uvkqg9TIdxGDJK4c/uBfeYXhCX0IEvzvjkvtD7UCkUH4hvaIguySqsU
+ QhycYN+x0xA9DfilP5p9RQg4EW1lsiObsvl1Gjv/hRlvkZhkKbOzkAlcBWU2if8Jb47o
+ MlLj54FICQKZ47wrxadOG+5U8nP2sQfG1KNzSICf38RofIWYOZTVno3HGFNsBwsvcsVY
+ awg35s1gKfnha8C/x4g3wonjTX5AHT/W2uorpGdKvbfIM+RHV7jICyWTjXhNIMBJIi2u
+ DlJA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=nbLWGUUG
-Subject: Re: [Buildroot] [PATCH] arch: Set max/common-page-size for libgcc &
- libstdc++
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=le+Ju9Fc
+Subject: [Buildroot] [PATCH 1/1] package/easy-rsa: bump to version 3.1.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,47 +93,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Alexey Brodkin <Alexey.Brodkin@synopsys.com>,
- Pavel Kozlov <Pavel.Kozlov@synopsys.com>, Vladimir Isaev <VVIsaev@gmail.com>,
- Alexey Brodkin via buildroot <buildroot@buildroot.org>
+Cc: Julien Viard de Galbert <julien@vdg.name>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 4 Jan 2024 22:34:34 +0100
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+https://github.com/OpenVPN/easy-rsa/blob/v3.1.7/ChangeLog
 
-> > But I'm surprised they are not needed also in the C library build. Why
-> > are you not seeing the same problem with the C library build, it should
-> > also need the same page size flags, doesn't it?  
-> 
-> It is my understanding that the toolchain wrapper is installed as a post
-> initial gcc hook as well:
-> 
->    package/gcc/gcc-initial/gcc-initial.mk:
->    59 HOST_GCC_INITIAL_POST_BUILD_HOOKS += TOOLCHAIN_WRAPPER_BUILD
->    60 HOST_GCC_INITIAL_POST_INSTALL_HOOKS += TOOLCHAIN_WRAPPER_INSTALL
->    61 HOST_GCC_INITIAL_POST_INSTALL_HOOKS += HOST_GCC_INSTALL_WRAPPER_AND_SIMPLE_SYMLINKS
-> 
-> So the C libraries are built using our wrapper.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/easy-rsa/easy-rsa.hash | 2 +-
+ package/easy-rsa/easy-rsa.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Hum, indeed. But then, why doesn't that apply to libgcc and libstdc++
-as well? It is because libgcc/libstdc++ are built with the second stage
-gcc, before it is installed and wrapped by our wrapper? I guess so
-because the first stage gcc isn't capable of building shared libraries,
-or something like that.
-
-So, indeed, my proposal to Alexey is to use ARCH_TOOLCHAIN_WRAPPER_OPTS
-in gcc.mk. This will allow to get rid of the special -matomic addition.
-
-Thomas
+diff --git a/package/easy-rsa/easy-rsa.hash b/package/easy-rsa/easy-rsa.hash
+index 5be651bde0..de19d8b693 100644
+--- a/package/easy-rsa/easy-rsa.hash
++++ b/package/easy-rsa/easy-rsa.hash
+@@ -1,5 +1,5 @@
+ # Locally computed: (after verifying gpg sig)
+-sha512  8c8d1f4baf90475d4cce334d116b7f12b82687157796b25560600b5098769226ae2f60f02982c75266b625d66b465360ffa815260ad44850923e3fbc9ba8540a  EasyRSA-3.1.1.tgz
++sha512  eb3978b07c313af148c6ae94b60e213c8b810c5974242855560b22ad949cfc094d311e4cc04a95ddd0f817bfec54971caa5289e5fc532895e1e58499d265c705  EasyRSA-3.1.7.tgz
+ 
+ # Hash for license files
+ sha256  7c4a4fc71745d93a87278801f1bca555562ca23f21e18293add64b9e6f6b7bf1  COPYING.md
+diff --git a/package/easy-rsa/easy-rsa.mk b/package/easy-rsa/easy-rsa.mk
+index 4ea45506dd..7266943f5b 100644
+--- a/package/easy-rsa/easy-rsa.mk
++++ b/package/easy-rsa/easy-rsa.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EASY_RSA_VERSION = 3.1.1
++EASY_RSA_VERSION = 3.1.7
+ EASY_RSA_SOURCE = EasyRSA-$(EASY_RSA_VERSION).tgz
+ EASY_RSA_SITE = https://github.com/OpenVPN/easy-rsa/releases/download/v$(EASY_RSA_VERSION)
+ EASY_RSA_LICENSE = GPL-2.0
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
