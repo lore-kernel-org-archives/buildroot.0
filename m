@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 417E6C47074
-	for <buildroot@archiver.kernel.org>; Thu,  4 Jan 2024 21:36:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F344C47074
+	for <buildroot@archiver.kernel.org>; Thu,  4 Jan 2024 21:36:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ED274615D6;
-	Thu,  4 Jan 2024 21:35:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED274615D6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1D30C615D0;
+	Thu,  4 Jan 2024 21:36:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D30C615D0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KX8JyG2wR0Dq; Thu,  4 Jan 2024 21:35:59 +0000 (UTC)
+	with ESMTP id B89gi0YIbpMP; Thu,  4 Jan 2024 21:36:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 34E3961AC7;
-	Thu,  4 Jan 2024 21:35:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 34E3961AC7
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 026331BF977
+	by smtp3.osuosl.org (Postfix) with ESMTP id 82838615D6;
+	Thu,  4 Jan 2024 21:36:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 82838615D6
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 01B101BF859
  for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 21:35:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DA2EB42E35
+ by smtp3.osuosl.org (Postfix) with ESMTP id D1178615D9
  for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 21:35:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA2EB42E35
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1178615D9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jVd4wdI2CE9G for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wsHaIQVlaKZW for <buildroot@lists.busybox.net>;
  Thu,  4 Jan 2024 21:35:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EDBE842E2F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0C609615D0
  for <buildroot@buildroot.org>; Thu,  4 Jan 2024 21:35:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EDBE842E2F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C609615D0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C6F0B84150; Thu,  4 Jan 2024 21:35:53 +0000 (UTC)
+ id EB07684153; Thu,  4 Jan 2024 21:35:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Jan 2024 22:35:36 +0100
+Date: Thu, 4 Jan 2024 22:35:38 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f6cf18303119f5c481a135abaee67867b03d8d54
-X-Git-Newrev: 206a9c11ac09d4264539b11ed0d45e6089d001a1
+X-Git-Oldrev: 7ff27f44ac6d3b01826819ec5c3ebabee6314e91
+X-Git-Newrev: f46b472aeb5302251346fb0cfbc179dea0e14877
 X-Patchwork-Hint: ignore
-Message-Id: <20240104213553.C6F0B84150@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-trafaret: new package
+Message-Id: <20240104213553.EB07684153@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rauc: bump version to 1.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,74 +63,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=206a9c11ac09d4264539b11ed0d45e6089d001a1
+commit: https://git.buildroot.net/buildroot/commit/?id=f46b472aeb5302251346fb0cfbc179dea0e14877
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Release notes: https://github.com/rauc/rauc/releases/tag/v1.11
+
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/Config.in                            |  1 +
- package/python-trafaret/Config.in            |  7 +++++++
- package/python-trafaret/python-trafaret.hash |  5 +++++
- package/python-trafaret/python-trafaret.mk   | 14 ++++++++++++++
- 4 files changed, 27 insertions(+)
+ package/rauc/rauc.hash | 2 +-
+ package/rauc/rauc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 38c36428b9..a2cc80aa27 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1375,6 +1375,7 @@ menu "External python modules"
- 	source "package/python-tomli/Config.in"
- 	source "package/python-tornado/Config.in"
- 	source "package/python-tqdm/Config.in"
-+	source "package/python-trafaret/Config.in"
- 	source "package/python-traitlets/Config.in"
- 	source "package/python-treq/Config.in"
- 	source "package/python-trio/Config.in"
-diff --git a/package/python-trafaret/Config.in b/package/python-trafaret/Config.in
-new file mode 100644
-index 0000000000..73c7216b1e
---- /dev/null
-+++ b/package/python-trafaret/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_TRAFARET
-+	bool "python-trafaret"
-+	help
-+	  Ultimate transformation library that supports validation,
-+	  contexts and aiohttp.
-+
-+	  https://github.com/Deepwalker/trafaret/
-diff --git a/package/python-trafaret/python-trafaret.hash b/package/python-trafaret/python-trafaret.hash
-new file mode 100644
-index 0000000000..d0d54c9ff2
---- /dev/null
-+++ b/package/python-trafaret/python-trafaret.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/trafaret/json
-+md5  85085fe18dd133d3622a2f7a3b0acf6a  trafaret-2.1.1.tar.gz
-+sha256  d9d00800318fbd343fdfb3353e947b2ebb5557159c844696c5ac24846f76d41c  trafaret-2.1.1.tar.gz
-+# Locally computed sha256 checksums
-+sha256  724f8da8a7161f07d9448aa37d1d5c4eb44b14727021c3b5d60a50ecf9a24771  LICENSE.txt
-diff --git a/package/python-trafaret/python-trafaret.mk b/package/python-trafaret/python-trafaret.mk
-new file mode 100644
-index 0000000000..74d87a3d13
---- /dev/null
-+++ b/package/python-trafaret/python-trafaret.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-trafaret
-+#
-+################################################################################
-+
-+PYTHON_TRAFARET_VERSION = 2.1.1
-+PYTHON_TRAFARET_SOURCE = trafaret-$(PYTHON_TRAFARET_VERSION).tar.gz
-+PYTHON_TRAFARET_SITE = https://files.pythonhosted.org/packages/c9/ed/aac034e566f8846aee6472dcc90da6011a0b1829e3ffc768407df519a3b0
-+PYTHON_TRAFARET_SETUP_TYPE = setuptools
-+PYTHON_TRAFARET_LICENSE = BSD-2-Clause
-+PYTHON_TRAFARET_LICENSE_FILES = LICENSE.txt
-+
-+$(eval $(python-package))
+diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
+index 38fea45b8a..8de309f8c7 100644
+--- a/package/rauc/rauc.hash
++++ b/package/rauc/rauc.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  aa99164c5f54fd29b5c8456221b51f92c900884af66de3e1b7f15a25b7db98a7  rauc-1.10.1.tar.xz
++sha256  a28f415c580390dd9e65016a5d90a63ee1cfd7e1b3e864cbb13cb3ac3513391f  rauc-1.11.tar.xz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
+index 4211abdcc4..aff5ead281 100644
+--- a/package/rauc/rauc.mk
++++ b/package/rauc/rauc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RAUC_VERSION = 1.10.1
++RAUC_VERSION = 1.11
+ RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
+ RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
+ RAUC_LICENSE = LGPL-2.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
