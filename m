@@ -4,65 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B63BC47073
-	for <buildroot@archiver.kernel.org>; Thu,  4 Jan 2024 21:31:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E54AC47074
+	for <buildroot@archiver.kernel.org>; Thu,  4 Jan 2024 21:31:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C90466F4A3;
-	Thu,  4 Jan 2024 21:31:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C90466F4A3
+	by smtp3.osuosl.org (Postfix) with ESMTP id 36F05615F8;
+	Thu,  4 Jan 2024 21:31:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36F05615F8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id joG5fgdV7lat; Thu,  4 Jan 2024 21:31:02 +0000 (UTC)
+	with ESMTP id 0RImkmZMOPb8; Thu,  4 Jan 2024 21:31:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 282F961B2D;
-	Thu,  4 Jan 2024 21:31:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 282F961B2D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 421121BF414
- for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 21:30:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9812A61B35;
+	Thu,  4 Jan 2024 21:31:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9812A61B35
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3D9101BF414
+ for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 21:30:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2838642D9F
- for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 21:30:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2838642D9F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 142048452E
+ for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 21:30:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 142048452E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4fNOLwnBFG3u for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Lhn-v6KgIyv6 for <buildroot@lists.busybox.net>;
+ Thu,  4 Jan 2024 21:30:52 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 04FF18452C
+ for <buildroot@buildroot.org>; Thu,  4 Jan 2024 21:30:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 04FF18452C
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 335C6FF80A;
  Thu,  4 Jan 2024 21:30:49 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3ABFB42D9C
- for <buildroot@buildroot.org>; Thu,  4 Jan 2024 21:30:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3ABFB42D9C
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D118440002;
- Thu,  4 Jan 2024 21:30:45 +0000 (UTC)
-Date: Thu, 4 Jan 2024 22:30:45 +0100
+Date: Thu, 4 Jan 2024 22:30:48 +0100
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20240104223045.07f60b0b@windsurf>
-In-Reply-To: <20240103174238.854675-1-fontaine.fabrice@gmail.com>
-References: <20240103174238.854675-1-fontaine.fabrice@gmail.com>
+Message-ID: <20240104223048.191bf429@windsurf>
+In-Reply-To: <20240103181826.875567-1-fontaine.fabrice@gmail.com>
+References: <20240103181826.875567-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1704403846;
+ d=bootlin.com; s=gm1; t=1704403849;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=9LlSWyH+YtSHODIilgfxm65T9YuloWCesn7FM6D7BTY=;
- b=geRYJf18/TMCYUGcIHnB5KnzRUTaZpg9EfEsmCj8ToNKFDNcOFAJmOh2kZZG58aC+kC/Si
- OPMpHgDXDpqsIlJ8rWw3hHCH1VoR06Y8JEk2C65eW/YSeoDPXnjaakTzqnVWaPbM4LmqBS
- L26SmTo5jllblHCkVwTValaIKN2QfGbzCvHf4H1SXT4dOGTX0gVOJJnMskzs3cziUB7i8y
- BDRr3bOT2vD/6qP3SY2r0YX/ghTKuz+iNNHXLhDnJzaVddmdxuTzlL3bElswttdo4+9lJV
- itwFljmmGUkEc/IBM88bnZPMTzMC6LYxtZSSP0XwDMHD+OluOKKqtcFCv+WfzA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=hre7eYzA/PaYAtHlmsQpY43J4Dn+/Ntj348RjuswJUw=;
+ b=Fxr2f8sLqVjvQIbB9VfFVCDju/ksjZOPbx+d/R8dA7zsMdQo5FcCcMGctIqqcwVGwrxcA5
+ FWxYduAr2VxK2lBGvgbSx8Jlm8HlupTAkmduq7RJUqcVfOxbfOatKn+5HZy1tsK72ZbfoA
+ beu1vi9vmDsXTxnobgKN1zsR6TwSa8+Bfp0Abbstd94kkAcBwZp+EuDMY7yWEV5opolkdv
+ DpDrRuWhb4oGdXbyH5/to7maw+AQqMTGW5mq6YVWDDD0/Pn7q+QjfFI5b/a4077ZpFImgS
+ Tro3DfUrGU797qPPHbzLPt85QduZ79EQJbea6N81JBBuTL4MNM6k2/jMOCPbvg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=geRYJf18
-Subject: Re: [Buildroot] [PATCH 1/1] package/vnstat: bump to version 2.11
+ header.s=gm1 header.b=Fxr2f8sL
+Subject: Re: [Buildroot] [PATCH 1/1] package/utf8proc: bump to version 2.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,22 +76,24 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Rodrigo Rebello <rprebello@gmail.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed,  3 Jan 2024 18:42:38 +0100
+On Wed,  3 Jan 2024 19:18:26 +0100
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> https://github.com/vergoh/vnstat/releases/tag/v2.11
+> Use official tarball
+> 
+> https://github.com/JuliaStrings/utf8proc/blob/v2.9.0/NEWS.md
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/vnstat/vnstat.hash | 2 +-
->  package/vnstat/vnstat.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/utf8proc/utf8proc.hash | 2 +-
+>  package/utf8proc/utf8proc.mk   | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
