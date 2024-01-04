@@ -1,72 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A2A5C47074
-	for <buildroot@archiver.kernel.org>; Thu,  4 Jan 2024 10:44:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C795C47074
+	for <buildroot@archiver.kernel.org>; Thu,  4 Jan 2024 16:56:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E390261105;
-	Thu,  4 Jan 2024 10:44:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E390261105
+	by smtp1.osuosl.org (Postfix) with ESMTP id C7120832B0;
+	Thu,  4 Jan 2024 16:56:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C7120832B0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id V8-gOXwv3EOV; Thu,  4 Jan 2024 10:44:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id n7En62E4erIm; Thu,  4 Jan 2024 16:56:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3117A61002;
-	Thu,  4 Jan 2024 10:44:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3117A61002
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 046391BF422
- for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 10:44:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 865D783183;
+	Thu,  4 Jan 2024 16:56:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 865D783183
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id F1C031BF3F9
+ for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 16:56:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BE0D161002
- for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 10:44:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE0D161002
+ by smtp4.osuosl.org (Postfix) with ESMTP id C3375400C9
+ for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 16:56:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C3375400C9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 17FPfJrQmHNo for <buildroot@lists.busybox.net>;
- Thu,  4 Jan 2024 10:44:25 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B5C6060F8B
- for <buildroot@buildroot.org>; Thu,  4 Jan 2024 10:44:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B5C6060F8B
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9F34424000C;
- Thu,  4 Jan 2024 10:44:21 +0000 (UTC)
-Date: Thu, 4 Jan 2024 11:44:20 +0100
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20240104114420.0a1fb690@windsurf>
-In-Reply-To: <CAPi7W83sQsbf-_SVva6QFpRhzg-YJ65UwKf+YeU2HRi_GVkt_w@mail.gmail.com>
-References: <20240103173741.850916-1-fontaine.fabrice@gmail.com>
- <20240103173741.850916-2-fontaine.fabrice@gmail.com>
- <20240104105538.36eaf9ef@windsurf>
- <CAPi7W83sQsbf-_SVva6QFpRhzg-YJ65UwKf+YeU2HRi_GVkt_w@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gOboXoJTzEvW for <buildroot@lists.busybox.net>;
+ Thu,  4 Jan 2024 16:56:49 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 554C840070
+ for <buildroot@buildroot.org>; Thu,  4 Jan 2024 16:56:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 554C840070
+Received: by mail.gandi.net (Postfix) with ESMTPSA id CC3D860003;
+ Thu,  4 Jan 2024 16:56:44 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peko@48ers.dk>) id 1rLR1P-0056CJ-2W;
+ Thu, 04 Jan 2024 17:56:43 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Thu,  4 Jan 2024 17:56:33 +0100
+Message-Id: <20240104165634.1215451-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1704365062;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=+8H5z/xCfIBfmYxvUbjbWgP7dGcDIbuy4GStuLewEAk=;
- b=CXy3/VSgCcMzx6TWpjTPzAlrF5y40xbT1SuauXhMtMPXxatLwr63/oPQgbWCzfd157Oc9Y
- cXZ6NX/d6IqHjzz8MrvANy7io2X7b73XjpMNCPvpiF/EZQ4p0bjZRRE+bMEvoShcEqnUH8
- kKJEuzHUwCsIhe8NNnYMpNl7oWrobOrosdlK75xOgseg1PszddAypOgGIo19SwS+zZ6sAj
- NrTOxxmiFkDG441Zs91BbZr36pjq+Wb6YZQoXuszrduGulCzz9iboFI/sALWtsgB0zPq5B
- KekPg5aMFsl6t4JJG7qLzjNTBN8702pWiwFB+izCGQ+7rLYCdxowCa3NhVu+xw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=CXy3/VSg
-Subject: Re: [Buildroot] [PATCH v2,
- 2/2] package/python-pysensors: add host-lm-sensors dependency
+X-GND-Sasl: peter@korsgaard.com
+Subject: [Buildroot] [PATCH] boot/arm-trusted-firmware: fix fiptool linking
+ issue on hosts without openssl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,43 +60,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
- Brandon Maier <brandon.maier@collins.com>, buildroot@buildroot.org
+Cc: Sergey Matyukevich <geomatsi@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Fabrice,
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/5834758777
 
-On Thu, 4 Jan 2024 11:10:22 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Commit e7d16c35a (boot/arm-trusted-firmware: fix the RPATH of fiptool) tried
+to fix the build of host-fiptool, but forgot to pass HOST_CFLAGS.
 
-> > Should just be moved directly to setup.py, and setup.py should not
-> > import sensors. From a quick look, none of those variables are used
-> > outside of setup.py. And of course this could be contributed upstream,
-> > explaining why "import sensors" at setup time is not good.  
-> 
-> Indeed, this is a cleaner solution.
-> However, it should be noted that upstream is dead: latest version is
-> from 2019 and source code repository given on
-> https://pypi.org/project/PySensors/ is unreachable.
+On hosts without (compatible) openssl development headers, this breaks
+the build when it cannot find the openssl headers:
 
-Hm. Then maybe it wasn't such a good idea to add this package in
-Buildroot in the first place? Even lm-sensors is not very well
-maintained in fact.
+fiptool_platform.h:19:11: fatal error: openssl/sha.h: No such file or directory
 
-Anyway, as an immediate fix, we can simply carry a patch in Buildroot.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks!
-
-Thomas
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+index bed873a182..7f9c896387 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+@@ -64,7 +64,7 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += \
+ 	$(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES)) \
+ 	PLAT=$(ARM_TRUSTED_FIRMWARE_PLATFORM) \
+ 	TARGET_BOARD=$(ARM_TRUSTED_FIRMWARE_TARGET_BOARD) \
+-	HOSTCC="$(HOSTCC) $(HOST_LDFLAGS)"
++	HOSTCC="$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS)"
+ 
+ ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP),y)
+ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += \
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.39.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
