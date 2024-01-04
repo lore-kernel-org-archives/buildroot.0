@@ -4,66 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98789C47073
-	for <buildroot@archiver.kernel.org>; Thu,  4 Jan 2024 21:43:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1D82C47074
+	for <buildroot@archiver.kernel.org>; Thu,  4 Jan 2024 21:44:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2E39A61B32;
-	Thu,  4 Jan 2024 21:43:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E39A61B32
+	by smtp3.osuosl.org (Postfix) with ESMTP id ABD7561B2C;
+	Thu,  4 Jan 2024 21:44:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABD7561B2C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FZcF2DKjitUy; Thu,  4 Jan 2024 21:43:38 +0000 (UTC)
+	with ESMTP id 6LGlFJxf8bO0; Thu,  4 Jan 2024 21:44:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8D4AD61AED;
-	Thu,  4 Jan 2024 21:43:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D4AD61AED
+	by smtp3.osuosl.org (Postfix) with ESMTP id 17C9561AEB;
+	Thu,  4 Jan 2024 21:44:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 17C9561AEB
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6D8051BF859
- for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 21:43:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B360E1BF859
+ for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 21:44:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4638D428AC
- for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 21:43:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4638D428AC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8D2EF42C37
+ for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 21:44:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D2EF42C37
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lFSwRT7XEygt for <buildroot@lists.busybox.net>;
- Thu,  4 Jan 2024 21:43:35 +0000 (UTC)
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4E9CF42864
- for <buildroot@buildroot.org>; Thu,  4 Jan 2024 21:43:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E9CF42864
-Received: by mail.gandi.net (Postfix) with ESMTPSA id AAD631BF206;
- Thu,  4 Jan 2024 21:43:33 +0000 (UTC)
-Date: Thu, 4 Jan 2024 22:43:33 +0100
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20240104224333.163266ac@windsurf>
-In-Reply-To: <20240104171447.10551-1-fontaine.fabrice@gmail.com>
-References: <20240104171447.10551-1-fontaine.fabrice@gmail.com>
+ with ESMTP id I3slnM-mR6l1 for <buildroot@lists.busybox.net>;
+ Thu,  4 Jan 2024 21:44:48 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 89E5C428BE
+ for <buildroot@buildroot.org>; Thu,  4 Jan 2024 21:44:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 89E5C428BE
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 53CB320003;
+ Thu,  4 Jan 2024 21:44:45 +0000 (UTC)
+Date: Thu, 4 Jan 2024 22:44:44 +0100
+To: Baruch Siach via buildroot <buildroot@buildroot.org>
+Message-ID: <20240104224444.76c7800d@windsurf>
+In-Reply-To: <7bf9e3705b3b2bfe8d7796551156abd2ddb8ea26.1704300546.git.baruch@tkos.co.il>
+References: <7bf9e3705b3b2bfe8d7796551156abd2ddb8ea26.1704300546.git.baruch@tkos.co.il>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1704404613;
+ d=bootlin.com; s=gm1; t=1704404686;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=j/5VnloxQ+tzsIaCcbxTZ3S8euebQelOkwJE6+7U+FQ=;
- b=iqGKV4JIjgWMPzt946wROJ5rrx2VivPnKTEXtCVIQzYtwQreRMDDgAi0G14qAITaQH5d3F
- xflEhERmOBzZFNt67X7kxkhgK62mcwTNQxoM5QnHkV23mfbH8v/HW4H9mOlq4O/6gumwr9
- ABkZPGt1qrNPSZm7llt3PPtqQxYht75slwjZtkhFsiLbP9ZIOkDNnfR9u+7zvN3wCTB/cb
- FkbfB3HSOXah2BHEqdSvtc3MwyoMFC+Nqau33MVYuYHMzoBQjYP7QPvF5uOUbJOb0aIfUS
- oO6tSfxjLlUidc1Rihk+zPWm/BzbKDh7xiRxu3DidSpYpOs45VsoHlISt/fUhw==
+ bh=PBE50wVunfrfUefxATsVuqvVlqkA79TvHx8QrCLSmOw=;
+ b=BzvlRTTLsEW1dwCBYuPQAo9WE82vP1WcH5b/1Vq3T2rCv99n0qe34C5nPD92H/zhbV3i6/
+ DhMjCPQGyYS67JPOea7Y6GLxR6gj4EEGO9OY5twNaeVkb32aj3UNtVJp7Wl/0lFTdUy4bE
+ ZVw8MlsPL3ImcQ103nV8vq87U9MlJmFneYPlTCtDkVgSULG6VvxId8SybYPBEu1g21ktg7
+ T9gNAshTPGvn7CwNYeq5pBuClRpBC9phTpNUx28x1B+djFXw7u0jO5IetTIHWJHwUH12GJ
+ nGiqulnblkOAqEg9Pleq/B5r+oC2aGCXFB92IN+rJd/04Ny0b1VpFuEjSoD1WA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=iqGKV4JI
-Subject: Re: [Buildroot] [PATCH 1/1] package/cryptodev-linux: fix build with
- linux >= 6.4
+ header.s=gm1 header.b=BzvlRTTL
+Subject: Re: [Buildroot] [PATCH] package/picocom: bump to version 2023-04
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,31 +76,42 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: buildroot@busybox.net
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gVGh1LCAgNCBKYW4gMjAyNCAxODoxNDo0NyArMDEwMApGYWJyaWNlIEZvbnRhaW5lIDxmb250
-YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4gd3JvdGU6Cgo+IEZpeCB0aGUgZm9sbG93aW5nIGJ1aWxk
-IGZhaWx1cmUgd2l0aCBsaW51eCA+PSA2LjQ6Cj4gCj4gL2hvbWUvYXV0b2J1aWxkL2F1dG9idWls
-ZC9pbnN0YW5jZS0xNS9vdXRwdXQtMS9idWlsZC9jcnlwdG9kZXYtbGludXgtMS4xMy8uL2lvY3Rs
-LmM6MTI0OToxODogZXJyb3I6IOKAmHN0cnVjdCBjdGxfdGFibGXigJkgaGFzIG5vIG1lbWJlciBu
-YW1lZCDigJhjaGlsZOKAmQo+ICAxMjQ5IHwgICAgICAgICAgICAgICAgIC5jaGlsZCAgICAgICAg
-ICA9IHZlcmJvc2l0eV9jdGxfZGlyLAo+ICAgICAgIHwgICAgICAgICAgICAgICAgICBefn5+fgo+
-IAo+IEZpeGVzOgo+ICAtIGh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9yZy9yZXN1bHRzL2Vj
-YmY0MjZmNmIwZmY5MjBhNTFjMTY3NGIwODBjMzVlZGY1ZGI4NTkKPiAKPiBTaWduZWQtb2ZmLWJ5
-OiBGYWJyaWNlIEZvbnRhaW5lIDxmb250YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4KPiAtLS0KPiAg
-Li4uMDEtemVyby1jb3B5LUZpeC1idWlsZC1mb3ItTGludXgtNi00LnBhdGNoIHwgMzcgKysrKysr
-KysrKysrKysrKwo+ICAuLi5ldl92ZXJib3NpdHktRml4LWJ1aWxkLWZvci1MaW51eC02LTQucGF0
-Y2ggfCA0NCArKysrKysrKysrKysrKysrKysrCj4gIDIgZmlsZXMgY2hhbmdlZCwgODEgaW5zZXJ0
-aW9ucygrKQo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9jcnlwdG9kZXYtbGludXgvMDAw
-MS16ZXJvLWNvcHktRml4LWJ1aWxkLWZvci1MaW51eC02LTQucGF0Y2gKPiAgY3JlYXRlIG1vZGUg
-MTAwNjQ0IHBhY2thZ2UvY3J5cHRvZGV2LWxpbnV4LzAwMDItY3J5cHRvZGV2X3ZlcmJvc2l0eS1G
-aXgtYnVpbGQtZm9yLUxpbnV4LTYtNC5wYXRjaAoKQXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcy4K
-ClRob21hcwotLSAKVGhvbWFzIFBldGF6em9uaSwgQ1RPLCBCb290bGluCkVtYmVkZGVkIExpbnV4
-IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcKaHR0cHM6Ly9ib290bGluLmNvbQpfX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0
-CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWls
-bWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+On Wed,  3 Jan 2024 18:49:06 +0200
+Baruch Siach via buildroot <buildroot@buildroot.org> wrote:
+
+> Switch to new upstream.
+> 
+> Drop upstream patch.
+> 
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  .checkpackageignore                           |  1 -
+>  ...-with-libc-s-without-cispeed-cospeed.patch | 49 -------------------
+>  package/picocom/Config.in                     |  2 +-
+>  package/picocom/picocom.hash                  |  2 +-
+>  package/picocom/picocom.mk                    |  4 +-
+>  5 files changed, 4 insertions(+), 54 deletions(-)
+>  delete mode 100644 package/picocom/0001-Compile-with-libc-s-without-cispeed-cospeed.patch
+
+Applied to master, thanks. However, it looks like release-monitoring
+isn't aware of this new upstream, at least based on
+https://release-monitoring.org/project/3634/. Perhaps something you
+could contribute to release-monitoring.org?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
