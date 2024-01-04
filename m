@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E67A8C3DA6E
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 07:34:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92345C3DA6E
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 07:35:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 99B48403E0;
-	Fri,  5 Jan 2024 07:34:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 99B48403E0
+	by smtp2.osuosl.org (Postfix) with ESMTP id 40668403E0;
+	Fri,  5 Jan 2024 07:35:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 40668403E0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vHGrDNLfdcbj; Fri,  5 Jan 2024 07:34:49 +0000 (UTC)
+	with ESMTP id j3EJDg-xbjJf; Fri,  5 Jan 2024 07:35:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7C7AA43677;
-	Fri,  5 Jan 2024 07:34:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C7AA43677
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DA64B1BF40F
- for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 07:32:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3708743626;
+	Fri,  5 Jan 2024 07:35:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3708743626
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0236A1BF990
+ for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 07:32:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B3C014207F
+ by smtp2.osuosl.org (Postfix) with ESMTP id CDF5343641
  for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 07:32:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B3C014207F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CDF5343641
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FswBVBUkhdpy for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bhtec-XrqS6Z for <buildroot@lists.busybox.net>;
  Fri,  5 Jan 2024 07:32:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D638A42079
+ by smtp2.osuosl.org (Postfix) with ESMTP id CE94043634
  for <buildroot@buildroot.org>; Fri,  5 Jan 2024 07:32:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D638A42079
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CE94043634
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C5B5484311; Fri,  5 Jan 2024 07:32:17 +0000 (UTC)
+ id BBACC84310; Fri,  5 Jan 2024 07:32:17 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 4 Jan 2024 21:02:06 +0100
+Date: Thu, 4 Jan 2024 21:02:05 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 1ea4cf8070eb76781224d4657f3005968f290d3e
-X-Git-Newrev: 850035b667083afcff6d853b9a8de7c8e58953aa
+X-Git-Oldrev: e6ed9d5f57e3bc04201f4f202a2fc18acf1b21ed
+X-Git-Newrev: 1ea4cf8070eb76781224d4657f3005968f290d3e
 X-Patchwork-Hint: ignore
-Message-Id: <20240105073217.C5B5484311@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/gst1-plugins-bad:
- security bump to version 1.22.7
+Message-Id: <20240105073217.BBACC84310@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x]
+ package/gst1-plugins-good: bump to version 1.22.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,53 +63,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=850035b667083afcff6d853b9a8de7c8e58953aa
+commit: https://git.buildroot.net/buildroot/commit/?id=1ea4cf8070eb76781224d4657f3005968f290d3e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
-
-Fixes the following security issues:
-
-CVE-2023-44429: Heap-based buffer overflow in the AV1 codec parser when
-handling certain malformed streams before GStreamer 1.22.7.
-
-https://gstreamer.freedesktop.org/security/sa-2023-0009.html
-
-CVE-2023-44446: Use-after-free (read) in the MXF demuxer when handling
-certain files before GStreamer 1.22.7.
-
-https://gstreamer.freedesktop.org/security/sa-2023-0010.html
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 22c1b4d3565dc8c2bbebc364a31d7a1bd5e72943)
+(cherry picked from commit 0894009b1aa48ec0167517f38bbd7d6fc3e4eb49)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash | 4 ++--
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk   | 2 +-
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash | 4 ++--
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
-index c6d1f2e009..e6f57393db 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
+index 1b315ac1cc..8bc8d5b5a6 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
 @@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-1.22.6.tar.xz.sha256sum
--sha256  b4029cd2908a089c55f1d902a565d007495c95b1442d838485dc47fb12df7137  gst-plugins-bad-1.22.6.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-1.22.7.tar.xz.sha256sum
-+sha256  c716f8dffa8fac3fb646941af1c6ec72fff05a045131311bf2d049fdc87bce2e  gst-plugins-bad-1.22.7.tar.xz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index 983be754e9..a41fb336a9 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+-# From https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.22.6.tar.xz.sha256sum
+-sha256  b3b07fe3f1ce7fe93aa9be7217866044548f35c4a7792280eec7e108a32f9817  gst-plugins-good-1.22.6.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.22.7.tar.xz.sha256sum
++sha256  b6db0e18e398b52665b7cdce301c34a8750483d5f4fbac1ede9f80b03743cd15  gst-plugins-good-1.22.7.tar.xz
+ sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+index cfe1a55f31..df59c1cf48 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_PLUGINS_BAD_VERSION = 1.22.6
-+GST1_PLUGINS_BAD_VERSION = 1.22.7
- GST1_PLUGINS_BAD_SOURCE = gst-plugins-bad-$(GST1_PLUGINS_BAD_VERSION).tar.xz
- GST1_PLUGINS_BAD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-bad
- GST1_PLUGINS_BAD_INSTALL_STAGING = YES
+-GST1_PLUGINS_GOOD_VERSION = 1.22.6
++GST1_PLUGINS_GOOD_VERSION = 1.22.7
+ GST1_PLUGINS_GOOD_SOURCE = gst-plugins-good-$(GST1_PLUGINS_GOOD_VERSION).tar.xz
+ GST1_PLUGINS_GOOD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-good
+ GST1_PLUGINS_GOOD_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
