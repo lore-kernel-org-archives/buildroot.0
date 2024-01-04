@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB006C47074
-	for <buildroot@archiver.kernel.org>; Thu,  4 Jan 2024 21:28:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4203EC47074
+	for <buildroot@archiver.kernel.org>; Thu,  4 Jan 2024 21:29:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8506F61B26;
-	Thu,  4 Jan 2024 21:28:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8506F61B26
+	by smtp3.osuosl.org (Postfix) with ESMTP id EF37961B35;
+	Thu,  4 Jan 2024 21:29:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF37961B35
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id c3jxS70-kAgk; Thu,  4 Jan 2024 21:28:52 +0000 (UTC)
+	with ESMTP id azzQWpHoJhbl; Thu,  4 Jan 2024 21:29:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EA8AC615F8;
-	Thu,  4 Jan 2024 21:28:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA8AC615F8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 356DB61B32;
+	Thu,  4 Jan 2024 21:29:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 356DB61B32
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 064931BF414
- for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 21:27:50 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 11C671BF414
+ for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 21:27:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1283B40089
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1872E400B1
  for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 21:27:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1283B40089
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1872E400B1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RQdJ3l6WThOt for <buildroot@lists.busybox.net>;
+ with ESMTP id rEj_i1ePp4GN for <buildroot@lists.busybox.net>;
  Thu,  4 Jan 2024 21:27:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 35A1D4263E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1A283424F3
  for <buildroot@buildroot.org>; Thu,  4 Jan 2024 21:27:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35A1D4263E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A283424F3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1E2D984091; Thu,  4 Jan 2024 21:27:47 +0000 (UTC)
+ id 0578B84092; Thu,  4 Jan 2024 21:27:47 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Jan 2024 22:12:37 +0100
+Date: Thu, 4 Jan 2024 22:11:07 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ce151f52d1543d7e56ea374d44cc2ead3bf9a883
-X-Git-Newrev: 7b7bac9bb2c1c977e4791c4430e2fff54522f257
+X-Git-Oldrev: fd835c3ef667195d5369b8806471293c81a43515
+X-Git-Newrev: 5810e9db8b72417e34c2b644f3d82c5e155ca567
 X-Patchwork-Hint: ignore
-Message-Id: <20240104212747.1E2D984091@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gdal: add sqlite optional
- dependency
+Message-Id: <20240104212747.0578B84092@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/vnstat: bump to version 2.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,39 +63,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7b7bac9bb2c1c977e4791c4430e2fff54522f257
+commit: https://git.buildroot.net/buildroot/commit/?id=5810e9db8b72417e34c2b644f3d82c5e155ca567
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+https://github.com/vergoh/vnstat/releases/tag/v2.11
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gdal/gdal.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/vnstat/vnstat.hash | 2 +-
+ package/vnstat/vnstat.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gdal/gdal.mk b/package/gdal/gdal.mk
-index 5690f55c00..e9dcc826b5 100644
---- a/package/gdal/gdal.mk
-+++ b/package/gdal/gdal.mk
-@@ -91,7 +91,6 @@ GDAL_CONF_OPTS = \
- 	-DGDAL_USE_SFCGAL=OFF \
- 	-DGDAL_USE_FYBA=OFF \
- 	-DGDAL_USE_SPATIALITE=OFF \
--	-DGDAL_USE_SQLITE3=OFF \
- 	-DGDAL_USE_TEIGHA=OFF \
- 	-DGDAL_USE_TILEDB=OFF \
- 	-DGDAL_USE_WEBP=OFF \
-@@ -127,4 +126,11 @@ else
- GDAL_CONF_OPTS += -DGDAL_USE_POSTGRESQL=OFF
- endif
+diff --git a/package/vnstat/vnstat.hash b/package/vnstat/vnstat.hash
+index bad4325d90..87d2a6d687 100644
+--- a/package/vnstat/vnstat.hash
++++ b/package/vnstat/vnstat.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  a9c61744e5cd8c366e2db4d282badc74021ddb614bd65b41240937997e457d25  vnstat-2.10.tar.gz
++sha256  babc3f1583cc40e4e8ffb2f53296d93d308cb5a5043e85054f6eaf7b4ae57856  vnstat-2.11.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/vnstat/vnstat.mk b/package/vnstat/vnstat.mk
+index 3b2951b8c9..665c0feaf3 100644
+--- a/package/vnstat/vnstat.mk
++++ b/package/vnstat/vnstat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_SQLITE),y)
-+GDAL_DEPENDENCIES += sqlite
-+GDAL_CONF_OPTS += -DGDAL_USE_SQLITE3=ON
-+else
-+GDAL_CONF_OPTS += -DGDAL_USE_SQLITE3=OFF
-+endif
-+
- $(eval $(cmake-package))
+-VNSTAT_VERSION = 2.10
++VNSTAT_VERSION = 2.11
+ VNSTAT_SITE = http://humdi.net/vnstat
+ VNSTAT_LICENSE = GPL-2.0
+ VNSTAT_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
