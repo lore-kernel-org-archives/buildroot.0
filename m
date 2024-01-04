@@ -4,65 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1D82C47074
-	for <buildroot@archiver.kernel.org>; Thu,  4 Jan 2024 21:44:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAD3BC47074
+	for <buildroot@archiver.kernel.org>; Thu,  4 Jan 2024 21:45:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ABD7561B2C;
-	Thu,  4 Jan 2024 21:44:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABD7561B2C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9362561B2F;
+	Thu,  4 Jan 2024 21:45:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9362561B2F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6LGlFJxf8bO0; Thu,  4 Jan 2024 21:44:52 +0000 (UTC)
+	with ESMTP id OlPlpJloSlCV; Thu,  4 Jan 2024 21:45:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 17C9561AEB;
-	Thu,  4 Jan 2024 21:44:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 17C9561AEB
+	by smtp3.osuosl.org (Postfix) with ESMTP id CBB5C61AED;
+	Thu,  4 Jan 2024 21:45:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CBB5C61AED
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B360E1BF859
- for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 21:44:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8F8341BF859
+ for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 21:45:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8D2EF42C37
- for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 21:44:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D2EF42C37
+ by smtp4.osuosl.org (Postfix) with ESMTP id 686F642C8D
+ for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 21:45:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 686F642C8D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id I3slnM-mR6l1 for <buildroot@lists.busybox.net>;
- Thu,  4 Jan 2024 21:44:48 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 89E5C428BE
- for <buildroot@buildroot.org>; Thu,  4 Jan 2024 21:44:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 89E5C428BE
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 53CB320003;
- Thu,  4 Jan 2024 21:44:45 +0000 (UTC)
-Date: Thu, 4 Jan 2024 22:44:44 +0100
-To: Baruch Siach via buildroot <buildroot@buildroot.org>
-Message-ID: <20240104224444.76c7800d@windsurf>
-In-Reply-To: <7bf9e3705b3b2bfe8d7796551156abd2ddb8ea26.1704300546.git.baruch@tkos.co.il>
-References: <7bf9e3705b3b2bfe8d7796551156abd2ddb8ea26.1704300546.git.baruch@tkos.co.il>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1704404686;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=PBE50wVunfrfUefxATsVuqvVlqkA79TvHx8QrCLSmOw=;
- b=BzvlRTTLsEW1dwCBYuPQAo9WE82vP1WcH5b/1Vq3T2rCv99n0qe34C5nPD92H/zhbV3i6/
- DhMjCPQGyYS67JPOea7Y6GLxR6gj4EEGO9OY5twNaeVkb32aj3UNtVJp7Wl/0lFTdUy4bE
- ZVw8MlsPL3ImcQ103nV8vq87U9MlJmFneYPlTCtDkVgSULG6VvxId8SybYPBEu1g21ktg7
- T9gNAshTPGvn7CwNYeq5pBuClRpBC9phTpNUx28x1B+djFXw7u0jO5IetTIHWJHwUH12GJ
- nGiqulnblkOAqEg9Pleq/B5r+oC2aGCXFB92IN+rJd/04Ny0b1VpFuEjSoD1WA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=BzvlRTTL
-Subject: Re: [Buildroot] [PATCH] package/picocom: bump to version 2023-04
+ with ESMTP id T8_C7FYRjiNt for <buildroot@lists.busybox.net>;
+ Thu,  4 Jan 2024 21:45:27 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8D5AE42C7D
+ for <buildroot@buildroot.org>; Thu,  4 Jan 2024 21:45:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D5AE42C7D
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 652F984188; Thu,  4 Jan 2024 21:45:27 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 4 Jan 2024 22:43:22 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e6ef64d955f34db773addad52c7af17e111d7f13
+X-Git-Newrev: f5eba2ef3a5930cd05ad33741b83af02c1dbf42e
+X-Patchwork-Hint: ignore
+Message-Id: <20240104214527.652F984188@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cryptodev-linux: fix build with
+ linux >= 6.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,42 +58,136 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@busybox.net
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============0750528236569991003=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed,  3 Jan 2024 18:49:06 +0200
-Baruch Siach via buildroot <buildroot@buildroot.org> wrote:
+--===============0750528236569991003==
+Content-Type: text/plain
 
-> Switch to new upstream.
-> 
-> Drop upstream patch.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  .checkpackageignore                           |  1 -
->  ...-with-libc-s-without-cispeed-cospeed.patch | 49 -------------------
->  package/picocom/Config.in                     |  2 +-
->  package/picocom/picocom.hash                  |  2 +-
->  package/picocom/picocom.mk                    |  4 +-
->  5 files changed, 4 insertions(+), 54 deletions(-)
->  delete mode 100644 package/picocom/0001-Compile-with-libc-s-without-cispeed-cospeed.patch
+commit: https://git.buildroot.net/buildroot/commit/?id=f5eba2ef3a5930cd05ad33741b83af02c1dbf42e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks. However, it looks like release-monitoring
-isn't aware of this new upstream, at least based on
-https://release-monitoring.org/project/3634/. Perhaps something you
-could contribute to release-monitoring.org?
+Fix the following build failure with linux >= 6.4:
 
-Thanks!
+/home/autobuild/autobuild/instance-15/output-1/build/cryptodev-linux-1.13/./ioctl.c:1249:18: error: ‘struct ctl_table’ has no member named ‘child’
+ 1249 |                 .child          = verbosity_ctl_dir,
+      |                  ^~~~~
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes:
+ - http://autobuild.buildroot.org/results/ecbf426f6b0ff920a51c1674b080c35edf5db859
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0001-zero-copy-Fix-build-for-Linux-6-4.patch   | 37 ++++++++++++++++++
+ ...yptodev_verbosity-Fix-build-for-Linux-6-4.patch | 44 ++++++++++++++++++++++
+ 2 files changed, 81 insertions(+)
+
+diff --git a/package/cryptodev-linux/0001-zero-copy-Fix-build-for-Linux-6-4.patch b/package/cryptodev-linux/0001-zero-copy-Fix-build-for-Linux-6-4.patch
+new file mode 100644
+index 0000000000..4bea55311c
+--- /dev/null
++++ b/package/cryptodev-linux/0001-zero-copy-Fix-build-for-Linux-6-4.patch
+@@ -0,0 +1,37 @@
++From 592017c3a910a3905b1925aee88c4674e9a596b7 Mon Sep 17 00:00:00 2001
++From: Gaurav Jain <gaurav.jain@nxp.com>
++Date: Tue, 30 May 2023 17:09:42 +0530
++Subject: [PATCH] zero copy: Fix build for Linux 6.4
++
++get_user_pages_remote api prototype is changed in kernel.
++struct vm_area_struct **vmas argument is removed.
++Migrate to the new API.
++
++Signed-off-by: Gaurav Jain <gaurav.jain@nxp.com>
++
++Upstream: https://github.com/cryptodev-linux/cryptodev-linux/commit/592017c3a910a3905b1925aee88c4674e9a596b7
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ zc.c | 6 +++++-
++ 1 file changed, 5 insertions(+), 1 deletion(-)
++
++diff --git a/zc.c b/zc.c
++index fdf7da17..6637945a 100644
++--- a/zc.c
+++++ b/zc.c
++@@ -80,10 +80,14 @@ int __get_userbuf(uint8_t __user *addr, uint32_t len, int write,
++ 	ret = get_user_pages_remote(task, mm,
++ 			(unsigned long)addr, pgcount, write ? FOLL_WRITE : 0,
++ 			pg, NULL, NULL);
++-#else
+++#elif (LINUX_VERSION_CODE < KERNEL_VERSION(6, 4, 0))
++ 	ret = get_user_pages_remote(mm,
++ 			(unsigned long)addr, pgcount, write ? FOLL_WRITE : 0,
++ 			pg, NULL, NULL);
+++#else
+++	ret = get_user_pages_remote(mm,
+++			(unsigned long)addr, pgcount, write ? FOLL_WRITE : 0,
+++			pg, NULL);
++ #endif
++ #if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 8, 0))
++ 	up_read(&mm->mmap_sem);
+diff --git a/package/cryptodev-linux/0002-cryptodev_verbosity-Fix-build-for-Linux-6-4.patch b/package/cryptodev-linux/0002-cryptodev_verbosity-Fix-build-for-Linux-6-4.patch
+new file mode 100644
+index 0000000000..e6022c686f
+--- /dev/null
++++ b/package/cryptodev-linux/0002-cryptodev_verbosity-Fix-build-for-Linux-6-4.patch
+@@ -0,0 +1,44 @@
++From 99ae2a39ddc3f89c66d9f09783b591c0f2dbf2e9 Mon Sep 17 00:00:00 2001
++From: Gaurav Jain <gaurav.jain@nxp.com>
++Date: Wed, 28 Jun 2023 12:44:32 +0530
++Subject: [PATCH] cryptodev_verbosity: Fix build for Linux 6.4
++
++register_sysctl_table api is removed in kernel.
++migrate to the new api register_sysctl.
++
++child is also removed in linux 6.4 ctl_table struct.
++
++Signed-off-by: Gaurav Jain <gaurav.jain@nxp.com>
++
++Upstream: https://github.com/cryptodev-linux/cryptodev-linux/commit/99ae2a39ddc3f89c66d9f09783b591c0f2dbf2e9
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ ioctl.c | 6 ++++++
++ 1 file changed, 6 insertions(+)
++
++diff --git a/ioctl.c b/ioctl.c
++index 8f241b86..4262bbd5 100644
++--- a/ioctl.c
+++++ b/ioctl.c
++@@ -1246,7 +1246,9 @@ static struct ctl_table verbosity_ctl_root[] = {
++ 	{
++ 		.procname       = "ioctl",
++ 		.mode           = 0555,
+++#if (LINUX_VERSION_CODE < KERNEL_VERSION(6, 4, 0))
++ 		.child          = verbosity_ctl_dir,
+++#endif
++ 	},
++ 	{},
++ };
++@@ -1267,7 +1269,11 @@ static int __init init_cryptodev(void)
++ 		return rc;
++ 	}
++ 
+++#if (LINUX_VERSION_CODE < KERNEL_VERSION(6, 4, 0))
++ 	verbosity_sysctl_header = register_sysctl_table(verbosity_ctl_root);
+++#else
+++	verbosity_sysctl_header = register_sysctl(verbosity_ctl_root->procname, verbosity_ctl_dir);
+++#endif
++ 
++ 	pr_info(PFX "driver %s loaded.\n", VERSION);
++ 
+
+--===============0750528236569991003==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0750528236569991003==--
