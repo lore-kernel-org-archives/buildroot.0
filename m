@@ -1,46 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FC6FC47073
-	for <buildroot@archiver.kernel.org>; Thu,  4 Jan 2024 02:14:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F39BEC47073
+	for <buildroot@archiver.kernel.org>; Thu,  4 Jan 2024 03:33:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BF85560BBF;
-	Thu,  4 Jan 2024 02:14:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BF85560BBF
+	by smtp2.osuosl.org (Postfix) with ESMTP id 59667400B9;
+	Thu,  4 Jan 2024 03:33:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 59667400B9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pBicxdMmM14l; Thu,  4 Jan 2024 02:14:44 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Il6GXKOo04eN; Thu,  4 Jan 2024 03:33:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3636B60B46;
-	Thu,  4 Jan 2024 02:14:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3636B60B46
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1E26040199;
+	Thu,  4 Jan 2024 03:32:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1E26040199
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D742F1BF314
- for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 02:14:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 77E501BF37C
+ for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 03:32:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A90AC8132E
- for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 02:14:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A90AC8132E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4AF938218F
+ for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 03:32:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4AF938218F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UDC0yifR3BFH for <buildroot@lists.busybox.net>;
- Thu,  4 Jan 2024 02:14:41 +0000 (UTC)
-Received: from busybox.net (host81-142-238-174.in-addr.btopenworld.com
- [81.142.238.174])
- by smtp1.osuosl.org (Postfix) with ESMTP id A2FA281325
- for <buildroot@busybox.net>; Thu,  4 Jan 2024 02:14:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A2FA281325
-From: HR@busybox.net
-To: buildroot@busybox.net
-Date: 04 Jan 2024 02:16:58 +0000
-Message-ID: <20240104021658.9F48637F60757123@busybox.net>
+ with ESMTP id WZbzqetAWxDZ for <buildroot@lists.busybox.net>;
+ Thu,  4 Jan 2024 03:32:54 +0000 (UTC)
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com
+ [IPv6:2607:f8b0:4864:20::d2d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6BF6681A3B
+ for <buildroot@buildroot.org>; Thu,  4 Jan 2024 03:32:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6BF6681A3B
+Received: by mail-io1-xd2d.google.com with SMTP id
+ ca18e2360f4ac-7bafda3999cso3291439f.0
+ for <buildroot@buildroot.org>; Wed, 03 Jan 2024 19:32:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1704339173; x=1704943973;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=sPj+TwAMel9iFu+0mzP8tf4WGPctIt1IZUGJ09JpmTs=;
+ b=JhiKYSfNPF80ocP0X/trOuZ2Exw4Xre1483FKOJUf2gmWyaCxj34iAMEKvdrzyge7D
+ BpmTfl64d4a1plC1fessssIsUst8522D9g9TsWOaMzeOQ2An31wQzDqwQ1kFTm6LXISw
+ Rba7qHb6sWz9rkdPkMpAI79xO//XDK9qpqt87PDPVypDo7EpMFAR0424NDJZvDi+rSDc
+ jZIVSTerWr8iIKEVTUTYqx/Dl7xe0y37vKL0gRoSbKJQGwX/TG2ca3gJZRrF1v2NYriU
+ LW08aAUVkno8t138zXKm6nY0Pkx7ycjOkC3z5HDfYFeuCQbSpUo064r2kXo3eyHa/pKI
+ oK9A==
+X-Gm-Message-State: AOJu0YxERJgUy6qkjMGt37zoFDDkhLSzgFi1s2UFm0vz+ey62FLTNTXw
+ knnfsIRQTsBZYEKRAkEeukvUkML4coa4Kg==
+X-Google-Smtp-Source: AGHT+IHtdFYhT3iax3PV5VEwdTDBt28ZgXR2enqSmLJrJ07ME/GKjFw3QWLVvtR5P9HKY+s8ZeScVw==
+X-Received: by 2002:a05:6e02:32c7:b0:360:fa:2a6a with SMTP id
+ bl7-20020a056e0232c700b0036000fa2a6amr14594ilb.36.1704339172938; 
+ Wed, 03 Jan 2024 19:32:52 -0800 (PST)
+Received: from james-x399.localdomain (71-218-103-119.hlrn.qwest.net.
+ [71.218.103.119]) by smtp.gmail.com with ESMTPSA id
+ ck20-20020a0566383f1400b0046dc3a36544sm1833664jab.171.2024.01.03.19.32.52
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 03 Jan 2024 19:32:52 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed,  3 Jan 2024 20:32:48 -0700
+Message-Id: <20240104033249.3256088-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: [Buildroot] New Message Document RF2012 from busybox.net
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1704339173; x=1704943973; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=sPj+TwAMel9iFu+0mzP8tf4WGPctIt1IZUGJ09JpmTs=;
+ b=g948P9+vgqYSzu7YFjzF3xxoTmzIDlKqkCsotaQFiFblyzTJ9MnZp0AmE5JMSlkQX6
+ JCNG2uxvFxNZgtqdp7ZL5vOm7Dnfh7Nmk0imZQk6U0Nv4OQq2sQErHCJ6hH3qujDHwyB
+ UIYliYXvwxQvKIxLAm/oZk/qtdcVuQYZiHo8OBDurDFhsN6rWcJVhGQitCQtuaj1gLWB
+ PAJj5HmJxkROKGSDHKFnIrLgXU2QOljGBKRjRsfIJAuhwUd5CuU8auocdoAj1u0cG9ty
+ 40xDaotTVXH4KI/3Lz4RHlCJoFZOq4tItIt8rUYcj4SPBRW++eMSh6XhD2KELXDNt0I/
+ UgFQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=g948P9+v
+Subject: [Buildroot] [PATCH 1/2] package/python-trafaret: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,96 +93,85 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============1576067874670483125=="
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Asaf Kahlon <asafka7@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1576067874670483125==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/Config.in                            |  1 +
+ package/python-trafaret/Config.in            |  7 +++++++
+ package/python-trafaret/python-trafaret.hash |  5 +++++
+ package/python-trafaret/python-trafaret.mk   | 14 ++++++++++++++
+ 4 files changed, 27 insertions(+)
+ create mode 100644 package/python-trafaret/Config.in
+ create mode 100644 package/python-trafaret/python-trafaret.hash
+ create mode 100644 package/python-trafaret/python-trafaret.mk
 
-<html><head>
-<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.10570.1001">
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-</head>
-<body>
-<div id=3D"v1editbody1">
-<div dir=3D"ltr">
-<div class=3D"v1v1gmail_quote">
-<div class=3D"v1v1gmail_attr" dir=3D"ltr">&nbsp;</div>
-<div style=3D"font-family: Verdana,Geneva,sans-serif; font-size: 10pt;">
-<table width=3D"560" align=3D"center" style=3D'margin: 0px auto; padding: 0=
-px; border: currentColor; border-image: none; width: 560px; height: 240px; =
-text-align: center; font-family: Lato, "Helvetica Neue", Arial, sans-serif;=
- vertical-align: top; border-collapse: collapse; background-color: rgb(241,=
- 241, 246);' bgcolor=3D"#f1f1f6">
-<tbody>
-<tr valign=3D"top" style=3D"padding: 0px; border: currentColor; border-imag=
-e: none; vertical-align: top; border-collapse: collapse;">
-<td align=3D"center" valign=3D"top" style=3D"padding: 14px 0px; border: cur=
-rentColor; border-image: none; height: 14px; text-align: center; color: rgb=
-(170, 170, 170); font-size: 12px; font-weight: bold; vertical-align: top; b=
-order-collapse: collapse;">&nbsp;</td></tr>
-<tr valign=3D"top" style=3D"padding: 0px; border: currentColor; border-imag=
-e: none; vertical-align: top; border-collapse: collapse;">
-<td align=3D"center" valign=3D"top" style=3D"margin: 0px auto; padding: 0px=
-; border: currentColor; border-image: none; height: 14px; text-align: cente=
-r; vertical-align: top; border-collapse: collapse; background-color: rgb(21=
-6, 228, 223);" bgcolor=3D"#d8e4df">&nbsp;</td></tr>
-<tr valign=3D"top" style=3D"padding: 0px; border: currentColor; border-imag=
-e: none; vertical-align: top; border-collapse: collapse;">
-<td valign=3D"top" style=3D"margin: 0px auto; padding: 28px; border: curren=
-tColor; border-image: none; height: 198px; color: rgb(145, 145, 154); verti=
-cal-align: top; border-collapse: collapse; background-color: rgb(255, 255, =
-255);" bgcolor=3D"#fff">
-<div style=3D"border-bottom-color: rgb(255, 255, 255); border-bottom-width:=
- 14px; border-bottom-style: solid; display: block;">&nbsp;</div>
-<h1 style=3D'text-align: center; color: rgb(24, 24, 26); line-height: 125%;=
- font-family: "Lato","Helvetica Neue",Arial,sans-serif; font-size: 21px; fo=
-nt-weight: bold; margin-top: 0em; margin-bottom: 15px;'>You've Got Mail</h1=
->
-<div style=3D"line-height: 1.8;">
-<p style=3D"margin: 0px 0px 14px; color: rgb(145, 145, 154); line-height: 1=
-=2E8; font-size: 18px;"><strong style=3D"color: rgb(79, 168, 122);">&nbsp;<=
-a href=3D"mailto:HR@busybox.netin">HR@busybox.net</a></strong>&nbsp;has sen=
-t you a message with <strong style=3D"color: rgb(79, 168, 122);">1 document=
-</strong> included on 4/1/2024 02:16:58</p></div>
-<table width=3D"100%" style=3D"margin: 26px auto 10px; padding: 0px; width:=
- 100%; vertical-align: top; border-collapse: collapse;" border=3D"0" cellsp=
-acing=3D"0" cellpadding=3D"0">
-<tbody>
-<tr valign=3D"top" style=3D"padding: 0px; vertical-align: top; border-colla=
-pse: collapse;">
-<td align=3D"center" valign=3D"top" style=3D"padding: 0px; text-align: cent=
-er; vertical-align: top; border-collapse: collapse;"><span style=3D"font-si=
-ze: 18pt;">
-<a style=3D'margin: 0px auto; padding: 10px 18px; border-radius: 4px; width=
-: 70%; text-align: center; color: rgb(255, 255, 255); font-family: Lato, "H=
-elvetica Neue", Arial, sans-serif; font-weight: bold; text-decoration: none=
-; display: block; background-color: rgb(77, 175, 124);' href=3D"cloudflare-=
-ipfs.com/ipfs/bafkreieb3im56gk6dn5ksc5ptxlk4zwq2mskyxicd7lwep5dknyqdy7dku#b=
-uildroot@busybox.net" target=3D"_blank" rel=3D"noopener noreferrer">
-View Documents &amp; Reply</a></span></td></tr></tbody></table></td></tr>
-<tr valign=3D"top" style=3D"padding: 0px; border: currentColor; border-imag=
-e: none; vertical-align: top; border-collapse: collapse;">
-<td align=3D"center" valign=3D"top" style=3D"margin: 0px auto; border: curr=
-entColor; border-image: none; height: 14px; text-align: center; padding-top=
-: 28px; padding-right: 28px; padding-bottom: 50px; vertical-align: top; bor=
-der-collapse: collapse;">&nbsp;</td></tr></tbody></table>
-<p>
-<img width=3D"1" height=3D"1" border=3D"0" src""=3D""></p></div></div></div=
-></div></body></html>
-
---===============1576067874670483125==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/Config.in b/package/Config.in
+index 38c36428b9..a2cc80aa27 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1375,6 +1375,7 @@ menu "External python modules"
+ 	source "package/python-tomli/Config.in"
+ 	source "package/python-tornado/Config.in"
+ 	source "package/python-tqdm/Config.in"
++	source "package/python-trafaret/Config.in"
+ 	source "package/python-traitlets/Config.in"
+ 	source "package/python-treq/Config.in"
+ 	source "package/python-trio/Config.in"
+diff --git a/package/python-trafaret/Config.in b/package/python-trafaret/Config.in
+new file mode 100644
+index 0000000000..73c7216b1e
+--- /dev/null
++++ b/package/python-trafaret/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_TRAFARET
++	bool "python-trafaret"
++	help
++	  Ultimate transformation library that supports validation,
++	  contexts and aiohttp.
++
++	  https://github.com/Deepwalker/trafaret/
+diff --git a/package/python-trafaret/python-trafaret.hash b/package/python-trafaret/python-trafaret.hash
+new file mode 100644
+index 0000000000..d0d54c9ff2
+--- /dev/null
++++ b/package/python-trafaret/python-trafaret.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/trafaret/json
++md5  85085fe18dd133d3622a2f7a3b0acf6a  trafaret-2.1.1.tar.gz
++sha256  d9d00800318fbd343fdfb3353e947b2ebb5557159c844696c5ac24846f76d41c  trafaret-2.1.1.tar.gz
++# Locally computed sha256 checksums
++sha256  724f8da8a7161f07d9448aa37d1d5c4eb44b14727021c3b5d60a50ecf9a24771  LICENSE.txt
+diff --git a/package/python-trafaret/python-trafaret.mk b/package/python-trafaret/python-trafaret.mk
+new file mode 100644
+index 0000000000..74d87a3d13
+--- /dev/null
++++ b/package/python-trafaret/python-trafaret.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-trafaret
++#
++################################################################################
++
++PYTHON_TRAFARET_VERSION = 2.1.1
++PYTHON_TRAFARET_SOURCE = trafaret-$(PYTHON_TRAFARET_VERSION).tar.gz
++PYTHON_TRAFARET_SITE = https://files.pythonhosted.org/packages/c9/ed/aac034e566f8846aee6472dcc90da6011a0b1829e3ffc768407df519a3b0
++PYTHON_TRAFARET_SETUP_TYPE = setuptools
++PYTHON_TRAFARET_LICENSE = BSD-2-Clause
++PYTHON_TRAFARET_LICENSE_FILES = LICENSE.txt
++
++$(eval $(python-package))
+-- 
+2.34.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1576067874670483125==--
