@@ -4,65 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5545DC3DA6E
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 13:03:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62C60C3DA6E
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 13:03:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F21584375B;
-	Fri,  5 Jan 2024 13:03:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F21584375B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1643443710;
+	Fri,  5 Jan 2024 13:03:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1643443710
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bUlamzd6nOO2; Fri,  5 Jan 2024 13:03:07 +0000 (UTC)
+	with ESMTP id GEhA1tbAL50V; Fri,  5 Jan 2024 13:03:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 34E744374E;
-	Fri,  5 Jan 2024 13:03:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 34E744374E
+	by smtp2.osuosl.org (Postfix) with ESMTP id EB9344374F;
+	Fri,  5 Jan 2024 13:03:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB9344374F
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 685691BF422
- for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 13:02:04 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 91F191BF422
+ for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 13:02:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 42261614FD
- for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 13:02:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 42261614FD
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6C5D361516
+ for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 13:02:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C5D361516
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YJ0JbNqaeG-C for <buildroot@lists.busybox.net>;
- Fri,  5 Jan 2024 13:02:03 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 447AC61499
- for <buildroot@buildroot.org>; Fri,  5 Jan 2024 13:02:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 447AC61499
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8B0B360006;
- Fri,  5 Jan 2024 13:02:01 +0000 (UTC)
-Date: Fri, 5 Jan 2024 14:02:01 +0100
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20240105140201.5f417117@windsurf>
-In-Reply-To: <20231227140651.1303381-1-fontaine.fabrice@gmail.com>
-References: <20231227140651.1303381-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1704459721;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=+pgG6tU8mCUl0X7mtMIWJ5LNn13fgvgPnbezJgt++08=;
- b=YL1D4p7o6+lqoWCrygfZoSc8hTOiEFVNWXaYq9/OuWVPl0DVWks85XtBACP5XNLcZdXgBh
- 98MD7EpvByMN+0TL6Er3IGPZuEMvqztmWqgGEiGKFLZRBi5Hh39CGx8MbymTDkx6dW59R+
- djQXaSz9gqde4Kek3Jevae/638L5iQBOJ23sPoZCCSfNf5E9R+ZKd7YaLrhGVN2BD2n2PE
- yUYsGRG+2f8XxV3LOYGzMRS6VaMR6KpYer2VulbfvpHec+7T2NBWba1CpBSE9z5xaG6kRn
- l6iznoztuH3oO1tQ6dFm8rvtEogFq75WPzjQ+drJANAGLLXciCOM7rz+Venbaw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=YL1D4p7o
-Subject: Re: [Buildroot] [PATCH 1/1] package/mpd-mpc: bump to version 0.35
+ with ESMTP id VmdjGtmgiIGG for <buildroot@lists.busybox.net>;
+ Fri,  5 Jan 2024 13:02:40 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9D522614D2
+ for <buildroot@buildroot.org>; Fri,  5 Jan 2024 13:02:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D522614D2
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8DBCC84558; Fri,  5 Jan 2024 13:02:40 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Fri, 5 Jan 2024 13:21:10 +0100
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: 9d9e7f625aba2c523cf5f1be745c7bb2a47fcbd1
+X-Git-Newrev: db5219995f80121ed3c76aeade795e428e10bcac
+X-Patchwork-Hint: ignore
+Message-Id: <20240105130240.8DBCC84558@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/tree: update
+ _SITE URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,33 +57,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Thierry Bultel <tbultel@free.fr>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============8971107356070219392=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 27 Dec 2023 15:06:51 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+--===============8971107356070219392==
+Content-Type: text/plain
 
-> https://github.com/MusicPlayerDaemon/mpc/blob/v0.35/NEWS
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/mpd-mpc/mpd-mpc.hash | 2 +-
->  package/mpd-mpc/mpd-mpc.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=db5219995f80121ed3c76aeade795e428e10bcac
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Applied to master, thanks.
+The current TREE_SITE URL doesn't work anymore.
+Moreover the README states:
+"
+The main distribution site for tree is here:
+http://oldmanprogrammer.net/source.php?dir=projects/tree
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Backup GIT sites are:
+https://gitlab.com/OldManProgrammer/unix-tree
+https://github.com/Old-Man-Programmer/tree
+
+Old site for as long as it lasts:
+http://mama.indstate.edu/users/ice/tree/
+ftp://mama.indstate.edu/linux/tree/
+"
+
+Use http://oldmanprogrammer.net/tar/tree/ for TREE_SITE
+
+Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 16fc7372512dd9bd199c394bfa54d74e852cc1b4)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/tree/Config.in | 2 +-
+ package/tree/tree.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/tree/Config.in b/package/tree/Config.in
+index 234995f109..4821b58960 100644
+--- a/package/tree/Config.in
++++ b/package/tree/Config.in
+@@ -7,7 +7,7 @@ config BR2_PACKAGE_TREE
+ 	  dircolors if the LS_COLORS environment variable is set and
+ 	  output is to tty.
+ 
+-	  http://mama.indstate.edu/users/ice/tree/
++	  http://oldmanprogrammer.net/source.php?dir=projects/tree
+ 
+ comment "tree needs a toolchain w/ wchar"
+ 	depends on !BR2_USE_WCHAR
+diff --git a/package/tree/tree.mk b/package/tree/tree.mk
+index da0acbae49..5b8fd47602 100644
+--- a/package/tree/tree.mk
++++ b/package/tree/tree.mk
+@@ -6,7 +6,7 @@
+ 
+ TREE_VERSION = 2.0.2
+ TREE_SOURCE = tree-$(TREE_VERSION).tgz
+-TREE_SITE = http://mama.indstate.edu/users/ice/tree/src
++TREE_SITE = http://oldmanprogrammer.net/tar/tree
+ TREE_LICENSE = GPL-2.0+
+ TREE_LICENSE_FILES = LICENSE
+ 
+
+--===============8971107356070219392==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8971107356070219392==--
