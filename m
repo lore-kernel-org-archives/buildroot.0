@@ -4,48 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BF3DC3DA6E
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 13:05:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17468C47079
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 13:06:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2440C43725;
-	Fri,  5 Jan 2024 13:05:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2440C43725
+	by smtp2.osuosl.org (Postfix) with ESMTP id B63E1436F1;
+	Fri,  5 Jan 2024 13:06:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B63E1436F1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AbBxvGcHHg5t; Fri,  5 Jan 2024 13:05:54 +0000 (UTC)
+	with ESMTP id ZInwqeAQuJqV; Fri,  5 Jan 2024 13:06:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A5F144379E;
-	Fri,  5 Jan 2024 13:05:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A5F144379E
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AB4CB1BF995
- for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 13:03:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A0DBC437A2;
+	Fri,  5 Jan 2024 13:06:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A0DBC437A2
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 56E661BF990
+ for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 13:03:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8507C40260
- for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 13:03:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8507C40260
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2131543748
+ for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 13:03:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2131543748
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wOmgrm0r8Qfg for <buildroot@lists.busybox.net>;
- Fri,  5 Jan 2024 13:03:36 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id ACA0040253
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rwWwaEK5aAG0 for <buildroot@lists.busybox.net>;
+ Fri,  5 Jan 2024 13:03:37 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D908943703
  for <buildroot@buildroot.org>; Fri,  5 Jan 2024 13:03:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ACA0040253
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9CA208455C; Fri,  5 Jan 2024 13:03:36 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 5 Jan 2024 13:28:06 +0100
-X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: df95958b0609948f51e1cac856ff6deb6fc08e1e
-X-Git-Newrev: c1855c5abe2bc19cffe450ec83ed401eae44fa3a
-X-Patchwork-Hint: ignore
-Message-Id: <20240105130336.9CA208455C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/mesa3d: add
- compile patch for linux < 3.5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D908943703
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 103C4240009;
+ Fri,  5 Jan 2024 13:03:34 +0000 (UTC)
+Date: Fri, 5 Jan 2024 14:03:34 +0100
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20240105140334.6ac1bbe4@windsurf>
+In-Reply-To: <20231226221952.2006884-1-fontaine.fabrice@gmail.com>
+References: <20231226221952.2006884-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1704459815;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=dbmlBRO8ESMeYviHEoOPwmPJJ92/qevooM47zvkS98A=;
+ b=T3WGzwMV3i7Z4kSp/C/uthftnCgvwT2neB9oYk67weL0H6vFlZgRdEH1hxDP2OWjuAc1BO
+ JhFwfSVkwpNK+dQXVmCxxQGWAw8VwV/4i9hSScYV/ZDmCRyoaBlINuXpM02A07UFIDLr+A
+ we0rHAB+/ARU0jht9+J2j7PnSjy2QJvXhYkULpOMilFdhRRwqoxzSnMF+u9pXzc6MMmYVk
+ 1wPgGt8OECvDo1y6q7yflF3wLB033mO9Lp6K8DSTiXvrGGWg+7I9u0vQXPqRMJq7mbKeEV
+ mby8JGdo/8qQ8Ux4el2ipe0PF00AOppAoD0kR9e5z2zZW3rqp0G1XzMDwY8eJw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=T3WGzwMV
+Subject: Re: [Buildroot] [PATCH 1/1] package/libwebsockets: fix wolfssl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,115 +74,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============9039019152791400738=="
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============9039019152791400738==
-Content-Type: text/plain
+Hello Fabrice,
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c1855c5abe2bc19cffe450ec83ed401eae44fa3a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
+On Tue, 26 Dec 2023 23:19:52 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-The kcmp() system call first appeared in linux 3.5,
-and was also not there before linux 5.12 if
-CONFIG_CHECKPOINT_RESTORE was not set.
+> Fix the following wolfssl build failure raised since commit
+> d6319d97a7864314088dcc6d1199f35029cfcecb:
+> 
+> -- Checking for one of the modules 'wolfssl'
+> CMake Error at lib/tls/CMakeLists.txt:79 (message):
+>   You must set LWS_WOLFSSL_LIBRARIES and LWS_WOLFSSL_INCLUDE_DIRS when
+>   LWS_WITH_WOLFSSL is turned on.
 
-See: https://man7.org/linux/man-pages/man2/kcmp.2.html
+Ideally, in such cases, it would be nice to extend a little bit the
+commit log to explain how the issue is resolved: "adding a patch that
+does XYZ, and making the wolfssl dependency only trigger when
+BR2_PACKAGE_WOLFSSL_ALL=y because ...".
 
-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7b71ce5018adb99c93e9b7d1fae4c2926c0fe130)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...e_file_description-fix-unknown-linux-3.5-.patch | 68 ++++++++++++++++++++++
- 1 file changed, 68 insertions(+)
+> +Fixes:
+> + - http://autobuild.buildroot.org/results/fe062b9f0b330e71309334d7605d64ea73761b59
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/mesa3d/0005-util-os_same_file_description-fix-unknown-linux-3.5-.patch b/package/mesa3d/0005-util-os_same_file_description-fix-unknown-linux-3.5-.patch
-new file mode 100644
-index 0000000000..c011580f6b
---- /dev/null
-+++ b/package/mesa3d/0005-util-os_same_file_description-fix-unknown-linux-3.5-.patch
-@@ -0,0 +1,68 @@
-+From b60974fac8a2f4c85cbb2ca788fc4ec3e81998f9 Mon Sep 17 00:00:00 2001
-+From: Thomas Devoogdt <thomas.devoogdt@barco.com>
-+Date: Tue, 17 Aug 2021 11:54:49 +0200
-+Subject: [PATCH] util: os_same_file_description: fix unknown linux < 3.5
-+ syscall SYS_kcmp
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+https://man7.org/linux/man-pages/man2/kcmp.2.html
-+
-+The kcmp() system call first appeared in Linux 3.5.
-+
-+But was probably also not supported by all major platforms
-+at that time. So fallback to the check that is done for windows.
-+
-+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
-+Acked-by: Yonggang Luo <luoyonggang@gmail.com>
-+Acked-by: Michel Dänzer <mdaenzer@redhat.com>
-+Upstream: https://gitlab.freedesktop.org/mesa/mesa/-/commit/3ef514982441ce496aa127611edd26b9867f4b95
-+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-+---
-+ src/util/os_file.c | 18 ++++++------------
-+ 1 file changed, 6 insertions(+), 12 deletions(-)
-+
-+diff --git a/src/util/os_file.c b/src/util/os_file.c
-+index 5fb30f2d908..464425a9b87 100644
-+--- a/src/util/os_file.c
-++++ b/src/util/os_file.c
-+@@ -202,29 +202,23 @@ os_read_file(const char *filename, size_t *size)
-+ /* copied from <linux/kcmp.h> */
-+ #define KCMP_FILE 0
-+ 
-++#endif
-++
-+ int
-+ os_same_file_description(int fd1, int fd2)
-+ {
-++#ifdef SYS_kcmp
-+    pid_t pid = getpid();
-++#endif
-+ 
-+    /* Same file descriptor trivially implies same file description */
-+    if (fd1 == fd2)
-+       return 0;
-+ 
-++#ifdef SYS_kcmp
-+    return syscall(SYS_kcmp, pid, pid, KCMP_FILE, fd1, fd2);
-+-}
-+-
-+ #else
-+-
-+-int
-+-os_same_file_description(int fd1, int fd2)
-+-{
-+-   /* Same file descriptor trivially implies same file description */
-+-   if (fd1 == fd2)
-+-      return 0;
-+-
-+    /* Otherwise we can't tell */
-+    return -1;
-+-}
-+-
-+ #endif
-++}
-+-- 
-+2.34.1
-+
+The Upstream: tag was missing here. So I dug in the upstream repo, and
+found that your fix had been merged, so I added a reference to it here.
 
---===============9039019152791400738==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+Applied, thanks a lot!
 
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============9039019152791400738==--
