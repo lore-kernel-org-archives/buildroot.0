@@ -4,69 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41258C47074
-	for <buildroot@archiver.kernel.org>; Thu,  4 Jan 2024 22:42:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 126CEC3DA6E
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 05:52:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D526261468;
-	Thu,  4 Jan 2024 22:42:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D526261468
+	by smtp3.osuosl.org (Postfix) with ESMTP id 57CD460FE9;
+	Fri,  5 Jan 2024 05:52:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 57CD460FE9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id E7XPp8GBn1X0; Thu,  4 Jan 2024 22:42:57 +0000 (UTC)
+	with ESMTP id Xdp0bCtyjMgP; Fri,  5 Jan 2024 05:52:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 40D436144C;
-	Thu,  4 Jan 2024 22:42:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 40D436144C
+	by smtp3.osuosl.org (Postfix) with ESMTP id B145560EF1;
+	Fri,  5 Jan 2024 05:52:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B145560EF1
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D717C1BF3E8
- for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 22:42:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D2D1E1BF3F2
+ for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 05:52:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AFDCE40266
- for <buildroot@lists.busybox.net>; Thu,  4 Jan 2024 22:42:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AFDCE40266
+ by smtp4.osuosl.org (Postfix) with ESMTP id B852241FA2
+ for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 05:52:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B852241FA2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3lIeT9cCZSbM for <buildroot@lists.busybox.net>;
- Thu,  4 Jan 2024 22:42:53 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B4F15401BE
- for <buildroot@buildroot.org>; Thu,  4 Jan 2024 22:42:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B4F15401BE
-Received: by mail.gandi.net (Postfix) with ESMTPSA id EC9E9240004;
- Thu,  4 Jan 2024 22:42:50 +0000 (UTC)
-Date: Thu, 4 Jan 2024 23:42:50 +0100
+ with ESMTP id a95RSBSfNHE0 for <buildroot@lists.busybox.net>;
+ Fri,  5 Jan 2024 05:52:16 +0000 (UTC)
+Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3C9C841F49
+ for <buildroot@buildroot.org>; Fri,  5 Jan 2024 05:52:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C9C841F49
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id 29C6E3520918; Fri,  5 Jan 2024 06:52:10 +0100 (CET)
+Date: Fri, 5 Jan 2024 06:52:10 +0100
+From: Waldemar Brodkorb <wbx@openadk.org>
 To: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Message-ID: <20240104234250.5d7544ed@windsurf>
-In-Reply-To: <DS7PR12MB9041AB129B87AC54AB7CC445A1672@DS7PR12MB9041.namprd12.prod.outlook.com>
-References: <20240103102311.4048759-1-abrodkin@synopsys.com>
- <20240104221941.044adcb5@windsurf> <ZZckauC7K7-qR0lP@landeda>
- <20240104223823.1bb97896@windsurf>
- <DS7PR12MB9041AB129B87AC54AB7CC445A1672@DS7PR12MB9041.namprd12.prod.outlook.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+Message-ID: <ZZeZClA0xpt7gTO5@waldemar-brodkorb.de>
+References: <20240104190529.1521901-1-abrodkin@synopsys.com>
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1704408171;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=+4OdUsSYIMKdjb9nxXnxxLxWI/AtrgTkEri6njwHDN0=;
- b=R7pH2hofLwsPMX7h1vJqPtrBLfzYN6J9FmMqEPq9bGKk7eZharJfeWnIKiUNkaQRBNf+0Y
- CDNFnltx/LwA90opOAESHEFGGJ42dSpMZRuVQ18umpl/aaMHTfhTZrXqFZHxSQ1e/n2Ee2
- 0eiqI5fgIGU218ZiD/dMiRW4LxRQqY9wC2ZyMJ7OxjssAO+mpMvKkUTbFo1+HyQo84tB6b
- XyOfCDYcpHj3WgV1mSvUpy0jGojbsO1mV+DtAXfmWTc7Q3nwcy5ygQBC6BSZ3mV2cXVU31
- 79NpWNrRzX9Gc1WlOjrPFcj4tEOS58gjEAm2EoObtPcq2DoMJrpIHZrhndyDOg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=R7pH2hof
-Subject: Re: [Buildroot] [PATCH] arch: Set max/common-page-size for libgcc &
- libstdc++
+Content-Disposition: inline
+In-Reply-To: <20240104190529.1521901-1-abrodkin@synopsys.com>
+X-Operating-System: Linux 5.10.0-27-amd64 x86_64
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=openadk.org; s=2022; 
+ t=1704433931; bh=20et0bJ4cOrHPQgqdFZl63qOuuyJo+vt+O81x/+4nO0=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=QJvcBizjv1gc3UF55cQ4N2gwZMlKdTIOzgMeFeySiPTNzmosD38dNNAx1w32T0QeL
+ CnX/+NdQwCU1sxEYFFU+0LQ3xQpKDP2TVPspcNcvhSf1uNJfNF13FPbRIfulsz155d
+ IzyGXGGA7Y+uave0Fv2jcU5DtIyZpBVgHoqRHuxUyqOSaDUOM38igGCXI6ZCNCOvnT
+ ykz4N3E7kw4xXgPPYnkHj4syUwAtTl7qyEwHx0mj7iKfYK669rLSLy7001cWCgYizG
+ FBcxIeLaZdLb95cgv/OrmeRZyf9aeZ0y0ePA1l3gHzcazOmKyCI1lmy+tETIQ4HoY6
+ ZEtqtVg+THOLA==
+Subject: Re: [Buildroot] [PATCH 0/3] Add support for ARCv3 ISA  processors
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,41 +67,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Pavel Kozlov <Pavel.Kozlov@synopsys.com>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>, Vladimir Isaev <VVIsaev@gmail.com>,
- Alexey Brodkin via buildroot <buildroot@buildroot.org>
+Cc: geomatsi@gmail.com, artem.panfilov@nokia.com, Shahab.Vahedi@synopsys.com,
+ VVIsaev@gmail.com, vgupta@kernel.org, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 4 Jan 2024 22:22:45 +0000
-Alexey Brodkin <Alexey.Brodkin@synopsys.com> wrote:
+Hi Alexey, All,
+Alexey Brodkin via buildroot wrote,
 
-> Do you mean something like that in gcc.mk?
-> ----------------------->8---------------------  
-> GCC_COMMON_TARGET_CFLAGS = $(TARGET_CFLAGS) $(ARCH_TOOLCHAIN_WRAPPER_OPTS)
-> GCC_COMMON_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS) $(ARCH_TOOLCHAIN_WRAPPER_OPTS)
-> GCC_COMMON_TARGET_LDFLAGS = $(TARGET_LDFLAGS) $(ARCH_TOOLCHAIN_WRAPPER_OPTS)
-> ----------------------->8---------------------  
+> It's been quite some time since introduction to the market
+> of new Synopsys ARCv3 ISA processors, which are meant to
+> build on top of success of their predecessors in ARCv2 family.
+> 
+> ARCv3 ISA is meant to improve efficiency of high-performance
+> embedded microprocessors and thus by definition is not binary
+> compatible with previous generation of ARC cores such as ARCompact
+> (ARC600 and ARC700 processors) and ARCv2 (ARC EM and ARC HS processors).
+> 
+> Moreover, finally in ARCv3 line there's a 64-bit processor family called
+> ARC HS6x meant to cover cases when 32-bit address space is not enough.
+> 
+> Since ARCv3 ISA in not binary compatible with older ARC cores, we have
+> to switch to newer tools, which in fact are already available as a part
+> of ARC GNU toolchain v2023.09, see [1] & integration of them into
+> Buildroot [2].
+> 
+> Even though that update is long overdue (for too long we kept all that in
+> our GitHub repo [3]) it's better late than never.
+> 
+> I'd like to say thank you for all the folks who used to work on Linux
+> bring-up on ARCv3 processors, most of whom did contribute to these
+> changes I'm sending out today, some even no longer work with us, but
+> still it's another amazing example of close and efficient collaboration
+> of a group of truly highly motivated professionals. And it is my
+> pleasure to work with such talented and bright people!
 
-Yes, exactly, and removing:
+You can add a 
+Tested-By: Waldemar Brodkorb <wbx@openadk.org>
 
-# Make sure libgcc & libstdc++ always get built with -matomic on ARC700
-ifeq ($(GCC_TARGET_CPU):$(BR2_ARC_ATOMIC_EXT),arc700:y)
-GCC_COMMON_TARGET_CFLAGS += -matomic
-GCC_COMMON_TARGET_CXXFLAGS += -matomic
-endif
+Thanks for working on this. I think I can mark my patches as
+superseded. At least my work on this kicked you out of the silence
+;=)
 
-because this will now be taken care of by $(ARCH_TOOLCHAIN_WRAPPER_OPTS)
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+best regards
+ Waldemar
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
