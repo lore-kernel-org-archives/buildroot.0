@@ -4,65 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1453EC46CD2
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 13:07:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6113AC3DA6E
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 13:07:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BA40643776;
-	Fri,  5 Jan 2024 13:07:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BA40643776
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1AB3143700;
+	Fri,  5 Jan 2024 13:07:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1AB3143700
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vSfvkRhSb50v; Fri,  5 Jan 2024 13:07:35 +0000 (UTC)
+	with ESMTP id JPMhy9lKeijp; Fri,  5 Jan 2024 13:07:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AFAA443700;
-	Fri,  5 Jan 2024 13:07:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AFAA443700
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5F79F1BF841
- for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 13:07:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E4BAE437BE;
+	Fri,  5 Jan 2024 13:07:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E4BAE437BE
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AE4421BF841
+ for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 13:07:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B0E7743700
- for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 13:07:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B0E7743700
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9561D42207
+ for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 13:07:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9561D42207
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id z1Kop8puMznT for <buildroot@lists.busybox.net>;
- Fri,  5 Jan 2024 13:07:31 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7804E436EB
- for <buildroot@buildroot.org>; Fri,  5 Jan 2024 13:07:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7804E436EB
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C824760003;
- Fri,  5 Jan 2024 13:07:29 +0000 (UTC)
-Date: Fri, 5 Jan 2024 14:07:29 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20240105140729.2f36bd7b@windsurf>
-In-Reply-To: <20231219191026.47158-1-bernd@kuhls.net>
-References: <20231219191026.47158-1-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1704460050;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=Hy3Q9xrLenzMHuc2wjlItZ/0HSobSTqG57m3C8YbjGw=;
- b=Q3kWs/N/orgRzUcVU3M91h8Cu1pLgRPONJIy4oPCnFkxyknDCm/cHsdSRJjlCiaee10o8D
- y8dArJ3vEYBO7HX8Mt4pFVTbHf9jvVEHR1sP0nnvQLwgX0/G1xJ//BH0ztVahwp+wlDJI0
- g1/1AT3OsOvmzshjhPPbXiV4Z7fqRMzBrcloMuAeATVYU7nLHFCbqYMBR5QiacqVsAhy1m
- IsGp7gpZ1colaODiERmzGT+Hhh6TO5grx+yQavPGdUTxbUvCqG3KWvFKRaX7KyW3ALPTRd
- WrtJF12Tlk7T8it5fn5KSN5Rsp+mAetBqfSZ+JlGwPvFl1i0NRTe4dmgzHrQEA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Q3kWs/N/
-Subject: Re: [Buildroot] [PATCH 1/1] package/{mesa3d,
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lpB016ryCicA for <buildroot@lists.busybox.net>;
+ Fri,  5 Jan 2024 13:07:34 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 75D9C410CA
+ for <buildroot@buildroot.org>; Fri,  5 Jan 2024 13:07:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 75D9C410CA
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 60E7484565; Fri,  5 Jan 2024 13:07:34 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 5 Jan 2024 14:06:30 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e946401406e5cb25e995dc24cd8c9b677aaab76c
+X-Git-Newrev: a80d19dea1bef90f3a5d624ddadf78be773be8a2
+X-Patchwork-Hint: ignore
+Message-Id: <20240105130734.60E7484565@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/{mesa3d,
  mesa3d-headers}: bump version to 23.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -77,30 +58,61 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Romain Naour <romain.naour@gmail.com>, "Yann E
- . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 19 Dec 2023 20:10:26 +0100
-Bernd Kuhls <bernd@kuhls.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=a80d19dea1bef90f3a5d624ddadf78be773be8a2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  package/mesa3d-headers/mesa3d-headers.mk | 2 +-
->  package/mesa3d/mesa3d.hash               | 5 +++--
->  package/mesa3d/mesa3d.mk                 | 2 +-
->  3 files changed, 5 insertions(+), 4 deletions(-)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 5 +++--
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 4 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 3bc12ca86e..29a6633132 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 23.2.1
++MESA3D_HEADERS_VERSION = 23.3.1
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 0f4ca05831..41835de461 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,4 +1,5 @@
+-# From https://gitlab.freedesktop.org/mesa/mesa/-/blob/23.2/docs/relnotes/23.2.1.rst
+-sha256  64de0616fc2d801f929ab1ac2a4f16b3e2783c4309a724c8a259b20df8bbc1cc  mesa-23.2.1.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-dev/2023-December/226085.html
++sha256  6e48126d70fdb3f20ffeb246ca0c2e41ffdc835f0663a03d4526b8bf5db41de6  mesa-23.3.1.tar.xz
++sha512  0861fb5083e37439ad8cc0a0d8372a7c84d8665ea298dc784e2dd893162e20ae072f5ef0b860be88ecf74bc123714acbc1dec312e139b892ff40ef1887c5f4a5  mesa-23.3.1.tar.xz
+ # License
+ sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 4b360c8a8f..abefb174f3 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 23.2.1
++MESA3D_VERSION = 23.3.1
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://archive.mesa3d.org
+ MESA3D_LICENSE = MIT, SGI, Khronos
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
