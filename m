@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85F97C3DA6E
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 22:50:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 901E8C3DA6E
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 22:50:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 212F34378D;
-	Fri,  5 Jan 2024 22:50:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 212F34378D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 375C4403D6;
+	Fri,  5 Jan 2024 22:50:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 375C4403D6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ph-rYJ0lEgjK; Fri,  5 Jan 2024 22:50:39 +0000 (UTC)
+	with ESMTP id I4UqiRoXG5UA; Fri,  5 Jan 2024 22:50:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0394743797;
-	Fri,  5 Jan 2024 22:50:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0394743797
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5819A1BF2B4
+	by smtp2.osuosl.org (Postfix) with ESMTP id C0007437A9;
+	Fri,  5 Jan 2024 22:50:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C0007437A9
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8227E1BF995
  for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 22:50:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2A8CB423DD
+ by smtp3.osuosl.org (Postfix) with ESMTP id 678A4614C1
  for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 22:50:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A8CB423DD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 678A4614C1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GGwgnAmDp8mo for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JH0yHRkD5kXU for <buildroot@lists.busybox.net>;
  Fri,  5 Jan 2024 22:50:21 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 329E6423DC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4289461488
  for <buildroot@buildroot.org>; Fri,  5 Jan 2024 22:50:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 329E6423DC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4289461488
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2039384600; Fri,  5 Jan 2024 22:50:21 +0000 (UTC)
+ id 2FF2C845FD; Fri,  5 Jan 2024 22:50:21 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 5 Jan 2024 23:47:14 +0100
+Date: Fri, 5 Jan 2024 23:48:43 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6ccef467ce61220c8b80e8f6dbd283529e5be4e9
-X-Git-Newrev: 64414981dd4d9d660e1877a6a8a5dfc620f18616
+X-Git-Oldrev: 64414981dd4d9d660e1877a6a8a5dfc620f18616
+X-Git-Newrev: 747dff5a366b6fa37788b0e8fc28781feb918f4f
 X-Patchwork-Hint: ignore
-Message-Id: <20240105225021.2039384600@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 5.{10,
- 15}.x / 6.{1, 6}.x series
+Message-Id: <20240105225021.2FF2C845FD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gcc: pass toolchain wrapper flags
+ during build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,67 +64,155 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=64414981dd4d9d660e1877a6a8a5dfc620f18616
+commit: https://git.buildroot.net/buildroot/commit/?id=747dff5a366b6fa37788b0e8fc28781feb918f4f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+With [1], [2] & [3] we made sure Buildroot packages get built with
+proper MMU page size assumed. This was done nicely through insertion of
+required flags into the toolchain wrapper so that there's no need to
+pass these flags to each and every package separately - toolchain
+wrapper used for real building has all set internally and so proper
+flags are implicitly used.
+
+But there's yet another corner case which is not handled that way -
+these are binaries or rather libraries which are being used as a part of
+GCC compilation: libgcc_s.so.1 and libstdc++.so.
+
+And so to make sure both the libraries get built properly we need to
+set TARGET_CFLAGS (cures libgcc_s.so) & TARGET_LDFLAGS (cures
+libstdc++.so).
+
+In case of ARM by defaut 64 KiB page size seems to be used, as w/o
+that patch we see the following for BR2_ARM64_PAGE_SIZE_4K=y:
+
+--------------------------->8----------------------------
+$ ./output/host/bin/aarch64-linux-readelf -l ./output/target/lib/libgcc_s.so.1
+
+Elf file type is DYN (Shared object file)
+Entry point 0x0
+There are 6 program headers, starting at offset 64
+
+Program Headers:
+  Type           Offset             VirtAddr           PhysAddr
+                 FileSiz            MemSiz              Flags  Align
+  LOAD           0x0000000000000000 0x0000000000000000 0x0000000000000000
+                 0x0000000000013d1c 0x0000000000013d1c  R E    0x10000
+  LOAD           0x000000000001fd98 0x000000000002fd98 0x000000000002fd98
+                 0x0000000000000438 0x00000000000005c8  RW     0x10000
+  DYNAMIC        0x000000000001fdb8 0x000000000002fdb8 0x000000000002fdb8
+                 0x0000000000000200 0x0000000000000200  RW     0x8
+
+$ ./output/host/bin/aarch64-linux-readelf -l ./output/target/usr/lib/libstdc++.so.6.0.32
+
+Elf file type is DYN (Shared object file)
+Entry point 0x0
+There are 7 program headers, starting at offset 64
+
+Program Headers:
+  Type           Offset             VirtAddr           PhysAddr
+                 FileSiz            MemSiz              Flags  Align
+  LOAD           0x0000000000000000 0x0000000000000000 0x0000000000000000
+                 0x00000000001d3462 0x00000000001d3462  R E    0x10000
+  LOAD           0x00000000001d5760 0x00000000001e5760 0x00000000001e5760
+                 0x000000000000e528 0x0000000000012de8  RW     0x10000
+  DYNAMIC        0x00000000001deef0 0x00000000001eeef0 0x00000000001eeef0
+                 0x0000000000000240 0x0000000000000240  RW     0x8
+--------------------------->8----------------------------
+
+Note alignment of 0x10000 in sections marked for loading.
+
+And with the patch applied we get expected alignment of 0x1000 (4
+KiB):
+
+--------------------------->8----------------------------
+$ ./output/host/bin/aarch64-linux-readelf -l ./output/target/lib/libgcc_s.so.1
+
+Elf file type is DYN (Shared object file)
+Entry point 0x0
+There are 6 program headers, starting at offset 64
+
+Program Headers:
+  Type           Offset             VirtAddr           PhysAddr
+                 FileSiz            MemSiz              Flags  Align
+  LOAD           0x0000000000000000 0x0000000000000000 0x0000000000000000
+                 0x0000000000013d1c 0x0000000000013d1c  R E    0x1000
+  LOAD           0x0000000000013d98 0x0000000000014d98 0x0000000000014d98
+                 0x0000000000000438 0x00000000000005c8  RW     0x1000
+  DYNAMIC        0x0000000000013db8 0x0000000000014db8 0x0000000000014db8
+                 0x0000000000000200 0x0000000000000200  RW     0x8
+
+$ ./output/host/bin/aarch64-linux-readelf -l ./output/target/usr/lib/libstdc++.so.6.0.32
+
+Elf file type is DYN (Shared object file)
+Entry point 0x0
+There are 7 program headers, starting at offset 64
+
+Program Headers:
+  Type           Offset             VirtAddr           PhysAddr
+                 FileSiz            MemSiz              Flags  Align
+  LOAD           0x0000000000000000 0x0000000000000000 0x0000000000000000
+                 0x00000000001d3462 0x00000000001d3462  R E    0x1000
+  LOAD           0x00000000001d3760 0x00000000001d4760 0x00000000001d4760
+                 0x000000000000e528 0x0000000000012de8  RW     0x1000
+  DYNAMIC        0x00000000001dcef0 0x00000000001ddef0 0x00000000001ddef0
+                 0x0000000000000240 0x0000000000000240  RW     0x8
+--------------------------->8----------------------------
+
+A nice side effect is that we can get rid of the special handling of
+"-matomic" as it's already part of ARCH_TOOLCHAIN_WRAPPER_OPTS.
+
+[1] https://git.buildroot.net/buildroot/commit/?id=3cc2c6d19ab2e1bb4634f26f9318da9b07df5fff
+[2] https://git.buildroot.net/buildroot/commit/?id=dcb74db89e74e512e36b32cea6f574a1a1ca84c4
+[3] https://git.buildroot.net/buildroot/commit/?id=5e52c28397b79f8c4c99552217cbe95202166626
+
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Signed-off-by: Vladimir Isaev <VVIsaev@gmail.com>
+Signed-off-by: Pavel Kozlov <kozlov@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 8 ++++----
- package/linux-headers/Config.in.host | 8 ++++----
- 3 files changed, 9 insertions(+), 9 deletions(-)
+ package/gcc/gcc.mk | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 627cfd2130..82d46365e7 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 93bc46643c..94935d79a2 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -98,23 +98,24 @@ HOST_GCC_COMMON_CONF_ENV = \
+ HOST_GCC_COMMON_MAKE_OPTS = \
+ 	gcc_cv_prog_makeinfo_modern=no
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.6.8" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.6.10" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index e0b7183888..4207bd6b2f 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,9 +1,9 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  5036c434e11e4b36d8da3f489851f7f829cf785fa7f7887468537a9ea4572416  linux-6.6.8.tar.xz
--sha256  7e3d2694d18ce502068cc88a430da809abbd17d0773268524ebece442612b541  linux-6.1.69.tar.xz
-+sha256  9ee627e4c109aec7fca3eda5898e81d201af2c7eb2f7d9d7d94c1f0e1205546c  linux-6.6.10.tar.xz
-+sha256  2df774dd53f9ffd4e57ebf804cf597709295df6a304fe261d25220a134b7f041  linux-6.1.71.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  b2a49d87605f3a9491581150315e22337c1afb599efc1e2737481be3a2d6d620  linux-5.15.145.tar.xz
--sha256  c55217a80d74f81b83116289a8bfe4302293390b45aeabb76f64814920788863  linux-5.10.205.tar.xz
-+sha256  5a807a5fa2a80ada957d8079681dfb5cc196ec26f43244d1c8a4fd7af592d192  linux-5.15.146.tar.xz
-+sha256  c43d613216e6c5197519a4e979de5c1b510100858ff591963931c99e59c7485b  linux-5.10.206.tar.xz
- sha256  4dae99e49f466d4689e128ec023754908147159d7462019a83c7da1f25df9b15  linux-5.4.265.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
- sha256  022dce3935eadec7c31093992cc101c905fd4ffbb8afce92f3e41fdd0fa18b36  linux-4.19.303.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index e593ace5ce..df760326dc 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -411,10 +411,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.14.334"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.19.303"	if BR2_KERNEL_HEADERS_4_19
- 	default "5.4.265"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.205"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.145"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.69"	if BR2_KERNEL_HEADERS_6_1
--	default "6.6.8"		if BR2_KERNEL_HEADERS_6_6
-+	default "5.10.206"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.15.146"	if BR2_KERNEL_HEADERS_5_15
-+	default "6.1.71"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.6.10"	if BR2_KERNEL_HEADERS_6_6
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+-GCC_COMMON_TARGET_CFLAGS = $(TARGET_CFLAGS)
+-GCC_COMMON_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
++# Target binaries and libraries which are being built as a part of GCC
++# don't use Buildroot toolchain wrapper because, instead its very own "xgcc"
++# binary is used. And so we need to explicitly propagate ALL the flags
++# directly to "xgcc" and that is done via configure-time environment
++# variables, see below setup of HOST_GCC_COMMON_CONF_ENV.
++GCC_COMMON_TARGET_CFLAGS = $(TARGET_CFLAGS) $(ARCH_TOOLCHAIN_WRAPPER_OPTS)
++GCC_COMMON_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS) $(ARCH_TOOLCHAIN_WRAPPER_OPTS)
++GCC_COMMON_TARGET_LDFLAGS = $(TARGET_LDFLAGS) $(ARCH_TOOLCHAIN_WRAPPER_OPTS)
+ 
+ # used to fix ../../../../libsanitizer/libbacktrace/../../libbacktrace/elf.c:772:21: error: 'st.st_mode' may be used uninitialized in this function [-Werror=maybe-uninitialized]
+ ifeq ($(BR2_ENABLE_DEBUG),y)
+ GCC_COMMON_TARGET_CFLAGS += -Wno-error
+ endif
+ 
+-# Make sure libgcc & libstdc++ always get built with -matomic on ARC700
+-ifeq ($(GCC_TARGET_CPU):$(BR2_ARC_ATOMIC_EXT),arc700:y)
+-GCC_COMMON_TARGET_CFLAGS += -matomic
+-GCC_COMMON_TARGET_CXXFLAGS += -matomic
+-endif
+-
+ # Propagate options used for target software building to GCC target libs
+ HOST_GCC_COMMON_CONF_ENV += CFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CFLAGS)"
+ HOST_GCC_COMMON_CONF_ENV += CXXFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CXXFLAGS)"
++HOST_GCC_COMMON_CONF_ENV += LDFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_LDFLAGS)"
+ HOST_GCC_COMMON_CONF_ENV += AR_FOR_TARGET=gcc-ar NM_FOR_TARGET=gcc-nm RANLIB_FOR_TARGET=gcc-ranlib
+ 
+ # libitm needs sparc V9+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
