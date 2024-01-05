@@ -4,55 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E37A1C3DA6E
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 10:41:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BE7CC3DA6E
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 10:43:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 919F7421B8;
-	Fri,  5 Jan 2024 10:41:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 919F7421B8
+	by smtp4.osuosl.org (Postfix) with ESMTP id DC4BB42176;
+	Fri,  5 Jan 2024 10:43:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC4BB42176
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AfSCV_LxMMI3; Fri,  5 Jan 2024 10:41:56 +0000 (UTC)
+	with ESMTP id PtMgLbQpwzQp; Fri,  5 Jan 2024 10:43:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ED2B9421AA;
-	Fri,  5 Jan 2024 10:41:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED2B9421AA
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D2C0E1BF378
- for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 10:41:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4358F4216E;
+	Fri,  5 Jan 2024 10:43:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4358F4216E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C969B1BF378
+ for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 10:43:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AAAA34364E
- for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 10:41:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AAAA34364E
+ by smtp1.osuosl.org (Postfix) with ESMTP id A1CB080BF9
+ for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 10:43:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A1CB080BF9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wRJaOzdAWUb0 for <buildroot@lists.busybox.net>;
- Fri,  5 Jan 2024 10:41:33 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2141040141
- for <buildroot@buildroot.org>; Fri,  5 Jan 2024 10:41:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2141040141
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7086BFF805;
- Fri,  5 Jan 2024 10:41:31 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LRWdKWV9G58D for <buildroot@lists.busybox.net>;
+ Fri,  5 Jan 2024 10:43:23 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8B005808A2
+ for <buildroot@buildroot.org>; Fri,  5 Jan 2024 10:43:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B005808A2
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 62FE520007;
+ Fri,  5 Jan 2024 10:43:20 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rLhdq-005cw8-2v;
- Fri, 05 Jan 2024 11:41:30 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rLhfb-005dm7-25;
+ Fri, 05 Jan 2024 11:43:19 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Romain Naour <romain.naour@smile.fr>
-References: <20231206224422.16063-1-romain.naour@smile.fr>
- <20231206224422.16063-3-romain.naour@smile.fr>
-Date: Fri, 05 Jan 2024 11:41:30 +0100
-In-Reply-To: <20231206224422.16063-3-romain.naour@smile.fr> (Romain Naour's
- message of "Wed, 6 Dec 2023 23:44:22 +0100")
-Message-ID: <87il483vvp.fsf@48ers.dk>
+To: buildroot@buildroot.org
+References: <20231209200916.250950-1-peter@korsgaard.com>
+Date: Fri, 05 Jan 2024 11:43:19 +0100
+In-Reply-To: <20231209200916.250950-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sat, 9 Dec 2023 21:09:15 +0100")
+Message-ID: <87edew3vso.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 3/3] support/testing: TestDtbocfg: bump
- kernel to 5.10.202
+Subject: Re: [Buildroot] [PATCH] package/libcurl: security bump to version
+ 8.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,20 +63,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Romain" == Romain Naour <romain.naour@smile.fr> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > The prebuilt kernel has been updated to 5.10.202, sync the kernel
- > built by TestDtbocfg.
+ > Fixes the following security issues:
+ > - CVE-2023-46218: cookie mixed case PSL bypass
 
- > Signed-off-by: Romain Naour <romain.naour@smile.fr>
+ >   This flaw allows a malicious HTTP server to set "super cookies" in curl
+ >   that are then passed back to more origins than what is otherwise allowed
+ >   or possible.  This allows a site to set cookies that then would get sent
+ >   to different and unrelated sites and domains.
 
-Committed to 2023.11.x, thanks.
+ >   https://curl.se/docs/CVE-2023-46218.html
+
+ > - CVE-2023-46219: HSTS long file name clears contents
+
+ >   When saving HSTS data to an excessively long file name, curl could end up
+ >   removing all contents, making subsequent requests using that file unaware
+ >   of the HSTS status they should otherwise use.
+
+ >   https://curl.se/docs/CVE-2023-46219.html
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2023.02.x and 2023.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
