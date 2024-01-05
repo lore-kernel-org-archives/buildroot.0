@@ -4,58 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 126CEC3DA6E
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 05:52:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56CB4C3DA6E
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 05:54:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 57CD460FE9;
-	Fri,  5 Jan 2024 05:52:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 57CD460FE9
+	by smtp3.osuosl.org (Postfix) with ESMTP id DD9DE61165;
+	Fri,  5 Jan 2024 05:54:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD9DE61165
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Xdp0bCtyjMgP; Fri,  5 Jan 2024 05:52:20 +0000 (UTC)
+	with ESMTP id PZnRkCVAD9yp; Fri,  5 Jan 2024 05:54:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B145560EF1;
-	Fri,  5 Jan 2024 05:52:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B145560EF1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3730D610AD;
+	Fri,  5 Jan 2024 05:54:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3730D610AD
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D2D1E1BF3F2
- for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 05:52:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 324D91BF3F2
+ for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 05:54:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B852241FA2
- for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 05:52:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B852241FA2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 09EB7417BB
+ for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 05:54:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 09EB7417BB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id a95RSBSfNHE0 for <buildroot@lists.busybox.net>;
- Fri,  5 Jan 2024 05:52:16 +0000 (UTC)
+ with ESMTP id A8HplIWQTKMw for <buildroot@lists.busybox.net>;
+ Fri,  5 Jan 2024 05:54:05 +0000 (UTC)
 Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3C9C841F49
- for <buildroot@buildroot.org>; Fri,  5 Jan 2024 05:52:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C9C841F49
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1A4D14176E
+ for <buildroot@buildroot.org>; Fri,  5 Jan 2024 05:54:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A4D14176E
 Received: by helium.openadk.org (Postfix, from userid 1000)
- id 29C6E3520918; Fri,  5 Jan 2024 06:52:10 +0100 (CET)
-Date: Fri, 5 Jan 2024 06:52:10 +0100
+ id 2CCB3352091B; Fri,  5 Jan 2024 06:54:03 +0100 (CET)
+Date: Fri, 5 Jan 2024 06:54:03 +0100
 From: Waldemar Brodkorb <wbx@openadk.org>
 To: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Message-ID: <ZZeZClA0xpt7gTO5@waldemar-brodkorb.de>
+Message-ID: <ZZeZewJSTNqyUqF2@waldemar-brodkorb.de>
 References: <20240104190529.1521901-1-abrodkin@synopsys.com>
+ <20240104190529.1521901-2-abrodkin@synopsys.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20240104190529.1521901-1-abrodkin@synopsys.com>
+In-Reply-To: <20240104190529.1521901-2-abrodkin@synopsys.com>
 X-Operating-System: Linux 5.10.0-27-amd64 x86_64
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=openadk.org; s=2022; 
- t=1704433931; bh=20et0bJ4cOrHPQgqdFZl63qOuuyJo+vt+O81x/+4nO0=;
+ t=1704434043; bh=iM+QDa0PxFwB9c9Nuidts4F/jQx20RNLjEHv/OViF6k=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=QJvcBizjv1gc3UF55cQ4N2gwZMlKdTIOzgMeFeySiPTNzmosD38dNNAx1w32T0QeL
- CnX/+NdQwCU1sxEYFFU+0LQ3xQpKDP2TVPspcNcvhSf1uNJfNF13FPbRIfulsz155d
- IzyGXGGA7Y+uave0Fv2jcU5DtIyZpBVgHoqRHuxUyqOSaDUOM38igGCXI6ZCNCOvnT
- ykz4N3E7kw4xXgPPYnkHj4syUwAtTl7qyEwHx0mj7iKfYK669rLSLy7001cWCgYizG
- FBcxIeLaZdLb95cgv/OrmeRZyf9aeZ0y0ePA1l3gHzcazOmKyCI1lmy+tETIQ4HoY6
- ZEtqtVg+THOLA==
-Subject: Re: [Buildroot] [PATCH 0/3] Add support for ARCv3 ISA  processors
+ b=RI7g22xFRI+SqT8OhaMrdxzWs/tWUnbmKCZn9xFvVo8eiXqk9u1f4N3MHFI1mRfKq
+ 0oT20KpfT8FmkVA1emyHEAO4i4TDHmxJ+OKRRMvghhKhfDbb8xSymDblREx9yUbInN
+ 5bucyKLg3QSJnPihjl7g8XL4uL+B87kX7hIQnYMYF8OvhX3uTJqeJWDpNWEkfjg4OE
+ AO5SRX6GD9qK8MkEsM4OkWbwiEfA6cBAO1Of/96kHm+zTUv33XPI93ptQLUvBfx08X
+ 6ZQ45/kfxN6xvat8rnltRcgyyRCHGHzt4bKP/HmKXSfUU2mLSWG87X7arY9nBQ4a3z
+ 74dI1bU2pivhQ==
+Subject: Re: [Buildroot] [PATCH 1/3] ARCv3: Add support of ARCv3 32-bit and
+ 64-bit processors
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,40 +79,20 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 Hi Alexey, All,
 Alexey Brodkin via buildroot wrote,
 
-> It's been quite some time since introduction to the market
-> of new Synopsys ARCv3 ISA processors, which are meant to
-> build on top of success of their predecessors in ARCv2 family.
+> These are new generation of high performance ARC HS5x and HS6x
+> cores that implement new ARCv3 ISA binary incompatible with
+> previous ARCompact & ARCv2.
 > 
-> ARCv3 ISA is meant to improve efficiency of high-performance
-> embedded microprocessors and thus by definition is not binary
-> compatible with previous generation of ARC cores such as ARCompact
-> (ARC600 and ARC700 processors) and ARCv2 (ARC EM and ARC HS processors).
+> On top of the ARC GNU toolchain 2023.09 there's an incremental fix [1].
+> Also instead of adding a reference to glibc fork there's just a patch
+> which adds changes required for ARCv3 support on top of the current
+> glibc. Since most of changes are ARC-specific there shouldn't be any
+> problems with moving to a newer glibc version and as wit hother
+                                                       ^^^^^^^^^^
+                                                       with other 
+> toolchain components that glibc patch will eventually be gone once
+> ARCv3 changes are accepted in the corresponding upstream projects.
 > 
-> Moreover, finally in ARCv3 line there's a 64-bit processor family called
-> ARC HS6x meant to cover cases when 32-bit address space is not enough.
-> 
-> Since ARCv3 ISA in not binary compatible with older ARC cores, we have
-> to switch to newer tools, which in fact are already available as a part
-> of ARC GNU toolchain v2023.09, see [1] & integration of them into
-> Buildroot [2].
-> 
-> Even though that update is long overdue (for too long we kept all that in
-> our GitHub repo [3]) it's better late than never.
-> 
-> I'd like to say thank you for all the folks who used to work on Linux
-> bring-up on ARCv3 processors, most of whom did contribute to these
-> changes I'm sending out today, some even no longer work with us, but
-> still it's another amazing example of close and efficient collaboration
-> of a group of truly highly motivated professionals. And it is my
-> pleasure to work with such talented and bright people!
-
-You can add a 
-Tested-By: Waldemar Brodkorb <wbx@openadk.org>
-
-Thanks for working on this. I think I can mark my patches as
-superseded. At least my work on this kicked you out of the silence
-;=)
-
 best regards
  Waldemar
 _______________________________________________
