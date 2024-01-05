@@ -4,66 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B625DC3DA6E
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 08:42:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 165D5C3DA6E
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 08:45:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5A58A40141;
-	Fri,  5 Jan 2024 08:42:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5A58A40141
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8C40140141;
+	Fri,  5 Jan 2024 08:45:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8C40140141
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yIcyxcjCyHWT; Fri,  5 Jan 2024 08:42:39 +0000 (UTC)
+	with ESMTP id 7WKipKnmrTYW; Fri,  5 Jan 2024 08:45:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 58BDA43553;
-	Fri,  5 Jan 2024 08:42:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 58BDA43553
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B402B1BF30D
- for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 08:42:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7F2A843553;
+	Fri,  5 Jan 2024 08:45:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7F2A843553
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6284E1BF30D
+ for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 08:45:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 99349420A7
- for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 08:42:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 99349420A7
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3B06B83D81
+ for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 08:45:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B06B83D81
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4ASiUbIPbGuP for <buildroot@lists.busybox.net>;
- Fri,  5 Jan 2024 08:42:35 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7B83A420A4
- for <buildroot@buildroot.org>; Fri,  5 Jan 2024 08:42:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B83A420A4
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7E5D240004;
- Fri,  5 Jan 2024 08:42:32 +0000 (UTC)
-Date: Fri, 5 Jan 2024 09:42:31 +0100
-To: Alexey Brodkin via buildroot <buildroot@buildroot.org>
-Message-ID: <20240105094231.318fd50f@windsurf>
-In-Reply-To: <20240104171224.1469776-1-abrodkin@synopsys.com>
-References: <20240104171224.1469776-1-abrodkin@synopsys.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1704444152;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=SndVw+u3Ts4wF9oBW8HciDClVmyGqIZ0wenXQoj+hTU=;
- b=W0IH2ddfAXFVkjYg0vfkxxWw18SjgahXCd3XDSHLtNzRCBzTPRSp806ArjEOQYZaLlbrot
- D97P8rpPUJZgxsP4wzoOo/092XE7/hdMYiMWxuuxc1XoZ+Uwnw0b5CmSZWg5gzTk+5j85I
- UnBB7NUCMF9kDnTtaEOZSPHtKOfDLm6U2qJseDbPW6kN21fSwzSySRO1XtlKjHpfns0PK3
- o3MnWg7MxLGrsFwABguNMwNO5QXa9so4Hm6KO2KeXWbaoXUOvhAy+6YAe7dgYOvAQwTABQ
- w+HUb7rOPVJyDLjFhPrahQbNvO+tgE0GTVXSNG7DU7qJX0ztc8rEhGcfCduKGw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=W0IH2ddf
-Subject: Re: [Buildroot] [PATCH] ARC: Switch toolchain components to
- arc-2023.09-release
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gqwoLpkPXuCc for <buildroot@lists.busybox.net>;
+ Fri,  5 Jan 2024 08:45:41 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5F9B783D79
+ for <buildroot@buildroot.org>; Fri,  5 Jan 2024 08:45:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F9B783D79
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4CE7084330; Fri,  5 Jan 2024 08:45:41 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 5 Jan 2024 09:45:01 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5594570a0c2ebb162ae304d7dca92aadf8f439ad
+X-Git-Newrev: 2d0327c802557bdf892a6aaf3abac57ed15fd80e
+X-Patchwork-Hint: ignore
+Message-Id: <20240105084541.4CE7084330@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/easy-rsa: bump to version 3.1.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,47 +57,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Alexey Brodkin <Alexey.Brodkin@synopsys.com>,
- Waldemar Brodkorb <mail@waldemar-brodkorb.de>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Alexey,
+commit: https://git.buildroot.net/buildroot/commit/?id=2d0327c802557bdf892a6aaf3abac57ed15fd80e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  4 Jan 2024 09:12:24 -0800
-Alexey Brodkin via buildroot <buildroot@buildroot.org> wrote:
+https://github.com/OpenVPN/easy-rsa/blob/v3.1.7/ChangeLog
 
->  .../0001-poison-system-directories.patch      | 310 ------------------
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/easy-rsa/easy-rsa.hash | 2 +-
+ package/easy-rsa/easy-rsa.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-You removed this patch without re-adding it for the new ARC toolchain
-version. When reviewing it, I thought: "but in fact, the other system
-directory poisoning patches in binutils are useless, because we are now
-doing this in the toolchain wrapper" and I even went all the way to
-writing a patch to remove those binutils patches.
-
-Except that binutils tools are not wrapped by the toolchain wrapper
-(only gcc/g++/etc. are), and this is why we have kept the system
-directory poisoning patches on binutils.
-
-Therefore, could you re-add this system directory poisoning patch for
-the ARC-specific binutils version, so that we have something that is
-aligned between binutils versions?
-
-It should be as easy as taking the binutils patch from the
-corresponding binutils version.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/easy-rsa/easy-rsa.hash b/package/easy-rsa/easy-rsa.hash
+index 5be651bde0..de19d8b693 100644
+--- a/package/easy-rsa/easy-rsa.hash
++++ b/package/easy-rsa/easy-rsa.hash
+@@ -1,5 +1,5 @@
+ # Locally computed: (after verifying gpg sig)
+-sha512  8c8d1f4baf90475d4cce334d116b7f12b82687157796b25560600b5098769226ae2f60f02982c75266b625d66b465360ffa815260ad44850923e3fbc9ba8540a  EasyRSA-3.1.1.tgz
++sha512  eb3978b07c313af148c6ae94b60e213c8b810c5974242855560b22ad949cfc094d311e4cc04a95ddd0f817bfec54971caa5289e5fc532895e1e58499d265c705  EasyRSA-3.1.7.tgz
+ 
+ # Hash for license files
+ sha256  7c4a4fc71745d93a87278801f1bca555562ca23f21e18293add64b9e6f6b7bf1  COPYING.md
+diff --git a/package/easy-rsa/easy-rsa.mk b/package/easy-rsa/easy-rsa.mk
+index 4ea45506dd..7266943f5b 100644
+--- a/package/easy-rsa/easy-rsa.mk
++++ b/package/easy-rsa/easy-rsa.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EASY_RSA_VERSION = 3.1.1
++EASY_RSA_VERSION = 3.1.7
+ EASY_RSA_SOURCE = EasyRSA-$(EASY_RSA_VERSION).tgz
+ EASY_RSA_SITE = https://github.com/OpenVPN/easy-rsa/releases/download/v$(EASY_RSA_VERSION)
+ EASY_RSA_LICENSE = GPL-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
