@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56CB4C3DA6E
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 05:54:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 315A0C3DA6E
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 05:57:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DD9DE61165;
-	Fri,  5 Jan 2024 05:54:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD9DE61165
+	by smtp3.osuosl.org (Postfix) with ESMTP id AE94D61165;
+	Fri,  5 Jan 2024 05:57:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE94D61165
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PZnRkCVAD9yp; Fri,  5 Jan 2024 05:54:09 +0000 (UTC)
+	with ESMTP id ykUr7p-BeUCd; Fri,  5 Jan 2024 05:57:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3730D610AD;
-	Fri,  5 Jan 2024 05:54:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3730D610AD
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 324D91BF3F2
- for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 05:54:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 15A38610AD;
+	Fri,  5 Jan 2024 05:57:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 15A38610AD
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9E18D1BF3F2
+ for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 05:57:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 09EB7417BB
- for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 05:54:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 09EB7417BB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 61AD3610AD
+ for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 05:57:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 61AD3610AD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id A8HplIWQTKMw for <buildroot@lists.busybox.net>;
- Fri,  5 Jan 2024 05:54:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Z_CYktnci3-f for <buildroot@lists.busybox.net>;
+ Fri,  5 Jan 2024 05:57:27 +0000 (UTC)
 Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1A4D14176E
- for <buildroot@buildroot.org>; Fri,  5 Jan 2024 05:54:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A4D14176E
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C361661063
+ for <buildroot@buildroot.org>; Fri,  5 Jan 2024 05:57:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C361661063
 Received: by helium.openadk.org (Postfix, from userid 1000)
- id 2CCB3352091B; Fri,  5 Jan 2024 06:54:03 +0100 (CET)
-Date: Fri, 5 Jan 2024 06:54:03 +0100
+ id A014D3520902; Fri,  5 Jan 2024 06:57:24 +0100 (CET)
+Date: Fri, 5 Jan 2024 06:57:24 +0100
 From: Waldemar Brodkorb <wbx@openadk.org>
 To: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Message-ID: <ZZeZewJSTNqyUqF2@waldemar-brodkorb.de>
+Message-ID: <ZZeaRKqDAiE5m4kW@waldemar-brodkorb.de>
 References: <20240104190529.1521901-1-abrodkin@synopsys.com>
- <20240104190529.1521901-2-abrodkin@synopsys.com>
+ <20240104190529.1521901-3-abrodkin@synopsys.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20240104190529.1521901-2-abrodkin@synopsys.com>
+In-Reply-To: <20240104190529.1521901-3-abrodkin@synopsys.com>
 X-Operating-System: Linux 5.10.0-27-amd64 x86_64
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=openadk.org; s=2022; 
- t=1704434043; bh=iM+QDa0PxFwB9c9Nuidts4F/jQx20RNLjEHv/OViF6k=;
+ t=1704434244; bh=S9s+BzFNFNRQehIkClPQSY7ChAfJJMIBcv9jqzAQ2WA=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=RI7g22xFRI+SqT8OhaMrdxzWs/tWUnbmKCZn9xFvVo8eiXqk9u1f4N3MHFI1mRfKq
- 0oT20KpfT8FmkVA1emyHEAO4i4TDHmxJ+OKRRMvghhKhfDbb8xSymDblREx9yUbInN
- 5bucyKLg3QSJnPihjl7g8XL4uL+B87kX7hIQnYMYF8OvhX3uTJqeJWDpNWEkfjg4OE
- AO5SRX6GD9qK8MkEsM4OkWbwiEfA6cBAO1Of/96kHm+zTUv33XPI93ptQLUvBfx08X
- 6ZQ45/kfxN6xvat8rnltRcgyyRCHGHzt4bKP/HmKXSfUU2mLSWG87X7arY9nBQ4a3z
- 74dI1bU2pivhQ==
-Subject: Re: [Buildroot] [PATCH 1/3] ARCv3: Add support of ARCv3 32-bit and
- 64-bit processors
+ b=aZIAHJys2Mi1w16pzoFHGNYQ8U17/z6eUgCAALN+u3dRkuNRJrGreX6+yvl53JSxo
+ HZWEgXifxtdldH/ZDZEE8D/3TVYg0SrmMoG5gSr3v8mWbey+QEnzJWQyWrB2+YGJvq
+ 4qPB8j4H+P1qEtpmCoQArTbiYbs4INj8D7BtFP8PYan/Zivgd/I+1y5fNgT+/tii8Y
+ 1N5BG9kPac2Nn73HFvaDEl4UySynr5E2d1xoECrf9A4yZBTJT0gJ+M7Vx1gYDXf5ha
+ jmCKHWaoROAs8wMSUbf98jvudOyDTE5IcKpdNBn5/uDNd7M+aO2XRzvjMqvnJ/XoHi
+ n0qjN+jASd0ww==
+Subject: Re: [Buildroot] [PATCH 2/3] ARC: Add defconfigs for ARC HS58 & HS68
+ processors in simulators
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,20 +79,35 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 Hi Alexey, All,
 Alexey Brodkin via buildroot wrote,
 
-> These are new generation of high performance ARC HS5x and HS6x
-> cores that implement new ARCv3 ISA binary incompatible with
-> previous ARCompact & ARCv2.
+> To simplify ramp-up with Linux on32-bit  ARC HS58 & 64-bit ARC HS68
+                                 ^^^^^^^^
+                                 missing space.
+> processors we introduce 2 defconfigs with instructions on how to build
+> embedded Linux image for them and how to run resultoing image.
 > 
-> On top of the ARC GNU toolchain 2023.09 there's an incremental fix [1].
-> Also instead of adding a reference to glibc fork there's just a patch
-> which adds changes required for ARCv3 support on top of the current
-> glibc. Since most of changes are ARC-specific there shouldn't be any
-> problems with moving to a newer glibc version and as wit hother
-                                                       ^^^^^^^^^^
-                                                       with other 
-> toolchain components that glibc patch will eventually be gone once
-> ARCv3 changes are accepted in the corresponding upstream projects.
+> As with earlier images for simulated platforms it's possible to
+> use the same image with either proprietary Synopsys nSIM simulator,
+> QEMU or even with real FPGA-based prototyping platform called HAPS.
 > 
+> That not only convenient, but also helps to work on observed issues,
+> i.e. run the same image on so very different platforms and see if
+> earlier observed problem is still there. That way we may easily
+> verify various platforms against each other.
+> 
+> For example, if one image works on nSIM & FPGA but doesn't work
+> on QEMU, it's clear something needs to be fixed in QEMU.
+> 
+> But if exactly the same though unexpected behavior is observed on all
+> the platforms, we may say with quite some confidence, that we're dealing
+> with a pure software or tools issue.
+
+It seems networking is broken in nsimdrv for both defconfigs.
+I am using nsimdrv -v
+nSIM, Version: 2022.06 (Build: 006_FREE)
+
+Is there a reason arc32 is using uclibc toolchain and arc64 is using
+glibc by default?
+
 best regards
  Waldemar
 _______________________________________________
