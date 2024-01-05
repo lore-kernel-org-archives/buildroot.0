@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D37CC3DA6E
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 12:54:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6C49C3DA6E
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 12:54:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EE2BB435DF;
-	Fri,  5 Jan 2024 12:54:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE2BB435DF
+	by smtp2.osuosl.org (Postfix) with ESMTP id 88BC4436EE;
+	Fri,  5 Jan 2024 12:54:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 88BC4436EE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ms2pwnctV_n8; Fri,  5 Jan 2024 12:54:15 +0000 (UTC)
+	with ESMTP id 9AnTvVwmSjyd; Fri,  5 Jan 2024 12:54:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E68D343707;
-	Fri,  5 Jan 2024 12:54:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E68D343707
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7FD7643700;
+	Fri,  5 Jan 2024 12:54:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7FD7643700
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BD5541BF422
- for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 12:52:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C083B1BF422
+ for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 12:52:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E064761497
- for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 12:52:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E064761497
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1F057610AE
+ for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 12:52:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F057610AE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id f7NUDtoskrry for <buildroot@lists.busybox.net>;
+ with ESMTP id QQPsGkEEnlXN for <buildroot@lists.busybox.net>;
  Fri,  5 Jan 2024 12:52:38 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2B365614C1
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4ACFB614D2
  for <buildroot@buildroot.org>; Fri,  5 Jan 2024 12:52:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B365614C1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4ACFB614D2
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 283DD844C7; Fri,  5 Jan 2024 12:52:38 +0000 (UTC)
+ id 3A08680153; Fri,  5 Jan 2024 12:52:38 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 5 Jan 2024 13:50:06 +0100
+Date: Fri, 5 Jan 2024 13:50:11 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 65c8a9b6626de83365865dea6fff1749466a36aa
-X-Git-Newrev: 6a65d3881099bd3408bce2f742a6972ec2a1d34f
+X-Git-Oldrev: 6a65d3881099bd3408bce2f742a6972ec2a1d34f
+X-Git-Newrev: e39b53dd03c1adf53e5bc204b22382a063b501ce
 X-Patchwork-Hint: ignore
-Message-Id: <20240105125238.283DD844C7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/jszip: bump to version 3.10.1
+Message-Id: <20240105125238.3A08680153@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/postgis: drop autoreconf
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +63,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6a65d3881099bd3408bce2f742a6972ec2a1d34f
+commit: https://git.buildroot.net/buildroot/commit/?id=e39b53dd03c1adf53e5bc204b22382a063b501ce
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/Stuk/jszip/blob/v3.10.1/CHANGES.md
+Commit 1718c2ba6a4db1461b2490aa42ca4f0a2112adae removed all patches but
+forgot to drop autoreconf
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/jszip/jszip.hash | 2 +-
- package/jszip/jszip.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/postgis/postgis.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/jszip/jszip.hash b/package/jszip/jszip.hash
-index d0c56a44ab..e90e9cc68b 100644
---- a/package/jszip/jszip.hash
-+++ b/package/jszip/jszip.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  aa3033c6bb5357a0b0965c92fbdb6d6abe64676e70ffa7933b63c573ab79ee45  jszip-3.10.0.tar.gz
-+sha256  e873e5d0d8549c78c0eafcab8fba40f4a1e27c5a9d48f4a6b2eb122470d0d88c  jszip-3.10.1.tar.gz
- sha256  566c953c6090b1218ca6217dd7359d45dde46581968586dc607d59a78af6a9c4  LICENSE.markdown
-diff --git a/package/jszip/jszip.mk b/package/jszip/jszip.mk
-index 3504368675..b282610a0d 100644
---- a/package/jszip/jszip.mk
-+++ b/package/jszip/jszip.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/postgis/postgis.mk b/package/postgis/postgis.mk
+index 2fb98245a3..bb3955ec54 100644
+--- a/package/postgis/postgis.mk
++++ b/package/postgis/postgis.mk
+@@ -11,8 +11,6 @@ POSTGIS_MAKE = $(MAKE1)
+ POSTGIS_LICENSE = GPL-2.0+ (PostGIS), BSD-3-Clause (xsl), GPL-2.0+ or LGPL-3.0+ (SFCGAL), MIT, Apache-2.0, ISC, BSL-1.0, CC-BY-SA-3.0
+ POSTGIS_LICENSE_FILES = LICENSE.TXT
+ POSTGIS_CPE_ID_VENDOR = postgis
+-# configure.ac is patched so need to run autoreconf
+-POSTGIS_AUTORECONF = YES
  
--JSZIP_VERSION = 3.10.0
-+JSZIP_VERSION = 3.10.1
- JSZIP_SITE = $(call github,Stuk,jszip,v$(JSZIP_VERSION))
- JSZIP_LICENSE = MIT or GPL-3.0
- JSZIP_LICENSE_FILES = LICENSE.markdown
+ POSTGIS_DEPENDENCIES = postgresql libgeos proj libxml2
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
