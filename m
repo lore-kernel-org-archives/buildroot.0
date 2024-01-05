@@ -4,65 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A07D5C3DA6E
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 12:56:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4AD6C3DA6E
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 12:56:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5265C4374D;
-	Fri,  5 Jan 2024 12:56:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5265C4374D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 776C743724;
+	Fri,  5 Jan 2024 12:56:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 776C743724
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2qfPrAYgaE4y; Fri,  5 Jan 2024 12:56:19 +0000 (UTC)
+	with ESMTP id PjnMxva4ixOa; Fri,  5 Jan 2024 12:56:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5543643700;
-	Fri,  5 Jan 2024 12:56:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5543643700
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 183C91BF422
+	by smtp2.osuosl.org (Postfix) with ESMTP id 90A444373D;
+	Fri,  5 Jan 2024 12:56:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 90A444373D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F37BD1BF422
  for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 12:54:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F174143700
- for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 12:54:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F174143700
+ by smtp3.osuosl.org (Postfix) with ESMTP id D9D7461497
+ for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 12:54:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D9D7461497
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vwzK2Ovd7AaF for <buildroot@lists.busybox.net>;
- Fri,  5 Jan 2024 12:54:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JZGJGjcACjiu for <buildroot@lists.busybox.net>;
+ Fri,  5 Jan 2024 12:54:31 +0000 (UTC)
 Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
  [217.70.183.200])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C0684435DF
- for <buildroot@buildroot.org>; Fri,  5 Jan 2024 12:54:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C0684435DF
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3633220007;
- Fri,  5 Jan 2024 12:54:28 +0000 (UTC)
-Date: Fri, 5 Jan 2024 13:53:36 +0100
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CA536607B4
+ for <buildroot@buildroot.org>; Fri,  5 Jan 2024 12:54:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA536607B4
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1D2952000E;
+ Fri,  5 Jan 2024 12:54:29 +0000 (UTC)
+Date: Fri, 5 Jan 2024 13:53:55 +0100
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20240105135336.2943008d@windsurf>
-In-Reply-To: <20240102222847.2460245-1-fontaine.fabrice@gmail.com>
-References: <20240102222847.2460245-1-fontaine.fabrice@gmail.com>
+Message-ID: <20240105135355.24bdc51d@windsurf>
+In-Reply-To: <20240102224900.2534201-1-fontaine.fabrice@gmail.com>
+References: <20240102224900.2534201-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1704459268;
+ d=bootlin.com; s=gm1; t=1704459269;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=OBopqun1oPhdOR7LK/C4jtYaP7IHGLGJP4DSOxlfavM=;
- b=kb0DylPugtmyFo9NF22U9Rrfpa1rXspbyRQDMwypFc9EZCavOnldWJLSBAlRdfU8pqg2aw
- FOergIK9I4lIDoX94HHjhif+QRuzVq3nJIr6gJD92IWBPefJ1jzXsOZo/fcfciUH28++fy
- FJdNahy9GLKFte58fas1vHHf7+M9Y7N+l38111uaiLh2tNzojX1JMbhesL0GDVHW4l82fQ
- JvOFdkhtKrww4ADirPHdmZo0NCpcRSWjy9ll5skH04G7SR9eYadVfh2erWvCfgY80RES5o
- IzwpNMOhFvfFZjyNaNvypjKChQSG3p83w+Msh0ksowWRZoXrNlP3N4tLDrRRqA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=6uxL+EJxZS3I8ynJYgBZCg5Ysj1NjeFzEe7NI4dbhng=;
+ b=j+ym38Z5nRbPhE7qc60isKBMhPBAhI90BcMXAjUorsJfrihQaAywkjIhaozyfjjzgAFn7V
+ RotW7isnw88MawjLC3mur1BrA2PWx6pJ+LarXeTzJVutn/T3yS9ZzU+DG//ANO+hLmMQYl
+ tuc8O358LoGVMT2jNyYzHtvnFZfxfzVMK+N9jb8/jJuIK+3KkBSgkNMbWvQflb1zx7BWLx
+ TqFaxmlMOdzEVlKE9dBDvdvWbUHhCJOlUIBmrxbmRnHJI0tTH+AmYZlkkvK524bGoR2I1I
+ SUDFUUowtJyE+n9iFfIH/h0TnxHf3QOYFZxZvQyRjR1vOdZo6XWP4nOYEnIadg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=kb0DylPu
-Subject: Re: [Buildroot] [PATCH 1/1] package/inih: bump to version 57
+ header.s=gm1 header.b=j+ym38Z5
+Subject: Re: [Buildroot] [PATCH 1/1] package/pugixml: bump to version 1.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,22 +76,25 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Theo Debrouwere <t.debrouwere@televic.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue,  2 Jan 2024 23:28:47 +0100
+On Tue,  2 Jan 2024 23:49:00 +0100
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> https://github.com/benhoyt/inih/releases/tag/r57
+> Update hash of LICENSE.md (year updated with
+> https://github.com/zeux/pugixml/commit/1a9a41b0f455fd94fd9e66bb8a987e807419cd3b)
+> 
+> https://github.com/zeux/pugixml/releases/tag/v1.14
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/inih/inih.hash | 2 +-
->  package/inih/inih.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/pugixml/pugixml.hash | 4 ++--
+>  package/pugixml/pugixml.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
