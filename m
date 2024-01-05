@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AEA3C3DA6E
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 22:51:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D36F4C3DA6E
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 22:51:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D2E37437AE;
-	Fri,  5 Jan 2024 22:51:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D2E37437AE
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5AF6D403D6;
+	Fri,  5 Jan 2024 22:51:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5AF6D403D6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PuykHljocylR; Fri,  5 Jan 2024 22:51:06 +0000 (UTC)
+	with ESMTP id G43L7I7by6kW; Fri,  5 Jan 2024 22:51:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A0B7643791;
-	Fri,  5 Jan 2024 22:51:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A0B7643791
+	by smtp2.osuosl.org (Postfix) with ESMTP id 70020437A9;
+	Fri,  5 Jan 2024 22:51:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 70020437A9
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0FFE01BF2B4
- for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 22:50:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8877C1BF2B4
+ for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 22:50:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DB86C61488
- for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 22:50:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB86C61488
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5784561488
+ for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 22:50:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5784561488
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OJNEdYPlxa3n for <buildroot@lists.busybox.net>;
- Fri,  5 Jan 2024 22:50:21 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 19A526146E
- for <buildroot@buildroot.org>; Fri,  5 Jan 2024 22:50:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 19A526146E
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 008DF845FD; Fri,  5 Jan 2024 22:50:20 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 5 Jan 2024 23:46:51 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 53494903a86f3c22c9a3b0f841f24a5c04787bca
-X-Git-Newrev: dd548ecda668964138f98dfd31e381cff0d0c756
-X-Patchwork-Hint: ignore
-Message-Id: <20240105225021.008DF845FD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi-peripheral-joystick: bump
- version to 20.1.14-Nexus
+ with ESMTP id OEtsd4nrW6lK for <buildroot@lists.busybox.net>;
+ Fri,  5 Jan 2024 22:50:56 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1AEEC6146E
+ for <buildroot@buildroot.org>; Fri,  5 Jan 2024 22:50:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1AEEC6146E
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D9C73C0005;
+ Fri,  5 Jan 2024 22:50:52 +0000 (UTC)
+Date: Fri, 5 Jan 2024 23:50:52 +0100
+To: Alexey Brodkin via buildroot <buildroot@buildroot.org>
+Message-ID: <20240105235052.1f70db20@windsurf>
+In-Reply-To: <20240105191710.1330461-1-abrodkin@synopsys.com>
+References: <20240105191710.1330461-1-abrodkin@synopsys.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1704495053;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=JtkZo/jh8HPfDviWKaiTzZ5RCNQPLpASG+X1c15Xm0g=;
+ b=CiEt3y++chOAH0qsZU4ula0X1MQUUZpWtTrQXWe+U357tC+yJkXj2/VkdTgAVsHy5+a73y
+ 9TWL+mcmbznhgYmKuNDp4WVeNYz2FQYNEg4Lcxr4vS0v+qGG1injqYi4SAT+muvtAH2kyw
+ pNYl6uW2jsr6pStSVqAZy8gRFiU19+gG1E/w9nnDM2TPB1dwCM2N3KaosBuKpjuIdtQgAB
+ kEXOAvkCwFr/uzMtGlRXAKVrwiTpxfbys2XvZyH2uSxPALgLFlB+tQ/rlWkucCs0iGsB7I
+ A3EuzYfsihdKjWtGE7ZtC62c8Fz1vRb4r4Q4c4x9qBCOQeYuJi5iSVTu8MtZEA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=CiEt3y++
+Subject: Re: [Buildroot] [PATCH v2] arch: Set max/common-page-size for
+ libgcc & libstdc++
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,44 +77,44 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Alexey Brodkin <Alexey.Brodkin@synopsys.com>, "Yann E .
+ MORIN" <yann.morin.1998@free.fr>, Vladimir Isaev <VVIsaev@gmail.com>,
+ Pavel Kozlov <Pavel.Kozlov@synopsys.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dd548ecda668964138f98dfd31e381cff0d0c756
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri,  5 Jan 2024 11:17:10 -0800
+Alexey Brodkin via buildroot <buildroot@buildroot.org> wrote:
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash | 2 +-
- package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> With [1], [2] & [3] we made sure Buildroot packages get built with
+> proper MMU page size assumed. This was done nicely through insertion of
+> required flags into the toolchain wrapper so that there's no need to
+> pass these flags to each and every package separately - toolchain
+> wrapper used for real building has all set internally and so proper
+> flags are impleicitly used.
+> 
+> But there's yet another corner case which is not handled that way -
+> these are binaries or rather libraries which are being used as a part of
+> GCC compilation: libgcc_s.so.1 and libstdc++.so.
+> 
+> And so to make sure both the libraries get built properly we need to set
+> TARGET_CFLAGS (cures libgcc_s.so) & TARGET_LDFLAGS (cures libstdc++.so).
+> 
+> In case of ARM by defaut 64 KiB page size seems to be used, as w/o that
+> patch I see the following for BR2_ARM64_PAGE_SIZE_4K=y:
+> --------------------------->8----------------------------  
+> $ ./output/host/bin/aarch64-linux-readelf -l ./output/target/lib/libgcc_s.so.1
 
-diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
-index d4ee52c05b..550da61981 100644
---- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
-+++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  9fabd0cbb54f6f4acfa16a5fa2c13e37d121bb0774e0b62ad3604a72c99b95e5  kodi-peripheral-joystick-20.1.13-Nexus.tar.gz
-+sha256  8c3dde851e45549d13ca3fcead9c27c440dfe070d68fb473ae71c522bc54753a  kodi-peripheral-joystick-20.1.14-Nexus.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
-index 0f54d71234..2fe6c29c0d 100644
---- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
-+++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_PERIPHERAL_JOYSTICK_VERSION = 20.1.13-Nexus
-+KODI_PERIPHERAL_JOYSTICK_VERSION = 20.1.14-Nexus
- KODI_PERIPHERAL_JOYSTICK_SITE = $(call github,xbmc,peripheral.joystick,$(KODI_PERIPHERAL_JOYSTICK_VERSION))
- KODI_PERIPHERAL_JOYSTICK_LICENSE = GPL-2.0+
- KODI_PERIPHERAL_JOYSTICK_LICENSE_FILES = LICENSE.md
+Applied to master with a few minor improvements in the commit title and
+commit log. Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
