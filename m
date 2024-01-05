@@ -4,65 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F014CC3DA6E
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 12:50:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C823BC3DA6E
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 12:52:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A1A25436D6;
-	Fri,  5 Jan 2024 12:50:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A1A25436D6
+	by smtp2.osuosl.org (Postfix) with ESMTP id 739BE435DF;
+	Fri,  5 Jan 2024 12:52:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 739BE435DF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XqEQZsRI0ZWD; Fri,  5 Jan 2024 12:50:02 +0000 (UTC)
+	with ESMTP id OENdbh_S63Y6; Fri,  5 Jan 2024 12:52:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7028E436F1;
-	Fri,  5 Jan 2024 12:50:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7028E436F1
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0B2B71BF990
- for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 12:49:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7290E436BD;
+	Fri,  5 Jan 2024 12:52:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7290E436BD
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D6D831BF422
+ for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 12:52:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D8F7A41F9B
- for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 12:49:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D8F7A41F9B
+ by smtp3.osuosl.org (Postfix) with ESMTP id AF1DE614DC
+ for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 12:52:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF1DE614DC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OHss5nrJCc7c for <buildroot@lists.busybox.net>;
- Fri,  5 Jan 2024 12:49:48 +0000 (UTC)
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BE08241F9A
- for <buildroot@buildroot.org>; Fri,  5 Jan 2024 12:49:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE08241F9A
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 19AEE1BF208;
- Fri,  5 Jan 2024 12:49:44 +0000 (UTC)
-Date: Fri, 5 Jan 2024 13:49:44 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20240105134944.52f8413a@windsurf>
-In-Reply-To: <20240103071141.6147-1-bernd@kuhls.net>
-References: <20240103071141.6147-1-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1704458985;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=B+cwlDkMpvl64nMJyC6gxWdl7pDj2aGfjQFln2z50gc=;
- b=WxXKGk8IuXh6ODSOrZYu/VcgNYDwNbuJ9E2VtrUbyVFHoNhjPlB9OQs/4Okx1iTpb+1Sey
- Oh+zeg+PtJBIjUai7DcEQWItNPGQ5KwfynrFpZ3CHZ9LObekkQ7nW6fGPF/eW8xFziR5Wy
- kzhBpBtNrcHPMCoSHlh1Lf1mTpomz0+veA0Z8kDPDMahiIC7BqHkYK9I0a9LS6aeJ7b5lC
- FnMwEYtXlYMPvow4S3T3nNh6hU3+9KMqC2UvvMPjpMwDOawhD/pzGoDHWQNHX28gNE4u8g
- +3q1ewwJ+1iY+NwyEH9upSuoV5WiakZ3Edz5Eosh78Bx9GR3AUryWtfQaTH5gQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=WxXKGk8I
-Subject: Re: [Buildroot] [PATCH 1/1] package/libdrm: bump version to 2.4.119
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NWso6pBCtpTx for <buildroot@lists.busybox.net>;
+ Fri,  5 Jan 2024 12:52:38 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id F2C6A610AE
+ for <buildroot@buildroot.org>; Fri,  5 Jan 2024 12:52:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F2C6A610AE
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id DF27B844C9; Fri,  5 Jan 2024 12:52:37 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 5 Jan 2024 13:48:21 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 639d8d4979d075cda3de9e663f5aecd9ead56c42
+X-Git-Newrev: 38d07349daece6393800619ecb3ef98299711819
+X-Patchwork-Hint: ignore
+Message-Id: <20240105125237.DF27B844C9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cmake: bump version to 3.28.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,31 +57,55 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed,  3 Jan 2024 08:11:41 +0100
-Bernd Kuhls <bernd@kuhls.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=38d07349daece6393800619ecb3ef98299711819
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Release notes:
-> https://lists.x.org/archives/xorg-announce/2023-December/003438.html
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  package/libdrm/libdrm.hash | 6 +++---
->  package/libdrm/libdrm.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+Changelog: https://cmake.org/cmake/help/v3.28/release/3.28.html
 
-Applied to master, thanks.
+Release notes:
+https://www.kitware.com/cmake-3-28-0-available-for-download/
+https://www.kitware.com/cmake-3-28-1-available-for-download/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/cmake/cmake.hash | 4 ++--
+ package/cmake/cmake.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
+index fbf0786232..51fff6c3ef 100644
+--- a/package/cmake/cmake.hash
++++ b/package/cmake/cmake.hash
+@@ -1,5 +1,5 @@
+-# From https://cmake.org/files/v3.27/cmake-3.27.9-SHA-256.txt
+-sha256  609a9b98572a6a5ea477f912cffb973109ed4d0a6a6b3f9e2353d2cdc048708e  cmake-3.27.9.tar.gz
++# From https://cmake.org/files/v3.28/cmake-3.28.1-SHA-256.txt
++sha256  15e94f83e647f7d620a140a7a5da76349fc47a1bfed66d0f5cdee8e7344079ad  cmake-3.28.1.tar.gz
+ 
+ # Locally calculated
+ sha256  4a01ccf2dc580ba570d02bc015bbe0ec92f1f318717aae9540ba841ba7946756  Copyright.txt
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index 7506e964a9..f56be9ba5c 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -5,8 +5,8 @@
+ ################################################################################
+ 
+ # When updating the version, please also update BR2_HOST_CMAKE_AT_LEAST_X_Y
+-CMAKE_VERSION_MAJOR = 3.27
+-CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).9
++CMAKE_VERSION_MAJOR = 3.28
++CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).1
+ CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
+ CMAKE_LICENSE = BSD-3-Clause
+ CMAKE_LICENSE_FILES = Copyright.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
