@@ -4,84 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF6A6C3DA6E
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 17:51:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB960C3DA6E
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 17:53:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A95B683ED1;
-	Fri,  5 Jan 2024 17:51:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A95B683ED1
+	by smtp1.osuosl.org (Postfix) with ESMTP id 357B082275;
+	Fri,  5 Jan 2024 17:53:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 357B082275
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iMbRmXvnZIoX; Fri,  5 Jan 2024 17:51:18 +0000 (UTC)
+	with ESMTP id ZEeUGd0CAxHb; Fri,  5 Jan 2024 17:53:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 03A7B83EC2;
-	Fri,  5 Jan 2024 17:51:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 03A7B83EC2
+	by smtp1.osuosl.org (Postfix) with ESMTP id 95777820A3;
+	Fri,  5 Jan 2024 17:53:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 95777820A3
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EAF851BF3CE
- for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 17:51:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8F2961BF3CE
+ for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 17:53:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C398B83EC2
- for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 17:51:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C398B83EC2
+ by smtp1.osuosl.org (Postfix) with ESMTP id 685338209C
+ for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 17:53:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 685338209C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id k1xjkzyfEtxq for <buildroot@lists.busybox.net>;
- Fri,  5 Jan 2024 17:51:16 +0000 (UTC)
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0102983EBB
- for <buildroot@buildroot.org>; Fri,  5 Jan 2024 17:51:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0102983EBB
-Received: by mail-wm1-x332.google.com with SMTP id
- 5b1f17b1804b1-40d87df95ddso15889425e9.0
- for <buildroot@buildroot.org>; Fri, 05 Jan 2024 09:51:15 -0800 (PST)
+ with ESMTP id cTBt9at-Vt3Q for <buildroot@lists.busybox.net>;
+ Fri,  5 Jan 2024 17:53:41 +0000 (UTC)
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6E19482089
+ for <buildroot@buildroot.org>; Fri,  5 Jan 2024 17:53:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E19482089
+Received: by mail-wr1-x431.google.com with SMTP id
+ ffacd0b85a97d-3374c693f92so1304083f8f.1
+ for <buildroot@buildroot.org>; Fri, 05 Jan 2024 09:53:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704477073; x=1705081873;
+ d=1e100.net; s=20230601; t=1704477218; x=1705082018;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=Pk0/p8K2wyI8XPRGdCsuEO0EsCvpYcoJdnit4D9Pu6o=;
- b=fMMSGdxOlmmRWaXodguo1Wg21oYl61e7Ge6sXZpnyNh3jqcaiP0tpglrfh4Oo19C3t
- BgwHpXn16TSjh+LMrojWjvSqApN1g940Blr5smyOsE0z19xUNeEZQMBPNBfwYBkffsM1
- WLLN1GxxzPLtGMlbM08uNKa6suxyi3XpRXGw2QTz43aXzYYAzMLPgnPDWl7POU8duKtw
- 9lN0WnZ5OT15LhHOBDl6mTOtFf5KSRUmkBKvIdX8CYJa6oTVmGrkypQXXrQzWrg2XQr/
- xE1BW0sLcfQT0LxFmmCRNU92J2HfE4ZjWGgDWYye1888rLfF47JgnuwltI1AVKl8PKz2
- /CvQ==
-X-Gm-Message-State: AOJu0Yz9nRiuDmn/V68FAC3WyOgkAj9CW1/PdaY/mjnjOMMoNt6v2yed
- Meib4erVEJUl/ZxcHJIu+ii8qUNOZk4=
-X-Google-Smtp-Source: AGHT+IEBrkh6lLL0SESb7qR0xEUhXVhAo+K/A05HChXkgUb2xSZayIQ0D8UBIQv75t/Ps0oScsfyTA==
-X-Received: by 2002:a7b:c342:0:b0:40d:6045:e847 with SMTP id
- l2-20020a7bc342000000b0040d6045e847mr737681wmj.88.1704477073052; 
- Fri, 05 Jan 2024 09:51:13 -0800 (PST)
+ bh=rcNjQ5LmyN+x9BbHmdoE5uKiLXz4ricQyVcC2k5d9Fw=;
+ b=NyyNKifBNUWMdMazdI/NCsZkr+3o0OIG3YAQ/n7bYZjHhgoNjZ1v9VIeAv4yqtlw1J
+ XF41NYOR6xd0RaqWmZ/w/grMQbZDtFR04JqS68e3OWIxI0wwP8q+3zTpURxCyGYsNlKA
+ swlyvJkzkX9i+Bc6TA/G5aXKkDC8tjBXdRwUYujPEfiJIq7gYoeA6DiNCDYXhvWxQST+
+ CsblgJ9CQ1Xq93Aavgf1nbMIMNCGlZRk+m0PnoKP/QGaHFs5H7atR6Ct7q+jEAPakieK
+ 6qecQG082WWIzOEatGEAY/D2FkQc2IrJWRUaYI/pXL2vFu5IvaAjrLfMs9h93mGWy02G
+ w8Pg==
+X-Gm-Message-State: AOJu0Yxj9cKuqVA1fBoIf8T0Y0mOIxj2ug0S5YYHVIGQ5/LrY792JP+Z
+ 7VGYr2iwqifcDPxKhOPt/MTu6onrd48=
+X-Google-Smtp-Source: AGHT+IHmZaxInckrj8/mt45jhF9N7diorTrhYcXkfAO2zVN9ChP2wgDWyLENbzzTEOcBO0sfaFaM6w==
+X-Received: by 2002:a5d:5005:0:b0:336:5f07:5968 with SMTP id
+ e5-20020a5d5005000000b003365f075968mr1548941wrt.96.1704477218490; 
+ Fri, 05 Jan 2024 09:53:38 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- w5-20020a05600c474500b0040e34835a58sm2227199wmo.22.2024.01.05.09.51.12
+ i1-20020adfefc1000000b00337464bf71bsm1810492wrp.39.2024.01.05.09.53.38
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 05 Jan 2024 09:51:12 -0800 (PST)
+ Fri, 05 Jan 2024 09:53:38 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri,  5 Jan 2024 18:51:07 +0100
-Message-ID: <20240105175107.736059-1-fontaine.fabrice@gmail.com>
+Date: Fri,  5 Jan 2024 18:53:36 +0100
+Message-ID: <20240105175336.737690-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1704477073; x=1705081873; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1704477218; x=1705082018; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Pk0/p8K2wyI8XPRGdCsuEO0EsCvpYcoJdnit4D9Pu6o=;
- b=m09N4Cw6eKLH0musruAXatCYxw8MlxWmthuFfmYp+WO6NHvR2fCnKasdQV72FJw4U8
- BjjMVEFGilLmUf2ctRdCMBIY6uvBiTuEZYrMfW7O08R821pvh1cbkNOLqRnf0ELFT1Xr
- L7X+ChF+Kiiyp6cpMNW59IQsxzfM7MiDLZVwSczM8qpLBgYNTDW3Cx9b5K7DNgklpcIS
- 5vTR/z165zPf2nF4Nx7yefJeXSmUzvMQ21PNG5GrodDeXjBGqwqzSwfy6EddG7lglmZ6
- tq8YQBUkq5BKbkMEOt7vg/Lp4JawUwafvptiqs83UMqoD+44mZ9CZFGNZF6COGNVOKKR
- z2TQ==
+ bh=rcNjQ5LmyN+x9BbHmdoE5uKiLXz4ricQyVcC2k5d9Fw=;
+ b=IoDVj4QdN7KsypdQ5Hkex9Kn6j7yuVQ/73NjKAj1yeWuew0rvvlLtYGVeWuSPZ8nTo
+ SFOi2/iJDEK9qBb0D84Nw93bcy/c3EtUlcHZIb+OKe1UTacfjn9rVOVA3d7rka7EjBTl
+ FgAvYT/14JostWHJpLU8Yw5DU0euR/KNDavsnmAaTLG+g3WfY5jmKQwNsRkV5nGR4+ft
+ MgEty7CGmdIEfVUi14dz5Xbx0E6odtYtVGR24TAwLy2kwZb4N+PSbaSqtdRAxMHtno/6
+ 2LYcSdizBouEN+9Ea7kjxdYoI66xGh6dx2woHnA1jFvVWGy9+3BRmMd5svRS6r299pCx
+ k3Kw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=m09N4Cw6
-Subject: [Buildroot] [PATCH 1/1] package/cups: fix avahi handling
+ header.a=rsa-sha256 header.s=20230601 header.b=IoDVj4Qd
+Subject: [Buildroot] [PATCH 1/1] package/tcping: bump to version 2.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,44 +93,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Olivier Schonken <olivier.schonken@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---{dis,en}able-avahi is unrecognized since bump to version 2.3.3op2 in
-commit 8cf034ab0f686d0a3891b6fe5bb5a2d1bdf381d5 (which switched upstream
-location from apple to openprinting):
+https://github.com/mkirchner/tcping/releases/tag/2.1.0
+https://github.com/mkirchner/tcping/releases/tag/2.0.0
 
-configure: WARNING: unrecognized options: --disable-gtk-doc, --disable-gtk-doc-html, --disable-doc, --disable-docs, --disable-documentation, --with-xmlto, --with-fop, --disable-dependency-tracking, --enable-ipv6, --disable-nls, --disable-systemd, --disable-avahi
+https://github.com/mkirchner/tcping/compare/1.3.6...2.1.0
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/cups/cups.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/tcping/tcping.hash | 2 +-
+ package/tcping/tcping.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cups/cups.mk b/package/cups/cups.mk
-index c46baa63b6..8db0281dc8 100644
---- a/package/cups/cups.mk
-+++ b/package/cups/cups.mk
-@@ -62,11 +62,11 @@ else
- CUPS_CONF_OPTS += --disable-libusb
- endif
+diff --git a/package/tcping/tcping.hash b/package/tcping/tcping.hash
+index c97c0fa2a4..f706599c2d 100644
+--- a/package/tcping/tcping.hash
++++ b/package/tcping/tcping.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  a731f0e48ff931d7b2a0e896e4db40867043740fe901dd225780f2164fdbdcf3  tcping-1.3.6.tar.gz
++sha256  b8aa427420fe00173b5a2c0013d78e52b010350f5438bf5903c1942cba7c39c9  tcping-2.1.0.tar.gz
+ sha256  4a35620e27ddb8de27898e4206c8f93633d877c1e128e98e95a035f760d94428  LICENSE
+diff --git a/package/tcping/tcping.mk b/package/tcping/tcping.mk
+index 5eaf702ef0..9a068f5668 100644
+--- a/package/tcping/tcping.mk
++++ b/package/tcping/tcping.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--ifeq ($(BR2_PACKAGE_AVAHI),y)
-+ifeq ($(BR2_PACKAGE_AVAHI_LIBAVAHI_CLIENT),y)
- CUPS_DEPENDENCIES += avahi
--CUPS_CONF_OPTS += --enable-avahi
-+CUPS_CONF_OPTS += --with-dnssd=avahi
- else
--CUPS_CONF_OPTS += --disable-avahi
-+CUPS_CONF_OPTS += --with-dnssd=no
- endif
- 
- ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+-TCPING_VERSION = 1.3.6
++TCPING_VERSION = 2.1.0
+ TCPING_SITE = $(call github,mkirchner,tcping,$(TCPING_VERSION))
+ TCPING_LICENSE = MIT
+ TCPING_LICENSE_FILES = LICENSE
 -- 
 2.43.0
 
