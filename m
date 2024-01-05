@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87125C47079
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 10:55:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C07EC3DA6E
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 10:56:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 48673421A0;
-	Fri,  5 Jan 2024 10:55:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 48673421A0
+	by smtp4.osuosl.org (Postfix) with ESMTP id DD813421CB;
+	Fri,  5 Jan 2024 10:56:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD813421CB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 86rrMX3WKBJU; Fri,  5 Jan 2024 10:55:57 +0000 (UTC)
+	with ESMTP id Ne28CBukE99v; Fri,  5 Jan 2024 10:56:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 76311421A1;
-	Fri,  5 Jan 2024 10:55:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 76311421A1
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 833B31BF995
+	by smtp4.osuosl.org (Postfix) with ESMTP id 30941421A0;
+	Fri,  5 Jan 2024 10:56:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30941421A0
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8633A1BF997
  for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 10:55:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 58B78421BF
+ by smtp2.osuosl.org (Postfix) with ESMTP id 66DD54367D
  for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 10:55:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 58B78421BF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 66DD54367D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yNdzgVjKmeGj for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7y3tfYwcZCD0 for <buildroot@lists.busybox.net>;
  Fri,  5 Jan 2024 10:55:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C423A421A1
+ by smtp2.osuosl.org (Postfix) with ESMTP id B036B4368E
  for <buildroot@buildroot.org>; Fri,  5 Jan 2024 10:55:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C423A421A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B036B4368E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B2396835C2; Fri,  5 Jan 2024 10:55:26 +0000 (UTC)
+ id 83447843B4; Fri,  5 Jan 2024 10:55:26 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 5 Jan 2024 11:52:12 +0100
+Date: Fri, 5 Jan 2024 11:41:59 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 3a8bd9fdb96ea6192069b943e3e746605be78f88
-X-Git-Newrev: 7c723814230d062ee06cd724ab3d3aa7505bdf97
+X-Git-Oldrev: 14a8579cd0a6cf099d4ab12f2b097a7e2e15dbb5
+X-Git-Newrev: ae514155a16a9f5c075d8623f47ae8b323f687e7
 X-Patchwork-Hint: ignore
-Message-Id: <20240105105526.B2396835C2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/xwayland: libdrm
- is required, not optional
+Message-Id: <20240105105526.83447843B4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/libcurl: security
+ bump to version 8.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,88 +63,62 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7c723814230d062ee06cd724ab3d3aa7505bdf97
+commit: https://git.buildroot.net/buildroot/commit/?id=ae514155a16a9f5c075d8623f47ae8b323f687e7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-Fixes:
-http://autobuild.buildroot.net/results/476/47665d417dbae76bf27e805a5bcb1d8d6ab1f445/
+Fixes the following security issues:
 
-xwayland unconditionally includes xf86drm.h, so libdrm is required and not
-optional:
+- CVE-2023-46218: cookie mixed case PSL bypass
 
-grep -rs xf86drm.h
-glamor/glamor_egl.c:#include <xf86drm.h>
-hw/xwayland/xwayland-glamor.h:#include <xf86drm.h>
-hw/xwayland/xwayland-glamor-eglstream.c:#include <xf86drm.h>
-hw/xwayland/xwayland-window.h:#include <xf86drm.h>
-hw/xwayland/xwayland-drm-lease.c:#include <xf86drm.h>
-hw/xwayland/xwayland-glamor-gbm.c:#include <xf86drm.h>
+  This flaw allows a malicious HTTP server to set "super cookies" in curl
+  that are then passed back to more origins than what is otherwise allowed
+  or possible.  This allows a site to set cookies that then would get sent
+  to different and unrelated sites and domains.
+
+  https://curl.se/docs/CVE-2023-46218.html
+
+- CVE-2023-46219: HSTS long file name clears contents
+
+  When saving HSTS data to an excessively long file name, curl could end up
+  removing all contents, making subsequent requests using that file unaware
+  of the HSTS status they should otherwise use.
+
+  https://curl.se/docs/CVE-2023-46219.html
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 797de283c7ae9b99e4d2366cf142b2bc8b2f2a84)
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit aaa9438b96f88b1ecbf5eb9a1aebef8010835b8d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xwayland/Config.in   |  1 +
- package/x11r7/xwayland/xwayland.mk | 13 ++++---------
- 2 files changed, 5 insertions(+), 9 deletions(-)
+ package/libcurl/libcurl.hash | 4 ++--
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xwayland/Config.in b/package/x11r7/xwayland/Config.in
-index 241ab73ad3..9ac1928f51 100644
---- a/package/x11r7/xwayland/Config.in
-+++ b/package/x11r7/xwayland/Config.in
-@@ -8,6 +8,7 @@ config BR2_PACKAGE_XWAYLAND
- 	# them, otherwise, use the small libsha1 library.
- 	depends on !BR2_RISCV_32 # xlib_libxshmfence
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # xlib_libxshmfence
-+	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_LIBSHA1 if (!BR2_PACKAGE_OPENSSL && !BR2_PACKAGE_LIBGCRYPT)
- 	select BR2_PACKAGE_PIXMAN
- 	select BR2_PACKAGE_WAYLAND
-diff --git a/package/x11r7/xwayland/xwayland.mk b/package/x11r7/xwayland/xwayland.mk
-index 8eac602042..b0bff19be5 100644
---- a/package/x11r7/xwayland/xwayland.mk
-+++ b/package/x11r7/xwayland/xwayland.mk
-@@ -12,6 +12,7 @@ XWAYLAND_LICENSE_FILES = COPYING
- XWAYLAND_CPE_ID_VENDOR = x.org
- XWAYLAND_INSTALL_STAGING = YES
- XWAYLAND_DEPENDENCIES = \
-+	libdrm \
- 	pixman \
- 	wayland \
- 	wayland-protocols \
-@@ -23,15 +24,16 @@ XWAYLAND_DEPENDENCIES = \
- 	xlib_xtrans \
- 	xorgproto
- XWAYLAND_CONF_OPTS = \
-+	-Ddri3=true \
- 	-Dxwayland_eglstream=false \
- 	-Dxvfb=false \
- 	-Ddefault_font_path=/usr/share/fonts/X11/ \
- 	-Ddtrace=false \
- 	-Ddocs=false
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index ecd5d63909..d5c20d29d3 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.se/download/curl-8.4.0.tar.xz.asc
++# https://curl.se/download/curl-8.5.0.tar.xz.asc
+ # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+-sha256  16c62a9c4af0f703d28bda6d7bbf37ba47055ad3414d70dec63e2e6336f2a82d  curl-8.4.0.tar.xz
++sha256  42ab8db9e20d8290a3b633e7fbb3cec15db34df65fd1015ef8ac1e4723750eeb  curl-8.5.0.tar.xz
+ sha256  b1d7feb949ea5023552029fbe0bf5db4f23c2f85e9b8e51e18536f0ecbf9c524  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 2c87821a48..3ecc587a52 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--ifeq ($(BR2_PACKAGE_LIBDRM)$(BR2_PACKAGE_LIBEPOXY),yy)
-+ifeq ($(BR2_PACKAGE_LIBEPOXY),y)
- XWAYLAND_CONF_OPTS += -Dglamor=true
--XWAYLAND_DEPENDENCIES += libdrm libepoxy
-+XWAYLAND_DEPENDENCIES += libepoxy
- else
- XWAYLAND_CONF_OPTS += -Dglamor=false
- endif
-@@ -79,13 +81,6 @@ XWAYLAND_CONF_OPTS += -Dsha1=libsha1
- XWAYLAND_DEPENDENCIES += libsha1
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBDRM),y)
--XWAYLAND_CONF_OPTS += -Ddri3=true
--XWAYLAND_DEPENDENCIES +=  libdrm
--else
--XWAYLAND_CONF_OPTS += -Ddri3=false
--endif
--
- ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
- XWAYLAND_CONF_OPTS += -Dlibunwind=true
- XWAYLAND_DEPENDENCIES += libunwind
+-LIBCURL_VERSION = 8.4.0
++LIBCURL_VERSION = 8.5.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
