@@ -4,54 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D75FC3DA6E
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 12:38:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CA84C3DA6E
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 12:41:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 06E94436E8;
-	Fri,  5 Jan 2024 12:38:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06E94436E8
+	by smtp2.osuosl.org (Postfix) with ESMTP id DE973436D6;
+	Fri,  5 Jan 2024 12:41:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE973436D6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HqadfqUO0veV; Fri,  5 Jan 2024 12:38:44 +0000 (UTC)
+	with ESMTP id 6UmzBV27ES-A; Fri,  5 Jan 2024 12:41:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 321D6436D6;
-	Fri,  5 Jan 2024 12:38:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 321D6436D6
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0ACC31BF385
- for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 12:38:41 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 265F2401ED;
+	Fri,  5 Jan 2024 12:41:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 265F2401ED
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4118E1BF385
+ for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 12:41:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D5D99436D8
- for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 12:38:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D5D99436D8
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2839761486
+ for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 12:41:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2839761486
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5uSpnbe9rlVq for <buildroot@lists.busybox.net>;
- Fri,  5 Jan 2024 12:38:39 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9D444400FE
- for <buildroot@buildroot.org>; Fri,  5 Jan 2024 12:38:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D444400FE
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 48AB060009;
- Fri,  5 Jan 2024 12:38:36 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pCGM25tlJz6I for <buildroot@lists.busybox.net>;
+ Fri,  5 Jan 2024 12:41:42 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2990760EF1
+ for <buildroot@buildroot.org>; Fri,  5 Jan 2024 12:41:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2990760EF1
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5535240007;
+ Fri,  5 Jan 2024 12:41:39 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rLjT9-0064u9-1L;
- Fri, 05 Jan 2024 13:38:35 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rLjW6-006548-1k;
+ Fri, 05 Jan 2024 13:41:38 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Devoogdt <thomas@devoogdt.com>
-References: <20231212135634.225795-1-thomas@devoogdt.com>
-Date: Fri, 05 Jan 2024 13:38:35 +0100
-In-Reply-To: <20231212135634.225795-1-thomas@devoogdt.com> (Thomas Devoogdt's
- message of "Tue, 12 Dec 2023 14:56:34 +0100")
-Message-ID: <87frzc2bw4.fsf@48ers.dk>
+To: Ralf Dragon <hypnotoad@lindra.de>
+References: <20231212160112.94272-1-hypnotoad@lindra.de>
+Date: Fri, 05 Jan 2024 13:41:38 +0100
+In-Reply-To: <20231212160112.94272-1-hypnotoad@lindra.de> (Ralf Dragon's
+ message of "Tue, 12 Dec 2023 17:01:11 +0100")
+Message-ID: <87bka02br1.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH v1] package/mesa3d: add compile patch for
- linux < 3.5
+Subject: Re: [Buildroot] [PATCH 1/2] python-sip: fix compile error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,28 +62,23 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd@kuhls.net>, Romain Naour <romain.naour@gmail.com>,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: gwenhael.goavec-merou@trabucayre.com, yann.morin.1998@free.fr,
+ asafka7@gmail.com, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Devoogdt <thomas@devoogdt.com> writes:
-
- > The kcmp() system call first appeared in linux 3.5,
- > and was also not there before linux 5.12 if
- > CONFIG_CHECKPOINT_RESTORE was not set.
-
- > See: https://man7.org/linux/man-pages/man2/kcmp.2.html
-
- > Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-
-Committed to 2023.02.x and 2023.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Pj4+Pj4gIlJhbGYiID09IFJhbGYgRHJhZ29uIDxoeXBub3RvYWRAbGluZHJhLmRlPiB3cml0ZXM6
+CgogPiBXaXRob3V0IHRoZSBwYXRjaCwgcHl0aG9uLXNpcCBmYWlscyB0byBjb21waWxlIHdpdGg6
+CiA+IHNpcGxpYi5jOiBJbiBmdW5jdGlvbiDigJhzaXBfYXBpX2dldF9mcmFtZeKAmToKID4gc2lw
+bGliLmM6MTM3NTA6MjI6IGVycm9yOiBpbnZhbGlkIHVzZSBvZiB1bmRlZmluZWQgdHlwZSDigJhz
+dHJ1Y3QgX2ZyYW1l4oCZCiA+IDEzNzUwIHwgICAgICAgICBmcmFtZSA9IGZyYW1lLT5mX2JhY2s7
+CgogPiBUaGlzIGxpa2VseSBmaXhlcyBidWcgMTUyMDEgWzFdLgoKCgogPiBbMV0gaHR0cHM6Ly9i
+dWdzLmJ1aWxkcm9vdC5vcmcvc2hvd19idWcuY2dpP2lkPTE1MjAxCgoKID4gU2lnbmVkLW9mZi1i
+eTogUmFsZiBEcmFnb24gPGh5cG5vdG9hZEBsaW5kcmEuZGU+CiA+IC0tLQogPiBCYWNrcG9ydCB0
+bzogMjAyMy4wMi54CgpDb21taXR0ZWQgdG8gMjAyMy4wMi54IGFuZCAyMDIzLjExLngsIHRoYW5r
+cy4KCi0tIApCeWUsIFBldGVyIEtvcnNnYWFyZApfX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWls
+ZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1
+aWxkcm9vdAo=
