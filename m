@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C823BC3DA6E
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 12:52:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4568C3DA6E
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 12:52:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 739BE435DF;
-	Fri,  5 Jan 2024 12:52:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 739BE435DF
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2207F436EE;
+	Fri,  5 Jan 2024 12:52:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2207F436EE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OENdbh_S63Y6; Fri,  5 Jan 2024 12:52:41 +0000 (UTC)
+	with ESMTP id kmMIqBIAG1WB; Fri,  5 Jan 2024 12:52:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7290E436BD;
-	Fri,  5 Jan 2024 12:52:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7290E436BD
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D6D831BF422
+	by smtp2.osuosl.org (Postfix) with ESMTP id 19238436F1;
+	Fri,  5 Jan 2024 12:52:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 19238436F1
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E1D391BF990
  for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 12:52:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AF1DE614DC
+ by smtp1.osuosl.org (Postfix) with ESMTP id BB9C383E8B
  for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 12:52:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF1DE614DC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BB9C383E8B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NWso6pBCtpTx for <buildroot@lists.busybox.net>;
- Fri,  5 Jan 2024 12:52:38 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Zx81VBKg-Aw2 for <buildroot@lists.busybox.net>;
+ Fri,  5 Jan 2024 12:52:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F2C6A610AE
+ by smtp1.osuosl.org (Postfix) with ESMTP id D47C1812E6
  for <buildroot@buildroot.org>; Fri,  5 Jan 2024 12:52:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F2C6A610AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D47C1812E6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DF27B844C9; Fri,  5 Jan 2024 12:52:37 +0000 (UTC)
+ id C04F4844C7; Fri,  5 Jan 2024 12:52:37 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 5 Jan 2024 13:48:21 +0100
+Date: Fri, 5 Jan 2024 13:48:13 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 639d8d4979d075cda3de9e663f5aecd9ead56c42
-X-Git-Newrev: 38d07349daece6393800619ecb3ef98299711819
+X-Git-Oldrev: d1eea4f90ce9238cae36a8d4ae0161a8a3748616
+X-Git-Newrev: 5e272456d6d5a6196eab7a6a4a858b956ecefd0e
 X-Patchwork-Hint: ignore
-Message-Id: <20240105125237.DF27B844C9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cmake: bump version to 3.28.1
+Message-Id: <20240105125237.C04F4844C7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/freeswitch: security bump version
+ to 1.10.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +64,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=38d07349daece6393800619ecb3ef98299711819
+commit: https://git.buildroot.net/buildroot/commit/?id=5e272456d6d5a6196eab7a6a4a858b956ecefd0e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: https://cmake.org/cmake/help/v3.28/release/3.28.html
-
 Release notes:
-https://www.kitware.com/cmake-3-28-0-available-for-download/
-https://www.kitware.com/cmake-3-28-1-available-for-download/
+https://developer.signalwire.com/freeswitch/FreeSWITCH-Explained/Release-Notes/FreeSWITCH-1.10.x-Release-notes_25460878/#11011-release-date-22-dec-2023
+https://github.com/signalwire/freeswitch/releases/tag/v1.10.11
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/cmake/cmake.hash | 4 ++--
- package/cmake/cmake.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/freeswitch/freeswitch.hash | 4 ++--
+ package/freeswitch/freeswitch.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
-index fbf0786232..51fff6c3ef 100644
---- a/package/cmake/cmake.hash
-+++ b/package/cmake/cmake.hash
+diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
+index 504be12090..3f16467e22 100644
+--- a/package/freeswitch/freeswitch.hash
++++ b/package/freeswitch/freeswitch.hash
 @@ -1,5 +1,5 @@
--# From https://cmake.org/files/v3.27/cmake-3.27.9-SHA-256.txt
--sha256  609a9b98572a6a5ea477f912cffb973109ed4d0a6a6b3f9e2353d2cdc048708e  cmake-3.27.9.tar.gz
-+# From https://cmake.org/files/v3.28/cmake-3.28.1-SHA-256.txt
-+sha256  15e94f83e647f7d620a140a7a5da76349fc47a1bfed66d0f5cdee8e7344079ad  cmake-3.28.1.tar.gz
- 
- # Locally calculated
- sha256  4a01ccf2dc580ba570d02bc015bbe0ec92f1f318717aae9540ba841ba7946756  Copyright.txt
-diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index 7506e964a9..f56be9ba5c 100644
---- a/package/cmake/cmake.mk
-+++ b/package/cmake/cmake.mk
-@@ -5,8 +5,8 @@
+-# From https://files.freeswitch.org/freeswitch-releases/freeswitch-1.10.10.-release.tar.xz.sha256
+-sha256  d2c702c7f4bd6eca539c3981cf859ad5c1846d9283829e24cd75686f2322b9df  freeswitch-1.10.10.-release.tar.xz
++# From https://files.freeswitch.org/freeswitch-releases/freeswitch-1.10.11.-release.tar.xz.sha256
++sha256  7f9603a691220d9f47da42f3b19290b629b69dceb2eee56448f0a7cefcf9d1a1  freeswitch-1.10.11.-release.tar.xz
+ # Locally computed
+ sha256  75c933202f40939cdc3827fce20a1efdaa38291e2b5a65d234eb16e2cffda66a  COPYING
+ sha256  c3e3388768dae8bf4edcc4108f95be815b8a05c0b0aef6e4c3d8df81affdfa34  docs/OPENH264_BINARY_LICENSE.txt
+diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
+index 07d436cf0b..5b9dc49c9b 100644
+--- a/package/freeswitch/freeswitch.mk
++++ b/package/freeswitch/freeswitch.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- # When updating the version, please also update BR2_HOST_CMAKE_AT_LEAST_X_Y
--CMAKE_VERSION_MAJOR = 3.27
--CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).9
-+CMAKE_VERSION_MAJOR = 3.28
-+CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).1
- CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
- CMAKE_LICENSE = BSD-3-Clause
- CMAKE_LICENSE_FILES = Copyright.txt
+-FREESWITCH_VERSION = 1.10.10
++FREESWITCH_VERSION = 1.10.11
+ FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).-release.tar.xz
+ FREESWITCH_SITE = https://files.freeswitch.org/freeswitch-releases
+ # External modules need headers/libs from staging
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
