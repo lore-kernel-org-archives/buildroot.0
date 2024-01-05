@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C41D7C3DA6E
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 10:57:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87F8BC47079
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jan 2024 10:57:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7F6D9421A0;
-	Fri,  5 Jan 2024 10:57:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F6D9421A0
+	by smtp4.osuosl.org (Postfix) with ESMTP id 43AF2421A0;
+	Fri,  5 Jan 2024 10:57:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 43AF2421A0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jOUTptkF67oj; Fri,  5 Jan 2024 10:57:12 +0000 (UTC)
+	with ESMTP id PfDxOFU3n1dI; Fri,  5 Jan 2024 10:57:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A29B4421C2;
-	Fri,  5 Jan 2024 10:57:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A29B4421C2
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4F731421C6;
+	Fri,  5 Jan 2024 10:57:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F731421C6
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C6CF61BF378
- for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 10:55:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CA8C11BF378
+ for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 10:55:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4D34860FE9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 590A661446
  for <buildroot@lists.busybox.net>; Fri,  5 Jan 2024 10:55:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D34860FE9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 590A661446
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tOXVYjB-ZtwL for <buildroot@lists.busybox.net>;
+ with ESMTP id 4w4gskeOyn-k for <buildroot@lists.busybox.net>;
  Fri,  5 Jan 2024 10:55:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 780F461445
+ by smtp3.osuosl.org (Postfix) with ESMTP id AC4BA61470
  for <buildroot@buildroot.org>; Fri,  5 Jan 2024 10:55:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 780F461445
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC4BA61470
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 62F1B843AE; Fri,  5 Jan 2024 10:55:26 +0000 (UTC)
+ id 9BFBB843AF; Fri,  5 Jan 2024 10:55:26 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 5 Jan 2024 11:28:34 +0100
+Date: Fri, 5 Jan 2024 11:45:16 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 69a90b0739458a529ba838ca9ea029ad8faaa0d6
-X-Git-Newrev: 02fc3473e161736b591266d0242307d31938ba4c
+X-Git-Oldrev: c794ede3e9af773e2922f6593a9b3e6a4553a0be
+X-Git-Newrev: 07c91947be2566176c7d2309f0896733e89d1305
 X-Patchwork-Hint: ignore
-Message-Id: <20240105105526.62F1B843AE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] support/testing: bump
- prebuilt kernel to 5.10.202
+Message-Id: <20240105105526.9BFBB843AF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x]
+ package/xserver_xorg-server: security bump to version 21.1.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,99 +63,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=02fc3473e161736b591266d0242307d31938ba4c
+commit: https://git.buildroot.net/buildroot/commit/?id=07c91947be2566176c7d2309f0896733e89d1305
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-As reported on the mailing list [1], TestPolkitSystemd and
-TestPolkitInitd are failing since we bumped the Bootlin toolchain
-2023.08 [2].
+Fixes the following security issues:
 
-The issue is caused by expat (XML library) package detecting
-arc4random_buf() introduced by glibc 2.36 [3].
+- CVE-2023-5367 X.Org server: OOB write in
+  XIChangeDeviceProperty/RRChangeOutputProperty
 
-With arc4random_buf() support enabled, expat hang Polkit while reading
-its policy files (XML files) due to a lack of entropy on the system.
+- CVE-2023-5380: Use-after-free bug in DestroyWindow
 
-Upgrading the kernel allows to avoid such issue thanks to
-random_get_entropy_fallback() introduced in 5.10.119 (backpored) [4].
+- CVE-2023-5574: Use-after-free bug in DamageDestroy
 
-Build the vexpress-v2p-ca9 (armv7) 5.10.202 using the kernel
-configuration file found in /proc/config.gz but with additional kernel
-options provided by SYSTEMD_LINUX_CONFIG_FIXUPS. Indeed some kernel
-options requested by systemd were missing in 5.10.7 kernel.
+For details, see the advisory:
+https://lists.x.org/archives/xorg-announce/2023-October/003430.html
 
-Build the versatile-pb (armv5) kernel using the same kernel
-configuration as qemu_arm_versatile_defconfig but with additional
-kernel options like for vexpress-v2p-ca9. While at it, enable
-IKCONFIG_PROC option to provide the kernel configuration at runtime
-in /proc/config.gz.
-
-Runtime tested:
-https://gitlab.com/kubu93/buildroot/-/pipelines/1097887826 (tests.package.test_polkit.TestPolkit*)
-https://gitlab.com/kubu93/buildroot/-/pipelines/1097705399 (tests.init.*)
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/5689309948 (TestPolkitSystemd)
-https://gitlab.com/buildroot.org/buildroot/-/jobs/5689309947 (TestPolkitInitd)
-
-[1] http://lists.busybox.net/pipermail/buildroot/2023-December/680445.html
-[2] 452365a385ef35e808eb2eb669d1e3227c7399dd
-[3] https://sourceware.org/git/?p=glibc.git;a=commit;h=6f4e0fcfa2d2b0915816a3a3a1d48b4763a7dee2
-[4] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=fdca775081527364621857957655207d83035376
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 241a8b0615ac35951aa6255593d853daac7fd4d1)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 36a9ec8921b6b6c0359ca6e4afd529f8473bab89)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/infra/emulator.py | 8 ++++----
- support/testing/run-tests         | 8 ++++----
- 2 files changed, 8 insertions(+), 8 deletions(-)
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 6 +++---
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/support/testing/infra/emulator.py b/support/testing/infra/emulator.py
-index 09f81eca89..624740fcb1 100644
---- a/support/testing/infra/emulator.py
-+++ b/support/testing/infra/emulator.py
-@@ -54,16 +54,16 @@ class Emulator(object):
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+index 092a640f04..ccd7cc74fa 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2023-March/003377.html
+-sha256  38aadb735650c8024ee25211c190bf8aad844c5f59632761ab1ef4c4d5aeb152  xorg-server-21.1.8.tar.xz
+-sha512  6104b3620ed2e1e27d9a8e963388bbe8785a764585b1bc03dbf5d719a92894773dda580d377ca18ceeab353e65a5d23cc947bab84a4012f9dd1eca31cac36937  xorg-server-21.1.8.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2023-October/003431.html
++sha256  ff697be2011b4c4966b7806929e51b7a08e9d33800d505305d26d9ccde4b533a  xorg-server-21.1.9.tar.xz
++sha512  9044e1b9222616fb63aea444b75f4ca6582edb7d899018f8ea30359e57edf04b1555e69397ebc4d288f7e36d6b82a54dde3895f11d414573d229e908ac17bfe8  xorg-server-21.1.9.tar.xz
+ # Locally calculated
+ sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index ede03d024c..cf0e688c36 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-                 if arch == "armv7":
-                     kernel = infra.download(self.downloaddir,
--                                            "kernel-vexpress-5.10.7")
-+                                            "kernel-vexpress-5.10.202")
-                     dtb = infra.download(self.downloaddir,
--                                         "vexpress-v2p-ca9-5.10.7.dtb")
-+                                         "vexpress-v2p-ca9-5.10.202.dtb")
-                     qemu_cmd += ["-dtb", dtb]
-                     qemu_cmd += ["-M", "vexpress-a9"]
-                 elif arch == "armv5":
-                     kernel = infra.download(self.downloaddir,
--                                            "kernel-versatile-5.10.7")
-+                                            "kernel-versatile-5.10.202")
-                     dtb = infra.download(self.downloaddir,
--                                         "versatile-pb-5.10.7.dtb")
-+                                         "versatile-pb-5.10.202.dtb")
-                     qemu_cmd += ["-dtb", dtb]
-                     qemu_cmd += ["-M", "versatilepb"]
-                     qemu_cmd += ["-device", "virtio-rng-pci"]
-diff --git a/support/testing/run-tests b/support/testing/run-tests
-index e8c540f370..485811b746 100755
---- a/support/testing/run-tests
-+++ b/support/testing/run-tests
-@@ -65,10 +65,10 @@ def main():
-     BRConfigTest.downloaddir = os.path.abspath(args.download)
- 
-     if args.prepare_only:
--        emulator_builtin_binaries = ["kernel-vexpress-5.10.7",
--                                     "vexpress-v2p-ca9-5.10.7.dtb",
--                                     "kernel-versatile-5.10.7",
--                                     "versatile-pb-5.10.7.dtb"]
-+        emulator_builtin_binaries = ["kernel-vexpress-5.10.202",
-+                                     "vexpress-v2p-ca9-5.10.202.dtb",
-+                                     "kernel-versatile-5.10.202",
-+                                     "versatile-pb-5.10.202.dtb"]
-         print("Downloading emulator builtin binaries")
-         for binary in emulator_builtin_binaries:
-             infra.download(BRConfigTest.downloaddir, binary)
+-XSERVER_XORG_SERVER_VERSION = 21.1.8
++XSERVER_XORG_SERVER_VERSION = 21.1.9
+ XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.xz
+ XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
+ XSERVER_XORG_SERVER_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
