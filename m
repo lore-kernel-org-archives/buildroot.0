@@ -4,47 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BB55C47074
-	for <buildroot@archiver.kernel.org>; Sat,  6 Jan 2024 14:12:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28CE1C46CD2
+	for <buildroot@archiver.kernel.org>; Sat,  6 Jan 2024 14:23:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2749360E03;
-	Sat,  6 Jan 2024 14:12:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2749360E03
+	by smtp3.osuosl.org (Postfix) with ESMTP id A7ED060BAD;
+	Sat,  6 Jan 2024 14:23:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A7ED060BAD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KEjO3_sZGG2U; Sat,  6 Jan 2024 14:12:25 +0000 (UTC)
+	with ESMTP id sAq-7swh9Wh7; Sat,  6 Jan 2024 14:23:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0E0B060D71;
-	Sat,  6 Jan 2024 14:12:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E0B060D71
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 408461BF362
- for <buildroot@lists.busybox.net>; Sat,  6 Jan 2024 14:11:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0A87660B90;
+	Sat,  6 Jan 2024 14:23:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A87660B90
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E80CA1BF362
+ for <buildroot@lists.busybox.net>; Sat,  6 Jan 2024 14:23:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 07BAC8322E
- for <buildroot@lists.busybox.net>; Sat,  6 Jan 2024 14:11:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 07BAC8322E
+ by smtp3.osuosl.org (Postfix) with ESMTP id CE63D60B90
+ for <buildroot@lists.busybox.net>; Sat,  6 Jan 2024 14:23:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE63D60B90
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vMIUEqEbMs1G for <buildroot@lists.busybox.net>;
- Sat,  6 Jan 2024 14:11:32 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1753E8318C
- for <buildroot@buildroot.org>; Sat,  6 Jan 2024 14:11:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1753E8318C
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0256E846D0; Sat,  6 Jan 2024 14:11:32 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5W6YxJdQJJDN for <buildroot@lists.busybox.net>;
+ Sat,  6 Jan 2024 14:23:04 +0000 (UTC)
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C5C2160B4E
+ for <buildroot@buildroot.org>; Sat,  6 Jan 2024 14:23:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5C2160B4E
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-40d8902da73so4035075e9.2
+ for <buildroot@buildroot.org>; Sat, 06 Jan 2024 06:23:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1704550981; x=1705155781;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=/a6XFXiBjdeaCC2++7KEaz0oO6efjhAVP4HoYVoBUIk=;
+ b=uRtOVf95VntL41HwS5XMsvz3Eb2Gj9Jb3F/hxlfvrrCUkX9mvmxtNWnBXJv1Xedbw5
+ CXrKfSqjWJOBU2MmiNnhppJOhyQSSlfrucG5O05zmlGtxu5ikdQBLgRl+ErZI8JR52sh
+ BxzA/fmIqCmm/dWZsGIzQI2KslomeqQE2R2C9MScpZtrTRw/9hjwPot/39neC0Ikqpfi
+ MSfaztVUsXLFT8d4yS9pPKK9TYG9gdhXHkT1vv8jxM3bxqxPZYsaQF8pIbckEuZW8lcF
+ rioJMYxEuDlYK5gpTwQOMEMBaDkvaXzdjkuZ/KaJKaHXEoh/HzXnmHksw5aFLXqCNFS5
+ DN7w==
+X-Gm-Message-State: AOJu0YxBdlsYnCQbYXW5hLr3tCmMEAbq3RGEWBJ3nSDrziLgxQ1f0IZs
+ psaB8BiI2f6kLhbVe+FS/9Tzitebk78=
+X-Google-Smtp-Source: AGHT+IFrFxhdRReFg2gi87kcZDfOL96qnZ35Tu+PeBlOtkjmzul5glRqF+V7HsTVfDkn6phMHYOJ7A==
+X-Received: by 2002:a05:600c:a019:b0:40e:347e:b4d with SMTP id
+ jg25-20020a05600ca01900b0040e347e0b4dmr680357wmb.89.1704550980691; 
+ Sat, 06 Jan 2024 06:23:00 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ u7-20020a05600c138700b0040d8d11bf63sm4832209wmf.41.2024.01.06.06.23.00
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 06 Jan 2024 06:23:00 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 6 Jan 2024 14:43:37 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1474f1b34b178defca1d16d18a2446fadda9a12b
-X-Git-Newrev: b1dbd3f679e6660325472e3fdca72127d74e6929
-X-Patchwork-Hint: ignore
-Message-Id: <20240106141132.0256E846D0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libtracefs: new package
+Date: Sat,  6 Jan 2024 15:22:58 +0100
+Message-ID: <20240106142258.1880402-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1704550981; x=1705155781; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=/a6XFXiBjdeaCC2++7KEaz0oO6efjhAVP4HoYVoBUIk=;
+ b=GSnTaZsCKAajS/A38pgtKdYBHWvJV9FeoWI3mB078CvNE5Ipply5KKXdMepwQZikDX
+ XEt3YKay03FkRKz07aUdSd0fj3kS4NPmBk1JEpqznTX25gz00ak1Xheboz28X7JuRKHs
+ 1bW+5v6l21QBOO/gIxPYQKk8qT4vXGvsKlsDBgrc2fn81gCTWzASFIG+bwyZ9QjQsbrf
+ jc9fp9GevVUNiokpqxJ4ZRBEk4rWXFG08TwD8mlGHrU854V3ov4j1u6Hg1455ELyg2/u
+ kYqV5U1dmCmbU0V/dCK31mZp55yHxLj+KkPRGTjwda5bniF5LJA+P+o+L9jKxgE2SLDY
+ drCA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=GSnTaZsC
+Subject: [Buildroot] [PATCH 1/1] package/libzenoh-pico: bump to version
+ 0.10.1-rc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,177 +94,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Alex Michel <alex.michel@wiedemann-group.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b1dbd3f679e6660325472e3fdca72127d74e6929
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://github.com/eclipse-zenoh/zenoh-pico/releases/tag/0.10.1-rc
 
-Introduce the libtracefs library, that is used to be bundled with the
-trace-cmd tool. This library is now used by several tools and libraries
-such as trace-cmd and rtla, and is used as an interface to the ftrace
-kernel subsystem through tracefs.
-
-To build with meson, this package requires to disable documentation
-generation, and since this is not possible add a local patch pending
-upstream that adds -Ddoc=false support to libtracefs.
-
-Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
-[Giulio:
-	- bump version to 1.7.0 and add hash file
-	- move to meson build system
-]
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- DEVELOPERS                                         |  2 +
- package/Config.in                                  |  1 +
- ...acefs-add-option-to-disable-documentation.patch | 51 ++++++++++++++++++++++
- package/libtracefs/Config.in                       |  8 ++++
- package/libtracefs/libtracefs.hash                 |  4 ++
- package/libtracefs/libtracefs.mk                   | 18 ++++++++
- 6 files changed, 84 insertions(+)
+ package/libzenoh-pico/libzenoh-pico.hash | 2 +-
+ package/libzenoh-pico/libzenoh-pico.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 4461216122..86588b1adb 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1236,6 +1236,7 @@ F:	package/libnspr/
- F:	package/libnss/
- F:	package/libnvme/
- F:	package/libtraceevent/
-+F:	package/libtracefs
- F:	package/mali-driver/
- F:	package/minicom/
- F:	package/mongoose/
-@@ -2134,6 +2135,7 @@ F:	package/timescaledb/
+diff --git a/package/libzenoh-pico/libzenoh-pico.hash b/package/libzenoh-pico/libzenoh-pico.hash
+index 564ecc9a57..98f804508f 100644
+--- a/package/libzenoh-pico/libzenoh-pico.hash
++++ b/package/libzenoh-pico/libzenoh-pico.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  752acec56236fca41dcc438307f4a76e69900383b06803d47f32c480643dc794  libzenoh-pico-0.10.0-rc.tar.gz
++sha256  7b615515ac844470ec7806921e8106b2923f6c43e242b34f062954de7560b799  libzenoh-pico-0.10.1-rc.tar.gz
+ sha256  d386df32cf327bbb25abe894277d3d7e0f447bafc59f4ad362615b0136f30db5  LICENSE
+diff --git a/package/libzenoh-pico/libzenoh-pico.mk b/package/libzenoh-pico/libzenoh-pico.mk
+index 72b956fddc..90dfda6c98 100644
+--- a/package/libzenoh-pico/libzenoh-pico.mk
++++ b/package/libzenoh-pico/libzenoh-pico.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- N:	Maxime Chevallier <maxime.chevallier@bootlin.com>
- F:	package/libtraceevent/
-+F:	package/libtracefs
- 
- N:	Michael Durrant <mdurrant@arcturusnetworks.com>
- F:	board/arcturus/
-diff --git a/package/Config.in b/package/Config.in
-index a6d76c4b3d..f5d0c06334 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -118,6 +118,7 @@ menu "Debugging, profiling and benchmark"
- 	source "package/latencytop/Config.in"
- 	source "package/libbpf/Config.in"
- 	source "package/libtraceevent/Config.in"
-+	source "package/libtracefs/Config.in"
- 	source "package/lmbench/Config.in"
- 	source "package/lsof/Config.in"
- 	source "package/ltp-testsuite/Config.in"
-diff --git a/package/libtracefs/0001-libtracefs-add-option-to-disable-documentation.patch b/package/libtracefs/0001-libtracefs-add-option-to-disable-documentation.patch
-new file mode 100644
-index 0000000000..70e7e61310
---- /dev/null
-+++ b/package/libtracefs/0001-libtracefs-add-option-to-disable-documentation.patch
-@@ -0,0 +1,51 @@
-+From 881e23ed774360f93ca81f820d7897bd9bbd6d63 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Sat, 30 Sep 2023 22:40:08 +0200
-+Subject: [PATCH] libtracefs: add option to disable documentation
-+
-+On some Linux environment builder(i.e. Buildroot) host asciidoc is not
-+provided since by default all man/docs are not installed to target but
-+meson.build at the moment build ascii and html documentation and
-+requires asciidoc making the building to fail. So let's add doc option
-+set to true by default to let the user to override it and not produce
-+the documentation.
-+
-+Upstream: https://patchwork.kernel.org/project/linux-trace-devel/patch/20230930204008.2528607-1-giulio.benetti@benettiengineering.com/
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ meson.build       | 3 +++
-+ meson_options.txt | 2 ++
-+ 2 files changed, 5 insertions(+)
-+
-+diff --git a/meson.build b/meson.build
-+index 9d42d78..f1e492e 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -39,6 +39,8 @@ if cunit_dep.found()
-+     subdir('utest')
-+ endif
-+ subdir('samples')
-++
-++if get_option('doc')
-+ subdir('Documentation')
-+
-+ custom_target(
-+@@ -46,3 +48,4 @@ custom_target(
-+     output: 'docs',
-+     depends: [html, man],
-+     command: ['echo'])
-++endif
-+diff --git a/meson_options.txt b/meson_options.txt
-+index 1d92c28..5533a88 100644
-+--- a/meson_options.txt
-++++ b/meson_options.txt
-+@@ -14,3 +14,5 @@ option('man-bold-literal', type : 'boolean', value : false,
-+        description : 'enable bold literals')
-+ option('docbook-suppress-sp', type : 'boolean', value : false,
-+        description : 'docbook suppress sp')
-++option('doc', type : 'boolean', value: true,
-++       description : 'produce documentation')
-+--
-+2.34.1
-+
-diff --git a/package/libtracefs/Config.in b/package/libtracefs/Config.in
-new file mode 100644
-index 0000000000..81a2e962ea
---- /dev/null
-+++ b/package/libtracefs/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_LIBTRACEFS
-+	bool "libtracefs"
-+	select BR2_PACKAGE_LIBTRACEEVENT
-+	help
-+	  libtracefs is used to easily interface with the ftrace
-+	  interface through the tracefs virtual filesystem.
-+
-+	  https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/
-diff --git a/package/libtracefs/libtracefs.hash b/package/libtracefs/libtracefs.hash
-new file mode 100644
-index 0000000000..676fcf1111
---- /dev/null
-+++ b/package/libtracefs/libtracefs.hash
-@@ -0,0 +1,4 @@
-+# Locally computed
-+sha256  411fcbf3434ecbaefa6c2b1bf092266293a672e2d7ee46fdd6b402753cb8bd16  libtracefs-1.7.0.tar.gz
-+sha256  f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79  GPL-2.0
-+sha256  0b9a4febcdee6de55872501d5c1a8f5d8b0d1650cd4d5351995ceb22e889f8ca  LGPL-2.1
-diff --git a/package/libtracefs/libtracefs.mk b/package/libtracefs/libtracefs.mk
-new file mode 100644
-index 0000000000..1e6e19a234
---- /dev/null
-+++ b/package/libtracefs/libtracefs.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# libtracefs
-+#
-+################################################################################
-+
-+LIBTRACEFS_VERSION = 1.7.0
-+LIBTRACEFS_SITE = https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/snapshot
-+LIBTRACEFS_INSTALL_STAGING = YES
-+LIBTRACEFS_LICENSE = GPL-2.0, LGPL-2.1
-+LIBTRACEFS_LICENSE_FILES = LICENSES/GPL-2.0 LICENSES/LGPL-2.1
-+
-+LIBTRACEFS_DEPENDENCIES = host-bison host-flex host-pkgconf libtraceevent
-+
-+LIBTRACEFS_CONF_OPTS = \
-+	-Ddoc=false
-+
-+$(eval $(meson-package))
+-LIBZENOH_PICO_VERSION = 0.10.0-rc
++LIBZENOH_PICO_VERSION = 0.10.1-rc
+ LIBZENOH_PICO_SITE = $(call github,eclipse-zenoh,zenoh-pico,$(LIBZENOH_PICO_VERSION))
+ LIBZENOH_PICO_LICENSE = Apache-2.0 or EPL-2.0
+ LIBZENOH_PICO_LICENSE_FILES = LICENSE
+-- 
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
