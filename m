@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C34D6C46CD2
-	for <buildroot@archiver.kernel.org>; Sat,  6 Jan 2024 22:42:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3286FC46CD2
+	for <buildroot@archiver.kernel.org>; Sat,  6 Jan 2024 22:43:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3ACE060B3B;
-	Sat,  6 Jan 2024 22:42:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3ACE060B3B
+	by smtp3.osuosl.org (Postfix) with ESMTP id D280A60AE5;
+	Sat,  6 Jan 2024 22:43:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D280A60AE5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0uDPCiSsx3-m; Sat,  6 Jan 2024 22:42:43 +0000 (UTC)
+	with ESMTP id jgwqgxAUweJf; Sat,  6 Jan 2024 22:43:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9FA4B60AD2;
-	Sat,  6 Jan 2024 22:42:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9FA4B60AD2
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6E3201BF3C6
- for <buildroot@lists.busybox.net>; Sat,  6 Jan 2024 22:42:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 067D260A5D;
+	Sat,  6 Jan 2024 22:43:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 067D260A5D
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0B5261BF2B3
+ for <buildroot@lists.busybox.net>; Sat,  6 Jan 2024 22:43:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4C51660AD2
- for <buildroot@lists.busybox.net>; Sat,  6 Jan 2024 22:42:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C51660AD2
+ by smtp4.osuosl.org (Postfix) with ESMTP id D87D841E19
+ for <buildroot@lists.busybox.net>; Sat,  6 Jan 2024 22:43:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D87D841E19
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id M7eRD6YpzVTg for <buildroot@lists.busybox.net>;
- Sat,  6 Jan 2024 22:42:39 +0000 (UTC)
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 69F7760A9F
- for <buildroot@buildroot.org>; Sat,  6 Jan 2024 22:42:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69F7760A9F
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-40d5d8a6730so8248515e9.1
- for <buildroot@buildroot.org>; Sat, 06 Jan 2024 14:42:39 -0800 (PST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HPKVQ72edrJS for <buildroot@lists.busybox.net>;
+ Sat,  6 Jan 2024 22:43:25 +0000 (UTC)
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 96F3941DF1
+ for <buildroot@buildroot.org>; Sat,  6 Jan 2024 22:43:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96F3941DF1
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-40d6b4e2945so9430185e9.0
+ for <buildroot@buildroot.org>; Sat, 06 Jan 2024 14:43:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704580957; x=1705185757;
+ d=1e100.net; s=20230601; t=1704581003; x=1705185803;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=zw2yk6VXHMtPCEaILoQYPW9S8jIW4mS37nmVYx1phao=;
- b=ftsHqMl43BXiV+09lA/rqZIdYGQvFFuUQsoBjmhGurFL3ErhSVk1K5+O1fuZxK+OWQ
- JWkZYbYAQ/zeuxYwRpZgG8ShPvpTKgtVXDH32WZtRGcEw1ESOFBwdn91+W5ujGToSsdY
- jgoTvMZthBfYrokuA2ILmTrOCT/KnDpmKxKMyxbx0tUZbCxZv9mnXlD6qpAFy4gdrTI9
- VthDkuoCjANEPMNxaN/NX8BMSMmu9fy1OkkQ9vM8VZZtFdPUxKHXQArf8p/dPflX6+E8
- qkN87M+eA3KaUO6fi/lGFxBdsqb2LppypfI1lsMHhdUElp719kvH4z8BAcbxbtIEFFPs
- n8vQ==
-X-Gm-Message-State: AOJu0YxdH0eEzcKyS1drcn2cCTemouZZKds7WPE1c9WTqXM/wIzXeEOO
- ZYZYpO0b2Lzka4Y4BuWqJodqvqqSwbM=
-X-Google-Smtp-Source: AGHT+IFJDBj0ViOrio3Rbs72mNH22xHYGfLPgNzsaF/hiVum4TJh4V9GCZIVi6W1T7GRCynRaaNJdw==
-X-Received: by 2002:a05:600c:4fc5:b0:40d:609d:d66a with SMTP id
- o5-20020a05600c4fc500b0040d609dd66amr785447wmq.84.1704580956377; 
- Sat, 06 Jan 2024 14:42:36 -0800 (PST)
+ bh=HsbEFrAl+RALDI25g8yk5xSAR5aT/9qW1eHQkz2ToE8=;
+ b=U8fC8V6+7AXtV5T+nnbuBFrM/uhBfM3knOYrdMGTEE8f+fr8FZCHDQsBFCMIQS57Xg
+ 1NH4oCgQjRO9xtFjY+yToeHqfl2m3R79vMKAFx1SmXTJkO6fII/eMylJvMHd2tRL5gUX
+ XszSM9AMfyWNjb36GxJ68HnAA06QVKB1zMdhaN1IjjUz/arf7jQtfBxIZrNUZE3R7vMS
+ lH+kNYFwGlvQRwGz4BhfOPl655Y3y03q5tU+ROWiXhLobSz5fyql5vDB14EoMnVMmhUU
+ OhWNudAChukaQF+dNkRiBP9+Bz453w9eCtcRBe+ZNk5Au+C4y+Wie8RCBKr6Jk6BVqql
+ 4HNg==
+X-Gm-Message-State: AOJu0Yz0bu0TSynEdixtDWaY5lq+u9PJclXLXcSzJTxIKqXI1iuqwR++
+ D+fLm1vOtOLTeB1+CFcU2uwO9tutqC4=
+X-Google-Smtp-Source: AGHT+IEA+RD1Rs3xT0Z6JI8tyDC2g7sQLHpoSrUs5DjmaLeDoR4of7O69QVrioYyMOeJhoJoErM8jA==
+X-Received: by 2002:a05:600c:b89:b0:40d:fc99:9ed7 with SMTP id
+ fl9-20020a05600c0b8900b0040dfc999ed7mr539911wmb.150.1704581002863; 
+ Sat, 06 Jan 2024 14:43:22 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- fa8-20020a05600c518800b0040e404796f3sm2605383wmb.18.2024.01.06.14.42.35
+ fc7-20020a05600c524700b0040d7b340e07sm5846686wmb.45.2024.01.06.14.43.22
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 06 Jan 2024 14:42:35 -0800 (PST)
+ Sat, 06 Jan 2024 14:43:22 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat,  6 Jan 2024 23:42:33 +0100
-Message-ID: <20240106224233.3637602-1-fontaine.fabrice@gmail.com>
+Date: Sat,  6 Jan 2024 23:43:20 +0100
+Message-ID: <20240106224320.3638136-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1704580957; x=1705185757; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1704581003; x=1705185803; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=zw2yk6VXHMtPCEaILoQYPW9S8jIW4mS37nmVYx1phao=;
- b=a0yagOiap8a+J7QomKYIZPXMG/AV0wyK7hLpdIethXx5na2fesfwrbeJccYWBl5NDy
- tn1tXUeKjfs+aHY8INyLdGk1pP4gUyO4ajrI2Xe9appa3h09JGoCMYHFvR66RIGbJanp
- y75EcDgjhurOHLb1N8NnXCb1IZiYRz5qwhD6ZsDRRkNO9A23CwfWFHb29kUsyzK2hwJn
- Of07GhrijS3ZncrHDEAaEqqx/DSnah52phN/CNP5PMpX1mMjwSk0JNi6fpbtXjchYTSV
- AO7ijTRTK9iXU4LpKFPBlUvxPm7aJwFu7/OLEfgRMSf8ehuFIoeqA04K7opIHIu13l6l
- G6mQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=HsbEFrAl+RALDI25g8yk5xSAR5aT/9qW1eHQkz2ToE8=;
+ b=Uuu8yoPhd9bObBjaYQCyOTkEWxO9LAaG7rjaQzHIreThpsg41E0BKWH7YsibSzp/LC
+ MbwOAn0f+MYjMWQ5GC5nqdjkaygH3Q6xNpkLZ1X4JkjfHYABMYvDUOq8w7ZHefK7mQMe
+ F87oqzuqOCHkYThP7r06/65RyFmtS/L6IRPAph88Q7GtgSqFjjvkvUcRsDsHwBEELoHH
+ jmrjTVSdIF8Yk24w7qTFQa/w8IIZJ/OfApATTiBWdGvi6kicplJEULdvslREbES011l3
+ wwF0mJ9vnFxEgk4PMbCRckAU4DofBlKwITYwVCtiB6ClBFkXG/fdv9+zGgByZUj3gTKy
+ /mqQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=a0yagOia
-Subject: [Buildroot] [PATCH 1/1] package/bayer2rgb-neon: fix aarch64 build
- with BR2_OPTIMIZE_0
+ header.a=rsa-sha256 header.s=20230601 header.b=Uuu8yoPh
+Subject: [Buildroot] [PATCH 1/1] package/bayer2rgb-neon: bump to latest
+ commit
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,40 +101,132 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure with aarch64 and BR2_OPTIMIZE_0 raised
-since commit 0512910e4901edcb78bb1daa4eb3be9bdc4dc8a9:
-
-src/convert-neon-body-bayer8.inc.h: In function 'bayer2rgb_convert_neon':
-src/convert-neon.c:233:17: error: third argument to '__builtin_prefetch' must be a constant
-  233 |                 __builtin_prefetch(((void const *)(_addr)) + 64, 0, (_lvl)); \
-      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-src/convert-neon-body-bayer8.inc.h:8:9: note: in expansion of macro 'do_prefetch'
-    8 |         do_prefetch(&in[+1*stride - 1], (rows_per_loop) < 3 ? 3 : 0);
-      |         ^~~~~~~~~~~
-
-Fixes:
- - http://autobuild.buildroot.org/results/307c1c448becd99dfba3a17b3ef816db0bb5cad6
+Drop patch (already in version)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/bayer2rgb-neon/bayer2rgb-neon.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ .checkpackageignore                           |  1 -
+ ...add-some-_always_inline_-annotations.patch | 75 -------------------
+ package/bayer2rgb-neon/bayer2rgb-neon.hash    |  2 +-
+ package/bayer2rgb-neon/bayer2rgb-neon.mk      |  2 +-
+ 4 files changed, 2 insertions(+), 78 deletions(-)
+ delete mode 100644 package/bayer2rgb-neon/0001-add-some-_always_inline_-annotations.patch
 
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 659939e4e3..21b24e7b44 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -180,7 +180,6 @@ package/bandwidthd/0001-src-bandwidthd.h-fix-build-with-gcc-10.patch Upstream
+ package/bash/0001-input.h-add-missing-include-on-stdio.h.patch Upstream
+ package/bash/0002-parse.y-fix-compilation-for-non-multibyte-builds.patch Upstream
+ package/bash/0003-configure-invert-condition-for-strtoimax-builtin.patch Upstream
+-package/bayer2rgb-neon/0001-add-some-_always_inline_-annotations.patch Upstream
+ package/bc/0001-bc-use-MAKEINFO-variable-for-docs.patch Upstream
+ package/bc/0002-notice-read-and-write-errors-on-input-and-output.patch Upstream
+ package/bc/0003-dc-fix-exit-code-of-q-command.patch Upstream
+diff --git a/package/bayer2rgb-neon/0001-add-some-_always_inline_-annotations.patch b/package/bayer2rgb-neon/0001-add-some-_always_inline_-annotations.patch
+deleted file mode 100644
+index 281f90c875..0000000000
+--- a/package/bayer2rgb-neon/0001-add-some-_always_inline_-annotations.patch
++++ /dev/null
+@@ -1,75 +0,0 @@
+-From 4e5d8be1b0d18453b76fca2c5139222a071dd207 Mon Sep 17 00:00:00 2001
+-From: Enrico Scholz <enrico.scholz@sigma-chemnitz.de>
+-Date: Mon, 4 Jul 2022 12:05:30 +0200
+-Subject: [PATCH] add some _always_inline_ annotations
+-
+-enforce inlining to fix build errors with '-Og'
+-
+-fixes #1
+-
+-Signed-off-by: Enrico Scholz <enrico.scholz@sigma-chemnitz.de>
+-[Retrieved from:
+-https://gitlab-ext.sigma-chemnitz.de/ensc/bayer2rgb/-/commit/4e5d8be1b0d18453b76fca2c5139222a071dd207]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/convert.c | 5 +++--
+- src/main.c    | 5 +++--
+- 2 files changed, 6 insertions(+), 4 deletions(-)
+-
+-diff --git a/src/convert.c b/src/convert.c
+-index c852a14..ec77040 100644
+---- a/src/convert.c
+-+++ b/src/convert.c
+-@@ -17,8 +17,9 @@
+- #include <stdbool.h>
+- #include <assert.h>
+- #include "bayer2rgb.h"
+-+#include "compiler.h"
+- 
+--static bool have_neon()
+-+inline static  _always_inline_ bool have_neon()
+- {
+- #ifdef HAVE_NEON
+- 	return true;
+-@@ -27,7 +28,7 @@ static bool have_neon()
+- #endif
+- }
+- 
+--static bool have_cplusplus()
+-+inline static  _always_inline_ bool have_cplusplus()
+- {
+- #ifdef HAVE_CPLUSPLUS
+- 	return true;
+-diff --git a/src/main.c b/src/main.c
+-index 841a142..087e8e5 100644
+---- a/src/main.c
+-+++ b/src/main.c
+-@@ -33,6 +33,7 @@
+- 
+- #include "src/bayer2rgb.h"
+- #include "src/bayer2rgb-cmdline.h"
+-+#include "src/compiler.h"
+- 
+- #define BPP_TO_BYTE(_bpp)	(((_bpp) + 7) / 8)
+- 
+-@@ -68,7 +69,7 @@ struct x_image_out {
+- 	size_t			total_size;
+- };
+- 
+--inline static bool have_neon(void)
+-+inline static  _always_inline_ bool have_neon(void)
+- {
+- #ifdef HAVE_NEON
+- 	return true;
+-@@ -77,7 +78,7 @@ inline static bool have_neon(void)
+- #endif
+- }
+- 
+--static bool have_cplusplus()
+-+inline static  _always_inline_ bool have_cplusplus()
+- {
+- #ifdef HAVE_CPLUSPLUS
+- 	return true;
+--- 
+-GitLab
+-
+diff --git a/package/bayer2rgb-neon/bayer2rgb-neon.hash b/package/bayer2rgb-neon/bayer2rgb-neon.hash
+index 26a14fcb51..7b26073de0 100644
+--- a/package/bayer2rgb-neon/bayer2rgb-neon.hash
++++ b/package/bayer2rgb-neon/bayer2rgb-neon.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  edf451dbb52ad67eb35f9043390bd75ea7228d493c99184aae80b3bd27beab62  bayer2rgb-neon-15feb1115b4828488cc36d09f625e23e8b6a0ec5-br1.tar.gz
++sha256  35b38a40e98e9fa7fb8042c718f460fb806e916d2bf3e9721c07bbe4b42faad5  bayer2rgb-neon-bc950b3398ba034fe5cc39f625796a6111cdb87f-br1.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
 diff --git a/package/bayer2rgb-neon/bayer2rgb-neon.mk b/package/bayer2rgb-neon/bayer2rgb-neon.mk
-index 212fe76766..b0b9882def 100644
+index b0b9882def..e6bd09c3fd 100644
 --- a/package/bayer2rgb-neon/bayer2rgb-neon.mk
 +++ b/package/bayer2rgb-neon/bayer2rgb-neon.mk
-@@ -19,6 +19,10 @@ ifeq ($(BR2_arm),y)
- BAYER2RGB_NEON_CFLAGS += -mfpu=neon
- endif
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_OPTIMIZE_0),y)
-+BAYER2RGB_NEON_CFLAGS += -O1
-+endif
-+
- BAYER2RGB_NEON_CONF_ENV = CFLAGS="$(BAYER2RGB_NEON_CFLAGS)"
- 
- $(eval $(autotools-package))
+-BAYER2RGB_NEON_VERSION = 15feb1115b4828488cc36d09f625e23e8b6a0ec5
++BAYER2RGB_NEON_VERSION = bc950b3398ba034fe5cc39f625796a6111cdb87f
+ BAYER2RGB_NEON_SITE = https://gitlab-ext.sigma-chemnitz.de/ensc/bayer2rgb.git
+ BAYER2RGB_NEON_SITE_METHOD = git
+ BAYER2RGB_NEON_LICENSE = GPL-3.0
 -- 
 2.43.0
 
