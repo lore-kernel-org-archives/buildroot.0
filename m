@@ -1,69 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F4D1C46CD2
-	for <buildroot@archiver.kernel.org>; Sat,  6 Jan 2024 14:03:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C098DC46CD2
+	for <buildroot@archiver.kernel.org>; Sat,  6 Jan 2024 14:05:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E7BE24185D;
-	Sat,  6 Jan 2024 14:03:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E7BE24185D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5FC9860BAD;
+	Sat,  6 Jan 2024 14:05:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5FC9860BAD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TWTF3td6M47z; Sat,  6 Jan 2024 14:03:07 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ipr_HIiwnbvQ; Sat,  6 Jan 2024 14:05:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D319241917;
-	Sat,  6 Jan 2024 14:03:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D319241917
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8DC2A60B90;
+	Sat,  6 Jan 2024 14:05:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8DC2A60B90
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 535B71BF59A
- for <buildroot@lists.busybox.net>; Sat,  6 Jan 2024 14:03:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5AFE91BF362
+ for <buildroot@lists.busybox.net>; Sat,  6 Jan 2024 14:05:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2C7CD41917
- for <buildroot@lists.busybox.net>; Sat,  6 Jan 2024 14:03:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C7CD41917
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3331C42096
+ for <buildroot@lists.busybox.net>; Sat,  6 Jan 2024 14:05:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3331C42096
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pRXpOCpAklSS for <buildroot@lists.busybox.net>;
- Sat,  6 Jan 2024 14:03:03 +0000 (UTC)
+ with ESMTP id uRw7P-0JGPsb for <buildroot@lists.busybox.net>;
+ Sat,  6 Jan 2024 14:05:25 +0000 (UTC)
 Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B0AA14185D
- for <buildroot@buildroot.org>; Sat,  6 Jan 2024 14:03:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0AA14185D
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0917542091
+ for <buildroot@buildroot.org>; Sat,  6 Jan 2024 14:05:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0917542091
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8290:3800:4f89:5708:1633:580e])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 8CACAB0055A;
- Sat,  6 Jan 2024 15:02:55 +0100 (CET)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id C61A3B0055E;
+ Sat,  6 Jan 2024 15:05:16 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 06 Jan 2024 15:02:55 +0100
-Date: Sat, 6 Jan 2024 15:02:55 +0100
+ Sat, 06 Jan 2024 15:05:16 +0100
+Date: Sat, 6 Jan 2024 15:05:16 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <ZZldj79dwyG7IXtS@landeda>
+Message-ID: <ZZleHINROrv0de6H@landeda>
 References: <20231024144256.2708299-1-giulio.benetti@benettiengineering.com>
- <20231024144256.2708299-2-giulio.benetti@benettiengineering.com>
+ <20231024144256.2708299-3-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20231024144256.2708299-2-giulio.benetti@benettiengineering.com>
+In-Reply-To: <20231024144256.2708299-3-giulio.benetti@benettiengineering.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1704549781;
- bh=wf7CrsoyFNiBwvRhywS6bRZEJhWBS71khxRL37uAjCw=;
+ d=free.fr; s=smtp-20201208; t=1704549923;
+ bh=4vod8rkbglcNYe8DZNx767DJ/cD/sBmcMt2UGy+tIUE=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=CvE2ht24VeL87p3XemfYhjDzFUeqoK146LFmfnalkk4T4PsACKiHCXmvF8MDTfYrw
- xNqFFITEBkF88p2JFOxsoVrf7pABUYIAXw9o494gKMSMyBO0aoDOtJarTdZYF3Bmyd
- rFL+0IOBE5lLmi0NCcH2rwkL49G7PZkjlMwjtQDEmBakDvU5aO/SFy/IDC44mCcJtl
- IhxLAeHSKwe/vjqPT+S1oaPHvSGjlMYBU1HE+/Nu8Nutgs+oQaIJPYo+uFjy5iEpPr
- lTesQS/XQdQlL+pnaqCOSMwZp30viNlaVjtHbuYvI/Hbywxup2LsJ3PjZkBgIt15IV
- YbC5GHboZZOtg==
+ b=V3osC9sCaXMNIK8cSZ69el2kNFRvNXnktKtW+COllIR+vrvUZ7cK1wBBvBDhuR/9O
+ 0ig1ihBK5WqfY5HHJqD/RflfIKBTzCzgccKfoB7T7OcW3YPtGqMVa55nnAV+b95MCq
+ cBaHGPoTj0mc34bY7jRkmk9a2KfHW7SwW4hviN6UeoywYWRDUFb5uD2uqseo41Jl1s
+ +7lcdTyiBXiTVIcLfmsFaO2c9DaAtOHi9r5cfrJnBNJZi5coIm83RYo0idZ1CGCsr4
+ Z11LgG75qB+NDZWrtC/VHkrMW6780mxkOmsftchjfJyxDRSIr+LBrWXalqpsojdONP
+ g8/1Z0UklcZMg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=CvE2ht24
-Subject: Re: [Buildroot] [PATCH v5 2/4] package/libtracefs: new package
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=V3osC9sC
+Subject: Re: [Buildroot] [PATCH v5 3/4] package/linux-tools: add rtla
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,183 +89,114 @@ Giulio, All,
 On 2023-10-24 16:42 +0200, Giulio Benetti spake thusly:
 > From: Maxime Chevallier <maxime.chevallier@bootlin.com>
 > 
-> Introduce the libtracefs library, that is used to be bundled with the
-> trace-cmd tool. This library is now used by several tools and libraries
-> such as trace-cmd and rtla, and is used as an interface to the ftrace
-> kernel subsystem through tracefs.
+> The RealTime Linux Analysis tool includes a set of commands that relies
+> on the osnoise and timerlat tracers from the ftrace kernel subsystem,
+> allowing to analyze the lantency sources coming from the hardware and
+> the kernel itself.
 > 
-> To build with meson, this package requires to disable documentation
-> generation, and since this is not possible add a local patch pending
-> upstream that adds -Ddoc=false support to libtracefs.
+> This tool was introduced in v5.17 but until v5.19 it relied on libprocps
+> that has been deprecated soon. So let's make it available for v5.19+.
+> Rtla relies on libtracefs and libtraceevent, although libtraceevent itself
+> is already a dependency for libtracefs.
 > 
 > Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
-> [Giulio:
-> 	- bump version to 1.7.0 and add hash file
-> 	- move to meson build system
-> ]
+> [Giulio: fix install on recent Linux versions]
 > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> [Andreas: deal with Linux Fixups, musl, SSP]
+> Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+> ---
+[--SNIP--]
+> diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
+> index 451b0eeff5..4df73159be 100644
+> --- a/package/linux-tools/Config.in
+> +++ b/package/linux-tools/Config.in
+> @@ -102,6 +102,16 @@ config BR2_PACKAGE_LINUX_TOOLS_PERF_NEEDS_HOST_PYTHON3
+>  
+>  endif
+>  
+> +config BR2_PACKAGE_LINUX_TOOLS_RTLA
+> +	bool "rtla"
+> +	select BR2_PACKAGE_LINUX_TOOLS
+> +	select BR2_PACKAGE_LIBTRACEFS
+> +	help
+> +	  Linux 5.19 and later has 2 new tracers, osnoise and timerlat.
+> +	  Linux 6.3 has new tracer hwnoise. These tracers allow performing
+> +	  latency analysis, for which the rtla tool provides wrapper
+> +	  commands to visualize and extract latency traces and reports.
+
+Re-reading that now, with the feedback from Andreas in my mind, I think
+it is still quite confusing. So I rewrote that help text to make it more
+explicit what happens.
 
 Applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
-> ---
-> V1->V2:
-> * bump to version 1.7.0
-> * add hash file
-> V2->V3:
-> * switch to meson build system
-> V4->V5:
-> * add host-flex/bison dependencies as suggested by Andreas Ziegler
-> ---
->  DEVELOPERS                                    |  2 +
->  package/Config.in                             |  1 +
->  ...-add-option-to-disable-documentation.patch | 51 +++++++++++++++++++
->  package/libtracefs/Config.in                  |  6 +++
->  package/libtracefs/libtracefs.hash            |  4 ++
->  package/libtracefs/libtracefs.mk              | 18 +++++++
->  6 files changed, 82 insertions(+)
->  create mode 100644 package/libtracefs/0001-libtracefs-add-option-to-disable-documentation.patch
->  create mode 100644 package/libtracefs/Config.in
->  create mode 100644 package/libtracefs/libtracefs.hash
->  create mode 100644 package/libtracefs/libtracefs.mk
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 47c054bb56..09af18c54c 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1226,6 +1226,7 @@ F:	package/libnspr/
->  F:	package/libnss/
->  F:	package/libnvme/
->  F:	package/libtraceevent/
-> +F:	package/libtracefs
->  F:	package/mali-driver/
->  F:	package/minicom/
->  F:	package/mmc-utils/
-> @@ -2118,6 +2119,7 @@ F:	package/timescaledb/
->  
->  N:	Maxime Chevallier <maxime.chevallier@bootlin.com>
->  F:	package/libtraceevent/
-> +F:	package/libtracefs
->  
->  N:	Michael Durrant <mdurrant@arcturusnetworks.com>
->  F:	board/arcturus/
-> diff --git a/package/Config.in b/package/Config.in
-> index 15f6bdee16..18cbb745dd 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -118,6 +118,7 @@ menu "Debugging, profiling and benchmark"
->  	source "package/latencytop/Config.in"
->  	source "package/libbpf/Config.in"
->  	source "package/libtraceevent/Config.in"
-> +	source "package/libtracefs/Config.in"
->  	source "package/lmbench/Config.in"
->  	source "package/lsof/Config.in"
->  	source "package/ltp-testsuite/Config.in"
-> diff --git a/package/libtracefs/0001-libtracefs-add-option-to-disable-documentation.patch b/package/libtracefs/0001-libtracefs-add-option-to-disable-documentation.patch
+>  config BR2_PACKAGE_LINUX_TOOLS_SELFTESTS
+>  	bool"selftests"
+>  	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # bash
+> diff --git a/package/linux-tools/linux-tool-rtla.mk.in b/package/linux-tools/linux-tool-rtla.mk.in
 > new file mode 100644
-> index 0000000000..0813451008
+> index 0000000000..603d86722d
 > --- /dev/null
-> +++ b/package/libtracefs/0001-libtracefs-add-option-to-disable-documentation.patch
-> @@ -0,0 +1,51 @@
-> +From 881e23ed774360f93ca81f820d7897bd9bbd6d63 Mon Sep 17 00:00:00 2001
-> +From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> +Date: Sat, 30 Sep 2023 22:40:08 +0200
-> +Subject: [PATCH] libtracefs: add option to disable documentation
-> +
-> +On some Linux environment builder(i.e. Buildroot) host asciidoc is not
-> +provided since by default all man/docs are not installed to target but
-> +meson.build at the moment build ascii and html documentation and
-> +requires asciidoc making the building to fail. So let's add doc option
-> +set to true by default to let the user to override it and not produce
-> +the documentation.
-> +
-> +Upstream: https://patchwork.kernel.org/project/linux-trace-devel/patch/20230930204008.2528607-1-giulio.benetti@benettiengineering.com/
-> +
-> +Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> +---
-> + meson.build       | 3 +++
-> + meson_options.txt | 2 ++
-> + 2 files changed, 5 insertions(+)
-> +
-> +diff --git a/meson.build b/meson.build
-> +index 9d42d78..f1e492e 100644
-> +--- a/meson.build
-> ++++ b/meson.build
-> +@@ -39,6 +39,8 @@ if cunit_dep.found()
-> +     subdir('utest')
-> + endif
-> + subdir('samples')
-> ++
-> ++if get_option('doc')
-> + subdir('Documentation')
-> + 
-> + custom_target(
-> +@@ -46,3 +48,4 @@ custom_target(
-> +     output: 'docs',
-> +     depends: [html, man],
-> +     command: ['echo'])
-> ++endif
-> +diff --git a/meson_options.txt b/meson_options.txt
-> +index 1d92c28..5533a88 100644
-> +--- a/meson_options.txt
-> ++++ b/meson_options.txt
-> +@@ -14,3 +14,5 @@ option('man-bold-literal', type : 'boolean', value : false,
-> +        description : 'enable bold literals')
-> + option('docbook-suppress-sp', type : 'boolean', value : false,
-> +        description : 'docbook suppress sp')
-> ++option('doc', type : 'boolean', value: true,
-> ++       description : 'produce documentation')
-> +-- 
-> +2.34.1
-> +
-> diff --git a/package/libtracefs/Config.in b/package/libtracefs/Config.in
-> new file mode 100644
-> index 0000000000..92ce0986df
-> --- /dev/null
-> +++ b/package/libtracefs/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_LIBTRACEFS
-> +	bool "libtracefs"
-> +	select BR2_PACKAGE_LIBTRACEEVENT
-> +	help
-> +	  libtracefs is used to easily interface with the ftrace
-> +	  interface through the tracefs virtual filesystem.
-> diff --git a/package/libtracefs/libtracefs.hash b/package/libtracefs/libtracefs.hash
-> new file mode 100644
-> index 0000000000..676fcf1111
-> --- /dev/null
-> +++ b/package/libtracefs/libtracefs.hash
-> @@ -0,0 +1,4 @@
-> +# Locally computed
-> +sha256  411fcbf3434ecbaefa6c2b1bf092266293a672e2d7ee46fdd6b402753cb8bd16  libtracefs-1.7.0.tar.gz
-> +sha256  f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79  GPL-2.0
-> +sha256  0b9a4febcdee6de55872501d5c1a8f5d8b0d1650cd4d5351995ceb22e889f8ca  LGPL-2.1
-> diff --git a/package/libtracefs/libtracefs.mk b/package/libtracefs/libtracefs.mk
-> new file mode 100644
-> index 0000000000..1e6e19a234
-> --- /dev/null
-> +++ b/package/libtracefs/libtracefs.mk
-> @@ -0,0 +1,18 @@
+> +++ b/package/linux-tools/linux-tool-rtla.mk.in
+> @@ -0,0 +1,55 @@
 > +################################################################################
 > +#
-> +# libtracefs
+> +# rtla
 > +#
 > +################################################################################
 > +
-> +LIBTRACEFS_VERSION = 1.7.0
-> +LIBTRACEFS_SITE = https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/snapshot
-> +LIBTRACEFS_INSTALL_STAGING = YES
-> +LIBTRACEFS_LICENSE = GPL-2.0, LGPL-2.1
-> +LIBTRACEFS_LICENSE_FILES = LICENSES/GPL-2.0 LICENSES/LGPL-2.1
+> +LINUX_TOOLS += rtla
 > +
-> +LIBTRACEFS_DEPENDENCIES = host-bison host-flex host-pkgconf libtraceevent
+> +RTLA_DEPENDENCIES = host-pkgconf libtracefs
+> +RTLA_MAKE_OPTS = $(LINUX_MAKE_FLAGS) \
+> +	CC=$(TARGET_CC) \
+> +	EXTRA_CFLAGS="-D_GNU_SOURCE" \
+> +	LDFLAGS="$(TARGET_LDFLAGS)" \
+> +	PKG_CONFIG_PATH=$(STAGING_DIR)/usr/lib/pkgconfig
 > +
-> +LIBTRACEFS_CONF_OPTS = \
-> +	-Ddoc=false
+> +ifeq ($(BR2_TOOLCHAIN_HAS_SSP),)
+> +define RTLA_DISABLE_STACK_PROTECTOR
+> +	$(SED) 's/-fstack-protector.* //' $(LINUX_DIR)/tools/tracing/rtla/Makefile
+> +endef
+> +endif
 > +
-> +$(eval $(meson-package))
+> +define RTLA_LINUX_CONFIG_FIXUPS
+> +	$(call KCONFIG_ENABLE_OPT,CONFIG_FTRACE)
+> +	$(call KCONFIG_ENABLE_OPT,CONFIG_TIMERLAT_TRACER)
+> +	$(call KCONFIG_ENABLE_OPT,CONFIG_HIST_TRIGGERS)
+> +endef
+> +
+> +define RTLA_BUILD_CMDS
+> +	$(Q)if ! grep install $(LINUX_DIR)/tools/tracing/rtla/Makefile >/dev/null 2>&1 ; then \
+> +		echo "Your kernel version is too old and does not implement the rtla tool." ; \
+> +		echo "At least kernel 5.19 must be used." ; \
+> +		exit 1 ; \
+> +	fi
+> +
+> +	$(RTLA_DISABLE_STACK_PROTECTOR)
+> +
+> +	$(TARGET_MAKE_ENV) \
+> +	$(MAKE) $(RTLA_MAKE_OPTS) \
+> +	-C $(LINUX_DIR)/tools/tracing rtla
+> +endef
+> +
+> +# make rtla_install build and install by default documentation using rst2man
+> +# but it's not available in Buildroot and we don't want manual files in target
+> +# folder so let's simply install the resulting rtla binary and create symlinks
+> +# like Linux does in its tools/tracing/rtla/Makefile
+> +define RTLA_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -m 0755 -D $(LINUX_DIR)/tools/tracing/rtla/rtla $(TARGET_DIR)/usr/bin
+> +	ln -sf rtla $(TARGET_DIR)/usr/bin/osnoise
+> +	ln -sf rtla $(TARGET_DIR)/usr/bin/timerlat
+> +
+> +	# Check if hwnoise is provided or not
+> +	if grep -q hwnoise $(LINUX_DIR)/tools/tracing/rtla/Makefile; then \
+> +		ln -sf rtla $(TARGET_DIR)/usr/bin/hwnoise ; \
+> +	fi
+> +endef
 > -- 
 > 2.34.1
 > 
