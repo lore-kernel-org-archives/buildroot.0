@@ -4,66 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C179C46CD2
-	for <buildroot@archiver.kernel.org>; Sat,  6 Jan 2024 10:12:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21801C46CD2
+	for <buildroot@archiver.kernel.org>; Sat,  6 Jan 2024 10:13:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 15BB1608A6;
-	Sat,  6 Jan 2024 10:12:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 15BB1608A6
+	by smtp3.osuosl.org (Postfix) with ESMTP id C8C3C60B43;
+	Sat,  6 Jan 2024 10:13:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C8C3C60B43
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JTZVtFn8N0HF; Sat,  6 Jan 2024 10:12:49 +0000 (UTC)
+	with ESMTP id sukMc3DdSbkd; Sat,  6 Jan 2024 10:13:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6F22D60B01;
-	Sat,  6 Jan 2024 10:12:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F22D60B01
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3BF9B60AD0;
+	Sat,  6 Jan 2024 10:13:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3BF9B60AD0
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1C0751BF861
- for <buildroot@lists.busybox.net>; Sat,  6 Jan 2024 10:12:42 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 827661BF3A6
+ for <buildroot@lists.busybox.net>; Sat,  6 Jan 2024 10:13:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B549E4055D
- for <buildroot@lists.busybox.net>; Sat,  6 Jan 2024 10:12:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B549E4055D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5CBCD405CE
+ for <buildroot@lists.busybox.net>; Sat,  6 Jan 2024 10:13:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5CBCD405CE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qwkvizzc7Uhh for <buildroot@lists.busybox.net>;
- Sat,  6 Jan 2024 10:12:40 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 01A0D40488
- for <buildroot@buildroot.org>; Sat,  6 Jan 2024 10:12:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 01A0D40488
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 14AFCFF803;
- Sat,  6 Jan 2024 10:12:36 +0000 (UTC)
-Date: Sat, 6 Jan 2024 11:12:36 +0100
+ with ESMTP id kAd3C8BGzy_o for <buildroot@lists.busybox.net>;
+ Sat,  6 Jan 2024 10:12:58 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9D7D640488
+ for <buildroot@buildroot.org>; Sat,  6 Jan 2024 10:12:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D7D640488
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5BEB0240002;
+ Sat,  6 Jan 2024 10:12:54 +0000 (UTC)
+Date: Sat, 6 Jan 2024 11:12:52 +0100
 To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20240106111236.6269f39d@windsurf>
-In-Reply-To: <20240103191151.2777684-1-bernd@kuhls.net>
+Message-ID: <20240106111252.0e3cb8ff@windsurf>
+In-Reply-To: <20240103191151.2777684-2-bernd@kuhls.net>
 References: <20240103191151.2777684-1-bernd@kuhls.net>
+ <20240103191151.2777684-2-bernd@kuhls.net>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1704535957;
+ d=bootlin.com; s=gm1; t=1704535974;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=3HXCcCYdbUGtCM8/uqGgiESlwYGhp817NmUwRI8CKQE=;
- b=nSdQyf12qvJOGfkkLqZscO4Wgi+jXGGUA4CAH3LxYiv3MVgNkv24Zu+DeW4AdvvODMXjfd
- R1jFY8GUaZX8NILkh6xUKxEf7uZ+TxdvtlsUE4yv27VlzLdds/iCt5l8kysxJ7i+VtwIji
- 0u/BzaEwC8ATzP44DTmUEkgfwMMXM4wHJRjC2Qax4I4vPTszKUH4hgR39KjdsOcBvcfIy7
- ejuHBgopwpZs8ccBPSR70/qVyi8YmhZOJOt99pl/7FPc3Ed4S0IprTgW5RlkQcAZ8hJ5Oa
- 8steiJqRo6BFGWedyveX0AAidABlfjp53ft6oL+jtRLk+9RZd8ri0ivwnrTvWQ==
+ bh=e5610YhxoAVGlvSqZpFtFyLgxVlelr1T1l1CNT02ovg=;
+ b=TV/KINPKrzWslMIzqzCAE1FF+5vf7mfwNeXO2FbM1iBcthEtwo76cIjYH1tAF/optkzspZ
+ G4DGAyJHmsi4D0E5Dscst+BGnLj8xElR8JXTnAmonohXn5Wt48SJ/FjxNMHvB66FzTvr6W
+ pwnUWebF2xY/2ft8NWZSjIvv+sl7fyfs7GUGgDsSyVh0tiyMnXbyhAzU+kLS047/DK0CVd
+ qexIOzPzLlSz75SVvEO+s8eem0r6KVe/4rQtWbGqWmilrHDXjxnHmyjyCj+VOWCDrYqNuq
+ V+2UC7fpz216xBBrcH4OFvGMulOZOSIefua+79li61b6VNVRqkpUgEs+kOCaYQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=nSdQyf12
-Subject: Re: [Buildroot] [PATCH v2 1/2] package/exim: fix build with
- libexecinfo
+ header.s=gm1 header.b=TV/KINPK
+Subject: Re: [Buildroot] [PATCH v2 2/2] package/exim: do not build
+ perl-based utilities
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,57 +84,27 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
-
-On Wed,  3 Jan 2024 20:11:50 +0100
+On Wed,  3 Jan 2024 20:11:51 +0100
 Bernd Kuhls <bernd@kuhls.net> wrote:
 
-> diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-> index fb9eecd71b..25d171875d 100644
-> --- a/package/exim/exim.mk
-> +++ b/package/exim/exim.mk
-> @@ -104,6 +104,7 @@ define EXIM_CONFIGURE_TOOLCHAIN
->  	$(call exim-config-add,HOSTCC,$(HOSTCC))
->  	$(call exim-config-add,HOSTCFLAGS,$(HOSTCFLAGS))
->  	$(EXIM_FIX_IP_OPTIONS_FOR_MUSL)
-> +	$(EXIM_EXTRALIBS)
+> Upstream added various utilities, for example exim_id_update
+> with commit https://github.com/Exim/exim/commit/46a36afae41f63de654269c8a0b7cf5852a85a14
+> which is a "Utility for one-time upgrage/downgrade between exim message-
+> id formats, around the 4.97 transition" which would add a dependency to
+> host-perl/perl so we build and install only the needed exim binary.
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+> v2: removed comment before EXIM_INSTALL_TARGET_CMDS, reworded commit log
+>     text (Luca)
 
-I've changed this to:
-
-+       $(call exim-config-add,EXTRALIBS,$(EXIM_EXTRALIBS))
-
-> +ifeq ($(BR2_PACKAGE_LIBEXECINFO),y)
-> +EXIM_DEPENDENCIES += libexecinfo
-> +define EXIM_EXTRALIBS
-> +$(call exim-config-add,EXTRALIBS,-lexecinfo)
-> +endef
-> +else ifneq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
-> +EXIM_C_FLAGS = -DNO_EXECINFO
-> +endif
-
-And changed this to:
-
-+ifeq ($(BR2_PACKAGE_LIBEXECINFO),y)
-+EXIM_DEPENDENCIES += libexecinfo
-+EXIM_EXTRALIBS += -lexecinfo
-+else ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),)
-+EXIM_CFLAGS = -DNO_EXECINFO
-+endif
-
-so EXIM_EXTRALIBS becomes really the list of extra libraries, and the
-exim-config-add call is inside EXIM_CONFIGURE_TOOLCHAIN. This means
-that we can add more things to EXIM_EXTRALIBS for other reasons if
-needed in the future.
-
-Also, I've used EXIM_CFLAGS instead of EXIM_C_FLAGS, and used a
-slightly different construct for the glibc condition.
-
-Applied with those changes, thanks a lot!
+I've added a reference to an autobuilder failure fixed by this, and
+applied. Thanks!
 
 Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
