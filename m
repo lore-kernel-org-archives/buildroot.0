@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F762C46CD2
-	for <buildroot@archiver.kernel.org>; Sat,  6 Jan 2024 09:57:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BDFECC47074
+	for <buildroot@archiver.kernel.org>; Sat,  6 Jan 2024 09:57:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 02E9383F7A;
-	Sat,  6 Jan 2024 09:57:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 02E9383F7A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6CF0184026;
+	Sat,  6 Jan 2024 09:57:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6CF0184026
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 989_qTOWGMXV; Sat,  6 Jan 2024 09:57:06 +0000 (UTC)
+	with ESMTP id u-khm1-VnHxr; Sat,  6 Jan 2024 09:57:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3ECFE84018;
-	Sat,  6 Jan 2024 09:57:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3ECFE84018
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2874A1BF360
+	by smtp1.osuosl.org (Postfix) with ESMTP id 82F1884018;
+	Sat,  6 Jan 2024 09:57:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 82F1884018
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 428791BF861
  for <buildroot@lists.busybox.net>; Sat,  6 Jan 2024 09:55:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8220442178
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8885883A42
  for <buildroot@lists.busybox.net>; Sat,  6 Jan 2024 09:55:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8220442178
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8885883A42
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kmrt7swTS8xJ for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id psRmlSuIKpwS for <buildroot@lists.busybox.net>;
  Sat,  6 Jan 2024 09:55:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 54E9842183
+ by smtp1.osuosl.org (Postfix) with ESMTP id 84CDD83F7A
  for <buildroot@buildroot.org>; Sat,  6 Jan 2024 09:55:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 54E9842183
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 84CDD83F7A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 48F428468B; Sat,  6 Jan 2024 09:55:24 +0000 (UTC)
+ id 7487D84688; Sat,  6 Jan 2024 09:55:24 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 6 Jan 2024 10:52:07 +0100
+Date: Sat, 6 Jan 2024 10:52:09 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cb7c72530f776ab3571d614df4460e02bed0ac97
-X-Git-Newrev: 377f246375d6a08abb5d9bd425cc1558ac77ef13
+X-Git-Oldrev: 377f246375d6a08abb5d9bd425cc1558ac77ef13
+X-Git-Newrev: 9ac63a33609fd4fee17874bc9569688c78613e1c
 X-Patchwork-Hint: ignore
-Message-Id: <20240106095524.48F428468B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tcpreplay: bump to version 4.4.4
+Message-Id: <20240106095524.7487D84688@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libarchive: fix uclibc build with
+ libiconv (again)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +64,137 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=377f246375d6a08abb5d9bd425cc1558ac77ef13
+commit: https://git.buildroot.net/buildroot/commit/?id=9ac63a33609fd4fee17874bc9569688c78613e1c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/appneta/tcpreplay/releases/tag/v4.4.4
-https://github.com/appneta/tcpreplay/releases/tag/v4.4.3
+Commit 7991d2c48a859f9c0333ade8192868c21b1a8a31 wrongly removed patch
+added by commit 1e8cce6f2b1936dbda9d63ddf4f41acf59a64113, advocating
+that upstream applied a different "solution", this "solution" was
+already tested on buildroot with commit
+9525bc7e64e8f44c31ab9dfd3f516ecb35982429 and is utterly broken as stated
+in:
+https://github.com/libarchive/libarchive/pull/1825#issuecomment-1403537856
+https://github.com/libarchive/libarchive/pull/1825#issuecomment-1437451472
+https://github.com/libarchive/libarchive/issues/1819#issuecomment-1439962521
+https://github.com/libarchive/libarchive/issues/1841#issuecomment-1426628554
+https://github.com/libarchive/libarchive/pull/1813#issuecomment-1396373372
+
+As a result, build failures are again raised by uclibc-ng with libiconv
+on fwup/gvfs/...:
+
+configure: error: Requires libarchive. Libarchive must be built with zlib support.
+
+[...]
+
+Run-time dependency libarchive found: NO (tried cmake)
+
+../output-1/build/gvfs-1.48.1/meson.build:405:2: ERROR: Dependency lookup for libarchive with method 'pkgconfig' failed: Could not generate cargs for libarchive:
+Package iconv was not found in the pkg-config search path.
+Perhaps you should add the directory containing `iconv.pc'
+to the PKG_CONFIG_PATH environment variable
+Package 'iconv', required by 'libarchive', not found
+
+So revert the upstream "solution", put back previous patch and let's
+hope that upstream improve their skills in pkg-config and static
+building but they probably don't really care about it...
+
+Fixes:
+ - http://autobuild.buildroot.org/results/0f5058634ecc2ffae3993f6f4513d8ce75e6c02f
+ - http://autobuild.buildroot.org/results/20fc291ef7e37ee8bd553976cbe841e53345680b
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/tcpreplay/tcpreplay.hash | 4 ++--
- package/tcpreplay/tcpreplay.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...-add-iconv-to-the-.pc-file-if-needed-1825.patch | 31 ++++++++++++++++++++++
+ ...ols-do-not-add-iconv-for-Requires.private.patch | 27 +++++++++++++++++++
+ package/libarchive/libarchive.mk                   |  4 +++
+ 3 files changed, 62 insertions(+)
 
-diff --git a/package/tcpreplay/tcpreplay.hash b/package/tcpreplay/tcpreplay.hash
-index 97c2e7ee34..e73e2d2c57 100644
---- a/package/tcpreplay/tcpreplay.hash
-+++ b/package/tcpreplay/tcpreplay.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://github.com/appneta/tcpreplay/releases/download/v4.4.2/tcpreplay-4.4.2.tar.xz.asc
-+# https://github.com/appneta/tcpreplay/releases/download/v4.4.4/tcpreplay-4.4.4.tar.xz.asc
- # using key 84E4FA215C934A7D97DC76D5E9E2149793BDE17E
--sha256  91585c247b108ed3c10d3546d18f6a467d44229c9988c97736f953af69a6f438  tcpreplay-4.4.2.tar.xz
-+sha256  3ff9753cc43bb15e77832cee657e3030dbcdd957fa247e6abacc605689e24051  tcpreplay-4.4.4.tar.xz
- sha256  07cf5e92d475287a7d1663b33097f40cae5adf03ed8920fcd4374e3dfb48c8ad  docs/LICENSE
-diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
-index 65eb908932..c5b3f9baa4 100644
---- a/package/tcpreplay/tcpreplay.mk
-+++ b/package/tcpreplay/tcpreplay.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libarchive/0001-Revert-Only-add-iconv-to-the-.pc-file-if-needed-1825.patch b/package/libarchive/0001-Revert-Only-add-iconv-to-the-.pc-file-if-needed-1825.patch
+new file mode 100644
+index 0000000000..a4dd7dad5c
+--- /dev/null
++++ b/package/libarchive/0001-Revert-Only-add-iconv-to-the-.pc-file-if-needed-1825.patch
+@@ -0,0 +1,31 @@
++From 3879afd473a256173cc626e16293f3fe8875f2d6 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 6 Jan 2024 09:53:23 +0100
++Subject: [PATCH] Revert "Only add "iconv" to the .pc file if needed (#1825)"
++
++This reverts commit 1f35c466aaa9444335a1b854b0b7223b0d2346c2.
++
++Upstream: no dedicated PR for this revert but there is already plenty of PRs/issues to fix iconv build ...
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ configure.ac | 4 +---
++ 1 file changed, 1 insertion(+), 3 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 93f7af94..204a4e69 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -434,9 +434,7 @@ if test "x$with_iconv" != "xno"; then
++     AC_CHECK_HEADERS([localcharset.h])
++     am_save_LIBS="$LIBS"
++     LIBS="${LIBS} ${LIBICONV}"
++-    if test -n "$LIBICONV"; then
++-      LIBSREQUIRED="$LIBSREQUIRED${LIBSREQUIRED:+ }iconv"
++-    fi
+++    LIBSREQUIRED="$LIBSREQUIRED${LIBSREQUIRED:+ }iconv"
++     AC_CHECK_FUNCS([locale_charset])
++     LIBS="${am_save_LIBS}"
++     if test "x$ac_cv_func_locale_charset" != "xyes"; then
++-- 
++2.43.0
++
+diff --git a/package/libarchive/0002-autotools-do-not-add-iconv-for-Requires.private.patch b/package/libarchive/0002-autotools-do-not-add-iconv-for-Requires.private.patch
+new file mode 100644
+index 0000000000..338dad46e0
+--- /dev/null
++++ b/package/libarchive/0002-autotools-do-not-add-iconv-for-Requires.private.patch
+@@ -0,0 +1,27 @@
++From 619c1be8d38ff79622db8f66f3b02832795315f9 Mon Sep 17 00:00:00 2001
++From: Christian Hesse <mail@eworm.de>
++Date: Wed, 14 Dec 2022 09:04:39 +0100
++Subject: [PATCH] autotools: do not add iconv for Requires.private
++
++There is no pkgconfig file for iconv, thus things break with this
++change. Let's drop iconv from Requires.private.
++
++Fixes: a83f3d32 ("autotools: Fix static linking when openssl is enabled in windows")
++Upstream: https://github.com/libarchive/libarchive/pull/1817/commits/619c1be8d38ff79622db8f66f3b02832795315f9
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ configure.ac | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 99bff20d1..f245d0c55 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -378,7 +378,6 @@ if test "x$with_iconv" != "xno"; then
++     AC_CHECK_HEADERS([localcharset.h])
++     am_save_LIBS="$LIBS"
++     LIBS="${LIBS} ${LIBICONV}"
++-    LIBSREQUIRED="$LIBSREQUIRED${LIBSREQUIRED:+ }iconv"
++     AC_CHECK_FUNCS([locale_charset])
++     LIBS="${am_save_LIBS}"
++     if test "x$ac_cv_func_locale_charset" != "xyes"; then
+diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
+index 2db36156b8..136f7a9c09 100644
+--- a/package/libarchive/libarchive.mk
++++ b/package/libarchive/libarchive.mk
+@@ -11,6 +11,10 @@ LIBARCHIVE_INSTALL_STAGING = YES
+ LIBARCHIVE_LICENSE = BSD-2-Clause, BSD-3-Clause, CC0-1.0, OpenSSL, Apache-2.0
+ LIBARCHIVE_LICENSE_FILES = COPYING
+ LIBARCHIVE_CPE_ID_VENDOR = libarchive
++# We're patching configure.ac
++LIBARCHIVE_AUTORECONF = YES
++# needed for autoreconf
++LIBARCHIVE_DEPENDENCIES += host-pkgconf
  
--TCPREPLAY_VERSION = 4.4.2
-+TCPREPLAY_VERSION = 4.4.4
- TCPREPLAY_SITE = https://github.com/appneta/tcpreplay/releases/download/v$(TCPREPLAY_VERSION)
- TCPREPLAY_SOURCE = tcpreplay-$(TCPREPLAY_VERSION).tar.xz
- TCPREPLAY_LICENSE = GPL-3.0
+ ifeq ($(BR2_PACKAGE_LIBARCHIVE_BSDTAR),y)
+ ifeq ($(BR2_STATIC_LIBS),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
