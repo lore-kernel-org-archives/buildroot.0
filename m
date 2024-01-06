@@ -4,87 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6940C47074
-	for <buildroot@archiver.kernel.org>; Sat,  6 Jan 2024 21:44:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08BB6C46CD2
+	for <buildroot@archiver.kernel.org>; Sat,  6 Jan 2024 21:44:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7529D8121D;
-	Sat,  6 Jan 2024 21:44:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7529D8121D
+	by smtp1.osuosl.org (Postfix) with ESMTP id B884982CAC;
+	Sat,  6 Jan 2024 21:44:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B884982CAC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id B4xOIOR9EfVE; Sat,  6 Jan 2024 21:44:31 +0000 (UTC)
+	with ESMTP id n9JrCasE8V-B; Sat,  6 Jan 2024 21:44:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9EB3281E40;
-	Sat,  6 Jan 2024 21:44:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9EB3281E40
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0A6541BF295
- for <buildroot@lists.busybox.net>; Sat,  6 Jan 2024 21:44:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E5D9E82AC6;
+	Sat,  6 Jan 2024 21:44:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E5D9E82AC6
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4E3011BF295
+ for <buildroot@lists.busybox.net>; Sat,  6 Jan 2024 21:44:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D5C934010C
- for <buildroot@lists.busybox.net>; Sat,  6 Jan 2024 21:44:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D5C934010C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 34C2A60BD0
+ for <buildroot@lists.busybox.net>; Sat,  6 Jan 2024 21:44:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 34C2A60BD0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id P4X4O2hORGCR for <buildroot@lists.busybox.net>;
- Sat,  6 Jan 2024 21:44:16 +0000 (UTC)
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com
- [IPv6:2607:f8b0:4864:20::135])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7FDB6400FD
- for <buildroot@buildroot.org>; Sat,  6 Jan 2024 21:44:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7FDB6400FD
-Received: by mail-il1-x135.google.com with SMTP id
- e9e14a558f8ab-3606ee78686so5174995ab.0
- for <buildroot@buildroot.org>; Sat, 06 Jan 2024 13:44:16 -0800 (PST)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hd2UV0GCYuch for <buildroot@lists.busybox.net>;
+ Sat,  6 Jan 2024 21:44:18 +0000 (UTC)
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com
+ [IPv6:2607:f8b0:4864:20::134])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3353E60B3B
+ for <buildroot@buildroot.org>; Sat,  6 Jan 2024 21:44:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3353E60B3B
+Received: by mail-il1-x134.google.com with SMTP id
+ e9e14a558f8ab-3606dda206aso4870605ab.3
+ for <buildroot@buildroot.org>; Sat, 06 Jan 2024 13:44:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704577455; x=1705182255;
+ d=1e100.net; s=20230601; t=1704577456; x=1705182256;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=8c7Uhk18xG5itdizCINMeDAjTLOlfCewWJVgn9VOGsg=;
- b=lKFYi3cRKo6nuAA2e/XhxKafsxkqxxYsG49xrx99LYWEIvSdN7oi/KXXD8KFqmxO9r
- ywVWenJICJ59MnQo6fzaPy0a6+Lpy9ittjwZ+g2VkylX3I63NNyNz58zo37uFo+zUP8q
- 6HFo4TrR0eZTZhV+KIbS7S4C09f9cCSOljFDZKdwV47evKUZILX8jWa1631BJfod/dHb
- WDKM9F7NG5uip5NM3zPQJVBW1ok7grByc4WEb0kRu7IFOKcp1s1AKTtJ7Y4O5PXxiRiv
- JhH8QolpMhmC5xl4wXJUK9EKEW298tsOOPtLFW1jiQENLlVrzo8iNZ003psVcDLv6l3t
- FmgA==
-X-Gm-Message-State: AOJu0YyE0UTZf5F0oIRn2LG5ewu9QJTocOr+jESCt5K3xR3tuGscSdCW
- UVa4WsVbRMa+CY7nGAQwZbl87XwU/Bqd9Q==
-X-Google-Smtp-Source: AGHT+IEKt3psq8H3cIVRj9SOY1FFqSZ8+CKr30ro6tECp21au2MXxMsGVpV2HEwQ89fdZId32Pislw==
-X-Received: by 2002:a05:6e02:1849:b0:35f:e863:a6ee with SMTP id
- b9-20020a056e02184900b0035fe863a6eemr2913464ilv.62.1704577455044; 
- Sat, 06 Jan 2024 13:44:15 -0800 (PST)
+ bh=lg2/6swzOKwS1w88Vw47J55iRQBCXPLApae6BG626Lg=;
+ b=BGriHvBaLoVpcL0ZcC2p7h7g+O/HsXRDL6OCM1AqKuSd8LD3XEThgkEM663DU0ZUob
+ aGROH8z/vCMHd5mKUV551Okg9GdOBRG5C1rxa4l/62y1vEN8vy7yELqkinO+xi2hoyr3
+ Id9hFq07U1Nwdz4o/u/MuyeJR0xWOvzIEm+SANf9BHR1RLZkhz8B2nuFFbOfbJxpvJfL
+ um98jKYQyYZAKz5n8Zo9YlyIVmFaMTGa8nVygjeJtzEFw5WDknFZGmneKuIPOgF1T24h
+ KBqEqbJM/yrYigVsk4ca8k7RV0TYtMXHHOLUh0smcmM5KbVjEABPRFSQjULTs9w3oH0B
+ 7P9g==
+X-Gm-Message-State: AOJu0YyvB06qmoXUVn3rhzj/k3SwH813TvEypL5lTHVRZPDEvftwDoIk
+ l6uKAp8waL4L4askL4oP3Q1JMj2cyKSuhg==
+X-Google-Smtp-Source: AGHT+IE8PeAvSr6W8ixsl0j8n2X2zHquDJaiIV5DaxP5R5ru6yiv6x8fY6y1JMuEzso0cBm+GgNucA==
+X-Received: by 2002:a05:6e02:168b:b0:35f:fe58:7001 with SMTP id
+ f11-20020a056e02168b00b0035ffe587001mr2896163ila.42.1704577456457; 
+ Sat, 06 Jan 2024 13:44:16 -0800 (PST)
 Received: from james-x399.localdomain (71-218-103-119.hlrn.qwest.net.
  [71.218.103.119]) by smtp.gmail.com with ESMTPSA id
- 6-20020a056e020ca600b00360039199cesm1496587ilg.3.2024.01.06.13.44.14
+ 6-20020a056e020ca600b00360039199cesm1496587ilg.3.2024.01.06.13.44.15
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 06 Jan 2024 13:44:14 -0800 (PST)
+ Sat, 06 Jan 2024 13:44:15 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat,  6 Jan 2024 14:44:08 -0700
-Message-Id: <20240106214410.3294887-2-james.hilliard1@gmail.com>
+Date: Sat,  6 Jan 2024 14:44:09 -0700
+Message-Id: <20240106214410.3294887-3-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240106214410.3294887-1-james.hilliard1@gmail.com>
 References: <20240106214410.3294887-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1704577455; x=1705182255; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1704577456; x=1705182256; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=8c7Uhk18xG5itdizCINMeDAjTLOlfCewWJVgn9VOGsg=;
- b=Lp+e+LK9Ww+axsLed27UkHhuJnm3JDX+XoMaZsvH9jEQwT34TBJxsIoovcYIDo89Ev
- xWPz0ROmx+F+pHN72IyjBflGgpM3XOFGA72a2M8/aL1CyIJr+Jm/etpFC+9G/LDY+aMJ
- 8wHi2inyHPStFo4QBSeekSwsxLM70I02fElcxZM+g4oZaf/RBJAn9uwP+6z3GhnOQURK
- ErSbcDOR4nd95DmDK6NWIPlGcXd/DA2VVLn0uq+dh/i3ZB8wAmg+YAjxbqgNN6AzIbMq
- 01Cjdh/K2pSDdGy693q9V/x73F61nsna1dmQpEaKA/G9qCbrLtw+13g3SjSevmxW8HTX
- aRIA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=lg2/6swzOKwS1w88Vw47J55iRQBCXPLApae6BG626Lg=;
+ b=I5UKOaDO7CfCaH47IYcz5T9KjQA8rYr59yCLEbqWcWKyAXid1QybD0nsrAB83nWYRp
+ GUMfpETBGlbWe9pyZB1U2vT04QRU7vGgCEPUWNtQa+MWqLzakJYYbGCso2EnH5EHNKXn
+ vVjP0reNEUKTZkSnDPpapu45yHMELKxMmO6prqZsiA010+gsJ/VhD9WgmUlt9geXp1P9
+ PtLVsLh68ytEDEdc7kZw/OeJnFHWLB4H68cuLFSAKMIsYloC5kmSTEhDdl59CEXOZhTk
+ 1Gc07QebM/uthWDoImTxVgQ1218rA69IvIWXgv1z8Xsty358vC8DBdx+G8rg+M7KHm6l
+ FzbQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Lp+e+LK9
-Subject: [Buildroot] [PATCH v2 2/4] package/python-aiosqlite: new package
+ header.a=rsa-sha256 header.s=20230601 header.b=I5UKOaDO
+Subject: [Buildroot] [PATCH v2 3/4] package/python-pypika-tortoise: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,72 +107,69 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
-Changes v1 -> v2:
-  - add missing python sqlite module
----
- package/Config.in                              |  1 +
- package/python-aiosqlite/Config.in             |  7 +++++++
- package/python-aiosqlite/python-aiosqlite.hash |  5 +++++
- package/python-aiosqlite/python-aiosqlite.mk   | 14 ++++++++++++++
+ package/Config.in                                 |  1 +
+ package/python-pypika-tortoise/Config.in          |  6 ++++++
+ .../python-pypika-tortoise.hash                   |  5 +++++
+ .../python-pypika-tortoise.mk                     | 15 +++++++++++++++
  4 files changed, 27 insertions(+)
- create mode 100644 package/python-aiosqlite/Config.in
- create mode 100644 package/python-aiosqlite/python-aiosqlite.hash
- create mode 100644 package/python-aiosqlite/python-aiosqlite.mk
+ create mode 100644 package/python-pypika-tortoise/Config.in
+ create mode 100644 package/python-pypika-tortoise/python-pypika-tortoise.hash
+ create mode 100644 package/python-pypika-tortoise/python-pypika-tortoise.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index f5d0c06334..ea023a84ef 100644
+index ea023a84ef..645393c0a4 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -978,6 +978,7 @@ menu "External python modules"
- 	source "package/python-aioredis/Config.in"
- 	source "package/python-aiorwlock/Config.in"
- 	source "package/python-aiosignal/Config.in"
-+	source "package/python-aiosqlite/Config.in"
- 	source "package/python-aiozipkin/Config.in"
- 	source "package/python-alembic/Config.in"
- 	source "package/python-alsaaudio/Config.in"
-diff --git a/package/python-aiosqlite/Config.in b/package/python-aiosqlite/Config.in
+@@ -1276,6 +1276,7 @@ menu "External python modules"
+ 	source "package/python-pyparsing/Config.in"
+ 	source "package/python-pyparted/Config.in"
+ 	source "package/python-pyphen/Config.in"
++	source "package/python-pypika-tortoise/Config.in"
+ 	source "package/python-pyqrcode/Config.in"
+ 	source "package/python-pyqt5/Config.in"
+ 	source "package/python-pyratemp/Config.in"
+diff --git a/package/python-pypika-tortoise/Config.in b/package/python-pypika-tortoise/Config.in
 new file mode 100644
-index 0000000000..77c78ea25d
+index 0000000000..62e14c6d50
 --- /dev/null
-+++ b/package/python-aiosqlite/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_AIOSQLITE
-+	bool "python-aiosqlite"
-+	select BR2_PACKAGE_PYTHON3_SQLITE # runtime
++++ b/package/python-pypika-tortoise/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_PYPIKA_TORTOISE
++	bool "python-pypika-tortoise"
 +	help
-+	  asyncio bridge to the standard sqlite3 module.
++	  Forked from pypika and streamline just for tortoise-orm.
 +
-+	  https://aiosqlite.omnilib.dev/
-diff --git a/package/python-aiosqlite/python-aiosqlite.hash b/package/python-aiosqlite/python-aiosqlite.hash
++	  https://github.com/tortoise/pypika-tortoise
+diff --git a/package/python-pypika-tortoise/python-pypika-tortoise.hash b/package/python-pypika-tortoise/python-pypika-tortoise.hash
 new file mode 100644
-index 0000000000..e06061346c
+index 0000000000..629762f4f7
 --- /dev/null
-+++ b/package/python-aiosqlite/python-aiosqlite.hash
++++ b/package/python-pypika-tortoise/python-pypika-tortoise.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/aiosqlite/json
-+md5  e829bf8f641ab115c1a9ca0494d35278  aiosqlite-0.19.0.tar.gz
-+sha256  95ee77b91c8d2808bd08a59fbebf66270e9090c3d92ffbf260dc0db0b979577d  aiosqlite-0.19.0.tar.gz
++# md5, sha256 from https://pypi.org/pypi/pypika-tortoise/json
++md5  98c9677516f06f61f211f834d51949a6  pypika-tortoise-0.1.6.tar.gz
++sha256  d802868f479a708e3263724c7b5719a26ad79399b2a70cea065f4a4cadbebf36  pypika-tortoise-0.1.6.tar.gz
 +# Locally computed sha256 checksums
-+sha256  ab0c171dc3ef8bf325a84bb77d855421f2611335ddf6e08816b2922c4edc0f76  LICENSE
-diff --git a/package/python-aiosqlite/python-aiosqlite.mk b/package/python-aiosqlite/python-aiosqlite.mk
++sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
+diff --git a/package/python-pypika-tortoise/python-pypika-tortoise.mk b/package/python-pypika-tortoise/python-pypika-tortoise.mk
 new file mode 100644
-index 0000000000..e513d53c02
+index 0000000000..84aa19cfbb
 --- /dev/null
-+++ b/package/python-aiosqlite/python-aiosqlite.mk
-@@ -0,0 +1,14 @@
++++ b/package/python-pypika-tortoise/python-pypika-tortoise.mk
+@@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# python-aiosqlite
++# python-pypika-tortoise
 +#
 +################################################################################
 +
-+PYTHON_AIOSQLITE_VERSION = 0.19.0
-+PYTHON_AIOSQLITE_SOURCE = aiosqlite-$(PYTHON_AIOSQLITE_VERSION).tar.gz
-+PYTHON_AIOSQLITE_SITE = https://files.pythonhosted.org/packages/ea/51/060efa10a814145acd4e42c6e5ed540b8714cad52ca026c5930e7c473049
-+PYTHON_AIOSQLITE_SETUP_TYPE = flit
-+PYTHON_AIOSQLITE_LICENSE = MIT
-+PYTHON_AIOSQLITE_LICENSE_FILES = LICENSE
++PYTHON_PYPIKA_TORTOISE_VERSION = 0.1.6
++PYTHON_PYPIKA_TORTOISE_SOURCE = pypika-tortoise-$(PYTHON_PYPIKA_TORTOISE_VERSION).tar.gz
++PYTHON_PYPIKA_TORTOISE_SITE = https://files.pythonhosted.org/packages/86/55/1bfd4150f664d2e07b36c8f442178cc1f717bb9ae6cae20f21e851c208c6
++PYTHON_PYPIKA_TORTOISE_SETUP_TYPE = pep517
++PYTHON_PYPIKA_TORTOISE_LICENSE = Apache-2.0
++PYTHON_PYPIKA_TORTOISE_LICENSE_FILES = LICENSE
++PYTHON_PYPIKA_TORTOISE_DEPENDENCIES = host-python-poetry-core
 +
 +$(eval $(python-package))
 -- 
