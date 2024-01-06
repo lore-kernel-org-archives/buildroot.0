@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64724C46CD2
-	for <buildroot@archiver.kernel.org>; Sat,  6 Jan 2024 14:11:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DE93C46CD2
+	for <buildroot@archiver.kernel.org>; Sat,  6 Jan 2024 14:12:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B620160B4E;
-	Sat,  6 Jan 2024 14:11:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B620160B4E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4AE4E60BAD;
+	Sat,  6 Jan 2024 14:12:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4AE4E60BAD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GLb-UFA8-vC4; Sat,  6 Jan 2024 14:11:48 +0000 (UTC)
+	with ESMTP id xzHk1XOpTLJX; Sat,  6 Jan 2024 14:12:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EF3DC60BAE;
-	Sat,  6 Jan 2024 14:11:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF3DC60BAE
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 268FA1BF861
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5F0EF60BA9;
+	Sat,  6 Jan 2024 14:11:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F0EF60BA9
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2D8D91BF863
  for <buildroot@lists.busybox.net>; Sat,  6 Jan 2024 14:11:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0D87E60B4E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 081F183280
  for <buildroot@lists.busybox.net>; Sat,  6 Jan 2024 14:11:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D87E60B4E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 081F183280
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UPlMQEo2Aus0 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5OgXb3UquNFy for <buildroot@lists.busybox.net>;
  Sat,  6 Jan 2024 14:11:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 33CC560B48
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2A1A6831A5
  for <buildroot@buildroot.org>; Sat,  6 Jan 2024 14:11:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33CC560B48
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A1A6831A5
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 23681846CF; Sat,  6 Jan 2024 14:11:32 +0000 (UTC)
+ id 15813846D1; Sat,  6 Jan 2024 14:11:32 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 6 Jan 2024 14:43:40 +0100
+Date: Sat, 6 Jan 2024 14:43:38 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 24f73b85f887122df8343346a106be144e6d814a
-X-Git-Newrev: b37249581fa4a221923540478db7fa720e04035d
+X-Git-Oldrev: b1dbd3f679e6660325472e3fdca72127d74e6929
+X-Git-Newrev: 24f73b85f887122df8343346a106be144e6d814a
 X-Patchwork-Hint: ignore
-Message-Id: <20240106141132.23681846CF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/trace-cmd: bump to 3.1.7
+Message-Id: <20240106141132.15813846D1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/linux-tools: add rtla
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,79 +62,142 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b37249581fa4a221923540478db7fa720e04035d
+commit: https://git.buildroot.net/buildroot/commit/?id=24f73b85f887122df8343346a106be144e6d814a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-trace-cmd's dependencies 'libtracefs' and 'libtraceevent' were split
-into dedicated projects, maintained outside of trace-cmd.
+The RealTime Linux Analysis tool includes a set of commands that relies
+on the osnoise and timerlat tracers from the ftrace kernel subsystem,
+allowing to analyze the lantency sources coming from the hardware and
+the kernel itself.
 
-This release, on top of bumping the version, adds this new dependencies.
+This tool was introduced in v5.17 but until v5.19 it relied on libprocps
+that has been deprecated soon. So let's make it available for v5.19+.
+Rtla relies on libtracefs and libtraceevent, although libtraceevent itself
+is already a dependency for libtracefs.
 
 Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
-[Giulio: bump to version 3.1.7]
+[Giulio: fix install on recent Linux versions]
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-[yann.morin.1998@free.fr: alphabetical order in dependencies]
+[Andreas: deal with Linux Fixups, musl, SSP]
+Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+[yann.morin.1998@free.fr: reword and extend help text]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/trace-cmd/Config.in      | 2 ++
- package/trace-cmd/trace-cmd.hash | 2 +-
- package/trace-cmd/trace-cmd.mk   | 6 ++++--
- 3 files changed, 7 insertions(+), 3 deletions(-)
+ DEVELOPERS                                |  2 ++
+ package/linux-tools/Config.in             | 21 +++++++++++++
+ package/linux-tools/linux-tool-rtla.mk.in | 52 +++++++++++++++++++++++++++++++
+ 3 files changed, 75 insertions(+)
 
-diff --git a/package/trace-cmd/Config.in b/package/trace-cmd/Config.in
-index 2d0accd7ae..00b9ebbd9a 100644
---- a/package/trace-cmd/Config.in
-+++ b/package/trace-cmd/Config.in
-@@ -4,6 +4,8 @@ config BR2_PACKAGE_TRACE_CMD
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_USE_MMU # fork()
- 	depends on !BR2_STATIC_LIBS # dlopen()
-+	select BR2_PACKAGE_LIBTRACEEVENT
-+	select BR2_PACKAGE_LIBTRACEFS
- 	help
- 	  Command line reader for ftrace.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 86588b1adb..d7543247f2 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1237,6 +1237,7 @@ F:	package/libnss/
+ F:	package/libnvme/
+ F:	package/libtraceevent/
+ F:	package/libtracefs
++F:	package/linux-tools/linux-tool-rtla.mk.in
+ F:	package/mali-driver/
+ F:	package/minicom/
+ F:	package/mongoose/
+@@ -2136,6 +2137,7 @@ F:	package/timescaledb/
+ N:	Maxime Chevallier <maxime.chevallier@bootlin.com>
+ F:	package/libtraceevent/
+ F:	package/libtracefs
++F:	package/linux-tools/linux-tool-rtla.mk.in
  
-diff --git a/package/trace-cmd/trace-cmd.hash b/package/trace-cmd/trace-cmd.hash
-index 4d39e4d5ea..6edcaf0e1c 100644
---- a/package/trace-cmd/trace-cmd.hash
-+++ b/package/trace-cmd/trace-cmd.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  a74d9ade2633b88d0ad199360d51996427e23f4835594133e456cd6e3bd3a651  trace-cmd-v2.9.7.tar.gz
-+sha256  e496d41e599f8ef3c9a74675da05f86be0d8d48d524f0182c73ab98cd16da0b0  trace-cmd-v3.1.7.tar.gz
- sha256  b1d04b850c1c7471b0f0896f6c6f0fcfc9f07e2dd183a5f5826af269fe9e88fb  COPYING
- sha256  70f297763149e72306919c924e164f83041d5e512868d4c8c1826c171b3e49f9  COPYING.LIB
- sha256  f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79  LICENSES/GPL-2.0
-diff --git a/package/trace-cmd/trace-cmd.mk b/package/trace-cmd/trace-cmd.mk
-index 52bb99036c..ab8e9149f7 100644
---- a/package/trace-cmd/trace-cmd.mk
-+++ b/package/trace-cmd/trace-cmd.mk
-@@ -4,14 +4,14 @@
- #
- ################################################################################
+ N:	Michael Durrant <mdurrant@arcturusnetworks.com>
+ F:	board/arcturus/
+diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
+index 451b0eeff5..adfca4dbe3 100644
+--- a/package/linux-tools/Config.in
++++ b/package/linux-tools/Config.in
+@@ -102,6 +102,27 @@ config BR2_PACKAGE_LINUX_TOOLS_PERF_NEEDS_HOST_PYTHON3
  
--TRACE_CMD_VERSION = 2.9.7
-+TRACE_CMD_VERSION = 3.1.7
- TRACE_CMD_SOURCE = trace-cmd-v$(TRACE_CMD_VERSION).tar.gz
- TRACE_CMD_SITE = \
- 	https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/snapshot
- TRACE_CMD_LICENSE = GPL-2.0, LGPL-2.1
- TRACE_CMD_LICENSE_FILES = COPYING COPYING.LIB LICENSES/GPL-2.0 LICENSES/LGPL-2.1
- 
--TRACE_CMD_DEPENDENCIES = host-pkgconf
-+TRACE_CMD_DEPENDENCIES = host-pkgconf libtraceevent libtracefs
- TRACE_CMD_MAKE_OPTS = prefix=/usr etcdir=/etc
- 
- ifeq ($(BR2_PACKAGE_AUDIT),y)
-@@ -34,6 +34,8 @@ ifeq ($(BR2_sparc64),y)
- TRACE_CMD_CFLAGS += -fPIC
  endif
  
-+TRACE_CMD_CFLAGS += $($(HOST_DIR)/bin/pkg-config --cflags libtracefs)
++config BR2_PACKAGE_LINUX_TOOLS_RTLA
++	bool "rtla"
++	select BR2_PACKAGE_LINUX_TOOLS
++	select BR2_PACKAGE_LIBTRACEFS
++	help
++	  These tracers allow performing latency analysis, for which the
++	  rtla tool provides wrapper commands to visualize and extract
++	  latency traces and reports.
 +
- # trace-cmd use CPPFLAGS to add some extra flags.
- # But like for CFLAGS, $(TARGET_CPPFLAGS) contains _LARGEFILE64_SOURCE
- # that causes build problems.
++	  rtla includes three tracers, which have been introduced in
++	  different kernel versions:
++	    - Linux 5.19 introduced the osnoise and timerlat tracers,
++	    - Linux 6.3 introduced the hwnoise tracer
++
++	  osnoise and timerlat are always installed, while hwnoise is
++	  installed if your kernel is recent enough.
++
++	  Note: rtla in kernels before 5.19 had additional dependencies,
++	  not available in Buildroot, so only rtla in kernels 5.19
++	  onwards is actually supported in Buildroot.
++
+ config BR2_PACKAGE_LINUX_TOOLS_SELFTESTS
+ 	bool"selftests"
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # bash
+diff --git a/package/linux-tools/linux-tool-rtla.mk.in b/package/linux-tools/linux-tool-rtla.mk.in
+new file mode 100644
+index 0000000000..449371ddfe
+--- /dev/null
++++ b/package/linux-tools/linux-tool-rtla.mk.in
+@@ -0,0 +1,52 @@
++################################################################################
++#
++# rtla
++#
++################################################################################
++
++LINUX_TOOLS += rtla
++
++RTLA_DEPENDENCIES = host-pkgconf libtracefs
++RTLA_MAKE_OPTS = $(LINUX_MAKE_FLAGS) \
++	CC=$(TARGET_CC) \
++	EXTRA_CFLAGS="-D_GNU_SOURCE" \
++	LDFLAGS="$(TARGET_LDFLAGS)" \
++	PKG_CONFIG_PATH=$(STAGING_DIR)/usr/lib/pkgconfig
++
++ifeq ($(BR2_TOOLCHAIN_HAS_SSP),)
++define RTLA_DISABLE_STACK_PROTECTOR
++	$(SED) 's/-fstack-protector.* //' $(LINUX_DIR)/tools/tracing/rtla/Makefile
++endef
++endif
++
++define RTLA_LINUX_CONFIG_FIXUPS
++	$(call KCONFIG_ENABLE_OPT,CONFIG_FTRACE)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_TIMERLAT_TRACER)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_HIST_TRIGGERS)
++endef
++
++define RTLA_BUILD_CMDS
++	$(Q)if ! grep install $(LINUX_DIR)/tools/tracing/rtla/Makefile >/dev/null 2>&1 ; then \
++		echo "Your kernel version is too old and does not implement the rtla tool." ; \
++		echo "At least kernel 5.19 must be used." ; \
++		exit 1 ; \
++	fi
++	$(RTLA_DISABLE_STACK_PROTECTOR)
++	$(TARGET_MAKE_ENV) $(MAKE) $(RTLA_MAKE_OPTS) \
++		-C $(LINUX_DIR)/tools/tracing rtla
++endef
++
++# make rtla_install build and install by default documentation using rst2man
++# but it's not available in Buildroot and we don't want manual files in target
++# folder so let's simply install the resulting rtla binary and create symlinks
++# like Linux does in its tools/tracing/rtla/Makefile
++define RTLA_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 -D $(LINUX_DIR)/tools/tracing/rtla/rtla $(TARGET_DIR)/usr/bin
++	ln -sf rtla $(TARGET_DIR)/usr/bin/osnoise
++	ln -sf rtla $(TARGET_DIR)/usr/bin/timerlat
++
++	# Check if hwnoise is provided or not
++	if grep -q hwnoise $(LINUX_DIR)/tools/tracing/rtla/Makefile; then \
++		ln -sf rtla $(TARGET_DIR)/usr/bin/hwnoise ; \
++	fi
++endef
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
