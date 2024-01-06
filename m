@@ -4,85 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3286FC46CD2
-	for <buildroot@archiver.kernel.org>; Sat,  6 Jan 2024 22:43:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7D75C46CD2
+	for <buildroot@archiver.kernel.org>; Sat,  6 Jan 2024 23:01:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D280A60AE5;
-	Sat,  6 Jan 2024 22:43:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D280A60AE5
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8CB1960B3B;
+	Sat,  6 Jan 2024 23:01:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8CB1960B3B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jgwqgxAUweJf; Sat,  6 Jan 2024 22:43:30 +0000 (UTC)
+	with ESMTP id fFVf2v2XmRaW; Sat,  6 Jan 2024 23:01:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 067D260A5D;
-	Sat,  6 Jan 2024 22:43:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 067D260A5D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0B5261BF2B3
- for <buildroot@lists.busybox.net>; Sat,  6 Jan 2024 22:43:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AE0A460AE5;
+	Sat,  6 Jan 2024 23:01:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE0A460AE5
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1A0321BF384
+ for <buildroot@lists.busybox.net>; Sat,  6 Jan 2024 23:01:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D87D841E19
- for <buildroot@lists.busybox.net>; Sat,  6 Jan 2024 22:43:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D87D841E19
+ by smtp3.osuosl.org (Postfix) with ESMTP id E67A560AE5
+ for <buildroot@lists.busybox.net>; Sat,  6 Jan 2024 23:01:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E67A560AE5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HPKVQ72edrJS for <buildroot@lists.busybox.net>;
- Sat,  6 Jan 2024 22:43:25 +0000 (UTC)
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 96F3941DF1
- for <buildroot@buildroot.org>; Sat,  6 Jan 2024 22:43:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96F3941DF1
-Received: by mail-wm1-x32b.google.com with SMTP id
- 5b1f17b1804b1-40d6b4e2945so9430185e9.0
- for <buildroot@buildroot.org>; Sat, 06 Jan 2024 14:43:25 -0800 (PST)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OoPGy_QqulzL for <buildroot@lists.busybox.net>;
+ Sat,  6 Jan 2024 23:01:37 +0000 (UTC)
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com
+ [IPv6:2607:f8b0:4864:20::22e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 93E1E6079E
+ for <buildroot@buildroot.org>; Sat,  6 Jan 2024 23:01:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 93E1E6079E
+Received: by mail-oi1-x22e.google.com with SMTP id
+ 5614622812f47-3bbc755167fso849498b6e.0
+ for <buildroot@buildroot.org>; Sat, 06 Jan 2024 15:01:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704581003; x=1705185803;
+ d=1e100.net; s=20230601; t=1704582096; x=1705186896;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=HsbEFrAl+RALDI25g8yk5xSAR5aT/9qW1eHQkz2ToE8=;
- b=U8fC8V6+7AXtV5T+nnbuBFrM/uhBfM3knOYrdMGTEE8f+fr8FZCHDQsBFCMIQS57Xg
- 1NH4oCgQjRO9xtFjY+yToeHqfl2m3R79vMKAFx1SmXTJkO6fII/eMylJvMHd2tRL5gUX
- XszSM9AMfyWNjb36GxJ68HnAA06QVKB1zMdhaN1IjjUz/arf7jQtfBxIZrNUZE3R7vMS
- lH+kNYFwGlvQRwGz4BhfOPl655Y3y03q5tU+ROWiXhLobSz5fyql5vDB14EoMnVMmhUU
- OhWNudAChukaQF+dNkRiBP9+Bz453w9eCtcRBe+ZNk5Au+C4y+Wie8RCBKr6Jk6BVqql
- 4HNg==
-X-Gm-Message-State: AOJu0Yz0bu0TSynEdixtDWaY5lq+u9PJclXLXcSzJTxIKqXI1iuqwR++
- D+fLm1vOtOLTeB1+CFcU2uwO9tutqC4=
-X-Google-Smtp-Source: AGHT+IEA+RD1Rs3xT0Z6JI8tyDC2g7sQLHpoSrUs5DjmaLeDoR4of7O69QVrioYyMOeJhoJoErM8jA==
-X-Received: by 2002:a05:600c:b89:b0:40d:fc99:9ed7 with SMTP id
- fl9-20020a05600c0b8900b0040dfc999ed7mr539911wmb.150.1704581002863; 
- Sat, 06 Jan 2024 14:43:22 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- fc7-20020a05600c524700b0040d7b340e07sm5846686wmb.45.2024.01.06.14.43.22
+ bh=gd6DHh6Xl7X9XRvA8JB2RiIjCEq72pNkoDXzY+cYHD0=;
+ b=Y2nxDMSTwTw/JAE0vy3MR59AsU56lVQ10EXn2N/xfHOdlvWI9ggWdcR7Zd2X8k44V/
+ eo/YUZ2CNaFmqoBBoLNo5pEx5SS7LjzABrRdXmFcx/CviQH8XMvp03HIpYnuOltZ7GP6
+ HLL3rQ44LK8DcFNtFr8lR2YGs4GyGeJUFTLkMzI/nviNPQgE2xoOJsQIvWUJ700CG9jn
+ p787ePFBCk+MEWR5/Iubiee3kfrcS7fr/iWPL4QopfOJueQD+IyQAIivBPbSpV4n8/cB
+ k9DXWP04Dg9zW/u5aIL3vZQ02WM+MvuMTXlt3JjsCzQPSjBzRNSxisfHsupl3MJEKadK
+ MzZw==
+X-Gm-Message-State: AOJu0YylkM3318HdVtdsuav3D98jFNskpkkWyKFB/Hpo9lBfAkjQ43zr
+ vRap8kdRuvCCTcYYHJ4x1UgIolWpKlhMAQSEHZvUytlN3z0=
+X-Google-Smtp-Source: AGHT+IH/TSNgvwgwQY/YYwgCBBK6R+pYjVEkPRiEA9EukYHm92w0Q/kTb6k+ravaKTiuONX8k78ijQ==
+X-Received: by 2002:a05:6808:3a14:b0:3bb:cddf:4258 with SMTP id
+ gr20-20020a0568083a1400b003bbcddf4258mr2587950oib.62.1704582095696; 
+ Sat, 06 Jan 2024 15:01:35 -0800 (PST)
+Received: from desktop-oi0kn2b.lan (75-174-33-82.boid.qwest.net.
+ [75.174.33.82]) by smtp.gmail.com with ESMTPSA id
+ u22-20020aa78396000000b006d974fe1b0esm3501540pfm.7.2024.01.06.15.01.34
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 06 Jan 2024 14:43:22 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Sat, 06 Jan 2024 15:01:35 -0800 (PST)
+From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Sat,  6 Jan 2024 23:43:20 +0100
-Message-ID: <20240106224320.3638136-1-fontaine.fabrice@gmail.com>
+Date: Sat,  6 Jan 2024 16:01:31 -0700
+Message-ID: <20240106230132.423302-1-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1704581003; x=1705185803; darn=buildroot.org;
+ d=amarulasolutions.com; s=google; t=1704582096; x=1705186896;
+ darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=HsbEFrAl+RALDI25g8yk5xSAR5aT/9qW1eHQkz2ToE8=;
- b=Uuu8yoPhd9bObBjaYQCyOTkEWxO9LAaG7rjaQzHIreThpsg41E0BKWH7YsibSzp/LC
- MbwOAn0f+MYjMWQ5GC5nqdjkaygH3Q6xNpkLZ1X4JkjfHYABMYvDUOq8w7ZHefK7mQMe
- F87oqzuqOCHkYThP7r06/65RyFmtS/L6IRPAph88Q7GtgSqFjjvkvUcRsDsHwBEELoHH
- jmrjTVSdIF8Yk24w7qTFQa/w8IIZJ/OfApATTiBWdGvi6kicplJEULdvslREbES011l3
- wwF0mJ9vnFxEgk4PMbCRckAU4DofBlKwITYwVCtiB6ClBFkXG/fdv9+zGgByZUj3gTKy
- /mqQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Uuu8yoPh
-Subject: [Buildroot] [PATCH 1/1] package/bayer2rgb-neon: bump to latest
- commit
+ bh=gd6DHh6Xl7X9XRvA8JB2RiIjCEq72pNkoDXzY+cYHD0=;
+ b=qVKOzcn+hZ5wJpeeIPySLZMRth8EYfQRFWEukwwrZuKKEeMMlqDcl3CCPwMbLBPURz
+ HyPWeU2Z1gsOrJZ93oLtlt3esAMuHea8AyAWKewUwDplZOPpaauAsxra5J3cQEYfXSNX
+ CIj4RMIzqWyodsEAJVqTpExZ8X3UYNDeXaFfQ=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=qVKOzcn+
+Subject: [Buildroot] [PATCH v6] ivi-homescreen: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,139 +92,199 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eloi Bail <eloi.bail@savoirfairelinux.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop patch (already in version)
+Much like flutter-pi, this package is a Flutter embedder used to run Flutter
+applications. However, unlike Flutter-pi, this package requires a Wayland
+compositor to run, which flutter-pi does not support. Furthermore, flutter-pi
+lacks several plugins and features that ivi-homescreen supports, such as:
+  - Dart VM console redirection
+  - DLT logging
+  - Accessibility
+  - Compositor region
+  - Compositor surface
+  - Desktop Window
+  - Go Router
+  - Isolate
+  - Keyboard Manager
+  - Layer Playground
+  - Mouse Cursor
+  - PackageInfo
+  - Platform
+  - Platform Views
+  - Restoration
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .checkpackageignore                           |  1 -
- ...add-some-_always_inline_-annotations.patch | 75 -------------------
- package/bayer2rgb-neon/bayer2rgb-neon.hash    |  2 +-
- package/bayer2rgb-neon/bayer2rgb-neon.mk      |  2 +-
- 4 files changed, 2 insertions(+), 78 deletions(-)
- delete mode 100644 package/bayer2rgb-neon/0001-add-some-_always_inline_-annotations.patch
+The following plugins and options are hardcoded to off:
+  - Crash handler: Requires a newer version of sentry-native.
+  - File selector: Requires the zenity package.
+  - Firebase-core: Requires the firebase-cpp-sdk package.
+  - URL Launcher: Requires a runtime-dependency on xdg-open.
+  - BUILD_TEXTURE_NAVI_RENDER_EGL: Failes to build.
+  - BUILD_TEXTURE_TEST_EGL: Fails to build.
+  - ENABLE_AGL_CLIENT: Used for Automitve Grade Linux (AGL).
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 659939e4e3..21b24e7b44 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -180,7 +180,6 @@ package/bandwidthd/0001-src-bandwidthd.h-fix-build-with-gcc-10.patch Upstream
- package/bash/0001-input.h-add-missing-include-on-stdio.h.patch Upstream
- package/bash/0002-parse.y-fix-compilation-for-non-multibyte-builds.patch Upstream
- package/bash/0003-configure-invert-condition-for-strtoimax-builtin.patch Upstream
--package/bayer2rgb-neon/0001-add-some-_always_inline_-annotations.patch Upstream
- package/bc/0001-bc-use-MAKEINFO-variable-for-docs.patch Upstream
- package/bc/0002-notice-read-and-write-errors-on-input-and-output.patch Upstream
- package/bc/0003-dc-fix-exit-code-of-q-command.patch Upstream
-diff --git a/package/bayer2rgb-neon/0001-add-some-_always_inline_-annotations.patch b/package/bayer2rgb-neon/0001-add-some-_always_inline_-annotations.patch
-deleted file mode 100644
-index 281f90c875..0000000000
---- a/package/bayer2rgb-neon/0001-add-some-_always_inline_-annotations.patch
-+++ /dev/null
-@@ -1,75 +0,0 @@
--From 4e5d8be1b0d18453b76fca2c5139222a071dd207 Mon Sep 17 00:00:00 2001
--From: Enrico Scholz <enrico.scholz@sigma-chemnitz.de>
--Date: Mon, 4 Jul 2022 12:05:30 +0200
--Subject: [PATCH] add some _always_inline_ annotations
--
--enforce inlining to fix build errors with '-Og'
--
--fixes #1
--
--Signed-off-by: Enrico Scholz <enrico.scholz@sigma-chemnitz.de>
--[Retrieved from:
--https://gitlab-ext.sigma-chemnitz.de/ensc/bayer2rgb/-/commit/4e5d8be1b0d18453b76fca2c5139222a071dd207]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/convert.c | 5 +++--
-- src/main.c    | 5 +++--
-- 2 files changed, 6 insertions(+), 4 deletions(-)
--
--diff --git a/src/convert.c b/src/convert.c
--index c852a14..ec77040 100644
----- a/src/convert.c
--+++ b/src/convert.c
--@@ -17,8 +17,9 @@
-- #include <stdbool.h>
-- #include <assert.h>
-- #include "bayer2rgb.h"
--+#include "compiler.h"
-- 
---static bool have_neon()
--+inline static  _always_inline_ bool have_neon()
-- {
-- #ifdef HAVE_NEON
-- 	return true;
--@@ -27,7 +28,7 @@ static bool have_neon()
-- #endif
-- }
-- 
---static bool have_cplusplus()
--+inline static  _always_inline_ bool have_cplusplus()
-- {
-- #ifdef HAVE_CPLUSPLUS
-- 	return true;
--diff --git a/src/main.c b/src/main.c
--index 841a142..087e8e5 100644
----- a/src/main.c
--+++ b/src/main.c
--@@ -33,6 +33,7 @@
-- 
-- #include "src/bayer2rgb.h"
-- #include "src/bayer2rgb-cmdline.h"
--+#include "src/compiler.h"
-- 
-- #define BPP_TO_BYTE(_bpp)	(((_bpp) + 7) / 8)
-- 
--@@ -68,7 +69,7 @@ struct x_image_out {
-- 	size_t			total_size;
-- };
-- 
---inline static bool have_neon(void)
--+inline static  _always_inline_ bool have_neon(void)
-- {
-- #ifdef HAVE_NEON
-- 	return true;
--@@ -77,7 +78,7 @@ inline static bool have_neon(void)
-- #endif
-- }
-- 
---static bool have_cplusplus()
--+inline static  _always_inline_ bool have_cplusplus()
-- {
-- #ifdef HAVE_CPLUSPLUS
-- 	return true;
---- 
--GitLab
--
-diff --git a/package/bayer2rgb-neon/bayer2rgb-neon.hash b/package/bayer2rgb-neon/bayer2rgb-neon.hash
-index 26a14fcb51..7b26073de0 100644
---- a/package/bayer2rgb-neon/bayer2rgb-neon.hash
-+++ b/package/bayer2rgb-neon/bayer2rgb-neon.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  edf451dbb52ad67eb35f9043390bd75ea7228d493c99184aae80b3bd27beab62  bayer2rgb-neon-15feb1115b4828488cc36d09f625e23e8b6a0ec5-br1.tar.gz
-+sha256  35b38a40e98e9fa7fb8042c718f460fb806e916d2bf3e9721c07bbe4b42faad5  bayer2rgb-neon-bc950b3398ba034fe5cc39f625796a6111cdb87f-br1.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/bayer2rgb-neon/bayer2rgb-neon.mk b/package/bayer2rgb-neon/bayer2rgb-neon.mk
-index b0b9882def..e6bd09c3fd 100644
---- a/package/bayer2rgb-neon/bayer2rgb-neon.mk
-+++ b/package/bayer2rgb-neon/bayer2rgb-neon.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BAYER2RGB_NEON_VERSION = 15feb1115b4828488cc36d09f625e23e8b6a0ec5
-+BAYER2RGB_NEON_VERSION = bc950b3398ba034fe5cc39f625796a6111cdb87f
- BAYER2RGB_NEON_SITE = https://gitlab-ext.sigma-chemnitz.de/ensc/bayer2rgb.git
- BAYER2RGB_NEON_SITE_METHOD = git
- BAYER2RGB_NEON_LICENSE = GPL-3.0
+The ENABLE_XDG_CLIENT=ON option is a requirement to run Flutter apps.
+If this option is disabled, ivi-homescreen segfaults when starting an
+application.
+
+Finally, there is a need for a patch that fixes the audio-players plugin:
+If the audio-players plugin is the only plugin selected, several compilation
+errors occure because of undeclared definitions, as the standard_method_codec.h
+header file is missing.
+
+Upstream-status: https://github.com/toyota-connected/ivi-homescreen/pull/133
+
+This package has been tested on a x86_64 host with an AMD Ryzen 9 6900HS
+with Docker 24.0.5:
+  - The following distributions:
+    - Fedora 39: Host system
+    - Ubuntu 22.04: Docker
+    - Debian 11: Docker
+
+  - The following targets:
+    - BR2_aarch64
+    - BR2_arm
+    - BR2_x86_64
+
+With the following defconfig:
+```
+BR2_x86_64=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_GLIBC_STABLE=y
+BR2_CCACHE=y
+BR2_INIT_SYSTEMD=y
+BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+BR2_SYSTEM_DEFAULT_PATH="/bin:/sbin:/usr/bin:/usr/sbin"
+BR2_GENERATE_LOCALE="en_US.UTF-8"
+BR2_ROOTFS_POST_BUILD_SCRIPT="board/pc/post-build.sh"
+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pc/post-image-efi.sh"
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.24"
+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/pc/linux.config"
+BR2_LINUX_KERNEL_INSTALL_TARGET=y
+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
+BR2_PACKAGE_FOOT=y
+BR2_PACKAGE_IVI_HOMESCREEN=y
+BR2_PACKAGE_IVI_HOMESCREEN_DART_VM_LOGGING=y
+BR2_PACKAGE_IVI_HOMESCREEN_DLT=y
+BR2_PACKAGE_IVI_HOMESCREEN_XDG_CLIENT=y
+BR2_PACKAGE_IVI_HOMESCREEN_AGL_CLIENT=y
+BR2_PACKAGE_IVI_HOMESCREEN_IVI_SHELL=y
+BR2_PACKAGE_IVI_HOMESCREEN_EGL_TRANSPARENCY=y
+BR2_PACKAGE_IVI_HOMESCREEN_EGL_ENABLE_3D=y
+BR2_PACKAGE_IVI_HOMESCREEN_EGL_MULTISAMPLE=y
+BR2_PACKAGE_IVI_HOMESCREEN_ACCESSIBILITY_PLUGIN=y
+BR2_PACKAGE_IVI_HOMESCREEN_COMP_REGION_PLUGIN=y
+BR2_PACKAGE_IVI_HOMESCREEN_COMP_SURF_PLUGIN=y
+BR2_PACKAGE_IVI_HOMESCREEN_DESKTOP_WINDOW_PLUGIN=y
+BR2_PACKAGE_IVI_HOMESCREEN_GO_ROUTER_PLUGIN=y
+BR2_PACKAGE_IVI_HOMESCREEN_INTEGRATION_TEST_PLUGIN=y
+BR2_PACKAGE_IVI_HOMESCREEN_ISOLATE_PLUGIN=y
+BR2_PACKAGE_IVI_HOMESCREEN_KEYBOARD_MANAGER_PLUGIN=y
+BR2_PACKAGE_IVI_HOMESCREEN_KEY_EVENT_PLUGIN=y
+BR2_PACKAGE_IVI_HOMESCREEN_LAYER_PLAYGROUND_PLUGIN=y
+BR2_PACKAGE_IVI_HOMESCREEN_LOGGING_PLUGIN=y
+BR2_PACKAGE_IVI_HOMESCREEN_MOUSE_CURSOR_PLUGIN=y
+BR2_PACKAGE_IVI_HOMESCREEN_PACKAGE_INFO_PLUGIN=y
+BR2_PACKAGE_IVI_HOMESCREEN_PLATFORM_PLUGIN=y
+BR2_PACKAGE_IVI_HOMESCREEN_PLATFORM_VIEWS_PLUGIN=y
+BR2_PACKAGE_IVI_HOMESCREEN_RESTORATION_PLUGIN=y
+BR2_PACKAGE_IVI_HOMESCREEN_TEXT_INPUT_PLUGIN=y
+BR2_PACKAGE_IVI_HOMESCREEN_URL_LAUNCHER_PLUGIN=y
+BR2_PACKAGE_IVI_HOMESCREEN_AUDIO_PLAYERS=y
+BR2_PACKAGE_IVI_HOMESCREEN_FLUTTER_SECURE_STORAGE_PLUGIN=y
+BR2_PACKAGE_IVI_HOMESCREEN_GOOGLE_SIGN_IN_PLUGIN=y
+BR2_PACKAGE_IVI_HOMESCREEN_GSTREAMER_EGL_PLUGIN=y
+BR2_PACKAGE_IVI_HOMESCREEN_OPENGL_TEXTURE_PLUGIN=y
+BR2_PACKAGE_SWAY=y
+BR2_PACKAGE_SWAY_SWAYBAR=y
+BR2_PACKAGE_SWAY_SWAYBAR_TRAY=y
+BR2_PACKAGE_SWAY_SWAYNAG=y
+BR2_PACKAGE_FLUTTER_GALLERY=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL=y
+BR2_PACKAGE_MESA3D_OSMESA_GALLIUM=y
+BR2_PACKAGE_MESA3D_OPENGL_ES=y
+BR2_PACKAGE_ACPID=y
+BR2_PACKAGE_FLUTTER_ENGINE=y
+BR2_PACKAGE_CONNMAN=y
+BR2_PACKAGE_CONNMAN_WIFI=y
+BR2_PACKAGE_CONNMAN_CLIENT=y
+BR2_TARGET_ROOTFS_EXT2=y
+BR2_TARGET_ROOTFS_EXT2_4=y
+BR2_TARGET_ROOTFS_EXT2_SIZE="512M"
+BR2_TARGET_GRUB2=y
+BR2_TARGET_GRUB2_X86_64_EFI=y
+BR2_PACKAGE_HOST_DOSFSTOOLS=y
+BR2_PACKAGE_HOST_GENIMAGE=y
+BR2_PACKAGE_HOST_MTOOLS=y
+```
+
+The image is then booted using qemu with the following
+command:
+```
+LIBGL_DRIVERS_PATH=/usr/lib64/dri \
+FONTCONFIG_PATH=/etc/fonts \
+qemu-system-x86_64 \
+  -enable-kvm \
+  -M pc \
+  -cpu host \
+  -m 1024M \
+  -bios /usr/share/OVMF/OVMF_CODE.fd \
+  -drive file=output/images/disk.img,if=virtio,format=raw \
+  -net nic,model=virtio \
+  -net user \
+  -device virtio-vga-gl \
+  -display gtk,gl=es,show-cursor=on \
+  -usb \
+  -device usb-ehci,id=ehci \
+  -device usb-tablet,bus=usb-bus.0
+```
+
+After logging in, type:
+ - mkdir -p /tmp/sway && export XDG_RUNTIME_DIR=/tmp/sway && sway
+ - bring up a terminal with `windows key + return`
+ - Type `homescreen --b=/usr/share/flutter/gallery/release/`
+
+
+Changelog:
+- Removed how I tested the package in the commit log [Yann]
+- Added the explicity dependency list of flutter and flutter-engine [Yann]
+- Removed XDG, and AGL clients as options.
+- Enabled XDG client by default.
+- Added 0001-add-missing-headers-to-the-audio-players-plugin.patch
+- Select BR2_PACKAGE_LIBCURL_FORCE_TLS and BR2_PACKAGE_OPENSSL if the
+  BR2_PACKAGE_IVI_HOMESCREEN_GOOGLE_SIGN_IN_PLUGIN is selected. [Yann]
+- Added dependencies of libegl, mesa3d, and libdrm if those backends are
+  enabled. [Yann]
+- Cleaned up licensing. [Yann]
+- Cleaned up and reduced the amount of ifeq else endif blocks [Yann]
+- Disabled the URL Launcher plugin.
+- Added help menus to as many plugins as I could.
+- Removed BR2_PACKAGE_IVI_HOMESCREEN_EGL_TEXTURE [Yann]
+
+Adam Duskett (1):
+  package/ivi-homescreen: new package
+
+ DEVELOPERS                                    |   1 +
+ package/Config.in                             |   1 +
+ ...-headers-to-the-audio-players-plugin.patch |  82 ++++++
+ package/ivi-homescreen/Config.in              | 268 ++++++++++++++++++
+ package/ivi-homescreen/ivi-homescreen.hash    |  21 ++
+ package/ivi-homescreen/ivi-homescreen.mk      | 135 +++++++++
+ 6 files changed, 508 insertions(+)
+ create mode 100644 package/ivi-homescreen/0001-add-missing-headers-to-the-audio-players-plugin.patch
+ create mode 100644 package/ivi-homescreen/Config.in
+ create mode 100644 package/ivi-homescreen/ivi-homescreen.hash
+ create mode 100644 package/ivi-homescreen/ivi-homescreen.mk
+
 -- 
 2.43.0
 
