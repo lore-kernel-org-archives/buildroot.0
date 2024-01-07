@@ -4,47 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCECEC47073
-	for <buildroot@archiver.kernel.org>; Sun,  7 Jan 2024 16:53:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 215F3C47073
+	for <buildroot@archiver.kernel.org>; Sun,  7 Jan 2024 16:54:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 50C8240191;
-	Sun,  7 Jan 2024 16:53:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 50C8240191
+	by smtp2.osuosl.org (Postfix) with ESMTP id B74AF400CF;
+	Sun,  7 Jan 2024 16:54:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B74AF400CF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OmogywxTCkvZ; Sun,  7 Jan 2024 16:53:18 +0000 (UTC)
+	with ESMTP id U8loUQxNFuEB; Sun,  7 Jan 2024 16:54:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4A1EA401C2;
-	Sun,  7 Jan 2024 16:53:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4A1EA401C2
+	by smtp2.osuosl.org (Postfix) with ESMTP id B5A7B40191;
+	Sun,  7 Jan 2024 16:54:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B5A7B40191
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C113F1BF863
- for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 16:53:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7581D1BF863
+ for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 16:54:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A11C682305
- for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 16:53:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A11C682305
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4E2C6812FC
+ for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 16:54:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E2C6812FC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UEXxFgjPjf4f for <buildroot@lists.busybox.net>;
- Sun,  7 Jan 2024 16:53:13 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C4AAF822F4
- for <buildroot@buildroot.org>; Sun,  7 Jan 2024 16:53:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C4AAF822F4
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B0D0D847BA; Sun,  7 Jan 2024 16:53:13 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 7 Jan 2024 17:52:07 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c740676c51de9ee66e32cb41bfeed5e6a446ceed
-X-Git-Newrev: 9501bc80f5c34cd04bdc686cd74324beb452649e
-X-Patchwork-Hint: ignore
-Message-Id: <20240107165313.B0D0D847BA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/liquid-dsp: fix build without neon
+ with ESMTP id Y2yakJ_hwpSF for <buildroot@lists.busybox.net>;
+ Sun,  7 Jan 2024 16:54:54 +0000 (UTC)
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1043781258
+ for <buildroot@buildroot.org>; Sun,  7 Jan 2024 16:54:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1043781258
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:4f89:5708:1633:580e])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 88899B0054E;
+ Sun,  7 Jan 2024 17:54:47 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 07 Jan 2024 17:54:47 +0100
+Date: Sun, 7 Jan 2024 17:54:47 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <ZZrXV0IzLjKOuvU7@landeda>
+References: <20240107132346.3161192-1-fontaine.fabrice@gmail.com>
+ <ZZrHtio9hrWSwB16@landeda>
+ <CAPi7W82KB5bmo_+2C87CdS1kBy76UmMm0S1e0A2dg77ce1f1JQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <CAPi7W82KB5bmo_+2C87CdS1kBy76UmMm0S1e0A2dg77ce1f1JQ@mail.gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1704646490;
+ bh=wMG0GBSqUo97HrFMeq9OPVSEEq8cqIwLFwrnKJ+bMGU=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=I2jnPb/q9nlXE6WYM1eCFhw6CZU2ByFQTKvEzUmWWxQiM6gy81UnJgKjBMnm5MBm4
+ Zng9vLPm56Vs2wU/mHyKktQy4g5DjYr/B6ycJ1+B5y4QjJdNCqkXyy9LnMiB5qRdFB
+ xdsAWnURF4vn2TJ+J/lihk55AI+JPNJvytuDodZ8siokKToXOOxPuVFbMX1miVH2Ku
+ iy8c1B0ioCWmrKaif99vXIuavO16/NLYZSB5Pfkno/f6/fMsyenGwL+HmRxuPCsuIg
+ ZuABDJa4nQaDXjj8lREKL2acVxjPq4mq0Z/BufmTYvpVW4o3J53raZEKOeqjenSFNW
+ UYmTR7Q5Tsq9A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=I2jnPb/q
+Subject: Re: [Buildroot] [PATCH 1/1] package/liquid-dsp: fix build without
+ neon
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,74 +77,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Guillaume William Brs <guillaume.bressaix@gmail.com>,
+ buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9501bc80f5c34cd04bdc686cd74324beb452649e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fix the following build failure without neon raised since bump to
-version 1.4.0 in commit 2f7f8f381394207bfb029ec395f5ced5695a0a2e and
-https://github.com/jgaeddert/liquid-dsp/commit/c821187dd9af2758c8e3c82e95eaf041b8ac81a0:
-
-/home/peko/autobuild/instance-0/output-1/host/bin/arm-none-linux-gnueabi-gcc -std=gnu11 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2 -g0 -D_FORTIFY_SOURCE=2  -ffast-math -mcpu=cortex-a7 -mfloat-abi=hard -mfpu=neon-vfpv4  -Wall -fPIC -Wno-deprecated -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I. -Iinclude  -c -o src/audio/src/cvsd.o src/audio/src/cvsd.c
-In file included from /home/peko/autobuild/instance-0/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/features.h:388:0,
-                 from /home/peko/autobuild/instance-0/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/stdlib.h:24,
-                 from src/libliquid.c:25:
-/home/peko/autobuild/instance-0/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/gnu/stubs.h:10:29: fatal error: gnu/stubs-hard.h: No such file or directory
- # include <gnu/stubs-hard.h>
-                             ^
-
-Indeed, upstream considers that NEON is available on all ARM platforms,
-and their configure.ac contains that code snippet:
-  239     arm|armv7*|armv8*)
-  240         # assume neon instructions are available
-  241         # TODO: check for Neon availability
-  242
-  243         # ARM architecture : use neon extensions
-
-Fixes:
- - http://autobuild.buildroot.org/results/36b3c2220c462e7a20262fd1b9064d9aeb6c9ec4
- - http://autobuild.buildroot.org/results/881826b4b6c141e59a0da2d7d1ad55d3709fdb95
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[yann.morin.1998@free.fr:
-  - refactor with LIQUID_DSP_SIMDOVERRIDE
-  - add comment about --disable-simdoverride
-  - extend commit log with upstream code snippet
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/liquid-dsp/liquid-dsp.mk | 11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/package/liquid-dsp/liquid-dsp.mk b/package/liquid-dsp/liquid-dsp.mk
-index ed0edacd94..eb4cda67a5 100644
---- a/package/liquid-dsp/liquid-dsp.mk
-+++ b/package/liquid-dsp/liquid-dsp.mk
-@@ -37,7 +37,18 @@ endif
- 
- # disable altivec, it has build issues
- ifeq ($(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpc64le),y)
-+LIQUID_DSP_SIMDOVERRIDE = y
-+endif
-+
-+# Upstream expects NEON on all ARM CPUs by default
-+ifeq ($(BR2_arm):$(BR2_ARM_FPU_NEON),y:)
-+LIQUID_DSP_SIMDOVERRIDE = y
-+endif
-+
-+ifeq ($(LIQUID_DSP_SIMDOVERRIDE),y)
- LIQUID_DSP_CONF_OPTS += --enable-simdoverride
-+# Do not add an else-clause to pass --disable-simdoverride, as it is
-+# non-functional, and behaves as --enable-simdoverride
- endif
- 
- LIQUID_DSP_CONF_OPTS += \
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+RmFicmljZSwgQWxsLAoKT24gMjAyNC0wMS0wNyAxNzoxMSArMDEwMCwgRmFicmljZSBGb250YWlu
+ZSBzcGFrZSB0aHVzbHk6Cj4gTGUgZGltLiA3IGphbnYuIDIwMjQgw6AgMTY6NDgsIFlhbm4gRS4g
+TU9SSU4gPHlhbm4ubW9yaW4uMTk5OEBmcmVlLmZyPiBhIMOpY3JpdCA6Cj4gPiBPbiAyMDI0LTAx
+LTA3IDE0OjIzICswMTAwLCBGYWJyaWNlIEZvbnRhaW5lIHNwYWtlIHRodXNseToKWy0tU05JUC0t
+XQo+ID4gPiAraWZlcSAoJChCUjJfYXJtKTokKEJSMl9BUk1fRlBVX05FT04pLHk6KQo+ID4gPiAr
+TElRVUlEX0RTUF9DT05GX09QVFMgKz0gLS1lbmFibGUtc2ltZG92ZXJyaWRlCj4gPiBVc3VhbGx5
+LCB3ZSBhZGQgYW4gZXhwbGljaXQgLS1kaXNhYmxlLiBBbnkgcmVhc29uIHdoeSBpdCB3YXMgbm90
+IGFkZGVkCj4gPiBoZXJlPwo+IEJlY2F1c2UgLS1kaXNhYmxlLXNpbWRvdmVycmlkZSBpcyBub3Qg
+c3VwcG9ydGVkLCB3b3JzdCwKPiAtLWRpc2FibGUtc2ltZG92ZXJyaWRlIGhhcyB0aGUgc2FtZSBl
+ZmZlY3QgdGhhbiAtLWVuYWJsZS1zaW1kb3ZlcnJpZGUsCj4gYmVjYXVzZSB1cHN0cmVhbSBkb2Vz
+bid0IGNoZWNrIHRoZSB2YWx1ZSBwcm92aWRlZCBieSB0aGUgdXNlcjoKPiBodHRwczovL2dpdGh1
+Yi5jb20vamdhZWRkZXJ0L2xpcXVpZC1kc3AvYmxvYi81NDMyZTMxN2UzYzMxZjA2OWU4MjIzZDE4
+NWMyODA3OGZjNDFjOGNjL2NvbmZpZ3VyZS5hYyNMNjQKCkFoLCBpbmRlZWQsIHRoYW5rcy4gSSBh
+bHNvIHNhdyB0aGF0IHRoZSBleGlzdGluZyBjb2RlIGRpZCBub3QgYWRkIGl0LApub3csIHNvIEkn
+dmUgcmVmYWN0b3JlZCB0aGUgY29kZSB0byBtYWtlIGl0IGV4cGxpY2l0IHdoeSB3ZSBkbyBub3Qg
+cGFzcwotLWRpc2FibGUtc2ltZG92ZXJyaWRlLCBhbmQgSSBleHRlbmRlZCB0aGUgY29tbWl0IGxv
+ZyB3aXRoIGFuIGV4Y2VycHQKZnJvbSB0aGUgY29uZmlndXJlLmFjIHdoaWxlIGF0IGl0LgoKQXBw
+bGllZCB0byBtYXN0ZXIsIHRoYW5rcy4KClJlZ2FyZHMsCllhbm4gRS4gTU9SSU4uCgotLSAKLi0t
+LS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4t
+LS0tLS0tLS0tLS0tLS0tLS0tLS4KfCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRk
+ZWQgfCAvIlwgQVNDSUkgUklCQk9OIHwgRXJpY3MnIGNvbnNwaXJhY3k6IHwKfCArMzMgNjYyIDM3
+NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWduZXIgfCBcIC8gQ0FNUEFJR04gICAgIHwgIF9fXyAgICAg
+ICAgICAgICAgIHwKfCArMzMgNTYxIDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAg
+QUdBSU5TVCAgICAgIHwgIFxlLyAgVGhlcmUgaXMgbm8gIHwKfCBodHRwOi8veW1vcmluLmlzLWEt
+Z2Vlay5vcmcvIHwgXy8qXF8gfCAvIFwgSFRNTCBNQUlMICAgIHwgICB2ICAgY29uc3BpcmFjeS4g
+IHwKJy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0tLS0t
+LS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0tLScKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRy
+b290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWls
+ZHJvb3QK
