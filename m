@@ -4,53 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45D3AC47074
-	for <buildroot@archiver.kernel.org>; Sun,  7 Jan 2024 11:21:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C336C47073
+	for <buildroot@archiver.kernel.org>; Sun,  7 Jan 2024 11:30:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EC6AC41DFC;
-	Sun,  7 Jan 2024 11:21:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC6AC41DFC
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3E1BF41AEF;
+	Sun,  7 Jan 2024 11:30:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E1BF41AEF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Zox5Dbl2ry7h; Sun,  7 Jan 2024 11:21:31 +0000 (UTC)
+	with ESMTP id f_-jTnkE7OOx; Sun,  7 Jan 2024 11:30:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4508A408F6;
-	Sun,  7 Jan 2024 11:21:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4508A408F6
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 806BE1BF4D5
- for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 11:21:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A7012417B9;
+	Sun,  7 Jan 2024 11:30:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A7012417B9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 32DF91BF4D5
+ for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 11:30:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 66D9E408F6
- for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 11:21:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 66D9E408F6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0ABCB4010F
+ for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 11:30:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0ABCB4010F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9SmKi0N3qb-N for <buildroot@lists.busybox.net>;
- Sun,  7 Jan 2024 11:21:27 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SwlAwqiV-CMJ for <buildroot@lists.busybox.net>;
+ Sun,  7 Jan 2024 11:29:58 +0000 (UTC)
 Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 70524408DE
- for <buildroot@buildroot.org>; Sun,  7 Jan 2024 11:21:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 70524408DE
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8B1AAC0003;
- Sun,  7 Jan 2024 11:21:25 +0000 (UTC)
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C5791400D0
+ for <buildroot@buildroot.org>; Sun,  7 Jan 2024 11:29:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C5791400D0
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 68DB5C0002;
+ Sun,  7 Jan 2024 11:29:54 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rMRDY-006dob-2y;
- Sun, 07 Jan 2024 12:21:24 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rMRLl-006dyg-3C;
+ Sun, 07 Jan 2024 12:29:53 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: <yann.morin@orange.com>
-References: <01cce88291ac132ca8c881eaaaf3b02a4efa68a9.1702887543.git.yann.morin@orange.com>
-Date: Sun, 07 Jan 2024 12:21:24 +0100
-In-Reply-To: <01cce88291ac132ca8c881eaaaf3b02a4efa68a9.1702887543.git.yann.morin@orange.com>
- (yann morin's message of "Mon, 18 Dec 2023 09:19:03 +0100")
-Message-ID: <871qat1j9n.fsf@48ers.dk>
+To: Bernd Kuhls <bernd@kuhls.net>
+References: <20231217172514.1897244-1-bernd@kuhls.net>
+Date: Sun, 07 Jan 2024 12:29:53 +0100
+In-Reply-To: <20231217172514.1897244-1-bernd@kuhls.net> (Bernd Kuhls's message
+ of "Sun, 17 Dec 2023 18:25:14 +0100")
+Message-ID: <87wmslz8i6.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH] editorconfig: fix wildcard expansion
+Subject: Re: [Buildroot] [PATCH 1/1] package/transmission: bump version to
+ 4.0.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,20 +69,12 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>>   <yann.morin@orange.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
 
- > From: "Yann E. MORIN" <yann.morin@orange.com>
- > It turns out that wildcard expansion, * and ?, is not performed in
- > matching lists {...}, at least in the vim plugin. The spec is not clear
- > about that, but refer to "pattern matching through Unix shell-style
- > wildcards" [0].
+ > Release notes:
+ > https://github.com/transmission/transmission/releases/tag/4.0.5
 
- > So, let's consider that this is not supported. Expand the patterns into
- > one section each, rather than use a list.
-
- > [0] https://spec.editorconfig.org/
-
- > Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+ > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Committed to 2023.11.x, thanks.
 
