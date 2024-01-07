@@ -4,66 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AFFFC47074
-	for <buildroot@archiver.kernel.org>; Sun,  7 Jan 2024 12:00:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75F5FC47073
+	for <buildroot@archiver.kernel.org>; Sun,  7 Jan 2024 12:05:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2EC3341B2F;
-	Sun,  7 Jan 2024 12:00:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2EC3341B2F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 29CCF41BE2;
+	Sun,  7 Jan 2024 12:05:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29CCF41BE2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7zh26fOc-lWo; Sun,  7 Jan 2024 12:00:10 +0000 (UTC)
+	with ESMTP id siZQGLLlhh6B; Sun,  7 Jan 2024 12:05:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8371741AE0;
-	Sun,  7 Jan 2024 12:00:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8371741AE0
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E5E151BF295
- for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 12:00:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7EF3341BD8;
+	Sun,  7 Jan 2024 12:05:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7EF3341BD8
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6CA1C1BF310
+ for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 12:05:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CA0F3836C5
- for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 12:00:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CA0F3836C5
+ by smtp2.osuosl.org (Postfix) with ESMTP id 441D14031E
+ for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 12:05:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 441D14031E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6svmcxdb71oa for <buildroot@lists.busybox.net>;
- Sun,  7 Jan 2024 12:00:05 +0000 (UTC)
-Received: from smtpcmd10101.aruba.it (smtpcmd10101.aruba.it [62.149.156.101])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5A06A836EA
- for <buildroot@buildroot.org>; Sun,  7 Jan 2024 12:00:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A06A836EA
-Received: from localhost.localdomain ([84.33.84.190])
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 78gLMueF0sKE for <buildroot@lists.busybox.net>;
+ Sun,  7 Jan 2024 12:05:41 +0000 (UTC)
+Received: from smtpcmd12132.aruba.it (smtpcmd12132.aruba.it [62.149.156.132])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A5A1B4015A
+ for <buildroot@buildroot.org>; Sun,  7 Jan 2024 12:05:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A5A1B4015A
+Received: from [192.168.50.163] ([84.33.84.190])
  by Aruba Outgoing Smtp  with ESMTPSA
- id MRourOtLi1f5IMRour6rks; Sun, 07 Jan 2024 13:00:01 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Date: Sun,  7 Jan 2024 12:59:58 +0100
-Message-Id: <20240107115958.173945-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240105140611.6a19a037@windsurf>
-References: <20240105140611.6a19a037@windsurf>
+ id MRuMrZ0opz7kwMRuMrrnfo; Sun, 07 Jan 2024 13:05:38 +0100
+Message-ID: <2af6ddd2-b24f-44ff-9ba2-687586a55190@benettiengineering.com>
+Date: Sun, 7 Jan 2024 13:05:37 +0100
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfEqP7Yc6awECBV4soBaVEEHHSkveHJZWCjdicnfCUwvk2WD3Wu/1tyzxKdp3BSxS/jnTFwk5g9FeLnkqCShMzblVHF0IDoqB7Q/vrsQbgjXAG1hOO1ki
- dJR4WJm4wZO4h3tUKlPseNqfBLvCG9wsLacY+KmKR8XghyxUP2dsxK8a5nGm1q6u//5JrPhxXQDztitFMt2fLMkiw6LPlcH6U9SHLXdZCkEm+mqhymzyAm0X
- HpZ5OrwZrcMW7tWHiGr+wg3Zep4xeY6yXGX1RWhsOHGKhcgBUoBBDcdNgSZkENYHZj3zLtU/70DxLP63dz9RRikpcPfaizc7hU+M3hFnRmq/QF37aM7OpXNm
- F1punka5GCyU7bc/FJ2uSv5CNTlVPw==
+User-Agent: Mozilla Thunderbird
+To: buildroot@buildroot.org
+References: <20240105140611.6a19a037@windsurf>
+ <20240107115958.173945-1-giulio.benetti@benettiengineering.com>
+Content-Language: en-US
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <20240107115958.173945-1-giulio.benetti@benettiengineering.com>
+X-CMAE-Envelope: MS4xfJTBXVz0c7aaxTanqDwqE94lIT+u3i0+ys0ObB7fDRhGF0xPoKP5ip1kPBqxZAdSF+mPtm9X7T0x17MH1iDvvobnTzA6EqpgoGa1dWZ0oxgKpnsWuhVZ
+ lDI6+frRDiO0x/PjX8CjbCmJCztwhPtSEtfVQIWuu+bIOdBW5Hb/gAa3HtNBrlwAgiSavSAh2F5cr7g5HCHDWCyWt9oCDWazyk31gn/rug9oibnRyFItXNsL
+ o2aoFfLjvJlCrSSPJ/pVnBWtX6DaLXujhsrqkvCKqz2eKMuLmWZkHcJimVhF0ABK6h/3pah3TQOM+jsgkLDlQaD6wg4qDnJw6A43Vbd7KIs=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1704628801; bh=FSqDbbUyZ5TqHlUEGMYFFWcEIKrrLRaY4hEekFXT+Gk=;
- h=From:To:Subject:Date:MIME-Version;
- b=Jfa4i2vWlkKSbuL6i6Sy09vpNYMTH6Tgw3+JtZTgh6CdEVyXgwW1uxoiFuXT6hW0U
- XL563yz7wWdpMkmhVK75am4RgwRWYIQJAjcbe8xSISQmOoREAj6BMbpGKSFITLDRZ2
- tDQM+3gfP78t6sZaulnTNvWnxkFDupPHLr57xMLV55zoXQkLjst+dlhbDRRa61+fTc
- jftulB+4KGQYvCZzGbBvTNqVEL5bN0vUUjrkhsTD8rx/f4bAsuECjQCr8EYuKy3Yqy
- kzc+gtzZpqdiZmo6/gc1X1v3UH53DI7C+jbF/88wS1+agw0ONp+AZcME49hrpJ1cK9
- Li1JP9lAZhKhg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ t=1704629138; bh=D7npAF8uTxcbbNFobNvQXXDKZnGbjTy83QFH3ht5FYE=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=B0NJo3Tsl5GjzXmRFtcwC89YTyXTxWrmtKNHWs1Z/5UvT/xCg8oAuRa5qxyOawDRe
+ cpfjrIY0KMcA5UzzAlyqMsSw5QzPwu4jZ3WFjbRUyTkIlhlmWepaqZ2G0HPvsu3AXp
+ bH9paKHrlHYEAM6GCi5ILkYF0ySrV0eNl3MEd/9xjauhuUyFJwycb04IsSfCQqhAFq
+ m/vEuVDf1ciLKJtCtf+yDwNA85x0jzLpgsm5VYu6ZYZr8PMTFztKPidjI0o0XBPRUA
+ WS6R3iCJtg+RFJlAFNVuqW0HibcEkJuMd3urM3YwYLHhdOjxAR+AESyQF/tlE6q+/a
+ UAZ6PBLqQlpEQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=Jfa4i2vW
-Subject: [Buildroot] [PATCH v3] package/swugenerator: add missing runtime
- dependencies
+ header.a=rsa-sha256 header.s=a1 header.b=B0NJo3Ts
+Subject: Re: [Buildroot] [PATCH v3] package/swugenerator: add missing
+ runtime dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,55 +76,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Giulio Benetti <giulio.benetti+tekvox@benettiengineering.com>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Giulio Benetti <giulio.benetti+tekvox@benettiengineering.com>
+Re-reading again...
 
-Package swugenerator can use openssl to encrypt files in .swu(cpio)
-resulting output archive and gzip or zlib to compress the same files but
-we're not sure build environment have or not openssl, gzip and zlib
-installed so add them as host dependencies like:
-* host-openssl
-* host-gzip
-* host-zlib
+On 07/01/24 12:59, Giulio Benetti wrote:
+> From: Giulio Benetti <giulio.benetti+tekvox@benettiengineering.com>
+> 
+> Package swugenerator can use openssl to encrypt files in .swu(cpio)
+> resulting output archive and gzip or zlib to compress the same files but
+> we're not sure build environment have or not openssl, gzip and zlib
+> installed 
 
-Signed-off-by: Giulio Benetti <giulio.benetti+tekvox@benettiengineering.com>
----
-V1->V2:
-* V1->V2:
-* add host-zstd and clarify in commit log these are runtime dependencies as
-  pointed by Thomas Petazzoni
-V2->V3:
-* improve commit log explaining why we need this patch as pointed by
-  Thomas Petazzoni
----
- package/swugenerator/swugenerator.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+and this can lead to runtime execution failure,
 
-diff --git a/package/swugenerator/swugenerator.mk b/package/swugenerator/swugenerator.mk
-index f4ead1d229..466fe1f046 100644
---- a/package/swugenerator/swugenerator.mk
-+++ b/package/swugenerator/swugenerator.mk
-@@ -9,6 +9,10 @@ SWUGENERATOR_SITE = $(call github,sbabic,swugenerator,v$(SWUGENERATOR_VERSION))
- SWUGENERATOR_LICENSE = GPL-3.0
- SWUGENERATOR_LICENSE_FILES = LICENSE
- HOST_SWUGENERATOR_SETUP_TYPE = setuptools
--HOST_SWUGENERATOR_DEPENDENCIES = host-python-libconf
-+HOST_SWUGENERATOR_DEPENDENCIES = \
-+	host-gzip \
-+	host-openssl \
-+	host-python-libconf \
-+	host-zstd
- 
- $(eval $(host-python-package))
+> so add them as host dependencies like:
+> * host-openssl
+> * host-gzip
+> * host-zlib
+> 
+
+Could please a Maintainer reword this commit log adding that missing 
+line that completes the answer to *why* we need *what*(add missing 
+dependencies)?
+
+I hope this time I've got close to a sufficient commit log :-)
+
+Best regards
 -- 
-2.34.1
+Giulio Benetti
+CEO&CTO@Benetti Engineering sas
+
+> Signed-off-by: Giulio Benetti <giulio.benetti+tekvox@benettiengineering.com>
+> ---
+> V1->V2:
+> * V1->V2:
+> * add host-zstd and clarify in commit log these are runtime dependencies as
+>    pointed by Thomas Petazzoni
+> V2->V3:
+> * improve commit log explaining why we need this patch as pointed by
+>    Thomas Petazzoni
+> ---
+>   package/swugenerator/swugenerator.mk | 6 +++++-
+>   1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/swugenerator/swugenerator.mk b/package/swugenerator/swugenerator.mk
+> index f4ead1d229..466fe1f046 100644
+> --- a/package/swugenerator/swugenerator.mk
+> +++ b/package/swugenerator/swugenerator.mk
+> @@ -9,6 +9,10 @@ SWUGENERATOR_SITE = $(call github,sbabic,swugenerator,v$(SWUGENERATOR_VERSION))
+>   SWUGENERATOR_LICENSE = GPL-3.0
+>   SWUGENERATOR_LICENSE_FILES = LICENSE
+>   HOST_SWUGENERATOR_SETUP_TYPE = setuptools
+> -HOST_SWUGENERATOR_DEPENDENCIES = host-python-libconf
+> +HOST_SWUGENERATOR_DEPENDENCIES = \
+> +	host-gzip \
+> +	host-openssl \
+> +	host-python-libconf \
+> +	host-zstd
+>   
+>   $(eval $(host-python-package))
 
 _______________________________________________
 buildroot mailing list
