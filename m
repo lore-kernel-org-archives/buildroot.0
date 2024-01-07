@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32C42C47074
-	for <buildroot@archiver.kernel.org>; Sun,  7 Jan 2024 16:25:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA76AC47073
+	for <buildroot@archiver.kernel.org>; Sun,  7 Jan 2024 16:25:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D784640191;
-	Sun,  7 Jan 2024 16:25:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D784640191
+	by smtp2.osuosl.org (Postfix) with ESMTP id 64931400CF;
+	Sun,  7 Jan 2024 16:25:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 64931400CF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xL8rLEbk8-fP; Sun,  7 Jan 2024 16:25:12 +0000 (UTC)
+	with ESMTP id IAE38xZrCX1o; Sun,  7 Jan 2024 16:25:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D30A34037C;
-	Sun,  7 Jan 2024 16:25:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D30A34037C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 260491BF869
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5D5FD403E5;
+	Sun,  7 Jan 2024 16:25:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D5FD403E5
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3ACBA1BF38B
  for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 16:23:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E2872415E5
- for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 16:23:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E2872415E5
+ by smtp2.osuosl.org (Postfix) with ESMTP id 38074403C4
+ for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 16:23:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 38074403C4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mucJCFpgQYEt for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5e6nC2xtdTvM for <buildroot@lists.busybox.net>;
  Sun,  7 Jan 2024 16:23:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2F683415E7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 257A440424
  for <buildroot@buildroot.org>; Sun,  7 Jan 2024 16:23:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F683415E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 257A440424
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1F0E2847B5; Sun,  7 Jan 2024 16:23:42 +0000 (UTC)
+ id 076718459B; Sun,  7 Jan 2024 16:23:42 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 7 Jan 2024 12:19:13 +0100
+Date: Sun, 7 Jan 2024 12:17:51 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: efdcc3f4d33f9840c6b3b7b176000cbce62dd219
-X-Git-Newrev: 0e5b9818a285c5597e94714c02c5fcafdfc82053
+X-Git-Oldrev: fe8420c92a2e8028ced743dfa310c8f7dc16b96a
+X-Git-Newrev: 81730dc4eaaf5ecaac98b95e043fa9c8a73504f3
 X-Patchwork-Hint: ignore
-Message-Id: <20240107162342.1F0E2847B5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/nmap: fix wording
- for nc symlink
+Message-Id: <20240107162342.076718459B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/openssh: select
+ linux-pam if refpolicy upstream is selected
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,30 +63,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0e5b9818a285c5597e94714c02c5fcafdfc82053
+commit: https://git.buildroot.net/buildroot/commit/?id=81730dc4eaaf5ecaac98b95e043fa9c8a73504f3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 85646943ec6fb8eeee760b89b5d31a09da7ea92b)
+linux-pam is required to login via OpenSSH if the upstream refpolicy for
+SELinux is enaabled, as linux-pam handles changing user contexts. If a
+user wants to make their own policy and use a refpolicy via git, we of course
+should let them do so. As such, only select linux-pam if the upstream version
+of refpolicy is selected.
+
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 2c5a82a29ceb382d53ccb08ffd34a92c142cadbb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nmap/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/openssh/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/nmap/Config.in b/package/nmap/Config.in
-index fc6312d0fc..6e097a9884 100644
---- a/package/nmap/Config.in
-+++ b/package/nmap/Config.in
-@@ -24,7 +24,7 @@ config BR2_PACKAGE_NMAP_NCAT
- 	  written for the Nmap Project as a much-improved
- 	  reimplementation of the venerable Netcat.
- 
--	  If symlink to "nc" is installed if neither netcat or
-+	  A symlink to "nc" is installed if neither netcat or
- 	  netcat-openbsd is selected.
- 
- comment "a symlink from ncat to 'nc' will be installed"
+diff --git a/package/openssh/Config.in b/package/openssh/Config.in
+index 08d3c7d391..a3038ba01f 100644
+--- a/package/openssh/Config.in
++++ b/package/openssh/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_OPENSSH
+ 	bool "openssh"
+ 	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_LINUX_PAM if BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_ZLIB
+ 	help
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
