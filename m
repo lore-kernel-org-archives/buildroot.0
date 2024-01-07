@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4E91C47074
-	for <buildroot@archiver.kernel.org>; Sun,  7 Jan 2024 16:23:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E590C47073
+	for <buildroot@archiver.kernel.org>; Sun,  7 Jan 2024 16:23:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 63C9940191;
-	Sun,  7 Jan 2024 16:23:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 63C9940191
+	by smtp2.osuosl.org (Postfix) with ESMTP id F2E6140370;
+	Sun,  7 Jan 2024 16:23:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F2E6140370
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id umr1BcBvNUFv; Sun,  7 Jan 2024 16:23:38 +0000 (UTC)
+	with ESMTP id 3rcFiishi8i4; Sun,  7 Jan 2024 16:23:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 45557403A5;
-	Sun,  7 Jan 2024 16:23:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 45557403A5
+	by smtp2.osuosl.org (Postfix) with ESMTP id E3E6B403A5;
+	Sun,  7 Jan 2024 16:23:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E3E6B403A5
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B8DBF1BF38B
- for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 16:22:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C8B0E1BF38B
+ for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 16:22:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1D4AA415E6
- for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 16:22:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D4AA415E6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9B894415D4
+ for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 16:22:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B894415D4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dBVTqx0ZISXg for <buildroot@lists.busybox.net>;
+ with ESMTP id BeF76J8rKmpe for <buildroot@lists.busybox.net>;
  Sun,  7 Jan 2024 16:22:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 41D49415E3
+ by smtp4.osuosl.org (Postfix) with ESMTP id 37537415DC
  for <buildroot@buildroot.org>; Sun,  7 Jan 2024 16:22:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41D49415E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37537415DC
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 400C68475F; Sun,  7 Jan 2024 16:22:00 +0000 (UTC)
+ id 25CDD84761; Sun,  7 Jan 2024 16:22:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 7 Jan 2024 12:19:22 +0100
+Date: Sun, 7 Jan 2024 12:14:36 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 51d582a6230324cdd959e661bd4fdc967df269f1
-X-Git-Newrev: 063bd879470b8e7a82d467944ccbb971dbc01fbf
+X-Git-Oldrev: 9fa2a798dce508f1f8d21e503a26716d9975b2fa
+X-Git-Newrev: d51cd29632650dc9dbc8e6828878127cd3f92982
 X-Patchwork-Hint: ignore
-Message-Id: <20240107162200.400C68475F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/nmap: fix wording
- for nc symlink
+Message-Id: <20240107162200.25CDD84761@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/libldns: fix
+ libressl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,30 +63,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=063bd879470b8e7a82d467944ccbb971dbc01fbf
+commit: https://git.buildroot.net/buildroot/commit/?id=d51cd29632650dc9dbc8e6828878127cd3f92982
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 85646943ec6fb8eeee760b89b5d31a09da7ea92b)
+Fix the following build failure raised since bump of libressl to version
+3.8.2 in commit 21eca49ed5110872407b76ab9337d2877c4cda24:
+
+./keys.c:167:35: error: 'ENGINE_METHOD_ALL' undeclared (first use in this function)
+  167 |         if(!ENGINE_set_default(e, ENGINE_METHOD_ALL)) {
+      |                                   ^~~~~~~~~~~~~~~~~
+
+Fixes:
+ - http://autobuild.buildroot.org/results/37cc05b78a7004caa1b45d896121f059a4f8ca00
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 96d0d677790e659b822761b50561b0316b4abf43)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nmap/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libldns/libldns.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/nmap/Config.in b/package/nmap/Config.in
-index fc6312d0fc..6e097a9884 100644
---- a/package/nmap/Config.in
-+++ b/package/nmap/Config.in
-@@ -24,7 +24,7 @@ config BR2_PACKAGE_NMAP_NCAT
- 	  written for the Nmap Project as a much-improved
- 	  reimplementation of the venerable Netcat.
+diff --git a/package/libldns/libldns.mk b/package/libldns/libldns.mk
+index 06564e3d9f..d6af6a2b97 100644
+--- a/package/libldns/libldns.mk
++++ b/package/libldns/libldns.mk
+@@ -17,7 +17,6 @@ LIBLDNS_CONF_OPTS = \
+ 	--with-ssl=$(STAGING_DIR)/usr \
+ 	--enable-dane \
+ 	--enable-ecdsa \
+-	--enable-gost \
+ 	--enable-sha2 \
+ 	--without-examples \
+ 	--without-p5-dns-ldns \
+@@ -30,6 +29,12 @@ else
+ LIBLDNS_CONF_OPTS += --disable-dane-verify
+ endif
  
--	  If symlink to "nc" is installed if neither netcat or
-+	  A symlink to "nc" is installed if neither netcat or
- 	  netcat-openbsd is selected.
- 
- comment "a symlink from ncat to 'nc' will be installed"
++ifeq ($(BR2_PACKAGE_LIBOPENSSL_ENGINES),y)
++LIBLDNS_CONF_OPTS += --enable-gost
++else
++LIBLDNS_CONF_OPTS += --disable-gost
++endif
++
+ ifeq ($(BR2_STATIC_LIBS),y)
+ LIBLDNS_DEPENDENCIES += host-pkgconf
+ # missing -lz breaks configure, add it using pkgconf
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
