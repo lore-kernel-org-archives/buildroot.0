@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E77AAC47074
-	for <buildroot@archiver.kernel.org>; Sun,  7 Jan 2024 16:23:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4E91C47074
+	for <buildroot@archiver.kernel.org>; Sun,  7 Jan 2024 16:23:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9F12040191;
-	Sun,  7 Jan 2024 16:23:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9F12040191
+	by smtp2.osuosl.org (Postfix) with ESMTP id 63C9940191;
+	Sun,  7 Jan 2024 16:23:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 63C9940191
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rvlzodS6uFe8; Sun,  7 Jan 2024 16:23:24 +0000 (UTC)
+	with ESMTP id umr1BcBvNUFv; Sun,  7 Jan 2024 16:23:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 92768403E5;
-	Sun,  7 Jan 2024 16:23:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92768403E5
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0BE2B1BF38B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 45557403A5;
+	Sun,  7 Jan 2024 16:23:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 45557403A5
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B8DBF1BF38B
  for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 16:22:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E211182446
- for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 16:22:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E211182446
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1D4AA415E6
+ for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 16:22:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D4AA415E6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UnoPP5zPcxhp for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dBVTqx0ZISXg for <buildroot@lists.busybox.net>;
  Sun,  7 Jan 2024 16:22:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1C92C82468
+ by smtp4.osuosl.org (Postfix) with ESMTP id 41D49415E3
  for <buildroot@buildroot.org>; Sun,  7 Jan 2024 16:22:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C92C82468
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41D49415E3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0AC3E8475F; Sun,  7 Jan 2024 16:22:00 +0000 (UTC)
+ id 400C68475F; Sun,  7 Jan 2024 16:22:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 7 Jan 2024 10:26:13 +0100
+Date: Sun, 7 Jan 2024 12:19:22 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 8fe4a7c8124feaa17d60c383bd244e7c33ae84ac
-X-Git-Newrev: 6c9852c602e1ebbce97c5a85133f2e903abae805
+X-Git-Oldrev: 51d582a6230324cdd959e661bd4fdc967df269f1
+X-Git-Newrev: 063bd879470b8e7a82d467944ccbb971dbc01fbf
 X-Patchwork-Hint: ignore
-Message-Id: <20240107162200.0AC3E8475F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x]
- package/giflib/0004-Fix-several-defects-found-by-Coverity-scan.patch: New
- security patch
+Message-Id: <20240107162200.400C68475F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/nmap: fix wording
+ for nc symlink
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,84 +63,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6c9852c602e1ebbce97c5a85133f2e903abae805
+commit: https://git.buildroot.net/buildroot/commit/?id=063bd879470b8e7a82d467944ccbb971dbc01fbf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit df04f179761614f3bccaf208d688ec4e2f64e38d)
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 85646943ec6fb8eeee760b89b5d31a09da7ea92b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ix-several-defects-found-by-Coverity-scan.patch | 61 ++++++++++++++++++++++
- 1 file changed, 61 insertions(+)
+ package/nmap/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/giflib/0004-Fix-several-defects-found-by-Coverity-scan.patch b/package/giflib/0004-Fix-several-defects-found-by-Coverity-scan.patch
-new file mode 100644
-index 0000000000..1719769872
---- /dev/null
-+++ b/package/giflib/0004-Fix-several-defects-found-by-Coverity-scan.patch
-@@ -0,0 +1,61 @@
-+From a1c48b91cd1cf1e9bf7077709b69f4bfd4c4abc7 Mon Sep 17 00:00:00 2001
-+From: Sandro Mani <manisandro@gmail.com>
-+Date: Tue, 5 Dec 2023 16:38:48 -0700
-+Subject: [PATCH] Fix several defects found by Coverity scan
-+
-+From: giflib-5.2.1-17.fc39.src.rpm
-+Upstream: Not submitted
-+
-+Signed-off-by: Sandro Mani <manisandro@gmail.com>
-+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-+---
-+ gif2rgb.c | 11 ++++++++++-
-+ 1 file changed, 10 insertions(+), 1 deletion(-)
-+
-+diff --git a/gif2rgb.c b/gif2rgb.c
-+index d9a469f..02cea41 100644
-+--- a/gif2rgb.c
-++++ b/gif2rgb.c
-+@@ -170,6 +170,8 @@ static void SaveGif(GifByteType *OutputBuffer,
-+     /* Open stdout for the output file: */
-+     if ((GifFile = EGifOpenFileHandle(1, &Error)) == NULL) {
-+ 	PrintGifError(Error);
-++	free(OutputBuffer);
-++	GifFreeMapObject(OutputColorMap);
-+ 	exit(EXIT_FAILURE);
-+     }
-+ 
-+@@ -179,6 +181,8 @@ static void SaveGif(GifByteType *OutputBuffer,
-+ 	EGifPutImageDesc(GifFile,
-+ 			 0, 0, Width, Height, false, NULL) == GIF_ERROR) {
-+ 	PrintGifError(Error);
-++	free(OutputBuffer);
-++	GifFreeMapObject(OutputColorMap);
-+ 	exit(EXIT_FAILURE);
-+     }
-+ 
-+@@ -187,8 +191,11 @@ static void SaveGif(GifByteType *OutputBuffer,
-+ 	       GifFile->Image.Width, GifFile->Image.Height);
-+ 
-+     for (i = 0; i < Height; i++) {
-+-	if (EGifPutLine(GifFile, Ptr, Width) == GIF_ERROR)
-++	if (EGifPutLine(GifFile, Ptr, Width) == GIF_ERROR) {
-++	    free(OutputBuffer);
-++	    GifFreeMapObject(OutputColorMap);
-+ 	    exit(EXIT_FAILURE);
-++        }
-+ 	GifQprintf("\b\b\b\b%-4d", Height - i - 1);
-+ 
-+ 	Ptr += Width;
-+@@ -196,6 +203,8 @@ static void SaveGif(GifByteType *OutputBuffer,
-+ 
-+     if (EGifCloseFile(GifFile, &Error) == GIF_ERROR) {
-+ 	PrintGifError(Error);
-++	free(OutputBuffer);
-++	GifFreeMapObject(OutputColorMap);
-+ 	exit(EXIT_FAILURE);
-+     }
-+ }
-+-- 
-+2.43.0
-+
+diff --git a/package/nmap/Config.in b/package/nmap/Config.in
+index fc6312d0fc..6e097a9884 100644
+--- a/package/nmap/Config.in
++++ b/package/nmap/Config.in
+@@ -24,7 +24,7 @@ config BR2_PACKAGE_NMAP_NCAT
+ 	  written for the Nmap Project as a much-improved
+ 	  reimplementation of the venerable Netcat.
+ 
+-	  If symlink to "nc" is installed if neither netcat or
++	  A symlink to "nc" is installed if neither netcat or
+ 	  netcat-openbsd is selected.
+ 
+ comment "a symlink from ncat to 'nc' will be installed"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
