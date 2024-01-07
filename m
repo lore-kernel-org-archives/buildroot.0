@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4D4DC47073
-	for <buildroot@archiver.kernel.org>; Sun,  7 Jan 2024 22:28:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46A26C47074
+	for <buildroot@archiver.kernel.org>; Sun,  7 Jan 2024 22:29:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 70F3960EE4;
-	Sun,  7 Jan 2024 22:28:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 70F3960EE4
+	by smtp3.osuosl.org (Postfix) with ESMTP id EA33560EAB;
+	Sun,  7 Jan 2024 22:29:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA33560EAB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XHeoUfvYjQ8r; Sun,  7 Jan 2024 22:28:21 +0000 (UTC)
+	with ESMTP id 8pqHm1kjReBi; Sun,  7 Jan 2024 22:29:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AE7F160EC9;
-	Sun,  7 Jan 2024 22:28:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE7F160EC9
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0BC3F1BF870
- for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 22:27:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 39D1D605B3;
+	Sun,  7 Jan 2024 22:29:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 39D1D605B3
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id CB1731BF33F
+ for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 22:29:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D71FF404EC
- for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 22:27:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D71FF404EC
+ by smtp3.osuosl.org (Postfix) with ESMTP id B16CE60E91
+ for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 22:29:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B16CE60E91
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YUFqdHQULMJO for <buildroot@lists.busybox.net>;
- Sun,  7 Jan 2024 22:27:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YlkYKec8FvUu for <buildroot@lists.busybox.net>;
+ Sun,  7 Jan 2024 22:29:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C1CCD404B6
- for <buildroot@buildroot.org>; Sun,  7 Jan 2024 22:27:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C1CCD404B6
+ by smtp3.osuosl.org (Postfix) with ESMTP id EB4B7605B3
+ for <buildroot@buildroot.org>; Sun,  7 Jan 2024 22:29:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB4B7605B3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9BC35848C0; Sun,  7 Jan 2024 22:27:53 +0000 (UTC)
+ id DB31A84906; Sun,  7 Jan 2024 22:29:03 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 7 Jan 2024 23:00:06 +0100
-X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 5c0d8ab627e2634a5580ce2becc22626cf82e0bf
-X-Git-Newrev: ec1b39ed8aad5cd52fbc5ac76d633b2bbafcfa49
+Date: Sun, 7 Jan 2024 23:23:51 +0100
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: c01b8fd38aacb983599ad63cffd26bb5131e7fb5
+X-Git-Newrev: 2fdf355b2a208af3a6f30a243e71561bd30c3ba1
 X-Patchwork-Hint: ignore
-Message-Id: <20240107222753.9BC35848C0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/glibc: add proper
+Message-Id: <20240107222903.DB31A84906@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/glibc: add proper
  CPE ID version detail
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ec1b39ed8aad5cd52fbc5ac76d633b2bbafcfa49
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2fdf355b2a208af3a6f30a243e71561bd30c3ba1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
 As reported in bug 15895, the GLIBC_VERSION field having a value
 looking like 2.38-27-g750a45a783906a19591fb8ff6b7841470f1f5701, it
@@ -85,33 +85,42 @@ Fixes: #15895
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 (cherry picked from commit af8c0e5c746b11872b57e660afc2118e882f7722)
+[Peter: adjust for glibc 2.36.x on 2023.02.x]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/glibc/glibc.mk | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ package/glibc/glibc.mk | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
 diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 0b71530310..32e6516c7f 100644
+index a3a84e86ec..8a31779afb 100644
 --- a/package/glibc/glibc.mk
 +++ b/package/glibc/glibc.mk
-@@ -20,6 +20,22 @@ GLIBC_LICENSE = GPL-2.0+ (programs), LGPL-2.1+, BSD-3-Clause, MIT (library)
+@@ -20,6 +20,30 @@ GLIBC_LICENSE = GPL-2.0+ (programs), LGPL-2.1+, BSD-3-Clause, MIT (library)
  GLIBC_LICENSE_FILES = COPYING COPYING.LIB LICENSES
  GLIBC_CPE_ID_VENDOR = gnu
  
-+# Extract the base version (e.g. 2.38) from GLIBC_VERSION) in order to
++# Extract the base version (e.g. 2.36) from GLIBC_VERSION in order to
 +# allow proper matching with the CPE database.
 +GLIBC_CPE_ID_VERSION = $(word 1, $(subst -,$(space),$(GLIBC_VERSION)))
 +
-+# Fixed by b25508dd774b617f99419bdc3cf2ace4560cd2d6, which is between
-+# 2.38 and the version we're really using
++# Fixed by b0e7888d1fa2dbd2d9e1645ec8c796abf78880b9, which is between
++# 2.36 and the version we're really using
++GLIBC_IGNORE_CVES += CVE-2022-39046
++
++# Fixed by 4ea972b7edd7e36610e8cde18bf7a8149d7bac4f, which is between
++# 2.36 and the version we're really using
 +GLIBC_IGNORE_CVES += CVE-2023-4527
 +
-+# Fixed by 750a45a783906a19591fb8ff6b7841470f1f5710, which is between
-+# 2.38 and the version we're really using.
++# Fixed by a9728f798ec7f05454c95637ee6581afaa9b487d, which is between
++# 2.36 and the version we're really using
++GLIBC_IGNORE_CVES += CVE-2023-4806
++
++# Fixed by 22955ad85186ee05834e47e665056148ca07699c, which is between
++# 2.36 and the version we're really using.
 +GLIBC_IGNORE_CVES += CVE-2023-4911
 +
-+# Fixed by 5ee59ca371b99984232d7584fe2b1a758b4421d3, which is between
-+# 2.38 and the version we're really using.
++# Fixed by 856bac55f98dc840e7c27cfa82262b933385de90, which is between
++# 2.36 and the version we're really using.
 +GLIBC_IGNORE_CVES += CVE-2023-5156
 +
  # glibc is part of the toolchain so disable the toolchain dependency
