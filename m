@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0303C47073
-	for <buildroot@archiver.kernel.org>; Sun,  7 Jan 2024 22:45:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0153BC47074
+	for <buildroot@archiver.kernel.org>; Sun,  7 Jan 2024 22:45:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5C168606BF;
-	Sun,  7 Jan 2024 22:45:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5C168606BF
+	by smtp3.osuosl.org (Postfix) with ESMTP id B4E7C60672;
+	Sun,  7 Jan 2024 22:45:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B4E7C60672
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YkpY7_gLV98o; Sun,  7 Jan 2024 22:45:18 +0000 (UTC)
+	with ESMTP id tVfoxh2wnNQz; Sun,  7 Jan 2024 22:45:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 663896074C;
-	Sun,  7 Jan 2024 22:45:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 663896074C
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9099A1BF33F
+	by smtp3.osuosl.org (Postfix) with ESMTP id DD05860EA5;
+	Sun,  7 Jan 2024 22:45:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD05860EA5
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C51241BF869
  for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 22:44:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 775CC81186
- for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 22:44:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 775CC81186
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9CFF6409B3
+ for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 22:44:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9CFF6409B3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dQH6iF8sWciF for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tI02uTaIcRQD for <buildroot@lists.busybox.net>;
  Sun,  7 Jan 2024 22:44:12 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 81C5481066
+ by smtp4.osuosl.org (Postfix) with ESMTP id B5C83409FC
  for <buildroot@buildroot.org>; Sun,  7 Jan 2024 22:44:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 81C5481066
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B5C83409FC
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 65F1F84A1B; Sun,  7 Jan 2024 22:44:12 +0000 (UTC)
+ id A542A84A58; Sun,  7 Jan 2024 22:44:12 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 7 Jan 2024 23:38:30 +0100
+Date: Sun, 7 Jan 2024 23:40:17 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 554de384ae61665de66d2ed3158dabd632407618
-X-Git-Newrev: 896de01e0e84aa2006fa453b9e1f583a44667e81
+X-Git-Oldrev: 02c3ce317a5bab9fe1426eec3d534174fcb5612c
+X-Git-Newrev: 1c70425ddb1079c340c54decbd65076087ceed69
 X-Patchwork-Hint: ignore
-Message-Id: <20240107224412.65F1F84A1B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/putty: bump
- version to 0.78
+Message-Id: <20240107224412.A542A84A58@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/putty: security
+ bump to version 0.80
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,144 +63,71 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=896de01e0e84aa2006fa453b9e1f583a44667e81
+commit: https://git.buildroot.net/buildroot/commit/?id=1c70425ddb1079c340c54decbd65076087ceed69
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Changelog:
-https://www.chiark.greenend.org.uk/~sgtatham/putty/changes.html
+As described in the announcement, this fixes a security issue:
 
-Removed patch, the patched file does not exist anymore in this release.
+There is one security fix in this release:
 
-Updated license hash due to copyright year bump:
-https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=ce59d8bb4f7a1c6aff677d1431ec84a803a24091
+ - Fix for a newly discovered security issue known as the 'Terrapin'
+   attack, also numbered CVE-2023-48795. The issue affects widely-used
+   OpenSSH extensions to the SSH protocol: the ChaCha20+Poly1305
+   cipher system, and 'encrypt-then-MAC' mode.
 
-Switched build system to cmake.
+   In order to benefit from the fix, you must be using a fixed version
+   of PuTTY _and_ a server with the fix, so that they can agree to
+   adopt a modified version of the protocol. Alternatively, you may be
+   able to reconfigure PuTTY to avoid selecting any of the affected
+   modes.
 
-Added optional dependency to libgtk3.
+   If PuTTY 0.80 connects to an SSH server without the fix, it will
+   warn you if the initial protocol negotiation chooses an insecure
+   mode to run the connection in, so that you can abandon the
+   connection. If it's possible to alter PuTTY's configuration to
+   avoid the problem, then the warning message will tell you how to do
+   it.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+https://lists.tartarus.org/pipermail/putty-announce/2023/000037.html
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 5673ea3ce4d4dd721bb17fc8d5b1283f5c1080b4)
+(cherry picked from commit 922132c39e233aec10835e2a4d7d8dbf92e99723)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-unix-uxutils.h-fix-build-on-uclibc.patch  | 41 ----------------------
- package/putty/Config.in                            |  6 ++--
- package/putty/putty.hash                           | 11 +++---
- package/putty/putty.mk                             | 13 ++++---
- 4 files changed, 14 insertions(+), 57 deletions(-)
+ package/putty/putty.hash | 8 ++++----
+ package/putty/putty.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/putty/0001-unix-uxutils.h-fix-build-on-uclibc.patch b/package/putty/0001-unix-uxutils.h-fix-build-on-uclibc.patch
-deleted file mode 100644
-index 78cef8b908..0000000000
---- a/package/putty/0001-unix-uxutils.h-fix-build-on-uclibc.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--From 3f30f3a7e3f07f5ca3cef0f405b02e22a018c6e4 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 9 May 2021 15:22:29 +0200
--Subject: [PATCH] unix/uxutils.h: fix build on uclibc
--
--Build on uclibc is broken since version 0.75 and commit
--65383082bf0c49cec63f4b36001a40bd9b13edf6 because AT_HWCAP2 is used
--even if <sys/auxv.h> is not available:
--
--unix/uxutils.c: In function 'platform_aes_hw_available':
--unix/uxutils.c:13:22: error: 'AT_HWCAP2' undeclared (first use in this function)
--   13 |     return getauxval(AT_HWCAP2) & HWCAP2_AES;
--      |                      ^~~~~~~~~
--
--To fix this build failure, include <elf.h>
--
--Fixes:
-- - http://autobuild.buildroot.org/results/726f7c5ce13e78ed91e827b872e9d7ccfa13f298
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: sent to Simon Tatham <anakin@pobox.com>]
-----
-- unix/uxutils.h | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/unix/uxutils.h b/unix/uxutils.h
--index c9acff53..b80bf972 100644
----- a/unix/uxutils.h
--+++ b/unix/uxutils.h
--@@ -18,6 +18,8 @@
-- 
-- #if defined __arm__ || defined __aarch64__
-- 
--+#include <elf.h>
--+
-- #ifdef HAVE_SYS_TYPES_H
-- #include <sys/types.h>
-- #endif
---- 
--2.30.2
--
-diff --git a/package/putty/Config.in b/package/putty/Config.in
-index cd8b3bb213..f89283b99a 100644
---- a/package/putty/Config.in
-+++ b/package/putty/Config.in
-@@ -3,10 +3,10 @@ config BR2_PACKAGE_PUTTY
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_USE_WCHAR
- 	help
--	  PuTTY is a free SSH and Telnet client. Without GTK2
-+	  PuTTY is a free SSH and Telnet client. Without GTK2 or GTK3
- 	  activated, only the commandline tools plink, pscp, psftp,
--	  and puttygen are built; enable GTK2 for the graphical
--	  client.
-+	  and puttygen are built; enable GTK2 or GTK3 for the
-+	  graphical client.
- 
- 	  http://www.chiark.greenend.org.uk/~sgtatham/putty/
- 
 diff --git a/package/putty/putty.hash b/package/putty/putty.hash
-index 861d45cb76..c691a4f975 100644
+index 0ae2a86be8..84569a31e5 100644
 --- a/package/putty/putty.hash
 +++ b/package/putty/putty.hash
-@@ -1,8 +1,7 @@
--# Hashes from: http://the.earth.li/~sgtatham/putty/0.76/{md5,sha1,sha256,sha512}sums
--md5  9d22f8c56c1eaa1c0af3098438f25908  putty-0.76.tar.gz
--sha1  de09f50aee330eb05ad0cb81b970d0cc8e5c9b25  putty-0.76.tar.gz
--sha256  547cd97a8daa87ef71037fab0773bceb54a8abccb2f825a49ef8eba5e045713f  putty-0.76.tar.gz
--sha512  4576b359593928c6eba923f2d7b66ac0f2cf00e0c217cdbbb124471c3b35feb090e623847bfc507a4ef106cb3067aac47419e241b11dd8bf4ae554061fa93c25  putty-0.76.tar.gz
-+# Hashes from: http://the.earth.li/~sgtatham/putty/0.78/{sha1,sha256,sha512}sums
-+sha1  198f01db6bea708e480fb11dd23026eda7b3f49f  putty-0.78.tar.gz
-+sha256  274e01bcac6bd155dfd647b2f18f791b4b17ff313753aa919fcae2e32d34614f  putty-0.78.tar.gz
-+sha512  d7a3e2eabd5f1f65fc0f3f1ee0789c30fbe891b57f63ddeac0b92befcb6aecd4a748f04a21c76ee42d992deb77c2e1a0454a71cc620ef26fbf23af660bd84bb5  putty-0.78.tar.gz
+@@ -1,7 +1,7 @@
+-# Hashes from: http://the.earth.li/~sgtatham/putty/0.79/{sha1,sha256,sha512}sums
+-sha1  c40c3ce9fd334c40e64c6b33ee7e1096dad52701  putty-0.79.tar.gz
+-sha256  428cc8666fbb938ebf4ac9276341980dcd70de395b33164496cf7995ef0ef0d8  putty-0.79.tar.gz
+-sha512  4f10f870b229c89e928921d3b350955ce1c1170a062e7943d9cc8dbd83389d82a9b844623541605f0db5a429d545c2d188bf8e384c6515466fae69b216120983  putty-0.79.tar.gz
++# Hashes from: http://the.earth.li/~sgtatham/putty/0.80/{sha1,sha256,sha512}sums
++sha1  9c4a96f63ee3e927472191c935cc89228693c03a  putty-0.80.tar.gz
++sha256  2013c83a721b1753529e9090f7c3830e8fe4c80a070ccce764539badb3f67081  putty-0.80.tar.gz
++sha512  c8a6b6fa54ecd8bcf4ec274fef51343dd9996e6458b250b5555c4dc88ded25e87f97277da482c29858510e65635112d541f559ab683635bd950572d850129f90  putty-0.80.tar.gz
  
  # Locally calculated
--sha256  3f3e870dd3d0867d79370b1d433602c60bb91b59de04e5d8f2a149b788530d53  LICENCE
-+sha256  7b10c93f0d582e820a9e6f8c6abbcff54192e41e60644f4d09b96b14fdbc74f8  LICENCE
+ sha256  7ede37f344ee03436c155a375ecb6cdb42a77105baa6e7804bf43260dc4a0c54  LICENCE
 diff --git a/package/putty/putty.mk b/package/putty/putty.mk
-index e57a78be96..82b7464bb4 100644
+index 4c9164d05e..bff6e78074 100644
 --- a/package/putty/putty.mk
 +++ b/package/putty/putty.mk
-@@ -4,18 +4,17 @@
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PUTTY_VERSION = 0.76
-+PUTTY_VERSION = 0.78
+-PUTTY_VERSION = 0.79
++PUTTY_VERSION = 0.80
  PUTTY_SITE = http://the.earth.li/~sgtatham/putty/$(PUTTY_VERSION)
  PUTTY_LICENSE = MIT
  PUTTY_LICENSE_FILES = LICENCE
- PUTTY_CPE_ID_VENDOR = putty
--PUTTY_CONF_OPTS = --disable-gtktest
-+PUTTY_DEPENDENCIES = host-pkgconf
- 
--ifeq ($(BR2_PACKAGE_LIBGTK2),y)
--PUTTY_CONF_OPTS += --with-gtk=2
-+ifeq ($(BR2_PACKAGE_LIBGTK3),y)
-+PUTTY_DEPENDENCIES += libgtk3
-+else ifeq ($(BR2_PACKAGE_LIBGTK2),y)
- PUTTY_DEPENDENCIES += libgtk2
--else
--PUTTY_CONF_OPTS += --without-gtk
- endif
- 
--$(eval $(autotools-package))
-+$(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
