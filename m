@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA76AC47073
-	for <buildroot@archiver.kernel.org>; Sun,  7 Jan 2024 16:25:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13DFDC47074
+	for <buildroot@archiver.kernel.org>; Sun,  7 Jan 2024 16:25:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 64931400CF;
-	Sun,  7 Jan 2024 16:25:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 64931400CF
+	by smtp2.osuosl.org (Postfix) with ESMTP id A886840424;
+	Sun,  7 Jan 2024 16:25:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A886840424
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IAE38xZrCX1o; Sun,  7 Jan 2024 16:25:26 +0000 (UTC)
+	with ESMTP id eT2fyu6pL-fy; Sun,  7 Jan 2024 16:25:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5D5FD403E5;
-	Sun,  7 Jan 2024 16:25:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D5FD403E5
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3ACBA1BF38B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8B2E5403E5;
+	Sun,  7 Jan 2024 16:25:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B2E5403E5
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E29211BF38B
  for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 16:23:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 38074403C4
- for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 16:23:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 38074403C4
+ by smtp1.osuosl.org (Postfix) with ESMTP id B706A81357
+ for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 16:23:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B706A81357
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5e6nC2xtdTvM for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ROpx1saaubny for <buildroot@lists.busybox.net>;
  Sun,  7 Jan 2024 16:23:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 257A440424
- for <buildroot@buildroot.org>; Sun,  7 Jan 2024 16:23:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 257A440424
+ by smtp1.osuosl.org (Postfix) with ESMTP id DF7138132B
+ for <buildroot@buildroot.org>; Sun,  7 Jan 2024 16:23:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DF7138132B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 076718459B; Sun,  7 Jan 2024 16:23:42 +0000 (UTC)
+ id CE670847B4; Sun,  7 Jan 2024 16:23:41 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 7 Jan 2024 12:17:51 +0100
+Date: Sun, 7 Jan 2024 10:28:35 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: fe8420c92a2e8028ced743dfa310c8f7dc16b96a
-X-Git-Newrev: 81730dc4eaaf5ecaac98b95e043fa9c8a73504f3
+X-Git-Oldrev: c307cd9595c5889e5593b705e098fdebac44ff2f
+X-Git-Newrev: cc3a88b9eca3fb9cdc458c1423bb02a73c020a0c
 X-Patchwork-Hint: ignore
-Message-Id: <20240107162342.076718459B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/openssh: select
- linux-pam if refpolicy upstream is selected
+Message-Id: <20240107162341.CE670847B4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x]
+ package/giflib/0004-Fix-several-defects-found-by-Coverity-scan.patch: New
+ security patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,35 +64,84 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=81730dc4eaaf5ecaac98b95e043fa9c8a73504f3
+commit: https://git.buildroot.net/buildroot/commit/?id=cc3a88b9eca3fb9cdc458c1423bb02a73c020a0c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-linux-pam is required to login via OpenSSH if the upstream refpolicy for
-SELinux is enaabled, as linux-pam handles changing user contexts. If a
-user wants to make their own policy and use a refpolicy via git, we of course
-should let them do so. As such, only select linux-pam if the upstream version
-of refpolicy is selected.
-
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 2c5a82a29ceb382d53ccb08ffd34a92c142cadbb)
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit df04f179761614f3bccaf208d688ec4e2f64e38d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openssh/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ ...ix-several-defects-found-by-Coverity-scan.patch | 61 ++++++++++++++++++++++
+ 1 file changed, 61 insertions(+)
 
-diff --git a/package/openssh/Config.in b/package/openssh/Config.in
-index 08d3c7d391..a3038ba01f 100644
---- a/package/openssh/Config.in
-+++ b/package/openssh/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_OPENSSH
- 	bool "openssh"
- 	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_LINUX_PAM if BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_ZLIB
- 	help
+diff --git a/package/giflib/0004-Fix-several-defects-found-by-Coverity-scan.patch b/package/giflib/0004-Fix-several-defects-found-by-Coverity-scan.patch
+new file mode 100644
+index 0000000000..1719769872
+--- /dev/null
++++ b/package/giflib/0004-Fix-several-defects-found-by-Coverity-scan.patch
+@@ -0,0 +1,61 @@
++From a1c48b91cd1cf1e9bf7077709b69f4bfd4c4abc7 Mon Sep 17 00:00:00 2001
++From: Sandro Mani <manisandro@gmail.com>
++Date: Tue, 5 Dec 2023 16:38:48 -0700
++Subject: [PATCH] Fix several defects found by Coverity scan
++
++From: giflib-5.2.1-17.fc39.src.rpm
++Upstream: Not submitted
++
++Signed-off-by: Sandro Mani <manisandro@gmail.com>
++Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
++---
++ gif2rgb.c | 11 ++++++++++-
++ 1 file changed, 10 insertions(+), 1 deletion(-)
++
++diff --git a/gif2rgb.c b/gif2rgb.c
++index d9a469f..02cea41 100644
++--- a/gif2rgb.c
+++++ b/gif2rgb.c
++@@ -170,6 +170,8 @@ static void SaveGif(GifByteType *OutputBuffer,
++     /* Open stdout for the output file: */
++     if ((GifFile = EGifOpenFileHandle(1, &Error)) == NULL) {
++ 	PrintGifError(Error);
+++	free(OutputBuffer);
+++	GifFreeMapObject(OutputColorMap);
++ 	exit(EXIT_FAILURE);
++     }
++ 
++@@ -179,6 +181,8 @@ static void SaveGif(GifByteType *OutputBuffer,
++ 	EGifPutImageDesc(GifFile,
++ 			 0, 0, Width, Height, false, NULL) == GIF_ERROR) {
++ 	PrintGifError(Error);
+++	free(OutputBuffer);
+++	GifFreeMapObject(OutputColorMap);
++ 	exit(EXIT_FAILURE);
++     }
++ 
++@@ -187,8 +191,11 @@ static void SaveGif(GifByteType *OutputBuffer,
++ 	       GifFile->Image.Width, GifFile->Image.Height);
++ 
++     for (i = 0; i < Height; i++) {
++-	if (EGifPutLine(GifFile, Ptr, Width) == GIF_ERROR)
+++	if (EGifPutLine(GifFile, Ptr, Width) == GIF_ERROR) {
+++	    free(OutputBuffer);
+++	    GifFreeMapObject(OutputColorMap);
++ 	    exit(EXIT_FAILURE);
+++        }
++ 	GifQprintf("\b\b\b\b%-4d", Height - i - 1);
++ 
++ 	Ptr += Width;
++@@ -196,6 +203,8 @@ static void SaveGif(GifByteType *OutputBuffer,
++ 
++     if (EGifCloseFile(GifFile, &Error) == GIF_ERROR) {
++ 	PrintGifError(Error);
+++	free(OutputBuffer);
+++	GifFreeMapObject(OutputColorMap);
++ 	exit(EXIT_FAILURE);
++     }
++ }
++-- 
++2.43.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
