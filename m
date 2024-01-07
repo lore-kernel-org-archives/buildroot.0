@@ -1,88 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6500C47074
-	for <buildroot@archiver.kernel.org>; Sun,  7 Jan 2024 21:08:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60AA4C47073
+	for <buildroot@archiver.kernel.org>; Sun,  7 Jan 2024 21:13:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5E9C840017;
-	Sun,  7 Jan 2024 21:08:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5E9C840017
+	by smtp1.osuosl.org (Postfix) with ESMTP id ECEB580FAD;
+	Sun,  7 Jan 2024 21:13:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ECEB580FAD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KKLVgHg--hRV; Sun,  7 Jan 2024 21:08:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PvLEoiQFdKGF; Sun,  7 Jan 2024 21:13:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4799D403FF;
-	Sun,  7 Jan 2024 21:08:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4799D403FF
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C8B781BF381
- for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 21:08:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4F9CE81004;
+	Sun,  7 Jan 2024 21:13:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F9CE81004
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8A0731BF381
+ for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 21:13:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A1E7F41591
- for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 21:08:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1E7F41591
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5CA7780FAD
+ for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 21:13:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5CA7780FAD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id f3odpkjlsd02 for <buildroot@lists.busybox.net>;
- Sun,  7 Jan 2024 21:08:50 +0000 (UTC)
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com
- [IPv6:2607:f8b0:4864:20::d35])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B6797410B5
- for <buildroot@buildroot.org>; Sun,  7 Jan 2024 21:08:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B6797410B5
-Received: by mail-io1-xd35.google.com with SMTP id
- ca18e2360f4ac-7b7fdde8b98so69633539f.1
- for <buildroot@buildroot.org>; Sun, 07 Jan 2024 13:08:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704661729; x=1705266529;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=VTVWYsVl6vgBTRY7P+nDAkIQKUQfcuWn3kiT2M36/3A=;
- b=qvbPzM5jTxSLtuUveY6qCdm4mEAi4MPalDlYGJmKc3EZPG7S5+2LTf99fGh3txgTFx
- 97G1Dct4VOhWKBalM8UGAQ1755aCYit7Aa4B1ra/fn3qQaXcJY1uLhMW6XER5eg0c5B+
- XXHulOXQqupDoVn9GIgL0/NO0Kqm+pN2GTX3nZ2SrXiuYEnl7P9gpOQk5KJSP4CQeD1V
- CsCYrSlaY6/fv3V8kZxFvPr/baxplQ44hAfHM6P5JCknLXLASnphXm9BE7lzLUPClJC7
- saKr4mGihZ/xqDO0EZRym2xgWbCrQQtwFQnMtUnU0r0wyBN4k/a8abqUzB+fM/rYgRoV
- MUGg==
-X-Gm-Message-State: AOJu0YwmsUOev9PuVX9fpc5tH6LLEMHfw/yDOn4r3P8uQCyMmK7cD0Ul
- qL4TpEQAwga7YoSBwmSAP5zWFQz4HF7VWA==
-X-Google-Smtp-Source: AGHT+IHP4innmAOB90pr8eg+QhAj3gMv1JVPbM0QlNu1u/npk5K4+RVnIILXywfdMdm2mi2SkU9aUw==
-X-Received: by 2002:a6b:6f16:0:b0:7bb:15b:4630 with SMTP id
- k22-20020a6b6f16000000b007bb015b4630mr3155829ioc.6.1704661729150; 
- Sun, 07 Jan 2024 13:08:49 -0800 (PST)
-Received: from james-x399.localdomain (71-218-103-119.hlrn.qwest.net.
- [71.218.103.119]) by smtp.gmail.com with ESMTPSA id
- a4-20020a0566380b0400b0046dfb833ea5sm1890808jab.17.2024.01.07.13.08.48
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 07 Jan 2024 13:08:48 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun,  7 Jan 2024 14:08:46 -0700
-Message-Id: <20240107210846.3319912-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id T_NINkNOtdWp for <buildroot@lists.busybox.net>;
+ Sun,  7 Jan 2024 21:13:42 +0000 (UTC)
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E483980F5C
+ for <buildroot@buildroot.org>; Sun,  7 Jan 2024 21:13:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E483980F5C
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:4f89:5708:1633:580e])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id B7465B0055A;
+ Sun,  7 Jan 2024 22:13:33 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 07 Jan 2024 22:13:33 +0100
+Date: Sun, 7 Jan 2024 22:13:33 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Peter Seiderer <ps.report@gmx.net>
+Message-ID: <ZZsT_YP2YxbjzJiN@landeda>
+References: <20231205235919.510051-1-adam.duskett@amarulasolutions.com>
+ <20231205235919.510051-4-adam.duskett@amarulasolutions.com>
+ <87msth1ofj.fsf@48ers.dk> <ZZqUtsil3DTT20FN@landeda>
+ <20240107210325.2712e100@gmx.net>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1704661729; x=1705266529; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=VTVWYsVl6vgBTRY7P+nDAkIQKUQfcuWn3kiT2M36/3A=;
- b=KeTtCmnbQn9BI9WqU40jf4n8N9v9PtnapffGTtseJzEqaopLVYdw74QCJvJFfN6Iwf
- JHA51FbZYIBYkAFSNsFeGM6r+mwBHvIC0lRvmr22IDLCwjXaMpgyrmqA/J0UVksJ8yDf
- 6WDp1m7AnmDgtsc32OzfofMHPun/xnJ5Hq+KsZVF9Buj6qB3XszJNrz8DzIUOzc62Up2
- n54SB66fdShdqD1/M5cBDMp+htN2gyqPV3Mhdaz4rNSYohOBVogtvgWujgwgv9DINuPO
- 9sd30AQpPVPCfMDhvWTFRUyXkzMTxE8eIyuzWocpmfuYbTxMKx9IOTOnzrQm1MHXUTpb
- ra1g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=KeTtCmnb
-Subject: [Buildroot] [PATCH 1/1] package/python-aiohttp-security: bump to
- version 0.5.0
+Content-Disposition: inline
+In-Reply-To: <20240107210325.2712e100@gmx.net>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1704662019;
+ bh=1TvSfBWZ9rzaDFBAYs7Wyqh/xXzdQ4MtygKcOtx74b8=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=f+b0FjDPJ+BtPU8RXw2/8o55gEMR4UADiFoqxrbO9YemLZkdfgD+h6Q9+2963z212
+ aax6NlZrhKbIwrk1nHzXW9R5tXGpura3kzabDu67va5JCNUV8bnrw3HVk84ZUHPu8D
+ 44VgMViiQpI6Xk9R/RZY96TroqggM0f57OCxb1rhpLK2bywXFrUQU2Xlrs2rR9ZEUj
+ z6psdQnlU9AJRzi1bJMFKzadkZhhVDYoj0Go0kyoIKndDysWnITjzkqKMghxnI9Ff/
+ P1F42cUVw50zo63KLkiE7NGxNiJtQ9ppz3upQCxCnuHP+kOJ87veY3laEQcqAuaLLC
+ 5qhIt4D5jeO1g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=f+b0FjDP
+Subject: Re: [Buildroot] [PATCH 3/3]
+ package/giflib/0004-Fix-several-defects-found-by-Coverity-scan.patch: New
+ security patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,49 +79,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: Bernd Kuhls <bernd@kuhls.net>,
+ Adam Duskett <adam.duskett@amarulasolutions.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-aiohttp-security/python-aiohttp-security.hash | 4 ++--
- package/python-aiohttp-security/python-aiohttp-security.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Peter, All,
 
-diff --git a/package/python-aiohttp-security/python-aiohttp-security.hash b/package/python-aiohttp-security/python-aiohttp-security.hash
-index 2c23df14d6..6a76070298 100644
---- a/package/python-aiohttp-security/python-aiohttp-security.hash
-+++ b/package/python-aiohttp-security/python-aiohttp-security.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aiohttp-security/json
--md5  1624f982d7a779e6ed396ef2ed20acc7  aiohttp-security-0.4.0.tar.gz
--sha256  40d4bb150454e392c2dfa3620f6eab28e140e94cf0c2d3b4bf43aef653ec9405  aiohttp-security-0.4.0.tar.gz
-+md5  b34fb62c6f4dd130f3c94f74c3bdc150  aiohttp-security-0.5.0.tar.gz
-+sha256  50cb724d310e1d0289798bb98ae852c3b75b77e8f51ce5159c57b7261d0638bd  aiohttp-security-0.5.0.tar.gz
- # Locally computed sha256 checksums
- sha256  a1cc8ff7210897d55d2552fa0792340f8e59720e0160b6918699d40f9a782b1c  LICENSE
-diff --git a/package/python-aiohttp-security/python-aiohttp-security.mk b/package/python-aiohttp-security/python-aiohttp-security.mk
-index 9ab3b16b30..274f60423f 100644
---- a/package/python-aiohttp-security/python-aiohttp-security.mk
-+++ b/package/python-aiohttp-security/python-aiohttp-security.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_AIOHTTP_SECURITY_VERSION = 0.4.0
-+PYTHON_AIOHTTP_SECURITY_VERSION = 0.5.0
- PYTHON_AIOHTTP_SECURITY_SOURCE = aiohttp-security-$(PYTHON_AIOHTTP_SECURITY_VERSION).tar.gz
--PYTHON_AIOHTTP_SECURITY_SITE = https://files.pythonhosted.org/packages/36/01/d85be376b7c1773b3cb7849cd56dc7d38165664df7de2d3e20af507ef5bb
-+PYTHON_AIOHTTP_SECURITY_SITE = https://files.pythonhosted.org/packages/31/49/56c131fe3dead875ab5907b154dac7fb6ee727662de80b7da0ff045030d4
- PYTHON_AIOHTTP_SECURITY_SETUP_TYPE = setuptools
- PYTHON_AIOHTTP_SECURITY_LICENSE = Apache-2.0
- PYTHON_AIOHTTP_SECURITY_LICENSE_FILES = LICENSE
+On 2024-01-07 21:03 +0100, Peter Seiderer spake thusly:
+> On Sun, 7 Jan 2024 13:10:30 +0100, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+[--SNIP--]
+> > Looking at the code, I doubt it is a security issue, in fact. It's
+> > probably just a memory leak, as the free() is replaced by this function:
+[--SNIP--]
+> > So, Object->Colors leaked, but I don't think it was a "security" issue.
+> Matter of judgment if a (very theoretically) denial-of-service/out-of-memory is counted
+> as 'security' issue ;-)
+
+Sure, but the affected code is in the gif2rgb program, not in the
+library, so the effects of the memory leak are limited to the time the
+program runs. gif2rgb only handles a single intput file, so it is
+short-lived, and the leaked memory is reclaimed once the program is
+reaped.
+
+Also note that the program does an exit() right after freeing that
+memory; it does not ensure that any other allocated memory is freed
+before exiting, so there might anyway be more memory that leaks.
+
+So yes, it's better do free memory with the semantically corresponding
+funtion (GifMapObject() -> GifFreeMapObject()), but it would have real
+difficulties getting classified as a security issue *in this specific
+case*.
+
+The only way this leaked memory could cause an issue, is if the program
+is not reaped. But then, if someone is able to attack the system by
+leaving zombies around, whether those zombies leaked memory or not is of
+no concern. So I think, but of course, security is so difficult that I
+may easily be wrong.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.34.1
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
