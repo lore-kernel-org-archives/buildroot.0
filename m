@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13DFDC47074
-	for <buildroot@archiver.kernel.org>; Sun,  7 Jan 2024 16:25:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71B82C47073
+	for <buildroot@archiver.kernel.org>; Sun,  7 Jan 2024 16:25:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A886840424;
-	Sun,  7 Jan 2024 16:25:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A886840424
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2670D403A9;
+	Sun,  7 Jan 2024 16:25:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2670D403A9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eT2fyu6pL-fy; Sun,  7 Jan 2024 16:25:39 +0000 (UTC)
+	with ESMTP id 0BZ_QcpdQSAg; Sun,  7 Jan 2024 16:25:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8B2E5403E5;
-	Sun,  7 Jan 2024 16:25:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B2E5403E5
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E29211BF38B
- for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 16:23:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2C0F540443;
+	Sun,  7 Jan 2024 16:25:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2C0F540443
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3687A1BF38B
+ for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 16:23:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B706A81357
- for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 16:23:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B706A81357
+ by smtp2.osuosl.org (Postfix) with ESMTP id 55EA940424
+ for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 16:23:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 55EA940424
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ROpx1saaubny for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7py7qrG4Y3_W for <buildroot@lists.busybox.net>;
  Sun,  7 Jan 2024 16:23:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id DF7138132B
- for <buildroot@buildroot.org>; Sun,  7 Jan 2024 16:23:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DF7138132B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 299C940462
+ for <buildroot@buildroot.org>; Sun,  7 Jan 2024 16:23:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 299C940462
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CE670847B4; Sun,  7 Jan 2024 16:23:41 +0000 (UTC)
+ id 13FF5847B4; Sun,  7 Jan 2024 16:23:42 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 7 Jan 2024 10:28:35 +0100
+Date: Sun, 7 Jan 2024 12:18:22 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: c307cd9595c5889e5593b705e098fdebac44ff2f
-X-Git-Newrev: cc3a88b9eca3fb9cdc458c1423bb02a73c020a0c
+X-Git-Oldrev: 81730dc4eaaf5ecaac98b95e043fa9c8a73504f3
+X-Git-Newrev: efdcc3f4d33f9840c6b3b7b176000cbce62dd219
 X-Patchwork-Hint: ignore
-Message-Id: <20240107162341.CE670847B4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x]
- package/giflib/0004-Fix-several-defects-found-by-Coverity-scan.patch: New
- security patch
+Message-Id: <20240107162342.13FF5847B4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/openssh: security
+ bump to version 9.6p1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,84 +63,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc3a88b9eca3fb9cdc458c1423bb02a73c020a0c
+commit: https://git.buildroot.net/buildroot/commit/?id=efdcc3f4d33f9840c6b3b7b176000cbce62dd219
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit df04f179761614f3bccaf208d688ec4e2f64e38d)
+OpenSSH 9.6 was released on 2023-12-18.
+
+This release contains fixes for a newly-discovered weakness in the
+SSH transport protocol (the "Terrapin" attack), a logic error relating
+to constrained PKCS#11 keys in ssh-agent(1) and countermeasures for
+programs that invoke ssh(1) with user or hostnames containing invalid
+characters.
+
+https://www.openssh.com/txt/release-9.6
+
+Signed-off-by: Christian Stewart <christian@aperture.us>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 3c047ea463e27ceaafde76d64406862c3322daa0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ix-several-defects-found-by-Coverity-scan.patch | 61 ++++++++++++++++++++++
- 1 file changed, 61 insertions(+)
+ package/openssh/openssh.hash | 2 +-
+ package/openssh/openssh.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/giflib/0004-Fix-several-defects-found-by-Coverity-scan.patch b/package/giflib/0004-Fix-several-defects-found-by-Coverity-scan.patch
-new file mode 100644
-index 0000000000..1719769872
---- /dev/null
-+++ b/package/giflib/0004-Fix-several-defects-found-by-Coverity-scan.patch
-@@ -0,0 +1,61 @@
-+From a1c48b91cd1cf1e9bf7077709b69f4bfd4c4abc7 Mon Sep 17 00:00:00 2001
-+From: Sandro Mani <manisandro@gmail.com>
-+Date: Tue, 5 Dec 2023 16:38:48 -0700
-+Subject: [PATCH] Fix several defects found by Coverity scan
-+
-+From: giflib-5.2.1-17.fc39.src.rpm
-+Upstream: Not submitted
-+
-+Signed-off-by: Sandro Mani <manisandro@gmail.com>
-+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-+---
-+ gif2rgb.c | 11 ++++++++++-
-+ 1 file changed, 10 insertions(+), 1 deletion(-)
-+
-+diff --git a/gif2rgb.c b/gif2rgb.c
-+index d9a469f..02cea41 100644
-+--- a/gif2rgb.c
-++++ b/gif2rgb.c
-+@@ -170,6 +170,8 @@ static void SaveGif(GifByteType *OutputBuffer,
-+     /* Open stdout for the output file: */
-+     if ((GifFile = EGifOpenFileHandle(1, &Error)) == NULL) {
-+ 	PrintGifError(Error);
-++	free(OutputBuffer);
-++	GifFreeMapObject(OutputColorMap);
-+ 	exit(EXIT_FAILURE);
-+     }
-+ 
-+@@ -179,6 +181,8 @@ static void SaveGif(GifByteType *OutputBuffer,
-+ 	EGifPutImageDesc(GifFile,
-+ 			 0, 0, Width, Height, false, NULL) == GIF_ERROR) {
-+ 	PrintGifError(Error);
-++	free(OutputBuffer);
-++	GifFreeMapObject(OutputColorMap);
-+ 	exit(EXIT_FAILURE);
-+     }
-+ 
-+@@ -187,8 +191,11 @@ static void SaveGif(GifByteType *OutputBuffer,
-+ 	       GifFile->Image.Width, GifFile->Image.Height);
-+ 
-+     for (i = 0; i < Height; i++) {
-+-	if (EGifPutLine(GifFile, Ptr, Width) == GIF_ERROR)
-++	if (EGifPutLine(GifFile, Ptr, Width) == GIF_ERROR) {
-++	    free(OutputBuffer);
-++	    GifFreeMapObject(OutputColorMap);
-+ 	    exit(EXIT_FAILURE);
-++        }
-+ 	GifQprintf("\b\b\b\b%-4d", Height - i - 1);
-+ 
-+ 	Ptr += Width;
-+@@ -196,6 +203,8 @@ static void SaveGif(GifByteType *OutputBuffer,
-+ 
-+     if (EGifCloseFile(GifFile, &Error) == GIF_ERROR) {
-+ 	PrintGifError(Error);
-++	free(OutputBuffer);
-++	GifFreeMapObject(OutputColorMap);
-+ 	exit(EXIT_FAILURE);
-+     }
-+ }
-+-- 
-+2.43.0
-+
+diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
+index 4060b95e9b..618b13133d 100644
+--- a/package/openssh/openssh.hash
++++ b/package/openssh/openssh.hash
+@@ -1,4 +1,4 @@
+ # From https://www.openssh.com/txt/release-9.4p1
+-sha256  3608fd9088db2163ceb3e600c85ab79d0de3d221e59192ea1923e23263866a85  openssh-9.4p1.tar.gz
++sha256  910211c07255a8c5ad654391b40ee59800710dd8119dd5362de09385aa7a777c  openssh-9.6p1.tar.gz
+ # Locally calculated
+ sha256  05c30446ba738934b3f1efa965b454c122ca26cc4b268e5ae6843f58ccd1b16d  LICENCE
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index 358ef42b6e..ec9e6613b0 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENSSH_VERSION_MAJOR = 9.4
++OPENSSH_VERSION_MAJOR = 9.6
+ OPENSSH_VERSION_MINOR = p1
+ OPENSSH_VERSION = $(OPENSSH_VERSION_MAJOR)$(OPENSSH_VERSION_MINOR)
+ OPENSSH_CPE_ID_VERSION = $(OPENSSH_VERSION_MAJOR)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
