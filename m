@@ -4,53 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0ED3FC47073
-	for <buildroot@archiver.kernel.org>; Sun,  7 Jan 2024 11:16:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A72C3C47074
+	for <buildroot@archiver.kernel.org>; Sun,  7 Jan 2024 11:19:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B79A241E0B;
-	Sun,  7 Jan 2024 11:16:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B79A241E0B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 59432408D9;
+	Sun,  7 Jan 2024 11:19:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 59432408D9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id k-DzXjV1Ebln; Sun,  7 Jan 2024 11:16:04 +0000 (UTC)
+	with ESMTP id wgtoGIhalOkj; Sun,  7 Jan 2024 11:19:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2C0CF41E06;
-	Sun,  7 Jan 2024 11:16:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C0CF41E06
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 818181BF4D5
- for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 11:16:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B459C4085C;
+	Sun,  7 Jan 2024 11:19:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B459C4085C
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 517351BF4D5
+ for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 11:19:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5B874607D0
- for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 11:16:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B874607D0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2AC604085C
+ for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 11:19:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2AC604085C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yBQfTNOP3GyI for <buildroot@lists.busybox.net>;
- Sun,  7 Jan 2024 11:16:00 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4E08B607C9
- for <buildroot@buildroot.org>; Sun,  7 Jan 2024 11:16:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E08B607C9
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 07B7E240002;
- Sun,  7 Jan 2024 11:15:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nMa3fPQxGO4j for <buildroot@lists.busybox.net>;
+ Sun,  7 Jan 2024 11:19:05 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 11ABC406E0
+ for <buildroot@buildroot.org>; Sun,  7 Jan 2024 11:19:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11ABC406E0
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C75EE40002;
+ Sun,  7 Jan 2024 11:19:01 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rMR8G-006dag-19;
- Sun, 07 Jan 2024 12:15:56 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rMRBF-006diJ-02;
+ Sun, 07 Jan 2024 12:19:01 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20231212205951.280961-1-fontaine.fabrice@gmail.com>
-Date: Sun, 07 Jan 2024 12:15:56 +0100
-In-Reply-To: <20231212205951.280961-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 12 Dec 2023 21:59:51 +0100")
-Message-ID: <87edet1jir.fsf@48ers.dk>
+To: Christian Stewart <christian@aperture.us>
+References: <20231220092741.37794-1-christian@aperture.us>
+ <87msu5886b.fsf@48ers.dk>
+Date: Sun, 07 Jan 2024 12:19:00 +0100
+In-Reply-To: <87msu5886b.fsf@48ers.dk> (Peter Korsgaard's message of "Wed, 20
+ Dec 2023 11:44:44 +0100")
+Message-ID: <87a5ph1jdn.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH v2,1/1] package/libldns: fix libressl build
+Subject: Re: [Buildroot] [PATCH v1 1/1] package/openssh: security bump to
+ version 9.6p1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,30 +64,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fix the following build failure raised since bump of libressl to version
- > 3.8.2 in commit 21eca49ed5110872407b76ab9337d2877c4cda24:
+>>>>> "Christian" == Christian Stewart <christian@aperture.us> writes:
+ >> OpenSSH 9.6 was released on 2023-12-18.
+ >> This release contains fixes for a newly-discovered weakness in the
+ >> SSH transport protocol (the "Terrapin" attack), a logic error relating
+ >> to constrained PKCS#11 keys in ssh-agent(1) and countermeasures for
+ >> programs that invoke ssh(1) with user or hostnames containing invalid
+ >> characters.
 
- > ./keys.c:167:35: error: 'ENGINE_METHOD_ALL' undeclared (first use in this function)
- >   167 |         if(!ENGINE_set_default(e, ENGINE_METHOD_ALL)) {
- >       |                                   ^~~~~~~~~~~~~~~~~
+ >> https://www.openssh.com/txt/release-9.6
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/37cc05b78a7004caa1b45d896121f059a4f8ca00
+ >> Signed-off-by: Christian Stewart <christian@aperture.us>
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
- > Changes v1 -> v2 (after review of Yann E. Morin):
- >  - Disable gost without engines instead of patching code
+ > Committed, thanks.
 
-Committed to 2023.11.x, thanks.
+Committed to 2023.02.x and 2023.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
