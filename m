@@ -4,54 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59C8DC47073
-	for <buildroot@archiver.kernel.org>; Sun,  7 Jan 2024 17:34:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55AC0C47074
+	for <buildroot@archiver.kernel.org>; Sun,  7 Jan 2024 17:35:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C9E31415E5;
-	Sun,  7 Jan 2024 17:34:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C9E31415E5
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9F87041680;
+	Sun,  7 Jan 2024 17:35:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F87041680
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FgvvM5kF6XJx; Sun,  7 Jan 2024 17:34:55 +0000 (UTC)
+	with ESMTP id LJFCq_aZ_XhO; Sun,  7 Jan 2024 17:35:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3F2DF415E3;
-	Sun,  7 Jan 2024 17:34:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F2DF415E3
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E4E821BF3C0
- for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 17:34:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 00844415EC;
+	Sun,  7 Jan 2024 17:35:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 00844415EC
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5540D1BF3C0
+ for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 17:34:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BE16260681
- for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 17:34:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE16260681
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2E68F415E6
+ for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 17:34:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E68F415E6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id n0G3DF4k7QCw for <buildroot@lists.busybox.net>;
- Sun,  7 Jan 2024 17:34:52 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LmGO-8uLzTsV for <buildroot@lists.busybox.net>;
+ Sun,  7 Jan 2024 17:34:57 +0000 (UTC)
 Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
  [IPv6:2001:4b98:dc4:8::221])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D4904606A0
- for <buildroot@buildroot.org>; Sun,  7 Jan 2024 17:34:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D4904606A0
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4CD1E240003;
- Sun,  7 Jan 2024 17:34:48 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 723B7415E3
+ for <buildroot@buildroot.org>; Sun,  7 Jan 2024 17:34:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 723B7415E3
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C3C15240003;
+ Sun,  7 Jan 2024 17:34:55 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rMX2t-006iy2-1r;
- Sun, 07 Jan 2024 18:34:47 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rMX31-006iy6-0g;
+ Sun, 07 Jan 2024 18:34:55 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Adam Duskett <adam.duskett@amarulasolutions.com>
 References: <20231218194001.544887-1-adam.duskett@amarulasolutions.com>
-Date: Sun, 07 Jan 2024 18:34:47 +0100
-In-Reply-To: <20231218194001.544887-1-adam.duskett@amarulasolutions.com> (Adam
- Duskett's message of "Mon, 18 Dec 2023 12:39:46 -0700")
-Message-ID: <87o7dxyrm0.fsf@48ers.dk>
+ <20231218194001.544887-2-adam.duskett@amarulasolutions.com>
+Date: Sun, 07 Jan 2024 18:34:55 +0100
+In-Reply-To: <20231218194001.544887-2-adam.duskett@amarulasolutions.com> (Adam
+ Duskett's message of "Mon, 18 Dec 2023 12:39:47 -0700")
+Message-ID: <87jzolyrls.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH v2 01/14] package/sway/Config.in: Remove
- duplicate dependencies
+Subject: Re: [Buildroot] [PATCH v2 02/14] package/sway/Config.in: select
+ BR2_PACKAGE_XKEYBOARD_CONFIG
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,9 +72,8 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Adam" == Adam Duskett <adam.duskett@amarulasolutions.com> writes:
 
+ > Much like weston, this is a runtime dependency.
  > Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
- > ---
- > v1 -> v2: Add to series
 
 Committed to 2023.02.x and 2023.11.x, thanks.
 
