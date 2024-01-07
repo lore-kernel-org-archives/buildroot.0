@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00FD3C47073
-	for <buildroot@archiver.kernel.org>; Sun,  7 Jan 2024 16:22:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B299C47074
+	for <buildroot@archiver.kernel.org>; Sun,  7 Jan 2024 16:22:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 60CD4400CF;
-	Sun,  7 Jan 2024 16:22:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 60CD4400CF
+	by smtp2.osuosl.org (Postfix) with ESMTP id 44F28403B8;
+	Sun,  7 Jan 2024 16:22:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 44F28403B8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PyTe9uemManI; Sun,  7 Jan 2024 16:22:04 +0000 (UTC)
+	with ESMTP id 2C4tUi5WjBNm; Sun,  7 Jan 2024 16:22:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 300FD400D0;
-	Sun,  7 Jan 2024 16:22:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 300FD400D0
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1AED91BF869
+	by smtp2.osuosl.org (Postfix) with ESMTP id 43BEF403A5;
+	Sun,  7 Jan 2024 16:22:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 43BEF403A5
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1AE861BF38B
  for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 16:22:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F409C415E7
+ by smtp1.osuosl.org (Postfix) with ESMTP id 001DE82532
  for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 16:22:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F409C415E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 001DE82532
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wxPpXJLziuqh for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oe-4lE5CTRMs for <buildroot@lists.busybox.net>;
  Sun,  7 Jan 2024 16:22:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2B897415D4
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1214B82457
  for <buildroot@buildroot.org>; Sun,  7 Jan 2024 16:22:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B897415D4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1214B82457
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 18FB384758; Sun,  7 Jan 2024 16:22:00 +0000 (UTC)
+ id F30F88475D; Sun,  7 Jan 2024 16:21:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 7 Jan 2024 12:12:58 +0100
+Date: Sun, 7 Jan 2024 10:26:08 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 6c9852c602e1ebbce97c5a85133f2e903abae805
-X-Git-Newrev: 9fa2a798dce508f1f8d21e503a26716d9975b2fa
+X-Git-Oldrev: 3a23349e8cc2f27018367617bedac3daecb27a99
+X-Git-Newrev: 8fe4a7c8124feaa17d60c383bd244e7c33ae84ac
 X-Patchwork-Hint: ignore
-Message-Id: <20240107162200.18FB384758@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/jq: security bump
- to version 1.7.1
+Message-Id: <20240107162159.F30F88475D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x]
+ package/giflib/0003-Fix-CVE-2023-39742.patch: New security patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,48 +63,74 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9fa2a798dce508f1f8d21e503a26716d9975b2fa
+commit: https://git.buildroot.net/buildroot/commit/?id=8fe4a7c8124feaa17d60c383bd244e7c33ae84ac
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-Fixes the following security issues:
-
-CVE-2023-50246: Fix heap buffer overflow in jvp_literal_number_literal
-https://github.com/jqlang/jq/security/advisories/GHSA-686w-5m7m-54vc
-
-CVE-2023-50268: fix stack-buffer-overflow if comparing nan with payload
-https://github.com/jqlang/jq/security/advisories/GHSA-7hmr-442f-qc8j
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+[yann.morin.1998@free.fr: extend GIFLIB_IGNORE_CVES]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 6985955a69b87b20e952c3c8cfc48ce2511100be)
+(cherry picked from commit 74253ffee576ea809f7eeb380647345a2ff910be)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/jq/jq.hash | 2 +-
- package/jq/jq.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/giflib/0003-Fix-CVE-2023-39742.patch | 36 ++++++++++++++++++++++++++++
+ package/giflib/giflib.mk                     |  2 ++
+ 2 files changed, 38 insertions(+)
 
-diff --git a/package/jq/jq.hash b/package/jq/jq.hash
-index 6c2db98e87..d4d8656ea0 100644
---- a/package/jq/jq.hash
-+++ b/package/jq/jq.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  402a0d6975d946e6f4e484d1a84320414a0ff8eb6cf49d2c11d144d4d344db62  jq-1.7.tar.gz
-+sha256  478c9ca129fd2e3443fe27314b455e211e0d8c60bc8ff7df703873deeee580c2  jq-1.7.1.tar.gz
- sha256  10e974638a41fadfd72357f2f3a4325e20b856c563365128f72feaa406f8c92d  COPYING
-diff --git a/package/jq/jq.mk b/package/jq/jq.mk
-index d886459dcc..8c417fad31 100644
---- a/package/jq/jq.mk
-+++ b/package/jq/jq.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/giflib/0003-Fix-CVE-2023-39742.patch b/package/giflib/0003-Fix-CVE-2023-39742.patch
+new file mode 100644
+index 0000000000..2ba01ac8a4
+--- /dev/null
++++ b/package/giflib/0003-Fix-CVE-2023-39742.patch
+@@ -0,0 +1,36 @@
++From 4288b993ee9df6550a367fe06ede3c003dc7bbc6 Mon Sep 17 00:00:00 2001
++From: Sandro Mani <manisandro@gmail.com>
++Date: Tue, 5 Dec 2023 16:35:40 -0700
++Subject: [PATCH] Fix CVE-2023-39742
++
++From: giflib-5.2.1-17.fc39.src.rpm
++Fix segmentation faults due to non correct checking for args
++Fixes: https://nvd.nist.gov/vuln/detail/CVE-2023-39742
++Upstream: https://sourceforge.net/p/giflib/bugs/166/
++
++Signed-off-by: Sandro Mani <manisandro@gmail.com>
++Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
++---
++ getarg.c | 6 ++++++
++ 1 file changed, 6 insertions(+)
++
++diff --git a/getarg.c b/getarg.c
++index d569f6c..51fbe0b 100644
++--- a/getarg.c
+++++ b/getarg.c
++@@ -307,6 +307,12 @@ GAGetParmeters(void *Parameters[],
++     int i = 0, ScanRes;
++ 
++     while (!(ISSPACE(CtrlStrCopy[i]))) {
+++
+++        if ((*argv) == argv_end) {
+++            GAErrorToken = Option;
+++            return CMD_ERR_NumRead;
+++        }
+++
++         switch (CtrlStrCopy[i + 1]) {
++           case 'd':    /* Get signed integers. */
++               ScanRes = sscanf(*((*argv)++), "%d",
++-- 
++2.43.0
++
+diff --git a/package/giflib/giflib.mk b/package/giflib/giflib.mk
+index 1207eafa16..d91c77e2ee 100644
+--- a/package/giflib/giflib.mk
++++ b/package/giflib/giflib.mk
+@@ -13,6 +13,8 @@ GIFLIB_CPE_ID_VENDOR = giflib_project
  
--JQ_VERSION = 1.7
-+JQ_VERSION = 1.7.1
- JQ_SITE = https://github.com/jqlang/jq/releases/download/jq-$(JQ_VERSION)
- JQ_LICENSE = MIT (code), ICU (decNumber), CC-BY-3.0 (documentation)
- JQ_LICENSE_FILES = COPYING
+ # 0002-Fix-CVE-2022-28506.patch
+ GIFLIB_IGNORE_CVES = CVE-2022-28506
++# 0003-Fix-CVE-2023-39742.patch
++GIFLIB_IGNORE_CVES += CVE-2023-39742
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+ GIFLIB_BUILD_LIBS = static-lib
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
