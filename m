@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BDDE0C47077
-	for <buildroot@archiver.kernel.org>; Sat,  6 Jan 2024 17:38:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1538FC47073
+	for <buildroot@archiver.kernel.org>; Sun,  7 Jan 2024 11:42:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 487A4403F9;
-	Sat,  6 Jan 2024 17:38:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 487A4403F9
+	by smtp4.osuosl.org (Postfix) with ESMTP id B0C4240223;
+	Sun,  7 Jan 2024 11:42:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0C4240223
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id b8u-XFPkMyc8; Sat,  6 Jan 2024 17:38:26 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1UsL5i46NEp8; Sun,  7 Jan 2024 11:42:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7198940190;
-	Sat,  6 Jan 2024 17:38:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7198940190
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5D4151BF345
- for <buildroot@lists.busybox.net>; Sat,  6 Jan 2024 17:38:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2FB29401BF;
+	Sun,  7 Jan 2024 11:42:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2FB29401BF
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A2A0A1BF292
+ for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 11:42:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3053D40190
- for <buildroot@lists.busybox.net>; Sat,  6 Jan 2024 17:38:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3053D40190
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7B9CB82FC9
+ for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 11:42:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B9CB82FC9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GrlNdSt06aDa for <buildroot@lists.busybox.net>;
- Sat,  6 Jan 2024 17:38:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qH6SpnAzJUS6 for <buildroot@lists.busybox.net>;
+ Sun,  7 Jan 2024 11:42:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2D55E4018F
- for <buildroot@uclibc.org>; Sat,  6 Jan 2024 17:38:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D55E4018F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0328182C1E
+ for <buildroot@uclibc.org>; Sun,  7 Jan 2024 11:42:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0328182C1E
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 16B9F83F25; Sat,  6 Jan 2024 17:38:22 +0000 (UTC)
+ id E427684293; Sun,  7 Jan 2024 11:42:51 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Sat, 06 Jan 2024 17:38:21 +0000
+Date: Sun, 07 Jan 2024 11:42:51 +0000
 X-Bugzilla-Reason: CC
-X-Bugzilla-Type: new
+X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
@@ -54,15 +54,15 @@ X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter cc
- target_milestone
-Message-ID: <bug-15910-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: short_desc
+Message-ID: <bug-15910-163-ivHYGyotaz@https.bugs.busybox.net/>
+In-Reply-To: <bug-15910-163@https.bugs.busybox.net/>
+References: <bug-15910-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15910] New: USB keyboard working on Raspberry CM4
- IO with "raspberrypicm4io_64_defconfig"
+Subject: [Buildroot] [Bug 15910] USB keyboard is not working by default
+ "raspberrypicm4io_64_defconfig"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,40 +81,14 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=15910
 
-            Bug ID: 15910
-           Summary: USB keyboard working on Raspberry CM4 IO with
-                    "raspberrypicm4io_64_defconfig"
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned@buildroot.uclibc.org
-          Reporter: benoit@mubiance.com
-                CC: buildroot@uclibc.org
-  Target Milestone: ---
+Benoit Pereira da Silva <benoit@mubiance.com> changed:
 
-I use the last :  Buildroot 2023.11-512-gd1c067e01b.
-
-Without changing any options in "make menuconfig" excepted setting a root
-password
-
-1. "make raspberrypicm4io_64_defconfig"
-2. "make"
-3. install on a Compute module 4 with its standard IO board.
-4. I always boot with a screen + i ve tested various USB keyboard.
-
-The log are correct, some usb device are detected. 
-I m stuck on the prompt: "buildroot login: _"
-
-Nothing Happens in the TTY when i press keys.
-
-Note that the generated config.txt contains : 
-# enable dwc2 USB controller (USB 2.0)
-dtoverlay=dwc2,dr_mode=host
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+            Summary|USB keyboard working on     |USB keyboard is not working
+                   |Raspberry CM4 IO with       |by default
+                   |"raspberrypicm4io_64_defcon |"raspberrypicm4io_64_defcon
+                   |fig"                        |fig"
 
 -- 
 You are receiving this mail because:
