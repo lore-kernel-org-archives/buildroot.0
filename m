@@ -4,55 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32F67C47074
-	for <buildroot@archiver.kernel.org>; Sun,  7 Jan 2024 22:27:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3E38C47073
+	for <buildroot@archiver.kernel.org>; Sun,  7 Jan 2024 22:27:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D09D760EA0;
-	Sun,  7 Jan 2024 22:27:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D09D760EA0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9C7F860EA0;
+	Sun,  7 Jan 2024 22:27:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C7F860EA0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aOWGhxsXodky; Sun,  7 Jan 2024 22:27:18 +0000 (UTC)
+	with ESMTP id xG--zCfQrtmg; Sun,  7 Jan 2024 22:27:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3C77260E91;
-	Sun,  7 Jan 2024 22:27:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C77260E91
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0772D1BF33F
- for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 22:27:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DB56060E91;
+	Sun,  7 Jan 2024 22:27:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB56060E91
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CF0071BF33F
+ for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 22:27:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E259A83103
- for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 22:27:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E259A83103
+ by smtp4.osuosl.org (Postfix) with ESMTP id B19E1401F0
+ for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 22:27:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B19E1401F0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lNn_pqB_Lli7 for <buildroot@lists.busybox.net>;
- Sun,  7 Jan 2024 22:27:15 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E1F48830D7
- for <buildroot@busybox.net>; Sun,  7 Jan 2024 22:27:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E1F48830D7
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B3BED240003;
- Sun,  7 Jan 2024 22:27:11 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rMbbr-006m9Q-0I;
- Sun, 07 Jan 2024 23:27:11 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CiNnUcT-BL_7 for <buildroot@lists.busybox.net>;
+ Sun,  7 Jan 2024 22:27:53 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id CB05540108
+ for <buildroot@buildroot.org>; Sun,  7 Jan 2024 22:27:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB05540108
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B9771848CE; Sun,  7 Jan 2024 22:27:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Baruch Siach via buildroot <buildroot@buildroot.org>
-References: <bbe9d77a3248044af15eb27f127466e0e672723d.1703223960.git.baruch@tkos.co.il>
-Date: Sun, 07 Jan 2024 23:27:11 +0100
-In-Reply-To: <bbe9d77a3248044af15eb27f127466e0e672723d.1703223960.git.baruch@tkos.co.il>
- (Baruch Siach via buildroot's message of "Fri, 22 Dec 2023 07:46:00
- +0200")
-Message-ID: <874jfozsn4.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH v2] package/libcurl: fix build with GnuTLS
- and no verbose
+To: buildroot@buildroot.org
+Date: Sun, 7 Jan 2024 23:26:53 +0100
+X-Git-Refname: refs/heads/2023.11.x
+X-Git-Oldrev: a84c3d64a61046fff253422086d68491311c16e4
+X-Git-Newrev: 681d9d768379303cbec452f3644cf8e82f4d4b10
+X-Patchwork-Hint: ignore
+Message-Id: <20240107222753.B9771848CE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/libcurl: fix
+ build with GnuTLS and no verbose
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,28 +57,95 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@busybox.net
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Baruch" == Baruch Siach via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=681d9d768379303cbec452f3644cf8e82f4d4b10
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
- > A change of data logging introduced in version 8.5.0 broke the build.
- > Add a patch to fix that.
+A change of data logging introduced in version 8.5.0 broke the build.
+Add a patch to fix that.
 
- > Fixes:
- > http://autobuild.buildroot.net/results/c5b996696333c4ff1392dbb8e6b0edc9c5322ee4/
+Fixes:
+http://autobuild.buildroot.net/results/c5b996696333c4ff1392dbb8e6b0edc9c5322ee4/
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
- > ---
- > v2: Take upstream patch
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 088ac834b7deac1f96d0c769aca015bd8dc99075)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...001-gnutls-fix-build-with-disable-verbose.patch | 60 ++++++++++++++++++++++
+ 1 file changed, 60 insertions(+)
 
-Committed to 2023.02.x and 2023.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libcurl/0001-gnutls-fix-build-with-disable-verbose.patch b/package/libcurl/0001-gnutls-fix-build-with-disable-verbose.patch
+new file mode 100644
+index 0000000000..25e389c972
+--- /dev/null
++++ b/package/libcurl/0001-gnutls-fix-build-with-disable-verbose.patch
+@@ -0,0 +1,60 @@
++From 0d9f9c5ea8c15c70eb420242b60179d9083c70b7 Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Mon, 11 Dec 2023 20:45:01 +0200
++Subject: [PATCH] gnutls: fix build with --disable-verbose
++
++infof() parameters must be defined event with --disable-verbose since
++commit dac293cfb702 ("lib: apache style infof and trace
++macros/functions").
++
++Move also 'ptr' definition under !CURL_DISABLE_VERBOSE_STRINGS.
++
++Fixes the following build failure:
++
++In file included from ../lib/sendf.h:29,
++                 from vtls/gtls.c:44:
++vtls/gtls.c: In function 'Curl_gtls_verifyserver':
++vtls/gtls.c:841:34: error: 'version' undeclared (first use in this function); did you mean 'session'?
++  841 |         gnutls_protocol_get_name(version), ptr);
++      |                                  ^~~~~~~
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++Upstream: https://github.com/curl/curl/commit/af520ac9fec7d88e942f05fdcd90704adb9fa566
++---
++ lib/vtls/gtls.c | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/lib/vtls/gtls.c b/lib/vtls/gtls.c
++index f42b6d6691de..b95c5be3c5e5 100644
++--- a/lib/vtls/gtls.c
+++++ b/lib/vtls/gtls.c
++@@ -818,16 +818,17 @@ Curl_gtls_verifyserver(struct Curl_easy *data,
++   char certname[65] = ""; /* limited to 64 chars by ASN.1 */
++   size_t size;
++   time_t certclock;
++-  const char *ptr;
++   int rc;
++   CURLcode result = CURLE_OK;
++ #ifndef CURL_DISABLE_VERBOSE_STRINGS
+++  const char *ptr;
++   unsigned int algo;
++   unsigned int bits;
++   gnutls_protocol_t version = gnutls_protocol_get_version(session);
++ #endif
++   long * const certverifyresult = &ssl_config->certverifyresult;
++ 
+++#ifndef CURL_DISABLE_VERBOSE_STRINGS
++   /* the name of the cipher suite used, e.g. ECDHE_RSA_AES_256_GCM_SHA384. */
++   ptr = gnutls_cipher_suite_get_name(gnutls_kx_get(session),
++                                      gnutls_cipher_get(session),
++@@ -835,6 +836,7 @@ Curl_gtls_verifyserver(struct Curl_easy *data,
++ 
++   infof(data, "SSL connection using %s / %s",
++         gnutls_protocol_get_name(version), ptr);
+++#endif
++ 
++   /* This function will return the peer's raw certificate (chain) as sent by
++      the peer. These certificates are in raw format (DER encoded for
++-- 
++2.43.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
