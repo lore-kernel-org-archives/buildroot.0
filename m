@@ -4,66 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 907CCC47074
-	for <buildroot@archiver.kernel.org>; Sun,  7 Jan 2024 17:01:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5CC67C47073
+	for <buildroot@archiver.kernel.org>; Sun,  7 Jan 2024 17:22:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4A7C7414C6;
-	Sun,  7 Jan 2024 17:01:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A7C7414C6
+	by smtp4.osuosl.org (Postfix) with ESMTP id E7A1C41687;
+	Sun,  7 Jan 2024 17:22:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E7A1C41687
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ggI_wfoMEpC4; Sun,  7 Jan 2024 17:01:27 +0000 (UTC)
+	with ESMTP id 6kAfdNlHDgTR; Sun,  7 Jan 2024 17:22:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 99880413D3;
-	Sun,  7 Jan 2024 17:01:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 99880413D3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3C95B4169C;
+	Sun,  7 Jan 2024 17:22:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C95B4169C
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id ABFB71BF863
- for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 17:01:25 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0C2B91BF3C0
+ for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 17:22:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 82EEF413D3
- for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 17:01:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 82EEF413D3
+ by smtp4.osuosl.org (Postfix) with ESMTP id D83F4416B4
+ for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 17:22:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D83F4416B4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tUzjEJxARYaP for <buildroot@lists.busybox.net>;
- Sun,  7 Jan 2024 17:01:24 +0000 (UTC)
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 82308402D1
- for <buildroot@buildroot.org>; Sun,  7 Jan 2024 17:01:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 82308402D1
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:4f89:5708:1633:580e])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 7DFAEB0055E;
- Sun,  7 Jan 2024 18:01:20 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 07 Jan 2024 18:01:20 +0100
-Date: Sun, 7 Jan 2024 18:01:20 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <ZZrY4LsW6tPagJvI@landeda>
-References: <20240102083643.3055484-1-thomas.petazzoni@bootlin.com>
+ with ESMTP id tsIJs2GeYQ4M for <buildroot@lists.busybox.net>;
+ Sun,  7 Jan 2024 17:22:09 +0000 (UTC)
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3CFDE4176B
+ for <buildroot@buildroot.org>; Sun,  7 Jan 2024 17:22:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3CFDE4176B
+Received: by mail-wm1-x334.google.com with SMTP id
+ 5b1f17b1804b1-40e4582ed74so4110775e9.1
+ for <buildroot@buildroot.org>; Sun, 07 Jan 2024 09:22:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1704648124; x=1705252924;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=2pNWG42mumPXTK3P8NNVOaipj0qpyOJT1qNBBzNgKQE=;
+ b=iVlN83worAIdFHsLdG2N1B56Aax+Bbcsl6tMwwivsalOvtcqJlmFnYPGn/O2ul+aMw
+ HczilwfdO0vHTa2b6J1l46+XiG/bIijj4in2jFNMHC5fDilxO+EBtEux7BM6QaAY5g5p
+ arEbufi6RMQy/R5IwE0aPS1bZLbI3wNi0/MmMEVj/cmoP5DCdVXx1LfH4+srNpSq8Zgs
+ 4te9JN0LCJZuJlTVIirl+aMekdjWvyf1GK3u55BveQQLBdCedhTrwHVf4MiqCSF/bKQS
+ 9uZX0/H1n8n7TREtLvK8AkMbP8Ti9CX/RPOf/ZiJnTgkoWTydQ5oUiCiN8C0wo+zSVev
+ l4PQ==
+X-Gm-Message-State: AOJu0YziNeeMOhtrG38BbAbNMl55Mz5Nv4ANl2oLlhwTf0DHUirUNiE+
+ ccYmtycYuz9zpcVKS53xa981uH557cs=
+X-Google-Smtp-Source: AGHT+IFDz+2Dj02jGpcrCj+i+bRYP5CeSfWM9z5OZLzTop9dBh/TTyxPsG4ocI6HEtsOlHspr5wNkg==
+X-Received: by 2002:a05:600c:1553:b0:40d:6217:c99d with SMTP id
+ f19-20020a05600c155300b0040d6217c99dmr698700wmg.48.1704648124163; 
+ Sun, 07 Jan 2024 09:22:04 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ p5-20020a05600c358500b0040d39d61a94sm4228713wmq.1.2024.01.07.09.22.03
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 07 Jan 2024 09:22:03 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun,  7 Jan 2024 18:22:01 +0100
+Message-ID: <20240107172201.734515-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240102083643.3055484-1-thomas.petazzoni@bootlin.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1704646882;
- bh=2E7bBI8Z2Qiz9wEzSmtw4m5BvaoRTksiouHLmswAJ8o=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=qgREPBLSCaHeUVhXR61mTLINBi71aboUFhMSp19YXCJeYwxNdtgT9Pfv54uc8QfBd
- n6QYcJGesZqwS8bWH5MO8AlmJtfMgXFLGbRfuBKq2f3i3WFR5/P9Nx1Umk6lwXMTHF
- ZOx44oMa3B94a2pB1xrWgKLxRiJrHTSOGbFLzjRbiD89xjioLSHgNNnVUe0J+4v8sG
- wIcYX7PFCzONxgVAMOIgBh4sY77Sjo14OR0M3Va76/pAbzaE08JlACokmggKFeBe1m
- rmKh2AWqFTDkm+6rhBJSER6JvnNT/bekpTCPIzP9m7bLqv35JGoKFjAR2uGvpnzzdP
- eb7j37PBb2G4w==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1704648124; x=1705252924; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=2pNWG42mumPXTK3P8NNVOaipj0qpyOJT1qNBBzNgKQE=;
+ b=JuIieIkxuimBsGu1ROi5rFmB0+4htrR6jS6bvyxy61i/SgqJ1YFCWneFjzJMQOV/mx
+ xtxfMoO8kzRKePoEyCiUfdVhHdFZLnbT/mHp48jYfR6wcd+8pYRvN3kVRFV1YhefWhZ5
+ aVGyFv317jkWr/xi4lX4nRE/gTyS0RXadFsBVc68FT/8+9gbawLAru2woR8QFbTIz8CR
+ 6GGp7CZCe/wQ3YFQaQdm2x1+NuJa6U9eCjrmTyjmOGc3+h25tzw1iygsuuntMKYEQJUT
+ kw+f9Blj1wS1QnTPDIxXuSonBvTcFL8BhICgSThV8U2RvLx6BYc1+Vyr2rgCwfScjgtQ
+ YNiA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=qgREPBLS
-Subject: Re: [Buildroot] [PATCH v3] Config.in: change default optimization
- level from -Os to -O2
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=JuIieIkx
+Subject: [Buildroot] [PATCH 1/1] package/stunnel: fix build without psk
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,91 +93,84 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Buildroot List <buildroot@buildroot.org>
+Cc: Pierre-Jean Texier <texier.pj2@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thomas, All,
+Fix the following build failure without psk raised since bump to version
+5.71 in commit 059259eabbd8d15c1e60c0c3b8631d0c02b93898:
 
-On 2024-01-02 09:36 +0100, Thomas Petazzoni via buildroot spake thusly:
-> Historically, Buildroot has defaulted to -Os as the gcc optimization
-> flags. However, this default is probably not the most appropriate
-> anymore, and this commit therefore changes the default to -O2.
-> 
-> Here are some arguments in favor of this change:
-> 
-> - Most Buildroot users use Buildroot for platforms that have a
->   reasonable amount of storage, and the difference between -Os and -O2
->   in terms of code size is no longer as significant compared to the
->   size of storage available on average embedded Linux devices
->   typically found these days.
-> 
-> - -Os can have a pretty bad performance impact, compared to -O2.
-> 
-> - -Os is much less widely tested than -O2. For example, with recent
->    versions of gcc, there are parts of Qt5 that segfault when compiled
->    with -Os and work perfectly fine with -O2. Yes, it's a compiler bug
->    that should be fixed, but in the mean time, having a default that's
->    more widely used/tested makes sense.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ocsp.c: In function 'ocsp_init':
+ocsp.c:112:20: error: 'SERVICE_OPTIONS' {aka 'struct service_options_struct'} has no member named 'psk_keys'
+  112 |         if(!section->psk_keys) {
+      |                    ^~
 
-Applied to master, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/1707beea413a8da8713ad2dc59db947329da45d2
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...ocsp.c-fix-build-with-OPENSSL_NO_PSK.patch | 45 +++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+ create mode 100644 package/stunnel/0001-src-ocsp.c-fix-build-with-OPENSSL_NO_PSK.patch
 
-> ---
->  Config.in | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Config.in b/Config.in
-> index 554b4062eb..bd4bf872aa 100644
-> --- a/Config.in
-> +++ b/Config.in
-> @@ -474,7 +474,7 @@ config BR2_STRIP_EXCLUDE_DIRS
->  
->  choice
->  	prompt "gcc optimization level"
-> -	default BR2_OPTIMIZE_S
-> +	default BR2_OPTIMIZE_2
->  	help
->  	  Set the optimization level for gcc
->  
-> @@ -520,6 +520,7 @@ config BR2_OPTIMIZE_2
->  	  -falign-loops -falign-labels -ftree-vrp -ftree-pre. Please
->  	  note the warning under -fgcse about invoking -O2 on programs
->  	  that use computed gotos.
-> +	  This is the default.
->  
->  config BR2_OPTIMIZE_3
->  	bool "optimization level 3"
-> @@ -548,7 +549,6 @@ config BR2_OPTIMIZE_S
->  	  -falign-loops -falign-labels -freorder-blocks
->  	  -freorder-blocks-and-partition -fprefetch-loop-arrays
->  	  -ftree-vect-loop-version
-> -	  This is the default.
->  
->  config BR2_OPTIMIZE_FAST
->  	bool "optimize for fast (may break packages!)"
-> -- 
-> 2.43.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/stunnel/0001-src-ocsp.c-fix-build-with-OPENSSL_NO_PSK.patch b/package/stunnel/0001-src-ocsp.c-fix-build-with-OPENSSL_NO_PSK.patch
+new file mode 100644
+index 0000000000..a8edc1d465
+--- /dev/null
++++ b/package/stunnel/0001-src-ocsp.c-fix-build-with-OPENSSL_NO_PSK.patch
+@@ -0,0 +1,45 @@
++From 93e5cdd68b13cc3161d9b0094b0f331bdaf07cbc Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 6 Jan 2024 17:28:20 +0100
++Subject: [PATCH] src/ocsp.c: fix build with OPENSSL_NO_PSK
++
++Fix the following build failure with OPENSSL_NO_PSK:
++
++ocsp.c: In function 'ocsp_init':
++ocsp.c:112:20: error: 'SERVICE_OPTIONS' {aka 'struct service_options_struct'} has no member named 'psk_keys'
++  112 |         if(!section->psk_keys) {
++      |                    ^~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/1707beea413a8da8713ad2dc59db947329da45d2
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Upstream: https://github.com/mtrojnar/stunnel/pull/18
++---
++ src/ocsp.c | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/src/ocsp.c b/src/ocsp.c
++index 5073ded..12792af 100644
++--- a/src/ocsp.c
+++++ b/src/ocsp.c
++@@ -109,12 +109,16 @@ int ocsp_init(SERVICE_OPTIONS *section) {
++         s_log(LOG_DEBUG, "OCSP: Client OCSP stapling enabled");
++     } else {
++ #if OPENSSL_VERSION_NUMBER>=0x10002000L
+++#ifndef OPENSSL_NO_PSK
++         if(!section->psk_keys) {
+++#endif
++             if(SSL_CTX_set_tlsext_status_cb(section->ctx, ocsp_server_cb)==TLSEXT_STATUSTYPE_ocsp)
++                 s_log(LOG_DEBUG, "OCSP: Server OCSP stapling enabled");
+++#ifndef OPENSSL_NO_PSK
++         } else {
++             s_log(LOG_NOTICE, "OCSP: Server OCSP stapling is incompatible with PSK");
++         }
+++#endif
++ #else /* OpenSSL version 1.0.2 or later */
++         s_log(LOG_NOTICE, "OCSP: Server OCSP stapling not supported");
++ #endif /* OpenSSL version 1.0.2 or later */
++-- 
++2.43.0
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
