@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46A26C47074
-	for <buildroot@archiver.kernel.org>; Sun,  7 Jan 2024 22:29:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B667EC47074
+	for <buildroot@archiver.kernel.org>; Sun,  7 Jan 2024 22:29:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EA33560EAB;
-	Sun,  7 Jan 2024 22:29:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA33560EAB
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5375C60EE5;
+	Sun,  7 Jan 2024 22:29:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5375C60EE5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8pqHm1kjReBi; Sun,  7 Jan 2024 22:29:07 +0000 (UTC)
+	with ESMTP id yYGHSpuu1sPZ; Sun,  7 Jan 2024 22:29:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 39D1D605B3;
-	Sun,  7 Jan 2024 22:29:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 39D1D605B3
+	by smtp3.osuosl.org (Postfix) with ESMTP id 953A560EC9;
+	Sun,  7 Jan 2024 22:29:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 953A560EC9
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CB1731BF33F
- for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 22:29:04 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 120B71BF869
+ for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 22:29:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B16CE60E91
+ by smtp3.osuosl.org (Postfix) with ESMTP id CC11F605B3
  for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 22:29:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B16CE60E91
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC11F605B3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YlkYKec8FvUu for <buildroot@lists.busybox.net>;
+ with ESMTP id 5qh1We5WJMyy for <buildroot@lists.busybox.net>;
  Sun,  7 Jan 2024 22:29:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id EB4B7605B3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0130B60E82
  for <buildroot@buildroot.org>; Sun,  7 Jan 2024 22:29:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB4B7605B3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0130B60E82
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DB31A84906; Sun,  7 Jan 2024 22:29:03 +0000 (UTC)
+ id E582784922; Sun,  7 Jan 2024 22:29:03 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 7 Jan 2024 23:23:51 +0100
+Date: Sun, 7 Jan 2024 23:24:09 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: c01b8fd38aacb983599ad63cffd26bb5131e7fb5
-X-Git-Newrev: 2fdf355b2a208af3a6f30a243e71561bd30c3ba1
+X-Git-Oldrev: 2fdf355b2a208af3a6f30a243e71561bd30c3ba1
+X-Git-Newrev: 9fbe59c75b35ba1c56d6a572961df7fd8d65208e
 X-Patchwork-Hint: ignore
-Message-Id: <20240107222903.DB31A84906@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/glibc: add proper
- CPE ID version detail
+Message-Id: <20240107222903.E582784922@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/glibc: ignore
+ CVEs not considered as security issues by upstream
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,65 +63,81 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2fdf355b2a208af3a6f30a243e71561bd30c3ba1
+commit: https://git.buildroot.net/buildroot/commit/?id=9fbe59c75b35ba1c56d6a572961df7fd8d65208e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-As reported in bug 15895, the GLIBC_VERSION field having a value
-looking like 2.38-27-g750a45a783906a19591fb8ff6b7841470f1f5701, it
-prevents the CPE/CVE matching with the NVD database to work correctly.
+5 CVEs affecting glibc according to the NVD database are considered as
+not being security issues by upstream glibc developers:
 
-This commit fixes that by defining GLIBC_CPE_ID_VERSION, derived from
-GLIBC_VERSION, by extracting the base version.
+* CVE-2010-4756: The glob implementation in the GNU C Library (aka
+  glibc or libc6) allows remote authenticated users to cause a denial
+  of service (CPU and memory consumption) via crafted glob expressions
+  that do not match any pathnames. glibc maintainers position: "That's
+  standard POSIX behaviour implemented by (e)glibc. Applications using
+  glob need to impose limits for themselves"
 
-Also, we update GLIBC_IGNORE_CVES to account for the CVEs that have
-clearly been fixed between 2.38 and
-2.38-27-g750a45a783906a19591fb8ff6b7841470f1f5701. There are a number
-of other CVEs still affecting the glibc package, but they are not
-related to this
-2.38...2.38-27-g750a45a783906a19591fb8ff6b7841470f1f5701 range.
+* CVE-2019-1010022: GNU Libc current is affected by: Mitigation
+  bypass. The impact is: Attacker may bypass stack guard
+  protection. The component is: nptl. The attack vector is: Exploit
+  stack buffer overflow vulnerability and use this bypass
+  vulnerability to bypass stack guard. NOTE: Upstream comments
+  indicate "this is being treated as a non-security bug and no real
+  threat. glibc maintainers position: "Not treated as a security issue
+  by upstream https://sourceware.org/bugzilla/show_bug.cgi?id=22850"
 
-Fixes: #15895
+* CVE-2019-1010023: GNU Libc current is affected by: Re-mapping
+  current loaded library with malicious ELF file. The impact is: In
+  worst case attacker may evaluate privileges. The component is:
+  libld. The attack vector is: Attacker sends 2 ELF files to victim
+  and asks to run ldd on it. ldd execute code. NOTE: Upstream comments
+  indicate "this is being treated as a non-security bug and no real
+  threat. glibc maintainers position: "Not treated as a security issue
+  by upstream https://sourceware.org/bugzilla/show_bug.cgi?id=22851"
+
+* CVE-2019-1010024: GNU Libc current is affected by: Mitigation
+  bypass. The impact is: Attacker may bypass ASLR using cache of
+  thread stack and heap. The component is: glibc. NOTE: Upstream
+  comments indicate "this is being treated as a non-security bug and
+  no real threat. glibc maintainers position: "Not treated as a
+  security issue by upstream
+  https://sourceware.org/bugzilla/show_bug.cgi?id=22852"
+
+* CVE-2019-1010025: GNU Libc current is affected by: Mitigation
+  bypass. The impact is: Attacker may guess the heap addresses of
+  pthread_created thread. The component is: glibc. NOTE: the vendor's
+  position is "ASLR bypass itself is not a vulnerability. Glibc
+  maintainers position: "Not treated as a security issue by upstream
+  https://sourceware.org/bugzilla/show_bug.cgi?id=22853"
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit af8c0e5c746b11872b57e660afc2118e882f7722)
-[Peter: adjust for glibc 2.36.x on 2023.02.x]
+(cherry picked from commit adaae82c5872aa611b18a4c81bf60be268696442)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/glibc/glibc.mk | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ package/glibc/glibc.mk | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
 diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index a3a84e86ec..8a31779afb 100644
+index 8a31779afb..98e7db7b4b 100644
 --- a/package/glibc/glibc.mk
 +++ b/package/glibc/glibc.mk
-@@ -20,6 +20,30 @@ GLIBC_LICENSE = GPL-2.0+ (programs), LGPL-2.1+, BSD-3-Clause, MIT (library)
- GLIBC_LICENSE_FILES = COPYING COPYING.LIB LICENSES
- GLIBC_CPE_ID_VENDOR = gnu
+@@ -44,6 +44,20 @@ GLIBC_IGNORE_CVES += CVE-2023-4911
+ # 2.36 and the version we're really using.
+ GLIBC_IGNORE_CVES += CVE-2023-5156
  
-+# Extract the base version (e.g. 2.36) from GLIBC_VERSION in order to
-+# allow proper matching with the CPE database.
-+GLIBC_CPE_ID_VERSION = $(word 1, $(subst -,$(space),$(GLIBC_VERSION)))
-+
-+# Fixed by b0e7888d1fa2dbd2d9e1645ec8c796abf78880b9, which is between
-+# 2.36 and the version we're really using
-+GLIBC_IGNORE_CVES += CVE-2022-39046
-+
-+# Fixed by 4ea972b7edd7e36610e8cde18bf7a8149d7bac4f, which is between
-+# 2.36 and the version we're really using
-+GLIBC_IGNORE_CVES += CVE-2023-4527
-+
-+# Fixed by a9728f798ec7f05454c95637ee6581afaa9b487d, which is between
-+# 2.36 and the version we're really using
-+GLIBC_IGNORE_CVES += CVE-2023-4806
-+
-+# Fixed by 22955ad85186ee05834e47e665056148ca07699c, which is between
-+# 2.36 and the version we're really using.
-+GLIBC_IGNORE_CVES += CVE-2023-4911
-+
-+# Fixed by 856bac55f98dc840e7c27cfa82262b933385de90, which is between
-+# 2.36 and the version we're really using.
-+GLIBC_IGNORE_CVES += CVE-2023-5156
++# All these CVEs are considered as not being security issues by
++# upstream glibc:
++#  https://security-tracker.debian.org/tracker/CVE-2010-4756
++#  https://security-tracker.debian.org/tracker/CVE-2019-1010022
++#  https://security-tracker.debian.org/tracker/CVE-2019-1010023
++#  https://security-tracker.debian.org/tracker/CVE-2019-1010024
++#  https://security-tracker.debian.org/tracker/CVE-2019-1010025
++GLIBC_IGNORE_CVES += \
++	CVE-2010-4756 \
++	CVE-2019-1010022 \
++	CVE-2019-1010023 \
++	CVE-2019-1010024 \
++	CVE-2019-1010025
 +
  # glibc is part of the toolchain so disable the toolchain dependency
  GLIBC_ADD_TOOLCHAIN_DEPENDENCY = NO
