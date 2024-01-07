@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C703FC47074
-	for <buildroot@archiver.kernel.org>; Sun,  7 Jan 2024 22:44:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C9E0C47074
+	for <buildroot@archiver.kernel.org>; Sun,  7 Jan 2024 22:44:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 81EB760F10;
-	Sun,  7 Jan 2024 22:44:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 81EB760F10
+	by smtp3.osuosl.org (Postfix) with ESMTP id BAA8160EC8;
+	Sun,  7 Jan 2024 22:44:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BAA8160EC8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aJXbEU7WKhdX; Sun,  7 Jan 2024 22:44:28 +0000 (UTC)
+	with ESMTP id g6nYD2UBLIGA; Sun,  7 Jan 2024 22:44:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C329660EF3;
-	Sun,  7 Jan 2024 22:44:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C329660EF3
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 824E81BF869
+	by smtp3.osuosl.org (Postfix) with ESMTP id 14AA260ED2;
+	Sun,  7 Jan 2024 22:44:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14AA260ED2
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8BAC61BF870
  for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 22:44:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 68FB881186
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6609B41499
  for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 22:44:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 68FB881186
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6609B41499
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XUCx1sWhZfAM for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bgPNduCHlCO7 for <buildroot@lists.busybox.net>;
  Sun,  7 Jan 2024 22:44:12 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A1C6881092
+ by smtp4.osuosl.org (Postfix) with ESMTP id AB31F409B3
  for <buildroot@buildroot.org>; Sun,  7 Jan 2024 22:44:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A1C6881092
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB31F409B3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 81A6084A38; Sun,  7 Jan 2024 22:44:12 +0000 (UTC)
+ id 98CD684905; Sun,  7 Jan 2024 22:44:12 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 7 Jan 2024 23:39:54 +0100
+Date: Sun, 7 Jan 2024 23:40:12 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 0e44d4e383e0397bc91c2e697458923076e17536
-X-Git-Newrev: 4aedd5f93b9bae6802c665593bb521633740b5f9
+X-Git-Oldrev: d2f9e1ea5259a14e1d0447b7a2dfbcb1e382f674
+X-Git-Newrev: 02c3ce317a5bab9fe1426eec3d534174fcb5612c
 X-Patchwork-Hint: ignore
-Message-Id: <20240107224412.81A6084A38@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/putty: fix legal
- info
+Message-Id: <20240107224412.98CD684905@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/putty: disable
+ gssapi
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,33 +63,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4aedd5f93b9bae6802c665593bb521633740b5f9
+commit: https://git.buildroot.net/buildroot/commit/?id=02c3ce317a5bab9fe1426eec3d534174fcb5612c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Commit bf284bcfbaa7f031713afcc4c4e33d54724b6f57 forgot to update hash of
-license file (year updated)
+PUTTY_GSSAPI is enabled by default resulting in the following build
+failure since bump to version 0.78 in commit
+5673ea3ce4d4dd721bb17fc8d5b1283f5c1080b4:
+
+ /home/fabrice/buildroot/output/build/putty-0.79/unix/gss.c:133:10: fatal error: gssapi/gssapi.h: No such file or directory
+  133 | #include <gssapi/gssapi.h>
+      |          ^~~~~~~~~~~~~~~~~
 
 Fixes:
- - http://autobuild.buildroot.org/results/900b3fe8d4bf029c6bca6ca63c6e093e42cc1072
+ - http://autobuild.buildroot.org/results/d6d06b5aa0df070c3880399e044fb3cd3a830aec
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit e4038b6af4e7a6b47b01c4b71eacd999bf8300d7)
+(cherry picked from commit 499b4d6d22a704adf65d1db0808952ad386ee1a0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/putty/putty.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/putty/putty.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/putty/putty.hash b/package/putty/putty.hash
-index 05c1a9eea6..0ae2a86be8 100644
---- a/package/putty/putty.hash
-+++ b/package/putty/putty.hash
-@@ -4,4 +4,4 @@ sha256  428cc8666fbb938ebf4ac9276341980dcd70de395b33164496cf7995ef0ef0d8  putty-
- sha512  4f10f870b229c89e928921d3b350955ce1c1170a062e7943d9cc8dbd83389d82a9b844623541605f0db5a429d545c2d188bf8e384c6515466fae69b216120983  putty-0.79.tar.gz
+diff --git a/package/putty/putty.mk b/package/putty/putty.mk
+index 529edd51c8..4c9164d05e 100644
+--- a/package/putty/putty.mk
++++ b/package/putty/putty.mk
+@@ -10,6 +10,7 @@ PUTTY_LICENSE = MIT
+ PUTTY_LICENSE_FILES = LICENCE
+ PUTTY_CPE_ID_VENDOR = putty
+ PUTTY_DEPENDENCIES = host-pkgconf
++PUTTY_CONF_OPTS = -DPUTTY_GSSAPI=OFF
  
- # Locally calculated
--sha256  7b10c93f0d582e820a9e6f8c6abbcff54192e41e60644f4d09b96b14fdbc74f8  LICENCE
-+sha256  7ede37f344ee03436c155a375ecb6cdb42a77105baa6e7804bf43260dc4a0c54  LICENCE
+ ifeq ($(BR2_PACKAGE_LIBGTK3),y)
+ PUTTY_DEPENDENCIES += libgtk3
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
