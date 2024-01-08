@@ -4,84 +4,100 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73073C3DA6E
-	for <buildroot@archiver.kernel.org>; Mon,  8 Jan 2024 07:07:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE946C3DA6E
+	for <buildroot@archiver.kernel.org>; Mon,  8 Jan 2024 07:14:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0A1A860ECE;
-	Mon,  8 Jan 2024 07:07:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A1A860ECE
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9DCB360EAB;
+	Mon,  8 Jan 2024 07:14:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9DCB360EAB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id y00EO3-tQzb6; Mon,  8 Jan 2024 07:07:32 +0000 (UTC)
+	with ESMTP id entDh7FnGeaL; Mon,  8 Jan 2024 07:14:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5D12260E86;
-	Mon,  8 Jan 2024 07:07:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5D12260E86
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4D5C81BF580
- for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 07:07:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0A60C60ED8;
+	Mon,  8 Jan 2024 07:14:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A60C60ED8
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id ADB181BF580
+ for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 07:14:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1A5FC40125
- for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 07:07:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A5FC40125
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8602560ED8
+ for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 07:14:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8602560ED8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KQPCTTWBM33n for <buildroot@lists.busybox.net>;
- Mon,  8 Jan 2024 07:07:28 +0000 (UTC)
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com
- [IPv6:2607:f8b0:4864:20::132])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C1988400F1
- for <buildroot@buildroot.org>; Mon,  8 Jan 2024 07:07:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C1988400F1
-Received: by mail-il1-x132.google.com with SMTP id
- e9e14a558f8ab-36082f3cb05so5014265ab.0
- for <buildroot@buildroot.org>; Sun, 07 Jan 2024 23:07:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704697647; x=1705302447;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=jY7WPzqouCbbGmHsEMwbyLOnzsCwExf3KVPQY7DqiEg=;
- b=iFODnaDujcFMrr4sSw8sjNytnagdHyHuRoUslFi35XQpgJzJ/MlzY4q36g8eqn9r1i
- MqtUhq70jRG0z9lQHsztgqQWVdBUwZgai4IQqQ1V+49jRGrgagqiE2f6c7UODwGU+anP
- KbFZWxow9nvqjEZYWHFvkriwCkluT4E0G00t5nvnkywF9hHapHassKlKl8OCfKT6/POk
- mZBYpbTK18h25RMNkH5lHACbkJm2HwMHQskn0Oc7bOPyL8vwzfnne+2ae6sJiEhzcubZ
- Ovle4+XqYxb8tyl83RVCiiW8wOhihwjF6A+w5USnv3lK1pluSrFyq15Kxw6m9p5mpOPI
- khlw==
-X-Gm-Message-State: AOJu0YzxKHeWrgnbUXLt4UES4KbOTz6g9Irq7mS9P1K8RAR36G7Ew21r
- 3zt/VTdMgH9Rwl9mTv8lejaNtfzeM7fwDQ==
-X-Google-Smtp-Source: AGHT+IEzO8iwDKlnynHkwyrqGZRw7UlMi8rVPbH02RqEfkYube6RYpB4FD5XX6X1XT7+y4MpiTI07Q==
-X-Received: by 2002:a92:ca0b:0:b0:35f:f02f:40b7 with SMTP id
- j11-20020a92ca0b000000b0035ff02f40b7mr4249813ils.10.1704697647258; 
- Sun, 07 Jan 2024 23:07:27 -0800 (PST)
-Received: from james-x399.localdomain (71-218-103-119.hlrn.qwest.net.
- [71.218.103.119]) by smtp.gmail.com with ESMTPSA id
- c17-20020a02a611000000b0046e1f0f6d92sm682892jam.76.2024.01.07.23.07.26
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 07 Jan 2024 23:07:26 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lIMSEIUAczT7 for <buildroot@lists.busybox.net>;
+ Mon,  8 Jan 2024 07:14:15 +0000 (UTC)
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com
+ [148.163.156.1])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9D5BC60EAB
+ for <buildroot@buildroot.org>; Mon,  8 Jan 2024 07:14:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D5BC60EAB
+Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
+ by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
+ 4085YioU016486
+ for <buildroot@buildroot.org>; Mon, 8 Jan 2024 07:14:15 GMT
+Received: from ppma23.wdc07v.mail.ibm.com
+ (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+ by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vf1qepf58-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+ for <buildroot@buildroot.org>; Mon, 08 Jan 2024 07:14:14 +0000
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+ by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id
+ 40868MJw004388
+ for <buildroot@buildroot.org>; Mon, 8 Jan 2024 07:14:13 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+ by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3vfjpkeccs-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+ for <buildroot@buildroot.org>; Mon, 08 Jan 2024 07:14:13 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com
+ [10.20.54.104])
+ by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id
+ 4087EBVd30671140
+ (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
+ for <buildroot@buildroot.org>; Mon, 8 Jan 2024 07:14:11 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+ by IMSVA (Postfix) with ESMTP id 672A52004B
+ for <buildroot@buildroot.org>; Mon,  8 Jan 2024 07:14:11 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+ by IMSVA (Postfix) with ESMTP id 3051920040
+ for <buildroot@buildroot.org>; Mon,  8 Jan 2024 07:14:11 +0000 (GMT)
+Received: from oc8242746057.ibm.com (unknown [9.171.50.78])
+ by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP
+ for <buildroot@buildroot.org>; Mon,  8 Jan 2024 07:14:11 +0000 (GMT)
+From: Alexander Egorenkov <egorenar@linux.ibm.com>
 To: buildroot@buildroot.org
-Date: Mon,  8 Jan 2024 00:07:25 -0700
-Message-Id: <20240108070725.3469629-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Mon,  8 Jan 2024 08:14:10 +0100
+Message-ID: <20240108071410.118585-1-egorenar@linux.ibm.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: vXFZZUIMDpbwTps5KlKc_HlxEIRmqzaC
+X-Proofpoint-ORIG-GUID: vXFZZUIMDpbwTps5KlKc_HlxEIRmqzaC
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-01-07_15,2024-01-08_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0
+ priorityscore=1501 impostorscore=0 mlxlogscore=499 bulkscore=0
+ adultscore=0 malwarescore=0 phishscore=0 spamscore=0 mlxscore=0
+ lowpriorityscore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2311290000 definitions=main-2401080059
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1704697647; x=1705302447; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=jY7WPzqouCbbGmHsEMwbyLOnzsCwExf3KVPQY7DqiEg=;
- b=cQ4/1AYzM88GpJskmbnu7b/RyKT3+aFdTrelIyCu19hBo5gM5HAv4zve5Y706C6H4l
- t6EPXChNFEiYQKTeRUKVEJmr6lFdWCT/uEk0/bb5idfxGZsl9nf6S1NAGO5bWVFHqllK
- MGUgjt0vl+gAWnMz5uu6gvlFUyUdyTNyed3qiJdYsKzISmRt3+s6xDyHyvWvQQGn77aL
- aAYQSbcmdIudNVuRyVtjIB4NmkUENOgKzY1X6k4U/VoWZcCKTcyiKxoypq/0KR/Db9lN
- 4xvtA9s5Nen6jpI/Lmgd+i7FsG90vuAthN7A7ZVFPtEMDKtU0pjXuCW0E63kGJlY2VfK
- Borw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=cQ4/1AYz
-Subject: [Buildroot] [PATCH 1/1] package/python-babel: bump to version 2.14.0
+ d=ibm.com; h=from : to : subject :
+ date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=WjzcR29UR7Z+ZjQmdQPjGeWJl/NskpGYlVeFnkushD8=;
+ b=UKV3i343p8/x52TIWops4N+waeP+iuUWiKLOmAswwIS0ufdnWo1wG/gKmcWFJhM+lm3Y
+ EZ9Azh+2vT6sfxiXnNV1M+2vpqrECx9JDsvOdp86VMY17mOXQDRiiPxa9KFhhioPCuXk
+ 7UsylROvYQ42YzUr41LZ9A63/lhfmqJQfsWZQUshsy3AT9EFA1Dr6V5OWz1wejDIlfp/
+ dlt7GdTuctcqB//d5+z3+S7iJFQHtVg9qoixONjN85om2ZREYsnhJOs1txXlsipv8Tl/
+ Z8X3inja039P2GNTpYieNy/UponlR/rm9PeI0PmwPWaCMdA2bsNThFSzOTa2G6Rn0ZVY yg== 
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com
+ header.a=rsa-sha256 header.s=pp1 header.b=UKV3i343
+Subject: [Buildroot] [PATCH 1/1] package/s390-tools: bump version to 2.30.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,49 +109,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Lionel Flandrin <lionel@svkt.org>,
- James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
 ---
- package/python-babel/python-babel.hash | 4 ++--
- package/python-babel/python-babel.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/s390-tools/s390-tools.hash | 2 +-
+ package/s390-tools/s390-tools.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-babel/python-babel.hash b/package/python-babel/python-babel.hash
-index dc48831c44..ab4e022564 100644
---- a/package/python-babel/python-babel.hash
-+++ b/package/python-babel/python-babel.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/babel/json
--md5  3162229c2daa7c32674ed26f87b63127  Babel-2.13.1.tar.gz
--sha256  33e0952d7dd6374af8dbf6768cc4ddf3ccfefc244f9986d4074704f2fbd18900  Babel-2.13.1.tar.gz
-+md5  3bec3f4c842144c15d839bdde41a44d4  Babel-2.14.0.tar.gz
-+sha256  6919867db036398ba21eb5c7a0f6b28ab8cbc3ae7a73a44ebe34ae74a4e7d363  Babel-2.14.0.tar.gz
- # Locally computed sha256 checksums
- sha256  908e0ad72053ae27c1d17e3340bd14cff9bf935992ed56526d17c983ab6e7af7  LICENSE
-diff --git a/package/python-babel/python-babel.mk b/package/python-babel/python-babel.mk
-index f8d2ccd258..eb39b9aef7 100644
---- a/package/python-babel/python-babel.mk
-+++ b/package/python-babel/python-babel.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/s390-tools/s390-tools.hash b/package/s390-tools/s390-tools.hash
+index a00e95437b96..c70bf69f008c 100644
+--- a/package/s390-tools/s390-tools.hash
++++ b/package/s390-tools/s390-tools.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  849ff400dc6c1eb7eebe4aa3e7a4871721c25bcee6cfdd0535a056a038fd3ab0  s390-tools-2.29.0.tar.gz
++sha256  9e565701cc6df4808243027706ee0a76c5fc0c7f9aae0afce1479fd4ff68bcdf  s390-tools-2.30.0.tar.gz
+ sha256  cca17a9a944ebec769adee4aebd805c912c357785ff2705a99ffe68563021f75  LICENSE
+diff --git a/package/s390-tools/s390-tools.mk b/package/s390-tools/s390-tools.mk
+index c3155a13ff5a..bc39a9bd1970 100644
+--- a/package/s390-tools/s390-tools.mk
++++ b/package/s390-tools/s390-tools.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_BABEL_VERSION = 2.13.1
-+PYTHON_BABEL_VERSION = 2.14.0
- PYTHON_BABEL_SOURCE = Babel-$(PYTHON_BABEL_VERSION).tar.gz
--PYTHON_BABEL_SITE = https://files.pythonhosted.org/packages/aa/6c/737d2345d86741eeb594381394016b9c74c1253b4cbe274bb1e7b5e2138e
-+PYTHON_BABEL_SITE = https://files.pythonhosted.org/packages/e2/80/cfbe44a9085d112e983282ee7ca4c00429bc4d1ce86ee5f4e60259ddff7f
- PYTHON_BABEL_SETUP_TYPE = setuptools
- PYTHON_BABEL_LICENSE = BSD-3-Clause
- PYTHON_BABEL_LICENSE_FILES = LICENSE
+-S390_TOOLS_VERSION = 2.29.0
++S390_TOOLS_VERSION = 2.30.0
+ S390_TOOLS_SITE = $(call github,ibm-s390-linux,s390-tools,v$(S390_TOOLS_VERSION))
+ S390_TOOLS_LICENSE = MIT
+ S390_TOOLS_LICENSE_FILES = LICENSE
 -- 
-2.34.1
+2.43.0
 
 _______________________________________________
 buildroot mailing list
