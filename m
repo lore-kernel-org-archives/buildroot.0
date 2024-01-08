@@ -4,54 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F377C3DA6E
-	for <buildroot@archiver.kernel.org>; Mon,  8 Jan 2024 10:56:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 553DBC3DA6E
+	for <buildroot@archiver.kernel.org>; Mon,  8 Jan 2024 10:56:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CED5860F6B;
-	Mon,  8 Jan 2024 10:56:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CED5860F6B
+	by smtp3.osuosl.org (Postfix) with ESMTP id DC69E60D70;
+	Mon,  8 Jan 2024 10:56:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC69E60D70
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0oEBlhp2nYVL; Mon,  8 Jan 2024 10:56:13 +0000 (UTC)
+	with ESMTP id QGnHF8Yacghz; Mon,  8 Jan 2024 10:56:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2E5E160F40;
-	Mon,  8 Jan 2024 10:56:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E5E160F40
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E95FC1BF31D
- for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 10:56:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7D35C60ED0;
+	Mon,  8 Jan 2024 10:56:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D35C60ED0
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 551241BF31D
+ for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 10:56:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BED4460F6B
- for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 10:56:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BED4460F6B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2D9A040967
+ for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 10:56:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D9A040967
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Qlfm69kjTe8v for <buildroot@lists.busybox.net>;
- Mon,  8 Jan 2024 10:56:07 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B466960F40
- for <buildroot@buildroot.org>; Mon,  8 Jan 2024 10:56:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B466960F40
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 78B1560016;
- Mon,  8 Jan 2024 10:56:03 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rMnIY-0072ZA-2j;
- Mon, 08 Jan 2024 11:56:02 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id r35o8PBk3Cd2 for <buildroot@lists.busybox.net>;
+ Mon,  8 Jan 2024 10:56:48 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 43406408FD
+ for <buildroot@buildroot.org>; Mon,  8 Jan 2024 10:56:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 43406408FD
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 20D0184B74; Mon,  8 Jan 2024 10:56:48 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-References: <20231223145109.DC63E87D3E@busybox.osuosl.org>
-Date: Mon, 08 Jan 2024 11:56:02 +0100
-In-Reply-To: <20231223145109.DC63E87D3E@busybox.osuosl.org> (Thomas Petazzoni
- via buildroot's message of "Sat, 23 Dec 2023 15:46:58 +0100")
-Message-ID: <87plycxfel.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [git commit] package/wlroots: add hwdata and
- hwdata_pnp_ids as a dependency
+To: buildroot@buildroot.org
+Date: Mon, 8 Jan 2024 11:54:25 +0100
+X-Git-Refname: refs/heads/2023.11.x
+X-Git-Oldrev: bbde80325228158bfff8b2ccaafb4bdcc3668383
+X-Git-Newrev: a3d291e8f6ad2b970a81c1b8a7e7f25a69ffc229
+X-Patchwork-Hint: ignore
+Message-Id: <20240108105648.20D0184B74@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/wlroots: add
+ hwdata and hwdata_pnp_ids as a dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,61 +57,95 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=a3d291e8f6ad2b970a81c1b8a7e7f25a69ffc229
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=50eed2060ae6a35be257a8773b8e217a623eb29e
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Since upstream commit
+eec95e3d5e1a4f2e13b1f6b34cc287475ca57daf ("backend/drm: use pnp.ids to
+fetch EDID data"), the pnp.ids file from hwdata is parsed at build
+time to generate a C source file. As per backend/drm/meson.build:
 
- > Since upstream commit
- > eec95e3d5e1a4f2e13b1f6b34cc287475ca57daf ("backend/drm: use pnp.ids to
- > fetch EDID data"), the pnp.ids file from hwdata is parsed at build
- > time to generate a C source file. As per backend/drm/meson.build:
+hwdata = dependency('hwdata', required: false, native: true)
+if hwdata.found()
+	hwdata_dir = hwdata.get_variable(pkgconfig: 'pkgdatadir')
+	pnp_ids = files(hwdata_dir / 'pnp.ids')
+else
+	pnp_ids = files('/usr/share/hwdata/pnp.ids')
+endif
 
- > hwdata = dependency('hwdata', required: false, native: true)
- > if hwdata.found()
- > 	hwdata_dir = hwdata.get_variable(pkgconfig: 'pkgdatadir')
- > 	pnp_ids = files(hwdata_dir / 'pnp.ids')
- > else
- > 	pnp_ids = files('/usr/share/hwdata/pnp.ids')
- > endif
+This is only needed when the DRM backend of wlroots is enabled, but
+currently, Buildroot enables this backend unconditionally.
 
- > This is only needed when the DRM backend of wlroots is enabled, but
- > currently, Buildroot enables this backend unconditionally.
+This failure can be reproduced using the following defconfig:
 
- > This failure can be reproduced using the following defconfig:
+BR2_x86_64=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_OSMESA_GALLIUM=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_MESA3D_OPENGL_ES=y
+BR2_PACKAGE_WLROOTS=y
 
- > BR2_x86_64=y
- > BR2_TOOLCHAIN_EXTERNAL=y
- > BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
- > BR2_PACKAGE_MESA3D=y
- > BR2_PACKAGE_MESA3D_OSMESA_GALLIUM=y
- > BR2_PACKAGE_MESA3D_OPENGL_EGL=y
- > BR2_PACKAGE_MESA3D_OPENGL_ES=y
- > BR2_PACKAGE_WLROOTS=y
+The issue was not caught in the autobuilders because the last
+successful build of a configuration that includes wlroots dates back
+from 2022-05-05, at which time Buildroot had wlroots 0.15.1.
 
- > The issue was not caught in the autobuilders because the last
- > successful build of a configuration that includes wlroots dates back
- > from 2022-05-05, at which time Buildroot had wlroots 0.15.1.
+This change in wlroots was introduced in wlroots 0.16.0, which means
+that it's only since Buildroot bumped from 0.15.1 to 0.16.2 in
+d6279bc82c02b43c9a2f28c36639e092b9e9e08b ("package/wlroots: bump to
+version 0.16.2") that the issue occurs. This commit is not yet in any
+tagged release, so there is no need to backport this fix.
 
- > This change in wlroots was introduced in wlroots 0.16.0, which means
- > that it's only since Buildroot bumped from 0.15.1 to 0.16.2 in
- > d6279bc82c02b43c9a2f28c36639e092b9e9e08b ("package/wlroots: bump to
- > version 0.16.2") that the issue occurs. This commit is not yet in any
- > tagged release, so there is no need to backport this fix.
+It should be noted that the proposed patch also installs pnp.ids to
+the target filesystem, while it is in practice not needed at runtime
+by wlroots. However, our current hwdata packaging doesn't allow
+installing it only in staging, and since wlroots anyway implies we're
+building a fairly heavy graphics stack, the size overhead of hwdata is
+deemed to be an acceptable trade-off.
 
-Ehh, git describe --contains d6279bc82c02b43c9a2f28c36639e092b9e9e08b
-2023.11-rc1~361
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+[Thomas: further extend the commit log, with details gathered by Yann
+and myself.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 50eed2060ae6a35be257a8773b8e217a623eb29e)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/wlroots/Config.in  | 2 ++
+ package/wlroots/wlroots.mk | 1 +
+ 2 files changed, 3 insertions(+)
 
-So I've backported it to 2023.11.x as well, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/wlroots/Config.in b/package/wlroots/Config.in
+index fb23e9069c..7622a3033b 100644
+--- a/package/wlroots/Config.in
++++ b/package/wlroots/Config.in
+@@ -16,6 +16,8 @@ config BR2_PACKAGE_WLROOTS
+ 	depends on BR2_PACKAGE_HAS_LIBEGL
+ 	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND
+ 	depends on BR2_PACKAGE_HAS_LIBGLES
++	select BR2_PACKAGE_HWDATA
++	select BR2_PACKAGE_HWDATA_PNP_IDS
+ 	select BR2_PACKAGE_LIBDRM
+ 	select BR2_PACKAGE_LIBINPUT
+ 	select BR2_PACKAGE_LIBXKBCOMMON
+diff --git a/package/wlroots/wlroots.mk b/package/wlroots/wlroots.mk
+index b478e57abb..bb5c8f497d 100644
+--- a/package/wlroots/wlroots.mk
++++ b/package/wlroots/wlroots.mk
+@@ -13,6 +13,7 @@ WLROOTS_INSTALL_STAGING = YES
+ WLROOTS_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	host-wayland \
++	hwdata \
+ 	libinput \
+ 	libxkbcommon \
+ 	libegl \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
