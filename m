@@ -4,66 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE754C3DA6E
-	for <buildroot@archiver.kernel.org>; Mon,  8 Jan 2024 19:47:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EC68C3DA6E
+	for <buildroot@archiver.kernel.org>; Mon,  8 Jan 2024 19:47:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 555D641B91;
-	Mon,  8 Jan 2024 19:47:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 555D641B91
+	by smtp4.osuosl.org (Postfix) with ESMTP id E125641B55;
+	Mon,  8 Jan 2024 19:47:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E125641B55
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3fBXHrMHWyby; Mon,  8 Jan 2024 19:47:35 +0000 (UTC)
+	with ESMTP id cwGFtXrtnd1a; Mon,  8 Jan 2024 19:47:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9C82C41D7F;
-	Mon,  8 Jan 2024 19:47:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C82C41D7F
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BCEAF1BF2B4
- for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 19:47:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 21DC041BCD;
+	Mon,  8 Jan 2024 19:47:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 21DC041BCD
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6CA451BF2B4
+ for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 19:47:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 951DC41B91
- for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 19:47:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 951DC41B91
+ by smtp1.osuosl.org (Postfix) with ESMTP id 52E7C83870
+ for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 19:47:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 52E7C83870
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id o4xocjcOSw_P for <buildroot@lists.busybox.net>;
- Mon,  8 Jan 2024 19:47:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tXRqnHgzyCvV for <buildroot@lists.busybox.net>;
+ Mon,  8 Jan 2024 19:47:43 +0000 (UTC)
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7EC8341B61
- for <buildroot@buildroot.org>; Mon,  8 Jan 2024 19:47:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7EC8341B61
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4807A8384B
+ for <buildroot@buildroot.org>; Mon,  8 Jan 2024 19:47:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4807A8384B
 Received: from fli4l.lan.fli4l (p5b3a0630.dip0.t-ipconnect.de [91.58.6.48])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 119C9A4C027C;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 13E90A4C0DB7;
  Mon,  8 Jan 2024 20:47:14 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:36232)
  by fli4l.lan.fli4l with esmtp (Exim 4.97.1)
- (envelope-from <bernd@kuhls.net>) id 1rMvab-000000000O4-1ciI;
+ (envelope-from <bernd@kuhls.net>) id 1rMvab-000000000O4-1uFt;
  Mon, 08 Jan 2024 20:47:13 +0100
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Mon,  8 Jan 2024 20:47:11 +0100
-Message-Id: <20240108194713.1375752-1-bernd@kuhls.net>
+Date: Mon,  8 Jan 2024 20:47:12 +0100
+Message-Id: <20240108194713.1375752-2-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20240108194713.1375752-1-bernd@kuhls.net>
+References: <20240108194713.1375752-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: ++
+X-Spamd-Bar: +++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202312101026; t=1704743234;
- bh=GmYOvL/La3QwSLvRlfSPWePELNHPvoFtwtLCJyTZms4=;
- h=From:To:Cc:Subject:Date:From;
- b=uAw/cPN6E0qIUPsvieptsEwFoB5AmOt9/+F0BgRqcrr3aOoOo6+1W/v4ltDDKbglr
- cVFtqtR6PA+0NFSElsffhROKLWyzh5/XPFQhaXNGiBdo1E6fqNErKW0/AMtGaBPpY2
- Tgh5nS5Rfv1CskaURHRWq2DwcERCHgaMgXkoNY6C5xxRy/ZPJiHsJErlL5bJX1tcYP
- MDPkktJ8eU87RnnhmIvypWb/Co//CqlbKeVVUjr3vcNvrRYUE5BXIHtFs0KcUHJ5Fm
- fQIrVOcXFDUg/fPJuISNKkUuL0xApN3n+MliTOb4Nt2sfU2y3VP9MZwa+Ii8Okadky
- jCtZTf0nwpgIQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=JRvBBYIbqVSst4/myoovvBK57ir97cXzrqbmqa2DQfk=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=mBByeM4nlPoZ2oeAEGzvMq70zP3qZ+3jb9Tsma5+qN/5ZIWi8lNeOYAb9PUxYhDTL
+ CBykrwqa719zMrsmS/V9RmeWUDaV6ll3zr3AX6+bMonsLXMO2EqUlJH0eRiTYSJkQZ
+ AboqnsQ6Uzg7pGOntj3Y4Vp0fwDyxc1HXpRFZrBzzZXUK39VBB6YtynS/W7c7qXdNZ
+ wYwXQa0fbi0uUb25OT9pgAoaU0YiS3dsBigtAfHcLY8wXSkvoeSnprYuNTdRHV1MVd
+ AcLzcwSAACbS4dTEg8Ck6H4FRAqWunFOhHMM6JSw4lCkMrd8Xti4Kh2SmmJQTltCaL
+ ZaAP0RI072f3Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202312101026 header.b=uAw/cPN6
-Subject: [Buildroot] [PATCH 1/3] {linux, linux-headers}: bump 4.{14,
- 19}.x / 5.4.x series
+ header.a=rsa-sha256 header.s=kas202312101026 header.b=mBByeM4n
+Subject: [Buildroot] [PATCH 2/3] {toolchain,
+ linux-headers}: add support for 6.7 headers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,47 +86,113 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+And add (and default to) 6.7 to linux-headers.
+
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- linux/linux.hash                     | 6 +++---
- package/linux-headers/Config.in.host | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ linux/linux.hash                                    |  1 +
+ package/linux-headers/Config.in.host                | 13 +++++++++++--
+ toolchain/Config.in                                 |  5 +++++
+ .../toolchain-external-custom/Config.in.options     |  6 +++++-
+ 4 files changed, 22 insertions(+), 3 deletions(-)
 
 diff --git a/linux/linux.hash b/linux/linux.hash
-index 4207bd6b2f..ff2ca2d6fe 100644
+index ff2ca2d6fe..f8b50e50fd 100644
 --- a/linux/linux.hash
 +++ b/linux/linux.hash
-@@ -4,10 +4,10 @@ sha256  2df774dd53f9ffd4e57ebf804cf597709295df6a304fe261d25220a134b7f041  linux-
+@@ -1,4 +1,5 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
++sha256  ef31144a2576d080d8c31698e83ec9f66bf97c677fa2aaf0d5bbb9f3345b1069  linux-6.7.tar.xz
+ sha256  9ee627e4c109aec7fca3eda5898e81d201af2c7eb2f7d9d7d94c1f0e1205546c  linux-6.6.10.tar.xz
+ sha256  2df774dd53f9ffd4e57ebf804cf597709295df6a304fe261d25220a134b7f041  linux-6.1.71.tar.xz
  # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
- sha256  5a807a5fa2a80ada957d8079681dfb5cc196ec26f43244d1c8a4fd7af592d192  linux-5.15.146.tar.xz
- sha256  c43d613216e6c5197519a4e979de5c1b510100858ff591963931c99e59c7485b  linux-5.10.206.tar.xz
--sha256  4dae99e49f466d4689e128ec023754908147159d7462019a83c7da1f25df9b15  linux-5.4.265.tar.xz
-+sha256  da072f7e6fe719c01e517cac1fa9988b2f5fa87d62a8501b7dc16d3b62b2acb6  linux-5.4.266.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256  022dce3935eadec7c31093992cc101c905fd4ffbb8afce92f3e41fdd0fa18b36  linux-4.19.303.tar.xz
--sha256  8a1d520cfa71e9faebae9d8c24101f5bffe48fcb897dede4cecad5af67c34a45  linux-4.14.334.tar.xz
-+sha256  cdc6a5d51aaff7c50bfe4ac4adf5cc3727043a24641145dc268e858db2a4b598  linux-4.19.304.tar.xz
-+sha256  29688745ab20b1fdf77a3cb50fbfcb266a9834b87dd707594c3c13ab43ec4029  linux-4.14.335.tar.xz
- # Locally computed
- sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
- sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
 diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index df760326dc..b0dcbd3011 100644
+index b0dcbd3011..070c57b5a1 100644
 --- a/package/linux-headers/Config.in.host
 +++ b/package/linux-headers/Config.in.host
-@@ -408,9 +408,9 @@ endchoice
+@@ -3,7 +3,7 @@ comment "Kernel Header Options"
+ choice
+ 	prompt "Kernel Headers"
+ 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
+-	default BR2_KERNEL_HEADERS_6_6
++	default BR2_KERNEL_HEADERS_6_7
+ 	help
+ 	  Select the kernel version to get headers from.
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.14.334"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.303"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.265"	if BR2_KERNEL_HEADERS_5_4
-+	default "4.14.335"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.304"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.266"	if BR2_KERNEL_HEADERS_5_4
- 	default "5.10.206"	if BR2_KERNEL_HEADERS_5_10
+@@ -52,6 +52,10 @@ config BR2_KERNEL_HEADERS_6_1
+ config BR2_KERNEL_HEADERS_6_6
+ 	bool "Linux 6.6.x kernel headers"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_6
++
++config BR2_KERNEL_HEADERS_6_7
++	bool "Linux 6.7.x kernel headers"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_7
+ 	select BR2_KERNEL_HEADERS_LATEST
+ 
+ config BR2_KERNEL_HEADERS_VERSION
+@@ -129,8 +133,12 @@ choice
+ 	  If your kernel headers are more recent than the latest version
+ 	  in the choice, then select the latest version.
+ 
++config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_7
++	bool "6.7.x or later"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_7
++
+ config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6
+-	bool "6.6.x or later"
++	bool "6.6.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_6
+ 
+ config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_5
+@@ -415,6 +423,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
  	default "5.15.146"	if BR2_KERNEL_HEADERS_5_15
  	default "6.1.71"	if BR2_KERNEL_HEADERS_6_1
+ 	default "6.6.10"	if BR2_KERNEL_HEADERS_6_6
++	default "6.7"		if BR2_KERNEL_HEADERS_6_7
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 34e0ae2c5f..12150eff0c 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -644,6 +644,10 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_5
+ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_6
+ 	bool
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_5
++
++config BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_7
++	bool
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_6
+ 	select BR2_TOOLCHAIN_HEADERS_LATEST
+ 
+ # This should be selected by the latest version, above, to indicate that
+@@ -657,6 +661,7 @@ config BR2_TOOLCHAIN_HEADERS_LATEST
+ # stops affecting a value on the first matching default.
+ config BR2_TOOLCHAIN_HEADERS_AT_LEAST
+ 	string
++	default "6.7"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_7
+ 	default "6.6"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_6
+ 	default "6.5"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_5
+ 	default "6.4"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_4
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index 5554d56719..a7c239dcab 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -162,8 +162,12 @@ choice
+ 	  If your toolchain uses headers newer than the latest version
+ 	  in the choice, then select the latest version.
+ 
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_6_7
++	bool "6.7.x or later"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_7
++
+ config BR2_TOOLCHAIN_EXTERNAL_HEADERS_6_6
+-	bool "6.6.x or later"
++	bool "6.6.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_6
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_HEADERS_6_5
 -- 
 2.39.2
 
