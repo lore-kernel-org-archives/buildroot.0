@@ -4,82 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3E6FC3DA6E
-	for <buildroot@archiver.kernel.org>; Mon,  8 Jan 2024 22:18:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7765C3DA6E
+	for <buildroot@archiver.kernel.org>; Mon,  8 Jan 2024 22:18:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 423C241365;
-	Mon,  8 Jan 2024 22:18:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 423C241365
+	by smtp4.osuosl.org (Postfix) with ESMTP id 99E414191C;
+	Mon,  8 Jan 2024 22:18:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 99E414191C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3nwQPJU0u9AN; Mon,  8 Jan 2024 22:18:12 +0000 (UTC)
+	with ESMTP id u1HlMloct6NN; Mon,  8 Jan 2024 22:18:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 80D2F410B2;
-	Mon,  8 Jan 2024 22:18:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80D2F410B2
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 57B201BF421
- for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 22:18:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DD6574159C;
+	Mon,  8 Jan 2024 22:18:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD6574159C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B05961BF421
+ for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 22:18:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3DFDE60E7B
- for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 22:18:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3DFDE60E7B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 87BB941953
+ for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 22:18:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 87BB941953
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cvjfGvyEpffP for <buildroot@lists.busybox.net>;
- Mon,  8 Jan 2024 22:18:09 +0000 (UTC)
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com
- [IPv6:2607:f8b0:4864:20::234])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5F90060AFC
- for <buildroot@buildroot.org>; Mon,  8 Jan 2024 22:18:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F90060AFC
-Received: by mail-oi1-x234.google.com with SMTP id
- 5614622812f47-3bbd6e37af4so2242531b6e.1
- for <buildroot@buildroot.org>; Mon, 08 Jan 2024 14:18:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704752288; x=1705357088;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=z4EHeLa5aj0xpRNxx4k+JMQY9ZzL4oMo6XdL0MNV1A8=;
- b=edPfG9Bvm/5QIK5L6AwJ4dvu7cxpt3kBjUCWINkaBzkvCDr34jQuHjDxKLqPxkcHFf
- uLIp8eq7f7Xp8t7rtLv2jhj83l7H7sOyEMn5ggPnaUIGFxbGEuTfA1GnkyLxzP9o4c1Q
- PcB8Rljt6Km0a2ED4lOFwlXed3q4Bg3SykljDTbYoF+JwsxUBliCb1nRXWTWhg0qE0gq
- xKCGqFpOcCflw9ggc6BkUkCJVDVaWqHgTJeBnvQvx4LTdanV1SSPCYuV+H4pr0R5mcTc
- RFVYCAin8gXVDedVRVeipI/BLy8My209kUsbvvXkEK8iBszsnGf5WeZsfMTJSL1KPn5X
- EGiw==
-X-Gm-Message-State: AOJu0Yzif9XvlsH0wCC3d6P8yfmQvROS6iuPZtkr+jTv/q9NQBFOKDjY
- AnzWdfePJ7yHAnkbGOqpgSdbco6XulIv6jCiERvvy5imdKD3aw==
-X-Google-Smtp-Source: AGHT+IHkPGPzHBhqIYlaDkDG9ASztXAgekXb4FG9ei1sbEcxPyII/Fpdmc1uI/uLBF3/dstzVaTPeTQaLDMaczYEQRU=
-X-Received: by 2002:a05:6808:3a0e:b0:3bd:3023:d282 with SMTP id
- gr14-20020a0568083a0e00b003bd3023d282mr2860851oib.110.1704752287815; Mon, 08
- Jan 2024 14:18:07 -0800 (PST)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gZqQFwAlomrB for <buildroot@lists.busybox.net>;
+ Mon,  8 Jan 2024 22:18:46 +0000 (UTC)
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 29CC940579
+ for <buildroot@buildroot.org>; Mon,  8 Jan 2024 22:18:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 29CC940579
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:4f89:5708:1633:580e])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 26A3AB0037C;
+ Mon,  8 Jan 2024 23:18:41 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Mon, 08 Jan 2024 23:18:40 +0100
+Date: Mon, 8 Jan 2024 23:18:40 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <ZZx0wJuA1601jiMn@landeda>
+References: <20240106101504.527255-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
-References: <20240108013056.39493-1-patrick.oppenlander@gmail.com>
- <87bk9w2v2v.fsf@tarshish>
-In-Reply-To: <87bk9w2v2v.fsf@tarshish>
-From: Patrick Oppenlander <patrick.oppenlander@gmail.com>
-Date: Tue, 9 Jan 2024 09:17:56 +1100
-Message-ID: <CAEg67Gmdn+qf_DqpA66un5oBgu3iqkejBVE9mBVpRqWrmpQ1rw@mail.gmail.com>
-To: Baruch Siach <baruch@tkos.co.il>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1704752288; x=1705357088; darn=buildroot.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=z4EHeLa5aj0xpRNxx4k+JMQY9ZzL4oMo6XdL0MNV1A8=;
- b=Q6IluSITsnyuMMRI6EKkjOz+YWKdtuQXKVJT6LzOyLIb8Lp6n7ZNuy9Y0dpiZwOVmm
- 0EB+OCsGuMi5LlOwMovd4cs1A+Kw1KAcOundhnLErp09AdIUcC6zoZag947p2VgWFkei
- BE1GR6CeAY+6ZLA/ODM1toXXlinEV9Xq2pmrFY9KI01ZT/Nd35ZLRxiL6pv9dxO23fUb
- Z8de8Zg32O0r628VrwcesawQNaHQeAisx2JSstWb5Fnwxdxv5sNteD+XhsLn9gVWPI2c
- Ow+tcet3QAuD0+PTGbnhuS/5om2Wy/mKKQlHuk1ZW3zjTKGRYTEI5CRh3+ntp6BPwrAM
- fDIQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Q6IluSIT
-Subject: Re: [Buildroot] [PATCH] package/minisign: new package
+Content-Disposition: inline
+In-Reply-To: <20240106101504.527255-1-fontaine.fabrice@gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1704752324;
+ bh=uGwhv112ODPsrQWe5rkWoBM8pyqoNGR+Bcw9ypdr83A=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=df+fLoDJgGKK1keGoxLL4YN8AnnF48DN9prtR/u3mvXior4RccQUe/eUg1huNX8ht
+ 8JmFBCevXYYt7fc93sQ8SQmezMQX3b+u8K8Vb/6tA8yelWT+4f7ytCVGCJhcBt4lu1
+ 3z0gATURWHV4aMCbn9k5b3JKrnG2DZgUX9SFFqmtejlUdyEKH+RanrbK+gtCpyT1p0
+ zxyGQiJVaL+Em8VcyKrfJb6N+h0Gebfkl5haQegCEXuxbxaG0CmYAlnqCcbhxsV7zW
+ tpfJeNrHDmSYSvuoAmZKInZMy+CV+qhIIpXBhsjyhdBkTcmyjIBY/itq1n9ex/gmsY
+ UlM1LJnEihcAA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=df+fLoDJ
+Subject: Re: [Buildroot] [PATCH 1/1] package/uftp: security bump to version
+ 5.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,38 +75,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgQmFydWNoLAoKT24gTW9uLCBKYW4gOCwgMjAyNCBhdCA1OjMz4oCvUE0gQmFydWNoIFNpYWNo
-IDxiYXJ1Y2hAdGtvcy5jby5pbD4gd3JvdGU6Cj4KPiBIaSBQYXRyaWNrLAo+Cj4gT24gTW9uLCBK
-YW4gMDggMjAyNCwgcGF0cmljay5vcHBlbmxhbmRlckBnbWFpbC5jb20gd3JvdGU6Cj4gW3NuaXBd
-Cj4gPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggMDAwMDAwMDAwMC4uZDZiZTQxYjJm
-ZQo+ID4gLS0tIC9kZXYvbnVsbAo+ID4gKysrIGIvcGFja2FnZS9taW5pc2lnbi9taW5pc2lnbi5t
-awo+ID4gQEAgLTAsMCArMSwxOCBAQAo+ID4gKyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4gPiAr
-Iwo+ID4gKyMgbWluaXNpZ24KPiA+ICsjCj4gPiArIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKPiA+
-ICsKPiA+ICtNSU5JU0lHTl9WRVJTSU9OID0gMC4xMQo+ID4gK01JTklTSUdOX1NJVEUgPSAkKGNh
-bGwgZ2l0aHViLGplZGlzY3QxLG1pbmlzaWduLCQoTUlOSVNJR05fVkVSU0lPTikpCj4gPiArTUlO
-SVNJR05fTElDRU5TRSA9IElTQwo+ID4gK01JTklTSUdOX0xJQ0VOU0VfRklMRVMgPSBMSUNFTlNF
-Cj4gPiArTUlOSVNJR05fREVQRU5ERU5DSUVTID0gaG9zdC1saWJzb2RpdW0gbGlic29kaXVtCj4K
-PiBEb2VzIHRhcmdldCBtaW5pc2lnbiBuZWVkIGJvdGggbGlic29kdW0gYW5kIGhvc3QtbGlic29k
-aXVtPwo+Cj4gV2hhdCBhYm91dCBob3N0LW1pbmlzaWduPyBEb2Vzbid0IGl0IG5lZWQgaG9zdC1s
-aWJzb2RpdW0gdG8gYnVpbGQ/Cj4KPiBUbyBhZGQgZGVwZW5kZW5jaWVzIHRvIHRoZSBob3N0IHBh
-Y2thZ2UsIHNldCBIT1NUX01JTklTSUdOX0RFUEVOREVOQ0lFUy4KClRoYW5rcyBmb3IgcG9pbnRp
-bmcgdGhhdCBvdXQuCgptaW5pc2lnbiBuZWVkcyBsaWJzb2RpdW0KaG9zdC1taW5pc2lnbiBuZWVk
-cyBob3N0LWxpYnNvZGl1bQoKSSdsbCBzdWJtaXQgYSB2Mi4KClBhdHJpY2sKCj4gYmFydWNoCj4K
-PiA+ICsKPiA+ICtpZmVxICgkKEJSMl9TVEFUSUNfTElCUykseSkKPiA+ICtNSU5JU0lHTl9DT05G
-X09QVFMgKz0gLURCVUlMRF9TVEFUSUNfRVhFQ1VUQUJMRVM9MQo+ID4gK2VuZGlmCj4gPiArCj4g
-PiArJChldmFsICQoY21ha2UtcGFja2FnZSkpCj4gPiArJChldmFsICQoaG9zdC1jbWFrZS1wYWNr
-YWdlKSkKPgo+Cj4gLS0KPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgIH4uIC5+ICAgVGsgT3BlbiBTeXN0ZW1zCj4gPX0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1vb08tLVUtLU9vby0tLS0tLS0tLS0tLXs9
-Cj4gICAgLSBiYXJ1Y2hAdGtvcy5jby5pbCAtIHRlbDogKzk3Mi41Mi4zNjguNDY1NiwgaHR0cDov
-L3d3dy50a29zLmNvLmlsIC0KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpo
-dHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Fabrice, All,
+
+On 2024-01-06 11:15 +0100, Fabrice Fontaine spake thusly:
+> Update site to avoid redirections (HSTS, etc.)
+> 
+> Version 5.0.3 - 12/17/2023
+>   A memory leak fix in the prior version wasn't applied correctly, resulting
+>     in an invalid memory access causing a crash.  Bug fixed.
+> 
+> Version 5.0.2 - 11/8/2023
+>   Fixed bug that caused crash when a CLIENT_KEY arrived out of order
+>   Fixed option handling on Windows when an argument is missing
+> 
+> https://sourceforge.net/projects/uftp-multicast/files/Changes.txt/download
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Applied to master, thanks.
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/uftp/uftp.hash | 2 +-
+>  package/uftp/uftp.mk   | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/uftp/uftp.hash b/package/uftp/uftp.hash
+> index e47cba9394..d4d3450d1a 100644
+> --- a/package/uftp/uftp.hash
+> +++ b/package/uftp/uftp.hash
+> @@ -1,3 +1,3 @@
+>  # Locally computed sha256
+> -sha256  f0435fbc8e9ffa125e05600cb6c7fc933d7d587f5bae41b257267be4f2ce0e61  uftp-5.0.1.tar.gz
+> +sha256  cb8668c19b1f10bc63a16ffa893e205dc3ec86361037d477d8003260ebc40080  uftp-5.0.3.tar.gz
+>  sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.txt
+> diff --git a/package/uftp/uftp.mk b/package/uftp/uftp.mk
+> index ce865c20ec..3dcd8646c0 100644
+> --- a/package/uftp/uftp.mk
+> +++ b/package/uftp/uftp.mk
+> @@ -4,8 +4,8 @@
+>  #
+>  ################################################################################
+>  
+> -UFTP_VERSION = 5.0.1
+> -UFTP_SITE = http://sourceforge.net/projects/uftp-multicast/files/source-tar
+> +UFTP_VERSION = 5.0.3
+> +UFTP_SITE = https://downloads.sourceforge.net/project/uftp-multicast/source-tar
+>  UFTP_LICENSE = GPL-3.0+
+>  UFTP_LICENSE_FILES = LICENSE.txt
+>  
+> -- 
+> 2.43.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
