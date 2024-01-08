@@ -1,69 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF72EC3DA6E
-	for <buildroot@archiver.kernel.org>; Mon,  8 Jan 2024 20:39:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C227C3DA6E
+	for <buildroot@archiver.kernel.org>; Mon,  8 Jan 2024 20:44:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 96FA341902;
-	Mon,  8 Jan 2024 20:39:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96FA341902
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Y0MjA3W-43g1; Mon,  8 Jan 2024 20:39:49 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DB1F4417E3;
-	Mon,  8 Jan 2024 20:39:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB1F4417E3
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C5A601BF2BA
- for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 20:39:47 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9EA63821D4
- for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 20:39:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9EA63821D4
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5EBCA8190B;
+	Mon,  8 Jan 2024 20:44:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5EBCA8190B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QpyQU8XLvggQ for <buildroot@lists.busybox.net>;
- Mon,  8 Jan 2024 20:39:46 +0000 (UTC)
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A71C8821BB
- for <buildroot@busybox.net>; Mon,  8 Jan 2024 20:39:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A71C8821BB
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:4dc2:634f:d1a7:1769])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id C24525FF95;
- Mon,  8 Jan 2024 21:39:42 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 08 Jan 2024 21:39:42 +0100
-Date: Mon, 8 Jan 2024 21:39:42 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Baruch Siach <baruch@tkos.co.il>
-Message-ID: <ZZxdjnTzr-aoHgRz@landeda>
-References: <955dd511a8904b18bce9c2ac8e27ad07c160e2b2.1704718771.git.baruch@tkos.co.il>
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jJVl4pmSuydA; Mon,  8 Jan 2024 20:44:03 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9F47F817AB;
+	Mon,  8 Jan 2024 20:44:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F47F817AB
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 27DC81BF2BA
+ for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 20:44:01 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 006BC61047
+ for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 20:44:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 006BC61047
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mBwUXjR4rIa3 for <buildroot@lists.busybox.net>;
+ Mon,  8 Jan 2024 20:44:00 +0000 (UTC)
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CEA1260FE3
+ for <buildroot@buildroot.org>; Mon,  8 Jan 2024 20:43:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CEA1260FE3
+Received: by mail-wr1-x432.google.com with SMTP id
+ ffacd0b85a97d-33687627ad0so2138890f8f.2
+ for <buildroot@buildroot.org>; Mon, 08 Jan 2024 12:43:59 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1704746637; x=1705351437;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=mEmSS98yEybod1RqHqyG6Q3OIribkryZDY/5gbICPnY=;
+ b=bAe77BupALU0Zdw1ytyQ4g/AcadDzCo3VAiQeBtqsNlhA5O4xJpZMyWkBI+ecbEZxs
+ er+wj+2XDrYPtBxLwADwlr3KBF7FiRYNCYQzJKy6AwTZ2E79rtjcfn4+xhcNL6S4p2tR
+ UEq7mmnHW5frVfAKN5em46+mHoJ5dgSr1cm1ZeMJTWZM4lxjtRwnKZAEIn2rv22iwG96
+ BgGa8rQMFfYuWemPzq1ZaH0jxKl+05w0xiXXWk8g9TThOiF4gA0j3Nmva2o7hRrom18W
+ 68EiIFJNrD3im9qOUHRWcTiNC+6M09/eB04RLJVBiqmNkeZnMDU6IeOPK8Lp63ymnefw
+ KhkQ==
+X-Gm-Message-State: AOJu0YxeTsW9CnyLQVAr+3ESta9X267rVSabTHQoymdjAUR33L7f4QL6
+ z5TLDP+ih1SO0MPtL5BINvXjxMVg2PQ=
+X-Google-Smtp-Source: AGHT+IG440A5cbB9TWJGiNkQCiS93vekQKl4CPKn5C5aNPgglm2an6yYZPWeD3sBBqDJMdUm8BUCIg==
+X-Received: by 2002:a05:600c:c08:b0:40e:4304:9124 with SMTP id
+ fm8-20020a05600c0c0800b0040e43049124mr1648936wmb.83.1704746637327; 
+ Mon, 08 Jan 2024 12:43:57 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ q17-20020a05600c46d100b0040e375604ecsm12321188wmo.31.2024.01.08.12.43.56
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 08 Jan 2024 12:43:56 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon,  8 Jan 2024 21:43:52 +0100
+Message-ID: <20240108204352.319621-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <955dd511a8904b18bce9c2ac8e27ad07c160e2b2.1704718771.git.baruch@tkos.co.il>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1704746385;
- bh=2YbI9i+/KG/OnW5DyfRpEC7o9TfikOopXNNDIUt+t+g=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=Tkh3WXGMRTjZ2hp821Yb2F6G5YYmxv6g1Q/I39eF7vnHbjrbTKb1YSwrIDAaV29/R
- sW10hrJ/VmR3/wGip+KU7EsvbIwOiFejMbFMND2BfBo7v5D9aqf6y/jwigYHrIEkI7
- 6NYN//sTzzWee9lFugPu2wc47heMPGwAYUH7g+cc1dHiI6rxYC9AfGoiwzDSeEa3FH
- 03sllsrQlyOqyxxM7fY2keG3fxcIn+0nrBE3Hs1ABuu+U0d6mJpl7KfTfi5CSN9Y9R
- Ch5tYfE+9cS04efYIHqk0MRpO9uTjDK/MgTo59jm9wBU/wGALou58mCaYqtmRyrvHk
- bsHwHhWHWk3mA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Tkh3WXGM
-Subject: Re: [Buildroot] [PATCH 1/2] package/rng-tools: update help text
- website reference
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1704746637; x=1705351437; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=mEmSS98yEybod1RqHqyG6Q3OIribkryZDY/5gbICPnY=;
+ b=GSpmkEOp/b57E7iz/BJX2fF5SEpqg8kY8LXlMb+Ck8TukW5gxBlLBqWCU9PO1PjLw4
+ lhUQRHrIFKuP+8sk+ZXIztc7FS/xDHceUuwwrM3sCT1H/W1wxygLetrtjmUBCakWc9o1
+ GooeAgThxNL8k7U1W2TIPmjS0aiRjnRVEyZOH3zn8UJ4/lSNoFkG9NxSXigjQmIHq0Uu
+ r3u2UnRG055r4rroNcsE3ZXuORyAWjuffwzM19Uf7nZPwTlO2ps9KREqOmoLZDMedM8H
+ zCIYqj4+262gtyd7u4N2jIocetOi3nq3xf0Gw+lyhTNw+wsxdFXuYUBSw0g1E73vD0YL
+ VMpQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=GSpmkEOp
+Subject: [Buildroot] [PATCH 1/1] package/libtraceevent: needs dynamic library
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,57 +93,92 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@busybox.net
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Maxime Chevallier <maxime.chevallier@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Baruch, All,
+Fix the following build failure raised since the addition of the package
+in commit 1474f1b34b178defca1d16d18a2446fadda9a12b:
 
-On 2024-01-08 14:59 +0200, Baruch Siach via buildroot spake thusly:
-> We switched to new upstream since commit f9e9c6349afe0
-> ("package/rng-tools: bump to 6.7"). Update the website URL as well.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+../src/event-plugin.c:10:10: fatal error: dlfcn.h: No such file or directory
+   10 | #include <dlfcn.h>
+      |          ^~~~~~~~~
 
-Both cleanups applied to master, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/7802d1ad00293147edda39683f6d3f614dd48263
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libtraceevent/Config.in | 4 ++++
+ package/libtracefs/Config.in    | 4 ++++
+ package/linux-tools/Config.in   | 4 ++++
+ 3 files changed, 12 insertions(+)
 
-> ---
->  package/rng-tools/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/rng-tools/Config.in b/package/rng-tools/Config.in
-> index be3f078a0bce..7f08fa25fbf7 100644
-> --- a/package/rng-tools/Config.in
-> +++ b/package/rng-tools/Config.in
-> @@ -9,7 +9,7 @@ config BR2_PACKAGE_RNG_TOOLS
->  	help
->  	  Daemon to use hardware random number generators.
->  
-> -	  http://sourceforge.net/projects/gkernel/
-> +	  https://github.com/nhorman/rng-tools
->  
->  if BR2_PACKAGE_RNG_TOOLS
->  
-> -- 
-> 2.43.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/libtraceevent/Config.in b/package/libtraceevent/Config.in
+index 399238eef1..28a5b32576 100644
+--- a/package/libtraceevent/Config.in
++++ b/package/libtraceevent/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBTRACEEVENT
+ 	bool "libtraceevent"
++	depends on !BR2_STATIC_LIBS # dlfcn.h
+ 	help
+ 	  libtraceevent is a library that interfaces with the ftrace
+ 	  subsystem in the linux kernel.
+@@ -9,3 +10,6 @@ config BR2_PACKAGE_LIBTRACEEVENT
+ 	  rtla.
+ 
+ 	  https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/
++
++comment "libtraceevent needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/libtracefs/Config.in b/package/libtracefs/Config.in
+index 81a2e962ea..bb0777b16c 100644
+--- a/package/libtracefs/Config.in
++++ b/package/libtracefs/Config.in
+@@ -1,8 +1,12 @@
+ config BR2_PACKAGE_LIBTRACEFS
+ 	bool "libtracefs"
++	depends on !BR2_STATIC_LIBS # libtraceevent
+ 	select BR2_PACKAGE_LIBTRACEEVENT
+ 	help
+ 	  libtracefs is used to easily interface with the ftrace
+ 	  interface through the tracefs virtual filesystem.
+ 
+ 	  https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/
++
++comment "libtracefs needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
+index adfca4dbe3..62adae4463 100644
+--- a/package/linux-tools/Config.in
++++ b/package/linux-tools/Config.in
+@@ -104,6 +104,7 @@ endif
+ 
+ config BR2_PACKAGE_LINUX_TOOLS_RTLA
+ 	bool "rtla"
++	depends on !BR2_STATIC_LIBS # libtracefs -> libtraceevent
+ 	select BR2_PACKAGE_LINUX_TOOLS
+ 	select BR2_PACKAGE_LIBTRACEFS
+ 	help
+@@ -123,6 +124,9 @@ config BR2_PACKAGE_LINUX_TOOLS_RTLA
+ 	  not available in Buildroot, so only rtla in kernels 5.19
+ 	  onwards is actually supported in Buildroot.
+ 
++comment "rtla needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
++
+ config BR2_PACKAGE_LINUX_TOOLS_SELFTESTS
+ 	bool"selftests"
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # bash
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
