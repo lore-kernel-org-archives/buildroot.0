@@ -4,65 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77FA8C47073
-	for <buildroot@archiver.kernel.org>; Mon,  8 Jan 2024 22:10:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3E6FC3DA6E
+	for <buildroot@archiver.kernel.org>; Mon,  8 Jan 2024 22:18:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 310184192C;
-	Mon,  8 Jan 2024 22:10:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 310184192C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 423C241365;
+	Mon,  8 Jan 2024 22:18:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 423C241365
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GFFJqMK_NyaZ; Mon,  8 Jan 2024 22:10:15 +0000 (UTC)
+	with ESMTP id 3nwQPJU0u9AN; Mon,  8 Jan 2024 22:18:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 621FA41932;
-	Mon,  8 Jan 2024 22:10:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 621FA41932
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5B6601BF421
- for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 22:10:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 80D2F410B2;
+	Mon,  8 Jan 2024 22:18:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80D2F410B2
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 57B201BF421
+ for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 22:18:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3AAFE8145E
- for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 22:10:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3AAFE8145E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3DFDE60E7B
+ for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 22:18:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3DFDE60E7B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IWX_l7tYQLSf for <buildroot@lists.busybox.net>;
- Mon,  8 Jan 2024 22:10:11 +0000 (UTC)
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CE5FF81779
- for <buildroot@buildroot.org>; Mon,  8 Jan 2024 22:10:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE5FF81779
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:4f89:5708:1633:580e])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 82253B00548;
- Mon,  8 Jan 2024 23:10:04 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 08 Jan 2024 23:10:03 +0100
-Date: Mon, 8 Jan 2024 23:10:03 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <ZZxyux9Op5erxfKi@landeda>
-References: <20240108211420.360412-1-fontaine.fabrice@gmail.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cvjfGvyEpffP for <buildroot@lists.busybox.net>;
+ Mon,  8 Jan 2024 22:18:09 +0000 (UTC)
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com
+ [IPv6:2607:f8b0:4864:20::234])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5F90060AFC
+ for <buildroot@buildroot.org>; Mon,  8 Jan 2024 22:18:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F90060AFC
+Received: by mail-oi1-x234.google.com with SMTP id
+ 5614622812f47-3bbd6e37af4so2242531b6e.1
+ for <buildroot@buildroot.org>; Mon, 08 Jan 2024 14:18:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1704752288; x=1705357088;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=z4EHeLa5aj0xpRNxx4k+JMQY9ZzL4oMo6XdL0MNV1A8=;
+ b=edPfG9Bvm/5QIK5L6AwJ4dvu7cxpt3kBjUCWINkaBzkvCDr34jQuHjDxKLqPxkcHFf
+ uLIp8eq7f7Xp8t7rtLv2jhj83l7H7sOyEMn5ggPnaUIGFxbGEuTfA1GnkyLxzP9o4c1Q
+ PcB8Rljt6Km0a2ED4lOFwlXed3q4Bg3SykljDTbYoF+JwsxUBliCb1nRXWTWhg0qE0gq
+ xKCGqFpOcCflw9ggc6BkUkCJVDVaWqHgTJeBnvQvx4LTdanV1SSPCYuV+H4pr0R5mcTc
+ RFVYCAin8gXVDedVRVeipI/BLy8My209kUsbvvXkEK8iBszsnGf5WeZsfMTJSL1KPn5X
+ EGiw==
+X-Gm-Message-State: AOJu0Yzif9XvlsH0wCC3d6P8yfmQvROS6iuPZtkr+jTv/q9NQBFOKDjY
+ AnzWdfePJ7yHAnkbGOqpgSdbco6XulIv6jCiERvvy5imdKD3aw==
+X-Google-Smtp-Source: AGHT+IHkPGPzHBhqIYlaDkDG9ASztXAgekXb4FG9ei1sbEcxPyII/Fpdmc1uI/uLBF3/dstzVaTPeTQaLDMaczYEQRU=
+X-Received: by 2002:a05:6808:3a0e:b0:3bd:3023:d282 with SMTP id
+ gr14-20020a0568083a0e00b003bd3023d282mr2860851oib.110.1704752287815; Mon, 08
+ Jan 2024 14:18:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240108211420.360412-1-fontaine.fabrice@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1704751807;
- bh=huRGTuePIvvNAi5AkA8N5BFo+LdZYSuYSSlT+Ri0wSc=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=PI1zFgVJLf1TCqlzKIsExULH+rv/0m1DshOMYWHxyfeauUEFNkxjhqTfmU27V3Yxc
- H/oEr6TNQr3JUuuI9gC8TREaey7VR4Qs7qmnm7VwHz8qx76b5pqNENh9/SmNMgo2eR
- WEPOV/L4B9+s7sJIU415goZo1mwo9fuQER7DsbMCeUELwo5F5M203Rse6ncl4mBMHp
- I0JOg3b/nifS1Te8B6DkIw4VW0UmT/dAwcAz2XnR/uOWNJwgYfPQFtG2ICb2AYnS1D
- CjYHhj+aKuj1ApLmEfVqxepl0vwXS6jUNamV/uLNtUK90oDGJCBIQbL5RWusMA/Sya
- QC0Vme4CWbJig==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=PI1zFgVJ
-Subject: Re: [Buildroot] [PATCH v3,1/1] package/liquid-dsp: fix x86 builds
+References: <20240108013056.39493-1-patrick.oppenlander@gmail.com>
+ <87bk9w2v2v.fsf@tarshish>
+In-Reply-To: <87bk9w2v2v.fsf@tarshish>
+From: Patrick Oppenlander <patrick.oppenlander@gmail.com>
+Date: Tue, 9 Jan 2024 09:17:56 +1100
+Message-ID: <CAEg67Gmdn+qf_DqpA66un5oBgu3iqkejBVE9mBVpRqWrmpQ1rw@mail.gmail.com>
+To: Baruch Siach <baruch@tkos.co.il>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1704752288; x=1705357088; darn=buildroot.org;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=z4EHeLa5aj0xpRNxx4k+JMQY9ZzL4oMo6XdL0MNV1A8=;
+ b=Q6IluSITsnyuMMRI6EKkjOz+YWKdtuQXKVJT6LzOyLIb8Lp6n7ZNuy9Y0dpiZwOVmm
+ 0EB+OCsGuMi5LlOwMovd4cs1A+Kw1KAcOundhnLErp09AdIUcC6zoZag947p2VgWFkei
+ BE1GR6CeAY+6ZLA/ODM1toXXlinEV9Xq2pmrFY9KI01ZT/Nd35ZLRxiL6pv9dxO23fUb
+ Z8de8Zg32O0r628VrwcesawQNaHQeAisx2JSstWb5Fnwxdxv5sNteD+XhsLn9gVWPI2c
+ Ow+tcet3QAuD0+PTGbnhuS/5om2Wy/mKKQlHuk1ZW3zjTKGRYTEI5CRh3+ntp6BPwrAM
+ fDIQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=Q6IluSIT
+Subject: Re: [Buildroot] [PATCH] package/minisign: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,124 +91,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Guillaume William Brs <guillaume.bressaix@gmail.com>,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
-
-On 2024-01-08 22:14 +0100, Fabrice Fontaine spake thusly:
-> HAVE_{MMX,SSE2,...} are not defined if ax_cv_have_{i}_cpu_ext is not set
-
-From a quick glance at upstream, it seems that there are two set of
-variables:
-  - ax_cv_have_{i}_ext
-  - ax_cv_have_{i}_cpu_ext
-
-The first is about whether said extension is available in the OS
-(whatever that means), while the second is about whether the CPU
-actually support that externsion.
-
-As I understand it, we should only be concerned with the latter, but the
-liquid-dsp configure.ac confuses the two and still checks the former.
-
-So we still need to set both.
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> resulting in the following build failure raised since bump to version
-> 1.5.0 in commit c2aaa0fbe2fdf6e599c68169aa7b2e55237190c7 and
-> https://github.com/jgaeddert/liquid-dsp/commit/02c4e8b99b11d9f1615b8840f243b08a85b86563:
-> 
-> src/dotprod/src/dotprod_cccf.sse.c: In function 'dotprod_cccf_execute_sse':
-> src/dotprod/src/dotprod_cccf.sse.c:258:5: error: unknown type name '__m128'; did you mean '__int128'?
->   258 |     __m128 v;   // input vector
->       |     ^~~~~~
->       |     __int128
-> 
-> or
-> 
-> src/dotprod/src/dotprod_cccf.mmx.c: In function 'dotprod_cccf_execute_mmx':
-> src/dotprod/src/dotprod_cccf.mmx.c:262:5: error: unknown type name '__m128'; did you mean '__int128'?
->   262 |     __m128 v;   // input vector
->       |     ^~~~~~
->       |     __int128
-> 
-> While at it, add AVX2 support
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/738ce9d3dc74ec165391f21256c955e5524f1632
->  - http://autobuild.buildroot.org/results/a2d150c724ab6787aeabaf31f65116f802e8584e
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
-> Changes v2 -> v3 (after review of Yann E. Morin):
->  - Keep current list format
-> 
-> Changes v1 -> v2:
->  - Keep old options (mmx, etc.) as they seem to be still used somewhere
->    in the code
-> 
->  package/liquid-dsp/liquid-dsp.mk | 12 +++++++++++-
->  1 file changed, 11 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/liquid-dsp/liquid-dsp.mk b/package/liquid-dsp/liquid-dsp.mk
-> index eb4cda67a5..ce4cd5a7a7 100644
-> --- a/package/liquid-dsp/liquid-dsp.mk
-> +++ b/package/liquid-dsp/liquid-dsp.mk
-> @@ -13,13 +13,23 @@ LIQUID_DSP_AUTORECONF = YES
->  
->  LIQUID_DSP_CONF_ENV = \
->  	ax_cv_have_mmx_ext=$(if $(BR2_X86_CPU_HAS_MMX),yes,no) \
-> +	ax_cv_have_mmx_cpu_ext=$(if $(BR2_X86_CPU_HAS_MMX),yes,no) \
->  	ax_cv_have_sse_ext=$(if $(BR2_X86_CPU_HAS_SSE),yes,no) \
-> +	ax_cv_have_sse_cpu_ext=$(if $(BR2_X86_CPU_HAS_SSE),yes,no) \
->  	ax_cv_have_sse2_ext=$(if $(BR2_X86_CPU_HAS_SSE2),yes,no) \
-> +	ax_cv_have_sse2_cpu_ext=$(if $(BR2_X86_CPU_HAS_SSE2),yes,no) \
->  	ax_cv_have_sse3_ext=$(if $(BR2_X86_CPU_HAS_SSE3),yes,no) \
-> +	ax_cv_have_sse3_cpu_ext=$(if $(BR2_X86_CPU_HAS_SSE3),yes,no) \
->  	ax_cv_have_ssse3_ext=$(if $(BR2_X86_CPU_HAS_SSSE3),yes,no) \
-> +	ax_cv_have_ssse3_cpu_ext=$(if $(BR2_X86_CPU_HAS_SSSE3),yes,no) \
->  	ax_cv_have_sse41_ext=$(if $(BR2_X86_CPU_HAS_SSE4),yes,no) \
-> +	ax_cv_have_sse41_cpu_ext=$(if $(BR2_X86_CPU_HAS_SSE4),yes,no) \
->  	ax_cv_have_sse42_ext=$(if $(BR2_X86_CPU_HAS_SSE42),yes,no) \
-> -	ax_cv_have_avx_ext=$(if $(BR2_X86_CPU_HAS_AVX),yes,no)
-> +	ax_cv_have_sse42_cpu_ext=$(if $(BR2_X86_CPU_HAS_SSE42),yes,no) \
-> +	ax_cv_have_avx_ext=$(if $(BR2_X86_CPU_HAS_AVX),yes,no) \
-> +	ax_cv_have_avx_cpu_ext=$(if $(BR2_X86_CPU_HAS_AVX),yes,no) \
-> +	ax_cv_have_avx2_ext=$(if $(BR2_X86_CPU_HAS_AVX2),yes,no) \
-> +	ax_cv_have_avx2_cpu_ext=$(if $(BR2_X86_CPU_HAS_AVX2),yes,no)
->  
->  LIQUID_DSP_CFLAGS = $(TARGET_CFLAGS)
->  LIQUID_DSP_LDFLAGS = $(TARGET_LDFLAGS)
-> -- 
-> 2.43.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgQmFydWNoLAoKT24gTW9uLCBKYW4gOCwgMjAyNCBhdCA1OjMz4oCvUE0gQmFydWNoIFNpYWNo
+IDxiYXJ1Y2hAdGtvcy5jby5pbD4gd3JvdGU6Cj4KPiBIaSBQYXRyaWNrLAo+Cj4gT24gTW9uLCBK
+YW4gMDggMjAyNCwgcGF0cmljay5vcHBlbmxhbmRlckBnbWFpbC5jb20gd3JvdGU6Cj4gW3NuaXBd
+Cj4gPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggMDAwMDAwMDAwMC4uZDZiZTQxYjJm
+ZQo+ID4gLS0tIC9kZXYvbnVsbAo+ID4gKysrIGIvcGFja2FnZS9taW5pc2lnbi9taW5pc2lnbi5t
+awo+ID4gQEAgLTAsMCArMSwxOCBAQAo+ID4gKyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4gPiAr
+Iwo+ID4gKyMgbWluaXNpZ24KPiA+ICsjCj4gPiArIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKPiA+
+ICsKPiA+ICtNSU5JU0lHTl9WRVJTSU9OID0gMC4xMQo+ID4gK01JTklTSUdOX1NJVEUgPSAkKGNh
+bGwgZ2l0aHViLGplZGlzY3QxLG1pbmlzaWduLCQoTUlOSVNJR05fVkVSU0lPTikpCj4gPiArTUlO
+SVNJR05fTElDRU5TRSA9IElTQwo+ID4gK01JTklTSUdOX0xJQ0VOU0VfRklMRVMgPSBMSUNFTlNF
+Cj4gPiArTUlOSVNJR05fREVQRU5ERU5DSUVTID0gaG9zdC1saWJzb2RpdW0gbGlic29kaXVtCj4K
+PiBEb2VzIHRhcmdldCBtaW5pc2lnbiBuZWVkIGJvdGggbGlic29kdW0gYW5kIGhvc3QtbGlic29k
+aXVtPwo+Cj4gV2hhdCBhYm91dCBob3N0LW1pbmlzaWduPyBEb2Vzbid0IGl0IG5lZWQgaG9zdC1s
+aWJzb2RpdW0gdG8gYnVpbGQ/Cj4KPiBUbyBhZGQgZGVwZW5kZW5jaWVzIHRvIHRoZSBob3N0IHBh
+Y2thZ2UsIHNldCBIT1NUX01JTklTSUdOX0RFUEVOREVOQ0lFUy4KClRoYW5rcyBmb3IgcG9pbnRp
+bmcgdGhhdCBvdXQuCgptaW5pc2lnbiBuZWVkcyBsaWJzb2RpdW0KaG9zdC1taW5pc2lnbiBuZWVk
+cyBob3N0LWxpYnNvZGl1bQoKSSdsbCBzdWJtaXQgYSB2Mi4KClBhdHJpY2sKCj4gYmFydWNoCj4K
+PiA+ICsKPiA+ICtpZmVxICgkKEJSMl9TVEFUSUNfTElCUykseSkKPiA+ICtNSU5JU0lHTl9DT05G
+X09QVFMgKz0gLURCVUlMRF9TVEFUSUNfRVhFQ1VUQUJMRVM9MQo+ID4gK2VuZGlmCj4gPiArCj4g
+PiArJChldmFsICQoY21ha2UtcGFja2FnZSkpCj4gPiArJChldmFsICQoaG9zdC1jbWFrZS1wYWNr
+YWdlKSkKPgo+Cj4gLS0KPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIH4uIC5+ICAgVGsgT3BlbiBTeXN0ZW1zCj4gPX0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1vb08tLVUtLU9vby0tLS0tLS0tLS0tLXs9
+Cj4gICAgLSBiYXJ1Y2hAdGtvcy5jby5pbCAtIHRlbDogKzk3Mi41Mi4zNjguNDY1NiwgaHR0cDov
+L3d3dy50a29zLmNvLmlsIC0KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpo
+dHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
