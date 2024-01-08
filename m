@@ -4,65 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76747C3DA6E
-	for <buildroot@archiver.kernel.org>; Mon,  8 Jan 2024 20:32:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EA04C3DA6E
+	for <buildroot@archiver.kernel.org>; Mon,  8 Jan 2024 20:38:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 02437401E2;
-	Mon,  8 Jan 2024 20:32:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 02437401E2
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4FA19417FB;
+	Mon,  8 Jan 2024 20:38:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4FA19417FB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xuboAV7tNszJ; Mon,  8 Jan 2024 20:32:51 +0000 (UTC)
+	with ESMTP id dg41l6dV-kVa; Mon,  8 Jan 2024 20:38:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 44EDC40181;
-	Mon,  8 Jan 2024 20:32:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 44EDC40181
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C92A91BF2BA
- for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 20:32:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0BA89417B7;
+	Mon,  8 Jan 2024 20:38:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0BA89417B7
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 71F541BF2BA
+ for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 20:38:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AF58841E13
- for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 20:32:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF58841E13
+ by smtp1.osuosl.org (Postfix) with ESMTP id 581258136B
+ for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 20:38:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 581258136B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id E5kg40BDQ4sV for <buildroot@lists.busybox.net>;
- Mon,  8 Jan 2024 20:32:47 +0000 (UTC)
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4FD6441E21
- for <buildroot@buildroot.org>; Mon,  8 Jan 2024 20:32:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4FD6441E21
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:4dc2:634f:d1a7:1769])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id A815560135;
- Mon,  8 Jan 2024 21:32:40 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 08 Jan 2024 21:32:40 +0100
-Date: Mon, 8 Jan 2024 21:32:40 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <ZZxb6CjIUOyhtLQX@landeda>
-References: <20240106220531.3285689-1-fontaine.fabrice@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240106220531.3285689-1-fontaine.fabrice@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1704745964;
- bh=sWeiLadg3J2zd0aIlm7KwEXq0CusDxoahRgW+I+lIao=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=sE0kdf89w3F5B22k9vX9ddEIarD1DoFTYRt03qmA/CLY/GMzyjyk6GQ1+vfHNrRfa
- 0n0pGStt6O6Z6YlxQJhMXDc5rXY+Ycuw0yQcSVYofdyBb2h6p+ZUU3CUCTy4OFJFUC
- Ylf70AzanQeWNE7BQBD2Edd7nuZultr5QVKYJ5qxswQEFUwekBZOXvwDHwdTgOKEHq
- CXHc4PEjfE+XIFEsey+bJ5M+xS0oNiinUK0ElGi25CxhdVUt4C/EAq2jsjO3iEXu6q
- 1KA1W7L/25a2rjlBeUz919aj6gZDI8PQhUUFtUsRlz2EhHpppUL87yIdFku9qiKOHH
- 9NYWy3La7hQNw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=sE0kdf89
-Subject: Re: [Buildroot] [PATCH 1/1] package/libutempter: fix dependencies
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6OTaJVkVP-Gj for <buildroot@lists.busybox.net>;
+ Mon,  8 Jan 2024 20:38:36 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id A36C981366
+ for <buildroot@buildroot.org>; Mon,  8 Jan 2024 20:38:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A36C981366
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8F0E484BD9; Mon,  8 Jan 2024 20:38:36 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Mon, 8 Jan 2024 21:35:43 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 717fe9dc396b3982a02306e8685d8338ae2ebbf6
+X-Git-Newrev: a2b8596873d53c52684e3056b655406aa40b58cc
+X-Patchwork-Hint: ignore
+Message-Id: <20240108203836.8F0E484BD9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rng-tools: normalize github macro
+ package name
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,65 +57,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adam Duskett <adam.duskett@amarulasolutions.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabricem, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=a2b8596873d53c52684e3056b655406aa40b58cc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2024-01-06 23:05 +0100, Fabrice Fontaine spake thusly:
-> Commit 02c818bc5c7a6967a212f12e4caa8ccdfa0b452b forgot to add
-> dependencies resulting in the following static build failure:
-> 
-> /home/autobuild/autobuild/instance-5/output-1/host/bin/arm-buildroot-linux-uclibcgnueabi-gcc -Wl,-z,relro -Wl,-stats  -static  -shared \
-> 	-Wl,-soname,libutempter.so.0,--version-script=libutempter.map,-z,defs \
-> 	-lc iface.os -o libutempter.so
-> /home/autobuild/autobuild/instance-5/output-1/host/lib/gcc/arm-buildroot-linux-uclibcgnueabi/12.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/autobuild/autobuild/instance-5/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/lib/libc.a(__uClibc_main.os): in function `__uClibc_fini':
-> __uClibc_main.c:(.text+0x190): undefined reference to `__fini_array_start'
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/781ab393455f0e6823b850f474f6fe38b27d8efa
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/libutempter/Config.in | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/libutempter/Config.in b/package/libutempter/Config.in
-> index a06a240418..5b79c1e44d 100644
-> --- a/package/libutempter/Config.in
-> +++ b/package/libutempter/Config.in
-> @@ -1,5 +1,7 @@
->  config BR2_PACKAGE_LIBUTEMPTER
->  	bool "libutempter"
-> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14
-> +	depends on !BR2_STATIC_LIBS
+This usage of <PKG>_NAME was introduced in commit f9e9c6349afe0
+("package/rng-tools: bump to 6.7"). No other package uses <PKG>_NAME
+this way.
 
-Applied to master, thanks.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/rng-tools/rng-tools.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Regards,
-Yann E. MORIN.
-
->  	help
->  	  The libutempter library provides interface for terminal
->  	  emulators such as screen and xterm to record user
-> -- 
-> 2.43.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
+index 3e565103e4..933370c9a9 100644
+--- a/package/rng-tools/rng-tools.mk
++++ b/package/rng-tools/rng-tools.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ RNG_TOOLS_VERSION = 6.16
+-RNG_TOOLS_SITE = $(call github,nhorman,$(RNG_TOOLS_NAME),v$(RNG_TOOLS_VERSION))
++RNG_TOOLS_SITE = $(call github,nhorman,rng-tools,v$(RNG_TOOLS_VERSION))
+ RNG_TOOLS_LICENSE = GPL-2.0
+ RNG_TOOLS_LICENSE_FILES = COPYING
+ RNG_TOOLS_CPE_ID_VENDOR = rng-tools_project
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
