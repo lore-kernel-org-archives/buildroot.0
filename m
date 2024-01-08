@@ -4,65 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 441B7C47074
-	for <buildroot@archiver.kernel.org>; Sun,  7 Jan 2024 23:23:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7511FC47074
+	for <buildroot@archiver.kernel.org>; Mon,  8 Jan 2024 01:31:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D3B7541687;
-	Sun,  7 Jan 2024 23:23:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D3B7541687
+	by smtp4.osuosl.org (Postfix) with ESMTP id EE55941553;
+	Mon,  8 Jan 2024 01:31:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE55941553
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SA4jEk4PRDqy; Sun,  7 Jan 2024 23:23:27 +0000 (UTC)
+	with ESMTP id z-jUqYQNUbpr; Mon,  8 Jan 2024 01:31:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3A5364167D;
-	Sun,  7 Jan 2024 23:23:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A5364167D
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8F9E31BF48B
- for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 23:22:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 46F734151C;
+	Mon,  8 Jan 2024 01:31:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46F734151C
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 328A21BF2EF
+ for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 01:31:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 75FE560E55
- for <buildroot@lists.busybox.net>; Sun,  7 Jan 2024 23:22:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 75FE560E55
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0AC6641553
+ for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 01:31:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0AC6641553
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dpB2DpVpfah0 for <buildroot@lists.busybox.net>;
- Sun,  7 Jan 2024 23:22:47 +0000 (UTC)
-Received: from smtpcmd10102.aruba.it (smtpcmd10102.aruba.it [62.149.156.102])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5F28A60E4D
- for <buildroot@buildroot.org>; Sun,  7 Jan 2024 23:22:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F28A60E4D
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba Outgoing Smtp  with ESMTPSA
- id McTarVOj11f5IMcTbrANbg; Mon, 08 Jan 2024 00:22:43 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mUKFwW_eKzO8 for <buildroot@lists.busybox.net>;
+ Mon,  8 Jan 2024 01:31:05 +0000 (UTC)
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com
+ [IPv6:2607:f8b0:4864:20::12e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id F36D141517
+ for <buildroot@buildroot.org>; Mon,  8 Jan 2024 01:31:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F36D141517
+Received: by mail-il1-x12e.google.com with SMTP id
+ e9e14a558f8ab-360852ae88fso8108965ab.3
+ for <buildroot@buildroot.org>; Sun, 07 Jan 2024 17:31:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1704677463; x=1705282263;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=hqO4FY0Fr+J1WlZ9HyuZLaaSGF0QMcvDcmpYqL6p0lo=;
+ b=exEXiYMY1NdpHXUDCqKH/KW/WfL9dvfTDsjzKQHwBVWFvVVGTT/JaYqW1yg44pDb7z
+ UxRZnxfaCeRJxcmyTRyY18brSHbyNxqcalBpDlEgPFCHSehWHjVWAZoEfaCpHWG943aD
+ Eq11gWNRsAS21Ok6ZDenwE0PcZ6q/CNjvYZYJyezND1vpoGN0Co0mV0rx+390v36MyR+
+ o1spGvtb9XdImaKheyM+BOuzAWBlh1E25j2SNEb+mvFHjPMy5rkFj0yFpATM2+AsYy9p
+ hSyh4+SqV0/TOD/03gsqwIZKxJYW7hxnuN2qs5SJx1M2KZOhdzS9W3axZIKCVHJ5MQNp
+ GsyQ==
+X-Gm-Message-State: AOJu0Ywo/gFv2h64zTGSfESKu+VtSYQ31TWG0oRrJWIJnISm6W4Bl/OO
+ QHD2vqGvY1qylf/NMj0AOTi/hJgfUp8=
+X-Google-Smtp-Source: AGHT+IG3i8zrhq2hK+Du+zDf3sCTI3bEd6+8Z66hkEdWoz3rWbI41MNa+zqaEMfGUP3goT05+Le/6w==
+X-Received: by 2002:a05:6e02:33a1:b0:35f:e864:f84 with SMTP id
+ bn33-20020a056e0233a100b0035fe8640f84mr5790946ilb.34.1704677463100; 
+ Sun, 07 Jan 2024 17:31:03 -0800 (PST)
+Received: from gtr.. ([2403:5814:e4c2:0:6876:9fff:feae:cf11])
+ by smtp.gmail.com with ESMTPSA id
+ 17-20020a170902c21100b001d3edef115dsm4998077pll.20.2024.01.07.17.31.01
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 07 Jan 2024 17:31:02 -0800 (PST)
+From: patrick.oppenlander@gmail.com
 To: buildroot@buildroot.org
-Date: Mon,  8 Jan 2024 00:22:41 +0100
-Message-Id: <20240107232241.666769-4-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240107232241.666769-1-giulio.benetti@benettiengineering.com>
-References: <20240107232241.666769-1-giulio.benetti@benettiengineering.com>
+Date: Mon,  8 Jan 2024 12:30:39 +1100
+Message-ID: <20240108013056.39493-1-patrick.oppenlander@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfJF5yGA/U8pcHh8uzbtdH5sfecyG/e7GcOqwlVO3/vBIUay62BeMhHLjWpzT3fI8aeFggvzfspfKVxI20KAkZz05UKpvDEXJUZdwVKUosZPSUeUJjvw7
- SRjEz4B6JKS7pe3X/78aN46/ihoeC42SFSnWKWfED9hD4H1vKcjOC/hIjbYDGpkdThchzb+D2c4NsFXU8ZD1WnkqFvaa6MgsFEbjpcDob6CWz1laIPbz1LsB
- ymWnPaX+shSFNikL7jcSKh2IUeYoYZ88OvpJM9Hf5MaZ/3Vwdl+H2bzotpa3+J84XbF4HiYe6NiiMfr04VCHPlH+8s38fYrv+6JjKCuCJq3B22kdqwiPHx06
- WnQOC0E6
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1704669763; bh=YU/flXPUc+xN4cc5wkv+CNzbooQ4K/aRqZLmL4lAV6k=;
- h=From:To:Subject:Date:MIME-Version;
- b=KFID/AGfKw3FHSGjdA5xDSQhhG16EU+LN59qQvXONXfeBDBIyLP682HHXaf2iYXO8
- iU4Y4Pvh4QZQxS73O60g0bhI0aLi10AamoMChfHwmTaBEl5i9MQofyUMupptQSy+H6
- usukNPY0RGiCGquhNkaVRGJzRH13lyoDN+KhV3p2q9zvpZ59DwJQcYJbJvtz2tSCy7
- VOOevblX51nWwQGrGyaepMD/82vWyH0SUvbmEm18rZ3LtqBxh/xvqSOVQ5WxaYO39L
- gN36yIFnkH6j7BSmFdpY68Ypw8gxo3HVNlwRosFp9G3bKjw7SI0ThYXS3VKhEiNrY8
- HS7mBJcPcLFTA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=KFID/AGf
-Subject: [Buildroot] [PATCH 4/4] package/trace-cmd: bump to version 3.2
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1704677463; x=1705282263; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=hqO4FY0Fr+J1WlZ9HyuZLaaSGF0QMcvDcmpYqL6p0lo=;
+ b=GASjNYMZSnARhPg3JgRqMbnHcBzCFClXIlJzFtKLIOxV4Ivitle3vfKbYXSJowI4ui
+ V8Ttejso35+NK3NIouU5LA1AEEC/aAePR8cP8LkXW4I83+L6lEpEgv727fVfRPjGVSf4
+ CXMT7BBsBvlMkeDmza9sWuk8QIyXjKyAryJ8KGxej060xnnQEbu8zWdh3BhzwhlSxQTn
+ 2/l3xcKKQgFD1NTKG8uJ7oE1NfccgzQTHF1DZGHDvfFZRF1o/0SDcgXcy5QznDpjKZp0
+ feHojyX61Z4zLBAJoV8aShL+ZmL+pcdrJDwnMkRXY63MpY1gM3mQMe6Ju6hHxCQ9H0wA
+ htaQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=GASjNYMZ
+Subject: [Buildroot] [PATCH] package/minisign: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,46 +93,113 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Pierre Floury <pierre.floury@gmail.com>,
- Maxime Chevallier <maxime.chevallier@bootlin.com>
+Cc: Patrick Oppenlander <patrick.oppenlander@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/trace-cmd/trace-cmd.hash | 2 +-
- package/trace-cmd/trace-cmd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+From: Patrick Oppenlander <patrick.oppenlander@gmail.com>
 
-diff --git a/package/trace-cmd/trace-cmd.hash b/package/trace-cmd/trace-cmd.hash
-index 6edcaf0e1c..30b0c48de6 100644
---- a/package/trace-cmd/trace-cmd.hash
-+++ b/package/trace-cmd/trace-cmd.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  e496d41e599f8ef3c9a74675da05f86be0d8d48d524f0182c73ab98cd16da0b0  trace-cmd-v3.1.7.tar.gz
-+sha256  62af2c6062eeb434925921bb5936774b0a0e17a5f86671fa2ea2f40704a080cd  trace-cmd-v3.2.tar.gz
- sha256  b1d04b850c1c7471b0f0896f6c6f0fcfc9f07e2dd183a5f5826af269fe9e88fb  COPYING
- sha256  70f297763149e72306919c924e164f83041d5e512868d4c8c1826c171b3e49f9  COPYING.LIB
- sha256  f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79  LICENSES/GPL-2.0
-diff --git a/package/trace-cmd/trace-cmd.mk b/package/trace-cmd/trace-cmd.mk
-index ab8e9149f7..e02eb79530 100644
---- a/package/trace-cmd/trace-cmd.mk
-+++ b/package/trace-cmd/trace-cmd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Patrick Oppenlander <patrick.oppenlander@gmail.com>
+---
+ package/Config.in               |  1 +
+ package/Config.in.host          |  1 +
+ package/minisign/Config.in      |  8 ++++++++
+ package/minisign/Config.in.host |  6 ++++++
+ package/minisign/minisign.hash  |  3 +++
+ package/minisign/minisign.mk    | 18 ++++++++++++++++++
+ 6 files changed, 37 insertions(+)
+ create mode 100644 package/minisign/Config.in
+ create mode 100644 package/minisign/Config.in.host
+ create mode 100644 package/minisign/minisign.hash
+ create mode 100644 package/minisign/minisign.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 5a3410d758..1b7a667ea1 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1538,6 +1538,7 @@ menu "Crypto"
+ 	source "package/ustream-ssl/Config.in"
+ 	source "package/wolfssl/Config.in"
+ 	source "package/wolftpm/Config.in"
++	source "package/minisign/Config.in"
+ endmenu
  
--TRACE_CMD_VERSION = 3.1.7
-+TRACE_CMD_VERSION = 3.2
- TRACE_CMD_SOURCE = trace-cmd-v$(TRACE_CMD_VERSION).tar.gz
- TRACE_CMD_SITE = \
- 	https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/snapshot
+ menu "Database"
+diff --git a/package/Config.in.host b/package/Config.in.host
+index c80842c33a..f03ca16b7b 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -64,6 +64,7 @@ menu "Host utilities"
+ 	source "package/meson-tools/Config.in.host"
+ 	source "package/mfgtools/Config.in.host"
+ 	source "package/microchip-hss-payload-generator/Config.in.host"
++	source "package/minisign/Config.in.host"
+ 	source "package/mkpasswd/Config.in.host"
+ 	source "package/moby-buildkit/Config.in.host"
+ 	source "package/mosquitto/Config.in.host"
+diff --git a/package/minisign/Config.in b/package/minisign/Config.in
+new file mode 100644
+index 0000000000..cfba5586b1
+--- /dev/null
++++ b/package/minisign/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_MINISIGN
++	bool "minisign"
++	select BR2_PACKAGE_LIBSODIUM
++	select BR2_PACKAGE_LIBSODIUM_FULL
++	help
++          Minisign is a dead simple tool to sign files and verify signatures.
++
++          https://github.com/jedisct1/minisign
+diff --git a/package/minisign/Config.in.host b/package/minisign/Config.in.host
+new file mode 100644
+index 0000000000..8ed57cdbfc
+--- /dev/null
++++ b/package/minisign/Config.in.host
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_HOST_MINISIGN
++	bool "host minisign"
++	help
++          Minisign is a dead simple tool to sign files and verify signatures.
++
++          https://github.com/jedisct1/minisign
+diff --git a/package/minisign/minisign.hash b/package/minisign/minisign.hash
+new file mode 100644
+index 0000000000..12cde42a43
+--- /dev/null
++++ b/package/minisign/minisign.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  74c2c78a1cd51a43a6c98f46a4eabefbc8668074ca9aa14115544276b663fc55  minisign-0.11.tar.gz
++sha256  d775d155cbf31638714c31c6f990f9fdc5f07998d91e42d1bf15483bd2d1706b  LICENSE
+diff --git a/package/minisign/minisign.mk b/package/minisign/minisign.mk
+new file mode 100644
+index 0000000000..d6be41b2fe
+--- /dev/null
++++ b/package/minisign/minisign.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# minisign
++#
++################################################################################
++
++MINISIGN_VERSION = 0.11
++MINISIGN_SITE = $(call github,jedisct1,minisign,$(MINISIGN_VERSION))
++MINISIGN_LICENSE = ISC
++MINISIGN_LICENSE_FILES = LICENSE
++MINISIGN_DEPENDENCIES = host-libsodium libsodium
++
++ifeq ($(BR2_STATIC_LIBS),y)
++MINISIGN_CONF_OPTS += -DBUILD_STATIC_EXECUTABLES=1
++endif
++
++$(eval $(cmake-package))
++$(eval $(host-cmake-package))
 -- 
-2.34.1
+2.43.0
 
 _______________________________________________
 buildroot mailing list
