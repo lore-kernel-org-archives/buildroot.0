@@ -4,65 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27EDEC3DA6E
-	for <buildroot@archiver.kernel.org>; Mon,  8 Jan 2024 20:48:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12796C3DA6E
+	for <buildroot@archiver.kernel.org>; Mon,  8 Jan 2024 20:52:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D745383B20;
-	Mon,  8 Jan 2024 20:48:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D745383B20
+	by smtp1.osuosl.org (Postfix) with ESMTP id B78AF8214B;
+	Mon,  8 Jan 2024 20:52:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B78AF8214B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sThr5eETaoMR; Mon,  8 Jan 2024 20:48:00 +0000 (UTC)
+	with ESMTP id lmrwKAkv7CxT; Mon,  8 Jan 2024 20:52:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 36C1A83AFA;
-	Mon,  8 Jan 2024 20:47:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 36C1A83AFA
+	by smtp1.osuosl.org (Postfix) with ESMTP id 11782820D7;
+	Mon,  8 Jan 2024 20:52:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 11782820D7
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 216381BF2BA
- for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 20:47:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2F4471BF2BA
+ for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 20:52:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0784F40173
- for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 20:47:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0784F40173
+ by smtp4.osuosl.org (Postfix) with ESMTP id 143B642033
+ for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 20:52:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 143B642033
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VHFEigHtkMLf for <buildroot@lists.busybox.net>;
- Mon,  8 Jan 2024 20:47:56 +0000 (UTC)
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 06D9A4015D
- for <buildroot@buildroot.org>; Mon,  8 Jan 2024 20:47:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 06D9A4015D
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:4dc2:634f:d1a7:1769])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id CBEB460129;
- Mon,  8 Jan 2024 21:47:51 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 08 Jan 2024 21:47:51 +0100
-Date: Mon, 8 Jan 2024 21:47:51 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Peter Korsgaard <peter@korsgaard.com>
-Message-ID: <ZZxfdzSiTecDpHrH@landeda>
-References: <20240108080413.1661026-1-peter@korsgaard.com>
+ with ESMTP id h-Mf9q_iBcsM for <buildroot@lists.busybox.net>;
+ Mon,  8 Jan 2024 20:51:58 +0000 (UTC)
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BBECC41F99
+ for <buildroot@buildroot.org>; Mon,  8 Jan 2024 20:51:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BBECC41F99
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 9550413F8A9;
+ Mon,  8 Jan 2024 21:51:55 +0100 (CET)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Mon,  8 Jan 2024 21:51:50 +0100
+Message-ID: <20240108205150.783168-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240108080413.1661026-1-peter@korsgaard.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1704746873;
- bh=7Hr5TMoU//2EiyeiHJ0FTSHAZt7qGKZL4IhjsCIB+2s=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=gobNE/10c+yQ7d72r45ykAPPQ5xW7vMSkZQAQ+j/nE4IzuYDWskmrSHAT4qL+HSRs
- bjQfwT6iM3/uX97SwvCONAP4CWtvOGLfEf86ZJIOCvnSFwr5w4t3IHppa6RueMpeS0
- URSlylWi+g+GfZAp4aZEcJPOvnPqBgo45VpCxkIZfsJY3xR5csjdoO4UfsMt3L2bKo
- DgOQyRWzH4/kazkjAEQ/7Z1aAqlmmxHJj6JAemgLiRS5/xNXjU+oSVWY6gUUV67iME
- QrFVsjIezhB4FZekHu3SCEA817rjTvRssJr/brmkDKep3Q3EyPYwTt+hYGGcAa5Wny
- 5lM5Eppoe2mbw==
+ d=free.fr; s=smtp-20201208; t=1704747116;
+ bh=q7pRBZVqKod/d/1FnwEVEOeSPHeJXl4QOBrA9B4wuJE=;
+ h=From:To:Cc:Subject:Date:From;
+ b=bXz0fwBhevaTpZp88uxQuhI6acKPLUVrocGPitlD9JdW6xGI9CpCPjrZc/xZqxz6i
+ 3KjWdAuca9P0lHUKU2AQUoSn1jTATXCvQuQy1RIrEH1XObUlAryaHMoffIcjpbeL4X
+ SIdxJMVXQmAk7YL3MqCBhZZ9Ttsmu89NUHQGoOlZzf8bdf4i3A+jdZQUGYmDLg7qH+
+ 7x2A9D9fQeXBGGaAoAcKdxk0Ud64b7cTYSJm20TwJaEbuUQGuRkVUJWD0Wu8W6c/H9
+ BOVWSOnry6jA2n2GO+Fq0njdudpZL5plbnHOMWLMvfzaYMum4NIrDYvwy4Zm1WEk9y
+ HQ155YmDgdNYg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=gobNE/10
-Subject: Re: [Buildroot] [PATCH] boot/shim: security bump to version 15.6
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=bXz0fwBh
+Subject: [Buildroot] [PATCH 1/1] package/openblas: bump to version v0.3.26
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,71 +70,74 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Peter, All,
+For change log since v0.3.25, see:
+https://github.com/OpenMathLib/OpenBLAS/releases/tag/v0.3.26
 
-On 2024-01-08 09:04 +0100, Peter Korsgaard spake thusly:
-> Fixes the following security issue:
-> 
-> CVE-2022-28737: There's a possible overflow in handle_image() when shim
-> tries to load and execute crafted EFI executables
-> 
-> https://github.com/advisories/GHSA-hmxr-46w2-jjwh
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+This commit also update _SITE url to follow download url published on
+the homepage https://www.openblas.net/
 
-Applied to master, thanks.
+Also https://github.com/xianyi/OpenBLAS is now redirecting to
+https://github.com/OpenMathLib/OpenBLAS
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+Patch tested on branch master at commit 1d97f8c with commands:
 
-> ---
->  boot/shim/shim.hash | 2 +-
->  boot/shim/shim.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/boot/shim/shim.hash b/boot/shim/shim.hash
-> index a0a9f06f35..c9c489fd2f 100644
-> --- a/boot/shim/shim.hash
-> +++ b/boot/shim/shim.hash
-> @@ -1,3 +1,3 @@
->  # locally computed hash
-> -sha256  8344473dd10569588b8238a4656b8fab226714eea9f5363f8c410aa8a5090297  shim-15.4.tar.bz2
-> +sha256  eab91644a3efe91a666399f5d8eb3eed0e04d04f79d4b6c0b278ef7747a239a5  shim-15.6.tar.bz2
->  sha256  15edf527919ddcb2f514ab9d16ad07ef219e4bb490e0b79560be510f0c159cc2  COPYRIGHT
-> diff --git a/boot/shim/shim.mk b/boot/shim/shim.mk
-> index 0a6d1527aa..bbef81cfc4 100644
-> --- a/boot/shim/shim.mk
-> +++ b/boot/shim/shim.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -SHIM_VERSION = 15.4
-> +SHIM_VERSION = 15.6
->  SHIM_SITE = https://github.com/rhboot/shim/releases/download/$(SHIM_VERSION)
->  SHIM_SOURCE = shim-$(SHIM_VERSION).tar.bz2
->  SHIM_LICENSE = BSD-2-Clause
-> -- 
-> 2.39.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+    make check-package
+    ...
+    0 warnings generated
 
+    support/testing/run-tests \
+        -d dl -o output_folder \
+        tests.package.test_openblas
+    ...
+    OK
+
+    utils/test-pkg -a -p openblas
+    ...
+    45 builds, 23 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+---
+ package/openblas/openblas.hash | 6 +++---
+ package/openblas/openblas.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/package/openblas/openblas.hash b/package/openblas/openblas.hash
+index d946ae7296..a0f054dab7 100644
+--- a/package/openblas/openblas.hash
++++ b/package/openblas/openblas.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/xianyi/OpenBLAS/releases/tag/v0.3.25
+-md5  48384e324cd1cdcfbdb0d2e16ca55327  openblas-0.3.25.tar.gz
++# From https://github.com/OpenMathLib/OpenBLAS/releases/tag/v0.3.26
++md5  bd496a1c81769ed19a161c1f8f904ccd  openblas-0.3.26.tar.gz
+ # Locally calculated
+-sha256  4c25cb30c4bb23eddca05d7d0a85997b8db6144f5464ba7f8c09ce91e2f35543  openblas-0.3.25.tar.gz
++sha256  4e6e4f5cb14c209262e33e6816d70221a2fe49eb69eaf0a06f065598ac602c68  openblas-0.3.26.tar.gz
+ sha256  190b5a9c8d9723fe958ad33916bd7346d96fab3c5ea90832bb02d854f620fcff  LICENSE
+diff --git a/package/openblas/openblas.mk b/package/openblas/openblas.mk
+index 76833121a9..2d6cdaa7bb 100644
+--- a/package/openblas/openblas.mk
++++ b/package/openblas/openblas.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-OPENBLAS_VERSION = 0.3.25
+-OPENBLAS_SITE = https://github.com/xianyi/OpenBLAS/releases/download/v$(OPENBLAS_VERSION)
++OPENBLAS_VERSION = 0.3.26
++OPENBLAS_SITE = https://github.com/OpenMathLib/OpenBLAS/releases/download/v$(OPENBLAS_VERSION)
+ OPENBLAS_LICENSE = BSD-3-Clause
+ OPENBLAS_LICENSE_FILES = LICENSE
+ OPENBLAS_INSTALL_STAGING = YES
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
