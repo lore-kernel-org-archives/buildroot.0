@@ -4,61 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9ED6C3DA6E
-	for <buildroot@archiver.kernel.org>; Mon,  8 Jan 2024 13:00:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F46BC3DA6E
+	for <buildroot@archiver.kernel.org>; Mon,  8 Jan 2024 13:11:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1533F418CA;
-	Mon,  8 Jan 2024 13:00:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1533F418CA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8FBC14195F;
+	Mon,  8 Jan 2024 13:11:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8FBC14195F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 49sQrr4PdVYD; Mon,  8 Jan 2024 13:00:03 +0000 (UTC)
+	with ESMTP id GxEKrAu4yr-8; Mon,  8 Jan 2024 13:11:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3FF4641743;
-	Mon,  8 Jan 2024 13:00:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3FF4641743
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 14E641BF292
- for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 12:59:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CEF0041705;
+	Mon,  8 Jan 2024 13:11:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CEF0041705
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B22AE1BF330
+ for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 13:11:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E29488140E
- for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 12:59:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E29488140E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 97A784149F
+ for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 13:11:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 97A784149F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ru7BIxYl1QCG for <buildroot@lists.busybox.net>;
- Mon,  8 Jan 2024 12:59:46 +0000 (UTC)
-Received: from mail.tkos.co.il (mail.tkos.co.il [84.110.109.230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8C70F8131B
- for <buildroot@busybox.net>; Mon,  8 Jan 2024 12:59:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C70F8131B
-Received: from tarshish.tkos.co.il (unknown [10.0.8.2])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XG6rFqDyReQ6 for <buildroot@lists.busybox.net>;
+ Mon,  8 Jan 2024 13:11:00 +0000 (UTC)
+X-Greylist: delayed 440 seconds by postgrey-1.37 at util1.osuosl.org;
+ Mon, 08 Jan 2024 13:11:00 UTC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F7BD41705
+Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5F7BD41705
+ for <buildroot@buildroot.org>; Mon,  8 Jan 2024 13:11:00 +0000 (UTC)
+Received: from [192.168.178.36] (unknown [212.37.174.96])
+ (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+ key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
  (No client certificate requested)
- by mail.tkos.co.il (Postfix) with ESMTPS id 8ABFD440865;
- Mon,  8 Jan 2024 14:57:32 +0200 (IST)
-To: buildroot@busybox.net
-Date: Mon,  8 Jan 2024 14:59:30 +0200
-Message-ID: <955dd511a8904b18bce9c2ac8e27ad07c160e2b2.1704718771.git.baruch@tkos.co.il>
-X-Mailer: git-send-email 2.43.0
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id 589972C80CDC;
+ Mon,  8 Jan 2024 14:03:38 +0100 (CET)
+Message-ID: <0eb549da-1140-4071-8e58-376d9dd5f434@bubu1.eu>
+Date: Mon, 8 Jan 2024 14:03:37 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: buildroot@buildroot.org
+References: <20240108064820.3450359-1-james.hilliard1@gmail.com>
+Content-Language: en-US
+In-Reply-To: <20240108064820.3450359-1-james.hilliard1@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=tkos.co.il; s=default; t=1704718652;
- bh=hhAD0qFWvE4Wp23oInf4obXsA4yvw31akTxtwXNElgE=;
- h=From:To:Cc:Subject:Date:From;
- b=XxwIgk+RPcIftFx1PaZ/8cqUxModPBTWW4MY2LqccKOVsrH8TRqaOMzL0W1YO916m
- 8zydYcEd5Z8WaiN0Ct3TxBS8CWkgmw8Y078G5nnx7HSTMfyrMePgKpEzg5LIF6m/ZH
- qXJEjCeME8dbReB6NxWrHMWUZTf1/rkEpqS0dsMQ/LF4IdHcncNcOqvYZtCBNx63mC
- UhsWtGEJ1zNpqi7PyIBXh866zyG3Y9Iqs2dCKnZJtT+LxN/oDQqRX+Dk78FBJtm3bJ
- dh+/vH8LCm8k7VNycF0jTxwGlL2YZ0mYP2Fzezq7eoO2SUESgScLInpqrI4F90D8kF
- ZTzPQteaUTYzA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=tkos.co.il header.i=@tkos.co.il
- header.a=rsa-sha256 header.s=default header.b=XxwIgk+R
-Subject: [Buildroot] [PATCH 1/2] package/rng-tools: update help text website
- reference
+ d=bubu1.eu; s=bubu; 
+ t=1704719018; bh=KAQVVSqfVAr3RVWCqdbkIyT20zG2l3oQFb2yS+KKe2k=;
+ h=Date:Subject:To:References:Cc:From:In-Reply-To;
+ b=tLaLsuBLZy0VRYZWSaNOuYwRK1ccso/5nMtAiElDpn+ZudcZdOlsAP9j00IA/b9bd
+ 1aHFOLBdpuQ924zVwEpgv10GxOdDqr8AZMfPMhhCpr1dxCu9W3sUu3n+GbWpGicqnQ
+ vWUtzCSos8aqcEML6TEIivP0H+yBcm8uUYhzhwr7J9cacrgZUVPY1vGNz1AtU2ss3X
+ lXh/AqNxlpCJaTlenT43isiH+qYbJvdrE5QYCst957FM+QDOoK8O/y6+6pedpQXnsG
+ UxjFEqlDNXbg7Yf0GZxusVyfHDQ++rpBsSXzu+qaL6WB6E6Hh0eUuFYwQIwnbiK6v+
+ ubO1GbBAa7h8A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=bubu1.eu header.i=@bubu1.eu
+ header.a=rsa-sha256 header.s=bubu header.b=tLaLsuBL
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-anyio: bump to version
+ 4.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,37 +76,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
-Content-Type: text/plain; charset="us-ascii"
+From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
+Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-We switched to new upstream since commit f9e9c6349afe0
-("package/rng-tools: bump to 6.7"). Update the website URL as well.
+Hi James,
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/rng-tools/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 08.01.24 07:48, James Hilliard wrote:
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>   package/python-anyio/python-anyio.hash | 4 ++--
+>   package/python-anyio/python-anyio.mk   | 4 ++--
+>   2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/python-anyio/python-anyio.hash b/package/python-anyio/python-anyio.hash
+> index 1cea549bc1..e77d30249c 100644
+> --- a/package/python-anyio/python-anyio.hash
+> +++ b/package/python-anyio/python-anyio.hash
+> @@ -1,5 +1,5 @@
+>   # md5, sha256 from https://pypi.org/pypi/anyio/json
+> -md5  58d288dd84e28e2507ff9ce7e4620010  anyio-3.7.1.tar.gz
+> -sha256  44a3c9aba0f5defa43261a8b3efb97891f2bd7d804e0e1f56419befa1adfc780  anyio-3.7.1.tar.gz
+> +md5  22e660fff1a584e72281f0d6a083e4e0  anyio-4.2.0.tar.gz
+> +sha256  e1875bb4b4e2de1669f4bc7869b6d3f54231cdced71605e6e64c9be77e3be50f  anyio-4.2.0.tar.gz
 
-diff --git a/package/rng-tools/Config.in b/package/rng-tools/Config.in
-index be3f078a0bce..7f08fa25fbf7 100644
---- a/package/rng-tools/Config.in
-+++ b/package/rng-tools/Config.in
-@@ -9,7 +9,7 @@ config BR2_PACKAGE_RNG_TOOLS
- 	help
- 	  Daemon to use hardware random number generators.
- 
--	  http://sourceforge.net/projects/gkernel/
-+	  https://github.com/nhorman/rng-tools
- 
- if BR2_PACKAGE_RNG_TOOLS
- 
--- 
-2.43.0
+This was introduced in this version because fastapi didn't support a 
+newer version.
 
+Fastapi 0.108.0 supports starlette 0.32 now, which supports anyio 4.2.0.
+So I think these should be bumped together/in the same series?
+
+
+>   # Locally computed sha256 checksums
+>   sha256  5361ac9dc58f2ef5fd2e9b09c68297c17f04950909bbc8023bdb82eacf22c2b0  LICENSE
+> diff --git a/package/python-anyio/python-anyio.mk b/package/python-anyio/python-anyio.mk
+> index 80404ac660..32c2286157 100644
+> --- a/package/python-anyio/python-anyio.mk
+> +++ b/package/python-anyio/python-anyio.mk
+> @@ -4,9 +4,9 @@
+>   #
+>   ################################################################################
+>   
+> -PYTHON_ANYIO_VERSION = 3.7.1
+> +PYTHON_ANYIO_VERSION = 4.2.0
+>   PYTHON_ANYIO_SOURCE = anyio-$(PYTHON_ANYIO_VERSION).tar.gz
+> -PYTHON_ANYIO_SITE = https://files.pythonhosted.org/packages/28/99/2dfd53fd55ce9838e6ff2d4dac20ce58263798bd1a0dbe18b3a9af3fcfce
+> +PYTHON_ANYIO_SITE = https://files.pythonhosted.org/packages/2d/b8/7333d87d5f03247215d86a86362fd3e324111788c6cdd8d2e6196a6ba833
+>   PYTHON_ANYIO_SETUP_TYPE = setuptools
+>   PYTHON_ANYIO_LICENSE = MIT
+>   PYTHON_ANYIO_LICENSE_FILES = LICENSE
+
+Marcus
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
