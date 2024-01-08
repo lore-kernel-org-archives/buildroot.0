@@ -4,84 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2CCBC3DA6E
-	for <buildroot@archiver.kernel.org>; Mon,  8 Jan 2024 06:48:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A928C3DA6E
+	for <buildroot@archiver.kernel.org>; Mon,  8 Jan 2024 06:51:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6D0F560D88;
-	Mon,  8 Jan 2024 06:48:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D0F560D88
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0C84E60E86;
+	Mon,  8 Jan 2024 06:51:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C84E60E86
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0VTTKE-QKfGv; Mon,  8 Jan 2024 06:48:30 +0000 (UTC)
+	with ESMTP id 4NqTCHG5hx4u; Mon,  8 Jan 2024 06:51:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C5E7360783;
-	Mon,  8 Jan 2024 06:48:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5E7360783
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 44EAF1BF387
- for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 06:48:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 68BF560BCD;
+	Mon,  8 Jan 2024 06:51:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 68BF560BCD
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9720D1BF387
+ for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 06:51:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 24EDD400CB
- for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 06:48:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 24EDD400CB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7C9D6415F5
+ for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 06:51:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C9D6415F5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cNT7MLQB6SMY for <buildroot@lists.busybox.net>;
- Mon,  8 Jan 2024 06:48:24 +0000 (UTC)
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com
- [IPv6:2607:f8b0:4864:20::12f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 25722400A4
- for <buildroot@buildroot.org>; Mon,  8 Jan 2024 06:48:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 25722400A4
-Received: by mail-il1-x12f.google.com with SMTP id
- e9e14a558f8ab-3607828cbf2so5634745ab.1
- for <buildroot@buildroot.org>; Sun, 07 Jan 2024 22:48:23 -0800 (PST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2WRfZ1MaAQE6 for <buildroot@lists.busybox.net>;
+ Mon,  8 Jan 2024 06:51:35 +0000 (UTC)
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com
+ [IPv6:2607:f8b0:4864:20::d33])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8A057415F1
+ for <buildroot@buildroot.org>; Mon,  8 Jan 2024 06:51:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A057415F1
+Received: by mail-io1-xd33.google.com with SMTP id
+ ca18e2360f4ac-7bbec1d1c9dso112120239f.1
+ for <buildroot@buildroot.org>; Sun, 07 Jan 2024 22:51:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704696503; x=1705301303;
+ d=1e100.net; s=20230601; t=1704696694; x=1705301494;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=3/0RRYWivQV+tx92coP1fw4dcHulTTHLT1HgeJd8vE0=;
- b=LRvnUQsHvCTjx9LV5s+7iAYL0hSNGepPAmxza/o5/k7eAEfv7McTqcDUPeXkLkytjE
- OqbNKDkwYIOrPv2Kdq/Rza9f0MsRTDPYJuVM1esJjp6txY8Bzg9t+iUpNzAuKMU+umbR
- oQNYX+4x/8OEPriYcBXbAiKnQ2gVDTLZ7ax+g47sm1fi3VIqE+GK1j+mr75opK9wp6IS
- fSZWJS+APCICARkyQH3CmM5GaftQcooBZ76BtTE7vEBR5jU+nN5NQDc4hsTZOBG/l+A1
- a65bHqyUMOQ8YZwjODnk/1YWsr9RZa2/uioUJpU3gxAAZvNU4kvs1E6iDjv7Q/6uL86K
- 8Vqw==
-X-Gm-Message-State: AOJu0Yx1NS1ZwIMBYQzYjE1TWShb62THktCuJVuj1awCEMqRkRm9+JVu
- 6ZiRty4VcMkCsH++yAFlTJUAOLUfaWQupg==
-X-Google-Smtp-Source: AGHT+IFSpHWwzDJXnfrTJu1Pd2sZUarJb2MxNPUY+RSvd4eP/nAaH6vyLDGe1lRJYJEK5UBrEUX5HQ==
-X-Received: by 2002:a05:6e02:1a8f:b0:360:6260:7d4 with SMTP id
- k15-20020a056e021a8f00b00360626007d4mr4394598ilv.27.1704696502705; 
- Sun, 07 Jan 2024 22:48:22 -0800 (PST)
+ bh=gwI+B7S8LTGfA6ra9o7778mwBLEXwsBVmSG4ugLN38M=;
+ b=hGNvg7Js/M7C0NUX0Z8ejdw4onxGez299Ze81b/4+ZcngoUFloNOMUExT0CwzL7Vbx
+ AKv+dIm02XSUDjjczBP8P/q+qGfyiobfcCdM4quxnF9VsGZYJqLsIdL98oClRFZBo+GU
+ d2kW2uvK4V4PMNRuFoAQWnfra+XUJghkiUIa8GnDRDQodLnVMFVSEZyIo/oUjqdXq1j6
+ ghMLcBWBWIVFjLbialEtAfTsQP5Ii+PnTZhe3vxv6jInJN4obp02K92Bm+4aIwit4BHP
+ D0cS+BAU/BNAMJkME/ENaJaK/9xi8tkFuv8kwtUW+iRxot8j79CVFdaoKr0ddcuiZnO8
+ QTLQ==
+X-Gm-Message-State: AOJu0YyHIgXc8ftyQuuP5TbGpp5WA6II7jsBE5PNpNiQ8xFVv8iLkvZG
+ cnkp/Zk8EujdJB/w4B7VAJZlIUo0kWTMzw==
+X-Google-Smtp-Source: AGHT+IHe8UasQpDgEC+XLQD5ZPj15B7+/F+aZZUGcZK+9kcBME76+59DbOQJLl5T5VW/rGqw+5knvQ==
+X-Received: by 2002:a92:cda8:0:b0:360:3c53:e652 with SMTP id
+ g8-20020a92cda8000000b003603c53e652mr6324115ild.1.1704696693861; 
+ Sun, 07 Jan 2024 22:51:33 -0800 (PST)
 Received: from james-x399.localdomain (71-218-103-119.hlrn.qwest.net.
  [71.218.103.119]) by smtp.gmail.com with ESMTPSA id
- fg7-20020a056638620700b0046e1c810f96sm857938jab.128.2024.01.07.22.48.22
+ cq8-20020a056638478800b00466754ca2fesm2037926jab.68.2024.01.07.22.51.33
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 07 Jan 2024 22:48:22 -0800 (PST)
+ Sun, 07 Jan 2024 22:51:33 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  7 Jan 2024 23:48:20 -0700
-Message-Id: <20240108064820.3450359-1-james.hilliard1@gmail.com>
+Date: Sun,  7 Jan 2024 23:51:31 -0700
+Message-Id: <20240108065131.3452618-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1704696503; x=1705301303; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1704696694; x=1705301494; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=3/0RRYWivQV+tx92coP1fw4dcHulTTHLT1HgeJd8vE0=;
- b=Yk/XaiN/+qOMZUWl+wXdIKIHKo6Uqm6Gv8iuP2xvw39aqEDuVbLoeMD6KN1QQrBSIm
- csOxH57kBp/bEA7Ld7tc17WE8BdOvuM7gStE5SU0b8p1blUvLTeW6rG3u5N6BRFCzZR4
- cWaOFl9BeMsLKYBw397PsX73ytuVqk6gd8P9mxc9Pg7Sw4GzrOxi+9m+3alVRIODhsHg
- ZGJMBBQ6sRSqbMMPNI5YJjL+lzSW0qBXLVp/8YWDCk+DtJG70vIs796cWFsykglTyhVN
- rCmPEUAnB9syG/YVlSlaY/GPGLOmzfO4/uyNS7NZzeTc9YvoE4EM3Vmjr/apLyk8fD64
- XnpQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=gwI+B7S8LTGfA6ra9o7778mwBLEXwsBVmSG4ugLN38M=;
+ b=ZxixDfMvjhD8rjARoqfcqLXmp+jiCWxXt4vDQRZ63F2oNyqGzJPnCZtP/MHQYtc4Uv
+ SjjwlUKYTnVmqDwuSz6sWtQ8l5ofiexs41DswmURYWkDMbODmnzNFQA9IUlU00e6GAcz
+ wtCX/UV4xjQ4drGvOkNLUEVNpMRh2MLeP4fKqWt6gOHVIT2gGcEqoHjedyNQ2sYMq8RV
+ 9kq/BV0+RA4LwwpDpVPvd2y2j85SCmv4v7yO4bOGWt54OuYZIhESsUA7LD3Th4wGEBa+
+ 95+qFdWKzbOvbKisCJIwo6SY8WM/b1gs8FVa/j9fa7wYXa1X7dCtaX0XzzZ/EsfdtDvV
+ DyvQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Yk/XaiN/
-Subject: [Buildroot] [PATCH 1/1] package/python-anyio: bump to version 4.2.0
+ header.a=rsa-sha256 header.s=20230601 header.b=ZxixDfMv
+Subject: [Buildroot] [PATCH 1/1] package/python-apispec: bump to version
+ 6.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,7 +94,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>,
+ James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -101,38 +103,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-anyio/python-anyio.hash | 4 ++--
- package/python-anyio/python-anyio.mk   | 4 ++--
+ package/python-apispec/python-apispec.hash | 4 ++--
+ package/python-apispec/python-apispec.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-anyio/python-anyio.hash b/package/python-anyio/python-anyio.hash
-index 1cea549bc1..e77d30249c 100644
---- a/package/python-anyio/python-anyio.hash
-+++ b/package/python-anyio/python-anyio.hash
+diff --git a/package/python-apispec/python-apispec.hash b/package/python-apispec/python-apispec.hash
+index f8a2350eaf..9c47a2c1a6 100644
+--- a/package/python-apispec/python-apispec.hash
++++ b/package/python-apispec/python-apispec.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/anyio/json
--md5  58d288dd84e28e2507ff9ce7e4620010  anyio-3.7.1.tar.gz
--sha256  44a3c9aba0f5defa43261a8b3efb97891f2bd7d804e0e1f56419befa1adfc780  anyio-3.7.1.tar.gz
-+md5  22e660fff1a584e72281f0d6a083e4e0  anyio-4.2.0.tar.gz
-+sha256  e1875bb4b4e2de1669f4bc7869b6d3f54231cdced71605e6e64c9be77e3be50f  anyio-4.2.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/apispec/json
+-md5  d6cc7586754cf1c653ffb7ee83955d3a  apispec-6.3.0.tar.gz
+-sha256  6cb08d92ce73ff0b3bf46cb2ea5c00d57289b0f279fb0256a3df468182ba5344  apispec-6.3.0.tar.gz
++md5  1aa13f34a226fca977d72f061360e96e  apispec-6.3.1.tar.gz
++sha256  b38e4479916d43f2b1e88ce15fc2fae93adf2e8d55cb59ec74ac66a827941483  apispec-6.3.1.tar.gz
  # Locally computed sha256 checksums
- sha256  5361ac9dc58f2ef5fd2e9b09c68297c17f04950909bbc8023bdb82eacf22c2b0  LICENSE
-diff --git a/package/python-anyio/python-anyio.mk b/package/python-anyio/python-anyio.mk
-index 80404ac660..32c2286157 100644
---- a/package/python-anyio/python-anyio.mk
-+++ b/package/python-anyio/python-anyio.mk
+ sha256  a452afcef750956a8396f7e7a6f913a117d28ef99a13170c29dc74c3b7a95f29  LICENSE
+diff --git a/package/python-apispec/python-apispec.mk b/package/python-apispec/python-apispec.mk
+index 744fb76810..aee0e16840 100644
+--- a/package/python-apispec/python-apispec.mk
++++ b/package/python-apispec/python-apispec.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ANYIO_VERSION = 3.7.1
-+PYTHON_ANYIO_VERSION = 4.2.0
- PYTHON_ANYIO_SOURCE = anyio-$(PYTHON_ANYIO_VERSION).tar.gz
--PYTHON_ANYIO_SITE = https://files.pythonhosted.org/packages/28/99/2dfd53fd55ce9838e6ff2d4dac20ce58263798bd1a0dbe18b3a9af3fcfce
-+PYTHON_ANYIO_SITE = https://files.pythonhosted.org/packages/2d/b8/7333d87d5f03247215d86a86362fd3e324111788c6cdd8d2e6196a6ba833
- PYTHON_ANYIO_SETUP_TYPE = setuptools
- PYTHON_ANYIO_LICENSE = MIT
- PYTHON_ANYIO_LICENSE_FILES = LICENSE
+-PYTHON_APISPEC_VERSION = 6.3.0
++PYTHON_APISPEC_VERSION = 6.3.1
+ PYTHON_APISPEC_SOURCE = apispec-$(PYTHON_APISPEC_VERSION).tar.gz
+-PYTHON_APISPEC_SITE = https://files.pythonhosted.org/packages/3f/1e/207c3e61c805eef214d7e5c58106312f9af4733b07f470224e4e309dc65e
++PYTHON_APISPEC_SITE = https://files.pythonhosted.org/packages/ff/0c/e70aa981d8ebe2e8a500a85c923579ce3363feccd704268e6ff8053875dd
+ PYTHON_APISPEC_SETUP_TYPE = setuptools
+ PYTHON_APISPEC_LICENSE = MIT
+ PYTHON_APISPEC_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
