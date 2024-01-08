@@ -4,66 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8EEF3C3DA6E
-	for <buildroot@archiver.kernel.org>; Mon,  8 Jan 2024 22:20:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8AA3CC3DA6E
+	for <buildroot@archiver.kernel.org>; Mon,  8 Jan 2024 22:30:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 43238420A4;
-	Mon,  8 Jan 2024 22:20:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 43238420A4
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2AF424192C;
+	Mon,  8 Jan 2024 22:30:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2AF424192C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sD6GBqKBOvKn; Mon,  8 Jan 2024 22:20:42 +0000 (UTC)
+	with ESMTP id ieMya0RGxpYD; Mon,  8 Jan 2024 22:30:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 86A8B4209A;
-	Mon,  8 Jan 2024 22:20:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 86A8B4209A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7AAEC1BF421
- for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 22:20:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 02C8B41B61;
+	Mon,  8 Jan 2024 22:30:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 02C8B41B61
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6BA031BF421
+ for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 22:30:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 542B28210F
- for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 22:20:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 542B28210F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 43062419C2
+ for <buildroot@lists.busybox.net>; Mon,  8 Jan 2024 22:30:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 43062419C2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id waKciBP9RsHQ for <buildroot@lists.busybox.net>;
- Mon,  8 Jan 2024 22:20:28 +0000 (UTC)
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4A88381EE8
- for <buildroot@buildroot.org>; Mon,  8 Jan 2024 22:20:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4A88381EE8
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:4f89:5708:1633:580e])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 164B3B0037C;
- Mon,  8 Jan 2024 23:20:23 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 08 Jan 2024 23:20:22 +0100
-Date: Mon, 8 Jan 2024 23:20:22 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <ZZx1Jp2GjNB2HiA5@landeda>
-References: <20240108220026.435160-1-fontaine.fabrice@gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TjikhTb_Lmsu for <buildroot@lists.busybox.net>;
+ Mon,  8 Jan 2024 22:30:04 +0000 (UTC)
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com
+ [IPv6:2607:f8b0:4864:20::22b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E90224031D
+ for <buildroot@buildroot.org>; Mon,  8 Jan 2024 22:30:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E90224031D
+Received: by mail-oi1-x22b.google.com with SMTP id
+ 5614622812f47-3bbbdf0b859so2806157b6e.3
+ for <buildroot@buildroot.org>; Mon, 08 Jan 2024 14:30:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1704753003; x=1705357803;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=wSYypNUlHKUqyNqpAs3fFGSKUrOKVJUza16ib6d/0B4=;
+ b=iA0E93gU4kMl0XOu+N5yzLGeQOh9aVLFDtvmWvinrxkJJZzZNSBrU74f41Bu3syU6d
+ Y1P/VIx1Q8ftv5MViOhfLMNacqWwR1AoNi0I1eTrb5x8ryx4y8dUcyK/BPEz9T2hVsO+
+ TP4z56iU0WrqhWVKiJV1nLKJsaq31Uut+tDwlKD5UpznixMKgHI/kJBVCeZdMTY6oUoz
+ KDuRgKYVylmxbFF/zDh04s8QXdClHA1IWHOxSpwPTWiaQsKPglveQedZxsOSAySllY+5
+ 4wZbqx+IcaLwp8eFERlT44qwLR8Slevp1wE+5Wdr/jpDGuAsSTSG8iiPM0/5cdkiiBYq
+ NgGA==
+X-Gm-Message-State: AOJu0YwTW9J5ONovGVXKpA40X/OadMC+R+OOCqtf/jVoiJTvGsSuXxAn
+ DrDM4zPfHeVM/9y3sw54DDBLY8u0PunWJw==
+X-Google-Smtp-Source: AGHT+IE3Og3ps+XF+3BxWR6qTX5g2WY1O3xnZQt9qAIgiXFeCKZyE2zu5BANDnBhfeox8yY7QAaJDQ==
+X-Received: by 2002:a05:6808:11ce:b0:3bd:346f:1d86 with SMTP id
+ p14-20020a05680811ce00b003bd346f1d86mr1578440oiv.20.1704753002609; 
+ Mon, 08 Jan 2024 14:30:02 -0800 (PST)
+Received: from pox13.. (office.relectrify.team. [159.196.192.155])
+ by smtp.gmail.com with ESMTPSA id
+ ff10-20020a056a002f4a00b006d96d034befsm362363pfb.30.2024.01.08.14.30.01
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 08 Jan 2024 14:30:02 -0800 (PST)
+From: patrick.oppenlander@gmail.com
+To: buildroot@buildroot.org
+Date: Tue,  9 Jan 2024 09:25:51 +1100
+Message-ID: <20240108222957.3567-1-patrick.oppenlander@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240108220026.435160-1-fontaine.fabrice@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1704752426;
- bh=pPd9g39W+xLspLTFjqGbW+6Xjs/BLaxZUnmfF2YBNuA=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=Uz3Sby/wJs35QEmlgmZ3fSKnokQfxZybk4fhPXOkPODx+aSe1bTsQdY63mR+NB9Af
- mb44FYLTm/J+Gj/gQ2iJsvmzKcRWoCly/IpUAzWX919CJv4N2GCztOHD5upkHHkt1R
- JaaqF26N8jbCLWcKAFCtW5qGRofYgwh77RdvYmDgUCQj+CMqwX3KmZFVLbd4p286Yk
- n9t1ynOmNaZz+nRzZ2qRiDQ8AnCDZg166bIaKZOy55Nc/pfpQV4jQ7MR2GcM+ybkCr
- x86zfb0oDytQcm46Rujm6sXEt7LNCznff0ZML3QMLh4NRTSbtp3lP2+D1gJcdzCPwf
- vbPKtmHrlOVMA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Uz3Sby/w
-Subject: Re: [Buildroot] [PATCH 1/1] package/micropython: security bump to
- version 1.22.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1704753003; x=1705357803; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=wSYypNUlHKUqyNqpAs3fFGSKUrOKVJUza16ib6d/0B4=;
+ b=DbK94XBD4JaFDDXe2NHazLFIGNoa26L6Sqmpo8VBytf/AovD05WlcjzEptHaqcwxJc
+ OD/T+euyHCzxj4jhNy3lLMYlK95Vfa1Xx9J1UBwn77oA2FOaaxmwKVhpOPHqKIG0EDPN
+ m1+A11Vt2r+e82Qw/kirFTUPhylmBucqMi4vBL07RlHxYvaqiT/Ub4VpjiYdT7pbipe/
+ YRLUmZN+piysrcSg9VAldelasF7szOXZSARGDNfMqEQx2Ul7KqQgJgFJrh7iuJzX2Fc2
+ w7aFn4Cv63IRXKGN++WH+CIziSW+7JBuUpAyi0M6VCj2HuKCYk4Bt7lVGnfegS7al5wj
+ a6pQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=DbK94XBD
+Subject: [Buildroot] [PATCH v2] package/minisign: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,80 +93,119 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Chris Packham <judge.packham@gmail.com>, buildroot@buildroot.org
+Cc: Patrick Oppenlander <patrick.oppenlander@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+From: Patrick Oppenlander <patrick.oppenlander@gmail.com>
 
-On 2024-01-08 23:00 +0100, Fabrice Fontaine spake thusly:
-> - Use official tarball
-> - Update hash of license file (some packages have been added or removed
->   but the list of licenses is the same)
-> - Fix CVE-2023-7158: A vulnerability was found in MicroPython up to
->   1.21.0. It has been classified as critical. Affected is the function
->   slice_indices of the file objslice.c. The manipulation leads to
->   heap-based buffer overflow. It is possible to launch the attack
->   remotely. The exploit has been disclosed to the public and may be
->   used. Upgrading to version 1.22.0 is able to address this issue. It is
->   recommended to upgrade the affected component. The identifier of this
->   vulnerability is VDB-249180.
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Patrick Oppenlander <patrick.oppenlander@gmail.com>
+---
 
-Applied to master, thanks.
+Changes from v1 (reviewed by Baruch Siach):
+* host-libsodium dependency was incorrectly on to the target dependencies list.
 
-Regards,
-Yann E. MORIN.
+ package/Config.in               |  1 +
+ package/Config.in.host          |  1 +
+ package/minisign/Config.in      |  8 ++++++++
+ package/minisign/Config.in.host |  6 ++++++
+ package/minisign/minisign.hash  |  3 +++
+ package/minisign/minisign.mk    | 19 +++++++++++++++++++
+ 6 files changed, 38 insertions(+)
+ create mode 100644 package/minisign/Config.in
+ create mode 100644 package/minisign/Config.in.host
+ create mode 100644 package/minisign/minisign.hash
+ create mode 100644 package/minisign/minisign.mk
 
-> ---
->  package/micropython/micropython.hash | 4 ++--
->  package/micropython/micropython.mk   | 5 +++--
->  2 files changed, 5 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/micropython/micropython.hash b/package/micropython/micropython.hash
-> index 7bff7de4e2..43551866b9 100644
-> --- a/package/micropython/micropython.hash
-> +++ b/package/micropython/micropython.hash
-> @@ -1,3 +1,3 @@
->  #locally computed
-> -sha256  c980ad7e742491df0dc10db2958137dbbf9aa7a8009e102fc75f4c0cac2d6b5e  micropython-1.19.1.tar.gz
-> -sha256  0f678c2abd7fe2cfca36693630506bbcbdfc219bd04bf4a02fe3b094ae4c666f  LICENSE
-> +sha256  a042764f0b6f6d92b267454c5bd5afcb83fc3900119f2583672aac571e661924  micropython-1.22.0.tar.xz
-> +sha256  d9e0e0395867c899090e150213bc2b417e970c17355a8d48300089875b3c8037  LICENSE
-> diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
-> index d73cdb28db..7dbca0f1c2 100644
-> --- a/package/micropython/micropython.mk
-> +++ b/package/micropython/micropython.mk
-> @@ -4,8 +4,9 @@
->  #
->  ################################################################################
->  
-> -MICROPYTHON_VERSION = 1.19.1
-> -MICROPYTHON_SITE = $(call github,micropython,micropython,v$(MICROPYTHON_VERSION))
-> +MICROPYTHON_VERSION = 1.22.0
-> +MICROPYTHON_SITE = https://micropython.org/resources/source
-> +MICROPYTHON_SOURCE = micropython-$(MICROPYTHON_VERSION).tar.xz
->  # Micropython has a lot of code copied from other projects, and also a number
->  # of submodules for various libs. However, we don't even clone the submodules,
->  # and most of the copied code is not used in the unix build.
-> -- 
-> 2.43.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/Config.in b/package/Config.in
+index 5a3410d758..1b7a667ea1 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1538,6 +1538,7 @@ menu "Crypto"
+ 	source "package/ustream-ssl/Config.in"
+ 	source "package/wolfssl/Config.in"
+ 	source "package/wolftpm/Config.in"
++	source "package/minisign/Config.in"
+ endmenu
+ 
+ menu "Database"
+diff --git a/package/Config.in.host b/package/Config.in.host
+index c80842c33a..f03ca16b7b 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -64,6 +64,7 @@ menu "Host utilities"
+ 	source "package/meson-tools/Config.in.host"
+ 	source "package/mfgtools/Config.in.host"
+ 	source "package/microchip-hss-payload-generator/Config.in.host"
++	source "package/minisign/Config.in.host"
+ 	source "package/mkpasswd/Config.in.host"
+ 	source "package/moby-buildkit/Config.in.host"
+ 	source "package/mosquitto/Config.in.host"
+diff --git a/package/minisign/Config.in b/package/minisign/Config.in
+new file mode 100644
+index 0000000000..cfba5586b1
+--- /dev/null
++++ b/package/minisign/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_MINISIGN
++	bool "minisign"
++	select BR2_PACKAGE_LIBSODIUM
++	select BR2_PACKAGE_LIBSODIUM_FULL
++	help
++          Minisign is a dead simple tool to sign files and verify signatures.
++
++          https://github.com/jedisct1/minisign
+diff --git a/package/minisign/Config.in.host b/package/minisign/Config.in.host
+new file mode 100644
+index 0000000000..8ed57cdbfc
+--- /dev/null
++++ b/package/minisign/Config.in.host
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_HOST_MINISIGN
++	bool "host minisign"
++	help
++          Minisign is a dead simple tool to sign files and verify signatures.
++
++          https://github.com/jedisct1/minisign
+diff --git a/package/minisign/minisign.hash b/package/minisign/minisign.hash
+new file mode 100644
+index 0000000000..12cde42a43
+--- /dev/null
++++ b/package/minisign/minisign.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  74c2c78a1cd51a43a6c98f46a4eabefbc8668074ca9aa14115544276b663fc55  minisign-0.11.tar.gz
++sha256  d775d155cbf31638714c31c6f990f9fdc5f07998d91e42d1bf15483bd2d1706b  LICENSE
+diff --git a/package/minisign/minisign.mk b/package/minisign/minisign.mk
+new file mode 100644
+index 0000000000..34b3f4046e
+--- /dev/null
++++ b/package/minisign/minisign.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# minisign
++#
++################################################################################
++
++MINISIGN_VERSION = 0.11
++MINISIGN_SITE = $(call github,jedisct1,minisign,$(MINISIGN_VERSION))
++MINISIGN_LICENSE = ISC
++MINISIGN_LICENSE_FILES = LICENSE
++MINISIGN_DEPENDENCIES = libsodium
++HOST_MINISIGN_DEPENDENCIES = host-libsodium
++
++ifeq ($(BR2_STATIC_LIBS),y)
++MINISIGN_CONF_OPTS += -DBUILD_STATIC_EXECUTABLES=1
++endif
++
++$(eval $(cmake-package))
++$(eval $(host-cmake-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
