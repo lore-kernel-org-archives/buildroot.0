@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBB22C46CD2
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jan 2024 07:13:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B03EDC46CD2
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jan 2024 07:16:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6BE1E41726;
-	Tue,  9 Jan 2024 07:13:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6BE1E41726
+	by smtp4.osuosl.org (Postfix) with ESMTP id 65E5041BCD;
+	Tue,  9 Jan 2024 07:16:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 65E5041BCD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id A6L2uMQnHbfe; Tue,  9 Jan 2024 07:13:51 +0000 (UTC)
+	with ESMTP id bay3OLEAgpSY; Tue,  9 Jan 2024 07:16:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9FE2B4099F;
-	Tue,  9 Jan 2024 07:13:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9FE2B4099F
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E94F41BF3EC
- for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 07:13:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AA43A4194F;
+	Tue,  9 Jan 2024 07:16:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA43A4194F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E47D71BF3EC
+ for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 07:16:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C658D81256
- for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 07:13:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C658D81256
+ by smtp4.osuosl.org (Postfix) with ESMTP id BD3FC41726
+ for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 07:16:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD3FC41726
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ilazCAjG8Ft2 for <buildroot@lists.busybox.net>;
- Tue,  9 Jan 2024 07:13:47 +0000 (UTC)
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com
- [IPv6:2607:f8b0:4864:20::12b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C893281208
- for <buildroot@buildroot.org>; Tue,  9 Jan 2024 07:13:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C893281208
-Received: by mail-il1-x12b.google.com with SMTP id
- e9e14a558f8ab-3608402ab93so11849065ab.0
- for <buildroot@buildroot.org>; Mon, 08 Jan 2024 23:13:47 -0800 (PST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Vjl0Q0k9O3BH for <buildroot@lists.busybox.net>;
+ Tue,  9 Jan 2024 07:16:51 +0000 (UTC)
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com
+ [IPv6:2607:f8b0:4864:20::d2e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D69A44194F
+ for <buildroot@buildroot.org>; Tue,  9 Jan 2024 07:16:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D69A44194F
+Received: by mail-io1-xd2e.google.com with SMTP id
+ ca18e2360f4ac-7bed8fee278so18246539f.2
+ for <buildroot@buildroot.org>; Mon, 08 Jan 2024 23:16:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704784426; x=1705389226;
+ d=1e100.net; s=20230601; t=1704784609; x=1705389409;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=42QnlZUPAhlkpp6B4elRFhjtIBW2PftofpsHVyZxQtc=;
- b=lgKn3vkzhJgsU8PuB7IxtBtWtinVmp2MB5wPQuDU6nKu+ZUzy8+lptPDdjPLLsrwF4
- 3GWPW4DOe+41co55wQitQuDnV3Yqca6vLbIb5a7+qzL1opyi81oGQMw2F8dq/FHstz8C
- Ft7sKWn0SuReaNt4ek1HToDk2pEnQa7TjT11dgsz6V7DhPgpczJ+pRruXiVp9dsU6s8G
- mdtGLDU3YyC0YtSfsmtMu+Th6R0+jC7y1PPMUDD3sUMwzgwxUQeXoYaAjslmL8hGhwbA
- LOHJXlottmmwvpPgslfAQHmwWLamdoVlHHn9nyJGqdXNDshOt/BzLUJRMUw7I4oHvEmz
- Jm0g==
-X-Gm-Message-State: AOJu0Yw9gHQLkIYM4KiTkACS6KMoGcN2wY3hc5y8VrFZ5x7YTWFBh3oX
- 9+UTdzJOS5k04fpXTNYkV4jtI/4ol1qXlA==
-X-Google-Smtp-Source: AGHT+IHEAMh1xwxK9PDrvqgBMB1E1Ilb6+S4XkoClOTzbHXpGzba0gcIE8+N931fwG174GnTjL4BrA==
-X-Received: by 2002:a05:6e02:3184:b0:360:65ba:17f3 with SMTP id
- cb4-20020a056e02318400b0036065ba17f3mr6153220ilb.36.1704784426404; 
- Mon, 08 Jan 2024 23:13:46 -0800 (PST)
+ bh=ymfd1vzO7IfZXQ2TKOOgAlhXbOt995PLiXmVupDcKiw=;
+ b=ej+P1yrEe8Et2KiJYynlMOPlKtxVEvOV+ij6nzaf9IZ5F7qUANqpbDCu+7tBITAWkO
+ yK8Oj/FEc4Hwkw49RYPk2m4iD2uNgjfqMgDTFfOxR1KnmMwMC0MyzcUeFclWUB0wtBDn
+ u2plAheR9cK2q3gHvV9UL+cYLABR2yA6lwNG+RUCuz8HS8a12s9Hk5TF6mo2z+Woiw+w
+ kP3PtLxPo8piTWbXkJz+QmICSVogNYcrXP93NU+hL/kiP53CSwZmOSSkuRFrijaoA2PP
+ EU3mQRS3QzqTEAEEgnxZJ4pfbmJUsX85z5PEtQMD1Wpz1C9VZEdWpLmXpiB7woLXlYNi
+ 6lgQ==
+X-Gm-Message-State: AOJu0Yyrx72pVyAChNdhNBKFYGVGdG7yOCa3d2wnsbwm8nATHpzhGPVh
+ x2cMVslNiGH4d+T3LvIEsvBHL4Un6n3Ceg==
+X-Google-Smtp-Source: AGHT+IEYPPnczgMpsJ+x/FG7ntBPk24lZ+AsnEolIXEX3dKfdi4SDyKUP6T13sa2wy18CWEg6iZq2w==
+X-Received: by 2002:a6b:f005:0:b0:7bb:9ed8:b6ee with SMTP id
+ w5-20020a6bf005000000b007bb9ed8b6eemr6493735ioc.17.1704784609464; 
+ Mon, 08 Jan 2024 23:16:49 -0800 (PST)
 Received: from james-x399.localdomain (71-218-103-119.hlrn.qwest.net.
  [71.218.103.119]) by smtp.gmail.com with ESMTPSA id
- cv10-20020a056638498a00b00469328386c8sm477968jab.162.2024.01.08.23.13.45
+ 12-20020a5ea50c000000b007bc3ebacf3esm354206iog.46.2024.01.08.23.16.48
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 08 Jan 2024 23:13:45 -0800 (PST)
+ Mon, 08 Jan 2024 23:16:49 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue,  9 Jan 2024 00:13:43 -0700
-Message-Id: <20240109071343.4025060-1-james.hilliard1@gmail.com>
+Date: Tue,  9 Jan 2024 00:16:47 -0700
+Message-Id: <20240109071647.4027355-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1704784426; x=1705389226; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1704784609; x=1705389409; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=42QnlZUPAhlkpp6B4elRFhjtIBW2PftofpsHVyZxQtc=;
- b=bbPZ9VqQ7S+l1nXPHbrObQWaz+9hJoo/GUT+mHYs1CnCqJ8AsUd7SI8+2wYc9aPycI
- pcNRcspfiW0U6zwfKJIoZV6PLHskJfreCN7FjMf3+Fqs0BX0TwCC0buxoPnHp602jbzW
- OqGr6fxDfNjDAPJ9XJTUXQ/FBtH1azbFbedsIcKoTbMVnF1KKxaqTcM8e+VAY6fTw2dS
- gjv4Gnfl+c10JdKBeaBR1m4Zc+emQVPkkJT88eLFLYrdF8wNqhYsj3i/282UXSGwNPeI
- /0XSvdQ3BfUgEK95BlDVJ4UpONz4uq/KmeCzRR22Dh+l/NOVZlYLKc7MCav7Jdqsf+No
- mKjA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=ymfd1vzO7IfZXQ2TKOOgAlhXbOt995PLiXmVupDcKiw=;
+ b=lxN3+HJI0MdZtEdTEWybFCr6ar4TKj/W2eQ2cnp0Pc4jOA/7GJ6hZTNy+w8VxEVBzz
+ rUrDMudyINY54mdZeUHxrgd+WqhrIWjg1eW6AjztmZxJbvLw2eg/vFG7GnNqiN4PAzOp
+ V3Ooj5cab5xkDlqEWWmhZMs2UPL1I22V1RRpaY4T3lEwbs62TWwVrdgRJX/MnqdGvrmU
+ Bs0DeVot4ud7/nRBJd8qDk2bH3HXajfDQkNWecp4KBfQ1rXXvCiEiIB3rC/4Dfyl016Z
+ LD76qZndsFWhzSgE0ZmoPCCJNn0zKx5VH+HdQSsI+l+uaYeExRsEiMtxAj6jEO/wEDcj
+ 0HoQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=bbPZ9VqQ
-Subject: [Buildroot] [PATCH 1/1] package/python-dtschema: bump to version
- 2023.11
+ header.a=rsa-sha256 header.s=20230601 header.b=lxN3+HJI
+Subject: [Buildroot] [PATCH 1/1] package/python-engineio: bump to version
+ 4.8.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,38 +102,37 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-dtschema/python-dtschema.hash | 4 ++--
- package/python-dtschema/python-dtschema.mk   | 4 ++--
+ package/python-engineio/python-engineio.hash | 4 ++--
+ package/python-engineio/python-engineio.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-dtschema/python-dtschema.hash b/package/python-dtschema/python-dtschema.hash
-index a391e4ab21..3e1dd22133 100644
---- a/package/python-dtschema/python-dtschema.hash
-+++ b/package/python-dtschema/python-dtschema.hash
+diff --git a/package/python-engineio/python-engineio.hash b/package/python-engineio/python-engineio.hash
+index 98fe647f68..c1b02350bc 100644
+--- a/package/python-engineio/python-engineio.hash
++++ b/package/python-engineio/python-engineio.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/dtschema/json
--md5  bb0ecd8b8680b76f7cb55da002f58d62  dtschema-2023.9.tar.gz
--sha256  52c6d271065155ca134d8a0bcf7e0ebed67b3991acbbd7a98b74eb8642f67d87  dtschema-2023.9.tar.gz
-+md5  cc4be8cfc01804cc31a123b56f68aeb1  dtschema-2023.11.tar.gz
-+sha256  cf9a449ea743c0a955cf6034ef246668fa5ea177684977c61fef7604af5f273b  dtschema-2023.11.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/python-engineio/json
+-md5  45870fb7b12e6e5dca3cb6a828f70928  python-engineio-4.8.0.tar.gz
+-sha256  2a32585d8fecd0118264fe0c39788670456ca9aa466d7c026d995cfff68af164  python-engineio-4.8.0.tar.gz
++md5  619e7fce0257a8219187f50aa94844a3  python-engineio-4.8.2.tar.gz
++sha256  f8609e3afdda318fdc336b4ba2de8dd397bb8f9b8a1b43e56c27330e32c2e34c  python-engineio-4.8.2.tar.gz
  # Locally computed sha256 checksums
- sha256  ca0d66263406dc684fe9db60577b234f65ffdf620d7e041c708e969447b69111  LICENSE.txt
-diff --git a/package/python-dtschema/python-dtschema.mk b/package/python-dtschema/python-dtschema.mk
-index 0fc13073f8..e1dd5009fd 100644
---- a/package/python-dtschema/python-dtschema.mk
-+++ b/package/python-dtschema/python-dtschema.mk
-@@ -4,9 +4,9 @@
+ sha256  c9e97d3dbc1fbbcdb4f7808b282cd646db887aff4f5313fe6bbe8d4c31405a9c  LICENSE
+diff --git a/package/python-engineio/python-engineio.mk b/package/python-engineio/python-engineio.mk
+index e84acee88f..7702b5f294 100644
+--- a/package/python-engineio/python-engineio.mk
++++ b/package/python-engineio/python-engineio.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PYTHON_DTSCHEMA_VERSION = 2023.9
-+PYTHON_DTSCHEMA_VERSION = 2023.11
- PYTHON_DTSCHEMA_SOURCE = dtschema-$(PYTHON_DTSCHEMA_VERSION).tar.gz
--PYTHON_DTSCHEMA_SITE = https://files.pythonhosted.org/packages/24/97/daa9109a854727cd4e1a715e4123198e5abd47db10c131de5bc0cef0acc3
-+PYTHON_DTSCHEMA_SITE = https://files.pythonhosted.org/packages/5a/94/7890ef663fba1cca84cf0ab64c7f68685343c921ab883f0356cd9978b605
- PYTHON_DTSCHEMA_SETUP_TYPE = setuptools
- PYTHON_DTSCHEMA_LICENSE = BSD-2-Clause
- PYTHON_DTSCHEMA_LICENSE_FILES = LICENSE.txt
+-PYTHON_ENGINEIO_VERSION = 4.8.0
+-PYTHON_ENGINEIO_SITE = https://files.pythonhosted.org/packages/c4/5c/4fa0bf79eb1a433d1e9b69430b3ac818837283c642640658f12949620813
++PYTHON_ENGINEIO_VERSION = 4.8.2
++PYTHON_ENGINEIO_SITE = https://files.pythonhosted.org/packages/e2/24/4a69dd119d10e31c4439f910a2a0f71b540b9f835ab60efa1f0f7bcae0c7
+ PYTHON_ENGINEIO_SETUP_TYPE = setuptools
+ PYTHON_ENGINEIO_LICENSE = MIT
+ PYTHON_ENGINEIO_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
