@@ -4,85 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE23DC47073
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jan 2024 08:36:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98278C46CD2
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jan 2024 08:36:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7AF8C41999;
-	Tue,  9 Jan 2024 08:36:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7AF8C41999
+	by smtp4.osuosl.org (Postfix) with ESMTP id 39CBD42082;
+	Tue,  9 Jan 2024 08:36:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39CBD42082
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id b_YG1gT8vrxg; Tue,  9 Jan 2024 08:36:14 +0000 (UTC)
+	with ESMTP id 5c__LR6jwnyf; Tue,  9 Jan 2024 08:36:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CC5AA4194F;
-	Tue,  9 Jan 2024 08:36:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC5AA4194F
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 258401BF3EC
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6F84041999;
+	Tue,  9 Jan 2024 08:36:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F84041999
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A39AE1BF3EC
  for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 08:36:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F1A7760ED9
- for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 08:36:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1A7760ED9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7C6944194F
+ for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 08:36:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C6944194F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9ejadXJl88OS for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KD4Sv_fhUr8x for <buildroot@lists.busybox.net>;
  Tue,  9 Jan 2024 08:36:11 +0000 (UTC)
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com
- [IPv6:2607:f8b0:4864:20::d2c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1DFA960E27
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com
+ [IPv6:2607:f8b0:4864:20::12e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7DBC54194E
  for <buildroot@buildroot.org>; Tue,  9 Jan 2024 08:36:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1DFA960E27
-Received: by mail-io1-xd2c.google.com with SMTP id
- ca18e2360f4ac-7b7f9fdc14dso130010939f.0
- for <buildroot@buildroot.org>; Tue, 09 Jan 2024 00:36:10 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7DBC54194E
+Received: by mail-il1-x12e.google.com with SMTP id
+ e9e14a558f8ab-3608402ab93so12022825ab.0
+ for <buildroot@buildroot.org>; Tue, 09 Jan 2024 00:36:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704789369; x=1705394169;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=cZwyQ5Z0GEdE8rZkr3Da97OD0po5xUhlkiA6LhN9reg=;
- b=wb/FaEM/1klnIwTkSG42sz8cwHxpl8d+nQ713qtCY2CXhn8JZ5gfo0cChJCOpbnFra
- a4OnqPBRT8Dc6BXj4E2KDkrPHOMXvJl2gxoYlpVy4uQMwiAaWXG8i0IMeYHyD8Lc4N+b
- /nfL+Vl+40ctX8Rb6qf1z6kyfQweBW6q1+pVNbO5+1YBa5ZgbjvaUan/uEP59B+wJd7z
- 9Fgqj4Hxar9Po6u5X6bGMd3ofiG8dchY3EaOg1TR1H0RAphNzdot0UpnhmVk1my/Qw6U
- nAlUfXRW5KGN7uwfsh/s7r08vsAHqvqzwCUwYo8p4Y5uXX5FLMvej8NGHyltq8YXkrL/
- 9vQA==
-X-Gm-Message-State: AOJu0Yz9rXnUWfqdhe3HwTI93XA1+OfPsLcqkZJbtrXi1fsDrFQa5NSp
- fPrNT/dPIxBPcTr+nMKLqqBs6cwqIutLwQ==
-X-Google-Smtp-Source: AGHT+IEOlNoPYqK8JKCvj8pQaoiOgserwaZXZI+g/rFy3l9Wbey1XfTBoEwA/vikaIpBemQ/BzRLKg==
-X-Received: by 2002:a6b:5009:0:b0:7bc:293c:be48 with SMTP id
- e9-20020a6b5009000000b007bc293cbe48mr3735766iob.16.1704789369376; 
+ d=1e100.net; s=20230601; t=1704789370; x=1705394170;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=lM8tiYtpAauYNaCu91PcbzwaVaCzuhgC1WNJhfYipXw=;
+ b=LkZY3QsD0YNSYc1ewjAaPp5ZLDTJYEsK7/SF+p1EPEpupQjvhpX+iMhPjEhV5WlAQC
+ SvhWAQn5tuizMqAWHkFGjU7mycU1poFxmxXX9AFFmb+cpt/LPqLjbW3agC6C548wHHaI
+ wtymlFWWy93/n/bPspQv1pJ5WujKJiTMZF8NdzjrDFVoD7YnO/KOzvDBg0DcG0wemfBX
+ RZeYXJ51CTPStcgX8j6IgxpbQ1q9VHKdf9CqUjJPqGjTkcRnOHNO81ZViI2pYecaL8If
+ B+N/h5dJkSQyvRs5i368U8cbvGa663W0MZJKJJDLofzZXQhpeNUefGCS4PDj/1TeWPOz
+ qPkQ==
+X-Gm-Message-State: AOJu0Yyb4aLR/rKhqdvTeHLSzcvt3Mo0Tv4ialRNA6Y3xvdBYPTLGRE0
+ vULKly+eUa3A90ciS76swEmxHCz8DN1OsQ==
+X-Google-Smtp-Source: AGHT+IHVzl/9HpX5fwJUeZb16ETmxflSObkqimq2UcVhDNfTScNEQ6WtT9h2g9Prj7RSPem7b30xJw==
+X-Received: by 2002:a05:6e02:174c:b0:35f:fe58:6ff2 with SMTP id
+ y12-20020a056e02174c00b0035ffe586ff2mr5869978ill.13.1704789369985; 
  Tue, 09 Jan 2024 00:36:09 -0800 (PST)
 Received: from james-x399.localdomain (71-218-103-119.hlrn.qwest.net.
  [71.218.103.119]) by smtp.gmail.com with ESMTPSA id
- t7-20020a056638204700b0046e08e513b2sm502312jaj.116.2024.01.09.00.36.08
+ t7-20020a056638204700b0046e08e513b2sm502312jaj.116.2024.01.09.00.36.09
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 09 Jan 2024 00:36:08 -0800 (PST)
+ Tue, 09 Jan 2024 00:36:09 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue,  9 Jan 2024 01:36:06 -0700
-Message-Id: <20240109083607.4082976-1-james.hilliard1@gmail.com>
+Date: Tue,  9 Jan 2024 01:36:07 -0700
+Message-Id: <20240109083607.4082976-2-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240109083607.4082976-1-james.hilliard1@gmail.com>
+References: <20240109083607.4082976-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1704789369; x=1705394169; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=cZwyQ5Z0GEdE8rZkr3Da97OD0po5xUhlkiA6LhN9reg=;
- b=Y5QZPkqDJqArX5MrQRWEhYTyzrpI34yw1L8IxiYeKuN63JNnLRcVn5CPYKt5mhEf/K
- UjV/9fE0zUyjYEdbeGBh6piBwgZQv5wRf3yDKbnoNJ/jMSWu4yuPpMtkWH2azx/fhwT0
- PcUIEAFa0tgMTvTSg/MCdfZkVNvNSxOfUFGWRCmGxLk05bj9ehgC1Qzlf0rbN8pIrUtx
- U36WSvaz2Dh5m5VnuxYDP6Y0O+xc8frNTJtPPuh+t5XEJWjx/CuBtNvN56aA6j6A4/tL
- ahmRxY8nhFcI2JgqKnyAWshFimi9InA7NCTBjbO3Cz7Z16QLbVJUsvL3zFsD/tue+GXq
- zePA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=gmail.com; s=20230601; t=1704789370; x=1705394170; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=lM8tiYtpAauYNaCu91PcbzwaVaCzuhgC1WNJhfYipXw=;
+ b=aGm5XyHbQ8MC61eya1jhbbWZ4wPMaDkw9xHF8femivKr1WVcCLWRlQxvh9wV7Q0qNt
+ aQIwDEGL+9EAG313AuSzDH5pvDOOJseS0GaBVVgVDEL5ByylqcQKOvplSQiBm7/ksrLM
+ qLO0qFaJM1NXwcS1cIqbBUwsuauIeszY9dGt+5IoV65RCfrQZFMmOgSstwPQvktfRB7t
+ KnxvJgbplPnOnx3iESe5JTT1HcSVQd1BMkH3gf+LpXwXf9szd5k6SWE6ehCxnpn3/fqk
+ SAKlt48jb8WMJi5zTRNk/9kJnukYOkgcFtmHlt/gl5fH3Mn1kdK38FXO9C5l9g88Bk4k
+ D9mg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Y5QZPkqD
-Subject: [Buildroot] [PATCH 1/2] package/python-matplotlib-inline: new
- package
+ header.a=rsa-sha256 header.s=20230601 header.b=aGm5XyHb
+Subject: [Buildroot] [PATCH 2/2] package/python-ipython: bump to version
+ 8.20.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,73 +105,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Add new python-matplotlib-inline runtime dependency.
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/Config.in                                  |  1 +
- package/python-matplotlib-inline/Config.in         |  7 +++++++
- .../python-matplotlib-inline.hash                  |  5 +++++
- .../python-matplotlib-inline.mk                    | 14 ++++++++++++++
- 4 files changed, 27 insertions(+)
- create mode 100644 package/python-matplotlib-inline/Config.in
- create mode 100644 package/python-matplotlib-inline/python-matplotlib-inline.hash
- create mode 100644 package/python-matplotlib-inline/python-matplotlib-inline.mk
+ package/python-ipython/Config.in           | 1 +
+ package/python-ipython/python-ipython.hash | 4 ++--
+ package/python-ipython/python-ipython.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index f5d0c06334..811bb012a2 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1181,6 +1181,7 @@ menu "External python modules"
- 	source "package/python-marshmallow/Config.in"
- 	source "package/python-marshmallow-sqlalchemy/Config.in"
- 	source "package/python-matplotlib/Config.in"
-+	source "package/python-matplotlib-inline/Config.in"
- 	source "package/python-mbstrdecoder/Config.in"
- 	source "package/python-memory-profiler/Config.in"
- 	source "package/python-midiutil/Config.in"
-diff --git a/package/python-matplotlib-inline/Config.in b/package/python-matplotlib-inline/Config.in
-new file mode 100644
-index 0000000000..2ea9f4d966
---- /dev/null
-+++ b/package/python-matplotlib-inline/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_MATPLOTLIB_INLINE
-+	bool "python-matplotlib-inline"
-+	select BR2_PACKAGE_PYTHON_TRAITLETS # runtime
-+	help
-+	  Inline Matplotlib backend for Jupyter.
-+
-+	  https://github.com/ipython/matplotlib-inline
-diff --git a/package/python-matplotlib-inline/python-matplotlib-inline.hash b/package/python-matplotlib-inline/python-matplotlib-inline.hash
-new file mode 100644
-index 0000000000..7382fc3406
---- /dev/null
-+++ b/package/python-matplotlib-inline/python-matplotlib-inline.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/matplotlib-inline/json
-+md5  aded9a57e2f526f76b3a4851d5528d4f  matplotlib-inline-0.1.6.tar.gz
-+sha256  f887e5f10ba98e8d2b150ddcf4702c1e5f8b3a20005eb0f74bfdbd360ee6f304  matplotlib-inline-0.1.6.tar.gz
-+# Locally computed sha256 checksums
-+sha256  8521b036c6448e0e0aa7213d4713b6fdee0f4c64c9f320450f77346bf5c0e8e4  LICENSE
-diff --git a/package/python-matplotlib-inline/python-matplotlib-inline.mk b/package/python-matplotlib-inline/python-matplotlib-inline.mk
-new file mode 100644
-index 0000000000..c9c22605ca
---- /dev/null
-+++ b/package/python-matplotlib-inline/python-matplotlib-inline.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-matplotlib-inline
-+#
-+################################################################################
-+
-+PYTHON_MATPLOTLIB_INLINE_VERSION = 0.1.6
-+PYTHON_MATPLOTLIB_INLINE_SOURCE = matplotlib-inline-$(PYTHON_MATPLOTLIB_INLINE_VERSION).tar.gz
-+PYTHON_MATPLOTLIB_INLINE_SITE = https://files.pythonhosted.org/packages/d9/50/3af8c0362f26108e54d58c7f38784a3bdae6b9a450bab48ee8482d737f44
-+PYTHON_MATPLOTLIB_INLINE_SETUP_TYPE = setuptools
-+PYTHON_MATPLOTLIB_INLINE_LICENSE = BSD-3-Clause
-+PYTHON_MATPLOTLIB_INLINE_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
+diff --git a/package/python-ipython/Config.in b/package/python-ipython/Config.in
+index c217efcfd1..87cc3969b0 100644
+--- a/package/python-ipython/Config.in
++++ b/package/python-ipython/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_PYTHON_IPYTHON
+ 	select BR2_PACKAGE_PYTHON_BACKCALL # runtime
+ 	select BR2_PACKAGE_PYTHON_DECORATOR # runtime
+ 	select BR2_PACKAGE_PYTHON_JEDI # runtime
++	select BR2_PACKAGE_PYTHON_MATPLOTLIB_INLINE # runtime
+ 	select BR2_PACKAGE_PYTHON_PICKLESHARE # runtime
+ 	select BR2_PACKAGE_PYTHON_PROMPT_TOOLKIT # runtime
+ 	select BR2_PACKAGE_PYTHON_PYGMENTS  # runtime
+diff --git a/package/python-ipython/python-ipython.hash b/package/python-ipython/python-ipython.hash
+index f68b3ba78c..33f70885b3 100644
+--- a/package/python-ipython/python-ipython.hash
++++ b/package/python-ipython/python-ipython.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/ipython/json
+-md5  ac2ff5bad97aa09befdf7f0f27323699  ipython-8.17.2.tar.gz
+-sha256  126bb57e1895594bb0d91ea3090bbd39384f6fe87c3d57fd558d0670f50339bb  ipython-8.17.2.tar.gz
++md5  eee726e4cef5fd680110a899b4e5e2cb  ipython-8.20.0.tar.gz
++sha256  2f21bd3fc1d51550c89ee3944ae04bbc7bc79e129ea0937da6e6c68bfdbf117a  ipython-8.20.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  341afcbd729887b7046fe7b98fc4f4edff3aed8d38f06eefd9b30670f043df17  COPYING.rst
+ sha256  e0e390748ed440ab893ca1f135a88a920aaf5409dbb90a5b427c75c5e51268fb  LICENSE
+diff --git a/package/python-ipython/python-ipython.mk b/package/python-ipython/python-ipython.mk
+index 1335121688..d3c2c05a05 100644
+--- a/package/python-ipython/python-ipython.mk
++++ b/package/python-ipython/python-ipython.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_IPYTHON_VERSION = 8.17.2
++PYTHON_IPYTHON_VERSION = 8.20.0
+ PYTHON_IPYTHON_SOURCE = ipython-$(PYTHON_IPYTHON_VERSION).tar.gz
+-PYTHON_IPYTHON_SITE = https://files.pythonhosted.org/packages/a9/e9/c83d1a5756bf44f1802045a54dacc910d3d254c5ec56040993978d8c1b8d
++PYTHON_IPYTHON_SITE = https://files.pythonhosted.org/packages/c5/d1/187474d64bdefcb6804c1a3a1597d9e94f287e71c06f50f7784d56833fb7
+ PYTHON_IPYTHON_LICENSE = BSD-3-Clause
+ PYTHON_IPYTHON_LICENSE_FILES = COPYING.rst LICENSE
+ PYTHON_IPYTHON_CPE_ID_VENDOR = ipython
 -- 
 2.34.1
 
