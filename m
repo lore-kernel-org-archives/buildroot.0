@@ -4,67 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A33FC46CD2
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jan 2024 17:46:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4B16C46CD2
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jan 2024 17:49:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 985946136F;
-	Tue,  9 Jan 2024 17:46:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 985946136F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7E92661340;
+	Tue,  9 Jan 2024 17:49:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E92661340
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MVCNs0faDOXb; Tue,  9 Jan 2024 17:46:31 +0000 (UTC)
+	with ESMTP id Hf6aJC4Bb-ev; Tue,  9 Jan 2024 17:49:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A779C6135E;
-	Tue,  9 Jan 2024 17:46:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A779C6135E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7163F1BF3C8
- for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 17:46:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 281B460757;
+	Tue,  9 Jan 2024 17:49:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 281B460757
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 45ED91BF3C8
+ for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 17:49:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4B64560F5D
- for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 17:46:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B64560F5D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1EBBD417DA
+ for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 17:49:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1EBBD417DA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id O_cxXqH28F23 for <buildroot@lists.busybox.net>;
- Tue,  9 Jan 2024 17:46:21 +0000 (UTC)
-Received: from 1.mo582.mail-out.ovh.net (1.mo582.mail-out.ovh.net
- [46.105.56.136])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1AF1C61163
- for <buildroot@buildroot.org>; Tue,  9 Jan 2024 17:46:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1AF1C61163
-Received: from director6.ghost.mail-out.ovh.net (unknown [10.109.148.38])
- by mo582.mail-out.ovh.net (Postfix) with ESMTP id 62D5428059
- for <buildroot@buildroot.org>; Tue,  9 Jan 2024 17:27:01 +0000 (UTC)
-Received: from ghost-submission-6684bf9d7b-qkmx4 (unknown [10.110.113.153])
- by director6.ghost.mail-out.ovh.net (Postfix) with ESMTPS id D45311FEB6;
- Tue,  9 Jan 2024 17:27:00 +0000 (UTC)
-Received: from armadeus.com ([37.59.142.108])
- by ghost-submission-6684bf9d7b-qkmx4 with ESMTPSA
- id ANfFMOSBnWUujwEA0+FtTA
- (envelope-from <sebastien.szymanski@armadeus.com>);
- Tue, 09 Jan 2024 17:27:00 +0000
-X-OVh-ClientIp: 92.148.253.243
-From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
-To: buildroot@buildroot.org
-Date: Tue,  9 Jan 2024 18:25:58 +0100
-Message-ID: <20240109172600.12811-2-sebastien.szymanski@armadeus.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20240109172600.12811-1-sebastien.szymanski@armadeus.com>
-References: <20240109172600.12811-1-sebastien.szymanski@armadeus.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BgALMvQ2qSTA for <buildroot@lists.busybox.net>;
+ Tue,  9 Jan 2024 17:49:33 +0000 (UTC)
+Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C63BD417D4
+ for <buildroot@buildroot.org>; Tue,  9 Jan 2024 17:49:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C63BD417D4
+Received: from [192.168.178.36] (unknown [212.37.174.96])
+ (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+ key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+ (No client certificate requested)
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id 4B2F42C801DE;
+ Tue,  9 Jan 2024 18:49:30 +0100 (CET)
+Message-ID: <db063503-1757-4d25-8abb-20c43d968a9a@bubu1.eu>
+Date: Tue, 9 Jan 2024 18:49:24 +0100
 MIME-Version: 1.0
-X-Ovh-Tracer-Id: 9359887404166409195
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrvdehledgleelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgjfhggtgfgsehtkeertdertdejnecuhfhrohhmpefurogsrghsthhivghnucfuiiihmhgrnhhskhhiuceoshgvsggrshhtihgvnhdrshiihihmrghnshhkihesrghrmhgruggvuhhsrdgtohhmqeenucggtffrrghtthgvrhhnpedtheejhffgvdfgteeggeejvdevleffjeegudeggedvfeelleekteelfefhueekkeenucffohhmrghinhepnhigphdrtghomhenucfkphepuddvjedrtddrtddruddpledvrddugeekrddvheefrddvgeefpdefjedrheelrddugedvrddutdeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeoshgvsggrshhtihgvnhdrshiihihmrghnshhkihesrghrmhgruggvuhhsrdgtohhmqedpnhgspghrtghpthhtohepuddprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdfovfetjfhoshhtpehmohehkedvpdhmohguvgepshhmthhpohhuth
-X-Mailman-Original-Authentication-Results: garm.ovh; auth=pass
- (GARM-108S00272f3d981-36be-401e-9662-25bad76d8e4a,
- 1C81E47412DA9CB083A96931AFF5080C19F73897)
- smtp.auth=sebastien.szymanski@armadeus.com
-Subject: [Buildroot] [PATCH v3 1/3] package/freescale-imx: add i.MX91 and
- i.MX93 SoC support
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+References: <20240109045635.3951040-1-james.hilliard1@gmail.com>
+In-Reply-To: <20240109045635.3951040-1-james.hilliard1@gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=bubu1.eu; s=bubu; 
+ t=1704822570; bh=Z9d5StIU/C1Es+IfE4ZMBALys7rQPIotO7GPAj/qqjY=;
+ h=Date:Subject:To:Cc:References:From:In-Reply-To;
+ b=gGL/wed9pQhxW8oPrPUwaBNMTdK17BFaDeFA3TLGk6GmJCV9NAcw97eX19mRP6BVt
+ ZRbfTyIxOSL2G1KmJLmKeVu3aFtmZAYfcdoaijXEbAQ+x64rxVtIB6TiEGX+UM9+Qq
+ J0Kf3TJ2d9t6vnoUmZxylQg/p+2clr3kMxbXNP2cCVyphq1hLQ+LlQhPplkURRWQQR
+ 8fex8+a1es/PbFRxm2cFUgc+JMPY4JwF2SIamtakOtGlShCELfmnk3KBkf7Kg/NEsd
+ HnU/ek1vxSi9qtqjIWtKNXKjltbTStQqbf+e3ICiPXSyhFcUEkPAvzDas5tjajuKVY
+ 5b9Jpnc4AaVBQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=bubu1.eu header.i=@bubu1.eu
+ header.a=rsa-sha256 header.s=bubu header.b=gGL/wed9
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-can: bump to version
+ 4.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,109 +74,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gary Bisson <bisson.gary@gmail.com>, Fabio Estevam <festevam@gmail.com>,
- Refik Tuzakli <tuzakli.refik@gmail.com>, Julien Olivain <ju.o@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Asaf Kahlon <asafka7@gmail.com>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhpcyBjb21taXQgYWRkcyBpLk1YOTEgYW5kIGkuTVg5MyBzdXBwb3J0IHRvIEJ1aWxkcm9vdC4K
-aHR0cHM6Ly93d3cubnhwLmNvbS9wcm9kdWN0cy9wcm9jZXNzb3JzLWFuZC1taWNyb2NvbnRyb2xs
-ZXJzL2FybS1wcm9jZXNzb3JzL2ktbXgtYXBwbGljYXRpb25zLXByb2Nlc3NvcnMvaS1teC05LXBy
-b2Nlc3NvcnM6SU1YOS1QUk9DRVNTT1JTCgpUaGVyZSBpcyBubyBpLk1YOTUgc29mdHdhcmUgcHJv
-dmlkZWQgYnkgTlhQIGF0IHRoZSBtb21lbnQgdGhhdCdzIHdoeQppLk1YOTUgaXMgbGVmdCBiZWhp
-bmQuCgpBZGFwdCBwYWNrYWdlIGZpcm13YXJlLWlteCBmb3IgdGhlIExQUERSNCBmaXJ3bWFyZXMg
-YmluYXJpZXMuCgpTaWduZWQtb2ZmLWJ5OiBTw6liYXN0aWVuIFN6eW1hbnNraSA8c2ViYXN0aWVu
-LnN6eW1hbnNraUBhcm1hZGV1cy5jb20+Ci0tLQoKQ2hhbmdlcyBmb3IgdjM6CiAtIG5vbmUKCkNo
-YW5nZXMgZm9yIHYyOgogLSBub25lCgogcGFja2FnZS9mcmVlc2NhbGUtaW14L0NvbmZpZy5pbiAg
-ICAgICAgICAgICAgIHwgIDggKysrKysrKwogcGFja2FnZS9mcmVlc2NhbGUtaW14L2Zpcm13YXJl
-LWlteC9Db25maWcuaW4gIHwgIDkgKysrKysrKysKIC4uLi9maXJtd2FyZS1pbXgvZmlybXdhcmUt
-aW14Lm1rICAgICAgICAgICAgICB8IDIzICsrKysrKysrKysrKysrKysrKysKIDMgZmlsZXMgY2hh
-bmdlZCwgNDAgaW5zZXJ0aW9ucygrKQoKZGlmZiAtLWdpdCBhL3BhY2thZ2UvZnJlZXNjYWxlLWlt
-eC9Db25maWcuaW4gYi9wYWNrYWdlL2ZyZWVzY2FsZS1pbXgvQ29uZmlnLmluCmluZGV4IDFjMjZi
-M2NjNmY0Yy4uMDIyOWVhZjAyNzFmIDEwMDY0NAotLS0gYS9wYWNrYWdlL2ZyZWVzY2FsZS1pbXgv
-Q29uZmlnLmluCisrKyBiL3BhY2thZ2UvZnJlZXNjYWxlLWlteC9Db25maWcuaW4KQEAgLTYxLDYg
-KzYxLDEyIEBAIGNvbmZpZyBCUjJfUEFDS0FHRV9GUkVFU0NBTEVfSU1YX1BMQVRGT1JNX0lNWDhY
-CiBjb25maWcgQlIyX1BBQ0tBR0VfRlJFRVNDQUxFX0lNWF9QTEFURk9STV9JTVg4RFhMCiAJYm9v
-bCAiaW14OGR4bCIKIAorY29uZmlnIEJSMl9QQUNLQUdFX0ZSRUVTQ0FMRV9JTVhfUExBVEZPUk1f
-SU1YOTEKKwlib29sICJpbXg5MSIKKworY29uZmlnIEJSMl9QQUNLQUdFX0ZSRUVTQ0FMRV9JTVhf
-UExBVEZPUk1fSU1YOTMKKwlib29sICJpbXg5MyIKKwogZW5kY2hvaWNlCiAKIGNvbmZpZyBCUjJf
-UEFDS0FHRV9GUkVFU0NBTEVfSU1YX1BMQVRGT1JNCkBAIC04MCw2ICs4Niw4IEBAIGNvbmZpZyBC
-UjJfUEFDS0FHRV9GUkVFU0NBTEVfSU1YX1BMQVRGT1JNCiAJZGVmYXVsdCAiSU1YOE1NIiBpZiBC
-UjJfUEFDS0FHRV9GUkVFU0NBTEVfSU1YX1BMQVRGT1JNX0lNWDhNTQogCWRlZmF1bHQgIklNWDhN
-TiIgaWYgQlIyX1BBQ0tBR0VfRlJFRVNDQUxFX0lNWF9QTEFURk9STV9JTVg4TU4KIAlkZWZhdWx0
-ICJJTVg4TVAiIGlmIEJSMl9QQUNLQUdFX0ZSRUVTQ0FMRV9JTVhfUExBVEZPUk1fSU1YOE1QCisJ
-ZGVmYXVsdCAiSU1YOTEiIGlmIEJSMl9QQUNLQUdFX0ZSRUVTQ0FMRV9JTVhfUExBVEZPUk1fSU1Y
-OTEKKwlkZWZhdWx0ICJJTVg5MyIgaWYgQlIyX1BBQ0tBR0VfRlJFRVNDQUxFX0lNWF9QTEFURk9S
-TV9JTVg5MwogCiBjb25maWcgQlIyX1BBQ0tBR0VfRlJFRVNDQUxFX0lNWF9IQVNfVlBVCiAJYm9v
-bApkaWZmIC0tZ2l0IGEvcGFja2FnZS9mcmVlc2NhbGUtaW14L2Zpcm13YXJlLWlteC9Db25maWcu
-aW4gYi9wYWNrYWdlL2ZyZWVzY2FsZS1pbXgvZmlybXdhcmUtaW14L0NvbmZpZy5pbgppbmRleCAw
-ODdkZGVmODc3MWIuLjdiZTY3NjEyNTNjOSAxMDA2NDQKLS0tIGEvcGFja2FnZS9mcmVlc2NhbGUt
-aW14L2Zpcm13YXJlLWlteC9Db25maWcuaW4KKysrIGIvcGFja2FnZS9mcmVlc2NhbGUtaW14L2Zp
-cm13YXJlLWlteC9Db25maWcuaW4KQEAgLTU1LDYgKzU1LDggQEAgY29uZmlnIEJSMl9QQUNLQUdF
-X0ZJUk1XQVJFX0lNWF9ORUVEU19ERFJfRlcKIAlkZWZhdWx0IHkgaWYgQlIyX1BBQ0tBR0VfRlJF
-RVNDQUxFX0lNWF9QTEFURk9STV9JTVg4TU0KIAlkZWZhdWx0IHkgaWYgQlIyX1BBQ0tBR0VfRlJF
-RVNDQUxFX0lNWF9QTEFURk9STV9JTVg4TU4KIAlkZWZhdWx0IHkgaWYgQlIyX1BBQ0tBR0VfRlJF
-RVNDQUxFX0lNWF9QTEFURk9STV9JTVg4TVAKKwlkZWZhdWx0IHkgaWYgQlIyX1BBQ0tBR0VfRlJF
-RVNDQUxFX0lNWF9QTEFURk9STV9JTVg5MQorCWRlZmF1bHQgeSBpZiBCUjJfUEFDS0FHRV9GUkVF
-U0NBTEVfSU1YX1BMQVRGT1JNX0lNWDkzCiAKIGlmIEJSMl9QQUNLQUdFX0ZJUk1XQVJFX0lNWF9O
-RUVEU19ERFJfRlcKIApAQCAtNzMsMTEgKzc1LDE1IEBAIGNvbmZpZyBCUjJfUEFDS0FHRV9GSVJN
-V0FSRV9JTVhfTFBERFI0CiAKIGNvbmZpZyBCUjJfUEFDS0FHRV9GSVJNV0FSRV9JTVhfRERSNAog
-CWJvb2wgIkREUjQiCisJZGVwZW5kcyBvbiAhQlIyX1BBQ0tBR0VfRlJFRVNDQUxFX0lNWF9QTEFU
-Rk9STV9JTVg5MQorCWRlcGVuZHMgb24gIUJSMl9QQUNLQUdFX0ZSRUVTQ0FMRV9JTVhfUExBVEZP
-Uk1fSU1YOTMKIAloZWxwCiAJICBVc2UgRERSNCBiaW5hcmllcyAoaS5lLjogZGRyNF8qXzIwMTgx
-MC5iaW4pLgogCiBjb25maWcgQlIyX1BBQ0tBR0VfRklSTVdBUkVfSU1YX0REUjMKIAlib29sICJE
-RFIzIgorCWRlcGVuZHMgb24gIUJSMl9QQUNLQUdFX0ZSRUVTQ0FMRV9JTVhfUExBVEZPUk1fSU1Y
-OTEKKwlkZXBlbmRzIG9uICFCUjJfUEFDS0FHRV9GUkVFU0NBTEVfSU1YX1BMQVRGT1JNX0lNWDkz
-CiAJaGVscAogCSAgVXNlIEREUjMgYmluYXJpZXMgKGkuZS46IGRkcjNfKl8yMDE4MTAuYmluKS4K
-IApAQCAtODksNiArOTUsOSBAQCBjb25maWcgQlIyX1BBQ0tBR0VfRklSTVdBUkVfSU1YX0REUl9W
-RVJTSU9OCiAJIyB1bmNvbmRpdGlvbmFsbHkgdXNlIEhXIHZlcnNpb24gMjAxODEwIHdoZW4gRERS
-My9ERFI0IHdhcwogCSMgc2VsZWN0ZWQKIAlkZWZhdWx0ICIyMDE4MTAiIGlmIEJSMl9QQUNLQUdF
-X0ZJUk1XQVJFX0lNWF9ERFIzIHx8IEJSMl9QQUNLQUdFX0ZJUk1XQVJFX0lNWF9ERFI0CisJZGVm
-YXVsdCAiMjAyMjAxIiBpZiBcCisJCUJSMl9QQUNLQUdFX0ZSRUVTQ0FMRV9JTVhfUExBVEZPUk1f
-SU1YOTEgfHwgXAorCQlCUjJfUEFDS0FHRV9GUkVFU0NBTEVfSU1YX1BMQVRGT1JNX0lNWDkzCiAJ
-aGVscAogCSAgVXNlIGEgc3BlY2lmaWMgdmVyc2lvbiBvZiB0aGUgaW14IGRkciBiaW5hcmllcy4g
-TGVhdmluZyB0aGlzCiAJICBmaWVsZCBlbXB0eSB3aWxsIHNlbGVjdCB0aGUgZGVmYXVsdCB2ZXJz
-aW9uLgpkaWZmIC0tZ2l0IGEvcGFja2FnZS9mcmVlc2NhbGUtaW14L2Zpcm13YXJlLWlteC9maXJt
-d2FyZS1pbXgubWsgYi9wYWNrYWdlL2ZyZWVzY2FsZS1pbXgvZmlybXdhcmUtaW14L2Zpcm13YXJl
-LWlteC5tawppbmRleCA2NmVmOGMzOTMwYmUuLmEwOGU4YzRmYjA5NyAxMDA2NDQKLS0tIGEvcGFj
-a2FnZS9mcmVlc2NhbGUtaW14L2Zpcm13YXJlLWlteC9maXJtd2FyZS1pbXgubWsKKysrIGIvcGFj
-a2FnZS9mcmVlc2NhbGUtaW14L2Zpcm13YXJlLWlteC9maXJtd2FyZS1pbXgubWsKQEAgLTQzLDEx
-ICs0MywzMyBAQCBlbmRlZgogRklSTVdBUkVfSU1YX0REUl9WRVJTSU9OID0gJChjYWxsIHFzdHJp
-cCwkKEJSMl9QQUNLQUdFX0ZJUk1XQVJFX0lNWF9ERFJfVkVSU0lPTikpCiBpZm5lcSAoJChGSVJN
-V0FSRV9JTVhfRERSX1ZFUlNJT04pLCkKIEZJUk1XQVJFX0lNWF9ERFJfVkVSU0lPTl9TVUZGSVgg
-PSBfJChGSVJNV0FSRV9JTVhfRERSX1ZFUlNJT04pCitpZmVxICgkKEJSMl9QQUNLQUdFX0ZSRUVT
-Q0FMRV9JTVhfUExBVEZPUk1fSU1YOTEpJChCUjJfUEFDS0FHRV9GUkVFU0NBTEVfSU1YX1BMQVRG
-T1JNX0lNWDkzKSx5KQorRklSTVdBUkVfSU1YX0REUl9WRVJTSU9OX1NVRkZJWCA9IF92JChGSVJN
-V0FSRV9JTVhfRERSX1ZFUlNJT04pCitlbmRpZgogZW5kaWYKIAogaWZlcSAoJChCUjJfUEFDS0FH
-RV9GSVJNV0FSRV9JTVhfTFBERFI0KSx5KQogRklSTVdBUkVfSU1YX0REUkZXX0RJUiA9ICQoQEQp
-L2Zpcm13YXJlL2Rkci9zeW5vcHN5cwogCitpZmVxICgkKEJSMl9QQUNLQUdFX0ZSRUVTQ0FMRV9J
-TVhfUExBVEZPUk1fSU1YOTEpJChCUjJfUEFDS0FHRV9GUkVFU0NBTEVfSU1YX1BMQVRGT1JNX0lN
-WDkzKSx5KQorZGVmaW5lIEZJUk1XQVJFX0lNWF9JTlNUQUxMX0lNQUdFX0REUl9GVworCSMgQ3Jl
-YXRlIHBhZGRlZCB2ZXJzaW9ucyBvZiBscGRkcjRfcG11XyogYW5kIGdlbmVyYXRlIGxwZGRyNF9w
-bXVfdHJhaW5fZncuYmluLgorCSMgbHBkZHI0X3BtdV90cmFpbl9mdy5iaW4gaXMgbmVlZGVkIHdo
-ZW4gZ2VuZXJhdGluZyBpbXg5LWJvb3Qtc2QuYmluCisJIyB3aGljaCBpcyBkb25lIGluIHBvc3Qt
-aW1hZ2Ugc2NyaXB0LgorCSQoY2FsbCBGSVJNV0FSRV9JTVhfUFJFUEFSRV9ERFJfRlcsIFwKKwkJ
-bHBkZHI0X2ltZW1fMWQkKEZJUk1XQVJFX0lNWF9ERFJfVkVSU0lPTl9TVUZGSVgpLAorCQlscGRk
-cjRfZG1lbV8xZCQoRklSTVdBUkVfSU1YX0REUl9WRVJTSU9OX1NVRkZJWCksCisJCWxwZGRyNF9w
-bXVfdHJhaW5fMWRfZncpCisJJChjYWxsIEZJUk1XQVJFX0lNWF9QUkVQQVJFX0REUl9GVywgXAor
-CQlscGRkcjRfaW1lbV8yZCQoRklSTVdBUkVfSU1YX0REUl9WRVJTSU9OX1NVRkZJWCksCisJCWxw
-ZGRyNF9kbWVtXzJkJChGSVJNV0FSRV9JTVhfRERSX1ZFUlNJT05fU1VGRklYKSwKKwkJbHBkZHI0
-X3BtdV90cmFpbl8yZF9mdykKKwljYXQgJChGSVJNV0FSRV9JTVhfRERSRldfRElSKS9scGRkcjRf
-cG11X3RyYWluXzFkX2Z3LmJpbiBcCisJCSQoRklSTVdBUkVfSU1YX0REUkZXX0RJUikvbHBkZHI0
-X3BtdV90cmFpbl8yZF9mdy5iaW4gPiBcCisJCSQoQklOQVJJRVNfRElSKS9scGRkcjRfcG11X3Ry
-YWluX2Z3LmJpbgorCWxuIC1zZiAkKEJJTkFSSUVTX0RJUikvbHBkZHI0X3BtdV90cmFpbl9mdy5i
-aW4gJChCSU5BUklFU19ESVIpL2Rkcl9mdy5iaW4KK2VuZGVmCitlbHNlCiBkZWZpbmUgRklSTVdB
-UkVfSU1YX0lOU1RBTExfSU1BR0VfRERSX0ZXCiAJIyBDcmVhdGUgcGFkZGVkIHZlcnNpb25zIG9m
-IGxwZGRyNF9wbXVfKiBhbmQgZ2VuZXJhdGUgbHBkZHI0X3BtdV90cmFpbl9mdy5iaW4uCiAJIyBs
-cGRkcjRfcG11X3RyYWluX2Z3LmJpbiBpcyBuZWVkZWQgd2hlbiBnZW5lcmF0aW5nIGlteDgtYm9v
-dC1zZC5iaW4KQEAgLTcxLDYgKzkzLDcgQEAgZGVmaW5lIEZJUk1XQVJFX0lNWF9JTlNUQUxMX0lN
-QUdFX0REUl9GVwogCWNwICQoRklSTVdBUkVfSU1YX0REUkZXX0RJUikvbHBkZHI0Ki5iaW4gJChC
-SU5BUklFU19ESVIpLwogZW5kZWYKIGVuZGlmCitlbmRpZgogCiBpZmVxICgkKEJSMl9QQUNLQUdF
-X0ZJUk1XQVJFX0lNWF9ERFI0KSx5KQogRklSTVdBUkVfSU1YX0REUkZXX0RJUiA9ICQoQEQpL2Zp
-cm13YXJlL2Rkci9zeW5vcHN5cwotLSAKMi40MS4wCgpfX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBi
-dWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZv
-L2J1aWxkcm9vdAo=
+Hi James,
+
+On 09.01.24 05:56, James Hilliard wrote:
+> Drop no longer used python-aenum runtime dependency.
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>   package/python-can/Config.in       | 1 -
+>   package/python-can/python-can.hash | 4 ++--
+>   package/python-can/python-can.mk   | 4 ++--
+>   3 files changed, 4 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/python-can/Config.in b/package/python-can/Config.in
+> index 68a9ffca71..27dc16fa33 100644
+> --- a/package/python-can/Config.in
+> +++ b/package/python-can/Config.in
+> @@ -2,7 +2,6 @@ config BR2_PACKAGE_PYTHON_CAN
+>   	bool "python-can"
+>   	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
+
+setuptools is no longer required as well:
+
+https://github.com/hardbyte/python-can/commit/1a3f5e3769aa565ada8c27177a94f7db43d019dc
+
+>   	select BR2_PACKAGE_PYTHON3_SQLITE # runtime
+> -	select BR2_PACKAGE_PYTHON_AENUM # runtime
+>   	select BR2_PACKAGE_PYTHON_MSGPACK # runtime
+>   	select BR2_PACKAGE_PYTHON_PACKAGING # runtime
+>   	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
+> diff --git a/package/python-can/python-can.hash b/package/python-can/python-can.hash
+> index 35e752ea54..4e706519be 100644
+> --- a/package/python-can/python-can.hash
+> +++ b/package/python-can/python-can.hash
+> @@ -1,5 +1,5 @@
+>   # md5, sha256 from https://pypi.org/pypi/python-can/json
+> -md5  26d799fe952cb590fba03f3d26ee66a4  python-can-4.2.2.tar.gz
+> -sha256  6ad50f4613289f3c4d276b6d2ac8901d776dcb929994cce93f55a69e858c595f  python-can-4.2.2.tar.gz
+> +md5  a84ace55fdeca8efd50986deacfba584  python-can-4.3.1.tar.gz
+> +sha256  008bea1c12e31586e1aa76971126b831bf01056a900e91862a11360e011ab933  python-can-4.3.1.tar.gz
+>   # Locally computed sha256 checksums
+>   sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE.txt
+> diff --git a/package/python-can/python-can.mk b/package/python-can/python-can.mk
+> index 012c82682c..c7100e3dda 100644
+> --- a/package/python-can/python-can.mk
+> +++ b/package/python-can/python-can.mk
+> @@ -4,8 +4,8 @@
+>   #
+>   ################################################################################
+>   
+> -PYTHON_CAN_VERSION = 4.2.2
+> -PYTHON_CAN_SITE = https://files.pythonhosted.org/packages/dd/f1/327caaf05b6bca594250053058a2adac537a88dfb5c41bb5498cfda9de78
+> +PYTHON_CAN_VERSION = 4.3.1
+> +PYTHON_CAN_SITE = https://files.pythonhosted.org/packages/02/fc/d5fd33ee93f17a4eb0dcd75aebf522396e3f511bf474058e99e86ae4e33f
+>   PYTHON_CAN_SETUP_TYPE = setuptools
+>   PYTHON_CAN_LICENSE = LGPL-3.0
+>   PYTHON_CAN_LICENSE_FILES = LICENSE.txt
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
