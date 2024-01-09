@@ -4,85 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20BC7C47073
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jan 2024 07:24:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD15FC47073
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jan 2024 07:28:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CC0FB41C57;
-	Tue,  9 Jan 2024 07:24:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC0FB41C57
+	by smtp4.osuosl.org (Postfix) with ESMTP id 56899418EF;
+	Tue,  9 Jan 2024 07:28:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56899418EF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KPmT_1CFKQMU; Tue,  9 Jan 2024 07:24:31 +0000 (UTC)
+	with ESMTP id X_T-exMbZACc; Tue,  9 Jan 2024 07:28:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 16F8341A3A;
-	Tue,  9 Jan 2024 07:24:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 16F8341A3A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3ECBE1BF3EC
- for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 07:24:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B0D0A417FB;
+	Tue,  9 Jan 2024 07:28:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0D0A417FB
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id EA7711BF3EC
+ for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 07:28:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 17B6F821A9
- for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 07:24:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 17B6F821A9
+ by smtp3.osuosl.org (Postfix) with ESMTP id C372060C0A
+ for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 07:28:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C372060C0A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4IvNo7OZ5wgX for <buildroot@lists.busybox.net>;
- Tue,  9 Jan 2024 07:24:27 +0000 (UTC)
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com
- [IPv6:2607:f8b0:4864:20::12c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 31FE4821A0
- for <buildroot@buildroot.org>; Tue,  9 Jan 2024 07:24:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 31FE4821A0
-Received: by mail-il1-x12c.google.com with SMTP id
- e9e14a558f8ab-3608bdb484fso5499475ab.1
- for <buildroot@buildroot.org>; Mon, 08 Jan 2024 23:24:27 -0800 (PST)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BVtlF1BwlcsZ for <buildroot@lists.busybox.net>;
+ Tue,  9 Jan 2024 07:28:38 +0000 (UTC)
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com
+ [IPv6:2607:f8b0:4864:20::12a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0270D60BF2
+ for <buildroot@buildroot.org>; Tue,  9 Jan 2024 07:28:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0270D60BF2
+Received: by mail-il1-x12a.google.com with SMTP id
+ e9e14a558f8ab-3607bb6596aso11087175ab.1
+ for <buildroot@buildroot.org>; Mon, 08 Jan 2024 23:28:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704785066; x=1705389866;
+ d=1e100.net; s=20230601; t=1704785316; x=1705390116;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=8PZlhpCu51MjCgPZGpqyX/OowGrcDIWw3+GcbsfTCxs=;
- b=LQ1biJzG5AFNYVwBC+2Mla7XlVg6UOSecmtQyT6Z7j0VUGSFGo+4hRuHyjDFMWws4h
- 9P5P3e9g7eZ3kEYBsJwk29+M1D2OAMf0PZYvQNUxiM7RHfdxSmyQhgGbdoRdWorlHglf
- mGu+qVRJ1DTvxml/IsyvSXXMppxVF/g510Ek0P6Nmg8GOBw7QPXIT/6dQkWvApNLVtz4
- /YEhf36FAozk9ETKY3EV1hqB37SDkDRB1eIwzmIQ0QyoX/+KwkUQPOXGwAB4F7gXOWW3
- GAJ1l6lRo6xZzfPktOxR7arFCNdaHDM5GnEmHipG04r217P9vX40K9XSmebb5nxOXPNC
- z29w==
-X-Gm-Message-State: AOJu0YyZZ+hrpMwA34ArybjrDWCBMAqQtjKA0EvVxltSnALApgUywypR
- KeZYI8EvlQOaD7szWLcp7ONNEJSWdmaWwg==
-X-Google-Smtp-Source: AGHT+IFVKUBuIbb9SlpChHY20lS5zUmM89okSzsyRJCaVw958Ot7cqxWYi7NaVh1YeeRtNVBfIh/5g==
-X-Received: by 2002:a05:6e02:1a03:b0:35d:7f18:f02d with SMTP id
- s3-20020a056e021a0300b0035d7f18f02dmr301257ild.19.1704785065884; 
- Mon, 08 Jan 2024 23:24:25 -0800 (PST)
+ bh=HLUKYVpB1CdjUSDp1804pREoIXQly+Fv4LTOL5AKmoU=;
+ b=AhjSZTlKjTCv5zJc1T+GcHk+bkaX/mjhZrf02fn+x6ndhFiKI+YNdLhyeF6E95fZgZ
+ 5+6a/3BzniUATL6eF6Ql/TIT1Tmy8HQ9hHyyL6xGI4eP9bjPYZyDaWcMQHbx66zBshgm
+ peGxHDRo3f95EhlFJ/yi6vT1ByM/QBJhR+V/9OJ9MT+Y+WNXc8RKaMjRHXwj8CFk4CTs
+ 7Bx4E3gn+OxS/CRAkb69IZDy50XtqchJodhEzZvZs5qqDCwF7ez8XqNdmXYgFELCBFlv
+ QLSRskDCXUy75SesR/75YRUFXtX5ZSKhjoniiKGVSfAg5mSLgSbH90W/jz2uMj7O+bmj
+ GUEg==
+X-Gm-Message-State: AOJu0Yyr4NCpqJNO3yT6EMFYr4Y8Sixh3ZxHVIRu6P15iGRFCgVZCj8w
+ P4FHvzF2nDaQ9QAyrZFKZOu7aE56WO9VsA==
+X-Google-Smtp-Source: AGHT+IGGGWCM7On+/2WGNfVo0Q+6Z0A3Mq+xx7hiIX4f7gDoF3+UMCclHJxFPcKTYSLZuScPP9x+6w==
+X-Received: by 2002:a05:6e02:1bc9:b0:360:7acd:5dca with SMTP id
+ x9-20020a056e021bc900b003607acd5dcamr5186211ilv.43.1704785316645; 
+ Mon, 08 Jan 2024 23:28:36 -0800 (PST)
 Received: from james-x399.localdomain (71-218-103-119.hlrn.qwest.net.
  [71.218.103.119]) by smtp.gmail.com with ESMTPSA id
- p9-20020a92d489000000b0035fb79100cesm437691ilg.59.2024.01.08.23.24.25
+ t12-20020a92c90c000000b003607ff64574sm442937ilp.64.2024.01.08.23.28.36
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 08 Jan 2024 23:24:25 -0800 (PST)
+ Mon, 08 Jan 2024 23:28:36 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue,  9 Jan 2024 00:24:23 -0700
-Message-Id: <20240109072423.4031745-1-james.hilliard1@gmail.com>
+Date: Tue,  9 Jan 2024 00:28:34 -0700
+Message-Id: <20240109072834.4036277-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1704785066; x=1705389866; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1704785316; x=1705390116; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=8PZlhpCu51MjCgPZGpqyX/OowGrcDIWw3+GcbsfTCxs=;
- b=c/OuAtuZ2wS5xcx3NVLVuUqqEVCiauUNhwNNEhsO5cyQRsJOGZGbZ3ZcnCMw9JxYO0
- 7ZgCquoowtXwymQxwCTZlN1/R/l047ZH0R4pCSawWDgDU8CSaUaiLNgz5p97XtMy7Xcc
- ZCG/B820WTQS34/3T8FMpHpW/pf7p0LuB3KuaT9Pm5CGOoYUVW2AypE/d2+5AxzSbZee
- mqHQQao+ocCLCtdyg+aJgIavgrKppBhHRE775Odo1lTQcFrHUa2eL3qQNxaAkwFhzexE
- ruKPWRfD07RcJw+6xCwLZKk9gG+h8WsEGfzKQqEp6jbCvEpYRcF2uPBNP6aj367EavKj
- TR/g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=HLUKYVpB1CdjUSDp1804pREoIXQly+Fv4LTOL5AKmoU=;
+ b=beFBPetGR7bnlK0mjOfd9KU8Ew/JEWY5tozKVJ/tESHScj1qxoAY0J8ABxkG6iyc1M
+ vGeeIxMyAI1d62wTkhBMV1HNUuPiHBer8XGY2uXLXPiC0oLBACvpZpGIVm64E+alb4Ef
+ nzjT0tM3fAxCNq3sFwl2b8CeRGzKeLHRAmo2EQkX6kWHxwompfiP+duC8kg8zLIgaBl3
+ 06S7ovfyKKIZC44dQM9hj0CswdpRtV1haaTElgda6SONCGrsngPm5KbNM3DgEA/ZLzBZ
+ iK5rK+kcFAbVWMsJddVkuAVM3C1knSjtazulZf5AZcgcDp25q3dHxpRfAWdjKGMkYrM7
+ SKwQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=c/OuAtuZ
-Subject: [Buildroot] [PATCH 1/1] package/python-esptool: bump to version
- 4.7.0
+ header.a=rsa-sha256 header.s=20230601 header.b=beFBPetG
+Subject: [Buildroot] [PATCH 1/1] package/python-falcon: bump to version 3.1.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,65 +93,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bartosz Bilas <b.bilas@grinn-global.com>,
- James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Grzegorz Blach <grzegorz@blach.pl>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add new python-intelhex runtime dependency.
-
-Add new python-pyyaml runtime dependency.
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-esptool/Config.in           | 2 ++
- package/python-esptool/python-esptool.hash | 4 ++--
- package/python-esptool/python-esptool.mk   | 4 ++--
- 3 files changed, 6 insertions(+), 4 deletions(-)
+ package/python-falcon/python-falcon.hash | 4 ++--
+ package/python-falcon/python-falcon.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-esptool/Config.in b/package/python-esptool/Config.in
-index 36243fa89e..4099957971 100644
---- a/package/python-esptool/Config.in
-+++ b/package/python-esptool/Config.in
-@@ -4,6 +4,8 @@ config BR2_PACKAGE_PYTHON_ESPTOOL
- 	select BR2_PACKAGE_PYTHON_BITSTRING # runtime
- 	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY # runtime
- 	select BR2_PACKAGE_PYTHON_ECDSA # runtime
-+	select BR2_PACKAGE_PYTHON_INTELHEX # runtime
-+	select BR2_PACKAGE_PYTHON_PYYAML # runtime
- 	select BR2_PACKAGE_PYTHON_REEDSOLO # runtime
- 	select BR2_PACKAGE_PYTHON_SERIAL # runtime
- 	select BR2_PACKAGE_PYTHON3_ZLIB
-diff --git a/package/python-esptool/python-esptool.hash b/package/python-esptool/python-esptool.hash
-index 25fea229b0..490b4e7e9c 100644
---- a/package/python-esptool/python-esptool.hash
-+++ b/package/python-esptool/python-esptool.hash
+diff --git a/package/python-falcon/python-falcon.hash b/package/python-falcon/python-falcon.hash
+index 497b5d2b57..2d54d27837 100644
+--- a/package/python-falcon/python-falcon.hash
++++ b/package/python-falcon/python-falcon.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/esptool/json
--md5  17853949fd582550a7c270f08d7691d4  esptool-4.6.2.tar.gz
--sha256  549ef93eef42ee7e9462ce5a53c16df7a0c71d91b3f77e19ec15749804cdf300  esptool-4.6.2.tar.gz
-+md5  e7f2012cf31cd23f60049b179fb3b53a  esptool-4.7.0.tar.gz
-+sha256  01454e69e1ef3601215db83ff2cb1fc79ece67d24b0e5d43d451b410447c4893  esptool-4.7.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/falcon/json
+-md5  383673fc6378428d0db5861a416cad0d  falcon-3.1.1.tar.gz
+-sha256  5dd393dbf01cbaf99493893de4832121bd495dc49a46c571915b79c59aad7ef4  falcon-3.1.1.tar.gz
++md5  22a5c32f3d9dd96d498febe8e16ddffe  falcon-3.1.3.tar.gz
++sha256  23335dbccd44f29e85ec55f2f35d5a0bc12bd7a509f641ab81f5c64b65626263  falcon-3.1.3.tar.gz
  # Locally computed sha256 checksums
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/python-esptool/python-esptool.mk b/package/python-esptool/python-esptool.mk
-index c0709c64b1..f5aaface74 100644
---- a/package/python-esptool/python-esptool.mk
-+++ b/package/python-esptool/python-esptool.mk
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/python-falcon/python-falcon.mk b/package/python-falcon/python-falcon.mk
+index b5ebc399dc..6c96bf16eb 100644
+--- a/package/python-falcon/python-falcon.mk
++++ b/package/python-falcon/python-falcon.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ESPTOOL_VERSION = 4.6.2
-+PYTHON_ESPTOOL_VERSION = 4.7.0
- PYTHON_ESPTOOL_SOURCE = esptool-$(PYTHON_ESPTOOL_VERSION).tar.gz
--PYTHON_ESPTOOL_SITE = https://files.pythonhosted.org/packages/a3/63/c757f50b606996a7e676f000b40626f65be63b3a10030563929c968e431c
-+PYTHON_ESPTOOL_SITE = https://files.pythonhosted.org/packages/1b/8b/f0d1e75879dee053874a4f955ed1e9ad97275485f51cb4bc2cb4e9b24479
- PYTHON_ESPTOOL_SETUP_TYPE = setuptools
- PYTHON_ESPTOOL_LICENSE = GPL-2.0+
- PYTHON_ESPTOOL_LICENSE_FILES = LICENSE
+-PYTHON_FALCON_VERSION = 3.1.1
++PYTHON_FALCON_VERSION = 3.1.3
+ PYTHON_FALCON_SOURCE = falcon-$(PYTHON_FALCON_VERSION).tar.gz
+-PYTHON_FALCON_SITE = https://files.pythonhosted.org/packages/29/bc/c11c9a14bb5b4d18a024ee51da15b793d1c869d151bb4101e324e0d055a8
++PYTHON_FALCON_SITE = https://files.pythonhosted.org/packages/3b/30/a7bc770025b6a7a36d0508e3d735dca239df7c27b862856e54d661f24632
+ PYTHON_FALCON_SETUP_TYPE = setuptools
+ PYTHON_FALCON_LICENSE = Apache-2.0
+ PYTHON_FALCON_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
