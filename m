@@ -4,84 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E638C46CD2
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jan 2024 08:22:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE23DC47073
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jan 2024 08:36:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A57F440259;
-	Tue,  9 Jan 2024 08:22:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A57F440259
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7AF8C41999;
+	Tue,  9 Jan 2024 08:36:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7AF8C41999
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nL7zkRuDf6IS; Tue,  9 Jan 2024 08:22:50 +0000 (UTC)
+	with ESMTP id b_YG1gT8vrxg; Tue,  9 Jan 2024 08:36:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E4C454005E;
-	Tue,  9 Jan 2024 08:22:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E4C454005E
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B90AC1BF2F4
- for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 08:22:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CC5AA4194F;
+	Tue,  9 Jan 2024 08:36:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC5AA4194F
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 258401BF3EC
+ for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 08:36:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 917F341902
- for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 08:22:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 917F341902
+ by smtp3.osuosl.org (Postfix) with ESMTP id F1A7760ED9
+ for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 08:36:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1A7760ED9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dUdTDF-UPki4 for <buildroot@lists.busybox.net>;
- Tue,  9 Jan 2024 08:22:47 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9ejadXJl88OS for <buildroot@lists.busybox.net>;
+ Tue,  9 Jan 2024 08:36:11 +0000 (UTC)
 Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com
  [IPv6:2607:f8b0:4864:20::d2c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B93B9418CF
- for <buildroot@buildroot.org>; Tue,  9 Jan 2024 08:22:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B93B9418CF
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1DFA960E27
+ for <buildroot@buildroot.org>; Tue,  9 Jan 2024 08:36:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1DFA960E27
 Received: by mail-io1-xd2c.google.com with SMTP id
- ca18e2360f4ac-7bee8f7df35so710839f.3
- for <buildroot@buildroot.org>; Tue, 09 Jan 2024 00:22:47 -0800 (PST)
+ ca18e2360f4ac-7b7f9fdc14dso130010939f.0
+ for <buildroot@buildroot.org>; Tue, 09 Jan 2024 00:36:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704788566; x=1705393366;
+ d=1e100.net; s=20230601; t=1704789369; x=1705394169;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=kGo3as/P9IhZErs2SqRjNmQ2flFS1dKStd2nDKEoPVA=;
- b=VPYcUS1dMOLmX7EFu3g2TxaUGRyxaTRAy1zkitQ8JEQ3MkW8fd+9X2sBVq33DKtL/6
- chyYZe/+C98LHtm6Ygrp9H9/1XyLzw37UjpTGLb1L6Cj5px3bqxLS8ojyp9yQkw8DgFN
- DX/e6AdihOwXGu95rVpq5i5iCRmklCtkBN7hUwALVzMX8Cx6ILgPL9AeM4CC0kGOp6Hv
- tU7MLKGpddRlgd7GRtk9ANQr+5P7C7/PyR++AX5Avs2gbZrQuQJbJrLqGE8sGIrRhFRY
- gIqBGj6zVbiIgs8UbRLJ3MsiHz+k7ImB/zSQQFLntyzVYzx2YIQB1N4/XWPuR7r0WO+9
- Ow+A==
-X-Gm-Message-State: AOJu0YxlKFKz2YEO25GRaoRIya2LQNU6us/QqtCt6bVZjln0NpZG7Pbp
- gRFGLScgH3wErOH9ZxS66ocP1ISYGHgqcA==
-X-Google-Smtp-Source: AGHT+IGZ6D/xMM6sd4o1EQkQXh4LBufTmshcNvzHDeZeMJT6x4vm4fHLg8TJQls3W1ouckeYDakJMA==
-X-Received: by 2002:a6b:7505:0:b0:7be:d8f9:9bc7 with SMTP id
- l5-20020a6b7505000000b007bed8f99bc7mr764161ioh.30.1704788566496; 
- Tue, 09 Jan 2024 00:22:46 -0800 (PST)
+ bh=cZwyQ5Z0GEdE8rZkr3Da97OD0po5xUhlkiA6LhN9reg=;
+ b=wb/FaEM/1klnIwTkSG42sz8cwHxpl8d+nQ713qtCY2CXhn8JZ5gfo0cChJCOpbnFra
+ a4OnqPBRT8Dc6BXj4E2KDkrPHOMXvJl2gxoYlpVy4uQMwiAaWXG8i0IMeYHyD8Lc4N+b
+ /nfL+Vl+40ctX8Rb6qf1z6kyfQweBW6q1+pVNbO5+1YBa5ZgbjvaUan/uEP59B+wJd7z
+ 9Fgqj4Hxar9Po6u5X6bGMd3ofiG8dchY3EaOg1TR1H0RAphNzdot0UpnhmVk1my/Qw6U
+ nAlUfXRW5KGN7uwfsh/s7r08vsAHqvqzwCUwYo8p4Y5uXX5FLMvej8NGHyltq8YXkrL/
+ 9vQA==
+X-Gm-Message-State: AOJu0Yz9rXnUWfqdhe3HwTI93XA1+OfPsLcqkZJbtrXi1fsDrFQa5NSp
+ fPrNT/dPIxBPcTr+nMKLqqBs6cwqIutLwQ==
+X-Google-Smtp-Source: AGHT+IEOlNoPYqK8JKCvj8pQaoiOgserwaZXZI+g/rFy3l9Wbey1XfTBoEwA/vikaIpBemQ/BzRLKg==
+X-Received: by 2002:a6b:5009:0:b0:7bc:293c:be48 with SMTP id
+ e9-20020a6b5009000000b007bc293cbe48mr3735766iob.16.1704789369376; 
+ Tue, 09 Jan 2024 00:36:09 -0800 (PST)
 Received: from james-x399.localdomain (71-218-103-119.hlrn.qwest.net.
  [71.218.103.119]) by smtp.gmail.com with ESMTPSA id
- y129-20020a6bc887000000b007bee386f29csm108903iof.20.2024.01.09.00.22.45
+ t7-20020a056638204700b0046e08e513b2sm502312jaj.116.2024.01.09.00.36.08
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 09 Jan 2024 00:22:46 -0800 (PST)
+ Tue, 09 Jan 2024 00:36:08 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue,  9 Jan 2024 01:22:44 -0700
-Message-Id: <20240109082244.4072761-1-james.hilliard1@gmail.com>
+Date: Tue,  9 Jan 2024 01:36:06 -0700
+Message-Id: <20240109083607.4082976-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1704788566; x=1705393366; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1704789369; x=1705394169; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=kGo3as/P9IhZErs2SqRjNmQ2flFS1dKStd2nDKEoPVA=;
- b=Ib2LJQLdydzFqVmG3gB+5Gk4KNjZjm3y4mCnxPV7OOivkWAbmK2RAzmMI4kurDnwty
- HtO77XCyXV85A2Qk6QWOj9YdOdBZrMDVUPx+QYbjVkfKfvLPBXqobtaXEqYhtppypvoP
- GIS+vVZ5llW4syFrtKietG9293fal9rDklf2KxYFH1ATQ2DIKcPAhKgUXjEbi+eqYpOA
- NMfLeEdArISjq0C3eI5COF2FeAy0PfuFlBkxATJoJ0SxgDlcIGv1FK4JkQDhAroSBOPT
- ZmS2sfnSPIq4aF4BfRkyuwnhCZNG6Tf7jXDgEoidNxy6DFdPB+R3sXeRLwGQp7Pvnf8X
- johA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=cZwyQ5Z0GEdE8rZkr3Da97OD0po5xUhlkiA6LhN9reg=;
+ b=Y5QZPkqDJqArX5MrQRWEhYTyzrpI34yw1L8IxiYeKuN63JNnLRcVn5CPYKt5mhEf/K
+ UjV/9fE0zUyjYEdbeGBh6piBwgZQv5wRf3yDKbnoNJ/jMSWu4yuPpMtkWH2azx/fhwT0
+ PcUIEAFa0tgMTvTSg/MCdfZkVNvNSxOfUFGWRCmGxLk05bj9ehgC1Qzlf0rbN8pIrUtx
+ U36WSvaz2Dh5m5VnuxYDP6Y0O+xc8frNTJtPPuh+t5XEJWjx/CuBtNvN56aA6j6A4/tL
+ ahmRxY8nhFcI2JgqKnyAWshFimi9InA7NCTBjbO3Cz7Z16QLbVJUsvL3zFsD/tue+GXq
+ zePA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Ib2LJQLd
-Subject: [Buildroot] [PATCH 1/1] package/python-idna: bump to version 3.6
+ header.a=rsa-sha256 header.s=20230601 header.b=Y5QZPkqD
+Subject: [Buildroot] [PATCH 1/2] package/python-matplotlib-inline: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,50 +94,81 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: Philippe Proulx <eeppeliteloop@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-License file hash changed due to year update:
-https://github.com/kjd/idna/commit/89cd0612146a50a720e5aef8f040ca8ed4c6274b
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-idna/python-idna.hash | 6 +++---
- package/python-idna/python-idna.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/Config.in                                  |  1 +
+ package/python-matplotlib-inline/Config.in         |  7 +++++++
+ .../python-matplotlib-inline.hash                  |  5 +++++
+ .../python-matplotlib-inline.mk                    | 14 ++++++++++++++
+ 4 files changed, 27 insertions(+)
+ create mode 100644 package/python-matplotlib-inline/Config.in
+ create mode 100644 package/python-matplotlib-inline/python-matplotlib-inline.hash
+ create mode 100644 package/python-matplotlib-inline/python-matplotlib-inline.mk
 
-diff --git a/package/python-idna/python-idna.hash b/package/python-idna/python-idna.hash
-index 3a758a6eac..5e6ac716a2 100644
---- a/package/python-idna/python-idna.hash
-+++ b/package/python-idna/python-idna.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/idna/json
--md5  13ea24e076212b6baae1135a116d1e0e  idna-3.4.tar.gz
--sha256  814f528e8dead7d329833b91c5faa87d60bf71824cd12a7530b5526063d02cb4  idna-3.4.tar.gz
-+md5  70f4beef4feb196ac64b75a93271f53c  idna-3.6.tar.gz
-+sha256  9ecdbbd083b06798ae1e86adcbfe8ab1479cf864e4ee30fe4e46a003d12491ca  idna-3.6.tar.gz
- # Locally computed sha256 checksums
--sha256  a2d6e4d940bd24dbe7b9645cde19a9792cc51db7ae0d5acd301ac860caa3e836  LICENSE.md
-+sha256  cb2faf0ca18c6d387ec7cb66f321939fba6e67e9dac09d31477cb9d8d3fe6899  LICENSE.md
-diff --git a/package/python-idna/python-idna.mk b/package/python-idna/python-idna.mk
-index 3976cb1518..eb92432bd3 100644
---- a/package/python-idna/python-idna.mk
-+++ b/package/python-idna/python-idna.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_IDNA_VERSION = 3.4
-+PYTHON_IDNA_VERSION = 3.6
- PYTHON_IDNA_SOURCE = idna-$(PYTHON_IDNA_VERSION).tar.gz
--PYTHON_IDNA_SITE = https://files.pythonhosted.org/packages/8b/e1/43beb3d38dba6cb420cefa297822eac205a277ab43e5ba5d5c46faf96438
-+PYTHON_IDNA_SITE = https://files.pythonhosted.org/packages/bf/3f/ea4b9117521a1e9c50344b909be7886dd00a519552724809bb1f486986c2
- PYTHON_IDNA_LICENSE = BSD-3-Clause
- PYTHON_IDNA_LICENSE_FILES = LICENSE.md
- PYTHON_IDNA_SETUP_TYPE = flit
+diff --git a/package/Config.in b/package/Config.in
+index f5d0c06334..811bb012a2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1181,6 +1181,7 @@ menu "External python modules"
+ 	source "package/python-marshmallow/Config.in"
+ 	source "package/python-marshmallow-sqlalchemy/Config.in"
+ 	source "package/python-matplotlib/Config.in"
++	source "package/python-matplotlib-inline/Config.in"
+ 	source "package/python-mbstrdecoder/Config.in"
+ 	source "package/python-memory-profiler/Config.in"
+ 	source "package/python-midiutil/Config.in"
+diff --git a/package/python-matplotlib-inline/Config.in b/package/python-matplotlib-inline/Config.in
+new file mode 100644
+index 0000000000..2ea9f4d966
+--- /dev/null
++++ b/package/python-matplotlib-inline/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_MATPLOTLIB_INLINE
++	bool "python-matplotlib-inline"
++	select BR2_PACKAGE_PYTHON_TRAITLETS # runtime
++	help
++	  Inline Matplotlib backend for Jupyter.
++
++	  https://github.com/ipython/matplotlib-inline
+diff --git a/package/python-matplotlib-inline/python-matplotlib-inline.hash b/package/python-matplotlib-inline/python-matplotlib-inline.hash
+new file mode 100644
+index 0000000000..7382fc3406
+--- /dev/null
++++ b/package/python-matplotlib-inline/python-matplotlib-inline.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/matplotlib-inline/json
++md5  aded9a57e2f526f76b3a4851d5528d4f  matplotlib-inline-0.1.6.tar.gz
++sha256  f887e5f10ba98e8d2b150ddcf4702c1e5f8b3a20005eb0f74bfdbd360ee6f304  matplotlib-inline-0.1.6.tar.gz
++# Locally computed sha256 checksums
++sha256  8521b036c6448e0e0aa7213d4713b6fdee0f4c64c9f320450f77346bf5c0e8e4  LICENSE
+diff --git a/package/python-matplotlib-inline/python-matplotlib-inline.mk b/package/python-matplotlib-inline/python-matplotlib-inline.mk
+new file mode 100644
+index 0000000000..c9c22605ca
+--- /dev/null
++++ b/package/python-matplotlib-inline/python-matplotlib-inline.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-matplotlib-inline
++#
++################################################################################
++
++PYTHON_MATPLOTLIB_INLINE_VERSION = 0.1.6
++PYTHON_MATPLOTLIB_INLINE_SOURCE = matplotlib-inline-$(PYTHON_MATPLOTLIB_INLINE_VERSION).tar.gz
++PYTHON_MATPLOTLIB_INLINE_SITE = https://files.pythonhosted.org/packages/d9/50/3af8c0362f26108e54d58c7f38784a3bdae6b9a450bab48ee8482d737f44
++PYTHON_MATPLOTLIB_INLINE_SETUP_TYPE = setuptools
++PYTHON_MATPLOTLIB_INLINE_LICENSE = BSD-3-Clause
++PYTHON_MATPLOTLIB_INLINE_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
 -- 
 2.34.1
 
