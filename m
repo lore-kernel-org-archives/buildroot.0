@@ -4,85 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E245C47073
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jan 2024 07:37:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 677F8C46CD2
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jan 2024 07:37:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 44B1C41929;
-	Tue,  9 Jan 2024 07:37:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 44B1C41929
+	by smtp4.osuosl.org (Postfix) with ESMTP id C8DCB42033;
+	Tue,  9 Jan 2024 07:37:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C8DCB42033
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GVmF4HUa6WZ3; Tue,  9 Jan 2024 07:37:16 +0000 (UTC)
+	with ESMTP id o0sCXIitD6Bu; Tue,  9 Jan 2024 07:37:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 859FC4191F;
-	Tue,  9 Jan 2024 07:37:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 859FC4191F
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 93D5B1BF3EC
- for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 07:37:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0840341921;
+	Tue,  9 Jan 2024 07:37:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0840341921
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C68AF1BF3EC
+ for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 07:37:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 791FF60BF2
- for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 07:37:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 791FF60BF2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9F13141921
+ for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 07:37:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F13141921
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 51YQdEC6FmIp for <buildroot@lists.busybox.net>;
- Tue,  9 Jan 2024 07:37:13 +0000 (UTC)
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com
- [IPv6:2607:f8b0:4864:20::d2a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7604260ACE
- for <buildroot@buildroot.org>; Tue,  9 Jan 2024 07:37:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7604260ACE
-Received: by mail-io1-xd2a.google.com with SMTP id
- ca18e2360f4ac-7bc32b04d16so121171739f.0
- for <buildroot@buildroot.org>; Mon, 08 Jan 2024 23:37:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704785832; x=1705390632;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=uKITMK6D3HgKuKAla+pqZLOAyHGxNDFQiCn9x2MdSjI=;
- b=nZsesrkVz242do/PHpT0oss08V9Fpl8UzrsjUefAHjQGwgCYKa1dlOAFTbhysWeIoe
- N4a2+pCjg8iORDMZJjZ84yXMIU4PYldtNG6Upotk9bJyv3PE7siyfQvmTmsYrToDhZkK
- Lxf1BjyPU1cf5lfAE6NhUwJyBJl/o2RN/CiBuOTevvcyeYiztHfn4ohDJU9yA8CzvVk2
- HiE3IYnWEShhxohdCsEXmz9Q6XsdAfwNFIhnqu7ZrJziEg1V8SHfUV+Mhfy8/P+b+4NS
- dzsYE/b4hsV4+Q72FTZgqxoBub/xFt109N3KrshSaaztjaqdrNsqIRSgcNU9t7+H8oJu
- vy5w==
-X-Gm-Message-State: AOJu0Yxjr2oEGnZv6f2RksUKWoJM1raBTD2v+5Kv+qGkZP1V2eSxnCGW
- Xkeut92Z4Ew9iHpidOeLLFsOWpi/0vclmA==
-X-Google-Smtp-Source: AGHT+IG4RyEEDTseMdyXOd8DhDP+hkqbXvYIIj6h/tAz4TCB8P8jCan8ijN/96bbGaDmhactOQUvkw==
-X-Received: by 2002:a05:6e02:1c8c:b0:360:41:eeb4 with SMTP id
- w12-20020a056e021c8c00b003600041eeb4mr5884704ill.42.1704785831925; 
- Mon, 08 Jan 2024 23:37:11 -0800 (PST)
-Received: from james-x399.localdomain (71-218-103-119.hlrn.qwest.net.
- [71.218.103.119]) by smtp.gmail.com with ESMTPSA id
- a21-20020a02ac15000000b0046dfa285b6esm486509jao.88.2024.01.08.23.37.11
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 08 Jan 2024 23:37:11 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue,  9 Jan 2024 00:37:09 -0700
-Message-Id: <20240109073709.4042044-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ri5CUJ0WNyg6 for <buildroot@lists.busybox.net>;
+ Tue,  9 Jan 2024 07:37:18 +0000 (UTC)
+Received: from mail.tkos.co.il (wiki.tkos.co.il [84.110.109.230])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 82CDB4191F
+ for <buildroot@buildroot.org>; Tue,  9 Jan 2024 07:37:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 82CDB4191F
+Received: from localhost (unknown [10.0.8.2])
+ by mail.tkos.co.il (Postfix) with ESMTP id 86CFD440459;
+ Tue,  9 Jan 2024 09:35:03 +0200 (IST)
+References: <20240109073348.4039538-1-james.hilliard1@gmail.com>
+User-agent: mu4e 1.10.8; emacs 29.1
+To: James Hilliard <james.hilliard1@gmail.com>
+Date: Tue, 09 Jan 2024 09:36:18 +0200
+In-reply-to: <20240109073348.4039538-1-james.hilliard1@gmail.com>
+Message-ID: <87zfxfq7o6.fsf@tarshish>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1704785832; x=1705390632; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=uKITMK6D3HgKuKAla+pqZLOAyHGxNDFQiCn9x2MdSjI=;
- b=ZfehLHysHjlOSjClBgEd09Ygeimbx1RRsJOgZh/g3dH4XUqdoz4Yli0Wuow6ARWe2+
- 2tAwvLWt+8jb4+twyoqgIFeu/PLQQMhGSQ1IvZZ++MDAvd4MEiSj0jt4kF1KmP3ed8wo
- CLYM1CzmtaB6cn9aN94bmPbs5dWHYMchA+9huTN5yzcnS4FbTHGcW9VSbQ7TDgZjmbLP
- nAfJ/jZw+xFto0i6XDeRMdIYuAHOXF4PjLQBOMPPIEhGWYh6U6VSuFHsPGd7nOr/cyGM
- IU693s/iLAU0NU3vUsRWyATS6RTrjBrCel2RyDkeO/goSKs8OdDrCB+RUJKI46Gc8FGY
- PD6g==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=ZfehLHys
-Subject: [Buildroot] [PATCH 1/1] package/python-flask-smorest: bump to
- version 0.42.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=tkos.co.il; s=default; t=1704785703;
+ bh=08O3tDwlVxW73EKg4413V2tsK+EvDfWYu7x98r+CZqg=;
+ h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+ b=MlTVV2IcMU5CSQnA7C9gv2p25h2s6Sn7vCM20rjCcynZkBI4Wb3u5PwwxYXVnV4ZE
+ 4D8Sj+MLcbRFul2wFnzIPulJHGHXQ20ty9YNsnyPVXHdZLZSSSmNcXamExMYhf1qBd
+ QUwZolykDYsL4pUB54Zlrak5iqn5SpWe9cwaKylBROos2YUKP7dztdRq0UUQ3GQp4N
+ 2mHKI/HIhHTVR45mCtES/ZiQFtBIJsI0fGpj9LsrwNae2SbpsNLmbmja1J6m4EmW8m
+ WNLJfPZuvPQXsSUIcSVwCp04AHgW1uzUmPTCf30bykeY42YLoW+4DO/VmCA/TCIYpW
+ 2Oyn+wsrBac0A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=tkos.co.il header.i=@tkos.co.il
+ header.a=rsa-sha256 header.s=default header.b=MlTVV2Ic
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-fastapi: bump to version
+ 0.108.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,50 +70,77 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>,
- James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+From: Baruch Siach via buildroot <buildroot@buildroot.org>
+Reply-To: Baruch Siach <baruch@tkos.co.il>
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-flask-smorest/python-flask-smorest.hash | 4 ++--
- package/python-flask-smorest/python-flask-smorest.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Hi James,
 
-diff --git a/package/python-flask-smorest/python-flask-smorest.hash b/package/python-flask-smorest/python-flask-smorest.hash
-index baeddb0e6b..b468c48fd8 100644
---- a/package/python-flask-smorest/python-flask-smorest.hash
-+++ b/package/python-flask-smorest/python-flask-smorest.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/flask-smorest/json
--md5  3d8c01cfe9ec4ba16636d6a3078edc87  flask-smorest-0.42.1.tar.gz
--sha256  7fde3f349d464c408c73b7cbbdb1884c1c36cc8c23b2562aba28d9bdfdd14cdc  flask-smorest-0.42.1.tar.gz
-+md5  b10a7a0bdee4505dec3cc7652560bc9e  flask-smorest-0.42.3.tar.gz
-+sha256  736ef072bd5522de750a5a9d9f1bfb6d750d05c66e1b3702bc7a20e4277af9bf  flask-smorest-0.42.3.tar.gz
- # Locally computed sha256 checksums
- sha256  40999ea1d9c1b8202fa44f8e6849a557e22df892481e067abf999879064b9521  LICENSE
-diff --git a/package/python-flask-smorest/python-flask-smorest.mk b/package/python-flask-smorest/python-flask-smorest.mk
-index 8a11e96d01..6eb1abc6fa 100644
---- a/package/python-flask-smorest/python-flask-smorest.mk
-+++ b/package/python-flask-smorest/python-flask-smorest.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_FLASK_SMOREST_VERSION = 0.42.1
-+PYTHON_FLASK_SMOREST_VERSION = 0.42.3
- PYTHON_FLASK_SMOREST_SOURCE = flask-smorest-$(PYTHON_FLASK_SMOREST_VERSION).tar.gz
--PYTHON_FLASK_SMOREST_SITE = https://files.pythonhosted.org/packages/be/6e/8e3d0287bfa2da6ca7cf94cd9c053ed209764538dd5fb1d96f535e4d43bb
-+PYTHON_FLASK_SMOREST_SITE = https://files.pythonhosted.org/packages/25/91/da55ec1288e821069ab61b6db4acfa171fa268c426523bb4f3a8a91210db
- PYTHON_FLASK_SMOREST_SETUP_TYPE = setuptools
- PYTHON_FLASK_SMOREST_LICENSE = MIT
- PYTHON_FLASK_SMOREST_LICENSE_FILES = LICENSE
+On Tue, Jan 09 2024, James Hilliard wrote:
+> Add new python-anyio runtime dependency.
+>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/python-fastapi/Config.in           | 1 -
+>  package/python-fastapi/python-fastapi.hash | 4 ++--
+>  package/python-fastapi/python-fastapi.mk   | 4 ++--
+>  3 files changed, 4 insertions(+), 5 deletions(-)
+>
+> diff --git a/package/python-fastapi/Config.in b/package/python-fastapi/Config.in
+> index 7d376d3dd7..d4a527c601 100644
+> --- a/package/python-fastapi/Config.in
+> +++ b/package/python-fastapi/Config.in
+> @@ -1,7 +1,6 @@
+>  config BR2_PACKAGE_PYTHON_FASTAPI
+>  	bool "python-fastapi"
+>  	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-pydantic -> python-pydantic-core
+> -	select BR2_PACKAGE_PYTHON_ANYIO # runtime
+
+This doesn't match the commit log.
+
+baruch
+
+>  	select BR2_PACKAGE_PYTHON_PYDANTIC # runtime
+>  	select BR2_PACKAGE_PYTHON_STARLETTE # runtime
+>  	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
+> diff --git a/package/python-fastapi/python-fastapi.hash b/package/python-fastapi/python-fastapi.hash
+> index 3dc1578cb7..8c578a386f 100644
+> --- a/package/python-fastapi/python-fastapi.hash
+> +++ b/package/python-fastapi/python-fastapi.hash
+> @@ -1,5 +1,5 @@
+>  # md5, sha256 from https://pypi.org/pypi/fastapi/json
+> -md5  06bfa7c610fc9e81d05b0319eb70cae7  fastapi-0.105.0.tar.gz
+> -sha256  4d12838819aa52af244580675825e750ad67c9df4614f557a769606af902cf22  fastapi-0.105.0.tar.gz
+> +md5  6dd5b159f2d6a7c405b4cb5cb9afb564  fastapi-0.108.0.tar.gz
+> +sha256  5056e504ac6395bf68493d71fcfc5352fdbd5fda6f88c21f6420d80d81163296  fastapi-0.108.0.tar.gz
+>  # Locally computed sha256 checksums
+>  sha256  4ec89ffc81485b97fec584b2d4a961032eeffe834453894fd9c1274906cc744e  LICENSE
+> diff --git a/package/python-fastapi/python-fastapi.mk b/package/python-fastapi/python-fastapi.mk
+> index dc6d919926..dd435445cb 100644
+> --- a/package/python-fastapi/python-fastapi.mk
+> +++ b/package/python-fastapi/python-fastapi.mk
+> @@ -4,9 +4,9 @@
+>  #
+>  ################################################################################
+>  
+> -PYTHON_FASTAPI_VERSION = 0.105.0
+> +PYTHON_FASTAPI_VERSION = 0.108.0
+>  PYTHON_FASTAPI_SOURCE = fastapi-$(PYTHON_FASTAPI_VERSION).tar.gz
+> -PYTHON_FASTAPI_SITE = https://files.pythonhosted.org/packages/77/bb/5941e6e2ce3020f64b539a49d39f49be05de17d0c47fea95012589f812a5
+> +PYTHON_FASTAPI_SITE = https://files.pythonhosted.org/packages/cb/0d/ec01761249b228f288b693a7ad6b2e695af521ca0f32dd09aef58890d9a4
+>  PYTHON_FASTAPI_SETUP_TYPE = pep517
+>  PYTHON_FASTAPI_LICENSE = MIT
+>  PYTHON_FASTAPI_LICENSE_FILES = LICENSE
+
+
 -- 
-2.34.1
-
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
