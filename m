@@ -4,54 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C53EAC4706C
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jan 2024 20:28:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38D79C4706C
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jan 2024 20:29:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7EE0440898;
-	Tue,  9 Jan 2024 20:28:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7EE0440898
+	by smtp4.osuosl.org (Postfix) with ESMTP id D5E0240493;
+	Tue,  9 Jan 2024 20:28:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D5E0240493
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BPiqrEZNDi7w; Tue,  9 Jan 2024 20:28:40 +0000 (UTC)
+	with ESMTP id ogIWwtLbcabZ; Tue,  9 Jan 2024 20:28:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D370F40493;
-	Tue,  9 Jan 2024 20:28:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D370F40493
+	by smtp4.osuosl.org (Postfix) with ESMTP id 22A344173B;
+	Tue,  9 Jan 2024 20:28:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 22A344173B
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 708EC1BF255
- for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 20:28:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4EDE01BF255
+ for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 20:28:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4980140493
- for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 20:28:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4980140493
+ by smtp4.osuosl.org (Postfix) with ESMTP id 284B540898
+ for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 20:28:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 284B540898
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TxnudzJ4ckRt for <buildroot@lists.busybox.net>;
- Tue,  9 Jan 2024 20:28:36 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 56A8F4047D
- for <buildroot@buildroot.org>; Tue,  9 Jan 2024 20:28:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56A8F4047D
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 45FB640005;
- Tue,  9 Jan 2024 20:28:34 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rNIi9-007hgt-1t;
- Tue, 09 Jan 2024 21:28:33 +0100
+ with ESMTP id ytr40CXWPJ4D for <buildroot@lists.busybox.net>;
+ Tue,  9 Jan 2024 20:28:55 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 65E6C40493
+ for <buildroot@buildroot.org>; Tue,  9 Jan 2024 20:28:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 65E6C40493
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 50C498508B; Tue,  9 Jan 2024 20:28:55 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20231226113428.32609-1-fontaine.fabrice@gmail.com>
-Date: Tue, 09 Jan 2024 21:28:33 +0100
-In-Reply-To: <20231226113428.32609-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 26 Dec 2023 12:34:28 +0100")
-Message-ID: <874jfmfdzi.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/cjson: security bump to version
- 1.7.17
+To: buildroot@buildroot.org
+Date: Tue, 9 Jan 2024 21:24:42 +0100
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: 885942976f19162df26efae21f5f04f631268105
+X-Git-Newrev: 574eafa5c018a43a2df3c5be9b6ac3fcf0ab269e
+X-Patchwork-Hint: ignore
+Message-Id: <20240109202855.50C498508B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/libgtk3: bump to
+ version 3.24.39
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,25 +57,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=574eafa5c018a43a2df3c5be9b6ac3fcf0ab269e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
- > - Fix null reference in cJSON_SetValuestring (CVE-2023-50472)
- > - Fix null reference in cJSON_InsertItemInArray (CVE-2023-50471)
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit a449898d8216fd0ed2e47996935329612f2b790c)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libgtk3/libgtk3.hash | 4 ++--
+ package/libgtk3/libgtk3.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > https://github.com/DaveGamble/cJSON/releases/tag/v1.7.17
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed to 2023.02.x and 2023.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
+index 4d6c210c62..c62dd82577 100644
+--- a/package/libgtk3/libgtk3.hash
++++ b/package/libgtk3/libgtk3.hash
+@@ -1,5 +1,5 @@
+-# From https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.38.sha256sum
+-sha256  ce11decf018b25bdd8505544a4f87242854ec88be054d9ade5f3a20444dd8ee7  gtk+-3.24.38.tar.xz
++# From https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.39.sha256sum
++sha256  1cac3e566b9b2f3653a458c08c2dcdfdca9f908037ac03c9d8564b4295778d79  gtk+-3.24.39.tar.xz
+ 
+ # Hash for license file:
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
+index e53d2aa040..e59cf817ca 100644
+--- a/package/libgtk3/libgtk3.mk
++++ b/package/libgtk3/libgtk3.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBGTK3_VERSION_MAJOR = 3.24
+-LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).38
++LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).39
+ LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
+ LIBGTK3_SITE = https://download.gnome.org/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
+ LIBGTK3_LICENSE = LGPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
