@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27C70C3DA6E
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 09:51:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD4B9C47073
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 09:52:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C7379435DE;
-	Wed, 10 Jan 2024 09:51:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C7379435DE
+	by smtp2.osuosl.org (Postfix) with ESMTP id 71D554361D;
+	Wed, 10 Jan 2024 09:52:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 71D554361D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JBmU0M4VBMHx; Wed, 10 Jan 2024 09:51:49 +0000 (UTC)
+	with ESMTP id 7ZDLbwssRG8g; Wed, 10 Jan 2024 09:52:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8FAB84361D;
-	Wed, 10 Jan 2024 09:51:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8FAB84361D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 471351BF34C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4D80C4363B;
+	Wed, 10 Jan 2024 09:52:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4D80C4363B
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 566641BF406
  for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 09:51:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2D68041693
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2DDEA613D3
  for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 09:51:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D68041693
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2DDEA613D3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id y5koQ1yH8rTB for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PY4Nef3ELEmh for <buildroot@lists.busybox.net>;
  Wed, 10 Jan 2024 09:51:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7582641607
+ by smtp3.osuosl.org (Postfix) with ESMTP id 52EDD60C17
  for <buildroot@buildroot.org>; Wed, 10 Jan 2024 09:51:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7582641607
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 52EDD60C17
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 61D2F853CD; Wed, 10 Jan 2024 09:51:32 +0000 (UTC)
+ id 433D5853B3; Wed, 10 Jan 2024 09:51:32 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 10 Jan 2024 10:35:26 +0100
+Date: Tue, 9 Jan 2024 21:35:21 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: cf70203bef206360a0cd75221034da063c5745ad
-X-Git-Newrev: 60a96b42a2a1914ba650beac7d66469749b59167
+X-Git-Oldrev: d6aa7c6b888a6511e38d3f3bb679055df8961500
+X-Git-Newrev: 1f4e5eafdf86552b5b49ac8253c0b44b25fc8bf2
 X-Patchwork-Hint: ignore
-Message-Id: <20240110095132.61D2F853CD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/libheif: security
- bump to version 1.17.6
+Message-Id: <20240110095132.433D5853B3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/onevpl-intel-gpu:
+ add CPE variables
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,48 +63,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=60a96b42a2a1914ba650beac7d66469749b59167
+commit: https://git.buildroot.net/buildroot/commit/?id=1f4e5eafdf86552b5b49ac8253c0b44b25fc8bf2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-A couple of build fixes and bug fixes detected by fuzzing.
+cpe:2.3:a:intel:onevpl_gpu_runtime is a valid CPE identifier for this
+package:
 
-Corrects these issues:
- - CVE-2023-49462
- - CVE-2023-49463
-
-https://github.com/strukturag/libheif/releases/tag/v1.17.6
+  https://nvd.nist.gov/products/cpe/detail/7F7056CA-A41D-4AB5-B9CC-9DE24A27B8BA
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 01689a9a65dceb15d453130b663a78ad9669aae5)
+(cherry picked from commit 312f4ab4c8a79e8cdc40dfed6870ac2aea981883)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libheif/libheif.hash | 2 +-
- package/libheif/libheif.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/onevpl-intel-gpu/onevpl-intel-gpu.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/libheif/libheif.hash b/package/libheif/libheif.hash
-index 6ea3ba6eec..a2ca065b7a 100644
---- a/package/libheif/libheif.hash
-+++ b/package/libheif/libheif.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  38ab01938ef419dbebb98346dc0b1c8bb503a0449ea61a0e409a988786c2af5b  libheif-1.17.5.tar.gz
-+sha256  8390baf4913eda0a183e132cec62b875fb2ef507ced5ddddc98dfd2f17780aee  libheif-1.17.6.tar.gz
- sha256  b2eb4f6588b005bebac44cfb2dfd23f6a16c5ca9b8a619a315158b0215a917a3  COPYING
-diff --git a/package/libheif/libheif.mk b/package/libheif/libheif.mk
-index 419a864ef3..bd307deb7b 100644
---- a/package/libheif/libheif.mk
-+++ b/package/libheif/libheif.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/onevpl-intel-gpu/onevpl-intel-gpu.mk b/package/onevpl-intel-gpu/onevpl-intel-gpu.mk
+index 8c9275fe75..1ce0f17053 100644
+--- a/package/onevpl-intel-gpu/onevpl-intel-gpu.mk
++++ b/package/onevpl-intel-gpu/onevpl-intel-gpu.mk
+@@ -8,6 +8,8 @@ ONEVPL_INTEL_GPU_VERSION = 23.4.0
+ ONEVPL_INTEL_GPU_SITE = $(call github,oneapi-src,oneVPL-intel-gpu,intel-onevpl-$(ONEVPL_INTEL_GPU_VERSION))
+ ONEVPL_INTEL_GPU_LICENSE = MIT
+ ONEVPL_INTEL_GPU_LICENSE_FILES = LICENSE
++ONEVPL_INTEL_GPU_CPE_ID_VENDOR = intel
++ONEVPL_INTEL_GPU_CPE_ID_PRODUCT = onevpl_gpu_runtime
+ ONEVPL_INTEL_GPU_DEPENDENCIES = libva onevpl
  
--LIBHEIF_VERSION = 1.17.5
-+LIBHEIF_VERSION = 1.17.6
- LIBHEIF_SITE = https://github.com/strukturag/libheif/releases/download/v$(LIBHEIF_VERSION)
- LIBHEIF_LICENSE = LGPL-3.0+
- LIBHEIF_LICENSE_FILES = COPYING
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
