@@ -4,84 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D699BC46CD2
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jan 2024 07:01:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CBE1C46CD2
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jan 2024 07:06:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6F13C4194F;
-	Tue,  9 Jan 2024 07:01:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F13C4194F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5D0A041921;
+	Tue,  9 Jan 2024 07:06:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5D0A041921
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GUMMrAcnrhNU; Tue,  9 Jan 2024 07:01:42 +0000 (UTC)
+	with ESMTP id FEyaIPjz7byH; Tue,  9 Jan 2024 07:06:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B82204193F;
-	Tue,  9 Jan 2024 07:01:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B82204193F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 750E21BF363
- for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 07:01:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 97B5B4194E;
+	Tue,  9 Jan 2024 07:06:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 97B5B4194E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B53C11BF3EC
+ for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 07:06:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4BBBA40446
- for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 07:01:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4BBBA40446
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9B20682681
+ for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 07:06:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B20682681
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ytnYXzbSP5Tb for <buildroot@lists.busybox.net>;
- Tue,  9 Jan 2024 07:01:39 +0000 (UTC)
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com
- [IPv6:2607:f8b0:4864:20::12c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 189DE404DB
- for <buildroot@buildroot.org>; Tue,  9 Jan 2024 07:01:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 189DE404DB
-Received: by mail-il1-x12c.google.com with SMTP id
- e9e14a558f8ab-3606f507efeso13748625ab.3
- for <buildroot@buildroot.org>; Mon, 08 Jan 2024 23:01:38 -0800 (PST)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1oVtIPOX_B7p for <buildroot@lists.busybox.net>;
+ Tue,  9 Jan 2024 07:06:29 +0000 (UTC)
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com
+ [IPv6:2607:f8b0:4864:20::d35])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9BFF68267F
+ for <buildroot@buildroot.org>; Tue,  9 Jan 2024 07:06:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9BFF68267F
+Received: by mail-io1-xd35.google.com with SMTP id
+ ca18e2360f4ac-7bed9f0ea20so14229339f.2
+ for <buildroot@buildroot.org>; Mon, 08 Jan 2024 23:06:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704783697; x=1705388497;
+ d=1e100.net; s=20230601; t=1704783988; x=1705388788;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=2ZaBH+6YHqbnnn6dq0B+CQezbUORJh0UXiB2OUXbFRM=;
- b=VN9sXRUp0S4+hey1AXcznXC6kbEjKQl8z2RD24yabRyk5+7l8YTSrq3IljrYcfpx0N
- NJYHDOGbijvJGwGVx5vfkBCEMGW0JKfxs3yIwhFxtLXOoUaYcXpygzBeytroh7TBZUUY
- AbPmqb5cdFJnFZxK7NHcwv58TXPqhShxDuuKxAqwjyIBsPqnQcEskg2CT/J2giUtv19t
- GJ4KQkrQkqHPKKxwzXeLJpGM6vXN5T+yafUjE24dBCX8vq9WNDk5dBYqQHcAHwFufvsT
- /yxhJ4zZF2Qwu79mkBe4GoSHtgGegnjzEhkdqcdN61bJls6KBq5FRPqY6CLtO3r39tc5
- Kbew==
-X-Gm-Message-State: AOJu0YxyvQw3JHzGZR3XaXJDkaK//CQCxYU4y7Kgv70lUlwO5wzCEVId
- RkPJwYiQwfq0rZ+SQiw1yn/Uf1kVq96c5A==
-X-Google-Smtp-Source: AGHT+IG9bPdt1PB+tpHjaECWHth2HFAjpWqhNgsI+l8DbBV8xiZGv68qVhwZI2k/2afDmREoNs9gvQ==
-X-Received: by 2002:a05:6e02:1c21:b0:35f:df71:423b with SMTP id
- m1-20020a056e021c2100b0035fdf71423bmr8756230ilh.30.1704783697661; 
- Mon, 08 Jan 2024 23:01:37 -0800 (PST)
+ bh=jxA18OnLldz7Gs2FbXqWBzvw3mtgbZJDiQMwXu3QxSE=;
+ b=kAaYO21Ky5s1w1A2cyujaTbj9/1fO3sRYm+Bc31Ei2zdHyDCNTHGuj0Xm1FApLMFaA
+ fepfDYlOIjKYbErKb7kGfDWiAIpXex3vXwvyEPkALz9kLHSUMTE+nVuCVOqFYEjHf11E
+ 9lRaYu9WnaeeEdQG3XTaLnYK9GCXSbJXN8oDImf0FM1185qWYlH+U7b8mYYxJY9dhqlZ
+ NQ0lCjwCVjpGHQ37KYLf68EO2sdyOr89Yo2Sxktofa6o+cu3LSW4lyUPDOo3qTnh7yL+
+ smgXCWdcwKxQsJzDQnuehrVYyr7ZdvtNmhhzdJLVVv53CU56sz+G3CEgGlMqqn8ZMoq/
+ o/ig==
+X-Gm-Message-State: AOJu0Yxtd0jV0kAJLu7ETddDW58elWzaz28IFiH/JbOc2F6RGEBhHDtE
+ qLtcVfUxUCCNhNVUy2TS1Y9HE85wwemuwA==
+X-Google-Smtp-Source: AGHT+IFW+vqcU1eOWzqWccrTek0oBY0DWZ6NZ35UhE7IVEbhYQugP5t9JPuBVfjXcR73JhFNaLm1gA==
+X-Received: by 2002:a05:6602:275b:b0:7bb:1d7e:ce20 with SMTP id
+ b27-20020a056602275b00b007bb1d7ece20mr6902316ioe.8.1704783988220; 
+ Mon, 08 Jan 2024 23:06:28 -0800 (PST)
 Received: from james-x399.localdomain (71-218-103-119.hlrn.qwest.net.
  [71.218.103.119]) by smtp.gmail.com with ESMTPSA id
- h1-20020a056e02052100b0035fd0a61f5fsm430986ils.49.2024.01.08.23.01.37
+ h12-20020a02cd2c000000b0046da402ed29sm479183jaq.109.2024.01.08.23.06.27
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 08 Jan 2024 23:01:37 -0800 (PST)
+ Mon, 08 Jan 2024 23:06:27 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue,  9 Jan 2024 00:01:35 -0700
-Message-Id: <20240109070135.4001715-1-james.hilliard1@gmail.com>
+Date: Tue,  9 Jan 2024 00:06:26 -0700
+Message-Id: <20240109070626.4019996-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1704783697; x=1705388497; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1704783988; x=1705388788; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=2ZaBH+6YHqbnnn6dq0B+CQezbUORJh0UXiB2OUXbFRM=;
- b=VkIpgCuUh2JTjbHtzPGFUQ095sQcsd8RW1bwAsXcxs/mfQ0vTCK/eIh/7uLCah5Qyj
- zt/q7V1RLDXcOOe6nDOYCSmD17c4XPHs5P98W/cItmaI3J7JASKLRsMszYfVG3BSZ6nv
- U614xZcHB0ov1lpNeMxQxCKDQZEtsA8NMinJXqzUJML7MikL2Ecp7QZ9OySUwwPj3Qmg
- V8HzmnpwQ/NjufeQn084MYAQCJ1C2NKRoQJlIfPwpgbgJPf0I07CXeqKVEJee0lWr/eC
- 23NfyrlgD8evTC1QmCXgGn0s/2LekKREni0Va/z4K17DUOLz9zfGTmfzODlWBvFUZz67
- sV5g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=jxA18OnLldz7Gs2FbXqWBzvw3mtgbZJDiQMwXu3QxSE=;
+ b=Vkiq8/NHiafrC3bl4qbwWtHSIyGf4fD7NwvqPeg8gkDdzApgBbhZarK995xQ1Te+J0
+ xuIE3hmiE5JIlTGjSHByg2ijoszpGNS6jMifwyN5kyRMYKDL1Ym6Ob6xrmTeXWkhZPuY
+ RO3V3Rc6PNaNvZfEA3g4uHJNmvvD+OnpuF+VmjMwDbYjhiWl1L7xY8LvtzuER/rzfdoy
+ Vb/8+J4Sucn5977pKcYUAMCAd1weadkLwrJeneAU+ZqSp3rSjPds/M+PfCnXY1mE1gNz
+ 7vEFXAX6n0+8rKdeIJ3TZadATE7xTWZJG/lVJG8N2+l0wMHnst75VsWRPXVJniRBCOe4
+ P5OQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=VkIpgCuU
-Subject: [Buildroot] [PATCH 1/1] package/python-distro: bump to version 1.9.0
+ header.a=rsa-sha256 header.s=20230601 header.b=Vkiq8/NH
+Subject: [Buildroot] [PATCH 1/1] package/python-django: bump to version 5.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,8 +93,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Julien Olivain <ju.o@free.fr>,
- Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Oli Vogt <oli.vogt.pub01@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -102,40 +102,39 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-distro/python-distro.hash | 8 ++++----
- package/python-distro/python-distro.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-distro/python-distro.hash b/package/python-distro/python-distro.hash
-index 3d3e4258de..7f8277896d 100644
---- a/package/python-distro/python-distro.hash
-+++ b/package/python-distro/python-distro.hash
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index 98c338f9d4..39fd9afdae 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
 @@ -1,5 +1,5 @@
--# From https://pypi.org/pypi/distro/json
--md5  a1e81972bbcfc0dc77dd0cde590c22a6  distro-1.8.0.tar.gz
--sha256  02e111d1dc6a50abb8eed6bf31c3e48ed8b0830d1ea2a1b78c61765c2513fdd8  distro-1.8.0.tar.gz
--# Locally computed
-+# md5, sha256 from https://pypi.org/pypi/distro/json
-+md5  c4eee99e1d05691230f223c37b895027  distro-1.9.0.tar.gz
-+sha256  2fa77c6fd8940f116ee1d6b94a2f90b13b5ea8d019b98bc8bafdcabcdd9bdbed  distro-1.9.0.tar.gz
-+# Locally computed sha256 checksums
- sha256  cb5e8e7e5f4a3988e1063c142c60dc2df75605f4c46515e776e3aca6df976e14  LICENSE
-diff --git a/package/python-distro/python-distro.mk b/package/python-distro/python-distro.mk
-index e079d8e265..05faab3888 100644
---- a/package/python-distro/python-distro.mk
-+++ b/package/python-distro/python-distro.mk
-@@ -4,9 +4,9 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5  d7afe6a68b631725a1dac116a7832b10  Django-4.2.7.tar.gz
+-sha256  8e0f1c2c2786b5c0e39fe1afce24c926040fad47c8ea8ad30aaf1188df29fc41  Django-4.2.7.tar.gz
++md5  5ff3c69d7e6b4f5ed378ec5713af8df7  Django-5.0.1.tar.gz
++sha256  8c8659665bc6e3a44fefe1ab0a291e5a3fb3979f9a8230be29de975e57e8f854  Django-5.0.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index 9b710412fa..ed4f4bcdf1 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--PYTHON_DISTRO_VERSION = 1.8.0
--PYTHON_DISTRO_SITE = https://files.pythonhosted.org/packages/4b/89/eaa3a3587ebf8bed93e45aa79be8c2af77d50790d15b53f6dfc85b57f398
-+PYTHON_DISTRO_VERSION = 1.9.0
- PYTHON_DISTRO_SOURCE = distro-$(PYTHON_DISTRO_VERSION).tar.gz
-+PYTHON_DISTRO_SITE = https://files.pythonhosted.org/packages/fc/f8/98eea607f65de6527f8a2e8885fc8015d3e6f5775df186e443e0964a11c3
- PYTHON_DISTRO_LICENSE = Apache-2.0
- PYTHON_DISTRO_LICENSE_FILES = LICENSE
- PYTHON_DISTRO_SETUP_TYPE = setuptools
+-PYTHON_DJANGO_VERSION = 4.2.7
++PYTHON_DJANGO_VERSION = 5.0.1
+ PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/5c/62/0c6ab2f3ac9a242b4562b6be1c418685fa7d1ccb8ca302cdb97e0b23cf4b
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/53/82/c8e8ed137da1c72fa110e3be9ab0f26bcfcf6f3d2994601d164dfac86269
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE
+ PYTHON_DJANGO_CPE_ID_VENDOR = djangoproject
 -- 
 2.34.1
 
