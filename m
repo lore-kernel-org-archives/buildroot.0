@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06C46C4706C
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jan 2024 20:31:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60100C4706C
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jan 2024 20:31:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B7E694173B;
-	Tue,  9 Jan 2024 20:31:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B7E694173B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1976941749;
+	Tue,  9 Jan 2024 20:31:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1976941749
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id apC9ZjOYVPYu; Tue,  9 Jan 2024 20:31:20 +0000 (UTC)
+	with ESMTP id j2uDErG2SAn8; Tue,  9 Jan 2024 20:31:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 063FE4175A;
-	Tue,  9 Jan 2024 20:31:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 063FE4175A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 52B8A1BF94D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6BA2C41744;
+	Tue,  9 Jan 2024 20:31:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6BA2C41744
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 64B9C1BF95D
  for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 20:31:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2B8B261182
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3C92041723
  for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 20:31:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B8B261182
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C92041723
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ax-lLhgGxhKx for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MwufuE2zt-mW for <buildroot@lists.busybox.net>;
  Tue,  9 Jan 2024 20:31:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 681AC60EE2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 76A474049A
  for <buildroot@buildroot.org>; Tue,  9 Jan 2024 20:31:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 681AC60EE2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 76A474049A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 545C38516E; Tue,  9 Jan 2024 20:31:05 +0000 (UTC)
+ id 6378385169; Tue,  9 Jan 2024 20:31:05 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 9 Jan 2024 21:25:00 +0100
+Date: Tue, 9 Jan 2024 21:28:13 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: be8bd8743d7dc2747b19141ce64c47651cdd8bae
-X-Git-Newrev: 5e0beb18fecc28b526a568ed0ae1e7a10e7cd819
+X-Git-Oldrev: 5e0beb18fecc28b526a568ed0ae1e7a10e7cd819
+X-Git-Newrev: d6aa7c6b888a6511e38d3f3bb679055df8961500
 X-Patchwork-Hint: ignore
-Message-Id: <20240109203105.545C38516E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/libgtk3: bump to
- version 3.24.39
+Message-Id: <20240109203105.6378385169@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/cjson: security
+ bump to version 1.7.17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,43 +63,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5e0beb18fecc28b526a568ed0ae1e7a10e7cd819
+commit: https://git.buildroot.net/buildroot/commit/?id=d6aa7c6b888a6511e38d3f3bb679055df8961500
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+- Fix null reference in cJSON_SetValuestring (CVE-2023-50472)
+- Fix null reference in cJSON_InsertItemInArray (CVE-2023-50471)
+
+https://github.com/DaveGamble/cJSON/releases/tag/v1.7.17
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a449898d8216fd0ed2e47996935329612f2b790c)
+(cherry picked from commit 449538348ebc941bd7a2ebde3e4e691daca45a91)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libgtk3/libgtk3.hash | 4 ++--
- package/libgtk3/libgtk3.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/cjson/cjson.hash | 2 +-
+ package/cjson/cjson.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
-index 4d6c210c62..c62dd82577 100644
---- a/package/libgtk3/libgtk3.hash
-+++ b/package/libgtk3/libgtk3.hash
-@@ -1,5 +1,5 @@
--# From https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.38.sha256sum
--sha256  ce11decf018b25bdd8505544a4f87242854ec88be054d9ade5f3a20444dd8ee7  gtk+-3.24.38.tar.xz
-+# From https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.39.sha256sum
-+sha256  1cac3e566b9b2f3653a458c08c2dcdfdca9f908037ac03c9d8564b4295778d79  gtk+-3.24.39.tar.xz
- 
- # Hash for license file:
- sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-index 6655a0d097..00a7672c6d 100644
---- a/package/libgtk3/libgtk3.mk
-+++ b/package/libgtk3/libgtk3.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
+index 74844d6aa6..305dc0d7b8 100644
+--- a/package/cjson/cjson.hash
++++ b/package/cjson/cjson.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  451131a92c55efc5457276807fc0c4c2c2707c9ee96ef90c47d68852d5384c6c  cjson-1.7.16.tar.gz
++sha256  c91d1eeb7175c50d49f6ba2a25e69b46bd05cffb798382c19bfb202e467ec51c  cjson-1.7.17.tar.gz
+ sha256  a36dda207c36db5818729c54e7ad4e8b0c6fba847491ba64f372c1a2037b6d5c  LICENSE
+diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
+index 7ed732ac90..f699c160ef 100644
+--- a/package/cjson/cjson.mk
++++ b/package/cjson/cjson.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBGTK3_VERSION_MAJOR = 3.24
--LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).38
-+LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).39
- LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
- LIBGTK3_SITE = https://download.gnome.org/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
- LIBGTK3_LICENSE = LGPL-2.0+
+-CJSON_VERSION = 1.7.16
++CJSON_VERSION = 1.7.17
+ CJSON_SITE = $(call github,DaveGamble,cjson,v$(CJSON_VERSION))
+ CJSON_INSTALL_STAGING = YES
+ CJSON_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
