@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1236AC4707B
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jan 2024 20:29:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86B26C4707B
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jan 2024 20:31:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BE7C240493;
-	Tue,  9 Jan 2024 20:29:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE7C240493
+	by smtp4.osuosl.org (Postfix) with ESMTP id 471EB4175A;
+	Tue,  9 Jan 2024 20:31:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 471EB4175A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ahm0DAnh8Er9; Tue,  9 Jan 2024 20:29:23 +0000 (UTC)
+	with ESMTP id Y96q5x05K_NQ; Tue,  9 Jan 2024 20:31:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EFF3A417CF;
-	Tue,  9 Jan 2024 20:29:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EFF3A417CF
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2BED91BF255
- for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 20:28:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9BBC141723;
+	Tue,  9 Jan 2024 20:31:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9BBC141723
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3A80C1BF255
+ for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 20:31:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1227A60E8D
- for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 20:28:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1227A60E8D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 135B981F05
+ for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 20:31:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 135B981F05
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IM5tYWJEE1OW for <buildroot@lists.busybox.net>;
- Tue,  9 Jan 2024 20:28:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fp2rNj_bQ6HD for <buildroot@lists.busybox.net>;
+ Tue,  9 Jan 2024 20:31:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5C0EA60E25
- for <buildroot@buildroot.org>; Tue,  9 Jan 2024 20:28:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5C0EA60E25
+ by smtp1.osuosl.org (Postfix) with ESMTP id 51DA081F37
+ for <buildroot@buildroot.org>; Tue,  9 Jan 2024 20:31:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 51DA081F37
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 42E208508A; Tue,  9 Jan 2024 20:28:55 +0000 (UTC)
+ id 3EAD38516B; Tue,  9 Jan 2024 20:31:05 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 9 Jan 2024 21:10:27 +0100
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 35d98448a2ed28ca095cc47c56bb6d5d0328fd53
-X-Git-Newrev: 885942976f19162df26efae21f5f04f631268105
+Date: Tue, 9 Jan 2024 21:22:23 +0100
+X-Git-Refname: refs/heads/2023.11.x
+X-Git-Oldrev: 5a803337de1238c9471905865de2bfa895ca1a98
+X-Git-Newrev: be8bd8743d7dc2747b19141ce64c47651cdd8bae
 X-Patchwork-Hint: ignore
-Message-Id: <20240109202855.42E208508A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] {linux,
- linux-headers}: bump 4.{14, 19}.x / 5.{4, 10, 15}.x / 6.{1, 6}.x series
+Message-Id: <20240109203105.3EAD38516B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/dbus: bump to
+ version 1.14.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,79 +63,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=885942976f19162df26efae21f5f04f631268105
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=be8bd8743d7dc2747b19141ce64c47651cdd8bae
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d42683a05517dd6bad1322c02058aeaa97e3ab3a)
-[Peter: drop 6.6.x bump]
+(cherry picked from commit be24c10472666d9dbfa12668c9326bc0bc9598b9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 12 ++++++------
- package/linux-headers/Config.in.host | 12 ++++++------
- 3 files changed, 13 insertions(+), 13 deletions(-)
+ package/dbus/dbus.hash | 4 ++--
+ package/dbus/dbus.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 429dee6e52..2e01afd442 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
+diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
+index 638bb4bc6f..a06ba50ccd 100644
+--- a/package/dbus/dbus.hash
++++ b/package/dbus/dbus.hash
+@@ -1,7 +1,7 @@
+ # Locally calculated after checking pgp signature
+-# https://dbus.freedesktop.org/releases/dbus/dbus-1.14.8.tar.xz.asc
++# https://dbus.freedesktop.org/releases/dbus/dbus-1.14.10.tar.xz.asc
+ # using key 36EC5A6448A4F5EF79BEFE98E05AE1478F814C4F
+-sha256  a6bd5bac5cf19f0c3c594bdae2565a095696980a683a0ef37cb6212e093bde35  dbus-1.14.8.tar.xz
++sha256  ba1f21d2bd9d339da2d4aa8780c09df32fea87998b73da24f49ab9df1e36a50f  dbus-1.14.10.tar.xz
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.1.68" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.1.69" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index deedb94822..f7eb3fe814 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,12 +1,12 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  365ff26a30e206de9b18489f45d38582a0a61b7c5919f8ab89295a47316784e1  linux-6.1.68.tar.xz
-+sha256  7e3d2694d18ce502068cc88a430da809abbd17d0773268524ebece442612b541  linux-6.1.69.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  096bb16ec07232f27f6a07998c41b655883a8d0a6bb613d39bf524a9ffd99e02  linux-5.15.143.tar.xz
--sha256  ff950750b1060f65c0dde7d4d89238937d80faddf3bcf9ba28189d917daccaee  linux-5.10.204.tar.xz
--sha256  d39c90dd9297a36aab7246b516f61e21493826004011f161090bce84db21b6b0  linux-5.4.264.tar.xz
-+sha256  b2a49d87605f3a9491581150315e22337c1afb599efc1e2737481be3a2d6d620  linux-5.15.145.tar.xz
-+sha256  c55217a80d74f81b83116289a8bfe4302293390b45aeabb76f64814920788863  linux-5.10.205.tar.xz
-+sha256  4dae99e49f466d4689e128ec023754908147159d7462019a83c7da1f25df9b15  linux-5.4.265.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256  53d33c0042eff3700b7f59bdac06295c98c50056fce72f630438974b46bd73ce  linux-4.19.302.tar.xz
--sha256  66337a2afdc32e5935294139765c99ef878eedbfe1495f3f3625c23cadcab648  linux-4.14.333.tar.xz
-+sha256  022dce3935eadec7c31093992cc101c905fd4ffbb8afce92f3e41fdd0fa18b36  linux-4.19.303.tar.xz
-+sha256  8a1d520cfa71e9faebae9d8c24101f5bffe48fcb897dede4cecad5af67c34a45  linux-4.14.334.tar.xz
- # Locally computed
- sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
- sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 94335b0992..8b88da9905 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -384,12 +384,12 @@ endchoice
+ # Locally calculated
+ sha256  e61807cd1c32ff4e7bd5b4b61dd21997c6dc5642cf19316124fe38d50e1f9fa3  COPYING
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index 930b1a298b..c41fbcb4dd 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -6,7 +6,7 @@
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.14.333"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.302"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.264"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.204"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.143"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.68"	if BR2_KERNEL_HEADERS_6_1
-+	default "4.14.334"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.303"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.265"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.10.205"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.15.145"	if BR2_KERNEL_HEADERS_5_15
-+	default "6.1.69"	if BR2_KERNEL_HEADERS_6_1
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+ # When updating dbus, check if there are changes in session.conf and
+ # system.conf, and update the versions in the dbus-broker package accordingly.
+-DBUS_VERSION = 1.14.8
++DBUS_VERSION = 1.14.10
+ DBUS_SOURCE = dbus-$(DBUS_VERSION).tar.xz
+ DBUS_SITE = https://dbus.freedesktop.org/releases/dbus
+ DBUS_LICENSE = AFL-2.1 or GPL-2.0+ (library, tools), GPL-2.0+ (tools)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
