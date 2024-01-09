@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF315C46CD2
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jan 2024 07:54:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 943D8C47073
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jan 2024 07:58:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 61378418C2;
-	Tue,  9 Jan 2024 07:54:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 61378418C2
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2969D415DC;
+	Tue,  9 Jan 2024 07:58:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2969D415DC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jsiZNmDrxZ34; Tue,  9 Jan 2024 07:54:45 +0000 (UTC)
+	with ESMTP id 7sEYI5L2b8RK; Tue,  9 Jan 2024 07:58:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AC3E3418AF;
-	Tue,  9 Jan 2024 07:54:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC3E3418AF
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 361CD1BF59C
- for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 07:54:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 406B741498;
+	Tue,  9 Jan 2024 07:58:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 406B741498
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8705B1BF59C
+ for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 07:58:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1B50B418AF
- for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 07:54:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B50B418AF
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5C56C60E5F
+ for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 07:58:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5C56C60E5F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 60KG9gM4VkvL for <buildroot@lists.busybox.net>;
- Tue,  9 Jan 2024 07:54:42 +0000 (UTC)
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com
- [IPv6:2607:f8b0:4864:20::133])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E5555418AD
- for <buildroot@buildroot.org>; Tue,  9 Jan 2024 07:54:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E5555418AD
-Received: by mail-il1-x133.google.com with SMTP id
- e9e14a558f8ab-36091f4d8easo6352055ab.2
- for <buildroot@buildroot.org>; Mon, 08 Jan 2024 23:54:41 -0800 (PST)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WzSnO78ZRwCu for <buildroot@lists.busybox.net>;
+ Tue,  9 Jan 2024 07:58:39 +0000 (UTC)
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com
+ [IPv6:2607:f8b0:4864:20::d33])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7727F60593
+ for <buildroot@buildroot.org>; Tue,  9 Jan 2024 07:58:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7727F60593
+Received: by mail-io1-xd33.google.com with SMTP id
+ ca18e2360f4ac-7baa8097064so136448139f.3
+ for <buildroot@buildroot.org>; Mon, 08 Jan 2024 23:58:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704786880; x=1705391680;
+ d=1e100.net; s=20230601; t=1704787118; x=1705391918;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=piOOCAZ3DSRFKylRoNXwul7IjLuMM+v1kRSApcBqMTg=;
- b=hEXCsDVgDGJcQ24QDbAJPC+y5STSeq0hRI5RDfyha8UJJ/N8C8VwKzw5V6U917v6jj
- inr+X4tZYQgwFZuYRZGzFL6YF2i8K4Xa5DgHvZVuXOG56Kw3uB/CSrl71bB+Nnf7EVRL
- w8ozfHn/w5UUMXxuV5bCeku9Nsude1HZrRNdMW+obctBURSW1uclawee0QJjeCSGPov9
- CFj0fzdzsfWIWOiTHntnm0SZHkwD32yV5I8VG6OFLq7Ui83xhWe4wx4F2xiNHyoIYTRt
- ZvbNdjoVmRan86clNpFtnVjq2rrzyP2khC3nj/CwK9W4uPnXhFDcxhcbBbHBf6H1aoTD
- hQug==
-X-Gm-Message-State: AOJu0YxYYU5IaMOzkVuaxHi40ACWexAQB7N1mM7PgSmayZbPOfNwqtt9
- 4W9e4k8RmP1B0vaartIY7K2wkE5Og9+2Cw==
-X-Google-Smtp-Source: AGHT+IFWrEnBK/tFPKfomuuXkeODFUQ8wPGGE8UdPlzqCNcmu1tov0l2ooRyfZA7tt9AeZStV55B4A==
-X-Received: by 2002:a05:6e02:2387:b0:360:7403:3cca with SMTP id
- bq7-20020a056e02238700b0036074033ccamr6703370ilb.51.1704786880536; 
- Mon, 08 Jan 2024 23:54:40 -0800 (PST)
+ bh=rex4VmCdJgUKAr2RgllBSdc6/QkBk9qE+pLHq27cKGE=;
+ b=Wnm8Bgg7BNYu+eA/9DKXPwoNuvD9pTexrQOcAd6mkRVRd2R0vlKTHqJs/ZuK1R3eE+
+ J3qZqmNb8rMbI7GgmaFWAoAaY9TEFbLheEq/6TLfldqIjtcWDHc3k2x0RWRxjkQ9VYLS
+ 6sUD+jvhNy9vJRpLLOJLZAqetWa7NOGGU6vHrgv8NSP1xfXySGbKgLs6HA9hTtezN4Ui
+ 6Pe1v34G2uhClHRiM0b3bsQ86aTdb/cPjhYBqTKrDAVO4fCpo8z6p/KYrhaMoQOwW84E
+ SRfnUdO6KK2bE1k91Re3JAuahLfanXXAeV0CxshUUsT7sXWEIhvDM0zgZ+BKjZr1vbze
+ sYQA==
+X-Gm-Message-State: AOJu0YwsLXBK828khKvhYJ00kGVmJQubLLGWZ+4+JGrtAJfJN4VLbDj+
+ I1NKBUok8iDiKuTZ9Wldo0LYUxHmD4PHxg==
+X-Google-Smtp-Source: AGHT+IGC/pk7LBcV4BE3lo2kbX0LCj3flK/0UMgsxdjh2zS0Mnq8nImqqd++dQJ6x7b3RJhEGvmY4Q==
+X-Received: by 2002:a6b:c947:0:b0:7bb:f22f:f217 with SMTP id
+ z68-20020a6bc947000000b007bbf22ff217mr5291077iof.27.1704787118152; 
+ Mon, 08 Jan 2024 23:58:38 -0800 (PST)
 Received: from james-x399.localdomain (71-218-103-119.hlrn.qwest.net.
  [71.218.103.119]) by smtp.gmail.com with ESMTPSA id
- y66-20020a029548000000b0046e139ad407sm496021jah.71.2024.01.08.23.54.40
+ z21-20020a6b5c15000000b007bee7b83da8sm29910ioh.53.2024.01.08.23.58.37
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 08 Jan 2024 23:54:40 -0800 (PST)
+ Mon, 08 Jan 2024 23:58:37 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue,  9 Jan 2024 00:54:33 -0700
-Message-Id: <20240109075433.4054341-1-james.hilliard1@gmail.com>
+Date: Tue,  9 Jan 2024 00:58:36 -0700
+Message-Id: <20240109075836.4057394-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1704786880; x=1705391680; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1704787118; x=1705391918; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=piOOCAZ3DSRFKylRoNXwul7IjLuMM+v1kRSApcBqMTg=;
- b=W1e+bU/rc6gAE51s9A/gSPQgBZZPwxARJ4gSRKbYXP1tM/aRpB5Rinh98/QDoMqwZZ
- Ls2n85UWTyUjy3jm0K4rXC76d329KXRPVc19kVOftZ8+eXrGC4XqVuCs38Gd9C8LBq7L
- xjBZfWUQyaX+CzzMKX9RLdCzXzDxzA5Rsz8YtJniv//FO0UoTNRD0jy6PV0y1vKbWR3v
- UFEsQR6M6d/rP1ZEdaMiqPuAE6UjYKaBcsOIqGw+fjsJ2wGzW9wATe8/Ig0ZsanS/tFC
- J6x5rbv3uU09vhNVEXleMA1iKiKQB5/vul3vDExlFCzZxWpsQprjxgVFgEpX84pDpzSd
- 6NeA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=rex4VmCdJgUKAr2RgllBSdc6/QkBk9qE+pLHq27cKGE=;
+ b=lOXajCcYKgp1NFlcLkeN4GK6e0nBdBk6J0OOv5ViMzI+epWd1WRlxnx2FzJFz+ips3
+ eWJLmAbKJ4XuIjb1taE1FClvPgvPynWT2DNyYzpK7vhFtXws/S6TTD8C2NC7zsKAj3N0
+ MK3CyPNLhz8sb5IPxUe3JTXKyHfhFSXlYfWENYi0u7w+bZdw/8fMvUfsKoCHrE/yJVMg
+ J/8PeSBanPZ2B+xJrZndYxFpgQEDwzlpTIRppDgX6B9JMFdRzF3Z0OhJqrDTUH47w91B
+ IBby5tIMKOjxv8AnGUrdJaDiiW9comjrmaBbMBlCXDjbTUmDRzD0nj2IVduqZttNeKnZ
+ P/Xg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=W1e+bU/r
-Subject: [Buildroot] [PATCH 1/1] package/python-google-auth: bump to version
- 2.26.1
+ header.a=rsa-sha256 header.s=20230601 header.b=lOXajCcY
+Subject: [Buildroot] [PATCH 1/1] package/python-greenlet: bump to version
+ 3.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,38 +102,39 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-google-auth/python-google-auth.hash | 4 ++--
- package/python-google-auth/python-google-auth.mk   | 4 ++--
+ package/python-greenlet/python-greenlet.hash | 4 ++--
+ package/python-greenlet/python-greenlet.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-google-auth/python-google-auth.hash b/package/python-google-auth/python-google-auth.hash
-index 2f965edc91..9c201391f4 100644
---- a/package/python-google-auth/python-google-auth.hash
-+++ b/package/python-google-auth/python-google-auth.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/google-auth/json
--md5  40413bc699c6e02d7732e7e09e8cec0c  google-auth-2.25.2.tar.gz
--sha256  42f707937feb4f5e5a39e6c4f343a17300a459aaf03141457ba505812841cc40  google-auth-2.25.2.tar.gz
-+md5  718e1a2c55baf3b019e9a42524812113  google-auth-2.26.1.tar.gz
-+sha256  54385acca5c0fbdda510cd8585ba6f3fcb06eeecf8a6ecca39d3ee148b092590  google-auth-2.26.1.tar.gz
+diff --git a/package/python-greenlet/python-greenlet.hash b/package/python-greenlet/python-greenlet.hash
+index 2de253e1b5..61e7f05346 100644
+--- a/package/python-greenlet/python-greenlet.hash
++++ b/package/python-greenlet/python-greenlet.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/greenlet/json
+-md5  3905122960191e81410714f7db4835e4  greenlet-3.0.1.tar.gz
+-sha256  816bd9488a94cba78d93e1abb58000e8266fa9cc2aa9ccdd6eb0696acb24005b  greenlet-3.0.1.tar.gz
++md5  170495b0af3b63ca40ca637dd6e5c6ef  greenlet-3.0.3.tar.gz
++sha256  43374442353259554ce33599da8b692d5aa96f8976d567d4badf263371fbe491  greenlet-3.0.3.tar.gz
  # Locally computed sha256 checksums
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/python-google-auth/python-google-auth.mk b/package/python-google-auth/python-google-auth.mk
-index 8638a2ca46..02c8c1164f 100644
---- a/package/python-google-auth/python-google-auth.mk
-+++ b/package/python-google-auth/python-google-auth.mk
+ sha256  769831d6e5dfaf2c20802faccff1fafb4c2025dd8f6253dfa47fcad59d4d0979  LICENSE
+ sha256  e5ff3c23c110e494cd7d736c10fd96d462457bafeca310840db6527298c7d46b  LICENSE.PSF
+diff --git a/package/python-greenlet/python-greenlet.mk b/package/python-greenlet/python-greenlet.mk
+index 7ca1ac1674..1af104519b 100644
+--- a/package/python-greenlet/python-greenlet.mk
++++ b/package/python-greenlet/python-greenlet.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_GOOGLE_AUTH_VERSION = 2.25.2
-+PYTHON_GOOGLE_AUTH_VERSION = 2.26.1
- PYTHON_GOOGLE_AUTH_SOURCE = google-auth-$(PYTHON_GOOGLE_AUTH_VERSION).tar.gz
--PYTHON_GOOGLE_AUTH_SITE = https://files.pythonhosted.org/packages/05/77/84608894384e02f3b0b2621b09ecb0b85e57ba368f13eecbbc43cd1b8719
-+PYTHON_GOOGLE_AUTH_SITE = https://files.pythonhosted.org/packages/bc/c0/b5119831db4888e703b2adaa912709931181678ae3a50ca08d51a3904765
- PYTHON_GOOGLE_AUTH_SETUP_TYPE = setuptools
- PYTHON_GOOGLE_AUTH_LICENSE = Apache-2.0
- PYTHON_GOOGLE_AUTH_LICENSE_FILES = LICENSE
+-PYTHON_GREENLET_VERSION = 3.0.1
++PYTHON_GREENLET_VERSION = 3.0.3
+ PYTHON_GREENLET_SOURCE = greenlet-$(PYTHON_GREENLET_VERSION).tar.gz
+-PYTHON_GREENLET_SITE = https://files.pythonhosted.org/packages/54/df/718c9b3e90edba70fa919bb3aaa5c3c8dabf3a8252ad1e93d33c348e5ca4
++PYTHON_GREENLET_SITE = https://files.pythonhosted.org/packages/17/14/3bddb1298b9a6786539ac609ba4b7c9c0842e12aa73aaa4d8d73ec8f8185
+ PYTHON_GREENLET_SETUP_TYPE = setuptools
+ PYTHON_GREENLET_LICENSE = MIT, PSF-2.0
+ PYTHON_GREENLET_LICENSE_FILES = LICENSE LICENSE.PSF
 -- 
 2.34.1
 
