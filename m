@@ -4,91 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 931C5C4707C
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 14:23:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6B61C4707C
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 14:29:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 414E84089E;
-	Wed, 10 Jan 2024 14:23:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 414E84089E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 579A441E41;
+	Wed, 10 Jan 2024 14:29:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 579A441E41
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LKI1yvyvf-gT; Wed, 10 Jan 2024 14:23:09 +0000 (UTC)
+	with ESMTP id 9d58hERRXyxV; Wed, 10 Jan 2024 14:29:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2B4D94088B;
-	Wed, 10 Jan 2024 14:23:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B4D94088B
+	by smtp4.osuosl.org (Postfix) with ESMTP id BEFBD420A0;
+	Wed, 10 Jan 2024 14:29:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BEFBD420A0
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8A6721BF277
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 14:23:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6D6621BF277
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 14:29:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6330C83D34
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 14:23:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6330C83D34
+ by smtp1.osuosl.org (Postfix) with ESMTP id 53D2E81ADE
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 14:29:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 53D2E81ADE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DqcLmvhqiJRO for <buildroot@lists.busybox.net>;
- Wed, 10 Jan 2024 14:23:04 +0000 (UTC)
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
- [IPv6:2a00:1450:4864:20::32e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2E16283D31
- for <buildroot@buildroot.org>; Wed, 10 Jan 2024 14:23:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E16283D31
-Received: by mail-wm1-x32e.google.com with SMTP id
- 5b1f17b1804b1-40e4d778e5eso23079755e9.1
- for <buildroot@buildroot.org>; Wed, 10 Jan 2024 06:23:04 -0800 (PST)
+ with ESMTP id MWeegJMAEpwW for <buildroot@lists.busybox.net>;
+ Wed, 10 Jan 2024 14:29:14 +0000 (UTC)
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4099B81A81
+ for <buildroot@buildroot.org>; Wed, 10 Jan 2024 14:29:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4099B81A81
+Received: by mail-wr1-x429.google.com with SMTP id
+ ffacd0b85a97d-3368ae75082so2947975f8f.1
+ for <buildroot@buildroot.org>; Wed, 10 Jan 2024 06:29:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704896582; x=1705501382;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=5ZaGBBL9MD6Zbvg2ae4hlz376e0qPMpbCHtAH/eBQjU=;
- b=TfyH5uezqMstCI6WaADPXwmeAkMfqf0GOPjKfMl0yblsMDH9bJ/MaFOD1jxr/5rQVQ
- fo9RnCw3/JUjRknOJxHW7rczO1NUzM8xa26bZsK+0HNYcfvGrgoBKBfXQfpl9H2ZOSkW
- 8z2b1DP+ZAUDGo03mTxi5OXJ0VeGZefYdxYZ65YrbjsYlKmTK84knLBIIPAOxxIy7n+q
- 9At2clEd7+RZUy6UjM3OUkhNoR4ot8/l10qhohyXOqPBOqyi04QhdB0NmdfxmsSwEgIx
- dj9kjM0rZLud9kmpwApKERwdzDu8GO5iLKHk6usQF8+cyCXAn7w2mrTNe23M3K9lRqYx
- UITg==
-X-Gm-Message-State: AOJu0Ywoaz4uOyaSXEdm2QOHjjlLXT+bLHy32j3mL1GZZDAtJZ5FS8vO
- mcbKzJ17rXWeEdDzfQMxBruDRj7pZsLwJ3JXEn8pN1iepY0=
-X-Google-Smtp-Source: AGHT+IFRrlKTAnSn58O1IqMnPXLch3lSxSVxUX1JwJJnocx6ZitmdJNc/oBXBqG50ILJmTm6NVWwzQ==
-X-Received: by 2002:a05:600c:2197:b0:40e:51cf:ec4b with SMTP id
- e23-20020a05600c219700b0040e51cfec4bmr671850wme.38.1704896582055; 
- Wed, 10 Jan 2024 06:23:02 -0800 (PST)
-Received: from [10.5.2.57] (176-161-53-116.abo.bbox.fr. [176.161.53.116])
+ d=1e100.net; s=20230601; t=1704896952; x=1705501752;
+ h=in-reply-to:from:content-language:references:cc:to:subject
+ :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+ :cc:subject:date:message-id:reply-to;
+ bh=43fMb4WMxZQLuAYWMxPHSHjvOblY8YKDgQkp9q59yH8=;
+ b=pOcsEEbKuKbq7DOaBwFhVZhD8xWrWhQHWLWmDU44nvhe3jqUMhHORUcOdjst+TIEHQ
+ IahP3ze97Jmagq5qs0USxY0KofLYfWX5uwpzDLk0VfB71l7a7rAc2sqbGQ4y5FqN8Ydh
+ LljFj0rM3KGs3wDTIN/hZBFwRBAu0NbmGKZPYc218OzryKtH2XjC6vNUR4igqIVMHzuA
+ 7jYgv334Dxfw9gfGMcXNPrlVRhSFvg6PZXlWo0cFpNQ3bUxw2Qy0BEzNept2CIFjc039
+ IVj9JKq6xOZgf5jjhp6f48Z/RR50VW5BskZ4PMbT9NHqKy9YqnDeEcUQPovH/lds5kdt
+ kxhA==
+X-Gm-Message-State: AOJu0Yx0K/1XwoTKU4Zu7jDppV6i1+6WiZlbtypESD+3PvSRNSijRyOd
+ PZOZeoqQHlam/CCFFDlOOzVue7s0qMpwPeJFTT/wd1z0mUo=
+X-Google-Smtp-Source: AGHT+IG/O9fx6oDxXUboUpadwCvgRAGSOYg6O2O8ZKeh3MAtcZ1g4rBzoBUZVFmOx+XoAu3h+Ofv/A==
+X-Received: by 2002:a05:600c:214f:b0:40e:49af:264c with SMTP id
+ v15-20020a05600c214f00b0040e49af264cmr88422wml.62.1704896952046; 
+ Wed, 10 Jan 2024 06:29:12 -0800 (PST)
+Received: from [10.5.2.37] (176-161-53-116.abo.bbox.fr. [176.161.53.116])
  by smtp.gmail.com with ESMTPSA id
- t21-20020a05600c451500b0040e3ac9f4c8sm2329793wmo.28.2024.01.10.06.23.00
+ fs23-20020a05600c3f9700b0040c11fbe581sm2435586wmb.27.2024.01.10.06.29.10
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 10 Jan 2024 06:23:01 -0800 (PST)
-Message-ID: <690bc418-091a-4fea-94b6-bfcd75483070@smile.fr>
-Date: Wed, 10 Jan 2024 15:22:59 +0100
+ Wed, 10 Jan 2024 06:29:11 -0800 (PST)
+Message-ID: <05f3360d-4383-4c7a-9b49-b453dd0ae46e@smile.fr>
+Date: Wed, 10 Jan 2024 15:29:08 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Antoine Coutant <antoine.coutant@smile.fr>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
 References: <20231228152657.488457-1-antoine.coutant@smile.fr>
  <20231228152657.488457-2-antoine.coutant@smile.fr> <ZZF8dBumVmvof2KW@landeda>
 Content-Language: en-US
-From: Romain Naour <romain.naour@smile.fr>
+From: Antoine Coutant <antoine.coutant@smile.fr>
 In-Reply-To: <ZZF8dBumVmvof2KW@landeda>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1704896582; x=1705501382;
+ d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1704896952; x=1705501752;
  darn=buildroot.org; 
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=5ZaGBBL9MD6Zbvg2ae4hlz376e0qPMpbCHtAH/eBQjU=;
- b=pNSbyxZ8KqplBJpEFcmIIZr7ldTLU9jc4FXqo/QGKlfeXgsNKgbXOE1Fex8ANgbQw+
- XMGne3cPkgwRqvUaxYi9p6ki+wK8pPwBN/JzUWKQvbvrmensn4Trttm+VYkmYk89k9WO
- rDZ7QFy4L/OAUUQrAUPONgtErg4TO+63CO56nSnJ45jM3DnapxgzWZztz1utVezWL0Sg
- 6UO7iQNvZvJ31Ti1yK+ojynMCQCJImwueSxiirivGR9GXl+WbEN8C1GeUcLOt3QYUxYq
- yD5VAkkj4d3Iwc0WC56CWHAMu0j//GysHQgS7X4GGUPipJu8VUy5z0k2AKOPn0umTcLy
- 8SzA==
+ h=in-reply-to:from:content-language:references:cc:to:subject
+ :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=43fMb4WMxZQLuAYWMxPHSHjvOblY8YKDgQkp9q59yH8=;
+ b=IXcubqNbsGOUfSx0jLhF5i8LFsE8pZzgSS9Uc7KvIzXdnJTiq/tbUIRtN2hzc427A2
+ OS24xNmZCMuKk+5J8BU5vlAqu7oqmNL8bjVGv1Ni7QrU575ST9XfK9l/n4b3EjQYfX4v
+ 8zvibX48kAny284c6sCIRgK8yan645xq+gvbCeK3Wx3RrtmPnFoCbn7GHAsDPEshxnif
+ U6NWjdveYHVrlJaTxTumEICzwSeUboAzLIc1txSHRhwLkFENRDYb/8OdOWsy8jmLY8Pu
+ 5lSk8L1I95F5F9rRfp1u2Tokvdydb9/A3ym9hLRsq2tT+/kxIrxmIzQM7ezVJT5rEU8d
+ naSA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=smile-fr.20230601.gappssmtp.com
  header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=pNSbyxZ8
+ header.s=20230601 header.b=IXcubqNb
 Subject: Re: [Buildroot] [PATCH v2 2/3] package/ripgrep: bump to version
  14.0.3
 X-BeenThere: buildroot@buildroot.org
@@ -102,177 +101,525 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: sebastian.weyer@smile.fr, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: romain.naour@smile.fr, sebastian.weyer@smile.fr, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============4509206009749792620=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gWWFubiwKCkxlIDMxLzEyLzIwMjMgw6AgMTU6MzYsIFlhbm4gRS4gTU9SSU4gYSDDqWNy
-aXTCoDoKPiBBbnRvaW5lLCBBbGwsCj4gCj4gT24gMjAyMy0xMi0yOCAxNjoyNiArMDEwMCwgQW50
-b2luZSBDb3V0YW50IHNwYWtlIHRodXNseToKPj4gcmlwZ3JlcCBwcmV2aW91cyB2ZXJzaW9uIGhh
-c2ggaXMgbm8gbG9uZ2VyIHZhbGlkLgo+PiBUaGUgdGFyYmFsbCBpcyBtb2RpZmllZCBieSBydXN0
-IHZlbmRvcmluZyBzbyB0aGUgaGFzaAo+PiBtYXkgY2hhbmdlIHdpdGggcnVzdCB2ZXJzaW9ucy4K
-PiAKPiBUaGlzIHdhcyB2ZXJ5IGNvbmNlcm5pbmcsIGFuZCBpZiB0aGF0IGhhZCBiZWVuIHRydWUs
-IGNvdWxkIG5vdCBoYXZlCj4gYmVlbiBzb2x2ZWQganVzdCBieSBidW1waW5nIHRoZSB2ZXJzaW9u
-LiBJbmRlZWQsIGl0IGlzIG5vdCBhbHdheXMKPiBwb3NzaWJsZSB0byBidW1wIHRoZSB2ZXJzaW9u
-LCBlLmcuIHdoZW4gdGhlIHBhY2thZ2UgaXMgYWxyZWFkeSB1c2luZwo+IHRoZSBsYXRlc3QgdmVy
-c2lvbi4KPiAKPiBGdXJ0aGVybW9yZSwgaXQgd2FzIGEgYml0IHN1cnByaXNpbmcgdGhhdCBvbmx5
-IHJpcGdyZXAgd2FzIGltcGFjdGVkLCBub3QKPiBhbGwgdGhlIG90aGVyIGNhcmdvLXZlbmRvcmVk
-IHBhY2thZ2VzLiBBbmQgaXQgdHVybmVkIG91dCB0aGF0IGluZGVlZCwKPiBhbm90aGVyIHBhY2th
-Z2Ugd2FzIGltcGFjdGVkLCBzZW50cnktY2xpIChidXQgd2Ugb25seSBoYXZlIHRoZSBob3N0Cj4g
-dmFyaWFudCBvZiBpdCkuCj4gCj4gU28sIHRoYXQgcmVhbGx5IG5lZWRlZCBtb3JlIGludmVzdGln
-YXRpb25zLCB0byBwcm92aWRlIGEgbW9yZSBzb2xpZAo+IGV4cGxhbmF0aW9uIHdoeSB0aGUgaGFz
-aCB3YXMgd3JvbmcsIGFuZCBpZiBwb3NzaWJsZSBpZGVudGlmeSB0aGUgcG9pbnQKPiBpbiB0aGUg
-Y2FyZ28gaGlzdG9yeSB3aGVyZSB0aGUgY2hhbmdlIGhhcHBlbmVkLCB0byBhc2sgdXBzdHJlYW0g
-aWYgdGhlCj4gdmVuZG9yaW5nIHNjaGVtZSB3YXMgc3RhYmxlIG9yIG5vdCAoaW4gdGhhdCBsYXR0
-ZXIgY2FzZSwgd2UnZCBoYXZlIGhhZAo+IHRvIGludHJvZHVjZSB0aGUgdmVyc2lvbmluZyBvZiB0
-aGUgdmVuZG9yZWQgYXJjaGl2ZXMpLgo+IAo+IEhvd2V2ZXIsIGFzIHlvdSBjYW4gc2VlIGluIHRo
-ZSByZXN0IG9mIHRoaXMgdGhyZWFkLCB0aGUgaXNzdWUgaGFzCj4gbm90aGluZyB0byBkbyB3aXRo
-IGNhcmdvIHZlbmRvcmluZywgaW4gZmFjdCwgYW5kIGlzIGNhdXNlZCBieSBhbgo+IHVucmVsYXRl
-ZCBjaGFuZ2UgaW4gdGhlIGRvd25sb2FkIGluZnJhIChteSBmYXVsdCEpLgo+IAo+IFNvLCB0aGUg
-cmlwZ3JlcCB2ZXJzaW9uIGJ1bXAgaXMgT0ssIGJ1dCBub3QgZm9yIHRoZSBjb3JyZWN0IHJlYXNv
-bnMuIDstKQoKVGhhbmtzIGZvciB5b3VyIHRpbWUgc3BlbnQgdG8gbG9vayBhdCB0aGlzIGlzc3Vl
-LgoKTWF5YmUgd2Ugc2hvdWxkIGNvbnNpZGVyIG1lcmdpbmcgdGhlIHBhdGNoIDMvMyB0aGF0IGFk
-ZCBhIG5ldyBydW50aW1lIHRlc3QKIlRlc3RSdXN0VmVuZG9yaW5nIi4KCkJlc3QgcmVnYXJkcywK
-Um9tYWluCgoKPiAKPiBSZWdhcmRzLAo+IFlhbm4gRS4gTU9SSU4uCj4gCj4+IFRoZSBwYXRjaCBo
-YXMgYmVlbiByZWJhc2VkIHRvIHJpcGdyZXAgMTQuMC4zLgo+Pgo+PiBDaGFuZ2Vsb2c6Cj4+IGh0
-dHBzOi8vZ2l0aHViLmNvbS9CdXJudFN1c2hpL3JpcGdyZXAvYmxvYi9tYXN0ZXIvQ0hBTkdFTE9H
-Lm1kCj4+Cj4+IFNpZ25lZC1vZmYtYnk6IEFudG9pbmUgQ291dGFudCA8YW50b2luZS5jb3V0YW50
-QHNtaWxlLmZyPgo+PiAtLS0KPj4KPj4gVGVzdGVkIHVzaW5nIHFlbXVfYWFyY2g2NF92aXJ0X2Rl
-ZmNvbmZpZyBhbmQgQXJtIEFBcmNoNjQgMTMuMi5yZWwxCj4+IHRvb2xjaGFpbi4KPj4KPj4gU2ln
-bmVkLW9mZi1ieTogQW50b2luZSBDb3V0YW50IDxhbnRvaW5lLmNvdXRhbnRAc21pbGUuZnI+Cj4+
-IC0tLQo+PiAgLi4ubGxvY2F0b3ItYmVoaW5kLWEtY2FyZ28tZmVhdHVyZS1mbGFnLnBhdGNoIHwg
-NTIgKysrKysrKysrKy0tLS0tLS0tLQo+PiAgcGFja2FnZS9yaXBncmVwL3JpcGdyZXAuaGFzaCAg
-ICAgICAgICAgICAgICAgIHwgIDIgKy0KPj4gIHBhY2thZ2UvcmlwZ3JlcC9yaXBncmVwLm1rICAg
-ICAgICAgICAgICAgICAgICB8ICA2ICstLQo+PiAgMyBmaWxlcyBjaGFuZ2VkLCAyOSBpbnNlcnRp
-b25zKCspLCAzMSBkZWxldGlvbnMoLSkKPj4KPj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvcmlwZ3Jl
-cC8wMDAxLXB1dHMtamVtYWxsb2MtYWxsb2NhdG9yLWJlaGluZC1hLWNhcmdvLWZlYXR1cmUtZmxh
-Zy5wYXRjaCBiL3BhY2thZ2UvcmlwZ3JlcC8wMDAxLXB1dHMtamVtYWxsb2MtYWxsb2NhdG9yLWJl
-aGluZC1hLWNhcmdvLWZlYXR1cmUtZmxhZy5wYXRjaAo+PiBpbmRleCBlMmJhNjhmMzg5Li5hYTA3
-M2M2ZTdmIDEwMDY0NAo+PiAtLS0gYS9wYWNrYWdlL3JpcGdyZXAvMDAwMS1wdXRzLWplbWFsbG9j
-LWFsbG9jYXRvci1iZWhpbmQtYS1jYXJnby1mZWF0dXJlLWZsYWcucGF0Y2gKPj4gKysrIGIvcGFj
-a2FnZS9yaXBncmVwLzAwMDEtcHV0cy1qZW1hbGxvYy1hbGxvY2F0b3ItYmVoaW5kLWEtY2FyZ28t
-ZmVhdHVyZS1mbGFnLnBhdGNoCj4+IEBAIC0xLDQgKzEsNCBAQAo+PiAtRnJvbSA2OGMyYTRkN2E1
-ZDliNDZmNjUxMjE5NThmZGIxMmQ1MjcwYmZkMWI2IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQo+
-PiArRnJvbSBlNGRmNjY3OGUzZTJkMDE4YWNjY2FmZDQ3ZDFlNDg0ODg3ZDIzMzIzIE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQo+PiAgRnJvbTogSm9uYXRoYW4gU3RpdGVzIDxtYWlsQGpvbnN0aXRl
-cy5jb20+Cj4+ICBEYXRlOiBXZWQsIDYgTWF5IDIwMjAgMTI6NTU6MzUgKzAwMDAKPj4gIFN1Ympl
-Y3Q6IFtQQVRDSF0gcHV0cyBqZW1hbGxvYyBhbGxvY2F0b3IgYmVoaW5kIGEgY2FyZ28gZmVhdHVy
-ZSBmbGFnCj4+IEBAIC05LDYgKzksOCBAQCBNb3ZlcyBqZW1hbGxvYyBiZWhpbmQgYSBmZWF0dXJl
-IGZvciBtdXNsIGJ1aWxkcywgd2hlcmUgaXQgaXMgbm90Cj4+ICBzdXBwb3J0ZWQgYnkgdGhlIHVw
-c3RyZWFtIHByb2plY3QsIHNvIHJpcGdyZXAgd2lsbCBmYWlsIHRvIGJ1aWxkLgo+PiAgCj4+ICBT
-aWduZWQtb2ZmLWJ5OiBTYW0gVm9zcyA8c2FtLnZvc3NAZ21haWwuY29tPgo+PiArW0FudG9pbmU6
-IHVwZGF0ZSBmb3IgMTQuMC4zXQo+PiArU2lnbmVkLW9mZi1ieTogQW50b2luZSBDb3V0YW50IDxh
-bnRvaW5lLmNvdXRhbnRAc21pbGUuZnI+Cj4+ICAtLS0KPj4gICAuZ2l0aHViL3dvcmtmbG93cy9j
-aS55bWwgICAgICB8IDYgKysrKysrCj4+ICAgLmdpdGh1Yi93b3JrZmxvd3MvcmVsZWFzZS55bWwg
-fCA4ICsrKysrKystCj4+IEBAIC0xOCwxMCArMjAsMTAgQEAgU2lnbmVkLW9mZi1ieTogU2FtIFZv
-c3MgPHNhbS52b3NzQGdtYWlsLmNvbT4KPj4gICA1IGZpbGVzIGNoYW5nZWQsIDM1IGluc2VydGlv
-bnMoKyksIDQgZGVsZXRpb25zKC0pCj4+ICAKPj4gIGRpZmYgLS1naXQgYS8uZ2l0aHViL3dvcmtm
-bG93cy9jaS55bWwgYi8uZ2l0aHViL3dvcmtmbG93cy9jaS55bWwKPj4gLWluZGV4IGFiMTU0ZWMu
-LmFhNTY3ZDkgMTAwNjQ0Cj4+ICtpbmRleCBiMzc3NTNlLi5hMmNkZWVlIDEwMDY0NAo+PiAgLS0t
-IGEvLmdpdGh1Yi93b3JrZmxvd3MvY2kueW1sCj4+ICArKysgYi8uZ2l0aHViL3dvcmtmbG93cy9j
-aS55bWwKPj4gLUBAIC0xNDksNiArMTQ5LDEyIEBAIGpvYnM6Cj4+ICtAQCAtMTYwLDYgKzE2MCwx
-MiBAQCBqb2JzOgo+PiAgICAgICAgIGlmOiBtYXRyaXgudGFyZ2V0ICE9ICcnCj4+ICAgICAgICAg
-cnVuOiAke3sgZW52LkNBUkdPIH19IHRlc3QgLS12ZXJib3NlIC0td29ya3NwYWNlICR7eyBlbnYu
-VEFSR0VUX0ZMQUdTIH19Cj4+ICAgCj4+IEBAIC0zMSwxNCArMzMsMTQgQEAgaW5kZXggYWIxNTRl
-Yy4uYWE1NjdkOSAxMDA2NDQKPj4gICsgICAgICBpZjogbWF0cml4Lm9zID09ICduaWdodGx5LW11
-c2wnCj4+ICArICAgICAgcnVuOiAke3sgZW52LkNBUkdPIH19IHRlc3QgLS12ZXJib3NlIC0tYWxs
-IC0tZmVhdHVyZXMgamVtYWxsb2MgJHt7IGVudi5UQVJHRVRfRkxBR1MgfX0KPj4gICsKPj4gLSAg
-ICAgLSBuYW1lOiBUZXN0IGZvciBleGlzdGVuY2Ugb2YgYnVpbGQgYXJ0aWZhY3RzIChXaW5kb3dz
-KQo+PiAtICAgICAgIGlmOiBtYXRyaXgub3MgPT0gJ3dpbmRvd3MtMjAxOScKPj4gLSAgICAgICBz
-aGVsbDogYmFzaAo+PiArICAgICAtIG5hbWU6IFRlc3QgenNoIHNoZWxsIGNvbXBsZXRpb25zIChV
-bml4LCBzYW5zIGNyb3NzKQo+PiArICAgICAgICMgV2UgY291bGQgdGVzdCB0aGlzIHdoZW4gdXNp
-bmcgQ3Jvc3MsIGJ1dCB3ZSdkIGhhdmUgdG8gZXhlY3V0ZSB0aGUKPj4gKyAgICAgICAjICdyZycg
-YmluYXJ5IChkb25lIGluIHRlc3QtY29tcGxldGUpIHdpdGggcWVtdSwgd2hpY2ggaXMgYSBwYWlu
-IGFuZAo+PiAgZGlmZiAtLWdpdCBhLy5naXRodWIvd29ya2Zsb3dzL3JlbGVhc2UueW1sIGIvLmdp
-dGh1Yi93b3JrZmxvd3MvcmVsZWFzZS55bWwKPj4gLWluZGV4IDdjZmI2YTQuLmFkNmI4MmQgMTAw
-NjQ0Cj4+ICtpbmRleCBiMTBjMDc2Li41OGE3YTEyIDEwMDY0NAo+PiAgLS0tIGEvLmdpdGh1Yi93
-b3JrZmxvd3MvcmVsZWFzZS55bWwKPj4gICsrKyBiLy5naXRodWIvd29ya2Zsb3dzL3JlbGVhc2Uu
-eW1sCj4+IC1AQCAtMTMzLDcgKzEzMywxMyBAQCBqb2JzOgo+PiArQEAgLTE1Myw3ICsxNTMsMTMg
-QEAgam9iczoKPj4gICAgICAgICAgIGVjaG8gInRhcmdldCBmbGFnIGlzOiAke3sgZW52LlRBUkdF
-VF9GTEFHUyB9fSIKPj4gICAgICAgICAgIGVjaG8gInRhcmdldCBkaXIgaXM6ICR7eyBlbnYuVEFS
-R0VUX0RJUiB9fSIKPj4gICAKPj4gQEAgLTUwLDI1ICs1MiwyNSBAQCBpbmRleCA3Y2ZiNmE0Li5h
-ZDZiODJkIDEwMDY0NAo+PiAgKwo+PiAgKyAgICAtIG5hbWU6IEJ1aWxkIHJlbGVhc2UgYmluYXJ5
-IChub24tbGludXgpCj4+ICArICAgICAgaWY6IG1hdHJpeC5idWlsZCAhPSAnbGludXgnCj4+IC0g
-ICAgICAgcnVuOiAke3sgZW52LkNBUkdPIH19IGJ1aWxkIC0tdmVyYm9zZSAtLXJlbGVhc2UgLS1m
-ZWF0dXJlcyBwY3JlMiAke3sgZW52LlRBUkdFVF9GTEFHUyB9fQo+PiAtIAo+PiAtICAgICAtIG5h
-bWU6IFN0cmlwIHJlbGVhc2UgYmluYXJ5IChsaW51eCBhbmQgbWFjb3MpCj4+ICsgICAgICAgc2hl
-bGw6IGJhc2gKPj4gKyAgICAgICBydW46IHwKPj4gKyAgICAgICAgICR7eyBlbnYuQ0FSR08gfX0g
-YnVpbGQgLS12ZXJib3NlIC0tcmVsZWFzZSAtLWZlYXR1cmVzIHBjcmUyICR7eyBlbnYuVEFSR0VU
-X0ZMQUdTIH19Cj4+ICBkaWZmIC0tZ2l0IGEvQ2FyZ28udG9tbCBiL0NhcmdvLnRvbWwKPj4gLWlu
-ZGV4IGZiNzhmY2IuLjBkMzRiMWUgMTAwNjQ0Cj4+ICtpbmRleCBmMzBjYzBiLi42ZmU0Yzc5IDEw
-MDY0NAo+PiAgLS0tIGEvQ2FyZ28udG9tbAo+PiAgKysrIGIvQ2FyZ28udG9tbAo+PiAtQEAgLTU2
-LDggKzU2LDkgQEAgdmVyc2lvbiA9ICIyLjMzLjAiCj4+IC0gZGVmYXVsdC1mZWF0dXJlcyA9IGZh
-bHNlCj4+IC0gZmVhdHVyZXMgPSBbInN1Z2dlc3Rpb25zIl0KPj4gK0BAIC01OSw4ICs1OSw5IEBA
-IHNlcmRlX2pzb24gPSAiMS4wLjIzIgo+PiArIHRlcm1jb2xvciA9ICIxLjEuMCIKPj4gKyB0ZXh0
-d3JhcCA9IHsgdmVyc2lvbiA9ICIwLjE2LjAiLCBkZWZhdWx0LWZlYXR1cmVzID0gZmFsc2UgfQo+
-PiAgIAo+PiAgLVt0YXJnZXQuJ2NmZyhhbGwodGFyZ2V0X2VudiA9ICJtdXNsIiwgdGFyZ2V0X3Bv
-aW50ZXJfd2lkdGggPSAiNjQiKSknLmRlcGVuZGVuY2llcy5qZW1hbGxvY2F0b3JdCj4+ICArW2Rl
-cGVuZGVuY2llcy5qZW1hbGxvY2F0b3JdCj4+IC0gdmVyc2lvbiA9ICIwLjMuMCIKPj4gKyB2ZXJz
-aW9uID0gIjAuNS4wIgo+PiAgK29wdGlvbmFsID0gdHJ1ZQo+PiAgIAo+PiAtIFtidWlsZC1kZXBl
-bmRlbmNpZXNdCj4+IC0gbGF6eV9zdGF0aWMgPSAiMS4xLjAiCj4+IC1AQCAtNzUsNiArNzYsMTEg
-QEAgd2Fsa2RpciA9ICIyIgo+PiArIFtkZXYtZGVwZW5kZW5jaWVzXQo+PiArIHNlcmRlID0gIjEu
-MC43NyIKPj4gK0BAIC03MCw2ICs3MSwxMSBAQCB3YWxrZGlyID0gIjIiCj4+ICAgW2ZlYXR1cmVz
-XQo+PiAgIHNpbWQtYWNjZWwgPSBbImdyZXAvc2ltZC1hY2NlbCJdCj4+ICAgcGNyZTIgPSBbImdy
-ZXAvcGNyZTIiXQo+PiBAQCAtODEsMTAgKzgzLDEwIEBAIGluZGV4IGZiNzhmY2IuLjBkMzRiMWUg
-MTAwNjQ0Cj4+ICAgW3Byb2ZpbGUucmVsZWFzZV0KPj4gICBkZWJ1ZyA9IDEKPj4gIGRpZmYgLS1n
-aXQgYS9SRUFETUUubWQgYi9SRUFETUUubWQKPj4gLWluZGV4IDQ2OTM4YmMuLjk5MTdiMjkgMTAw
-NjQ0Cj4+ICtpbmRleCA2M2MwNzI1Li4zZDM1ODE5IDEwMDY0NAo+PiAgLS0tIGEvUkVBRE1FLm1k
-Cj4+ICArKysgYi9SRUFETUUubWQKPj4gLUBAIC00MDYsNiArNDA2LDE1IEBAIGJ1aWxkIGEgc3Rh
-dGljIGV4ZWN1dGFibGUgd2l0aCBNVVNMIGFuZCB3aXRoIFBDUkUyLCB0aGVuIHlvdSB3aWxsIG5l
-ZWQgdG8gaGF2ZQo+PiArQEAgLTQ0Miw2ICs0NDIsMTUgQEAgYnVpbGQgYSBzdGF0aWMgZXhlY3V0
-YWJsZSB3aXRoIE1VU0wgYW5kIHdpdGggUENSRTIsIHRoZW4geW91IHdpbGwgbmVlZCB0byBoYXZl
-Cj4+ICAgYG11c2wtZ2NjYCBpbnN0YWxsZWQsIHdoaWNoIG1pZ2h0IGJlIGluIGEgc2VwYXJhdGUg
-cGFja2FnZSBmcm9tIHRoZSBhY3R1YWwKPj4gICBNVVNMIGxpYnJhcnksIGRlcGVuZGluZyBvbiB5
-b3VyIExpbnV4IGRpc3RyaWJ1dGlvbi4KPj4gICAKPj4gQEAgLTEwMSwxMCArMTAzLDEwIEBAIGlu
-ZGV4IDQ2OTM4YmMuLjk5MTdiMjkgMTAwNjQ0Cj4+ICAgIyMjIFJ1bm5pbmcgdGVzdHMKPj4gICAK
-Pj4gIGRpZmYgLS1naXQgYS9jcmF0ZXMvY29yZS9tYWluLnJzIGIvY3JhdGVzL2NvcmUvbWFpbi5y
-cwo+PiAtaW5kZXggNDczODVkZS4uYzlkYWU1YSAxMDA2NDQKPj4gK2luZGV4IDY0ZjM1Y2UuLjlh
-YTY2NjMgMTAwNjQ0Cj4+ICAtLS0gYS9jcmF0ZXMvY29yZS9tYWluLnJzCj4+ICArKysgYi9jcmF0
-ZXMvY29yZS9tYWluLnJzCj4+IC1AQCAtMzEsNyArMzEsNyBAQCBtb2Qgc3ViamVjdDsKPj4gK0BA
-IC0yNyw3ICsyNyw3IEBAIG1vZCBzZWFyY2g7Cj4+ICAgLy8gaGF2ZSB0aGUgZmFzdGVzdCB2ZXJz
-aW9uIG9mIGV2ZXJ5dGhpbmcuIEl0cyBnb2FsIGlzIHRvIGJlIHNtYWxsIGFuZCBhbWVuYWJsZQo+
-PiAgIC8vIHRvIHN0YXRpYyBjb21waWxhdGlvbi4pIEV2ZW4gdGhvdWdoIHJpcGdyZXAgaXNuJ3Qg
-cGFydGljdWxhcmx5IGFsbG9jYXRpb24KPj4gICAvLyBoZWF2eSwgbXVzbCdzIGFsbG9jYXRvciBh
-cHBlYXJzIHRvIHNsb3cgZG93biByaXBncmVwIHF1aXRlIGEgYml0LiBUaGVyZWZvcmUsCj4+IEBA
-IC0xMTMsNyArMTE1LDcgQEAgaW5kZXggNDczODVkZS4uYzlkYWU1YSAxMDA2NDQKPj4gICAvLwo+
-PiAgIC8vIFdlIGRvbid0IHVuY29uZGl0aW9uYWxseSB1c2UgamVtYWxsb2MgYmVjYXVzZSBpdCBj
-YW4gYmUgbmljZSB0byB1c2UgdGhlCj4+ICAgLy8gc3lzdGVtJ3MgZGVmYXVsdCBhbGxvY2F0b3Ig
-YnkgZGVmYXVsdC4gTW9yZW92ZXIsIGplbWFsbG9jIHNlZW1zIHRvIGluY3JlYXNlCj4+IC1AQCAt
-MzksNyArMzksMTEgQEAgbW9kIHN1YmplY3Q7Cj4+ICtAQCAtMzUsNyArMzUsMTEgQEAgbW9kIHNl
-YXJjaDsKPj4gICAvLwo+PiAgIC8vIE1vcmVvdmVyLCB3ZSBvbmx5IGRvIHRoaXMgb24gNjQtYml0
-IHN5c3RlbXMgc2luY2UgamVtYWxsb2MgZG9lc24ndCBzdXBwb3J0Cj4+ICAgLy8gaTY4Ni4KPj4g
-QEAgLTEyNyw1ICsxMjksNSBAQCBpbmRleCA0NzM4NWRlLi5jOWRhZTVhIDEwMDY0NAo+PiAgIHN0
-YXRpYyBBTExPQzogamVtYWxsb2NhdG9yOjpKZW1hbGxvYyA9IGplbWFsbG9jYXRvcjo6SmVtYWxs
-b2M7Cj4+ICAgCj4+ICAtLSAKPj4gLTIuMzIuMAo+PiArMi4yNS4xCj4+ICAKPj4gZGlmZiAtLWdp
-dCBhL3BhY2thZ2UvcmlwZ3JlcC9yaXBncmVwLmhhc2ggYi9wYWNrYWdlL3JpcGdyZXAvcmlwZ3Jl
-cC5oYXNoCj4+IGluZGV4IDcxZTc0ZTFiY2YuLmZmODZjMTJhZDUgMTAwNjQ0Cj4+IC0tLSBhL3Bh
-Y2thZ2UvcmlwZ3JlcC9yaXBncmVwLmhhc2gKPj4gKysrIGIvcGFja2FnZS9yaXBncmVwL3JpcGdy
-ZXAuaGFzaAo+PiBAQCAtMSwzICsxLDMgQEAKPj4gICMgTG9jYWxseSBjYWxjdWxhdGVkCj4+IC1z
-aGEyNTYgIDZmMWQ0YThiNjUzY2U0OGQ1OWFkNzc3Mjg4YjEyNTdjYmRhNjA3ZGIyOWRiMTlkMDMx
-YjdlNjIyYzYwNTI2ZjggIHJpcGdyZXAtYWY2YjZjNTQzYjIyNGQzNDhhODg3NmYwYzA2MjQ1ZDll
-YTc5MjljNS50YXIuZ3oKPj4gK3NoYTI1NiAgMmYwMjI4ODljOTk5ZmZlMDA5NTVlNTg2ZmUyNGIz
-MzRkMWM3OTA2MDk3OGZjNDFiOTViNTJhMzA5NDZlNjVkMCAgcmlwZ3JlcC0xNC4wLjMudGFyLmd6
-Cj4+ICBzaGEyNTYgIDBmOTZhODM4NDBlMTQ2ZTQzYzBlYzk2YTIyZWMxZjM5MmUwNjgwZTZjMTIy
-NmU2ZjNiYTg3ZTA3NDBhZjg1MGYgIExJQ0VOU0UtTUlUCj4+IGRpZmYgLS1naXQgYS9wYWNrYWdl
-L3JpcGdyZXAvcmlwZ3JlcC5tayBiL3BhY2thZ2UvcmlwZ3JlcC9yaXBncmVwLm1rCj4+IGluZGV4
-IGQ1ODc0NDFjZmEuLjQ0NjYyNzQ5YmIgMTAwNjQ0Cj4+IC0tLSBhL3BhY2thZ2UvcmlwZ3JlcC9y
-aXBncmVwLm1rCj4+ICsrKyBiL3BhY2thZ2UvcmlwZ3JlcC9yaXBncmVwLm1rCj4+IEBAIC00LDEx
-ICs0LDcgQEAKPj4gICMKPj4gICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4+ICAKPj4gLSMgU2Ft
-ZSBhcyAxMy4wLjAsIHdlIHVzZSBhIEdpdCBjb21taXQgaGFzaCBiZWNhdXNlIHRoZSBoYXNoIG9m
-IHRoaXMKPj4gLSMgdGFyYmFsbCBjaGFuZ2VkIHdoZW4gbW92aW5nIHRvIHRoZSBjYXJnby1wYWNr
-YWdlIGluZnJhc3RydWN0dXJlLCBhbmQKPj4gLSMgd2UgY2FuJ3QgY2hhbmdlIHRoZSBoYXNoIG9m
-IGV4aXN0aW5nIHRhcmJhbGwuIFBsZWFzZSBzd2l0Y2ggYmFjayB0bwo+PiAtIyBhIEdpdCB0YWcg
-YXQgdGhlIG5leHQgdmVyc2lvbiBidW1wLgo+PiAtUklQR1JFUF9WRVJTSU9OID0gYWY2YjZjNTQz
-YjIyNGQzNDhhODg3NmYwYzA2MjQ1ZDllYTc5MjljNQo+PiArUklQR1JFUF9WRVJTSU9OID0gMTQu
-MC4zCj4+ICBSSVBHUkVQX1NJVEUgPSAkKGNhbGwgZ2l0aHViLGJ1cm50c3VzaGkscmlwZ3JlcCwk
-KFJJUEdSRVBfVkVSU0lPTikpCj4+ICBSSVBHUkVQX0xJQ0VOU0UgPSBNSVQKPj4gIFJJUEdSRVBf
-TElDRU5TRV9GSUxFUyA9IExJQ0VOU0UtTUlUCj4+IC0tIAo+PiAyLjI1LjEKPj4KPj4gX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPj4gYnVpbGRyb290IG1h
-aWxpbmcgbGlzdAo+PiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+PiBodHRwczovL2xpc3RzLmJ1
-aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKPiAKCl9fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QK
-YnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxt
-YW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+This is a multi-part message in MIME format.
+--===============4509206009749792620==
+Content-Type: multipart/alternative;
+ boundary="------------MhXyilVusfDhH1HZpGod62fe"
+Content-Language: en-US
+
+This is a multi-part message in MIME format.
+--------------MhXyilVusfDhH1HZpGod62fe
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+
+Yann, All,
+
+
+On 31/12/2023 15:36, Yann E. MORIN wrote:
+> Antoine, All,
+>
+> On 2023-12-28 16:26 +0100, Antoine Coutant spake thusly:
+>> ripgrep previous version hash is no longer valid.
+>> The tarball is modified by rust vendoring so the hash
+>> may change with rust versions.
+> This was very concerning, and if that had been true, could not have
+> been solved just by bumping the version. Indeed, it is not always
+> possible to bump the version, e.g. when the package is already using
+> the latest version.
+>
+> Furthermore, it was a bit surprising that only ripgrep was impacted, not
+> all the other cargo-vendored packages. And it turned out that indeed,
+> another package was impacted, sentry-cli (but we only have the host
+> variant of it).
+>
+> So, that really needed more investigations, to provide a more solid
+> explanation why the hash was wrong, and if possible identify the point
+> in the cargo history where the change happened, to ask upstream if the
+> vendoring scheme was stable or not (in that latter case, we'd have had
+> to introduce the versioning of the vendored archives).
+>
+> However, as you can see in the rest of this thread, the issue has
+> nothing to do with cargo vendoring, in fact, and is caused by an
+> unrelated change in the download infra (my fault!).
+
+I'm sorry for the confusion I caused by my misunderstanding.
+
+Thanks for all your research!
+
+
+Regards,
+
+Antoine Coutant
+
+>
+> So, the ripgrep version bump is OK, but not for the correct reasons. ;-)
+>
+> Regards,
+> Yann E. MORIN.
+>
+>> The patch has been rebased to ripgrep 14.0.3.
+>>
+>> Changelog:
+>> https://github.com/BurntSushi/ripgrep/blob/master/CHANGELOG.md
+>>
+>> Signed-off-by: Antoine Coutant<antoine.coutant@smile.fr>
+>> ---
+>>
+>> Tested using qemu_aarch64_virt_defconfig and Arm AArch64 13.2.rel1
+>> toolchain.
+>>
+>> Signed-off-by: Antoine Coutant<antoine.coutant@smile.fr>
+>> ---
+>>   ...llocator-behind-a-cargo-feature-flag.patch | 52 ++++++++++---------
+>>   package/ripgrep/ripgrep.hash                  |  2 +-
+>>   package/ripgrep/ripgrep.mk                    |  6 +--
+>>   3 files changed, 29 insertions(+), 31 deletions(-)
+>>
+>> diff --git a/package/ripgrep/0001-puts-jemalloc-allocator-behind-a-cargo-feature-flag.patch b/package/ripgrep/0001-puts-jemalloc-allocator-behind-a-cargo-feature-flag.patch
+>> index e2ba68f389..aa073c6e7f 100644
+>> --- a/package/ripgrep/0001-puts-jemalloc-allocator-behind-a-cargo-feature-flag.patch
+>> +++ b/package/ripgrep/0001-puts-jemalloc-allocator-behind-a-cargo-feature-flag.patch
+>> @@ -1,4 +1,4 @@
+>> -From 68c2a4d7a5d9b46f65121958fdb12d5270bfd1b6 Mon Sep 17 00:00:00 2001
+>> +From e4df6678e3e2d018acccafd47d1e484887d23323 Mon Sep 17 00:00:00 2001
+>>   From: Jonathan Stites<mail@jonstites.com>
+>>   Date: Wed, 6 May 2020 12:55:35 +0000
+>>   Subject: [PATCH] puts jemalloc allocator behind a cargo feature flag
+>> @@ -9,6 +9,8 @@ Moves jemalloc behind a feature for musl builds, where it is not
+>>   supported by the upstream project, so ripgrep will fail to build.
+>>   
+>>   Signed-off-by: Sam Voss<sam.voss@gmail.com>
+>> +[Antoine: update for 14.0.3]
+>> +Signed-off-by: Antoine Coutant<antoine.coutant@smile.fr>
+>>   ---
+>>    .github/workflows/ci.yml      | 6 ++++++
+>>    .github/workflows/release.yml | 8 +++++++-
+>> @@ -18,10 +20,10 @@ Signed-off-by: Sam Voss<sam.voss@gmail.com>
+>>    5 files changed, 35 insertions(+), 4 deletions(-)
+>>   
+>>   diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+>> -index ab154ec..aa567d9 100644
+>> +index b37753e..a2cdeee 100644
+>>   --- a/.github/workflows/ci.yml
+>>   +++ b/.github/workflows/ci.yml
+>> -@@ -149,6 +149,12 @@ jobs:
+>> +@@ -160,6 +160,12 @@ jobs:
+>>          if: matrix.target != ''
+>>          run: ${{ env.CARGO }} test --verbose --workspace ${{ env.TARGET_FLAGS }}
+>>    
+>> @@ -31,14 +33,14 @@ index ab154ec..aa567d9 100644
+>>   +      if: matrix.os == 'nightly-musl'
+>>   +      run: ${{ env.CARGO }} test --verbose --all --features jemalloc ${{ env.TARGET_FLAGS }}
+>>   +
+>> -     - name: Test for existence of build artifacts (Windows)
+>> -       if: matrix.os == 'windows-2019'
+>> -       shell: bash
+>> +     - name: Test zsh shell completions (Unix, sans cross)
+>> +       # We could test this when using Cross, but we'd have to execute the
+>> +       # 'rg' binary (done in test-complete) with qemu, which is a pain and
+>>   diff --git a/.github/workflows/release.yml b/.github/workflows/release.yml
+>> -index 7cfb6a4..ad6b82d 100644
+>> +index b10c076..58a7a12 100644
+>>   --- a/.github/workflows/release.yml
+>>   +++ b/.github/workflows/release.yml
+>> -@@ -133,7 +133,13 @@ jobs:
+>> +@@ -153,7 +153,13 @@ jobs:
+>>            echo "target flag is: ${{ env.TARGET_FLAGS }}"
+>>            echo "target dir is: ${{ env.TARGET_DIR }}"
+>>    
+>> @@ -50,25 +52,25 @@ index 7cfb6a4..ad6b82d 100644
+>>   +
+>>   +    - name: Build release binary (non-linux)
+>>   +      if: matrix.build != 'linux'
+>> -       run: ${{ env.CARGO }} build --verbose --release --features pcre2 ${{ env.TARGET_FLAGS }}
+>> -
+>> -     - name: Strip release binary (linux and macos)
+>> +       shell: bash
+>> +       run: |
+>> +         ${{ env.CARGO }} build --verbose --release --features pcre2 ${{ env.TARGET_FLAGS }}
+>>   diff --git a/Cargo.toml b/Cargo.toml
+>> -index fb78fcb..0d34b1e 100644
+>> +index f30cc0b..6fe4c79 100644
+>>   --- a/Cargo.toml
+>>   +++ b/Cargo.toml
+>> -@@ -56,8 +56,9 @@ version = "2.33.0"
+>> - default-features = false
+>> - features = ["suggestions"]
+>> +@@ -59,8 +59,9 @@ serde_json = "1.0.23"
+>> + termcolor = "1.1.0"
+>> + textwrap = { version = "0.16.0", default-features = false }
+>>    
+>>   -[target.'cfg(all(target_env = "musl", target_pointer_width = "64"))'.dependencies.jemallocator]
+>>   +[dependencies.jemallocator]
+>> - version = "0.3.0"
+>> + version = "0.5.0"
+>>   +optional = true
+>>    
+>> - [build-dependencies]
+>> - lazy_static = "1.1.0"
+>> -@@ -75,6 +76,11 @@ walkdir = "2"
+>> + [dev-dependencies]
+>> + serde = "1.0.77"
+>> +@@ -70,6 +71,11 @@ walkdir = "2"
+>>    [features]
+>>    simd-accel = ["grep/simd-accel"]
+>>    pcre2 = ["grep/pcre2"]
+>> @@ -81,10 +83,10 @@ index fb78fcb..0d34b1e 100644
+>>    [profile.release]
+>>    debug = 1
+>>   diff --git a/README.md b/README.md
+>> -index 46938bc..9917b29 100644
+>> +index 63c0725..3d35819 100644
+>>   --- a/README.md
+>>   +++ b/README.md
+>> -@@ -406,6 +406,15 @@ build a static executable with MUSL and with PCRE2, then you will need to have
+>> +@@ -442,6 +442,15 @@ build a static executable with MUSL and with PCRE2, then you will need to have
+>>    `musl-gcc` installed, which might be in a separate package from the actual
+>>    MUSL library, depending on your Linux distribution.
+>>    
+>> @@ -101,10 +103,10 @@ index 46938bc..9917b29 100644
+>>    ### Running tests
+>>    
+>>   diff --git a/crates/core/main.rs b/crates/core/main.rs
+>> -index 47385de..c9dae5a 100644
+>> +index 64f35ce..9aa6663 100644
+>>   --- a/crates/core/main.rs
+>>   +++ b/crates/core/main.rs
+>> -@@ -31,7 +31,7 @@ mod subject;
+>> +@@ -27,7 +27,7 @@ mod search;
+>>    // have the fastest version of everything. Its goal is to be small and amenable
+>>    // to static compilation.) Even though ripgrep isn't particularly allocation
+>>    // heavy, musl's allocator appears to slow down ripgrep quite a bit. Therefore,
+>> @@ -113,7 +115,7 @@ index 47385de..c9dae5a 100644
+>>    //
+>>    // We don't unconditionally use jemalloc because it can be nice to use the
+>>    // system's default allocator by default. Moreover, jemalloc seems to increase
+>> -@@ -39,7 +39,11 @@ mod subject;
+>> +@@ -35,7 +35,11 @@ mod search;
+>>    //
+>>    // Moreover, we only do this on 64-bit systems since jemalloc doesn't support
+>>    // i686.
+>> @@ -127,5 +129,5 @@ index 47385de..c9dae5a 100644
+>>    static ALLOC: jemallocator::Jemalloc = jemallocator::Jemalloc;
+>>    
+>>   --
+>> -2.32.0
+>> +2.25.1
+>>   
+>> diff --git a/package/ripgrep/ripgrep.hash b/package/ripgrep/ripgrep.hash
+>> index 71e74e1bcf..ff86c12ad5 100644
+>> --- a/package/ripgrep/ripgrep.hash
+>> +++ b/package/ripgrep/ripgrep.hash
+>> @@ -1,3 +1,3 @@
+>>   # Locally calculated
+>> -sha256  6f1d4a8b653ce48d59ad777288b1257cbda607db29db19d031b7e622c60526f8  ripgrep-af6b6c543b224d348a8876f0c06245d9ea7929c5.tar.gz
+>> +sha256  2f022889c999ffe00955e586fe24b334d1c79060978fc41b95b52a30946e65d0  ripgrep-14.0.3.tar.gz
+>>   sha256  0f96a83840e146e43c0ec96a22ec1f392e0680e6c1226e6f3ba87e0740af850f  LICENSE-MIT
+>> diff --git a/package/ripgrep/ripgrep.mk b/package/ripgrep/ripgrep.mk
+>> index d587441cfa..44662749bb 100644
+>> --- a/package/ripgrep/ripgrep.mk
+>> +++ b/package/ripgrep/ripgrep.mk
+>> @@ -4,11 +4,7 @@
+>>   #
+>>   ################################################################################
+>>   
+>> -# Same as 13.0.0, we use a Git commit hash because the hash of this
+>> -# tarball changed when moving to the cargo-package infrastructure, and
+>> -# we can't change the hash of existing tarball. Please switch back to
+>> -# a Git tag at the next version bump.
+>> -RIPGREP_VERSION = af6b6c543b224d348a8876f0c06245d9ea7929c5
+>> +RIPGREP_VERSION = 14.0.3
+>>   RIPGREP_SITE = $(call github,burntsushi,ripgrep,$(RIPGREP_VERSION))
+>>   RIPGREP_LICENSE = MIT
+>>   RIPGREP_LICENSE_FILES = LICENSE-MIT
+>> -- 
+>> 2.25.1
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot@buildroot.org
+>> https://lists.buildroot.org/mailman/listinfo/buildroot
+--------------MhXyilVusfDhH1HZpGod62fe
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  </head>
+  <body>
+    <p dir="ltr"
+      style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;"
+      id="docs-internal-guid-56fded93-7fff-b6e6-84c2-584a595336cf"><span
+style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Yann, All,</span></p>
+    <br>
+    <p></p>
+    <div class="moz-cite-prefix">On 31/12/2023 15:36, Yann E. MORIN
+      wrote:<br>
+    </div>
+    <blockquote type="cite" cite="mid:ZZF8dBumVmvof2KW@landeda">
+      <pre class="moz-quote-pre" wrap="">Antoine, All,
+
+On 2023-12-28 16:26 +0100, Antoine Coutant spake thusly:
+</pre>
+      <blockquote type="cite">
+        <pre class="moz-quote-pre" wrap="">ripgrep previous version hash is no longer valid.
+The tarball is modified by rust vendoring so the hash
+may change with rust versions.
+</pre>
+      </blockquote>
+      <pre class="moz-quote-pre" wrap="">
+This was very concerning, and if that had been true, could not have
+been solved just by bumping the version. Indeed, it is not always
+possible to bump the version, e.g. when the package is already using
+the latest version.
+
+Furthermore, it was a bit surprising that only ripgrep was impacted, not
+all the other cargo-vendored packages. And it turned out that indeed,
+another package was impacted, sentry-cli (but we only have the host
+variant of it).
+
+So, that really needed more investigations, to provide a more solid
+explanation why the hash was wrong, and if possible identify the point
+in the cargo history where the change happened, to ask upstream if the
+vendoring scheme was stable or not (in that latter case, we'd have had
+to introduce the versioning of the vendored archives).
+
+However, as you can see in the rest of this thread, the issue has
+nothing to do with cargo vendoring, in fact, and is caused by an
+unrelated change in the download infra (my fault!).</pre>
+    </blockquote>
+    <br>
+    <p dir="ltr"
+      style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">I'm sorry for the confusion I caused by my misunderstanding.</span></p>
+    <p dir="ltr"
+      style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Thanks for all your research!</span></p>
+    <br>
+    <p dir="ltr"
+      style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Regards,</span></p>
+    <p dir="ltr"
+      style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Antoine Coutant</span></p>
+    <blockquote type="cite" cite="mid:ZZF8dBumVmvof2KW@landeda">
+      <pre class="moz-quote-pre" wrap="">
+
+So, the ripgrep version bump is OK, but not for the correct reasons. ;-)
+
+Regards,
+Yann E. MORIN.
+
+</pre>
+      <blockquote type="cite">
+        <pre class="moz-quote-pre" wrap="">The patch has been rebased to ripgrep 14.0.3.
+
+Changelog:
+<a class="moz-txt-link-freetext" href="https://github.com/BurntSushi/ripgrep/blob/master/CHANGELOG.md">https://github.com/BurntSushi/ripgrep/blob/master/CHANGELOG.md</a>
+
+Signed-off-by: Antoine Coutant <a class="moz-txt-link-rfc2396E" href="mailto:antoine.coutant@smile.fr">&lt;antoine.coutant@smile.fr&gt;</a>
+---
+
+Tested using qemu_aarch64_virt_defconfig and Arm AArch64 13.2.rel1
+toolchain.
+
+Signed-off-by: Antoine Coutant <a class="moz-txt-link-rfc2396E" href="mailto:antoine.coutant@smile.fr">&lt;antoine.coutant@smile.fr&gt;</a>
+---
+ ...llocator-behind-a-cargo-feature-flag.patch | 52 ++++++++++---------
+ package/ripgrep/ripgrep.hash                  |  2 +-
+ package/ripgrep/ripgrep.mk                    |  6 +--
+ 3 files changed, 29 insertions(+), 31 deletions(-)
+
+diff --git a/package/ripgrep/0001-puts-jemalloc-allocator-behind-a-cargo-feature-flag.patch b/package/ripgrep/0001-puts-jemalloc-allocator-behind-a-cargo-feature-flag.patch
+index e2ba68f389..aa073c6e7f 100644
+--- a/package/ripgrep/0001-puts-jemalloc-allocator-behind-a-cargo-feature-flag.patch
++++ b/package/ripgrep/0001-puts-jemalloc-allocator-behind-a-cargo-feature-flag.patch
+@@ -1,4 +1,4 @@
+-From 68c2a4d7a5d9b46f65121958fdb12d5270bfd1b6 Mon Sep 17 00:00:00 2001
++From e4df6678e3e2d018acccafd47d1e484887d23323 Mon Sep 17 00:00:00 2001
+ From: Jonathan Stites <a class="moz-txt-link-rfc2396E" href="mailto:mail@jonstites.com">&lt;mail@jonstites.com&gt;</a>
+ Date: Wed, 6 May 2020 12:55:35 +0000
+ Subject: [PATCH] puts jemalloc allocator behind a cargo feature flag
+@@ -9,6 +9,8 @@ Moves jemalloc behind a feature for musl builds, where it is not
+ supported by the upstream project, so ripgrep will fail to build.
+ 
+ Signed-off-by: Sam Voss <a class="moz-txt-link-rfc2396E" href="mailto:sam.voss@gmail.com">&lt;sam.voss@gmail.com&gt;</a>
++[Antoine: update for 14.0.3]
++Signed-off-by: Antoine Coutant <a class="moz-txt-link-rfc2396E" href="mailto:antoine.coutant@smile.fr">&lt;antoine.coutant@smile.fr&gt;</a>
+ ---
+  .github/workflows/ci.yml      | 6 ++++++
+  .github/workflows/release.yml | 8 +++++++-
+@@ -18,10 +20,10 @@ Signed-off-by: Sam Voss <a class="moz-txt-link-rfc2396E" href="mailto:sam.voss@gmail.com">&lt;sam.voss@gmail.com&gt;</a>
+  5 files changed, 35 insertions(+), 4 deletions(-)
+ 
+ diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+-index ab154ec..aa567d9 100644
++index b37753e..a2cdeee 100644
+ --- a/.github/workflows/ci.yml
+ +++ b/.github/workflows/ci.yml
+-@@ -149,6 +149,12 @@ jobs:
++@@ -160,6 +160,12 @@ jobs:
+        if: matrix.target != ''
+        run: ${{ env.CARGO }} test --verbose --workspace ${{ env.TARGET_FLAGS }}
+  
+@@ -31,14 +33,14 @@ index ab154ec..aa567d9 100644
+ +      if: matrix.os == 'nightly-musl'
+ +      run: ${{ env.CARGO }} test --verbose --all --features jemalloc ${{ env.TARGET_FLAGS }}
+ +
+-     - name: Test for existence of build artifacts (Windows)
+-       if: matrix.os == 'windows-2019'
+-       shell: bash
++     - name: Test zsh shell completions (Unix, sans cross)
++       # We could test this when using Cross, but we'd have to execute the
++       # 'rg' binary (done in test-complete) with qemu, which is a pain and
+ diff --git a/.github/workflows/release.yml b/.github/workflows/release.yml
+-index 7cfb6a4..ad6b82d 100644
++index b10c076..58a7a12 100644
+ --- a/.github/workflows/release.yml
+ +++ b/.github/workflows/release.yml
+-@@ -133,7 +133,13 @@ jobs:
++@@ -153,7 +153,13 @@ jobs:
+          echo "target flag is: ${{ env.TARGET_FLAGS }}"
+          echo "target dir is: ${{ env.TARGET_DIR }}"
+  
+@@ -50,25 +52,25 @@ index 7cfb6a4..ad6b82d 100644
+ +
+ +    - name: Build release binary (non-linux)
+ +      if: matrix.build != 'linux'
+-       run: ${{ env.CARGO }} build --verbose --release --features pcre2 ${{ env.TARGET_FLAGS }}
+- 
+-     - name: Strip release binary (linux and macos)
++       shell: bash
++       run: |
++         ${{ env.CARGO }} build --verbose --release --features pcre2 ${{ env.TARGET_FLAGS }}
+ diff --git a/Cargo.toml b/Cargo.toml
+-index fb78fcb..0d34b1e 100644
++index f30cc0b..6fe4c79 100644
+ --- a/Cargo.toml
+ +++ b/Cargo.toml
+-@@ -56,8 +56,9 @@ version = "2.33.0"
+- default-features = false
+- features = ["suggestions"]
++@@ -59,8 +59,9 @@ serde_json = "1.0.23"
++ termcolor = "1.1.0"
++ textwrap = { version = "0.16.0", default-features = false }
+  
+ -[target.'cfg(all(target_env = "musl", target_pointer_width = "64"))'.dependencies.jemallocator]
+ +[dependencies.jemallocator]
+- version = "0.3.0"
++ version = "0.5.0"
+ +optional = true
+  
+- [build-dependencies]
+- lazy_static = "1.1.0"
+-@@ -75,6 +76,11 @@ walkdir = "2"
++ [dev-dependencies]
++ serde = "1.0.77"
++@@ -70,6 +71,11 @@ walkdir = "2"
+  [features]
+  simd-accel = ["grep/simd-accel"]
+  pcre2 = ["grep/pcre2"]
+@@ -81,10 +83,10 @@ index fb78fcb..0d34b1e 100644
+  [profile.release]
+  debug = 1
+ diff --git a/README.md b/README.md
+-index 46938bc..9917b29 100644
++index 63c0725..3d35819 100644
+ --- a/README.md
+ +++ b/README.md
+-@@ -406,6 +406,15 @@ build a static executable with MUSL and with PCRE2, then you will need to have
++@@ -442,6 +442,15 @@ build a static executable with MUSL and with PCRE2, then you will need to have
+  `musl-gcc` installed, which might be in a separate package from the actual
+  MUSL library, depending on your Linux distribution.
+  
+@@ -101,10 +103,10 @@ index 46938bc..9917b29 100644
+  ### Running tests
+  
+ diff --git a/crates/core/main.rs b/crates/core/main.rs
+-index 47385de..c9dae5a 100644
++index 64f35ce..9aa6663 100644
+ --- a/crates/core/main.rs
+ +++ b/crates/core/main.rs
+-@@ -31,7 +31,7 @@ mod subject;
++@@ -27,7 +27,7 @@ mod search;
+  // have the fastest version of everything. Its goal is to be small and amenable
+  // to static compilation.) Even though ripgrep isn't particularly allocation
+  // heavy, musl's allocator appears to slow down ripgrep quite a bit. Therefore,
+@@ -113,7 +115,7 @@ index 47385de..c9dae5a 100644
+  //
+  // We don't unconditionally use jemalloc because it can be nice to use the
+  // system's default allocator by default. Moreover, jemalloc seems to increase
+-@@ -39,7 +39,11 @@ mod subject;
++@@ -35,7 +35,11 @@ mod search;
+  //
+  // Moreover, we only do this on 64-bit systems since jemalloc doesn't support
+  // i686.
+@@ -127,5 +129,5 @@ index 47385de..c9dae5a 100644
+  static ALLOC: jemallocator::Jemalloc = jemallocator::Jemalloc;
+  
+ -- 
+-2.32.0
++2.25.1
+ 
+diff --git a/package/ripgrep/ripgrep.hash b/package/ripgrep/ripgrep.hash
+index 71e74e1bcf..ff86c12ad5 100644
+--- a/package/ripgrep/ripgrep.hash
++++ b/package/ripgrep/ripgrep.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  6f1d4a8b653ce48d59ad777288b1257cbda607db29db19d031b7e622c60526f8  ripgrep-af6b6c543b224d348a8876f0c06245d9ea7929c5.tar.gz
++sha256  2f022889c999ffe00955e586fe24b334d1c79060978fc41b95b52a30946e65d0  ripgrep-14.0.3.tar.gz
+ sha256  0f96a83840e146e43c0ec96a22ec1f392e0680e6c1226e6f3ba87e0740af850f  LICENSE-MIT
+diff --git a/package/ripgrep/ripgrep.mk b/package/ripgrep/ripgrep.mk
+index d587441cfa..44662749bb 100644
+--- a/package/ripgrep/ripgrep.mk
++++ b/package/ripgrep/ripgrep.mk
+@@ -4,11 +4,7 @@
+ #
+ ################################################################################
+ 
+-# Same as 13.0.0, we use a Git commit hash because the hash of this
+-# tarball changed when moving to the cargo-package infrastructure, and
+-# we can't change the hash of existing tarball. Please switch back to
+-# a Git tag at the next version bump.
+-RIPGREP_VERSION = af6b6c543b224d348a8876f0c06245d9ea7929c5
++RIPGREP_VERSION = 14.0.3
+ RIPGREP_SITE = $(call github,burntsushi,ripgrep,$(RIPGREP_VERSION))
+ RIPGREP_LICENSE = MIT
+ RIPGREP_LICENSE_FILES = LICENSE-MIT
+-- 
+2.25.1
+
+_______________________________________________
+buildroot mailing list
+<a class="moz-txt-link-abbreviated" href="mailto:buildroot@buildroot.org">buildroot@buildroot.org</a>
+<a class="moz-txt-link-freetext" href="https://lists.buildroot.org/mailman/listinfo/buildroot">https://lists.buildroot.org/mailman/listinfo/buildroot</a>
+</pre>
+      </blockquote>
+      <pre class="moz-quote-pre" wrap="">
+</pre>
+    </blockquote>
+  </body>
+</html>
+
+--------------MhXyilVusfDhH1HZpGod62fe--
+
+--===============4509206009749792620==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4509206009749792620==--
