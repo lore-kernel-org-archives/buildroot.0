@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 773EBC47073
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 20:19:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BA2FC4707B
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 20:20:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2508E43748;
-	Wed, 10 Jan 2024 20:19:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2508E43748
+	by smtp2.osuosl.org (Postfix) with ESMTP id E7FE24379B;
+	Wed, 10 Jan 2024 20:19:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E7FE24379B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TjvTsUN9JZmA; Wed, 10 Jan 2024 20:19:45 +0000 (UTC)
+	with ESMTP id 6Ds8v8hsQ_rJ; Wed, 10 Jan 2024 20:19:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E42C0437E7;
-	Wed, 10 Jan 2024 20:19:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E42C0437E7
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 473871BF95D
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 20:16:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 80FF04378A;
+	Wed, 10 Jan 2024 20:19:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 80FF04378A
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4AAEB1BF5B3
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 20:16:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0B78783A77
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6D3DC43748
  for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 20:16:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B78783A77
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D3DC43748
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tocskKKajOOr for <buildroot@lists.busybox.net>;
- Wed, 10 Jan 2024 20:16:52 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 26Qs6A0rh23U for <buildroot@lists.busybox.net>;
+ Wed, 10 Jan 2024 20:16:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3E09283B40
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4978343770
  for <buildroot@buildroot.org>; Wed, 10 Jan 2024 20:16:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3E09283B40
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4978343770
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2D29A85CC6; Wed, 10 Jan 2024 20:16:52 +0000 (UTC)
+ id 454DD85CBF; Wed, 10 Jan 2024 20:16:52 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 10 Jan 2024 21:10:24 +0100
+Date: Wed, 10 Jan 2024 21:15:17 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: b2a8693a8dc8821a094615a290d141a605f9384a
-X-Git-Newrev: 8bcd8a64808020e5ab689fe21d9ac7ee8d10d4e8
+X-Git-Oldrev: 2564310fa2be5e0618d5152f81769a05a6b9c48c
+X-Git-Newrev: 05b182a3b1e0155f7d2e1de229191b898c17920b
 X-Patchwork-Hint: ignore
-Message-Id: <20240110201652.2D29A85CC6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/proftpd: security
- bump to version 1.3.8b
+Message-Id: <20240110201652.454DD85CBF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/dropbear: fix
+ CVE-2023-48795
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,50 +63,272 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8bcd8a64808020e5ab689fe21d9ac7ee8d10d4e8
+commit: https://git.buildroot.net/buildroot/commit/?id=05b182a3b1e0155f7d2e1de229191b898c17920b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-1.3.8b - Released 19-Dec-2023
---------------------------------
-- Issue 1735 - Compiling ProFTPD 1.3.8a mod_sftp, mod_tls using libressl 3.7.3
-  fails.
-- Issue 1756 - Build system fails for specific module names.
-- Issue 1760 - mod_sftp is affected by "Terrapin" Prefix Truncation Attacks in
-  SSH Specification (CVE-2023-48795).
-
-https://github.com/proftpd/proftpd/blob/1.3.8/NEWS
+https://github.com/advisories/GHSA-45x7-px36-x8w8
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e83793705b5436feffc087c7f33e3f455439ede7)
+(cherry picked from commit 391a442cc350cec07c7e056bf498c8d03e9396ae)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/proftpd/proftpd.hash | 2 +-
- package/proftpd/proftpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../dropbear/0001-Implement-Strict-KEX-mode.patch  | 232 +++++++++++++++++++++
+ package/dropbear/dropbear.mk                       |   3 +
+ 2 files changed, 235 insertions(+)
 
-diff --git a/package/proftpd/proftpd.hash b/package/proftpd/proftpd.hash
-index f950f26b86..5a7d153a31 100644
---- a/package/proftpd/proftpd.hash
-+++ b/package/proftpd/proftpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  f7139e7377a2cb059b8b9b14d76a6df5f440e3181cb15ae890d43bbcae574748  proftpd-1.3.8.tar.gz
-+sha256  183ab7c6107de271a2959ff268f55c9b6c76b2cf0029e6584fccc019686601e0  proftpd-1.3.8b.tar.gz
- sha256  391a473d755c29b5326fb726326ff3c37e42512f53a8f5789fc310232150bf80  COPYING
-diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
-index 398155222d..0820822e17 100644
---- a/package/proftpd/proftpd.mk
-+++ b/package/proftpd/proftpd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/dropbear/0001-Implement-Strict-KEX-mode.patch b/package/dropbear/0001-Implement-Strict-KEX-mode.patch
+new file mode 100644
+index 0000000000..ce7b84861c
+--- /dev/null
++++ b/package/dropbear/0001-Implement-Strict-KEX-mode.patch
+@@ -0,0 +1,232 @@
++From 6e43be5c7b99dbee49dc72b6f989f29fdd7e9356 Mon Sep 17 00:00:00 2001
++From: Matt Johnston <matt@ucc.asn.au>
++Date: Mon, 20 Nov 2023 14:02:47 +0800
++Subject: [PATCH] Implement Strict KEX mode
++
++As specified by OpenSSH with kex-strict-c-v00@openssh.com and
++kex-strict-s-v00@openssh.com.
++
++Upstream: https://github.com/mkj/dropbear/commit/6e43be5c7b99dbee49dc72b6f989f29fdd7e9356
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/cli-session.c    | 11 +++++++++++
++ src/common-algo.c    |  6 ++++++
++ src/common-kex.c     | 26 +++++++++++++++++++++++++-
++ src/kex.h            |  3 +++
++ src/process-packet.c | 34 +++++++++++++++++++---------------
++ src/ssh.h            |  4 ++++
++ src/svr-session.c    |  3 +++
++ 7 files changed, 71 insertions(+), 16 deletions(-)
++
++diff --git a/cli-session.c b/cli-session.c
++index 5981b2470..d261c8f82 100644
++--- a/cli-session.c
+++++ b/cli-session.c
++@@ -46,6 +46,7 @@ static void cli_finished(void) ATTRIB_NORETURN;
++ static void recv_msg_service_accept(void);
++ static void cli_session_cleanup(void);
++ static void recv_msg_global_request_cli(void);
+++static void cli_algos_initialise(void);
++ 
++ struct clientsession cli_ses; /* GLOBAL */
++ 
++@@ -117,6 +118,7 @@ void cli_session(int sock_in, int sock_out, struct dropbear_progress_connection
++ 	}
++ 
++ 	chaninitialise(cli_chantypes);
+++	cli_algos_initialise();
++ 
++ 	/* Set up cli_ses vars */
++ 	cli_session_init(proxy_cmd_pid);
++@@ -487,3 +489,12 @@ void cli_dropbear_log(int priority, const char* format, va_list param) {
++ 	fflush(stderr);
++ }
++ 
+++static void cli_algos_initialise(void) {
+++	algo_type *algo;
+++	for (algo = sshkex; algo->name; algo++) {
+++		if (strcmp(algo->name, SSH_STRICT_KEX_S) == 0) {
+++			algo->usable = 0;
+++		}
+++	}
+++}
+++
++diff --git a/common-algo.c b/common-algo.c
++index 378f0ca8e..f9d46ebb6 100644
++--- a/common-algo.c
+++++ b/common-algo.c
++@@ -307,6 +307,12 @@ algo_type sshkex[] = {
++ 	/* Set unusable by svr_algos_initialise() */
++ 	{SSH_EXT_INFO_C, 0, NULL, 1, NULL},
++ #endif
+++#endif
+++#if DROPBEAR_CLIENT
+++	{SSH_STRICT_KEX_C, 0, NULL, 1, NULL},
+++#endif
+++#if DROPBEAR_SERVER
+++	{SSH_STRICT_KEX_S, 0, NULL, 1, NULL},
++ #endif
++ 	{NULL, 0, NULL, 0, NULL}
++ };
++diff --git a/common-kex.c b/common-kex.c
++index ac8844246..8e33b12a6 100644
++--- a/common-kex.c
+++++ b/common-kex.c
++@@ -183,6 +183,10 @@ void send_msg_newkeys() {
++ 	gen_new_keys();
++ 	switch_keys();
++ 
+++	if (ses.kexstate.strict_kex) {
+++		ses.transseq = 0;
+++	}
+++
++ 	TRACE(("leave send_msg_newkeys"))
++ }
++ 
++@@ -193,7 +197,11 @@ void recv_msg_newkeys() {
++ 
++ 	ses.kexstate.recvnewkeys = 1;
++ 	switch_keys();
++-	
+++
+++	if (ses.kexstate.strict_kex) {
+++		ses.recvseq = 0;
+++	}
+++
++ 	TRACE(("leave recv_msg_newkeys"))
++ }
++ 
++@@ -550,6 +558,10 @@ void recv_msg_kexinit() {
++ 
++ 	ses.kexstate.recvkexinit = 1;
++ 
+++	if (ses.kexstate.strict_kex && !ses.kexstate.donefirstkex && ses.recvseq != 1) {
+++		dropbear_exit("First packet wasn't kexinit");
+++	}
+++
++ 	TRACE(("leave recv_msg_kexinit"))
++ }
++ 
++@@ -859,6 +871,18 @@ static void read_kex_algos() {
++ 	}
++ #endif
++ 
+++	if (!ses.kexstate.donefirstkex) {
+++		const char* strict_name;
+++		if (IS_DROPBEAR_CLIENT) {
+++			strict_name = SSH_STRICT_KEX_S;
+++		} else {
+++			strict_name = SSH_STRICT_KEX_C;
+++		}
+++		if (buf_has_algo(ses.payload, strict_name) == DROPBEAR_SUCCESS) {
+++			ses.kexstate.strict_kex = 1;
+++		}
+++	}
+++
++ 	algo = buf_match_algo(ses.payload, sshkex, kexguess2, &goodguess);
++ 	allgood &= goodguess;
++ 	if (algo == NULL || algo->data == NULL) {
++diff --git a/kex.h b/kex.h
++index 77cf21a37..7fcc3c252 100644
++--- a/kex.h
+++++ b/kex.h
++@@ -83,6 +83,9 @@ struct KEXState {
++ 
++ 	unsigned our_first_follows_matches : 1;
++ 
+++	/* Boolean indicating that strict kex mode is in use */
+++	unsigned int strict_kex;
+++
++ 	time_t lastkextime; /* time of the last kex */
++ 	unsigned int datatrans; /* data transmitted since last kex */
++ 	unsigned int datarecv; /* data received since last kex */
++diff --git a/process-packet.c b/process-packet.c
++index 945416023..133a152d0 100644
++--- a/process-packet.c
+++++ b/process-packet.c
++@@ -44,6 +44,7 @@ void process_packet() {
++ 
++ 	unsigned char type;
++ 	unsigned int i;
+++	unsigned int first_strict_kex = ses.kexstate.strict_kex && !ses.kexstate.donefirstkex;
++ 	time_t now;
++ 
++ 	TRACE2(("enter process_packet"))
++@@ -54,22 +55,24 @@ void process_packet() {
++ 	now = monotonic_now();
++ 	ses.last_packet_time_keepalive_recv = now;
++ 
++-	/* These packets we can receive at any time */
++-	switch(type) {
++ 
++-		case SSH_MSG_IGNORE:
++-			goto out;
++-		case SSH_MSG_DEBUG:
++-			goto out;
+++	if (type == SSH_MSG_DISCONNECT) {
+++		/* Allowed at any time */
+++		dropbear_close("Disconnect received");
+++	}
++ 
++-		case SSH_MSG_UNIMPLEMENTED:
++-			/* debugging XXX */
++-			TRACE(("SSH_MSG_UNIMPLEMENTED"))
++-			goto out;
++-			
++-		case SSH_MSG_DISCONNECT:
++-			/* TODO cleanup? */
++-			dropbear_close("Disconnect received");
+++	/* These packets may be received at any time,
+++	   except during first kex with strict kex */
+++	if (!first_strict_kex) {
+++		switch(type) {
+++			case SSH_MSG_IGNORE:
+++				goto out;
+++			case SSH_MSG_DEBUG:
+++				goto out;
+++			case SSH_MSG_UNIMPLEMENTED:
+++				TRACE(("SSH_MSG_UNIMPLEMENTED"))
+++				goto out;
+++		}
++ 	}
++ 
++ 	/* Ignore these packet types so that keepalives don't interfere with
++@@ -98,7 +101,8 @@ void process_packet() {
++ 			if (type >= 1 && type <= 49
++ 				&& type != SSH_MSG_SERVICE_REQUEST
++ 				&& type != SSH_MSG_SERVICE_ACCEPT
++-				&& type != SSH_MSG_KEXINIT)
+++				&& type != SSH_MSG_KEXINIT
+++				&& !first_strict_kex)
++ 			{
++ 				TRACE(("unknown allowed packet during kexinit"))
++ 				recv_unimplemented();
++diff --git a/ssh.h b/ssh.h
++index 1b4fec65f..ef3efdca0 100644
++--- a/ssh.h
+++++ b/ssh.h
++@@ -100,6 +100,10 @@
++ #define SSH_EXT_INFO_C "ext-info-c"
++ #define SSH_SERVER_SIG_ALGS "server-sig-algs"
++ 
+++/* OpenSSH strict KEX feature */
+++#define SSH_STRICT_KEX_S "kex-strict-s-v00@openssh.com"
+++#define SSH_STRICT_KEX_C "kex-strict-c-v00@openssh.com"
+++
++ /* service types */
++ #define SSH_SERVICE_USERAUTH "ssh-userauth"
++ #define SSH_SERVICE_USERAUTH_LEN 12
++diff --git a/svr-session.c b/svr-session.c
++index 769f0731d..a538e2c5c 100644
++--- a/svr-session.c
+++++ b/svr-session.c
++@@ -370,6 +370,9 @@ static void svr_algos_initialise(void) {
++ 			algo->usable = 0;
++ 		}
++ #endif
+++		if (strcmp(algo->name, SSH_STRICT_KEX_C) == 0) {
+++			algo->usable = 0;
+++		}
++ 	}
++ }
++ 
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index 36eb7898ba..7ac8a38559 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -14,6 +14,9 @@ DROPBEAR_PROGRAMS = dropbear $(DROPBEAR_TARGET_BINS)
+ DROPBEAR_CPE_ID_VENDOR = dropbear_ssh_project
+ DROPBEAR_CPE_ID_PRODUCT = dropbear_ssh
  
--PROFTPD_VERSION = 1.3.8
-+PROFTPD_VERSION = 1.3.8b
- PROFTPD_SITE = ftp://ftp.proftpd.org/distrib/source
- PROFTPD_LICENSE = GPL-2.0+
- PROFTPD_LICENSE_FILES = COPYING
++# 0001-Implement-Strict-KEX-mode.patch
++DROPBEAR_IGNORE_CVES += CVE-2023-48795
++
+ # Disable hardening flags added by dropbear configure.ac, and let
+ # Buildroot add them when the relevant options are enabled. This
+ # prevents dropbear from using SSP support when not available.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
