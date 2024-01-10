@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 389C0C47073
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 20:24:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E277FC47073
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 20:24:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D9B78436D6;
-	Wed, 10 Jan 2024 20:24:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D9B78436D6
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9E849436EF;
+	Wed, 10 Jan 2024 20:24:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9E849436EF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QVlToyck8EKm; Wed, 10 Jan 2024 20:24:37 +0000 (UTC)
+	with ESMTP id b2tdYk39uRbv; Wed, 10 Jan 2024 20:24:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A35044380B;
-	Wed, 10 Jan 2024 20:24:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A35044380B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 73C9A1BF95D
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 20:22:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 310E943814;
+	Wed, 10 Jan 2024 20:24:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 310E943814
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1D9711BF5B3
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 20:22:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 47F9E83A77
+ by smtp3.osuosl.org (Postfix) with ESMTP id 654E561577
  for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 20:22:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 47F9E83A77
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 654E561577
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LL_PmWaoXLwY for <buildroot@lists.busybox.net>;
- Wed, 10 Jan 2024 20:22:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4QbOqzJf7zL0 for <buildroot@lists.busybox.net>;
+ Wed, 10 Jan 2024 20:22:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id EA17A83B40
- for <buildroot@buildroot.org>; Wed, 10 Jan 2024 20:22:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA17A83B40
+ by smtp3.osuosl.org (Postfix) with ESMTP id 620FD61563
+ for <buildroot@buildroot.org>; Wed, 10 Jan 2024 20:22:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 620FD61563
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DAAB285D63; Wed, 10 Jan 2024 20:22:03 +0000 (UTC)
+ id 52A1785D62; Wed, 10 Jan 2024 20:22:04 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 10 Jan 2024 21:02:56 +0100
+Date: Wed, 10 Jan 2024 21:15:37 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 232a03959253f6a19e90d3588c280d2f904fc4ad
-X-Git-Newrev: 030d5daa7de21548039d0691768182ba9ee03008
+X-Git-Oldrev: 732144957380f36747c8a0d22eea39bd93f9bc56
+X-Git-Newrev: dd068147b430253c87010ff21198e1be318ade1c
 X-Patchwork-Hint: ignore
-Message-Id: <20240110202203.DAAB285D63@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x]
- package/x11r7/xserver_xorg-server: security bump to version 21.1.10
+Message-Id: <20240110202204.52A1785D62@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/dropbear: fix
+ CVE-2023-48795
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,79 +63,272 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=030d5daa7de21548039d0691768182ba9ee03008
+commit: https://git.buildroot.net/buildroot/commit/?id=dd068147b430253c87010ff21198e1be318ade1c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Fixes the following security issues:
+https://github.com/advisories/GHSA-45x7-px36-x8w8
 
-1) CVE-2023-6377: X.Org server: Out-of-bounds memory write in XKB button actions
-
-A device has XKB button actions for each button on the device.  When a
-logical device switch happens (e.g.  moving from a touchpad to a mouse), the
-server re-calculates the information available on the respective master
-device (typically the Virtual Core Pointer).  This re-calculation only
-allocated enough memory for a single XKB action rather instead of enough for
-the newly active physical device's number of button.  As a result, querying
-or changing the XKB button actions results in out-of-bounds memory reads and
-writes.
-
-This may lead to local privilege escalation if the server is run as root or
-remote code execution (e.g. x11 over ssh).
-
-2) CVE-2023-6478: X.Org server: Out-of-bounds memory read in
-RRChangeOutputProperty and RRChangeProviderProperty
-
-This fixes an OOB read and the resulting information disclosure.
-
-Length calculation for the request was clipped to a 32-bit integer.  With
-the correct stuff->nUnits value the expected request size was truncated,
-passing the REQUEST_FIXED_SIZE check.
-
-The server then proceeded with reading at least stuff->nUnits bytes
-(depending on stuff->format) from the request and stuffing whatever it finds
-into the property.  In the process it would also allocate at least
-stuff->nUnits bytes, i.e.  4GB.
-
-See also CVE-2022-46344 where this issue was fixed for other requests.
-
-For more details, see the advisory:
-https://lists.x.org/archives/xorg-announce/2023-December/003435.html
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9b62f5905e9f9d47363983a5bd7ef8672b21cca6)
+(cherry picked from commit 391a442cc350cec07c7e056bf498c8d03e9396ae)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 6 +++---
- package/x11r7/xserver_xorg-server/xserver_xorg-server.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .../dropbear/0001-Implement-Strict-KEX-mode.patch  | 232 +++++++++++++++++++++
+ package/dropbear/dropbear.mk                       |   3 +
+ 2 files changed, 235 insertions(+)
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-index ccd7cc74fa..de93b11927 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2023-October/003431.html
--sha256  ff697be2011b4c4966b7806929e51b7a08e9d33800d505305d26d9ccde4b533a  xorg-server-21.1.9.tar.xz
--sha512  9044e1b9222616fb63aea444b75f4ca6582edb7d899018f8ea30359e57edf04b1555e69397ebc4d288f7e36d6b82a54dde3895f11d414573d229e908ac17bfe8  xorg-server-21.1.9.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2023-December/003436.html
-+sha256  ceb0b3a2efc57ac3ccf388d3dc88b97615068639fb284d469689ae3d105611d0  xorg-server-21.1.10.tar.xz
-+sha512  8135d9b7c0c71f427ba0a3b80741fee4f6ae195779399b73261a00858882f3516e367a08e2da1403734b04eacabae9aa231e5375eff23b57a3ff764e9caf8926  xorg-server-21.1.10.tar.xz
- # Locally calculated
- sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index cf0e688c36..4ac4283e4b 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/dropbear/0001-Implement-Strict-KEX-mode.patch b/package/dropbear/0001-Implement-Strict-KEX-mode.patch
+new file mode 100644
+index 0000000000..ce7b84861c
+--- /dev/null
++++ b/package/dropbear/0001-Implement-Strict-KEX-mode.patch
+@@ -0,0 +1,232 @@
++From 6e43be5c7b99dbee49dc72b6f989f29fdd7e9356 Mon Sep 17 00:00:00 2001
++From: Matt Johnston <matt@ucc.asn.au>
++Date: Mon, 20 Nov 2023 14:02:47 +0800
++Subject: [PATCH] Implement Strict KEX mode
++
++As specified by OpenSSH with kex-strict-c-v00@openssh.com and
++kex-strict-s-v00@openssh.com.
++
++Upstream: https://github.com/mkj/dropbear/commit/6e43be5c7b99dbee49dc72b6f989f29fdd7e9356
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/cli-session.c    | 11 +++++++++++
++ src/common-algo.c    |  6 ++++++
++ src/common-kex.c     | 26 +++++++++++++++++++++++++-
++ src/kex.h            |  3 +++
++ src/process-packet.c | 34 +++++++++++++++++++---------------
++ src/ssh.h            |  4 ++++
++ src/svr-session.c    |  3 +++
++ 7 files changed, 71 insertions(+), 16 deletions(-)
++
++diff --git a/cli-session.c b/cli-session.c
++index 5981b2470..d261c8f82 100644
++--- a/cli-session.c
+++++ b/cli-session.c
++@@ -46,6 +46,7 @@ static void cli_finished(void) ATTRIB_NORETURN;
++ static void recv_msg_service_accept(void);
++ static void cli_session_cleanup(void);
++ static void recv_msg_global_request_cli(void);
+++static void cli_algos_initialise(void);
++ 
++ struct clientsession cli_ses; /* GLOBAL */
++ 
++@@ -117,6 +118,7 @@ void cli_session(int sock_in, int sock_out, struct dropbear_progress_connection
++ 	}
++ 
++ 	chaninitialise(cli_chantypes);
+++	cli_algos_initialise();
++ 
++ 	/* Set up cli_ses vars */
++ 	cli_session_init(proxy_cmd_pid);
++@@ -487,3 +489,12 @@ void cli_dropbear_log(int priority, const char* format, va_list param) {
++ 	fflush(stderr);
++ }
++ 
+++static void cli_algos_initialise(void) {
+++	algo_type *algo;
+++	for (algo = sshkex; algo->name; algo++) {
+++		if (strcmp(algo->name, SSH_STRICT_KEX_S) == 0) {
+++			algo->usable = 0;
+++		}
+++	}
+++}
+++
++diff --git a/common-algo.c b/common-algo.c
++index 378f0ca8e..f9d46ebb6 100644
++--- a/common-algo.c
+++++ b/common-algo.c
++@@ -307,6 +307,12 @@ algo_type sshkex[] = {
++ 	/* Set unusable by svr_algos_initialise() */
++ 	{SSH_EXT_INFO_C, 0, NULL, 1, NULL},
++ #endif
+++#endif
+++#if DROPBEAR_CLIENT
+++	{SSH_STRICT_KEX_C, 0, NULL, 1, NULL},
+++#endif
+++#if DROPBEAR_SERVER
+++	{SSH_STRICT_KEX_S, 0, NULL, 1, NULL},
++ #endif
++ 	{NULL, 0, NULL, 0, NULL}
++ };
++diff --git a/common-kex.c b/common-kex.c
++index ac8844246..8e33b12a6 100644
++--- a/common-kex.c
+++++ b/common-kex.c
++@@ -183,6 +183,10 @@ void send_msg_newkeys() {
++ 	gen_new_keys();
++ 	switch_keys();
++ 
+++	if (ses.kexstate.strict_kex) {
+++		ses.transseq = 0;
+++	}
+++
++ 	TRACE(("leave send_msg_newkeys"))
++ }
++ 
++@@ -193,7 +197,11 @@ void recv_msg_newkeys() {
++ 
++ 	ses.kexstate.recvnewkeys = 1;
++ 	switch_keys();
++-	
+++
+++	if (ses.kexstate.strict_kex) {
+++		ses.recvseq = 0;
+++	}
+++
++ 	TRACE(("leave recv_msg_newkeys"))
++ }
++ 
++@@ -550,6 +558,10 @@ void recv_msg_kexinit() {
++ 
++ 	ses.kexstate.recvkexinit = 1;
++ 
+++	if (ses.kexstate.strict_kex && !ses.kexstate.donefirstkex && ses.recvseq != 1) {
+++		dropbear_exit("First packet wasn't kexinit");
+++	}
+++
++ 	TRACE(("leave recv_msg_kexinit"))
++ }
++ 
++@@ -859,6 +871,18 @@ static void read_kex_algos() {
++ 	}
++ #endif
++ 
+++	if (!ses.kexstate.donefirstkex) {
+++		const char* strict_name;
+++		if (IS_DROPBEAR_CLIENT) {
+++			strict_name = SSH_STRICT_KEX_S;
+++		} else {
+++			strict_name = SSH_STRICT_KEX_C;
+++		}
+++		if (buf_has_algo(ses.payload, strict_name) == DROPBEAR_SUCCESS) {
+++			ses.kexstate.strict_kex = 1;
+++		}
+++	}
+++
++ 	algo = buf_match_algo(ses.payload, sshkex, kexguess2, &goodguess);
++ 	allgood &= goodguess;
++ 	if (algo == NULL || algo->data == NULL) {
++diff --git a/kex.h b/kex.h
++index 77cf21a37..7fcc3c252 100644
++--- a/kex.h
+++++ b/kex.h
++@@ -83,6 +83,9 @@ struct KEXState {
++ 
++ 	unsigned our_first_follows_matches : 1;
++ 
+++	/* Boolean indicating that strict kex mode is in use */
+++	unsigned int strict_kex;
+++
++ 	time_t lastkextime; /* time of the last kex */
++ 	unsigned int datatrans; /* data transmitted since last kex */
++ 	unsigned int datarecv; /* data received since last kex */
++diff --git a/process-packet.c b/process-packet.c
++index 945416023..133a152d0 100644
++--- a/process-packet.c
+++++ b/process-packet.c
++@@ -44,6 +44,7 @@ void process_packet() {
++ 
++ 	unsigned char type;
++ 	unsigned int i;
+++	unsigned int first_strict_kex = ses.kexstate.strict_kex && !ses.kexstate.donefirstkex;
++ 	time_t now;
++ 
++ 	TRACE2(("enter process_packet"))
++@@ -54,22 +55,24 @@ void process_packet() {
++ 	now = monotonic_now();
++ 	ses.last_packet_time_keepalive_recv = now;
++ 
++-	/* These packets we can receive at any time */
++-	switch(type) {
++ 
++-		case SSH_MSG_IGNORE:
++-			goto out;
++-		case SSH_MSG_DEBUG:
++-			goto out;
+++	if (type == SSH_MSG_DISCONNECT) {
+++		/* Allowed at any time */
+++		dropbear_close("Disconnect received");
+++	}
++ 
++-		case SSH_MSG_UNIMPLEMENTED:
++-			/* debugging XXX */
++-			TRACE(("SSH_MSG_UNIMPLEMENTED"))
++-			goto out;
++-			
++-		case SSH_MSG_DISCONNECT:
++-			/* TODO cleanup? */
++-			dropbear_close("Disconnect received");
+++	/* These packets may be received at any time,
+++	   except during first kex with strict kex */
+++	if (!first_strict_kex) {
+++		switch(type) {
+++			case SSH_MSG_IGNORE:
+++				goto out;
+++			case SSH_MSG_DEBUG:
+++				goto out;
+++			case SSH_MSG_UNIMPLEMENTED:
+++				TRACE(("SSH_MSG_UNIMPLEMENTED"))
+++				goto out;
+++		}
++ 	}
++ 
++ 	/* Ignore these packet types so that keepalives don't interfere with
++@@ -98,7 +101,8 @@ void process_packet() {
++ 			if (type >= 1 && type <= 49
++ 				&& type != SSH_MSG_SERVICE_REQUEST
++ 				&& type != SSH_MSG_SERVICE_ACCEPT
++-				&& type != SSH_MSG_KEXINIT)
+++				&& type != SSH_MSG_KEXINIT
+++				&& !first_strict_kex)
++ 			{
++ 				TRACE(("unknown allowed packet during kexinit"))
++ 				recv_unimplemented();
++diff --git a/ssh.h b/ssh.h
++index 1b4fec65f..ef3efdca0 100644
++--- a/ssh.h
+++++ b/ssh.h
++@@ -100,6 +100,10 @@
++ #define SSH_EXT_INFO_C "ext-info-c"
++ #define SSH_SERVER_SIG_ALGS "server-sig-algs"
++ 
+++/* OpenSSH strict KEX feature */
+++#define SSH_STRICT_KEX_S "kex-strict-s-v00@openssh.com"
+++#define SSH_STRICT_KEX_C "kex-strict-c-v00@openssh.com"
+++
++ /* service types */
++ #define SSH_SERVICE_USERAUTH "ssh-userauth"
++ #define SSH_SERVICE_USERAUTH_LEN 12
++diff --git a/svr-session.c b/svr-session.c
++index 769f0731d..a538e2c5c 100644
++--- a/svr-session.c
+++++ b/svr-session.c
++@@ -370,6 +370,9 @@ static void svr_algos_initialise(void) {
++ 			algo->usable = 0;
++ 		}
++ #endif
+++		if (strcmp(algo->name, SSH_STRICT_KEX_C) == 0) {
+++			algo->usable = 0;
+++		}
++ 	}
++ }
++ 
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index 36eb7898ba..7ac8a38559 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -14,6 +14,9 @@ DROPBEAR_PROGRAMS = dropbear $(DROPBEAR_TARGET_BINS)
+ DROPBEAR_CPE_ID_VENDOR = dropbear_ssh_project
+ DROPBEAR_CPE_ID_PRODUCT = dropbear_ssh
  
--XSERVER_XORG_SERVER_VERSION = 21.1.9
-+XSERVER_XORG_SERVER_VERSION = 21.1.10
- XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.xz
- XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
- XSERVER_XORG_SERVER_LICENSE = MIT
++# 0001-Implement-Strict-KEX-mode.patch
++DROPBEAR_IGNORE_CVES += CVE-2023-48795
++
+ # Disable hardening flags added by dropbear configure.ac, and let
+ # Buildroot add them when the relevant options are enabled. This
+ # prevents dropbear from using SSP support when not available.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
