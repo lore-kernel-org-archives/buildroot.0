@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F4E7C3DA6E
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 10:27:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5381EC47074
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 10:27:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BFB5A613EC;
-	Wed, 10 Jan 2024 10:27:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BFB5A613EC
+	by smtp3.osuosl.org (Postfix) with ESMTP id E04FC613D3;
+	Wed, 10 Jan 2024 10:27:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E04FC613D3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id m7tnZSQs2cVM; Wed, 10 Jan 2024 10:27:31 +0000 (UTC)
+	with ESMTP id 4yJpr4DXNqnQ; Wed, 10 Jan 2024 10:27:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E689A61408;
-	Wed, 10 Jan 2024 10:27:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E689A61408
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CADC61BF354
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 10:26:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 40F1461418;
+	Wed, 10 Jan 2024 10:27:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 40F1461418
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2253D1BF354
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 10:26:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9C71741C6C
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 10:26:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C71741C6C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0407A4014E
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 10:26:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0407A4014E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xrEdMlqmKrbA for <buildroot@lists.busybox.net>;
- Wed, 10 Jan 2024 10:26:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AuPEtiYes6BO for <buildroot@lists.busybox.net>;
+ Wed, 10 Jan 2024 10:26:51 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B6F824151C
+ by smtp2.osuosl.org (Postfix) with ESMTP id DDDB0435DB
  for <buildroot@buildroot.org>; Wed, 10 Jan 2024 10:26:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B6F824151C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DDDB0435DB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A579985538; Wed, 10 Jan 2024 10:26:50 +0000 (UTC)
+ id CB34785536; Wed, 10 Jan 2024 10:26:50 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 10 Jan 2024 11:19:01 +0100
+Date: Wed, 10 Jan 2024 11:21:48 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 573f5a6f7241c804a2d909520908df35fea2a55f
-X-Git-Newrev: 280aa23da67c1f301bf06dd8352d3fd551ed476d
+X-Git-Oldrev: d1a9aa8f92214c2d40b2d2e4c1999a16ced4ac1b
+X-Git-Newrev: c0c62f8cf03c2fd25e4efec114474ac8263416c0
 X-Patchwork-Hint: ignore
-Message-Id: <20240110102650.A579985538@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/x11r7/xwayland:
- security bump to 23.2.3
+Message-Id: <20240110102650.CB34785536@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/wolfssl: security
+ bump to version 5.6.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,57 +63,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=280aa23da67c1f301bf06dd8352d3fd551ed476d
+commit: https://git.buildroot.net/buildroot/commit/?id=c0c62f8cf03c2fd25e4efec114474ac8263416c0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-According to
-https://lists.x.org/archives/xorg-announce/2023-December/003437.html:
+- Use official tarball and so drop autoreconf
+- Fix CVE-2023-6935, CVE-2023-6936 and CVE-2023-6937
 
-  This release contains the fixes for CVE-2023-6377 and CVE-2023-6478
-  in today's security advisory:
-  https://lists.x.org/archives/xorg-announce/2023-December/003435.html
+https://github.com/wolfSSL/wolfssl/releases/tag/v5.6.6-stable
 
-The release has only 10 commits compared to 23.2.2, all of which being
-fixes, two of them being the security fixes. So it seems like bumping
-the version is a reasonable trade-off vs. backporting the security
-fixes.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 078b8558b9e25917db680fdeb8d9c64db9aafc8e)
+(cherry picked from commit d0c4bd703a424f69451d7774727680fae2b4daa3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xwayland/xwayland.hash | 6 +++---
- package/x11r7/xwayland/xwayland.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/wolfssl/wolfssl.hash | 2 +-
+ package/wolfssl/wolfssl.mk   | 8 ++------
+ 2 files changed, 3 insertions(+), 7 deletions(-)
 
-diff --git a/package/x11r7/xwayland/xwayland.hash b/package/x11r7/xwayland/xwayland.hash
-index 12363a66bf..533ef9de86 100644
---- a/package/x11r7/xwayland/xwayland.hash
-+++ b/package/x11r7/xwayland/xwayland.hash
-@@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2023-October/003432.html
--sha256  9f7c0938d2a41e941ffa04f99c35e5db2bcd3eec034afe8d35d5c810a22eb0a8  xwayland-23.2.2.tar.xz
--sha512  f5b319fdace7d7c078544730ecd26afeb63b1a0c779fb097455147945df85af32d9e91501ebdb70209d48e8a3ead3b23be31e9d5118358ac17e699abb4b6ac07  xwayland-23.2.2.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2023-December/003437.html
-+sha256  eb9d9aa7232c47412c8835ec15a97c575f03563726c787754ff0c019bd07e302  xwayland-23.2.3.tar.xz
-+sha512  37198aa2f06313a0cb2add51cc78f81b26a42f2c9d55a0d3eecf958777107ea5560961c128f2d0af055f7460ba10fadb1b9050251c2c50f2251b40ab517e79cd  xwayland-23.2.3.tar.xz
+diff --git a/package/wolfssl/wolfssl.hash b/package/wolfssl/wolfssl.hash
+index fb5a570de8..59e42e98b9 100644
+--- a/package/wolfssl/wolfssl.hash
++++ b/package/wolfssl/wolfssl.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256  031691906794ff45e1e792561cf31759f5d29ac74936bc8dffb8b14f16d820b4  wolfssl-5.6.4.tar.gz
++sha256  75aaafe3b8c776d1ac417288116c8d444115f9fac5acb382a39a7d163dfd618d  wolfssl-5.6.6.tar.gz
  
- # Locally calculated
- sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
-diff --git a/package/x11r7/xwayland/xwayland.mk b/package/x11r7/xwayland/xwayland.mk
-index b0bff19be5..8f4bcd8117 100644
---- a/package/x11r7/xwayland/xwayland.mk
-+++ b/package/x11r7/xwayland/xwayland.mk
-@@ -4,7 +4,7 @@
+ # Hash for license files:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
+index 17452fdcaf..68c69afd59 100644
+--- a/package/wolfssl/wolfssl.mk
++++ b/package/wolfssl/wolfssl.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--XWAYLAND_VERSION = 23.2.2
-+XWAYLAND_VERSION = 23.2.3
- XWAYLAND_SOURCE = xwayland-$(XWAYLAND_VERSION).tar.xz
- XWAYLAND_SITE = https://xorg.freedesktop.org/archive/individual/xserver
- XWAYLAND_LICENSE = MIT
+-WOLFSSL_VERSION = 5.6.4
+-WOLFSSL_SITE = $(call github,wolfSSL,wolfssl,v$(WOLFSSL_VERSION)-stable)
++WOLFSSL_VERSION = 5.6.6
++WOLFSSL_SITE = https://github.com/wolfSSL/wolfssl/releases/download/v$(WOLFSSL_VERSION)-stable
+ WOLFSSL_INSTALL_STAGING = YES
+ 
+ WOLFSSL_LICENSE = GPL-2.0+
+@@ -14,10 +14,6 @@ WOLFSSL_CPE_ID_VENDOR = wolfssl
+ WOLFSSL_CONFIG_SCRIPTS = wolfssl-config
+ WOLFSSL_DEPENDENCIES = host-pkgconf
+ 
+-# wolfssl's source code is released without a configure
+-# script, so we need autoreconf
+-WOLFSSL_AUTORECONF = YES
+-
+ WOLFSSL_CONF_OPTS = --disable-examples --disable-crypttests
+ 
+ ifeq ($(BR2_PACKAGE_WOLFSSL_ALL),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
