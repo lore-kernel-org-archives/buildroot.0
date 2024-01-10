@@ -4,69 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37F5CC47073
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 17:08:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B571FC4707B
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 17:11:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C1D5B80F9E;
-	Wed, 10 Jan 2024 17:08:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1D5B80F9E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 69A5482907;
+	Wed, 10 Jan 2024 17:11:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 69A5482907
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6vR6_zNVYMEF; Wed, 10 Jan 2024 17:08:30 +0000 (UTC)
+	with ESMTP id GLNIn2Cm0X5A; Wed, 10 Jan 2024 17:11:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 297E580E50;
-	Wed, 10 Jan 2024 17:08:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 297E580E50
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7225E1BF5D7
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 17:08:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C6E3481EA6;
+	Wed, 10 Jan 2024 17:11:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6E3481EA6
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id ECE011BF5D7
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 17:10:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4C127421F2
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 17:08:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C127421F2
+ by smtp2.osuosl.org (Postfix) with ESMTP id BCF03435F9
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 17:10:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BCF03435F9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id esN3RnnEY30j for <buildroot@lists.busybox.net>;
- Wed, 10 Jan 2024 17:08:20 +0000 (UTC)
-Received: from mail.hostpark.net (mail.hostpark.net [212.243.197.30])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 27768421DE
- for <buildroot@buildroot.org>; Wed, 10 Jan 2024 17:08:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 27768421DE
-Received: from localhost (localhost [127.0.0.1])
- by mail.hostpark.net (Postfix) with ESMTP id 6FF5E16761;
- Wed, 10 Jan 2024 18:08:18 +0100 (CET)
-X-Virus-Scanned: by Hostpark/NetZone Mailprotection at hostpark.net
-Received: from mail.hostpark.net ([127.0.0.1])
- by localhost (mail0.hostpark.net [127.0.0.1]) (amavisd-new, port 10224)
- with ESMTP id f6QYuUi026zP; Wed, 10 Jan 2024 18:08:18 +0100 (CET)
-Received: from customer (localhost [127.0.0.1])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by mail.hostpark.net (Postfix) with ESMTPSA id 9D2B416734;
- Wed, 10 Jan 2024 18:08:16 +0100 (CET)
-To: buildroot@buildroot.org
-Date: Wed, 10 Jan 2024 18:07:58 +0100
-Message-ID: <20240110170759.3966933-2-christian@klarinett.li>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240110170759.3966933-1-christian@klarinett.li>
-References: <20240110170759.3966933-1-christian@klarinett.li>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4o0JkUCqKX-N for <buildroot@lists.busybox.net>;
+ Wed, 10 Jan 2024 17:10:58 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2A967403AF
+ for <buildroot@buildroot.org>; Wed, 10 Jan 2024 17:10:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A967403AF
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 117E240003;
+ Wed, 10 Jan 2024 17:10:54 +0000 (UTC)
+Message-ID: <764c353d-f1d8-4e3b-a29f-d43fe10d4c6e@korsgaard.com>
+Date: Wed, 10 Jan 2024 18:10:54 +0100
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=klarinett.li; h=
- content-transfer-encoding:mime-version:references:in-reply-to
- :x-mailer:message-id:date:date:subject:subject:from:from; s=
- sel2011a; t=1704906498; bh=SWORu7ypcag4CO4cL7y5HVyBoO7ThY4xdh6i4
- tw/rsM=; b=oZAAhgLC19+7RWTu3EdQ09sBxQa5oCfqSoaMqYLVGztaledfFy66Q
- 3iVhfyjQRJfl1E4GcwGyek2BUDjoVN0/d3Wjd6gcqm4xvAcgiju5Me/Fa2B8itS3
- 3lIVaPwX4FdK+008ESTOyzszpkMrY42R7JreP3OiZNOfAF1n51TiGw=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=klarinett.li header.i=@klarinett.li
- header.a=rsa-sha256 header.s=sel2011a header.b=oZAAhgLC
-Subject: [Buildroot] [PATCH 2/2] package/qt6/qt6base: add
- QT6BASE_CPE_ID_VENDOR and QT6BASE_CPE_ID_PRODUCT
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20231227202344.599971-1-peter@korsgaard.com>
+ <ZY3XsVK9oklEwDwJ@landeda>
+From: Peter Korsgaard <peter@korsgaard.com>
+In-Reply-To: <ZY3XsVK9oklEwDwJ@landeda>
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH 01/12] package/gstreamer1: bump to version
+ 1.22.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,43 +61,24 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Hitz via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Hitz <christian@klarinett.li>
-Cc: Christian Hitz <christian.hitz@bbv.ch>,
- Jesse Van Gavere <jesseevg@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Christian Hitz <christian.hitz@bbv.ch>
+On 28/12/2023 21.16, Yann E. MORIN wrote:
+> Peter, All,
+> 
+> On 2023-12-27 21:23 +0100, Peter Korsgaard spake thusly:
+>> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> 
+> Series of 12 patches applied to master, thanks.
 
-cpe:2.3:a:qt:qt:6.4.3:*:*:*:*:*:*:* is a valid CPE identifier for this
-package:
+Series committed to 2023.02.x and 2023.11.x, thanks.
 
-  https://nvd.nist.gov/products/cpe/detail/8397D12E-2D77-458E-B9C3-DC7B4775B1A7
-
-Signed-off-by: Christian Hitz <christian.hitz@bbv.ch>
----
- package/qt6/qt6base/qt6base.mk | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
-index 67c705fb93..667dd4133f 100644
---- a/package/qt6/qt6base/qt6base.mk
-+++ b/package/qt6/qt6base/qt6base.mk
-@@ -7,6 +7,8 @@
- QT6BASE_VERSION = $(QT6_VERSION)
- QT6BASE_SITE = $(QT6_SITE)
- QT6BASE_SOURCE = qtbase-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6BASE_VERSION).tar.xz
-+QT6BASE_CPE_ID_VENDOR = qt
-+QT6BASE_CPE_ID_PRODUCT = qt
- 
- QT6BASE_CMAKE_BACKEND = ninja
- 
 -- 
-2.43.0
+Bye, Peter Korsgaard
 
 _______________________________________________
 buildroot mailing list
