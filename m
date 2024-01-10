@@ -4,67 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83B47C4707B
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 20:11:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00E1AC47073
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 20:11:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 262EA435DF;
-	Wed, 10 Jan 2024 20:11:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 262EA435DF
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9FA874379B;
+	Wed, 10 Jan 2024 20:11:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9FA874379B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MjJvR1l4tvvT; Wed, 10 Jan 2024 20:11:42 +0000 (UTC)
+	with ESMTP id bTy5lTO8WkNz; Wed, 10 Jan 2024 20:11:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 20B5D436E5;
-	Wed, 10 Jan 2024 20:11:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 20B5D436E5
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9220F43779;
+	Wed, 10 Jan 2024 20:11:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9220F43779
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3BEA31BF5B3
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 20:11:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1668B1BF5B3
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 20:11:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1472A613FF
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 20:11:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1472A613FF
+ by smtp3.osuosl.org (Postfix) with ESMTP id F0094613FF
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 20:11:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F0094613FF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SRUVxlcgyWAK for <buildroot@lists.busybox.net>;
- Wed, 10 Jan 2024 20:11:28 +0000 (UTC)
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4DF59605EA
- for <buildroot@buildroot.org>; Wed, 10 Jan 2024 20:11:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4DF59605EA
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:4f89:5708:1633:580e])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 31637B005AF;
- Wed, 10 Jan 2024 21:11:23 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Wed, 10 Jan 2024 21:11:22 +0100
-Date: Wed, 10 Jan 2024 21:11:22 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Peter Korsgaard <peter@korsgaard.com>
-Message-ID: <ZZ756kxkevit-FJz@landeda>
-References: <20231228203217.4C7EC81840@busybox.osuosl.org>
- <87edepasjd.fsf@48ers.dk>
+ with ESMTP id ewJYo1xVX3uy for <buildroot@lists.busybox.net>;
+ Wed, 10 Jan 2024 20:11:33 +0000 (UTC)
+Received: from smtpcmd11116.aruba.it (smtpcmd11116.aruba.it [62.149.156.116])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5362E605EA
+ for <buildroot@buildroot.org>; Wed, 10 Jan 2024 20:11:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5362E605EA
+Received: from [192.168.50.163] ([84.33.84.190])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id NevBrUefInb7jNevBrhEyK; Wed, 10 Jan 2024 21:11:30 +0100
+Message-ID: <243b44e3-92ca-463a-91a6-dfdc248b01b9@benettiengineering.com>
+Date: Wed, 10 Jan 2024 21:11:29 +0100
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <87edepasjd.fsf@48ers.dk>
+User-Agent: Mozilla Thunderbird
+To: Jesse Taube <mr.bossman075@gmail.com>, buildroot@buildroot.org
+References: <20240109141132.654749-1-Mr.Bossman075@gmail.com>
+Content-Language: en-US
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <20240109141132.654749-1-Mr.Bossman075@gmail.com>
+X-CMAE-Envelope: MS4xfCdIvekmnyY8Nm1ZJoXb6cOyEIQ2PxQehv0SOm3AuYIiBlncsr13Pqc9DyXjUmGqolKkjNZyq5+hB4qRYDtSD/inKw4dTmxwDCHGUZhlGnj/twFpYFMD
+ ZrrI6rD4TFO27nOE2kt6b5YJW5FtW8nYxP1SRUmPP1WIbEicfJKPXbDu4+JtS3WNMNJnlTiUmoWVYe8H+XIBGJyumMqvrBAp5vODCTHHHF6CL0vwCala+/+/
+ V0Y3w0pcnMKc1ZljRIL8QhhBkLhox0s5C7UMA8fagyVsfGdvrBZTac7WvK9eA/ZG
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1704917485;
- bh=0GWpexA2aPfVqFxxvFQ18M7FOjrk9E1s3scUJEUF58E=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=gmeFAM0SLRk7t7aKI66NgRbPDgDG04P+YdjlixFlb270/WH21JFUpFF1FGmYBWxaT
- noBb2pqU5PwrpJ6cX4MChp4R+D5tVieD7cTZaUO2E2lCtCy1R0LbSu6yzxpkOdlRHc
- EP34EqS/hDj33Yw1onLfb3PD5MBiI147ZF2zuvRuzP0gVi1SLujv5VfXuAYwTQkPG1
- dUl2E7D73+MxBx1STOhA1n3dwBjHuQNunbyRLZz/mVO4skK/yeotQiwJj3MEBeMNa+
- WpNkNEWtAT8gObBCyEbdQ8kTjRs2HHS4wN9wa4Fr1KUXiGoumDSGoD3hO6Uq3R43lq
- 0wSLq3Dlu+hpw==
+ d=aruba.it; s=a1; 
+ t=1704917490; bh=rZVEp8tH4ggoBRmmOWSYhvmiWovtA5UykkwGDoUrKcE=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=SYwju6fvPfsG/qrQbCU0IWHIx68AJ81kZ7LkLEs0TwlxNbtDWwhKuPgpG9a0hswFZ
+ SUPZ504UbsI5/7uF1LM0WDDNIfF2+PuQsglHhFXvdtVNlItlliDxPd24yxHlCwHnS1
+ juPkQXd09JdmTaOFU9Pgchmqz1L8IDCNCFe5Ki+AuMsglWjZY3LgfhCNnVa2+eHKC/
+ /VJW5cYOH87NH09/pn6zMvVEDgQ+z62k2EzDkzPQLDFsqIpvWDU3iobwJ7txgJESUi
+ /Z4JrClC5JoMDmO8SZtMEKyPMOBR0/ZQXINNj5N3eLdTKvMSh353FvIMHOUcES1qjS
+ LDRzW3lc05rZA==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=gmeFAM0S
-Subject: Re: [Buildroot] [git commit] package/qt6base: remove
- $(TARGET_DIR)/usr/mkspecs in target-finalize
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=SYwju6fv
+Subject: Re: [Buildroot] [PATCH v2] configs/imxrt1050-evk: Bump Kernel and
+ U-boot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,54 +75,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Peter, All,
+Hi Jesse,
 
-On 2024-01-10 20:37 +0100, Peter Korsgaard spake thusly:
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
->  > qt6base installs things in /usr/mkspecs, but also the soon to be added
->  > qt6core5compat, and the existing package qwt as well.
-[--SNIP--]
->  > diff --git a/package/qwt/qwt.mk b/package/qwt/qwt.mk
->  > index 9f0b78655f..f344ca4e3a 100644
->  > --- a/package/qwt/qwt.mk
->  > +++ b/package/qwt/qwt.mk
->  > @@ -58,7 +58,6 @@ endef
->  
->  >  define QWT_INSTALL_TARGET_CMDS
->  >  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install INSTALL_ROOT=$(TARGET_DIR)
->  > -	rm -Rf $(TARGET_DIR)/usr/mkspecs
-> Hmm, qwt is a qt5 package, so this looks odd?
+On 09/01/24 15:11, Jesse Taube wrote:
+> Bump Linux to 6.7 and U-Boot to 2024.01
+> 
+> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
 
-Ah, indeed, I didn't realise that. The original was a hard-coded removal
-of $(TARGET_DIR)/usr/mkspecs, so that would have indeed taken care of
-the removal for qwt, qt6base and any other qt6 package.
+Looks good to me:
+Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-However, I changed it to a qt6base target-finalize hook when aplying,
-and I did not realise qwt was not a qt6 package.
-
-For Qt6, the /usr/mkspec is really a qt6base thing, so I still believe
-it makes sense that it is a qt6base target-fionalize hook. For qwt, this
-is an issue specific to qwt, not qt5base, so it makes sense to keep it
-as an ad-goc fixup.
-
-I'll revert the qwt part.
-
-Regards,
-Yann E. MORIN.
-
+Best regards
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Giulio Benetti
+CEO&CTO@Benetti Engineering sas
+
+> ---
+>   configs/imxrt1050-evk_defconfig | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/configs/imxrt1050-evk_defconfig b/configs/imxrt1050-evk_defconfig
+> index af060fb9f4..3eb556df06 100644
+> --- a/configs/imxrt1050-evk_defconfig
+> +++ b/configs/imxrt1050-evk_defconfig
+> @@ -7,16 +7,16 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+>   BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/freescale/imxrt1050evk/genimage.cfg"
+>   
+>   # Toolchain
+> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_7=y
+>   
+>   # Kernel
+>   BR2_LINUX_KERNEL=y
+>   BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1"
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.7"
+>   BR2_LINUX_KERNEL_DEFCONFIG="imxrt"
+>   BR2_LINUX_KERNEL_UIMAGE=y
+>   BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> -BR2_LINUX_KERNEL_INTREE_DTS_NAME="imxrt1050-evk"
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="nxp/imx/imxrt1050-evk"
+>   
+>   # Filesystem
+>   BR2_TARGET_ROOTFS_EXT2=y
+> @@ -30,7 +30,7 @@ BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-minimal.config"
+>   BR2_TARGET_UBOOT=y
+>   BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+>   BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.10"
+> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.01"
+>   BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imxrt1050-evk"
+>   BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/freescale/imxrt1050evk/uboot.fragment"
+>   BR2_TARGET_UBOOT_FORMAT_IMG=y
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
