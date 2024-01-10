@@ -4,48 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1585DC47073
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 17:14:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FA43C4707B
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 17:15:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C4C0583D80;
-	Wed, 10 Jan 2024 17:14:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C4C0583D80
+	by smtp1.osuosl.org (Postfix) with ESMTP id EC2D380E48;
+	Wed, 10 Jan 2024 17:15:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC2D380E48
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cxcywBmR4Jdg; Wed, 10 Jan 2024 17:14:21 +0000 (UTC)
+	with ESMTP id Sc4Ge6h_8_zh; Wed, 10 Jan 2024 17:15:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 18F2D83D3F;
-	Wed, 10 Jan 2024 17:14:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 18F2D83D3F
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DC4AC1BF5D7
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 17:11:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4A47180E4E;
+	Wed, 10 Jan 2024 17:15:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4A47180E4E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8D39A1BF5D7
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 17:15:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8D81A421F2
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 17:11:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D81A421F2
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7326D614B2
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 17:15:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7326D614B2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IkcKiPNTmhK7 for <buildroot@lists.busybox.net>;
- Wed, 10 Jan 2024 17:11:48 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8392F4220A
- for <buildroot@buildroot.org>; Wed, 10 Jan 2024 17:11:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8392F4220A
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7DB6785A8D; Wed, 10 Jan 2024 17:11:47 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EebO4WQpKxuI for <buildroot@lists.busybox.net>;
+ Wed, 10 Jan 2024 17:15:06 +0000 (UTC)
+Received: from mail.hostpark.net (mail.hostpark.net [212.243.197.30])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id AFACB614BB
+ for <buildroot@buildroot.org>; Wed, 10 Jan 2024 17:15:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AFACB614BB
+Received: from localhost (localhost [127.0.0.1])
+ by mail.hostpark.net (Postfix) with ESMTP id 6E6FF16523;
+ Wed, 10 Jan 2024 18:15:03 +0100 (CET)
+X-Virus-Scanned: by Hostpark/NetZone Mailprotection at hostpark.net
+Received: from mail.hostpark.net ([127.0.0.1])
+ by localhost (mail1.hostpark.net [127.0.0.1]) (amavisd-new, port 10224)
+ with ESMTP id WC2OPQnEIDkH; Wed, 10 Jan 2024 18:15:03 +0100 (CET)
+Received: from customer (localhost [127.0.0.1])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+ (No client certificate requested)
+ by mail.hostpark.net (Postfix) with ESMTPSA id 1F86B16255;
+ Wed, 10 Jan 2024 18:15:01 +0100 (CET)
 To: buildroot@buildroot.org
-Date: Wed, 10 Jan 2024 18:09:10 +0100
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 728e96c54252546b61791e1bc86071e1372af813
-X-Git-Newrev: e84e2bd841454db35ac1a05a873cbd42d9f34562
-X-Patchwork-Hint: ignore
-Message-Id: <20240110171147.7DB6785A8D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/gst-omx: bump to
- version 1.22.8
+Date: Wed, 10 Jan 2024 18:14:54 +0100
+Message-ID: <20240110171455.3978780-1-christian@klarinett.li>
+X-Mailer: git-send-email 2.43.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=klarinett.li; h=
+ content-transfer-encoding:mime-version:x-mailer:message-id:date
+ :date:subject:subject:from:from; s=sel2011a; t=1704906903; bh=f8
+ clrifBUiu8UIWyvlV8uoeR5KACsMbdbTLZAnwzPqU=; b=0iEQNjc94zxvqF4aRZ
+ G3wtHC0H60pTyiRZPLSdfpOgPTKKgbA8Wqv+XgEv3pDTZeyj+csJfCtnkztszC2t
+ NBdMr2Vhp6g7CT/1d/1AHiCUbEt4mlcj62yVRjXEATjO+t68+WDOcwshTP/LVh70
+ HSp5I7bSahDZMgJD9IUlIUnw8=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key) header.d=klarinett.li header.i=@klarinett.li
+ header.a=rsa-sha256 header.s=sel2011a header.b=0iEQNjc9
+Subject: [Buildroot] [PATCH] package/duktape: add DUKTAPE_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,47 +75,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Christian Hitz via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Hitz <christian@klarinett.li>
+Cc: Christian Hitz <christian.hitz@bbv.ch>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e84e2bd841454db35ac1a05a873cbd42d9f34562
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+From: Christian Hitz <christian.hitz@bbv.ch>
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 574a11910171ecd9a44f5cfc9984db3c462034fa)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+cpe:2.3:a:duktape_project:duktape:2.7.0:*:*:*:*:*:*:* is a valid CPE
+identifier for this package:
+
+  https://nvd.nist.gov/products/cpe/detail/DEAF95D7-0DAB-4025-8C5A-9CCF80D75CF2
+
+Signed-off-by: Christian Hitz <christian.hitz@bbv.ch>
 ---
- package/gstreamer1/gst-omx/gst-omx.hash | 4 ++--
- package/gstreamer1/gst-omx/gst-omx.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/duktape/duktape.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/gstreamer1/gst-omx/gst-omx.hash b/package/gstreamer1/gst-omx/gst-omx.hash
-index dc9b369ca0..528ebb99c2 100644
---- a/package/gstreamer1/gst-omx/gst-omx.hash
-+++ b/package/gstreamer1/gst-omx/gst-omx.hash
-@@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.22.7.tar.xz.sha256sum
--sha256  d7a18ec47d40a472bd5cba2015e0be72b732f1699895398cec5cd8e6a3a53b44  gst-omx-1.22.7.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.22.8.tar.xz.sha256sum
-+sha256  94df10e7713618f0c8a4223f6e047f2d8f0ccecba1d585618e791f13037762df  gst-omx-1.22.8.tar.xz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/gstreamer1/gst-omx/gst-omx.mk b/package/gstreamer1/gst-omx/gst-omx.mk
-index 6c27989ec6..472f929189 100644
---- a/package/gstreamer1/gst-omx/gst-omx.mk
-+++ b/package/gstreamer1/gst-omx/gst-omx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/duktape/duktape.mk b/package/duktape/duktape.mk
+index 674c5e9323..9b5fb65f06 100644
+--- a/package/duktape/duktape.mk
++++ b/package/duktape/duktape.mk
+@@ -11,6 +11,7 @@ DUKTAPE_SITE = \
+ DUKTAPE_LICENSE = MIT
+ DUKTAPE_LICENSE_FILES = LICENSE.txt
+ DUKTAPE_INSTALL_STAGING = YES
++DUKTAPE_CPE_ID_VENDOR = duktape_project
  
--GST_OMX_VERSION = 1.22.7
-+GST_OMX_VERSION = 1.22.8
- GST_OMX_SOURCE = gst-omx-$(GST_OMX_VERSION).tar.xz
- GST_OMX_SITE = https://gstreamer.freedesktop.org/src/gst-omx
- 
+ define DUKTAPE_BUILD_CMDS
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) -f Makefile.sharedlibrary
+-- 
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
