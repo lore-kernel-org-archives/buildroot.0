@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FC27C47073
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 17:22:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79CDDC4707B
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 17:22:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D5C4183D26;
-	Wed, 10 Jan 2024 17:22:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D5C4183D26
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3605E83D0A;
+	Wed, 10 Jan 2024 17:22:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3605E83D0A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dZhmscpXPkAg; Wed, 10 Jan 2024 17:22:31 +0000 (UTC)
+	with ESMTP id whOSzr1Os6Vl; Wed, 10 Jan 2024 17:22:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3175483CE9;
-	Wed, 10 Jan 2024 17:22:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3175483CE9
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7F3B11BF5D7
+	by smtp1.osuosl.org (Postfix) with ESMTP id 81B9383A3C;
+	Wed, 10 Jan 2024 17:22:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 81B9383A3C
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id ADBFE1BF966
  for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 17:22:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 65F5042214
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7E735614EE
  for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 17:22:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 65F5042214
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E735614EE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BoPPhmFg_7PR for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PdSzPDPSmD_A for <buildroot@lists.busybox.net>;
  Wed, 10 Jan 2024 17:22:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7229241A3A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8E3E060093
  for <buildroot@buildroot.org>; Wed, 10 Jan 2024 17:22:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7229241A3A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E3E060093
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5DFA385C11; Wed, 10 Jan 2024 17:22:15 +0000 (UTC)
+ id 7C36B85C48; Wed, 10 Jan 2024 17:22:15 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 10 Jan 2024 18:08:48 +0100
+Date: Wed, 10 Jan 2024 18:08:50 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: c6a59147acb5149f411466b74501f6bf071427a4
-X-Git-Newrev: d1772f1ddcb906b09883e1db9cca222012b1e8c1
+X-Git-Oldrev: e55eab4b961953ef9cd38c5fe070b538396c5df3
+X-Git-Newrev: ea4538688ce9b74cd5869183eb7f64ae8c1a38aa
 X-Patchwork-Hint: ignore
-Message-Id: <20240110172215.5DFA385C11@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/gstreamer1: bump
- to version 1.22.8
+Message-Id: <20240110172215.7C36B85C48@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/gst1-plugins-bad:
+ security bump to version 1.22.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,41 +63,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d1772f1ddcb906b09883e1db9cca222012b1e8c1
+commit: https://git.buildroot.net/buildroot/commit/?id=ea4538688ce9b74cd5869183eb7f64ae8c1a38aa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
+
+Fixes the following security issue:
+
+ZDI-CAN-22300: Heap-based buffer overflow in the AV1 codec parser when
+handling certain malformed streams before GStreamer 1.22.8
+
+https://gstreamer.freedesktop.org/security/sa-2023-0011.html
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 2631267648b44b7ca423238c57bf723dbccf6250)
+(cherry picked from commit 7add923aedcd64c310a1c6bb93ad006ca8e7ee54)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gstreamer1/gstreamer1.hash | 4 ++--
- package/gstreamer1/gstreamer1/gstreamer1.mk   | 2 +-
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash | 4 ++--
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gstreamer1/gstreamer1.hash b/package/gstreamer1/gstreamer1/gstreamer1.hash
-index 7d62d05fec..89cc25674e 100644
---- a/package/gstreamer1/gstreamer1/gstreamer1.hash
-+++ b/package/gstreamer1/gstreamer1/gstreamer1.hash
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
+index e6f57393db..bf4abd3c2f 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
 @@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.22.7.tar.xz.sha256sum
--sha256  01e42c6352a06bdfa4456e64b06ab7d98c5c487a25557c761554631cbda64217  gstreamer-1.22.7.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.22.8.tar.xz.sha256sum
-+sha256  ad4e3db1771139b1db17b1afa7c05db083ae0100bd4da244b71f162dcce41bfc  gstreamer-1.22.8.tar.xz
- sha256  ad2eec519ebd4b5df86ea84dff24ae3bfa2edea846a703b58902dd221ae375db  COPYING
-diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
-index 9ee41392b2..88c528d4b5 100644
---- a/package/gstreamer1/gstreamer1/gstreamer1.mk
-+++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
+-# From https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-1.22.7.tar.xz.sha256sum
+-sha256  c716f8dffa8fac3fb646941af1c6ec72fff05a045131311bf2d049fdc87bce2e  gst-plugins-bad-1.22.7.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-1.22.8.tar.xz.sha256sum
++sha256  458783f8236068991e3e296edd671c8eddb8be6fac933c1c2e1503462864ea0f  gst-plugins-bad-1.22.8.tar.xz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index a41fb336a9..ac1328b7e2 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GSTREAMER1_VERSION = 1.22.7
-+GSTREAMER1_VERSION = 1.22.8
- GSTREAMER1_SOURCE = gstreamer-$(GSTREAMER1_VERSION).tar.xz
- GSTREAMER1_SITE = https://gstreamer.freedesktop.org/src/gstreamer
- GSTREAMER1_INSTALL_STAGING = YES
+-GST1_PLUGINS_BAD_VERSION = 1.22.7
++GST1_PLUGINS_BAD_VERSION = 1.22.8
+ GST1_PLUGINS_BAD_SOURCE = gst-plugins-bad-$(GST1_PLUGINS_BAD_VERSION).tar.xz
+ GST1_PLUGINS_BAD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-bad
+ GST1_PLUGINS_BAD_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
