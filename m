@@ -4,84 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3EDAC47073
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 22:04:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DF07C4707B
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 22:04:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4D5FD43727;
-	Wed, 10 Jan 2024 22:04:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4D5FD43727
+	by smtp2.osuosl.org (Postfix) with ESMTP id 11CBD4046B;
+	Wed, 10 Jan 2024 22:04:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 11CBD4046B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ef9Aa0YqkQOf; Wed, 10 Jan 2024 22:04:06 +0000 (UTC)
+	with ESMTP id 6FmvCByItdEo; Wed, 10 Jan 2024 22:04:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 42E5943715;
-	Wed, 10 Jan 2024 22:04:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 42E5943715
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D238E1BF966
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 22:04:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0E5C843715;
+	Wed, 10 Jan 2024 22:04:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E5C843715
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B359D1BF304
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 22:04:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A99A540143
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 22:04:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A99A540143
+ by smtp1.osuosl.org (Postfix) with ESMTP id 98ECB83C31
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 22:04:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 98ECB83C31
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6jyzK07Fvl1E for <buildroot@lists.busybox.net>;
- Wed, 10 Jan 2024 22:04:01 +0000 (UTC)
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 877BE4046B
- for <buildroot@buildroot.org>; Wed, 10 Jan 2024 22:04:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 877BE4046B
-Received: by mail-wm1-x32b.google.com with SMTP id
- 5b1f17b1804b1-40e461c1f5bso42406255e9.3
- for <buildroot@buildroot.org>; Wed, 10 Jan 2024 14:04:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704924239; x=1705529039;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=p/AdqQv0Nv8dr4SX+6FTw39i/8t+hSAjMYaifza7wQ4=;
- b=jGEOKeQg6tHerXPtnEEa9O8MNarM33fi55rrYRsypZB69hBjyN7QXZ4/V+JpLkdhSu
- KQN0Auz/4Fsc4qsJNREXEBRNKh2bH7t7f7CsisY5sK5rwyhqiIwTSFJG1aI9hXAO8/Xh
- 8PpjawuO1qs2yTbD1WXvK/Dwd/jLllQ/Ex4IOF+GuYJDyI/79/khYZ3c9SbB0p9PzFDk
- lecs89Vx7Ot5/JvKrkAuB2mD/zc2Y/aw1KczjmjOS2dPKjinJ52wbH6+LiJbm2zsmDib
- 3gXZw4SKk+U7ihMeu3Z0/KRn+lHRjgXriGnS+bXUtNQrTOmAoeC6QAInt4BboEgcx+ac
- Ebgg==
-X-Gm-Message-State: AOJu0YyknhZqgb6OcULUK4qe18fdFUDKcGknbo+3iANKStC1wBQXf4eg
- CQw8Shoepx0G7/MZTHs1+t/lVZTv+Lg=
-X-Google-Smtp-Source: AGHT+IGaGTkvWCksK47xpfP17FcI0hEvzlQZiQ904TRu0neDbB0DtM5HIhsJzFj22YZdhGLmYbzS7g==
-X-Received: by 2002:a05:600c:420a:b0:40d:85d4:4bf8 with SMTP id
- x10-20020a05600c420a00b0040d85d44bf8mr48380wmh.54.1704924238724; 
- Wed, 10 Jan 2024 14:03:58 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- c18-20020a7bc2b2000000b0040d5c58c41dsm3409164wmk.24.2024.01.10.14.03.58
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 10 Jan 2024 14:03:58 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nviup8dIHWTL for <buildroot@lists.busybox.net>;
+ Wed, 10 Jan 2024 22:04:52 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id E71AA83C2D
+ for <buildroot@buildroot.org>; Wed, 10 Jan 2024 22:04:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E71AA83C2D
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D3DE485E2C; Wed, 10 Jan 2024 22:04:51 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 10 Jan 2024 23:03:53 +0100
-Message-ID: <20240110220353.1270674-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1704924239; x=1705529039; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=p/AdqQv0Nv8dr4SX+6FTw39i/8t+hSAjMYaifza7wQ4=;
- b=BU3V4g30VYj9QlGke0hu5G2PIgBKP5e8HKIYJw4X+g84er23iZFqBARNL7vfrjX7K/
- BU1+zHPwOv9hYbgPllqP2t9+UULnTF2Gsey9szu9iB1Ihte1bZM7IvE9B8RIsHvBcCuF
- 8F32VFTMkJPCSqthUpqRifyXTvMX5pCla295XAwtcdlrfaY1qxGPKGisqZbJn3G53+hw
- NsT4Pvtg814FRGVd4X3ZI1qvemPNgPai9zbvmjFDQppWiG6w0FW00EkHsPMeAi0b6kB4
- 7q+TMcMHJ103F5xl+/pYCnl+m+go3XSs3mb4We0uIJFvrZhrJtonAEAD6OwYA2FxxbAM
- E+KA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=BU3V4g30
-Subject: [Buildroot] [PATCH 1/1] package/libminiupnpc: bump to version 2.2.6
+Date: Wed, 10 Jan 2024 23:04:09 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 117ece4835182a0be6f4552a805cc0c912af411d
+X-Git-Newrev: 0ca23b84e51cd9db7c45451a952135f2f79c5bcb
+X-Patchwork-Hint: ignore
+Message-Id: <20240110220451.D3DE485E2C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libtraceevent: bump to version
+ 1.8.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,46 +57,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd@kuhls.net>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/miniupnp/miniupnp/blob/miniupnpc_2_2_6/miniupnpc/Changelog.txt
+commit: https://git.buildroot.net/buildroot/commit/?id=0ca23b84e51cd9db7c45451a952135f2f79c5bcb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libminiupnpc/libminiupnpc.hash | 2 +-
- package/libminiupnpc/libminiupnpc.mk   | 2 +-
+ package/libtraceevent/libtraceevent.hash | 2 +-
+ package/libtraceevent/libtraceevent.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libminiupnpc/libminiupnpc.hash b/package/libminiupnpc/libminiupnpc.hash
-index db6b01f0c9..21dac02dd3 100644
---- a/package/libminiupnpc/libminiupnpc.hash
-+++ b/package/libminiupnpc/libminiupnpc.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/libtraceevent/libtraceevent.hash b/package/libtraceevent/libtraceevent.hash
+index 14dcf54c67..c338491f26 100644
+--- a/package/libtraceevent/libtraceevent.hash
++++ b/package/libtraceevent/libtraceevent.hash
+@@ -1,4 +1,4 @@
  # Locally computed
--sha256  38acd5f4602f7cf8bcdc1ec30b2d58db2e9912e5d9f5350dd99b06bfdffb517c  miniupnpc-2.2.5.tar.gz
-+sha256  37fcd91953508c3e62d6964bb8ffbc5d47f3e13481fa54e6214fcc68704c66f1  miniupnpc-2.2.6.tar.gz
- sha256  e143c6e207d0bb874c4be76b57689ffa408063a37a735c6dcec3dc600cb522c5  LICENSE
-diff --git a/package/libminiupnpc/libminiupnpc.mk b/package/libminiupnpc/libminiupnpc.mk
-index 59b593cb36..dddbe6f81b 100644
---- a/package/libminiupnpc/libminiupnpc.mk
-+++ b/package/libminiupnpc/libminiupnpc.mk
+-sha256  1801f416b317e2ae0430ce964cf22b9ecb9fb5cd9c6c2d1073b29953c3309bca  libtraceevent-1.8.1.tar.gz
++sha256  919f0c024c7b5059eace52d854d4df00ae7e361a4033e1b4d6fe01d97064a1b9  libtraceevent-1.8.2.tar.gz
+ sha256  f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79  LICENSES/GPL-2.0
+ sha256  0b9a4febcdee6de55872501d5c1a8f5d8b0d1650cd4d5351995ceb22e889f8ca  LICENSES/LGPL-2.1
+diff --git a/package/libtraceevent/libtraceevent.mk b/package/libtraceevent/libtraceevent.mk
+index d348fc51f6..da0aa575d7 100644
+--- a/package/libtraceevent/libtraceevent.mk
++++ b/package/libtraceevent/libtraceevent.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBMINIUPNPC_VERSION = 2.2.5
-+LIBMINIUPNPC_VERSION = 2.2.6
- LIBMINIUPNPC_SOURCE = miniupnpc-$(LIBMINIUPNPC_VERSION).tar.gz
- LIBMINIUPNPC_SITE = http://miniupnp.free.fr/files
- LIBMINIUPNPC_INSTALL_STAGING = YES
--- 
-2.43.0
-
+-LIBTRACEEVENT_VERSION = 1.8.1
++LIBTRACEEVENT_VERSION = 1.8.2
+ LIBTRACEEVENT_SITE = https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/snapshot
+ LIBTRACEEVENT_LICENSE = GPL-2.0, LGPL-2.1
+ LIBTRACEEVENT_LICENSE_FILES = LICENSES/GPL-2.0 LICENSES/LGPL-2.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
