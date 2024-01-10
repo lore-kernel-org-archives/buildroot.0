@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E277FC47073
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 20:24:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C0C4C4707B
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 20:25:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9E849436EF;
-	Wed, 10 Jan 2024 20:24:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9E849436EF
+	by smtp2.osuosl.org (Postfix) with ESMTP id F3F924378A;
+	Wed, 10 Jan 2024 20:25:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F3F924378A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id b2tdYk39uRbv; Wed, 10 Jan 2024 20:24:51 +0000 (UTC)
+	with ESMTP id rfbfGHopDdgJ; Wed, 10 Jan 2024 20:25:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 310E943814;
-	Wed, 10 Jan 2024 20:24:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 310E943814
+	by smtp2.osuosl.org (Postfix) with ESMTP id 367C74382C;
+	Wed, 10 Jan 2024 20:25:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 367C74382C
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1D9711BF5B3
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 20:22:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1F15C1BF5B3
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 20:22:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 654E561577
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 20:22:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 654E561577
+ by smtp3.osuosl.org (Postfix) with ESMTP id CE67261569
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 20:22:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE67261569
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4QbOqzJf7zL0 for <buildroot@lists.busybox.net>;
- Wed, 10 Jan 2024 20:22:05 +0000 (UTC)
+ with ESMTP id VYIh2zB8Rott for <buildroot@lists.busybox.net>;
+ Wed, 10 Jan 2024 20:22:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 620FD61563
+ by smtp3.osuosl.org (Postfix) with ESMTP id 532B06155E
  for <buildroot@buildroot.org>; Wed, 10 Jan 2024 20:22:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 620FD61563
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 532B06155E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 52A1785D62; Wed, 10 Jan 2024 20:22:04 +0000 (UTC)
+ id 434EA85D61; Wed, 10 Jan 2024 20:22:04 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 10 Jan 2024 21:15:37 +0100
+Date: Wed, 10 Jan 2024 21:13:34 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 732144957380f36747c8a0d22eea39bd93f9bc56
-X-Git-Newrev: dd068147b430253c87010ff21198e1be318ade1c
+X-Git-Oldrev: 80757aadd0d73af48cdcbe1d942f420a17da4c58
+X-Git-Newrev: 732144957380f36747c8a0d22eea39bd93f9bc56
 X-Patchwork-Hint: ignore
-Message-Id: <20240110202204.52A1785D62@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/dropbear: fix
+Message-Id: <20240110202204.434EA85D61@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/libssh2: fix
  CVE-2023-48795
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,272 +63,502 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dd068147b430253c87010ff21198e1be318ade1c
+commit: https://git.buildroot.net/buildroot/commit/?id=732144957380f36747c8a0d22eea39bd93f9bc56
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
 https://github.com/advisories/GHSA-45x7-px36-x8w8
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 391a442cc350cec07c7e056bf498c8d03e9396ae)
+(cherry picked from commit f0c21dd4888ce63469595836390606ec24ac0119)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../dropbear/0001-Implement-Strict-KEX-mode.patch  | 232 +++++++++++++++++++++
- package/dropbear/dropbear.mk                       |   3 +
- 2 files changed, 235 insertions(+)
+ ...KEX-to-fix-CVE-2023-48795-Terrapin-Attack.patch | 462 +++++++++++++++++++++
+ package/libssh2/libssh2.mk                         |   3 +
+ 2 files changed, 465 insertions(+)
 
-diff --git a/package/dropbear/0001-Implement-Strict-KEX-mode.patch b/package/dropbear/0001-Implement-Strict-KEX-mode.patch
+diff --git a/package/libssh2/0002-src-add-strict-KEX-to-fix-CVE-2023-48795-Terrapin-Attack.patch b/package/libssh2/0002-src-add-strict-KEX-to-fix-CVE-2023-48795-Terrapin-Attack.patch
 new file mode 100644
-index 0000000000..ce7b84861c
+index 0000000000..2ccedee19e
 --- /dev/null
-+++ b/package/dropbear/0001-Implement-Strict-KEX-mode.patch
-@@ -0,0 +1,232 @@
-+From 6e43be5c7b99dbee49dc72b6f989f29fdd7e9356 Mon Sep 17 00:00:00 2001
-+From: Matt Johnston <matt@ucc.asn.au>
-+Date: Mon, 20 Nov 2023 14:02:47 +0800
-+Subject: [PATCH] Implement Strict KEX mode
++++ b/package/libssh2/0002-src-add-strict-KEX-to-fix-CVE-2023-48795-Terrapin-Attack.patch
+@@ -0,0 +1,462 @@
++From d34d9258b8420b19ec3f97b4cc5bf7aa7d98e35a Mon Sep 17 00:00:00 2001
++From: Michael Buckley <michael@buckleyisms.com>
++Date: Thu, 30 Nov 2023 15:08:02 -0800
++Subject: [PATCH] src: add 'strict KEX' to fix CVE-2023-48795 "Terrapin Attack"
 +
-+As specified by OpenSSH with kex-strict-c-v00@openssh.com and
-+kex-strict-s-v00@openssh.com.
++Refs:
++https://terrapin-attack.com/
++https://seclists.org/oss-sec/2023/q4/292
++https://osv.dev/list?ecosystem=&q=CVE-2023-48795
++https://github.com/advisories/GHSA-45x7-px36-x8w8
++https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-48795
 +
-+Upstream: https://github.com/mkj/dropbear/commit/6e43be5c7b99dbee49dc72b6f989f29fdd7e9356
++Fixes #1290
++Closes #1291
++
++Upstream: https://github.com/libssh2/libssh2/commit/d34d9258b8420b19ec3f97b4cc5bf7aa7d98e35a
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ src/cli-session.c    | 11 +++++++++++
-+ src/common-algo.c    |  6 ++++++
-+ src/common-kex.c     | 26 +++++++++++++++++++++++++-
-+ src/kex.h            |  3 +++
-+ src/process-packet.c | 34 +++++++++++++++++++---------------
-+ src/ssh.h            |  4 ++++
-+ src/svr-session.c    |  3 +++
-+ 7 files changed, 71 insertions(+), 16 deletions(-)
++ src/kex.c          | 63 +++++++++++++++++++++++------------
++ src/libssh2_priv.h | 18 +++++++---
++ src/packet.c       | 83 +++++++++++++++++++++++++++++++++++++++++++---
++ src/packet.h       |  2 +-
++ src/session.c      |  3 ++
++ src/transport.c    | 12 ++++++-
++ 6 files changed, 149 insertions(+), 32 deletions(-)
 +
-+diff --git a/cli-session.c b/cli-session.c
-+index 5981b2470..d261c8f82 100644
-+--- a/cli-session.c
-++++ b/cli-session.c
-+@@ -46,6 +46,7 @@ static void cli_finished(void) ATTRIB_NORETURN;
-+ static void recv_msg_service_accept(void);
-+ static void cli_session_cleanup(void);
-+ static void recv_msg_global_request_cli(void);
-++static void cli_algos_initialise(void);
-+ 
-+ struct clientsession cli_ses; /* GLOBAL */
-+ 
-+@@ -117,6 +118,7 @@ void cli_session(int sock_in, int sock_out, struct dropbear_progress_connection
-+ 	}
-+ 
-+ 	chaninitialise(cli_chantypes);
-++	cli_algos_initialise();
-+ 
-+ 	/* Set up cli_ses vars */
-+ 	cli_session_init(proxy_cmd_pid);
-+@@ -487,3 +489,12 @@ void cli_dropbear_log(int priority, const char* format, va_list param) {
-+ 	fflush(stderr);
-+ }
-+ 
-++static void cli_algos_initialise(void) {
-++	algo_type *algo;
-++	for (algo = sshkex; algo->name; algo++) {
-++		if (strcmp(algo->name, SSH_STRICT_KEX_S) == 0) {
-++			algo->usable = 0;
-++		}
-++	}
-++}
-++
-+diff --git a/common-algo.c b/common-algo.c
-+index 378f0ca8e..f9d46ebb6 100644
-+--- a/common-algo.c
-++++ b/common-algo.c
-+@@ -307,6 +307,12 @@ algo_type sshkex[] = {
-+ 	/* Set unusable by svr_algos_initialise() */
-+ 	{SSH_EXT_INFO_C, 0, NULL, 1, NULL},
-+ #endif
-++#endif
-++#if DROPBEAR_CLIENT
-++	{SSH_STRICT_KEX_C, 0, NULL, 1, NULL},
-++#endif
-++#if DROPBEAR_SERVER
-++	{SSH_STRICT_KEX_S, 0, NULL, 1, NULL},
-+ #endif
-+ 	{NULL, 0, NULL, 0, NULL}
++diff --git a/src/kex.c b/src/kex.c
++index 8e7b7f0af3..a7b301e157 100644
++--- a/src/kex.c
+++++ b/src/kex.c
++@@ -3032,6 +3032,13 @@ kex_method_extension_negotiation = {
++     0,
 + };
-+diff --git a/common-kex.c b/common-kex.c
-+index ac8844246..8e33b12a6 100644
-+--- a/common-kex.c
-++++ b/common-kex.c
-+@@ -183,6 +183,10 @@ void send_msg_newkeys() {
-+ 	gen_new_keys();
-+ 	switch_keys();
 + 
-++	if (ses.kexstate.strict_kex) {
-++		ses.transseq = 0;
-++	}
+++static const LIBSSH2_KEX_METHOD
+++kex_method_strict_client_extension = {
+++    "kex-strict-c-v00@openssh.com",
+++    NULL,
+++    0,
+++};
 ++
-+ 	TRACE(("leave send_msg_newkeys"))
++ static const LIBSSH2_KEX_METHOD *libssh2_kex_methods[] = {
++ #if LIBSSH2_ED25519
++     &kex_method_ssh_curve25519_sha256,
++@@ -3050,6 +3057,7 @@ static const LIBSSH2_KEX_METHOD *libssh2_kex_methods[] = {
++     &kex_method_diffie_helman_group1_sha1,
++     &kex_method_diffie_helman_group_exchange_sha1,
++     &kex_method_extension_negotiation,
+++    &kex_method_strict_client_extension,
++     NULL
++ };
++ 
++@@ -3302,13 +3310,13 @@ static int kexinit(LIBSSH2_SESSION * session)
++     return 0;
 + }
 + 
-+@@ -193,7 +197,11 @@ void recv_msg_newkeys() {
++-/* kex_agree_instr
+++/* _libssh2_kex_agree_instr
++  * Kex specific variant of strstr()
++  * Needle must be preceded by BOL or ',', and followed by ',' or EOL
++  */
++-static unsigned char *
++-kex_agree_instr(unsigned char *haystack, size_t haystack_len,
++-                const unsigned char *needle, size_t needle_len)
+++unsigned char *
+++_libssh2_kex_agree_instr(unsigned char *haystack, size_t haystack_len,
+++                         const unsigned char *needle, size_t needle_len)
++ {
++     unsigned char *s;
++     unsigned char *end_haystack;
++@@ -3393,7 +3401,7 @@ static int kex_agree_hostkey(LIBSSH2_SESSION * session,
++         while(s && *s) {
++             unsigned char *p = (unsigned char *) strchr((char *) s, ',');
++             size_t method_len = (p ? (size_t)(p - s) : strlen((char *) s));
++-            if(kex_agree_instr(hostkey, hostkey_len, s, method_len)) {
+++            if(_libssh2_kex_agree_instr(hostkey, hostkey_len, s, method_len)) {
++                 const LIBSSH2_HOSTKEY_METHOD *method =
++                     (const LIBSSH2_HOSTKEY_METHOD *)
++                     kex_get_method_by_name((char *) s, method_len,
++@@ -3427,9 +3435,9 @@ static int kex_agree_hostkey(LIBSSH2_SESSION * session,
++     }
 + 
-+ 	ses.kexstate.recvnewkeys = 1;
-+ 	switch_keys();
-+-	
++     while(hostkeyp && (*hostkeyp) && (*hostkeyp)->name) {
++-        s = kex_agree_instr(hostkey, hostkey_len,
++-                            (unsigned char *) (*hostkeyp)->name,
++-                            strlen((*hostkeyp)->name));
+++        s = _libssh2_kex_agree_instr(hostkey, hostkey_len,
+++                                     (unsigned char *) (*hostkeyp)->name,
+++                                     strlen((*hostkeyp)->name));
++         if(s) {
++             /* So far so good, but does it suit our purposes? (Encrypting vs
++                Signing) */
++@@ -3463,6 +3471,12 @@ static int kex_agree_kex_hostkey(LIBSSH2_SESSION * session, unsigned char *kex,
++ {
++     const LIBSSH2_KEX_METHOD **kexp = libssh2_kex_methods;
++     unsigned char *s;
+++    const unsigned char *strict =
+++        (unsigned char *)"kex-strict-s-v00@openssh.com";
 ++
-++	if (ses.kexstate.strict_kex) {
-++		ses.recvseq = 0;
-++	}
+++    if(_libssh2_kex_agree_instr(kex, kex_len, strict, 28)) {
+++        session->kex_strict = 1;
+++    }
++ 
++     if(session->kex_prefs) {
++         s = (unsigned char *) session->kex_prefs;
++@@ -3470,7 +3484,7 @@ static int kex_agree_kex_hostkey(LIBSSH2_SESSION * session, unsigned char *kex,
++         while(s && *s) {
++             unsigned char *q, *p = (unsigned char *) strchr((char *) s, ',');
++             size_t method_len = (p ? (size_t)(p - s) : strlen((char *) s));
++-            q = kex_agree_instr(kex, kex_len, s, method_len);
+++            q = _libssh2_kex_agree_instr(kex, kex_len, s, method_len);
++             if(q) {
++                 const LIBSSH2_KEX_METHOD *method = (const LIBSSH2_KEX_METHOD *)
++                     kex_get_method_by_name((char *) s, method_len,
++@@ -3504,9 +3518,9 @@ static int kex_agree_kex_hostkey(LIBSSH2_SESSION * session, unsigned char *kex,
++     }
++ 
++     while(*kexp && (*kexp)->name) {
++-        s = kex_agree_instr(kex, kex_len,
++-                            (unsigned char *) (*kexp)->name,
++-                            strlen((*kexp)->name));
+++        s = _libssh2_kex_agree_instr(kex, kex_len,
+++                                     (unsigned char *) (*kexp)->name,
+++                                     strlen((*kexp)->name));
++         if(s) {
++             /* We've agreed on a key exchange method,
++              * Can we agree on a hostkey that works with this kex?
++@@ -3550,7 +3564,7 @@ static int kex_agree_crypt(LIBSSH2_SESSION * session,
++             unsigned char *p = (unsigned char *) strchr((char *) s, ',');
++             size_t method_len = (p ? (size_t)(p - s) : strlen((char *) s));
++ 
++-            if(kex_agree_instr(crypt, crypt_len, s, method_len)) {
+++            if(_libssh2_kex_agree_instr(crypt, crypt_len, s, method_len)) {
++                 const LIBSSH2_CRYPT_METHOD *method =
++                     (const LIBSSH2_CRYPT_METHOD *)
++                     kex_get_method_by_name((char *) s, method_len,
++@@ -3572,9 +3586,9 @@ static int kex_agree_crypt(LIBSSH2_SESSION * session,
++     }
++ 
++     while(*cryptp && (*cryptp)->name) {
++-        s = kex_agree_instr(crypt, crypt_len,
++-                            (unsigned char *) (*cryptp)->name,
++-                            strlen((*cryptp)->name));
+++        s = _libssh2_kex_agree_instr(crypt, crypt_len,
+++                                     (unsigned char *) (*cryptp)->name,
+++                                     strlen((*cryptp)->name));
++         if(s) {
++             endpoint->crypt = *cryptp;
++             return 0;
++@@ -3614,7 +3628,7 @@ static int kex_agree_mac(LIBSSH2_SESSION * session,
++             unsigned char *p = (unsigned char *) strchr((char *) s, ',');
++             size_t method_len = (p ? (size_t)(p - s) : strlen((char *) s));
++ 
++-            if(kex_agree_instr(mac, mac_len, s, method_len)) {
+++            if(_libssh2_kex_agree_instr(mac, mac_len, s, method_len)) {
++                 const LIBSSH2_MAC_METHOD *method = (const LIBSSH2_MAC_METHOD *)
++                     kex_get_method_by_name((char *) s, method_len,
++                                            (const LIBSSH2_COMMON_METHOD **)
++@@ -3635,8 +3649,9 @@ static int kex_agree_mac(LIBSSH2_SESSION * session,
++     }
++ 
++     while(*macp && (*macp)->name) {
++-        s = kex_agree_instr(mac, mac_len, (unsigned char *) (*macp)->name,
++-                            strlen((*macp)->name));
+++        s = _libssh2_kex_agree_instr(mac, mac_len,
+++                                     (unsigned char *) (*macp)->name,
+++                                     strlen((*macp)->name));
++         if(s) {
++             endpoint->mac = *macp;
++             return 0;
++@@ -3667,7 +3682,7 @@ static int kex_agree_comp(LIBSSH2_SESSION *session,
++             unsigned char *p = (unsigned char *) strchr((char *) s, ',');
++             size_t method_len = (p ? (size_t)(p - s) : strlen((char *) s));
++ 
++-            if(kex_agree_instr(comp, comp_len, s, method_len)) {
+++            if(_libssh2_kex_agree_instr(comp, comp_len, s, method_len)) {
++                 const LIBSSH2_COMP_METHOD *method =
++                     (const LIBSSH2_COMP_METHOD *)
++                     kex_get_method_by_name((char *) s, method_len,
++@@ -3689,8 +3704,9 @@ static int kex_agree_comp(LIBSSH2_SESSION *session,
++     }
++ 
++     while(*compp && (*compp)->name) {
++-        s = kex_agree_instr(comp, comp_len, (unsigned char *) (*compp)->name,
++-                            strlen((*compp)->name));
+++        s = _libssh2_kex_agree_instr(comp, comp_len,
+++                                     (unsigned char *) (*compp)->name,
+++                                     strlen((*compp)->name));
++         if(s) {
++             endpoint->comp = *compp;
++             return 0;
++@@ -3871,6 +3887,7 @@ _libssh2_kex_exchange(LIBSSH2_SESSION * session, int reexchange,
++                 session->local.kexinit = key_state->oldlocal;
++                 session->local.kexinit_len = key_state->oldlocal_len;
++                 key_state->state = libssh2_NB_state_idle;
+++                session->state &= ~LIBSSH2_STATE_INITIAL_KEX;
++                 session->state &= ~LIBSSH2_STATE_KEX_ACTIVE;
++                 session->state &= ~LIBSSH2_STATE_EXCHANGING_KEYS;
++                 return -1;
++@@ -3896,6 +3913,7 @@ _libssh2_kex_exchange(LIBSSH2_SESSION * session, int reexchange,
++                 session->local.kexinit = key_state->oldlocal;
++                 session->local.kexinit_len = key_state->oldlocal_len;
++                 key_state->state = libssh2_NB_state_idle;
+++                session->state &= ~LIBSSH2_STATE_INITIAL_KEX;
++                 session->state &= ~LIBSSH2_STATE_KEX_ACTIVE;
++                 session->state &= ~LIBSSH2_STATE_EXCHANGING_KEYS;
++                 return -1;
++@@ -3944,6 +3962,7 @@ _libssh2_kex_exchange(LIBSSH2_SESSION * session, int reexchange,
++         session->remote.kexinit = NULL;
++     }
++ 
+++    session->state &= ~LIBSSH2_STATE_INITIAL_KEX;
++     session->state &= ~LIBSSH2_STATE_KEX_ACTIVE;
++     session->state &= ~LIBSSH2_STATE_EXCHANGING_KEYS;
++ 
++diff --git a/src/libssh2_priv.h b/src/libssh2_priv.h
++index 7660366954..18d9ab2130 100644
++--- a/src/libssh2_priv.h
+++++ b/src/libssh2_priv.h
++@@ -736,6 +736,9 @@ struct _LIBSSH2_SESSION
++     /* key signing algorithm preferences -- NULL yields server order */
++     char *sign_algo_prefs;
++ 
+++    /* Whether to use the OpenSSH Strict KEX extension */
+++    int kex_strict;
 ++
-+ 	TRACE(("leave recv_msg_newkeys"))
++     /* (remote as source of data -- packet_read ) */
++     libssh2_endpoint_data remote;
++ 
++@@ -908,6 +911,7 @@ struct _LIBSSH2_SESSION
++     int fullpacket_macstate;
++     size_t fullpacket_payload_len;
++     int fullpacket_packet_type;
+++    uint32_t fullpacket_required_type;
++ 
++     /* State variables used in libssh2_sftp_init() */
++     libssh2_nonblocking_states sftpInit_state;
++@@ -948,10 +952,11 @@ struct _LIBSSH2_SESSION
++ };
++ 
++ /* session.state bits */
++-#define LIBSSH2_STATE_EXCHANGING_KEYS   0x00000001
++-#define LIBSSH2_STATE_NEWKEYS           0x00000002
++-#define LIBSSH2_STATE_AUTHENTICATED     0x00000004
++-#define LIBSSH2_STATE_KEX_ACTIVE        0x00000008
+++#define LIBSSH2_STATE_INITIAL_KEX       0x00000001
+++#define LIBSSH2_STATE_EXCHANGING_KEYS   0x00000002
+++#define LIBSSH2_STATE_NEWKEYS           0x00000004
+++#define LIBSSH2_STATE_AUTHENTICATED     0x00000008
+++#define LIBSSH2_STATE_KEX_ACTIVE        0x00000010
++ 
++ /* session.flag helpers */
++ #ifdef MSG_NOSIGNAL
++@@ -1182,6 +1187,11 @@ ssize_t _libssh2_send(libssh2_socket_t socket, const void *buffer,
++ int _libssh2_kex_exchange(LIBSSH2_SESSION * session, int reexchange,
++                           key_exchange_state_t * state);
++ 
+++unsigned char *_libssh2_kex_agree_instr(unsigned char *haystack,
+++                                        size_t haystack_len,
+++                                        const unsigned char *needle,
+++                                        size_t needle_len);
+++
++ /* Let crypt.c/hostkey.c expose their method structs */
++ const LIBSSH2_CRYPT_METHOD **libssh2_crypt_methods(void);
++ const LIBSSH2_HOSTKEY_METHOD **libssh2_hostkey_methods(void);
++diff --git a/src/packet.c b/src/packet.c
++index eccb8c56a8..6da14e9fa1 100644
++--- a/src/packet.c
+++++ b/src/packet.c
++@@ -624,14 +624,13 @@ packet_authagent_open(LIBSSH2_SESSION * session,
++  * layer when it has received a packet.
++  *
++  * The input pointer 'data' is pointing to allocated data that this function
++- * is asked to deal with so on failure OR success, it must be freed fine.
++- * The only exception is when the return code is LIBSSH2_ERROR_EAGAIN.
+++ * will be freed unless return the code is LIBSSH2_ERROR_EAGAIN.
++  *
++  * This function will always be called with 'datalen' greater than zero.
++  */
++ int
++ _libssh2_packet_add(LIBSSH2_SESSION * session, unsigned char *data,
++-                    size_t datalen, int macstate)
+++                    size_t datalen, int macstate, uint32_t seq)
++ {
++     int rc = 0;
++     unsigned char *message = NULL;
++@@ -676,6 +675,70 @@ _libssh2_packet_add(LIBSSH2_SESSION * session, unsigned char *data,
++         break;
++     }
++ 
+++    if(session->state & LIBSSH2_STATE_INITIAL_KEX) {
+++        if(msg == SSH_MSG_KEXINIT) {
+++            if(!session->kex_strict) {
+++                if(datalen < 17) {
+++                    LIBSSH2_FREE(session, data);
+++                    session->packAdd_state = libssh2_NB_state_idle;
+++                    return _libssh2_error(session,
+++                                          LIBSSH2_ERROR_BUFFER_TOO_SMALL,
+++                                          "Data too short extracting kex");
+++                }
+++                else {
+++                    const unsigned char *strict =
+++                    (unsigned char *)"kex-strict-s-v00@openssh.com";
+++                    struct string_buf buf;
+++                    unsigned char *algs = NULL;
+++                    size_t algs_len = 0;
+++
+++                    buf.data = (unsigned char *)data;
+++                    buf.dataptr = buf.data;
+++                    buf.len = datalen;
+++                    buf.dataptr += 17; /* advance past type and cookie */
+++
+++                    if(_libssh2_get_string(&buf, &algs, &algs_len)) {
+++                        LIBSSH2_FREE(session, data);
+++                        session->packAdd_state = libssh2_NB_state_idle;
+++                        return _libssh2_error(session,
+++                                              LIBSSH2_ERROR_BUFFER_TOO_SMALL,
+++                                              "Algs too short");
+++                    }
+++
+++                    if(algs_len == 0 ||
+++                       _libssh2_kex_agree_instr(algs, algs_len, strict, 28)) {
+++                        session->kex_strict = 1;
+++                    }
+++                }
+++            }
+++
+++            if(session->kex_strict && seq) {
+++                LIBSSH2_FREE(session, data);
+++                session->socket_state = LIBSSH2_SOCKET_DISCONNECTED;
+++                session->packAdd_state = libssh2_NB_state_idle;
+++                libssh2_session_disconnect(session, "strict KEX violation: "
+++                                           "KEXINIT was not the first packet");
+++
+++                return _libssh2_error(session, LIBSSH2_ERROR_SOCKET_DISCONNECT,
+++                                      "strict KEX violation: "
+++                                      "KEXINIT was not the first packet");
+++            }
+++        }
+++
+++        if(session->kex_strict && session->fullpacket_required_type &&
+++            session->fullpacket_required_type != msg) {
+++            LIBSSH2_FREE(session, data);
+++            session->socket_state = LIBSSH2_SOCKET_DISCONNECTED;
+++            session->packAdd_state = libssh2_NB_state_idle;
+++            libssh2_session_disconnect(session, "strict KEX violation: "
+++                                       "unexpected packet type");
+++
+++            return _libssh2_error(session, LIBSSH2_ERROR_SOCKET_DISCONNECT,
+++                                  "strict KEX violation: "
+++                                  "unexpected packet type");
+++        }
+++    }
+++
++     if(session->packAdd_state == libssh2_NB_state_allocated) {
++         /* A couple exceptions to the packet adding rule: */
++         switch(msg) {
++@@ -1364,6 +1427,15 @@ _libssh2_packet_ask(LIBSSH2_SESSION * session, unsigned char packet_type,
++ 
++             return 0;
++         }
+++        else if(session->kex_strict &&
+++                (session->state & LIBSSH2_STATE_INITIAL_KEX)) {
+++            libssh2_session_disconnect(session, "strict KEX violation: "
+++                                       "unexpected packet type");
+++
+++            return _libssh2_error(session, LIBSSH2_ERROR_SOCKET_DISCONNECT,
+++                                  "strict KEX violation: "
+++                                  "unexpected packet type");
+++        }
++         packet = _libssh2_list_next(&packet->node);
++     }
++     return -1;
++@@ -1425,7 +1497,10 @@ _libssh2_packet_require(LIBSSH2_SESSION * session, unsigned char packet_type,
++     }
++ 
++     while(session->socket_state == LIBSSH2_SOCKET_CONNECTED) {
++-        int ret = _libssh2_transport_read(session);
+++        int ret;
+++        session->fullpacket_required_type = packet_type;
+++        ret = _libssh2_transport_read(session);
+++        session->fullpacket_required_type = 0;
++         if(ret == LIBSSH2_ERROR_EAGAIN)
++             return ret;
++         else if(ret < 0) {
++diff --git a/src/packet.h b/src/packet.h
++index 1d90b8af12..955351e5f6 100644
++--- a/src/packet.h
+++++ b/src/packet.h
++@@ -72,6 +72,6 @@ int _libssh2_packet_burn(LIBSSH2_SESSION * session,
++ int _libssh2_packet_write(LIBSSH2_SESSION * session, unsigned char *data,
++                           unsigned long data_len);
++ int _libssh2_packet_add(LIBSSH2_SESSION * session, unsigned char *data,
++-                        size_t datalen, int macstate);
+++                        size_t datalen, int macstate, uint32_t seq);
++ 
++ #endif /* LIBSSH2_PACKET_H */
++diff --git a/src/session.c b/src/session.c
++index 35e7929fe7..9d89ade8ec 100644
++--- a/src/session.c
+++++ b/src/session.c
++@@ -469,6 +469,8 @@ libssh2_session_init_ex(LIBSSH2_ALLOC_FUNC((*my_alloc)),
++         session->abstract = abstract;
++         session->api_timeout = 0; /* timeout-free API by default */
++         session->api_block_mode = 1; /* blocking API by default */
+++        session->state = LIBSSH2_STATE_INITIAL_KEX;
+++        session->fullpacket_required_type = 0;
++         session->packet_read_timeout = LIBSSH2_DEFAULT_READ_TIMEOUT;
++         session->flag.quote_paths = 1; /* default behavior is to quote paths
++                                           for the scp subsystem */
++@@ -1223,6 +1225,7 @@ libssh2_session_disconnect_ex(LIBSSH2_SESSION *session, int reason,
++                               const char *desc, const char *lang)
++ {
++     int rc;
+++    session->state &= ~LIBSSH2_STATE_INITIAL_KEX;
++     session->state &= ~LIBSSH2_STATE_EXCHANGING_KEYS;
++     BLOCK_ADJUST(rc, session,
++                  session_disconnect(session, reason, desc, lang));
++diff --git a/src/transport.c b/src/transport.c
++index 21be9d2b80..a8bb588a4b 100644
++--- a/src/transport.c
+++++ b/src/transport.c
++@@ -186,6 +186,7 @@ fullpacket(LIBSSH2_SESSION * session, int encrypted /* 1 or 0 */ )
++     struct transportpacket *p = &session->packet;
++     int rc;
++     int compressed;
+++    uint32_t seq = session->remote.seqno;
++ 
++     if(session->fullpacket_state == libssh2_NB_state_idle) {
++         session->fullpacket_macstate = LIBSSH2_MAC_CONFIRMED;
++@@ -317,7 +318,7 @@ fullpacket(LIBSSH2_SESSION * session, int encrypted /* 1 or 0 */ )
++     if(session->fullpacket_state == libssh2_NB_state_created) {
++         rc = _libssh2_packet_add(session, p->payload,
++                                  session->fullpacket_payload_len,
++-                                 session->fullpacket_macstate);
+++                                 session->fullpacket_macstate, seq);
++         if(rc == LIBSSH2_ERROR_EAGAIN)
++             return rc;
++         if(rc) {
++@@ -328,6 +329,11 @@ fullpacket(LIBSSH2_SESSION * session, int encrypted /* 1 or 0 */ )
++ 
++     session->fullpacket_state = libssh2_NB_state_idle;
++ 
+++    if(session->kex_strict &&
+++        session->fullpacket_packet_type == SSH_MSG_NEWKEYS) {
+++        session->remote.seqno = 0;
+++    }
+++
++     return session->fullpacket_packet_type;
 + }
 + 
-+@@ -550,6 +558,10 @@ void recv_msg_kexinit() {
++@@ -1093,6 +1099,10 @@ int _libssh2_transport_send(LIBSSH2_SESSION *session,
 + 
-+ 	ses.kexstate.recvkexinit = 1;
++     session->local.seqno++;
 + 
-++	if (ses.kexstate.strict_kex && !ses.kexstate.donefirstkex && ses.recvseq != 1) {
-++		dropbear_exit("First packet wasn't kexinit");
-++	}
+++    if(session->kex_strict && data[0] == SSH_MSG_NEWKEYS) {
+++        session->local.seqno = 0;
+++    }
 ++
-+ 	TRACE(("leave recv_msg_kexinit"))
-+ }
-+ 
-+@@ -859,6 +871,18 @@ static void read_kex_algos() {
-+ 	}
-+ #endif
-+ 
-++	if (!ses.kexstate.donefirstkex) {
-++		const char* strict_name;
-++		if (IS_DROPBEAR_CLIENT) {
-++			strict_name = SSH_STRICT_KEX_S;
-++		} else {
-++			strict_name = SSH_STRICT_KEX_C;
-++		}
-++		if (buf_has_algo(ses.payload, strict_name) == DROPBEAR_SUCCESS) {
-++			ses.kexstate.strict_kex = 1;
-++		}
-++	}
-++
-+ 	algo = buf_match_algo(ses.payload, sshkex, kexguess2, &goodguess);
-+ 	allgood &= goodguess;
-+ 	if (algo == NULL || algo->data == NULL) {
-+diff --git a/kex.h b/kex.h
-+index 77cf21a37..7fcc3c252 100644
-+--- a/kex.h
-++++ b/kex.h
-+@@ -83,6 +83,9 @@ struct KEXState {
-+ 
-+ 	unsigned our_first_follows_matches : 1;
-+ 
-++	/* Boolean indicating that strict kex mode is in use */
-++	unsigned int strict_kex;
-++
-+ 	time_t lastkextime; /* time of the last kex */
-+ 	unsigned int datatrans; /* data transmitted since last kex */
-+ 	unsigned int datarecv; /* data received since last kex */
-+diff --git a/process-packet.c b/process-packet.c
-+index 945416023..133a152d0 100644
-+--- a/process-packet.c
-++++ b/process-packet.c
-+@@ -44,6 +44,7 @@ void process_packet() {
-+ 
-+ 	unsigned char type;
-+ 	unsigned int i;
-++	unsigned int first_strict_kex = ses.kexstate.strict_kex && !ses.kexstate.donefirstkex;
-+ 	time_t now;
-+ 
-+ 	TRACE2(("enter process_packet"))
-+@@ -54,22 +55,24 @@ void process_packet() {
-+ 	now = monotonic_now();
-+ 	ses.last_packet_time_keepalive_recv = now;
-+ 
-+-	/* These packets we can receive at any time */
-+-	switch(type) {
-+ 
-+-		case SSH_MSG_IGNORE:
-+-			goto out;
-+-		case SSH_MSG_DEBUG:
-+-			goto out;
-++	if (type == SSH_MSG_DISCONNECT) {
-++		/* Allowed at any time */
-++		dropbear_close("Disconnect received");
-++	}
-+ 
-+-		case SSH_MSG_UNIMPLEMENTED:
-+-			/* debugging XXX */
-+-			TRACE(("SSH_MSG_UNIMPLEMENTED"))
-+-			goto out;
-+-			
-+-		case SSH_MSG_DISCONNECT:
-+-			/* TODO cleanup? */
-+-			dropbear_close("Disconnect received");
-++	/* These packets may be received at any time,
-++	   except during first kex with strict kex */
-++	if (!first_strict_kex) {
-++		switch(type) {
-++			case SSH_MSG_IGNORE:
-++				goto out;
-++			case SSH_MSG_DEBUG:
-++				goto out;
-++			case SSH_MSG_UNIMPLEMENTED:
-++				TRACE(("SSH_MSG_UNIMPLEMENTED"))
-++				goto out;
-++		}
-+ 	}
-+ 
-+ 	/* Ignore these packet types so that keepalives don't interfere with
-+@@ -98,7 +101,8 @@ void process_packet() {
-+ 			if (type >= 1 && type <= 49
-+ 				&& type != SSH_MSG_SERVICE_REQUEST
-+ 				&& type != SSH_MSG_SERVICE_ACCEPT
-+-				&& type != SSH_MSG_KEXINIT)
-++				&& type != SSH_MSG_KEXINIT
-++				&& !first_strict_kex)
-+ 			{
-+ 				TRACE(("unknown allowed packet during kexinit"))
-+ 				recv_unimplemented();
-+diff --git a/ssh.h b/ssh.h
-+index 1b4fec65f..ef3efdca0 100644
-+--- a/ssh.h
-++++ b/ssh.h
-+@@ -100,6 +100,10 @@
-+ #define SSH_EXT_INFO_C "ext-info-c"
-+ #define SSH_SERVER_SIG_ALGS "server-sig-algs"
-+ 
-++/* OpenSSH strict KEX feature */
-++#define SSH_STRICT_KEX_S "kex-strict-s-v00@openssh.com"
-++#define SSH_STRICT_KEX_C "kex-strict-c-v00@openssh.com"
-++
-+ /* service types */
-+ #define SSH_SERVICE_USERAUTH "ssh-userauth"
-+ #define SSH_SERVICE_USERAUTH_LEN 12
-+diff --git a/svr-session.c b/svr-session.c
-+index 769f0731d..a538e2c5c 100644
-+--- a/svr-session.c
-++++ b/svr-session.c
-+@@ -370,6 +370,9 @@ static void svr_algos_initialise(void) {
-+ 			algo->usable = 0;
-+ 		}
-+ #endif
-++		if (strcmp(algo->name, SSH_STRICT_KEX_C) == 0) {
-++			algo->usable = 0;
-++		}
-+ 	}
-+ }
-+ 
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index 36eb7898ba..7ac8a38559 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
-@@ -14,6 +14,9 @@ DROPBEAR_PROGRAMS = dropbear $(DROPBEAR_TARGET_BINS)
- DROPBEAR_CPE_ID_VENDOR = dropbear_ssh_project
- DROPBEAR_CPE_ID_PRODUCT = dropbear_ssh
++     ret = LIBSSH2_SEND(session, p->outbuf, total_length,
++                        LIBSSH2_SOCKET_SEND_FLAGS(session));
++     if(ret < 0)
+diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk
+index a42be46a7a..b2c07cbf30 100644
+--- a/package/libssh2/libssh2.mk
++++ b/package/libssh2/libssh2.mk
+@@ -13,6 +13,9 @@ LIBSSH2_CPE_ID_VENDOR = libssh2
+ LIBSSH2_INSTALL_STAGING = YES
+ LIBSSH2_CONF_OPTS = --disable-examples-build --disable-rpath
  
-+# 0001-Implement-Strict-KEX-mode.patch
-+DROPBEAR_IGNORE_CVES += CVE-2023-48795
++# 0002-src-add-strict-KEX-to-fix-CVE-2023-48795-Terrapin-Attack.patch
++LIBSSH2_IGNORE_CVES += CVE-2023-48795
 +
- # Disable hardening flags added by dropbear configure.ac, and let
- # Buildroot add them when the relevant options are enabled. This
- # prevents dropbear from using SSP support when not available.
+ ifeq ($(BR2_PACKAGE_LIBSSH2_MBEDTLS),y)
+ LIBSSH2_DEPENDENCIES += mbedtls
+ LIBSSH2_CONF_OPTS += --with-libmbedcrypto-prefix=$(STAGING_DIR)/usr \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
