@@ -4,66 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89195C47073
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 20:32:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D53B7C47073
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 20:35:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 317EC400C1;
-	Wed, 10 Jan 2024 20:32:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 317EC400C1
+	by smtp2.osuosl.org (Postfix) with ESMTP id 840FE400C1;
+	Wed, 10 Jan 2024 20:35:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 840FE400C1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3ox5Eo6Xw2vu; Wed, 10 Jan 2024 20:32:37 +0000 (UTC)
+	with ESMTP id TtuYspcjvry0; Wed, 10 Jan 2024 20:35:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D7E1443784;
-	Wed, 10 Jan 2024 20:32:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D7E1443784
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4F5E31BF5B3
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 20:32:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6D0C1436BC;
+	Wed, 10 Jan 2024 20:35:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D0C1436BC
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B0E531BF5B3
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 20:35:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2870283D95
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 20:32:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2870283D95
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7CCCD42078
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 20:35:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7CCCD42078
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Bil3mvpbN5bj for <buildroot@lists.busybox.net>;
- Wed, 10 Jan 2024 20:32:34 +0000 (UTC)
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 34A4F83D8C
- for <buildroot@buildroot.org>; Wed, 10 Jan 2024 20:32:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 34A4F83D8C
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:4f89:5708:1633:580e])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 29BEBB00576;
- Wed, 10 Jan 2024 21:32:26 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Wed, 10 Jan 2024 21:32:25 +0100
-Date: Wed, 10 Jan 2024 21:32:25 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Antoine Coutant <antoine.coutant@smile.fr>
-Message-ID: <ZZ7-2b0Hv75GJAA0@landeda>
-References: <20240110163412.3977522-1-antoine.coutant@smile.fr>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CWtE1n8vG8b0 for <buildroot@lists.busybox.net>;
+ Wed, 10 Jan 2024 20:35:35 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 500084206F
+ for <buildroot@buildroot.org>; Wed, 10 Jan 2024 20:35:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 500084206F
+Received: by mail.gandi.net (Postfix) with ESMTPSA id ABC3360002;
+ Wed, 10 Jan 2024 20:35:33 +0000 (UTC)
+Date: Wed, 10 Jan 2024 21:35:32 +0100
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20240110213532.3e12945b@windsurf>
+In-Reply-To: <20240106153539.570324-1-ju.o@free.fr>
+References: <20240106153539.570324-1-ju.o@free.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240110163412.3977522-1-antoine.coutant@smile.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1704918752;
- bh=Mq4NPU0romJLJo0iG4Q7AXDPx7aeEASpJPAUWYl6r4A=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=exKAuXZ++aBZgnmIrrxyc6y0d7w6B0J9KNRj7b4G0xZwTlmSDSxBsJ/Iot/CRd0vf
- qNWdJyi/2DOfHQzkavOEbDkIDBLzzq9Z8QOpuH9EtzPrMRinhO46OiLl/YMbx2CYt1
- XW79cJ8vCyPxOfTcrK2J/PTdFZ+u3hgMQbyv0IjurCbZZd8Lx+iMaqzFGDItpmhSSQ
- iRJrHFjepbjo4/0dpnPInQ2jILfdcFKFJsREfpq6syVpz1NjLc4hi+se2aF6cuBdwM
- F8ahFKF7Tng9V6ofWIcanINRiHb28TZy24CpCtxGECP/oKgzQMcryt7xkbH4AwW9/1
- W0xijX2768E7w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=exKAuXZ+
-Subject: Re: [Buildroot] [PATCH v3 1/3] Revert "support/download: generate
- even more reproducible tarballs"
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1704918933;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=sfpoEjfe4gI3Yh7aztQHlBHZ0kbgoq2Kps2ZJDrkVxI=;
+ b=nCMS8KDKfv+SDZ9eu2SySPLiD9jOf5lrhWyv/wzjSpLJR4ICP675CFWeWa+2aqpTRmJkzx
+ P1Csc7FiCe63bH5drTaLZ2ikHHk9vFDj/f5pKRiDBudyDWk+IGt7BTt9VIUZ70J9t4JP7M
+ LKDMDYW3IDe0eUc9Gb6yAZGMgHFhePe6zKbEdfaC3A6m/GXsF+/zKLf50grLCD829x+UmX
+ d9KB/djrhTwd0Z6dHs9b3vZNtnVvUuftP/dZChe4ohOMC8hZPsDZI1b+xZcZYnSiG9/Yxu
+ 4FfcZbf+BtftPsLc7jqtkZ0B0Tx6HBwFh+EZl6V41pnTtDuOEfLhKD+PSeI4ig==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=nCMS8KDK
+Subject: Re: [Buildroot] [PATCH 1/1] configs/imx8mmpico: uboot needs openssl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,77 +74,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: sebastian.weyer@smile.fr, romain.naour@smile.fr,
- Vincent Fazio <vfazio@xes-inc.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Antoine, All,
+Hello Julien,
 
-On 2024-01-10 17:34 +0100, Antoine Coutant spake thusly:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On Sat,  6 Jan 2024 16:35:39 +0100
+Julien Olivain <ju.o@free.fr> wrote:
+
+> Commit 78e8f383 "configs/imx8mmpico: bump bsp components to version
+> tn-kirkstone_5.15.71-2.2.0" bumped components, but forgot to add
+> BR2_TARGET_UBOOT_NEEDS_OPENSSL=y.
 > 
-> Commit 768f9f80f62c (support/download: generate even more reproducible
-> tarballs) causes non-reproducibility in tarballs we previousy
-> generated, especially the archives for two cargo-vendored packages,
-> ripgrep and sentry-cli.
-[--SNIP--]
-> Reported-by: Antoine Coutant <antoine.coutant@smile.fr>
-> Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Vincent Fazio <vfazio@xes-inc.com>
-> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Tested-by: Romain Naour <romain.naour@smile.fr>
-> Tested-by: Antoine Coutant <antoine.coutant@smile.fr>
-
-You should have added your own SoB line here. The SoB line is abot the
-chain of propagation of a patch. I was the author, so obviously I SoB-ed
-it. Since you grabbed it and sent it, you are part of the chain of
-propagation, so you should SoB it.
-
-See: https://developercertificate.org/
-
-I was case (a) as described in there, you were case (b).
-
-Regards,
-Yann E. MORIN.
-
+> This commit adds it to the defconfig to fix the build.
+> 
+> Fixes:
+> - https://gitlab.com/buildroot.org/buildroot/-/jobs/5858180248
+> 
+>     In file included from tools/imagetool.h:24,
+>                      from tools/aisimage.c:7:
+>     include/image.h:1166:12: fatal error: openssl/evp.h: No such file or directory
+>      1166 | #  include <openssl/evp.h>
+>           |            ^~~~~~~~~~~~~~~
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 > ---
->  support/download/helpers | 3 ---
->  1 file changed, 3 deletions(-)
+>  configs/imx8mmpico_defconfig | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/support/download/helpers b/support/download/helpers
-> index 265685eff5..90a7d6c1ec 100755
-> --- a/support/download/helpers
-> +++ b/support/download/helpers
-> @@ -53,9 +53,6 @@ mk_tar_gz() {
->      tmp="$(mktemp --tmpdir="$(pwd)")"
->      pushd "${in_dir}" >/dev/null
->  
-> -    # Enforce group/others mode bits
-> -    chmod -R go-wx+X .
-> -
->      # Establish list
->      find . -not -type d -and -not \( -false "${find_opts[@]}" \) >"${tmp}.list"
->      # Sort list for reproducibility
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+> diff --git a/configs/imx8mmpico_defconfig b/configs/imx8mmpico_defconfig
+> index c402ea675d..711cdeb390 100644
+> --- a/configs/imx8mmpico_defconfig
+> +++ b/configs/imx8mmpico_defconfig
+> @@ -28,6 +28,7 @@ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+>  BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,TechNexion,u-boot-tn-imx,tn-kirkstone_5.15.71-2.2.0_20230512)/u-boot-tn-imx-tn-kirkstone_5.15.71-2.2.0_20230512.tar.gz"
+>  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Puck-imx8mm"
 
+This doesn't apply here, as this line doesn't match what we have in
+Buildroot. Is this "Puck-imx8mm" normal? We have:
+
+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="pico-imx8mm"
+
+Could you check this?
+
+Thanks!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
