@@ -4,84 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3706EC3DA6E
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 05:19:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C8FAC3DA6E
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 05:35:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E15E1837AD;
-	Wed, 10 Jan 2024 05:19:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E15E1837AD
+	by smtp1.osuosl.org (Postfix) with ESMTP id D1A1180F6B;
+	Wed, 10 Jan 2024 05:34:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D1A1180F6B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id B081aLETaVzd; Wed, 10 Jan 2024 05:19:17 +0000 (UTC)
+	with ESMTP id 5Qyu3oRg5gg9; Wed, 10 Jan 2024 05:34:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 40E958378C;
-	Wed, 10 Jan 2024 05:19:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 40E958378C
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4734C1BF34C
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 05:19:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E700980F92;
+	Wed, 10 Jan 2024 05:34:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E700980F92
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D252B1BF34C
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 05:34:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2CB0C6152D
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 05:19:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2CB0C6152D
+ by smtp2.osuosl.org (Postfix) with ESMTP id A88B143810
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 05:34:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A88B143810
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RmkgWPwREtoE for <buildroot@lists.busybox.net>;
- Wed, 10 Jan 2024 05:19:14 +0000 (UTC)
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com
- [IPv6:2607:f8b0:4864:20::d2d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5485561523
- for <buildroot@buildroot.org>; Wed, 10 Jan 2024 05:19:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5485561523
-Received: by mail-io1-xd2d.google.com with SMTP id
- ca18e2360f4ac-7ba9f1cfe94so121577939f.1
- for <buildroot@buildroot.org>; Tue, 09 Jan 2024 21:19:14 -0800 (PST)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zW4KvbXJRd2o for <buildroot@lists.busybox.net>;
+ Wed, 10 Jan 2024 05:34:52 +0000 (UTC)
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com
+ [IPv6:2607:f8b0:4864:20::134])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 96B11437FC
+ for <buildroot@buildroot.org>; Wed, 10 Jan 2024 05:34:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 96B11437FC
+Received: by mail-il1-x134.google.com with SMTP id
+ e9e14a558f8ab-36074b286d8so20879675ab.1
+ for <buildroot@buildroot.org>; Tue, 09 Jan 2024 21:34:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704863953; x=1705468753;
+ d=1e100.net; s=20230601; t=1704864891; x=1705469691;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=mmEaHPJ2gYmsX1AbRhAqxYtP3dZNTtv5wKxQYbbFCC4=;
- b=hTPc4GR+drF5br7163ITgHjiNH1Nm3DcXX5r4acY+n98m15AilVBBeBQOnYx51imsq
- xnp8zslXW8mGfMZX89zL4YX2T+rCcH0TmL/ci1x/QZXeNnzHkglHNsO1y4okE32CA+kC
- EuGN+CT/ybq0dLf47RWtgUVKzpVxDgzXU7aFgYPYufgM3AVq9nm7s8oEeMoK/CJvoiSq
- v3Zz6EzqchZeJfwCxQ977Z5jRyo9NKEfCzJELR5gcDhmN5PklgnUfmaHVzUqmV0AcpWO
- nqu+9LWEYPa4gnU7KBgK0bEXHoq6VvqbacQapmlHmmlWVUQAINw7e3vCTCX/JlNLCvBe
- yaPQ==
-X-Gm-Message-State: AOJu0YzHbVd9EDfMvSZjaksl/tnFhMrZxOh3Zw9VeiA9dp67qY6y6LL6
- o8R0LLItNKBTVojJwrNd6GNdFOTQpu0u3g==
-X-Google-Smtp-Source: AGHT+IFC8VnAgJZZ3ubqXKFRIM4h48u66ufA8PzRtqmr+I1mzwgowODco9Myi9U+ybH033KKE4Xdyw==
-X-Received: by 2002:a05:6e02:1847:b0:360:73de:be5e with SMTP id
- b7-20020a056e02184700b0036073debe5emr629572ilv.14.1704863952943; 
- Tue, 09 Jan 2024 21:19:12 -0800 (PST)
+ bh=PSJf4qBsXZSDmjjYfmPNSrl6yxZUT57AeavqvBFuHH8=;
+ b=KG4UukeS1FYZrU1vvw6Qy+Upl+tLtBMlaRDrsGNCHgTz+oFd8oPEhUYfBYFMjrsbR9
+ i3IGypmEYoBRpOM0aTj1y2sOh50XcsDfprv9n1Z9XPEzpTwSNlYv6ykCJrAhQPUckTy1
+ /BUVQuBAPVD1z10nHWf1hwHDGEIyplgDnINHD1LdUrgMOA4dt4ekFfR+vxlBYBkmzk4z
+ xY9hSQHBiXpTca34nNJ0x+Ws3LJ3zh6z2qu9Mq+R6Ozc186hsk/8cznLb4S6J5P6r62A
+ NCd9poEASdE75YvvK2vULTZJDddg4O9agw8cS1HYzxsNd04//OKiw4AZj9+TKj1Qf5mP
+ z24w==
+X-Gm-Message-State: AOJu0Yz46y1A2YgluGgRvUCvfQxb/d26MJz6jsIXEgR2XdRGO2kzqDLQ
+ /YOVnbYO5M6H9aorAsbbOvAAlMCdbXzHHA==
+X-Google-Smtp-Source: AGHT+IHl9K+sZC2G6eadhQaIWZdUknYBHuh3yIrEvhxAnqTmaaxCq2EotZOfDTVfYWYefQDm/fctjA==
+X-Received: by 2002:a05:6e02:1a85:b0:35f:f383:ac7b with SMTP id
+ k5-20020a056e021a8500b0035ff383ac7bmr752018ilv.16.1704864891122; 
+ Tue, 09 Jan 2024 21:34:51 -0800 (PST)
 Received: from james-x399.localdomain (71-218-103-119.hlrn.qwest.net.
  [71.218.103.119]) by smtp.gmail.com with ESMTPSA id
- br9-20020a056e0223c900b0035f7f712c78sm1054633ilb.36.2024.01.09.21.19.12
+ u16-20020a056e02111000b0035fb70434fesm1039990ilk.53.2024.01.09.21.34.50
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 09 Jan 2024 21:19:12 -0800 (PST)
+ Tue, 09 Jan 2024 21:34:50 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue,  9 Jan 2024 22:19:10 -0700
-Message-Id: <20240110051911.1137724-1-james.hilliard1@gmail.com>
+Date: Tue,  9 Jan 2024 22:34:49 -0700
+Message-Id: <20240110053449.1157385-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1704863953; x=1705468753; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1704864891; x=1705469691; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=mmEaHPJ2gYmsX1AbRhAqxYtP3dZNTtv5wKxQYbbFCC4=;
- b=XjYhvqbgvb2irFRWigNDAuAo5lzzVA7Qlm+NN8eYFi6+KH/gOwwcSYbA5vsqs1oJzA
- Jvy8UeDph1m0uOqqTF5OIx17U5rPa7j/R8TckJXx/loLVuf+HMyQc52uIoLu4JL6rJ9d
- uYkaFJHSPPhNWJcX/k77GJQyDZCCQyWBBxDuCmpSXpZ6bkAA/wi8d4/p/He+C/XsV5iA
- Gl3Ckj1bqpMTyvtba4pbzj+30NLCm0E3mbyKlALayN5ku6xksBv7eZBnXDBK3iG6omF7
- 0DeKIZcXMOW6Lly30QN2+tCZ3pbUGTl2EgK5aFc7SbAKnXE/4cdLlT4IJhan3plTU9+L
- JIvg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=PSJf4qBsXZSDmjjYfmPNSrl6yxZUT57AeavqvBFuHH8=;
+ b=PMYzca/h2hcmPYcviJ+ELIrGqz/lkTWXqYDejc9OyM5E/4lJxzc8kOmlYXF3PQqxgp
+ tkptMw/WscwheyWfH2h93hv/WDTPb9tNhVMfnDB1WIrtvqhuh0PccLOiCghMPcU/wZlb
+ k26m1O7g7FsGQxacPZoUe1Rp1Ac7u7Cxy4+2HwbubBqUGISmdwUbEsIHoezyKUwqcHJ8
+ GcjqGOUG2Lc1xOiE0aPr7oTopLZDbbSsfiKI0G1lGH/fyjyAmJI8dn8P4sHARy2m97nB
+ X8Vsz2fF7TDF3bxuLIrXpyk3RkSEO7u4wO7EAHfRy6rhftryLLqrv1X9emchYMEUcFko
+ 0umg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=XjYhvqbg
-Subject: [Buildroot] [PATCH 1/1] package/python-pyjwt: bump to version 2.8.0
+ header.a=rsa-sha256 header.s=20230601 header.b=PMYzca/h
+Subject: [Buildroot] [PATCH 1/1] package/python-pylibftdi: bump to version
+ 0.21.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,46 +95,84 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: James Hilliard <james.hilliard1@gmail.com>,
- Grzegorz Blach <grzegorz@blach.pl>, Asaf Kahlon <asafka7@gmail.com>
+ Christian Kellermann <christian.kellermann@solectrix.de>,
+ Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+License hash changed due to year update:
+https://github.com/codedstructure/pylibftdi/commit/c96231bb8134a2afeb0b77c12474b97a3355d2dc
+
+Fixup patch so that it applies against 0.21.0.
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pyjwt/python-pyjwt.hash | 4 ++--
- package/python-pyjwt/python-pyjwt.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .../0001-do-not-use-find-library.patch            | 15 ++++++++-------
+ package/python-pylibftdi/python-pylibftdi.hash    |  6 +++---
+ package/python-pylibftdi/python-pylibftdi.mk      |  4 ++--
+ 3 files changed, 13 insertions(+), 12 deletions(-)
 
-diff --git a/package/python-pyjwt/python-pyjwt.hash b/package/python-pyjwt/python-pyjwt.hash
-index 249f0e478e..06b91bc14a 100644
---- a/package/python-pyjwt/python-pyjwt.hash
-+++ b/package/python-pyjwt/python-pyjwt.hash
+diff --git a/package/python-pylibftdi/0001-do-not-use-find-library.patch b/package/python-pylibftdi/0001-do-not-use-find-library.patch
+index 192ed43e54..19dabebffe 100644
+--- a/package/python-pylibftdi/0001-do-not-use-find-library.patch
++++ b/package/python-pylibftdi/0001-do-not-use-find-library.patch
+@@ -15,17 +15,18 @@ this package.
+ Signed-off-by: Christian Kellermann <christian.kellermann@solectrix.de>
+ 
+ ---
+-diff -purN pylibftdi-0.15.0.orig/pylibftdi/driver.py pylibftdi-0.15.0/pylibftdi/driver.py
+---- pylibftdi-0.15.0.orig/pylibftdi/driver.py	2015-04-26 22:41:39.000000000 +0200
+-+++ pylibftdi-0.15.0/pylibftdi/driver.py	2017-02-27 13:08:56.502958000 +0100
+-@@ -121,8 +121,8 @@ class Driver(object):
++diff -purN pylibftdi-0.21.0.orig/src/pylibftdi/driver.py pylibftdi-0.21.0/src/pylibftdi/driver.py
++--- pylibftdi-0.21.0.orig/src/pylibftdi/driver.py	2015-04-26 22:41:39.000000000 +0200
+++++ pylibftdi-0.21.0/src/pylibftdi/driver.py	2017-02-27 13:08:56.502958000 +0100
++@@ -148,9 +148,8 @@ class Driver:
+                      lib = getattr(cdll, lib_path)
+                      break
+          if lib is None:
+--            raise LibraryMissingError('{} library not found (search: {})'.format(
+--                name, search_list))
++-            raise LibraryMissingError(
++-                f"{name} library not found (search: {str(search_list)})"
++-            )
+ +            return cdll.LoadLibrary(name + '.so')
+ +
+          return lib
+- 
++
+      @property
+diff --git a/package/python-pylibftdi/python-pylibftdi.hash b/package/python-pylibftdi/python-pylibftdi.hash
+index ee0ba127ca..5d8a19647f 100644
+--- a/package/python-pylibftdi/python-pylibftdi.hash
++++ b/package/python-pylibftdi/python-pylibftdi.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/PyJWT/json
--md5  228adbf1f9d2bcd42bbfb6d3b43dc48a  PyJWT-2.7.0.tar.gz
--sha256  bd6ca4a3c4285c1a2d4349e5a035fdf8fb94e04ccd0fcbe6ba289dae9cc3e074  PyJWT-2.7.0.tar.gz
-+md5  a683445793adb7fcf39ad3e55c5c347c  PyJWT-2.8.0.tar.gz
-+sha256  57e28d156e3d5c10088e0c68abb90bfac3df82b40a71bd0daa20c65ccd5c23de  PyJWT-2.8.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pylibftdi/json
+-md5  fb43ade3283b809d4ebe92bf4a60d7fc  pylibftdi-0.20.0.tar.gz
+-sha256  f4a87fc4af2c9c7d42badd4192ca9b529f32c9d96fdc8daea7e29c509226df5f  pylibftdi-0.20.0.tar.gz
++md5  75b63f325b760cc6342b7d35fbb84fde  pylibftdi-0.21.0.tar.gz
++sha256  eb7e2f5052852547f4c6c46022a1665f9d7453439639171eade56fdc80a58832  pylibftdi-0.21.0.tar.gz
  # Locally computed sha256 checksums
- sha256  797a7a20231d4c433e9f1911db1731d06b5828b98f499819a034f7c0f56f5ce5  LICENSE
-diff --git a/package/python-pyjwt/python-pyjwt.mk b/package/python-pyjwt/python-pyjwt.mk
-index 982bc758df..d4cf226941 100644
---- a/package/python-pyjwt/python-pyjwt.mk
-+++ b/package/python-pyjwt/python-pyjwt.mk
+-sha256  0d3f1af06b566a783091422061b60e864fc5d5853418b71643041e254b4ae7f9  LICENSE.txt
++sha256  b8a7b113cfaa2c01d0701183de16ba653465692b1e29e0229244eee42fb3a9a8  LICENSE.txt
+diff --git a/package/python-pylibftdi/python-pylibftdi.mk b/package/python-pylibftdi/python-pylibftdi.mk
+index 34040b72ac..7dca37e416 100644
+--- a/package/python-pylibftdi/python-pylibftdi.mk
++++ b/package/python-pylibftdi/python-pylibftdi.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYJWT_VERSION = 2.7.0
-+PYTHON_PYJWT_VERSION = 2.8.0
- PYTHON_PYJWT_SOURCE = PyJWT-$(PYTHON_PYJWT_VERSION).tar.gz
--PYTHON_PYJWT_SITE = https://files.pythonhosted.org/packages/e0/f0/9804c72e9a314360c135f42c434eb42eaabb5e7ebad760cbd8fc7023be38
-+PYTHON_PYJWT_SITE = https://files.pythonhosted.org/packages/30/72/8259b2bccfe4673330cea843ab23f86858a419d8f1493f66d413a76c7e3b
- PYTHON_PYJWT_SETUP_TYPE = setuptools
- PYTHON_PYJWT_LICENSE = MIT
- PYTHON_PYJWT_LICENSE_FILES = LICENSE
+-PYTHON_PYLIBFTDI_VERSION = 0.20.0
++PYTHON_PYLIBFTDI_VERSION = 0.21.0
+ PYTHON_PYLIBFTDI_SOURCE = pylibftdi-$(PYTHON_PYLIBFTDI_VERSION).tar.gz
+-PYTHON_PYLIBFTDI_SITE = https://files.pythonhosted.org/packages/b8/03/4f778ce6dceea58dc5bfd555c22fdb265afc922d81d3c4496a791a54c479
++PYTHON_PYLIBFTDI_SITE = https://files.pythonhosted.org/packages/d2/ce/ff3e83f3a14eb5b7950ff3657f07cdc3033dd0ded5c8ed093db515e1de33
+ PYTHON_PYLIBFTDI_LICENSE = MIT
+ PYTHON_PYLIBFTDI_LICENSE_FILES = LICENSE.txt
+ PYTHON_PYLIBFTDI_DEPENDENCIES = libftdi
 -- 
 2.34.1
 
