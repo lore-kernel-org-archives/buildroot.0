@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59E48C3DA6E
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 09:53:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 811B5C3DA6E
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 09:53:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0E13443681;
-	Wed, 10 Jan 2024 09:53:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E13443681
+	by smtp2.osuosl.org (Postfix) with ESMTP id 314C8435FF;
+	Wed, 10 Jan 2024 09:53:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 314C8435FF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EDvbAs4uMfmg; Wed, 10 Jan 2024 09:53:15 +0000 (UTC)
+	with ESMTP id bca0i6WOkXRi; Wed, 10 Jan 2024 09:53:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E8B124363B;
-	Wed, 10 Jan 2024 09:53:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E8B124363B
+	by smtp2.osuosl.org (Postfix) with ESMTP id F0E5D43623;
+	Wed, 10 Jan 2024 09:53:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F0E5D43623
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8AC861BF34C
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 09:51:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9AEF91BF406
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 09:51:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4ECEB41607
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6185F41693
  for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 09:51:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4ECEB41607
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6185F41693
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4LWGL_4fbcn6 for <buildroot@lists.busybox.net>;
+ with ESMTP id 1b9NKcotajir for <buildroot@lists.busybox.net>;
  Wed, 10 Jan 2024 09:51:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7FDE74160B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9A8AD4168E
  for <buildroot@buildroot.org>; Wed, 10 Jan 2024 09:51:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FDE74160B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A8AD4168E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 70389853B3; Wed, 10 Jan 2024 09:51:32 +0000 (UTC)
+ id 98702853B3; Wed, 10 Jan 2024 09:51:32 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 10 Jan 2024 10:36:04 +0100
+Date: Wed, 10 Jan 2024 10:45:59 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 60a96b42a2a1914ba650beac7d66469749b59167
-X-Git-Newrev: ed75806fe9330d3b408d9e045f0ce36a8593dc3b
+X-Git-Oldrev: fb163d2c7df772de8689836564339197294960a8
+X-Git-Newrev: 5909f8eae3fd9ee4a04361a7ba9fffb4b5b524e6
 X-Patchwork-Hint: ignore
-Message-Id: <20240110095132.70389853B3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/libde265:
- security bump to version 1.0.15
+Message-Id: <20240110095132.98702853B3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/libebml: security
+ bump to version 1.4.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,47 +63,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ed75806fe9330d3b408d9e045f0ce36a8593dc3b
+commit: https://git.buildroot.net/buildroot/commit/?id=5909f8eae3fd9ee4a04361a7ba9fffb4b5b524e6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-A couple of bug fixes, including the following CVEs:
- - CVE-2023-49465
- - CVE-2023-49467
- - CVE-2023-49468
+Fix invalid memory access (reading beyond allocated memory) due to
+missing integer overflow check.
 
-https://github.com/strukturag/libde265/releases/tag/v1.0.15
+https://github.com/Matroska-Org/libebml/blob/release-1.4.5/NEWS.md
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 158edd5aa94b516cf8710e690431289da2545e40)
+(cherry picked from commit 69df189aea5e8c4f0de340e541f25705acaea1d2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libde265/libde265.hash | 2 +-
- package/libde265/libde265.mk   | 2 +-
+ package/libebml/libebml.hash | 2 +-
+ package/libebml/libebml.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libde265/libde265.hash b/package/libde265/libde265.hash
-index 9bb3f20a71..a21a8a1265 100644
---- a/package/libde265/libde265.hash
-+++ b/package/libde265/libde265.hash
+diff --git a/package/libebml/libebml.hash b/package/libebml/libebml.hash
+index c83fde32ab..34626eb1f4 100644
+--- a/package/libebml/libebml.hash
++++ b/package/libebml/libebml.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  99f46ef77a438be639aa3c5d9632c0670541c5ed5d386524d4199da2d30df28f  libde265-1.0.14.tar.gz
-+sha256  00251986c29d34d3af7117ed05874950c875dd9292d016be29d3b3762666511d  libde265-1.0.15.tar.gz
- sha256  02cc1585a20677992e0ba578fa692635dc193735f2691dc81de924b51c4e8020  COPYING
-diff --git a/package/libde265/libde265.mk b/package/libde265/libde265.mk
-index 8624d2f949..62c22246aa 100644
---- a/package/libde265/libde265.mk
-+++ b/package/libde265/libde265.mk
+ # Locally calculated
+-sha256  82dc5f83356cc9340aee76ed7512210b3a4edf5f346bc9c2c7044f55052687a7  libebml-1.4.4.tar.xz
++sha256  4971640b0592da29c2d426f303e137a9b0b3d07e1b81d069c1e56a2f49ab221b  libebml-1.4.5.tar.xz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL
+diff --git a/package/libebml/libebml.mk b/package/libebml/libebml.mk
+index c85638c03e..0f69de8c81 100644
+--- a/package/libebml/libebml.mk
++++ b/package/libebml/libebml.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBDE265_VERSION = 1.0.14
-+LIBDE265_VERSION = 1.0.15
- LIBDE265_SITE = https://github.com/strukturag/libde265/releases/download/v$(LIBDE265_VERSION)
- LIBDE265_LICENSE = LGPL-3.0+
- LIBDE265_LICENSE_FILES = COPYING
+-LIBEBML_VERSION = 1.4.4
++LIBEBML_VERSION = 1.4.5
+ LIBEBML_SOURCE = libebml-$(LIBEBML_VERSION).tar.xz
+ LIBEBML_SITE = http://dl.matroska.org/downloads/libebml
+ LIBEBML_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
