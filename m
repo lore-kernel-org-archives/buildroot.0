@@ -4,62 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1DADC47073
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 20:52:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0430C47073
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 20:52:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8E544436D7;
-	Wed, 10 Jan 2024 20:52:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E544436D7
+	by smtp2.osuosl.org (Postfix) with ESMTP id A8F34436D7;
+	Wed, 10 Jan 2024 20:52:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A8F34436D7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dRQwkClYgbCx; Wed, 10 Jan 2024 20:52:10 +0000 (UTC)
+	with ESMTP id epmB24NR1G2F; Wed, 10 Jan 2024 20:52:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A7CE4436E5;
-	Wed, 10 Jan 2024 20:52:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A7CE4436E5
+	by smtp2.osuosl.org (Postfix) with ESMTP id C2A8F43727;
+	Wed, 10 Jan 2024 20:52:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C2A8F43727
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 52AB51BF5B3
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 20:52:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 90A571BF5B3
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 20:52:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0950542276
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 20:52:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0950542276
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6A04842276
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 20:52:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A04842276
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id txFwAECWk1Wr for <buildroot@lists.busybox.net>;
- Wed, 10 Jan 2024 20:52:05 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 074104226E
- for <buildroot@buildroot.org>; Wed, 10 Jan 2024 20:52:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 074104226E
-Received: by mail.gandi.net (Postfix) with ESMTPA id 1AA68240005;
- Wed, 10 Jan 2024 20:52:02 +0000 (UTC)
-To: Buildroot List <buildroot@buildroot.org>
-Date: Wed, 10 Jan 2024 21:51:53 +0100
-Message-ID: <20240110205154.4091988-1-thomas.petazzoni@bootlin.com>
-X-Mailer: git-send-email 2.43.0
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1704919922;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=FoWCcUShrskbifgh1747PN7B5FlENjdiODZupDE5HaY=;
- b=LdlIUpi5weeM216EM++AsQKM0KnSKUGodULtZY8yFEb1vmwkMfpWNtnpIzsIcT1K46qV23
- HxBFqWLOqbLcXxwrGfor3Vy7BHvjX9kYE6h5tPWcj/zM6YoFpR7SI6ddnPZDgkFyxsoxlF
- qSQHHlhgwVW0O7ond0GWHfiRHaNr+GUjgl2QCGDPm3vva+X2A29dy6gPvbXc7CykCOtTzg
- OGVxKycm3UMjp5+Abk2dwe2kM2LhQuYLf/CQ6kRaBtXy9FkpJKyTuRV98zV0yfH9WBMqAB
- vuPwwYV9sUesxIoRCv0mrTxRWnb944yr8JGFEWV/X+IqN6RSdoWSFeyYaZGVJg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=LdlIUpi5
-Subject: [Buildroot] [PATCH] package/pipewire: fix webrtc-audio-processing
- condition
+ with ESMTP id Z_Ecs9NYgVX4 for <buildroot@lists.busybox.net>;
+ Wed, 10 Jan 2024 20:52:22 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B90DD4226E
+ for <buildroot@buildroot.org>; Wed, 10 Jan 2024 20:52:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B90DD4226E
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A47B085DB2; Wed, 10 Jan 2024 20:52:22 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Wed, 10 Jan 2024 21:13:43 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9bf9cac489bfe313623d0382446a1504d4f75992
+X-Git-Newrev: 7fe4e29b5ea2c129c123df2d847fc8e04f06e93e
+X-Patchwork-Hint: ignore
+Message-Id: <20240110205222.A47B085DB2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qwt: reinstate mkspecs cleanup
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,44 +56,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The condition checking whether the webrtc-audio-processing package is
-enabled, added in commit
-3ccd3b4c384e98703841b12f7309362957f8f17d ("package/pipewire: bump to
-version 0.3.32") is obviously incorrect, and can never be true.
+commit: https://git.buildroot.net/buildroot/commit/?id=7fe4e29b5ea2c129c123df2d847fc8e04f06e93e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the condition to use the correct variable instead.
+The qwt package is a Qt5 package, not a Qt6 one, so it can't benefit
+from the target-finalize hook that was introduced in e29fcde4ba70
+(package/qt6base: remove $(TARGET_DIR)/usr/mkspecs in target-finalize).
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Indeed, the original patch was hard-coding the mkspecs removal directly
+in the target-finalize recipe, and that was made a hook as a last-minute
+change when applying, without realising that qwt was qt5-based.
+
+So, reinstate the mkspecs removal as an ad-hoc fixup in the qwt package.
+
+This actually partially reverts commit e29fcde4ba70 (package/qt6base:
+remove $(TARGET_DIR)/usr/mkspecs in target-finalize).
+
+Reported-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/pipewire/pipewire.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/qwt/qwt.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
-index 628c69ff8a..f0f3cd847c 100644
---- a/package/pipewire/pipewire.mk
-+++ b/package/pipewire/pipewire.mk
-@@ -225,7 +225,7 @@ else
- PIPEWIRE_CONF_OPTS += -Dcompress-offload=disabled
- endif
+diff --git a/package/qwt/qwt.mk b/package/qwt/qwt.mk
+index f344ca4e3a..9f0b78655f 100644
+--- a/package/qwt/qwt.mk
++++ b/package/qwt/qwt.mk
+@@ -58,6 +58,7 @@ endef
  
--ifeq ($(WEBRTC_AUDIO_PROCESSING),y)
-+ifeq ($(BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING),y)
- PIPEWIRE_CONF_OPTS += -Decho-cancel-webrtc=enabled
- PIPEWIRE_DEPENDENCIES += webrtc-audio-processing
- else
--- 
-2.43.0
-
+ define QWT_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install INSTALL_ROOT=$(TARGET_DIR)
++	rm -Rf $(TARGET_DIR)/usr/mkspecs
+ endef
+ 
+ $(eval $(qmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
