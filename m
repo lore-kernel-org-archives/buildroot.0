@@ -4,85 +4,101 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2113CC3DA6E
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 05:39:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 247A5C3DA6E
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 05:40:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C20BF81094;
-	Wed, 10 Jan 2024 05:38:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C20BF81094
+	by smtp1.osuosl.org (Postfix) with ESMTP id A87A88131D;
+	Wed, 10 Jan 2024 05:40:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A87A88131D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YbNoUCaf1qP3; Wed, 10 Jan 2024 05:38:58 +0000 (UTC)
+	with ESMTP id cN1n10IgkGrQ; Wed, 10 Jan 2024 05:40:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0767581006;
-	Wed, 10 Jan 2024 05:38:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0767581006
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 992CF1BF34C
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 05:38:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 86B748131E;
+	Wed, 10 Jan 2024 05:40:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 86B748131E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 63C7C1BF34C
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 05:40:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 761CA408D5
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 05:38:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 761CA408D5
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3BC6F8131E
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 05:40:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3BC6F8131E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6LJgCMtyAvjf for <buildroot@lists.busybox.net>;
- Wed, 10 Jan 2024 05:38:54 +0000 (UTC)
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com
- [IPv6:2607:f8b0:4864:20::d29])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 580214028B
- for <buildroot@buildroot.org>; Wed, 10 Jan 2024 05:38:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 580214028B
-Received: by mail-io1-xd29.google.com with SMTP id
- ca18e2360f4ac-7ba903342c2so265220039f.3
- for <buildroot@buildroot.org>; Tue, 09 Jan 2024 21:38:54 -0800 (PST)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id k5VOQyqEdts5 for <buildroot@lists.busybox.net>;
+ Wed, 10 Jan 2024 05:40:52 +0000 (UTC)
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com
+ [IPv6:2607:f8b0:4864:20::836])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8D71E8131D
+ for <buildroot@buildroot.org>; Wed, 10 Jan 2024 05:40:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8D71E8131D
+Received: by mail-qt1-x836.google.com with SMTP id
+ d75a77b69052e-429b46135d0so1643041cf.2
+ for <buildroot@buildroot.org>; Tue, 09 Jan 2024 21:40:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704865133; x=1705469933;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=5ZKfYR2aLAgZ+WegjYCEIbadjWqv7PE7KXyxDNPb3nc=;
- b=Q8gAVuldqsexub11Ev53klOV2FJhPk3w8sqV/EWfGTP1BkDLlSdGFPIqHjahs7/fjX
- Q1b8kToDFTW30OhdejlJ/rZwU7b+ydO2ixW9X1c2/IFRekmrO0Tbnj0YSepy4aq4KkiR
- uQbSLbVczMUATG6m13dpadxRGdG3/o5boE77EA5qRnLD12VLO7kcFjHR/bSZ8UNE+dE4
- j0bC9uxobCiRmMebkNQSToxuKwhFfa8R49u4d/lff9TBGWN3yFXMji7z7XYf0Th/HonW
- t6SZrhsPjrx4P+2YGaX2pBoXFvKPp951R2ueZzTG2Q4yDmyN/niNAzAi2dr8ll7Lxwqk
- /C3A==
-X-Gm-Message-State: AOJu0Yy80O7KE4+C6l3otuSEHAFLwFHnHBePuEbAm0rxN+6rgZg5MTI1
- 3A1yI4nF/qfqR6lt0iA04ARJBr0VNhFCGg==
-X-Google-Smtp-Source: AGHT+IHmNwkLY73Ho969/eGDYkXUhqqWsk8oPSGTrimT8lX8wbcVWTZYrjPBMW6B3e0FoU94ZHNfWw==
-X-Received: by 2002:a6b:db02:0:b0:7be:e783:850e with SMTP id
- t2-20020a6bdb02000000b007bee783850emr212240ioc.39.1704865132864; 
- Tue, 09 Jan 2024 21:38:52 -0800 (PST)
-Received: from james-x399.localdomain (71-218-103-119.hlrn.qwest.net.
- [71.218.103.119]) by smtp.gmail.com with ESMTPSA id
- k13-20020a5e890d000000b007b7f3506685sm440600ioj.17.2024.01.09.21.38.52
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 09 Jan 2024 21:38:52 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue,  9 Jan 2024 22:38:50 -0700
-Message-Id: <20240110053850.1159643-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+ d=1e100.net; s=20230601; t=1704865251; x=1705470051;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=Wl6KplL8vfqqzv9XIvHtOm+qlgn0/YVCH+xMxC333j8=;
+ b=bKHjtJUNTohS8/nIQPnzsjEXg9nQ0UZn1x35Y2yHOk7Rcge3iKVJ1PiXkd/K/+mIb6
+ ciSzInPy9wgi5m6+3OIfStK+/aRbmOpLEx4jQvI7RJ5pwVVhrfb+21gXpWcHuWWPXdCd
+ Dv1kQYAVLVqu1aQH7LupYC35+CY1X2PKtkW9RQa5R0aKvkSsSgfVgPeL3U8JQqs5+VYJ
+ YXFHm/i2W0xCnAksISLqf5JmmLSUFEBz+oh3HdcgBE2oYcOkPmwW6ZdVjvzklqdiSAtE
+ e7Vpmm7w4nrXNnuVUH3sLEyJKK+qHUOLncxxM34d8eSEhs72ULAj60LVnoMWjsBMAgh5
+ Kpzw==
+X-Gm-Message-State: AOJu0YzVOvwIXTE/HZE9m9sDO3dl2UERv7qAEpnseAIkbDoGV+wd1dCG
+ LtrfLVoQfj/NGCU65J0meOgzWajgT1Uk1A==
+X-Google-Smtp-Source: AGHT+IE8kWehfow24cvasfCahOteXRnQwmSQ0KUU70I6cj4jEzLcuNUg6AgxZgtVGm7CpYkCj/gbDA==
+X-Received: by 2002:a05:622a:588:b0:429:b76a:c3fa with SMTP id
+ c8-20020a05622a058800b00429b76ac3famr202269qtb.26.1704865251286; 
+ Tue, 09 Jan 2024 21:40:51 -0800 (PST)
+Received: from [172.16.32.83] ([198.232.126.202])
+ by smtp.gmail.com with ESMTPSA id
+ cr14-20020a05622a428e00b0042997333149sm1497591qtb.63.2024.01.09.21.40.49
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 09 Jan 2024 21:40:51 -0800 (PST)
+Message-ID: <b3a8b9db-86ee-47c6-96e2-baa2cba61404@landley.net>
+Date: Tue, 9 Jan 2024 23:47:27 -0600
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US
+To: Greg Ungerer <gerg@linux-m68k.org>, Petr Vorel <pvorel@suse.cz>
+References: <20240103015240.1065284-1-pvorel@suse.cz>
+ <CAMuHMdXGwyS-CL0vLdUP4Z4YEYhmcmDyC3YdGCnS=jFkqASqvw@mail.gmail.com>
+ <20240103114957.GD1073466@pevik>
+ <CAMuHMdX0s0gLRoPtjJmDnSmZ_MNY590dN+JxM1HKAL1g_bjX+w@mail.gmail.com>
+ <ZZVOhlGPg5KRyS-F@yuki> <5a1f1ff3-8a61-67cf-59a9-ce498738d912@landley.net>
+ <20240105131135.GA1484621@pevik>
+ <90c1ddc1-c608-30fc-d5aa-fdf63c90d055@landley.net>
+ <20240108090338.GA1552643@pevik>
+ <a3d7f5ae-56c6-9cd8-2cda-2d50d12be9c4@landley.net>
+ <461a6556-8f24-48f5-811a-498cb44f2d64@linux-m68k.org>
+From: Rob Landley <rob@landley.net>
+In-Reply-To: <461a6556-8f24-48f5-811a-498cb44f2d64@linux-m68k.org>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1704865133; x=1705469933; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=5ZKfYR2aLAgZ+WegjYCEIbadjWqv7PE7KXyxDNPb3nc=;
- b=mF+JW6F3UZhecCU3JvMUTBCl6XHsNRI5zSEIWyKK/J8/oRodED2+tMyZYkG4SBwQAC
- MYJL9sKxnvprDSATW5j6jwUhURlVQ0g6Ls0Iy0DQJcEfUkclwbLhU6cOQgmKu7E47y6H
- R4rU4zBuspG72AdfocbNDKnjOUnzlFXXLmJACBD1GUB0ZODk/QWOQZ9mpp98J3RB6mox
- GDjtYyYkg+6c5lyCNAYGNrS8/X1PpPcwsTTe+3JyJFOEZvmXOgvGNo1dgeYPXDZJWQfr
- h3DTlbg2ZMimIimBZC5FmwFT240i03MIlKFoqNJHbJ846nQHrc0oBSDVFI2MNj+g7NEN
- qXGA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=mF+JW6F3
-Subject: [Buildroot] [PATCH 1/1] package/python-pymodbus: bump to version
- 3.6.3
+ d=landley-net.20230601.gappssmtp.com; s=20230601; t=1704865251; x=1705470051;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=Wl6KplL8vfqqzv9XIvHtOm+qlgn0/YVCH+xMxC333j8=;
+ b=QJAuGcfNaPB3QaZkVuFalFN/qbMwMwE216K9UDf7P8itElf7W1nuONT5hn5N9RDVi1
+ UMsce9k4JXEr05AiRw8XvqZnqOnef+RjiuiIaqO9la/x/h1z4qVz29z+IaAee/ToL77n
+ fviBvTZ+vkd6KN96dviMZCLWExruDtsByDlyq6qUuoqkbevrldCvjTDlLZB/KUmv31My
+ TCiJy3JWyWixlqqvcxQTfOhhGnTDScPSDHHaeYzBvX4u7h7fct40enJ0kRmYKJ9YGbjB
+ cYxMIAfecArau0QstTB8b4SC5x8BVFzUa7DjctF8N1HjJt2X+xf7ZfYnCGuwK2AF5kVC
+ Fmzw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=landley-net.20230601.gappssmtp.com
+ header.i=@landley-net.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=QJAuGcfN
+Subject: Re: [Buildroot] Call for nommu LTP maintainer [was: Re: [PATCH
+ 00/36] Remove UCLINUX from LTP]
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,74 +110,219 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Falco Hyfing <hyfinglists@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: Niklas Cassel <niklas.cassel@wdc.com>,
+ Andrea Cervesato <andrea.cervesato@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+ Linux-sh list <linux-sh@vger.kernel.org>,
+ Christophe Lyon <christophe.lyon@linaro.org>,
+ Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
+ Li Wang <liwang@redhat.com>, linux-m68k@lists.linux-m68k.org,
+ Geert Uytterhoeven <geert@linux-m68k.org>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>,
+ Cyril Hrubis <chrubis@suse.cz>,
+ John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+ linux-riscv <linux-riscv@lists.infradead.org>, buildroot@buildroot.org,
+ ltp@lists.linux.it, automated-testing@lists.yoctoproject.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-License hash changed due to year range update:
-https://github.com/pymodbus-dev/pymodbus/commit/131d30391efd9c64f1fec857ae0372746374e6d2
 
-Drop no longer required python-six runtime dependency.
 
-Drop no longer required python-serial runtime dependency.
+On 1/9/24 17:17, Greg Ungerer wrote:
+> 
+> On 10/1/24 06:24, Rob Landley wrote:
+>> On 1/8/24 03:03, Petr Vorel wrote:
+>>> Hi Rob, all,
+>>>
+>>> [ Added Niklas Cassel, who is maintainer of qemu_riscv64_nommu_virt_defconfig in
+>>> buildroot ]
+>> 
+>> Hi Niklas!
+>> 
+>>>> Buildroot also apparently has an LTP package selectable in menuconfig:
+>>>
+>>>> https://github.com/buildroot/buildroot/tree/master/package/ltp-testsuite
+>>>
+>>>> But I haven't tried it...
+>>>
+>>> I'm the maintainer of the LTP package in buildroot in my private time.
+>>> BTW I spent quite a lot of time fixing LTP (and some other system packages,
+>>> e.g. nfs-utils) compilation on some old legacy architectures reported via
+>>> http://autobuild.buildroot.net/ I've never used in the reality.
+>>> But I certainly don't have time to drive nommu support in my private time.
+>>> I don't even have an interest, I don't use any nommu device.
+>> 
+>> I do, but I've never done much with LTP, and I have my hands full with toybox
+>> and mkroot already.
+>> 
+>>> Therefore nobody who is not involved in nommu will not find a time to support it
+>>> in LTP (support does not mean just to add the functionality to the new C API,
+>>> but run tests on nommu and fix failing bugs). I suppose nobody is paid to work
+>>> on nommu platforms, it would have to be a hobby project, right?
+>> 
+>> A bunch of people are paid to work on nommu platforms, and I've worked with them
+>> a bunch, but none of them talk to linux-kernel. They find the culture toxic,
+>> insular, and categorically dismissive of their interests.
+> 
+> I have been involved in the kernel nommu space for 20 years, and sure, there is
+> some of that. But mostly spending some time and effort to get involved pays off.
+> I have seen potential contributors show up with some arrogant attitudes too,
+> so it cuts both ways here.
+> 
+> The m68k community I have been part of has been nothing but welcoming. The mm
+> people have tried hard to keep nommu support up-to-date where almost none of them
+> actually have a vested interest in doing so.
+> 
+> What I have seen is that many companies working in this space just don't want
+> to spend the time and effort to go mainline.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-pymodbus/Config.in            | 6 ++----
- package/python-pymodbus/python-pymodbus.hash | 6 +++---
- package/python-pymodbus/python-pymodbus.mk   | 4 ++--
- 3 files changed, 7 insertions(+), 9 deletions(-)
+Sometimes they don't bother. Sometimes there's a language barrier. Sometimes
+they can't get anything newer than 2.6 working because that's the BSP they were
+given so what's the point of trying to engage upstream? Sometimes they think
+it's their upstream vendor's responsibility. Sometimes they poke their head up
+and get it bit off ala http://landley.net/notes-2008.html#11-12-2008 and then
+that serves as a warning to others for generations. Sometimes the company's
+legal department thinks it's a terrible idea to attract attention from people
+like the SFLC. And sometimes...
 
-diff --git a/package/python-pymodbus/Config.in b/package/python-pymodbus/Config.in
-index 0ba6fb88f0..dac6716b87 100644
---- a/package/python-pymodbus/Config.in
-+++ b/package/python-pymodbus/Config.in
-@@ -1,8 +1,6 @@
- config BR2_PACKAGE_PYTHON_PYMODBUS
- 	bool "python-pymodbus"
--	select BR2_PACKAGE_PYTHON_SIX # runtime
--	select BR2_PACKAGE_PYTHON_SERIAL # runtime
- 	help
--	  Pymodbus is a full Modbus protocol implementation.
-+	  A fully featured modbus protocol stack in python.
- 
--	  https://github.com/riptideio/pymodbus
-+	  https://github.com/pymodbus-dev/pymodbus/
-diff --git a/package/python-pymodbus/python-pymodbus.hash b/package/python-pymodbus/python-pymodbus.hash
-index d9337ffe84..5f60af52d8 100644
---- a/package/python-pymodbus/python-pymodbus.hash
-+++ b/package/python-pymodbus/python-pymodbus.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pymodbus/json
--md5  89da6585b27b8c4b3887eb9f7d1e950b  pymodbus-3.0.2.tar.gz
--sha256  704cb7fb90631c45f9c3a70b89d0c990fe0e208ac56f14a5c449e21bebd1e201  pymodbus-3.0.2.tar.gz
-+md5  e8a618bf4699db477ca07cdee54818d0  pymodbus-3.6.3.tar.gz
-+sha256  862f64376ae201f979c91ca2398f0ed5df8f136b76491e0995edeebbd0fa8940  pymodbus-3.6.3.tar.gz
- # Locally computed sha256 checksums
--sha256  796a47993313691ea404d8af7e4c0f9daf1d2760e3900938985b59c9008eee2f  LICENSE
-+sha256  47f904249172e795a6b32de91f471073297befffd74e17cafc288d348a55972e  LICENSE
-diff --git a/package/python-pymodbus/python-pymodbus.mk b/package/python-pymodbus/python-pymodbus.mk
-index 54879d38e9..21e7fdcfba 100644
---- a/package/python-pymodbus/python-pymodbus.mk
-+++ b/package/python-pymodbus/python-pymodbus.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYMODBUS_VERSION = 3.0.2
-+PYTHON_PYMODBUS_VERSION = 3.6.3
- PYTHON_PYMODBUS_SOURCE = pymodbus-$(PYTHON_PYMODBUS_VERSION).tar.gz
--PYTHON_PYMODBUS_SITE = https://files.pythonhosted.org/packages/94/f7/6149a1b107fa54378a7adec83db7cd3679bf02216a6f5c83b37f55335897
-+PYTHON_PYMODBUS_SITE = https://files.pythonhosted.org/packages/ca/8b/d779c6ac03479aa719c1c6ed11711176661ea200dae0ec29f04231f0e596
- PYTHON_PYMODBUS_SETUP_TYPE = setuptools
- PYTHON_PYMODBUS_LICENSE = BSD-3-Clause
- PYTHON_PYMODBUS_LICENSE_FILES = LICENSE
--- 
-2.34.1
 
+The SmartFusion 2 project I was doing on cortex-m was for a project that was to
+be launched into space on a NASA rocket, and thus fell under ITAR export
+regulations (as the entire US space program has since 1996 due to
+https://en.wikipedia.org/wiki/International_Traffic_in_Arms_Regulations#:~:text=Intelsat
+) and my manager explained it to me as:
+
+"If I buy a screwdriver from Home Depot, it's just a screwdriver. If I use it to
+turn a screw on a spacecraft it is now a munition and cannot be discussed with
+non-US persons".
+
+The stupid linked above was:
+
+1) cryptography was categorized as a munition until Bill Clinton relaxed it via
+executive order, because 56 bit https was preventing anybody from trusting the
+web with their credit card data.
+
+2) Before that, in 1996, china wanted to launch a satellite into space with
+crypto stuff so they negotiated with the USA to get some cryptographic hardware
+which was delivered/installed under armed guard and escorted to the launch pad.
+
+3) The rocket blew up on launch, scattering debris over a chinese city (becuase
+of COURSE china's rocket launches go over large population centers). The crypto
+hardware was never recovered.
+
+4) It became a scandal. Congress freaked. And somehow in the scuffle ITAR export
+regulations were extended from cryptography to the entire US space program.
+
+5) The US space program dried up and blew away, as engineers had to choose
+between "I can work on space stuff" and "I can have any sort of professional
+network online". (Because who online is a "non-US person"? That includes canada.
+You can't discuss ITAR subjects with canadians. Or foreign nationals living in
+the USA. You couldn't ask Alan Cox a question about an ITAR project.)
+
+So that's a whole category that stays very quiet about what they do, and whose
+legal analysis of the GPL is "we're making 3 of these and shooting them into
+space, if you retrieve one from space and demand source code from us we will
+forward you to the relevant federal agencies, and there's a nonzero chance
+you'll be on a black site in Diego Garcia within 24 hours where they will figure
+out how you did that. Or maybe you'll get the code. Who knows?"
+
+Me, I try to avoid that kind of contract...
+
+> That is a business decision they
+> make, and that is fine. Heck my work in actual mainline has never really been
+> paid for by any company and I have sunk a _lot_ of time into it. (Full disclosure
+> I did get paid to work on early porting and support - just not geting it into
+> mainline and maintain it there).
+
+The thing is if you post something _once_ it gets ignored, and if you follow-up
+long enough for it to go in (which often takes years), it will then get ripped
+out again a few years later because "we never hear from anybody who uses this".
+
+Engaging with the community is signing up for an ongoing commitment.
+
+>> For example, cortex-m is a large nommu platform on which vendors support Linux
+>> BSPs, but notice how page 8 of
+>> https://www.microsemi.com/document-portal/doc_view/132181-linux-cortex-m-users-manual
+>> points at a cross compiler toolchain from _2010_ and page 4 says they're booting
+>> a 2.6.33 kernel?
+> 
+> Any company/person who follows the route of not working with the linux kernel
+> community to get their work included is going to inevitably get stuck on older
+> versions of everything.
+
+I fight hard to get current versions of everything to work on all my supported
+targets. This requires regular regression testing, and I maintain a pile of
+patches that I post here periodically but I fully admit will probably never go in:
+
+  https://lkml.iu.edu/hypermail/linux/kernel/2302.2/05594.html
+
+(Sigh, now that 6.7 is out I should post the new round...)
+
+People who want to use my kernels as a source are welcome to do so (and I've
+seen my patches quietly show up in other projects), but getting upstream to
+actually _fix_ anything? Every one of those patches had a link to the previous
+time it was posted to the list and ignored.
+
+I mean literally, the first of those patches teaches the makefile to autodetect
+whether $PREFIX-cc is gcc or llvm and just do the right thing, and I was told
+that they actively didn't want it to:
+
+https://lkml.iu.edu/hypermail/linux/kernel/2302.2/07184.html
+
+That is modern linux-kernel development.
+
+>> I'm a bit weird in that I try to get CURRENT stuff to work on nommu, and a lot
+>> of people have been happy to consume my work, but getting any of them to post
+>> directly to linux-kernel is like pulling teeth.
+> 
+> I regularly test nommu configurations (as in every kernel rc and release) on m68k
+> and at least every release on other architectures like arm(*) and recently on
+> riscv as well.
+
+Sigh, I should start caring about riscv. I added or1k support, I should do
+riscv. (Except I did or1k because I found it in actual hardware, the Orange Pi
+3b's power controller is an or1k asic so I needed an or1k toolchain to build
+some of u-boot's firmware or else the board couldn't reboot, and there was a
+qemu-system-or1k already, which turned into adding it to mkroot via a long
+https://lore.kernel.org/openrisc/ZX1xbs_AGdgLgcx7@antec/ thread with its
+developers. Alas I still can't get qemu to exit (I.E. virtually reboot or power
+off), apparently I need to reinstall my laptop to have a new enough version of
+python 3 to build a newer qemu with. It's on the todo list...)
+
+I still have a hard time considering riscv anything other than open source's
+version of Itanium. Promises of ubiquity, but even a 28 nanometer mask is still
+6 figures before you run any wafers and your mask build process is sucking in
+all the black box libraries the fab can sell you, so what does "open" really get
+you here? Cortex-m got cheap when the superh patents expired so Arm didn't have
+to pay royalties to hitachi (renesas?) for the thumb instruction set anymore,
+and they belt those suckers en masse amortizing the up-front costs over ENORMOUS
+volume.
+
+And yes, j-core was trying to fix the closed source library and toolchain issues
+back when I was still working with them. Among other things fishing
+Google/skywater's openlane toolchain build out of their magic docker and
+reproducing it under a vanilla debootstrap, ala
+https://github.com/j-core/openlane-vhdl-build (As with most corporate
+clusterfscks, once you dig far enough it turns out you can throw over 90% of it
+out...)
+
+But these days I'm trying to get toybox to 1.0...
+
+> (*) somewhat annoyingly needing a minor patch to run the versatile qemu platform
+>      I like to test with. But hey, that is on me :-)
+
+I would very much like to add more nommu targets to mkroot, can I get your
+build/config info offline? (I tried fishing configs out of buildroot a couple
+years ago, but after the THIRD one where the secret was "use very old versions
+of packages, the current stuff is broken"... And the problems were things like
+"the conversion to device tree deleted a huge chunk of this infrastructure", not
+simple fixes.)
+
+> Regards
+> Greg
+
+Rob
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
