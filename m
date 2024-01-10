@@ -4,55 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FFC3C4707B
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 15:41:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E4A4C4707C
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 15:41:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3D5444023D;
-	Wed, 10 Jan 2024 15:41:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D5444023D
+	by smtp4.osuosl.org (Postfix) with ESMTP id BC8CA421BD;
+	Wed, 10 Jan 2024 15:41:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC8CA421BD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id e0kU-AZI_X2S; Wed, 10 Jan 2024 15:41:10 +0000 (UTC)
+	with ESMTP id r2gu6zRo8wPT; Wed, 10 Jan 2024 15:41:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A999A41511;
-	Wed, 10 Jan 2024 15:41:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A999A41511
+	by smtp4.osuosl.org (Postfix) with ESMTP id 19BA24043D;
+	Wed, 10 Jan 2024 15:41:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 19BA24043D
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1A36E1BF364
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 15:41:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E646A1BF364
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 15:41:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EF4C3436D9
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 15:41:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EF4C3436D9
+ by smtp2.osuosl.org (Postfix) with ESMTP id BD71543583
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 15:41:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD71543583
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mZBy-8uDpGR0 for <buildroot@lists.busybox.net>;
- Wed, 10 Jan 2024 15:41:07 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BEE0143583
- for <buildroot@buildroot.org>; Wed, 10 Jan 2024 15:41:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BEE0143583
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C10C71C0007;
- Wed, 10 Jan 2024 15:41:02 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rNahR-008cEM-2i;
- Wed, 10 Jan 2024 16:41:01 +0100
+ with ESMTP id 2lATiWC0C0AW for <buildroot@lists.busybox.net>;
+ Wed, 10 Jan 2024 15:41:31 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B5CD8436F9
+ for <buildroot@buildroot.org>; Wed, 10 Jan 2024 15:41:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B5CD8436F9
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A0539856C6; Wed, 10 Jan 2024 15:41:31 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <20231109212901.5596-1-ps.report@gmx.net>
- <20231109212901.5596-4-ps.report@gmx.net> <ZYylqNlJBI4-Uouq@landeda>
-Date: Wed, 10 Jan 2024 16:41:01 +0100
-In-Reply-To: <ZYylqNlJBI4-Uouq@landeda> (Yann E. MORIN's message of "Wed, 27
- Dec 2023 23:31:04 +0100")
-Message-ID: <87r0ipb3hu.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH v1 4/4] package/libcamera: add i.MX8 ISI
- pipeline option
+To: buildroot@buildroot.org
+Date: Wed, 10 Jan 2024 16:39:02 +0100
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: 0f2ffac1c9dee625482457c270846c6dced7eeda
+X-Git-Newrev: c7b77dfa8556c84ea6a6b31de005469b2e3a678c
+X-Patchwork-Hint: ignore
+Message-Id: <20240110154131.A0539856C6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/libcamera:
+ disable python bindings
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,31 +57,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Marcus Folkesson <marcus.folkesson@gmail.com>,
- Peter Seiderer <ps.report@gmx.net>,
- Kieran Bingham <kieran.bingham@ideasonboard.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c7b77dfa8556c84ea6a6b31de005469b2e3a678c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
- > Peter, All,
- > On 2023-11-09 22:29 +0100, Peter Seiderer spake thusly:
- >> Add i.MX8 ISI pipeline option (introduced with upstream commit [1] (since
- >> version v0.0.1).
- >> 
- >> [1] https://git.libcamera.org/libcamera/libcamera.git/commit/?id=0ec982d210861cc6aaebb5d6e8f1a755a16c9792
- >> 
- >> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Disable python binding option (introduced with upstream commit [1]
+since version v0.0.1).
 
- > Applied to master, thanks.
+[1] https://git.libcamera.org/libcamera/libcamera.git/commit/?id=8aa02271fd716ed046970a0b1f89176963303f50
 
-Committed to 2023.02.x and 2023.11.x, thanks.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 09e61e40d27daaabd41ad180eca144dd498ec75d)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libcamera/libcamera.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
+index 01c4cb2ff2..7981c7d3bf 100644
+--- a/package/libcamera/libcamera.mk
++++ b/package/libcamera/libcamera.mk
+@@ -19,6 +19,7 @@ LIBCAMERA_CONF_OPTS = \
+ 	-Dandroid=disabled \
+ 	-Ddocumentation=disabled \
+ 	-Dtest=false \
++	-Dpycamera=disabled \
+ 	-Dwerror=false
+ LIBCAMERA_INSTALL_STAGING = YES
+ LIBCAMERA_LICENSE = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
