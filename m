@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB8A2C3DA6E
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 10:23:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92657C3DA6E
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 10:26:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6FEDB6141A;
-	Wed, 10 Jan 2024 10:23:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6FEDB6141A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 485C1613ED;
+	Wed, 10 Jan 2024 10:26:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 485C1613ED
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qtGSSi77cwuE; Wed, 10 Jan 2024 10:23:33 +0000 (UTC)
+	with ESMTP id 4uVqLdW0r4qx; Wed, 10 Jan 2024 10:26:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B80B061407;
-	Wed, 10 Jan 2024 10:23:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B80B061407
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 02ABA1BF354
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 10:22:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A4743613D3;
+	Wed, 10 Jan 2024 10:26:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A4743613D3
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 99D121BF354
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 10:26:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 75D1041C14
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 10:22:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 75D1041C14
+ by smtp3.osuosl.org (Postfix) with ESMTP id 80143613D3
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 10:26:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80143613D3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 59Gng6nPd0QB for <buildroot@lists.busybox.net>;
- Wed, 10 Jan 2024 10:22:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uRJrQG-knCLe for <buildroot@lists.busybox.net>;
+ Wed, 10 Jan 2024 10:26:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5636141C0F
- for <buildroot@buildroot.org>; Wed, 10 Jan 2024 10:22:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5636141C0F
+ by smtp3.osuosl.org (Postfix) with ESMTP id C449A607C0
+ for <buildroot@buildroot.org>; Wed, 10 Jan 2024 10:26:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C449A607C0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3F474854A5; Wed, 10 Jan 2024 10:22:40 +0000 (UTC)
+ id B24568553F; Wed, 10 Jan 2024 10:26:50 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 10 Jan 2024 11:20:44 +0100
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 09703ea9f99a109c3bb4dc7157b43efa7848d793
-X-Git-Newrev: 91f09db85fffd60c5e7717cfcc07406862d026b0
+Date: Wed, 10 Jan 2024 11:20:35 +0100
+X-Git-Refname: refs/heads/2023.11.x
+X-Git-Oldrev: 280aa23da67c1f301bf06dd8352d3fd551ed476d
+X-Git-Newrev: 8529a89b0f79171208a6649ea9bf0172c301c267
 X-Patchwork-Hint: ignore
-Message-Id: <20240110102240.3F474854A5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/gstreamer1/gstd:
+Message-Id: <20240110102650.B24568553F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/gstreamer1/gstd:
  drop readline dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=91f09db85fffd60c5e7717cfcc07406862d026b0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8529a89b0f79171208a6649ea9bf0172c301c267
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
 readline is not a dependency since bump to version 0.15.0 in commit
 cbd06adac50e304f413689febf676911ae29d967 and
