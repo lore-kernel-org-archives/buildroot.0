@@ -4,167 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C40FAC4707B
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 21:24:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82D7CC4707B
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 21:30:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 47783400C1;
-	Wed, 10 Jan 2024 21:24:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 47783400C1
+	by smtp2.osuosl.org (Postfix) with ESMTP id 23D24400C1;
+	Wed, 10 Jan 2024 21:30:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 23D24400C1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kuEOC56ECoP7; Wed, 10 Jan 2024 21:24:52 +0000 (UTC)
+	with ESMTP id sCzOrJnUuc06; Wed, 10 Jan 2024 21:30:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0AFF5436D7;
-	Wed, 10 Jan 2024 21:24:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0AFF5436D7
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 89DAB1BF2CA
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 21:24:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2FF52436D7;
+	Wed, 10 Jan 2024 21:30:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2FF52436D7
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 86D841BF2CA
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 21:30:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5D07E4221D
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 21:24:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5D07E4221D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5FE4B614D0
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 21:30:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5FE4B614D0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1UlPeJShaYWt for <buildroot@lists.busybox.net>;
- Wed, 10 Jan 2024 21:24:47 +0000 (UTC)
-X-Greylist: delayed 426 seconds by postgrey-1.37 at util1.osuosl.org;
- Wed, 10 Jan 2024 21:24:47 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B7444221C
-Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7B7444221C
- for <buildroot@buildroot.org>; Wed, 10 Jan 2024 21:24:47 +0000 (UTC)
-X-CSE-ConnectionGUID: FJl8ZIHhTF+so6h/iXswdQ==
-X-CSE-MsgGUID: i9boEqsqS1iE+3bIXWv0RA==
-X-IronPort-AV: E=Sophos;i="6.04,184,1695657600"; 
-   d="scan'208";a="7068362"
-Received: from mail-co1nam11lp2169.outbound.protection.outlook.com (HELO
- NAM11-CO1-obe.outbound.protection.outlook.com) ([104.47.56.169])
- by ob1.hgst.iphmx.com with ESMTP; 11 Jan 2024 05:17:36 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iWqqOp8ca60lTyJy7isrvApIB2rS3hXZWt/sb/qMC2jnkJF08zTD8yxPVzATlgtvXp7DyTzsdBq67sEQEiiXhDvaj1ppH2dSvhJePxFG8TxGpBRxA2aSYY4eCc4kee17JcVsZr41yGjPA6iTd5cgytXJahtBxU/um+lipf/lQjUr3wtWtpgzwp1ECnvgYwRfSWNvaV61+zBzb7iTYrDXz3e7lwzp074jkC7Tu/1ihmybVzmdCHwPsacN4LxnXdmBsjQpKdgrUSuAU7rSUzBza5IsI6lbHzCVqQ6w4CdNEu3hABKDwO5N1KM3W3CdVpl/JR5kYgfc1bd3ivVivDkwsA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=b3/x+NVwIv4zyU9+V7EOtGVmS1MiBfeSBIDXCUFJYNY=;
- b=TUu05vIM3onw5ShQbuFOI1RgY28nQaZwyyAWfwTDnO+0EHS9hpbOEbspuoGHbjUq6h6w4kNx8FL8vrVpblbnWmL/Gmltodadtumyga/GlWfMA81sMTsag/3tLgfxdQyL8a/B6EnrCalpVi8gK6ufcqlI8Tj6I9A3WOqusmGNWuthb4D7xkT0YihpBEllPCWj+LU0yapMd6JPRmAnfIoQ06r0kdiYpKGiEtXoG7FwsjvAlY3hiSw+oVPbijtdmS0WIqCrPn0XD9WnPBgrQGuB6uN8+2K/9pinUNONbdenJ9F6/FoNWVB7lrSMg/lXYnhftJK1YoeXy6TWmSOB1m2ZkQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
- header.d=wdc.com; arc=none
-Received: from BL0PR04MB4850.namprd04.prod.outlook.com (2603:10b6:208:5f::14)
- by BN0PR04MB8205.namprd04.prod.outlook.com (2603:10b6:408:15c::11)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7181.17; Wed, 10 Jan
- 2024 21:17:33 +0000
-Received: from BL0PR04MB4850.namprd04.prod.outlook.com
- ([fe80::56e9:30a:5826:79fa]) by BL0PR04MB4850.namprd04.prod.outlook.com
- ([fe80::56e9:30a:5826:79fa%4]) with mapi id 15.20.7181.018; Wed, 10 Jan 2024
- 21:17:33 +0000
-To: Rob Landley <rob@landley.net>
-Thread-Topic: [Automated-testing] Call for nommu LTP maintainer [was: Re:
- [PATCH 00/36] Remove UCLINUX from LTP]
-Thread-Index: AQHaQhGbMR/7MaUknku9yjrZLvyb+bDPsNGAgAO+XIiAACGIAA==
-Date: Wed, 10 Jan 2024 21:17:33 +0000
-Message-ID: <ZZ8JbCPd3rq4u7iG@x1-carbon>
-References: <CAMuHMdX0s0gLRoPtjJmDnSmZ_MNY590dN+JxM1HKAL1g_bjX+w@mail.gmail.com>
- <ZZVOhlGPg5KRyS-F@yuki> <5a1f1ff3-8a61-67cf-59a9-ce498738d912@landley.net>
- <20240105131135.GA1484621@pevik>
- <90c1ddc1-c608-30fc-d5aa-fdf63c90d055@landley.net>
- <20240108090338.GA1552643@pevik> <ZZvJXTshFUYSaMVH@yuki>
- <SA3PR13MB6372498CC6372F8B16237244FD6A2@SA3PR13MB6372.namprd13.prod.outlook.com>
- <20240110141455.GC1698252@pevik>
- <40996ea1-3417-1c2f-ddd2-e6ed45cb6f4b@landley.net>
-In-Reply-To: <40996ea1-3417-1c2f-ddd2-e6ed45cb6f4b@landley.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL0PR04MB4850:EE_|BN0PR04MB8205:EE_
-x-ms-office365-filtering-correlation-id: 5335a178-577a-4fd1-6f39-08dc12218fbc
-wdcipoutbound: EOP-TRUE
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 2AGQOBr5hNUb8tiBxtQ5GOq9maAvTLTndTo6bZT9iOc8dokGOH+mkm2WadUmYfC9vCIXqruubLSUIvDJL6nmohm1CIfmTgR0ILnqHYk1S0cYe9fWkjf4jkq/r4xzk7x94uia0LpK/TogjgGnl3/OZ7VuqaFUkxjauxs5axIym4MAHc4MPprkF3isGwZheGQ54YQ97LAD5NgGiy0IcJgaAhjWz/1ETpt2FOx59VyKRoX3Ofxbc2fgOdsYr0Q+DUo9tey9sV8ktY5olOF+K6YPmAHBM1Fk1LE9UiGrjmbT4gHwPCzt41uF2/bCv0CinY0Qek5TtIPl9ro0dpbjCHfj99taeKAIEAvOmibhdTsKgTo9ltI0+s1SqCRH8IIwW/fXB+8nbOm/r7d8DG9H/J1bdev8A87tuBf9fQhT5vwn/yojMBWARKYSx3OCA3JSGqLJxGR9ktdM/lfWLLkKmTNaW/dCT7gMdoDTPSTINkLIjeZIgYlvK9c5IQ0OFkmOqHw68SvxqHxU8Gts4rLWav5S3UNr4lt7Vg312FvFB6ng81Hm1WGffDT7vu/HD6p7yYJn9wmtxX61BfQcGIAt4T138cvkJx47L2ArmVXjWDhU3FzYdlvl2Sh09P7NUGy+gWDW
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:BL0PR04MB4850.namprd04.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230031)(7916004)(39860400002)(136003)(366004)(346002)(376002)(396003)(230922051799003)(1800799012)(451199024)(186009)(64100799003)(7416002)(5660300002)(4744005)(8936002)(8676002)(38070700009)(4326008)(2906002)(41300700001)(33716001)(478600001)(38100700002)(122000001)(26005)(76116006)(71200400001)(6512007)(9686003)(91956017)(66946007)(66556008)(6916009)(66446008)(66476007)(6506007)(316002)(54906003)(64756008)(86362001)(6486002)(82960400001);
- DIR:OUT; SFP:1102; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?E28fibFmwXdzfjbvsy3NJ70Ss2vpnTk7fX7fdEvcjNQCO8rtnwxN7uhKwxIi?=
- =?us-ascii?Q?Tyus+PcGD33hKuQ0wjvGMKGht0riS693mz/SdJheYma83Z+A7w2EGmvTZXpc?=
- =?us-ascii?Q?N4QzAZWrdy0pcXsdjpGPBmQvTbrXD4QXbDSGDgnteZyLLG6y4vOUJw0SjvCC?=
- =?us-ascii?Q?x2OafVEBr04vMLUDW1MtKBgG6UPJqb4HNzCXEeUH/DUTE7pes5eRGXhmbYoj?=
- =?us-ascii?Q?KnpGGmAhXjb4V3itYCN5tDQhpmR9TvRmyNRPc61nZRaurPEhleeZPmDy5t3/?=
- =?us-ascii?Q?RZQfZOaumSqWw9eJ0FIPVW/v6JQ6fDq82R8qYW20cJAgBRixnwW7PBaF9bQK?=
- =?us-ascii?Q?ZGCCi4RxBLGwK1w2D8Dd2anAgpYI4tStnNP3el6i5mXxqHA5rFC6eua/dwBg?=
- =?us-ascii?Q?lLkcxxIFiBf3N4M6jefswyh0AAGYrA47OYq1wWEvkrLrqBtmpLHPiBUwrO3B?=
- =?us-ascii?Q?oBFE1bH0ij0JVXaBDEtNsMjHKuvFnEqX8oPN8bU4zHIPJAeOSP3Y8i+meaVa?=
- =?us-ascii?Q?FAIcIwdhMDWnwrSC9ipRzhZPOL4UG3egeo7XumTAf/2HcNz+7p5w9TrZocak?=
- =?us-ascii?Q?EbDQRzBRPsbLZrnO464ngQlHuTeAWn7AV+gho5wmuoYLNNehtV4hWoMx0aE1?=
- =?us-ascii?Q?6w5E3USoAAD4PBX6SrG5dZGo+dqk4T9As3qJwZ59nRwVm2g312OXdZ7YDj54?=
- =?us-ascii?Q?jlk9Y8KapQ7SIIlBJBao9N4Yi0U2vpz1wpLqXLUiVwFgf56pOQRYa+L4vIBK?=
- =?us-ascii?Q?iTwu4z8yCARkkhSiGcOwx2D2z9N+hcOvMCfGVBjl6oA3iDWs85keNZbXyF5e?=
- =?us-ascii?Q?3UGaR4ulIxggbGoUFMqVLS0EzcAQ3gZoayx9x5P5bZyZ888PMliscUhWxgyn?=
- =?us-ascii?Q?H8ygWqr2yGF1HL50OzY+3Rb5HjNto3ZMbziXnnPRvoMnu0hdy3WVWgTDrEFf?=
- =?us-ascii?Q?0x3LE66sLM1IETWArasxMnSWYBY0Oaq/uEGrKmUk5Iiwu+UwoboF95OUatZc?=
- =?us-ascii?Q?Aik//akhIZ0TaQpvadVZCw4x6jy56R7fTSFozlKwq7Qq2ulJmXLM7N0Enzcy?=
- =?us-ascii?Q?pQgkmI+rhgHAuZeJ6Ye/3Q9U2ldqrhD68ZB3ks48ep+IcuQeeNkeE8/Ur2mf?=
- =?us-ascii?Q?BWJayDkqArQ679iVuQ9yr/305s/kzW7dFPlbfIUATzNvMgX7YWY5sbzgiQR+?=
- =?us-ascii?Q?HISMBMRGHgRnVV94pFq58K/VD7o3m2yZIaugz7PiTAXtGTI45rFi8ukq6g2V?=
- =?us-ascii?Q?Bge2YKMN9eeS55c71eQBmPV91LgCNr4eP2AvHWFPyL34eoBkl/UX7CPEfdHG?=
- =?us-ascii?Q?lz0HaWe3P0SBC9YENzcCPomHmHgMlY8QN53+9+RF4udFRV/L+ZArTvPUzbz6?=
- =?us-ascii?Q?HHOiFdJyulIWV3F6Ff3wJPyAQ+3Awr7ATeI98qoNu7U81GfckMu3tnj48Ht0?=
- =?us-ascii?Q?TZtk2SzG8FhdVfF/1gmDtf15v1/Hh8t/Lp0KEyN1cX3DchLnrXIcZBey2EQ9?=
- =?us-ascii?Q?ASi4oQ3kO0JRYaaxhjhyk+TvyAAOZe+uTg70XonMgGnQmNenkrF31xHQv1jW?=
- =?us-ascii?Q?BEav9VRJkojbDe3XHHSUpPHCB6ZCkcU6NWxJ4k5Yp4ytsfM17Ll1tU/ni2cO?=
- =?us-ascii?Q?pA=3D=3D?=
-Content-ID: <D0EE684CEEEBCB4F9B30529F4622F2BC@namprd04.prod.outlook.com>
-MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: KxJ6n7KptPQC0IsWWxLkAi5SKHDASz8X4e2/XRkPKViPutqtSzW+6HTW4wirjNJnYvmjwdx2XP5oejDJAFahISxlwOHT6EzqKu8TZY1uEc0EMl/54cWBu//GmML1edA0tOZlByb3+zJlXG2DQs59paddfSHsHQf8lAVSFZ0EkxiOBe2bvtA/jepi7bzd6WLyuRyY8PMjvHU0IMqVwOy7f8WBvT/xw4ImOoZHOl7CaoBfDUEhLTYzli/0UTu2O/Lu4Ed94PoKdGAK5VJ8c5SYReFieeZMZHHUlWjYq4oCKOwR6Z9vdqIWLqvYkEY4WNZmK+kQTn1o7nvH4TcL/HviUapOck6ad2Yn61YXOdtnTuBBIxcyEAbH0djms7bcyz/+N7xuZFuEASkWVW/GYETXsg1tidcSh66po/XiB3Qb42vj9bNwI0zPr8QedL80/pTdM/y9iZ+vzGgxr+2m3WIX4bo85QBxyiLX3I5EYed1jgOMzOhOKoX1mpG9jkwrNXzfvnc3c8x5ItpK2Li3kmnJxauiDYtUtYrpBnd+7ELTAgIZ55BnOPo2jJrRo3e2lpyYEEKIEMZVZx82pQC7aiCfpH87c8TxxxklV+7go5EGIs2h2fztUWXRkfjWXHM+QGHc
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR04MB4850.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5335a178-577a-4fd1-6f39-08dc12218fbc
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jan 2024 21:17:33.3934 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: RCiK2NIFFVcpTKzw/4XxnJbcNdCPegZHqth4w6rgSbiPQTvBBtfJvZySDNcvEJmLSnXl0wrYZvSJseQh723M/Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR04MB8205
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
- d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
- t=1704921887; x=1736457887;
- h=from:to:cc:subject:date:message-id:references:
- in-reply-to:content-id:content-transfer-encoding:
- mime-version;
- bh=b3/x+NVwIv4zyU9+V7EOtGVmS1MiBfeSBIDXCUFJYNY=;
- b=ZlVwjnvJvneeZWIgm9mLxZ0Fr/0iOgIxmNOZk6mBZRyeCWnfs7l2+h0H
- wh4YllmdHWQQSvghqwUY2Oh26LfBiaojo5O7LhLzq9GlXbE7564OI0Ykm
- XVBxVNB5ghsvHc+UuV/hPJkNdXplDzhsSLGAl9a5YxG2d++MnNnoog1ee
- nLHHsJldHNyHU24eHn3R5LDX0wbW4rhRqmc8vU4alr0f+vS7cOV7FwYF7
- U2QFj5+7O1MGl5GoE+pZDtqYqlwhdhZVgjM5YRIuHyAjh/Z7hfLIqyQgP
- MoSwSDGqEBDmfCkYAEicfkPjQbg+pfsUTNRtiO52IFTdch3vU2h9iJYi0
- Q==;
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=b3/x+NVwIv4zyU9+V7EOtGVmS1MiBfeSBIDXCUFJYNY=;
- b=Apx2R6UA9psyo6qiQ8okAERk1tdfio4DQkQvl7hB6TYjvO3OjTsFb1NwoNBiKePbWppq89IN9EcKsEmSvZe0LPCKohR2ani1nwbcXrczoblB3dJnNKCFGqjjPV0xM603AOQG/NDQEfxQTWTft7Wr+B1OhD6DCCVKnmsAasKayBw=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=wdc.com header.i=@wdc.com
- header.a=rsa-sha256 header.s=dkim.wdc.com header.b=ZlVwjnvJ; 
- dkim=pass (1024-bit key) header.d=sharedspace.onmicrosoft.com
- header.i=@sharedspace.onmicrosoft.com header.a=rsa-sha256
- header.s=selector2-sharedspace-onmicrosoft-com header.b=Apx2R6UA
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wdc.com;
-Subject: Re: [Buildroot] [Automated-testing] Call for nommu LTP maintainer
- [was: Re: [PATCH 00/36] Remove UCLINUX from LTP]
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ej_EkkjhQqyS for <buildroot@lists.busybox.net>;
+ Wed, 10 Jan 2024 21:30:45 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id CACD261481
+ for <buildroot@buildroot.org>; Wed, 10 Jan 2024 21:30:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CACD261481
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B6FCB85E05; Wed, 10 Jan 2024 21:30:45 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Wed, 10 Jan 2024 22:30:05 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b7c163f1903db0eeeba6d49b3a977b2f021c5396
+X-Git-Newrev: 9d8497e79de3ced144877ba6ee38cc5b7181aaeb
+X-Patchwork-Hint: ignore
+Message-Id: <20240110213045.B6FCB85E05@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ivi-homescreen: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -176,40 +56,643 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Niklas Cassel via buildroot <buildroot@buildroot.org>
-Reply-To: Niklas Cassel <Niklas.Cassel@wdc.com>
-Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>,
- Andrea Cervesato <andrea.cervesato@suse.com>, Jonathan Corbet <corbet@lwn.net>,
- Linux-sh list <linux-sh@vger.kernel.org>, Tim Bird <tim.bird@sony.com>,
- Randy Dunlap <rdunlap@infradead.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- Li Wang <liwang@redhat.com>, Petr Vorel <pvorel@suse.cz>,
- "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
- Geert Uytterhoeven <geert@linux-m68k.org>,
- Christophe Lyon <christophe.lyon@linaro.org>, Cyril Hrubis <chrubis@suse.cz>,
- John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
- linux-riscv <linux-riscv@lists.infradead.org>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>,
- Greg Ungerer <gerg@linux-m68k.org>, "ltp@lists.linux.it" <ltp@lists.linux.it>,
- "automated-testing@lists.yoctoproject.org"
- <automated-testing@lists.yoctoproject.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, Jan 10, 2024 at 01:23:51PM -0600, Rob Landley wrote:
-> UCLINUX is a long-dead distro. Linaro died in the dot-com crash and its founder
-> Jeff Dionne moved to Japan for his next gig and never came back. On the way out
-> he handed uclinux off to someone else, who didn't do a lot of work maintaining
-> it. Most of the actual support went "upstream" into various packages (linux and
-> busybox and gcc and so on) before the handoff, so you didn't NEED uclinux anymore.
+commit: https://git.buildroot.net/buildroot/commit/?id=9d8497e79de3ced144877ba6ee38cc5b7181aaeb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-s/Linaro/Lineo/
+Much like flutter-pi, this package is a Flutter embedder used to run Flutter
+applications. However, unlike Flutter-pi, this package requires a Wayland
+compositor to run, which flutter-pi does not support. Furthermore, flutter-pi
+lacks several plugins and features that ivi-homescreen supports, such as:
+  - Dart VM console redirection
+  - DLT logging
+  - Accessibility
+  - Compositor region
+  - Compositor surface
+  - Desktop Window
+  - Go Router
+  - Isolate
+  - Keyboard Manager
+  - Layer Playground
+  - Mouse Cursor
+  - PackageInfo
+  - Platform
+  - Platform Views
+  - Restoration
 
+The following plugins and options are hardcoded to off:
+  - Crash handler: Requires a newer version of sentry-native.
+  - File selector: Requires the zenity package.
+  - Firebase-core: Requires the firebase-cpp-sdk package.
+  - URL Launcher: Requires a runtime-dependency on xdg-open.
+  - BUILD_TEXTURE_NAVI_RENDER_EGL: Failes to build.
+  - BUILD_TEXTURE_TEST_EGL: Fails to build.
+  - ENABLE_AGL_CLIENT: Used for Automitve Grade Linux (AGL).
 
-Kind regards,
-Niklas
+The ENABLE_XDG_CLIENT=ON option is a requirement to run Flutter apps.
+If this option is disabled, ivi-homescreen segfaults when starting an
+application.
+
+Finally, there is a need for a patch that fixes the audio-players plugin:
+If the audio-players plugin is the only plugin selected, several compilation
+errors occure because of undeclared definitions, as the standard_method_codec.h
+header file is missing.
+
+Upstream-status: https://github.com/toyota-connected/ivi-homescreen/pull/133
+
+This package has been tested on a x86_64 host with an AMD Ryzen 9 6900HS
+with Docker 24.0.5:
+  - The following distributions:
+    - Fedora 39: Host system
+    - Ubuntu 22.04: Docker
+    - Debian 11: Docker
+
+  - The following targets:
+    - BR2_aarch64
+    - BR2_arm
+    - BR2_x86_64
+
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+[yann.morin.1998@free.fr:
+  - propagate BR2_PACKAGE_HOST_FLUTTER_SDK_BIN_ARCH_SUPPORTS to comments
+  - drop NPTL, implied by glibc
+  - reorder dependencies in a more logical way
+  - reorder comments
+  - drop undefined BR2_PACKAGE_IVI_HOMESCREEN_HAS_CLIENT
+  - grammar ("for to change")
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ DEVELOPERS                                         |   1 +
+ package/Config.in                                  |   1 +
+ ...ssing-headers-to-the-audio-players-plugin.patch |  82 +++++++
+ package/ivi-homescreen/Config.in                   | 270 +++++++++++++++++++++
+ package/ivi-homescreen/ivi-homescreen.hash         |  21 ++
+ package/ivi-homescreen/ivi-homescreen.mk           | 136 +++++++++++
+ 6 files changed, 511 insertions(+)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d7543247f2..94a89c63d5 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -35,6 +35,7 @@ F:	package/flutter-engine/
+ F:	package/flutter-gallery/
+ F:	package/flutter-pi/
+ F:	package/flutter-sdk-bin/
++F:	package/ivi-homescreen/
+ F:	package/libutempter/
+ F:	package/tllist/
+ F:	support/testing/tests/package/test_flutter.py
+diff --git a/package/Config.in b/package/Config.in
+index f5d0c06334..0009256298 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -322,6 +322,7 @@ comment "Graphic applications"
+ 	source "package/glmark2/Config.in"
+ 	source "package/glslsandbox-player/Config.in"
+ 	source "package/gnuplot/Config.in"
++	source "package/ivi-homescreen/Config.in"
+ 	source "package/jhead/Config.in"
+ 	source "package/kmscube/Config.in"
+ 	source "package/libva-utils/Config.in"
+diff --git a/package/ivi-homescreen/0001-add-missing-headers-to-the-audio-players-plugin.patch b/package/ivi-homescreen/0001-add-missing-headers-to-the-audio-players-plugin.patch
+new file mode 100644
+index 0000000000..c26fdba7f2
+--- /dev/null
++++ b/package/ivi-homescreen/0001-add-missing-headers-to-the-audio-players-plugin.patch
+@@ -0,0 +1,82 @@
++From 7e35ea4fbd94a1604907069bb9cc2e2dff4b43c7 Mon Sep 17 00:00:00 2001
++From: Adam Duskett <adam.duskett@amarulasolutions.com>
++Date: Sat, 6 Jan 2024 14:18:56 -0700
++Subject: [PATCH] add missing headers to the audio-players plugin
++
++Fixes flutter::StandardMethodCodec not being declared on the following lines:
++plugins/audio_players/audio_players_registry.cc:83
++plugins/audio_players/audio_players_registry.cc:94
++plugins/audio_players/audio_players_registry.cc:152
++plugins/audio_players/audio_player.cc:257
++plugins/audio_players/audio_player.cc:623
++
++Upstream: https://github.com/toyota-connected/ivi-homescreen/pull/133
++
++Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
++---
++ shell/plugins/audio_players/audio_player.cc           | 3 ++-
++ shell/plugins/audio_players/audio_players.cc          | 4 +++-
++ shell/plugins/audio_players/audio_players_registry.cc | 3 ++-
++ 3 files changed, 7 insertions(+), 3 deletions(-)
++
++diff --git a/shell/plugins/audio_players/audio_player.cc b/shell/plugins/audio_players/audio_player.cc
++index 56027eb..a85e9ae 100644
++--- a/shell/plugins/audio_players/audio_player.cc
+++++ b/shell/plugins/audio_players/audio_player.cc
++@@ -20,6 +20,7 @@
++ #include <map>
++ #include <sstream>
++ 
+++#include <flutter/standard_method_codec.h>
++ #include <flutter/standard_message_codec.h>
++ 
++ #include <gst/audio/audio.h>
++@@ -639,4 +640,4 @@ void AudioPlayer::OnPlatformMessage(const FlutterPlatformMessage* message,
++   engine->SendPlatformMessageResponse(message->response_handle, result->data(),
++                                       result->size());
++ }
++-}  // namespace Plugins
++\ No newline at end of file
+++}  // namespace Plugins
++diff --git a/shell/plugins/audio_players/audio_players.cc b/shell/plugins/audio_players/audio_players.cc
++index 0605576..4290f5a 100644
++--- a/shell/plugins/audio_players/audio_players.cc
+++++ b/shell/plugins/audio_players/audio_players.cc
++@@ -19,6 +19,8 @@
++ #include <memory>
++ #include <vector>
++ 
+++#include <flutter/standard_method_codec.h>
+++
++ #include "audio_player.h"
++ #include "audio_players_registry.h"
++ #include "engine.h"
++@@ -314,4 +316,4 @@ void AudioPlayers::OnPlatformMessage(const FlutterPlatformMessage* message,
++               : "Unknown AudioPlayersLinux error");
++   }
++ }
++-}
++\ No newline at end of file
+++}
++diff --git a/shell/plugins/audio_players/audio_players_registry.cc b/shell/plugins/audio_players/audio_players_registry.cc
++index 6c9ef33..00c4f45 100644
++--- a/shell/plugins/audio_players/audio_players_registry.cc
+++++ b/shell/plugins/audio_players/audio_players_registry.cc
++@@ -19,6 +19,7 @@
++ #include <memory>
++ #include <mutex>
++ 
+++#include <flutter/standard_method_codec.h>
++ #include <flutter/standard_message_codec.h>
++ 
++ #include "audio_player.h"
++@@ -168,4 +169,4 @@ void AudioPlayersRegistry::OnPlatformMessageEvents(
++   engine->SendPlatformMessageResponse(message->response_handle, result->data(),
++                                       result->size());
++ }
++-}  // namespace Plugins
++\ No newline at end of file
+++}  // namespace Plugins
++-- 
++2.43.0
++
+diff --git a/package/ivi-homescreen/Config.in b/package/ivi-homescreen/Config.in
+new file mode 100644
+index 0000000000..de7509320f
+--- /dev/null
++++ b/package/ivi-homescreen/Config.in
+@@ -0,0 +1,270 @@
++menuconfig BR2_PACKAGE_IVI_HOMESCREEN
++	bool "ivi-homescreen"
++	depends on BR2_PACKAGE_HOST_FLUTTER_SDK_BIN_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_FLUTTER_ENGINE_ARCH_SUPPORTS
++	depends on BR2_HOST_GCC_AT_LEAST_5 # flutter-engine
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # flutter-engine
++	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # flutter-engine
++	depends on BR2_TOOLCHAIN_USES_GLIBC # flutter-engine
++	depends on BR2_INSTALL_LIBSTDCPP # flutter-engine
++	depends on !BR2_STATIC_LIBS # flutter-engine, wayland
++	depends on BR2_USE_WCHAR # flutter-engine
++	depends on BR2_PACKAGE_HAS_LIBGL || BR2_PACKAGE_HAS_LIBGLES # flutter-engine
++	select BR2_PACKAGE_HOST_FLUTTER_SDK_BIN
++	select BR2_PACKAGE_FLUTTER_ENGINE
++	select BR2_PACKAGE_LIBXKBCOMMON
++	select BR2_PACKAGE_WAYLAND
++	select BR2_PACKAGE_WAYLAND_PROTOCOLS
++	select BR2_PACKAGE_WAYLAND_UTILS
++	help
++	  Toyota's Flutter Embedder that communicates with Wayland
++	  compositors.
++	  Features:
++	  - Strongly Typed (C++)
++	  - Lightweight
++	  - Platform Channels enabled/disabled via CMake
++	  - OpenGL Texture Framework
++	  - Compositor Sub-surface/Region support
++	  - Vulkan / EGL backend support
++
++	  https://github.com/toyota-connected/ivi-homescreen
++
++if BR2_PACKAGE_IVI_HOMESCREEN
++
++config BR2_PACKAGE_IVI_HOMESCREEN_IVI_SHELL_CLIENT
++	bool "ivi-shell client"
++
++comment "Logging"
++config BR2_PACKAGE_IVI_HOMESCREEN_DART_VM_LOGGING
++	bool "Enable Dart VM Logging"
++
++config BR2_PACKAGE_IVI_HOMESCREEN_DLT_LOGGING
++	bool "DLT logging"
++
++comment "EGL options"
++
++config BR2_PACKAGE_IVI_HOMESCREEN_EGL_TRANSPARENCY
++	bool "Transparency"
++	depends on BR2_PACKAGE_HAS_LIBEGL
++
++comment "Transparency support needs an EGL backend"
++	depends on !BR2_PACKAGE_HAS_LIBEGL
++
++config BR2_PACKAGE_IVI_HOMESCREEN_EGL_ENABLE_3D
++	bool "3D support"
++	depends on BR2_PACKAGE_HAS_LIBEGL
++	help
++	  Build with EGL Stencil, Depth, and Stencil
++
++comment "3D support needs an EGL backend"
++	depends on !BR2_PACKAGE_HAS_LIBEGL
++
++config BR2_PACKAGE_IVI_HOMESCREEN_EGL_MULTISAMPLE
++	bool "Multisample support"
++	depends on BR2_PACKAGE_HAS_LIBEGL
++	help
++	  Build with EGL Sample set to 4
++
++comment "Multisample support needs an EGL backend"
++	depends on !BR2_PACKAGE_HAS_LIBEGL
++
++comment "dependency-less plugins"
++
++config BR2_PACKAGE_IVI_HOMESCREEN_ACCESSIBILITY_PLUGIN
++	bool "Accessibility"
++
++config BR2_PACKAGE_IVI_HOMESCREEN_COMP_REGION_PLUGIN
++	bool "Compositor Region"
++
++config BR2_PACKAGE_IVI_HOMESCREEN_COMP_SURF_PLUGIN
++	bool "Compositor Surface"
++
++config BR2_PACKAGE_IVI_HOMESCREEN_DESKTOP_WINDOW_PLUGIN
++	bool "Desktop Window"
++	help
++	  Flutter plugin to change window size.
++
++	  https://pub.dev/packages/desktop_window
++
++config BR2_PACKAGE_IVI_HOMESCREEN_GO_ROUTER_PLUGIN
++	bool "Go Router"
++	help
++	  A declarative routing package for Flutter that uses the
++	  Router API to provide a convenient, url-based API for
++	  navigating between different screens. You can define URL
++	  patterns, navigate using a URL, handle deep links, and a
++	  number of other navigation-related scenarios.
++
++	  https://pub.dev/packages/go_router
++
++config BR2_PACKAGE_IVI_HOMESCREEN_INTEGRATION_TEST_PLUGIN
++	bool "Flutter Integration Test support"
++	help
++	  https://docs.flutter.dev/cookbook/testing/integration/introduction
++
++config BR2_PACKAGE_IVI_HOMESCREEN_ISOLATE_PLUGIN
++	bool "Isolate"
++
++config BR2_PACKAGE_IVI_HOMESCREEN_KEYBOARD_MANAGER_PLUGIN
++	bool "Keyboard Manager"
++	select BR2_PACKAGE_IVI_HOMESCREEN_TEXT_INPUT_PLUGIN # runtime
++	help
++	  This is a wrapper for the raw keyboard listener made to
++	  simplify intercept external keyboard button press.
++
++	  https://pub.dev/packages/keyboard_manager
++
++config BR2_PACKAGE_IVI_HOMESCREEN_KEY_EVENT_PLUGIN
++	bool "Key Event"
++	select BR2_PACKAGE_IVI_HOMESCREEN_TEXT_INPUT_PLUGIN # runtime
++	help
++	  KeyEvent plugin to support RawKeyEvent.
++
++config BR2_PACKAGE_IVI_HOMESCREEN_LAYER_PLAYGROUND_PLUGIN
++	bool "Layer Playground"
++	select BR2_PACKAGE_IVI_HOMESCREEN_PLATFORM_VIEWS_PLUGIN
++	help
++	  This plugin enables the platform views plugin and also
++	  provides a simple-box-view-type option.
++
++	  https://github.com/toyota-connected/ivi-homescreen/tree/main/shell/plugins/platform_views
++
++config BR2_PACKAGE_IVI_HOMESCREEN_LOGGING_PLUGIN
++	bool "Logging"
++
++config BR2_PACKAGE_IVI_HOMESCREEN_MOUSE_CURSOR_PLUGIN
++	bool "Mouse Cursor"
++	help
++	  Add mouse cursor support.
++
++config BR2_PACKAGE_IVI_HOMESCREEN_PACKAGE_INFO_PLUGIN
++	bool "PackageInfo"
++	help
++	  Prints the ivi-homescreen package information.
++
++config BR2_PACKAGE_IVI_HOMESCREEN_PLATFORM_PLUGIN
++	bool "Platform"
++	help
++	  Get information about the platform the Flutter application
++	  is running on.
++
++config BR2_PACKAGE_IVI_HOMESCREEN_PLATFORM_VIEWS_PLUGIN
++	bool "Platform Views"
++	help
++	  This plugin supports the AndroidView interface. Meaning you
++	  can take any Platform View Dart code, change the definition
++	  to use AndroidView, and you will have a working interface.
++
++	  Benefits of using this interface:
++	    - pre-defined interface that is supported in Flutter SDK
++	    - params are easily augmented in Dart to add for given use
++	      case
++	    - pass touch to another process/library without additional
++	      work
++
++	  For a backing implementation there are a number of approaches:
++	    - Have a PlatformView implementation render to a Texture
++	    - Compositor Region support
++	      (poke a hole for another process)
++	    - Compositor sub-surface and manage Z-order
++
++	  The above is already supported today using either an OpenGL
++	  texture, or a Compositor Sub-Surface. Using Platform Views
++	  just re-uses an existing interface.
++
++	  https://github.com/toyota-connected/ivi-homescreen/tree/main/shell/plugins/platform_views
++
++config BR2_PACKAGE_IVI_HOMESCREEN_RESTORATION_PLUGIN
++	bool "Restoration"
++	help
++	  Handles the Flutter restoration callback
++
++config BR2_PACKAGE_IVI_HOMESCREEN_TEXT_INPUT_PLUGIN
++	bool "Text Input"
++	help
++	  Allow for text input
++
++comment "plugins with external dependencies"
++config BR2_PACKAGE_IVI_HOMESCREEN_AUDIO_PLAYERS
++	bool "Audio Players"
++	select BR2_PACKAGE_GSTREAMER1
++	select BR2_PACKAGE_GST1_PLUGINS_BASE
++	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ALSA
++	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOCONVERT
++	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIORESAMPLE
++	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VOLUME
++	help
++	  A Flutter plugin to play multiple simultaneously audio files.
++	  Based on audioplayers-v5.2.1
++
++	  https://pub.dev/packages/audioplayers
++
++config BR2_PACKAGE_IVI_HOMESCREEN_FLUTTER_SECURE_STORAGE_PLUGIN
++	bool "Flutter Secure Storage"
++	select BR2_PACKAGE_LIBSECRET
++	help
++	  Store data in secure storage
++
++	  https://pub.dev/packages/flutter_secure_storage
++
++config BR2_PACKAGE_IVI_HOMESCREEN_GOOGLE_SIGN_IN_PLUGIN
++	bool "Google Sign In manager"
++	select BR2_PACKAGE_LIBCURL
++	select BR2_PACKAGE_LIBCURL_FORCE_TLS
++	select BR2_PACKAGE_OPENSSL
++	help
++	  This static plugin is to support this pub.dev package:
++	  https://pub.dev/packages/google_sign_in
++
++	  https://github.com/toyota-connected/ivi-homescreen/tree/main/shell/plugins/google_sign_in
++
++config BR2_PACKAGE_IVI_HOMESCREEN_GSTREAMER_EGL_PLUGIN
++	bool "GStreamer EGL"
++	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_HAS_LIBEGL
++	select BR2_PACKAGE_FFMPEG
++	select BR2_PACKAGE_GSTREAMER1
++	select BR2_PACKAGE_GST1_PLUGINS_BASE
++	select BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL
++	select BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_EGL
++	help
++	  A GStreamer-powered alternative to Flutter's video_player that
++	  support Linux, iOS and Android.
++
++	  https://pub.dev/packages/flutter_gstreamer_player
++
++comment "GStreamer plugin needs an EGL backend"
++	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
++	depends on !BR2_PACKAGE_HAS_LIBEGL
++
++config BR2_PACKAGE_IVI_HOMESCREEN_OPENGL_TEXTURE_PLUGIN
++	bool "OpenGL Texture"
++	depends on BR2_PACKAGE_HAS_LIBEGL
++	help
++	  A Flutter OpenGL ES plugin using a Texture() widget.
++	  Many shaders from ShaderToy.com can be copy/pasted
++
++	  https://pub.dev/packages/flutter_opengl
++
++comment "OpenGL texture plugin needs an EGL backend"
++	depends on !BR2_PACKAGE_HAS_LIBEGL
++
++endif # BR2_PACKAGE_IVI_HOMESCREEN
++
++comment "ivi-homescreen needs a glibc toolchain w/ wchar, C++, gcc >= 5, dynamic library, host gcc >= 5, NPTL"
++	depends on BR2_PACKAGE_HOST_FLUTTER_SDK_BIN_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_FLUTTER_ENGINE_ARCH_SUPPORTS
++	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
++		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_5 \
++		|| BR2_STATIC_LIBS || !BR2_USE_WCHAR \
++		|| !BR2_HOST_GCC_AT_LEAST_5
++
++comment "ivi-homescreen needs a toolchain not affected by GCC bug 64735"
++	depends on BR2_PACKAGE_HOST_FLUTTER_SDK_BIN_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_FLUTTER_ENGINE_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
++
++comment "ivi-homescreen needs an OpenGL or OpenGLES backend"
++	depends on BR2_PACKAGE_HOST_FLUTTER_SDK_BIN_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_FLUTTER_ENGINE_ARCH_SUPPORTS
++	depends on !BR2_PACKAGE_HAS_LIBGL && !BR2_PACKAGE_HAS_LIBGLES
+diff --git a/package/ivi-homescreen/ivi-homescreen.hash b/package/ivi-homescreen/ivi-homescreen.hash
+new file mode 100644
+index 0000000000..a0d0162948
+--- /dev/null
++++ b/package/ivi-homescreen/ivi-homescreen.hash
+@@ -0,0 +1,21 @@
++# Locally calculated
++sha256  1ab2e7ab5f947482cb5529dbb6392e7e1945ceb0b593abde6b6279d7bd2fdb79  ivi-homescreen-5ab78a19e95c88cc5d6b173ab1260a211e78cf0a-br1.tar.gz
++
++# Apache-2.0
++sha256  6b96fa0a3def85caaf466caa2bd82d4ca4f22d106ff88f97a00c537c00cc714b  LICENSE
++sha256  943c358cb6d086e4bc0937941b8f8d766db7d4e5f06583efd45dca0ca6a645f3  third_party/filament/libs/bluevk/include/bluevk/BlueVK.h
++
++# BSD-3-Clause
++sha256  fdff25c8a4147791114584a45d56621336d294601da77656e83504a71747c8c2  third_party/flutter/shell/platform/common/client_wrapper/core_implementations.cc
++
++# BSD-Style
++sha256  baa98cbcc03e3e745c4ad9ac2d3fb3464424486b2e420081181013034a7e6406  third_party/flutter/third_party/dart/runtime/include/dart_api.h
++
++# BSL-1.0
++sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  third_party/asio-1-28-1/asio/LICENSE_1_0.txt
++
++# MIT
++sha256  240f786071b64c28c0a1dae3e3b05fc3ca93fa4882b1e36e56ee49fee3037b0a  third_party/flutter/third_party/rapidjson/include/rapidjson/rapidjson.h
++sha256  4b67e7ae8c91e68e1a929eb1cbaa4c773c6d19aa91aaa12c390cf9560d1c9799  third_party/sanitizers-cmake/LICENSE
++sha256  a7241a379cb98d37788f82c2fc2e484c3ae85dae881fd3406f0637644850926f  third_party/spdlog-1.12.0/LICENSE
++sha256  8b79f17fa7cf47adeeb8277965267e3932155fdfcab81a0ed5d583438bdf9135  third_party/weston/protocol/ivi-application.xml
+diff --git a/package/ivi-homescreen/ivi-homescreen.mk b/package/ivi-homescreen/ivi-homescreen.mk
+new file mode 100644
+index 0000000000..4293b2bc35
+--- /dev/null
++++ b/package/ivi-homescreen/ivi-homescreen.mk
+@@ -0,0 +1,136 @@
++################################################################################
++#
++# ivi-homescreen
++#
++################################################################################
++
++IVI_HOMESCREEN_VERSION = 5ab78a19e95c88cc5d6b173ab1260a211e78cf0a
++IVI_HOMESCREEN_SITE = https://github.com/toyota-connected/ivi-homescreen.git
++IVI_HOMESCREEN_SITE_METHOD = git
++IVI_HOMESCREEN_LICENSE = Apache-2.0, BSD-3-Clause, BSD-Style, BSL-1.0, MIT
++
++# Keep order as listed in ivi-homescreen.hash
++IVI_HOMESCREEN_LICENSE_FILES = \
++	LICENSE \
++	third_party/filament/libs/bluevk/include/bluevk/BlueVK.h \
++	third_party/flutter/shell/platform/common/client_wrapper/core_implementations.cc \
++	third_party/flutter/third_party/dart/runtime/include/dart_api.h \
++	third_party/asio-1-28-1/asio/LICENSE_1_0.txt \
++	third_party/flutter/third_party/rapidjson/include/rapidjson/rapidjson.h \
++	third_party/sanitizers-cmake/LICENSE \
++	third_party/spdlog-1.12.0/LICENSE \
++	third_party/weston/protocol/ivi-application.xml
++
++IVI_HOMESCREEN_DEPENDENCIES = \
++	host-flutter-sdk-bin \
++	flutter-engine \
++	libxkbcommon \
++	wayland \
++	wayland-protocols \
++	wayland-utils
++
++IVI_HOMESCREEN_CONF_OPTS = \
++	-DBUILD_CRASH_HANDLER=OFF \
++	-DBUILD_PLUGIN_FILE_SELECTOR=OFF \
++	-DBUILD_PLUGIN_FIREBASE_CORE=OFF \
++	-DBUILD_PLUGIN_URL_LAUNCHER=OFF \
++	-DBUILD_TEXTURE_NAVI_RENDER_EGL=OFF \
++	-DBUILD_TEXTURE_TEST_EGL=OFF \
++	-DBUILD_UNIT_TESTS=OFF \
++	-DENABLE_AGL_CLIENT=OFF \
++	-DENABLE_XDG_CLIENT=ON \
++	-DENABLE_IVI_SHELL_CLIENT=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_IVI_SHELL_CLIENT),ON,OFF)
++
++# Logging
++IVI_HOMESCREEN_CONF_OPTS += \
++	-DENABLE_DART_VM_LOGGING=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_DART_VM_LOGGING),ON,OFF) \
++	-DENABLE_DLT=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_DLT_LOGGING),ON,OFF)
++
++# EGL
++IVI_HOMESCREEN_CONF_OPTS += \
++	-DBUILD_EGL_TRANSPARENCY=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_EGL_TRANSPARENCY),ON,OFF) \
++	-DBUILD_EGL_ENABLE_3D=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_EGL_ENABLE_3D),ON,OFF) \
++	-DBUILD_EGL_ENABLE_MULTISAMPLE=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_EGL_MULTISAMPLE),ON,OFF)
++
++# dependency-less plugins
++IVI_HOMESCREEN_CONF_OPTS += \
++	-DBUILD_PLUGIN_ACCESSIBILITY=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_ACCESSIBILITY_PLUGIN),ON,OFF) \
++	-DBUILD_PLUGIN_COMP_REGION=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_COMP_REGION_PLUGIN),ON,OFF) \
++	-DBUILD_PLUGIN_COMP_SURF=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_COMP_SURF_PLUGIN),ON,OFF) \
++	-DBUILD_PLUGIN_DESKTOP_WINDOW=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_DESKTOP_WINDOW_PLUGIN),ON,OFF) \
++	-DBUILD_PLUGIN_GO_ROUTER=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_GO_ROUTER_PLUGIN),ON,OFF) \
++	-DBUILD_PLUGIN_INTEGRATION_TEST=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_INTEGRATION_TEST_PLUGIN),ON,OFF) \
++	-DBUILD_PLUGIN_ISOLATE=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_ISOLATE_PLUGIN),ON,OFF) \
++	-DBUILD_PLUGIN_KEYBOARD_MANAGER=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_KEYBOARD_MANAGER_PLUGIN),ON,OFF) \
++	-DBUILD_PLUGIN_KEY_EVENT=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_KEY_EVENT_PLUGIN),ON,OFF) \
++	-DBUILD_PLUGIN_LAYER_PLAYGROUND=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_LAYER_PLAYGROUND_PLUGIN),ON,OFF) \
++	-DBUILD_PLUGIN_LOGGING=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_LOGGING_PLUGIN),ON,OFF) \
++	-DBUILD_PLUGIN_MOUSE_CURSOR=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_MOUSE_CURSOR_PLUGIN),ON,OFF) \
++	-DBUILD_PLUGIN_PACKAGE_INFO=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_PACKAGE_INFO_PLUGIN),ON,OFF) \
++	-DBUILD_PLUGIN_PLATFORM=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_PLATFORM_PLUGIN),ON,OFF) \
++	-DBUILD_PLUGIN_PLATFORM_VIEWS=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_PLATFORM_VIEWS_PLUGIN),ON,OFF) \
++	-DBUILD_PLUGIN_RESTORATION=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_RESTORATION_PLUGIN),ON,OFF) \
++	-DBUILD_PLUGIN_TEXT_INPUT=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_TEXT_INPUT_PLUGIN),ON,OFF)
++
++# Wayland backend options
++ifeq ($(BR2_PACKAGE_HAS_LIBEGL),y)
++IVI_HOMESCREEN_DEPENDENCIES += libegl
++IVI_HOMESCREEN_CONF_OPTS += -DBUILD_BACKEND_WAYLAND_EGL=ON
++else
++IVI_HOMESCREEN_CONF_OPTS += -DBUILD_BACKEND_WAYLAND_EGL=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER),y)
++IVI_HOMESCREEN_DEPENDENCIES += mesa3d
++IVI_HOMESCREEN_CONF_OPTS += -DBUILD_BACKEND_WAYLAND_VULKAN=ON
++else
++IVI_HOMESCREEN_CONF_OPTS += -DBUILD_BACKEND_WAYLAND_VULKAN=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_LIBDRM),y)
++IVI_HOMESCREEN_DEPENDENCIES += libdrm
++IVI_HOMESCREEN_CONF_OPTS += -DBUILD_BACKEND_WAYLAND_DRM=ON
++else
++IVI_HOMESCREEN_CONF_OPTS += -DBUILD_BACKEND_WAYLAND_DRM=OFF
++endif
++
++# "plugins with external dependencies"
++ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_AUDIO_PLAYERS),y)
++IVI_HOMESCREEN_DEPENDENCIES += gstreamer1 gst1-plugins-base
++IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_AUDIO_PLAYERS=ON
++else
++IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_AUDIO_PLAYERS=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_FLUTTER_SECURE_STORAGE_PLUGIN),y)
++IVI_HOMESCREEN_DEPENDENCIES += libsecret
++IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_SECURE_STORAGE=ON
++else
++IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_SECURE_STORAGE=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_GOOGLE_SIGN_IN_PLUGIN),y)
++IVI_HOMESCREEN_DEPENDENCIES += libcurl
++IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_GOOGLE_SIGN_IN=ON
++else
++IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_GOOGLE_SIGN_IN=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_GSTREAMER_EGL_PLUGIN),y)
++IVI_HOMESCREEN_DEPENDENCIES += ffmpeg gstreamer1 gst1-plugins-base
++IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_GSTREAMER_EGL=ON
++else
++IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_GSTREAMER_EGL=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_OPENGL_TEXTURE_PLUGIN),y)
++IVI_HOMESCREEN_CONF_OPTS += \
++	-DBUILD_PLUGIN_OPENGL_TEXTURE=ON \
++	-DBUILD_TEXTURE_EGL=ON
++else
++IVI_HOMESCREEN_CONF_OPTS += \
++	-DBUILD_PLUGIN_OPENGL_TEXTURE=OFF \
++	-DBUILD_TEXTURE_EGL=OFF
++endif
++
++$(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
