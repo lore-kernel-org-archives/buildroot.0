@@ -4,48 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A56F4C4707B
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 15:47:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2DAF2C4707C
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 15:55:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5DF584223D;
-	Wed, 10 Jan 2024 15:47:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5DF584223D
+	by smtp4.osuosl.org (Postfix) with ESMTP id B8BAE421BE;
+	Wed, 10 Jan 2024 15:55:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B8BAE421BE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ncW-JlVoKCht; Wed, 10 Jan 2024 15:47:08 +0000 (UTC)
+	with ESMTP id MorAYySwxuUl; Wed, 10 Jan 2024 15:55:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 94C8142211;
-	Wed, 10 Jan 2024 15:47:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 94C8142211
+	by smtp4.osuosl.org (Postfix) with ESMTP id 17CF8421F2;
+	Wed, 10 Jan 2024 15:55:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17CF8421F2
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 80CEC1BF364
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 15:46:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5B3E71BF364
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 15:55:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4687D41823
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 15:46:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4687D41823
+ by smtp4.osuosl.org (Postfix) with ESMTP id 40C96421F2
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 15:55:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 40C96421F2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jOU1STUFi0Y7 for <buildroot@lists.busybox.net>;
- Wed, 10 Jan 2024 15:46:03 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5FA0A41710
- for <buildroot@buildroot.org>; Wed, 10 Jan 2024 15:46:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5FA0A41710
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4CC54856C8; Wed, 10 Jan 2024 15:46:03 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 10 Jan 2024 16:38:43 +0100
-X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 773db648fb04726ff71f92d9aae72100aacab361
-X-Git-Newrev: a2c303136ff005d49370ad2850736075413e8290
-X-Patchwork-Hint: ignore
-Message-Id: <20240110154603.4CC54856C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/libcamera:
- pipeline option 'raspberrypi' changed to 'rpi/vc4'
+ with ESMTP id 4fjoUp2xNcQC for <buildroot@lists.busybox.net>;
+ Wed, 10 Jan 2024 15:55:18 +0000 (UTC)
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 50135421BE
+ for <buildroot@buildroot.org>; Wed, 10 Jan 2024 15:55:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50135421BE
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-40e43e48a16so40134145e9.2
+ for <buildroot@buildroot.org>; Wed, 10 Jan 2024 07:55:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1704902116; x=1705506916;
+ h=content-transfer-encoding:in-reply-to:from:references:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=/moVqXXC38UeIqxt2XEz0xtSjsFdkwyLIwmzBm00U7k=;
+ b=aOAhPuBqLr4cVCC20Ee6oMXCTTk6/WDfCEJFVZvUM/7tKnQZko1FRUs4WKq3eTRCHe
+ Qw5EFdCcLgewgU86486sSzQ4CZR82LVXDumChAdWg5ptAoeMgDafV15YjeS4I7oTmghW
+ +OQ/mqMj36snqrlkbApIwKKWMA/LQ1Tabgm8fEPHWQAb72JvB5eG2PiGssehGwdBP61S
+ qn8mi/gtJ8NAMg16j4QO0lAlgAurWf2wWLPFBbnux72g9zIIaSkz6EZVg22qyrVYMisQ
+ GGRxbrNhIULsCaGFpesjWoo4K7QW4gY0uOYwb9PvSxHbmNCtQYxslEiL3aiFqVaMTIHy
+ x/sw==
+X-Gm-Message-State: AOJu0YxLnN5z75bqKP5IclmIWnJLqZqR91JoCnpvoMAuiZRqYg//Csai
+ 5hvFMmEk1LDQdsUc/6gl1wuA0BHxB28wgg==
+X-Google-Smtp-Source: AGHT+IEm1WE0hCPPnYDjjFWgcEqbNB38ZpSb7KanFsRL4Dnzl/6++x93D6Y/70W/9q28bn1aEVLepw==
+X-Received: by 2002:a05:600c:4fc8:b0:40e:353c:8a5f with SMTP id
+ o8-20020a05600c4fc800b0040e353c8a5fmr616334wmq.102.1704902116148; 
+ Wed, 10 Jan 2024 07:55:16 -0800 (PST)
+Received: from [10.5.2.57] (176-161-53-116.abo.bbox.fr. [176.161.53.116])
+ by smtp.gmail.com with ESMTPSA id
+ g11-20020a05600c310b00b0040d5f466deesm2705295wmo.38.2024.01.10.07.55.15
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 10 Jan 2024 07:55:15 -0800 (PST)
+Message-ID: <b8371f73-1e2f-4020-bcdf-2d96c12c5c5b@smile.fr>
+Date: Wed, 10 Jan 2024 16:55:14 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: fr, en-US
+To: =?UTF-8?Q?Fl=C3=A1vio_Tapaj=C3=B3s?= <flavio.tapajos@newtesc.com.br>,
+ buildroot@buildroot.org
+References: <20240110152246.1605712-1-flavio.tapajos@newtesc.com.br>
+From: Romain Naour <romain.naour@smile.fr>
+In-Reply-To: <20240110152246.1605712-1-flavio.tapajos@newtesc.com.br>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1704902116; x=1705506916;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:in-reply-to:from:references:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=/moVqXXC38UeIqxt2XEz0xtSjsFdkwyLIwmzBm00U7k=;
+ b=Vf1h/y/Y39for7wF42t01dp27quQfzbVZwiXnJ5eYjbeTAWGSs/NmcwLoEGYildUTE
+ 3RuaT0AEX5j5NBDVo5NEkohaHJKXU2fbMZKG4scDYs2VpYiF7rtwLPAajhUcDn97tH2T
+ ciyhGh/MZHdsIjn5KzSyMu7yVlk/R3A6OsZU5HkSq4XAEd+cXc2Gaf0VqPxocpOMpSu5
+ 2GYpWyoejm6ZtyYUQVc225awEPNWBFbNjHii1sFaL2eSCgJx4zcQVuEV1FbaQgi7ghzy
+ otgcQfD/U6Qlxr/LnLUTiVwWXmxxzlz6CTwObjIgJjTyyMduUF0RPlvERAqocugt4RyZ
+ 8NLQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=smile-fr.20230601.gappssmtp.com
+ header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=Vf1h/y/Y
+Subject: Re: [Buildroot] [PATCH 1/2] boot/uboot: bump to 2024.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,114 +100,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2c303136ff005d49370ad2850736075413e8290
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
-
-With upstram commit [1] (since version v0.1.0) the pipeline option 'raspberrypi'
-was renamed to 'rpi/vc4'.
-
-Change the buildroot option name from BR2_PACKAGE_LIBCAMERA_PIPELINE_RASPBERRYPI
-to BR2_PACKAGE_LIBCAMERA_PIPELINE_RPI_VC4 (and add Config.in.legacy entry
-accordingly) and move handling in Config.in/libcamer.mk to follow alphabetic
-ordering.
-
-Fixes:
-
-  .../build/libcamera-v0.1.0/meson.build:3:0: ERROR: Options "raspberrypi" are not in allowed choices: "all, auto, imx8-isi, ipu3, rkisp1, rpi/vc4, simple, uvcvideo, vimc"
-
-[1] https://git.libcamera.org/libcamera/libcamera.git/commit/?id=726e9274ea95fa46352556d340c5793a8da51fcd
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 782d268abadc2541953d1782d79d142a7b6f07b1)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- Config.in.legacy               | 10 ++++++++++
- package/libcamera/Config.in    | 16 ++++++++--------
- package/libcamera/libcamera.mk |  6 +++---
- 3 files changed, 21 insertions(+), 11 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 312d53943c..ebd2c5d8d4 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,16 @@ endif
- 
- comment "Legacy options removed in 2023.11"
- 
-+config BR2_PACKAGE_LIBCAMERA_PIPELINE_RASPBERRYPI
-+	bool "libcamera pipeline 'raspberrypi' was renamed to 'rpi/vc4'"
-+	depends on BR2_arm || BR2_aarch64
-+	depends on BR2_USE_WCHAR
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_LIBCAMERA_PIPELINE_RPI_VC4
-+	help
-+	  Since version 0.1.0 the libcamera pipeline option
-+	  'raspberrypi' was renamed to 'rpi/vc4'.
-+
- config BR2_PACKAGE_PYTHON_PYXB
- 	bool "python-pyxb removed"
- 	select BR2_LEGACY
-diff --git a/package/libcamera/Config.in b/package/libcamera/Config.in
-index 63c06173db..65d5fb37f8 100644
---- a/package/libcamera/Config.in
-+++ b/package/libcamera/Config.in
-@@ -40,21 +40,21 @@ config BR2_PACKAGE_LIBCAMERA_PIPELINE_IPU3
- 	help
- 	  Pipeline for Intel IPU3.
- 
--config BR2_PACKAGE_LIBCAMERA_PIPELINE_RASPBERRYPI
--	bool "raspberrypi pipeline"
-+config BR2_PACKAGE_LIBCAMERA_PIPELINE_RKISP1
-+	bool "rkisp1 pipeline"
- 	depends on BR2_arm || BR2_aarch64
--	depends on BR2_USE_WCHAR # boost (already enforced for gnutls)
--	select BR2_PACKAGE_BOOST
- 	select BR2_PACKAGE_LIBCAMERA_HAS_PIPELINE
- 	help
--	  Pipeline for Raspberry Pi devices.
-+	  Pipeline for Rockchip ISP1.
- 
--config BR2_PACKAGE_LIBCAMERA_PIPELINE_RKISP1
--	bool "rkisp1 pipeline"
-+config BR2_PACKAGE_LIBCAMERA_PIPELINE_RPI_VC4
-+	bool "rpi/vc4 pipeline"
- 	depends on BR2_arm || BR2_aarch64
-+	depends on BR2_USE_WCHAR # boost (already enforced for gnutls)
-+	select BR2_PACKAGE_BOOST
- 	select BR2_PACKAGE_LIBCAMERA_HAS_PIPELINE
- 	help
--	  Pipeline for Rockchip ISP1.
-+	  Pipeline for Raspberry Pi devices.
- 
- config BR2_PACKAGE_LIBCAMERA_PIPELINE_SIMPLE
- 	bool "simple pipeline"
-diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
-index 8dce67f60f..c1c8bb7b33 100644
---- a/package/libcamera/libcamera.mk
-+++ b/package/libcamera/libcamera.mk
-@@ -51,11 +51,11 @@ LIBCAMERA_CONF_OPTS += -Dv4l2=false
- endif
- 
- LIBCAMERA_PIPELINES-$(BR2_PACKAGE_LIBCAMERA_PIPELINE_IPU3) += ipu3
--ifeq ($(BR2_PACKAGE_LIBCAMERA_PIPELINE_RASPBERRYPI),y)
--LIBCAMERA_PIPELINES-y += raspberrypi
-+LIBCAMERA_PIPELINES-$(BR2_PACKAGE_LIBCAMERA_PIPELINE_RKISP1) += rkisp1
-+ifeq ($(BR2_PACKAGE_LIBCAMERA_PIPELINE_RPI_VC4),y)
-+LIBCAMERA_PIPELINES-y += rpi/vc4
- LIBCAMERA_DEPENDENCIES += boost
- endif
--LIBCAMERA_PIPELINES-$(BR2_PACKAGE_LIBCAMERA_PIPELINE_RKISP1) += rkisp1
- LIBCAMERA_PIPELINES-$(BR2_PACKAGE_LIBCAMERA_PIPELINE_SIMPLE) += simple
- LIBCAMERA_PIPELINES-$(BR2_PACKAGE_LIBCAMERA_PIPELINE_UVCVIDEO) += uvcvideo
- LIBCAMERA_PIPELINES-$(BR2_PACKAGE_LIBCAMERA_PIPELINE_VIMC) += vimc
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8sCgpMZSAxMC8wMS8yMDI0IMOgIDE2OjIyLCBGbMOhdmlvIFRhcGFqw7NzIGEgw6ljcml0
+wqA6Cj4gQWxsIGluLXRyZWUgY29uZmlncyB3aXRoIHRoZSB1Ym9vdCBib290bG9hZGVyIHVzZSBh
+IGN1c3RvbSB2ZXJzaW9uLAo+IHNvIHRoaXMgcGF0Y2ggaXMgbW9zdGx5IGZvciB0aGUgbWVudWNv
+bmZpZyBkZWZhdWx0IHVib290IHZlcnNpb24KPiAKCk5vdGljZSB3ZSBoYXZlIGEgdWJvb3QtdG9v
+bHMgcGFja2FnZSB0aGF0IHdhcyBub3QgdXBkYXRlZCBzaW5jZSBhIHdoaWxlOgoKaHR0cHM6Ly9n
+aXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vYmxvYi9tYXN0ZXIvcGFja2FnZS91
+Ym9vdC10b29scy91Ym9vdC10b29scy5taz9yZWZfdHlwZT1oZWFkcyNMNwoKSXQgd291bGQgYmUg
+Z3JlYXQgaWYgeW91IGNhbiB1cGRhdGUgaXQgdG9vLgoKVGhhbmtzIQoKQmVzdCByZWdhcmRzLApS
+b21haW4KCgo+IFNpZ25lZC1vZmYtYnk6IEZsw6F2aW8gVGFwYWrDs3MgPGZsYXZpby50YXBham9z
+QG5ld3Rlc2MuY29tLmJyPgo+IC0tLQo+ICBib290L3Vib290L0NvbmZpZy5pbiAgfCA0ICsrLS0K
+PiAgYm9vdC91Ym9vdC91Ym9vdC5oYXNoIHwgMiArLQo+ICAyIGZpbGVzIGNoYW5nZWQsIDMgaW5z
+ZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkKPiAKPiBkaWZmIC0tZ2l0IGEvYm9vdC91Ym9vdC9D
+b25maWcuaW4gYi9ib290L3Vib290L0NvbmZpZy5pbgo+IGluZGV4IDIxZjE5ZGI4OTAuLmJlYWZi
+Mzg5MzAgMTAwNjQ0Cj4gLS0tIGEvYm9vdC91Ym9vdC9Db25maWcuaW4KPiArKysgYi9ib290L3Vi
+b290L0NvbmZpZy5pbgo+IEBAIC00MSw3ICs0MSw3IEBAIGNob2ljZQo+ICAJICBTZWxlY3QgdGhl
+IHNwZWNpZmljIFUtQm9vdCB2ZXJzaW9uIHlvdSB3YW50IHRvIHVzZQo+ICAKPiAgY29uZmlnIEJS
+Ml9UQVJHRVRfVUJPT1RfTEFURVNUX1ZFUlNJT04KPiAtCWJvb2wgIjIwMjIuMDQiCj4gKwlib29s
+ICIyMDI0LjAxIgo+ICAKPiAgY29uZmlnIEJSMl9UQVJHRVRfVUJPT1RfQ1VTVE9NX1ZFUlNJT04K
+PiAgCWJvb2wgIkN1c3RvbSB2ZXJzaW9uIgo+IEBAIC04NSw3ICs4NSw3IEBAIGVuZGlmCj4gIAo+
+ICBjb25maWcgQlIyX1RBUkdFVF9VQk9PVF9WRVJTSU9OCj4gIAlzdHJpbmcKPiAtCWRlZmF1bHQg
+IjIwMjIuMDQiCWlmIEJSMl9UQVJHRVRfVUJPT1RfTEFURVNUX1ZFUlNJT04KPiArCWRlZmF1bHQg
+IjIwMjQuMDEiCWlmIEJSMl9UQVJHRVRfVUJPT1RfTEFURVNUX1ZFUlNJT04KPiAgCWRlZmF1bHQg
+QlIyX1RBUkdFVF9VQk9PVF9DVVNUT01fVkVSU0lPTl9WQUxVRSBcCj4gIAkJaWYgQlIyX1RBUkdF
+VF9VQk9PVF9DVVNUT01fVkVSU0lPTgo+ICAJZGVmYXVsdCAiY3VzdG9tIglpZiBCUjJfVEFSR0VU
+X1VCT09UX0NVU1RPTV9UQVJCQUxMCj4gZGlmZiAtLWdpdCBhL2Jvb3QvdWJvb3QvdWJvb3QuaGFz
+aCBiL2Jvb3QvdWJvb3QvdWJvb3QuaGFzaAo+IGluZGV4IGE4YmQ4MTc5MDAuLmZiZTVkMjE1NDAg
+MTAwNjQ0Cj4gLS0tIGEvYm9vdC91Ym9vdC91Ym9vdC5oYXNoCj4gKysrIGIvYm9vdC91Ym9vdC91
+Ym9vdC5oYXNoCj4gQEAgLTEsMyArMSwzIEBACj4gICMgTG9jYWxseSBjb21wdXRlZDoKPiAtc2hh
+MjU2ICA2OGUwNjU0MTM5MjY3NzhlMjc2ZWMzYWJkMjhiYjMyZmE4MmFiYWE0YTY4OThkNTcwYzFm
+NDhmYmRiMDhiY2QwICB1LWJvb3QtMjAyMi4wNC50YXIuYnoyCj4gK3NoYTI1NiAgYjk5NjExZjFl
+ZDIzN2JmMzU0MWJkYzg0MzRiNjhjOTZhNmUwNTk2NzA2MWY5OTI0NDNjYjMwYWFiZWJlZjViMyAg
+dS1ib290LTIwMjQuMDEudGFyLmJ6Mgo+ICBzaGEyNTYgIDgxNzdmOTc1MTMyMTM1MjZkZjJjZjYx
+ODRkOGZmOTg2YzY3NWFmYjUxNGQ0ZTY4YTQwNDAxMDUyMWI4ODA2NDMgIExpY2Vuc2VzL2dwbC0y
+LjAudHh0CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpi
+dWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlz
+dHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
