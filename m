@@ -4,46 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E22ECC4707B
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 20:50:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9070EC4707B
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 20:50:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8CE84400C1;
-	Wed, 10 Jan 2024 20:50:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8CE84400C1
+	by smtp2.osuosl.org (Postfix) with ESMTP id 41A8643727;
+	Wed, 10 Jan 2024 20:50:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 41A8643727
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id N4dfPUOrXZNB; Wed, 10 Jan 2024 20:50:22 +0000 (UTC)
+	with ESMTP id kzCY3IEeKjc9; Wed, 10 Jan 2024 20:50:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 756DA437D2;
-	Wed, 10 Jan 2024 20:50:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 756DA437D2
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A8E161BF5B3
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 20:49:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 454FC4378A;
+	Wed, 10 Jan 2024 20:50:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 454FC4378A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0D7D31BF5B3
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 20:49:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 81594436D7
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 20:49:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 81594436D7
+ by smtp1.osuosl.org (Postfix) with ESMTP id E706883DB5
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 20:49:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E706883DB5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Cw3p7t7pkdBF for <buildroot@lists.busybox.net>;
- Wed, 10 Jan 2024 20:49:09 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 94A6F400C1
- for <buildroot@buildroot.org>; Wed, 10 Jan 2024 20:49:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94A6F400C1
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8279985DB3; Wed, 10 Jan 2024 20:49:09 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 10 Jan 2024 21:24:18 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7ea38660e01a87ab70c02e38c78a49202e8e5c21
-X-Git-Newrev: d702ac5844fb99d5ddc5c1a00d2ec5f83af9d034
-X-Patchwork-Hint: ignore
-Message-Id: <20240110204909.8279985DB3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-grpcio: needs C++
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VNfSGP4fzxWK for <buildroot@lists.busybox.net>;
+ Wed, 10 Jan 2024 20:49:23 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DC61B83DB0
+ for <buildroot@buildroot.org>; Wed, 10 Jan 2024 20:49:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DC61B83DB0
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 0A6F840003;
+ Wed, 10 Jan 2024 20:49:20 +0000 (UTC)
+Date: Wed, 10 Jan 2024 21:49:20 +0100
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20240110214920.5e6485da@windsurf>
+In-Reply-To: <20240106142258.1880402-1-fontaine.fabrice@gmail.com>
+References: <20240106142258.1880402-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1704919761;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=TVqEvGi59fsAh2enlqz8dA4LGruWgH/k9olPAb9NnW0=;
+ b=aV2poEHDpOTp4V0GYYArEXXrA4dsMSySFHufiAuFTYUowy9/5hNktY94p/BZ3Wlh9WqDc7
+ PFu4kUXouSCxsCZgi+ocyvRtwyYe0ouWoT1a3FCVwz2s5aq5u+a5ff+UHE/vYESDp6ua9q
+ Vwe7Wa2xQBYL3gcpIbVt4KKEnfzHOxfbvzr5EKXhdbNzwINEX3bsLGNW9llJkHXHNrBj0p
+ Ie+KFv6PdUtHltukQ60VMAFuOtawEpvnDhRf4/rIoKkqDFeZHtU7f2r/7SEYHfkRm9mMbJ
+ vbbf7SgW5OYMMBWp7RB8XaWas0zlGl62Y5wAYnLZDlX0obrbkqVHF1ToAHCjGQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=aV2poEHD
+Subject: Re: [Buildroot] [PATCH 1/1] package/libzenoh-pico: bump to version
+ 0.10.1-rc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,96 +77,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Alex Michel <alex.michel@wiedemann-group.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d702ac5844fb99d5ddc5c1a00d2ec5f83af9d034
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat,  6 Jan 2024 15:22:58 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Fix the following build failure raised since the addition of the package
-in commit ea45b95c0e54866134c63e88e60489a012b3d134:
+> https://github.com/eclipse-zenoh/zenoh-pico/releases/tag/0.10.1-rc
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/libzenoh-pico/libzenoh-pico.hash | 2 +-
+>  package/libzenoh-pico/libzenoh-pico.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-/home/autobuild/autobuild/instance-12/output-1/build/python-grpcio-1.60.0/setup.py:40: DeprecationWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html
-  import pkg_resources
-Traceback (most recent call last):
-  File "/home/autobuild/autobuild/instance-12/output-1/build/python-grpcio-1.60.0/setup.py", line 289, in <module>
-    if check_linker_need_libatomic():
-       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/autobuild/autobuild/instance-12/output-1/build/python-grpcio-1.60.0/setup.py", line 223, in check_linker_need_libatomic
-    cpp_test = subprocess.Popen(
-               ^^^^^^^^^^^^^^^^^
-  File "/home/autobuild/autobuild/instance-12/output-1/host/sparc64-buildroot-linux-gnu/sysroot/usr/lib/python3.11/subprocess.py", line 1026, in __init__
-    self._execute_child(args, executable, preexec_fn, close_fds,
-  File "/home/autobuild/autobuild/instance-12/output-1/host/sparc64-buildroot-linux-gnu/sysroot/usr/lib/python3.11/subprocess.py", line 1950, in _execute_child
-    raise child_exception_type(errno_num, err_msg, err_filename)
-FileNotFoundError: [Errno 2] No such file or directory: 'no'
+Applied to master, thanks.
 
-Fixes:
- - http://autobuild.buildroot.org/results/58ac25b4e426712269c5fc144121c955b714c760
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/python-grpc-requests/Config.in     | 4 ++++
- package/python-grpcio-reflection/Config.in | 4 ++++
- package/python-grpcio/Config.in            | 4 ++++
- 3 files changed, 12 insertions(+)
-
-diff --git a/package/python-grpc-requests/Config.in b/package/python-grpc-requests/Config.in
-index 3c266e5976..3a2740f0f7 100644
---- a/package/python-grpc-requests/Config.in
-+++ b/package/python-grpc-requests/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_PYTHON_GRPC_REQUESTS
- 	bool "python-grpc-requests"
- 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-cryptography
-+	depends on BR2_INSTALL_LIBSTDCPP # python-grpcio
- 	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY # runtime
- 	select BR2_PACKAGE_PYTHON_GOOGLE_API_CORE # runtime
- 	select BR2_PACKAGE_PYTHON_GRPCIO # runtime
-@@ -9,3 +10,6 @@ config BR2_PACKAGE_PYTHON_GRPC_REQUESTS
- 	  grpc for Humans. grpc reflection support client.
- 
- 	  https://github.com/wesky93/grpc_requests
-+
-+comment "python-grpcio-requests needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/python-grpcio-reflection/Config.in b/package/python-grpcio-reflection/Config.in
-index d2ee039c5f..afe8988165 100644
---- a/package/python-grpcio-reflection/Config.in
-+++ b/package/python-grpcio-reflection/Config.in
-@@ -1,8 +1,12 @@
- config BR2_PACKAGE_PYTHON_GRPCIO_REFLECTION
- 	bool "python-grpcio-reflection"
-+	depends on BR2_INSTALL_LIBSTDCPP # python-grpcio
- 	select BR2_PACKAGE_PYTHON_GRPCIO # runtime
- 	select BR2_PACKAGE_PYTHON_PROTOBUF # runtime
- 	help
- 	  Standard Protobuf Reflection Service for gRPC.
- 
- 	  https://grpc.io
-+
-+comment "python-grpcio-reflection needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/python-grpcio/Config.in b/package/python-grpcio/Config.in
-index e63ac2ae34..5242eb461e 100644
---- a/package/python-grpcio/Config.in
-+++ b/package/python-grpcio/Config.in
-@@ -1,6 +1,10 @@
- config BR2_PACKAGE_PYTHON_GRPCIO
- 	bool "python-grpcio"
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	help
- 	  HTTP/2-based RPC framework.
- 
- 	  https://grpc.io
-+
-+comment "python-grpcio needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
