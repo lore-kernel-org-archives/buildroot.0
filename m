@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90437C3DA6E
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 09:50:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90DB7C3DA6E
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 09:50:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3C7BF435DB;
-	Wed, 10 Jan 2024 09:50:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C7BF435DB
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3CFE043635;
+	Wed, 10 Jan 2024 09:50:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3CFE043635
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IkB8P-Tl2y5s; Wed, 10 Jan 2024 09:50:24 +0000 (UTC)
+	with ESMTP id qWlmEJJF1S7j; Wed, 10 Jan 2024 09:50:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AD32543637;
-	Wed, 10 Jan 2024 09:50:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AD32543637
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 616321BF95D
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 09:49:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 315B1435F5;
+	Wed, 10 Jan 2024 09:50:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 315B1435F5
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 23A461BF34C
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 09:49:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A5BF1613DA
+ by smtp4.osuosl.org (Postfix) with ESMTP id F3AB241607
  for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 09:49:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5BF1613DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F3AB241607
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tUGqrig_YeWi for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SHdhCMdQMmAC for <buildroot@lists.busybox.net>;
  Wed, 10 Jan 2024 09:49:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AD0B1613D3
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9D5E341693
  for <buildroot@buildroot.org>; Wed, 10 Jan 2024 09:49:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD0B1613D3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D5E341693
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9C8FB852DA; Wed, 10 Jan 2024 09:49:24 +0000 (UTC)
+ id 8CE1A852E0; Wed, 10 Jan 2024 09:49:24 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 10 Jan 2024 10:46:42 +0100
+Date: Wed, 10 Jan 2024 10:41:05 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: f67494c4f10273b76c18602985e892b9fd3c669d
-X-Git-Newrev: f9bc00b561abaf3129faec8c51bc74d2cb45ac20
+X-Git-Oldrev: 5b35141a899dd3607859e0b0f0380ab0864a48ff
+X-Git-Newrev: f67494c4f10273b76c18602985e892b9fd3c669d
 X-Patchwork-Hint: ignore
-Message-Id: <20240110094924.9C8FB852DA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/libebml: bump to
- version 1.4.4
+Message-Id: <20240110094924.8CE1A852E0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/opensc: security
+ bump to version 0.24.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,136 +63,363 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f9bc00b561abaf3129faec8c51bc74d2cb45ac20
+commit: https://git.buildroot.net/buildroot/commit/?id=f67494c4f10273b76c18602985e892b9fd3c669d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-- Drop patch (already in version)
-- C++14 is required since
-  https://github.com/Matroska-Org/libebml/commit/4159caf84c18f64137e6cdb5f15c5e76d0bb0976
+- Drop patches (already in version) and so drop autoreconf
+- Fix the following security issues:
+  - CVE-2023-40660: Fix Potential PIN bypass
+  - CVE-2023-40661: Important dynamic analyzers reports
+  - CVE-2023-4535: Out-of-bounds read in MyEID driver handling
+    encryption using symmetric keys
 
-https://github.com/Matroska-Org/libebml/blob/release-1.4.4/NEWS.md
+https://github.com/OpenSC/OpenSC/releases/tag/0.24.0
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit cef841bf7d428a92b5af41b6ea21d7f8ae004526)
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 37eb68c9fb46279e9ce8d56af6f90456a6274070)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...riate-header-files-for-std-numeric_limits.patch | 40 ----------------------
- package/libebml/Config.in                          |  6 ++--
- package/libebml/libebml.hash                       |  2 +-
- package/libebml/libebml.mk                         |  2 +-
- package/libmatroska/Config.in                      |  6 ++--
- 5 files changed, 10 insertions(+), 46 deletions(-)
+ ...1-fixed-compatibility-with-LibreSSL-3.5.0.patch | 54 -----------------
+ ...2-fixed-compatibility-with-LibreSSL-3.7.0.patch | 28 ---------
+ ...003-configure-add-option-to-disable-tests.patch | 67 ----------------------
+ ...gth-calculation-to-fix-buffer-overrun-bug.patch | 51 ----------------
+ ...breSSL-does-provide-EVP_sha3_-after-3-7-3.patch | 32 -----------
+ ...006-fixed-detection-of-SHA3-compatibility.patch | 27 ---------
+ package/opensc/opensc.hash                         |  2 +-
+ package/opensc/opensc.mk                           |  7 +--
+ 8 files changed, 2 insertions(+), 266 deletions(-)
 
-diff --git a/package/libebml/0001-include-appropriate-header-files-for-std-numeric_limits.patch b/package/libebml/0001-include-appropriate-header-files-for-std-numeric_limits.patch
+diff --git a/package/opensc/0001-fixed-compatibility-with-LibreSSL-3.5.0.patch b/package/opensc/0001-fixed-compatibility-with-LibreSSL-3.5.0.patch
 deleted file mode 100644
-index c7e789c02e..0000000000
---- a/package/libebml/0001-include-appropriate-header-files-for-std-numeric_limits.patch
+index 0daf75d5ba..0000000000
+--- a/package/opensc/0001-fixed-compatibility-with-LibreSSL-3.5.0.patch
 +++ /dev/null
-@@ -1,40 +0,0 @@
--From f0bfd53647961e799a43d918c46cf3b6bff89806 Mon Sep 17 00:00:00 2001
--From: Moritz Bunkus <mo@bunkus.online>
--Date: Sat, 27 Feb 2021 20:36:52 +0100
--Subject: [PATCH] include appropriate header files for std::numeric_limits
+@@ -1,54 +0,0 @@
+-From da01e5fab9be9865db1aac203e574e0edbfd6584 Mon Sep 17 00:00:00 2001
+-From: Frank Morgner <frankmorgner@gmail.com>
+-Date: Wed, 14 Dec 2022 09:31:29 +0100
+-Subject: [PATCH] fixed compatibility with LibreSSL >= 3.5.0
 -
--Fixes #80.
+-fixes https://github.com/OpenSC/OpenSC/issues/2664
 -
--[Retrieved (and updated to remove ChangeLog update) from:
--https://github.com/Matroska-Org/libebml/commit/f0bfd53647961e799a43d918c46cf3b6bff89806]
+-Upstream: https://github.com/OpenSC/OpenSC/commit/da01e5fab9be9865db1aac203e574e0edbfd6584
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- src/libopensc/card-iasecc.c    | 12 +-----------
+- src/libopensc/sc-ossl-compat.h |  1 +
+- 2 files changed, 2 insertions(+), 11 deletions(-)
+-
+-diff --git a/src/libopensc/card-iasecc.c b/src/libopensc/card-iasecc.c
+-index 480c1cf87b..1347ed2393 100644
+---- a/src/libopensc/card-iasecc.c
+-+++ b/src/libopensc/card-iasecc.c
+-@@ -38,21 +38,11 @@
+- #include <openssl/pkcs12.h>
+- #include <openssl/x509v3.h>
+- 
+--/*
+-- * OpenSSL-3.0.0 does not allow access to the SHA data
+-- * so this driver can not produces signatures
+-- * OpenSSL 1.1.1 uses EVP_MD_CTX_md_data
+-- * LibreSSL
+-- */
+--
+--#if defined(LIBRESSL_VERSION_NUMBER)
+--# define  EVP_MD_CTX_md_data(x)  (x->md_data)
+--#endif
+--
+- #include "internal.h"
+- #include "asn1.h"
+- #include "cardctl.h"
+- #include "opensc.h"
+-+#include "sc-ossl-compat.h"
+- /* #include "sm.h" */
+- #include "pkcs15.h"
+- /* #include "hash-strings.h" */
+-diff --git a/src/libopensc/sc-ossl-compat.h b/src/libopensc/sc-ossl-compat.h
+-index da53ca8cee..8c0f96701c 100644
+---- a/src/libopensc/sc-ossl-compat.h
+-+++ b/src/libopensc/sc-ossl-compat.h
+-@@ -42,6 +42,7 @@ extern "C" {
+- #define X509_get_extension_flags(x)	(x->ex_flags)
+- #define X509_get_key_usage(x)		(x->ex_kusage)
+- #define X509_get_extended_key_usage(x)	(x->ex_xkusage)
+-+#define EVP_MD_CTX_md_data(x)          (x->md_data)
+- #endif
+- 
+- #if defined(LIBRESSL_VERSION_NUMBER)
+diff --git a/package/opensc/0002-fixed-compatibility-with-LibreSSL-3.7.0.patch b/package/opensc/0002-fixed-compatibility-with-LibreSSL-3.7.0.patch
+deleted file mode 100644
+index 6bbbea6ce6..0000000000
+--- a/package/opensc/0002-fixed-compatibility-with-LibreSSL-3.7.0.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-From 98ad0f93b0a7673cdce82e1b3faa7dc314c64dd6 Mon Sep 17 00:00:00 2001
+-From: Frank Morgner <frankmorgner@gmail.com>
+-Date: Fri, 16 Dec 2022 11:56:28 +0100
+-Subject: [PATCH] fixed compatibility with LibreSSL 3.7.0
+-
+-Upstream: https://github.com/OpenSC/OpenSC/commit/98ad0f93b0a7673cdce82e1b3faa7dc314c64dd6
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- src/libopensc/sc-ossl-compat.h | 2 ++
+- 1 file changed, 2 insertions(+)
+-
+-diff --git a/src/libopensc/sc-ossl-compat.h b/src/libopensc/sc-ossl-compat.h
+-index 8c0f96701c..4425da93f3 100644
+---- a/src/libopensc/sc-ossl-compat.h
+-+++ b/src/libopensc/sc-ossl-compat.h
+-@@ -54,9 +54,11 @@ extern "C" {
+- #define EVP_sha3_256()                          (NULL)
+- #define EVP_sha3_384()                          (NULL)
+- #define EVP_sha3_512()                          (NULL)
+-+#if LIBRESSL_VERSION_NUMBER < 0x3070000fL
+- #define EVP_PKEY_new_raw_public_key(t, e, p, l) (NULL)
+- #define EVP_PKEY_get_raw_public_key(p, pu, l)   (0)
+- #endif
+-+#endif
+- 
+- /* OpenSSL 1.1.1 has FIPS_mode function */
+- #if OPENSSL_VERSION_NUMBER >= 0x30000000L
+diff --git a/package/opensc/0003-configure-add-option-to-disable-tests.patch b/package/opensc/0003-configure-add-option-to-disable-tests.patch
+deleted file mode 100644
+index 29342026c1..0000000000
+--- a/package/opensc/0003-configure-add-option-to-disable-tests.patch
++++ /dev/null
+@@ -1,67 +0,0 @@
+-From 3c3ed2ecbf31d41b6e5406da55971b9d9eaa3388 Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd@kuhls.net>
+-Date: Mon, 24 Jul 2023 22:28:11 +0200
+-Subject: [PATCH] configure: add option to disable tests
+-
+-Upstream: https://github.com/OpenSC/OpenSC/pull/2822
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- configure.ac    | 9 +++++++++
+- src/Makefile.am | 6 +++++-
+- 2 files changed, 14 insertions(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 0a90445b..9b7543da 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -272,6 +272,13 @@ AC_ARG_ENABLE(
+- 	[enable_doc="no"]
+- )
+- 
+-+AC_ARG_ENABLE(
+-+	[tests],
+-+	[AS_HELP_STRING([--enable-tests],[enable tests @<:@enabled@:>@])],
+-+	,
+-+	[enable_tests="yes"]
+-+)
+-+
+- AC_ARG_ENABLE(
+- 	[dnie-ui],
+- 	[AS_HELP_STRING([--enable-dnie-ui],[enable use of external user interface program to request DNIe pin@<:@disabled@:>@])],
+-@@ -1119,6 +1126,7 @@ AM_CONDITIONAL([ENABLE_NOTIFY], [test "${enable_notify}" = "yes"])
+- AM_CONDITIONAL([ENABLE_CRYPTOTOKENKIT], [test "${enable_cryptotokenkit}" = "yes"])
+- AM_CONDITIONAL([ENABLE_OPENCT], [test "${enable_openct}" = "yes"])
+- AM_CONDITIONAL([ENABLE_DOC], [test "${enable_doc}" = "yes"])
+-+AM_CONDITIONAL([ENABLE_TESTS], [test "${enable_tests}" = "yes"])
+- AM_CONDITIONAL([WIN32], [test "${WIN32}" = "yes"])
+- AM_CONDITIONAL([CYGWIN], [test "${CYGWIN}" = "yes"])
+- AM_CONDITIONAL([ENABLE_MINIDRIVER], [test "${enable_minidriver}" = "yes"])
+-@@ -1213,6 +1221,7 @@ XSL stylesheets:         ${xslstylesheetsdir}
+- 
+- man support:             ${enable_man}
+- doc support:             ${enable_doc}
+-+tests:                   ${enable_tests}
+- thread locking support:  ${enable_thread_locking}
+- zlib support:            ${enable_zlib}
+- readline support:        ${enable_readline}
+-diff --git a/src/Makefile.am b/src/Makefile.am
+-index 3ce465bf..bf71b61f 100644
+---- a/src/Makefile.am
+-+++ b/src/Makefile.am
+-@@ -3,7 +3,11 @@ EXTRA_DIST = Makefile.mak
+- 
+- # Order IS important
+- SUBDIRS = common scconf ui pkcs15init sm \
+--		  libopensc pkcs11 tools minidriver tests
+-+		  libopensc pkcs11 tools minidriver
+-+
+-+if ENABLE_TESTS
+-+SUBDIRS += tests
+-+endif
+- 
+- if ENABLE_SM
+- SUBDIRS += smm
+--- 
+-2.39.2
+-
+diff --git a/package/opensc/0004-pkcs15init-correct-left-length-calculation-to-fix-buffer-overrun-bug.patch b/package/opensc/0004-pkcs15init-correct-left-length-calculation-to-fix-buffer-overrun-bug.patch
+deleted file mode 100644
+index 079f960b59..0000000000
+--- a/package/opensc/0004-pkcs15init-correct-left-length-calculation-to-fix-buffer-overrun-bug.patch
++++ /dev/null
+@@ -1,51 +0,0 @@
+-From 81944d1529202bd28359bede57c0a15deb65ba8a Mon Sep 17 00:00:00 2001
+-From: fullwaywang <fullwaywang@tencent.com>
+-Date: Mon, 29 May 2023 10:38:48 +0800
+-Subject: [PATCH] pkcs15init: correct left length calculation to fix buffer
+- overrun bug. Fixes #2785
+-
+-Upstream: https://github.com/OpenSC/OpenSC/commit/81944d1529202bd28359bede57c0a15deb65ba8a
 -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ----
-- ChangeLog                 | 4 ++++
-- src/EbmlString.cpp        | 1 +
-- src/EbmlUnicodeString.cpp | 1 +
-- 3 files changed, 6 insertions(+)
+- src/pkcs15init/pkcs15-cardos.c | 10 +++++-----
+- 1 file changed, 5 insertions(+), 5 deletions(-)
 -
--diff --git a/src/EbmlString.cpp b/src/EbmlString.cpp
--index 27e55fd..4c05fcf 100644
----- a/src/EbmlString.cpp
--+++ b/src/EbmlString.cpp
--@@ -34,6 +34,7 @@
--   \author Steve Lhomme     <robux4 @ users.sf.net>
-- */
-- #include <cassert>
--+#include <limits>
+-diff --git a/src/pkcs15init/pkcs15-cardos.c b/src/pkcs15init/pkcs15-cardos.c
+-index 9715cf390f..f41f73c349 100644
+---- a/src/pkcs15init/pkcs15-cardos.c
+-+++ b/src/pkcs15init/pkcs15-cardos.c
+-@@ -872,7 +872,7 @@ static int cardos_have_verifyrc_package(sc_card_t *card)
+- 	sc_apdu_t apdu;
+-         u8        rbuf[SC_MAX_APDU_BUFFER_SIZE];
+-         int       r;
+--	const u8  *p = rbuf, *q;
+-+	const u8  *p = rbuf, *q, *pp;
+- 	size_t    len, tlen = 0, ilen = 0;
 - 
-- #include "ebml/EbmlString.h"
+- 	sc_format_apdu(card, &apdu, SC_APDU_CASE_2_SHORT, 0xca, 0x01, 0x88);
+-@@ -888,13 +888,13 @@ static int cardos_have_verifyrc_package(sc_card_t *card)
+- 		return 0;
 - 
--diff --git a/src/EbmlUnicodeString.cpp b/src/EbmlUnicodeString.cpp
--index 496a16a..99fc073 100644
----- a/src/EbmlUnicodeString.cpp
--+++ b/src/EbmlUnicodeString.cpp
--@@ -36,6 +36,7 @@
-- */
-- 
-- #include <cassert>
--+#include <limits>
-- 
-- #include "ebml/EbmlUnicodeString.h"
-- 
-diff --git a/package/libebml/Config.in b/package/libebml/Config.in
-index a00b894358..b770154af7 100644
---- a/package/libebml/Config.in
-+++ b/package/libebml/Config.in
-@@ -2,11 +2,13 @@ config BR2_PACKAGE_LIBEBML
- 	bool "libebml"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
- 	help
- 	  Access library for the EBML (Extensible Binary Meta
- 	  Language, a binary derivative of XML) format.
+- 	while (len != 0) {
+--		p = sc_asn1_find_tag(card->ctx, p, len, 0xe1, &tlen);
+--		if (p == NULL)
+-+		pp = sc_asn1_find_tag(card->ctx, p, len, 0xe1, &tlen);
+-+		if (pp == NULL)
+- 			return 0;
+- 		if (card->type == SC_CARD_TYPE_CARDOS_M4_3)	{
+- 			/* the verifyRC package on CardOS 4.3B use Manufacturer ID 0x01	*/
+- 			/* and Package Number 0x07					*/
+--			q = sc_asn1_find_tag(card->ctx, p, tlen, 0x01, &ilen);
+-+			q = sc_asn1_find_tag(card->ctx, pp, tlen, 0x01, &ilen);
+- 			if (q == NULL || ilen != 4)
+- 				return 0;
+- 			if (q[0] == 0x07)
+-@@ -902,7 +902,7 @@ static int cardos_have_verifyrc_package(sc_card_t *card)
+- 		} else if (card->type == SC_CARD_TYPE_CARDOS_M4_4)	{
+- 			/* the verifyRC package on CardOS 4.4 use Manufacturer ID 0x03	*/
+- 			/* and Package Number 0x02					*/
+--			q = sc_asn1_find_tag(card->ctx, p, tlen, 0x03, &ilen);
+-+			q = sc_asn1_find_tag(card->ctx, pp, tlen, 0x03, &ilen);
+- 			if (q == NULL || ilen != 4)
+- 				return 0;
+- 			if (q[0] == 0x02)
+diff --git a/package/opensc/0005-LibreSSL-does-provide-EVP_sha3_-after-3-7-3.patch b/package/opensc/0005-LibreSSL-does-provide-EVP_sha3_-after-3-7-3.patch
+deleted file mode 100644
+index 80c19a3f5f..0000000000
+--- a/package/opensc/0005-LibreSSL-does-provide-EVP_sha3_-after-3-7-3.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From e015242590ad9131e124232cc5a2fd02d525ef2c Mon Sep 17 00:00:00 2001
+-From: Klemens Nanni <kn@openbsd.org>
+-Date: Thu, 29 Jun 2023 02:41:43 +0300
+-Subject: [PATCH] LibreSSL does provide EVP_sha3_*() after 3.7.3
+-
+-Support was added in 16.04.2023.
+-
+-Compile- and run-tested on OpenBSD/amd64 7.3-current.
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Upstream: https://github.com/OpenSC/OpenSC/commit/e015242590ad9131e124232cc5a2fd02d525ef2c
+----
+- src/libopensc/sc-ossl-compat.h | 2 ++
+- 1 file changed, 2 insertions(+)
+-
+-diff --git a/src/libopensc/sc-ossl-compat.h b/src/libopensc/sc-ossl-compat.h
+-index df0cebbce2..8012cd4c0f 100644
+---- a/src/libopensc/sc-ossl-compat.h
+-+++ b/src/libopensc/sc-ossl-compat.h
+-@@ -50,10 +50,12 @@ extern "C" {
+- #if LIBRESSL_VERSION_NUMBER < 0x30500000L
+- #define FIPS_mode()                             (0)
+- #endif
+-+#ifndef EVP_sha3_224
+- #define EVP_sha3_224()                          (NULL)
+- #define EVP_sha3_256()                          (NULL)
+- #define EVP_sha3_384()                          (NULL)
+- #define EVP_sha3_512()                          (NULL)
+-+#endif
+- #if LIBRESSL_VERSION_NUMBER < 0x3070000fL
+- #define EVP_PKEY_new_raw_public_key(t, e, p, l) (NULL)
+- #define EVP_PKEY_get_raw_public_key(p, pu, l)   (0)
+diff --git a/package/opensc/0006-fixed-detection-of-SHA3-compatibility.patch b/package/opensc/0006-fixed-detection-of-SHA3-compatibility.patch
+deleted file mode 100644
+index 3d8aa7e4ef..0000000000
+--- a/package/opensc/0006-fixed-detection-of-SHA3-compatibility.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-From 33351d91aa22fa8077847ba3f19abb5a00b04600 Mon Sep 17 00:00:00 2001
+-From: Frank Morgner <frankmorgner@gmail.com>
+-Date: Tue, 15 Aug 2023 17:58:21 +0200
+-Subject: [PATCH] fixed detection of SHA3 compatibility
+-
+-fixes https://github.com/OpenSC/OpenSC/issues/2836
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Upstream: https://github.com/OpenSC/OpenSC/commit/33351d91aa22fa8077847ba3f19abb5a00b04600
+----
+- src/libopensc/sc-ossl-compat.h | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/src/libopensc/sc-ossl-compat.h b/src/libopensc/sc-ossl-compat.h
+-index 8012cd4c0f..96ec4bd736 100644
+---- a/src/libopensc/sc-ossl-compat.h
+-+++ b/src/libopensc/sc-ossl-compat.h
+-@@ -50,7 +50,8 @@ extern "C" {
+- #if LIBRESSL_VERSION_NUMBER < 0x30500000L
+- #define FIPS_mode()                             (0)
+- #endif
+--#ifndef EVP_sha3_224
+-+/* OpenSSL 1.1.1 has EVP_sha3_* */
+-+#if defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x30800000L
+- #define EVP_sha3_224()                          (NULL)
+- #define EVP_sha3_256()                          (NULL)
+- #define EVP_sha3_384()                          (NULL)
+diff --git a/package/opensc/opensc.hash b/package/opensc/opensc.hash
+index e8e675667e..232222062c 100644
+--- a/package/opensc/opensc.hash
++++ b/package/opensc/opensc.hash
+@@ -1,5 +1,5 @@
+ # Computed locally from https://https://github.com/OpenSC/OpenSC/releases/
+-sha256  a4844a6ea03a522ecf35e49659716dacb6be03f7c010a1a583aaf3eb915ed2e0  opensc-0.23.0.tar.gz
++sha256  24d03c69287291da32a30c4c38a304ad827f56cb85d83619e1f5403ab6480ef8  opensc-0.24.0.tar.gz
  
- 	  http://matroska.org
- 
--comment "libebml needs a toolchain w/ C++, wchar"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
-+comment "libebml needs a toolchain w/ C++, wchar, gcc >= 4.9"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-diff --git a/package/libebml/libebml.hash b/package/libebml/libebml.hash
-index 32ca1e3dd3..c83fde32ab 100644
---- a/package/libebml/libebml.hash
-+++ b/package/libebml/libebml.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  41c7237ce05828fb220f62086018b080af4db4bb142f31bec0022c925889b9f2  libebml-1.4.2.tar.xz
-+sha256  82dc5f83356cc9340aee76ed7512210b3a4edf5f346bc9c2c7044f55052687a7  libebml-1.4.4.tar.xz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL
-diff --git a/package/libebml/libebml.mk b/package/libebml/libebml.mk
-index 056cf888e1..c85638c03e 100644
---- a/package/libebml/libebml.mk
-+++ b/package/libebml/libebml.mk
-@@ -4,7 +4,7 @@
+ # Computed locally
+ sha256  376b54d4c5f4aa99421823fa4da93e3ab73096fce2400e89858632aa7da24a14  COPYING
+diff --git a/package/opensc/opensc.mk b/package/opensc/opensc.mk
+index 823bc50102..49bdcae37a 100644
+--- a/package/opensc/opensc.mk
++++ b/package/opensc/opensc.mk
+@@ -4,18 +4,13 @@
  #
  ################################################################################
  
--LIBEBML_VERSION = 1.4.2
-+LIBEBML_VERSION = 1.4.4
- LIBEBML_SOURCE = libebml-$(LIBEBML_VERSION).tar.xz
- LIBEBML_SITE = http://dl.matroska.org/downloads/libebml
- LIBEBML_INSTALL_STAGING = YES
-diff --git a/package/libmatroska/Config.in b/package/libmatroska/Config.in
-index ec0e8415d7..b2e4354df5 100644
---- a/package/libmatroska/Config.in
-+++ b/package/libmatroska/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBMATROSKA
- 	bool "libmatroska"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libebml
- 	select BR2_PACKAGE_LIBEBML
- 	help
- 	  Extensible open standard audio/video container format access
-@@ -9,5 +10,6 @@ config BR2_PACKAGE_LIBMATROSKA
+-OPENSC_VERSION = 0.23.0
++OPENSC_VERSION = 0.24.0
+ OPENSC_SITE = https://github.com/OpenSC/OpenSC/releases/download/$(OPENSC_VERSION)
+ OPENSC_LICENSE = LGPL-2.1+
+ OPENSC_LICENSE_FILES = COPYING
+ OPENSC_CPE_ID_VENDOR = opensc_project
+-# 0003-configure-add-option-to-disable-tests.patch
+-OPENSC_AUTORECONF = YES
+ OPENSC_DEPENDENCIES = openssl pcsc-lite
+ OPENSC_INSTALL_STAGING = YES
+ OPENSC_CONF_OPTS = --disable-cmocka --disable-strict --disable-tests
  
- 	  http://matroska.org
- 
--comment "libmatroska needs a toolchain w/ C++, wchar"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
-+comment "libmatroska needs a toolchain w/ C++, wchar, gcc >= 4.9"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+-# 0004-pkcs15init-correct-left-length-calculation-to-fix-buffer-overrun-bug.patch
+-OPENSC_IGNORE_CVES += CVE-2023-2977
+-
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
