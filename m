@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E9CBC4707B
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 20:23:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8384C47073
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 20:24:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 26A25436D6;
-	Wed, 10 Jan 2024 20:23:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 26A25436D6
+	by smtp2.osuosl.org (Postfix) with ESMTP id 77690436E5;
+	Wed, 10 Jan 2024 20:24:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 77690436E5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JkRoHKFGRO1J; Wed, 10 Jan 2024 20:23:57 +0000 (UTC)
+	with ESMTP id PFznEkZ522-B; Wed, 10 Jan 2024 20:24:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D32A7437D2;
-	Wed, 10 Jan 2024 20:23:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D32A7437D2
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 188F71BF5B3
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6DDC243809;
+	Wed, 10 Jan 2024 20:24:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6DDC243809
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 62F7B1BF5B3
  for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 20:22:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8A40761555
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 20:22:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A40761555
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0DFD083AAD
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 20:22:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0DFD083AAD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gyDDW9pk5VCU for <buildroot@lists.busybox.net>;
- Wed, 10 Jan 2024 20:22:04 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MEDDj7GNvHyL for <buildroot@lists.busybox.net>;
+ Wed, 10 Jan 2024 20:22:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 274966155B
- for <buildroot@buildroot.org>; Wed, 10 Jan 2024 20:22:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 274966155B
+ by smtp1.osuosl.org (Postfix) with ESMTP id BF9D683A77
+ for <buildroot@buildroot.org>; Wed, 10 Jan 2024 20:22:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF9D683A77
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 24B2985D61; Wed, 10 Jan 2024 20:22:04 +0000 (UTC)
+ id ADAAA85D63; Wed, 10 Jan 2024 20:22:03 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 10 Jan 2024 21:13:01 +0100
+Date: Wed, 10 Jan 2024 20:41:17 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: fda35e7115776cb3844c5f2e89c3f8cbc81fbad0
-X-Git-Newrev: 555bf35d3a88a572132e6c1e16f2776611160c29
+X-Git-Oldrev: e4e40d106baf77819f9b4e793b79ea124adfc577
+X-Git-Newrev: dabe89e5a41910a15aceb013b01a4e94e36bad2c
 X-Patchwork-Hint: ignore
-Message-Id: <20240110202204.24B2985D61@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/libssh2: disable
- rpath
+Message-Id: <20240110202203.ADAAA85D63@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/libcap-ng:
+ disable python3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +63,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=555bf35d3a88a572132e6c1e16f2776611160c29
+commit: https://git.buildroot.net/buildroot/commit/?id=dabe89e5a41910a15aceb013b01a4e94e36bad2c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Bumping libssh2 to 1.11.0 with buildroot commit
-af87ad197caf434936fe239f2718fd17b60fcb8b
-causes build errors with libcurl due to "-R" being added to libssh2.pc.
+python3 is an optional dependency (enabled by default) since bump to
+version 0.7.7 in commit 4314c86b0b932c3d381ae59b641366697906868f and
+https://github.com/stevegrubb/libcap-ng/commit/02fc25f9d3a00c7d7ccd619d8d678511a73b940b
 
-Quoting autobuilder build-end.log
-
-checking for recv... no
-configure: error: Unable to link function recv
-
-Quoting autobuilder libcurl-8.1.2/config.log
-
-arc-buildroot-linux-uclibc-gcc.br_real: error: unrecognized command-line option '-R'
-
-Fixes:
-http://autobuild.buildroot.net/results/78f/78ffda92d51f8abdbcef93f968ace432d0d44979/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 409a5f98767d5bb117504597f83446cb134586d8)
+(cherry picked from commit 4d21ec5021f6ec9ba40a9f71a9028b7b55bc6aea)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libssh2/libssh2.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libcap-ng/libcap-ng.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk
-index 8bedbdffba..a42be46a7a 100644
---- a/package/libssh2/libssh2.mk
-+++ b/package/libssh2/libssh2.mk
-@@ -11,7 +11,7 @@ LIBSSH2_LICENSE = BSD
- LIBSSH2_LICENSE_FILES = COPYING
- LIBSSH2_CPE_ID_VENDOR = libssh2
- LIBSSH2_INSTALL_STAGING = YES
--LIBSSH2_CONF_OPTS = --disable-examples-build
-+LIBSSH2_CONF_OPTS = --disable-examples-build --disable-rpath
+diff --git a/package/libcap-ng/libcap-ng.mk b/package/libcap-ng/libcap-ng.mk
+index 46f72c702e..c33460d951 100644
+--- a/package/libcap-ng/libcap-ng.mk
++++ b/package/libcap-ng/libcap-ng.mk
+@@ -12,10 +12,10 @@ LIBCAP_NG_CPE_ID_VENDOR = libcap-ng_project
+ LIBCAP_NG_INSTALL_STAGING = YES
  
- ifeq ($(BR2_PACKAGE_LIBSSH2_MBEDTLS),y)
- LIBSSH2_DEPENDENCIES += mbedtls
+ LIBCAP_NG_CONF_ENV = ac_cv_prog_swig_found=no
+-LIBCAP_NG_CONF_OPTS = --without-python
++LIBCAP_NG_CONF_OPTS = --without-python --without-python3
+ 
+ HOST_LIBCAP_NG_CONF_ENV = ac_cv_prog_swig_found=no
+-HOST_LIBCAP_NG_CONF_OPTS = --without-python
++HOST_LIBCAP_NG_CONF_OPTS = --without-python --without-python3
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
