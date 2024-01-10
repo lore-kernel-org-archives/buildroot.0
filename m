@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89914C4707B
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 20:22:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16FFAC4707B
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 20:22:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 35A12437B2;
-	Wed, 10 Jan 2024 20:22:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 35A12437B2
+	by smtp2.osuosl.org (Postfix) with ESMTP id AFBE7437A1;
+	Wed, 10 Jan 2024 20:22:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AFBE7437A1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nTlcKOwwSjtu; Wed, 10 Jan 2024 20:22:21 +0000 (UTC)
+	with ESMTP id lxToWTaTo9XG; Wed, 10 Jan 2024 20:22:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 31CA3437F4;
-	Wed, 10 Jan 2024 20:22:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 31CA3437F4
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CE3C21BF95D
+	by smtp2.osuosl.org (Postfix) with ESMTP id BE1E8437F8;
+	Wed, 10 Jan 2024 20:22:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BE1E8437F8
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D5F191BF966
  for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 20:22:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A730461564
+ by smtp2.osuosl.org (Postfix) with ESMTP id AD08B43748
  for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 20:22:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A730461564
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AD08B43748
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0Dp9wiUhB1Dn for <buildroot@lists.busybox.net>;
- Wed, 10 Jan 2024 20:22:04 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GcdpRhL_kMCD for <buildroot@lists.busybox.net>;
+ Wed, 10 Jan 2024 20:22:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E22BB613FF
+ by smtp2.osuosl.org (Postfix) with ESMTP id A64D3436D7
  for <buildroot@buildroot.org>; Wed, 10 Jan 2024 20:22:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E22BB613FF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A64D3436D7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CFDFA85D64; Wed, 10 Jan 2024 20:22:03 +0000 (UTC)
+ id 93AAE85D62; Wed, 10 Jan 2024 20:22:03 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 10 Jan 2024 21:02:15 +0100
+Date: Wed, 10 Jan 2024 20:39:28 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: d643e10124c17b8b34b888dda024deae1828fed1
-X-Git-Newrev: 232a03959253f6a19e90d3588c280d2f904fc4ad
+X-Git-Oldrev: 095c5f78e4f02e4b674c2898193dcb78dee5c5d2
+X-Git-Newrev: e4e40d106baf77819f9b4e793b79ea124adfc577
 X-Patchwork-Hint: ignore
-Message-Id: <20240110202203.CFDFA85D64@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/libiec61850: add
- mbedtls optional dependency
+Message-Id: <20240110202203.93AAE85D62@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/pkg-qmake.mk:
+ drop host-perl dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,37 +63,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=232a03959253f6a19e90d3588c280d2f904fc4ad
+commit: https://git.buildroot.net/buildroot/commit/?id=e4e40d106baf77819f9b4e793b79ea124adfc577
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-mbedtls is an optional dependency since bump to version 1.5.0 in
-commit a42e0e4600be785fa750c6b481c41a76d041df03 and
-https://github.com/mz-automation/libiec61850/commit/19f2cbf0e7066753476ff8c38c07a6f0df73a622
+Since commit 5770a645a3a49a3f0f02972131a4ff5283b4c11e ("package/qt5:
+bump packages to latest kde submodule versions"), the
+QT_HEADERS_SYNC_HOOK hook no longer calls the syncqt.pl script, so
+host-perl is no longer needed as a dependency of running this
+hook (and as a dependency of building Qt).
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4d07864d4c1b7d964e23f8ab75f5c6f828a674c5)
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit b678091a1c68327d086b6534a27224763db23006)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libiec61850/libiec61850.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/pkg-qmake.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/libiec61850/libiec61850.mk b/package/libiec61850/libiec61850.mk
-index 4b61e40c6d..a3cfb74b03 100644
---- a/package/libiec61850/libiec61850.mk
-+++ b/package/libiec61850/libiec61850.mk
-@@ -15,4 +15,11 @@ LIBIEC61850_CONF_OPTS = -DBUILD_PYTHON_BINDINGS=OFF
- # https://github.com/mz-automation/libiec61850/issues/442
- LIBIEC61850_IGNORE_CVES += CVE-2023-27772
+diff --git a/package/pkg-qmake.mk b/package/pkg-qmake.mk
+index fdaddf08df..ccf78692e8 100644
+--- a/package/pkg-qmake.mk
++++ b/package/pkg-qmake.mk
+@@ -50,7 +50,6 @@ $(2)_DEPENDENCIES 		+= qt5base
+ endif
  
-+ifeq ($(BR2_PACKAGE_MBEDTLS),y)
-+LIBIEC61850_DEPENDENCIES += mbedtls
-+LIBIEC61850_CONF_OPTS += -DCONFIG_USE_EXTERNAL_MBEDTLS_DYNLIB=ON
-+else
-+LIBIEC61850_CONF_OPTS += -DCONFIG_USE_EXTERNAL_MBEDTLS_DYNLIB=OFF
-+endif
-+
- $(eval $(cmake-package))
+ ifeq ($$($(2)_SYNC_QT_HEADERS),YES)
+-$(2)_DEPENDENCIES 		+= host-perl
+ $(2)_PRE_CONFIGURE_HOOKS        += QT_HEADERS_SYNC_HOOK
+ endif
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
