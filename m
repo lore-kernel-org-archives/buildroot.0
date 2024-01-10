@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED8A9C47074
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 09:53:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59E48C3DA6E
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 09:53:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A7198435DE;
-	Wed, 10 Jan 2024 09:53:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A7198435DE
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0E13443681;
+	Wed, 10 Jan 2024 09:53:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E13443681
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pwnn3Ro6Q2_k; Wed, 10 Jan 2024 09:52:59 +0000 (UTC)
+	with ESMTP id EDvbAs4uMfmg; Wed, 10 Jan 2024 09:53:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D4A3343623;
-	Wed, 10 Jan 2024 09:52:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D4A3343623
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2B09F1BF95D
+	by smtp2.osuosl.org (Postfix) with ESMTP id E8B124363B;
+	Wed, 10 Jan 2024 09:53:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E8B124363B
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8AC861BF34C
  for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 09:51:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 04A5160C17
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 09:51:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 04A5160C17
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4ECEB41607
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 09:51:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4ECEB41607
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eEo5TjSEjj7S for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4LWGL_4fbcn6 for <buildroot@lists.busybox.net>;
  Wed, 10 Jan 2024 09:51:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9C53560E32
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7FDE74160B
  for <buildroot@buildroot.org>; Wed, 10 Jan 2024 09:51:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C53560E32
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FDE74160B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8C1E0853CD; Wed, 10 Jan 2024 09:51:32 +0000 (UTC)
+ id 70389853B3; Wed, 10 Jan 2024 09:51:32 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 10 Jan 2024 10:45:18 +0100
+Date: Wed, 10 Jan 2024 10:36:04 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 71f9acc72b41d6a0b03731403845a7356cefd081
-X-Git-Newrev: fb163d2c7df772de8689836564339197294960a8
+X-Git-Oldrev: 60a96b42a2a1914ba650beac7d66469749b59167
+X-Git-Newrev: ed75806fe9330d3b408d9e045f0ce36a8593dc3b
 X-Patchwork-Hint: ignore
-Message-Id: <20240110095132.8C1E0853CD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/opensc: security
- bump to version 0.24.0
+Message-Id: <20240110095132.70389853B3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/libde265:
+ security bump to version 1.0.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,363 +63,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fb163d2c7df772de8689836564339197294960a8
+commit: https://git.buildroot.net/buildroot/commit/?id=ed75806fe9330d3b408d9e045f0ce36a8593dc3b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-- Drop patches (already in version) and so drop autoreconf
-- Fix the following security issues:
-  - CVE-2023-40660: Fix Potential PIN bypass
-  - CVE-2023-40661: Important dynamic analyzers reports
-  - CVE-2023-4535: Out-of-bounds read in MyEID driver handling
-    encryption using symmetric keys
+A couple of bug fixes, including the following CVEs:
+ - CVE-2023-49465
+ - CVE-2023-49467
+ - CVE-2023-49468
 
-https://github.com/OpenSC/OpenSC/releases/tag/0.24.0
+https://github.com/strukturag/libde265/releases/tag/v1.0.15
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 37eb68c9fb46279e9ce8d56af6f90456a6274070)
+(cherry picked from commit 158edd5aa94b516cf8710e690431289da2545e40)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...1-fixed-compatibility-with-LibreSSL-3.5.0.patch | 54 -----------------
- ...2-fixed-compatibility-with-LibreSSL-3.7.0.patch | 28 ---------
- ...003-configure-add-option-to-disable-tests.patch | 67 ----------------------
- ...gth-calculation-to-fix-buffer-overrun-bug.patch | 51 ----------------
- ...breSSL-does-provide-EVP_sha3_-after-3-7-3.patch | 32 -----------
- ...006-fixed-detection-of-SHA3-compatibility.patch | 27 ---------
- package/opensc/opensc.hash                         |  2 +-
- package/opensc/opensc.mk                           |  7 +--
- 8 files changed, 2 insertions(+), 266 deletions(-)
+ package/libde265/libde265.hash | 2 +-
+ package/libde265/libde265.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/opensc/0001-fixed-compatibility-with-LibreSSL-3.5.0.patch b/package/opensc/0001-fixed-compatibility-with-LibreSSL-3.5.0.patch
-deleted file mode 100644
-index 0daf75d5ba..0000000000
---- a/package/opensc/0001-fixed-compatibility-with-LibreSSL-3.5.0.patch
-+++ /dev/null
-@@ -1,54 +0,0 @@
--From da01e5fab9be9865db1aac203e574e0edbfd6584 Mon Sep 17 00:00:00 2001
--From: Frank Morgner <frankmorgner@gmail.com>
--Date: Wed, 14 Dec 2022 09:31:29 +0100
--Subject: [PATCH] fixed compatibility with LibreSSL >= 3.5.0
--
--fixes https://github.com/OpenSC/OpenSC/issues/2664
--
--Upstream: https://github.com/OpenSC/OpenSC/commit/da01e5fab9be9865db1aac203e574e0edbfd6584
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- src/libopensc/card-iasecc.c    | 12 +-----------
-- src/libopensc/sc-ossl-compat.h |  1 +
-- 2 files changed, 2 insertions(+), 11 deletions(-)
--
--diff --git a/src/libopensc/card-iasecc.c b/src/libopensc/card-iasecc.c
--index 480c1cf87b..1347ed2393 100644
----- a/src/libopensc/card-iasecc.c
--+++ b/src/libopensc/card-iasecc.c
--@@ -38,21 +38,11 @@
-- #include <openssl/pkcs12.h>
-- #include <openssl/x509v3.h>
-- 
---/*
--- * OpenSSL-3.0.0 does not allow access to the SHA data
--- * so this driver can not produces signatures
--- * OpenSSL 1.1.1 uses EVP_MD_CTX_md_data
--- * LibreSSL
--- */
---
---#if defined(LIBRESSL_VERSION_NUMBER)
---# define  EVP_MD_CTX_md_data(x)  (x->md_data)
---#endif
---
-- #include "internal.h"
-- #include "asn1.h"
-- #include "cardctl.h"
-- #include "opensc.h"
--+#include "sc-ossl-compat.h"
-- /* #include "sm.h" */
-- #include "pkcs15.h"
-- /* #include "hash-strings.h" */
--diff --git a/src/libopensc/sc-ossl-compat.h b/src/libopensc/sc-ossl-compat.h
--index da53ca8cee..8c0f96701c 100644
----- a/src/libopensc/sc-ossl-compat.h
--+++ b/src/libopensc/sc-ossl-compat.h
--@@ -42,6 +42,7 @@ extern "C" {
-- #define X509_get_extension_flags(x)	(x->ex_flags)
-- #define X509_get_key_usage(x)		(x->ex_kusage)
-- #define X509_get_extended_key_usage(x)	(x->ex_xkusage)
--+#define EVP_MD_CTX_md_data(x)          (x->md_data)
-- #endif
-- 
-- #if defined(LIBRESSL_VERSION_NUMBER)
-diff --git a/package/opensc/0002-fixed-compatibility-with-LibreSSL-3.7.0.patch b/package/opensc/0002-fixed-compatibility-with-LibreSSL-3.7.0.patch
-deleted file mode 100644
-index 6bbbea6ce6..0000000000
---- a/package/opensc/0002-fixed-compatibility-with-LibreSSL-3.7.0.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From 98ad0f93b0a7673cdce82e1b3faa7dc314c64dd6 Mon Sep 17 00:00:00 2001
--From: Frank Morgner <frankmorgner@gmail.com>
--Date: Fri, 16 Dec 2022 11:56:28 +0100
--Subject: [PATCH] fixed compatibility with LibreSSL 3.7.0
--
--Upstream: https://github.com/OpenSC/OpenSC/commit/98ad0f93b0a7673cdce82e1b3faa7dc314c64dd6
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- src/libopensc/sc-ossl-compat.h | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/src/libopensc/sc-ossl-compat.h b/src/libopensc/sc-ossl-compat.h
--index 8c0f96701c..4425da93f3 100644
----- a/src/libopensc/sc-ossl-compat.h
--+++ b/src/libopensc/sc-ossl-compat.h
--@@ -54,9 +54,11 @@ extern "C" {
-- #define EVP_sha3_256()                          (NULL)
-- #define EVP_sha3_384()                          (NULL)
-- #define EVP_sha3_512()                          (NULL)
--+#if LIBRESSL_VERSION_NUMBER < 0x3070000fL
-- #define EVP_PKEY_new_raw_public_key(t, e, p, l) (NULL)
-- #define EVP_PKEY_get_raw_public_key(p, pu, l)   (0)
-- #endif
--+#endif
-- 
-- /* OpenSSL 1.1.1 has FIPS_mode function */
-- #if OPENSSL_VERSION_NUMBER >= 0x30000000L
-diff --git a/package/opensc/0003-configure-add-option-to-disable-tests.patch b/package/opensc/0003-configure-add-option-to-disable-tests.patch
-deleted file mode 100644
-index 29342026c1..0000000000
---- a/package/opensc/0003-configure-add-option-to-disable-tests.patch
-+++ /dev/null
-@@ -1,67 +0,0 @@
--From 3c3ed2ecbf31d41b6e5406da55971b9d9eaa3388 Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd@kuhls.net>
--Date: Mon, 24 Jul 2023 22:28:11 +0200
--Subject: [PATCH] configure: add option to disable tests
--
--Upstream: https://github.com/OpenSC/OpenSC/pull/2822
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- configure.ac    | 9 +++++++++
-- src/Makefile.am | 6 +++++-
-- 2 files changed, 14 insertions(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index 0a90445b..9b7543da 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -272,6 +272,13 @@ AC_ARG_ENABLE(
-- 	[enable_doc="no"]
-- )
-- 
--+AC_ARG_ENABLE(
--+	[tests],
--+	[AS_HELP_STRING([--enable-tests],[enable tests @<:@enabled@:>@])],
--+	,
--+	[enable_tests="yes"]
--+)
--+
-- AC_ARG_ENABLE(
-- 	[dnie-ui],
-- 	[AS_HELP_STRING([--enable-dnie-ui],[enable use of external user interface program to request DNIe pin@<:@disabled@:>@])],
--@@ -1119,6 +1126,7 @@ AM_CONDITIONAL([ENABLE_NOTIFY], [test "${enable_notify}" = "yes"])
-- AM_CONDITIONAL([ENABLE_CRYPTOTOKENKIT], [test "${enable_cryptotokenkit}" = "yes"])
-- AM_CONDITIONAL([ENABLE_OPENCT], [test "${enable_openct}" = "yes"])
-- AM_CONDITIONAL([ENABLE_DOC], [test "${enable_doc}" = "yes"])
--+AM_CONDITIONAL([ENABLE_TESTS], [test "${enable_tests}" = "yes"])
-- AM_CONDITIONAL([WIN32], [test "${WIN32}" = "yes"])
-- AM_CONDITIONAL([CYGWIN], [test "${CYGWIN}" = "yes"])
-- AM_CONDITIONAL([ENABLE_MINIDRIVER], [test "${enable_minidriver}" = "yes"])
--@@ -1213,6 +1221,7 @@ XSL stylesheets:         ${xslstylesheetsdir}
-- 
-- man support:             ${enable_man}
-- doc support:             ${enable_doc}
--+tests:                   ${enable_tests}
-- thread locking support:  ${enable_thread_locking}
-- zlib support:            ${enable_zlib}
-- readline support:        ${enable_readline}
--diff --git a/src/Makefile.am b/src/Makefile.am
--index 3ce465bf..bf71b61f 100644
----- a/src/Makefile.am
--+++ b/src/Makefile.am
--@@ -3,7 +3,11 @@ EXTRA_DIST = Makefile.mak
-- 
-- # Order IS important
-- SUBDIRS = common scconf ui pkcs15init sm \
---		  libopensc pkcs11 tools minidriver tests
--+		  libopensc pkcs11 tools minidriver
--+
--+if ENABLE_TESTS
--+SUBDIRS += tests
--+endif
-- 
-- if ENABLE_SM
-- SUBDIRS += smm
---- 
--2.39.2
--
-diff --git a/package/opensc/0004-pkcs15init-correct-left-length-calculation-to-fix-buffer-overrun-bug.patch b/package/opensc/0004-pkcs15init-correct-left-length-calculation-to-fix-buffer-overrun-bug.patch
-deleted file mode 100644
-index 079f960b59..0000000000
---- a/package/opensc/0004-pkcs15init-correct-left-length-calculation-to-fix-buffer-overrun-bug.patch
-+++ /dev/null
-@@ -1,51 +0,0 @@
--From 81944d1529202bd28359bede57c0a15deb65ba8a Mon Sep 17 00:00:00 2001
--From: fullwaywang <fullwaywang@tencent.com>
--Date: Mon, 29 May 2023 10:38:48 +0800
--Subject: [PATCH] pkcs15init: correct left length calculation to fix buffer
-- overrun bug. Fixes #2785
--
--Upstream: https://github.com/OpenSC/OpenSC/commit/81944d1529202bd28359bede57c0a15deb65ba8a
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/pkcs15init/pkcs15-cardos.c | 10 +++++-----
-- 1 file changed, 5 insertions(+), 5 deletions(-)
--
--diff --git a/src/pkcs15init/pkcs15-cardos.c b/src/pkcs15init/pkcs15-cardos.c
--index 9715cf390f..f41f73c349 100644
----- a/src/pkcs15init/pkcs15-cardos.c
--+++ b/src/pkcs15init/pkcs15-cardos.c
--@@ -872,7 +872,7 @@ static int cardos_have_verifyrc_package(sc_card_t *card)
-- 	sc_apdu_t apdu;
--         u8        rbuf[SC_MAX_APDU_BUFFER_SIZE];
--         int       r;
---	const u8  *p = rbuf, *q;
--+	const u8  *p = rbuf, *q, *pp;
-- 	size_t    len, tlen = 0, ilen = 0;
-- 
-- 	sc_format_apdu(card, &apdu, SC_APDU_CASE_2_SHORT, 0xca, 0x01, 0x88);
--@@ -888,13 +888,13 @@ static int cardos_have_verifyrc_package(sc_card_t *card)
-- 		return 0;
-- 
-- 	while (len != 0) {
---		p = sc_asn1_find_tag(card->ctx, p, len, 0xe1, &tlen);
---		if (p == NULL)
--+		pp = sc_asn1_find_tag(card->ctx, p, len, 0xe1, &tlen);
--+		if (pp == NULL)
-- 			return 0;
-- 		if (card->type == SC_CARD_TYPE_CARDOS_M4_3)	{
-- 			/* the verifyRC package on CardOS 4.3B use Manufacturer ID 0x01	*/
-- 			/* and Package Number 0x07					*/
---			q = sc_asn1_find_tag(card->ctx, p, tlen, 0x01, &ilen);
--+			q = sc_asn1_find_tag(card->ctx, pp, tlen, 0x01, &ilen);
-- 			if (q == NULL || ilen != 4)
-- 				return 0;
-- 			if (q[0] == 0x07)
--@@ -902,7 +902,7 @@ static int cardos_have_verifyrc_package(sc_card_t *card)
-- 		} else if (card->type == SC_CARD_TYPE_CARDOS_M4_4)	{
-- 			/* the verifyRC package on CardOS 4.4 use Manufacturer ID 0x03	*/
-- 			/* and Package Number 0x02					*/
---			q = sc_asn1_find_tag(card->ctx, p, tlen, 0x03, &ilen);
--+			q = sc_asn1_find_tag(card->ctx, pp, tlen, 0x03, &ilen);
-- 			if (q == NULL || ilen != 4)
-- 				return 0;
-- 			if (q[0] == 0x02)
-diff --git a/package/opensc/0005-LibreSSL-does-provide-EVP_sha3_-after-3-7-3.patch b/package/opensc/0005-LibreSSL-does-provide-EVP_sha3_-after-3-7-3.patch
-deleted file mode 100644
-index 80c19a3f5f..0000000000
---- a/package/opensc/0005-LibreSSL-does-provide-EVP_sha3_-after-3-7-3.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From e015242590ad9131e124232cc5a2fd02d525ef2c Mon Sep 17 00:00:00 2001
--From: Klemens Nanni <kn@openbsd.org>
--Date: Thu, 29 Jun 2023 02:41:43 +0300
--Subject: [PATCH] LibreSSL does provide EVP_sha3_*() after 3.7.3
--
--Support was added in 16.04.2023.
--
--Compile- and run-tested on OpenBSD/amd64 7.3-current.
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Upstream: https://github.com/OpenSC/OpenSC/commit/e015242590ad9131e124232cc5a2fd02d525ef2c
-----
-- src/libopensc/sc-ossl-compat.h | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/src/libopensc/sc-ossl-compat.h b/src/libopensc/sc-ossl-compat.h
--index df0cebbce2..8012cd4c0f 100644
----- a/src/libopensc/sc-ossl-compat.h
--+++ b/src/libopensc/sc-ossl-compat.h
--@@ -50,10 +50,12 @@ extern "C" {
-- #if LIBRESSL_VERSION_NUMBER < 0x30500000L
-- #define FIPS_mode()                             (0)
-- #endif
--+#ifndef EVP_sha3_224
-- #define EVP_sha3_224()                          (NULL)
-- #define EVP_sha3_256()                          (NULL)
-- #define EVP_sha3_384()                          (NULL)
-- #define EVP_sha3_512()                          (NULL)
--+#endif
-- #if LIBRESSL_VERSION_NUMBER < 0x3070000fL
-- #define EVP_PKEY_new_raw_public_key(t, e, p, l) (NULL)
-- #define EVP_PKEY_get_raw_public_key(p, pu, l)   (0)
-diff --git a/package/opensc/0006-fixed-detection-of-SHA3-compatibility.patch b/package/opensc/0006-fixed-detection-of-SHA3-compatibility.patch
-deleted file mode 100644
-index 3d8aa7e4ef..0000000000
---- a/package/opensc/0006-fixed-detection-of-SHA3-compatibility.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--From 33351d91aa22fa8077847ba3f19abb5a00b04600 Mon Sep 17 00:00:00 2001
--From: Frank Morgner <frankmorgner@gmail.com>
--Date: Tue, 15 Aug 2023 17:58:21 +0200
--Subject: [PATCH] fixed detection of SHA3 compatibility
--
--fixes https://github.com/OpenSC/OpenSC/issues/2836
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Upstream: https://github.com/OpenSC/OpenSC/commit/33351d91aa22fa8077847ba3f19abb5a00b04600
-----
-- src/libopensc/sc-ossl-compat.h | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/src/libopensc/sc-ossl-compat.h b/src/libopensc/sc-ossl-compat.h
--index 8012cd4c0f..96ec4bd736 100644
----- a/src/libopensc/sc-ossl-compat.h
--+++ b/src/libopensc/sc-ossl-compat.h
--@@ -50,7 +50,8 @@ extern "C" {
-- #if LIBRESSL_VERSION_NUMBER < 0x30500000L
-- #define FIPS_mode()                             (0)
-- #endif
---#ifndef EVP_sha3_224
--+/* OpenSSL 1.1.1 has EVP_sha3_* */
--+#if defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x30800000L
-- #define EVP_sha3_224()                          (NULL)
-- #define EVP_sha3_256()                          (NULL)
-- #define EVP_sha3_384()                          (NULL)
-diff --git a/package/opensc/opensc.hash b/package/opensc/opensc.hash
-index e8e675667e..232222062c 100644
---- a/package/opensc/opensc.hash
-+++ b/package/opensc/opensc.hash
-@@ -1,5 +1,5 @@
- # Computed locally from https://https://github.com/OpenSC/OpenSC/releases/
--sha256  a4844a6ea03a522ecf35e49659716dacb6be03f7c010a1a583aaf3eb915ed2e0  opensc-0.23.0.tar.gz
-+sha256  24d03c69287291da32a30c4c38a304ad827f56cb85d83619e1f5403ab6480ef8  opensc-0.24.0.tar.gz
- 
- # Computed locally
- sha256  376b54d4c5f4aa99421823fa4da93e3ab73096fce2400e89858632aa7da24a14  COPYING
-diff --git a/package/opensc/opensc.mk b/package/opensc/opensc.mk
-index 823bc50102..49bdcae37a 100644
---- a/package/opensc/opensc.mk
-+++ b/package/opensc/opensc.mk
-@@ -4,18 +4,13 @@
+diff --git a/package/libde265/libde265.hash b/package/libde265/libde265.hash
+index 9bb3f20a71..a21a8a1265 100644
+--- a/package/libde265/libde265.hash
++++ b/package/libde265/libde265.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  99f46ef77a438be639aa3c5d9632c0670541c5ed5d386524d4199da2d30df28f  libde265-1.0.14.tar.gz
++sha256  00251986c29d34d3af7117ed05874950c875dd9292d016be29d3b3762666511d  libde265-1.0.15.tar.gz
+ sha256  02cc1585a20677992e0ba578fa692635dc193735f2691dc81de924b51c4e8020  COPYING
+diff --git a/package/libde265/libde265.mk b/package/libde265/libde265.mk
+index 8624d2f949..62c22246aa 100644
+--- a/package/libde265/libde265.mk
++++ b/package/libde265/libde265.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENSC_VERSION = 0.23.0
-+OPENSC_VERSION = 0.24.0
- OPENSC_SITE = https://github.com/OpenSC/OpenSC/releases/download/$(OPENSC_VERSION)
- OPENSC_LICENSE = LGPL-2.1+
- OPENSC_LICENSE_FILES = COPYING
- OPENSC_CPE_ID_VENDOR = opensc_project
--# 0003-configure-add-option-to-disable-tests.patch
--OPENSC_AUTORECONF = YES
- OPENSC_DEPENDENCIES = openssl pcsc-lite
- OPENSC_INSTALL_STAGING = YES
- OPENSC_CONF_OPTS = --disable-cmocka --disable-strict --disable-tests
- 
--# 0004-pkcs15init-correct-left-length-calculation-to-fix-buffer-overrun-bug.patch
--OPENSC_IGNORE_CVES += CVE-2023-2977
--
- $(eval $(autotools-package))
+-LIBDE265_VERSION = 1.0.14
++LIBDE265_VERSION = 1.0.15
+ LIBDE265_SITE = https://github.com/strukturag/libde265/releases/download/v$(LIBDE265_VERSION)
+ LIBDE265_LICENSE = LGPL-3.0+
+ LIBDE265_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
