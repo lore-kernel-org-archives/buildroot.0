@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F3A6C4707B
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 20:49:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6165C47073
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 20:49:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F06A3400C1;
-	Wed, 10 Jan 2024 20:49:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F06A3400C1
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7079A43731;
+	Wed, 10 Jan 2024 20:49:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7079A43731
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dYYHzyVp560t; Wed, 10 Jan 2024 20:49:12 +0000 (UTC)
+	with ESMTP id RakJlqMnoaZo; Wed, 10 Jan 2024 20:49:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E588E436D7;
-	Wed, 10 Jan 2024 20:49:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E588E436D7
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 89ACD1BF5B3
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7EB144379C;
+	Wed, 10 Jan 2024 20:49:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7EB144379C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E284E1BF5B3
  for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 20:49:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 62B6B61568
+ by smtp2.osuosl.org (Postfix) with ESMTP id BA034436EF
  for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 20:49:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62B6B61568
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BA034436EF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QHv9bSApJhIo for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AGsW058ggXxf for <buildroot@lists.busybox.net>;
  Wed, 10 Jan 2024 20:49:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9723A61595
+ by smtp2.osuosl.org (Postfix) with ESMTP id BB64E436D7
  for <buildroot@buildroot.org>; Wed, 10 Jan 2024 20:49:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9723A61595
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB64E436D7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 795AC85DB2; Wed, 10 Jan 2024 20:49:09 +0000 (UTC)
+ id A998D85DB9; Wed, 10 Jan 2024 20:49:09 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 10 Jan 2024 21:22:57 +0100
+Date: Wed, 10 Jan 2024 21:46:30 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 27b02945bd35a48607f3785666b2107e01ec7ffb
-X-Git-Newrev: 7ea38660e01a87ab70c02e38c78a49202e8e5c21
+X-Git-Oldrev: 3bd02f8f923aedb42fd08703f6d8f95db29001bb
+X-Git-Newrev: 2bcfb2549bef46c59886c94def693b3c22a5deec
 X-Patchwork-Hint: ignore
-Message-Id: <20240110204909.795AC85DB2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/dependencies/dependencies.sh:
- libopenssl needs perl Math::BigInt on s390
+Message-Id: <20240110204909.A998D85DB9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/imxrt1050-evk: Use zImage instead
+ of uImage
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,39 +64,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ea38660e01a87ab70c02e38c78a49202e8e5c21
+commit: https://git.buildroot.net/buildroot/commit/?id=2bcfb2549bef46c59886c94def693b3c22a5deec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libopenssl needs perl Math::BigInt for s390x asm to avoid the following
-build failure since commit a5cacb63082b9e58194c4b9f8b2af2c3e38ff15c:
+imxrt1050-evk was using uImage switch to using zImage
+now.
 
-Can't locate bigint.pm in @INC (you may need to install the bigint module) (@INC contains: /home/buildroot/autobuild/instance-0/output-1/build/libopenssl-3.2.0/crypto/poly1305/asm/../.. /home/buildroot/autobuild/instance-0/output-1/host/lib/perl /usr/local/lib64/perl5/5.36 /usr/local/share/perl5/5.36 /usr/lib64/perl5/vendor_perl /usr/share/perl5/vendor_perl /usr/lib64/perl5 /usr/share/perl5) at /home/buildroot/autobuild/instance-0/output-1/build/libopenssl-3.2.0/crypto/poly1305/asm/../../perlasm/s390x.pm line 16.
-BEGIN failed--compilation aborted at /home/buildroot/autobuild/instance-0/output-1/build/libopenssl-3.2.0/crypto/poly1305/asm/../../perlasm/s390x.pm line 16.
-
-Fixes:
- - http://autobuild.buildroot.org/results/986cb07d368c7214ffbc9d60c378e7ac00797f00
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/dependencies/dependencies.sh | 4 ++++
- 1 file changed, 4 insertions(+)
+ board/freescale/imxrt1050evk/genimage.cfg   | 2 +-
+ board/freescale/imxrt1050evk/uboot.fragment | 2 +-
+ configs/imxrt1050-evk_defconfig             | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index 6e7d067ccd..3d83cb3285 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -282,6 +282,10 @@ required_perl_modules="$required_perl_modules Thread::Queue" # Used by host-auto
- required_perl_modules="$required_perl_modules FindBin" # Used by (host-)libopenssl
- required_perl_modules="$required_perl_modules IPC::Cmd" # Used by (host-)libopenssl
+diff --git a/board/freescale/imxrt1050evk/genimage.cfg b/board/freescale/imxrt1050evk/genimage.cfg
+index daa51bdbe0..64fc8452f8 100644
+--- a/board/freescale/imxrt1050evk/genimage.cfg
++++ b/board/freescale/imxrt1050evk/genimage.cfg
+@@ -1,7 +1,7 @@
+ image boot.vfat {
+ 	vfat {
+ 		files = {
+-			"uImage",
++			"zImage",
+ 			"imxrt1050-evk.dtb",
+ 		}
+ 	}
+diff --git a/board/freescale/imxrt1050evk/uboot.fragment b/board/freescale/imxrt1050evk/uboot.fragment
+index 1c5bb6af35..dd45ca4c29 100644
+--- a/board/freescale/imxrt1050evk/uboot.fragment
++++ b/board/freescale/imxrt1050evk/uboot.fragment
+@@ -1,2 +1,2 @@
+ CONFIG_USE_BOOTCOMMAND=y
+-CONFIG_BOOTCOMMAND="setenv bootargs console=ttyLP0 root=/dev/mmcblk0p2 rw earlycon rootwait;load mmc 0:1 0x80800000 imxrt1050-evk.dtb;load mmc 0:1 0x80000000 uImage;bootm 0x80000000 - 0x80800000"
++CONFIG_BOOTCOMMAND="setenv bootargs console=ttyLP0 root=/dev/mmcblk0p2 rw earlycon rootwait;load mmc 0:1 0x80800000 imxrt1050-evk.dtb;load mmc 0:1 0x80000000 zImage;bootz 0x80000000 - 0x80800000"
+diff --git a/configs/imxrt1050-evk_defconfig b/configs/imxrt1050-evk_defconfig
+index 3eb556df06..947abe5df2 100644
+--- a/configs/imxrt1050-evk_defconfig
++++ b/configs/imxrt1050-evk_defconfig
+@@ -14,7 +14,7 @@ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.7"
+ BR2_LINUX_KERNEL_DEFCONFIG="imxrt"
+-BR2_LINUX_KERNEL_UIMAGE=y
++BR2_LINUX_KERNEL_ZIMAGE=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="nxp/imx/imxrt1050-evk"
  
-+if grep -q ^BR2_PACKAGE_LIBOPENSSL=y $BR2_CONFIG && grep -q ^BR2_s390x=y $BR2_CONFIG ; then
-+    required_perl_modules="$required_perl_modules Math::BigInt"
-+fi
-+
- if grep -q ^BR2_PACKAGE_MOSH=y $BR2_CONFIG ; then
-     required_perl_modules="$required_perl_modules diagnostics"
- fi
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
