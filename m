@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8384C47073
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 20:24:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BB5EC4707B
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 20:24:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 77690436E5;
-	Wed, 10 Jan 2024 20:24:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 77690436E5
+	by smtp2.osuosl.org (Postfix) with ESMTP id 45EA243816;
+	Wed, 10 Jan 2024 20:24:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 45EA243816
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PFznEkZ522-B; Wed, 10 Jan 2024 20:24:10 +0000 (UTC)
+	with ESMTP id zzkPfoMD6MN0; Wed, 10 Jan 2024 20:24:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6DDC243809;
-	Wed, 10 Jan 2024 20:24:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6DDC243809
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 62F7B1BF5B3
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 20:22:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 288234380B;
+	Wed, 10 Jan 2024 20:24:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 288234380B
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4F2CD1BF5B3
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 20:22:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0DFD083AAD
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 20:22:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0DFD083AAD
+ by smtp3.osuosl.org (Postfix) with ESMTP id A2FED6155B
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 20:22:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A2FED6155B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MEDDj7GNvHyL for <buildroot@lists.busybox.net>;
- Wed, 10 Jan 2024 20:22:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JqZkl7ASzfOI for <buildroot@lists.busybox.net>;
+ Wed, 10 Jan 2024 20:22:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id BF9D683A77
- for <buildroot@buildroot.org>; Wed, 10 Jan 2024 20:22:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF9D683A77
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0CFC361542
+ for <buildroot@buildroot.org>; Wed, 10 Jan 2024 20:22:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0CFC361542
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id ADAAA85D63; Wed, 10 Jan 2024 20:22:03 +0000 (UTC)
+ id 0B3E685D61; Wed, 10 Jan 2024 20:22:04 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 10 Jan 2024 20:41:17 +0100
+Date: Wed, 10 Jan 2024 21:10:32 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: e4e40d106baf77819f9b4e793b79ea124adfc577
-X-Git-Newrev: dabe89e5a41910a15aceb013b01a4e94e36bad2c
+X-Git-Oldrev: 6b481567f933807fca211943ed790e44ed680131
+X-Git-Newrev: 530183a915bb7acdc07e05b3fc41c88314021cbb
 X-Patchwork-Hint: ignore
-Message-Id: <20240110202203.ADAAA85D63@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/libcap-ng:
- disable python3
+Message-Id: <20240110202204.0B3E685D61@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/proftpd: security
+ bump to version 1.3.8b
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,38 +63,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dabe89e5a41910a15aceb013b01a4e94e36bad2c
+commit: https://git.buildroot.net/buildroot/commit/?id=530183a915bb7acdc07e05b3fc41c88314021cbb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-python3 is an optional dependency (enabled by default) since bump to
-version 0.7.7 in commit 4314c86b0b932c3d381ae59b641366697906868f and
-https://github.com/stevegrubb/libcap-ng/commit/02fc25f9d3a00c7d7ccd619d8d678511a73b940b
+1.3.8b - Released 19-Dec-2023
+--------------------------------
+- Issue 1735 - Compiling ProFTPD 1.3.8a mod_sftp, mod_tls using libressl 3.7.3
+  fails.
+- Issue 1756 - Build system fails for specific module names.
+- Issue 1760 - mod_sftp is affected by "Terrapin" Prefix Truncation Attacks in
+  SSH Specification (CVE-2023-48795).
+
+https://github.com/proftpd/proftpd/blob/1.3.8/NEWS
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 4d21ec5021f6ec9ba40a9f71a9028b7b55bc6aea)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit e83793705b5436feffc087c7f33e3f455439ede7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcap-ng/libcap-ng.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/proftpd/proftpd.hash | 2 +-
+ package/proftpd/proftpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libcap-ng/libcap-ng.mk b/package/libcap-ng/libcap-ng.mk
-index 46f72c702e..c33460d951 100644
---- a/package/libcap-ng/libcap-ng.mk
-+++ b/package/libcap-ng/libcap-ng.mk
-@@ -12,10 +12,10 @@ LIBCAP_NG_CPE_ID_VENDOR = libcap-ng_project
- LIBCAP_NG_INSTALL_STAGING = YES
+diff --git a/package/proftpd/proftpd.hash b/package/proftpd/proftpd.hash
+index f950f26b86..5a7d153a31 100644
+--- a/package/proftpd/proftpd.hash
++++ b/package/proftpd/proftpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  f7139e7377a2cb059b8b9b14d76a6df5f440e3181cb15ae890d43bbcae574748  proftpd-1.3.8.tar.gz
++sha256  183ab7c6107de271a2959ff268f55c9b6c76b2cf0029e6584fccc019686601e0  proftpd-1.3.8b.tar.gz
+ sha256  391a473d755c29b5326fb726326ff3c37e42512f53a8f5789fc310232150bf80  COPYING
+diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
+index 398155222d..0820822e17 100644
+--- a/package/proftpd/proftpd.mk
++++ b/package/proftpd/proftpd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- LIBCAP_NG_CONF_ENV = ac_cv_prog_swig_found=no
--LIBCAP_NG_CONF_OPTS = --without-python
-+LIBCAP_NG_CONF_OPTS = --without-python --without-python3
- 
- HOST_LIBCAP_NG_CONF_ENV = ac_cv_prog_swig_found=no
--HOST_LIBCAP_NG_CONF_OPTS = --without-python
-+HOST_LIBCAP_NG_CONF_OPTS = --without-python --without-python3
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+-PROFTPD_VERSION = 1.3.8
++PROFTPD_VERSION = 1.3.8b
+ PROFTPD_SITE = ftp://ftp.proftpd.org/distrib/source
+ PROFTPD_LICENSE = GPL-2.0+
+ PROFTPD_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
