@@ -4,85 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EB1DC3DA6E
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 04:39:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9E49C3DA6E
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 04:42:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A02BC417A6;
-	Wed, 10 Jan 2024 04:39:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A02BC417A6
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6295D4012A;
+	Wed, 10 Jan 2024 04:42:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6295D4012A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fdalC1UWEsH6; Wed, 10 Jan 2024 04:39:28 +0000 (UTC)
+	with ESMTP id 86i2zfvp8SfP; Wed, 10 Jan 2024 04:42:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EE90841749;
-	Wed, 10 Jan 2024 04:39:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE90841749
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CD3EB1BF5F5
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 04:39:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B31C94177E;
+	Wed, 10 Jan 2024 04:42:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B31C94177E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 224F41BF5F5
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 04:42:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A6B0041749
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 04:39:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A6B0041749
+ by smtp2.osuosl.org (Postfix) with ESMTP id 00678435F3
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 04:42:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 00678435F3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 42dEkC7LvveY for <buildroot@lists.busybox.net>;
- Wed, 10 Jan 2024 04:39:25 +0000 (UTC)
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com
- [IPv6:2607:f8b0:4864:20::d35])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CD82A41702
- for <buildroot@buildroot.org>; Wed, 10 Jan 2024 04:39:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD82A41702
-Received: by mail-io1-xd35.google.com with SMTP id
- ca18e2360f4ac-7beda2e6794so49995239f.1
- for <buildroot@buildroot.org>; Tue, 09 Jan 2024 20:39:24 -0800 (PST)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zgqo7Uyy8UVg for <buildroot@lists.busybox.net>;
+ Wed, 10 Jan 2024 04:42:45 +0000 (UTC)
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com
+ [IPv6:2607:f8b0:4864:20::d32])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id AAA03435AB
+ for <buildroot@buildroot.org>; Wed, 10 Jan 2024 04:42:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AAA03435AB
+Received: by mail-io1-xd32.google.com with SMTP id
+ ca18e2360f4ac-7bef3d20395so17104339f.0
+ for <buildroot@buildroot.org>; Tue, 09 Jan 2024 20:42:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704861563; x=1705466363;
+ d=1e100.net; s=20230601; t=1704861764; x=1705466564;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=2y11Y59VucWaM6B1E34h49vHbmdt3aVGdf7YHGbgmR0=;
- b=b5E1jGgpYKlOMuR+NEvz8bTGU2PKpcrXv59JjOzWFYM/3L7cXsoopJAAgC9gJ0f5N6
- Z8sasPVTyNMNtgbRkgLz4hAT3BD1QOgGevEDTlcm0rI8eLRPkJBq07zIN0DNHY4D7C9t
- /290UF5X4WI+wjWRDsPUTfwUA7fViw9ctz5LCCX08Iidi6qVvFFLnQvbFQL4vJSLp2+1
- 9haQ8C7OazPBVYyLelfFMQ44Pl+siBqfer1eWLg+Q+aJ2YzA4hcWzaAWFb1bfjs5iTBz
- cCsRjtwDuAgpMxmzT7c2U1t/hkoyNA0ZwNONttFmfQr36BxMRRMcMlD78biG2j631a5t
- aDGg==
-X-Gm-Message-State: AOJu0YzqS5UDkknhUPHRUpqziMwZBl+BeEv9jxhEeiZjLb988b8LyWB4
- jlYxNHv68E5z5LOW8t73hdmEYWMqEDrVSA==
-X-Google-Smtp-Source: AGHT+IGsCAQLYxj6sewtMiqE75PtkWWhgAJe7cmaTsad/puyeyLLudYIBwjRENDx/7v1o8ZrFxYkOg==
-X-Received: by 2002:a6b:5b07:0:b0:7bb:ec92:3d96 with SMTP id
- v7-20020a6b5b07000000b007bbec923d96mr137595ioh.18.1704861563372; 
- Tue, 09 Jan 2024 20:39:23 -0800 (PST)
+ bh=kDG8Z5kYqRlJx3eQGUgrWKysVmLtPwCWsqANlFdCALs=;
+ b=bhLR6Cq6imLa9+TDrn1v9vo4HAWMSWn0cl2cSgIm49DnnfihHo2RUKoE2TQxlNBR9o
+ nn7CdgOanOBSsDowPYrNyfuPSAAgMFcn+mGW6c4LV+RgJ0Zind1emmHKdev+Y487ctvu
+ nHLVPhHGMK2T6N5p+e4cN36/vDWV7LMUoEHOcc4y1KYblKXTYMd1TP8z9dQoGqxFNPSS
+ x4NrGamwlhUh+EV1XkfIUv3SHQ9CR4eSwCXySxgQdFXhFzNwo7KWIw44tndCMkxgp2jP
+ rhTj2pookUPlK2/64wUBniRrV3cLitm875vdh6+ZO+DKxGZYpsb47ylQv3pfwCZIHlWA
+ ovMg==
+X-Gm-Message-State: AOJu0YzHp2SzFz6qv29dHXKmjuuNngFaYcy0iPs+8GdpcM3+JXLNG6Va
+ JOFlrGHSOz/E+6OuFLx31w3OkhK7RhvA0g==
+X-Google-Smtp-Source: AGHT+IHOi7ARZb18mbDTGwCwe3PZu90Jfmy1XdhN7WOOp8arBFkyzfJiBG/vHUs7IK6rlOo6LWA3Lw==
+X-Received: by 2002:a05:6602:1b16:b0:7be:eaea:ea83 with SMTP id
+ dk22-20020a0566021b1600b007beeaeaea83mr186990iob.11.1704861764241; 
+ Tue, 09 Jan 2024 20:42:44 -0800 (PST)
 Received: from james-x399.localdomain (71-218-103-119.hlrn.qwest.net.
  [71.218.103.119]) by smtp.gmail.com with ESMTPSA id
- dn9-20020a056638090900b0046b4976c3ccsm1061312jab.138.2024.01.09.20.39.22
+ k34-20020a056638372200b0046e29c56401sm1080425jav.0.2024.01.09.20.42.43
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 09 Jan 2024 20:39:22 -0800 (PST)
+ Tue, 09 Jan 2024 20:42:43 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue,  9 Jan 2024 21:39:21 -0700
-Message-Id: <20240110043921.1077310-1-james.hilliard1@gmail.com>
+Date: Tue,  9 Jan 2024 21:42:42 -0700
+Message-Id: <20240110044242.1080333-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1704861563; x=1705466363; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1704861764; x=1705466564; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=2y11Y59VucWaM6B1E34h49vHbmdt3aVGdf7YHGbgmR0=;
- b=UBgqXzVXYblQmAcKJUh16h6ZaONHrDTAM/ss14cy01jUtfYlxgIay4dh9879rSCMes
- yVfmD0fMYJeDe7db6WMwwymWt497kTjPKo1R+rlhvsrHKzr0ZTsQ6aCPjnof7DGMtDW6
- tEoORwhAubq/1Kr33ZPKG0fex+ZGfP7TJPgI8VB8Oiyu63U+GFi2iGuhNVYSXGr7AHuB
- QEEjOfpLqfrLbT1ICU+6qz+tdwKo86iRIZBxkLxmm2TcVH5N0mIaa4m76QpsxyRyaqOa
- jP67Rwqa6ury1uVvLYuhFMq7FnVtAVbjub/AS/nybdNh1b7JDgBGOLQo3in7GKXVd/7D
- NpsQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=kDG8Z5kYqRlJx3eQGUgrWKysVmLtPwCWsqANlFdCALs=;
+ b=WRDRYHlrI70j8qH26yepOPjtRwmQI7wnLfNkyS1+z5k0mRt+vG04WeFdqt89wxYszL
+ cH9Ma+E/KyIIefm05KK+jIfEmkrqzyzt5W/CuD8+JVFMSya+dZLLfPD5LXlk07m5qLgX
+ x6y7y3z5NPRdNM8/Jr5xBZUSq3UKvACUJg/lH2aEK3l7QrpEV+bqMOzNeIgD59m96+HI
+ vn62eBF8lhqBhUSkDjWkCT6TsZK7IfpDjbJ99j7jg2PLudEtRlMwQzgY+OTixOd66Kj+
+ MYqW6DBkT28EN6SRkoCU4bW8OLqoEbLzYg/ltIPkVzFha/KRJsCyDneJb2TuoKZf1K3z
+ kJJQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=UBgqXzVX
-Subject: [Buildroot] [PATCH 1/1] package/python-prompt-toolkit: bump to
- version 3.0.43
+ header.a=rsa-sha256 header.s=20230601 header.b=WRDRYHlr
+Subject: [Buildroot] [PATCH 1/1] package/python-psutil: bump to version 5.9.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,38 +101,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-prompt-toolkit/python-prompt-toolkit.hash | 4 ++--
- package/python-prompt-toolkit/python-prompt-toolkit.mk   | 4 ++--
+ package/python-psutil/python-psutil.hash | 4 ++--
+ package/python-psutil/python-psutil.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-prompt-toolkit/python-prompt-toolkit.hash b/package/python-prompt-toolkit/python-prompt-toolkit.hash
-index 54130f3ae0..1821d4d65c 100644
---- a/package/python-prompt-toolkit/python-prompt-toolkit.hash
-+++ b/package/python-prompt-toolkit/python-prompt-toolkit.hash
+diff --git a/package/python-psutil/python-psutil.hash b/package/python-psutil/python-psutil.hash
+index f388118663..c5f4f39fe0 100644
+--- a/package/python-psutil/python-psutil.hash
++++ b/package/python-psutil/python-psutil.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/prompt-toolkit/json
--md5  252a5d200e41d46b65a3076d2bc0a4bd  prompt_toolkit-3.0.41.tar.gz
--sha256  941367d97fc815548822aa26c2a269fdc4eb21e9ec05fc5d447cf09bad5d75f0  prompt_toolkit-3.0.41.tar.gz
-+md5  f33c0f4ae8d11addababf6d90c98f8bc  prompt_toolkit-3.0.43.tar.gz
-+sha256  3527b7af26106cbc65a040bcc84839a3566ec1b051bb0bfe953631e704b0ff7d  prompt_toolkit-3.0.43.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/psutil/json
+-md5  eec35090e7474e471a12f0dd16c981f9  psutil-5.9.6.tar.gz
+-sha256  e4b92ddcd7dd4cdd3f900180ea1e104932c7bce234fb88976e2a3b296441225a  psutil-5.9.6.tar.gz
++md5  afcc40a779f84f6d909570a8934cebc3  psutil-5.9.7.tar.gz
++sha256  3f02134e82cfb5d089fddf20bb2e03fd5cd52395321d1c8458a9e58500ff417c  psutil-5.9.7.tar.gz
  # Locally computed sha256 checksums
- sha256  303574d9bdd85c757d6025017942bf17baeedf2778f62bd7f425d07d880f4c4a  LICENSE
-diff --git a/package/python-prompt-toolkit/python-prompt-toolkit.mk b/package/python-prompt-toolkit/python-prompt-toolkit.mk
-index db40f6c7eb..31c0d9783f 100644
---- a/package/python-prompt-toolkit/python-prompt-toolkit.mk
-+++ b/package/python-prompt-toolkit/python-prompt-toolkit.mk
+ sha256  b89c063b3786e28e0c0a38f1931db61fed35e69dd2a2966fbecffee0f46c8d10  LICENSE
+diff --git a/package/python-psutil/python-psutil.mk b/package/python-psutil/python-psutil.mk
+index ece1039a51..e83193f20f 100644
+--- a/package/python-psutil/python-psutil.mk
++++ b/package/python-psutil/python-psutil.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PROMPT_TOOLKIT_VERSION = 3.0.41
-+PYTHON_PROMPT_TOOLKIT_VERSION = 3.0.43
- PYTHON_PROMPT_TOOLKIT_SOURCE = prompt_toolkit-$(PYTHON_PROMPT_TOOLKIT_VERSION).tar.gz
--PYTHON_PROMPT_TOOLKIT_SITE = https://files.pythonhosted.org/packages/d9/7b/7d88d94427e1e179e0a62818e68335cf969af5ca38033c0ca02237ab6ee7
-+PYTHON_PROMPT_TOOLKIT_SITE = https://files.pythonhosted.org/packages/cc/c6/25b6a3d5cd295304de1e32c9edbcf319a52e965b339629d37d42bb7126ca
- PYTHON_PROMPT_TOOLKIT_SETUP_TYPE = setuptools
- PYTHON_PROMPT_TOOLKIT_LICENSE = BSD-3-Clause
- PYTHON_PROMPT_TOOLKIT_LICENSE_FILES = LICENSE
+-PYTHON_PSUTIL_VERSION = 5.9.6
++PYTHON_PSUTIL_VERSION = 5.9.7
+ PYTHON_PSUTIL_SOURCE = psutil-$(PYTHON_PSUTIL_VERSION).tar.gz
+-PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/2d/01/beb7331fc6c8d1c49dd051e3611379bfe379e915c808e1301506027fce9d
++PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/a0/d0/c9ae661a302931735237791f04cb7086ac244377f78692ba3b3eae3a9619
+ PYTHON_PSUTIL_SETUP_TYPE = setuptools
+ PYTHON_PSUTIL_LICENSE = BSD-3-Clause
+ PYTHON_PSUTIL_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
