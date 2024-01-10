@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B9E3C4707C
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 15:37:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6333BC4707B
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 15:39:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F33DD4210B;
-	Wed, 10 Jan 2024 15:37:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F33DD4210B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1C16541511;
+	Wed, 10 Jan 2024 15:39:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C16541511
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PayIH4RtacyE; Wed, 10 Jan 2024 15:37:43 +0000 (UTC)
+	with ESMTP id 7Gd78oKApfrU; Wed, 10 Jan 2024 15:39:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 56CF042099;
-	Wed, 10 Jan 2024 15:37:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56CF042099
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3C81B1BF364
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 15:37:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 62B044043D;
+	Wed, 10 Jan 2024 15:39:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62B044043D
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 62F781BF364
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 15:39:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 15EB8813EE
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 15:37:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 15EB8813EE
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3C8D44043D
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 15:39:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C8D44043D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JyZP8Hr94ISh for <buildroot@lists.busybox.net>;
- Wed, 10 Jan 2024 15:37:40 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Et5YV5tqkSuZ for <buildroot@lists.busybox.net>;
+ Wed, 10 Jan 2024 15:39:48 +0000 (UTC)
 Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 12E3C813E6
- for <buildroot@buildroot.org>; Wed, 10 Jan 2024 15:37:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 12E3C813E6
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D907A2000A;
- Wed, 10 Jan 2024 15:37:37 +0000 (UTC)
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7FC644023D
+ for <buildroot@buildroot.org>; Wed, 10 Jan 2024 15:39:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FC644023D
+Received: by mail.gandi.net (Postfix) with ESMTPSA id AB93E20004;
+ Wed, 10 Jan 2024 15:39:46 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rNae9-008btE-0D;
- Wed, 10 Jan 2024 16:37:37 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rNagD-008c7Z-35;
+ Wed, 10 Jan 2024 16:39:45 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: "Yann E. MORIN" <yann.morin.1998@free.fr>
 References: <20231109212901.5596-1-ps.report@gmx.net>
- <ZYyiJOUePibRgeQq@landeda> <ZYyjLr25mkMFJqU8@landeda>
-Date: Wed, 10 Jan 2024 16:37:37 +0100
-In-Reply-To: <ZYyjLr25mkMFJqU8@landeda> (Yann E. MORIN's message of "Wed, 27
- Dec 2023 23:20:30 +0100")
-Message-ID: <874jflci7y.fsf@48ers.dk>
+ <20231109212901.5596-2-ps.report@gmx.net> <ZYykPK_-a5M2_aKR@landeda>
+Date: Wed, 10 Jan 2024 16:39:45 +0100
+In-Reply-To: <ZYykPK_-a5M2_aKR@landeda> (Yann E. MORIN's message of "Wed, 27
+ Dec 2023 23:25:00 +0100")
+Message-ID: <87zfxdb3jy.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH v1 1/4] package/libcamera: pipeline option
- 'raspberrypi' changed to 'rpi/vc4'
+Subject: Re: [Buildroot] [PATCH v1 2/4] package/libcamera: disable python
+ bindings by default
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,20 +74,19 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Hi,
+ > Peter, All,
+ > On 2023-11-09 22:28 +0100, Peter Seiderer spake thusly:
+ >> Disable python binding option (introduced with upstream commit [1] (since
+ >> version v0.0.1) by default.
 
- >> > +	  Since version ... the libcamera pipeline option 'raspberrypi' was
+ > Since there i s no way to enabled them with this change, they are not
+ > "disabled *by default*"; they are just "disabled".
 
- >     $ ./utils/docker-run make check-pacakge
- >     Config.in.legacy:156: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
+ > So I dropped the "y default" part of the title and the commit log.
 
- > I had it fixed locally, but forgot to commit before pushing, so I pushed
- > a follow-up fix.
+ > Applied to master, thanks.
 
- > I also replaced the '...' with the actual version you talked about ion
- > the commit log: 0.1.0.
-
-Ahh ;)
+Committed to 2023.02.x and 2023.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
