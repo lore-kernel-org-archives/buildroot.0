@@ -4,83 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7E50C4706C
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jan 2024 22:51:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5087BC3DA6E
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 03:41:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3551543633;
-	Tue,  9 Jan 2024 22:51:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3551543633
+	by smtp2.osuosl.org (Postfix) with ESMTP id AEF7840111;
+	Wed, 10 Jan 2024 03:41:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AEF7840111
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QUYS0aXNnjZ2; Tue,  9 Jan 2024 22:51:56 +0000 (UTC)
+	with ESMTP id OSYn0gUDClpZ; Wed, 10 Jan 2024 03:40:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1DDEE4364C;
-	Tue,  9 Jan 2024 22:51:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1DDEE4364C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E77C81BF3A7
- for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 22:51:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 88F92419F0;
+	Wed, 10 Jan 2024 03:40:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 88F92419F0
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B40221BF5B4
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 03:40:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CD37342E9B
- for <buildroot@lists.busybox.net>; Tue,  9 Jan 2024 22:51:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD37342E9B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 99F35613C0
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 03:40:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 99F35613C0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HBZWO1Dg4Zon for <buildroot@lists.busybox.net>;
- Tue,  9 Jan 2024 22:51:51 +0000 (UTC)
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com
- [IPv6:2607:f8b0:4864:20::102b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CBCE842CFE
- for <buildroot@buildroot.org>; Tue,  9 Jan 2024 22:51:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CBCE842CFE
-Received: by mail-pj1-x102b.google.com with SMTP id
- 98e67ed59e1d1-28c0df4b42eso3097727a91.1
- for <buildroot@buildroot.org>; Tue, 09 Jan 2024 14:51:51 -0800 (PST)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TVh_-k1EUz4i for <buildroot@lists.busybox.net>;
+ Wed, 10 Jan 2024 03:40:55 +0000 (UTC)
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com
+ [IPv6:2607:f8b0:4864:20::12c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7267A60B9C
+ for <buildroot@buildroot.org>; Wed, 10 Jan 2024 03:40:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7267A60B9C
+Received: by mail-il1-x12c.google.com with SMTP id
+ e9e14a558f8ab-3606e11d9cbso20541185ab.0
+ for <buildroot@buildroot.org>; Tue, 09 Jan 2024 19:40:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704840711; x=1705445511;
+ d=1e100.net; s=20230601; t=1704858054; x=1705462854;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=8QLsuRc0yvsRmy7q7rLzEElYCa36Gzb33Re0CnGSoR8=;
- b=aZMDROopwVbFxJD51r5yPgmBmt3oP78n3GaSSOGzdTCXk0482cVND8/SXu9Yx2cnbm
- r7X1kFlF+Pr4urirAtUKyPJvAIBoindtoRGhiy9LlKCrFoyGQp7IFtN6G8HWeRjgmsRF
- rrmq3lZbMoL/TemSanX9O3n4yYFiMpG1JvheOFAI3L9vv5K/g0BbgJL1f89aasaKhfgA
- f9chT6xjbhaOK0mHEaS+AqBUkSxMCmhP9dG/+d/mBFLdyMsc2ajvS89eU0xQ4bcJ5NyS
- qHl2pxpB6wdkK1slcOlmyR7LonN4onVusbAc9gwTS56QCjkba2VHHAofAbbOuXxNF9Vg
- bzPw==
-X-Gm-Message-State: AOJu0YwHa9gxnEE4BoKDi36W8rZRQiu9xukLfQsaOSoUSAory48bKSRg
- Do03v8Y4bfF2Y/7qJYCfQxUT4m2xnOjcMZZ/PVuHzTCdNja59Q==
-X-Google-Smtp-Source: AGHT+IHRe7aesj1Uqhva8bU0YqgPYLCr3kM+LmI8HmkrpTvQJMJVCqf+8QUJj3yjCjMfggOhSrEJfQ==
-X-Received: by 2002:a17:90b:3c04:b0:28c:e54e:8676 with SMTP id
- pb4-20020a17090b3c0400b0028ce54e8676mr1708547pjb.42.1704840710915; 
- Tue, 09 Jan 2024 14:51:50 -0800 (PST)
-Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
- [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
- 4-20020a17090a1a4400b0028ae0184bfasm9226pjl.49.2024.01.09.14.51.49
- (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
- Tue, 09 Jan 2024 14:51:50 -0800 (PST)
+ bh=MZkXU/qEJqVUMvk8kZaS8Ds3BCcyOUK1pEgmgemwTE8=;
+ b=OoBXLMPOZcXJ4ZMqKUhcyNz64Rx2gWt9tqLf8U4xMYcpwcQlnDXYzyXj3sCLfVaPbY
+ gCSyTcmng15P/bqoxR0Hw0s0V44HXccMsjWRXR15Jk02itVGKnxr5Xo6lHk5Mi8XwoaW
+ +4iU6HgTTPbvkU9VUbt0/PRRM3qxrASeQfRw/Ta/PQ7tlASMrH4xSOE3rquh8z1qH6rB
+ JfmV8zaBDn1j6yCtkCw883TToyC59uFfoEWsA67YFJQxsovv4jME7Ovbi8VIGvk8+MQc
+ M1VtEGxwa2/ZPOPag2UP0Q39HXC/x6/O1j6LiMHfZj5wu5ZlIo5rAg7vD1yKFHIYCVF1
+ I1CQ==
+X-Gm-Message-State: AOJu0YzZtu+Sm0jw1jskvS810XuXv8rMXG4NZn6pdg1yt9X8+kWYB/HT
+ K8URpYhIMuqOgr2M5aL8cELIwAe7Y+KQeQ==
+X-Google-Smtp-Source: AGHT+IESOZR/+ap7XIT9C0ZosAZ6P2sdUD4ndRFcPlmACOlWeW7c2gI+ut1qvbxdnbmgXUXMKWcttg==
+X-Received: by 2002:a05:6e02:174c:b0:35f:fe74:2ca4 with SMTP id
+ y12-20020a056e02174c00b0035ffe742ca4mr747283ill.26.1704858053934; 
+ Tue, 09 Jan 2024 19:40:53 -0800 (PST)
+Received: from james-x399.localdomain (71-218-103-119.hlrn.qwest.net.
+ [71.218.103.119]) by smtp.gmail.com with ESMTPSA id
+ bt6-20020a056638430600b0046e107e49c9sm1064174jab.155.2024.01.09.19.40.53
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 09 Jan 2024 19:40:53 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue,  9 Jan 2024 14:51:48 -0800
-Message-ID: <20240109225148.79257-1-christian@aperture.us>
-X-Mailer: git-send-email 2.43.0
+Date: Tue,  9 Jan 2024 20:40:52 -0700
+Message-Id: <20240110034052.931500-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=aperture.us; s=google; t=1704840711; x=1705445511; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1704858054; x=1705462854; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=8QLsuRc0yvsRmy7q7rLzEElYCa36Gzb33Re0CnGSoR8=;
- b=iTKQf/9+4Li/QoFboarTdk1yP5MWHtid20ziMzPuPEnYyOivyeqG1jWp898fY1fwQT
- KmHpiRcGTFT4L2pMImn3ijewuhwovI9r7tqUE1c+Gcb9Tblqvgm9ZseVNNzzYgKG+Ef1
- 8s9nzEDZ0y/flvun6w5IleNg7Q7L2gsm//81Kwtr5mIHNZUR7Fw2vMr0VlcZ0CtlFGka
- 1WCLSIYnszpoGhCXYZzBzSyJ0ZsbDhSCwsKKpGxhk4cVnXdS5kcwnMMFv0FNZxGgsdae
- my0fhzGGHtvAVvCb7pQx8euOPFkDR9JF5tJNhKXhU+FldxwDk02Wxxz8VozYUxEarR3u
- EgWw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=aperture.us header.i=@aperture.us
- header.a=rsa-sha256 header.s=google header.b=iTKQf/9+
-Subject: [Buildroot] [PATCH v1 1/1] package/go: bump to version 1.20.6
+ bh=MZkXU/qEJqVUMvk8kZaS8Ds3BCcyOUK1pEgmgemwTE8=;
+ b=eCITkrPAMvJA0olvjfx0zjXofhAxL6LQhTEc9d9Sjca2HqKveMXyk1/HTrQnk7IIhU
+ EOdE336r+Y2NXTH2YkLBY1ljcZKJV/SGYtenEyn5PRFCCrEzYmxz3peY+9vkGif5+ymH
+ 8gD+ummoKfUy/awdPosdWQ+6a6BKWJcXJp9AMZCHL3bl/13thrvIb2v63DKh/H5YkZoA
+ ZGM0uRSg+YUAX72h+sTly860ETpxs7S/OFljo4Xya3qzyCibXJe75rR1y6qJeVU+ZmKx
+ Rmd66rq/KDe791BE7OLw1cX2ugI6Re2SkFjgxEdu2wbmyctITbQLEmVl8gL0F1QOhYGw
+ 1QMQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=eCITkrPA
+Subject: [Buildroot] [PATCH 1/1] package/python-markdown2: bump to version
+ 2.4.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,51 +94,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@aperture.us>
-Cc: Christian Stewart <christian@aperture.us>, Anisse Astier <anisse@astier.eu>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-go1.21.6 (released 2024-01-09) includes fixes to the compiler, the runtime, and
-the crypto/tls, maps, and runtime/pprof packages.
-
-https://go.dev/doc/devel/release#go1.21.6
-
-Signed-off-by: Christian Stewart <christian@aperture.us>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-markdown2/python-markdown2.hash | 4 ++--
+ package/python-markdown2/python-markdown2.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 34822b7537..bee10089a7 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://go.dev/dl
--sha256  285cbbdf4b6e6e62ed58f370f3f6d8c30825d6e56c5853c66d3c23bcdb09db19  go1.21.5.src.tar.gz
-+sha256  124926a62e45f78daabbaedb9c011d97633186a33c238ffc1e25320c02046248  go1.21.6.src.tar.gz
- sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index f3747b6473..f9d31aacac 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-markdown2/python-markdown2.hash b/package/python-markdown2/python-markdown2.hash
+index 0e14f23261..0a76499185 100644
+--- a/package/python-markdown2/python-markdown2.hash
++++ b/package/python-markdown2/python-markdown2.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/markdown2/json
+-md5  a338c5be41a822914af8211b080659fd  markdown2-2.4.10.tar.gz
+-sha256  cdba126d90dc3aef6f4070ac342f974d63f415678959329cc7909f96cc235d72  markdown2-2.4.10.tar.gz
++md5  69cdd2c9ee1f6837cb173a44d6a0622d  markdown2-2.4.12.tar.gz
++sha256  1bc8692696954d597778e0e25713c14ca56d87992070dedd95c17eddaf709204  markdown2-2.4.12.tar.gz
+ # Locally computed sha256 checksums
+ sha256  f8c7c4d554409cf621b8d653dbfffb719745fd36f5c49b8305258649b403ef9c  LICENSE.txt
+diff --git a/package/python-markdown2/python-markdown2.mk b/package/python-markdown2/python-markdown2.mk
+index b4719562fc..4c21eb98e8 100644
+--- a/package/python-markdown2/python-markdown2.mk
++++ b/package/python-markdown2/python-markdown2.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--GO_VERSION = 1.21.5
-+GO_VERSION = 1.21.6
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+-PYTHON_MARKDOWN2_VERSION = 2.4.10
++PYTHON_MARKDOWN2_VERSION = 2.4.12
+ PYTHON_MARKDOWN2_SOURCE = markdown2-$(PYTHON_MARKDOWN2_VERSION).tar.gz
+-PYTHON_MARKDOWN2_SITE = https://files.pythonhosted.org/packages/8e/b3/64c459af88ea8c2eeb020d0edf3e36c62176e988c47e412133c37c5da5e7
++PYTHON_MARKDOWN2_SITE = https://files.pythonhosted.org/packages/3c/e4/87a454674ac303e2ca6c25713845d2ae1b59c1a88576054cbec25aaebad1
+ PYTHON_MARKDOWN2_SETUP_TYPE = setuptools
+ PYTHON_MARKDOWN2_LICENSE = MIT
+ PYTHON_MARKDOWN2_LICENSE_FILES = LICENSE.txt
 -- 
-2.43.0
+2.34.1
 
 _______________________________________________
 buildroot mailing list
