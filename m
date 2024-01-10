@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01ABBC47074
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 10:22:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F90CC3DA6E
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 10:22:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AD835613D3;
-	Wed, 10 Jan 2024 10:22:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD835613D3
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1AFD0611C4;
+	Wed, 10 Jan 2024 10:22:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1AFD0611C4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1fhikCxO4r09; Wed, 10 Jan 2024 10:22:43 +0000 (UTC)
+	with ESMTP id MUqwZycYHjlH; Wed, 10 Jan 2024 10:22:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0AE25613F2;
-	Wed, 10 Jan 2024 10:22:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0AE25613F2
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 44CF11BF354
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4F84A61404;
+	Wed, 10 Jan 2024 10:22:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F84A61404
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BEB3A1BF354
  for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 10:22:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 26FF441C60
+ by smtp2.osuosl.org (Postfix) with ESMTP id A0C72435DE
  for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 10:22:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 26FF441C60
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A0C72435DE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7M4_xkyvo9Nc for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id taQZkr0iHkXo for <buildroot@lists.busybox.net>;
  Wed, 10 Jan 2024 10:22:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4CBF9402B2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3411B4014E
  for <buildroot@buildroot.org>; Wed, 10 Jan 2024 10:22:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4CBF9402B2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3411B4014E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3541A85484; Wed, 10 Jan 2024 10:22:40 +0000 (UTC)
+ id 1EC9C85482; Wed, 10 Jan 2024 10:22:40 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 10 Jan 2024 11:18:57 +0100
+Date: Wed, 10 Jan 2024 11:16:36 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 961fd7154b988c05d1c01498f31c007de619e9b1
-X-Git-Newrev: 09703ea9f99a109c3bb4dc7157b43efa7848d793
+X-Git-Oldrev: 8b99e6639e78c410becbe5ae9ed1c395d22d9d0c
+X-Git-Newrev: 961fd7154b988c05d1c01498f31c007de619e9b1
 X-Patchwork-Hint: ignore
-Message-Id: <20240110102240.3541A85484@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/x11r7/xwayland:
- security bump to 23.2.3
+Message-Id: <20240110102240.1EC9C85482@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/squid: security
+ bump to version 6.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,57 +63,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=09703ea9f99a109c3bb4dc7157b43efa7848d793
+commit: https://git.buildroot.net/buildroot/commit/?id=961fd7154b988c05d1c01498f31c007de619e9b1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-According to
-https://lists.x.org/archives/xorg-announce/2023-December/003437.html:
+- Drop patch (already in version)
+- Fix CVE-2023-50269: This problem allows a remote client to perform
+  Denial of Service attack by sending a large X-Forwarded-For header
+  when the follow_x_forwarded_for feature is configured.
 
-  This release contains the fixes for CVE-2023-6377 and CVE-2023-6478
-  in today's security advisory:
-  https://lists.x.org/archives/xorg-announce/2023-December/003435.html
+https://github.com/squid-cache/squid/security/advisories/GHSA-wgq4-4cfg-c4x3
+https://github.com/squid-cache/squid/blob/SQUID_6_6/ChangeLog
 
-The release has only 10 commits compared to 23.2.2, all of which being
-fixes, two of them being the security fixes. So it seems like bumping
-the version is a reasonable trade-off vs. backporting the security
-fixes.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 078b8558b9e25917db680fdeb8d9c64db9aafc8e)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit c13199c9326fa2daa574f08ec8fc063a48d0eb06)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xwayland/xwayland.hash | 6 +++---
- package/x11r7/xwayland/xwayland.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/squid/squid.hash | 8 ++++----
+ package/squid/squid.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/x11r7/xwayland/xwayland.hash b/package/x11r7/xwayland/xwayland.hash
-index 12363a66bf..533ef9de86 100644
---- a/package/x11r7/xwayland/xwayland.hash
-+++ b/package/x11r7/xwayland/xwayland.hash
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index a163bd9ad3..4a8ea5d550 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
 @@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2023-October/003432.html
--sha256  9f7c0938d2a41e941ffa04f99c35e5db2bcd3eec034afe8d35d5c810a22eb0a8  xwayland-23.2.2.tar.xz
--sha512  f5b319fdace7d7c078544730ecd26afeb63b1a0c779fb097455147945df85af32d9e91501ebdb70209d48e8a3ead3b23be31e9d5118358ac17e699abb4b6ac07  xwayland-23.2.2.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2023-December/003437.html
-+sha256  eb9d9aa7232c47412c8835ec15a97c575f03563726c787754ff0c019bd07e302  xwayland-23.2.3.tar.xz
-+sha512  37198aa2f06313a0cb2add51cc78f81b26a42f2c9d55a0d3eecf958777107ea5560961c128f2d0af055f7460ba10fadb1b9050251c2c50f2251b40ab517e79cd  xwayland-23.2.3.tar.xz
- 
+-# From http://www.squid-cache.org/Versions/v6/squid-6.5.tar.xz.asc
+-md5  da2797d899cf538fab7f504fdf3c18bf  squid-6.5.tar.xz
+-sha1  07a08394625948750264778c82e19cf24ea7cb1f  squid-6.5.tar.xz
++# From http://www.squid-cache.org/Versions/v6/squid-6.6.tar.xz.asc
++md5  5a41134ee1b7e75f62088acdec92d2ca  squid-6.6.tar.xz
++sha1  f05e06a9dd3bf7501d2844e43d9ae1bd00e9edcc  squid-6.6.tar.xz
  # Locally calculated
- sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
-diff --git a/package/x11r7/xwayland/xwayland.mk b/package/x11r7/xwayland/xwayland.mk
-index b0bff19be5..8f4bcd8117 100644
---- a/package/x11r7/xwayland/xwayland.mk
-+++ b/package/x11r7/xwayland/xwayland.mk
+-sha256  5070f8a3ae6666870c8fc716326befb0a1abe8b5ff3a6f3932cbc5543d7c8549  squid-6.5.tar.xz
++sha256  55bd7f9f4898153161ea1228998acb551bf840832b9e5b90fc8ecd2942420318  squid-6.6.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index c1477b1adf..3a9edac71e 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XWAYLAND_VERSION = 23.2.2
-+XWAYLAND_VERSION = 23.2.3
- XWAYLAND_SOURCE = xwayland-$(XWAYLAND_VERSION).tar.xz
- XWAYLAND_SITE = https://xorg.freedesktop.org/archive/individual/xserver
- XWAYLAND_LICENSE = MIT
+-SQUID_VERSION = 6.5
++SQUID_VERSION = 6.6
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v6
+ SQUID_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
