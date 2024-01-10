@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5411C47073
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 23:21:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BE58C47073
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 23:23:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6556E43772;
-	Wed, 10 Jan 2024 23:21:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6556E43772
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3B9E7404A8;
+	Wed, 10 Jan 2024 23:23:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B9E7404A8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wUmKLF0YQ6qc; Wed, 10 Jan 2024 23:21:38 +0000 (UTC)
+	with ESMTP id 8VqxrIhiSXxn; Wed, 10 Jan 2024 23:23:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5B4C443778;
-	Wed, 10 Jan 2024 23:21:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5B4C443778
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 939311BF398
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 23:21:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1761743717;
+	Wed, 10 Jan 2024 23:23:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1761743717
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 24C471BF398
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 23:23:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 799BB61591
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 23:21:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 799BB61591
+ by smtp1.osuosl.org (Postfix) with ESMTP id EF54E83DB5
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 23:23:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF54E83DB5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gN76XqW9hMwt for <buildroot@lists.busybox.net>;
- Wed, 10 Jan 2024 23:21:34 +0000 (UTC)
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8E13D61588
- for <buildroot@buildroot.org>; Wed, 10 Jan 2024 23:21:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E13D61588
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OjETsifhIQt5 for <buildroot@lists.busybox.net>;
+ Wed, 10 Jan 2024 23:23:01 +0000 (UTC)
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0B6C183DA4
+ for <buildroot@buildroot.org>; Wed, 10 Jan 2024 23:23:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B6C183DA4
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8290:3800:4f89:5708:1633:580e])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 88B72B0053D;
- Thu, 11 Jan 2024 00:21:29 +0100 (CET)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 52F4EB00539;
+ Thu, 11 Jan 2024 00:22:57 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Thu, 11 Jan 2024 00:21:29 +0100
-Date: Thu, 11 Jan 2024 00:21:29 +0100
+ Thu, 11 Jan 2024 00:22:57 +0100
+Date: Thu, 11 Jan 2024 00:22:57 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Adam Duskett <adam.duskett@amarulasolutions.com>
-Message-ID: <ZZ8meXMGuT2Z0YhG@landeda>
+Message-ID: <ZZ8m0SNtFlQT1_YZ@landeda>
 References: <20240102235957.3072102-1-adam.duskett@amarulasolutions.com>
- <20240102235957.3072102-4-adam.duskett@amarulasolutions.com>
+ <20240102235957.3072102-5-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20240102235957.3072102-4-adam.duskett@amarulasolutions.com>
+In-Reply-To: <20240102235957.3072102-5-adam.duskett@amarulasolutions.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1704928891;
- bh=YYlzaQc2aPeVYRvrvXtlaahV4W40XMQtqYV5cvOsTb0=;
+ d=free.fr; s=smtp-20201208; t=1704928979;
+ bh=BUYjG6RArCoakwoL8KX1cKO+gcDMm6tb7C3tuk5/OvA=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=L2SzPVwpmOWz/RWP6y89wKfPu9GImsWuBbl6dQtZhyYkaNlrZiKX/869wwu3YmmWl
- 6ebPt+KtLCjnmSOOVyYgy/FUJxbUKTDQUI+WTAzPM28Al/7zuxKgpmsiPssv+t1kwO
- +iDZ1nELRTSxV7dy8nu76o6cbJqklwzwYXn+A5M62cA97Klun7e0CY0IjOHTXvBgtS
- 8kISrcW8z2bGJAwSU2+/HgOq1YIFGAxx2eV2ScgtxDlmP0n29QtXPKCqi2D96nK3BZ
- IDaPCjZybmXzfRcy3l36iX7u6PaNDwPsF1iFMuuazvhACD+4uoDz3X/90T+Y5ssM21
- bIffhvFSjRC1Q==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=a9m496+ZmEn+o3KuROZZzq9Js95eeC8ARq3gml/4Z2pXwC/JUbh7VgDXrA0jtEpa/
+ RRWUGm7dWqxYFrbFSZY3uGkvGsHjk9XYAuWq/IHvneF/y82oS0IYIdolceZB9mWmCf
+ 96p70MmGQq7AFwAM+NkfdQoVr+8KYcl7xQNEyNP9XeDNrYoyKwMhBMnhkgUdQGr9z7
+ sHd7IgbavKtG+olJpEODDcNshziR5J/ulAYqtr3oG+Oq5kIjmZdiorY5FKoe6l/Jrb
+ kA3PUdEWgtH7vXTqvzyLkkGtFllvdcc6bVbhtqinPyCBK/Q80KQAPZraTykb/C4cFh
+ 97hYn3zecr+Sw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=L2SzPVwp
-Subject: Re: [Buildroot] [PATCH v3 03/11] package/flutter-sdk-bin: bump
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=a9m496+Z
+Subject: Re: [Buildroot] [PATCH v3 04/11] package/flutter-engine: bump
  version to 3.16.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -85,31 +85,41 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 Adam, All,
 
 On 2024-01-02 16:59 -0700, Adam Duskett spake thusly:
-> On line 66 of flutter_tools/lib/runner.dart, the following lines have been
-> replaced:
+> Flutter 3.16 includes 1,954 commits and improvements.
 > 
-> ```
-> if (args.contains('--disable-telemetry') &&
->             args.contains('--enable-telemetry'))
-> ```
+> Flutter 3.16.0 also sets Material 3 as the default visual style for
+> applications.
 > 
-> with the following:
+> A brief changelog can be found here:
+> https://docs.flutter.dev/release/release-notes/release-notes-3.16.0
 > 
-> ```
-> if (args.contains('--disable-analytics') &&
->     args.contains('--enable-analytics')) {
-> ```
+> A full changelog is provided below, which is provided at the end of the
+> brief changelog page found above:
+> https://github.com/flutter/engine/compare/3.13.0%E2%80%A63.16.0-0.5.pre
 > 
-> As such, the option in package/flutter-sdk-bin/flutter-sdk-bin.mk on line 27
-> changes from "--disable-telemetry" to "--disable-analytics."
+> This package update has been tested on a x86_64 host with Docker 24.0.5:
+>   - The following distributions:
+>     - Fedora 39: Host system
+>     - Ubuntu 22.04: Docker
+>     - Debian 11: Docker
+> 
+>   - The following targets:
+>     - BR2_aarch64
+>     - BR2_arm
+>     - BR2_x86_64
+> 
+> Also, the package is tested with the following testing command:
+> 
+> ./support/testing/run-tests \
+>   -d ./dl \
+>   -o ./output \
+>   -k \
+>   tests.package.test_flutter.TestFlutter
 
-I've shortenned the above to just state that upstream had changed the
-name of the option.
+As we discussed about ivi-homescreen, testing details are very welcome,
+but they are better placed in a post-commit note, so that they do not
+end up in the commit log. So I dropped those.
 
-> A subsequent look at the rest of the file including the logic around the
-> change of the name of the above option provides no other elevant changes
-> that would apply to this package update.
-> 
 > Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 
 Applied to master, thanks.
@@ -120,41 +130,22 @@ Yann E. MORIN.
 > ---
 > v2 -> v3: Updted to 3.16.5
 > 
->  package/flutter-sdk-bin/flutter-sdk-bin.hash | 2 +-
->  package/flutter-sdk-bin/flutter-sdk-bin.mk   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/flutter-engine/flutter-engine.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/flutter-sdk-bin/flutter-sdk-bin.hash b/package/flutter-sdk-bin/flutter-sdk-bin.hash
-> index a204de1807..f0a855f2c9 100644
-> --- a/package/flutter-sdk-bin/flutter-sdk-bin.hash
-> +++ b/package/flutter-sdk-bin/flutter-sdk-bin.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256  b6bc6f93423488c67110e0fe56523cd2260f3a4c379ed015cd1c7fab66362739  flutter_linux_3.13.9-stable.tar.xz
-> +sha256  57e59fa3a31be7e87b3847cdf782f1323578bbf70a0cd35f3615f01ab429ac29  flutter_linux_3.16.5-stable.tar.xz
->  sha256  a598db94b6290ffbe10b5ecf911057b6a943351c727fdda9e5f2891d68700a20  LICENSE
-> diff --git a/package/flutter-sdk-bin/flutter-sdk-bin.mk b/package/flutter-sdk-bin/flutter-sdk-bin.mk
-> index e8e71b6ab0..a28cf645f3 100644
-> --- a/package/flutter-sdk-bin/flutter-sdk-bin.mk
-> +++ b/package/flutter-sdk-bin/flutter-sdk-bin.mk
-> @@ -4,7 +4,7 @@
+> diff --git a/package/flutter-engine/flutter-engine.mk b/package/flutter-engine/flutter-engine.mk
+> index d31d435d79..c3ac144f2a 100644
+> --- a/package/flutter-engine/flutter-engine.mk
+> +++ b/package/flutter-engine/flutter-engine.mk
+> @@ -21,7 +21,7 @@
 >  #
->  ################################################################################
+>  # There is no hash provided, as the gn binary (used for configuration) relies
+>  # on the .git directories. As such, a reproducible tarball is not possible.
+> -FLUTTER_ENGINE_VERSION = 3.13.9
+> +FLUTTER_ENGINE_VERSION = 3.16.5
 >  
-> -FLUTTER_SDK_BIN_VERSION = 3.13.9
-> +FLUTTER_SDK_BIN_VERSION = 3.16.5
->  FLUTTER_SDK_BIN_SITE = https://storage.googleapis.com/flutter_infra_release/releases/stable/linux
->  FLUTTER_SDK_BIN_SOURCE = flutter_linux_$(FLUTTER_SDK_BIN_VERSION)-stable.tar.xz
->  FLUTTER_SDK_BIN_LICENSE = BSD-3-Clause
-> @@ -25,7 +25,7 @@ HOST_FLUTTER_SDK_BIN_ENV = \
->  HOST_FLUTTER_SDK_BIN_CONF_OPTS = \
->  	--clear-features \
->  	--no-analytics \
-> -	--disable-telemetry \
-> +	--disable-analytics \
->  	--enable-custom-devices \
->  	--enable-linux-desktop \
->  	--no-enable-android \
+>  # There is nothing for Buildroot to download. This is handled by gclient.
+>  FLUTTER_ENGINE_SITE =
 > -- 
 > 2.43.0
 > 
