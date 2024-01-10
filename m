@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C63AC3DA6E
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 04:19:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18C3BC3DA6E
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 04:25:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9DC9642C4C;
-	Wed, 10 Jan 2024 04:19:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9DC9642C4C
+	by smtp4.osuosl.org (Postfix) with ESMTP id A1EE842C53;
+	Wed, 10 Jan 2024 04:25:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1EE842C53
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ROx6meCjclHg; Wed, 10 Jan 2024 04:19:37 +0000 (UTC)
+	with ESMTP id 1luuvSZEN-N5; Wed, 10 Jan 2024 04:25:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E29EC42C47;
-	Wed, 10 Jan 2024 04:19:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E29EC42C47
+	by smtp4.osuosl.org (Postfix) with ESMTP id E42B142C28;
+	Wed, 10 Jan 2024 04:25:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E42B142C28
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6ADC11BF5F5
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 04:19:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 031401BF5F5
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 04:24:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 401DD613B7
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 04:19:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 401DD613B7
+ by smtp3.osuosl.org (Postfix) with ESMTP id C7522613B7
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 04:24:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7522613B7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OfusBGmrqr22 for <buildroot@lists.busybox.net>;
- Wed, 10 Jan 2024 04:19:34 +0000 (UTC)
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com
- [IPv6:2607:f8b0:4864:20::d35])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 53A4C612B4
- for <buildroot@buildroot.org>; Wed, 10 Jan 2024 04:19:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 53A4C612B4
-Received: by mail-io1-xd35.google.com with SMTP id
- ca18e2360f4ac-7bee328027bso40943139f.1
- for <buildroot@buildroot.org>; Tue, 09 Jan 2024 20:19:34 -0800 (PST)
+ with ESMTP id kX5V2g4_-6gs for <buildroot@lists.busybox.net>;
+ Wed, 10 Jan 2024 04:24:58 +0000 (UTC)
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com
+ [IPv6:2607:f8b0:4864:20::12d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E9FCB605A1
+ for <buildroot@buildroot.org>; Wed, 10 Jan 2024 04:24:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E9FCB605A1
+Received: by mail-il1-x12d.google.com with SMTP id
+ e9e14a558f8ab-3606dd96868so22178675ab.2
+ for <buildroot@buildroot.org>; Tue, 09 Jan 2024 20:24:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704860373; x=1705465173;
+ d=1e100.net; s=20230601; t=1704860696; x=1705465496;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=/ocwZrlz+O36oJllqKH4wqGjohV2+CEd8J2Dr1H78a0=;
- b=RWdWy7NIH/zTdvx7KpXeDH6GrD1QU8OCy9jW08jzNBGjSAjk2jLzm921WEQhyMgI2w
- SuCE8ggAKDz1Ri7ytYLzFfQhP9EomMXPnFdkIHCFIFbty00cCmOwuuzOtmX1gOeKRP6e
- mCtXDSM+/d81dX+Zwzumk0O0+IctpmIhmz/LpIexolC059FN4WqmTvVw1Lf/im0TC/AL
- xh8QXA7g3upFN/UUK0vRvFjnjEU+NaunFo3Mz4FodVyB+euo8+vj4tOETElCXjhU7cwg
- MXxnCZIRG66GE6pj6leh5S8hth5DSPOt5KZVQlQJQu0Za5f7mskr/5IJv3TdUyGQ4oMZ
- rqJg==
-X-Gm-Message-State: AOJu0Yy01jiiUVckYh/mAchTzCx14zGLM5d15P7DQr568HazG6Dq2pFW
- Qp7OJEFEhR63SPiES7+a0qnYx86rSRsO+w==
-X-Google-Smtp-Source: AGHT+IFaNqjSXsf3WyD/5tVjFKlxglLFfQk2E9YA7m7EYpzRICSBfrNvAmpGq+Nx7bXIvVxYo1gRow==
-X-Received: by 2002:a92:ca09:0:b0:35f:f65e:111b with SMTP id
- j9-20020a92ca09000000b0035ff65e111bmr858622ils.58.1704860372945; 
- Tue, 09 Jan 2024 20:19:32 -0800 (PST)
+ bh=73r4eqLgkrGJRPOXfQl7fPbhgXlD1NwJ9W+kiomw/R4=;
+ b=qQYMfn75WlUfZ3rIPo6jGJCsXZbxg7GEh72gCjlpn4cY9GUzG6DPfSEa2Bgdym4YtW
+ Wcvegz2EB9ZyMoyD4w1EsEorrfmUD6w1d24J8yAeEXxZoGLOHNMd8fTAXmtaB7NhSv7U
+ 2Z7+Q8cYTim3+wLtQqJPTO9MMvMfnq/iv7ezfEdh0oSopkk7ZuSHYiB9TeR/SF5kC/w3
+ WbjSBvvhLz35Tl2nl/ZxmXnny6r/6iFhhzTMAJ32OO6RPZRetz3rXLED849FjQd0P4DF
+ TB/Ge2+aAiEFFAAOS19znmj+Cop/Dlr5NzCmDC+1XjeKquNk50PN0P5ae7Fto0tLLiHd
+ 03KA==
+X-Gm-Message-State: AOJu0Yw6XZzq4wiH5qLIY/aBrQZum2hkaQEWerUo1Sx6rsLOu6ldL9tq
+ qwub9i38Kix1/L3EG8wZquJk4VEszWxBJQ==
+X-Google-Smtp-Source: AGHT+IHrDH6clVULDlM18z6zKQIHyhZqz0HnEhonfVG3XLkL9W3yPY8OqL3eMwFg98H04a2JyDGtBQ==
+X-Received: by 2002:a05:6e02:1a6c:b0:360:6ca4:d304 with SMTP id
+ w12-20020a056e021a6c00b003606ca4d304mr601900ilv.61.1704860696501; 
+ Tue, 09 Jan 2024 20:24:56 -0800 (PST)
 Received: from james-x399.localdomain (71-218-103-119.hlrn.qwest.net.
  [71.218.103.119]) by smtp.gmail.com with ESMTPSA id
- u10-20020a02aa8a000000b0046dda6b83c1sm1070593jai.25.2024.01.09.20.19.32
+ by15-20020a056e02260f00b003608b8c848esm1022012ilb.32.2024.01.09.20.24.56
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 09 Jan 2024 20:19:32 -0800 (PST)
+ Tue, 09 Jan 2024 20:24:56 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue,  9 Jan 2024 21:19:30 -0700
-Message-Id: <20240110041930.1037925-1-james.hilliard1@gmail.com>
+Date: Tue,  9 Jan 2024 21:24:54 -0700
+Message-Id: <20240110042454.1040891-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1704860373; x=1705465173; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1704860696; x=1705465496; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=/ocwZrlz+O36oJllqKH4wqGjohV2+CEd8J2Dr1H78a0=;
- b=NBnbclkgEUhhmezX/O9wzCEIOQ7jmu5ddr4qbaLE/QrOytKgZihNBNDAUdWPUN1yCR
- Au3Cbs9A3GvkhScqcXNBWK1KWqh95m2p00KZ/C5HeXC3p4nhdX19BEGg/uHhHTsLQGnc
- 0RTIVq87XKSJxeWd/DRF79Cc0KtpAaeAFHVdp9NwCudztYcfmkOVEdKv+JS6WBMyGFzm
- pq8eSFJtM71oPAZAqnBXugOmbgtIXqncSJxzRhv4/a7XyF7FssY9zWB807DeQYXZRGeQ
- W9rb2dHFNAjxT4xxqLadADviI4VyhZ75XNt8P4Wi4PsGEerhPlA1N0fDomFAA9qRO6fE
- FlKw==
+ bh=73r4eqLgkrGJRPOXfQl7fPbhgXlD1NwJ9W+kiomw/R4=;
+ b=Q0h6X0Lz85ZoDBpthvI9biMiK497iBfqYOjUPowWX9MauXCH3qbitufHPF5vPtgvOU
+ OY3E+n12hCYZ8iY3QPbU7aaloRe9vt+Mn2KyP8tNncjJ3C9ftpugRkQ7SR4r+odGbHmk
+ jL0ChC0bEF4J8MUjTsU6lrGCjZ7gNgpXxlmQxkoSOH/y5rKUfyewYsAy2+eEmDo9kuUu
+ FwyGwGHOWIKSbQ4toqq0FV4JWBaLVPkCoLgYpwfsgQUdH2241Eyaw9Db0ewuocCblxvm
+ tjh6j4wO60LGcxLiD3yySR4pEvOfVOpKugn6KDP47wOIrRnBkpYWqDeTXY78z/+kedMO
+ 6YtQ==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=NBnbclkg
-Subject: [Buildroot] [PATCH 1/1] package/python-pathspec: bump to version
- 0.12.1
+ header.a=rsa-sha256 header.s=20230601 header.b=Q0h6X0Lz
+Subject: [Buildroot] [PATCH 1/1] package/python-pexpect: bump to version
+ 4.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,45 +100,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Migrate from setuptools to flit build backend.
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pathspec/python-pathspec.hash | 4 ++--
- package/python-pathspec/python-pathspec.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-pexpect/python-pexpect.hash | 4 ++--
+ package/python-pexpect/python-pexpect.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pathspec/python-pathspec.hash b/package/python-pathspec/python-pathspec.hash
-index 01177b7428..15283e3ac2 100644
---- a/package/python-pathspec/python-pathspec.hash
-+++ b/package/python-pathspec/python-pathspec.hash
+diff --git a/package/python-pexpect/python-pexpect.hash b/package/python-pexpect/python-pexpect.hash
+index a38c8d5a03..617428feb1 100644
+--- a/package/python-pexpect/python-pexpect.hash
++++ b/package/python-pexpect/python-pexpect.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pathspec/json
--md5  92ebd6d735d261952ff99d64083eeff4  pathspec-0.11.2.tar.gz
--sha256  e0d8d0ac2f12da61956eb2306b69f9469b42f4deb0f3cb6ed47b9cce9996ced3  pathspec-0.11.2.tar.gz
-+md5  2b26ad1981bfa23748e115f00085624c  pathspec-0.12.1.tar.gz
-+sha256  a482d51503a1ab33b1c67a6c3813a26953dbdc71c31dacaef9a838c4e29f5712  pathspec-0.12.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pexpect/json
+-md5  153eb25184249d6a85fde9acf4804085  pexpect-4.8.0.tar.gz
+-sha256  fc65a43959d153d0114afe13997d439c22823a27cefceb5ff35c2178c6784c0c  pexpect-4.8.0.tar.gz
++md5  f48d48325ee7f1221add0396ea9e2f14  pexpect-4.9.0.tar.gz
++sha256  ee7d41123f3c9911050ea2c2dac107568dc43b2d3b0c7557a33212c398ead30f  pexpect-4.9.0.tar.gz
  # Locally computed sha256 checksums
- sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  LICENSE
-diff --git a/package/python-pathspec/python-pathspec.mk b/package/python-pathspec/python-pathspec.mk
-index d32b6a56e1..c4cb34b4c3 100644
---- a/package/python-pathspec/python-pathspec.mk
-+++ b/package/python-pathspec/python-pathspec.mk
-@@ -4,11 +4,11 @@
+ sha256  4a483ae1c4dc738a6c8b73feb49074e1835da02ab5aa686f2675029906fa364d  LICENSE
+diff --git a/package/python-pexpect/python-pexpect.mk b/package/python-pexpect/python-pexpect.mk
+index d230b11338..469144aa60 100644
+--- a/package/python-pexpect/python-pexpect.mk
++++ b/package/python-pexpect/python-pexpect.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PATHSPEC_VERSION = 0.11.2
-+PYTHON_PATHSPEC_VERSION = 0.12.1
- PYTHON_PATHSPEC_SOURCE = pathspec-$(PYTHON_PATHSPEC_VERSION).tar.gz
--PYTHON_PATHSPEC_SITE = https://files.pythonhosted.org/packages/a0/2a/bd167cdf116d4f3539caaa4c332752aac0b3a0cc0174cdb302ee68933e81
-+PYTHON_PATHSPEC_SITE = https://files.pythonhosted.org/packages/ca/bc/f35b8446f4531a7cb215605d100cd88b7ac6f44ab3fc94870c120ab3adbf
- PYTHON_PATHSPEC_LICENSE = MPL-2.0
- PYTHON_PATHSPEC_LICENSE_FILES = LICENSE
--PYTHON_PATHSPEC_SETUP_TYPE = setuptools
-+PYTHON_PATHSPEC_SETUP_TYPE = flit
- 
- $(eval $(host-python-package))
+-PYTHON_PEXPECT_VERSION = 4.8.0
++PYTHON_PEXPECT_VERSION = 4.9.0
+ PYTHON_PEXPECT_SOURCE = pexpect-$(PYTHON_PEXPECT_VERSION).tar.gz
+-PYTHON_PEXPECT_SITE = https://files.pythonhosted.org/packages/e5/9b/ff402e0e930e70467a7178abb7c128709a30dfb22d8777c043e501bc1b10
++PYTHON_PEXPECT_SITE = https://files.pythonhosted.org/packages/42/92/cc564bf6381ff43ce1f4d06852fc19a2f11d180f23dc32d9588bee2f149d
+ PYTHON_PEXPECT_LICENSE = ISC
+ PYTHON_PEXPECT_LICENSE_FILES = LICENSE
+ PYTHON_PEXPECT_SETUP_TYPE = setuptools
 -- 
 2.34.1
 
