@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57D48C3DA6E
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 10:23:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB8A2C3DA6E
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 10:23:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1519761408;
-	Wed, 10 Jan 2024 10:23:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1519761408
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6FEDB6141A;
+	Wed, 10 Jan 2024 10:23:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6FEDB6141A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 89JbQ9DbAFkF; Wed, 10 Jan 2024 10:23:21 +0000 (UTC)
+	with ESMTP id qtGSSi77cwuE; Wed, 10 Jan 2024 10:23:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 653E0613F2;
-	Wed, 10 Jan 2024 10:23:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 653E0613F2
+	by smtp3.osuosl.org (Postfix) with ESMTP id B80B061407;
+	Wed, 10 Jan 2024 10:23:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B80B061407
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C58821BF354
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 10:22:43 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 02ABA1BF354
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 10:22:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 58D5A402B2
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 10:22:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 58D5A402B2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 75D1041C14
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 10:22:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 75D1041C14
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yaus8EuI_3R4 for <buildroot@lists.busybox.net>;
+ with ESMTP id 59Gng6nPd0QB for <buildroot@lists.busybox.net>;
  Wed, 10 Jan 2024 10:22:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6D79341C49
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5636141C0F
  for <buildroot@buildroot.org>; Wed, 10 Jan 2024 10:22:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D79341C49
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5636141C0F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 551AF85482; Wed, 10 Jan 2024 10:22:40 +0000 (UTC)
+ id 3F474854A5; Wed, 10 Jan 2024 10:22:40 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 10 Jan 2024 11:22:08 +0100
+Date: Wed, 10 Jan 2024 11:20:44 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 29bf1f45742e8d12f9ac1760079aa68984ca357a
-X-Git-Newrev: 0f2ffac1c9dee625482457c270846c6dced7eeda
+X-Git-Oldrev: 09703ea9f99a109c3bb4dc7157b43efa7848d793
+X-Git-Newrev: 91f09db85fffd60c5e7717cfcc07406862d026b0
 X-Patchwork-Hint: ignore
-Message-Id: <20240110102240.551AF85482@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/wolfssl: security
- bump to version 5.6.6
+Message-Id: <20240110102240.3F474854A5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/gstreamer1/gstd:
+ drop readline dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,60 +63,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f2ffac1c9dee625482457c270846c6dced7eeda
+commit: https://git.buildroot.net/buildroot/commit/?id=91f09db85fffd60c5e7717cfcc07406862d026b0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-- Use official tarball and so drop autoreconf
-- Fix CVE-2023-6935, CVE-2023-6936 and CVE-2023-6937
-
-https://github.com/wolfSSL/wolfssl/releases/tag/v5.6.6-stable
+readline is not a dependency since bump to version 0.15.0 in commit
+cbd06adac50e304f413689febf676911ae29d967 and
+https://github.com/RidgeRun/gstd-1.x/commit/978b503840e0f9ae99f732113babbc4fbfb2a770
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d0c4bd703a424f69451d7774727680fae2b4daa3)
+(cherry picked from commit 95a5ed75457f1511777c57075f33d34b3622a3de)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wolfssl/wolfssl.hash | 2 +-
- package/wolfssl/wolfssl.mk   | 8 ++------
- 2 files changed, 3 insertions(+), 7 deletions(-)
+ package/gstreamer1/gstd/Config.in | 1 -
+ package/gstreamer1/gstd/gstd.mk   | 3 +--
+ 2 files changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/package/wolfssl/wolfssl.hash b/package/wolfssl/wolfssl.hash
-index fb5a570de8..59e42e98b9 100644
---- a/package/wolfssl/wolfssl.hash
-+++ b/package/wolfssl/wolfssl.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  031691906794ff45e1e792561cf31759f5d29ac74936bc8dffb8b14f16d820b4  wolfssl-5.6.4.tar.gz
-+sha256  75aaafe3b8c776d1ac417288116c8d444115f9fac5acb382a39a7d163dfd618d  wolfssl-5.6.6.tar.gz
+diff --git a/package/gstreamer1/gstd/Config.in b/package/gstreamer1/gstd/Config.in
+index df1d2f59c3..bfe1a40bfd 100644
+--- a/package/gstreamer1/gstd/Config.in
++++ b/package/gstreamer1/gstd/Config.in
+@@ -10,7 +10,6 @@ config BR2_PACKAGE_GSTD
+ 	select BR2_PACKAGE_LIBEDIT
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBSOUP
+-	select BR2_PACKAGE_READLINE
+ 	help
+ 	  GStreamer Daemon, also called gstd, is a GStreamer framework
+ 	  for controlling audio and video streaming using an
+diff --git a/package/gstreamer1/gstd/gstd.mk b/package/gstreamer1/gstd/gstd.mk
+index ccb3b3e1bc..965ede7949 100644
+--- a/package/gstreamer1/gstd/gstd.mk
++++ b/package/gstreamer1/gstd/gstd.mk
+@@ -17,8 +17,7 @@ GSTD_DEPENDENCIES = \
+ 	libdaemon \
+ 	libedit \
+ 	libglib2 \
+-	libsoup \
+-	readline
++	libsoup
  
- # Hash for license files:
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
-index 17452fdcaf..68c69afd59 100644
---- a/package/wolfssl/wolfssl.mk
-+++ b/package/wolfssl/wolfssl.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--WOLFSSL_VERSION = 5.6.4
--WOLFSSL_SITE = $(call github,wolfSSL,wolfssl,v$(WOLFSSL_VERSION)-stable)
-+WOLFSSL_VERSION = 5.6.6
-+WOLFSSL_SITE = https://github.com/wolfSSL/wolfssl/releases/download/v$(WOLFSSL_VERSION)-stable
- WOLFSSL_INSTALL_STAGING = YES
- 
- WOLFSSL_LICENSE = GPL-2.0+
-@@ -14,10 +14,6 @@ WOLFSSL_CPE_ID_VENDOR = wolfssl
- WOLFSSL_CONFIG_SCRIPTS = wolfssl-config
- WOLFSSL_DEPENDENCIES = host-pkgconf
- 
--# wolfssl's source code is released without a configure
--# script, so we need autoreconf
--WOLFSSL_AUTORECONF = YES
--
- WOLFSSL_CONF_OPTS = --disable-examples --disable-crypttests
- 
- ifeq ($(BR2_PACKAGE_WOLFSSL_ALL),y)
+ GSTD_CONF_OPTS = \
+ 	-Denable-tests=disabled \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
