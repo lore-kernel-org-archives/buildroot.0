@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44351C4707B
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 20:49:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 093E0C4707B
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 20:50:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E7584400C1;
-	Wed, 10 Jan 2024 20:49:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E7584400C1
+	by smtp2.osuosl.org (Postfix) with ESMTP id AFA4C437E8;
+	Wed, 10 Jan 2024 20:50:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AFA4C437E8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jI15WXTYXIUc; Wed, 10 Jan 2024 20:49:54 +0000 (UTC)
+	with ESMTP id 8BkGEdSIUpwt; Wed, 10 Jan 2024 20:50:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 68BD1437D2;
-	Wed, 10 Jan 2024 20:49:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 68BD1437D2
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1A9741BF966
+	by smtp2.osuosl.org (Postfix) with ESMTP id B87DF437EF;
+	Wed, 10 Jan 2024 20:50:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B87DF437EF
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1D6351BF97F
  for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 20:49:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E74E742249
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7E97261569
  for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 20:49:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E74E742249
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E97261569
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Iq9vZFZUt7N1 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id O7d-_lUde0eJ for <buildroot@lists.busybox.net>;
  Wed, 10 Jan 2024 20:49:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id AEEFF423E3
+ by smtp3.osuosl.org (Postfix) with ESMTP id BE3B96156E
  for <buildroot@buildroot.org>; Wed, 10 Jan 2024 20:49:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AEEFF423E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE3B96156E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 972CC85DB7; Wed, 10 Jan 2024 20:49:09 +0000 (UTC)
+ id A038185DB8; Wed, 10 Jan 2024 20:49:09 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 10 Jan 2024 21:38:04 +0100
+Date: Wed, 10 Jan 2024 21:46:02 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7028893592d0022b8094e769b3215e08f104fa2b
-X-Git-Newrev: 7f13171e9d23862e0a30e84c7776f2b42cb0f9db
+X-Git-Oldrev: 7f13171e9d23862e0a30e84c7776f2b42cb0f9db
+X-Git-Newrev: 3bd02f8f923aedb42fd08703f6d8f95db29001bb
 X-Patchwork-Hint: ignore
-Message-Id: <20240110204909.972CC85DB7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/binutils: re-add poison system
- directories patch to ARC binutils
+Message-Id: <20240110204909.A038185DB8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/imxrt1050-evk: Bump Kernel and
+ U-boot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,344 +64,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7f13171e9d23862e0a30e84c7776f2b42cb0f9db
+commit: https://git.buildroot.net/buildroot/commit/?id=3bd02f8f923aedb42fd08703f6d8f95db29001bb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-While updating ARC GNU toolchain version (see [1]) we unintentionally
-got rid of "0001-poison-system-directories.patch" which still makes
-sense.
+Bump Linux to 6.7 and U-Boot to 2024.01
 
-Even though one may think that we do not need these Binutils patches
-because we do "poisoning" of system directories in toolchain wrapper,
-but these wrappers don't exist for tools originated from Binutils, only
-for gcc, g++ etc.
-
-So we need to keep that patch still, sorry.
-
-[1] https://git.buildroot.net/buildroot/commit/?id=045ab73702b8bc09f94ca1f3b8e5bf3acb0b0843
-
-Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-poison-system-directories.patch           | 309 +++++++++++++++++++++
- 1 file changed, 309 insertions(+)
+ configs/imxrt1050-evk_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/binutils/arc-2023.09-release/0001-poison-system-directories.patch b/package/binutils/arc-2023.09-release/0001-poison-system-directories.patch
-new file mode 100644
-index 0000000000..4b927b630e
---- /dev/null
-+++ b/package/binutils/arc-2023.09-release/0001-poison-system-directories.patch
-@@ -0,0 +1,309 @@
-+From a6d90a842e349545ceb27f022317618dd99378ce Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Fri, 25 Dec 2015 11:45:38 +0100
-+Subject: [PATCH] poison-system-directories
-+
-+Patch adapted to binutils 2.23.2 and extended to use
-+BR_COMPILER_PARANOID_UNSAFE_PATH by Thomas Petazzoni.
-+
-+[Waldemar: rebase on top of 2.39]
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+[Romain: rebase on top of 2.33.1]
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+[Gustavo: adapt to binutils 2.25]
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+Upstream-Status: Inappropriate [distribution: codesourcery]
-+Upstream: N/A [Buildroot specific]
-+
-+Patch originally created by Mark Hatle, forward-ported to
-+binutils 2.21 by Scott Garman.
-+
-+purpose:  warn for uses of system directories when cross linking
-+
-+Code Merged from Sourcery G++ binutils 2.19 - 4.4-277
-+
-+2008-07-02  Joseph Myers  <joseph@codesourcery.com>
-+
-+    ld/
-+    * ld.h (args_type): Add error_poison_system_directories.
-+    * ld.texinfo (--error-poison-system-directories): Document.
-+    * ldfile.c (ldfile_add_library_path): Check
-+    command_line.error_poison_system_directories.
-+    * ldmain.c (main): Initialize
-+    command_line.error_poison_system_directories.
-+    * lexsup.c (enum option_values): Add
-+    OPTION_ERROR_POISON_SYSTEM_DIRECTORIES.
-+    (ld_options): Add --error-poison-system-directories.
-+    (parse_args): Handle new option.
-+
-+2007-06-13  Joseph Myers  <joseph@codesourcery.com>
-+
-+    ld/
-+    * config.in: Regenerate.
-+    * ld.h (args_type): Add poison_system_directories.
-+    * ld.texinfo (--no-poison-system-directories): Document.
-+    * ldfile.c (ldfile_add_library_path): Check
-+    command_line.poison_system_directories.
-+    * ldmain.c (main): Initialize
-+    command_line.poison_system_directories.
-+    * lexsup.c (enum option_values): Add
-+    OPTION_NO_POISON_SYSTEM_DIRECTORIES.
-+    (ld_options): Add --no-poison-system-directories.
-+    (parse_args): Handle new option.
-+
-+2007-04-20  Joseph Myers  <joseph@codesourcery.com>
-+
-+    Merge from Sourcery G++ binutils 2.17:
-+
-+    2007-03-20  Joseph Myers  <joseph@codesourcery.com>
-+    Based on patch by Mark Hatle <mark.hatle@windriver.com>.
-+    ld/
-+    * configure.ac (--enable-poison-system-directories): New option.
-+    * configure, config.in: Regenerate.
-+    * ldfile.c (ldfile_add_library_path): If
-+    ENABLE_POISON_SYSTEM_DIRECTORIES defined, warn for use of /lib,
-+    /usr/lib, /usr/local/lib or /usr/X11R6/lib.
-+
-+Signed-off-by: Mark Hatle <mark.hatle@windriver.com>
-+Signed-off-by: Scott Garman <scott.a.garman@intel.com>
-+---
-+ ld/config.in    |  3 +++
-+ ld/configure    | 14 ++++++++++++++
-+ ld/configure.ac | 10 ++++++++++
-+ ld/ld.h         |  8 ++++++++
-+ ld/ld.texi      | 12 ++++++++++++
-+ ld/ldfile.c     | 17 +++++++++++++++++
-+ ld/ldlex.h      |  2 ++
-+ ld/ldmain.c     |  2 ++
-+ ld/lexsup.c     | 21 +++++++++++++++++++++
-+ 9 files changed, 89 insertions(+)
-+
-+diff --git a/ld/config.in b/ld/config.in
-+index ad0dc6a106c..d21edaddce7 100644
-+--- a/ld/config.in
-++++ b/ld/config.in
-+@@ -58,6 +58,9 @@
-+    language is requested. */
-+ #undef ENABLE_NLS
-+ 
-++/* Define to warn for use of native system library directories */
-++#undef ENABLE_POISON_SYSTEM_DIRECTORIES
-++
-+ /* Additional extension a shared object might have. */
-+ #undef EXTRA_SHLIB_EXTENSION
-+ 
-+diff --git a/ld/configure b/ld/configure
-+index 43b44be1dc6..28f054ea3f8 100755
-+--- a/ld/configure
-++++ b/ld/configure
-+@@ -839,6 +839,7 @@ with_lib_path
-+ enable_targets
-+ enable_64_bit_bfd
-+ with_sysroot
-++enable_poison_system_directories
-+ enable_gold
-+ enable_got
-+ enable_compressed_debug_sections
-+@@ -1521,6 +1522,8 @@ Optional Features:
-+   --enable-checking       enable run-time checks
-+   --enable-targets        alternative target configurations
-+   --enable-64-bit-bfd     64-bit support (on hosts with narrower word sizes)
-++  --enable-poison-system-directories
-++                          warn for use of native system library directories
-+   --enable-gold[=ARG]     build gold [ARG={default,yes,no}]
-+   --enable-got=<type>     GOT handling scheme (target, single, negative,
-+                           multigot)
-+@@ -15504,7 +15507,18 @@ else
-+ fi
-+ 
-+ 
-++# Check whether --enable-poison-system-directories was given.
-++if test "${enable_poison_system_directories+set}" = set; then :
-++  enableval=$enable_poison_system_directories;
-++else
-++  enable_poison_system_directories=no
-++fi
-++
-++if test "x${enable_poison_system_directories}" = "xyes"; then
-+ 
-++$as_echo "#define ENABLE_POISON_SYSTEM_DIRECTORIES 1" >>confdefs.h
-++
-++fi
-+ 
-+ # Check whether --enable-got was given.
-+ if test "${enable_got+set}" = set; then :
-+diff --git a/ld/configure.ac b/ld/configure.ac
-+index 77edac3258c..a74dac63038 100644
-+--- a/ld/configure.ac
-++++ b/ld/configure.ac
-+@@ -103,6 +103,16 @@ AC_SUBST(use_sysroot)
-+ AC_SUBST(TARGET_SYSTEM_ROOT)
-+ AC_SUBST(TARGET_SYSTEM_ROOT_DEFINE)
-+ 
-++AC_ARG_ENABLE([poison-system-directories],
-++         AS_HELP_STRING([--enable-poison-system-directories],
-++                [warn for use of native system library directories]),,
-++         [enable_poison_system_directories=no])
-++if test "x${enable_poison_system_directories}" = "xyes"; then
-++  AC_DEFINE([ENABLE_POISON_SYSTEM_DIRECTORIES],
-++       [1],
-++       [Define to warn for use of native system library directories])
-++fi
-++
-+ dnl Use --enable-gold to decide if this linker should be the default.
-+ dnl "install_as_default" is set to false if gold is the default linker.
-+ dnl "installed_linker" is the installed BFD linker name.
-+diff --git a/ld/ld.h b/ld/ld.h
-+index 05649ff61b8..1818c227473 100644
-+--- a/ld/ld.h
-++++ b/ld/ld.h
-+@@ -163,6 +163,14 @@ typedef struct
-+      in the linker script.  */
-+   bool force_group_allocation;
-+ 
-++  /* If TRUE (the default) warn for uses of system directories when
-++     cross linking.  */
-++  bool poison_system_directories;
-++
-++  /* If TRUE (default FALSE) give an error for uses of system
-++     directories when cross linking instead of a warning.  */
-++  bool error_poison_system_directories;
-++
-+   /* Big or little endian as set on command line.  */
-+   enum endian_enum endian;
-+ 
-+diff --git a/ld/ld.texi b/ld/ld.texi
-+index db3a9f09b45..9dacc934f80 100644
-+--- a/ld/ld.texi
-++++ b/ld/ld.texi
-+@@ -2949,6 +2949,18 @@ string identifying the original linked file does not change.
-+ Passing @code{none} for @var{style} disables the setting from any
-+ @code{--build-id} options earlier on the command line.
-+ 
-++@kindex --no-poison-system-directories
-++@item --no-poison-system-directories
-++Do not warn for @option{-L} options using system directories such as
-++@file{/usr/lib} when cross linking.  This option is intended for use
-++in chroot environments when such directories contain the correct
-++libraries for the target system rather than the host.
-++
-++@kindex --error-poison-system-directories
-++@item --error-poison-system-directories
-++Give an error instead of a warning for @option{-L} options using
-++system directories when cross linking.
-++
-+ @kindex --package-metadata=@var{JSON}
-+ @item --package-metadata=@var{JSON}
-+ Request the creation of a @code{.note.package} ELF note section.  The
-+diff --git a/ld/ldfile.c b/ld/ldfile.c
-+index b8fd4e5d8e0..1f1d8e23bc9 100644
-+--- a/ld/ldfile.c
-++++ b/ld/ldfile.c
-+@@ -117,6 +117,23 @@ ldfile_add_library_path (const char *name, bool cmdline)
-+     new_dirs->name = concat (ld_sysroot, name + strlen ("$SYSROOT"), (const char *) NULL);
-+   else
-+     new_dirs->name = xstrdup (name);
-++
-++#ifdef ENABLE_POISON_SYSTEM_DIRECTORIES
-++  if (command_line.poison_system_directories
-++  && ((!strncmp (name, "/lib", 4))
-++      || (!strncmp (name, "/usr/lib", 8))
-++      || (!strncmp (name, "/usr/local/lib", 14))
-++      || (!strncmp (name, "/usr/X11R6/lib", 14))))
-++   {
-++     if (command_line.error_poison_system_directories)
-++       einfo (_("%X%P: error: library search path \"%s\" is unsafe for "
-++            "cross-compilation\n"), name);
-++     else
-++       einfo (_("%P: warning: library search path \"%s\" is unsafe for "
-++            "cross-compilation\n"), name);
-++   }
-++#endif
-++
-+ }
-+ 
-+ /* Try to open a BFD for a lang_input_statement.  */
-+diff --git a/ld/ldlex.h b/ld/ldlex.h
-+index 0538f0a06a1..d1de3aec23d 100644
-+--- a/ld/ldlex.h
-++++ b/ld/ldlex.h
-+@@ -166,6 +166,8 @@ enum option_values
-+   OPTION_CTF_VARIABLES,
-+   OPTION_NO_CTF_VARIABLES,
-+   OPTION_CTF_SHARE_TYPES,
-++  OPTION_NO_POISON_SYSTEM_DIRECTORIES,
-++  OPTION_ERROR_POISON_SYSTEM_DIRECTORIES,
-+   OPTION_WARN_EXECSTACK,
-+   OPTION_NO_WARN_EXECSTACK,
-+   OPTION_WARN_RWX_SEGMENTS,
-+diff --git a/ld/ldmain.c b/ld/ldmain.c
-+index 9290a189b0d..e2e3074e872 100644
-+--- a/ld/ldmain.c
-++++ b/ld/ldmain.c
-+@@ -321,6 +321,8 @@ main (int argc, char **argv)
-+   command_line.warn_mismatch = true;
-+   command_line.warn_search_mismatch = true;
-+   command_line.check_section_addresses = -1;
-++  command_line.poison_system_directories = true;
-++  command_line.error_poison_system_directories = false;
-+ 
-+   /* We initialize DEMANGLING based on the environment variable
-+      COLLECT_NO_DEMANGLE.  The gcc collect2 program will demangle the
-+diff --git a/ld/lexsup.c b/ld/lexsup.c
-+index c5960385572..da0a7829914 100644
-+--- a/ld/lexsup.c
-++++ b/ld/lexsup.c
-+@@ -613,6 +613,14 @@ static const struct ld_option ld_options[] =
-+ 		   "                                <method> is: share-unconflicted (default),\n"
-+ 		   "                                             share-duplicated"),
-+     TWO_DASHES },
-++  { {"no-poison-system-directories", no_argument, NULL,
-++    OPTION_NO_POISON_SYSTEM_DIRECTORIES},
-++    '\0', NULL, N_("Do not warn for -L options using system directories"),
-++    TWO_DASHES },
-++  { {"error-poison-system-directories", no_argument, NULL,
-++    OPTION_ERROR_POISON_SYSTEM_DIRECTORIES},
-++    '\0', NULL, N_("Give an error for -L options using system directories"),
-++    TWO_DASHES },
-+ };
-+ 
-+ #define OPTION_COUNT ARRAY_SIZE (ld_options)
-+@@ -625,6 +633,7 @@ parse_args (unsigned argc, char **argv)
-+   int ingroup = 0;
-+   char *default_dirlist = NULL;
-+   char *shortopts;
-++  char *BR_paranoid_env;
-+   struct option *longopts;
-+   struct option *really_longopts;
-+   int last_optind;
-+@@ -1692,6 +1701,14 @@ parse_args (unsigned argc, char **argv)
-+ 	  }
-+ 	  break;
-+ 
-++	case OPTION_NO_POISON_SYSTEM_DIRECTORIES:
-++	  command_line.poison_system_directories = false;
-++	  break;
-++
-++	case OPTION_ERROR_POISON_SYSTEM_DIRECTORIES:
-++	  command_line.error_poison_system_directories = true;
-++	  break;
-++
-+ 	case OPTION_PUSH_STATE:
-+ 	  input_flags.pushed = xmemdup (&input_flags,
-+ 					sizeof (input_flags),
-+@@ -1837,6 +1854,10 @@ parse_args (unsigned argc, char **argv)
-+       command_line.soname = NULL;
-+     }
-+ 
-++  BR_paranoid_env = getenv("BR_COMPILER_PARANOID_UNSAFE_PATH");
-++  if (BR_paranoid_env && strlen(BR_paranoid_env) > 0)
-++    command_line.error_poison_system_directories = true;
-++
-+   while (ingroup)
-+     {
-+       einfo (_("%P: missing --end-group; added as last command line option\n"));
-+-- 
-+2.40.1
-+
+diff --git a/configs/imxrt1050-evk_defconfig b/configs/imxrt1050-evk_defconfig
+index af060fb9f4..3eb556df06 100644
+--- a/configs/imxrt1050-evk_defconfig
++++ b/configs/imxrt1050-evk_defconfig
+@@ -7,16 +7,16 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/freescale/imxrt1050evk/genimage.cfg"
+ 
+ # Toolchain
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_7=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.7"
+ BR2_LINUX_KERNEL_DEFCONFIG="imxrt"
+ BR2_LINUX_KERNEL_UIMAGE=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="imxrt1050-evk"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="nxp/imx/imxrt1050-evk"
+ 
+ # Filesystem
+ BR2_TARGET_ROOTFS_EXT2=y
+@@ -30,7 +30,7 @@ BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-minimal.config"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.01"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imxrt1050-evk"
+ BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/freescale/imxrt1050evk/uboot.fragment"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
