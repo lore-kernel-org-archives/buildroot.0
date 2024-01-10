@@ -4,101 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 247A5C3DA6E
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 05:40:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30158C3DA6E
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jan 2024 06:43:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A87A88131D;
-	Wed, 10 Jan 2024 05:40:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A87A88131D
+	by smtp1.osuosl.org (Postfix) with ESMTP id AEB4180EB2;
+	Wed, 10 Jan 2024 06:43:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AEB4180EB2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cN1n10IgkGrQ; Wed, 10 Jan 2024 05:40:57 +0000 (UTC)
+	with ESMTP id rOWUrgVGh05F; Wed, 10 Jan 2024 06:43:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 86B748131E;
-	Wed, 10 Jan 2024 05:40:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 86B748131E
+	by smtp1.osuosl.org (Postfix) with ESMTP id A7FD380EB6;
+	Wed, 10 Jan 2024 06:43:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A7FD380EB6
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 63C7C1BF34C
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 05:40:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A8F5A1BF2BF
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 06:43:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3BC6F8131E
- for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 05:40:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3BC6F8131E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4101380EB6
+ for <buildroot@lists.busybox.net>; Wed, 10 Jan 2024 06:43:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4101380EB6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id k5VOQyqEdts5 for <buildroot@lists.busybox.net>;
- Wed, 10 Jan 2024 05:40:52 +0000 (UTC)
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com
- [IPv6:2607:f8b0:4864:20::836])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8D71E8131D
- for <buildroot@buildroot.org>; Wed, 10 Jan 2024 05:40:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8D71E8131D
-Received: by mail-qt1-x836.google.com with SMTP id
- d75a77b69052e-429b46135d0so1643041cf.2
- for <buildroot@buildroot.org>; Tue, 09 Jan 2024 21:40:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704865251; x=1705470051;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=Wl6KplL8vfqqzv9XIvHtOm+qlgn0/YVCH+xMxC333j8=;
- b=bKHjtJUNTohS8/nIQPnzsjEXg9nQ0UZn1x35Y2yHOk7Rcge3iKVJ1PiXkd/K/+mIb6
- ciSzInPy9wgi5m6+3OIfStK+/aRbmOpLEx4jQvI7RJ5pwVVhrfb+21gXpWcHuWWPXdCd
- Dv1kQYAVLVqu1aQH7LupYC35+CY1X2PKtkW9RQa5R0aKvkSsSgfVgPeL3U8JQqs5+VYJ
- YXFHm/i2W0xCnAksISLqf5JmmLSUFEBz+oh3HdcgBE2oYcOkPmwW6ZdVjvzklqdiSAtE
- e7Vpmm7w4nrXNnuVUH3sLEyJKK+qHUOLncxxM34d8eSEhs72ULAj60LVnoMWjsBMAgh5
- Kpzw==
-X-Gm-Message-State: AOJu0YzVOvwIXTE/HZE9m9sDO3dl2UERv7qAEpnseAIkbDoGV+wd1dCG
- LtrfLVoQfj/NGCU65J0meOgzWajgT1Uk1A==
-X-Google-Smtp-Source: AGHT+IE8kWehfow24cvasfCahOteXRnQwmSQ0KUU70I6cj4jEzLcuNUg6AgxZgtVGm7CpYkCj/gbDA==
-X-Received: by 2002:a05:622a:588:b0:429:b76a:c3fa with SMTP id
- c8-20020a05622a058800b00429b76ac3famr202269qtb.26.1704865251286; 
- Tue, 09 Jan 2024 21:40:51 -0800 (PST)
-Received: from [172.16.32.83] ([198.232.126.202])
- by smtp.gmail.com with ESMTPSA id
- cr14-20020a05622a428e00b0042997333149sm1497591qtb.63.2024.01.09.21.40.49
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 09 Jan 2024 21:40:51 -0800 (PST)
-Message-ID: <b3a8b9db-86ee-47c6-96e2-baa2cba61404@landley.net>
-Date: Tue, 9 Jan 2024 23:47:27 -0600
+ with ESMTP id hP3pNdmQgVWg for <buildroot@lists.busybox.net>;
+ Wed, 10 Jan 2024 06:43:41 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3A46080EB2
+ for <buildroot@buildroot.org>; Wed, 10 Jan 2024 06:43:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A46080EB2
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7000A40009
+ for <buildroot@buildroot.org>; Wed, 10 Jan 2024 06:43:38 +0000 (UTC)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US
-To: Greg Ungerer <gerg@linux-m68k.org>, Petr Vorel <pvorel@suse.cz>
-References: <20240103015240.1065284-1-pvorel@suse.cz>
- <CAMuHMdXGwyS-CL0vLdUP4Z4YEYhmcmDyC3YdGCnS=jFkqASqvw@mail.gmail.com>
- <20240103114957.GD1073466@pevik>
- <CAMuHMdX0s0gLRoPtjJmDnSmZ_MNY590dN+JxM1HKAL1g_bjX+w@mail.gmail.com>
- <ZZVOhlGPg5KRyS-F@yuki> <5a1f1ff3-8a61-67cf-59a9-ce498738d912@landley.net>
- <20240105131135.GA1484621@pevik>
- <90c1ddc1-c608-30fc-d5aa-fdf63c90d055@landley.net>
- <20240108090338.GA1552643@pevik>
- <a3d7f5ae-56c6-9cd8-2cda-2d50d12be9c4@landley.net>
- <461a6556-8f24-48f5-811a-498cb44f2d64@linux-m68k.org>
-From: Rob Landley <rob@landley.net>
-In-Reply-To: <461a6556-8f24-48f5-811a-498cb44f2d64@linux-m68k.org>
+To: buildroot@buildroot.org
+Date: Wed, 10 Jan 2024 06:43:38 -0000
+X-GND-Sasl: bot@bootlin.com
+Message-Id: <20240110064343.4101380EB6@smtp1.osuosl.org>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=landley-net.20230601.gappssmtp.com; s=20230601; t=1704865251; x=1705470051;
- darn=buildroot.org; 
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=Wl6KplL8vfqqzv9XIvHtOm+qlgn0/YVCH+xMxC333j8=;
- b=QJAuGcfNaPB3QaZkVuFalFN/qbMwMwE216K9UDf7P8itElf7W1nuONT5hn5N9RDVi1
- UMsce9k4JXEr05AiRw8XvqZnqOnef+RjiuiIaqO9la/x/h1z4qVz29z+IaAee/ToL77n
- fviBvTZ+vkd6KN96dviMZCLWExruDtsByDlyq6qUuoqkbevrldCvjTDlLZB/KUmv31My
- TCiJy3JWyWixlqqvcxQTfOhhGnTDScPSDHHaeYzBvX4u7h7fct40enJ0kRmYKJ9YGbjB
- cYxMIAfecArau0QstTB8b4SC5x8BVFzUa7DjctF8N1HjJt2X+xf7ZfYnCGuwK2AF5kVC
- Fmzw==
+ d=bootlin.com; s=gm1; 
+ t=1704869018; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
+ mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=GXEiWKtTsYxXG9MNAFSZBWTDch6S+jxYFCTVvOIgFGo=;
+ b=AuLHg2tubIzy9efwD6IpLOJfoH1XD/4YHI+jgwzkBWTvst0TDwgNpyQGTH8NJbrxehMZm6
+ MeNLrHfG8wvSY2hgvyLF5BTqYQBdVbhmTbLJclb5JFhv7jn6NcPzXAS3T0rPnz6utHAPQk
+ brSh0ZQ2icDTcMvc7k981R6CudzwiZbrIiq1EsO+1X20nHstLuwn1ICKKNvRhNDpaMbSfy
+ UKFiHDEHVBzwbb2V5oQdb47J3zAeYskg7XawyExk57Hozt0U6NuGosB1NXNso0t6JoJLkN
+ u4U9gv80EZ0vI1Wgof20PSPQT3xlf+BqrjuPNsLS6JqbRXx8K6Rc/WjVTOKxKg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=landley-net.20230601.gappssmtp.com
- header.i=@landley-net.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=QJAuGcfN
-Subject: Re: [Buildroot] Call for nommu LTP maintainer [was: Re: [PATCH
- 00/36] Remove UCLINUX from LTP]
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=AuLHg2tu
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2024-01-09
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -110,219 +69,167 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Niklas Cassel <niklas.cassel@wdc.com>,
- Andrea Cervesato <andrea.cervesato@suse.com>, Jonathan Corbet <corbet@lwn.net>,
- Linux-sh list <linux-sh@vger.kernel.org>,
- Christophe Lyon <christophe.lyon@linaro.org>,
- Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
- Li Wang <liwang@redhat.com>, linux-m68k@lists.linux-m68k.org,
- Geert Uytterhoeven <geert@linux-m68k.org>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>,
- Cyril Hrubis <chrubis@suse.cz>,
- John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
- linux-riscv <linux-riscv@lists.infradead.org>, buildroot@buildroot.org,
- ltp@lists.linux.it, automated-testing@lists.yoctoproject.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Hello,
+
+Autobuild statistics for 2024-01-09
+===================================
+
+      branch |  OK | NOK | TIM | TOT |
+  2023.02.x  |  4  |  2  |  0  |  6  |
+  2023.11.x  |  1  |  2  |  0  |  3  |
+    master   | 49  | 67  |  0  | 116 |
+
+Classification of failures by reason for master
+-----------------------------------------------
+
+                   exim-4.97.1 | 11
+  gobject-introspection-1.76.1 | 5 
+                  stunnel-5.71 | 5 
+ibm-sw-tpm2-5452af422edeff7... | 4 
+glibc-2.38-27-g750a45a78390... | 3 
+              libarchive-3.7.2 | 3 
+                libressl-3.8.2 | 3 
+cegui-00b4e1fe174da53b7ed72... | 2 
+                elfutils-0.189 | 2 
+                host-go-1.21.5 | 2 
+              libopenssl-3.2.0 | 2 
+                libselinux-3.5 | 2 
+     linux-5.10.162-cip24-rt10 | 2 
+                  linux-6.6.10 | 2 
+                    ngrep-1.47 | 2 
+                 openssh-9.6p1 | 2 
+             util-linux-2.39.2 | 2 
+                    brltty-6.6 | 1 
+                   duma-2.5.21 | 1 
+              host-rust-1.74.1 | 1 
+               ipmitool-1_8_19 | 1 
+               libglib2-2.76.1 | 1 
+                 libnss-3.96.1 | 1 
+                    pppd-2.5.0 | 1 
+          python-grpcio-1.60.0 | 1 
+            quickjs-2023-12-09 | 1 
+              sdl2_mixer-2.6.3 | 1 
+                 sudo-1.9.15p5 | 1 
+uclibc-ng-test-0f303c63fab7... | 1 
+                       unknown | 1 
 
 
-On 1/9/24 17:17, Greg Ungerer wrote:
-> 
-> On 10/1/24 06:24, Rob Landley wrote:
->> On 1/8/24 03:03, Petr Vorel wrote:
->>> Hi Rob, all,
->>>
->>> [ Added Niklas Cassel, who is maintainer of qemu_riscv64_nommu_virt_defconfig in
->>> buildroot ]
->> 
->> Hi Niklas!
->> 
->>>> Buildroot also apparently has an LTP package selectable in menuconfig:
->>>
->>>> https://github.com/buildroot/buildroot/tree/master/package/ltp-testsuite
->>>
->>>> But I haven't tried it...
->>>
->>> I'm the maintainer of the LTP package in buildroot in my private time.
->>> BTW I spent quite a lot of time fixing LTP (and some other system packages,
->>> e.g. nfs-utils) compilation on some old legacy architectures reported via
->>> http://autobuild.buildroot.net/ I've never used in the reality.
->>> But I certainly don't have time to drive nommu support in my private time.
->>> I don't even have an interest, I don't use any nommu device.
->> 
->> I do, but I've never done much with LTP, and I have my hands full with toybox
->> and mkroot already.
->> 
->>> Therefore nobody who is not involved in nommu will not find a time to support it
->>> in LTP (support does not mean just to add the functionality to the new C API,
->>> but run tests on nommu and fix failing bugs). I suppose nobody is paid to work
->>> on nommu platforms, it would have to be a hobby project, right?
->> 
->> A bunch of people are paid to work on nommu platforms, and I've worked with them
->> a bunch, but none of them talk to linux-kernel. They find the culture toxic,
->> insular, and categorically dismissive of their interests.
-> 
-> I have been involved in the kernel nommu space for 20 years, and sure, there is
-> some of that. But mostly spending some time and effort to get involved pays off.
-> I have seen potential contributors show up with some arrogant attitudes too,
-> so it cuts both ways here.
-> 
-> The m68k community I have been part of has been nothing but welcoming. The mm
-> people have tried hard to keep nommu support up-to-date where almost none of them
-> actually have a vested interest in doing so.
-> 
-> What I have seen is that many companies working in this space just don't want
-> to spend the time and effort to go mainline.
+Detail of failures for master
+-----------------------------
 
-Sometimes they don't bother. Sometimes there's a language barrier. Sometimes
-they can't get anything newer than 2.6 working because that's the BSP they were
-given so what's the point of trying to engage upstream? Sometimes they think
-it's their upstream vendor's responsibility. Sometimes they poke their head up
-and get it bit off ala http://landley.net/notes-2008.html#11-12-2008 and then
-that serves as a warning to others for generations. Sometimes the company's
-legal department thinks it's a terrible idea to attract attention from people
-like the SFLC. And sometimes...
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    mips     |           brltty-6.6           | NOK | http://autobuild.buildroot.net/results/fa99c7fbf854c92eb3fb692b94bbd776e6c37412 |     
+    i686     | cegui-00b4e1fe174da53b7ed72... | NOK | http://autobuild.buildroot.net/results/1004e873efb0ea01b1b4b2199d4dd20eda593d80 |     
+    i686     | cegui-00b4e1fe174da53b7ed72... | NOK | http://autobuild.buildroot.net/results/52ea767f2d401c31a04526bb2638a8330c57fda9 |     
+  aarch64    |          duma-2.5.21           | NOK | http://autobuild.buildroot.net/results/f82c6dc8de9551b7f7ed1becaf869a669767711a | ORPH
+   nios2     |         elfutils-0.189         | NOK | http://autobuild.buildroot.net/results/e16dc6ab6c93eefc2d38b4049583d4f5a4fa9e5e | ORPH
+microblazeel |         elfutils-0.189         | NOK | http://autobuild.buildroot.net/results/68fb816101799725422bb7137d8103c85097b152 | ORPH
+   mips64    |          exim-4.97.1           | NOK | http://autobuild.buildroot.net/results/b8675c0e3489a1b8bcbddbe38caa61f2311814b7 |     
+    i686     |          exim-4.97.1           | NOK | http://autobuild.buildroot.net/results/4f29475479510419b98e91c4eb0315af438302e8 |     
+ powerpc64   |          exim-4.97.1           | NOK | http://autobuild.buildroot.net/results/e1a5143d7cb82e3b55ae71eb903a9b5268912b51 |     
+  aarch64    |          exim-4.97.1           | NOK | http://autobuild.buildroot.net/results/1ad1b4250b2f04cdde4a34c10e86c0fb37411f58 |     
+   sh4eb     |          exim-4.97.1           | NOK | http://autobuild.buildroot.net/results/93a995a10545349582430f2761df139077ece86f |     
+   armeb     |          exim-4.97.1           | NOK | http://autobuild.buildroot.net/results/acc8586064f09108f6b4572812ee1b8773cb4977 |     
+   s390x     |          exim-4.97.1           | NOK | http://autobuild.buildroot.net/results/24ce313089315e47930aeb7906a2ac5d3e1ea925 |     
+   mips64    |          exim-4.97.1           | NOK | http://autobuild.buildroot.net/results/4c92e2e4dd3c59e69cefe8ab851e9b330c895b1c |     
+   s390x     |          exim-4.97.1           | NOK | http://autobuild.buildroot.net/results/ef6916a1d3784ace50b0836b6bbc7a5753f15592 |     
+   mips64    |          exim-4.97.1           | NOK | http://autobuild.buildroot.net/results/844c22d604ffda1d5e5e4ea0d44f2aa79b6ce11f |     
+ microblaze  |          exim-4.97.1           | NOK | http://autobuild.buildroot.net/results/3178f1eebca5cd9e5faad7c1dd7a85eb41046214 |     
+ powerpc64   | glibc-2.38-27-g750a45a78390... | NOK | http://autobuild.buildroot.net/results/a094a024fa802aef3f5a181a5e511f2dd63f82e7 |     
+  powerpc    | glibc-2.38-27-g750a45a78390... | NOK | http://autobuild.buildroot.net/results/a0dcf3cd7102c5c956744ca54143ef56a5d1dba1 |     
+ powerpc64   | glibc-2.38-27-g750a45a78390... | NOK | http://autobuild.buildroot.net/results/075ac4fb3b7af5f8a0cd435bbad94f77dacadc1e |     
+    or1k     |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/458133b2bd79d9bee5095c2484a1aa3e81177822 | ORPH
+    m68k     |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/5dbb81434747eb545e07d0730a35af8827c56073 | ORPH
+   nios2     |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/bd6eca772df5445b8fa9b07395fe6eb518dede78 | ORPH
+   nios2     |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/f73160917ddaea7183e3e39927a5ed3e6887b36a | ORPH
+    or1k     |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/ed4000fb50ec433dfe50b1b6cabdb1a7e62f88cd | ORPH
+    arm      |         host-go-1.21.5         | NOK | http://autobuild.buildroot.net/results/5e89662e913cc80ad766fe6c4f3473814bf8130b |     
+   mipsel    |         host-go-1.21.5         | NOK | http://autobuild.buildroot.net/results/aa2b466d030f1676ac2ff718e6c95a75d11cec8d |     
+  aarch64    |        host-rust-1.74.1        | NOK | http://autobuild.buildroot.net/results/19ec5abf50a945751b1b90de5170418119cf9baf |     
+    arm      | ibm-sw-tpm2-5452af422edeff7... | NOK | http://autobuild.buildroot.net/results/55659441749680bab1ce36bb90494b57350c5dc9 |     
+  sparc64    | ibm-sw-tpm2-5452af422edeff7... | NOK | http://autobuild.buildroot.net/results/3aa9ac1d167c11dc1077e309e2b845692f14e667 |     
+  aarch64    | ibm-sw-tpm2-5452af422edeff7... | NOK | http://autobuild.buildroot.net/results/7f3dfcde08869c23986c61649ec0ace7f927e684 |     
+  powerpc    | ibm-sw-tpm2-5452af422edeff7... | NOK | http://autobuild.buildroot.net/results/e799c86eab7f1488b22e0689f82068dc59a20a57 |     
+ aarch64_be  |        ipmitool-1_8_19         | NOK | http://autobuild.buildroot.net/results/fc1f4cab7e46a3a53c8958f7bbbb09b270a954f2 |     
+    or1k     |        libarchive-3.7.2        | NOK | http://autobuild.buildroot.net/results/2f826e05b5c0dceee439f314bab2d7789393dfa3 |     
+   nios2     |        libarchive-3.7.2        | NOK | http://autobuild.buildroot.net/results/343a8b26f89977feb3ccd2ccb45cb0937b31d9fa |     
+    or1k     |        libarchive-3.7.2        | NOK | http://autobuild.buildroot.net/results/19f4e0156407a2e0c97bd0eac42105d0b2068ed2 |     
+   arceb     |        libglib2-2.76.1         | NOK | http://autobuild.buildroot.net/results/4460e6950d02e817813dbde541b2754f66bc0a3e |     
+   x86_64    |         libnss-3.96.1          | NOK | http://autobuild.buildroot.net/results/4ff23c3abf9f0f91aa63b43bf7c47d48e17e65ef |     
+   s390x     |        libopenssl-3.2.0        | NOK | http://autobuild.buildroot.net/results/751423087c43a46903938854990c7e298afbc4ab | ORPH
+   s390x     |        libopenssl-3.2.0        | NOK | http://autobuild.buildroot.net/results/fa9d90866a38b47cb7151238de3633933547de0c | ORPH
+  powerpc    |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/bb1f774fe3b0db5a6192078181a9df388573267c | ORPH
+  mips64el   |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/87fe13e1134a737d0331e9b9a224b59ef68c0495 | ORPH
+   arceb     |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/3aeed1d87d19741840a747acee51d070d07d581d | ORPH
+    i586     |         libselinux-3.5         | NOK | http://autobuild.buildroot.net/results/af579508218ac4432e9dd918b00e98f4e5642bc8 |     
+    i686     |         libselinux-3.5         | NOK | http://autobuild.buildroot.net/results/c7a5effccf603be6f302cc47f0bf1f135e12e51d |     
+  powerpc    |   linux-5.10.162-cip24-rt10    | NOK | http://autobuild.buildroot.net/results/db84db14bb141f1cd526cba922a0864c21fd67b0 | ORPH
+  mips64el   |   linux-5.10.162-cip24-rt10    | NOK | http://autobuild.buildroot.net/results/633b3a8ded5ec2c0bef82431c1cb3b03fc00d3b0 | ORPH
+    sh4a     |          linux-6.6.10          | NOK | http://autobuild.buildroot.net/results/595e821dbe8176d4feb2e9dc1cb696a271a8691c | ORPH
+   armeb     |          linux-6.6.10          | NOK | http://autobuild.buildroot.net/results/0a80afde5abab0c1651ede0b36b91dccd9481f55 | ORPH
+  aarch64    |           ngrep-1.47           | NOK | http://autobuild.buildroot.net/results/320fc64a3f016910685dce1e49cd0d6b0e7f385e |     
+  mips64el   |           ngrep-1.47           | NOK | http://autobuild.buildroot.net/results/05c916162b9c1027cf53f1699a1f5653151098ed |     
+powerpc64le  |         openssh-9.6p1          | NOK | http://autobuild.buildroot.net/results/f31dd1ff9a1b533daacd94a1a081c71ef1c45fc7 | ORPH
+  powerpc    |         openssh-9.6p1          | NOK | http://autobuild.buildroot.net/results/6d3eb6bf032aefb04bfd8b26c2322fe05ef58a52 | ORPH
+  sparc64    |           pppd-2.5.0           | NOK | http://autobuild.buildroot.net/results/2878ecc594267fc7080bde6a4d5f250645ad0579 |     
+    i686     |      python-grpcio-1.60.0      | NOK | http://autobuild.buildroot.net/results/c8e4c560b6da3c36fdc1034ca6a9bde3986d457f |     
+    arm      |       quickjs-2023-12-09       | NOK | http://autobuild.buildroot.net/results/9947edf86b311684e9e0065d638edee22c0a47df |     
+    arm      |        sdl2_mixer-2.6.3        | NOK | http://autobuild.buildroot.net/results/039b71d2341a3742360ec6ce29f15fbd287b74d3 | ORPH
+   x86_64    |          stunnel-5.71          | NOK | http://autobuild.buildroot.net/results/3fca78e655d9f79958a841f31a665cc0b84e1db8 |     
+  mips64el   |          stunnel-5.71          | NOK | http://autobuild.buildroot.net/results/696eb05079fbb6424f31078382890e4c613b65dd |     
+   mips64    |          stunnel-5.71          | NOK | http://autobuild.buildroot.net/results/db4969ce71ef0a88dea74f4d883223c9565f7075 |     
+  sparc64    |          stunnel-5.71          | NOK | http://autobuild.buildroot.net/results/5dc5c57807bd59c91d237011e3f39f81e45ab937 |     
+    or1k     |          stunnel-5.71          | NOK | http://autobuild.buildroot.net/results/89f9267d2ed5343bfbb68f8622be9c794f12010d |     
+    arm      |         sudo-1.9.15p5          | NOK | http://autobuild.buildroot.net/results/7eaaca9592661e0ac15e8efa55084dba28e0d634 | ORPH
+   mips64    | uclibc-ng-test-0f303c63fab7... | NOK | http://autobuild.buildroot.net/results/8c6585b1b71edc25bc88d6bb1f243fca66520c35 |     
+    i686     |            unknown             | NOK | http://autobuild.buildroot.net/results/21b7294a1de16f4756d572b0e53e957619bbc0e6 |     
+  aarch64    |       util-linux-2.39.2        | NOK | http://autobuild.buildroot.net/results/8ec7492fed4cdc6193261934103442a566e0c868 | ORPH
+    arc      |       util-linux-2.39.2        | NOK | http://autobuild.buildroot.net/results/a588e7390196a4af2ce6e618fccf9b4a3fc191d2 | ORPH
 
 
-The SmartFusion 2 project I was doing on cortex-m was for a project that was to
-be launched into space on a NASA rocket, and thus fell under ITAR export
-regulations (as the entire US space program has since 1996 due to
-https://en.wikipedia.org/wiki/International_Traffic_in_Arms_Regulations#:~:text=Intelsat
-) and my manager explained it to me as:
+Classification of failures by reason for 2023.02.x
+--------------------------------------------------
 
-"If I buy a screwdriver from Home Depot, it's just a screwdriver. If I use it to
-turn a screw on a spacecraft it is now a munition and cannot be discussed with
-non-US persons".
+              host-rust-1.67.1 | 1 
+               madplay-0.15.2b | 1 
 
-The stupid linked above was:
 
-1) cryptography was categorized as a munition until Bill Clinton relaxed it via
-executive order, because 56 bit https was preventing anybody from trusting the
-web with their credit card data.
+Detail of failures for 2023.02.x
+--------------------------------
 
-2) Before that, in 1996, china wanted to launch a satellite into space with
-crypto stuff so they negotiated with the USA to get some cryptographic hardware
-which was delivered/installed under armed guard and escorted to the launch pad.
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  sparc64    |        host-rust-1.67.1        | NOK | http://autobuild.buildroot.net/results/32e73c881402054bcf27d2991b0a0bb895de86ee |     
+   armeb     |        madplay-0.15.2b         | NOK | http://autobuild.buildroot.net/results/d97df7fb2a3648d46fcbd60f5b020f3813d437c4 | ORPH
 
-3) The rocket blew up on launch, scattering debris over a chinese city (becuase
-of COURSE china's rocket launches go over large population centers). The crypto
-hardware was never recovered.
 
-4) It became a scandal. Congress freaked. And somehow in the scuffle ITAR export
-regulations were extended from cryptography to the entire US space program.
+Classification of failures by reason for 2023.11.x
+--------------------------------------------------
 
-5) The US space program dried up and blew away, as engineers had to choose
-between "I can work on space stuff" and "I can have any sort of professional
-network online". (Because who online is a "non-US person"? That includes canada.
-You can't discuss ITAR subjects with canadians. Or foreign nationals living in
-the USA. You couldn't ask Alan Cox a question about an ITAR project.)
+              host-rust-1.71.1 | 1 
+                    pppd-2.5.0 | 1 
 
-So that's a whole category that stays very quiet about what they do, and whose
-legal analysis of the GPL is "we're making 3 of these and shooting them into
-space, if you retrieve one from space and demand source code from us we will
-forward you to the relevant federal agencies, and there's a nonzero chance
-you'll be on a black site in Diego Garcia within 24 hours where they will figure
-out how you did that. Or maybe you'll get the code. Who knows?"
 
-Me, I try to avoid that kind of contract...
+Detail of failures for 2023.11.x
+--------------------------------
 
-> That is a business decision they
-> make, and that is fine. Heck my work in actual mainline has never really been
-> paid for by any company and I have sunk a _lot_ of time into it. (Full disclosure
-> I did get paid to work on early porting and support - just not geting it into
-> mainline and maintain it there).
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  aarch64    |        host-rust-1.71.1        | NOK | http://autobuild.buildroot.net/results/e1c41709819dc6aedeaa3907ad063192d842d149 |     
+   sparc     |           pppd-2.5.0           | NOK | http://autobuild.buildroot.net/results/52473020f0f190322092d9e0691832cdd5a8c558 |     
 
-The thing is if you post something _once_ it gets ignored, and if you follow-up
-long enough for it to go in (which often takes years), it will then get ripped
-out again a few years later because "we never hear from anybody who uses this".
 
-Engaging with the community is signing up for an ongoing commitment.
 
->> For example, cortex-m is a large nommu platform on which vendors support Linux
->> BSPs, but notice how page 8 of
->> https://www.microsemi.com/document-portal/doc_view/132181-linux-cortex-m-users-manual
->> points at a cross compiler toolchain from _2010_ and page 4 says they're booting
->> a 2.6.33 kernel?
-> 
-> Any company/person who follows the route of not working with the linux kernel
-> community to get their work included is going to inevitably get stuck on older
-> versions of everything.
-
-I fight hard to get current versions of everything to work on all my supported
-targets. This requires regular regression testing, and I maintain a pile of
-patches that I post here periodically but I fully admit will probably never go in:
-
-  https://lkml.iu.edu/hypermail/linux/kernel/2302.2/05594.html
-
-(Sigh, now that 6.7 is out I should post the new round...)
-
-People who want to use my kernels as a source are welcome to do so (and I've
-seen my patches quietly show up in other projects), but getting upstream to
-actually _fix_ anything? Every one of those patches had a link to the previous
-time it was posted to the list and ignored.
-
-I mean literally, the first of those patches teaches the makefile to autodetect
-whether $PREFIX-cc is gcc or llvm and just do the right thing, and I was told
-that they actively didn't want it to:
-
-https://lkml.iu.edu/hypermail/linux/kernel/2302.2/07184.html
-
-That is modern linux-kernel development.
-
->> I'm a bit weird in that I try to get CURRENT stuff to work on nommu, and a lot
->> of people have been happy to consume my work, but getting any of them to post
->> directly to linux-kernel is like pulling teeth.
-> 
-> I regularly test nommu configurations (as in every kernel rc and release) on m68k
-> and at least every release on other architectures like arm(*) and recently on
-> riscv as well.
-
-Sigh, I should start caring about riscv. I added or1k support, I should do
-riscv. (Except I did or1k because I found it in actual hardware, the Orange Pi
-3b's power controller is an or1k asic so I needed an or1k toolchain to build
-some of u-boot's firmware or else the board couldn't reboot, and there was a
-qemu-system-or1k already, which turned into adding it to mkroot via a long
-https://lore.kernel.org/openrisc/ZX1xbs_AGdgLgcx7@antec/ thread with its
-developers. Alas I still can't get qemu to exit (I.E. virtually reboot or power
-off), apparently I need to reinstall my laptop to have a new enough version of
-python 3 to build a newer qemu with. It's on the todo list...)
-
-I still have a hard time considering riscv anything other than open source's
-version of Itanium. Promises of ubiquity, but even a 28 nanometer mask is still
-6 figures before you run any wafers and your mask build process is sucking in
-all the black box libraries the fab can sell you, so what does "open" really get
-you here? Cortex-m got cheap when the superh patents expired so Arm didn't have
-to pay royalties to hitachi (renesas?) for the thumb instruction set anymore,
-and they belt those suckers en masse amortizing the up-front costs over ENORMOUS
-volume.
-
-And yes, j-core was trying to fix the closed source library and toolchain issues
-back when I was still working with them. Among other things fishing
-Google/skywater's openlane toolchain build out of their magic docker and
-reproducing it under a vanilla debootstrap, ala
-https://github.com/j-core/openlane-vhdl-build (As with most corporate
-clusterfscks, once you dig far enough it turns out you can throw over 90% of it
-out...)
-
-But these days I'm trying to get toybox to 1.0...
-
-> (*) somewhat annoyingly needing a minor patch to run the versatile qemu platform
->      I like to test with. But hey, that is on me :-)
-
-I would very much like to add more nommu targets to mkroot, can I get your
-build/config info offline? (I tried fishing configs out of buildroot a couple
-years ago, but after the THIRD one where the secret was "use very old versions
-of packages, the current stuff is broken"... And the problems were things like
-"the conversion to device tree deleted a huge chunk of this infrastructure", not
-simple fixes.)
-
-> Regards
-> Greg
-
-Rob
+-- 
+http://autobuild.buildroot.net
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
