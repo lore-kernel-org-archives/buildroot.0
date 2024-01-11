@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4E80C47077
-	for <buildroot@archiver.kernel.org>; Thu, 11 Jan 2024 07:02:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12E85C47077
+	for <buildroot@archiver.kernel.org>; Thu, 11 Jan 2024 07:09:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4619D40133;
-	Thu, 11 Jan 2024 07:02:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4619D40133
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9C00840549;
+	Thu, 11 Jan 2024 07:09:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9C00840549
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OGJMUlxYcqQW; Thu, 11 Jan 2024 07:02:44 +0000 (UTC)
+	with ESMTP id zv3XmP2TmIL5; Thu, 11 Jan 2024 07:09:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3C01F40538;
-	Thu, 11 Jan 2024 07:02:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C01F40538
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7D9121BF359
- for <buildroot@lists.busybox.net>; Thu, 11 Jan 2024 07:02:41 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9EFFB43809;
+	Thu, 11 Jan 2024 07:09:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9EFFB43809
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7498F1BF2F5
+ for <buildroot@lists.busybox.net>; Thu, 11 Jan 2024 07:09:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 62DA283E12
- for <buildroot@lists.busybox.net>; Thu, 11 Jan 2024 07:02:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 62DA283E12
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4D1A041F82
+ for <buildroot@lists.busybox.net>; Thu, 11 Jan 2024 07:09:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D1A041F82
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id j4wVNIx5H2cq for <buildroot@lists.busybox.net>;
- Thu, 11 Jan 2024 07:02:40 +0000 (UTC)
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com
- [IPv6:2607:f8b0:4864:20::d31])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8B7D083DCF
- for <buildroot@buildroot.org>; Thu, 11 Jan 2024 07:02:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B7D083DCF
-Received: by mail-io1-xd31.google.com with SMTP id
- ca18e2360f4ac-7bc3e297bc9so226733439f.3
- for <buildroot@buildroot.org>; Wed, 10 Jan 2024 23:02:40 -0800 (PST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZzX9I7zdGNdm for <buildroot@lists.busybox.net>;
+ Thu, 11 Jan 2024 07:09:14 +0000 (UTC)
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com
+ [IPv6:2607:f8b0:4864:20::12d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 409E741E88
+ for <buildroot@buildroot.org>; Thu, 11 Jan 2024 07:09:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 409E741E88
+Received: by mail-il1-x12d.google.com with SMTP id
+ e9e14a558f8ab-3606f3b8069so22992915ab.2
+ for <buildroot@buildroot.org>; Wed, 10 Jan 2024 23:09:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704956559; x=1705561359;
+ d=1e100.net; s=20230601; t=1704956953; x=1705561753;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=5W3UVisoBiBEVxdo8SouWPv5B6YDuXDNlXysGiwUofM=;
- b=Mw25LDiqabM5yv8HSEDijPvBEHnNbHNffJkp1xpOxDjxS4cusoXpfH1h9JswKwy8Xa
- sQSLuEcLBXesWfIBBKA27sKnlscq+EmvZ9lXoZQpUAC0RGKIyW5zddIne6+a4gH/Ykun
- yfB14RYcBpscbAgL8OTJgHAi9mZ/S9pWtDUfCvULJEMYjhTsK3pkG/Huiyo0jO5YnL9b
- tNQwtmuqLYqezyskW39t679T6kotTIOrARVjOtkyHSW66kF5vqKlFOXQEY7w3xcUEa+Y
- ioUSsdlXb0GiCkLjpgXZdBPiydTwpyBf7zkF6Kdzx4k40EXQcfU5PsDPkmCEYANB8F0P
- Y5eQ==
-X-Gm-Message-State: AOJu0Yz8hSKUKy/0GTLE04Tsd9xQ2rtXrNLYS+M3i4AMPN3gMMD4U4X5
- 6nnZaLv7WFkVHG19oHJ+N0BDcgeS6vpP9Q==
-X-Google-Smtp-Source: AGHT+IGoq868pw5XFV9Yw+V8zyYfwrxSYTvUUYPTO+VZT+cc0HTSNStWWD/CUu1ErJcCWfwj8lu9zA==
-X-Received: by 2002:a5e:c602:0:b0:7bc:3c94:d888 with SMTP id
- f2-20020a5ec602000000b007bc3c94d888mr870884iok.0.1704956559174; 
- Wed, 10 Jan 2024 23:02:39 -0800 (PST)
+ bh=Un/OuzTg0SmprKQkzZgU4hIgu+WOo3BGmgoPTfzwKkg=;
+ b=QTQcB3FutrhWELYh5WKtuN6F5JJew1UEAlp5Kaw2GKe28QlsDvnY4vSJX8GZEt1ZlV
+ 5ud3NxJBiJo2W2y3cdpe+ssg9x9ddoss3Dsfl6WB408zu+ilu2xPU3Z80jsgCKwqRyEE
+ cfC2TKGqIF3o6z/w83j+lF8Zj2ZL0oo/TTlRM30BB9KkaqXRJVNcC2G0wsYQDhi+ay2c
+ 7XUhn3fBgSsiqFEBOqldKqlPYgOfYVLXorSBOhxDd7nYGdsXDYRmBrIn4TwFHSQJ+TsR
+ TyUi47wRR0Dxzja6EWpsWqqGVEPBBEhKU1vKZo9q1YcYSQNU7hx8wA5DJfqdwLWTPEzZ
+ y2nw==
+X-Gm-Message-State: AOJu0Ywg2caYBrvPU645N8DfHn5LWej4Ga+rrhRA9OLR7ad4/LVg3hkl
+ 5sfzWIUmyQvShtO+fUbc7GtFQ3vNO1hyxw==
+X-Google-Smtp-Source: AGHT+IHbuxWF6PhPEbVHH+t/FlyrN6oe3am2ADziWqnDKneoLqyWlHb7fLhhsYyoefXrkxwO8fRo5w==
+X-Received: by 2002:a92:c205:0:b0:360:8cf5:7d81 with SMTP id
+ j5-20020a92c205000000b003608cf57d81mr833416ilo.49.1704956952942; 
+ Wed, 10 Jan 2024 23:09:12 -0800 (PST)
 Received: from james-x399.localdomain (71-218-103-119.hlrn.qwest.net.
  [71.218.103.119]) by smtp.gmail.com with ESMTPSA id
- g21-20020a02cd15000000b0046df3b352casm150271jaq.38.2024.01.10.23.02.38
+ 8-20020a056e020ca800b0035f75e80d1esm117929ilg.52.2024.01.10.23.09.12
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 10 Jan 2024 23:02:38 -0800 (PST)
+ Wed, 10 Jan 2024 23:09:12 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 11 Jan 2024 00:02:15 -0700
-Message-Id: <20240111070215.3064748-1-james.hilliard1@gmail.com>
+Date: Thu, 11 Jan 2024 00:09:10 -0700
+Message-Id: <20240111070910.3068587-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1704956559; x=1705561359; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1704956953; x=1705561753; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=5W3UVisoBiBEVxdo8SouWPv5B6YDuXDNlXysGiwUofM=;
- b=O6wEu+zaWEMkNNRF1h8mJDfM+2aBqBa0y0mC3ne2T3xwwJGoaaC/C/wqRgucFbNwOY
- bXfIIHhzw6SECQxCg4rcPovKzTCNeyPIR9sq4S3ED2x56RN/pohiL84tsvMUuBBXubrQ
- 2N+GWr6O1uLX3WfKA5XRedHtrN2wKz6qMdMEZpExkHQaYLmwSdGeV4ONKaM/VQDv056L
- 7k1R/vVMP3uxAheNVmqVoHXGkmd4Wj03h+8VH+LxU2ZvByCwfKSo04rx21CD9I8BOqOd
- rpwMTyeGvn+gC9+yH9kCgWszXcFTZDOtHQwP8FX6apoQDjWHNVz5YYOOPaaF16HARYrC
- jfZQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=Un/OuzTg0SmprKQkzZgU4hIgu+WOo3BGmgoPTfzwKkg=;
+ b=R8ua32gH9Df8TlEiDFiEIqoLXFmf+JAnIXeMxh0/9CgeccPXYh5OYhVGeWhMo4sQa9
+ noTWmxkJ6nADjhU4dRGSzu/iYn2F9h3tuC18VZFUvvTX4BfxDoTaRTLXUWMJoYrUyaB7
+ zOtbgUVuPG/I9DYb/geAUv+L1T+VEvh/FQfKK0QPQgFSuB99UoKx13X871mtFScobIef
+ Bu3ZR3NHnWdahiQRLd19WabaPoGJG3e6m4XmxnWtmj+LjfLHuNhYumO1KYU9Mn4ugAgG
+ xXglUSYqmKdV1B0rxFRAE1oWJPVJ0VcD2/LecMW20b1uftZQJ4o16yXWTEEf+jwxoR6Q
+ yqaQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=O6wEu+za
-Subject: [Buildroot] [PATCH 1/1] package/python-smbprotocol: bump to version
- 1.12.0
+ header.a=rsa-sha256 header.s=20230601 header.b=R8ua32gH
+Subject: [Buildroot] [PATCH 1/1] package/python-socketio: bump to version
+ 5.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,40 +102,37 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-smbprotocol/python-smbprotocol.hash | 7 +++----
- package/python-smbprotocol/python-smbprotocol.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ package/python-socketio/python-socketio.hash | 4 ++--
+ package/python-socketio/python-socketio.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-smbprotocol/python-smbprotocol.hash b/package/python-smbprotocol/python-smbprotocol.hash
-index a46f9f635b..b9d5f74999 100644
---- a/package/python-smbprotocol/python-smbprotocol.hash
-+++ b/package/python-smbprotocol/python-smbprotocol.hash
-@@ -1,6 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/smbprotocol/json
--md5  a7474ab4cf8912dffaab56ad5067f429  smbprotocol-1.10.1.tar.gz
--sha256  b5bc9d4930ec947d42c21089a4d373b97e3f6488fd15d32d27189312fd8a04c9  smbprotocol-1.10.1.tar.gz
--
--# Locally computed
-+md5  ccbb42bdd58a0070f56e966d8562451b  smbprotocol-1.12.0.tar.gz
-+sha256  5916a4b6c948bb70f82c246bdbfc86cf152226b71dac9f33b3d731d91e86274f  smbprotocol-1.12.0.tar.gz
-+# Locally computed sha256 checksums
- sha256  4c3c550abc2b04c507ed0d641dd7e524eaff5bd06c7862af957301836d496d15  LICENSE
-diff --git a/package/python-smbprotocol/python-smbprotocol.mk b/package/python-smbprotocol/python-smbprotocol.mk
-index 17c2b17dbc..ece0744252 100644
---- a/package/python-smbprotocol/python-smbprotocol.mk
-+++ b/package/python-smbprotocol/python-smbprotocol.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-socketio/python-socketio.hash b/package/python-socketio/python-socketio.hash
+index abdcc3a5b7..a7756eb39d 100644
+--- a/package/python-socketio/python-socketio.hash
++++ b/package/python-socketio/python-socketio.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/python-socketio/json
+-md5  e63369252a9d383cbfc503337b864733  python-socketio-5.7.2.tar.gz
+-sha256  92395062d9db3c13d30e7cdedaa0e1330bba78505645db695415f9a3c628d097  python-socketio-5.7.2.tar.gz
++md5  207c7452bf6f1f444d8b70cac8801647  python-socketio-5.11.0.tar.gz
++sha256  b03186e04b942088781f6286c13604a853e5e35ed59158c51ff7af22fa032e6f  python-socketio-5.11.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  c9e97d3dbc1fbbcdb4f7808b282cd646db887aff4f5313fe6bbe8d4c31405a9c  LICENSE
+diff --git a/package/python-socketio/python-socketio.mk b/package/python-socketio/python-socketio.mk
+index aecff55ef4..dc0c24fef5 100644
+--- a/package/python-socketio/python-socketio.mk
++++ b/package/python-socketio/python-socketio.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PYTHON_SMBPROTOCOL_VERSION = 1.10.1
-+PYTHON_SMBPROTOCOL_VERSION = 1.12.0
- PYTHON_SMBPROTOCOL_SOURCE = smbprotocol-$(PYTHON_SMBPROTOCOL_VERSION).tar.gz
--PYTHON_SMBPROTOCOL_SITE = https://files.pythonhosted.org/packages/13/1a/73ad1883beebe4f6f47879cb9880690944faa00681141920c7a2219f6152
-+PYTHON_SMBPROTOCOL_SITE = https://files.pythonhosted.org/packages/57/72/d95216a9fd5da1b2fa225130741f50d4949c8f76d46669d30921c06d69ff
- PYTHON_SMBPROTOCOL_SETUP_TYPE = setuptools
- PYTHON_SMBPROTOCOL_LICENSE = MIT
- PYTHON_SMBPROTOCOL_LICENSE_FILES = LICENSE
+-PYTHON_SOCKETIO_VERSION = 5.7.2
+-PYTHON_SOCKETIO_SITE = https://files.pythonhosted.org/packages/ee/56/294629986bf6cea96e0edb3933a7f2fac7a079d12909e893903a2effc670
++PYTHON_SOCKETIO_VERSION = 5.11.0
++PYTHON_SOCKETIO_SITE = https://files.pythonhosted.org/packages/7a/e1/2817819a5635a099fda9fc758c51dc2f07996d6928d744639afcf5c5ddbb
+ PYTHON_SOCKETIO_SETUP_TYPE = setuptools
+ PYTHON_SOCKETIO_LICENSE = MIT
+ PYTHON_SOCKETIO_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
