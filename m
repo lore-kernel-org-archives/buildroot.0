@@ -1,87 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B00FDC4707B
-	for <buildroot@archiver.kernel.org>; Thu, 11 Jan 2024 04:31:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2721C47077
+	for <buildroot@archiver.kernel.org>; Thu, 11 Jan 2024 04:45:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2016F83E46;
-	Thu, 11 Jan 2024 04:31:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2016F83E46
+	by smtp3.osuosl.org (Postfix) with ESMTP id F01436143E;
+	Thu, 11 Jan 2024 04:45:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F01436143E
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Ini7wGX32dnj; Thu, 11 Jan 2024 04:45:38 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4FFE561431;
+	Thu, 11 Jan 2024 04:45:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4FFE561431
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6BC361BF8B4
+ for <buildroot@lists.busybox.net>; Thu, 11 Jan 2024 04:45:35 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5203A82969
+ for <buildroot@lists.busybox.net>; Thu, 11 Jan 2024 04:45:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5203A82969
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id t5OHSkYT-LlM; Thu, 11 Jan 2024 04:31:01 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6AC2283E47;
-	Thu, 11 Jan 2024 04:31:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6AC2283E47
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EF2301BF380
- for <buildroot@lists.busybox.net>; Thu, 11 Jan 2024 04:30:58 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C505B40A2F
- for <buildroot@lists.busybox.net>; Thu, 11 Jan 2024 04:30:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C505B40A2F
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tmwpVjDdZXdV for <buildroot@lists.busybox.net>;
- Thu, 11 Jan 2024 04:30:57 +0000 (UTC)
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com
- [IPv6:2607:f8b0:4864:20::d2f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D072540133
- for <buildroot@buildroot.org>; Thu, 11 Jan 2024 04:30:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D072540133
-Received: by mail-io1-xd2f.google.com with SMTP id
- ca18e2360f4ac-7beff81df32so27266639f.1
- for <buildroot@buildroot.org>; Wed, 10 Jan 2024 20:30:56 -0800 (PST)
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yhpz3Ydgh2tP for <buildroot@lists.busybox.net>;
+ Thu, 11 Jan 2024 04:45:34 +0000 (UTC)
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com
+ [IPv6:2607:f8b0:4864:20::231])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 534D782923
+ for <buildroot@buildroot.org>; Thu, 11 Jan 2024 04:45:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 534D782923
+Received: by mail-oi1-x231.google.com with SMTP id
+ 5614622812f47-3bbbe583e04so3052230b6e.3
+ for <buildroot@buildroot.org>; Wed, 10 Jan 2024 20:45:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704947455; x=1705552255;
+ d=1e100.net; s=20230601; t=1704948332; x=1705553132;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=Ij/+j9S+ojrRBAjbJ8K1hUKYEdTeDRRODjXMExB0ncg=;
- b=j8r7IU7moa5dXb033adCRUBJSIy4ma4KgZJiOuavASr64/mp8Sb9H75Ax5kx0mjISU
- /Y3paY8AI1fG8xheSIaJDr73YmEwg/YriS5527MqhdmGkG+3X8M4ORvwVQ8PNbzINrZZ
- H3Tq9S++dc23X67aiR1LyIJcWVdwNheDaXOJQ0j1TTazy0V+nxUuJn3PWfq096v8RqAq
- qXtY0gABWpxsWz4xV/EEeq+uWZ9lek9PyY7dERmaMCMgDAriuWdZN6bu7R+NtDLITqNG
- JBgdNMpXmOnyv0MrF9rlrKvd1kzSRa2FNuhvlj97NB8+12YeZmaGLPcT2Qsywa/zgGTO
- A0EA==
-X-Gm-Message-State: AOJu0YxWk/Id0aywgIfQIAKauXk4KV6vgISxbZNcvbjLPiN55Qit4mmi
- KQzLKwBsuEjvC/7bx3/hjI2zkfgdIwNAVA==
-X-Google-Smtp-Source: AGHT+IGPSKKV0ZN/qkEvZDC7Myxmqu/zzYKmOmBKDGe2dy7T+bx0xmsFc4jVSV0YI8i4sZBVnKp2Tw==
-X-Received: by 2002:a5e:8a04:0:b0:7be:ff7f:b029 with SMTP id
- d4-20020a5e8a04000000b007beff7fb029mr808451iok.31.1704947455316; 
- Wed, 10 Jan 2024 20:30:55 -0800 (PST)
+ bh=pnn/wKN1U0QvXbdGsxYciimeYGERl+MTcehVX55nOSw=;
+ b=kz8coWIHfpJ1FyRwKZ4pm2upThe09Eg1p6rmb9fHAESq4pAIIcpmRf7b9QrnKt2KnZ
+ A83KGOfenqzPkRx45UOh59EkzW0TGcniOST2MxYuuVNQ5eLW4ZwO4a42VBW3P4SJKb78
+ jjX2UbUz9cnMicXIZRhzEM4B5XCgR3jSJim2R8O6oDkPp1rxO3EzwTGNqts+iv4vCf1l
+ OacQuar0mUryehp1E0PeeunY25WuTFHH3KgvwrRa+NJNGZ9hgIPGDHkbdrOsU7yzRcwN
+ iTx7f3vd6eWyc3CpCLaQ9jWhiUPTUWg/qJdQ/jXyHzorz+1hlpmi3+pfr7Jht4XGR2J2
+ TZGg==
+X-Gm-Message-State: AOJu0Yy6bx9yWiVnxuzyok5ntc3790j3Y0oZpLQoedrocUz8lqab4b/7
+ keDYupn0abn509+0a6cR00uRcVvvEUdg+Q==
+X-Google-Smtp-Source: AGHT+IHZyPkZjUOwrVTyXAoZ3Ob0ixByuTrD/nBy/WRQ+QCEE8BVFMMOK9y1/1A9a2WGzguSzgJSew==
+X-Received: by 2002:a05:6808:144e:b0:3bd:5006:e2f4 with SMTP id
+ x14-20020a056808144e00b003bd5006e2f4mr768227oiv.82.1704948332606; 
+ Wed, 10 Jan 2024 20:45:32 -0800 (PST)
 Received: from james-x399.localdomain (71-218-103-119.hlrn.qwest.net.
  [71.218.103.119]) by smtp.gmail.com with ESMTPSA id
- y30-20020a02731e000000b0046e4c2f9f5csm94855jab.28.2024.01.10.20.30.54
+ g21-20020a02cd15000000b0046df3b352casm97894jaq.38.2024.01.10.20.45.32
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 10 Jan 2024 20:30:54 -0800 (PST)
+ Wed, 10 Jan 2024 20:45:32 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 10 Jan 2024 21:30:52 -0700
-Message-Id: <20240111043052.2880841-1-james.hilliard1@gmail.com>
+Date: Wed, 10 Jan 2024 21:45:29 -0700
+Message-Id: <20240111044530.2889558-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1704947455; x=1705552255; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1704948332; x=1705553132; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Ij/+j9S+ojrRBAjbJ8K1hUKYEdTeDRRODjXMExB0ncg=;
- b=cBZ7ItbhsmYh7YV5qqDkB8UM0AYzNq984HMqWodnBnlxe79wNrIDHXOl+4GGQCTiWP
- Qs05kp8TmEFCmssDnR9c2w6BujPRSH8Slvbo2JYLjRq7WIIJWe8bhfnU6yS+mNtFy1gU
- 6PPQhDadLxQAPpjk9lBqgZzpU3DCE802OOTG89+Ijs5CzS45rIEKNrIL2N+XsaBqIuTl
- lqUMGUUpiO3PSFbX+6QTwt6XtTpIf4+/2K1Gnopzt+HH6sJRkIv2qvj86AraKCq43Fku
- G8wGBVyRpSdHQ8EuqXUxQW/5zmFEMprW1uBRqZq6PQ3LjdQsB4v6O7rIgvpvyXmW4Lpm
- 48dw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=pnn/wKN1U0QvXbdGsxYciimeYGERl+MTcehVX55nOSw=;
+ b=FK0HhbJuCgK9a9LSQsk/bVa5b9xqQvPrJgIs5383sGkU+gFNSexhXdxyFINdokukYo
+ soQjEJvVfSg27b3asFrxGo7S1slZEjD2CgfXyB2JPkp1wtM3xnfndTqKkaNxTEYmyApt
+ KZceJ6fxwKwMCRTV32a9QSXXhn0xAirFaZno2E1YntMJBsbbVJqKgcxRwcj8Kb9Xj/9E
+ v37oXLUtb5DzdSTla2ibkp4epg+7Ejgf2AeZCNGB7LcLn1XNnxQ6bx7HQxTJQj0v4m5R
+ UsPFzCw7vqfjReP2xC2DpWdw56BYbYvKOTf11PXCUMQ+7+VCok9jpuzWEntZj+bw1fmV
+ lEIw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=cBZ7Itbh
-Subject: [Buildroot] [PATCH 1/1] package/python-pyzmq: bump to version 25.1.2
+ header.a=rsa-sha256 header.s=20230601 header.b=FK0HhbJu
+Subject: [Buildroot] [PATCH 1/2] package/python-pypng: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,65 +93,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-License hashes/names changed due to rename/reformat:
-https://github.com/zeromq/pyzmq/pull/1837
-
-Add new host-python-setuptools-scm build dependency.
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pyzmq/python-pyzmq.hash |  8 ++++----
- package/python-pyzmq/python-pyzmq.mk   | 11 +++++++----
- 2 files changed, 11 insertions(+), 8 deletions(-)
+ package/Config.in                      |  1 +
+ package/python-pypng/Config.in         |  6 ++++++
+ package/python-pypng/python-pypng.hash |  5 +++++
+ package/python-pypng/python-pypng.mk   | 14 ++++++++++++++
+ 4 files changed, 26 insertions(+)
+ create mode 100644 package/python-pypng/Config.in
+ create mode 100644 package/python-pypng/python-pypng.hash
+ create mode 100644 package/python-pypng/python-pypng.mk
 
-diff --git a/package/python-pyzmq/python-pyzmq.hash b/package/python-pyzmq/python-pyzmq.hash
-index efbc91d83c..3c91d25995 100644
---- a/package/python-pyzmq/python-pyzmq.hash
-+++ b/package/python-pyzmq/python-pyzmq.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/pyzmq/json
--md5  f10b7c3dee2c03557e2c5d00b73dfc7f  pyzmq-24.0.1.tar.gz
--sha256  216f5d7dbb67166759e59b0479bca82b8acf9bed6015b526b8eb10143fb08e77  pyzmq-24.0.1.tar.gz
-+md5  280afc0992b0a9f109dafc1e672d2f26  pyzmq-25.1.2.tar.gz
-+sha256  93f1aa311e8bb912e34f004cf186407a4e90eec4f0ecc0efd26056bf7eda0226  pyzmq-25.1.2.tar.gz
- # Locally computed sha256 checksums
--sha256  aef3b80570351d44e29c22d080d4e9e106b34f3fdbc5cdf9636994474c72b1a2  COPYING.BSD
--sha256  44b23767df3c0fe27f88981f09bc7f50a1695cec4b24252fa5f55f03e76bcd6d  COPYING.LESSER
-+sha256  c0cf5f5c03f8d6772f7a271df1cb671054578bd3d79527c72fc1f28f8cc72a7a  LICENSE.BSD
-+sha256  5f1dac83d6c25674004810ec9e54b304ccbb8303ac5961813b09235966abfd48  LICENSE.LESSER
-diff --git a/package/python-pyzmq/python-pyzmq.mk b/package/python-pyzmq/python-pyzmq.mk
-index 5792957eaf..1d9a7d01cb 100644
---- a/package/python-pyzmq/python-pyzmq.mk
-+++ b/package/python-pyzmq/python-pyzmq.mk
-@@ -4,15 +4,18 @@
- #
- ################################################################################
- 
--PYTHON_PYZMQ_VERSION = 24.0.1
-+PYTHON_PYZMQ_VERSION = 25.1.2
- PYTHON_PYZMQ_SOURCE = pyzmq-$(PYTHON_PYZMQ_VERSION).tar.gz
--PYTHON_PYZMQ_SITE = https://files.pythonhosted.org/packages/46/0d/b06cf99a64d4187632f4ac9ddf6be99cd35de06fe72d75140496a8e0eef5
-+PYTHON_PYZMQ_SITE = https://files.pythonhosted.org/packages/3a/33/1a3683fc9a4bd64d8ccc0290da75c8f042184a1a49c146d28398414d3341
- PYTHON_PYZMQ_LICENSE = LGPL-3.0+, BSD-3-Clause, Apache-2.0
- # Apache license only online: http://www.apache.org/licenses/LICENSE-2.0
--PYTHON_PYZMQ_LICENSE_FILES = COPYING.LESSER COPYING.BSD
--PYTHON_PYZMQ_DEPENDENCIES = host-python-packaging zeromq
-+PYTHON_PYZMQ_LICENSE_FILES = LICENSE.LESSER LICENSE.BSD
- PYTHON_PYZMQ_SETUP_TYPE = setuptools
- PYTHON_PYZMQ_BUILD_OPTS = --zmq=$(STAGING_DIR)/usr
-+PYTHON_PYZMQ_DEPENDENCIES = \
-+	host-python-packaging \
-+	host-python-setuptools-scm \
-+	zeromq
- 
- # Due to issues with cross-compiling, hardcode to the zeromq in BR
- define PYTHON_PYZMQ_PATCH_ZEROMQ_VERSION
+diff --git a/package/Config.in b/package/Config.in
+index 5b8b15fa54..1375d28116 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1276,6 +1276,7 @@ menu "External python modules"
+ 	source "package/python-pyparsing/Config.in"
+ 	source "package/python-pyparted/Config.in"
+ 	source "package/python-pyphen/Config.in"
++	source "package/python-pypng/Config.in"
+ 	source "package/python-pyqrcode/Config.in"
+ 	source "package/python-pyqt5/Config.in"
+ 	source "package/python-pyratemp/Config.in"
+diff --git a/package/python-pypng/Config.in b/package/python-pypng/Config.in
+new file mode 100644
+index 0000000000..c1ed405615
+--- /dev/null
++++ b/package/python-pypng/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_PYPNG
++	bool "python-pypng"
++	help
++	  Pure Python library for saving and loading PNG images.
++
++	  https://gitlab.com/drj11/pypng
+diff --git a/package/python-pypng/python-pypng.hash b/package/python-pypng/python-pypng.hash
+new file mode 100644
+index 0000000000..0f55eef702
+--- /dev/null
++++ b/package/python-pypng/python-pypng.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/pypng/json
++md5  7d9cce86ceb19524784ade86fb13a063  pypng-0.20220715.0.tar.gz
++sha256  739c433ba96f078315de54c0db975aee537cbc3e1d0ae4ed9aab0ca1e427e2c1  pypng-0.20220715.0.tar.gz
++# Locally computed sha256 checksums
++sha256  8dd127d87bb901ab9c8f584e98b7c7aa8539db27fe62ff01b1ee4be93b6a513a  LICENCE
+diff --git a/package/python-pypng/python-pypng.mk b/package/python-pypng/python-pypng.mk
+new file mode 100644
+index 0000000000..07ad16b67b
+--- /dev/null
++++ b/package/python-pypng/python-pypng.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-pypng
++#
++################################################################################
++
++PYTHON_PYPNG_VERSION = 0.20220715.0
++PYTHON_PYPNG_SOURCE = pypng-$(PYTHON_PYPNG_VERSION).tar.gz
++PYTHON_PYPNG_SITE = https://files.pythonhosted.org/packages/93/cd/112f092ec27cca83e0516de0a3368dbd9128c187fb6b52aaaa7cde39c96d
++PYTHON_PYPNG_SETUP_TYPE = setuptools
++PYTHON_PYPNG_LICENSE = MIT
++PYTHON_PYPNG_LICENSE_FILES = LICENCE
++
++$(eval $(python-package))
 -- 
 2.34.1
 
