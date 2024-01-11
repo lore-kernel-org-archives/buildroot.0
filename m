@@ -4,68 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AD7CC47077
-	for <buildroot@archiver.kernel.org>; Thu, 11 Jan 2024 20:22:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36FDEC47077
+	for <buildroot@archiver.kernel.org>; Thu, 11 Jan 2024 20:25:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E76426F74D;
-	Thu, 11 Jan 2024 20:22:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E76426F74D
+	by smtp3.osuosl.org (Postfix) with ESMTP id BD2F86F72C;
+	Thu, 11 Jan 2024 20:25:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BD2F86F72C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id p4_O_Yuqv4wG; Thu, 11 Jan 2024 20:22:13 +0000 (UTC)
+	with ESMTP id DQjQUFPS8BzW; Thu, 11 Jan 2024 20:25:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 318CA6F738;
-	Thu, 11 Jan 2024 20:22:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 318CA6F738
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 441101BF2E5
- for <buildroot@lists.busybox.net>; Thu, 11 Jan 2024 20:22:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 057DD6F568;
+	Thu, 11 Jan 2024 20:25:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 057DD6F568
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 531751BF2E5
+ for <buildroot@lists.busybox.net>; Thu, 11 Jan 2024 20:25:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1DDB984011
- for <buildroot@lists.busybox.net>; Thu, 11 Jan 2024 20:22:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1DDB984011
+ by smtp4.osuosl.org (Postfix) with ESMTP id 38BFC42D2C
+ for <buildroot@lists.busybox.net>; Thu, 11 Jan 2024 20:25:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 38BFC42D2C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1YcFLcwJFgGH for <buildroot@lists.busybox.net>;
- Thu, 11 Jan 2024 20:22:09 +0000 (UTC)
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2CE9084008
- for <buildroot@buildroot.org>; Thu, 11 Jan 2024 20:22:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2CE9084008
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:4f89:5708:1633:580e])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id AD75EB0055A;
- Thu, 11 Jan 2024 21:22:03 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Thu, 11 Jan 2024 21:22:03 +0100
-Date: Thu, 11 Jan 2024 21:22:03 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Adam Duskett <adam.duskett@amarulasolutions.com>
-Message-ID: <ZaBN6-d-0-ENbQgi@landeda>
-References: <20240102235957.3072102-1-adam.duskett@amarulasolutions.com>
- <20240102235957.3072102-9-adam.duskett@amarulasolutions.com>
- <ZaA4GvpdWkjt9kb5@landeda>
- <CAHDQB6PaKTpFgpK+jaMVrDmbkUDz5-qv-MTrWT7wFNM7HFM44w@mail.gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <CAHDQB6PaKTpFgpK+jaMVrDmbkUDz5-qv-MTrWT7wFNM7HFM44w@mail.gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1705004526;
- bh=4yQ3Rh+UkRHLq3Hwpb5jA4qNBthy2SZogxmpcUEwpO4=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=gEvdOcPqXPtwqdBD8nQ1EI/PjNGGcb5TpxtO1YYLM7x6+2b7apUl/RuEyZjFzmZgu
- 0goa9MnrcrR0owRa7uAcbCTS/VT76i+Oyz32P/wTxlaPyM1uYAf1mp8o8fDpDKSQwj
- R2f7XyznS1+LY0cYFXw90SYsVJhWjOBfrkTSzqwnnaTicq0cz1EahJhoVUhoBeINSZ
- UrmYCMJmHoDyHT0vLeiWsMs0RMEHHv1tLAlXQeI0eZkudC7anamH0A9EJ8w7U/UZXt
- ukfBy1a9rnJp0z1cAUzRGufQOLUM0xHEoCLNZrsg/qsLKX4G5P0GRTIpwC65xNfest
- v7MkwvnQij4WA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=gEvdOcPq
-Subject: Re: [Buildroot] [PATCH v3 08/11] package/flutter-sdk-bin: add dart
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FkyYk1TsAkfT for <buildroot@lists.busybox.net>;
+ Thu, 11 Jan 2024 20:25:31 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 65D2942D2B
+ for <buildroot@buildroot.org>; Thu, 11 Jan 2024 20:25:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 65D2942D2B
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 51EA785EDA; Thu, 11 Jan 2024 20:25:31 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Thu, 11 Jan 2024 21:13:47 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9024e18665232dc4047203edb6d012021baeedfa
+X-Git-Newrev: 66414ed526ca44b383baa56b706f58747b90ea52
+X-Patchwork-Hint: ignore
+Message-Id: <20240111202531.51EA785EDA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/flutter-sdk-bin: add dart
  arguments for different runtime modes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -78,60 +57,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QWRhbSwgQWxsLAoKT24gMjAyNC0wMS0xMSAxMjo0MCAtMDcwMCwgQWRhbSBEdXNrZXR0IHNwYWtl
-IHRodXNseToKPiBPbiBUaHUsIEphbiAxMSwgMjAyNCBhdCAxMTo0OeKAr0FNIFlhbm4gRS4gTU9S
-SU4gPHlhbm4ubW9yaW4uMTk5OEBmcmVlLmZyPiB3cm90ZToKPiA+IE9uIDIwMjQtMDEtMDIgMTY6
-NTkgLTA3MDAsIEFkYW0gRHVza2V0dCBzcGFrZSB0aHVzbHk6Cj4gPiA+IE5vdyB0aGF0IHByb2Zp
-bGUgbW9kZSBpcyBhbiBvcHRpb24gZm9yIHRoZSBmbHV0dGVyLWVuZ2luZSBwYWNrYWdlLCB0aGUg
-bG9naWMKPiA+ID4gaW4gcGFja2FnZS9mbHV0dGVyLXNkay1iaW4vZmx1dHRlci1zZGstYmluLm1r
-IGlzIG5vIGxvbmdlciBzdWZmaWNpZW50LgpbLS1TTklQLS1dCj4gPiA+ICBpZmVxICgkKEJSMl9F
-TkFCTEVfUlVOVElNRV9ERUJVRykseSkKPiA+ID4gLUhPU1RfRkxVVFRFUl9TREtfQklOX1NES19S
-T09UID0gXAo+ID4gPiAtICAgICAkKEhPU1RfRkxVVFRFUl9TREtfQklOX1NES19FTkdJTkUpL2Nv
-bW1vbi9mbHV0dGVyX3BhdGNoZWRfc2RrCj4gPiA+ICtIT1NUX0ZMVVRURVJfU0RLX0JJTl9ERUJV
-R19GTEFHUyA9IC0tZW5hYmxlLWFzc2VydHMKPiA+ID4gIEhPU1RfRkxVVFRFUl9TREtfQklOX1NE
-S19QUk9EVUNUID0gZmFsc2UKPiA+ID4gK0hPU1RfRkxVVFRFUl9TREtfQklOX1NES19ST09UID0g
-JChIT1NUX0ZMVVRURVJfU0RLX0JJTl9TREtfRU5HSU5FKS9jb21tb24vZmx1dHRlcl9wYXRjaGVk
-X3Nkawo+ID4gPiArZWxzZSBpZmVxICgkKEZMVVRURVJfRU5HSU5FX1JVTlRJTUVfTU9ERV9QUk9G
-SUxFKSx5KQo+ID4gPiArSE9TVF9GTFVUVEVSX1NES19CSU5fUFJPRklMRV9GTEFHUyA9IC0tdHJh
-Y2std2lkZ2V0LWNyZWF0aW9uCj4gPiA+ICtIT1NUX0ZMVVRURVJfU0RLX0JJTl9TREtfUFJPRFVD
-VCA9IGZhbHNlCj4gPiA+ICtIT1NUX0ZMVVRURVJfU0RLX0JJTl9TREtfUk9PVCA9ICQoSE9TVF9G
-TFVUVEVSX1NES19CSU5fU0RLX0VOR0lORSkvY29tbW9uL2ZsdXR0ZXJfcGF0Y2hlZF9zZGsKPiA+
-ID4gK0hPU1RfRkxVVFRFUl9TREtfQklOX1NES19WTV9QUk9GSUxFID0gdHJ1ZQo+ID4gPiAgZWxz
-ZQo+ID4gPiAtSE9TVF9GTFVUVEVSX1NES19CSU5fU0RLX1JPT1QgPSBcCj4gPiA+IC0gICAgICQo
-SE9TVF9GTFVUVEVSX1NES19CSU5fU0RLX0VOR0lORSkvY29tbW9uL2ZsdXR0ZXJfcGF0Y2hlZF9z
-ZGtfcHJvZHVjdAo+ID4gPiArSE9TVF9GTFVUVEVSX1NES19CSU5fREVCVUdfRkxBR1MgPQo+ID4g
-PiArSE9TVF9GTFVUVEVSX1NES19CSU5fUFJPRklMRV9GTEFHUyA9Cj4gPiA+ICBIT1NUX0ZMVVRU
-RVJfU0RLX0JJTl9TREtfUFJPRFVDVCA9IHRydWUKPiA+ID4gK0hPU1RfRkxVVFRFUl9TREtfQklO
-X1NES19ST09UID0gJChIT1NUX0ZMVVRURVJfU0RLX0JJTl9TREtfRU5HSU5FKS9jb21tb24vZmx1
-dHRlcl9wYXRjaGVkX3Nka19wcm9kdWN0Cj4gPiA+ICtIT1NUX0ZMVVRURVJfU0RLX0JJTl9TREtf
-Vk1fUFJPRklMRSA9IGZhbHNlCj4gPiA+ICBlbmRpZgo+ID4gVGhpcyBpZi1lbGlmLWVsc2UgYmxv
-Y2sgaXMgbm90IGluIHRoZSBzYW1lIG9yZGVyIGFzIHRoZSBvbmUgdG8gZW5hYmxlCj4gPiBwcm9m
-aWxpbmcgaW4gZmx1dHRlci1lbmdpbmUuIEhlcmUgeW91IGhhdmU6IGRlYnVnLCBwcm9maWxpbmcs
-IHJlbGVhc2UsCj4gPiB3aGlsZSBpbiBmbHV0dGVyLWVuZ2luZSB0aGUgb3JkZXIgaXM6IHByb2Zp
-bGluZywgZGVidWcsIHJlbGVhc2UuCj4gPgo+ID4gU2hvdWxkbid0IHRoZSB0d28gbWF0Y2gsIGku
-ZS4gc2hvdWxkIHdlIHN3YXAgdGhlIGRlYnVnIGFuZCBwcm9maWxpbmcKPiA+IGJsb2NrcyBoZXJl
-Pwo+IE5vIHdvcnJpZXMgaWYgeW91IHJlLWFycmFuZ2UgdGhlIGlmLWVsaWYtZWxzZSBibG9jayB0
-byBtYXRjaCB3aGF0IGlzCj4gaW4gZmx1dHRlci1lbmdpbmUuIFRoZSBvdXRjb21lIGlzIHRoZSBz
-YW1lLgoKQXMgd2UgZGlzY3Vzc2VkIG9uIElSQywgdGhlIG91dGNvbWUgaXMgbm90IHRoZSBzYW1l
-LiBJbmRlZWQsCkZMVVRURVJfRU5HSU5FX1JVTlRJTUVfTU9ERV9QUk9GSUxFIGlzIHN1cHBvc2Vk
-IHRvIHdpbiBvdmVyCkJSMl9FTkFCTEVfUlVOVElNRV9ERUJVRywgc28gdGhhdCB3aGVuIGJvdGgg
-ZGVidWcgYW5kIHByb2ZpbGluZyBhcmUKZW5hYmxlZCwgd2UgZG8gcHJvZmlsZSwgbm90IGRlYnVn
-LgoKQW5kIGFzIGNvbmNsdWRlZCBvbiBJUkMsIEknbGwgc3dhcCB3aGVuIGFwcGx5aW5nLgoKUmVn
-YXJkcywKWWFubiBFLiBNT1JJTi4KCi0tIAouLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0t
-LS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLgp8ICBZYW5u
-IEUuIE1PUklOICB8IFJlYWwtVGltZSBFbWJlZGRlZCB8IC8iXCBBU0NJSSBSSUJCT04gfCBFcmlj
-cycgY29uc3BpcmFjeTogfAp8ICszMyA2NjIgMzc2IDA1NiB8IFNvZnR3YXJlICBEZXNpZ25lciB8
-IFwgLyBDQU1QQUlHTiAgICAgfCAgX19fICAgICAgICAgICAgICAgfAp8ICszMyA1NjEgMDk5IDQy
-NyBgLS0tLS0tLS0tLS0tLi0tLS0tLS06ICBYICBBR0FJTlNUICAgICAgfCAgXGUvICBUaGVyZSBp
-cyBubyAgfAp8IGh0dHA6Ly95bW9yaW4uaXMtYS1nZWVrLm9yZy8gfCBfLypcXyB8IC8gXCBIVE1M
-IE1BSUwgICAgfCAgIHYgICBjb25zcGlyYWN5LiAgfAonLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tXi0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLS0tJwpf
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3Qg
-bWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRy
-b290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+commit: https://git.buildroot.net/buildroot/commit/?id=66414ed526ca44b383baa56b706f58747b90ea52
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Now that profile mode is an option for the flutter-engine package, the logic
+in package/flutter-sdk-bin/flutter-sdk-bin.mk is no longer sufficient.
+
+The profile/debug/release logic was inspired by:
+https://github.com/meta-flutter/meta-flutter/blob/kirkstone/conf/include/
+
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+[yann.morin.1998@free.fr:
+  - make FLUTTER_ENGINE_RUNTIME_MODE_PROFILE win over
+    BR2_ENABLE_RUNTIME_DEBUG
+  - don't set variables to empty string
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/flutter-sdk-bin/flutter-sdk-bin.mk | 20 ++++++++++++++------
+ 1 file changed, 14 insertions(+), 6 deletions(-)
+
+diff --git a/package/flutter-sdk-bin/flutter-sdk-bin.mk b/package/flutter-sdk-bin/flutter-sdk-bin.mk
+index a28cf645f3..5e5042bea8 100644
+--- a/package/flutter-sdk-bin/flutter-sdk-bin.mk
++++ b/package/flutter-sdk-bin/flutter-sdk-bin.mk
+@@ -54,14 +54,20 @@ define HOST_FLUTTER_SDK_BIN_INSTALL_CMDS
+ 	cp -rpdT $(@D)/. $(HOST_FLUTTER_SDK_BIN_SDK)/
+ endef
+ 
+-ifeq ($(BR2_ENABLE_RUNTIME_DEBUG),y)
+-HOST_FLUTTER_SDK_BIN_SDK_ROOT = \
+-	$(HOST_FLUTTER_SDK_BIN_SDK_ENGINE)/common/flutter_patched_sdk
++ifeq ($(FLUTTER_ENGINE_RUNTIME_MODE_PROFILE),y)
++HOST_FLUTTER_SDK_BIN_PROFILE_FLAGS = --track-widget-creation
+ HOST_FLUTTER_SDK_BIN_SDK_PRODUCT = false
++HOST_FLUTTER_SDK_BIN_SDK_ROOT = $(HOST_FLUTTER_SDK_BIN_SDK_ENGINE)/common/flutter_patched_sdk
++HOST_FLUTTER_SDK_BIN_SDK_VM_PROFILE = true
++else ifeq ($(BR2_ENABLE_RUNTIME_DEBUG),y)
++HOST_FLUTTER_SDK_BIN_DEBUG_FLAGS = --enable-asserts
++HOST_FLUTTER_SDK_BIN_SDK_PRODUCT = false
++HOST_FLUTTER_SDK_BIN_SDK_ROOT = $(HOST_FLUTTER_SDK_BIN_SDK_ENGINE)/common/flutter_patched_sdk
++HOST_FLUTTER_SDK_BIN_SDK_VM_PROFILE = false
+ else
+-HOST_FLUTTER_SDK_BIN_SDK_ROOT = \
+-	$(HOST_FLUTTER_SDK_BIN_SDK_ENGINE)/common/flutter_patched_sdk_product
+ HOST_FLUTTER_SDK_BIN_SDK_PRODUCT = true
++HOST_FLUTTER_SDK_BIN_SDK_ROOT = $(HOST_FLUTTER_SDK_BIN_SDK_ENGINE)/common/flutter_patched_sdk_product
++HOST_FLUTTER_SDK_BIN_SDK_VM_PROFILE = false
+ endif
+ 
+ # The Order matters.Taken from:
+@@ -73,8 +79,10 @@ HOST_FLUTTER_SDK_BIN_DART_ARGS = \
+ 	--sdk-root $(HOST_FLUTTER_SDK_BIN_SDK_ROOT) \
+ 	--target=flutter \
+ 	--no-print-incremental-dependencies \
+-	-Ddart.vm.profile=false \
++	-Ddart.vm.profile=$(HOST_FLUTTER_SDK_BIN_SDK_VM_PROFILE) \
+ 	-Ddart.vm.product=$(HOST_FLUTTER_SDK_BIN_SDK_PRODUCT) \
++	$(HOST_FLUTTER_SDK_BIN_DEBUG_FLAGS) \
++	$(HOST_FLUTTER_SDK_BIN_PROFILE_FLAGS) \
+ 	--aot \
+ 	--tfa \
+ 	--target-os linux \
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
