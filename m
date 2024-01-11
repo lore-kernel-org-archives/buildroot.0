@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94285C47077
-	for <buildroot@archiver.kernel.org>; Thu, 11 Jan 2024 05:01:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8027C47077
+	for <buildroot@archiver.kernel.org>; Thu, 11 Jan 2024 05:04:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0D91A6143E;
-	Thu, 11 Jan 2024 05:01:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D91A6143E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 92ECC613B7;
+	Thu, 11 Jan 2024 05:04:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92ECC613B7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Nts8B-EqLQXk; Thu, 11 Jan 2024 05:01:01 +0000 (UTC)
+	with ESMTP id HFM2REj6jRFK; Thu, 11 Jan 2024 05:04:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 684E1613D7;
-	Thu, 11 Jan 2024 05:01:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 684E1613D7
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8A5421BF8B4
- for <buildroot@lists.busybox.net>; Thu, 11 Jan 2024 05:00:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2336F613D7;
+	Thu, 11 Jan 2024 05:04:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2336F613D7
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6222F1BF23C
+ for <buildroot@lists.busybox.net>; Thu, 11 Jan 2024 05:04:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6309A83E4B
- for <buildroot@lists.busybox.net>; Thu, 11 Jan 2024 05:00:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6309A83E4B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 36BBD40888
+ for <buildroot@lists.busybox.net>; Thu, 11 Jan 2024 05:04:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 36BBD40888
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eZVDhW1ozlTE for <buildroot@lists.busybox.net>;
- Thu, 11 Jan 2024 05:00:57 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cqb7moWjpaeI for <buildroot@lists.busybox.net>;
+ Thu, 11 Jan 2024 05:04:42 +0000 (UTC)
 Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com
  [IPv6:2607:f8b0:4864:20::d2b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 66ED883E4A
- for <buildroot@buildroot.org>; Thu, 11 Jan 2024 05:00:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 66ED883E4A
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 56D4340860
+ for <buildroot@buildroot.org>; Thu, 11 Jan 2024 05:04:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56D4340860
 Received: by mail-io1-xd2b.google.com with SMTP id
- ca18e2360f4ac-7ba9c26e14aso125972339f.0
- for <buildroot@buildroot.org>; Wed, 10 Jan 2024 21:00:57 -0800 (PST)
+ ca18e2360f4ac-7baa8097064so235196439f.3
+ for <buildroot@buildroot.org>; Wed, 10 Jan 2024 21:04:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704949256; x=1705554056;
+ d=1e100.net; s=20230601; t=1704949481; x=1705554281;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=FmsckA99ILksfLRxHiWS2+J7TUKe0dkBYeq4TqKNr2U=;
- b=PVvjb7G7MWGxO7+66OygKI8fDK0ow0FZ99Woou76yV/dqDdqRd3hFJkT2pLWmiAzER
- 9CwTBbfQVMngzhqBpOJkfQa52VQwM7ms5Gsj0sxR8hCyDj3QVuGEg6WKol6O1a9xxzjR
- uADLBeJeYgEUnk8oszwUTzJHVuscyEm98WxTxMyiANrfsoDsBVen5TA66Qu2cp++lKgZ
- y3SxRdKUDPeHhtY2Szbk1UCxHGOen2wmWPZjFhIJxzwvyjyVMaN1A+sWRoqZNOBHqnhG
- hBZfbf/5HyfCx27TdrrnIpZeeJmU901sGCrhzIh1JOipRE/9oT1WPnl4RI/8qpz1JTMe
- 12lQ==
-X-Gm-Message-State: AOJu0Yw9z0Pba4V90cq28ISIKkM6IBB9kc+Tf+tAGjHgzWDw3Bwu2MLm
- PB8Va1ujz7JpBIegB/GJ4lTQoo65UMGmow==
-X-Google-Smtp-Source: AGHT+IFCx7HW7tBHpi/95zeQkRiyQn0lguSookvq4UZsbcM8eIxOZSHiyL5jkhJRnB7Xs8v72ePusQ==
-X-Received: by 2002:a05:6602:4883:b0:7bb:dd24:3f42 with SMTP id
- ee3-20020a056602488300b007bbdd243f42mr207142iob.11.1704949256005; 
- Wed, 10 Jan 2024 21:00:56 -0800 (PST)
+ bh=+/x3NmDaYXHu31KZm7773hSjH8ABKkptzk8cT4NrSoY=;
+ b=QR9lMYpPzf9NhqPvs/kTQ3FVijGyLHmylr4zehIns2qxVG0CVjxSr0BfsEEZayb4xs
+ WWV0WDF9E//oFOSyJCTCrUJxUhWxLxvmYUkqdXkE5VAe5gJuac6ImwccEjS2OKyQt4AK
+ gACUFAqtXehLvMHwL/WUiikTHrZt/AlJIrkO/6gquJINqR+7dxQcdzdpQ/YYG80jxxbE
+ dsHNFF1v5luM1AOGetfiw1mLep7zlb3JKWvmM1u/nupzwZ5NF+h4mKxrGaLYtHnSrVNc
+ iEoTaromI1i3Ggp7QK9T2INeLtkLWnz5RYHdL8kOUVMrPBx1smIjsICZBVYb9uWoBdmW
+ x9rw==
+X-Gm-Message-State: AOJu0YzomBWT+VQW8xEMHpl4WXtb/KR0VwiX6ElE3aUQszkyTa3QviLu
+ nCGuikpyS4Pk16or49oXo82W81zP6duliA==
+X-Google-Smtp-Source: AGHT+IHRy+4bTHh7FAvZu0OyPYLNV8cBW6w3AGM1xvr9mWDfwsPKlL4COrCKz4G4UwJEK4U+9sXmlg==
+X-Received: by 2002:a6b:e812:0:b0:7bc:3e75:74e7 with SMTP id
+ f18-20020a6be812000000b007bc3e7574e7mr828556ioh.9.1704949480914; 
+ Wed, 10 Jan 2024 21:04:40 -0800 (PST)
 Received: from james-x399.localdomain (71-218-103-119.hlrn.qwest.net.
  [71.218.103.119]) by smtp.gmail.com with ESMTPSA id
- a17-20020a056638005100b0046df6e19b9csm104291jap.34.2024.01.10.21.00.55
+ cs9-20020a056638470900b0046df4bee536sm106378jab.122.2024.01.10.21.04.40
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 10 Jan 2024 21:00:55 -0800 (PST)
+ Wed, 10 Jan 2024 21:04:40 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 10 Jan 2024 22:00:53 -0700
-Message-Id: <20240111050053.2897660-1-james.hilliard1@gmail.com>
+Date: Wed, 10 Jan 2024 22:04:39 -0700
+Message-Id: <20240111050439.2900236-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1704949256; x=1705554056; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1704949481; x=1705554281; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=FmsckA99ILksfLRxHiWS2+J7TUKe0dkBYeq4TqKNr2U=;
- b=B3HV3SxhJYKxhPLe+XU6hGDLcXYMQEuB8DmqyJqgIE2fBRi1RcPfuIE7sg8/7Bi/Ob
- ZSOIysXiuQMlTxemcL5LJFPTzo+UfWfV2wgzFqsblxTIjvM+o7bvkElQt37P2VaiuFn/
- ONl4Dm6QmaOTyqMjoLkjV1FlxOwd6X2TOwfVu2OqlU9beAf/k47pxvrMCeyRdzrmYp0D
- jS43qpwwt78n8tUOT4RRaEAxzSVlUwK0dGmW7sebND60ShmBeEalj8XrmZis0okKr0my
- T6NFn5pYZr2QjIFaPmMCQpBtdG1eyz4V0RG1+4WxZK9hc4lKg1LlzQEKRCdTs/xOoODk
- IoXQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=+/x3NmDaYXHu31KZm7773hSjH8ABKkptzk8cT4NrSoY=;
+ b=XFnQmnT9hdOVfQ4UZOn/pypKc8S7EPKddga1MvkUgts1G2XTxHkBlF1kTmDsEC+FfZ
+ gqxzkM4smK4gjSHsOxuLqsYrwZUbArGSI4ncRPcnxlOVjWlSaRUbzzX9id1k60GJTnhx
+ I6fDLau1w+sT4wV/eiLrnOgTBrQdRg2nvkBwS1e+SGlqeO+OtK5t9j6dN9XJxAVqTRR2
+ 22gEEpZ2QNpUIY67qS6LN53yVpYQgex9kgP/E1PGvQ7qEMUe18t7sWfkx539hsbFaAAo
+ mk3WA7JLJ3OhTAn2P57NpqWEsy6OYoBCnjOwv/TVgTgQJES0EZiBaW+eT3SLuspUuk/o
+ trSg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=B3HV3Sxh
-Subject: [Buildroot] [PATCH 1/1] package/python-reedsolo: bump to version
- 1.7.0
+ header.a=rsa-sha256 header.s=20230601 header.b=XFnQmnT9
+Subject: [Buildroot] [PATCH 1/1] package/python-referencing: bump to version
+ 0.32.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,47 +100,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-License changed to Unlicense/MIT-0:
-https://github.com/tomerfiliba-org/reedsolomon/commit/7b97461684701cf19451db1fd348d831dc526dc2
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-reedsolo/python-reedsolo.hash | 6 +++---
- package/python-reedsolo/python-reedsolo.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/python-referencing/python-referencing.hash | 4 ++--
+ package/python-referencing/python-referencing.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-reedsolo/python-reedsolo.hash b/package/python-reedsolo/python-reedsolo.hash
-index fdafc89f49..c1729f0aeb 100644
---- a/package/python-reedsolo/python-reedsolo.hash
-+++ b/package/python-reedsolo/python-reedsolo.hash
+diff --git a/package/python-referencing/python-referencing.hash b/package/python-referencing/python-referencing.hash
+index d4f3dce5a4..2880a47477 100644
+--- a/package/python-referencing/python-referencing.hash
++++ b/package/python-referencing/python-referencing.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/reedsolo/json
--md5  b67a04027a1825c63a63b6793ec660a3  reedsolo-1.6.0.tar.gz
--sha256  4e290d3b0a7207ac7aac186790766c752b5fcdf5e0b04dfd260349579052bbac  reedsolo-1.6.0.tar.gz
-+md5  5bbd7741f915ad67b6d425f93ab9d103  reedsolo-1.7.0.tar.gz
-+sha256  c1359f02742751afe0f1c0de9f0772cc113835aa2855d2db420ea24393c87732  reedsolo-1.7.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/referencing/json
+-md5  617d973b9ce86b6f74b2216c6f3af5c9  referencing-0.30.2.tar.gz
+-sha256  794ad8003c65938edcdbc027f1933215e0d0ccc0291e3ce20a4d87432b59efc0  referencing-0.30.2.tar.gz
++md5  d1a0a4ae03ebba4b86b22bfb825f150b  referencing-0.32.1.tar.gz
++sha256  3c57da0513e9563eb7e203ebe9bb3a1b509b042016433bd1e45a2853466c3dd3  referencing-0.32.1.tar.gz
  # Locally computed sha256 checksums
--sha256  0babd7b573efc3dcf5bb3c28b583150726f775d3dd8d54d6cd062834735b3d73  LICENSE
-+sha256  2da9536c23b72bac15603bb1f8dbf269dc68ecfbc35a75f8d0aa9cb209ba0934  LICENSE
-diff --git a/package/python-reedsolo/python-reedsolo.mk b/package/python-reedsolo/python-reedsolo.mk
-index 2a7fd42a05..66e85fb40a 100644
---- a/package/python-reedsolo/python-reedsolo.mk
-+++ b/package/python-reedsolo/python-reedsolo.mk
-@@ -4,11 +4,11 @@
+ sha256  42dcd63495f87b4eb7c7757afa379bb55a53f94afd7a5f657d9adf57236e515c  COPYING
+diff --git a/package/python-referencing/python-referencing.mk b/package/python-referencing/python-referencing.mk
+index 4d11c99deb..27d1452e91 100644
+--- a/package/python-referencing/python-referencing.mk
++++ b/package/python-referencing/python-referencing.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_REEDSOLO_VERSION = 1.6.0
-+PYTHON_REEDSOLO_VERSION = 1.7.0
- PYTHON_REEDSOLO_SOURCE = reedsolo-$(PYTHON_REEDSOLO_VERSION).tar.gz
--PYTHON_REEDSOLO_SITE = https://files.pythonhosted.org/packages/9b/10/28d1492cc82a103bc06f18cb9a9dbb3a9168ab2e4068801fa0aa0c76b231
-+PYTHON_REEDSOLO_SITE = https://files.pythonhosted.org/packages/f7/61/a67338cbecf370d464e71b10e9a31355f909d6937c3a8d6b17dd5d5beb5e
- PYTHON_REEDSOLO_SETUP_TYPE = setuptools
--PYTHON_REEDSOLO_LICENSE = Public Domain
-+PYTHON_REEDSOLO_LICENSE = MIT-0, Unlicense
- PYTHON_REEDSOLO_LICENSE_FILES = LICENSE
- 
- $(eval $(python-package))
+-PYTHON_REFERENCING_VERSION = 0.30.2
++PYTHON_REFERENCING_VERSION = 0.32.1
+ PYTHON_REFERENCING_SOURCE = referencing-$(PYTHON_REFERENCING_VERSION).tar.gz
+-PYTHON_REFERENCING_SITE = https://files.pythonhosted.org/packages/e1/43/d3f6cf3e1ec9003520c5fb31dc363ee488c517f09402abd2a1c90df63bbb
++PYTHON_REFERENCING_SITE = https://files.pythonhosted.org/packages/81/ce/910573eca7b1a1c6358b0dc0774ce1eeb81f4c98d4ee371f1c85f22040a1
+ PYTHON_REFERENCING_SETUP_TYPE = pep517
+ PYTHON_REFERENCING_LICENSE = MIT
+ PYTHON_REFERENCING_LICENSE_FILES = COPYING
 -- 
 2.34.1
 
