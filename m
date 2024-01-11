@@ -4,84 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AC7EC47077
-	for <buildroot@archiver.kernel.org>; Thu, 11 Jan 2024 06:45:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CA11C47077
+	for <buildroot@archiver.kernel.org>; Thu, 11 Jan 2024 06:50:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CE93043818;
-	Thu, 11 Jan 2024 06:45:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CE93043818
+	by smtp2.osuosl.org (Postfix) with ESMTP id ABD2440133;
+	Thu, 11 Jan 2024 06:50:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ABD2440133
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DtpdrjVkAvEX; Thu, 11 Jan 2024 06:45:19 +0000 (UTC)
+	with ESMTP id FITSMCcJGpRY; Thu, 11 Jan 2024 06:50:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 986B84381F;
-	Thu, 11 Jan 2024 06:45:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 986B84381F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BEE1B1BF846
- for <buildroot@lists.busybox.net>; Thu, 11 Jan 2024 06:45:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A132043809;
+	Thu, 11 Jan 2024 06:50:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A132043809
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id AF73D1BF846
+ for <buildroot@lists.busybox.net>; Thu, 11 Jan 2024 06:50:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 960BE4381F
- for <buildroot@lists.busybox.net>; Thu, 11 Jan 2024 06:45:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 960BE4381F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 87419611F7
+ for <buildroot@lists.busybox.net>; Thu, 11 Jan 2024 06:50:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 87419611F7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WXFwlmZ7yYPk for <buildroot@lists.busybox.net>;
- Thu, 11 Jan 2024 06:45:15 +0000 (UTC)
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com
- [IPv6:2607:f8b0:4864:20::135])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 68C8A43818
- for <buildroot@buildroot.org>; Thu, 11 Jan 2024 06:45:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 68C8A43818
-Received: by mail-il1-x135.google.com with SMTP id
- e9e14a558f8ab-3608e206f27so22142805ab.1
- for <buildroot@buildroot.org>; Wed, 10 Jan 2024 22:45:15 -0800 (PST)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id o-vyJlulhKAq for <buildroot@lists.busybox.net>;
+ Thu, 11 Jan 2024 06:50:14 +0000 (UTC)
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com
+ [IPv6:2607:f8b0:4864:20::d2b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id AF61060F5D
+ for <buildroot@buildroot.org>; Thu, 11 Jan 2024 06:50:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF61060F5D
+Received: by mail-io1-xd2b.google.com with SMTP id
+ ca18e2360f4ac-7bc32b04d16so210182639f.0
+ for <buildroot@buildroot.org>; Wed, 10 Jan 2024 22:50:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704955514; x=1705560314;
+ d=1e100.net; s=20230601; t=1704955813; x=1705560613;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=Z33Hlo4kwzyBMzTdxSjwe85g+ThbgdELWE/7Y70+5ak=;
- b=XnjIY99E8t5EJbABVmb0MCdTDeuIR72cDCoTcMbVzAPNhjLuJog5I0IKVwFk4WN8hX
- ep01mRsRVRXj5w7cl+04Rzw0vK/nogcTsjFiREikc74T2ci8jmonwO+qTEbcZwVBhtoE
- xWyryAy56m4QJOWkJ1DkpSOAUqwsVVF3huFvoHp8hwFupPAOfybKv59303uWrTGMK5Kr
- H+EgROamr3fqv4YmKl0VSFqRfsFzDHmvenlGk3+4cLtxrymjzYLXE37ZTgrOBWxgTy2X
- EhXtezh4z/Ik7f1jFHrJN1npe2PW3NAyHpTWazhExJ6dwuMp1jjhhXCQwhpINR1CaO4r
- xn/g==
-X-Gm-Message-State: AOJu0Yx6e5qwOeGcRP/2Fx0u7NAdLmmf0ViQQdnver/yz+1t+yss6O/c
- h25LoOW7V8kHpIQqUYO3ioLMlVnAxSQ/ig==
-X-Google-Smtp-Source: AGHT+IHDD5R/4RomZFaLErCIzTlV1Tr8f4Q2ucydw2aBT0+63oNTFIG5ZrYRjFyMa76CfYe5Z+0Reg==
-X-Received: by 2002:a05:6e02:f41:b0:360:7ea:ac4f with SMTP id
- y1-20020a056e020f4100b0036007eaac4fmr650844ilj.105.1704955514017; 
- Wed, 10 Jan 2024 22:45:14 -0800 (PST)
+ bh=UMGJJcOQGshoggv1gk6NYcxiIoasmFI+KoPliFQ6eIA=;
+ b=KPh7Uwh7toA6WDNRgXMKw4v06IOwL7jpeg+e77vlglD+DffBwEZSko/nBDQObTW0RG
+ ceuKmIc1uqf81700U4ptyoFoAT1As8R5mkgBgmDFltDP87ipvRvW42tzqLpwaAgkMaBZ
+ U9MNmjRuFsOwT5mVPm/tZeJbGgxjz5nNUx5kAbUkCh2WqKrQx0DjZhW3hIANS6cn22ZL
+ r5GP/67vPc3YBTycLYsDo0NUPq/ok9FXnWTtDILnoTiynhfdTspX1GD8iSxNLXMG6c6j
+ os9hfWZbde1j/iNUmDTXKmZyz7ogA8bMjXb3kbgl8uN+TKSHt0a+fgSvKIQopigekAHn
+ rlAg==
+X-Gm-Message-State: AOJu0YwZtD7HBCtAepDt4PqrRbWJbVRb9OTY2tUkV8CmXCiet/A0krdV
+ qIo4MCYcfpPn365ZfBkRt6C60baYaPR8bA==
+X-Google-Smtp-Source: AGHT+IFth9Lorp8fgbXZVpwYIO/ZvDG8rETtMa6a8LF1pbXBd9zf/7izbEAclfQnU8jU/jjbPj2zeA==
+X-Received: by 2002:a05:6e02:1071:b0:35f:fccc:ac7a with SMTP id
+ q17-20020a056e02107100b0035ffcccac7amr721299ilj.35.1704955813417; 
+ Wed, 10 Jan 2024 22:50:13 -0800 (PST)
 Received: from james-x399.localdomain (71-218-103-119.hlrn.qwest.net.
  [71.218.103.119]) by smtp.gmail.com with ESMTPSA id
- l16-20020a056e020e5000b003606b6d1070sm106925ilk.22.2024.01.10.22.45.13
+ fa7-20020a056638618700b0046e4a8367c0sm144321jab.140.2024.01.10.22.50.12
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 10 Jan 2024 22:45:13 -0800 (PST)
+ Wed, 10 Jan 2024 22:50:13 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 10 Jan 2024 23:45:11 -0700
-Message-Id: <20240111064511.3053913-1-james.hilliard1@gmail.com>
+Date: Wed, 10 Jan 2024 23:50:11 -0700
+Message-Id: <20240111065011.3057364-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1704955514; x=1705560314; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1704955813; x=1705560613; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Z33Hlo4kwzyBMzTdxSjwe85g+ThbgdELWE/7Y70+5ak=;
- b=BHIbQndsBwVfDtHpGB7hIDwFsuADPE5L4ZZqo6WLTO80GG6TFFSISy2h+Ntm4Fam+b
- ojT8JGk4zb1YI6LIPnLRlDgoxwhnc+/qS3zp0Hu5qsh2cvMLDhYKSe8B4vsKrd/p89tB
- oD/509vUvycumXr6/yKyXG/avJYNZIoybi1GXLjlxTg2jhXQEECvE+UtI3k1qjv/7qKw
- nX8VTuxxOym7hnbW88VEzbr0mtWUxL2KqDa2rSRwZAJvSQj9AjRc0pH1jiYBkD4HJEsx
- B6ljIl4Tdug6/mF8A/1ac8CCTvOe6STS0qb5BzlnpFbV2N45vWHo+D8qqbBFfUMDaOjn
- jR2Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=UMGJJcOQGshoggv1gk6NYcxiIoasmFI+KoPliFQ6eIA=;
+ b=TKMt8jD6dr1esb/FUq4sUiIKf2awpfatUB6EcsMEuIetA934ETqaeF9ndpoPeRfs13
+ T6a4cK0GVrM3jy3n1215H5o1T9AHu9+EtWe1+hRXODktiQDb2zPUZWoKpF+DHA4InvI/
+ hH48X/J+Avpk2XwqKzakiqSfatuCUqwzlwUPwe1NozX3NjL03dbUOUqApj0Fj49aRp9l
+ pPwEqgiEF70afdEDdQJ8D/VrEyeoV3utuhHvYTOG3CwA1MnIZQNjOx3mjwbKtjNt08+r
+ XxgvXTduBa1GVnva8jb0jBLc6plrXfSnG8+9+5t2pQmvAT2p1ZHCDqRUXUQC4w185JTC
+ Zq0w==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=BHIbQnds
-Subject: [Buildroot] [PATCH 1/1] package/python-sh: bump to version 2.0.6
+ header.a=rsa-sha256 header.s=20230601 header.b=TKMt8jD6
+Subject: [Buildroot] [PATCH 1/1] package/python-simplejson: bump to version
+ 3.19.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,7 +94,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: Ludovic Desroches <ludovic.desroches@microchip.com>,
+ James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -101,38 +103,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-sh/python-sh.hash | 4 ++--
- package/python-sh/python-sh.mk   | 4 ++--
+ package/python-simplejson/python-simplejson.hash | 4 ++--
+ package/python-simplejson/python-simplejson.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-sh/python-sh.hash b/package/python-sh/python-sh.hash
-index a31aacdee1..c0d3f62f12 100644
---- a/package/python-sh/python-sh.hash
-+++ b/package/python-sh/python-sh.hash
+diff --git a/package/python-simplejson/python-simplejson.hash b/package/python-simplejson/python-simplejson.hash
+index a8b946b2c4..9f96f99bf4 100644
+--- a/package/python-simplejson/python-simplejson.hash
++++ b/package/python-simplejson/python-simplejson.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/sh/json
--md5  d60498172876f35aef6303a9cbb8eb11  sh-1.14.3.tar.gz
--sha256  e4045b6c732d9ce75d571c79f5ac2234edd9ae4f5fa9d59b09705082bdca18c7  sh-1.14.3.tar.gz
-+md5  aadf37759a9cb4862257cef3cf44a27b  sh-2.0.6.tar.gz
-+sha256  9b2998f313f201c777e2c0061f0b1367497097ef13388595be147e2a00bf7ba1  sh-2.0.6.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/simplejson/json
+-md5  ecd07fca7a7fa0bcc9acdf9d82e41eb1  simplejson-3.18.1.tar.gz
+-sha256  746086e3ef6d74b53599df31b491d88a355abf2e31c837137dd90f8c4561cafa  simplejson-3.18.1.tar.gz
++md5  3b334627d870a3c849e1322d18a7bfe7  simplejson-3.19.2.tar.gz
++sha256  9eb442a2442ce417801c912df68e1f6ccfcd41577ae7274953ab3ad24ef7d82c  simplejson-3.19.2.tar.gz
  # Locally computed sha256 checksums
- sha256  d8491c6e236568d04f7c8c07f2f1b8f5d142706dab6ab88f6e0d2dd476b6c706  LICENSE.txt
-diff --git a/package/python-sh/python-sh.mk b/package/python-sh/python-sh.mk
-index 781de88ab1..af4da3f6c9 100644
---- a/package/python-sh/python-sh.mk
-+++ b/package/python-sh/python-sh.mk
+ sha256  fcaa1e313a99304322e2e0836ea4ee7d839ce9a480438f3922a853edfdde129f  LICENSE.txt
+diff --git a/package/python-simplejson/python-simplejson.mk b/package/python-simplejson/python-simplejson.mk
+index 5782626387..d5ba3948b7 100644
+--- a/package/python-simplejson/python-simplejson.mk
++++ b/package/python-simplejson/python-simplejson.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SH_VERSION = 1.14.3
-+PYTHON_SH_VERSION = 2.0.6
- PYTHON_SH_SOURCE = sh-$(PYTHON_SH_VERSION).tar.gz
--PYTHON_SH_SITE = https://files.pythonhosted.org/packages/b7/09/89c28aaf2a49f226fef8587c90c6386bd2cc03a0295bc4ff7fc6ee43c01d
-+PYTHON_SH_SITE = https://files.pythonhosted.org/packages/cd/51/7355831d8e1cee8348157d769ccda8a31ca9fa0548e7f93d87837d83866d
- PYTHON_SH_SETUP_TYPE = setuptools
- PYTHON_SH_LICENSE = MIT
- PYTHON_SH_LICENSE_FILES = LICENSE.txt
+-PYTHON_SIMPLEJSON_VERSION = 3.18.1
++PYTHON_SIMPLEJSON_VERSION = 3.19.2
+ PYTHON_SIMPLEJSON_SOURCE = simplejson-$(PYTHON_SIMPLEJSON_VERSION).tar.gz
+-PYTHON_SIMPLEJSON_SITE = https://files.pythonhosted.org/packages/0f/a0/79d2bec499cb53678bc20d41f9706ca02777f0876efa9b29a69fb3d55dfd
++PYTHON_SIMPLEJSON_SITE = https://files.pythonhosted.org/packages/79/79/3ccb95bb4154952532f280f7a41979fbfb0fbbaee4d609810ecb01650afa
+ PYTHON_SIMPLEJSON_LICENSE = Academic Free License (AFL), MIT
+ PYTHON_SIMPLEJSON_LICENSE_FILES = LICENSE.txt
+ PYTHON_SIMPLEJSON_CPE_ID_VENDOR = simplejson_project
 -- 
 2.34.1
 
