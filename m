@@ -4,90 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D2AFC47077
-	for <buildroot@archiver.kernel.org>; Thu, 11 Jan 2024 10:38:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9544C4725D
+	for <buildroot@archiver.kernel.org>; Thu, 11 Jan 2024 10:39:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B681481E30;
-	Thu, 11 Jan 2024 10:38:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B681481E30
+	by smtp1.osuosl.org (Postfix) with ESMTP id 77A3181771;
+	Thu, 11 Jan 2024 10:39:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 77A3181771
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JQF_m9-mcO6z; Thu, 11 Jan 2024 10:38:51 +0000 (UTC)
+	with ESMTP id i-ctfSz8yRlw; Thu, 11 Jan 2024 10:39:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E82C081A95;
-	Thu, 11 Jan 2024 10:38:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E82C081A95
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C82661BF2F5
- for <buildroot@lists.busybox.net>; Thu, 11 Jan 2024 10:38:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6E83981CDB;
+	Thu, 11 Jan 2024 10:39:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E83981CDB
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9038E1BF2F5
+ for <buildroot@lists.busybox.net>; Thu, 11 Jan 2024 10:38:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ADC2641A32
- for <buildroot@lists.busybox.net>; Thu, 11 Jan 2024 10:38:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ADC2641A32
+ by smtp1.osuosl.org (Postfix) with ESMTP id 68C9481405
+ for <buildroot@lists.busybox.net>; Thu, 11 Jan 2024 10:38:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 68C9481405
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id e-rv4c2JTurM for <buildroot@lists.busybox.net>;
- Thu, 11 Jan 2024 10:38:36 +0000 (UTC)
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com
- [IPv6:2a00:1450:4864:20::242])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 77614418C9
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zHvEixluC1Bh for <buildroot@lists.busybox.net>;
+ Thu, 11 Jan 2024 10:38:37 +0000 (UTC)
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com
+ [IPv6:2a00:1450:4864:20::344])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0A698813A6
  for <buildroot@buildroot.org>; Thu, 11 Jan 2024 10:38:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77614418C9
-Received: by mail-lj1-x242.google.com with SMTP id
- 38308e7fff4ca-2cd5c55d6b8so43905141fa.3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0A698813A6
+Received: by mail-wm1-x344.google.com with SMTP id
+ 5b1f17b1804b1-40e60e13703so3475285e9.0
  for <buildroot@buildroot.org>; Thu, 11 Jan 2024 02:38:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704969513; x=1705574313;
+ d=1e100.net; s=20230601; t=1704969515; x=1705574315;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=jBIDqIwLg2U0OBRPnToLH51uhE44jXh6D70Hgt3JDrQ=;
- b=LnlMUrFak6x0/vgrw/HaBcMSewKq/AzOxJXRg844f8Ba+ifxUF2OE6/LSCpTJWU83E
- QbMXF7MzS2vGwYo8Xs1euIoXWfpg298xCgYuZFvyLbqvskO14ad7NxI2D29pp9EfW3U/
- Vkn48YJdiFwRk36VGVGeTpFae82dcfy2SIe3i6CNOQBzl2hoT/8nwSKaB6ppTvjNgFYG
- KNV2AJWtABONNQB4eJ6rNrk4aZx0v0AWme7kVo6Y0e+2vVAFnLoeU3EB63W9PU9xavMa
- hfoACsEH41E5tOkpBvI3OAih554uj/TMd70Tbg5hNlATaVk4SMp/d0QjxSco/rU4RtKP
- rbNQ==
-X-Gm-Message-State: AOJu0YzfhW1uhw9kg5XZZt2xs7BRgdDwIHxYy+UjBTQa3TPQWeqR+jsL
- HtL1cSZGZRCM+k9J20G+mvgLcfj9Im14B2dSltqiphTz8hleYVl8
-X-Google-Smtp-Source: AGHT+IGxFwikAlzv5OB7YdsuNnx7qN6IgLYkmpkuXvhfCtAbiqZyVxjGEVecMwfBKhabOTJMbX5k3A==
-X-Received: by 2002:a2e:9819:0:b0:2cc:cbe7:3acd with SMTP id
- a25-20020a2e9819000000b002cccbe73acdmr183284ljj.87.1704969513503; 
- Thu, 11 Jan 2024 02:38:33 -0800 (PST)
+ bh=fUZuVSZNa/22awfqATZak2mK7ZCgfwYwHMzfrdJ727E=;
+ b=oaAMJWhu/Pj30JQS9WlM4P1hXRS08Mh1jA7OgL8c0qtAHPoTyTqpbLAqUK4w1xwyMU
+ if5yCvkwS0LbkEPMSjEStvKXEPEHOxSrbE5jQ5cmYIJAc/rodI2+lPwYCFvbZdWDoyCE
+ toGceDMhAGOhhctNXcshfNqsAq5GTLFSXkEIKFQAqLvFwXQU+NM3inM1RvD6Fm1R1TpY
+ l1SPYvsXhOWLLXMQSaC5QhNd6CgBzH/uSC9TemknRPw474nU0P43lEBFyBXLYJB1Ducm
+ FGMRxgx/hKb2/wnDWKQ79kI2EO+hLhYHizEDVaS/ezz9+mzEqPwYmuRl71Z2yvwC20sM
+ JMpQ==
+X-Gm-Message-State: AOJu0YyKR+5elgUi3cRd4SP3msimqSRQvQoWCTUUlMcfgefOW089o17a
+ vjTK4v7UtXPH7fubb6iE40AGGvRY3tnx/s4k34PSig2brwA+wSrt
+X-Google-Smtp-Source: AGHT+IGrrUwav+frowNXD/YEp6fC+Pqif7nqhJxBgXfTss/u9nLH9imOihbIoAJw271JQpb3oFtCVA==
+X-Received: by 2002:a05:600c:4f96:b0:40d:59fd:1e93 with SMTP id
+ n22-20020a05600c4f9600b0040d59fd1e93mr261378wmq.141.1704969514882; 
+ Thu, 11 Jan 2024 02:38:34 -0800 (PST)
 Received: from localhost.localdomain ([80.215.186.92])
  by smtp.gmail.com with ESMTPSA id
- j21-20020a5d6e55000000b0033672cfca96sm869810wrz.89.2024.01.11.02.38.32
+ j21-20020a5d6e55000000b0033672cfca96sm869810wrz.89.2024.01.11.02.38.33
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 11 Jan 2024 02:38:32 -0800 (PST)
+ Thu, 11 Jan 2024 02:38:34 -0800 (PST)
 From: Antoine Coutant <antoine.coutant@smile.fr>
 To: buildroot@buildroot.org
-Date: Thu, 11 Jan 2024 11:38:18 +0100
-Message-Id: <20240111103819.3984913-2-antoine.coutant@smile.fr>
+Date: Thu, 11 Jan 2024 11:38:19 +0100
+Message-Id: <20240111103819.3984913-3-antoine.coutant@smile.fr>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20240111103819.3984913-1-antoine.coutant@smile.fr>
 References: <20240111103819.3984913-1-antoine.coutant@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1704969513; x=1705574313;
+ d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1704969515; x=1705574315;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=jBIDqIwLg2U0OBRPnToLH51uhE44jXh6D70Hgt3JDrQ=;
- b=Cvk6u0/Idln12ezAjFvCOVYM2XANFaMUb8/k4/pOav/frtdXxf2r0EEflHaHar8Q93
- EIqCBHhDYiFlU2bNCXBScPD9UJHO2J70ofgyhpgW2pxXYPryWCdQYNr3pHKATVM4u8r+
- phn0zCBBnjLkaS6A0MG7iFZbUaYctYsurv6wxJIyq64lbOPPPY7pCnEreEpm8xEUjRX6
- aBNS9qJ/rYdjZ8ZAOVcwTdF93GMy8MkORPzosaO+RKbnmOsjUTzfKoKgZJYVNPeyOoz2
- OfkjIYWpjkuheIjn8yOMsj4vByqqm10+ojxEoqP1tLkQYSpeSYDnRyBZ1sSznLyXkfVT
- UsVw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=fUZuVSZNa/22awfqATZak2mK7ZCgfwYwHMzfrdJ727E=;
+ b=XdwX5qb4Zxm+xjNXcj9RBb9niiM3+HA2bVkLWGFFQMcuG8U1g9idTgkIB1JYrBUaMA
+ gS2o+ve+jQ1+MrV0g49gxow5Za/9vJyAzjw7qDzyEG6jtw5fLcqwiec8a5EZQ/uHyCy/
+ Gs/ZuHyBY34t1o8CQz9OXeqP4HTTS8ED7M6Y0t1DY+qj6RqXB++L3GgudhNMNnuIav0o
+ fDd4N/so/udULw4lONaeVUlz/xquuKXJ6XORRDIuuFao1XkAC19v/RqxQ1JZfcvuYXpg
+ 7tTaI0MQhSX0K3JXYYOA8EaSLWOGCpQST5oiHNMRDj0J6W0UflFXEPikypMg5gRGcPrc
+ J/Rg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=smile-fr.20230601.gappssmtp.com
  header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=Cvk6u0/I
-Subject: [Buildroot] [PATCH v4 2/3] support/testing: test_rust.py: Add test
- to check correct vendoring
+ header.s=20230601 header.b=XdwX5qb4
+Subject: [Buildroot] [PATCH v4 3/3] package/ripgrep: bump to version 14.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,99 +98,188 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Antoine Coutant <antoine.coutant@smile.fr>,
- Sebastian Weyer <sebastian.weyer@smile.fr>
+Cc: Antoine Coutant <antoine.coutant@smile.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Sebastian Weyer <sebastian.weyer@smile.fr>
+Changelog:
+https://github.com/BurntSushi/ripgrep/blob/master/CHANGELOG.md
 
-Currently the tests TestRust and TestRustBin do check for vendoring by
-requiring package ripgrep to be built but only if the download
-directory is already empty, otherwise the existing contents of the download
-directory will be reused and therefore not be redownloaded.
+The patch has been rebased to ripgrep 14.1.0.
 
-This new test will only verify that the required packages are downloaded
-and vendored correctly without doing a runtime test. It does so by setting a
-path to a folder "dl" inside the build directory (output-directory/testname/)
-and then setting the environment variable BR2_DL_DIR to this path before the
-build starts. BR2_DL_DIR is not set in the config options because it would be
-overridden by the user's own environment variable if defined. This code was
-essentially copied from the file test_gitforge.py which was added in commit
-1ca6ab6ace3c1f9edfbfd16b57d1280b3ea2c6f5
-
-We want the package ripgrep to be built since it requires vendoring
-directly. Additionally we want the package python-cryptography to be
-built because it has rust dependencies and therefore indirectly also requires
-vendoring.
-
-Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
 Signed-off-by: Antoine Coutant <antoine.coutant@smile.fr>
 ---
-Changes v1 -> v2:
-	- make the change proposed here:
-	http://patchwork.ozlabs.org/project/buildroot/patch/20230207165031.17188-1-sebastian.weyer@smile.fr/
----
- support/testing/tests/package/test_rust.py | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
 
-diff --git a/support/testing/tests/package/test_rust.py b/support/testing/tests/package/test_rust.py
-index fb9dd2d916..763125ca20 100644
---- a/support/testing/tests/package/test_rust.py
-+++ b/support/testing/tests/package/test_rust.py
-@@ -1,4 +1,5 @@
- import os
-+import shutil
+Changes v2 -> v3:
+	- bump version to 14.1.0 instead of 14.0.3
+
+Tested using qemu_aarch64_virt_defconfig and Arm AArch64 13.2.rel1
+toolchain.
+---
+ ...llocator-behind-a-cargo-feature-flag.patch | 52 ++++++++++---------
+ package/ripgrep/ripgrep.hash                  |  2 +-
+ package/ripgrep/ripgrep.mk                    |  6 +--
+ 3 files changed, 29 insertions(+), 31 deletions(-)
+
+diff --git a/package/ripgrep/0001-puts-jemalloc-allocator-behind-a-cargo-feature-flag.patch b/package/ripgrep/0001-puts-jemalloc-allocator-behind-a-cargo-feature-flag.patch
+index e2ba68f389..e665a6570e 100644
+--- a/package/ripgrep/0001-puts-jemalloc-allocator-behind-a-cargo-feature-flag.patch
++++ b/package/ripgrep/0001-puts-jemalloc-allocator-behind-a-cargo-feature-flag.patch
+@@ -1,4 +1,4 @@
+-From 68c2a4d7a5d9b46f65121958fdb12d5270bfd1b6 Mon Sep 17 00:00:00 2001
++From 77f850969433b14769ade4281899373f3ebabf86 Mon Sep 17 00:00:00 2001
+ From: Jonathan Stites <mail@jonstites.com>
+ Date: Wed, 6 May 2020 12:55:35 +0000
+ Subject: [PATCH] puts jemalloc allocator behind a cargo feature flag
+@@ -9,6 +9,8 @@ Moves jemalloc behind a feature for musl builds, where it is not
+ supported by the upstream project, so ripgrep will fail to build.
  
- import infra.basetest
+ Signed-off-by: Sam Voss <sam.voss@gmail.com>
++[Antoine: update for 14.1.0]
++Signed-off-by: Antoine Coutant <antoine.coutant@smile.fr>
+ ---
+  .github/workflows/ci.yml      | 6 ++++++
+  .github/workflows/release.yml | 8 +++++++-
+@@ -18,10 +20,10 @@ Signed-off-by: Sam Voss <sam.voss@gmail.com>
+  5 files changed, 35 insertions(+), 4 deletions(-)
  
-@@ -54,3 +55,44 @@ class TestRust(TestRustBase):
-     def test_run(self):
-         self.login()
-         self.assertRunOk("rg Buildroot /etc/issue")
-+
-+
-+class TestRustVendoring(infra.basetest.BRConfigTest):
-+    config = \
-+        """
-+        BR2_arm=y
-+        BR2_cortex_a9=y
-+        BR2_ARM_ENABLE_NEON=y
-+        BR2_ARM_ENABLE_VFP=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        BR2_PACKAGE_HOST_RUSTC=y
-+        BR2_PACKAGE_RIPGREP=y
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_CRYPTOGRAPHY=y
-+        BR2_BACKUP_SITE=""
-+        """
-+
-+    def setUp(self):
-+        super(TestRustVendoring, self).setUp()
-+
-+    def tearDown(self):
-+        self.show_msg("Cleaning up")
-+        if self.b and not self.keepbuilds:
-+            self.b.delete()
-+
-+    def check_download(self, package):
-+        # store downloaded tarball inside the output dir so the test infra
-+        # cleans it up at the end
-+        dl_dir = os.path.join(self.builddir, "dl")
-+        # enforce we test the download
-+        if os.path.exists(dl_dir):
-+            shutil.rmtree(dl_dir)
-+        env = {"BR2_DL_DIR": dl_dir}
-+        self.b.build(["{}-dirclean".format(package),
-+                      "{}-legal-info".format(package)],
-+                     env)
-+
-+    def test_run(self):
-+        self.check_download("ripgrep")
-+        self.check_download("python-cryptography")
+ diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+-index ab154ec..aa567d9 100644
++index d21b85a..0c9ecb9 100644
+ --- a/.github/workflows/ci.yml
+ +++ b/.github/workflows/ci.yml
+-@@ -149,6 +149,12 @@ jobs:
++@@ -172,6 +172,12 @@ jobs:
+        if: matrix.target != ''
+        run: ${{ env.CARGO }} test --verbose --workspace ${{ env.TARGET_FLAGS }}
+  
+@@ -31,14 +33,14 @@ index ab154ec..aa567d9 100644
+ +      if: matrix.os == 'nightly-musl'
+ +      run: ${{ env.CARGO }} test --verbose --all --features jemalloc ${{ env.TARGET_FLAGS }}
+ +
+-     - name: Test for existence of build artifacts (Windows)
+-       if: matrix.os == 'windows-2019'
+-       shell: bash
++     - name: Test zsh shell completions (Unix, sans cross)
++       # We could test this when using Cross, but we'd have to execute the
++       # 'rg' binary (done in test-complete) with qemu, which is a pain and
+ diff --git a/.github/workflows/release.yml b/.github/workflows/release.yml
+-index 7cfb6a4..ad6b82d 100644
++index f6ea3d9..ac18129 100644
+ --- a/.github/workflows/release.yml
+ +++ b/.github/workflows/release.yml
+-@@ -133,7 +133,13 @@ jobs:
++@@ -171,7 +171,13 @@ jobs:
+          echo "target flag is: ${{ env.TARGET_FLAGS }}"
+          echo "target dir is: ${{ env.TARGET_DIR }}"
+  
+@@ -50,25 +52,25 @@ index 7cfb6a4..ad6b82d 100644
+ +
+ +    - name: Build release binary (non-linux)
+ +      if: matrix.build != 'linux'
+-       run: ${{ env.CARGO }} build --verbose --release --features pcre2 ${{ env.TARGET_FLAGS }}
+- 
+-     - name: Strip release binary (linux and macos)
++       shell: bash
++       run: |
++         ${{ env.CARGO }} build --verbose --release --features pcre2 ${{ env.TARGET_FLAGS }}
+ diff --git a/Cargo.toml b/Cargo.toml
+-index fb78fcb..0d34b1e 100644
++index da350bc..1a0a48f 100644
+ --- a/Cargo.toml
+ +++ b/Cargo.toml
+-@@ -56,8 +56,9 @@ version = "2.33.0"
+- default-features = false
+- features = ["suggestions"]
++@@ -59,8 +59,9 @@ serde_json = "1.0.23"
++ termcolor = "1.1.0"
++ textwrap = { version = "0.16.0", default-features = false }
+  
+ -[target.'cfg(all(target_env = "musl", target_pointer_width = "64"))'.dependencies.jemallocator]
+ +[dependencies.jemallocator]
+- version = "0.3.0"
++ version = "0.5.0"
+ +optional = true
+  
+- [build-dependencies]
+- lazy_static = "1.1.0"
+-@@ -75,6 +76,11 @@ walkdir = "2"
++ [dev-dependencies]
++ serde = "1.0.77"
++@@ -70,6 +71,11 @@ walkdir = "2"
+  [features]
+  simd-accel = ["grep/simd-accel"]
+  pcre2 = ["grep/pcre2"]
+@@ -81,10 +83,10 @@ index fb78fcb..0d34b1e 100644
+  [profile.release]
+  debug = 1
+ diff --git a/README.md b/README.md
+-index 46938bc..9917b29 100644
++index 0821fab..fdb9fb5 100644
+ --- a/README.md
+ +++ b/README.md
+-@@ -406,6 +406,15 @@ build a static executable with MUSL and with PCRE2, then you will need to have
++@@ -478,6 +478,15 @@ build a static executable with MUSL and with PCRE2, then you will need to have
+  `musl-gcc` installed, which might be in a separate package from the actual
+  MUSL library, depending on your Linux distribution.
+  
+@@ -101,10 +103,10 @@ index 46938bc..9917b29 100644
+  ### Running tests
+  
+ diff --git a/crates/core/main.rs b/crates/core/main.rs
+-index 47385de..c9dae5a 100644
++index 64f35ce..9aa6663 100644
+ --- a/crates/core/main.rs
+ +++ b/crates/core/main.rs
+-@@ -31,7 +31,7 @@ mod subject;
++@@ -27,7 +27,7 @@ mod search;
+  // have the fastest version of everything. Its goal is to be small and amenable
+  // to static compilation.) Even though ripgrep isn't particularly allocation
+  // heavy, musl's allocator appears to slow down ripgrep quite a bit. Therefore,
+@@ -113,7 +115,7 @@ index 47385de..c9dae5a 100644
+  //
+  // We don't unconditionally use jemalloc because it can be nice to use the
+  // system's default allocator by default. Moreover, jemalloc seems to increase
+-@@ -39,7 +39,11 @@ mod subject;
++@@ -35,7 +35,11 @@ mod search;
+  //
+  // Moreover, we only do this on 64-bit systems since jemalloc doesn't support
+  // i686.
+@@ -127,5 +129,5 @@ index 47385de..c9dae5a 100644
+  static ALLOC: jemallocator::Jemalloc = jemallocator::Jemalloc;
+  
+ -- 
+-2.32.0
++2.25.1
+ 
+diff --git a/package/ripgrep/ripgrep.hash b/package/ripgrep/ripgrep.hash
+index 71e74e1bcf..9d5b869a9c 100644
+--- a/package/ripgrep/ripgrep.hash
++++ b/package/ripgrep/ripgrep.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  6f1d4a8b653ce48d59ad777288b1257cbda607db29db19d031b7e622c60526f8  ripgrep-af6b6c543b224d348a8876f0c06245d9ea7929c5.tar.gz
++sha256  6dfa5e8346b041749b9d7467efb794fcd15cf5b7d3ccec530940dcb1aa4ab590  ripgrep-14.1.0.tar.gz
+ sha256  0f96a83840e146e43c0ec96a22ec1f392e0680e6c1226e6f3ba87e0740af850f  LICENSE-MIT
+diff --git a/package/ripgrep/ripgrep.mk b/package/ripgrep/ripgrep.mk
+index d587441cfa..05b8d5c48e 100644
+--- a/package/ripgrep/ripgrep.mk
++++ b/package/ripgrep/ripgrep.mk
+@@ -4,11 +4,7 @@
+ #
+ ################################################################################
+ 
+-# Same as 13.0.0, we use a Git commit hash because the hash of this
+-# tarball changed when moving to the cargo-package infrastructure, and
+-# we can't change the hash of existing tarball. Please switch back to
+-# a Git tag at the next version bump.
+-RIPGREP_VERSION = af6b6c543b224d348a8876f0c06245d9ea7929c5
++RIPGREP_VERSION = 14.1.0
+ RIPGREP_SITE = $(call github,burntsushi,ripgrep,$(RIPGREP_VERSION))
+ RIPGREP_LICENSE = MIT
+ RIPGREP_LICENSE_FILES = LICENSE-MIT
 -- 
 2.25.1
 
