@@ -4,84 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8728C47077
-	for <buildroot@archiver.kernel.org>; Thu, 11 Jan 2024 18:22:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7C73C47077
+	for <buildroot@archiver.kernel.org>; Thu, 11 Jan 2024 18:30:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A27B284046;
-	Thu, 11 Jan 2024 18:22:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A27B284046
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7453C83F81;
+	Thu, 11 Jan 2024 18:30:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7453C83F81
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id u2vtblRklXVi; Thu, 11 Jan 2024 18:22:35 +0000 (UTC)
+	with ESMTP id GuknSyD_0yBQ; Thu, 11 Jan 2024 18:30:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EE41F8404C;
-	Thu, 11 Jan 2024 18:22:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE41F8404C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9D02483D60;
+	Thu, 11 Jan 2024 18:30:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D02483D60
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 646F81BF255
- for <buildroot@lists.busybox.net>; Thu, 11 Jan 2024 18:22:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1E1571BF255
+ for <buildroot@lists.busybox.net>; Thu, 11 Jan 2024 18:30:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 461CD421CE
- for <buildroot@lists.busybox.net>; Thu, 11 Jan 2024 18:22:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 461CD421CE
+ by smtp4.osuosl.org (Postfix) with ESMTP id EB50742CD2
+ for <buildroot@lists.busybox.net>; Thu, 11 Jan 2024 18:30:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB50742CD2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FwWWWnD7SgFX for <buildroot@lists.busybox.net>;
- Thu, 11 Jan 2024 18:22:31 +0000 (UTC)
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1446E420E4
- for <buildroot@buildroot.org>; Thu, 11 Jan 2024 18:22:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1446E420E4
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-40b5155e154so72436065e9.3
- for <buildroot@buildroot.org>; Thu, 11 Jan 2024 10:22:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704997348; x=1705602148;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=548zfcTyNT40Gw6nilA16eLc9ODXFwXpYQSwdGkD9Qc=;
- b=rUt3Fwwdn9nLaBbcmDVSOx4k1btO/FC+nUHvQNDShcJr8c4qkOOU6UgnCS8iiySIQs
- /yQFwlpG5LlnXhrk3OKFlMKLQPs4uyFbl8986mTMd7lsBluttli463iX29GwfmZRmr68
- 8a5OgckpePEPpqVgo8VnTgX7OWqshfvx4RQ1LOSa/wrkJPSgpRr9zwROpFeo/Voo29Qq
- 24xNPKESvzA0L1TtGwcAk4Us4qslf9cCIh2pSt7eQBGc0AbV50q5P5kRWV/7nMdExiA5
- so/l1PG6Vdou3j8BfNhZGa9yYZGFu0j7yqwCEj2S11Yllqukn65cF9kfBY6tbPHzA5GS
- bTaQ==
-X-Gm-Message-State: AOJu0Yzp1YL+IKLm7Na30/e/xdLj3z0ZPvgAmN90Ow8f0O5sieCC4gCa
- WosQFe6KIy18mYibKaqLmKJthEN5pbc=
-X-Google-Smtp-Source: AGHT+IGyn8tWZd3gh3FvgZ6J+RSzUf3S950xZ+rGZX/xuYNmdHke6UGNpzJ7c8FEmRpQaBT4bSdEJw==
-X-Received: by 2002:a05:600c:6012:b0:40e:4a2c:bdea with SMTP id
- az18-20020a05600c601200b0040e4a2cbdeamr109687wmb.150.1704997347721; 
- Thu, 11 Jan 2024 10:22:27 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- n38-20020a05600c502600b0040e6245579csm1733191wmr.11.2024.01.11.10.22.27
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 11 Jan 2024 10:22:27 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ with ESMTP id WkMXHpA7DGZJ for <buildroot@lists.busybox.net>;
+ Thu, 11 Jan 2024 18:30:23 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id DD8AC42CC8
+ for <buildroot@buildroot.org>; Thu, 11 Jan 2024 18:30:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD8AC42CC8
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C984485EA6; Thu, 11 Jan 2024 18:30:23 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 11 Jan 2024 19:22:25 +0100
-Message-ID: <20240111182225.2420602-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1704997348; x=1705602148; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=548zfcTyNT40Gw6nilA16eLc9ODXFwXpYQSwdGkD9Qc=;
- b=jv8f+hUouH8SQeaaK8o3fe6zNxgU9zVYHb+Ci5djWUDrp8Jv/QJhZ2zZY4DxQOlJ95
- 6/C285r/G+bRXMM5/YoFaFdw4Gk5Vgn9FwcYtzY6t9fNEXtNMio2fwanKcl8AZgHtb2W
- /9SbpAtmMSF5ScFFQM0Bs7jLgUEZQdau+q9rRKZjW4+3/86j9WEMVbUSviT9dY6VDchC
- G7u8EDhB7iHQLOiCPYZdGDQg+PMOwFc+xV0DT/B/wJp0waCB8aCoN8G0Fc6y4e2/lJ3C
- udPqk0q/p7PqUa4GqXPG9PGVWxKGQfXdHNYnJDUuUT/HWyK0V1rkAL73KmkeJbiMuz+g
- UjZA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=jv8f+hUo
-Subject: [Buildroot] [PATCH 1/1] package/criu: disable i386
+Date: Thu, 11 Jan 2024 19:28:17 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 24b2ef0c6799c4d8fb1a9de78590c4e48b5470e7
+X-Git-Newrev: 694b0ce218b984db3cad9c45541b0d49c46dfd2a
+X-Patchwork-Hint: ignore
+Message-Id: <20240111183023.C984485EA6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/flutter-pi: bump version to
+ f34d7bdbda713ba607b9625541ddfa314d9999a0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,53 +57,134 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Marcus Folkesson <marcus.folkesson@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Building for i386 raises the following build failure since the additon
-of the package in commit 3e4b479f39c15ffdf307ec8395d856680c727204:
+commit: https://git.buildroot.net/buildroot/commit/?id=694b0ce218b984db3cad9c45541b0d49c46dfd2a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Makefile:23: *** "The architecture i386 isn't supported".  Stop.
+There are 14 commits between the current version of d62e84 and f34d7b.
+Some highlights include:
+  - egl_gbm_render_surface: fix initialization of is_locked:
+  - src/egl_gbm_render_surface: properly fallback to surface with no modifier
+    (so we can drop our patch)
+  - user input: store mt positions separately
+  - video player: Transition to READY before NULL
+  - check all malloc returns
 
-Setting ARCH=x86 won't work either as it results in the following build
-failure:
+In addition, commit 6a28738 introduces the charset_converter, which is a
+platform-side implementation of the charset_converter plugin found here:
+https://pub.dev/packages/charset_converter
 
-compel/arch/x86/plugins/std/memcpy.S: Assembler messages:
-compel/arch/x86/plugins/std/memcpy.S:20: Error: bad register name `%rdi'
-compel/arch/x86/plugins/std/memcpy.S:21: Error: bad register name `%rdx'
-compel/arch/x86/plugins/std/memcpy.S:22: Error: `shrq' is only supported in 64-bit mode
-compel/arch/x86/plugins/std/memcpy.S:24: Error: `movsq' is only supported in 64-bit mode
-compel/arch/x86/plugins/std/syscalls/syscall-common-x86-64.S: Assembler messages:
-compel/arch/x86/plugins/std/syscalls/syscall-common-x86-64.S:13: Error: bad register name `%rcx'
-compel/arch/x86/plugins/std/syscalls/syscall-common-x86-64.S:19: Error: bad register name `%rax'
+As this is a new plugin, disable it; a follow-up commit will add an
+option to enable it.
 
-Fixes:
- - http://autobuild.buildroot.org/results/94cc463762b57efacf743d107a8dda7660a995a3
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/criu/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ ..._render_surface-properly-fallback-to-surf.patch | 59 ----------------------
+ package/flutter-pi/flutter-pi.hash                 |  2 +-
+ package/flutter-pi/flutter-pi.mk                   |  3 +-
+ 3 files changed, 3 insertions(+), 61 deletions(-)
 
-diff --git a/package/criu/Config.in b/package/criu/Config.in
-index ff3bf30229..b3bb830768 100644
---- a/package/criu/Config.in
-+++ b/package/criu/Config.in
-@@ -6,7 +6,6 @@ config BR2_PACKAGE_CRIU_ARCH_SUPPORTS
- 	default y if BR2_ARM_CPU_ARMV7M
- 	default y if BR2_ARM_CPU_ARMV8A
- 	default y if BR2_aarch64
--	default y if BR2_i386
- 	default y if BR2_mips
- 	default y if BR2_x86_64
- 	default y if BR2_powerpc64le # Only support powerpc64 with LE
--- 
-2.43.0
-
+diff --git a/package/flutter-pi/0001-src-egl_gbm_render_surface-properly-fallback-to-surf.patch b/package/flutter-pi/0001-src-egl_gbm_render_surface-properly-fallback-to-surf.patch
+deleted file mode 100644
+index 7a1a49b3d4..0000000000
+--- a/package/flutter-pi/0001-src-egl_gbm_render_surface-properly-fallback-to-surf.patch
++++ /dev/null
+@@ -1,59 +0,0 @@
+-From 856f9849763535d62ed01b538ba23905875c93f4 Mon Sep 17 00:00:00 2001
+-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-Date: Tue, 26 Sep 2023 20:31:17 +0200
+-Subject: [PATCH] src/egl_gbm_render_surface: properly fallback to surface with
+- no modifier
+-
+-In 869fa7fcfbeb, we added a fallback to be able to create an EGL sruface
+-when the driver do not support modifiers, like the llvmpipe software
+-renderer (or like some proprietary drivers, like the MALI ones), as
+-reported in #269 [0].
+-
+-However, in c6537673c9b6, there was a big overhaul of renderer
+-infrastructure. That commit lost the with-modifiers code path and only
+-kept the without-modifiers fallback one (i.e. it only kept the call to
+-gbm_surface_create(), not to gbm_surface_create_with_modifiers()).
+-
+-Then in b0d09f5032a4, the with-modifier code path was re-instated, but
+-in a way that made it exclusive with the without-modifiers one. That is,
+-the without-modifiers code path was not a fallback to when the other
+-failed.
+-
+-Re-instate the fallback mechanism as intiially implemented.
+-
+-[0] https://github.com/ardera/flutter-pi/issues/269
+-
+-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+-Upstream: https://github.com/ardera/flutter-pi/pull/367
+----
+- src/egl_gbm_render_surface.c | 6 ++++--
+- 1 file changed, 4 insertions(+), 2 deletions(-)
+-
+-diff --git a/src/egl_gbm_render_surface.c b/src/egl_gbm_render_surface.c
+-index ce9e5e7..8a58667 100644
+---- a/src/egl_gbm_render_surface.c
+-+++ b/src/egl_gbm_render_surface.c
+-@@ -146,6 +146,7 @@ static int egl_gbm_render_surface_init(
+-     }
+- #endif
+- 
+-+    gbm_surface = NULL;
+-     if (allowed_modifiers != NULL) {
+-         gbm_surface = gbm_surface_create_with_modifiers(
+-             gbm_device,
+-@@ -158,9 +159,10 @@ static int egl_gbm_render_surface_init(
+-         if (gbm_surface == NULL) {
+-             ok = errno;
+-             LOG_ERROR("Couldn't create GBM surface for rendering. gbm_surface_create_with_modifiers: %s\n", strerror(ok));
+--            return ok;
+-+            LOG_ERROR("Will retry without modifiers\n");
+-         }
+--    } else {
+-+    }
+-+    if (gbm_surface == NULL) {
+-         gbm_surface = gbm_surface_create(
+-             gbm_device,
+-             size.x,
+--- 
+-2.25.1
+-
+diff --git a/package/flutter-pi/flutter-pi.hash b/package/flutter-pi/flutter-pi.hash
+index f7148963a4..6c5371d18a 100644
+--- a/package/flutter-pi/flutter-pi.hash
++++ b/package/flutter-pi/flutter-pi.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  e4af79c8f53c15913f52a83a221f099a2a750d023a0bc4560d0db6f15def79a2  flutter-pi-d62e84350d2869b3ec1dfb1af21bfe234c4b817f-br1.tar.gz
++sha256  cf10ca9e26beea036ccf218e6a900de5f1f2000e00c03e7a48898c2a0c99f591  flutter-pi-f34d7bdbda713ba607b9625541ddfa314d9999a0-br1.tar.gz
+ sha256  b34df9d3e1b4e5d1ba70b1740ec74b69f1189b44efd0c96b898b074ef8db1c70  LICENSE
+diff --git a/package/flutter-pi/flutter-pi.mk b/package/flutter-pi/flutter-pi.mk
+index 27f140c177..4ec89bdfad 100644
+--- a/package/flutter-pi/flutter-pi.mk
++++ b/package/flutter-pi/flutter-pi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FLUTTER_PI_VERSION = d62e84350d2869b3ec1dfb1af21bfe234c4b817f
++FLUTTER_PI_VERSION = f34d7bdbda713ba607b9625541ddfa314d9999a0
+ FLUTTER_PI_SITE = https://github.com/ardera/flutter-pi.git
+ FLUTTER_PI_SITE_METHOD = git
+ FLUTTER_PI_LICENSE = MIT
+@@ -27,6 +27,7 @@ FLUTTER_PI_CONF_OPTS = \
+ 	-DENABLE_VULKAN=OFF \
+ 	-DFILESYSTEM_LAYOUT=meta-flutter \
+ 	-DLINT_EGL_HEADERS=OFF \
++	-DBUILD_CHARSET_CONVERTER_PLUGIN=OFF \
+ 	-DTRY_BUILD_GSTREAMER_AUDIO_PLAYER_PLUGIN=OFF \
+ 	-DTRY_BUILD_GSTREAMER_VIDEO_PLAYER_PLUGIN=OFF \
+ 	-DTRY_ENABLE_OPENGL=OFF \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
