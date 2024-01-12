@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8687DC47258
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jan 2024 17:46:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B42BC47258
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jan 2024 17:46:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 40EF481F41;
-	Fri, 12 Jan 2024 17:46:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 40EF481F41
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2757283DE4;
+	Fri, 12 Jan 2024 17:46:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2757283DE4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 94yuVCk1qym6; Fri, 12 Jan 2024 17:46:27 +0000 (UTC)
+	with ESMTP id 8qzMc0mQLwCt; Fri, 12 Jan 2024 17:46:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1AD7C845E9;
-	Fri, 12 Jan 2024 17:46:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1AD7C845E9
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D8E491BF995
- for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 17:44:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7FF9084678;
+	Fri, 12 Jan 2024 17:46:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7FF9084678
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7EF1D1BF309
+ for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 17:44:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8F89060DCB
- for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 17:44:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F89060DCB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4EB9A438B8
+ for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 17:44:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4EB9A438B8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id INSQy_kJevop for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gH90Mxy-STK3 for <buildroot@lists.busybox.net>;
  Fri, 12 Jan 2024 17:44:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5EF2160C05
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9FC46439EC
  for <buildroot@buildroot.org>; Fri, 12 Jan 2024 17:44:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5EF2160C05
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9FC46439EC
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4DBA485FA8; Fri, 12 Jan 2024 17:44:07 +0000 (UTC)
+ id 9EAE085FA2; Fri, 12 Jan 2024 17:44:07 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 12 Jan 2024 18:16:16 +0100
+Date: Fri, 12 Jan 2024 18:32:31 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 3264bdb37cb4a90568ea4de94e0da88c43bb17c6
-X-Git-Newrev: 283825c22e79ffeb5d68cd3acd7fd39c33c0dd86
+X-Git-Oldrev: 9993970d69f2e40fe03249ff27f4e6f7343fd3e4
+X-Git-Newrev: fba48064c3486b975f0888fd2544f8e9a4b0c907
 X-Patchwork-Hint: ignore
-Message-Id: <20240112174407.4DBA485FA8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/libsigsegv: fix
- musl build with powerpc
+Message-Id: <20240112174407.9EAE085FA2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/dahdi-linux: bump
+ to version 3.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,227 +58,483 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============4903609372749755822=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=283825c22e79ffeb5d68cd3acd7fd39c33c0dd86
+--===============4903609372749755822==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=fba48064c3486b975f0888fd2544f8e9a4b0c907
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-Fix the following musl build failure with powerpc raised since bump to
-version 2.14 in commit c6addf4606c3a41cdad5c6ac4c6508b298b6e92a:
+- Drop all patches except first one (already in version)
+- This bump will fix the following build failure with kernel >= 6.6:
 
-In file included from fault.h:36,
-                 from handler-unix.c:77,
-                 from handler.c:19:
-handler-unix.c: In function 'sigsegv_handler':
-fault-linux-powerpc.h:35:73: error: 'mcontext_t' has no member named 'uc_regs'; did you mean 'gregs'?
-   35 | #  define SIGSEGV_FAULT_STACKPOINTER  ((ucontext_t *) ucp)->uc_mcontext.uc_regs->gregs[1]
-      |                                                                         ^~~~~~~
-handler-unix.c:157:43: note: in expansion of macro 'SIGSEGV_FAULT_STACKPOINTER'
-  157 |           uintptr_t old_sp = (uintptr_t) (SIGSEGV_FAULT_STACKPOINTER);
-      |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/autobuild/autobuild/instance-2/output-1/build/dahdi-linux-3.2.0/drivers/dahdi/wct4xxp/base.c: In function ‘free_wc’:
+./include/linux/workqueue.h:639:9: error: call to ‘__warn_flushing_systemwide_wq’ declared with attribute warning: Please avoid flushing system-wide workqueues. [-Werror=attribute-warning]
+  639 |         __warn_flushing_systemwide_wq();                                \
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/autobuild/autobuild/instance-2/output-1/build/dahdi-linux-3.2.0/drivers/dahdi/wct4xxp/base.c:2025:9: note: in expansion of macro ‘flush_scheduled_work’
+ 2025 |         flush_scheduled_work();
+      |         ^~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+
+https://github.com/asterisk/dahdi-linux/releases/tag/v3.3.0
 
 Fixes:
- - http://autobuild.buildroot.org/results/77b600071f07605be3ec28e2da46d6938e240087
+ - http://autobuild.buildroot.org/results/e9755e1f4814b6b0c151c590b5c34acfd89556ad
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 74f401025d7ffbc5be9191b9c31208e501759edb)
+(cherry picked from commit a608e519a028a8218c5190c8fd417df33173347c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...t-for-Linux-PowerPC-32-bit-with-musl-libc.patch | 114 +++++++++++++++++++++
- package/libsigsegv/0002-add-musl.m4.patch          |  47 +++++++++
- package/libsigsegv/libsigsegv.mk                   |   2 +
- 3 files changed, 163 insertions(+)
+ .checkpackageignore                                |   4 -
+ ...di-Kbuild-fix-HOTPLUG_FIRMWARE-definition.patch |  64 ------------
+ ...ch => 0001-fix-build-with-32-bits-kernel.patch} |   1 +
+ ...compilation-issues-on-linux-kernel-5-18-0.patch |  58 -----------
+ .../0004-next-fix-kernel-6-1-build.patch           |  32 ------
+ .../dahdi-linux/0005-Fix-build-on-Linux-6.3.patch  | 116 ---------------------
+ .../dahdi-linux/0006-Fix-build-on-Linux-6.4.patch  |  69 ------------
+ package/dahdi-linux/dahdi-linux.hash               |   4 +-
+ package/dahdi-linux/dahdi-linux.mk                 |   2 +-
+ 9 files changed, 4 insertions(+), 346 deletions(-)
 
-diff --git a/package/libsigsegv/0001-Add-support-for-Linux-PowerPC-32-bit-with-musl-libc.patch b/package/libsigsegv/0001-Add-support-for-Linux-PowerPC-32-bit-with-musl-libc.patch
-new file mode 100644
-index 0000000000..dcc2f7c9cb
---- /dev/null
-+++ b/package/libsigsegv/0001-Add-support-for-Linux-PowerPC-32-bit-with-musl-libc.patch
-@@ -0,0 +1,114 @@
-+From a6ff69873110c0a8ba6f7fd90532dbc11224828c Mon Sep 17 00:00:00 2001
-+From: Bruno Haible <bruno@clisp.org>
-+Date: Sun, 13 Mar 2022 15:04:06 +0100
-+Subject: [PATCH] Add support for Linux/PowerPC (32-bit) with musl libc.
-+
-+Reported by Khem Raj <raj.khem@gmail.com> in
-+<https://lists.gnu.org/archive/html/m4-patches/2022-03/msg00000.html>.
-+
-+* autogen.sh: Copy also musl.m4.
-+* configure.ac: Invoke gl_MUSL_LIBC.
-+* src/fault-linux-powerpc.h (SIGSEGV_FAULT_STACKPOINTER): In the 32-bit
-+case, handle musl libc differently.
-+* NEWS: Mention it.
-+
-+Upstream: https://git.savannah.gnu.org/gitweb/?p=libsigsegv.git;a=commit;h=a6ff69873110c0a8ba6f7fd90532dbc11224828c
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ ChangeLog                 | 11 +++++++++++
-+ NEWS                      |  4 ++++
-+ autogen.sh                |  3 ++-
-+ configure.ac              |  2 ++
-+ src/fault-linux-powerpc.h | 27 ++++++++++++++++++++++-----
-+ 5 files changed, 41 insertions(+), 6 deletions(-)
-+
-+diff --git a/ChangeLog b/ChangeLog
-+index c52b227..7c0a8fa 100644
-+--- a/ChangeLog
-++++ b/ChangeLog
-+@@ -1,3 +1,14 @@
-++2022-03-13  Bruno Haible  <bruno@clisp.org>
-++
-++	Add support for Linux/PowerPC (32-bit) with musl libc.
-++	Reported by Khem Raj <raj.khem@gmail.com> in
-++	<https://lists.gnu.org/archive/html/m4-patches/2022-03/msg00000.html>.
-++	* autogen.sh: Copy also musl.m4.
-++	* configure.ac: Invoke gl_MUSL_LIBC.
-++	* src/fault-linux-powerpc.h (SIGSEGV_FAULT_STACKPOINTER): In the 32-bit
-++	case, handle musl libc differently.
-++	* NEWS: Mention it.
-++
-+ 2022-01-07  Bruno Haible  <bruno@clisp.org>
-+ 
-+ 	Prepare for version 2.14.
-+diff --git a/NEWS b/NEWS
-+index 4d012f8..82cc0f4 100644
-+--- a/NEWS
-++++ b/NEWS
-+@@ -1,3 +1,7 @@
-++New in 2.15:
-++
-++* Added support for Linux/PowerPC (32-bit) with musl libc.
-++
-+ New in 2.14:
-+ 
-+ * Added support for 64-bit Cygwin.
-+diff --git a/configure.ac b/configure.ac
-+index e87f13b..164786f 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -75,6 +75,8 @@ AC_MSG_RESULT([$sv_cv_host])
-+ PLATFORM="$sv_cv_host"
-+ AC_SUBST([PLATFORM])
-+ 
-++gl_MUSL_LIBC
-++
-+ dnl ========================== Done with PLATFORM ==========================
-+ 
-+ 
-+diff --git a/src/fault-linux-powerpc.h b/src/fault-linux-powerpc.h
-+index cba6ea7..b3f922a 100644
-+--- a/src/fault-linux-powerpc.h
-++++ b/src/fault-linux-powerpc.h
-+@@ -1,5 +1,5 @@
-+ /* Fault handler information.  Linux/PowerPC version when it supports POSIX.
-+-   Copyright (C) 2002, 2009, 2017  Bruno Haible <bruno@clisp.org>
-++   Copyright (C) 2002, 2009, 2017, 2022  Bruno Haible <bruno@clisp.org>
-+ 
-+    This program is free software: you can redistribute it and/or modify
-+    it under the terms of the GNU General Public License as published by
-+@@ -28,10 +28,27 @@
-+ #if defined(__powerpc64__) || defined(_ARCH_PPC64) /* 64-bit */
-+ # define SIGSEGV_FAULT_STACKPOINTER  ((ucontext_t *) ucp)->uc_mcontext.gp_regs[1]
-+ #else /* 32-bit */
-+-/* both should be equivalent */
-+-# if 0
-+-#  define SIGSEGV_FAULT_STACKPOINTER  ((ucontext_t *) ucp)->uc_mcontext.regs->gpr[1]
-++# if MUSL_LIBC
-++/* musl libc has a different structure of ucontext_t in
-++   musl/arch/powerpc/bits/signal.h.  */
-++/* The glibc comments say:
-++     "Different versions of the kernel have stored the registers on signal
-++      delivery at different offsets from the ucontext struct.  Programs should
-++      thus use the uc_mcontext.uc_regs pointer to find where the registers are
-++      actually stored."  */
-++#  if 0
-++#   define SIGSEGV_FAULT_STACKPOINTER  ((ucontext_t *) ucp)->uc_mcontext.gregs[1]
-++#  else
-++#   define SIGSEGV_FAULT_STACKPOINTER  ((ucontext_t *) ucp)->uc_regs->gregs[1]
-++#  endif
-+ # else
-+-#  define SIGSEGV_FAULT_STACKPOINTER  ((ucontext_t *) ucp)->uc_mcontext.uc_regs->gregs[1]
-++/* Assume the structure of ucontext_t in
-++   glibc/sysdeps/unix/sysv/linux/powerpc/sys/ucontext.h.  */
-++/* Because of the union, both definitions should be equivalent.  */
-++#  if 0
-++#   define SIGSEGV_FAULT_STACKPOINTER  ((ucontext_t *) ucp)->uc_mcontext.regs->gpr[1]
-++#  else
-++#   define SIGSEGV_FAULT_STACKPOINTER  ((ucontext_t *) ucp)->uc_mcontext.uc_regs->gregs[1]
-++#  endif
-+ # endif
-+ #endif
-+-- 
-+2.17.1
-+
-diff --git a/package/libsigsegv/0002-add-musl.m4.patch b/package/libsigsegv/0002-add-musl.m4.patch
-new file mode 100644
-index 0000000000..d6f06d8400
---- /dev/null
-+++ b/package/libsigsegv/0002-add-musl.m4.patch
-@@ -0,0 +1,47 @@
-+From a9b07220b986500cfee7777a543494d360964306 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 2 Jan 2024 21:39:24 +0100
-+Subject: [PATCH] add musl.m4
-+
-+Add musl.m4 (retrieved from
-+https://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=blob;f=m4/musl.m4;h=34d2c1ff22a148eeb76936410ac497d68b228f59;hb=HEAD)
-+
-+musl.m4 is needed for gl_MUSL_LIBC since
-+https://git.savannah.gnu.org/gitweb/?p=libsigsegv.git;a=commit;h=a6ff69873110c0a8ba6f7fd90532dbc11224828c
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Upstream: sent to Bruno Haible <bruno@clisp.org>
-+---
-+ m4/musl.m4 | 20 ++++++++++++++++++++
-+ 1 file changed, 20 insertions(+)
-+ create mode 100644 m4/musl.m4
-+
-+diff --git a/m4/musl.m4 b/m4/musl.m4
-+new file mode 100644
-+index 0000000..34d2c1f
-+--- /dev/null
-++++ b/m4/musl.m4
-+@@ -0,0 +1,20 @@
-++# musl.m4 serial 4
-++dnl Copyright (C) 2019-2024 Free Software Foundation, Inc.
-++dnl This file is free software; the Free Software Foundation
-++dnl gives unlimited permission to copy and/or distribute it,
-++dnl with or without modifications, as long as this notice is preserved.
-++
-++# Test for musl libc, despite the musl libc authors don't like it
-++# <https://wiki.musl-libc.org/faq.html>
-++# <https://lists.gnu.org/archive/html/bug-gnulib/2018-02/msg00079.html>.
-++# From Bruno Haible.
-++
-++AC_DEFUN_ONCE([gl_MUSL_LIBC],
-++[
-++  AC_REQUIRE([AC_CANONICAL_HOST])
-++  case "$host_os" in
-++    *-musl* | midipix*)
-++      AC_DEFINE([MUSL_LIBC], [1], [Define to 1 on musl libc.])
-++      ;;
-++  esac
-++])
-+-- 
-+2.43.0
-+
-diff --git a/package/libsigsegv/libsigsegv.mk b/package/libsigsegv/libsigsegv.mk
-index 98bcd55c8c..0d5875aa95 100644
---- a/package/libsigsegv/libsigsegv.mk
-+++ b/package/libsigsegv/libsigsegv.mk
-@@ -10,5 +10,7 @@ LIBSIGSEGV_INSTALL_STAGING = YES
- LIBSIGSEGV_CONF_ENV = sv_cv_fault_posix=yes
- LIBSIGSEGV_LICENSE = GPL-2.0+
- LIBSIGSEGV_LICENSE_FILES = COPYING
-+# We're patching configure.ac
-+LIBSIGSEGV_AUTORECONF = YES
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 8852535292..dde9c6311e 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -278,10 +278,6 @@ package/curlftpfs/0004-fix-musl-build-off-t.patch Upstream
+ package/cutelyst/0001-server-CMakeLists.txt-don-t-override-CMAKE_EXE_LINKE.patch Upstream
+ package/cwiid/0001-wmdemo-fix-linking-by-adding-the-missing-lbluetooth-.patch Upstream
+ package/cwiid/0002-configure-make-wmgui-build-optional.patch Upstream
+-package/dahdi-linux/0001-drivers-dahdi-Kbuild-fix-HOTPLUG_FIRMWARE-definition.patch Upstream
+-package/dahdi-linux/0002-fix-build-with-32-bits-kernel.patch Upstream
+-package/dahdi-linux/0003-Fixed-compilation-issues-on-linux-kernel-5-18-0.patch Upstream
+-package/dahdi-linux/0004-next-fix-kernel-6-1-build.patch Upstream
+ package/dahdi-tools/0001-no-build-docs.patch Upstream
+ package/dahdi-tools/0002-no-perl-manpages.patch Upstream
+ package/dante/0001-fix-sparc-compile.patch Upstream
+diff --git a/package/dahdi-linux/0001-drivers-dahdi-Kbuild-fix-HOTPLUG_FIRMWARE-definition.patch b/package/dahdi-linux/0001-drivers-dahdi-Kbuild-fix-HOTPLUG_FIRMWARE-definition.patch
+deleted file mode 100644
+index 82fd9bdc59..0000000000
+--- a/package/dahdi-linux/0001-drivers-dahdi-Kbuild-fix-HOTPLUG_FIRMWARE-definition.patch
++++ /dev/null
+@@ -1,64 +0,0 @@
+-From dc0a646a460e6da10ddbe7bf02794051d76f8751 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Thu, 4 Nov 2021 17:30:06 +0100
+-Subject: [PATCH] drivers/dahdi/Kbuild: fix HOTPLUG_FIRMWARE definition
+-
+-HOTPLUG_FIRMWARE is used before being defined resulting in the following
+-build failure since version 2.7.0 and
+-https://git.asterisk.org/gitweb/?p=dahdi/linux.git;a=commit;h=e2f492595c9191ba6d556ccac1bde4c1bb892938:
+-
+-  MODPOST /home/fabrice/buildroot/output/build/dahdi-linux-5c840cf43838e0690873e73409491c392333b3b8/drivers/dahdi/Module.symvers
+-ERROR: modpost: "_binary_dahdi_fw_oct6114_032_bin_start" [/home/fabrice/buildroot/output/build/dahdi-linux-5c840cf43838e0690873e73409491c392333b3b8/drivers/dahdi/wcaxx.ko] undefined!
+-ERROR: modpost: "_binary_dahdi_fw_oct6114_032_bin_size" [/home/fabrice/buildroot/output/build/dahdi-linux-5c840cf43838e0690873e73409491c392333b3b8/drivers/dahdi/wcaxx.ko] undefined!
+-ERROR: modpost: "_binary_dahdi_fw_oct6114_128_bin_start" [/home/fabrice/buildroot/output/build/dahdi-linux-5c840cf43838e0690873e73409491c392333b3b8/drivers/dahdi/wcte43x.ko] undefined!
+-ERROR: modpost: "_binary_dahdi_fw_oct6114_064_bin_start" [/home/fabrice/buildroot/output/build/dahdi-linux-5c840cf43838e0690873e73409491c392333b3b8/drivers/dahdi/wcte43x.ko] undefined!
+-ERROR: modpost: "_binary_dahdi_fw_oct6114_128_bin_size" [/home/fabrice/buildroot/output/build/dahdi-linux-5c840cf43838e0690873e73409491c392333b3b8/drivers/dahdi/wcte43x.ko] undefined!
+-ERROR: modpost: "_binary_dahdi_fw_oct6114_064_bin_size" [/home/fabrice/buildroot/output/build/dahdi-linux-5c840cf43838e0690873e73409491c392333b3b8/drivers/dahdi/wcte43x.ko] undefined!
+-ERROR: modpost: "_binary_dahdi_fw_oct6114_032_bin_start" [/home/fabrice/buildroot/output/build/dahdi-linux-5c840cf43838e0690873e73409491c392333b3b8/drivers/dahdi/wcte13xp.ko] undefined!
+-ERROR: modpost: "_binary_dahdi_fw_oct6114_032_bin_size" [/home/fabrice/buildroot/output/build/dahdi-linux-5c840cf43838e0690873e73409491c392333b3b8/drivers/dahdi/wcte13xp.ko] undefined!
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: sent to "Shaun Ruffell <sruffell@sruffell.net>"]
+----
+- drivers/dahdi/Kbuild | 18 +++++++++---------
+- 1 file changed, 9 insertions(+), 9 deletions(-)
+-
+-diff --git a/drivers/dahdi/Kbuild b/drivers/dahdi/Kbuild
+-index 855e5bf..b1a8481 100644
+---- a/drivers/dahdi/Kbuild
+-+++ b/drivers/dahdi/Kbuild
+-@@ -13,6 +13,15 @@ obj-$(DAHDI_BUILD_ALL)$(CONFIG_DAHDI_WCTC4XXP)		+= wctc4xxp/
+- obj-$(DAHDI_BUILD_ALL)$(CONFIG_DAHDI_WCTDM24XXP)	+= wctdm24xxp/
+- obj-$(DAHDI_BUILD_ALL)$(CONFIG_DAHDI_WCTE13XP)		+= wcte13xp.o
+- 
+-+ifndef HOTPLUG_FIRMWARE
+-+ifneq (,$(filter y m,$(CONFIG_FW_LOADER)))
+-+HOTPLUG_FIRMWARE := yes
+-+else
+-+HOTPLUG_FIRMWARE := no
+-+endif
+-+export HOTPLUG_FIRMWARE
+-+endif
+-+
+- wcte13xp-objs := wcte13xp-base.o wcxb_spi.o wcxb.o wcxb_flash.o
+- CFLAGS_wcte13xp-base.o += -I$(src)/oct612x -I$(src)/oct612x/include -I$(src)/oct612x/octdeviceapi -I$(src)/oct612x/octdeviceapi/oct6100api
+- ifeq ($(HOTPLUG_FIRMWARE),yes)
+-@@ -61,15 +70,6 @@ endif
+- 
+- CFLAGS_MODULE += -I$(DAHDI_INCLUDE) -I$(src) -Wno-format-truncation
+- 
+--ifndef HOTPLUG_FIRMWARE
+--ifneq (,$(filter y m,$(CONFIG_FW_LOADER)))
+--HOTPLUG_FIRMWARE := yes
+--else
+--HOTPLUG_FIRMWARE := no
+--endif
+--export HOTPLUG_FIRMWARE
+--endif
+--
+- # fix typo present in CentOS and RHEL 2.6.9 kernels
+- BAD_KERNELS_VERS := 22 34 34.0.1 34.0.2
+- BAD_KERNELS := $(foreach ver,$(BAD_KERNELS_VERS),2.6.9-$(ver).EL 2.6.9-$(ver).ELsmp)
+--- 
+-2.33.0
+-
+diff --git a/package/dahdi-linux/0002-fix-build-with-32-bits-kernel.patch b/package/dahdi-linux/0001-fix-build-with-32-bits-kernel.patch
+similarity index 99%
+rename from package/dahdi-linux/0002-fix-build-with-32-bits-kernel.patch
+rename to package/dahdi-linux/0001-fix-build-with-32-bits-kernel.patch
+index ddaf6b4e7a..df09149679 100644
+--- a/package/dahdi-linux/0002-fix-build-with-32-bits-kernel.patch
++++ b/package/dahdi-linux/0001-fix-build-with-32-bits-kernel.patch
+@@ -12,6 +12,7 @@ ERROR: modpost: "__moddi3" [/home/fabrice/buildroot/output/build/dahdi-linux-5c8
+ ERROR: modpost: "__divdi3" [/home/fabrice/buildroot/output/build/dahdi-linux-5c840cf43838e0690873e73409491c392333b3b8/drivers/dahdi/xpp/xpp.ko] undefined!
  
- $(eval $(autotools-package))
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Upstream: https://github.com/asterisk/dahdi-linux/pull/32
+ ---
+  drivers/dahdi/xpp/xbus-core.c    |  9 ++++++---
+  drivers/dahdi/xpp/xbus-pcm.c     |  4 ++--
+diff --git a/package/dahdi-linux/0003-Fixed-compilation-issues-on-linux-kernel-5-18-0.patch b/package/dahdi-linux/0003-Fixed-compilation-issues-on-linux-kernel-5-18-0.patch
+deleted file mode 100644
+index a896def375..0000000000
+--- a/package/dahdi-linux/0003-Fixed-compilation-issues-on-linux-kernel-5-18-0.patch
++++ /dev/null
+@@ -1,58 +0,0 @@
+-From dbb43101c2a9205b67223b006bf75c29ebadced9 Mon Sep 17 00:00:00 2001
+-From: Pushkar Singh <psingh@sangoma.com>
+-Date: Tue, 2 Aug 2022 19:40:00 +0530
+-Subject: [PATCH] Fixed compilation issues on linux kernel >= 5.18.0
+-
+-With kernel 5.18 and higher
+-PCI: Remove the deprecated "pci-dma-compat.h" API
+-
+-The commit will make sure to impplement pci dma related api's
+-[Retrieved from:
+-https://github.com/asterisk/dahdi-linux/commit/dbb43101c2a9205b67223b006bf75c29ebadced9]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- include/dahdi/kernel.h | 31 +++++++++++++++++++++++++++++++
+- 1 file changed, 31 insertions(+)
+-
+-diff --git a/include/dahdi/kernel.h b/include/dahdi/kernel.h
+-index ed81e9e3..35e93bc4 100644
+---- a/include/dahdi/kernel.h
+-+++ b/include/dahdi/kernel.h
+-@@ -58,6 +58,37 @@
+- 
+- #include <linux/poll.h>
+- 
+-+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 18, 0)
+-+#include <linux/pci.h>
+-+#include <linux/dma-mapping.h>
+-+
+-+static inline void *pci_alloc_consistent(struct pci_dev *hwdev, size_t size, dma_addr_t *dma_handle)
+-+{
+-+    return dma_alloc_coherent(hwdev == NULL ? NULL : &hwdev->dev, size, dma_handle, GFP_ATOMIC);
+-+}
+-+
+-+static inline void pci_free_consistent(struct pci_dev *hwdev, size_t size, void *vaddr, dma_addr_t dma_handle)
+-+{
+-+    dma_free_coherent(hwdev == NULL ? NULL : &hwdev->dev, size, vaddr, dma_handle);
+-+}
+-+
+-+static inline dma_addr_t pci_map_single(struct pci_dev *hwdev, void *ptr, size_t size, int direction)
+-+{
+-+    return dma_map_single(&hwdev->dev, ptr, size, (enum dma_data_direction)direction);
+-+}
+-+
+-+static inline void pci_unmap_single(struct pci_dev *hwdev, dma_addr_t dma_addr, size_t size, int direction)
+-+{
+-+    dma_unmap_single(&hwdev->dev, dma_addr, size, (enum dma_data_direction)direction);
+-+}
+-+
+-+static inline int pci_set_dma_mask(struct pci_dev *dev, u64 mask)
+-+{
+-+    return dma_set_mask(&dev->dev, mask);
+-+}
+-+
+-+#endif
+-+
+- #if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 29)
+- #define HAVE_NET_DEVICE_OPS
+- #endif
+diff --git a/package/dahdi-linux/0004-next-fix-kernel-6-1-build.patch b/package/dahdi-linux/0004-next-fix-kernel-6-1-build.patch
+deleted file mode 100644
+index b910c4b775..0000000000
+--- a/package/dahdi-linux/0004-next-fix-kernel-6-1-build.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From a759a578277bde98eba7ef4bf86bdf819a900de9 Mon Sep 17 00:00:00 2001
+-From: John Thomson <git@johnthomson.fastmail.com.au>
+-Date: Sun, 23 Oct 2022 13:42:52 +1000
+-Subject: [PATCH] fix kernel 6.1 build
+-
+-kernel 6.1 includes b48b89f9c189 ("net: drop the weight argument from netif_napi_add") [0]
+-
+-[0]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b48b89f9c189d24eb5e2b4a0ac067da5a24ee86d
+-
+-Signed-off-by: John Thomson <git@johnthomson.fastmail.com.au>
+-[Retrieved from:
+-https://github.com/asterisk/dahdi-linux/pull/14/commits/a759a578277bde98eba7ef4bf86bdf819a900de9]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- include/dahdi/kernel.h | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/include/dahdi/kernel.h b/include/dahdi/kernel.h
+-index 35e93bc4..fd64a15e 100644
+---- a/include/dahdi/kernel.h
+-+++ b/include/dahdi/kernel.h
+-@@ -58,6 +58,10 @@
+- 
+- #include <linux/poll.h>
+- 
+-+#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0)
+-+#define netif_napi_add netif_napi_add_weight
+-+#endif
+-+
+- #if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 18, 0)
+- #include <linux/pci.h>
+- #include <linux/dma-mapping.h>
+diff --git a/package/dahdi-linux/0005-Fix-build-on-Linux-6.3.patch b/package/dahdi-linux/0005-Fix-build-on-Linux-6.3.patch
+deleted file mode 100644
+index f2ac4d2dc3..0000000000
+--- a/package/dahdi-linux/0005-Fix-build-on-Linux-6.3.patch
++++ /dev/null
+@@ -1,116 +0,0 @@
+-From c4969d756eac041758856b99a1084158c06beb7e Mon Sep 17 00:00:00 2001
+-From: Brahmajit Das <brahmajit.xyz@gmail.com>
+-Date: Thu, 22 Jun 2023 15:52:18 +0000
+-Subject: [PATCH] drivers/dahdi: fix build with clang-16
+-
+-clang-16 enables -Werror=incompatible-pointer-types (along with buch of
+-other warnings) by default, thus resulting in errors such as:
+-
+-/var/tmp/portage/net-misc/dahdi-3.2.0/work/dahdi-linux-3.2.0/drivers/dahdi/dahdi-sysfs.c:272:20: error: incompatible function
+-      pointer types initializing 'int (*)(const struct device *, struct kobj_uevent_env *)' with an expression of type
+-      'int (struct device *, struct kobj_uevent_env *)' [-Wincompatible-function-pointer-types]
+-        .uevent         = span_uevent,
+-                          ^~~~~~~~~~~
+-/var/tmp/portage/net-misc/dahdi-3.2.0/work/dahdi-linux-3.2.0/drivers/dahdi/dahdi-sysfs.c:709:20: error: incompatible function
+-      pointer types initializing 'int (*)(const struct device *, struct kobj_uevent_env *)' with an expression of type
+-      'int (struct device *, struct kobj_uevent_env *)' [-Wincompatible-function-pointer-types]
+-        .uevent         = device_uevent,
+-                          ^~~~~~~~~~~~~
+-2 errors generated.
+-
+-This is due the change in bus_type strcut made in upstream commit
+-https://github.com/torvalds/linux/commit/2a81ada32f0e584fc0c943e0d3a8c9f4fae411d6.
+-Where they make uevent take a const *, as the strcut should not be
+-modifying the device that is passed into it.
+-
+-This patch modifes some of the fucntions parameter types, making dahdi
+-possible to be built with clang-16.
+-
+-Bug: https://bugs.gentoo.org/906179
+-Signed-off-by: Brahmajit Das <brahmajit.xyz@gmail.com>
+-
+-Upstream: https://github.com/asterisk/dahdi-linux/pull/21
+-
+-[Bernd: updated patch for compatibility with kernel < 6.3]
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- drivers/dahdi/dahdi-sysfs.c    | 12 ++++++++++--
+- drivers/dahdi/wctc4xxp/base.c  |  2 +-
+- drivers/dahdi/xpp/xbus-sysfs.c |  4 ++++
+- 3 files changed, 15 insertions(+), 3 deletions(-)
+-
+-diff --git a/drivers/dahdi/dahdi-sysfs.c b/drivers/dahdi/dahdi-sysfs.c
+-index ca29ddba..38236929 100644
+---- a/drivers/dahdi/dahdi-sysfs.c
+-+++ b/drivers/dahdi/dahdi-sysfs.c
+-@@ -47,7 +47,7 @@ static int span_match(struct device *dev, struct device_driver *driver)
+- 	return 1;
+- }
+- 
+--static inline struct dahdi_span *dev_to_span(struct device *dev)
+-+static inline struct dahdi_span *dev_to_span(const struct device *dev)
+- {
+- 	return dev_get_drvdata(dev);
+- }
+-@@ -68,7 +68,11 @@ static inline struct dahdi_span *dev_to_span(struct device *dev)
+- 			return err;				\
+- 	} while (0)
+- 
+-+#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 3, 0)
+- static int span_uevent(struct device *dev, struct kobj_uevent_env *kenv)
+-+#else
+-+static int span_uevent(const struct device *dev, struct kobj_uevent_env *kenv)
+-+#endif
+- {
+- 	struct dahdi_span *span;
+- 
+-@@ -415,7 +419,7 @@ static struct {
+- 	unsigned int clean_chardev:1;
+- } should_cleanup;
+- 
+--static inline struct dahdi_device *to_ddev(struct device *dev)
+-+static inline struct dahdi_device *to_ddev(const struct device *dev)
+- {
+- 	return container_of(dev, struct dahdi_device, dev);
+- }
+-@@ -438,7 +442,11 @@ static inline struct dahdi_device *to_ddev(struct device *dev)
+- 			return err;				\
+- 	} while (0)
+- 
+-+#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 3, 0)
+- static int device_uevent(struct device *dev, struct kobj_uevent_env *kenv)
+-+#else
+-+static int device_uevent(const struct device *dev, struct kobj_uevent_env *kenv)
+-+#endif
+- {
+- 	struct dahdi_device *ddev;
+- 
+-diff --git a/drivers/dahdi/wctc4xxp/base.c b/drivers/dahdi/wctc4xxp/base.c
+-index ec6fc436..db70ea7e 100644
+---- a/drivers/dahdi/wctc4xxp/base.c
+-+++ b/drivers/dahdi/wctc4xxp/base.c
+-@@ -643,7 +643,7 @@ wctc4xxp_net_register(struct wcdte *wc)
+- 		return -ENOMEM;
+- 	priv = netdev_priv(netdev);
+- 	priv->wc = wc;
+--	memcpy(netdev->dev_addr, our_mac, sizeof(our_mac));
+-+	memcpy((void *)netdev->dev_addr, our_mac, sizeof(our_mac));
+- 
+- #	ifdef HAVE_NET_DEVICE_OPS
+- 	netdev->netdev_ops = &wctc4xxp_netdev_ops;
+-diff --git a/drivers/dahdi/xpp/xbus-sysfs.c b/drivers/dahdi/xpp/xbus-sysfs.c
+-index d8c11dc3..11b3ed3e 100644
+---- a/drivers/dahdi/xpp/xbus-sysfs.c
+-+++ b/drivers/dahdi/xpp/xbus-sysfs.c
+-@@ -418,7 +418,11 @@ static int astribank_match(struct device *dev, struct device_driver *driver)
+- 			return err;				\
+- 	} while (0)
+- 
+-+#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 3, 0)
+- static int astribank_uevent(struct device *dev, struct kobj_uevent_env *kenv)
+-+#else
+-+static int astribank_uevent(const struct device *dev, struct kobj_uevent_env *kenv)
+-+#endif
+- {
+- 	xbus_t *xbus;
+- 	extern char *initdir;
+diff --git a/package/dahdi-linux/0006-Fix-build-on-Linux-6.4.patch b/package/dahdi-linux/0006-Fix-build-on-Linux-6.4.patch
+deleted file mode 100644
+index 992cb4d513..0000000000
+--- a/package/dahdi-linux/0006-Fix-build-on-Linux-6.4.patch
++++ /dev/null
+@@ -1,69 +0,0 @@
+-From b393e59d7eb2951e2fb279fca1c4756ea165aeee Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd@kuhls.net>
+-Date: Sun, 9 Jul 2023 17:14:31 +0200
+-Subject: [PATCH] Fix build on Linux 6.4
+-
+-Needed after upstream changes in kernel 6.4:
+-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/diff/include/linux/device/class.h?id=1aaba11da9aa
+-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=48380368dec14859723b9e3fbd43e042638d9a76
+-
+-Upstream: https://github.com/asterisk/dahdi-linux/pull/22
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- drivers/dahdi/dahdi-sysfs-chan.c  | 4 ++++
+- drivers/dahdi/voicebus/voicebus.c | 4 ++++
+- drivers/dahdi/wctdm24xxp/base.c   | 4 ++++
+- 3 files changed, 12 insertions(+)
+-
+-diff --git a/drivers/dahdi/dahdi-sysfs-chan.c b/drivers/dahdi/dahdi-sysfs-chan.c
+-index a91e6ed..b18b5f9 100644
+---- a/drivers/dahdi/dahdi-sysfs-chan.c
+-+++ b/drivers/dahdi/dahdi-sysfs-chan.c
+-@@ -482,7 +482,11 @@ int __init dahdi_sysfs_chan_init(const struct file_operations *fops)
+- 	}
+- 	should_cleanup.channel_driver = 1;
+- 
+-+#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 4, 0)
+- 	dahdi_class = class_create(THIS_MODULE, "dahdi");
+-+#else
+-+	dahdi_class = class_create("dahdi");
+-+#endif
+- 	if (IS_ERR(dahdi_class)) {
+- 		res = PTR_ERR(dahdi_class);
+- 		dahdi_err("%s: class_create(dahi_chan) failed. Error: %d\n",
+-diff --git a/drivers/dahdi/voicebus/voicebus.c b/drivers/dahdi/voicebus/voicebus.c
+-index 8a1f7a6..d141aaf 100644
+---- a/drivers/dahdi/voicebus/voicebus.c
+-+++ b/drivers/dahdi/voicebus/voicebus.c
+-@@ -1135,7 +1135,11 @@ static void vb_stop_txrx_processors(struct voicebus *vb)
+-  */
+- void voicebus_stop(struct voicebus *vb)
+- {
+-+#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 4, 0)
+- 	static DEFINE_SEMAPHORE(stop);
+-+#else
+-+	static DEFINE_SEMAPHORE(stop, 1);
+-+#endif
+- 
+- 	down(&stop);
+- 
+-diff --git a/drivers/dahdi/wctdm24xxp/base.c b/drivers/dahdi/wctdm24xxp/base.c
+-index a28e249..4392b45 100644
+---- a/drivers/dahdi/wctdm24xxp/base.c
+-+++ b/drivers/dahdi/wctdm24xxp/base.c
+-@@ -224,7 +224,11 @@ mod_hooksig(struct wctdm *wc, struct wctdm_module *mod, enum dahdi_rxsig rxsig)
+- }
+- 
+- struct wctdm *ifaces[WC_MAX_IFACES];
+-+#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 4, 0)
+- DEFINE_SEMAPHORE(ifacelock);
+-+#else
+-+DEFINE_SEMAPHORE(ifacelock, 1);
+-+#endif
+- 
+- static void wctdm_release(struct wctdm *wc);
+- 
+--- 
+-2.39.2
+-
+diff --git a/package/dahdi-linux/dahdi-linux.hash b/package/dahdi-linux/dahdi-linux.hash
+index 2d3f336777..e250850630 100644
+--- a/package/dahdi-linux/dahdi-linux.hash
++++ b/package/dahdi-linux/dahdi-linux.hash
+@@ -1,5 +1,5 @@
+-# From http://downloads.asterisk.org/pub/telephony/dahdi-linux/releases/dahdi-linux-3.2.0.sha256
+-sha256  e2ef9b3f6769f60f432cfa09c39c9a0d7ab5bddff59229f385056915c65f9f13  dahdi-linux-3.2.0.tar.gz
++# From http://downloads.asterisk.org/pub/telephony/dahdi-linux/releases/dahdi-linux-3.3.0.sha256
++sha256  f9528a82b5e88c1d92d737efd65bd571bef2cd1b1b44d43b857a76e38e01a7c0  dahdi-linux-3.3.0.tar.gz
+ 
+ # Firmware files have no upstream hash, so sha56 locally computed
+ sha256  3ff26cf80555fd7470b43a87c51d03c1db2a75abcd4561d79f69b6c48298e4a1  dahdi-fwload-vpmadt032-1.25.0.tar.gz
+diff --git a/package/dahdi-linux/dahdi-linux.mk b/package/dahdi-linux/dahdi-linux.mk
+index 88519b5106..c688d3877c 100644
+--- a/package/dahdi-linux/dahdi-linux.mk
++++ b/package/dahdi-linux/dahdi-linux.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DAHDI_LINUX_VERSION = 3.2.0
++DAHDI_LINUX_VERSION = 3.3.0
+ DAHDI_LINUX_SITE = \
+ 	http://downloads.asterisk.org/pub/telephony/dahdi-linux/releases
+ 
+
+--===============4903609372749755822==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4903609372749755822==--
