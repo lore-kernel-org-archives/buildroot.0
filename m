@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E42CC47258
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jan 2024 17:45:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A0D5C4706C
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jan 2024 17:46:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DE59484676;
-	Fri, 12 Jan 2024 17:45:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE59484676
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2563983C72;
+	Fri, 12 Jan 2024 17:46:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2563983C72
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aieDtvO2laWv; Fri, 12 Jan 2024 17:45:49 +0000 (UTC)
+	with ESMTP id n9tc74zgh7fx; Fri, 12 Jan 2024 17:46:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 04DFC84635;
-	Fri, 12 Jan 2024 17:45:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 04DFC84635
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B9BE61BF309
- for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 17:44:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A507E83EBE;
+	Fri, 12 Jan 2024 17:46:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A507E83EBE
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6D5BD1BF309
+ for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 17:44:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3C468401C2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 169864383D
  for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 17:44:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C468401C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 169864383D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eBLxRzdlufCe for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sdig_mnWeXEr for <buildroot@lists.busybox.net>;
  Fri, 12 Jan 2024 17:44:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CE87A40363
+ by smtp4.osuosl.org (Postfix) with ESMTP id 83059438B8
  for <buildroot@buildroot.org>; Fri, 12 Jan 2024 17:44:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CE87A40363
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 83059438B8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BD1B685FA2; Fri, 12 Jan 2024 17:44:07 +0000 (UTC)
+ id 7409985FA4; Fri, 12 Jan 2024 17:44:07 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 12 Jan 2024 18:35:02 +0100
+Date: Fri, 12 Jan 2024 18:23:39 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 2c343d410977bd9e754ecdd466e2d0724e0a4bff
-X-Git-Newrev: 0ff0ef16e5d7371d7773d8206629340a87b644f3
+X-Git-Oldrev: aed89aae186be7af067372e6baad8f4a9c6d23f7
+X-Git-Newrev: 3729b5ecd1c769afc88c177c07a7b4df60a3ce23
 X-Patchwork-Hint: ignore
-Message-Id: <20240112174407.BD1B685FA2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/python-pysensors:
- fix build without host lm-sensors
+Message-Id: <20240112174407.7409985FA4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/exim: bump
+ version to 4.97
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,103 +63,553 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0ff0ef16e5d7371d7773d8206629340a87b644f3
+commit: https://git.buildroot.net/buildroot/commit/?id=3729b5ecd1c769afc88c177c07a7b4df60a3ce23
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-Fix the following build failure raised since the addition of the
-package in commit c8ff8d41c06f6b1cbc5cf8702a516411084ead16:
+Removed patches which are included in this release:
+https://git.exim.org/exim.git/commitdiff/4e9ed49f8f12eb331b29bd5b6dc3693c520fddc2
+https://git.exim.org/exim.git/commitdiff/d8ecc7bf97934a1e2244788c610c958cacd740bd
+https://git.exim.org/exim.git/commitdiff/158dff9936e36a2d31d037d3988b9353458d6471
+https://git.exim.org/exim.git/commitdiff/32da6327e434e986a18b75a84f2d8c687ba14619
 
-  File "/home/buildroot/autobuild/instance-2/output-1/build/python-pysensors-0.0.4/setup.py", line 3, in <module>
-    import sensors
-  File "/home/buildroot/autobuild/instance-2/output-1/build/python-pysensors-0.0.4/sensors/__init__.py", line 20, in <module>
-    raise ImportError("can't find the sensors library.")
+Added upstream patch to fix build error.
 
-Fixes:
- - http://autobuild.buildroot.org/results/acd8583fb635ea27811405a2478182ddcd5642f7
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Tested-by: Brandon Maier <brandon.maier@collins.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d1eea4f90ce9238cae36a8d4ae0161a8a3748616)
+(cherry picked from commit faec3ca30e358575f70a036879029f63f7da9b29)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Remove-import-sensors-from-setup-py.patch | 55 ++++++++++++++++++++++
- package/python-pysensors/Config.in                 |  2 +-
- 2 files changed, 56 insertions(+), 1 deletion(-)
+ .checkpackageignore                                |   4 -
+ ...0006-Fix-regex-n-use-after-free.-Bug-2915.patch | 173 ---------------------
+ package/exim/0006-OpenSSL-fix-non-DANE-build.patch |  28 ++++
+ .../0007-Fix-non-WITH_CONTENT_SCAN-build.patch     |  61 --------
+ .../0008-Fix-non-WITH_CONTENT_SCAN-build-2.patch   | 139 -----------------
+ .../0009-Fix-non-WITH_CONTENT_SCAN-build-3.patch   |  49 ------
+ package/exim/exim.hash                             |   4 +-
+ package/exim/exim.mk                               |   2 +-
+ 8 files changed, 31 insertions(+), 429 deletions(-)
 
-diff --git a/package/python-pysensors/0001-Remove-import-sensors-from-setup-py.patch b/package/python-pysensors/0001-Remove-import-sensors-from-setup-py.patch
+diff --git a/.checkpackageignore b/.checkpackageignore
+index d7e9a2ee08..8852535292 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -394,10 +394,6 @@ package/exim/0002-Don-t-make-backup-copies-of-installed-files.patch Upstream
+ package/exim/0003-Skip-version-check-and-symlink-installation.patch Upstream
+ package/exim/0004-exim_lock-fix-lstat-related-build-errors.patch Upstream
+ package/exim/0005-sieve-fix-build-errors.patch Upstream
+-package/exim/0006-Fix-regex-n-use-after-free.-Bug-2915.patch Upstream
+-package/exim/0007-Fix-non-WITH_CONTENT_SCAN-build.patch Upstream
+-package/exim/0008-Fix-non-WITH_CONTENT_SCAN-build-2.patch Upstream
+-package/exim/0009-Fix-non-WITH_CONTENT_SCAN-build-3.patch Upstream
+ package/exim/S86exim Indent Variables
+ package/expect/0001-enable-cross-compilation.patch Upstream
+ package/expect/0002-allow-tcl-build-directory.patch Upstream
+diff --git a/package/exim/0006-Fix-regex-n-use-after-free.-Bug-2915.patch b/package/exim/0006-Fix-regex-n-use-after-free.-Bug-2915.patch
+deleted file mode 100644
+index 57fa189b04..0000000000
+--- a/package/exim/0006-Fix-regex-n-use-after-free.-Bug-2915.patch
++++ /dev/null
+@@ -1,173 +0,0 @@
+-From 4e9ed49f8f12eb331b29bd5b6dc3693c520fddc2 Mon Sep 17 00:00:00 2001
+-From: Jeremy Harris <jgh146exb@wizmail.org>
+-Date: Wed, 31 Aug 2022 15:37:40 +0100
+-Subject: [PATCH] Fix $regex<n> use-after-free.  Bug 2915
+-
+-[Upstream: https://sources.debian.org/data/main/e/exim4/4.96-9/debian/patches/75_08-Fix-regex-n-use-after-free.-Bug-2915.patch]
+-[Peter: drop Changelog hunk]
+-Signed-off-by: Peter Korsgaard <peter@korsgard.com>
+----
+- src/exim.c                  |  4 +---
+- src/expand.c                |  2 +-
+- src/functions.h             |  1 +
+- src/globals.c               |  2 +-
+- src/regex.c                 | 29 ++++++++++++++++++-----------
+- src/smtp_in.c               |  2 ++
+- test/confs/4002                 | 10 ++++++++++
+- test/mail/4002.userx            |  7 +++++++
+- test/scripts/4000-scanning/4002 |  7 +++++++
+- 9 files changed, 53 insertions(+), 17 deletions(-)
+-
+---- a/src/exim.c
+-+++ b/src/exim.c
+-@@ -1999,12 +1999,10 @@
+- 
+- regex_whitelisted_macro =
+-   regex_must_compile(US"^[A-Za-z0-9_/.-]*$", FALSE, TRUE);
+- #endif
+- 
+--for (i = 0; i < REGEX_VARS; i++) regex_vars[i] = NULL;
+--
+- /* If the program is called as "mailq" treat it as equivalent to "exim -bp";
+- this seems to be a generally accepted convention, since one finds symbolic
+- links called "mailq" in standard OS configurations. */
+- 
+- if ((namelen == 5 && Ustrcmp(argv[0], "mailq") == 0) ||
+-@@ -6082,11 +6080,11 @@
+-   callout_address = NULL;
+-   sending_ip_address = NULL;
+-   deliver_localpart_data = deliver_domain_data =
+-   recipient_data = sender_data = NULL;
+-   acl_var_m = NULL;
+--  for(int i = 0; i < REGEX_VARS; i++) regex_vars[i] = NULL;
+-+  regex_vars_clear();
+- 
+-   store_reset(reset_point);
+-   }
+- 
+- exim_exit(EXIT_SUCCESS);   /* Never returns */
+---- a/src/expand.c
+-+++ b/src/expand.c
+-@@ -1871,11 +1871,11 @@
+-   {
+-   tree_node * node = tree_search(router_var, name + 2);
+-   return node ? node->data.ptr : strict_acl_vars ? NULL : US"";
+-   }
+- 
+--/* Handle $auth<n> variables. */
+-+/* Handle $auth<n>, $regex<n> variables. */
+- 
+- if (Ustrncmp(name, "auth", 4) == 0)
+-   {
+-   uschar *endptr;
+-   int n = Ustrtoul(name + 4, &endptr, 10);
+---- a/src/functions.h
+-+++ b/src/functions.h
+-@@ -436,10 +436,11 @@
+- extern int     regex(const uschar **);
+- #endif
+- extern BOOL    regex_match(const pcre2_code *, const uschar *, int, uschar **);
+- extern BOOL    regex_match_and_setup(const pcre2_code *, const uschar *, int, int);
+- extern const pcre2_code *regex_must_compile(const uschar *, BOOL, BOOL);
+-+extern void    regex_vars_clear(void);
+- extern void    retry_add_item(address_item *, uschar *, int);
+- extern BOOL    retry_check_address(const uschar *, host_item *, uschar *, BOOL,
+-                  uschar **, uschar **);
+- extern retry_config *retry_find_config(const uschar *, const uschar *, int, int);
+- extern BOOL    retry_ultimate_address_timeout(uschar *, const uschar *,
+---- a/src/globals.c
+-+++ b/src/globals.c
+-@@ -1313,11 +1313,11 @@
+- #ifndef DISABLE_PIPE_CONNECT
+- const pcre2_code *regex_EARLY_PIPE   = NULL;
+- #endif
+- const pcre2_code *regex_ismsgid      = NULL;
+- const pcre2_code *regex_smtp_code    = NULL;
+--const uschar *regex_vars[REGEX_VARS];
+-+const uschar *regex_vars[REGEX_VARS] = { 0 };;
+- #ifdef WHITELIST_D_MACROS
+- const pcre2_code *regex_whitelisted_macro = NULL;
+- #endif
+- #ifdef WITH_CONTENT_SCAN
+- uschar *regex_match_string     = NULL;
+---- a/src/regex.c
+-+++ b/src/regex.c
+-@@ -94,22 +94,32 @@
+-   }
+- pcre2_match_data_free(md);
+- return FAIL;
+- }
+- 
+-+
+-+/* reset expansion variables */
+-+void
+-+regex_vars_clear(void)
+-+{
+-+regex_match_string = NULL;
+-+for (int i = 0; i < REGEX_VARS; i++) regex_vars[i] = NULL;
+-+}
+-+
+-+
+-+
+- int
+--regex(const uschar **listptr)
+-+regex(const uschar ** listptr)
+- {
+- unsigned long mbox_size;
+--FILE *mbox_file;
+--pcre_list *re_list_head;
+--uschar *linebuffer;
+-+FILE * mbox_file;
+-+pcre_list * re_list_head;
+-+uschar * linebuffer;
+- long f_pos = 0;
+- int ret = FAIL;
+- 
+--/* reset expansion variable */
+--regex_match_string = NULL;
+-+regex_vars_clear();
+- 
+- if (!mime_stream)				/* We are in the DATA ACL */
+-   {
+-   if (!(mbox_file = spool_mbox(&mbox_size, NULL, NULL)))
+-     {						/* error while spooling */
+-@@ -167,18 +177,17 @@
+- 
+- 
+- int
+- mime_regex(const uschar **listptr)
+- {
+--pcre_list *re_list_head = NULL;
+--FILE *f;
+--uschar *mime_subject = NULL;
+-+pcre_list * re_list_head = NULL;
+-+FILE * f;
+-+uschar * mime_subject = NULL;
+- int mime_subject_len = 0;
+- int ret;
+- 
+--/* reset expansion variable */
+--regex_match_string = NULL;
+-+regex_vars_clear();
+- 
+- /* precompile our regexes */
+- if (!(re_list_head = compile(*listptr)))
+-   return FAIL;			/* no regexes -> nothing to do */
+- 
+---- a/src/smtp_in.c
+-+++ b/src/smtp_in.c
+-@@ -2155,12 +2155,14 @@
+- prdr_requested = FALSE;
+- #endif
+- #ifdef SUPPORT_I18N
+- message_smtputf8 = FALSE;
+- #endif
+-+regex_vars_clear();
+- body_linecount = body_zerocount = 0;
+- 
+-+lookup_value = NULL;				/* Can be set by ACL */
+- sender_rate = sender_rate_limit = sender_rate_period = NULL;
+- ratelimiters_mail = NULL;           /* Updated by ratelimit ACL condition */
+-                    /* Note that ratelimiters_conn persists across resets. */
+- 
+- /* Reset message ACL variables */
+diff --git a/package/exim/0006-OpenSSL-fix-non-DANE-build.patch b/package/exim/0006-OpenSSL-fix-non-DANE-build.patch
 new file mode 100644
-index 0000000000..737f194fd4
+index 0000000000..8ae63d2226
 --- /dev/null
-+++ b/package/python-pysensors/0001-Remove-import-sensors-from-setup-py.patch
-@@ -0,0 +1,55 @@
-+Remove import sensors from setup.py
++++ b/package/exim/0006-OpenSSL-fix-non-DANE-build.patch
+@@ -0,0 +1,28 @@
++From 37b849dca4dfd855212a763662825e967a4d77b1 Mon Sep 17 00:00:00 2001
++From: Jeremy Harris <jgh146exb@wizmail.org>
++Date: Tue, 7 Nov 2023 15:02:18 +0000
++Subject: [PATCH] OpenSSL: fix non-DANE build
 +
-+Don't import sensors in setup.py to avoid adding a dependency on host
-+lm-sensors. Instead, move __version__, __author__, __contact__ and
-+__license__ to setup.py
++Upstream: https://git.exim.org/exim.git/commitdiff/37b849dca4dfd855212a763662825e967a4d77b1
 +
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Upstream: upstream is dead since 2019
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ src/tls-openssl.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff '--color=auto' -Nura PySensors-0.0.4.orig/sensors/__init__.py PySensors-0.0.4/sensors/__init__.py
-+--- PySensors-0.0.4.orig/sensors/__init__.py	2024-01-04 13:47:07.114179107 +0100
-++++ PySensors-0.0.4/sensors/__init__.py	2024-01-04 14:07:24.701178768 +0100
-+@@ -6,12 +6,6 @@
++diff --git a/src/src/tls-openssl.c b/src/src/tls-openssl.c
++index ef11de593..851ac77c5 100644
++--- a/src/tls-openssl.c
+++++ b/src/tls-openssl.c
++@@ -2605,7 +2605,7 @@ if (!(bs = OCSP_response_get1_basic(rsp)))
++     asking for certificate-status under DANE, so this callback won't run for
++     that combination. It still will for non-DANE. */
 + 
-+ from sensors import stdc
++-#ifdef EXIM_HAVE_OPENSSL_OCSP_RESP_GET0_SIGNER
+++#if defined(EXIM_HAVE_OPENSSL_OCSP_RESP_GET0_SIGNER) && defined(SUPPORT_DANE)
++     X509 * signer;
 + 
-+-__version__ = "0.0.4"
-+-__date__ = "2019-09-19"
-+-__author__ = "Marc 'BlackJack' Rintsch"
-+-__contact__ = 'marc@rintsch.de'
-+-__license__ = 'LGPL v2.1'
-+-
-+ API_VERSION = 4
-+ DEFAULT_CONFIG_FILENAME = b"/etc/sensors3.conf"
-+ 
-+diff '--color=auto' -Nura PySensors-0.0.4.orig/setup.py PySensors-0.0.4/setup.py
-+--- PySensors-0.0.4.orig/setup.py	2024-01-04 13:47:07.114179107 +0100
-++++ PySensors-0.0.4/setup.py	2024-01-04 14:07:04.657260411 +0100
-+@@ -1,17 +1,21 @@
-+ #!/usr/bin/env python3
-+ from setuptools import setup
-+-import sensors
-++
-++__version__ = "0.0.4"
-++__author__ = "Marc 'BlackJack' Rintsch"
-++__contact__ = 'marc@rintsch.de'
-++__license__ = 'LGPL v2.1'
-+ 
-+ setup(
-+     name='PySensors',
-+-    version=sensors.__version__,
-+-    author=sensors.__author__,
-+-    author_email=sensors.__contact__,
-++    version=__version__,
-++    author=__author__,
-++    author_email=__contact__,
-+     packages=['sensors'],
-+     # scripts=[],
-+     url='http://pypi.python.org/pypi/PySensors/',
-+     # download_url='',
-+-    license=sensors.__license__,
-++    license=__license__,
-+     description='Python bindings to libsensors (via ctypes)',
-+     long_description=open('README.rst').read(),
-+     long_description_content_type="text/x-rst",
-diff --git a/package/python-pysensors/Config.in b/package/python-pysensors/Config.in
-index f8e056506b..952d14c351 100644
---- a/package/python-pysensors/Config.in
-+++ b/package/python-pysensors/Config.in
++     if (  tls_out.dane_verified
++-- 
++2.30.2
++
+diff --git a/package/exim/0007-Fix-non-WITH_CONTENT_SCAN-build.patch b/package/exim/0007-Fix-non-WITH_CONTENT_SCAN-build.patch
+deleted file mode 100644
+index 9f87f18e00..0000000000
+--- a/package/exim/0007-Fix-non-WITH_CONTENT_SCAN-build.patch
++++ /dev/null
+@@ -1,61 +0,0 @@
+-From d8ecc7bf97934a1e2244788c610c958cacd740bd Mon Sep 17 00:00:00 2001
+-From: Jeremy Harris <jgh146exb@wizmail.org>
+-Date: Wed, 31 Aug 2022 17:03:37 +0100
+-Subject: [PATCH] Fix non-WITH_CONTENT_SCAN build.
+-
+-Broken-by: 4e9ed49f8f
+-
+-[Upstream: https://sources.debian.org/data/main/e/exim4/4.96-9/debian/patches/75_09-Fix-non-WITH_CONTENT_SCAN-build.patch]
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- src/exim.c  | 11 +++++++++++
+- src/regex.c | 10 ----------
+- 2 files changed, 11 insertions(+), 10 deletions(-)
+-
+---- a/src/exim.c
+-+++ b/src/exim.c
+-@@ -1677,10 +1677,21 @@
+-   if ((s = expand_string(big_buffer))) printf("%s\n", CS s);
+-   else printf("Failed: %s\n", expand_string_message);
+- }
+- 
+- 
+-+/* reset regex expansion variables */
+-+void
+-+regex_vars_clear(void)
+-+{
+-+regex_match_string = NULL;
+-+for (int i = 0; i < REGEX_VARS; i++) regex_vars[i] = NULL;
+-+}
+-+
+-+
+-+
+-+
+- 
+- /*************************************************
+- *          Entry point and high-level code       *
+- *************************************************/
+- 
+---- a/src/regex.c
+-+++ b/src/regex.c
+-@@ -95,20 +95,10 @@
+- pcre2_match_data_free(md);
+- return FAIL;
+- }
+- 
+- 
+--/* reset expansion variables */
+--void
+--regex_vars_clear(void)
+--{
+--regex_match_string = NULL;
+--for (int i = 0; i < REGEX_VARS; i++) regex_vars[i] = NULL;
+--}
+--
+--
+--
+- int
+- regex(const uschar ** listptr)
+- {
+- unsigned long mbox_size;
+- FILE * mbox_file;
+diff --git a/package/exim/0008-Fix-non-WITH_CONTENT_SCAN-build-2.patch b/package/exim/0008-Fix-non-WITH_CONTENT_SCAN-build-2.patch
+deleted file mode 100644
+index 43cc1d79a9..0000000000
+--- a/package/exim/0008-Fix-non-WITH_CONTENT_SCAN-build-2.patch
++++ /dev/null
+@@ -1,139 +0,0 @@
+-From 158dff9936e36a2d31d037d3988b9353458d6471 Mon Sep 17 00:00:00 2001
+-From: Jeremy Harris <jgh146exb@wizmail.org>
+-Date: Wed, 31 Aug 2022 17:17:59 +0100
+-Subject: [PATCH] Fix non-WITH_CONTENT_SCAN build (2)
+-
+-Broken-by: d8ecc7bf97
+-
+-[Upstream: https://sources.debian.org/data/main/e/exim4/4.96-9/debian/patches/75_10-Fix-non-WITH_CONTENT_SCAN-build-2.patch]
+-[Peter: drop Changelog hunk]
+-Signed-off-by: Peter Korsgaard <peter@korsgard.com>
+----
+- src/exim.c      | 13 +------------
+- src/functions.h |  2 +-
+- src/globals.h   |  2 +-
+- src/regex.c     | 10 ++++++++++
+- src/smtp_in.c   |  2 ++
+- 5 files changed, 15 insertions(+), 14 deletions(-)
+-
+---- a/src/exim.c
+-+++ b/src/exim.c
+-@@ -1677,21 +1677,10 @@
+-   if ((s = expand_string(big_buffer))) printf("%s\n", CS s);
+-   else printf("Failed: %s\n", expand_string_message);
+- }
+- 
+- 
+--/* reset regex expansion variables */
+--void
+--regex_vars_clear(void)
+--{
+--regex_match_string = NULL;
+--for (int i = 0; i < REGEX_VARS; i++) regex_vars[i] = NULL;
+--}
+--
+--
+--
+--
+- 
+- /*************************************************
+- *          Entry point and high-level code       *
+- *************************************************/
+- 
+-@@ -6085,17 +6074,17 @@
+-   deliver_domain_orig = NULL;
+-   deliver_host = deliver_host_address = NULL;
+-   dnslist_domain = dnslist_matched = NULL;
+- #ifdef WITH_CONTENT_SCAN
+-   malware_name = NULL;
+-+  regex_vars_clear();
+- #endif
+-   callout_address = NULL;
+-   sending_ip_address = NULL;
+-   deliver_localpart_data = deliver_domain_data =
+-   recipient_data = sender_data = NULL;
+-   acl_var_m = NULL;
+--  regex_vars_clear();
+- 
+-   store_reset(reset_point);
+-   }
+- 
+- exim_exit(EXIT_SUCCESS);   /* Never returns */
+---- a/src/functions.h
+-+++ b/src/functions.h
+-@@ -432,15 +432,15 @@
+- extern BOOL    receive_msg(BOOL);
+- extern int_eximarith_t receive_statvfs(BOOL, int *);
+- extern void    receive_swallow_smtp(void);
+- #ifdef WITH_CONTENT_SCAN
+- extern int     regex(const uschar **);
+-+extern void    regex_vars_clear(void);
+- #endif
+- extern BOOL    regex_match(const pcre2_code *, const uschar *, int, uschar **);
+- extern BOOL    regex_match_and_setup(const pcre2_code *, const uschar *, int, int);
+- extern const pcre2_code *regex_must_compile(const uschar *, BOOL, BOOL);
+--extern void    regex_vars_clear(void);
+- extern void    retry_add_item(address_item *, uschar *, int);
+- extern BOOL    retry_check_address(const uschar *, host_item *, uschar *, BOOL,
+-                  uschar **, uschar **);
+- extern retry_config *retry_find_config(const uschar *, const uschar *, int, int);
+- extern BOOL    retry_ultimate_address_timeout(uschar *, const uschar *,
+---- a/src/globals.h
+-+++ b/src/globals.h
+-@@ -895,16 +895,16 @@
+- #ifndef DISABLE_PIPE_CONNECT
+- extern const pcre2_code  *regex_EARLY_PIPE;  /* For recognizing PIPE_CONNCT */
+- #endif
+- extern const pcre2_code  *regex_ismsgid;     /* Compiled r.e. for message ID */
+- extern const pcre2_code  *regex_smtp_code;   /* For recognizing SMTP codes */
+--extern const uschar *regex_vars[];           /* $regexN variables */
+- #ifdef WHITELIST_D_MACROS
+- extern const pcre2_code  *regex_whitelisted_macro; /* For -D macro values */
+- #endif
+- #ifdef WITH_CONTENT_SCAN
+- extern uschar *regex_match_string;     /* regex that matched a line (regex ACL condition) */
+-+extern const uschar *regex_vars[];
+- #endif
+- extern int     remote_delivery_count;  /* Number of remote addresses */
+- extern int     remote_max_parallel;    /* Maximum parallel delivery */
+- extern uschar *remote_sort_domains;    /* Remote domain sorting order */
+- extern retry_config *retries;          /* Chain of retry config information */
+---- a/src/regex.c
+-+++ b/src/regex.c
+-@@ -95,10 +95,20 @@
+- pcre2_match_data_free(md);
+- return FAIL;
+- }
+- 
+- 
+-+/* reset expansion variables */
+-+void
+-+regex_vars_clear(void)
+-+{
+-+regex_match_string = NULL;
+-+for (int i = 0; i < REGEX_VARS; i++) regex_vars[i] = NULL;
+-+}
+-+
+-+
+-+
+- int
+- regex(const uschar ** listptr)
+- {
+- unsigned long mbox_size;
+- FILE * mbox_file;
+---- a/src/smtp_in.c
+-+++ b/src/smtp_in.c
+-@@ -2155,11 +2155,13 @@
+- prdr_requested = FALSE;
+- #endif
+- #ifdef SUPPORT_I18N
+- message_smtputf8 = FALSE;
+- #endif
+-+#ifdef WITH_CONTENT_SCAN
+- regex_vars_clear();
+-+#endif
+- body_linecount = body_zerocount = 0;
+- 
+- lookup_value = NULL;				/* Can be set by ACL */
+- sender_rate = sender_rate_limit = sender_rate_period = NULL;
+- ratelimiters_mail = NULL;           /* Updated by ratelimit ACL condition */
+diff --git a/package/exim/0009-Fix-non-WITH_CONTENT_SCAN-build-3.patch b/package/exim/0009-Fix-non-WITH_CONTENT_SCAN-build-3.patch
+deleted file mode 100644
+index f9675c80d3..0000000000
+--- a/package/exim/0009-Fix-non-WITH_CONTENT_SCAN-build-3.patch
++++ /dev/null
+@@ -1,49 +0,0 @@
+-From 32da6327e434e986a18b75a84f2d8c687ba14619 Mon Sep 17 00:00:00 2001
+-From: Jeremy Harris <jgh146exb@wizmail.org>
+-Date: Thu, 1 Sep 2022 15:54:35 +0100
+-Subject: [PATCH] Fix non-WITH_CONTENT_SCAN build (3)
+-
+-Broken-by: d8ecc7bf97
+-
+-[Upstream: https://sources.debian.org/data/main/e/exim4/4.96-9/debian/patches/75_11-Fix-non-WITH_CONTENT_SCAN-build-3.patch]
+-[Peter: drop Changelog hunk]
+-Signed-off-by: Peter Korsgaard <peter@korsgard.com>
+----
+- src/expand.c | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/src/expand.c b/src/expand.c
+-index 89de56255..831ca2b75 100644
+---- a/src/expand.c
+-+++ b/src/expand.c
+-@@ -1869,6 +1869,7 @@ if (Ustrncmp(name, "auth", 4) == 0)
+-   if (!*endptr && n != 0 && n <= AUTH_VARS)
+-     return auth_vars[n-1] ? auth_vars[n-1] : US"";
+-   }
+-+#ifdef WITH_CONTENT_SCAN
+- else if (Ustrncmp(name, "regex", 5) == 0)
+-   {
+-   uschar *endptr;
+-@@ -1876,6 +1877,7 @@ else if (Ustrncmp(name, "regex", 5) == 0)
+-   if (!*endptr && n != 0 && n <= REGEX_VARS)
+-     return regex_vars[n-1] ? regex_vars[n-1] : US"";
+-   }
+-+#endif
+- 
+- /* For all other variables, search the table */
+- 
+-@@ -8715,9 +8717,11 @@ assert_variable_notin() treats as const, so deconst is safe. */
+- for (int i = 0; i < AUTH_VARS; i++) if (auth_vars[i])
+-   assert_variable_notin(US"auth<n>", US auth_vars[i], &e);
+- 
+-+#ifdef WITH_CONTENT_SCAN
+- /* check regex<n> variables. assert_variable_notin() treats as const. */
+- for (int i = 0; i < REGEX_VARS; i++) if (regex_vars[i])
+-   assert_variable_notin(US"regex<n>", US regex_vars[i], &e);
+-+#endif
+- 
+- /* check known-name variables */
+- for (var_entry * v = var_table; v < var_table + var_table_size; v++)
+--- 
+-2.35.1
+-
+diff --git a/package/exim/exim.hash b/package/exim/exim.hash
+index e784bf7521..6336a40427 100644
+--- a/package/exim/exim.hash
++++ b/package/exim/exim.hash
 @@ -1,6 +1,6 @@
- config BR2_PACKAGE_PYTHON_PYSENSORS
- 	bool "python-pysensors"
--	select BR2_PACKAGE_LM_SENSORS
-+	select BR2_PACKAGE_LM_SENSORS # runtime
- 	help
- 	  Python bindings for libsensors.so from the lm-sensors project
- 	  via ctypes. Supports API version 4, i.e. libsensors version
+ # From https://ftp.exim.org/pub/exim/exim4/00-sha256sums.txt
+-sha256  038e327e8d1e93d005bac9bb06fd22aec44d5028930d6dbe8817ad44bbfc1de6  exim-4.96.2.tar.xz
++sha256  428150e67c494fa14fe5195d81b972c1b23e651ee4f9f2ff1788250266d31e9c  exim-4.97.tar.xz
+ # From https://ftp.exim.org/pub/exim/exim4/00-sha512sums.txt
+-sha512  dc9f6a114e64ac826489edff88d50a24195b64714428e691c10a7bfb119b3ebb6455bf80cbb34dfd0a4e2e44cbde72effb009357a8e0a6065e512fe32092e3ed  exim-4.96.2.tar.xz
++sha512  b28cbb49fa7e143dfcc94e004d57cf98a1945013e676cd103c1ee4cf52933d49d378baa13bea2663353dba97745d6b2ab8b7b66cde870788a2d85d7abd716968  exim-4.97.tar.xz
+ # Locally calculated
+ sha256  49240db527b7e55b312a46fc59794fde5dd006422e422257f4f057bfd27b3c8f  LICENCE
+diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+index 166a4ead54..23d888e6f2 100644
+--- a/package/exim/exim.mk
++++ b/package/exim/exim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EXIM_VERSION = 4.96.2
++EXIM_VERSION = 4.97
+ EXIM_SOURCE = exim-$(EXIM_VERSION).tar.xz
+ EXIM_SITE = https://ftp.exim.org/pub/exim/exim4
+ EXIM_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
