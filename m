@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5933FC4706C
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jan 2024 19:46:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60FF9C4707C
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jan 2024 19:56:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0C8E560BD5;
-	Fri, 12 Jan 2024 19:46:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C8E560BD5
+	by smtp3.osuosl.org (Postfix) with ESMTP id 191E160D62;
+	Fri, 12 Jan 2024 19:56:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 191E160D62
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id F3f_kWK1RpBW; Fri, 12 Jan 2024 19:46:45 +0000 (UTC)
+	with ESMTP id 39Ud7MeWVNXF; Fri, 12 Jan 2024 19:56:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8C87460B49;
-	Fri, 12 Jan 2024 19:46:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C87460B49
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5727560C15;
+	Fri, 12 Jan 2024 19:56:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5727560C15
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8B7411BF489
- for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 19:46:42 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1E1241BF489
+ for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 19:56:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 646BC83FE1
- for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 19:46:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 646BC83FE1
+ by smtp1.osuosl.org (Postfix) with ESMTP id 03F7384588
+ for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 19:56:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 03F7384588
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZubWOA_92H6V for <buildroot@lists.busybox.net>;
- Fri, 12 Jan 2024 19:46:41 +0000 (UTC)
+ with ESMTP id L2FidmkUtHOe for <buildroot@lists.busybox.net>;
+ Fri, 12 Jan 2024 19:56:22 +0000 (UTC)
 Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5443183FB4
- for <buildroot@buildroot.org>; Fri, 12 Jan 2024 19:46:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5443183FB4
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1A67884571
+ for <buildroot@buildroot.org>; Fri, 12 Jan 2024 19:56:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1A67884571
 Received: from home.juju.sh (unknown
  [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
  (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id EB81D13F8BA;
- Fri, 12 Jan 2024 20:46:36 +0100 (CET)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 8F09713F86A;
+ Fri, 12 Jan 2024 20:56:18 +0100 (CET)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 12 Jan 2024 20:46:26 +0100
-Message-ID: <20240112194627.112457-1-ju.o@free.fr>
+Date: Fri, 12 Jan 2024 20:56:10 +0100
+Message-ID: <20240112195610.151822-1-ju.o@free.fr>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1705088798;
- bh=kiyzzuqpK3AlNw/rOggObSzMEhH+UAdpvSme4xM8FNA=;
+ d=free.fr; s=smtp-20201208; t=1705089379;
+ bh=UfiIDskc2lDtowb17vGqi8p27+qPApSBU0rSXcakyqE=;
  h=From:To:Cc:Subject:Date:From;
- b=B/M+3rUr4BWpO2ZT9+EOA/EwhnmL9DR7pwhbr0Y08bM8XJbXi3cF/mBJ6RLoAdUlu
- 03tx7CJZ043aFR2ujGG6PfjQxLxFIqtranHQVX86JqmMha8cwyrbHrOYJjgzNlVAzt
- PBSW0iGKfsQXzXQeN0N7pPd9K74RXiw2/AC1/w4fdT7pcryfwl8Bevh3qh59HtwWGH
- Y96ISW8JAC2IJjPenZATRvVwhTczKx9m0YzMinwl1VcyOGzuWGDlwguLC0y8GLANYx
- NyZG3BeOPnJttgIXPvD4aSM1IA4o4NPZoX5LaR7cguY7CfiSNazae5XTusKRyVzjH9
- mDAA6Kpprikwg==
+ b=VJrufwr14ZqdYBM6Or+wj57lGpLX2AzHP+N9yXvzhptogX4qGPcX+/r21+FxG1OoR
+ GXgo7zX10YqSvC9FenPC4cJgzaht6RQ+by/osheTdM48rfBKvK9by3hO2uhFub2bGz
+ l7vT9KSpOAFtigG21N/d9EhA3m7LKfbxPgUJuicyh9QIFii+5P7iocY6zU6/e/woyI
+ ynJlcF83KyN57+qlCtwRz4jDF3rklMYR5NDJ2/0IIOq1v78AAXkzTwARyXff54svin
+ 9J14i4DAyXYit9m5VtzU5JhHAUw6AjTFXzuOyU0qWvYM3fizIo+FMhY6b7TlXEqqVO
+ 0fKeRNBG/ymnQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=B/M+3rUr
-Subject: [Buildroot] [PATCH 1/1] support/testing: new apache runtime test
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=VJrufwr1
+Subject: [Buildroot] [PATCH 1/1] support/testing: new sqlite runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,41 +78,95 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- DEVELOPERS                                   |  1 +
- support/testing/tests/package/test_apache.py | 23 ++++++++++++++++++++
- 2 files changed, 24 insertions(+)
- create mode 100644 support/testing/tests/package/test_apache.py
+ DEVELOPERS                                   |   1 +
+ support/testing/tests/package/test_sqlite.py | 101 +++++++++++++++++++
+ 2 files changed, 102 insertions(+)
+ create mode 100644 support/testing/tests/package/test_sqlite.py
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 94a89c63d5..11780db285 100644
+index 94a89c63d5..5f9416f248 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1759,6 +1759,7 @@ F:	support/testing/tests/package/sample_python_pyalsa.py
- F:	support/testing/tests/package/sample_python_spake2.py
- F:	support/testing/tests/package/test_acpica.py
- F:	support/testing/tests/package/test_acpica/
-+F:	support/testing/tests/package/test_apache.py
- F:	support/testing/tests/package/test_brotli.py
- F:	support/testing/tests/package/test_bzip2.py
- F:	support/testing/tests/package/test_compressor_base.py
-diff --git a/support/testing/tests/package/test_apache.py b/support/testing/tests/package/test_apache.py
+@@ -1811,6 +1811,7 @@ F:	support/testing/tests/package/test_python_spake2.py
+ F:	support/testing/tests/package/test_rdma_core.py
+ F:	support/testing/tests/package/test_rdma_core/
+ F:	support/testing/tests/package/test_screen.py
++F:	support/testing/tests/package/test_sqlite.py
+ F:	support/testing/tests/package/test_stress_ng.py
+ F:	support/testing/tests/package/test_tcl.py
+ F:	support/testing/tests/package/test_tcl/
+diff --git a/support/testing/tests/package/test_sqlite.py b/support/testing/tests/package/test_sqlite.py
 new file mode 100644
-index 0000000000..f29f4e2524
+index 0000000000..215703d7f2
 --- /dev/null
-+++ b/support/testing/tests/package/test_apache.py
-@@ -0,0 +1,23 @@
++++ b/support/testing/tests/package/test_sqlite.py
+@@ -0,0 +1,101 @@
 +import os
 +
 +import infra.basetest
 +
 +
-+class TestApache(infra.basetest.BRTest):
++class TestSQLite(infra.basetest.BRTest):
 +    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
 +        """
-+        BR2_PACKAGE_APACHE=y
++        BR2_PACKAGE_SQLITE=y
 +        BR2_TARGET_ROOTFS_CPIO=y
 +        # BR2_TARGET_ROOTFS_TAR is not set
 +        """
++    db_file = "buildroot.db"
++    db_backup = "db_dump.sql"
++
++    def run_sql_query(self, query):
++        cmd = f'sqlite3 "{self.db_file}" "{query}"'
++        self.assertRunOk(cmd)
++
++    def create_tables(self):
++        sql_query = "CREATE TABLE fruits ("
++        sql_query += "id integer PRIMARY KEY, name varchar(16) NOT NULL);"
++        self.run_sql_query(sql_query)
++
++        sql_query = "CREATE TABLE colors ("
++        sql_query += "id integer PRIMARY KEY, name varchar(16) NOT NULL);"
++        self.run_sql_query(sql_query)
++
++        sql_query = "CREATE TABLE fruit_colors ("
++        sql_query += "fruit_id integer REFERENCES fruits(id), "
++        sql_query += "color_id integer REFERENCES colors(id), "
++        sql_query += "UNIQUE (fruit_id, color_id));"
++        self.run_sql_query(sql_query)
++
++    def insert_data(self):
++        fruits = ["Banana", "Blueberry", "Orange", "Raspberry"]
++        fruit_id = 1
++        for fruit in fruits:
++            sql_query = "INSERT INTO fruits (id, name) "
++            sql_query += f"VALUES ({fruit_id}, '{fruit}');"
++            self.run_sql_query(sql_query)
++            fruit_id += 1
++
++        colors = ["Blue", "Orange", "Red", "Yellow"]
++        color_id = 1
++        for color in colors:
++            sql_query = "INSERT INTO colors (id, name) "
++            sql_query += f"VALUES ({color_id}, '{color}');"
++            self.run_sql_query(sql_query)
++            color_id += 1
++
++        fruit_colors = [(1, 4), (2, 1), (3, 2), (4, 3)]
++        for fruit_color in fruit_colors:
++            fruit_id, color_id = fruit_color
++            sql_query = "INSERT INTO fruit_colors (fruit_id, color_id) "
++            sql_query += f"VALUES ({fruit_id}, {color_id});"
++            self.run_sql_query(sql_query)
++
++    def query_database(self):
++        sql_query = "SELECT "
++        sql_query += "fruits.name AS fruit, colors.name AS color "
++        sql_query += "FROM fruits, colors, fruit_colors "
++        sql_query += "WHERE fruits.id = fruit_colors.fruit_id "
++        sql_query += "AND colors.id = fruit_colors.color_id "
++        sql_query += "ORDER BY fruit;"
++        self.run_sql_query(sql_query)
 +
 +    def test_run(self):
 +        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
@@ -121,9 +175,33 @@ index 0000000000..f29f4e2524
 +                           options=["-initrd", cpio_file])
 +        self.emulator.login()
 +
-+        self.assertRunOk("httpd -V")
-+        self.assertRunOk("wget http://localhost/index.html")
-+        self.assertRunOk("grep -F 'It works!' index.html")
++        # The sqlite3 binary can execute.
++        self.assertRunOk("sqlite3 --version")
++
++        self.create_tables()
++        self.insert_data()
++        self.query_database()
++
++        sql_query = "UPDATE fruits SET name = 'Lemon' WHERE id = 1;"
++        self.run_sql_query(sql_query)
++
++        # Dump the test database for a backup.
++        cmd = f'echo .dump | sqlite3 "{self.db_file}" > "{self.db_backup}"'
++        self.assertRunOk(cmd)
++
++        # Drop all the tables.
++        tables = ["fruit_colors", "fruits", "colors"]
++        for table in tables:
++            sql_query = f"DROP TABLE {table};"
++            self.run_sql_query(sql_query)
++
++        # Restore the backup.
++        cmd = f'sqlite3 "{self.db_file}" < "{self.db_backup}"'
++        self.assertRunOk(cmd)
++
++        # Query on last time our data, to check the backup restoration
++        # succeeded.
++        self.query_database()
 -- 
 2.43.0
 
