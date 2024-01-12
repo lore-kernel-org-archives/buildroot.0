@@ -4,86 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35DE3C47077
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jan 2024 00:59:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A42CC4707B
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jan 2024 00:59:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E0B8B42E11;
-	Fri, 12 Jan 2024 00:59:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0B8B42E11
+	by smtp4.osuosl.org (Postfix) with ESMTP id 53B7C42DED;
+	Fri, 12 Jan 2024 00:59:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 53B7C42DED
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Dm3WQuIiV6lE; Fri, 12 Jan 2024 00:59:21 +0000 (UTC)
+	with ESMTP id XT41WSnXhHmL; Fri, 12 Jan 2024 00:59:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 04A5342E0D;
-	Fri, 12 Jan 2024 00:59:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04A5342E0D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 62E391BF97F
- for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 00:57:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 970CB42E11;
+	Fri, 12 Jan 2024 00:59:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 970CB42E11
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 74D071BF97F
+ for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 00:57:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3A8DC40648
- for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 00:57:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A8DC40648
+ by smtp4.osuosl.org (Postfix) with ESMTP id 59E8542DED
+ for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 00:57:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 59E8542DED
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UAh98sRVDEdr for <buildroot@lists.busybox.net>;
- Fri, 12 Jan 2024 00:57:37 +0000 (UTC)
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com
- [IPv6:2607:f8b0:4864:20::432])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B12E940124
- for <buildroot@buildroot.org>; Fri, 12 Jan 2024 00:57:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B12E940124
-Received: by mail-pf1-x432.google.com with SMTP id
- d2e1a72fcca58-6d9bd63ec7fso3823796b3a.2
- for <buildroot@buildroot.org>; Thu, 11 Jan 2024 16:57:37 -0800 (PST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id j4RWHQzIoXvJ for <buildroot@lists.busybox.net>;
+ Fri, 12 Jan 2024 00:57:39 +0000 (UTC)
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com
+ [IPv6:2607:f8b0:4864:20::232])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A5FC142DF6
+ for <buildroot@buildroot.org>; Fri, 12 Jan 2024 00:57:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5FC142DF6
+Received: by mail-oi1-x232.google.com with SMTP id
+ 5614622812f47-3bb9b28acb4so4500342b6e.2
+ for <buildroot@buildroot.org>; Thu, 11 Jan 2024 16:57:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1705021056; x=1705625856;
+ d=1e100.net; s=20230601; t=1705021057; x=1705625857;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=GbYvK41MNbyJvTNQnobk7ebJwDBk6++XWqSQqFrtnts=;
- b=mYMhtWTPbf+hIcIcgPAo1lewDFMDidZeUbJ+JjOxvK1cs2/O3eyLKqHD3+xlPG4RmI
- 3JdlJSNgMDpg20vQXjxZRfYjp/f4MKNNrl6BDEL7rFU/aNmv7bZCd40ocIoSzbYtxzBr
- RVLAbyH7BlM8EGZwzCo1a95w59vNXjyjO+lyNc+iGC2vx03FOw2SkXJ7Gq4A3Tb0j7sV
- EFWNxhpg4YZRH7zJTZHXGvvBqjxciUx6fOXOJaUm/GXxiBZNOnRwQJG/Rm6u32XVm0ea
- vQNroVC62Wv/l7SlNw0puVrp+ZODkNIR9mQ3kFipEzDMzYJSSHcRVv1FOz2CE4iEfxa1
- m4dg==
-X-Gm-Message-State: AOJu0Ywz7+31dnbR4QVzXwE3V0MRjsIsdVymMxmmUUiXUMxk9YuAoaIO
- 75JcopZwBHDFTvO65gcP+mxU9fHFaGcdZo6A4vShcBves0o=
-X-Google-Smtp-Source: AGHT+IGR1B74m/mRQXobHT82FvKaF77FzrtHGICQo/ZHMm84yCODPQkmtMFQdJpWglv2IWwY0cGJwQ==
-X-Received: by 2002:aa7:9f1a:0:b0:6da:c8b7:d9e3 with SMTP id
- g26-20020aa79f1a000000b006dac8b7d9e3mr147595pfr.55.1705021056106; 
- Thu, 11 Jan 2024 16:57:36 -0800 (PST)
+ bh=561Ich8NlqBIoKcqEPqACONPv/X/gWXcHFPKIpILp2I=;
+ b=LTUdsixseHUMF+rDNeWEk6ulekLiADX9emFor+TYsZ5GRi8aDJUNfuL/7HampcxJ+5
+ xQLmEF375RvlNGwhpjcNxMh7Frr2ZP9bSzVsOTZLCMB4Iy/cuEE9OTF1hTZzK1r5do85
+ MGwnByHB5t23igYN8rw9oZNs69hLBKxtZtwNqKKpzadyG5YTbQxvzTGW5vRPH7doIqd9
+ tFi3Gf1xnttbWvo7UgaE+ssJBuV5YQC7jgwpmtAzhRg8u2kcQSpKL+waIcdMZRb8T0W1
+ Ucdf7i+28J/+ANsCZx5LF3TsebzTH/F5qlZUaaCAYibQjVTlvcJHDeLEvV+gjGxaYiMO
+ O1gw==
+X-Gm-Message-State: AOJu0YyrtCsIN7K0AogunHRK8jWtiqMg0fwBLQWCLkM5RLpIXlQmkgQM
+ w3cpLeoboar8o8NEmGysJwYEkoZG0W/cAo/P4rD5YTf/5vo=
+X-Google-Smtp-Source: AGHT+IFNC1cTnOLKY10xm67z5OwET8v2E0B6ZfAE6jMQ/8O780G/0EUQwsVIMXJnWk3ShFmp2dzzSA==
+X-Received: by 2002:a05:6808:138f:b0:3bd:5f3c:e021 with SMTP id
+ c15-20020a056808138f00b003bd5f3ce021mr251421oiw.26.1705021057656; 
+ Thu, 11 Jan 2024 16:57:37 -0800 (PST)
 Received: from fedora.. (24-116-183-211.cpe.sparklight.net. [24.116.183.211])
  by smtp.gmail.com with ESMTPSA id
- y187-20020a62cec4000000b006dab86e675esm1917733pfg.185.2024.01.11.16.57.34
+ y187-20020a62cec4000000b006dab86e675esm1917733pfg.185.2024.01.11.16.57.36
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 11 Jan 2024 16:57:35 -0800 (PST)
+ Thu, 11 Jan 2024 16:57:36 -0800 (PST)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Thu, 11 Jan 2024 17:57:18 -0700
-Message-ID: <20240112005719.1082305-10-adam.duskett@amarulasolutions.com>
+Date: Thu, 11 Jan 2024 17:57:19 -0700
+Message-ID: <20240112005719.1082305-11-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240112005719.1082305-1-adam.duskett@amarulasolutions.com>
 References: <20240112005719.1082305-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1705021056; x=1705625856;
+ d=amarulasolutions.com; s=google; t=1705021057; x=1705625857;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=GbYvK41MNbyJvTNQnobk7ebJwDBk6++XWqSQqFrtnts=;
- b=M9fWQdwLrSVdNVG5a4oxcdGQPC5P/hQSdq4J8+hXEgkOcPjOm2oQCdrHWASeVLOKiX
- E05hQ5M0RQd8C6JpizOvLIzaIVnq/P9bhGJme3wXFrrN58nUksm/0XprgEQ0NuQBXPAV
- T24d4yDa6jTz5m//RwVu8UZ1uowfu87wkVFsY=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=561Ich8NlqBIoKcqEPqACONPv/X/gWXcHFPKIpILp2I=;
+ b=rD0i1ljJoy9xfY90rYdFQqDhSADMrkVsdhqF2SItSV8d45A8MEsckVaS9Gmh3b/kt9
+ 98L+chKifGe5PkNAbbyybQsGz6zNPcX1N4O/0w0IptLJEFvDlTp0TNdmr82fF9Cemp8V
+ m1G2NqRrPk7r+R3yShJ7UE/NAYGt4LjbrB0Eo=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=M9fWQdwL
-Subject: [Buildroot] [PATCH 09/10] package/flutter-gallery: fix build options
+ header.b=rD0i1ljJ
+Subject: [Buildroot] [PATCH 10/10] package/flutter-gallery: clean up
+ install_target_cmds
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,109 +102,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-As the flutter-gallery package is a reference package for users wishing to use
-Flutter for their UX with Buildroot, this package must have the correct build
-options. Indeed, this package currently starts and runs, but only because of
-the 0001-remove-GetStorage.patch. Through testing, flutter-gallery fails to
-run during the following scenario:
-  - The xdg-user-dirs package is ported and present.
-  - flutter-gallery depends on xdg-user-dirs.
-  - The 0001-remove-GetStorage.patch file is removed.
+Remove and create the kernel_blob.bin file in the flutter_assets directory:
 
-After extensive testing and comparing the current build arguments against what
-the meta-flutter repository for Yocto passes to all of the applications that
-inherit flutter-app, it is clear that handling the dart_plugin_registrant.dart
-file is missing from the dart arguments in the flutter-gallery build step.
+  When Flutter compiles the source code, it creates the kernel_blob.bin file,
+  a Dart Kernel Bytecode of the application.
 
-As the documentation for the dart_plugin_registrant.dart file is nonexistent
-in any official documentation. However, there is a comment from an issue on
-the official dart-lang/sdk page on Github that explains what this file is
-(and refers to the Dark SDK source code instead of official documentation.)
+  If kernel_blob.bin exists inside the flutter_assets directory, then the
+  application source code can be extracted with nothing more than apktool.
+  Not only is this a security risk, it's also redundant and a waste of space.
 
-From https://github.com/dart-lang/sdk/issues/52506#issuecomment-1562806787:
-```
-The dart_plugin_registrant.dart is a very special file. It's neither included
-in the Dart app nor any dependent packages. Rather it's an artificially
-created file by the flutter tools. It contains logic to run plugin
-registration logic.
+  Removing the kernel_blob.bin file generated for flutter-gallery saves 86M!
+  Because this package is a reference package, and some applications may check
+  if the kernel_blob.bin file exists, we also touch a blank kernel_blob.bin
+  file.
 
-A flutter build will eventually compile the Dart application where it will add
-<dir>/.dart_tool/flutter_build/dart_plugin_registrant.dart as an extra source
-file (see here). Additionally it will also inject that uri as a constant into
-Dart source code via a -Dflutter.dart_plugin_registrant=<uri>.
-
-Once the app runs it will access the
-package:flutter/src/dart_plugin_registrant.dart:dartPluginRegistrantLibrary
-constant and use it to look up the library object and then invoke the plugin
-registration logic.
-```
-
-Now that what the dart_plugin_registrant.dart does is understood, we need to
-pass the following to the dart binary during the flutter-gallery build step:
-
-  -Dflutter.dart_plugin_registrant=file://[...]/dart_plugin_registrant.dart:
-   Injects a file containing the logic to run the plugin registration logic as
-   a constant into the flutter-application source code.
-
-  --source file://$(@D)/.dart_tool/flutter_build/dart_plugin_registrant.dart:
-    Adds the dart_plugin_registrant.dart file as a source file to compile.
-
-  --source package:flutter/src/dart_plugin_registrant.dart:
-    Binds the plugin implementation to the platform interface based on the
-    configuration of the app's pubpec.yaml, and the plugin's pubspec.yaml.
-
-The native_assets.yaml file provides the native-assets mapping for
-@Native external functions. The flutter-gallery package has no functions
-marked as @Native; however, calling "flutter build bundle" creates a blank
-template "native_assets.yaml" file, which is safe to include in the build.
-This line, while not necessary for flutter-gallery, may be helpful for other
-users who use @Native external functions in their applications, and this
-example makes porting other applications quicker and easier.
-
-Finally, there is a known issue when using the dart_plugin_registrant.dart
-file outlined here: https://github.com/flutter/flutter/issues/137972.
-
-To summarize: If a user fails to pass the --obfuscate flag to gen_snapshsot
-when using the dart_plugin_registrant.dart file, their application may fail
-to start. One such application is Gallery, which I have independently verified.
-
-As such, pass the --obfuscate flag to gen_snapshot to ensure that
-flutter-gallery properly starts when building with the additional
-dart_plugin_registrant.dart arguments above.
-
-However, I acknowledge that the obfuscate flag hides function and class names
-in compiled Dart code, and there are some cases when a user should avoid using
-the flag. For example, when using the runtimeType API:
-https://api.flutter.dev/flutter/dart-core/Object/runtimeType.html. However,
-this is not the case with flutter-gallery, and the --obfuscate flag is needed.
+Do not use relative symlinks:
+  Users may not install their applications in the
+  /usr/share/flutter/${package_name} directory. Because this is a reference
+  application, using exact symlinks to icudtl.dat and libflutter_engine.so
+  is preferable.
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
- package/flutter-gallery/flutter-gallery.mk | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ package/flutter-gallery/flutter-gallery.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/package/flutter-gallery/flutter-gallery.mk b/package/flutter-gallery/flutter-gallery.mk
-index 50ddd9ffba..e23dc399da 100644
+index e23dc399da..6b0954cb32 100644
 --- a/package/flutter-gallery/flutter-gallery.mk
 +++ b/package/flutter-gallery/flutter-gallery.mk
-@@ -24,10 +24,15 @@ endef
+@@ -45,10 +45,12 @@ define FLUTTER_GALLERY_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 0755 $(@D)/libapp.so \
+ 		$(FLUTTER_GALLERY_INSTALL_DIR)/lib/libapp.so
  
- define FLUTTER_GALLERY_BUILD_CMDS
- 	cd $(@D) && \
--		FLUTTER_RUNTIME_MODES=$(FLUTTER_ENGINE_RUNTIME_MODE) \
--		$(HOST_FLUTTER_SDK_BIN_DART_BIN) package:gallery/main.dart && \
-+		$(HOST_FLUTTER_SDK_BIN_DART_BIN) \
-+			-Dflutter.dart_plugin_registrant=file://$(@D)/.dart_tool/flutter_build/dart_plugin_registrant.dart \
-+			--source file://$(@D)/.dart_tool/flutter_build/dart_plugin_registrant.dart \
-+			--source package:flutter/src/dart_plugin_registrant.dart \
-+			--native-assets $(@D)/.dart_tool/flutter_build/*/native_assets.yaml \
-+			package:gallery/main.dart && \
- 		$(HOST_FLUTTER_SDK_BIN_ENV) $(FLUTTER_ENGINE_GEN_SNAPSHOT) \
- 			--deterministic \
-+			--obfuscate \
- 			--snapshot_kind=app-aot-elf \
- 			--elf=libapp.so \
- 			.dart_tool/flutter_build/*/app.dill
+-	ln -sf ../../../$(FLUTTER_ENGINE_RUNTIME_MODE)/data/icudtl.dat \
++	ln -sf /usr/share/flutter/$(FLUTTER_ENGINE_RUNTIME_MODE)/data/icudtl.dat \
+ 	$(FLUTTER_GALLERY_INSTALL_DIR)/data/
+ 
+-	ln -sf ../../../../../lib/libflutter_engine.so $(FLUTTER_GALLERY_INSTALL_DIR)/lib/
++	ln -sf /usr/lib/libflutter_engine.so $(FLUTTER_GALLERY_INSTALL_DIR)/lib/
++	$(RM) $(FLUTTER_GALLERY_INSTALL_DIR)/data/flutter_assets/kernel_blob.bin
++	touch $(FLUTTER_GALLERY_INSTALL_DIR)/data/flutter_assets/kernel_blob.bin
+ endef
+ 
+ $(eval $(generic-package))
 -- 
 2.43.0
 
