@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E176AC4706C
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jan 2024 16:36:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E0A9C47258
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jan 2024 16:37:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8E40C60B12;
-	Fri, 12 Jan 2024 16:36:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E40C60B12
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2C2516FB00;
+	Fri, 12 Jan 2024 16:37:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C2516FB00
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RCUrBn_Ru6VE; Fri, 12 Jan 2024 16:36:51 +0000 (UTC)
+	with ESMTP id h-rNiG5DUqm2; Fri, 12 Jan 2024 16:37:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C35CD6FAEE;
-	Fri, 12 Jan 2024 16:36:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C35CD6FAEE
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0EC0A1BF2F3
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5EE2F6FAD8;
+	Fri, 12 Jan 2024 16:37:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5EE2F6FAD8
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6FBD21BF2F3
  for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 16:36:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DB117436FF
+ by smtp1.osuosl.org (Postfix) with ESMTP id 99B57845D1
  for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 16:36:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB117436FF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 99B57845D1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iJDT5mjOV_h2 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mrRZIUgqNYYq for <buildroot@lists.busybox.net>;
  Fri, 12 Jan 2024 16:36:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C3E8340364
+ by smtp1.osuosl.org (Postfix) with ESMTP id AD6B0845C9
  for <buildroot@buildroot.org>; Fri, 12 Jan 2024 16:36:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C3E8340364
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD6B0845C9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AFD3585F02; Fri, 12 Jan 2024 16:36:36 +0000 (UTC)
+ id 8118585F00; Fri, 12 Jan 2024 16:36:36 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 12 Jan 2024 17:26:26 +0100
+Date: Fri, 12 Jan 2024 16:22:49 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 0aab578d487aae9b4bf9e54a8fe322720ad47d92
-X-Git-Newrev: 12a5a21fee615eea17fe1e52c39a0566e242fd7c
+X-Git-Oldrev: 05b182a3b1e0155f7d2e1de229191b898c17920b
+X-Git-Newrev: 9d33bfe809c8a952a43a9d192e0e5f0323498e91
 X-Patchwork-Hint: ignore
-Message-Id: <20240112163636.AFD3585F02@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/orc: bump to
- version 0.4.34
+Message-Id: <20240112163636.8118585F00@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/python-werkzeug:
+ security bump to version 2.3.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +63,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=12a5a21fee615eea17fe1e52c39a0566e242fd7c
+commit: https://git.buildroot.net/buildroot/commit/?id=9d33bfe809c8a952a43a9d192e0e5f0323498e91
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-https://gitlab.freedesktop.org/gstreamer/orc/-/blob/0.4.34/RELEASE
+Fix slow multipart parsing for large parts potentially enabling DoS
+attacks (CVE-2023-46136):
+https://github.com/pallets/werkzeug/security/advisories/GHSA-hrfv-mqp8-q5rw
+
+https://werkzeug.palletsprojects.com/en/2.3.x/changes/#version-2-3-8
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 39a2e7b219ec87e380004ec3f3795652872b9553)
+(cherry picked from commit b8bacbfb9762e4c2dc58fd36d2bddc91f033e21e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/orc/orc.hash | 4 ++--
- package/orc/orc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-werkzeug/python-werkzeug.hash | 4 ++--
+ package/python-werkzeug/python-werkzeug.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/orc/orc.hash b/package/orc/orc.hash
-index 136fc3ece4..1e584c1190 100644
---- a/package/orc/orc.hash
-+++ b/package/orc/orc.hash
+diff --git a/package/python-werkzeug/python-werkzeug.hash b/package/python-werkzeug/python-werkzeug.hash
+index 07b6f2f40d..34adc67088 100644
+--- a/package/python-werkzeug/python-werkzeug.hash
++++ b/package/python-werkzeug/python-werkzeug.hash
 @@ -1,5 +1,5 @@
--# From https://gstreamer.freedesktop.org/data/src/orc/orc-0.4.33.tar.xz.sha256sum
--sha256  844e6d7db8086f793f57618d3d4b68d29d99b16034e71430df3c21cfd3c3542a  orc-0.4.33.tar.xz
-+# From https://gstreamer.freedesktop.org/data/src/orc/orc-0.4.34.tar.xz.sha256sum
-+sha256  8f47abb3f097171e44eb807adcdabd860fba2effd37d8d3c4fbd5f341cadd41f  orc-0.4.34.tar.xz
- 
- # Locally calculated
- sha256  4f5dabb1b44bb6fc5cd53820b1f103147ad61b395a57903991325bd1b85d97bf  COPYING
-diff --git a/package/orc/orc.mk b/package/orc/orc.mk
-index be718e6f85..b2d2bb461b 100644
---- a/package/orc/orc.mk
-+++ b/package/orc/orc.mk
-@@ -4,7 +4,7 @@
+ # md5, sha256 from https://pypi.org/pypi/werkzeug/json
+-md5  de26f240d6f95689a8d15170c2d958b6  Werkzeug-2.3.6.tar.gz
+-sha256  98c774df2f91b05550078891dee5f0eb0cb797a522c757a2452b9cee5b202330  Werkzeug-2.2.3.tar.gz
++md5  3bb49cd2f2b51a1c638532e9a935e207  werkzeug-2.3.8.tar.gz
++sha256  554b257c74bbeb7a0d254160a4f8ffe185243f52a52035060b761ca62d977f03  werkzeug-2.3.8.tar.gz
+ # Locally computed sha256 checksums
+ sha256  3b49dcee4105eb37bac10faf1be260408fe85d252b8e9df2e0979fc1e094437b  LICENSE.rst
+diff --git a/package/python-werkzeug/python-werkzeug.mk b/package/python-werkzeug/python-werkzeug.mk
+index 3b7c663437..e8ef32bb1b 100644
+--- a/package/python-werkzeug/python-werkzeug.mk
++++ b/package/python-werkzeug/python-werkzeug.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--ORC_VERSION = 0.4.33
-+ORC_VERSION = 0.4.34
- ORC_SOURCE = orc-$(ORC_VERSION).tar.xz
- ORC_SITE = http://gstreamer.freedesktop.org/data/src/orc
- ORC_LICENSE = BSD-2-Clause, BSD-3-Clause
+-PYTHON_WERKZEUG_VERSION = 2.3.6
+-PYTHON_WERKZEUG_SOURCE = Werkzeug-$(PYTHON_WERKZEUG_VERSION).tar.gz
+-PYTHON_WERKZEUG_SITE = https://files.pythonhosted.org/packages/d1/7e/c35cea5749237d40effc50ed1a1c7518d9f2e768fcf30b4e9ea119e74975
++PYTHON_WERKZEUG_VERSION = 2.3.8
++PYTHON_WERKZEUG_SOURCE = werkzeug-$(PYTHON_WERKZEUG_VERSION).tar.gz
++PYTHON_WERKZEUG_SITE = https://files.pythonhosted.org/packages/3d/4b/d746f1000782c89d6c97df9df43ba8f4d126038608843d3560ae88d201b5
+ PYTHON_WERKZEUG_SETUP_TYPE = setuptools
+ PYTHON_WERKZEUG_LICENSE = BSD-3-Clause
+ PYTHON_WERKZEUG_LICENSE_FILES = LICENSE.rst
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
