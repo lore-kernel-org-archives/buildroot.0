@@ -4,60 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A00D8C4707C
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jan 2024 06:54:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04885C4706C
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jan 2024 07:15:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 292E060E03;
-	Fri, 12 Jan 2024 06:54:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 292E060E03
+	by smtp3.osuosl.org (Postfix) with ESMTP id 57F4060E03;
+	Fri, 12 Jan 2024 07:15:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 57F4060E03
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UtGIEQb1nhDK; Fri, 12 Jan 2024 06:54:22 +0000 (UTC)
+	with ESMTP id vPuo0C3Fc7C6; Fri, 12 Jan 2024 07:15:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5762D60D8E;
-	Fri, 12 Jan 2024 06:54:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5762D60D8E
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3A3821BF33D
- for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 06:54:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4624160DCA;
+	Fri, 12 Jan 2024 07:15:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4624160DCA
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id EC6D11BF331
+ for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 07:14:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 00BCE42892
- for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 06:54:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 00BCE42892
+ by smtp1.osuosl.org (Postfix) with ESMTP id D1E8683F5C
+ for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 07:14:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D1E8683F5C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id S6t0dqZ0NUyC for <buildroot@lists.busybox.net>;
- Fri, 12 Jan 2024 06:54:17 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4618742859
- for <buildroot@buildroot.org>; Fri, 12 Jan 2024 06:54:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4618742859
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 69E17FF809
- for <buildroot@buildroot.org>; Fri, 12 Jan 2024 06:54:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eR9g3yK4iLfM for <buildroot@lists.busybox.net>;
+ Fri, 12 Jan 2024 07:14:58 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id ECBA483F5B
+ for <buildroot@buildroot.org>; Fri, 12 Jan 2024 07:14:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ECBA483F5B
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 011C81C0006;
+ Fri, 12 Jan 2024 07:14:54 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1rOBkk-00AfFv-1O;
+ Fri, 12 Jan 2024 08:14:54 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Arnout Vandecappelle <arnout@mind.be>
+References: <20240111105621.2321957-1-peter@korsgaard.com>
+ <d2672443-90dc-4e4f-b3d7-f592b8d26b0c@mind.be>
+Date: Fri, 12 Jan 2024 08:14:54 +0100
+In-Reply-To: <d2672443-90dc-4e4f-b3d7-f592b8d26b0c@mind.be> (Arnout
+ Vandecappelle's message of "Thu, 11 Jan 2024 22:10:43 +0100")
+Message-ID: <877ckf2fbl.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-To: buildroot@buildroot.org
-Date: Fri, 12 Jan 2024 06:54:14 -0000
-X-GND-Sasl: bot@bootlin.com
-Message-Id: <20240112065419.00BCE42892@smtp4.osuosl.org>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; 
- t=1705042454; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
- mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding;
- bh=M5t/cr4xu9G3WxPybIWr1DKvxiuK98EclRx1agYsPyA=;
- b=NbPRRSfvaRlSjHIZ7fK5JjJuk7sB0ZP44iioArSwc7zVGPpqRkqpN2TzdnUoHpKZo5gGI8
- WrU425wo/xniA15R9R8Jedisw/+DAfj3TSozjJC7coYN1cvRFon8jyoemeLza0j7D+tt36
- EqMIm5ZNX2kxkq3KfGtmwCZueVvGbIlsNwbijhTC/EQ0Zdt4HTKZtw3B6f5NjySBEgCxUe
- XDxE155JsCboPTkKomBYBizT8uGMx+DeLZRYJpgGJLyYrMaSynVxHw4L586cTV8KmOUGtT
- b3OUaWoYDnibuS24+eZC2T6upJK+EYnq7XwvEJp/p0gOtndXiqTwm0dSYQQg7A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=NbPRRSfv
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2024-01-11
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/2] package/Makefile.in: set GIT_DIR=. in
+ {HOST, TARGET}_MAKE_ENV
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,101 +64,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Autobuild statistics for 2024-01-11
-===================================
+Hi,
 
-      branch |  OK | NOK | TIM | TOT |
-  2023.02.x  |  5  |  3  |  0  |  8  |
-  2023.11.x  |  2  |  2  |  0  |  4  |
-    master   | 10  | 15  |  1  | 26  |
+ >> # finds this perl module by exporting the proper value for PERL5LIB.
+ >> export PERL5LIB=$(HOST_DIR)/lib/perl
+ >> -TARGET_MAKE_ENV = PATH=$(BR_PATH)
+ >> +TARGET_MAKE_ENV = \
+ >> +	GIT_DIR=. \
+ >> +	PATH=$(BR_PATH)
 
-Classification of failures by reason for master
------------------------------------------------
+ >  There are a number of infras that don't use TARGET_MAKE_ENV: golang,
+ >  luarocks, perl, and python. Of these, I think only golang has a big
+ >  risk of having the same issue. So shouldn't we add it there as well?
+ >  And perhaps to python as well.
 
-                       unknown | 3 
-        host-sentry-cli-2.20.3 | 2 
-                   botan-3.2.0 | 1 
-         gobject-introspection | 1 
-  gobject-introspection-1.76.1 | 1 
-                host-go-1.21.6 | 1 
-              libarchive-3.7.2 | 1 
-               libglib2-2.76.1 | 1 
-              libopenssl-3.2.0 | 1 
-                libressl-3.8.2 | 1 
-          linux-5.10.162-cip24 | 1 
-                  linux-6.6.10 | 1 
-                 systemd-254.6 | 1 
+Possibly, yes. We have to be a bit careful to not cause issues with the
+module vendoring, but it should be doable.
 
-
-Detail of failures for master
------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-   sparc     |          botan-3.2.0           | NOK | http://autobuild.buildroot.net/results/d58c4730c770467b42af426545dd917ecc5fed17 | ORPH
- microblaze  |     gobject-introspection      | TIM | http://autobuild.buildroot.net/results/ec8e484974b6ba3877cc56957fed0fc8e91a571b |     
-  sparc64    |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/5a65268b1e3976a7a4f2da4aaa8b2752fc1eeb5c | ORPH
-    i686     |         host-go-1.21.6         | NOK | http://autobuild.buildroot.net/results/8c873f073908888b4e160e5c2c1ec8de527a8d64 |     
- aarch64_be  |     host-sentry-cli-2.20.3     | NOK | http://autobuild.buildroot.net/results/c86a26436696c2780a519fa8a839ee669e852489 |     
- microblaze  |     host-sentry-cli-2.20.3     | NOK | http://autobuild.buildroot.net/results/295d2d7c9b61ca7a835d447cfe908b3b7563b771 |     
-  sparc64    |        libarchive-3.7.2        | NOK | http://autobuild.buildroot.net/results/b0a40c57ef2827797f7af400797166b5958faa60 |     
-   arceb     |        libglib2-2.76.1         | NOK | http://autobuild.buildroot.net/results/c4c8232ffe8641f005036a049857c1949156b0c6 |     
-   s390x     |        libopenssl-3.2.0        | NOK | http://autobuild.buildroot.net/results/4af285136d991ea8279d84fc6137fc4fb4b6a925 | ORPH
-    mips     |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/d07d467548ece753d213ec7f390c2b0f68aec385 | ORPH
-  mips64el   |      linux-5.10.162-cip24      | NOK | http://autobuild.buildroot.net/results/7a76a7e1a45897f2307a773f84f1332daafd2fef | ORPH
-   x86_64    |          linux-6.6.10          | NOK | http://autobuild.buildroot.net/results/ea61da04de02ec2909ae1bfd0852a7fba5921918 | ORPH
-powerpc64le  |         systemd-254.6          | NOK | http://autobuild.buildroot.net/results/23b1afd6605092694eb3b7a6f92996b3e4eb6137 |     
-   x86_64    |            unknown             | NOK | http://autobuild.buildroot.net/results/1947361db684fb72b5e404c6d23628758b930170 |     
-    m68k     |            unknown             | NOK | http://autobuild.buildroot.net/results/5753e8fed8920d37a7b66475f4e146906eb46892 |     
-microblazeel |            unknown             | NOK | http://autobuild.buildroot.net/results/45d0ee883151da4eb653fe7c23b1eb85cadcb2ba |     
-
-
-Classification of failures by reason for 2023.02.x
---------------------------------------------------
-
-       freeradius-server-3.2.3 | 1 
-               host-runc-1.1.7 | 1 
-                 openssh-9.6p1 | 1 
-
-
-Detail of failures for 2023.02.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
- powerpc64   |    freeradius-server-3.2.3     | NOK | http://autobuild.buildroot.net/results/64f8c9e51edd729ac359d408aabf5642695f7d03 |     
-    arc      |        host-runc-1.1.7         | NOK | http://autobuild.buildroot.net/results/a80dd182eecaa46a6d808d6426c8965b2f5f4455 |     
-   mips64    |         openssh-9.6p1          | NOK | http://autobuild.buildroot.net/results/e3d623336905bc9c59439f31f84c85e85e6d7c6b | ORPH
-
-
-Classification of failures by reason for 2023.11.x
---------------------------------------------------
-
-                 dc3dd-7.2.641 | 1 
-                libressl-3.8.2 | 1 
-
-
-Detail of failures for 2023.11.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    or1k     |         dc3dd-7.2.641          | NOK | http://autobuild.buildroot.net/results/6562d99508258210346b2154073a611be06bce29 | ORPH
-   sparc     |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/6e9d6ad8f8a5ba63e627e70ef73a7fe43b7eddd1 | ORPH
-
-
+Will you send patches?
 
 -- 
-http://autobuild.buildroot.net
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
