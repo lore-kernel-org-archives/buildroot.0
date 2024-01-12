@@ -4,50 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24D27C4707C
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jan 2024 19:40:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5933FC4706C
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jan 2024 19:46:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CB88A60BBE;
-	Fri, 12 Jan 2024 19:40:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB88A60BBE
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0C8E560BD5;
+	Fri, 12 Jan 2024 19:46:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C8E560BD5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7mEKle9eOVJD; Fri, 12 Jan 2024 19:40:42 +0000 (UTC)
+	with ESMTP id F3f_kWK1RpBW; Fri, 12 Jan 2024 19:46:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2201B60B49;
-	Fri, 12 Jan 2024 19:40:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2201B60B49
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8C87460B49;
+	Fri, 12 Jan 2024 19:46:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C87460B49
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DA6B71BF995
- for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 19:40:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8B7411BF489
+ for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 19:46:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C02F8843EB
- for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 19:40:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C02F8843EB
+ by smtp1.osuosl.org (Postfix) with ESMTP id 646BC83FE1
+ for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 19:46:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 646BC83FE1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id N2d8Cnc7A39A for <buildroot@lists.busybox.net>;
- Fri, 12 Jan 2024 19:40:25 +0000 (UTC)
-Received: from mail.grinn-global.com (mail.grinn-global.com [77.55.128.204])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B92FA843EA
- for <buildroot@buildroot.org>; Fri, 12 Jan 2024 19:40:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B92FA843EA
-X-Virus-Scanned: by amavisd-new using ClamAV (26)
-Received: from zm.lan (pub-47.182.29.194.multiplay.pl [194.29.182.47])
- by server220076.nazwa.pl (Postfix) with ESMTP id 8CFB81BD650;
- Fri, 12 Jan 2024 20:40:23 +0100 (CET)
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
+ with ESMTP id ZubWOA_92H6V for <buildroot@lists.busybox.net>;
+ Fri, 12 Jan 2024 19:46:41 +0000 (UTC)
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5443183FB4
+ for <buildroot@buildroot.org>; Fri, 12 Jan 2024 19:46:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5443183FB4
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id EB81D13F8BA;
+ Fri, 12 Jan 2024 20:46:36 +0100 (CET)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 12 Jan 2024 20:39:59 +0100
-Message-ID: <20240112194000.925982-2-m.niestroj@grinn-global.com>
+Date: Fri, 12 Jan 2024 20:46:26 +0100
+Message-ID: <20240112194627.112457-1-ju.o@free.fr>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240112194000.925982-1-m.niestroj@grinn-global.com>
-References: <20240112194000.925982-1-m.niestroj@grinn-global.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] configs/orangepi_zero3: use upstream U-Boot
- and Linux
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1705088798;
+ bh=kiyzzuqpK3AlNw/rOggObSzMEhH+UAdpvSme4xM8FNA=;
+ h=From:To:Cc:Subject:Date:From;
+ b=B/M+3rUr4BWpO2ZT9+EOA/EwhnmL9DR7pwhbr0Y08bM8XJbXi3cF/mBJ6RLoAdUlu
+ 03tx7CJZ043aFR2ujGG6PfjQxLxFIqtranHQVX86JqmMha8cwyrbHrOYJjgzNlVAzt
+ PBSW0iGKfsQXzXQeN0N7pPd9K74RXiw2/AC1/w4fdT7pcryfwl8Bevh3qh59HtwWGH
+ Y96ISW8JAC2IJjPenZATRvVwhTczKx9m0YzMinwl1VcyOGzuWGDlwguLC0y8GLANYx
+ NyZG3BeOPnJttgIXPvD4aSM1IA4o4NPZoX5LaR7cguY7CfiSNazae5XTusKRyVzjH9
+ mDAA6Kpprikwg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=B/M+3rUr
+Subject: [Buildroot] [PATCH 1/1] support/testing: new apache runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,81 +70,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergey Kuzminov <kuzminov.sergey81@gmail.com>,
- Marcin Niestroj <m.niestroj@grinn-global.com>,
- Sergey Matyukevich <geomatsi@gmail.com>
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-There is now support in both upstream U-Boot and upstream Linux.
-
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- board/orangepi/orangepi-zero3/linux.config |  1 -
- configs/orangepi_zero3_defconfig           | 17 ++++++++---------
- 2 files changed, 8 insertions(+), 10 deletions(-)
- delete mode 100644 board/orangepi/orangepi-zero3/linux.config
+ DEVELOPERS                                   |  1 +
+ support/testing/tests/package/test_apache.py | 23 ++++++++++++++++++++
+ 2 files changed, 24 insertions(+)
+ create mode 100644 support/testing/tests/package/test_apache.py
 
-diff --git a/board/orangepi/orangepi-zero3/linux.config b/board/orangepi/orangepi-zero3/linux.config
-deleted file mode 100644
-index 09b7a93a5a..0000000000
---- a/board/orangepi/orangepi-zero3/linux.config
-+++ /dev/null
-@@ -1 +0,0 @@
--CONFIG_MFD_AC200=y
-diff --git a/configs/orangepi_zero3_defconfig b/configs/orangepi_zero3_defconfig
-index f4fbf86812..93d53dc301 100644
---- a/configs/orangepi_zero3_defconfig
-+++ b/configs/orangepi_zero3_defconfig
-@@ -2,7 +2,7 @@ BR2_aarch64=y
- BR2_cortex_a53=y
- BR2_ARM_FPU_VFPV4=y
- 
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_7=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
- BR2_SYSTEM_DHCP="eth0"
- 
-@@ -16,8 +16,8 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
- # Bootloader
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,orangepi-xunlong,u-boot-orangepi,6fe17fac388aad17490cf386578b7532975e567f)/u-boot-orangepi-6fe17fac388aad17490cf386578b7532975e567f.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_zero3"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-@@ -30,21 +30,20 @@ BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="SCP=/dev/null"
- 
- # Kernel
- BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,orangepi-xunlong,linux-orangepi,3495b5ee0594566c9fed930b96b1cae90600412e)/linux-orangepi-3495b5ee0594566c9fed930b96b1cae90600412e.tar.gz"
--BR2_LINUX_KERNEL_DEFCONFIG="linux_sunxi64"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.7"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-h616-orangepi-zero3"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-h618-orangepi-zero3"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_LINUX_KERNEL_DTB_KEEP_DIRNAME=y
--BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/orangepi/orangepi-zero3/linux.config"
- 
- # Filesystem
- BR2_TARGET_GENERIC_ISSUE="Welcome to Orangepi Zero3"
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
--BR2_TARGET_ROOTFS_EXT2_SIZE="180M"
-+BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- # BR2_TARGET_ROOTFS_TAR is not set
- 
- # host tools
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 94a89c63d5..11780db285 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1759,6 +1759,7 @@ F:	support/testing/tests/package/sample_python_pyalsa.py
+ F:	support/testing/tests/package/sample_python_spake2.py
+ F:	support/testing/tests/package/test_acpica.py
+ F:	support/testing/tests/package/test_acpica/
++F:	support/testing/tests/package/test_apache.py
+ F:	support/testing/tests/package/test_brotli.py
+ F:	support/testing/tests/package/test_bzip2.py
+ F:	support/testing/tests/package/test_compressor_base.py
+diff --git a/support/testing/tests/package/test_apache.py b/support/testing/tests/package/test_apache.py
+new file mode 100644
+index 0000000000..f29f4e2524
+--- /dev/null
++++ b/support/testing/tests/package/test_apache.py
+@@ -0,0 +1,23 @@
++import os
++
++import infra.basetest
++
++
++class TestApache(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_APACHE=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        self.assertRunOk("httpd -V")
++        self.assertRunOk("wget http://localhost/index.html")
++        self.assertRunOk("grep -F 'It works!' index.html")
 -- 
 2.43.0
 
