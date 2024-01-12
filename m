@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E0A9C47258
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jan 2024 16:37:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7EEEC4706C
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jan 2024 16:37:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2C2516FB00;
-	Fri, 12 Jan 2024 16:37:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C2516FB00
+	by smtp3.osuosl.org (Postfix) with ESMTP id 84F036FB1E;
+	Fri, 12 Jan 2024 16:37:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 84F036FB1E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id h-rNiG5DUqm2; Fri, 12 Jan 2024 16:37:04 +0000 (UTC)
+	with ESMTP id bJWq1JisqFd6; Fri, 12 Jan 2024 16:37:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5EE2F6FAD8;
-	Fri, 12 Jan 2024 16:37:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5EE2F6FAD8
+	by smtp3.osuosl.org (Postfix) with ESMTP id CF0EB6FB21;
+	Fri, 12 Jan 2024 16:37:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CF0EB6FB21
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6FBD21BF2F3
- for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 16:36:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 730C51BF2F3
+ for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 16:36:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 99B57845D1
- for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 16:36:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 99B57845D1
+ by smtp1.osuosl.org (Postfix) with ESMTP id 55E84845C9
+ for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 16:36:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 55E84845C9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mrRZIUgqNYYq for <buildroot@lists.busybox.net>;
+ with ESMTP id lRSy-OonbgZo for <buildroot@lists.busybox.net>;
  Fri, 12 Jan 2024 16:36:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id AD6B0845C9
+ by smtp1.osuosl.org (Postfix) with ESMTP id CD788845CC
  for <buildroot@buildroot.org>; Fri, 12 Jan 2024 16:36:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD6B0845C9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD788845CC
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8118585F00; Fri, 12 Jan 2024 16:36:36 +0000 (UTC)
+ id BC03985F03; Fri, 12 Jan 2024 16:36:36 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 12 Jan 2024 16:22:49 +0100
+Date: Fri, 12 Jan 2024 17:33:47 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 05b182a3b1e0155f7d2e1de229191b898c17920b
-X-Git-Newrev: 9d33bfe809c8a952a43a9d192e0e5f0323498e91
+X-Git-Oldrev: 12a5a21fee615eea17fe1e52c39a0566e242fd7c
+X-Git-Newrev: 29bac1a29b65b1361988d0341931733c58252ac3
 X-Patchwork-Hint: ignore
-Message-Id: <20240112163636.8118585F00@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/python-werkzeug:
- security bump to version 2.3.8
+Message-Id: <20240112163636.BC03985F03@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/gdb: Remove
+ special handling of libstdc++ for ARC
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,53 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9d33bfe809c8a952a43a9d192e0e5f0323498e91
+commit: https://git.buildroot.net/buildroot/commit/?id=29bac1a29b65b1361988d0341931733c58252ac3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-Fix slow multipart parsing for large parts potentially enabling DoS
-attacks (CVE-2023-46136):
-https://github.com/pallets/werkzeug/security/advisories/GHSA-hrfv-mqp8-q5rw
+Effectively that's a revert of a very old fix [1]
+which is no longer needed.
 
-https://werkzeug.palletsprojects.com/en/2.3.x/changes/#version-2-3-8
+[1] https://git.buildroot.net/buildroot/commit/?id=ca99d0ea925e5a8e42bd270402b0171a39d1d955
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b8bacbfb9762e4c2dc58fd36d2bddc91f033e21e)
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 7077476c8c85f23897ce14a203cc91596a63b202)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-werkzeug/python-werkzeug.hash | 4 ++--
- package/python-werkzeug/python-werkzeug.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/gdb/gdb.mk | 7 -------
+ 1 file changed, 7 deletions(-)
 
-diff --git a/package/python-werkzeug/python-werkzeug.hash b/package/python-werkzeug/python-werkzeug.hash
-index 07b6f2f40d..34adc67088 100644
---- a/package/python-werkzeug/python-werkzeug.hash
-+++ b/package/python-werkzeug/python-werkzeug.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/werkzeug/json
--md5  de26f240d6f95689a8d15170c2d958b6  Werkzeug-2.3.6.tar.gz
--sha256  98c774df2f91b05550078891dee5f0eb0cb797a522c757a2452b9cee5b202330  Werkzeug-2.2.3.tar.gz
-+md5  3bb49cd2f2b51a1c638532e9a935e207  werkzeug-2.3.8.tar.gz
-+sha256  554b257c74bbeb7a0d254160a4f8ffe185243f52a52035060b761ca62d977f03  werkzeug-2.3.8.tar.gz
- # Locally computed sha256 checksums
- sha256  3b49dcee4105eb37bac10faf1be260408fe85d252b8e9df2e0979fc1e094437b  LICENSE.rst
-diff --git a/package/python-werkzeug/python-werkzeug.mk b/package/python-werkzeug/python-werkzeug.mk
-index 3b7c663437..e8ef32bb1b 100644
---- a/package/python-werkzeug/python-werkzeug.mk
-+++ b/package/python-werkzeug/python-werkzeug.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index ea710f0c1f..9be6be77b8 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -174,13 +174,6 @@ else
+ GDB_CONF_OPTS += --disable-gdbserver
+ endif
  
--PYTHON_WERKZEUG_VERSION = 2.3.6
--PYTHON_WERKZEUG_SOURCE = Werkzeug-$(PYTHON_WERKZEUG_VERSION).tar.gz
--PYTHON_WERKZEUG_SITE = https://files.pythonhosted.org/packages/d1/7e/c35cea5749237d40effc50ed1a1c7518d9f2e768fcf30b4e9ea119e74975
-+PYTHON_WERKZEUG_VERSION = 2.3.8
-+PYTHON_WERKZEUG_SOURCE = werkzeug-$(PYTHON_WERKZEUG_VERSION).tar.gz
-+PYTHON_WERKZEUG_SITE = https://files.pythonhosted.org/packages/3d/4b/d746f1000782c89d6c97df9df43ba8f4d126038608843d3560ae88d201b5
- PYTHON_WERKZEUG_SETUP_TYPE = setuptools
- PYTHON_WERKZEUG_LICENSE = BSD-3-Clause
- PYTHON_WERKZEUG_LICENSE_FILES = LICENSE.rst
+-# When gdb is built as C++ application for ARC it segfaults at runtime
+-# So we pass --disable-build-with-cxx config option to force gdb not to
+-# be built as C++ app.
+-ifeq ($(BR2_arc),y)
+-GDB_CONF_OPTS += --disable-build-with-cxx
+-endif
+-
+ # gdb 7.12+ by default builds with a C++ compiler, which doesn't work
+ # when we don't have C++ support in the toolchain
+ ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
