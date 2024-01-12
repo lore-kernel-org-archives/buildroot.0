@@ -1,51 +1,56 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED283C4706C
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jan 2024 17:46:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99191C4706C
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jan 2024 17:57:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A51338468B;
-	Fri, 12 Jan 2024 17:46:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A51338468B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3CB9A60E37;
+	Fri, 12 Jan 2024 17:57:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3CB9A60E37
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OVkO-DjBRovr; Fri, 12 Jan 2024 17:46:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Vo0wwhe_nPVo; Fri, 12 Jan 2024 17:57:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8B89D84683;
-	Fri, 12 Jan 2024 17:46:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B89D84683
+	by smtp3.osuosl.org (Postfix) with ESMTP id BB97B60D67;
+	Fri, 12 Jan 2024 17:57:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB97B60D67
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DCE881BF309
- for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 17:44:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 585401BF309
+ for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 17:57:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DDD5760C05
- for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 17:44:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DDD5760C05
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3EB7560D67
+ for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 17:57:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3EB7560D67
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id u3xxClPj8Mth for <buildroot@lists.busybox.net>;
- Fri, 12 Jan 2024 17:44:07 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B3A016FA4F
- for <buildroot@buildroot.org>; Fri, 12 Jan 2024 17:44:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B3A016FA4F
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B1D7085FA1; Fri, 12 Jan 2024 17:44:07 +0000 (UTC)
+ with ESMTP id fCKbjXjte16D for <buildroot@lists.busybox.net>;
+ Fri, 12 Jan 2024 17:57:01 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 59D5660C2B
+ for <buildroot@buildroot.org>; Fri, 12 Jan 2024 17:57:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 59D5660C2B
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5013640003;
+ Fri, 12 Jan 2024 17:56:59 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1rOLm6-00CAAs-2L;
+ Fri, 12 Jan 2024 18:56:58 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 12 Jan 2024 18:33:10 +0100
-X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: fba48064c3486b975f0888fd2544f8e9a4b0c907
-X-Git-Newrev: 2c343d410977bd9e754ecdd466e2d0724e0a4bff
-X-Patchwork-Hint: ignore
-Message-Id: <20240112174407.B1D7085FA1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/dahdi-tools: bump
- to version 3.3.0
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20240102224108.2515943-1-fontaine.fabrice@gmail.com>
+Date: Fri, 12 Jan 2024 18:56:58 +0100
+In-Reply-To: <20240102224108.2515943-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 2 Jan 2024 23:41:08 +0100")
+Message-ID: <87o7dqxwnp.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] package/postgis: drop autoreconf
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,51 +62,23 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Maxim Kochetkov <fido_max@inbox.ru>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2c343d410977bd9e754ecdd466e2d0724e0a4bff
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-https://github.com/asterisk/dahdi-tools/releases/tag/v3.3.0
+ > Commit 1718c2ba6a4db1461b2490aa42ca4f0a2112adae removed all patches but
+ > forgot to drop autoreconf
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 5594570a0c2ebb162ae304d7dca92aadf8f439ad)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/dahdi-tools/dahdi-tools.hash | 4 ++--
- package/dahdi-tools/dahdi-tools.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/dahdi-tools/dahdi-tools.hash b/package/dahdi-tools/dahdi-tools.hash
-index c119ff4ee1..1251617286 100644
---- a/package/dahdi-tools/dahdi-tools.hash
-+++ b/package/dahdi-tools/dahdi-tools.hash
-@@ -1,5 +1,5 @@
--# From http://downloads.asterisk.org/pub/telephony/dahdi-tools/releases/dahdi-tools-3.2.0.sha256
--sha256  2bc269887fcd42d2486572611934d713e603734cc658b3b517fc9f3bdea7262f  dahdi-tools-3.2.0.tar.gz
-+# From http://downloads.asterisk.org/pub/telephony/dahdi-tools/releases/dahdi-tools-3.3.0.sha256
-+sha256  5706b37df5840ecdc524d4c86df2ad34a31f83db552a8519b4ccf61bac75d2e4  dahdi-tools-3.3.0.tar.gz
- 
- # License files, locally computed
- sha256  fa5fc1d1eec39532ea517518eeefd7b6e3c14341a55e5880a0e2a49eee47a5b7  LICENSE
-diff --git a/package/dahdi-tools/dahdi-tools.mk b/package/dahdi-tools/dahdi-tools.mk
-index 7d4de645a2..056b29156d 100644
---- a/package/dahdi-tools/dahdi-tools.mk
-+++ b/package/dahdi-tools/dahdi-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DAHDI_TOOLS_VERSION = 3.2.0
-+DAHDI_TOOLS_VERSION = 3.3.0
- DAHDI_TOOLS_SITE = http://downloads.asterisk.org/pub/telephony/dahdi-tools/releases
- 
- DAHDI_TOOLS_LICENSE = GPLv2, LGPLv2.1
+Committed to 2023.02.x and 2023.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
