@@ -4,54 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98299C4706C
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jan 2024 17:26:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30F77C4706C
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jan 2024 17:30:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4CAB3845BA;
-	Fri, 12 Jan 2024 17:26:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4CAB3845BA
+	by smtp1.osuosl.org (Postfix) with ESMTP id BA2CF83E6C;
+	Fri, 12 Jan 2024 17:30:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BA2CF83E6C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Z6ntkix0GiCC; Fri, 12 Jan 2024 17:26:27 +0000 (UTC)
+	with ESMTP id Z8XfAZGPr_yK; Fri, 12 Jan 2024 17:30:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B4F8F845B8;
-	Fri, 12 Jan 2024 17:26:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B4F8F845B8
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 950731BF309
- for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 17:26:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 39BD783D66;
+	Fri, 12 Jan 2024 17:30:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 39BD783D66
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5A3861BF309
+ for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 17:30:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7BBA460B38
- for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 17:26:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7BBA460B38
+ by smtp4.osuosl.org (Postfix) with ESMTP id 32D1442DDB
+ for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 17:30:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 32D1442DDB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JRUM7tLvDdWQ for <buildroot@lists.busybox.net>;
- Fri, 12 Jan 2024 17:26:24 +0000 (UTC)
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 005F960A91
- for <buildroot@buildroot.org>; Fri, 12 Jan 2024 17:26:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 005F960A91
-Received: by mail.gandi.net (Postfix) with ESMTPSA id BC7A21BF20B;
- Fri, 12 Jan 2024 17:26:20 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id H68j6CG-09UZ for <buildroot@lists.busybox.net>;
+ Fri, 12 Jan 2024 17:30:00 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1940142D59
+ for <buildroot@buildroot.org>; Fri, 12 Jan 2024 17:29:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1940142D59
+Received: by mail.gandi.net (Postfix) with ESMTPSA id EA65160004;
+ Fri, 12 Jan 2024 17:29:56 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rOLIS-00C8UU-02;
- Fri, 12 Jan 2024 18:26:20 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rOLLw-00C8j9-11;
+ Fri, 12 Jan 2024 18:29:56 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd@kuhls.net>
-References: <20240103190258.2729806-1-bernd@kuhls.net>
-Date: Fri, 12 Jan 2024 18:26:19 +0100
-In-Reply-To: <20240103190258.2729806-1-bernd@kuhls.net> (Bernd Kuhls's message
- of "Wed, 3 Jan 2024 20:02:58 +0100")
-Message-ID: <87h6jizcn8.fsf@48ers.dk>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20240104171447.10551-1-fontaine.fabrice@gmail.com>
+Date: Fri, 12 Jan 2024 18:29:56 +0100
+In-Reply-To: <20240104171447.10551-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 4 Jan 2024 18:14:47 +0100")
+Message-ID: <87cyu6zch7.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/exim: security bump version to
- 4.97.1
+Subject: Re: [Buildroot] [PATCH 1/1] package/cryptodev-linux: fix build with
+ linux >= 6.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,22 +63,23 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
-
- > Fixes CVE-2023-51766: https://seclists.org/oss-sec/2023/q4/348
- > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-
-Committed to 2023.02.x and 2023.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Pj4+Pj4gIkZhYnJpY2UiID09IEZhYnJpY2UgRm9udGFpbmUgPGZvbnRhaW5lLmZhYnJpY2VAZ21h
+aWwuY29tPiB3cml0ZXM6CgogPiBGaXggdGhlIGZvbGxvd2luZyBidWlsZCBmYWlsdXJlIHdpdGgg
+bGludXggPj0gNi40OgogPiAvaG9tZS9hdXRvYnVpbGQvYXV0b2J1aWxkL2luc3RhbmNlLTE1L291
+dHB1dC0xL2J1aWxkL2NyeXB0b2Rldi1saW51eC0xLjEzLy4vaW9jdGwuYzoxMjQ5OjE4OiBlcnJv
+cjog4oCYc3RydWN0IGN0bF90YWJsZeKAmSBoYXMgbm8gbWVtYmVyIG5hbWVkIOKAmGNoaWxk4oCZ
+CiA+ICAxMjQ5IHwgICAgICAgICAgICAgICAgIC5jaGlsZCAgICAgICAgICA9IHZlcmJvc2l0eV9j
+dGxfZGlyLAogPiAgICAgICB8ICAgICAgICAgICAgICAgICAgXn5+fn4KCiA+IEZpeGVzOgogPiAg
+LSBodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5vcmcvcmVzdWx0cy9lY2JmNDI2ZjZiMGZmOTIw
+YTUxYzE2NzRiMDgwYzM1ZWRmNWRiODU5CgogPiBTaWduZWQtb2ZmLWJ5OiBGYWJyaWNlIEZvbnRh
+aW5lIDxmb250YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4KCkNvbW1pdHRlZCB0byAyMDIzLjExLngs
+IHRoYW5rcy4KCi0tIApCeWUsIFBldGVyIEtvcnNnYWFyZApfX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9v
+dEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3Rp
+bmZvL2J1aWxkcm9vdAo=
