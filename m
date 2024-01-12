@@ -4,101 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E714FC4707C
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jan 2024 20:32:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5D69C4707C
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jan 2024 20:50:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8954743FB4;
-	Fri, 12 Jan 2024 20:32:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8954743FB4
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5288040399;
+	Fri, 12 Jan 2024 20:50:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5288040399
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Kqj04JAt4KWf; Fri, 12 Jan 2024 20:32:46 +0000 (UTC)
+	with ESMTP id EkjfadEGaKpv; Fri, 12 Jan 2024 20:50:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 834A343FB8;
-	Fri, 12 Jan 2024 20:32:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 834A343FB8
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 31C151BF2A7
- for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 20:32:43 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 387BD4044F;
+	Fri, 12 Jan 2024 20:50:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 387BD4044F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A6D9B1BF2A7
+ for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 20:50:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 003E584B68
- for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 20:11:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 003E584B68
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7F75E42C4F
+ for <buildroot@lists.busybox.net>; Fri, 12 Jan 2024 20:50:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F75E42C4F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wzHjej7ehfuY for <buildroot@lists.busybox.net>;
- Fri, 12 Jan 2024 20:11:49 +0000 (UTC)
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com
- [IPv6:2607:f8b0:4864:20::d2f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 586B784C2E
- for <buildroot@buildroot.org>; Fri, 12 Jan 2024 20:11:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 586B784C2E
-Received: by mail-io1-xd2f.google.com with SMTP id
- ca18e2360f4ac-7bee8858a8aso128038339f.0
- for <buildroot@buildroot.org>; Fri, 12 Jan 2024 12:11:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1705090303; x=1705695103;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=+m+8+sn/yrRpMNmoKuVGJnl0KXgHIO06YV19abnxPJI=;
- b=RmnOuipO7Ncwirr2fbjCzMZcEMr2AU+P5IpFXa0aSMLeRzZ/00CsWX6L3dwH5yOeA6
- kXLjnC+FC3LZH/9hC2KCzBO+6XrviorbmMLyZoKeHdHCKEAWJALQHciFTBwdXrt4omXi
- MyIfd3t6GNJ76mr3bAgxxEp9blm87rKjMCC/DTktJKRgJhakV9IDlrRNOAKdyi/kJ2DO
- LP2n6jZXUHt8mho/aEHXrcDjCsIROPS+G3eTXUy3BbpX12w9085NSEyYhQNDlHOHNAN4
- 0L3L4o4C90Txmlz8ihF+/84zD96mZG+jOcEKYeBNdZ/+Ezu2oS0y6/SO9MaJI6PJ5dlE
- hRKA==
-X-Gm-Message-State: AOJu0Yz8AdojkNph15Dy4a4bXyleaTn//iqySMIs6duLxpRokSe/VpbJ
- 5gJH0rVDlU0fdUZNODhD9BPnk96uSMWqWg==
-X-Google-Smtp-Source: AGHT+IHqoFIA5SsY0S6pP9E/YEdP51Pl+qXJMok2jHmvOWgujRF0EPJI7JOUqJM1HPAneMcc2A0bVw==
-X-Received: by 2002:a05:6602:89b:b0:7ba:b9fd:a234 with SMTP id
- f27-20020a056602089b00b007bab9fda234mr1993100ioz.37.1705090303206; 
- Fri, 12 Jan 2024 12:11:43 -0800 (PST)
-Received: from [172.16.32.83] ([198.232.126.202])
- by smtp.gmail.com with ESMTPSA id
- bt9-20020a056638430900b0046e25a7bb9esm1063767jab.176.2024.01.12.12.11.42
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 12 Jan 2024 12:11:43 -0800 (PST)
-Message-ID: <2ff803d9-748c-e168-3775-b05fb11868bb@landley.net>
-Date: Fri, 12 Jan 2024 14:18:25 -0600
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id raVp0J3Bq7DD for <buildroot@lists.busybox.net>;
+ Fri, 12 Jan 2024 20:50:03 +0000 (UTC)
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 58D18416C0
+ for <buildroot@buildroot.org>; Fri, 12 Jan 2024 20:50:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 58D18416C0
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 1F26313F89A;
+ Fri, 12 Jan 2024 21:49:58 +0100 (CET)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Fri, 12 Jan 2024 21:49:52 +0100
+Message-ID: <20240112204952.229925-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US
-To: Niklas Cassel <Niklas.Cassel@wdc.com>, Greg Ungerer <gerg@linux-m68k.org>
-References: <5a1f1ff3-8a61-67cf-59a9-ce498738d912@landley.net>
- <20240105131135.GA1484621@pevik>
- <90c1ddc1-c608-30fc-d5aa-fdf63c90d055@landley.net>
- <20240108090338.GA1552643@pevik> <ZZvJXTshFUYSaMVH@yuki>
- <SA3PR13MB6372498CC6372F8B16237244FD6A2@SA3PR13MB6372.namprd13.prod.outlook.com>
- <20240110141455.GC1698252@pevik>
- <40996ea1-3417-1c2f-ddd2-e6ed45cb6f4b@landley.net>
- <ZZ8JbCPd3rq4u7iG@x1-carbon>
- <7e348eb3-bd34-4c66-9ed6-b5108da80486@linux-m68k.org>
- <ZZ+zB29hRhpjiOrh@x1-carbon>
-From: Rob Landley <rob@landley.net>
-In-Reply-To: <ZZ+zB29hRhpjiOrh@x1-carbon>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=landley-net.20230601.gappssmtp.com; s=20230601; t=1705090303; x=1705695103;
- darn=buildroot.org; 
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=+m+8+sn/yrRpMNmoKuVGJnl0KXgHIO06YV19abnxPJI=;
- b=GMvV/dxiWxGTrZ7P49aBGHCcbq5rFgPmZlIkm7XGH0fYWD9MPrXa6dBSht5Y2f239x
- eX0KSkwSGNO6CoHGUOPQOgPkLIxA+5WaWxPwzK2FPKFCkwA7PlHxsGS3t/arIMrDDWZj
- F5+mBKXM5NmXiO5sZjDFM/KfjOZPBzR3/5rMTX6G48zZHF/pqs6b4W2ehwAzeiwkMqrY
- 7ajMA7/BXi3HxDOZWdir0MisGC4d4x3GxjCCXEzlFskXbF/Lp42fAB3L9H77NbRIOGWa
- EOI4cB2CmDyfpf26kh2Mkp0Y0axLxKMkyO5/kgpGIovNak8iXQrnEXid+a4Nee2CzjQS
- 3wag==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=landley-net.20230601.gappssmtp.com
- header.i=@landley-net.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=GMvV/dxi
-Subject: Re: [Buildroot] [Automated-testing] Call for nommu LTP maintainer
- [was: Re: [PATCH 00/36] Remove UCLINUX from LTP]
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1705092600;
+ bh=iS06Yi8/31AdDrk0ltc/wGDj0i44CrG2rQIfR2Ia12I=;
+ h=From:To:Cc:Subject:Date:From;
+ b=vCXotOwurZ3EZjjQcf+Xj5TsXJMTUKxpEomx20QkKQ8TOShgx8rZkg5uhJ7s8u5fC
+ ouv+jjeLch5gsNpLRXFdQqRg1Vp88Gi7Lc+1JAiB7lFju28Bw1Zxura68MTOUSm0Xy
+ eAhkvsWFgox37WgsRI40CJp8CY0+iPzgrd9vQOgEOSJ00AGhVZ+V8ffZmXAEgBXXvL
+ r4M4HBgLad2uAkUReebFkasJTUciCmAmbS/MA48ox+cX5xB1EGthpaePBx4HbigoaZ
+ ItAiPmXeFCyUuq2tfTIBw5PW3i7K26UeWWNl88Bmhl08EeLXF2ny6X0vG7dknwfk69
+ 9SySAXfAeXyPQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=vCXotOwu
+Subject: [Buildroot] [PATCH 1/1] support/testing: add a "file" package
+ runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -110,42 +71,121 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Andrea Cervesato <andrea.cervesato@suse.com>,
- Jonathan Corbet <corbet@lwn.net>, Linux-sh list <linux-sh@vger.kernel.org>,
- Tim Bird <tim.bird@sony.com>, Randy Dunlap <rdunlap@infradead.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- Li Wang <liwang@redhat.com>, Petr Vorel <pvorel@suse.cz>,
- "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
- Geert Uytterhoeven <geert@linux-m68k.org>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>,
- Cyril Hrubis <chrubis@suse.cz>,
- John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
- linux-riscv <linux-riscv@lists.infradead.org>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>,
- Christophe Lyon <christophe.lyon@linaro.org>,
- "ltp@lists.linux.it" <ltp@lists.linux.it>,
- "automated-testing@lists.yoctoproject.org"
- <automated-testing@lists.yoctoproject.org>
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 1/11/24 03:21, Niklas Cassel wrote:
->> > s/Linaro/Lineo/
->> 
->> Lineo was not founded by Jeff Dionne, see https://en.wikipedia.org/wiki/Lineo
->> for its genisys. Maybe you are thinking of RT-Control.
-> 
-> Yes, Jeff cofounded Rt-Control which later merged with Lineo.
-> 
-> My main point is that Linaro is a completely different company,
-> which did not "die in the dot-com crash", like stated above.
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ DEVELOPERS                                 |  1 +
+ support/testing/tests/package/test_file.py | 81 ++++++++++++++++++++++
+ 2 files changed, 82 insertions(+)
+ create mode 100644 support/testing/tests/package/test_file.py
 
-Sorry, I typo uclibc/uclinux all the time too. (In extreme cases I swap
-busybox/toybox, which is personally embarassing...)
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 94a89c63d5..8179974097 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1765,6 +1765,7 @@ F:	support/testing/tests/package/test_compressor_base.py
+ F:	support/testing/tests/package/test_ddrescue.py
+ F:	support/testing/tests/package/test_ddrescue/
+ F:	support/testing/tests/package/test_dos2unix.py
++F:	support/testing/tests/package/test_file.py
+ F:	support/testing/tests/package/test_fluidsynth.py
+ F:	support/testing/tests/package/test_fluidsynth/
+ F:	support/testing/tests/package/test_gawk.py
+diff --git a/support/testing/tests/package/test_file.py b/support/testing/tests/package/test_file.py
+new file mode 100644
+index 0000000000..686fa52d72
+--- /dev/null
++++ b/support/testing/tests/package/test_file.py
+@@ -0,0 +1,81 @@
++import os
++
++import infra.basetest
++
++
++class TestFile(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_FILE=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def generate_test_data(self):
++        cmd = "echo 'Hello Buildroot!' > file.txt"
++        self.assertRunOk(cmd)
++
++        cmd = "gzip -k file.txt"
++        self.assertRunOk(cmd)
++
++        cmd = "ln -s file.txt link.txt"
++        self.assertRunOk(cmd)
++
++        cmd = "echo 'void main(void) { printf(\"hello\\nBuildroot!\"); }' > file.c"
++        self.assertRunOk(cmd)
++
++        cmd = "echo -e '#!/bin/sh\necho Hello Buildroot' > file.sh"
++        self.assertRunOk(cmd)
++
++        cmd = "echo -e '"
++        cmd += "#!/usr/bin/env python3\nprint(\"Hello Buildroot!\")'"
++        cmd += " > file.py"
++        self.assertRunOk(cmd)
++
++        cmd = "dd if=/dev/urandom of=file.bin bs=1k count=4"
++        self.assertRunOk(cmd)
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        self.assertRunOk("file --version")
++
++        self.generate_test_data()
++
++        tests = [
++            ["file.txt", "ASCII text"],
++            ["file.txt.gz", "gzip compressed data"],
++            ["file.c", "C source"],
++            ["file.sh", "POSIX shell script"],
++            ["file.py", "Python script"],
++            ["file.bin", "data"],
++            ["/usr/share/misc/magic.mgc", "magic binary file for file"],
++            ["/usr/bin/file", "ELF"],
++            ["/dev/zero", "character special"],
++            ["/", "directory"]
++        ]
++        for test_file, expected_type in tests:
++            cmd = f"file '{test_file}' | grep -F '{expected_type}'"
++            self.assertRunOk(cmd)
++
++        tests = [
++            ["file.txt", "text/plain"],
++            ["file.txt.gz", "application/gzip"],
++            ["file.bin", "application/octet-stream"],
++        ]
++        for test_file, expected_type in tests:
++            cmd = f"file -i '{test_file}' | grep -F '{expected_type}'"
++            self.assertRunOk(cmd)
++
++        cmd = "file -h link.txt | grep -F 'symbolic link'"
++        self.assertRunOk(cmd)
++
++        cmd = "file -L link.txt | grep -F 'ASCII text'"
++        self.assertRunOk(cmd)
++
++        cmd = "file -z file.txt.gz | grep -F 'ASCII text'"
++        self.assertRunOk(cmd)
+-- 
+2.43.0
 
-Rob
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
