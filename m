@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3640C4706C
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 20:33:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F683C4707B
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 20:33:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9E38E60A9A;
-	Sat, 13 Jan 2024 20:33:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9E38E60A9A
+	by smtp3.osuosl.org (Postfix) with ESMTP id DAE9E60ED6;
+	Sat, 13 Jan 2024 20:33:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DAE9E60ED6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EVlpp-W__KdL; Sat, 13 Jan 2024 20:33:10 +0000 (UTC)
+	with ESMTP id DtTlZnsPRI2v; Sat, 13 Jan 2024 20:33:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EE8FC60AD4;
-	Sat, 13 Jan 2024 20:33:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE8FC60AD4
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A7EE51BF83A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4E5F160BAA;
+	Sat, 13 Jan 2024 20:33:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E5F160BAA
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DC4C71BF867
  for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 20:33:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 80E6E40983
+ by smtp1.osuosl.org (Postfix) with ESMTP id B5A1D83B69
  for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 20:33:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80E6E40983
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5A1D83B69
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kbchd_Uxpe9a for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JitNpZZAPf8D for <buildroot@lists.busybox.net>;
  Sat, 13 Jan 2024 20:33:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B6FEC4096C
+ by smtp1.osuosl.org (Postfix) with ESMTP id DC9B983B40
  for <buildroot@buildroot.org>; Sat, 13 Jan 2024 20:33:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B6FEC4096C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DC9B983B40
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A73058605F; Sat, 13 Jan 2024 20:33:07 +0000 (UTC)
+ id CCC148605F; Sat, 13 Jan 2024 20:33:07 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 13 Jan 2024 21:04:08 +0100
+Date: Sat, 13 Jan 2024 21:16:49 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 65483f4905fb4b30edb0c45d71dae5d7786c5879
-X-Git-Newrev: f788b19bdc57476e52f498fefb2445c60bb36767
+X-Git-Oldrev: 58a3ae71a65685a81d1b5a445cb1030ad605df05
+X-Git-Newrev: 005014ccf3868eb8213da21a41660546a2123d5a
 X-Patchwork-Hint: ignore
-Message-Id: <20240113203307.A73058605F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/python-brotli:
- drop C++ depends
+Message-Id: <20240113203307.CCC148605F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/Config.in: move
+ flutter-pi
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,51 +63,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f788b19bdc57476e52f498fefb2445c60bb36767
+commit: https://git.buildroot.net/buildroot/commit/?id=005014ccf3868eb8213da21a41660546a2123d5a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-C++ is no longer required for python-brotli as of version 1.1.0:
-https://github.com/google/brotli/commit/c8df4b3049ff1283fc4525defbcd003188f88963
+flutter-pi was erroneously placed under the "Graphic libraries" section
+of the menu "Graphic libraries and applications (graphic/text)" menu.
+However, as flutter-pi is an application that runs graphic applicaitons
+it is better suited to be placed under the "Graphic applications"
+section.
 
-Drop python-brotli C++ depends comment from python-weasyprint
-reverse dependency.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a51c664ef5130715220b28bfc71df102fb9c0bfc)
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 1a2ae469d0c9d548c091f731748e01039dd4f2a4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-brotli/Config.in     | 4 ----
- package/python-weasyprint/Config.in | 2 +-
- 2 files changed, 1 insertion(+), 5 deletions(-)
+ package/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python-brotli/Config.in b/package/python-brotli/Config.in
-index c31315392b..ca493bfeff 100644
---- a/package/python-brotli/Config.in
-+++ b/package/python-brotli/Config.in
-@@ -1,10 +1,6 @@
- config BR2_PACKAGE_PYTHON_BROTLI
- 	bool "python-brotli"
--	depends on BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Python bindings for the Brotli compression library.
- 
- 	  https://github.com/google/brotli
--
--comment "python-brotli needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/python-weasyprint/Config.in b/package/python-weasyprint/Config.in
-index 18d72d742e..65210fb1eb 100644
---- a/package/python-weasyprint/Config.in
-+++ b/package/python-weasyprint/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_PYTHON_WEASYPRINT
- 	bool "python-weasyprint"
--	depends on BR2_INSTALL_LIBSTDCPP # python-brotli, python-zopfli
-+	depends on BR2_INSTALL_LIBSTDCPP # python-zopfli
- 	select BR2_PACKAGE_PYTHON_BROTLI # runtime
- 	select BR2_PACKAGE_PYTHON_CFFI # runtime
- 	select BR2_PACKAGE_PYTHON_CSSSELECT2 # runtime
+diff --git a/package/Config.in b/package/Config.in
+index 5a3410d758..4bf55d21ee 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -313,6 +313,7 @@ menu "Graphic libraries and applications (graphic/text)"
+ comment "Graphic applications"
+ 	source "package/cage/Config.in"
+ 	source "package/cog/Config.in"
++	source "package/flutter-pi/Config.in"
+ 	source "package/fswebcam/Config.in"
+ 	source "package/ghostscript/Config.in"
+ 	source "package/glmark2/Config.in"
+@@ -346,7 +347,6 @@ comment "Graphic libraries"
+ 	source "package/fbterm/Config.in"
+ 	source "package/fbv/Config.in"
+ 	source "package/flutter-gallery/Config.in"
+-	source "package/flutter-pi/Config.in"
+ 	source "package/freerdp/Config.in"
+ 	source "package/graphicsmagick/Config.in"
+ 	source "package/imagemagick/Config.in"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
