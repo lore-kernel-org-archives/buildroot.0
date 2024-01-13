@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22809C4707B
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 13:36:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99D45C4706C
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 13:36:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CD62F40969;
-	Sat, 13 Jan 2024 13:36:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD62F40969
+	by smtp4.osuosl.org (Postfix) with ESMTP id 52CD140978;
+	Sat, 13 Jan 2024 13:36:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 52CD140978
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lakrN8svFRGt; Sat, 13 Jan 2024 13:36:07 +0000 (UTC)
+	with ESMTP id Yrph1lknDGv7; Sat, 13 Jan 2024 13:36:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 204A141F80;
-	Sat, 13 Jan 2024 13:36:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 204A141F80
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9B6C01BF867
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9656A41F83;
+	Sat, 13 Jan 2024 13:36:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9656A41F83
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EB3861BF325
  for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 13:34:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E099F40979
+ by smtp2.osuosl.org (Postfix) with ESMTP id 71016401AE
  for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 13:34:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E099F40979
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 71016401AE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5NNJehbJVGMJ for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RJvHN2Bfg1w4 for <buildroot@lists.busybox.net>;
  Sat, 13 Jan 2024 13:34:12 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E67F640959
- for <buildroot@buildroot.org>; Sat, 13 Jan 2024 13:34:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E67F640959
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4D6A940223
+ for <buildroot@buildroot.org>; Sat, 13 Jan 2024 13:34:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4D6A940223
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C353885E29; Sat, 13 Jan 2024 13:34:11 +0000 (UTC)
+ id 3A33585E2C; Sat, 13 Jan 2024 13:34:12 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 13 Jan 2024 11:30:12 +0100
+Date: Sat, 13 Jan 2024 14:28:40 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: d76820414a19508ae15b859c1ac306a9c2a82b65
-X-Git-Newrev: fede7aecf802dd95aa4d31730895777268a885cf
+X-Git-Oldrev: 42afffe7700799f86b6dacca3d27aa39e290c61c
+X-Git-Newrev: 9432974081815daa43cda420a0a428dd54a49521
 X-Patchwork-Hint: ignore
-Message-Id: <20240113133411.C353885E29@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/cups: fix systemd
- handling
+Message-Id: <20240113133412.3A33585E2C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/faad2: security
+ bump to version 2.11.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,39 +63,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fede7aecf802dd95aa4d31730895777268a885cf
+commit: https://git.buildroot.net/buildroot/commit/?id=9432974081815daa43cda420a0a428dd54a49521
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
---{dis,en}able-systemd is unrecognized since bump to version 2.4.0 in
-commit 07230bfcbc4b3c760a1d96a2595e3557c5e7278b and
-https://github.com/OpenPrinting/cups/commit/796bd7cf235b1f738e54ccdcab150ee97827ec23:
+- Switch to cmake-package
+- Fix CVE-2023-38857 and CVE-2023-38858
 
-configure: WARNING: unrecognized options: --disable-gtk-doc, --disable-gtk-doc-html, --disable-doc, --disable-docs, --disable-documentation, --with-xmlto, --with-fop, --disable-dependency-tracking, --enable-ipv6, --disable-nls, --disable-systemd, --disable-avahi
+https://github.com/knik0/faad2/blob/2.11.1/ChangeLog
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 3ebd3bf15ee1570b68cf8defe951f3574f3cda86)
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 358a379f47ad20b69dcb3c3dd8eeaad210ff5e09)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cups/cups.mk | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ package/faad2/faad2.hash | 2 +-
+ package/faad2/faad2.mk   | 8 ++------
+ 2 files changed, 3 insertions(+), 7 deletions(-)
 
-diff --git a/package/cups/cups.mk b/package/cups/cups.mk
-index 3a7c5f1e85..344e21e02b 100644
---- a/package/cups/cups.mk
-+++ b/package/cups/cups.mk
-@@ -40,10 +40,8 @@ CUPS_DEPENDENCIES = \
+diff --git a/package/faad2/faad2.hash b/package/faad2/faad2.hash
+index 3a9c36df00..b7813130fd 100644
+--- a/package/faad2/faad2.hash
++++ b/package/faad2/faad2.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  4c16c71295ca0cbf7c3dfe98eb11d8fa8d0ac3042e41604cfd6cc11a408cf264  faad2-2.10.1.tar.gz
++sha256  72dbc0494de9ee38d240f670eccf2b10ef715fd0508c305532ca3def3225bb06  faad2-2.11.1.tar.gz
+ sha256  d3baf3a54943cf12a994c85867a18dec84f810901b2f2878ddfd77efcc3c150f  COPYING
+diff --git a/package/faad2/faad2.mk b/package/faad2/faad2.mk
+index eecab35af8..686e5045c0 100644
+--- a/package/faad2/faad2.mk
++++ b/package/faad2/faad2.mk
+@@ -4,16 +4,12 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
- CUPS_CONF_OPTS += --with-systemd=/usr/lib/systemd/system \
--	--enable-systemd
-+	--with-ondemand=systemd
- CUPS_DEPENDENCIES += systemd
--else
--CUPS_CONF_OPTS += --disable-systemd
- endif
+-FAAD2_VERSION = 2.10.1
++FAAD2_VERSION = 2.11.1
+ FAAD2_SITE = $(call github,knik0,faad2,$(FAAD2_VERSION))
+ FAAD2_LICENSE = GPL-2.0
+ FAAD2_LICENSE_FILES = COPYING
+ FAAD2_CPE_ID_VENDOR = audiocoding
+ FAAD2_CPE_ID_PRODUCT = freeware_advanced_audio_decoder_2
+-# frontend/faad calls frexp()
+-FAAD2_CONF_ENV = LIBS=-lm
+ FAAD2_INSTALL_STAGING = YES
+-# From git
+-FAAD2_AUTORECONF = YES
  
- ifeq ($(BR2_PACKAGE_DBUS),y)
+-$(eval $(autotools-package))
++$(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
