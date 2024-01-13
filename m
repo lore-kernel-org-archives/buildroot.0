@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E57A5C4706C
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 20:32:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FAF1C4706C
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 20:32:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A0B8360A9A;
-	Sat, 13 Jan 2024 20:32:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A0B8360A9A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0B07D60EE9;
+	Sat, 13 Jan 2024 20:32:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B07D60EE9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Gq8-BCX8Rv4f; Sat, 13 Jan 2024 20:32:08 +0000 (UTC)
+	with ESMTP id y_xD1dDUCDZ5; Sat, 13 Jan 2024 20:32:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D1D8660BAA;
-	Sat, 13 Jan 2024 20:32:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1D8660BAA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 55B5D60BAA;
+	Sat, 13 Jan 2024 20:32:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 55B5D60BAA
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2D4AF1BF86D
- for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 20:31:30 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5E2411BF83A
+ for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 20:31:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 049F24059D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 39C6F4026F
  for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 20:31:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 049F24059D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 39C6F4026F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PjbznSiEG-nB for <buildroot@lists.busybox.net>;
+ with ESMTP id PNjkcphbKgsL for <buildroot@lists.busybox.net>;
  Sat, 13 Jan 2024 20:31:29 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E84424026F
- for <buildroot@buildroot.org>; Sat, 13 Jan 2024 20:31:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E84424026F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 11C7F4044F
+ for <buildroot@buildroot.org>; Sat, 13 Jan 2024 20:31:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 11C7F4044F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D33418600E; Sat, 13 Jan 2024 20:31:28 +0000 (UTC)
+ id F14A68600D; Sat, 13 Jan 2024 20:31:28 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 13 Jan 2024 16:10:09 +0100
+Date: Sat, 13 Jan 2024 21:29:40 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 7796294112383448c2ce27b33a29d5245bb536b0
-X-Git-Newrev: 75ed72cec32e2ed0ea9b94f2c15204ab94da56f0
+X-Git-Oldrev: ec74765e63869f8d4c28b1ce62c66ff6d93bd084
+X-Git-Newrev: 3d7c0e92db5d0ef6bae23db4487de5d4d795e74d
 X-Patchwork-Hint: ignore
-Message-Id: <20240113203128.D33418600E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/exim: do not
- build perl-based utilities
+Message-Id: <20240113203128.F14A68600D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/Makefile.in: set
+ GIT_DIR=. in {HOST, TARGET}_MAKE_ENV
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,52 +63,73 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=75ed72cec32e2ed0ea9b94f2c15204ab94da56f0
+commit: https://git.buildroot.net/buildroot/commit/?id=3d7c0e92db5d0ef6bae23db4487de5d4d795e74d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Upstream added various utilities, for example exim_id_update
-with commit https://github.com/Exim/exim/commit/46a36afae41f63de654269c8a0b7cf5852a85a14
-which is a "Utility for one-time upgrage/downgrade between exim message-
-id formats, around the 4.97 transition" which would add a dependency to
-host-perl/perl so we build and install only the needed exim binary.
+A number of packages try to detect if they are running in a git repo and run
+git describe at build time instead of using the hard coded version number if
+it succeed, leading to odd version numbers as they end up picking up the
+Buildroot git version if building inside a Buildroot git checkout, E.G.:
 
-Fixes:
+rauc --version
+rauc 2023.11-562-g9c954953b4+
 
-  http://autobuild.buildroot.net/results/111302dc3b4763befe9b159ae59b1b72de9162ea/
+This is because rauc builds with meson and uses vcs_tag:
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9bf9cac489bfe313623d0382446a1504d4f75992)
+https://github.com/rauc/rauc/blob/v1.11/meson.build#L168-L171
+
+https://mesonbuild.com/Reference-manual_functions.html#vcs_tag
+
+Another example is micropython, where we already work around it by passing
+GIT_DIR=.
+
+In the context of Buildroot the packages are never built in their own git
+checkout, so pass GIT_DIR=.  to ensure git doesn't walk back up the
+directory tree and finds the Buildroot git repo, which fixes the rauc (and
+similar) issues.
+
+>>> rauc 1.11 Building
+..
+ninja: Entering directory `/home/peko/source/buildroot/output-rauc/build/rauc-1.11//build'
+[1/29] Generating version.h with a custom command
+fatal: not a git repository: '.'
+
+cat output-rauc/build/rauc-1.11/build/version.h
+ #define PACKAGE_STRING "rauc 1.11"
+
+ #define PACKAGE_VERSION "1.11"
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit c07aafa087927ac6f10591bc13e30b7ecd5c7b7f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/exim/exim.mk | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ package/Makefile.in | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index 98b6097957..84fe96218c 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
-@@ -144,16 +144,15 @@ define EXIM_BUILD_CMDS
- 		CFLAGS="-std=c99 $(HOST_CFLAGS)" \
- 		LFLAGS="-fPIC $(HOST_LDFLAGS)"
- 	$(TARGET_MAKE_ENV) build=br $(MAKE) -C $(@D) $(EXIM_STATIC_FLAGS) \
--		CFLAGS="-std=c99 $(TARGET_CFLAGS) $(EXIM_CFLAGS)"
-+		CFLAGS="-std=c99 $(TARGET_CFLAGS) $(EXIM_CFLAGS)" exim
- endef
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 7e6ae19559..e0f1c15881 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -260,7 +260,9 @@ export PERL=$(shell which perl)
+ # finds this perl module by exporting the proper value for PERL5LIB.
+ export PERL5LIB=$(HOST_DIR)/lib/perl
  
- # Need to replicate the LFLAGS in install, as exim still wants to build
- # something when installing...
- define EXIM_INSTALL_TARGET_CMDS
--	DESTDIR=$(TARGET_DIR) INSTALL_ARG="-no_chown -no_symlink" build=br \
--	  $(MAKE) -C $(@D) $(EXIM_STATIC_FLAGS) \
--		CFLAGS="-std=c99 $(TARGET_CFLAGS)" \
--		install
-+	cd $(@D)/build-br; \
-+		DESTDIR=$(TARGET_DIR) build=br \
-+		../scripts/exim_install -no_chown -no_symlink exim
- 	chmod u+s $(TARGET_DIR)/usr/sbin/exim
- endef
+-TARGET_MAKE_ENV = PATH=$(BR_PATH)
++TARGET_MAKE_ENV = \
++	GIT_DIR=. \
++	PATH=$(BR_PATH)
  
+ TARGET_CONFIGURE_OPTS = \
+ 	$(TARGET_MAKE_ENV) \
+@@ -304,6 +306,7 @@ TARGET_CONFIGURE_OPTS = \
+ 
+ 
+ HOST_MAKE_ENV = \
++	GIT_DIR=. \
+ 	PATH=$(BR_PATH) \
+ 	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+ 	PKG_CONFIG_SYSROOT_DIR="/" \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
