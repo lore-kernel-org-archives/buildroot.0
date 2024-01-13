@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 795C7C4706C
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 13:35:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33D94C4706C
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 13:35:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 34EB241F95;
-	Sat, 13 Jan 2024 13:35:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 34EB241F95
+	by smtp4.osuosl.org (Postfix) with ESMTP id E485640970;
+	Sat, 13 Jan 2024 13:35:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E485640970
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5fUKF9V8lMNg; Sat, 13 Jan 2024 13:35:04 +0000 (UTC)
+	with ESMTP id h26dlnDhbuh8; Sat, 13 Jan 2024 13:35:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 71DBE41F80;
-	Sat, 13 Jan 2024 13:35:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 71DBE41F80
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2B8391BF86D
- for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 13:34:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1595F40978;
+	Sat, 13 Jan 2024 13:35:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1595F40978
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 139CC1BF325
+ for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 13:34:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DA2F360C10
- for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 13:34:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA2F360C10
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0D91B40978
+ for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 13:34:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D91B40978
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KJmtwSQtRjIA for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 79FuSIHPYfii for <buildroot@lists.busybox.net>;
  Sat, 13 Jan 2024 13:34:12 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F0E7D60B78
- for <buildroot@buildroot.org>; Sat, 13 Jan 2024 13:34:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F0E7D60B78
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4712440979
+ for <buildroot@buildroot.org>; Sat, 13 Jan 2024 13:34:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4712440979
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DF09085E2C; Sat, 13 Jan 2024 13:34:11 +0000 (UTC)
+ id 430C485E7A; Sat, 13 Jan 2024 13:34:12 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 13 Jan 2024 11:50:43 +0100
+Date: Sat, 13 Jan 2024 14:33:45 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: d59600235378e04b392290880c74ddd4958b405c
-X-Git-Newrev: 3801c4e4be34a7d0ad3032991cccaa0c80f47506
+X-Git-Oldrev: 9432974081815daa43cda420a0a428dd54a49521
+X-Git-Newrev: 84bc0dafe2a0ad07176307b4c070fdfd5aac194b
 X-Patchwork-Hint: ignore
-Message-Id: <20240113133411.DF09085E2C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/lvm2: fix libaio
- handling
+Message-Id: <20240113133412.430C485E7A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/micropython:
+ security bump to version 1.22.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,62 +63,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3801c4e4be34a7d0ad3032991cccaa0c80f47506
+commit: https://git.buildroot.net/buildroot/commit/?id=84bc0dafe2a0ad07176307b4c070fdfd5aac194b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-libaio is only needed for standard install
+- Use official tarball
+- Update hash of license file (some packages have been added or removed
+  but the list of licenses is the same)
+- Fix CVE-2023-7158: A vulnerability was found in MicroPython up to
+  1.21.0. It has been classified as critical. Affected is the function
+  slice_indices of the file objslice.c. The manipulation leads to
+  heap-based buffer overflow. It is possible to launch the attack
+  remotely. The exploit has been disclosed to the public and may be
+  used. Upgrading to version 1.22.0 is able to address this issue. It is
+  recommended to upgrade the affected component. The identifier of this
+  vulnerability is VDB-249180.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[yann.morin.1998@free.fr: fix check-package]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit ee9c92e4a4d518d07da5fc3d64aa695509ecdea7)
+(cherry picked from commit 1e12b7dd49d1c64a5195f226e9e4da21e84f5d0c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lvm2/Config.in | 2 +-
- package/lvm2/lvm2.mk   | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/micropython/micropython.hash | 4 ++--
+ package/micropython/micropython.mk   | 5 +++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/lvm2/Config.in b/package/lvm2/Config.in
-index cc740dd40c..5d19f78b8a 100644
---- a/package/lvm2/Config.in
-+++ b/package/lvm2/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_LVM2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # needs fork()
- 	depends on !BR2_STATIC_LIBS # It fails to build statically
--	select BR2_PACKAGE_LIBAIO
- 	help
- 	  This is LVM2, the rewrite of The Linux Logical Volume Manager.
- 	  LVM supports enterprise level volume management of disk and
-@@ -29,6 +28,7 @@ config BR2_PACKAGE_LVM2_STANDARD_INSTALL
- 	default y
- 	# http://lists.busybox.net/pipermail/buildroot/2016-August/170592.html
- 	depends on !BR2_TOOLCHAIN_USES_MUSL
-+	select BR2_PACKAGE_LIBAIO
- 	help
- 	  Install the standard suite of lvm2 programs. When this option
- 	  is not set, only dmsetup is installed.
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 9caf99eb9b..474ea30bdc 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -25,7 +25,7 @@ LVM2_CONF_OPTS += \
- 	--disable-nls \
- 	--with-symvers=no
+diff --git a/package/micropython/micropython.hash b/package/micropython/micropython.hash
+index 7bff7de4e2..43551866b9 100644
+--- a/package/micropython/micropython.hash
++++ b/package/micropython/micropython.hash
+@@ -1,3 +1,3 @@
+ #locally computed
+-sha256  c980ad7e742491df0dc10db2958137dbbf9aa7a8009e102fc75f4c0cac2d6b5e  micropython-1.19.1.tar.gz
+-sha256  0f678c2abd7fe2cfca36693630506bbcbdfc219bd04bf4a02fe3b094ae4c666f  LICENSE
++sha256  a042764f0b6f6d92b267454c5bd5afcb83fc3900119f2583672aac571e661924  micropython-1.22.0.tar.xz
++sha256  d9e0e0395867c899090e150213bc2b417e970c17355a8d48300089875b3c8037  LICENSE
+diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
+index 5f687c73b9..e6eb536ea5 100644
+--- a/package/micropython/micropython.mk
++++ b/package/micropython/micropython.mk
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
  
--LVM2_DEPENDENCIES += host-pkgconf libaio
-+LVM2_DEPENDENCIES += host-pkgconf
- 
- # LVM2 uses autoconf, but not automake, and the build system does not
- # take into account the toolchain passed at configure time.
-@@ -49,6 +49,7 @@ LVM2_CONF_OPTS += --disable-selinux
- endif
- 
- ifeq ($(BR2_PACKAGE_LVM2_STANDARD_INSTALL),y)
-+LVM2_DEPENDENCIES += libaio
- LVM2_INSTALL_STAGING_OPTS += install
- LVM2_INSTALL_TARGET_OPTS += install
- ifeq ($(BR2_INIT_SYSTEMD),y)
+-MICROPYTHON_VERSION = 1.19.1
+-MICROPYTHON_SITE = $(call github,micropython,micropython,v$(MICROPYTHON_VERSION))
++MICROPYTHON_VERSION = 1.22.0
++MICROPYTHON_SITE = https://micropython.org/resources/source
++MICROPYTHON_SOURCE = micropython-$(MICROPYTHON_VERSION).tar.xz
+ # Micropython has a lot of code copied from other projects, and also a number
+ # of submodules for various libs. However, we don't even clone the submodules,
+ # and most of the copied code is not used in the unix build.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
