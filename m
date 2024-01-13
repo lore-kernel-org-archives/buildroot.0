@@ -4,53 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02FE2C4706C
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 20:11:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3D3AC4706C
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 20:15:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A4CA641EA8;
-	Sat, 13 Jan 2024 20:11:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A4CA641EA8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7207C41E0A;
+	Sat, 13 Jan 2024 20:15:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7207C41E0A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FPD1mXpk_2Vn; Sat, 13 Jan 2024 20:11:21 +0000 (UTC)
+	with ESMTP id 02bBqR734Hn4; Sat, 13 Jan 2024 20:15:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1462B41EA6;
-	Sat, 13 Jan 2024 20:11:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1462B41EA6
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E61D51BF83A
- for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 20:11:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C5F1F41699;
+	Sat, 13 Jan 2024 20:15:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C5F1F41699
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B1A3C1BF83A
+ for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 20:15:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BDED0402BC
- for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 20:11:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BDED0402BC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8A33F60ACC
+ for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 20:15:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A33F60ACC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AdW4W4j_Ib8P for <buildroot@lists.busybox.net>;
- Sat, 13 Jan 2024 20:11:16 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 62CED4026F
- for <buildroot@buildroot.org>; Sat, 13 Jan 2024 20:11:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 62CED4026F
-Received: by mail.gandi.net (Postfix) with ESMTPSA id DD65140002;
- Sat, 13 Jan 2024 20:11:12 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rOkLX-00DMmw-3D;
- Sat, 13 Jan 2024 21:11:12 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20240106133919.1586012-1-fontaine.fabrice@gmail.com>
-Date: Sat, 13 Jan 2024 21:11:11 +0100
-In-Reply-To: <20240106133919.1586012-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 6 Jan 2024 14:39:19 +0100")
-Message-ID: <87ttnhro2o.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mah6q7ovj3ZL for <buildroot@lists.busybox.net>;
+ Sat, 13 Jan 2024 20:15:44 +0000 (UTC)
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 896DF60A9A
+ for <buildroot@buildroot.org>; Sat, 13 Jan 2024 20:15:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 896DF60A9A
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 65B7E13F88D;
+ Sat, 13 Jan 2024 21:15:39 +0100 (CET)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 13 Jan 2024 21:15:31 +0100
+Message-ID: <20240113201532.121274-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/nushell: fix sparc64 build
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1705176940;
+ bh=EyqeulJ5sKg9WHNigNX27QS6Qbrh/tI5YBZpdf3CWdU=;
+ h=From:To:Cc:Subject:Date:From;
+ b=H2eXdi+s87yH6J0SVKBVAHhp95ixEloiGXw/dWbL0tYygF3s8iBKco/q2Ft3GhIpR
+ fStrmA7uZ5HMa4OBa0o1Twdi4lUyRUYd/LrTECaJzGOfzH5B+B6XlEhnKKP5WwKrdI
+ ixLvITzQG5BuPFyap1AXqBe8WM8EUsYCuOBFM6ng5LJpGqGfhmIto7CepsJ14tXrQK
+ NBp1X3MkeYA6oPDpaMOQMIJrNb3pJ3181LGTz9iVYkI08bTxLKxEoPGDDYZdqMjJL+
+ cLx2g35SaeSWQAiHICNGqIrRKI8CCe/CSB5hh0ncJyo1FzXgw/zaUnxbCrwBVovZTe
+ MO2s07b3QJtBA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=H2eXdi+s
+Subject: [Buildroot] [PATCH 1/1] support/testing: add netcat runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,43 +70,81 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sebastian Weyer <sebastian.weyer@smile.fr>, buildroot@buildroot.org
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ DEVELOPERS                                   |  1 +
+ support/testing/tests/package/test_netcat.py | 41 ++++++++++++++++++++
+ 2 files changed, 42 insertions(+)
+ create mode 100644 support/testing/tests/package/test_netcat.py
 
- > Fix the following build failure on sparc64 raised since bump to version
- > 0.85 in commit 470f0fb1ec0bd2ba03340f2aea34891ca8d7739d:
-
- > error[E0308]: mismatched types
- --> /home/autobuild/autobuild/instance-7/output-1/build/nushell-0.85.0/VENDOR/uucore/src/lib/features/fs.rs:121:16
- >     |
- > 111 |     pub fn number_of_links(&self) -> u64 {
- >     |                                      --- expected `u64` because of return type
- > ...
- > 121 |         return self.0.st_nlink;
- >     |                ^^^^^^^^^^^^^^^ expected `u64`, found `u32`
- >     |
- > help: you can convert a `u32` to a `u64`
- >     |
- > 121 |         return self.0.st_nlink.into();
- >     |                               +++++++
-
- > For more information about this error, try `rustc --explain E0308`.
- > error: could not compile `uucore` (lib) due to previous error
-
- > Fixes:
- >  - http://autobuild.buildroot.org/results/f9f0287a8e39c65895014ca513ed25071f020add
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed to 2023.11.x, thanks.
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 94a89c63d5..d25f31f0ff 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1791,6 +1791,7 @@ F:	support/testing/tests/package/test_lz4.py
+ F:	support/testing/tests/package/test_lzop.py
+ F:	support/testing/tests/package/test_mtools.py
+ F:	support/testing/tests/package/test_ncdu.py
++F:	support/testing/tests/package/test_netcat.py
+ F:	support/testing/tests/package/test_nftables.py
+ F:	support/testing/tests/package/test_nftables/
+ F:	support/testing/tests/package/test_octave.py
+diff --git a/support/testing/tests/package/test_netcat.py b/support/testing/tests/package/test_netcat.py
+new file mode 100644
+index 0000000000..b3efa4c40b
+--- /dev/null
++++ b/support/testing/tests/package/test_netcat.py
+@@ -0,0 +1,41 @@
++import os
++import time
++
++import infra.basetest
++
++
++class TestNetCat(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++        BR2_PACKAGE_NETCAT=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        self.assertRunOk("nc --version")
++
++        in_file = "input.bin"
++        out_file = "output.bin"
++        port = 12345
++
++        cmd = f"dd if=/dev/urandom of={in_file} bs=1k count=1k"
++        self.assertRunOk(cmd)
++
++        cmd = f"nc -l -p {port} > {out_file} &"
++        self.assertRunOk(cmd)
++
++        time.sleep(1)
++
++        cmd = f"cat {in_file} | nc -c 127.0.0.1 {port}"
++        self.assertRunOk(cmd)
++
++        cmd = f"cmp {in_file} {out_file}"
++        self.assertRunOk(cmd)
 -- 
-Bye, Peter Korsgaard
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
