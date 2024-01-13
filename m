@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99D45C4706C
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 13:36:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E330AC4707B
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 13:36:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 52CD140978;
-	Sat, 13 Jan 2024 13:36:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 52CD140978
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9B00F40963;
+	Sat, 13 Jan 2024 13:36:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B00F40963
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Yrph1lknDGv7; Sat, 13 Jan 2024 13:36:19 +0000 (UTC)
+	with ESMTP id 825PnIOwAbkY; Sat, 13 Jan 2024 13:36:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9656A41F83;
-	Sat, 13 Jan 2024 13:36:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9656A41F83
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EB3861BF325
- for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 13:34:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E9C0D41FA4;
+	Sat, 13 Jan 2024 13:36:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E9C0D41FA4
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 345411BF325
+ for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 13:34:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 71016401AE
+ by smtp4.osuosl.org (Postfix) with ESMTP id EC76E40E46
  for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 13:34:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 71016401AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC76E40E46
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RJvHN2Bfg1w4 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qxVcF208bWvC for <buildroot@lists.busybox.net>;
  Sat, 13 Jan 2024 13:34:12 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4D6A940223
+ by smtp4.osuosl.org (Postfix) with ESMTP id 36D1F40970
  for <buildroot@buildroot.org>; Sat, 13 Jan 2024 13:34:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4D6A940223
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 36D1F40970
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3A33585E2C; Sat, 13 Jan 2024 13:34:12 +0000 (UTC)
+ id 274C385E69; Sat, 13 Jan 2024 13:34:12 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 13 Jan 2024 14:28:40 +0100
+Date: Sat, 13 Jan 2024 14:23:52 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 42afffe7700799f86b6dacca3d27aa39e290c61c
-X-Git-Newrev: 9432974081815daa43cda420a0a428dd54a49521
+X-Git-Oldrev: 7b1ee6b6b6cd5825c7528713083417ac6ad9718c
+X-Git-Newrev: 425dbe3b3df7e2858103c97f52dbf4e3e2405f3a
 X-Patchwork-Hint: ignore
-Message-Id: <20240113133412.3A33585E2C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/faad2: security
- bump to version 2.11.1
+Message-Id: <20240113133412.274C385E69@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] boot/shim: security bump
+ to version 15.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,55 +63,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9432974081815daa43cda420a0a428dd54a49521
+commit: https://git.buildroot.net/buildroot/commit/?id=425dbe3b3df7e2858103c97f52dbf4e3e2405f3a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-- Switch to cmake-package
-- Fix CVE-2023-38857 and CVE-2023-38858
+Fixes the following security issue:
 
-https://github.com/knik0/faad2/blob/2.11.1/ChangeLog
+CVE-2022-28737: There's a possible overflow in handle_image() when shim
+tries to load and execute crafted EFI executables
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+https://github.com/advisories/GHSA-hmxr-46w2-jjwh
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 358a379f47ad20b69dcb3c3dd8eeaad210ff5e09)
+(cherry picked from commit f29cbc6ce3def37d7dc4d99fa2a5cbdadc6369e9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/faad2/faad2.hash | 2 +-
- package/faad2/faad2.mk   | 8 ++------
- 2 files changed, 3 insertions(+), 7 deletions(-)
+ boot/shim/shim.hash | 2 +-
+ boot/shim/shim.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/faad2/faad2.hash b/package/faad2/faad2.hash
-index 3a9c36df00..b7813130fd 100644
---- a/package/faad2/faad2.hash
-+++ b/package/faad2/faad2.hash
+diff --git a/boot/shim/shim.hash b/boot/shim/shim.hash
+index a0a9f06f35..c9c489fd2f 100644
+--- a/boot/shim/shim.hash
++++ b/boot/shim/shim.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  4c16c71295ca0cbf7c3dfe98eb11d8fa8d0ac3042e41604cfd6cc11a408cf264  faad2-2.10.1.tar.gz
-+sha256  72dbc0494de9ee38d240f670eccf2b10ef715fd0508c305532ca3def3225bb06  faad2-2.11.1.tar.gz
- sha256  d3baf3a54943cf12a994c85867a18dec84f810901b2f2878ddfd77efcc3c150f  COPYING
-diff --git a/package/faad2/faad2.mk b/package/faad2/faad2.mk
-index eecab35af8..686e5045c0 100644
---- a/package/faad2/faad2.mk
-+++ b/package/faad2/faad2.mk
-@@ -4,16 +4,12 @@
+ # locally computed hash
+-sha256  8344473dd10569588b8238a4656b8fab226714eea9f5363f8c410aa8a5090297  shim-15.4.tar.bz2
++sha256  eab91644a3efe91a666399f5d8eb3eed0e04d04f79d4b6c0b278ef7747a239a5  shim-15.6.tar.bz2
+ sha256  15edf527919ddcb2f514ab9d16ad07ef219e4bb490e0b79560be510f0c159cc2  COPYRIGHT
+diff --git a/boot/shim/shim.mk b/boot/shim/shim.mk
+index 0a6d1527aa..bbef81cfc4 100644
+--- a/boot/shim/shim.mk
++++ b/boot/shim/shim.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FAAD2_VERSION = 2.10.1
-+FAAD2_VERSION = 2.11.1
- FAAD2_SITE = $(call github,knik0,faad2,$(FAAD2_VERSION))
- FAAD2_LICENSE = GPL-2.0
- FAAD2_LICENSE_FILES = COPYING
- FAAD2_CPE_ID_VENDOR = audiocoding
- FAAD2_CPE_ID_PRODUCT = freeware_advanced_audio_decoder_2
--# frontend/faad calls frexp()
--FAAD2_CONF_ENV = LIBS=-lm
- FAAD2_INSTALL_STAGING = YES
--# From git
--FAAD2_AUTORECONF = YES
- 
--$(eval $(autotools-package))
-+$(eval $(cmake-package))
+-SHIM_VERSION = 15.4
++SHIM_VERSION = 15.6
+ SHIM_SITE = https://github.com/rhboot/shim/releases/download/$(SHIM_VERSION)
+ SHIM_SOURCE = shim-$(SHIM_VERSION).tar.bz2
+ SHIM_LICENSE = BSD-2-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
