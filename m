@@ -4,87 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA178C4707B
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 20:20:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DB1FC4706C
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 20:20:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6F2BC60A9A;
-	Sat, 13 Jan 2024 20:20:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F2BC60A9A
+	by smtp3.osuosl.org (Postfix) with ESMTP id C7C4960ACC;
+	Sat, 13 Jan 2024 20:20:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7C4960ACC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Du5GA5uTO7Je; Sat, 13 Jan 2024 20:20:41 +0000 (UTC)
+	with ESMTP id lJs8wGvd64PZ; Sat, 13 Jan 2024 20:20:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A7FE260ACD;
-	Sat, 13 Jan 2024 20:20:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A7FE260ACD
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0F6341BF83A
- for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 20:20:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 17AB760ACD;
+	Sat, 13 Jan 2024 20:20:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 17AB760ACD
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5E1D21BF83A
+ for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 20:20:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E7E8C4026F
- for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 20:20:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E7E8C4026F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3111A408F1
+ for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 20:20:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3111A408F1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4G6b3Zwoc3UC for <buildroot@lists.busybox.net>;
- Sat, 13 Jan 2024 20:20:26 +0000 (UTC)
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com
- [IPv6:2607:f8b0:4864:20::22d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E424F403A5
- for <buildroot@buildroot.org>; Sat, 13 Jan 2024 20:20:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E424F403A5
-Received: by mail-oi1-x22d.google.com with SMTP id
- 5614622812f47-3bd3b34a58dso3242563b6e.3
- for <buildroot@buildroot.org>; Sat, 13 Jan 2024 12:20:25 -0800 (PST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 43hcpEX1T6a4 for <buildroot@lists.busybox.net>;
+ Sat, 13 Jan 2024 20:20:27 +0000 (UTC)
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com
+ [IPv6:2607:f8b0:4864:20::230])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 45CCD402FE
+ for <buildroot@buildroot.org>; Sat, 13 Jan 2024 20:20:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 45CCD402FE
+Received: by mail-oi1-x230.google.com with SMTP id
+ 5614622812f47-3bb53e20a43so5384821b6e.1
+ for <buildroot@buildroot.org>; Sat, 13 Jan 2024 12:20:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1705177224; x=1705782024;
+ d=1e100.net; s=20230601; t=1705177225; x=1705782025;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=lldr7QgsflTJMryJ7ILXvMmWnfuMxF/bmxRMkn4rRBY=;
- b=v2Po8prlPp5EXewzwpYhQZepFsbbtPkmzZsPnKyOkDl0K9UAqos5kxphL9OPQ2kqWg
- 9gSHLydUqaH50CW7xHsaUEdhhFFh8CHEELi+NH050S7w6b9kcVoSnyncLp5x/fqtO8pK
- aKUd51/JHC+SbVqcsGcCL2aZECj2F0A3h+HKQQF1FeTY9YbVWMjPB6OAi+5Gwkd5qG8n
- xaevBtvuw2tPCMMAzHL/cxwTzFtiM4u4o9AObuJxNM7p5EbqqpHnmgSkkYh9x7FcirAp
- 7LDOqkE+MrUdnAKkW4URdxy2hHm7WhIxadsLzF91r2GXjmtOyKSMTwcTUDuijIinJ0ok
- qExg==
-X-Gm-Message-State: AOJu0YwQu7d+OxuSrL/be+ja0TWV1IJh3fgU47Y/u4AZJzKNN5TSCJEc
- Pq7cbVxFStm203nGpAALNFQxr7zE20VkT962dBIrq6GxNUM=
-X-Google-Smtp-Source: AGHT+IH0ciE1iXmd3ux1KhhporAJLyLKjC0Gm2DOTIZ6/RB+42IZv4+xkL8H6VcKenPI0WVjCcsouA==
-X-Received: by 2002:a05:6808:221a:b0:3bb:bd57:b59a with SMTP id
- bd26-20020a056808221a00b003bbbd57b59amr3693521oib.15.1705177223906; 
- Sat, 13 Jan 2024 12:20:23 -0800 (PST)
+ bh=ltLQ1sRzG6Jmrio8JOnRBrb2jEqh5ICp68FXNccVbKg=;
+ b=O9LiCJi4jNpeFfIXaQ3bYe4nJKKk3RB8zOPFrmujoTw/LYvPVLN4a6PxN4Q4QLI8Y5
+ XwnRX4Ss/3Dc/zi77c+Bj2vioFRKfARdHQzbfiB8uThh4MSamFxO6OR+Mztzp4+cUvmX
+ IrkH+Hn4lUgddmHDE5yyJ/4Xea9F8K4FMNXoyb0eb4Flnr+PPeEaK/1R4RaOw8gIQM6P
+ qjZWeLKNKufmnwg6PEwq7aTTElWS/q7vHScWmvP1KmVZB+P+lPkyqXwG4ToittlHzaO0
+ 3tJ8Efh5htxwILfuow7K712vT7puKp3CHaPk+cLFROiNS69dmeSJpQp5WLA3R2e0QoGL
+ LwkA==
+X-Gm-Message-State: AOJu0YzIqBmmxifWefI1QbRsN1Pa+zUnIdvnsAtW8xhXyVDU5jwSaJPh
+ 57zJvClLRBZ5ZTqY5eEr94fST2D2na6PYXeu1mIJ/1e9BGg=
+X-Google-Smtp-Source: AGHT+IH6PotsTp8KUSnlbnwFBLJ89gtEowBeL35hF9m/1kMTvvdndxunNd85FOPSuuSopLV7wiuLpg==
+X-Received: by 2002:a05:6808:171c:b0:3bd:5f60:cb9 with SMTP id
+ bc28-20020a056808171c00b003bd5f600cb9mr4054160oib.97.1705177225440; 
+ Sat, 13 Jan 2024 12:20:25 -0800 (PST)
 Received: from fedora.. (24-116-183-211.cpe.sparklight.net. [24.116.183.211])
  by smtp.gmail.com with ESMTPSA id
- y126-20020a62ce84000000b006d9b5b3ea1fsm5281331pfg.22.2024.01.13.12.20.22
+ y126-20020a62ce84000000b006d9b5b3ea1fsm5281331pfg.22.2024.01.13.12.20.24
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 13 Jan 2024 12:20:23 -0800 (PST)
+ Sat, 13 Jan 2024 12:20:24 -0800 (PST)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Sat, 13 Jan 2024 13:20:11 -0700
-Message-ID: <20240113202020.21747-2-adam.duskett@amarulasolutions.com>
+Date: Sat, 13 Jan 2024 13:20:12 -0700
+Message-ID: <20240113202020.21747-3-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240113202020.21747-1-adam.duskett@amarulasolutions.com>
 References: <20240113202020.21747-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1705177224; x=1705782024;
+ d=amarulasolutions.com; s=google; t=1705177225; x=1705782025;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=lldr7QgsflTJMryJ7ILXvMmWnfuMxF/bmxRMkn4rRBY=;
- b=mpkgBmwH85JhB4lR0ZnV6TRXJERb0NW9TbT7ILUNW/tujdeRmaC7FFbrCxhHiDKMer
- FzX90AhL6YG37YbWgBe3lvcCIXAmGuCeEAomcjeBDczflGjUPxO9rQIiAPBFs6XL0MF9
- mKjyp0XARXS7pCdixqaXUzxyIGLgsHlH7kCZ4=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=ltLQ1sRzG6Jmrio8JOnRBrb2jEqh5ICp68FXNccVbKg=;
+ b=KaMxl7u6klB1DomA2S1+xEw+fjgUfgQPxc32Ud8AJZcqob/yayCZywXIDIOsP1lSiw
+ aLcuWzwdTjN9d9lpxZgiUuZ4k9ERVEfC9Tuz2SIT4Fr+j7UoMqPQhS6LR2xmw25AEwlF
+ FBLg3BEUXZBkghciLnA/Mzcsn6Fer6rog1dI8=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=mpkgBmwH
-Subject: [Buildroot] [PATCH v2 01/10] package/ivi-homescreen: add
- standard_method_codec.h to keyboard manager plugin
+ header.b=KaMxl7u6
+Subject: [Buildroot] [PATCH v2 02/10] package/depot-tools: bump version to
+ 8d14454ba4a35fd9d2483842b08815a2357ec86f
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,83 +102,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The keyboard manager plugin is also missing the flutter/standard_method_codec.h
-header.
-
-  - Add shell/plugins/keyboard_manager/keyboard_manager.h to the patch.
-
-  - Rename the patch to
-    0001-add-missing-headers-to-the-audio-players-and-keyboar.patch
-
-Upstream pull request updated as well.
-
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
- ...rs-to-the-audio-players-and-keyboar.patch} | 26 +++++++++++++++++--
- 1 file changed, 24 insertions(+), 2 deletions(-)
- rename package/ivi-homescreen/{0001-add-missing-headers-to-the-audio-players-plugin.patch => 0001-add-missing-headers-to-the-audio-players-and-keyboar.patch} (77%)
+ package/depot-tools/depot-tools.hash | 2 +-
+ package/depot-tools/depot-tools.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ivi-homescreen/0001-add-missing-headers-to-the-audio-players-plugin.patch b/package/ivi-homescreen/0001-add-missing-headers-to-the-audio-players-and-keyboar.patch
-similarity index 77%
-rename from package/ivi-homescreen/0001-add-missing-headers-to-the-audio-players-plugin.patch
-rename to package/ivi-homescreen/0001-add-missing-headers-to-the-audio-players-and-keyboar.patch
-index c26fdba7f2..0d308b786b 100644
---- a/package/ivi-homescreen/0001-add-missing-headers-to-the-audio-players-plugin.patch
-+++ b/package/ivi-homescreen/0001-add-missing-headers-to-the-audio-players-and-keyboar.patch
-@@ -1,7 +1,8 @@
- From 7e35ea4fbd94a1604907069bb9cc2e2dff4b43c7 Mon Sep 17 00:00:00 2001
- From: Adam Duskett <adam.duskett@amarulasolutions.com>
- Date: Sat, 6 Jan 2024 14:18:56 -0700
--Subject: [PATCH] add missing headers to the audio-players plugin
-+Subject: [PATCH] add missing headers to the audio-players and keyboard_manager
-+ plugin
+diff --git a/package/depot-tools/depot-tools.hash b/package/depot-tools/depot-tools.hash
+index 2109096901..70218e4658 100644
+--- a/package/depot-tools/depot-tools.hash
++++ b/package/depot-tools/depot-tools.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  8e0bccdd6b1231f58d5453dc14a5e1d195295ac8d466dec34961e951e946b50b  depot-tools-4e87f5bfe244e903f712408ea68dc3c3a6fe2d00-br1.tar.gz
++sha256  5da23d7558975093c6a732f5743c7f224d16dd3f878a6a1b577b1b127a4098cc  depot-tools-8d14454ba4a35fd9d2483842b08815a2357ec86f-br1.tar.gz
+ sha256  984523ee987f4e8b72d61df37d8f1189a7077cd4b77e41a397e35593b297a29d  LICENSE
+diff --git a/package/depot-tools/depot-tools.mk b/package/depot-tools/depot-tools.mk
+index e3b840f29a..634258ffbb 100644
+--- a/package/depot-tools/depot-tools.mk
++++ b/package/depot-tools/depot-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- Fixes flutter::StandardMethodCodec not being declared on the following lines:
- plugins/audio_players/audio_players_registry.cc:83
-@@ -9,6 +10,7 @@ plugins/audio_players/audio_players_registry.cc:94
- plugins/audio_players/audio_players_registry.cc:152
- plugins/audio_players/audio_player.cc:257
- plugins/audio_players/audio_player.cc:623
-+plugins/keyboard_manager/keyboard_manager.cc:25
- 
- Upstream: https://github.com/toyota-connected/ivi-homescreen/pull/133
- 
-@@ -17,7 +19,8 @@ Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-  shell/plugins/audio_players/audio_player.cc           | 3 ++-
-  shell/plugins/audio_players/audio_players.cc          | 4 +++-
-  shell/plugins/audio_players/audio_players_registry.cc | 3 ++-
-- 3 files changed, 7 insertions(+), 3 deletions(-)
-+ shell/plugins/keyboard_manager/keyboard_manager.h     | 3 ++-
-+ 4 files changed, 9 insertions(+), 4 deletions(-)
- 
- diff --git a/shell/plugins/audio_players/audio_player.cc b/shell/plugins/audio_players/audio_player.cc
- index 56027eb..a85e9ae 100644
-@@ -77,6 +80,25 @@ index 6c9ef33..00c4f45 100644
- -}  // namespace Plugins
- \ No newline at end of file
- +}  // namespace Plugins
-+diff --git a/shell/plugins/keyboard_manager/keyboard_manager.h b/shell/plugins/keyboard_manager/keyboard_manager.h
-+index 74b4e8d..cae1954 100644
-+--- a/shell/plugins/keyboard_manager/keyboard_manager.h
-++++ b/shell/plugins/keyboard_manager/keyboard_manager.h
-+@@ -17,6 +17,7 @@
-+ #pragma once
-+ 
-+ #include "flutter/fml/macros.h"
-++#include <flutter/standard_method_codec.h>
-+ 
-+ #include <shell/platform/embedder/embedder.h>
-+ 
-+@@ -45,4 +46,4 @@ class KeyboardManager {
-+ 
-+  private:
-+   static constexpr char kGetKeyboardState[] = "getKeyboardState";
-+-};
-+\ No newline at end of file
-++};
- -- 
- 2.43.0
- 
+-DEPOT_TOOLS_VERSION = 4e87f5bfe244e903f712408ea68dc3c3a6fe2d00
++DEPOT_TOOLS_VERSION = 8d14454ba4a35fd9d2483842b08815a2357ec86f
+ DEPOT_TOOLS_SITE = https://chromium.googlesource.com/chromium/tools/depot_tools
+ DEPOT_TOOLS_SITE_METHOD = git
+ DEPOT_TOOLS_LICENSE = BSD-3-Clause
 -- 
 2.43.0
 
