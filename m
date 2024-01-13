@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33D94C4706C
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 13:35:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91623C4707B
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 13:35:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E485640970;
-	Sat, 13 Jan 2024 13:35:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E485640970
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4A40741F80;
+	Sat, 13 Jan 2024 13:35:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A40741F80
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id h26dlnDhbuh8; Sat, 13 Jan 2024 13:35:17 +0000 (UTC)
+	with ESMTP id LR-cZEfGQCk6; Sat, 13 Jan 2024 13:35:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1595F40978;
-	Sat, 13 Jan 2024 13:35:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1595F40978
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 139CC1BF325
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8C35340963;
+	Sat, 13 Jan 2024 13:35:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C35340963
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4872F1BF867
  for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 13:34:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0D91B40978
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0585E60B78
  for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 13:34:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D91B40978
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0585E60B78
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 79FuSIHPYfii for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Gng-_lVaBJly for <buildroot@lists.busybox.net>;
  Sat, 13 Jan 2024 13:34:12 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4712440979
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4104360D53
  for <buildroot@buildroot.org>; Sat, 13 Jan 2024 13:34:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4712440979
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4104360D53
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 430C485E7A; Sat, 13 Jan 2024 13:34:12 +0000 (UTC)
+ id 303B985E78; Sat, 13 Jan 2024 13:34:12 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 13 Jan 2024 14:33:45 +0100
+Date: Sat, 13 Jan 2024 14:27:53 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 9432974081815daa43cda420a0a428dd54a49521
-X-Git-Newrev: 84bc0dafe2a0ad07176307b4c070fdfd5aac194b
+X-Git-Oldrev: 425dbe3b3df7e2858103c97f52dbf4e3e2405f3a
+X-Git-Newrev: 42afffe7700799f86b6dacca3d27aa39e290c61c
 X-Patchwork-Hint: ignore
-Message-Id: <20240113133412.430C485E7A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/micropython:
- security bump to version 1.22.0
+Message-Id: <20240113133412.303B985E78@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/uftp: security
+ bump to version 5.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,56 +63,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=84bc0dafe2a0ad07176307b4c070fdfd5aac194b
+commit: https://git.buildroot.net/buildroot/commit/?id=42afffe7700799f86b6dacca3d27aa39e290c61c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-- Use official tarball
-- Update hash of license file (some packages have been added or removed
-  but the list of licenses is the same)
-- Fix CVE-2023-7158: A vulnerability was found in MicroPython up to
-  1.21.0. It has been classified as critical. Affected is the function
-  slice_indices of the file objslice.c. The manipulation leads to
-  heap-based buffer overflow. It is possible to launch the attack
-  remotely. The exploit has been disclosed to the public and may be
-  used. Upgrading to version 1.22.0 is able to address this issue. It is
-  recommended to upgrade the affected component. The identifier of this
-  vulnerability is VDB-249180.
+Update site to avoid redirections (HSTS, etc.)
+
+Version 5.0.3 - 12/17/2023
+  A memory leak fix in the prior version wasn't applied correctly, resulting
+    in an invalid memory access causing a crash.  Bug fixed.
+
+Version 5.0.2 - 11/8/2023
+  Fixed bug that caused crash when a CLIENT_KEY arrived out of order
+  Fixed option handling on Windows when an argument is missing
+
+https://sourceforge.net/projects/uftp-multicast/files/Changes.txt/download
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 1e12b7dd49d1c64a5195f226e9e4da21e84f5d0c)
+(cherry picked from commit bfe2fe22697f2fc95749d20603cf3eae51453ad7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/micropython/micropython.hash | 4 ++--
- package/micropython/micropython.mk   | 5 +++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/uftp/uftp.hash | 2 +-
+ package/uftp/uftp.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/micropython/micropython.hash b/package/micropython/micropython.hash
-index 7bff7de4e2..43551866b9 100644
---- a/package/micropython/micropython.hash
-+++ b/package/micropython/micropython.hash
+diff --git a/package/uftp/uftp.hash b/package/uftp/uftp.hash
+index e47cba9394..d4d3450d1a 100644
+--- a/package/uftp/uftp.hash
++++ b/package/uftp/uftp.hash
 @@ -1,3 +1,3 @@
- #locally computed
--sha256  c980ad7e742491df0dc10db2958137dbbf9aa7a8009e102fc75f4c0cac2d6b5e  micropython-1.19.1.tar.gz
--sha256  0f678c2abd7fe2cfca36693630506bbcbdfc219bd04bf4a02fe3b094ae4c666f  LICENSE
-+sha256  a042764f0b6f6d92b267454c5bd5afcb83fc3900119f2583672aac571e661924  micropython-1.22.0.tar.xz
-+sha256  d9e0e0395867c899090e150213bc2b417e970c17355a8d48300089875b3c8037  LICENSE
-diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
-index 5f687c73b9..e6eb536ea5 100644
---- a/package/micropython/micropython.mk
-+++ b/package/micropython/micropython.mk
-@@ -4,8 +4,9 @@
+ # Locally computed sha256
+-sha256  f0435fbc8e9ffa125e05600cb6c7fc933d7d587f5bae41b257267be4f2ce0e61  uftp-5.0.1.tar.gz
++sha256  cb8668c19b1f10bc63a16ffa893e205dc3ec86361037d477d8003260ebc40080  uftp-5.0.3.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.txt
+diff --git a/package/uftp/uftp.mk b/package/uftp/uftp.mk
+index ce865c20ec..3dcd8646c0 100644
+--- a/package/uftp/uftp.mk
++++ b/package/uftp/uftp.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--MICROPYTHON_VERSION = 1.19.1
--MICROPYTHON_SITE = $(call github,micropython,micropython,v$(MICROPYTHON_VERSION))
-+MICROPYTHON_VERSION = 1.22.0
-+MICROPYTHON_SITE = https://micropython.org/resources/source
-+MICROPYTHON_SOURCE = micropython-$(MICROPYTHON_VERSION).tar.xz
- # Micropython has a lot of code copied from other projects, and also a number
- # of submodules for various libs. However, we don't even clone the submodules,
- # and most of the copied code is not used in the unix build.
+-UFTP_VERSION = 5.0.1
+-UFTP_SITE = http://sourceforge.net/projects/uftp-multicast/files/source-tar
++UFTP_VERSION = 5.0.3
++UFTP_SITE = https://downloads.sourceforge.net/project/uftp-multicast/source-tar
+ UFTP_LICENSE = GPL-3.0+
+ UFTP_LICENSE_FILES = LICENSE.txt
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
