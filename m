@@ -4,53 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02055C4707B
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 10:30:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F594C4707B
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 10:31:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8823F41EF2;
-	Sat, 13 Jan 2024 10:30:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8823F41EF2
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1229A41EF4;
+	Sat, 13 Jan 2024 10:31:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1229A41EF4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Px9iT24y34UI; Sat, 13 Jan 2024 10:30:44 +0000 (UTC)
+	with ESMTP id ZF1lkz5_petX; Sat, 13 Jan 2024 10:31:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E843941EF0;
-	Sat, 13 Jan 2024 10:30:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E843941EF0
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EAF0C1BF397
- for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 10:30:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6AA3341EF0;
+	Sat, 13 Jan 2024 10:31:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6AA3341EF0
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1398B1BF397
+ for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 10:30:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C2F7041EF0
- for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 10:30:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2F7041EF0
+ by smtp2.osuosl.org (Postfix) with ESMTP id DFD9740242
+ for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 10:30:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DFD9740242
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ih9tRGEVexpM for <buildroot@lists.busybox.net>;
- Sat, 13 Jan 2024 10:30:41 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9B1D141EEC
- for <buildroot@buildroot.org>; Sat, 13 Jan 2024 10:30:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B1D141EEC
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 41A431C0007;
- Sat, 13 Jan 2024 10:30:38 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0yKZ9iuroO4k for <buildroot@lists.busybox.net>;
+ Sat, 13 Jan 2024 10:30:47 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 053094018E
+ for <buildroot@buildroot.org>; Sat, 13 Jan 2024 10:30:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 053094018E
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DAD5E40005;
+ Sat, 13 Jan 2024 10:30:43 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rObHh-00CZ7n-1y;
- Sat, 13 Jan 2024 11:30:37 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rObHn-00CZ8E-18;
+ Sat, 13 Jan 2024 11:30:43 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20240105174917.734849-1-fontaine.fabrice@gmail.com>
-Date: Sat, 13 Jan 2024 11:30:37 +0100
-In-Reply-To: <20240105174917.734849-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 5 Jan 2024 18:49:17 +0100")
-Message-ID: <87le8twmnm.fsf@48ers.dk>
+References: <20240105175107.736059-1-fontaine.fabrice@gmail.com>
+Date: Sat, 13 Jan 2024 11:30:43 +0100
+In-Reply-To: <20240105175107.736059-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 5 Jan 2024 18:51:07 +0100")
+Message-ID: <87h6jhwmng.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/cups: fix systemd handling
+Subject: Re: [Buildroot] [PATCH 1/1] package/cups: fix avahi handling
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,9 +71,9 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > --{dis,en}able-systemd is unrecognized since bump to version 2.4.0 in
- > commit 07230bfcbc4b3c760a1d96a2595e3557c5e7278b and
- > https://github.com/OpenPrinting/cups/commit/796bd7cf235b1f738e54ccdcab150ee97827ec23:
+ > --{dis,en}able-avahi is unrecognized since bump to version 2.3.3op2 in
+ > commit 8cf034ab0f686d0a3891b6fe5bb5a2d1bdf381d5 (which switched upstream
+ > location from apple to openprinting):
 
  > configure: WARNING: unrecognized options: --disable-gtk-doc,
  > --disable-gtk-doc-html, --disable-doc, --disable-docs,
