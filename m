@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 560B4C4707B
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 13:34:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0851FC4707B
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 13:34:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1036240967;
-	Sat, 13 Jan 2024 13:34:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1036240967
+	by smtp4.osuosl.org (Postfix) with ESMTP id A836B41F84;
+	Sat, 13 Jan 2024 13:34:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A836B41F84
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7ijxS4ioyAF4; Sat, 13 Jan 2024 13:34:39 +0000 (UTC)
+	with ESMTP id bm2AdG9gM8-6; Sat, 13 Jan 2024 13:34:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5407540970;
-	Sat, 13 Jan 2024 13:34:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5407540970
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 243051BF325
+	by smtp4.osuosl.org (Postfix) with ESMTP id D35B441F90;
+	Sat, 13 Jan 2024 13:34:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D35B441F90
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 29D991BF868
  for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 13:34:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F235E40963
- for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 13:34:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F235E40963
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0D8D8401AE
+ for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 13:34:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D8D8401AE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id I6Z0821h804r for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hkkO2BCFgQUN for <buildroot@lists.busybox.net>;
  Sat, 13 Jan 2024 13:34:12 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2F6DD40969
- for <buildroot@buildroot.org>; Sat, 13 Jan 2024 13:34:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F6DD40969
+ by smtp2.osuosl.org (Postfix) with ESMTP id 08D164014B
+ for <buildroot@buildroot.org>; Sat, 13 Jan 2024 13:34:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 08D164014B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1DC4885E29; Sat, 13 Jan 2024 13:34:12 +0000 (UTC)
+ id E9AA185E69; Sat, 13 Jan 2024 13:34:11 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 13 Jan 2024 14:20:31 +0100
+Date: Sat, 13 Jan 2024 11:57:18 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 011c962a7563a2087740e5a55724d85f0554a939
-X-Git-Newrev: 7b1ee6b6b6cd5825c7528713083417ac6ad9718c
+X-Git-Oldrev: 3801c4e4be34a7d0ad3032991cccaa0c80f47506
+X-Git-Newrev: feef0edb3bcfa9da2cc39b7e762d754583222c6e
 X-Patchwork-Hint: ignore
-Message-Id: <20240113133412.1DC4885E29@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/rng-tools:
- normalize github macro package name
+Message-Id: <20240113133411.E9AA185E69@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/libreplaygain:
+ use version friendly to release-monitoring
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,34 +63,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7b1ee6b6b6cd5825c7528713083417ac6ad9718c
+commit: https://git.buildroot.net/buildroot/commit/?id=feef0edb3bcfa9da2cc39b7e762d754583222c6e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-This usage of <PKG>_NAME was introduced in commit f9e9c6349afe0
-("package/rng-tools: bump to 6.7"). No other package uses <PKG>_NAME
-this way.
+Update LIBREPLAYGAIN_VERSION to match what is returned by
+https://release-monitoring.org/project/370816
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit a2b8596873d53c52684e3056b655406aa40b58cc)
+(cherry picked from commit 558a25994b3ccab9b308bb667e464bdff0ab0d61)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rng-tools/rng-tools.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libreplaygain/libreplaygain.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
-index 3e565103e4..933370c9a9 100644
---- a/package/rng-tools/rng-tools.mk
-+++ b/package/rng-tools/rng-tools.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/libreplaygain/libreplaygain.mk b/package/libreplaygain/libreplaygain.mk
+index ff0950c43d..129eb90d5f 100644
+--- a/package/libreplaygain/libreplaygain.mk
++++ b/package/libreplaygain/libreplaygain.mk
+@@ -4,9 +4,9 @@
+ #
  ################################################################################
  
- RNG_TOOLS_VERSION = 6.16
--RNG_TOOLS_SITE = $(call github,nhorman,$(RNG_TOOLS_NAME),v$(RNG_TOOLS_VERSION))
-+RNG_TOOLS_SITE = $(call github,nhorman,rng-tools,v$(RNG_TOOLS_VERSION))
- RNG_TOOLS_LICENSE = GPL-2.0
- RNG_TOOLS_LICENSE_FILES = COPYING
- RNG_TOOLS_CPE_ID_VENDOR = rng-tools_project
+-LIBREPLAYGAIN_VERSION = r475
++LIBREPLAYGAIN_VERSION = 475
+ LIBREPLAYGAIN_SITE = http://files.musepack.net/source
+-LIBREPLAYGAIN_SOURCE = libreplaygain_$(LIBREPLAYGAIN_VERSION).tar.gz
++LIBREPLAYGAIN_SOURCE = libreplaygain_r$(LIBREPLAYGAIN_VERSION).tar.gz
+ # upstream doesn't ship configure
+ LIBREPLAYGAIN_AUTORECONF = YES
+ LIBREPLAYGAIN_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
