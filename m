@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00CCEC4706C
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 13:35:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C01CAC4706C
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 13:35:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A9C9341F9D;
-	Sat, 13 Jan 2024 13:35:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A9C9341F9D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 74A8641F80;
+	Sat, 13 Jan 2024 13:35:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 74A8641F80
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tUp58DwVOQy5; Sat, 13 Jan 2024 13:35:42 +0000 (UTC)
+	with ESMTP id kur3B7JIRVdB; Sat, 13 Jan 2024 13:35:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1161F41F85;
-	Sat, 13 Jan 2024 13:35:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1161F41F85
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D89241BF325
- for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 13:34:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6C57240E46;
+	Sat, 13 Jan 2024 13:35:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C57240E46
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 843261BF325
+ for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 13:34:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3B2564014B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1A38C60D5F
  for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 13:34:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B2564014B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A38C60D5F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9B77680nw_Lp for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bkLQspreFpYc for <buildroot@lists.busybox.net>;
  Sat, 13 Jan 2024 13:34:12 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3C89D40217
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1B33860D52
  for <buildroot@buildroot.org>; Sat, 13 Jan 2024 13:34:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C89D40217
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B33860D52
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1534D85E2A; Sat, 13 Jan 2024 13:34:12 +0000 (UTC)
+ id 0A61E84BCB; Sat, 13 Jan 2024 13:34:12 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 13 Jan 2024 14:19:52 +0100
+Date: Sat, 13 Jan 2024 11:58:58 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: cdde416765f3bee7726dad1ed32578eeede3c0fd
-X-Git-Newrev: 011c962a7563a2087740e5a55724d85f0554a939
+X-Git-Oldrev: 80fddff9aa2171aaf33ab82615090cbcd13ddc14
+X-Git-Newrev: cdde416765f3bee7726dad1ed32578eeede3c0fd
 X-Patchwork-Hint: ignore
-Message-Id: <20240113133412.1534D85E2A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/rng-tools: update
- help text website reference
+Message-Id: <20240113133412.0A61E84BCB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/liquid-dsp: fix
+ build without neon
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,33 +63,69 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=011c962a7563a2087740e5a55724d85f0554a939
+commit: https://git.buildroot.net/buildroot/commit/?id=cdde416765f3bee7726dad1ed32578eeede3c0fd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-We switched to new upstream since commit f9e9c6349afe0
-("package/rng-tools: bump to 6.7"). Update the website URL as well.
+Fix the following build failure without neon raised since bump to
+version 1.4.0 in commit 2f7f8f381394207bfb029ec395f5ced5695a0a2e and
+https://github.com/jgaeddert/liquid-dsp/commit/c821187dd9af2758c8e3c82e95eaf041b8ac81a0:
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+/home/peko/autobuild/instance-0/output-1/host/bin/arm-none-linux-gnueabi-gcc -std=gnu11 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2 -g0 -D_FORTIFY_SOURCE=2  -ffast-math -mcpu=cortex-a7 -mfloat-abi=hard -mfpu=neon-vfpv4  -Wall -fPIC -Wno-deprecated -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I. -Iinclude  -c -o src/audio/src/cvsd.o src/audio/src/cvsd.c
+In file included from /home/peko/autobuild/instance-0/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/features.h:388:0,
+                 from /home/peko/autobuild/instance-0/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/stdlib.h:24,
+                 from src/libliquid.c:25:
+/home/peko/autobuild/instance-0/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/gnu/stubs.h:10:29: fatal error: gnu/stubs-hard.h: No such file or directory
+ # include <gnu/stubs-hard.h>
+                             ^
+
+Indeed, upstream considers that NEON is available on all ARM platforms,
+and their configure.ac contains that code snippet:
+  239     arm|armv7*|armv8*)
+  240         # assume neon instructions are available
+  241         # TODO: check for Neon availability
+  242
+  243         # ARM architecture : use neon extensions
+
+Fixes:
+ - http://autobuild.buildroot.org/results/36b3c2220c462e7a20262fd1b9064d9aeb6c9ec4
+ - http://autobuild.buildroot.org/results/881826b4b6c141e59a0da2d7d1ad55d3709fdb95
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998@free.fr:
+  - refactor with LIQUID_DSP_SIMDOVERRIDE
+  - add comment about --disable-simdoverride
+  - extend commit log with upstream code snippet
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 717fe9dc396b3982a02306e8685d8338ae2ebbf6)
+(cherry picked from commit 9501bc80f5c34cd04bdc686cd74324beb452649e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rng-tools/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/liquid-dsp/liquid-dsp.mk | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/package/rng-tools/Config.in b/package/rng-tools/Config.in
-index be3f078a0b..7f08fa25fb 100644
---- a/package/rng-tools/Config.in
-+++ b/package/rng-tools/Config.in
-@@ -9,7 +9,7 @@ config BR2_PACKAGE_RNG_TOOLS
- 	help
- 	  Daemon to use hardware random number generators.
+diff --git a/package/liquid-dsp/liquid-dsp.mk b/package/liquid-dsp/liquid-dsp.mk
+index fcdf572532..b8ae583672 100644
+--- a/package/liquid-dsp/liquid-dsp.mk
++++ b/package/liquid-dsp/liquid-dsp.mk
+@@ -37,7 +37,18 @@ endif
  
--	  http://sourceforge.net/projects/gkernel/
-+	  https://github.com/nhorman/rng-tools
+ # disable altivec, it has build issues
+ ifeq ($(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpc64le),y)
++LIQUID_DSP_SIMDOVERRIDE = y
++endif
++
++# Upstream expects NEON on all ARM CPUs by default
++ifeq ($(BR2_arm):$(BR2_ARM_FPU_NEON),y:)
++LIQUID_DSP_SIMDOVERRIDE = y
++endif
++
++ifeq ($(LIQUID_DSP_SIMDOVERRIDE),y)
+ LIQUID_DSP_CONF_OPTS += --enable-simdoverride
++# Do not add an else-clause to pass --disable-simdoverride, as it is
++# non-functional, and behaves as --enable-simdoverride
+ endif
  
- if BR2_PACKAGE_RNG_TOOLS
- 
+ LIQUID_DSP_CONF_OPTS += \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
