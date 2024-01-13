@@ -4,53 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C116C4707B
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 21:07:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C763C4706C
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 21:08:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D8F8B60EE4;
-	Sat, 13 Jan 2024 21:07:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D8F8B60EE4
+	by smtp3.osuosl.org (Postfix) with ESMTP id D2F1E60E02;
+	Sat, 13 Jan 2024 21:08:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D2F1E60E02
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Qr3pu9Qfprqa; Sat, 13 Jan 2024 21:07:07 +0000 (UTC)
+	with ESMTP id K0rnus5GJafv; Sat, 13 Jan 2024 21:08:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 57BE560EDD;
-	Sat, 13 Jan 2024 21:07:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 57BE560EDD
+	by smtp3.osuosl.org (Postfix) with ESMTP id 572E560C33;
+	Sat, 13 Jan 2024 21:08:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 572E560C33
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 95DD21BF3D4
- for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 21:07:03 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7B8A71BF3D4
+ for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 21:08:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6F06660E68
- for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 21:07:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F06660E68
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5F8A460C33
+ for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 21:08:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F8A460C33
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Gx7yvkcbC1YY for <buildroot@lists.busybox.net>;
- Sat, 13 Jan 2024 21:07:03 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C036460E09
- for <buildroot@buildroot.org>; Sat, 13 Jan 2024 21:07:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C036460E09
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1228A1C0002;
- Sat, 13 Jan 2024 21:07:00 +0000 (UTC)
+ with ESMTP id WdM-PfW5Fj9f for <buildroot@lists.busybox.net>;
+ Sat, 13 Jan 2024 21:08:07 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id AAD2560B83
+ for <buildroot@buildroot.org>; Sat, 13 Jan 2024 21:08:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AAD2560B83
+Received: by mail.gandi.net (Postfix) with ESMTPSA id AC235E0002;
+ Sat, 13 Jan 2024 21:08:04 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rOlDY-00DPSv-1K;
- Sat, 13 Jan 2024 22:07:00 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rOlEa-00DPVy-06;
+ Sat, 13 Jan 2024 22:08:04 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Michael Nosthoff via buildroot <buildroot@buildroot.org>
-References: <20240107093955.79725-1-buildroot@heine.tech>
-Date: Sat, 13 Jan 2024 22:07:00 +0100
-In-Reply-To: <20240107093955.79725-1-buildroot@heine.tech> (Michael Nosthoff
- via buildroot's message of "Sun, 7 Jan 2024 10:39:55 +0100")
-Message-ID: <87bk9poscr.fsf@48ers.dk>
+To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+References: <20240110205154.4091988-1-thomas.petazzoni@bootlin.com>
+Date: Sat, 13 Jan 2024 22:08:03 +0100
+In-Reply-To: <20240110205154.4091988-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni via buildroot's message of "Wed, 10 Jan 2024 21:51:53
+ +0100")
+Message-ID: <877ckdosb0.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/fmt: bump to version 1.2.1
+Subject: Re: [Buildroot] [PATCH] package/pipewire: fix
+ webrtc-audio-processing condition
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,18 +64,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Semyon Kolganov <semenak94@mail.ru>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Michael" == Michael Nosthoff via buildroot <buildroot@buildroot.org> writes:
+>>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
 
- > - fixes an ABI break introduced in 1.2.0
- > Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+ > The condition checking whether the webrtc-audio-processing package is
+ > enabled, added in commit
+ > 3ccd3b4c384e98703841b12f7309362957f8f17d ("package/pipewire: bump to
+ > version 0.3.32") is obviously incorrect, and can never be true.
 
-Committed after fixing s/1.2/10.2/, thanks.
+ > Fix the condition to use the correct variable instead.
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
