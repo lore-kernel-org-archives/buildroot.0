@@ -4,87 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B6B4C4706C
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 20:22:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7E11C4706C
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 20:22:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 477E360F01;
-	Sat, 13 Jan 2024 20:22:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 477E360F01
+	by smtp3.osuosl.org (Postfix) with ESMTP id 974D360EDE;
+	Sat, 13 Jan 2024 20:22:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 974D360EDE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Gc5QZf4TwGcv; Sat, 13 Jan 2024 20:22:22 +0000 (UTC)
+	with ESMTP id EMCmi5ZOvAgE; Sat, 13 Jan 2024 20:22:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 917CA60EE9;
-	Sat, 13 Jan 2024 20:22:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 917CA60EE9
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C3E271BF83A
- for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 20:20:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D6D8060E13;
+	Sat, 13 Jan 2024 20:22:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D6D8060E13
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 537321BF83A
+ for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 20:20:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9CF33408F1
- for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 20:20:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9CF33408F1
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2CDE2839B8
+ for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 20:20:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2CDE2839B8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id r2VnbcyGopkm for <buildroot@lists.busybox.net>;
- Sat, 13 Jan 2024 20:20:35 +0000 (UTC)
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com
- [IPv6:2607:f8b0:4864:20::22e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8B5A5402FE
- for <buildroot@buildroot.org>; Sat, 13 Jan 2024 20:20:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B5A5402FE
-Received: by mail-oi1-x22e.google.com with SMTP id
- 5614622812f47-3bbd6e3795eso6114986b6e.2
- for <buildroot@buildroot.org>; Sat, 13 Jan 2024 12:20:35 -0800 (PST)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Gjuc8LOEnt-K for <buildroot@lists.busybox.net>;
+ Sat, 13 Jan 2024 20:20:37 +0000 (UTC)
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com
+ [IPv6:2607:f8b0:4864:20::42b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 882928394A
+ for <buildroot@buildroot.org>; Sat, 13 Jan 2024 20:20:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 882928394A
+Received: by mail-pf1-x42b.google.com with SMTP id
+ d2e1a72fcca58-6da9c834646so6474348b3a.3
+ for <buildroot@buildroot.org>; Sat, 13 Jan 2024 12:20:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1705177233; x=1705782033;
+ d=1e100.net; s=20230601; t=1705177236; x=1705782036;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=oDjNKiiFbJUq2JqtaOS9FnZQ+Cn1wxByRZI4q3+oXNk=;
- b=eSwjmQs5/XCjaUfFDIxDugZPhDa4NgPN+E2n/+ugWE9NsA7XVjmqpp8UAjVe3fk48H
- OLbzPhaS0lP2jeL6kfb5gUW2CDvOVkq6gTHtWkF4yKkmPXq0Ud/TyRFuOAFaa0BSm/oK
- U1151i0IPXXfpz5qec8ZD0tUxZUDOpQ+Crwnd0PcIG4XKR2+IJrd26E+3JVyrh0f0zT2
- J9NqY/ZER2949lBpoHyZ6TQ5ueGZcyWpe5EiigyF0+OBjDYBRQfWW+1Pq8WQ5d03O1S+
- 6saGq7kPvh4WtaBwcZcieK1d/FoipthaNIKTRf68NiwM2CCD7XDoqrAgN5/wOPdsR49n
- HwLg==
-X-Gm-Message-State: AOJu0Yzd876/unnFu29D0qlQ1PwMQ4L+0f7ArTU++i06lSXrx+aYkMKC
- gJkuwaIVIRHxEi7to7xZ3b3Qg3+4Mu8cnMNvj0zEoHGvB4k=
-X-Google-Smtp-Source: AGHT+IEjq5H3Egmg8aDw00pc8LJ87diYki/kuSyud/Kr3oLPqcP64mzmsXN8ib3TtVYEQIxc5t/BVw==
-X-Received: by 2002:a05:6808:114b:b0:3bb:c6ff:4513 with SMTP id
- u11-20020a056808114b00b003bbc6ff4513mr3544445oiu.98.1705177233362; 
- Sat, 13 Jan 2024 12:20:33 -0800 (PST)
+ bh=561Ich8NlqBIoKcqEPqACONPv/X/gWXcHFPKIpILp2I=;
+ b=l0X8zlSwEc7UpnChme5tSoZo7uCo0jV1qNQcKJu163Q9rEn6jFRFkbL2HuoQvJebPP
+ wavCfBmOiaHRgcGoGtQClnL6ZRNcE+KV3sdK8Z1R97l8IDfNcboXNfclqV4JWoUB2HYH
+ Gatj5R/nRw0dN5NqhpU5iGVGKnfbBqbNuVXFcfTDYun9mrrm9ctS0TdYEaRkBk0qX5WE
+ U0hNlbAHquZjqbb9aVR/e1DjwKQAwkvwMhBH32hQ2reIBKtfPv6NB3Y5rd04HD/wiZNu
+ 5Mzhxjgx+A/I2TwhudKG3kHB1u9hWJizXAn8Wy2vg0ZlyE5ymUuQQApGySv557Kfp/MO
+ sfAQ==
+X-Gm-Message-State: AOJu0Yx5uk7uEMRCHFc+P/CZq2AWXKESEZ2QiAcZBo7OMxR55aiGt4U5
+ GfhdkxIrCRqc/Trl4vlrNP0slr3s6oZq1X/9SZmL/LY2cMQ=
+X-Google-Smtp-Source: AGHT+IGnf0sm9uYJDFIDyDtuaMYFQmElx8OlbZX8MAMoFiC28sAdODYjW5DDfWG/Ze5bk0r94pyvKg==
+X-Received: by 2002:a05:6a00:1994:b0:6d9:b386:c079 with SMTP id
+ d20-20020a056a00199400b006d9b386c079mr4091713pfl.43.1705177235839; 
+ Sat, 13 Jan 2024 12:20:35 -0800 (PST)
 Received: from fedora.. (24-116-183-211.cpe.sparklight.net. [24.116.183.211])
  by smtp.gmail.com with ESMTPSA id
- y126-20020a62ce84000000b006d9b5b3ea1fsm5281331pfg.22.2024.01.13.12.20.32
+ y126-20020a62ce84000000b006d9b5b3ea1fsm5281331pfg.22.2024.01.13.12.20.34
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 13 Jan 2024 12:20:32 -0800 (PST)
+ Sat, 13 Jan 2024 12:20:35 -0800 (PST)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Sat, 13 Jan 2024 13:20:18 -0700
-Message-ID: <20240113202020.21747-9-adam.duskett@amarulasolutions.com>
+Date: Sat, 13 Jan 2024 13:20:20 -0700
+Message-ID: <20240113202020.21747-11-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240113202020.21747-1-adam.duskett@amarulasolutions.com>
 References: <20240113202020.21747-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1705177233; x=1705782033;
+ d=amarulasolutions.com; s=google; t=1705177236; x=1705782036;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=oDjNKiiFbJUq2JqtaOS9FnZQ+Cn1wxByRZI4q3+oXNk=;
- b=XMhpYml6MlQCYyKzqWZIdOz9BiL666fFN+cJ1nzDWzitXTcwYnhrPEtfmXS5lRb/WP
- yB4VxdHQP3L5rslaA9N4Q2SgKUaHeKBlHEyzkQ1d1vWm2vSixY3HMhj6FF1dyzySzJ/L
- qptbXk6ygYiD+HBippFbrh4/uAIKD54PLrkII=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=561Ich8NlqBIoKcqEPqACONPv/X/gWXcHFPKIpILp2I=;
+ b=oSbfvpTnM1/0GDvOWZn/O9BUgKdWbwbbmDdSyjcBleFQ/JtCpU+fwlng482ApOeEP4
+ bkNyQNE7br3EkJ4d/E8TsQT6D19ZG3E8yTzZKO2Nh28KcXkB9lGASpll3eSo6VE0u6Pe
+ VSWcNKmzY71VIZiQcLmc/MwlQpZAMxp+GjG/o=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=XMhpYml6
-Subject: [Buildroot] [PATCH v2 08/10] package/flutter-gallery: add a
- configure step
+ header.b=oSbfvpTn
+Subject: [Buildroot] [PATCH v2 10/10] package/flutter-gallery: clean up
+ install_target_cmds
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,41 +102,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-To make the next patch easier to understand, add a configure step to the
-flutter-gallery.mk file. The `$(HOST_FLUTTER_SDK_BIN_FLUTTER) build bundle`
-command is placed in the configure step because it generates several files
-needed for the flutter_gen_snapshot tool to generate the target .so file.
+Remove and create the kernel_blob.bin file in the flutter_assets directory:
+
+  When Flutter compiles the source code, it creates the kernel_blob.bin file,
+  a Dart Kernel Bytecode of the application.
+
+  If kernel_blob.bin exists inside the flutter_assets directory, then the
+  application source code can be extracted with nothing more than apktool.
+  Not only is this a security risk, it's also redundant and a waste of space.
+
+  Removing the kernel_blob.bin file generated for flutter-gallery saves 86M!
+  Because this package is a reference package, and some applications may check
+  if the kernel_blob.bin file exists, we also touch a blank kernel_blob.bin
+  file.
+
+Do not use relative symlinks:
+  Users may not install their applications in the
+  /usr/share/flutter/${package_name} directory. Because this is a reference
+  application, using exact symlinks to icudtl.dat and libflutter_engine.so
+  is preferable.
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
- package/flutter-gallery/flutter-gallery.mk | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ package/flutter-gallery/flutter-gallery.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/package/flutter-gallery/flutter-gallery.mk b/package/flutter-gallery/flutter-gallery.mk
-index 57a476b1ab..50ddd9ffba 100644
+index e23dc399da..6b0954cb32 100644
 --- a/package/flutter-gallery/flutter-gallery.mk
 +++ b/package/flutter-gallery/flutter-gallery.mk
-@@ -14,12 +14,17 @@ FLUTTER_GALLERY_DEPENDENCIES = \
+@@ -45,10 +45,12 @@ define FLUTTER_GALLERY_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 0755 $(@D)/libapp.so \
+ 		$(FLUTTER_GALLERY_INSTALL_DIR)/lib/libapp.so
  
- FLUTTER_GALLERY_INSTALL_DIR = $(TARGET_DIR)/usr/share/flutter/gallery/$(FLUTTER_ENGINE_RUNTIME_MODE)
+-	ln -sf ../../../$(FLUTTER_ENGINE_RUNTIME_MODE)/data/icudtl.dat \
++	ln -sf /usr/share/flutter/$(FLUTTER_ENGINE_RUNTIME_MODE)/data/icudtl.dat \
+ 	$(FLUTTER_GALLERY_INSTALL_DIR)/data/
  
--define FLUTTER_GALLERY_BUILD_CMDS
-+define FLUTTER_GALLERY_CONFIGURE_CMDS
- 	cd $(@D) && \
- 		FLUTTER_RUNTIME_MODES=$(FLUTTER_ENGINE_RUNTIME_MODE) \
- 		$(HOST_FLUTTER_SDK_BIN_FLUTTER) clean && \
--		$(HOST_FLUTTER_SDK_BIN_FLUTTER) packages get && \
--		$(HOST_FLUTTER_SDK_BIN_FLUTTER) build bundle && \
-+		$(HOST_FLUTTER_SDK_BIN_FLUTTER) pub get && \
-+		$(HOST_FLUTTER_SDK_BIN_FLUTTER) build bundle
-+endef
-+
-+define FLUTTER_GALLERY_BUILD_CMDS
-+	cd $(@D) && \
-+		FLUTTER_RUNTIME_MODES=$(FLUTTER_ENGINE_RUNTIME_MODE) \
- 		$(HOST_FLUTTER_SDK_BIN_DART_BIN) package:gallery/main.dart && \
- 		$(HOST_FLUTTER_SDK_BIN_ENV) $(FLUTTER_ENGINE_GEN_SNAPSHOT) \
- 			--deterministic \
+-	ln -sf ../../../../../lib/libflutter_engine.so $(FLUTTER_GALLERY_INSTALL_DIR)/lib/
++	ln -sf /usr/lib/libflutter_engine.so $(FLUTTER_GALLERY_INSTALL_DIR)/lib/
++	$(RM) $(FLUTTER_GALLERY_INSTALL_DIR)/data/flutter_assets/kernel_blob.bin
++	touch $(FLUTTER_GALLERY_INSTALL_DIR)/data/flutter_assets/kernel_blob.bin
+ endef
+ 
+ $(eval $(generic-package))
 -- 
 2.43.0
 
