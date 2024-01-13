@@ -4,54 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D1B9C4706C
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 13:33:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB5ECC4707B
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 13:34:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D34A840960;
-	Sat, 13 Jan 2024 13:33:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D34A840960
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6ED0C40967;
+	Sat, 13 Jan 2024 13:34:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6ED0C40967
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jyezIIYS8Jpm; Sat, 13 Jan 2024 13:33:09 +0000 (UTC)
+	with ESMTP id CTb3epBBsqOq; Sat, 13 Jan 2024 13:34:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0F36640951;
-	Sat, 13 Jan 2024 13:33:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0F36640951
+	by smtp4.osuosl.org (Postfix) with ESMTP id BD38240969;
+	Sat, 13 Jan 2024 13:34:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD38240969
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7C5BF1BF325
- for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 13:33:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CFD5D1BF325
+ for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 13:34:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5583340950
- for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 13:33:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5583340950
+ by smtp4.osuosl.org (Postfix) with ESMTP id A87EA40E46
+ for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 13:34:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A87EA40E46
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zhcCTgXTeXKz for <buildroot@lists.busybox.net>;
- Sat, 13 Jan 2024 13:33:05 +0000 (UTC)
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0880240951
- for <buildroot@buildroot.org>; Sat, 13 Jan 2024 13:33:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0880240951
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9B1DFE0003;
- Sat, 13 Jan 2024 13:33:01 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rOe8C-00CzG7-36;
- Sat, 13 Jan 2024 14:33:00 +0100
+ with ESMTP id yVHpbs_bJ1-7 for <buildroot@lists.busybox.net>;
+ Sat, 13 Jan 2024 13:34:12 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E808240963
+ for <buildroot@buildroot.org>; Sat, 13 Jan 2024 13:34:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E808240963
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D25E984BCB; Sat, 13 Jan 2024 13:34:11 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20240108220026.435160-1-fontaine.fabrice@gmail.com>
-Date: Sat, 13 Jan 2024 14:33:00 +0100
-In-Reply-To: <20240108220026.435160-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 8 Jan 2024 23:00:26 +0100")
-Message-ID: <87ttnhtl2r.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/micropython: security bump to
- version 1.22.0
+To: buildroot@buildroot.org
+Date: Sat, 13 Jan 2024 11:30:16 +0100
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: fede7aecf802dd95aa4d31730895777268a885cf
+X-Git-Newrev: d59600235378e04b392290880c74ddd4958b405c
+X-Patchwork-Hint: ignore
+Message-Id: <20240113133411.D25E984BCB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/cups: fix avahi
+ handling
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,76 +57,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Chris Packham <judge.packham@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=d59600235378e04b392290880c74ddd4958b405c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
- > - Use official tarball
- > - Update hash of license file (some packages have been added or removed
- >   but the list of licenses is the same)
- > - Fix CVE-2023-7158: A vulnerability was found in MicroPython up to
- >   1.21.0. It has been classified as critical. Affected is the function
- >   slice_indices of the file objslice.c. The manipulation leads to
- >   heap-based buffer overflow. It is possible to launch the attack
- >   remotely. The exploit has been disclosed to the public and may be
- >   used. Upgrading to version 1.22.0 is able to address this issue. It is
- >   recommended to upgrade the affected component. The identifier of this
- >   vulnerability is VDB-249180.
+--{dis,en}able-avahi is unrecognized since bump to version 2.3.3op2 in
+commit 8cf034ab0f686d0a3891b6fe5bb5a2d1bdf381d5 (which switched upstream
+location from apple to openprinting):
 
-Committed to 2023.02.x and 2023.11.x, thanks.
+configure: WARNING: unrecognized options: --disable-gtk-doc, --disable-gtk-doc-html, --disable-doc, --disable-docs, --disable-documentation, --with-xmlto, --with-fop, --disable-dependency-tracking, --enable-ipv6, --disable-nls, --disable-systemd, --disable-avahi
 
-What about micropython-lib? Do we need to update that one as well to
-match the version of micropython?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 36743d61756ec4c8bdf1963a8cfea01724ba78ef)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/cups/cups.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
- >  package/micropython/micropython.hash | 4 ++--
- >  package/micropython/micropython.mk   | 5 +++--
- >  2 files changed, 5 insertions(+), 4 deletions(-)
-
- > diff --git a/package/micropython/micropython.hash b/package/micropython/micropython.hash
- > index 7bff7de4e2..43551866b9 100644
- > --- a/package/micropython/micropython.hash
- > +++ b/package/micropython/micropython.hash
- > @@ -1,3 +1,3 @@
- >  #locally computed
- > -sha256  c980ad7e742491df0dc10db2958137dbbf9aa7a8009e102fc75f4c0cac2d6b5e  micropython-1.19.1.tar.gz
- > -sha256  0f678c2abd7fe2cfca36693630506bbcbdfc219bd04bf4a02fe3b094ae4c666f  LICENSE
- > +sha256  a042764f0b6f6d92b267454c5bd5afcb83fc3900119f2583672aac571e661924  micropython-1.22.0.tar.xz
- > +sha256  d9e0e0395867c899090e150213bc2b417e970c17355a8d48300089875b3c8037  LICENSE
- > diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
- > index d73cdb28db..7dbca0f1c2 100644
- > --- a/package/micropython/micropython.mk
- > +++ b/package/micropython/micropython.mk
- > @@ -4,8 +4,9 @@
- >  #
- >  ################################################################################
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index 344e21e02b..855328a7e7 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
+@@ -68,11 +68,11 @@ else
+ CUPS_CONF_OPTS += --disable-libusb
+ endif
  
- > -MICROPYTHON_VERSION = 1.19.1
- > -MICROPYTHON_SITE = $(call github,micropython,micropython,v$(MICROPYTHON_VERSION))
- > +MICROPYTHON_VERSION = 1.22.0
- > +MICROPYTHON_SITE = https://micropython.org/resources/source
- > +MICROPYTHON_SOURCE = micropython-$(MICROPYTHON_VERSION).tar.xz
- >  # Micropython has a lot of code copied from other projects, and also a number
- >  # of submodules for various libs. However, we don't even clone the submodules,
- >  # and most of the copied code is not used in the unix build.
- > -- 
-
- > 2.43.0
-
- > _______________________________________________
- > buildroot mailing list
- > buildroot@buildroot.org
- > https://lists.buildroot.org/mailman/listinfo/buildroot
-
-
--- 
-Bye, Peter Korsgaard
+-ifeq ($(BR2_PACKAGE_AVAHI),y)
++ifeq ($(BR2_PACKAGE_AVAHI_LIBAVAHI_CLIENT),y)
+ CUPS_DEPENDENCIES += avahi
+-CUPS_CONF_OPTS += --enable-avahi
++CUPS_CONF_OPTS += --with-dnssd=avahi
+ else
+-CUPS_CONF_OPTS += --disable-avahi
++CUPS_CONF_OPTS += --with-dnssd=no
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
