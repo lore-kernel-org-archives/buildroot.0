@@ -4,67 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4989EC4706C
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 17:45:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6DD3C4706C
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 18:37:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F118460EA5;
-	Sat, 13 Jan 2024 17:45:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F118460EA5
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4B2FE60C33;
+	Sat, 13 Jan 2024 18:37:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B2FE60C33
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wWQ3zC3i-ojv; Sat, 13 Jan 2024 17:45:42 +0000 (UTC)
+	with ESMTP id R5SxsExuzXOJ; Sat, 13 Jan 2024 18:37:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4CFA760E92;
-	Sat, 13 Jan 2024 17:45:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4CFA760E92
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 91A521BF592
- for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 17:45:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B8AB760E91;
+	Sat, 13 Jan 2024 18:37:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B8AB760E91
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6AFFB1BF393
+ for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 18:37:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 353B740158
- for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 17:45:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 353B740158
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4FD82821D6
+ for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 18:37:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4FD82821D6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6zbkb6cjFLw3 for <buildroot@lists.busybox.net>;
- Sat, 13 Jan 2024 17:45:37 +0000 (UTC)
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 80E61400B8
- for <buildroot@buildroot.org>; Sat, 13 Jan 2024 17:45:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 80E61400B8
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 66A5D1BF207;
- Sat, 13 Jan 2024 17:45:33 +0000 (UTC)
-Date: Sat, 13 Jan 2024 18:45:32 +0100
-To: Peter Korsgaard <peter@korsgaard.com>
-Message-ID: <20240113184532.3d393158@windsurf>
-In-Reply-To: <87ply5wtzf.fsf@48ers.dk>
-References: <20240106095524.0610E81D7B@busybox.osuosl.org>
- <87ply5wtzf.fsf@48ers.dk>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LQei4W6mNnTm for <buildroot@lists.busybox.net>;
+ Sat, 13 Jan 2024 18:37:22 +0000 (UTC)
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com
+ [209.85.128.54])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1674382146
+ for <buildroot@buildroot.org>; Sat, 13 Jan 2024 18:37:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1674382146
+Received: by mail-wm1-f54.google.com with SMTP id
+ 5b1f17b1804b1-40e69b31366so10704015e9.1
+ for <buildroot@buildroot.org>; Sat, 13 Jan 2024 10:37:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1705171039; x=1705775839;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=G4pviLzF7mPIWh6ckfAsvJ/20+aI+BFi+yq5ATAHoHM=;
+ b=HoJb/9tN0nyljJwc7/1iO/s4Z4OAea5P4ht+9+kmjmvwfpw0fkHvSd2aKWJQvJbfRR
+ U9aGum2Zjcj+txwHYO9aJZ6xeFQa668HwbFGYX+bQy2fjJq7HJgBUPq7TH5T5tS82Siz
+ cfOKuUL7JSvzXD6KJSjoMOJoeOuZbybmor7kzk/hrkTrxxLNownbpqfFCPkfxKT4Ej8A
+ IXk2Xcxng2PT6V36A9u1Dh2xSomTjAqeITrMB0jDO5/KkiCF2qAJKZSM4ETMFqFodo7p
+ junSxbovkZC1Azbi6xvHrzCkzG6Qiw/4Hl5k8mPv0fYP21lpBpKNIEKQiq1vevQzw7uN
+ u+UA==
+X-Gm-Message-State: AOJu0YwT1P5znwJcQ96Wrttlzx/JmBmfZt6Styk/v37B6Y/w5XezbML8
+ ovwXc4DqZl9d4sVLb+tMojteqdunJ4k=
+X-Google-Smtp-Source: AGHT+IEcxOw0yuwHEhQ6IlQycaNZjC6NjNZMVnwv7H/eA1o0CXzkLe6eLmHOD0G5MuaF+Y8kClQfkQ==
+X-Received: by 2002:a05:600c:3b18:b0:40e:4db4:9c4a with SMTP id
+ m24-20020a05600c3b1800b0040e4db49c4amr1808299wms.50.1705171038543; 
+ Sat, 13 Jan 2024 10:37:18 -0800 (PST)
+Received: from localhost.localdomain
+ ([2a02:a03f:eb68:2f00:9aa6:243e:598c:8973])
+ by smtp.gmail.com with ESMTPSA id
+ j28-20020a05600c1c1c00b0040e6726befcsm6319793wms.10.2024.01.13.10.37.17
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 13 Jan 2024 10:37:18 -0800 (PST)
+From: Thomas Devoogdt <thomas@devoogdt.com>
+To: buildroot@buildroot.org
+Date: Sat, 13 Jan 2024 19:37:15 +0100
+Message-Id: <20240113183715.404990-1-thomas@devoogdt.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1705167933;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=YOGihckuL9f7F04k+lnr3I3lE7ef6Tk+GuoQfOkOvu4=;
- b=ic/HKzEl9n9vyuf8qymf7G/9kHxiFdXmAfjgV6TjGh24PrYOgcpOgmka/Qj0ZMpCw69+tj
- PZd5+Rm6jdXf+ffiB+kTAiJ5ejKp1hSCNk/awRly7lsEmY9ICJPYMxsaMAZznNZkyPTgmh
- 8kfNi+XxJ10y5PsXHttIVqwZwTOdB9LbT70+UbdIAAnuQrstOEq8M26q6AT5dDKeX4O+x2
- ch32EfSHJaUuNUmtLFpaKNv+WHhRuBjhvrNoYL8e2pbQ6dkpZ5jmOxrwJ+bze+8x/3X7IM
- w7rJ3RMECbxgKFS72jy5y6SRjvmSO7HTf7zcZQawkBQaimVQiq1G5jXvJ1CxnA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=ic/HKzEl
-Subject: Re: [Buildroot] [git commit] package/avahi: fix libavahi-client
- handling
+Subject: [Buildroot] [PATCH v1] package/libglib2: fix libintl support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,37 +80,1108 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: fontaine.fabrice@gmail.com,
- Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Cc: Thomas Devoogdt <thomas@devoogdt.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Peter,
+Commit 12ba3563655e3ebab252e52daa6c710864fa869f disabled
+support for wrap downloads, which is used to fetch a
+fallback libintl implementation if needed. So add one ourselves,
+the files are fetched from https://github.com/frida/proxy-libintl/tree/0.4.
 
-On Sat, 13 Jan 2024 08:52:20 +0100
-Peter Korsgaard <peter@korsgaard.com> wrote:
+Fixes: http://autobuild.buildroot.org/results/04d/04d9a17e64503e0bece7bad33549ef3ad4b237c9/build-end.log.
 
-> Does this change really make sense in the context of Buildroot? Libavahi
-> is a library to talk to the avahi daemon, so not very useful without the
-> daemon.
+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+---
+No upstream patch has been provided yet because it's not clear if this is applicable,
+perhaps, meson-based packages should have download infrastructure for those wrap downloads.
+---
+ .checkpackageignore                           |    2 +
+ ...0004-build-move-intl-to-a-subproject.patch | 1016 +++++++++++++++++
+ ...fallback-to-proxy-libintl-subproject.patch |   29 +
+ 3 files changed, 1047 insertions(+)
+ create mode 100644 package/libglib2/0004-build-move-intl-to-a-subproject.patch
+ create mode 100644 package/libglib2/0005-meson-fallback-to-proxy-libintl-subproject.patch
 
-True. To be honest, I didn't put too much thinking when applying
-Fabrice's patch: the daemon was not strictly needed when building the
-library, dropping the dependency made sense, so I applied. If there is
-a runtime dependency on the daemon, then indeed maybe we should keep
-the dependency. No strong feeling about it, and I certainly wouldn't
-feel offended if the commit was reverted.
-
-Thomas
+diff --git a/.checkpackageignore b/.checkpackageignore
+index e13c66f7bb..663426ab16 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -634,6 +634,8 @@ package/libfuse/0002-util-ulockmgr_server-c-conditionally-define-closefrom-fix-g
+ package/libgcrypt/0001-configure.ac-add-an-option-to-disable-tests.patch Upstream
+ package/libglfw/0001-Wayland-Remove-extra-cmake-modules-dependency.patch Upstream
+ package/libglfw/0002-src-CMakeLists.txt-allow-override-of-wayland-pkgdata.patch Upstream
++package/libglib2/0004-build-move-intl-to-a-subproject.patch Upstream
++package/libglib2/0005-meson-fallback-to-proxy-libintl-subproject.patch Upstream
+ package/libgpiod/0001-build-add-a-configure-switch-for-building-examples.patch Upstream
+ package/libgsm/0001-misc-fixes-from-archlinux.patch Upstream
+ package/libgtk2/0001-reduce-dependencies.patch Upstream
+diff --git a/package/libglib2/0004-build-move-intl-to-a-subproject.patch b/package/libglib2/0004-build-move-intl-to-a-subproject.patch
+new file mode 100644
+index 0000000000..59caac34fe
+--- /dev/null
++++ b/package/libglib2/0004-build-move-intl-to-a-subproject.patch
+@@ -0,0 +1,1016 @@
++From 3b68ec7c55930ad84065334aeba11e505ec6a44c Mon Sep 17 00:00:00 2001
++From: Thomas Devoogdt <thomas@devoogdt.com>
++Date: Sat, 13 Jan 2024 19:13:17 +0100
++Subject: [PATCH] build: move intl to a subproject
++
++Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
++---
++ subprojects/proxy-libintl/COPYING     | 482 ++++++++++++++++++++++++++
++ subprojects/proxy-libintl/README.md   |  42 +++
++ subprojects/proxy-libintl/libintl.c   | 302 ++++++++++++++++
++ subprojects/proxy-libintl/libintl.h   | 110 ++++++
++ subprojects/proxy-libintl/meson.build |  28 ++
++ 5 files changed, 964 insertions(+)
++ create mode 100644 subprojects/proxy-libintl/COPYING
++ create mode 100644 subprojects/proxy-libintl/README.md
++ create mode 100644 subprojects/proxy-libintl/libintl.c
++ create mode 100644 subprojects/proxy-libintl/libintl.h
++ create mode 100644 subprojects/proxy-libintl/meson.build
++
++diff --git a/subprojects/proxy-libintl/COPYING b/subprojects/proxy-libintl/COPYING
++new file mode 100644
++index 000000000..bf50f20de
++--- /dev/null
+++++ b/subprojects/proxy-libintl/COPYING
++@@ -0,0 +1,482 @@
+++		  GNU LIBRARY GENERAL PUBLIC LICENSE
+++		       Version 2, June 1991
+++
+++ Copyright (C) 1991 Free Software Foundation, Inc.
+++    		    59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+++ Everyone is permitted to copy and distribute verbatim copies
+++ of this license document, but changing it is not allowed.
+++
+++[This is the first released version of the library GPL.  It is
+++ numbered 2 because it goes with version 2 of the ordinary GPL.]
+++
+++			    Preamble
+++
+++  The licenses for most software are designed to take away your
+++freedom to share and change it.  By contrast, the GNU General Public
+++Licenses are intended to guarantee your freedom to share and change
+++free software--to make sure the software is free for all its users.
+++
+++  This license, the Library General Public License, applies to some
+++specially designated Free Software Foundation software, and to any
+++other libraries whose authors decide to use it.  You can use it for
+++your libraries, too.
+++
+++  When we speak of free software, we are referring to freedom, not
+++price.  Our General Public Licenses are designed to make sure that you
+++have the freedom to distribute copies of free software (and charge for
+++this service if you wish), that you receive source code or can get it
+++if you want it, that you can change the software or use pieces of it
+++in new free programs; and that you know you can do these things.
+++
+++  To protect your rights, we need to make restrictions that forbid
+++anyone to deny you these rights or to ask you to surrender the rights.
+++These restrictions translate to certain responsibilities for you if
+++you distribute copies of the library, or if you modify it.
+++
+++  For example, if you distribute copies of the library, whether gratis
+++or for a fee, you must give the recipients all the rights that we gave
+++you.  You must make sure that they, too, receive or can get the source
+++code.  If you link a program with the library, you must provide
+++complete object files to the recipients so that they can relink them
+++with the library, after making changes to the library and recompiling
+++it.  And you must show them these terms so they know their rights.
+++
+++  Our method of protecting your rights has two steps: (1) copyright
+++the library, and (2) offer you this license which gives you legal
+++permission to copy, distribute and/or modify the library.
+++
+++  Also, for each distributor's protection, we want to make certain
+++that everyone understands that there is no warranty for this free
+++library.  If the library is modified by someone else and passed on, we
+++want its recipients to know that what they have is not the original
+++version, so that any problems introduced by others will not reflect on
+++the original authors' reputations.
+++
+++  Finally, any free program is threatened constantly by software
+++patents.  We wish to avoid the danger that companies distributing free
+++software will individually obtain patent licenses, thus in effect
+++transforming the program into proprietary software.  To prevent this,
+++we have made it clear that any patent must be licensed for everyone's
+++free use or not licensed at all.
+++
+++  Most GNU software, including some libraries, is covered by the ordinary
+++GNU General Public License, which was designed for utility programs.  This
+++license, the GNU Library General Public License, applies to certain
+++designated libraries.  This license is quite different from the ordinary
+++one; be sure to read it in full, and don't assume that anything in it is
+++the same as in the ordinary license.
+++
+++  The reason we have a separate public license for some libraries is that
+++they blur the distinction we usually make between modifying or adding to a
+++program and simply using it.  Linking a program with a library, without
+++changing the library, is in some sense simply using the library, and is
+++analogous to running a utility program or application program.  However, in
+++a textual and legal sense, the linked executable is a combined work, a
+++derivative of the original library, and the ordinary General Public License
+++treats it as such.
+++
+++  Because of this blurred distinction, using the ordinary General
+++Public License for libraries did not effectively promote software
+++sharing, because most developers did not use the libraries.  We
+++concluded that weaker conditions might promote sharing better.
+++
+++  However, unrestricted linking of non-free programs would deprive the
+++users of those programs of all benefit from the free status of the
+++libraries themselves.  This Library General Public License is intended to
+++permit developers of non-free programs to use free libraries, while
+++preserving your freedom as a user of such programs to change the free
+++libraries that are incorporated in them.  (We have not seen how to achieve
+++this as regards changes in header files, but we have achieved it as regards
+++changes in the actual functions of the Library.)  The hope is that this
+++will lead to faster development of free libraries.
+++
+++  The precise terms and conditions for copying, distribution and
+++modification follow.  Pay close attention to the difference between a
+++"work based on the library" and a "work that uses the library".  The
+++former contains code derived from the library, while the latter only
+++works together with the library.
+++
+++  Note that it is possible for a library to be covered by the ordinary
+++General Public License rather than by this special one.
+++
+++		  GNU LIBRARY GENERAL PUBLIC LICENSE
+++   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+++
+++  0. This License Agreement applies to any software library which
+++contains a notice placed by the copyright holder or other authorized
+++party saying it may be distributed under the terms of this Library
+++General Public License (also called "this License").  Each licensee is
+++addressed as "you".
+++
+++  A "library" means a collection of software functions and/or data
+++prepared so as to be conveniently linked with application programs
+++(which use some of those functions and data) to form executables.
+++
+++  The "Library", below, refers to any such software library or work
+++which has been distributed under these terms.  A "work based on the
+++Library" means either the Library or any derivative work under
+++copyright law: that is to say, a work containing the Library or a
+++portion of it, either verbatim or with modifications and/or translated
+++straightforwardly into another language.  (Hereinafter, translation is
+++included without limitation in the term "modification".)
+++
+++  "Source code" for a work means the preferred form of the work for
+++making modifications to it.  For a library, complete source code means
+++all the source code for all modules it contains, plus any associated
+++interface definition files, plus the scripts used to control compilation
+++and installation of the library.
+++
+++  Activities other than copying, distribution and modification are not
+++covered by this License; they are outside its scope.  The act of
+++running a program using the Library is not restricted, and output from
+++such a program is covered only if its contents constitute a work based
+++on the Library (independent of the use of the Library in a tool for
+++writing it).  Whether that is true depends on what the Library does
+++and what the program that uses the Library does.
+++  
+++  1. You may copy and distribute verbatim copies of the Library's
+++complete source code as you receive it, in any medium, provided that
+++you conspicuously and appropriately publish on each copy an
+++appropriate copyright notice and disclaimer of warranty; keep intact
+++all the notices that refer to this License and to the absence of any
+++warranty; and distribute a copy of this License along with the
+++Library.
+++
+++  You may charge a fee for the physical act of transferring a copy,
+++and you may at your option offer warranty protection in exchange for a
+++fee.
+++
+++  2. You may modify your copy or copies of the Library or any portion
+++of it, thus forming a work based on the Library, and copy and
+++distribute such modifications or work under the terms of Section 1
+++above, provided that you also meet all of these conditions:
+++
+++    a) The modified work must itself be a software library.
+++
+++    b) You must cause the files modified to carry prominent notices
+++    stating that you changed the files and the date of any change.
+++
+++    c) You must cause the whole of the work to be licensed at no
+++    charge to all third parties under the terms of this License.
+++
+++    d) If a facility in the modified Library refers to a function or a
+++    table of data to be supplied by an application program that uses
+++    the facility, other than as an argument passed when the facility
+++    is invoked, then you must make a good faith effort to ensure that,
+++    in the event an application does not supply such function or
+++    table, the facility still operates, and performs whatever part of
+++    its purpose remains meaningful.
+++
+++    (For example, a function in a library to compute square roots has
+++    a purpose that is entirely well-defined independent of the
+++    application.  Therefore, Subsection 2d requires that any
+++    application-supplied function or table used by this function must
+++    be optional: if the application does not supply it, the square
+++    root function must still compute square roots.)
+++
+++These requirements apply to the modified work as a whole.  If
+++identifiable sections of that work are not derived from the Library,
+++and can be reasonably considered independent and separate works in
+++themselves, then this License, and its terms, do not apply to those
+++sections when you distribute them as separate works.  But when you
+++distribute the same sections as part of a whole which is a work based
+++on the Library, the distribution of the whole must be on the terms of
+++this License, whose permissions for other licensees extend to the
+++entire whole, and thus to each and every part regardless of who wrote
+++it.
+++
+++Thus, it is not the intent of this section to claim rights or contest
+++your rights to work written entirely by you; rather, the intent is to
+++exercise the right to control the distribution of derivative or
+++collective works based on the Library.
+++
+++In addition, mere aggregation of another work not based on the Library
+++with the Library (or with a work based on the Library) on a volume of
+++a storage or distribution medium does not bring the other work under
+++the scope of this License.
+++
+++  3. You may opt to apply the terms of the ordinary GNU General Public
+++License instead of this License to a given copy of the Library.  To do
+++this, you must alter all the notices that refer to this License, so
+++that they refer to the ordinary GNU General Public License, version 2,
+++instead of to this License.  (If a newer version than version 2 of the
+++ordinary GNU General Public License has appeared, then you can specify
+++that version instead if you wish.)  Do not make any other change in
+++these notices.
+++
+++  Once this change is made in a given copy, it is irreversible for
+++that copy, so the ordinary GNU General Public License applies to all
+++subsequent copies and derivative works made from that copy.
+++
+++  This option is useful when you wish to copy part of the code of
+++the Library into a program that is not a library.
+++
+++  4. You may copy and distribute the Library (or a portion or
+++derivative of it, under Section 2) in object code or executable form
+++under the terms of Sections 1 and 2 above provided that you accompany
+++it with the complete corresponding machine-readable source code, which
+++must be distributed under the terms of Sections 1 and 2 above on a
+++medium customarily used for software interchange.
+++
+++  If distribution of object code is made by offering access to copy
+++from a designated place, then offering equivalent access to copy the
+++source code from the same place satisfies the requirement to
+++distribute the source code, even though third parties are not
+++compelled to copy the source along with the object code.
+++
+++  5. A program that contains no derivative of any portion of the
+++Library, but is designed to work with the Library by being compiled or
+++linked with it, is called a "work that uses the Library".  Such a
+++work, in isolation, is not a derivative work of the Library, and
+++therefore falls outside the scope of this License.
+++
+++  However, linking a "work that uses the Library" with the Library
+++creates an executable that is a derivative of the Library (because it
+++contains portions of the Library), rather than a "work that uses the
+++library".  The executable is therefore covered by this License.
+++Section 6 states terms for distribution of such executables.
+++
+++  When a "work that uses the Library" uses material from a header file
+++that is part of the Library, the object code for the work may be a
+++derivative work of the Library even though the source code is not.
+++Whether this is true is especially significant if the work can be
+++linked without the Library, or if the work is itself a library.  The
+++threshold for this to be true is not precisely defined by law.
+++
+++  If such an object file uses only numerical parameters, data
+++structure layouts and accessors, and small macros and small inline
+++functions (ten lines or less in length), then the use of the object
+++file is unrestricted, regardless of whether it is legally a derivative
+++work.  (Executables containing this object code plus portions of the
+++Library will still fall under Section 6.)
+++
+++  Otherwise, if the work is a derivative of the Library, you may
+++distribute the object code for the work under the terms of Section 6.
+++Any executables containing that work also fall under Section 6,
+++whether or not they are linked directly with the Library itself.
+++
+++  6. As an exception to the Sections above, you may also compile or
+++link a "work that uses the Library" with the Library to produce a
+++work containing portions of the Library, and distribute that work
+++under terms of your choice, provided that the terms permit
+++modification of the work for the customer's own use and reverse
+++engineering for debugging such modifications.
+++
+++  You must give prominent notice with each copy of the work that the
+++Library is used in it and that the Library and its use are covered by
+++this License.  You must supply a copy of this License.  If the work
+++during execution displays copyright notices, you must include the
+++copyright notice for the Library among them, as well as a reference
+++directing the user to the copy of this License.  Also, you must do one
+++of these things:
+++
+++    a) Accompany the work with the complete corresponding
+++    machine-readable source code for the Library including whatever
+++    changes were used in the work (which must be distributed under
+++    Sections 1 and 2 above); and, if the work is an executable linked
+++    with the Library, with the complete machine-readable "work that
+++    uses the Library", as object code and/or source code, so that the
+++    user can modify the Library and then relink to produce a modified
+++    executable containing the modified Library.  (It is understood
+++    that the user who changes the contents of definitions files in the
+++    Library will not necessarily be able to recompile the application
+++    to use the modified definitions.)
+++
+++    b) Accompany the work with a written offer, valid for at
+++    least three years, to give the same user the materials
+++    specified in Subsection 6a, above, for a charge no more
+++    than the cost of performing this distribution.
+++
+++    c) If distribution of the work is made by offering access to copy
+++    from a designated place, offer equivalent access to copy the above
+++    specified materials from the same place.
+++
+++    d) Verify that the user has already received a copy of these
+++    materials or that you have already sent this user a copy.
+++
+++  For an executable, the required form of the "work that uses the
+++Library" must include any data and utility programs needed for
+++reproducing the executable from it.  However, as a special exception,
+++the source code distributed need not include anything that is normally
+++distributed (in either source or binary form) with the major
+++components (compiler, kernel, and so on) of the operating system on
+++which the executable runs, unless that component itself accompanies
+++the executable.
+++
+++  It may happen that this requirement contradicts the license
+++restrictions of other proprietary libraries that do not normally
+++accompany the operating system.  Such a contradiction means you cannot
+++use both them and the Library together in an executable that you
+++distribute.
+++
+++  7. You may place library facilities that are a work based on the
+++Library side-by-side in a single library together with other library
+++facilities not covered by this License, and distribute such a combined
+++library, provided that the separate distribution of the work based on
+++the Library and of the other library facilities is otherwise
+++permitted, and provided that you do these two things:
+++
+++    a) Accompany the combined library with a copy of the same work
+++    based on the Library, uncombined with any other library
+++    facilities.  This must be distributed under the terms of the
+++    Sections above.
+++
+++    b) Give prominent notice with the combined library of the fact
+++    that part of it is a work based on the Library, and explaining
+++    where to find the accompanying uncombined form of the same work.
+++
+++  8. You may not copy, modify, sublicense, link with, or distribute
+++the Library except as expressly provided under this License.  Any
+++attempt otherwise to copy, modify, sublicense, link with, or
+++distribute the Library is void, and will automatically terminate your
+++rights under this License.  However, parties who have received copies,
+++or rights, from you under this License will not have their licenses
+++terminated so long as such parties remain in full compliance.
+++
+++  9. You are not required to accept this License, since you have not
+++signed it.  However, nothing else grants you permission to modify or
+++distribute the Library or its derivative works.  These actions are
+++prohibited by law if you do not accept this License.  Therefore, by
+++modifying or distributing the Library (or any work based on the
+++Library), you indicate your acceptance of this License to do so, and
+++all its terms and conditions for copying, distributing or modifying
+++the Library or works based on it.
+++
+++  10. Each time you redistribute the Library (or any work based on the
+++Library), the recipient automatically receives a license from the
+++original licensor to copy, distribute, link with or modify the Library
+++subject to these terms and conditions.  You may not impose any further
+++restrictions on the recipients' exercise of the rights granted herein.
+++You are not responsible for enforcing compliance by third parties to
+++this License.
+++
+++  11. If, as a consequence of a court judgment or allegation of patent
+++infringement or for any other reason (not limited to patent issues),
+++conditions are imposed on you (whether by court order, agreement or
+++otherwise) that contradict the conditions of this License, they do not
+++excuse you from the conditions of this License.  If you cannot
+++distribute so as to satisfy simultaneously your obligations under this
+++License and any other pertinent obligations, then as a consequence you
+++may not distribute the Library at all.  For example, if a patent
+++license would not permit royalty-free redistribution of the Library by
+++all those who receive copies directly or indirectly through you, then
+++the only way you could satisfy both it and this License would be to
+++refrain entirely from distribution of the Library.
+++
+++If any portion of this section is held invalid or unenforceable under any
+++particular circumstance, the balance of the section is intended to apply,
+++and the section as a whole is intended to apply in other circumstances.
+++
+++It is not the purpose of this section to induce you to infringe any
+++patents or other property right claims or to contest validity of any
+++such claims; this section has the sole purpose of protecting the
+++integrity of the free software distribution system which is
+++implemented by public license practices.  Many people have made
+++generous contributions to the wide range of software distributed
+++through that system in reliance on consistent application of that
+++system; it is up to the author/donor to decide if he or she is willing
+++to distribute software through any other system and a licensee cannot
+++impose that choice.
+++
+++This section is intended to make thoroughly clear what is believed to
+++be a consequence of the rest of this License.
+++
+++  12. If the distribution and/or use of the Library is restricted in
+++certain countries either by patents or by copyrighted interfaces, the
+++original copyright holder who places the Library under this License may add
+++an explicit geographical distribution limitation excluding those countries,
+++so that distribution is permitted only in or among countries not thus
+++excluded.  In such case, this License incorporates the limitation as if
+++written in the body of this License.
+++
+++  13. The Free Software Foundation may publish revised and/or new
+++versions of the Library General Public License from time to time.
+++Such new versions will be similar in spirit to the present version,
+++but may differ in detail to address new problems or concerns.
+++
+++Each version is given a distinguishing version number.  If the Library
+++specifies a version number of this License which applies to it and
+++"any later version", you have the option of following the terms and
+++conditions either of that version or of any later version published by
+++the Free Software Foundation.  If the Library does not specify a
+++license version number, you may choose any version ever published by
+++the Free Software Foundation.
+++
+++  14. If you wish to incorporate parts of the Library into other free
+++programs whose distribution conditions are incompatible with these,
+++write to the author to ask for permission.  For software which is
+++copyrighted by the Free Software Foundation, write to the Free
+++Software Foundation; we sometimes make exceptions for this.  Our
+++decision will be guided by the two goals of preserving the free status
+++of all derivatives of our free software and of promoting the sharing
+++and reuse of software generally.
+++
+++			    NO WARRANTY
+++
+++  15. BECAUSE THE LIBRARY IS LICENSED FREE OF CHARGE, THERE IS NO
+++WARRANTY FOR THE LIBRARY, TO THE EXTENT PERMITTED BY APPLICABLE LAW.
+++EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR
+++OTHER PARTIES PROVIDE THE LIBRARY "AS IS" WITHOUT WARRANTY OF ANY
+++KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE
+++IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+++PURPOSE.  THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE
+++LIBRARY IS WITH YOU.  SHOULD THE LIBRARY PROVE DEFECTIVE, YOU ASSUME
+++THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
+++
+++  16. IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN
+++WRITING WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY
+++AND/OR REDISTRIBUTE THE LIBRARY AS PERMITTED ABOVE, BE LIABLE TO YOU
+++FOR DAMAGES, INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL OR
+++CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OR INABILITY TO USE THE
+++LIBRARY (INCLUDING BUT NOT LIMITED TO LOSS OF DATA OR DATA BEING
+++RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD PARTIES OR A
+++FAILURE OF THE LIBRARY TO OPERATE WITH ANY OTHER SOFTWARE), EVEN IF
+++SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH
+++DAMAGES.
+++
+++		     END OF TERMS AND CONDITIONS
+++
+++           How to Apply These Terms to Your New Libraries
+++
+++  If you develop a new library, and you want it to be of the greatest
+++possible use to the public, we recommend making it free software that
+++everyone can redistribute and change.  You can do so by permitting
+++redistribution under these terms (or, alternatively, under the terms of the
+++ordinary General Public License).
+++
+++  To apply these terms, attach the following notices to the library.  It is
+++safest to attach them to the start of each source file to most effectively
+++convey the exclusion of warranty; and each file should have at least the
+++"copyright" line and a pointer to where the full notice is found.
+++
+++    <one line to give the library's name and a brief idea of what it does.>
+++    Copyright (C) <year>  <name of author>
+++
+++    This library is free software; you can redistribute it and/or
+++    modify it under the terms of the GNU Library General Public
+++    License as published by the Free Software Foundation; either
+++    version 2 of the License, or (at your option) any later version.
+++
+++    This library is distributed in the hope that it will be useful,
+++    but WITHOUT ANY WARRANTY; without even the implied warranty of
+++    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++    Library General Public License for more details.
+++
+++    You should have received a copy of the GNU Library General Public
+++    License along with this library; if not, write to the 
+++    Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
+++    Boston, MA  02111-1307  USA.
+++
+++Also add information on how to contact you by electronic and paper mail.
+++
+++You should also get your employer (if you work as a programmer) or your
+++school, if any, to sign a "copyright disclaimer" for the library, if
+++necessary.  Here is a sample; alter the names:
+++
+++  Yoyodyne, Inc., hereby disclaims all copyright interest in the
+++  library `Frob' (a library for tweaking knobs) written by James Random Hacker.
+++
+++  <signature of Ty Coon>, 1 April 1990
+++  Ty Coon, President of Vice
+++
+++That's all there is to it!
++diff --git a/subprojects/proxy-libintl/README.md b/subprojects/proxy-libintl/README.md
++new file mode 100644
++index 000000000..6bd2d2a40
++--- /dev/null
+++++ b/subprojects/proxy-libintl/README.md
++@@ -0,0 +1,42 @@
+++This is a trivial minimal library intended to act as a proxy for a
+++dynamically loaded optional libintl. This dynamically loaded library
+++would be intl.dll (the core DLL of GNU gettext-runtime) on Windows,
+++libintl.dylib on MacOS, and libintl.so on many embedded (?)
+++platforms. It is relevant on Windows, MacOS and some embedded
+++platforms. On Linux you have gettext functionality already in the C
+++library.
+++
+++If you compile it with -DSTUB_ONLY the ability to dynamically load
+++libintl is not compiled in, and this library always acts as just a
+++dummy.
+++
+++The STUB_ONLY patch was provided by Geoffrey Wossum, thanks.
+++
+++proxy-libintl was originally intended to be used when building
+++software that wants to use i18n features of (GNU) gettext, but one
+++wants to be able to decide only at package/installer construction time
+++whether to actually support i18n or not. In the negative case, one
+++wants to avoid having to ship the gettext DLL (intl.dll) at all. With
+++the -DSTUB_ONLY possibility one can also use it when one has no
+++intention to provide even the possibility of localisation in the
+++binaries one builds against this.
+++
+++When building Windows DLLs with gcc, if you don't use a .def file and
+++don't use __declspec(dllexport) attributes either to declare the list
+++of exported functions, GNU ld will export all global symbols. Usually
+++this is what you want, as it corresponds closely to what happens on
+++ELF-based platforms like Linux.
+++
+++However, when you build such a DLL, let's call it libfoo, against the
+++static proxy-libintl, this then means that the libintl entry points
+++will also get exported from the libfoo DLL. This is definitely not
+++what you want. It might then lead to other DLLs higher up in the
+++dependency stack to import the libintl functions from the libfoo DLL.
+++
+++To avoid this, use the --exclude-libs ld flag, i.e. pass
+++-Wl,--exclude-libs=libintl.a in your LDFLAGS when building
+++libfoo. Unfortunately there is no __declspec(nodllexport)...
+++
+++Both a "plain" 32-bit library and a x86_64 one is provided.
+++
+++Tor Lillqvist <tml@iki.fi>, July 2008
++diff --git a/subprojects/proxy-libintl/libintl.c b/subprojects/proxy-libintl/libintl.c
++new file mode 100644
++index 000000000..12fc31198
++--- /dev/null
+++++ b/subprojects/proxy-libintl/libintl.c
++@@ -0,0 +1,302 @@
+++/*
+++ * Copyright (C) 2008 Tor Lillqvist
+++ *
+++ * This library is free software; you can redistribute it and/or
+++ * modify it under the terms of the GNU Library General Public
+++ * License as published by the Free Software Foundation; either
+++ * version 2 of the License, or (at your option) any later version.
+++ *
+++ * This library is distributed in the hope that it will be useful,
+++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++ * Library General Public License for more details.
+++ *
+++ * You should have received a copy of the GNU Library General Public
+++ * License along with this library; see the file COPYING.LIB.txt.  If
+++ * not, write to the Free Software Foundation, Inc., 51 Franklin
+++ * Street, Fifth Floor, Boston, MA 02110-1301, USA.
+++ */
+++
+++#ifdef _WIN32
+++#  define WIN32_LEAN_AND_MEAN
+++#  include <windows.h>
+++#else
+++#  include <stddef.h>
+++#  if !STUB_ONLY
+++#    include <dlfcn.h>
+++#  endif
+++typedef void* HMODULE;
+++#endif
+++
+++#ifdef _MSC_VER
+++#  define strdup(s) _strdup (s)
+++#endif
+++
+++#include <stdlib.h>
+++#include <string.h>
+++
+++#define G_INTL_COMPILATION
+++#include "libintl.h"
+++
+++int _nl_msg_cat_cntr;		/* So that configury thinks it is GNU
+++				 * gettext
+++				 */
+++
+++static char * (*p_gettext) (const char *msgid);
+++
+++static char * (*p_dgettext) (const char *domainname,
+++			     const char *msgid);
+++
+++static char * (*p_dcgettext) (const char *domainname,
+++			      const char *msgid,
+++			      int         category);
+++
+++static char * (*p_ngettext) (const char       *msgid1,
+++			     const char       *msgid2,
+++			     unsigned long int n);
+++
+++static char * (*p_dngettext) (const char       *domainname,
+++			      const char       *msgid1,
+++			      const char       *msgid2,
+++			      unsigned long int n);
+++
+++static char * (*p_dcngettext) (const char       *domainname,
+++			       const char       *msgid1,
+++			       const char       *msgid2,
+++			       unsigned long int n,
+++			       int               category);
+++
+++static char * (*p_textdomain) (const char *domainname);
+++
+++static char * (*p_bindtextdomain) (const char *domainname,
+++				   const char *dirname);
+++
+++static char * (*p_bind_textdomain_codeset) (const char *domainname,
+++					    const char *codeset);
+++
+++static int
+++use_intl_dll (HMODULE dll)
+++{
+++#if !STUB_ONLY
+++#  ifdef _WIN32
+++#    define LOOKUP(fn) p_##fn = (void *) GetProcAddress (dll, #fn); if (p_##fn == NULL) return 0
+++#  else
+++#    define LOOKUP(fn) p_##fn = (void *) dlsym (dll, #fn); if (p_##fn == NULL) return 0
+++#  endif  /* _WIN32 */
+++
+++
+++  LOOKUP (gettext);
+++  LOOKUP (dgettext);
+++  LOOKUP (dcgettext);
+++  LOOKUP (ngettext);
+++  LOOKUP (dngettext);
+++  LOOKUP (dcngettext);
+++  LOOKUP (textdomain);
+++  LOOKUP (bindtextdomain);
+++  LOOKUP (bind_textdomain_codeset);
+++  
+++#undef LOOKUP
+++#endif  /* !STUB_ONLY */
+++  return 1;
+++}
+++
+++static char *current_domain = NULL;
+++
+++#define DUMMY(fn, parlist, retval)		\
+++static char *					\
+++dummy_##fn parlist				\
+++{						\
+++  return (char *) (retval);			\
+++}
+++
+++DUMMY (gettext,
+++       (const char *msgid),
+++       msgid)
+++
+++DUMMY (dgettext, 
+++       (const char *domainname,
+++	const char *msgid),
+++       msgid)
+++
+++DUMMY (dcgettext,
+++       (const char *domainname,
+++	const char *msgid,
+++	int         category),
+++       msgid)
+++
+++DUMMY (ngettext,
+++       (const char       *msgid1,
+++	const char       *msgid2,
+++	unsigned long int n),
+++       n == 1 ? msgid1 : msgid2)
+++
+++DUMMY (dngettext,
+++       (const char       *domainname,
+++	const char       *msgid1,
+++	const char       *msgid2,
+++	unsigned long int n),
+++       n == 1 ? msgid1 : msgid2)
+++
+++DUMMY (dcngettext,
+++       (const char       *domainname,
+++	const char       *msgid1,
+++	const char       *msgid2,
+++	unsigned long int n,
+++	int               category),
+++       n == 1 ? msgid1 : msgid2)
+++
+++/* GLib requires that textdomain(NULL) returns "messages"
+++ * if textdomain() hasn't been called earlier.
+++ */
+++DUMMY (textdomain,
+++       (const char *domainname),
+++       (domainname ?
+++	(free (current_domain), current_domain = strdup (domainname)) :
+++	(current_domain ?
+++	 current_domain :
+++	 (current_domain = strdup ("messages")))))
+++
+++/* bindtextdomain() should return the current dirname for the domain,
+++ * after possibly changing it. I don't think software usually checks
+++ * the return value, though, so just return a dummy string now. This
+++ * is the dummy implementation after all, so it hardly matters?
+++ */
+++DUMMY (bindtextdomain,
+++       (const char *domainname,
+++	const char *dirname),
+++       "/dummy")
+++
+++/* bind_textdomain_codeset() should return the corrent codeset for the
+++ * domain after possibly changing it. Again, this is the dummy
+++ * implementation, so just return the codeset argument.
+++ */
+++DUMMY (bind_textdomain_codeset,
+++       (const char *domainname,
+++	const char *codeset),
+++       codeset)
+++
+++#undef DUMMY
+++
+++static void
+++use_dummy (void)
+++{
+++#define USE_DUMMY(fn) p_##fn = dummy_##fn
+++
+++  USE_DUMMY (gettext);
+++  USE_DUMMY (dgettext);
+++  USE_DUMMY (dcgettext);
+++  USE_DUMMY (ngettext);
+++  USE_DUMMY (dngettext);
+++  USE_DUMMY (dcngettext);
+++  USE_DUMMY (textdomain);
+++  USE_DUMMY (bindtextdomain);
+++  USE_DUMMY (bind_textdomain_codeset);
+++  
+++#undef USE_DUMMY
+++
+++}
+++
+++static void
+++setup (void)
+++{
+++  static int beenhere = 0;
+++
+++  if (!beenhere)
+++    {
+++#if !STUB_ONLY
+++#if defined(_WIN64)
+++      /* On 64-bit Windows we have let libtool choose the default name
+++       * for the DLL, as we don't need the intl.dll name for backward
+++       * compatibility
+++       */
+++      HMODULE intl_dll = LoadLibrary ("libintl-8.dll");
+++#  elif defined( _WIN32)
+++      HMODULE intl_dll = LoadLibrary ("intl.dll");
+++#  elif defined(__APPLE__) && defined(__MACH__)
+++      HMODULE intl_dll = dlopen ("libintl.dylib", RTLD_LAZY);
+++#  else
+++      HMODULE intl_dll = dlopen ("libintl.so", RTLD_LAZY);
+++#  endif
+++#else  /* !STUB_ONLY */
+++      HMODULE intl_dll = NULL;
+++#endif  /* STUB_ONLY */
+++
+++      if (intl_dll != NULL &&
+++	  use_intl_dll (intl_dll))
+++	;
+++      else
+++	use_dummy ();
+++
+++      beenhere = 1;
+++    }
+++}
+++
+++void
+++_proxy_libintl_deinit (void)
+++{
+++  if (current_domain != NULL)
+++    {
+++      free (current_domain);
+++      current_domain = NULL;
+++    }
+++}
+++
+++#define IMPLEMENT(fn, parlist, parlist2)	\
+++char *						\
+++g_libintl_ ## fn parlist			\
+++{						\
+++  setup ();					\
+++  return p_##fn parlist2;			\
+++}
+++
+++IMPLEMENT (gettext,
+++	   (const char *msgid),
+++	   (msgid))
+++
+++IMPLEMENT (dgettext,
+++	   (const char *domainname,
+++	    const char *msgid),
+++	   (domainname, msgid))
+++
+++IMPLEMENT (dcgettext,
+++	   (const char *domainname,
+++	    const char *msgid,
+++	    int         category),
+++	   (domainname, msgid, category))
+++
+++IMPLEMENT (ngettext,
+++	   (const char       *msgid1,
+++	    const char       *msgid2,
+++	    unsigned long int n),
+++	   (msgid1, msgid2, n))
+++
+++IMPLEMENT (dngettext,
+++	   (const char       *domainname,
+++	    const char       *msgid1,
+++	    const char       *msgid2,
+++	    unsigned long int n),
+++	   (domainname, msgid1, msgid2, n))
+++
+++IMPLEMENT (dcngettext,
+++	   (const char       *domainname,
+++	    const char       *msgid1,
+++	    const char       *msgid2,
+++	    unsigned long int n,
+++	    int               category),
+++	   (domainname, msgid1, msgid2, n, category))
+++
+++IMPLEMENT (textdomain,
+++	   (const char *domainname),
+++	   (domainname))
+++
+++IMPLEMENT (bindtextdomain,
+++	   (const char *domainname,
+++	    const char *dirname),
+++	   (domainname, dirname))
+++
+++IMPLEMENT (bind_textdomain_codeset,
+++	   (const char *domainname,
+++	    const char *codeset),
+++	   (domainname, codeset))
+++
+++#undef IMPLEMENT
++diff --git a/subprojects/proxy-libintl/libintl.h b/subprojects/proxy-libintl/libintl.h
++new file mode 100644
++index 000000000..791cc10ab
++--- /dev/null
+++++ b/subprojects/proxy-libintl/libintl.h
++@@ -0,0 +1,110 @@
+++/*
+++ * Copyright (C) 2008 Tor Lillqvist
+++ *
+++ * This library is free software; you can redistribute it and/or
+++ * modify it under the terms of the GNU Library General Public
+++ * License as published by the Free Software Foundation; either
+++ * version 2 of the License, or (at your option) any later version.
+++ *
+++ * This library is distributed in the hope that it will be useful,
+++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++ * Library General Public License for more details.
+++ *
+++ * You should have received a copy of the GNU Library General Public
+++ * License along with this library; see the file COPYING.LIB.txt.  If
+++ * not, write to the Free Software Foundation, Inc., 51 Franklin
+++ * Street, Fifth Floor, Boston, MA 02110-1301, USA.
+++ */
+++
+++#ifndef _LIBINTL_H
+++#define _LIBINTL_H      1
+++
+++#include <locale.h>
+++
+++#ifndef LC_MESSAGES
+++# define LC_MESSAGES 1729       /* Use same value as in GNU gettext */
+++#endif
+++
+++/* Define this to make configure checks successfully find gettext in libintl.
+++ * This will cause the AM_GNU_GETTEXT([external]) macro to successfully detect
+++ * that gettext is in -lintl, not in libc, and needs #include <libintl.h> */
+++#ifndef __GNU_GETTEXT_SUPPORTED_REVISION
+++# define __GNU_GETTEXT_SUPPORTED_REVISION
+++#endif
+++
+++#if defined(__has_attribute)
+++# define PROXY_LIBINTL_HAS_GNUC_FORMAT __has_attribute(__format_arg__)
+++#else
+++# define PROXY_LIBINTL_HAS_GNUC_FORMAT (__GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ > 4))
+++#endif
+++
+++#if PROXY_LIBINTL_HAS_GNUC_FORMAT
+++# define PROXY_LIBINTL_GNUC_FORMAT(arg_idx) __attribute__((__format_arg__(arg_idx)))
+++#else
+++# define PROXY_LIBINTL_GNUC_FORMAT(arg_idx)
+++#endif
+++
+++#define gettext g_libintl_gettext
+++#define dgettext g_libintl_dgettext
+++#define dcgettext g_libintl_dcgettext
+++#define ngettext g_libintl_ngettext
+++#define dngettext g_libintl_dngettext
+++#define dcngettext g_libintl_dcngettext
+++#define textdomain g_libintl_textdomain
+++#define bindtextdomain g_libintl_bindtextdomain
+++#define bind_textdomain_codeset g_libintl_bind_textdomain_codeset
+++
+++/* Define G_INTL_STATIC_COMPILATION to link statically */
+++#if defined(_WIN32) && !defined(G_INTL_STATIC_COMPILATION)
+++/* Export when producing library, import when linking against library */
+++#  ifdef G_INTL_COMPILATION
+++#    define G_INTL_EXPORT __declspec(dllexport)
+++#  else
+++#    define G_INTL_EXPORT __declspec(dllimport)
+++#  endif
+++#else
+++#  define G_INTL_EXPORT extern
+++#endif
+++
+++#ifdef __cplusplus
+++extern "C" {
+++#endif
+++
+++G_INTL_EXPORT char *g_libintl_gettext (const char *msgid) PROXY_LIBINTL_GNUC_FORMAT (1);
+++
+++G_INTL_EXPORT char *g_libintl_dgettext (const char *domainname,
+++				 const char *msgid) PROXY_LIBINTL_GNUC_FORMAT (2);
+++
+++G_INTL_EXPORT char *g_libintl_dcgettext (const char *domainname,
+++			const char *msgid,
+++			int         category) PROXY_LIBINTL_GNUC_FORMAT (2);
+++
+++G_INTL_EXPORT char *g_libintl_ngettext (const char       *msgid1,
+++				 const char       *msgid2,
+++				 unsigned long int n) PROXY_LIBINTL_GNUC_FORMAT (1) PROXY_LIBINTL_GNUC_FORMAT (2);
+++
+++G_INTL_EXPORT char *g_libintl_dngettext (const char       *domainname,
+++				  const char       *msgid1,
+++				  const char       *msgid2,
+++				  unsigned long int n) PROXY_LIBINTL_GNUC_FORMAT (2) PROXY_LIBINTL_GNUC_FORMAT (3);
+++
+++G_INTL_EXPORT char *g_libintl_dcngettext (const char       *domainname,
+++				   const char       *msgid1,
+++				   const char       *msgid2,
+++				   unsigned long int n,
+++				   int               category) PROXY_LIBINTL_GNUC_FORMAT (2) PROXY_LIBINTL_GNUC_FORMAT (3);
+++
+++G_INTL_EXPORT char *g_libintl_textdomain (const char *domainname);
+++
+++G_INTL_EXPORT char *g_libintl_bindtextdomain (const char *domainname,
+++				       const char *dirname);
+++
+++G_INTL_EXPORT char *g_libintl_bind_textdomain_codeset (const char *domainname,
+++						const char *codeset);
+++
+++#ifdef __cplusplus
+++}
+++#endif
+++
+++#endif /* _LIBINTL_H */
++diff --git a/subprojects/proxy-libintl/meson.build b/subprojects/proxy-libintl/meson.build
++new file mode 100644
++index 000000000..957bf18ae
++--- /dev/null
+++++ b/subprojects/proxy-libintl/meson.build
++@@ -0,0 +1,28 @@
+++project('proxy-libintl', 'c',
+++  version : '1',
+++  meson_version : '>= 0.46.0',
+++  default_options : [ 'warning_level=1',
+++                      'c_std=gnu99',
+++                      'buildtype=debugoptimized' ])
+++
+++if get_option('default_library') == 'static'
+++  add_project_arguments('-DG_INTL_STATIC_COMPILATION', language : 'c')
+++endif
+++
+++install_headers('libintl.h')
+++
+++intl_lib = library('intl',
+++  'libintl.c',
+++  c_args: ['-DSTUB_ONLY'],
+++  soversion : 8,
+++  darwin_versions : ['10', '10.5'],
+++  install : true)
+++
+++c_args = []
+++if get_option('default_library') == 'static'
+++  c_args += ['-DG_INTL_STATIC_COMPILATION']
+++endif
+++
+++intl_dep = declare_dependency(link_with : intl_lib,
+++  compile_args: c_args,
+++  include_directories : include_directories('.'))
++-- 
++2.34.1
++
+diff --git a/package/libglib2/0005-meson-fallback-to-proxy-libintl-subproject.patch b/package/libglib2/0005-meson-fallback-to-proxy-libintl-subproject.patch
+new file mode 100644
+index 0000000000..fdaa50f1e8
+--- /dev/null
++++ b/package/libglib2/0005-meson-fallback-to-proxy-libintl-subproject.patch
+@@ -0,0 +1,29 @@
++From 537484faba100c22f4f6ff941701375907657071 Mon Sep 17 00:00:00 2001
++From: Thomas Devoogdt <thomas@devoogdt.com>
++Date: Sat, 13 Jan 2024 19:21:06 +0100
++Subject: [PATCH] meson: fallback to proxy-libintl subproject
++
++This partially reverts 71438c44b7e92789374159b0c8db0378986c8417.
++
++Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
++---
++ meson.build | 3 +--
++ 1 file changed, 1 insertion(+), 2 deletions(-)
++
++diff --git a/meson.build b/meson.build
++index 0cbc9689f..82b74a9e1 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -2115,8 +2115,7 @@ endif
++ if libintl.found()
++   have_bind_textdomain_codeset = cc.has_function('bind_textdomain_codeset', dependencies: libintl_deps)
++ else
++-  libintl = dependency('intl', allow_fallback: true)
++-  assert(libintl.type_name() == 'internal')
+++  libintl = subproject('proxy-libintl').get_variable('intl_dep')
++   libintl_deps = [libintl]
++   have_bind_textdomain_codeset = true  # proxy-libintl supports it
++ endif
++-- 
++2.34.1
++
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.34.1
+
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
