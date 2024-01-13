@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC587C4706C
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 13:52:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C05AC4706C
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 13:52:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8A66C41817;
-	Sat, 13 Jan 2024 13:52:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A66C41817
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2888541834;
+	Sat, 13 Jan 2024 13:52:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2888541834
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cUkrPKrK7R3W; Sat, 13 Jan 2024 13:52:15 +0000 (UTC)
+	with ESMTP id 1U960_AaDhWL; Sat, 13 Jan 2024 13:52:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C811041834;
-	Sat, 13 Jan 2024 13:52:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C811041834
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 019991BF2EB
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5F7DD41824;
+	Sat, 13 Jan 2024 13:52:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F7DD41824
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5A4E81BF2EB
  for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 13:52:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DC40441880
- for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 13:52:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC40441880
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3CFD660C10
+ for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 13:52:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3CFD660C10
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eFX_xx2Z58L6 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qy-Nl7JeQiWV for <buildroot@lists.busybox.net>;
  Sat, 13 Jan 2024 13:52:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id F0EC641817
- for <buildroot@buildroot.org>; Sat, 13 Jan 2024 13:51:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F0EC641817
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7032A60B78
+ for <buildroot@buildroot.org>; Sat, 13 Jan 2024 13:52:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7032A60B78
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DC7C785FD1; Sat, 13 Jan 2024 13:51:59 +0000 (UTC)
+ id 6E0EA85FD5; Sat, 13 Jan 2024 13:52:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 13 Jan 2024 11:29:42 +0100
+Date: Sat, 13 Jan 2024 14:27:44 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: cbc2ba71f1bbc7fcbc728f81e6db98de68124bee
-X-Git-Newrev: 533376412e4eee06b9cac5d770f09bc2b0e0fb54
+X-Git-Oldrev: 3b6bef1948d7ce9181db3c9a913c92a1fd2d3b2a
+X-Git-Newrev: c3a2dcadf0df7a14acca24e2744e45288ea06614
 X-Patchwork-Hint: ignore
-Message-Id: <20240113135159.DC7C785FD1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/cups: fix systemd
- handling
+Message-Id: <20240113135200.6E0EA85FD5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/uftp: security
+ bump to version 5.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,39 +63,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=533376412e4eee06b9cac5d770f09bc2b0e0fb54
+commit: https://git.buildroot.net/buildroot/commit/?id=c3a2dcadf0df7a14acca24e2744e45288ea06614
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
---{dis,en}able-systemd is unrecognized since bump to version 2.4.0 in
-commit 07230bfcbc4b3c760a1d96a2595e3557c5e7278b and
-https://github.com/OpenPrinting/cups/commit/796bd7cf235b1f738e54ccdcab150ee97827ec23:
+Update site to avoid redirections (HSTS, etc.)
 
-configure: WARNING: unrecognized options: --disable-gtk-doc, --disable-gtk-doc-html, --disable-doc, --disable-docs, --disable-documentation, --with-xmlto, --with-fop, --disable-dependency-tracking, --enable-ipv6, --disable-nls, --disable-systemd, --disable-avahi
+Version 5.0.3 - 12/17/2023
+  A memory leak fix in the prior version wasn't applied correctly, resulting
+    in an invalid memory access causing a crash.  Bug fixed.
+
+Version 5.0.2 - 11/8/2023
+  Fixed bug that caused crash when a CLIENT_KEY arrived out of order
+  Fixed option handling on Windows when an argument is missing
+
+https://sourceforge.net/projects/uftp-multicast/files/Changes.txt/download
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 3ebd3bf15ee1570b68cf8defe951f3574f3cda86)
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit bfe2fe22697f2fc95749d20603cf3eae51453ad7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cups/cups.mk | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ package/uftp/uftp.hash | 2 +-
+ package/uftp/uftp.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/cups/cups.mk b/package/cups/cups.mk
-index 3a7c5f1e85..344e21e02b 100644
---- a/package/cups/cups.mk
-+++ b/package/cups/cups.mk
-@@ -40,10 +40,8 @@ CUPS_DEPENDENCIES = \
+diff --git a/package/uftp/uftp.hash b/package/uftp/uftp.hash
+index e47cba9394..d4d3450d1a 100644
+--- a/package/uftp/uftp.hash
++++ b/package/uftp/uftp.hash
+@@ -1,3 +1,3 @@
+ # Locally computed sha256
+-sha256  f0435fbc8e9ffa125e05600cb6c7fc933d7d587f5bae41b257267be4f2ce0e61  uftp-5.0.1.tar.gz
++sha256  cb8668c19b1f10bc63a16ffa893e205dc3ec86361037d477d8003260ebc40080  uftp-5.0.3.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.txt
+diff --git a/package/uftp/uftp.mk b/package/uftp/uftp.mk
+index ce865c20ec..3dcd8646c0 100644
+--- a/package/uftp/uftp.mk
++++ b/package/uftp/uftp.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
- CUPS_CONF_OPTS += --with-systemd=/usr/lib/systemd/system \
--	--enable-systemd
-+	--with-ondemand=systemd
- CUPS_DEPENDENCIES += systemd
--else
--CUPS_CONF_OPTS += --disable-systemd
- endif
+-UFTP_VERSION = 5.0.1
+-UFTP_SITE = http://sourceforge.net/projects/uftp-multicast/files/source-tar
++UFTP_VERSION = 5.0.3
++UFTP_SITE = https://downloads.sourceforge.net/project/uftp-multicast/source-tar
+ UFTP_LICENSE = GPL-3.0+
+ UFTP_LICENSE_FILES = LICENSE.txt
  
- ifeq ($(BR2_PACKAGE_DBUS),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
