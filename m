@@ -4,54 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68D44C4707B
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 20:42:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81DE4C4707B
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 20:43:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1FA9260C01;
-	Sat, 13 Jan 2024 20:42:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1FA9260C01
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3941260B53;
+	Sat, 13 Jan 2024 20:43:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3941260B53
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ehMWYBJWwkdx; Sat, 13 Jan 2024 20:42:37 +0000 (UTC)
+	with ESMTP id p0V8ornX_-KV; Sat, 13 Jan 2024 20:43:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8B24360B5D;
-	Sat, 13 Jan 2024 20:42:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B24360B5D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D47DF1BF83A
- for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 20:42:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A265C60B83;
+	Sat, 13 Jan 2024 20:43:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A265C60B83
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 61A1B1BF83A
+ for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 20:43:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AA5EE41C54
- for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 20:42:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA5EE41C54
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3A37B403A5
+ for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 20:43:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A37B403A5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YA690bOQIk5r for <buildroot@lists.busybox.net>;
- Sat, 13 Jan 2024 20:42:35 +0000 (UTC)
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D99F041C21
- for <buildroot@buildroot.org>; Sat, 13 Jan 2024 20:42:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D99F041C21
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A28FAC0003;
- Sat, 13 Jan 2024 20:42:32 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id teenB5Uyf9sb for <buildroot@lists.busybox.net>;
+ Sat, 13 Jan 2024 20:43:03 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F3BF44026F
+ for <buildroot@buildroot.org>; Sat, 13 Jan 2024 20:43:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F3BF44026F
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 58BEF240002;
+ Sat, 13 Jan 2024 20:42:59 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rOkpr-00DOLd-2Z;
- Sat, 13 Jan 2024 21:42:31 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rOkqI-00DONc-0u;
+ Sat, 13 Jan 2024 21:42:58 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Bernd Kuhls <bernd@kuhls.net>
 References: <20240113162647.3316051-1-bernd@kuhls.net>
- <20240113162647.3316051-3-bernd@kuhls.net>
-Date: Sat, 13 Jan 2024 21:42:31 +0100
-In-Reply-To: <20240113162647.3316051-3-bernd@kuhls.net> (Bernd Kuhls's message
- of "Sat, 13 Jan 2024 17:26:46 +0100")
-Message-ID: <87mst9q820.fsf@48ers.dk>
+ <20240113162647.3316051-4-bernd@kuhls.net>
+Date: Sat, 13 Jan 2024 21:42:58 +0100
+In-Reply-To: <20240113162647.3316051-4-bernd@kuhls.net> (Bernd Kuhls's message
+ of "Sat, 13 Jan 2024 17:26:47 +0100")
+Message-ID: <87il3xq819.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 3/4] linux: bump latest version to 6.7
+Subject: Re: [Buildroot] [PATCH 4/4] package/linux-headers: drop 4.14.x
+ option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,28 +76,12 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
 
+ > The 4.14.x series is now EOL upstream, so drop the linux-headers option
+ > and add legacy handling for it.
+
  > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
- > ---
- >  linux/Config.in | 6 +++---
- >  1 file changed, 3 insertions(+), 3 deletions(-)
 
- > diff --git a/linux/Config.in b/linux/Config.in
- > index 9f9cf55d96..78e90b495a 100644
- > --- a/linux/Config.in
- > +++ b/linux/Config.in
- > @@ -28,8 +28,8 @@ choice
- >  	prompt "Kernel version"
- 
- >  config BR2_LINUX_KERNEL_LATEST_VERSION
- > -	bool "Latest version (6.6)"
- > -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_6 if BR2_KERNEL_HEADERS_AS_KERNEL
- > +	bool "Latest version (6.7)"
- > +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_7 if BR2_KERNEL_HEADERS_AS_KERNEL
-
-Given how close we are to 2024.02-rc1 and the fact that kernel 6.6 is a
-LTS kernel I would prefer to wait with this patch until 2024.02-rc1 is
-tagged and then add it to next instead (same for the one for 6.7
-headers).
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
