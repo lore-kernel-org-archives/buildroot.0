@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91623C4707B
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 13:35:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00CCEC4706C
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 13:35:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4A40741F80;
-	Sat, 13 Jan 2024 13:35:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A40741F80
+	by smtp4.osuosl.org (Postfix) with ESMTP id A9C9341F9D;
+	Sat, 13 Jan 2024 13:35:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A9C9341F9D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LR-cZEfGQCk6; Sat, 13 Jan 2024 13:35:29 +0000 (UTC)
+	with ESMTP id tUp58DwVOQy5; Sat, 13 Jan 2024 13:35:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8C35340963;
-	Sat, 13 Jan 2024 13:35:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C35340963
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4872F1BF867
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1161F41F85;
+	Sat, 13 Jan 2024 13:35:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1161F41F85
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D89241BF325
  for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 13:34:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0585E60B78
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3B2564014B
  for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 13:34:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0585E60B78
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B2564014B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Gng-_lVaBJly for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9B77680nw_Lp for <buildroot@lists.busybox.net>;
  Sat, 13 Jan 2024 13:34:12 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4104360D53
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3C89D40217
  for <buildroot@buildroot.org>; Sat, 13 Jan 2024 13:34:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4104360D53
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C89D40217
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 303B985E78; Sat, 13 Jan 2024 13:34:12 +0000 (UTC)
+ id 1534D85E2A; Sat, 13 Jan 2024 13:34:12 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 13 Jan 2024 14:27:53 +0100
+Date: Sat, 13 Jan 2024 14:19:52 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 425dbe3b3df7e2858103c97f52dbf4e3e2405f3a
-X-Git-Newrev: 42afffe7700799f86b6dacca3d27aa39e290c61c
+X-Git-Oldrev: cdde416765f3bee7726dad1ed32578eeede3c0fd
+X-Git-Newrev: 011c962a7563a2087740e5a55724d85f0554a939
 X-Patchwork-Hint: ignore
-Message-Id: <20240113133412.303B985E78@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/uftp: security
- bump to version 5.0.3
+Message-Id: <20240113133412.1534D85E2A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/rng-tools: update
+ help text website reference
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,53 +63,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=42afffe7700799f86b6dacca3d27aa39e290c61c
+commit: https://git.buildroot.net/buildroot/commit/?id=011c962a7563a2087740e5a55724d85f0554a939
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Update site to avoid redirections (HSTS, etc.)
+We switched to new upstream since commit f9e9c6349afe0
+("package/rng-tools: bump to 6.7"). Update the website URL as well.
 
-Version 5.0.3 - 12/17/2023
-  A memory leak fix in the prior version wasn't applied correctly, resulting
-    in an invalid memory access causing a crash.  Bug fixed.
-
-Version 5.0.2 - 11/8/2023
-  Fixed bug that caused crash when a CLIENT_KEY arrived out of order
-  Fixed option handling on Windows when an argument is missing
-
-https://sourceforge.net/projects/uftp-multicast/files/Changes.txt/download
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit bfe2fe22697f2fc95749d20603cf3eae51453ad7)
+(cherry picked from commit 717fe9dc396b3982a02306e8685d8338ae2ebbf6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/uftp/uftp.hash | 2 +-
- package/uftp/uftp.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/rng-tools/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/uftp/uftp.hash b/package/uftp/uftp.hash
-index e47cba9394..d4d3450d1a 100644
---- a/package/uftp/uftp.hash
-+++ b/package/uftp/uftp.hash
-@@ -1,3 +1,3 @@
- # Locally computed sha256
--sha256  f0435fbc8e9ffa125e05600cb6c7fc933d7d587f5bae41b257267be4f2ce0e61  uftp-5.0.1.tar.gz
-+sha256  cb8668c19b1f10bc63a16ffa893e205dc3ec86361037d477d8003260ebc40080  uftp-5.0.3.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.txt
-diff --git a/package/uftp/uftp.mk b/package/uftp/uftp.mk
-index ce865c20ec..3dcd8646c0 100644
---- a/package/uftp/uftp.mk
-+++ b/package/uftp/uftp.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/rng-tools/Config.in b/package/rng-tools/Config.in
+index be3f078a0b..7f08fa25fb 100644
+--- a/package/rng-tools/Config.in
++++ b/package/rng-tools/Config.in
+@@ -9,7 +9,7 @@ config BR2_PACKAGE_RNG_TOOLS
+ 	help
+ 	  Daemon to use hardware random number generators.
  
--UFTP_VERSION = 5.0.1
--UFTP_SITE = http://sourceforge.net/projects/uftp-multicast/files/source-tar
-+UFTP_VERSION = 5.0.3
-+UFTP_SITE = https://downloads.sourceforge.net/project/uftp-multicast/source-tar
- UFTP_LICENSE = GPL-3.0+
- UFTP_LICENSE_FILES = LICENSE.txt
+-	  http://sourceforge.net/projects/gkernel/
++	  https://github.com/nhorman/rng-tools
+ 
+ if BR2_PACKAGE_RNG_TOOLS
  
 _______________________________________________
 buildroot mailing list
