@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 929DAC4707B
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 21:32:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C31AC4706C
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 21:39:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 50C28605AE;
-	Sat, 13 Jan 2024 21:32:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 50C28605AE
+	by smtp3.osuosl.org (Postfix) with ESMTP id 28145606EC;
+	Sat, 13 Jan 2024 21:39:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 28145606EC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nXWgv7uBWIwr; Sat, 13 Jan 2024 21:32:03 +0000 (UTC)
+	with ESMTP id QifD84W-bhyW; Sat, 13 Jan 2024 21:39:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7CA6C60F8D;
-	Sat, 13 Jan 2024 21:32:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7CA6C60F8D
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 474451BF3D4
- for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 21:30:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 82BB660701;
+	Sat, 13 Jan 2024 21:39:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 82BB660701
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3A6B81BF3D4
+ for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 21:39:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DED77606E6
- for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 21:30:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DED77606E6
+ by smtp1.osuosl.org (Postfix) with ESMTP id 137D68247F
+ for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 21:39:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 137D68247F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9j4sSIKSw3oG for <buildroot@lists.busybox.net>;
- Sat, 13 Jan 2024 21:30:34 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8E00C606EB
- for <buildroot@buildroot.org>; Sat, 13 Jan 2024 21:30:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E00C606EB
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7C394813EC; Sat, 13 Jan 2024 21:30:34 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mqDvT9Pn35I6 for <buildroot@lists.busybox.net>;
+ Sat, 13 Jan 2024 21:39:03 +0000 (UTC)
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6A93182046
+ for <buildroot@buildroot.org>; Sat, 13 Jan 2024 21:39:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A93182046
+Received: from fli4l.lan.fli4l (p5b3a01c2.dip0.t-ipconnect.de [91.58.1.194])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 4F0C0A4C00C5;
+ Sat, 13 Jan 2024 22:39:00 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:55570)
+ by fli4l.lan.fli4l with esmtp (Exim 4.97.1)
+ (envelope-from <bernd@kuhls.net>) id 1rOliV-000000002mq-0q8n;
+ Sat, 13 Jan 2024 22:38:59 +0100
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 13 Jan 2024 22:22:02 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0d615aa138036ccf3fbba8351c5123a9d825ae37
-X-Git-Newrev: f79658fbb5337fbe6cf8f735d5e1a851c7e28ad3
-X-Patchwork-Hint: ignore
-Message-Id: <20240113213034.7C394813EC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/zbar: bump to version 0.23.93
+Date: Sat, 13 Jan 2024 22:38:59 +0100
+Message-Id: <20240113213859.647391-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202312101026; t=1705181940;
+ bh=AeiKf0DLXonF0HXwOmj2pcUcLMja6eE3pbswJdR43GU=;
+ h=From:To:Cc:Subject:Date:From;
+ b=VHD8dz6J7W7ucZa7d64YcdMvR+lh0YDs4tFXihOlFdGRFgpJp4X7R8QYsuFoJU9El
+ 358Uqeq+on0stRDWEyPCzch4jtNvj30E9FgCdz8gjv46Hfs7yruNsrC/lr3SkuE5lp
+ IODhjPAfDaLIw8NNAqgJHUssT0XPd5DfZaZcqRxwez4B1yUkHCrXL7kKMSmUfdE+Az
+ 7WbCaQPEkI1CT099cv8nyueIfvpKt1nWLhwnz98kzorLU4MIvE23scEGOJerPapfBh
+ rcscicPgi6oQ9ZOz3HImMi6WJvE4EhOKBr58SIWbeLhmFvI8vwfLj4XMJmYULbNSPs
+ UUyRCGv7pERdQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202312101026 header.b=VHD8dz6J
+Subject: [Buildroot] [PATCH 1/1] package/linux-firmware: add option for V4L
+ cx23885 devices
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,141 +75,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7756779650013040685=="
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7756779650013040685==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=f79658fbb5337fbe6cf8f735d5e1a851c7e28ad3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Drop patch which is now upstream.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-[Peter: drop patch from .checkpackageignore]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- .checkpackageignore                                |  1 -
- ...001-python-enum-fix-build-for-Python-3.11.patch | 62 ----------------------
- package/zbar/zbar.hash                             |  2 +-
- package/zbar/zbar.mk                               |  2 +-
- 4 files changed, 2 insertions(+), 65 deletions(-)
+ package/linux-firmware/Config.in         | 6 ++++++
+ package/linux-firmware/linux-firmware.mk | 6 ++++++
+ 2 files changed, 12 insertions(+)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index bbbf35c102..020caa754d 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1465,7 +1465,6 @@ package/ympd/0001-only-c-language.patch Upstream
- package/ympd/0002-added-forward-declarations.patch Upstream
- package/zabbix/0001-m4-netsnmp.m4-fix-shared-netsnmp-build.patch Upstream
- package/zabbix/0002-fix-build-with-libressl-3.5.0.patch Upstream
--package/zbar/0001-python-enum-fix-build-for-Python-3.11.patch Upstream
- package/zic/0001-remove-dependency-check-on-version-file.patch Upstream
- package/zip/0001-configure-Remove-Check-C-compiler-type-optimization-.patch Upstream
- package/zip/0002-configure-Don-t-use-host-CPP.patch Upstream
-diff --git a/package/zbar/0001-python-enum-fix-build-for-Python-3.11.patch b/package/zbar/0001-python-enum-fix-build-for-Python-3.11.patch
-deleted file mode 100644
-index f525b62184..0000000000
---- a/package/zbar/0001-python-enum-fix-build-for-Python-3.11.patch
-+++ /dev/null
-@@ -1,62 +0,0 @@
--From fbaec4b4e6fe735efe6916fe5b92805a0d96bf8a Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?=C4=90o=C3=A0n=20Tr=E1=BA=A7n=20C=C3=B4ng=20Danh?=
-- <congdanhqx@gmail.com>
--Date: Wed, 21 Sep 2022 10:32:11 +0700
--Subject: [PATCH] python: enum: fix build for Python 3.11
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Python 3.9 introduced Py_SET_SIZE function to set size instead of
--relying on Py_SIZE() as a macro [3.9].
--
--Python 3.10 started to encourage to use Py_SET_SIZE instead of
--assigning into return value of Py_SIZE [3.10].
--
--Python 3.11 flips the switch, turn Py_SIZE into a function [3.11],
--thus Py_SIZE(obj) will be a rvalue. We need to use Py_SET_SIZE
--to set size now.
--
--[3.9]: https://docs.python.org/3.9/c-api/structures.html#c.Py_SET_SIZE
--[3.10]: https://docs.python.org/3.10/c-api/structures.html#c.Py_SIZE
--[3.11]: https://docs.python.org/3.11/c-api/structures.html#c.Py_SIZE
--
--Signed-off-by: Đoàn Trần Công Danh <congdanhqx@gmail.com>
--Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
--[Upstream status:
--https://github.com/mchehab/zbar/pull/231]
-----
-- python/enum.c | 8 ++++++++
-- 1 file changed, 8 insertions(+)
--
--diff --git a/python/enum.c b/python/enum.c
--index dfe1b1e..946344f 100644
----- a/python/enum.c
--+++ b/python/enum.c
--@@ -52,7 +52,11 @@ enumitem_new (PyTypeObject *type,
-- 
--     /* we assume the "fast path" for a single-digit ints (see longobject.c) */
--     /* this also holds if we get a small_int preallocated long */
--+#if PY_VERSION_HEX >= 0x03090000
--+    Py_SET_SIZE(&self->val, Py_SIZE(longval));
--+#else
--     Py_SIZE(&self->val) = Py_SIZE(longval);
--+#endif
--     self->val.ob_digit[0] = longval->ob_digit[0];
--     Py_DECREF(longval);
-- #else
--@@ -143,7 +147,11 @@ zbarEnumItem_New (PyObject *byname,
-- 
--     /* we assume the "fast path" for a single-digit ints (see longobject.c) */
--     /* this also holds if we get a small_int preallocated long */
--+#if PY_VERSION_HEX >= 0x03090000
--+    Py_SET_SIZE(&self->val, Py_SIZE(longval));
--+#else
--     Py_SIZE(&self->val) = Py_SIZE(longval);
--+#endif
--     self->val.ob_digit[0] = longval->ob_digit[0];
--     Py_DECREF(longval);
-- 
---- 
--2.34.1
--
-diff --git a/package/zbar/zbar.hash b/package/zbar/zbar.hash
-index a4303266db..0136b1d1f3 100644
---- a/package/zbar/zbar.hash
-+++ b/package/zbar/zbar.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  9152c8fb302b3891e1cb9cc719883d2f4ccd2483e3430783a2cf2d93bd5901ad  zbar-0.23.90.tar.bz2
-+sha256  83be8f85fc7c288fd91f98d52fc55db7eedbddcf10a83d9221d7034636683fa0  zbar-0.23.93.tar.bz2
- sha256  44260f9252c7fe38ba8dfb645330504f4a375e3a5e9dd7d5d6b9f04adb4952f1  LICENSE.md
-diff --git a/package/zbar/zbar.mk b/package/zbar/zbar.mk
-index 2c933929cf..1a1e4eb24b 100644
---- a/package/zbar/zbar.mk
-+++ b/package/zbar/zbar.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index 5befe50122..488d96d973 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -600,6 +600,12 @@ config BR2_PACKAGE_LINUX_FIRMWARE_CX231XX
+ 	  Firmware files for Conexant Cx23100/101/102 USB broadcast
+ 	  A/V decoder needed by the Linux CX231XX driver.
  
--ZBAR_VERSION = 0.23.90
-+ZBAR_VERSION = 0.23.93
- ZBAR_SOURCE = zbar-$(ZBAR_VERSION).tar.bz2
- ZBAR_SITE = https://www.linuxtv.org/downloads/zbar
- ZBAR_LICENSE = LGPL-2.1+
-
---===============7756779650013040685==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
++config BR2_PACKAGE_LINUX_FIRMWARE_CX23885
++	bool "Conexant Cx23885/7/8 PCIe broadcast A/V decoder"
++	help
++	  Firmware files for Conexant Cx23885/7/8 PCIe broadcast
++	  A/V decoder needed by the Linux CX23885 driver.
++
+ endmenu
+ 
+ endif
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index ffb4fc2e7b..bc50d3fa39 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -811,6 +811,12 @@ LINUX_FIRMWARE_FILES += v4l-cx231xx-avcore-01.fw
+ # which is installed unconditionally
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_CX23885),y)
++LINUX_FIRMWARE_FILES += v4l-cx23885-avcore-01.fw
++# No license file; the license is in the file WHENCE
++# which is installed unconditionally
++endif
++
+ ifneq ($(LINUX_FIRMWARE_FILES)$(LINUX_FIRMWARE_DIRS),)
+ 
+ define LINUX_FIRMWARE_BUILD_CMDS
+-- 
+2.39.2
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7756779650013040685==--
