@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB5ECC4707B
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 13:34:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BBDCC4706C
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 13:34:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6ED0C40967;
-	Sat, 13 Jan 2024 13:34:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6ED0C40967
+	by smtp4.osuosl.org (Postfix) with ESMTP id CE78340967;
+	Sat, 13 Jan 2024 13:34:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE78340967
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CTb3epBBsqOq; Sat, 13 Jan 2024 13:34:14 +0000 (UTC)
+	with ESMTP id 5qg7wUtxp0NN; Sat, 13 Jan 2024 13:34:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BD38240969;
-	Sat, 13 Jan 2024 13:34:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD38240969
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CFD5D1BF325
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0B84E40970;
+	Sat, 13 Jan 2024 13:34:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B84E40970
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E89AC1BF867
  for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 13:34:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A87EA40E46
+ by smtp3.osuosl.org (Postfix) with ESMTP id BA89360D5F
  for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 13:34:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A87EA40E46
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA89360D5F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yVHpbs_bJ1-7 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gSX7-akguKlG for <buildroot@lists.busybox.net>;
  Sat, 13 Jan 2024 13:34:12 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E808240963
- for <buildroot@buildroot.org>; Sat, 13 Jan 2024 13:34:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E808240963
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1096D60C10
+ for <buildroot@buildroot.org>; Sat, 13 Jan 2024 13:34:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1096D60C10
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D25E984BCB; Sat, 13 Jan 2024 13:34:11 +0000 (UTC)
+ id F3B3685E78; Sat, 13 Jan 2024 13:34:11 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 13 Jan 2024 11:30:16 +0100
+Date: Sat, 13 Jan 2024 11:58:08 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: fede7aecf802dd95aa4d31730895777268a885cf
-X-Git-Newrev: d59600235378e04b392290880c74ddd4958b405c
+X-Git-Oldrev: feef0edb3bcfa9da2cc39b7e762d754583222c6e
+X-Git-Newrev: 80fddff9aa2171aaf33ab82615090cbcd13ddc14
 X-Patchwork-Hint: ignore
-Message-Id: <20240113133411.D25E984BCB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/cups: fix avahi
- handling
+Message-Id: <20240113133411.F3B3685E78@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/musepack: use
+ version friendly to release-monitoring
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,42 +63,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d59600235378e04b392290880c74ddd4958b405c
+commit: https://git.buildroot.net/buildroot/commit/?id=80fddff9aa2171aaf33ab82615090cbcd13ddc14
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
---{dis,en}able-avahi is unrecognized since bump to version 2.3.3op2 in
-commit 8cf034ab0f686d0a3891b6fe5bb5a2d1bdf381d5 (which switched upstream
-location from apple to openprinting):
-
-configure: WARNING: unrecognized options: --disable-gtk-doc, --disable-gtk-doc-html, --disable-doc, --disable-docs, --disable-documentation, --with-xmlto, --with-fop, --disable-dependency-tracking, --enable-ipv6, --disable-nls, --disable-systemd, --disable-avahi
+Update MUSEPACK_VERSION to match what is returned by
+https://release-monitoring.org/project/21865
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 36743d61756ec4c8bdf1963a8cfea01724ba78ef)
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit c740676c51de9ee66e32cb41bfeed5e6a446ceed)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cups/cups.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/musepack/musepack.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cups/cups.mk b/package/cups/cups.mk
-index 344e21e02b..855328a7e7 100644
---- a/package/cups/cups.mk
-+++ b/package/cups/cups.mk
-@@ -68,11 +68,11 @@ else
- CUPS_CONF_OPTS += --disable-libusb
- endif
+diff --git a/package/musepack/musepack.mk b/package/musepack/musepack.mk
+index fc66c684a5..e25ac6df1d 100644
+--- a/package/musepack/musepack.mk
++++ b/package/musepack/musepack.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
--ifeq ($(BR2_PACKAGE_AVAHI),y)
-+ifeq ($(BR2_PACKAGE_AVAHI_LIBAVAHI_CLIENT),y)
- CUPS_DEPENDENCIES += avahi
--CUPS_CONF_OPTS += --enable-avahi
-+CUPS_CONF_OPTS += --with-dnssd=avahi
- else
--CUPS_CONF_OPTS += --disable-avahi
-+CUPS_CONF_OPTS += --with-dnssd=no
- endif
- 
- ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+-MUSEPACK_VERSION = r475
++MUSEPACK_VERSION = 475
+ MUSEPACK_SITE = http://files.musepack.net/source
+-MUSEPACK_SOURCE = musepack_src_$(MUSEPACK_VERSION).tar.gz
++MUSEPACK_SOURCE = musepack_src_r$(MUSEPACK_VERSION).tar.gz
+ MUSEPACK_DEPENDENCIES = libcuefile libreplaygain
+ MUSEPACK_INSTALL_STAGING = YES
+ MUSEPACK_MAKE = $(MAKE1)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
