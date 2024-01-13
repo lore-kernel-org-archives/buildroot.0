@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BC73C4706C
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 21:15:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 663D9C4707B
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 21:15:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CE6C760E4B;
-	Sat, 13 Jan 2024 21:15:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE6C760E4B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 227EA60E09;
+	Sat, 13 Jan 2024 21:15:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 227EA60E09
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id el51DlyAXwzf; Sat, 13 Jan 2024 21:15:31 +0000 (UTC)
+	with ESMTP id jF-uiTFp2sBd; Sat, 13 Jan 2024 21:15:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 28A8660EE4;
-	Sat, 13 Jan 2024 21:15:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 28A8660EE4
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1BD761BF3D4
- for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 21:15:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 68EAD60F01;
+	Sat, 13 Jan 2024 21:15:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 68EAD60F01
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 080741BF867
+ for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 21:15:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B2C9341E12
+ by smtp1.osuosl.org (Postfix) with ESMTP id BDB8A83022
  for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 21:15:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B2C9341E12
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BDB8A83022
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id h8oiKse1UgGg for <buildroot@lists.busybox.net>;
- Sat, 13 Jan 2024 21:15:01 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WFpauGb_9QHv for <buildroot@lists.busybox.net>;
+ Sat, 13 Jan 2024 21:15:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CEE7A41E0D
+ by smtp1.osuosl.org (Postfix) with ESMTP id E750983027
  for <buildroot@buildroot.org>; Sat, 13 Jan 2024 21:15:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CEE7A41E0D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E750983027
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BEADB86062; Sat, 13 Jan 2024 21:15:01 +0000 (UTC)
+ id D6C0F86065; Sat, 13 Jan 2024 21:15:01 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 13 Jan 2024 21:44:48 +0100
+Date: Sat, 13 Jan 2024 21:45:32 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 38e447edb9b6a893e45f0053bd49303bde52ef57
-X-Git-Newrev: b034d1127aae5601bccc4b47356a34f86dfa3eb7
+X-Git-Oldrev: e6af32c08c8d47a71d6f8fa48439f3d87dcef2f6
+X-Git-Newrev: 1e3d206f154915ec86d7750bf7f846b6da412a1a
 X-Patchwork-Hint: ignore
-Message-Id: <20240113211501.BEADB86062@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/{mesa3d,
- mesa3d-headers}: bump version to 23.3.3
+Message-Id: <20240113211501.D6C0F86065@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wireshark: security bump to
+ version 4.0.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,59 +63,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b034d1127aae5601bccc4b47356a34f86dfa3eb7
+commit: https://git.buildroot.net/buildroot/commit/?id=1e3d206f154915ec86d7750bf7f846b6da412a1a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://lists.freedesktop.org/archives/mesa-announce/2024-January/000742.html
+- GVCP dissector crash. CVE-2024-0208.
+- IEEE 1609.2 dissector crash. CVE-2024-0209.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+https://www.wireshark.org/security/wnpa-sec-2024-01
+https://www.wireshark.org/security/wnpa-sec-2024-02
+
+https://www.wireshark.org/docs/relnotes/wireshark-4.0.12
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 6 +++---
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/wireshark/wireshark.hash | 6 +++---
+ package/wireshark/wireshark.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 8e870ac030..0ca8d07e73 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index a6ef69b1af..6610eb7781 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,6 +1,6 @@
+-# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.0.11.txt
+-sha1  4af3140d69f9d41e1c4e161fad66304a6920ddce  wireshark-4.0.11.tar.xz
+-sha256  4c341cc33a6c512d983f4126e6f3e5c249f604e14ab7f337d38b1cbe58199e3d  wireshark-4.0.11.tar.xz
++# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.0.12.txt
++sha1  e00d90769995bf786b05c05bdd9a2c6c8e372e70  wireshark-4.0.12.tar.xz
++sha256  e4e3d618ba11e159fb163f0dc4716a8b72a065aafd1111db9405332552a5a115  wireshark-4.0.12.tar.xz
  
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 23.3.2
-+MESA3D_HEADERS_VERSION = 23.3.3
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://archive.mesa3d.org
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index b6c36f1c55..706911a809 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2023-December/000741.html
--sha256  3cfcb81fa16f89c56abe3855d2637d396ee4e03849b659000a6b8e5f57e69adc  mesa-23.3.2.tar.xz
--sha512  634d2b67ade2121de3f19f2cccd4bf7ceb2ac391b9366587ed1c2412444e010de8ec14a25529fdec1f43f943096422eb23cefcb8a89d2f8b20286850188b65c3  mesa-23.3.2.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2024-January/000742.html
-+sha256  518307c0057fa3cee8b58df78be431d4df5aafa7edc60d09278b2d7a0a80f3b4  mesa-23.3.3.tar.xz
-+sha512  bed23e8324b026edd5d2b16a381ec563cf2fa9be9c8fbe8d9fb907cab9d87eef91f493fb9d4e3973d4b679e271d2a85ce48af491585638ab97f087532fc63c30  mesa-23.3.3.tar.xz
- # License
- sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 98fa33febe..99db7d0eb2 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index 6fb4b60f2b..3759f9bf94 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 23.3.2
-+MESA3D_VERSION = 23.3.3
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://archive.mesa3d.org
- MESA3D_LICENSE = MIT, SGI, Khronos
+-WIRESHARK_VERSION = 4.0.11
++WIRESHARK_VERSION = 4.0.12
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
+ WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
