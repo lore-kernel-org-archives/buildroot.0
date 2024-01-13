@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7B3BC4706C
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 13:53:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48ADDC4706C
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 13:53:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 45D5241E1A;
-	Sat, 13 Jan 2024 13:53:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 45D5241E1A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 059C341F90;
+	Sat, 13 Jan 2024 13:53:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 059C341F90
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 22Qg5dxF4kJr; Sat, 13 Jan 2024 13:53:06 +0000 (UTC)
+	with ESMTP id Ae0gHSkxbtpI; Sat, 13 Jan 2024 13:53:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0BC0D41D60;
-	Sat, 13 Jan 2024 13:53:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0BC0D41D60
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 68F0C1BF2EB
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2263141F88;
+	Sat, 13 Jan 2024 13:53:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2263141F88
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 96A0A1BF867
  for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 13:52:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ED7F94188C
- for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 13:52:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED7F94188C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6A27760B78
+ for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 13:52:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A27760B78
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SGlXNVnmxOhd for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XawgnJ9ZM_Sr for <buildroot@lists.busybox.net>;
  Sat, 13 Jan 2024 13:52:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 293CD41834
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4B3E760B48
  for <buildroot@buildroot.org>; Sat, 13 Jan 2024 13:52:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 293CD41834
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B3E760B48
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 110B685FD9; Sat, 13 Jan 2024 13:52:00 +0000 (UTC)
+ id 3746585FD5; Sat, 13 Jan 2024 13:52:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 13 Jan 2024 11:48:17 +0100
+Date: Sat, 13 Jan 2024 11:58:52 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 5a618731c2361b86b3514f23139159c14c3c8a4b
-X-Git-Newrev: 0b55d5c2fca246dd8eb95a212f1040cf4154f9d6
+X-Git-Oldrev: a7ef9bee4602ae0194001224f6d80518f6229065
+X-Git-Newrev: 135dfcdb951c81197d4ceaff25f74f956f9ce69d
 X-Patchwork-Hint: ignore
-Message-Id: <20240113135200.110B685FD9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/lvm2: fix libaio
- handling
+Message-Id: <20240113135200.3746585FD5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/liquid-dsp: fix
+ build without neon
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,62 +63,69 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b55d5c2fca246dd8eb95a212f1040cf4154f9d6
+commit: https://git.buildroot.net/buildroot/commit/?id=135dfcdb951c81197d4ceaff25f74f956f9ce69d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-libaio is only needed for standard install
+Fix the following build failure without neon raised since bump to
+version 1.4.0 in commit 2f7f8f381394207bfb029ec395f5ced5695a0a2e and
+https://github.com/jgaeddert/liquid-dsp/commit/c821187dd9af2758c8e3c82e95eaf041b8ac81a0:
+
+/home/peko/autobuild/instance-0/output-1/host/bin/arm-none-linux-gnueabi-gcc -std=gnu11 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2 -g0 -D_FORTIFY_SOURCE=2  -ffast-math -mcpu=cortex-a7 -mfloat-abi=hard -mfpu=neon-vfpv4  -Wall -fPIC -Wno-deprecated -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I. -Iinclude  -c -o src/audio/src/cvsd.o src/audio/src/cvsd.c
+In file included from /home/peko/autobuild/instance-0/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/features.h:388:0,
+                 from /home/peko/autobuild/instance-0/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/stdlib.h:24,
+                 from src/libliquid.c:25:
+/home/peko/autobuild/instance-0/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/gnu/stubs.h:10:29: fatal error: gnu/stubs-hard.h: No such file or directory
+ # include <gnu/stubs-hard.h>
+                             ^
+
+Indeed, upstream considers that NEON is available on all ARM platforms,
+and their configure.ac contains that code snippet:
+  239     arm|armv7*|armv8*)
+  240         # assume neon instructions are available
+  241         # TODO: check for Neon availability
+  242
+  243         # ARM architecture : use neon extensions
+
+Fixes:
+ - http://autobuild.buildroot.org/results/36b3c2220c462e7a20262fd1b9064d9aeb6c9ec4
+ - http://autobuild.buildroot.org/results/881826b4b6c141e59a0da2d7d1ad55d3709fdb95
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[yann.morin.1998@free.fr: fix check-package]
+[yann.morin.1998@free.fr:
+  - refactor with LIQUID_DSP_SIMDOVERRIDE
+  - add comment about --disable-simdoverride
+  - extend commit log with upstream code snippet
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit ee9c92e4a4d518d07da5fc3d64aa695509ecdea7)
+(cherry picked from commit 9501bc80f5c34cd04bdc686cd74324beb452649e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lvm2/Config.in | 2 +-
- package/lvm2/lvm2.mk   | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/liquid-dsp/liquid-dsp.mk | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/package/lvm2/Config.in b/package/lvm2/Config.in
-index 577a90656a..ddb398d160 100644
---- a/package/lvm2/Config.in
-+++ b/package/lvm2/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_LVM2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # needs fork()
- 	depends on !BR2_STATIC_LIBS # It fails to build statically
--	select BR2_PACKAGE_LIBAIO
- 	help
- 	  This is LVM2, the rewrite of The Linux Logical Volume Manager.
- 	  LVM supports enterprise level volume management of disk and
-@@ -27,6 +26,7 @@ if BR2_PACKAGE_LVM2
- config BR2_PACKAGE_LVM2_STANDARD_INSTALL
- 	bool "standard install instead of only dmsetup"
- 	default y
-+	select BR2_PACKAGE_LIBAIO
- 	help
- 	  Install the standard suite of lvm2 programs. When this option
- 	  is not set, only dmsetup is installed.
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 9caf99eb9b..474ea30bdc 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -25,7 +25,7 @@ LVM2_CONF_OPTS += \
- 	--disable-nls \
- 	--with-symvers=no
+diff --git a/package/liquid-dsp/liquid-dsp.mk b/package/liquid-dsp/liquid-dsp.mk
+index e9788eb144..0cddbefe44 100644
+--- a/package/liquid-dsp/liquid-dsp.mk
++++ b/package/liquid-dsp/liquid-dsp.mk
+@@ -37,7 +37,18 @@ endif
  
--LVM2_DEPENDENCIES += host-pkgconf libaio
-+LVM2_DEPENDENCIES += host-pkgconf
- 
- # LVM2 uses autoconf, but not automake, and the build system does not
- # take into account the toolchain passed at configure time.
-@@ -49,6 +49,7 @@ LVM2_CONF_OPTS += --disable-selinux
+ # disable altivec, it has build issues
+ ifeq ($(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpc64le),y)
++LIQUID_DSP_SIMDOVERRIDE = y
++endif
++
++# Upstream expects NEON on all ARM CPUs by default
++ifeq ($(BR2_arm):$(BR2_ARM_FPU_NEON),y:)
++LIQUID_DSP_SIMDOVERRIDE = y
++endif
++
++ifeq ($(LIQUID_DSP_SIMDOVERRIDE),y)
+ LIQUID_DSP_CONF_OPTS += --enable-simdoverride
++# Do not add an else-clause to pass --disable-simdoverride, as it is
++# non-functional, and behaves as --enable-simdoverride
  endif
  
- ifeq ($(BR2_PACKAGE_LVM2_STANDARD_INSTALL),y)
-+LVM2_DEPENDENCIES += libaio
- LVM2_INSTALL_STAGING_OPTS += install
- LVM2_INSTALL_TARGET_OPTS += install
- ifeq ($(BR2_INIT_SYSTEMD),y)
+ LIQUID_DSP_CONF_OPTS += \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
