@@ -4,53 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47F82C4707C
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 21:14:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A7E9C4706C
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jan 2024 21:15:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0398360B83;
-	Sat, 13 Jan 2024 21:14:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0398360B83
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5321960EDD;
+	Sat, 13 Jan 2024 21:15:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5321960EDD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RtGSfKdU8VBD; Sat, 13 Jan 2024 21:14:49 +0000 (UTC)
+	with ESMTP id lOHsS-ZbwM_A; Sat, 13 Jan 2024 21:15:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5D9D260AC3;
-	Sat, 13 Jan 2024 21:14:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5D9D260AC3
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 674B81BF3D4
- for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 21:14:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A776460AC3;
+	Sat, 13 Jan 2024 21:15:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A776460AC3
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 821C81BF3D4
+ for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 21:15:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4C8024032A
- for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 21:14:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C8024032A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 586DE8303C
+ for <buildroot@lists.busybox.net>; Sat, 13 Jan 2024 21:15:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 586DE8303C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tRcQED1UQMko for <buildroot@lists.busybox.net>;
- Sat, 13 Jan 2024 21:14:46 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 385BB40578
- for <buildroot@buildroot.org>; Sat, 13 Jan 2024 21:14:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 385BB40578
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 58750240002;
- Sat, 13 Jan 2024 21:14:44 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rOlL1-00DPzZ-2E;
- Sat, 13 Jan 2024 22:14:43 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kA5HCvKJF8bb for <buildroot@lists.busybox.net>;
+ Sat, 13 Jan 2024 21:15:01 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9170283022
+ for <buildroot@buildroot.org>; Sat, 13 Jan 2024 21:15:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9170283022
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7AB438605F; Sat, 13 Jan 2024 21:15:01 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Waldemar Brodkorb <wbx@openadk.org>
-References: <ZZQO5Te/A8SzdRLn@waldemar-brodkorb.de>
-Date: Sat, 13 Jan 2024 22:14:43 +0100
-In-Reply-To: <ZZQO5Te/A8SzdRLn@waldemar-brodkorb.de> (Waldemar Brodkorb's
- message of "Tue, 2 Jan 2024 14:25:57 +0100")
-Message-ID: <87h6jhndfg.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/asterisk: bump to 20.5.2
+To: buildroot@buildroot.org
+Date: Sat, 13 Jan 2024 21:38:55 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 66414ed526ca44b383baa56b706f58747b90ea52
+X-Git-Newrev: baacbfdb2bdd23789d9f18cedb1c80115de9c0d2
+X-Patchwork-Hint: ignore
+Message-Id: <20240113211501.7AB438605F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/catch2: bump to version 3.5.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,73 +56,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=baacbfdb2bdd23789d9f18cedb1c80115de9c0d2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Tested on a Raspberry PI4 with a SNOM 360 and a SIP Trunk to Easybell.
- > Attention: chan_sip is deprecated, use chan_pjsip instead.
- > For chan_pjsip you need to enable openssl otherwise the module will not
- > load.
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/catch2/catch2.hash | 2 +-
+ package/catch2/catch2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Patches 0005 and 0006 are applied upstream.
- > Remove unused configure options:
- > --without-curses
- > --without-isdnnet
- > --without-misdn
- > --without-nbs
- > --without-oss
- > --without-sqlite
- > --without-suppserv
- > --without-termcap
- > --without-tinfo
- > --without-vpb
-
- > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
- > ---
- >  .checkpackageignore                           |  2 -
- >  DEVELOPERS                                    |  1 +
- >  ...tection-of-re-entrant-resolver-funct.patch | 38 -------------------
- >  ...n-iostream.c-fix-build-with-libressl.patch | 38 -------------------
- >  package/asterisk/asterisk.hash                |  2 +-
- >  package/asterisk/asterisk.mk                  | 18 ++-------
- >  6 files changed, 6 insertions(+), 93 deletions(-)
- >  delete mode 100644 package/asterisk/0005-configure-fix-detection-of-re-entrant-resolver-funct.patch
- >  delete mode 100644 package/asterisk/0006-main-iostream.c-fix-build-with-libressl.patch
-
- > diff --git a/.checkpackageignore b/.checkpackageignore
- > index def465e802..807752c5f4 100644
- > --- a/.checkpackageignore
- > +++ b/.checkpackageignore
- > @@ -159,8 +159,6 @@ package/asterisk/0001-sounds-do-not-download-and-check-sha1s.patch Upstream
- >  package/asterisk/0002-configure-fix-detection-of-libcrypt.patch Upstream
- >  package/asterisk/0003-build-ensure-target-directory-for-modules-exists.patch Upstream
- >  package/asterisk/0004-install-samples-need-the-data-files.patch Upstream
- > -package/asterisk/0005-configure-fix-detection-of-re-entrant-resolver-funct.patch Upstream
- > -package/asterisk/0006-main-iostream.c-fix-build-with-libressl.patch Upstream
- >  package/at/0001-Makefile.in-fix-make-install-for-non-root-don-t-stri.patch Upstream
- >  package/at/S99at Indent Variables
- >  package/attr/0001-build-with-older-GCCs.patch Upstream
- > diff --git a/DEVELOPERS b/DEVELOPERS
- > index cc089e8ff6..d8e8d58026 100644
- > --- a/DEVELOPERS
- > +++ b/DEVELOPERS
- > @@ -3106,6 +3106,7 @@ N:	Wade Berrier <wberrier@gmail.com>
- >  F:	package/ngrep/
+diff --git a/package/catch2/catch2.hash b/package/catch2/catch2.hash
+index d118feadf8..c90973154a 100644
+--- a/package/catch2/catch2.hash
++++ b/package/catch2/catch2.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  f6d4f8d78a9b59ec72a81d49f58d18eb317372ac07f8d9432710a079e69fd66a  catch2-3.5.0.tar.gz
++sha256  49c3ca7a68f1c8ec71307736bc6ed14fec21631707e1be9af45daf4037e75a08  catch2-3.5.1.tar.gz
+ sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE.txt
+diff --git a/package/catch2/catch2.mk b/package/catch2/catch2.mk
+index 49ac5fff2d..fc4a1d69a9 100644
+--- a/package/catch2/catch2.mk
++++ b/package/catch2/catch2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- >  N:	Waldemar Brodkorb <wbx@openadk.org>
- > +F:	package/asterisk/
-
-Thanks for stepping up to maintain asterisk!
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+-CATCH2_VERSION = 3.5.0
++CATCH2_VERSION = 3.5.1
+ CATCH2_SITE = $(call github,catchorg,Catch2,v$(CATCH2_VERSION))
+ CATCH2_INSTALL_STAGING = YES
+ CATCH2_INSTALL_TARGET = NO
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
