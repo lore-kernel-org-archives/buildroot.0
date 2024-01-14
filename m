@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8A56C47077
-	for <buildroot@archiver.kernel.org>; Sun, 14 Jan 2024 18:31:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B255C47077
+	for <buildroot@archiver.kernel.org>; Sun, 14 Jan 2024 18:31:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 96E1380E60;
-	Sun, 14 Jan 2024 18:31:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96E1380E60
+	by smtp1.osuosl.org (Postfix) with ESMTP id B706082883;
+	Sun, 14 Jan 2024 18:31:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B706082883
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id O7KOwR6UONzh; Sun, 14 Jan 2024 18:31:37 +0000 (UTC)
+	with ESMTP id L19708eoOMZh; Sun, 14 Jan 2024 18:31:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D93ED80E6A;
-	Sun, 14 Jan 2024 18:31:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D93ED80E6A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9E0D31BF86D
- for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 18:31:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 19CFB82862;
+	Sun, 14 Jan 2024 18:31:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 19CFB82862
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 038E91BF593
+ for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 18:31:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 77A6B80E60
+ by smtp2.osuosl.org (Postfix) with ESMTP id DC09D40199
  for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 18:31:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 77A6B80E60
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC09D40199
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GFt_8PrYxRH1 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3eRqsnm0zOMb for <buildroot@lists.busybox.net>;
  Sun, 14 Jan 2024 18:31:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id AB6F780E5A
+ by smtp2.osuosl.org (Postfix) with ESMTP id B8F1540181
  for <buildroot@buildroot.org>; Sun, 14 Jan 2024 18:31:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AB6F780E5A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B8F1540181
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9A6EC86169; Sun, 14 Jan 2024 18:31:22 +0000 (UTC)
+ id A4E948616A; Sun, 14 Jan 2024 18:31:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 14 Jan 2024 19:28:00 +0100
+Date: Sun, 14 Jan 2024 19:28:45 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 0960917efa96efa818d39599ab785f7b7637029d
-X-Git-Newrev: e21749eae40cfc82e030cff34277d2592bc8aac4
+X-Git-Oldrev: e21749eae40cfc82e030cff34277d2592bc8aac4
+X-Git-Newrev: c8d49d4960e6bd0d968e860d5f23f49e28b4f34a
 X-Patchwork-Hint: ignore
-Message-Id: <20240114183122.9A6EC86169@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/libaio: add
- LIBAIO_CPE_ID_VENDOR
+Message-Id: <20240114183122.A4E948616A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/criu: disable mips
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,34 +62,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e21749eae40cfc82e030cff34277d2592bc8aac4
+commit: https://git.buildroot.net/buildroot/commit/?id=c8d49d4960e6bd0d968e860d5f23f49e28b4f34a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-cpe:2.3:a:libaio_project:libaio:-:*:*:*:*:*:*:*is a valid CPE identifier
-for this package:
+mips raises the following build failure since the addition of the
+package in commit 3e4b479f39c15ffdf307ec8395d856680c727204:
 
-  https://nvd.nist.gov/products/cpe/detail/69B8039E-7837-4DE3-8DFE-C2E4D834EE78
+compel/arch/mips/plugins/std/memcpy.S:7: Error: opcode not supported on this processor: mips32 (mips32) `dadd $2,$0,$4'
+compel/arch/mips/plugins/std/memcpy.S:8: Error: opcode not supported on this processor: mips32 (mips32) `daddiu $13,$0,0'
 
-Signed-off-by: Christian Hitz <christian.hitz@bbv.ch>
+Indeed, dadd and daddiu are specific to mips64
+
+Building on mips64 doesn't work either as it raises the following build
+failure:
+
+/tmp/ccArXSfi.s:305: Error: opcode not supported on this processor: mips64 (mips64) `rdhwr $2,$29'
+
+Fixes:
+ - http://autobuild.buildroot.org/results/b0341d0654e66bdac2c91d5949be3810a961d9da
+ - http://autobuild.buildroot.org/results/b7b8860476de04980bd8c7241d3dd5a01a0251c8
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 0d615aa138036ccf3fbba8351c5123a9d825ae37)
+(cherry picked from commit 3865d88423c18f28f74efd9878a386db9491246f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libaio/libaio.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/criu/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/libaio/libaio.mk b/package/libaio/libaio.mk
-index e13e49346b..12cfbc4ef4 100644
---- a/package/libaio/libaio.mk
-+++ b/package/libaio/libaio.mk
-@@ -9,6 +9,7 @@ LIBAIO_SITE = https://releases.pagure.org/libaio
- LIBAIO_INSTALL_STAGING = YES
- LIBAIO_LICENSE = LGPL-2.1+
- LIBAIO_LICENSE_FILES = COPYING
-+LIBAIO_CPE_ID_VENDOR = libaio_project
- 
- LIBAIO_CONFIGURE_OPTS = $(TARGET_CONFIGURE_OPTS)
- 
+diff --git a/package/criu/Config.in b/package/criu/Config.in
+index b3bb830768..fc0da823b3 100644
+--- a/package/criu/Config.in
++++ b/package/criu/Config.in
+@@ -6,7 +6,6 @@ config BR2_PACKAGE_CRIU_ARCH_SUPPORTS
+ 	default y if BR2_ARM_CPU_ARMV7M
+ 	default y if BR2_ARM_CPU_ARMV8A
+ 	default y if BR2_aarch64
+-	default y if BR2_mips
+ 	default y if BR2_x86_64
+ 	default y if BR2_powerpc64le # Only support powerpc64 with LE
+ 	# CRIU has "some" support for s390 but it is not included due to
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
