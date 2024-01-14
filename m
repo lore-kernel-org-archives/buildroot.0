@@ -1,63 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8604FC4707B
-	for <buildroot@archiver.kernel.org>; Sun, 14 Jan 2024 17:34:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93B49C47077
+	for <buildroot@archiver.kernel.org>; Sun, 14 Jan 2024 17:48:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 23BEC60B20;
-	Sun, 14 Jan 2024 17:34:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 23BEC60B20
+	by smtp1.osuosl.org (Postfix) with ESMTP id 30A3481DE7;
+	Sun, 14 Jan 2024 17:48:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 30A3481DE7
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SjGbKfo1LSw5; Sun, 14 Jan 2024 17:48:31 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8D23381D5C;
+	Sun, 14 Jan 2024 17:48:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8D23381D5C
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BC9721BF316
+ for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 17:48:28 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 95DAC60ABD
+ for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 17:48:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 95DAC60ABD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PXlF8DAbca_V; Sun, 14 Jan 2024 17:34:18 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 69E4660AB2;
-	Sun, 14 Jan 2024 17:34:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69E4660AB2
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3573E1BF2F9
- for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 17:34:16 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 10D06409EF
- for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 17:34:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 10D06409EF
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8lMFYBNvafR5 for <buildroot@lists.busybox.net>;
- Sun, 14 Jan 2024 17:34:12 +0000 (UTC)
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A2B97409DB
- for <buildroot@buildroot.org>; Sun, 14 Jan 2024 17:34:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A2B97409DB
-X-QQ-mid: bizesmtp76t1705253633t0op7ixi
-Received: from main2-ubuntu.tail147f4.ts.net ( [202.201.15.117])
- by bizesmtp.qq.com (ESMTP) with 
- id ; Mon, 15 Jan 2024 01:33:51 +0800 (CST)
-X-QQ-SSF: 01200000002000B06000B00A0000000
-X-QQ-FEAT: ceHWIenCpmB28ylWCXRRBoNiG8rFRvqHg4qU4ZinzCcmng91nf8Y2gDxubFeu
- Vqe6/YEgyvY7iJZiwRPQ8rDDyfT/MorGoEBLiZeVkYx+A2bPliKWk62tk5aX5rQriiAikt4
- 75sI9TweKYT6OLd5RBWb6J4aRUe6iUkm6NdKCBNSf15oiWa4udr1biPacmBbdGBD2cc55u/
- Dto2BlhzeYcU1h+LFHJCJVTT7ssbi/sW27cz33rgrfXCkXO4VGE3GjtJd8OtJBHXzTM5Zrl
- XUqRPA55cM/pl4fYeK8ZBqZliREM+mgYeMah/TVToWwu1v4pbHqYLtyTNgkdYk0IHZl+nlL
- KWAsSBlTDlbCqBAKB4MFEkfXrqBww==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 6442957718602121627
-From: Yuan Tan <tanyuan@tinylab.org>
-To: peter@korsgaard.com
-Date: Mon, 15 Jan 2024 01:33:51 +0800
-Message-Id: <20240114173351.287285-1-tanyuan@tinylab.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <87cyv94xd0.fsf@48ers.dk>
-References: <87cyv94xd0.fsf@48ers.dk>
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id H2Iai5jvKwne for <buildroot@lists.busybox.net>;
+ Sun, 14 Jan 2024 17:48:27 +0000 (UTC)
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5686E60AB2
+ for <buildroot@buildroot.org>; Sun, 14 Jan 2024 17:48:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5686E60AB2
+Received: from fli4l.lan.fli4l (p5b3a01c2.dip0.t-ipconnect.de [91.58.1.194])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 3F334A4C018D
+ for <buildroot@buildroot.org>; Sun, 14 Jan 2024 18:48:24 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:42764)
+ by fli4l.lan.fli4l with esmtp (Exim 4.97.1)
+ (envelope-from <bernd@kuhls.net>) id 1rP4au-000000003DZ-03Gx
+ for buildroot@buildroot.org; Sun, 14 Jan 2024 18:48:24 +0100
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Sun, 14 Jan 2024 18:48:22 +0100
+Message-Id: <20240114174823.2732695-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-Subject: [Buildroot] Inquiry About Mirroring Methods for Buildroot Packages
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202312101026; t=1705254504;
+ bh=qYofA3EvE3OrgFS87L2N/RdKTozgi2dmoJc1TKCsMBg=;
+ h=From:To:Subject:Date:From;
+ b=yLQryXdKQNF4BjU78f7DvU/Z0bvq0dstIBqwnqBIwzyVvx8tFrZf4s0ZE6/ybH1sE
+ uIHqi2qecJQpUGnQMIH5i7GDpIQAn9jrKngwfdotYMO8q9DKeojCAGWkFUFCz+0i2R
+ jslAGsV5KK00LpKQprIDCYwoghYUbYxuWhGSmV1IXMtJG3xR1MhpVB63GBhbRoVdQ0
+ 0qeKh2EeSONtDyoRUfYPjvEeVcPHxn1DHRc7p76Hu+3VYHbHGzu17h+pUQicg3aNZD
+ jwXnaDox3Iu/PQ8o7aertoI52Z6uA8rPZ3agf+SnkgCkJ9wVHUT3WIXoDjWzslzKWH
+ XIniEOLUpyL4A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202312101026 header.b=yLQryXdK
+Subject: [Buildroot] [PATCH 1/2] package/kodi: needs host-cmake >= 3.26
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,68 +74,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: yann.morin.1998@free.fr, tanyuan@tinylab.org, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi,
+Fixes build error on Debian bookworm with
 
-It seems that my last email was ignored, I am resending it now, and I hope
-it does not disturb anyone.
+$ cmake --version
+cmake version 3.25.1
 
-> 
->  > On 11/12/2023 10:56, Yuan Tan wrote:
->  >> Hi,
->  >> I am reaching out to inquire about the best practices for mirroring
->  >> Buildroot packages. We aim to establish a reliable mirror for these
->  >> packages, particularly to facilitate access for users in regions like
->  >> mainland China, where downloading packages can sometimes be challenging.
-> 
->  >  We use cloudflare CDN. I just read up on it and it seems there's a
->  >  separate CDN that needs to be enabled to serve China. Perhaps that
->  > just needs to be enabled?
->  > Peter?
-> 
-> Hmm, I guess you are referring to
-> https://www.cloudflare.com/application-services/products/china-network/?
-> 
-> If so, that doesn't look as if that is just something you can enable for
-> their free offering, E.G. you apparently need a "ICP license":
-> 
-> What is an ICP license
-> 
-> ICP is the short name for "Internet Content Provider". According to
-> Chinese regulations, all websites hosted in Mainland China or content
-> served from Chinese data centers (which is true for our China Network
-> service) needs to obtain an ICP "BeiAn=E5=A4=87=E6=A1=88" or "License =E8=
-> =AF=81" number for
-> every domain that serves content to your pages. This number needs to be
-> displayed on the footer of your pages.
-> 
+-- Found Python3: /home/buildroot/br2/output/per-package/kodi/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/python3.11
+ (found suitable exact version "3.11.6") found components: Development Development.Module Development.Embed
+-- Could NOT find Python3 (missing: Interpreter)
+    Reason given by package:
+        Interpreter: Cannot run the interpreter
+        "/home/buildroot/br2/output/per-package/kodi/host/x86_64-buildroot-linux-gnu/sysroot/usr/bin/python3"
 
-Yes, providing internet services in China is quite troublesome :). Some
-universities have set up some mirror sites, and I am trying to set up one
-for buildroot as well.
+CMake Error at cmake/scripts/common/Macros.cmake:432 (message):
+  PYTHON enabled but not found
+Call Stack (most recent call first):
+  CMakeLists.txt:214 (core_optional_dep)
 
->  >> I have two suggestions and would like to know if either is possible:
->  >> 1. Could you enable rsync for sources.buildroot.net? This would make
->  >> it
->  >> easier for mirror sites to stay updated.
->  >> 2. If rsync isn't an option, would it be okay to use wget to clone
->  >> the
->  >> entire sources.buildroot.net?
-> 
->  >  Wouldn't it be easier to construct your own version, by running the
->  >  same script that Peter uses to update actual sources.buildroot.net?
->  >  Though IIUC that script is a bit of a hack.
-> 
-> yes, it is a big hack. It basically runs make allyespackageconfig &&
-> make source, but then does a number of mutations as well to try to catch
-> per-architecture packages or packages with multiple versions.
+-- Configuring incomplete, errors occurred!
 
-May I ask if this script can be shared?
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/kodi/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 6b68e6d504..181db55571 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -66,7 +66,7 @@ menuconfig BR2_PACKAGE_KODI
+ 	depends on BR2_PACKAGE_PYTHON3
+ 	depends on !BR2_PACKAGE_PYTHON3_PYC_ONLY
+ 	select BR2_NEEDS_HOST_JAVA
+-	select BR2_HOST_CMAKE_AT_LEAST_3_24
++	select BR2_HOST_CMAKE_AT_LEAST_3_26
+ 	select BR2_PACKAGE_FFMPEG
+ 	select BR2_PACKAGE_FFMPEG_GPL
+ 	select BR2_PACKAGE_FFMPEG_POSTPROC
+-- 
+2.39.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
