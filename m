@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 522CCC47077
-	for <buildroot@archiver.kernel.org>; Sun, 14 Jan 2024 22:24:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B953BC4707B
+	for <buildroot@archiver.kernel.org>; Sun, 14 Jan 2024 22:26:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DBA7D415ED;
-	Sun, 14 Jan 2024 22:24:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DBA7D415ED
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7433E415FA;
+	Sun, 14 Jan 2024 22:26:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7433E415FA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AoPKsbUUVHON; Sun, 14 Jan 2024 22:24:42 +0000 (UTC)
+	with ESMTP id N51Cnbg6MDq2; Sun, 14 Jan 2024 22:26:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 29DE8415E1;
-	Sun, 14 Jan 2024 22:24:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29DE8415E1
+	by smtp4.osuosl.org (Postfix) with ESMTP id BC2C4415ED;
+	Sun, 14 Jan 2024 22:26:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC2C4415ED
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B357F1BF45A
- for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 22:24:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 620861BF45A
+ for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 22:26:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 99682415E1
- for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 22:24:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 99682415E1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3BC86415ED
+ for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 22:26:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3BC86415ED
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fkb72KQEQysb for <buildroot@lists.busybox.net>;
- Sun, 14 Jan 2024 22:24:38 +0000 (UTC)
+ with ESMTP id E7dVSqtgYMAV for <buildroot@lists.busybox.net>;
+ Sun, 14 Jan 2024 22:26:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 90C5B415DC
- for <buildroot@buildroot.org>; Sun, 14 Jan 2024 22:24:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 90C5B415DC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7171F415DC
+ for <buildroot@buildroot.org>; Sun, 14 Jan 2024 22:26:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7171F415DC
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7D99B8618C; Sun, 14 Jan 2024 22:24:38 +0000 (UTC)
+ id 5F8488618F; Sun, 14 Jan 2024 22:26:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 14 Jan 2024 23:24:27 +0100
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 75846d63725e1c098511826524b5b33d4772b7f3
-X-Git-Newrev: f353b6fd5ddbd3a8ce1aa886d6d4edb1295a4e9b
+Date: Sun, 14 Jan 2024 23:24:38 +0100
+X-Git-Refname: refs/heads/2023.11.x
+X-Git-Oldrev: 4ffcb0c8c4771a9f522079a68692eb9ec10805bf
+X-Git-Newrev: fef893cb60dc2f2dc6d064743bc378ad8e4f5d32
 X-Patchwork-Hint: ignore
-Message-Id: <20240114222438.7D99B8618C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/micropython: add
+Message-Id: <20240114222622.5F8488618F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/micropython: add
  MICROPYTHON_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f353b6fd5ddbd3a8ce1aa886d6d4edb1295a4e9b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=fef893cb60dc2f2dc6d064743bc378ad8e4f5d32
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
 cpe:2.3:a:micropython:micropython is a valid CPE identifier for this
 package:
