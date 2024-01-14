@@ -4,83 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19988C47DA7
-	for <buildroot@archiver.kernel.org>; Sun, 14 Jan 2024 12:40:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B6B1C4707B
+	for <buildroot@archiver.kernel.org>; Sun, 14 Jan 2024 12:55:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ACCA9418DE;
-	Sun, 14 Jan 2024 12:40:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ACCA9418DE
+	by smtp4.osuosl.org (Postfix) with ESMTP id A8D7B413A3;
+	Sun, 14 Jan 2024 12:55:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A8D7B413A3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jZDuerVRTLA6; Sun, 14 Jan 2024 12:40:50 +0000 (UTC)
+	with ESMTP id 0Rjef-bbxi7D; Sun, 14 Jan 2024 12:55:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 103A3418D2;
-	Sun, 14 Jan 2024 12:40:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 103A3418D2
+	by smtp4.osuosl.org (Postfix) with ESMTP id B045F4146F;
+	Sun, 14 Jan 2024 12:55:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B045F4146F
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8DE4B1BF59E
- for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 12:40:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5F33B1BF59E
+ for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 12:55:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 66AFB418D2
- for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 12:40:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 66AFB418D2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3781B410E6
+ for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 12:55:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3781B410E6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 103N-ems43H6 for <buildroot@lists.busybox.net>;
- Sun, 14 Jan 2024 12:40:46 +0000 (UTC)
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com
- [IPv6:2a00:1450:4864:20::230])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8BC19418D0
- for <buildroot@buildroot.org>; Sun, 14 Jan 2024 12:40:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8BC19418D0
-Received: by mail-lj1-x230.google.com with SMTP id
- 38308e7fff4ca-2cd1232a2c7so94867621fa.0
- for <buildroot@buildroot.org>; Sun, 14 Jan 2024 04:40:46 -0800 (PST)
+ with ESMTP id xhYK4wE9pUrs for <buildroot@lists.busybox.net>;
+ Sun, 14 Jan 2024 12:55:01 +0000 (UTC)
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3AE21410CB
+ for <buildroot@buildroot.org>; Sun, 14 Jan 2024 12:55:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3AE21410CB
+Received: by mail-wr1-x429.google.com with SMTP id
+ ffacd0b85a97d-3376555b756so4338397f8f.0
+ for <buildroot@buildroot.org>; Sun, 14 Jan 2024 04:55:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1705236044; x=1705840844;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=eBS0x3qz6pLyWDnfiYZXJKA65fC7C0tzt9mK5GoZyss=;
- b=J8+THRBvBwsvNVRpg4zye8Kbc12RKKrlYJPCG3Vb/nayxxQuV/bQLl3vNGlBKV85EA
- 60mxoyTEOloawJ3WNoOIuw4SqyhJO726/Ez6rbHsD3+gMQaNZ0A1G6ruvHvu7xQGhoUV
- YzrWybszDWTBSuKVeKSpWAyS4U/4eH2DDPl2DrAqp9WJNGwcjjj1ojy5wpL4J45LJc7n
- UghJhfDDd/KyTfGkGvmOCun8LcujRrETKlxkpEOYbPLm8hIYLyb2p3yv83avtLUsBp4D
- LfwCh+aJa7AbvWEJ5AOJKK9LJ4ZJnTzwdKl8Ji07JBBVDBTLLk2F7NMU0UdXxB0xc97W
- 79qQ==
-X-Gm-Message-State: AOJu0Ywyu84Pa1HH3QUlalCGUxDuUxQdZz64OZwqpiJL58S2Q2GyU0dX
- sK4GIhJm8Aaad1Q8oQlu06jT81tc5H33O7KY84Eylv6O
-X-Google-Smtp-Source: AGHT+IFJhzSXQaf3dzEeTx498QV4oV8+zPstxfJ80EhQIVOEXxCGE4CsYhNa0md5eMx05VdIYtfHV5S0DrOg5QdT0k8=
-X-Received: by 2002:a2e:870d:0:b0:2cd:1c0c:99 with SMTP id
- m13-20020a2e870d000000b002cd1c0c0099mr1724880lji.74.1705236044030; 
- Sun, 14 Jan 2024 04:40:44 -0800 (PST)
-MIME-Version: 1.0
-References: <20240106095524.0610E81D7B@busybox.osuosl.org>
- <87ply5wtzf.fsf@48ers.dk>
- <20240113184532.3d393158@windsurf> <877ckdt3bm.fsf@48ers.dk>
-In-Reply-To: <877ckdt3bm.fsf@48ers.dk>
+ d=1e100.net; s=20230601; t=1705236898; x=1705841698;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=i+aPuByGP33jQkj3Bb3GArV2GW0FatEMX8AkRK7tr4Y=;
+ b=iaNhKATa8YZaXX70UXyb9sZYhTgyn5WVpmxhiUS0l0x6ApxkMqj1ko6eEqpZxXsM+p
+ mhQigAYQ3BHQJrbYMVEzJy1vfYnbvQ8P25aE2OJ3XfI16SRRdJO9+KJ7058AdXEYYlV1
+ DudRWHEcA1Vf4p5FyEHWmKRtkqW8otxugk19WulvDLkS6SRdCLm4ESEckmDzpDebXlYU
+ /0NImXMr3ucQ+98T8iANCX6+E3f70xsXEjwT2KoSkNYq43p2eZdefw2znWGbhef6prib
+ 8eY8d1jbrt1JJVV6cWt1WHodmgoor8N5xchJTtpYiUyCdGs+mJQjrgF6QQL8ndxnWKE5
+ s4UA==
+X-Gm-Message-State: AOJu0YxByuOULVLU3mB7gSNrjYXdMRptNyuGoWeMsPMo8dx3JvfrB171
+ DcYGHzqfPGcB9/OiqzNeX8aezIcPinU=
+X-Google-Smtp-Source: AGHT+IEBmtr0ot0W4hy4hhdAIxgm/MQ/3CozHHxDvgLqYVlwQY8glAFKKGOPdCzgWFhKyZEOtG+gmQ==
+X-Received: by 2002:adf:fc8c:0:b0:336:c79d:7504 with SMTP id
+ g12-20020adffc8c000000b00336c79d7504mr1959462wrr.2.1705236898349; 
+ Sun, 14 Jan 2024 04:54:58 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ a7-20020adff7c7000000b0033660f75d08sm9035890wrq.116.2024.01.14.04.54.57
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 14 Jan 2024 04:54:58 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 14 Jan 2024 13:40:32 +0100
-Message-ID: <CAPi7W82nTEgz_G4BB-=gm6-sFA+LPBWbz-2eCFCZ=Z0Yeb_TNQ@mail.gmail.com>
-To: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Sun, 14 Jan 2024 13:54:48 +0100
+Message-ID: <20240114125448.819400-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1705236044; x=1705840844; darn=buildroot.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=eBS0x3qz6pLyWDnfiYZXJKA65fC7C0tzt9mK5GoZyss=;
- b=mmrk8hR31S6kBL11hvgl+mRTCRc8+H9wv6LKjguo1v3yiADEryAjITGisbubXgKsod
- XL/TK7cFVnjdtK5cfouXBmJQfv+sBO4G4U7lwgYfFRGxzpLG23JbNPZ0BZaZpSY3ytNr
- cTqIiVysyPvPIrBvRkjGKkS0VP85Weshabo4zFNIEa/zX38Y7LSG81UOlwLVzrvvkQx7
- Gugp9NlWnLyHf3Akypf4y2Jf1VoYgIYBCgwauarrdZGrguMV5CGMmD4Ks/rPPPnDRxcq
- losA+yeC4iScTajjJoHr3cvDOQOwX9TszJReeUO0KZvoY3JqRJ3RFHW423LxVjr115z/
- C6oA==
+ d=gmail.com; s=20230601; t=1705236898; x=1705841698; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=i+aPuByGP33jQkj3Bb3GArV2GW0FatEMX8AkRK7tr4Y=;
+ b=On4r8vU2SLw3oL0+OM+QGUZmSSH9RVCGIdt3Q/ZXL0vccS8YzIemt3IqGIP/puLe+k
+ 32RZFAoy/n52dPAn8o5wjcF+vw8tj5/PCS/g3P6gNbBx1lHxsKwhfXKMCJ0nMw7wAwiZ
+ b9QokxYBtBJV+bnknmXvgbzs9j5/cvqttvTIMRNl2UePkwE76/34Q+7qzM7M+qSmDMRt
+ 1K8ofnLVrlIxw+ql6+fF0MYY9Ih2pyfswvxcsnPAK2w/mqCNar3PSJeIgRVf5DhvtntO
+ 1KXxjS62rKTf316CT962D5t7nS8he5trS56E6Sxpx/HTcaLlF76GeUCAifOh00dWpIMl
+ B7EA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=mmrk8hR3
-Subject: Re: [Buildroot] [git commit] package/avahi: fix libavahi-client
+ header.a=rsa-sha256 header.s=20230601 header.b=On4r8vU2
+Subject: [Buildroot] [PATCH 1/1] toolchain/Config.in: update ucontext
  handling
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -93,35 +94,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8sCgpMZSBzYW0uIDEzIGphbnYuIDIwMjQgw6AgMjA6NTYsIFBldGVyIEtvcnNnYWFyZCA8
-cGV0ZXJAa29yc2dhYXJkLmNvbT4gYSDDqWNyaXQgOgo+Cj4gPj4+Pj4gIlRob21hcyIgPT0gVGhv
-bWFzIFBldGF6em9uaSA8dGhvbWFzLnBldGF6em9uaUBib290bGluLmNvbT4gd3JpdGVzOgo+Cj4g
-ID4gSGVsbG8gUGV0ZXIsCj4gID4gT24gU2F0LCAxMyBKYW4gMjAyNCAwODo1MjoyMCArMDEwMAo+
-ICA+IFBldGVyIEtvcnNnYWFyZCA8cGV0ZXJAa29yc2dhYXJkLmNvbT4gd3JvdGU6Cj4KPiAgPj4g
-RG9lcyB0aGlzIGNoYW5nZSByZWFsbHkgbWFrZSBzZW5zZSBpbiB0aGUgY29udGV4dCBvZiBCdWls
-ZHJvb3Q/IExpYmF2YWhpCj4gID4+IGlzIGEgbGlicmFyeSB0byB0YWxrIHRvIHRoZSBhdmFoaSBk
-YWVtb24sIHNvIG5vdCB2ZXJ5IHVzZWZ1bCB3aXRob3V0IHRoZQo+ICA+PiBkYWVtb24uCj4KPiAg
-PiBUcnVlLiBUbyBiZSBob25lc3QsIEkgZGlkbid0IHB1dCB0b28gbXVjaCB0aGlua2luZyB3aGVu
-IGFwcGx5aW5nCj4gID4gRmFicmljZSdzIHBhdGNoOiB0aGUgZGFlbW9uIHdhcyBub3Qgc3RyaWN0
-bHkgbmVlZGVkIHdoZW4gYnVpbGRpbmcgdGhlCj4gID4gbGlicmFyeSwgZHJvcHBpbmcgdGhlIGRl
-cGVuZGVuY3kgbWFkZSBzZW5zZSwgc28gSSBhcHBsaWVkLiBJZiB0aGVyZSBpcwo+ICA+IGEgcnVu
-dGltZSBkZXBlbmRlbmN5IG9uIHRoZSBkYWVtb24sIHRoZW4gaW5kZWVkIG1heWJlIHdlIHNob3Vs
-ZCBrZWVwCj4gID4gdGhlIGRlcGVuZGVuY3kuIE5vIHN0cm9uZyBmZWVsaW5nIGFib3V0IGl0LCBh
-bmQgSSBjZXJ0YWlubHkgd291bGRuJ3QKPiAgPiBmZWVsIG9mZmVuZGVkIGlmIHRoZSBjb21taXQg
-d2FzIHJldmVydGVkLgo+Cj4gSXQgaXMgYXQgbGVhc3QgbXkgdW5kZXJzdGFuZGluZyB0aGF0IGxp
-YmF2YWhpIGRvZXNuJ3QgbWFrZSBtdWNoIHNlbnNlCj4gd2l0aG91dCB0aGUgZGFlbW9uLCB1bmxl
-c3MgSSBhbSBtaXNzaW5nIHNvbWV0aGluZy4gRmFicmljZT8KCk9uIGRlYmlhbiwgbGliYXZhaGkt
-Y2xpZW50MyBkZXBlbmRzIG9uIGxpYmF2YWhpLWNvbW1vbjMgYW5kIGxpYmRidXMuClRoZXJlIGlz
-IG5vIGRlcGVuZGVuY3kgb24gYXZhaGktZGFlbW9uLgpIb3dldmVyLCBpbiB0aGUgY29udGV4dCBv
-ZiBidWlsZHJvb3QgcGVyaGFwcyB0aGlzIGRvZXNuJ3QgbWFrZSBhIGxvdCBvZiBzZW5zZS4KCj4K
-PiAtLQo+IEJ5ZSwgUGV0ZXIgS29yc2dhYXJkCgpCZXN0IFJlZ2FyZHMsCgpGYWJyaWNlCl9fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWls
-aW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qu
-b3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+As suggested by Thomas Petazzoni in [1], add a comment on
+BR2_TOOLCHAIN_HAS_UCONTEXT to specify that this boolean will be set to
+true only when a toolchain provides a full featured ucontext
+implementation with ucontext_t and {get,make,set}context. As a result,
+drop its selection from BR2_TOOLCHAIN_USES_MUSL to fix the following
+musl build failure on php:
+
+/home/autobuild/autobuild/instance-8/output-1/host/lib/gcc/m68k-buildroot-linux-musl/12.3.0/../../../../m68k-buildroot-linux-musl/bin/ld: Zend/zend_fibers.o: in function `zend_fiber_init_context':
+zend_fibers.c:(.text+0x946): undefined reference to `getcontext'
+
+[1]: https://patchwork.ozlabs.org/project/buildroot/patch/20230516193307.1543455-1-bernd.kuhls@t-online.de/
+
+Fixes:
+ - http://autobuild.buildroot.org/results/271f9fb8bfa5ba2f74feef81e6b375b54e21cece
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ toolchain/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 5be63d4e15..f1f9212f25 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -34,7 +34,6 @@ config BR2_TOOLCHAIN_USES_MUSL
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+-	select BR2_TOOLCHAIN_HAS_UCONTEXT
+ 	select BR2_TOOLCHAIN_SUPPORTS_PIE if !BR2_STATIC_LIBS
+ 
+ choice
+@@ -303,6 +302,8 @@ config BR2_TOOLCHAIN_HAS_SSP_STRONG
+ 	bool
+ 	default y if BR2_TOOLCHAIN_HAS_SSP && BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 
++# This boolean is true if the toolchain provides a full featured
++# ucontext implementation with ucontext_t and {get,make,set}context
+ config BR2_TOOLCHAIN_HAS_UCONTEXT
+ 	bool
+ 
+-- 
+2.43.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
