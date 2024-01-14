@@ -4,53 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BCFBC47077
-	for <buildroot@archiver.kernel.org>; Sun, 14 Jan 2024 18:28:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D08B9C4707B
+	for <buildroot@archiver.kernel.org>; Sun, 14 Jan 2024 18:29:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 36D0880E85;
-	Sun, 14 Jan 2024 18:28:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 36D0880E85
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6E882820AD;
+	Sun, 14 Jan 2024 18:29:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E882820AD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yS23oLXCzOLU; Sun, 14 Jan 2024 18:28:51 +0000 (UTC)
+	with ESMTP id 9Qa5VZ7WA33V; Sun, 14 Jan 2024 18:29:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8E23C80E7C;
-	Sun, 14 Jan 2024 18:28:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E23C80E7C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0290B1BF593
- for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 18:28:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CB36381E9A;
+	Sun, 14 Jan 2024 18:29:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB36381E9A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3A89E1BF593
+ for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 18:29:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DCF944046D
- for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 18:28:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DCF944046D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 13B1981E55
+ for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 18:29:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 13B1981E55
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GiWgQV8hzwks for <buildroot@lists.busybox.net>;
- Sun, 14 Jan 2024 18:28:37 +0000 (UTC)
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A089440342
- for <buildroot@buildroot.org>; Sun, 14 Jan 2024 18:28:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A089440342
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E5FCD1BF206;
- Sun, 14 Jan 2024 18:28:33 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id foOC1m3IgwaN for <buildroot@lists.busybox.net>;
+ Sun, 14 Jan 2024 18:29:12 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DEB5081E2A
+ for <buildroot@buildroot.org>; Sun, 14 Jan 2024 18:29:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DEB5081E2A
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A804A20002;
+ Sun, 14 Jan 2024 18:29:08 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rP5Dl-00E1xX-0d;
- Sun, 14 Jan 2024 19:28:33 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rP5EK-00E208-06;
+ Sun, 14 Jan 2024 19:29:08 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Christian Hitz via buildroot <buildroot@buildroot.org>
-References: <20240110171755.3984161-1-christian@klarinett.li>
-Date: Sun, 14 Jan 2024 19:28:33 +0100
-In-Reply-To: <20240110171755.3984161-1-christian@klarinett.li> (Christian Hitz
- via buildroot's message of "Wed, 10 Jan 2024 18:17:54 +0100")
-Message-ID: <87fryzlqge.fsf@48ers.dk>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20240111194021.2570675-1-fontaine.fabrice@gmail.com>
+Date: Sun, 14 Jan 2024 19:29:08 +0100
+In-Reply-To: <20240111194021.2570675-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 11 Jan 2024 20:40:21 +0100")
+Message-ID: <87bk9nlqff.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/libaio: add LIBAIO_CPE_ID_VENDOR
+Subject: Re: [Buildroot] [PATCH 1/1] package/criu: disable mips
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,24 +62,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Christian Hitz <christian@klarinett.li>,
- Christian Hitz <christian.hitz@bbv.ch>
+Cc: Marcus Folkesson <marcus.folkesson@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Christian" == Christian Hitz via buildroot <buildroot@buildroot.org> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > From: Christian Hitz <christian.hitz@bbv.ch>
- > cpe:2.3:a:libaio_project:libaio:-:*:*:*:*:*:*:*is a valid CPE identifier
- > for this package:
+ > mips raises the following build failure since the addition of the
+ > package in commit 3e4b479f39c15ffdf307ec8395d856680c727204:
 
- >   https://nvd.nist.gov/products/cpe/detail/69B8039E-7837-4DE3-8DFE-C2E4D834EE78
+ > compel/arch/mips/plugins/std/memcpy.S:7: Error: opcode not supported on this processor: mips32 (mips32) `dadd $2,$0,$4'
+ > compel/arch/mips/plugins/std/memcpy.S:8: Error: opcode not supported on this processor: mips32 (mips32) `daddiu $13,$0,0'
 
- > Signed-off-by: Christian Hitz <christian.hitz@bbv.ch>
+ > Indeed, dadd and daddiu are specific to mips64
 
-Committed to 2023.02.x and 2023.11.x, thanks.
+ > Building on mips64 doesn't work either as it raises the following build
+ > failure:
+
+ > /tmp/ccArXSfi.s:305: Error: opcode not supported on this processor: mips64 (mips64) `rdhwr $2,$29'
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/b0341d0654e66bdac2c91d5949be3810a961d9da
+ >  - http://autobuild.buildroot.org/results/b7b8860476de04980bd8c7241d3dd5a01a0251c8
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2023.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
