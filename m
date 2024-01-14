@@ -4,65 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD1F9C47077
-	for <buildroot@archiver.kernel.org>; Sun, 14 Jan 2024 11:11:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A4BAC47077
+	for <buildroot@archiver.kernel.org>; Sun, 14 Jan 2024 11:13:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 33BF741830;
-	Sun, 14 Jan 2024 11:11:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33BF741830
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2EB2B41860;
+	Sun, 14 Jan 2024 11:13:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2EB2B41860
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9M_KGxqY4AmF; Sun, 14 Jan 2024 11:11:11 +0000 (UTC)
+	with ESMTP id 2hGakI_QA3mr; Sun, 14 Jan 2024 11:13:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 601EF41836;
-	Sun, 14 Jan 2024 11:11:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 601EF41836
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7B4AA4182D;
+	Sun, 14 Jan 2024 11:13:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B4AA4182D
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 665DC1BF2A3
- for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 11:11:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DC0011BF2A3
+ for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 11:13:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 382BA60BDE
- for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 11:11:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 382BA60BDE
+ by smtp3.osuosl.org (Postfix) with ESMTP id B28EF60E27
+ for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 11:13:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B28EF60E27
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kLytipDtsTcc for <buildroot@lists.busybox.net>;
- Sun, 14 Jan 2024 11:11:08 +0000 (UTC)
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id ECF2C60BEB
- for <buildroot@buildroot.org>; Sun, 14 Jan 2024 11:11:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ECF2C60BEB
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id BAD9313F8A7;
- Sun, 14 Jan 2024 12:11:01 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 14 Jan 2024 12:11:01 +0100
-Date: Sun, 14 Jan 2024 12:11:01 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <ZaPBRc4jfREsr0rz@landeda>
-References: <20240114101619.7120-1-fontaine.fabrice@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240114101619.7120-1-fontaine.fabrice@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1705230665;
- bh=Eq/AtF7QEbdXgfsluP6rToNmldIt+6Cx+tFqVUv+0n4=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=sfYhBjSuG/zVidk1vxJ0lmu9+94hb/b0Etm4SHVxTut9M9hDbcjZNIOQWv33pIAnc
- ye4RorZL9YWkew4FF6vD0fNLqvMoKcB+xAKrE3yjIpWhyZDcpj61GjJDta6/9ours5
- sVHH95ojUiktnCpxYOVxG9Dzyu0E5UlqdLuX4UkS+/IOkJerk2tB2o9OLo7Rs+S3UH
- ZbYR0djQYi41TuBiHqgxU87/sc/CUOagWSYAkI+ixYnyZUjp7VKczHhf+GhPrrACpA
- U97t/oyReVpjhjTBHKuuDhJi5mMk+Z230CK+zWreIkbGeI3+VwTCIkUBGm+7/gdJN9
- U/H3EiBo2VCfw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=sfYhBjSu
-Subject: Re: [Buildroot] [PATCH 1/1] package/criu: disable on aarch64_be
+ with ESMTP id VuyG1SXwMxxH for <buildroot@lists.busybox.net>;
+ Sun, 14 Jan 2024 11:13:09 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id ECBF660EA1
+ for <buildroot@buildroot.org>; Sun, 14 Jan 2024 11:13:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ECBF660EA1
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D5FC786116; Sun, 14 Jan 2024 11:13:08 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 14 Jan 2024 12:11:38 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f0b9be1872a4fa41de0356888915e2ea4322fa72
+X-Git-Newrev: 62036327f6ded08ceae01f9b33cb3227ef106399
+X-Patchwork-Hint: ignore
+Message-Id: <20240114111308.D5FC786116@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libkcapi: fix legal info
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,84 +56,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Marcus Folkesson <marcus.folkesson@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=62036327f6ded08ceae01f9b33cb3227ef106399
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2024-01-14 11:16 +0100, Fabrice Fontaine spake thusly:
-> armv8a aarch64_be raises the following build failure since the addition
-> of the package in commit 3e4b479f39c15ffdf307ec8395d856680c727204:
-> 
-> Error (compel/arch/aarch64/src/lib/handle-elf-host.c:30): Unsupported Elf format detected
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/8eaa881a926d138a0bfd3f1076246088994e883f
->  - http://autobuild.buildroot.org/results/8de9b4d6b26e06f6b4457a31366bdc0d8a8c34ae
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/criu/Config.in | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/criu/Config.in b/package/criu/Config.in
-> index fc0da823b3..02d000e49b 100644
-> --- a/package/criu/Config.in
-> +++ b/package/criu/Config.in
-> @@ -1,10 +1,10 @@
->  # criu only builds on certain architectures
->  config BR2_PACKAGE_CRIU_ARCH_SUPPORTS
->  	bool
-> -	default y if BR2_ARM_CPU_ARMV6
-> -	default y if BR2_ARM_CPU_ARMV7A
-> -	default y if BR2_ARM_CPU_ARMV7M
-> -	default y if BR2_ARM_CPU_ARMV8A
-> +	default y if BR2_arm && BR2_ARM_CPU_ARMV6
-> +	default y if BR2_arm && BR2_ARM_CPU_ARMV7A
-> +	default y if BR2_arm && BR2_ARM_CPU_ARMV7M
+Commit e6af32c08c8d47a71d6f8fa48439f3d87dcef2f6 forgot to update hash of
+COPYING (update in year:
+https://github.com/smuellerDD/libkcapi/commit/fc937358e71253a6efaa3ba74885364976b040ea)
 
-armv6 and armv7 can never be aarch64, so there is no need to guard them
-with BR2_arm. Also note that this also disables for armeb, not just
-aarch64_be.
+Fixes:
+ - http://autobuild.buildroot.org/results/823c89ed3ac3f12e64a22bd88e193a5be28c34e5
 
-Unless you meant this commit to mean "disable for armeb and aarch64_be"?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libkcapi/libkcapi.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> +	default y if BR2_arm && BR2_ARM_CPU_ARMV8A
-
-This also disables armv8 for armeb. Is that expected?
-
-If it is just about disabling for aarch64_be (and nothing else), then
-I'd prefer the condition to be written explicitly, as such:
-
-    default y if BR2_ARM_CPU_ARMV8A && !BR2_aarch64_be
-
-However, if your commit was really about disabling for all big-endian
-ARM and Aarch64, then the commit title and commit log should be fixed.
-
-Regards,
-Yann E. MORIN.
-
->  	default y if BR2_aarch64
->  	default y if BR2_x86_64
->  	default y if BR2_powerpc64le # Only support powerpc64 with LE
-> -- 
-> 2.43.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libkcapi/libkcapi.hash b/package/libkcapi/libkcapi.hash
+index 691ef0977a..172b6cbcc7 100644
+--- a/package/libkcapi/libkcapi.hash
++++ b/package/libkcapi/libkcapi.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+ sha256  15b550c14165a266fa233b485d029d54508da593dfa6d1731ec5d5a285c716e9  libkcapi-1.5.0.tar.xz
+-sha256  9765fad61726afb2b253db2c68153672e4178d6809667ae98141f3e90fe8645b  COPYING
++sha256  00e0a844d67b190580a9dc5943e555a3d0b2158e21d01a25526762c619979326  COPYING
+ sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING.gplv2
+ sha256  13aa749a5b0a454917a944ed8fffc530b784f5ead522b1aacaf4ec8aa55a6239  COPYING.bsd
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
