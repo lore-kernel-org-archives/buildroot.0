@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD0FDC4707B
-	for <buildroot@archiver.kernel.org>; Sun, 14 Jan 2024 16:40:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35BB0C47077
+	for <buildroot@archiver.kernel.org>; Sun, 14 Jan 2024 16:41:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 72BBE60E8B;
-	Sun, 14 Jan 2024 16:40:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 72BBE60E8B
+	by smtp3.osuosl.org (Postfix) with ESMTP id D9E4E60ABE;
+	Sun, 14 Jan 2024 16:41:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D9E4E60ABE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IW7-Y-bc3unT; Sun, 14 Jan 2024 16:40:50 +0000 (UTC)
+	with ESMTP id KzFZ27PA-kMr; Sun, 14 Jan 2024 16:41:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BCB9460E38;
-	Sun, 14 Jan 2024 16:40:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BCB9460E38
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 336D51BF86D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 29D1E60E97;
+	Sun, 14 Jan 2024 16:41:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 29D1E60E97
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 44E991BF870
  for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 16:40:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0C77A60ABE
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1E63382296
  for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 16:40:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C77A60ABE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1E63382296
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yyYBBJ3WfDXR for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mLEGsQTIiXBL for <buildroot@lists.busybox.net>;
  Sun, 14 Jan 2024 16:40:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4A83D6058B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 34C1D8228F
  for <buildroot@buildroot.org>; Sun, 14 Jan 2024 16:40:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A83D6058B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 34C1D8228F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 382EA86140; Sun, 14 Jan 2024 16:40:35 +0000 (UTC)
+ id 20FC18605E; Sun, 14 Jan 2024 16:40:35 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 14 Jan 2024 17:39:36 +0100
+Date: Sun, 14 Jan 2024 17:38:14 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 67501521431c7b793497d0d74b9132bedfbf2b3f
-X-Git-Newrev: 10023b762677cfb4b452dd7727ee286f2275387d
+X-Git-Oldrev: 021ff73ef81e5f4bb99504843b964181966b5903
+X-Git-Newrev: 7fe875886f7ecf27b9c820c148a1f4499b734d75
 X-Patchwork-Hint: ignore
-Message-Id: <20240114164035.382EA86140@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/libuev: security
- bump to version 2.4.1
+Message-Id: <20240114164035.20FC18605E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/wireshark:
+ security bump to version 4.0.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,50 +63,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=10023b762677cfb4b452dd7727ee286f2275387d
+commit: https://git.buildroot.net/buildroot/commit/?id=7fe875886f7ecf27b9c820c148a1f4499b734d75
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-- Fix #27: possible buffer overrun in uev_run()
-- Update hash of LICENSE file (update in year with
-  https://github.com/troglobit/libuev/commit/0f5909615439d2a3d6a9b44f5a7570e071b90448)
+- GVCP dissector crash. CVE-2024-0208.
+- IEEE 1609.2 dissector crash. CVE-2024-0209.
 
-https://github.com/troglobit/libuev/blob/v2.4.1/ChangeLog.md
+https://www.wireshark.org/security/wnpa-sec-2024-01
+https://www.wireshark.org/security/wnpa-sec-2024-02
+
+https://www.wireshark.org/docs/relnotes/wireshark-4.0.12
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit e3518dd952d20d64bc9cd24ebf025b4e7b575baf)
+(cherry picked from commit 1e3d206f154915ec86d7750bf7f846b6da412a1a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libuev/libuev.hash | 6 +++---
- package/libuev/libuev.mk   | 2 +-
+ package/wireshark/wireshark.hash | 6 +++---
+ package/wireshark/wireshark.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libuev/libuev.hash b/package/libuev/libuev.hash
-index e5c9660a02..1b5a9fa721 100644
---- a/package/libuev/libuev.hash
-+++ b/package/libuev/libuev.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/troglobit/libuev/releases/download/v2.4.0/libuev-2.4.0.tar.xz.sha256
--sha256  31f1aa4f492ba4f6a5dd6b19968ae6a732968dc05cae6575930560b6cee1f5ef  libuev-2.4.0.tar.xz
-+# From https://github.com/troglobit/libuev/releases/download/v2.4.1/libuev-2.4.1.tar.xz.sha256
-+sha256  1d171c572ca48ddd6763f76c54e77d021d4ca7beb007610f7c1fec903511977b  libuev-2.4.1.tar.xz
- # License files
--sha256  694a734d9c1b46ae203314ed1c744a1acebd4fe5fc964b761703772546f0d3ab  LICENSE
-+sha256  387d0d8e2aabf187751c8f1ebb9a4abaecaa7e0e05fead27f408193a0f0f17dd  LICENSE
-diff --git a/package/libuev/libuev.mk b/package/libuev/libuev.mk
-index a32381dcc5..432c362401 100644
---- a/package/libuev/libuev.mk
-+++ b/package/libuev/libuev.mk
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index a6ef69b1af..6610eb7781 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,6 +1,6 @@
+-# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.0.11.txt
+-sha1  4af3140d69f9d41e1c4e161fad66304a6920ddce  wireshark-4.0.11.tar.xz
+-sha256  4c341cc33a6c512d983f4126e6f3e5c249f604e14ab7f337d38b1cbe58199e3d  wireshark-4.0.11.tar.xz
++# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.0.12.txt
++sha1  e00d90769995bf786b05c05bdd9a2c6c8e372e70  wireshark-4.0.12.tar.xz
++sha256  e4e3d618ba11e159fb163f0dc4716a8b72a065aafd1111db9405332552a5a115  wireshark-4.0.12.tar.xz
+ 
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index 6fb4b60f2b..3759f9bf94 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBUEV_VERSION = 2.4.0
-+LIBUEV_VERSION = 2.4.1
- LIBUEV_SOURCE = libuev-$(LIBUEV_VERSION).tar.xz
- LIBUEV_SITE = https://github.com/troglobit/libuev/releases/download/v$(LIBUEV_VERSION)
- LIBUEV_LICENSE = MIT
+-WIRESHARK_VERSION = 4.0.11
++WIRESHARK_VERSION = 4.0.12
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
+ WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
