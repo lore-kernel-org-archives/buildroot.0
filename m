@@ -4,48 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B40B7C47077
-	for <buildroot@archiver.kernel.org>; Sun, 14 Jan 2024 16:44:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E3E8C4707B
+	for <buildroot@archiver.kernel.org>; Sun, 14 Jan 2024 16:52:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7412F60669;
-	Sun, 14 Jan 2024 16:44:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7412F60669
+	by smtp3.osuosl.org (Postfix) with ESMTP id BA8CB60759;
+	Sun, 14 Jan 2024 16:52:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA8CB60759
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 19Vfa5EH1VYq; Sun, 14 Jan 2024 16:44:07 +0000 (UTC)
+	with ESMTP id umiE9pO1q8QZ; Sun, 14 Jan 2024 16:52:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A522760EAA;
-	Sun, 14 Jan 2024 16:44:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A522760EAA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 25F6260706;
+	Sun, 14 Jan 2024 16:52:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 25F6260706
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2B3CD1BF41F
- for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 16:43:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3AB5F1BF41F
+ for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 16:52:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 401CB600C9
- for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 16:43:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 401CB600C9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0D67460706
+ for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 16:52:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D67460706
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LUBsk7EMANQk for <buildroot@lists.busybox.net>;
- Sun, 14 Jan 2024 16:43:15 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6E71D6058D
- for <buildroot@buildroot.org>; Sun, 14 Jan 2024 16:43:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E71D6058D
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5C1AC86158; Sun, 14 Jan 2024 16:43:15 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ with ESMTP id XTlcFt3oA4_w for <buildroot@lists.busybox.net>;
+ Sun, 14 Jan 2024 16:52:45 +0000 (UTC)
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0C40C60701
+ for <buildroot@buildroot.org>; Sun, 14 Jan 2024 16:52:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C40C60701
+Received: by mail-wr1-x434.google.com with SMTP id
+ ffacd0b85a97d-3367601a301so6908817f8f.2
+ for <buildroot@buildroot.org>; Sun, 14 Jan 2024 08:52:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1705251163; x=1705855963;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=/0YqayIu2B3vR45R3oqMjIATRZeMrPi6t2r9HEe7Nok=;
+ b=oXMX/hNxAeIN7T1L/wYEg5xUJe/G7qt8xDT9WglwIJvtpkOAKlEMZLH4Hdc4ehv3/r
+ sYlwPUDps+g3YWpzlBe3FZt9j+Cpa0kNeNUWaFbGOu+NrvOptHO8JivK2bc5DnlsiOYi
+ 6+inaEITRCj+hzw9/a7tEzH+KiIVG9ZYZi1CqF3GqIwwTDDW91adtzjVcjBGYK9aVgFv
+ 8z2gJjsJuv6WX0E8wmcyWI53xo4GKdeTdtAzd0gMabFSMdwxThYLi5Ojh4B0Ht+VynDi
+ KMJ1npPTaD5/OkZ6nTDOzLNm4uz8TPW/omSgy0JrssFsASzT4NVEFjYwdtxvrEEjth2c
+ yJzw==
+X-Gm-Message-State: AOJu0YylbDjYqsgkqPmdEOix8vMJJwqIpsyJvY+PpuuFaHIu0g8Vs1xa
+ 2xPsmdn6mLWtrIZ9aIA5Zx4gVNEthF0=
+X-Google-Smtp-Source: AGHT+IGozJGgRSn+l9UBDfdFCBjBTe6txKLXkU7fV3VBT8qAs36TWoR7rNP2zKBqx1Ur2PT57qAJlQ==
+X-Received: by 2002:a5d:6545:0:b0:337:492d:4184 with SMTP id
+ z5-20020a5d6545000000b00337492d4184mr1580846wrv.139.1705251162594; 
+ Sun, 14 Jan 2024 08:52:42 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ f18-20020adffcd2000000b0033642a9a1eesm9547888wrs.21.2024.01.14.08.52.42
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 14 Jan 2024 08:52:42 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 14 Jan 2024 17:39:30 +0100
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 89b9a7d38b59803809a43cf1908366f78a2c303a
-X-Git-Newrev: 1ddea7db1039c68f3b3ad42fe6b97c0ed0c32e5c
-X-Patchwork-Hint: ignore
-Message-Id: <20240114164315.5C1AC86158@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/libuev: security
- bump to version 2.4.1
+Date: Sun, 14 Jan 2024 17:52:40 +0100
+Message-ID: <20240114165240.1591850-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1705251163; x=1705855963; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=/0YqayIu2B3vR45R3oqMjIATRZeMrPi6t2r9HEe7Nok=;
+ b=hzUm2UzOT7uxyTgpoqmRsDxH1MeCroy7QfbJlLEE6d+EdPiW6g/wixmC/5KOCBIxY+
+ WBJgRVZVVBIV55WecpSLhBpWt/sX5p5baRTBbZ3/sTYIJ+TFoIkx0wL9Q9SbtnveA9KE
+ zu0cwLyNjB490OYPSIJxXbmbt3748RUZ+jdpaudsXC8WxNCKNb+sVl2I2yWEUhOsJ3oX
+ d9AXqEnWg0SGA2YwfKuJorJbQu2UL3a0ZHEKj9kX9Wr2avZJPrMBBCzluVLoubk3CGGK
+ 7tTIXERh36gY2DyvlqYH1i6lVbcQuBTbor+ogkkEdnvdS8MAQi834FusEwm0hX8AiGej
+ 8eYA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=hzUm2UzO
+Subject: [Buildroot] [PATCH 1/1] package/micropython: add
+ MICROPYTHON_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,56 +94,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Chris Packham <judge.packham@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ddea7db1039c68f3b3ad42fe6b97c0ed0c32e5c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+cpe:2.3:a:micropython:micropython is a valid CPE identifier for this
+package:
 
-- Fix #27: possible buffer overrun in uev_run()
-- Update hash of LICENSE file (update in year with
-  https://github.com/troglobit/libuev/commit/0f5909615439d2a3d6a9b44f5a7570e071b90448)
-
-https://github.com/troglobit/libuev/blob/v2.4.1/ChangeLog.md
+  https://nvd.nist.gov/products/cpe/detail/853A709B-B8CB-4E8C-BF5E-6621C3A1D994
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit e3518dd952d20d64bc9cd24ebf025b4e7b575baf)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libuev/libuev.hash | 6 +++---
- package/libuev/libuev.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/micropython/micropython.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libuev/libuev.hash b/package/libuev/libuev.hash
-index e5c9660a02..1b5a9fa721 100644
---- a/package/libuev/libuev.hash
-+++ b/package/libuev/libuev.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/troglobit/libuev/releases/download/v2.4.0/libuev-2.4.0.tar.xz.sha256
--sha256  31f1aa4f492ba4f6a5dd6b19968ae6a732968dc05cae6575930560b6cee1f5ef  libuev-2.4.0.tar.xz
-+# From https://github.com/troglobit/libuev/releases/download/v2.4.1/libuev-2.4.1.tar.xz.sha256
-+sha256  1d171c572ca48ddd6763f76c54e77d021d4ca7beb007610f7c1fec903511977b  libuev-2.4.1.tar.xz
- # License files
--sha256  694a734d9c1b46ae203314ed1c744a1acebd4fe5fc964b761703772546f0d3ab  LICENSE
-+sha256  387d0d8e2aabf187751c8f1ebb9a4abaecaa7e0e05fead27f408193a0f0f17dd  LICENSE
-diff --git a/package/libuev/libuev.mk b/package/libuev/libuev.mk
-index a32381dcc5..432c362401 100644
---- a/package/libuev/libuev.mk
-+++ b/package/libuev/libuev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
+index 3d356c51d8..6e0af59f06 100644
+--- a/package/micropython/micropython.mk
++++ b/package/micropython/micropython.mk
+@@ -13,6 +13,7 @@ MICROPYTHON_SOURCE = micropython-$(MICROPYTHON_VERSION).tar.xz
+ MICROPYTHON_LICENSE = MIT, BSD-1-Clause, BSD-3-Clause, Zlib
+ MICROPYTHON_LICENSE_FILES = LICENSE
+ MICROPYTHON_DEPENDENCIES = host-pkgconf libffi host-python3
++MICROPYTHON_CPE_ID_VENDOR = micropython
  
--LIBUEV_VERSION = 2.4.0
-+LIBUEV_VERSION = 2.4.1
- LIBUEV_SOURCE = libuev-$(LIBUEV_VERSION).tar.xz
- LIBUEV_SITE = https://github.com/troglobit/libuev/releases/download/v$(LIBUEV_VERSION)
- LIBUEV_LICENSE = MIT
+ # Use fallback implementation for exception handling on architectures that don't
+ # have explicit support.
+-- 
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
