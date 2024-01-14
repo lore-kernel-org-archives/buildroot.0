@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E8B7C4707B
-	for <buildroot@archiver.kernel.org>; Sun, 14 Jan 2024 16:40:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD0FDC4707B
+	for <buildroot@archiver.kernel.org>; Sun, 14 Jan 2024 16:40:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 45D5860ADA;
-	Sun, 14 Jan 2024 16:40:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 45D5860ADA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 72BBE60E8B;
+	Sun, 14 Jan 2024 16:40:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 72BBE60E8B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IX1aAur46vbt; Sun, 14 Jan 2024 16:40:38 +0000 (UTC)
+	with ESMTP id IW7-Y-bc3unT; Sun, 14 Jan 2024 16:40:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A273E60ABE;
-	Sun, 14 Jan 2024 16:40:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A273E60ABE
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 283E91BF41F
+	by smtp3.osuosl.org (Postfix) with ESMTP id BCB9460E38;
+	Sun, 14 Jan 2024 16:40:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BCB9460E38
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 336D51BF86D
  for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 16:40:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0198241696
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0C77A60ABE
  for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 16:40:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0198241696
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C77A60ABE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RX32yfwXB-Wg for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yyYBBJ3WfDXR for <buildroot@lists.busybox.net>;
  Sun, 14 Jan 2024 16:40:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3E78E41692
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4A83D6058B
  for <buildroot@buildroot.org>; Sun, 14 Jan 2024 16:40:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E78E41692
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A83D6058B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2BEBC8613F; Sun, 14 Jan 2024 16:40:35 +0000 (UTC)
+ id 382EA86140; Sun, 14 Jan 2024 16:40:35 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 14 Jan 2024 17:38:57 +0100
+Date: Sun, 14 Jan 2024 17:39:36 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 7fe875886f7ecf27b9c820c148a1f4499b734d75
-X-Git-Newrev: 67501521431c7b793497d0d74b9132bedfbf2b3f
+X-Git-Oldrev: 67501521431c7b793497d0d74b9132bedfbf2b3f
+X-Git-Newrev: 10023b762677cfb4b452dd7727ee286f2275387d
 X-Patchwork-Hint: ignore
-Message-Id: <20240114164035.2BEBC8613F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/pipewire: fix
- webrtc-audio-processing condition
+Message-Id: <20240114164035.382EA86140@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/libuev: security
+ bump to version 2.4.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,37 +63,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=67501521431c7b793497d0d74b9132bedfbf2b3f
+commit: https://git.buildroot.net/buildroot/commit/?id=10023b762677cfb4b452dd7727ee286f2275387d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-The condition checking whether the webrtc-audio-processing package is
-enabled, added in commit
-3ccd3b4c384e98703841b12f7309362957f8f17d ("package/pipewire: bump to
-version 0.3.32") is obviously incorrect, and can never be true.
+- Fix #27: possible buffer overrun in uev_run()
+- Update hash of LICENSE file (update in year with
+  https://github.com/troglobit/libuev/commit/0f5909615439d2a3d6a9b44f5a7570e071b90448)
 
-Fix the condition to use the correct variable instead.
+https://github.com/troglobit/libuev/blob/v2.4.1/ChangeLog.md
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 52f8db409fade387f0f90940c0b32acb27317017)
+(cherry picked from commit e3518dd952d20d64bc9cd24ebf025b4e7b575baf)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pipewire/pipewire.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libuev/libuev.hash | 6 +++---
+ package/libuev/libuev.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
-index 628c69ff8a..f0f3cd847c 100644
---- a/package/pipewire/pipewire.mk
-+++ b/package/pipewire/pipewire.mk
-@@ -225,7 +225,7 @@ else
- PIPEWIRE_CONF_OPTS += -Dcompress-offload=disabled
- endif
+diff --git a/package/libuev/libuev.hash b/package/libuev/libuev.hash
+index e5c9660a02..1b5a9fa721 100644
+--- a/package/libuev/libuev.hash
++++ b/package/libuev/libuev.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/troglobit/libuev/releases/download/v2.4.0/libuev-2.4.0.tar.xz.sha256
+-sha256  31f1aa4f492ba4f6a5dd6b19968ae6a732968dc05cae6575930560b6cee1f5ef  libuev-2.4.0.tar.xz
++# From https://github.com/troglobit/libuev/releases/download/v2.4.1/libuev-2.4.1.tar.xz.sha256
++sha256  1d171c572ca48ddd6763f76c54e77d021d4ca7beb007610f7c1fec903511977b  libuev-2.4.1.tar.xz
+ # License files
+-sha256  694a734d9c1b46ae203314ed1c744a1acebd4fe5fc964b761703772546f0d3ab  LICENSE
++sha256  387d0d8e2aabf187751c8f1ebb9a4abaecaa7e0e05fead27f408193a0f0f17dd  LICENSE
+diff --git a/package/libuev/libuev.mk b/package/libuev/libuev.mk
+index a32381dcc5..432c362401 100644
+--- a/package/libuev/libuev.mk
++++ b/package/libuev/libuev.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--ifeq ($(WEBRTC_AUDIO_PROCESSING),y)
-+ifeq ($(BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING),y)
- PIPEWIRE_CONF_OPTS += -Decho-cancel-webrtc=enabled
- PIPEWIRE_DEPENDENCIES += webrtc-audio-processing
- else
+-LIBUEV_VERSION = 2.4.0
++LIBUEV_VERSION = 2.4.1
+ LIBUEV_SOURCE = libuev-$(LIBUEV_VERSION).tar.xz
+ LIBUEV_SITE = https://github.com/troglobit/libuev/releases/download/v$(LIBUEV_VERSION)
+ LIBUEV_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
