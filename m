@@ -4,67 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DA71C47077
-	for <buildroot@archiver.kernel.org>; Sun, 14 Jan 2024 08:53:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D748C4707B
+	for <buildroot@archiver.kernel.org>; Sun, 14 Jan 2024 08:59:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3DE3860A5C;
-	Sun, 14 Jan 2024 08:53:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3DE3860A5C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 300E660AB1;
+	Sun, 14 Jan 2024 08:59:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 300E660AB1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ejreCXsLgErT; Sun, 14 Jan 2024 08:53:25 +0000 (UTC)
+	with ESMTP id SHGL-oLVHUD4; Sun, 14 Jan 2024 08:59:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8012460A61;
-	Sun, 14 Jan 2024 08:53:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8012460A61
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 148451BF366
- for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 08:53:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1844160AB2;
+	Sun, 14 Jan 2024 08:59:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1844160AB2
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CF23A1BF267
+ for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 08:59:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EE9CA607DE
- for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 08:53:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE9CA607DE
+ by smtp4.osuosl.org (Postfix) with ESMTP id A6C1841B41
+ for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 08:59:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A6C1841B41
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZEyW1Y--N4PS for <buildroot@lists.busybox.net>;
- Sun, 14 Jan 2024 08:53:22 +0000 (UTC)
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DEB9F6062F
- for <buildroot@buildroot.org>; Sun, 14 Jan 2024 08:53:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DEB9F6062F
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3pE3tLsqMlDP for <buildroot@lists.busybox.net>;
+ Sun, 14 Jan 2024 08:59:21 +0000 (UTC)
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7D48041B36
+ for <buildroot@buildroot.org>; Sun, 14 Jan 2024 08:59:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D48041B36
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id E65C913F8AE;
- Sun, 14 Jan 2024 09:53:16 +0100 (CET)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 7137F13F8A2;
+ Sun, 14 Jan 2024 09:59:16 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 14 Jan 2024 09:53:16 +0100
-Date: Sun, 14 Jan 2024 09:53:16 +0100
+ Sun, 14 Jan 2024 09:59:16 +0100
+Date: Sun, 14 Jan 2024 09:59:16 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Jan =?utf-8?B?xIxlcm3DoWs=?= <sairon@sairon.cz>
-Message-ID: <ZaOg_Ed68ndZ4Y_P@landeda>
-References: <20240102145029.242682-1-sairon@sairon.cz>
- <20240102145029.242682-2-sairon@sairon.cz>
+To: Yang Li <yang.li@amlogic.com>
+Message-ID: <ZaOiZNVvO7OuK3sC@landeda>
+References: <20240103073954.3555165-1-yang.li@amlogic.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20240102145029.242682-2-sairon@sairon.cz>
+In-Reply-To: <20240103073954.3555165-1-yang.li@amlogic.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1705222400;
- bh=BXCmMlzrt63bJulG/SCKBo3sK8jodAY1XLY2/Jxg0Aw=;
+ d=free.fr; s=smtp-20201208; t=1705222759;
+ bh=Gn555WynOTqBW/b9A/7CW6+bdDr/8fJVFqqS5ONm4Ek=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=tdFLzoNcBBiGyvML1WCHsbnBSz0ZgsqtPiH+s++4TX13jN77etcDhV1Mj5AodVtnU
- 4KnTcFw/9iUCYlOIRcHtFO5oMnSUt4tvloUkLLqOhEX0R7L90nvpe6Vz2CfOG269fZ
- LfoYi7k6fhXijMlzlF8ncPR3AMrfiblpZViKde8P7QNbKEkCGrv3Nqq9cBI+1N3Xi7
- nmm/4KomyOovS40i5sKQxD9zIqY29LDasF5HutMF0Tv+5dazNEXayMPTazj5c3Bd0e
- T+w5wOQalYwsCDqDgJAy0i/w7QjhPlNtrRJdEiyenH0CDytI5g9OyBye9AmJGm1P2O
- N9oOz0nbnlgrw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=VDENrHlh6UAq5xw8UYmL8oCztCzujpQaSjKX6xbvHsxamgqAF8JB4qiDi+OK6F1Zy
+ 2s/Xw7iFXONM0UCaDQg5AtxwAJcROmbMufqEdAJMwKzGdd3VD/a2En3vp+9eLx0bBK
+ SBmmmF+akmP45SuLi5SetvOku+6ImZM08MfP1Bu+ERPXMyqbTUi7jeXh4+NmUPo6bh
+ B9f5Bm1LKTKLWF7mYAwkthDfbhBAaVEGwVycTmHv9VVxf1NKzIHgNfbAOI+T54HCO3
+ l0MUa8n7ETuH0sS7pIhQ3bbu6X6eqK4Sh4iZuje9p3kH+Fc2UW4N9cWBYhUF7XsWxy
+ lt/kDvTeQsUDA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=tdFLzoNc
-Subject: Re: [Buildroot] [PATCH 2/2] package/linux-firmware: add WiFi and BT
- firmware for MT7921 and MT7922
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=VDENrHlh
+Subject: Re: [Buildroot] [PATCH] package/linux-firmware: add support of
+ Amlogic bluetooth firmware
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,94 +76,88 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SmFuLCBBbGwsCgpPbiAyMDI0LTAxLTAyIDE1OjUwICswMTAwLCBKYW4gxIxlcm3DoWsgc3Bha2Ug
-dGh1c2x5Ogo+IEFsdGhvdWdoIHNpbWlsYXIgaW4gbmFtZSwgdGhleSB1c2UgZGlmZmVyZW50IGtl
-cm5lbCBkcml2ZXIgKHdpdGggdGhlCj4gZXhjZXB0aW9uIG9mIGNvbW1vbiBCbHVldG9vdGggZHJp
-dmVyLCBidXQgdGhlIGZpcm13YXJlIGZpbGUgaXMgcXVpdGUKPiBsYXJnZSBhbnl3YXksIHNvIGl0
-J3Mgd29ydGggaGF2aW5nIHRoZSBwb3NzaWJpbGl0eSB0byBiZSBzcGVjaWZpYykuCj4gCj4gU2ln
-bmVkLW9mZi1ieTogSmFuIMSMZXJtw6FrIDxzYWlyb25Ac2Fpcm9uLmN6Pgo+IC0tLQo+ICBwYWNr
-YWdlL2xpbnV4LWZpcm13YXJlL0NvbmZpZy5pbiAgICAgICAgIHwgMjAgKysrKysrKysrKysrKysr
-KysrCj4gIHBhY2thZ2UvbGludXgtZmlybXdhcmUvbGludXgtZmlybXdhcmUubWsgfCAyNiArKysr
-KysrKysrKysrKysrKysrKysrKysKPiAgMiBmaWxlcyBjaGFuZ2VkLCA0NiBpbnNlcnRpb25zKCsp
-Cj4gCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvbGludXgtZmlybXdhcmUvQ29uZmlnLmluIGIvcGFj
-a2FnZS9saW51eC1maXJtd2FyZS9Db25maWcuaW4KPiBpbmRleCAxMjIxYTgwOTg0Li44MTA3ZjA3
-Yjg5IDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvbGludXgtZmlybXdhcmUvQ29uZmlnLmluCj4gKysr
-IGIvcGFja2FnZS9saW51eC1maXJtd2FyZS9Db25maWcuaW4KPiBAQCAtNTksNiArNTksMTYgQEAg
-Y29uZmlnIEJSMl9QQUNLQUdFX0xJTlVYX0ZJUk1XQVJFX0lCVAo+ICAJICBGaXJtd2FyZSBmaWxl
-cyBmb3IgSW50ZWwgMzE2MC83MjYwLzcyNjUvODI2MC84MjY1IFdpcmVsZXNzCj4gIAkgIGJsdWV0
-b290aCBzdXBwb3J0Lgo+ICAKPiArY29uZmlnIEJSMl9QQUNLQUdFX0xJTlVYX0ZJUk1XQVJFX01U
-NzkyMV9CVAo+ICsJYm9vbCAiTWVkaWFUZWsgTVQ3OTIxIgo+ICsJaGVscAo+ICsJICBGaXJtd2Fy
-ZSBmaWxlcyBmb3IgTWVkaWFUZWsgTVQ3OTIxIGJsdWV0b290aCBzdXBwb3J0Cj4gKwo+ICtjb25m
-aWcgQlIyX1BBQ0tBR0VfTElOVVhfRklSTVdBUkVfTVQ3OTIyX0JUCj4gKwlib29sICJNZWRpYVRl
-ayBNVDc5MjIiCj4gKwloZWxwCj4gKwkgIEZpcm13YXJlIGZpbGVzIGZvciBNZWRpYVRlayBNVDc5
-MjIgYmx1ZXRvb3RoIHN1cHBvcnQKCkkndmUgcmVuYW1lZCB0aGUgb3B0aW9ucyB0byBpbmNsdWRl
-ICJNRURJQVRFSyIgdG8gbWF0Y2ggdGhlIGZvbGxvd2luZwpvcHRpb24sIGFuZCBhbHNvIHJlb3Jk
-ZXJlZCB0aGVtIGFmdGVyLCB0b286Cgo+ICBjb25maWcgQlIyX1BBQ0tBR0VfTElOVVhfRklSTVdB
-UkVfTUVESUFURUtfTVQ3NjUwCj4gIAlib29sICJNZWRpYVRlayBNVDc2NTAiCj4gIAloZWxwCj4g
-QEAgLTM4Myw2ICszOTMsMTYgQEAgY29uZmlnIEJSMl9QQUNLQUdFX0xJTlVYX0ZJUk1XQVJFX01F
-RElBVEVLX01UNzZYMkUKPiAgCWhlbHAKPiAgCSAgTWVkaWFUZWsgTVQ3NngyZQo+ICAKPiArY29u
-ZmlnIEJSMl9QQUNLQUdFX0xJTlVYX0ZJUk1XQVJFX01FRElBVEVLX01UNzkyMQoKSGVyZSwgdGhl
-IFdpRmktcmVsYXRlZCBvcHRpb25zIGFscmVhZHkgaGFkIHRoZSAiTUVESUFURUsiIHBhcnQsIHNv
-IHRoZQpCVCBvbmVzIHdlcmUgcmVhbGx5IHN0YW5kaW5nIGFwYXJ0IHdpdGhvdXQgaXQuCgo+ICsJ
-Ym9vbCAiTWVkaWFUZWsgTVQ3OTIxIgo+ICsJaGVscAo+ICsJICBNZWRpYVRlayBNVDc5MjEKPiAr
-Cj4gK2NvbmZpZyBCUjJfUEFDS0FHRV9MSU5VWF9GSVJNV0FSRV9NRURJQVRFS19NVDc5MjIKPiAr
-CWJvb2wgIk1lZGlhVGVrIE1UNzkyMiIKPiArCWhlbHAKPiArCSAgTWVkaWFUZWsgTVQ3OTIyCj4g
-Kwo+ICBjb25maWcgQlIyX1BBQ0tBR0VfTElOVVhfRklSTVdBUkVfUVVBTENPTU1fNjE3NAo+ICAJ
-Ym9vbCAiUXVhbGNvbW0gQXRoZXJvcyA2MTc0Igo+ICAJaGVscAo+IGRpZmYgLS1naXQgYS9wYWNr
-YWdlL2xpbnV4LWZpcm13YXJlL2xpbnV4LWZpcm13YXJlLm1rIGIvcGFja2FnZS9saW51eC1maXJt
-d2FyZS9saW51eC1maXJtd2FyZS5tawo+IGluZGV4IGQwNjFjOWY0MDIuLmE2YTEzOGIzYTMgMTAw
-NjQ0Cj4gLS0tIGEvcGFja2FnZS9saW51eC1maXJtd2FyZS9saW51eC1maXJtd2FyZS5tawo+ICsr
-KyBiL3BhY2thZ2UvbGludXgtZmlybXdhcmUvbGludXgtZmlybXdhcmUubWsKPiBAQCAtNTksNiAr
-NTksMTggQEAgTElOVVhfRklSTVdBUkVfRklMRVMgKz0gaW50ZWwvaWJ0LSoKPiAgTElOVVhfRklS
-TVdBUkVfQUxMX0xJQ0VOU0VfRklMRVMgKz0gTElDRU5DRS5pYnRfZmlybXdhcmUKPiAgZW5kaWYK
-PiAgCj4gKyMgTWVkaWF0ZWsgTVQ3OTIxIEJsdWV0b290aAo+ICtpZmVxICgkKEJSMl9QQUNLQUdF
-X0xJTlVYX0ZJUk1XQVJFX01UNzkyMV9CVCkseSkKPiArTElOVVhfRklSTVdBUkVfRklMRVMgKz0g
-bWVkaWF0ZWsvQlRfUkFNX0NPREVfTVQ3OTYxXzFfMl9oZHIuYmluCj4gK0xJTlVYX0ZJUk1XQVJF
-X0FMTF9MSUNFTlNFX0ZJTEVTICs9IExJQ0VOQ0UubWVkaWF0ZWsKPiArZW5kaWYKPiArCj4gKyMg
-TWVkaWF0ZWsgTVQ3OTIyIEJsdWV0b290aAo+ICtpZmVxICgkKEJSMl9QQUNLQUdFX0xJTlVYX0ZJ
-Uk1XQVJFX01UNzkyMl9CVCkseSkKPiArTElOVVhfRklSTVdBUkVfRklMRVMgKz0gbWVkaWF0ZWsv
-QlRfUkFNX0NPREVfTVQ3OTIyXzFfMV9oZHIuYmluCj4gK0xJTlVYX0ZJUk1XQVJFX0FMTF9MSUNF
-TlNFX0ZJTEVTICs9IExJQ0VOQ0UubWVkaWF0ZWsKPiArZW5kaWYKClRoZSBvcmRlcmluZyBpbiB0
-aGUgLm1rIGlzIGEgYml0IGxvb3NlLCBidXQgdGhlcmUgaXMgc29tZSBraW5kIG9mCmFscGhhYmV0
-aWNhbCBvcmRlcmluZyBhbnl3YXksIHNvIEkgbW92ZWQgYWxsIHRoZSBuZXcgTWVkaWF0ZWsgb3B0
-aW9uCnRvZ2V0aGVyIHdpdGggdGhlIGV4aXN0aW5nIEJUIG9uZS4KCkFsc28sIHRoZXJlIHdhcyBu
-byBoYXNoIGZvciB0aGUgbGljZW5zZSBmaWxlLCBzbyBJIGFkZGVkIG9uZS4gUGxlYXNlCmNoZWNr
-IGl0IG9uIHlvdXIgc2lkZSwgdG8gZWIgc3VyZSB3ZSBnZXQgdGhlIHNhbWUuCgpBcHBsaWVkIHRv
-IG1hc3RlciB3aXRoIHRoZSBhYm92ZSBmaXhlcyAsIHRoYW5rcy4KClJlZ2FyZHMsCllhbm4gRS4g
-TU9SSU4uCgo+ICAjIFF1YWxjb21tIEF0aGVyb3MgUm9tZSA2MTc0QSBCbHVldG9vdGgKPiAgaWZl
-cSAoJChCUjJfUEFDS0FHRV9MSU5VWF9GSVJNV0FSRV9RVUFMQ09NTV82MTc0QV9CVCkseSkKPiAg
-TElOVVhfRklSTVdBUkVfRklMRVMgKz0gcWNhL3JhbXBhdGNoX3VzYl8wMDAwMDMwMi5iaW4gcWNh
-L252bV91c2JfMDAwMDAzMDIuYmluCj4gQEAgLTM4Miw2ICszOTQsMjAgQEAgTElOVVhfRklSTVdB
-UkVfRklMRVMgKz0gbWVkaWF0ZWsvbXQ3NjYyLmJpbiBtZWRpYXRlay9tdDc2NjJfcm9tX3BhdGNo
-LmJpbgo+ICBMSU5VWF9GSVJNV0FSRV9BTExfTElDRU5TRV9GSUxFUyArPSBMSUNFTkNFLnJhbGlu
-a19hX21lZGlhdGVrX2NvbXBhbnlfZmlybXdhcmUKPiAgZW5kaWYKPiAgCj4gKyMgTVQ3OTIxCj4g
-K2lmZXEgKCQoQlIyX1BBQ0tBR0VfTElOVVhfRklSTVdBUkVfTUVESUFURUtfTVQ3OTIxKSx5KQo+
-ICtMSU5VWF9GSVJNV0FSRV9GSUxFUyArPSBtZWRpYXRlay9XSUZJX01UNzk2MV9wYXRjaF9tY3Vf
-MV8yX2hkci5iaW4gXAo+ICsJCQltZWRpYXRlay9XSUZJX1JBTV9DT0RFX01UNzk2MV8xLmJpbgo+
-ICtMSU5VWF9GSVJNV0FSRV9BTExfTElDRU5TRV9GSUxFUyArPSBMSUNFTkNFLm1lZGlhdGVrCj4g
-K2VuZGlmCj4gKwo+ICsjIE1UNzkyMgo+ICtpZmVxICgkKEJSMl9QQUNLQUdFX0xJTlVYX0ZJUk1X
-QVJFX01FRElBVEVLX01UNzkyMikseSkKPiArTElOVVhfRklSTVdBUkVfRklMRVMgKz0gbWVkaWF0
-ZWsvV0lGSV9NVDc5MjJfcGF0Y2hfbWN1XzFfMV9oZHIuYmluIFwKPiArCQkJbWVkaWF0ZWsvV0lG
-SV9SQU1fQ09ERV9NVDc5MjJfMS5iaW4KPiArTElOVVhfRklSTVdBUkVfQUxMX0xJQ0VOU0VfRklM
-RVMgKz0gTElDRU5DRS5tZWRpYXRlawo+ICtlbmRpZgo+ICsKPiAgIyBxY2E2MTc0Cj4gIGlmZXEg
-KCQoQlIyX1BBQ0tBR0VfTElOVVhfRklSTVdBUkVfUVVBTENPTU1fNjE3NCkseSkKPiAgTElOVVhf
-RklSTVdBUkVfRklMRVMgKz0gYXRoMTBrL1FDQTYxNzQKPiAtLSAKPiAyLjM0LjEKPiAKPiBfX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGJ1aWxkcm9vdCBt
-YWlsaW5nIGxpc3QKPiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+IGh0dHBzOi8vbGlzdHMuYnVp
-bGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAoKLS0gCi4tLS0tLS0tLS0tLS0t
-LS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0t
-LS0tLS0tLS0uCnwgIFlhbm4gRS4gTU9SSU4gIHwgUmVhbC1UaW1lIEVtYmVkZGVkIHwgLyJcIEFT
-Q0lJIFJJQkJPTiB8IEVyaWNzJyBjb25zcGlyYWN5OiB8CnwgKzMzIDY2MiAzNzYgMDU2IHwgU29m
-dHdhcmUgIERlc2lnbmVyIHwgXCAvIENBTVBBSUdOICAgICB8ICBfX18gICAgICAgICAgICAgICB8
-CnwgKzMzIDU2MSAwOTkgNDI3IGAtLS0tLS0tLS0tLS0uLS0tLS0tLTogIFggIEFHQUlOU1QgICAg
-ICB8ICBcZS8gIFRoZXJlIGlzIG5vICB8CnwgaHR0cDovL3ltb3Jpbi5pcy1hLWdlZWsub3JnLyB8
-IF8vKlxfIHwgLyBcIEhUTUwgTUFJTCAgICB8ICAgdiAgIGNvbnNwaXJhY3kuICB8CictLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0t
-LS0tLS0tLS0tLS0tLS0nCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0
-cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Yang Li, All,
+
+On 2024-01-03 15:39 +0800, Yang Li spake thusly:
+> Add support of Amlogic bluetooth firmware.
+> 
+> Signed-off-by: Yang Li <yang.li@amlogic.com>
+> ---
+>  package/linux-firmware/Config.in         | 9 +++++++++
+>  package/linux-firmware/linux-firmware.mk | 6 ++++++
+>  2 files changed, 15 insertions(+)
+> 
+> diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+> index 5befe50122..9b7ead89d9 100644
+> --- a/package/linux-firmware/Config.in
+> +++ b/package/linux-firmware/Config.in
+> @@ -602,4 +602,13 @@ config BR2_PACKAGE_LINUX_FIRMWARE_CX231XX
+>  
+>  endmenu
+>  
+> +menu "Amlogic Firmware"
+
+As the commit log states, and the file path implies, it is a Bluetotth
+firmware, so there is no need for a new submenu, and I moved the entry
+to the Bluettoth submenu.
+
+> +config BR2_PACKAGE_LINUX_FIRMWARE_AMLOGIC
+> +	bool "Support Amlogic SOC firmware"
+> +	help
+> +	  Firmware files for Conexant Amlogic SOC driver.
+> +
+> +endmenu
+> +
+>  endif
+> diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+> index 96905dd909..4d02aeb714 100644
+> --- a/package/linux-firmware/linux-firmware.mk
+> +++ b/package/linux-firmware/linux-firmware.mk
+> @@ -811,6 +811,12 @@ LINUX_FIRMWARE_FILES += v4l-cx231xx-avcore-01.fw
+>  # which is installed unconditionally
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_AMLOGIC),y)
+> +LINUX_FIRMWARE_FILES += amlogic/bluetooth/*.bin
+> +# No license file; the license is in the file WHENCE
+> +# which is installed unconditionally
+
+Actually, there is one, aptly named LICENSE.amlogic, which is also
+referred to in the WHENCE file. So I added it, and aded a hash for it
+too. Please check on your side that you get the same hash as the one I
+added.
+
+Applied to master with the above fixes, thanks.
+
+Regards,
+Yann E. MORIN.
+
+> +endif
+> +
+>  ifneq ($(LINUX_FIRMWARE_FILES)$(LINUX_FIRMWARE_DIRS),)
+>  
+>  define LINUX_FIRMWARE_BUILD_CMDS
+> -- 
+> 2.42.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
