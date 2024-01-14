@@ -4,65 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28A3FC4707B
-	for <buildroot@archiver.kernel.org>; Sun, 14 Jan 2024 12:33:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CC9CC4707B
+	for <buildroot@archiver.kernel.org>; Sun, 14 Jan 2024 12:38:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AD92F418D0;
-	Sun, 14 Jan 2024 12:33:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD92F418D0
+	by smtp4.osuosl.org (Postfix) with ESMTP id E206840510;
+	Sun, 14 Jan 2024 12:38:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E206840510
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id c5u7S0OeOqAE; Sun, 14 Jan 2024 12:33:40 +0000 (UTC)
+	with ESMTP id QnPgYTkwdZuG; Sun, 14 Jan 2024 12:38:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BFA94418D2;
-	Sun, 14 Jan 2024 12:33:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BFA94418D2
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 013811BF59E
- for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 12:33:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3C2DA404EF;
+	Sun, 14 Jan 2024 12:38:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C2DA404EF
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7C0041BF59E
+ for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 12:38:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CBF1C418D2
- for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 12:33:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CBF1C418D2
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5A4FD60AC1
+ for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 12:38:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5A4FD60AC1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3h69mXuoF5Ft for <buildroot@lists.busybox.net>;
- Sun, 14 Jan 2024 12:33:37 +0000 (UTC)
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C033B418D0
- for <buildroot@buildroot.org>; Sun, 14 Jan 2024 12:33:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C033B418D0
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 5724013F846;
- Sun, 14 Jan 2024 13:33:31 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 14 Jan 2024 13:33:31 +0100
-Date: Sun, 14 Jan 2024 13:33:31 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <ZaPUmxh3jgrzCmEc@landeda>
-References: <20240113100654.85904-1-fontaine.fabrice@gmail.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DNF9I-JS9-Bo for <buildroot@lists.busybox.net>;
+ Sun, 14 Jan 2024 12:38:51 +0000 (UTC)
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5ED5160ABD
+ for <buildroot@buildroot.org>; Sun, 14 Jan 2024 12:38:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5ED5160ABD
+Received: by mail-wr1-x433.google.com with SMTP id
+ ffacd0b85a97d-336c5b5c163so4709202f8f.1
+ for <buildroot@buildroot.org>; Sun, 14 Jan 2024 04:38:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1705235928; x=1705840728;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=Nh9/8spEKRUxCxU11KK70ArSZtJ4qkv/zDh1j+g1spM=;
+ b=GTYnt8bIIgKw87/LPutU8ii4I+75q2ieh++ZhHgII8KPIs5PCbLUv+r2F0Hmo2NTd1
+ HuiaRxCK+SGFeT9CWv50E4BbgZI97zb5RRtSUbCqMUmLuoqJE+d+UbrC7PKURmuU+HrO
+ ImQ4ipremUTOQ9P119MLjd8GUT7qtjx2+7WoZ1PruQkf5FVDjVHvHuJRkSdjenohpe45
+ E6ak2jw72kVYxoDX/ihfRj/yWcSLLDP4CzRiPa+0i/VLSTyhVdvPRdJ/nj9j64kZERP/
+ NW+dvLUaQumfaF0ifPE1fUhVOGqT/E4GNjzfIr/8KBL6IQBZ1UK+FH0UPuevw4cNqdqD
+ TO7g==
+X-Gm-Message-State: AOJu0YxmYlQhsTD3SSW/qnK5R7NC6P8NLpEkViai6jLG9D0dGOix61lf
+ tB9N528UjFx1HWKbhhGRqrej9q/v6GI=
+X-Google-Smtp-Source: AGHT+IETuvMq6qSQwt4goVSWEaoOITllRUAs93kz4w77M4fp4YQo3NeqynWSjpMXvdihuLixsfnQOw==
+X-Received: by 2002:adf:a3d9:0:b0:336:7a5c:ffc3 with SMTP id
+ m25-20020adfa3d9000000b003367a5cffc3mr3065345wrb.14.1705235928362; 
+ Sun, 14 Jan 2024 04:38:48 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ m7-20020a5d4a07000000b003365fc41bcasm9030648wrq.51.2024.01.14.04.38.47
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 14 Jan 2024 04:38:48 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 14 Jan 2024 13:38:45 +0100
+Message-ID: <20240114123845.810225-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240113100654.85904-1-fontaine.fabrice@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1705235614;
- bh=J/2BZux5j20IDyuMeK7Rs2IRL+JBXPEQPn5Uhsy6c2Y=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=Zw9w9PhHBAs6/E5/c7BYMsfJkEdmFVQXAErHMjb92RTZKaQhYw7F89GrGlZftmdg0
- hkvz0VvEDZMjCGZHXy52BbNPmnPc10zyi3nL783JLPoUyeKwcK18d7yZ9DamF3Gr+U
- Fz2j8oiVRaBU9TljJd+vZbaAIWkSPMTFaedzEP5xxQXc4xht6ity87C1R07WAF4l+U
- hjKyCV8DxU03BpyrXUIdKcoFO55hI/OxWcEBciZhPcGchN2kmJMb38YHBOr33ir7O2
- 6/ldPn09CONVzW66copnMVe2q6NsRTtz+C7gwJSIT2aAUF3c/ffj3XCEql3qoxwpiQ
- djd27il7tL6vg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Zw9w9PhH
-Subject: Re: [Buildroot] [PATCH 1/1] package/apcupsd: set LD to TARGET_CXX
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1705235928; x=1705840728; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=Nh9/8spEKRUxCxU11KK70ArSZtJ4qkv/zDh1j+g1spM=;
+ b=SjqxZhwk78bRiG7JjuztoCVkej/C2ped/ozd5KgpOQZIvDXKkJ3z3oBuxgH14TYYkM
+ wlYara7Zt6858uWYSEW9ETzF9hd+joqrItYFv/AYvUqUVM40KbAknkYgmYQs7T0NU2Vn
+ 0YqNeyA74aY08Lf+YOcEL5Cciib8hFKqZQT7zmaj8Nfsep87HbUWJz+7/1xdkWO9rgRu
+ XM5MNoOxhknEvknAu0Mc/JmQY4AJZZ06VO2JsW89F6c5kH47NG35/nBEHXm/oPRHTx2f
+ jfW+4mM0bC2ggCOO9NiZPteWSwTJY5oZVhfvTJE+8YTX0o55Xas3mYntdf43MH7OUI98
+ vSdg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=SjqxZhwk
+Subject: [Buildroot] [PATCH v2,1/1] package/criu: disable on aarch64_be
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,90 +93,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+Cc: Marcus Folkesson <marcus.folkesson@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+armv8a aarch64_be raises the following build failure since the addition
+of the package in commit 3e4b479f39c15ffdf307ec8395d856680c727204:
 
-James, question for you, below...
+Error (compel/arch/aarch64/src/lib/handle-elf-host.c:30): Unsupported Elf format detected
 
-On 2024-01-13 11:06 +0100, Fabrice Fontaine spake thusly:
-> As found out by Yann E. Morin in [1], apcupsd configure script is ugly,
-> and uses gcc to do the link line-wrapping which will raise the following
-> build failure with gcc 13:
-> 
-> /home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/powerpc64le-buildroot-linux-gnu/13.2.0/../../../../powerpc64le-buildroot-linux-gnu/bin/ld: /home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/powerpc64le-buildroot-linux-gnu/13.2.0/../../../../powerpc64le-buildroot-linux-gnu/lib/../lib64/libsupc++.a(eh_alloc.o): in function `std::basic_string_view<char, std::char_traits<char> >::compare(unsigned long, unsigned long, char const*, unsigned long) const':
-> eh_alloc.cc:(.text._ZNKSt17basic_string_viewIcSt11char_traitsIcEE7compareEmmPKcm[_ZNKSt17basic_string_viewIcSt11char_traitsIcEE7compareEmmPKcm]+0x44): undefined reference to `std::__throw_out_of_range_fmt(char const*, ...)'
-> 
-> It will also raise the following build failure on sparc/arc:
-> 
-> /home/autobuild/autobuild/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arceb-snps-linux-uclibc/9.2.1/../../../../arceb-snps-linux-uclibc/bin/ld: /home/autobuild/autobuild/instance-3/output-1/host/arceb-buildroot-linux-uclibc/sysroot/lib/libsupc++.a(eh_throw.o): in function `__exchange_and_add_dispatch':
-> /SCRATCH/arcjenkins2/slaves/ru20-custom-arcgnu2/workspace/arcoss_verification/arc_gnu_toolchain_release/arc_gnu_toolchain_release/bd-uclibceb/gcc-stage2/arceb-snps-linux-uclibc/libstdc++-v3/include/ext/atomicity.h:82: undefined reference to `__gnu_cxx::__exchange_and_add(int volatile*, int)'
-> /home/autobuild/autobuild/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arceb-snps-linux-uclibc/9.2.1/../../../../arceb-snps-linux-uclibc/bin/ld: /SCRATCH/arcjenkins2/slaves/ru20-custom-arcgnu2/workspace/arcoss_verification/arc_gnu_toolchain_release/arc_gnu_toolchain_release/bd-uclibceb/gcc-stage2/arceb-snps-linux-uclibc/libstdc++-v3/include/ext/atomicity.h:82: undefined reference to `__gnu_cxx::__exchange_and_add(int volatile*, int)'
-> 
-> Instead of trying to patch the configure script as advocated by
-> Yann E. Morin, set LD to TARGET_CXX as:
->  - this solution is quicker
->  - usptream is dead (last release in 2016)
+Fixes:
+ - http://autobuild.buildroot.org/results/8eaa881a926d138a0bfd3f1076246088994e883f
+ - http://autobuild.buildroot.org/results/8de9b4d6b26e06f6b4457a31366bdc0d8a8c34ae
 
-Last release was 3.14.14. Too bad they did not do 3.14.15.. ;-)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2 (after review of Yann E. Morin):
+ - Fix condition to only exclude aarch64_be, not armeb
 
-Seriously, though: is apcupsd still needed, when we have nut that
-handles a large number of UPSes:
-    https://networkupstools.org/ddl/APC/
+ package/criu/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-James, as you were the one to introduce apcupsd: what does apcupsd do
-that nut does not provide for?
-
->  - this solution has already been used in other packages (nodejs, zmqpp)
-> 
-> [1]: https://patchwork.ozlabs.org/project/buildroot/patch/20200812171821.2517-1-Evgeniy.Didin@synopsys.com/
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/6096c3ddc5edf3204635c2c90246c2e8c8e074e7
->  - http://autobuild.buildroot.org/results/d8a/d8a3ab31c5b86871c7e1117f4ffa7b6cedfcb7e0/build-end.log
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Applied to master, thanks.
-
-> ---
->  package/apcupsd/apcupsd.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/apcupsd/apcupsd.mk b/package/apcupsd/apcupsd.mk
-> index 80ed0b0832..97e6d6a558 100644
-> --- a/package/apcupsd/apcupsd.mk
-> +++ b/package/apcupsd/apcupsd.mk
-> @@ -71,8 +71,8 @@ APCUPSD_CONF_OPTS += --disable-usb
->  endif
->  
->  define APCUPSD_BUILD_CMDS
-> -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src
-> -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/platforms
-> +	$(TARGET_MAKE_ENV) $(MAKE) LD="$(TARGET_CXX)" -C $(@D)/src
-> +	$(TARGET_MAKE_ENV) $(MAKE) LD="$(TARGET_CXX)" -C $(@D)/platforms
->  endef
->  
->  define APCUPSD_INSTALL_TARGET_CMDS
-> -- 
-> 2.43.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/criu/Config.in b/package/criu/Config.in
+index 4c295acf4f..a5adc0cedd 100644
+--- a/package/criu/Config.in
++++ b/package/criu/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_CRIU_ARCH_SUPPORTS
+ 	default y if BR2_ARM_CPU_ARMV6
+ 	default y if BR2_ARM_CPU_ARMV7A
+ 	default y if BR2_ARM_CPU_ARMV7M
+-	default y if BR2_ARM_CPU_ARMV8A
++	default y if BR2_ARM_CPU_ARMV8A && !BR2_aarch64_be
+ 	default y if BR2_aarch64
+ 	default y if BR2_x86_64
+ 	default y if BR2_powerpc64le # Only support powerpc64 with LE
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
