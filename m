@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E32C1C47077
-	for <buildroot@archiver.kernel.org>; Sun, 14 Jan 2024 16:43:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1698EC4707B
+	for <buildroot@archiver.kernel.org>; Sun, 14 Jan 2024 16:43:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 79A7260669;
-	Sun, 14 Jan 2024 16:43:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 79A7260669
+	by smtp3.osuosl.org (Postfix) with ESMTP id C7976600C9;
+	Sun, 14 Jan 2024 16:43:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7976600C9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FnEEMyY79DT1; Sun, 14 Jan 2024 16:43:30 +0000 (UTC)
+	with ESMTP id R6LB8DfLEh7D; Sun, 14 Jan 2024 16:43:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C26F960743;
-	Sun, 14 Jan 2024 16:43:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C26F960743
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8DADC1BF41F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0D82B60E6D;
+	Sun, 14 Jan 2024 16:43:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D82B60E6D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9F0031BF86D
  for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 16:43:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6744D402DC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 83884409DB
  for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 16:43:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6744D402DC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 83884409DB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dau8xAedfnjj for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8iuGsVIh6wzM for <buildroot@lists.busybox.net>;
  Sun, 14 Jan 2024 16:43:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 59FB8402DA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 39E22409B5
  for <buildroot@buildroot.org>; Sun, 14 Jan 2024 16:43:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 59FB8402DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 39E22409B5
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 475FB86157; Sun, 14 Jan 2024 16:43:15 +0000 (UTC)
+ id 248B183233; Sun, 14 Jan 2024 16:43:15 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 14 Jan 2024 17:38:06 +0100
+Date: Sun, 14 Jan 2024 17:34:15 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: cf79204de42758317c254d4b618dcaf99f74d165
-X-Git-Newrev: f092de882dd9a87723842272fb33078e57f1cea9
+X-Git-Oldrev: 92ab91d60e9f438f6017300eee59b492bd801a7d
+X-Git-Newrev: b3225459ebc5d02079ff3a487f80b0491e5423ac
 X-Patchwork-Hint: ignore
-Message-Id: <20240114164315.475FB86157@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/wireshark:
- security bump to version 4.0.12
+Message-Id: <20240114164315.248B183233@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] {linux,
+ linux-headers}: bump 4.{14, 19}.x / 5.{4, 10, 15}.x / 6.{1, 6}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,53 +63,77 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f092de882dd9a87723842272fb33078e57f1cea9
+commit: https://git.buildroot.net/buildroot/commit/?id=b3225459ebc5d02079ff3a487f80b0491e5423ac
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-- GVCP dissector crash. CVE-2024-0208.
-- IEEE 1609.2 dissector crash. CVE-2024-0209.
-
-https://www.wireshark.org/security/wnpa-sec-2024-01
-https://www.wireshark.org/security/wnpa-sec-2024-02
-
-https://www.wireshark.org/docs/relnotes/wireshark-4.0.12
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 1e3d206f154915ec86d7750bf7f846b6da412a1a)
+(cherry picked from commit 069da87a89da7275389065fd4ca9dbfefb453aad)
+[Peter: drop 6.6.x bump]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireshark/wireshark.hash | 6 +++---
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 10 +++++-----
+ package/linux-headers/Config.in.host | 10 +++++-----
+ 3 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index a6ef69b1af..6610eb7781 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,6 +1,6 @@
--# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.0.11.txt
--sha1  4af3140d69f9d41e1c4e161fad66304a6920ddce  wireshark-4.0.11.tar.xz
--sha256  4c341cc33a6c512d983f4126e6f3e5c249f604e14ab7f337d38b1cbe58199e3d  wireshark-4.0.11.tar.xz
-+# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.0.12.txt
-+sha1  e00d90769995bf786b05c05bdd9a2c6c8e372e70  wireshark-4.0.12.tar.xz
-+sha256  e4e3d618ba11e159fb163f0dc4716a8b72a065aafd1111db9405332552a5a115  wireshark-4.0.12.tar.xz
+diff --git a/linux/Config.in b/linux/Config.in
+index 71f8586f2f..e9f5ffe9e4 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -128,7 +128,7 @@ endif
  
- # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 6fb4b60f2b..3759f9bf94 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.1.71" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.1.72" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 418d3d2cba..ec86d5fe5c 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,12 +1,12 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  2df774dd53f9ffd4e57ebf804cf597709295df6a304fe261d25220a134b7f041  linux-6.1.71.tar.xz
++sha256  98dce69077c35cffca799dcdbbd32a02242aad6b0950eb931936bb2ef69f0926  linux-6.1.72.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+ sha256  5a807a5fa2a80ada957d8079681dfb5cc196ec26f43244d1c8a4fd7af592d192  linux-5.15.146.tar.xz
+-sha256  c43d613216e6c5197519a4e979de5c1b510100858ff591963931c99e59c7485b  linux-5.10.206.tar.xz
+-sha256  4dae99e49f466d4689e128ec023754908147159d7462019a83c7da1f25df9b15  linux-5.4.265.tar.xz
++sha256  86ace9892296bf1534d574894edd27614b68de4085c03fd3f60121751a334f1b  linux-5.10.207.tar.xz
++sha256  da072f7e6fe719c01e517cac1fa9988b2f5fa87d62a8501b7dc16d3b62b2acb6  linux-5.4.266.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256  022dce3935eadec7c31093992cc101c905fd4ffbb8afce92f3e41fdd0fa18b36  linux-4.19.303.tar.xz
+-sha256  8a1d520cfa71e9faebae9d8c24101f5bffe48fcb897dede4cecad5af67c34a45  linux-4.14.334.tar.xz
++sha256  cdc6a5d51aaff7c50bfe4ac4adf5cc3727043a24641145dc268e858db2a4b598  linux-4.19.304.tar.xz
++sha256  0820fdb7971c6974338081c11fbf2dc869870501e7bdcac4d0ed58ba1f57b61c  linux-4.14.336.tar.xz
+ # Locally computed
+ sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
+ sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 57d09b136e..8c30ce2e78 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -384,12 +384,12 @@ endchoice
  
--WIRESHARK_VERSION = 4.0.11
-+WIRESHARK_VERSION = 4.0.12
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.14.334"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.303"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.265"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.206"	if BR2_KERNEL_HEADERS_5_10
++	default "4.14.336"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.304"	if BR2_KERNEL_HEADERS_4_19
++	default "5.4.266"	if BR2_KERNEL_HEADERS_5_4
++	default "5.10.207"	if BR2_KERNEL_HEADERS_5_10
+ 	default "5.15.146"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.1.71"	if BR2_KERNEL_HEADERS_6_1
++	default "6.1.72"	if BR2_KERNEL_HEADERS_6_1
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
