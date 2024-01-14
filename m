@@ -1,88 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B57B5C47077
-	for <buildroot@archiver.kernel.org>; Sun, 14 Jan 2024 13:54:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D952C4707B
+	for <buildroot@archiver.kernel.org>; Sun, 14 Jan 2024 15:56:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 57A3B40466;
-	Sun, 14 Jan 2024 13:54:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 57A3B40466
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9IXNYwnN36sP; Sun, 14 Jan 2024 13:54:56 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 27CFD4054B;
-	Sun, 14 Jan 2024 13:54:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 27CFD4054B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 12BDE1BF372
- for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 13:54:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ECE0160AB1
- for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 13:54:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ECE0160AB1
+	by smtp3.osuosl.org (Postfix) with ESMTP id D9D4060AC3;
+	Sun, 14 Jan 2024 15:56:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D9D4060AC3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id b0FWq3JRAB_1 for <buildroot@lists.busybox.net>;
- Sun, 14 Jan 2024 13:54:52 +0000 (UTC)
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C687C60A9F
- for <buildroot@buildroot.org>; Sun, 14 Jan 2024 13:54:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C687C60A9F
-Received: by mail-wm1-x32b.google.com with SMTP id
- 5b1f17b1804b1-40e779f030aso676145e9.0
- for <buildroot@buildroot.org>; Sun, 14 Jan 2024 05:54:51 -0800 (PST)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id buAhU3DrQ-fe; Sun, 14 Jan 2024 15:56:36 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1CB6A60B8A;
+	Sun, 14 Jan 2024 15:56:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1CB6A60B8A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A2FAF1BF4DB
+ for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 15:56:33 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7C5C382438
+ for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 15:56:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7C5C382438
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WpaSuCDvOssF for <buildroot@lists.busybox.net>;
+ Sun, 14 Jan 2024 15:56:32 +0000 (UTC)
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6493D82437
+ for <buildroot@buildroot.org>; Sun, 14 Jan 2024 15:56:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6493D82437
+Received: by mail-wm1-x331.google.com with SMTP id
+ 5b1f17b1804b1-40e67e90d5aso20646075e9.1
+ for <buildroot@buildroot.org>; Sun, 14 Jan 2024 07:56:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1705240489; x=1705845289;
+ d=1e100.net; s=20230601; t=1705247789; x=1705852589;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=j0dShVezCM7KQHKzaicxaNvThupGiLer31M6NSyJcdE=;
- b=OgXWsmAi9OyXySlTVCB8CuR6fYYEhnzte97oYlbcoXFcKkFDgNDb8VUKE32iFbIWa8
- zymmvJDbt/LCWpsPNFBx+i62SxesBCnhhes+CoIfxgugqK93+AFnlZa1bRnAo+Q4GWDm
- SqV0JUlScW6PuUw9FmYJhs80fIjY4ur9OThWrw760B/PCD94SJd9SoSOgO2IvEOubrA2
- GOO50KYo5kgmDGU7dcX5pqfirGGKSFfJNnT3oGJZn4prp9urhYdgWVZQkkMxToZ3uLOn
- mdRvEXsJZmrMpAsXVIvw8jzmRQReAEyz2ffT+K0TTPqMa6UenSj0pd6N9EmlktUSjOMj
- OiPg==
-X-Gm-Message-State: AOJu0Yzyf42O74PQVHXyTRxqu26iSqfArFQkUyaS50+Wuqd0CuED92vT
- P2TtTvqMxSyYkqfva018YO5VOrYWn7U=
-X-Google-Smtp-Source: AGHT+IF5ORl9gSjAJv0wEXZ5x57fP1jCMpFY4BQ1QSlKaa1PRa0AtmE/Jy+Zv7XrZDKhvfAreorqbQ==
-X-Received: by 2002:a05:600c:4fcb:b0:40e:45c0:ad64 with SMTP id
- o11-20020a05600c4fcb00b0040e45c0ad64mr2039206wmq.14.1705240488573; 
- Sun, 14 Jan 2024 05:54:48 -0800 (PST)
+ bh=+1CgVwRLq9lL1X4DgBWcND/ApWyJVC6Q32iKyp/wWeo=;
+ b=XlGEKjkgTAZlLKeD3qDZAv6Vqs6vdZE5QalfcIkfsDmA3FzOZijLA1QhF6J/AaUmVA
+ Ef4vx0yHnMReNIiDGQw2vUZiGSAeGcDHrgBL69dGDXkNPaABUOKHkuGxP5vXMtQRHyDZ
+ IqaPVJPLv3N47w1RywVVUdko6/qixEn+geM9+u3lyse0AaF0tdpJSDRb9tnEatDJBin9
+ eo5r0yH7x624lL4RTYJ3q0T5b/w99M/cBxnG3MnSUP92mf1UDEdt4Yxup4Z7ttsOYoJz
+ 0uIWtsxVLhqee68WYdN3BpEco8nyr97d9KzMlPx39ZqJJ7LOV0wDGqZWEtft+5nmF+DS
+ 1SXg==
+X-Gm-Message-State: AOJu0YzQNZE14y3FRr/F6zWXFhISURNrHKf00Zg+i7lucZVotKHaNBf+
+ W0Mu4fXpIZKdtOxjy1zyC9ddZPqKpZ0=
+X-Google-Smtp-Source: AGHT+IFE+BbQjOUTWo933ngmtflkyhReH+CsT8y5Tyh5N1WsSXxUYopwf2coPUeP+JzwBq8vJ+VELQ==
+X-Received: by 2002:a05:600c:3b06:b0:40e:4a7b:f5df with SMTP id
+ m6-20020a05600c3b0600b0040e4a7bf5dfmr2644423wms.127.1705247789216; 
+ Sun, 14 Jan 2024 07:56:29 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- x9-20020adfec09000000b00336b8461a5esm9192303wrn.88.2024.01.14.05.54.48
+ l6-20020a7bc346000000b0040d81ca11casm12654065wmj.28.2024.01.14.07.56.28
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 14 Jan 2024 05:54:48 -0800 (PST)
+ Sun, 14 Jan 2024 07:56:28 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 14 Jan 2024 14:54:46 +0100
-Message-ID: <20240114135446.1156025-1-fontaine.fabrice@gmail.com>
+Date: Sun, 14 Jan 2024 16:56:26 +0100
+Message-ID: <20240114155626.1563626-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1705240489; x=1705845289; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1705247789; x=1705852589; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=j0dShVezCM7KQHKzaicxaNvThupGiLer31M6NSyJcdE=;
- b=FlNSXZafPdWIBEVBMaShFSeA/SlFkNYtrh3IuYx+1MxQY3SGS8MyKM4gzaaN7MiepE
- kuKMPgfWu/oo0Ik+Pp/FweAFIxSwUn47aSRdUJ6zx2koW9BYHY9rLlTk0WG2UBeH1KqB
- OipHPMGatc1b4EOUZB7RY1hfaHwcRRqERrPoFja022HcqyYZEfudp4LVhsBzvfH8JxY0
- uINWfF/J9N5hyVbKLy0hldGrMcrXj39LwC+qDYEriXtf2mZz4u2+JYTQOaG0H8UBb3g5
- +GLcOa6eVUwOOlhkGMYCFv42/PFxuhI2P0OnV11XJNYqHvj28RpAxXppDNazTJRFIzUS
- Sprw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=+1CgVwRLq9lL1X4DgBWcND/ApWyJVC6Q32iKyp/wWeo=;
+ b=O4Ykzk/vlKEGiGnbomN3QemhapOVy0fbc4nkieq30xgR8QMucxwVdfvB8rqboDAGXk
+ +yjCB1EiPrK2MNf+nGxSHF6tvQ+2GG5K+/PFYURDg7q/HLCLODB/G5tXGPiaKyMLTRZN
+ /t02yH0zFaHPAymBNcclOpu6ffizHIyjI4Zb6Xr4JbzkvWct0MfhEOBdt0GsHKNpc6T1
+ odgAyod9h4fIiKHs3ZybeX0UMwopnh5/G35D21e/Dil/Xj1BnG910MkcVgZ2q+FFTHNz
+ OCI9+05qm7K1MDtyvZ6WBoX24Ure0kuoeweetnqEoROrvqRkNi/SIvoC8xAJHJTRBvBW
+ 0RVg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=FlNSXZaf
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/tinymembench: force arm mode instead of Thumb mode
+ header.a=rsa-sha256 header.s=20230601 header.b=O4Ykzk/v
+Subject: [Buildroot] [PATCH 1/1] package/libuwsc: fix wolfssl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,83 +93,118 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Jianhui Zhao <zhaojh329@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure in Thumb mode:
+Commit 1567fbd72d4b547f70a7509247bf9abb73ab58e3 didn't fully fix the
+wolfssl build failure because the include on wolfssl/options.h was still
+missing:
 
-/tmp/ccaZHrla.s:40: Error: instruction not supported in Thumb16 mode -- `subs r1,r1,#16'
-/tmp/ccaZHrla.s:43: Error: instruction not supported in Thumb16 mode -- `subs r1,r1,#16'
-main.c:45: Error: selected processor does not support `mla r2,r10,r2,r5' in Thumb mode
-main.c:46: Error: unshifted register required -- `and r8,r7,r2,lsr#16'
-main.c:47: Error: selected processor does not support `mla r2,r10,r2,r5' in Thumb mode
-main.c:48: Error: unshifted register required -- `and r9,r6,r2,lsr#8'
-main.c:49: Error: selected processor does not support `mla r2,r10,r2,r5' in Thumb mode
+/home/autobuild/autobuild/instance-6/output-1/build/libuwsc-3.3.5/src/ssl.c:62:5: error: unknown type name 'SSL_CTX'
+   62 |     SSL_CTX *ctx;
+      |     ^~~~~~~
 
-While at it, add upstream tag to first patch
+While at it, add upstream tag to patches
 
 Fixes:
- - http://autobuild.buildroot.org/results/1e359c294a8d71fb1833e5d04a6bc7d4fd533510
- - http://autobuild.buildroot.org/results/c06010d7a2bdb33a1707266133a3880e14be7657
+ - http://autobuild.buildroot.org/results/edc49cce5b1f456d980841f4c315e7cd784b1561
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2 (after review of Yann E. Morin):
- - Keep patch
-
- .checkpackageignore                                      | 1 -
- .../0001-arm-fix-build-on-Thumb-only-architectures.patch | 1 +
- package/tinymembench/tinymembench.mk                     | 9 ++++++++-
- 3 files changed, 9 insertions(+), 2 deletions(-)
+ .checkpackageignore                           |  2 -
+ ...001-CMakeLists.txt-add-BUILD_EXAMPLE.patch |  2 +-
+ .../libuwsc/0002-fix-bad-indentation.patch    |  3 +-
+ .../0003-src-ssl.c-fix-wolfssl-build.patch    | 37 +++++++++++++++++++
+ 4 files changed, 39 insertions(+), 5 deletions(-)
+ create mode 100644 package/libuwsc/0003-src-ssl.c-fix-wolfssl-build.patch
 
 diff --git a/.checkpackageignore b/.checkpackageignore
-index 4051805c33..09a1bf35e0 100644
+index 02878eae1c..acc9a596f2 100644
 --- a/.checkpackageignore
 +++ b/.checkpackageignore
-@@ -1296,7 +1296,6 @@ package/tinyalsa/0001-include-time.h-before-asound.h.patch Upstream
- package/tinycbor/0001-Makefile-add-DISABLE_WERROR.patch Upstream
- package/tinycompress/0001-wave-add-time.h-missing-header-inclusion.patch Upstream
- package/tinydtls/0001-sha2-sha2.c-fix-build-on-big-endian.patch Upstream
--package/tinymembench/0001-arm-fix-build-on-Thumb-only-architectures.patch Upstream
- package/tinyproxy/0001-prevent-junk-from-showing-up-in-error-page-in-invalid-requests.patch Upstream
- package/tinyxml/0001-In-stamp-always-advance-the-pointer-if-p-0xef.patch Upstream
- package/tpm2-abrmd/S80tpm2-abrmd Indent Shellcheck Variables
-diff --git a/package/tinymembench/0001-arm-fix-build-on-Thumb-only-architectures.patch b/package/tinymembench/0001-arm-fix-build-on-Thumb-only-architectures.patch
-index 88559ec012..cefa4e995f 100644
---- a/package/tinymembench/0001-arm-fix-build-on-Thumb-only-architectures.patch
-+++ b/package/tinymembench/0001-arm-fix-build-on-Thumb-only-architectures.patch
-@@ -11,6 +11,7 @@ architecture supports the ARM instruction set, by testing the
- __ARM_ARCH_ISA_ARM compiler define.
+@@ -725,8 +725,6 @@ package/libuhttpd/0001-add-compatibility-for-wolfssl-5-0.patch Upstream
+ package/libuio/0001-configure.ac-set-automake-strictness-to-foreign.patch Upstream
+ package/liburcu/0001-Only-blacklist-ARM-gcc-4.8.0-and-4.8.1.patch Upstream
+ package/libusbgx/0001-Add-include-of-sys-sysmacro.h.patch Upstream
+-package/libuwsc/0001-CMakeLists.txt-add-BUILD_EXAMPLE.patch Upstream
+-package/libuwsc/0002-fix-bad-indentation.patch Upstream
+ package/libvpx/0001-vpx_mem-vpx_mem.h-Fix-compilation-with-uClibc.patch Upstream
+ package/libwebsock/0001-Switch-to-use-pkg-config-to-detect-libevent-and-open.patch Upstream
+ package/libwebsock/0002-fix-ssl.patch Upstream
+diff --git a/package/libuwsc/0001-CMakeLists.txt-add-BUILD_EXAMPLE.patch b/package/libuwsc/0001-CMakeLists.txt-add-BUILD_EXAMPLE.patch
+index 197dd1de0f..87f343a9d9 100644
+--- a/package/libuwsc/0001-CMakeLists.txt-add-BUILD_EXAMPLE.patch
++++ b/package/libuwsc/0001-CMakeLists.txt-add-BUILD_EXAMPLE.patch
+@@ -6,7 +6,7 @@ Subject: [PATCH] CMakeLists.txt: add BUILD_EXAMPLE
+ Allow the user to disable example
  
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Upstream: https://github.com/ssvb/tinymembench/pull/13
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[yann.morin.1998@free.fr: backport from upstream]
++Upstream: https://github.com/zhaojh329/libuwsc/commit/bb71b21eb9407479ad729b3c858b0fc350fae335
+ Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
  ---
-  arm-neon.S | 2 +-
-  asm-opt.c  | 2 +-
-diff --git a/package/tinymembench/tinymembench.mk b/package/tinymembench/tinymembench.mk
-index 016d680ce7..bc84595e24 100644
---- a/package/tinymembench/tinymembench.mk
-+++ b/package/tinymembench/tinymembench.mk
-@@ -9,8 +9,15 @@ TINYMEMBENCH_SITE = $(call github,ssvb,tinymembench,v$(TINYMEMBENCH_VERSION))
- TINYMEMBENCH_LICENSE = MIT
- TINYMEMBENCH_LICENSE_FILES = LICENSE
+  CMakeLists.txt | 6 +++++-
+diff --git a/package/libuwsc/0002-fix-bad-indentation.patch b/package/libuwsc/0002-fix-bad-indentation.patch
+index f33f944d06..77cae92cf2 100644
+--- a/package/libuwsc/0002-fix-bad-indentation.patch
++++ b/package/libuwsc/0002-fix-bad-indentation.patch
+@@ -5,8 +5,7 @@ Subject: [PATCH] fix bad indentation
  
-+# tinymembench has some assembly function that is not present in Thumb mode:
-+# Error: instruction not supported in Thumb16 mode -- `subs r1,r1,#16'
-+# so, we desactivate Thumb mode
-+ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
-+TINYMEMBENCH_MAKE_OPTS += CFLAGS="$(TARGET_CFLAGS) -marm"
-+endif
+ Fixes error with GCC11.
+ 
+-[Retrieved from:
+-https://github.com/zhaojh329/libuwsc/commit/8cb416140741a596235b8acc46b2b119b13ebfab]
++Upstream: https://github.com/zhaojh329/libuwsc/commit/8cb416140741a596235b8acc46b2b119b13ebfab
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ ---
+  src/lua/uwsc_lua.c | 2 +-
+diff --git a/package/libuwsc/0003-src-ssl.c-fix-wolfssl-build.patch b/package/libuwsc/0003-src-ssl.c-fix-wolfssl-build.patch
+new file mode 100644
+index 0000000000..4c652a63c2
+--- /dev/null
++++ b/package/libuwsc/0003-src-ssl.c-fix-wolfssl-build.patch
+@@ -0,0 +1,37 @@
++From 1c3579e99163a13d622c3ef44088c23d5eea306d Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 14 Jan 2024 16:44:13 +0100
++Subject: [PATCH] src/ssl.c: fix wolfssl build
 +
- define TINYMEMBENCH_BUILD_CMDS
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) $(TINYMEMBENCH_MAKE_OPTS) -C $(@D)
- endef
- 
- define TINYMEMBENCH_INSTALL_TARGET_CMDS
++wolfssl/options.h must also be included by clients to avoid the
++following build failure because OPENSSL_ALL won't be defined:
++
++/home/autobuild/autobuild/instance-6/output-1/build/libuwsc-3.3.5/src/ssl.c:62:5: error: unknown type name 'SSL_CTX'
++   62 |     SSL_CTX *ctx;
++      |     ^~~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/edc49cce5b1f456d980841f4c315e7cd784b1561
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Upstream: N/A (already fixed by
++https://github.com/zhaojh329/ssl/commit/c40ebcd7b4277321acbbd4b00b4b10fd363c7a97)
++---
++ src/ssl.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/ssl.c b/src/ssl.c
++index 3640022..6a3d250 100644
++--- a/src/ssl.c
+++++ b/src/ssl.c
++@@ -54,6 +54,7 @@ struct uwsc_ssl_ctx {
++ #include <openssl/err.h>
++ #elif UWSC_HAVE_WOLFSSL
++ #define WC_NO_HARDEN
+++#include <wolfssl/options.h>
++ #include <wolfssl/openssl/ssl.h>
++ #include <wolfssl/openssl/err.h>
++ #endif
++-- 
++2.43.0
++
 -- 
 2.43.0
 
