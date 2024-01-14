@@ -1,88 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B6B1C4707B
-	for <buildroot@archiver.kernel.org>; Sun, 14 Jan 2024 12:55:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FB36C4707B
+	for <buildroot@archiver.kernel.org>; Sun, 14 Jan 2024 13:46:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A8D7B413A3;
-	Sun, 14 Jan 2024 12:55:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A8D7B413A3
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7816740466;
+	Sun, 14 Jan 2024 13:46:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7816740466
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0Rjef-bbxi7D; Sun, 14 Jan 2024 12:55:05 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id WGu6i_U4n5hT; Sun, 14 Jan 2024 13:46:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B045F4146F;
-	Sun, 14 Jan 2024 12:55:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B045F4146F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 52E3740533;
+	Sun, 14 Jan 2024 13:46:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 52E3740533
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5F33B1BF59E
- for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 12:55:02 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8ABA31BF372
+ for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 13:46:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3781B410E6
- for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 12:55:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3781B410E6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 63400418BD
+ for <buildroot@lists.busybox.net>; Sun, 14 Jan 2024 13:46:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 63400418BD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xhYK4wE9pUrs for <buildroot@lists.busybox.net>;
- Sun, 14 Jan 2024 12:55:01 +0000 (UTC)
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3AE21410CB
- for <buildroot@buildroot.org>; Sun, 14 Jan 2024 12:55:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3AE21410CB
-Received: by mail-wr1-x429.google.com with SMTP id
- ffacd0b85a97d-3376555b756so4338397f8f.0
- for <buildroot@buildroot.org>; Sun, 14 Jan 2024 04:55:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1705236898; x=1705841698;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=i+aPuByGP33jQkj3Bb3GArV2GW0FatEMX8AkRK7tr4Y=;
- b=iaNhKATa8YZaXX70UXyb9sZYhTgyn5WVpmxhiUS0l0x6ApxkMqj1ko6eEqpZxXsM+p
- mhQigAYQ3BHQJrbYMVEzJy1vfYnbvQ8P25aE2OJ3XfI16SRRdJO9+KJ7058AdXEYYlV1
- DudRWHEcA1Vf4p5FyEHWmKRtkqW8otxugk19WulvDLkS6SRdCLm4ESEckmDzpDebXlYU
- /0NImXMr3ucQ+98T8iANCX6+E3f70xsXEjwT2KoSkNYq43p2eZdefw2znWGbhef6prib
- 8eY8d1jbrt1JJVV6cWt1WHodmgoor8N5xchJTtpYiUyCdGs+mJQjrgF6QQL8ndxnWKE5
- s4UA==
-X-Gm-Message-State: AOJu0YxByuOULVLU3mB7gSNrjYXdMRptNyuGoWeMsPMo8dx3JvfrB171
- DcYGHzqfPGcB9/OiqzNeX8aezIcPinU=
-X-Google-Smtp-Source: AGHT+IEBmtr0ot0W4hy4hhdAIxgm/MQ/3CozHHxDvgLqYVlwQY8glAFKKGOPdCzgWFhKyZEOtG+gmQ==
-X-Received: by 2002:adf:fc8c:0:b0:336:c79d:7504 with SMTP id
- g12-20020adffc8c000000b00336c79d7504mr1959462wrr.2.1705236898349; 
- Sun, 14 Jan 2024 04:54:58 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- a7-20020adff7c7000000b0033660f75d08sm9035890wrq.116.2024.01.14.04.54.57
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 14 Jan 2024 04:54:58 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun, 14 Jan 2024 13:54:48 +0100
-Message-ID: <20240114125448.819400-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
+ with ESMTP id kOVrXbMTJnf0 for <buildroot@lists.busybox.net>;
+ Sun, 14 Jan 2024 13:46:51 +0000 (UTC)
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0D859418BA
+ for <buildroot@buildroot.org>; Sun, 14 Jan 2024 13:46:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D859418BA
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 3582C13F81D;
+ Sun, 14 Jan 2024 14:46:46 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 14 Jan 2024 14:46:45 +0100
+Date: Sun, 14 Jan 2024 14:46:45 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <ZaPlxc9iDoZwG-RZ@landeda>
+References: <20240114111619.310101-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1705236898; x=1705841698; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=i+aPuByGP33jQkj3Bb3GArV2GW0FatEMX8AkRK7tr4Y=;
- b=On4r8vU2SLw3oL0+OM+QGUZmSSH9RVCGIdt3Q/ZXL0vccS8YzIemt3IqGIP/puLe+k
- 32RZFAoy/n52dPAn8o5wjcF+vw8tj5/PCS/g3P6gNbBx1lHxsKwhfXKMCJ0nMw7wAwiZ
- b9QokxYBtBJV+bnknmXvgbzs9j5/cvqttvTIMRNl2UePkwE76/34Q+7qzM7M+qSmDMRt
- 1K8ofnLVrlIxw+ql6+fF0MYY9Ih2pyfswvxcsnPAK2w/mqCNar3PSJeIgRVf5DhvtntO
- 1KXxjS62rKTf316CT962D5t7nS8he5trS56E6Sxpx/HTcaLlF76GeUCAifOh00dWpIMl
- B7EA==
+Content-Disposition: inline
+In-Reply-To: <20240114111619.310101-1-fontaine.fabrice@gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1705240008;
+ bh=UWPhjH3e4faLDdc8L4hm1DcsUzmkqY4oe5djuIMk6ns=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=p1ccpu3qIxdRXFeF0i7rVooH74/5fMwQACEATjNLjkcblTdj054sqHYbzWOOWLS7h
+ a+oAdgoLwC0RfLAGuA8uokG0SY1rf1GpAgTYRE2wX8J4pOGhp9PhqXt9gX5SEPBSRa
+ ojEYRwCl2x952yISYkeRTyS7oJYQGxcpt9PpOV3Nhb1XpBiVnBCb7IVixHyLIz7U2K
+ GjVnyV2Gz6DiIBhv8pip7r+o2m+yqzBsQtu3C90uqWBqM06OvImGrZMpNSbeTFYSpL
+ cVq4SW78f2ugE0M0ijiY61mLqO3WsczHUY1t7BImX/yZ7zyvi/a5LucQsZVZ5yziUo
+ tDJdiHbj2dXWQ==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=On4r8vU2
-Subject: [Buildroot] [PATCH 1/1] toolchain/Config.in: update ucontext
- handling
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=p1ccpu3q
+Subject: Re: [Buildroot] [PATCH 1/1] package/tinymembench: force arm mode
+ instead of Thumb mode
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,60 +75,166 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-As suggested by Thomas Petazzoni in [1], add a comment on
-BR2_TOOLCHAIN_HAS_UCONTEXT to specify that this boolean will be set to
-true only when a toolchain provides a full featured ucontext
-implementation with ucontext_t and {get,make,set}context. As a result,
-drop its selection from BR2_TOOLCHAIN_USES_MUSL to fix the following
-musl build failure on php:
+Fabrice, All,
 
-/home/autobuild/autobuild/instance-8/output-1/host/lib/gcc/m68k-buildroot-linux-musl/12.3.0/../../../../m68k-buildroot-linux-musl/bin/ld: Zend/zend_fibers.o: in function `zend_fiber_init_context':
-zend_fibers.c:(.text+0x946): undefined reference to `getcontext'
+On 2024-01-14 12:16 +0100, Fabrice Fontaine spake thusly:
+> Fix the following build failure in Thumb mode:
+> 
+> /tmp/ccaZHrla.s:40: Error: instruction not supported in Thumb16 mode -- `subs r1,r1,#16'
+> /tmp/ccaZHrla.s:43: Error: instruction not supported in Thumb16 mode -- `subs r1,r1,#16'
+> main.c:45: Error: selected processor does not support `mla r2,r10,r2,r5' in Thumb mode
+> main.c:46: Error: unshifted register required -- `and r8,r7,r2,lsr#16'
+> main.c:47: Error: selected processor does not support `mla r2,r10,r2,r5' in Thumb mode
+> main.c:48: Error: unshifted register required -- `and r9,r6,r2,lsr#8'
+> main.c:49: Error: selected processor does not support `mla r2,r10,r2,r5' in Thumb mode
+> 
+> While at it, drop patch which is not needed anymore. This patch has been
+> submitted in 2016: https://github.com/ssvb/tinymembench/pull/13. But
+> upstream seems dead (no commit since 2017).
 
-[1]: https://patchwork.ozlabs.org/project/buildroot/patch/20230516193307.1543455-1-bernd.kuhls@t-online.de/
+The patch is still needed to fix the build on Cortex-M processors, such
+as for this defconfig:
 
-Fixes:
- - http://autobuild.buildroot.org/results/271f9fb8bfa5ba2f74feef81e6b375b54e21cece
+    BR2_arm=y
+    BR2_cortex_m7=y
+    BR2_TOOLCHAIN_EXTERNAL=y
+    BR2_PACKAGE_TINYMEMBENCH=y
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- toolchain/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Do not confuse Thumb and Thumb2:
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 5be63d4e15..f1f9212f25 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -34,7 +34,6 @@ config BR2_TOOLCHAIN_USES_MUSL
- 	select BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
- 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
--	select BR2_TOOLCHAIN_HAS_UCONTEXT
- 	select BR2_TOOLCHAIN_SUPPORTS_PIE if !BR2_STATIC_LIBS
- 
- choice
-@@ -303,6 +302,8 @@ config BR2_TOOLCHAIN_HAS_SSP_STRONG
- 	bool
- 	default y if BR2_TOOLCHAIN_HAS_SSP && BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 
-+# This boolean is true if the toolchain provides a full featured
-+# ucontext implementation with ucontext_t and {get,make,set}context
- config BR2_TOOLCHAIN_HAS_UCONTEXT
- 	bool
- 
+  - Thumb is Thumb1, availble in armv5 and armv6; virtually all such
+    CPUs that have Thumb1, also have full ARM mode (at least as far as
+    Buildroot is concerned); this is why it is OK to enable ARM mode
+    when the configuration uses BR2_ARM_INSTRUCTIONS_THUMB;
+
+  - Thumb2 is for armv7 (and above), and there are armv7 CPUs that have
+    only Thumb2 adn no full ARM mode; they are "known" as armv7m.
+
+The patch from Thomas fixes the third case, while the build failure you
+try to fix is about the second case.
+
+Regards,
+Yann E. MORIN.
+
+> Fixes:
+>  - http://autobuild.buildroot.org/results/1e359c294a8d71fb1833e5d04a6bc7d4fd533510
+>  - http://autobuild.buildroot.org/results/c06010d7a2bdb33a1707266133a3880e14be7657
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  .checkpackageignore                           |  1 -
+>  ...ix-build-on-Thumb-only-architectures.patch | 47 -------------------
+>  package/tinymembench/tinymembench.mk          |  9 +++-
+>  3 files changed, 8 insertions(+), 49 deletions(-)
+>  delete mode 100644 package/tinymembench/0001-arm-fix-build-on-Thumb-only-architectures.patch
+> 
+> diff --git a/.checkpackageignore b/.checkpackageignore
+> index 4051805c33..09a1bf35e0 100644
+> --- a/.checkpackageignore
+> +++ b/.checkpackageignore
+> @@ -1296,7 +1296,6 @@ package/tinyalsa/0001-include-time.h-before-asound.h.patch Upstream
+>  package/tinycbor/0001-Makefile-add-DISABLE_WERROR.patch Upstream
+>  package/tinycompress/0001-wave-add-time.h-missing-header-inclusion.patch Upstream
+>  package/tinydtls/0001-sha2-sha2.c-fix-build-on-big-endian.patch Upstream
+> -package/tinymembench/0001-arm-fix-build-on-Thumb-only-architectures.patch Upstream
+>  package/tinyproxy/0001-prevent-junk-from-showing-up-in-error-page-in-invalid-requests.patch Upstream
+>  package/tinyxml/0001-In-stamp-always-advance-the-pointer-if-p-0xef.patch Upstream
+>  package/tpm2-abrmd/S80tpm2-abrmd Indent Shellcheck Variables
+> diff --git a/package/tinymembench/0001-arm-fix-build-on-Thumb-only-architectures.patch b/package/tinymembench/0001-arm-fix-build-on-Thumb-only-architectures.patch
+> deleted file mode 100644
+> index 88559ec012..0000000000
+> --- a/package/tinymembench/0001-arm-fix-build-on-Thumb-only-architectures.patch
+> +++ /dev/null
+> @@ -1,47 +0,0 @@
+> -From 034a3552e9700c6d424bd706db106f5bce1f5a5e Mon Sep 17 00:00:00 2001
+> -From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> -Date: Fri, 11 Nov 2016 21:49:39 +0100
+> -Subject: [PATCH] arm: fix build on Thumb-only architectures
+> -
+> -Building tinymembench for ARM Cortex-M currently fails, because the
+> -arm-neon.S file contains ARM code that doesn't build on Thumb-only
+> -architectures. To account for this and fix the build for Cortex-M,
+> -this patch adjusts the compile time condition to also verify that the
+> -architecture supports the ARM instruction set, by testing the
+> -__ARM_ARCH_ISA_ARM compiler define.
+> -
+> -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ----
+> - arm-neon.S | 2 +-
+> - asm-opt.c  | 2 +-
+> - 2 files changed, 2 insertions(+), 2 deletions(-)
+> -
+> -diff --git a/arm-neon.S b/arm-neon.S
+> -index 4db78ce..19c30ad 100644
+> ---- a/arm-neon.S
+> -+++ b/arm-neon.S
+> -@@ -21,7 +21,7 @@
+> -  * DEALINGS IN THE SOFTWARE.
+> -  */
+> - 
+> --#ifdef __arm__
+> -+#if defined(__arm__) && defined(__ARM_ARCH_ISA_ARM)
+> - 
+> - .text
+> - .fpu neon
+> -diff --git a/asm-opt.c b/asm-opt.c
+> -index 9da4596..eba1183 100644
+> ---- a/asm-opt.c
+> -+++ b/asm-opt.c
+> -@@ -202,7 +202,7 @@ bench_info *get_asm_framebuffer_benchmarks(void)
+> -         return empty;
+> - }
+> - 
+> --#elif defined(__arm__)
+> -+#elif defined(__arm__) && defined(__ARM_ARCH_ISA_ARM)
+> - 
+> - #include "arm-neon.h"
+> - 
+> --- 
+> -2.7.4
+> -
+> diff --git a/package/tinymembench/tinymembench.mk b/package/tinymembench/tinymembench.mk
+> index 016d680ce7..bc84595e24 100644
+> --- a/package/tinymembench/tinymembench.mk
+> +++ b/package/tinymembench/tinymembench.mk
+> @@ -9,8 +9,15 @@ TINYMEMBENCH_SITE = $(call github,ssvb,tinymembench,v$(TINYMEMBENCH_VERSION))
+>  TINYMEMBENCH_LICENSE = MIT
+>  TINYMEMBENCH_LICENSE_FILES = LICENSE
+>  
+> +# tinymembench has some assembly function that is not present in Thumb mode:
+> +# Error: instruction not supported in Thumb16 mode -- `subs r1,r1,#16'
+> +# so, we desactivate Thumb mode
+> +ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
+> +TINYMEMBENCH_MAKE_OPTS += CFLAGS="$(TARGET_CFLAGS) -marm"
+> +endif
+> +
+>  define TINYMEMBENCH_BUILD_CMDS
+> -	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+> +	$(TARGET_CONFIGURE_OPTS) $(MAKE) $(TINYMEMBENCH_MAKE_OPTS) -C $(@D)
+>  endef
+>  
+>  define TINYMEMBENCH_INSTALL_TARGET_CMDS
+> -- 
+> 2.43.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
 -- 
-2.43.0
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
