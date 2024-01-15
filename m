@@ -1,70 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A30BC3DA79
-	for <buildroot@archiver.kernel.org>; Mon, 15 Jan 2024 13:41:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C353C4707B
+	for <buildroot@archiver.kernel.org>; Mon, 15 Jan 2024 14:35:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DBB5982457;
-	Mon, 15 Jan 2024 13:41:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DBB5982457
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8DDD241761;
+	Mon, 15 Jan 2024 14:35:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8DDD241761
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9MY3OEcZaySP; Mon, 15 Jan 2024 13:41:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XcCazSs5fvh1; Mon, 15 Jan 2024 14:35:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 31E5C81F4E;
-	Mon, 15 Jan 2024 13:41:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 31E5C81F4E
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AF5331BF4DD
- for <buildroot@lists.busybox.net>; Mon, 15 Jan 2024 13:41:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 85B8B41753;
+	Mon, 15 Jan 2024 14:34:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 85B8B41753
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E91D71BF3CD
+ for <buildroot@lists.busybox.net>; Mon, 15 Jan 2024 14:34:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4B88581F4E
- for <buildroot@lists.busybox.net>; Mon, 15 Jan 2024 13:41:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4B88581F4E
+ by smtp2.osuosl.org (Postfix) with ESMTP id BF3C84175B
+ for <buildroot@lists.busybox.net>; Mon, 15 Jan 2024 14:34:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF3C84175B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XTQmI8NDlcwt for <buildroot@lists.busybox.net>;
- Mon, 15 Jan 2024 13:41:26 +0000 (UTC)
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1DB5C81F36
- for <buildroot@buildroot.org>; Mon, 15 Jan 2024 13:41:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1DB5C81F36
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id 72F6135210AB; Mon, 15 Jan 2024 14:41:22 +0100 (CET)
-Date: Mon, 15 Jan 2024 14:41:22 +0100
-From: Waldemar Brodkorb <wbx@openadk.org>
-To: Petr Vorel <pvorel@suse.cz>
-Message-ID: <ZaU2Ag1wg1Sne9zZ@waldemar-brodkorb.de>
-References: <5a1f1ff3-8a61-67cf-59a9-ce498738d912@landley.net>
- <20240105131135.GA1484621@pevik>
- <90c1ddc1-c608-30fc-d5aa-fdf63c90d055@landley.net>
- <20240108090338.GA1552643@pevik> <ZZvJXTshFUYSaMVH@yuki>
- <SA3PR13MB6372498CC6372F8B16237244FD6A2@SA3PR13MB6372.namprd13.prod.outlook.com>
- <20240110141455.GC1698252@pevik>
- <40996ea1-3417-1c2f-ddd2-e6ed45cb6f4b@landley.net>
- <81c07a13-305a-404b-b14c-3aff8fde3f67@linux-m68k.org>
- <d3a26b8e-8823-8f3c-b815-4396cbac1dc3@landley.net>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZIztEWK02Ctx for <buildroot@lists.busybox.net>;
+ Mon, 15 Jan 2024 14:34:56 +0000 (UTC)
+X-Greylist: delayed 420 seconds by postgrey-1.37 at util1.osuosl.org;
+ Mon, 15 Jan 2024 14:34:55 UTC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D98F741753
+Received: from mx1.sberdevices.ru (mx1.sberdevices.ru [37.18.73.165])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D98F741753
+ for <buildroot@buildroot.org>; Mon, 15 Jan 2024 14:34:55 +0000 (UTC)
+Received: from p-infra-ksmg-sc-msk01 (localhost [127.0.0.1])
+ by mx1.sberdevices.ru (Postfix) with ESMTP id B3ECE100025
+ for <buildroot@buildroot.org>; Mon, 15 Jan 2024 17:27:52 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru B3ECE100025
+Received: from smtp.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru
+ [172.16.192.107])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by mx1.sberdevices.ru (Postfix) with ESMTPS
+ for <buildroot@buildroot.org>; Mon, 15 Jan 2024 17:27:52 +0300 (MSK)
+Received: from sberdevices (100.64.160.123) by p-i-exch-sc-m01.sberdevices.ru
+ (172.16.192.107) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Mon, 15 Jan
+ 2024 17:27:52 +0300
+To: <buildroot@buildroot.org>
+Date: Mon, 15 Jan 2024 17:27:44 +0300
+Message-ID: <20240115142744.70711-1-aolvolk@salutedevices.com>
+X-Mailer: git-send-email 2.39.3 (Apple Git-145)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <d3a26b8e-8823-8f3c-b815-4396cbac1dc3@landley.net>
-X-Operating-System: Linux 5.10.0-27-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1705326082; bh=oxu8ri+2lNAJGmWaelZR/DAbUPHgJwlAGo7y/CzxD4E=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=DX6Ey8NpU5GrlvEu3ZRCkLwI5kBRnUvpr23wJSVaSMxIvKcwenahJ6FnpxnlCpzvT
- q00OflPoW7AF8uLs4+x/C0//3TcLaD7fuJWk3adpvG8BfJL/B5c8yVJ+2pKol1WuZ+
- hXP81V9hyEpCoS7AKFE+l1KA+iCWIjBaPsusSRwfwCsJWzdAVRc7quDLtRl99U+GB5
- vZ8tq3rEaqKwyMKsPNvqa8yhU6Xz2PkbZZsreGoz/vomjnBebeI4AOolJ32GaW/Mmo
- qO7Ah7Eon0nLF4vBUP3bfqcjzzORYmhkrwk+dBf/iwB3cmChCKQvD9qZ3FYOXh0Nn8
- ZD+QMa3ub/EkA==
-Subject: Re: [Buildroot] [Automated-testing] Call for nommu LTP maintainer
- [was: Re: [PATCH 00/36] Remove UCLINUX from LTP]
+X-Originating-IP: [100.64.160.123]
+X-ClientProxiedBy: p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) To
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 182653 [Jan 15 2024]
+X-KSMG-AntiSpam-Version: 6.1.0.3
+X-KSMG-AntiSpam-Envelope-From: aolvolk@salutedevices.com
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 7 0.3.7
+ 6d6bf5bd8eea7373134f756a2fd73e9456bb7d1a, {Tracking_uf_ne_domains},
+ {Tracking_from_domain_doesnt_match_to}, salutedevices.com:7.1.1;
+ smtp.sberdevices.ru:7.1.1,5.0.1; d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;
+ 100.64.160.123:7.1.2; 127.0.0.199:7.1.2;
+ 0pointer.de:7.1.1, FromAlignment: s, ApMailHostAddress: 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean, bases: 2024/01/15 10:51:00
+X-KSMG-LinksScanning: Clean, bases: 2024/01/15 10:51:00
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960,
+ bases: 2024/01/15 11:31:00 #23194549
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=salutedevices.com; s=mail; t=1705328872;
+ bh=2WywTXdGmO/LL1BpZ5GMad2onMDK6MDMGoFjaHV8iRA=;
+ h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
+ b=WSje1Kb3tdRtZVa/m6MOJ/J40Ap6ypKg5VSIhjZ6DAhpmQAj7LihVmws6jXvtzHbM
+ o5QTz+q0LCnjDUapy/uI2JCXThoEbfGkIGECCA0hGEGhrsmFPKBOIU+Z8HzI7QzEUV
+ /tQaaL7RGUVecgdqFC3JVXbH0WvvLYeuhgeY8/3GdUEyYZOl+llVuTLRBE3gJn2nHd
+ ahrwXvsM6odKSaFgf5W+OQRFgDhn0aY4DquuySU5csTNPbroTlA8Zfppx/yym5yyyy
+ npEmASAX3FtteWGKmHUC7oNJlMSJ6xu9ufETCNvZcsG9rpA4oMKKF7jYEb4POpJwOT
+ rIOvoqU1j7QUg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=salutedevices.com
+ header.i=@salutedevices.com header.a=rsa-sha256 header.s=mail
+ header.b=WSje1Kb3
+Subject: [Buildroot] [PATCH] package/ifplugd: add option to override
+ sysconfdir
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,97 +107,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Niklas Cassel <niklas.cassel@wdc.com>,
- Andrea Cervesato <andrea.cervesato@suse.com>, Cyril Hrubis <chrubis@suse.cz>,
- Jonathan Corbet <corbet@lwn.net>, Tim Bird <tim.bird@sony.com>,
- Linux-sh list <linux-sh@vger.kernel.org>,
- "ltp@lists.linux.it" <ltp@lists.linux.it>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- Li Wang <liwang@redhat.com>, Petr Vorel <pvorel@suse.cz>,
- "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
- Randy Dunlap <rdunlap@infradead.org>,
- Christophe Lyon <christophe.lyon@linaro.org>, Rob Landley <rob@landley.net>,
- John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
- Geert Uytterhoeven <geert@linux-m68k.org>,
- linux-riscv <linux-riscv@lists.infradead.org>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>,
- Greg Ungerer <gerg@linux-m68k.org>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>,
- "automated-testing@lists.yoctoproject.org"
- <automated-testing@lists.yoctoproject.org>
+From: Alisa Volk via buildroot <buildroot@buildroot.org>
+Reply-To: Alisa Volk <aolvolk@salutedevices.com>
+Cc: Alisa Volk <aolvolk@salutedevices.com>, ovlevin@salutedevices.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi,
+Add BR2_PACKAGE_IFPLUGD_SYSCONFDIR option to pass custom --sysconfdir argument.
 
-I want to clarify some things of the point of view of uClibc-ng
-support.
+Ifplugd init script is auto-generated with sysconfdir="etc/" by default.
+As a result path to ifplugd configuration file is hardcoded
+to /etc/ifplugd/ifplugd.conf.
 
-There is support for following configurations for noMMU targets:
-ARM:
- - FLAT with Linuxthreads supported (for Qemu you need a Linux patch)
- - FDPIC with NPTL supported (NPTL works only on real hardware not in Qemu)
- - ELF with Thread support not working
+This patch allows to override sysconfdir making it possible
+to use custom path to configuration file.
 
-M68k:
- - FLAT with Linuxthreads supported
- - ELF with Thread support not working
+Signed-off-by: Alisa Volk <aolvolk@salutedevices.com>
+---
+ package/ifplugd/Config.in  | 6 ++++++
+ package/ifplugd/ifplugd.mk | 4 +++-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
 
-RISCV64:
- - FLAT without Thread support
- - ELF with Thread support not working
+diff --git a/package/ifplugd/Config.in b/package/ifplugd/Config.in
+index c4b5b5b9d1..772c084132 100644
+--- a/package/ifplugd/Config.in
++++ b/package/ifplugd/Config.in
+@@ -12,3 +12,9 @@ config BR2_PACKAGE_IFPLUGD
+ 	  configure the interface when a cable is really connected.
+ 
+ 	  http://0pointer.de/lennart/projects/ifplugd/
++
++config BR2_PACKAGE_IFPLUGD_SYSCONFDIR
++	string "sysconfdir"
++	default "/etc"
++	help
++	  Path to ifplugd.conf and ifplugd.action files.
+diff --git a/package/ifplugd/ifplugd.mk b/package/ifplugd/ifplugd.mk
+index 6de7f17641..5d7f1562d3 100644
+--- a/package/ifplugd/ifplugd.mk
++++ b/package/ifplugd/ifplugd.mk
+@@ -13,7 +13,9 @@ IFPLUGD_AUTORECONF = YES
+ 
+ # install-strip unconditionally overwrites $(TARGET_DIR)/etc/ifplugd/ifplugd.*
+ IFPLUGD_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-exec
+-IFPLUGD_CONF_OPTS = --disable-lynx --with-initdir=/etc/init.d/
++IFPLUGD_CONF_OPTS = --disable-lynx \
++	--with-initdir=/etc/init.d/ \
++	--sysconfdir=$(BR2_PACKAGE_IFPLUGD_SYSCONFDIR)
+ IFPLUGD_DEPENDENCIES = libdaemon
+ 
+ define IFPLUGD_INSTALL_FIXUP
+-- 
+2.39.3 (Apple Git-145)
 
-RISCV32:
- - FLAT without Thread support, needs a small Linux Kernel patch
-
-SH2/J2:
- - FLAT with Linuxthreads supported
-
-Xtensa:
- - FLAT with Linuxthreads supported
-
-There are some obsolete architectures supported by uClibc-ng, but
-no longer supported by Linux:
-
-Blackfin:
- - FLAT with Linuxthreads supported
- - FDPIC
-
-H8300:
- - FLAT with Linuxthreads supported
-
-C6X:
- - DSBT 
-
-LM32:
- - FLAT
-
-LTP requires NPTL to work, so the only testable platform is ARM with
-FDPIC right now.
-Unfortunately LTP 20230929 needs fork for some files:
-
-RANLIB libltp.a
-/home/wbx/arm/toolchain_st-stm32f746g_uclibc-ng_cortex_m7_soft_eabi_thumb_nommu/usr/lib/gcc/arm-openadk-uclinuxfdpiceabi/13.2.0/../../../../arm-openadk-uclinuxfdpiceabi/bin/ld: ../../lib/libltp.a(tst_res.o): in function `tst_fork':
-/home/wbx/arm/build_st-stm32f746g_uclibc-ng_cortex_m7_soft_eabi_thumb_nommu/w-ltp-20230929-1/ltp-full-20230929/lib/tst_res.c:430:(.text+0x952): undefined reference to `fork'
-/home/wbx/arm/toolchain_st-stm32f746g_uclibc-ng_cortex_m7_soft_eabi_thumb_nommu/usr/lib/gcc/arm-openadk-uclinuxfdpiceabi/13.2.0/../../../../arm-openadk-uclinuxfdpiceabi/bin/ld: ../../lib/libltp.a(tst_test.o): in function `fork_testrun':
-/home/wbx/arm/build_st-stm32f746g_uclibc-ng_cortex_m7_soft_eabi_thumb_nommu/w-ltp-20230929-1/ltp-full-20230929/lib/tst_test.c:1597:(.text+0xf4e): undefined reference to `fork'
-/home/wbx/arm/toolchain_st-stm32f746g_uclibc-ng_cortex_m7_soft_eabi_thumb_nommu/usr/lib/gcc/arm-openadk-uclinuxfdpiceabi/13.2.0/../../../../arm-openadk-uclinuxfdpiceabi/bin/ld: ../../lib/libltp.a(tst_test.o): in function `safe_fork':
-/home/wbx/arm/build_st-stm32f746g_uclibc-ng_cortex_m7_soft_eabi_thumb_nommu/w-ltp-20230929-1/ltp-full-20230929/lib/tst_test.c:435:(.text+0x345c): undefined reference to `fork'
-collect2: error: ld returned 1 exit status
-gmake[8]: *** [../../include/mk/rules.mk:45: test01] Error 1
-gmake[7]: *** [../include/mk/generic_trunk_target.inc:108: all] Error 2
-gmake[6]: *** [Makefile:94: lib-all] Error 2
-gmake[5]: *** [/home/wbx/arm/mk/pkg-bottom.mk:141: /home/wbx/arm/build_st-stm32f746g_uclibc-ng_cortex_m7_soft_eabi_thumb_nommu/w-ltp-20230929-1/ltp-full-20230929/.build_done] Error 2
-gmake[4]: *** [Makefile:61: ltp-compile] Error 2
-gmake[3]: *** [mk/build.mk:221: package/compile] Error 2
-gmake[2]: *** [/home/wbx/arm/mk/build.mk:176: world] Error 2
-
-So there is really work to be done to make the existing code work on noMMU.
-
-best regards
- Waldemar
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
