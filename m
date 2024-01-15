@@ -4,69 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0453C3DA79
-	for <buildroot@archiver.kernel.org>; Mon, 15 Jan 2024 22:19:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A529C47DA2
+	for <buildroot@archiver.kernel.org>; Mon, 15 Jan 2024 22:40:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4A32A813E5;
-	Mon, 15 Jan 2024 22:19:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4A32A813E5
+	by smtp1.osuosl.org (Postfix) with ESMTP id C145A81E8D;
+	Mon, 15 Jan 2024 22:40:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C145A81E8D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OqSNqEWunMX3; Mon, 15 Jan 2024 22:19:55 +0000 (UTC)
+	with ESMTP id kWCX2o0lKfWs; Mon, 15 Jan 2024 22:40:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 885EB813E0;
-	Mon, 15 Jan 2024 22:19:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 885EB813E0
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A1CE11BF39D
- for <buildroot@lists.busybox.net>; Mon, 15 Jan 2024 22:19:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1B9C681E86;
+	Mon, 15 Jan 2024 22:40:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B9C681E86
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 10ADF1BF39D
+ for <buildroot@lists.busybox.net>; Mon, 15 Jan 2024 22:40:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 75D8E61195
- for <buildroot@lists.busybox.net>; Mon, 15 Jan 2024 22:19:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 75D8E61195
+ by smtp2.osuosl.org (Postfix) with ESMTP id DB54F42EBE
+ for <buildroot@lists.busybox.net>; Mon, 15 Jan 2024 22:39:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB54F42EBE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BWZXCZ35KM0x for <buildroot@lists.busybox.net>;
- Mon, 15 Jan 2024 22:19:51 +0000 (UTC)
-Received: from smtpcmd0641.aruba.it (smtpcmd0641.aruba.it [62.149.156.41])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E803561194
- for <buildroot@buildroot.org>; Mon, 15 Jan 2024 22:19:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E803561194
-Received: from [192.168.50.163] ([84.33.84.190])
- by Aruba Outgoing Smtp  with ESMTPSA
- id PVJ4rwgf7So8WPVJ4rwGGp; Mon, 15 Jan 2024 23:19:47 +0100
-Message-ID: <2c318982-bed2-468d-919b-37a1d675f898@benettiengineering.com>
-Date: Mon, 15 Jan 2024 23:19:45 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8GpOOACLctcz for <buildroot@lists.busybox.net>;
+ Mon, 15 Jan 2024 22:39:58 +0000 (UTC)
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
+ [IPv6:2a00:1450:4864:20::629])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5592841D60
+ for <buildroot@buildroot.org>; Mon, 15 Jan 2024 22:39:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5592841D60
+Received: by mail-ej1-x629.google.com with SMTP id
+ a640c23a62f3a-a28b2e1a13fso963957466b.3
+ for <buildroot@buildroot.org>; Mon, 15 Jan 2024 14:39:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1705358396; x=1705963196;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=PmGASyWW+bnEOKh3bEpL/rE0wAikdWKI2xXk7G62uuQ=;
+ b=b/VRb4hy9QwCbqSxYXmxuf2/egYS6vODW7GvW5qFzTCAfexwtyFlG5GcCxkmNelM3P
+ VI+vatW8Br64+xC7yIKWDecpeApG5uiagPo3SglnjjO+ApWtwtwBW5KZy+3Id+mSOnHt
+ 3lv1Ua1QhnBYO19MwehOTNpeAfERKNX9uaZvFB7saQc9hCeu7lLena3awlAtyQm3b0pw
+ 1ixkDvfF73JlEhVaqkS5ZsLnNn99+U/7dRgFhODOhn6KX74SeSk3aJHRTm6QvsuS8Eto
+ r2wju7wFRdwdx8nngk/MjlOzaRI5Hqy5kU4tQIsORJq12e8Xqw8pMkxmX1nbCLF7jmtH
+ 7xgQ==
+X-Gm-Message-State: AOJu0YyIINyif2yhIvd1nmWejndBvXEiXzgH1GXX71jkxpIhNzyveNAx
+ F6nIAFD0XkHGB5I8hwXWbkFynUSMIUI=
+X-Google-Smtp-Source: AGHT+IFj9K2TzQsJgYDgvbyg3s9X87d7n3STzX9VUBYq7dB32WlRvSNxfuEjp4yRPcxdNjG9NV4jCg==
+X-Received: by 2002:a17:907:d40c:b0:a2d:a239:635e with SMTP id
+ vi12-20020a170907d40c00b00a2da239635emr1396992ejc.24.1705358396443; 
+ Mon, 15 Jan 2024 14:39:56 -0800 (PST)
+Received: from x230.suse.cz (gw1.ms-free.net. [185.243.124.10])
+ by smtp.gmail.com with ESMTPSA id
+ v24-20020a1709067d9800b00a2a4efe7d3dsm5771303ejo.79.2024.01.15.14.39.55
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 15 Jan 2024 14:39:56 -0800 (PST)
+From: Petr Vorel <petr.vorel@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon, 15 Jan 2024 23:39:52 +0100
+Message-ID: <20240115223952.2532111-1-petr.vorel@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20240115213415.17439-1-fontaine.fabrice@gmail.com>
- <20240115213415.17439-2-fontaine.fabrice@gmail.com>
- <167d3968-1070-42dd-a140-f26a9d6d9657@benettiengineering.com>
-Content-Language: en-US
-In-Reply-To: <167d3968-1070-42dd-a140-f26a9d6d9657@benettiengineering.com>
-X-CMAE-Envelope: MS4xfL3Slm7U2T313GHl0F30ps1EpAWzrVO+bFn6QI+qoOQPBiwPl0nWTQak3d4Ixm16W0G5rMdNAGfn9+IjdHf7BHr8ho51Z1I7oq7d6xUkHA3aOQZnEyu6
- dhd7/RFwskPBnpQNBprRmJsOQF/4kMJMFrywRBsV0whx+XK6ySXH/GJtuIyUKJvXcIYTyn9fJkysjzHbN0rQzIpxUgxxTgJSHZpR86GPJEWp/XIBbGQxE0YA
- zBrvyyCMkD6B+TP7Zb25os1uiWdziml+nbXl9Gkv/AGUX5+V/q7NDL3QIV+sIfxPAi4oP+FW5UfML6X6QHfw5Gr2AztwgOlqVtK7gsVgM1M06hBuJaaViJBG
- QpznVd2/JHWqbygXY1swhgFpWXMM6xdSDyG8m/7bVZrKmsQgaO2l0IdC6Aob2fJixXi65JrMgkjFr3ZCxJhZCFAiGBZmmyftxEffW1uxTqkxXyWVIiaZTcXZ
- wFN+oIYH3X7LoF7r
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1705357187; bh=YN/K8c2d/KGsh9v4dpsa62a8hn31rdAhgPM0100N2Y0=;
- h=Date:MIME-Version:Subject:From:To:Content-Type;
- b=AuhV78lXjDPSLWMZjlo7++QftkFEK+7FYCjb4SNgSstuzQCzhko4auaiu88eL6Ryz
- 45gqFPbK06fx45AfHLimXAJs1mMQmzmzbGZPndpUm/Dwpj7J5f4xzPp13vrvPZ7W1v
- 4Qg19JiH6IITOr/e/iciwUL7wZPkR5yY9VcKXCCQ94QHFs+6ulv6ftZZEvppHE9dsU
- Eydc90bblyqJqS4V0ADLr/Zhbq7PP4t9IKw0TFsQy6VKhPvzDVw5pq4zelJ5jYb8ML
- 0OROmDN/vOfDJGcPgdjd1a0sLkdnZbOcWoG2Xnp8l89EqpG6oyG2wpSmIdZPyzO0qK
- sKVKwJp3xO3wg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=AuhV78lX
-Subject: Re: [Buildroot] [PATCH 2/2] package/attr: affected by gcc bug 101766
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1705358396; x=1705963196; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=PmGASyWW+bnEOKh3bEpL/rE0wAikdWKI2xXk7G62uuQ=;
+ b=Tarm3rcxe2Jnf62LzyjYl/z7LsZxbKIZZyLR7y531r0Fe7MtypAT3BKjvMn1NYdvvR
+ pc45bgugi2ixTw1jezKwzn9tADkZvmkBJqeAQKPMklOD+CrrfnyEkElaWFmVLtiY6nc1
+ 6yZZHmp2H1tkAOBEsyxa9Vwnr3G3OGmPNmfX0PWAiWMX7pe1SNusmN+87AiOf3FRtvSY
+ qCUHo1gn8AF8sN0s3ZAvbN7C/TrXMk4uXkO+3uYCtsyNl7IfC1CxHqmIwFiaxKRLxA3n
+ 94BGPIE0QmpHy9pOcejNqRy4lmO+netY0NqAweZ9hjHLepDdlOBABgROBOxDpH0tydMO
+ 8mGg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=Tarm3rcx
+Subject: [Buildroot] [PATCH 1/1] package/libqrtr-glib: bump version to 1.2.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,91 +93,89 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sen Hastings <sen@phobosdpl.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Romain Naour <romain.naour@gmail.com>, Norbert Lange <nolange79@gmail.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>,
+ Aleksander Morgado <aleksander@aleksander.es>,
+ Petr Vorel <petr.vorel@gmail.com>, "Yann E . MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-RllJIHRoaXMgY291bGQgYmUgZml4ZWQgYXMgaXQncyBiZWVuIGRvbmUgaW4gbGliZnVzZSBieSBj
-aGVja2luZyBpbgpNYWtlZmlsZSBpZiBzeW12ZXIgaXMgc3VwcG9ydGVkIGFuZCBlbWl0dGluZzoK
-LURIQVZFX1NZTVZFUl9BVFRSSUJVVEUKCmFuZCB0aGVuOgpodHRwczovL2dpdGh1Yi5jb20vbGli
-ZnVzZS9saWJmdXNlL2Jsb2IvbWFzdGVyL2xpYi9mdXNlX21pc2MuaCNMMTgtTDI2Cgp1c2luZzoK
-X19hc21fXygiXHQuc3ltdmVyICIgc3ltMSAiLCIgc3ltMik7Cmluc3RlYWQgb2Y6Cl9fYXR0cmli
-dXRlX18gKChzeW12ZXIgKHN5bTIpKSkKCk5vdyB0aGF0IEknbSBnZXR0aW5nIGRlZXBlciBJJ20g
-c2VlaW5nIHRoZSBleGFjdCBzYW1lIHByb2JsZW0gY29taW5nCmZyb20gdGhlIGdjYyBidWcgMTAx
-NzY2LCB0aGF0IF9faGFzX2F0dHJpYnV0ZSgpIGlzIGJyb2tlbiBmb3IgbWFueQphdHRyaWJ1dGVz
-IGluY2x1ZGluZyBzeW12ZXIgYW5kIHRoYXQgcmVxdWlyZXMgYSBydW50aW1lIGNoZWNrIHRvCmtu
-b3cgaWYgc3ltdmVyIGlzIHN1cHBvcnQgb3Igbm90LgoKQWdhaW4sIGl0IHdhcyBqdXN0IEZZSSwg
-dGhlIHBhdGNoIGxvb2tzIGdvb2QgdG8gbWUuIElmIHNvbWVvbmUgd2FudHMKdG8gZml4IGl0IGlz
-IHdlbGNvbWUuCgpCZXN0IHJlZ2FyZHMKLS0gCkdpdWxpbyBCZW5ldHRpCkNFTyZDVE9AQmVuZXR0
-aSBFbmdpbmVlcmluZyBzYXMKCk9uIDE1LzAxLzI0IDIzOjA4LCBHaXVsaW8gQmVuZXR0aSB3cm90
-ZToKPiBIaSBGYWJyaWNlLAo+IAo+IE9uIDE1LzAxLzI0IDIyOjM0LCBGYWJyaWNlIEZvbnRhaW5l
-IHdyb3RlOgo+PiBhdHRyIGlzIGFmZmVjdGVkIGJ5IGdjYyBidWcgMTAxNzY2IHNpbmNlIHZlcnNp
-b24gMS41LjIgYW5kCj4+IGh0dHBzOi8vZ2l0LnNhdmFubmFoLm5vbmdudS5vcmcvY2dpdC9hdHRy
-LmdpdC9jb21taXQvP2lkPTExYjkwNjkwOThiNGQ0YzIzZWZiMDZjOTQ1N2EwODViNzg0MzU0ZDQK
-Pj4gcmVzdWx0aW5nIGluIHRoZSBmb2xsb3dpbmcgYnVpbGQgZmFpbHVyZSBvbiBtaWNyb2JsYXpl
-IHNpbmNlIGNvbW1pdAo+PiBiMzFiOTEyOTZlN2Y5ODViOTA5ZjEwNGYwNmEwOThhZGRkZWYxZmVh
-Ogo+Pgo+PiBsaWJhdHRyL3N5c2NhbGxzLmM6MTMzOjEwOiBlcnJvcjogc3ltdmVyIGlzIG9ubHkg
-c3VwcG9ydGVkIG9uIEVMRiAKPj4gcGxhdGZvcm1zCj4+IMKgwqAgMTMzIHwgIyBwcmFnbWEgR0ND
-IHZpc2liaWxpdHkgcG9wCj4+IMKgwqDCoMKgwqDCoCB8wqDCoMKgwqDCoMKgwqDCoMKgIF5+fgo+
-IAo+IFBsZWFzZSBhZGQ6Cj4gU28gbGV0J3MgZGlzYWJsZSBwYWNrYWdlIGF0dHIgYW5kIHBhY2th
-Z2VzIGRlcGVuZGluZyBvbiBpdC4KPiAKPj4KPj4gRml4ZXM6Cj4+IMKgIC0gCj4+IGh0dHA6Ly9h
-dXRvYnVpbGQuYnVpbGRyb290Lm9yZy9yZXN1bHRzLzI5Yzc2ZTAyYmVjZWRmOTIyYmQ3ZGMwNTMz
-MzM4YzA3OGJmNzdkMmEKPj4KPj4gU2lnbmVkLW9mZi1ieTogRmFicmljZSBGb250YWluZSA8Zm9u
-dGFpbmUuZmFicmljZUBnbWFpbC5jb20+Cj4+IC0tLQo+PiDCoCBwYWNrYWdlL2FjbC9Db25maWcu
-aW7CoMKgwqDCoCB8IDQgKysrKwo+PiDCoCBwYWNrYWdlL2F0dHIvQ29uZmlnLmluwqDCoMKgIHwg
-NCArKysrCj4+IMKgIHBhY2thZ2Uvc3lzdGVtZC9Db25maWcuaW4gfCA0ICsrKysKPj4gwqAgMyBm
-aWxlcyBjaGFuZ2VkLCAxMiBpbnNlcnRpb25zKCspCj4+Cj4+IGRpZmYgLS1naXQgYS9wYWNrYWdl
-L2FjbC9Db25maWcuaW4gYi9wYWNrYWdlL2FjbC9Db25maWcuaW4KPj4gaW5kZXggOTJmMjI1MTg3
-OC4uMTMyYzZlOGFkMyAxMDA2NDQKPj4gLS0tIGEvcGFja2FnZS9hY2wvQ29uZmlnLmluCj4+ICsr
-KyBiL3BhY2thZ2UvYWNsL0NvbmZpZy5pbgo+PiBAQCAtMSw1ICsxLDYgQEAKPj4gwqAgY29uZmln
-IEJSMl9QQUNLQUdFX0FDTAo+PiDCoMKgwqDCoMKgIGJvb2wgImFjbCIKPj4gK8KgwqDCoCBkZXBl
-bmRzIG9uICFCUjJfVE9PTENIQUlOX0hBU19HQ0NfQlVHXzEwMTc2NiAjIGF0dHIKPj4gwqDCoMKg
-wqDCoCBzZWxlY3QgQlIyX1BBQ0tBR0VfQVRUUgo+PiDCoMKgwqDCoMKgIGhlbHAKPj4gwqDCoMKg
-wqDCoMKgwqAgUE9TSVggQWNjZXNzIENvbnRyb2wgTGlzdHMsIHdoaWNoIGFyZSB1c2VkIHRvIGRl
-ZmluZSBtb3JlCj4+IEBAIC04LDMgKzksNiBAQCBjb25maWcgQlIyX1BBQ0tBR0VfQUNMCj4+IMKg
-wqDCoMKgwqDCoMKgIFRoaXMgcGFja2FnZSBhbHNvIHByb3ZpZGVzIGxpYmFjbC4KPj4gwqDCoMKg
-wqDCoMKgwqAgaHR0cDovL3NhdmFubmFoLm5vbmdudS5vcmcvcHJvamVjdHMvYWNsCj4+ICsKPj4g
-K2NvbW1lbnQgImFjbCBuZWVkcyBhIHRvb2xjaGFpbiBub3QgYWZmZWN0ZWQgYnkgR0NDIGJ1ZyAx
-MDE3NjYiCj4+ICvCoMKgwqAgZGVwZW5kcyBvbiBCUjJfVE9PTENIQUlOX0hBU19HQ0NfQlVHXzEw
-MTc2Ngo+PiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9hdHRyL0NvbmZpZy5pbiBiL3BhY2thZ2UvYXR0
-ci9Db25maWcuaW4KPj4gaW5kZXggNTU0NzcyYjc1ZC4uYjlkOWY1N2Q4ZiAxMDA2NDQKPj4gLS0t
-IGEvcGFja2FnZS9hdHRyL0NvbmZpZy5pbgo+PiArKysgYi9wYWNrYWdlL2F0dHIvQ29uZmlnLmlu
-Cj4+IEBAIC0xLDcgKzEsMTEgQEAKPj4gwqAgY29uZmlnIEJSMl9QQUNLQUdFX0FUVFIKPj4gwqDC
-oMKgwqDCoCBib29sICJhdHRyIgo+PiArwqDCoMKgIGRlcGVuZHMgb24gIUJSMl9UT09MQ0hBSU5f
-SEFTX0dDQ19CVUdfMTAxNzY2Cj4+IMKgwqDCoMKgwqAgaGVscAo+PiDCoMKgwqDCoMKgwqDCoCBD
-b21tYW5kcyBmb3IgTWFuaXB1bGF0aW5nIEZpbGVzeXN0ZW0gRXh0ZW5kZWQgQXR0cmlidXRlcy4K
-Pj4gwqDCoMKgwqDCoMKgwqAgVGhpcyBwYWNrYWdlIGFsc28gcHJvdmlkZXMgbGliYXR0ci4KPj4g
-wqDCoMKgwqDCoMKgwqAgaHR0cDovL3NhdmFubmFoLm5vbmdudS5vcmcvcHJvamVjdHMvYXR0cgo+
-PiArCj4+ICtjb21tZW50ICJhdHRyIG5lZWRzIGEgdG9vbGNoYWluIG5vdCBhZmZlY3RlZCBieSBH
-Q0MgYnVnIDEwMTc2NiIKPj4gK8KgwqDCoCBkZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fSEFTX0dD
-Q19CVUdfMTAxNzY2Cj4+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3N5c3RlbWQvQ29uZmlnLmluIGIv
-cGFja2FnZS9zeXN0ZW1kL0NvbmZpZy5pbgo+PiBpbmRleCA4NTkzMzJkOWU0Li5mMGY5MmI3OGIw
-IDEwMDY0NAo+PiAtLS0gYS9wYWNrYWdlL3N5c3RlbWQvQ29uZmlnLmluCj4+ICsrKyBiL3BhY2th
-Z2Uvc3lzdGVtZC9Db25maWcuaW4KPj4gQEAgLTQ1MSw2ICs0NTEsNyBAQCBjb25maWcgQlIyX1BB
-Q0tBR0VfU1lTVEVNRF9SRktJTEwKPj4gwqAgY29uZmlnIEJSMl9QQUNLQUdFX1NZU1RFTURfU01B
-Q0tfU1VQUE9SVAo+PiDCoMKgwqDCoMKgIGJvb2wgImVuYWJsZSBTTUFDSyBzdXBwb3J0Igo+PiAr
-wqDCoMKgIGRlcGVuZHMgb24gIUJSMl9UT09MQ0hBSU5fSEFTX0dDQ19CVUdfMTAxNzY2ICMgYXR0
-cgo+PiDCoMKgwqDCoMKgIHNlbGVjdCBCUjJfUEFDS0FHRV9BVFRSCj4+IMKgwqDCoMKgwqAgc2Vs
-ZWN0IEJSMl9QQUNLQUdFX1NNQUNLCj4+IMKgwqDCoMKgwqAgaGVscAo+PiBAQCAtNDYzLDYgKzQ2
-NCw5IEBAIGNvbmZpZyBCUjJfUEFDS0FHRV9TWVNURU1EX1NNQUNLX1NVUFBPUlQKPj4gwqDCoMKg
-wqDCoMKgwqAgV2hlbiB0aGlzIGZlYXR1cmUgaXMgZW5hYmxlZCwgU3lzdGVtZCBtb3VudHMgc21h
-Y2tmcyBhbmQKPj4gwqDCoMKgwqDCoMKgwqAgbWFuYWdlcyBzZWN1cml0eSBsYWJlbHMgZm9yIHNv
-Y2tldHMuCj4+ICtjb21tZW50ICJTTUFDSyBzdXBwb3J0IG5lZWRzIGEgdG9vbGNoYWluIG5vdCBh
-ZmZlY3RlZCBieSBHQ0MgYnVnIDEwMTc2NiIKPj4gK8KgwqDCoCBkZXBlbmRzIG9uIEJSMl9UT09M
-Q0hBSU5fSEFTX0dDQ19CVUdfMTAxNzY2Cj4+ICsKPj4gwqAgY29uZmlnIEJSMl9QQUNLQUdFX1NZ
-U1RFTURfU1lTRVhUCj4+IMKgwqDCoMKgwqAgYm9vbCAiZW5hYmxlIHN5c2V4dCBzdXBwb3J0Igo+
-PiDCoMKgwqDCoMKgIGhlbHAKPiAKPiBJJ3ZlIGZvdW5kIHRoYXQgZm9sbG93aW5nIGRlcGVuZGVu
-Y3kgaXMgbWlzc2luZzoKPiBCUjJfUEFDS0FHRV9MVUFfRkxVCj4gCj4gRG8geW91IG1pbmQgc2Vu
-ZGluZyBhIFYyIHdpdGggdGhhdCBkZXBlbmRlbmN5IGFuZCByZXdvcmRpbmcgYSBiaXQgbGlrZQo+
-IEkndmUgcG9pbnRlZCBhYm92ZT8KPiAKPiBXaXRoIHRob3NlIGluY2x1ZGVkIHlvdSBjYW4gYWRk
-Ogo+IFJldmlld2VkLWJ5OiBHaXVsaW8gQmVuZXR0aSA8Z2l1bGlvLmJlbmV0dGlAYmVuZXR0aWVu
-Z2luZWVyaW5nLmNvbT4KPiAKPiBUaGFuayB5b3UhCj4gCj4gQmVzdCByZWdhcmRzCgpfX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGlu
-ZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9y
-Zy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Project switched to meson.
+Use gitlab.freedesktop.org for download (previous URL did not work for
+meson), thus moving to tar.gz archive.
+
+Disable gtkdocize (not only to follow Buildroot approach, but also to avoid
+build failure: ERROR: Program 'gtkdoc-scan' not found or not executable).
+
+License file got renamed:
+https://gitlab.freedesktop.org/mobile-broadband/libqrtr-glib/-/commit/974e4231eaf4a3bf087c1df54e77df8cac935e15
+
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+---
+Hi,
+
+build tested (very minimal testing):
+
+                    bootlin-armv5-uclibc [1/6]: SKIPPED
+                     bootlin-armv7-glibc [2/6]: OK
+                   bootlin-armv7m-uclibc [3/6]: SKIPPED
+                     bootlin-x86-64-musl [4/6]: SKIPPED
+                      br-arm-full-static [5/6]: SKIPPED
+                            sourcery-arm [6/6]: SKIPPED
+6 builds, 5 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+
+ package/libqrtr-glib/libqrtr-glib.hash |  4 ++--
+ package/libqrtr-glib/libqrtr-glib.mk   | 16 +++++++++-------
+ 2 files changed, 11 insertions(+), 9 deletions(-)
+
+diff --git a/package/libqrtr-glib/libqrtr-glib.hash b/package/libqrtr-glib/libqrtr-glib.hash
+index e00dd0cb94..38543f7de9 100644
+--- a/package/libqrtr-glib/libqrtr-glib.hash
++++ b/package/libqrtr-glib/libqrtr-glib.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+-sha256  30d879b2ade6f8f461def3a677755db5c0238babf688d5c83c03b3e6abe35cee  libqrtr-glib-1.0.0.tar.xz
++sha256  c5cdf5ea91cbd2cf2758b2896064c7b1dfe7156063267df905f957ac69b6b763  libqrtr-glib-1.2.2.tar.gz
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSES/LGPL-2.1-or-later.txt
+diff --git a/package/libqrtr-glib/libqrtr-glib.mk b/package/libqrtr-glib/libqrtr-glib.mk
+index 6ab8335417..c3df76dc84 100644
+--- a/package/libqrtr-glib/libqrtr-glib.mk
++++ b/package/libqrtr-glib/libqrtr-glib.mk
+@@ -4,19 +4,21 @@
+ #
+ ################################################################################
+ 
+-LIBQRTR_GLIB_VERSION = 1.0.0
+-LIBQRTR_GLIB_SITE = http://www.freedesktop.org/software/libqmi
+-LIBQRTR_GLIB_SOURCE = libqrtr-glib-$(LIBQRTR_GLIB_VERSION).tar.xz
++LIBQRTR_GLIB_VERSION = 1.2.2
++LIBQRTR_GLIB_SITE = https://gitlab.freedesktop.org/mobile-broadband/libqrtr-glib/-/archive/$(LIBQRTR_GLIB_VERSION)
+ LIBQRTR_GLIB_LICENSE = LGPL-2.1+
+-LIBQRTR_GLIB_LICENSE_FILES = COPYING.LIB
++LIBQRTR_GLIB_LICENSE_FILES = LICENSES/LGPL-2.1-or-later.txt
+ LIBQRTR_GLIB_INSTALL_STAGING = YES
+ LIBQRTR_GLIB_DEPENDENCIES = libglib2
+ 
+ ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+-LIBQRTR_GLIB_CONF_OPTS += --enable-introspection
++LIBQRTR_GLIB_CONF_OPTS += -Dintrospection=true
+ LIBQRTR_GLIB_DEPENDENCIES += gobject-introspection
+ else
+-LIBQRTR_GLIB_CONF_OPTS += --disable-introspection
++LIBQRTR_GLIB_CONF_OPTS += -Dintrospection=false
+ endif
+ 
+-$(eval $(autotools-package))
++# disable gtkdocize
++LIBQRTR_GLIB_CONF_OPTS += -Dgtk_doc=false
++
++$(eval $(meson-package))
+-- 
+2.43.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
