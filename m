@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A69EC3DA79
-	for <buildroot@archiver.kernel.org>; Mon, 15 Jan 2024 07:49:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 655CFC47258
+	for <buildroot@archiver.kernel.org>; Mon, 15 Jan 2024 10:21:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3356D410B0;
-	Mon, 15 Jan 2024 07:49:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3356D410B0
+	by smtp4.osuosl.org (Postfix) with ESMTP id D8D6E41758;
+	Mon, 15 Jan 2024 10:21:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D8D6E41758
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rH_nObSf3jVy; Mon, 15 Jan 2024 07:49:04 +0000 (UTC)
+	with ESMTP id oxx-48D-TJLy; Mon, 15 Jan 2024 10:21:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5EB31410A4;
-	Mon, 15 Jan 2024 07:49:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5EB31410A4
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 62DF01BF396
- for <buildroot@lists.busybox.net>; Mon, 15 Jan 2024 07:49:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 11AF141748;
+	Mon, 15 Jan 2024 10:21:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11AF141748
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 80A6C1BF41C
+ for <buildroot@lists.busybox.net>; Mon, 15 Jan 2024 10:21:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3A21E4017A
- for <buildroot@lists.busybox.net>; Mon, 15 Jan 2024 07:49:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A21E4017A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 597AE60E38
+ for <buildroot@lists.busybox.net>; Mon, 15 Jan 2024 10:21:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 597AE60E38
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wkLwu0E0qW1n for <buildroot@lists.busybox.net>;
- Mon, 15 Jan 2024 07:49:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JlKcGCkehJw3 for <buildroot@lists.busybox.net>;
+ Mon, 15 Jan 2024 10:21:30 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EA926400EA
- for <buildroot@buildroot.org>; Mon, 15 Jan 2024 07:48:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA926400EA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 999E260E1B
+ for <buildroot@buildroot.org>; Mon, 15 Jan 2024 10:21:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 999E260E1B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D429F861A7; Mon, 15 Jan 2024 07:48:59 +0000 (UTC)
+ id 85583861B6; Mon, 15 Jan 2024 10:21:30 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 15 Jan 2024 08:46:17 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b31b91296e7f985b909f104f06a098adddef1fea
-X-Git-Newrev: e874fd08e01a8d543520f867d95ae8a6a9fa242e
+Date: Mon, 15 Jan 2024 11:21:09 +0100
+X-Git-Refname: refs/heads/2023.11.x
+X-Git-Oldrev: fef893cb60dc2f2dc6d064743bc378ad8e4f5d32
+X-Git-Newrev: 8526e60a1f09854b96016b03a2439fcb61200ee4
 X-Patchwork-Hint: ignore
-Message-Id: <20240115074859.D429F861A7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libuwsc: fix wolfssl build
+Message-Id: <20240115102130.85583861B6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] Update for 2023.11.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,114 +62,92 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e874fd08e01a8d543520f867d95ae8a6a9fa242e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=8526e60a1f09854b96016b03a2439fcb61200ee4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-Commit 1567fbd72d4b547f70a7509247bf9abb73ab58e3 didn't fully fix the
-wolfssl build failure because the include on wolfssl/options.h was still
-missing:
-
-/home/autobuild/autobuild/instance-6/output-1/build/libuwsc-3.3.5/src/ssl.c:62:5: error: unknown type name 'SSL_CTX'
-   62 |     SSL_CTX *ctx;
-      |     ^~~~~~~
-
-While at it, add upstream tag to patches
-
-Fixes:
- - http://autobuild.buildroot.org/results/edc49cce5b1f456d980841f4c315e7cd784b1561
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .checkpackageignore                                |  2 --
- .../0001-CMakeLists.txt-add-BUILD_EXAMPLE.patch    |  2 +-
- package/libuwsc/0002-fix-bad-indentation.patch     |  3 +-
- .../libuwsc/0003-src-ssl.c-fix-wolfssl-build.patch | 37 ++++++++++++++++++++++
- 4 files changed, 39 insertions(+), 5 deletions(-)
+ CHANGES                  | 39 +++++++++++++++++++++++++++++++++++++++
+ Makefile                 |  4 ++--
+ support/misc/Vagrantfile |  2 +-
+ 3 files changed, 42 insertions(+), 3 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 020caa754d..914dd6fb63 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -727,8 +727,6 @@ package/libuhttpd/0001-add-compatibility-for-wolfssl-5-0.patch Upstream
- package/libuio/0001-configure.ac-set-automake-strictness-to-foreign.patch Upstream
- package/liburcu/0001-Only-blacklist-ARM-gcc-4.8.0-and-4.8.1.patch Upstream
- package/libusbgx/0001-Add-include-of-sys-sysmacro.h.patch Upstream
--package/libuwsc/0001-CMakeLists.txt-add-BUILD_EXAMPLE.patch Upstream
--package/libuwsc/0002-fix-bad-indentation.patch Upstream
- package/libvpx/0001-vpx_mem-vpx_mem.h-Fix-compilation-with-uClibc.patch Upstream
- package/libwebsock/0001-Switch-to-use-pkg-config-to-detect-libevent-and-open.patch Upstream
- package/libwebsock/0002-fix-ssl.patch Upstream
-diff --git a/package/libuwsc/0001-CMakeLists.txt-add-BUILD_EXAMPLE.patch b/package/libuwsc/0001-CMakeLists.txt-add-BUILD_EXAMPLE.patch
-index 197dd1de0f..87f343a9d9 100644
---- a/package/libuwsc/0001-CMakeLists.txt-add-BUILD_EXAMPLE.patch
-+++ b/package/libuwsc/0001-CMakeLists.txt-add-BUILD_EXAMPLE.patch
-@@ -6,7 +6,7 @@ Subject: [PATCH] CMakeLists.txt: add BUILD_EXAMPLE
- Allow the user to disable example
+diff --git a/CHANGES b/CHANGES
+index f927b7df65..3c02b64064 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,42 @@
++2023.11.1, released January 15th, 2024
++
++	Important / security related fixes.
++
++	Infrastructure:
++
++	- Download: Revert a permission fixup step in the tarball
++	  creation logic, which lead to a hash mismatch issue in two
++	  cargo-vendored packages, ripgrep and sentry-cli.
++
++	- Build: Pass GIT_DIR=. in the environment (through
++	  HOST_MAKE_ENV/TARGET_MAKE_ENV) to the build steps to
++	  workaround packages trying to detect if they are building in
++	  a git checkout and getting confused when building in a sub
++	  directory of a Buildroot git checkout.
++
++	Defconfigs: Rock5b: Add download hashes for U-Boot and Linux
++
++	Updated/fixed packages: apcupsd, arm-trusted-firmware, botan,
++	cjson, criu, cryptodev-linux, cups, dahdi-linux, dahdi-tools,
++	dbus, docker, dropbear, duktape, edk2, erlang, exim, faad2,
++	freeswitch, gcc, gdal, gdb, giflib, glibc, gnuplot, gnutls,
++	go, google-breakpad, gst-omx, gstd, gst1-devtools, gst1-libav,
++	gst1-plugins-bad, gst1-plugins-base, gst1-plugins-good,
++	gst1-plugins-ugly, gst1-python, gst1-rtsp-server, gst1-vaapi,
++	gstreamer1, gstreamer1-editing-services, ipcalc, jq,
++	json-for-modern-cpp, ksmbd-tools, libaio, libarchive,
++	libcamera, libcamera-apps, libcap-ng, libcgroup, libcurl,
++	libde265, libebml, libgtk3, libheif, libiec61850, libndns,
++	libostree, libraw, libsigsegv, libssh, libssh2, libuev,
++	libwebsockets, libzenoh-pico, liquid-dsp, lvm2, madplay,
++	mesa3d, micropython, minizip, mp4v2, nushell,
++	onevpl-intel-gpu, opensc, openssh, optee-client, orc, php,
++	pipewire, postgis, postgresql, proftpd, putty, python-brotli,
++	python-pysensors, python-sip, python-werkzeug, shim, squid,
++	strongswan, sway, tinyssh, tor, transmission, tree, udev,
++	uftp, valijson, wireshark, wlroots, wolfssl,
++	xserver_xorg-server, xwayland,
++
+ 2023.11, released December 4th, 2023
  
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[yann.morin.1998@free.fr: backport from upstream]
-+Upstream: https://github.com/zhaojh329/libuwsc/commit/bb71b21eb9407479ad729b3c858b0fc350fae335
- Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
- ---
-  CMakeLists.txt | 6 +++++-
-diff --git a/package/libuwsc/0002-fix-bad-indentation.patch b/package/libuwsc/0002-fix-bad-indentation.patch
-index f33f944d06..77cae92cf2 100644
---- a/package/libuwsc/0002-fix-bad-indentation.patch
-+++ b/package/libuwsc/0002-fix-bad-indentation.patch
-@@ -5,8 +5,7 @@ Subject: [PATCH] fix bad indentation
+ 	Various fixes.
+diff --git a/Makefile b/Makefile
+index e422e97214..7d1fa0641f 100644
+--- a/Makefile
++++ b/Makefile
+@@ -90,9 +90,9 @@ all:
+ .PHONY: all
  
- Fixes error with GCC11.
+ # Set and export the version string
+-export BR2_VERSION := 2023.11
++export BR2_VERSION := 2023.11.1
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1701677000
++BR2_VERSION_EPOCH = 1705314000
  
--[Retrieved from:
--https://github.com/zhaojh329/libuwsc/commit/8cb416140741a596235b8acc46b2b119b13ebfab]
-+Upstream: https://github.com/zhaojh329/libuwsc/commit/8cb416140741a596235b8acc46b2b119b13ebfab
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- ---
-  src/lua/uwsc_lua.c | 2 +-
-diff --git a/package/libuwsc/0003-src-ssl.c-fix-wolfssl-build.patch b/package/libuwsc/0003-src-ssl.c-fix-wolfssl-build.patch
-new file mode 100644
-index 0000000000..4c652a63c2
---- /dev/null
-+++ b/package/libuwsc/0003-src-ssl.c-fix-wolfssl-build.patch
-@@ -0,0 +1,37 @@
-+From 1c3579e99163a13d622c3ef44088c23d5eea306d Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 14 Jan 2024 16:44:13 +0100
-+Subject: [PATCH] src/ssl.c: fix wolfssl build
-+
-+wolfssl/options.h must also be included by clients to avoid the
-+following build failure because OPENSSL_ALL won't be defined:
-+
-+/home/autobuild/autobuild/instance-6/output-1/build/libuwsc-3.3.5/src/ssl.c:62:5: error: unknown type name 'SSL_CTX'
-+   62 |     SSL_CTX *ctx;
-+      |     ^~~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/edc49cce5b1f456d980841f4c315e7cd784b1561
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Upstream: N/A (already fixed by
-+https://github.com/zhaojh329/ssl/commit/c40ebcd7b4277321acbbd4b00b4b10fd363c7a97)
-+---
-+ src/ssl.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/ssl.c b/src/ssl.c
-+index 3640022..6a3d250 100644
-+--- a/src/ssl.c
-++++ b/src/ssl.c
-+@@ -54,6 +54,7 @@ struct uwsc_ssl_ctx {
-+ #include <openssl/err.h>
-+ #elif UWSC_HAVE_WOLFSSL
-+ #define WC_NO_HARDEN
-++#include <wolfssl/options.h>
-+ #include <wolfssl/openssl/ssl.h>
-+ #include <wolfssl/openssl/err.h>
-+ #endif
-+-- 
-+2.43.0
-+
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+index 61eb743659..64c479b693 100644
+--- a/support/misc/Vagrantfile
++++ b/support/misc/Vagrantfile
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Buildroot version to use
+-RELEASE='2023.11'
++RELEASE='2023.11.1'
+ 
+ ### Change here for more memory/cores ###
+ VM_MEMORY=2048
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
