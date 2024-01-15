@@ -4,85 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 004A7C3DA79
-	for <buildroot@archiver.kernel.org>; Mon, 15 Jan 2024 07:41:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8F7BC3DA79
+	for <buildroot@archiver.kernel.org>; Mon, 15 Jan 2024 07:41:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8693940933;
-	Mon, 15 Jan 2024 07:41:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8693940933
+	by smtp4.osuosl.org (Postfix) with ESMTP id 572424175E;
+	Mon, 15 Jan 2024 07:41:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 572424175E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dR_dTGjfXdqV; Mon, 15 Jan 2024 07:41:27 +0000 (UTC)
+	with ESMTP id R5byLqy6Sm2v; Mon, 15 Jan 2024 07:41:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C33FA4092A;
-	Mon, 15 Jan 2024 07:41:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C33FA4092A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DE7EB1BF396
- for <buildroot@lists.busybox.net>; Mon, 15 Jan 2024 07:41:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8CF2940932;
+	Mon, 15 Jan 2024 07:41:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8CF2940932
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8568C1BF396
+ for <buildroot@lists.busybox.net>; Mon, 15 Jan 2024 07:41:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B051C607F7
- for <buildroot@lists.busybox.net>; Mon, 15 Jan 2024 07:41:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B051C607F7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5DCA54092A
+ for <buildroot@lists.busybox.net>; Mon, 15 Jan 2024 07:41:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5DCA54092A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0qbshNRDH4Ik for <buildroot@lists.busybox.net>;
- Mon, 15 Jan 2024 07:41:22 +0000 (UTC)
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com
- [IPv6:2a00:1450:4864:20::134])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 60AF4607F1
- for <buildroot@buildroot.org>; Mon, 15 Jan 2024 07:41:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60AF4607F1
-Received: by mail-lf1-x134.google.com with SMTP id
- 2adb3069b0e04-50e7af5f618so9227926e87.1
- for <buildroot@buildroot.org>; Sun, 14 Jan 2024 23:41:22 -0800 (PST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DFVIDEzO5DvV for <buildroot@lists.busybox.net>;
+ Mon, 15 Jan 2024 07:41:24 +0000 (UTC)
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com
+ [IPv6:2a00:1450:4864:20::12d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4539C4089E
+ for <buildroot@buildroot.org>; Mon, 15 Jan 2024 07:41:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4539C4089E
+Received: by mail-lf1-x12d.google.com with SMTP id
+ 2adb3069b0e04-50e80d14404so8101747e87.1
+ for <buildroot@buildroot.org>; Sun, 14 Jan 2024 23:41:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1705304480; x=1705909280;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=mytuqPFkD3UuBWZ+Nq8pjFlelzi9Vg8Hd0PPEPKvXJM=;
- b=FOOVtRTwPE7YvGWFAXC8DT+ZZrJT9zGcADXgerJzUu59an5CssJZkSMiQO+vCHJx0l
- xDHCJwVPeq2dabTvEOpGayuXJ+ZtmAmPmOzcl/+sc1QeLQqljJxlK/YFAQzj9jt3CL0B
- 4Ka0LoM58MF+b/zTb8NW/A22juiFMkT49fOW3TZglnu6l6FHeTu1949vf4oZdXg02pQM
- hBvhK9n7BF0wD/ORV5ZPDEdRTmj+mZQFQU+muSqmf2qms7t3lfVbB7geh2uCSWy1XIeo
- 5j2wV9qpASkKPPDFsBtjX6a4l8ZgPqacW9I6W8RhpmElE2A++7Wb4QUwSwpzPcajXFFD
- re8w==
-X-Gm-Message-State: AOJu0YyND8mmdto2VBZmUial3hJAoZg+Lwoz4qrlh6yI58nc1Pl+Wlmt
- /Ep9k49GxZlAesdc2pLJYa84jBez6+Pl/Q==
-X-Google-Smtp-Source: AGHT+IGRhWpWGYn32w8iry1EOm2uDZXpmaEoMvbNoITDoNnW4BqLoiZJxG+LCZtPdGsh4klGqcJgpg==
-X-Received: by 2002:a05:6512:1247:b0:50e:b622:24e9 with SMTP id
- fb7-20020a056512124700b0050eb62224e9mr2732076lfb.85.1705304479549; 
- Sun, 14 Jan 2024 23:41:19 -0800 (PST)
+ d=1e100.net; s=20230601; t=1705304482; x=1705909282;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=bNIDCFgKu/M9l0pHFjWDqBou9ucyRvr6yY1i6F8JrEE=;
+ b=vnu5p1X1VDKjas+vrFMAZ8VaJMWtX3LpTefbnKpmaomScAKku6C+APkGWHC1s3N06u
+ 3r7oGs9HhTKVoJwNJU+rqnY3EzBN7pWPMRLW2WeYtUjQ29vTXvuOurQiQ3bgFd6Ooq4U
+ muhLTW86OQojVX86KQV/W+1yUE+0pWN2jO/MSGsZUbBB385ps8UDXcXVldFTLV/RSf/S
+ 3nQaFAZLcO0S8YD1/GHdNU2fhzST/HRZF2Is36eHzJ6whrqUn0UU8DOFrgECcbMKCB9q
+ teD/Z1g3WTjG9EBCG/Wr+n01VhSu0RX51KpvyK/5pl8yLOEiYBzPw0Zkup5Ykx1dXzgg
+ U+wg==
+X-Gm-Message-State: AOJu0YzdfiEO1VkWSilkiDu407X+lI6UWw6mtNtJUIDVoRpQgh4JiQy7
+ Uv4KggXHZEq+wJ7yRnnySMjqcO4DeH/VwQ==
+X-Google-Smtp-Source: AGHT+IEf9CU8uSR9TefrSmQCjWIhNsvK/G9MBxllssfH7JvYChxq50GxbDg0Gv7uM5EdmYLaTdhkVA==
+X-Received: by 2002:a05:6512:b12:b0:50e:dc80:4f59 with SMTP id
+ w18-20020a0565120b1200b0050edc804f59mr2722123lfu.18.1705304481812; 
+ Sun, 14 Jan 2024 23:41:21 -0800 (PST)
 Received: from localhost.localdomain ([176.10.248.204])
  by smtp.gmail.com with ESMTPSA id
- fc6-20020a056512138600b0050e9c5b289asm1383913lfb.91.2024.01.14.23.41.18
+ fc6-20020a056512138600b0050e9c5b289asm1383913lfb.91.2024.01.14.23.41.21
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 14 Jan 2024 23:41:19 -0800 (PST)
+ Sun, 14 Jan 2024 23:41:21 -0800 (PST)
 From: Joachim Wiberg <troglobit@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 15 Jan 2024 08:41:08 +0100
-Message-Id: <20240115074112.157216-1-troglobit@gmail.com>
+Date: Mon, 15 Jan 2024 08:41:09 +0100
+Message-Id: <20240115074112.157216-2-troglobit@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240115074112.157216-1-troglobit@gmail.com>
+References: <20240115074112.157216-1-troglobit@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1705304480; x=1705909280; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=mytuqPFkD3UuBWZ+Nq8pjFlelzi9Vg8Hd0PPEPKvXJM=;
- b=G5w4a0vfFPYV45rYHi3Ea8kQhiIwzvzzM6TC9/tPAyr7ergJmGt19l9D3r7QFAUKdD
- kfxlxOZSGm9tudiMWsduXDYqwHSKFjZeAT0qj2wkUi+xHkynnYrEsAkmkLYag1wJMARs
- 5Ez8yrDjXuT5tFOTQUxcATdURU+bPcsXG6SLTLyCV09ljjvgWssLMT9Ub1IfQDA3dZv2
- dJVjwhDE192XVbwYySH++Yrx+AM4xiW7oLp6+BJddvifGR6Yqb8Ws/M6vDnwYruySuVM
- XwFy8sMi/dkLgxJlEfljP6bR1ZxzaraCrxuhOLI73YXKWkEZ7SoXSeeFBYu9tnGVntYB
- rAJg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=gmail.com; s=20230601; t=1705304482; x=1705909282; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=bNIDCFgKu/M9l0pHFjWDqBou9ucyRvr6yY1i6F8JrEE=;
+ b=TPJhIlFgyFm1DUoYibkvLeD5qUBZjvuGlq7w8gnclo6/xYB7ztgKOth8zJtT+90bHw
+ xSCkCCZNf65p332pg9kiSsIe4OoXydwWZXrebT67uacRyi2KpdvNxSv3IVysEh5XYqmZ
+ MbP5bbpnNGiz7OtmOV8nQwi1jbSSjMXagiEdAAApCkkaiVEJJGSaE2jzEhPwmi+jJsfi
+ /5kHmDMRn6bD87zIXY5AL1zm8KZlE+1qqbHdKNm2ubIwiEGBDwLYSQqZqY8WWk5ubZ4Q
+ yG4jmw1haE0V9kkjRdxMFHIYVdvhfZKcYn1RP87uUAoT5+yEfsM+Tfj7oaOKn6NQnWTH
+ A2vg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=G5w4a0vf
-Subject: [Buildroot] [PATCH 0/3] package/watchdogd: version bump and major
- Config.in rewrite
+ header.a=rsa-sha256 header.s=20230601 header.b=TPJhIlFg
+Subject: [Buildroot] [PATCH 1/3] package/watchdogd: bump to version 4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,41 +102,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi,
+ - Major feature upgrade, command line and .conf files compatible
+ - LICENSE hash update due to update in copyright years
 
-this patch set upgrades watchdogd to the latest version, a major upgrade
-with lots of fixes and new features:
+For details, see https://github.com/troglobit/watchdogd/releases/tag/4.0
 
-  https://github.com/troglobit/watchdogd/releases/tag/4.0
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+---
+ package/watchdogd/watchdogd.hash | 4 ++--
+ package/watchdogd/watchdogd.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-One such change is how the configure script used to be --with-plugin=SEC
-and now is just --with-plugin.  This is handled in a separate patch of
-Config.in, with the legacy migration support from int -> bool.
-
-The split in separate patches for bump and Config.in changes are mostly
-for clarity, but works because the SEC poll argument was always ignored
-by the upstream configure script, and the same is true now. (The poll
-interval has always been set in the /etc/watchdogd.conf file.)
-
-A couple of new optional system monitor plugins were added too, these
-were added as a separate patch.
-
-
-Best regards
- /Joachim
-
-Joachim Wiberg (3):
-  package/watchdogd: bump to version 4.0
-  package/watchdogd: convert Config.in options, int -> bool
-  package/watchdogd: add menuconfig support for new system monitors
-
- package/watchdogd/Config.in      | 46 ++++++++++++++++++--------------
- package/watchdogd/watchdogd.hash |  4 +--
- package/watchdogd/watchdogd.mk   | 30 ++++++++++++++-------
- 3 files changed, 49 insertions(+), 31 deletions(-)
-
---
+diff --git a/package/watchdogd/watchdogd.hash b/package/watchdogd/watchdogd.hash
+index 4ff1a3485b..0c228666bd 100644
+--- a/package/watchdogd/watchdogd.hash
++++ b/package/watchdogd/watchdogd.hash
+@@ -1,5 +1,5 @@
+ # Upstream .sha256 from GitHub
+-sha256  33ec4edc8cb4ada7a4d8324a27d897d33aae5e83257ed64d3d37508825c11237  watchdogd-3.5.tar.gz
++sha256  7f38bc691353a51fc6feb2ccab60417c0284dd3f4d55c50d8b1781fda70d8101  watchdogd-4.0.tar.gz
+ 
+ # Locally calculated
+-sha256  fd685e20931174308c45a26418a7ce34d66704c4e4b92ab1d8299deb255cd676  LICENSE
++sha256  e233c56d807c74c67f2eff47ad03c216144cdd374d8d7578b996c28c260eadda  LICENSE
+diff --git a/package/watchdogd/watchdogd.mk b/package/watchdogd/watchdogd.mk
+index ea033b4e71..d140039540 100644
+--- a/package/watchdogd/watchdogd.mk
++++ b/package/watchdogd/watchdogd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WATCHDOGD_VERSION = 3.5
++WATCHDOGD_VERSION = 4.0
+ WATCHDOGD_SITE = https://github.com/troglobit/watchdogd/releases/download/$(WATCHDOGD_VERSION)
+ WATCHDOGD_LICENSE = ISC
+ WATCHDOGD_LICENSE_FILES = LICENSE
+-- 
 2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
