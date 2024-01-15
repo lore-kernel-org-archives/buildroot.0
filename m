@@ -4,84 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A3E5C4707C
-	for <buildroot@archiver.kernel.org>; Mon, 15 Jan 2024 21:48:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D84FCC3DA79
+	for <buildroot@archiver.kernel.org>; Mon, 15 Jan 2024 21:57:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C254E843B2;
-	Mon, 15 Jan 2024 21:48:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C254E843B2
+	by smtp1.osuosl.org (Postfix) with ESMTP id 791B584392;
+	Mon, 15 Jan 2024 21:57:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 791B584392
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id U1xebz7UdnbL; Mon, 15 Jan 2024 21:48:19 +0000 (UTC)
+	with ESMTP id F5uhBiXkWSZz; Mon, 15 Jan 2024 21:57:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 31AFB843A7;
-	Mon, 15 Jan 2024 21:48:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 31AFB843A7
+	by smtp1.osuosl.org (Postfix) with ESMTP id D09FC8404F;
+	Mon, 15 Jan 2024 21:57:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D09FC8404F
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7EB741BF383
- for <buildroot@lists.busybox.net>; Mon, 15 Jan 2024 21:48:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id AC8D51BF383
+ for <buildroot@lists.busybox.net>; Mon, 15 Jan 2024 21:57:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5033941FCE
- for <buildroot@lists.busybox.net>; Mon, 15 Jan 2024 21:48:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5033941FCE
+ by smtp4.osuosl.org (Postfix) with ESMTP id 83E9242F28
+ for <buildroot@lists.busybox.net>; Mon, 15 Jan 2024 21:57:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 83E9242F28
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Lbf4hhOg6eHr for <buildroot@lists.busybox.net>;
- Mon, 15 Jan 2024 21:48:15 +0000 (UTC)
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
- [IPv6:2a00:1450:4864:20::536])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5CCE341FB3
- for <buildroot@buildroot.org>; Mon, 15 Jan 2024 21:48:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5CCE341FB3
-Received: by mail-ed1-x536.google.com with SMTP id
- 4fb4d7f45d1cf-55790581457so10464360a12.3
- for <buildroot@buildroot.org>; Mon, 15 Jan 2024 13:48:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1705355293; x=1705960093;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=ASgOApS7+Z7PUE/qrdwsHRMRolvyc7iH13a8jIQsqTk=;
- b=rNregKeylTMIBTSLYV3FmDUHU6xxk2dP8OMg98galYczfxqp1tBb56UIj7Io0IFXMh
- HWAASH/VaW+iNB7eqOo6xJvcYMnmnalimwS5ZAvgNBGAbxkgj1OR88+PqmOCHj0Tb3Bh
- nfcGtRsJWxRK8fG7zXFEyL76eRCwwuxaSUOM+JZaXEjGGrlJ2BuGAthVB98+dFxYCXgR
- TztH/hO4/fuJrUq1LnBYfZwJnSVwubFB3MiFrrmJfC+8k8gkSCDfRCFHxyjT87mSGQCl
- FPvl7IqrBFQn7haVPUW6S2kI5xtpW67C5/c0k7AskqA7ZS5BJQFvblZUds+2v8AYhQRT
- 601A==
-X-Gm-Message-State: AOJu0Yzf/Xss1Cuo7rxE57qGsT4x+vzoXLZjn5qoU3YkHvMJLihpBBQV
- EGZjflm2uyM5G9aSZociiuMpO8It4Mw=
-X-Google-Smtp-Source: AGHT+IFXFqRCEcUbSda2jdBAVGvYiRItNJcQNPnuLoubO1p8ULjJs1VpjchMIHCNW9KjZmUDZdfHPw==
-X-Received: by 2002:a05:6402:1745:b0:555:3b98:7540 with SMTP id
- v5-20020a056402174500b005553b987540mr2888769edx.33.1705355293473; 
- Mon, 15 Jan 2024 13:48:13 -0800 (PST)
-Received: from x230.suse.cz (gw1.ms-free.net. [185.243.124.10])
- by smtp.gmail.com with ESMTPSA id
- u11-20020a056402110b00b00558aa40f914sm5636471edv.40.2024.01.15.13.48.12
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 15 Jan 2024 13:48:13 -0800 (PST)
-From: Petr Vorel <petr.vorel@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon, 15 Jan 2024 22:48:09 +0100
-Message-ID: <20240115214809.2352232-1-petr.vorel@gmail.com>
-X-Mailer: git-send-email 2.43.0
+ with ESMTP id GuCGyWKndpbf for <buildroot@lists.busybox.net>;
+ Mon, 15 Jan 2024 21:57:15 +0000 (UTC)
+Received: from smtpcmd0641.aruba.it (smtpcmd0641.aruba.it [62.149.156.41])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E047642F1E
+ for <buildroot@buildroot.org>; Mon, 15 Jan 2024 21:57:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E047642F1E
+Received: from [192.168.50.163] ([84.33.84.190])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id PUxDrwWJhSo8WPUxDrwDM3; Mon, 15 Jan 2024 22:57:12 +0100
+Message-ID: <e971b0bc-6242-4a28-b203-5e0326466f13@benettiengineering.com>
+Date: Mon, 15 Jan 2024 22:57:10 +0100
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1705355293; x=1705960093; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=ASgOApS7+Z7PUE/qrdwsHRMRolvyc7iH13a8jIQsqTk=;
- b=XqDQlNr0VlVRaVGmmpqivHHmOd+emhNuZQ3fiDiALZhlhGC0L4P1yaQyqNEIQ2waIb
- UxdE5ASN4jOr9EpAwBtYE+gH7HqivOo0cpT3c/qsortsNwXNv2shfaz5ra8lJrFOiv2E
- TKYNz2MT0alIoeFN8SymaoXTo+mumU6/j6OLzmUKzgn5hQefnD5dD4qfC6nXt1kcy2+N
- tmQ4q5lnV9TtQlX+qc7xFIxcEZwOK4D4g8WlRERleqtBw5wxaf+ekzr55/b/ZGCLknEF
- 87FUnwR5zWbxskr4CZbywgVMq1CIz0PwP0qIvjHhAe9oMcczIDRN1YET4tSvbitGos4r
- Mx9Q==
+User-Agent: Mozilla Thunderbird
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20240115213415.17439-1-fontaine.fabrice@gmail.com>
+Content-Language: en-US
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <20240115213415.17439-1-fontaine.fabrice@gmail.com>
+X-CMAE-Envelope: MS4xfM1OW28lLOw41c6dlWhwt4+nyBh3kUO9Sinc4HHIOqVlkSdTLaCY+OTCILF+wd81Ew8wCEP30AZtIO5cJL6Kk/61VQGAgpCABgZ31+yHUOCuCWmkiHbG
+ 1aqpOSbbX/rUvtxZ/276PDncqt6IMLmlAaosvfjfTbyuQqsQJHgV8/snSFO6SKzSIQbjEMnIF0D9q4pMhf8hE4CwIZ3lDZ10RZ2Cj0FD2obbx9SFyypmToBL
+ twnMKj+Thf4BJ/GftCcR4N1dmSxoBx3UuVnVR0qxB2bu1kg/JYVPQK3ddGoBNLIatY1ytHYQ/ms6epzk6IYOQQnQnbttpwccO1InVp+io8fsdv7bm/r66JEC
+ Zlm4NtBf6AA/Lo5TALHQDHMJTzRL2KPweFL3LseV6Fy0btwBFXB0weH3obxZrpwyRaQMCVeB8W/JPuy8NXydi6saaRtE3ACF+Zzya1Xf/ocMogVz70wIkQvr
+ q40yXPYD/A5prpy8
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1705355832; bh=TX3i40Yz32J6F8z43eABGcxw4g5Nfg0iZ9dbpm7jTck=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=fBivhhFEJ9dnt/5zbW4EGKXVMGCbpDaJ/Z+wwt4Sa3xbauzri75MjAi764cnROMFw
+ vBfYWf4ZRSwGtwCSCDTa4XsUSIfJYpwRQs/t2YUOQDDIeXd96xxTt/vw0a+AqPftVA
+ iUWMBb/TklYnEeUtdexi1ypd/mlL/rZvv+FLa4lb08ec0q4Eo3YmICDZqHlIyZns+F
+ lbVx4C6YLgSwctrvYV4aDwzRFqaPnViMTr0GlMJMYKdQ+zCvdaWy5Hlr/027KjlfQr
+ QS410z5H6IQp3qSDupriFXOpbtQCOLxiDVBY6afHpgvnHwPo2uAGUeYCZTSey+ZSaS
+ Xz5mSq+BztEoA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=XqDQlNr0
-Subject: [Buildroot] [PATCH 1/1] package/libtirpc: bump version to 1.3.4
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=fBivhhFE
+Subject: Re: [Buildroot] [PATCH 1/2] toolchain: add
+ BR2_TOOLCHAIN_HAS_GCC_BUG_101766
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,47 +77,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Petr Vorel <petr.vorel@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@free-electrons.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Sen Hastings <sen@phobosdpl.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Romain Naour <romain.naour@gmail.com>, Norbert Lange <nolange79@gmail.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
- package/libtirpc/libtirpc.hash | 4 ++--
- package/libtirpc/libtirpc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hi Fabrice,
 
-diff --git a/package/libtirpc/libtirpc.hash b/package/libtirpc/libtirpc.hash
-index 1efc3e47e2..40e59f9bcb 100644
---- a/package/libtirpc/libtirpc.hash
-+++ b/package/libtirpc/libtirpc.hash
-@@ -1,5 +1,5 @@
- # From sourceforge's info on download page:
--sha1  6e52c39148494e4836e2d5d4f28b11ddfa65394b  libtirpc-1.3.3.tar.bz2
-+sha1  63c800f81f823254d2706637bab551dec176b99b  libtirpc-1.3.4.tar.bz2
- # Locally computed
--sha256  6474e98851d9f6f33871957ddee9714fdcd9d8a5ee9abb5a98d63ea2e60e12f3  libtirpc-1.3.3.tar.bz2
-+sha256  1e0b0c7231c5fa122e06c0609a76723664d068b0dba3b8219b63e6340b347860  libtirpc-1.3.4.tar.bz2
- sha256  17cf6098f95bdbb269f0bbc68e76c88fe20487ca7ec53f454923ab4256ecd2e7  COPYING
-diff --git a/package/libtirpc/libtirpc.mk b/package/libtirpc/libtirpc.mk
-index 179adc97d0..298b3c36bd 100644
---- a/package/libtirpc/libtirpc.mk
-+++ b/package/libtirpc/libtirpc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBTIRPC_VERSION = 1.3.3
-+LIBTIRPC_VERSION = 1.3.4
- LIBTIRPC_SOURCE = libtirpc-$(LIBTIRPC_VERSION).tar.bz2
- LIBTIRPC_SITE = http://downloads.sourceforge.net/project/libtirpc/libtirpc/$(LIBTIRPC_VERSION)
- LIBTIRPC_LICENSE = BSD-3-Clause
+On 15/01/24 22:34, Fabrice Fontaine wrote:
+> BR2_TOOLCHAIN_HAS_GCC_BUG_101766 will be used to fix a build a build
+> failure on attr and elfutils with microblaze
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>   toolchain/Config.in | 8 ++++++++
+>   1 file changed, 8 insertions(+)
+> 
+> diff --git a/toolchain/Config.in b/toolchain/Config.in
+> index f1f9212f25..dc4e52bb3d 100644
+> --- a/toolchain/Config.in
+> +++ b/toolchain/Config.in
+> @@ -210,6 +210,14 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_101737
+>   	bool
+>   	default y if BR2_sh
+>   
+> +# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101766
+> +# Microblaze gcc can't use .symver attribute leading to:
+> +# error: symver is only supported on ELF platforms
+> +# however __has_attribute(symver) returns true
+> +config BR2_TOOLCHAIN_HAS_GCC_BUG_101766
+> +	bool
+> +	default y if BR2_microblaze || BR2_microblazeel
+> +
+
+Thank you for providing such gcc bug:
+Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+
+Best regards
 -- 
-2.43.0
+Giulio Benetti
+CEO&CTO@Benetti Engineering sas
+
+>   # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101915
+>   # ICE: in extract_insn, at recog.c:2294 on microblaze.
+>   # This bug still exists in gcc = 12.1.0
 
 _______________________________________________
 buildroot mailing list
