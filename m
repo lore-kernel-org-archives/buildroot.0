@@ -4,87 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2196EC3DA79
-	for <buildroot@archiver.kernel.org>; Mon, 15 Jan 2024 21:58:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0568C3DA79
+	for <buildroot@archiver.kernel.org>; Mon, 15 Jan 2024 22:09:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C80AB843B2;
-	Mon, 15 Jan 2024 21:58:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C80AB843B2
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8C6B0811BB;
+	Mon, 15 Jan 2024 22:09:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C6B0811BB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 07t1-0KNKZsR; Mon, 15 Jan 2024 21:58:14 +0000 (UTC)
+	with ESMTP id nrXQ2mKGEnOy; Mon, 15 Jan 2024 22:09:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 376FC8437F;
-	Mon, 15 Jan 2024 21:58:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 376FC8437F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 521D61BF383
- for <buildroot@lists.busybox.net>; Mon, 15 Jan 2024 21:58:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CBBE280FA4;
+	Mon, 15 Jan 2024 22:08:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CBBE280FA4
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DA76E1BF39D
+ for <buildroot@lists.busybox.net>; Mon, 15 Jan 2024 22:08:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2935242DB0
- for <buildroot@lists.busybox.net>; Mon, 15 Jan 2024 21:58:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2935242DB0
+ by smtp4.osuosl.org (Postfix) with ESMTP id BC2AA41B3D
+ for <buildroot@lists.busybox.net>; Mon, 15 Jan 2024 22:08:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC2AA41B3D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zH-aOY05nNSs for <buildroot@lists.busybox.net>;
- Mon, 15 Jan 2024 21:58:09 +0000 (UTC)
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
- [IPv6:2a00:1450:4864:20::629])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C995442DA9
- for <buildroot@buildroot.org>; Mon, 15 Jan 2024 21:58:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C995442DA9
-Received: by mail-ej1-x629.google.com with SMTP id
- a640c23a62f3a-a2dbc61fe89so161790466b.0
- for <buildroot@buildroot.org>; Mon, 15 Jan 2024 13:58:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1705355886; x=1705960686;
- h=in-reply-to:content-disposition:mime-version:references:reply-to
- :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=VOblvCLcNb55BUW/x+tJYzxp5tpLLIYTe059gTr0zsQ=;
- b=p6DrPWC+59k/2vsHSflN/42uQ1CbWD77b+Ak+/cLds5J5V0k/fHtcFx1bGztoEmw6x
- U+L7nECsielQ3YzqHoC8tzvBRWvZbB8Cswf5hdNKoA2FsgiNyeUn+u1Gm+1VQHf/VJVV
- mp+7X3kwz+FGt7SascNGKE+f9NtHz95s1gqiEkwBOJVL3uUAttdLPQVtYoKNpXO9yHC4
- bCraKRnhG8B7QJ8YlcCs0RFTHBkTPbMZDqny9BWnxx0On/h2+TxV3C0WdJEWbh2QlXBF
- 40CM6lUhfJS+gZDqzLVS873jaR/08J9bMEd8XMsT5ffg0AZx10nGvROWfbtU2/Kjtyfg
- +eiQ==
-X-Gm-Message-State: AOJu0YxjiHeN8zYfrYj1TLCbYVd2kJYXqU0xN0Ng2UBiTL485aJvaqzt
- 0kWwR2HdnapRW5tKfZgKc7uWuXkVpsM=
-X-Google-Smtp-Source: AGHT+IFSL2/TLOAoXx2Cuwx/Y4CKghxdVN2Xwkg5LDzFoWus+2n6DE2mgFqMR+ZG+3OTfeNcl0vcIA==
-X-Received: by 2002:a17:907:d40f:b0:a2d:ad14:a2a6 with SMTP id
- vi15-20020a170907d40f00b00a2dad14a2a6mr1583877ejc.23.1705355886238; 
- Mon, 15 Jan 2024 13:58:06 -0800 (PST)
-Received: from pevik (gw1.ms-free.net. [185.243.124.10])
- by smtp.gmail.com with ESMTPSA id
- z9-20020a1709060be900b00a28148beabdsm5705116ejg.102.2024.01.15.13.58.05
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 15 Jan 2024 13:58:05 -0800 (PST)
-Date: Mon, 15 Jan 2024 22:58:03 +0100
-From: Petr Vorel <petr.vorel@gmail.com>
-To: buildroot@buildroot.org
-Message-ID: <20240115215803.GB2351444@pevik>
-References: <20240115214809.2352232-1-petr.vorel@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wyL46OQssdUw for <buildroot@lists.busybox.net>;
+ Mon, 15 Jan 2024 22:08:57 +0000 (UTC)
+Received: from smtpcmd0642.aruba.it (smtpcmd0642.aruba.it [62.149.156.42])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 77FAE41DF8
+ for <buildroot@buildroot.org>; Mon, 15 Jan 2024 22:08:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77FAE41DF8
+Received: from [192.168.50.163] ([84.33.84.190])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id PV8XrwbFGSo8WPV8YrwEp3; Mon, 15 Jan 2024 23:08:54 +0100
+Message-ID: <167d3968-1070-42dd-a140-f26a9d6d9657@benettiengineering.com>
+Date: Mon, 15 Jan 2024 23:08:52 +0100
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240115214809.2352232-1-petr.vorel@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1705355886; x=1705960686; darn=buildroot.org;
- h=in-reply-to:content-disposition:mime-version:references:reply-to
- :message-id:subject:cc:to:from:date:from:to:cc:subject:date
- :message-id:reply-to;
- bh=VOblvCLcNb55BUW/x+tJYzxp5tpLLIYTe059gTr0zsQ=;
- b=kEYQyOPWa9tAfTAS9Iih5/ZUnX49KDzuWT1pNJgSCZk9tkC4ApNC216jjRGDqQEptB
- Ro+1Zcx6DmPi20jdkQbDUfN0Ilte4ntPJRdoC9zifWPsYPh3pJKc5KgfhN8ps3Rrtvv1
- p3BLAaeSeQln9/kysg8V0QwZQO0H68w3Gq/9iPGMuJCReBJPDwpt6MgMLQIetlRNeYfm
- QUmgShyit5OFv07y8KNEZcY4ulrg2Db9E1YF4R4dI/vQlJL/3affuZQSqWo8KMaTrLFv
- SkoHAceUoHla1JTna9U+7KA9JXLLnHQ1d/8zRDEa7nmGl9KIT9R3wPZ5a8eOSIIRPMbT
- RPRA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=kEYQyOPW
-Subject: Re: [Buildroot] [PATCH 1/1] package/libtirpc: bump version to 1.3.4
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20240115213415.17439-1-fontaine.fabrice@gmail.com>
+ <20240115213415.17439-2-fontaine.fabrice@gmail.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <20240115213415.17439-2-fontaine.fabrice@gmail.com>
+X-CMAE-Envelope: MS4xfKfefmFAQjy83tZYQoWEyCr6n7DoCoxWEkcUPSSe4DV3gKxhao73epzCI8BLWOyhT9dCpJqG/EKkvmXwg9cspQFOm/66n6fozXrnRcWm1fGngpMpcXqp
+ oyEquoZiBp3C73xPEu+LmNWsTEoK0IQ0luydqWTg0gp5HbTbUQU6/UIfj1f7AlSHfEnqUj9ZooIj227DCllle1QCM+dJnmzQrgHB3fWwyRUqJsmn5WmxyDkv
+ PdrM7rAeiMMeqsz1z+k4hoXzmMvQnoFieJrPyDtetbR08RXzLr54/Tih56IwAqqIP6wOcsAf/nAZdl0eS7tFh1KmVbCBIERQcv6hbIj7LdS7x0x11PHsCcTB
+ SWQd3+RvBVKkhyTjK4s+LXTLgMVuEbmsn2eVWlG8l1LolWubjU3xKwXqWmMw6MrWIHcxaJHUvRPOgsVz6uuAVvvoTo92GCSfh1tIay6piEWBn8YDne+LzDcF
+ yiXb85krvkZKVZyH
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1705356534; bh=Nj/cC8BP2rXuzt5aS0DwNNS93HQWU1AckLA2tGuAh2I=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=QlcHO3hvewUNAJf3Qblp+5ojsYSk7pL7aALSHtRv5x1DSLNNtydFBhyPK2oc0e5RI
+ b7FWq92kqkBPs3hwWaXJB5cZVXeJnPvnvNwIpSfUh882tIkwXPfVpVZ3Xigwt/ir39
+ 3qqe6e9JLbK1fK5DbYiZUCdDyZbE3YPPWpArOGAgs5/qa5XcTYN2J9Iqbf8NXrQu8q
+ gJ44Vz36ZsJdgU7inZiqrrJHWHWtret4DOgMKKxNF5mbthxSVPcP42GPcb1soEC3Ao
+ Wr5+nsf3IhytbrXNJlEmCr7KZAuRezRlpYDu6aiG7oGlpb+mgPm74zhqYARj0sPIdx
+ /wZU5sGaHDOkA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=QlcHO3hv
+Subject: Re: [Buildroot] [PATCH 2/2] package/attr: affected by gcc bug 101766
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,27 +77,114 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Reply-To: Petr Vorel <petr.vorel@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Sen Hastings <sen@phobosdpl.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Romain Naour <romain.naour@gmail.com>, Norbert Lange <nolange79@gmail.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi,
+Hi Fabrice,
 
-build tested:
+On 15/01/24 22:34, Fabrice Fontaine wrote:
+> attr is affected by gcc bug 101766 since version 1.5.2 and
+> https://git.savannah.nongnu.org/cgit/attr.git/commit/?id=11b9069098b4d4c23efb06c9457a085b784354d4
+> resulting in the following build failure on microblaze since commit
+> b31b91296e7f985b909f104f06a098adddef1fea:
+> 
+> libattr/syscalls.c:133:10: error: symver is only supported on ELF platforms
+>    133 | # pragma GCC visibility pop
+>        |          ^~~
 
-                    bootlin-armv5-uclibc [1/6]: OK
-                     bootlin-armv7-glibc [2/6]: OK
-                   bootlin-armv7m-uclibc [3/6]: OK
-                     bootlin-x86-64-musl [4/6]: OK
-                      br-arm-full-static [5/6]: OK
-                            sourcery-arm [6/6]: OK
+Please add:
+So let's disable package attr and packages depending on it.
 
-Kind regards,
-Petr
+> 
+> Fixes:
+>   - http://autobuild.buildroot.org/results/29c76e02becedf922bd7dc0533338c078bf77d2a
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>   package/acl/Config.in     | 4 ++++
+>   package/attr/Config.in    | 4 ++++
+>   package/systemd/Config.in | 4 ++++
+>   3 files changed, 12 insertions(+)
+> 
+> diff --git a/package/acl/Config.in b/package/acl/Config.in
+> index 92f2251878..132c6e8ad3 100644
+> --- a/package/acl/Config.in
+> +++ b/package/acl/Config.in
+> @@ -1,5 +1,6 @@
+>   config BR2_PACKAGE_ACL
+>   	bool "acl"
+> +	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_101766 # attr
+>   	select BR2_PACKAGE_ATTR
+>   	help
+>   	  POSIX Access Control Lists, which are used to define more
+> @@ -8,3 +9,6 @@ config BR2_PACKAGE_ACL
+>   	  This package also provides libacl.
+>   
+>   	  http://savannah.nongnu.org/projects/acl
+> +
+> +comment "acl needs a toolchain not affected by GCC bug 101766"
+> +	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_101766
+> diff --git a/package/attr/Config.in b/package/attr/Config.in
+> index 554772b75d..b9d9f57d8f 100644
+> --- a/package/attr/Config.in
+> +++ b/package/attr/Config.in
+> @@ -1,7 +1,11 @@
+>   config BR2_PACKAGE_ATTR
+>   	bool "attr"
+> +	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_101766
+>   	help
+>   	  Commands for Manipulating Filesystem Extended Attributes.
+>   	  This package also provides libattr.
+>   
+>   	  http://savannah.nongnu.org/projects/attr
+> +
+> +comment "attr needs a toolchain not affected by GCC bug 101766"
+> +	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_101766
+> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+> index 859332d9e4..f0f92b78b0 100644
+> --- a/package/systemd/Config.in
+> +++ b/package/systemd/Config.in
+> @@ -451,6 +451,7 @@ config BR2_PACKAGE_SYSTEMD_RFKILL
+>   
+>   config BR2_PACKAGE_SYSTEMD_SMACK_SUPPORT
+>   	bool "enable SMACK support"
+> +	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_101766 # attr
+>   	select BR2_PACKAGE_ATTR
+>   	select BR2_PACKAGE_SMACK
+>   	help
+> @@ -463,6 +464,9 @@ config BR2_PACKAGE_SYSTEMD_SMACK_SUPPORT
+>   	  When this feature is enabled, Systemd mounts smackfs and
+>   	  manages security labels for sockets.
+>   
+> +comment "SMACK support needs a toolchain not affected by GCC bug 101766"
+> +	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_101766
+> +
+>   config BR2_PACKAGE_SYSTEMD_SYSEXT
+>   	bool "enable sysext support"
+>   	help
+
+I've found that following dependency is missing:
+BR2_PACKAGE_LUA_FLU
+
+Do you mind sending a V2 with that dependency and rewording a bit like
+I've pointed above?
+
+With those included you can add:
+Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+
+Thank you!
+
+Best regards
+-- 
+Giulio Benetti
+CEO&CTO@Benetti Engineering sas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
