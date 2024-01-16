@@ -1,65 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04ADCC47077
-	for <buildroot@archiver.kernel.org>; Tue, 16 Jan 2024 21:06:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E9F0C47077
+	for <buildroot@archiver.kernel.org>; Tue, 16 Jan 2024 21:44:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7E81D8366E;
-	Tue, 16 Jan 2024 21:06:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E81D8366E
+	by smtp2.osuosl.org (Postfix) with ESMTP id AA78940342;
+	Tue, 16 Jan 2024 21:44:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AA78940342
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id t0Pppt582SO3; Tue, 16 Jan 2024 21:44:37 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 740A441A47;
+	Tue, 16 Jan 2024 21:44:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 740A441A47
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6A6B31BF3D7
+ for <buildroot@lists.busybox.net>; Tue, 16 Jan 2024 21:44:35 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 49CC881E31
+ for <buildroot@lists.busybox.net>; Tue, 16 Jan 2024 21:44:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 49CC881E31
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kuYt6iqOdt7g; Tue, 16 Jan 2024 21:06:12 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AEA3383638;
-	Tue, 16 Jan 2024 21:06:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AEA3383638
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B6EAC1BF3D7
- for <buildroot@lists.busybox.net>; Tue, 16 Jan 2024 21:06:10 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9C0B160B06
- for <buildroot@lists.busybox.net>; Tue, 16 Jan 2024 21:06:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C0B160B06
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZZexfwKzjHWH for <buildroot@lists.busybox.net>;
- Tue, 16 Jan 2024 21:06:08 +0000 (UTC)
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 59B52605D5
- for <buildroot@buildroot.org>; Tue, 16 Jan 2024 21:06:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 59B52605D5
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id D83E913F880;
- Tue, 16 Jan 2024 22:06:03 +0100 (CET)
-From: Julien Olivain <ju.o@free.fr>
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7Q8GOc0h2TxW for <buildroot@lists.busybox.net>;
+ Tue, 16 Jan 2024 21:44:34 +0000 (UTC)
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3127A81E2C
+ for <buildroot@buildroot.org>; Tue, 16 Jan 2024 21:44:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3127A81E2C
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 5b1f17b1804b1-40d6b4e2945so116415885e9.0
+ for <buildroot@buildroot.org>; Tue, 16 Jan 2024 13:44:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1705441472; x=1706046272;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=y3bUvwg1PGcq80ez3+HXrK909i/mfOM6A9/t0paEyVs=;
+ b=guZGbt4Rchfdw4GJJe/lvk550HW/1TqYmq3muzAk0c4u+3ZDnbXLce5De4DiKDWa9Q
+ t8LThpI9YlWTMUQfG0aEB8wFrNlPoXp0j8mh+47bvTHM9J6XjtvOxspfEoLYIgB4KGd+
+ stZfc2xfFDb/NS5sO/x7kHKAy8tquctNJnlIXVTOjMm5MWQRzVoxvrVOv5UNd6Up/6PU
+ GUQCgA/m5xWH96imiVhzxKHZildEUbFAGopRtnBDA0iBVddHE38U4op9o92sLncjw7PS
+ V8fEfCMXyqNhjpvouWoHx35Y48ooMWn7H2L5s6vPXMSmqx/3lRrk+OZr7bdmefeudqrI
+ bkpw==
+X-Gm-Message-State: AOJu0YxSrpAbnAApz7A7bUh3cKqb0+bKyvo+CqjFxgRpzRSVYDZhq+yu
+ KxTDwtM2e+tkx1N3awgLy11ZzyCtNjY=
+X-Google-Smtp-Source: AGHT+IGvAJGDcye6Cys0p3s+CO0FTJyIPrnyRzoZyqUFzfdnu03s21LchE/Hli+PA36LeAc1YipoDw==
+X-Received: by 2002:adf:f2cf:0:b0:337:3bc2:d75b with SMTP id
+ d15-20020adff2cf000000b003373bc2d75bmr2800333wrp.206.1705441471613; 
+ Tue, 16 Jan 2024 13:44:31 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ i18-20020adfb652000000b00337bd545d7bsm103845wre.21.2024.01.16.13.44.30
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 16 Jan 2024 13:44:31 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 16 Jan 2024 22:05:56 +0100
-Message-ID: <20240116210556.589407-1-ju.o@free.fr>
+Date: Tue, 16 Jan 2024 22:44:27 +0100
+Message-ID: <20240116214427.945514-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1705439165;
- bh=z8pxZtzCBEjaRC3QLMQbifDRAOvKlGPt0kbch0bOjHg=;
- h=From:To:Cc:Subject:Date:From;
- b=HOjXWNJoYVrjF3HYMKUPT/kdZ3r74dB6/+LFjI2zU+RD+GiXatYVxravhAxWN+O/+
- 9XXcmQvR0prItfW/Rr7jSohkDvIDBqncXPvm1lD8YnT8w4E+2UGyZdxyQzzlUyk45K
- mKt+ogAaZopq2jb8vEdVpnvdk+1dmBHs7AFC9Ihk6S+v7FBqE5b+q9jwlYbW4jUO7M
- tc8rYByL0LZFfiJIzOPTpqfCZ8C9P2Knmq7nqBjN7Xy3Y6Xsr1HaDOEtDBmyZxW4l/
- szP5yWT/uSR5a4MMxYpi8n/geEFIJcBM1GUhfBZX6GWIR7MpjYQvo3dpvOESwvrdGW
- +a1drtSmVB78A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=HOjXWNJo
-Subject: [Buildroot] [PATCH 1/1] support/testing: add micropython runtime
- test
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1705441472; x=1706046272; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=y3bUvwg1PGcq80ez3+HXrK909i/mfOM6A9/t0paEyVs=;
+ b=VUPvd+um/DLzQGTOA+6zRt/WgS12EYTQtW6wVnr393Y1+ACDLBfUL+ditkeJBAwcgL
+ iwtDD+zuJZTRsl5cBPj9vPNnpHBxAENgBXUqKkUjcAVIDsNT1I3KK1ipoHPpgWNOE3jA
+ Zw56botOyZ1WyFzkN43XgM+IZ+kr2OtocE2szLJBadzdsIPukY7NEpMYaQ/R7QorPnSM
+ Y5CWgmRp3qqV1fYoJfN2JDJhigkaMmSJzDVlaBQG35YK+9kYJMuXyt0SZd1O05ZsN17v
+ SfwVPQITa1FkLmkKT0M0YMWgxXW/cUPYF5SOa4ovpjiqnlyaoFtPvZIqYaIcHJgq1C/n
+ 4MWA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=VUPvd+um
+Subject: [Buildroot] [PATCH 1/1] package/libtracefs: needs threads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,163 +93,78 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Maxime Chevallier <maxime.chevallier@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+libtracefs needs threads resulting in the following build failure since
+its addition in commit b1dbd3f679e6660325472e3fdca72127d74e6929:
+
+In file included from /home/autobuild/autobuild/instance-2/output-1/host/xtensa-buildroot-linux-uclibc/sysroot/usr/include/stdio.h:27,
+                 from ../src/tracefs-instance.c:10:
+/home/autobuild/autobuild/instance-2/output-1/host/xtensa-buildroot-linux-uclibc/sysroot/usr/include/features.h:218:5: warning: #warning requested reentrant code, but thread support was disabled [-Wcpp]
+  218 | #   warning requested reentrant code, but thread support was disabled
+      |     ^~~~~~~
+../src/tracefs-instance.c:20:10: fatal error: pthread.h: No such file or directory
+   20 | #include <pthread.h>
+      |          ^~~~~~~~~~~
+
+Fixes:
+ - http://autobuild.buildroot.org/results/e0a8dd0781a1d1824a4cb78f47dcff4055083959
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Test is working on tag 2023.11, but fails on tag 2023.11.1 and branch
-master at commit e07402a (micropython fail to compile, maybe due to
-the bump to version 1.22.0?).
+ package/libtracefs/Config.in  | 5 +++--
+ package/linux-tools/Config.in | 5 +++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-This is unrelated to this test, since the failure can be reproduced
-with:
-
-    cat > .config <<EOF
-    BR2_aarch64=y
-    BR2_TOOLCHAIN_EXTERNAL=y
-    BR2_PACKAGE_MICROPYTHON=y
-    EOF
-    make olddefconfig
-    make
-
-Build fail with:
-
-    /buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-none-linux-gnu/13.2.1/../../../../aarch64-none-linux-gnu/bin/ld: build-standard/modffi.o: in function 'char2ffi_type':
-    /buildroot/output/build/micropython-1.22.0/ports/unix/modffi.c:119:(.text.char2ffi_type+0x28): undefined reference to 'ffi_type_sint8'
-    [...and many others...]
-
-The test is also working when patch [1] is applied, because libffi is
-no longer compiled.
-
-[1] https://patchwork.ozlabs.org/project/buildroot/patch/20240116183629.365115-1-fontaine.fabrice@gmail.com/
----
- DEVELOPERS                                    |  2 +
- .../testing/tests/package/test_micropython.py | 66 +++++++++++++++++++
- .../rootfs-overlay/root/mandel.py             | 25 +++++++
- 3 files changed, 93 insertions(+)
- create mode 100644 support/testing/tests/package/test_micropython.py
- create mode 100755 support/testing/tests/package/test_micropython/rootfs-overlay/root/mandel.py
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f5b04937b6..0f961ea486 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1789,6 +1789,8 @@ F:	support/testing/tests/package/test_lzip.py
- F:	support/testing/tests/package/test_lsof.py
- F:	support/testing/tests/package/test_lz4.py
- F:	support/testing/tests/package/test_lzop.py
-+F:	support/testing/tests/package/test_micropython.py
-+F:	support/testing/tests/package/test_micropython/
- F:	support/testing/tests/package/test_mtools.py
- F:	support/testing/tests/package/test_ncdu.py
- F:	support/testing/tests/package/test_nftables.py
-diff --git a/support/testing/tests/package/test_micropython.py b/support/testing/tests/package/test_micropython.py
-new file mode 100644
-index 0000000000..6d213c7ea5
---- /dev/null
-+++ b/support/testing/tests/package/test_micropython.py
-@@ -0,0 +1,66 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestMicroPython(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        f"""
-+        BR2_PACKAGE_MICROPYTHON=y
-+        BR2_ROOTFS_OVERLAY="{infra.filepath("tests/package/test_micropython/rootfs-overlay")}"
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def run_upy_code(self, python_code):
-+        cmd = f'micropython -c "{python_code}"'
-+        self.assertRunOk(cmd)
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        # The micropython binary can execute.
-+        self.assertRunOk("micropython -h")
-+
-+        # Check implementation is 'micropython'.
-+        py_code = "import sys ; assert sys.implementation.name == 'micropython'"
-+        self.run_upy_code(py_code)
-+
-+        # Query interpreter version and implementation.
-+        py_code = "import sys ; "
-+        py_code += "print('Version:', sys.version) ; "
-+        py_code += "print('Implementation:', sys.implementation)"
-+        self.run_upy_code(py_code)
-+
-+        # Check micropython optimization are correctly reported.
-+        for opt_level in range(4):
-+            py_code = "import micropython ; "
-+            py_code += "opt = micropython.opt_level() ; "
-+            py_code += "print(opt) ; "
-+            py_code += f"assert opt == {opt_level}"
-+            cmd = f"micropython -O{opt_level} -c '{py_code}'"
-+            self.assertRunOk(cmd)
-+
-+        # Check micropython can return a non-zero exit code.
-+        expected_code = 123
-+        py_code = "import sys ; "
-+        py_code += f"sys.exit({expected_code})"
-+        cmd = f'micropython -c "{py_code}"'
-+        _, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, expected_code)
-+
-+        # We check micropython computes correctly.
-+        input_value = 1234
-+        expected_output = str(sum(range(input_value)))
-+        py_code = f"print(sum(range(({input_value}))))"
-+        cmd = f'micropython -c "{py_code}"'
-+        output, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
-+        self.assertEqual(output[0], expected_output)
-+
-+        # Finally, we check check a small script can execute.
-+        self.assertRunOk("/root/mandel.py", timeout=10)
-diff --git a/support/testing/tests/package/test_micropython/rootfs-overlay/root/mandel.py b/support/testing/tests/package/test_micropython/rootfs-overlay/root/mandel.py
-new file mode 100755
-index 0000000000..0552f6894c
---- /dev/null
-+++ b/support/testing/tests/package/test_micropython/rootfs-overlay/root/mandel.py
-@@ -0,0 +1,25 @@
-+#! /usr/bin/env micropython
-+
-+from micropython import mem_info
-+
-+POINTS = list(",.:-;!/>)|&IH%*Z")
-+
-+
-+def mandel():
-+    for y in range(-15, 16):
-+        for x in range(1, 85):
-+            i = 0
-+            r = 0
-+            for k in range(112):
-+                j = (r*r) - (i*i) - 2 + (x/25)
-+                i = 2 * r * i + (y/10)
-+                if j*j + i*i >= 11:
-+                    break
-+                r = j
-+            print(POINTS[k & 0xF], end='')
-+        print()
-+
-+
-+if __name__ == '__main__':
-+    mandel()
-+    mem_info()
+diff --git a/package/libtracefs/Config.in b/package/libtracefs/Config.in
+index bb0777b16c..a46bbe0bb1 100644
+--- a/package/libtracefs/Config.in
++++ b/package/libtracefs/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBTRACEFS
+ 	bool "libtracefs"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS # libtraceevent
+ 	select BR2_PACKAGE_LIBTRACEEVENT
+ 	help
+@@ -8,5 +9,5 @@ config BR2_PACKAGE_LIBTRACEFS
+ 
+ 	  https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/
+ 
+-comment "libtracefs needs a toolchain w/ dynamic library"
+-	depends on BR2_STATIC_LIBS
++comment "libtracefs needs a toolchain w/ threads, dynamic library"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
+index ce744663f1..fb158f84d4 100644
+--- a/package/linux-tools/Config.in
++++ b/package/linux-tools/Config.in
+@@ -104,6 +104,7 @@ endif
+ 
+ config BR2_PACKAGE_LINUX_TOOLS_RTLA
+ 	bool "rtla"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libtracefs
+ 	depends on !BR2_STATIC_LIBS # libtracefs
+ 	select BR2_PACKAGE_LINUX_TOOLS
+ 	select BR2_PACKAGE_LIBTRACEFS
+@@ -124,8 +125,8 @@ config BR2_PACKAGE_LINUX_TOOLS_RTLA
+ 	  not available in Buildroot, so only rtla in kernels 5.19
+ 	  onwards is actually supported in Buildroot.
+ 
+-comment "rtla needs a toolchain w/ dynamic library"
+-	depends on BR2_STATIC_LIBS
++comment "rtla needs a toolchain w/ threads, dynamic library"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+ 
+ config BR2_PACKAGE_LINUX_TOOLS_SELFTESTS
+ 	bool"selftests"
 -- 
 2.43.0
 
