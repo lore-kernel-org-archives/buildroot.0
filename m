@@ -4,61 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3E37C47077
-	for <buildroot@archiver.kernel.org>; Tue, 16 Jan 2024 18:35:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49357C47077
+	for <buildroot@archiver.kernel.org>; Tue, 16 Jan 2024 18:36:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 775BB605C9;
-	Tue, 16 Jan 2024 18:35:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 775BB605C9
+	by smtp3.osuosl.org (Postfix) with ESMTP id ED9E96112B;
+	Tue, 16 Jan 2024 18:36:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED9E96112B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wjVUjcgAr6Ts; Tue, 16 Jan 2024 18:35:27 +0000 (UTC)
+	with ESMTP id MyQFgGGlBaP4; Tue, 16 Jan 2024 18:36:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A96C2605E3;
-	Tue, 16 Jan 2024 18:35:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A96C2605E3
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8D3251BF473
- for <buildroot@lists.busybox.net>; Tue, 16 Jan 2024 18:35:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4687960E71;
+	Tue, 16 Jan 2024 18:36:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4687960E71
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id AA9871BF473
+ for <buildroot@lists.busybox.net>; Tue, 16 Jan 2024 18:36:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6538241C10
- for <buildroot@lists.busybox.net>; Tue, 16 Jan 2024 18:35:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6538241C10
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8309C60E71
+ for <buildroot@lists.busybox.net>; Tue, 16 Jan 2024 18:36:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8309C60E71
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4lhH1uYqXIC5 for <buildroot@lists.busybox.net>;
- Tue, 16 Jan 2024 18:35:23 +0000 (UTC)
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2EC8941C0F
- for <buildroot@buildroot.org>; Tue, 16 Jan 2024 18:35:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2EC8941C0F
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id AFAA313F8C2;
- Tue, 16 Jan 2024 19:35:18 +0100 (CET)
-From: Julien Olivain <ju.o@free.fr>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Il5-ejIwV3g6 for <buildroot@lists.busybox.net>;
+ Tue, 16 Jan 2024 18:36:35 +0000 (UTC)
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 835B3605E3
+ for <buildroot@buildroot.org>; Tue, 16 Jan 2024 18:36:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 835B3605E3
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-40e760e5b49so25785655e9.1
+ for <buildroot@buildroot.org>; Tue, 16 Jan 2024 10:36:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1705430193; x=1706034993;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=TMxnTnRq2UwBTw4wE3PXkhayxJcDZuaCaCNEdlc6R9c=;
+ b=XZbTy8qu1PjLj9lA5KqSeJexbmxGpQWgdWh08BePv72Fb7+h5g1k7iH+y0Cgp9wPxY
+ jgGB/Gii8Yl0235r+zD8nRH+pn2y/XfS+C8ChaLdsszx8mhbRd9R7z2L3EdHMKbJ7mCZ
+ 2qw/cpsmmpmdjyVDoao8eBd11NWU4NNXYULfWeGyh2snsPxZM2YFbK3PU576KOXcygmK
+ 2Zf7Y9wqN0DBUvZwg3ITNKkFBfFmDJZqXNRkJ1KE3OnO0zF1jPom2eh5BAKqqIG9XzIU
+ IvqFiGd2SeeY5oDU89371zmRdqKErW3KrPumyywxWJGfiewQfwoPU4kpQM34fn7mi7AV
+ bF1Q==
+X-Gm-Message-State: AOJu0YzuZjtoLe9vtBqVkggHmyOuzrofoftqtBEEKoSca368tPFgioi+
+ mu9EqJ2gsPLirDMlCyFXGTnGCWI2CIE=
+X-Google-Smtp-Source: AGHT+IFUeJ0YZqm7IuXHK3vJNh+o21908JxaJdxJX/hXZSI1hF1Wl8BVWBjVvEV5tTQdS3t4LiYXzw==
+X-Received: by 2002:a05:600c:3146:b0:40e:6792:2fb0 with SMTP id
+ h6-20020a05600c314600b0040e67922fb0mr2479284wmo.39.1705430192414; 
+ Tue, 16 Jan 2024 10:36:32 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ m35-20020a05600c3b2300b0040e541ddcb1sm20237316wms.33.2024.01.16.10.36.31
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 16 Jan 2024 10:36:31 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 16 Jan 2024 19:35:12 +0100
-Message-ID: <20240116183512.320951-1-ju.o@free.fr>
+Date: Tue, 16 Jan 2024 19:36:29 +0100
+Message-ID: <20240116183629.365115-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1705430120;
- bh=eM5Bqw4KymRzTnGgs67aJ4Rm+oVDJCsS0nVROsgU5tw=;
- h=From:To:Cc:Subject:Date:From;
- b=WXvZ9zk++Dmq44GTXeBzp6n6odELegYDNWt9lHwPrHmJLD8KMkAvfNFhbTluQgDq3
- lO00Uebf8PsWjDfraiFD4SKBeKGplzr6bLQBUuNbtS73o4ph/HsGSo4jtuPuMDIHmX
- uPufBlzXICGp387JyLZy8YOqXquhW7Xj0dp3/Z81Jy1+ZaiQYIrKsC+P4xjxXVGej3
- 1gScqhGYeDmrtgQq1xDr6WutR1IAWtEF4Xj7PLqmEPBnGlCJe4Z9lGOyMoUb0gCTC1
- H3qxGwnuVk5EtgfxVfGIbYKKpQmkw4ep30PTY48Kg6rJjZ8Lx2UHKLUzrqVgpaqkWu
- yYeNLX2hmomWQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=WXvZ9zk+
-Subject: [Buildroot] [PATCH 1/1] support/testing: add sed runtime test
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1705430193; x=1706034993; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=TMxnTnRq2UwBTw4wE3PXkhayxJcDZuaCaCNEdlc6R9c=;
+ b=AdpPbkD/cvFY8r3pmACOIgj+XwaXwI5a/c/dp/aFtKtFnw7+lYQkZWVIhcrk8lNUoO
+ OdwWDRfSlaK7IXuWDW9F84b7Usi+p0DuICzfUHVF3UPHFzZqVUqIH0PMF0FGMsgDiF+V
+ LKCl7MjvbFstzdfDVJCMZXVOxU98RGvKSHZF1XGM2808MpyaMAYuraU2/fNM1zyWmNFF
+ By/5a2p2dMfjLgeFO48HW0rpSNl9vgdgv31Uzhveg7ijtUNPUnfIjq4Q6LMFf+idKM8T
+ NX2r9zu3MHw0g245yOf+RVDSZqvncuwbZuRwpjvppEMfjzuTPlBDOe3qIRpNY02vWFkG
+ 1Hug==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=AdpPbkD/
+Subject: [Buildroot] [PATCH 1/1] package/micropython: libffi is optional,
+ not mandatory
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,167 +94,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+Cc: Chris Packham <judge.packham@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+libffi is optional, not mandatory since bump to version 1.22.0 in commit
+1e12b7dd49d1c64a5195f226e9e4da21e84f5d0c and
+https://github.com/micropython/micropython/commit/89b320737652829edbab921e86d7ad3962d86d9e
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Tested on branch master at commit e07402a with commands:
+ package/micropython/Config.in      | 1 -
+ package/micropython/micropython.mk | 9 ++++++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-    make check-package
-    ...
-    0 warnings generated
-
-    support/testing/run-tests \
-        -d dl -o output_folder \
-        tests.package.test_sed
-    ...
-    OK
----
- DEVELOPERS                                |   1 +
- support/testing/tests/package/test_sed.py | 118 ++++++++++++++++++++++
- 2 files changed, 119 insertions(+)
- create mode 100644 support/testing/tests/package/test_sed.py
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f5b04937b6..24a80b7b36 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1811,6 +1811,7 @@ F:	support/testing/tests/package/test_python_spake2.py
- F:	support/testing/tests/package/test_rdma_core.py
- F:	support/testing/tests/package/test_rdma_core/
- F:	support/testing/tests/package/test_screen.py
-+F:	support/testing/tests/package/test_sed.py
- F:	support/testing/tests/package/test_stress_ng.py
- F:	support/testing/tests/package/test_tcl.py
- F:	support/testing/tests/package/test_tcl/
-diff --git a/support/testing/tests/package/test_sed.py b/support/testing/tests/package/test_sed.py
-new file mode 100644
-index 0000000000..0a0fdb890a
---- /dev/null
-+++ b/support/testing/tests/package/test_sed.py
-@@ -0,0 +1,118 @@
-+import os
+diff --git a/package/micropython/Config.in b/package/micropython/Config.in
+index b5dc47279d..30161c8b70 100644
+--- a/package/micropython/Config.in
++++ b/package/micropython/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_MICROPYTHON
+ 	bool "micropython"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS
+-	select BR2_PACKAGE_LIBFFI
+ 	help
+ 	  Micro Python is a lean and fast implementation of the Python
+ 	  3 programming language that is optimised to run on a
+diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
+index 6e0af59f06..c7873ab62a 100644
+--- a/package/micropython/micropython.mk
++++ b/package/micropython/micropython.mk
+@@ -12,7 +12,7 @@ MICROPYTHON_SOURCE = micropython-$(MICROPYTHON_VERSION).tar.xz
+ # and most of the copied code is not used in the unix build.
+ MICROPYTHON_LICENSE = MIT, BSD-1-Clause, BSD-3-Clause, Zlib
+ MICROPYTHON_LICENSE_FILES = LICENSE
+-MICROPYTHON_DEPENDENCIES = host-pkgconf libffi host-python3
++MICROPYTHON_DEPENDENCIES = host-python3
+ MICROPYTHON_CPE_ID_VENDOR = micropython
+ 
+ # Use fallback implementation for exception handling on architectures that don't
+@@ -36,6 +36,13 @@ MICROPYTHON_MAKE_OPTS += \
+ 	LDFLAGS_EXTRA="$(TARGET_LDFLAGS)" \
+ 	CWARN=
+ 
++ifeq ($(BR2_PACKAGE_LIBFFI),y)
++MICROPYTHON_DEPENDENCIES += host-pkgconf libffi
++MICROPYTHON_MAKE_OPTS += MICROPY_PY_FFI=1
++else
++MICROPYTHON_MAKE_OPTS += MICROPY_PY_FFI=0
++endif
 +
-+import infra.basetest
-+
-+
-+class TestSed(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-+        BR2_PACKAGE_SED=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def check_gnu_sed(self):
-+        in_file = "testfile.txt"
-+
-+        # We create a test file for this test.
-+        self.assertRunOk(f"echo 'This is a test' > {in_file}")
-+
-+        # Check we have the GNU sed by testing a GNU extension likely
-+        # not present in other implementation. See:
-+        # https://www.gnu.org/software/sed/manual/sed.html#Extended-Commands
-+        # Note: we cannot search for "GNU sed" in sed --version,
-+        # because busybox sed --version outputs: "This is not GNU sed
-+        # version 4.0". The 'F' and 'Q' sed commands are known to be
-+        # unimplemented in BusyBox 1.36.1.
-+        expected_code = 123
-+        sed_script = f"F;Q {expected_code}"
-+        cmd = f"sed '{sed_script}' {in_file}"
-+        output, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, expected_code)
-+        self.assertEqual(output, [in_file])
-+
-+    def check_sed_substitute(self):
-+        testfile_num = 5
-+
-+        # We create few different test files for this test.
-+        cmd = f'for i in $(seq {testfile_num}) ; do '
-+        cmd += 'echo "=== $i Hello ===" > file$i.txt ; '
-+        cmd += 'done'
-+        self.assertRunOk(cmd)
-+
-+        # We reformat file content, in-place.
-+        sed_script = "s/^=== \\([0-9]*\\) \\(Hello\\) ===$/\\2 \\1/"
-+        cmd = f"sed -i '{sed_script}' file[0-9]*.txt"
-+        self.assertRunOk(cmd)
-+
-+        # We substitute numbers with the string "Buildroot". We use an
-+        # extended regular expression (with the '+'), so we test with
-+        # the '-r' option.
-+        sed_script = "s/[0-9]+/Buildroot/g"
-+        cmd = f"sed -r -i '{sed_script}' file[0-9]*.txt"
-+        self.assertRunOk(cmd)
-+
-+        # Our previous text manipulations are expected to end up with
-+        # the "Hello Buildroot" string in all files.
-+        cmd = "cat file[0-9]*.txt"
-+        output, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
-+        self.assertEqual(output, ["Hello Buildroot"] * testfile_num)
-+
-+    def check_sed_line_count(self):
-+        # We use the '=' command to count lines.
-+        line_count = 1234
-+        cmd = f"seq {line_count} | sed -n '$='"
-+        output, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
-+        self.assertEqual(int(output[0]), line_count)
-+
-+    def check_sed_line_address(self):
-+        input_file = "strings.txt"
-+        expected_file = "expected.txt"
-+
-+        # We create simple data for this test.
-+        strings = ["one", "two", "three", "four", "five"]
-+        content = '\\n'.join(strings)
-+        cmd = f"echo -e \"{content}\" > {input_file}"
-+        self.assertRunOk(cmd)
-+
-+        # The manipulation in this tests are expected to extract the
-+        # first and last of the input. We create the expected data for
-+        # comparison.
-+        expected_output = [strings[0], strings[-1]]
-+        content = '\\n'.join(expected_output)
-+        cmd = f"echo -e \"{content}\" > {expected_file}"
-+        self.assertRunOk(cmd)
-+
-+        # We remove lines between strings "two" and "four" included.
-+        cmd = f"sed '/two/,/four/d' {input_file} > output1.txt"
-+        self.assertRunOk(cmd)
-+
-+        # We check output is the same as the expected data.
-+        cmd = f"cmp {expected_file} output1.txt"
-+        self.assertRunOk(cmd)
-+
-+        # We redo the same manipulation using line number addresses.
-+        cmd = f"sed -n '1p;5p' {input_file} > output2.txt"
-+        self.assertRunOk(cmd)
-+
-+        # We check again output is correct.
-+        cmd = f"cmp {expected_file} output2.txt"
-+        self.assertRunOk(cmd)
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        # Check the program can execute
-+        self.assertRunOk("sed --version")
-+
-+        self.check_gnu_sed()
-+        self.check_sed_substitute()
-+        self.check_sed_line_count()
-+        self.check_sed_line_address()
+ define MICROPYTHON_BUILD_CMDS
+ 	$(MICROPYTHON_MAKE_ENV) $(MAKE) -C $(@D)/mpy-cross
+ 	$(MICROPYTHON_MAKE_ENV) $(MAKE) -C $(@D)/ports/unix \
 -- 
 2.43.0
 
