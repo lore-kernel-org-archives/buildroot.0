@@ -1,88 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49357C47077
-	for <buildroot@archiver.kernel.org>; Tue, 16 Jan 2024 18:36:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50FE8C47077
+	for <buildroot@archiver.kernel.org>; Tue, 16 Jan 2024 19:45:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ED9E96112B;
-	Tue, 16 Jan 2024 18:36:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED9E96112B
+	by smtp2.osuosl.org (Postfix) with ESMTP id C663040432;
+	Tue, 16 Jan 2024 19:45:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C663040432
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MyQFgGGlBaP4; Tue, 16 Jan 2024 18:36:40 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id K6HW6iTmzycG; Tue, 16 Jan 2024 19:45:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4687960E71;
-	Tue, 16 Jan 2024 18:36:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4687960E71
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AA9871BF473
- for <buildroot@lists.busybox.net>; Tue, 16 Jan 2024 18:36:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BFB2540629;
+	Tue, 16 Jan 2024 19:45:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BFB2540629
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5A8BE1BF846
+ for <buildroot@lists.busybox.net>; Tue, 16 Jan 2024 19:44:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8309C60E71
- for <buildroot@lists.busybox.net>; Tue, 16 Jan 2024 18:36:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8309C60E71
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3331A819D5
+ for <buildroot@lists.busybox.net>; Tue, 16 Jan 2024 19:44:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3331A819D5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Il5-ejIwV3g6 for <buildroot@lists.busybox.net>;
- Tue, 16 Jan 2024 18:36:35 +0000 (UTC)
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 835B3605E3
- for <buildroot@buildroot.org>; Tue, 16 Jan 2024 18:36:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 835B3605E3
-Received: by mail-wm1-x329.google.com with SMTP id
- 5b1f17b1804b1-40e760e5b49so25785655e9.1
- for <buildroot@buildroot.org>; Tue, 16 Jan 2024 10:36:35 -0800 (PST)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZRf-F1Q8iSaC for <buildroot@lists.busybox.net>;
+ Tue, 16 Jan 2024 19:44:57 +0000 (UTC)
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
+ [IPv6:2a00:1450:4864:20::62b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EB7EF818D7
+ for <buildroot@busybox.net>; Tue, 16 Jan 2024 19:44:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB7EF818D7
+Received: by mail-ej1-x62b.google.com with SMTP id
+ a640c23a62f3a-a277339dcf4so1150180666b.2
+ for <buildroot@busybox.net>; Tue, 16 Jan 2024 11:44:56 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1705430193; x=1706034993;
+ d=1e100.net; s=20230601; t=1705434295; x=1706039095;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=TMxnTnRq2UwBTw4wE3PXkhayxJcDZuaCaCNEdlc6R9c=;
- b=XZbTy8qu1PjLj9lA5KqSeJexbmxGpQWgdWh08BePv72Fb7+h5g1k7iH+y0Cgp9wPxY
- jgGB/Gii8Yl0235r+zD8nRH+pn2y/XfS+C8ChaLdsszx8mhbRd9R7z2L3EdHMKbJ7mCZ
- 2qw/cpsmmpmdjyVDoao8eBd11NWU4NNXYULfWeGyh2snsPxZM2YFbK3PU576KOXcygmK
- 2Zf7Y9wqN0DBUvZwg3ITNKkFBfFmDJZqXNRkJ1KE3OnO0zF1jPom2eh5BAKqqIG9XzIU
- IvqFiGd2SeeY5oDU89371zmRdqKErW3KrPumyywxWJGfiewQfwoPU4kpQM34fn7mi7AV
- bF1Q==
-X-Gm-Message-State: AOJu0YzuZjtoLe9vtBqVkggHmyOuzrofoftqtBEEKoSca368tPFgioi+
- mu9EqJ2gsPLirDMlCyFXGTnGCWI2CIE=
-X-Google-Smtp-Source: AGHT+IFUeJ0YZqm7IuXHK3vJNh+o21908JxaJdxJX/hXZSI1hF1Wl8BVWBjVvEV5tTQdS3t4LiYXzw==
-X-Received: by 2002:a05:600c:3146:b0:40e:6792:2fb0 with SMTP id
- h6-20020a05600c314600b0040e67922fb0mr2479284wmo.39.1705430192414; 
- Tue, 16 Jan 2024 10:36:32 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- m35-20020a05600c3b2300b0040e541ddcb1sm20237316wms.33.2024.01.16.10.36.31
+ bh=twaV/k/5de1r9rh0a8pJbYzuz9BjtbAIRNKkVu6x0B8=;
+ b=Cp/MNmhB8WJoAdmsSSS2gc8LCtzAHsO044NwnrayryfzVANNyiwaQ8tu+H02Cs4Y48
+ sd8uDRhQxj2B/kbqu12KF0ZaSyBhkY5/SJwRM6m79TAB7XGoL64QXYm82dDMPQz5DJ3G
+ xor8FnDOBa92V4HTzt+cJBs6D8HL6sXj2OHZoz3GkDfjWmyDHRpTREXplws9oH+EfCsk
+ VXxvsx4vZvob8Jf4oRpho/HpvgxGZIZjFgzEAl+QV4Gd7u1PNRyT6FCj3sHrnMAtifiI
+ wvMkNYTvpim8aQPq0JLtjY+dnCwNdcj0FUU/Bgqrgixox/rILoy/WH4ECBFQA7guwGvB
+ JZ9Q==
+X-Gm-Message-State: AOJu0YyTxRBoZdIfH5st2L5xb6PmPzbZi5cnW2lFIub0V0DY6uCe0rGb
+ EaEwUro56S7zGa0eRl5y9c0WK0rjwsA=
+X-Google-Smtp-Source: AGHT+IE/Jttr1PTlLnIsPIg45KeUWkgP7OBTjmIqXnNAHHuccwLzbv9tHYqdfOEZ0uPmsfvAoMnsPA==
+X-Received: by 2002:a17:907:7a94:b0:a2e:bc31:e4c1 with SMTP id
+ mm20-20020a1709077a9400b00a2ebc31e4c1mr7044ejc.142.1705434294834; 
+ Tue, 16 Jan 2024 11:44:54 -0800 (PST)
+Received: from xubuntu-23.. ([93.24.197.12]) by smtp.gmail.com with ESMTPSA id
+ ce2-20020a170906b24200b00a26a0145c5esm6819711ejb.116.2024.01.16.11.44.54
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 16 Jan 2024 10:36:31 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue, 16 Jan 2024 19:36:29 +0100
-Message-ID: <20240116183629.365115-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
+ Tue, 16 Jan 2024 11:44:54 -0800 (PST)
+From: Francois Perrad <fperrad@gmail.com>
+X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Tue, 16 Jan 2024 20:44:50 +0100
+Message-Id: <20240116194450.33260-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1705430193; x=1706034993; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1705434295; x=1706039095; darn=busybox.net;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=TMxnTnRq2UwBTw4wE3PXkhayxJcDZuaCaCNEdlc6R9c=;
- b=AdpPbkD/cvFY8r3pmACOIgj+XwaXwI5a/c/dp/aFtKtFnw7+lYQkZWVIhcrk8lNUoO
- OdwWDRfSlaK7IXuWDW9F84b7Usi+p0DuICzfUHVF3UPHFzZqVUqIH0PMF0FGMsgDiF+V
- LKCl7MjvbFstzdfDVJCMZXVOxU98RGvKSHZF1XGM2808MpyaMAYuraU2/fNM1zyWmNFF
- By/5a2p2dMfjLgeFO48HW0rpSNl9vgdgv31Uzhveg7ijtUNPUnfIjq4Q6LMFf+idKM8T
- NX2r9zu3MHw0g245yOf+RVDSZqvncuwbZuRwpjvppEMfjzuTPlBDOe3qIRpNY02vWFkG
- 1Hug==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=twaV/k/5de1r9rh0a8pJbYzuz9BjtbAIRNKkVu6x0B8=;
+ b=ZAuIJ13edz+C8hkJTUypfi2xbdtZn8cpyhLOSedjwB7lyIspf+UcVTTPRFgRH1v9r+
+ KrK1toODzUhYl6ztfm1EENGe4PWo1Iv2SMESAKvQ6IZ//rIjCI+nOtQEat76oiqJad6U
+ m86uIfp/9vPrwe3OXkgO35MyNPhfWptuzGNWjlK9lcrqRPOeaCsgcpFwNxChJ76TYr2M
+ Am5hBffo1plQGHC/o0tq+mzFUE26tSPXiMGS33k9lsE83vPEKFQG/93Im91iEx3qV//W
+ FPmLdC8/JhyGE273KSosegLhi2Sv70KkyBjFxmYDSUeul5huZ/PjbgKRxLoa9Ta5fiiN
+ p0Rg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=AdpPbkD/
-Subject: [Buildroot] [PATCH 1/1] package/micropython: libffi is optional,
- not mandatory
+ header.a=rsa-sha256 header.s=20230601 header.b=ZAuIJ13e
+Subject: [Buildroot] [PATCH] package/libksba: bump to version 1.6.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,64 +93,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Chris Packham <judge.packham@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-libffi is optional, not mandatory since bump to version 1.22.0 in commit
-1e12b7dd49d1c64a5195f226e9e4da21e84f5d0c and
-https://github.com/micropython/micropython/commit/89b320737652829edbab921e86d7ad3962d86d9e
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/micropython/Config.in      | 1 -
- package/micropython/micropython.mk | 9 ++++++++-
- 2 files changed, 8 insertions(+), 2 deletions(-)
+ package/libksba/libksba.hash | 4 ++--
+ package/libksba/libksba.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/micropython/Config.in b/package/micropython/Config.in
-index b5dc47279d..30161c8b70 100644
---- a/package/micropython/Config.in
-+++ b/package/micropython/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_MICROPYTHON
- 	bool "micropython"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS
--	select BR2_PACKAGE_LIBFFI
- 	help
- 	  Micro Python is a lean and fast implementation of the Python
- 	  3 programming language that is optimised to run on a
-diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
-index 6e0af59f06..c7873ab62a 100644
---- a/package/micropython/micropython.mk
-+++ b/package/micropython/micropython.mk
-@@ -12,7 +12,7 @@ MICROPYTHON_SOURCE = micropython-$(MICROPYTHON_VERSION).tar.xz
- # and most of the copied code is not used in the unix build.
- MICROPYTHON_LICENSE = MIT, BSD-1-Clause, BSD-3-Clause, Zlib
- MICROPYTHON_LICENSE_FILES = LICENSE
--MICROPYTHON_DEPENDENCIES = host-pkgconf libffi host-python3
-+MICROPYTHON_DEPENDENCIES = host-python3
- MICROPYTHON_CPE_ID_VENDOR = micropython
+diff --git a/package/libksba/libksba.hash b/package/libksba/libksba.hash
+index 08b599dc0..3ac36e19c 100644
+--- a/package/libksba/libksba.hash
++++ b/package/libksba/libksba.hash
+@@ -1,6 +1,6 @@
+ # From https://www.gnupg.org/download/integrity_check.html
+-sha1  258c31c72adda2ef547d94038b7e0fd7bd93d03c  libksba-1.6.4.tar.bz2
+-sha256  bbb43f032b9164d86c781ffe42213a83bf4f2fee91455edfa4654521b8b03b6b  libksba-1.6.4.tar.bz2
++sha1  0ada15ac00baa7df677a05bcb517621708f9c2f2  libksba-1.6.5.tar.bz2
++sha256  a564628c574c99287998753f98d750babd91a4e9db451f46ad140466ef2a6d16  libksba-1.6.5.tar.bz2
  
- # Use fallback implementation for exception handling on architectures that don't
-@@ -36,6 +36,13 @@ MICROPYTHON_MAKE_OPTS += \
- 	LDFLAGS_EXTRA="$(TARGET_LDFLAGS)" \
- 	CWARN=
+ # Hash for license files:
+ sha256  f9c59ea5a5e1dfdeebcd134e6a594c21eb088cc95f6653ee99ff2e187c105380  AUTHORS
+diff --git a/package/libksba/libksba.mk b/package/libksba/libksba.mk
+index fdc4bb034..52ad5fbee 100644
+--- a/package/libksba/libksba.mk
++++ b/package/libksba/libksba.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_LIBFFI),y)
-+MICROPYTHON_DEPENDENCIES += host-pkgconf libffi
-+MICROPYTHON_MAKE_OPTS += MICROPY_PY_FFI=1
-+else
-+MICROPYTHON_MAKE_OPTS += MICROPY_PY_FFI=0
-+endif
-+
- define MICROPYTHON_BUILD_CMDS
- 	$(MICROPYTHON_MAKE_ENV) $(MAKE) -C $(@D)/mpy-cross
- 	$(MICROPYTHON_MAKE_ENV) $(MAKE) -C $(@D)/ports/unix \
+-LIBKSBA_VERSION = 1.6.4
++LIBKSBA_VERSION = 1.6.5
+ LIBKSBA_SOURCE = libksba-$(LIBKSBA_VERSION).tar.bz2
+ LIBKSBA_SITE = https://gnupg.org/ftp/gcrypt/libksba
+ LIBKSBA_LICENSE = LGPL-3.0+ or GPL-2.0+ (library, headers), GPL-3.0+ (manual, tests, build system)
 -- 
-2.43.0
+2.40.1
 
 _______________________________________________
 buildroot mailing list
