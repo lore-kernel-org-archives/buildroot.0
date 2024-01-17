@@ -1,87 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93795C47258
-	for <buildroot@archiver.kernel.org>; Wed, 17 Jan 2024 19:25:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE96FC47258
+	for <buildroot@archiver.kernel.org>; Wed, 17 Jan 2024 20:12:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ECFD460C16;
-	Wed, 17 Jan 2024 19:25:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ECFD460C16
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1lIof1T40CAB; Wed, 17 Jan 2024 19:25:00 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4115A60ABA;
-	Wed, 17 Jan 2024 19:24:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4115A60ABA
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 74BA31BF470
- for <buildroot@lists.busybox.net>; Wed, 17 Jan 2024 19:24:57 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4B446436E5
- for <buildroot@lists.busybox.net>; Wed, 17 Jan 2024 19:24:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4B446436E5
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5E18E4040D;
+	Wed, 17 Jan 2024 20:12:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5E18E4040D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WMvtGGPNcbs0 for <buildroot@lists.busybox.net>;
- Wed, 17 Jan 2024 19:24:56 +0000 (UTC)
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
- [IPv6:2a00:1450:4864:20::62f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B7A52404A5
- for <buildroot@buildroot.org>; Wed, 17 Jan 2024 19:24:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B7A52404A5
-Received: by mail-ej1-x62f.google.com with SMTP id
- a640c23a62f3a-a26ed1e05c7so1374299466b.2
- for <buildroot@buildroot.org>; Wed, 17 Jan 2024 11:24:55 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1705519494; x=1706124294;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=pU2Be2dgB4iZ7ursKNt3ywThT1pjVOw3u/MZXIMObJI=;
- b=e4ru6q1UZ7/tgmiIRWmzjCHL2+hnRdZ6GaWCy2Op+j5TGBawD3Au/dYJVjloZSlFf6
- XCV9c3s4CarIKs061KzPnyk+H4IepH7i7uBNlQdsdkv+3gFnso2rnJpL5Lqn0tEsBz9F
- eRb2v69b2BrpoofLIwov7IJwt7aexemOOhgAPlyk9Hh72QYjtgB5z6RfADboqFq9I58M
- Kl/mPD7ggHWiF6/KYQy95r9ggV2g0u2lUF/mBZNMAhgIasYTJHeiyHL/N/slamuAwImP
- ZJDO9ue8OWjiwhHW3IhAZanCfMoq68Jga5JEuShg9dq1fvUckXF/uJtE85oWbWlGUlHc
- UDZA==
-X-Gm-Message-State: AOJu0YyhVQnKGINmZbSnnSCGnxs9BafnXNc1NTuAp5d8kzrh7YqaNT15
- UF/Biu5jhwoskrsQ/5Hz5Mfs0efvz2Y=
-X-Google-Smtp-Source: AGHT+IHeWOl7fUTKQt1wvLgjEPdRImK9ioCRTlRMdTUTFvJ3Ulz3EvNyXuP9ZRCnl/hI95t7emm2ug==
-X-Received: by 2002:a17:906:fe02:b0:a29:28f6:6aca with SMTP id
- wy2-20020a170906fe0200b00a2928f66acamr3871766ejb.123.1705519493610; 
- Wed, 17 Jan 2024 11:24:53 -0800 (PST)
-Received: from LinkMed.fritz.box ([2a00:10:7f17:f01:158e:6095:a0bc:29ca])
- by smtp.gmail.com with ESMTPSA id
- lg13-20020a170906f88d00b00a2eae54d365sm1467066ejb.184.2024.01.17.11.24.53
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 17 Jan 2024 11:24:53 -0800 (PST)
-From: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2gicDpD4rS1n; Wed, 17 Jan 2024 20:12:15 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2649843722;
+	Wed, 17 Jan 2024 20:12:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2649843722
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4ABB31BF487
+ for <buildroot@lists.busybox.net>; Wed, 17 Jan 2024 20:12:12 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 22D2F615AA
+ for <buildroot@lists.busybox.net>; Wed, 17 Jan 2024 20:12:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 22D2F615AA
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ne-J9MDV0v46 for <buildroot@lists.busybox.net>;
+ Wed, 17 Jan 2024 20:12:10 +0000 (UTC)
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 82A2161595
+ for <buildroot@buildroot.org>; Wed, 17 Jan 2024 20:12:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 82A2161595
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 2268313F88E;
+ Wed, 17 Jan 2024 21:12:06 +0100 (CET)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 17 Jan 2024 19:23:42 +0000
-Message-ID: <20240117192342.2633-1-raphael.pavlidis@gmail.com>
+Date: Wed, 17 Jan 2024 21:11:57 +0100
+Message-ID: <20240117201157.51827-1-ju.o@free.fr>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1705519494; x=1706124294; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=pU2Be2dgB4iZ7ursKNt3ywThT1pjVOw3u/MZXIMObJI=;
- b=Mf3fOdSYL6gbdoPyUwN4kXe40jeyPjzTixFU3G1+kOKI5KtV/38/8SolxGtT6vm9NE
- DPKj74TlNMlzAS/OXu9OqML7ZG9ty8cz+q+i1L2FycS/ikyq6vqgbpHc7SnXEEZfJPSD
- aCqaqk/JIW3JYeV/QjMZd/hhIdFb2KQpiLrJDdn19eg4y7noQQTFoB58V8O56EZ2ZSW7
- +fEKg5KEEJJHN0NwTfSdfEjMo9/Bpu2adGMHh5Y8xxWIphqaka7aZXaDtG6k6RnLudO8
- ZJ4O7MiXFVfud80YJaE9WnS7Mcmgs6fN17YkGmYpqXkXnWOG2lCUkE3h9pFHU4xkm4RE
- PH/g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Mf3fOdSY
-Subject: [Buildroot] [PATCH v1 1/1] package/shadow: bump to version 4.14.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1705522327;
+ bh=3cdN0t8JgoaKqbastkq65Lw+UYYLr8iPtxs0hhrWMTM=;
+ h=From:To:Cc:Subject:Date:From;
+ b=Fb3tHQYv8242gyoclaKby/StNyDi4z/Ktj4++HJpZTJrkl96GOFPahaonDLsGPfc0
+ kumFIEHqpGlA0xWC4TRCbytGYcqZSMyo4Sd7vQBex/+OFHyqli42huj2ktw7Dkl0nM
+ 7fvGe2zgdVRkhOQSDNSwa8TSx7/l4flVa7HTLxa74Xfa36MiMS0b3g0TGqnynoWF4c
+ pG0wFcYRurUm8mKvb7aHluhUJrd3EMTtnJeydde9PXu48Rv9a9MH7o76EYbYBlom1F
+ a+4mavJ/vuflXpEeiQXV0+mso+1VvJPx84z4I8P5oeZpVy8d1nUM+mNZ3rofZzBW9K
+ 7Oz6chWwqMhPQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Fb3tHQYv
+Subject: [Buildroot] [PATCH 1/1] support/testing: add pciutils runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,105 +70,133 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Also, the new version has an optional dependency on libbsd.
-
-Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .../shadow/0001-Fix-yescrypt-support.patch    | 38 -------------------
- package/shadow/shadow.hash                    |  5 ++-
- package/shadow/shadow.mk                      |  9 ++++-
- 3 files changed, 11 insertions(+), 41 deletions(-)
- delete mode 100644 package/shadow/0001-Fix-yescrypt-support.patch
+Patch tested on branch master at commit b200632 with commands:
 
-diff --git a/package/shadow/0001-Fix-yescrypt-support.patch b/package/shadow/0001-Fix-yescrypt-support.patch
-deleted file mode 100644
-index 19427676ca..0000000000
---- a/package/shadow/0001-Fix-yescrypt-support.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--From 7a63017b3c873a59e3482322b7824160a8c8ca67 Mon Sep 17 00:00:00 2001
--11;rgb:f6f6/f5f5/f4f4From: Bernd Kuhls <bernd@kuhls.net>
--Date: Sun, 9 Jul 2023 10:55:03 +0200
--Subject: [PATCH] Fix yescrypt support
--
--Fixes build error:
--newusers.c: In function 'update_passwd':
--newusers.c:433:21: error: 'sflg' undeclared (first use in this function); did you mean 'rflg'?
--
--introduced by
--https://github.com/shadow-maint/shadow/commit/5cd04d03f94622c12220d4a6352824af081b8531
--which forgot to define sflg for these configure options:
--
----without-sha-crypt --without-bcrypt --with-yescrypt
--
--Upstream: https://github.com/shadow-maint/shadow/commit/29da702491eea314b915ea9c7a83c9af80cf5797
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- src/newusers.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/newusers.c b/src/newusers.c
--index 7cb8434b..08f79798 100644
----- a/src/newusers.c
--+++ b/src/newusers.c
--@@ -60,7 +60,7 @@ static bool rflg = false;	/* create a system account */
-- #ifndef USE_PAM
-- static /*@null@*//*@observer@*/char *crypt_method = NULL;
-- #define cflg (NULL != crypt_method)
---#if defined(USE_SHA_CRYPT) || defined(USE_BCRYPT)
--+#if defined(USE_SHA_CRYPT) || defined(USE_BCRYPT) || defined(USE_YESCRYPT)
-- static bool sflg = false;
-- #endif
-- #ifdef USE_SHA_CRYPT
+    make check-package
+    ...
+    0 warnings generated
+
+    support/testing/run-tests \
+        -d dl -o output_folder \
+        tests.package.test_pciutils
+    ...
+    OK
 ---
--2.39.2
--
-diff --git a/package/shadow/shadow.hash b/package/shadow/shadow.hash
-index 2e5c4a8168..4689a994de 100644
---- a/package/shadow/shadow.hash
-+++ b/package/shadow/shadow.hash
-@@ -1,3 +1,4 @@
--# Locally computed
--sha256  9afe245d79a2e7caac5f1ed62519b17416b057ec89df316df1c3935502f9dd2c  shadow-4.13.tar.xz
-+# Verified from https://github.com/shadow-maint/shadow/releases/download/4.14.3/shadow-4.14.3.tar.xz.asc
-+# with key A9348594CE31283A826FBDD8D57633D441E25BB5
-+sha256  6969279236fe3152768573a38c9f83cb9ca109851a5a990aec1fc672ac2cfcd2  shadow-4.14.3.tar.xz
- sha256  3d25ab8f43fdc14624296a56ff8dc3e72e499ad35f32ae0c803f4959cfe17c0a  COPYING
-diff --git a/package/shadow/shadow.mk b/package/shadow/shadow.mk
-index 4bc3cce037..03eb16a3f4 100644
---- a/package/shadow/shadow.mk
-+++ b/package/shadow/shadow.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ DEVELOPERS                                    |  1 +
+ .../testing/tests/package/test_pciutils.py    | 83 +++++++++++++++++++
+ 2 files changed, 84 insertions(+)
+ create mode 100644 support/testing/tests/package/test_pciutils.py
 
--SHADOW_VERSION = 4.13
-+SHADOW_VERSION = 4.14.3
- SHADOW_SITE = https://github.com/shadow-maint/shadow/releases/download/$(SHADOW_VERSION)
- SHADOW_SOURCE = shadow-$(SHADOW_VERSION).tar.xz
- SHADOW_LICENSE = BSD-3-Clause
-@@ -120,6 +120,13 @@ else
- SHADOW_CONF_OPTS += --without-yescrypt
- endif
-
-+ifeq ($(BR2_PACKAGE_LIBBSD),y)
-+SHADOW_CONF_OPTS += --with-libbsd
-+SHADOW_DEPENDENCIES += libbsd
-+else
-+SHADOW_CONF_OPTS += --without-libbsd
-+endif
+diff --git a/DEVELOPERS b/DEVELOPERS
+index f5b04937b6..bc92bdb813 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1797,6 +1797,7 @@ F:	support/testing/tests/package/test_octave.py
+ F:	support/testing/tests/package/test_ola.py
+ F:	support/testing/tests/package/test_ola/
+ F:	support/testing/tests/package/test_openblas.py
++F:	support/testing/tests/package/test_pciutils.py
+ F:	support/testing/tests/package/test_perftest.py
+ F:	support/testing/tests/package/test_pigz.py
+ F:	support/testing/tests/package/test_python_distro.py
+diff --git a/support/testing/tests/package/test_pciutils.py b/support/testing/tests/package/test_pciutils.py
+new file mode 100644
+index 0000000000..3221b0cfd1
+--- /dev/null
++++ b/support/testing/tests/package/test_pciutils.py
+@@ -0,0 +1,83 @@
++import os
 +
- define SHADOW_PERMISSIONS
- 	/usr/bin/chage f 4755 0 0 - - - - -
- 	/usr/bin/chfn f 4755 0 0 - - - - -
---
++import infra.basetest
++
++
++class TestPCIUtils(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_PCIUTILS=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++
++        # Note: we add a qemu pci-testdev in order to have a stable
++        # device ID, and for writing in configuration space without
++        # interfering with the rest of the emulation. See:
++        # https://www.qemu.org/docs/master/specs/pci-testdev.html
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file,
++                                    "-device", "pci-testdev"])
++        self.emulator.login()
++
++        # Check the program executes. This test also check that we
++        # have "lspci" from the pciutils package, rather than the
++        # busybox applet (which does not recognize the --version
++        # option)"
++        self.assertRunOk("lspci --version")
++
++        # Check few program invocations.
++        self.assertRunOk("lspci")
++        for lspci_opt in ["-t", "-n", "-v", "-vv", "-x"]:
++            self.assertRunOk(f"lspci {lspci_opt}")
++
++        # Check we can see the qemu pci-testdev.
++        # Vendor: 1b36: Red Hat, Inc.
++        # Device: 0005: QEMU PCI Test Device
++        pci_vendor_id = "1b36"
++        pci_device_id = "0005"
++        pci_dev = f"{pci_vendor_id}:{pci_device_id}"
++        cmd = f"lspci -d {pci_dev}"
++        output, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
++        self.assertIn("Red Hat, Inc.", output[0])
++        self.assertIn("QEMU PCI Test Device", output[0])
++
++        # We disable INTx emulation by setting bit 10 of the COMMAND
++        # register in the configuration space. See:
++        # https://git.kernel.org/pub/scm/utils/pciutils/pciutils.git/tree/lib/header.h?h=v3.10.0#n26
++        dis_int_x = 0x400
++        data_mask = f"{hex(dis_int_x)}:{hex(dis_int_x)}"
++        cmd = f"setpci -d {pci_dev} COMMAND.w={data_mask}"
++        self.assertRunOk(cmd)
++
++        # We read back and check the value.
++        cmd = f"setpci -d {pci_dev} COMMAND.w"
++        output, exit_code = self.emulator.run(cmd)
++        read_value = int(output[0], 16)
++        self.assertEqual(exit_code, 0)
++        self.assertTrue((read_value & dis_int_x) == dis_int_x)
++
++        # We check lspci now see the disabled INTx emulation.
++        cmd = f"lspci -vv -d {pci_dev} | grep -F 'DisINTx+'"
++        self.assertRunOk(cmd)
++
++        # We re-enable the INTx emulation by clearing the bit 10.
++        data_mask = f"0x0:{hex(dis_int_x)}"
++        cmd = f"setpci -d {pci_dev} COMMAND.w={data_mask}"
++        self.assertRunOk(cmd)
++
++        # We read back and check the value, again.
++        cmd = f"setpci -d {pci_dev} COMMAND.w"
++        output, exit_code = self.emulator.run(cmd)
++        read_value = int(output[0], 16)
++        self.assertEqual(exit_code, 0)
++        self.assertTrue((read_value & dis_int_x) == 0)
++
++        # We check lspci now see the enabled INTx emulation.
++        cmd = f"lspci -vv -d {pci_dev} | grep -F 'DisINTx-'"
++        self.assertRunOk(cmd)
+-- 
 2.43.0
 
 _______________________________________________
