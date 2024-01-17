@@ -4,56 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A9E3C47422
-	for <buildroot@archiver.kernel.org>; Wed, 17 Jan 2024 07:27:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2DDDC47258
+	for <buildroot@archiver.kernel.org>; Wed, 17 Jan 2024 11:15:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CDC1841E7E;
-	Wed, 17 Jan 2024 07:27:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CDC1841E7E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1B5E841E7E;
+	Wed, 17 Jan 2024 11:15:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B5E841E7E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iYWP2GJv4tgw; Wed, 17 Jan 2024 07:27:19 +0000 (UTC)
+	with ESMTP id k9Ysa0cNYT5L; Wed, 17 Jan 2024 11:15:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 18AE741E32;
-	Wed, 17 Jan 2024 07:27:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 18AE741E32
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2425C1BF288
- for <buildroot@lists.busybox.net>; Wed, 17 Jan 2024 07:27:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6787C41E6E;
+	Wed, 17 Jan 2024 11:15:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6787C41E6E
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B51E41BF28C
+ for <buildroot@lists.busybox.net>; Wed, 17 Jan 2024 11:15:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 09B6D6141D
- for <buildroot@lists.busybox.net>; Wed, 17 Jan 2024 07:27:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 09B6D6141D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9B12B41E6E
+ for <buildroot@lists.busybox.net>; Wed, 17 Jan 2024 11:15:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B12B41E6E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8MXujyeUMxEC for <buildroot@lists.busybox.net>;
- Wed, 17 Jan 2024 07:27:15 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DAE3F61418
- for <buildroot@buildroot.org>; Wed, 17 Jan 2024 07:27:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DAE3F61418
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7D8AF40005;
- Wed, 17 Jan 2024 07:27:11 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rQ0KM-00Fk8n-28;
- Wed, 17 Jan 2024 08:27:10 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Jan =?utf-8?Q?Kundr=C3=A1t?= via buildroot <buildroot@buildroot.org>
-References: <20240111105621.2321957-1-peter@korsgaard.com>
- <ee6bc481-faaf-4d84-a450-d9a2730f9fda@cesnet.cz>
-Date: Wed, 17 Jan 2024 08:27:10 +0100
-In-Reply-To: <ee6bc481-faaf-4d84-a450-d9a2730f9fda@cesnet.cz> ("Jan
- =?utf-8?Q?Kundr=C3=A1t?=
- via buildroot"'s message of "Tue, 16 Jan 2024 16:32:37 +0100")
-Message-ID: <8734uwju7l.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HAcwgXL8xMVa for <buildroot@lists.busybox.net>;
+ Wed, 17 Jan 2024 11:15:23 +0000 (UTC)
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com
+ [IPv6:2a00:1450:4864:20::134])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2295441E08
+ for <buildroot@buildroot.org>; Wed, 17 Jan 2024 11:15:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2295441E08
+Received: by mail-lf1-x134.google.com with SMTP id
+ 2adb3069b0e04-50e67f70f34so11406384e87.0
+ for <buildroot@buildroot.org>; Wed, 17 Jan 2024 03:15:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1705490121; x=1706094921;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=YVWEFAgrNvzqBq9pmEwhpZqwMucVJ7j7+h5hzmhAUPU=;
+ b=inHN9TdblXlWmFf6emdjJs+yMV5HKSFfXiJ9ah2+P3hJrQs48pY/p3DHw1us6NcBwi
+ w/1jKTvqQHmL+5k4G9WtzSX2xQeIdMqnQzuLlEhgboEFC9snY+RYuk3Y21zRvba6cHWz
+ z7eaPzVxe6bNEpa3eQg+kAu+eAgQqzWsQPE89DRcJYiGsLC5lO6dZQvjz1PZULeClysH
+ iJZoGg6hGLZCP7tp5ea40EYJ3xtl3DiFafKCFQH5u7JhinAx0erAqqj7xCOCv1IN3Cms
+ qwbKCgGaWI+uesGgRmUJwBLQZ/ieV78gOx+nDdS5GTZXkgehAPqtoJozgY0aO8RjMZxk
+ PjVA==
+X-Gm-Message-State: AOJu0YxiPh/a5sr4ZrYGOpXQVIh5dF0g1HuV861TIFMqITrtv2HrQLJa
+ m23+KwQeasvVkBzK19REo3lSZuJS3yboyg==
+X-Google-Smtp-Source: AGHT+IGKvfj/JOjVJcElEV8W228JcCwN1W4M9g+Az+4sZW9vaXvHrTPnxMGPphbuq8AWh3IOZyCzSA==
+X-Received: by 2002:a05:6512:1323:b0:50e:b3ed:f4fb with SMTP id
+ x35-20020a056512132300b0050eb3edf4fbmr5301993lfu.15.1705490120816; 
+ Wed, 17 Jan 2024 03:15:20 -0800 (PST)
+Received: from [192.168.127.42] (ip-89-103-66-201.bb.vodafone.cz.
+ [89.103.66.201]) by smtp.gmail.com with ESMTPSA id
+ p10-20020a1709060dca00b00a26d20a48dasm7625506eji.125.2024.01.17.03.15.20
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 17 Jan 2024 03:15:20 -0800 (PST)
+Message-ID: <8cd703c2-6256-4993-a6c8-aba7a824676d@sairon.cz>
+Date: Wed, 17 Jan 2024 12:15:19 +0100
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/2] package/Makefile.in: set GIT_DIR=. in
- {HOST, TARGET}_MAKE_ENV
+User-Agent: Mozilla Thunderbird
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20240109183354.361126-1-sairon@sairon.cz>
+ <ZaOkIQZ9czn7zQpU@landeda>
+Content-Language: en-US
+From: =?UTF-8?B?SmFuIMSMZXJtw6Fr?= <sairon@sairon.cz>
+In-Reply-To: <ZaOkIQZ9czn7zQpU@landeda>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sairon.cz; s=google; t=1705490121; x=1706094921; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=YVWEFAgrNvzqBq9pmEwhpZqwMucVJ7j7+h5hzmhAUPU=;
+ b=ADtYFOHZ43qLSszt2QNaWG+QurCAyKej/88TWADhhCcNQ6BfxB2IKlEu2xAVcpr7pZ
+ YJHSy73WeT8I7bLl1V4sBcd3T6zDfEK2IOqIRxdWl+kx3rlyJI9dySrP4q728lKLW6uZ
+ j6hgIHUXGatTwpEEOkp+oqMF4EOHLp/qg76fVnXD0v41ZlOkHtFU8Y47SS9jOdUqfaJp
+ nU7BLxRSxKag6vzN9jqfADCSioIr3MGYew6+laO2nczIfc6KeXMCxGQvv+sQtIqA4eT1
+ r1+T3Z3vD7KMsQDNsa05V1NZlEOKNanrrOfjoYSYJVYhTaj279iKegUzgakReRWo5fk2
+ NVnw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=sairon.cz header.i=@sairon.cz
+ header.a=rsa-sha256 header.s=google header.b=ADtYFOHZ
+Subject: Re: [Buildroot] [PATCH 1/1] package/linux-firmware: bump version to
+ 20231211
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,63 +99,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jan =?utf-8?Q?Kundr=C3=A1t?= <jan.kundrat@cesnet.cz>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pj4+Pj4gIkphbiIgPT0gSmFuIEt1bmRyw6F0IHZpYSBidWlsZHJvb3QgPGJ1aWxkcm9vdEBidWls
-ZHJvb3Qub3JnPiB3cml0ZXM6CgogPj4gSW4gdGhlIGNvbnRleHQgb2YgQnVpbGRyb290IHRoZSBw
-YWNrYWdlcyBhcmUgbmV2ZXIgYnVpbHQgaW4gdGhlaXIgb3duIGdpdAogPj4gY2hlY2tvdXQsIHNv
-IHBhc3MgR0lUX0RJUj0uICB0byBlbnN1cmUgZ2l0IGRvZXNuJ3Qgd2FsayBiYWNrIHVwIHRoZQog
-Pj4gZGlyZWN0b3J5IHRyZWUgYW5kIGZpbmRzIHRoZSBCdWlsZHJvb3QgZ2l0IHJlcG8sIHdoaWNo
-IGZpeGVzIHRoZSByYXVjIChhbmQKID4+IHNpbWlsYXIpIGlzc3Vlcy4KCiA+IFRoaXMgaGFzIGNh
-dXNlZCBhIHJlZ3Jlc3Npb24gZm9yIHVzLgoKU29ycnkgdG8gaGVhciB0aGF0LgoKID4gV2UncmUg
-dXNpbmcgWnV1bCBDSSBbMV0gd2hpY2ggaXMgc2V0IHVwIHNvIHRoYXQgYW55IHBhdGNoIHRoYXQn
-cwogPiB1cGxvYWRlZCBmb3IgcmV2aWV3IGluIGFueSBvZiBvdXIgaW50ZXJuYWwgcHJvamVjdHMg
-YWxzbyB0cmlnZ2VycyBhCiA+IHRlc3QgYnVpbGQgdGhyb3VnaCBCdWlsZHJvb3QuIFNvbWUgb2Yg
-dGhlc2UgYnVpbGRzIHdvdWxkIHVzZSBzZXF1ZW5jZXMKID4gb2YgeWV0LXVubWVyZ2VkIHBhdGNo
-ZXMsIHNvIHRyYWNraW5nIHZlcnNpb24gaW5mbyBvZiBlYWNoIGNvbXBvbmVudCBpcwogPiBjcnVj
-aWFsLCB3aGljaCBpcyB3aHkgd2UncmUgcHV0aW5nIGFsbCB0aGF0IGludG8gdGhlIHRhcmdldCdz
-CiA+IC9ldGMvb3MtcmVsZWFzZSwgYXMgd2VsbCBhcyByZWxheWluZyBvbiB0aGUgYnVpbGQgc3lz
-dGVtIHRvIGNhbGwgYW4KID4gZXF1aXZhbGVudCBvZiBhIGBnaXQgZGVzY3JpYmVgIGZvciBlYWNo
-IG9mIG91ciBwcm9qZWN0cy4KCiA+IEZvciB0aGlzIGZlYXR1cmUsIHdlJ3JlIHJlbHlpbmcgb24g
-YSBmZXcgaG9va3M6CgogPiAtIFp1dWwgaXRzZWxmIHByb2R1Y2VzIHRoZSBjb3JyZWN0IGNvbnRl
-bnQgYXMgYSBnaXQgY2hlY2tvdXQgaW4gYQogPiAgIHNjcmF0Y2ggZGlyZWN0b3J5LAoKID4gLSBC
-dWlsZHJvb3QgaXMgY29uZmlndXJlZCB2aWEgYGxvY2FsLm1rYCB0byB1c2UgdGhhdCBjaGVja291
-dCBhcyBhCiA+ICAgc291cmNlIFsyXQoKID4gLSBhIGN1c3RvbSBob29rIHNldHMgdXAgdGhlIHJl
-ZGlyZWN0aW9uIHZpYSB0aGUgYGdpdGRpcmAgc3RhdGVtZW50IGluCiA+ICAgdGhlIGJ1aWRscm9v
-dCdzIGNvcHkgb2YgdGhlIHNvdXJjZSBkaXJlY3RvcnkgWzNdLCB0aGlzIHJlZGlyZWN0aW9uCiA+
-ICAgaG93ZXZlciAgdGFrZXMgZWZmZWN0IGF0IHJ1bnRpbWUgKHNlZSBbNF0pCgpJIGRvbid0IHVu
-ZGVyc3RhbmQgd2h5IHlvdSBkbyA+IFwkKEBEKS8uZ2l0LCBJIHdhcyB3b3VsZCBoYXZlCmV4cGVj
-dGVkID4+IFwkKEBEKS8uZ2l0L2NvbmZpZyBidXQgT0suCgoKID4gLSB0aGUgYnVpbGQgc2NyaXB0
-IG9mIGVhY2ggYXBwIHRoZW4gc2ltcGx5IHJ1bnMgYGdpdCBkZXNjcmliZWAgd2l0aCBhCiA+ICAg
-ZmV3IGZsYWdzIGZvciBvdXRwdXQgZm9ybWF0dGluZzsgdGhlIGFwcHMgY3VycmVudGx5IGRvIG5v
-dCBoYXZlIGEKID4gICB3YXkgb2YgYWNjZXB0aW5nIHNvbWUgZXh0ZXJuYWxseSBwcm92aWRlZCB2
-ZXJzaW9uIHN0cmluZ3MuCgogPiBTb21lIG9mIG91ciBwcm9qZWN0cyB1c2UgZ2l0IHN1Ym1vZHVs
-ZXMsIHdoaWNoIG1lYW5zIHRoYXQgbWFuaXB1bGF0aW5nCiA+IC5naXRkaXIgaGFzIHRvIGJlIGRv
-bmUgY2FyZWZ1bHkuIFRoZSBUTDtEUiB2ZXJzaW9uIGlzIHRoYXQgdGhpcyBpcyBhCiA+IGJpdCBt
-b3JlIGNvbXBsZXggdGhhbiBqdXN0IHB1dHRpbmcgYSB2ZXJzaW9uIG92ZXJyaWRlIGludG8gYSBm
-aWxlLiBJbgogPiBzaG9ydCwgdGhlcmUncyBhbHJlYWR5IGEgZ2l0IGNoZWNrb3V0IHRoYXQncyBi
-ZWVuIHByZXBhcmVkIHdpdGgKID4gYWNjdXJhdGUgdmVyc2lvbiBpbmZvLCBhbmQgaXQgbWFrZXMg
-c2Vuc2UgdG8gdXNlIHRoYXQgaW5mbyBhcy1pcyAtLSBvcgogPiBpdCBoYXMgd29ya2VkIHdlbGwg
-Zm9yIHVzIGluIHRoZSBwYXN0IHRocmVlIHllYXJzIDopLCB1cCB1bnRpbCB0aGlzCiA+IGNvbW1p
-dC4KCkkgZ3Vlc3MgdGhvc2UgYXJlIGxvY2FsL2N1c3RvbSBwYWNrYWdlcyB0aGF0IHlvdSBoYXZl
-IGluIHlvdXIgZXh0ZXJuYWwKdHJlZT8gQ2FuIHlvdSBwYXNzIEdJVF9ESVI9LmdpdCB0byB0aGVt
-IChvciBtYWtlIHRoZW0gdW5zZXQgR0lUX0RJUikgdG8KbWFrZSB0aGVtIHVzZSB5b3VyIHByZXBh
-cmVkIC5naXQgZGlyZWN0b3J5PwoKCiA+IEhvdyBhcmUgeW91IGd1eXMgc29sdmluZyB0aGlzIHBy
-b2JsZW0gaW4geW91ciBDSSBzeXN0ZW1zPwoKVGhpcyBpcyBub3QgYXBwbGljYWJsZSB0byB0aGUg
-Q0kgZG9uZSBmb3IgQnVpbGRyb290IGl0c2VsZiAod2hlcmUgd2UKd2FudCB0byBidWlsZCB0aGUg
-dmVyc2lvbnMgc3BlY2lmaWVkIGluIHRoZSAubWsgZmlsZXMpLiBGb3IgJFdPUkssIEkKaGF2ZSBw
-b3B1bGF0ZWQgYSBmaWxlIGluIGEgcG9zdC1idWlsZCBzY3JpcHQgbGlrZSB5b3VyIG9zLXJlbGVh
-c2UgZmlsZS4KCgogPiBJcyB0aGVyZSBhIGNoYW5jZSBvZiB1bmRvaW5nIHRoaXMgZ2xvYmFsIEdJ
-VF9ESVIgd2hpY2gsCiA+IHVuZm9ydHVuYXRlbHksIHRha2VzIHByZWNlZGVuY2Ugb3ZlciB0aGUg
-cHJvamVjdHMnIG93biAuZ2l0ZGlyCiA+IG1lY2hhbmlzbT8KClRoZSBwcm9ibGVtIHRoaXMgY2hh
-bmdlIHRyaWVkIHRvIGZpeCBpcyByZWFsLCBzbyB0aGUgcXVlc3Rpb24gaXMgaG93IHdlCmNhbiBj
-b250aW51ZSB0byBmaXggdGhpcyBpc3N1ZSAod2l0aG91dCBoYXZpbmcgdG8gcGxheSB3aGFjay1h
-LW1vbGUgZm9yCmVhY2ggcGFja2FnZSkgd2hpY2ggc3RpbGwgc3VwcG9ydGluZyBhIHVzZSBjYXNl
-IGxpa2UgeW91cnMuCgpUaGFua3MgZm9yIHRoZSBoZWFkcyB1cCEKCi0tIApCeWUsIFBldGVyIEtv
-cnNnYWFyZApfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpi
-dWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlz
-dHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Hi Yann,
+
+>> Updated WHENCE hash due to various commits:
+>> https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/log/WHENCE
+> 
+> If the file changed, that is because there were changes upstream, so
+> stating there are "various commits" that changed the file is not very
+> helpful.
+
+It's a bit vague formulation indeed, however it's accompanied with the 
+link to the list of changes in the upstream git tree. Unfortunately cgit 
+UI doesn't have a way to specify commit range to limit the list of commits.
+
+Anyway, I simply followed the example of previous updates of 
+linux-firmware, where a similar wording was used:
+
+----
+
+commit f9ff92a0793fe86353583fc5d36e74ef7e79c255
+Author: Bernd Kuhls <bernd@kuhls.net>
+Date:   Fri Nov 3 21:11:31 2023 +0100
+
+     package/linux-firmware: bump version to 20231030
+
+     Updated license hash due to various commits:
+ 
+https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/log/WHENCE
+
+---
+
+commit f9ff92a0793fe86353583fc5d36e74ef7e79c255
+Author: Bernd Kuhls <bernd@kuhls.net>
+Date:   Fri Nov 3 21:11:31 2023 +0100
+
+     package/linux-firmware: bump version to 20231030
+
+     Updated license hash due to various commits:
+ 
+https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/log/WHENCE
+
+---
+
+In some cases the hash was updated without any log message at all, like 
+in bec9e5f7852f6fefb234877dff45916d921c4b18.
+
+But no problem, I don't take it personally. Seeing you addressed "all" 
+in your reply, I get it's something that we should all be more careful 
+about :)
+
+> So, a better phrasing would have been:
+> 
+>      Updated WHENCE hash due to various new entries for new blobs.
+> 
+
+I'll try to keep it in mind for the next time, thanks.
+
+Cheers,
+Jan
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
