@@ -1,69 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E333C4725D
-	for <buildroot@archiver.kernel.org>; Thu, 18 Jan 2024 00:38:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 163E2C47258
+	for <buildroot@archiver.kernel.org>; Thu, 18 Jan 2024 01:56:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 99AEC41EF6;
-	Thu, 18 Jan 2024 00:38:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 99AEC41EF6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8D27C61589;
+	Thu, 18 Jan 2024 01:56:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D27C61589
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zc4SkZwuxWRm; Thu, 18 Jan 2024 00:38:41 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YMVZh4MrqUWt; Thu, 18 Jan 2024 01:56:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EDC0441DA8;
-	Thu, 18 Jan 2024 00:38:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EDC0441DA8
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 51AD91BF969
- for <buildroot@lists.busybox.net>; Thu, 18 Jan 2024 00:38:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E70E46157D;
+	Thu, 18 Jan 2024 01:56:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E70E46157D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0AA171BF3EB
+ for <buildroot@lists.busybox.net>; Thu, 18 Jan 2024 01:56:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2A53881973
- for <buildroot@lists.busybox.net>; Thu, 18 Jan 2024 00:38:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A53881973
+ by smtp3.osuosl.org (Postfix) with ESMTP id DE3436157D
+ for <buildroot@lists.busybox.net>; Thu, 18 Jan 2024 01:56:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE3436157D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wr61-HG5Ce2e for <buildroot@lists.busybox.net>;
- Thu, 18 Jan 2024 00:38:38 +0000 (UTC)
-X-Greylist: delayed 578 seconds by postgrey-1.37 at util1.osuosl.org;
- Thu, 18 Jan 2024 00:38:37 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A20DA8193E
-Received: from mail.ott.net (mail.ott.net [77.109.144.132])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A20DA8193E
- for <buildroot@buildroot.org>; Thu, 18 Jan 2024 00:38:37 +0000 (UTC)
-Received: from relay.zh.ott.net (relay.zh.ott.net [IPv6:fd53:c48b:8ee5::17:1])
- by mail.ott.net (Postfix) with ESMTPS id 28E164803040;
- Thu, 18 Jan 2024 01:28:50 +0100 (CET)
-Received: by relay.zh.ott.net (OpenSMTPD) with ESMTPS id 6c085931
- (TLSv1.3:TLS_CHACHA20_POLY1305_SHA256:256:YES); 
- Thu, 18 Jan 2024 01:28:49 +0100 (CET)
-Received: from localhost (mort [local])
- by mort (OpenSMTPD) with ESMTPA id a78813f9;
- Thu, 18 Jan 2024 00:28:45 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 18 Jan 2024 01:28:34 +0100
-Message-ID: <20240118002834.76578-1-stefan@ott.net>
-X-Mailer: git-send-email 2.43.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SbsPzY34pTMK for <buildroot@lists.busybox.net>;
+ Thu, 18 Jan 2024 01:56:38 +0000 (UTC)
+Received: from office2.cesnet.cz (office2.cesnet.cz [78.128.248.237])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6163961577
+ for <buildroot@buildroot.org>; Thu, 18 Jan 2024 01:56:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6163961577
+Received: from localhost (unknown
+ [IPv6:2a07:b241:1002:700:41fe:11a9:b352:1c39])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+ (No client certificate requested)
+ by office2.cesnet.cz (Postfix) with ESMTPSA id 77A801180072;
+ Thu, 18 Jan 2024 02:56:31 +0100 (CET)
+To: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 18 Jan 2024 02:56:27 +0100
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=ott.net; s=onbz5; 
- t=1705537730; bh=t8RK91T22NjuTMhGcf7sFLdhZgaWP5RQx5nTIxfoDPs=;
- h=From:To:Cc:Subject:Date:From;
- b=KXzsERqrf1S8Nmy6aEsbG+NOQbMCtavcg5Gt2OFOtYPJHIgYcAuSt2QbEk+XrLTvx
- 8DWROmYeFHVSq+aAA8qpGRBRQLSDUh3BgakWkM1m8yFuYNJqjr4MeEeQRGm5XF8zRp
- 4vdjYlK0no85LMIGwseiw13pqe0rP7zFVAZFPEYCQ3hRF7Zf9E5Yhn1cJ2BDdt4sUy
- WKoFYPYCdPKSRXDFLuvRBJ9pca4KFy/HYaKnq5Wvg8pbSnh5L7A3301mBQaHIRlgDy
- YyPQoxtTbal7022kecW4dq/WQA3nfsLnv5qSr4Jm7Bl6IG8KBK+rutNuS0Rxxmap8y
- ZxRLJzAJK1QOQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=ott.net header.i=@ott.net
- header.a=rsa-sha256 header.s=onbz5 header.b=KXzsERqr
-Subject: [Buildroot] [PATCH] package/sway: make systemd optional
+Message-ID: <0a76a0e8-2a2d-4172-8f03-f9ffd194f4db@cesnet.cz>
+In-Reply-To: <8734uwju7l.fsf@48ers.dk>
+References: <20240111105621.2321957-1-peter@korsgaard.com>
+ <ee6bc481-faaf-4d84-a450-d9a2730f9fda@cesnet.cz> <8734uwju7l.fsf@48ers.dk>
+Organization: CESNET
+User-Agent: Trojita/unstable-2024-01-14; Qt/5.15.12; wayland; Linux; 
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=cesnet.cz; s=office2-2020; t=1705542993;
+ bh=utFytoMJNMiP5P76Ofe9/ASuCWpeKmMdBcfI6DgkwZU=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References;
+ b=adKTFpefudka+9DQd4/FAU45JE9YHaNt6ZdUp5UPlXU71/PBNebXPuaEEF3jJC7CM
+ 4rTMqVjwLG1HAJw2yH/5K4VJt7kQA2hmDG4rJJ7IQ/g2VpCeQ6kRXgjNGEF731nbua
+ VqQZKv65xfIcDlodNIQCgCqpIh8mr95OVI2bMLoc6TTQl+gWoJCfyXLD4zw47x4hei
+ ZTNt73ETotkQIj61sF99tDNlceuTTauIgtlmZnz3nasOB4w2hGN6Vx3fz8RJM9SCeD
+ 75Pcy9Veq+oc/G//R1fZJDhB6IaeVY7WsMU8bNWBfZJCHGnlokjVVmxLO6MWKun5Ct
+ NUsb5F20GHw6g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=cesnet.cz header.i=@cesnet.cz
+ header.a=rsa-sha256 header.s=office2-2020 header.b=adKTFpef
+Subject: Re: [Buildroot] 
+ =?iso-8859-1?q?=5BPATCH_1/2=5D_package/Makefile=2Ein?=
+ =?iso-8859-1?q?=3A_set_GIT=5FDIR=3D=2E_in_=7BHOST=2C_TARGET=7D=5FMAKE=5FE?=
+ =?iso-8859-1?q?NV?=
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,96 +78,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Stefan Ott via buildroot <buildroot@buildroot.org>
-Reply-To: Stefan Ott <stefan@ott.net>
-Cc: Raphael Pavlidis <raphael.pavlidis@gmail.com>, Stefan Ott <stefan@ott.net>
-Content-Type: text/plain; charset="us-ascii"
+From: =?utf-8?q?Jan_Kundr=C3=A1t_via_buildroot?= <buildroot@buildroot.org>
+Reply-To: =?iso-8859-1?Q?Jan_Kundr=E1t?= <jan.kundrat@cesnet.cz>
+Cc: buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Sway works perfectly fine without it.
+> I guess those are local/custom packages that you have in your external
+> tree? Can you pass GIT_DIR=.git to them (or make them unset GIT_DIR) to
+> make them use your prepared .git directory?
 
-Signed-off-by: Stefan Ott <stefan@ott.net>
----
- package/sway/Config.in | 22 ++++++++++++++++++----
- package/sway/sway.mk   | 10 +++++++---
- 2 files changed, 25 insertions(+), 7 deletions(-)
+Yes, these are local packages whose build recipes live in our br2-external 
+tree.
 
-diff --git a/package/sway/Config.in b/package/sway/Config.in
-index 4f6d9fb215..8d79d3ca6a 100644
---- a/package/sway/Config.in
-+++ b/package/sway/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_SWAY
- 	bool "sway"
--	depends on BR2_PACKAGE_SYSTEMD # is required by the sd-bus provider
- 	depends on !BR2_STATIC_LIBS # wlroots
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # pango, wlroots
- 	depends on BR2_PACKAGE_HAS_LIBEGL # wlroots
-@@ -30,6 +29,22 @@ config BR2_PACKAGE_SWAY
- 
- if BR2_PACKAGE_SWAY
- 
-+choice BR2_PACKAGE_SWAY_SD_BUS_PROVIDER
-+	prompt "Provider of the sd-bus library"
-+	default BR2_PACKAGE_SWAY_SD_BUS_PROVIDER_AUTO
-+
-+config BR2_PACKAGE_SWAY_SD_BUS_PROVIDER_AUTO
-+	bool "auto"
-+
-+config BR2_PACKAGE_SWAY_SD_BUS_PROVIDER_LIBSYSTEMD
-+	bool "libsystemd"
-+	depends on BR2_PACKAGE_SYSTEMD
-+
-+comment "The systemd backend needs systemd"
-+	depends on !BR2_PACKAGE_SYSTEMD
-+endchoice
-+
-+
- config BR2_PACKAGE_SWAY_SWAYBAR
- 	bool "swaybar"
- 	select BR2_PACKAGE_DEJAVU
-@@ -54,9 +69,8 @@ config BR2_PACKAGE_SWAY_SWAYNAG
- 
- endif # BR2_PACKAGE_SWAY
- 
--comment "sway needs systemd, udev, EGL w/ Wayland backend and OpenGL ES support"
--	depends on !BR2_PACKAGE_SYSTEMD || \
--		!BR2_PACKAGE_HAS_UDEV || \
-+comment "sway needs udev, EGL w/ Wayland backend and OpenGL ES support"
-+	depends on !BR2_PACKAGE_HAS_UDEV || \
- 		!BR2_PACKAGE_HAS_LIBEGL || \
- 		!BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \
- 		!BR2_PACKAGE_HAS_LIBGLES
-diff --git a/package/sway/sway.mk b/package/sway/sway.mk
-index 0aad9de712..cce3b72d14 100644
---- a/package/sway/sway.mk
-+++ b/package/sway/sway.mk
-@@ -8,13 +8,17 @@ SWAY_VERSION = 1.8.1
- SWAY_SITE = https://github.com/swaywm/sway/releases/download/$(SWAY_VERSION)
- SWAY_LICENSE = MIT
- SWAY_LICENSE_FILES = LICENSE
--SWAY_DEPENDENCIES = systemd host-pkgconf wlroots json-c pcre cairo pango
-+SWAY_DEPENDENCIES = host-pkgconf wlroots json-c pcre cairo pango
- SWAY_CONF_OPTS = \
- 	-Dwerror=false \
- 	-Dzsh-completions=false \
- 	-Dfish-completions=false \
--	-Dman-pages=disabled \
--	-Dsd-bus-provider=libsystemd
-+	-Dman-pages=disabled
-+
-+ifeq ($(BR2_PACKAGE_SWAY_SD_BUS_PROVIDER_LIBSYSTEMD),y)
-+SWAY_CONF_OPTS += -Dsd-bus-provider=libsystemd
-+SWAY_DEPENDENCIES += systemd
-+endif
- 
- ifeq ($(BR2_PACKAGE_WLROOTS_X11),y)
- SWAY_CONF_OPTS += -Dxwayland=enabled
--- 
-2.43.0
+I tried to unset the GIT_DIR from both $(PKG)_PRE_CONFIGURE_HOOKS and 
+$(PKG)_PRE_BULD_HOOKS, but calling `unset GIT_DIR` has no effect in there. 
+That makes sense, because it's used like this in the pkg-cmake.mk:
 
+define $(2)_BUILD_CMDS
+	$$(TARGET_MAKE_ENV) $$($$(PKG)_BUILD_ENV) $$(BR2_CMAKE) --build 
+$$($$(PKG)_BUILDDIR) -j$(PARALLEL_JOBS) $$($$(PKG)_BUILD_OPTS)
+
+...so it won't propagate because it's set explicitly just before the build 
+command executes.
+
+In the end, I did it like this:
+
+  XXX_HACK_GIT_DIR = GIT_DIR=.git
+
+...and then for each project:
+
+  FOO_BUILD_ENV += $(XXX_HACK_GIT_DIR)
+  BAR_BUILD_ENV += $(XXX_HACK_GIT_DIR)
+
+Cheers,
+Jan
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
