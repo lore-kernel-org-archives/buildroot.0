@@ -1,81 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F84EC47DAF
-	for <buildroot@archiver.kernel.org>; Thu, 18 Jan 2024 16:26:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39B5DC47DB3
+	for <buildroot@archiver.kernel.org>; Thu, 18 Jan 2024 18:08:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1AC8F42244;
-	Thu, 18 Jan 2024 16:26:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1AC8F42244
+	by smtp1.osuosl.org (Postfix) with ESMTP id B0F6A84010;
+	Thu, 18 Jan 2024 18:08:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B0F6A84010
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GkYCWic-05Ff; Thu, 18 Jan 2024 16:26:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cYZIPjetM4Af; Thu, 18 Jan 2024 18:08:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3184B42260;
-	Thu, 18 Jan 2024 16:26:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3184B42260
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id F26F11BF348
- for <buildroot@lists.busybox.net>; Thu, 18 Jan 2024 16:26:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F33C68402C;
+	Thu, 18 Jan 2024 18:08:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F33C68402C
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 652941BF2FF
+ for <buildroot@lists.busybox.net>; Thu, 18 Jan 2024 18:08:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D40D142260
- for <buildroot@lists.busybox.net>; Thu, 18 Jan 2024 16:26:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D40D142260
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3E4BC6F5B9
+ for <buildroot@lists.busybox.net>; Thu, 18 Jan 2024 18:08:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3E4BC6F5B9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AF7dkefNazZL for <buildroot@lists.busybox.net>;
- Thu, 18 Jan 2024 16:26:08 +0000 (UTC)
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.236])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 85E3942244
- for <buildroot@buildroot.org>; Thu, 18 Jan 2024 16:26:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 85E3942244
-Received: from unknown (HELO opfedv3rlp0b.nor.fr.ftgroup) ([x.x.x.x]) by
- smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 18 Jan 2024 17:26:04 +0100
-Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv3rlp0b.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 18 Jan 2024 17:26:04 +0100
-Received: from tl-lnx-nyma7486-2 [x.x.x.x] by
- OPE16NORMBX305.corporate.adroot.infra.ftgroup [x.x.x.x] with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Thu, 18 Jan 2024 17:26:03 +0100
-Received: by tl-lnx-nyma7486-2 (sSMTP sendmail emulation);
- Thu, 18 Jan 2024 17:26:03 +0100
-From: yann.morin@orange.com
-X-IronPort-AV: E=Sophos;i="6.05,203,1701126000"; d="scan'208";a="94049020"
-Date: Thu, 18 Jan 2024 17:26:03 +0100
-To: <buildroot@buildroot.org>
-Message-ID: <ZalRG3A6D8xRnfg9@tl-lnx-nyma7486-2>
-References: <e050e870b2afb35643036a87df540add584c95b4.1705594130.git.yann.morin@orange.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4hdpB5wmvuZA for <buildroot@lists.busybox.net>;
+ Thu, 18 Jan 2024 18:08:11 +0000 (UTC)
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id F34A36F59A
+ for <buildroot@buildroot.org>; Thu, 18 Jan 2024 18:08:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F34A36F59A
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 8F9F46014A;
+ Thu, 18 Jan 2024 19:08:05 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:34382])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Thu, 18 Jan 2024 19:08:05 +0100
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <e050e870b2afb35643036a87df540add584c95b4.1705594130.git.yann.morin@orange.com>
-X-Originating-IP: [10.115.27.52]
-X-ClientProxiedBy: OPE16NORMBX401.corporate.adroot.infra.ftgroup
- (10.115.26.14) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
- (10.115.27.10)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1705595167; x=1737131167;
- h=date:to:subject:message-id:references:mime-version:
- in-reply-to:content-transfer-encoding:from;
- bh=FMBVljSXSwhJuMmw785ZqReuP3uKcmt/Z7uAidQ/Iwg=;
- b=btKkP7dmdKN479aZSIbhxxNzRUG+EsC5RFmLnwnUvNG6m6d0ilbl4F9k
- 89/a6wwn7aTTZ0J8h4QDoM65MOr5kRTyx3XkIO4a0tVEOn3/fBkM8fO/6
- po2J7ldIoxStWUTuh6d91r8rArm4B0npFPt8JbrdikUx7b9TXxgxZ9Ip+
- Gy9I36uozumMl8omGPM3FZi9MTduQCYdZRHLUa2TiWDXREKecNjA0OWVJ
- cyMc/XsKlLWMQJHx45gq7XKOUpcqPZ6aORJ2DmFp8TsdfK+XV2mkcY3nF
- 8ZMSOcxpV7vfNSdcOh8OvarMps5Uv4OhBpULaWmgnhJ6hCWICeNTV9GW6
- Q==;
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
- header.a=rsa-sha256 header.s=orange002 header.b=btKkP7dm
-Subject: Re: [Buildroot] [PATCH] docs/manual: extend makedev syntax section
+Date: Thu, 18 Jan 2024 19:08:05 +0100
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+In-Reply-To: <20240117210756.265708-1-ju.o@free.fr>
+References: <20240117210756.265708-1-ju.o@free.fr>
+User-Agent: Webmail Free/1.6.5
+Message-ID: <639458d877d32fb65419df7a48c941bb@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1705601286;
+ bh=TbNPhHRxRDFg55xNlbXobyubJ0fIfHmPby3ASoa45eA=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=IJ/3IZDtixIsf1iWqIwQ/u1Y0OqUeyv5OVrhQEAnLNILOK74ejduI1fnJw4hFgB+c
+ 4LnT6+Me9Rqxwgj+BLJObWn1M9REfwStZP7f9rdOsI7CWf28f5ihnoN3HB8k0Kq9U7
+ GDAxqvT5u85ILPhhD+tLniOJlh6IlIkqX/lUlpUopVVXqvwvG5Hzr15JXQrr5tlEqN
+ kxNJY/O55u/8yZ6fKUyvqLYn+mHefYxPcDLwHY0ql+SMMkvXqVlVY5uj2/Ku9YN8bU
+ Nb/69rLKPrV3Y9z/zytD0yOePdmFJ7vW8pyi00EMOloIQ3ITT9NquWpEBmrJF1pKXB
+ efXHdr+i3rdQw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=IJ/3IZDt
+Subject: Re: [Buildroot] [PATCH 1/1] package/postgresql: fix service runtime
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,139 +76,126 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Maxim Kochetkov <fido_max@inbox.ru>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-All,
+Hi,
 
-On 2024-01-18 17:08 +0100, yann.morin@orange.com spake thusly:
-> From: "Yann E. MORIN" <yann.morin@orange.com>
+On 17/01/2024 22:07, Julien Olivain wrote:
+> Since commit 2a8065e "package/postgresql: bump version to 16.1", the
+> postgresql service fail to start at runtime with an error:
 > 
-> The section of the manual describing the makedev syntax is not
-> up-to-date with the current features, and does not properly describe
-> existing ones.
+>     FATAL:  could not load library 
+> "/usr/lib/postgresql/dict_snowball.so": 
+> /usr/lib/postgresql/dict_snowball.so: undefined symbol: 
+> CurrentMemoryContext
 > 
->   - extend the list of types with the requirements on the existence of
->     the target file or directory; for 'c', 'b', and 'p', the existence
->     requirement is inherited from mknod(2):
+> This is due to the Posgresql autotool configure script trying to
+> detect whether the toolchain linker needs --export-dynamic or not.
+> This test is done with a runtime execution of a test program, and
+> therefore cannot run in cross-compilation. In that case, the
+> configure script assumes it is not needed. See commit [1], included
+> in PostgreSQL v16.0.
 > 
->     ERRORS
->         ...
->         ENOENT A directory component in pathname does not exist or is a
->                dangling symbolic link.
+> This commit fixes the issue by forcing the value in _CONF_ENV. The
+> package has already a Kconfig dependency on !BR2_STATIC_LIBS, so the
+> value can be unconditionally set.
 > 
->     for the other types, the existence requirements are extracted from
->     the source of makedev.c;
+> [1] 
+> https://git.postgresql.org/gitweb/?p=postgresql.git;a=commitdiff;h=9db49fc5bfdc0126be03f4b8986013e59d93b91d
 > 
->   - format the types fags, so they are rendered in monospace;
-
-Woops... *flags
-
-Regards,
-Yann E. MORIN.
-
->   - extend the 'mode' description, as it can be set to -1 for 'f', 'd',
->     or 'r', so that only the uid and gid are set. This is most useful
->     for 'r', where setting the same mode recursively for all the
->     sub-directories and files alike does not really make sense; indeed
->     in this case, the modes are usually set correctly when the package
->     (or rootfs overlay) installs the files, and only the uid and gid are
->     interesting to set;
-> 
->   - extend and update the examples to show-case the -1 mode use-case.
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 > ---
->  docs/manual/makedev-syntax.adoc | 33 +++++++++++++++++++--------------
->  1 file changed, 19 insertions(+), 14 deletions(-)
+> This patch was tested on branch master at commit b200632, and also
+> with patch from:
+> https://patchwork.ozlabs.org/project/buildroot/patch/20240111224003.243443-1-ju.o@free.fr/
 > 
-> diff --git a/docs/manual/makedev-syntax.adoc b/docs/manual/makedev-syntax.adoc
-> index d6efb31d42..e63c9233eb 100644
-> --- a/docs/manual/makedev-syntax.adoc
-> +++ b/docs/manual/makedev-syntax.adoc
-> @@ -22,14 +22,19 @@ There are a few non-trivial blocks:
->  
->  - +name+ is the path to the file you want to create/modify
->  - +type+ is the type of the file, being one of:
-> -  * f: a regular file
-> -  * d: a directory
-> -  * r: a directory recursively
-> -  * c: a character device file
-> -  * b: a block device file
-> -  * p: a named pipe
-> +  * `f`: a regular file, which must already exist
-> +  * `F`: a regular file, which is ignored and not created if missing
-> +  * `d`: a directory, which is created, as well as its parents, if missing
-> +  * `r`: a directory recursively, which must already exist
-> +  * `c`: a character device file, which parent directory must exist
-> +  * `b`: a block device file, which parent directory must exist
-> +  * `p`: a named pipe, which parent directory must exist
->  - +mode+ are the usual permissions settings (only numerical values
-> -  are allowed)
-> +  are allowed);
-> +  for type `d`, the mode of existing parents is not changed, but the mode
-> +  of created parents is set;
-> +  for types `f`, `F`, and `r`, +mode+ can also be set to +-1+ to not
-> +  change the mode (and only change uid and gid)
->  - +uid+ and +gid+ are the UID and GID to set on this file; can be
->    either numerical values or actual names
->  - +major+ and +minor+ are here for device files, set to +-+ for other
-> @@ -38,22 +43,22 @@ There are a few non-trivial blocks:
->    of files, and can be reduced to a loop, beginning at +start+,
->    incrementing its counter by +inc+ until it reaches +count+
->  
-> -Let's say you want to change the permissions of a given file; using
-> -this syntax, you will need to write:
-> +Let's say you want to change the ownership and permissions of a given
-> +file; using this syntax, you will need to write:
->  
->  ----
->  /usr/bin/foo f 755 0 0 - - - - -
->  /usr/bin/bar f 755 root root - - - - -
->  /data/buz f 644 buz-user buz-group - - - - -
-> +/data/baz f -1 baz-user baz-group - - - - -
->  ----
->  
-> -Alternatively, if you want to change owner/permission of a directory
-> -recursively, you can write (to set UID to foo, GID to bar and access
-> -rights to rwxr-x--- for the directory /usr/share/myapp and all files
-> -and directories below it):
-> +Alternatively, if you want to change owner of a directory recursively,
-> +you can write (to set UID to `foo` and GID to `bar` for the directory
-> +`/usr/share/myapp` and all files and directories below it):
->  
->  ----
-> -/usr/share/myapp r 750 foo bar - - - - -
-> +/usr/share/myapp r -1 foo bar - - - - -
->  ----
->  
->  On the other hand, if you want to create the device file +/dev/hda+
-> -- 
-> 2.34.1
+> with command:
 > 
+>     support/testing/run-tests \
+>         -d dl -o output_folder \
+>         tests.package.test_postgresql
+>     ...
+>     OK
 
--- 
-                                        ____________
-.-----------------.--------------------:       _    :------------------.
-|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
-|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
-| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
-| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
-'--------------------------------------:______/_____:------------------'
+For info, I tested this patch on branch master at
+commit d622ea0 with commands:
 
-____________________________________________________________________________________________________________
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+utils/test-pkg -a -p postgresql
+                              arm-aarch64 [ 1/45]: OK
+                    bootlin-aarch64-glibc [ 2/45]: OK
+                bootlin-arcle-hs38-uclibc [ 3/45]: OK
+                     bootlin-armv5-uclibc [ 4/45]: OK
+                      bootlin-armv7-glibc [ 5/45]: OK
+                    bootlin-armv7m-uclibc [ 6/45]: SKIPPED
+                       bootlin-armv7-musl [ 7/45]: OK
+                 bootlin-m68k-5208-uclibc [ 8/45]: SKIPPED
+                bootlin-m68k-68040-uclibc [ 9/45]: OK
+              bootlin-microblazeel-uclibc [10/45]: OK
+                 bootlin-mipsel32r6-glibc [11/45]: OK
+                    bootlin-mipsel-uclibc [12/45]: OK
+                      bootlin-nios2-glibc [13/45]: OK
+                  bootlin-openrisc-uclibc [14/45]: OK
+         bootlin-powerpc64le-power8-glibc [15/45]: OK
+            bootlin-powerpc-e500mc-uclibc [16/45]: OK
+                    bootlin-riscv32-glibc [17/45]: OK
+                    bootlin-riscv64-glibc [18/45]: OK
+                     bootlin-riscv64-musl [19/45]: OK
+                  bootlin-s390x-z13-glibc [20/45]: OK
+                       bootlin-sh4-uclibc [21/45]: OK
+                    bootlin-sparc64-glibc [22/45]: OK
+                     bootlin-sparc-uclibc [23/45]: OK
+                     bootlin-x86-64-glibc [24/45]: OK
+                      bootlin-x86-64-musl [25/45]: OK
+                    bootlin-x86-64-uclibc [26/45]: OK
+                    bootlin-xtensa-uclibc [27/45]: OK
+                             br-arm-basic [28/45]: SKIPPED
+                     br-arm-full-nothread [29/45]: OK
+                       br-arm-full-static [30/45]: SKIPPED
+                    br-i386-pentium4-full [31/45]: OK
+                 br-i386-pentium-mmx-musl [32/45]: OK
+                       br-mips64-n64-full [33/45]: OK
+                  br-mips64r6-el-hf-glibc [34/45]: OK
+                br-powerpc-603e-basic-cpp [35/45]: SKIPPED
+                br-powerpc64-power7-glibc [36/45]: OK
+                        linaro-aarch64-be [37/45]: OK
+                           linaro-aarch64 [38/45]: OK
+                               linaro-arm [39/45]: OK
+                      sourcery-arm-armv4t [40/45]: OK
+                             sourcery-arm [41/45]: OK
+                      sourcery-arm-thumb2 [42/45]: OK
+                          sourcery-mips64 [43/45]: OK
+                            sourcery-mips [44/45]: OK
+                           sourcery-nios2 [45/45]: OK
+45 builds, 5 skipped, 0 build failed, 0 legal-info failed, 0 show-info 
+failed
 
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
+> ---
+>  package/postgresql/postgresql.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/postgresql/postgresql.mk 
+> b/package/postgresql/postgresql.mk
+> index ec5b61b932..644f93d88a 100644
+> --- a/package/postgresql/postgresql.mk
+> +++ b/package/postgresql/postgresql.mk
+> @@ -15,6 +15,7 @@ POSTGRESQL_INSTALL_STAGING = YES
+>  POSTGRESQL_CONFIG_SCRIPTS = pg_config
+>  POSTGRESQL_CONF_ENV = \
+>  	ac_cv_type_struct_sockaddr_in6=yes \
+> +	pgac_cv_prog_cc_LDFLAGS_EX_BE__Wl___export_dynamic=yes \
+>  	LIBS=$(TARGET_NLS_LIBS)
+>  POSTGRESQL_CONF_OPTS = --disable-rpath
+>  POSTGRESQL_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+> --
+> 2.43.0
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
