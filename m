@@ -1,87 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5816AC47258
-	for <buildroot@archiver.kernel.org>; Wed, 17 Jan 2024 23:46:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E333C4725D
+	for <buildroot@archiver.kernel.org>; Thu, 18 Jan 2024 00:38:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DBE64615B8;
-	Wed, 17 Jan 2024 23:46:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DBE64615B8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 99AEC41EF6;
+	Thu, 18 Jan 2024 00:38:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 99AEC41EF6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gY11im2s-_Zk; Wed, 17 Jan 2024 23:46:45 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zc4SkZwuxWRm; Thu, 18 Jan 2024 00:38:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 65BAD6143E;
-	Wed, 17 Jan 2024 23:46:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 65BAD6143E
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 056AB1BF36B
- for <buildroot@lists.busybox.net>; Wed, 17 Jan 2024 23:46:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EDC0441DA8;
+	Thu, 18 Jan 2024 00:38:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EDC0441DA8
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 51AD91BF969
+ for <buildroot@lists.busybox.net>; Thu, 18 Jan 2024 00:38:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D8DC6403BE
- for <buildroot@lists.busybox.net>; Wed, 17 Jan 2024 23:46:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D8DC6403BE
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2A53881973
+ for <buildroot@lists.busybox.net>; Thu, 18 Jan 2024 00:38:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A53881973
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BGHN69OxRCMd for <buildroot@lists.busybox.net>;
- Wed, 17 Jan 2024 23:46:42 +0000 (UTC)
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
- [IPv6:2a00:1450:4864:20::530])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 847EB40150
- for <buildroot@buildroot.org>; Wed, 17 Jan 2024 23:46:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 847EB40150
-Received: by mail-ed1-x530.google.com with SMTP id
- 4fb4d7f45d1cf-559d0ef3fb5so1551748a12.3
- for <buildroot@buildroot.org>; Wed, 17 Jan 2024 15:46:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1705535199; x=1706139999;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=t1KNgx3CWKNthx0fElopTNdJqoKgylh6gFCPLSWexrY=;
- b=eDpxLM37xSHzXq5u2pVff/2yNEZVRJu/n3zNYeDwce6IvMdQkLBnFDRTbwFout9uf/
- 63ZfIHN/7idk6ncO2lxKUcxmeLd3s67MzlhtGqbeSAs8Uo9RrjYPNmN1sbRGizT9fv39
- 3zlRARlXphaNekBEtTH496+QSFCZGk46iWsf1qe7R/W44hcRlDm6+xC4bjqGEBwPgkuc
- hHa6Vsl+XPgNjO+CDu7kvvSIYg81e3yXGxgj0fpVySkMo+j9ySTOEMV07+S8KKM1bE0f
- fay1hMddyMv8ch0wBtmbels5b3XdrW3ZU/AJRtgizNFqhCdFzsqz3GnKaERaN4uJPZ7E
- JkSg==
-X-Gm-Message-State: AOJu0YzFWrez/ErlgqiJx7rHVY/CtFxsQlqbvgJgUTIclMLCLEgdFeDJ
- R1hHlw4V82w03mJuZ0CEEUGB7dCJQ4M=
-X-Google-Smtp-Source: AGHT+IHgRTOcrnVpGqDWrFYOi8jr2/AQkn0UHlGmVhHOJVuRncB8QLyLaaVK/YHDuv8hCAktePCG0Q==
-X-Received: by 2002:a17:907:bd7:b0:a1e:997a:574f with SMTP id
- ez23-20020a1709070bd700b00a1e997a574fmr4179909ejc.122.1705535199196; 
- Wed, 17 Jan 2024 15:46:39 -0800 (PST)
-Received: from x230.suse.cz (gw1.ms-free.net. [185.243.124.10])
- by smtp.gmail.com with ESMTPSA id
- rv4-20020a17090710c400b00a26e490e3f2sm8320468ejb.181.2024.01.17.15.46.37
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 17 Jan 2024 15:46:38 -0800 (PST)
-From: Petr Vorel <petr.vorel@gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wr61-HG5Ce2e for <buildroot@lists.busybox.net>;
+ Thu, 18 Jan 2024 00:38:38 +0000 (UTC)
+X-Greylist: delayed 578 seconds by postgrey-1.37 at util1.osuosl.org;
+ Thu, 18 Jan 2024 00:38:37 UTC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A20DA8193E
+Received: from mail.ott.net (mail.ott.net [77.109.144.132])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A20DA8193E
+ for <buildroot@buildroot.org>; Thu, 18 Jan 2024 00:38:37 +0000 (UTC)
+Received: from relay.zh.ott.net (relay.zh.ott.net [IPv6:fd53:c48b:8ee5::17:1])
+ by mail.ott.net (Postfix) with ESMTPS id 28E164803040;
+ Thu, 18 Jan 2024 01:28:50 +0100 (CET)
+Received: by relay.zh.ott.net (OpenSMTPD) with ESMTPS id 6c085931
+ (TLSv1.3:TLS_CHACHA20_POLY1305_SHA256:256:YES); 
+ Thu, 18 Jan 2024 01:28:49 +0100 (CET)
+Received: from localhost (mort [local])
+ by mort (OpenSMTPD) with ESMTPA id a78813f9;
+ Thu, 18 Jan 2024 00:28:45 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 18 Jan 2024 00:46:30 +0100
-Message-ID: <20240117234630.2728809-1-petr.vorel@gmail.com>
+Date: Thu, 18 Jan 2024 01:28:34 +0100
+Message-ID: <20240118002834.76578-1-stefan@ott.net>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1705535199; x=1706139999; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=t1KNgx3CWKNthx0fElopTNdJqoKgylh6gFCPLSWexrY=;
- b=jc2RNnkQfuD9fat6FrAO9EgEJs0jxD0jVo+8Uq3wWj7ub6ZIUGtEsLWGIAR55MKqMN
- btGi8ISNqibtFcAPRfJwtf0FwUC4mt421HHtRVH9mK1qi0b88dAyRVzs+1cm9Rra8fBn
- HXF8h9AX7+FqRwlTyySoaVFrbJ5GMecoHcmEMJAkG17CftP08L/Ht3AEQZsUQf55ROTo
- K8qLxpFfyJfnqyZWFMauiNeWGyA9sHwbrVcMCpIF63G9HONwnfezp3RqYmqL9/O8QiID
- 9jzEUYo4OrM3p9WV7a733V2VG8YkMDuGqS08tjX3AMWw6FkBSqRdEip4WjJCLG/O6yKP
- gDQg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=jc2RNnkQ
-Subject: [Buildroot] [PATCH] package/iputils: bump release to 20240117
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=ott.net; s=onbz5; 
+ t=1705537730; bh=t8RK91T22NjuTMhGcf7sFLdhZgaWP5RQx5nTIxfoDPs=;
+ h=From:To:Cc:Subject:Date:From;
+ b=KXzsERqrf1S8Nmy6aEsbG+NOQbMCtavcg5Gt2OFOtYPJHIgYcAuSt2QbEk+XrLTvx
+ 8DWROmYeFHVSq+aAA8qpGRBRQLSDUh3BgakWkM1m8yFuYNJqjr4MeEeQRGm5XF8zRp
+ 4vdjYlK0no85LMIGwseiw13pqe0rP7zFVAZFPEYCQ3hRF7Zf9E5Yhn1cJ2BDdt4sUy
+ WKoFYPYCdPKSRXDFLuvRBJ9pca4KFy/HYaKnq5Wvg8pbSnh5L7A3301mBQaHIRlgDy
+ YyPQoxtTbal7022kecW4dq/WQA3nfsLnv5qSr4Jm7Bl6IG8KBK+rutNuS0Rxxmap8y
+ ZxRLJzAJK1QOQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=ott.net header.i=@ott.net
+ header.a=rsa-sha256 header.s=onbz5 header.b=KXzsERqr
+Subject: [Buildroot] [PATCH] package/sway: make systemd optional
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,44 +75,93 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>,
- Petr Vorel <petr.vorel@gmail.com>, "Yann E . MORIN" <yann.morin.1998@free.fr>
+From: Stefan Ott via buildroot <buildroot@buildroot.org>
+Reply-To: Stefan Ott <stefan@ott.net>
+Cc: Raphael Pavlidis <raphael.pavlidis@gmail.com>, Stefan Ott <stefan@ott.net>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
- package/iputils/iputils.hash | 4 ++--
- package/iputils/iputils.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Sway works perfectly fine without it.
 
-diff --git a/package/iputils/iputils.hash b/package/iputils/iputils.hash
-index c2f6a40797..a3e48d60a9 100644
---- a/package/iputils/iputils.hash
-+++ b/package/iputils/iputils.hash
-@@ -1,5 +1,5 @@
--# https://github.com/iputils/iputils/releases/download/20231222/sha256sums.asc
--sha256  e3ce5e1a1f795c2d520985463b90e20f9388b7060796d54ad64509aa8e4af775  iputils-20231222.tar.gz
-+# https://github.com/iputils/iputils/releases/download/20240117/sha256sums.asc
-+sha256  7ed46e876e4157e1d20c40ec945e1ce0f3af3b10b5f6373e423135c6f22cd116  iputils-20240117.tar.gz
- # Locally computed
- sha256  2c9f29d982c48665c30b3adaf400c048988fd256eb91c691e351eb3b6a8b2036  LICENSE
- sha256  9acc4bc871a4742550158e3696dcb381953172ef808d04ca248184f9f6322712  Documentation/LICENSE.BSD3
-diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-index bcf440ec93..58e44d673a 100644
---- a/package/iputils/iputils.mk
-+++ b/package/iputils/iputils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Stefan Ott <stefan@ott.net>
+---
+ package/sway/Config.in | 22 ++++++++++++++++++----
+ package/sway/sway.mk   | 10 +++++++---
+ 2 files changed, 25 insertions(+), 7 deletions(-)
+
+diff --git a/package/sway/Config.in b/package/sway/Config.in
+index 4f6d9fb215..8d79d3ca6a 100644
+--- a/package/sway/Config.in
++++ b/package/sway/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_SWAY
+ 	bool "sway"
+-	depends on BR2_PACKAGE_SYSTEMD # is required by the sd-bus provider
+ 	depends on !BR2_STATIC_LIBS # wlroots
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # pango, wlroots
+ 	depends on BR2_PACKAGE_HAS_LIBEGL # wlroots
+@@ -30,6 +29,22 @@ config BR2_PACKAGE_SWAY
  
--IPUTILS_VERSION = 20231222
-+IPUTILS_VERSION = 20240117
- IPUTILS_SITE = https://github.com/iputils/iputils/releases/download/$(IPUTILS_VERSION)
- IPUTILS_LICENSE = GPL-2.0+, BSD-3-Clause
- IPUTILS_LICENSE_FILES = LICENSE Documentation/LICENSE.BSD3 Documentation/LICENSE.GPL2
+ if BR2_PACKAGE_SWAY
+ 
++choice BR2_PACKAGE_SWAY_SD_BUS_PROVIDER
++	prompt "Provider of the sd-bus library"
++	default BR2_PACKAGE_SWAY_SD_BUS_PROVIDER_AUTO
++
++config BR2_PACKAGE_SWAY_SD_BUS_PROVIDER_AUTO
++	bool "auto"
++
++config BR2_PACKAGE_SWAY_SD_BUS_PROVIDER_LIBSYSTEMD
++	bool "libsystemd"
++	depends on BR2_PACKAGE_SYSTEMD
++
++comment "The systemd backend needs systemd"
++	depends on !BR2_PACKAGE_SYSTEMD
++endchoice
++
++
+ config BR2_PACKAGE_SWAY_SWAYBAR
+ 	bool "swaybar"
+ 	select BR2_PACKAGE_DEJAVU
+@@ -54,9 +69,8 @@ config BR2_PACKAGE_SWAY_SWAYNAG
+ 
+ endif # BR2_PACKAGE_SWAY
+ 
+-comment "sway needs systemd, udev, EGL w/ Wayland backend and OpenGL ES support"
+-	depends on !BR2_PACKAGE_SYSTEMD || \
+-		!BR2_PACKAGE_HAS_UDEV || \
++comment "sway needs udev, EGL w/ Wayland backend and OpenGL ES support"
++	depends on !BR2_PACKAGE_HAS_UDEV || \
+ 		!BR2_PACKAGE_HAS_LIBEGL || \
+ 		!BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \
+ 		!BR2_PACKAGE_HAS_LIBGLES
+diff --git a/package/sway/sway.mk b/package/sway/sway.mk
+index 0aad9de712..cce3b72d14 100644
+--- a/package/sway/sway.mk
++++ b/package/sway/sway.mk
+@@ -8,13 +8,17 @@ SWAY_VERSION = 1.8.1
+ SWAY_SITE = https://github.com/swaywm/sway/releases/download/$(SWAY_VERSION)
+ SWAY_LICENSE = MIT
+ SWAY_LICENSE_FILES = LICENSE
+-SWAY_DEPENDENCIES = systemd host-pkgconf wlroots json-c pcre cairo pango
++SWAY_DEPENDENCIES = host-pkgconf wlroots json-c pcre cairo pango
+ SWAY_CONF_OPTS = \
+ 	-Dwerror=false \
+ 	-Dzsh-completions=false \
+ 	-Dfish-completions=false \
+-	-Dman-pages=disabled \
+-	-Dsd-bus-provider=libsystemd
++	-Dman-pages=disabled
++
++ifeq ($(BR2_PACKAGE_SWAY_SD_BUS_PROVIDER_LIBSYSTEMD),y)
++SWAY_CONF_OPTS += -Dsd-bus-provider=libsystemd
++SWAY_DEPENDENCIES += systemd
++endif
+ 
+ ifeq ($(BR2_PACKAGE_WLROOTS_X11),y)
+ SWAY_CONF_OPTS += -Dxwayland=enabled
 -- 
 2.43.0
 
