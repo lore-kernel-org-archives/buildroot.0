@@ -1,70 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39B5DC47DB3
-	for <buildroot@archiver.kernel.org>; Thu, 18 Jan 2024 18:08:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BE79C47DB3
+	for <buildroot@archiver.kernel.org>; Thu, 18 Jan 2024 18:28:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B0F6A84010;
-	Thu, 18 Jan 2024 18:08:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B0F6A84010
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cYZIPjetM4Af; Thu, 18 Jan 2024 18:08:14 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F33C68402C;
-	Thu, 18 Jan 2024 18:08:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F33C68402C
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 652941BF2FF
- for <buildroot@lists.busybox.net>; Thu, 18 Jan 2024 18:08:12 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3E4BC6F5B9
- for <buildroot@lists.busybox.net>; Thu, 18 Jan 2024 18:08:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3E4BC6F5B9
+	by smtp3.osuosl.org (Postfix) with ESMTP id DB0FE60B03;
+	Thu, 18 Jan 2024 18:28:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB0FE60B03
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4hdpB5wmvuZA for <buildroot@lists.busybox.net>;
- Thu, 18 Jan 2024 18:08:11 +0000 (UTC)
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp3.osuosl.org (Postfix) with ESMTPS id F34A36F59A
- for <buildroot@buildroot.org>; Thu, 18 Jan 2024 18:08:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F34A36F59A
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 8F9F46014A;
- Thu, 18 Jan 2024 19:08:05 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:34382])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Thu, 18 Jan 2024 19:08:05 +0100
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MZd898-XoIfr; Thu, 18 Jan 2024 18:28:28 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 55234608A5;
+	Thu, 18 Jan 2024 18:28:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 55234608A5
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DB7831BF2FF
+ for <buildroot@lists.busybox.net>; Thu, 18 Jan 2024 18:28:25 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id B020F80EC8
+ for <buildroot@lists.busybox.net>; Thu, 18 Jan 2024 18:28:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B020F80EC8
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OqkdQ3p-MCHP for <buildroot@lists.busybox.net>;
+ Thu, 18 Jan 2024 18:28:24 +0000 (UTC)
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AECD980E92
+ for <buildroot@busybox.net>; Thu, 18 Jan 2024 18:28:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AECD980E92
+Received: by mail-wr1-x435.google.com with SMTP id
+ ffacd0b85a97d-337bcaef29eso2420116f8f.0
+ for <buildroot@busybox.net>; Thu, 18 Jan 2024 10:28:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1705602503; x=1706207303;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=bYEBDd8zqPZHYQ22coIGXFVQTSMEV6HeijIxruEf+fo=;
+ b=IBgqXBWfX4WZZfZksCj2TG/NjGvecKtN75wZzHhmN9dVQGRteuzmN3y1Rs9D2z/18l
+ TIi0Y82e0Ezvc3XdSuANDjpx3LWIEZh24zyT8EqaF0A8iGe3xMiOsgfqIuVE7kJ0iAFN
+ rf3C+Q1buM626yfXwS6k81NQq51/iS7emEc7Tjb0vaLrHA68wZdE26kvkh/qXprFqtmC
+ X9jpoKpB5nmYrhlA7boUzOVG9kvTJi4Ab7tseZ+wpdpn7dd7Dn0EKXQvmbE1Mx9CXvTV
+ hdcjngUVlBcOMfzNvSQ6gHgMyhICIYN589gLQjPqQ+CPyvXV4FXt0tPAJfkmLJ+PP4rF
+ dGyg==
+X-Gm-Message-State: AOJu0YzNWptjxTREPgAZE2io8HImn5FYDlNhWicCZeMP+mIrKeUx9mlg
+ GFjOLnR2wyrkq8aFSWGVCUDpZO8hNCV9FCM5T6DtzaCRl93HZh4Qnv4rAw7y
+X-Google-Smtp-Source: AGHT+IG2QNdd/1E9L6yBC1ErMtm9FJPxpcmYLAO+b7RBSLbyZHs/zzRggOsuIdNUtDxAZ6XgJhtz+w==
+X-Received: by 2002:adf:fd90:0:b0:337:b2c0:7526 with SMTP id
+ d16-20020adffd90000000b00337b2c07526mr1005311wrr.6.1705602502475; 
+ Thu, 18 Jan 2024 10:28:22 -0800 (PST)
+Received: from xubuntu-23.. ([93.24.197.12]) by smtp.gmail.com with ESMTPSA id
+ u9-20020a5d6ac9000000b00337d392c6c3sm1821541wrw.13.2024.01.18.10.28.21
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 18 Jan 2024 10:28:22 -0800 (PST)
+From: Francois Perrad <fperrad@gmail.com>
+X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Thu, 18 Jan 2024 19:28:08 +0100
+Message-Id: <20240118182808.551258-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Date: Thu, 18 Jan 2024 19:08:05 +0100
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-In-Reply-To: <20240117210756.265708-1-ju.o@free.fr>
-References: <20240117210756.265708-1-ju.o@free.fr>
-User-Agent: Webmail Free/1.6.5
-Message-ID: <639458d877d32fb65419df7a48c941bb@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1705601286;
- bh=TbNPhHRxRDFg55xNlbXobyubJ0fIfHmPby3ASoa45eA=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=IJ/3IZDtixIsf1iWqIwQ/u1Y0OqUeyv5OVrhQEAnLNILOK74ejduI1fnJw4hFgB+c
- 4LnT6+Me9Rqxwgj+BLJObWn1M9REfwStZP7f9rdOsI7CWf28f5ihnoN3HB8k0Kq9U7
- GDAxqvT5u85ILPhhD+tLniOJlh6IlIkqX/lUlpUopVVXqvwvG5Hzr15JXQrr5tlEqN
- kxNJY/O55u/8yZ6fKUyvqLYn+mHefYxPcDLwHY0ql+SMMkvXqVlVY5uj2/Ku9YN8bU
- Nb/69rLKPrV3Y9z/zytD0yOePdmFJ7vW8pyi00EMOloIQ3ITT9NquWpEBmrJF1pKXB
- efXHdr+i3rdQw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=IJ/3IZDt
-Subject: Re: [Buildroot] [PATCH 1/1] package/postgresql: fix service runtime
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1705602503; x=1706207303; darn=busybox.net;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=bYEBDd8zqPZHYQ22coIGXFVQTSMEV6HeijIxruEf+fo=;
+ b=kY/LMOoWk4jOXIxh+FFz5G54vgkzclIrwq8T9aJ0Eq8IADOqBS4pRLTftJVzSz9TjK
+ 0nHrqPLemH1ffK3Zrr1+8rg1QiPrwyGyyHgI7TnV2Dh0RN3Ty2MrnzmqzK+vM000wU9/
+ xtRJ17nC6uY8Ux6tt6YUMqBKB0BKwGWEiOS7tlrEHnhMOf8rOluElvvHgZgmZx5l9w1s
+ sMw7HNbPiR/dbRKjwgP0VnLuS8NNbcky+nbcil6yNDU966xcDoNXimxD0sjSBehPOJc+
+ pMmogJgBEEqaP8cjhWV4w6o0JMCeiLL4P80uWfTEGxXTjBC0mkTzK47+G7HR9M+LYCty
+ 5OWw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=kY/LMOoW
+Subject: [Buildroot] [PATCH] package/autoconf: bump to version 2.72
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,126 +93,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Maxim Kochetkov <fido_max@inbox.ru>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi,
+https://git.savannah.gnu.org/cgit/autoconf.git/tree/NEWS?h=v2.72
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/autoconf/0001-dont-add-dirty-to-version.patch | 2 +-
+ package/autoconf/autoconf.hash                        | 2 +-
+ package/autoconf/autoconf.mk                          | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-On 17/01/2024 22:07, Julien Olivain wrote:
-> Since commit 2a8065e "package/postgresql: bump version to 16.1", the
-> postgresql service fail to start at runtime with an error:
-> 
->     FATAL:  could not load library 
-> "/usr/lib/postgresql/dict_snowball.so": 
-> /usr/lib/postgresql/dict_snowball.so: undefined symbol: 
-> CurrentMemoryContext
-> 
-> This is due to the Posgresql autotool configure script trying to
-> detect whether the toolchain linker needs --export-dynamic or not.
-> This test is done with a runtime execution of a test program, and
-> therefore cannot run in cross-compilation. In that case, the
-> configure script assumes it is not needed. See commit [1], included
-> in PostgreSQL v16.0.
-> 
-> This commit fixes the issue by forcing the value in _CONF_ENV. The
-> package has already a Kconfig dependency on !BR2_STATIC_LIBS, so the
-> value can be unconditionally set.
-> 
-> [1] 
-> https://git.postgresql.org/gitweb/?p=postgresql.git;a=commitdiff;h=9db49fc5bfdc0126be03f4b8986013e59d93b91d
-> 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
-> ---
-> This patch was tested on branch master at commit b200632, and also
-> with patch from:
-> https://patchwork.ozlabs.org/project/buildroot/patch/20240111224003.243443-1-ju.o@free.fr/
-> 
-> with command:
-> 
->     support/testing/run-tests \
->         -d dl -o output_folder \
->         tests.package.test_postgresql
->     ...
->     OK
+diff --git a/package/autoconf/0001-dont-add-dirty-to-version.patch b/package/autoconf/0001-dont-add-dirty-to-version.patch
+index e8d9f6a29..8df227686 100644
+--- a/package/autoconf/0001-dont-add-dirty-to-version.patch
++++ b/package/autoconf/0001-dont-add-dirty-to-version.patch
+@@ -17,7 +17,7 @@ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ diff -Nura autoconf-2.69.orig/build-aux/git-version-gen autoconf-2.69/build-aux/git-version-gen
+ --- autoconf-2.69.orig/build-aux/git-version-gen	2013-06-27 11:31:02.340200154 -0300
+ +++ autoconf-2.69/build-aux/git-version-gen	2013-06-27 11:31:13.734577033 -0300
+-@@ -203,7 +203,7 @@
++@@ -210,7 +210,7 @@
+        *) # Append the suffix only if there isn't one already.
+            case $v in
+              *-dirty) ;;
+diff --git a/package/autoconf/autoconf.hash b/package/autoconf/autoconf.hash
+index de0840dd8..f94b2d9de 100644
+--- a/package/autoconf/autoconf.hash
++++ b/package/autoconf/autoconf.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256  f14c83cfebcc9427f2c3cea7258bd90df972d92eb26752da4ddad81c87a0faa4  autoconf-2.71.tar.xz
++sha256  ba885c1319578d6c94d46e9b0dceb4014caafe2490e437a0dbca3f270a223f5a  autoconf-2.72.tar.xz
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYINGv3
+ sha256  1f1cde9fb68b9b3cff18c420894bec5bd4defacd700b7d13df54a887301e5350  COPYING.EXCEPTION
+diff --git a/package/autoconf/autoconf.mk b/package/autoconf/autoconf.mk
+index 15ce9d592..48bfc80e7 100644
+--- a/package/autoconf/autoconf.mk
++++ b/package/autoconf/autoconf.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-AUTOCONF_VERSION = 2.71
++AUTOCONF_VERSION = 2.72
+ AUTOCONF_SOURCE = autoconf-$(AUTOCONF_VERSION).tar.xz
+ AUTOCONF_SITE = $(BR2_GNU_MIRROR)/autoconf
+ 
+-- 
+2.40.1
 
-For info, I tested this patch on branch master at
-commit d622ea0 with commands:
-
-utils/test-pkg -a -p postgresql
-                              arm-aarch64 [ 1/45]: OK
-                    bootlin-aarch64-glibc [ 2/45]: OK
-                bootlin-arcle-hs38-uclibc [ 3/45]: OK
-                     bootlin-armv5-uclibc [ 4/45]: OK
-                      bootlin-armv7-glibc [ 5/45]: OK
-                    bootlin-armv7m-uclibc [ 6/45]: SKIPPED
-                       bootlin-armv7-musl [ 7/45]: OK
-                 bootlin-m68k-5208-uclibc [ 8/45]: SKIPPED
-                bootlin-m68k-68040-uclibc [ 9/45]: OK
-              bootlin-microblazeel-uclibc [10/45]: OK
-                 bootlin-mipsel32r6-glibc [11/45]: OK
-                    bootlin-mipsel-uclibc [12/45]: OK
-                      bootlin-nios2-glibc [13/45]: OK
-                  bootlin-openrisc-uclibc [14/45]: OK
-         bootlin-powerpc64le-power8-glibc [15/45]: OK
-            bootlin-powerpc-e500mc-uclibc [16/45]: OK
-                    bootlin-riscv32-glibc [17/45]: OK
-                    bootlin-riscv64-glibc [18/45]: OK
-                     bootlin-riscv64-musl [19/45]: OK
-                  bootlin-s390x-z13-glibc [20/45]: OK
-                       bootlin-sh4-uclibc [21/45]: OK
-                    bootlin-sparc64-glibc [22/45]: OK
-                     bootlin-sparc-uclibc [23/45]: OK
-                     bootlin-x86-64-glibc [24/45]: OK
-                      bootlin-x86-64-musl [25/45]: OK
-                    bootlin-x86-64-uclibc [26/45]: OK
-                    bootlin-xtensa-uclibc [27/45]: OK
-                             br-arm-basic [28/45]: SKIPPED
-                     br-arm-full-nothread [29/45]: OK
-                       br-arm-full-static [30/45]: SKIPPED
-                    br-i386-pentium4-full [31/45]: OK
-                 br-i386-pentium-mmx-musl [32/45]: OK
-                       br-mips64-n64-full [33/45]: OK
-                  br-mips64r6-el-hf-glibc [34/45]: OK
-                br-powerpc-603e-basic-cpp [35/45]: SKIPPED
-                br-powerpc64-power7-glibc [36/45]: OK
-                        linaro-aarch64-be [37/45]: OK
-                           linaro-aarch64 [38/45]: OK
-                               linaro-arm [39/45]: OK
-                      sourcery-arm-armv4t [40/45]: OK
-                             sourcery-arm [41/45]: OK
-                      sourcery-arm-thumb2 [42/45]: OK
-                          sourcery-mips64 [43/45]: OK
-                            sourcery-mips [44/45]: OK
-                           sourcery-nios2 [45/45]: OK
-45 builds, 5 skipped, 0 build failed, 0 legal-info failed, 0 show-info 
-failed
-
-> ---
->  package/postgresql/postgresql.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/postgresql/postgresql.mk 
-> b/package/postgresql/postgresql.mk
-> index ec5b61b932..644f93d88a 100644
-> --- a/package/postgresql/postgresql.mk
-> +++ b/package/postgresql/postgresql.mk
-> @@ -15,6 +15,7 @@ POSTGRESQL_INSTALL_STAGING = YES
->  POSTGRESQL_CONFIG_SCRIPTS = pg_config
->  POSTGRESQL_CONF_ENV = \
->  	ac_cv_type_struct_sockaddr_in6=yes \
-> +	pgac_cv_prog_cc_LDFLAGS_EX_BE__Wl___export_dynamic=yes \
->  	LIBS=$(TARGET_NLS_LIBS)
->  POSTGRESQL_CONF_OPTS = --disable-rpath
->  POSTGRESQL_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
-> --
-> 2.43.0
-
-Best regards,
-
-Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
