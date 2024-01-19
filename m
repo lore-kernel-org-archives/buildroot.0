@@ -1,104 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7840C47DAF
-	for <buildroot@archiver.kernel.org>; Thu, 18 Jan 2024 22:23:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80258C47422
+	for <buildroot@archiver.kernel.org>; Fri, 19 Jan 2024 02:11:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2A0C080EC3;
-	Thu, 18 Jan 2024 22:23:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A0C080EC3
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0B5B760F07;
+	Fri, 19 Jan 2024 02:11:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B5B760F07
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id c6Aidmh5mCT1; Thu, 18 Jan 2024 22:23:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EqZtaDHZt-hK; Fri, 19 Jan 2024 02:11:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 505738141A;
-	Thu, 18 Jan 2024 22:23:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 505738141A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 73DAB1BF20F
- for <buildroot@lists.busybox.net>; Thu, 18 Jan 2024 22:23:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 644FF60EE3;
+	Fri, 19 Jan 2024 02:11:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 644FF60EE3
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CCAA51BF405
+ for <buildroot@lists.busybox.net>; Fri, 19 Jan 2024 02:11:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4CFD280E48
- for <buildroot@lists.busybox.net>; Thu, 18 Jan 2024 22:23:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4CFD280E48
+ by smtp4.osuosl.org (Postfix) with ESMTP id A5774424F3
+ for <buildroot@lists.busybox.net>; Fri, 19 Jan 2024 02:11:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5774424F3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4MANf0jpzl_B for <buildroot@lists.busybox.net>;
- Thu, 18 Jan 2024 22:23:23 +0000 (UTC)
-Received: from mx0b-00105401.pphosted.com (mx0b-00105401.pphosted.com
- [67.231.152.184])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3029080C62
- for <buildroot@buildroot.org>; Thu, 18 Jan 2024 22:23:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3029080C62
-Received: from pps.filterd (m0346905.ppops.net [127.0.0.1])
- by mx0a-00105401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
- 40IKa0Bm018617; Thu, 18 Jan 2024 22:23:20 GMT
-Received: from xusxph005rp050.rtx.com (xusxph005rp050.rtx.com [128.13.121.147])
- by mx0a-00105401.pphosted.com (PPS) with ESMTPS id 3vpph0nh7m-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
- Thu, 18 Jan 2024 22:23:20 +0000
-Received: from xusxph005rp020.corp.ray.com ([128.13.121.224])
- by xusxph005rp050.rtx.com (8.17.1.19/8.17.1.19) with ESMTPS id 40IMNJQ5022534
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
- Thu, 18 Jan 2024 22:23:19 GMT
-Received: from ciulimr01.rockwellcollins.com
- (snat-utc-mailhub.rockwellcollins.com [10.172.224.19])
- by xusxph005rp020.corp.ray.com (8.17.1.19/8.17.1.19) with ESMTPS id
- 40IMNJNU016739
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
- Thu, 18 Jan 2024 22:23:19 GMT
-X-Received: from bspbox.kirk (kirk.rockwellcollins.lab [10.148.204.208])
- by ciulimr01.rockwellcollins.com (Postfix) with ESMTP id 0C581601A9;
- Thu, 18 Jan 2024 16:23:19 -0600 (CST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eSMMRc7m_Asj for <buildroot@lists.busybox.net>;
+ Fri, 19 Jan 2024 02:11:36 +0000 (UTC)
+Received: from mail.ott.net (mail.ott.net [77.109.144.132])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2C7C3428AF
+ for <buildroot@buildroot.org>; Fri, 19 Jan 2024 02:11:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C7C3428AF
+Received: from relay.zh.ott.net (relay.zh.ott.net [IPv6:fd53:c48b:8ee5::17:1])
+ by mail.ott.net (Postfix) with ESMTPS id E18FE480086F;
+ Fri, 19 Jan 2024 03:11:29 +0100 (CET)
+Received: by relay.zh.ott.net (OpenSMTPD) with ESMTPS id 0b9df2e7
+ (TLSv1.3:TLS_CHACHA20_POLY1305_SHA256:256:YES); 
+ Fri, 19 Jan 2024 03:11:29 +0100 (CET)
+Received: from localhost (mort [local])
+ by mort (OpenSMTPD) with ESMTPA id 41aee40e;
+ Fri, 19 Jan 2024 02:11:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 18 Jan 2024 22:23:01 +0000
-Message-ID: <20240118222310.62234-1-brandon.maier@collins.com>
+Date: Fri, 19 Jan 2024 03:11:23 +0100
+Message-ID: <20240119021124.92277-1-stefan@ott.net>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240118144823.5105c00f@windsurf>
+References: <20240118144823.5105c00f@windsurf>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-18_10,2024-01-17_01,2023-05-22_02
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-18_10,2024-01-17_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0
- adultscore=0
- phishscore=0 mlxlogscore=999 bulkscore=0 spamscore=0 malwarescore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2401180152
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0
- suspectscore=0 mlxscore=0
- malwarescore=0 mlxlogscore=999 phishscore=0 adultscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
- definitions=main-2401180152
-X-Proofpoint-GUID: qbJVxQFbq6qltZeEWNCh9Fz-yQYUAdke
-X-Proofpoint-ORIG-GUID: qbJVxQFbq6qltZeEWNCh9Fz-yQYUAdke
-X-Proofpoint-Spam-Details: rule=outbound_default_notspam
- policy=outbound_default score=0
- suspectscore=0 mlxscore=0 adultscore=0 malwarescore=0 phishscore=0
- clxscore=1015 priorityscore=1501 bulkscore=0 lowpriorityscore=0
- spamscore=0 mlxlogscore=999 impostorscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2311290000
- definitions=main-2401180152
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=collins.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type :
- content-transfer-encoding; s=POD051818;
- bh=V8OMd6pwb/O3Kq4YH7CkYbUyI+O9D4xZX4lPgnc+Yn4=;
- b=j95MKJCUJWGpteY1NTbjLiqewEPDZ/gzAAQbxljXuP4lcvSCSc6kBNNGN3pTI4TE44FE
- 2YG4/wr77WolXayIWPibXCARbHCrZIFjCYUb/G2uQKwScz58b/QPTW6ZpfvKAcFu+qx2
- 1K11+rxoDWH5I4bc48tBAZXhcNQmIJjTKukMVZBnRQHUJ5jP1bnKmUUKnbNXDch2u8mZ
- O88sd9oKNy20EHP2h8gnq+BZXfcKs3mxzzT9CwIzRfL75gTWcZd6PVKIQd/kM5J0UXAT
- ZWawFpLAUxTw/1KtIcyUqQA7O8MbvaiFX057hrRbQToelWXZDcpQNpctkoWbBoIuDdsQ zA== 
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=collins.com header.i=@collins.com
- header.a=rsa-sha256 header.s=POD051818 header.b=j95MKJCU
-Subject: [Buildroot] [PATCH 1/1] package/openssh: fix build error on powerpc
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=ott.net; s=onbz5; 
+ t=1705630289; bh=N6OH9IQ1OYTTy/Q1FtJ6j/kTQZgPoO0eo2BPnJDaTyQ=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=k9lg5Jyk003d6+p/uct9w64EgdmC/w/XS+nwxMRYi16N2jumXtcJ6q4fxcZV6QgpA
+ A5+ULgab3XwhPtQ8WRdxUXSf5OT2LexeGuWA4yRPMuyjseKc1S+C+P9Q0xQuuOaCzY
+ AN5ksA7eCagWAmugyUqMhczuebWedkCR88YOTscGy1xBEkYXlm8SV6xUu/FJ+3mxP7
+ 0NzYTjAzjk73sgV5nA3ExiieMLVJ3misQvl5v20zu7dRKVDTj8c6m2MCPKeAlKfwKQ
+ XqklhsGSlSn54PA7faHMju5gwZzyNbksb9s8g30HD/P3TiBW3ep+ajW5WwEcmN94hF
+ cDYDfnHpLQStQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=ott.net header.i=@ott.net
+ header.a=rsa-sha256 header.s=onbz5 header.b=k9lg5Jyk
+Subject: [Buildroot] [PATCH v2] package/sway: make systemd optional
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -110,77 +75,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Brandon Maier via buildroot <buildroot@buildroot.org>
-Reply-To: Brandon Maier <brandon.maier@collins.com>
-Cc: Brandon Maier <brandon.maier@collins.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Stefan Ott via buildroot <buildroot@buildroot.org>
+Reply-To: Stefan Ott <stefan@ott.net>
+Cc: Raphael Pavlidis <raphael.pavlidis@gmail.com>, Stefan Ott <stefan@ott.net>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Rml4ZXMgdGhlIGZvbGxvd2luZyBlcnJvciBtZXNzYWdlIGludHJvZHVjdGVkIGJ5IE9wZW5TU0gg
-djkuNnAxLgoKICBzc2hrZXkuYzogSW4gZnVuY3Rpb24gJ3NzaGtleV9zZXRfZmlsZW5hbWUnOgog
-IHNzaGtleS5jOjM3MDU6MTogc29ycnksIHVuaW1wbGVtZW50ZWQ6ICctZnplcm8tY2FsbC11c2Vk
-LXJlZ3MnIG5vdCBzdXBwb3J0ZWQgb24gdGhpcyB0YXJnZXQKICAgMzcwNSB8IH0KCkZpeGVzOgpo
-dHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5vcmcvcmVzdWx0cy9lYzcvZWM3ODBhZWQ1YjFjNGZk
-ZjliOTFmNmU3YmU5OWU4ZDRjNDJlZmE1OAoKU2lnbmVkLW9mZi1ieTogQnJhbmRvbiBNYWllciA8
-YnJhbmRvbi5tYWllckBjb2xsaW5zLmNvbT4KLS0tCiAuLi5jdGlvbi1vZi1icm9rZW4tZnplcm8t
-Y2FsbC11c2VkLXJlZ3MucGF0Y2ggfCA1NyArKysrKysrKysrKysrKysrKysrCiBwYWNrYWdlL29w
-ZW5zc2gvb3BlbnNzaC5tayAgICAgICAgICAgICAgICAgICAgfCAgMyArCiAyIGZpbGVzIGNoYW5n
-ZWQsIDYwIGluc2VydGlvbnMoKykKIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL29wZW5zc2gv
-MDAwMS1iZXR0ZXItZGV0ZWN0aW9uLW9mLWJyb2tlbi1memVyby1jYWxsLXVzZWQtcmVncy5wYXRj
-aAoKZGlmZiAtLWdpdCBhL3BhY2thZ2Uvb3BlbnNzaC8wMDAxLWJldHRlci1kZXRlY3Rpb24tb2Yt
-YnJva2VuLWZ6ZXJvLWNhbGwtdXNlZC1yZWdzLnBhdGNoIGIvcGFja2FnZS9vcGVuc3NoLzAwMDEt
-YmV0dGVyLWRldGVjdGlvbi1vZi1icm9rZW4tZnplcm8tY2FsbC11c2VkLXJlZ3MucGF0Y2gKbmV3
-IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMC4uNWMwNTYwMzNhOQotLS0gL2Rldi9u
-dWxsCisrKyBiL3BhY2thZ2Uvb3BlbnNzaC8wMDAxLWJldHRlci1kZXRlY3Rpb24tb2YtYnJva2Vu
-LWZ6ZXJvLWNhbGwtdXNlZC1yZWdzLnBhdGNoCkBAIC0wLDAgKzEsNTcgQEAKK0Zyb20gMTAzNmQ3
-N2IzNGE1ZmExNWU1NmY1MTZiODFiOTkyODAwNjg0OGNiZCBNb24gU2VwIDE3IDAwOjAwOjAwIDIw
-MDEKK0Zyb206IERhbWllbiBNaWxsZXIgPGRqbUBtaW5kcm90Lm9yZz4KK0RhdGU6IEZyaSwgMjIg
-RGVjIDIwMjMgMTc6NTY6MjYgKzExMDAKK1N1YmplY3Q6IFtQQVRDSF0gYmV0dGVyIGRldGVjdGlv
-biBvZiBicm9rZW4gLWZ6ZXJvLWNhbGwtdXNlZC1yZWdzCitNSU1FLVZlcnNpb246IDEuMAorQ29u
-dGVudC1UeXBlOiB0ZXh0L3BsYWluOyBjaGFyc2V0PVVURi04CitDb250ZW50LVRyYW5zZmVyLUVu
-Y29kaW5nOiA4Yml0CisKK2djYyAxMy4yLjAgb24gcHBjNjRsZSByZWZ1c2VzIHRvIGNvbXBpbGUg
-c29tZSBmdW5jdGlvbiwgaW5jbHVkaW5nCitjaXBoZXIuYzpjb21wcmVzc2lvbl9hbGdfbGlzdCgp
-IHdpdGggYW4gZXJyb3I6CisKKz4gc29ycnksIHVuaW1wbGVtZW50ZWQ6IGFyZ3VtZW50IOKAmHVz
-ZWTigJkgaXMgbm90IHN1cHBvcnRlZGN3Cis+IGZvciDigJgtZnplcm8tY2FsbC11c2VkLXJlZ3Pi
-gJkgb24gdGhpcyB0YXJnZXQKKworVGhpcyBleHRlbmRzIHRoZSBhdXRvY29uZiB3aWxsLWl0LXdv
-cmsgdGVzdCB3aXRoIGEgc2ltaWxhcmx5LQorc3RydWN0dXJlZCBmdW5jdGlvbiB0aGF0IHNlZW1z
-IHRvIGNhdGNoIHRoaXMuCisKK1Nwb3R0ZWQvdGVzdGVkIGJ5IENvbGluIFdhdHNvbjsgYnozNjQ1
-CisKK1Vwc3RyZWFtOiBodHRwczovL2dpdGh1Yi5jb20vb3BlbnNzaC9vcGVuc3NoLXBvcnRhYmxl
-L2NvbW1pdC8xMDM2ZDc3YjM0YTVmYTE1ZTU2ZjUxNmI4MWI5OTI4MDA2ODQ4Y2JkLnBhdGNoCitT
-aWduZWQtb2ZmLWJ5OiBCcmFuZG9uIE1haWVyIDxicmFuZG9uLm1haWVyQGNvbGxpbnMuY29tPgor
-LS0tCisgbTQvb3BlbnNzaC5tNCB8IDEyICsrKysrKysrKy0tLQorIDEgZmlsZSBjaGFuZ2VkLCA5
-IGluc2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pCisKK2RpZmYgLS1naXQgYS9tNC9vcGVuc3No
-Lm00IGIvbTQvb3BlbnNzaC5tNAoraW5kZXggNWQ0YzU2MjgwZmMuLjAzM2RmNTAxYzNkIDEwMDY0
-NAorLS0tIGEvbTQvb3BlbnNzaC5tNAorKysrIGIvbTQvb3BlbnNzaC5tNAorQEAgLTIwLDE4ICsy
-MCwyNCBAQCBjaGFyICpmMihjaGFyICpzLCAuLi4pIHsKKyAJdmFfZW5kKGFyZ3MpOworIAlyZXR1
-cm4gc3RyZHVwKHJldCk7CisgfQorK2NvbnN0IGNoYXIgKmYzKGludCBzKSB7CisrCXJldHVybiBz
-ID8gImdvb2QiIDogImdvb2RlciI7CisrfQorIGludCBtYWluKGludCBhcmdjLCBjaGFyICoqYXJn
-dikgeworLQkodm9pZClhcmd2OworIAljaGFyIGJbMjU2XSwgKmNwOworKwljb25zdCBjaGFyICpz
-OworIAkvKiBTb21lIG1hdGggdG8gY2F0Y2ggLWZ0cmFwdiBwcm9ibGVtcyBpbiB0aGUgdG9vbGNo
-YWluICovCisgCWludCBpID0gMTIzICogYXJnYywgaiA9IDQ1NiArIGFyZ2MsIGsgPSA3ODkgLSBh
-cmdjOworIAlmbG9hdCBsID0gaSAqIDIuMTsKKyAJZG91YmxlIG0gPSBsIC8gMC41OworIAlsb25n
-IGxvbmcgaW50IG4gPSBhcmdjICogMTIzNDVMTCwgbyA9IDEyMzQ1TEwgKiAobG9uZyBsb25nIGlu
-dClhcmdjOworKwkodm9pZClhcmd2OworIAlmKDEpOworLQlzbnByaW50ZihiLCBzaXplb2YgYiwg
-IiVkICVkICVkICVmICVmICVsbGQgJWxsZFxuIiwgaSxqLGssbCxtLG4sbyk7CisrCXMgPSBmMyhm
-KDIpKTsKKysJc25wcmludGYoYiwgc2l6ZW9mIGIsICIlZCAlZCAlZCAlZiAlZiAlbGxkICVsbGQg
-JXNcbiIsIGksaixrLGwsbSxuLG8scyk7CisgCWlmICh3cml0ZSgxLCBiLCAwKSA9PSAtMSkgZXhp
-dCgwKTsKKy0JY3AgPSBmMigiJWQgJWQgJWQgJWYgJWYgJWxsZCAlbGxkXG4iLCBpLGosayxsLG0s
-bixvKTsKKysJY3AgPSBmMigiJWQgJWQgJWQgJWYgJWYgJWxsZCAlbGxkICVzXG4iLCBpLGosayxs
-LG0sbixvLHMpOworKwlpZiAod3JpdGUoMSwgY3AsIDApID09IC0xKSBleGl0KDApOworIAlmcmVl
-KGNwKTsKKyAJLyoKKyAJICogVGVzdCBmYWxsdGhyb3VnaCBiZWhhdmlvdXIuICBjbGFuZyAxMCdz
-IC1XaW1wbGljaXQtZmFsbHRocm91Z2ggZG9lcwpkaWZmIC0tZ2l0IGEvcGFja2FnZS9vcGVuc3No
-L29wZW5zc2gubWsgYi9wYWNrYWdlL29wZW5zc2gvb3BlbnNzaC5tawppbmRleCBlYzllNjYxM2Iw
-Li5lZjUzMGNjODUwIDEwMDY0NAotLS0gYS9wYWNrYWdlL29wZW5zc2gvb3BlbnNzaC5taworKysg
-Yi9wYWNrYWdlL29wZW5zc2gvb3BlbnNzaC5tawpAQCAtMTMsNiArMTMsOSBAQCBPUEVOU1NIX1NJ
-VEUgPSBodHRwOi8vZnRwLm9wZW5ic2Qub3JnL3B1Yi9PcGVuQlNEL09wZW5TU0gvcG9ydGFibGUK
-IE9QRU5TU0hfTElDRU5TRSA9IEJTRC0zLUNsYXVzZSwgQlNELTItQ2xhdXNlLCBQdWJsaWMgRG9t
-YWluCiBPUEVOU1NIX0xJQ0VOU0VfRklMRVMgPSBMSUNFTkNFCiAKKyMgMDAwMS1iZXR0ZXItZGV0
-ZWN0aW9uLW9mLWJyb2tlbi1memVyby1jYWxsLXVzZWQtcmVncy5wYXRjaAorT1BFTlNTSF9BVVRP
-UkVDT05GID0gWUVTCisKIE9QRU5TU0hfQ09ORl9FTlYgPSBcCiAJTEQ9IiQoVEFSR0VUX0NDKSIg
-XAogCUxERkxBR1M9IiQoVEFSR0VUX0NGTEFHUykiIFwKLS0gCjIuNDMuMAoKX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlz
-dApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFp
-bG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Sway works perfectly fine without it.
+
+Signed-off-by: Stefan Ott <stefan@ott.net>
+
+---
+Changes v1 -> v2:
+  - Automatically enable systemd integration for builds with systemd
+    support (suggested by Thomas Petazzoni)
+---
+ package/sway/Config.in |  6 ++----
+ package/sway/sway.mk   | 10 +++++++---
+ 2 files changed, 9 insertions(+), 7 deletions(-)
+
+diff --git a/package/sway/Config.in b/package/sway/Config.in
+index 4f6d9fb215..084ba830d7 100644
+--- a/package/sway/Config.in
++++ b/package/sway/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_SWAY
+ 	bool "sway"
+-	depends on BR2_PACKAGE_SYSTEMD # is required by the sd-bus provider
+ 	depends on !BR2_STATIC_LIBS # wlroots
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # pango, wlroots
+ 	depends on BR2_PACKAGE_HAS_LIBEGL # wlroots
+@@ -54,9 +53,8 @@ config BR2_PACKAGE_SWAY_SWAYNAG
+ 
+ endif # BR2_PACKAGE_SWAY
+ 
+-comment "sway needs systemd, udev, EGL w/ Wayland backend and OpenGL ES support"
+-	depends on !BR2_PACKAGE_SYSTEMD || \
+-		!BR2_PACKAGE_HAS_UDEV || \
++comment "sway needs udev, EGL w/ Wayland backend and OpenGL ES support"
++	depends on !BR2_PACKAGE_HAS_UDEV || \
+ 		!BR2_PACKAGE_HAS_LIBEGL || \
+ 		!BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \
+ 		!BR2_PACKAGE_HAS_LIBGLES
+diff --git a/package/sway/sway.mk b/package/sway/sway.mk
+index 0aad9de712..60492ae720 100644
+--- a/package/sway/sway.mk
++++ b/package/sway/sway.mk
+@@ -8,13 +8,17 @@ SWAY_VERSION = 1.8.1
+ SWAY_SITE = https://github.com/swaywm/sway/releases/download/$(SWAY_VERSION)
+ SWAY_LICENSE = MIT
+ SWAY_LICENSE_FILES = LICENSE
+-SWAY_DEPENDENCIES = systemd host-pkgconf wlroots json-c pcre cairo pango
++SWAY_DEPENDENCIES = host-pkgconf wlroots json-c pcre cairo pango
+ SWAY_CONF_OPTS = \
+ 	-Dwerror=false \
+ 	-Dzsh-completions=false \
+ 	-Dfish-completions=false \
+-	-Dman-pages=disabled \
+-	-Dsd-bus-provider=libsystemd
++	-Dman-pages=disabled
++
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++SWAY_CONF_OPTS += -Dsd-bus-provider=libsystemd
++SWAY_DEPENDENCIES += systemd
++endif
+ 
+ ifeq ($(BR2_PACKAGE_WLROOTS_X11),y)
+ SWAY_CONF_OPTS += -Dxwayland=enabled
+-- 
+2.43.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
