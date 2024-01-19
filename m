@@ -4,65 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3B7AC4725D
-	for <buildroot@archiver.kernel.org>; Fri, 19 Jan 2024 11:25:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B700CC4725D
+	for <buildroot@archiver.kernel.org>; Fri, 19 Jan 2024 11:26:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8986642239;
-	Fri, 19 Jan 2024 11:25:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8986642239
+	by smtp4.osuosl.org (Postfix) with ESMTP id 39A0442C9E;
+	Fri, 19 Jan 2024 11:26:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39A0442C9E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VTRUQlghyK6t; Fri, 19 Jan 2024 11:25:08 +0000 (UTC)
+	with ESMTP id vhHqKsJrPVWJ; Fri, 19 Jan 2024 11:26:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DBE0A421FB;
-	Fri, 19 Jan 2024 11:25:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DBE0A421FB
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9F5BE1BF5A6
- for <buildroot@lists.busybox.net>; Fri, 19 Jan 2024 11:25:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 97606428EE;
+	Fri, 19 Jan 2024 11:26:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 97606428EE
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 034E01BF5A6
+ for <buildroot@lists.busybox.net>; Fri, 19 Jan 2024 11:26:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6ADDE83A90
- for <buildroot@lists.busybox.net>; Fri, 19 Jan 2024 11:25:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6ADDE83A90
+ by smtp3.osuosl.org (Postfix) with ESMTP id CFF1B60F01
+ for <buildroot@lists.busybox.net>; Fri, 19 Jan 2024 11:26:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFF1B60F01
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7ZjnUu70SBhK for <buildroot@lists.busybox.net>;
- Fri, 19 Jan 2024 11:25:04 +0000 (UTC)
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5974582664
- for <buildroot@busybox.net>; Fri, 19 Jan 2024 11:25:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5974582664
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 66820E0002;
- Fri, 19 Jan 2024 11:25:01 +0000 (UTC)
-Date: Fri, 19 Jan 2024 12:24:59 +0100
-To: Francois Perrad <fperrad@gmail.com>
-Message-ID: <20240119122459.253ad24c@windsurf>
-In-Reply-To: <20240118182808.551258-1-francois.perrad@gadz.org>
-References: <20240118182808.551258-1-francois.perrad@gadz.org>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IVYUYliJBtAm for <buildroot@lists.busybox.net>;
+ Fri, 19 Jan 2024 11:26:33 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DDF2E60EE9
+ for <buildroot@buildroot.org>; Fri, 19 Jan 2024 11:26:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DDF2E60EE9
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 26439C0008;
+ Fri, 19 Jan 2024 11:26:31 +0000 (UTC)
+Date: Fri, 19 Jan 2024 12:26:30 +0100
+To: Stefan Ott via buildroot <buildroot@buildroot.org>
+Message-ID: <20240119122630.3f58dad1@windsurf>
+In-Reply-To: <20240119021124.92277-1-stefan@ott.net>
+References: <20240118144823.5105c00f@windsurf>
+ <20240119021124.92277-1-stefan@ott.net>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1705663501;
+ d=bootlin.com; s=gm1; t=1705663591;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=iEEPQeLjmI1u6sxzXQiEjJQ1Li/QSp3qcQZO1qd3/x4=;
- b=Ahanc4HfH85PwXt7g2m1DepvGMttwHpS7/dyVvUQOaA1UPTRvgDA9hgY1KTYyyl0G46WWj
- KCeIKH2ExC1+ufnDce9MZeoPMzjoggY5CxD7cLzfHDZBnMTF6iaDEeV/8+A09LExGSBSSb
- XtZH4Y8Khlp3jBK4M3tNKU9AQeUB2mO2ZxwEuGuaCbiEjyEaGBz1k9gZl9OPGThVpNlZ1O
- DCaxkaQ9PtSEpu7jJjI083N8d2tJa8UPb9V38BfG5TT6Yx6rZi+D8fzGOj+AovTrB9SZFJ
- fILuXPwU4mN4px78bn6tSfWnDDWonJVhSL5dDh6BfMKETODT1JQEc/oWYK9OlA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=ej9augCtw5lFjomIzrtQCs/GDkrSlh6CH/xIjJ+JaUk=;
+ b=gIk1DQ6SyVr9itv8LuDlAFhmDN+p37HBu0IroTgGzBMKyMKFash1tVwCWIAp9GoiX422bU
+ B7QF3fXh4JtK6h6tXDNW+z6Y6qMur1yNPAielVEBYnoLzSWbdCRBTo+tpSgHu91jWaT7tf
+ FIwNqXmP11mRl6gds+INv/xD2kxanYgjYUTBWBggoT3nw6iKDIHVGdGqfLckg4wldWj1fO
+ P9ZUUYXL1Uoe3tc8H/hyJe6BEbb7slg2zgwA/8Jmn5c6lEAy35eIWvOM+4nerrmshJh/hd
+ lliWhp4oZImpbeJSkl65TcgG8czMnR11tzBRFRs0gA6y3ARoMdsWXFTssyUjGg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Ahanc4Hf
-Subject: Re: [Buildroot] [PATCH] package/autoconf: bump to version 2.72
+ header.s=gm1 header.b=gIk1DQ6S
+Subject: Re: [Buildroot] [PATCH v2] package/sway: make systemd optional
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,25 +77,33 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@busybox.net
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Raphael Pavlidis <raphael.pavlidis@gmail.com>, Stefan Ott <stefan@ott.net>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gRnJhbsOnb2lzLAoKT24gVGh1LCAxOCBKYW4gMjAyNCAxOToyODowOCArMDEwMApGcmFu
-Y29pcyBQZXJyYWQgPGZwZXJyYWRAZ21haWwuY29tPiB3cm90ZToKCj4gaHR0cHM6Ly9naXQuc2F2
-YW5uYWguZ251Lm9yZy9jZ2l0L2F1dG9jb25mLmdpdC90cmVlL05FV1M/aD12Mi43Mgo+IFNpZ25l
-ZC1vZmYtYnk6IEZyYW5jb2lzIFBlcnJhZCA8ZnJhbmNvaXMucGVycmFkQGdhZHoub3JnPgoKVGhh
-bmtzIGZvciB0aGUgYnVtcC4gSG93IG11Y2ggdGVzdGluZyBkaWQgeW91IGRvIGFmdGVyIHRoaXMg
-YnVtcCB3aXRoCnBhY2thZ2VzIHRoYXQgaGF2ZSBBVVRPUkVDT05GID0gWUVTID8KCkl0IGlzIGlu
-ZGVlZCBmYWlybHkgY29tbW9uIGZvciBhdXRvY29uZiBidW1wcyB0byBicmVhayB0aGluZ3MuIFdl
-CmNlcnRhaW5seSBkb24ndCBuZWVkIGEgZnVsbCB0ZXN0aW5nIGNvdmVyYWdlIGJlZm9yZSBtZXJn
-aW5nICh3ZSBoYXZlCmF1dG9idWlsZGVycyBmb3IgdGhhdCksIGJ1dCB0aGUgdGVzdGluZyBvZiBh
-IHJlYXNvbmFibHkgbGFyZ2UKY29uZmlndXJhdGlvbnMgb2YgcGFja2FnZXMgdGhhdCBzZXQgQVVU
-T1JFQ09ORiA9IFlFUyB3b3VsZCBiZSBuaWNlLgoKVGhhbmtzIGEgbG90IQoKVGhvbWFzCi0tIApU
-aG9tYXMgUGV0YXp6b25pLCBjby1vd25lciBhbmQgQ0VPLCBCb290bGluCkVtYmVkZGVkIExpbnV4
-IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcgYW5kIHRyYWluaW5nCmh0dHBzOi8vYm9vdGxpbi5jb20K
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290
-IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxk
-cm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Hello,
+
+Thanks for the new iteration!
+
+On Fri, 19 Jan 2024 03:11:23 +0100
+Stefan Ott via buildroot <buildroot@buildroot.org> wrote:
+
+> +ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+> +SWAY_CONF_OPTS += -Dsd-bus-provider=libsystemd
+
+Which other values of -Dsd-bus-provider are available? Would one be
+suitable for an "else" clause to this "if" condition?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
