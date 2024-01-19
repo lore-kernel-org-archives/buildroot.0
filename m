@@ -4,60 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5FBEC4725D
-	for <buildroot@archiver.kernel.org>; Fri, 19 Jan 2024 07:00:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DED2C4725D
+	for <buildroot@archiver.kernel.org>; Fri, 19 Jan 2024 07:29:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 181CB404A6;
-	Fri, 19 Jan 2024 07:00:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 181CB404A6
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8CC21400DD;
+	Fri, 19 Jan 2024 07:29:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8CC21400DD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CHIr1w8WDvu2; Fri, 19 Jan 2024 07:00:37 +0000 (UTC)
+	with ESMTP id 1xVbdqFKAIp2; Fri, 19 Jan 2024 07:29:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A20D3405B3;
-	Fri, 19 Jan 2024 07:00:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A20D3405B3
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 15D661BF282
- for <buildroot@lists.busybox.net>; Fri, 19 Jan 2024 07:00:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4B2EA400E4;
+	Fri, 19 Jan 2024 07:29:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4B2EA400E4
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1C8961BF842
+ for <buildroot@lists.busybox.net>; Fri, 19 Jan 2024 07:29:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DFECE405B3
- for <buildroot@lists.busybox.net>; Fri, 19 Jan 2024 07:00:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DFECE405B3
+ by smtp4.osuosl.org (Postfix) with ESMTP id E7A8242883
+ for <buildroot@lists.busybox.net>; Fri, 19 Jan 2024 07:29:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E7A8242883
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8J0mVXncCJ9b for <buildroot@lists.busybox.net>;
- Fri, 19 Jan 2024 07:00:33 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 465C2404A6
- for <buildroot@buildroot.org>; Fri, 19 Jan 2024 07:00:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 465C2404A6
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 943022000D
- for <buildroot@buildroot.org>; Fri, 19 Jan 2024 07:00:29 +0000 (UTC)
-MIME-Version: 1.0
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZWxepZBt_M4i for <buildroot@lists.busybox.net>;
+ Fri, 19 Jan 2024 07:29:46 +0000 (UTC)
+Received: from mail.heine.tech (mail.heine.tech [195.201.24.99])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2DB8541E19
+ for <buildroot@buildroot.org>; Fri, 19 Jan 2024 07:29:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2DB8541E19
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id F115C1814B9; Fri, 19 Jan 2024 08:29:42 +0100 (CET)
 To: buildroot@buildroot.org
-Date: Fri, 19 Jan 2024 07:00:29 -0000
-X-GND-Sasl: bot@bootlin.com
-Message-Id: <20240119070034.DFECE405B3@smtp2.osuosl.org>
+Date: Fri, 19 Jan 2024 08:29:27 +0100
+Message-Id: <20240119072933.25453-1-buildroot@heine.tech>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; 
- t=1705647629; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
- mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding;
- bh=N93XHXf3byudR2e1a8QJ3Yx1XZIvrk0GV8H+4I94fAA=;
- b=LtxNu5DNcWHgjaxdoHnQfcsFMrWe0WkBzUyTLKDBt52Sc26yG/exbLKlt4P0/i3fW1sPWF
- Y+6d6Uq0Fp+x4kgJfnOQs0KmCwj8S/we9TcdgmY4sNveNWJLjBGs2gY5gbGnxgjwQDfZvZ
- Pncemqy7K/eOT2V+yk1TQvKO9cwmtjkHYlDkU8+8OHNuSXNH3iHyhuooJym8vV+d69d1gm
- sfQHpUyWGcQjWbl/CN+nq+XL7LLEg6lAOo+ne50mFDTzkrkVfqCj22IGtRZzIYlRpPSIza
- pibuQtNclcK2RapRbBP+kkMrC36zxLSOP37R8EfCUT4ry6UZPnI86iZvsPgsZg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=LtxNu5DN
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2024-01-18
+ d=heine.tech; s=dkim; 
+ t=1705649383; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=TIXSE1xHP5Cw1WpUg5xbqGUc/8PiLMrxT465qmwe0YI=;
+ b=S/XwB65wcz1KQxNoLoLjIp8rvVeXRZw/tnidau1lz+lXi41ewQvFiXD1bZnUcBIuTJry3G
+ gv5hvABwXE1JaR21H0p3/up9UCv7L2SD+m5OYQmpaeyNIWI8Rx35wRTxILFOpVsTwhXkhZ
+ qQprdbLmxi9nDESKKo7frX+2K6Cf/HE=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key) header.d=heine.tech header.i=@heine.tech
+ header.a=rsa-sha256 header.s=dkim header.b=S/XwB65w
+Subject: [Buildroot] [PATCH v2] package/protobuf-c: bump to version 1.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,180 +64,174 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
+Reply-To: Michael Nosthoff <buildroot@heine.tech>
+Cc: Marcus Folkesson <marcus.folkesson@gmail.com>,
+ Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+- drops support for proto2
+- fixes compatibility with protobuf >= 22.0 (which we did not yet bump)
+- to be compatible with new protobuf versions c++17 is now required
+  when building with protoc (which we only do for the host package) [0]
+  hence require host gcc >= 7 for c++17 support, propagate to depending packets
 
-Autobuild statistics for 2024-01-18
-===================================
+[0] https://github.com/protobuf-c/protobuf-c/pull/673
 
-      branch |  OK | NOK | TIM | TOT |
-  2023.02.x  |  1  |  6  |  0  |  7  |
-  2023.11.x  |  3  |  2  |  0  |  5  |
-    master   | 45  | 48  |  0  | 93  |
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+---
 
-Classification of failures by reason for master
------------------------------------------------
+v2:
+- update the different Config.in comments according to review
+- rephrase the requirement of C++17 for the host package
+---
+ package/collectd/Config.in         | 2 ++
+ package/criu/Config.in             | 1 +
+ package/kismet/Config.in           | 6 ++++--
+ package/protobuf-c/Config.in       | 5 +++--
+ package/protobuf-c/protobuf-c.hash | 4 ++--
+ package/protobuf-c/protobuf-c.mk   | 6 +++---
+ package/riemann-c-client/Config.in | 6 ++++--
+ 7 files changed, 19 insertions(+), 11 deletions(-)
 
-  gobject-introspection-1.76.1 | 5 
-                  stunnel-5.71 | 4 
-                       unknown | 4 
-                    attr-2.5.2 | 3 
-                libressl-3.8.2 | 3 
-                 openssh-9.6p1 | 3 
-glibc-2.38-27-g750a45a78390... | 2 
-        host-sentry-cli-2.20.3 | 2 
- Makefile:727: target-finalize | 2 
-            micropython-1.22.0 | 2 
-                 sudo-1.9.15p5 | 2 
-                elfutils-0.189 | 1 
-                 glibmm-2.76.0 | 1 
-                 highway-1.0.7 | 1 
-       host-gcc-initial-12.3.0 | 1 
-              host-rust-1.74.1 | 1 
-              libarchive-3.7.2 | 1 
-libdill-32d0e8b733416208e04... | 1 
-                 libnss-3.96.1 | 1 
-          linux-5.10.162-cip24 | 1 
-                memtest86-6.20 | 1 
-               openblas-0.3.25 | 1 
-                    pppd-2.5.0 | 1 
-                    proj-9.3.0 | 1 
-                    qemu-8.1.1 | 1 
-            quickjs-2023-12-09 | 1 
-                re2-2023-11-01 | 1 
-
-
-Detail of failures for master
------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-microblazeel |           attr-2.5.2           | NOK | http://autobuild.buildroot.net/results/687e8549a82cfc5818b0aea58419424cad9d89e1 |     
- microblaze  |           attr-2.5.2           | NOK | http://autobuild.buildroot.net/results/f4520615a9acda1dc01cdd99e614c1399334d2b7 |     
-microblazeel |           attr-2.5.2           | NOK | http://autobuild.buildroot.net/results/86b08fe1147a8ca28c6003df32a9455a33600819 |     
-    arc      |         elfutils-0.189         | NOK | http://autobuild.buildroot.net/results/89e6cc25c040d072f14db1ddc3b62aec060765d4 | ORPH
-    arc      | glibc-2.38-27-g750a45a78390... | NOK | http://autobuild.buildroot.net/results/ab2ac9599f3b346230929f46f3938e7e5946b594 |     
- powerpc64   | glibc-2.38-27-g750a45a78390... | NOK | http://autobuild.buildroot.net/results/00334ffc1d53ca7320e454b1b1e47f06aabd9573 |     
-   nios2     |         glibmm-2.76.0          | NOK | http://autobuild.buildroot.net/results/61760d01ac17be98a75562a49ba2beb6d392e6f0 |     
-    i686     |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/792de7d331c5e6a24f91f21470fcc4dfc9174362 | ORPH
-  sparc64    |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/ddfdfaa8757f132023fe3f329cf4cd9eeac60084 | ORPH
-    or1k     |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/19149df0617a96711cb69654dcf33d18a630809e | ORPH
-    mips     |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/7d6dfdd7e1275522cdd5d8585166558c97a643d1 | ORPH
-    or1k     |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/5ea5d51457e3e98c9748b457cd86d3ff4f439246 | ORPH
-  riscv32    |         highway-1.0.7          | NOK | http://autobuild.buildroot.net/results/3f8def50c93f73c26339f72d6a13951d5fb41c30 |     
-    arm      |    host-gcc-initial-12.3.0     | NOK | http://autobuild.buildroot.net/results/2ce96a0ce8773c75337627b7c2c12c541803d80e |     
-    i686     |        host-rust-1.74.1        | NOK | http://autobuild.buildroot.net/results/471b1404c1d0d281100b4e2f9679a914a853ebb8 |     
-    or1k     |     host-sentry-cli-2.20.3     | NOK | http://autobuild.buildroot.net/results/353f687e0ee4966738c66d3453e0230a27a9f94f |     
-  mips64el   |     host-sentry-cli-2.20.3     | NOK | http://autobuild.buildroot.net/results/5d98dc1c357a53476a7a7c0036c7e7ada98888d8 |     
-    arc      |        libarchive-3.7.2        | NOK | http://autobuild.buildroot.net/results/631a592bd653411a2b5b75a833efc0f1c5634c74 |     
-   nios2     | libdill-32d0e8b733416208e04... | NOK | http://autobuild.buildroot.net/results/c984c3307c4b046d6c88af375b7f05233459b383 |     
-    i686     |         libnss-3.96.1          | NOK | http://autobuild.buildroot.net/results/9ea4e543249325da0efa5e5bf79bde7959d60ea1 |     
-   mipsel    |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/7bb1da9cad8ab64731e744959c6dd4b88b3e7309 | ORPH
-    sh4a     |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/329b6419aff8c6df885eea32b9bb3aa3cbbeda87 | ORPH
-    arc      |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/58b5107dddddcb055915279357e08590e245ce9d | ORPH
-   x86_64    |      linux-5.10.162-cip24      | NOK | http://autobuild.buildroot.net/results/67eae55e7168297fcecf701671550418a5fe8bd9 | ORPH
-powerpc64le  | Makefile:727: target-finalize  | NOK | http://autobuild.buildroot.net/results/04a93877d5b3c63db81574271e3c8fb6ed12934e |     
-   mips64    | Makefile:727: target-finalize  | NOK | http://autobuild.buildroot.net/results/70b2ecea404fc52815f80ee05a04ede292e2455e |     
-    i586     |         memtest86-6.20         | NOK | http://autobuild.buildroot.net/results/665f7d5c9d10ee7e678ae6f7705af4057eb4aae0 |     
-   mips64    |       micropython-1.22.0       | NOK | http://autobuild.buildroot.net/results/43851ebc3786bd058b407b9ac1fb52610d4f2888 |     
-    m68k     |       micropython-1.22.0       | NOK | http://autobuild.buildroot.net/results/994e3b1dac41062f0247d7a5819469aae19260f2 |     
-  mips64el   |        openblas-0.3.25         | NOK | http://autobuild.buildroot.net/results/fecc71181a582b6097ad2f8ec1223f14307293bf |     
-powerpc64le  |         openssh-9.6p1          | NOK | http://autobuild.buildroot.net/results/b3470e1540f19043a242e5962e893824c1e79c50 | ORPH
- powerpc64   |         openssh-9.6p1          | NOK | http://autobuild.buildroot.net/results/b949cc0b2f1c84ec3c31cc0f5d493b932d98fd13 | ORPH
-powerpc64le  |         openssh-9.6p1          | NOK | http://autobuild.buildroot.net/results/67163c97b77790408ad6073f273630a461db4382 | ORPH
-  sparc64    |           pppd-2.5.0           | NOK | http://autobuild.buildroot.net/results/273b9ae8d118dcd5a3ad7797c7e9250d2af4fae0 |     
-  sparc64    |           proj-9.3.0           | NOK | http://autobuild.buildroot.net/results/98bae3556a1678427961ae8c30b09d5d8fda3afb |     
-powerpc64le  |           qemu-8.1.1           | NOK | http://autobuild.buildroot.net/results/9977ab64f3770bf4f4edd6e6d78a5c0cd6c7cc83 |     
-  mips64el   |       quickjs-2023-12-09       | NOK | http://autobuild.buildroot.net/results/62084794d216c8c4a4d1fc2f1d70df0dec022d96 |     
-    mips     |         re2-2023-11-01         | NOK | http://autobuild.buildroot.net/results/09e3ea5857ff87f65015f36a96992815cf9dfe9f |     
-    i686     |          stunnel-5.71          | NOK | http://autobuild.buildroot.net/results/65e65da9939a4c092d4d29d9aaf7e8f3833ee237 |     
-    mips     |          stunnel-5.71          | NOK | http://autobuild.buildroot.net/results/1a33253262d1ffdfd3b042a6d170cbb58ce4276e |     
- aarch64_be  |          stunnel-5.71          | NOK | http://autobuild.buildroot.net/results/81ddb0d2742498b126a5ff65340c1a558a556c5c |     
-  mips64el   |          stunnel-5.71          | NOK | http://autobuild.buildroot.net/results/f74addd2a81650248cd496099e6de8519ee56589 |     
-    mips     |         sudo-1.9.15p5          | NOK | http://autobuild.buildroot.net/results/55c88d45da2d99bfc26277bdeba6f5e54d6c445d | ORPH
-   mipsel    |         sudo-1.9.15p5          | NOK | http://autobuild.buildroot.net/results/69addcf7b6f43fe3b02b2e2b83b04c3a27dd7926 | ORPH
-   mipsel    |            unknown             | NOK | http://autobuild.buildroot.net/results/30c67bac23b37d1d8c5e392308bbb2fb73174138 |     
-   x86_64    |            unknown             | NOK | http://autobuild.buildroot.net/results/7d42bc2526b12dce9262da7434a89e9ad8170eab |     
-  mips64el   |            unknown             | NOK | http://autobuild.buildroot.net/results/19ebc0a53941f26e537f6bfed43dfdd23f78328e |     
- aarch64_be  |            unknown             | NOK | http://autobuild.buildroot.net/results/643b084a8bc74575e5551de5a5cb660c8a9843db |     
-
-
-Classification of failures by reason for 2023.02.x
---------------------------------------------------
-
-               gupnp-av-0.14.0 | 1 
-              host-rust-1.67.1 | 1 
-                libglvnd-1.4.0 | 1 
-                  linux-6.1.72 | 1 
-                python3-3.11.6 | 1 
-                       unknown | 1 
-
-
-Detail of failures for 2023.02.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    mips     |        gupnp-av-0.14.0         | NOK | http://autobuild.buildroot.net/results/994e3c590f94380a1dd99f2e9557fc2606b142d2 |     
-powerpc64le  |        host-rust-1.67.1        | NOK | http://autobuild.buildroot.net/results/14a83799456b90214e3677d93bef3a731327d11c |     
-    arc      |         libglvnd-1.4.0         | NOK | http://autobuild.buildroot.net/results/32f958c8af6e6e5af10c0d20b75d620696210c88 | ORPH
-    sh4      |          linux-6.1.72          | NOK | http://autobuild.buildroot.net/results/1d43b5b166fdf1cae1d39a5fe079771fb6ee12ee | ORPH
-   x86_64    |         python3-3.11.6         | NOK | http://autobuild.buildroot.net/results/94d8d9eb6a404283ec4517443e66169e3ffeda70 |     
-   mipsel    |            unknown             | NOK | http://autobuild.buildroot.net/results/db2cc1012a36bbce0cfebc88b7db308dee702eb8 |     
-
-
-Classification of failures by reason for 2023.11.x
---------------------------------------------------
-
-              host-rust-1.71.1 | 1 
-                    proj-9.3.0 | 1 
-
-
-Detail of failures for 2023.11.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-   mips64    |        host-rust-1.71.1        | NOK | http://autobuild.buildroot.net/results/c3d47080fe530db769925e56e3a2685d43e908c5 |     
-   sparc     |           proj-9.3.0           | NOK | http://autobuild.buildroot.net/results/f9ff90167c0b581e86587d77d3afc991079c63fa |     
-
-
-Gitlab CI results for 2024-01-18
-================================
-
-Detail of runtime-test failures for master
-------------------------------------------
-
-             runtime-test |                        link to the job                        | orph?
---------------------------+---------------------------------------------------------------+------
-      TestCpioDracutGlibc | https://gitlab.com/buildroot.org/buildroot/-/jobs/5928434694  | ORPH 
-...ioDracutGlibcMergedUsr | https://gitlab.com/buildroot.org/buildroot/-/jobs/5928434699  | ORPH 
-       TestCpioDracutMusl | https://gitlab.com/buildroot.org/buildroot/-/jobs/5928434703  | ORPH 
-...pioDracutMuslMergedUsr | https://gitlab.com/buildroot.org/buildroot/-/jobs/5928434706  | ORPH 
-     TestCpioDracutUclibc | https://gitlab.com/buildroot.org/buildroot/-/jobs/5928434711  | ORPH 
-...oDracutUclibcMergedUsr | https://gitlab.com/buildroot.org/buildroot/-/jobs/5928434717  | ORPH 
-              TestFlutter | https://gitlab.com/buildroot.org/buildroot/-/jobs/5928434912  | ORPH 
-              TestGlxinfo | https://gitlab.com/buildroot.org/buildroot/-/jobs/5928434934  | ORPH 
-         TestGrubX8664EFI | https://gitlab.com/buildroot.org/buildroot/-/jobs/5928434370  | ORPH 
-   TestPythonPy3Bitstring | https://gitlab.com/buildroot.org/buildroot/-/jobs/5928435230  | ORPH 
-    TestPythonPy3Crossbar | https://gitlab.com/buildroot.org/buildroot/-/jobs/5928435266  | ORPH 
-    TestPythonPy3Dtschema | https://gitlab.com/buildroot.org/buildroot/-/jobs/5928435281  | ORPH 
-...honPy3FlaskExpectsJson | https://gitlab.com/buildroot.org/buildroot/-/jobs/5928435292  | ORPH 
-...PythonPy3MagicWormhole | https://gitlab.com/buildroot.org/buildroot/-/jobs/5928435319  | ORPH 
-       TestPythonPy3SciPy | https://gitlab.com/buildroot.org/buildroot/-/jobs/5928435387  | ORPH 
-                 TestRust | https://gitlab.com/buildroot.org/buildroot/-/jobs/5928435434  | ORPH 
-     TestSELinuxCustomGit | https://gitlab.com/buildroot.org/buildroot/-/jobs/5928434606  | ORPH 
-
-
-
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index d3b686771d..145b9a2a3a 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -738,6 +738,7 @@ config BR2_PACKAGE_COLLECTD_RIEMANN
+ 	# riemann-c-client -> protobuf-c
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
++	depends on BR2_HOST_GCC_AT_LEAST_7 # protobuf-c
+ 	select BR2_PACKAGE_RIEMANN_C_CLIENT
+ 	select BR2_PACKAGE_LIBTOOL
+ 	help
+@@ -772,6 +773,7 @@ config BR2_PACKAGE_COLLECTD_WRITEPROMETHEUS
+ 	bool "write_prometheus"
+ 	depends on BR2_INSTALL_LIBSTDCPP # protobuf-c
+ 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS # protobuf-c
++	depends on BR2_HOST_GCC_AT_LEAST_7 # protobuf-c
+ 	select BR2_PACKAGE_LIBMICROHTTPD
+ 	select BR2_PACKAGE_PROTOBUF_C
+ 	help
+diff --git a/package/criu/Config.in b/package/criu/Config.in
+index 4c295acf4f..d223524eee 100644
+--- a/package/criu/Config.in
++++ b/package/criu/Config.in
+@@ -12,6 +12,7 @@ config BR2_PACKAGE_CRIU_ARCH_SUPPORTS
+ 	# BE/LE endian issues.
+ 	depends on BR2_USE_MMU # libcap
+ 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS # protobuf-c
++	depends on BR2_HOST_GCC_AT_LEAST_7 # protobuf-c
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+ 
+diff --git a/package/kismet/Config.in b/package/kismet/Config.in
+index 7bde6c92af..ea2b33fca7 100644
+--- a/package/kismet/Config.in
++++ b/package/kismet/Config.in
+@@ -1,8 +1,9 @@
+-comment "kismet needs a toolchain w/ threads, C++, gcc >= 5"
++comment "kismet needs a toolchain w/ threads, C++, gcc >= 5, host-gcc >= 7"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_5 || \
++		!BR2_HOST_GCC_AT_LEAST_7
+ 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
+ 
+ config BR2_PACKAGE_KISMET
+@@ -11,6 +12,7 @@ config BR2_PACKAGE_KISMET
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS # protobuf-c
++	depends on BR2_HOST_GCC_AT_LEAST_7 # protobuf-c
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # C++14
+ 	select BR2_PACKAGE_LIBPCAP
+ 	select BR2_PACKAGE_PROTOBUF_C
+diff --git a/package/protobuf-c/Config.in b/package/protobuf-c/Config.in
+index d96cd7b382..56b58afe99 100644
+--- a/package/protobuf-c/Config.in
++++ b/package/protobuf-c/Config.in
+@@ -4,12 +4,13 @@ config BR2_PACKAGE_PROTOBUF_C
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	# host-protobuf only builds on certain architectures
+ 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
++	depends on BR2_HOST_GCC_AT_LEAST_7 # c++17
+ 	help
+ 	  Code generator and runtime libraries to use Protocol Buffers
+ 	  from pure C (not C++).
+ 
+ 	  https://github.com/protobuf-c/protobuf-c
+ 
+-comment "protobuf-c needs a toolchain w/ C++, threads"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++comment "protobuf-c needs a toolchain w/ C++, threads, host-gcc >= 7"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_HOST_GCC_AT_LEAST_7
+ 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
+diff --git a/package/protobuf-c/protobuf-c.hash b/package/protobuf-c/protobuf-c.hash
+index ec00442277..aafd98416a 100644
+--- a/package/protobuf-c/protobuf-c.hash
++++ b/package/protobuf-c/protobuf-c.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  4cc4facd508172f3e0a4d3a8736225d472418aee35b4ad053384b137b220339f  protobuf-c-1.4.1.tar.gz
+-sha256  b8999cb392cc5bbe8cd679de59584ad8d2f26033123e76f1d662fa14b9d4f287  LICENSE
++sha256  7b404c63361ed35b3667aec75cc37b54298d56dd2bcf369de3373212cc06fd98  protobuf-c-1.5.0.tar.gz
++sha256  ad28bbf89340b86d15aad1ff62c4f4590025d836415307dc66cf0338235cc2f4  LICENSE
+diff --git a/package/protobuf-c/protobuf-c.mk b/package/protobuf-c/protobuf-c.mk
+index 0742a33db2..ccabd4723f 100644
+--- a/package/protobuf-c/protobuf-c.mk
++++ b/package/protobuf-c/protobuf-c.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PROTOBUF_C_VERSION = 1.4.1
++PROTOBUF_C_VERSION = 1.5.0
+ PROTOBUF_C_SITE = https://github.com/protobuf-c/protobuf-c/releases/download/v$(PROTOBUF_C_VERSION)
+ PROTOBUF_C_DEPENDENCIES = host-protobuf-c
+ HOST_PROTOBUF_C_DEPENDENCIES = host-protobuf host-pkgconf
+@@ -15,8 +15,8 @@ PROTOBUF_C_LICENSE = BSD-2-Clause
+ PROTOBUF_C_LICENSE_FILES = LICENSE
+ PROTOBUF_C_CPE_ID_VENDOR = protobuf-c_project
+ 
+-# host-protobuf needs c++11 (since 3.6.0)
+-HOST_PROTOBUF_C_CONF_ENV += CXXFLAGS="$(HOST_CXXFLAGS) -std=c++11"
++# when building with protoc (from host-protobuf) c++17 is now required
++HOST_PROTOBUF_C_CONF_ENV += CXXFLAGS="$(HOST_CXXFLAGS) -std=c++17"
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+diff --git a/package/riemann-c-client/Config.in b/package/riemann-c-client/Config.in
+index 6c3c35caf8..ba6a665dab 100644
+--- a/package/riemann-c-client/Config.in
++++ b/package/riemann-c-client/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_RIEMANN_C_CLIENT
+ 	depends on BR2_INSTALL_LIBSTDCPP # protobuf-c
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf-c
+ 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS # protobuf-c
++	depends on BR2_HOST_GCC_AT_LEAST_7 # protobuf-c
+ 	select BR2_PACKAGE_PROTOBUF_C
+ 	help
+ 	  Riemann-c-client is a C client library for the Riemann
+@@ -12,6 +13,7 @@ config BR2_PACKAGE_RIEMANN_C_CLIENT
+ 
+ 	  https://github.com/algernon/riemann-c-client
+ 
+-comment "riemann-c-client needs a toolchain w/ C++, threads"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++comment "riemann-c-client needs a toolchain w/ C++, threads, host-gcc >= 7"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_HOST_GCC_AT_LEAST_7
+ 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
 -- 
-http://autobuild.buildroot.net
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
