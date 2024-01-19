@@ -1,58 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DED2C4725D
-	for <buildroot@archiver.kernel.org>; Fri, 19 Jan 2024 07:29:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 713E7C4725D
+	for <buildroot@archiver.kernel.org>; Fri, 19 Jan 2024 11:23:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8CC21400DD;
-	Fri, 19 Jan 2024 07:29:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8CC21400DD
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1xVbdqFKAIp2; Fri, 19 Jan 2024 07:29:50 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4B2EA400E4;
-	Fri, 19 Jan 2024 07:29:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4B2EA400E4
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1C8961BF842
- for <buildroot@lists.busybox.net>; Fri, 19 Jan 2024 07:29:48 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E7A8242883
- for <buildroot@lists.busybox.net>; Fri, 19 Jan 2024 07:29:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E7A8242883
+	by smtp4.osuosl.org (Postfix) with ESMTP id D2F2041B58;
+	Fri, 19 Jan 2024 11:23:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D2F2041B58
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZWxepZBt_M4i for <buildroot@lists.busybox.net>;
- Fri, 19 Jan 2024 07:29:46 +0000 (UTC)
-Received: from mail.heine.tech (mail.heine.tech [195.201.24.99])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2DB8541E19
- for <buildroot@buildroot.org>; Fri, 19 Jan 2024 07:29:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2DB8541E19
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id F115C1814B9; Fri, 19 Jan 2024 08:29:42 +0100 (CET)
-To: buildroot@buildroot.org
-Date: Fri, 19 Jan 2024 08:29:27 +0100
-Message-Id: <20240119072933.25453-1-buildroot@heine.tech>
-X-Mailer: git-send-email 2.34.1
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id iDBlXCGvuV3A; Fri, 19 Jan 2024 11:23:51 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3687E41A42;
+	Fri, 19 Jan 2024 11:23:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3687E41A42
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 679981BF5A6
+ for <buildroot@lists.busybox.net>; Fri, 19 Jan 2024 11:23:48 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id F1C2360F01
+ for <buildroot@lists.busybox.net>; Fri, 19 Jan 2024 11:23:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1C2360F01
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id v05YgCajRQVt for <buildroot@lists.busybox.net>;
+ Fri, 19 Jan 2024 11:23:46 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 55B4560EE9
+ for <buildroot@buildroot.org>; Fri, 19 Jan 2024 11:23:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 55B4560EE9
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 71DCCC0007;
+ Fri, 19 Jan 2024 11:23:43 +0000 (UTC)
+Date: Fri, 19 Jan 2024 12:23:42 +0100
+To: Yang Li <yang.li@amlogic.com>
+Message-ID: <20240119122342.6230902d@windsurf>
+In-Reply-To: <20240119031503.2967130-1-yang.li@amlogic.com>
+References: <20240119031503.2967130-1-yang.li@amlogic.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=heine.tech; s=dkim; 
- t=1705649383; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=TIXSE1xHP5Cw1WpUg5xbqGUc/8PiLMrxT465qmwe0YI=;
- b=S/XwB65wcz1KQxNoLoLjIp8rvVeXRZw/tnidau1lz+lXi41ewQvFiXD1bZnUcBIuTJry3G
- gv5hvABwXE1JaR21H0p3/up9UCv7L2SD+m5OYQmpaeyNIWI8Rx35wRTxILFOpVsTwhXkhZ
- qQprdbLmxi9nDESKKo7frX+2K6Cf/HE=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=heine.tech header.i=@heine.tech
- header.a=rsa-sha256 header.s=dkim header.b=S/XwB65w
-Subject: [Buildroot] [PATCH v2] package/protobuf-c: bump to version 1.5.0
+ d=bootlin.com; s=gm1; t=1705663423;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=aadPElnqU7AXl9ahFQS2SRuM058a+vVrqy48IjsSDSM=;
+ b=fA+RXAk2/VzeyGpfgrswe4nRqyQa6G0USDuS+7/NnFnLHD7ywwT6UdatSLcRRJoiTwMcAI
+ 2IDDUpfnixSAeTMsKi+YT9UkKsRyJnPWx5YsiGBd3mx8EKCpfw7K628lIYru42yArJ6Xdk
+ K3Oxwr2kh29HXd73HaAX58WsaoWSzbbbLNuJ6gtDowitzceNF+qmIPwFiD02z7ii0dObdt
+ j3nG/yH6l/MTEN4qeK/O7L+lU9yw0cr9oVIhf5D2BHUAPh9wUu+8LuAaGJ04WLybqRe4hO
+ dAbgXSdR+x7kOAwqdIDru+G/dtvX+zIMsSRvvCKOyWu6SRiBKVZvnAtxRIrVAA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=fA+RXAk2
+Subject: Re: [Buildroot] [PATCH] package/linux-firmware: add scripts for
+ Amlogic
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,174 +75,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
-Reply-To: Michael Nosthoff <buildroot@heine.tech>
-Cc: Marcus Folkesson <marcus.folkesson@gmail.com>,
- Asaf Kahlon <asafka7@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Bernd Kuhls <bernd@kuhls.net>, "Yann E.
+ MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- drops support for proto2
-- fixes compatibility with protobuf >= 22.0 (which we did not yet bump)
-- to be compatible with new protobuf versions c++17 is now required
-  when building with protoc (which we only do for the host package) [0]
-  hence require host gcc >= 7 for c++17 support, propagate to depending packets
+Hello,
 
-[0] https://github.com/protobuf-c/protobuf-c/pull/673
+On Fri, 19 Jan 2024 11:15:02 +0800
+Yang Li <yang.li@amlogic.com> wrote:
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
----
+> Add scripts for installing Amlogic firmware.
+> 
+> Signed-off-by: Yang Li <yang.li@amlogic.com>
 
-v2:
-- update the different Config.in comments according to review
-- rephrase the requirement of C++17 for the host package
----
- package/collectd/Config.in         | 2 ++
- package/criu/Config.in             | 1 +
- package/kismet/Config.in           | 6 ++++--
- package/protobuf-c/Config.in       | 5 +++--
- package/protobuf-c/protobuf-c.hash | 4 ++--
- package/protobuf-c/protobuf-c.mk   | 6 +++---
- package/riemann-c-client/Config.in | 6 ++++--
- 7 files changed, 19 insertions(+), 11 deletions(-)
+Thanks for your contribution! See some comments below.
 
-diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index d3b686771d..145b9a2a3a 100644
---- a/package/collectd/Config.in
-+++ b/package/collectd/Config.in
-@@ -738,6 +738,7 @@ config BR2_PACKAGE_COLLECTD_RIEMANN
- 	# riemann-c-client -> protobuf-c
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
-+	depends on BR2_HOST_GCC_AT_LEAST_7 # protobuf-c
- 	select BR2_PACKAGE_RIEMANN_C_CLIENT
- 	select BR2_PACKAGE_LIBTOOL
- 	help
-@@ -772,6 +773,7 @@ config BR2_PACKAGE_COLLECTD_WRITEPROMETHEUS
- 	bool "write_prometheus"
- 	depends on BR2_INSTALL_LIBSTDCPP # protobuf-c
- 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS # protobuf-c
-+	depends on BR2_HOST_GCC_AT_LEAST_7 # protobuf-c
- 	select BR2_PACKAGE_LIBMICROHTTPD
- 	select BR2_PACKAGE_PROTOBUF_C
- 	help
-diff --git a/package/criu/Config.in b/package/criu/Config.in
-index 4c295acf4f..d223524eee 100644
---- a/package/criu/Config.in
-+++ b/package/criu/Config.in
-@@ -12,6 +12,7 @@ config BR2_PACKAGE_CRIU_ARCH_SUPPORTS
- 	# BE/LE endian issues.
- 	depends on BR2_USE_MMU # libcap
- 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS # protobuf-c
-+	depends on BR2_HOST_GCC_AT_LEAST_7 # protobuf-c
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
- 
-diff --git a/package/kismet/Config.in b/package/kismet/Config.in
-index 7bde6c92af..ea2b33fca7 100644
---- a/package/kismet/Config.in
-+++ b/package/kismet/Config.in
-@@ -1,8 +1,9 @@
--comment "kismet needs a toolchain w/ threads, C++, gcc >= 5"
-+comment "kismet needs a toolchain w/ threads, C++, gcc >= 5, host-gcc >= 7"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_5 || \
-+		!BR2_HOST_GCC_AT_LEAST_7
- 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
- 
- config BR2_PACKAGE_KISMET
-@@ -11,6 +12,7 @@ config BR2_PACKAGE_KISMET
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS # protobuf-c
-+	depends on BR2_HOST_GCC_AT_LEAST_7 # protobuf-c
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # C++14
- 	select BR2_PACKAGE_LIBPCAP
- 	select BR2_PACKAGE_PROTOBUF_C
-diff --git a/package/protobuf-c/Config.in b/package/protobuf-c/Config.in
-index d96cd7b382..56b58afe99 100644
---- a/package/protobuf-c/Config.in
-+++ b/package/protobuf-c/Config.in
-@@ -4,12 +4,13 @@ config BR2_PACKAGE_PROTOBUF_C
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	# host-protobuf only builds on certain architectures
- 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
-+	depends on BR2_HOST_GCC_AT_LEAST_7 # c++17
- 	help
- 	  Code generator and runtime libraries to use Protocol Buffers
- 	  from pure C (not C++).
- 
- 	  https://github.com/protobuf-c/protobuf-c
- 
--comment "protobuf-c needs a toolchain w/ C++, threads"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+comment "protobuf-c needs a toolchain w/ C++, threads, host-gcc >= 7"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_HOST_GCC_AT_LEAST_7
- 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
-diff --git a/package/protobuf-c/protobuf-c.hash b/package/protobuf-c/protobuf-c.hash
-index ec00442277..aafd98416a 100644
---- a/package/protobuf-c/protobuf-c.hash
-+++ b/package/protobuf-c/protobuf-c.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  4cc4facd508172f3e0a4d3a8736225d472418aee35b4ad053384b137b220339f  protobuf-c-1.4.1.tar.gz
--sha256  b8999cb392cc5bbe8cd679de59584ad8d2f26033123e76f1d662fa14b9d4f287  LICENSE
-+sha256  7b404c63361ed35b3667aec75cc37b54298d56dd2bcf369de3373212cc06fd98  protobuf-c-1.5.0.tar.gz
-+sha256  ad28bbf89340b86d15aad1ff62c4f4590025d836415307dc66cf0338235cc2f4  LICENSE
-diff --git a/package/protobuf-c/protobuf-c.mk b/package/protobuf-c/protobuf-c.mk
-index 0742a33db2..ccabd4723f 100644
---- a/package/protobuf-c/protobuf-c.mk
-+++ b/package/protobuf-c/protobuf-c.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PROTOBUF_C_VERSION = 1.4.1
-+PROTOBUF_C_VERSION = 1.5.0
- PROTOBUF_C_SITE = https://github.com/protobuf-c/protobuf-c/releases/download/v$(PROTOBUF_C_VERSION)
- PROTOBUF_C_DEPENDENCIES = host-protobuf-c
- HOST_PROTOBUF_C_DEPENDENCIES = host-protobuf host-pkgconf
-@@ -15,8 +15,8 @@ PROTOBUF_C_LICENSE = BSD-2-Clause
- PROTOBUF_C_LICENSE_FILES = LICENSE
- PROTOBUF_C_CPE_ID_VENDOR = protobuf-c_project
- 
--# host-protobuf needs c++11 (since 3.6.0)
--HOST_PROTOBUF_C_CONF_ENV += CXXFLAGS="$(HOST_CXXFLAGS) -std=c++11"
-+# when building with protoc (from host-protobuf) c++17 is now required
-+HOST_PROTOBUF_C_CONF_ENV += CXXFLAGS="$(HOST_CXXFLAGS) -std=c++17"
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
-diff --git a/package/riemann-c-client/Config.in b/package/riemann-c-client/Config.in
-index 6c3c35caf8..ba6a665dab 100644
---- a/package/riemann-c-client/Config.in
-+++ b/package/riemann-c-client/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_RIEMANN_C_CLIENT
- 	depends on BR2_INSTALL_LIBSTDCPP # protobuf-c
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf-c
- 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS # protobuf-c
-+	depends on BR2_HOST_GCC_AT_LEAST_7 # protobuf-c
- 	select BR2_PACKAGE_PROTOBUF_C
- 	help
- 	  Riemann-c-client is a C client library for the Riemann
-@@ -12,6 +13,7 @@ config BR2_PACKAGE_RIEMANN_C_CLIENT
- 
- 	  https://github.com/algernon/riemann-c-client
- 
--comment "riemann-c-client needs a toolchain w/ C++, threads"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+comment "riemann-c-client needs a toolchain w/ C++, threads, host-gcc >= 7"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_HOST_GCC_AT_LEAST_7
- 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
+> ---
+>  package/linux-firmware/linux-firmware.mk | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+> index c09dbc523e..735d4b7e53 100644
+> --- a/package/linux-firmware/linux-firmware.mk
+> +++ b/package/linux-firmware/linux-firmware.mk
+> @@ -856,6 +856,12 @@ LINUX_FIRMWARE_FILES += v4l-cx23885-avcore-01.fw
+>  # which is installed unconditionally
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_AMLOGIC),y)
+
+This option does not exist. Probably you forgot to add some changes in
+package/linux-firmware/Config.in?
+
+Also, usually, our options are not per vendor, but more per device or
+class of devices. Which devices are supported by those 2 bluetooth
+firmware files?
+
+Best regards,
+
+Thomas
 -- 
-2.34.1
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
