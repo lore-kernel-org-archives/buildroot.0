@@ -4,119 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A43F0C4725D
-	for <buildroot@archiver.kernel.org>; Sat, 20 Jan 2024 00:53:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17ECFC47DAF
+	for <buildroot@archiver.kernel.org>; Sat, 20 Jan 2024 01:18:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 202DA42CAE;
-	Sat, 20 Jan 2024 00:53:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 202DA42CAE
+	by smtp4.osuosl.org (Postfix) with ESMTP id A333C42C47;
+	Sat, 20 Jan 2024 01:18:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A333C42C47
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id END6XHWjGyEV; Sat, 20 Jan 2024 00:53:17 +0000 (UTC)
+	with ESMTP id yZy7Uy5Hm9PW; Sat, 20 Jan 2024 01:18:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5A5334206A;
-	Sat, 20 Jan 2024 00:53:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A5334206A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5F4781BF28E
- for <buildroot@lists.busybox.net>; Sat, 20 Jan 2024 00:53:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CA9A142D28;
+	Sat, 20 Jan 2024 01:18:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA9A142D28
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2DF391BF298
+ for <buildroot@lists.busybox.net>; Sat, 20 Jan 2024 01:18:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 37D5D846B5
- for <buildroot@lists.busybox.net>; Sat, 20 Jan 2024 00:53:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 37D5D846B5
+ by smtp4.osuosl.org (Postfix) with ESMTP id 02B5C41E2D
+ for <buildroot@lists.busybox.net>; Sat, 20 Jan 2024 01:18:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 02B5C41E2D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id S--71ckETyif for <buildroot@lists.busybox.net>;
- Sat, 20 Jan 2024 00:53:13 +0000 (UTC)
-Received: from mx0a-003ede02.pphosted.com (mx0a-003ede02.pphosted.com
- [205.220.169.153])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 537CD84661
- for <buildroot@buildroot.org>; Sat, 20 Jan 2024 00:53:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 537CD84661
-Received: from pps.filterd (m0286615.ppops.net [127.0.0.1])
- by mx0b-003ede02.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id
- 40JG9gnx018240
- for <buildroot@buildroot.org>; Fri, 19 Jan 2024 16:53:12 -0800
-Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com
- [209.85.210.198])
- by mx0b-003ede02.pphosted.com (PPS) with ESMTPS id 3vkqkmnf7f-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
- for <buildroot@buildroot.org>; Fri, 19 Jan 2024 16:53:12 -0800 (PST)
-Received: by mail-pf1-f198.google.com with SMTP id
- d2e1a72fcca58-6d9bd4fa279so1367797b3a.0
- for <buildroot@buildroot.org>; Fri, 19 Jan 2024 16:53:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1705711991; x=1706316791;
- h=mime-version:message-id:date:subject:cc:to:from:x-gm-message-state
- :from:to:cc:subject:date:message-id:reply-to;
- bh=On9KiXOtaoLANPJFhyJTpi82nggDiYbkNn+wLVjtS3w=;
- b=DOyNjLnx0siUqT1tlN52SIp7genMvo4hODlShLHj6w8auzULPxzEj8ksHPwIoBlcWS
- vJLShQbi0OrL1SVzeSwE+FrI48E82ZaFVhdtrrHh427gw1XBNf4e09kqvteewcWkZlD4
- 93zKz/5RSMx86Z1NN4qG7JllgufA7qz4ydAuYH4sjiyBNZQ+1zjY2GqFul4udyznbXEq
- uJipNgzDUIxCQ6VppnE5nwgPLlfXJcm6tlHkxelTeBM2Yi7IJ3CWRhBjxFMjOZTiXgA3
- E3a+37fXHLuglfthTHNVO2QCHSXxv10lR3PD86ROWRK5nhcnABHOMmccE2LbqXoFaYm7
- 6ZQw==
-X-Gm-Message-State: AOJu0YxSgCO8Jt9WT69crWNK7PgAW1TDQUN5f08HTz1CKxsoMckJpcRF
- CRmW4GiL6VL5SNxvGUmfod2AzHVVJmKWNAlbSIXUxSklriYyzzC2cfax5T4gRdaMhNAvb1ppyuf
- yt47KAJd/E0/Lwq+jZViBpHPOp+4nhXTaSwTKvn1SvTn+Z/HO3rbZgowT0p/MXcbHqyjq0XZ03N
- hPDZgvN5jUql3a0HIzPldNdlFBkP0i9yHVNZbL8OHvnPClT8Ho
-X-Received: by 2002:a05:6a20:12c5:b0:19a:7c41:f567 with SMTP id
- v5-20020a056a2012c500b0019a7c41f567mr689685pzg.12.1705711991666; 
- Fri, 19 Jan 2024 16:53:11 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGIUBTveTVY5ntW2eX3nMZm9RTdb1CvcwSMi07pVKhn2Y9kIjNEjAQIGgtW6ltIrAVOhfNfCg==
-X-Received: by 2002:a05:6a20:12c5:b0:19a:7c41:f567 with SMTP id
- v5-20020a056a2012c500b0019a7c41f567mr689681pzg.12.1705711991227; 
- Fri, 19 Jan 2024 16:53:11 -0800 (PST)
-Received: from CN3W9T2-DT.corp.robot.car ([199.73.127.2])
- by smtp.gmail.com with ESMTPSA id
- u5-20020a170902b28500b001d7077f0421sm3282356plr.119.2024.01.19.16.53.10
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 19 Jan 2024 16:53:10 -0800 (PST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wyhiVRUSm9kP for <buildroot@lists.busybox.net>;
+ Sat, 20 Jan 2024 01:18:15 +0000 (UTC)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DCB4C41D74
+ for <buildroot@buildroot.org>; Sat, 20 Jan 2024 01:18:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DCB4C41D74
+Received: from smtp.kernel.org (transwarp.subspace.kernel.org [100.75.92.58])
+ by dfw.source.kernel.org (Postfix) with ESMTP id 9109361987;
+ Sat, 20 Jan 2024 01:18:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF53BC433A6;
+ Sat, 20 Jan 2024 01:18:12 +0000 (UTC)
+From: Mat Martineau <martineau@kernel.org>
 To: buildroot@buildroot.org
-Date: Fri, 19 Jan 2024 16:52:48 -0800
-Message-ID: <20240120005248.3986139-1-hudson.ayers@getcruise.com>
+Date: Fri, 19 Jan 2024 17:17:59 -0800
+Message-ID: <20240120011759.2454452-3-martineau@kernel.org>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240120011759.2454452-1-martineau@kernel.org>
+References: <20240120011759.2454452-1-martineau@kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-GUID: g-tn9_-uGogVHoMijSY9kJedr2n7isNM
-X-Proofpoint-ORIG-GUID: g-tn9_-uGogVHoMijSY9kJedr2n7isNM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-19_12,2024-01-19_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 bulkscore=0
- lowpriorityscore=0 suspectscore=0 clxscore=1015 phishscore=0
- mlxlogscore=727 priorityscore=1501 adultscore=0 mlxscore=0 spamscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2311290000 definitions=main-2401200005
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=getcruise.com; 
- h=from:to:cc:subject:date:message-id:mime-version:content-type;
- s=ppemail; bh=On9KiXOtaoLANPJFhyJTpi82nggDiYbkNn+wLVjtS3w=; b=n
- X9zaJ2CEKckYZI15bdgD9ZrxKi3d7QgnnEWuKBz5tRXnY8L+5cHeqNcP7v2jCUQ1
- VDca68AYLh4LDTKNQfCQ66aNQ+0wMzr9iypnOmUCFVg4/QzHY5nIyvWVfXVynRJF
- 2WnW+sWgiajSGuUAYj15PHTFCQ0cv5qFYDo6CbyXiXtAFQ5ukRYCxY5xRYjcyCR3
- DgfnwQ/S0EIHaSMCLMAhmL1+i8sXa6F6A1QrFfir/HtPtCJCuqOmgnG7ZR4HpcCo
- bIYpKyfsrWU30LHd7VBsTZQSHhAxNTDZuFHRWHy67tUSuA+h81J8hqAEZGgpZTQD
- L5WK8uNmifnJysoLwBupQ==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=getcruise.com; s=google; t=1705711991; x=1706316791; darn=buildroot.org;
- h=mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
- :date:message-id:reply-to;
- bh=On9KiXOtaoLANPJFhyJTpi82nggDiYbkNn+wLVjtS3w=;
- b=XU5NSwvFQe6Wv4vI1RaGfU43ElMjVGXHL+YCU6dvOi476JAEjBPQn6LAABvEMeuWs5
- l3K4s21v0/OL/aov8itjVdl1vtJRI3pHtxtSR4+Tn73xtxLF+njRjn7PLwtNXaZyQkW0
- 3u+m8NelqBQnec2S1tQ6C/tQjtaCOlKluPMiWuXhukSMW4WkCNPJJUWnD4DjjIptDVUK
- lYXKnBGHimoeassbTKowjON+L0kGrDqDQDgHV8MxvZ69Hn3RztwbxG+MZ+WUxbr1OnCG
- yTkzXoURuOijaF8pebpwtHpFLv7XhOfM22Kuq7I1HGCODm4C8vvCT9FiQhoXbc6TNj0q
- bqSw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=getcruise.com header.i=@getcruise.com
- header.a=rsa-sha256 header.s=ppemail header.b=nX9zaJ2C; 
- dkim=pass (2048-bit key) header.d=getcruise.com header.i=@getcruise.com
- header.a=rsa-sha256 header.s=google header.b=XU5NSwvF
-Subject: [Buildroot] [PATCH 1/1] package/genimage: bump version to 17.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=kernel.org; s=k20201202; t=1705713493;
+ bh=Dqg0yXk0QMM7qMWYGFGer1KzJDNQiQx4TKI3SPlpBDE=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=VUnDht0ps2e6mX7j5mBGgOUTqNmYj4mXzjpW4Kale4d3s8SNyUM3hvu21vq5Orucx
+ D0Q22aXexq9dkdz5bzYsNCwnNi+ovFzyZrkS086TLe2WQxbkYDuRA7rIhMdUVha88c
+ OdH0Zc/nI2QiZJa8Jck1XcB9wS3jWr4SkSHVEV9eEAt69xKPHA9fbXVvzxvxDZTtfx
+ HrWNRrAdUxuqCIxRuX96UVPeQHEPtT1o8x/bXnwJDivqWXg0B1nsnQscT6lretCW0J
+ h22VnW3bQcirki+kPBFSza9x5O/csyhgFHS97ZqQTzUJwVnrLQ4g9KPAuTzUWg8zgw
+ tn9uuorLJDKXA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org
+ header.a=rsa-sha256 header.s=k20201202 header.b=VUnDht0p
+Subject: [Buildroot] [PATCH v7 2/2] package/bpftrace: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -128,61 +72,186 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Hudson Ayers via buildroot <buildroot@buildroot.org>
-Reply-To: Hudson Ayers <hudson.ayers@getcruise.com>
-Cc: Pierre-Jean Texier <texier.pj2@gmail.com>,
- Hudson Ayers <hudson.ayers@getcruise.com>
+Cc: jugurtha.belkalem@smile.fr, qyousef@layalina.io,
+ Qais Yousef <qais.yousef@arm.com>, naveen.mamindlapalli@gmail.com,
+ romain.naour@smile.fr, Mat Martineau <martineau@kernel.org>,
+ Romain Naour <romain.naour@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This changes bumps the version of the genimage package,
-which brings in fixes when generating flash images that
-reference sparse files, along with other fixes and features.
+From: Qais Yousef <qais.yousef@arm.com>
 
-Signed-off-by: Hudson Ayers <hudson.ayers@getcruise.com>
+bpftrace is a high-level tracing language for Linux enhanced Berkeley
+Packet Filter (eBPF) available in recent Linux kernels (4.1 and later).
+
+Only tested on x86_64.
+
+v7 changes:
+ - Ported to current buildroot release
+ - Update to bpftrace 0.19.1
+ - Add libcereal dependency
+ - Use new configure option for USE_SYSTEM_BPF_BCC
+ - Update dependencies
+ - Use BUILD_SHARED_LIBS=OFF instead of patching cmake files
+ - Don't install tool docs in target filesystem
+ - Propagate config dependencies
+
+Signed-off-by: Qais Yousef <qais.yousef@arm.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+Cc: Qais Yousef <qyousef@layalina.io>
+Signed-off-by: Mat Martineau <martineau@kernel.org>
+
+squashme: bpftrace: more review fixups
 ---
- package/genimage/genimage.hash | 2 +-
- package/genimage/genimage.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS                     |  4 +++
+ package/Config.in              |  1 +
+ package/bpftrace/Config.in     | 54 ++++++++++++++++++++++++++++++++++
+ package/bpftrace/bpftrace.hash |  3 ++
+ package/bpftrace/bpftrace.mk   | 24 +++++++++++++++
+ 5 files changed, 86 insertions(+)
+ create mode 100644 package/bpftrace/Config.in
+ create mode 100644 package/bpftrace/bpftrace.hash
+ create mode 100644 package/bpftrace/bpftrace.mk
 
-diff --git a/package/genimage/genimage.hash b/package/genimage/genimage.hash
-index 7ea8f99fda..e09ffd82be 100644
---- a/package/genimage/genimage.hash
-+++ b/package/genimage/genimage.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  869f9662d3b778c69b1d1fe70df658e1c9e90aeda26abb753f6fe55e8b0c6e73  genimage-16.tar.xz
-+sha256  a8756e3567a0d4d82c36b08ccc1e088250b9006d5670c6b2b014185e6ec60671  genimage-17.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/genimage/genimage.mk b/package/genimage/genimage.mk
-index d1671f335d..2be8e1137e 100644
---- a/package/genimage/genimage.mk
-+++ b/package/genimage/genimage.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0af50f1f848d..2218b13f1121 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2505,6 +2505,9 @@ F:	package/synergy/
+ N:	Prabhu Sannachi <prabhu.sannachi@collins.com>
+ F:	package/redis-plus-plus/
  
--GENIMAGE_VERSION = 16
-+GENIMAGE_VERSION = 17
- GENIMAGE_SOURCE = genimage-$(GENIMAGE_VERSION).tar.xz
- GENIMAGE_SITE = https://github.com/pengutronix/genimage/releases/download/v$(GENIMAGE_VERSION)
- HOST_GENIMAGE_DEPENDENCIES = host-pkgconf host-libconfuse
++N:	Qais Yousef <qais.yousef@arm.com>
++F:	package/bpftrace/
++
+ N:	Rafal Susz <rafal.susz@gmail.com>
+ F:	board/avnet/s6lx9_microboard/
+ F:	configs/s6lx9_microboard_defconfig
+@@ -2606,6 +2609,7 @@ F:	package/alure/
+ F:	package/aubio/
+ F:	package/bcc/
+ F:	package/binutils/
++F:	package/bpftrace/
+ F:	package/bullet/
+ F:	package/clinfo/
+ F:	package/efl/
+diff --git a/package/Config.in b/package/Config.in
+index 662c935a1f1c..1fc983dfd8aa 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -91,6 +91,7 @@ menu "Debugging, profiling and benchmark"
+ 	source "package/blktrace/Config.in"
+ 	source "package/bonnie/Config.in"
+ 	source "package/bpftool/Config.in"
++	source "package/bpftrace/Config.in"
+ 	source "package/cache-calibrator/Config.in"
+ 	source "package/clinfo/Config.in"
+ 	source "package/clpeak/Config.in"
+diff --git a/package/bpftrace/Config.in b/package/bpftrace/Config.in
+new file mode 100644
+index 000000000000..e8afa37b6e63
+--- /dev/null
++++ b/package/bpftrace/Config.in
+@@ -0,0 +1,54 @@
++config BR2_PACKAGE_BPFTRACE_ARCH_SUPPORTS
++	bool
++	default y if BR2_aarch64 || BR2_aarch64_be
++	default y if BR2_x86_64
++	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
++
++config BR2_PACKAGE_BPFTRACE
++	bool "bpftrace"
++	depends on BR2_PACKAGE_BPFTRACE_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS # bcc
++	depends on BR2_TOOLCHAIN_USES_GLIBC # bcc
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # bcc -> clang
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libbpf
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libbpf
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13 # libbpf
++	depends on BR2_INSTALL_LIBSTDCPP # bcc -> clang
++	depends on BR2_HOST_GCC_AT_LEAST_7 # bcc -> clang
++	depends on BR2_USE_WCHAR # bcc -> clang, bcc -> python3, libbpf
++	depends on BR2_USE_MMU # bcc -> python3
++	depends on BR2_TOOLCHAIN_HAS_THREADS # bcc -> clang, bcc -> python3
++	depends on !BR2_STATIC_LIBS # bcc -> clang, bcc -> python3, libbpf
++	select BR2_PACKAGE_BCC
++	select BR2_PACKAGE_LIBBPF
++	select BR2_PACKAGE_CEREAL
++	select BR2_PACKAGE_ELFUTILS
++	select BR2_PACKAGE_BZIP2
++	select BR2_PACKAGE_XZ
++	# LLVM RTTI mendatory: https://github.com/iovisor/bpftrace/issues/1156
++	select BR2_PACKAGE_LLVM_RTTI
++	select BR2_PACKAGE_LLVM
++	help
++	  bpftrace is a high-level tracing language for Linux enhanced
++	  Berkeley Packet Filter (eBPF) available in recent Linux
++	  kernels (4.x).
++
++	  bpftrace uses LLVM as a backend to compile scripts to
++	  BPF-bytecode and makes use of BCC for interacting with the
++	  Linux BPF system, as well as existing Linux tracing
++	  capabilities: kernel dynamic tracing (kprobes), user-level
++	  dynamic tracing (uprobes), and tracepoints. The bpftrace
++	  language is inspired by awk and C, and predecessor tracers
++	  such as DTrace and SystemTap.
++
++	  It's highly recommended to NOT strip bpftrace binary.
++	  To do so, add "bpftrace" to BR2_STRIP_EXCLUDE_FILES.
++	  See:
++	    https://bugzilla.redhat.com/show_bug.cgi?id=1865787
++
++	  https://www.github.com/iovisor/bpftrace
++
++comment "bpftrace needs a glibc toolchain w/ C++, gcc >= 7"
++	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
++	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_INSTALL_LIBSTDCPP \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_7
+diff --git a/package/bpftrace/bpftrace.hash b/package/bpftrace/bpftrace.hash
+new file mode 100644
+index 000000000000..c2ecc927da35
+--- /dev/null
++++ b/package/bpftrace/bpftrace.hash
+@@ -0,0 +1,3 @@
++# locally calculated
++sha256  b520340f28ce4d6f2fb2355f1675b6801ff8498ed9e8bff14abbbf6baff5a08e  bpftrace-0.19.1.tar.gz
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/bpftrace/bpftrace.mk b/package/bpftrace/bpftrace.mk
+new file mode 100644
+index 000000000000..072cee4ae72e
+--- /dev/null
++++ b/package/bpftrace/bpftrace.mk
+@@ -0,0 +1,24 @@
++################################################################################
++#
++# bpftrace
++#
++################################################################################
++
++BPFTRACE_VERSION = 0.19.1
++BPFTRACE_SITE = $(call github,iovisor,bpftrace,v$(BPFTRACE_VERSION))
++BPFTRACE_LICENSE = Apache-2.0
++BPFTRACE_LICENSE_FILES = LICENSE
++BPFTRACE_DEPENDENCIES = host-bison host-flex bcc libbpf cereal bzip2 xz elfutils llvm
++
++# libbfd, libopcodes
++ifeq ($(BR2_PACKAGE_BINUTILS),y)
++BPFTRACE_DEPENDENCIES += binutils
++endif
++
++BPFTRACE_CONF_OPTS += -DENABLE_MAN:BOOL=OFF \
++	-DUSE_SYSTEM_BPF_BCC:BOOL=ON \
++	-DBUILD_SHARED_LIBS:BOOL=OFF \
++	-DBUILD_TESTING:BOOL=OFF \
++	-DINSTALL_TOOL_DOCS:BOOL=OFF
++
++$(eval $(cmake-package))
 -- 
 2.43.0
 
-
--- 
-
-
-*Confidentiality Note:* We care about protecting our proprietary 
-information, confidential material, and trade secrets. This message may 
-contain some or all of those things. Cruise will suffer material harm if 
-anyone other than the intended recipient disseminates or takes any action 
-based on this message. If you have received this message (including any 
-attachments) in error, please delete it immediately and notify the sender 
-promptly.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
