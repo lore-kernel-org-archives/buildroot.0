@@ -4,63 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17ECFC47DAF
-	for <buildroot@archiver.kernel.org>; Sat, 20 Jan 2024 01:18:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48DD7C4725D
+	for <buildroot@archiver.kernel.org>; Sat, 20 Jan 2024 01:18:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A333C42C47;
-	Sat, 20 Jan 2024 01:18:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A333C42C47
+	by smtp4.osuosl.org (Postfix) with ESMTP id F0A1E42C47;
+	Sat, 20 Jan 2024 01:18:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F0A1E42C47
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yZy7Uy5Hm9PW; Sat, 20 Jan 2024 01:18:18 +0000 (UTC)
+	with ESMTP id SE7jd_490AFq; Sat, 20 Jan 2024 01:18:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CA9A142D28;
-	Sat, 20 Jan 2024 01:18:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA9A142D28
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2DF391BF298
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2893942E70;
+	Sat, 20 Jan 2024 01:18:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2893942E70
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BC5731BF298
  for <buildroot@lists.busybox.net>; Sat, 20 Jan 2024 01:18:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 02B5C41E2D
- for <buildroot@lists.busybox.net>; Sat, 20 Jan 2024 01:18:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 02B5C41E2D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 955538467B
+ for <buildroot@lists.busybox.net>; Sat, 20 Jan 2024 01:18:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 955538467B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wyhiVRUSm9kP for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id godCr0cG3bPl for <buildroot@lists.busybox.net>;
  Sat, 20 Jan 2024 01:18:15 +0000 (UTC)
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DCB4C41D74
- for <buildroot@buildroot.org>; Sat, 20 Jan 2024 01:18:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DCB4C41D74
+Received: from sin.source.kernel.org (sin.source.kernel.org
+ [IPv6:2604:1380:40e1:4800::1])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 917CB8467A
+ for <buildroot@buildroot.org>; Sat, 20 Jan 2024 01:18:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 917CB8467A
 Received: from smtp.kernel.org (transwarp.subspace.kernel.org [100.75.92.58])
- by dfw.source.kernel.org (Postfix) with ESMTP id 9109361987;
+ by sin.source.kernel.org (Postfix) with ESMTP id 029B1CE27CF;
  Sat, 20 Jan 2024 01:18:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF53BC433A6;
- Sat, 20 Jan 2024 01:18:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA9C0C433F1;
+ Sat, 20 Jan 2024 01:18:11 +0000 (UTC)
 From: Mat Martineau <martineau@kernel.org>
 To: buildroot@buildroot.org
-Date: Fri, 19 Jan 2024 17:17:59 -0800
-Message-ID: <20240120011759.2454452-3-martineau@kernel.org>
+Date: Fri, 19 Jan 2024 17:17:57 -0800
+Message-ID: <20240120011759.2454452-1-martineau@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240120011759.2454452-1-martineau@kernel.org>
-References: <20240120011759.2454452-1-martineau@kernel.org>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=kernel.org; s=k20201202; t=1705713493;
- bh=Dqg0yXk0QMM7qMWYGFGer1KzJDNQiQx4TKI3SPlpBDE=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=VUnDht0ps2e6mX7j5mBGgOUTqNmYj4mXzjpW4Kale4d3s8SNyUM3hvu21vq5Orucx
- D0Q22aXexq9dkdz5bzYsNCwnNi+ovFzyZrkS086TLe2WQxbkYDuRA7rIhMdUVha88c
- OdH0Zc/nI2QiZJa8Jck1XcB9wS3jWr4SkSHVEV9eEAt69xKPHA9fbXVvzxvxDZTtfx
- HrWNRrAdUxuqCIxRuX96UVPeQHEPtT1o8x/bXnwJDivqWXg0B1nsnQscT6lretCW0J
- h22VnW3bQcirki+kPBFSza9x5O/csyhgFHS97ZqQTzUJwVnrLQ4g9KPAuTzUWg8zgw
- tn9uuorLJDKXA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=kernel.org; s=k20201202; t=1705713492;
+ bh=9sU0Q5I63JJqFUJVyc7ooov1d+b2VGBGoVg+jqQ0cu8=;
+ h=From:To:Cc:Subject:Date:From;
+ b=m3otIc/qbX50AYTCdS8QDIfLaBChH7qvn2TXz+Oj6gospt50HgTO64aAIdQ3YwV7e
+ rSH0VIuYw6NpRAIix+XnyCrjOEMs+vecowYKnFclLwabkLgUIbi3FsaFpR4IoLHWM0
+ 2+m9ZxGHPAj3mOEoy0ILhzIblLJjkRx+NkpOOm4wNcZtwWRsASdIOxJfSlS9o3qDxE
+ J7b7Tw72kR/yvbbbd2qF3lJu9nlYZRGIVP/i38O7AAqSqG6s2MoSQeU6zyzpfuHXmv
+ ChyAIdzc6T37R5t0iGM7FAE18tA1niK2YrsKpbqUQG3dcU+krawxunWQ8t/zF3fWyL
+ D5ROGrn5tb27A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org
- header.a=rsa-sha256 header.s=k20201202 header.b=VUnDht0p
-Subject: [Buildroot] [PATCH v7 2/2] package/bpftrace: new package
+ header.a=rsa-sha256 header.s=k20201202 header.b=m3otIc/q
+Subject: [Buildroot] [PATCH v7 0/2] bcc and bpftrace
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,183 +71,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: jugurtha.belkalem@smile.fr, qyousef@layalina.io,
- Qais Yousef <qais.yousef@arm.com>, naveen.mamindlapalli@gmail.com,
- romain.naour@smile.fr, Mat Martineau <martineau@kernel.org>,
- Romain Naour <romain.naour@gmail.com>
+Cc: jugurtha.belkalem@smile.fr, romain.naour@smile.fr,
+ naveen.mamindlapalli@gmail.com, qyousef@layalina.io,
+ Mat Martineau <martineau@kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Qais Yousef <qais.yousef@arm.com>
+Hello -
 
-bpftrace is a high-level tracing language for Linux enhanced Berkeley
-Packet Filter (eBPF) available in recent Linux kernels (4.1 and later).
+I found the unmerged patches from late 2020 that add the bcc and
+bpftrace packages in patchwork:
 
-Only tested on x86_64.
+https://patchwork.ozlabs.org/project/buildroot/patch/20201220151203.2206747-2-romain.naour@gmail.com/
+https://patchwork.ozlabs.org/project/buildroot/patch/20201220151203.2206747-4-romain.naour@gmail.com/
 
-v7 changes:
- - Ported to current buildroot release
- - Update to bpftrace 0.19.1
- - Add libcereal dependency
- - Use new configure option for USE_SYSTEM_BPF_BCC
- - Update dependencies
- - Use BUILD_SHARED_LIBS=OFF instead of patching cmake files
- - Don't install tool docs in target filesystem
- - Propagate config dependencies
+There were 5 patches in v6 of this series. Two were applied (LLVM BPF
+backend and libbpf), and I'm not sure the luajit-related changes are
+needed - please correct me if I'm mistaken here!
 
-Signed-off-by: Qais Yousef <qais.yousef@arm.com>
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-Cc: Qais Yousef <qyousef@layalina.io>
-Signed-off-by: Mat Martineau <martineau@kernel.org>
+I've ported the commits adding the bcc and bpftrace packages to the
+latest buildroot tree, and addressed some of the review comments in
+v6. It looks like some of the original contributor's contact information
+has changed so please let me know if any of the tags in the commit
+messages need to be updated.
 
-squashme: bpftrace: more review fixups
----
- DEVELOPERS                     |  4 +++
- package/Config.in              |  1 +
+Jugurtha BELKALEM (1):
+  package/bcc: new package
+
+Qais Yousef (1):
+  package/bpftrace: new package
+
+ DEVELOPERS                     |  6 ++++
+ package/Config.in              |  2 ++
+ package/bcc/Config.in          | 44 +++++++++++++++++++++++++++
+ package/bcc/bcc.hash           |  3 ++
+ package/bcc/bcc.mk             | 43 +++++++++++++++++++++++++++
  package/bpftrace/Config.in     | 54 ++++++++++++++++++++++++++++++++++
  package/bpftrace/bpftrace.hash |  3 ++
  package/bpftrace/bpftrace.mk   | 24 +++++++++++++++
- 5 files changed, 86 insertions(+)
+ 8 files changed, 179 insertions(+)
+ create mode 100644 package/bcc/Config.in
+ create mode 100644 package/bcc/bcc.hash
+ create mode 100644 package/bcc/bcc.mk
  create mode 100644 package/bpftrace/Config.in
  create mode 100644 package/bpftrace/bpftrace.hash
  create mode 100644 package/bpftrace/bpftrace.mk
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 0af50f1f848d..2218b13f1121 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2505,6 +2505,9 @@ F:	package/synergy/
- N:	Prabhu Sannachi <prabhu.sannachi@collins.com>
- F:	package/redis-plus-plus/
- 
-+N:	Qais Yousef <qais.yousef@arm.com>
-+F:	package/bpftrace/
-+
- N:	Rafal Susz <rafal.susz@gmail.com>
- F:	board/avnet/s6lx9_microboard/
- F:	configs/s6lx9_microboard_defconfig
-@@ -2606,6 +2609,7 @@ F:	package/alure/
- F:	package/aubio/
- F:	package/bcc/
- F:	package/binutils/
-+F:	package/bpftrace/
- F:	package/bullet/
- F:	package/clinfo/
- F:	package/efl/
-diff --git a/package/Config.in b/package/Config.in
-index 662c935a1f1c..1fc983dfd8aa 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -91,6 +91,7 @@ menu "Debugging, profiling and benchmark"
- 	source "package/blktrace/Config.in"
- 	source "package/bonnie/Config.in"
- 	source "package/bpftool/Config.in"
-+	source "package/bpftrace/Config.in"
- 	source "package/cache-calibrator/Config.in"
- 	source "package/clinfo/Config.in"
- 	source "package/clpeak/Config.in"
-diff --git a/package/bpftrace/Config.in b/package/bpftrace/Config.in
-new file mode 100644
-index 000000000000..e8afa37b6e63
---- /dev/null
-+++ b/package/bpftrace/Config.in
-@@ -0,0 +1,54 @@
-+config BR2_PACKAGE_BPFTRACE_ARCH_SUPPORTS
-+	bool
-+	default y if BR2_aarch64 || BR2_aarch64_be
-+	default y if BR2_x86_64
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+
-+config BR2_PACKAGE_BPFTRACE
-+	bool "bpftrace"
-+	depends on BR2_PACKAGE_BPFTRACE_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS # bcc
-+	depends on BR2_TOOLCHAIN_USES_GLIBC # bcc
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # bcc -> clang
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libbpf
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libbpf
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13 # libbpf
-+	depends on BR2_INSTALL_LIBSTDCPP # bcc -> clang
-+	depends on BR2_HOST_GCC_AT_LEAST_7 # bcc -> clang
-+	depends on BR2_USE_WCHAR # bcc -> clang, bcc -> python3, libbpf
-+	depends on BR2_USE_MMU # bcc -> python3
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # bcc -> clang, bcc -> python3
-+	depends on !BR2_STATIC_LIBS # bcc -> clang, bcc -> python3, libbpf
-+	select BR2_PACKAGE_BCC
-+	select BR2_PACKAGE_LIBBPF
-+	select BR2_PACKAGE_CEREAL
-+	select BR2_PACKAGE_ELFUTILS
-+	select BR2_PACKAGE_BZIP2
-+	select BR2_PACKAGE_XZ
-+	# LLVM RTTI mendatory: https://github.com/iovisor/bpftrace/issues/1156
-+	select BR2_PACKAGE_LLVM_RTTI
-+	select BR2_PACKAGE_LLVM
-+	help
-+	  bpftrace is a high-level tracing language for Linux enhanced
-+	  Berkeley Packet Filter (eBPF) available in recent Linux
-+	  kernels (4.x).
-+
-+	  bpftrace uses LLVM as a backend to compile scripts to
-+	  BPF-bytecode and makes use of BCC for interacting with the
-+	  Linux BPF system, as well as existing Linux tracing
-+	  capabilities: kernel dynamic tracing (kprobes), user-level
-+	  dynamic tracing (uprobes), and tracepoints. The bpftrace
-+	  language is inspired by awk and C, and predecessor tracers
-+	  such as DTrace and SystemTap.
-+
-+	  It's highly recommended to NOT strip bpftrace binary.
-+	  To do so, add "bpftrace" to BR2_STRIP_EXCLUDE_FILES.
-+	  See:
-+	    https://bugzilla.redhat.com/show_bug.cgi?id=1865787
-+
-+	  https://www.github.com/iovisor/bpftrace
-+
-+comment "bpftrace needs a glibc toolchain w/ C++, gcc >= 7"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_INSTALL_LIBSTDCPP \
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_7
-diff --git a/package/bpftrace/bpftrace.hash b/package/bpftrace/bpftrace.hash
-new file mode 100644
-index 000000000000..c2ecc927da35
---- /dev/null
-+++ b/package/bpftrace/bpftrace.hash
-@@ -0,0 +1,3 @@
-+# locally calculated
-+sha256  b520340f28ce4d6f2fb2355f1675b6801ff8498ed9e8bff14abbbf6baff5a08e  bpftrace-0.19.1.tar.gz
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/bpftrace/bpftrace.mk b/package/bpftrace/bpftrace.mk
-new file mode 100644
-index 000000000000..072cee4ae72e
---- /dev/null
-+++ b/package/bpftrace/bpftrace.mk
-@@ -0,0 +1,24 @@
-+################################################################################
-+#
-+# bpftrace
-+#
-+################################################################################
-+
-+BPFTRACE_VERSION = 0.19.1
-+BPFTRACE_SITE = $(call github,iovisor,bpftrace,v$(BPFTRACE_VERSION))
-+BPFTRACE_LICENSE = Apache-2.0
-+BPFTRACE_LICENSE_FILES = LICENSE
-+BPFTRACE_DEPENDENCIES = host-bison host-flex bcc libbpf cereal bzip2 xz elfutils llvm
-+
-+# libbfd, libopcodes
-+ifeq ($(BR2_PACKAGE_BINUTILS),y)
-+BPFTRACE_DEPENDENCIES += binutils
-+endif
-+
-+BPFTRACE_CONF_OPTS += -DENABLE_MAN:BOOL=OFF \
-+	-DUSE_SYSTEM_BPF_BCC:BOOL=ON \
-+	-DBUILD_SHARED_LIBS:BOOL=OFF \
-+	-DBUILD_TESTING:BOOL=OFF \
-+	-DINSTALL_TOOL_DOCS:BOOL=OFF
-+
-+$(eval $(cmake-package))
 -- 
 2.43.0
 
