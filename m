@@ -1,87 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C53BC47258
-	for <buildroot@archiver.kernel.org>; Sat, 20 Jan 2024 20:47:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED2C8C47258
+	for <buildroot@archiver.kernel.org>; Sat, 20 Jan 2024 20:58:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E85FE60F25;
-	Sat, 20 Jan 2024 20:47:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E85FE60F25
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8057641B14;
+	Sat, 20 Jan 2024 20:58:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8057641B14
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EzLhXEZZIaKo; Sat, 20 Jan 2024 20:47:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0Q9c33cC44ZC; Sat, 20 Jan 2024 20:58:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D570F60F33;
-	Sat, 20 Jan 2024 20:47:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D570F60F33
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4CAA51BF2AF
- for <buildroot@lists.busybox.net>; Sat, 20 Jan 2024 20:47:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C8707417A4;
+	Sat, 20 Jan 2024 20:58:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C8707417A4
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3BCC21BF2AF
+ for <buildroot@lists.busybox.net>; Sat, 20 Jan 2024 20:58:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2645860F33
- for <buildroot@lists.busybox.net>; Sat, 20 Jan 2024 20:47:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2645860F33
+ by smtp4.osuosl.org (Postfix) with ESMTP id 148ED417A4
+ for <buildroot@lists.busybox.net>; Sat, 20 Jan 2024 20:58:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 148ED417A4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zxVk8NZ3vUSk for <buildroot@lists.busybox.net>;
- Sat, 20 Jan 2024 20:47:09 +0000 (UTC)
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C113960F25
- for <buildroot@buildroot.org>; Sat, 20 Jan 2024 20:47:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C113960F25
-Received: by mail-wm1-x329.google.com with SMTP id
- 5b1f17b1804b1-40e72a567eeso22954495e9.0
- for <buildroot@buildroot.org>; Sat, 20 Jan 2024 12:47:08 -0800 (PST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OYYa2k34Vlzh for <buildroot@lists.busybox.net>;
+ Sat, 20 Jan 2024 20:58:43 +0000 (UTC)
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1F6654179E
+ for <buildroot@buildroot.org>; Sat, 20 Jan 2024 20:58:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F6654179E
+Received: by mail-wr1-x432.google.com with SMTP id
+ ffacd0b85a97d-339231c062bso1091886f8f.0
+ for <buildroot@buildroot.org>; Sat, 20 Jan 2024 12:58:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1705783626; x=1706388426;
+ d=1e100.net; s=20230601; t=1705784321; x=1706389121;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=WarIpaqOsytAuJrVfPmddx+8jRKhEp8DUOUHZm+VUO0=;
- b=kZAD7F1/nxf++MKQ3Rc4o1ZmYj1ntNHGoDXW2k27l1lae12TGbxIMEAcFG88bbMd3E
- 3jc0FE4KrKQCPsWTHikms8dD9e6t6DEOhtn3hDeutHUsZBcCkKLhi4WuvZ2WSZ3uP4FM
- WuqqjM5cow3g0zpxJLuP0/QMCo2PBcjIlERzdWVvfnmYM+7WYt5xDAU6rOR/9SqrTs0A
- 9hCn+yP0ZGG80aIYSpP6ROH8/oRAmQJt8R8YHIOzIQ6RsY39oWzOTCGQbdFVo+KZpFKv
- 033SfRqOVHZspnprZefgnIMfrHqMkYBdmFJRhjol7HUCh9mn6+ITSee/SEvgpoRhV2mc
- xTLQ==
-X-Gm-Message-State: AOJu0Yx9ojyj8iElmt3pbntlDQKIh5ruTUNX1vlr+ff4sRtqb5j/FdOm
- VysCHwxUTJaF9fxCge0VwOxaPJ8Kio+GlGAtHMFOPEQMdKHITOuzT8BxwSEd
-X-Google-Smtp-Source: AGHT+IEvOKIEx0RgAzC5bEwNpgGL6Tc6Zih3XDnql2m+iPLNIVj60Yk+VIyV4yPw34DjmiZ4w8VsnA==
-X-Received: by 2002:a05:600c:68c3:b0:40d:37a8:3261 with SMTP id
- jd3-20020a05600c68c300b0040d37a83261mr520619wmb.134.1705783625898; 
- Sat, 20 Jan 2024 12:47:05 -0800 (PST)
+ bh=OdDny4MR4Jin9cp/u0YhySkrt2km5VM9Yptz3qlWeFo=;
+ b=E3pWkTvMxFHgALVDBwXzTJ1VBzDhO7ASbno85FPeoDxgHdDTphBuRrcMMZJr0lZGFO
+ amPYP5Z01EgK8c7cRXMPmFjYVhjj/4RuLD216z0EAzqCOVoiOztWK3DomhsvSjnpRBvF
+ RllxMgFc2A19ZhKgXBxxAfxqzXmo32itzDY8c7GRD5lQ03gTlqKtNClJ24eCCQbgTjNL
+ F4CJlVRHyXAFxvpUFVvCv0n+1BS56xRPHEuSTwEWJCnqv/ys60LmlbPFkvYU97N4+1v9
+ sQ9a1klrpycwUp4+ojcOF7chLbSEvNXqt5Qy+zcb7qLmgm4CS0pEl7MKacuPm3kXpVFq
+ DwKA==
+X-Gm-Message-State: AOJu0YzuY9XAWpXREAhb7jLWSp1nqH9/q+luCSkqMwbbHmsh78Kk4vLH
+ KD+B2zny/ALnQu8xCA9QIqY6mS8DyhQUWLBkiVcsUQ6mT5d4UQtQixRo3X2q
+X-Google-Smtp-Source: AGHT+IEr/SO61rFIc5awsxDm2I1fY/u/NyeDsTegmo18vKR6R1kI+NIIKabYNkHdzjC51ysoH+6M5g==
+X-Received: by 2002:a05:600c:a39e:b0:40e:4a2c:c894 with SMTP id
+ hn30-20020a05600ca39e00b0040e4a2cc894mr957660wmb.124.1705784320691; 
+ Sat, 20 Jan 2024 12:58:40 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- v29-20020adfa1dd000000b0033929310ae4sm2232582wrv.73.2024.01.20.12.47.05
+ ek15-20020a05600c3ecf00b0040e8e358f82sm10727210wmb.19.2024.01.20.12.58.40
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 20 Jan 2024 12:47:05 -0800 (PST)
+ Sat, 20 Jan 2024 12:58:40 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 20 Jan 2024 21:47:01 +0100
-Message-ID: <20240120204701.70123-1-fontaine.fabrice@gmail.com>
+Date: Sat, 20 Jan 2024 21:58:38 +0100
+Message-ID: <20240120205838.76973-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1705783626; x=1706388426; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1705784321; x=1706389121; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=WarIpaqOsytAuJrVfPmddx+8jRKhEp8DUOUHZm+VUO0=;
- b=Kfjl1smfJ/3LqSDLKf+4br6Migt0bFsaBkCK5D59lmZAfxRZ+nNYEhzebHiO8E6KAm
- BtDdr2ddP6MyFD4kRLTjAILMHX2uwkP2CtXg4WXajtWxrckqPk1La06+DPKbLaZxXkUz
- V6t72Kiu/fxiHtb50g+fuzZvkCRXZie41I6gY0rr2TONygH4uckIxUN7XkotMTXyUrqX
- Fcb3CGAjBwCdssx03YXrD5fErqxzpNZ7oWs1T0KRX+D+nyP76Uo0AjpRVC45EM7lCwww
- KxSWOtFLHYuo+Mplempd80BFqsR/jPVQyztDIsgeZzHl0rEIcrwjI+/IS1pHc0dVGBTy
- TpHw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=OdDny4MR4Jin9cp/u0YhySkrt2km5VM9Yptz3qlWeFo=;
+ b=UKQOq+mDvMdoWfFn5N4hXmWPSua+60OoEi5sju7ux69/R/7UV2/B+f7UpR/4OR0d0O
+ v/dcsrVBz1YHZ4E8B3NoIBnkzB54di3nAK2z9rsXfex3wzp578T0sWm3Iwr9JcYCbRbG
+ jlxvr4n8hoqw1uMWYW37SShDn4mw0oY3nEXiwi/Z4hPDCOn6aDrsBxYt4U/rjMrsnuR3
+ Xyhe55T43IGJmY00bfLcXhv2JUBB+p+k1EUxsgVbZ4OQ8lRFiengFipO7/+VYLqyj8Qh
+ Czeewzsf07veRTZ4U3+7kK8Wz7sHc6yIxQO8n61BTE9tPD896SlFURwLlh2Mo5TmUA4e
+ a+bQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Kfjl1smf
-Subject: [Buildroot] [PATCH 1/1] package/python-mako: add CPE variables
+ header.a=rsa-sha256 header.s=20230601 header.b=UKQOq+mD
+Subject: [Buildroot] [PATCH 1/1] package/python-html5lib: add CPE variables
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,36 +93,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd@kuhls.net>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-cpe:2.3:a:sqlalchemy:mako is a valid CPE identifier for this package:
+cpe:2.3:a:html5lib:html5lib is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/detail/3A26A531-FD34-4F27-ADD5-C0C88FA337B3
+  https://nvd.nist.gov/products/cpe/detail/97A353CC-7402-4606-93CA-111308296748
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/python-mako/python-mako.mk | 2 ++
+ package/python-html5lib/python-html5lib.mk | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/python-mako/python-mako.mk b/package/python-mako/python-mako.mk
-index 1f7a0b0657..2eba772b26 100644
---- a/package/python-mako/python-mako.mk
-+++ b/package/python-mako/python-mako.mk
-@@ -10,6 +10,8 @@ PYTHON_MAKO_SITE = https://files.pythonhosted.org/packages/a9/6e/6b41e654bbdcef9
- PYTHON_MAKO_SETUP_TYPE = setuptools
- PYTHON_MAKO_LICENSE = MIT
- PYTHON_MAKO_LICENSE_FILES = LICENSE
-+PYTHON_MAKO_CPE_ID_VENDOR = sqlalchemy
-+PYTHON_MAKO_CPE_ID_PRODUCT = mako
+diff --git a/package/python-html5lib/python-html5lib.mk b/package/python-html5lib/python-html5lib.mk
+index 84229eabd0..320ef01c7a 100644
+--- a/package/python-html5lib/python-html5lib.mk
++++ b/package/python-html5lib/python-html5lib.mk
+@@ -10,5 +10,7 @@ PYTHON_HTML5LIB_SITE = https://files.pythonhosted.org/packages/ac/b6/b55c3f49042
+ PYTHON_HTML5LIB_LICENSE = MIT
+ PYTHON_HTML5LIB_LICENSE_FILES = LICENSE
+ PYTHON_HTML5LIB_SETUP_TYPE = setuptools
++PYTHON_HTML5LIB_CPE_ID_VENDOR = html5lib
++PYTHON_HTML5LIB_CPE_ID_PRODUCT = html5lib
  
- # In host build, setup.py tries to download markupsafe if it is not installed
- HOST_PYTHON_MAKO_DEPENDENCIES = host-python-markupsafe
+ $(eval $(python-package))
 -- 
 2.43.0
 
