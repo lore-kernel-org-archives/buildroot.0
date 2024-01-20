@@ -4,66 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9ED4FC47258
-	for <buildroot@archiver.kernel.org>; Sat, 20 Jan 2024 20:35:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE6FFC47258
+	for <buildroot@archiver.kernel.org>; Sat, 20 Jan 2024 20:38:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 04A1760F26;
-	Sat, 20 Jan 2024 20:35:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 04A1760F26
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7DB7960A80;
+	Sat, 20 Jan 2024 20:38:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7DB7960A80
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pxWurnmDGZve; Sat, 20 Jan 2024 20:35:53 +0000 (UTC)
+	with ESMTP id 6Udm-zNyPH8c; Sat, 20 Jan 2024 20:38:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4867360F07;
-	Sat, 20 Jan 2024 20:35:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4867360F07
+	by smtp3.osuosl.org (Postfix) with ESMTP id C148460F25;
+	Sat, 20 Jan 2024 20:38:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C148460F25
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E18E41BF31E
- for <buildroot@lists.busybox.net>; Sat, 20 Jan 2024 20:35:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id AC8AD1BF31E
+ for <buildroot@lists.busybox.net>; Sat, 20 Jan 2024 20:38:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B9A3D40275
- for <buildroot@lists.busybox.net>; Sat, 20 Jan 2024 20:35:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B9A3D40275
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8525A4013F
+ for <buildroot@lists.busybox.net>; Sat, 20 Jan 2024 20:38:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8525A4013F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qvCsCDXagzpZ for <buildroot@lists.busybox.net>;
- Sat, 20 Jan 2024 20:35:48 +0000 (UTC)
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 048EE40003
- for <buildroot@buildroot.org>; Sat, 20 Jan 2024 20:35:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 048EE40003
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id A00D513F86A;
- Sat, 20 Jan 2024 21:35:42 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 20 Jan 2024 21:35:42 +0100
-Date: Sat, 20 Jan 2024 21:35:42 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Adam Duskett <adam.duskett@amarulasolutions.com>
-Message-ID: <ZawungZjGBS6Z3Dq@landeda>
-References: <20240113194950.11170-1-adam.duskett@amarulasolutions.com>
+ with ESMTP id 2Uyi4vRBXs55 for <buildroot@lists.busybox.net>;
+ Sat, 20 Jan 2024 20:38:11 +0000 (UTC)
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 42E2C40012
+ for <buildroot@buildroot.org>; Sat, 20 Jan 2024 20:38:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 42E2C40012
+Received: by mail-wr1-x42b.google.com with SMTP id
+ ffacd0b85a97d-339208f5105so1533817f8f.1
+ for <buildroot@buildroot.org>; Sat, 20 Jan 2024 12:38:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1705783088; x=1706387888;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=HwkDS2afuYWuGGezqaIVm1lbxzVD81oFUbwFiWJy09M=;
+ b=Cic6j/ku3atMqycOzEcDa1Q8j1z4CrOBU8oqFs20k04m5etJ3GHI0wXvD/e4Sz0G9H
+ YIR21c5t7Tm3g9/jX2x8/XWpQ5lHJ6BO7FTqsoS6Nk2sgpvWrmoo5uM+LPPKMLBmbYvu
+ LXzrP4BCr8Ie7+4hL8KhVIr6lndh1qGBGiSsfeY0v50IwrcjAuBZmmYePjq9+utEooj3
+ 64md5cuH5dzUAZqelNMDwqibQ/J/dUNG25yeLWHtpLhs9MHW+4CXB7OzYy0HtD5hbv2w
+ c+qVGSpvSrvBp0lRYCKPpjH6ubKm/E711an8r7X0k/4ewwc/cyCFstivQm+ciYvhlblT
+ uBcg==
+X-Gm-Message-State: AOJu0Yw8AWr6D2Z2DINjBNmGctSg7nNzuC7WjMR2pK1p1282Nf9l14WD
+ AxUmzwO83NmuOr2gyj7fMIAvd554ZJgsc+yZ0n45tcmDDM/1YSHZArESEMLz
+X-Google-Smtp-Source: AGHT+IFAR+z7+d+afGlZcT/YaKeqtXddIZlkwOieSw0YjCYH3fSrbjceQM6vU8hALG1Yro7WyIC8WQ==
+X-Received: by 2002:adf:ef89:0:b0:336:d9cc:3050 with SMTP id
+ d9-20020adfef89000000b00336d9cc3050mr676783wro.126.1705783088221; 
+ Sat, 20 Jan 2024 12:38:08 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ l20-20020a5d5274000000b00337d1c832basm7033257wrc.113.2024.01.20.12.38.07
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 20 Jan 2024 12:38:07 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat, 20 Jan 2024 21:38:05 +0100
+Message-ID: <20240120203805.64729-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240113194950.11170-1-adam.duskett@amarulasolutions.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1705782944;
- bh=QpulpvKTNzD2RY+IH5ZZXNKaT+MDHeT7q4HmhfCH7s8=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=AlTYOsoQSWtvr6UwFPKUsxrlQ2J13aDlTvATX0poleUP2HqWcu7a21sG0hsMkv2Ne
- U1PCQsbyL4/8nDj2ELmAxAMrnL+BzhCR4534OdhL2ZNKxKnzSwSM9+y3PvqfHsbfLA
- lL4x2cxO5ULLXhH1vP/oiNr2Z5GNLNn6KKQKXXOIG+sknDs1avs1+AKlXjCek49WMT
- gyEQTySQL7IhecrRKF1Vo2Yg5g3stz2WolIjJV0xZY57GA9Y1ekWcCpL62BrRfZFRJ
- egp9SFmWFJc8oWSG9ntXzZ/HvUr6dKhBmqBCCewX0/popp9BSNtM+Zf3eWRSghgvo8
- etG4zVe3IVJDQ==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1705783088; x=1706387888; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=HwkDS2afuYWuGGezqaIVm1lbxzVD81oFUbwFiWJy09M=;
+ b=HzEAMPRyOblCY/W6oxADdJEDVyE/Vpv6AXpG5Gsfh3zBNMKBApbpZvQeR8yA11uU0N
+ tgiTWKIjUUvdAldObBeK7Gty5UDaBnSCrkeJZmzO1QF4kfJstbjss8AJ0CmdFS6nD9vg
+ 2t+5XoEIiyZA2LwVtcCU4aFCfVdCZtWWsXoy5/dsw+m5UTsdgKilNiDFWf89KRW1z+Ug
+ lay3zLCqiTZ55K6ZVw423gYIPXvWmN4iG2aNI+idBPvUQzcMuz2aqlR9iWEirRDH1bSk
+ mADtpUzaKhWR1eGYGd4VwYGqRDVPQZIpJFKXyhkwi8iRuRtLDY9WjIAZA9yWq2Xyk4zv
+ kgfQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=AlTYOsoQ
-Subject: Re: [Buildroot] [PATCH v4 1/1]
- package/flutter-sdk-bin/Config.in.host: change flutter-pub-cache location
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=HzEAMPRy
+Subject: [Buildroot] [PATCH 1/1] package/python-numpy: add CPE variables
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,102 +93,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Samuel Martin <s.martin49@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Adam, All,
+cpe:2.3:a:numpy:numpy is a valid CPE identifier for this package:
 
-On 2024-01-13 12:49 -0700, Adam Duskett spake thusly:
-> When running the command "flutter pub get," the plugins are stored in the
-> pub-cache directory along with their sha256sum hashes. The default location of
-> the pub-cache directory is current $(HOST_DIR)/share/flutter/sdk/.pub-cache,
-> which is not an acceptable choice by default because every plugin is
-> re-downloaded during every build of a flutter application either during a new
-> build or when building with the per-package-directory option enabled.
-> 
-> Furthermore, keeping the pub-cache in its current location prevents users from
-> committing the pub-cache directory to git for faster rebuilds of a
-> Buildroot-based system, as users cannot store the pub-cache for later use.
-> 
-> To fix the above issue completely, the following two changes must occur:
-> 
->   - Change the hard-coded Flutter pub-cache location to
->     $(DL_DIR)/br-flutter-pub-cache.
-> 
->   - Remove the `rm -rf $(HOST_FLUTTER_SDK_BIN_SDK)/.pub-cache` and the
->     associated comment about why the build system removes the .pub-cache
->     directory. After further research, the help text of the precache command
->     reads, "Populate the Flutter tool's cache of binary artifacts."
->     The current reasoning listed in the comments is not accurate for a
->     the following reasons:
-> 
->     1. We do not want to remove their directory if users already have a pub
->        cache they have symlinked to.
-> 
->     2. If the flutter-sdk-bin package previously set up the pub-cache, then
->        the pub-cache directory is set up with the options we want, and there
->        is no reason to remove the pub-cache directory.
+  https://nvd.nist.gov/products/cpe/detail/C19878E8-7FFC-4BB4-B1A8-F396CB169DF2
 
-I have added a little comment abot the concurrent acces to the shared
-pub-cache, thanks for the pointer on IRC!
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/python-numpy/python-numpy.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
-> changes v3 -> v4:
->   - Hardcode the directory to $(DL_DIR)/br-flutter-pub-cache. [Yann]
->   - Remove the `rm -rf $(HOST_FLUTTER_SDK_BIN_SDK)/.pub-cache` line. [Yann]
->   - Remove the associated comments about the above line. [Yann]
->   - Expand the commit log.
-> 
->  package/flutter-sdk-bin/flutter-sdk-bin.mk | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/package/flutter-sdk-bin/flutter-sdk-bin.mk b/package/flutter-sdk-bin/flutter-sdk-bin.mk
-> index 5e5042bea8..2e37e6f036 100644
-> --- a/package/flutter-sdk-bin/flutter-sdk-bin.mk
-> +++ b/package/flutter-sdk-bin/flutter-sdk-bin.mk
-> @@ -41,11 +41,8 @@ define HOST_FLUTTER_SDK_BIN_CONFIGURE_CMDS
->  	$(HOST_FLUTTER_SDK_BIN_ENV) $(@D)/bin/dart --disable-analytics
->  endef
->  
-> -# Remove the cache, as we will run precache after setting up flutter and dart
-> -# with the new config options.
->  define HOST_FLUTTER_SDK_BIN_BUILD_CMDS
->  	mkdir -p $(HOST_FLUTTER_SDK_BIN_SDK)
-> -	rm -rf $(HOST_FLUTTER_SDK_BIN_SDK)/.pub-cache
->  	cd $(@D) && \
->  		$(HOST_FLUTTER_SDK_BIN_ENV) $(@D)/bin/flutter precache;
->  endef
-> @@ -104,4 +101,4 @@ HOST_FLUTTER_SDK_BIN_DART_BIN = \
->  $(eval $(host-generic-package))
->  
->  # For target packages to locate said pub-cache
-> -FLUTTER_SDK_BIN_PUB_CACHE = $(HOST_FLUTTER_SDK_BIN_SDK)/.pub-cache
-> +FLUTTER_SDK_BIN_PUB_CACHE = $(DL_DIR)/br-flutter-pub-cache
-> -- 
-> 2.43.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
+index b52e0da17d..383135f9fe 100644
+--- a/package/python-numpy/python-numpy.mk
++++ b/package/python-numpy/python-numpy.mk
+@@ -14,6 +14,8 @@ PYTHON_NUMPY_LICENSE_FILES = \
+ 	numpy/core/include/numpy/libdivide/LICENSE.txt \
+ 	numpy/linalg/lapack_lite/LICENSE.txt \
+ 	tools/npy_tempita/license.txt
++PYTHON_NUMPY_CPE_ID_VENDOR = numpy
++PYTHON_NUMPY_CPE_ID_PRODUCT = numpy
+ 
+ PYTHON_NUMPY_DEPENDENCIES = host-python-cython python3
+ HOST_PYTHON_NUMPY_DEPENDENCIES = host-python-cython
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
