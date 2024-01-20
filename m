@@ -4,65 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 869F4C47258
-	for <buildroot@archiver.kernel.org>; Sat, 20 Jan 2024 21:45:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03E04C47DAF
+	for <buildroot@archiver.kernel.org>; Sat, 20 Jan 2024 21:45:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3836D4216A;
-	Sat, 20 Jan 2024 21:45:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3836D4216A
+	by smtp4.osuosl.org (Postfix) with ESMTP id A97C042233;
+	Sat, 20 Jan 2024 21:45:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A97C042233
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ghhYvrj7WnbM; Sat, 20 Jan 2024 21:45:19 +0000 (UTC)
+	with ESMTP id HhNCZdl70GHU; Sat, 20 Jan 2024 21:45:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2794342175;
-	Sat, 20 Jan 2024 21:45:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2794342175
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9D78D1BF346
- for <buildroot@lists.busybox.net>; Sat, 20 Jan 2024 21:44:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C721642207;
+	Sat, 20 Jan 2024 21:45:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C721642207
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2F63B1BF346
+ for <buildroot@lists.busybox.net>; Sat, 20 Jan 2024 21:45:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 75CF340936
- for <buildroot@lists.busybox.net>; Sat, 20 Jan 2024 21:44:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 75CF340936
+ by smtp2.osuosl.org (Postfix) with ESMTP id 15B084013F
+ for <buildroot@lists.busybox.net>; Sat, 20 Jan 2024 21:45:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 15B084013F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id I_lO0IFVxcY5 for <buildroot@lists.busybox.net>;
- Sat, 20 Jan 2024 21:43:56 +0000 (UTC)
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 89A2C41749
- for <buildroot@buildroot.org>; Sat, 20 Jan 2024 21:43:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 89A2C41749
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zH49XVtQe1nI for <buildroot@lists.busybox.net>;
+ Sat, 20 Jan 2024 21:45:24 +0000 (UTC)
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C4F4140012
+ for <buildroot@buildroot.org>; Sat, 20 Jan 2024 21:45:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C4F4140012
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id E423913F88E;
- Sat, 20 Jan 2024 22:43:50 +0100 (CET)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id D058513F899;
+ Sat, 20 Jan 2024 22:45:19 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 20 Jan 2024 22:43:50 +0100
-Date: Sat, 20 Jan 2024 22:43:50 +0100
+ Sat, 20 Jan 2024 22:45:19 +0100
+Date: Sat, 20 Jan 2024 22:45:19 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Adam Duskett <adam.duskett@amarulasolutions.com>
-Message-ID: <Zaw-lqbBKdMnbOMF@landeda>
+Message-ID: <Zaw-71RHMeYgH6yO@landeda>
 References: <20240117225049.28443-1-adam.duskett@amarulasolutions.com>
+ <20240117225049.28443-3-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20240117225049.28443-1-adam.duskett@amarulasolutions.com>
+In-Reply-To: <20240117225049.28443-3-adam.duskett@amarulasolutions.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1705787033;
- bh=4Ikdkrr3mUOynA8Jb/mxh0w2W108wXK9dBu3nOjxhVI=;
+ d=free.fr; s=smtp-20201208; t=1705787121;
+ bh=65XrTu2ssZc7K0ntYr4r0kqLsl5UQjBMlHtF+6Minxo=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=cLss6eJKwbWcF2fXqg/hiZilBlh3lEXtu0w/qSoBavYr1da4qC8siRufslvDs2EwE
- 7ce6Dm5xglvlP3bzhhKI7umrKzOw5wMXyl+G8tNgQc/527uFnLWsDbcMO47Gd+xnl/
- hMj8GQB9ddGto3oq7GYAJxIFPy9I3cGZxiLIGQPsR2++niY7rLSHubnO6yjZHjLTSy
- 7l6VAHTu2yv5VzRjWt2TcIVTRU5DN0FHd6x1qbsF69Ug6DbCAsTKkUkpMSp+TX2wyE
- rWizAHnGG7gDtuKzmilMMx+KON8FYLgB4f3ym3oiOm+QtQ7WsUaQtun+Mz/SqzFRcQ
- L4mInqfTNU+vw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=N4CnCzzOmt6RtZUOUunAi/nQ/EN3PObMg8umHs1LN7Pet11noyBnN72gORhzpWrMp
+ uucfhG4+Rk27fM/maLiIq8jPk9tVQSdEah7uRUFA00ZqSYZJLyBaFOPUwtGNskO0Jl
+ f25RESPFVuApb9xZqcb8TxjKmMJZKBiqGcWkpn7b2/ASoWrmx4DVMTgT66PjgCO+xJ
+ jmu+1hWFOnQzb36KUVUa2yK0A4LqRAQWJX+ArEhM6N8oYHId/jyyBfEHSbGxhmZDgF
+ g/moOtulRZrULHTRsT4jMauaN5z2XUODCZOHh1t3YDel9GsHPuvwVUCEJsV/1HBZZu
+ 1XVQ0JuSW6zYg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=cLss6eJK
-Subject: Re: [Buildroot] [PATCH v3 00/10] more flutter package improvements
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=N4CnCzzO
+Subject: Re: [Buildroot] [PATCH v3 02/10] package/depot-tools: bump version
+ to 8d14454ba4a35fd9d2483842b08815a2357ec86f
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,95 +85,44 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 Adam, All,
 
 On 2024-01-17 15:50 -0700, Adam Duskett spake thusly:
-> Change v2 -> v3:
->   - Bump flutter-sdk-bin to 3.16.8
->   - Bump flutter-engine to 3.16.8
->   - Bump flutter-pi to 75e72fef8e8ce65ec72a002c00d9c6db4d1479d3
-> 
-> Changes v1 -> v2:
->   - Bump flutter-sdk-bin to 3.16.7
->   - Bump flutter-engine to 3.16.7
-> 
-> Most of these are self-explanitory and simple, however the depot-tools version
-> bump should be explained:
-> 
-> The current depot-tools version is from Jul 13 2023, and there is a bug where
-> when building with PPD enabled, building a Flutter application on my laptop
-> running Fedora 39 or even in the Debian 11 container fails due to permission
-> issues when running rsync such as:
-> 
-> /usr/bin/sed: couldn't open temporary file [...]/output/per-package/flutter-gallery/host/share/flutter/sdk/.vpython-root/0e1e32/lib/python3.8/sed763MrF: Permission denied
-> make: *** [package/pkg-generic.mk:267: [...]/output/build/flutter-gallery-2.10.2/.stamp_configured] Error 123
-> 
-> After several hours of attempting to find the exact cause of the issue by
-> parsing git logs of the depot_tools repository and cross-referencing bugs on
-> https://bugs.chromium.org/p/chromium/issues I am unable to determine the exact
-> reason why the problem occurs or the exact commit that fixes the issue.
-> 
-> However, updating depot-tools does indeed fix the issue, and looking at the
-> source code between 4e87f5bf and 8d14454b shows improvements to several bash
-> scripts, such as gclient, vpython3, and spid. All of which could be culprits
-> of this bug. As flutter-engine is the only package that uses host-depot-tools,
-> it is safe to update.
-> 
-> This permission bug is present on PPD and normal builds, but causes a build
-> to crash only on PPD because of rsyncing. On non-ppd builds, the bug only
-> causes some minor annoyance when trying to run `make clean` because permission
-> denials crop up when trying to remove the .vpython-root directory.
 
-The explanation for the depot-tools bump was very good, so I copied that
-as the commit log for the corresponding patch.
+The comments you provided in the cover letter really belonged to this
+commmit log, so I copied that as-is (apart for line-wrapping).
 
-> I can't remember, but I * think * the autobuilders don't select PPD yet, which
-> is probably why this bug hasn't caused any autobuild failures yet.
+> Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 
-Yes, PPD is enabled randomly on the autobuilders. That we have no such
-failure for now is probably due to the low probability we end up having
-a selection of packages enough to build a flutter app.
-
-I'll reply to individual patches where I have some comments.
+Applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
-> As for everything else:
->   - Tested on Fedora 39 and Debian 11.
->   - PPD and Non-PPD.
->   - Docker and host.
+> ---
+>  package/depot-tools/depot-tools.hash | 2 +-
+>  package/depot-tools/depot-tools.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> Everything passes and works as expected.
-> 
-> Thanks!
-> 
-> Adam Duskett (10):
->   package/ivi-homescreen: add standard_method_codec.h to keyboard
->     manager plugin
->   package/depot-tools: bump version to
->     8d14454ba4a35fd9d2483842b08815a2357ec86f
->   package/flutter-engine/Config.in: Drop nptl dependency
->   package/flutter-sdk-bin: bump version to 3.16.8
->   package/flutter-engine: bump version to 3.16.8
->   package/flutter-pi: bump version to
->     75e72fef8e8ce65ec72a002c00d9c6db4d1479d3
->   package/flutter-pi/Config.in: propagate flutter-engine dependencies
->   package/flutter-gallery: add a configure step
->   package/flutter-gallery: fix build options
->   package/flutter-gallery: clean up install_target_cmds
-> 
->  package/depot-tools/depot-tools.hash          |  2 +-
->  package/depot-tools/depot-tools.mk            |  2 +-
->  package/flutter-engine/Config.in              | 10 +++---
->  package/flutter-engine/flutter-engine.mk      |  2 +-
->  package/flutter-gallery/flutter-gallery.mk    | 24 ++++++++++----
->  package/flutter-pi/Config.in                  | 31 +++++++++++++++++--
->  package/flutter-pi/flutter-pi.hash            |  2 +-
->  package/flutter-pi/flutter-pi.mk              |  2 +-
->  package/flutter-sdk-bin/flutter-sdk-bin.hash  |  2 +-
->  package/flutter-sdk-bin/flutter-sdk-bin.mk    |  2 +-
->  ...rs-to-the-audio-players-and-keyboar.patch} | 26 ++++++++++++++--
->  11 files changed, 81 insertions(+), 24 deletions(-)
->  rename package/ivi-homescreen/{0001-add-missing-headers-to-the-audio-players-plugin.patch => 0001-add-missing-headers-to-the-audio-players-and-keyboar.patch} (77%)
-> 
+> diff --git a/package/depot-tools/depot-tools.hash b/package/depot-tools/depot-tools.hash
+> index 2109096901..70218e4658 100644
+> --- a/package/depot-tools/depot-tools.hash
+> +++ b/package/depot-tools/depot-tools.hash
+> @@ -1,3 +1,3 @@
+>  # Locally calculated
+> -sha256  8e0bccdd6b1231f58d5453dc14a5e1d195295ac8d466dec34961e951e946b50b  depot-tools-4e87f5bfe244e903f712408ea68dc3c3a6fe2d00-br1.tar.gz
+> +sha256  5da23d7558975093c6a732f5743c7f224d16dd3f878a6a1b577b1b127a4098cc  depot-tools-8d14454ba4a35fd9d2483842b08815a2357ec86f-br1.tar.gz
+>  sha256  984523ee987f4e8b72d61df37d8f1189a7077cd4b77e41a397e35593b297a29d  LICENSE
+> diff --git a/package/depot-tools/depot-tools.mk b/package/depot-tools/depot-tools.mk
+> index e3b840f29a..634258ffbb 100644
+> --- a/package/depot-tools/depot-tools.mk
+> +++ b/package/depot-tools/depot-tools.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -DEPOT_TOOLS_VERSION = 4e87f5bfe244e903f712408ea68dc3c3a6fe2d00
+> +DEPOT_TOOLS_VERSION = 8d14454ba4a35fd9d2483842b08815a2357ec86f
+>  DEPOT_TOOLS_SITE = https://chromium.googlesource.com/chromium/tools/depot_tools
+>  DEPOT_TOOLS_SITE_METHOD = git
+>  DEPOT_TOOLS_LICENSE = BSD-3-Clause
 > -- 
 > 2.43.0
 > 
