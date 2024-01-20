@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03E04C47DAF
-	for <buildroot@archiver.kernel.org>; Sat, 20 Jan 2024 21:45:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7156BC47DDC
+	for <buildroot@archiver.kernel.org>; Sat, 20 Jan 2024 21:46:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A97C042233;
-	Sat, 20 Jan 2024 21:45:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A97C042233
+	by smtp4.osuosl.org (Postfix) with ESMTP id 06EA241D74;
+	Sat, 20 Jan 2024 21:46:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 06EA241D74
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HhNCZdl70GHU; Sat, 20 Jan 2024 21:45:31 +0000 (UTC)
+	with ESMTP id tT88Ij-DbgHP; Sat, 20 Jan 2024 21:46:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C721642207;
-	Sat, 20 Jan 2024 21:45:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C721642207
+	by smtp4.osuosl.org (Postfix) with ESMTP id 467A541934;
+	Sat, 20 Jan 2024 21:46:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 467A541934
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2F63B1BF346
- for <buildroot@lists.busybox.net>; Sat, 20 Jan 2024 21:45:25 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 290E11BF346
+ for <buildroot@lists.busybox.net>; Sat, 20 Jan 2024 21:46:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 15B084013F
- for <buildroot@lists.busybox.net>; Sat, 20 Jan 2024 21:45:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 15B084013F
+ by smtp2.osuosl.org (Postfix) with ESMTP id F19554013F
+ for <buildroot@lists.busybox.net>; Sat, 20 Jan 2024 21:46:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F19554013F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zH49XVtQe1nI for <buildroot@lists.busybox.net>;
- Sat, 20 Jan 2024 21:45:24 +0000 (UTC)
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C4F4140012
- for <buildroot@buildroot.org>; Sat, 20 Jan 2024 21:45:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C4F4140012
+ with ESMTP id zVGPTTOyAcTM for <buildroot@lists.busybox.net>;
+ Sat, 20 Jan 2024 21:46:41 +0000 (UTC)
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BD85540012
+ for <buildroot@buildroot.org>; Sat, 20 Jan 2024 21:46:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD85540012
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id D058513F899;
- Sat, 20 Jan 2024 22:45:19 +0100 (CET)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id A1EB913F81D;
+ Sat, 20 Jan 2024 22:46:36 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 20 Jan 2024 22:45:19 +0100
-Date: Sat, 20 Jan 2024 22:45:19 +0100
+ Sat, 20 Jan 2024 22:46:36 +0100
+Date: Sat, 20 Jan 2024 22:46:36 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Adam Duskett <adam.duskett@amarulasolutions.com>
-Message-ID: <Zaw-71RHMeYgH6yO@landeda>
+Message-ID: <Zaw_PDsLArK-KQj-@landeda>
 References: <20240117225049.28443-1-adam.duskett@amarulasolutions.com>
- <20240117225049.28443-3-adam.duskett@amarulasolutions.com>
+ <20240117225049.28443-9-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20240117225049.28443-3-adam.duskett@amarulasolutions.com>
+In-Reply-To: <20240117225049.28443-9-adam.duskett@amarulasolutions.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1705787121;
- bh=65XrTu2ssZc7K0ntYr4r0kqLsl5UQjBMlHtF+6Minxo=;
+ d=free.fr; s=smtp-20201208; t=1705787198;
+ bh=JWxu9nLkuwnqffEOnPFHBmfCnEEJxSyDGr8NICyXZog=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=N4CnCzzOmt6RtZUOUunAi/nQ/EN3PObMg8umHs1LN7Pet11noyBnN72gORhzpWrMp
- uucfhG4+Rk27fM/maLiIq8jPk9tVQSdEah7uRUFA00ZqSYZJLyBaFOPUwtGNskO0Jl
- f25RESPFVuApb9xZqcb8TxjKmMJZKBiqGcWkpn7b2/ASoWrmx4DVMTgT66PjgCO+xJ
- jmu+1hWFOnQzb36KUVUa2yK0A4LqRAQWJX+ArEhM6N8oYHId/jyyBfEHSbGxhmZDgF
- g/moOtulRZrULHTRsT4jMauaN5z2XUODCZOHh1t3YDel9GsHPuvwVUCEJsV/1HBZZu
- 1XVQ0JuSW6zYg==
+ b=aU/rRcfC/vd8q3lqXdwm8NTmB7Ffth1u0i7bKrgCvIENaGJWYPD9MW/yj6tVqIc2z
+ hgbvLdTZ1Aq3yfbKdD+pAfDed6ho7wmZMkI/q2b/MVFmvlP8985pXXu2l984Ic2SKW
+ plEpRu4ZUbBkwglFy+hKCeuF7xqK5Sos7qRM83k2u9DpeIS/28B7kcIkiBbYbdTvsA
+ ibDhFVVF1ZAw9WguB21KZxAHxDAw10+pxbgOJWcVsceR6Uyz9ObGosP2i41AFb4tnZ
+ CPM2BaLUPz5JQmxtWKmZdWlrSknznxe6v6nR9Vq3mr17EKCvmupSt3sxK/XhMGCee3
+ ar6R/Ui5JhJiQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=N4CnCzzO
-Subject: Re: [Buildroot] [PATCH v3 02/10] package/depot-tools: bump version
- to 8d14454ba4a35fd9d2483842b08815a2357ec86f
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=aU/rRcfC
+Subject: Re: [Buildroot] [PATCH v3 08/10] package/flutter-gallery: add a
+ configure step
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,44 +85,48 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 Adam, All,
 
 On 2024-01-17 15:50 -0700, Adam Duskett spake thusly:
-
-The comments you provided in the cover letter really belonged to this
-commmit log, so I copied that as-is (apart for line-wrapping).
-
+> To make the next patch easier to understand, add a configure step to the
+> flutter-gallery.mk file. The `$(HOST_FLUTTER_SDK_BIN_FLUTTER) build bundle`
+> command is placed in the configure step because it generates several files
+> needed for the flutter_gen_snapshot tool to generate the target .so file.
+> 
 > Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+> ---
+>  package/flutter-gallery/flutter-gallery.mk | 11 ++++++++---
+>  1 file changed, 8 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/flutter-gallery/flutter-gallery.mk b/package/flutter-gallery/flutter-gallery.mk
+> index 57a476b1ab..50ddd9ffba 100644
+> --- a/package/flutter-gallery/flutter-gallery.mk
+> +++ b/package/flutter-gallery/flutter-gallery.mk
+> @@ -14,12 +14,17 @@ FLUTTER_GALLERY_DEPENDENCIES = \
+>  
+>  FLUTTER_GALLERY_INSTALL_DIR = $(TARGET_DIR)/usr/share/flutter/gallery/$(FLUTTER_ENGINE_RUNTIME_MODE)
+>  
+> -define FLUTTER_GALLERY_BUILD_CMDS
+> +define FLUTTER_GALLERY_CONFIGURE_CMDS
+>  	cd $(@D) && \
+>  		FLUTTER_RUNTIME_MODES=$(FLUTTER_ENGINE_RUNTIME_MODE) \
+>  		$(HOST_FLUTTER_SDK_BIN_FLUTTER) clean && \
+> -		$(HOST_FLUTTER_SDK_BIN_FLUTTER) packages get && \
+> +		$(HOST_FLUTTER_SDK_BIN_FLUTTER) pub get && \
 
-Applied to master, thanks.
+As disucssed on IRC< that belonged to a spearate patch, so I split this
+patch int two, and applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/depot-tools/depot-tools.hash | 2 +-
->  package/depot-tools/depot-tools.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/depot-tools/depot-tools.hash b/package/depot-tools/depot-tools.hash
-> index 2109096901..70218e4658 100644
-> --- a/package/depot-tools/depot-tools.hash
-> +++ b/package/depot-tools/depot-tools.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256  8e0bccdd6b1231f58d5453dc14a5e1d195295ac8d466dec34961e951e946b50b  depot-tools-4e87f5bfe244e903f712408ea68dc3c3a6fe2d00-br1.tar.gz
-> +sha256  5da23d7558975093c6a732f5743c7f224d16dd3f878a6a1b577b1b127a4098cc  depot-tools-8d14454ba4a35fd9d2483842b08815a2357ec86f-br1.tar.gz
->  sha256  984523ee987f4e8b72d61df37d8f1189a7077cd4b77e41a397e35593b297a29d  LICENSE
-> diff --git a/package/depot-tools/depot-tools.mk b/package/depot-tools/depot-tools.mk
-> index e3b840f29a..634258ffbb 100644
-> --- a/package/depot-tools/depot-tools.mk
-> +++ b/package/depot-tools/depot-tools.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -DEPOT_TOOLS_VERSION = 4e87f5bfe244e903f712408ea68dc3c3a6fe2d00
-> +DEPOT_TOOLS_VERSION = 8d14454ba4a35fd9d2483842b08815a2357ec86f
->  DEPOT_TOOLS_SITE = https://chromium.googlesource.com/chromium/tools/depot_tools
->  DEPOT_TOOLS_SITE_METHOD = git
->  DEPOT_TOOLS_LICENSE = BSD-3-Clause
+> -		$(HOST_FLUTTER_SDK_BIN_FLUTTER) build bundle && \
+> +		$(HOST_FLUTTER_SDK_BIN_FLUTTER) build bundle
+> +endef
+> +
+> +define FLUTTER_GALLERY_BUILD_CMDS
+> +	cd $(@D) && \
+> +		FLUTTER_RUNTIME_MODES=$(FLUTTER_ENGINE_RUNTIME_MODE) \
+>  		$(HOST_FLUTTER_SDK_BIN_DART_BIN) package:gallery/main.dart && \
+>  		$(HOST_FLUTTER_SDK_BIN_ENV) $(FLUTTER_ENGINE_GEN_SNAPSHOT) \
+>  			--deterministic \
 > -- 
 > 2.43.0
 > 
