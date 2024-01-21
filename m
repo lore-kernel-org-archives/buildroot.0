@@ -4,83 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DEF33C47422
-	for <buildroot@archiver.kernel.org>; Sun, 21 Jan 2024 12:52:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58EC7C47422
+	for <buildroot@archiver.kernel.org>; Sun, 21 Jan 2024 13:12:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1EAD54087A;
-	Sun, 21 Jan 2024 12:52:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1EAD54087A
+	by smtp4.osuosl.org (Postfix) with ESMTP id A4FD041680;
+	Sun, 21 Jan 2024 13:12:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A4FD041680
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UKJjsTgaisDp; Sun, 21 Jan 2024 12:52:57 +0000 (UTC)
+	with ESMTP id M3ZxWPXNx0fO; Sun, 21 Jan 2024 13:12:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 626534030B;
-	Sun, 21 Jan 2024 12:52:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 626534030B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 26EC21BF3DF
- for <buildroot@lists.busybox.net>; Sun, 21 Jan 2024 12:52:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DEA13416A5;
+	Sun, 21 Jan 2024 13:12:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DEA13416A5
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5A4571BF577
+ for <buildroot@lists.busybox.net>; Sun, 21 Jan 2024 13:12:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F029960AE2
- for <buildroot@lists.busybox.net>; Sun, 21 Jan 2024 12:52:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F029960AE2
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3283E82690
+ for <buildroot@lists.busybox.net>; Sun, 21 Jan 2024 13:12:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3283E82690
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rd-Xe9lEkKNy for <buildroot@lists.busybox.net>;
- Sun, 21 Jan 2024 12:52:53 +0000 (UTC)
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 74FE860AE1
- for <buildroot@buildroot.org>; Sun, 21 Jan 2024 12:52:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 74FE860AE1
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost ([62.216.208.14]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MjjCL-1qhnDE1nOV-00lG4N; Sun, 21
- Jan 2024 13:47:39 +0100
-Date: Sun, 21 Jan 2024 13:47:38 +0100
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20240121134738.6f0d953b@gmx.net>
-In-Reply-To: <7E2BA7C4-0A2C-40FF-AF48-25BD637CFB7A@benettiengineering.com>
-References: <PH0PR19MB540925F1A9987E1D7F58BB0DD0762@PH0PR19MB5409.namprd19.prod.outlook.com>
- <7E2BA7C4-0A2C-40FF-AF48-25BD637CFB7A@benettiengineering.com>
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.39; x86_64-suse-linux-gnu)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Y5SCkExEq5k6 for <buildroot@lists.busybox.net>;
+ Sun, 21 Jan 2024 13:12:12 +0000 (UTC)
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0CF638267C
+ for <buildroot@buildroot.org>; Sun, 21 Jan 2024 13:12:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0CF638267C
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 019C813F8B5;
+ Sun, 21 Jan 2024 14:12:05 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 21 Jan 2024 14:12:05 +0100
+Date: Sun, 21 Jan 2024 14:12:05 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Peter Korsgaard <peter@korsgaard.com>
+Message-ID: <Za0YJSXFxMiKvO0j@landeda>
+References: <20240111105621.2321957-1-peter@korsgaard.com>
+ <20240111105621.2321957-2-peter@korsgaard.com>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:nvrQ5vbdVgW5bETWYn4f1RD3WUaUK/eGwOUucdor27b1EN2RKk0
- 9EpnpUhFcXHiH7uLdRr4aA92GTXNTpJ49UUhsYiLFK0g2MzoZssUMBqoF+ffuM+YglDmmtk
- Si5wmdCJQ3W4kx1/LTvZQ3Ny8J97ggxjWQC4yhO34DrDAafDoeEKIh0UbpZiULwt5IivRd+
- dHl4rcWeljIPl+uC65eEg==
-UI-OutboundReport: notjunk:1;M01:P0:Hf+fZnUvKEs=;nalM2gX8DltMoIDGvpER+WHugJP
- Ao0p9YR/XXLBecS11SnEsOwkJ+NlxB1G4+0nqCrvVSUXHsTk1bdCYoQkx47x8xzrtZkQoY5yT
- Vxu7i6+HVJ+QMCW9tbyPPbWsxK+2gfbli1hiH+WoT7chZyxq+SR/Yh5UV27wYkPLSTTyNAK+f
- HokjLH8cdj/a4P7xIOKZs+0oL0NyjaNHiTAC6bPgWttOE3CeXSDtsy/b1HhUzyRuc/qioLMJ5
- IDJG0cjmULeZnWeXISkJQdKTq1a/5+UMidGU/5h0BP1x1BHnSccdqmVPUCvd0yKkpbuK4KELh
- XHr2Kdc/uN/66FibXpUAYO2S0JI54S90nYr8jUW04LQiif9Y48LclF1Swxi4PqvlFw48vROCZ
- PGgqVFxw47vDkE616Rkg3EZEYLWOn2wl8GOy7Ygwo3qh+5iK7aXYu4QYhlpeJf6ENz78yyAiP
- vq/Kz5XnBsUwYmC+orOOytRowE/2YBy1Fa01YRiKeujlJbVbN51EsacYkBpapT274abWaN2se
- l4Ki+XI286K2l1X6DhdRmAfbV7YUbM3fpnsm3fjgQx/cVhaJ1nfuRpbtKQ1K6LcKX6bqafp1u
- eeDjIxAbAS/yItujdlwo0k9Xstymex3+XsXOZhA/IKa/1C2PlfK36JZS96CCVw+o8joF/Jh00
- gpERePgQ3nhDyRmuqAHvKOQgv2RdUgwuBge9HHLesLtkUaOp3kzVmM1Q9PBgkWmkx2NGHfliJ
- DD4yb8ticvSt3cjHFpDeCDqPyZDDOZCzfyRsaT95JJm9rmxUgWQgBUKuevdli5/hTSQR/G7yV
- +AS8ygdLbm9EalnX92abVaswHgIIPLBDRG10NFh74sUOncTkKdxXREvJ1+ewljXPF6taKQFn6
- NOycb1aRnvq9xwAAsSpDGISeyhe01eVOhKBdldBDSja2exMxFw0leGofHlKzWbK+XVrMRZASG
- +QRh4g+ahr5aLTNf4v5Sg+pmlWs=
+Content-Disposition: inline
+In-Reply-To: <20240111105621.2321957-2-peter@korsgaard.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=gmx.net; 
- s=s31663417; t=1705841570; x=1706446370; i=ps.report@gmx.net;
- bh=RxjtH+g1+Ojjdo6/Ayz48QAAAjTkPiFgdRzyWdhrJqQ=;
- h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:
- References;
- b=mOktzmPD1/wgW3EFNu7mzD8FSTpcw6YWy7c1BUVGFVkYzbmjkJvCeaUMKvu8HRon
- IYq6w9N2sIgQUS8TBhJA+uwB/C9tUDYkMLXQxPaKf2cnSrEp8Uqd0e6EQVKZXroOg
- Zo3+FJN2p+kCaMF9UstJHoa6KQAYpS6ZHiYk8qUFCALgOXg2nvKThmf+EoIORXLwp
- jLAPtwvl+5OgwqkKveqXx5hHvdoql0XVS+QieWNU6IMqI/gAg5Obby/kVzVtW/lu6
- W7AfvsuMmRRxkNcgLZm8sRtK6wpbfnU2M5HsvwW0kX7DkYvm28EIYVLXEX7q7Tccp
- IVhkjzg3pglVpGdCYw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net
- header.a=rsa-sha256 header.s=s31663417 header.b=mOktzmPD
-Subject: Re: [Buildroot] [Help] Run Chocolate-doom
+ d=free.fr; s=smtp-20201208; t=1705842729;
+ bh=71mGZHv+s3TEaCRrBDeQkL9ap7L1JODfCVmr90wCXL0=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=bDgQ4oqmgTT/s8HNN5PwiK2IC0KMsJF7jIdqsUNTU3vFllGuADBEGiaiL3egmjNMj
+ /9V+pIDKtWkqcLcz9bnzKNSIdJpTQukO7j50FiI89IspepXNrB+2XyKtaxSibN1dbq
+ 7kiJ04b521AAsu12SI/q4/HMKXWiyCT5S2x3aRLbvQLIQp/1r4GELcJirzLA8x8FC3
+ 72zKelJNWePKT/NGfP3vcnUEuLNyNc1pET7YSgYLPyAqqr06krmQyWj50BV5BVZCOA
+ 2X3ZiN71fNNd/LZvnvQ6q2o3QMSvjB04JLSQepvLC2vR/h+NmAPY1SHMOun7rdXqTc
+ RmpednWHjM7fg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=bDgQ4oqm
+Subject: Re: [Buildroot] [PATCH 2/2] package/micropython: drop GIT_DIR=.
+ workaround
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,40 +76,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Peter Seiderer via buildroot <buildroot@buildroot.org>
-Reply-To: Peter Seiderer <ps.report@gmx.net>
-Cc: franco ariel <fran.millocs@live.com.ar>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Chris Packham <judge.packham@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gU3VuLCAyMSBKYW4gMjAyNCAxMjoyMjo0NiArMDEwMCwgR2l1bGlvIEJlbmV0dGkgPGdpdWxp
-by5iZW5ldHRpQGJlbmV0dGllbmdpbmVlcmluZy5jb20+IHdyb3RlOgoKPiBIaSBGcmFuY28sCj4g
-Cj4gPiBJbCBnaW9ybm8gMjEgZ2VuIDIwMjQsIGFsbGUgb3JlIDA3OjQ4LCBmcmFuY28gYXJpZWwg
-PGZyYW4ubWlsbG9jc0BsaXZlLmNvbS5hcj4gaGEgc2NyaXR0bzoKPiA+IAo+ID4g77u/Cj4gPiBI
-ZWxsbywKPiA+IEknbSB0cnlpbmcgdG8gdGFrZSBteSBmaXJzdCBzdGVwcyBvbiBidWlsZHJvb3Qg
-dXNpbmcgbXkgUmFzcGJlcnJ5IHBpIDQgYW5kIEknbSBqdXN0IHRyeWluZyB0byBmaWd1cmUgb3V0
-IGhvdyB0byBydW4gdGhlIENob2NvbGF0ZS1Eb29tLCBJIGFscmVhZHkgaW5zdGFsbGVkIGFuZCB3
-aGVuIEkgdHJ5IHRvIHJ1biBpdCwgaXQgdGhyb3dzIHRoZSBmb2xsb3dpbmcgZXJyb3I6Cj4gPiBG
-YWlsZWQgdG8gaW5pdGlhbGl6ZSB2aWRlbzogTm8gYXZhaWxhYmxlIHZpZGVvIGRldmljZS4gIAo+
-IAo+IEkgdGhpbmsgeW91IGhhdmUgbm8gcmVnaXN0ZXJlZCB2aWRlbyBvdXRwdXQuCj4gWW91IGNh
-biBjaGVjayB0aGlzIGJ5IGNoZWNraW5nIGRtZXNnLgo+IFRoaXMgY291bGQgaGFwcGVuIGlmIHlv
-dSBkb27igJl0IGJ1aWxkIGV1ZGV2IG9yIG1kZXYgdG8gbGV0IGJ1c3lib3ggdG8gYXV0b21hdGlj
-YWxseSByZWdpc3RlciBkZXZpY2UgZHJpdmVycyB3aGVuIGRldmljZXMgYXJlIGZvdW5kLgo+IFNv
-IHlvdSBjb3VsZCB0cnkgdG8gcmVidWlsZCBmcm9tIHNjcmF0Y2ggdXNpbmcgYSBkeW5hbWljIGRl
-dmljZSBoYW5kbGluZyhldWRldikuCgpBZGQgYWRkCgpkdG92ZXJsYXk9dmM0LWttcy12M2QtcGk0
-Cgp0byB5b3VyIGJvby1wYXRpdGlvbiBjb25maWcudHh0IGZpbGUKClJlZ2FyZHMsClBldGVyCgoK
-PiAKPiBPdGhlcndpc2UgY2FuIHlvdSBwYXN0ZWJpbiB5b3VyIGRlZmNvbmZpZz8KPiAKPiBCZXN0
-IHJlZ2FyZHMKPiBHaXVsaW8KPiAKPiA+IAo+ID4gSSBhbHJlYWR5IGluc3RhbGxlZCBhbGwgdGhl
-IEdyYXBoaWNzIGxpYnJhcmllcywgU0RMMiwgZGlyZWN0ZmIsIGV0Yy4KPiA+IE1heWJlIEkgYW0g
-bWlzc2luZyBzb21ldGhpbmcuCj4gPiAKPiA+IFRoYW5rIHlvdSwKPiA+IEZyYW5jby4gCj4gPiAK
-PiA+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gPiBi
-dWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4gPiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+ID4gaHR0
-cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290ICAKPiAK
-PiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGJ1aWxk
-cm9vdCBtYWlsaW5nIGxpc3QKPiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+IGh0dHBzOi8vbGlz
-dHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAoKX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlz
-dApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFp
-bG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Peter, All,
+
+On 2024-01-11 11:56 +0100, Peter Korsgaard spake thusly:
+> Now that it is handled globally in TARGET_MAKE_ENV.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/micropython/micropython.mk | 5 -----
+>  1 file changed, 5 deletions(-)
+> 
+> diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
+> index e6eb536ea5..3d356c51d8 100644
+> --- a/package/micropython/micropython.mk
+> +++ b/package/micropython/micropython.mk
+> @@ -14,11 +14,6 @@ MICROPYTHON_LICENSE = MIT, BSD-1-Clause, BSD-3-Clause, Zlib
+>  MICROPYTHON_LICENSE_FILES = LICENSE
+>  MICROPYTHON_DEPENDENCIES = host-pkgconf libffi host-python3
+>  
+> -# Set GIT_DIR so package won't use buildroot's version number
+> -MICROPYTHON_MAKE_ENV = \
+> -	$(TARGET_MAKE_ENV) \
+> -	GIT_DIR=.
+
+I was way too sloppy when applying this patch: MICROPYTHON_MAKE_ENV
+previously contained $(TARGET_MAKE_ENV), but now it is totally unset,
+and the expansions of it have not been replaced with TARGET_MAKE_ENV,
+leading to all sorts of build faiulures, like:
+
+    LINK build-standard/micropython
+    arm-linux-gcc: ERROR: unsafe header/library path used in cross-compilation: '-L/usr/lib64/../lib64'
+
+I suspect it is also the issue reported by Julien in his micropython
+runtime test:
+
+    https://patchwork.ozlabs.org/project/buildroot/patch/20240116210556.589407-1-ju.o@free.fr/
+
+I'll push a fixup patch that uses TARGET_MAKE_ENV
+
+Regards,
+Yann E. MORIN.
+
+>  # Use fallback implementation for exception handling on architectures that don't
+>  # have explicit support.
+>  ifeq ($(BR2_i386)$(BR2_x86_64)$(BR2_arm)$(BR2_armeb),)
+> -- 
+> 2.39.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
