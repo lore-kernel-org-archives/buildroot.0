@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E4F9C47422
-	for <buildroot@archiver.kernel.org>; Sun, 21 Jan 2024 13:59:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 687EDC47422
+	for <buildroot@archiver.kernel.org>; Sun, 21 Jan 2024 15:32:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 87B20400CE;
-	Sun, 21 Jan 2024 13:59:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 87B20400CE
+	by smtp2.osuosl.org (Postfix) with ESMTP id D127240280;
+	Sun, 21 Jan 2024 15:32:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D127240280
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gHYwcIAqlaoI; Sun, 21 Jan 2024 13:59:27 +0000 (UTC)
+	with ESMTP id spnxtrHk7zeq; Sun, 21 Jan 2024 15:32:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0E1774037E;
-	Sun, 21 Jan 2024 13:59:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E1774037E
+	by smtp2.osuosl.org (Postfix) with ESMTP id B722F40556;
+	Sun, 21 Jan 2024 15:32:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B722F40556
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6F4B31BF20F
- for <buildroot@lists.busybox.net>; Sun, 21 Jan 2024 13:59:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3D10F1BF577
+ for <buildroot@lists.busybox.net>; Sun, 21 Jan 2024 15:32:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4E83D417A2
- for <buildroot@lists.busybox.net>; Sun, 21 Jan 2024 13:59:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E83D417A2
+ by smtp4.osuosl.org (Postfix) with ESMTP id E9905417DA
+ for <buildroot@lists.busybox.net>; Sun, 21 Jan 2024 15:32:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E9905417DA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id C8FDxKC0M9Ck for <buildroot@lists.busybox.net>;
- Sun, 21 Jan 2024 13:59:23 +0000 (UTC)
+ with ESMTP id rTjiZzrPwX92 for <buildroot@lists.busybox.net>;
+ Sun, 21 Jan 2024 15:32:05 +0000 (UTC)
 Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 262A141749
- for <buildroot@buildroot.org>; Sun, 21 Jan 2024 13:59:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 262A141749
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A0674417E5
+ for <buildroot@buildroot.org>; Sun, 21 Jan 2024 15:32:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A0674417E5
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 39AF313F8C0;
- Sun, 21 Jan 2024 14:59:18 +0100 (CET)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id A88E413F880;
+ Sun, 21 Jan 2024 16:31:59 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 21 Jan 2024 14:59:18 +0100
-Date: Sun, 21 Jan 2024 14:59:18 +0100
+ Sun, 21 Jan 2024 16:31:59 +0100
+Date: Sun, 21 Jan 2024 16:31:59 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Julien Olivain <ju.o@free.fr>
-Message-ID: <Za0jNoEFYccULASy@landeda>
-References: <20240116210556.589407-1-ju.o@free.fr>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <Za0478tdOijKbdho@landeda>
+References: <20240116183629.365115-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20240116210556.589407-1-ju.o@free.fr>
+In-Reply-To: <20240116183629.365115-1-fontaine.fabrice@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1705845560;
- bh=kEIg5DKJgJ6bUGELeZsKtJMRMII52gbShiiVtq73ELM=;
+ d=free.fr; s=smtp-20201208; t=1705851122;
+ bh=vE6UndKQeJ4IL0W2IGhlHhPAMlmcParuU7DErXEf7jE=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=AbioU1e35zQOlipUsuX1QP8Uk7ybNBE9JoEFG0ehmm+4/s7eBPwcKuqM3A6kKoFWn
- 2TY9r4wW1XfkR2PJw3bkpeNMab4ihIdUm4QLXfcdf/UjPOuvILPHfGbqQXurtkXcqS
- XVyaj0ggJ/NexJCDvAUwhCTsDNoVJZA+/Pf77RcpjAQjN++KEwhbJCpy1uXW/SBlzz
- 4Nx4TNBD6wx+ksmUTfEm21+njXgDGpnOBLwI7jnI8Ny23cs+D4FpyYBTZdVwkcurl2
- J2TkkQ+VJ9Ns+Eb1UOV1ssiL0+Hd3Ut9r8RQlPu5mQuxbdluIamF2etTAEFuF9h4az
- h6L02cVnprY8w==
+ b=eoYmo89P18beTIzPtlsx7VXjBqxam/MgCWIz17SjbSNP1zpxeXVVuyvLraDwOq+aF
+ K/dPwk6I2gf2ol1V2mN+cowcIik3lPQCpNVkHcTeEhFOwHYLlL171hdaH8boAYZknJ
+ 8L36SHi+Lv8tn6NJ4CK2KmqkyMhyTj2E2jLJWmGUhCETKysxenYuWSAEgvgPvU4XWf
+ WkxP1MQGa1vWzWpMOx88S7QfbIfGn/Y8murtFnoD1Ig6dcxbAZcFlUly4v/kjsqxiw
+ cSesIymOgNOVyQk3k0F76efHxdq9dabmB7VPfX2WKHuLgPkYPO6cw4v79n6iZ2mid5
+ LrPZIomaRRrKg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=AbioU1e3
-Subject: Re: [Buildroot] [PATCH 1/1] support/testing: add micropython
- runtime test
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=eoYmo89P
+Subject: Re: [Buildroot] [PATCH 1/1] package/micropython: libffi is optional,
+ not mandatory
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,173 +75,70 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Chris Packham <judge.packham@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Julien, All,
+Fabrice, All,
 
-On 2024-01-16 22:05 +0100, Julien Olivain spake thusly:
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
+On 2024-01-16 19:36 +0100, Fabrice Fontaine spake thusly:
+> libffi is optional, not mandatory since bump to version 1.22.0 in commit
+> 1e12b7dd49d1c64a5195f226e9e4da21e84f5d0c and
+> https://github.com/micropython/micropython/commit/89b320737652829edbab921e86d7ad3962d86d9e
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-I did a few cosmetic changes, mostly: run commands on the target, but
-run the verification in the infra. For example, I changed constructs
-like:
-    run("micropython -c 'foo = something(); assert foo == 0'")
-into:
-    out = run("micropython -c 'print(something())'")
-    self.assertEqual(int(out[0]), 0, "error message")
-
-Indeed, we don't want to be using the tested program to validate that
-the tested program works as expected...
-
-Applied to master with those few changes, thanks!
-
-> ---
-> Test is working on tag 2023.11, but fails on tag 2023.11.1 and branch
-> master at commit e07402a (micropython fail to compile, maybe due to
-> the bump to version 1.22.0?).
-[--SNIP--]
->     /buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-none-linux-gnu/13.2.1/../../../../aarch64-none-linux-gnu/bin/ld: build-standard/modffi.o: in function 'char2ffi_type':
->     /buildroot/output/build/micropython-1.22.0/ports/unix/modffi.c:119:(.text.char2ffi_type+0x28): undefined reference to 'ffi_type_sint8'
->     [...and many others...]
-
-The culprit was commit 9024e1866523 (package/micropython: drop GIT_DIR=.
-workaround), for which I pushed a fixup, as 6c9be611a8b7.
+Applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
-> The test is also working when patch [1] is applied, because libffi is
-> no longer compiled.
-> 
-> [1] https://patchwork.ozlabs.org/project/buildroot/patch/20240116183629.365115-1-fontaine.fabrice@gmail.com/
 > ---
->  DEVELOPERS                                    |  2 +
->  .../testing/tests/package/test_micropython.py | 66 +++++++++++++++++++
->  .../rootfs-overlay/root/mandel.py             | 25 +++++++
->  3 files changed, 93 insertions(+)
->  create mode 100644 support/testing/tests/package/test_micropython.py
->  create mode 100755 support/testing/tests/package/test_micropython/rootfs-overlay/root/mandel.py
+>  package/micropython/Config.in      | 1 -
+>  package/micropython/micropython.mk | 9 ++++++++-
+>  2 files changed, 8 insertions(+), 2 deletions(-)
 > 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index f5b04937b6..0f961ea486 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1789,6 +1789,8 @@ F:	support/testing/tests/package/test_lzip.py
->  F:	support/testing/tests/package/test_lsof.py
->  F:	support/testing/tests/package/test_lz4.py
->  F:	support/testing/tests/package/test_lzop.py
-> +F:	support/testing/tests/package/test_micropython.py
-> +F:	support/testing/tests/package/test_micropython/
->  F:	support/testing/tests/package/test_mtools.py
->  F:	support/testing/tests/package/test_ncdu.py
->  F:	support/testing/tests/package/test_nftables.py
-> diff --git a/support/testing/tests/package/test_micropython.py b/support/testing/tests/package/test_micropython.py
-> new file mode 100644
-> index 0000000000..6d213c7ea5
-> --- /dev/null
-> +++ b/support/testing/tests/package/test_micropython.py
-> @@ -0,0 +1,66 @@
-> +import os
+> diff --git a/package/micropython/Config.in b/package/micropython/Config.in
+> index b5dc47279d..30161c8b70 100644
+> --- a/package/micropython/Config.in
+> +++ b/package/micropython/Config.in
+> @@ -2,7 +2,6 @@ config BR2_PACKAGE_MICROPYTHON
+>  	bool "micropython"
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+>  	depends on !BR2_STATIC_LIBS
+> -	select BR2_PACKAGE_LIBFFI
+>  	help
+>  	  Micro Python is a lean and fast implementation of the Python
+>  	  3 programming language that is optimised to run on a
+> diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
+> index 6e0af59f06..c7873ab62a 100644
+> --- a/package/micropython/micropython.mk
+> +++ b/package/micropython/micropython.mk
+> @@ -12,7 +12,7 @@ MICROPYTHON_SOURCE = micropython-$(MICROPYTHON_VERSION).tar.xz
+>  # and most of the copied code is not used in the unix build.
+>  MICROPYTHON_LICENSE = MIT, BSD-1-Clause, BSD-3-Clause, Zlib
+>  MICROPYTHON_LICENSE_FILES = LICENSE
+> -MICROPYTHON_DEPENDENCIES = host-pkgconf libffi host-python3
+> +MICROPYTHON_DEPENDENCIES = host-python3
+>  MICROPYTHON_CPE_ID_VENDOR = micropython
+>  
+>  # Use fallback implementation for exception handling on architectures that don't
+> @@ -36,6 +36,13 @@ MICROPYTHON_MAKE_OPTS += \
+>  	LDFLAGS_EXTRA="$(TARGET_LDFLAGS)" \
+>  	CWARN=
+>  
+> +ifeq ($(BR2_PACKAGE_LIBFFI),y)
+> +MICROPYTHON_DEPENDENCIES += host-pkgconf libffi
+> +MICROPYTHON_MAKE_OPTS += MICROPY_PY_FFI=1
+> +else
+> +MICROPYTHON_MAKE_OPTS += MICROPY_PY_FFI=0
+> +endif
 > +
-> +import infra.basetest
-> +
-> +
-> +class TestMicroPython(infra.basetest.BRTest):
-> +    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-> +        f"""
-> +        BR2_PACKAGE_MICROPYTHON=y
-> +        BR2_ROOTFS_OVERLAY="{infra.filepath("tests/package/test_micropython/rootfs-overlay")}"
-> +        BR2_TARGET_ROOTFS_CPIO=y
-> +        # BR2_TARGET_ROOTFS_TAR is not set
-> +        """
-> +
-> +    def run_upy_code(self, python_code):
-> +        cmd = f'micropython -c "{python_code}"'
-> +        self.assertRunOk(cmd)
-> +
-> +    def test_run(self):
-> +        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-> +        self.emulator.boot(arch="armv5",
-> +                           kernel="builtin",
-> +                           options=["-initrd", cpio_file])
-> +        self.emulator.login()
-> +
-> +        # The micropython binary can execute.
-> +        self.assertRunOk("micropython -h")
-> +
-> +        # Check implementation is 'micropython'.
-> +        py_code = "import sys ; assert sys.implementation.name == 'micropython'"
-> +        self.run_upy_code(py_code)
-> +
-> +        # Query interpreter version and implementation.
-> +        py_code = "import sys ; "
-> +        py_code += "print('Version:', sys.version) ; "
-> +        py_code += "print('Implementation:', sys.implementation)"
-> +        self.run_upy_code(py_code)
-> +
-> +        # Check micropython optimization are correctly reported.
-> +        for opt_level in range(4):
-> +            py_code = "import micropython ; "
-> +            py_code += "opt = micropython.opt_level() ; "
-> +            py_code += "print(opt) ; "
-> +            py_code += f"assert opt == {opt_level}"
-> +            cmd = f"micropython -O{opt_level} -c '{py_code}'"
-> +            self.assertRunOk(cmd)
-> +
-> +        # Check micropython can return a non-zero exit code.
-> +        expected_code = 123
-> +        py_code = "import sys ; "
-> +        py_code += f"sys.exit({expected_code})"
-> +        cmd = f'micropython -c "{py_code}"'
-> +        _, exit_code = self.emulator.run(cmd)
-> +        self.assertEqual(exit_code, expected_code)
-> +
-> +        # We check micropython computes correctly.
-> +        input_value = 1234
-> +        expected_output = str(sum(range(input_value)))
-> +        py_code = f"print(sum(range(({input_value}))))"
-> +        cmd = f'micropython -c "{py_code}"'
-> +        output, exit_code = self.emulator.run(cmd)
-> +        self.assertEqual(exit_code, 0)
-> +        self.assertEqual(output[0], expected_output)
-> +
-> +        # Finally, we check check a small script can execute.
-> +        self.assertRunOk("/root/mandel.py", timeout=10)
-> diff --git a/support/testing/tests/package/test_micropython/rootfs-overlay/root/mandel.py b/support/testing/tests/package/test_micropython/rootfs-overlay/root/mandel.py
-> new file mode 100755
-> index 0000000000..0552f6894c
-> --- /dev/null
-> +++ b/support/testing/tests/package/test_micropython/rootfs-overlay/root/mandel.py
-> @@ -0,0 +1,25 @@
-> +#! /usr/bin/env micropython
-> +
-> +from micropython import mem_info
-> +
-> +POINTS = list(",.:-;!/>)|&IH%*Z")
-> +
-> +
-> +def mandel():
-> +    for y in range(-15, 16):
-> +        for x in range(1, 85):
-> +            i = 0
-> +            r = 0
-> +            for k in range(112):
-> +                j = (r*r) - (i*i) - 2 + (x/25)
-> +                i = 2 * r * i + (y/10)
-> +                if j*j + i*i >= 11:
-> +                    break
-> +                r = j
-> +            print(POINTS[k & 0xF], end='')
-> +        print()
-> +
-> +
-> +if __name__ == '__main__':
-> +    mandel()
-> +    mem_info()
+>  define MICROPYTHON_BUILD_CMDS
+>  	$(MICROPYTHON_MAKE_ENV) $(MAKE) -C $(@D)/mpy-cross
+>  	$(MICROPYTHON_MAKE_ENV) $(MAKE) -C $(@D)/ports/unix \
 > -- 
 > 2.43.0
 > 
