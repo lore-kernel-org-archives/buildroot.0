@@ -4,65 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 301FAC47422
-	for <buildroot@archiver.kernel.org>; Sun, 21 Jan 2024 10:19:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F8B0C47422
+	for <buildroot@archiver.kernel.org>; Sun, 21 Jan 2024 10:20:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D20F94059F;
-	Sun, 21 Jan 2024 10:19:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D20F94059F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1C809403A7;
+	Sun, 21 Jan 2024 10:20:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C809403A7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hDGLXUIb-dN2; Sun, 21 Jan 2024 10:19:51 +0000 (UTC)
+	with ESMTP id SnmcF_DR3luw; Sun, 21 Jan 2024 10:20:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D738E40468;
-	Sun, 21 Jan 2024 10:19:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D738E40468
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DC6E31BF59D
- for <buildroot@lists.busybox.net>; Sun, 21 Jan 2024 10:19:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F159B40494;
+	Sun, 21 Jan 2024 10:20:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F159B40494
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 800391BF3F3
+ for <buildroot@lists.busybox.net>; Sun, 21 Jan 2024 10:20:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C2911408C9
- for <buildroot@lists.busybox.net>; Sun, 21 Jan 2024 10:19:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C2911408C9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5926A418F5
+ for <buildroot@lists.busybox.net>; Sun, 21 Jan 2024 10:20:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5926A418F5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ubkEMniRCWMj for <buildroot@lists.busybox.net>;
- Sun, 21 Jan 2024 10:19:37 +0000 (UTC)
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A8AD240547
- for <buildroot@buildroot.org>; Sun, 21 Jan 2024 10:19:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A8AD240547
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VL116D3YkmM2 for <buildroot@lists.busybox.net>;
+ Sun, 21 Jan 2024 10:20:01 +0000 (UTC)
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2F9B9418F0
+ for <buildroot@buildroot.org>; Sun, 21 Jan 2024 10:20:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F9B9418F0
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id E1B3A13F81D;
- Sun, 21 Jan 2024 11:19:33 +0100 (CET)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 7969E13F8A9;
+ Sun, 21 Jan 2024 11:19:57 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 21 Jan 2024 11:19:33 +0100
-Date: Sun, 21 Jan 2024 11:19:33 +0100
+ Sun, 21 Jan 2024 11:19:57 +0100
+Date: Sun, 21 Jan 2024 11:19:57 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Julien Olivain <ju.o@free.fr>
-Message-ID: <ZazvtXWIxmtURzUu@landeda>
-References: <20240112194627.112457-1-ju.o@free.fr>
+Message-ID: <Zazvzc8l00sd25pH@landeda>
+References: <20240113201532.121274-1-ju.o@free.fr>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20240112194627.112457-1-ju.o@free.fr>
+In-Reply-To: <20240113201532.121274-1-ju.o@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1705832376;
- bh=wlVasZjiLRSZg1DxCjOlBwrEPk1IKY/GHsa63+8Byx8=;
+ d=free.fr; s=smtp-20201208; t=1705832399;
+ bh=mYYMAl1l5urJCTBBQxIIJTkwt9i31XgJlVgsVWnFEcU=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=dq6cykkEXEOWvk/I0tzFHLJ3ddI/v1zqPgONA6+uooeHs39uTgkUlYOosT5HeQ51P
- ejTvpamiFoVdfkuWU2ZngvXJmxZ/Ya692nezFsG+6a3NkIUdpOjT/sK69COgwmjm8o
- /GlmPjT3PmwdRwjVxFheGKNeH5h/uV7VEFlShHwV+8nvIg52RhVSu2U9I02UnWyExe
- /mAYpVluWII/C1W53Dx/nBonR9nnQTRX1xQqqh5S8NhtHwyomRxunkpZWQp+HQWbYo
- Z1bNTxNGFecJyfEttMv89nexMZhiP1WFMVjeifUtCF7FIcv4lsgJcTo/kp017IH+R1
- 2D+a34+BefL8Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=Csbzdxl+MuD+UP982GxHHMf62mg7LgWtnketsvM5Jxf+j+3FIyi5q9Fis0veLw+N5
+ dRByuMaifMpQOIr+6EnQZAvfaA7/Gk6liS9ci4kuoHz9bWwAgbeRdmzKBIRrWXzC4t
+ 4GS/B5RBld1lS11BkZZY5TGVydQstBluobHsaQpaPwimfsXiu1QYdBQ1vj6zcN7C3f
+ MuuB7KCYNgHC0IR5i90ydEuB01jfvOIjtRlk6fCXSwfGmVGm+jAKL2d43ZzQja7QL8
+ 74NsmqkxGHAQCVnXiPNGOkDDCGEZevfAaS/bUo0ZV0ODIzAXnFWcRK/MaHSAXMyxic
+ hq9PMDBNl+yHA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=dq6cykkE
-Subject: Re: [Buildroot] [PATCH 1/1] support/testing: new apache runtime test
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Csbzdxl+
+Subject: Re: [Buildroot] [PATCH 1/1] support/testing: add netcat runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,7 +82,7 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Julien, All,
 
-On 2024-01-12 20:46 +0100, Julien Olivain spake thusly:
+On 2024-01-13 21:15 +0100, Julien Olivain spake thusly:
 > Signed-off-by: Julien Olivain <ju.o@free.fr>
 
 Applied to master, thanks.
@@ -92,37 +92,39 @@ Yann E. MORIN.
 
 > ---
 >  DEVELOPERS                                   |  1 +
->  support/testing/tests/package/test_apache.py | 23 ++++++++++++++++++++
->  2 files changed, 24 insertions(+)
->  create mode 100644 support/testing/tests/package/test_apache.py
+>  support/testing/tests/package/test_netcat.py | 41 ++++++++++++++++++++
+>  2 files changed, 42 insertions(+)
+>  create mode 100644 support/testing/tests/package/test_netcat.py
 > 
 > diff --git a/DEVELOPERS b/DEVELOPERS
-> index 94a89c63d5..11780db285 100644
+> index 94a89c63d5..d25f31f0ff 100644
 > --- a/DEVELOPERS
 > +++ b/DEVELOPERS
-> @@ -1759,6 +1759,7 @@ F:	support/testing/tests/package/sample_python_pyalsa.py
->  F:	support/testing/tests/package/sample_python_spake2.py
->  F:	support/testing/tests/package/test_acpica.py
->  F:	support/testing/tests/package/test_acpica/
-> +F:	support/testing/tests/package/test_apache.py
->  F:	support/testing/tests/package/test_brotli.py
->  F:	support/testing/tests/package/test_bzip2.py
->  F:	support/testing/tests/package/test_compressor_base.py
-> diff --git a/support/testing/tests/package/test_apache.py b/support/testing/tests/package/test_apache.py
+> @@ -1791,6 +1791,7 @@ F:	support/testing/tests/package/test_lz4.py
+>  F:	support/testing/tests/package/test_lzop.py
+>  F:	support/testing/tests/package/test_mtools.py
+>  F:	support/testing/tests/package/test_ncdu.py
+> +F:	support/testing/tests/package/test_netcat.py
+>  F:	support/testing/tests/package/test_nftables.py
+>  F:	support/testing/tests/package/test_nftables/
+>  F:	support/testing/tests/package/test_octave.py
+> diff --git a/support/testing/tests/package/test_netcat.py b/support/testing/tests/package/test_netcat.py
 > new file mode 100644
-> index 0000000000..f29f4e2524
+> index 0000000000..b3efa4c40b
 > --- /dev/null
-> +++ b/support/testing/tests/package/test_apache.py
-> @@ -0,0 +1,23 @@
+> +++ b/support/testing/tests/package/test_netcat.py
+> @@ -0,0 +1,41 @@
 > +import os
+> +import time
 > +
 > +import infra.basetest
 > +
 > +
-> +class TestApache(infra.basetest.BRTest):
+> +class TestNetCat(infra.basetest.BRTest):
 > +    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
 > +        """
-> +        BR2_PACKAGE_APACHE=y
+> +        BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
+> +        BR2_PACKAGE_NETCAT=y
 > +        BR2_TARGET_ROOTFS_CPIO=y
 > +        # BR2_TARGET_ROOTFS_TAR is not set
 > +        """
@@ -134,9 +136,25 @@ Yann E. MORIN.
 > +                           options=["-initrd", cpio_file])
 > +        self.emulator.login()
 > +
-> +        self.assertRunOk("httpd -V")
-> +        self.assertRunOk("wget http://localhost/index.html")
-> +        self.assertRunOk("grep -F 'It works!' index.html")
+> +        self.assertRunOk("nc --version")
+> +
+> +        in_file = "input.bin"
+> +        out_file = "output.bin"
+> +        port = 12345
+> +
+> +        cmd = f"dd if=/dev/urandom of={in_file} bs=1k count=1k"
+> +        self.assertRunOk(cmd)
+> +
+> +        cmd = f"nc -l -p {port} > {out_file} &"
+> +        self.assertRunOk(cmd)
+> +
+> +        time.sleep(1)
+> +
+> +        cmd = f"cat {in_file} | nc -c 127.0.0.1 {port}"
+> +        self.assertRunOk(cmd)
+> +
+> +        cmd = f"cmp {in_file} {out_file}"
+> +        self.assertRunOk(cmd)
 > -- 
 > 2.43.0
 > 
