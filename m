@@ -1,64 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39F04C47422
-	for <buildroot@archiver.kernel.org>; Sun, 21 Jan 2024 18:37:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68E5CC47422
+	for <buildroot@archiver.kernel.org>; Sun, 21 Jan 2024 19:13:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C6AE360B0B;
-	Sun, 21 Jan 2024 18:37:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C6AE360B0B
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FlhZoOm_iGmB; Sun, 21 Jan 2024 18:37:42 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1684160ABE;
-	Sun, 21 Jan 2024 18:37:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1684160ABE
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9C0BA1BF427
- for <buildroot@lists.busybox.net>; Sun, 21 Jan 2024 18:37:39 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7508240160
- for <buildroot@lists.busybox.net>; Sun, 21 Jan 2024 18:37:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7508240160
+	by smtp2.osuosl.org (Postfix) with ESMTP id BEDFF40136;
+	Sun, 21 Jan 2024 19:13:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BEDFF40136
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1Zy1UZLUcoto for <buildroot@lists.busybox.net>;
- Sun, 21 Jan 2024 18:37:38 +0000 (UTC)
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 615B840142
- for <buildroot@buildroot.org>; Sun, 21 Jan 2024 18:37:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 615B840142
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 842F913F8BA;
- Sun, 21 Jan 2024 19:37:35 +0100 (CET)
-From: Julien Olivain <ju.o@free.fr>
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id eVnE6hfy5bsA; Sun, 21 Jan 2024 19:13:46 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id E0A2940142;
+	Sun, 21 Jan 2024 19:13:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E0A2940142
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 30BED1BF3C9
+ for <buildroot@lists.busybox.net>; Sun, 21 Jan 2024 19:13:43 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 170AE813F6
+ for <buildroot@lists.busybox.net>; Sun, 21 Jan 2024 19:13:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 170AE813F6
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RFxUpAQckody for <buildroot@lists.busybox.net>;
+ Sun, 21 Jan 2024 19:13:39 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9DA8881397
+ for <buildroot@buildroot.org>; Sun, 21 Jan 2024 19:13:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9DA8881397
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 86BF0863EF; Sun, 21 Jan 2024 19:13:39 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 21 Jan 2024 19:37:28 +0100
-Message-ID: <20240121183728.50314-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.43.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1705862256;
- bh=xDUVtg2ARN4O34Pg7uC8TGLxS7j5p+XBhUQx4WwaG1I=;
- h=From:To:Cc:Subject:Date:From;
- b=lgpbRsEgAmThSQRbT8oigGBxR0ya/GjXWOxQ99qrep9sDN+AY7D8CTQpaNpBbUgCQ
- 8vbZINc8cQ4isZ9EduugVvXgC1hRasfzdOr8cgumDseIeqviVQ79zIbIzhr3aMvbZl
- N/Jthq7VxH9wdLuGvRLLljqgoV+dQGfUUjndJH0XhNYCJYWiESdmfru5PMs9SlOJmn
- 9ZkEj7gr3ohjz5ne62bVTQJt2rqv7nE7XGz3+9xtACcNKlxJ6vI6aX6iRmjnzKVrRs
- fYQTuuArveJp7iJud+fQmB+8pDZpLRZZZQwyCkiLxAdBO5jH6D5f2dL/A7jVYHjaFp
- ooNIkYIjK8vbg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=lgpbRsEg
-Subject: [Buildroot] [PATCH 1/1] package/highway: fix package license
+Date: Sun, 21 Jan 2024 20:12:12 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 3825cc8a38d8cb5cf1d27557b890db099e81b39c
+X-Git-Newrev: d59705cd383229eced90e0c8acc5e187b01991c2
+X-Patchwork-Hint: ignore
+Message-Id: <20240121191339.86BF0863EF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/highway: fix package license
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,11 +56,14 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
+
+commit: https://git.buildroot.net/buildroot/commit/?id=d59705cd383229eced90e0c8acc5e187b01991c2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Commit 0db3c08daf "package/highway: bump to version 1.0.7" updated the
 package, but forgot to update the legal information accordingly.
@@ -90,6 +79,7 @@ hash.
 [2] https://github.com/google/highway/releases/tag/1.0.6
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
  package/highway/highway.hash | 1 +
  package/highway/highway.mk   | 4 ++--
@@ -119,9 +109,6 @@ index 692794959a..bb87e5fc0d 100644
  HIGHWAY_INSTALL_STAGING = YES
  
  HIGHWAY_CXXFLAGS = $(TARGET_CXXFLAGS)
--- 
-2.43.0
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
