@@ -4,65 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F8B0C47422
-	for <buildroot@archiver.kernel.org>; Sun, 21 Jan 2024 10:20:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8AD08C47422
+	for <buildroot@archiver.kernel.org>; Sun, 21 Jan 2024 10:21:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1C809403A7;
-	Sun, 21 Jan 2024 10:20:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C809403A7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 39B75400FE;
+	Sun, 21 Jan 2024 10:21:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 39B75400FE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SnmcF_DR3luw; Sun, 21 Jan 2024 10:20:05 +0000 (UTC)
+	with ESMTP id gEzF_CqYWEj6; Sun, 21 Jan 2024 10:21:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F159B40494;
-	Sun, 21 Jan 2024 10:20:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F159B40494
+	by smtp2.osuosl.org (Postfix) with ESMTP id 15CFC40515;
+	Sun, 21 Jan 2024 10:21:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 15CFC40515
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 800391BF3F3
- for <buildroot@lists.busybox.net>; Sun, 21 Jan 2024 10:20:02 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 021E11BF3F3
+ for <buildroot@lists.busybox.net>; Sun, 21 Jan 2024 10:21:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5926A418F5
- for <buildroot@lists.busybox.net>; Sun, 21 Jan 2024 10:20:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5926A418F5
+ by smtp4.osuosl.org (Postfix) with ESMTP id CF489418F7
+ for <buildroot@lists.busybox.net>; Sun, 21 Jan 2024 10:21:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF489418F7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VL116D3YkmM2 for <buildroot@lists.busybox.net>;
- Sun, 21 Jan 2024 10:20:01 +0000 (UTC)
+ with ESMTP id EOzcpehUKNzG for <buildroot@lists.busybox.net>;
+ Sun, 21 Jan 2024 10:21:12 +0000 (UTC)
 Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2F9B9418F0
- for <buildroot@buildroot.org>; Sun, 21 Jan 2024 10:20:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F9B9418F0
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D809E418F5
+ for <buildroot@buildroot.org>; Sun, 21 Jan 2024 10:21:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D809E418F5
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 7969E13F8A9;
- Sun, 21 Jan 2024 11:19:57 +0100 (CET)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 321D013F846;
+ Sun, 21 Jan 2024 11:21:08 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 21 Jan 2024 11:19:57 +0100
-Date: Sun, 21 Jan 2024 11:19:57 +0100
+ Sun, 21 Jan 2024 11:21:07 +0100
+Date: Sun, 21 Jan 2024 11:21:07 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Julien Olivain <ju.o@free.fr>
-Message-ID: <Zazvzc8l00sd25pH@landeda>
-References: <20240113201532.121274-1-ju.o@free.fr>
+Message-ID: <ZazwE7v52UBvaazZ@landeda>
+References: <20240113204824.212604-1-ju.o@free.fr>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20240113201532.121274-1-ju.o@free.fr>
+In-Reply-To: <20240113204824.212604-1-ju.o@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1705832399;
- bh=mYYMAl1l5urJCTBBQxIIJTkwt9i31XgJlVgsVWnFEcU=;
+ d=free.fr; s=smtp-20201208; t=1705832470;
+ bh=EAfcuTEwRBphIGEoq9keXefI5xvequOprAQ9TjwmtW8=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=Csbzdxl+MuD+UP982GxHHMf62mg7LgWtnketsvM5Jxf+j+3FIyi5q9Fis0veLw+N5
- dRByuMaifMpQOIr+6EnQZAvfaA7/Gk6liS9ci4kuoHz9bWwAgbeRdmzKBIRrWXzC4t
- 4GS/B5RBld1lS11BkZZY5TGVydQstBluobHsaQpaPwimfsXiu1QYdBQ1vj6zcN7C3f
- MuuB7KCYNgHC0IR5i90ydEuB01jfvOIjtRlk6fCXSwfGmVGm+jAKL2d43ZzQja7QL8
- 74NsmqkxGHAQCVnXiPNGOkDDCGEZevfAaS/bUo0ZV0ODIzAXnFWcRK/MaHSAXMyxic
- hq9PMDBNl+yHA==
+ b=MVUj5PW/xMXislzK6RnlcHW7q7MmKEQEEflT3213J5DfYweevhV/3Ql1QwIELNyCs
+ IBOibr967CHRTfQrG0gdrGOmAd6rAKpTnBD3p6rJJB/WcEnfs01jq/8/nBxm3bF15B
+ RmdSYhDbJfcqI59qCzNMl5nhwuLV22DZZtswLetvDJ1idpm26thp4QW+n6PbI7fWYO
+ 5fPGbvzc31urd3EeDWvnPV25vK1yUV5RnxAwX4Q7+h0cZNMZROWCoNyHZ/ViVZe+eB
+ 8Qm47h0q9Z/Wu83bPfOsK4HjIVjcnuxkBxF7alYgptm8Htp0ZZcJ5i3JR7XOQf1ZiB
+ G7weEJDEjR6Mg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Csbzdxl+
-Subject: Re: [Buildroot] [PATCH 1/1] support/testing: add netcat runtime test
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=MVUj5PW/
+Subject: Re: [Buildroot] [PATCH 1/1] support/testing: add ngrep runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,7 +82,7 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Julien, All,
 
-On 2024-01-13 21:15 +0100, Julien Olivain spake thusly:
+On 2024-01-13 21:48 +0100, Julien Olivain spake thusly:
 > Signed-off-by: Julien Olivain <ju.o@free.fr>
 
 Applied to master, thanks.
@@ -91,40 +91,41 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  DEVELOPERS                                   |  1 +
->  support/testing/tests/package/test_netcat.py | 41 ++++++++++++++++++++
->  2 files changed, 42 insertions(+)
->  create mode 100644 support/testing/tests/package/test_netcat.py
+>  DEVELOPERS                                  |  1 +
+>  support/testing/tests/package/test_ngrep.py | 49 +++++++++++++++++++++
+>  2 files changed, 50 insertions(+)
+>  create mode 100644 support/testing/tests/package/test_ngrep.py
 > 
 > diff --git a/DEVELOPERS b/DEVELOPERS
-> index 94a89c63d5..d25f31f0ff 100644
+> index 94a89c63d5..33ad5b3097 100644
 > --- a/DEVELOPERS
 > +++ b/DEVELOPERS
-> @@ -1791,6 +1791,7 @@ F:	support/testing/tests/package/test_lz4.py
->  F:	support/testing/tests/package/test_lzop.py
->  F:	support/testing/tests/package/test_mtools.py
+> @@ -1793,6 +1793,7 @@ F:	support/testing/tests/package/test_mtools.py
 >  F:	support/testing/tests/package/test_ncdu.py
-> +F:	support/testing/tests/package/test_netcat.py
 >  F:	support/testing/tests/package/test_nftables.py
 >  F:	support/testing/tests/package/test_nftables/
+> +F:	support/testing/tests/package/test_ngrep.py
 >  F:	support/testing/tests/package/test_octave.py
-> diff --git a/support/testing/tests/package/test_netcat.py b/support/testing/tests/package/test_netcat.py
+>  F:	support/testing/tests/package/test_ola.py
+>  F:	support/testing/tests/package/test_ola/
+> diff --git a/support/testing/tests/package/test_ngrep.py b/support/testing/tests/package/test_ngrep.py
 > new file mode 100644
-> index 0000000000..b3efa4c40b
+> index 0000000000..29aaa55c2c
 > --- /dev/null
-> +++ b/support/testing/tests/package/test_netcat.py
-> @@ -0,0 +1,41 @@
+> +++ b/support/testing/tests/package/test_ngrep.py
+> @@ -0,0 +1,49 @@
 > +import os
 > +import time
 > +
 > +import infra.basetest
 > +
 > +
-> +class TestNetCat(infra.basetest.BRTest):
+> +class TestNgrep(infra.basetest.BRTest):
 > +    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
 > +        """
 > +        BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
 > +        BR2_PACKAGE_NETCAT=y
+> +        BR2_PACKAGE_NGREP=y
 > +        BR2_TARGET_ROOTFS_CPIO=y
 > +        # BR2_TARGET_ROOTFS_TAR is not set
 > +        """
@@ -136,24 +137,31 @@ Yann E. MORIN.
 > +                           options=["-initrd", cpio_file])
 > +        self.emulator.login()
 > +
-> +        self.assertRunOk("nc --version")
-> +
-> +        in_file = "input.bin"
-> +        out_file = "output.bin"
 > +        port = 12345
+> +        msg = 'Hello Buildroot'
 > +
-> +        cmd = f"dd if=/dev/urandom of={in_file} bs=1k count=1k"
-> +        self.assertRunOk(cmd)
+> +        # Check the program can execute.
+> +        self.assertRunOk("ngrep -V")
 > +
-> +        cmd = f"nc -l -p {port} > {out_file} &"
+> +        # Start a netcat server in background accepting connections
+> +        cmd = f"nc -l -p {port} >/dev/null </dev/null &"
 > +        self.assertRunOk(cmd)
 > +
 > +        time.sleep(1)
 > +
-> +        cmd = f"cat {in_file} | nc -c 127.0.0.1 {port}"
+> +        # Start a netcat client in background, sending one message
+> +        # every seconds
+> +        cmd = "( while true ; do "
+> +        cmd += f"echo '{msg}'; "
+> +        cmd += "sleep 1 ; "
+> +        cmd += "done) | "
+> +        cmd += f"nc 127.0.0.1 {port} &"
 > +        self.assertRunOk(cmd)
 > +
-> +        cmd = f"cmp {in_file} {out_file}"
+> +        time.sleep(1)
+> +
+> +        # Capture 3 packets with the message.
+> +        cmd = f"ngrep -n 3 '{msg}'"
 > +        self.assertRunOk(cmd)
 > -- 
 > 2.43.0
