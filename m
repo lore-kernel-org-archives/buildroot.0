@@ -4,87 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F830C47DB7
-	for <buildroot@archiver.kernel.org>; Sun, 21 Jan 2024 20:43:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D811C47422
+	for <buildroot@archiver.kernel.org>; Sun, 21 Jan 2024 20:57:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F3ED760AFF;
-	Sun, 21 Jan 2024 20:43:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3ED760AFF
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0015660AFF;
+	Sun, 21 Jan 2024 20:57:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0015660AFF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id y2J790zkI_rK; Sun, 21 Jan 2024 20:43:13 +0000 (UTC)
+	with ESMTP id UQRKrOmrRnNx; Sun, 21 Jan 2024 20:57:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5350160AEE;
-	Sun, 21 Jan 2024 20:43:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5350160AEE
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2BC4F1BF37F
- for <buildroot@lists.busybox.net>; Sun, 21 Jan 2024 20:43:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 721D160AEB;
+	Sun, 21 Jan 2024 20:57:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 721D160AEB
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 743AE1BF28A
+ for <buildroot@lists.busybox.net>; Sun, 21 Jan 2024 20:57:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 03832404BF
- for <buildroot@lists.busybox.net>; Sun, 21 Jan 2024 20:43:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 03832404BF
+ by smtp1.osuosl.org (Postfix) with ESMTP id 59DFE821E9
+ for <buildroot@lists.busybox.net>; Sun, 21 Jan 2024 20:57:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 59DFE821E9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4vYmOR7uqGoV for <buildroot@lists.busybox.net>;
- Sun, 21 Jan 2024 20:42:58 +0000 (UTC)
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com
- [IPv6:2607:f8b0:4864:20::132])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C7D0C40432
- for <buildroot@buildroot.org>; Sun, 21 Jan 2024 20:42:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C7D0C40432
-Received: by mail-il1-x132.google.com with SMTP id
- e9e14a558f8ab-361a38dd171so9653065ab.0
- for <buildroot@buildroot.org>; Sun, 21 Jan 2024 12:42:58 -0800 (PST)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id smD8fX-PQezR for <buildroot@lists.busybox.net>;
+ Sun, 21 Jan 2024 20:57:25 +0000 (UTC)
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com
+ [IPv6:2607:f8b0:4864:20::22b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1BBD9821DA
+ for <buildroot@buildroot.org>; Sun, 21 Jan 2024 20:57:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1BBD9821DA
+Received: by mail-oi1-x22b.google.com with SMTP id
+ 5614622812f47-3bd562d17dcso2244685b6e.3
+ for <buildroot@buildroot.org>; Sun, 21 Jan 2024 12:57:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1705869777; x=1706474577;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=g1JdsJUW1QWEXH4ZKjojoUhdTmgWQAAYmScdxN+47Ds=;
- b=kOdLxtZbdpGgp1f88WShcFImkXgqzuBNDL+7Ye5V/lWIIMuTfDi0OOZ/wgyBYxvzsY
- jap1ioNT1wgQt2RZ8hOVL95dtO6FKa/wF+Pqq+1R24glXm6hGalfgT8AZ2G0SsrqPZmJ
- sZaAm6BHZiTBgDVUzZpECjVn/+Kh3/kf4JNJr9Zk59q6WhKbDon0uAcyu6Pid98ClUtW
- ELJFTyy4B5dKqTepSJs2O309eVcdXCLhFjCR1edLaa3z3kWPsBJPKDT7ltV/4pp5VzjA
- 7RTtJLVU2zQ1HqbpRCLVjrUt8/uE53i0SiKqCUCH66Ek0mVgHvfOTLLQcEnE0sNgzGEt
- HAKA==
-X-Gm-Message-State: AOJu0YzDOA8kS/oZLYZxlDJiULHJfqGLucsI3I0azgJ0MV2FEtMPde57
- iwb62SQ5OM26O/+U714OOXI4C5if312+w/KWBJoDy8DGBNEdumNSFiv9fQ1g7usQdbEjW6PgVPU
- s
-X-Google-Smtp-Source: AGHT+IEZa8KSFNHDczdpxNFaqiocM6DAvavd3M6CsU0cwAVxTktJENR0eAQbABVXHwEhnqtr+zoprw==
-X-Received: by 2002:a05:6e02:926:b0:361:aae3:4ecf with SMTP id
- o6-20020a056e02092600b00361aae34ecfmr4089376ilt.39.1705869777369; 
- Sun, 21 Jan 2024 12:42:57 -0800 (PST)
+ d=1e100.net; s=20230601; t=1705870643; x=1706475443;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=NSOWyFjcHRQgOwIUHk947cjC3I/0UsOT5vhH99L0L5k=;
+ b=WoHfU6u+5wtWAqDDYcCn+roMkd9NkkV+5JmoUP12MJyHn1K120zATeYfBGQAcZBqFm
+ RvsfZf5dmmDmVi9tD5bGO6o+HL2AiBEWBuzY/aX7X1l+2z2wUQUFt2zG9Cx/qAhV+5P5
+ rpd3jcZPLCAiBoLoFlM85lgPMQwf0x2ODdvlDR/VkVrc7/qaZ5Cry3drmI58Q+mkk1Q/
+ kU1XFPIyMAEqE0rK3gVAdKF316xdy2yY/cyAP/WwtTvc7J4OK2Ug2nSWL/rHCPdVrrD4
+ 6rT/Rj7bGLX3RTeOY3r9lNC04+DEWiNXWqNFiLLB8gIV9RhCRNjw+X2qBc6LTcD6jpib
+ 3R7g==
+X-Gm-Message-State: AOJu0Ywwp7+71/FlKvoakJlAs31RYoVykenP2dy7XDvyqjkrv2IekgZI
+ 9BnzxMh/O1vCvlRFokgzTbjibHvmOhiI4pP60j9TJMAv1MXeOlvPKnP2OuWYd08X0cNhzgvsPb1
+ l
+X-Google-Smtp-Source: AGHT+IFuB7/Aubmn8qBr9ZjnF984zFe1CPIz6WCnsHYf5DAvuwOL4hgzAMZXWMa3M8FlwYsOI8T8qA==
+X-Received: by 2002:a05:6808:1521:b0:3bd:bb5b:7eb6 with SMTP id
+ u33-20020a056808152100b003bdbb5b7eb6mr248487oiw.2.1705870643345; 
+ Sun, 21 Jan 2024 12:57:23 -0800 (PST)
 Received: from fedora.. ([75.174.148.104]) by smtp.gmail.com with ESMTPSA id
- u30-20020a63471e000000b0059b2316be86sm6927606pga.46.2024.01.21.12.42.56
+ x20-20020a170902e05400b001d705b43724sm6034278plx.169.2024.01.21.12.57.22
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 21 Jan 2024 12:42:56 -0800 (PST)
+ Sun, 21 Jan 2024 12:57:22 -0800 (PST)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Sun, 21 Jan 2024 13:42:52 -0700
-Message-ID: <20240121204252.152952-2-adam.duskett@amarulasolutions.com>
+Date: Sun, 21 Jan 2024 13:57:18 -0700
+Message-ID: <20240121205718.155549-1-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240121204252.152952-1-adam.duskett@amarulasolutions.com>
-References: <20240121204252.152952-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1705869777; x=1706474577;
+ d=amarulasolutions.com; s=google; t=1705870643; x=1706475443;
  darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=g1JdsJUW1QWEXH4ZKjojoUhdTmgWQAAYmScdxN+47Ds=;
- b=col1qFBH+pMo3LERn3Pux9/XI5+oPj+WIHKAExQDwLGHkUqUVOm9DzOvsoENi/5RAT
- 0NE70SfWGTYCDMiw7dZg0zyr1Ok/H66MSH5NmRUEM7XvpmDKU9v4E4sPo0uDMM9hkvbo
- czpDV9pG+NbbVWe+x/lyF/PFqlnwLPg2vwhOs=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=NSOWyFjcHRQgOwIUHk947cjC3I/0UsOT5vhH99L0L5k=;
+ b=Jt2inXD7BAHGgx3lUz3BWH7kzvlEsKpBX0bMF8KUXfTwFsGdvk/2HQtx953EmrqaGe
+ Xj+8x2AXZDJ4g5yyPVKKe3beVqtNrfsr2U6wR7GF06OuL8VXLU8q8IvabeVXJI55TTIf
+ vjT4RDGBcs+in0T90p+knc+Q3WB31E/5QUcM0=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=col1qFBH
-Subject: [Buildroot] [PATCH 2/2] package/wlroots: Update patch with upstream
- status
+ header.b=Jt2inXD7
+Subject: [Buildroot] [PATCH 1/1] package/flutter-pi: enable vulkan if
+ possible
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,51 +93,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adrian Perez de Castro <aperez@igalia.com>,
- Adam Duskett <adam.duskett@amarulasolutions.com>
+Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-package/wlroots/0001-Add-feature-macros-to-more-C-files-.patch has been
-rejected upstream, and the initial pull request was moved to the
-freedesktop gitlab. Update the patch to reflect these changes.
+Enable the flutter-pi vulkan option if a suitable driver is enabled.
+Currently, only Mesa provides Vulkan drivers. As such, gating the feature
+behind the BR2_PACKAGE_MESA3D_VULKAN_DRIVER option is reasonable at the moment
+and is done by three other packages already:
+flutter-engine, ivi-home screen, and wlroots.
+
+Furthermore, a dependency on BR2_PACKAGE_VULKAN_LOADER is needed as the
+vulkan-loader package provides the vulkan.pc file, which the configure step
+relies upon.
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
- .checkpackageignore                                           | 1 -
- .../wlroots/0001-Add-feature-macros-to-more-C-files-.patch    | 4 +++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/flutter-pi/flutter-pi.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 914dd6fb63..1ada9fa261 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1407,7 +1407,6 @@ package/wilc-driver/0005-Fix-cast-warnings.patch Upstream
- package/wipe/0001-musl.patch Upstream
- package/wireless_tools/0001-remove-bzero.patch Upstream
- package/wireshark/0001-cmake-lemon-wipe-CMAKE_-EXE_LINKER_FLAGS-SYSROOT-if-.patch Upstream
--package/wlroots/0001-Add-feature-macros-to-more-C-files-.patch Upstream
- package/woff2/0001-CMake-Handle-multiple-libraries-being-returned-for-B.patch Upstream
- package/wpa_supplicant/0001-build-re-enable-options-for-libwpa_client.so-and-.patch Upstream
- package/wpa_supplicant/ifupdown.sh Shellcheck
-diff --git a/package/wlroots/0001-Add-feature-macros-to-more-C-files-.patch b/package/wlroots/0001-Add-feature-macros-to-more-C-files-.patch
-index 0ba078708a..0e1ae9d87a 100644
---- a/package/wlroots/0001-Add-feature-macros-to-more-C-files-.patch
-+++ b/package/wlroots/0001-Add-feature-macros-to-more-C-files-.patch
-@@ -5,8 +5,10 @@ Subject: [PATCH] Add feature macros to more C files
+diff --git a/package/flutter-pi/flutter-pi.mk b/package/flutter-pi/flutter-pi.mk
+index f1812b154e..9edc62e7ac 100644
+--- a/package/flutter-pi/flutter-pi.mk
++++ b/package/flutter-pi/flutter-pi.mk
+@@ -24,7 +24,6 @@ FLUTTER_PI_CONF_OPTS = \
+ 	-DENABLE_TESTS=OFF \
+ 	-DENABLE_TSAN=OFF \
+ 	-DENABLE_UBSAN=OFF \
+-	-DENABLE_VULKAN=OFF \
+ 	-DFILESYSTEM_LAYOUT=meta-flutter \
+ 	-DLINT_EGL_HEADERS=OFF \
+ 	-DTRY_BUILD_GSTREAMER_AUDIO_PLAYER_PLUGIN=OFF \
+@@ -75,6 +74,13 @@ else
+ FLUTTER_PI_CONF_OPTS += -DBUILD_TEXT_INPUT_PLUGIN=OFF
+ endif
  
- These source files use "struct timespec", which is POSIX 1993.09.
- 
--Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-+Upstream: Rejected (Upstream does not want these workarounds)
-+see: https://gitlab.freedesktop.org/wlroots/wlroots/-/merge_requests/2493
- 
-+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
- [Retrieved from: https://github.com/swaywm/wlroots/pull/2493]
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- ---
++ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER)$(BR2_PACKAGE_VULKAN_LOADER),yy)
++FLUTTER_PI_DEPENDENCIES += mesa3d vulkan-loader
++FLUTTER_PI_CONF_OPTS += -DENABLE_VULKAN=ON
++else
++FLUTTER_PI_CONF_OPTS += -DENABLE_VULKAN=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_HAS_LIBGLES),y)
+ FLUTTER_PI_CONF_OPTS += -DENABLE_OPENGL=ON
+ else
 -- 
 2.43.0
 
