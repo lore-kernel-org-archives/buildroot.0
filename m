@@ -4,47 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED0A7C47422
-	for <buildroot@archiver.kernel.org>; Sun, 21 Jan 2024 09:45:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D60E1C47422
+	for <buildroot@archiver.kernel.org>; Sun, 21 Jan 2024 09:45:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 77E9C40198;
-	Sun, 21 Jan 2024 09:45:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 77E9C40198
+	by smtp2.osuosl.org (Postfix) with ESMTP id E97A940167;
+	Sun, 21 Jan 2024 09:45:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E97A940167
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hAm0qBgYjt8R; Sun, 21 Jan 2024 09:45:25 +0000 (UTC)
+	with ESMTP id Bb03Bka_sPqT; Sun, 21 Jan 2024 09:45:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B891540167;
-	Sun, 21 Jan 2024 09:45:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B891540167
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7BE6C1BF4E7
- for <buildroot@lists.busybox.net>; Sun, 21 Jan 2024 09:45:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 28A1E4045C;
+	Sun, 21 Jan 2024 09:45:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 28A1E4045C
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0115A1BF4E7
+ for <buildroot@lists.busybox.net>; Sun, 21 Jan 2024 09:45:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6121A40198
- for <buildroot@lists.busybox.net>; Sun, 21 Jan 2024 09:45:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6121A40198
+ by smtp4.osuosl.org (Postfix) with ESMTP id CE4BE417C1
+ for <buildroot@lists.busybox.net>; Sun, 21 Jan 2024 09:45:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE4BE417C1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id a-NDNsiI-Rw5 for <buildroot@lists.busybox.net>;
- Sun, 21 Jan 2024 09:45:21 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id BDB4C4017B
- for <buildroot@buildroot.org>; Sun, 21 Jan 2024 09:45:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BDB4C4017B
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9B2A08636E; Sun, 21 Jan 2024 09:45:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id de5gAiCj-Cey for <buildroot@lists.busybox.net>;
+ Sun, 21 Jan 2024 09:45:28 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 660FD417C0
+ for <buildroot@buildroot.org>; Sun, 21 Jan 2024 09:45:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 660FD417C0
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 19D7B240005;
+ Sun, 21 Jan 2024 09:45:24 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1rRUOK-001WVA-14;
+ Sun, 21 Jan 2024 10:45:24 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 21 Jan 2024 10:44:52 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 857addbd5aed50c3b158886a189118bb2271f8ca
-X-Git-Newrev: 5f59c175a484fcc47c6875db49ad03eb83b90523
-X-Patchwork-Hint: ignore
-Message-Id: <20240121094521.9B2A08636E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/redis: security bump to v7.2.4
+To: Titouan Christophe <titouanchristophe@gmail.com>
+References: <20240118193717.915022-1-titouanchristophe@gmail.com>
+Date: Sun, 21 Jan 2024 10:45:24 +0100
+In-Reply-To: <20240118193717.915022-1-titouanchristophe@gmail.com> (Titouan
+ Christophe's message of "Thu, 18 Jan 2024 20:37:17 +0100")
+Message-ID: <877ck3hvez.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] package/redis: security bump to v7.2.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,67 +62,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Daniel Price <daniel.price@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5f59c175a484fcc47c6875db49ad03eb83b90523
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Titouan" == Titouan Christophe <titouanchristophe@gmail.com> writes:
 
-See release notes (https://github.com/redis/redis/blob/7.2.4/00-RELEASENOTES):
+ > See release notes (https://github.com/redis/redis/blob/7.2.4/00-RELEASENOTES):
+ > ================================================================================
+ > Redis 7.2.4    Released Tue 09 Jan 2024 10:45:52 IST
+ > ================================================================================
 
-================================================================================
-Redis 7.2.4    Released Tue 09 Jan 2024 10:45:52 IST
-================================================================================
+ > Upgrade urgency SECURITY: See security fixes below.
 
-Upgrade urgency SECURITY: See security fixes below.
+ > Security fixes
+ > ==============
+ > * (CVE-2023-41056) In some cases, Redis may incorrectly handle resizing of memory
+ >   buffers which can result in incorrect accounting of buffer sizes and lead to
+ >   heap overflow and potential remote code execution.
 
-Security fixes
-==============
-* (CVE-2023-41056) In some cases, Redis may incorrectly handle resizing of memory
-  buffers which can result in incorrect accounting of buffer sizes and lead to
-  heap overflow and potential remote code execution.
+ > Bug fixes
+ > =========
 
-Bug fixes
-=========
+ > * Fix crashes of cluster commands clusters with mixed versions of 7.0 and 7.2 (#12805, #12832)
+ > * Fix slot ownership not being properly handled when deleting a slot from a node (#12564)
+ > * Fix atomicity issues with the RedisModuleEvent_Key module API event (#12733)
 
-* Fix crashes of cluster commands clusters with mixed versions of 7.0 and 7.2 (#12805, #12832)
-* Fix slot ownership not being properly handled when deleting a slot from a node (#12564)
-* Fix atomicity issues with the RedisModuleEvent_Key module API event (#12733)
+ > Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
 
-Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/redis/redis.hash | 2 +-
- package/redis/redis.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Committed, thanks.
 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index 365fbf4063..378b930374 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/redis/redis-hashes/blob/master/README
--sha256  3e2b196d6eb4ddb9e743088bfc2915ccbb42d40f5a8a3edd8cb69c716ec34be7  redis-7.2.3.tar.gz
-+sha256  8d104c26a154b29fd67d6568b4f375212212ad41e0c2caa3d66480e78dbd3b59  redis-7.2.4.tar.gz
- 
- # Locally calculated
- sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index 77cfb1e0b1..09a3b9448b 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--REDIS_VERSION = 7.2.3
-+REDIS_VERSION = 7.2.4
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
