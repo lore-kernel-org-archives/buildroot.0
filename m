@@ -4,46 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B84CFC47DAF
-	for <buildroot@archiver.kernel.org>; Mon, 22 Jan 2024 13:15:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB4FEC47DAF
+	for <buildroot@archiver.kernel.org>; Mon, 22 Jan 2024 13:15:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3D6F160F51;
-	Mon, 22 Jan 2024 13:15:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D6F160F51
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6682160F85;
+	Mon, 22 Jan 2024 13:15:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6682160F85
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GnMy7H8EiCyC; Mon, 22 Jan 2024 13:15:09 +0000 (UTC)
+	with ESMTP id wF9P629qKZE3; Mon, 22 Jan 2024 13:15:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 97A1060F34;
-	Mon, 22 Jan 2024 13:15:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 97A1060F34
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D2A7B1BF401
+	by smtp3.osuosl.org (Postfix) with ESMTP id B3B7260F7E;
+	Mon, 22 Jan 2024 13:15:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B3B7260F7E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EACF31BF94D
  for <buildroot@lists.busybox.net>; Mon, 22 Jan 2024 13:15:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AA0AD801E8
+ by smtp2.osuosl.org (Postfix) with ESMTP id C34C44031E
  for <buildroot@lists.busybox.net>; Mon, 22 Jan 2024 13:15:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA0AD801E8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C34C44031E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id R6wMGMdChrtH for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WBK2Eft0zJfp for <buildroot@lists.busybox.net>;
  Mon, 22 Jan 2024 13:15:05 +0000 (UTC)
 Received: from smtpdh16-1.aruba.it (smtpdh16-1.aruba.it [62.149.155.100])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 26E6B81BA8
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2F1DA416AA
  for <buildroot@buildroot.org>; Mon, 22 Jan 2024 13:15:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 26E6B81BA8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2F1DA416AA
 Received: from localhost.localdomain ([84.33.84.190])
  by Aruba Outgoing Smtp  with ESMTPSA
- id Ru8jrpDYafJYdRu8krOEiZ; Mon, 22 Jan 2024 14:15:02 +0100
+ id Ru8jrpDYafJYdRu8krOEhw; Mon, 22 Jan 2024 14:15:02 +0100
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Mon, 22 Jan 2024 14:15:00 +0100
-Message-Id: <20240122131500.1935387-3-giulio.benetti@benettiengineering.com>
+Date: Mon, 22 Jan 2024 14:14:58 +0100
+Message-Id: <20240122131500.1935387-1-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240122131500.1935387-1-giulio.benetti@benettiengineering.com>
-References: <20240122131500.1935387-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
 X-CMAE-Envelope: MS4xfNm/htpACv/WLQddIAvmpjXrfnn/0kP3t2gtTohngp5kDge3VxIKZb9Lk0t9Xh9ZMQnxMJeyNKq7YBNqkAepyvgouo0CjDsZ4moW2pxU9E7So8UwRG23
  dgkrmYWyk3Lu+Sj6XGyNe3p+n57fHt6A2c7XBq/kkxhp2GsChM2pTDGYvclop3tRzpZJ9SQLQCijFc8B613K6JChUN327pEQG33lHWNiTmQliYivLKnjjUGz
@@ -51,18 +49,18 @@ X-CMAE-Envelope: MS4xfNm/htpACv/WLQddIAvmpjXrfnn/0kP3t2gtTohngp5kDge3VxIKZb9Lk0t
  qO1mixCrkiIUHfKhPlCdjhfSv/uqBw==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1705929302; bh=S99ptXfDcbOq73LxvLKZxaToN+a5YhMAzMcJkRLLg+k=;
+ t=1705929302; bh=91uCBkEzVhNO5Eenbhsg00lJrJsPp6pjFToIOpvECZo=;
  h=From:To:Subject:Date:MIME-Version;
- b=UdQ0Gvgj3kcR/nFSLHzR4eZK0FftaCiuZYH6FoKivPKG7sR3pZW+sDI0Y5/kSRtZo
- wyxEB6yHNEsYS1oc0jT/zxsB2yBVCbGEScUxiIqy3xcdLRMccHAdS65j4EbtfJxaEe
- AkYiwm96DedRZ3//myWYyp7vr4lZCYbbw/Bv5B6kLv1wq/vpepfCj2ZbY3c+QmDUT1
- X0KvzyOA9r0LuX6zdVDw+V0YHevEO7cfrPh0gKup45hwPOF+JBWe2JjuFCdZ/8GvQ5
- aShjRQWR1IUwKO72bwxrdjfiuc6lcnYuZMYkEwYrHnPHsWri0y04x1HXEmAnmp97OU
- grYxOwWZK/1Ag==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=Q8Hd14RNYGOTviDgpzDObBQiDcNE9MxeD8ZvU4OyFcIwQzNP1PosX8CEO2dq9MIVI
+ 1ZTrwoEzGG4xEgk4kOQ82XjyLJJU6/mVzISoonzt1EWlotkY4bKyNVO7vbI3qwp1pz
+ Wmjqnu4Dv/K99R443pMHICZYS0H4Ue1bWLxK0mccAGsjFfOnGeyh8DYz+QVNo9wnZ/
+ zic3vUy1gd028JcdRakZ80/qaM+zk7VGLl9PbZRK7VtOS6rVOXI2AXRcVR8gy3QIez
+ u3loHZZZnNsU/TnNThoTmBbzCaAu0QKXz/nEVo/87AWSr9BnOZhOKSBqiO8YsmUedZ
+ nA7F/LGwDgL1Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=UdQ0Gvgj
-Subject: [Buildroot] [PATCH] package/rtl8189fs: bump to version 2024-01-21
+ header.a=rsa-sha256 header.s=a1 header.b=Q8Hd14RN
+Subject: [Buildroot] [PATCH] package/rtl8821cu: bump to version 2024-01-21
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,31 +85,32 @@ With this version we can build with Linux 6.8.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/rtl8189fs/rtl8189fs.hash | 2 +-
- package/rtl8189fs/rtl8189fs.mk   | 2 +-
+ package/rtl8821cu/rtl8821cu.hash | 2 +-
+ package/rtl8821cu/rtl8821cu.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rtl8189fs/rtl8189fs.hash b/package/rtl8189fs/rtl8189fs.hash
-index 377812fba8..3c34fbc07f 100644
---- a/package/rtl8189fs/rtl8189fs.hash
-+++ b/package/rtl8189fs/rtl8189fs.hash
-@@ -1,2 +1,2 @@
+diff --git a/package/rtl8821cu/rtl8821cu.hash b/package/rtl8821cu/rtl8821cu.hash
+index 3d7a1be9d1..b3d6d2c569 100644
+--- a/package/rtl8821cu/rtl8821cu.hash
++++ b/package/rtl8821cu/rtl8821cu.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
--sha256  9ff7aa9ee8cd7a8f386531d3b009e7bcbce1ff71bb676c187c40e538755eb8b5  rtl8189fs-75a566a830037c7d1309c5a9fe411562772a1cf2.tar.gz
-+sha256  21044732f402452e587afdd5f2d96a466209b9acf2b24f70c83e1e5cc0eca5d6  rtl8189fs-e9f204d41a1dc837af15bccb50127ecc9d722d8f.tar.gz
-diff --git a/package/rtl8189fs/rtl8189fs.mk b/package/rtl8189fs/rtl8189fs.mk
-index bd29469242..8d2e044f14 100644
---- a/package/rtl8189fs/rtl8189fs.mk
-+++ b/package/rtl8189fs/rtl8189fs.mk
+-sha256  5226fefd72d2dd2b8048a8d836f731139ddcb9a34eab68e9b07acee6ee5d8553  rtl8821cu-eb52ece92607394ecc22e96b41671ec3e5b1fa30.tar.gz
++sha256  3ccec54462a8668142a9c2b2ddfffe4e0434feebe6caf6a7de6812dc8713c37f  rtl8821cu-5b39398e2de146edeb76716420f3288f508bea61.tar.gz
+ sha256  22cdb0a9cf492dbf05c5b27381a5c0e73ae0d4622427b522b0ba92b7495e5fb0  LICENSE
+diff --git a/package/rtl8821cu/rtl8821cu.mk b/package/rtl8821cu/rtl8821cu.mk
+index 8f344d518f..8cb8ea710b 100644
+--- a/package/rtl8821cu/rtl8821cu.mk
++++ b/package/rtl8821cu/rtl8821cu.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RTL8189FS_VERSION = 75a566a830037c7d1309c5a9fe411562772a1cf2
-+RTL8189FS_VERSION = e9f204d41a1dc837af15bccb50127ecc9d722d8f
- RTL8189FS_SITE = $(call github,jwrdegoede,rtl8189ES_linux,$(RTL8189FS_VERSION))
- RTL8189FS_LICENSE = GPL-2.0
- 
+-RTL8821CU_VERSION = eb52ece92607394ecc22e96b41671ec3e5b1fa30
++RTL8821CU_VERSION = 5b39398e2de146edeb76716420f3288f508bea61
+ RTL8821CU_SITE = $(call github,morrownr,8821cu-20210916,$(RTL8821CU_VERSION))
+ RTL8821CU_LICENSE = GPL-2.0
+ RTL8821CU_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
