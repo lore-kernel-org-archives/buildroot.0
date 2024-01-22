@@ -4,62 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B29BC47DAF
-	for <buildroot@archiver.kernel.org>; Mon, 22 Jan 2024 15:03:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9F03C47DD9
+	for <buildroot@archiver.kernel.org>; Mon, 22 Jan 2024 16:09:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 900AE606BF;
-	Mon, 22 Jan 2024 15:03:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 900AE606BF
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4EAFF60675;
+	Mon, 22 Jan 2024 16:09:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4EAFF60675
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2iDgOvGSW3d1; Mon, 22 Jan 2024 15:03:15 +0000 (UTC)
+	with ESMTP id mPMSCnSxEUxX; Mon, 22 Jan 2024 16:09:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CC2D160FBF;
-	Mon, 22 Jan 2024 15:03:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC2D160FBF
+	by smtp3.osuosl.org (Postfix) with ESMTP id 581FE606CB;
+	Mon, 22 Jan 2024 16:09:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 581FE606CB
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 18C721BF30C
- for <buildroot@lists.busybox.net>; Mon, 22 Jan 2024 15:03:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D6D791BF378
+ for <buildroot@lists.busybox.net>; Mon, 22 Jan 2024 16:09:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E65E340882
- for <buildroot@lists.busybox.net>; Mon, 22 Jan 2024 15:03:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E65E340882
+ by smtp4.osuosl.org (Postfix) with ESMTP id AA2F24167F
+ for <buildroot@lists.busybox.net>; Mon, 22 Jan 2024 16:09:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA2F24167F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Al_bFIIQxdTd for <buildroot@lists.busybox.net>;
- Mon, 22 Jan 2024 15:03:11 +0000 (UTC)
-Received: from smtpdh16-2.aruba.it (smtpdh16-2.aruba.it [62.149.155.101])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1F6CA40513
- for <buildroot@buildroot.org>; Mon, 22 Jan 2024 15:03:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F6CA40513
+ with ESMTP id C0WFVTtHCQns for <buildroot@lists.busybox.net>;
+ Mon, 22 Jan 2024 16:09:54 +0000 (UTC)
+Received: from smtpcmd0872.aruba.it (smtpcmd0872.aruba.it [62.149.156.72])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id AA36D4167B
+ for <buildroot@buildroot.org>; Mon, 22 Jan 2024 16:09:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA36D4167B
 Received: from localhost.localdomain ([84.33.84.190])
  by Aruba Outgoing Smtp  with ESMTPSA
- id RvpLrr9B2fJYdRvpMrPcfB; Mon, 22 Jan 2024 16:03:08 +0100
+ id RwrtrAvARKiS4RwrtrPOhx; Mon, 22 Jan 2024 17:09:50 +0100
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Mon, 22 Jan 2024 16:03:06 +0100
-Message-Id: <20240122150306.2518185-1-giulio.benetti@benettiengineering.com>
+Date: Mon, 22 Jan 2024 17:09:49 +0100
+Message-Id: <20240122160949.4052959-1-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfK6iJAInOWjArlTMaxojQM2Ao7ywHUJaozG9C//KFrIo62c2/J0hs5Rej5sUtY45JwoZORRFJWH/n175tj8ZQ71qFmk5tloOwL9EqgMTL2CSQPlU2Dky
- 7qKeGecJokGOHGoNYP/EeYEH2vNC+derpQ+UZ0QcEy2qeLqijoJUeCmyu73I9/H5gpXXSHnaRwGw/5vUdQre3PiHqI54dV60OsYutqFg+zayKan+qaGn2E6t
- +2UHZPBfYEAHUKPD19eMO5cgnQ6Tc8goApSOuTt2E4bsp1FdO8CSJFC836+psv8RpZTzTBSlYQfKSYxPlp5zQQ==
+X-CMAE-Envelope: MS4xfHdKkh6e3BwL6+TYCda2+9/54ILj4DvIgV+dH1As0dckS0ljMzNiGYlkdonlicopC46OTzukJQ0PdVoJRT/BRS8w0c1ECEuSKc4FDQHSW7TJiZFDJDIq
+ jpEqgwJ15758Grk5T/BLUnx6KBkHzBYU5LgKUdcNM5fVKvCdNX8VrqVNu11cjRkc4uqI2ufDFlh+jReBwRRjXmFGlG7am+P4pGdMWucZkHqw/5RokXYE8ouX
+ xGJ2stoAK5pYOz0Ze4yhHE9z9mD60aV7fW6Jz1NQ1b4=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1705935788; bh=zm/dn8hycYiiXV/krQp50TWQMuTVkN8P2B44eRaTN6o=;
+ t=1705939790; bh=2nDZ2SOujkdhodEAe5J14uXzarHEMKcmc1CxIS9uhMs=;
  h=From:To:Subject:Date:MIME-Version;
- b=S0+BXNhm82VJv70albkivycaUumr44imLIN9qQlHCfn6Qwznmq15DpT3JwLappTD3
- 5XBgdr1upn+IV45IgMeadTuDpT2oIOoG99cgPqLYT8DYtlkoJp7FSUe/k0bHFwpmxY
- LgVM94Y9fH6jq0AYN9o9+97sAC6953AYLk8dHkl8EGuGXaQzDdq4duMoiA9UAnpVTe
- wWEsSye9FwzLoxIZhkFqhsYYLvUnotC/OZcHdOmeNndTWaksh3M4S2fld6KrfN00Sd
- ETGNEzSdlGpz8BRm2qquq4jrqZsWEWhQp2YU5NOrJV9yurPkhJUMTIDpg8oW4BBjGH
- qPzrzRcBGT9Zw==
+ b=d2TorMKm1oKbZ12Htv6kRlRfWdQYgxSrQH7ujusYgO7HM/WJwmCNFMDdda73gaNYV
+ ucUwO7QwrFYwe0kHpkaJHVUOVcX3aZiy044052qCBZHUUGNUZQqpzDyOk8d8gw39Pb
+ SbcUuPydjVIh8mcUjVTL+8lOeUsXIyIK5e/X/dvjwd9JhSMRBXIKnT/bYcrQKoc/fj
+ eGor+DDxFAPalrTsVVhdJifpmdaAxVPNK2Cx87jkvPm9T6MlX9RlhZhq6kxrgpEaGZ
+ h6DvX9IAqoDxMhhXKe5rFb5XGsCs8XlIflhAKKbyXDoDnJkvDdH3mnwSQqPWl+WwDa
+ NIbvUX0Gme8iw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=S0+BXNhm
-Subject: [Buildroot] [PATCH v2] package/rtl8189fs: bump to version 2024-01-22
+ header.a=rsa-sha256 header.s=a1 header.b=d2TorMKm
+Subject: [Buildroot] [PATCH v2] package/libblockdev: bump to version 3.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,95 +71,279 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Sergey Matyukevich <geomatsi@gmail.com>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-With this version we can build with Linux 6.8.
-Let's also drop local patch that has been upstreamed.
+* Rework strerror_l() patch by declaring it only in utils.h as a macro
+* select BR2_PACKAGE_UTIL_LINUX_LIBUUID since it's now mandatory
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
 V1->V2:
-* bump version to latest version where local patch has been upstreamed
+* reworked local strerror_l() patch as a macro to avoid adding a second patch
+* selected BR2_PACKAGE_UTIL_LINUX_LIBUUID by default
 ---
- ...TRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch | 41 -------------------
- package/rtl8189fs/rtl8189fs.hash              |  2 +-
- package/rtl8189fs/rtl8189fs.mk                |  2 +-
- 3 files changed, 2 insertions(+), 43 deletions(-)
- delete mode 100644 package/rtl8189fs/0001-Makefile-move-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch
+ ...-replacement-function-for-strerror_l.patch | 160 ++++--------------
+ package/libblockdev/Config.in                 |   5 +-
+ package/libblockdev/libblockdev.hash          |   2 +-
+ package/libblockdev/libblockdev.mk            |   2 +-
+ 4 files changed, 35 insertions(+), 134 deletions(-)
 
-diff --git a/package/rtl8189fs/0001-Makefile-move-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch b/package/rtl8189fs/0001-Makefile-move-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch
-deleted file mode 100644
-index f9e2d6845d..0000000000
---- a/package/rtl8189fs/0001-Makefile-move-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--From f48d99fab8b79e573850067a3ff2d8c16aa95ce1 Mon Sep 17 00:00:00 2001
--From: Giulio Benetti <giulio.benetti@benettiengineering.com>
--Date: Wed, 28 Sep 2022 21:17:17 +0200
--Subject: [PATCH] Makefile: move 'EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)' at the
-- end of EXTRA_FLAGS assignment
--
--At the moment USER_EXTRA_CFLAGS can't override local Makfile EXTRA_CFLAGS
--since it's assigned at the beginning of the Makefile. For example it's not
--possible to undefine the hardcoded CONFIG_LITTLE_ENDIAN and this doesn't
--allow to build these modules for big endian architectures. So let's move
--the assignment of USER_EXTRA_CFLAGS to EXTRA_CFLAGS after the last
--EXTRA_CFLAGS assignment.
--
--Upstream: https://github.com/jwrdegoede/rtl8189ES_linux/pull/101
--
--Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-----
-- Makefile | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/Makefile b/Makefile
--index dfca305..6f91d0a 100644
----- a/Makefile
--+++ b/Makefile
--@@ -1,4 +1,3 @@
---EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)
-- EXTRA_CFLAGS += -O1
-- #EXTRA_CFLAGS += -O3
-- #EXTRA_CFLAGS += -Wall
--@@ -2208,6 +2207,8 @@ ifneq ($(USER_MODULE_NAME),)
-- MODULE_NAME := $(USER_MODULE_NAME)
-- endif
+diff --git a/package/libblockdev/0001-Provide-replacement-function-for-strerror_l.patch b/package/libblockdev/0001-Provide-replacement-function-for-strerror_l.patch
+index 987d28f82e..e5819a4e9c 100644
+--- a/package/libblockdev/0001-Provide-replacement-function-for-strerror_l.patch
++++ b/package/libblockdev/0001-Provide-replacement-function-for-strerror_l.patch
+@@ -1,29 +1,25 @@
+-From 2acf5a8d4858035396ee45d96c824e0481644d36 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Date: Sat, 29 Aug 2020 16:04:15 +0200
++From 01883cc14904e55d90955ad7cd9fc55bc18364ac Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Sat, 20 Jan 2024 13:29:28 +0100
+ Subject: [PATCH] Provide replacement function for strerror_l()
+ 
+ strerror_l() is not implemented in some C libraries, such as uClibc,
+-so let's provide a simple replacement function that falls back on
+-strerror().
++so let's provide a simple replacement define that falls back on
++strerror() in utils.h header and include it where missing.
+ 
+-Upstream status: Not Applicable since it's due uclibc only
++Upstream: N/A since it's due uclibc only
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+-[Giulio: ported to version 3.0+]
++[Giulio: ported to version 3.0 and 3.1]
+ ---
+- configure.ac                    | 2 ++
+- src/plugins/crypto.c            | 7 +++++++
+- src/plugins/nvme/nvme-error.c   | 8 ++++++++
+- src/plugins/nvme/nvme-fabrics.c | 8 ++++++++
+- src/plugins/nvme/nvme-op.c      | 8 ++++++++
+- src/plugins/part.c              | 9 +++++++++
+- src/utils/module.c              | 8 +++++++-
+- 7 files changed, 49 insertions(+), 1 deletion(-)
++ configure.ac       | 2 ++
++ src/utils/module.c | 1 +
++ src/utils/utils.h  | 4 ++++
++ 3 files changed, 7 insertions(+)
+ 
+ diff --git a/configure.ac b/configure.ac
+-index 0a8ce4a7..dfbddb39 100644
++index 02b26e3e..67341134 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+ @@ -120,6 +120,8 @@ AC_CHECK_HEADERS([dlfcn.h string.h unistd.h sys/fcntl.h sys/ioctl.h linux/random
+@@ -35,127 +31,33 @@ index 0a8ce4a7..dfbddb39 100644
+  AC_ARG_WITH([escrow],
+      AS_HELP_STRING([--with-escrow], [support escrow @<:@default=yes@:>@]),
+      [],
+-diff --git a/src/plugins/crypto.c b/src/plugins/crypto.c
+-index c5f719ca..b2ae3f56 100644
+---- a/src/plugins/crypto.c
+-+++ b/src/plugins/crypto.c
+-@@ -62,6 +62,13 @@
 - 
--+EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)
+- #define UNUSED __attribute__((unused))
+- 
+-+#if !defined(HAVE_STRERROR_L)
+-+static char *strerror_l(int errnum, locale_t locale UNUSED)
+-+{
+-+	return strerror(errnum);
+-+}
+-+#endif
 -+
-- ifneq ($(KERNELRELEASE),)
+- /**
+-  * SECTION: crypto
+-  * @short_description: plugin for operations with encrypted devices
+-diff --git a/src/plugins/nvme/nvme-error.c b/src/plugins/nvme/nvme-error.c
+-index 4bd4d771..618b6aef 100644
+---- a/src/plugins/nvme/nvme-error.c
+-+++ b/src/plugins/nvme/nvme-error.c
+-@@ -34,6 +34,14 @@
+- #include "nvme.h"
+- #include "nvme-private.h"
 - 
-- ########### this part for *.mk ############################
---- 
--2.34.1
--
-diff --git a/package/rtl8189fs/rtl8189fs.hash b/package/rtl8189fs/rtl8189fs.hash
-index 377812fba8..e3d63ac4b0 100644
---- a/package/rtl8189fs/rtl8189fs.hash
-+++ b/package/rtl8189fs/rtl8189fs.hash
-@@ -1,2 +1,2 @@
+-+#define UNUSED __attribute__((unused))
+-+
+-+#if !defined(HAVE_STRERROR_L)
+-+static char *strerror_l(int errnum, locale_t locale UNUSED)
+-+{
+-+    return strerror(errnum);
+-+}
+-+#endif
+- 
+- /**
+-  * bd_nvme_error_quark: (skip)
+-diff --git a/src/plugins/nvme/nvme-fabrics.c b/src/plugins/nvme/nvme-fabrics.c
+-index 1877845f..5fcbeddc 100644
+---- a/src/plugins/nvme/nvme-fabrics.c
+-+++ b/src/plugins/nvme/nvme-fabrics.c
+-@@ -36,6 +36,14 @@
+- #include "nvme.h"
+- #include "nvme-private.h"
+- 
+-+#define UNUSED __attribute__((unused))
+-+
+-+#if !defined(HAVE_STRERROR_L)
+-+static char *strerror_l(int errnum, locale_t locale UNUSED)
+-+{
+-+    return strerror(errnum);
+-+}
+-+#endif
+- 
+- /* nvme-cli defaults */
+- #define PATH_NVMF_CONFIG  "/etc/nvme/config.json"
+-diff --git a/src/plugins/nvme/nvme-op.c b/src/plugins/nvme/nvme-op.c
+-index dbef4f3a..7bafd7a3 100644
+---- a/src/plugins/nvme/nvme-op.c
+-+++ b/src/plugins/nvme/nvme-op.c
+-@@ -35,6 +35,14 @@
+- #include "nvme.h"
+- #include "nvme-private.h"
+- 
+-+#define UNUSED __attribute__((unused))
+-+
+-+#if !defined(HAVE_STRERROR_L)
+-+static char *strerror_l(int errnum, locale_t locale UNUSED)
+-+{
+-+    return strerror(errnum);
+-+}
+-+#endif
+- 
+- /**
+-  * bd_nvme_device_self_test:
+-diff --git a/src/plugins/part.c b/src/plugins/part.c
+-index 46d31137..6234e013 100644
+---- a/src/plugins/part.c
+-+++ b/src/plugins/part.c
+-@@ -26,6 +26,15 @@
+- 
+- #include "part.h"
+- 
+-+#define UNUSED __attribute__((unused))
+-+
+-+#if !defined(HAVE_STRERROR_L)
+-+static char *strerror_l(int errnum, locale_t locale UNUSED)
+-+{
+-+	return strerror(errnum);
+-+}
+-+#endif
+-+
+- /**
+-  * SECTION: part
+-  * @short_description: plugin for operations with partition tables
+ diff --git a/src/utils/module.c b/src/utils/module.c
+-index 6557c3ab..69dd4731 100644
++index 6557c3ab..5893f0ac 100644
+ --- a/src/utils/module.c
+ +++ b/src/utils/module.c
+-@@ -74,6 +74,13 @@ static void set_kmod_logging (struct kmod_ctx *ctx) {
+-     kmod_set_log_fn (ctx, utils_kmod_log_redirect, NULL);
+- }
++@@ -28,6 +28,7 @@
++ #include "module.h"
++ #include "exec.h"
++ #include "logging.h"
+++#include "utils.h"
++ 
++ #define UNUSED __attribute__((unused))
++ 
++diff --git a/src/utils/utils.h b/src/utils/utils.h
++index 801a8b6e..b2bdf0d0 100644
++--- a/src/utils/utils.h
+++++ b/src/utils/utils.h
++@@ -9,6 +9,10 @@
++ #include "dbus.h"
++ #include "logging.h"
+  
+ +#if !defined(HAVE_STRERROR_L)
+-+static char *strerror_l(int errnum, locale_t locale UNUSED)
+-+{
+-+	return strerror(errnum);
+-+}
+++#define strerror_l(errnum, locale)      strerror(errnum)
+ +#endif
+ +
+  /**
+-  * bd_utils_have_kernel_module:
+-  * @module_name: name of the kernel module to check
+-@@ -259,7 +266,6 @@ gboolean bd_utils_unload_kernel_module (const gchar *module_name, GError **error
+-     return TRUE;
+- }
+- 
+--
+- static BDUtilsLinuxVersion detected_linux_ver;
+- static gboolean have_linux_ver = FALSE;
+- 
++  * SECTION: utils
++  * @short_description: library providing utility functions used by the blockdev library and its plugins
+ -- 
+ 2.34.1
+ 
+diff --git a/package/libblockdev/Config.in b/package/libblockdev/Config.in
+index 527ba79e4e..e0449628b4 100644
+--- a/package/libblockdev/Config.in
++++ b/package/libblockdev/Config.in
+@@ -8,6 +8,8 @@ config BR2_PACKAGE_LIBBLOCKDEV
+ 	depends on BR2_ENABLE_LOCALE
+ 	select BR2_PACKAGE_KMOD
+ 	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	help
+ 	  libblockdev is a C library supporting GObject introspection
+ 	  for manipulation of block devices. It has a plugin-based
+@@ -30,7 +32,6 @@ config BR2_PACKAGE_LIBBLOCKDEV_CRYPTO
+ config BR2_PACKAGE_LIBBLOCKDEV_FS
+ 	bool "filesystem"
+ 	depends on BR2_ENABLE_LOCALE # parted
+-	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
+ 	select BR2_PACKAGE_PARTED
+ 	select BR2_PACKAGE_E2FSPROGS
+@@ -62,7 +63,6 @@ config BR2_PACKAGE_LIBBLOCKDEV_PART
+ 	bool "part"
+ 	depends on BR2_ENABLE_LOCALE # parted
+ 	select BR2_PACKAGE_PARTED
+-	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBFDISK
+ 
+ comment "part plugin needs a toolchain w/ locale"
+@@ -70,7 +70,6 @@ comment "part plugin needs a toolchain w/ locale"
+ 
+ config BR2_PACKAGE_LIBBLOCKDEV_SWAP
+ 	bool "swap"
+-	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+ 
+ endif
+diff --git a/package/libblockdev/libblockdev.hash b/package/libblockdev/libblockdev.hash
+index 5f9a8a7e6c..79700a4996 100644
+--- a/package/libblockdev/libblockdev.hash
++++ b/package/libblockdev/libblockdev.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
--sha256  9ff7aa9ee8cd7a8f386531d3b009e7bcbce1ff71bb676c187c40e538755eb8b5  rtl8189fs-75a566a830037c7d1309c5a9fe411562772a1cf2.tar.gz
-+sha256  c92e1d800258665835922c1e927708f7a0477a1cbb281dc98ba5d33d5e3271ee  rtl8189fs-5d523593f41c0b8d723c6aa86b217ee1d0965786.tar.gz
-diff --git a/package/rtl8189fs/rtl8189fs.mk b/package/rtl8189fs/rtl8189fs.mk
-index bd29469242..86a2ac734b 100644
---- a/package/rtl8189fs/rtl8189fs.mk
-+++ b/package/rtl8189fs/rtl8189fs.mk
+-sha256  49841ff92db0ab032931e6f2b5eab63e5969b0ddc14b067b60e46a6eb6c60e47  libblockdev-3.0.4.tar.gz
++sha256  41e4af66c9d78e795302d37825dfd88a4970f82da7b4ebe6487feba2afae44fb  libblockdev-3.1.0.tar.gz
+ sha256  97bdc721d875501b6243a456333fdfdb1ab64d31c4da2554de845caf4674b946  LICENSE
+diff --git a/package/libblockdev/libblockdev.mk b/package/libblockdev/libblockdev.mk
+index e0fca2b95c..ebf01acfb5 100644
+--- a/package/libblockdev/libblockdev.mk
++++ b/package/libblockdev/libblockdev.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RTL8189FS_VERSION = 75a566a830037c7d1309c5a9fe411562772a1cf2
-+RTL8189FS_VERSION = 5d523593f41c0b8d723c6aa86b217ee1d0965786
- RTL8189FS_SITE = $(call github,jwrdegoede,rtl8189ES_linux,$(RTL8189FS_VERSION))
- RTL8189FS_LICENSE = GPL-2.0
- 
+-LIBBLOCKDEV_VERSION = 3.0.4
++LIBBLOCKDEV_VERSION = 3.1.0
+ LIBBLOCKDEV_SITE = https://github.com/storaged-project/libblockdev/releases/download/$(LIBBLOCKDEV_VERSION)-1
+ LIBBLOCKDEV_LICENSE = LGPL-2.1
+ LIBBLOCKDEV_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
