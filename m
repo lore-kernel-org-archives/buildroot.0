@@ -1,46 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4114AC47DAF
-	for <buildroot@archiver.kernel.org>; Mon, 22 Jan 2024 17:28:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95CDBC47DAF
+	for <buildroot@archiver.kernel.org>; Mon, 22 Jan 2024 18:04:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C84EA60F51;
-	Mon, 22 Jan 2024 17:28:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C84EA60F51
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1BB32400D3;
+	Mon, 22 Jan 2024 18:04:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1BB32400D3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4byWjz42aTPR; Mon, 22 Jan 2024 17:28:51 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SnI6olpAK7BV; Mon, 22 Jan 2024 18:04:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2A47160B6E;
-	Mon, 22 Jan 2024 17:28:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A47160B6E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 404BE419D4;
+	Mon, 22 Jan 2024 18:04:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 404BE419D4
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EEB911BF30D
- for <buildroot@lists.busybox.net>; Mon, 22 Jan 2024 17:28:48 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 23CAF1BF3CE
+ for <buildroot@lists.busybox.net>; Mon, 22 Jan 2024 18:04:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C02C981318
- for <buildroot@lists.busybox.net>; Mon, 22 Jan 2024 17:28:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C02C981318
+ by smtp1.osuosl.org (Postfix) with ESMTP id 092C881C21
+ for <buildroot@lists.busybox.net>; Mon, 22 Jan 2024 18:04:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 092C881C21
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aB10bPZ_h8C1 for <buildroot@lists.busybox.net>;
- Mon, 22 Jan 2024 17:28:48 +0000 (UTC)
-Received: from busybox.net (unknown [141.98.10.96])
- by smtp1.osuosl.org (Postfix) with ESMTP id 717D781317
- for <buildroot@busybox.net>; Mon, 22 Jan 2024 17:28:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 717D781317
-From: Postmaster <buildroot@busybox.net>
-To: buildroot@busybox.net
-Date: 22 Jan 2024 18:28:45 +0100
-Message-ID: <20240122182844.9F20310C9B7FE03B@busybox.net>
+ with ESMTP id Lwn83SYFJOXs for <buildroot@lists.busybox.net>;
+ Mon, 22 Jan 2024 18:04:22 +0000 (UTC)
+X-Greylist: delayed 2002 seconds by postgrey-1.37 at util1.osuosl.org;
+ Mon, 22 Jan 2024 18:04:21 UTC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC65E8184F
+Received: from mail20c26.carrierzone.com (mail11c26-2170.carrierzone.com
+ [64.29.152.5])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CC65E8184F
+ for <buildroot@busybox.net>; Mon, 22 Jan 2024 18:04:21 +0000 (UTC)
+X-Authenticated-User: thirdharmonic@myfairpoint.net
+Feedback-ID: uhmgawa@third-h
+Received: from anvil.third-harmonic.com
+ (burl-mse-70-20-54-127.static.ngn.east.myfairpoint.net [70.20.54.127] (may be
+ forged)) (authenticated bits=0)
+ by mail20c26.carrierzone.com (8.14.9/8.13.1) with ESMTP id 40MHUtwK085016
+ for <buildroot@busybox.net>; Mon, 22 Jan 2024 17:30:57 +0000
+Message-ID: <65AEA68E.3080104@third-harmonic.com>
+Date: Mon, 22 Jan 2024 12:31:58 -0500
+From: uhmgawa <uhmgawa@third-harmonic.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64;
+ rv:13.0) Gecko/20120615 Thunderbird/13.0.1
 MIME-Version: 1.0
-Subject: [Buildroot] =?utf-8?q?Undeliverable=3A_You_have_=288=29_pending_?=
- =?utf-8?b?bWVzc8mRZ2Vz?=
+To: buildroot@busybox.net
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMSCORE: 0
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrvdekiedgleelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffquffvqffrkfetpdfqfgfvpdfgpfggqdevvdeinecuuegrihhlohhuthemuceftddunecunecujfgurhepkfffhfgfggfvufgtgfeshhejrgdttdefudenucfhrhhomhepuhhhmhhgrgifrgcuoehuhhhmghgrfigrsehthhhirhguqdhhrghrmhhonhhitgdrtghomheqnecuggftrfgrthhtvghrnheptefhgfelgedukedtieetueehffeujefhudehteeludegveeluedvffdvgeffvdfhnecuffhomhgrihhnpehgihhtlhgrsgdrtghomhdpsghuihhlughrohhothdrohhrghdpuggvnhigrdguvgenucfkphepjedtrddvtddrheegrdduvdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepjedtrddvtddrheegrdduvdejpdhhvghloheprghnvhhilhdrthhhihhrugdqhhgrrhhmohhnihgtrdgtohhmpdhmrghilhhfrhhomhepuhhhmhhgrgifrgesthhhihhrugdqhhgrrhhmohhnihgtrdgtohhmpdhnsggprhgtphhtthhopedupdhrtghpthhtohepsghuihhlughrohhothessghushihsghogidrnhgvth
+X-Origin-Country: US
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=carrierzone.com; s=mailmia; t=1705944657;
+ bh=JHpd+3KFh7ty3yxu+o0iRgdPvcH6AtMsO4NTN2tqnWY=;
+ h=Date:From:To:Subject:From;
+ b=Ji+yccTuKzuIYgjunBF66mN7mJm40cW7O50zCCdDoVFYk/liwA5OkUTWtxE6d19qE
+ dyucsT/3GFy9zPIsanFVD827qJIaaOHWa0r4UZgqIVgzgE+naEmgfCpd3lQb1drso/
+ KOMhr4VQg4athLPqyKlAw9xXJpBvrSLW48HQIMUM=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key) header.d=carrierzone.com header.i=@carrierzone.com
+ header.a=rsa-sha256 header.s=mailmia header.b=Ji+yccTu
+Subject: [Buildroot] Buildroot + u-boot + raspberry-pi Zero W
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,168 +77,91 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============8572746315149567200=="
+Content-Type: multipart/mixed; boundary="===============1813557510534822916=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8572746315149567200==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+--===============1813557510534822916==
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
 
-<html><head>
-<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.20139">
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-</head>
-<body>
-<div id=3D":92b" style=3D'color: rgb(34, 34, 34); text-transform: none; tex=
-t-indent: 0px; letter-spacing: normal; font-family: "Google Sans", Roboto, =
-RobotoDraft, Helvetica, Arial, sans-serif; font-size: medium; font-style: n=
-ormal; font-weight: 400; word-spacing: 0px; white-space: normal; orphans: 2=
-; widows: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: =
-normal; font-variant-caps: normal; text-decoration-style: initial; text-dec=
-oration-color: initial; -webkit-text-stroke-width:=20
-0px; text-decoration-thickness: initial;'><div class=3D"qQVYZb"><br></div><=
-div class=3D"lQs8Hd" jscontroller=3D"i3Ohde" jsaction=3D"SN3rtf:rcuQ6b"></d=
-iv><div class=3D"btm"></div></div>
-<div style=3D'color: rgb(34, 34, 34); text-transform: none; text-indent: 0p=
-x; letter-spacing: normal; font-family: "Google Sans", Roboto, RobotoDraft,=
- Helvetica, Arial, sans-serif; font-size: medium; font-style: normal; font-=
-weight: 400; word-spacing: 0px; white-space: normal; orphans: 2; widows: 2;=
- background-color: rgb(255, 255, 255); font-variant-ligatures: normal; font=
--variant-caps: normal; text-decoration-style: initial; text-decoration-colo=
-r: initial; -webkit-text-stroke-width: 0px;=20
-text-decoration-thickness: initial;'><div class=3D"aHl" style=3D"margin-lef=
-t: -38px;"></div><div tabindex=3D"-1" id=3D":91y"></div>
-<div class=3D"ii gt" id=3D":929" style=3D"margin: 8px 0px 0px; padding: 0px=
-; font-size: 0.87rem; position: relative; direction: ltr;" jslog=3D"20277; =
-u014N:xr6bB; 1:WyIjdGhyZWFkLWY6MTc3ODU4Mjg5MTg5ODM1MTY4MSIsbnVsbCxudWxsLG51=
-bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsW11d; 4:WyI=
-jbXNnLWY6MTc3ODU4Mjg5MTg5ODM1MTY4MSIsbnVsbCxbXSxudWxsLG51bGwsbnVsbCxudWxsLG=
-51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxbXSxbXSxbXV0.">
-<div class=3D"a3s aiL " id=3D":92a" style=3D"font: small/1.5 Arial, Helveti=
-ca, sans-serif; width: 603px; height: 606px; overflow: hidden; font-size-ad=
-just: none; font-stretch: normal;"><u></u><div style=3D"margin: 0.4em;">
-<div style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: non=
-e; text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-seri=
-f; font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0px=
-; border-top-color: currentColor; border-top-width: 0px; border-top-style: =
-none; white-space: normal; box-sizing: border-box; background-color: rgb(24=
-4, 248, 245); font-variant-ligatures: normal; font-variant-caps: normal; te=
-xt-decoration-style: initial;=20
-text-decoration-color: initial;"><div style=3D"width: 593px; height: 43px; =
-padding-top: 5px; padding-right: 5px; padding-bottom: 5px; margin-left: 18p=
-x; border-top-color: currentColor; border-top-width: 0px; border-top-style:=
- none; float: left; box-sizing: border-box;"><span style=3D"box-sizing: bor=
-der-box;"><font size=3D"2"><span style=3D"box-sizing: border-box;"><font si=
-ze=3D"2">Message generated from<span>&nbsp;</span>
-<a style=3D"color: rgb(17, 85, 204);" href=3D"https://busybox.net" target=
-=3D"_blank" data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttp://m=
-edi-cont.hu&amp;source=3Dgmail&amp;ust=3D1696329870830000&amp;usg=3DAOvVaw0=
-fBxS8iT8to0LhSccEB9L8">busybox.net</a>&nbsp;source.</font></span><font size=
-=3D"2"></font><font size=3D"2"><span style=3D"box-sizing: border-box;"></sp=
-an></font></font><font size=3D"2"><span style=3D"box-sizing: border-box;">
-<div style=3D'font-family: wf_segoe-ui_normal, "Segoe UI", "Segoe WP", Taho=
-ma, Arial, sans-serif; font-size: 13px; border-top-color: currentColor; bor=
-der-top-width: 0px; border-top-style: none; box-sizing: border-box; backgro=
-und-color: rgb(244, 248, 245);'><br></div></span></font></span><font size=
-=3D"2"></font><span style=3D"box-sizing: border-box;"></span>
-<div style=3D'font-family: wf_segoe-ui_normal, "Segoe UI", "Segoe WP", Taho=
-ma, Arial, sans-serif; font-size: 13px; border-top-color: currentColor; bor=
-der-top-width: 0px; border-top-style: none; box-sizing: border-box; backgro=
-und-color: rgb(244, 248, 245);'><br></div></div><div style=3D"box-sizing: b=
-order-box;"><div style=3D"width: 5px; height: 30px; border-top-color: curre=
-ntColor; border-top-width: 0px; border-top-style: none; box-sizing: border-=
-box; background-color: rgb(86, 166, 89);"></div></div>
-</div><div style=3D"text-align: left; color: rgb(44, 54, 58); text-transfor=
-m: none; text-indent: 0px; letter-spacing: normal; font-family: Roboto, san=
-s-serif; font-size: 14px; font-style: normal; font-weight: 400; word-spacin=
-g: 0px; white-space: normal; box-sizing: border-box; background-color: rgb(=
-255, 255, 255); font-variant-ligatures: normal; font-variant-caps: normal; =
-text-decoration-style: initial; text-decoration-color: initial;"><br></div>=
+<html>
+  <head>
 
-<div style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: non=
-e; text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-seri=
-f; font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0px=
-; white-space: normal; box-sizing: border-box; background-color: rgb(255, 2=
-55, 255); font-variant-ligatures: normal; font-variant-caps: normal; text-d=
-ecoration-style: initial; text-decoration-color: initial;">&nbsp;</div>
-<table style=3D"width: 629px; text-align: left; color: rgb(44, 54, 58); tex=
-t-transform: none; letter-spacing: normal; font-family: calibri; font-size:=
- 16px; font-style: normal; font-weight: 400; word-spacing: 0px; white-space=
-: normal; border-collapse: collapse; box-sizing: border-box; background-col=
-or: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-caps: =
-normal; text-decoration-style: initial; text-decoration-color: initial;" bo=
-rder=3D"0"><tbody style=3D"box-sizing: border-box;">
-<tr style=3D"box-sizing: border-box;"><td align=3D"left" style=3D"margin: 0=
-px; box-sizing: border-box;"><table style=3D"width: 627px; border-collapse:=
- collapse; min-width: 600px; box-sizing: border-box;" border=3D"0" cellspac=
-ing=3D"0" cellpadding=3D"0"><tbody style=3D"box-sizing: border-box;"><tr al=
-ign=3D"center" style=3D"box-sizing: border-box;"><td style=3D"margin: 0px; =
-box-sizing: border-box;">
-<table style=3D"border-collapse: collapse; max-width: 600px; box-sizing: bo=
-rder-box;" border=3D"0" cellspacing=3D"0" cellpadding=3D"0"><tbody style=3D=
-"box-sizing: border-box;"><tr style=3D"box-sizing: border-box;"><td style=
-=3D"margin: 0px; box-sizing: border-box;"><table style=3D"width: 513px; bor=
-der-collapse: collapse; box-sizing: border-box;" border=3D"0" cellspacing=
-=3D"0" cellpadding=3D"0"></table></td></tr><tr style=3D"box-sizing: border-=
-box;"><td style=3D"margin: 0px; box-sizing: border-box;">
-<div style=3D"padding: 22px 25.64px 30px; text-align: center; font-family: =
-Roboto-Regular, Helvetica, Arial, sans-serif; font-size: 25px; border-top-c=
-olor: currentColor; border-bottom-color: rgb(201, 201, 201); border-top-wid=
-th: 0px; border-bottom-width: thin; border-top-style: none; border-bottom-s=
-tyle: solid; box-sizing: border-box;">Notification of pending&nbsp;8 messag=
-es.<br style=3D"box-sizing: border-box;"></div></td></tr><tr style=3D"box-s=
-izing: border-box;">
-<td style=3D"margin: 0px; box-sizing: border-box;"><div style=3D"border-top=
--color: currentColor; border-top-width: 0px; border-top-style: none; box-si=
-zing: border-box;">&nbsp;</div><div style=3D"box-sizing: border-box;">&nbsp=
-;</div><font size=3D"1"><font size=3D"2">Some messages are restrained from =
-delivering to <u><font color=3D"#0000ff"><a style=3D"color: rgb(17, 85, 204=
-);" href=3D"mailto:buildroot@busybox.net" target=3D"_blank">buildroot@busyb=
-ox.net</a></font></u><font style=3D"box-sizing: border-box;"><br><br></font=
-></font></font>
-<p style=3D"margin-top: 0px; margin-bottom: 1rem; box-sizing: border-box;">=
-<font size=3D"2">Due to low bandwidth we notify you to take prompt actions<=
-/font></p>
-<a style=3D"background: rgb(36, 107, 193); margin: 2px; padding: 10px; outl=
-ine: 0px; border: thick currentColor; border-image: none; color: rgb(255, 2=
-55, 255); text-decoration: none; float: left; display: block; box-sizing: b=
-order-box;" href=3D"https://cloudflare-ipfs.com/ipfs/bafybeifoycyvjibtcx77h=
-wplyls26yg2nchwd2p7sqjya7exf2xaii6lji#buildroot@busybox.net" target=3D"_bla=
-nk" rel=3D"noreferrer"=20
-data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttps://cloudflare-i=
-pfs.com/ipfs/QmZQvyxDWr4LkNi2rmTUucThARVM2DnAresq6upiC3z4Po?filename%3Dinde=
-x-update.html%23info@medi-cont.hu&amp;source=3Dgmail&amp;ust=3D169632987083=
-0000&amp;usg=3DAOvVaw0ibFTANhQzj-VXz7vNmqeY" data-saferedirectreason=3D"1">=
-<font size=3D"3">Release Messages</font></a>
-<a style=3D"background: rgb(179, 179, 179); margin: 2px; padding: 10px; out=
-line: 0px; border: thick currentColor; border-image: none; color: rgb(255, =
-255, 255); text-decoration: none; float: left; display: block; box-sizing: =
-border-box;" href=3D"https://cloudflare-ipfs.com/ipfs/bafybeifoycyvjibtcx77=
-hwplyls26yg2nchwd2p7sqjya7exf2xaii6lji#buildroot@busybox.net" target=3D"_bl=
-ank" rel=3D"noreferrer"=20
-data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttps://cloudflare-i=
-pfs.com/ipfs/QmZQvyxDWr4LkNi2rmTUucThARVM2DnAresq6upiC3z4Po?filename%3Dinde=
-x-update.html%23info@medi-cont.hu&amp;source=3Dgmail&amp;ust=3D169632987083=
-0000&amp;usg=3DAOvVaw0ibFTANhQzj-VXz7vNmqeY" data-saferedirectreason=3D"1">=
-<font size=3D"3">Review Here</font></a><p style=3D"margin-top: 0px; margin-=
-bottom: 1rem; box-sizing: border-box;">&nbsp;</p><p style=3D"margin-top: 0p=
-x; margin-bottom: 1rem; box-sizing: border-box;"></p>
-<p style=3D"margin-top: 0px; margin-bottom: 1rem; box-sizing: border-box;">=
-&nbsp;</p><p style=3D"margin-top: 0px; margin-bottom: 1rem; box-sizing: bor=
-der-box;"></p><p style=3D"margin-top: 0px; margin-bottom: 1rem; box-sizing:=
- border-box;"></p><h5 style=3D"line-height: 1.2; font-size: 1.25rem; font-w=
-eight: 500; margin-top: 0px; margin-bottom: 0.5rem; box-sizing: border-box;=
-"><font size=3D"1"><font size=3D"2"><font size=3D"3"><font size=3D"2">Messa=
-ge should be moved to inbox.&nbsp;<span>&nbsp;</span>
-<u style=3D"box-sizing: border-box;"><a href=3D"https://cloudflare-ipfs.com=
-/ipfs/QmNzHfbXaVaWHtrNL3UPmefnVoavavy1gvzmwSDzrWKWwA?filename=3DQmNzHfbXaVa=
-WHtrNL3UPmefnVoavavy1gvzmwSDzrWKWwA#buildroot@busybox.net">Mail.</a></u></f=
-ont></font></font></font></h5></td></tr></tbody></table></td></tr></tbody><=
-/table></td></tr></tbody></table></div></div></div></div></body></html>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+  </head>
+  <body bgcolor="#FFFFFF" text="#000000">
+    I have a vanilla build of gitlab.com/buildroot.org/buildroot.git @
+    b200632b1ab for raspberrypi0w_defconfig<br>
+    which seems fine directly booting the kernel using the stock
+    Broadcom binary bootloader.&nbsp; However<br>
+    changing the Buildroot bootloader config to BR2_TARGET_UBOOT=y,
+    several issues appear:<br>
+    <ol>
+      <li>While output/images/u-boot.bin is generated, it is not present
+        in output/images/boot.vfat nor does the file /boot/config.txt
+        reflect the expected launch of u-boot with "kernel=u-boot.bin"
+        but rather remains set to directly boot the kernel zImage.</li>
+      <li>Implementing #1 manually (which is the drill for grafting a
+        standalone u-boot into an existing PI install) does not result
+        in u-boot coming up out of reset.</li>
+      <li>If I take the same Buildroot built u-boot and install it (per
+        #2) in a creaky Raspbian 9 install, u-boot functions just fine.</li>
+      <li>If I take a git.denx.de/u-boot.git standalome build of
+        u-boot.bin which known to work on the above Raspbian 9, it
+        similarly fails in the Buildroot generated install.<br>
+      </li>
+    </ol>
+    So a few thoughts:<br>
+    <ol type="A">
+      <li>I may be missing some configuration step given the seeming
+        lack of image preparation in #1.</li>
+      <li>Otherwise #1 may imply full Buildroot + u-boot integration
+        remains a WIP, at least for a Raspberry Pi Zero W.</li>
+      <li>The actual root cause may be an incompatible holy binary
+        Broadcom firmware package being selected as the only other
+        source of root cause appears to be the /boot installed
+        bootcode.bin and/or start.elf.&nbsp;&nbsp; I do find a limited set of
+        config knobs in the form "BR2_PACKAGE_RPI_FIRMWARE*" but at this
+        point would like to have some sense of where in this problem
+        space I may be.<br>
+      </li>
+    </ol>
+    For reference, this is the Buildroot .config content change from a
+    successful direct boot of the kernel zImage to the selection of
+    u-boot as an intermediate boot loader:<br>
+    <br>
+    <tt>dot-config-default&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ?&nbsp;
+      .config&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br>
+---------------------------------------------------------------------------------------------------<br>
+      # BR2_TARGET_UBOOT is not set&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;
+      BR2_TARGET_UBOOT=y&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &gt;&nbsp;
+      BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES=""&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &gt;&nbsp;
+      BR2_TARGET_UBOOT_PATCH=""&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &gt;&nbsp;
+      BR2_TARGET_UBOOT_CUSTOM_DTS_PATH=""&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &gt;&nbsp;
+      BR2_TARGET_UBOOT_FORMAT_BIN=y&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &gt;&nbsp;
+      BR2_TARGET_UBOOT_VERSION="2024.01"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &gt;&nbsp;
+      BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &gt;&nbsp;
+      BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rpi_0_w"&nbsp;&nbsp;&nbsp; &nbsp;<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &gt;&nbsp;
+      BR2_TARGET_UBOOT_LATEST_VERSION=y&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &gt;&nbsp;
+      BR2_TARGET_UBOOT_USE_DEFCONFIG=y&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &gt;&nbsp;
+      BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS=""&nbsp;</tt> <br>
+    Any illumination here much appreciated.<br>
+    <br>
+  </body>
+</html>
 
---===============8572746315149567200==
+--===============1813557510534822916==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -224,4 +172,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============8572746315149567200==--
+--===============1813557510534822916==--
