@@ -4,89 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE9ACC47DAF
-	for <buildroot@archiver.kernel.org>; Mon, 22 Jan 2024 11:01:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAB53C4725D
+	for <buildroot@archiver.kernel.org>; Mon, 22 Jan 2024 11:05:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 368124160B;
-	Mon, 22 Jan 2024 11:01:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 368124160B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3A880403C5;
+	Mon, 22 Jan 2024 11:05:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A880403C5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6loAsCmxYo06; Mon, 22 Jan 2024 11:01:40 +0000 (UTC)
+	with ESMTP id ccUcEIG0ydNI; Mon, 22 Jan 2024 11:05:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 51D684167E;
-	Mon, 22 Jan 2024 11:01:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 51D684167E
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3E9E91BF369
- for <buildroot@lists.busybox.net>; Mon, 22 Jan 2024 11:01:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 490D041693;
+	Mon, 22 Jan 2024 11:05:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 490D041693
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id ADADC1BF3F2
+ for <buildroot@lists.busybox.net>; Mon, 22 Jan 2024 11:05:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1586F4167E
- for <buildroot@lists.busybox.net>; Mon, 22 Jan 2024 11:01:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1586F4167E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 82E69824DC
+ for <buildroot@lists.busybox.net>; Mon, 22 Jan 2024 11:05:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 82E69824DC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iWbPlGA5DsZM for <buildroot@lists.busybox.net>;
- Mon, 22 Jan 2024 11:01:37 +0000 (UTC)
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com
- [IPv6:2607:f8b0:4864:20::62f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0B0CF4160B
- for <buildroot@buildroot.org>; Mon, 22 Jan 2024 11:01:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B0CF4160B
-Received: by mail-pl1-x62f.google.com with SMTP id
- d9443c01a7336-1d71e24845aso14043125ad.0
- for <buildroot@buildroot.org>; Mon, 22 Jan 2024 03:01:36 -0800 (PST)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lRq8rJvVu2Ua for <buildroot@lists.busybox.net>;
+ Mon, 22 Jan 2024 11:05:33 +0000 (UTC)
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com
+ [IPv6:2607:f8b0:4864:20::431])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 775B082416
+ for <buildroot@buildroot.org>; Mon, 22 Jan 2024 11:05:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 775B082416
+Received: by mail-pf1-x431.google.com with SMTP id
+ d2e1a72fcca58-6d9b37f4804so2349745b3a.1
+ for <buildroot@buildroot.org>; Mon, 22 Jan 2024 03:05:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1705921296; x=1706526096;
+ d=1e100.net; s=20230601; t=1705921533; x=1706526333;
  h=in-reply-to:content-transfer-encoding:content-disposition
  :mime-version:references:message-id:subject:cc:to:from:date
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=WHEp44qv+LrtWQPIUS7vSOm3MVdDXXNmDJVO+fx68d0=;
- b=etiuplpjryN9zT+Ph2+pZPEatHI3BQNnJF43WDg9rdANSTaL7AVCOafl/rhOHc84ZC
- hz+dQ6652mKtsu8SP08hQtbAj2WP/UN/j/X8e978a6twnGvPRWbwknCgAfEaAl4GWxeU
- bK0MOPsN3D6zsA6wRcOqLwN0fb4XcEFqXE2AtJHaBTNwi4DJ7fYoWcbyWXMqAXhy+gCQ
- s2qQhY5p1x1tZy1aQXOl+8iE0qh67kue1tXPrPZR+RcQjCg9/KOBy9Wey71F5OyRvP0h
- FYYhVjS476/rjxneEK9NUoVjBzStvhRVoceb7RFYM3d7unbyoJj/rAj7eh4cm6h4xpAT
- T3aQ==
-X-Gm-Message-State: AOJu0YzBKLEf1o7nIzCvODySTo5ovUXvmAI4JcdaEpfHfpEbghd8eUci
- xkvq+e8k11W6X1g5ZDynRpZqTvT/ipHgejNzbGWo4anyE4/02tO/
-X-Google-Smtp-Source: AGHT+IF9gmyIJeBOIfXOH42ja5AwzS9c+b7tnhrPGc763+c1W4tcx3r0lBBvz8tHB0i7TGsd4HUUTA==
-X-Received: by 2002:a17:903:2587:b0:1d0:8383:741d with SMTP id
- jb7-20020a170903258700b001d08383741dmr1422545plb.30.1705921295685; 
- Mon, 22 Jan 2024 03:01:35 -0800 (PST)
+ bh=Dd6jnTLzx/ZQGcd8z8vkkM9NW0LcMlTaEA/sYsPh4Sw=;
+ b=ON8etbzDwzijh5gDsgbtdMTutgLBPGxaaSQtHvDANk7pNXEK9Fvti9vuKeSHsw8qe3
+ duUkLPF+dnSxfqLPvE5B7426mAhniuqxZaoIbgmBI1G1fqeFtn9zwbaoWrMGqS3U21dP
+ 19t+VECDzoJKBMjSLFNPkr04DecQDdcoYBjIuWR/5r5ab2icMrph92rlkCi6JGGQy8FG
+ YOXUk+2FXRmY8jaH2sq+Aw2+usUnqvKO7CDynl2rEXP6X/qWZmf1VpGJBZDiDOfKmjtw
+ CmTO9Z7PZErgeBhkGfgoeW9VZe7AwRcHgGYiz7Y3inGdzxfiw4F5fUKDeWgOIC3y6kG7
+ 6dmQ==
+X-Gm-Message-State: AOJu0YyBf/95Ff4ZgLy9bznB3DNS1dif0XLiI5s/GZXv0o48sKTRd6le
+ M4/60Pz4yYDkbNO747uYggzgwURxAf8WgMafxLDXyWyq+ReiETy1
+X-Google-Smtp-Source: AGHT+IH2RlmLpKA8mTUCr80mu+cbnbSyd1SPf/bAZlngbcBNggLZAjvJmffwLnLlbj6xgQEuIhI5Xg==
+X-Received: by 2002:a05:6a20:9152:b0:19b:6424:cd7d with SMTP id
+ x18-20020a056a20915200b0019b6424cd7dmr3843679pzc.27.1705921532723; 
+ Mon, 22 Jan 2024 03:05:32 -0800 (PST)
 Received: from p1g2 ([2001:861:3201:3d10:c328:92c5:7d77:c274])
  by smtp.gmail.com with ESMTPSA id
- o17-20020a170902e29100b001d73228cd99sm3414745plc.99.2024.01.22.03.01.33
+ d21-20020aa78695000000b006dbd3d7e242sm3155819pfo.126.2024.01.22.03.05.30
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 22 Jan 2024 03:01:34 -0800 (PST)
-Date: Mon, 22 Jan 2024 12:01:31 +0100
+ Mon, 22 Jan 2024 03:05:32 -0800 (PST)
+Date: Mon, 22 Jan 2024 12:05:28 +0100
 From: Gary Bisson <bisson.gary@gmail.com>
 To: =?iso-8859-1?Q?S=E9bastien?= Szymanski <sebastien.szymanski@armadeus.com>
-Message-ID: <Za5LC0fMBoDVzuiS@p1g2>
+Message-ID: <Za5L-Hg0l5wCdejw@p1g2>
 References: <20240109172600.12811-1-sebastien.szymanski@armadeus.com>
- <20240109172600.12811-2-sebastien.szymanski@armadeus.com>
+ <20240109172600.12811-3-sebastien.szymanski@armadeus.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20240109172600.12811-2-sebastien.szymanski@armadeus.com>
+In-Reply-To: <20240109172600.12811-3-sebastien.szymanski@armadeus.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1705921296; x=1706526096; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1705921533; x=1706526333; darn=buildroot.org;
  h=in-reply-to:content-transfer-encoding:content-disposition
  :mime-version:references:message-id:subject:cc:to:from:date:from:to
  :cc:subject:date:message-id:reply-to;
- bh=WHEp44qv+LrtWQPIUS7vSOm3MVdDXXNmDJVO+fx68d0=;
- b=jv76UT1062S90nScNssZfpgqxmErQ+goE/l2IiMM758n1YjMSmdK/WsDHEEmPNaHVb
- bLTRQVh4RLfj7grdAXzEPDLEqkGTfUF9lX01ZtxdqmZwIUsD40XDl5alxawrDxX6aid2
- EoOVGPklbDNUnGmniuMd6EF6j+0Nbgskxemvs4W7V2Rt5ntjrTe3n8oCdw1fgiiUjZOc
- 4ZCnZPceS0IArnsDuo5bdjgDLgDTFsFeHGyK2bHRF0obunT7ZPPIfZwYbf5NWrsWw3fa
- 40K9l06OR3jvfWhlZrOZ5W7009TA+oe/vDpY0TgxvoR6BWn7HlmtV4f9oq13cb892HQq
- FNeg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=Dd6jnTLzx/ZQGcd8z8vkkM9NW0LcMlTaEA/sYsPh4Sw=;
+ b=bbGj52ocp8239TlCrVkN9y9sV4EZajDTggzBNhGtMFOO96Ij2MqKLa1UuNfApjbVz4
+ +V8QEfQrtfPJFJoy9LRpQjS9bYmg38O36m3/9nLl/Wd+Ue/vRrSCpiCcmTnJSn+hZcuH
+ ZVPwJrGTPMU1R/iJgbBEkzEeg6b+sfrWZOrVMeDtL4ezKs01k5I9heL9VNw3DQQOM0Q8
+ z8JDje53jAiq/C9wuhIVhDhbTcBAfgYN0K9Ou5K7hcIJGZI1tjP35s2Qgq90ezF/Jana
+ hLyW+3/iStYazutTwEWbw9/YBjDuHzFLtGiGULsyB334tfm7WaCp4LT9/XG4COQ+uxfu
+ Buig==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=jv76UT10
-Subject: Re: [Buildroot] [PATCH v3 1/3] package/freescale-imx: add i.MX91
- and i.MX93 SoC support
+ header.a=rsa-sha256 header.s=20230601 header.b=bbGj52oc
+Subject: Re: [Buildroot] [PATCH v3 2/3]
+ package/freescale-imx/firmware-ele-imx: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,19 +106,16 @@ Content-Transfer-Encoding: quoted-printable
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi S=E9bastien,
+Hi,
 
-On Tue, Jan 09, 2024 at 06:25:58PM +0100, S=E9bastien Szymanski wrote:
-> This commit adds i.MX91 and i.MX93 support to Buildroot.
-> https://www.nxp.com/products/processors-and-microcontrollers/arm-processo=
-rs/i-mx-applications-processors/i-mx-9-processors:IMX9-PROCESSORS
+On Tue, Jan 09, 2024 at 06:25:59PM +0100, S=E9bastien Szymanski wrote:
+> This package provides firmware blobs for the Edgelock Secure
+> Enclave (ELE) [1] present on i.MX8ULP and i.MX9 Socs.
+> This version comes from the 6.1.55-2.2.0 release.
 > =
 
-> There is no i.MX95 software provided by NXP at the moment that's why
-> i.MX95 is left behind.
-> =
-
-> Adapt package firmware-imx for the LPPDR4 firwmares binaries.
+> [1] https://www.nxp.com/products/nxp-product-information/nxp-product-prog=
+rams/edgelock-secure-enclave:EDGELOCK-SECURE-ENCLAVE
 > =
 
 > Signed-off-by: S=E9bastien Szymanski <sebastien.szymanski@armadeus.com>
@@ -126,164 +123,172 @@ rs/i-mx-applications-processors/i-mx-9-processors:IMX9-PROCESSORS
 > =
 
 > Changes for v3:
->  - none
+>  - rename package from firmware-sentinel to package firmware-ele-imx
 > =
 
 > Changes for v2:
 >  - none
 > =
 
->  package/freescale-imx/Config.in               |  8 +++++++
->  package/freescale-imx/firmware-imx/Config.in  |  9 ++++++++
->  .../firmware-imx/firmware-imx.mk              | 23 +++++++++++++++++++
->  3 files changed, 40 insertions(+)
+>  package/freescale-imx/Config.in               | 30 +++++++++++++++++++
+>  .../freescale-imx/firmware-ele-imx/Config.in  | 21 +++++++++++++
+>  .../firmware-ele-imx/firmware-ele-imx.hash    |  4 +++
+>  .../firmware-ele-imx/firmware-ele-imx.mk      | 27 +++++++++++++++++
+>  4 files changed, 82 insertions(+)
+>  create mode 100644 package/freescale-imx/firmware-ele-imx/Config.in
+>  create mode 100644 package/freescale-imx/firmware-ele-imx/firmware-ele-i=
+mx.hash
+>  create mode 100644 package/freescale-imx/firmware-ele-imx/firmware-ele-i=
+mx.mk
 > =
 
 > diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Conf=
 ig.in
-> index 1c26b3cc6f4c..0229eaf0271f 100644
+> index 0229eaf0271f..da60d0879840 100644
 > --- a/package/freescale-imx/Config.in
 > +++ b/package/freescale-imx/Config.in
-> @@ -61,6 +61,12 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
->  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8DXL
->  	bool "imx8dxl"
+> @@ -69,6 +69,35 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX93
 >  =
 
-> +config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX91
-> +	bool "imx91"
-> +
-> +config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX93
-> +	bool "imx93"
-> +
 >  endchoice
 >  =
 
->  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM
-> @@ -80,6 +86,8 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM
->  	default "IMX8MM" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
->  	default "IMX8MN" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN
->  	default "IMX8MP" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MP
-> +	default "IMX91" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX91
-> +	default "IMX93" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX93
->  =
+> +choice
+> +	prompt "i.MX platform asic version"
 
->  config BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
->  	bool
-> diff --git a/package/freescale-imx/firmware-imx/Config.in b/package/frees=
-cale-imx/firmware-imx/Config.in
-> index 087ddef8771b..7be6761253c9 100644
-> --- a/package/freescale-imx/firmware-imx/Config.in
-> +++ b/package/freescale-imx/firmware-imx/Config.in
-> @@ -55,6 +55,8 @@ config BR2_PACKAGE_FIRMWARE_IMX_NEEDS_DDR_FW
->  	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
->  	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN
->  	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MP
-> +	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX91
-> +	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX93
->  =
+Please rename "i.MX Silicon Revision" in order to match the Datasheet
+naming (see 1.1 Ordering Information section).
 
->  if BR2_PACKAGE_FIRMWARE_IMX_NEEDS_DDR_FW
->  =
-
-> @@ -73,11 +75,15 @@ config BR2_PACKAGE_FIRMWARE_IMX_LPDDR4
->  =
-
->  config BR2_PACKAGE_FIRMWARE_IMX_DDR4
->  	bool "DDR4"
-> +	depends on !BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX91
-> +	depends on !BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX93
->  	help
->  	  Use DDR4 binaries (i.e.: ddr4_*_201810.bin).
->  =
-
->  config BR2_PACKAGE_FIRMWARE_IMX_DDR3
->  	bool "DDR3"
-> +	depends on !BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX91
-> +	depends on !BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX93
->  	help
->  	  Use DDR3 binaries (i.e.: ddr3_*_201810.bin).
->  =
-
-> @@ -89,6 +95,9 @@ config BR2_PACKAGE_FIRMWARE_IMX_DDR_VERSION
->  	# unconditionally use HW version 201810 when DDR3/DDR4 was
->  	# selected
->  	default "201810" if BR2_PACKAGE_FIRMWARE_IMX_DDR3 || BR2_PACKAGE_FIRMWA=
-RE_IMX_DDR4
-> +	default "202201" if \
-> +		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX91 || \
+> +	default BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX91A1 \
+> +		if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX91
+> +	default BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX93A1 \
+> +		if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX93
+> +	depends on BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX91 || \
 > +		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX93
+> +	help
+> +	  Some packages related to the selected i.MX platform need
+> +	  to know the asic version of the platform they will run on.
+> +	  If you don't know, leave the default value.
+> +
+> +	  Note - mismatches may result in a failure to boot!
+> +
+> +config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX91A1
+> +	bool "imx91a1"
+> +	depends on BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX91
+> +
+> +config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX93A0
+> +	bool "imx93a0"
+> +	depends on BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX93
+> +
+> +config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX93A1
+> +	bool "imx93a1"
+> +	depends on BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX93
+> +
+> +endchoice
+> +
 
-Why not having the DDR version set as "v202201" here?
+Actually, can you add that part above with the previous patch?
+I believe this should be part of the overall CPU addition support.
 
->  	help
->  	  Use a specific version of the imx ddr binaries. Leaving this
->  	  field empty will select the default version.
-> diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package=
-/freescale-imx/firmware-imx/firmware-imx.mk
-> index 66ef8c3930be..a08e8c4fb097 100644
-> --- a/package/freescale-imx/firmware-imx/firmware-imx.mk
-> +++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
-> @@ -43,11 +43,33 @@ endef
->  FIRMWARE_IMX_DDR_VERSION =3D $(call qstrip,$(BR2_PACKAGE_FIRMWARE_IMX_DD=
-R_VERSION))
->  ifneq ($(FIRMWARE_IMX_DDR_VERSION),)
->  FIRMWARE_IMX_DDR_VERSION_SUFFIX =3D _$(FIRMWARE_IMX_DDR_VERSION)
-> +ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX91)$(BR2_PACKAGE_FREESCALE=
-_IMX_PLATFORM_IMX93),y)
-> +FIRMWARE_IMX_DDR_VERSION_SUFFIX =3D _v$(FIRMWARE_IMX_DDR_VERSION)
-> +endif
-
-That would allow to get rid of the above and keep the suffix variable
-somewhat generic across the CPUs?
-No strong feelings here, just a suggestion to make the patch even
-smaller.
-
->  endif
->  =
-
->  ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_LPDDR4),y)
->  FIRMWARE_IMX_DDRFW_DIR =3D $(@D)/firmware/ddr/synopsys
->  =
-
-> +ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX91)$(BR2_PACKAGE_FREESCALE=
-_IMX_PLATFORM_IMX93),y)
-> +define FIRMWARE_IMX_INSTALL_IMAGE_DDR_FW
-> +	# Create padded versions of lpddr4_pmu_* and generate lpddr4_pmu_train_=
-fw.bin.
-> +	# lpddr4_pmu_train_fw.bin is needed when generating imx9-boot-sd.bin
-> +	# which is done in post-image script.
-> +	$(call FIRMWARE_IMX_PREPARE_DDR_FW, \
-> +		lpddr4_imem_1d$(FIRMWARE_IMX_DDR_VERSION_SUFFIX),
-> +		lpddr4_dmem_1d$(FIRMWARE_IMX_DDR_VERSION_SUFFIX),
-> +		lpddr4_pmu_train_1d_fw)
-> +	$(call FIRMWARE_IMX_PREPARE_DDR_FW, \
-> +		lpddr4_imem_2d$(FIRMWARE_IMX_DDR_VERSION_SUFFIX),
-> +		lpddr4_dmem_2d$(FIRMWARE_IMX_DDR_VERSION_SUFFIX),
-> +		lpddr4_pmu_train_2d_fw)
-> +	cat $(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_1d_fw.bin \
-> +		$(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_2d_fw.bin > \
-> +		$(BINARIES_DIR)/lpddr4_pmu_train_fw.bin
-> +	ln -sf $(BINARIES_DIR)/lpddr4_pmu_train_fw.bin $(BINARIES_DIR)/ddr_fw.b=
-in
+>  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM
+>  	string
+>  	default "IMX25_3STACK" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX25_3STA=
+CK
+> @@ -125,6 +154,7 @@ source "package/freescale-imx/imx-uuc/Config.in"
+>  source "package/freescale-imx/imx-vpu/Config.in"
+>  source "package/freescale-imx/imx-vpu-hantro/Config.in"
+>  source "package/freescale-imx/imx-vpuwrap/Config.in"
+> +source "package/freescale-imx/firmware-ele-imx/Config.in"
+>  source "package/freescale-imx/firmware-imx/Config.in"
+>  source "package/freescale-imx/imx-sc-firmware/Config.in"
+>  source "package/freescale-imx/imx-seco/Config.in"
+> diff --git a/package/freescale-imx/firmware-ele-imx/Config.in b/package/f=
+reescale-imx/firmware-ele-imx/Config.in
+> new file mode 100644
+> index 000000000000..7867c3712c9c
+> --- /dev/null
+> +++ b/package/freescale-imx/firmware-ele-imx/Config.in
+> @@ -0,0 +1,21 @@
+> +config BR2_PACKAGE_FIRMWARE_ELE_IMX
+> +	bool "firmware-ele-imx"
+> +	depends on BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX91 || \
+> +		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX93
+> +	help
+> +	  Firmware blobs for the Edgelock Secure Enclave (ELE)
+> +	  present on i.MX8ULP and i.MX9 SoCs.
+> +
+> +	  This library is provided by NXP as-is and doesn't have an
+> +	  upstream.
+> +
+> +if BR2_PACKAGE_FIRMWARE_ELE_IMX
+> +
+> +config BR2_PACKAGE_FIRMWARE_ELE_IMX_AHAB_CONTAINER_IMAGE
+> +	string
+> +	default "mx93a0-ahab-container.img" if BR2_PACKAGE_FREESCALE_IMX_PLATFO=
+RM_IMX93A0
+> +	default "mx93a1-ahab-container.img" if \
+> +		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX91A1 || \
+> +		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX93A1
+> +
+> +endif # BR2_PACKAGE_FIRMWARE_ELE_IMX
+> diff --git a/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.hash=
+ b/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.hash
+> new file mode 100644
+> index 000000000000..58565cef43e9
+> --- /dev/null
+> +++ b/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.hash
+> @@ -0,0 +1,4 @@
+> +# Locally calculated
+> +sha256  4a0440168d8dfb95989a17be8fafb149589e110e7d4518e5e8a33463dfb5e5ca=
+  firmware-ele-imx-0.1.0.bin
+> +sha256  24d7cb3a7e51011466a149bd99acf89387b832be2d0890ce2e183dfbc9d7cb84=
+  COPYING
+> +sha256  c800aaca3a7e9f470d99d7cde0a48c95982ed601d4c306f7b8f43f3710054f28=
+  SCR.txt
+> diff --git a/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.mk b=
+/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.mk
+> new file mode 100644
+> index 000000000000..600b50c5b456
+> --- /dev/null
+> +++ b/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.mk
+> @@ -0,0 +1,27 @@
+> +########################################################################=
+########
+> +#
+> +# firmware-ele-imx
+> +#
+> +########################################################################=
+########
+> +
+> +FIRMWARE_ELE_IMX_VERSION =3D 0.1.0
+> +FIRMWARE_ELE_IMX_SITE =3D $(FREESCALE_IMX_SITE)
+> +FIRMWARE_ELE_IMX_SOURCE =3D firmware-ele-imx-$(FIRMWARE_ELE_IMX_VERSION)=
+.bin
+> +
+> +FIRMWARE_ELE_IMX_LICENSE =3D NXP Semiconductor Software License Agreement
+> +FIRMWARE_ELE_IMX_LICENSE_FILES =3D COPYING SCR.txt
+> +FIRMWARE_ELE_IMX_REDISTRIBUTE =3D NO
+> +
+> +FIRMWARE_ELE_IMX_INSTALL_IMAGES =3D YES
+> +
+> +define FIRMWARE_ELE_IMX_EXTRACT_CMDS
+> +	$(call NXP_EXTRACT_HELPER,$(FIRMWARE_ELE_IMX_DL_DIR)/$(FIRMWARE_ELE_IMX=
+_SOURCE))
 > +endef
-> +else
->  define FIRMWARE_IMX_INSTALL_IMAGE_DDR_FW
->  	# Create padded versions of lpddr4_pmu_* and generate lpddr4_pmu_train_=
-fw.bin.
->  	# lpddr4_pmu_train_fw.bin is needed when generating imx8-boot-sd.bin
-> @@ -71,6 +93,7 @@ define FIRMWARE_IMX_INSTALL_IMAGE_DDR_FW
->  	cp $(FIRMWARE_IMX_DDRFW_DIR)/lpddr4*.bin $(BINARIES_DIR)/
->  endef
->  endif
-> +endif
->  =
+> +
+> +FIRMWARE_ELE_IMX_AHAB_CONTAINER_IMAGE =3D $(call qstrip,$(BR2_PACKAGE_FI=
+RMWARE_ELE_IMX_AHAB_CONTAINER_IMAGE))
+> +
+> +define FIRMWARE_ELE_IMX_INSTALL_IMAGES_CMDS
+> +	cp $(@D)/$(FIRMWARE_ELE_IMX_AHAB_CONTAINER_IMAGE) $(BINARIES_DIR)/ahab-=
+container.img
+> +endef
+> +
+> +$(eval $(generic-package))
 
->  ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_DDR4),y)
->  FIRMWARE_IMX_DDRFW_DIR =3D $(@D)/firmware/ddr/synopsys
+The rest looks ok to me.
 
-Otherwise the rest looks good.
-
-Regards,
+Thanks,
 Gary
 _______________________________________________
 buildroot mailing list
