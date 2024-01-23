@@ -4,66 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64E58C47DDB
-	for <buildroot@archiver.kernel.org>; Tue, 23 Jan 2024 15:39:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE02BC47DDB
+	for <buildroot@archiver.kernel.org>; Tue, 23 Jan 2024 15:50:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ED80840878;
-	Tue, 23 Jan 2024 15:39:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED80840878
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5D76A41A2A;
+	Tue, 23 Jan 2024 15:50:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5D76A41A2A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FGhpsBCQbI0y; Tue, 23 Jan 2024 15:39:11 +0000 (UTC)
+	with ESMTP id FomeSmHsepmK; Tue, 23 Jan 2024 15:50:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 459C6404CC;
-	Tue, 23 Jan 2024 15:39:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 459C6404CC
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 782811BF360
- for <buildroot@lists.busybox.net>; Tue, 23 Jan 2024 15:39:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A115A41936;
+	Tue, 23 Jan 2024 15:50:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A115A41936
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1E2E51BF360
+ for <buildroot@lists.busybox.net>; Tue, 23 Jan 2024 15:50:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4F92340472
- for <buildroot@lists.busybox.net>; Tue, 23 Jan 2024 15:39:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F92340472
+ by smtp3.osuosl.org (Postfix) with ESMTP id EBC0060C20
+ for <buildroot@lists.busybox.net>; Tue, 23 Jan 2024 15:50:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EBC0060C20
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pTiM2HdwaWwz for <buildroot@lists.busybox.net>;
- Tue, 23 Jan 2024 15:39:08 +0000 (UTC)
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BE7DC4011A
- for <buildroot@buildroot.org>; Tue, 23 Jan 2024 15:39:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BE7DC4011A
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 6612413FA37;
- Tue, 23 Jan 2024 16:39:01 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 23 Jan 2024 16:39:01 +0100
-Date: Tue, 23 Jan 2024 16:39:01 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Maximilian Senftleben <maximilian.senftleben@frogblue-tec.com>
-Message-ID: <Za_dleqTzTAK8k48@landeda>
-References: <20240123140211.105695-1-maximilian.senftleben@frogblue-tec.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240123140211.105695-1-maximilian.senftleben@frogblue-tec.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1706024344;
- bh=IED+EyExgkOL8J9+rnGgv9mtFnG1NlR4fQYogGJKvpA=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=BD1l0kkgUWZ8dJI5Y/JR92bYkiW7RC7Iu9YcAOkz4RVVINQI7cAlGlUwiRPivUak8
- P8lM9HWyrkh4U+0SmMs9OqUmvDWn99qNyqtQI1B/fJpTIsLNQho+zVLyCZDU4CG0ez
- UDgudPWiFPEiKjhv72gPI3U8HZuskwWWqgVThkpYwPBlHDMGEq3HID9nxKTQD/7xpw
- RrzUZri81ZFKptD1t/uzxCMO9EXfPv8KHx8748Y6raFJmUM+q20SmLnthYo/Rbl1JU
- yU7IOV9oEFXbTLAG08yMQS3/jJHwLelgchGvZ9KsOdsW0qBG7WohMABiJGXrO3U8S1
- nC+GJ5FJvx+mA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=BD1l0kkg
-Subject: Re: [Buildroot] [PATCH 1/1] package/opencv4-contrib: fix
- INSTALL_TARGET value
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qNqqDRBFmNST for <buildroot@lists.busybox.net>;
+ Tue, 23 Jan 2024 15:50:19 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3EDEC60BF8
+ for <buildroot@buildroot.org>; Tue, 23 Jan 2024 15:50:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3EDEC60BF8
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 25C9E86423; Tue, 23 Jan 2024 15:50:19 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Tue, 23 Jan 2024 16:44:17 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9fa01e309781faec1395507405a128deb8f55c56
+X-Git-Newrev: 3b8b1125adcdb3563a8392e802f0fb5266142e93
+X-Patchwork-Hint: ignore
+Message-Id: <20240123155019.25C9E86423@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/vulkan-loader: fix x11 handling
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,60 +56,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Woodrow Douglass <wdouglass@carnegierobotics.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Maximilain, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=3b8b1125adcdb3563a8392e802f0fb5266142e93
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2024-01-23 15:02 +0100, Maximilian Senftleben spake thusly:
-> The variable should be a YES/NO value, FALSE is not a valid value.
-> E.g. the yesno-to-bool cmd does not translate a FALSE value and therefore returns invalid JSON.
+Fix the following build failure raised since the addition of the package
+in commit 6aa1bc31678ff9f8013084fda34b9f941cc63fc3:
 
-Good catch, thanks!
+In file included from /home/buildroot/autobuild/run/instance-3/output-1/build/vulkan-loader-1.3.262/loader/extension_manual.h:24,
+                 from /home/buildroot/autobuild/run/instance-3/output-1/build/vulkan-loader-1.3.262/loader/extension_manual.c:23:
+/home/buildroot/autobuild/run/instance-3/output-1/host/aarch64-buildroot-linux-gnu/sysroot/usr/include/vulkan/vulkan.h:71:10: fatal error: X11/extensions/Xrandr.h: No such file or directory
+   71 | #include <X11/extensions/Xrandr.h>
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~
 
-> Signed-off-by: Maximilian Senftleben <maximilian.senftleben@frogblue-tec.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/55ddfd44393e3bcc2f25bad2f9ecb7e1b142a985
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+Tested-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/vulkan-loader/vulkan-loader.mk | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/opencv4-contrib/opencv4-contrib.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/opencv4-contrib/opencv4-contrib.mk b/package/opencv4-contrib/opencv4-contrib.mk
-> index 52d2682b26..f8c8cfd94c 100644
-> --- a/package/opencv4-contrib/opencv4-contrib.mk
-> +++ b/package/opencv4-contrib/opencv4-contrib.mk
-> @@ -6,7 +6,7 @@
->  
->  OPENCV4_CONTRIB_VERSION = 4.8.1
->  OPENCV4_CONTRIB_SITE = $(call github,opencv,opencv_contrib,$(OPENCV4_CONTRIB_VERSION))
-> -OPENCV4_CONTRIB_INSTALL_TARGET = FALSE
-> +OPENCV4_CONTRIB_INSTALL_TARGET = NO
->  OPENCV4_CONTRIB_LICENSE = Apache-2.0
->  OPENCV4_CONTRIB_LICENSE_FILES = LICENSE
->  
-> -- 
-> 2.43.0
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/vulkan-loader/vulkan-loader.mk b/package/vulkan-loader/vulkan-loader.mk
+index f6dd9d0ac3..b1545a4972 100644
+--- a/package/vulkan-loader/vulkan-loader.mk
++++ b/package/vulkan-loader/vulkan-loader.mk
+@@ -26,13 +26,16 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBXCB),y)
+ VULKAN_LOADER_DEPENDENCIES += libxcb
+-VULKAN_LOADER_CONF_OPTS += \
+-	-DBUILD_WSI_XCB_SUPPORT=ON \
+-	-DBUILD_WSI_XLIB_SUPPORT=ON
++VULKAN_LOADER_CONF_OPTS += -DBUILD_WSI_XCB_SUPPORT=ON
+ else
+-VULKAN_LOADER_CONF_OPTS += \
+-	-DBUILD_WSI_XCB_SUPPORT=OFF \
+-	-DBUILD_WSI_XLIB_SUPPORT=OFF
++VULKAN_LOADER_CONF_OPTS += -DBUILD_WSI_XCB_SUPPORT=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_XLIB_LIBX11)$(BR2_PACKAGE_XLIB_LIBXRANDR),yy)
++VULKAN_LOADER_DEPENDENCIES += xlib_libX11 xlib_libXrandr
++VULKAN_LOADER_CONF_OPTS += -DBUILD_WSI_XLIB_SUPPORT=ON
++else
++VULKAN_LOADER_CONF_OPTS += -DBUILD_WSI_XLIB_SUPPORT=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_WAYLAND),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
