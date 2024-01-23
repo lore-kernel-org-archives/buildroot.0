@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA739C47258
-	for <buildroot@archiver.kernel.org>; Tue, 23 Jan 2024 20:36:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C28DC47258
+	for <buildroot@archiver.kernel.org>; Tue, 23 Jan 2024 20:37:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8B3F8405D8;
-	Tue, 23 Jan 2024 20:36:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B3F8405D8
+	by smtp2.osuosl.org (Postfix) with ESMTP id D927540445;
+	Tue, 23 Jan 2024 20:37:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D927540445
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RxUYRaFomMUF; Tue, 23 Jan 2024 20:36:49 +0000 (UTC)
+	with ESMTP id ujLGBzSusDAu; Tue, 23 Jan 2024 20:37:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8737240642;
-	Tue, 23 Jan 2024 20:36:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8737240642
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 49FF31BF852
- for <buildroot@lists.busybox.net>; Tue, 23 Jan 2024 20:36:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E1B06405D8;
+	Tue, 23 Jan 2024 20:37:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1B06405D8
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0BA8B1BF852
+ for <buildroot@lists.busybox.net>; Tue, 23 Jan 2024 20:37:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 214AB405D8
- for <buildroot@lists.busybox.net>; Tue, 23 Jan 2024 20:36:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 214AB405D8
+ by smtp1.osuosl.org (Postfix) with ESMTP id D80BE81E7B
+ for <buildroot@lists.busybox.net>; Tue, 23 Jan 2024 20:37:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D80BE81E7B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZKycQR-Fs7z0 for <buildroot@lists.busybox.net>;
- Tue, 23 Jan 2024 20:36:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kJQBNVqQmLoL for <buildroot@lists.busybox.net>;
+ Tue, 23 Jan 2024 20:37:17 +0000 (UTC)
 Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A3FDC40445
- for <buildroot@buildroot.org>; Tue, 23 Jan 2024 20:36:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A3FDC40445
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 00CB681E57
+ for <buildroot@buildroot.org>; Tue, 23 Jan 2024 20:37:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 00CB681E57
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 6B3B613F8C8;
- Tue, 23 Jan 2024 21:36:40 +0100 (CET)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 0BEAB13F81D;
+ Tue, 23 Jan 2024 21:37:13 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 23 Jan 2024 21:36:40 +0100
-Date: Tue, 23 Jan 2024 21:36:40 +0100
+ Tue, 23 Jan 2024 21:37:12 +0100
+Date: Tue, 23 Jan 2024 21:37:12 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Adam Duskett <adam.duskett@amarulasolutions.com>
-Message-ID: <ZbAjWL734XjjiKi1@landeda>
+Message-ID: <ZbAjeAgNMGIp03ea@landeda>
 References: <20240123190035.904936-1-adam.duskett@amarulasolutions.com>
- <20240123190035.904936-2-adam.duskett@amarulasolutions.com>
+ <20240123190035.904936-3-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20240123190035.904936-2-adam.duskett@amarulasolutions.com>
+In-Reply-To: <20240123190035.904936-3-adam.duskett@amarulasolutions.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1706042202;
- bh=mibW3R1gAJP+6SYz38HXm4KP0INy7WvllU00La9bEBM=;
+ d=free.fr; s=smtp-20201208; t=1706042235;
+ bh=nhccGWWWF78K/amCLpepqU4JiYNHtKjMdb5q3jWrvgQ=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=h0R8rHYXzQo9SC/5XJNFGnjGjgbStqEKqvhagHIHYq4KWl1D69EX/s0uxHlOQLCm4
- DIUZYIjfVjvJOFdogZK7d19Vmn9WMNmNs8QT5VlR70qzSTaqfa0qSpg0L3afSs89LA
- 7VJTyJ9QGmlSj4QrWXa+chFbK8hvRnim/uVe20bPmMLxN40HT+waiI9oeXmR83uzhz
- nP/xepyPDilxP/r2UCsxXK6EMWAUmsHVVg2g+Lhm4e2tUgKTjm2pprl+ue9P70BfLP
- RT72P7BnIYFRDz7V3sNQzCj+Mq9fmxaZY/oMUvkPNmujsZ6haRGMV0+Bs48jnCVFY9
- scbXg0tQk0zUQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=u/RLUwF4CFcYf+Id8iDVQZTA5DrfE0mXR0l+vOqTeUbnTxOlxvRDNzB2Wg40gvCvh
+ HMhSOF+gHdaLG5sHHkbXA8S0LiuEZLU6ylWNaLe90rrI3IzQCQqaNCkFSj0judQL7O
+ lIQbQvqgXJW4rfF1qOoPHZ80EMbBdwNDRIPJzhkasuAK1/1tTfS4rJLwPTrmsbt+b5
+ sA12ZzX7CLnsl1iaZCFOM0nHWRYHfwHpXOqxJAyvv5Mr9Nc3eu2+mgEjgG5c6a6l8v
+ gTd+BnLe8OvW8G9GtASIEAmy4uTWaFPklRxvifc2I2hhmZLCaTTx9eQbyuzIHsrzBk
+ OLV/DwgPGy4MQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=h0R8rHYX
-Subject: Re: [Buildroot] [PATCH 1/3] package/flutter-pi: remove libgles
- requirement for gstreamer audio plugin
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=u/RLUwF4
+Subject: Re: [Buildroot] [PATCH 2/3] package/flutter-pi: Fix help text for
+ gstreamer audio player
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,19 +82,12 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Adam, All,
+
 On 2024-01-23 12:00 -0700, Adam Duskett spake thusly:
-> package/flutter-pi: remove libgles requirement for gstreamer audio plugin
-
-Duplicate commit title.
-
-> I erroneously added the dependency BR2_PACKAGE_HAS_LIBGLES for the gstreamer
-
-No 'I' in commit logs; instead, we use third-person passive tense. I
-reworded the commit log.
-
-> audio player plugin, and the CMakeLists.txt file does not check for gles2 when
-> the plugin is selected. This error was likely due to a copy/paste mistake.
-> Remove the requirement.
+> The help text is currently copy and pasted from the gstreamer video
+> player plugin help text. Change it to reflect the text from the
+> CMakeLists.txt file.
 > 
 > Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 
@@ -104,21 +97,25 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/flutter-pi/Config.in | 1 -
->  1 file changed, 1 deletion(-)
+>  package/flutter-pi/Config.in | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
 > 
 > diff --git a/package/flutter-pi/Config.in b/package/flutter-pi/Config.in
-> index bb0e3702c1..95b5525806 100644
+> index 95b5525806..223e29749c 100644
 > --- a/package/flutter-pi/Config.in
 > +++ b/package/flutter-pi/Config.in
-> @@ -47,7 +47,6 @@ config BR2_PACKAGE_FLUTTER_PI_CHARSET_CONVERTER_PLUGIN
+> @@ -54,9 +54,8 @@ config BR2_PACKAGE_FLUTTER_PI_GSTREAMER_AUDIO_PLAYER_PLUGIN
+>  	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIORESAMPLE
+>  	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VOLUME
+>  	help
+> -	  Include the gstreamer based video plugins in the finished
+> -	  binary. Allows for more stable, hardware accelerated
+> -	  video playback in flutter using gstreamer.
+> +	  Include the gstreamer based audio plugins in the finished
+> +	  binary.
 >  
->  config BR2_PACKAGE_FLUTTER_PI_GSTREAMER_AUDIO_PLAYER_PLUGIN
->  	bool "gstreamer audio player"
-> -	depends on BR2_PACKAGE_HAS_LIBGLES
->  	select BR2_PACKAGE_GSTREAMER1
->  	select BR2_PACKAGE_GST1_PLUGINS_BASE
->  	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ALSA
+>  config BR2_PACKAGE_FLUTTER_PI_GSTREAMER_VIDEO_PLAYER_PLUGIN
+>  	bool "gstreamer video player"
 > -- 
 > 2.43.0
 > 
