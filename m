@@ -1,87 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5B7FC46CD2
-	for <buildroot@archiver.kernel.org>; Wed, 24 Jan 2024 08:40:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FD27C46CD2
+	for <buildroot@archiver.kernel.org>; Wed, 24 Jan 2024 10:35:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F088B42EA8;
-	Wed, 24 Jan 2024 08:40:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F088B42EA8
+	by smtp3.osuosl.org (Postfix) with ESMTP id F1D4F61446;
+	Wed, 24 Jan 2024 10:35:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1D4F61446
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PiuEv0U0jmw1; Wed, 24 Jan 2024 08:40:06 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dzIKvfTp-SVy; Wed, 24 Jan 2024 10:35:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 29D3542E9C;
-	Wed, 24 Jan 2024 08:40:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29D3542E9C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 531856144A;
+	Wed, 24 Jan 2024 10:35:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 531856144A
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 52D801BF339
- for <buildroot@lists.busybox.net>; Wed, 24 Jan 2024 08:39:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6BE2E1BF391
+ for <buildroot@lists.busybox.net>; Wed, 24 Jan 2024 10:35:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2BC0084EF5
- for <buildroot@lists.busybox.net>; Wed, 24 Jan 2024 08:39:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2BC0084EF5
+ by smtp1.osuosl.org (Postfix) with ESMTP id 443D783F18
+ for <buildroot@lists.busybox.net>; Wed, 24 Jan 2024 10:35:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 443D783F18
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CmHFgTtVe8mB for <buildroot@lists.busybox.net>;
- Wed, 24 Jan 2024 08:39:57 +0000 (UTC)
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2FDD3844B7
- for <buildroot@busybox.net>; Wed, 24 Jan 2024 08:39:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2FDD3844B7
-Received: by mail-wm1-x331.google.com with SMTP id
- 5b1f17b1804b1-40d6b4e2945so61832025e9.0
- for <buildroot@busybox.net>; Wed, 24 Jan 2024 00:39:57 -0800 (PST)
+ with ESMTP id p7AYVHNW5gUb for <buildroot@lists.busybox.net>;
+ Wed, 24 Jan 2024 10:35:08 +0000 (UTC)
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C907683EC4
+ for <buildroot@busybox.net>; Wed, 24 Jan 2024 10:35:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C907683EC4
+Received: by mail-wm1-x32e.google.com with SMTP id
+ 5b1f17b1804b1-40ec048e0c1so12382875e9.2
+ for <buildroot@busybox.net>; Wed, 24 Jan 2024 02:35:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1706085595; x=1706690395;
+ d=1e100.net; s=20230601; t=1706092506; x=1706697306;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=9Gte4Ylw4aoE5dbNdPQ/YeSP97qJIcbtomU3bgGwMOk=;
- b=VKQo//5I0PduTfwBm2RlbEIwAf37N1dqCUvfAc2BfmWcvMKhij+PJ6VY3Q1QV0koQu
- e4NyNuDnKpLpA1cjdv3DZqhhN3QkxCGuZL8P1X1PxCiBqL7fY51LbazmnDTpDa1P+N2w
- HZGgOrzYZf1b0ZYkgRmJwOqo1CWX1U0u3QOxZiw0bya9axSlRASDDDABuqbTikCAmZln
- uuMN5BFcDvbAhWYg416xvgslfpadKna0fZBJ620Xw9nmLXgU9jzl8KzYNT4WzFw39q5q
- s+WxViJMbxCkZ/oQOQWxsW8NT85mgomQMe+P+M4oQ0HFZm+inlRFn+GPtYGhoAEUZQHg
- T1eA==
-X-Gm-Message-State: AOJu0YzWkCGQ8rnIbrPU9qA0/VPThB9RqBc8fJO0C2mmEbfuFPDDuygy
- auhFioopB6xNztg7VYpsX1YBH4vQyoWhrv245gonfNM/yVi98B0VSehlPTSJ
-X-Google-Smtp-Source: AGHT+IEv+C/UpAWwEXuzyZRsIFVaf7ViOB7OjG1aF0EH/Qr85c9w0GEJQqXLqDbQprmAkhJx++D4hw==
-X-Received: by 2002:a05:600c:3799:b0:40e:4a78:bc5f with SMTP id
- o25-20020a05600c379900b0040e4a78bc5fmr604025wmr.97.1706085594864; 
- Wed, 24 Jan 2024 00:39:54 -0800 (PST)
+ bh=WkvzAssXCa8HBmc2uaOQ9FyCNRA71wdc88hAW0f4OkE=;
+ b=YyVnpcZaD0FfHM7WW2Z8LlunWB9nJwDHWAURQ0aDbmSN7XyXVndZl0CTxPJwEb0BDt
+ YC3AkeHmh7lw/4/r+0b8komwyy9COOrlZRluIl2aN4YawsIoFzIrd148bZPvHZa8jaZF
+ ncF6VcQ4S3JDWuSH9WyxmLqqgVA6qKgR2rojgiXNWSbvND+TSU/awWnhV3khRxO7hF4a
+ eTpDXwv1548zYH6LPqUVNFfJSxyQWI7msn0jLA4ReqiN9ypC86KuwN3xv4mAZYfsOd/D
+ 3GmxOtVoF3XpK1wUUslKIq6lpfLqBCnGov07GgqXOGBCPElS+I6QjxvVLljZjM1bKjmC
+ jDRg==
+X-Gm-Message-State: AOJu0YwLb6qN6ymDc5lcltHYBM/P8ish84kXNWOJxf5Pr5pj8Ii0gpln
+ J/DSrLgl/juMe285vn3VVN3tD9PNNrujZxcINDAhb+owIg4c8MA4xaSxczmA
+X-Google-Smtp-Source: AGHT+IHHys3o9nibnXFEVd0redi6XBnlIp2u9bn3hI2VwKFaqOLdqFMVdqEdl9p7BtLPGhRDVtJaOg==
+X-Received: by 2002:a05:600c:4448:b0:40e:937f:16dc with SMTP id
+ v8-20020a05600c444800b0040e937f16dcmr1430976wmn.17.1706092505473; 
+ Wed, 24 Jan 2024 02:35:05 -0800 (PST)
 Received: from xubuntu-23.. ([93.24.197.12]) by smtp.gmail.com with ESMTPSA id
- k20-20020a05600c1c9400b0040e54f15d3dsm48730038wms.31.2024.01.24.00.39.54
+ o8-20020a05600c4fc800b0040e549c77a1sm49195392wmq.32.2024.01.24.02.35.04
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 24 Jan 2024 00:39:54 -0800 (PST)
+ Wed, 24 Jan 2024 02:35:05 -0800 (PST)
 From: Francois Perrad <fperrad@gmail.com>
 X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Wed, 24 Jan 2024 09:39:51 +0100
-Message-Id: <20240124083951.484031-1-francois.perrad@gadz.org>
+Date: Wed, 24 Jan 2024 11:34:44 +0100
+Message-Id: <20240124103453.623733-1-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1706085595; x=1706690395; darn=busybox.net;
+ d=gmail.com; s=20230601; t=1706092506; x=1706697306; darn=busybox.net;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=9Gte4Ylw4aoE5dbNdPQ/YeSP97qJIcbtomU3bgGwMOk=;
- b=Jfn8sYnES3UpvusPQqp0daYqJ+8l9iZPVo1skjxbde3LdFYPuiJtgsUJsErbvlqUit
- 1e8xYNigLlfr9rkIRzOZQOGdl/P/kPWSffJTv8N/oc4UjehDaN65cWyVANm7NZV/jovv
- c7MFZJumZ05eKlJv6I7l7p8v+Ut2s9/95BR8zcWnRBQ2xBe6kJ8vajYbmPKWYMiXkQ4a
- JqPbPt670f6HzEDk6ukgme7avFQVbifxkQRzFHk3Ug071AdzW7Py/mdo9OK4Dw/qkIgQ
- ZzQDbwysMv629UuKfNdAejnvyyrY4ulBLIMbYJYH6KJvq8zZ9eZJB2pg2vkjn1b8u1Io
- vt1w==
+ bh=WkvzAssXCa8HBmc2uaOQ9FyCNRA71wdc88hAW0f4OkE=;
+ b=QN3TpBjHpHD/qk7Fh669ID7CcQ0i3uQdEwC84RvvJCA75NOxs2UKlBJx5hMKTlSiq7
+ lJKbmGtpM+LjkcrSo46oWWe5odnuxgSklzv41k6Tu8mzG2hxQR8cTvQXxvVmGbbudmwY
+ pu0ON5Y9sm2YJZbcoBu6eVdLVdeit2Su5lrHLmaGjQTGy0o7nsBH/d4tv8dm2rrQpqXz
+ 9Pu8F4viCGzqeYPfDnn5dKBdyaUTMGunHXWAt55JcWHXhk3tULGRzz/iqr5Cpx1DNQNS
+ yrIA6Bg71Taha6cvWS5cQ4tz6rlm5e31U2IP1WHlr5FqCRxtanZCwLzv6fA3dZZ2CiSh
+ itjA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Jfn8sYnE
-Subject: [Buildroot] [PATCH] package/moarvm: bump to version 2023.12
+ header.a=rsa-sha256 header.s=20230601 header.b=QN3TpBjH
+Subject: [Buildroot] [PATCH 01/10] package/perl-cookie-baker: bump to
+ version 0.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,32 +101,37 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/moarvm/moarvm.hash | 2 +-
- package/moarvm/moarvm.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/perl-cookie-baker/perl-cookie-baker.hash | 6 +++---
+ package/perl-cookie-baker/perl-cookie-baker.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/moarvm/moarvm.hash b/package/moarvm/moarvm.hash
-index f988f9b15..ed10fad96 100644
---- a/package/moarvm/moarvm.hash
-+++ b/package/moarvm/moarvm.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  aa79d77896c312ba23e01074a53ef3d060becae2ed70b066f902f332da65a499  MoarVM-2023.10.tar.gz
-+sha256  08095605dd2b6a0ebb01394395a725ae561d655700835fa2eff90122a9b1d22a  MoarVM-2023.12.tar.gz
- sha256  c53c6b96081b0a5b9b2fb4d0133d55c20e5e00e4c127ade62f03434ee7b3d2de  Artistic2.txt
-diff --git a/package/moarvm/moarvm.mk b/package/moarvm/moarvm.mk
-index dc833181a..bd1938d88 100644
---- a/package/moarvm/moarvm.mk
-+++ b/package/moarvm/moarvm.mk
+diff --git a/package/perl-cookie-baker/perl-cookie-baker.hash b/package/perl-cookie-baker/perl-cookie-baker.hash
+index cc2a84b14..34bb4b143 100644
+--- a/package/perl-cookie-baker/perl-cookie-baker.hash
++++ b/package/perl-cookie-baker/perl-cookie-baker.hash
+@@ -1,6 +1,6 @@
+-# retrieved by scancpan from http://cpan.metacpan.org/
+-md5  bc8f95893d6ec3093a62d1957e1908f2  Cookie-Baker-0.11.tar.gz
+-sha256  59275f474e07c0aa3611e3e684b894e7db913333d8214420be63f12ec18cd7ab  Cookie-Baker-0.11.tar.gz
++# retrieved by scancpan from https://cpan.metacpan.org/
++md5  7ab63698d2f24a8cfe31a7ea270e9d2d  Cookie-Baker-0.12.tar.gz
++sha256  9b04df5d47dcd45ac4299626a10ec990fb40c94ee5a6300c3a88bdfb3575ec29  Cookie-Baker-0.12.tar.gz
+ 
+ # computed by scancpan
+ sha256  b4ce94671fa219074d4e91e2268652d6bf9764cebcc7a5e27bfc14897745ca4c  LICENSE
+diff --git a/package/perl-cookie-baker/perl-cookie-baker.mk b/package/perl-cookie-baker/perl-cookie-baker.mk
+index 27c88f3e5..add5fcd0e 100644
+--- a/package/perl-cookie-baker/perl-cookie-baker.mk
++++ b/package/perl-cookie-baker/perl-cookie-baker.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MOARVM_VERSION = 2023.10
-+MOARVM_VERSION = 2023.12
- MOARVM_SITE = http://moarvm.com/releases
- MOARVM_SOURCE = MoarVM-$(MOARVM_VERSION).tar.gz
- MOARVM_LICENSE = Artistic-2.0
+-PERL_COOKIE_BAKER_VERSION = 0.11
++PERL_COOKIE_BAKER_VERSION = 0.12
+ PERL_COOKIE_BAKER_SOURCE = Cookie-Baker-$(PERL_COOKIE_BAKER_VERSION).tar.gz
+ PERL_COOKIE_BAKER_SITE = $(BR2_CPAN_MIRROR)/authors/id/K/KA/KAZEBURO
+ PERL_COOKIE_BAKER_DEPENDENCIES = host-perl-module-build-tiny
 -- 
 2.40.1
 
