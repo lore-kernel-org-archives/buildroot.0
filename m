@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44C2CC46CD2
-	for <buildroot@archiver.kernel.org>; Wed, 24 Jan 2024 22:22:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52250C47422
+	for <buildroot@archiver.kernel.org>; Wed, 24 Jan 2024 22:24:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B8D3F401B5;
-	Wed, 24 Jan 2024 22:22:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B8D3F401B5
+	by smtp4.osuosl.org (Postfix) with ESMTP id EF8AC41BB4;
+	Wed, 24 Jan 2024 22:24:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF8AC41BB4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id I6XKpHctGSJ5; Wed, 24 Jan 2024 22:22:48 +0000 (UTC)
+	with ESMTP id gCzMEkrVJuhc; Wed, 24 Jan 2024 22:24:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2829640149;
-	Wed, 24 Jan 2024 22:22:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2829640149
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 545971BF831
- for <buildroot@lists.busybox.net>; Wed, 24 Jan 2024 22:22:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3FF484168C;
+	Wed, 24 Jan 2024 22:24:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3FF484168C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 238591BF831
+ for <buildroot@lists.busybox.net>; Wed, 24 Jan 2024 22:24:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3A48B8330B
- for <buildroot@lists.busybox.net>; Wed, 24 Jan 2024 22:22:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A48B8330B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0829240129
+ for <buildroot@lists.busybox.net>; Wed, 24 Jan 2024 22:24:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0829240129
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DgYJlHtenhbG for <buildroot@lists.busybox.net>;
- Wed, 24 Jan 2024 22:22:45 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xV7ybS04cKMp for <buildroot@lists.busybox.net>;
+ Wed, 24 Jan 2024 22:24:12 +0000 (UTC)
 Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7183281EDE
- for <buildroot@buildroot.org>; Wed, 24 Jan 2024 22:22:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7183281EDE
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E1D9E40119
+ for <buildroot@buildroot.org>; Wed, 24 Jan 2024 22:24:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1D9E40119
 Received: from home.juju.sh (unknown
  [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
  (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 7A3B213F880;
- Wed, 24 Jan 2024 23:22:42 +0100 (CET)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 0343213F8A7;
+ Wed, 24 Jan 2024 23:24:08 +0100 (CET)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 24 Jan 2024 23:22:36 +0100
-Message-ID: <20240124222236.15954-1-ju.o@free.fr>
+Date: Wed, 24 Jan 2024 23:24:03 +0100
+Message-ID: <20240124222403.16360-1-ju.o@free.fr>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1706134963;
- bh=auCBtAHtERMXEiPk8DEPLU2F6z4ExihxmJIha+9wgR8=;
+ d=free.fr; s=smtp-20201208; t=1706135050;
+ bh=fhCFf/Crl5rQPAtfhNjRA/tzOhYm7d1cskzVaYHsxdM=;
  h=From:To:Cc:Subject:Date:From;
- b=Y6uKqLGfBhXTCGXBRe0uzcjycNwS3tdKhCifrjyiUgBvFW5or5cdo6mdLcCGIA4wK
- 57rk1ACWxhDlRPH2hwiZWDWxPSHRiF/qpGowJf62F2ENFp2HFqO5xCErnmmvnZpwHM
- k/ajinan4CP6Rt5zMZi4ghfOY8APv56ZNG1MxuRlMuW2nzT8VTIHW0H46hsQWg6wvb
- 3xDFZWgV9s3r55WM5/fSSsf7KZnsByA9+ZnnAeoJx/W/LUWjmO+dM7Qar7fUAx+5ds
- UI5LA0+1lh/d6iGLpoojOjmu66HEQVt5T/aM72v33Y3AtJiq1qlsH82xKjFLDyYAE7
- Dv9ObC5r61SOA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=VFNoawPvBnvxUZpChB99ekAyuPCOGyVpQyhZj06vRXRa4DfzekAB4j2b1efXCIir0
+ dpIVpEWaulNYTSYclrsRFPf/But8t5K1CgTbw/S3D7M1+AZGzv8qBQD5exrrFesigF
+ 9C/9JAacBA0mbcvKHphKkHHRrC2vbhrPnqFVfTyEXgYdXlGWIzG8U12VD1S5BM0/sV
+ GWz/YTZPsN9sEbO/gI/Dy4Z2N6nMclGi2LGS4ucch4uZAoWCU+ybzdpnvdNcjH/Qp8
+ BayG/yRaaR0xKmjEWDmizP/hMR5NDqZ8xTb++sl6Y5fBXtpw5pTxNOcY8g75VnpWlq
+ SgEeRB/jVBbUQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Y6uKqLGf
-Subject: [Buildroot] [PATCH 1/1] support/testing: add ltrace runtime test
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=VFNoawPv
+Subject: [Buildroot] [PATCH 1/1] support/testing: add trace-cmd runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,61 +78,105 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- DEVELOPERS                                   |  1 +
- support/testing/tests/package/test_ltrace.py | 32 ++++++++++++++++++++
- 2 files changed, 33 insertions(+)
- create mode 100644 support/testing/tests/package/test_ltrace.py
+Patch tested on branch master at commit bc680b5 with commands:
+
+    make check-package
+    ...
+    0 warnings generated
+
+    support/testing/run-tests \
+        -d dl -o output_folder \
+        tests.package.test_trace_cmd
+    ...
+    OK
+---
+ DEVELOPERS                                    |  2 +
+ .../testing/tests/package/test_trace_cmd.py   | 54 +++++++++++++++++++
+ .../test_trace_cmd/linux-ftrace.fragment      |  1 +
+ 3 files changed, 57 insertions(+)
+ create mode 100644 support/testing/tests/package/test_trace_cmd.py
+ create mode 100644 support/testing/tests/package/test_trace_cmd/linux-ftrace.fragment
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 9528837dd0..eea185c159 100644
+index 9528837dd0..94febf5a75 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1787,6 +1787,7 @@ F:	support/testing/tests/package/test_less.py
- F:	support/testing/tests/package/test_libgpgme.py
- F:	support/testing/tests/package/test_libjxl.py
- F:	support/testing/tests/package/test_lrzip.py
-+F:	support/testing/tests/package/test_ltrace.py
- F:	support/testing/tests/package/test_lzip.py
- F:	support/testing/tests/package/test_lsof.py
- F:	support/testing/tests/package/test_lz4.py
-diff --git a/support/testing/tests/package/test_ltrace.py b/support/testing/tests/package/test_ltrace.py
+@@ -1822,6 +1822,8 @@ F:	support/testing/tests/package/test_sed.py
+ F:	support/testing/tests/package/test_stress_ng.py
+ F:	support/testing/tests/package/test_tcl.py
+ F:	support/testing/tests/package/test_tcl/
++F:	support/testing/tests/package/test_trace_cmd.py
++F:	support/testing/tests/package/test_trace_cmd/
+ F:	support/testing/tests/package/test_weston.py
+ F:	support/testing/tests/package/test_weston/
+ F:	support/testing/tests/package/test_xz.py
+diff --git a/support/testing/tests/package/test_trace_cmd.py b/support/testing/tests/package/test_trace_cmd.py
 new file mode 100644
-index 0000000000..9ef64ba5dd
+index 0000000000..e7d5e13bce
 --- /dev/null
-+++ b/support/testing/tests/package/test_ltrace.py
-@@ -0,0 +1,32 @@
++++ b/support/testing/tests/package/test_trace_cmd.py
+@@ -0,0 +1,54 @@
 +import os
 +
 +import infra.basetest
 +
 +
-+class TestLtrace(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_PACKAGE_LTRACE=y
++class TestTraceCmd(infra.basetest.BRTest):
++    # A specific configuration is needed for testing trace-cmd.
++    # The function tracer need to be enabled in the Kernel.
++    kern_fragment = \
++        infra.filepath("tests/package/test_trace_cmd/linux-ftrace.fragment")
++    config = \
++        f"""
++        BR2_aarch64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.74"
++        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
++        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{kern_fragment}"
++        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++        BR2_PACKAGE_TRACE_CMD=y
 +        BR2_TARGET_ROOTFS_CPIO=y
++        BR2_TARGET_ROOTFS_CPIO_GZIP=y
 +        # BR2_TARGET_ROOTFS_TAR is not set
 +        """
 +
 +    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
++        img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
++        kern = os.path.join(self.builddir, "images", "Image")
++        self.emulator.boot(arch="aarch64",
++                           kernel=kern,
++                           kernel_cmdline=["console=ttyAMA0"],
++                           options=["-M", "virt",
++                                    "-cpu", "cortex-a57",
++                                    "-m", "256M",
++                                    "-initrd", img])
 +        self.emulator.login()
 +
-+        # Check the program can execute
-+        self.assertRunOk("ltrace --version")
++        # Record calls to kmalloc() from a simple command.
++        self.assertRunOk("trace-cmd record -e kmalloc ls -l /")
 +
-+        # Run ltrace on a ls
-+        cmd = "ltrace -a 0 -o ltrace.log ls /"
-+        self.assertRunOk(cmd)
++        # Show information about the trace.dat file.
++        self.assertRunOk("trace-cmd dump")
 +
-+        # Check the ltrace log contains occurrences of libc malloc()
-+        cmd = "grep -Ec 'malloc\\([0-9]+\\)' ltrace.log"
-+        out, ret = self.emulator.run(cmd)
-+        self.assertEqual(ret, 0)
-+        self.assertGreater(int(out[0]), 0)
++        # Generate a text report of the trace.
++        self.assertRunOk("trace-cmd report > trace.txt")
++
++        # Check we have occurrences of "kmalloc:" in the trace report.
++        cmd = "grep -Fc kmalloc: trace.txt"
++        output, exit_code = self.emulator.run(cmd)
++        self.assertEquals(exit_code, 0)
++        self.assertTrue(int(output[0]) > 0)
+diff --git a/support/testing/tests/package/test_trace_cmd/linux-ftrace.fragment b/support/testing/tests/package/test_trace_cmd/linux-ftrace.fragment
+new file mode 100644
+index 0000000000..ef82146616
+--- /dev/null
++++ b/support/testing/tests/package/test_trace_cmd/linux-ftrace.fragment
+@@ -0,0 +1 @@
++CONFIG_FTRACE=y
 -- 
 2.43.0
 
