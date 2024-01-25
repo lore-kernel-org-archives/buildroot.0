@@ -4,47 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A4B6C47258
-	for <buildroot@archiver.kernel.org>; Thu, 25 Jan 2024 21:41:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B78AC48260
+	for <buildroot@archiver.kernel.org>; Thu, 25 Jan 2024 21:41:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3B00544885;
-	Thu, 25 Jan 2024 21:41:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B00544885
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2BE414EC59;
+	Thu, 25 Jan 2024 21:41:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2BE414EC59
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vivEBiXZ1M8G; Thu, 25 Jan 2024 21:41:11 +0000 (UTC)
+	with ESMTP id XLggDg81ZTUM; Thu, 25 Jan 2024 21:41:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C52E54ED6F;
-	Thu, 25 Jan 2024 21:41:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C52E54ED6F
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2F1B31BF5DA
- for <buildroot@lists.busybox.net>; Thu, 25 Jan 2024 21:40:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 663374EC1D;
+	Thu, 25 Jan 2024 21:41:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 663374EC1D
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BE4731BF5DA
+ for <buildroot@lists.busybox.net>; Thu, 25 Jan 2024 21:40:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D1CD86F70A
- for <buildroot@lists.busybox.net>; Thu, 25 Jan 2024 21:22:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1CD86F70A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 11267846A1
+ for <buildroot@lists.busybox.net>; Thu, 25 Jan 2024 21:17:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 11267846A1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QbajobbxN_Nw for <buildroot@lists.busybox.net>;
- Thu, 25 Jan 2024 21:22:37 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8090A6F72C
- for <buildroot@buildroot.org>; Thu, 25 Jan 2024 21:22:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8090A6F72C
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 528128645A; Thu, 25 Jan 2024 21:22:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HNrYuDIx0a-n for <buildroot@lists.busybox.net>;
+ Thu, 25 Jan 2024 21:17:38 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6036F83F17
+ for <buildroot@busybox.net>; Thu, 25 Jan 2024 21:17:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6036F83F17
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3C282C0002;
+ Thu, 25 Jan 2024 21:17:36 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1rT76N-006IH5-1z;
+ Thu, 25 Jan 2024 22:17:35 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu, 25 Jan 2024 22:17:17 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b136bed2fd703548610e2ac3e0d54b33128db716
-X-Git-Newrev: 9ba82f85f3d7bac948b63ec8aca16780fe4198ec
-X-Patchwork-Hint: ignore
-Message-Id: <20240125212237.528128645A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/janet: bump to version 1.33.0
+To: Francois Perrad <fperrad@gmail.com>
+References: <20240124083943.484010-1-francois.perrad@gadz.org>
+Date: Thu, 25 Jan 2024 22:17:35 +0100
+In-Reply-To: <20240124083943.484010-1-francois.perrad@gadz.org> (Francois
+ Perrad's message of "Wed, 24 Jan 2024 09:39:43 +0100")
+Message-ID: <87y1cd5d00.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH] package/janet: bump to version 1.33.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,46 +62,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9ba82f85f3d7bac948b63ec8aca16780fe4198ec
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/janet/janet.hash | 2 +-
- package/janet/janet.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-diff --git a/package/janet/janet.hash b/package/janet/janet.hash
-index 148b55d958..33bbad5853 100644
---- a/package/janet/janet.hash
-+++ b/package/janet/janet.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  ac74444f1b545830c34738fe9ebb58c865ea4b819b0b0c3124315c646d9ce4cb  janet-1.32.1.tar.gz
-+sha256  c9018fbd69b825cfc706d8c40e9464be37e924ce07089933e92f4f931ccf0d8d  janet-1.33.0.tar.gz
- 
- # Locally calculated
- sha256  95fca700e8dce9699248e7cc80ac88ce2357874c8352cd2be4d18f183dc9710b  LICENSE
-diff --git a/package/janet/janet.mk b/package/janet/janet.mk
-index aa7d85fd50..ac34ba0a38 100644
---- a/package/janet/janet.mk
-+++ b/package/janet/janet.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--JANET_VERSION = 1.32.1
-+JANET_VERSION = 1.33.0
- JANET_SITE = $(call github,janet-lang,janet,v$(JANET_VERSION))
- JANET_LICENSE = MIT
- JANET_LICENSE_FILES = LICENSE
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
