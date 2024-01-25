@@ -4,53 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42D64C47258
-	for <buildroot@archiver.kernel.org>; Thu, 25 Jan 2024 21:42:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E493AC47258
+	for <buildroot@archiver.kernel.org>; Thu, 25 Jan 2024 21:42:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E215142F78;
-	Thu, 25 Jan 2024 21:42:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E215142F78
+	by smtp4.osuosl.org (Postfix) with ESMTP id 939A14ED45;
+	Thu, 25 Jan 2024 21:42:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 939A14ED45
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0hlNLHbf7UjK; Thu, 25 Jan 2024 21:42:22 +0000 (UTC)
+	with ESMTP id ogpK7QyLZ118; Thu, 25 Jan 2024 21:42:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 52EF74ED5A;
-	Thu, 25 Jan 2024 21:42:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 52EF74ED5A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2409B1BF98D
- for <buildroot@lists.busybox.net>; Thu, 25 Jan 2024 21:41:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C91F14ED4F;
+	Thu, 25 Jan 2024 21:42:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C91F14ED4F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 516071BF5DA
+ for <buildroot@lists.busybox.net>; Thu, 25 Jan 2024 21:41:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1504985164
- for <buildroot@lists.busybox.net>; Thu, 25 Jan 2024 21:20:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1504985164
+ by smtp4.osuosl.org (Postfix) with ESMTP id 624834EC88
+ for <buildroot@lists.busybox.net>; Thu, 25 Jan 2024 21:22:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 624834EC88
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iI_nhuIBkNfP for <buildroot@lists.busybox.net>;
- Thu, 25 Jan 2024 21:20:15 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0B7EC85161
- for <buildroot@busybox.net>; Thu, 25 Jan 2024 21:20:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B7EC85161
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 98B4DFF803;
- Thu, 25 Jan 2024 21:20:11 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rT78s-006IQm-3C;
- Thu, 25 Jan 2024 22:20:11 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rXQTbfMxWClr for <buildroot@lists.busybox.net>;
+ Thu, 25 Jan 2024 21:22:37 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6E80A46493
+ for <buildroot@buildroot.org>; Thu, 25 Jan 2024 21:22:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E80A46493
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 46E4C864CC; Thu, 25 Jan 2024 21:22:37 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Francois Perrad <fperrad@gmail.com>
-References: <20240123122042.466413-1-francois.perrad@gadz.org>
-Date: Thu, 25 Jan 2024 22:20:10 +0100
-In-Reply-To: <20240123122042.466413-1-francois.perrad@gadz.org> (Francois
- Perrad's message of "Tue, 23 Jan 2024 13:20:42 +0100")
-Message-ID: <87h6j15cvp.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/libgtk3: bump to version 3.24.40
+To: buildroot@buildroot.org
+Date: Thu, 25 Jan 2024 22:13:07 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 04dfeff6242516a1061973fc7af2cc9c5e3dd4e2
+X-Git-Newrev: b136bed2fd703548610e2ac3e0d54b33128db716
+X-Patchwork-Hint: ignore
+Message-Id: <20240125212237.46E4C864CC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gnutls: security bump to 3.8.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,20 +56,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@busybox.net
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b136bed2fd703548610e2ac3e0d54b33128db716
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+see CVE-2024-0553: Fix more timing side-channel inside RSA-PSK key exchange
+see CVE-2024-0567: Fix assertion failure when verifying a certificate chain with a cycle of cross signatures
 
-Committed, thanks.
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gnutls/gnutls.hash | 4 ++--
+ package/gnutls/gnutls.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index 6ad363f01d..47fb34ea7c 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.8/gnutls-3.8.2.tar.xz.sig
+-sha256  e765e5016ffa9b9dd243e363a0460d577074444ee2491267db2e96c9c2adef77  gnutls-3.8.2.tar.xz
++# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.8/gnutls-3.8.3.tar.xz.sig
++sha256  f74fc5954b27d4ec6dfbb11dea987888b5b124289a3703afcada0ee520f4173e  gnutls-3.8.3.tar.xz
+ # Locally calculated
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  doc/COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  doc/COPYING.LESSER
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 3e9987cdce..8a4f3345aa 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -6,7 +6,7 @@
+ 
+ # When bumping, make sure *all* --without-libfoo-prefix options are in GNUTLS_CONF_OPTS
+ GNUTLS_VERSION_MAJOR = 3.8
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).2
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).3
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = LGPL-2.1+ (core library)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
