@@ -4,53 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B78AC48260
-	for <buildroot@archiver.kernel.org>; Thu, 25 Jan 2024 21:41:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8BE0C48260
+	for <buildroot@archiver.kernel.org>; Thu, 25 Jan 2024 21:41:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2BE414EC59;
-	Thu, 25 Jan 2024 21:41:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2BE414EC59
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5654F4251D;
+	Thu, 25 Jan 2024 21:41:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5654F4251D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XLggDg81ZTUM; Thu, 25 Jan 2024 21:41:24 +0000 (UTC)
+	with ESMTP id CA6W28BbgXVN; Thu, 25 Jan 2024 21:41:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 663374EC1D;
-	Thu, 25 Jan 2024 21:41:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 663374EC1D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 64ADC4216B;
+	Thu, 25 Jan 2024 21:41:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64ADC4216B
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BE4731BF5DA
- for <buildroot@lists.busybox.net>; Thu, 25 Jan 2024 21:40:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0E20C1BF5DA
+ for <buildroot@lists.busybox.net>; Thu, 25 Jan 2024 21:40:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 11267846A1
- for <buildroot@lists.busybox.net>; Thu, 25 Jan 2024 21:17:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 11267846A1
+ by smtp1.osuosl.org (Postfix) with ESMTP id A02B285139
+ for <buildroot@lists.busybox.net>; Thu, 25 Jan 2024 21:18:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A02B285139
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HNrYuDIx0a-n for <buildroot@lists.busybox.net>;
- Thu, 25 Jan 2024 21:17:38 +0000 (UTC)
+ with ESMTP id ig0K_HvBizdM for <buildroot@lists.busybox.net>;
+ Thu, 25 Jan 2024 21:18:04 +0000 (UTC)
 Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
  [217.70.183.198])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6036F83F17
- for <buildroot@busybox.net>; Thu, 25 Jan 2024 21:17:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6036F83F17
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3C282C0002;
- Thu, 25 Jan 2024 21:17:36 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EDA298513F
+ for <buildroot@busybox.net>; Thu, 25 Jan 2024 21:18:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EDA298513F
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7A646C0002;
+ Thu, 25 Jan 2024 21:18:02 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rT76N-006IH5-1z;
- Thu, 25 Jan 2024 22:17:35 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rT76n-006IIA-33;
+ Thu, 25 Jan 2024 22:18:01 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Francois Perrad <fperrad@gmail.com>
-References: <20240124083943.484010-1-francois.perrad@gadz.org>
-Date: Thu, 25 Jan 2024 22:17:35 +0100
-In-Reply-To: <20240124083943.484010-1-francois.perrad@gadz.org> (Francois
- Perrad's message of "Wed, 24 Jan 2024 09:39:43 +0100")
-Message-ID: <87y1cd5d00.fsf@48ers.dk>
+References: <20240124083951.484031-1-francois.perrad@gadz.org>
+Date: Thu, 25 Jan 2024 22:18:01 +0100
+In-Reply-To: <20240124083951.484031-1-francois.perrad@gadz.org> (Francois
+ Perrad's message of "Wed, 24 Jan 2024 09:39:51 +0100")
+Message-ID: <87ttn15cza.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/janet: bump to version 1.33.0
+Subject: Re: [Buildroot] [PATCH] package/moarvm: bump to version 2023.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
