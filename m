@@ -4,54 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C174C47258
-	for <buildroot@archiver.kernel.org>; Thu, 25 Jan 2024 21:39:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45E52C47258
+	for <buildroot@archiver.kernel.org>; Thu, 25 Jan 2024 21:39:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0BDF14ED26;
-	Thu, 25 Jan 2024 21:39:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0BDF14ED26
+	by smtp4.osuosl.org (Postfix) with ESMTP id CCD604285A;
+	Thu, 25 Jan 2024 21:39:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CCD604285A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Mhu7JvVK1XbJ; Thu, 25 Jan 2024 21:39:10 +0000 (UTC)
+	with ESMTP id c-ZvesETaqiW; Thu, 25 Jan 2024 21:39:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4931B42E93;
-	Thu, 25 Jan 2024 21:39:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4931B42E93
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3A0DE1BF5DA
- for <buildroot@lists.busybox.net>; Thu, 25 Jan 2024 21:39:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 245314EBA8;
+	Thu, 25 Jan 2024 21:39:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 245314EBA8
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 210671BF616
+ for <buildroot@lists.busybox.net>; Thu, 25 Jan 2024 21:39:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 81E0E4B3D5
- for <buildroot@lists.busybox.net>; Thu, 25 Jan 2024 21:13:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 81E0E4B3D5
+ by smtp3.osuosl.org (Postfix) with ESMTP id 691206F57A
+ for <buildroot@lists.busybox.net>; Thu, 25 Jan 2024 21:19:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 691206F57A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kXcOlHlj-ila for <buildroot@lists.busybox.net>;
- Thu, 25 Jan 2024 21:13:57 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0DB0A42C6C
- for <buildroot@buildroot.org>; Thu, 25 Jan 2024 21:11:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0DB0A42C6C
-Received: by mail.gandi.net (Postfix) with ESMTPSA id F2AF740002;
- Thu, 25 Jan 2024 21:11:39 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id p1M4jyk783On for <buildroot@lists.busybox.net>;
+ Thu, 25 Jan 2024 21:19:27 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 347F36FC0C
+ for <buildroot@buildroot.org>; Thu, 25 Jan 2024 21:19:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 347F36FC0C
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E5E641C0004;
+ Thu, 25 Jan 2024 21:19:23 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rT70d-006HsO-0G;
- Thu, 25 Jan 2024 22:11:39 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rT786-006INb-2z;
+ Thu, 25 Jan 2024 22:19:22 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Adrian Perez de Castro <aperez@igalia.com>
-References: <20240125144121.1534299-1-aperez@igalia.com>
-Date: Thu, 25 Jan 2024 22:11:39 +0100
-In-Reply-To: <20240125144121.1534299-1-aperez@igalia.com> (Adrian Perez de
- Castro's message of "Thu, 25 Jan 2024 16:41:17 +0200")
-Message-ID: <8734ul6ruc.fsf@48ers.dk>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20240122221934.475430-1-fontaine.fabrice@gmail.com>
+Date: Thu, 25 Jan 2024 22:19:22 +0100
+In-Reply-To: <20240122221934.475430-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 22 Jan 2024 23:19:34 +0100")
+Message-ID: <87le8d5cx1.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/libwpe: switch back to version
- 1.14.2
+Subject: Re: [Buildroot] [PATCH 1/1] package/xterm: bump to version 389
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,60 +68,25 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > The versioning scheme for libwpe uses the middle version number to
- > indicate stability: an even number for stable releases, odd for
- > development preview releases. As such, Buildroot should be using
- > version 1.14.2, which is the most recent of the stable releases.
- > While at it, add a note in the .mk file about the versioning scheme.
+ > - Update hash of COPYING (update in year)
+ > - This bump will fix the following musl build failure raised since bump
+ >   to version 384 in commit 164d635f3782522c324c710b767ef21c598228c4:
 
-Hmm, this was bumped back in July before 2023.08-rc1. Is there no 1.16.x
-version coming?
+ > ./main.c:802:34: error: 'TAB3' undeclared here (not in a function); did you mean 'TAB0'?
+ >   802 |     { -1,       XTTYMODE__tabs,  TAB3 },
+ >       |                                  ^~~~
+ >       |                                  TAB0
 
- > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
- > ---
- >  package/libwpe/libwpe.hash | 6 +++---
- >  package/libwpe/libwpe.mk   | 3 ++-
- >  2 files changed, 5 insertions(+), 4 deletions(-)
+ > https://invisible-island.net/xterm/xterm.log.html#xterm_389
 
- > diff --git a/package/libwpe/libwpe.hash b/package/libwpe/libwpe.hash
- > index 226b4f3295..554b1f2b0e 100644
- > --- a/package/libwpe/libwpe.hash
- > +++ b/package/libwpe/libwpe.hash
- > @@ -1,6 +1,6 @@
- > -# From https://wpewebkit.org/releases/libwpe-1.15.1.tar.xz.sums
- > -sha1  0082ceb475175bfecd1172f2c0b292824d31561b  libwpe-1.15.1.tar.xz
- > -sha256  14d36a93a05ab7ada9bec581720b8057336fe681bbbe59bda7d50cb8f3eba3a6  libwpe-1.15.1.tar.xz
- > +# From https://wpewebkit.org/releases/libwpe-1.14.2.tar.xz.sums
- > +sha1  70a2b894af2b50d7082260158a89524974a480f3  libwpe-1.14.2.tar.xz
- > +sha256  8ae38022c50cb340c96fdbee1217f1e46ab57fbc1c8ba98142565abbedbe22ef  libwpe-1.14.2.tar.xz
- 
- >  # Hashes for license files:
- >  sha256  35bef295cedbbf179eaee14328002587a0e7dc08ebf3f15ea080a6f2815f0d7b  COPYING
- > diff --git a/package/libwpe/libwpe.mk b/package/libwpe/libwpe.mk
- > index f8c6b0fc76..1fbdd5fcc3 100644
- > --- a/package/libwpe/libwpe.mk
- > +++ b/package/libwpe/libwpe.mk
- > @@ -4,7 +4,8 @@
- >  #
- >  ################################################################################
- 
- > -LIBWPE_VERSION = 1.15.1
- > +# The middle number is even for stable releases, odd for development ones.
- > +LIBWPE_VERSION = 1.14.2
- >  LIBWPE_SITE = https://wpewebkit.org/releases
- >  LIBWPE_SOURCE = libwpe-$(LIBWPE_VERSION).tar.xz
- >  LIBWPE_INSTALL_STAGING = YES
- > -- 
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/51f98577b851bdbb0a0ab93c9ef94977776c1b1b
 
- > 2.43.0
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
- > _______________________________________________
- > buildroot mailing list
- > buildroot@buildroot.org
- > https://lists.buildroot.org/mailman/listinfo/buildroot
-
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
