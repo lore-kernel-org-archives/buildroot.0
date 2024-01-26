@@ -1,53 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A87A2C47DDF
-	for <buildroot@archiver.kernel.org>; Fri, 26 Jan 2024 13:57:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 169CDC47DDB
+	for <buildroot@archiver.kernel.org>; Fri, 26 Jan 2024 16:02:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3245B60F5C;
-	Fri, 26 Jan 2024 13:57:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3245B60F5C
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OehdsB1iBjWn; Fri, 26 Jan 2024 13:57:56 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7775760F4B;
-	Fri, 26 Jan 2024 13:57:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7775760F4B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B54321BF59C
- for <buildroot@lists.busybox.net>; Fri, 26 Jan 2024 13:57:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9A5E540150
- for <buildroot@lists.busybox.net>; Fri, 26 Jan 2024 13:57:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A5E540150
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7CADD41BDD;
+	Fri, 26 Jan 2024 16:02:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7CADD41BDD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tls4XZwfgjjM for <buildroot@lists.busybox.net>;
- Fri, 26 Jan 2024 13:57:52 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2E7904014E
- for <buildroot@buildroot.org>; Fri, 26 Jan 2024 13:57:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E7904014E
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2612E60003;
- Fri, 26 Jan 2024 13:57:49 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 90iIA_tNmHb0; Fri, 26 Jan 2024 16:02:53 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id CE76E41770;
+	Fri, 26 Jan 2024 16:02:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE76E41770
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 151C61BF293
+ for <buildroot@lists.busybox.net>; Fri, 26 Jan 2024 16:02:51 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id E113F404B0
+ for <buildroot@lists.busybox.net>; Fri, 26 Jan 2024 16:02:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E113F404B0
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5T6cpG3YYQmC for <buildroot@lists.busybox.net>;
+ Fri, 26 Jan 2024 16:02:48 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8B9DA401D2
+ for <buildroot@buildroot.org>; Fri, 26 Jan 2024 16:02:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B9DA401D2
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9B1D9C0003;
+ Fri, 26 Jan 2024 16:02:45 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@48ers.dk>) id 1rTMiK-00A6Jn-1r;
- Fri, 26 Jan 2024 14:57:48 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rTOfF-00ACo3-0K;
+ Fri, 26 Jan 2024 17:02:45 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 26 Jan 2024 14:57:47 +0100
-Message-Id: <20240126135747.2407552-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.2
+To: <Jamie.Gibbons@microchip.com>
+References: <20240126100903.2139253-1-peter@korsgaard.com>
+ <7a66a52cc9a4b5bd68d89480a2ff8ac05239415e.camel@microchip.com>
+Date: Fri, 26 Jan 2024 17:02:44 +0100
+In-Reply-To: <7a66a52cc9a4b5bd68d89480a2ff8ac05239415e.camel@microchip.com>
+ (Jamie Gibbons's message of "Fri, 26 Jan 2024 12:44:01 +0000")
+Message-ID: <87plxo2icb.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: [Buildroot] [PATCH] package/darkhttpd: security bump to version 1.15
+Subject: Re: [Buildroot] [PATCH] board/microchip/mpfs_icicle/genimage.cfg:
+ drop legacy gpt = true
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,68 +64,24 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Ludovic.Desroches@microchip.com, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes the following security issues:
-
-CVE-2024-23770: Local Leak of Authentication Parameter in Process List
-
-CVE-2024-23771: Basic Auth Timing Attack
-
-https://security.opensuse.org/2024/01/22/darkhttpd-basic-auth-issues.html
-
-Notice that CVE-2024-23770 is only documented as a known weakness, not
-fixed.
-
-Also change the license logic to use the dedicated COPYING file available
-since 1.14:
-
-https://github.com/emikulic/darkhttpd/commit/a8ae2b1de069588cad23d79a5392445ee9590fcd
-
-This license is ISC, not MIT - So adjust DARKHTTPD_LICENSE to match.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/darkhttpd/darkhttpd.hash | 4 ++--
- package/darkhttpd/darkhttpd.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/package/darkhttpd/darkhttpd.hash b/package/darkhttpd/darkhttpd.hash
-index 188afff767..84a787eeba 100644
---- a/package/darkhttpd/darkhttpd.hash
-+++ b/package/darkhttpd/darkhttpd.hash
-@@ -1,3 +1,3 @@
- # Locally generated
--sha256  e063de9efa5635260c8def00a4d41ec6145226a492d53fa1dac436967670d195  darkhttpd-1.14.tar.gz
--sha256  f002944c9a8516e3346002d39c3e13681306833358c0f3c7781dff1fdb639710  darkhttpd.c
-+sha256  ea48cedafbf43186f4a8d1afc99b33b671adee99519658446022e6f63bd9eda9  darkhttpd-1.15.tar.gz
-+sha256  1ecf63e8f84fd60ac7215e04195b9a61dcb47176ea65df26547582027f6c1dee  COPYING
-diff --git a/package/darkhttpd/darkhttpd.mk b/package/darkhttpd/darkhttpd.mk
-index bda08899b8..e13f8f7770 100644
---- a/package/darkhttpd/darkhttpd.mk
-+++ b/package/darkhttpd/darkhttpd.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--DARKHTTPD_VERSION = 1.14
-+DARKHTTPD_VERSION = 1.15
- DARKHTTPD_SITE = $(call github,emikulic,darkhttpd,v$(DARKHTTPD_VERSION))
--DARKHTTPD_LICENSE = MIT
--DARKHTTPD_LICENSE_FILES = darkhttpd.c
-+DARKHTTPD_LICENSE = ISC
-+DARKHTTPD_LICENSE_FILES = COPYING
- DARKHTTPD_CPE_ID_VENDOR = darkhttpd_project
- 
- define DARKHTTPD_BUILD_CMDS
--- 
-2.39.2
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Pj4+Pj4gICA8SmFtaWUuR2liYm9uc0BtaWNyb2NoaXAuY29tPiB3cml0ZXM6CgogPiBPbiBGcmks
+IDIwMjQtMDEtMjYgYXQgMTE6MDkgKzAxMDAsIFBldGVyIEtvcnNnYWFyZCB3cm90ZToKID4+IEVY
+VEVSTkFMIEVNQUlMOiBEbyBub3QgY2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRhY2htZW50cyB1bmxl
+c3MgeW91IGtub3cKID4+IHRoZSBjb250ZW50IGlzIHNhZmUKID4+IAogPj4gR2VuaW1hZ2UgY29t
+cGxhaW5zIGFib3V0IHRoZSBjb25maWcgdXNpbmcgdGhlIGRlcHJlY2F0ZWQgZ3B0IG9wdGlvbjoK
+ID4+IAogPj4gSU5GTzogaGRpbWFnZShzZGNhcmQuaW1nKTogVGhlIG9wdGlvbiAnZ3B0JyBpcyBk
+ZXByZWNhdGVkLsKgIFVzZQogPj4gJ3BhcnRpdGlvbi10YWJsZS10eXBlJyBpbnN0ZWFkCiA+PiAK
+ID4+IFNvIGNoYW5nZSB0byBwYXJ0aXRpb24tdGFibGUtdHlwZSBmb3IgY29uc2lzdGVuY3kgd2l0
+aCB0aGUgb3RoZXIKID4+IGNvbmZpZ3MuCgogPiBIaSBQZXRlciwKCiA+IFRoYW5rcyBmb3IgdGhl
+IHVwZGF0ZS4KCiA+IEphbWllLgoKID4+IFNpZ25lZC1vZmYtYnk6IFBldGVyIEtvcnNnYWFyZCA8
+cGV0ZXJAa29yc2dhYXJkLmNvbT4KID4gVGVzdGVkLWJ5OiBKYW1pZSBHaWJib25zIDxqYW1pZS5n
+aWJib25zQG1pY3JvY2hpcC5jb20+CgpDb21taXR0ZWQsIHRoYW5rcy4KCi0tIApCeWUsIFBldGVy
+IEtvcnNnYWFyZApfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+XwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8v
+bGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
