@@ -1,50 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0EB2AC47422
-	for <buildroot@archiver.kernel.org>; Fri, 26 Jan 2024 16:13:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1572C47DDB
+	for <buildroot@archiver.kernel.org>; Fri, 26 Jan 2024 17:29:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BE690400F6;
-	Fri, 26 Jan 2024 16:13:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE690400F6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 55EE560DF9;
+	Fri, 26 Jan 2024 17:29:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 55EE560DF9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4M9OKWSoz_fv; Fri, 26 Jan 2024 16:12:59 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nZsDZ_VYN1mB; Fri, 26 Jan 2024 17:29:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9A374400D9;
-	Fri, 26 Jan 2024 16:12:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A374400D9
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8AFA060BF1;
+	Fri, 26 Jan 2024 17:29:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8AFA060BF1
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 78CDD1BF284
- for <buildroot@lists.busybox.net>; Fri, 26 Jan 2024 16:12:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id ACF0C1BF38C
+ for <buildroot@lists.busybox.net>; Fri, 26 Jan 2024 17:29:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5D5D9614D2
- for <buildroot@lists.busybox.net>; Fri, 26 Jan 2024 16:12:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5D5D9614D2
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8548760BF1
+ for <buildroot@lists.busybox.net>; Fri, 26 Jan 2024 17:29:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8548760BF1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TFeBTP_Mm3bP for <buildroot@lists.busybox.net>;
- Fri, 26 Jan 2024 16:12:18 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 32C4C60C02
- for <buildroot@buildroot.org>; Fri, 26 Jan 2024 16:12:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32C4C60C02
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2087586583; Fri, 26 Jan 2024 16:12:18 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ with ESMTP id PVSmpFbX8A5o for <buildroot@lists.busybox.net>;
+ Fri, 26 Jan 2024 17:29:27 +0000 (UTC)
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 99F2D60BC0
+ for <buildroot@buildroot.org>; Fri, 26 Jan 2024 17:29:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 99F2D60BC0
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-40ee82d040dso6048445e9.3
+ for <buildroot@buildroot.org>; Fri, 26 Jan 2024 09:29:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1706290165; x=1706894965;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=oMNpyifNnAUCPSK/CtXMkhVIyZswiK0DR48fXrA2ieM=;
+ b=IZ6lG7/qoxb9L86ShkgR83w8beKGOGC1rBYGv0KrK0out9f3Y+HUxKRjR6jl+pBUCj
+ DYqvCDKYRgBRCvyqDqclZ7DX6GLyH70LWNkecDLIxM3AsWdqXcuTRJQycOr5slYx+Ege
+ fSxRYjZMQTy1toLTCMsy7gxUtMFbV2Vtllf4csAY1WkKkBQt1L63rrayOVYQST2qVhcU
+ VIb8SL3KYL1wcRFxUoxORiXYKyrogWwbxIGgoeybRyT/u6LmJEPe8qS2DdAzB8Vrq1x9
+ x4iHuynH2MGCkfHn+jkaUKWR6qjV3vHDa7HPz5HXJ1Ftc6J5fifoSaUi2S93mlfqZ5RJ
+ 2bBQ==
+X-Gm-Message-State: AOJu0Yz1DOydMP+CpUW2c04xEq0lzBWok/f87dGYZsKW2j25g7BPHn3k
+ um+yeD2Fv9U+q3qRoxHYwfdzEbwdXC7wNZLNQ+44ZSN67R8Rf+Kf22zPI5U7eNQ=
+X-Google-Smtp-Source: AGHT+IH287b8oxGI7VOgYB3rabNohuN8asxBvMOLbdnVwFuKhpHI4h5GXeVedqau4ssBPLg2jlqQyQ==
+X-Received: by 2002:a05:600c:4f08:b0:40e:4e95:c3 with SMTP id
+ l8-20020a05600c4f0800b0040e4e9500c3mr99559wmq.73.1706290165099; 
+ Fri, 26 Jan 2024 09:29:25 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ v12-20020a05600c444c00b0040ee7175eb1sm1118663wmn.9.2024.01.26.09.29.24
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 26 Jan 2024 09:29:24 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 26 Jan 2024 17:08:24 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: afe633d6beef29b05514e2272414b6db6a727cb8
-X-Git-Newrev: de81f2e3bcd7268214ad909af7d7e467b1720a63
-X-Patchwork-Hint: ignore
-Message-Id: <20240126161218.2087586583@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kexec: bump to version 2.0.28
+Date: Fri, 26 Jan 2024 18:29:20 +0100
+Message-ID: <20240126172920.1628617-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1706290165; x=1706894965; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=oMNpyifNnAUCPSK/CtXMkhVIyZswiK0DR48fXrA2ieM=;
+ b=gL/+DCYrbUJqt9sKarSeFQoxR4joje1re66NeI0a8EU+DK6p0DJnv01S95uuf5AhTD
+ 4JYAV5PlFmiZ/zUYfHB7IrwCvjEHj0cGNxFBJdSY5Opc7dTjiXb4sgdKVydPw/Kth37Q
+ uS4aK+HT1XbEb8IMhsNH2379CiEQIVoUR1H/T0YqDuKjgj+vvcxBorVKNus8mkQD6rCE
+ rbKkinAIxVVkYXrXvM+g77qx5A4BWDVWydNUqIEswnYxRsdfT9Y+efLCvLQ1UrHyqemL
+ NdbKr1o32DrVTPBRShsIldv66ZkdsK+NMhCNLpXeUJ+Kq9sz1G6BQ8o5FQBUreEsvjdy
+ aoVQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=gL/+DCYr
+Subject: [Buildroot] [PATCH 1/1] package/brltty: disable emacs and lua
+ bindings
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,223 +94,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Mario Lang <mlang@blind.guru>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de81f2e3bcd7268214ad909af7d7e467b1720a63
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Disable lua bindings to avoid the following build failure if host-lua
+and lua are built before brltty raised since bump to version 6.5 in
+commit 82c6e87d5eaaf5b32aa340ab384f88539238cbe1 and
+https://github.com/brltty/brltty/commit/42bf48ca010d9163652cb0a014662fa243132736:
 
-For release announce, see:
-https://lists.infradead.org/pipermail/kexec/2024-January/029156.html
+configure: lua package: lua
+configure: lua includes:
+configure: lua libs: -L/home/autobuild/autobuild/instance-0/output-1/host/bin/../sparc64-buildroot-linux-gnu/sysroot/usr/lib -llua -lm -ldl
+checking for lua5.4... no
+checking for lua... /home/autobuild/autobuild/instance-0/output-1/host/bin/lua
+configure: Lua shell: /home/autobuild/autobuild/instance-0/output-1/host/bin/lua
+configure: Lua library directory: /home/autobuild/autobuild/instance-0/output-1/host/lib/lua/5.3
 
-This commit removes the two package patches, which are now included
-in this new version.
+[...]
 
-The "KEXEC_AUTORECONF = YES" is also removed, since it is no longer
-needed (due to the patch removal).
+/usr/bin/install -c -d /home/autobuild/autobuild/instance-0/output-1/target/home/autobuild/autobuild/instance-0/output-1/host/lib/lua/5.3
+/usr/bin/install -c -s --strip-program /bin/true brlapi.so /home/autobuild/autobuild/instance-0/output-1/target/home/autobuild/autobuild/instance-0/output-1/host/lib/lua/5.3
+make[3]: Leaving directory '/home/autobuild/autobuild/instance-0/output-1/build/brltty-6.6/Bindings/Lua'
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[...]
+
+brltty: installs files in /home/autobuild/autobuild/instance-0/output-1/target//home/autobuild/autobuild/instance-0/output-1
+
+While at it, disable emacs bindings which have also been added in
+version 6.5 with
+https://github.com/brltty/brltty/commit/64a487e29941df54796645229a872ecbe2a06bfe
+
+Fixes:
+ - http://autobuild.buildroot.org/results/f424e6727bbe61ea4b7703e93aae6fcab7506898
+ - http://autobuild.buildroot.org/results/bf4a161fc66fb99a24f08bea3436b13738f2e383
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../0001-m68k-fix-getrandom-use-with-uclibc.patch  |  36 -------
- ...de-a-memfd_create-wrapper-if-not-present-.patch | 113 ---------------------
- package/kexec/kexec.hash                           |   2 +-
- package/kexec/kexec.mk                             |   4 +-
- 4 files changed, 2 insertions(+), 153 deletions(-)
+ package/brltty/brltty.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/kexec/0001-m68k-fix-getrandom-use-with-uclibc.patch b/package/kexec/0001-m68k-fix-getrandom-use-with-uclibc.patch
-deleted file mode 100644
-index 6661349aba..0000000000
---- a/package/kexec/0001-m68k-fix-getrandom-use-with-uclibc.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From 491439a5c55b18dce96b522f3a603faaf1908ede Mon Sep 17 00:00:00 2001
--From: Laurent Vivier <laurent@vivier.eu>
--Date: Fri, 21 Apr 2023 18:22:07 +0200
--Subject: [PATCH] m68k: fix getrandom() use with uclibc
--
--With uclibc, getrandom() is only defined with _GNU_SOURCE, fix that:
--
--kexec/arch/m68k/bootinfo.c: In function 'bootinfo_add_rng_seed':
--kexec/arch/m68k/bootinfo.c:231:13: warning: implicit declaration of function 'getrandom'; did you mean 'srandom'? [-Wimplicit-function-declaration]
--  231 |         if (getrandom(bi->rng_seed.data, RNG_SEED_LEN, GRND_NONBLOCK) != RNG_SEED_LEN) {
--      |             ^~~~~~~~~
--      |             srandom
--kexec/arch/m68k/bootinfo.c:231:56: error: 'GRND_NONBLOCK' undeclared (first use in this function)
--  231 |         if (getrandom(bi->rng_seed.data, RNG_SEED_LEN, GRND_NONBLOCK) != RNG_SEED_LEN) {
--      |                                                        ^~~~~~~~~~~~~
--
--Fixes:  b9de05184816 ("m68k: pass rng seed via BI_RNG_SEED")
--Upstream: https://lore.kernel.org/kexec/20230422095904.1303434-1-laurent@vivier.eu/
--Cc: Jason@zx2c4.com
--Signed-off-by: Laurent Vivier <laurent@vivier.eu>
-----
-- kexec/arch/m68k/bootinfo.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/kexec/arch/m68k/bootinfo.c b/kexec/arch/m68k/bootinfo.c
--index 086a34bdfdeb..5afd212d9d34 100644
----- a/kexec/arch/m68k/bootinfo.c
--+++ b/kexec/arch/m68k/bootinfo.c
--@@ -1,3 +1,4 @@
--+#define _GNU_SOURCE
-- 
-- #include <stdio.h>
-- #include <stdlib.h>
---- 
--2.40.0
--
-diff --git a/package/kexec/0002-kexec-provide-a-memfd_create-wrapper-if-not-present-.patch b/package/kexec/0002-kexec-provide-a-memfd_create-wrapper-if-not-present-.patch
-deleted file mode 100644
-index 649ec56042..0000000000
---- a/package/kexec/0002-kexec-provide-a-memfd_create-wrapper-if-not-present-.patch
-+++ /dev/null
-@@ -1,113 +0,0 @@
--From 417382aecd6964f97a0a0774a5cccd29c1b9edb3 Mon Sep 17 00:00:00 2001
--From: Julien Olivain <ju.o@free.fr>
--Date: Sat, 23 Sep 2023 13:09:23 +0200
--Subject: [PATCH] kexec: provide a memfd_create() wrapper if not present in
-- libc
--
--Commit 714fa115 "kexec/arm64: Simplify the code for zImage" introduced
--a use of the memfd_create() system call, included in version
--kexec-tools v2.0.27.
--
--This system call was introduced in kernel commit [1], first included
--in kernel v3.17 (released on 2014-10-05).
--
--The memfd_create() glibc wrapper function was added much later in
--commit [2], first included in glibc version 2.27 (released on
--2018-02-01).
--
--This direct use memfd_create() introduced a requirement on
--Kernel >= 3.17 and glibc >= 2.27.
--
--There is old toolchains like [3] for example (which ships gcc 7.3.1,
--glibc 2.25 and includes kernel v4.10 headers), that can still be used
--to build newer kernels. Even if such toolchains can be seen as
--outdated, they are is still claimed as supported by recent kernel.
--For example, Kernel v6.5.5 has a requirement on gcc version 5.1 and
--greater. See [4].
--
--Moreover, kexec-tools <= 2.0.26 could be compiled using recent
--toolchains with alternative libc (e.g. uclibc-ng, musl) which are not
--providing the memfd_create() wrapper.
--
--When compiling kexec-tools v2.0.27 with a toolchain not providing the
--memfd_create() syscall wrapper, the compilation fail with message:
--
--    kexec/kexec.c: In function 'copybuf_memfd':
--    kexec/kexec.c:645:7: warning: implicit declaration of function 'memfd_create'; did you mean 'SYS_memfd_create'? [-Wimplicit-function-declaration]
--      fd = memfd_create("kernel", MFD_ALLOW_SEALING);
--           ^~~~~~~~~~~~
--           SYS_memfd_create
--    kexec/kexec.c:645:30: error: 'MFD_ALLOW_SEALING' undeclared (first use in this function); did you mean '_PC_ALLOC_SIZE_MIN'?
--      fd = memfd_create("kernel", MFD_ALLOW_SEALING);
--                                  ^~~~~~~~~~~~~~~~~
--                                  _PC_ALLOC_SIZE_MIN
--
--In order to let kexec-tools compile in a wider range of configurations,
--this commit adds a memfd_create() function check in autoconf configure
--script, and adds a system call wrapper which will be used if the
--function is not available. With this commit, the environment
--requirement is relaxed to only kernel >= v3.17.
--
--Note: this issue was found in kexec-tools integration in Buildroot [5]
--using the command "utils/test-pkg -a -p kexec", which tests many
--toolchain/arch combinations.
--
--[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=9183df25fe7b194563db3fec6dc3202a5855839c
--[2] https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=59d2cbb1fe4b8601d5cbd359c3806973eab6c62d
--[3] https://releases.linaro.org/components/toolchain/binaries/7.3-2018.05/aarch64-linux-gnu/gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu.tar.xz
--[4] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/Documentation/process/changes.rst?h=v6.5.5#n32
--[5] https://buildroot.org/
--
--Upstream: https://lists.infradead.org/pipermail/kexec/2023-September/028168.html
--Signed-off-by: Julien Olivain <ju.o@free.fr>
-----
-- configure.ac  |  3 +++
-- kexec/kexec.c | 11 +++++++++++
-- 2 files changed, 14 insertions(+)
--
--diff --git a/configure.ac b/configure.ac
--index 192976c..212ef2c 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -208,6 +208,9 @@ if test "$ac_cv_lib_xenctrl_xc_kexec_load" = yes ; then
-- 		AC_MSG_NOTICE([The kexec_status call is not available]))
-- fi
-- 
--+dnl Check if libc has the memfd_create() syscall wrapper
--+AC_CHECK_FUNCS([memfd_create])
--+
-- dnl ---Sanity checks
-- if test "$CC"      = "no"; then AC_MSG_ERROR([cc not found]); fi
-- if test "$CPP"     = "no"; then AC_MSG_ERROR([cpp not found]); fi
--diff --git a/kexec/kexec.c b/kexec/kexec.c
--index c3b182e..c44c4b7 100644
----- a/kexec/kexec.c
--+++ b/kexec/kexec.c
--@@ -31,6 +31,10 @@
-- #include <sys/mount.h>
-- #include <sys/types.h>
-- #include <sys/stat.h>
--+#ifndef HAVE_MEMFD_CREATE
--+#include <linux/memfd.h>
--+#include <sys/syscall.h>
--+#endif
-- #include <sys/reboot.h>
-- #include <sys/mman.h>
-- #include <unistd.h>
--@@ -638,6 +642,13 @@ char *slurp_decompress_file(const char *filename, off_t *r_size)
-- 	return kernel_buf;
-- }
-- 
--+#ifndef HAVE_MEMFD_CREATE
--+static int memfd_create(const char *name, unsigned int flags)
--+{
--+	return syscall(SYS_memfd_create, name, flags);
--+}
--+#endif
--+
-- static int copybuf_memfd(const char *kernel_buf, size_t size)
-- {
-- 	int fd, count;
---- 
--2.41.0
--
-diff --git a/package/kexec/kexec.hash b/package/kexec/kexec.hash
-index 650f0992de..cfa8790bb1 100644
---- a/package/kexec/kexec.hash
-+++ b/package/kexec/kexec.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/linux/utils/kernel/kexec/sha256sums.asc
--sha256  38d78bcfa33a88928324b57dc81f50c1dfc279eede45e80957ca18f4e84b8187  kexec-tools-2.0.27.tar.xz
-+sha256  d2f0ef872f39e2fe4b1b01feb62b0001383207239b9f8041f98a95564161d053  kexec-tools-2.0.28.tar.xz
- # locally calculated
- sha256  fa5fc1d1eec39532ea517518eeefd7b6e3c14341a55e5880a0e2a49eee47a5b7  COPYING
-diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
-index 5d30f4884b..df14b2d711 100644
---- a/package/kexec/kexec.mk
-+++ b/package/kexec/kexec.mk
-@@ -4,13 +4,11 @@
- #
- ################################################################################
+diff --git a/package/brltty/brltty.mk b/package/brltty/brltty.mk
+index f00a18cc6f..22d58ebd00 100644
+--- a/package/brltty/brltty.mk
++++ b/package/brltty/brltty.mk
+@@ -23,8 +23,10 @@ BRLTTY_CONF_ENV = \
+ 	PKG_CONFIG_FOR_BUILD=$(HOST_DIR)/bin/pkgconf
  
--KEXEC_VERSION = 2.0.27
-+KEXEC_VERSION = 2.0.28
- KEXEC_SOURCE = kexec-tools-$(KEXEC_VERSION).tar.xz
- KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kexec
- KEXEC_LICENSE = GPL-2.0
- KEXEC_LICENSE_FILES = COPYING
--# 0002-kexec-provide-a-memfd_create-wrapper-if-not-present-.patch
--KEXEC_AUTORECONF = YES
- KEXEC_CPE_ID_PRODUCT = kexec-tools
- KEXEC_CPE_ID_VENDOR = kexec-tools_project
- KEXEC_SELINUX_MODULES = kdump
+ BRLTTY_CONF_OPTS = \
++	--disable-emacs-bindings \
+ 	--disable-java-bindings \
+ 	--disable-lisp-bindings \
++	--disable-lua-bindings \
+ 	--disable-ocaml-bindings \
+ 	--disable-python-bindings \
+ 	--disable-tcl-bindings \
+-- 
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
