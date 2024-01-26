@@ -1,72 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2242CC47258
-	for <buildroot@archiver.kernel.org>; Thu, 25 Jan 2024 22:34:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7319DC47258
+	for <buildroot@archiver.kernel.org>; Fri, 26 Jan 2024 02:49:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 79D1C402B1;
-	Thu, 25 Jan 2024 22:34:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 79D1C402B1
+	by smtp4.osuosl.org (Postfix) with ESMTP id B699F42FC9;
+	Fri, 26 Jan 2024 02:49:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B699F42FC9
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id z1sN78a11XPW; Fri, 26 Jan 2024 02:49:42 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id D884D42FCA;
+	Fri, 26 Jan 2024 02:49:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D884D42FCA
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B81C61BF4D5
+ for <buildroot@lists.busybox.net>; Fri, 26 Jan 2024 02:49:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8FE2F40180
+ for <buildroot@lists.busybox.net>; Fri, 26 Jan 2024 02:49:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8FE2F40180
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lpGIJmEQeB5h; Thu, 25 Jan 2024 22:34:00 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 13DA24369E;
-	Thu, 25 Jan 2024 22:33:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 13DA24369E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4A2DE1BF321
- for <buildroot@lists.busybox.net>; Thu, 25 Jan 2024 22:33:57 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2338361B39
- for <buildroot@lists.busybox.net>; Thu, 25 Jan 2024 22:33:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2338361B39
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id u0jCfTflXuDn for <buildroot@lists.busybox.net>;
- Thu, 25 Jan 2024 22:33:55 +0000 (UTC)
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 909F8615A5
- for <buildroot@buildroot.org>; Thu, 25 Jan 2024 22:33:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 909F8615A5
-Received: from 91-152-140-108.elisa-laajakaista.fi ([91.152.140.108]
- helo=momiji.home) by fanzine2.igalia.com with esmtpsa 
- (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
- id 1rT8IB-00A9f5-Ny; Thu, 25 Jan 2024 23:33:51 +0100
-Received: from localhost (momiji.home [local])
- by momiji.home (OpenSMTPD) with ESMTPA id 76530865;
- Thu, 25 Jan 2024 22:33:50 +0000 (UTC)
-Date: Fri, 26 Jan 2024 00:33:46 +0200
-Message-ID: <20240126003346.GB2901019@igalia.com>
-From: Adrian Perez de Castro <aperez@igalia.com>
-To: Peter Korsgaard <peter@korsgaard.com>
-In-Reply-To: <8734ul6ruc.fsf@48ers.dk>
-References: <20240125144121.1534299-1-aperez@igalia.com>
- <8734ul6ruc.fsf@48ers.dk>
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8HgcDqNu1nBL for <buildroot@lists.busybox.net>;
+ Fri, 26 Jan 2024 02:49:38 +0000 (UTC)
+Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com
+ [136.143.188.15])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 007EA40151
+ for <buildroot@buildroot.org>; Fri, 26 Jan 2024 02:49:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 007EA40151
+ARC-Seal: i=1; a=rsa-sha256; t=1706237368; cv=none; 
+ d=zohomail.com; s=zohoarc; 
+ b=UwX3PBjcCjbpyFAQd0cKJfTz+NqwwhA7FXJCO4R/pMeyEBK5xtLtPGQDK6gyo4Z76jDa3O1HgGVELXKjuXc31C4TQdCps+u9qIu/QvZI8URUNEN3URswpBYSM82CmTjU8VHHFXb6yiNqqw/coZmFg55L3LvhZwPlLmL2yL0pT0Q=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com;
+ s=zohoarc; t=1706237368;
+ h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To;
+ bh=seb2Ytgt/xksqjCd6MCgh7FFtXVn3bTtVquS6zS1peg=; 
+ b=Xti+aRnSSihwM77Lih9qhkLlvzr0noUopa0G4+fgXkX/lODMPBfk12BSgtBhY9ste6vwurRVIjgLzQGXptnrZTAoQ+uxkqTeYuGeUwAdgn1ywJ7LC6g2+UO3Ne7RTeEHNl+GRa3P3D935H4iD7cE+9xyWByazFhHAKt8k9Txldw=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+ dkim=pass  header.i=matt-silva.com;
+ spf=pass  smtp.mailfrom=dev@matt-silva.com;
+ dmarc=pass header.from=<dev@matt-silva.com>
+Received: from localhost.localdomain (70.51.135.81 [70.51.135.81]) by
+ mx.zohomail.com with SMTPS id 1706237366327694.4177680075451;
+ Thu, 25 Jan 2024 18:49:26 -0800 (PST)
+From: Matt Silva <dev@matt-silva.com>
+To: buildroot@buildroot.org
+Date: Thu, 25 Jan 2024 21:49:14 -0500
+Message-ID: <20240126024914.13825-1-dev@matt-silva.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
+X-ZohoMailClient: External
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=igalia.com; 
- s=20170329; h=Content-Type:MIME-Version:References:In-Reply-To:Subject:Cc:To:
- From:Message-ID:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
- Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
- :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
- List-Post:List-Owner:List-Archive;
- bh=5PXGckOMCKCIyMmSbIO1PtqyrQCDJMh+4P73o/XS/i4=; b=mX3BkbHin3K7Jlo1KCtIxCgTXf
- Q3uzWx8/uAz72jzgsndixzSyEoBU14DPzgHPliOP4Xlzrzfngv1lXKGMbI6fFGxWbDB6vgGmunAKv
- lMhGPJOvBzHtJqObF0w7mhuhUE1Jvziz0BtQZJvW4axtLAq5EbRpbu2ANwR6DCGXrD5+K5ZdDbnb2
- OENILpyeqgvuDfJGNCN/xGXfrfBnmm3rJuFlDdfhm9PaWAlMrLlSxXA+9lkoJ5DY6p57m3KqDpuDx
- VaFvXkBGVVbMXvZdCbJ/9MZa2EvSbOGmtBSYJ4xeOrFXebw4p0xgpfp2R6Nnrl08L9oOfXpTaQ6DD
- b8N2dW3Q==;
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com
- header.a=rsa-sha256 header.s=20170329 header.b=mX3BkbHi
-Subject: Re: [Buildroot] [PATCH] package/libwpe: switch back to version
- 1.14.2
+ c=relaxed/relaxed; t=1706237368; 
+ s=zoho; d=matt-silva.com; i=dev@matt-silva.com;
+ h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
+ bh=seb2Ytgt/xksqjCd6MCgh7FFtXVn3bTtVquS6zS1peg=;
+ b=Ddzx62hUOk1bBKtnAsxf9mFQr4a/iSD7TQsKATQyVAivhhHEUqxM9FuXk87e0ljt
+ pAQOmBHUgVu+qAHlU/Q1D+gFuCac8UeAbhD/wFIC4wJxfmPglhyaJYrWNEIkjRkxv00
+ bWk2K/Zwg8AeTG7MmvMg/lQbq/o+lu9eOO3/pzUc=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=matt-silva.com header.i=dev@matt-silva.com
+ header.a=rsa-sha256 header.s=zoho header.b=Ddzx62hU
+Subject: [Buildroot] [PATCH 1/1] package/rlwrap: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,103 +80,170 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============4686365081285313870=="
+Cc: Matt Silva <dev@matt-silva.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Signed-off-by: Matt Silva <dev@matt-silva.com>
+---
+ package/Config.in          |  1 +
+ package/rlwrap/Config.in   | 58 ++++++++++++++++++++++++++++++++++++++
+ package/rlwrap/rlwrap.hash |  6 ++++
+ package/rlwrap/rlwrap.mk   | 48 +++++++++++++++++++++++++++++++
+ 4 files changed, 113 insertions(+)
+ create mode 100644 package/rlwrap/Config.in
+ create mode 100644 package/rlwrap/rlwrap.hash
+ create mode 100644 package/rlwrap/rlwrap.mk
 
---===============4686365081285313870==
-Content-Type: multipart/signed; boundary="xEAhc/qeod6LaX1U"; micalg="pgp-ripemd160"; protocol="application/pgp-signature"
-
-
---xEAhc/qeod6LaX1U
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: base64
-
-SGVsbG8sCgpPbiBUaHUsIDI1IEphbiAyMDI0IDIyOjExOjM5ICswMTAwIFBldGVyIEtvcnNnYWFy
-ZCA8cGV0ZXJAa29yc2dhYXJkLmNvbT4gd3JvdGU6Cj4gPj4+Pj4gIkFkcmlhbiIgPT0gQWRyaWFu
-IFBlcmV6IGRlIENhc3RybyA8YXBlcmV6QGlnYWxpYS5jb20+IHdyaXRlczoKPiAKPiAgPiBUaGUg
-dmVyc2lvbmluZyBzY2hlbWUgZm9yIGxpYndwZSB1c2VzIHRoZSBtaWRkbGUgdmVyc2lvbiBudW1i
-ZXIgdG8KPiAgPiBpbmRpY2F0ZSBzdGFiaWxpdHk6IGFuIGV2ZW4gbnVtYmVyIGZvciBzdGFibGUg
-cmVsZWFzZXMsIG9kZCBmb3IKPiAgPiBkZXZlbG9wbWVudCBwcmV2aWV3IHJlbGVhc2VzLiBBcyBz
-dWNoLCBCdWlsZHJvb3Qgc2hvdWxkIGJlIHVzaW5nCj4gID4gdmVyc2lvbiAxLjE0LjIsIHdoaWNo
-IGlzIHRoZSBtb3N0IHJlY2VudCBvZiB0aGUgc3RhYmxlIHJlbGVhc2VzLgo+ICA+IFdoaWxlIGF0
-IGl0LCBhZGQgYSBub3RlIGluIHRoZSAubWsgZmlsZSBhYm91dCB0aGUgdmVyc2lvbmluZyBzY2hl
-bWUuCj4gCj4gSG1tLCB0aGlzIHdhcyBidW1wZWQgYmFjayBpbiBKdWx5IGJlZm9yZSAyMDIzLjA4
-LXJjMS4gSXMgdGhlcmUgbm8gMS4xNi54Cj4gdmVyc2lvbiBjb21pbmc/CgpOb3QgYW55dGltZSBz
-b29uLiBSZWxlYXNlIDEuMTQuMiB3aGljaCBJIGp1c3QgbWFkZSB5ZXN0ZXJkYXkgaW5jbHVkZXMg
-YWxsIHRoZQpmaXhlcyB0aGF0IGFyZSBhbHNvIGluIDEuMTUuMiAtLSB1c3VhbGx5IHdlIG9ubHkg
-ZG8gYSBuZXcgc3RhYmxlIGJyYW5jaCBpZgp0aGVyZSBhcmUgbmV3IGZlYXR1cmVzLCBhbmQgd2Ug
-aGF2ZW4ndCBhZGRlZCBhbnl0aGluZyB0byBsaWJ3cGUgZm9yIGEgcXVpdGUKbG9uZyB0aW1lLgoK
-QWxzbywgWWFubiBhc2tlZCBvbiBJUkMgd2hldGhlciB0aGUgcGFja2FnZXMgdGhhdCBkZXBlbmQg
-b24gbGlid3BlCih3cGViYWNrZW5kLWZkbywgd3Bld2Via2l0LCBnc3QxLXBsdWdpbnMtYmFkKSBj
-YW4gdXNlIDEuMTQueC4uLiBZZXMsCnRoZXkgY2FuLiBGb3IgV1BFIFdlYktpdCB3ZSBldmVuIGhh
-dmUgYSBjb21wYXRpYmlsaXR5IHRhYmxlIGhlcmU6CgogIGh0dHBzOi8vd3Bld2Via2l0Lm9yZy9y
-ZWxlYXNlL3NjaGVkdWxlLwoKPSkKCk1heWJlIHdlIHNob3VsZCByZWNvbnNpZGVyIHRoZSB2ZXJz
-aW9uaW5nIHNjaGVtZSwgdXNpbmcgc3VmZml4ZXMgZm9yCmRldmVsb3BtZW50IHJlbGVhc2VzIGFu
-ZCByZWxlYXNlIGNhbmRpZGF0ZXMgKCJYLlktZGV2TiIsICJYLVktcmNOIikKaW5zdGVhZCBvZiBl
-dmVuL29kZCBudW1iZXJpbmcuIEl0IHNlZW1zIHRvIGNhdXNlIGVub3VnaCBjb25mdXNpb24gdG8K
-YXQgbGVhc3QgY29uc2lkZXIgdGhlIGNoYW5nZS4KCj4gID4gU2lnbmVkLW9mZi1ieTogQWRyaWFu
-IFBlcmV6IGRlIENhc3RybyA8YXBlcmV6QGlnYWxpYS5jb20+Cj4gID4gLS0tCj4gID4gIHBhY2th
-Z2UvbGlid3BlL2xpYndwZS5oYXNoIHwgNiArKystLS0KPiAgPiAgcGFja2FnZS9saWJ3cGUvbGli
-d3BlLm1rICAgfCAzICsrLQo+ICA+ICAyIGZpbGVzIGNoYW5nZWQsIDUgaW5zZXJ0aW9ucygrKSwg
-NCBkZWxldGlvbnMoLSkKPiAKPiAgPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9saWJ3cGUvbGlid3Bl
-Lmhhc2ggYi9wYWNrYWdlL2xpYndwZS9saWJ3cGUuaGFzaAo+ICA+IGluZGV4IDIyNmI0ZjMyOTUu
-LjU1NGIxZjJiMGUgMTAwNjQ0Cj4gID4gLS0tIGEvcGFja2FnZS9saWJ3cGUvbGlid3BlLmhhc2gK
-PiAgPiArKysgYi9wYWNrYWdlL2xpYndwZS9saWJ3cGUuaGFzaAo+ICA+IEBAIC0xLDYgKzEsNiBA
-QAo+ICA+IC0jIEZyb20gaHR0cHM6Ly93cGV3ZWJraXQub3JnL3JlbGVhc2VzL2xpYndwZS0xLjE1
-LjEudGFyLnh6LnN1bXMKPiAgPiAtc2hhMSAgMDA4MmNlYjQ3NTE3NWJmZWNkMTE3MmYyYzBiMjky
-ODI0ZDMxNTYxYiAgbGlid3BlLTEuMTUuMS50YXIueHoKPiAgPiAtc2hhMjU2ICAxNGQzNmE5M2Ew
-NWFiN2FkYTliZWM1ODE3MjBiODA1NzMzNmZlNjgxYmJiZTU5YmRhN2Q1MGNiOGYzZWJhM2E2ICBs
-aWJ3cGUtMS4xNS4xLnRhci54ego+ICA+ICsjIEZyb20gaHR0cHM6Ly93cGV3ZWJraXQub3JnL3Jl
-bGVhc2VzL2xpYndwZS0xLjE0LjIudGFyLnh6LnN1bXMKPiAgPiArc2hhMSAgNzBhMmI4OTRhZjJi
-NTBkNzA4MjI2MDE1OGE4OTUyNDk3NGE0ODBmMyAgbGlid3BlLTEuMTQuMi50YXIueHoKPiAgPiAr
-c2hhMjU2ICA4YWUzODAyMmM1MGNiMzQwYzk2ZmRiZWUxMjE3ZjFlNDZhYjU3ZmJjMWM4YmE5ODE0
-MjU2NWFiYmVkYmUyMmVmICBsaWJ3cGUtMS4xNC4yLnRhci54ego+ICAKPiAgPiAgIyBIYXNoZXMg
-Zm9yIGxpY2Vuc2UgZmlsZXM6Cj4gID4gIHNoYTI1NiAgMzViZWYyOTVjZWRiYmYxNzllYWVlMTQz
-MjgwMDI1ODdhMGU3ZGMwOGViZjNmMTVlYTA4MGE2ZjI4MTVmMGQ3YiAgQ09QWUlORwo+ICA+IGRp
-ZmYgLS1naXQgYS9wYWNrYWdlL2xpYndwZS9saWJ3cGUubWsgYi9wYWNrYWdlL2xpYndwZS9saWJ3
-cGUubWsKPiAgPiBpbmRleCBmOGM2YjBmYzc2Li4xZmJkZDVmY2MzIDEwMDY0NAo+ICA+IC0tLSBh
-L3BhY2thZ2UvbGlid3BlL2xpYndwZS5tawo+ICA+ICsrKyBiL3BhY2thZ2UvbGlid3BlL2xpYndw
-ZS5tawo+ICA+IEBAIC00LDcgKzQsOCBAQAo+ICA+ICAjCj4gID4gICMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjCj4gIAo+ICA+IC1MSUJXUEVfVkVSU0lPTiA9IDEuMTUuMQo+ICA+ICsjIFRoZSBtaWRk
-bGUgbnVtYmVyIGlzIGV2ZW4gZm9yIHN0YWJsZSByZWxlYXNlcywgb2RkIGZvciBkZXZlbG9wbWVu
-dCBvbmVzLgo+ICA+ICtMSUJXUEVfVkVSU0lPTiA9IDEuMTQuMgo+ICA+ICBMSUJXUEVfU0lURSA9
-IGh0dHBzOi8vd3Bld2Via2l0Lm9yZy9yZWxlYXNlcwo+ICA+ICBMSUJXUEVfU09VUkNFID0gbGli
-d3BlLSQoTElCV1BFX1ZFUlNJT04pLnRhci54ego+ICA+ICBMSUJXUEVfSU5TVEFMTF9TVEFHSU5H
-ID0gWUVTCj4gID4gLS0gCj4gCj4gID4gMi40My4wCj4gCj4gID4gX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiAgPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0
-Cj4gID4gYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKPiAgPiBodHRwczovL2xpc3RzLmJ1aWxkcm9v
-dC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKPiAKPiAKPiAtLSAKPiBCeWUsIFBldGVy
-IEtvcnNnYWFyZAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fCj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4g
-aHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cj4g
-CgpDaGVlcnMsCuKAlEFkcmnDoW4K
-
---xEAhc/qeod6LaX1U
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABEDAB0WIQRao7wzT9fjNp58d7KRxVnb5MkSOwUCZbLhygAKCRCRxVnb5MkS
-O/yCAJsFkMTGgJcBN9lPKNJ+uvF6xLVSZgCdHD/AL9koK/cl2b0j/MEUgVNXeHs=
-=DYWG
------END PGP SIGNATURE-----
-
---xEAhc/qeod6LaX1U--
-
---===============4686365081285313870==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/Config.in b/package/Config.in
+index 5b8b15fa54..0df3f49781 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2688,6 +2688,7 @@ comment "Utilities"
+ 	source "package/pinentry/Config.in"
+ 	source "package/qprint/Config.in"
+ 	source "package/ranger/Config.in"
++	source "package/rlwrap/Config.in"
+ 	source "package/rtty/Config.in"
+ 	source "package/screen/Config.in"
+ 	source "package/screenfetch/Config.in"
+diff --git a/package/rlwrap/Config.in b/package/rlwrap/Config.in
+new file mode 100644
+index 0000000000..b4a7f7fe3e
+--- /dev/null
++++ b/package/rlwrap/Config.in
+@@ -0,0 +1,58 @@
++config BR2_PACKAGE_RLWRAP
++	bool "rlwrap"
++	select BR2_PACKAGE_READLINE
++	help
++	  rlwrap is a 'readline wrapper', a small utility that uses the
++	  GNU Readline library to allow the editing of keyboard input
++	  for any command.
++
++	  https://github.com/hanslub42/rlwrap
++
++if BR2_PACKAGE_RLWRAP
++
++config BR2_PACKAGE_RLWRAP_SPY_ON_READLINE
++	bool "spy on readline"
++	default y
++	help
++	  If we want to keep the display tidy when re-sizing the
++	  terminal window or printing multi-line prompts, we have to
++	  know whether or not readline is in horizontal-scroll-mode
++	  (i.e. wheter long lines are scrolled or wrapped). At present,
++	  this involves a look at a private readline variable - if you
++	  feel guilty about that, disable this option
++
++config BR2_PACKAGE_RLWRAP_HOMEGROWN_REDISPLAY
++	bool "homegrown redisplay"
++	default n
++	help
++	  Some people report double echoing of user input. Enabling this
++	  option will cure the problem - though the display will then
++	  flicker over slow connections (cf. BUGS)
++
++config BR2_PACKAGE_RLWRAP_DEBUG
++	bool "enable debug"
++	default n
++	help
++	  Adds a --debug option to rlwrap's repertoire. This will make
++	  rlwrap write debug information to a file /tmp/rlwrap.debug
++	  (cf. the output of rlwrap --help for more info)
++
++config BR2_PACKAGE_RLWRAP_PROC_MOUNTPOINT
++	string "proc mountpoint"
++	default "/proc"
++	help
++	  Mountpoint for Linux-style procfs, used for determination of
++	  slave command's working directory
++
++config BR2_PACKAGE_RLWRAP_MULTIBYTE_AWARE
++	bool "multibyte awareness"
++	default y
++	depends on BR2_USE_WCHAR
++	help
++	  Prevent rlwrap from seeing multibyte characters as multiple
++	  characters
++
++comment "rlwrap multibyte awareness needs a toolchain w/ wchar"
++	depends on !BR2_USE_WCHAR
++
++endif
+diff --git a/package/rlwrap/rlwrap.hash b/package/rlwrap/rlwrap.hash
+new file mode 100644
+index 0000000000..b7005e860e
+--- /dev/null
++++ b/package/rlwrap/rlwrap.hash
+@@ -0,0 +1,6 @@
++# from https://github.com/hanslub42/rlwrap/releases/tag/0.46.1
++sha256  2711986a1248f6ac59e2aecf5586205835970040d300a42b4bf8014397e73e37  rlwrap-0.46.1.tar.gz
++
++# license files, locally calculated
++sha256  656d25fab58016ac6ac11bb126709e4f860ea063d11795232eb55987172f78ff  AUTHORS
++sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/rlwrap/rlwrap.mk b/package/rlwrap/rlwrap.mk
+new file mode 100644
+index 0000000000..6f9de8281c
+--- /dev/null
++++ b/package/rlwrap/rlwrap.mk
+@@ -0,0 +1,48 @@
++################################################################################
++#
++# rlwrap
++#
++################################################################################
++
++# https://github.com/hanslub42/rlwrap/releases/download/0.46.1/rlwrap-0.46.1.tar.gz
++
++RLWRAP_VERSION = 0.46.1
++RLWRAP_SOURCE = rlwrap-$(RLWRAP_VERSION).tar.gz
++RLWRAP_SITE = https://github.com/hanslub42/rlwrap/releases/download/$(RLWRAP_VERSION)
++RLWRAP_LICENSE = GPL-2.0
++RLWRAP_LICENSE_FILES = AUTHORS COPYING
++
++RLWRAP_DEPENDENCIES = readline
++
++# --enable-spy-on-readline
++ifeq ($(BR2_PACKAGE_RLWRAP_SPY_ON_READLINE),y)
++RLWRAP_CONF_OPTS += --enable-spy-on-readline
++else
++RLWRAP_CONF_OPTS += --disable-spy-on-readline
++endif
++
++# --enable-homegrown-redisplay
++ifeq ($(BR2_PACKAGE_RLWRAP_HOMEGROWN_REDISPLAY),y)
++RLWRAP_CONF_OPTS += --enable-homegrown-redisplay
++else
++RLWRAP_CONF_OPTS += --disable-homegrown-redisplay
++endif
++
++# --enable-debug
++ifeq ($(BR2_PACKAGE_RLWRAP_DEBUG),y)
++RLWRAP_CONF_OPTS += --enable-debug
++else
++RLWRAP_CONF_OPTS += --disable-debug
++endif
++
++# --enable-proc-mountpoint
++RLWRAP_CONF_OPTS += --enable-proc-mountpoint=$(BR2_PACKAGE_RLWRAP_PROC_MOUNTPOINT)
++
++# --enable-multibyte-aware
++ifeq ($(BR2_PACKAGE_RLWRAP_MULTIBYTE_AWARE),y)
++RLWRAP_CONF_OPTS += --enable-multibyte-aware
++else
++RLWRAP_CONF_OPTS += --disable-multibyte-aware
++endif
++
++$(eval $(autotools-package))
+-- 
+2.43.0
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4686365081285313870==--
