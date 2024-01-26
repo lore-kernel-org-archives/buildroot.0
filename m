@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1572C47DDB
-	for <buildroot@archiver.kernel.org>; Fri, 26 Jan 2024 17:29:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6EB1AC47422
+	for <buildroot@archiver.kernel.org>; Fri, 26 Jan 2024 17:31:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 55EE560DF9;
-	Fri, 26 Jan 2024 17:29:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 55EE560DF9
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0C43C60DF9;
+	Fri, 26 Jan 2024 17:31:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C43C60DF9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nZsDZ_VYN1mB; Fri, 26 Jan 2024 17:29:31 +0000 (UTC)
+	with ESMTP id LCboIm0nmQBz; Fri, 26 Jan 2024 17:31:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8AFA060BF1;
-	Fri, 26 Jan 2024 17:29:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8AFA060BF1
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id ACF0C1BF38C
- for <buildroot@lists.busybox.net>; Fri, 26 Jan 2024 17:29:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4CC6E60BF1;
+	Fri, 26 Jan 2024 17:31:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4CC6E60BF1
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A48A01BF38C
+ for <buildroot@lists.busybox.net>; Fri, 26 Jan 2024 17:31:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8548760BF1
- for <buildroot@lists.busybox.net>; Fri, 26 Jan 2024 17:29:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8548760BF1
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7BDD38437E
+ for <buildroot@lists.busybox.net>; Fri, 26 Jan 2024 17:31:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7BDD38437E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PVSmpFbX8A5o for <buildroot@lists.busybox.net>;
- Fri, 26 Jan 2024 17:29:27 +0000 (UTC)
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 99F2D60BC0
- for <buildroot@buildroot.org>; Fri, 26 Jan 2024 17:29:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 99F2D60BC0
-Received: by mail-wm1-x32a.google.com with SMTP id
- 5b1f17b1804b1-40ee82d040dso6048445e9.3
- for <buildroot@buildroot.org>; Fri, 26 Jan 2024 09:29:27 -0800 (PST)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id l02rkOSRBCgM for <buildroot@lists.busybox.net>;
+ Fri, 26 Jan 2024 17:31:05 +0000 (UTC)
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 090A68404F
+ for <buildroot@buildroot.org>; Fri, 26 Jan 2024 17:31:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 090A68404F
+Received: by mail-wm1-x32f.google.com with SMTP id
+ 5b1f17b1804b1-40ee894c5easo4957465e9.1
+ for <buildroot@buildroot.org>; Fri, 26 Jan 2024 09:31:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1706290165; x=1706894965;
+ d=1e100.net; s=20230601; t=1706290262; x=1706895062;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=oMNpyifNnAUCPSK/CtXMkhVIyZswiK0DR48fXrA2ieM=;
- b=IZ6lG7/qoxb9L86ShkgR83w8beKGOGC1rBYGv0KrK0out9f3Y+HUxKRjR6jl+pBUCj
- DYqvCDKYRgBRCvyqDqclZ7DX6GLyH70LWNkecDLIxM3AsWdqXcuTRJQycOr5slYx+Ege
- fSxRYjZMQTy1toLTCMsy7gxUtMFbV2Vtllf4csAY1WkKkBQt1L63rrayOVYQST2qVhcU
- VIb8SL3KYL1wcRFxUoxORiXYKyrogWwbxIGgoeybRyT/u6LmJEPe8qS2DdAzB8Vrq1x9
- x4iHuynH2MGCkfHn+jkaUKWR6qjV3vHDa7HPz5HXJ1Ftc6J5fifoSaUi2S93mlfqZ5RJ
- 2bBQ==
-X-Gm-Message-State: AOJu0Yz1DOydMP+CpUW2c04xEq0lzBWok/f87dGYZsKW2j25g7BPHn3k
- um+yeD2Fv9U+q3qRoxHYwfdzEbwdXC7wNZLNQ+44ZSN67R8Rf+Kf22zPI5U7eNQ=
-X-Google-Smtp-Source: AGHT+IH287b8oxGI7VOgYB3rabNohuN8asxBvMOLbdnVwFuKhpHI4h5GXeVedqau4ssBPLg2jlqQyQ==
-X-Received: by 2002:a05:600c:4f08:b0:40e:4e95:c3 with SMTP id
- l8-20020a05600c4f0800b0040e4e9500c3mr99559wmq.73.1706290165099; 
- Fri, 26 Jan 2024 09:29:25 -0800 (PST)
+ bh=8SxFVcQSQBGR126vCSVNQJ6Vy2yVQFin4s1gxj+wMKA=;
+ b=jz4Fm6qG8MRua550p2EX76RFMOzY9A7eTE6WAxmgLi74Kfqu/DtgYksTjYwCZKtvSb
+ kAYxzKY54CTNpbDGplPMFtCDrHPW/iuC98TxE7pHDZlgergE3BS3SqBTveAubz72ZWpg
+ GWkG9OqBlIfR/to79Ir/Xh8RoQDDehsyft6IZxjh0xMPNqPcB5u/YU5fdvoGNY0Ishbo
+ giAIv2/WOINwQZaw5Ocyt6jd0PQ6hjLch+XdyZlwVlH/H++yvu59yeZZv8VUm0RenNhH
+ dWwGhrctBgNl84FC9+vfYMJF7FQ24Jxm1zCvJxNDajVgZL2YuLcOiRkach6GL19Xh77q
+ PPGA==
+X-Gm-Message-State: AOJu0YyUc6E/Y1TiB3Kvf38GZtuGv2fi2goREtFGjG1/fSEtl6P1BIjp
+ GzFSab5ZHeFs5UvkAmdeSbDhMEJGftVyRV4qnaom67L4dUNYcMF16KoyN1d5k/I=
+X-Google-Smtp-Source: AGHT+IGG24qdpKophxQHe90R+iFA1Ewb1fNZuNuswmu5j0yp0lOGPuDyxxvfc8HnDmaqNDq+xS88tg==
+X-Received: by 2002:a05:600c:4511:b0:40e:cec6:9e77 with SMTP id
+ t17-20020a05600c451100b0040ecec69e77mr95980wmo.125.1706290261801; 
+ Fri, 26 Jan 2024 09:31:01 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- v12-20020a05600c444c00b0040ee7175eb1sm1118663wmn.9.2024.01.26.09.29.24
+ q17-20020a05600c46d100b0040ebf5956absm2473875wmo.29.2024.01.26.09.31.01
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 26 Jan 2024 09:29:24 -0800 (PST)
+ Fri, 26 Jan 2024 09:31:01 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 26 Jan 2024 18:29:20 +0100
-Message-ID: <20240126172920.1628617-1-fontaine.fabrice@gmail.com>
+Date: Fri, 26 Jan 2024 18:30:58 +0100
+Message-ID: <20240126173059.1629666-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1706290165; x=1706894965; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1706290262; x=1706895062; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=oMNpyifNnAUCPSK/CtXMkhVIyZswiK0DR48fXrA2ieM=;
- b=gL/+DCYrbUJqt9sKarSeFQoxR4joje1re66NeI0a8EU+DK6p0DJnv01S95uuf5AhTD
- 4JYAV5PlFmiZ/zUYfHB7IrwCvjEHj0cGNxFBJdSY5Opc7dTjiXb4sgdKVydPw/Kth37Q
- uS4aK+HT1XbEb8IMhsNH2379CiEQIVoUR1H/T0YqDuKjgj+vvcxBorVKNus8mkQD6rCE
- rbKkinAIxVVkYXrXvM+g77qx5A4BWDVWydNUqIEswnYxRsdfT9Y+efLCvLQ1UrHyqemL
- NdbKr1o32DrVTPBRShsIldv66ZkdsK+NMhCNLpXeUJ+Kq9sz1G6BQ8o5FQBUreEsvjdy
- aoVQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=8SxFVcQSQBGR126vCSVNQJ6Vy2yVQFin4s1gxj+wMKA=;
+ b=E605Riv4mxEXZu5wbfZonx3oLZgmwUqroyEButIYcE5h1bACdaHuFpMPmN0DUySx2L
+ mRJ4o8VjfBFpH//miEPcgi/q1s83cPAVTgXXB0HxtK98ym41g+4qcjKpVZQXuvrKfSfc
+ p2FLPN+bwnXHXsVIWoIftQUCTH2LofEpJL4ZDTCjppugqT+XfSc3JRm94VYJQE8bSI5/
+ RyrLPDFqdJ0vGDWCf/5Qk9mPHjNGuBCUMA7BzlzahxIbd4sA/v14FnVG1tbFyHU3oHxA
+ qm2upf+wrhd3UecsHhIL/ATano6rKGBSyXPh6YqAe2aEHuGEMWzdJcx/x+jvPKPjZ4KJ
+ e+OQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=gL/+DCYr
-Subject: [Buildroot] [PATCH 1/1] package/brltty: disable emacs and lua
- bindings
+ header.a=rsa-sha256 header.s=20230601 header.b=E605Riv4
+Subject: [Buildroot] [PATCH 1/1] package/falcosecurity-libs: drop
+ FALCOSECURITY_LIBS_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,64 +94,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Mario Lang <mlang@blind.guru>,
+Cc: Francis Laniel <flaniel@linux.microsoft.com>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Disable lua bindings to avoid the following build failure if host-lua
-and lua are built before brltty raised since bump to version 6.5 in
-commit 82c6e87d5eaaf5b32aa340ab384f88539238cbe1 and
-https://github.com/brltty/brltty/commit/42bf48ca010d9163652cb0a014662fa243132736:
+FALCOSECURITY_LIBS_CPE_ID_VENDOR is plain wrong since the addition of
+the package in commit a15e35c4ebc52f29f65372c8e86cefa874aa4aaf, indeed
+falco:falcosecurity-libs is not a valid CPE ID:
 
-configure: lua package: lua
-configure: lua includes:
-configure: lua libs: -L/home/autobuild/autobuild/instance-0/output-1/host/bin/../sparc64-buildroot-linux-gnu/sysroot/usr/lib -llua -lm -ldl
-checking for lua5.4... no
-checking for lua... /home/autobuild/autobuild/instance-0/output-1/host/bin/lua
-configure: Lua shell: /home/autobuild/autobuild/instance-0/output-1/host/bin/lua
-configure: Lua library directory: /home/autobuild/autobuild/instance-0/output-1/host/lib/lua/5.3
-
-[...]
-
-/usr/bin/install -c -d /home/autobuild/autobuild/instance-0/output-1/target/home/autobuild/autobuild/instance-0/output-1/host/lib/lua/5.3
-/usr/bin/install -c -s --strip-program /bin/true brlapi.so /home/autobuild/autobuild/instance-0/output-1/target/home/autobuild/autobuild/instance-0/output-1/host/lib/lua/5.3
-make[3]: Leaving directory '/home/autobuild/autobuild/instance-0/output-1/build/brltty-6.6/Bindings/Lua'
-
-[...]
-
-brltty: installs files in /home/autobuild/autobuild/instance-0/output-1/target//home/autobuild/autobuild/instance-0/output-1
-
-While at it, disable emacs bindings which have also been added in
-version 6.5 with
-https://github.com/brltty/brltty/commit/64a487e29941df54796645229a872ecbe2a06bfe
-
-Fixes:
- - http://autobuild.buildroot.org/results/f424e6727bbe61ea4b7703e93aae6fcab7506898
- - http://autobuild.buildroot.org/results/bf4a161fc66fb99a24f08bea3436b13738f2e383
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe:2.3:a:falco:falcosecurity-libs
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/brltty/brltty.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/falcosecurity-libs/falcosecurity-libs.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/brltty/brltty.mk b/package/brltty/brltty.mk
-index f00a18cc6f..22d58ebd00 100644
---- a/package/brltty/brltty.mk
-+++ b/package/brltty/brltty.mk
-@@ -23,8 +23,10 @@ BRLTTY_CONF_ENV = \
- 	PKG_CONFIG_FOR_BUILD=$(HOST_DIR)/bin/pkgconf
+diff --git a/package/falcosecurity-libs/falcosecurity-libs.mk b/package/falcosecurity-libs/falcosecurity-libs.mk
+index 92d5c61832..4245f9581a 100644
+--- a/package/falcosecurity-libs/falcosecurity-libs.mk
++++ b/package/falcosecurity-libs/falcosecurity-libs.mk
+@@ -8,7 +8,6 @@ FALCOSECURITY_LIBS_VERSION = e5c53d648f3c4694385bbe488e7d47eaa36c229a
+ FALCOSECURITY_LIBS_SITE = $(call github,falcosecurity,libs,$(FALCOSECURITY_LIBS_VERSION))
+ FALCOSECURITY_LIBS_LICENSE = Apache-2.0 (userspace), MIT or GPL-2.0 (driver)
+ FALCOSECURITY_LIBS_LICENSE_FILES = COPYING driver/MIT.txt driver/GPL2.txt
+-FALCOSECURITY_LIBS_CPE_ID_VENDOR = falco
  
- BRLTTY_CONF_OPTS = \
-+	--disable-emacs-bindings \
- 	--disable-java-bindings \
- 	--disable-lisp-bindings \
-+	--disable-lua-bindings \
- 	--disable-ocaml-bindings \
- 	--disable-python-bindings \
- 	--disable-tcl-bindings \
+ FALCOSECURITY_LIBS_DEPENDENCIES = \
+ 	c-ares \
 -- 
 2.43.0
 
