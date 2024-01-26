@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92E1CC47422
-	for <buildroot@archiver.kernel.org>; Fri, 26 Jan 2024 16:04:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33B1EC47DDB
+	for <buildroot@archiver.kernel.org>; Fri, 26 Jan 2024 16:05:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4C0A3420A3;
-	Fri, 26 Jan 2024 16:04:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C0A3420A3
+	by smtp4.osuosl.org (Postfix) with ESMTP id E098942130;
+	Fri, 26 Jan 2024 16:05:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E098942130
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QEGKhq8e8UlG; Fri, 26 Jan 2024 16:04:50 +0000 (UTC)
+	with ESMTP id FqprsPlFa0KD; Fri, 26 Jan 2024 16:05:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 84D374208C;
-	Fri, 26 Jan 2024 16:04:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84D374208C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 33C7A1BF98E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1CCCF42083;
+	Fri, 26 Jan 2024 16:05:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1CCCF42083
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 326651BF284
  for <buildroot@lists.busybox.net>; Fri, 26 Jan 2024 16:04:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0C2544208C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0BD0583DDD
  for <buildroot@lists.busybox.net>; Fri, 26 Jan 2024 16:04:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C2544208C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0BD0583DDD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YxdW7Lzk1cbY for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dalhfZ0i_RyV for <buildroot@lists.busybox.net>;
  Fri, 26 Jan 2024 16:04:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 429D542083
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3FAA583DD7
  for <buildroot@buildroot.org>; Fri, 26 Jan 2024 16:04:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 429D542083
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3FAA583DD7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 231D386558; Fri, 26 Jan 2024 16:04:47 +0000 (UTC)
+ id 080BF86554; Fri, 26 Jan 2024 16:04:47 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 26 Jan 2024 17:02:21 +0100
+Date: Fri, 26 Jan 2024 17:02:12 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0d1f8ebe929d68167500040726cca698c8f45f07
-X-Git-Newrev: b8d9e75eb89898fac1a8200e78bca084635eefbc
+X-Git-Oldrev: 23534a6b41d6dd530395fa3727dd080aaca27a3d
+X-Git-Newrev: 0d1f8ebe929d68167500040726cca698c8f45f07
 X-Patchwork-Hint: ignore
-Message-Id: <20240126160447.231D386558@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/xwayland: security bump to version
- 23.2.4
+Message-Id: <20240126160447.080BF86554@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/microchip/mpfs_icicle/genimage.cfg:
+ drop legacy gpt = true
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,66 +63,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b8d9e75eb89898fac1a8200e78bca084635eefbc
+commit: https://git.buildroot.net/buildroot/commit/?id=0d1f8ebe929d68167500040726cca698c8f45f07
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issues:
+Genimage complains about the config using the deprecated gpt option:
 
-1) CVE-2023-6816 can be triggered by passing an invalid array index to
-DeviceFocusEvent or ProcXIQueryPointer.
+INFO: hdimage(sdcard.img): The option 'gpt' is deprecated.  Use
+'partition-table-type' instead
 
-2) CVE-2024-0229 can be triggered if a device has both a button and a
-key class and zero buttons.
-
-3) CVE-2024-21885 can be triggered if a device with a given ID was
-removed and a new device with the same ID added both in the same
-operation.
-
-4) CVE-2024-21886 can be triggered by disabling a master device with
-disabled slave devices.
-
-5) CVE-2024-0409 can be triggered by enabling SELinux
-xserver_object_manager and running a client.
-
-6) CVE-2024-0408 can be triggered by enabling SELinux
-xserver_object_manager and creating a GLX PBuffer.
-
-For details, see the advisory:
-https://lists.x.org/archives/xorg-announce/2024-January/003444.html
+So change to partition-table-type for consistency with the other configs.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Tested-by: Jamie Gibbons <jamie.gibbons@microchip.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xwayland/xwayland.hash | 6 +++---
- package/x11r7/xwayland/xwayland.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ board/microchip/mpfs_icicle/genimage.cfg | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/x11r7/xwayland/xwayland.hash b/package/x11r7/xwayland/xwayland.hash
-index 533ef9de86..5bb26bf17e 100644
---- a/package/x11r7/xwayland/xwayland.hash
-+++ b/package/x11r7/xwayland/xwayland.hash
-@@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2023-December/003437.html
--sha256  eb9d9aa7232c47412c8835ec15a97c575f03563726c787754ff0c019bd07e302  xwayland-23.2.3.tar.xz
--sha512  37198aa2f06313a0cb2add51cc78f81b26a42f2c9d55a0d3eecf958777107ea5560961c128f2d0af055f7460ba10fadb1b9050251c2c50f2251b40ab517e79cd  xwayland-23.2.3.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2024-January/003443.html
-+sha256  a99e159b6d0d33098b3b6ab22a88bfcece23c8b9d0ca72c535c55dcb0681b46b  xwayland-23.2.4.tar.xz
-+sha512  ac3ff208cbef5bbe4637c335cfda226489c93b0a3768f2f4fb0201c588485ede38262fbce77ef1425b3d2a0be61b6580df53341c7b95e6072c8b6371ad29d187  xwayland-23.2.4.tar.xz
+diff --git a/board/microchip/mpfs_icicle/genimage.cfg b/board/microchip/mpfs_icicle/genimage.cfg
+index 6955d3365a..9282c9ce5f 100644
+--- a/board/microchip/mpfs_icicle/genimage.cfg
++++ b/board/microchip/mpfs_icicle/genimage.cfg
+@@ -15,7 +15,7 @@ image boot.vfat {
  
- # Locally calculated
- sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
-diff --git a/package/x11r7/xwayland/xwayland.mk b/package/x11r7/xwayland/xwayland.mk
-index 8f4bcd8117..c66dd471ac 100644
---- a/package/x11r7/xwayland/xwayland.mk
-+++ b/package/x11r7/xwayland/xwayland.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ image sdcard.img {
+ 	hdimage {
+-		gpt = true
++		partition-table-type = "gpt"
+ 	}
  
--XWAYLAND_VERSION = 23.2.3
-+XWAYLAND_VERSION = 23.2.4
- XWAYLAND_SOURCE = xwayland-$(XWAYLAND_VERSION).tar.xz
- XWAYLAND_SITE = https://xorg.freedesktop.org/archive/individual/xserver
- XWAYLAND_LICENSE = MIT
+ 	partition uboot {
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
