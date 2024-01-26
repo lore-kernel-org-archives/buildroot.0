@@ -4,48 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16A6DC47DDB
-	for <buildroot@archiver.kernel.org>; Fri, 26 Jan 2024 21:33:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F0A1C47DDB
+	for <buildroot@archiver.kernel.org>; Fri, 26 Jan 2024 21:34:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ABF7F40502;
-	Fri, 26 Jan 2024 21:33:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ABF7F40502
+	by smtp2.osuosl.org (Postfix) with ESMTP id 441A74060D;
+	Fri, 26 Jan 2024 21:34:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 441A74060D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mVnz9MRnV2X5; Fri, 26 Jan 2024 21:33:57 +0000 (UTC)
+	with ESMTP id vhCgOS6GDK-3; Fri, 26 Jan 2024 21:34:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B71064018F;
-	Fri, 26 Jan 2024 21:33:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B71064018F
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3EFE01BF2EC
- for <buildroot@lists.busybox.net>; Fri, 26 Jan 2024 21:33:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 571E14018F;
+	Fri, 26 Jan 2024 21:34:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 571E14018F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id DEE841BF2EC
+ for <buildroot@lists.busybox.net>; Fri, 26 Jan 2024 21:34:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 17D704212A
- for <buildroot@lists.busybox.net>; Fri, 26 Jan 2024 21:33:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17D704212A
+ by smtp2.osuosl.org (Postfix) with ESMTP id B69624018F
+ for <buildroot@lists.busybox.net>; Fri, 26 Jan 2024 21:34:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B69624018F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 68_ojlsBtMeS for <buildroot@lists.busybox.net>;
- Fri, 26 Jan 2024 21:33:47 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3CF594210D
- for <buildroot@buildroot.org>; Fri, 26 Jan 2024 21:33:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3CF594210D
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1DE32865B3; Fri, 26 Jan 2024 21:33:47 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LJNOZsUEIAJa for <buildroot@lists.busybox.net>;
+ Fri, 26 Jan 2024 21:34:29 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7CA3B40142
+ for <buildroot@buildroot.org>; Fri, 26 Jan 2024 21:34:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7CA3B40142
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 99C3AFF808;
+ Fri, 26 Jan 2024 21:34:26 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1rTTqD-00ATZd-30;
+ Fri, 26 Jan 2024 22:34:25 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 26 Jan 2024 22:33:07 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 40f7130a671ad5fc15628d9ecf852ece12d013da
-X-Git-Newrev: a33827760823b1455326e0fc8cf6089a3081e782
-X-Patchwork-Hint: ignore
-Message-Id: <20240126213347.1DE32865B3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/faad2: force arm mode instead of
- Thumb mode
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20240126173059.1629666-1-fontaine.fabrice@gmail.com>
+Date: Fri, 26 Jan 2024 22:34:25 +0100
+In-Reply-To: <20240126173059.1629666-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 26 Jan 2024 18:30:58 +0100")
+Message-ID: <875xzf22zi.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] package/falcosecurity-libs: drop
+ FALCOSECURITY_LIBS_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,45 +63,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Francis Laniel <flaniel@linux.microsoft.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a33827760823b1455326e0fc8cf6089a3081e782
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Fix the following build failure in Thumb mode:
+ > FALCOSECURITY_LIBS_CPE_ID_VENDOR is plain wrong since the addition of
+ > the package in commit a15e35c4ebc52f29f65372c8e86cefa874aa4aaf, indeed
+ > falco:falcosecurity-libs is not a valid CPE ID:
 
-/tmp/ccfzn6FH.s:36: Error: selected processor does not support `smull r2,r3,r1,r0' in Thumb mode
+ >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe:2.3:a:falco:falcosecurity-libs
 
-Fixes:
- - http://autobuild.buildroot.org/results/838808b4751244ee01cde6b8261212b49e511a32
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[Peter: reword comment slightly]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/faad2/faad2.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+Committed, thanks.
 
-diff --git a/package/faad2/faad2.mk b/package/faad2/faad2.mk
-index 686e5045c0..0b249b3450 100644
---- a/package/faad2/faad2.mk
-+++ b/package/faad2/faad2.mk
-@@ -12,4 +12,11 @@ FAAD2_CPE_ID_VENDOR = audiocoding
- FAAD2_CPE_ID_PRODUCT = freeware_advanced_audio_decoder_2
- FAAD2_INSTALL_STAGING = YES
- 
-+# faad2 contains assembly routines using ARM instructions not present in thumb1 mode:
-+# Error: selected processor does not support `smull r2,r3,r1,r0' in Thumb mode
-+# so force ARM mode
-+ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
-+FAAD2_CONF_OPTS += -DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -marm"
-+endif
-+
- $(eval $(cmake-package))
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
