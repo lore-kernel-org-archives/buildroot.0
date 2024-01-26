@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BFBD9C47422
-	for <buildroot@archiver.kernel.org>; Fri, 26 Jan 2024 08:49:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 951C6C47DDB
+	for <buildroot@archiver.kernel.org>; Fri, 26 Jan 2024 08:49:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7FF9B84FA5;
-	Fri, 26 Jan 2024 08:49:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7FF9B84FA5
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5394584FCA;
+	Fri, 26 Jan 2024 08:49:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5394584FCA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aRzjUEvp-lH5; Fri, 26 Jan 2024 08:49:31 +0000 (UTC)
+	with ESMTP id NU8U3ytGLYFA; Fri, 26 Jan 2024 08:49:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C981E84D49;
-	Fri, 26 Jan 2024 08:49:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C981E84D49
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6C4E21BF990
- for <buildroot@lists.busybox.net>; Fri, 26 Jan 2024 08:48:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7D07184FC4;
+	Fri, 26 Jan 2024 08:49:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D07184FC4
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 23D701BF420
+ for <buildroot@lists.busybox.net>; Fri, 26 Jan 2024 08:48:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 452574367C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 33F6684000
  for <buildroot@lists.busybox.net>; Fri, 26 Jan 2024 08:48:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 452574367C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 33F6684000
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zD4xvzl7qQPV for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id H8_Y8Hz2dLJy for <buildroot@lists.busybox.net>;
  Fri, 26 Jan 2024 08:48:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 346E9402B1
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3C07383FEA
  for <buildroot@buildroot.org>; Fri, 26 Jan 2024 08:48:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 346E9402B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3C07383FEA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1F17086530; Fri, 26 Jan 2024 08:48:46 +0000 (UTC)
+ id 29C4F86531; Fri, 26 Jan 2024 08:48:46 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 26 Jan 2024 09:45:01 +0100
+Date: Fri, 26 Jan 2024 09:45:50 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6116963df34ed8c64393b0ce1cfa117db7936bab
-X-Git-Newrev: 8ceab1f2cd105f683b80e485422c8e10d2048b01
+X-Git-Oldrev: 8ceab1f2cd105f683b80e485422c8e10d2048b01
+X-Git-Newrev: bbea0e71398e19f0a8d360b7e16a5baa8d2f5c50
 X-Patchwork-Hint: ignore
-Message-Id: <20240126084846.1F17086530@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kvazaar: bump to version 2.2.0
+Message-Id: <20240126084846.29C4F86531@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kismet: bump to version 2023-07-R1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,53 +62,91 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8ceab1f2cd105f683b80e485422c8e10d2048b01
+commit: https://git.buildroot.net/buildroot/commit/?id=bbea0e71398e19f0a8d360b7e16a5baa8d2f5c50
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update hash of LICENSE (new line added with
-https://github.com/ultravideo/kvazaar/commit/7856583ee05f627bbab153bedb68d586ccb3750d)
+- openssl is a mandatory dependency of BR2_PACKAGE_KISMET_SERVER since
+  https://github.com/kismetwireless/kismet/commit/d916acf8c0fa36d8d794ce3d0fb87fc180592b6c
+- pcre2 is an optional dependency since
+  https://github.com/kismetwireless/kismet/commit/bb1ecb1c5688cafb1914847c2d068f820b847f2b
+- disable wifi-coconut (enabled by default and depends on libusb:
+  https://github.com/kismetwireless/kismet/commit/e221b8d45c1598aac64dd4403be1bf7d7df3d0a6)
 
-https://github.com/ultravideo/kvazaar/releases/tag/v2.2.0
+https://kismetwireless.net/posts/kismet-2023-07-r1/
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/kvazaar/kvazaar.hash | 8 ++++----
- package/kvazaar/kvazaar.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/kismet/Config.in   |  1 +
+ package/kismet/kismet.hash |  2 +-
+ package/kismet/kismet.mk   | 12 ++++++++----
+ 3 files changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/package/kvazaar/kvazaar.hash b/package/kvazaar/kvazaar.hash
-index 20b8e5918e..4956fc7091 100644
---- a/package/kvazaar/kvazaar.hash
-+++ b/package/kvazaar/kvazaar.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  a76998462924ab8409cf8de4947ba5a5023daa33207676e9c4eefc2bbd46c834  kvazaar-2.1.0.tar.xz
--sha256  4caf7852236f62bfd77aac10a7b9a42372b00aa461ad8912780cd865a39062ff  LICENSE
--sha256  16f569c87d5ec20b7474b55ee0a8877b8f8b4dc13f9567ebe0b8fe8afdeb34d2  LICENSE.greatest
--sha256  f84c0f33873a015f399d8171cf321af2f09ef915ae7ad5a9edaa7d0286cf9d5e  LICENSE.x264asm
-+sha256  f8fb72184f10b2fac295452bd0d5936d4449ed849754d5d1f3e7035998983573  kvazaar-2.2.0.tar.xz
-+sha256  3c1dc3d7f8a3d08c14f4fbe9942f45764d8a21a3296e8d83446f33fd65f21c38  LICENSE
-+sha256  16f569c87d5ec20b7474b55ee0a8877b8f8b4dc13f9567ebe0b8fe8afdeb34d2  LICENSE.EXT.greatest
-+sha256  f84c0f33873a015f399d8171cf321af2f09ef915ae7ad5a9edaa7d0286cf9d5e  LICENSE.EXT.x264asm
-diff --git a/package/kvazaar/kvazaar.mk b/package/kvazaar/kvazaar.mk
-index 17e2ea8caf..6bcc6066a4 100644
---- a/package/kvazaar/kvazaar.mk
-+++ b/package/kvazaar/kvazaar.mk
-@@ -4,11 +4,11 @@
+diff --git a/package/kismet/Config.in b/package/kismet/Config.in
+index 7bde6c92af..80e68743a5 100644
+--- a/package/kismet/Config.in
++++ b/package/kismet/Config.in
+@@ -63,6 +63,7 @@ config BR2_PACKAGE_KISMET_SERVER
+ 	depends on !BR2_STATIC_LIBS # dlfcn.h
+ 	depends on BR2_USE_WCHAR
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::future
++	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_PROTOBUF
+ 
+ comment "server needs a toolchain w/ dynamic library, wchar"
+diff --git a/package/kismet/kismet.hash b/package/kismet/kismet.hash
+index 725d24e551..543515858e 100644
+--- a/package/kismet/kismet.hash
++++ b/package/kismet/kismet.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  2149cceac5526508653f4d02dcf7a694e3da3dc000a2372a1ee4bf9988279781  kismet-2022-08-R1.tar.xz
++sha256  f08548e26ca65fa1e567b1debbea1ca4d0e7206bddb96a4f639c90171873e8f7  kismet-2023-07-R1.tar.xz
+ sha256  93c7f0d7e356b0abfb6f494ff3ea37f96abc84e9a5619b25d4e43f7553a55739  LICENSE
+diff --git a/package/kismet/kismet.mk b/package/kismet/kismet.mk
+index 8def78ad2a..c448233d60 100644
+--- a/package/kismet/kismet.mk
++++ b/package/kismet/kismet.mk
+@@ -4,13 +4,14 @@
  #
  ################################################################################
  
--KVAZAAR_VERSION = 2.1.0
-+KVAZAAR_VERSION = 2.2.0
- KVAZAAR_SOURCE = kvazaar-$(KVAZAAR_VERSION).tar.xz
- KVAZAAR_SITE = https://github.com/ultravideo/kvazaar/releases/download/v$(KVAZAAR_VERSION)
- KVAZAAR_LICENSE = BSD-3-Clause, ISC (greatest, x264asm)
--KVAZAAR_LICENSE_FILES = LICENSE LICENSE.greatest LICENSE.x264asm
-+KVAZAAR_LICENSE_FILES = LICENSE LICENSE.EXT.greatest LICENSE.EXT.x264asm
- KVAZAAR_INSTALL_STAGING = YES
- KVAZAAR_DEPENDENCIES = host-pkgconf
+-KISMET_VERSION = 2022-08-R1
++KISMET_VERSION = 2023-07-R1
+ KISMET_SOURCE = kismet-$(KISMET_VERSION).tar.xz
+ KISMET_SITE = http://www.kismetwireless.net/code
+ KISMET_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	libpcap \
+ 	$(if $(BR2_PACKAGE_LIBNL),libnl) \
++	$(if $(BR2_PACKAGE_OPENSSL),openssl) \
+ 	$(if $(BR2_PACKAGE_PROTOBUF),protobuf) \
+ 	protobuf-c \
+ 	sqlite \
+@@ -19,7 +20,7 @@ KISMET_LICENSE = GPL-2.0+
+ KISMET_LICENSE_FILES = LICENSE
+ KISMET_SELINUX_MODULES = kismet
  
+-KISMET_CONF_OPTS = --disable-debuglibs
++KISMET_CONF_OPTS = --disable-debuglibs --disable-wifi-coconut
+ 
+ KISMET_CXXFLAGS = $(TARGET_CXXFLAGS)
+ 
+@@ -57,9 +58,12 @@ else
+ KISMET_CONF_OPTS += --disable-lmsensors
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_PCRE),y)
++ifeq ($(BR2_PACKAGE_PCRE2),y)
++KISMET_DEPENDENCIES += pcre2
++KISMET_CONF_OPTS += --enable-pcre --enable-require-pcre2
++else ifeq ($(BR2_PACKAGE_PCRE),y)
+ KISMET_DEPENDENCIES += pcre
+-KISMET_CONF_OPTS += --enable-pcre
++KISMET_CONF_OPTS += --enable-pcre --disable-require-pcre2
+ else
+ KISMET_CONF_OPTS += --disable-pcre
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
