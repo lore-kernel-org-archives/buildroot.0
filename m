@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16847C47422
-	for <buildroot@archiver.kernel.org>; Fri, 26 Jan 2024 21:30:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C045C47422
+	for <buildroot@archiver.kernel.org>; Fri, 26 Jan 2024 21:30:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6D0C9408BC;
-	Fri, 26 Jan 2024 21:30:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D0C9408BC
+	by smtp2.osuosl.org (Postfix) with ESMTP id EEC0E4378A;
+	Fri, 26 Jan 2024 21:30:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EEC0E4378A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RnFmcYnSn8zH; Fri, 26 Jan 2024 21:30:33 +0000 (UTC)
+	with ESMTP id 19p75qFHW1Cq; Fri, 26 Jan 2024 21:30:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 93B8143753;
-	Fri, 26 Jan 2024 21:30:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 93B8143753
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0C7C143782;
+	Fri, 26 Jan 2024 21:30:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C7C143782
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8A8931BF2EC
- for <buildroot@lists.busybox.net>; Fri, 26 Jan 2024 21:29:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8DC271BF2EC
+ for <buildroot@lists.busybox.net>; Fri, 26 Jan 2024 21:29:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 820A742157
- for <buildroot@lists.busybox.net>; Fri, 26 Jan 2024 21:29:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 820A742157
+ by smtp4.osuosl.org (Postfix) with ESMTP id 644AE41FB8
+ for <buildroot@lists.busybox.net>; Fri, 26 Jan 2024 21:29:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 644AE41FB8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WyLsvCzuLKdx for <buildroot@lists.busybox.net>;
+ with ESMTP id UC4LC7FajgSz for <buildroot@lists.busybox.net>;
  Fri, 26 Jan 2024 21:29:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id AF64E41FB8
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9965941F96
  for <buildroot@buildroot.org>; Fri, 26 Jan 2024 21:29:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF64E41FB8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9965941F96
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 92397865AE; Fri, 26 Jan 2024 21:29:47 +0000 (UTC)
+ id 79090865AB; Fri, 26 Jan 2024 21:29:47 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 26 Jan 2024 22:26:09 +0100
+Date: Fri, 26 Jan 2024 22:25:13 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 39acca7349f6b757a83788dd5e385e61c3e29680
-X-Git-Newrev: 81d35de1ba925cbf7a51b403d05f164a4bb5e60f
+X-Git-Oldrev: 69a7680407bef325c613b33121ed1ec6a97ab7cb
+X-Git-Newrev: f596248627ee133ef1640cee8ff9f276fb545b41
 X-Patchwork-Hint: ignore
-Message-Id: <20240126212947.92397865AE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rtl8821cu: bump to version
- 2024-01-21
+Message-Id: <20240126212947.79090865AB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/catch2: bump to version 3.5.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +62,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=81d35de1ba925cbf7a51b403d05f164a4bb5e60f
+commit: https://git.buildroot.net/buildroot/commit/?id=f596248627ee133ef1640cee8ff9f276fb545b41
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-With this version we can build with Linux 6.8.
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rtl8821cu/rtl8821cu.hash | 2 +-
- package/rtl8821cu/rtl8821cu.mk   | 2 +-
+ package/catch2/catch2.hash | 2 +-
+ package/catch2/catch2.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rtl8821cu/rtl8821cu.hash b/package/rtl8821cu/rtl8821cu.hash
-index 3d7a1be9d1..b3d6d2c569 100644
---- a/package/rtl8821cu/rtl8821cu.hash
-+++ b/package/rtl8821cu/rtl8821cu.hash
+diff --git a/package/catch2/catch2.hash b/package/catch2/catch2.hash
+index c90973154a..5136785513 100644
+--- a/package/catch2/catch2.hash
++++ b/package/catch2/catch2.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  5226fefd72d2dd2b8048a8d836f731139ddcb9a34eab68e9b07acee6ee5d8553  rtl8821cu-eb52ece92607394ecc22e96b41671ec3e5b1fa30.tar.gz
-+sha256  3ccec54462a8668142a9c2b2ddfffe4e0434feebe6caf6a7de6812dc8713c37f  rtl8821cu-5b39398e2de146edeb76716420f3288f508bea61.tar.gz
- sha256  22cdb0a9cf492dbf05c5b27381a5c0e73ae0d4622427b522b0ba92b7495e5fb0  LICENSE
-diff --git a/package/rtl8821cu/rtl8821cu.mk b/package/rtl8821cu/rtl8821cu.mk
-index 8f344d518f..8cb8ea710b 100644
---- a/package/rtl8821cu/rtl8821cu.mk
-+++ b/package/rtl8821cu/rtl8821cu.mk
+ # Locally computed:
+-sha256  49c3ca7a68f1c8ec71307736bc6ed14fec21631707e1be9af45daf4037e75a08  catch2-3.5.1.tar.gz
++sha256  269543a49eb76f40b3f93ff231d4c24c27a7e16c90e47d2e45bcc564de470c6e  catch2-3.5.2.tar.gz
+ sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE.txt
+diff --git a/package/catch2/catch2.mk b/package/catch2/catch2.mk
+index fc4a1d69a9..ee0940642f 100644
+--- a/package/catch2/catch2.mk
++++ b/package/catch2/catch2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RTL8821CU_VERSION = eb52ece92607394ecc22e96b41671ec3e5b1fa30
-+RTL8821CU_VERSION = 5b39398e2de146edeb76716420f3288f508bea61
- RTL8821CU_SITE = $(call github,morrownr,8821cu-20210916,$(RTL8821CU_VERSION))
- RTL8821CU_LICENSE = GPL-2.0
- RTL8821CU_LICENSE_FILES = LICENSE
+-CATCH2_VERSION = 3.5.1
++CATCH2_VERSION = 3.5.2
+ CATCH2_SITE = $(call github,catchorg,Catch2,v$(CATCH2_VERSION))
+ CATCH2_INSTALL_STAGING = YES
+ CATCH2_INSTALL_TARGET = NO
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
