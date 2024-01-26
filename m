@@ -4,48 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD22FC47422
-	for <buildroot@archiver.kernel.org>; Fri, 26 Jan 2024 22:37:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C48AEC47422
+	for <buildroot@archiver.kernel.org>; Fri, 26 Jan 2024 23:05:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7896B6153A;
-	Fri, 26 Jan 2024 22:37:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7896B6153A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5D15160B1D;
+	Fri, 26 Jan 2024 23:05:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5D15160B1D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FmdkssCoTrRC; Fri, 26 Jan 2024 22:37:14 +0000 (UTC)
+	with ESMTP id Xz5r5r4VHaFA; Fri, 26 Jan 2024 23:05:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CCA9661512;
-	Fri, 26 Jan 2024 22:37:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CCA9661512
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BB3A31BF98E
- for <buildroot@lists.busybox.net>; Fri, 26 Jan 2024 22:36:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6E76F60BA4;
+	Fri, 26 Jan 2024 23:05:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E76F60BA4
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 696091BF33C
+ for <buildroot@lists.busybox.net>; Fri, 26 Jan 2024 23:05:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A14FB614FD
- for <buildroot@lists.busybox.net>; Fri, 26 Jan 2024 22:36:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A14FB614FD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3A96140432
+ for <buildroot@lists.busybox.net>; Fri, 26 Jan 2024 23:05:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A96140432
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3dHJvnAEgs-9 for <buildroot@lists.busybox.net>;
- Fri, 26 Jan 2024 22:36:58 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9495160BA6
- for <buildroot@buildroot.org>; Fri, 26 Jan 2024 22:36:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9495160BA6
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7F17C865C1; Fri, 26 Jan 2024 22:36:58 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sdnKGbzqeFyo for <buildroot@lists.busybox.net>;
+ Fri, 26 Jan 2024 23:05:30 +0000 (UTC)
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4F3E040339
+ for <buildroot@buildroot.org>; Fri, 26 Jan 2024 23:05:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F3E040339
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 0B15F13F86A;
+ Sat, 27 Jan 2024 00:05:25 +0100 (CET)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 26 Jan 2024 22:33:59 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a33827760823b1455326e0fc8cf6089a3081e782
-X-Git-Newrev: 9b36995c2c205fc46824c556f8c97d461c1c6bb8
-X-Patchwork-Hint: ignore
-Message-Id: <20240126223658.7F17C865C1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/falcosecurity-libs: drop
- FALCOSECURITY_LIBS_CPE_ID_VENDOR
+Date: Sat, 27 Jan 2024 00:05:20 +0100
+Message-ID: <20240126230520.427817-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.43.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1706310327;
+ bh=qQn/Zs7V4UrCXt6Z2dR/atbAc30FyCdVoxYkb2KVw7w=;
+ h=From:To:Cc:Subject:Date:From;
+ b=jvMP3k1dGJvtSO8cJ/0O29K4/B+kzrZ7LoXzmE+pIniJx3Ecao2jzZHRmNkPt1xkW
+ wAcxeMLsWqS+B8j9BeXnhzOH2d/vXu2X+Strn+TeHRx07VRTFagLhzMK5VK8VuO+nf
+ 9hnhBZ7eJ/8MlSEW/vuAnwqSH3HEZUi8+8P5hIaLhyptccoaBxnyKvcvdzHaR6lNV0
+ 2SB6QyOgmoXOZ/kiD5Sw3viUUdYhnVS0mba13p1k0Rrsa88M0haGehKxicUE+Q4Jw6
+ b1p7qP7TVG9ObmZ9LNy1Ci+rvrb26e/efL44hNQhWlaups5GXEdIXBPXORlVXBn1wW
+ em9bueMg5M9/g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=jvMP3k1d
+Subject: [Buildroot] [PATCH 1/1] support/testing: add cryptsetup runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,39 +70,191 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9b36995c2c205fc46824c556f8c97d461c1c6bb8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-FALCOSECURITY_LIBS_CPE_ID_VENDOR is plain wrong since the addition of
-the package in commit a15e35c4ebc52f29f65372c8e86cefa874aa4aaf, indeed
-falco:falcosecurity-libs is not a valid CPE ID:
-
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe:2.3:a:falco:falcosecurity-libs
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/falcosecurity-libs/falcosecurity-libs.mk | 1 -
- 1 file changed, 1 deletion(-)
+ DEVELOPERS                                    |   2 +
+ .../testing/tests/package/test_cryptsetup.py  | 137 ++++++++++++++++++
+ .../test_cryptsetup/linux-cryptsetup.fragment |   5 +
+ 3 files changed, 144 insertions(+)
+ create mode 100644 support/testing/tests/package/test_cryptsetup.py
+ create mode 100644 support/testing/tests/package/test_cryptsetup/linux-cryptsetup.fragment
 
-diff --git a/package/falcosecurity-libs/falcosecurity-libs.mk b/package/falcosecurity-libs/falcosecurity-libs.mk
-index 92d5c61832..4245f9581a 100644
---- a/package/falcosecurity-libs/falcosecurity-libs.mk
-+++ b/package/falcosecurity-libs/falcosecurity-libs.mk
-@@ -8,7 +8,6 @@ FALCOSECURITY_LIBS_VERSION = e5c53d648f3c4694385bbe488e7d47eaa36c229a
- FALCOSECURITY_LIBS_SITE = $(call github,falcosecurity,libs,$(FALCOSECURITY_LIBS_VERSION))
- FALCOSECURITY_LIBS_LICENSE = Apache-2.0 (userspace), MIT or GPL-2.0 (driver)
- FALCOSECURITY_LIBS_LICENSE_FILES = COPYING driver/MIT.txt driver/GPL2.txt
--FALCOSECURITY_LIBS_CPE_ID_VENDOR = falco
- 
- FALCOSECURITY_LIBS_DEPENDENCIES = \
- 	c-ares \
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9528837dd0..18bdde6e69 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1764,6 +1764,8 @@ F:	support/testing/tests/package/test_bc.py
+ F:	support/testing/tests/package/test_brotli.py
+ F:	support/testing/tests/package/test_bzip2.py
+ F:	support/testing/tests/package/test_compressor_base.py
++F:	support/testing/tests/package/test_cryptsetup.py
++F:	support/testing/tests/package/test_cryptsetup/
+ F:	support/testing/tests/package/test_ddrescue.py
+ F:	support/testing/tests/package/test_ddrescue/
+ F:	support/testing/tests/package/test_dos2unix.py
+diff --git a/support/testing/tests/package/test_cryptsetup.py b/support/testing/tests/package/test_cryptsetup.py
+new file mode 100644
+index 0000000000..759dfd7c5f
+--- /dev/null
++++ b/support/testing/tests/package/test_cryptsetup.py
+@@ -0,0 +1,137 @@
++import os
++import subprocess
++
++import infra.basetest
++
++
++class TestCryptSetup(infra.basetest.BRTest):
++    # A specific configuration is needed for using cryptsetup:
++    # - A kernel config fragment enables all the parts needed for
++    #   mounting a LUKS2 volume,
++    # - Enable OpenSSL for cryptsetup crypto backend library,
++    # - Enable e2fsprog for formatting a ext4 filesystem.
++    kern_frag = \
++        infra.filepath("tests/package/test_cryptsetup/linux-cryptsetup.fragment")
++    config = \
++        f"""
++        BR2_aarch64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.75"
++        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
++        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{kern_frag}"
++        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++        BR2_PACKAGE_CRYPTSETUP=y
++        BR2_PACKAGE_E2FSPROGS=y
++        BR2_PACKAGE_OPENSSL=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        BR2_TARGET_ROOTFS_CPIO_GZIP=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        disk_file = os.path.join(self.builddir, "images", "disk.img")
++        self.emulator.logfile.write(f"Creating disk image: {disk_file}")
++        subprocess.check_call(
++            ["dd", "if=/dev/urandom", f"of={disk_file}", "bs=1M", "count=20"],
++            stdout=self.emulator.logfile,
++            stderr=self.emulator.logfile)
++
++        img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
++        kern = os.path.join(self.builddir, "images", "Image")
++
++        bootargs = ["console=ttyAMA0"]
++        qemu_opts = ["-M", "virt", "-cpu", "cortex-a57", "-m", "256M",
++                     "-initrd", img,
++                     "-drive", f"file={disk_file},if=virtio,format=raw"]
++        self.emulator.boot(arch="aarch64",
++                           kernel=kern,
++                           kernel_cmdline=bootargs,
++                           options=qemu_opts)
++        self.emulator.login()
++
++        # Check the program can execute.
++        self.assertRunOk("cryptsetup --version")
++
++        passkey = "ThisIsAPassKey."
++        dev = "/dev/vda"
++        dm_name = "luks-vol"
++        dm_dev = f"/dev/mapper/{dm_name}"
++        mnt_pt = "/mnt/secure-volume"
++
++        # Check the device is NOT detected as a LUKS volume, because
++        # it is not formatted yet.
++        is_luks_cmd = f"cryptsetup isLuks {dev}"
++        _, ret = self.emulator.run(is_luks_cmd)
++        self.assertNotEqual(ret, 0)
++
++        # Format the LUKS volume.
++        cmd = f"echo {passkey} | cryptsetup luksFormat {dev}"
++        self.assertRunOk(cmd, timeout=30)
++
++        # Check the device is now detected as a LUKS device.
++        self.assertRunOk(is_luks_cmd)
++
++        # Dump LUKS device header information.
++        self.assertRunOk(f"cryptsetup luksDump {dev}")
++
++        # Open the LUKS device
++        luks_open_cmd = f"echo {passkey} | "
++        luks_open_cmd += f"cryptsetup open --type luks {dev} {dm_name}"
++        self.assertRunOk(luks_open_cmd, timeout=10)
++
++        # Create an ext4 filesystem.
++        self.assertRunOk(f"mke2fs -T ext4 {dm_dev}", timeout=10)
++
++        # Create the mount point directory.
++        self.assertRunOk(f"mkdir {mnt_pt}")
++
++        # Mount the LUKS device.
++        mount_cmd = f"mount {dm_dev} {mnt_pt}"
++        self.assertRunOk(mount_cmd)
++
++        # Create a plain text file in the mounted filesystem.
++        msg = "This is a plain text message"
++        plain_file = f"{mnt_pt}/file.txt"
++        self.assertRunOk(f"echo '{msg}' > {plain_file}")
++
++        # Unmount.
++        self.assertRunOk(f"umount {mnt_pt}")
++
++        # We are supposed to see our plain text message on the
++        # dm-crypt device.
++        self.assertRunOk(f"grep -Fq '{msg}' {dm_dev}", timeout=10)
++
++        # Close the LUKS device
++        self.assertRunOk(f"cryptsetup close {dm_name}")
++
++        # We are NOT supposed to find our plain text message on the
++        # crypted storage device.
++        _, ret = self.emulator.run(f"grep -Fq '{msg}' {dev}", timeout=10)
++        self.assertNotEqual(ret, 0)
++
++        # Try to open LUKS volume with a wrong password. This is
++        # expected to fail.
++        cmd = f"echo 'Wrong{passkey}' | "
++        cmd += f"cryptsetup open --type luks {dev} {dm_name}"
++        _, ret = self.emulator.run(cmd, timeout=10)
++        self.assertNotEqual(ret, 0)
++
++        # Check the device-mapper device was NOT created (since we
++        # tried to open it with a wrong password).
++        self.assertRunOk(f"test ! -e {dm_dev}")
++
++        # Reopen the LUKS device, with the good passkey this time...
++        self.assertRunOk(luks_open_cmd, timeout=10)
++
++        # ...remount...
++        self.assertRunOk(mount_cmd)
++
++        # ...and read back our plain text file. We check we get back
++        # our original message.
++        out, ret = self.emulator.run(f"cat {plain_file}")
++        self.assertEqual(ret, 0)
++        self.assertEqual(out[0], msg)
+diff --git a/support/testing/tests/package/test_cryptsetup/linux-cryptsetup.fragment b/support/testing/tests/package/test_cryptsetup/linux-cryptsetup.fragment
+new file mode 100644
+index 0000000000..37d5494fc2
+--- /dev/null
++++ b/support/testing/tests/package/test_cryptsetup/linux-cryptsetup.fragment
+@@ -0,0 +1,5 @@
++CONFIG_BLK_DEV_DM=y
++CONFIG_CRYPTO_AES=y
++CONFIG_CRYPTO_XTS=y
++CONFIG_DM_CRYPT=y
++CONFIG_MD=y
+-- 
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
