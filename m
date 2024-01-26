@@ -4,53 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EACEC47DDB
-	for <buildroot@archiver.kernel.org>; Fri, 26 Jan 2024 21:29:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92A0EC47422
+	for <buildroot@archiver.kernel.org>; Fri, 26 Jan 2024 21:29:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DD63C405D3;
-	Fri, 26 Jan 2024 21:29:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DD63C405D3
+	by smtp2.osuosl.org (Postfix) with ESMTP id 42E7640502;
+	Fri, 26 Jan 2024 21:29:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 42E7640502
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GUfVqer6NbJb; Fri, 26 Jan 2024 21:29:25 +0000 (UTC)
+	with ESMTP id f5ihJaHSR0Jt; Fri, 26 Jan 2024 21:29:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BE578402C3;
-	Fri, 26 Jan 2024 21:29:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BE578402C3
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4047640142;
+	Fri, 26 Jan 2024 21:29:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4047640142
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 667A51BF2EC
- for <buildroot@lists.busybox.net>; Fri, 26 Jan 2024 21:29:23 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 87E581BF98E
+ for <buildroot@lists.busybox.net>; Fri, 26 Jan 2024 21:29:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3F57761499
- for <buildroot@lists.busybox.net>; Fri, 26 Jan 2024 21:29:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F57761499
+ by smtp3.osuosl.org (Postfix) with ESMTP id 67D30614E9
+ for <buildroot@lists.busybox.net>; Fri, 26 Jan 2024 21:29:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 67D30614E9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3vlPydAM6-r3 for <buildroot@lists.busybox.net>;
- Fri, 26 Jan 2024 21:29:22 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1C72D60AAD
- for <buildroot@buildroot.org>; Fri, 26 Jan 2024 21:29:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C72D60AAD
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 45C9360004;
- Fri, 26 Jan 2024 21:29:19 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rTTlG-00ATBg-2C;
- Fri, 26 Jan 2024 22:29:18 +0100
+ with ESMTP id ijwibGOnLrK8 for <buildroot@lists.busybox.net>;
+ Fri, 26 Jan 2024 21:29:47 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9C40960AAD
+ for <buildroot@buildroot.org>; Fri, 26 Jan 2024 21:29:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C40960AAD
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8680A86580; Fri, 26 Jan 2024 21:29:47 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Waldemar Brodkorb <wbx@openadk.org>
-References: <Za5ALVSKp4U3Pa2Z@waldemar-brodkorb.de>
-Date: Fri, 26 Jan 2024 22:29:18 +0100
-In-Reply-To: <Za5ALVSKp4U3Pa2Z@waldemar-brodkorb.de> (Waldemar Brodkorb's
- message of "Mon, 22 Jan 2024 11:15:09 +0100")
-Message-ID: <87il3f2381.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/ruby: bump to 3.3.0
+To: buildroot@buildroot.org
+Date: Fri, 26 Jan 2024 22:25:36 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f596248627ee133ef1640cee8ff9f276fb545b41
+X-Git-Newrev: 39acca7349f6b757a83788dd5e385e61c3e29680
+X-Patchwork-Hint: ignore
+Message-Id: <20240126212947.8680A86580@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libnss: bump version to 3.97
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,36 +56,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=39acca7349f6b757a83788dd5e385e61c3e29680
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > See here for changes:
- > https://www.ruby-lang.org/en/news/2023/12/25/ruby-3-3-0-released/
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > Patch applied upstream.
-
- > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-
-make ruby-legal-info
-..
->>> ruby 3.3.0 Collecting legal info
-ERROR: while checking hashes from package/ruby//ruby.hash
-ERROR: LEGAL has wrong sha256 hash:
-ERROR: expected: 794c384f94396ab07e3e6f53a9f8be093facb7eb4193266024302b93b29e12dc
-ERROR: got     : e849b28d324423e636a3e6bc5d583cdaf4bd046c2b20872c53886b612d01a4a1
-ERROR: Incomplete download, or man-in-the-middle (MITM) attack
-
-Please check what changed in the LEGAL file, adjust the commit message
-and resend - Thanks.
-
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index e44f729363..fdfe9773d2 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_96_1_RTM/src/SHA256SUMS
+-sha256  c51e89f6fbb06163f4302e368eeb672d748b52d583948bdb15ef1b069237a496  nss-3.96.1.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_97_RTM/src/SHA256SUMS
++sha256  078efb8393f32e40b1fb4bf6930fff7f1aabed01287fcc5fe58aba736765fa0a  nss-3.97.tar.gz
+ # Locally calculated
+ sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 80f8b53297..60a33456b0 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSS_VERSION = 3.96.1
++LIBNSS_VERSION = 3.97
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
