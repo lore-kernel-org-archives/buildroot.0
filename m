@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07368C47422
-	for <buildroot@archiver.kernel.org>; Fri, 26 Jan 2024 16:12:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A046AC47DDB
+	for <buildroot@archiver.kernel.org>; Fri, 26 Jan 2024 16:12:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B02F34212F;
-	Fri, 26 Jan 2024 16:12:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B02F34212F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 57FC7420DF;
+	Fri, 26 Jan 2024 16:12:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 57FC7420DF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 22ZiDxbC0tBf; Fri, 26 Jan 2024 16:12:21 +0000 (UTC)
+	with ESMTP id po6Ib6_YGmzW; Fri, 26 Jan 2024 16:12:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CD96D42134;
-	Fri, 26 Jan 2024 16:12:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD96D42134
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 27E661BF284
+	by smtp4.osuosl.org (Postfix) with ESMTP id 649CC420B0;
+	Fri, 26 Jan 2024 16:12:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 649CC420B0
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2F1C61BF98E
  for <buildroot@lists.busybox.net>; Fri, 26 Jan 2024 16:12:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 00DA583FEB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 08927614DB
  for <buildroot@lists.busybox.net>; Fri, 26 Jan 2024 16:12:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 00DA583FEB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 08927614DB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Mm3-hZts61Ye for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iuovG2shNWVs for <buildroot@lists.busybox.net>;
  Fri, 26 Jan 2024 16:12:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2D26083FE7
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3C144614D2
  for <buildroot@buildroot.org>; Fri, 26 Jan 2024 16:12:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D26083FE7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C144614D2
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 16B6D86582; Fri, 26 Jan 2024 16:12:18 +0000 (UTC)
+ id 2A59086584; Fri, 26 Jan 2024 16:12:18 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 26 Jan 2024 17:06:26 +0100
+Date: Fri, 26 Jan 2024 17:08:56 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d433f06371f58c6a8705697b7cdf317518c984c5
-X-Git-Newrev: afe633d6beef29b05514e2272414b6db6a727cb8
+X-Git-Oldrev: de81f2e3bcd7268214ad909af7d7e467b1720a63
+X-Git-Newrev: 69a7680407bef325c613b33121ed1ec6a97ab7cb
 X-Patchwork-Hint: ignore
-Message-Id: <20240126161218.16B6D86582@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cog: bump to version 0.18.2
+Message-Id: <20240126161218.2A59086584@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/iproute2: bump version to 6.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,50 +62,92 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=afe633d6beef29b05514e2272414b6db6a727cb8
+commit: https://git.buildroot.net/buildroot/commit/?id=69a7680407bef325c613b33121ed1ec6a97ab7cb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is a small bugfix release, with a fix for a crash in the DRM/KMS
-module that affects i.MX6 boards and probably others. Release notes:
+Backport fix of ss's output.
 
-  https://wpewebkit.org/release/cog-0.18.2.html
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cog/cog.hash | 8 ++++----
- package/cog/cog.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ ...revent-Process-column-from-being-printed-.patch | 45 ++++++++++++++++++++++
+ package/iproute2/iproute2.hash                     |  2 +-
+ package/iproute2/iproute2.mk                       |  2 +-
+ 3 files changed, 47 insertions(+), 2 deletions(-)
 
-diff --git a/package/cog/cog.hash b/package/cog/cog.hash
-index 177113bb42..387666969a 100644
---- a/package/cog/cog.hash
-+++ b/package/cog/cog.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/cog-0.18.1.tar.xz.sums
--md5  204ae9353ed828e4ac39b1dd4c5c35dd  cog-0.18.1.tar.xz
--sha1  f0f0ebcd279170f427be0ad57fd356faff1a2732  cog-0.18.1.tar.xz
--sha256  72e3a84052b459e2d53d0e8b947f20e27bf5d8049766c4c1594eb9c6b6cf7ab3  cog-0.18.1.tar.xz
-+# From https://wpewebkit.org/releases/cog-0.18.2.tar.xz.sums
-+md5  7fbfc2e19304132be0d73f5e5512151c  cog-0.18.2.tar.xz
-+sha1  045294f7fa878db86e4b8a617ee4ac056a71cb75  cog-0.18.2.tar.xz
-+sha256  3c4237cff6323b8c3eaf52c6f3f6415b898a22c0127c6c396c1eaa6eef46c279  cog-0.18.2.tar.xz
- 
- # Hashes for license files:
- sha256  e6c42d93c68b292bcccf6d2ec3e13da85df90b718ba27c2c2a01053a9d009252  COPYING
-diff --git a/package/cog/cog.mk b/package/cog/cog.mk
-index bd34f124c5..e96909f779 100644
---- a/package/cog/cog.mk
-+++ b/package/cog/cog.mk
+diff --git a/package/iproute2/0001-Revert-ss-prevent-Process-column-from-being-printed-.patch b/package/iproute2/0001-Revert-ss-prevent-Process-column-from-being-printed-.patch
+new file mode 100644
+index 0000000000..10fa472d64
+--- /dev/null
++++ b/package/iproute2/0001-Revert-ss-prevent-Process-column-from-being-printed-.patch
+@@ -0,0 +1,45 @@
++From f22c49730c3691c25a1147081363eb35aa9d1048 Mon Sep 17 00:00:00 2001
++From: Stephen Hemminger <stephen@networkplumber.org>
++Date: Sat, 13 Jan 2024 08:51:55 -0800
++Subject: [PATCH] Revert "ss: prevent "Process" column from being printed
++ unless requested"
++
++This reverts commit 1607bf531fd2f984438d227ea97312df80e7cf56.
++
++This commit is being reverted because it breaks output of tcp info.
++The order of the columns enum is order sensistive.
++
++Bug: https://bugzilla.kernel.org/show_bug.cgi?id=218372
++Signed-off-by: Stephen Hemminger <stephen@networkplumber.org>
++Upstream: https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/commit/?id=f22c49730c3691c25a1147081363eb35aa9d1048
++---
++ misc/ss.c | 5 +----
++ 1 file changed, 1 insertion(+), 4 deletions(-)
++
++diff --git a/misc/ss.c b/misc/ss.c
++index 09dc1f37..9438382b 100644
++--- a/misc/ss.c
+++++ b/misc/ss.c
++@@ -100,8 +100,8 @@ enum col_id {
++ 	COL_SERV,
++ 	COL_RADDR,
++ 	COL_RSERV,
++-	COL_PROC,
++ 	COL_EXT,
+++	COL_PROC,
++ 	COL_MAX
++ };
++
++@@ -5795,9 +5795,6 @@ int main(int argc, char *argv[])
++ 	if (ssfilter_parse(&current_filter.f, argc, argv, filter_fp))
++ 		usage();
++
++-	if (!show_processes)
++-		columns[COL_PROC].disabled = 1;
++-
++ 	if (!(current_filter.dbs & (current_filter.dbs - 1)))
++ 		columns[COL_NETID].disabled = 1;
++
++--
++2.43.0
++
+diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
+index edd03b6459..0be058e64b 100644
+--- a/package/iproute2/iproute2.hash
++++ b/package/iproute2/iproute2.hash
+@@ -1,3 +1,3 @@
+ # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
+-sha256  a70179085fa1b96d3c33b040c809b75e2b57563adc505a4ad05e2609df373463  iproute2-6.5.0.tar.xz
++sha256  ff942dd9828d7d1f867f61fe72ce433078c31e5d8e4a78e20f02cb5892e8841d  iproute2-6.7.0.tar.xz
+ sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index a2e90a66f3..7e70f62ff2 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--COG_VERSION = 0.18.1
-+COG_VERSION = 0.18.2
- COG_SITE = https://wpewebkit.org/releases
- COG_SOURCE = cog-$(COG_VERSION).tar.xz
- COG_INSTALL_STAGING = YES
+-IPROUTE2_VERSION = 6.5.0
++IPROUTE2_VERSION = 6.7.0
+ IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
+ IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
+ IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
