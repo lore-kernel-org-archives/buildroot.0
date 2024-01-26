@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51F77C47DDB
-	for <buildroot@archiver.kernel.org>; Fri, 26 Jan 2024 08:49:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBD68C47422
+	for <buildroot@archiver.kernel.org>; Fri, 26 Jan 2024 08:50:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D6C7C84FEC;
-	Fri, 26 Jan 2024 08:49:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D6C7C84FEC
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7A76285038;
+	Fri, 26 Jan 2024 08:50:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A76285038
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XJUXyfOcJEIm; Fri, 26 Jan 2024 08:49:57 +0000 (UTC)
+	with ESMTP id tNK2cspGbiq7; Fri, 26 Jan 2024 08:50:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1526F85012;
-	Fri, 26 Jan 2024 08:49:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1526F85012
+	by smtp1.osuosl.org (Postfix) with ESMTP id BA5628502E;
+	Fri, 26 Jan 2024 08:50:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BA5628502E
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8FE171BF420
- for <buildroot@lists.busybox.net>; Fri, 26 Jan 2024 08:48:48 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 216A51BF420
+ for <buildroot@lists.busybox.net>; Fri, 26 Jan 2024 08:48:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2CB2C45A57
+ by smtp4.osuosl.org (Postfix) with ESMTP id 47A3145B4F
  for <buildroot@lists.busybox.net>; Fri, 26 Jan 2024 08:48:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2CB2C45A57
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 47A3145B4F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KonDJ4MNQOKc for <buildroot@lists.busybox.net>;
+ with ESMTP id ylqxz3JLeA_6 for <buildroot@lists.busybox.net>;
  Fri, 26 Jan 2024 08:48:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6057D45B4F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6B99845BBB
  for <buildroot@buildroot.org>; Fri, 26 Jan 2024 08:48:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6057D45B4F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B99845BBB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4EAA5864F8; Fri, 26 Jan 2024 08:48:46 +0000 (UTC)
+ id 5AE5786530; Fri, 26 Jan 2024 08:48:46 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 26 Jan 2024 09:46:45 +0100
+Date: Fri, 26 Jan 2024 09:47:43 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: aad3136d458578350c7095e0a519834c2a175af6
-X-Git-Newrev: be94e1ab54d11e4d3a387a4937ee65fa4d99b3f6
+X-Git-Oldrev: be94e1ab54d11e4d3a387a4937ee65fa4d99b3f6
+X-Git-Newrev: be267a227a9138f48b1ef93c68b93adae1870ff8
 X-Patchwork-Hint: ignore
-Message-Id: <20240126084846.4EAA5864F8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pyroute2: bump to version
- 0.7.10
+Message-Id: <20240126084846.5AE5786530@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-aiojobs: bump to version
+ 1.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +63,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=be94e1ab54d11e4d3a387a4937ee65fa4d99b3f6
+commit: https://git.buildroot.net/buildroot/commit/?id=be267a227a9138f48b1ef93c68b93adae1870ff8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Drop no longer required python-async-timeout runtime dependency.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pyroute2/python-pyroute2.hash | 4 ++--
- package/python-pyroute2/python-pyroute2.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-aiojobs/Config.in           | 1 -
+ package/python-aiojobs/python-aiojobs.hash | 4 ++--
+ package/python-aiojobs/python-aiojobs.mk   | 4 ++--
+ 3 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pyroute2/python-pyroute2.hash b/package/python-pyroute2/python-pyroute2.hash
-index bac8809f2d..87693d028b 100644
---- a/package/python-pyroute2/python-pyroute2.hash
-+++ b/package/python-pyroute2/python-pyroute2.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/pyroute2/json
--md5  caaef93e32f2c3aee305aefba7c8ad21  pyroute2-0.7.3.tar.gz
--sha256  7041040db1c2d187fbccd151485b1244c41d758be821785847946370eb6bb706  pyroute2-0.7.3.tar.gz
-+md5  0566531c56ec453cc9ca0aff2c3f2f31  pyroute2-0.7.10.tar.gz
-+sha256  cc2f90aad1517cb0b301041f678cc8d3c3427c26e53f15c78c93c67928d89a02  pyroute2-0.7.10.tar.gz
- # Locally computed sha256
- sha256  4739b32a2478e9c204bf010bad5d565d188e59ff905e3c8f71fe3398098b7093  LICENSE.Apache-2.0
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL-2.0-or-later
-diff --git a/package/python-pyroute2/python-pyroute2.mk b/package/python-pyroute2/python-pyroute2.mk
-index fb4a1cbe5d..023b8e7c44 100644
---- a/package/python-pyroute2/python-pyroute2.mk
-+++ b/package/python-pyroute2/python-pyroute2.mk
+diff --git a/package/python-aiojobs/Config.in b/package/python-aiojobs/Config.in
+index 2dc4f3f955..0cdd1c106f 100644
+--- a/package/python-aiojobs/Config.in
++++ b/package/python-aiojobs/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_PYTHON_AIOJOBS
+ 	bool "python-aiojobs"
+-	select BR2_PACKAGE_PYTHON_ASYNC_TIMEOUT # runtime
+ 	help
+ 	  Jobs scheduler for managing background task (asyncio).
+ 
+diff --git a/package/python-aiojobs/python-aiojobs.hash b/package/python-aiojobs/python-aiojobs.hash
+index 8920e3aecd..baaa61b331 100644
+--- a/package/python-aiojobs/python-aiojobs.hash
++++ b/package/python-aiojobs/python-aiojobs.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/aiojobs/json
+-md5  529a4367f9bc63a482a2962ba54bfd51  aiojobs-1.2.0.tar.gz
+-sha256  a4bcfb6a2d21ad08dea904e9f73040b37657d0c33cc8d77e683e47de5fcf0b12  aiojobs-1.2.0.tar.gz
++md5  d4742018c2188147f1efa41645b5758b  aiojobs-1.2.1.tar.gz
++sha256  59d6e7ad7829e9d0f73bfceeae28153b541be6b0959a08cc5ceb222717c888ff  aiojobs-1.2.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  1803dc89455114eefad3b827543343edc2452432fdac29b5edc66c8b66d4cbf3  LICENSE
+diff --git a/package/python-aiojobs/python-aiojobs.mk b/package/python-aiojobs/python-aiojobs.mk
+index be0acd3fbc..9e4a55e13c 100644
+--- a/package/python-aiojobs/python-aiojobs.mk
++++ b/package/python-aiojobs/python-aiojobs.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYROUTE2_VERSION = 0.7.3
-+PYTHON_PYROUTE2_VERSION = 0.7.10
- PYTHON_PYROUTE2_SOURCE = pyroute2-$(PYTHON_PYROUTE2_VERSION).tar.gz
--PYTHON_PYROUTE2_SITE = https://files.pythonhosted.org/packages/9c/e6/8d163b1aea84223696fef8f8c55566adf166b79d614d602469d64af00226
-+PYTHON_PYROUTE2_SITE = https://files.pythonhosted.org/packages/18/44/930e15e4fd5d0c7c54dfd303f644a057d88f411a97581d6edc5cb9e16f9e
- PYTHON_PYROUTE2_LICENSE = Apache-2.0 or GPL-2.0+
- PYTHON_PYROUTE2_LICENSE_FILES = LICENSE.Apache-2.0 LICENSE.GPL-2.0-or-later README.license.rst
- PYTHON_PYROUTE2_SETUP_TYPE = setuptools
+-PYTHON_AIOJOBS_VERSION = 1.2.0
++PYTHON_AIOJOBS_VERSION = 1.2.1
+ PYTHON_AIOJOBS_SOURCE = aiojobs-$(PYTHON_AIOJOBS_VERSION).tar.gz
+-PYTHON_AIOJOBS_SITE = https://files.pythonhosted.org/packages/c4/e0/4685393810a267c09edef41ddafd0dd28108d95e1b91019b1843fc6e5b83
++PYTHON_AIOJOBS_SITE = https://files.pythonhosted.org/packages/07/ad/e4240f9225022798e0e651ced8f6dc022e88eae4f2df6e1482a8f3c0d54d
+ PYTHON_AIOJOBS_SETUP_TYPE = setuptools
+ PYTHON_AIOJOBS_LICENSE = Apache-2.0
+ PYTHON_AIOJOBS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
