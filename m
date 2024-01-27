@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC442C46CD2
-	for <buildroot@archiver.kernel.org>; Sat, 27 Jan 2024 20:40:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74739C47DA9
+	for <buildroot@archiver.kernel.org>; Sat, 27 Jan 2024 20:40:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8399E83D17;
-	Sat, 27 Jan 2024 20:40:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8399E83D17
+	by smtp1.osuosl.org (Postfix) with ESMTP id 309CA8144C;
+	Sat, 27 Jan 2024 20:40:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 309CA8144C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XlPIT3EXVbjK; Sat, 27 Jan 2024 20:40:14 +0000 (UTC)
+	with ESMTP id sDZNMxfMpHkP; Sat, 27 Jan 2024 20:40:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BAA868144C;
-	Sat, 27 Jan 2024 20:40:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BAA868144C
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1A5FD1BF85D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6CB8582798;
+	Sat, 27 Jan 2024 20:40:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6CB8582798
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 580D41BF280
  for <buildroot@lists.busybox.net>; Sat, 27 Jan 2024 20:39:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DDC0260A98
+ by smtp2.osuosl.org (Postfix) with ESMTP id DE7CD40363
  for <buildroot@lists.busybox.net>; Sat, 27 Jan 2024 20:39:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DDC0260A98
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE7CD40363
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nvPNh8ZMLU4D for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id R05Nn9J021R9 for <buildroot@lists.busybox.net>;
  Sat, 27 Jan 2024 20:39:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C155260A6B
+ by smtp2.osuosl.org (Postfix) with ESMTP id ACEDD400F8
  for <buildroot@buildroot.org>; Sat, 27 Jan 2024 20:39:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C155260A6B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ACEDD400F8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AA8FE8663C; Sat, 27 Jan 2024 20:39:08 +0000 (UTC)
+ id 97E718663A; Sat, 27 Jan 2024 20:39:08 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 27 Jan 2024 21:33:25 +0100
+Date: Sat, 27 Jan 2024 21:33:17 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6b7db1bf64f50c59abe2aee387f7f7943d00a807
-X-Git-Newrev: 3407703f2c95f40ec8fe71862c99b730c8ce9890
+X-Git-Oldrev: 0c7fd35947d91f84cff994bfb5c85b31b956d006
+X-Git-Newrev: e81d29d55181c73c38a80152a39955b921cdc84c
 X-Patchwork-Hint: ignore
-Message-Id: <20240127203908.AA8FE8663C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gst1-plugins-good: bump to version
- 1.22.9
+Message-Id: <20240127203908.97E718663A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gstreamer1: bump to version 1.22.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,39 +62,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3407703f2c95f40ec8fe71862c99b730c8ce9890
+commit: https://git.buildroot.net/buildroot/commit/?id=e81d29d55181c73c38a80152a39955b921cdc84c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash | 4 ++--
- package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk   | 2 +-
+ package/gstreamer1/gstreamer1/gstreamer1.hash | 4 ++--
+ package/gstreamer1/gstreamer1/gstreamer1.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
-index b810115bb9..4410da6ef4 100644
---- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
-+++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.hash b/package/gstreamer1/gstreamer1/gstreamer1.hash
+index 89cc25674e..b6ed001eb3 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.hash
++++ b/package/gstreamer1/gstreamer1/gstreamer1.hash
 @@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.22.8.tar.xz.sha256sum
--sha256  e305b9f07f52743ca481da0a4e0c76c35efd60adaf1b0694eb3bb021e2137e39  gst-plugins-good-1.22.8.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.22.9.tar.xz.sha256sum
-+sha256  26959fcfebfff637d4ea08ef40316baf31b61bb7729820b0684e800c3a1478b6  gst-plugins-good-1.22.9.tar.xz
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
-diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-index 3e7ddbe567..a1ad63915d 100644
---- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-+++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+-# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.22.8.tar.xz.sha256sum
+-sha256  ad4e3db1771139b1db17b1afa7c05db083ae0100bd4da244b71f162dcce41bfc  gstreamer-1.22.8.tar.xz
++# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.22.9.tar.xz.sha256sum
++sha256  1e7124d347e8cdc80f08ec1d370c201be513002af1102bb20e83c5279cb48ebd  gstreamer-1.22.9.tar.xz
+ sha256  ad2eec519ebd4b5df86ea84dff24ae3bfa2edea846a703b58902dd221ae375db  COPYING
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
+index 88c528d4b5..5b9125e62a 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.mk
++++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_PLUGINS_GOOD_VERSION = 1.22.8
-+GST1_PLUGINS_GOOD_VERSION = 1.22.9
- GST1_PLUGINS_GOOD_SOURCE = gst-plugins-good-$(GST1_PLUGINS_GOOD_VERSION).tar.xz
- GST1_PLUGINS_GOOD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-good
- GST1_PLUGINS_GOOD_LICENSE_FILES = COPYING
+-GSTREAMER1_VERSION = 1.22.8
++GSTREAMER1_VERSION = 1.22.9
+ GSTREAMER1_SOURCE = gstreamer-$(GSTREAMER1_VERSION).tar.xz
+ GSTREAMER1_SITE = https://gstreamer.freedesktop.org/src/gstreamer
+ GSTREAMER1_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
