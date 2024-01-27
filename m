@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D918FC46CD2
-	for <buildroot@archiver.kernel.org>; Sat, 27 Jan 2024 20:57:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4201BC46CD2
+	for <buildroot@archiver.kernel.org>; Sat, 27 Jan 2024 20:58:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 80E7B60EF1;
-	Sat, 27 Jan 2024 20:57:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80E7B60EF1
+	by smtp3.osuosl.org (Postfix) with ESMTP id F231C60A98;
+	Sat, 27 Jan 2024 20:57:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F231C60A98
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id j8fEQxukx0tA; Sat, 27 Jan 2024 20:57:46 +0000 (UTC)
+	with ESMTP id WLuhJXDOzEOf; Sat, 27 Jan 2024 20:57:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B796B60E55;
-	Sat, 27 Jan 2024 20:57:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B796B60E55
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 024191BF280
+	by smtp3.osuosl.org (Postfix) with ESMTP id 428DD60F37;
+	Sat, 27 Jan 2024 20:57:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 428DD60F37
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 59BB51BF280
  for <buildroot@lists.busybox.net>; Sat, 27 Jan 2024 20:56:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B56E0416CE
+ by smtp2.osuosl.org (Postfix) with ESMTP id EE2CE40347
  for <buildroot@lists.busybox.net>; Sat, 27 Jan 2024 20:56:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B56E0416CE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE2CE40347
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qs_I6Ebadq74 for <buildroot@lists.busybox.net>;
- Sat, 27 Jan 2024 20:56:29 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YdsTeAGdfCGs for <buildroot@lists.busybox.net>;
+ Sat, 27 Jan 2024 20:56:30 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D4FAE414EA
+ by smtp2.osuosl.org (Postfix) with ESMTP id F2EE8401C2
  for <buildroot@buildroot.org>; Sat, 27 Jan 2024 20:56:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D4FAE414EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F2EE8401C2
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C267F866A7; Sat, 27 Jan 2024 20:56:29 +0000 (UTC)
+ id D70CA866AA; Sat, 27 Jan 2024 20:56:29 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 27 Jan 2024 21:48:06 +0100
+Date: Sat, 27 Jan 2024 21:48:14 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0faa9037fcd33d96574a03e81cd99a97581833c7
-X-Git-Newrev: 2ca657b77f68ee3630d1333dc529465618882ab5
+X-Git-Oldrev: 588897736e30afd9e0f8713e3004c4173dccc434
+X-Git-Newrev: 402fe6ae46bcc4c3a1e191d7601c4fa4ee415055
 X-Patchwork-Hint: ignore
-Message-Id: <20240127205629.C267F866A7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/perl-devel-stacktrace: bump to
- version 2.05
+Message-Id: <20240127205629.D70CA866AA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perl-math-int64: bump to version
+ 0.57
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,48 +63,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ca657b77f68ee3630d1333dc529465618882ab5
+commit: https://git.buildroot.net/buildroot/commit/?id=402fe6ae46bcc4c3a1e191d7601c4fa4ee415055
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-diff LICENSE:
-    -This software is Copyright (c) 2000 - 2019 by David Rolsky.
-    +This software is Copyright (c) 2000 - 2024 by David Rolsky.
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/perl-devel-stacktrace/perl-devel-stacktrace.hash | 8 ++++----
- package/perl-devel-stacktrace/perl-devel-stacktrace.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/perl-math-int64/perl-math-int64.hash | 6 +++---
+ package/perl-math-int64/perl-math-int64.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl-devel-stacktrace/perl-devel-stacktrace.hash b/package/perl-devel-stacktrace/perl-devel-stacktrace.hash
-index 4e64ef1716..7525ebbb9b 100644
---- a/package/perl-devel-stacktrace/perl-devel-stacktrace.hash
-+++ b/package/perl-devel-stacktrace/perl-devel-stacktrace.hash
+diff --git a/package/perl-math-int64/perl-math-int64.hash b/package/perl-math-int64/perl-math-int64.hash
+index 4f2374b107..7730b722a5 100644
+--- a/package/perl-math-int64/perl-math-int64.hash
++++ b/package/perl-math-int64/perl-math-int64.hash
 @@ -1,6 +1,6 @@
 -# retrieved by scancpan from http://cpan.metacpan.org/
--md5  a5b09f7be7f2b10b525a9740676906d8  Devel-StackTrace-2.04.tar.gz
--sha256  cd3c03ed547d3d42c61fa5814c98296139392e7971c092e09a431f2c9f5d6855  Devel-StackTrace-2.04.tar.gz
+-md5  1ad0ce8b5e903dfe9f7ffbabd8a43014  Math-Int64-0.54.tar.gz
+-sha256  dcfc51e698437ea6b9cefe0276215c56cdb6a7f85e3e24a2b6b4189f1960d351  Math-Int64-0.54.tar.gz
 +# retrieved by scancpan from https://cpan.metacpan.org/
-+md5  b8ca19bb4c76e98a04373618db9c7c3c  Devel-StackTrace-2.05.tar.gz
-+sha256  63cb6196e986a7e578c4d28b3c780e7194835bfc78b68eeb8f00599d4444888c  Devel-StackTrace-2.05.tar.gz
++md5  ed431cca1c403b1078fb1b3e2860d8de  Math-Int64-0.57.tar.gz
++sha256  12c60111c1cfceb257ac2ccc5b2e1721879efa09a1b0a73e8836afca107a7d75  Math-Int64-0.57.tar.gz
  
  # computed by scancpan
--sha256  dbd3162d261db5b40cac4d85afba619ec6a196398003c57b85c2333e7ef4c393  LICENSE
-+sha256  74f17bdbecbdfb75998f953c1dedb27d72199c8f0b612b1fca7834e4bfd87f90  LICENSE
-diff --git a/package/perl-devel-stacktrace/perl-devel-stacktrace.mk b/package/perl-devel-stacktrace/perl-devel-stacktrace.mk
-index 0178390141..557f21bb85 100644
---- a/package/perl-devel-stacktrace/perl-devel-stacktrace.mk
-+++ b/package/perl-devel-stacktrace/perl-devel-stacktrace.mk
+ sha256  59feedfdc4f99a746c54e06ac46c4627fb1e29be3bc71756184f92333600f72b  COPYING
+diff --git a/package/perl-math-int64/perl-math-int64.mk b/package/perl-math-int64/perl-math-int64.mk
+index 749ff60c97..c0abcf48a1 100644
+--- a/package/perl-math-int64/perl-math-int64.mk
++++ b/package/perl-math-int64/perl-math-int64.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_DEVEL_STACKTRACE_VERSION = 2.04
-+PERL_DEVEL_STACKTRACE_VERSION = 2.05
- PERL_DEVEL_STACKTRACE_SOURCE = Devel-StackTrace-$(PERL_DEVEL_STACKTRACE_VERSION).tar.gz
- PERL_DEVEL_STACKTRACE_SITE = $(BR2_CPAN_MIRROR)/authors/id/D/DR/DROLSKY
- PERL_DEVEL_STACKTRACE_LICENSE = Artistic-2.0
+-PERL_MATH_INT64_VERSION = 0.54
++PERL_MATH_INT64_VERSION = 0.57
+ PERL_MATH_INT64_SOURCE = Math-Int64-$(PERL_MATH_INT64_VERSION).tar.gz
+ PERL_MATH_INT64_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SA/SALVA
+ PERL_MATH_INT64_LICENSE = Artistic or GPL-1.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
