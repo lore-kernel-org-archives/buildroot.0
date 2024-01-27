@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 018C3C46CD2
-	for <buildroot@archiver.kernel.org>; Sat, 27 Jan 2024 20:57:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D918FC46CD2
+	for <buildroot@archiver.kernel.org>; Sat, 27 Jan 2024 20:57:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B0C1E60EFD;
-	Sat, 27 Jan 2024 20:57:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B0C1E60EFD
+	by smtp3.osuosl.org (Postfix) with ESMTP id 80E7B60EF1;
+	Sat, 27 Jan 2024 20:57:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80E7B60EF1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iWWHATX_Iidv; Sat, 27 Jan 2024 20:57:23 +0000 (UTC)
+	with ESMTP id j8fEQxukx0tA; Sat, 27 Jan 2024 20:57:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0D0FE60EF1;
-	Sat, 27 Jan 2024 20:57:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D0FE60EF1
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 965991BF280
- for <buildroot@lists.busybox.net>; Sat, 27 Jan 2024 20:56:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B796B60E55;
+	Sat, 27 Jan 2024 20:57:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B796B60E55
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 024191BF280
+ for <buildroot@lists.busybox.net>; Sat, 27 Jan 2024 20:56:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CE8E0834D3
+ by smtp4.osuosl.org (Postfix) with ESMTP id B56E0416CE
  for <buildroot@lists.busybox.net>; Sat, 27 Jan 2024 20:56:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE8E0834D3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B56E0416CE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uXtvIIYvcR8C for <buildroot@lists.busybox.net>;
- Sat, 27 Jan 2024 20:56:30 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qs_I6Ebadq74 for <buildroot@lists.busybox.net>;
+ Sat, 27 Jan 2024 20:56:29 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 20BB78348C
- for <buildroot@buildroot.org>; Sat, 27 Jan 2024 20:56:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20BB78348C
+ by smtp4.osuosl.org (Postfix) with ESMTP id D4FAE414EA
+ for <buildroot@buildroot.org>; Sat, 27 Jan 2024 20:56:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D4FAE414EA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0D5E8866A8; Sat, 27 Jan 2024 20:56:30 +0000 (UTC)
+ id C267F866A7; Sat, 27 Jan 2024 20:56:29 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 27 Jan 2024 21:48:30 +0100
+Date: Sat, 27 Jan 2024 21:48:06 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f32f348f658aef08d3cde093b1fff8b9be6f2233
-X-Git-Newrev: a1f94338856f04deca6db98426fa09209e00617f
+X-Git-Oldrev: 0faa9037fcd33d96574a03e81cd99a97581833c7
+X-Git-Newrev: 2ca657b77f68ee3630d1333dc529465618882ab5
 X-Patchwork-Hint: ignore
-Message-Id: <20240127205630.0D5E8866A8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/perl-plack: bump to version 1.0051
+Message-Id: <20240127205629.C267F866A7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perl-devel-stacktrace: bump to
+ version 2.05
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,42 +63,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a1f94338856f04deca6db98426fa09209e00617f
+commit: https://git.buildroot.net/buildroot/commit/?id=2ca657b77f68ee3630d1333dc529465618882ab5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+diff LICENSE:
+    -This software is Copyright (c) 2000 - 2019 by David Rolsky.
+    +This software is Copyright (c) 2000 - 2024 by David Rolsky.
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/perl-plack/perl-plack.hash | 4 ++--
- package/perl-plack/perl-plack.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/perl-devel-stacktrace/perl-devel-stacktrace.hash | 8 ++++----
+ package/perl-devel-stacktrace/perl-devel-stacktrace.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/perl-plack/perl-plack.hash b/package/perl-plack/perl-plack.hash
-index 84d65ec525..c9e2bb01f6 100644
---- a/package/perl-plack/perl-plack.hash
-+++ b/package/perl-plack/perl-plack.hash
+diff --git a/package/perl-devel-stacktrace/perl-devel-stacktrace.hash b/package/perl-devel-stacktrace/perl-devel-stacktrace.hash
+index 4e64ef1716..7525ebbb9b 100644
+--- a/package/perl-devel-stacktrace/perl-devel-stacktrace.hash
++++ b/package/perl-devel-stacktrace/perl-devel-stacktrace.hash
 @@ -1,6 +1,6 @@
- # retrieved by scancpan from https://cpan.metacpan.org/
--md5  0856a900a981769e3d79f0a10ccc3e65  Plack-1.0050.tar.gz
--sha256  d2651ade82ebbff7abe0a3a189fc932dadc4779186ce89468e56d0189eaa6ed4  Plack-1.0050.tar.gz
-+md5  0b3e573458b37ad69069fc8cb307b6b8  Plack-1.0051.tar.gz
-+sha256  bebde91c42298ed6ec8e6c82b21433a1b49aa39412c247f3905b80f955acf77b  Plack-1.0051.tar.gz
+-# retrieved by scancpan from http://cpan.metacpan.org/
+-md5  a5b09f7be7f2b10b525a9740676906d8  Devel-StackTrace-2.04.tar.gz
+-sha256  cd3c03ed547d3d42c61fa5814c98296139392e7971c092e09a431f2c9f5d6855  Devel-StackTrace-2.04.tar.gz
++# retrieved by scancpan from https://cpan.metacpan.org/
++md5  b8ca19bb4c76e98a04373618db9c7c3c  Devel-StackTrace-2.05.tar.gz
++sha256  63cb6196e986a7e578c4d28b3c780e7194835bfc78b68eeb8f00599d4444888c  Devel-StackTrace-2.05.tar.gz
  
  # computed by scancpan
- sha256  8a0c0ad4682691b5bc138e553636adfc8bb38f8885c4c44fd421ec8cc69c9a8f  LICENSE
-diff --git a/package/perl-plack/perl-plack.mk b/package/perl-plack/perl-plack.mk
-index c39c3d8fd6..2c591cc05a 100644
---- a/package/perl-plack/perl-plack.mk
-+++ b/package/perl-plack/perl-plack.mk
+-sha256  dbd3162d261db5b40cac4d85afba619ec6a196398003c57b85c2333e7ef4c393  LICENSE
++sha256  74f17bdbecbdfb75998f953c1dedb27d72199c8f0b612b1fca7834e4bfd87f90  LICENSE
+diff --git a/package/perl-devel-stacktrace/perl-devel-stacktrace.mk b/package/perl-devel-stacktrace/perl-devel-stacktrace.mk
+index 0178390141..557f21bb85 100644
+--- a/package/perl-devel-stacktrace/perl-devel-stacktrace.mk
++++ b/package/perl-devel-stacktrace/perl-devel-stacktrace.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_PLACK_VERSION = 1.0050
-+PERL_PLACK_VERSION = 1.0051
- PERL_PLACK_SOURCE = Plack-$(PERL_PLACK_VERSION).tar.gz
- PERL_PLACK_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MI/MIYAGAWA
- PERL_PLACK_DEPENDENCIES = host-perl-file-sharedir-install
+-PERL_DEVEL_STACKTRACE_VERSION = 2.04
++PERL_DEVEL_STACKTRACE_VERSION = 2.05
+ PERL_DEVEL_STACKTRACE_SOURCE = Devel-StackTrace-$(PERL_DEVEL_STACKTRACE_VERSION).tar.gz
+ PERL_DEVEL_STACKTRACE_SITE = $(BR2_CPAN_MIRROR)/authors/id/D/DR/DROLSKY
+ PERL_DEVEL_STACKTRACE_LICENSE = Artistic-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
