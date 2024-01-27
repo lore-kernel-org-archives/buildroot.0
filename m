@@ -4,48 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1E98C46CD2
-	for <buildroot@archiver.kernel.org>; Sat, 27 Jan 2024 18:03:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77893C46CD2
+	for <buildroot@archiver.kernel.org>; Sat, 27 Jan 2024 18:05:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7745D8133C;
-	Sat, 27 Jan 2024 18:03:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7745D8133C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2377583DC3;
+	Sat, 27 Jan 2024 18:05:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2377583DC3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ludk52185zbt; Sat, 27 Jan 2024 18:03:44 +0000 (UTC)
+	with ESMTP id Cq9rYO9aMIio; Sat, 27 Jan 2024 18:05:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A8026812EA;
-	Sat, 27 Jan 2024 18:03:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A8026812EA
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 271D41BF2E3
- for <buildroot@lists.busybox.net>; Sat, 27 Jan 2024 18:03:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 60A6183DC6;
+	Sat, 27 Jan 2024 18:05:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 60A6183DC6
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E1CD81BF388
+ for <buildroot@lists.busybox.net>; Sat, 27 Jan 2024 18:05:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E9FBC4051A
- for <buildroot@lists.busybox.net>; Sat, 27 Jan 2024 18:03:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E9FBC4051A
+ by smtp1.osuosl.org (Postfix) with ESMTP id C4C7883DC6
+ for <buildroot@lists.busybox.net>; Sat, 27 Jan 2024 18:05:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C4C7883DC6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0tjHZ0Q8JMsH for <buildroot@lists.busybox.net>;
- Sat, 27 Jan 2024 18:03:39 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id AB76B4012E
- for <buildroot@buildroot.org>; Sat, 27 Jan 2024 18:03:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB76B4012E
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 947DA8653A; Sat, 27 Jan 2024 18:03:39 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nc3H6RbkZ1k0 for <buildroot@lists.busybox.net>;
+ Sat, 27 Jan 2024 18:05:39 +0000 (UTC)
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C4C2483DC3
+ for <buildroot@buildroot.org>; Sat, 27 Jan 2024 18:05:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C4C2483DC3
+Received: from fli4l.lan.fli4l (p5b3a0164.dip0.t-ipconnect.de [91.58.1.100])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id C1DE5A4C06CF
+ for <buildroot@buildroot.org>; Sat, 27 Jan 2024 19:05:34 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:40420)
+ by fli4l.lan.fli4l with esmtp (Exim 4.97.1)
+ (envelope-from <bernd@kuhls.net>) id 1rTn3e-0000000020E-0xFc
+ for buildroot@buildroot.org; Sat, 27 Jan 2024 19:05:34 +0100
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 27 Jan 2024 18:58:40 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 611c0cb198041f518f2be3e0f5236d5c6ef93f58
-X-Git-Newrev: 1dd1a21d4d85146d2593e3db205c458c44dc8c6a
-X-Patchwork-Hint: ignore
-Message-Id: <20240127180339.947DA8653A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Revert "package/uuu: fix build failure
- with host gcc 13.x"
+Date: Sat, 27 Jan 2024 19:05:34 +0100
+Message-Id: <20240127180534.7078-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202312101026; t=1706378734;
+ bh=JvDUwGPMfikqzVW+QcSCG5hPS0yxRl2UbzAiEBw058A=;
+ h=From:To:Subject:Date:From;
+ b=Fb6QUUZQcBTJg3GORCK0Ky4h3gh+YEMtIoN5Ep/OQungPVLv0A2CcDXuuIYmxDdza
+ NNvO8cpGTpBzajyvmqQWLh+1zmE73fwd2P7MyrauJcoHgdXcHKZCbKwMhS0d5m4OqG
+ OZ/vtfb6D/u/hdSuF3uuLDPAu0FGB0+cJafXQebnnHcSdDyDLTd7PJ6EUZs5wSooS8
+ lTAqjaf+vn++VHdE8aAciO+tzfR/xQyNQK299qYEGNFS0VVTmYQV2Ayr55mORgFTtv
+ vpuhJWrRcP0QYga9WPxaA/G69HEsPyRFMrW5UFNhRmu53cB5toG9CZPbYCZForSAug
+ YAtzyJlFCdz3Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202312101026 header.b=Fb6QUUZQ
+Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-mythtv: bump version to
+ 20.5.10-Nexus
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,82 +75,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1dd1a21d4d85146d2593e3db205c458c44dc8c6a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This reverts commit 04dfeff6242516a1061973fc7af2cc9c5e3dd4e2 as it
-raises the following build failure because patch has been merged since
-version 1.5.104:
-
-Applying 0001-Fix-missing-references.patch using patch:
-patching file libuuu/libcomm.h
-Reversed (or previously applied) patch detected!  Skipping patch.
-1 out of 1 hunk ignored -- saving rejects to file libuuu/libcomm.h.rej
-patching file uuu/buildincmd.h
-Reversed (or previously applied) patch detected!  Skipping patch.
-1 out of 1 hunk ignored -- saving rejects to file uuu/buildincmd.h.rej
-
-Fixes:
- - http://autobuild.buildroot.org/results/bf7b2206261e3385c567ae4359b0379b03161e3a
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/uuu/0001-Fix-missing-references.patch | 40 ---------------------------
- 1 file changed, 40 deletions(-)
+ package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash | 2 +-
+ package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/uuu/0001-Fix-missing-references.patch b/package/uuu/0001-Fix-missing-references.patch
-deleted file mode 100644
-index 140c9755c7..0000000000
---- a/package/uuu/0001-Fix-missing-references.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--From 24fd043225903247f71ac10666d820277c0b10b1 Mon Sep 17 00:00:00 2001
--From: nixgnauhcuy <nixgnauhcuy@gmail.com>
--Date: Tue, 9 May 2023 14:32:33 +0800
--Subject: [PATCH] Fix missing references
--
--Upstream: https://github.com/nxp-imx/mfgtools/commit/24fd043225903247f71ac10666d820277c0b10b1
--
--Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-----
-- libuuu/libcomm.h | 1 +
-- uuu/buildincmd.h | 1 +
-- 2 files changed, 2 insertions(+)
--
--diff --git a/libuuu/libcomm.h b/libuuu/libcomm.h
--index 0afdfa3..38d622d 100644
----- a/libuuu/libcomm.h
--+++ b/libuuu/libcomm.h
--@@ -28,6 +28,7 @@
-- * POSSIBILITY OF SUCH DAMAGE.
-- *
-- */
--+#include <stdint.h>
-- #include <string>
-- #include <stdarg.h>
-- #include <locale>
--diff --git a/uuu/buildincmd.h b/uuu/buildincmd.h
--index 9415117..46286cc 100644
----- a/uuu/buildincmd.h
--+++ b/uuu/buildincmd.h
--@@ -31,6 +31,7 @@
-- 
-- #pragma once
-- 
--+#include <stdint.h>
-- #include <map>
-- #include <string>
-- #include <vector>
---- 
--2.34.1
--
+diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
+index 3aad45f4f6..c61c391825 100644
+--- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
++++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  c3eefdb9e12c4ca517709378bfe0b985b808d3dbd2ce75f234c78a88c3a1e411  kodi-pvr-mythtv-20.5.8-Nexus.tar.gz
++sha256  eb21e185d1333a8696565138bc58df3d37970c9a3615193396e9f296a56a24c4  kodi-pvr-mythtv-20.5.10-Nexus.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
+index bba881755d..66f1948741 100644
+--- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
++++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_PVR_MYTHTV_VERSION = 20.5.8-Nexus
++KODI_PVR_MYTHTV_VERSION = 20.5.10-Nexus
+ KODI_PVR_MYTHTV_SITE = $(call github,janbar,pvr.mythtv,$(KODI_PVR_MYTHTV_VERSION))
+ KODI_PVR_MYTHTV_LICENSE = GPL-2.0+
+ KODI_PVR_MYTHTV_LICENSE_FILES = LICENSE.md
+-- 
+2.39.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
