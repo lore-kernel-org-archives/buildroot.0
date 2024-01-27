@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 025D4C46CD2
-	for <buildroot@archiver.kernel.org>; Sat, 27 Jan 2024 16:47:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9E81C46CD2
+	for <buildroot@archiver.kernel.org>; Sat, 27 Jan 2024 17:06:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A2B4B40199;
-	Sat, 27 Jan 2024 16:47:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A2B4B40199
+	by smtp4.osuosl.org (Postfix) with ESMTP id 448E541B6B;
+	Sat, 27 Jan 2024 17:06:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 448E541B6B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id V-CcjcgYbQkL; Sat, 27 Jan 2024 16:47:54 +0000 (UTC)
+	with ESMTP id LrF5c7dYOKMK; Sat, 27 Jan 2024 17:06:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 72F314018C;
-	Sat, 27 Jan 2024 16:47:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72F314018C
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7DCC71BF23B
- for <buildroot@lists.busybox.net>; Sat, 27 Jan 2024 16:47:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6CF62417A0;
+	Sat, 27 Jan 2024 17:06:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6CF62417A0
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1F59B1BF2E3
+ for <buildroot@lists.busybox.net>; Sat, 27 Jan 2024 17:06:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5C63460BAF
- for <buildroot@lists.busybox.net>; Sat, 27 Jan 2024 16:47:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5C63460BAF
+ by smtp4.osuosl.org (Postfix) with ESMTP id ED04C417A0
+ for <buildroot@lists.busybox.net>; Sat, 27 Jan 2024 17:06:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED04C417A0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fI7MgBReS69E for <buildroot@lists.busybox.net>;
- Sat, 27 Jan 2024 16:47:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yRDy0ViJlmDj for <buildroot@lists.busybox.net>;
+ Sat, 27 Jan 2024 17:06:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 58F0E60745
- for <buildroot@buildroot.org>; Sat, 27 Jan 2024 16:47:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 58F0E60745
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1C6CB41766
+ for <buildroot@buildroot.org>; Sat, 27 Jan 2024 17:06:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C6CB41766
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 42448864F2; Sat, 27 Jan 2024 16:47:46 +0000 (UTC)
+ id 0915E864FA; Sat, 27 Jan 2024 17:06:11 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 27 Jan 2024 17:46:51 +0100
+Date: Sat, 27 Jan 2024 18:04:08 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 52f3793d46e4185951ce0e7254a35fba23959346
-X-Git-Newrev: e53a8593b4edf5df1771692df6764b3bc385c6f4
+X-Git-Oldrev: e53a8593b4edf5df1771692df6764b3bc385c6f4
+X-Git-Newrev: 611c0cb198041f518f2be3e0f5236d5c6ef93f58
 X-Patchwork-Hint: ignore
-Message-Id: <20240127164746.42448864F2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] boot/syslinux: carry fix for build
- failures with binutils 2.31+
+Message-Id: <20240127170611.0915E864FA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/weston: fix build without gbm
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,360 +62,75 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e53a8593b4edf5df1771692df6764b3bc385c6f4
+commit: https://git.buildroot.net/buildroot/commit/?id=611c0cb198041f518f2be3e0f5236d5c6ef93f58
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-From a report on the syslinux mailing list [0]:
+Fix the following build failure without gbm raised since commit
+534c22dd606e200969fce49b8d23b27902dec94e:
 
-    The GNU linker now writes two segments of type PT_LOAD into the
-    program header. However, this is not supported by the wrapper
-    script that converts the shared object to an .efi executable.
-    As per comment in that file:
+Message: dmabuf-feedback requires gbm which was not found. If you rather not build this, drop "dmabuf-feedback" from simple-clients option.
 
-        (...) Although there may be several LOAD program headers,
-        only one is currently copied.
+Move the option assignment further down, below all the simple-clients
+lists; in Makefile, and because we are usign simply expanded variables,
+this is not necessary, but it is easier on us humans when we review the
+code.
 
-    A simple workaround I've found to work is to ask the linker to put
-    everything into one PT_LOAD program header.
+Also add a comment explaining why the initial list is incomplete.
 
-The issue is ackowledged in the syslinux wiki page about building
-syslinux [1]. This page refers to various resources, of which a Debian
-patch [2].
+Fixes:
+ - http://autobuild.buildroot.org/results/ebbba1d73ceeaacee17fde0c6c853415cd316091
 
-This information is also referenced in #11861.
-
-Fixes: #11861
-
-[0] https://www.syslinux.org/archives/2018-August/026167.html
-[1] https://wiki.syslinux.org/wiki/index.php?title=Building
-[2] https://salsa.debian.org/images-team/syslinux/-/blob/debian/master/debian/patches/0017-single-load-segment.patch
-
-Reported-by: Sam Lancia <sam@gpsm.co.uk>
-Reported-by: Meliodas <meliodasren01@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- boot/syslinux/0018-single-load-segment.patch | 313 +++++++++++++++++++++++++++
- 1 file changed, 313 insertions(+)
+ package/weston/weston.mk | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/boot/syslinux/0018-single-load-segment.patch b/boot/syslinux/0018-single-load-segment.patch
-new file mode 100644
-index 0000000000..11d73c31a4
---- /dev/null
-+++ b/boot/syslinux/0018-single-load-segment.patch
-@@ -0,0 +1,313 @@
-+From: Lukas Schwaighofer <lukas@schwaighofer.name>
-+Date: Sat, 18 Aug 2018 16:56:35 +0200
-+Subject: Force the linker to put all sections into a single PT_LOAD segment
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index 6a5c0e57f5..b07e798765 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -23,11 +23,9 @@ WESTON_CONF_OPTS = \
+ 	-Dtools=calibrator,debug,info,terminal,touch-calibrator
+ 
+ ifeq ($(BR2_PACKAGE_WESTON_SIMPLE_CLIENTS),y)
++# Note: some clients are conditional, see further for the others.
+ WESTON_SIMPLE_CLIENTS = \
+ 	damage \
+-	dmabuf-egl \
+-	dmabuf-feedback \
+-	egl \
+ 	im \
+ 	shm \
+ 	touch
+@@ -38,8 +36,6 @@ WESTON_SIMPLE_CLIENTS += dmabuf-v4l
+ endif
+ endif # BR2_PACKAGE_WESTON_SIMPLE_CLIENTS
+ 
+-WESTON_CONF_OPTS += -Dsimple-clients=$(subst $(space),$(comma),$(strip $(WESTON_SIMPLE_CLIENTS)))
+-
+ ifeq ($(BR2_PACKAGE_JPEG),y)
+ WESTON_CONF_OPTS += -Dimage-jpeg=true
+ WESTON_DEPENDENCIES += jpeg
+@@ -57,6 +53,9 @@ endif
+ ifeq ($(BR2_PACKAGE_HAS_LIBEGL_WAYLAND)$(BR2_PACKAGE_HAS_LIBGBM)$(BR2_PACKAGE_HAS_LIBGLES),yyy)
+ WESTON_CONF_OPTS += -Drenderer-gl=true
+ WESTON_DEPENDENCIES += libegl libgbm libgles
++ifeq ($(BR2_PACKAGE_WESTON_SIMPLE_CLIENTS),y)
++WESTON_SIMPLE_CLIENTS += dmabuf-egl dmabuf-feedback egl
++endif
+ ifeq ($(BR2_PACKAGE_PIPEWIRE)$(BR2_PACKAGE_WESTON_DRM),yy)
+ WESTON_CONF_OPTS += -Dpipewire=true -Dbackend-pipewire=true
+ WESTON_DEPENDENCIES += pipewire
+@@ -70,6 +69,8 @@ WESTON_CONF_OPTS += \
+ 	-Dbackend-pipewire=false
+ endif
+ 
++WESTON_CONF_OPTS += -Dsimple-clients=$(subst $(space),$(comma),$(strip $(WESTON_SIMPLE_CLIENTS)))
 +
-+This is required when using binutils >= 2.31 which writes two PT_LOAD segments
-+by default. This is not supported by the wrapper.c script used to convert the
-+shared object into an elf binary.
-+
-+Forwarded: https://www.syslinux.org/archives/2018-August/026167.html
-+[yann.morin.1998@free.fr:
-+  - grab from the Debian package
-+  - https://salsa.debian.org/images-team/syslinux/-/blob/fa1349f1f8e5f5d6307e589f02c0a679031d1c7f/debian/patches/0017-single-load-segment.patch
-+]
-+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-+Upstream: reported https://www.syslinux.org/archives/2018-August/026167.html
-+Upstream: acknowledged https://wiki.syslinux.org/wiki/index.php?title=Building
-+---
-+ efi/i386/syslinux.ld   | 37 +++++++++++++++++++++----------------
-+ efi/x86_64/syslinux.ld | 37 +++++++++++++++++++++----------------
-+ 2 files changed, 42 insertions(+), 32 deletions(-)
-+
-+diff --git a/efi/i386/syslinux.ld b/efi/i386/syslinux.ld
-+index bab3fc7..19c1647 100644
-+--- a/efi/i386/syslinux.ld
-++++ b/efi/i386/syslinux.ld
-+@@ -19,6 +19,11 @@ OUTPUT_FORMAT("elf32-i386", "elf32-i386", "elf32-i386")
-+ OUTPUT_ARCH(i386)
-+ ENTRY(_start)
-+
-++PHDRS
-++{
-++	all PT_LOAD ;
-++}
-++
-+ SECTIONS
-+ {
-+ 	. = 0;
-+@@ -31,7 +36,7 @@ SECTIONS
-+ 		*(.text)
-+ 		*(.text.*)
-+ 		__text_end = .;
-+-	}
-++	} :all
-+
-+ 	. = ALIGN(16);
-+
-+@@ -40,7 +45,7 @@ SECTIONS
-+ 		*(.rodata)
-+ 		*(.rodata.*)
-+ 		__rodata_end = .;
-+-	}
-++	} :all
-+
-+ 	. = ALIGN(4);
-+
-+@@ -49,14 +54,14 @@ SECTIONS
-+ 		KEEP (*(SORT(.ctors.*)))
-+ 		KEEP (*(.ctors))
-+ 		__ctors_end = .;
-+-	}
-++	} :all
-+
-+ 	.dtors : {
-+ 		__dtors_start = .;
-+ 		KEEP (*(SORT(.dtors.*)))
-+ 		KEEP (*(.dtors))
-+ 		__dtors_end = .;
-+-	}
-++	} :all
-+
-+ 	. = ALIGN(4096);
-+ 	.rel : {
-+@@ -64,7 +69,7 @@ SECTIONS
-+ 		*(.rel.data)
-+ 		*(.rel.data.*)
-+ 		*(.rel.ctors)
-+-	}
-++	} :all
-+
-+ 	. = ALIGN(4);
-+
-+@@ -72,14 +77,14 @@ SECTIONS
-+ 		__gnu_hash_start = .;
-+ 		*(.gnu.hash)
-+ 		__gnu_hash_end = .;
-+-	}
-++	} :all
-+
-+
-+ 	.dynsym : {
-+ 		__dynsym_start = .;
-+ 		*(.dynsym)
-+ 		__dynsym_end = .;
-+-	}
-++	} :all
-+
-+ 	. = ALIGN(4);
-+
-+@@ -87,7 +92,7 @@ SECTIONS
-+ 		__dynstr_start = .;
-+ 		*(.dynstr)
-+ 		__dynstr_end = .;
-+-	}
-++	} :all
-+
-+ 	. = ALIGN(4);
-+
-+@@ -104,7 +109,7 @@ SECTIONS
-+ 		KEEP (*(.got.plt))
-+ 		KEEP (*(.got))
-+ 		__got_end = .;
-+-	}
-++	} :all
-+
-+ 	. = ALIGN(4);
-+
-+@@ -112,7 +117,7 @@ SECTIONS
-+ 		__dynamic_start = .;
-+ 		*(.dynamic)
-+ 		__dynamic_end = .;
-+-	}
-++	} :all
-+
-+ 	. = ALIGN(16);
-+
-+@@ -122,19 +127,19 @@ SECTIONS
-+ 		*(.data.*)
-+ 		*(.lowmem)
-+ 		__data_end = .;
-+-	}
-++	} :all
-+
-+ 	.reloc : {
-+ 		*(.reloc)
-+-	}
-++	} :all
-+
-+ 	.symtab : {
-+ 		*(.symtab)
-+-	}
-++	} :all
-+
-+ 	.strtab : {
-+ 		*(.strtab)
-+-	}
-++	} :all
-+
-+ 	.bss (NOLOAD) : {
-+ 		/* the EFI loader doesn't seem to like a .bss section,
-+@@ -148,7 +153,7 @@ SECTIONS
-+ 		__bss_end = .;
-+ 		*(.sbss)
-+ 		*(.scommon)
-+-	}
-++	} :all
-+ 	__bss_len = ABSOLUTE(__bss_end) - ABSOLUTE(__bss_start);
-+ 	__bss_dwords = (__bss_len + 3) >> 2;
-+
-+@@ -161,7 +166,7 @@ SECTIONS
-+ 		*(.hugebss)
-+ 		*(.hugebss.*)
-+ 		__hugebss_end = .;
-+-	}
-++	} :all
-+
-+ 	_end = .;
-+
-+diff --git a/efi/x86_64/syslinux.ld b/efi/x86_64/syslinux.ld
-+index 450641c..a2c124f 100644
-+--- a/efi/x86_64/syslinux.ld
-++++ b/efi/x86_64/syslinux.ld
-+@@ -19,6 +19,11 @@ OUTPUT_FORMAT("elf64-x86-64", "elf64-x86-64", "elf64-x86-64")
-+ OUTPUT_ARCH(i386:x86-64)
-+ ENTRY(_start)
-+
-++PHDRS
-++{
-++	all PT_LOAD ;
-++}
-++
-+ SECTIONS
-+ {
-+ 	. = 0;
-+@@ -31,7 +36,7 @@ SECTIONS
-+ 		*(.text)
-+ 		*(.text.*)
-+ 		__text_end = .;
-+-	}
-++	} :all
-+
-+ 	. = ALIGN(16);
-+
-+@@ -40,7 +45,7 @@ SECTIONS
-+ 		*(.rodata)
-+ 		*(.rodata.*)
-+ 		__rodata_end = .;
-+-	}
-++	} :all
-+
-+ 	. = ALIGN(4);
-+
-+@@ -49,14 +54,14 @@ SECTIONS
-+ 		KEEP (*(SORT(.ctors.*)))
-+ 		KEEP (*(.ctors))
-+ 		__ctors_end = .;
-+-	}
-++	} :all
-+
-+ 	.dtors : {
-+ 		__dtors_start = .;
-+ 		KEEP (*(SORT(.dtors.*)))
-+ 		KEEP (*(.dtors))
-+ 		__dtors_end = .;
-+-	}
-++	} :all
-+
-+ 	. = ALIGN(4096);
-+ 	.rel : {
-+@@ -64,7 +69,7 @@ SECTIONS
-+ 		*(.rel.data)
-+ 		*(.rel.data.*)
-+ 		*(.rel.ctors)
-+-	}
-++	} :all
-+
-+ 	. = ALIGN(4);
-+
-+@@ -72,14 +77,14 @@ SECTIONS
-+ 		__gnu_hash_start = .;
-+ 		*(.gnu.hash)
-+ 		__gnu_hash_end = .;
-+-	}
-++	} :all
-+
-+
-+ 	.dynsym : {
-+ 		__dynsym_start = .;
-+ 		*(.dynsym)
-+ 		__dynsym_end = .;
-+-	}
-++	} :all
-+
-+ 	. = ALIGN(4);
-+
-+@@ -87,7 +92,7 @@ SECTIONS
-+ 		__dynstr_start = .;
-+ 		*(.dynstr)
-+ 		__dynstr_end = .;
-+-	}
-++	} :all
-+
-+ 	. = ALIGN(4);
-+
-+@@ -104,7 +109,7 @@ SECTIONS
-+ 		KEEP (*(.got.plt))
-+ 		KEEP (*(.got))
-+ 		__got_end = .;
-+-	}
-++	} :all
-+
-+ 	. = ALIGN(4);
-+
-+@@ -112,7 +117,7 @@ SECTIONS
-+ 		__dynamic_start = .;
-+ 		*(.dynamic)
-+ 		__dynamic_end = .;
-+-	}
-++	} :all
-+
-+ 	. = ALIGN(16);
-+
-+@@ -122,19 +127,19 @@ SECTIONS
-+ 		*(.data.*)
-+ 		*(.lowmem)
-+ 		__data_end = .;
-+-	}
-++	} :all
-+
-+ 	.reloc : {
-+ 		*(.reloc)
-+-	}
-++	} :all
-+
-+ 	.symtab : {
-+ 		*(.symtab)
-+-	}
-++	} :all
-+
-+ 	.strtab : {
-+ 		*(.strtab)
-+-	}
-++	} :all
-+
-+ 	.bss (NOLOAD) : {
-+ 		/* the EFI loader doesn't seem to like a .bss section,
-+@@ -148,7 +153,7 @@ SECTIONS
-+ 		__bss_end = .;
-+ 		*(.sbss)
-+ 		*(.scommon)
-+-	}
-++	} :all
-+ 	__bss_len = ABSOLUTE(__bss_end) - ABSOLUTE(__bss_start);
-+ 	__bss_dwords = (__bss_len + 3) >> 2;
-+
-+@@ -161,7 +166,7 @@ SECTIONS
-+ 		*(.hugebss)
-+ 		*(.hugebss.*)
-+ 		__hugebss_end = .;
-+-	}
-++	} :all
-+
-+ 	_end = .;
-+
+ ifeq ($(BR2_PACKAGE_WESTON_RDP),y)
+ WESTON_DEPENDENCIES += freerdp
+ WESTON_CONF_OPTS += -Dbackend-rdp=true
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
