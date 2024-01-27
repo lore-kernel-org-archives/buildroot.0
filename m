@@ -4,48 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 632B7C46CD2
-	for <buildroot@archiver.kernel.org>; Sat, 27 Jan 2024 20:58:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA462C47DA9
+	for <buildroot@archiver.kernel.org>; Sat, 27 Jan 2024 20:58:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 191DE60F37;
-	Sat, 27 Jan 2024 20:58:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 191DE60F37
+	by smtp3.osuosl.org (Postfix) with ESMTP id A50E860F67;
+	Sat, 27 Jan 2024 20:58:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A50E860F67
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fJlBrSNalZi2; Sat, 27 Jan 2024 20:58:36 +0000 (UTC)
+	with ESMTP id kmd7bPnoqfFT; Sat, 27 Jan 2024 20:58:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6F7D060F1C;
-	Sat, 27 Jan 2024 20:58:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F7D060F1C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6F2021BF280
- for <buildroot@lists.busybox.net>; Sat, 27 Jan 2024 20:56:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D15EA60F51;
+	Sat, 27 Jan 2024 20:58:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D15EA60F51
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C9FC31BF280
+ for <buildroot@lists.busybox.net>; Sat, 27 Jan 2024 20:56:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 296BD400F8
- for <buildroot@lists.busybox.net>; Sat, 27 Jan 2024 20:56:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 296BD400F8
+ by smtp1.osuosl.org (Postfix) with ESMTP id AFC83834C7
+ for <buildroot@lists.busybox.net>; Sat, 27 Jan 2024 20:56:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AFC83834C7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id neOV5pyEsOof for <buildroot@lists.busybox.net>;
- Sat, 27 Jan 2024 20:56:30 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2AF4E401F1
- for <buildroot@buildroot.org>; Sat, 27 Jan 2024 20:56:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2AF4E401F1
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 17C3F866A5; Sat, 27 Jan 2024 20:56:30 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 27 Jan 2024 21:48:34 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a1f94338856f04deca6db98426fa09209e00617f
-X-Git-Newrev: 46d4f5c7519f949751b80c3e73fa055c07796c4e
-X-Patchwork-Hint: ignore
-Message-Id: <20240127205630.17C3F866A5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/perl-posix-strftime-compiler: bump
- to version 0.46
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id juYzrXi5X4fD for <buildroot@lists.busybox.net>;
+ Sat, 27 Jan 2024 20:56:58 +0000 (UTC)
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 97BB08344C
+ for <buildroot@busybox.net>; Sat, 27 Jan 2024 20:56:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 97BB08344C
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 91AD013F89C;
+ Sat, 27 Jan 2024 21:56:53 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 27 Jan 2024 21:56:53 +0100
+Date: Sat, 27 Jan 2024 21:56:53 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Francois Perrad <fperrad@gmail.com>
+Message-ID: <ZbVuFccuPFgbE-xZ@landeda>
+References: <20240124103453.623733-1-francois.perrad@gadz.org>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20240124103453.623733-1-francois.perrad@gadz.org>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1706389015;
+ bh=BTsbZHbm2bzjbd9Hc7YWL4a/tnp7709FsKGSwEpEn7g=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=lQpS1qjvdFtYfkLzNSqn9EXoleIfn4pNPgJNCT7x6wxadaJM1NA7A8CbFszuo48aO
+ WSiryIWDpS3IXAW4b2NWb6yUt2jSb5WUh5cSkn0iD+lJVI9u9MVB3KxmsyQkLNpT0p
+ tSJlXnIuB8wiME2v9W5Cn5umywFvbvIlFHed3YtmcZfNo3km2/oLJpahUbsWRKj5BN
+ vzDDfAOC4FLPXm2bMjdRIab1DDOQ2FZwSFeaYWLQRfI1EpNxFLnbddWdrw3CEgdZbi
+ 3ZUiz/pY6IkadzCe+0NAEZ9T8u3I72P3K36Si1/miEEAd8rLGs6FExyHvp0zc+w+2O
+ VDvrLjsI0spmg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=lQpS1qjv
+Subject: Re: [Buildroot] [PATCH 01/10] package/perl-cookie-baker: bump to
+ version 0.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,50 +75,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@busybox.net
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=46d4f5c7519f949751b80c3e73fa055c07796c4e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- .../perl-posix-strftime-compiler/perl-posix-strftime-compiler.hash  | 6 +++---
- .../perl-posix-strftime-compiler/perl-posix-strftime-compiler.mk    | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/perl-posix-strftime-compiler/perl-posix-strftime-compiler.hash b/package/perl-posix-strftime-compiler/perl-posix-strftime-compiler.hash
-index bdc6fd45a0..cad4b03f24 100644
---- a/package/perl-posix-strftime-compiler/perl-posix-strftime-compiler.hash
-+++ b/package/perl-posix-strftime-compiler/perl-posix-strftime-compiler.hash
-@@ -1,6 +1,6 @@
--# retrieved by scancpan from http://cpan.metacpan.org/
--md5  3a5ae7d56a5917410c1b661e01ed1a68  POSIX-strftime-Compiler-0.44.tar.gz
--sha256  dfd3c97398dcfe51c8236b85e3dc28035667b76531f7aa0a6535f3aa5405b35a  POSIX-strftime-Compiler-0.44.tar.gz
-+# retrieved by scancpan from https://cpan.metacpan.org/
-+md5  e64777d20d363a1b47acf85774d108da  POSIX-strftime-Compiler-0.46.tar.gz
-+sha256  bf88873248ef88cc5e68ed074493496be684ec334e11273d4654306dd9dae485  POSIX-strftime-Compiler-0.46.tar.gz
- 
- # computed by scancpan
- sha256  79c2a066104e71602785fd815c5aea6f7db78c19451d68521380083f9c2a8805  LICENSE
-diff --git a/package/perl-posix-strftime-compiler/perl-posix-strftime-compiler.mk b/package/perl-posix-strftime-compiler/perl-posix-strftime-compiler.mk
-index c11ed58514..f7f6745ec9 100644
---- a/package/perl-posix-strftime-compiler/perl-posix-strftime-compiler.mk
-+++ b/package/perl-posix-strftime-compiler/perl-posix-strftime-compiler.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PERL_POSIX_STRFTIME_COMPILER_VERSION = 0.44
-+PERL_POSIX_STRFTIME_COMPILER_VERSION = 0.46
- PERL_POSIX_STRFTIME_COMPILER_SOURCE = POSIX-strftime-Compiler-$(PERL_POSIX_STRFTIME_COMPILER_VERSION).tar.gz
- PERL_POSIX_STRFTIME_COMPILER_SITE = $(BR2_CPAN_MIRROR)/authors/id/K/KA/KAZEBURO
- PERL_POSIX_STRFTIME_COMPILER_DEPENDENCIES = host-perl-module-build-tiny
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+RnJhbsOnb2lzLCBBbGwsCgpPbiAyMDI0LTAxLTI0IDExOjM0ICswMTAwLCBGcmFuY29pcyBQZXJy
+YWQgc3Bha2UgdGh1c2x5Ogo+IFNpZ25lZC1vZmYtYnk6IEZyYW5jb2lzIFBlcnJhZCA8ZnJhbmNv
+aXMucGVycmFkQGdhZHoub3JnPgoKV2hvbGUgc2VyaWVzIGFwcGxpZWQgdG8gbWFzdGVyLCB0aGFu
+a3MuCgpSZWdhcmRzLApZYW5uIEUuIE1PUklOLgoKPiAtLS0KPiAgcGFja2FnZS9wZXJsLWNvb2tp
+ZS1iYWtlci9wZXJsLWNvb2tpZS1iYWtlci5oYXNoIHwgNiArKystLS0KPiAgcGFja2FnZS9wZXJs
+LWNvb2tpZS1iYWtlci9wZXJsLWNvb2tpZS1iYWtlci5tayAgIHwgMiArLQo+ICAyIGZpbGVzIGNo
+YW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgNCBkZWxldGlvbnMoLSkKPiAKPiBkaWZmIC0tZ2l0IGEv
+cGFja2FnZS9wZXJsLWNvb2tpZS1iYWtlci9wZXJsLWNvb2tpZS1iYWtlci5oYXNoIGIvcGFja2Fn
+ZS9wZXJsLWNvb2tpZS1iYWtlci9wZXJsLWNvb2tpZS1iYWtlci5oYXNoCj4gaW5kZXggY2MyYTg0
+YjE0Li4zNGJiNGIxNDMgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9wZXJsLWNvb2tpZS1iYWtlci9w
+ZXJsLWNvb2tpZS1iYWtlci5oYXNoCj4gKysrIGIvcGFja2FnZS9wZXJsLWNvb2tpZS1iYWtlci9w
+ZXJsLWNvb2tpZS1iYWtlci5oYXNoCj4gQEAgLTEsNiArMSw2IEBACj4gLSMgcmV0cmlldmVkIGJ5
+IHNjYW5jcGFuIGZyb20gaHR0cDovL2NwYW4ubWV0YWNwYW4ub3JnLwo+IC1tZDUgIGJjOGY5NTg5
+M2Q2ZWMzMDkzYTYyZDE5NTdlMTkwOGYyICBDb29raWUtQmFrZXItMC4xMS50YXIuZ3oKPiAtc2hh
+MjU2ICA1OTI3NWY0NzRlMDdjMGFhMzYxMWUzZTY4NGI4OTRlN2RiOTEzMzMzZDgyMTQ0MjBiZTYz
+ZjEyZWMxOGNkN2FiICBDb29raWUtQmFrZXItMC4xMS50YXIuZ3oKPiArIyByZXRyaWV2ZWQgYnkg
+c2NhbmNwYW4gZnJvbSBodHRwczovL2NwYW4ubWV0YWNwYW4ub3JnLwo+ICttZDUgIDdhYjYzNjk4
+ZDJmMjRhOGNmZTMxYTdlYTI3MGU5ZDJkICBDb29raWUtQmFrZXItMC4xMi50YXIuZ3oKPiArc2hh
+MjU2ICA5YjA0ZGY1ZDQ3ZGNkNDVhYzQyOTk2MjZhMTBlYzk5MGZiNDBjOTRlZTVhNjMwMGMzYTg4
+YmRmYjM1NzVlYzI5ICBDb29raWUtQmFrZXItMC4xMi50YXIuZ3oKPiAgCj4gICMgY29tcHV0ZWQg
+Ynkgc2NhbmNwYW4KPiAgc2hhMjU2ICBiNGNlOTQ2NzFmYTIxOTA3NGQ0ZTkxZTIyNjg2NTJkNmJm
+OTc2NGNlYmNjN2E1ZTI3YmZjMTQ4OTc3NDVjYTRjICBMSUNFTlNFCj4gZGlmZiAtLWdpdCBhL3Bh
+Y2thZ2UvcGVybC1jb29raWUtYmFrZXIvcGVybC1jb29raWUtYmFrZXIubWsgYi9wYWNrYWdlL3Bl
+cmwtY29va2llLWJha2VyL3BlcmwtY29va2llLWJha2VyLm1rCj4gaW5kZXggMjdjODhmM2U1Li5h
+ZGQ1ZmNkMGUgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9wZXJsLWNvb2tpZS1iYWtlci9wZXJsLWNv
+b2tpZS1iYWtlci5tawo+ICsrKyBiL3BhY2thZ2UvcGVybC1jb29raWUtYmFrZXIvcGVybC1jb29r
+aWUtYmFrZXIubWsKPiBAQCAtNCw3ICs0LDcgQEAKPiAgIwo+ICAjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIwo+ICAKPiAtUEVSTF9DT09LSUVfQkFLRVJfVkVSU0lPTiA9IDAuMTEKPiArUEVSTF9DT09L
+SUVfQkFLRVJfVkVSU0lPTiA9IDAuMTIKPiAgUEVSTF9DT09LSUVfQkFLRVJfU09VUkNFID0gQ29v
+a2llLUJha2VyLSQoUEVSTF9DT09LSUVfQkFLRVJfVkVSU0lPTikudGFyLmd6Cj4gIFBFUkxfQ09P
+S0lFX0JBS0VSX1NJVEUgPSAkKEJSMl9DUEFOX01JUlJPUikvYXV0aG9ycy9pZC9LL0tBL0tBWkVC
+VVJPCj4gIFBFUkxfQ09PS0lFX0JBS0VSX0RFUEVOREVOQ0lFUyA9IGhvc3QtcGVybC1tb2R1bGUt
+YnVpbGQtdGlueQo+IC0tIAo+IDIuNDAuMQo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fCj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9v
+dEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlz
+dGluZm8vYnVpbGRyb290CgotLSAKLi0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0t
+LS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4KfCAgWWFubiBFLiBN
+T1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9OIHwgRXJpY3MnIGNv
+bnNwaXJhY3k6IHwKfCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWduZXIgfCBcIC8g
+Q0FNUEFJR04gICAgIHwgIF9fXyAgICAgICAgICAgICAgIHwKfCArMzMgNTYxIDA5OSA0MjcgYC0t
+LS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAgQUdBSU5TVCAgICAgIHwgIFxlLyAgVGhlcmUgaXMgbm8g
+IHwKfCBodHRwOi8veW1vcmluLmlzLWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAvIFwgSFRNTCBNQUlM
+ICAgIHwgICB2ICAgY29uc3BpcmFjeS4gIHwKJy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LV4tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0tLScKX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxp
+bmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5v
+cmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
