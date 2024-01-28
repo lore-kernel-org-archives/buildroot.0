@@ -4,88 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 026C6C47DA9
-	for <buildroot@archiver.kernel.org>; Sun, 28 Jan 2024 13:22:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89483C47DA9
+	for <buildroot@archiver.kernel.org>; Sun, 28 Jan 2024 13:22:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B57998272C;
-	Sun, 28 Jan 2024 13:22:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B57998272C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 46A7B82779;
+	Sun, 28 Jan 2024 13:22:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 46A7B82779
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GgfkXSLXBJNw; Sun, 28 Jan 2024 13:22:23 +0000 (UTC)
+	with ESMTP id 9d74Ix2vJ0ts; Sun, 28 Jan 2024 13:22:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 045F7827A0;
-	Sun, 28 Jan 2024 13:22:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 045F7827A0
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 274C91BF2C7
+	by smtp1.osuosl.org (Postfix) with ESMTP id 88324827DE;
+	Sun, 28 Jan 2024 13:22:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 88324827DE
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8C1741BF2C7
  for <buildroot@lists.busybox.net>; Sun, 28 Jan 2024 13:21:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2ADDA40179
- for <buildroot@lists.busybox.net>; Sun, 28 Jan 2024 13:21:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2ADDA40179
+ by smtp4.osuosl.org (Postfix) with ESMTP id 64AD1415A7
+ for <buildroot@lists.busybox.net>; Sun, 28 Jan 2024 13:21:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64AD1415A7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eFYhPUXuRS2p for <buildroot@lists.busybox.net>;
- Sun, 28 Jan 2024 13:21:04 +0000 (UTC)
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 17FC9404A3
- for <buildroot@buildroot.org>; Sun, 28 Jan 2024 13:21:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 17FC9404A3
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-40e72a567eeso39113555e9.0
- for <buildroot@buildroot.org>; Sun, 28 Jan 2024 05:21:03 -0800 (PST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id agCmgcKc8KkY for <buildroot@lists.busybox.net>;
+ Sun, 28 Jan 2024 13:21:05 +0000 (UTC)
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 812214159F
+ for <buildroot@buildroot.org>; Sun, 28 Jan 2024 13:21:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 812214159F
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 5b1f17b1804b1-40eacb6067dso34700525e9.1
+ for <buildroot@buildroot.org>; Sun, 28 Jan 2024 05:21:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1706448062; x=1707052862;
+ d=1e100.net; s=20230601; t=1706448063; x=1707052863;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=v6G51KP89EohwFCQ1bC4Uq9i/EjFDvCgv/yVrRtlgA0=;
- b=RiI5CL/aeNLkxHTgNGK0aV5PNRlDh4/qEI40ENtoX7UmpgWrA3dx+kPkz52IVmQZCP
- l/nR7Eq2y4haT6WWqEqfqRqno0ZFgpv3lJhUZGgp5rO4jUs9amlo+dBsRMqLzruyfFpC
- FLu9SKwu9g6pwgGg4pZhcO4QfgouhJ6ReaBYn16csmQF1T3yehoBXmnxwSdXZqHaeUVU
- AA/G1Gq3aOB7IdqqfHyofvfqflRvhFKvkMCD6MnYQHvO/d5CXducketV+JNDWYWg18zr
- e26D/XJ7/EPg+oTUavQu36jC416DkkOuFsVgOaPyYETAWFU44tx4qzoTG5PD8FGGg7J9
- Bv3A==
-X-Gm-Message-State: AOJu0YyQfVmOvUkyQGiFybkpdVinZ4IIcYwscUaY4CRCDX40K/cU/Zc+
- Vq3oJZORVh43z1TjNbRBmtLwv5XVaBEh3lbVDT8NDM3VAFVOGtI5RJ8RMoci
-X-Google-Smtp-Source: AGHT+IHvIzk55Aq7XIIgVRU8p25eWUX6aa6Dr8CI1BGWA5DGeEINgRWdwKgSjplX4r5GgK2gAQO3KA==
-X-Received: by 2002:a05:600c:444c:b0:40e:431c:4172 with SMTP id
- v12-20020a05600c444c00b0040e431c4172mr3047745wmn.13.1706448062090; 
- Sun, 28 Jan 2024 05:21:02 -0800 (PST)
+ bh=Fav8dT4tL7yNMf5aKUe6NG+WXmxuHrkYtzDV5INtExE=;
+ b=izaveri+ka160G74zqOSSCXGBrexXv5bn9o7k9Zk1x2kVfzzSsoNVRyBwjIMsVXi4c
+ eb7+EgSCaetyJc5h5+L+6KJC7dzkZwBCC/acCmoNo9dQ8Ba7Zdm099Z4rCYLaWppLLP5
+ lXNapt8UCQiLSQythgCYvSqWlyRMlVeaMwV0Eeiv2VedbG+UHQgFaAFJPpVe7vKrQtEU
+ Kdda0sXuibQ8V8tE8xHPYeL6G4cYG6f6nQ1yBickQ9n6tRyVTVRwb4iyeeDRYemdVaI8
+ WJuieD+R2BShI24SM4h0/5+eX65woEHujJXQi7go9vP0wQoJHTf8qDSFSRYFsqHepO2J
+ tV7Q==
+X-Gm-Message-State: AOJu0YyVTM9p9YziaO6R+gYFYk7Pji6qWvq73cW4khe8zuZC37Ov8/WK
+ CO2hcfgrolRzVfo8sIe7d/X3wuT/CIlp94LssWLPYWkBuS/BpqnJkM+RJXDB
+X-Google-Smtp-Source: AGHT+IGg4AO1kV1YLsQAGDwmyWc7a7sQV54iUqx/kjDt1QAjWQ/MZQEAD7NxJbVY6KbTh/y0tLXoiw==
+X-Received: by 2002:a05:600c:310b:b0:40e:f5e3:5e16 with SMTP id
+ g11-20020a05600c310b00b0040ef5e35e16mr951635wmo.27.1706448063559; 
+ Sun, 28 Jan 2024 05:21:03 -0800 (PST)
 Received: from landeda.home ([2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
  by smtp.gmail.com with ESMTPSA id
- bv25-20020a0560001f1900b0033aec64ba7dsm747778wrb.78.2024.01.28.05.21.01
+ bv25-20020a0560001f1900b0033aec64ba7dsm747778wrb.78.2024.01.28.05.21.03
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 28 Jan 2024 05:21:01 -0800 (PST)
+ Sun, 28 Jan 2024 05:21:03 -0800 (PST)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 28 Jan 2024 14:20:55 +0100
-Message-ID: <7a6ed8af0a4692069c8b146c6b14647db89c9d23.1706448055.git.yann.morin.1998@free.fr>
+Date: Sun, 28 Jan 2024 14:20:58 +0100
+Message-ID: <681d58c130501398b80678a980d2fe511d35015f.1706448055.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1706448055.git.yann.morin.1998@free.fr>
 References: <cover.1706448055.git.yann.morin.1998@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1706448062; x=1707052862; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1706448063; x=1707052863; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
  :message-id:reply-to;
- bh=v6G51KP89EohwFCQ1bC4Uq9i/EjFDvCgv/yVrRtlgA0=;
- b=G6xeS+627jyPuKYNsuMtMrnbDkaRoDAVSZDOr1ZX91uoWzDXsOIlliwSzxTYfeowrT
- ozzRl2QFuBQp0jXljqmr863t0uEDWjVRdl790kACn+4OfV16UkeNl48Un8nax2oFsZWy
- uHsxcl7H33ONL/fy59sy4zYmq87SRBQjMg87DPgmGh9zQSg8rkQAo389eB/v1i/NMsRY
- E8PWmjQ9e9CKTX/8bcwb72uKDf7JZaJ0HZUHUAuI9CkSbn2/OjOJhMPYKz69yrC+Ainx
- puCONFghpTCu6VVi5BezXrMdj/U4AtMZbKKWNqM8+xntu5+oxyZKklGSgw+9+BOj9BkK
- Yzdw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=Fav8dT4tL7yNMf5aKUe6NG+WXmxuHrkYtzDV5INtExE=;
+ b=ADLAWjYdcCynh4b0Mh7xASYhGIT2B3830K5ZIIKFXDb+lUFeuoIN1/7vUCSwDXSUsJ
+ T+RNoWfRl3p44T4FqZBnHp7smxgSUJH3kyy+zz62XpQGAOiA83W8hYi4X+bcE6a9GHQh
+ yAFBbg9aAGueTW5Vkd8GxgAJsfxCbnbOj0UN0gOug3CVPoEj5luHTl6sl6q/jLsGfKCm
+ swtejTN4NXK+5cLJ77GiXMT1Qx3g17qipj3wprLA+F7HOCZNYU996MQGNHa9PF/xiTbe
+ PnPT7QpPbwj9kwT79X+IuXIEvemDYxgFofeCmTWFVVN3K6zrTZOdzHb0wlI12dHbYvCf
+ 8mBA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=G6xeS+62
-Subject: [Buildroot] [PATCH 06/10] package/petitboot: propagate depednencies
- from kexec/kexec-lite
+ header.a=rsa-sha256 header.s=20230601 header.b=ADLAWjYd
+Subject: [Buildroot] [PATCH 09/10] package/opencv-contrib: propagate opencv4
+ dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,61 +97,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>, "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Laurent Vivier <laurent@vivier.eu>
+Cc: Woodrow Douglass <wdouglass@carnegierobotics.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit 719921bebe17 (package/kexec: bump to version 2.0.27) forgot to
-propagate the new dependency on kernel headers to petitboot, which may
-select kexec, causing unmet dependencies warnings (unfortunately, not
-errors), such as;
+Commit a7736afacaef (package/opencv4-contrib: properly note dependencies
+between modules) forgot to propagate the dependencies of selected
+symbols, causing unmet dependencies warnings (unfortunately, not
+errors), such as:
 
-    $ KCONFIG_SEED=0x84462FFC make randconfig
-    WARNING: unmet direct dependencies detected for BR2_PACKAGE_KEXEC
-      Depends on [n]: BR2_PACKAGE_KEXEC_ARCH_SUPPORTS [=y] && BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 [=n]
+    $ KCONFIG_SEED=0x9F66F854 make randconfig
+    WARNING: unmet direct dependencies detected for BR2_PACKAGE_OPENCV4_LIB_DNN
+      Depends on [n]: BR2_PACKAGE_OPENCV4 [=y] && !BR2_TOOLCHAIN_USES_UCLIBC [=y] && BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS [=y]
       Selected by [y]:
-      - BR2_PACKAGE_PETITBOOT [=y] && (BR2_PACKAGE_KEXEC_ARCH_SUPPORTS [=y] || BR2_PACKAGE_KEXEC_LITE_ARCH_SUPPORTS [=n]) && BR2_USE_MMU [=y] && BR2_USE_WCHAR [=y] && !BR2_STATIC_LIBS [=n] && BR2_TOOLCHAIN_HAS_THREADS [=y] && BR2_PACKAGE_HAS_UDEV [=y] && !BR2_PACKAGE_KEXEC_LITE_ARCH_SUPPORTS [=n]
+      - BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNN_OBJDETECT [=y] && BR2_PACKAGE_OPENCV4_CONTRIB [=y]
 
-Propagate the dependency from kexec, and add comments about dependencies
-also inherited from kexec-lite.
+Propagate the dependencies and add associated comments.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Laurent Vivier <laurent@vivier.eu>
-Cc: Julien Olivain <ju.o@free.fr>
+Cc: Woodrow Douglass <wdouglass@carnegierobotics.com>
 ---
- package/petitboot/Config.in | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ package/opencv4-contrib/Config.in | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/package/petitboot/Config.in b/package/petitboot/Config.in
-index f931ab91cd..6a3d476b11 100644
---- a/package/petitboot/Config.in
-+++ b/package/petitboot/Config.in
-@@ -2,10 +2,11 @@ config BR2_PACKAGE_PETITBOOT
- 	bool "petitboot"
- 	depends on BR2_PACKAGE_KEXEC_ARCH_SUPPORTS || BR2_PACKAGE_KEXEC_LITE_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU # lvm2
--	depends on BR2_USE_WCHAR # elfutils
--	depends on !BR2_STATIC_LIBS # elfutils, lvm2
--	depends on BR2_TOOLCHAIN_HAS_THREADS # elfutils, lvm2
-+	depends on BR2_USE_WCHAR # elfutils, kexec-lite
-+	depends on !BR2_STATIC_LIBS # elfutils, kexec-lite, lvm2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # elfutils, kexec-lite, lvm2
- 	depends on BR2_PACKAGE_HAS_UDEV
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 || !BR2_PACKAGE_KEXEC_ARCH_SUPPORTS # kexec
- 	select BR2_PACKAGE_ELFUTILS
- 	select BR2_PACKAGE_LVM2 # devmapper
- 	select BR2_PACKAGE_NCURSES
-@@ -36,3 +37,7 @@ comment "petitboot needs a toolchain w/ wchar, dynamic library, threads, udev /d
- 	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_PACKAGE_HAS_UDEV
+diff --git a/package/opencv4-contrib/Config.in b/package/opencv4-contrib/Config.in
+index 951d5f71ad..261d414869 100644
+--- a/package/opencv4-contrib/Config.in
++++ b/package/opencv4-contrib/Config.in
+@@ -74,19 +74,31 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DATASETS
+ 
+ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNN_OBJDETECT
+ 	bool "dnn_objdetect"
++	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # opencv4 dnn
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC # opencv4 dnn
+ 	select BR2_PACKAGE_OPENCV4_LIB_DNN
+ 	help
+ 	  Object Detection using CNNs -- Implements compact CNN Model
+ 	  for object detection. Trained using Caffe but uses
+ 	  opencv_dnn module.
+ 
++comment "dnn_objdetect needs a glibc or musl toolchain"
++	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC
 +
-+comment "petitboot w/ kexec needs a toolchain w/ headers >= 3.17"
-+	depends on BR2_PACKAGE_KEXEC_ARCH_SUPPORTS && !BR2_PACKAGE_KEXEC_LITE_ARCH_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
+ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNN_SUPERRES
+ 	bool "dnn_superres"
++	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # opencv4 dnn
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC # opencv4 dnn
+ 	select BR2_PACKAGE_OPENCV4_LIB_DNN
+ 	help
+ 	  Superresolution using CNNs -- Contains four trained
+ 	  convolutional neural networks to upscale images.
+ 
++comment "dnn_superres needs a glibc or musl toolchain"
++	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC
++
+ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNNS_EASILY_FOOLED
+ 	bool "dnns_easily_fooled"
+ 	help
 -- 
 2.43.0
 
