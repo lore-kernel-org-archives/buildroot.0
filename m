@@ -4,57 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B435C47DA9
-	for <buildroot@archiver.kernel.org>; Sun, 28 Jan 2024 13:21:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96DDFC47258
+	for <buildroot@archiver.kernel.org>; Sun, 28 Jan 2024 13:21:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EB1BD82779;
-	Sun, 28 Jan 2024 13:21:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB1BD82779
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4B30D8272C;
+	Sun, 28 Jan 2024 13:21:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4B30D8272C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id N56LJuUMFeWY; Sun, 28 Jan 2024 13:21:33 +0000 (UTC)
+	with ESMTP id fvc6pk7DA7UK; Sun, 28 Jan 2024 13:21:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 126158272C;
-	Sun, 28 Jan 2024 13:21:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 126158272C
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C6DE81BF86C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8AAB4827A5;
+	Sun, 28 Jan 2024 13:21:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8AAB4827A5
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C51A41BF868
  for <buildroot@lists.busybox.net>; Sun, 28 Jan 2024 13:21:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9551260881
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9768540585
  for <buildroot@lists.busybox.net>; Sun, 28 Jan 2024 13:21:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9551260881
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9768540585
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZglG6SWd_7Yz for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mGqVV5ftseBo for <buildroot@lists.busybox.net>;
  Sun, 28 Jan 2024 13:21:03 +0000 (UTC)
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2385F607B4
- for <buildroot@buildroot.org>; Sun, 28 Jan 2024 13:21:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2385F607B4
-Received: by mail-wr1-x431.google.com with SMTP id
- ffacd0b85a97d-337cf4eabc9so1774736f8f.3
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9757E400C8
+ for <buildroot@buildroot.org>; Sun, 28 Jan 2024 13:21:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9757E400C8
+Received: by mail-wr1-x42f.google.com with SMTP id
+ ffacd0b85a97d-337d05b8942so1994806f8f.3
  for <buildroot@buildroot.org>; Sun, 28 Jan 2024 05:21:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1706448061; x=1707052861;
+ d=1e100.net; s=20230601; t=1706448060; x=1707052860;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=1QC2Oo6t0q+k3PPkQOj1PHo6NvjpVU+S66Pq/XOe4y4=;
- b=Gd2EA+Lj9jVDSp49QGLrl6XqSJllSTzLJte4LBchefS+/PNHv5szihVUvuxT2DPafa
- 3GIewaiWlq8BANZ41o/T1Yutu9XDD+ZStEYealqVLmn3RnbVbQIcwbekc86pOnIlJn4I
- yoahJYyBFwX1nF0AZaAmvFQBTdIQ92E0Zjoz5TQ8QtKfoWB5w6ZarF+62+t0dAeUFjkQ
- uGK6Gm6i9O/A2QDk3xtQEOHluvSPX+2v4x8J5RC3LU6h7Gp5ZEPEWlub4hJxOoakPH8n
- h5E2sW2mz6yaJwfTRoysviM8S49SZDnDn51imQkQdMxHQw/saXcOJMTH2CrEV1e5kAiR
- gItA==
-X-Gm-Message-State: AOJu0YyCEKgGmolpn7PyayrHOgsa9hyXdIhRvFL2+S50QCTec6F9SP58
- /qVQx3aGnmEltmYeiHrTTNZqWUSuYEJfIYWj/4YoamTw4fOk5uLcYrKrxAjS
-X-Google-Smtp-Source: AGHT+IFDh/KJZ6sgVAaUp3BcHBQbcA+vpUwea5lqn9LQEmG+SEzx8XweWcJmre5+bD+EQCPtx5pLsQ==
-X-Received: by 2002:a5d:644d:0:b0:33a:e639:2da1 with SMTP id
- d13-20020a5d644d000000b0033ae6392da1mr1540237wrw.65.1706448060844; 
+ bh=giLCE7r/w6hE3LNkat5bnTORbHf0cC0VCXvGPCzlC5I=;
+ b=RQe2sZ2b8WzS6ZgMJP+zn12WFyf0TlqXXB0XeuD1cvsLLjKzsPl/GeCXbzX6ESSckL
+ 19FOY3Nbe6F8M+8X2Q85l4a/IA6Zq9dy47wHs7EWO8fqbIjtUH/YaRwC2gr/d1smy/wJ
+ TMd0SPWSp3UgGznzRfbJvn391U05yzLXuuc+WkAVzdoZb3sMn3q9jUFRlvLdJzItnPfs
+ sjB6yk90Ab8iCifUz9vE31zz2+dgKqdCs4N6C1U/0k7D5fVhtJo6fCtm7YHQEaYBAFLT
+ ae574AtKFd768t6Ww87KpVDWVfaR2RHuElA1eQUbrXCSuc9ymLBDS9hd8SMJYXcrot7v
+ xvJQ==
+X-Gm-Message-State: AOJu0Yzea0tjD6spDo3Qu6wv8zKrXV+yD1O2XgdJmPP0CFx37RzFK+dD
+ 7rAMMKzXALCxohF1qDEDKgvuaofk/1cfjII4gmLhWTsOG7R1AN+nBV4r3i1S
+X-Google-Smtp-Source: AGHT+IFi0T7U34jhnzjNgZyC8Mz7pd9p29/72R0LkEVDueBKy+kPUqQxoQ88acLZNDOQTKMZOk0/BA==
+X-Received: by 2002:adf:ed43:0:b0:33a:e6e9:5044 with SMTP id
+ u3-20020adfed43000000b0033ae6e95044mr1529984wro.41.1706448060398; 
  Sun, 28 Jan 2024 05:21:00 -0800 (PST)
 Received: from landeda.home ([2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
  by smtp.gmail.com with ESMTPSA id
@@ -63,29 +63,29 @@ Received: from landeda.home ([2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
  Sun, 28 Jan 2024 05:21:00 -0800 (PST)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 28 Jan 2024 14:20:52 +0100
-Message-ID: <0fab83c33d4c5d4afe807e78169f68d539bcf5af.1706448055.git.yann.morin.1998@free.fr>
+Date: Sun, 28 Jan 2024 14:20:51 +0100
+Message-ID: <df16b2a080d81430777e362a57818411d1c57a94.1706448055.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1706448055.git.yann.morin.1998@free.fr>
 References: <cover.1706448055.git.yann.morin.1998@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1706448061; x=1707052861; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1706448060; x=1707052860; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
  :message-id:reply-to;
- bh=1QC2Oo6t0q+k3PPkQOj1PHo6NvjpVU+S66Pq/XOe4y4=;
- b=A08OcucVrtgr4jPwf75F+vPzr+KprHNbBKycOM42pCrG/ajBTJXvcgvRsBfQumnk4N
- eYHYIgWYiCc7QhMcYkLV65gNOciz64Cv31WMJ8C5Nws/OZ5sNlpEEHQQMf8NtWo1XYiN
- Z1HCqGcycBCz8MNtq4FObs+NPFmWV201cu+T3GW4wa+irtRCR+LVPmIF5E5C0xXYN3pc
- jKV7ehchKkeqz/NRArtO0mOdBBeQctpfdPcI8rL5+SYWaQGor2uz32kW62kQZ9oQgzYh
- 7z0vO0WChFFSM39G/VW0cNcHocTnagVgK/X9LMvcP5g4PSXCiaX4ArDYkgmRX8wdQWQU
- UlbA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=giLCE7r/w6hE3LNkat5bnTORbHf0cC0VCXvGPCzlC5I=;
+ b=GQp7V+Uzf9O4wb3glZjx0KaNBzUmJV1Cq6htciIUWyU2p6zj84YRhSZY4wIi7T7j29
+ 4IHUGd0mb0+my81Ax2Ip7MpTSwHusCG2Yuh6wMk8JlRMXGf+EPsexn0c/YLZ+ebL4WsG
+ zt6kurSh1Wks0ALLoNibA+O1bZ8HlBFtDXvgL1n/nnTvk/Ds2DqZnVFChkBZ/WrE3Zq9
+ 3+WEuSgzbQjZxjLsI7rZyxSOUb5dXPE4qyqQEZuVZzGOuovUHNl8wdKKJY8YEdT9lvzK
+ EMyzbDvq8kP8K/igfYE55Vu+a7SgJtcv6IriT7GOX6BftoQ90ncVsvhIhl5q0b3kNba3
+ tfOg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=A08OcucV
-Subject: [Buildroot] [PATCH 03/10] package/openssh: fix dependencies with
- refpolicy
+ header.a=rsa-sha256 header.s=20230601 header.b=GQp7V+Uz
+Subject: [Buildroot] [PATCH 02/10] package/ivi-homescreen: fix dependencies
+ for gstreamer plugin
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,79 +104,72 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit 2c5a82a29ceb(package/openssh: select linux-pam if refpolicy
-upstream is selected) did not account for the linux-pam dependencies
-before selecting it, causing unmet dependencies warnings (unfortunately,
-not errors), such as:
+The gstreamer plugin select the EGL backend of gst1-plugins-base, but
+forgot to propagate all of its dependencies, notably the _HAS_API
+condition, causing unmet dependencies warnings (unfortunately, not
+errors), such as;
 
-    $ KCONFIG_SEED=0x8D55903B make randconfig
-    WARNING: unmet direct dependencies detected for BR2_PACKAGE_LIBABSEIL_CPP
-      Depends on [n]: BR2_INSTALL_LIBSTDCPP [=y] && BR2_TOOLCHAIN_GCC_AT_LEAST_8 [=y] && BR2_TOOLCHAIN_HAS_THREADS [=y] && !BR2_STATIC_LIBS [=n] && BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS [=n]
+    $ KCONFIG_SEED=0x597D22A8 make randconfig
+    WARNING: unmet direct dependencies detected for BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_EGL
+      Depends on [n]: BR2_PACKAGE_GSTREAMER1 [=y] && BR2_PACKAGE_GST1_PLUGINS_BASE [=y] && BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL [=y] && BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_API [=n] && BR2_PACKAGE_HAS_LIBEGL [=y]
       Selected by [y]:
-      - BR2_PACKAGE_RE2 [=y] && BR2_INSTALL_LIBSTDCPP [=y] && BR2_TOOLCHAIN_GCC_AT_LEAST_8 [=y] && BR2_TOOLCHAIN_HAS_THREADS [=y]
+      - BR2_PACKAGE_IVI_HOMESCREEN_GSTREAMER_EGL_PLUGIN [=y] && BR2_PACKAGE_IVI_HOMESCREEN [=y] && BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS [=y] && BR2_PACKAGE_HAS_LIBEGL [=y]
 
-Propagate those dependencies, but only when they are required, i.e. only
-when the upstreram refpolicy is used.
+We can't select _HAS_API, because it is a symbol that represents a
+capability provided by other features of gst1-plugins-base; it's
+semantically like a virtual package: we can't select it, we can only
+depend on it.
 
-Transitively propagate those also to sshfs, for those two it did not
-already have; we use a separate coment to cimplify the comment prompt.
+Add this dependency to fix this situation.
+
+This however causes circular (recursive) dependencies errors:
+
+    package/gstreamer1/gst1-plugins-base/Config.in:135:error: recursive dependency detected!
+    package/gstreamer1/gst1-plugins-base/Config.in:135:     symbol BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL is selected by BR2_PACKAGE_IVI_HOMESCREEN_GSTREAMER_EGL_PLUGIN
+    package/ivi-homescreen/Config.in:221:   symbol BR2_PACKAGE_IVI_HOMESCREEN_GSTREAMER_EGL_PLUGIN depends on BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_API
+    package/gstreamer1/gst1-plugins-base/Config.in:149:     symbol BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_API is selected by BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_OPENGL
+    package/gstreamer1/gst1-plugins-base/Config.in:152:     symbol BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_OPENGL depends on BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL
+
+Indeed, _HAS_API is only even set when gstreamer1, gst1-plugins-base,
+and the gst1-plugins-base's lib-opengl support, are all already enabled.
+As such, the dependency on _HAS_API already implies those, and there is
+no need to select them.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
- package/openssh/Config.in | 12 ++++++++++++
- package/sshfs/Config.in   |  7 +++++++
- 2 files changed, 19 insertions(+)
+ package/ivi-homescreen/Config.in | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/openssh/Config.in b/package/openssh/Config.in
-index a3038ba01f..0e9a84469b 100644
---- a/package/openssh/Config.in
-+++ b/package/openssh/Config.in
-@@ -1,6 +1,10 @@
- config BR2_PACKAGE_OPENSSH
- 	bool "openssh"
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_ENABLE_LOCALE || !BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION # linux-pam
-+	depends on BR2_USE_WCHAR || !BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION # linux-pam
-+	depends on !BR2_STATIC_LIBS || !BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION # linux-pam
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || !BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION # linux-pam
- 	select BR2_PACKAGE_LINUX_PAM if BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_ZLIB
-@@ -41,3 +45,11 @@ config BR2_PACKAGE_OPENSSH_SANDBOX
- 	  This is normally preferable, but may cause seccomp problems
- 	  for certain combinations of C libraries and kernel versions.
- endif
-+
-+comment "openssh w/ refpolicy needs a toolchain w/ gcc >= 4.9, locale, wchar, dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION
-+	depends on !BR2_ENABLE_LOCALE \
-+		|| !BR2_USE_WCHAR \
-+		|| BR2_STATIC_LIBS \
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-diff --git a/package/sshfs/Config.in b/package/sshfs/Config.in
-index bc54b698d8..b778b62fa0 100644
---- a/package/sshfs/Config.in
-+++ b/package/sshfs/Config.in
-@@ -4,6 +4,8 @@ config BR2_PACKAGE_SSHFS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libfuse3, glib2
- 	depends on BR2_USE_MMU # libfuse3, glib2
- 	depends on !BR2_STATIC_LIBS # libfuse3
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || !BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION # openssh
-+	depends on BR2_ENABLE_LOCALE || !BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION # openssh
- 	select BR2_PACKAGE_LIBFUSE3
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
-@@ -17,3 +19,8 @@ config BR2_PACKAGE_SSHFS
- comment "sshfs needs a toolchain w/ wchar, threads, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-+
-+comment "sshfs w/ refpolicy needs a toolchain w/ gcc >= 4.9, locale"
-+	depends on BR2_USE_MMU
-+	depends on (!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 && BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION) \
-+		|| (!BR2_ENABLE_LOCALE && BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION)
+diff --git a/package/ivi-homescreen/Config.in b/package/ivi-homescreen/Config.in
+index de7509320f..c24df05b6d 100644
+--- a/package/ivi-homescreen/Config.in
++++ b/package/ivi-homescreen/Config.in
+@@ -222,10 +222,8 @@ config BR2_PACKAGE_IVI_HOMESCREEN_GSTREAMER_EGL_PLUGIN
+ 	bool "GStreamer EGL"
+ 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HAS_LIBEGL
++	depends on BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_API # GST1_PLUGINS_BASE_LIB_OPENGL_EGL
+ 	select BR2_PACKAGE_FFMPEG
+-	select BR2_PACKAGE_GSTREAMER1
+-	select BR2_PACKAGE_GST1_PLUGINS_BASE
+-	select BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_EGL
+ 	help
+ 	  A GStreamer-powered alternative to Flutter's video_player that
+@@ -233,9 +231,10 @@ config BR2_PACKAGE_IVI_HOMESCREEN_GSTREAMER_EGL_PLUGIN
+ 
+ 	  https://pub.dev/packages/flutter_gstreamer_player
+ 
+-comment "GStreamer plugin needs an EGL backend"
++comment "GStreamer plugin needs gst1-plugins-base with an EGL backend"
+ 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+-	depends on !BR2_PACKAGE_HAS_LIBEGL
++	depends on !BR2_PACKAGE_HAS_LIBEGL \
++		|| !BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_API
+ 
+ config BR2_PACKAGE_IVI_HOMESCREEN_OPENGL_TEXTURE_PLUGIN
+ 	bool "OpenGL Texture"
 -- 
 2.43.0
 
