@@ -4,84 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C35EC47DA9
-	for <buildroot@archiver.kernel.org>; Mon, 29 Jan 2024 19:44:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4323BC47DDB
+	for <buildroot@archiver.kernel.org>; Mon, 29 Jan 2024 19:54:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D965A60BCA;
-	Mon, 29 Jan 2024 19:44:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D965A60BCA
+	by smtp3.osuosl.org (Postfix) with ESMTP id D8C2760758;
+	Mon, 29 Jan 2024 19:54:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D8C2760758
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XDZ4oEvNv540; Mon, 29 Jan 2024 19:44:19 +0000 (UTC)
+	with ESMTP id XEPgtSSycK0M; Mon, 29 Jan 2024 19:54:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3EC0C60D7B;
-	Mon, 29 Jan 2024 19:44:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3EC0C60D7B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D29DA1BF489
- for <buildroot@lists.busybox.net>; Mon, 29 Jan 2024 19:44:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F32B260759;
+	Mon, 29 Jan 2024 19:54:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F32B260759
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 610191BF489
+ for <buildroot@lists.busybox.net>; Mon, 29 Jan 2024 19:54:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AA8A581D16
- for <buildroot@lists.busybox.net>; Mon, 29 Jan 2024 19:44:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA8A581D16
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4591D60759
+ for <buildroot@lists.busybox.net>; Mon, 29 Jan 2024 19:54:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4591D60759
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IpvNYhAtPuzh for <buildroot@lists.busybox.net>;
- Mon, 29 Jan 2024 19:44:15 +0000 (UTC)
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5868381A29
- for <buildroot@busybox.net>; Mon, 29 Jan 2024 19:44:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5868381A29
-Received: by mail-wr1-x435.google.com with SMTP id
- ffacd0b85a97d-3394b892691so1742427f8f.1
- for <buildroot@busybox.net>; Mon, 29 Jan 2024 11:44:15 -0800 (PST)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5R809qWHTk0I for <buildroot@lists.busybox.net>;
+ Mon, 29 Jan 2024 19:54:32 +0000 (UTC)
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com
+ [IPv6:2607:f8b0:4864:20::102b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1832360758
+ for <buildroot@buildroot.org>; Mon, 29 Jan 2024 19:54:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1832360758
+Received: by mail-pj1-x102b.google.com with SMTP id
+ 98e67ed59e1d1-290a55f3feaso2328980a91.2
+ for <buildroot@buildroot.org>; Mon, 29 Jan 2024 11:54:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1706557453; x=1707162253;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=Syro6HPayfTjfv7RmHXs/1RE5aGp3jg2dqC+MlHtQ2A=;
- b=e2HB2Ccg2jh/RV3wafBRHeIL/GVDi585l57393tzMN5LCXrnpyIyd9KmZxnCyFjdio
- rYrf76r2vYix7RUaf7x4NqwfZPxwmexss/YisfxQo9ZPdssoe4lY72pddvxptvGuTAck
- Rf/3xnQixHZC61y4oh/XC0iHyntPhg+TP3+KeItD9lVAvs+JsILtBmc8xzwuDagfG/IZ
- liIdNnFQi55AXL57VYDg54BIGermdHp6p1JeNu3C5Sso4sVUfNQ7xj643rBvag6SwAOl
- 7bsT6PcMlDD3l7rGu1Joaurmznw4yGAKImpxK8H6caoIspL8Ia5lfr31oFMi5CBC7s6Z
- XDuw==
-X-Gm-Message-State: AOJu0YzzGTleY4bbWP5mb3XPo4zp+l9Vi+GRUfkwp/7d6iLtsq2CLgpX
- oMP+qGYfbXYcaLur7xmtgdYEFiqK+gHNrKhr+xsqVS3SljkY6PlG9S34HR0D
-X-Google-Smtp-Source: AGHT+IH5oqYKinJaTrsUu/rYmTv0QSMdqqCVO4t5thNsMaFXgHJILCUgcmJg5P/7Yx/onRI1LghZXA==
-X-Received: by 2002:adf:e40b:0:b0:338:8892:fbdd with SMTP id
- g11-20020adfe40b000000b003388892fbddmr6632925wrm.4.1706557453269; 
- Mon, 29 Jan 2024 11:44:13 -0800 (PST)
-Received: from xubuntu-23.. ([93.24.197.12]) by smtp.gmail.com with ESMTPSA id
- ck11-20020a5d5e8b000000b0033af31c1cfesm2300645wrb.29.2024.01.29.11.44.12
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 29 Jan 2024 11:44:13 -0800 (PST)
-From: Francois Perrad <fperrad@gmail.com>
-X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Mon, 29 Jan 2024 20:43:54 +0100
-Message-Id: <20240129194354.6851-1-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.40.1
+ d=1e100.net; s=20230601; t=1706558071; x=1707162871;
+ h=content-transfer-encoding:subject:from:to:content-language
+ :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+ :cc:subject:date:message-id:reply-to;
+ bh=EAKcVYnBC3NUb3qMRzGX1CHRg2QdWpkOY+Za2o55vRY=;
+ b=kZn0Xo4GDAcDRkWqo+Gpfl3mNXy/wbMDi7ngX6QRrDnLRN4Yflc/XNV6nwRA+j/tIl
+ QRvdNhhNSx4rzhhFUcddPXv0kIsnLAdyZA2GAyxN2JAmLhYMhWwkldlpFJhJFTqGVECA
+ hfZ0qjboMEbE4Lxa/qM2q9T01o3sMs5l+xflX9HrW/YAD7PBJZyvRGeNdylOkAxwpfMg
+ 7DlJT16C+Q0QyIwv4JasP15/2HbZss0T1TECdbyh2to6hlAoMKzeHDK3MUJv9xXX4F1w
+ BzJYIrJx2tG4AZRJ+9Gd5BPd9I3Uu35/IrM82tShznbzCWrWRGwnGYJsnGZR8lzEJ+xs
+ 58Uw==
+X-Gm-Message-State: AOJu0YwlwNGnSHPUtGpWogNxck6WBBHsCtNgbqn9243cBltyNRsYkILa
+ oZBMWXbqOE9ADgCgSc3VhAB7aVgYlqYugOeaico4uOz4y/6dBWncjmM++A4SDSAUiXmvK9/EFcl
+ c
+X-Google-Smtp-Source: AGHT+IGYYJg6mZfAARElL4SBnPEp9/MY2G3TFKU4yzmLK4IwwAuC6Hg7y6cDvbtP5ixHrVkU6/3QjA==
+X-Received: by 2002:a17:90a:ec0e:b0:28c:8eaa:e5e3 with SMTP id
+ l14-20020a17090aec0e00b0028c8eaae5e3mr4012761pjy.17.1706558071099; 
+ Mon, 29 Jan 2024 11:54:31 -0800 (PST)
+Received: from [192.168.0.172] (d172-218-135-26.bchsia.telus.net.
+ [172.218.135.26]) by smtp.gmail.com with ESMTPSA id
+ qa15-20020a17090b4fcf00b00295a091e5d6sm486476pjb.2.2024.01.29.11.54.30
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 29 Jan 2024 11:54:30 -0800 (PST)
+Message-ID: <f0bf5c75-199c-d23b-373a-f2728ecac99e@threespeedlogic.com>
+Date: Mon, 29 Jan 2024 11:54:29 -0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US
+To: buildroot <buildroot@buildroot.org>
+From: Graeme Smecher <gsmecher@threespeedlogic.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1706557453; x=1707162253; darn=busybox.net;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Syro6HPayfTjfv7RmHXs/1RE5aGp3jg2dqC+MlHtQ2A=;
- b=ONnkGdnn4GBoPmSZlPBe7KSalz5fK/BVyJ7KImSGf05mckhnIBlETh7YRyxzpriCk8
- T7BNnCrXtYL/MpY6+M+UFCniA/1XPbLx/q3N5BM0y7uBS5BUhFynFjJ3e06oxhzjFiu+
- hPe2yqo8l3dVtM6Hx6oEJras55BMUFm1Sk9uGbXqlDSlotXaC8uEIsQUPLpd0qe+zHM+
- BahZOIu8hfEnHX0gjy5ybBV+ptkUa0mMxlF5aXYcXauD3gyuzE/cJAz3AzVJWHv76FeZ
- Hu7AvtuVbmysDXTHWhJ8XuSrq44V6EH/ZcUDJ4Fhj+UMH+eWO8T1D+0rdAIgjBxG0hKd
- U4ww==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=ONnkGdnn
-Subject: [Buildroot] [PATCH] package/libgtk3: bump to version 3.24.41
+ d=threespeedlogic-com.20230601.gappssmtp.com; s=20230601; t=1706558071;
+ x=1707162871; darn=buildroot.org; 
+ h=content-transfer-encoding:subject:from:to:content-language
+ :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=EAKcVYnBC3NUb3qMRzGX1CHRg2QdWpkOY+Za2o55vRY=;
+ b=Xabm74WH6BkR4pYFixlvI+n0HQO/AUal7kHJ+z92zjWDngtgYx0bos7NqNtr2bHGzj
+ 1k0mnlmGNBj3eMAwQztcR0iqupopDs9d/iix/0qbma2ZXTP8/d1Khdj6or3mWknIHt5L
+ oj6kAcf4DO4HUoHH8q3PTozRA8EhMsbMoHPTHqCSE7r1hCD8b82kwz/dTRvemAe5PJ7/
+ 6PckDPac/nWBRZeItoXaTaCYLfld0NMJKVv5NqDZXGOFi8sbP+ySY4SO5rnj3HvXZ5Ia
+ fXUHdtZWE/EpT8Wkei/DOfmVRSxG5lSRFETwndeFAvlAnVhW414LGGZ1PurWlcpVFjWL
+ TWxw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=threespeedlogic-com.20230601.gappssmtp.com
+ header.i=@threespeedlogic-com.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=Xabm74WH
+Subject: [Buildroot] host-python-numpy - confused about host openblas
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,45 +101,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/libgtk3/libgtk3.hash | 4 ++--
- package/libgtk3/libgtk3.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hi all,
 
-diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
-index 609a56aae..0fa487344 100644
---- a/package/libgtk3/libgtk3.hash
-+++ b/package/libgtk3/libgtk3.hash
-@@ -1,5 +1,5 @@
--# From https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.40.sha256sum
--sha256  444dbb11f4fd5d592d74422441671854d1b744d0a7f3a3fbf9d4f936eb0552d3  gtk+-3.24.40.tar.xz
-+# From https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.41.sha256sum
-+sha256  47da61487af3087a94bc49296fd025ca0bc02f96ef06c556e7c8988bd651b6fa  gtk+-3.24.41.tar.xz
- 
- # Hash for license file:
- sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-index 69315b6ed..7e5882f83 100644
---- a/package/libgtk3/libgtk3.mk
-+++ b/package/libgtk3/libgtk3.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBGTK3_VERSION_MAJOR = 3.24
--LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).40
-+LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).41
- LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
- LIBGTK3_SITE = https://download.gnome.org/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
- LIBGTK3_LICENSE = LGPL-2.0+
--- 
-2.40.1
+Several packages depend on host-python-numpy:
 
+	buildroot$ grep host-python-numpy -rl package/
+	package/python-pythran/python-pythran.mk
+	package/python-matplotlib/python-matplotlib.mk
+	package/python-matplotlib/Config.in
+	package/piglit/piglit.mk
+	package/piglit/Config.in
+	package/gnuradio/gnuradio.mk
+	package/gnuradio/Config.in
+	package/python-scipy/python-scipy.mk
+	package/python-scipy/Config.in
+	package/uhd/uhd.mk
+	package/uhd/Config.in
+
+However, this package appears to rely on a host-openblas dependency that's implied but never really spelled out.
+
+My builds fail as follows:
+
+	buldroot$ make
+	>>> host-python-numpy 1.25.0 Configuring
+	rm -rf /path/to/buildroot/output/build/host-python-numpy-1.25.0//build
+	mkdir -p /path/to/buildroot/output/build/host-python-numpy-1.25.0//build
+	GIT_DIR=. PATH="/path/to/buildroot/output/host/bin:/path/to/buildroot/output/host/sbin:/home/gsmecher/.local/bin:/home/gsmecher/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/snap/bin" PKG_CONFIG="/path/to/buildroot/output/host/bin/pkg-config" PKG_CONFIG_SYSROOT_DIR="/" PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 PKG_CONFIG_LIBDIR="/path/to/buildroot/output/host/lib/pkgconfig:/path/to/buildroot/output/host/share/pkgconfig" AR="/usr/bin/ar" AS="/usr/bin/as" LD="/usr/bin/ld" NM="/usr/bin/nm" CC="/usr/bin/gcc" GCC="/usr/bin/gcc" CXX="/usr/bin/g++" CPP="/usr/bin/cpp" OBJCOPY="/usr/bin/objcopy" RANLIB="/usr/bin/ranlib" CPPFLAGS="-I/path/to/buildroot/output/host/include" CFLAGS="-O2 -I/path/to/buildroot/output/host/include" CXXFLAGS="-O2 -I/path/to/buildroot/output/host/include" LDFLAGS="-L/path/to/buildroot/output/host/lib -Wl,-rpath,/path/to/buildroot/output/host/lib" INTLTOOL_PERL=/usr/bin/perl  PYTHONNOUSERSITE=y /path/to/buildroot/output/host/bin/me
+ son setup --prefix=/path/to/buildroot/output/host --libdir=lib --sysconfdir=/path/to/buildroot/output/host/etc --localstatedir=/path/to/buildroot/output/host/var --default-library=shared --buildtype=release --wrap-mode=nodownload -Dstrip=true  /path/to/buildroot/output/build/host-python-numpy-1.25.0/ /path/to/buildroot/output/build/host-python-numpy-1.25.0//build
+	The Meson build system
+	Version: 1.1.1
+	Source dir: /path/to/buildroot/output/build/host-python-numpy-1.25.0
+	Build dir: /path/to/buildroot/output/build/host-python-numpy-1.25.0/build
+	Build type: native build
+	Project name: NumPy
+	Project version: 1.24.0.dev0
+	C compiler for the host machine: /usr/bin/gcc (gcc 12.2.0 "gcc (Debian 12.2.0-14) 12.2.0")
+	C linker for the host machine: /usr/bin/gcc ld.bfd 2.40
+	C++ compiler for the host machine: /usr/bin/g++ (gcc 12.2.0 "g++ (Debian 12.2.0-14) 12.2.0")
+	C++ linker for the host machine: /usr/bin/g++ ld.bfd 2.40
+	Cython compiler for the host machine: cython (cython 0.29.36)
+	Host machine cpu family: x86_64
+	Host machine cpu: x86_64
+	Program python3 found: YES (/path/to/buildroot/output/host/bin/python3)
+	Found pkg-config: /path/to/buildroot/output/host/bin/pkg-config (1.6.3)
+	Has header "Python.h" with dependency python-3.11: YES
+	Compiler for C supports arguments -fno-strict-aliasing: YES
+	Library m found: YES
+	Found CMake: /path/to/buildroot/output/host/bin/cmake (3.27.7)
+	WARNING: CMake Toolchain: Failed to determine CMake compilers state
+	WARNING: CMake Toolchain: Failed to determine CMake compilers state
+	Run-time dependency openblas found: NO (tried pkgconfig and cmake)
+	WARNING: CMake Toolchain: Failed to determine CMake compilers state
+	Run-time dependency openblas found: YES 0.3.21
+	Dependency openblas found: YES 0.3.21 (cached)
+	Program _build_utils/process_src_template.py found: YES (/path/to/buildroot/output/host/bin/python3 /path/to/buildroot/output/build/host-python-numpy-1.25.0/numpy/_build_utils/process_src_template.py)
+	Program _build_utils/tempita.py found: YES (/path/to/buildroot/output/build/host-python-numpy-1.25.0/numpy/_build_utils/tempita.py)
+
+	output/build/host-python-numpy-1.25.0/numpy/meson.build:201:44: ERROR: Could not get cmake variable and no default provided for <CMakeDependency OpenBLAS: True None>
+
+	A full log can be found at /path/to/buildroot/output/build/host-python-numpy-1.25.0/build/meson-logs/meson-log.txt
+	make: *** [package/pkg-generic.mk:273: /path/to/buildroot/output/build/host-python-numpy-1.25.0/.stamp_configured] Error 1
+
+Any suggestions? There are enough packages depending on host-numpy that I expect it's something unusual on my end. If I force the build to proceed using system pkg-config I can coax it into proceeding - but this is clearly a hack.
+
+thanks,
+Graeme
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
