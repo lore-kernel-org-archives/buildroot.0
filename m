@@ -1,69 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C86B2C47DDB
-	for <buildroot@archiver.kernel.org>; Mon, 29 Jan 2024 18:50:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C35EC47DA9
+	for <buildroot@archiver.kernel.org>; Mon, 29 Jan 2024 19:44:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7606681E29;
-	Mon, 29 Jan 2024 18:50:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7606681E29
+	by smtp3.osuosl.org (Postfix) with ESMTP id D965A60BCA;
+	Mon, 29 Jan 2024 19:44:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D965A60BCA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id b9s32elSZUYp; Mon, 29 Jan 2024 18:49:59 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XDZ4oEvNv540; Mon, 29 Jan 2024 19:44:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 910CA81DFC;
-	Mon, 29 Jan 2024 18:49:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 910CA81DFC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3EC0C60D7B;
+	Mon, 29 Jan 2024 19:44:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3EC0C60D7B
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5B1CB1BF287
- for <buildroot@lists.busybox.net>; Mon, 29 Jan 2024 18:49:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D29DA1BF489
+ for <buildroot@lists.busybox.net>; Mon, 29 Jan 2024 19:44:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3285C81DFC
- for <buildroot@lists.busybox.net>; Mon, 29 Jan 2024 18:49:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3285C81DFC
+ by smtp1.osuosl.org (Postfix) with ESMTP id AA8A581D16
+ for <buildroot@lists.busybox.net>; Mon, 29 Jan 2024 19:44:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA8A581D16
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lqJT0zTrhlH6 for <buildroot@lists.busybox.net>;
- Mon, 29 Jan 2024 18:49:55 +0000 (UTC)
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E97BA81DE5
- for <buildroot@buildroot.org>; Mon, 29 Jan 2024 18:49:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E97BA81DE5
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id B377813F8BA;
- Mon, 29 Jan 2024 19:49:48 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 29 Jan 2024 19:49:48 +0100
-Date: Mon, 29 Jan 2024 19:49:48 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Abilio Marques <abiliojr@gmail.com>
-Message-ID: <ZbfzTLGmqOnq02EJ@landeda>
-References: <20240129022913.3367510-1-abiliojr@gmail.com>
+ with ESMTP id IpvNYhAtPuzh for <buildroot@lists.busybox.net>;
+ Mon, 29 Jan 2024 19:44:15 +0000 (UTC)
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5868381A29
+ for <buildroot@busybox.net>; Mon, 29 Jan 2024 19:44:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5868381A29
+Received: by mail-wr1-x435.google.com with SMTP id
+ ffacd0b85a97d-3394b892691so1742427f8f.1
+ for <buildroot@busybox.net>; Mon, 29 Jan 2024 11:44:15 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1706557453; x=1707162253;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=Syro6HPayfTjfv7RmHXs/1RE5aGp3jg2dqC+MlHtQ2A=;
+ b=e2HB2Ccg2jh/RV3wafBRHeIL/GVDi585l57393tzMN5LCXrnpyIyd9KmZxnCyFjdio
+ rYrf76r2vYix7RUaf7x4NqwfZPxwmexss/YisfxQo9ZPdssoe4lY72pddvxptvGuTAck
+ Rf/3xnQixHZC61y4oh/XC0iHyntPhg+TP3+KeItD9lVAvs+JsILtBmc8xzwuDagfG/IZ
+ liIdNnFQi55AXL57VYDg54BIGermdHp6p1JeNu3C5Sso4sVUfNQ7xj643rBvag6SwAOl
+ 7bsT6PcMlDD3l7rGu1Joaurmznw4yGAKImpxK8H6caoIspL8Ia5lfr31oFMi5CBC7s6Z
+ XDuw==
+X-Gm-Message-State: AOJu0YzzGTleY4bbWP5mb3XPo4zp+l9Vi+GRUfkwp/7d6iLtsq2CLgpX
+ oMP+qGYfbXYcaLur7xmtgdYEFiqK+gHNrKhr+xsqVS3SljkY6PlG9S34HR0D
+X-Google-Smtp-Source: AGHT+IH5oqYKinJaTrsUu/rYmTv0QSMdqqCVO4t5thNsMaFXgHJILCUgcmJg5P/7Yx/onRI1LghZXA==
+X-Received: by 2002:adf:e40b:0:b0:338:8892:fbdd with SMTP id
+ g11-20020adfe40b000000b003388892fbddmr6632925wrm.4.1706557453269; 
+ Mon, 29 Jan 2024 11:44:13 -0800 (PST)
+Received: from xubuntu-23.. ([93.24.197.12]) by smtp.gmail.com with ESMTPSA id
+ ck11-20020a5d5e8b000000b0033af31c1cfesm2300645wrb.29.2024.01.29.11.44.12
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 29 Jan 2024 11:44:13 -0800 (PST)
+From: Francois Perrad <fperrad@gmail.com>
+X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Mon, 29 Jan 2024 20:43:54 +0100
+Message-Id: <20240129194354.6851-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240129022913.3367510-1-abiliojr@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1706554191;
- bh=xl0XwIV7uvHsuu4m+DFYIXgP0RLqQNbZCdnZGYhudpQ=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=jgKeIv7p01ZzQRcHXmhQZlWAu49F9DpAVy2Fuu58Uq7hTQ6AY72/nVaL6ylQFVc0W
- +SFoE91cWeWO2L0MBkcViYScK+gQkx0dIWDUz00m8+3jAHsVRyVCeqVkf42g7JJh7g
- suY15MCtl3b+RJN4MqXalXkDzfNJ80GU26HxgoB+nwu7mczs9m633O/jN2xOpZL1ng
- JSiN/zs3Fa2C2Ut2kCf7XAINwL29S/+8IkKUXyVcT2ypZx+pVuaROmwV5a0iCgpjAk
- TgTs5M/BIttj8nxifyO2fzq7wDx1F/G1jhZXRFcM3s+PjgcsB6rmnFxe1VNJ0dKbAv
- 80SGpTs1bwNzw==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1706557453; x=1707162253; darn=busybox.net;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=Syro6HPayfTjfv7RmHXs/1RE5aGp3jg2dqC+MlHtQ2A=;
+ b=ONnkGdnn4GBoPmSZlPBe7KSalz5fK/BVyJ7KImSGf05mckhnIBlETh7YRyxzpriCk8
+ T7BNnCrXtYL/MpY6+M+UFCniA/1XPbLx/q3N5BM0y7uBS5BUhFynFjJ3e06oxhzjFiu+
+ hPe2yqo8l3dVtM6Hx6oEJras55BMUFm1Sk9uGbXqlDSlotXaC8uEIsQUPLpd0qe+zHM+
+ BahZOIu8hfEnHX0gjy5ybBV+ptkUa0mMxlF5aXYcXauD3gyuzE/cJAz3AzVJWHv76FeZ
+ Hu7AvtuVbmysDXTHWhJ8XuSrq44V6EH/ZcUDJ4Fhj+UMH+eWO8T1D+0rdAIgjBxG0hKd
+ U4ww==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=jgKeIv7p
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/micropython: make use of
- recent micropython-lib
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=ONnkGdnn
+Subject: [Buildroot] [PATCH] package/libgtk3: bump to version 3.24.41
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,99 +93,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Chris Packham <judge.packham@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Abilio, All,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/libgtk3/libgtk3.hash | 4 ++--
+ package/libgtk3/libgtk3.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thanks for this new iteration!
-
-On 2024-01-28 18:29 -0800, Abilio Marques spake thusly:
-> Until now, micropython-lib was a package that installed v1.9.3,
-> which is more than 6 years old. This was acceptable since micropython
-> never made any other official release of the library until v1.20.
-> 
-> Meanwhile, the libraries underwent a reorganization, and they are now
-> available in a directory structure that cannot be copied directly into
-> the target. This is my theory on why v1.9.3 is still present in the
-
-We try to avoid singular first-person messages in the commit log, and
-prefer the more neutral plural first-person "we", or the passive tense.
-Here, I'd rephrase it as;
-
-    This might explain why v1.9.3 is still...
-
-> current day buildroot (which comes with micropython v1.22).
-> 
-> This commit introduces an auxiliary script to collect those libraries
-> and reorder them into a structure that can then be copied into
-> /usr/lib/micropython. The script utilizes a module from the tools
-> directory of the micropython repo.
-> 
-> As part of the changes made by the micropython project, the libraries
-> are now released together with the interpreter. They are cloned as a
-> submodule into the lib/micropython-lib directory.
-> 
-> These are the 2 main reasons why the old buildroot micropython-lib
-> package is being removed.
-> 
-> With this commit, micropython-lib is installed (optionally) as part
-> of micropython. The original config variable name was retained as it
-> fits with the micropython package 'namespace", and thus this is
-> backward compatible and no legacy handling is needed.
-> 
-> I tried to keep it simple. It makes use of existing micropython tools
-> (used to process manifests) to discover the list of packages available
-> in micropython-lib. My hope is that by relying on them, any future
-> changes in directory structure will be covered by the official
-> "manifestfile.py" tool.
-
-Ditto, no "I" or "my". No need to resend just ofe of the phrasing, it
-can be fixed when applying.
-
-One thing that again got me down the host-micropython rabbit-hole, is
-that we don't need host-micropython at all, because the manifestfile
-module is actual CPython code, not micropython code, so we really, like
-really-really, want to write that script for CPython.
-
-[--SNIP--]
-> diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
-> index 37c148da94..5a0c5616a5 100644
-> --- a/package/micropython/micropython.mk
-> +++ b/package/micropython/micropython.mk
-> @@ -57,4 +57,21 @@ define MICROPYTHON_INSTALL_TARGET_CMDS
->  		install
->  endef
->  
-> +ifeq ($(BR2_PACKAGE_MICROPYTHON_LIB),y)
-> +define MICROPYTHON_COLLECT_LIBS
-> +	$(EXTRA_ENV) PYTHONPATH=$(@D)/tools:/$PYTHONPATH \
-
-There is no need to complement PYTHON path with $PYTHONPATH. Indeed,
-PYTHONPATH only *augments* the search path, it does not replace the
-standard path, so we should just need:
-
-    $(EXTRA_ENV) PYTHONPATH=$(@D)/tools \
-    package/micropython/collect_micropython_lib.py \
-        $(@D) $(@D)/.built_pylib
-
-No need to resend, I'll tinker with it tonight.
-
-Thanks!
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
+index 609a56aae..0fa487344 100644
+--- a/package/libgtk3/libgtk3.hash
++++ b/package/libgtk3/libgtk3.hash
+@@ -1,5 +1,5 @@
+-# From https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.40.sha256sum
+-sha256  444dbb11f4fd5d592d74422441671854d1b744d0a7f3a3fbf9d4f936eb0552d3  gtk+-3.24.40.tar.xz
++# From https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.41.sha256sum
++sha256  47da61487af3087a94bc49296fd025ca0bc02f96ef06c556e7c8988bd651b6fa  gtk+-3.24.41.tar.xz
+ 
+ # Hash for license file:
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
+index 69315b6ed..7e5882f83 100644
+--- a/package/libgtk3/libgtk3.mk
++++ b/package/libgtk3/libgtk3.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBGTK3_VERSION_MAJOR = 3.24
+-LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).40
++LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).41
+ LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
+ LIBGTK3_SITE = https://download.gnome.org/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
+ LIBGTK3_LICENSE = LGPL-2.0+
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.40.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
