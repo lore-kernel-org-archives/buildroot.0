@@ -4,65 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24F26C47DDB
-	for <buildroot@archiver.kernel.org>; Mon, 29 Jan 2024 18:44:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C86B2C47DDB
+	for <buildroot@archiver.kernel.org>; Mon, 29 Jan 2024 18:50:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B6BB681E6B;
-	Mon, 29 Jan 2024 18:44:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B6BB681E6B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7606681E29;
+	Mon, 29 Jan 2024 18:50:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7606681E29
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CYjEKkzPrlQK; Mon, 29 Jan 2024 18:44:26 +0000 (UTC)
+	with ESMTP id b9s32elSZUYp; Mon, 29 Jan 2024 18:49:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 08E8181E45;
-	Mon, 29 Jan 2024 18:44:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 08E8181E45
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 324841BF287
- for <buildroot@lists.busybox.net>; Mon, 29 Jan 2024 18:44:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 910CA81DFC;
+	Mon, 29 Jan 2024 18:49:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 910CA81DFC
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5B1CB1BF287
+ for <buildroot@lists.busybox.net>; Mon, 29 Jan 2024 18:49:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0907140399
- for <buildroot@lists.busybox.net>; Mon, 29 Jan 2024 18:44:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0907140399
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3285C81DFC
+ for <buildroot@lists.busybox.net>; Mon, 29 Jan 2024 18:49:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3285C81DFC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IWM56Dz72Wlr for <buildroot@lists.busybox.net>;
- Mon, 29 Jan 2024 18:44:21 +0000 (UTC)
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 661B040025
- for <buildroot@buildroot.org>; Mon, 29 Jan 2024 18:44:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 661B040025
-Received: from [192.168.178.36] (unknown [212.37.174.96])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id 28A832C8386B;
- Mon, 29 Jan 2024 19:44:19 +0100 (CET)
-Message-ID: <50ba83e2-479a-4868-b3d4-5640322dc68c@bubu1.eu>
-Date: Mon, 29 Jan 2024 19:44:18 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lqJT0zTrhlH6 for <buildroot@lists.busybox.net>;
+ Mon, 29 Jan 2024 18:49:55 +0000 (UTC)
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E97BA81DE5
+ for <buildroot@buildroot.org>; Mon, 29 Jan 2024 18:49:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E97BA81DE5
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id B377813F8BA;
+ Mon, 29 Jan 2024 19:49:48 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Mon, 29 Jan 2024 19:49:48 +0100
+Date: Mon, 29 Jan 2024 19:49:48 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Abilio Marques <abiliojr@gmail.com>
+Message-ID: <ZbfzTLGmqOnq02EJ@landeda>
+References: <20240129022913.3367510-1-abiliojr@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: Angelo Compagnucci <angelo@amarulasolutions.com>, buildroot@buildroot.org
-References: <20230919123957.2614998-1-angelo@amarulasolutions.com>
-In-Reply-To: <20230919123957.2614998-1-angelo@amarulasolutions.com>
+Content-Disposition: inline
+In-Reply-To: <20240129022913.3367510-1-abiliojr@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=bubu1.eu; s=bubu; 
- t=1706553859; bh=NYxwXT8nBbt79kEdQOWBRET7eqX8eJO5uVupbeh8R+o=;
- h=Date:Subject:To:References:Cc:From:In-Reply-To;
- b=RtLXUkT8dX8rXRr09lQSroVkoqNA4MI0LdCrCnVpswwP1hVhRGUSIFv16+Gz7c7Tz
- 9FXUW6b1Kp2wUXwm6VSPAadQ+hnOWGubyhkeIA8KfzauxejR0xO3N6g6jxqxetEvxx
- U9VejiKi9ECO/JnO57f2FwCU1hI7Rrz/+cQxMGbh9C/iYUVL98QdFdPnp8tOz/K6MH
- t8QSajeWS8QlaBbxg8LyWCys4b9xQpo65dQf6YpT/KO18JJdE1oP2AWNvfq2lFz1J2
- jerAU6bc+GWkkEay+SKFnf6b2PVSRs7KQ9/dwvokOty1/57rmSXIAfrsPVoM1y4VAD
- XCrqPa9hv/xyg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=bubu1.eu header.i=@bubu1.eu
- header.a=rsa-sha256 header.s=bubu header.b=RtLXUkT8
-Subject: Re: [Buildroot] [PATCH] package/python-minimalmodbus: bump to
- version 2.1.1
+ d=free.fr; s=smtp-20201208; t=1706554191;
+ bh=xl0XwIV7uvHsuu4m+DFYIXgP0RLqQNbZCdnZGYhudpQ=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=jgKeIv7p01ZzQRcHXmhQZlWAu49F9DpAVy2Fuu58Uq7hTQ6AY72/nVaL6ylQFVc0W
+ +SFoE91cWeWO2L0MBkcViYScK+gQkx0dIWDUz00m8+3jAHsVRyVCeqVkf42g7JJh7g
+ suY15MCtl3b+RJN4MqXalXkDzfNJ80GU26HxgoB+nwu7mczs9m633O/jN2xOpZL1ng
+ JSiN/zs3Fa2C2Ut2kCf7XAINwL29S/+8IkKUXyVcT2ypZx+pVuaROmwV5a0iCgpjAk
+ TgTs5M/BIttj8nxifyO2fzq7wDx1F/G1jhZXRFcM3s+PjgcsB6rmnFxe1VNJ0dKbAv
+ 80SGpTs1bwNzw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=jgKeIv7p
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/micropython: make use of
+ recent micropython-lib
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,63 +75,99 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
-Cc: James Hilliard <james.hilliard1@gmail.com>
+Cc: Chris Packham <judge.packham@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Angelo,
+Abilio, All,
 
-On 19.09.23 14:39, Angelo Compagnucci wrote:
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-> ---
->   package/python-minimalmodbus/python-minimalmodbus.hash | 2 +-
->   package/python-minimalmodbus/python-minimalmodbus.mk   | 4 ++--
->   2 files changed, 3 insertions(+), 3 deletions(-)
+Thanks for this new iteration!
+
+On 2024-01-28 18:29 -0800, Abilio Marques spake thusly:
+> Until now, micropython-lib was a package that installed v1.9.3,
+> which is more than 6 years old. This was acceptable since micropython
+> never made any other official release of the library until v1.20.
 > 
-> diff --git a/package/python-minimalmodbus/python-minimalmodbus.hash b/package/python-minimalmodbus/python-minimalmodbus.hash
-> index b29e83773b..635090fae7 100644
-> --- a/package/python-minimalmodbus/python-minimalmodbus.hash
-> +++ b/package/python-minimalmodbus/python-minimalmodbus.hash
-> @@ -1,4 +1,4 @@
->   # sha256 from https://pypi.org/project/minimalmodbus
-> -sha256  cf873a2530be3f4b86467c3e4d47b5f69fd345d47451baca4adbf59e2ac36d00  minimalmodbus-2.0.1.tar.gz
-> +sha256  c3f5a56e107d537e4bb420f7e735841ab2939c8ca6fb528f5fe4124571315b64  minimalmodbus-2.1.1.tar.gz
->   # Hash for license file
->   sha256  abe787d472ae2069e935c84eb13fd770518dfb08b92d5f190f3cd7ff6d1f6f32  LICENSE
-> diff --git a/package/python-minimalmodbus/python-minimalmodbus.mk b/package/python-minimalmodbus/python-minimalmodbus.mk
-> index b463cf9ffe..5a6e7733be 100644
-> --- a/package/python-minimalmodbus/python-minimalmodbus.mk
-> +++ b/package/python-minimalmodbus/python-minimalmodbus.mk
-> @@ -4,9 +4,9 @@
->   #
->   ################################################################################
->   
-> -PYTHON_MINIMALMODBUS_VERSION = 2.0.1
-> +PYTHON_MINIMALMODBUS_VERSION = 2.1.1
+> Meanwhile, the libraries underwent a reorganization, and they are now
+> available in a directory structure that cannot be copied directly into
+> the target. This is my theory on why v1.9.3 is still present in the
 
-AFAICT this bump broke the package. For whatever reason this installs an 
-empty package for me.
+We try to avoid singular first-person messages in the commit log, and
+prefer the more neutral plural first-person "we", or the passive tense.
+Here, I'd rephrase it as;
 
-Switching the setup type to pep517 fixes this/works around this.
+    This might explain why v1.9.3 is still...
 
-Alternatively, this should be fixed by applying 
-https://patchwork.ozlabs.org/project/buildroot/patch/20231126180840.2081945-5-james.hilliard1@gmail.com/ 
-(which switches all setuptools builds to pep517) but I haven't 
-specifically tested this.
+> current day buildroot (which comes with micropython v1.22).
+> 
+> This commit introduces an auxiliary script to collect those libraries
+> and reorder them into a structure that can then be copied into
+> /usr/lib/micropython. The script utilizes a module from the tools
+> directory of the micropython repo.
+> 
+> As part of the changes made by the micropython project, the libraries
+> are now released together with the interpreter. They are cloned as a
+> submodule into the lib/micropython-lib directory.
+> 
+> These are the 2 main reasons why the old buildroot micropython-lib
+> package is being removed.
+> 
+> With this commit, micropython-lib is installed (optionally) as part
+> of micropython. The original config variable name was retained as it
+> fits with the micropython package 'namespace", and thus this is
+> backward compatible and no legacy handling is needed.
+> 
+> I tried to keep it simple. It makes use of existing micropython tools
+> (used to process manifests) to discover the list of packages available
+> in micropython-lib. My hope is that by relying on them, any future
+> changes in directory structure will be covered by the official
+> "manifestfile.py" tool.
 
->   PYTHON_MINIMALMODBUS_SOURCE = minimalmodbus-$(PYTHON_MINIMALMODBUS_VERSION).tar.gz
-> -PYTHON_MINIMALMODBUS_SITE = https://files.pythonhosted.org/packages/78/99/8cd22b4465e697bae2b02fd06aaccd4c5cdfbb18945d728db99f23d71df9
-> +PYTHON_MINIMALMODBUS_SITE = https://files.pythonhosted.org/packages/37/fc/8a58f7bcdece751f16a4a9aac780acd1288aa8ac6adbffdd764c88fb71c6
->   PYTHON_MINIMALMODBUS_SETUP_TYPE = setuptools
->   PYTHON_MINIMALMODBUS_LICENSE = Apache-2.0
->   PYTHON_MINIMALMODBUS_LICENSE_FILES = LICENSE
+Ditto, no "I" or "my". No need to resend just ofe of the phrasing, it
+can be fixed when applying.
 
-Best,
-Marcus
+One thing that again got me down the host-micropython rabbit-hole, is
+that we don't need host-micropython at all, because the manifestfile
+module is actual CPython code, not micropython code, so we really, like
+really-really, want to write that script for CPython.
+
+[--SNIP--]
+> diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
+> index 37c148da94..5a0c5616a5 100644
+> --- a/package/micropython/micropython.mk
+> +++ b/package/micropython/micropython.mk
+> @@ -57,4 +57,21 @@ define MICROPYTHON_INSTALL_TARGET_CMDS
+>  		install
+>  endef
+>  
+> +ifeq ($(BR2_PACKAGE_MICROPYTHON_LIB),y)
+> +define MICROPYTHON_COLLECT_LIBS
+> +	$(EXTRA_ENV) PYTHONPATH=$(@D)/tools:/$PYTHONPATH \
+
+There is no need to complement PYTHON path with $PYTHONPATH. Indeed,
+PYTHONPATH only *augments* the search path, it does not replace the
+standard path, so we should just need:
+
+    $(EXTRA_ENV) PYTHONPATH=$(@D)/tools \
+    package/micropython/collect_micropython_lib.py \
+        $(@D) $(@D)/.built_pylib
+
+No need to resend, I'll tinker with it tonight.
+
+Thanks!
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
