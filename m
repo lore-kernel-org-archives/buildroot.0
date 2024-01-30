@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 607FBC47DDB
-	for <buildroot@archiver.kernel.org>; Tue, 30 Jan 2024 22:17:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAF30C46CD2
+	for <buildroot@archiver.kernel.org>; Tue, 30 Jan 2024 22:17:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1E10683F77;
-	Tue, 30 Jan 2024 22:17:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1E10683F77
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9723380C89;
+	Tue, 30 Jan 2024 22:17:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9723380C89
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id U0M_d_AO5UaN; Tue, 30 Jan 2024 22:17:21 +0000 (UTC)
+	with ESMTP id Q_pVn_uRl7AZ; Tue, 30 Jan 2024 22:17:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 41C6D83DE0;
-	Tue, 30 Jan 2024 22:17:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 41C6D83DE0
+	by smtp1.osuosl.org (Postfix) with ESMTP id DAD5183EDD;
+	Tue, 30 Jan 2024 22:17:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DAD5183EDD
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A974E1BF275
- for <buildroot@lists.busybox.net>; Tue, 30 Jan 2024 22:17:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 409151BF275
+ for <buildroot@lists.busybox.net>; Tue, 30 Jan 2024 22:17:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7B4A340638
+ by smtp2.osuosl.org (Postfix) with ESMTP id B00BC40638
  for <buildroot@lists.busybox.net>; Tue, 30 Jan 2024 22:17:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7B4A340638
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B00BC40638
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vdtL8ya0sNWZ for <buildroot@lists.busybox.net>;
+ with ESMTP id kaKFmqcfbVrf for <buildroot@lists.busybox.net>;
  Tue, 30 Jan 2024 22:17:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3CF2E42EDD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 283A242E85
  for <buildroot@buildroot.org>; Tue, 30 Jan 2024 22:17:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3CF2E42EDD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 283A242E85
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2876D86783; Tue, 30 Jan 2024 22:17:05 +0000 (UTC)
+ id 0DA4C86780; Tue, 30 Jan 2024 22:17:05 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 30 Jan 2024 23:16:13 +0100
+Date: Tue, 30 Jan 2024 23:15:09 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 44292dabc09bc14df033e7be9d12429353ceaac7
-X-Git-Newrev: adf323fc4595d90c1b688a9ca63301d2dea8c69e
+X-Git-Oldrev: c7c6778d2a52b80d37d3ca940be4b47d5a4a503f
+X-Git-Newrev: 8b83d96145cd627c806f9002987da956f5ec4d96
 X-Patchwork-Hint: ignore
-Message-Id: <20240130221705.2876D86783@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/{mesa3d,
- mesa3d-headers}: bump version to 23.3.4
+Message-Id: <20240130221705.0DA4C86780@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-pvr-mythtv: bump version to
+ 20.5.10-Nexus
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,59 +63,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=adf323fc4595d90c1b688a9ca63301d2dea8c69e
+commit: https://git.buildroot.net/buildroot/commit/?id=8b83d96145cd627c806f9002987da956f5ec4d96
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Release notes:
-https://lists.freedesktop.org/archives/mesa-announce/2024-January/000745.html
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 6 +++---
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash | 2 +-
+ package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 0ca8d07e73..d04fa10342 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 23.3.3
-+MESA3D_HEADERS_VERSION = 23.3.4
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://archive.mesa3d.org
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 706911a809..e99027c013 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2024-January/000742.html
--sha256  518307c0057fa3cee8b58df78be431d4df5aafa7edc60d09278b2d7a0a80f3b4  mesa-23.3.3.tar.xz
--sha512  bed23e8324b026edd5d2b16a381ec563cf2fa9be9c8fbe8d9fb907cab9d87eef91f493fb9d4e3973d4b679e271d2a85ce48af491585638ab97f087532fc63c30  mesa-23.3.3.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2024-January/000745.html
-+sha256  df12d765be4650fe532860b18aa18e6da1d0b07d1a21dfdfe04660e6b7bac39a  mesa-23.3.4.tar.xz
-+sha512  026c424989a594dd840dc158ca09e0f57e604f0b1bd2a3981110b4b2b5a47c6cd9c7241c7f48957a781e2dd9f9760cc9db79b2fb7c7fe39b64eddb18dcf18412  mesa-23.3.4.tar.xz
- # License
- sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 99db7d0eb2..d8d8fb8dd6 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
+index 3aad45f4f6..c61c391825 100644
+--- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
++++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  c3eefdb9e12c4ca517709378bfe0b985b808d3dbd2ce75f234c78a88c3a1e411  kodi-pvr-mythtv-20.5.8-Nexus.tar.gz
++sha256  eb21e185d1333a8696565138bc58df3d37970c9a3615193396e9f296a56a24c4  kodi-pvr-mythtv-20.5.10-Nexus.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
+index bba881755d..66f1948741 100644
+--- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
++++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 23.3.3
-+MESA3D_VERSION = 23.3.4
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://archive.mesa3d.org
- MESA3D_LICENSE = MIT, SGI, Khronos
+-KODI_PVR_MYTHTV_VERSION = 20.5.8-Nexus
++KODI_PVR_MYTHTV_VERSION = 20.5.10-Nexus
+ KODI_PVR_MYTHTV_SITE = $(call github,janbar,pvr.mythtv,$(KODI_PVR_MYTHTV_VERSION))
+ KODI_PVR_MYTHTV_LICENSE = GPL-2.0+
+ KODI_PVR_MYTHTV_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
