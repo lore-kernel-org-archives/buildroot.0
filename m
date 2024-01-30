@@ -1,45 +1,102 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF4B9C47DDF
-	for <buildroot@archiver.kernel.org>; Tue, 30 Jan 2024 11:44:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDA69C46CD2
+	for <buildroot@archiver.kernel.org>; Tue, 30 Jan 2024 13:24:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6D95C40AB7;
-	Tue, 30 Jan 2024 11:44:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D95C40AB7
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0ee2lVPnXjWT; Tue, 30 Jan 2024 11:44:42 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6786F409E7;
-	Tue, 30 Jan 2024 11:44:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6786F409E7
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0765A1BF681
- for <buildroot@lists.busybox.net>; Tue, 30 Jan 2024 11:44:40 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D4E7C821BB
- for <buildroot@lists.busybox.net>; Tue, 30 Jan 2024 11:44:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D4E7C821BB
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6C51281EAF;
+	Tue, 30 Jan 2024 13:24:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C51281EAF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GBG-NUEkgRD9 for <buildroot@lists.busybox.net>;
- Tue, 30 Jan 2024 11:44:39 +0000 (UTC)
-Received: from busybox.net (unknown [141.98.10.96])
- by smtp1.osuosl.org (Postfix) with ESMTP id 41222821B3
- for <buildroot@busybox.net>; Tue, 30 Jan 2024 11:44:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 41222821B3
-From: Mailbox Server <buildroot@busybox.net>
-To: buildroot@busybox.net
-Date: 30 Jan 2024 12:44:36 +0100
-Message-ID: <20240130124435.70F9E5D8998C10F4@busybox.net>
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OgtbEsAfwY8E; Tue, 30 Jan 2024 13:24:01 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7337E81E5F;
+	Tue, 30 Jan 2024 13:24:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7337E81E5F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0DEE41BF2A5
+ for <buildroot@lists.busybox.net>; Tue, 30 Jan 2024 13:23:59 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id D97E2400B9
+ for <buildroot@lists.busybox.net>; Tue, 30 Jan 2024 13:23:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D97E2400B9
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Biaw6vbakyyf for <buildroot@lists.busybox.net>;
+ Tue, 30 Jan 2024 13:23:57 +0000 (UTC)
+X-Greylist: delayed 359 seconds by postgrey-1.37 at util1.osuosl.org;
+ Tue, 30 Jan 2024 13:23:56 UTC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CAE4740242
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de
+ [81.169.146.163])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CAE4740242
+ for <buildroot@buildroot.org>; Tue, 30 Jan 2024 13:23:56 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; t=1706620674; cv=none;
+ d=strato.com; s=strato-dkim-0002;
+ b=s/WpiCGf69EJikwrammh4bqVfZyVAEo2z55kx1GnDtBr4+gUfX9NYCjjNlh3se9Wwt
+ VPavNGlYwIelpdNH7Z2z43nu49ijD/PSH3gfcSKWAvBxF+UgLIRsio+NXWgF0mXq8c6Z
+ Ln3WPRzH3mik8QI5kWbWiS5gMi25Qsr+7zsk+r5rptYAG41qrpIqNufikpixZB0jTj0D
+ g7zuTecI1iwyfBFohg2gQ8YkHzEV5yK/Hf7R0zN/baU2XzfFioLFJSIaivTBKk8dsvPS
+ VZNcniOMOifY0WOuAlfHbZug49O8h833MA541/d9df/7B56lH2wvjz6UniiEBuk5LGpX
+ 3uUQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1706620674;
+ s=strato-dkim-0002; d=strato.com;
+ h=Message-Id:Date:Subject:To:From:Cc:Date:From:Subject:Sender;
+ bh=dBie0KEgHsa2XSYZcNMBJrA3Rw6grX7cJah+cTOgqEQ=;
+ b=JEQJMg30AvFGHQ/p1RtDL2NCfe/dhonNTm8XMQCz4tOpXIIphO5WN3BzvoehtS4aAV
+ +8m0PovbIKiyibobdJsMd8RTkiZyHVFv6ECMCZgyfDVAvPBvgyuSS5rVZOaR2+RwS+zl
+ Wo+86Q/sBQN0eeUGfPkLfR9S/OwvrW21VoQAUEJ9E3WjSTzeIQrmfiEgXK63gqLEs8PC
+ 1me30kFHe7hh+MawsKQ0kVJgqE07HX7rm+2Zpnr3zj9sASMHZS4v73NdT6M5dgsJFIH0
+ b+PWyb6ft4va56qoidkzT5JgIQGZIwtB70311/isx6/IJB/To6LQHoct4vPFjqTWk3Uw
+ Wvag==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo00
+X-RZG-AUTH: ":IHkAYkmvNfSwjg/qSc4u8zZOVaURsoXe3UH2mQA0KglxDI1B7BeEcdPLARTmodKwkQi99TJCcPJmIA=="
+Received: from debian-test.local.in-circuit.de
+ by smtp.strato.de (RZmta 49.11.2 DYNA|AUTH)
+ with ESMTPSA id x7ec2e00UDHs4Mj
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+ (Client did not present a certificate) for <buildroot@buildroot.org>;
+ Tue, 30 Jan 2024 14:17:54 +0100 (CET)
+From: Ludwig Kormann <ludwig.kormann@ict42.de>
+To: buildroot@buildroot.org
+Date: Tue, 30 Jan 2024 14:17:50 +0100
+Message-Id: <20240130131750.3802767-1-ludwig.kormann@ict42.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Subject: [Buildroot] buildroot@busybox.net Mailbox Confirmation
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ t=1706620674; 
+ s=strato-dkim-0002; d=ict42.de;
+ h=Message-Id:Date:Subject:To:From:Cc:Date:From:Subject:Sender;
+ bh=dBie0KEgHsa2XSYZcNMBJrA3Rw6grX7cJah+cTOgqEQ=;
+ b=Uh/oy05leszKg6qDW+emQFA+nxXvVpxySQqaEqavdOzsS1ygBe0GLpFcTlsf77fB+Q
+ Nwt/zMdaHGJd7zRWScwWryM9jyAzQwpBJ5dV3DmU8i36K3lscSeWylN1XA5G3wFh7elW
+ F45E3LtGvPaBVoJbAmWjTLE/CFGNKm0RVxjafobhy2q4avw2lPNZMvHGysuZWfABerOu
+ zXNhBOS/xP3v/sFbx9cb/5BnUCaxlEjLuJQesftbOVhlaHJDt8rRHVkV1b/9p/hrEyHg
+ JBPwEZ2WPhH/itC1UAG1OdF8AFvvrTCC5Iu7OZCGG7LG+RZtWAle7HJMaMlPRzY/dS+F
+ Oh+w==
+X-Mailman-Original-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+ t=1706620674; 
+ s=strato-dkim-0003; d=ict42.de;
+ h=Message-Id:Date:Subject:To:From:Cc:Date:From:Subject:Sender;
+ bh=dBie0KEgHsa2XSYZcNMBJrA3Rw6grX7cJah+cTOgqEQ=;
+ b=eZX2uUB4vo9DeLTMq5yPturhO2q6bP4ELiuIpTTsSZzWSJJu/lOnA9D6hbKC2odcLw
+ QuoIpyE9kmb1JUozKqAg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=ict42.de header.i=@ict42.de
+ header.a=rsa-sha256 header.s=strato-dkim-0002 header.b=Uh/oy05l; 
+ dkim=pass header.d=ict42.de header.i=@ict42.de header.a=ed25519-sha256
+ header.s=strato-dkim-0003 header.b=eZX2uUB4
+Subject: [Buildroot] [PATCH 1/1] configs/icnova-a20-adb4006: Bump Linux and
+ U-Boot version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -51,94 +108,313 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============5189542293667124750=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5189542293667124750==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Bump version of Linux to 6.6.14 and U-Boot to 2024.01
+and also use upstream configs and dts.
 
-<html><head>
-<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.20139">
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-</head>
-<body>
-<p style=3D"text-align: left; color: rgb(34, 34, 34); text-transform: none;=
- text-indent: 0px; letter-spacing: normal; font-family: Arial, Helvetica, s=
-ans-serif; font-size: small; font-style: normal; font-weight: 400; margin-t=
-op: 0px; word-spacing: 0px; white-space: normal; box-sizing: border-box; or=
-phans: 2; widows: 2; background-color: rgb(255, 255, 255); font-variant-lig=
-atures: normal; font-variant-caps: normal; -webkit-text-stroke-width: 0px; =
-text-decoration-thickness: initial;=20
-text-decoration-style: initial; text-decoration-color: initial;"><font size=
-=3D"2"><font face=3D"Verdana" style=3D"box-sizing: border-box;">Dear&nbsp;b=
-uildroot</font><font face=3D"Verdana" style=3D"box-sizing: border-box;">,</=
-font></font></p>
-<div style=3D"text-align: left; color: rgb(34, 34, 34); text-transform: non=
-e; text-indent: 0px; letter-spacing: normal; font-family: Arial, Helvetica,=
- sans-serif; font-size: small; font-style: normal; font-weight: 400; word-s=
-pacing: 0px; white-space: normal; box-sizing: border-box; orphans: 2; widow=
-s: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: normal;=
- font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-decoration=
--thickness: initial; text-decoration-style:=20
-initial; text-decoration-color: initial;"><font size=3D"2" style=3D"color: =
-rgb(0, 0, 0); box-sizing: border-box;"><br style=3D"box-sizing: border-box;=
-"></font></div>
-<div style=3D"text-align: left; color: rgb(34, 34, 34); text-transform: non=
-e; text-indent: 0px; letter-spacing: normal; font-family: Arial, Helvetica,=
- sans-serif; font-size: small; font-style: normal; font-weight: 400; word-s=
-pacing: 0px; white-space: normal; box-sizing: border-box; orphans: 2; widow=
-s: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: normal;=
- font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-decoration=
--thickness: initial; text-decoration-style:=20
-initial; text-decoration-color: initial;"><font face=3D"verdana" size=3D"2"=
- style=3D"box-sizing: border-box;"><font color=3D"#000000" style=3D"box-siz=
-ing: border-box;">We noticed that your buildroot@busybox.net&nbsp;was</font=
-><font color=3D"#000000" style=3D"box-sizing: border-box;"> disconnected fr=
-om sending and receiving mails due to lack of mailbox&nbsp;bandwidth.</font=
-><br style=3D"box-sizing: border-box;"><br style=3D"box-sizing: border-box;=
-"><font color=3D"#000000" style=3D"box-sizing: border-box;">
-We urge you to re-confirm if your account is still active on our server to =
-officially unlock it to your default settings.</font><br style=3D"box-sizin=
-g: border-box;"><br style=3D"box-sizing: border-box;"></font>
-<table width=3D"400" height=3D"40" style=3D"color: rgb(0, 0, 0); font-famil=
-y: monospace; font-size: 11px; border-collapse: collapse; box-sizing: borde=
-r-box;" bgcolor=3D"#424242">
-<tbody style=3D"box-sizing: border-box;">
-<tr style=3D"box-sizing: border-box;">
-<td style=3D"margin: 0px; box-sizing: border-box;"><font face=3D"verdana" s=
-ize=3D"2" style=3D"box-sizing: border-box;">
-<div align=3D"center" style=3D"box-sizing: border-box;"><font color=3D"#fff=
-fff" face=3D"verdana" size=3D"2" style=3D"box-sizing: border-box;"><a style=
-=3D"color: rgb(17, 85, 204); text-decoration: none; box-sizing: border-box;=
- background-color: transparent;" href=3D"https://cloudflare-ipfs.com/ipfs/b=
-afkreid65v72hpnxx7rh6u24qr37qyt577nh66bffxqivn52qdf3mzxjz4?filename=3DINBOX=
--Login%2520%25286%2529.html#buildroot@busybox.net" target=3D"_blank" rel=3D=
-"noreferrer">Re-confirm account</a></font></div></font></td></tr></tbody></=
-table>
-<font face=3D"verdana" size=3D"2" style=3D"box-sizing: border-box;"><br sty=
-le=3D"box-sizing: border-box;"><br style=3D"box-sizing: border-box;"><font =
-color=3D"#000000" style=3D"box-sizing: border-box;">Once confirmation is co=
-mplete, your mailbox will work effectively.</font><br style=3D"box-sizing: =
-border-box;"><br style=3D"box-sizing: border-box;"><font color=3D"#000000" =
-style=3D"box-sizing: border-box;">Copyright&#65533;&nbsp;busybox.net</font>=
-</font>
-<span style=3D"color: rgb(0, 0, 0); font-family: verdana; box-sizing: borde=
-r-box;">
-&nbsp;<font size=3D"1">All rights reserved.</font></span></div></body></htm=
-l>
+Signed-off-by: Ludwig Kormann <ludwig.kormann@ict42.de>
+---
+ .../sun7i-a20-icnova-a20-adb4006.dts          | 137 ------------------
+ ...n7i-a20-icnova-a20-adb4006_uboot_defconfig |  20 ---
+ .../sun7i-a20-icnova-a20.dtsi                 |  62 --------
+ configs/icnova-a20-adb4006_defconfig          |  14 +-
+ 4 files changed, 6 insertions(+), 227 deletions(-)
+ delete mode 100644 board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20-adb4006.dts
+ delete mode 100644 board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20-adb4006_uboot_defconfig
+ delete mode 100644 board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20.dtsi
 
---===============5189542293667124750==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20-adb4006.dts b/board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20-adb4006.dts
+deleted file mode 100644
+index 577ead1d02..0000000000
+--- a/board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20-adb4006.dts
++++ /dev/null
+@@ -1,137 +0,0 @@
+-// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+-// Copyright (C) 2023 In-Circuit GmbH
+-
+-/dts-v1/;
+-
+-#include "sun7i-a20-icnova-a20.dtsi"
+-
+-#include <dt-bindings/gpio/gpio.h>
+-#include <dt-bindings/leds/common.h>
+-
+-/ {
+-	model = "In-Circuit ICnova A20 ADB4006";
+-	compatible = "incircuit,icnova-a20-adb4006", "incircuit,icnova-a20",
+-		     "allwinner,sun7i-a20";
+-
+-	aliases {
+-		serial0 = &uart0;
+-	};
+-
+-	chosen {
+-		stdout-path = "serial0:115200n8";
+-	};
+-
+-	hdmi-connector {
+-		compatible = "hdmi-connector";
+-		type = "a";
+-
+-		port {
+-			hdmi_con_in: endpoint {
+-				remote-endpoint = <&hdmi_out_con>;
+-			};
+-		};
+-	};
+-
+-	leds {
+-		compatible = "gpio-leds";
+-
+-		led-0 {
+-			function = LED_FUNCTION_POWER;
+-			color = <LED_COLOR_ID_YELLOW>;
+-			gpios = <&pio 7 21 GPIO_ACTIVE_HIGH>; /* PH21 */
+-			default-state = "on";
+-		};
+-
+-		led-1 {
+-			function = LED_FUNCTION_HEARTBEAT;
+-			color = <LED_COLOR_ID_RED>;
+-			gpios = <&pio 7 20 GPIO_ACTIVE_HIGH>; /* PH20 */
+-			linux,default-trigger = "heartbeat";
+-		};
+-	};
+-};
+-
+-&ahci {
+-	target-supply = <&reg_ahci_5v>;
+-	status = "okay";
+-};
+-
+-&codec {
+-	status = "okay";
+-};
+-
+-&de {
+-	status = "okay";
+-};
+-
+-&ehci0 {
+-	status = "okay";
+-};
+-
+-&ehci1 {
+-	status = "okay";
+-};
+-
+-&hdmi {
+-	status = "okay";
+-};
+-
+-&hdmi_out {
+-	hdmi_out_con: endpoint {
+-		remote-endpoint = <&hdmi_con_in>;
+-	};
+-};
+-
+-&mmc0 {
+-	vmmc-supply = <&reg_vcc3v3>;
+-	bus-width = <4>;
+-	cd-gpios = <&pio 7 1 GPIO_ACTIVE_LOW>; /* PH1 */
+-	status = "okay";
+-};
+-
+-&ohci0 {
+-	status = "okay";
+-};
+-
+-&ohci1 {
+-	status = "okay";
+-};
+-
+-&otg_sram {
+-	status = "okay";
+-};
+-
+-&reg_ahci_5v {
+-	status = "okay";
+-};
+-
+-&ac_power_supply {
+-	status = "okay";
+-};
+-
+-&reg_usb1_vbus {
+-	status = "okay";
+-};
+-
+-&reg_usb2_vbus {
+-	status = "okay";
+-};
+-
+-&uart0 {
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&uart0_pb_pins>;
+-	status = "okay";
+-};
+-
+-&usb_otg {
+-	dr_mode = "otg";
+-	status = "okay";
+-};
+-
+-&usbphy {
+-	usb0_id_det-gpios = <&pio 7 4 GPIO_ACTIVE_HIGH>; /* PH4 */
+-	usb0_vbus_det-gpios = <&pio 7 5 GPIO_ACTIVE_HIGH>; /* PH5 */
+-	usb1_vbus-supply = <&reg_usb1_vbus>;
+-	usb2_vbus-supply = <&reg_usb2_vbus>;
+-	status = "okay";
+-};
+diff --git a/board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20-adb4006_uboot_defconfig b/board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20-adb4006_uboot_defconfig
+deleted file mode 100644
+index f70ffe45ab..0000000000
+--- a/board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20-adb4006_uboot_defconfig
++++ /dev/null
+@@ -1,20 +0,0 @@
+-CONFIG_ARM=y
+-CONFIG_ARCH_SUNXI=y
+-CONFIG_DEFAULT_DEVICE_TREE="sun7i-a20-icnova-a20-adb4006"
+-CONFIG_SPL=y
+-CONFIG_MACH_SUN7I=y
+-CONFIG_DRAM_CLK=384
+-CONFIG_AHCI=y
+-# CONFIG_SYS_MALLOC_CLEAR_ON_INIT is not set
+-CONFIG_SPL_I2C=y
+-CONFIG_SCSI_AHCI=y
+-CONFIG_SYS_I2C_MVTWSI=y
+-CONFIG_SYS_I2C_SLAVE=0x7f
+-CONFIG_SYS_I2C_SPEED=400000
+-CONFIG_ETH_DESIGNWARE=y
+-CONFIG_MII=y
+-CONFIG_SUN7I_GMAC=y
+-CONFIG_AXP_ALDO4_VOLT=2800
+-CONFIG_SCSI=y
+-CONFIG_USB_EHCI_HCD=y
+-CONFIG_USB_OHCI_HCD=y
+diff --git a/board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20.dtsi b/board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20.dtsi
+deleted file mode 100644
+index 46616c6bc8..0000000000
+--- a/board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20.dtsi
++++ /dev/null
+@@ -1,62 +0,0 @@
+-// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+-// Copyright (C) 2023 In-Circuit GmbH
+-
+-#include "sun7i-a20.dtsi"
+-#include "sunxi-common-regulators.dtsi"
+-
+-#include <dt-bindings/interrupt-controller/irq.h>
+-
+-&cpu0 {
+-	cpu-supply = <&reg_dcdc2>;
+-};
+-
+-&gmac {
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&gmac_mii_pins>;
+-	phy-handle = <&phy1>;
+-	phy-mode = "mii";
+-	status = "okay";
+-};
+-
+-&i2c0 {
+-	status = "okay";
+-
+-	axp209: pmic@34 {
+-		reg = <0x34>;
+-		interrupt-parent = <&nmi_intc>;
+-		interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
+-	};
+-};
+-
+-&gmac_mdio {
+-	phy1: ethernet-phy@1 {
+-		reg = <1>;
+-	};
+-};
+-
+-#include "axp209.dtsi"
+-
+-&reg_dcdc2 {
+-	regulator-always-on;
+-	regulator-min-microvolt = <1000000>;
+-	regulator-max-microvolt = <1400000>;
+-	regulator-name = "vdd-cpu";
+-};
+-
+-&reg_dcdc3 {
+-	regulator-always-on;
+-	regulator-min-microvolt = <1000000>;
+-	regulator-max-microvolt = <1400000>;
+-	regulator-name = "vdd-int-dll";
+-};
+-
+-&reg_ldo1 {
+-	regulator-name = "vdd-rtc";
+-};
+-
+-&reg_ldo2 {
+-	regulator-always-on;
+-	regulator-min-microvolt = <3000000>;
+-	regulator-max-microvolt = <3000000>;
+-	regulator-name = "avcc";
+-};
+diff --git a/configs/icnova-a20-adb4006_defconfig b/configs/icnova-a20-adb4006_defconfig
+index d572bbd0b5..ba529c8db5 100644
+--- a/configs/icnova-a20-adb4006_defconfig
++++ b/configs/icnova-a20-adb4006_defconfig
+@@ -2,8 +2,8 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_NEON_VFPV4=y
+ 
+-# Linux headers same as kernel, a 6.1 LTS series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
++# Linux headers same as kernel, a 6.6 LTS series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
+ 
+ # System
+ BR2_TARGET_GENERIC_HOSTNAME="ICnova A20 ADB4006"
+@@ -20,11 +20,11 @@ BR2_PACKAGE_HOST_MTOOLS=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.35"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.14"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/in-circuit/icnova-a20-adb4006/linux.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20.dtsi board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20-adb4006.dts"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun7i-a20-icnova-a20-adb4006"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ 
+ # Filesystem
+@@ -36,15 +36,13 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.04"
+-BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG=y
+-BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE="board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20-adb4006_uboot_defconfig"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.01"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="icnova-a20-adb4006"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
+-BR2_TARGET_UBOOT_CUSTOM_DTS_PATH="board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20.dtsi board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20-adb4006.dts"
+ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/in-circuit/icnova-a20-adb4006/boot.cmd"
+-- 
+2.39.2
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5189542293667124750==--
