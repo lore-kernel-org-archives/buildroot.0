@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2D3DC46CD2
-	for <buildroot@archiver.kernel.org>; Tue, 30 Jan 2024 22:08:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 894F3C47DDB
+	for <buildroot@archiver.kernel.org>; Tue, 30 Jan 2024 22:08:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7DE4B83DD5;
-	Tue, 30 Jan 2024 22:08:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7DE4B83DD5
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1B1AE80E94;
+	Tue, 30 Jan 2024 22:08:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B1AE80E94
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SQXzYsAhLc3z; Tue, 30 Jan 2024 22:08:10 +0000 (UTC)
+	with ESMTP id j0T9iG45sexT; Tue, 30 Jan 2024 22:08:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D044B835BA;
-	Tue, 30 Jan 2024 22:08:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D044B835BA
+	by smtp1.osuosl.org (Postfix) with ESMTP id 652E180B67;
+	Tue, 30 Jan 2024 22:08:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 652E180B67
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C19A11BF95D
- for <buildroot@lists.busybox.net>; Tue, 30 Jan 2024 22:07:44 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D25AA1BF95D
+ for <buildroot@lists.busybox.net>; Tue, 30 Jan 2024 22:07:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7C9FE41B23
+ by smtp4.osuosl.org (Postfix) with ESMTP id 93C4741BB3
  for <buildroot@lists.busybox.net>; Tue, 30 Jan 2024 22:07:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C9FE41B23
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 93C4741BB3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4_tLhdQul61l for <buildroot@lists.busybox.net>;
+ with ESMTP id DSvKBhDQsp59 for <buildroot@lists.busybox.net>;
  Tue, 30 Jan 2024 22:07:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 92EFC41B26
+ by smtp4.osuosl.org (Postfix) with ESMTP id A3F7A41B27
  for <buildroot@buildroot.org>; Tue, 30 Jan 2024 22:07:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 92EFC41B26
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3F7A41B27
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7E91986737; Tue, 30 Jan 2024 22:07:39 +0000 (UTC)
+ id 8CA2786738; Tue, 30 Jan 2024 22:07:39 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 30 Jan 2024 23:04:58 +0100
+Date: Tue, 30 Jan 2024 23:06:19 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2953cd264489229adaef5f0a1f307900dcc3e425
-X-Git-Newrev: b0fabbd2aabd827a1989c5dd97089a0cfb9e04c6
+X-Git-Oldrev: b0fabbd2aabd827a1989c5dd97089a0cfb9e04c6
+X-Git-Newrev: 863131cad9fec0a54a4b4281f5fa3cd5ed8ea462
 X-Patchwork-Hint: ignore
-Message-Id: <20240130220739.7E91986737@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mdio-tools: bump version to 1.3.1
+Message-Id: <20240130220739.8CA2786738@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libpsl: bump to version 0.21.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,49 +62,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b0fabbd2aabd827a1989c5dd97089a0cfb9e04c6
+commit: https://git.buildroot.net/buildroot/commit/?id=863131cad9fec0a54a4b4281f5fa3cd5ed8ea462
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[v1.3.1] - 2023-12-02
----------------------
+The main changes are improvements to the Meson build system, including
+a fix for a build issue related to iconv:
 
-Fixes mvls to work with kernels 6.2 and onwards.
+  https://github.com/rockdaboot/libpsl/releases/tag/0.21.3
+  https://github.com/rockdaboot/libpsl/releases/tag/0.21.4
+  https://github.com/rockdaboot/libpsl/releases/tag/0.21.5
 
-- mdio: Multiple registers can now be dumped at once, via the generic
-  dump operation.
-
-- mvls: Relax the driver matching to accept the strings used in
-  kernels 6.2 and newer.
-
-Signed-off-by: Robert Marko <robimarko@gmail.com>
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mdio-tools/mdio-tools.hash | 2 +-
- package/mdio-tools/mdio-tools.mk   | 2 +-
+ package/libpsl/libpsl.hash | 2 +-
+ package/libpsl/libpsl.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mdio-tools/mdio-tools.hash b/package/mdio-tools/mdio-tools.hash
-index 1a9d598923..19172e2cd6 100644
---- a/package/mdio-tools/mdio-tools.hash
-+++ b/package/mdio-tools/mdio-tools.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  d2ab71d92173053af41d754e9c229e1ead768b9f8b7f4947b3b87b84c4c5e360  mdio-tools-1.3.0.tar.gz
-+sha256  652353ba153fdd8b1d58ded4b90d0639536d705aa5923018e27ea0b78aa8e4fb  mdio-tools-1.3.1.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/mdio-tools/mdio-tools.mk b/package/mdio-tools/mdio-tools.mk
-index fb8ec39f35..16eba74734 100644
---- a/package/mdio-tools/mdio-tools.mk
-+++ b/package/mdio-tools/mdio-tools.mk
+diff --git a/package/libpsl/libpsl.hash b/package/libpsl/libpsl.hash
+index a35a609ff2..d800ba6a77 100644
+--- a/package/libpsl/libpsl.hash
++++ b/package/libpsl/libpsl.hash
+@@ -1,5 +1,5 @@
+ # Locally generated
+-sha256  e35991b6e17001afa2c0ca3b10c357650602b92596209b7492802f3768a6285f  libpsl-0.21.2.tar.gz
++sha256  1dcc9ceae8b128f3c0b3f654decd0e1e891afc6ff81098f227ef260449dae208  libpsl-0.21.5.tar.gz
+ 
+ # Hashes for license files:
+ sha256  776cd11d54f0ea3e5efdd25ff1a0d952a1744215bb5858ea7aeb91808e70c9f7  COPYING
+diff --git a/package/libpsl/libpsl.mk b/package/libpsl/libpsl.mk
+index ef3c524b4f..d1a12f864c 100644
+--- a/package/libpsl/libpsl.mk
++++ b/package/libpsl/libpsl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MDIO_TOOLS_VERSION = 1.3.0
-+MDIO_TOOLS_VERSION = 1.3.1
- MDIO_TOOLS_SITE = https://github.com/wkz/mdio-tools/releases/download/$(MDIO_TOOLS_VERSION)
- MDIO_TOOLS_LICENSE = GPL-2.0
- MDIO_TOOLS_LICENSE_FILES = COPYING
+-LIBPSL_VERSION = 0.21.2
++LIBPSL_VERSION = 0.21.5
+ LIBPSL_SITE = https://github.com/rockdaboot/libpsl/releases/download/$(LIBPSL_VERSION)
+ LIBPSL_LICENSE = MIT, BSD-3-Clause
+ LIBPSL_LICENSE_FILES = COPYING src/LICENSE.chromium
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
