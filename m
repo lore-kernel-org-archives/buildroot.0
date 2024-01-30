@@ -1,102 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDA69C46CD2
-	for <buildroot@archiver.kernel.org>; Tue, 30 Jan 2024 13:24:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28C9DC47DDF
+	for <buildroot@archiver.kernel.org>; Tue, 30 Jan 2024 13:42:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6C51281EAF;
-	Tue, 30 Jan 2024 13:24:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C51281EAF
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OgtbEsAfwY8E; Tue, 30 Jan 2024 13:24:01 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7337E81E5F;
-	Tue, 30 Jan 2024 13:24:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7337E81E5F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0DEE41BF2A5
- for <buildroot@lists.busybox.net>; Tue, 30 Jan 2024 13:23:59 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D97E2400B9
- for <buildroot@lists.busybox.net>; Tue, 30 Jan 2024 13:23:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D97E2400B9
+	by smtp2.osuosl.org (Postfix) with ESMTP id A129D400B9;
+	Tue, 30 Jan 2024 13:42:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A129D400B9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Biaw6vbakyyf for <buildroot@lists.busybox.net>;
- Tue, 30 Jan 2024 13:23:57 +0000 (UTC)
-X-Greylist: delayed 359 seconds by postgrey-1.37 at util1.osuosl.org;
- Tue, 30 Jan 2024 13:23:56 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CAE4740242
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de
- [81.169.146.163])
- by smtp2.osuosl.org (Postfix) with ESMTPS id CAE4740242
- for <buildroot@buildroot.org>; Tue, 30 Jan 2024 13:23:56 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; t=1706620674; cv=none;
- d=strato.com; s=strato-dkim-0002;
- b=s/WpiCGf69EJikwrammh4bqVfZyVAEo2z55kx1GnDtBr4+gUfX9NYCjjNlh3se9Wwt
- VPavNGlYwIelpdNH7Z2z43nu49ijD/PSH3gfcSKWAvBxF+UgLIRsio+NXWgF0mXq8c6Z
- Ln3WPRzH3mik8QI5kWbWiS5gMi25Qsr+7zsk+r5rptYAG41qrpIqNufikpixZB0jTj0D
- g7zuTecI1iwyfBFohg2gQ8YkHzEV5yK/Hf7R0zN/baU2XzfFioLFJSIaivTBKk8dsvPS
- VZNcniOMOifY0WOuAlfHbZug49O8h833MA541/d9df/7B56lH2wvjz6UniiEBuk5LGpX
- 3uUQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1706620674;
- s=strato-dkim-0002; d=strato.com;
- h=Message-Id:Date:Subject:To:From:Cc:Date:From:Subject:Sender;
- bh=dBie0KEgHsa2XSYZcNMBJrA3Rw6grX7cJah+cTOgqEQ=;
- b=JEQJMg30AvFGHQ/p1RtDL2NCfe/dhonNTm8XMQCz4tOpXIIphO5WN3BzvoehtS4aAV
- +8m0PovbIKiyibobdJsMd8RTkiZyHVFv6ECMCZgyfDVAvPBvgyuSS5rVZOaR2+RwS+zl
- Wo+86Q/sBQN0eeUGfPkLfR9S/OwvrW21VoQAUEJ9E3WjSTzeIQrmfiEgXK63gqLEs8PC
- 1me30kFHe7hh+MawsKQ0kVJgqE07HX7rm+2Zpnr3zj9sASMHZS4v73NdT6M5dgsJFIH0
- b+PWyb6ft4va56qoidkzT5JgIQGZIwtB70311/isx6/IJB/To6LQHoct4vPFjqTWk3Uw
- Wvag==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo00
-X-RZG-AUTH: ":IHkAYkmvNfSwjg/qSc4u8zZOVaURsoXe3UH2mQA0KglxDI1B7BeEcdPLARTmodKwkQi99TJCcPJmIA=="
-Received: from debian-test.local.in-circuit.de
- by smtp.strato.de (RZmta 49.11.2 DYNA|AUTH)
- with ESMTPSA id x7ec2e00UDHs4Mj
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
- (Client did not present a certificate) for <buildroot@buildroot.org>;
- Tue, 30 Jan 2024 14:17:54 +0100 (CET)
-From: Ludwig Kormann <ludwig.kormann@ict42.de>
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id uL01GgD-XhnL; Tue, 30 Jan 2024 13:42:46 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8F2AD4017A;
+	Tue, 30 Jan 2024 13:42:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8F2AD4017A
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 637BB1BF951
+ for <buildroot@lists.busybox.net>; Tue, 30 Jan 2024 13:42:41 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 49D9341B94
+ for <buildroot@lists.busybox.net>; Tue, 30 Jan 2024 13:42:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 49D9341B94
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZDsFMKsqON96 for <buildroot@lists.busybox.net>;
+ Tue, 30 Jan 2024 13:42:40 +0000 (UTC)
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 25D4B41B8F
+ for <buildroot@buildroot.org>; Tue, 30 Jan 2024 13:42:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 25D4B41B8F
+Received: from 91-153-34-210.elisa-laajakaista.fi ([91.153.34.210] helo=kodama)
+ by fanzine2.igalia.com with esmtpsa 
+ (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+ id 1rUoNl-00BhYK-JR; Tue, 30 Jan 2024 14:42:33 +0100
+Received: from localhost (kodama [local])
+ by kodama (OpenSMTPD) with ESMTPA id 9d3436f6;
+ Tue, 30 Jan 2024 13:42:32 +0000 (UTC)
+From: Adrian Perez de Castro <aperez@igalia.com>
 To: buildroot@buildroot.org
-Date: Tue, 30 Jan 2024 14:17:50 +0100
-Message-Id: <20240130131750.3802767-1-ludwig.kormann@ict42.de>
-X-Mailer: git-send-email 2.39.2
+Date: Tue, 30 Jan 2024 15:42:29 +0200
+Message-ID: <20240130134232.2781911-1-aperez@igalia.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- t=1706620674; 
- s=strato-dkim-0002; d=ict42.de;
- h=Message-Id:Date:Subject:To:From:Cc:Date:From:Subject:Sender;
- bh=dBie0KEgHsa2XSYZcNMBJrA3Rw6grX7cJah+cTOgqEQ=;
- b=Uh/oy05leszKg6qDW+emQFA+nxXvVpxySQqaEqavdOzsS1ygBe0GLpFcTlsf77fB+Q
- Nwt/zMdaHGJd7zRWScwWryM9jyAzQwpBJ5dV3DmU8i36K3lscSeWylN1XA5G3wFh7elW
- F45E3LtGvPaBVoJbAmWjTLE/CFGNKm0RVxjafobhy2q4avw2lPNZMvHGysuZWfABerOu
- zXNhBOS/xP3v/sFbx9cb/5BnUCaxlEjLuJQesftbOVhlaHJDt8rRHVkV1b/9p/hrEyHg
- JBPwEZ2WPhH/itC1UAG1OdF8AFvvrTCC5Iu7OZCGG7LG+RZtWAle7HJMaMlPRzY/dS+F
- Oh+w==
-X-Mailman-Original-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
- t=1706620674; 
- s=strato-dkim-0003; d=ict42.de;
- h=Message-Id:Date:Subject:To:From:Cc:Date:From:Subject:Sender;
- bh=dBie0KEgHsa2XSYZcNMBJrA3Rw6grX7cJah+cTOgqEQ=;
- b=eZX2uUB4vo9DeLTMq5yPturhO2q6bP4ELiuIpTTsSZzWSJJu/lOnA9D6hbKC2odcLw
- QuoIpyE9kmb1JUozKqAg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=ict42.de header.i=@ict42.de
- header.a=rsa-sha256 header.s=strato-dkim-0002 header.b=Uh/oy05l; 
- dkim=pass header.d=ict42.de header.i=@ict42.de header.a=ed25519-sha256
- header.s=strato-dkim-0003 header.b=eZX2uUB4
-Subject: [Buildroot] [PATCH 1/1] configs/icnova-a20-adb4006: Bump Linux and
- U-Boot version
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=igalia.com; 
+ s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
+ Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+ Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+ In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=suXshiOtYq8i57WiSMDASS5Jv0URBad32pB+0DhOiPg=; b=EHz26VjPGB9dRBbF7+ipJo70oC
+ BTrPud2OtuGJUe21Pm4AdFD/SH+2EXfwA7tmzu+p0f836EqOmItp9qW0mUIlv62+r0tPNigLJmicc
+ Y85sIozOxAMKwQciRGSZws1dXIvdcsFYo5GabNS1aFIPoyjoJOqlhCCbv3VSIKQDQx8wvZgMHqRYw
+ N9gyLhCuflrBXndKLYY2ybfeBW50M5oElQe/1HLLIatAA5TrqpoQ6iQ1kBc22aDKPnHLJ8107h6V+
+ LVKMX0nj8QQg1OicC6fZ4fcP4RPsz/SiTBHvABxtrqh02uyzlZ0qxaoesVZ9bCShrihHpLe2JBljW
+ Icp+rvnA==;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com
+ header.a=rsa-sha256 header.s=20170329 header.b=EHz26VjP
+Subject: [Buildroot] [PATCH] package/libpsl: bump to version 0.21.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,311 +75,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Adrian Perez de Castro <aperez@igalia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bump version of Linux to 6.6.14 and U-Boot to 2024.01
-and also use upstream configs and dts.
+The main changes are improvements to the Meson build system, including
+a fix for a build issue related to iconv:
 
-Signed-off-by: Ludwig Kormann <ludwig.kormann@ict42.de>
+  https://github.com/rockdaboot/libpsl/releases/tag/0.21.3
+  https://github.com/rockdaboot/libpsl/releases/tag/0.21.4
+  https://github.com/rockdaboot/libpsl/releases/tag/0.21.5
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
- .../sun7i-a20-icnova-a20-adb4006.dts          | 137 ------------------
- ...n7i-a20-icnova-a20-adb4006_uboot_defconfig |  20 ---
- .../sun7i-a20-icnova-a20.dtsi                 |  62 --------
- configs/icnova-a20-adb4006_defconfig          |  14 +-
- 4 files changed, 6 insertions(+), 227 deletions(-)
- delete mode 100644 board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20-adb4006.dts
- delete mode 100644 board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20-adb4006_uboot_defconfig
- delete mode 100644 board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20.dtsi
+ package/libpsl/libpsl.hash | 2 +-
+ package/libpsl/libpsl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20-adb4006.dts b/board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20-adb4006.dts
-deleted file mode 100644
-index 577ead1d02..0000000000
---- a/board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20-adb4006.dts
-+++ /dev/null
-@@ -1,137 +0,0 @@
--// SPDX-License-Identifier: (GPL-2.0 OR MIT)
--// Copyright (C) 2023 In-Circuit GmbH
--
--/dts-v1/;
--
--#include "sun7i-a20-icnova-a20.dtsi"
--
--#include <dt-bindings/gpio/gpio.h>
--#include <dt-bindings/leds/common.h>
--
--/ {
--	model = "In-Circuit ICnova A20 ADB4006";
--	compatible = "incircuit,icnova-a20-adb4006", "incircuit,icnova-a20",
--		     "allwinner,sun7i-a20";
--
--	aliases {
--		serial0 = &uart0;
--	};
--
--	chosen {
--		stdout-path = "serial0:115200n8";
--	};
--
--	hdmi-connector {
--		compatible = "hdmi-connector";
--		type = "a";
--
--		port {
--			hdmi_con_in: endpoint {
--				remote-endpoint = <&hdmi_out_con>;
--			};
--		};
--	};
--
--	leds {
--		compatible = "gpio-leds";
--
--		led-0 {
--			function = LED_FUNCTION_POWER;
--			color = <LED_COLOR_ID_YELLOW>;
--			gpios = <&pio 7 21 GPIO_ACTIVE_HIGH>; /* PH21 */
--			default-state = "on";
--		};
--
--		led-1 {
--			function = LED_FUNCTION_HEARTBEAT;
--			color = <LED_COLOR_ID_RED>;
--			gpios = <&pio 7 20 GPIO_ACTIVE_HIGH>; /* PH20 */
--			linux,default-trigger = "heartbeat";
--		};
--	};
--};
--
--&ahci {
--	target-supply = <&reg_ahci_5v>;
--	status = "okay";
--};
--
--&codec {
--	status = "okay";
--};
--
--&de {
--	status = "okay";
--};
--
--&ehci0 {
--	status = "okay";
--};
--
--&ehci1 {
--	status = "okay";
--};
--
--&hdmi {
--	status = "okay";
--};
--
--&hdmi_out {
--	hdmi_out_con: endpoint {
--		remote-endpoint = <&hdmi_con_in>;
--	};
--};
--
--&mmc0 {
--	vmmc-supply = <&reg_vcc3v3>;
--	bus-width = <4>;
--	cd-gpios = <&pio 7 1 GPIO_ACTIVE_LOW>; /* PH1 */
--	status = "okay";
--};
--
--&ohci0 {
--	status = "okay";
--};
--
--&ohci1 {
--	status = "okay";
--};
--
--&otg_sram {
--	status = "okay";
--};
--
--&reg_ahci_5v {
--	status = "okay";
--};
--
--&ac_power_supply {
--	status = "okay";
--};
--
--&reg_usb1_vbus {
--	status = "okay";
--};
--
--&reg_usb2_vbus {
--	status = "okay";
--};
--
--&uart0 {
--	pinctrl-names = "default";
--	pinctrl-0 = <&uart0_pb_pins>;
--	status = "okay";
--};
--
--&usb_otg {
--	dr_mode = "otg";
--	status = "okay";
--};
--
--&usbphy {
--	usb0_id_det-gpios = <&pio 7 4 GPIO_ACTIVE_HIGH>; /* PH4 */
--	usb0_vbus_det-gpios = <&pio 7 5 GPIO_ACTIVE_HIGH>; /* PH5 */
--	usb1_vbus-supply = <&reg_usb1_vbus>;
--	usb2_vbus-supply = <&reg_usb2_vbus>;
--	status = "okay";
--};
-diff --git a/board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20-adb4006_uboot_defconfig b/board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20-adb4006_uboot_defconfig
-deleted file mode 100644
-index f70ffe45ab..0000000000
---- a/board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20-adb4006_uboot_defconfig
-+++ /dev/null
-@@ -1,20 +0,0 @@
--CONFIG_ARM=y
--CONFIG_ARCH_SUNXI=y
--CONFIG_DEFAULT_DEVICE_TREE="sun7i-a20-icnova-a20-adb4006"
--CONFIG_SPL=y
--CONFIG_MACH_SUN7I=y
--CONFIG_DRAM_CLK=384
--CONFIG_AHCI=y
--# CONFIG_SYS_MALLOC_CLEAR_ON_INIT is not set
--CONFIG_SPL_I2C=y
--CONFIG_SCSI_AHCI=y
--CONFIG_SYS_I2C_MVTWSI=y
--CONFIG_SYS_I2C_SLAVE=0x7f
--CONFIG_SYS_I2C_SPEED=400000
--CONFIG_ETH_DESIGNWARE=y
--CONFIG_MII=y
--CONFIG_SUN7I_GMAC=y
--CONFIG_AXP_ALDO4_VOLT=2800
--CONFIG_SCSI=y
--CONFIG_USB_EHCI_HCD=y
--CONFIG_USB_OHCI_HCD=y
-diff --git a/board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20.dtsi b/board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20.dtsi
-deleted file mode 100644
-index 46616c6bc8..0000000000
---- a/board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20.dtsi
-+++ /dev/null
-@@ -1,62 +0,0 @@
--// SPDX-License-Identifier: (GPL-2.0 OR MIT)
--// Copyright (C) 2023 In-Circuit GmbH
--
--#include "sun7i-a20.dtsi"
--#include "sunxi-common-regulators.dtsi"
--
--#include <dt-bindings/interrupt-controller/irq.h>
--
--&cpu0 {
--	cpu-supply = <&reg_dcdc2>;
--};
--
--&gmac {
--	pinctrl-names = "default";
--	pinctrl-0 = <&gmac_mii_pins>;
--	phy-handle = <&phy1>;
--	phy-mode = "mii";
--	status = "okay";
--};
--
--&i2c0 {
--	status = "okay";
--
--	axp209: pmic@34 {
--		reg = <0x34>;
--		interrupt-parent = <&nmi_intc>;
--		interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
--	};
--};
--
--&gmac_mdio {
--	phy1: ethernet-phy@1 {
--		reg = <1>;
--	};
--};
--
--#include "axp209.dtsi"
--
--&reg_dcdc2 {
--	regulator-always-on;
--	regulator-min-microvolt = <1000000>;
--	regulator-max-microvolt = <1400000>;
--	regulator-name = "vdd-cpu";
--};
--
--&reg_dcdc3 {
--	regulator-always-on;
--	regulator-min-microvolt = <1000000>;
--	regulator-max-microvolt = <1400000>;
--	regulator-name = "vdd-int-dll";
--};
--
--&reg_ldo1 {
--	regulator-name = "vdd-rtc";
--};
--
--&reg_ldo2 {
--	regulator-always-on;
--	regulator-min-microvolt = <3000000>;
--	regulator-max-microvolt = <3000000>;
--	regulator-name = "avcc";
--};
-diff --git a/configs/icnova-a20-adb4006_defconfig b/configs/icnova-a20-adb4006_defconfig
-index d572bbd0b5..ba529c8db5 100644
---- a/configs/icnova-a20-adb4006_defconfig
-+++ b/configs/icnova-a20-adb4006_defconfig
-@@ -2,8 +2,8 @@ BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_NEON_VFPV4=y
+diff --git a/package/libpsl/libpsl.hash b/package/libpsl/libpsl.hash
+index a35a609ff2..d800ba6a77 100644
+--- a/package/libpsl/libpsl.hash
++++ b/package/libpsl/libpsl.hash
+@@ -1,5 +1,5 @@
+ # Locally generated
+-sha256  e35991b6e17001afa2c0ca3b10c357650602b92596209b7492802f3768a6285f  libpsl-0.21.2.tar.gz
++sha256  1dcc9ceae8b128f3c0b3f654decd0e1e891afc6ff81098f227ef260449dae208  libpsl-0.21.5.tar.gz
  
--# Linux headers same as kernel, a 6.1 LTS series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
-+# Linux headers same as kernel, a 6.6 LTS series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
+ # Hashes for license files:
+ sha256  776cd11d54f0ea3e5efdd25ff1a0d952a1744215bb5858ea7aeb91808e70c9f7  COPYING
+diff --git a/package/libpsl/libpsl.mk b/package/libpsl/libpsl.mk
+index ef3c524b4f..d1a12f864c 100644
+--- a/package/libpsl/libpsl.mk
++++ b/package/libpsl/libpsl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # System
- BR2_TARGET_GENERIC_HOSTNAME="ICnova A20 ADB4006"
-@@ -20,11 +20,11 @@ BR2_PACKAGE_HOST_MTOOLS=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.35"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.14"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/in-circuit/icnova-a20-adb4006/linux.fragment"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20.dtsi board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20-adb4006.dts"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun7i-a20-icnova-a20-adb4006"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- 
- # Filesystem
-@@ -36,15 +36,13 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.04"
--BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE="board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20-adb4006_uboot_defconfig"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.01"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="icnova-a20-adb4006"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
--BR2_TARGET_UBOOT_CUSTOM_DTS_PATH="board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20.dtsi board/in-circuit/icnova-a20-adb4006/sun7i-a20-icnova-a20-adb4006.dts"
- BR2_PACKAGE_HOST_UBOOT_TOOLS=y
- BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
- BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/in-circuit/icnova-a20-adb4006/boot.cmd"
+-LIBPSL_VERSION = 0.21.2
++LIBPSL_VERSION = 0.21.5
+ LIBPSL_SITE = https://github.com/rockdaboot/libpsl/releases/download/$(LIBPSL_VERSION)
+ LIBPSL_LICENSE = MIT, BSD-3-Clause
+ LIBPSL_LICENSE_FILES = COPYING src/LICENSE.chromium
 -- 
-2.39.2
+2.43.0
 
 _______________________________________________
 buildroot mailing list
