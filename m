@@ -4,88 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D436DC46CD2
-	for <buildroot@archiver.kernel.org>; Tue, 30 Jan 2024 20:03:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33C81C46CD2
+	for <buildroot@archiver.kernel.org>; Tue, 30 Jan 2024 20:12:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6C5B183DB2;
-	Tue, 30 Jan 2024 20:03:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C5B183DB2
+	by smtp1.osuosl.org (Postfix) with ESMTP id C37A883DE3;
+	Tue, 30 Jan 2024 20:12:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C37A883DE3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JZzJ4rjmOv3v; Tue, 30 Jan 2024 20:02:59 +0000 (UTC)
+	with ESMTP id 6iA1oWYr5SWX; Tue, 30 Jan 2024 20:12:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A8E7283DA9;
-	Tue, 30 Jan 2024 20:02:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A8E7283DA9
+	by smtp1.osuosl.org (Postfix) with ESMTP id E611483E01;
+	Tue, 30 Jan 2024 20:12:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E611483E01
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DF17E1BF2EB
- for <buildroot@lists.busybox.net>; Tue, 30 Jan 2024 20:02:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id ADB161BF340
+ for <buildroot@lists.busybox.net>; Tue, 30 Jan 2024 20:12:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B398983DB1
- for <buildroot@lists.busybox.net>; Tue, 30 Jan 2024 20:02:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B398983DB1
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8621A83E01
+ for <buildroot@lists.busybox.net>; Tue, 30 Jan 2024 20:12:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8621A83E01
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GWd96gNItoKi for <buildroot@lists.busybox.net>;
- Tue, 30 Jan 2024 20:02:56 +0000 (UTC)
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 895A483DA9
- for <buildroot@buildroot.org>; Tue, 30 Jan 2024 20:02:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 895A483DA9
-Received: by mail-wr1-x42e.google.com with SMTP id
- ffacd0b85a97d-33ae3154cf8so2195828f8f.3
- for <buildroot@buildroot.org>; Tue, 30 Jan 2024 12:02:55 -0800 (PST)
+ with ESMTP id UXFSXe7P2OCt for <buildroot@lists.busybox.net>;
+ Tue, 30 Jan 2024 20:12:17 +0000 (UTC)
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5DEAA83DE8
+ for <buildroot@buildroot.org>; Tue, 30 Jan 2024 20:12:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5DEAA83DE8
+Received: by mail-wr1-x429.google.com with SMTP id
+ ffacd0b85a97d-33af4b34e2cso80737f8f.1
+ for <buildroot@buildroot.org>; Tue, 30 Jan 2024 12:12:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1706644973; x=1707249773;
- h=content-transfer-encoding:in-reply-to:cc:from:references:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=xgDBoMPZ4TqvywDYNX+zXVOtLRasTDUZbBt8S+JjYSc=;
- b=J8UJFQckI6sxUzrAXV2bOAkq6TAO255t99Xnrg9eKm5CXXJWdjcRonI5CIj+iWmd0a
- TrgUnO3n0uba9N36UJk438hamBdzAosAwOl4MAf7Q+xStnxaHb4FRsuwgJ6Wr47x8fQX
- p5z9Kl1Az6HPvvBJfQ0yFHd4pSZCtJKUne4Dpu0nsRpyApwzpOTuvwBBTGzlWaRcVcpE
- iPnnI+wH1Eo2OZsgIlxsJDAe48LOvirtfsZVa2XK+PQK5TWMfhr50TGndOh82tyE9CDJ
- 2ZQt4IDQrIQ73BNTFHYfkFhb5HEcFoZCUWC/+4YlyfBvOa878w8xnnENnvowFP9/Slww
- 3tKw==
-X-Gm-Message-State: AOJu0YzA3j0cQv1vNDT270OD4WXTmxfrw0FjcF+35EaspBB78bNoUryP
- UHRecku9NmCp4kQHg0KZXTpfySKJ55GSSCNT0RrcnABNj3nvLtbeD2ERH6C3KLQ=
-X-Google-Smtp-Source: AGHT+IEMy+z81aaeS9+LYbnGKtxgU4UzwX+RiVWcHwIdyVE4Ljb8D59PK1APnOaAA/Tj902QTn4VCA==
-X-Received: by 2002:adf:ab0d:0:b0:33a:e477:d220 with SMTP id
- q13-20020adfab0d000000b0033ae477d220mr6147995wrc.37.1706644973432; 
- Tue, 30 Jan 2024 12:02:53 -0800 (PST)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
- (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
- by smtp.gmail.com with ESMTPSA id
- bp20-20020a5d5a94000000b0033af280ec84sm5296828wrb.26.2024.01.30.12.02.51
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 30 Jan 2024 12:02:52 -0800 (PST)
-Message-ID: <f5a4aa23-fdb0-4c06-9f18-8ea0e69cbd7d@mind.be>
-Date: Tue, 30 Jan 2024 21:02:49 +0100
+ d=1e100.net; s=20230601; t=1706645535; x=1707250335;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=08i07JW9BLCmhhLmMjxPDDJ2JMA5WulC15Q2qe8FZe4=;
+ b=Vg2O8WH/iyvxjo4UOFfdFFjJ7G3do+aHNytAbmLMFSpkWeyog6D68GTIpje1tnWaaM
+ YXHoFrUmAZNoFwZ4PF/LXhtJ11PV/UAqUq1ENDmPOBriUQdCQ1vCDvQePKRvS/+dNA2N
+ eTbW8ZUu8jYCtx/Qt4LmDVbiMdkD6M+XBLWhzM9GXKhH2y+codTFSiVvsk68zsikiWnW
+ JdArx4JIEej1huWHB7UBR/Vs2XnkiGZWc+K0vR0PvrLxy+PiD5AgkwrqU1MyjCJP4f4G
+ t5tgIwa53ZQRvFTKfJEndKnHnKMqwboJCTs7chJsVpHia9LhyLKkWYHwO3Nh8+rJdTwJ
+ wt/g==
+X-Gm-Message-State: AOJu0YyCRdSMBEynGW2iX0UhryWX5SwX0OIMipj4yqWKClAaknvx4jlP
+ 0T9Sjf3KxOPXdowDRpQAnzzCnLeksY5dU2XIe8Tnpm18Xl1UwqAjtxtT9QSGH/jlvXvXBJmM0O5
+ 07csY1kZDUNS1QDdjA7NUYV+kCuaGfErRXYA=
+X-Google-Smtp-Source: AGHT+IHk5NYBN8y7pc+28dcFPYx8pqQfeG3ZNSoQWydAZ+WIAR5XF7fDJZUvy0/Em3FHq+PY6MdzBx7SDv2fjdBQfOs=
+X-Received: by 2002:a5d:47ca:0:b0:33a:fe3b:a048 with SMTP id
+ o10-20020a5d47ca000000b0033afe3ba048mr1772643wrc.34.1706645534850; Tue, 30
+ Jan 2024 12:12:14 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-GB
-To: Nayab Sayed <nayabbasha.sayed@microchip.com>, buildroot@buildroot.org
 References: <20240124-kernel_dir-v1-1-4125408cf65d@microchip.com>
-In-Reply-To: <20240124-kernel_dir-v1-1-4125408cf65d@microchip.com>
+ <f5a4aa23-fdb0-4c06-9f18-8ea0e69cbd7d@mind.be>
+In-Reply-To: <f5a4aa23-fdb0-4c06-9f18-8ea0e69cbd7d@mind.be>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Tue, 30 Jan 2024 21:12:02 +0100
+Message-ID: <CA+TH9VnQSgdqVs6_SQn4012LHH8jyV562e-1e+AkYa2gttF-4w@mail.gmail.com>
+To: Arnout Vandecappelle <arnout@mind.be>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1706644973; x=1707249773; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:cc:from:references:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=xgDBoMPZ4TqvywDYNX+zXVOtLRasTDUZbBt8S+JjYSc=;
- b=Vz9Hibu9/u+OQLyI1l9TbwtMzsUnjYAJFEkQFKjVRRiQMk7e9TvkbyW/DotVKzpROt
- QRFhyFNwvzfqHycoRdVTcwHjeyndX39ipNrbufT8vSjDEjg+PSiQoRLM9RsVNpNc9K9x
- gdhtyBBSad7VJ/V+kpefvfYl/c3UUHa0goIyDeizFAC98/7SpS3vQU8gSJUFcCzNy6b5
- AgPziEPItpAhn3vQ1B4HNlfIc9Dx0/73d9uuqPFkPaG2PiG5EKqZUre8sPI8wx+GOuai
- xYMjCEGDNLRDkKldNTBJ8i8UCqllCt131962v2UAXmk71oC0QRrMUzjm6Pxyzj7cDBNH
- DmKQ==
+ d=gmail.com; s=20230601; t=1706645535; x=1707250335; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=08i07JW9BLCmhhLmMjxPDDJ2JMA5WulC15Q2qe8FZe4=;
+ b=VjspiyhOSlzppaK+fMQm78HlXgfk4lNUFI3hE6MDjW3hKbGJLykYBx2+MF9nEt1W3s
+ 9yWF0CGqQGKpfxVqVMlWgksQCj0J1UwUhqfIwk7e75VIsrhSSw5fti5TFMsdVDVTak5R
+ wstoLVqOuFbv7+fnNsjyEU40EoznexQfg5PFC9oJHPTsut3t8+BY6pRHdx7A/GbbH/Je
+ qpEBAFE+RW0HGd9WHfGT6zjIsd7uqQydOTLdgO336+XrMXhveiHIQVmLqzrpnSL/fAVJ
+ U+aPsAnVjyCj/KQDneiANh5R/GZJJEhWqu2gswqvQxCdA5OZ50X4GQ32wy7V1tFZ4eVA
+ aU3g==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Vz9Hibu9
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=VjspiyhO
 Subject: Re: [Buildroot] [PATCH] package/environment-setup: replace variable
  KERNELDIR with KERNEL_DIR
 X-BeenThere: buildroot@buildroot.org
@@ -99,80 +92,240 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: Angelo Compagnucci <angelo@amarulasolutions.com>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Cc: Nayab Sayed <nayabbasha.sayed@microchip.com>,
+ Angelo Compagnucci <angelo@amarulasolutions.com>,
+ buildroot <buildroot@buildroot.org>
+Content-Type: multipart/mixed; boundary="===============3734964762999676537=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+--===============3734964762999676537==
+Content-Type: multipart/alternative; boundary="000000000000dcc4eb06102f6017"
+
+--000000000000dcc4eb06102f6017
+Content-Type: text/plain; charset="UTF-8"
+
+Il mar 30 gen 2024, 21:03 Arnout Vandecappelle via buildroot <
+buildroot@buildroot.org> ha scritto:
+
+>
+>
+> On 24/01/2024 06:32, Nayab Sayed via buildroot wrote:
+> > This commit updates the host environment setup helper script to use the
+> more
+> > conventional variable name KERNEL_DIR instead of KERNELDIR.  The change
+> is made
+> > for consistency and to align with established conventions in the project
+> (like
+> > KERNEL_HOST, HOST_DIR etc.). No functional changes are introduced by this
+> > commit.
+>
+>   Do you have some evidence of this established convention?
+>
+>   We currently have three external module packages that use KERNELDIR
+> (falcosecurity-libs, ti-gfx and ti-sgx-km) and two that use KERNEL_DIR
+> (kernel-module-imx-gpu-viv and gcnano-binaries).
+>
+>
+>   It has been KERNELDIR in Buildroot for more than 3 years now. If we
+> change it
+> now, in all likelihood we will break a number of scripts that rely on that
+> environment variable. So I think we need quite overwhelming evidence that
+> KERNEL_DIR is better before we introduce such breakage.
+>
+>   Angelo, you originally introduced KERNELDIR, anything to add to this
+> discussion?
+>
+
+I took it straight from the LDD3 kernel module makefile example.
+
+Googling around, I cannot see a definitive answer, probably exporting both
+could be a nice idea.
 
 
-On 24/01/2024 06:32, Nayab Sayed via buildroot wrote:
-> This commit updates the host environment setup helper script to use the more
-> conventional variable name KERNEL_DIR instead of KERNELDIR.  The change is made
-> for consistency and to align with established conventions in the project (like
-> KERNEL_HOST, HOST_DIR etc.). No functional changes are introduced by this
-> commit.
+>   Regards,
+>   Arnout
+>
+> >
+> > Signed-off-by: Nayab Sayed <nayabbasha.sayed@microchip.com>
+> > ---
+> >   package/environment-setup/environment-setup    | 2 +-
+> >   package/environment-setup/environment-setup.mk | 2 +-
+> >   2 files changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/package/environment-setup/environment-setup
+> b/package/environment-setup/environment-setup
+> > index 84a9843c24..8504a89743 100644
+> > --- a/package/environment-setup/environment-setup
+> > +++ b/package/environment-setup/environment-setup
+> > @@ -10,7 +10,7 @@ cat <<'EOF'
+> >   Some tips:
+> >   * PATH now contains the SDK utilities
+> >   * Standard autotools variables (CC, LD, CFLAGS) are exported
+> > -* Kernel compilation variables (ARCH, CROSS_COMPILE, KERNELDIR) are
+> exported
+> > +* Kernel compilation variables (ARCH, CROSS_COMPILE, KERNEL_DIR) are
+> exported
+> >   * To configure do "./configure $CONFIGURE_FLAGS" or use
+> >     the "configure" alias
+> >   * To build CMake-based projects, use the "cmake" alias
+> > diff --git a/package/environment-setup/environment-setup.mk
+> b/package/environment-setup/environment-setup.mk
+> > index 29ec5a9a95..cc058a5799 100644
+> > --- a/package/environment-setup/environment-setup.mk
+> > +++ b/package/environment-setup/environment-setup.mk
+> > @@ -34,7 +34,7 @@ define HOST_ENVIRONMENT_SETUP_INSTALL_CMDS
+> >               >> $(ENVIRONMENT_SETUP_FILE)
+> >
+> >       $(if $(BR2_LINUX_KERNEL),\
+> > -             printf "export \"KERNELDIR=$(LINUX_BUILDDIR)\"\n" \
+> > +             printf "export \"KERNEL_DIR=$(LINUX_BUILDDIR)\"\n" \
+> >                       >> $(ENVIRONMENT_SETUP_FILE),)
+> >   endef
+> >
+> >
+> > ---
+> > base-commit: 04dfeff6242516a1061973fc7af2cc9c5e3dd4e2
+> > change-id: 20240124-kernel_dir-41a48fd97b75
+> >
+> > Best regards,
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+>
 
-  Do you have some evidence of this established convention?
+--000000000000dcc4eb06102f6017
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-  We currently have three external module packages that use KERNELDIR 
-(falcosecurity-libs, ti-gfx and ti-sgx-km) and two that use KERNEL_DIR 
-(kernel-module-imx-gpu-viv and gcnano-binaries).
+<div dir=3D"auto"><div><br><br><div class=3D"gmail_quote"><div dir=3D"ltr" =
+class=3D"gmail_attr">Il mar 30 gen 2024, 21:03 Arnout Vandecappelle via bui=
+ldroot &lt;<a href=3D"mailto:buildroot@buildroot.org">buildroot@buildroot.o=
+rg</a>&gt; ha scritto:<br></div><blockquote class=3D"gmail_quote" style=3D"=
+margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex"><br>
+<br>
+On 24/01/2024 06:32, Nayab Sayed via buildroot wrote:<br>
+&gt; This commit updates the host environment setup helper script to use th=
+e more<br>
+&gt; conventional variable name KERNEL_DIR instead of KERNELDIR.=C2=A0 The =
+change is made<br>
+&gt; for consistency and to align with established conventions in the proje=
+ct (like<br>
+&gt; KERNEL_HOST, HOST_DIR etc.). No functional changes are introduced by t=
+his<br>
+&gt; commit.<br>
+<br>
+=C2=A0 Do you have some evidence of this established convention?<br>
+<br>
+=C2=A0 We currently have three external module packages that use KERNELDIR =
+<br>
+(falcosecurity-libs, ti-gfx and ti-sgx-km) and two that use KERNEL_DIR <br>
+(kernel-module-imx-gpu-viv and gcnano-binaries).<br>
+<br>
+<br>
+=C2=A0 It has been KERNELDIR in Buildroot for more than 3 years now. If we =
+change it <br>
+now, in all likelihood we will break a number of scripts that rely on that =
+<br>
+environment variable. So I think we need quite overwhelming evidence that <=
+br>
+KERNEL_DIR is better before we introduce such breakage.<br>
+<br>
+=C2=A0 Angelo, you originally introduced KERNELDIR, anything to add to this=
+ discussion?<br></blockquote></div></div><div dir=3D"auto"><br></div><div d=
+ir=3D"auto">I took it straight from the LDD3 kernel module makefile example=
+.</div><div dir=3D"auto"><br></div><div dir=3D"auto">Googling around, I can=
+not see a definitive answer, probably exporting both could be a nice idea.<=
+/div><div dir=3D"auto"><br></div><div dir=3D"auto"><div class=3D"gmail_quot=
+e"><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left=
+:1px #ccc solid;padding-left:1ex">
+<br>
+=C2=A0 Regards,<br>
+=C2=A0 Arnout<br>
+<br>
+&gt; <br>
+&gt; Signed-off-by: Nayab Sayed &lt;<a href=3D"mailto:nayabbasha.sayed@micr=
+ochip.com" target=3D"_blank" rel=3D"noreferrer">nayabbasha.sayed@microchip.=
+com</a>&gt;<br>
+&gt; ---<br>
+&gt;=C2=A0 =C2=A0package/environment-setup/environment-setup=C2=A0 =C2=A0 |=
+ 2 +-<br>
+&gt;=C2=A0 =C2=A0package/environment-setup/<a href=3D"http://environment-se=
+tup.mk" rel=3D"noreferrer noreferrer" target=3D"_blank">environment-setup.m=
+k</a> | 2 +-<br>
+&gt;=C2=A0 =C2=A02 files changed, 2 insertions(+), 2 deletions(-)<br>
+&gt; <br>
+&gt; diff --git a/package/environment-setup/environment-setup b/package/env=
+ironment-setup/environment-setup<br>
+&gt; index 84a9843c24..8504a89743 100644<br>
+&gt; --- a/package/environment-setup/environment-setup<br>
+&gt; +++ b/package/environment-setup/environment-setup<br>
+&gt; @@ -10,7 +10,7 @@ cat &lt;&lt;&#39;EOF&#39;<br>
+&gt;=C2=A0 =C2=A0Some tips:<br>
+&gt;=C2=A0 =C2=A0* PATH now contains the SDK utilities<br>
+&gt;=C2=A0 =C2=A0* Standard autotools variables (CC, LD, CFLAGS) are export=
+ed<br>
+&gt; -* Kernel compilation variables (ARCH, CROSS_COMPILE, KERNELDIR) are e=
+xported<br>
+&gt; +* Kernel compilation variables (ARCH, CROSS_COMPILE, KERNEL_DIR) are =
+exported<br>
+&gt;=C2=A0 =C2=A0* To configure do &quot;./configure $CONFIGURE_FLAGS&quot;=
+ or use<br>
+&gt;=C2=A0 =C2=A0 =C2=A0the &quot;configure&quot; alias<br>
+&gt;=C2=A0 =C2=A0* To build CMake-based projects, use the &quot;cmake&quot;=
+ alias<br>
+&gt; diff --git a/package/environment-setup/<a href=3D"http://environment-s=
+etup.mk" rel=3D"noreferrer noreferrer" target=3D"_blank">environment-setup.=
+mk</a> b/package/environment-setup/<a href=3D"http://environment-setup.mk" =
+rel=3D"noreferrer noreferrer" target=3D"_blank">environment-setup.mk</a><br=
+>
+&gt; index 29ec5a9a95..cc058a5799 100644<br>
+&gt; --- a/package/environment-setup/<a href=3D"http://environment-setup.mk=
+" rel=3D"noreferrer noreferrer" target=3D"_blank">environment-setup.mk</a><=
+br>
+&gt; +++ b/package/environment-setup/<a href=3D"http://environment-setup.mk=
+" rel=3D"noreferrer noreferrer" target=3D"_blank">environment-setup.mk</a><=
+br>
+&gt; @@ -34,7 +34,7 @@ define HOST_ENVIRONMENT_SETUP_INSTALL_CMDS<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; $(ENVIR=
+ONMENT_SETUP_FILE)<br>
+&gt;=C2=A0 =C2=A0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0$(if $(BR2_LINUX_KERNEL),\<br>
+&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0printf &quot;export \=
+&quot;KERNELDIR=3D$(LINUX_BUILDDIR)\&quot;\n&quot; \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0printf &quot;export \=
+&quot;KERNEL_DIR=3D$(LINUX_BUILDDIR)\&quot;\n&quot; \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0&gt;&gt; $(ENVIRONMENT_SETUP_FILE),)<br>
+&gt;=C2=A0 =C2=A0endef<br>
+&gt;=C2=A0 =C2=A0<br>
+&gt; <br>
+&gt; ---<br>
+&gt; base-commit: 04dfeff6242516a1061973fc7af2cc9c5e3dd4e2<br>
+&gt; change-id: 20240124-kernel_dir-41a48fd97b75<br>
+&gt; <br>
+&gt; Best regards,<br>
+_______________________________________________<br>
+buildroot mailing list<br>
+<a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank" rel=3D"norefer=
+rer">buildroot@buildroot.org</a><br>
+<a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=3D"n=
+oreferrer noreferrer" target=3D"_blank">https://lists.buildroot.org/mailman=
+/listinfo/buildroot</a><br>
+</blockquote></div></div></div>
 
+--000000000000dcc4eb06102f6017--
 
-  It has been KERNELDIR in Buildroot for more than 3 years now. If we change it 
-now, in all likelihood we will break a number of scripts that rely on that 
-environment variable. So I think we need quite overwhelming evidence that 
-KERNEL_DIR is better before we introduce such breakage.
+--===============3734964762999676537==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-  Angelo, you originally introduced KERNELDIR, anything to add to this discussion?
-
-  Regards,
-  Arnout
-
-> 
-> Signed-off-by: Nayab Sayed <nayabbasha.sayed@microchip.com>
-> ---
->   package/environment-setup/environment-setup    | 2 +-
->   package/environment-setup/environment-setup.mk | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/environment-setup/environment-setup b/package/environment-setup/environment-setup
-> index 84a9843c24..8504a89743 100644
-> --- a/package/environment-setup/environment-setup
-> +++ b/package/environment-setup/environment-setup
-> @@ -10,7 +10,7 @@ cat <<'EOF'
->   Some tips:
->   * PATH now contains the SDK utilities
->   * Standard autotools variables (CC, LD, CFLAGS) are exported
-> -* Kernel compilation variables (ARCH, CROSS_COMPILE, KERNELDIR) are exported
-> +* Kernel compilation variables (ARCH, CROSS_COMPILE, KERNEL_DIR) are exported
->   * To configure do "./configure $CONFIGURE_FLAGS" or use
->     the "configure" alias
->   * To build CMake-based projects, use the "cmake" alias
-> diff --git a/package/environment-setup/environment-setup.mk b/package/environment-setup/environment-setup.mk
-> index 29ec5a9a95..cc058a5799 100644
-> --- a/package/environment-setup/environment-setup.mk
-> +++ b/package/environment-setup/environment-setup.mk
-> @@ -34,7 +34,7 @@ define HOST_ENVIRONMENT_SETUP_INSTALL_CMDS
->   		>> $(ENVIRONMENT_SETUP_FILE)
->   
->   	$(if $(BR2_LINUX_KERNEL),\
-> -		printf "export \"KERNELDIR=$(LINUX_BUILDDIR)\"\n" \
-> +		printf "export \"KERNEL_DIR=$(LINUX_BUILDDIR)\"\n" \
->   			>> $(ENVIRONMENT_SETUP_FILE),)
->   endef
->   
-> 
-> ---
-> base-commit: 04dfeff6242516a1061973fc7af2cc9c5e3dd4e2
-> change-id: 20240124-kernel_dir-41a48fd97b75
-> 
-> Best regards,
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3734964762999676537==--
