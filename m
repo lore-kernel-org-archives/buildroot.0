@@ -4,62 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58B38C47DB3
-	for <buildroot@archiver.kernel.org>; Mon, 29 Jan 2024 23:18:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13322C46CD2
+	for <buildroot@archiver.kernel.org>; Tue, 30 Jan 2024 06:47:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E91C760BA0;
-	Mon, 29 Jan 2024 23:18:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E91C760BA0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7985F60B70;
+	Tue, 30 Jan 2024 06:47:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7985F60B70
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IXSrybtoZgir; Mon, 29 Jan 2024 23:18:06 +0000 (UTC)
+	with ESMTP id BN5T4mhX58v1; Tue, 30 Jan 2024 06:47:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DFCB660C0F;
-	Mon, 29 Jan 2024 23:18:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DFCB660C0F
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 296621BF309
- for <buildroot@lists.busybox.net>; Mon, 29 Jan 2024 23:18:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 791AA60BCE;
+	Tue, 30 Jan 2024 06:47:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 791AA60BCE
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 03FBC1BF2C2
+ for <buildroot@lists.busybox.net>; Tue, 30 Jan 2024 06:47:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 01B8860BA0
- for <buildroot@lists.busybox.net>; Mon, 29 Jan 2024 23:18:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 01B8860BA0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9A544417EA
+ for <buildroot@lists.busybox.net>; Tue, 30 Jan 2024 06:47:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A544417EA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id S2ZqCJXF1FxT for <buildroot@lists.busybox.net>;
- Mon, 29 Jan 2024 23:18:02 +0000 (UTC)
-Received: from smtpdh18-1.aruba.it (smtpdh18-1.aruba.it [62.149.155.132])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E892D60B3B
- for <buildroot@buildroot.org>; Mon, 29 Jan 2024 23:18:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E892D60B3B
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba Outgoing Smtp  with ESMTPSA
- id Uat4r1x68RqncUat4rsACH; Tue, 30 Jan 2024 00:17:59 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Date: Tue, 30 Jan 2024 00:17:56 +0100
-Message-Id: <20240129231756.443977-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MWVrkijjOeah for <buildroot@lists.busybox.net>;
+ Tue, 30 Jan 2024 06:47:39 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 78A0A417BA
+ for <buildroot@buildroot.org>; Tue, 30 Jan 2024 06:47:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 78A0A417BA
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8A2C61BF20D
+ for <buildroot@buildroot.org>; Tue, 30 Jan 2024 06:47:35 +0000 (UTC)
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfASEkYajnAcBAlZxWoZBXXKpCiphRdGtXzrnmo5ZtU2N9a3rEDsVrggtMJuqcP4PvvuXiLGw8A6aqst+g3ytzaaNswhhgVZwfbZpi1Uq5RYQJdGbl0Vp
- n8eQSUiDFyGs1Wkwxhc5siG6IKrLNX/aVLixiflIp5piWS3D4kyAH6ciJVT43VUtAFLb3s5ACVm6E5MqKFxByImCQcvHqFU7BaB+rZAQ5H7+7cL5jlkGo0Fm
- P/6Azr6l3oyQdG1EVx/aDBACUtKt4pW1XsnxRCr+xF4=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1706570279; bh=c1aNVW+tLaH5H5Y1jv6f/ButNvi/ek7pa1L3yyuF8eg=;
- h=From:To:Subject:Date:MIME-Version;
- b=YKqaZDrlCuhk72L8yhrT6clvDIFLktfXdhUce40jdOLuV5CieXnCzt6Wa9RJznRZx
- 0CkfOkkDePWVkiLXMggwv8IyCI59jNT3G4rklSW+wfp7sK7Wbe10Y3aZH/kBfyfE0D
- E7q6Usl5uAksHloyUcfYDmb8FlKPP/4cZdu8LrSt4CPpgmAti4NgCQoG9LhaZFyG9t
- bDO2IzsFEx+TWQYRqdAhe4AFpfw8Y50AcITYZkGMYGQbmEbAkkRPEKrhTU4FW3gdUZ
- no7EJPUtOQKLInFb6d8Ur1AfJl+5Oa6lVN4auyK5Ojxlo7kQGLhXk//+8vnewQ3SYO
- Xmph+li1M9EkQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=YKqaZDrl
-Subject: [Buildroot] [PATCH] package/esp-hosted: bump version to 2024-01-26
+To: buildroot@buildroot.org
+Date: Tue, 30 Jan 2024 06:47:35 -0000
+X-GND-Sasl: bot@bootlin.com
+Message-Id: <20240130064740.9A544417EA@smtp4.osuosl.org>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; 
+ t=1706597255; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
+ mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=e8ZzCqTk4qzw9kl9BE7lDmQgCp/kPCoQDQRpMntaZc8=;
+ b=eCs7sLsPKTiDbFZsa4HUb5OvzhATmvZ8gpy973l/+FvaWxYL4F5PJs8rOnjvv3khtuDSoe
+ RoPZVJX9u2vqjDj5wrDEeqLtIBtX3785cZnnCnnVkxLhONdeq2alZfCpF3gQKPANPQv2Vg
+ 31qwvX2DanMwmJjwUm3IgrdUUo6Rxc6y2SFzFsEsuSztpE6YjpAYarVkPktill+2klOUsx
+ uBAgdAobaimakNgGMJdLoSHzXDiQ5SeBXAuKhLfnynPU85IgAFnsjq2vUn35a6XZclXJR5
+ tVOCttKIhATwU19QTGvTwCWeBi9AkYzl6xuIh1y8/YyWsXuzPdWMsiDn3AJ1UQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=eCs7sLsP
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2024-01-29
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,205 +69,164 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-* support Linux 6.7
-* support ESP32 and ESP32C6 Targets
+Hello,
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- ...g-Fix-build-with-Linux-kernel-versio.patch | 36 ++++++++++
- ...py-with-strscpy-as-suggested-in-Linu.patch | 71 +++++++++++++++++++
- package/esp-hosted/Config.in                  | 14 ++++
- package/esp-hosted/esp-hosted.hash            |  2 +-
- package/esp-hosted/esp-hosted.mk              |  8 ++-
- 5 files changed, 129 insertions(+), 2 deletions(-)
- create mode 100644 package/esp-hosted/0001-fix-esp-hosted-ng-Fix-build-with-Linux-kernel-versio.patch
- create mode 100644 package/esp-hosted/0002-Substitute-strlcpy-with-strscpy-as-suggested-in-Linu.patch
+Autobuild statistics for 2024-01-29
+===================================
 
-diff --git a/package/esp-hosted/0001-fix-esp-hosted-ng-Fix-build-with-Linux-kernel-versio.patch b/package/esp-hosted/0001-fix-esp-hosted-ng-Fix-build-with-Linux-kernel-versio.patch
-new file mode 100644
-index 0000000000..6c5b7bae38
---- /dev/null
-+++ b/package/esp-hosted/0001-fix-esp-hosted-ng-Fix-build-with-Linux-kernel-versio.patch
-@@ -0,0 +1,36 @@
-+From 5391bf14468cda9aa180fb524c3d12d3af7525f3 Mon Sep 17 00:00:00 2001
-+From: Nicolas Aguirre <aguirre.nicolas@gmail.com>
-+Date: Thu, 25 Jan 2024 16:01:49 +0100
-+Subject: [PATCH] fix(esp-hosted-ng): Fix build with Linux kernel version 6.7.0
-+
-+cfg80211_rx_assoc_resp structure has been removed and replaced by
-+cfg80211_rx_assoc_resp_data after this changes :
-+https://patchwork.kernel.org/project/linux-wireless/patch/20231012114229.2931808-3-kvalo@kernel.org/
-+
-+Upstream: https://github.com/espressif/esp-hosted/pull/324
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ esp_hosted_ng/host/include/esp_kernel_port.h | 5 +++++
-+ 1 file changed, 5 insertions(+)
-+
-+diff --git a/esp_hosted_ng/host/include/esp_kernel_port.h b/esp_hosted_ng/host/include/esp_kernel_port.h
-+index 03d11773e5..c4eb336969 100644
-+--- a/esp_hosted_ng/host/include/esp_kernel_port.h
-++++ b/esp_hosted_ng/host/include/esp_kernel_port.h
-+@@ -178,7 +178,12 @@ void CFG80211_RX_ASSOC_RESP(struct net_device *dev,
-+ 			    const u8 *req_ies, size_t req_ies_len)
-+ {
-+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 0, 0))
-++
-++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 7, 0))
-++	struct cfg80211_rx_assoc_resp_data resp = {0};
-++#else
-+ 	struct cfg80211_rx_assoc_resp resp = {0};
-++#endif
-+ 
-+ 	resp.links[0].bss = bss;
-+ 	resp.buf = (u8 *)buf;
-+-- 
-+2.34.1
-+
-diff --git a/package/esp-hosted/0002-Substitute-strlcpy-with-strscpy-as-suggested-in-Linu.patch b/package/esp-hosted/0002-Substitute-strlcpy-with-strscpy-as-suggested-in-Linu.patch
-new file mode 100644
-index 0000000000..54c8539552
---- /dev/null
-+++ b/package/esp-hosted/0002-Substitute-strlcpy-with-strscpy-as-suggested-in-Linu.patch
-@@ -0,0 +1,71 @@
-+From 2479fac6163537c77f30ac66440018a866e1312b Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Mon, 29 Jan 2024 23:56:03 +0100
-+Subject: [PATCH] Substitute strlcpy() with strscpy() as suggested in Linux:
-+ https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/scripts/checkpatch.pl#n7006
-+
-+Upstream: https://github.com/espressif/esp-hosted/pull/326
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ esp_hosted_fg/host/linux/host_driver/esp32/spi/esp_spi.c | 2 +-
-+ esp_hosted_ng/host/esp_cfg80211.c                        | 2 +-
-+ esp_hosted_ng/host/esp_cmd.c                             | 2 +-
-+ esp_hosted_ng/host/spi/esp_spi.c                         | 2 +-
-+ 4 files changed, 4 insertions(+), 4 deletions(-)
-+
-+diff --git a/esp_hosted_fg/host/linux/host_driver/esp32/spi/esp_spi.c b/esp_hosted_fg/host/linux/host_driver/esp32/spi/esp_spi.c
-+index f375d7d3f1..1dc2506bee 100644
-+--- a/esp_hosted_fg/host/linux/host_driver/esp32/spi/esp_spi.c
-++++ b/esp_hosted_fg/host/linux/host_driver/esp32/spi/esp_spi.c
-+@@ -460,7 +460,7 @@ static int spi_dev_init(int spi_clk_mhz)
-+ 	struct spi_board_info esp_board = {{0}};
-+ 	struct spi_master *master = NULL;
-+ 
-+-	strlcpy(esp_board.modalias, "esp_spi", sizeof(esp_board.modalias));
-++	strscpy(esp_board.modalias, "esp_spi", sizeof(esp_board.modalias));
-+ 	esp_board.mode = SPI_MODE_2;
-+ 	esp_board.max_speed_hz = spi_clk_mhz * NUMBER_1M;
-+ 	esp_board.bus_num = 0;
-+diff --git a/esp_hosted_ng/host/esp_cfg80211.c b/esp_hosted_ng/host/esp_cfg80211.c
-+index 548fdcc476..feeb9921a1 100644
-+--- a/esp_hosted_ng/host/esp_cfg80211.c
-++++ b/esp_hosted_ng/host/esp_cfg80211.c
-+@@ -671,7 +671,7 @@ static void esp_reg_notifier(struct wiphy *wiphy,
-+ 
-+ 	/* Don't send same regdom info to firmware */
-+ 	if (strncmp(request->alpha2, priv->country_code, strlen(request->alpha2))) {
-+-		strlcpy(priv->country_code, request->alpha2, MAX_COUNTRY_LEN);
-++		strscpy(priv->country_code, request->alpha2, MAX_COUNTRY_LEN);
-+ 		cmd_set_reg_domain(priv);
-+ 	}
-+ }
-+diff --git a/esp_hosted_ng/host/esp_cmd.c b/esp_hosted_ng/host/esp_cmd.c
-+index 244df46c0f..0c0ab968ef 100644
-+--- a/esp_hosted_ng/host/esp_cmd.c
-++++ b/esp_hosted_ng/host/esp_cmd.c
-+@@ -1646,7 +1646,7 @@ int cmd_set_reg_domain(struct esp_wifi_device *priv)
-+ 
-+ 	cmd = (struct cmd_reg_domain *) (cmd_node->cmd_skb->data + sizeof(struct esp_payload_header));
-+ 
-+-	strlcpy(cmd->country_code, priv->country_code, MAX_COUNTRY_LEN);
-++	strscpy(cmd->country_code, priv->country_code, MAX_COUNTRY_LEN);
-+ 
-+ 	queue_cmd_node(priv->adapter, cmd_node, ESP_CMD_DFLT_PRIO);
-+ 	queue_work(priv->adapter->cmd_wq, &priv->adapter->cmd_work);
-+diff --git a/esp_hosted_ng/host/spi/esp_spi.c b/esp_hosted_ng/host/spi/esp_spi.c
-+index 8364a0c4d6..c741d71981 100644
-+--- a/esp_hosted_ng/host/spi/esp_spi.c
-++++ b/esp_hosted_ng/host/spi/esp_spi.c
-+@@ -416,7 +416,7 @@ static int spi_dev_init(int spi_clk_mhz)
-+ 	struct spi_board_info esp_board = {{0}};
-+ 	struct spi_master *master = NULL;
-+ 
-+-	strlcpy(esp_board.modalias, "esp_spi", sizeof(esp_board.modalias));
-++	strscpy(esp_board.modalias, "esp_spi", sizeof(esp_board.modalias));
-+ 	esp_board.mode = SPI_MODE_2;
-+ 	esp_board.max_speed_hz = spi_clk_mhz * NUMBER_1M;
-+ 	esp_board.bus_num = 0;
-+-- 
-+2.34.1
-+
-diff --git a/package/esp-hosted/Config.in b/package/esp-hosted/Config.in
-index 42e1afa8c5..5abab73b57 100644
---- a/package/esp-hosted/Config.in
-+++ b/package/esp-hosted/Config.in
-@@ -28,4 +28,18 @@ config BR2_PACKAGE_ESP_HOSTED_SPI
- 
- endchoice
- 
-+choice
-+	prompt "Target"
-+	default BR2_PACKAGE_ESP_HOSTED_TARGET_ESP32
-+	help
-+	  Select which SoC Target driver is used for
-+
-+config BR2_PACKAGE_ESP_HOSTED_TARGET_ESP32
-+	bool "ESP32"
-+
-+config BR2_PACKAGE_ESP_HOSTED_TARGET_ESP32C6
-+	bool "ESP32C6"
-+
-+endchoice
-+
- endif
-diff --git a/package/esp-hosted/esp-hosted.hash b/package/esp-hosted/esp-hosted.hash
-index b129bb42f9..73e19a2a47 100644
---- a/package/esp-hosted/esp-hosted.hash
-+++ b/package/esp-hosted/esp-hosted.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  6e023c26355643f2aaf6d79d5910f64c49ea638063235d519075629643518a71  esp-hosted-ce3c50a33fa4bc562a1b6cbcee292c1ae0b0a404.tar.gz
-+sha256  81852d1de5d6d8bb806818723c994dfae703e5fba4a734c5254902f3f71cf7b7  esp-hosted-0067a944ddc0e532bc13f83236c65df3a1ec00a0.tar.gz
- sha256  ed57d96d27be775b22f9571d3724ef84e0d0b8f24b805ec7f87a32189de19a9c  LICENSE
-diff --git a/package/esp-hosted/esp-hosted.mk b/package/esp-hosted/esp-hosted.mk
-index 578108c91d..6a4a4e1358 100644
---- a/package/esp-hosted/esp-hosted.mk
-+++ b/package/esp-hosted/esp-hosted.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ESP_HOSTED_VERSION = ce3c50a33fa4bc562a1b6cbcee292c1ae0b0a404
-+ESP_HOSTED_VERSION = 0067a944ddc0e532bc13f83236c65df3a1ec00a0
- ESP_HOSTED_SITE = $(call github,espressif,esp-hosted,$(ESP_HOSTED_VERSION))
- ESP_HOSTED_DEPENDENCIES = linux
- ESP_HOSTED_LICENSE = GPL-2.0
-@@ -28,5 +28,11 @@ else
- ESP_HOSTED_MODULE_MAKE_OPTS = target=sdio
- endif
- 
-+ifeq ($(BR2_PACKAGE_ESP_HOSTED_TARGET_ESP32),y)
-+ESP_HOSTED_MODULE_MAKE_OPTS += ESP_SLAVE=CONFIG_TARGET_ESP32=y
-+else
-+ESP_HOSTED_MODULE_MAKE_OPTS += ESP_SLAVE=CONFIG_TARGET_ESP32C6=y
-+endif
-+
- $(eval $(kernel-module))
- $(eval $(generic-package))
+      branch |  OK | NOK | TIM | TOT |
+  2023.02.x  |  3  |  0  |  0  |  3  |
+  2023.11.x  |  2  |  4  |  0  |  6  |
+    master   | 39  | 50  |  1  | 90  |
+
+Classification of failures by reason for master
+-----------------------------------------------
+
+                libressl-3.8.2 | 5 
+                  stunnel-5.71 | 5 
+                 openssh-9.6p1 | 4 
+                 sudo-1.9.15p5 | 4 
+  gobject-introspection-1.76.1 | 3 
+                  linux-6.6.13 | 3 
+                    attr-2.5.2 | 2 
+                    brltty-6.6 | 2 
+              libopenssl-3.2.0 | 2 
+                  acpid-2.0.34 | 1 
+             bluez5_utils-5.68 | 1 
+                   botan-3.2.0 | 1 
+                elfutils-0.189 | 1 
+         gobject-introspection | 1 
+host-heimdal-f4faaeaba371ff... | 1 
+              host-rust-1.74.1 | 1 
+               ipmitool-1_8_19 | 1 
+              libarchive-3.7.2 | 1 
+               libglib2-2.76.1 | 1 
+                   libnss-3.97 | 1 
+                libselinux-3.5 | 1 
+ Makefile:727: target-finalize | 1 
+                 mesa3d-23.3.3 | 1 
+                 powertop-2.15 | 1 
+                    pppd-2.5.0 | 1 
+           python-numpy-1.25.0 | 1 
+                 samba4-4.19.3 | 1 
+uclibc-ng-test-0f303c63fab7... | 1 
+                       unknown | 1 
+                 wolfssl-5.6.6 | 1 
+
+
+Detail of failures for master
+-----------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  mips64el   |          acpid-2.0.34          | NOK | http://autobuild.buildroot.net/results/19a4e4fc770b0454e3df6ba6ee3d4aa283141f45 | ORPH
+ microblaze  |           attr-2.5.2           | NOK | http://autobuild.buildroot.net/results/0fbd528b250590b1717bce5f07f7f318ca8eee87 |     
+ microblaze  |           attr-2.5.2           | NOK | http://autobuild.buildroot.net/results/4729909d7ab42bf8f13c7607a85ad49bb87a8df8 |     
+    sh4      |       bluez5_utils-5.68        | NOK | http://autobuild.buildroot.net/results/d87c418a2e68626645f68c68ca03bb0bc885d1bf |     
+ powerpc64   |          botan-3.2.0           | NOK | http://autobuild.buildroot.net/results/43307dee29a2b70ec0b5115d6481a05eb7d3e55f | ORPH
+  powerpc    |           brltty-6.6           | NOK | http://autobuild.buildroot.net/results/3d7bedfbdea77c513e565e5085a168b0a3ee6c80 |     
+  mips64el   |           brltty-6.6           | NOK | http://autobuild.buildroot.net/results/f33392505ce73063d7bebaa011737e50f7581f87 |     
+microblazeel |         elfutils-0.189         | NOK | http://autobuild.buildroot.net/results/6d115013d8c29ff3fad715a67c3217f984fcb10b | ORPH
+microblazeel |     gobject-introspection      | TIM | http://autobuild.buildroot.net/results/f28b444aff73502e7aaece0b2c6cac42efd89696 |     
+    m68k     |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/c500af2efb9345ff9f15e1b01bc36788138ae3e9 | ORPH
+   s390x     |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/f3c7d17dea2d5dced464e7f2d7dc6d83ca7ed31e | ORPH
+  sparc64    |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/80437f5ee62069cf9d037e435b49c4dce298d2b1 | ORPH
+  mips64el   | host-heimdal-f4faaeaba371ff... | NOK | http://autobuild.buildroot.net/results/64c1992d1c7d8b9f0e5266f7d6769e0b33f881cd | ORPH
+  sparc64    |        host-rust-1.74.1        | NOK | http://autobuild.buildroot.net/results/d95e42cfb9740aa4aad0b192a985c5ab91587177 |     
+microblazeel |        ipmitool-1_8_19         | NOK | http://autobuild.buildroot.net/results/e0c779e3dfc51799f36d99bc4bfbf5673a82b742 |     
+ microblaze  |        libarchive-3.7.2        | NOK | http://autobuild.buildroot.net/results/055b34ccd825e191bd96abac25d1eae23b51af2a |     
+   arceb     |        libglib2-2.76.1         | NOK | http://autobuild.buildroot.net/results/31f8b42efef22f92f0a94a22618a5524094a16c5 |     
+    or1k     |          libnss-3.97           | NOK | http://autobuild.buildroot.net/results/cb6e0c3663299423c00146ff8a1317ea3ef4ee50 |     
+    arm      |        libopenssl-3.2.0        | NOK | http://autobuild.buildroot.net/results/e6b25e46c77446656368b642431bb663b94b613f | ORPH
+   s390x     |        libopenssl-3.2.0        | NOK | http://autobuild.buildroot.net/results/93e7794889e7b730dbefa41c2f6e5ab3960ad4df | ORPH
+   mips64    |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/08d94bca4b3e2a3f98eb46806cdc7d56678f3d3b | ORPH
+ powerpc64   |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/247bb0a2091f0c92c988ba0c2c03342962bb3549 | ORPH
+   nios2     |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/2e77d50a76abbc924c2d89b4ddef777797c38690 | ORPH
+ powerpc64   |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/e20c02c26b2de712f56e3c744c766bd7b38c31c3 | ORPH
+   s390x     |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/73b417da4237028c8996b78bf5f6e452cf158ef0 | ORPH
+   armeb     |         libselinux-3.5         | NOK | http://autobuild.buildroot.net/results/e8a78da2fb91c1e0f8a2e815cbdd2659776e3b1d |     
+   nios2     |          linux-6.6.13          | NOK | http://autobuild.buildroot.net/results/c7babefd997a7a7894c13636e03c4f523eca00b2 | ORPH
+powerpc64le  |          linux-6.6.13          | NOK | http://autobuild.buildroot.net/results/72cb2067fa228d22bc35d5dc32585527a113d285 | ORPH
+ microblaze  |          linux-6.6.13          | NOK | http://autobuild.buildroot.net/results/bde71150243aaf681b5f06e36ffa7b36cfb29e5f | ORPH
+powerpc64le  | Makefile:727: target-finalize  | NOK | http://autobuild.buildroot.net/results/69e48f4edd6cdf325a2aec3c9dc9414ff7a8e3c3 |     
+ aarch64_be  |         mesa3d-23.3.3          | NOK | http://autobuild.buildroot.net/results/b62eba2155b080ed02fde774994f2fffc8a6ef51 |     
+ powerpc64   |         openssh-9.6p1          | NOK | http://autobuild.buildroot.net/results/1f4b147f0c434063bb8e9db2cb488ccdcf7a1f9f | ORPH
+  mips64el   |         openssh-9.6p1          | NOK | http://autobuild.buildroot.net/results/0d0d7d1081e0980701faee1bc801f986031f57f0 | ORPH
+  mips64el   |         openssh-9.6p1          | NOK | http://autobuild.buildroot.net/results/081b584fb03562321cd1fa86032d535b2a886ed6 | ORPH
+ powerpc64   |         openssh-9.6p1          | NOK | http://autobuild.buildroot.net/results/2eeda406acc0b6a6d966dc3616ab59124ae7cdbc | ORPH
+   s390x     |         powertop-2.15          | NOK | http://autobuild.buildroot.net/results/f4240d07cde921b49522ce6fa7bde6bb376d3bb4 |     
+  sparc64    |           pppd-2.5.0           | NOK | http://autobuild.buildroot.net/results/12e088f919475089a68e9665e581f292d6ebb467 |     
+    mips     |      python-numpy-1.25.0       | NOK | http://autobuild.buildroot.net/results/87aed1add075233297c289a46c0c58e2a84d9128 |     
+    m68k     |         samba4-4.19.3          | NOK | http://autobuild.buildroot.net/results/33ccf81c5cb9449ec3baeb944f7d74b9738a0232 |     
+    m68k     |          stunnel-5.71          | NOK | http://autobuild.buildroot.net/results/20bb15da18d59d3a7cf31cdd368974b8bfec1470 |     
+ powerpc64   |          stunnel-5.71          | NOK | http://autobuild.buildroot.net/results/5dc4b78f750aee6bbb119a917905124d55f8c4b6 |     
+ microblaze  |          stunnel-5.71          | NOK | http://autobuild.buildroot.net/results/4008ba7a9926a65e05ef1581aaa8896b15be220d |     
+  aarch64    |          stunnel-5.71          | NOK | http://autobuild.buildroot.net/results/402549445a3a2913d56d42955258095cfc863ad9 |     
+   mipsel    |          stunnel-5.71          | NOK | http://autobuild.buildroot.net/results/61582142379a385f453ab6bc4fb0d0d610197adf |     
+ aarch64_be  |         sudo-1.9.15p5          | NOK | http://autobuild.buildroot.net/results/006e0d9924962324db64e4394798900688f7924c | ORPH
+   armeb     |         sudo-1.9.15p5          | NOK | http://autobuild.buildroot.net/results/ebb061016a5006d31a7b5c628abc2f653fe09468 | ORPH
+   mips64    |         sudo-1.9.15p5          | NOK | http://autobuild.buildroot.net/results/48ab8a62ded94361791357f3dd01253bd1abdc56 | ORPH
+  powerpc    |         sudo-1.9.15p5          | NOK | http://autobuild.buildroot.net/results/70c1eb3b8efda40e82b71af496e500eda8d90e89 | ORPH
+    arm      | uclibc-ng-test-0f303c63fab7... | NOK | http://autobuild.buildroot.net/results/ee34bd0b5c1c4bafe220594b868481ff1baa6be2 |     
+    arm      |            unknown             | NOK | http://autobuild.buildroot.net/results/5ac9e1e2363ff4b49fd0394cd83918e98b5b6a50 |     
+    mips     |         wolfssl-5.6.6          | NOK | http://autobuild.buildroot.net/results/efb0cd353ec6078260b54150667ab2f7bd9e0111 |     
+
+
+Classification of failures by reason for 2023.11.x
+--------------------------------------------------
+
+              host-rust-1.71.1 | 1 
+           janus-gateway-1.1.2 | 1 
+                libselinux-3.5 | 1 
+            micropython-1.22.0 | 1 
+
+
+Detail of failures for 2023.11.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  sparc64    |        host-rust-1.71.1        | NOK | http://autobuild.buildroot.net/results/184d3b5e15cdcb9a56c8000e274679fcdab51c7c |     
+   mips64    |      janus-gateway-1.1.2       | NOK | http://autobuild.buildroot.net/results/6749557ae846df425127ca31759145847d85dbb1 |     
+   arceb     |         libselinux-3.5         | NOK | http://autobuild.buildroot.net/results/503cd8b298a289d51c555c6d2da709c7f2334df8 |     
+  powerpc    |       micropython-1.22.0       | NOK | http://autobuild.buildroot.net/results/e7da6e8c7d7d4fd32e7dbaa407425cdbdc675bb3 |     
+
+
+Gitlab CI results for 2024-01-29
+================================
+
+Detail of runtime-test failures for master
+------------------------------------------
+
+             runtime-test |                        link to the job                        | orph?
+--------------------------+---------------------------------------------------------------+------
+      TestCpioDracutGlibc | https://gitlab.com/buildroot.org/buildroot/-/jobs/6040162462  | ORPH 
+...ioDracutGlibcMergedUsr | https://gitlab.com/buildroot.org/buildroot/-/jobs/6040162463  | ORPH 
+       TestCpioDracutMusl | https://gitlab.com/buildroot.org/buildroot/-/jobs/6040162465  | ORPH 
+...pioDracutMuslMergedUsr | https://gitlab.com/buildroot.org/buildroot/-/jobs/6040162468  | ORPH 
+     TestCpioDracutUclibc | https://gitlab.com/buildroot.org/buildroot/-/jobs/6040162470  | ORPH 
+...oDracutUclibcMergedUsr | https://gitlab.com/buildroot.org/buildroot/-/jobs/6040162471  | ORPH 
+              TestGlxinfo | https://gitlab.com/buildroot.org/buildroot/-/jobs/6040162761  | ORPH 
+         TestGrubX8664EFI | https://gitlab.com/buildroot.org/buildroot/-/jobs/6040162292  | ORPH 
+   TestPythonPy3Bitstring | https://gitlab.com/buildroot.org/buildroot/-/jobs/6040163014  | ORPH 
+    TestPythonPy3Crossbar | https://gitlab.com/buildroot.org/buildroot/-/jobs/6040163031  | ORPH 
+    TestPythonPy3Dtschema | https://gitlab.com/buildroot.org/buildroot/-/jobs/6040163045  | ORPH 
+...honPy3FlaskExpectsJson | https://gitlab.com/buildroot.org/buildroot/-/jobs/6040163051  | ORPH 
+...PythonPy3MagicWormhole | https://gitlab.com/buildroot.org/buildroot/-/jobs/6040163069  | ORPH 
+       TestPythonPy3SciPy | https://gitlab.com/buildroot.org/buildroot/-/jobs/6040163109  | ORPH 
+                 TestRust | https://gitlab.com/buildroot.org/buildroot/-/jobs/6040163138  | ORPH 
+
+
+
 -- 
-2.34.1
-
+http://autobuild.buildroot.net
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
