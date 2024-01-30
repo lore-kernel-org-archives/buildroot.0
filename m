@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 571BDC46CD2
-	for <buildroot@archiver.kernel.org>; Tue, 30 Jan 2024 22:07:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2D3DC46CD2
+	for <buildroot@archiver.kernel.org>; Tue, 30 Jan 2024 22:08:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1019C83AA0;
-	Tue, 30 Jan 2024 22:07:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1019C83AA0
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7DE4B83DD5;
+	Tue, 30 Jan 2024 22:08:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7DE4B83DD5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jjbqV5fRWM9v; Tue, 30 Jan 2024 22:07:58 +0000 (UTC)
+	with ESMTP id SQXzYsAhLc3z; Tue, 30 Jan 2024 22:08:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5A29B83896;
-	Tue, 30 Jan 2024 22:07:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A29B83896
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8C9FA1BF5DF
- for <buildroot@lists.busybox.net>; Tue, 30 Jan 2024 22:07:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D044B835BA;
+	Tue, 30 Jan 2024 22:08:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D044B835BA
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C19A11BF95D
+ for <buildroot@lists.busybox.net>; Tue, 30 Jan 2024 22:07:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 65E4D613D1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7C9FE41B23
  for <buildroot@lists.busybox.net>; Tue, 30 Jan 2024 22:07:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 65E4D613D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C9FE41B23
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oR4iGc9nXTVY for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4_tLhdQul61l for <buildroot@lists.busybox.net>;
  Tue, 30 Jan 2024 22:07:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7A9F760D4F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 92EFC41B26
  for <buildroot@buildroot.org>; Tue, 30 Jan 2024 22:07:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A9F760D4F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 92EFC41B26
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 61B4586735; Tue, 30 Jan 2024 22:07:39 +0000 (UTC)
+ id 7E91986737; Tue, 30 Jan 2024 22:07:39 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 30 Jan 2024 22:56:33 +0100
+Date: Tue, 30 Jan 2024 23:04:58 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e784eb8538bb3582f28572d1db640b89be2e86dd
-X-Git-Newrev: 1dfa4c56fe5dd1b584791b3c0c61dcf0b623aad5
+X-Git-Oldrev: 2953cd264489229adaef5f0a1f307900dcc3e425
+X-Git-Newrev: b0fabbd2aabd827a1989c5dd97089a0cfb9e04c6
 X-Patchwork-Hint: ignore
-Message-Id: <20240130220739.61B4586735@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dhcpcd: bump to version 10.0.5
+Message-Id: <20240130220739.7E91986737@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mdio-tools: bump version to 1.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,45 +62,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1dfa4c56fe5dd1b584791b3c0c61dcf0b623aad5
+commit: https://git.buildroot.net/buildroot/commit/?id=b0fabbd2aabd827a1989c5dd97089a0cfb9e04c6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This version contains a fix for aarch64 based systems.
-On such systems, dhcpcd would crash without setting any IP addresses.
-See https://github.com/NetworkConfiguration/dhcpcd/commit/6a36f96740f8fb9f9b615b157962505f1ad8a00c
-and https://github.com/NetworkConfiguration/dhcpcd/issues/260 for more
-details.
+[v1.3.1] - 2023-12-02
+---------------------
 
-Signed-off-by: David Barbion <davidb@230ruedubac.fr>
+Fixes mvls to work with kernels 6.2 and onwards.
+
+- mdio: Multiple registers can now be dumped at once, via the generic
+  dump operation.
+
+- mvls: Relax the driver matching to accept the strings used in
+  kernels 6.2 and newer.
+
+Signed-off-by: Robert Marko <robimarko@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dhcpcd/dhcpcd.hash | 2 +-
- package/dhcpcd/dhcpcd.mk   | 2 +-
+ package/mdio-tools/mdio-tools.hash | 2 +-
+ package/mdio-tools/mdio-tools.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dhcpcd/dhcpcd.hash b/package/dhcpcd/dhcpcd.hash
-index b015dce4ac..fb4f6064bc 100644
---- a/package/dhcpcd/dhcpcd.hash
-+++ b/package/dhcpcd/dhcpcd.hash
-@@ -1,4 +1,4 @@
- # sha256 from https://github.com/NetworkConfiguration/dhcpcd/releases/tag/v10.0.4
--sha256  ced5bbde8da3726eac77b9e77e4f31a89c9849d811ef8a2c749664fc5f55a718  dhcpcd-10.0.4.tar.xz
-+sha256  eb1f3cfef3069781ff8c896d7cea922639964afe22db28c069dc3f37f57eb428  dhcpcd-10.0.5.tar.xz
- # Locally calculated
- sha256  a7d6da3a202cdd38eaab0bcea4d25f60d002980f3785b3e896d9bf387f093ac8  LICENSE
-diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
-index ba1481e83d..ab3f98dd5a 100644
---- a/package/dhcpcd/dhcpcd.mk
-+++ b/package/dhcpcd/dhcpcd.mk
+diff --git a/package/mdio-tools/mdio-tools.hash b/package/mdio-tools/mdio-tools.hash
+index 1a9d598923..19172e2cd6 100644
+--- a/package/mdio-tools/mdio-tools.hash
++++ b/package/mdio-tools/mdio-tools.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  d2ab71d92173053af41d754e9c229e1ead768b9f8b7f4947b3b87b84c4c5e360  mdio-tools-1.3.0.tar.gz
++sha256  652353ba153fdd8b1d58ded4b90d0639536d705aa5923018e27ea0b78aa8e4fb  mdio-tools-1.3.1.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/mdio-tools/mdio-tools.mk b/package/mdio-tools/mdio-tools.mk
+index fb8ec39f35..16eba74734 100644
+--- a/package/mdio-tools/mdio-tools.mk
++++ b/package/mdio-tools/mdio-tools.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DHCPCD_VERSION = 10.0.4
-+DHCPCD_VERSION = 10.0.5
- DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.xz
- DHCPCD_SITE = https://github.com/NetworkConfiguration/dhcpcd/releases/download/v$(DHCPCD_VERSION)
- DHCPCD_DEPENDENCIES = host-pkgconf
+-MDIO_TOOLS_VERSION = 1.3.0
++MDIO_TOOLS_VERSION = 1.3.1
+ MDIO_TOOLS_SITE = https://github.com/wkz/mdio-tools/releases/download/$(MDIO_TOOLS_VERSION)
+ MDIO_TOOLS_LICENSE = GPL-2.0
+ MDIO_TOOLS_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
