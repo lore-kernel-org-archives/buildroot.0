@@ -1,92 +1,91 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02962C46CD2
-	for <buildroot@archiver.kernel.org>; Tue, 30 Jan 2024 21:11:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C979C46CD2
+	for <buildroot@archiver.kernel.org>; Tue, 30 Jan 2024 21:56:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A6BA641E3B;
-	Tue, 30 Jan 2024 21:11:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A6BA641E3B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 91EE983DC5;
+	Tue, 30 Jan 2024 21:56:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 91EE983DC5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Koj9AC5tMUAT; Tue, 30 Jan 2024 21:11:35 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fOfK1zqp0Drb; Tue, 30 Jan 2024 21:56:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EC9D841E26;
-	Tue, 30 Jan 2024 21:11:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC9D841E26
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5486D83D7C;
+	Tue, 30 Jan 2024 21:56:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5486D83D7C
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7CD671BF263
- for <buildroot@lists.busybox.net>; Tue, 30 Jan 2024 21:11:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B9F961BF263
+ for <buildroot@lists.busybox.net>; Tue, 30 Jan 2024 21:56:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5479541E26
- for <buildroot@lists.busybox.net>; Tue, 30 Jan 2024 21:11:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5479541E26
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9238141E61
+ for <buildroot@lists.busybox.net>; Tue, 30 Jan 2024 21:56:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9238141E61
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RGDorON1mIl8 for <buildroot@lists.busybox.net>;
- Tue, 30 Jan 2024 21:11:32 +0000 (UTC)
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com
- [IPv6:2a00:1450:4864:20::130])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 83A2A41B92
- for <buildroot@buildroot.org>; Tue, 30 Jan 2024 21:11:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 83A2A41B92
-Received: by mail-lf1-x130.google.com with SMTP id
- 2adb3069b0e04-51124983d6aso99681e87.0
- for <buildroot@buildroot.org>; Tue, 30 Jan 2024 13:11:32 -0800 (PST)
+ with ESMTP id sfr9MOqdn7iI for <buildroot@lists.busybox.net>;
+ Tue, 30 Jan 2024 21:56:41 +0000 (UTC)
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com
+ [IPv6:2a00:1450:4864:20::136])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 223E041E0F
+ for <buildroot@buildroot.org>; Tue, 30 Jan 2024 21:56:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 223E041E0F
+Received: by mail-lf1-x136.google.com with SMTP id
+ 2adb3069b0e04-51124d43943so80299e87.2
+ for <buildroot@buildroot.org>; Tue, 30 Jan 2024 13:56:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1706649090; x=1707253890;
- h=mime-version:user-agent:content-transfer-encoding:references
- :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
- :from:to:cc:subject:date:message-id:reply-to;
- bh=P+v2MdmlG925wI9oQcuOJ+5evDFguvZ+CJdeHrE/WUA=;
- b=ZbZoXI5/7Tubb+3g2YOsHW4ZpveEbiqPiVEAEMRKrqz/hD0nqZ9GVuBZc4lRXod+iT
- 98w7UziavKs3Q4Ck7eWtW+pNHe2CMWlSsCoQlNnbTbiBhOpO6U6BtpwDDHtSnvkVDBDF
- 94URoSTKYCB6bIJvhZ4WQZbRGCdBB4+9Cpf3aZU7SAuWdPTNJ8IfOvTrea45sKEhoVuU
- sVYtgHEBu32PiqRcLAZ/BjQQaRJ1Y2MjSeV+lDqh0SIN0guF9+5JKwk8EUiH7LlGuOob
- SUs8NS/FX37ktNaUueqkTWWjNEMp39w7kBC8o/pBM0/zS2bATYJUns1gQlvyhb3SRpkc
- ZyKg==
-X-Gm-Message-State: AOJu0Yxlkvagl7wF17VT/xrn1cpAJB48FmV2bC08kxWmk/hK9t0oy8I9
- jo6F+xVcHet00x1egWaa5vHI0zOtbN/6N17y2QhEuqcLHnRvhK6KdsyhexfmVfE=
-X-Google-Smtp-Source: AGHT+IEBG+3q0bQDljqnp5fKe7Kh3Wtio1HDrEERoWs5naJ6/9t7KOoSGH5owWyqO8v38HT6LpOMUg==
-X-Received: by 2002:a05:6512:3e0b:b0:511:1038:dcde with SMTP id
- i11-20020a0565123e0b00b005111038dcdemr5102123lfv.52.1706649089884; 
- Tue, 30 Jan 2024 13:11:29 -0800 (PST)
-Received: from giga-mm-1.home ([2a02:1210:8690:9300:82ee:73ff:feb8:99e3])
+ d=1e100.net; s=20230601; t=1706651798; x=1707256598;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=fImXB/WgLKyicsl2mKHHRNzsH1qdmQnnIsTY1NcxTlM=;
+ b=ilFxACalfMWFHKlEQTgfCN6BLEhw0O5ucChyxz02FW3HbUCSF6sUz7vlU9cfpW2F6j
+ V2dXkHhwXzOzTuqRsbnMyVoyk4XtKFZ4h1jd8JmHp43NuU3QCqIquGVO4A/pNaC6tSZv
+ f7ugud6l9oZJpPKLIfbrn96bonnG1/y3RwNQt4MqU11jFzRoiSe2+9ekGkuwhPeI0acA
+ F1A4adLn+Di+e5fGJDidZHRIJw21R7S3nkiVYxu6b6IBu4DGsDmb5bn+zxNW37ujescf
+ uNbaT1IYsaBVEiiGniE58nEQlUHfdMxe+PMzqaAb74Hxy9gl6wa7qGEvdJSdF1lsiCJ7
+ DlMQ==
+X-Gm-Message-State: AOJu0YxHHaHWTRgKud7UuSNCts6QPDEcR1tv331sJqULQLukplHjpCTp
+ P9/agc3e1+kabAIgt12H6f7V3oDonW+xER0httJDx73TKVWIwpzn0/jR+CPw
+X-Google-Smtp-Source: AGHT+IHOJC3OchNMx2TKtpgxyXFkWBKuYNT1qDEPrs+HA45MRqXQ81E4WmeNnu15sa7nGtp8CXNDTQ==
+X-Received: by 2002:ac2:4208:0:b0:510:293e:83b with SMTP id
+ y8-20020ac24208000000b00510293e083bmr6071483lfh.18.1706651798187; 
+ Tue, 30 Jan 2024 13:56:38 -0800 (PST)
+Received: from luthien.lan ([2001:9b0:214:3500::c2e])
  by smtp.gmail.com with ESMTPSA id
- cu7-20020a170906ba8700b00a3527389447sm4804203ejd.142.2024.01.30.13.11.29
+ w28-20020ac2443c000000b0051121ce0ad8sm105435lfl.32.2024.01.30.13.56.37
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 30 Jan 2024 13:11:29 -0800 (PST)
-Message-ID: <f63378d9f3ed51f3740b15d02e66f8831905cc8b.camel@gmail.com>
-From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-To: gsmecher@threespeedlogic.com, buildroot@buildroot.org
-Date: Tue, 30 Jan 2024 22:11:28 +0100
-In-Reply-To: <20240130210553.2554954-1-gsmecher@threespeedlogic.com>
-References: <2419e302d2201270df70f0f2033fff876168332b.camel@gmail.com>
- <20240130210553.2554954-1-gsmecher@threespeedlogic.com>
-User-Agent: Evolution 3.48.4 
+ Tue, 30 Jan 2024 13:56:37 -0800 (PST)
+From: Joachim Wiberg <troglobit@gmail.com>
+To: buildroot@buildroot.org
+Date: Tue, 30 Jan 2024 22:56:23 +0100
+Message-Id: <20240130215628.884512-1-troglobit@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <ZbU68sY6d4uvT-M0@landeda>
+References: 
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1706649090; x=1707253890; darn=buildroot.org;
- h=mime-version:user-agent:content-transfer-encoding:references
- :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
- :date:message-id:reply-to;
- bh=P+v2MdmlG925wI9oQcuOJ+5evDFguvZ+CJdeHrE/WUA=;
- b=E2J7P6xsoNQgh/wX4iqTRsGTRPTitcX1Sa7Lbk3GDps4DE+ajy/DwPogTLvID73KYp
- yReZcMteyoWjhnGllbQHfovQ3lrSF+AFm6W2jhXzUe5tAAM8cxlMESnzwwmd2hqX5K8r
- ZL9TRG6Nq1KGI2lzVL01/UnAPNU8orjwMYJS5uLr/tabw+rjSkFbjAiTwJS2SZja9GLW
- lx9Q/VPuVB4K3vIq1L/0cZxwNbDc2zeGcEMlkJK7c62MOdvr10Lm3SvMqPB8n9jn9qpd
- vtqYcbk3c0l4MrxCxbPWr9RpUo7JMQtvLPreZctvAahkmMgMfdcC4yqAcWMHSNQa0Dm+
- 4ZMA==
+ d=gmail.com; s=20230601; t=1706651798; x=1707256598; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=fImXB/WgLKyicsl2mKHHRNzsH1qdmQnnIsTY1NcxTlM=;
+ b=Nu5wg2svliOwlcr5NbIsAFDddhGbi+VZHHQT+gMH1nMCyuwDCy56avBU9EahM1Emw8
+ GoWLLha3R7ftBd4yS2fDP9WsRRTBGGGYQWqMfaYA3IQi24nrrtx2rO8r2dWQMQ1wRHXq
+ nPB2S8pLbVPXL+AjsvoEEvOJrCd3RCISChpIYTRh006wP99KH1FNqWXmasV5eL1yl6tR
+ MiRzENXb437ujlZSNKw4FjX+Lnah2v9LIIVLgRLfKjNvnDZdYuLb+peu4hZdTOARwhH+
+ 9L6k+OTiTTl/p4e3hnJBiFMOH4+gHrx0VKQY2L9Byk98IEMhaBeURM1EZQGx38PL6Wal
+ PURg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=E2J7P6xs
-Subject: Re: [Buildroot] [PATCH] linux.mk: Allow wildcards in
- BR2_LINUX_KERNEL_CUSTOM_DTS_PATH.
+ header.a=rsa-sha256 header.s=20230601 header.b=Nu5wg2sv
+Subject: [Buildroot] [PATCH v2 0/2] package/watchdogd: slightly messy bump
+ to v4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,44 +97,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: thomas.petazzoni@bootlin.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Joachim Wiberg <troglobit@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgR3JhZW1lIQoKT24gVHVlLCAyMDI0LTAxLTMwIGF0IDEzOjA1IC0wODAwLCBnc21lY2hlckB0
-aHJlZXNwZWVkbG9naWMuY29tIHdyb3RlOgo+IEZyb206IEdyYWVtZSBTbWVjaGVyIDxnc21lY2hl
-ckB0aHJlZXNwZWVkbG9naWMuY29tPgo+IAo+IFRoZXJlIGFyZSBhIGZldyBjb25maWcvIGVudHJp
-ZXMgd2hlcmUgd2lsZGNhcmRzIGFyZSBhbHJlYWR5IHByZXNlbnQ6Cj4gCj4gwqDCoMKgwqAgJCBn
-cmVwIC1ybGUgJ0JSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX0RUU19QQVRIPS4qXConIGNvbmZpZ3Mv
-Cj4gwqDCoMKgwqAgY29uZmlncy9vY3Rhdm9fb3NkMzJtcDFfYnJrX2RlZmNvbmZpZwo+IMKgwqDC
-oMKgIGNvbmZpZ3Mvb2N0YXZvX29zZDMybXAxX3JlZF9kZWZjb25maWcKPiAKPiAuLi5ob3dldmVy
-LCB3aGlsZSB0aGUgY29weS1pbiBzdGVwIG9mIGRldmljZSB0cmVlIGNvbXBpbGF0aW9uIHdvcmtz
-Cj4gY29ycmVjdGx5LCB0aGVzZSB3aWxkY2FyZHMgYXJlIG5vdCBjb252ZXJ0ZWQgdG8gRFRDIGJ1
-aWxkIHRhcmdldHMgaW4gdGhlCj4ga2VybmVsIGJ1aWxkLiBBcyBhIHJlc3VsdCwgdGhpcyBjb25m
-aWd1cmF0aW9uIGxpbmUgYWxvbmUgaXMgbm90IGVub3VnaAo+IHRvIGdlbmVyYXRlIERUQ3MuIEl0
-IHNob3VsZCBiZS4KPiAKPiBUaGlzIHBhdGNoIGFkZHMgYSAkKHdpbGRjYXJkKSBleHBhbnNpb24g
-c3RlcCBpbnRvIGdlbmVyYXRpb24gb2YgRFRCCj4gY29tcGlsYXRpb24gdGFyZ2V0cyAodGhlIExJ
-TlVYX0RUQl9OQU1FIHZhcmlhYmxlKS4gQXMgYSByZXN1bHQsCj4gd2lsZGNhcmRzIGJlaGF2ZSBj
-b3JyZWN0bHkuCj4gCj4gU2lnbmVkLW9mZi1ieTogR3JhZW1lIFNtZWNoZXIgPGdzbWVjaGVyQHRo
-cmVlc3BlZWRsb2dpYy5jb20+CgpNYWtlcyBzZW5zZSB0byBtZSAoZXhjZXB0IGEgZG90IGluIHRo
-ZSBjb21taXQgU3ViamVjdCksCgpSZXZpZXdlZC1ieTogQWxleGFuZGVyIFN2ZXJkbGluIDxhbGV4
-YW5kZXIuc3ZlcmRsaW5AZ21haWwuY29tPgoKPiAtLS0KPiDCoGxpbnV4L2xpbnV4Lm1rIHwgMiAr
-LQo+IMKgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pCj4gCj4g
-ZGlmZiAtLWdpdCBhL2xpbnV4L2xpbnV4Lm1rIGIvbGludXgvbGludXgubWsKPiBpbmRleCAxZGI1
-YzYwNDZkLi44MDg4MTU5N2FkIDEwMDY0NAo+IC0tLSBhL2xpbnV4L2xpbnV4Lm1rCj4gKysrIGIv
-bGludXgvbGludXgubWsKPiBAQCAtMTk1LDcgKzE5NSw3IEBAIExJTlVYX0RUU19OQU1FICs9ICQo
-Y2FsbCBxc3RyaXAsJChCUjJfTElOVVhfS0VSTkVMX0lOVFJFRV9EVFNfTkFNRSkpCj4gwqAjIGFu
-ZCAuZHRzaSBmaWxlcyBpbiBCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9EVFNfUEFUSC4gQm90aCB3
-aWxsIGJlCj4gwqAjIGNvcGllZCB0byBhcmNoLzxhcmNoPi9ib290L2R0cywgYnV0IG9ubHkgdGhl
-IC5kdHMgZmlsZXMgd2lsbAo+IMKgIyBhY3R1YWxseSBiZSBnZW5lcmF0ZWQgYXMgLmR0Yi4KPiAt
-TElOVVhfRFRTX05BTUUgKz0gJChiYXNlbmFtZSAkKGZpbHRlciAlLmR0cywkKG5vdGRpciAkKGNh
-bGwgcXN0cmlwLCQoQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fRFRTX1BBVEgpKSkpKQo+ICtMSU5V
-WF9EVFNfTkFNRSArPSAkKGJhc2VuYW1lICQoZmlsdGVyICUuZHRzLCQobm90ZGlyICQod2lsZGNh
-cmQgJChjYWxsIHFzdHJpcCwgJChCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9EVFNfUEFUSCkpKSkp
-KQo+IMKgCj4gwqBMSU5VWF9EVEJTID0gJChhZGRzdWZmaXggLmR0YiwkKExJTlVYX0RUU19OQU1F
-KSkKPiDCoAoKLS0gCkFsZXhhbmRlciBTdmVyZGxpbi4KCl9fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290
-QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGlu
-Zm8vYnVpbGRyb290Cg==
+Second take,
+
+this patch set upgrades watchdogd to the latest version, a major upgrade
+with lots of fixes and new features:
+
+  https://github.com/troglobit/watchdogd/releases/tag/4.0
+
+One messy change is the configure script change from --with-plugin=SEC
+to just --with-plugin.  I almost got it right in v1 of this series and
+with the help from Yann's review, this migration is now handled in the
+same patch as the version bump, to gracefully migrate legacy options.
+
+A couple of new optional system monitor plugins were introduce in the
+new release, Config.in support for these are in a separate patch.
+
+Best regards
+ /Joachim
+
+ Config.in.legacy                 | 58 ++++++++++++++++++++++++++++++++
+ package/watchdogd/Config.in      | 46 ++++++++++++++-----------
+ package/watchdogd/watchdogd.hash |  4 +--
+ package/watchdogd/watchdogd.mk   | 30 ++++++++++++-----
+ 4 files changed, 107 insertions(+), 31 deletions(-)
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
