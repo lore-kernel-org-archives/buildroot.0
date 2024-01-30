@@ -4,93 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5241C46CD2
-	for <buildroot@archiver.kernel.org>; Tue, 30 Jan 2024 20:22:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0FAAC46CD2
+	for <buildroot@archiver.kernel.org>; Tue, 30 Jan 2024 20:42:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5AFB683DB5;
-	Tue, 30 Jan 2024 20:22:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5AFB683DB5
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3551B83DA3;
+	Tue, 30 Jan 2024 20:42:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3551B83DA3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YmzWLk5z7z7Q; Tue, 30 Jan 2024 20:22:24 +0000 (UTC)
+	with ESMTP id 4BnUJYXauC8i; Tue, 30 Jan 2024 20:42:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B73F983DA7;
-	Tue, 30 Jan 2024 20:22:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B73F983DA7
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EA1DB1BF340
- for <buildroot@lists.busybox.net>; Tue, 30 Jan 2024 20:22:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 85CF983D77;
+	Tue, 30 Jan 2024 20:42:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 85CF983D77
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CA3471BF591
+ for <buildroot@lists.busybox.net>; Tue, 30 Jan 2024 20:42:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CF43A83DA7
- for <buildroot@lists.busybox.net>; Tue, 30 Jan 2024 20:22:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF43A83DA7
+ by smtp2.osuosl.org (Postfix) with ESMTP id AE65440A66
+ for <buildroot@lists.busybox.net>; Tue, 30 Jan 2024 20:42:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AE65440A66
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZJuasIJFkXzB for <buildroot@lists.busybox.net>;
- Tue, 30 Jan 2024 20:22:20 +0000 (UTC)
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com
- [IPv6:2607:f8b0:4864:20::42f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6C8F083BD2
- for <buildroot@buildroot.org>; Tue, 30 Jan 2024 20:22:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C8F083BD2
-Received: by mail-pf1-x42f.google.com with SMTP id
- d2e1a72fcca58-6ddb129350cso2638631b3a.3
- for <buildroot@buildroot.org>; Tue, 30 Jan 2024 12:22:20 -0800 (PST)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id O9yXR0bjPL_b for <buildroot@lists.busybox.net>;
+ Tue, 30 Jan 2024 20:42:44 +0000 (UTC)
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6DFC740A1F
+ for <buildroot@buildroot.org>; Tue, 30 Jan 2024 20:42:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6DFC740A1F
+Received: by mail-wm1-x330.google.com with SMTP id
+ 5b1f17b1804b1-40eacb6067dso57117465e9.1
+ for <buildroot@buildroot.org>; Tue, 30 Jan 2024 12:42:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1706646140; x=1707250940;
- h=content-transfer-encoding:subject:cc:to:from:content-language
- :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
- :cc:subject:date:message-id:reply-to;
- bh=40MhLZHwSsvY8pRgu4QM4KefXMO3ZdYYZu7xqj1DVQ8=;
- b=QmsBesWBQh6MFgeM653zAHuerg0x54ZV9tmxPoHPKJgtzXXtjQD/qPy96H0KLcobbo
- n6X2WxMUO7B6r2lCYn3XK0YRWEpJgvGHbiNS/oORTBjeVNdimkb4SpFtwdiWAVKmraUg
- 6rhkgz7r0seyxeKQfI6FXTuxuhPdIfCjyBBiKZKKxtAn1SrP77KSjBNe699/W3yjVn9n
- 1xqNRj4bf5JTTOaOiBiD6qAmfBgKWfexQM8Tl4E3Pr+zZFxBEXZkvv9i+2BhshyrWCBT
- 2uehzm/HOK91fdBm48CSF079WWYEC9wrtONtDcf805qcCKtXtOCieeliAk6s18qq0QB9
- Dowg==
-X-Gm-Message-State: AOJu0YwnmcQCRCARmfj5KFyLpjfnNJ3A5Kfm72HEcJfcUJDRUmy/82QR
- 7Zi+ybH6mcwuwoPA1j/7+hBSTlkjh1+IUggaJOtrLqkZ8SEfnwu8Szsp/FASVGPEUxNT1s7Y2Yj
- T
-X-Google-Smtp-Source: AGHT+IG5+h9SXg+YLFG1GrtcGpNdFrKhw77WSzUHB7j3pIl4HEY6tnnh1RytvZqgN2N6oQGTQhktyA==
-X-Received: by 2002:a05:6a20:a39c:b0:19b:5b9d:fe93 with SMTP id
- w28-20020a056a20a39c00b0019b5b9dfe93mr4762023pzk.60.1706646139625; 
- Tue, 30 Jan 2024 12:22:19 -0800 (PST)
-X-Forwarded-Encrypted: i=0;
- AJvYcCWl45+TsTmrmBwC19TSyjPsv64ECv27SGsesHjIcfyPa6a62jYXEy2N9E/gwjb5yt8VS+1hYwgitPW6hyb83gLQ9KCzYfKDHCgai8aM
-Received: from [192.168.0.172] (d172-218-135-26.bchsia.telus.net.
- [172.218.135.26]) by smtp.gmail.com with ESMTPSA id
- g20-20020a62e314000000b006dacfab07b6sm8200335pfh.121.2024.01.30.12.22.18
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 30 Jan 2024 12:22:19 -0800 (PST)
-Message-ID: <40db655b-0ea0-8169-765c-8c7240d9ef39@threespeedlogic.com>
-Date: Tue, 30 Jan 2024 12:22:18 -0800
+ d=1e100.net; s=20230601; t=1706647362; x=1707252162;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=FxGE5fw4NvoUmGo8qXSZ19lQHA6Vj8lq+wviuUn4qrk=;
+ b=OwL9SFo4uQhU/MkNVsKLW195wp/VHFRxT+qhYkn1az0AxBqdU8Rq+0CiYhHj2AqWTy
+ AKBnvomhohVB0/V4tPnrOLC76HeWCADI6AZ+F/bBVCnwDOtOuQJp5pehPuG6sYXjEsby
+ 7js5uPtTwtOLesw/wImuv4ncjNsJsnoXsPIWtS4hDCqBH/9sH/isOoTSd5yTPAGh3xro
+ xGUxA39xlURFSdYxk3A5n3A8B6x7ugaD4ZTgJffmhPX3YP+5Uj8hsGkmUlFMAU9e10Za
+ 6uWICggWK+/1D10IE32FK4oYtON9Cl+HZVd+K5o2Cqv6j9Bao3ZisY20+bdU87RgCirF
+ Sb8A==
+X-Gm-Message-State: AOJu0YyeQlQPkNRvxdTt/55yzUT3EAKNT+89o/117P54Qef/h9c5NLE2
+ on/E2IZOUHVkoPrYE7G4YmR4U3E7mFAArR8dae5zDmvRW/i+H50ohRxnCbHoC08=
+X-Google-Smtp-Source: AGHT+IEKbyigKJTbcQjdsaqcvAzokN6E5FVBPJq2CU34sIvWjOyDn5as0SnmbfJ41ObAUiGppZm8yw==
+X-Received: by 2002:a05:600c:35d3:b0:40f:b33a:a6f8 with SMTP id
+ r19-20020a05600c35d300b0040fb33aa6f8mr140359wmq.18.1706647361666; 
+ Tue, 30 Jan 2024 12:42:41 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ n13-20020a05600c4f8d00b0040eed5dcb3fsm11005762wmq.48.2024.01.30.12.42.40
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 30 Jan 2024 12:42:41 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Tue, 30 Jan 2024 21:42:39 +0100
+Message-ID: <20240130204239.49546-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US
-From: Graeme Smecher <gsmecher@threespeedlogic.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- alexander.sverdlin@gmail.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=threespeedlogic-com.20230601.gappssmtp.com; s=20230601; t=1706646140;
- x=1707250940; darn=buildroot.org; 
- h=content-transfer-encoding:subject:cc:to:from:content-language
- :user-agent:mime-version:date:message-id:from:to:cc:subject:date
- :message-id:reply-to;
- bh=40MhLZHwSsvY8pRgu4QM4KefXMO3ZdYYZu7xqj1DVQ8=;
- b=ilOxifaePSXbF+U/4HFbu018yH/RQB0ViRI9wIQEKX5ZIYejcdEdiGoCnrTGtTn1xX
- 3FgxdmG7m5BC+WxXYXLvXulyHwOZM8ZWmVnVjKxFOS7KXZsv4JbrzhiTwpHezfcUEXfk
- 5P4pNGt+I54wqLAleW4DbsHmjdGhJkgux9C8i9cggOGeoGHfFOblTmzyhq0Cf9+EWgT3
- GBCDZ4P7j9EAtjltLNABUeA8vUhQ9xRKrC3M352On6y1b2K10Dc0htr6eaYUnLlAsz2m
- oK39mY6WSVema2FmYjeedKiAMxYqBnsQGaU81B2opZjzSoY3mzN6sP3GoovY/nLNjZC9
- 5wiA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=threespeedlogic-com.20230601.gappssmtp.com
- header.i=@threespeedlogic-com.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=ilOxifae
-Subject: [Buildroot] linux.mk: Wildcards in device-tree paths
+ d=gmail.com; s=20230601; t=1706647362; x=1707252162; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=FxGE5fw4NvoUmGo8qXSZ19lQHA6Vj8lq+wviuUn4qrk=;
+ b=PDZLN3ASoly7Xq47NMV8oUXiLGC0gHmZ2oNJnxgqrPw1mz9jyY2nQXquHitAshIphN
+ DjzUYBQEHwi3amk+MAvw512lNoH6hulWu4hylrxCiL3jVlL0dbeWhf1np97YIYVcddfE
+ YSTpYlqsVq80x3J8nZ4iAFEhS641BxtjNGQGttgEFSoTYp901S15vEwGiSzBRT01jwE9
+ ggR72+1fVi2fN6342gCxEaDPXoJmUf1jVHaainvaa7VOt3qiIMrlYMFXGtXIh3A87ZSD
+ /sbgl8XO6bUIW/nM0a+fVk+FKympueJCd6YX+jIt3Da6gGIyrQDE7dr7bgFVAGhuJR/m
+ Wopw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=PDZLN3AS
+Subject: [Buildroot] [PATCH 1/1] package/joe: add JOE_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,34 +93,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot <buildroot@buildroot.org>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi all,
+cpe:2.3:a:joseph_allen:joe is a valid CPE identifier for this package:
 
-Several of the configs in buildroot use wildcards to copy device trees into the kernel build:
+  https://nvd.nist.gov/products/cpe/detail/5F530947-2060-4842-92B9-5BC61D9C5430
 
-     $ grep -re 'BR2_LINUX_KERNEL_CUSTOM_DTS_PATH=.*\*' configs/
-     configs/octavo_osd32mp1_brk_defconfig:BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/octavo/osd32mp1-brk/linux-dts/*"
-     configs/octavo_osd32mp1_red_defconfig:BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/octavo/osd32mp1-red/linux-dts/*"
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/joe/joe.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-However, in linux.mk, this variable is expanded into LINUX_DTS_NAME as follows:
+diff --git a/package/joe/joe.mk b/package/joe/joe.mk
+index f0cac402e1..9346ec1fd3 100644
+--- a/package/joe/joe.mk
++++ b/package/joe/joe.mk
+@@ -8,6 +8,7 @@ JOE_VERSION = 4.6
+ JOE_SITE = http://downloads.sourceforge.net/project/joe-editor/JOE%20sources/joe-$(JOE_VERSION)
+ JOE_LICENSE = GPL-2.0+
+ JOE_LICENSE_FILES = COPYING
++JOE_CPE_ID_VENDOR = joseph_allen
+ 
+ ifeq ($(BR2_PACKAGE_NCURSES),y)
+ JOE_DEPENDENCIES += ncurses
+-- 
+2.43.0
 
-     LINUX_DTS_NAME += $(basename $(filter %.dts,$(notdir $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)))))
-
-Notably, there is no $(wildcard) in place and the "*" is passed as a literal asterisk to $(filter), which prunes it due to the missing .dts suffix. I am guessing this line in the config is inert, and that the device trees are pulled into the kernel build via some other configuration line.
-
-I can fix this by adding a wildcard function in this expansion as follows:
-
-     LINUX_DTS_NAME += $(basename $(filter %.dts,$(notdir $(wildcard $(call qstrip, $(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH))))))
-
-...but before I prepare a patch, I thought I'd ask if there is a better way of accommodating a wildcard when enumerating device trees. I can, of course, list these files individually, but a wildcard is easier to maintain across device-tree revisions.
-
-thanks,
-Graeme
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
