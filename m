@@ -1,53 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D17CC46CD2
-	for <buildroot@archiver.kernel.org>; Tue, 30 Jan 2024 16:49:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF76BC46CD2
+	for <buildroot@archiver.kernel.org>; Tue, 30 Jan 2024 19:29:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8A6BD81FC9;
-	Tue, 30 Jan 2024 16:49:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A6BD81FC9
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6B8B960B51;
+	Tue, 30 Jan 2024 19:29:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B8B960B51
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1fkrvuHzFa3G; Tue, 30 Jan 2024 16:49:42 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id oRZbhruo5Mk6; Tue, 30 Jan 2024 19:29:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D43D481E1F;
-	Tue, 30 Jan 2024 16:49:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D43D481E1F
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DF5031BF300
- for <buildroot@lists.busybox.net>; Tue, 30 Jan 2024 16:49:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 81F2360F03;
+	Tue, 30 Jan 2024 19:29:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 81F2360F03
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 87D0A1BF2EB
+ for <buildroot@lists.busybox.net>; Tue, 30 Jan 2024 19:29:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B8A7881E1F
- for <buildroot@lists.busybox.net>; Tue, 30 Jan 2024 16:49:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8A7881E1F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5E396402F6
+ for <buildroot@lists.busybox.net>; Tue, 30 Jan 2024 19:29:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5E396402F6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 15Yhr18UBYjg for <buildroot@lists.busybox.net>;
- Tue, 30 Jan 2024 16:49:39 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0F79B81E0C
- for <buildroot@buildroot.org>; Tue, 30 Jan 2024 16:49:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F79B81E0C
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1B32E2000B;
- Tue, 30 Jan 2024 16:49:34 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@48ers.dk>) id 1rUrIk-00GOyQ-0m;
- Tue, 30 Jan 2024 17:49:34 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Sj9WlpZAX0Br for <buildroot@lists.busybox.net>;
+ Tue, 30 Jan 2024 19:29:37 +0000 (UTC)
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com
+ [IPv6:2607:f8b0:4864:20::135])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8313C400CE
+ for <buildroot@buildroot.org>; Tue, 30 Jan 2024 19:29:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8313C400CE
+Received: by mail-il1-x135.google.com with SMTP id
+ e9e14a558f8ab-3637d8ec873so9554245ab.1
+ for <buildroot@buildroot.org>; Tue, 30 Jan 2024 11:29:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1706642976; x=1707247776;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=MVP4JUJ58JUes32pTJixPwaezj/gBsgOQVARyLyweEM=;
+ b=wkhZ+jCwBjm+GUY2C69+IIfQpdVS8yT3NJaugbd9cgLdz+RvzE8wdRDImRfBcN9pi1
+ O4mGWcK+wSxLK2YbOJuXTHr6JgYP8YaCRDkn2ieYHWFUUTSizJm3zrhR/uqtCLfSy5Lx
+ sWEJYIE89g5dChaSPMmhGNvipY3cjkA2W5u7ULIKl+qydg2d2MPb9RoFjotfbIIdZFkW
+ FzKOd97Ea/30BV2Vb0q0YriPy5DP2onOYNFj/q/M3zrKrgzSRjv47pqfkHHHvxtLlT6C
+ 5keeuT9AWqJEKadH6y7z0ZCzcu+I7BVjXE3baXJ4xTrkt/GU2TXg/31mXOktb9Hj/DJm
+ /Cxw==
+X-Gm-Message-State: AOJu0Yz+G12pvZtDDzNgDxOmqspxQMnrw4mxLKrnu9ulHFuypMsSqITi
+ qLLnnN1+gQdjU4ipCVl0cbqRSFlvBVDSNaVjjQIcGiTshczUIeaU/LHVlqht
+X-Google-Smtp-Source: AGHT+IEZLbhNNebuwmhvtjC68R2nmT+FmdoZkiQgh0T67NcATzuGVjU7OHSDia1BOdKjVkbuV9dxbw==
+X-Received: by 2002:a92:b00f:0:b0:362:b459:11cd with SMTP id
+ x15-20020a92b00f000000b00362b45911cdmr9723033ilh.6.1706642975467; 
+ Tue, 30 Jan 2024 11:29:35 -0800 (PST)
+Received: from james-x399.localdomain (71-218-247-10.hlrn.qwest.net.
+ [71.218.247.10]) by smtp.gmail.com with ESMTPSA id
+ f11-20020a056638118b00b0046e89d77870sm2431242jas.125.2024.01.30.11.29.34
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 30 Jan 2024 11:29:34 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 30 Jan 2024 17:49:29 +0100
-Message-Id: <20240130164930.3909227-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.2
+Date: Tue, 30 Jan 2024 12:29:32 -0700
+Message-Id: <20240130192932.888169-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: [Buildroot] [PATCH] package/syslog-ng: needs pcre2, not pcre
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1706642976; x=1707247776; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=MVP4JUJ58JUes32pTJixPwaezj/gBsgOQVARyLyweEM=;
+ b=J8PGm37HZ+FpgEhN1ivtC3+Lt6uGaDrhnGn+LmN/vNEVwoex6xZelFRE3J3KFoBT36
+ Jy+x9I8QR3VoLtd7Zo0oyU6Klr4tVDjhvpa/wxIySVyRSe34xGTwtzxJp2pP+LpYDcsi
+ gt3IiACUcRtzmpel6mg/mypvEX+IG5oOYESeHmQ4hYkqBakG3NV+0rLYDtEDCaCb5zIS
+ uvooawbNjTFoWOHKdyIc4KWlLnVjTEiuQQxwhj+ECcmLmr++0XqgvCGylitYsSBTeRop
+ 7IFblmfzdnTcsBNDqTfZWXEJ/TKt5tmzlkWdAFHS65Abg65uStW/VHmiPgHuNynyUcoG
+ RikQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=J8PGm37H
+Subject: [Buildroot] [PATCH 1/1] package/gst1-plugins-bad: fix webrtcdsp
+ plugin build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,53 +94,924 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Chris Packham <judge.packham@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Syslog-ng-uses pcre2 instead of pcre since 4.3.0 with:
-https://github.com/syslog-ng/syslog-ng/commit/cb6de08dc9078644d48ca536b5660e406b1a50d6
+The webrtc-audio-processing package was bumped from version 0.3.1 to
+version 1.3 in commit ef0fa986eb7ff25c0a5db70ec0b62032e2d71538 which
+broke compatibility with the gst1-plugins-bad webrtcdsp plugin.
 
-No autobuilder failures, as pcre2 is implicitly available through libglib2.
+To fix this backport a commit from upstream adding support for
+webrtc-audio-processing version 1.3 to gst1-plugins-bad.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes:
+output/build/gst1-plugins-bad-1.22.9/ext/webrtcdsp/meson.build:7:13: ERROR: Dependency "webrtc-audio-processing" not found, tried pkgconfig and cmake
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/syslog-ng/Config.in    | 2 +-
- package/syslog-ng/syslog-ng.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...e-code-for-webrtc-audio-processing-1.patch | 884 ++++++++++++++++++
+ 1 file changed, 884 insertions(+)
+ create mode 100644 package/gstreamer1/gst1-plugins-bad/0001-webrtcdsp-Update-code-for-webrtc-audio-processing-1.patch
 
-diff --git a/package/syslog-ng/Config.in b/package/syslog-ng/Config.in
-index 30ad54a4bf..aa1e71d225 100644
---- a/package/syslog-ng/Config.in
-+++ b/package/syslog-ng/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_SYSLOG_NG
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	select BR2_PACKAGE_LIBGLIB2
--	select BR2_PACKAGE_PCRE
-+	select BR2_PACKAGE_PCRE2
- 	select BR2_PACKAGE_OPENSSL
- 	help
- 	  syslog-ng is an enhanced log daemon, supporting a wide range
-diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
-index ff5aaee429..dd02a6e3af 100644
---- a/package/syslog-ng/syslog-ng.mk
-+++ b/package/syslog-ng/syslog-ng.mk
-@@ -12,7 +12,7 @@ SYSLOG_NG_LICENSE = LGPL-2.1+ (syslog-ng core), GPL-2.0+ (modules)
- SYSLOG_NG_LICENSE_FILES = COPYING GPL.txt LGPL.txt
- SYSLOG_NG_CPE_ID_VENDOR = oneidentity
- SYSLOG_NG_DEPENDENCIES = host-bison host-flex host-pkgconf \
--	libglib2 openssl pcre
-+	libglib2 openssl pcre2
- # We're patching configure.ac
- SYSLOG_NG_AUTORECONF = YES
- SYSLOG_NG_CONF_OPTS = --disable-manpages --localstatedir=/var/run \
+diff --git a/package/gstreamer1/gst1-plugins-bad/0001-webrtcdsp-Update-code-for-webrtc-audio-processing-1.patch b/package/gstreamer1/gst1-plugins-bad/0001-webrtcdsp-Update-code-for-webrtc-audio-processing-1.patch
+new file mode 100644
+index 0000000000..a8a569164f
+--- /dev/null
++++ b/package/gstreamer1/gst1-plugins-bad/0001-webrtcdsp-Update-code-for-webrtc-audio-processing-1.patch
+@@ -0,0 +1,884 @@
++From d5755744c3e2b70e9f04704ae9d18b928d9fa456 Mon Sep 17 00:00:00 2001
++From: Arun Raghavan <arun@asymptotic.io>
++Date: Wed, 2 Dec 2020 18:31:44 -0500
++Subject: [PATCH] webrtcdsp: Update code for webrtc-audio-processing-1
++
++Updated API usage appropriately, and now we have a versioned package to
++track breaking vs. non-breaking updates.
++
++Deprecates a number of properties (and we have to plug in our own values
++for related enums which are now gone):
++
++  * echo-suprression-level
++  * experimental-agc
++  * extended-filter
++  * delay-agnostic
++  * voice-detection-frame-size-ms
++  * voice-detection-likelihood
++
++Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/2943>
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++[james.hilliard1@gmail.com: backport from upstream commit
++d5755744c3e2b70e9f04704ae9d18b928d9fa456]
++---
++ .../ext/webrtcdsp/gstwebrtcdsp.cpp            | 271 +++++++-----------
++ .../ext/webrtcdsp/gstwebrtcechoprobe.cpp      |  87 +++---
++ .../ext/webrtcdsp/gstwebrtcechoprobe.h        |   9 +-
++ .../gst-plugins-bad/ext/webrtcdsp/meson.build |   4 +-
++ 4 files changed, 164 insertions(+), 207 deletions(-)
++
++diff --git a/ext/webrtcdsp/gstwebrtcdsp.cpp b/ext/webrtcdsp/gstwebrtcdsp.cpp
++index 7ee09488fb..c9a7cdae2f 100644
++--- a/ext/webrtcdsp/gstwebrtcdsp.cpp
+++++ b/ext/webrtcdsp/gstwebrtcdsp.cpp
++@@ -71,9 +71,7 @@
++ #include "gstwebrtcdsp.h"
++ #include "gstwebrtcechoprobe.h"
++ 
++-#include <webrtc/modules/audio_processing/include/audio_processing.h>
++-#include <webrtc/modules/interface/module_common_types.h>
++-#include <webrtc/system_wrappers/include/trace.h>
+++#include <modules/audio_processing/include/audio_processing.h>
++ 
++ GST_DEBUG_CATEGORY (webrtc_dsp_debug);
++ #define GST_CAT_DEFAULT (webrtc_dsp_debug)
++@@ -82,10 +80,9 @@ GST_DEBUG_CATEGORY (webrtc_dsp_debug);
++ #define DEFAULT_COMPRESSION_GAIN_DB 9
++ #define DEFAULT_STARTUP_MIN_VOLUME 12
++ #define DEFAULT_LIMITER TRUE
++-#define DEFAULT_GAIN_CONTROL_MODE webrtc::GainControl::kAdaptiveDigital
+++#define DEFAULT_GAIN_CONTROL_MODE webrtc::AudioProcessing::Config::GainController1::Mode::kAdaptiveDigital
++ #define DEFAULT_VOICE_DETECTION FALSE
++ #define DEFAULT_VOICE_DETECTION_FRAME_SIZE_MS 10
++-#define DEFAULT_VOICE_DETECTION_LIKELIHOOD webrtc::VoiceDetection::kLowLikelihood
++ 
++ static GstStaticPadTemplate gst_webrtc_dsp_sink_template =
++ GST_STATIC_PAD_TEMPLATE ("sink",
++@@ -119,7 +116,7 @@ GST_STATIC_PAD_TEMPLATE ("src",
++         "channels = (int) [1, MAX]")
++     );
++ 
++-typedef webrtc::EchoCancellation::SuppressionLevel GstWebrtcEchoSuppressionLevel;
+++typedef int GstWebrtcEchoSuppressionLevel;
++ #define GST_TYPE_WEBRTC_ECHO_SUPPRESSION_LEVEL \
++     (gst_webrtc_echo_suppression_level_get_type ())
++ static GType
++@@ -127,10 +124,9 @@ gst_webrtc_echo_suppression_level_get_type (void)
++ {
++   static GType suppression_level_type = 0;
++   static const GEnumValue level_types[] = {
++-    {webrtc::EchoCancellation::kLowSuppression, "Low Suppression", "low"},
++-    {webrtc::EchoCancellation::kModerateSuppression,
++-      "Moderate Suppression", "moderate"},
++-    {webrtc::EchoCancellation::kHighSuppression, "high Suppression", "high"},
+++    {1, "Low Suppression", "low"},
+++    {2, "Moderate Suppression", "moderate"},
+++    {3, "high Suppression", "high"},
++     {0, NULL, NULL}
++   };
++ 
++@@ -141,7 +137,7 @@ gst_webrtc_echo_suppression_level_get_type (void)
++   return suppression_level_type;
++ }
++ 
++-typedef webrtc::NoiseSuppression::Level GstWebrtcNoiseSuppressionLevel;
+++typedef webrtc::AudioProcessing::Config::NoiseSuppression::Level GstWebrtcNoiseSuppressionLevel;
++ #define GST_TYPE_WEBRTC_NOISE_SUPPRESSION_LEVEL \
++     (gst_webrtc_noise_suppression_level_get_type ())
++ static GType
++@@ -149,10 +145,10 @@ gst_webrtc_noise_suppression_level_get_type (void)
++ {
++   static GType suppression_level_type = 0;
++   static const GEnumValue level_types[] = {
++-    {webrtc::NoiseSuppression::kLow, "Low Suppression", "low"},
++-    {webrtc::NoiseSuppression::kModerate, "Moderate Suppression", "moderate"},
++-    {webrtc::NoiseSuppression::kHigh, "High Suppression", "high"},
++-    {webrtc::NoiseSuppression::kVeryHigh, "Very High Suppression",
+++    {webrtc::AudioProcessing::Config::NoiseSuppression::Level::kLow, "Low Suppression", "low"},
+++    {webrtc::AudioProcessing::Config::NoiseSuppression::Level::kModerate, "Moderate Suppression", "moderate"},
+++    {webrtc::AudioProcessing::Config::NoiseSuppression::Level::kHigh, "High Suppression", "high"},
+++    {webrtc::AudioProcessing::Config::NoiseSuppression::Level::kVeryHigh, "Very High Suppression",
++       "very-high"},
++     {0, NULL, NULL}
++   };
++@@ -164,7 +160,7 @@ gst_webrtc_noise_suppression_level_get_type (void)
++   return suppression_level_type;
++ }
++ 
++-typedef webrtc::GainControl::Mode GstWebrtcGainControlMode;
+++typedef webrtc::AudioProcessing::Config::GainController1::Mode GstWebrtcGainControlMode;
++ #define GST_TYPE_WEBRTC_GAIN_CONTROL_MODE \
++     (gst_webrtc_gain_control_mode_get_type ())
++ static GType
++@@ -172,8 +168,9 @@ gst_webrtc_gain_control_mode_get_type (void)
++ {
++   static GType gain_control_mode_type = 0;
++   static const GEnumValue mode_types[] = {
++-    {webrtc::GainControl::kAdaptiveDigital, "Adaptive Digital", "adaptive-digital"},
++-    {webrtc::GainControl::kFixedDigital, "Fixed Digital", "fixed-digital"},
+++    {webrtc::AudioProcessing::Config::GainController1::kAdaptiveDigital, "Adaptive Digital", "adaptive-digital"},
+++    {webrtc::AudioProcessing::Config::GainController1::kFixedDigital, "Fixed Digital", "fixed-digital"},
+++    {webrtc::AudioProcessing::Config::GainController1::kAdaptiveAnalog, "Adaptive Analog", "adaptive-analog"},
++     {0, NULL, NULL}
++   };
++ 
++@@ -184,7 +181,7 @@ gst_webrtc_gain_control_mode_get_type (void)
++   return gain_control_mode_type;
++ }
++ 
++-typedef webrtc::VoiceDetection::Likelihood GstWebrtcVoiceDetectionLikelihood;
+++typedef int GstWebrtcVoiceDetectionLikelihood;
++ #define GST_TYPE_WEBRTC_VOICE_DETECTION_LIKELIHOOD \
++     (gst_webrtc_voice_detection_likelihood_get_type ())
++ static GType
++@@ -192,10 +189,10 @@ gst_webrtc_voice_detection_likelihood_get_type (void)
++ {
++   static GType likelihood_type = 0;
++   static const GEnumValue likelihood_types[] = {
++-    {webrtc::VoiceDetection::kVeryLowLikelihood, "Very Low Likelihood", "very-low"},
++-    {webrtc::VoiceDetection::kLowLikelihood, "Low Likelihood", "low"},
++-    {webrtc::VoiceDetection::kModerateLikelihood, "Moderate Likelihood", "moderate"},
++-    {webrtc::VoiceDetection::kHighLikelihood, "High Likelihood", "high"},
+++    {1, "Very Low Likelihood", "very-low"},
+++    {2, "Low Likelihood", "low"},
+++    {3, "Moderate Likelihood", "moderate"},
+++    {4, "High Likelihood", "high"},
++     {0, NULL, NULL}
++   };
++ 
++@@ -227,6 +224,7 @@ enum
++   PROP_VOICE_DETECTION,
++   PROP_VOICE_DETECTION_FRAME_SIZE_MS,
++   PROP_VOICE_DETECTION_LIKELIHOOD,
+++  PROP_EXTRA_DELAY_MS,
++ };
++ 
++ /**
++@@ -248,7 +246,7 @@ struct _GstWebrtcDsp
++   /* Protected by the stream lock */
++   GstAdapter *adapter;
++   GstPlanarAudioAdapter *padapter;
++-  webrtc::AudioProcessing * apm;
+++  webrtc::AudioProcessing *apm;
++ 
++   /* Protected by the object lock */
++   gchar *probe_name;
++@@ -257,21 +255,15 @@ struct _GstWebrtcDsp
++   /* Properties */
++   gboolean high_pass_filter;
++   gboolean echo_cancel;
++-  webrtc::EchoCancellation::SuppressionLevel echo_suppression_level;
++   gboolean noise_suppression;
++-  webrtc::NoiseSuppression::Level noise_suppression_level;
+++  webrtc::AudioProcessing::Config::NoiseSuppression::Level noise_suppression_level;
++   gboolean gain_control;
++-  gboolean experimental_agc;
++-  gboolean extended_filter;
++-  gboolean delay_agnostic;
++   gint target_level_dbfs;
++   gint compression_gain_db;
++   gint startup_min_volume;
++   gboolean limiter;
++-  webrtc::GainControl::Mode gain_control_mode;
+++  webrtc::AudioProcessing::Config::GainController1::Mode gain_control_mode;
++   gboolean voice_detection;
++-  gint voice_detection_frame_size_ms;
++-  webrtc::VoiceDetection::Likelihood voice_detection_likelihood;
++ };
++ 
++ G_DEFINE_TYPE_WITH_CODE (GstWebrtcDsp, gst_webrtc_dsp, GST_TYPE_AUDIO_FILTER,
++@@ -376,9 +368,9 @@ gst_webrtc_dsp_analyze_reverse_stream (GstWebrtcDsp * self,
++     GstClockTime rec_time)
++ {
++   GstWebrtcEchoProbe *probe = NULL;
++-  webrtc::AudioProcessing * apm;
++-  webrtc::AudioFrame frame;
+++  webrtc::AudioProcessing *apm;
++   GstBuffer *buf = NULL;
+++  GstAudioBuffer abuf;
++   GstFlowReturn ret = GST_FLOW_OK;
++   gint err, delay;
++ 
++@@ -391,48 +383,44 @@ gst_webrtc_dsp_analyze_reverse_stream (GstWebrtcDsp * self,
++   if (!probe)
++     return GST_FLOW_OK;
++ 
+++  webrtc::StreamConfig config (probe->info.rate, probe->info.channels,
+++      false);
++   apm = self->apm;
++ 
++-  if (self->delay_agnostic)
++-    rec_time = GST_CLOCK_TIME_NONE;
++-
++-again:
++-  delay = gst_webrtc_echo_probe_read (probe, rec_time, (gpointer) &frame, &buf);
+++  delay = gst_webrtc_echo_probe_read (probe, rec_time, &buf);
++   apm->set_stream_delay_ms (delay);
++ 
+++  g_return_val_if_fail (buf != NULL, GST_FLOW_ERROR);
+++
++   if (delay < 0)
++     goto done;
++ 
++-  if (frame.sample_rate_hz_ != self->info.rate) {
+++  if (probe->info.rate != self->info.rate) {
++     GST_ELEMENT_ERROR (self, STREAM, FORMAT,
++         ("Echo Probe has rate %i , while the DSP is running at rate %i,"
++          " use a caps filter to ensure those are the same.",
++-         frame.sample_rate_hz_, self->info.rate), (NULL));
+++         probe->info.rate, self->info.rate), (NULL));
++     ret = GST_FLOW_ERROR;
++     goto done;
++   }
++ 
++-  if (buf) {
++-    webrtc::StreamConfig config (frame.sample_rate_hz_, frame.num_channels_,
++-        false);
++-    GstAudioBuffer abuf;
++-    float * const * data;
+++  gst_audio_buffer_map (&abuf, &self->info, buf, GST_MAP_READWRITE);
+++
+++  if (probe->interleaved) {
+++    int16_t * const data = (int16_t * const) abuf.planes[0];
++ 
++-    gst_audio_buffer_map (&abuf, &self->info, buf, GST_MAP_READWRITE);
++-    data = (float * const *) abuf.planes;
++     if ((err = apm->ProcessReverseStream (data, config, config, data)) < 0)
++       GST_WARNING_OBJECT (self, "Reverse stream analyses failed: %s.",
++           webrtc_error_to_string (err));
++-    gst_audio_buffer_unmap (&abuf);
++-    gst_buffer_replace (&buf, NULL);
++   } else {
++-    if ((err = apm->AnalyzeReverseStream (&frame)) < 0)
+++    float * const * data = (float * const *) abuf.planes;
+++
+++    if ((err = apm->ProcessReverseStream (data, config, config, data)) < 0)
++       GST_WARNING_OBJECT (self, "Reverse stream analyses failed: %s.",
++           webrtc_error_to_string (err));
++   }
++ 
++-  if (self->delay_agnostic)
++-      goto again;
+++  gst_audio_buffer_unmap (&abuf);
++ 
++ done:
++   gst_object_unref (probe);
++@@ -443,16 +431,14 @@ done:
++ 
++ static void
++ gst_webrtc_vad_post_activity (GstWebrtcDsp *self, GstBuffer *buffer,
++-    gboolean stream_has_voice)
+++    gboolean stream_has_voice, guint8 level)
++ {
++   GstClockTime timestamp = GST_BUFFER_PTS (buffer);
++   GstBaseTransform *trans = GST_BASE_TRANSFORM_CAST (self);
++   GstStructure *s;
++   GstClockTime stream_time;
++   GstAudioLevelMeta *meta;
++-  guint8 level;
++ 
++-  level = self->apm->level_estimator ()->RMS ();
++   meta = gst_buffer_get_audio_level_meta (buffer);
++   if (meta) {
++     meta->voice_activity = stream_has_voice;
++@@ -481,6 +467,7 @@ gst_webrtc_dsp_process_stream (GstWebrtcDsp * self,
++ {
++   GstAudioBuffer abuf;
++   webrtc::AudioProcessing * apm = self->apm;
+++  webrtc::StreamConfig config (self->info.rate, self->info.channels, false);
++   gint err;
++ 
++   if (!gst_audio_buffer_map (&abuf, &self->info, buffer,
++@@ -490,19 +477,10 @@ gst_webrtc_dsp_process_stream (GstWebrtcDsp * self,
++   }
++ 
++   if (self->interleaved) {
++-    webrtc::AudioFrame frame;
++-    frame.num_channels_ = self->info.channels;
++-    frame.sample_rate_hz_ = self->info.rate;
++-    frame.samples_per_channel_ = self->period_samples;
++-
++-    memcpy (frame.data_, abuf.planes[0], self->period_size);
++-    err = apm->ProcessStream (&frame);
++-    if (err >= 0)
++-      memcpy (abuf.planes[0], frame.data_, self->period_size);
+++    int16_t * const data = (int16_t * const) abuf.planes[0];
+++    err = apm->ProcessStream (data, config, config, data);
++   } else {
++     float * const * data = (float * const *) abuf.planes;
++-    webrtc::StreamConfig config (self->info.rate, self->info.channels, false);
++-
++     err = apm->ProcessStream (data, config, config, data);
++   }
++ 
++@@ -511,10 +489,13 @@ gst_webrtc_dsp_process_stream (GstWebrtcDsp * self,
++         webrtc_error_to_string (err));
++   } else {
++     if (self->voice_detection) {
++-      gboolean stream_has_voice = apm->voice_detection ()->stream_has_voice ();
+++      webrtc::AudioProcessingStats stats = apm->GetStatistics ();
+++      gboolean stream_has_voice = stats.voice_detected && *stats.voice_detected;
+++      // The meta takes the value as -dbov, so we negate
+++      guint8 level = stats.output_rms_dbfs ? (guint8) -(*stats.output_rms_dbfs) : 127;
++ 
++       if (stream_has_voice != self->stream_has_voice)
++-        gst_webrtc_vad_post_activity (self, buffer, stream_has_voice);
+++        gst_webrtc_vad_post_activity (self, buffer, stream_has_voice, level);
++ 
++       self->stream_has_voice = stream_has_voice;
++     }
++@@ -583,21 +564,9 @@ static gboolean
++ gst_webrtc_dsp_start (GstBaseTransform * btrans)
++ {
++   GstWebrtcDsp *self = GST_WEBRTC_DSP (btrans);
++-  webrtc::Config config;
++ 
++   GST_OBJECT_LOCK (self);
++ 
++-  config.Set < webrtc::ExtendedFilter >
++-      (new webrtc::ExtendedFilter (self->extended_filter));
++-  config.Set < webrtc::ExperimentalAgc >
++-      (new webrtc::ExperimentalAgc (self->experimental_agc, self->startup_min_volume));
++-  config.Set < webrtc::DelayAgnostic >
++-      (new webrtc::DelayAgnostic (self->delay_agnostic));
++-
++-  /* TODO Intelligibility enhancer, Beamforming, etc. */
++-
++-  self->apm = webrtc::AudioProcessing::Create (config);
++-
++   if (self->echo_cancel) {
++     self->probe = gst_webrtc_acquire_echo_probe (self->probe_name);
++ 
++@@ -618,10 +587,8 @@ static gboolean
++ gst_webrtc_dsp_setup (GstAudioFilter * filter, const GstAudioInfo * info)
++ {
++   GstWebrtcDsp *self = GST_WEBRTC_DSP (filter);
++-  webrtc::AudioProcessing * apm;
++-  webrtc::ProcessingConfig pconfig;
+++  webrtc::AudioProcessing::Config config;
++   GstAudioInfo probe_info = *info;
++-  gint err = 0;
++ 
++   GST_LOG_OBJECT (self, "setting format to %s with %i Hz and %i channels",
++       info->finfo->description, info->rate, info->channels);
++@@ -633,7 +600,7 @@ gst_webrtc_dsp_setup (GstAudioFilter * filter, const GstAudioInfo * info)
++ 
++   self->info = *info;
++   self->interleaved = (info->layout == GST_AUDIO_LAYOUT_INTERLEAVED);
++-  apm = self->apm;
+++  self->apm = webrtc::AudioProcessingBuilder().Create();
++ 
++   if (!self->interleaved)
++     gst_planar_audio_adapter_configure (self->padapter, info);
++@@ -642,8 +609,7 @@ gst_webrtc_dsp_setup (GstAudioFilter * filter, const GstAudioInfo * info)
++   self->period_samples = info->rate / 100;
++   self->period_size = self->period_samples * info->bpf;
++ 
++-  if (self->interleaved &&
++-      (webrtc::AudioFrame::kMaxDataSizeSamples * 2) < self->period_size)
+++  if (self->interleaved && (self->period_size > MAX_DATA_SIZE_SAMPLES * 2))
++     goto period_too_big;
++ 
++   if (self->probe) {
++@@ -658,40 +624,31 @@ gst_webrtc_dsp_setup (GstAudioFilter * filter, const GstAudioInfo * info)
++     GST_WEBRTC_ECHO_PROBE_UNLOCK (self->probe);
++   }
++ 
++-  /* input stream */
++-  pconfig.streams[webrtc::ProcessingConfig::kInputStream] =
++-      webrtc::StreamConfig (info->rate, info->channels, false);
++-  /* output stream */
++-  pconfig.streams[webrtc::ProcessingConfig::kOutputStream] =
++-      webrtc::StreamConfig (info->rate, info->channels, false);
++-  /* reverse input stream */
++-  pconfig.streams[webrtc::ProcessingConfig::kReverseInputStream] =
++-      webrtc::StreamConfig (probe_info.rate, probe_info.channels, false);
++-  /* reverse output stream */
++-  pconfig.streams[webrtc::ProcessingConfig::kReverseOutputStream] =
++-      webrtc::StreamConfig (probe_info.rate, probe_info.channels, false);
++-
++-  if ((err = apm->Initialize (pconfig)) < 0)
++-    goto initialize_failed;
++-
++   /* Setup Filters */
+++  // TODO: expose pre_amplifier
+++
++   if (self->high_pass_filter) {
++     GST_DEBUG_OBJECT (self, "Enabling High Pass filter");
++-    apm->high_pass_filter ()->Enable (true);
+++    config.high_pass_filter.enabled = true;
++   }
++ 
++   if (self->echo_cancel) {
++     GST_DEBUG_OBJECT (self, "Enabling Echo Cancellation");
++-    apm->echo_cancellation ()->enable_drift_compensation (false);
++-    apm->echo_cancellation ()
++-        ->set_suppression_level (self->echo_suppression_level);
++-    apm->echo_cancellation ()->Enable (true);
+++    config.echo_canceller.enabled = true;
++   }
++ 
++   if (self->noise_suppression) {
++     GST_DEBUG_OBJECT (self, "Enabling Noise Suppression");
++-    apm->noise_suppression ()->set_level (self->noise_suppression_level);
++-    apm->noise_suppression ()->Enable (true);
+++    config.noise_suppression.enabled = true;
+++    config.noise_suppression.level = self->noise_suppression_level;
+++  }
+++
+++  // TODO: expose transient suppression
+++
+++  if (self->voice_detection) {
+++    GST_DEBUG_OBJECT (self, "Enabling Voice Activity Detection");
+++    config.voice_detection.enabled = true;
+++    self->stream_has_voice = FALSE;
++   }
++ 
++   if (self->gain_control) {
++@@ -706,30 +663,17 @@ gst_webrtc_dsp_setup (GstAudioFilter * filter, const GstAudioInfo * info)
++ 
++     g_type_class_unref (mode_class);
++ 
++-    apm->gain_control ()->set_mode (self->gain_control_mode);
++-    apm->gain_control ()->set_target_level_dbfs (self->target_level_dbfs);
++-    apm->gain_control ()->set_compression_gain_db (self->compression_gain_db);
++-    apm->gain_control ()->enable_limiter (self->limiter);
++-    apm->gain_control ()->Enable (true);
+++    config.gain_controller1.enabled = true;
+++    config.gain_controller1.target_level_dbfs = self->target_level_dbfs;
+++    config.gain_controller1.compression_gain_db = self->compression_gain_db;
+++    config.gain_controller1.enable_limiter = self->limiter;
+++    config.level_estimation.enabled = true;
++   }
++ 
++-  if (self->voice_detection) {
++-    GEnumClass *likelihood_class = (GEnumClass *)
++-        g_type_class_ref (GST_TYPE_WEBRTC_VOICE_DETECTION_LIKELIHOOD);
++-    GST_DEBUG_OBJECT (self, "Enabling Voice Activity Detection, frame size "
++-      "%d milliseconds, likelihood: %s", self->voice_detection_frame_size_ms,
++-      g_enum_get_value (likelihood_class,
++-          self->voice_detection_likelihood)->value_name);
++-    g_type_class_unref (likelihood_class);
+++  // TODO: expose gain controller 2
+++  // TODO: expose residual echo detector
++ 
++-    self->stream_has_voice = FALSE;
++-
++-    apm->voice_detection ()->Enable (true);
++-    apm->voice_detection ()->set_likelihood (self->voice_detection_likelihood);
++-    apm->voice_detection ()->set_frame_size_ms (
++-        self->voice_detection_frame_size_ms);
++-    apm->level_estimator ()->Enable (true);
++-  }
+++  self->apm->ApplyConfig (config);
++ 
++   GST_OBJECT_UNLOCK (self);
++ 
++@@ -738,9 +682,9 @@ gst_webrtc_dsp_setup (GstAudioFilter * filter, const GstAudioInfo * info)
++ period_too_big:
++   GST_OBJECT_UNLOCK (self);
++   GST_WARNING_OBJECT (self, "webrtcdsp format produce too big period "
++-      "(maximum is %" G_GSIZE_FORMAT " samples and we have %u samples), "
+++      "(maximum is %d samples and we have %u samples), "
++       "reduce the number of channels or the rate.",
++-      webrtc::AudioFrame::kMaxDataSizeSamples, self->period_size / 2);
+++      MAX_DATA_SIZE_SAMPLES, self->period_size / 2);
++   return FALSE;
++ 
++ probe_has_wrong_rate:
++@@ -751,14 +695,6 @@ probe_has_wrong_rate:
++           " use a caps filter to ensure those are the same.",
++           probe_info.rate, info->rate), (NULL));
++   return FALSE;
++-
++-initialize_failed:
++-  GST_OBJECT_UNLOCK (self);
++-  GST_ELEMENT_ERROR (self, LIBRARY, INIT,
++-      ("Failed to initialize WebRTC Audio Processing library"),
++-      ("webrtc::AudioProcessing::Initialize() failed: %s",
++-          webrtc_error_to_string (err)));
++-  return FALSE;
++ }
++ 
++ static gboolean
++@@ -803,8 +739,6 @@ gst_webrtc_dsp_set_property (GObject * object,
++       self->echo_cancel = g_value_get_boolean (value);
++       break;
++     case PROP_ECHO_SUPPRESSION_LEVEL:
++-      self->echo_suppression_level =
++-          (GstWebrtcEchoSuppressionLevel) g_value_get_enum (value);
++       break;
++     case PROP_NOISE_SUPPRESSION:
++       self->noise_suppression = g_value_get_boolean (value);
++@@ -817,13 +751,10 @@ gst_webrtc_dsp_set_property (GObject * object,
++       self->gain_control = g_value_get_boolean (value);
++       break;
++     case PROP_EXPERIMENTAL_AGC:
++-      self->experimental_agc = g_value_get_boolean (value);
++       break;
++     case PROP_EXTENDED_FILTER:
++-      self->extended_filter = g_value_get_boolean (value);
++       break;
++     case PROP_DELAY_AGNOSTIC:
++-      self->delay_agnostic = g_value_get_boolean (value);
++       break;
++     case PROP_TARGET_LEVEL_DBFS:
++       self->target_level_dbfs = g_value_get_int (value);
++@@ -845,11 +776,8 @@ gst_webrtc_dsp_set_property (GObject * object,
++       self->voice_detection = g_value_get_boolean (value);
++       break;
++     case PROP_VOICE_DETECTION_FRAME_SIZE_MS:
++-      self->voice_detection_frame_size_ms = g_value_get_int (value);
++       break;
++     case PROP_VOICE_DETECTION_LIKELIHOOD:
++-      self->voice_detection_likelihood =
++-          (GstWebrtcVoiceDetectionLikelihood) g_value_get_enum (value);
++       break;
++     default:
++       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
++@@ -876,7 +804,7 @@ gst_webrtc_dsp_get_property (GObject * object,
++       g_value_set_boolean (value, self->echo_cancel);
++       break;
++     case PROP_ECHO_SUPPRESSION_LEVEL:
++-      g_value_set_enum (value, self->echo_suppression_level);
+++      g_value_set_enum (value, (GstWebrtcEchoSuppressionLevel) 2);
++       break;
++     case PROP_NOISE_SUPPRESSION:
++       g_value_set_boolean (value, self->noise_suppression);
++@@ -888,13 +816,13 @@ gst_webrtc_dsp_get_property (GObject * object,
++       g_value_set_boolean (value, self->gain_control);
++       break;
++     case PROP_EXPERIMENTAL_AGC:
++-      g_value_set_boolean (value, self->experimental_agc);
+++      g_value_set_boolean (value, false);
++       break;
++     case PROP_EXTENDED_FILTER:
++-      g_value_set_boolean (value, self->extended_filter);
+++      g_value_set_boolean (value, false);
++       break;
++     case PROP_DELAY_AGNOSTIC:
++-      g_value_set_boolean (value, self->delay_agnostic);
+++      g_value_set_boolean (value, false);
++       break;
++     case PROP_TARGET_LEVEL_DBFS:
++       g_value_set_int (value, self->target_level_dbfs);
++@@ -915,10 +843,10 @@ gst_webrtc_dsp_get_property (GObject * object,
++       g_value_set_boolean (value, self->voice_detection);
++       break;
++     case PROP_VOICE_DETECTION_FRAME_SIZE_MS:
++-      g_value_set_int (value, self->voice_detection_frame_size_ms);
+++      g_value_set_int (value, 0);
++       break;
++     case PROP_VOICE_DETECTION_LIKELIHOOD:
++-      g_value_set_enum (value, self->voice_detection_likelihood);
+++      g_value_set_enum (value, 2);
++       break;
++     default:
++       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
++@@ -1005,13 +933,13 @@ gst_webrtc_dsp_class_init (GstWebrtcDspClass * klass)
++ 
++   g_object_class_install_property (gobject_class,
++       PROP_ECHO_SUPPRESSION_LEVEL,
++-      g_param_spec_enum ("echo-suppression-level", "Echo Suppression Level",
+++      g_param_spec_enum ("echo-suppression-level",
+++          "Echo Suppression Level (does nothing)",
++           "Controls the aggressiveness of the suppressor. A higher level "
++           "trades off double-talk performance for increased echo suppression.",
++-          GST_TYPE_WEBRTC_ECHO_SUPPRESSION_LEVEL,
++-          webrtc::EchoCancellation::kModerateSuppression,
+++          GST_TYPE_WEBRTC_ECHO_SUPPRESSION_LEVEL, 2,
++           (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
++-              G_PARAM_CONSTRUCT)));
+++              G_PARAM_CONSTRUCT | G_PARAM_DEPRECATED)));
++ 
++   g_object_class_install_property (gobject_class,
++       PROP_NOISE_SUPPRESSION,
++@@ -1026,7 +954,7 @@ gst_webrtc_dsp_class_init (GstWebrtcDspClass * klass)
++           "Controls the aggressiveness of the suppression. Increasing the "
++           "level will reduce the noise level at the expense of a higher "
++           "speech distortion.", GST_TYPE_WEBRTC_NOISE_SUPPRESSION_LEVEL,
++-          webrtc::EchoCancellation::kModerateSuppression,
+++          webrtc::AudioProcessing::Config::NoiseSuppression::Level::kModerate,
++           (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
++               G_PARAM_CONSTRUCT)));
++ 
++@@ -1039,24 +967,26 @@ gst_webrtc_dsp_class_init (GstWebrtcDspClass * klass)
++ 
++   g_object_class_install_property (gobject_class,
++       PROP_EXPERIMENTAL_AGC,
++-      g_param_spec_boolean ("experimental-agc", "Experimental AGC",
+++      g_param_spec_boolean ("experimental-agc",
+++          "Experimental AGC (does nothing)",
++           "Enable or disable experimental automatic gain control.",
++           FALSE, (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
++-              G_PARAM_CONSTRUCT)));
+++              G_PARAM_CONSTRUCT | G_PARAM_DEPRECATED)));
++ 
++   g_object_class_install_property (gobject_class,
++       PROP_EXTENDED_FILTER,
++       g_param_spec_boolean ("extended-filter", "Extended Filter",
++           "Enable or disable the extended filter.",
++           TRUE, (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
++-              G_PARAM_CONSTRUCT)));
+++              G_PARAM_CONSTRUCT | G_PARAM_DEPRECATED)));
++ 
++   g_object_class_install_property (gobject_class,
++       PROP_DELAY_AGNOSTIC,
++-      g_param_spec_boolean ("delay-agnostic", "Delay Agnostic",
+++      g_param_spec_boolean ("delay-agnostic",
+++          "Delay agnostic mode (does nothing)",
++           "Enable or disable the delay agnostic mode.",
++           FALSE, (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
++-              G_PARAM_CONSTRUCT)));
+++              G_PARAM_CONSTRUCT | G_PARAM_DEPRECATED)));
++ 
++   g_object_class_install_property (gobject_class,
++       PROP_TARGET_LEVEL_DBFS,
++@@ -1111,24 +1041,23 @@ gst_webrtc_dsp_class_init (GstWebrtcDspClass * klass)
++   g_object_class_install_property (gobject_class,
++       PROP_VOICE_DETECTION_FRAME_SIZE_MS,
++       g_param_spec_int ("voice-detection-frame-size-ms",
++-          "Voice Detection Frame Size Milliseconds",
+++          "Voice detection frame size in milliseconds (does nothing)",
++           "Sets the |size| of the frames in ms on which the VAD will operate. "
++           "Larger frames will improve detection accuracy, but reduce the "
++           "frequency of updates",
++           10, 30, DEFAULT_VOICE_DETECTION_FRAME_SIZE_MS,
++           (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
++-              G_PARAM_CONSTRUCT)));
+++              G_PARAM_CONSTRUCT | G_PARAM_DEPRECATED)));
++ 
++   g_object_class_install_property (gobject_class,
++       PROP_VOICE_DETECTION_LIKELIHOOD,
++       g_param_spec_enum ("voice-detection-likelihood",
++-          "Voice Detection Likelihood",
+++          "Voice detection likelihood (does nothing)",
++           "Specifies the likelihood that a frame will be declared to contain "
++           "voice.",
++-          GST_TYPE_WEBRTC_VOICE_DETECTION_LIKELIHOOD,
++-          DEFAULT_VOICE_DETECTION_LIKELIHOOD,
+++          GST_TYPE_WEBRTC_VOICE_DETECTION_LIKELIHOOD, 2,
++           (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
++-              G_PARAM_CONSTRUCT)));
+++              G_PARAM_CONSTRUCT | G_PARAM_DEPRECATED)));
++ 
++   gst_type_mark_as_plugin_api (GST_TYPE_WEBRTC_GAIN_CONTROL_MODE, (GstPluginAPIFlags) 0);
++   gst_type_mark_as_plugin_api (GST_TYPE_WEBRTC_NOISE_SUPPRESSION_LEVEL, (GstPluginAPIFlags) 0);
++diff --git a/ext/webrtcdsp/gstwebrtcechoprobe.cpp b/ext/webrtcdsp/gstwebrtcechoprobe.cpp
++index acdb3d8a7d..8e8ca064c4 100644
++--- a/ext/webrtcdsp/gstwebrtcechoprobe.cpp
+++++ b/ext/webrtcdsp/gstwebrtcechoprobe.cpp
++@@ -33,7 +33,8 @@
++ 
++ #include "gstwebrtcechoprobe.h"
++ 
++-#include <webrtc/modules/interface/module_common_types.h>
+++#include <modules/audio_processing/include/audio_processing.h>
+++
++ #include <gst/audio/audio.h>
++ 
++ GST_DEBUG_CATEGORY_EXTERN (webrtc_dsp_debug);
++@@ -102,7 +103,7 @@ gst_webrtc_echo_probe_setup (GstAudioFilter * filter, const GstAudioInfo * info)
++   self->period_size = self->period_samples * info->bpf;
++ 
++   if (self->interleaved &&
++-      (webrtc::AudioFrame::kMaxDataSizeSamples * 2) < self->period_size)
+++      (MAX_DATA_SIZE_SAMPLES * 2) < self->period_size)
++     goto period_too_big;
++ 
++   GST_WEBRTC_ECHO_PROBE_UNLOCK (self);
++@@ -112,9 +113,9 @@ gst_webrtc_echo_probe_setup (GstAudioFilter * filter, const GstAudioInfo * info)
++ period_too_big:
++   GST_WEBRTC_ECHO_PROBE_UNLOCK (self);
++   GST_WARNING_OBJECT (self, "webrtcdsp format produce too big period "
++-      "(maximum is %" G_GSIZE_FORMAT " samples and we have %u samples), "
+++      "(maximum is %d samples and we have %u samples), "
++       "reduce the number of channels or the rate.",
++-      webrtc::AudioFrame::kMaxDataSizeSamples, self->period_size / 2);
+++      MAX_DATA_SIZE_SAMPLES, self->period_size / 2);
++   return FALSE;
++ }
++ 
++@@ -303,18 +304,20 @@ gst_webrtc_release_echo_probe (GstWebrtcEchoProbe * probe)
++ 
++ gint
++ gst_webrtc_echo_probe_read (GstWebrtcEchoProbe * self, GstClockTime rec_time,
++-    gpointer _frame, GstBuffer ** buf)
+++    GstBuffer ** buf)
++ {
++-  webrtc::AudioFrame * frame = (webrtc::AudioFrame *) _frame;
++   GstClockTimeDiff diff;
++-  gsize avail, skip, offset, size;
+++  gsize avail, skip, offset, size = 0;
++   gint delay = -1;
++ 
++   GST_WEBRTC_ECHO_PROBE_LOCK (self);
++ 
+++  /* We always return a buffer -- if don't have data (size == 0), we generate a
+++   * silence buffer */
+++
++   if (!GST_CLOCK_TIME_IS_VALID (self->latency) ||
++       !GST_AUDIO_INFO_IS_VALID (&self->info))
++-    goto done;
+++    goto copy;
++ 
++   if (self->interleaved)
++     avail = gst_adapter_available (self->adapter) / self->info.bpf;
++@@ -324,7 +327,7 @@ gst_webrtc_echo_probe_read (GstWebrtcEchoProbe * self, GstClockTime rec_time,
++   /* In delay agnostic mode, just return 10ms of data */
++   if (!GST_CLOCK_TIME_IS_VALID (rec_time)) {
++     if (avail < self->period_samples)
++-      goto done;
+++      goto copy;
++ 
++     size = self->period_samples;
++     skip = 0;
++@@ -371,23 +374,51 @@ gst_webrtc_echo_probe_read (GstWebrtcEchoProbe * self, GstClockTime rec_time,
++   size = MIN (avail - offset, self->period_samples - skip);
++ 
++ copy:
++-  if (self->interleaved) {
++-    skip *= self->info.bpf;
++-    offset *= self->info.bpf;
++-    size *= self->info.bpf;
++-
++-    if (size < self->period_size)
++-      memset (frame->data_, 0, self->period_size);
++-
++-    if (size) {
++-      gst_adapter_copy (self->adapter, (guint8 *) frame->data_ + skip,
++-          offset, size);
++-      gst_adapter_flush (self->adapter, offset + size);
++-    }
+++  if (!size) {
+++    /* No data, provide a period's worth of silence */
+++    *buf = gst_buffer_new_allocate (NULL, self->period_size, NULL);
+++    gst_buffer_memset (*buf, 0, 0, self->period_size);
+++    gst_buffer_add_audio_meta (*buf, &self->info, self->period_samples,
+++        NULL);
++   } else {
+++    /* We have some actual data, pop period_samples' worth if have it, else pad
+++     * with silence and provide what we do have */
++     GstBuffer *ret, *taken, *tmp;
++ 
++-    if (size) {
+++    if (self->interleaved) {
+++      skip *= self->info.bpf;
+++      offset *= self->info.bpf;
+++      size *= self->info.bpf;
+++
+++      gst_adapter_flush (self->adapter, offset);
+++
+++      /* we need to fill silence at the beginning and/or the end of the
+++       * buffer in order to have period_samples in the buffer */
+++      if (size < self->period_size) {
+++        gsize padding = self->period_size - (skip + size);
+++
+++        taken = gst_adapter_take_buffer (self->adapter, size);
+++        ret = gst_buffer_new ();
+++
+++        /* need some silence at the beginning */
+++        if (skip) {
+++          tmp = gst_buffer_new_allocate (NULL, skip, NULL);
+++          gst_buffer_memset (tmp, 0, 0, skip);
+++          ret = gst_buffer_append (ret, tmp);
+++        }
+++
+++        ret = gst_buffer_append (ret, taken);
+++
+++        /* need some silence at the end */
+++        if (padding) {
+++          tmp = gst_buffer_new_allocate (NULL, padding, NULL);
+++          gst_buffer_memset (tmp, 0, 0, padding);
+++          ret = gst_buffer_append (ret, tmp);
+++        }
+++      } else {
+++        ret = gst_adapter_take_buffer (self->adapter, size);
+++      }
+++    } else {
++       gst_planar_audio_adapter_flush (self->padapter, offset);
++ 
++       /* we need to fill silence at the beginning and/or the end of each
++@@ -430,23 +461,13 @@ copy:
++         ret = gst_planar_audio_adapter_take_buffer (self->padapter, size,
++           GST_MAP_READWRITE);
++       }
++-    } else {
++-      ret = gst_buffer_new_allocate (NULL, self->period_size, NULL);
++-      gst_buffer_memset (ret, 0, 0, self->period_size);
++-      gst_buffer_add_audio_meta (ret, &self->info, self->period_samples,
++-          NULL);
++     }
++ 
++     *buf = ret;
++   }
++ 
++-  frame->num_channels_ = self->info.channels;
++-  frame->sample_rate_hz_ = self->info.rate;
++-  frame->samples_per_channel_ = self->period_samples;
++-
++   delay = self->delay;
++ 
++-done:
++   GST_WEBRTC_ECHO_PROBE_UNLOCK (self);
++ 
++   return delay;
++diff --git a/ext/webrtcdsp/gstwebrtcechoprobe.h b/ext/webrtcdsp/gstwebrtcechoprobe.h
++index 36fd34f179..488c0e958f 100644
++--- a/ext/webrtcdsp/gstwebrtcechoprobe.h
+++++ b/ext/webrtcdsp/gstwebrtcechoprobe.h
++@@ -45,6 +45,12 @@ G_BEGIN_DECLS
++ #define GST_WEBRTC_ECHO_PROBE_LOCK(obj) g_mutex_lock (&GST_WEBRTC_ECHO_PROBE (obj)->lock)
++ #define GST_WEBRTC_ECHO_PROBE_UNLOCK(obj) g_mutex_unlock (&GST_WEBRTC_ECHO_PROBE (obj)->lock)
++ 
+++/* From the webrtc audio_frame.h definition of kMaxDataSizeSamples:
+++ * Stereo, 32 kHz, 120 ms (2 * 32 * 120)
+++ * Stereo, 192 kHz, 20 ms (2 * 192 * 20)
+++ */
+++#define MAX_DATA_SIZE_SAMPLES 7680
+++
++ typedef struct _GstWebrtcEchoProbe GstWebrtcEchoProbe;
++ typedef struct _GstWebrtcEchoProbeClass GstWebrtcEchoProbeClass;
++ 
++@@ -71,6 +77,7 @@ struct _GstWebrtcEchoProbe
++   GstClockTime latency;
++   gint delay;
++   gboolean interleaved;
+++  gint extra_delay;
++ 
++   GstSegment segment;
++   GstAdapter *adapter;
++@@ -92,7 +99,7 @@ GST_ELEMENT_REGISTER_DECLARE (webrtcechoprobe);
++ GstWebrtcEchoProbe *gst_webrtc_acquire_echo_probe (const gchar * name);
++ void gst_webrtc_release_echo_probe (GstWebrtcEchoProbe * probe);
++ gint gst_webrtc_echo_probe_read (GstWebrtcEchoProbe * self,
++-    GstClockTime rec_time, gpointer frame, GstBuffer ** buf);
+++    GstClockTime rec_time, GstBuffer ** buf);
++ 
++ G_END_DECLS
++ #endif /* __GST_WEBRTC_ECHO_PROBE_H__ */
++diff --git a/ext/webrtcdsp/meson.build b/ext/webrtcdsp/meson.build
++index 5aeae69a44..09565e27c7 100644
++--- a/ext/webrtcdsp/meson.build
+++++ b/ext/webrtcdsp/meson.build
++@@ -4,7 +4,7 @@ webrtc_sources = [
++   'gstwebrtcdspplugin.cpp'
++ ]
++ 
++-webrtc_dep = dependency('webrtc-audio-processing', version : ['>= 0.2', '< 0.4'],
+++webrtc_dep = dependency('webrtc-audio-processing-1', version : ['>= 1.0'],
++                         required : get_option('webrtcdsp'))
++ 
++ if not gnustl_dep.found() and get_option('webrtcdsp').enabled()
++@@ -20,7 +20,7 @@ if webrtc_dep.found() and gnustl_dep.found()
++     dependencies : [gstbase_dep, gstaudio_dep, gstbadaudio_dep, webrtc_dep, gnustl_dep],
++     install : true,
++     install_dir : plugins_install_dir,
++-    override_options : ['cpp_std=c++11'],
+++    override_options : ['cpp_std=c++17'],
++   )
++   plugins += [gstwebrtcdsp]
++ endif
++-- 
++2.34.1
++
 -- 
-2.39.2
+2.34.1
+
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
