@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB9E8C47258
-	for <buildroot@archiver.kernel.org>; Wed, 31 Jan 2024 20:25:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67F8AC47258
+	for <buildroot@archiver.kernel.org>; Wed, 31 Jan 2024 20:26:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7117660F3E;
-	Wed, 31 Jan 2024 20:25:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7117660F3E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 21D4660B0F;
+	Wed, 31 Jan 2024 20:26:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 21D4660B0F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id z3utV6SrPm2j; Wed, 31 Jan 2024 20:25:47 +0000 (UTC)
+	with ESMTP id rxU90df4QSw0; Wed, 31 Jan 2024 20:26:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B6CB9611CE;
-	Wed, 31 Jan 2024 20:25:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6CB9611CE
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3D3851BF951
- for <buildroot@lists.busybox.net>; Wed, 31 Jan 2024 20:25:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 33C1B60F33;
+	Wed, 31 Jan 2024 20:25:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33C1B60F33
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 75AA21BF5A4
+ for <buildroot@lists.busybox.net>; Wed, 31 Jan 2024 20:25:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0FC4A84443
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3B36360B6A
  for <buildroot@lists.busybox.net>; Wed, 31 Jan 2024 20:25:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0FC4A84443
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B36360B6A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4DMdHpumsUjR for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2-q0jcgnD8ud for <buildroot@lists.busybox.net>;
  Wed, 31 Jan 2024 20:25:31 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4456A8442B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3E71560B1A
  for <buildroot@buildroot.org>; Wed, 31 Jan 2024 20:25:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4456A8442B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3E71560B1A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 315A4864FA; Wed, 31 Jan 2024 20:25:31 +0000 (UTC)
+ id 1964E864EE; Wed, 31 Jan 2024 20:25:31 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 31 Jan 2024 21:24:34 +0100
+Date: Wed, 31 Jan 2024 21:21:18 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f24e85238f67eb65ec5dc7ebde7f0c7cfd3c396b
-X-Git-Newrev: d932f84d9fed1fca22c7bcd1eea382d7c9ea6735
+X-Git-Oldrev: 459620aa98fbdace1a9f76d1fa40f7f27a2c4afa
+X-Git-Newrev: ef5d3327a1f030924cb5f000d568fc69f7e7ec53
 X-Patchwork-Hint: ignore
-Message-Id: <20240131202531.315A4864FA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/syslog-ng: needs pcre2, not pcre
+Message-Id: <20240131202531.1964E864EE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lynx: fix openssl static build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,46 +62,62 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d932f84d9fed1fca22c7bcd1eea382d7c9ea6735
+commit: https://git.buildroot.net/buildroot/commit/?id=ef5d3327a1f030924cb5f000d568fc69f7e7ec53
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Syslog-ng-uses pcre2 instead of pcre since 4.3.0 with:
-https://github.com/syslog-ng/syslog-ng/commit/cb6de08dc9078644d48ca536b5660e406b1a50d6
+Use LDFLAGS instead of LIBS to fix the following openssl static build
+failure raised because lynx filters out duplicates (i.e. -lz) in
+CF_ADD_LIBS:
 
-No autobuilder failures, as pcre2 is implicitly available through libglib2.
+configure:12958: checking for inet_ntoa
+configure:12995: /home/autobuild/autobuild/instance-7/output-1/host/bin/x86_64-buildroot-linux-uclibc-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Ofast -g0 -static -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -DLINUX  -static conftest.c -L/home/autobuild/autobuild/instance-7/output-1/host/bin/../x86_64-buildroot-linux-uclibc/sysroot/usr/lib64 -lssl -L/home/autobuild/autobuild/instance-7/output-1/host/bin/../x86_64-buildroot-linux-uclibc/sysroot/usr/lib64 -lz -pthread -lcrypto -lz -pthread  >&5
+configure:12998: $? = 0
+configure:13001: test -s conftest
+configure:13004: $? = 0
+configure:13014: result: yes
+configure:13095: checking for gethostbyname
+configure:13151: result: yes
+configure:13232: checking for strcasecmp
+configure:13288: result: yes
+configure:13401: checking for inet_aton function
+configure:13443: /home/autobuild/autobuild/instance-7/output-1/host/bin/x86_64-buildroot-linux-uclibc-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Ofast -g0 -static -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -DLINUX  -static conftest.c  -L/home/autobuild/autobuild/instance-7/output-1/host/bin/../x86_64-buildroot-linux-uclibc/sysroot/usr/lib64 -lssl -lz -pthread -lcrypto >&5
 
+[...]
+
+/home/autobuild/autobuild/instance-7/output-1/host/bin/x86_64-buildroot-linux-uclibc-gcc -DHAVE_CONFIG_H  -DLOCALEDIR=\"/usr/share/locale\" -I. -I.. -Ichrtrans -I./chrtrans -I.. -I../src -I.././WWW/Library/Implementation    -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -DLINUX -I/home/autobuild/autobuild/instance-7/output-1/host/x86_64-buildroot-linux-uclibc/sysroot/usr/include -I/home/autobuild/autobuild/instance-7/output-1/host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/openssl  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Ofast -g0 -static  -Wl,-rpath,/home/autobuild/autobuild/instance-7/output-1/host/bin/../x86_64-buildroot-linux-uclibc/sysroot/usr/lib64 -Wl,-rpath,/home/autobuild/autobuild/instance-7/output-1/host/x86_64-buildroot-linux-uclibc/sysroot/usr/lib   -L/home/autobuild/autobuild/instance-7/output-1/host/x86_64-buildroot-linux-uclibc/sysroot/usr/lib -static -o lynx  LYebcdic.o LYClean.o LYShowInfo.o LYEdit.o L
+ YStrings.o LYMail.o HTAlert.o GridText.o LYGetFile.o LYMain.o LYMainLoop.o LYCurses.o LYBookmark.o LYmktime.o LYUtils.o LYOptions.o LYReadCFG.o LYSearch.o LYHistory.o LYForms.o LYPrint.o LYrcFile.o LYDownload.o LYNews.o LYKeymap.o HTML.o HTFWriter.o HTInit.o DefaultStyle.o LYUpload.o LYLeaks.o LYexit.o LYJump.o LYList.o LYCgi.o LYTraversal.o LYEditmap.o LYCharSets.o LYCharUtils.o LYMap.o LYCookie.o LYStyle.o LYHash.o LYPrettySrc.o TRSTable.o parsdate.o UCdomap.o UCAux.o UCAuto.o  LYSession.o LYLocal.o  .././WWW/Library/Implementation/libwww.a -lz -static -lncurses -lssl -lcrypto -L/home/autobuild/autobuild/instance-7/output-1/host/bin/../x86_64-buildroot-linux-uclibc/sysroot/usr/lib64 -pthread
+/home/autobuild/autobuild/instance-7/output-1/host/lib/gcc/x86_64-buildroot-linux-uclibc/11.4.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: /home/autobuild/autobuild/instance-7/output-1/host/x86_64-buildroot-linux-uclibc/sysroot/usr/lib/libcrypto.a(libcrypto-lib-c_zlib.o): in function `zlib_oneshot_expand_block':
+c_zlib.c:(.text+0xb8b): undefined reference to `uncompress'
+
+Patching aclocal.m4 is not possible as autoreconf fails due to missing
+AC_DIVERT_HELP macro.
+
+This build failure is only raised by autobuilders since 2024 for an
+unknown reason.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/6d4119b54fc6b6111a03f81e131e83bae0d844d1
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/syslog-ng/Config.in    | 2 +-
- package/syslog-ng/syslog-ng.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/lynx/lynx.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/syslog-ng/Config.in b/package/syslog-ng/Config.in
-index 30ad54a4bf..aa1e71d225 100644
---- a/package/syslog-ng/Config.in
-+++ b/package/syslog-ng/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_SYSLOG_NG
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	select BR2_PACKAGE_LIBGLIB2
--	select BR2_PACKAGE_PCRE
-+	select BR2_PACKAGE_PCRE2
- 	select BR2_PACKAGE_OPENSSL
- 	help
- 	  syslog-ng is an enhanced log daemon, supporting a wide range
-diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
-index ff5aaee429..dd02a6e3af 100644
---- a/package/syslog-ng/syslog-ng.mk
-+++ b/package/syslog-ng/syslog-ng.mk
-@@ -12,7 +12,7 @@ SYSLOG_NG_LICENSE = LGPL-2.1+ (syslog-ng core), GPL-2.0+ (modules)
- SYSLOG_NG_LICENSE_FILES = COPYING GPL.txt LGPL.txt
- SYSLOG_NG_CPE_ID_VENDOR = oneidentity
- SYSLOG_NG_DEPENDENCIES = host-bison host-flex host-pkgconf \
--	libglib2 openssl pcre
-+	libglib2 openssl pcre2
- # We're patching configure.ac
- SYSLOG_NG_AUTORECONF = YES
- SYSLOG_NG_CONF_OPTS = --disable-manpages --localstatedir=/var/run \
+diff --git a/package/lynx/lynx.mk b/package/lynx/lynx.mk
+index 3f62f4f5b7..b441eacef7 100644
+--- a/package/lynx/lynx.mk
++++ b/package/lynx/lynx.mk
+@@ -53,6 +53,8 @@ LYNX_DEPENDENCIES += libidn
+ LYNX_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs libidn`
+ endif
+ 
+-LYNX_CONF_ENV = LIBS="$(LYNX_LIBS)" CFLAGS="$(TARGET_CFLAGS) $(LYNX_CFLAGS)"
++LYNX_CONF_ENV = \
++	LDFLAGS="$(TARGET_LDFLAGS) $(LYNX_LIBS)" \
++	CFLAGS="$(TARGET_CFLAGS) $(LYNX_CFLAGS)"
+ 
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
