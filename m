@@ -4,89 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DEA63C47258
-	for <buildroot@archiver.kernel.org>; Wed, 31 Jan 2024 17:38:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E738C47258
+	for <buildroot@archiver.kernel.org>; Wed, 31 Jan 2024 18:19:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 748DA4039D;
-	Wed, 31 Jan 2024 17:38:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 748DA4039D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8ABCD400A4;
+	Wed, 31 Jan 2024 18:19:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8ABCD400A4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JTrVrxfa5P7U; Wed, 31 Jan 2024 17:38:37 +0000 (UTC)
+	with ESMTP id I5UlFOGeV5IK; Wed, 31 Jan 2024 18:19:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 36CD240465;
-	Wed, 31 Jan 2024 17:38:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 36CD240465
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CF1601BF2A3
- for <buildroot@lists.busybox.net>; Wed, 31 Jan 2024 17:38:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4690A4359D;
+	Wed, 31 Jan 2024 18:19:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4690A4359D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7903F1BF59E
+ for <buildroot@lists.busybox.net>; Wed, 31 Jan 2024 18:19:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A861281295
- for <buildroot@lists.busybox.net>; Wed, 31 Jan 2024 17:38:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A861281295
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4B6BA60F6C
+ for <buildroot@lists.busybox.net>; Wed, 31 Jan 2024 18:19:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B6BA60F6C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RqkAckeLx4en for <buildroot@lists.busybox.net>;
- Wed, 31 Jan 2024 17:38:33 +0000 (UTC)
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B18FF81381
- for <buildroot@buildroot.org>; Wed, 31 Jan 2024 17:38:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B18FF81381
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-40faf6788d1so7100605e9.0
- for <buildroot@buildroot.org>; Wed, 31 Jan 2024 09:38:32 -0800 (PST)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SVXS2dR-xDLn for <buildroot@lists.busybox.net>;
+ Wed, 31 Jan 2024 18:19:09 +0000 (UTC)
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com
+ [IPv6:2a00:1450:4864:20::635])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D7E2860F31
+ for <buildroot@buildroot.org>; Wed, 31 Jan 2024 18:19:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D7E2860F31
+Received: by mail-ej1-x635.google.com with SMTP id
+ a640c23a62f3a-a359e6fde44so620766b.3
+ for <buildroot@buildroot.org>; Wed, 31 Jan 2024 10:19:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1706722710; x=1707327510;
+ d=1e100.net; s=20230601; t=1706725147; x=1707329947;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=OQpWNH9owTBK0nIejHJmjIUsjizWoJUGQ7enZsKw0qk=;
- b=qCkEvpbm4dNK+LzdnmaraTrI8jtpF247gv81XofnsH/SeWHiLs455vrhaTiIVuKk69
- bQnLWKwH0sX7OJdEivH5FzxvpPZ1R/1Y7YuXak2cYLJrVvguW4Ket5rtD/fy4PytAQOZ
- kZ7luiuPIyjkpspzVwEzqIF70j7O2QmObj79zsRf+n5MUdZ2m2UuM4bhf0p9r6nQCxv/
- gAPKQkMZk+4jIl4+DlEqpzHjHezAlOLsCYt7vse+U1qtB3k07fs0PcshrsT6XegRu47P
- iNiewQQZoQclpAUNY4ZoYxDzAyuy5XJEak+tStkT0K/VNLw8lY65K+QL9lK6ONBOYMfb
- Dm5w==
-X-Gm-Message-State: AOJu0YzoWrB7zHjARGyP1KORZt4Dt3xO8Bo1gIm+d5kA48cwqtbx+9V1
- u+3ukGEOOA9SnOKjwnr0byDtjblvh3HxTfVxSGfubXuIP34NrmvVr6VZ4uNY40LZCSW6oPJ5qG4
- v
-X-Google-Smtp-Source: AGHT+IH1qlChRXb8jeUzIgIQrxvV7/xsZncG1EvnO4YR1EiHkRW/oxxCRFkt65qpBWD+i9uMaRt6oA==
-X-Received: by 2002:a5d:6608:0:b0:337:d84c:1d6 with SMTP id
- n8-20020a5d6608000000b00337d84c01d6mr4708016wru.18.1706722710549; 
- Wed, 31 Jan 2024 09:38:30 -0800 (PST)
-Received: from P-NTS-Evian.home
- (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
- [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
+ bh=uQPXeZ7izR5CZKU+R2b25qmgkQZzI2MbYqjAnNa9H44=;
+ b=EGpL/ypy8r3j1BOSO2erK/Ko46KuJVC5/kD9nzP1xg2gTDk/ZGVfzcloXypjN1PXWI
+ QpoASiU9UeTt8td6/pDCfR2p4aTa62E0HMTVL7KWsTxlzicoemD6nu/xZKHrdF1ipSSc
+ 97L7qeXrRP6SUlgh9rTiXWb8jUzEXfYqBROxe6mER78Xuj9K9ScNpU7dUEWy1kuRNeJQ
+ SnOSLxUs0tjjaybtipxaU8CPNrFumbXEJN0/v0PyIcCASDcrU7RrZ7+/urxCPy1BM/f5
+ Lh6PXjM4QSSdMv9GbCJedU3yxrSz7jVY/E8/fz0cauf3LbuLkPXzyF6wn4+HM3Eynmje
+ CU8w==
+X-Gm-Message-State: AOJu0Ywng1kZA/k7Zib/hcz0LvZWC/THvDJsqQx46f7CQpiuipFMlgSW
+ Mr1XeaWKt3pPGi7WRuWZbbtz80N278h4lCOwdRbEzd/uDOrOhEwh16N2ek/2
+X-Google-Smtp-Source: AGHT+IHy4T5P1OHjN7RzTY2uaO34/MTgN2NwVIPCVu6nKrT7n47cgtN9oNedvxf2eejR5m5ZhO4xnA==
+X-Received: by 2002:a17:906:1110:b0:a36:af:3939 with SMTP id
+ h16-20020a170906111000b00a3600af3939mr1852414eja.17.1706725146714; 
+ Wed, 31 Jan 2024 10:19:06 -0800 (PST)
+Received: from x230.suse.cz (gw1.ms-free.net. [185.243.124.10])
  by smtp.gmail.com with ESMTPSA id
- q18-20020a05600c46d200b0040efd192a95sm2190662wmo.1.2024.01.31.09.38.30
+ vj12-20020a170907d48c00b00a3672977b7asm857817ejc.144.2024.01.31.10.19.05
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 31 Jan 2024 09:38:30 -0800 (PST)
-From: Romain Naour <romain.naour@smile.fr>
+ Wed, 31 Jan 2024 10:19:06 -0800 (PST)
+From: Petr Vorel <petr.vorel@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 31 Jan 2024 18:38:27 +0100
-Message-ID: <20240131173827.1281120-1-romain.naour@smile.fr>
+Date: Wed, 31 Jan 2024 19:19:02 +0100
+Message-ID: <20240131181902.26975-1-petr.vorel@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1706722710; x=1707327510;
- darn=buildroot.org; 
+ d=gmail.com; s=20230601; t=1706725147; x=1707329947; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=OQpWNH9owTBK0nIejHJmjIUsjizWoJUGQ7enZsKw0qk=;
- b=j1af1jXZEgcY/6RomGqwCq9zD161C1gjpPYiiC2rECnRtt3X3/Z0d4JUeZ2rVkkR2Y
- LfVtNGHJL2Fpek11zuMSeZT46LjalhIKmwHP4tu6LaUMTVVGaEWWubkqVd/KHT6ptAi1
- 7mXk/8gBDDelJ4uIU+o9bKmNMU3vH1fEIPuAh2XOfR1d3lCWcU5uk2Cs7hx5QHMNVHbQ
- 29pIvAAqDs/yn2jTBjDkpt8TfE5fozgVPrBg2wz4N6zZI6jTtazMecrXtqQzcEOqkfWV
- 5AE9lyP0+8miX+pk/F0h2nuVauTYWE0Nepp3omUjybBgFLgmGNjeeaxdxOCCWX3h0EKr
- pyYA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=smile-fr.20230601.gappssmtp.com
- header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=j1af1jXZ
-Subject: [Buildroot] [PATCH] configs/am574x_idk_defconfig: new defconfig
+ bh=uQPXeZ7izR5CZKU+R2b25qmgkQZzI2MbYqjAnNa9H44=;
+ b=aQ6viqSjeLjS/8hGqdfjKWhh+6FQi3x+1zvUNVdv5BR5BhF3OQgpFredHePQzTfebd
+ fONQlXwMXHMG2N+46fl9ov5jejTMBVKFHPbGnQS8z5kMFB4He17ohzuEhLTP5mBcd2Vu
+ r94vwf07FMZ9BLvPsvbvUNiPSTveUaTS/bnuXv/PPZaCJ3bwyD7+NfDMlJCk3qhQcviS
+ Ivr0ZObBQ/GD4/DFqLUC2QRcxgQ6FR9ys7XvIfjCYRDvu/xnLHLQniGBlWKGhAqBYijB
+ pgbZjQpPGdQKEWXgdbMmhLwqg6pPFG5mmbafScnpIh8ddpqTD1/NGiEqOi+rqu32dO4s
+ Gbdw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=aQ6viqSj
+Subject: [Buildroot] [PATCH 1/1] package/ltp-testsuite: bump version to
+ 20240129
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,193 +94,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@smile.fr>
+Cc: Petr Vorel <petr.vorel@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch adds a basic support for AM574x Industrial Development Kit
-[1].
-
-Use multi_v7_defconfig as kernel configuration file instead of
-the deprecated omap2plus_defconfig [2].
-
-The main differences between upstream kernels and the TI vendor tree
-(5.10.x based) are:
-
-  - pru based 100M ethernet ports will not work with upstream kernels
-  since the prueth driver for AM57 is not upstream yet (as of 6.8-rc2)
-  [3].
-
-  - The ARM/DSP examples provided by TI [4] will not work either since
-  they requires an experimental patch [5] adding "remote-processor
-  messaging sockets".
-
-  - There is no support for the POWERVR GPU SGX544 that requires
-  additional userpace vendor (closed source) libraries.
-
-[1] https://www.ti.com/tool/TMDSIDK574
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=cca9f6838bac3441a42fa906314bf5e3bff50ac5
-[3] https://git.ti.com/cgit/ti-linux-kernel/ti-linux-kernel/commit/?id=792b57aac224416f66175c15d60379a4cf581d0f
-[4] https://git.ti.com/cgit/processor-sdk/big-data-ipc-examples
-[5] https://git.ti.com/cgit/ti-linux-kernel/ti-linux-kernel/commit/?id=f4b978a978c38149f712ddd137f12ed5fb914161
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
- board/ti/am574x-idk/extlinux.conf |  4 +++
- board/ti/am574x-idk/genimage.cfg  | 30 +++++++++++++++++++++
- board/ti/am574x-idk/post-build.sh |  4 +++
- board/ti/am574x-idk/readme.txt    | 28 +++++++++++++++++++
- configs/am574x_idk_defconfig      | 45 +++++++++++++++++++++++++++++++
- 5 files changed, 111 insertions(+)
- create mode 100644 board/ti/am574x-idk/extlinux.conf
- create mode 100644 board/ti/am574x-idk/genimage.cfg
- create mode 100755 board/ti/am574x-idk/post-build.sh
- create mode 100644 board/ti/am574x-idk/readme.txt
- create mode 100644 configs/am574x_idk_defconfig
+ package/ltp-testsuite/ltp-testsuite.hash | 4 ++--
+ package/ltp-testsuite/ltp-testsuite.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/board/ti/am574x-idk/extlinux.conf b/board/ti/am574x-idk/extlinux.conf
-new file mode 100644
-index 0000000000..29e0ecfa14
---- /dev/null
-+++ b/board/ti/am574x-idk/extlinux.conf
-@@ -0,0 +1,4 @@
-+label am5749-idk-buildroot
-+  kernel /zImage
-+  fdtdir /
-+  append console=ttyS0,115200n8 root=/dev/mmcblk0p2 rw rootfstype=ext4 rootwait
-diff --git a/board/ti/am574x-idk/genimage.cfg b/board/ti/am574x-idk/genimage.cfg
-new file mode 100644
-index 0000000000..02a9ffe013
---- /dev/null
-+++ b/board/ti/am574x-idk/genimage.cfg
-@@ -0,0 +1,30 @@
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"MLO",
-+			"u-boot.img",
-+			"zImage",
-+			"am574x-idk.dtb",
-+			"extlinux"
-+		}
-+	}
-+
-+	size = 16M
-+}
-+
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition u-boot {
-+		partition-type = 0xC
-+		bootable = "true"
-+                image = "boot.vfat"
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+		size = 1G
-+	}
-+}
-diff --git a/board/ti/am574x-idk/post-build.sh b/board/ti/am574x-idk/post-build.sh
-new file mode 100755
-index 0000000000..5dcdb352eb
---- /dev/null
-+++ b/board/ti/am574x-idk/post-build.sh
-@@ -0,0 +1,4 @@
-+#!/bin/sh
-+BOARD_DIR="$(dirname "$0")"
-+
-+install -m 0644 -D "${BOARD_DIR}"/extlinux.conf "${BINARIES_DIR}"/extlinux/extlinux.conf
-diff --git a/board/ti/am574x-idk/readme.txt b/board/ti/am574x-idk/readme.txt
-new file mode 100644
-index 0000000000..4869984cf1
---- /dev/null
-+++ b/board/ti/am574x-idk/readme.txt
-@@ -0,0 +1,28 @@
-+Texas Instuments AM574x IDK Test and Development Board
-+
-+Description
-+===========
-+
-+This configuration will build a basic image for the TI AM574x IDK
-+board: https://www.ti.com/tool/TMDSIDK574
-+
-+How to build it
-+===============
-+
-+Configure Buildroot:
-+
-+    $ make am574x_idk_defconfig
-+
-+Compile everything and build the USB flash drive image:
-+
-+    $ make
-+
-+How to write the SD card
-+========================
-+
-+Once the build process is finished you will have an image called "sdcard.img"
-+in the output/images/ directory.
-+
-+Copy the bootable "sdcard.img" onto an SD card with "dd":
-+
-+  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
-diff --git a/configs/am574x_idk_defconfig b/configs/am574x_idk_defconfig
-new file mode 100644
-index 0000000000..bbae73dff4
---- /dev/null
-+++ b/configs/am574x_idk_defconfig
-@@ -0,0 +1,45 @@
-+# Architecture
-+BR2_arm=y
-+BR2_cortex_a15=y
-+
-+# System
-+BR2_SYSTEM_DHCP="eth0"
-+
-+# Linux headers same as kernel, a 6.6 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.14"
-+BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="ti/omap/am574x-idk"
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+
-+# Filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+
-+# Image
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/ti/am574x-idk/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/ti/am574x-idk/genimage.cfg"
-+
-+# Bootloader
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.01"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am57xx_evm"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+# BR2_TARGET_UBOOT_FORMAT_BIN is not set
-+BR2_TARGET_UBOOT_FORMAT_IMG=y
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="MLO"
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+
-+# Required tools to create the SD image
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
+diff --git a/package/ltp-testsuite/ltp-testsuite.hash b/package/ltp-testsuite/ltp-testsuite.hash
+index 2e84e978d1..1562f346b4 100644
+--- a/package/ltp-testsuite/ltp-testsuite.hash
++++ b/package/ltp-testsuite/ltp-testsuite.hash
+@@ -1,4 +1,4 @@
+-# From: https://github.com/linux-test-project/ltp/releases/download/20230929/ltp-full-20230929.tar.xz.sha256
+-sha256  eb161ff8f1966a1f3428fd4561eb20ebb9f83b7519e35cc12fc66bcfa7983b6b  ltp-full-20230929.tar.xz
++# From: https://github.com/linux-test-project/ltp/releases/download/20240129/ltp-full-20240129.tar.xz.sha256
++sha256  c302f6b2ca09cbb7835f549777bdb9233fe31f7086d7ad8e65472a0804e3e025  ltp-full-20240129.tar.xz
+ # Locally computed
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+index 2a8c12fc25..ea57686a9c 100644
+--- a/package/ltp-testsuite/ltp-testsuite.mk
++++ b/package/ltp-testsuite/ltp-testsuite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LTP_TESTSUITE_VERSION = 20230929
++LTP_TESTSUITE_VERSION = 20240129
+ LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
+ LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
+ 
 -- 
 2.43.0
 
