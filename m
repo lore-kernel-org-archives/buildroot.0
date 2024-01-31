@@ -4,84 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 967A6C47258
-	for <buildroot@archiver.kernel.org>; Wed, 31 Jan 2024 20:08:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8C5FC47258
+	for <buildroot@archiver.kernel.org>; Wed, 31 Jan 2024 20:18:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7F0CD8453F;
-	Wed, 31 Jan 2024 20:08:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7F0CD8453F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5F7DB844C2;
+	Wed, 31 Jan 2024 20:18:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F7DB844C2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2YhXzKWDxVVX; Wed, 31 Jan 2024 20:08:03 +0000 (UTC)
+	with ESMTP id Ct2tMoHIshHT; Wed, 31 Jan 2024 20:18:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C840484537;
-	Wed, 31 Jan 2024 20:08:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C840484537
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3C5251BF5A4
- for <buildroot@lists.busybox.net>; Wed, 31 Jan 2024 20:08:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9A26784437;
+	Wed, 31 Jan 2024 20:17:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9A26784437
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 14B821BF5A4
+ for <buildroot@lists.busybox.net>; Wed, 31 Jan 2024 20:17:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 152E384537
- for <buildroot@lists.busybox.net>; Wed, 31 Jan 2024 20:08:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 152E384537
+ by smtp3.osuosl.org (Postfix) with ESMTP id EEEBB60B22
+ for <buildroot@lists.busybox.net>; Wed, 31 Jan 2024 20:17:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EEEBB60B22
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8N-Wdt_fZ1f1 for <buildroot@lists.busybox.net>;
- Wed, 31 Jan 2024 20:08:00 +0000 (UTC)
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 40DCC8452E
- for <buildroot@buildroot.org>; Wed, 31 Jan 2024 20:08:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 40DCC8452E
-Received: by mail-wm1-x32b.google.com with SMTP id
- 5b1f17b1804b1-40efcb37373so1827355e9.2
- for <buildroot@buildroot.org>; Wed, 31 Jan 2024 12:08:00 -0800 (PST)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LdbSPX7DlsP9 for <buildroot@lists.busybox.net>;
+ Wed, 31 Jan 2024 20:17:57 +0000 (UTC)
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com
+ [IPv6:2607:f8b0:4864:20::631])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 454DE60B1A
+ for <buildroot@buildroot.org>; Wed, 31 Jan 2024 20:17:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 454DE60B1A
+Received: by mail-pl1-x631.google.com with SMTP id
+ d9443c01a7336-1d934c8f8f7so1641105ad.2
+ for <buildroot@buildroot.org>; Wed, 31 Jan 2024 12:17:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1706731678; x=1707336478;
+ d=1e100.net; s=20230601; t=1706732276; x=1707337076;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=3zbO1kRLqkkln43ijSLP1IIFwYh1SdHUD1zbPl9+rGw=;
- b=JcfGuvHtvTl6h+pvKXCQGQ3GdY1amJHdKS2A3ffolqD+YcWSJ55yYmc+lDDc51TtME
- WOP33tW6bjV+13vlDEPklQvbvEmTFIgSvxLCqzexSrXwrikg0Os9AlphRY8G+jqOkUQ9
- qPXgUZ4UFfs2wi5BbK+xtHNR6uvprRXWvMkIN/zK05xxs9/waissaIY+Rp/jTggHCE5l
- S8QorfIgveXHIZ83Ti1vH7enAmWLnANdjfsfNnfejLx4f5rTkZdYiVjU1ZDu7BknAPFZ
- UtITkQAMu3WZ95qg0x4eFDViElrWMvHZ2a0EK8qRdZgLnnRvWIM/0oTGkhaCUr9nnCiA
- gWww==
-X-Gm-Message-State: AOJu0YyZaojRdf+R78nZjaqyIL8RoqpscqcMKOQKV8st1fNcx+SEziGa
- bJ47hW456hZDr8RN8iPaHRle2hDqyUzL8KJKRSS5wuRUO+vL1bBIzhJXvR7aq7E=
-X-Google-Smtp-Source: AGHT+IEQHb9UtysiUZCcMeRUSCBOayBuOXHAZXlmh+LV7Ais5pNONAXyderkomSy1PzlisRJl9ZzMQ==
-X-Received: by 2002:a05:600c:2943:b0:40f:b456:6877 with SMTP id
- n3-20020a05600c294300b0040fb4566877mr2042683wmd.18.1706731677570; 
- Wed, 31 Jan 2024 12:07:57 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- iv18-20020a05600c549200b0040e76b60235sm2477764wmb.8.2024.01.31.12.07.56
+ bh=xeGkcCaGtbqKRrVY+c4dbRrovF+pImnz4N7EVPJ6BqE=;
+ b=seFk6Gl80mysPglB+/O+4YDCodBeDZ2airN1s62e/TZBXN90OgW/MrXI9nn+ysf3PC
+ H4X2Yx+DnvMYconoJtdz3uDzHxdsr1sqBfLLqBNo48uJK3pF1W02lNcGXXl5a1g3lDbt
+ z+Ve2/WdF2LxAU4XhjyDiLAo0JT5lqauhVxROHGsgrQWTshHCuxJBsf9fVvYcSMh15+H
+ HIg31sCeSPdWxg1M7gPZoyaGrPz64RFoNw/YB/9+UQX95DClJpv/s79Aqm8Dvx5MbktR
+ CKLuiPnUPWNe+ePo4SL36DQ9cJ2AIyvyx5oNJUVDhXxwIw727BZpAtLJ/qSeFCU9A7KJ
+ 0VIA==
+X-Gm-Message-State: AOJu0Yw33ChXHv6tRqV9XKzE6A74l+2fwhNuv/yQKxVgVw3hCgTXGrsu
+ sKxZmlmY0t3DPM9t5U7lyWyjATw7I9z/v66r+OUSr7BnxeA4q3fg2xvTXxMs
+X-Google-Smtp-Source: AGHT+IFEBw12sOY3NI8dEJ6wdVRhWxdyIHX22jPYxcnONAaVij2v3y4BfIbMNF4noPeNHvTSTbF52g==
+X-Received: by 2002:a17:903:2584:b0:1d4:b60f:1de5 with SMTP id
+ jb4-20020a170903258400b001d4b60f1de5mr121828plb.26.1706732276204; 
+ Wed, 31 Jan 2024 12:17:56 -0800 (PST)
+Received: from blastoff3.hitronhub.home
+ ([2604:3d09:c74:2000:8c07:f573:4ebd:aaab])
+ by smtp.gmail.com with ESMTPSA id
+ lo4-20020a170903434400b001d8f1616a05sm5269223plb.91.2024.01.31.12.17.54
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 31 Jan 2024 12:07:56 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Wed, 31 Jan 2024 12:17:55 -0800 (PST)
+From: Peter Thompson <peter.macleod.thompson@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 31 Jan 2024 21:07:54 +0100
-Message-ID: <20240131200754.1784621-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Date: Wed, 31 Jan 2024 13:17:47 -0700
+Message-Id: <20240131201747.23175-1-peter.macleod.thompson@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1706731678; x=1707336478; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1706732276; x=1707337076; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=3zbO1kRLqkkln43ijSLP1IIFwYh1SdHUD1zbPl9+rGw=;
- b=Xh4IrFjow6DGly5YTK5M75i0q6VpWG7pj1W16UdSfQ7VRKve/9Rq5KwM38rYwsuEak
- SB9qk9vjD8ddG18Tk4gJEQ2CdRAq/Dvvr3DIKxgWlkp6KFU7i2yvrSOwHIFr4+KsAy84
- yvALYH9oImGMqjpvJ4dakLOZ3VOSuKcjwUB9FFH/e9FoktK0iPI6Mb+g5nmfxn+8C024
- TWx+cHAjg/YlZq7kSRzk+rPlEXhsV7t2rqEGHNbasPEDgwK0vSwcEsflidzL0sUbTfsQ
- w1VbYsitkSkR3Qir2kegPKAOu95jMRX0egCy7vUrkwkgDLI1m/5cZhyHtIgGAYWQkSW5
- LJgg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=xeGkcCaGtbqKRrVY+c4dbRrovF+pImnz4N7EVPJ6BqE=;
+ b=RNEgfSo59/ePMVHc0uvFkBQTSalt3GLYol1+Sn0sTw6yzZ30Z4k17uzSbU9Dc2ZFiM
+ JhAyXP4e9J8IuPYvb4sBSITjO2lHeZXd8/sQL5RIKVbByehTeHWO9PoML1Lf15qHaPjc
+ qYoXIX5LRvjEZNNnk251Lb5yDPpDnGVTNhiynuT7laav8ZktOF3YhmzdmLmzfMIbPHqd
+ 3TFDn9wo+VndmLFx9pmLZjWaH6a+s6QaLPUo7/93ICvzJ0B8ykuG7RTLWA83vcXbzW2z
+ 6cqMclQiTpK9+pgZcD73y/pBZ3HmVAMfd5cdtZY7o5yGm8Nme1gWzU4CwDhgvNtXpq8l
+ lACw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Xh4IrFjo
-Subject: [Buildroot] [PATCH 1/1] package/libheif: add jpeg-turbo support
+ header.a=rsa-sha256 header.s=20230601 header.b=RNEgfSo5
+Subject: [Buildroot] [PATCH 1/1] package/sdl2_ttf: bump version to 2.22.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,38 +94,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd@kuhls.net>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Peter Macleod Thompson <peter.macleod.thompson@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-jpeg support is not limited to libjpeg
+From: Peter Macleod Thompson <peter.macleod.thompson@gmail.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Update LICENSE.txt hash for change in copyright year to 2024
+
+Signed-off-by: Peter Macleod Thompson <peter.macleod.thompson@gmail.com>
 ---
- package/libheif/libheif.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/sdl2_ttf/sdl2_ttf.hash | 4 ++--
+ package/sdl2_ttf/sdl2_ttf.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libheif/libheif.mk b/package/libheif/libheif.mk
-index bd307deb7b..908e2ce068 100644
---- a/package/libheif/libheif.mk
-+++ b/package/libheif/libheif.mk
-@@ -51,9 +51,9 @@ else
- LIBHEIF_CONF_OPTS += -DWITH_LIBDE265=OFF
- endif
+diff --git a/package/sdl2_ttf/sdl2_ttf.hash b/package/sdl2_ttf/sdl2_ttf.hash
+index f43ec790fd..7693aeba6b 100644
+--- a/package/sdl2_ttf/sdl2_ttf.hash
++++ b/package/sdl2_ttf/sdl2_ttf.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  9dc71ed93487521b107a2c4a9ca6bf43fb62f6bddd5c26b055e6b91418a22053  SDL2_ttf-2.20.2.tar.gz
+-sha256  1852c8549e3d154687197d46abababd3e8faae035f19991b2ca850fa3a43ad57  LICENSE.txt
++sha256  d48cbd1ce475b9e178206bf3b72d56b66d84d44f64ac05803328396234d67723  SDL2_ttf-2.22.0.tar.gz
++sha256  a0e8ce06504966e45088ee1cc7583cc8af9aac615d4cf56d47d847da9cb15139  LICENSE.txt
+diff --git a/package/sdl2_ttf/sdl2_ttf.mk b/package/sdl2_ttf/sdl2_ttf.mk
+index c2c4b660f8..f4f293cec1 100644
+--- a/package/sdl2_ttf/sdl2_ttf.mk
++++ b/package/sdl2_ttf/sdl2_ttf.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--ifeq ($(BR2_PACKAGE_LIBJPEG),y)
-+ifeq ($(BR2_PACKAGE_JPEG),y)
- LIBHEIF_CONF_OPTS += -DWITH_JPEG_DECODER=ON -DWITH_JPEG_ENCODER=ON
--LIBHEIF_DEPENDENCIES += libjpeg
-+LIBHEIF_DEPENDENCIES += jpeg
- else
- LIBHEIF_CONF_OPTS += -DWITH_JPEG_DECODER=OFF -DWITH_JPEG_ENCODER=OFF
- endif
+-SDL2_TTF_VERSION = 2.20.2
++SDL2_TTF_VERSION = 2.22.0
+ SDL2_TTF_SOURCE = SDL2_ttf-$(SDL2_TTF_VERSION).tar.gz
+ SDL2_TTF_SITE = http://www.libsdl.org/projects/SDL_ttf/release
+ SDL2_TTF_LICENSE = Zlib
 -- 
-2.43.0
+2.20.1
 
 _______________________________________________
 buildroot mailing list
