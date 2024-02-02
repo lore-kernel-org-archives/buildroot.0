@@ -4,70 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13CE5C48291
-	for <buildroot@archiver.kernel.org>; Fri,  2 Feb 2024 09:37:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4618C4828E
+	for <buildroot@archiver.kernel.org>; Fri,  2 Feb 2024 09:37:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BEC806FA5D;
-	Fri,  2 Feb 2024 09:37:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BEC806FA5D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7B79F6FA6B;
+	Fri,  2 Feb 2024 09:37:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B79F6FA6B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EH5j_29y4TVJ; Fri,  2 Feb 2024 09:37:16 +0000 (UTC)
+	with ESMTP id 89W2dQK5DTsR; Fri,  2 Feb 2024 09:37:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EEE5B6FAA9;
-	Fri,  2 Feb 2024 09:37:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EEE5B6FAA9
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C0B1D1BF39D
- for <buildroot@lists.busybox.net>; Fri,  2 Feb 2024 09:36:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8E06E6FA5D;
+	Fri,  2 Feb 2024 09:37:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E06E6FA5D
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 95E251BF39D
+ for <buildroot@lists.busybox.net>; Fri,  2 Feb 2024 09:36:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9996A84D1A
- for <buildroot@lists.busybox.net>; Fri,  2 Feb 2024 09:36:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9996A84D1A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6E37D42E60
+ for <buildroot@lists.busybox.net>; Fri,  2 Feb 2024 09:36:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E37D42E60
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1ItAkInm3J7D for <buildroot@lists.busybox.net>;
- Fri,  2 Feb 2024 09:36:35 +0000 (UTC)
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com
- [IPv6:2a00:1450:4864:20::143])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 547B284D1C
- for <buildroot@buildroot.org>; Fri,  2 Feb 2024 09:36:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 547B284D1C
-Received: by mail-lf1-x143.google.com with SMTP id
- 2adb3069b0e04-5113a97a565so51427e87.3
- for <buildroot@buildroot.org>; Fri, 02 Feb 2024 01:36:35 -0800 (PST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rvmqdp6rtQFz for <buildroot@lists.busybox.net>;
+ Fri,  2 Feb 2024 09:36:36 +0000 (UTC)
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com
+ [IPv6:2a00:1450:4864:20::344])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 420A142E4B
+ for <buildroot@buildroot.org>; Fri,  2 Feb 2024 09:36:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 420A142E4B
+Received: by mail-wm1-x344.google.com with SMTP id
+ 5b1f17b1804b1-40fc654a77dso4023065e9.2
+ for <buildroot@buildroot.org>; Fri, 02 Feb 2024 01:36:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20230601; t=1706866593; x=1707471393;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=mTcbUbs6Zr+IEc5Wem2ZtycDN0WrRkPzMy4gB1WpuAY=;
- b=WISO8TMC/mYgvVtMsoZU7WIzIBEtOcI6CvTRqIZA19dmbIBCaPgA4JnPVxH+nsGpYY
- SBJbwBKeQCcHHPVjTEGgbWag4+EYY944VR0vFxdb1t6GeY3lkvhPjsgV6dhNWD32SFIR
- eJKJdbhcY1ZCMjquzbLO2qV3RnnKV63nheQhMasKjIqqwPX8kR5W/zfIl90W9zo8OKwb
- UjOBJhLdjM8VUuZnsz+hwIJEYFrxg4E1lE/4a6n9vz7nlGswDahHt5KpQ3JMQysmjwgv
- MGeHAeCmToDZ7S/T7lgDtS7w8d+G2LXw866twfyztXQ9ylvpymqPzx6qUAZL+hljv1pF
- NZmg==
-X-Gm-Message-State: AOJu0Yxsc5xmPwsQtl/lHBwX211b21RfH+DJ0ykzGEsveGFem8v7A7mB
- 8oJyAnE+nxhr5rY/Z3GbK4XfjWjdi+CFpvzAkXQEC+aYD7WCc5G30QXR6AKYBtdWxHE2OvxYBl0
- oYgZ1YQ==
-X-Google-Smtp-Source: AGHT+IF61wqV/MLmbzos3FFIAQ3V+EWLb5N4xIT6ANNu5TnUC4fI5+S+jfGTX1Yun/6rcL/kIb5aaA==
-X-Received: by 2002:a05:6512:281d:b0:50e:9a16:fb with SMTP id
- cf29-20020a056512281d00b0050e9a1600fbmr3973985lfb.6.1706866592751; 
- Fri, 02 Feb 2024 01:36:32 -0800 (PST)
+ bh=+MWWpNp1toXCaUAqWdem4ZQT0e3wF121TBFZgdbavOE=;
+ b=PnBvM/jlV5sibEwtO/qFttI2F/BcKIxt/RI5626ByBvBvTb4UfhNE0jRGm0GA7m1dw
+ /HKRi3Ocv7y9u1zUd0inrTgQrnCPgQtTZpP2M6PcSvFg1c2nQCE5wxRJw+yVGg1oAtLN
+ HUWzBocySPudMOT7zmHmNibMswEZdY+5eIe9VOCSIUNITfeJLLlOIs6A9yK9Emq5qxvL
+ gyMRkyvURwsdxGtdVhemxXEoJANkBdU+hnA8XqPaiM73mCLPmVpimRKPJIWqs8ywdp8w
+ ooSpiJw3TCkfmKSe4LYVzIa8bdrsf8B4DnDCk3GwB4XpOtGGMHIKtGPdx+3CHE328Miv
+ MOfA==
+X-Gm-Message-State: AOJu0Yzpu8LnFOfKI3VxfUJ7jho9oE2uKm/wrZY0ymnehEu041Ho/9KS
+ jz75Jyf/x9HVYfpCbpf4rtWQOfV6TseEz3Sv0g1lcu1NKm78sYSbybrkiIsTqPNrRRmZylk4awd
+ oI/hGlA==
+X-Google-Smtp-Source: AGHT+IFdKqebgIdl37p5Ona8hm5uKzKLHOP5OxSlM8KqeXuNmzhzTB9VPp0uQ/bUKvrZOpJ0UCDWWg==
+X-Received: by 2002:a5d:4d81:0:b0:33a:e89f:1dc6 with SMTP id
+ b1-20020a5d4d81000000b0033ae89f1dc6mr1191333wru.29.1706866593568; 
+ Fri, 02 Feb 2024 01:36:33 -0800 (PST)
 X-Forwarded-Encrypted: i=0;
- AJvYcCVPrklZpvbqfdNAmSSjCb3P+wsenl47tepnX/dlx+RXWx8lr3+Cz+DQfOIHIs1PFiJiNq0Y5Ata/h+Kd3RLfPsVhgN/0sGS1/UAu2ji9f6XxwbvBbHFs4mL94819mgIOSZmqk/SjKXdnF/3lvYIQPCpY6k9NDEXOWlg
+ AJvYcCX4NNStRkTCowNqGDKa2Atjye6vKS32c6UgaqpLk51sfYkb73NZG81vUztolGuSX/rSpVUOSFp1W9vjSXuiBewo1KbKGZ8cyL41z+EKQkIQPh3Ej5Ymrn+3nn4mWNo3qY4tM1QMknDS9GC7tlGT+VusAUb6B1kHPe5b
 Received: from localhost.localdomain ([80.215.186.96])
  by smtp.gmail.com with ESMTPSA id
- m1-20020adfe941000000b0033ae6fa7f20sm1504615wrn.65.2024.02.02.01.36.31
+ m1-20020adfe941000000b0033ae6fa7f20sm1504615wrn.65.2024.02.02.01.36.32
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 02 Feb 2024 01:36:32 -0800 (PST)
+ Fri, 02 Feb 2024 01:36:33 -0800 (PST)
 From: Antoine Coutant <antoine.coutant@smile.fr>
 To: buildroot@buildroot.org
-Date: Fri,  2 Feb 2024 10:36:21 +0100
-Message-Id: <20240202093625.1409559-4-antoine.coutant@smile.fr>
+Date: Fri,  2 Feb 2024 10:36:22 +0100
+Message-Id: <20240202093625.1409559-5-antoine.coutant@smile.fr>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20240202093625.1409559-1-antoine.coutant@smile.fr>
 References: <20240202093625.1409559-1-antoine.coutant@smile.fr>
@@ -78,19 +78,18 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=mTcbUbs6Zr+IEc5Wem2ZtycDN0WrRkPzMy4gB1WpuAY=;
- b=OCBM8uAbgj8RAw1nbbk/FCZTKhyuvsQdFSU7XaQaHK4XiqdYJTgPHL3LA/FOVra59s
- xCr8WDy2gcs+WRYRQupPRN5+TKE5Zy6XfjzQryVZJQkHd97VNrH29dpLZQTjLs50hLB5
- btBySQZopWBrT/ACgxkcvV9vV4cf5vT1o6m5cJGorzUllwSf65HBkaJRUMxetnba2iRy
- 1zDJYSs5sdcQoZLmT0tGOKVXLSFa+GWoDfylPK+ASTFl2TTcziFBT63enHkdNp0Ax0YM
- W+A+BkbSSFZWd/aM+5yNkxmmHCeaW8XB5scnR/uLlfmWXKuN0kgnzKz3NqhpMr+mVdkK
- MNCw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=+MWWpNp1toXCaUAqWdem4ZQT0e3wF121TBFZgdbavOE=;
+ b=KJvKLzULzMWMasMLPHYTa+Fd3RggbgXJqMI8kfZRLWzv4qNP2AohdpvfMZnSCm1QT4
+ 7+N+reCZzgKgX5sVeHUouQjNs40NkTVkizJVWaV8uNfQ1BXvp55nCF6wbw827nxQ7i6b
+ gO3S9dib3JClawdsG5Fz4CnDoTAmBW0hgFQFFHJ4cL5Erxpc7nQEqhEMsb/C5LbeIkbC
+ +Dr8IqLSYgyKIorVEBtWHt00k8xmsT3aPz3crQHE7JLK0Q1jPnq9qhGVJKB3jR+B2n6B
+ sV3jGp6iNZfLO7PxNkEVIHYWsjHcuBs1nXdXLKdgnoC0sGeevIfiyiEgwKlyOIbKsDa6
+ 4D/Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=smile-fr.20230601.gappssmtp.com
  header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=OCBM8uAb
-Subject: [Buildroot] [PATCH v4 3/7] package/spirv-llvm-translator: add
- target variant to provide LLVMSPIRVLib
+ header.s=20230601 header.b=KJvKLzUL
+Subject: [Buildroot] [PATCH v4 4/7] package/opencl-headers: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -109,105 +108,116 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Romain Naour <romain.naour@smile.fr>
+From: Sebastian Weyer <sebastian.weyer@smile.fr>
 
-This target version is needed for Rusticl which is an LLVM based OpenCL
-framework[1]. Rusticl allow programs to compile OpenCL C/C++ code
-at runtime with Clang. Clang generates LLVM IR which is translated into
-SPIR-V by spirv-llvm-translator. Finally, mesa can use its internal
-tools to manage SPIR-V.
+These headers provide the C language API bindings. It is a complement to
+the C++ bindings already available in opencl-clhpp. This package is
+required to build opencl-icd-loader:
 
-[1]: https://docs.mesa3d.org/rusticl.html
+https://github.com/KhronosGroup/OpenCL-ICD-Loader#dependencies
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
 Signed-off-by: Antoine Coutant <antoine.coutant@smile.fr>
 ---
 Changes v2 -> v3:
-	- resolution of the conflict created by adding spirv-llvm-translator
+	- resolution of the conflict created by adding opencl-headers
+	under Sebastian Weyer in DEVELOPERS
+	- resolution of the conflict created by adding opencl-headers
 	to package/Config.in
-	- resolution of the conflict created by adding spirv-headers and zlib
-	to spirv-llvm-translator dependencies
 
 Changes v3 -> v4:
-	- explain why the target version is needed in the commit log.
+	- bump version from v2023.04.17 to v2023.12.14:
+	add cl_function_types.h to the header files to keep
+	this header added in commit e049b16b5f157e2f28e7b5c301e71e1ccb3fe288
+	- remove the list of headers to install as it is exhaustive.
+	Instead, select all files with "*".
 
 Signed-off-by: Antoine Coutant <antoine.coutant@smile.fr>
 ---
- package/Config.in                             |  1 +
- package/spirv-llvm-translator/Config.in       | 22 +++++++++++++++++++
- .../spirv-llvm-translator.mk                  | 12 +++++++++-
- 3 files changed, 34 insertions(+), 1 deletion(-)
- create mode 100644 package/spirv-llvm-translator/Config.in
+ DEVELOPERS                                 |  1 +
+ package/Config.in                          |  1 +
+ package/opencl-headers/Config.in           |  7 +++++++
+ package/opencl-headers/opencl-headers.hash |  3 +++
+ package/opencl-headers/opencl-headers.mk   | 22 ++++++++++++++++++++++
+ 5 files changed, 34 insertions(+)
+ create mode 100644 package/opencl-headers/Config.in
+ create mode 100644 package/opencl-headers/opencl-headers.hash
+ create mode 100644 package/opencl-headers/opencl-headers.mk
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index cc9bc5b5cc..79c46c3539 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2693,6 +2693,7 @@ F:	package/ripgrep/
+ N:	Sebastian Weyer <sebastian.weyer@smile.fr>
+ F:      package/amlogic-boot-fip/
+ F:	package/nushell/
++F:	package/opencl-headers
+ F:	package/rust-bindgen/
+ F:	package/spirv-headers/
+ F:	support/testing/tests/package/sample_nu.nu
 diff --git a/package/Config.in b/package/Config.in
-index 426bd7d090..9324d1e4c8 100644
+index 9324d1e4c8..dfbd20e889 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -334,6 +334,7 @@ comment "Graphic applications"
- 	source "package/pngquant/Config.in"
- 	source "package/qt5cinex/Config.in"
- 	source "package/rrdtool/Config.in"
-+	source "package/spirv-llvm-translator/Config.in"
- 	source "package/spirv-tools/Config.in"
- 	source "package/stellarium/Config.in"
- 	source "package/sway/Config.in"
-diff --git a/package/spirv-llvm-translator/Config.in b/package/spirv-llvm-translator/Config.in
+@@ -1696,6 +1696,7 @@ menu "Graphics"
+ 	source "package/menu-cache/Config.in"
+ 	source "package/onevpl-intel-gpu/Config.in"
+ 	source "package/opencl-clhpp/Config.in"
++	source "package/opencl-headers/Config.in"
+ 	source "package/opencv3/Config.in"
+ 	source "package/opencv4/Config.in"
+ 	source "package/opencv4-contrib/Config.in"
+diff --git a/package/opencl-headers/Config.in b/package/opencl-headers/Config.in
 new file mode 100644
-index 0000000000..73ca787d8a
+index 0000000000..092d8a2a4d
 --- /dev/null
-+++ b/package/spirv-llvm-translator/Config.in
-@@ -0,0 +1,22 @@
-+config BR2_PACKAGE_SPIRV_LLVM_TRANSLATOR
-+	bool "spirv-translator"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_HOST_GCC_AT_LEAST_7 # host-llvm
-+	select BR2_PACKAGE_LLVM
-+	select BR2_PACKAGE_SPIRV_HEADERS
-+	select BR2_PACKAGE_ZLIB
++++ b/package/opencl-headers/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_OPENCL_HEADERS
++	bool "opencl-headers"
++	depends on BR2_PACKAGE_HAS_LIBOPENCL
 +	help
-+	  LLVM/SPIR-V Bi-Directional Translator is a library and tool
-+	  for translation between LLVM IR and SPIR-V.
++	  C language headers for the OpenCL API
 +
-+	  https://github.com/khronosGroup/SPIRV-LLVM-Translator
++	  https://github.com/KhronosGroup/OpenCL-Headers
+diff --git a/package/opencl-headers/opencl-headers.hash b/package/opencl-headers/opencl-headers.hash
+new file mode 100644
+index 0000000000..802ed05450
+--- /dev/null
++++ b/package/opencl-headers/opencl-headers.hash
+@@ -0,0 +1,3 @@
++#Locally generated
++sha256  407d5e109a70ec1b6cd3380ce357c21e3d3651a91caae6d0d8e1719c69a1791d  OpenCL-Headers-2023.12.14.tar.gz
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/opencl-headers/opencl-headers.mk b/package/opencl-headers/opencl-headers.mk
+new file mode 100644
+index 0000000000..7aa0e0d168
+--- /dev/null
++++ b/package/opencl-headers/opencl-headers.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# opencl-headers
++#
++################################################################################
 +
-+comment "spirv-translator needs a toolchain w/ threads, C++, gcc >= 7, dynamic library, host gcc >= 7"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 \
-+		|| BR2_STATIC_LIBS || !BR2_HOST_GCC_AT_LEAST_7
-diff --git a/package/spirv-llvm-translator/spirv-llvm-translator.mk b/package/spirv-llvm-translator/spirv-llvm-translator.mk
-index 523890a986..8361a74c59 100644
---- a/package/spirv-llvm-translator/spirv-llvm-translator.mk
-+++ b/package/spirv-llvm-translator/spirv-llvm-translator.mk
-@@ -10,7 +10,7 @@ SPIRV_LLVM_TRANSLATOR_VERSION = v15.0.0-46-ge82ecc2bd7295604fcf1824e47c95fa6a09c
- SPIRV_LLVM_TRANSLATOR_SITE = $(call github,KhronosGroup,SPIRV-LLVM-Translator,$(SPIRV_LLVM_TRANSLATOR_VERSION))
- SPIRV_LLVM_TRANSLATOR_LICENSE = NCSA
- SPIRV_LLVM_TRANSLATOR_LICENSE_FILES = LICENSE.TXT
--HOST_SPIRV_LLVM_TRANSLATOR_DEPENDENCIES = host-clang host-llvm host-spirv-headers
-+HOST_SPIRV_LLVM_TRANSLATOR_DEPENDENCIES = host-clang host-llvm host-spirv-headers spirv-headers zlib
- HOST_SPIRV_LLVM_TRANSLATOR_CONF_OPTS = \
- 	-DLLVM_BUILD_TOOLS=ON \
- 	-DLLVM_DIR=$(HOST_DIR)/lib/cmake/llvm \
-@@ -19,4 +19,14 @@ HOST_SPIRV_LLVM_TRANSLATOR_CONF_OPTS = \
- 	-DLLVM_EXTERNAL_PROJECTS="SPIRV-Headers" \
- 	-DLLVM_EXTERNAL_SPIRV_HEADERS_SOURCE_DIR=$(HOST_DIR)/include
- 
-+SPIRV_LLVM_TRANSLATOR_INSTALL_STAGING = YES
-+SPIRV_LLVM_TRANSLATOR_DEPENDENCIES = host-clang host-llvm llvm
-+SPIRV_LLVM_TRANSLATOR_CONF_OPTS = \
-+	-DLLVM_EXTERNAL_SPIRV_HEADERS_SOURCE_DIR=${STAGING_DIR}/usr \
-+	-DLLVM_BUILD_TOOLS=ON \
-+	-DLLVM_DIR=$(STAGING_DIR)/lib/cmake/llvm \
-+	-DLLVM_SPIRV_BUILD_EXTERNAL=YES \
-+	-DLLVM_SPIRV_INCLUDE_TESTS=OFF
++OPENCL_HEADERS_VERSION = 2023.12.14
++OPENCL_HEADERS_SOURCE = OpenCL-Headers-$(OPENCL_HEADERS_VERSION).tar.gz
++OPENCL_HEADERS_SITE = $(call github,KhronosGroup,OpenCL-Headers,v$(OPENCL_HEADERS_VERSION))
++OPENCL_HEADERS_LICENSE = Apache-2.0
++OPENCL_HEADERS_LICENSE_FILES = LICENSE
++OPENCL_HEADERS_INSTALL_STAGING = YES
 +
-+$(eval $(cmake-package))
- $(eval $(host-cmake-package))
++OPENCL_HEADERS_INSTALL_TARGET = NO
++
++define OPENCL_HEADERS_INSTALL_STAGING_CMDS
++	mkdir -p $(STAGING_DIR)/usr/include/CL
++	$(INSTALL) -D -m 0644 $(@D)/CL/* \
++		$(STAGING_DIR)/usr/include/CL
++endef
++
++$(eval $(generic-package))
 -- 
 2.25.1
 
