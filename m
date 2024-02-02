@@ -1,69 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9FDB7C4828E
-	for <buildroot@archiver.kernel.org>; Fri,  2 Feb 2024 19:35:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9110BC4828F
+	for <buildroot@archiver.kernel.org>; Fri,  2 Feb 2024 20:30:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4AAE58468A;
-	Fri,  2 Feb 2024 19:35:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4AAE58468A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 04921404C2;
+	Fri,  2 Feb 2024 20:30:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 04921404C2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eGX1PvDOjiba; Fri,  2 Feb 2024 19:35:12 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8rlOfA3KbQyK; Fri,  2 Feb 2024 20:30:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A119084690;
-	Fri,  2 Feb 2024 19:35:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A119084690
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AF8181BF3C3
- for <buildroot@lists.busybox.net>; Fri,  2 Feb 2024 19:35:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 160AE400D7;
+	Fri,  2 Feb 2024 20:30:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 160AE400D7
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 466441BF57F
+ for <buildroot@lists.busybox.net>; Fri,  2 Feb 2024 20:29:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8832542266
- for <buildroot@lists.busybox.net>; Fri,  2 Feb 2024 19:35:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8832542266
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1590F400D7
+ for <buildroot@lists.busybox.net>; Fri,  2 Feb 2024 20:29:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1590F400D7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3K64Gn4kbhma for <buildroot@lists.busybox.net>;
- Fri,  2 Feb 2024 19:35:09 +0000 (UTC)
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 56A2542251
- for <buildroot@buildroot.org>; Fri,  2 Feb 2024 19:35:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56A2542251
-Received: from fli4l.lan.fli4l (p5b3a0164.dip0.t-ipconnect.de [91.58.1.100])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 340B2A4C09D2
- for <buildroot@buildroot.org>; Fri,  2 Feb 2024 20:35:07 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:59286)
- by fli4l.lan.fli4l with esmtp (Exim 4.97.1)
- (envelope-from <bernd@kuhls.net>) id 1rVzJa-000000000Dv-3rR8
- for buildroot@buildroot.org; Fri, 02 Feb 2024 20:35:06 +0100
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Fri,  2 Feb 2024 20:35:06 +0100
-Message-Id: <20240202193506.58522-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HcT2F10jSV3c for <buildroot@lists.busybox.net>;
+ Fri,  2 Feb 2024 20:29:57 +0000 (UTC)
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
+ [IPv6:2a00:1450:4864:20::62c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E9BE1400CF
+ for <buildroot@buildroot.org>; Fri,  2 Feb 2024 20:29:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E9BE1400CF
+Received: by mail-ej1-x62c.google.com with SMTP id
+ a640c23a62f3a-a370328e8b8so144885466b.3
+ for <buildroot@buildroot.org>; Fri, 02 Feb 2024 12:29:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1706905795; x=1707510595;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=wIgTfhDvpz5z1UYTZDQDmXHNWgTFsdYRP1w0cPLEysA=;
+ b=gkPzDNYXNUoDnMsLoAv+6J7ec4seuEss7QUrmOsGep/u8r7V26fa63bYV563yK5Lgi
+ HnzCUwSuHNWkn5B1g3zXTHjQv9a++4eV0gAC1ztLWTCfSL3ricCR11q56kZqZ0b2Bh6q
+ VaWJcWFyZkF8ppOgCK9jtxAzJZKWyioYd7YKt9Fr43kCVXbNFpQKD+VrHy8XVGA4SmL5
+ DZyuOSL3aSH8Zr6hUvwdjbJUc06Szy0rHmGVQD4Cbwynx7Ymi53a0FoZLiN3m18vEZA0
+ x/rSOtNKgKtrsu64/lZlfAdDZ3NOyFqIqEbWvASNbqepzo11S4YGbMmqQEXx0xtMhUzv
+ 0mwg==
+X-Gm-Message-State: AOJu0YxEDb964sa7jSjZETULV/ujxLMHQcBjfdJ7N5CSDoFd71vgovNZ
+ oH72RzlM4XHH/Z2RIvr0mYTGeq66wlaHVgGNjpQFa05CCizV9SzdZURl+/Qt
+X-Google-Smtp-Source: AGHT+IG70J8bxE0NBxx6hazCDFpYttxXmqiRpiBIQKBvhYfqXND5kUeuo+owjSzjh0/2xMcVQJe5dw==
+X-Received: by 2002:a17:906:6d87:b0:a36:5d54:64b1 with SMTP id
+ h7-20020a1709066d8700b00a365d5464b1mr2204536ejt.73.1706905794807; 
+ Fri, 02 Feb 2024 12:29:54 -0800 (PST)
+X-Forwarded-Encrypted: i=0;
+ AJvYcCWWmv+U8gC12pCdGJ482VaqKZzqpKSBQTWfhK7TWzV86ewKgsJXtLs04nNnhNppk5dfAU3A8TdWfIWL1D0CMLgi++zEM8KogQ==
+Received: from ?IPV6:2a00:10:7f17:f01:4503:8b32:1ee1:49d4?
+ ([2a00:10:7f17:f01:4503:8b32:1ee1:49d4])
+ by smtp.gmail.com with ESMTPSA id
+ t8-20020a17090616c800b00a36c60180aesm1226747ejd.60.2024.02.02.12.29.54
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 02 Feb 2024 12:29:54 -0800 (PST)
+Message-ID: <d000051f-9013-41e0-b72f-68cbd0652854@gmail.com>
+Date: Fri, 2 Feb 2024 21:29:54 +0100
 MIME-Version: 1.0
-X-Spamd-Bar: +
+User-Agent: Mozilla Thunderbird
+To: Stefan Ott <stefan@ott.net>, buildroot@buildroot.org
+References: <20240202020258.600562-1-stefan@ott.net>
+Content-Language: en-US
+From: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+In-Reply-To: <20240202020258.600562-1-stefan@ott.net>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202312101026; t=1706902507;
- bh=eqXfiaj0vcqOgcd8aMYs6TInLaDZnPvDpizXiSRSV8E=;
- h=From:To:Subject:Date:From;
- b=SVAZCXIw0AHSyx8zr6Qta1k7B3gfxWOBafVRcb/PDKVMqAMbaEx83mtDlmPc3OVDf
- 0cJe/qs9ZGxEKZtt1o7AQsTGnpbcZ1HZ2FNjQuedaPO/r7etzM1ec+DgsUz9otml2I
- 3MJPg7ZTuJsVo90zynxGZXvkvbU+Ukk/jvkF/2+M6zuMfFtmT3mPSrwj1A+kzANsww
- E79WmZkseBdjWtaJeLytG9mELC9oOACGPevk0K2kW9/8Ch2FNCavGD0QCrup6BQgjb
- P710a8aNkIR+YeIVPIEzSdRIHT/wmPZBoSJBFJuaVEqka1YkyFUQOCi1hHTybEeG45
- 8oYz5O4zgdoBw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202312101026 header.b=SVAZCXIw
-Subject: [Buildroot] [PATCH 1/1] package/kodi-peripheral-joystick: bump
- version to 20.1.15-Nexus
+ d=gmail.com; s=20230601; t=1706905795; x=1707510595; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:to:subject:user-agent:mime-version:date:message-id:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=wIgTfhDvpz5z1UYTZDQDmXHNWgTFsdYRP1w0cPLEysA=;
+ b=YfyG15hpUx3yK6fKWNFDuc9jIRF/FYHEOqSX4w5WdikgLAvJ+JSr7FRhsu6f33PV7N
+ xfOb5fZVcjy8Lt3OSon8aF0eTPNPf7rIu2DdZ8f2TFhRUZhMYAV+IkDpRaTs8fzhWY4P
+ Eal029ow0tijoxXY55tfmg8espz6V6g6a00sa7f4ksXzzMWi4CDdazGC4d0XticvXC4U
+ D0000osVsa9UTSM+Eo1Eyp7ivRAdu2FPWc+37NOYBScaG5HeqE86PFP2anm/FWiUZ8CW
+ h+dU85OipKblUyL9WppKxu5noY5lv1ifKaryq70/tXuTtiYmW5AOSLRXTZl0X50J1YS7
+ n9AQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=YfyG15hp
+Subject: Re: [Buildroot] [PATCH v3] package/sway: make systemd optional
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,41 +100,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash | 2 +-
- package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hello Stefan,
 
-diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
-index 550da61981..d4765d2b2c 100644
---- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
-+++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  8c3dde851e45549d13ca3fcead9c27c440dfe070d68fb473ae71c522bc54753a  kodi-peripheral-joystick-20.1.14-Nexus.tar.gz
-+sha256  7292431b26e3ea969967a02f42ce48cae7742398b148ca041470c17934d06272  kodi-peripheral-joystick-20.1.15-Nexus.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
-index 2fe6c29c0d..d81962562c 100644
---- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
-+++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_PERIPHERAL_JOYSTICK_VERSION = 20.1.14-Nexus
-+KODI_PERIPHERAL_JOYSTICK_VERSION = 20.1.15-Nexus
- KODI_PERIPHERAL_JOYSTICK_SITE = $(call github,xbmc,peripheral.joystick,$(KODI_PERIPHERAL_JOYSTICK_VERSION))
- KODI_PERIPHERAL_JOYSTICK_LICENSE = GPL-2.0+
- KODI_PERIPHERAL_JOYSTICK_LICENSE_FILES = LICENSE.md
--- 
-2.39.2
+Thanks for the new iteration!
+
+On 2/2/24 03:02, Stefan Ott wrote:
+
+[SNIP]
+
+>   
+> +comment "swaybar tray needs systemd"
+> +	depends on !BR2_PACKAGE_SYSTEMD
+> +
+>   endif # BR2_PACKAGE_SWAY_SWAYBAR
+>   
+>   config BR2_PACKAGE_SWAY_SWAYNAG
+> @@ -54,9 +57,8 @@ config BR2_PACKAGE_SWAY_SWAYNAG
+>   
+>   endif # BR2_PACKAGE_SWAY
+>   
+
+I like it more if the tray feature is enabled automatically if systemd 
+is present, without making it an option.
+
+Thanks,
+Raphael Pavlidis
+
 
 _______________________________________________
 buildroot mailing list
