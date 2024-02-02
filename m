@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4651C4828E
-	for <buildroot@archiver.kernel.org>; Fri,  2 Feb 2024 19:30:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9FDB7C4828E
+	for <buildroot@archiver.kernel.org>; Fri,  2 Feb 2024 19:35:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 46F1D80C2D;
-	Fri,  2 Feb 2024 19:30:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 46F1D80C2D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4AAE58468A;
+	Fri,  2 Feb 2024 19:35:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4AAE58468A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XrZ7-kfa_lmN; Fri,  2 Feb 2024 19:30:09 +0000 (UTC)
+	with ESMTP id eGX1PvDOjiba; Fri,  2 Feb 2024 19:35:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4E04D80B59;
-	Fri,  2 Feb 2024 19:30:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E04D80B59
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B2B411BF3C3
- for <buildroot@lists.busybox.net>; Fri,  2 Feb 2024 19:30:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A119084690;
+	Fri,  2 Feb 2024 19:35:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A119084690
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AF8181BF3C3
+ for <buildroot@lists.busybox.net>; Fri,  2 Feb 2024 19:35:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 92BA2804C0
- for <buildroot@lists.busybox.net>; Fri,  2 Feb 2024 19:30:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 92BA2804C0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8832542266
+ for <buildroot@lists.busybox.net>; Fri,  2 Feb 2024 19:35:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8832542266
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Xdc3ZcNQA2-K for <buildroot@lists.busybox.net>;
- Fri,  2 Feb 2024 19:30:05 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3K64Gn4kbhma for <buildroot@lists.busybox.net>;
+ Fri,  2 Feb 2024 19:35:09 +0000 (UTC)
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 361D28002A
- for <buildroot@buildroot.org>; Fri,  2 Feb 2024 19:30:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 361D28002A
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 56A2542251
+ for <buildroot@buildroot.org>; Fri,  2 Feb 2024 19:35:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56A2542251
 Received: from fli4l.lan.fli4l (p5b3a0164.dip0.t-ipconnect.de [91.58.1.100])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 6180FA4C00B7
- for <buildroot@buildroot.org>; Fri,  2 Feb 2024 20:29:33 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:34504)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 340B2A4C09D2
+ for <buildroot@buildroot.org>; Fri,  2 Feb 2024 20:35:07 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:59286)
  by fli4l.lan.fli4l with esmtp (Exim 4.97.1)
- (envelope-from <bernd@kuhls.net>) id 1rVzED-000000007iE-0RS1
- for buildroot@buildroot.org; Fri, 02 Feb 2024 20:29:33 +0100
+ (envelope-from <bernd@kuhls.net>) id 1rVzJa-000000000Dv-3rR8
+ for buildroot@buildroot.org; Fri, 02 Feb 2024 20:35:06 +0100
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Fri,  2 Feb 2024 20:29:33 +0100
-Message-Id: <20240202192933.53122-1-bernd@kuhls.net>
+Date: Fri,  2 Feb 2024 20:35:06 +0100
+Message-Id: <20240202193506.58522-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202312101026; t=1706902173;
- bh=VoMZELAcLV/QPhNcQWkrnFClAtEttNK/XReyGDgCw4Y=;
+ s=kas202312101026; t=1706902507;
+ bh=eqXfiaj0vcqOgcd8aMYs6TInLaDZnPvDpizXiSRSV8E=;
  h=From:To:Subject:Date:From;
- b=dphiI0sMXSxHIN/lhj7bUXwYd93Z7ZrPFXLjbwDsL2gHxFKTuxjoKqlpzUIfnjwqn
- Aa0xypDtKRxLQn/cCbD1ijgvpeIGs6uYfXhZPfOIUPTC1+lXtEoMIrxPu8k+TKKEJx
- eV4xT0vBBPmDX7EopVESj3PaiYyvZm+f8b/vAoN/FKSMleIr0C5zOfzVM0Ng/+8rlo
- n971Xi4WuEFPvG/+p0NUPOdT1JX3ZGrnJ3IR1ccBYIPt0f4EI9yox33yoIu+c5H5cI
- IUIsldIiR+mMMEsgTWq/LX2tLBRV6Q9S8hrX4L6yAuM22XBI1ioq9BzJzOZ5ixp5Kb
- TsFze1y9hgcbA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=SVAZCXIw0AHSyx8zr6Qta1k7B3gfxWOBafVRcb/PDKVMqAMbaEx83mtDlmPc3OVDf
+ 0cJe/qs9ZGxEKZtt1o7AQsTGnpbcZ1HZ2FNjQuedaPO/r7etzM1ec+DgsUz9otml2I
+ 3MJPg7ZTuJsVo90zynxGZXvkvbU+Ukk/jvkF/2+M6zuMfFtmT3mPSrwj1A+kzANsww
+ E79WmZkseBdjWtaJeLytG9mELC9oOACGPevk0K2kW9/8Ch2FNCavGD0QCrup6BQgjb
+ P710a8aNkIR+YeIVPIEzSdRIHT/wmPZBoSJBFJuaVEqka1YkyFUQOCi1hHTybEeG45
+ 8oYz5O4zgdoBw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202312101026 header.b=dphiI0sM
-Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 6.{1,
- 6}.x series
+ header.a=rsa-sha256 header.s=kas202312101026 header.b=SVAZCXIw
+Subject: [Buildroot] [PATCH 1/1] package/kodi-peripheral-joystick: bump
+ version to 20.1.15-Nexus
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,52 +82,32 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 4 ++--
- package/linux-headers/Config.in.host | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash | 2 +-
+ package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 662bd09162..da22b439e3 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
+diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
+index 550da61981..d4765d2b2c 100644
+--- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
++++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  8c3dde851e45549d13ca3fcead9c27c440dfe070d68fb473ae71c522bc54753a  kodi-peripheral-joystick-20.1.14-Nexus.tar.gz
++sha256  7292431b26e3ea969967a02f42ce48cae7742398b148ca041470c17934d06272  kodi-peripheral-joystick-20.1.15-Nexus.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
+index 2fe6c29c0d..d81962562c 100644
+--- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
++++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.6.14" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.6.15" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index d7082aa629..10edcc2ed9 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,6 +1,6 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  fbe96b2db3f962cd2a96a849d554300e7a4555995160082d4f323c2a1dfa1584  linux-6.6.14.tar.xz
--sha256  6cd19410330c13ec4c18fd28a83d3e40fc12a152815fb7c3e1b0764329093a56  linux-6.1.75.tar.xz
-+sha256  ab290c7f8687f2f8af96e14abd0700ba8b282426151873690f51621d8d5f5faa  linux-6.6.15.tar.xz
-+sha256  0580cc0e81ff9aee245f79531d8c1c5c7d711eee227cd4cf52d1ff335727b1fd  linux-6.1.76.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
- sha256  c48575c97fd9f4767cbe50a13b1b2b40ee42830aba3182fabd35a03259a6e5d8  linux-5.15.148.tar.xz
- sha256  44e22fad647c638726a8eae23703c4263bead612d17c89ca7ad7ab32b5ce88d5  linux-5.10.209.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index bf55c8714a..a0e572adc0 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -407,8 +407,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "5.4.268"	if BR2_KERNEL_HEADERS_5_4
- 	default "5.10.209"	if BR2_KERNEL_HEADERS_5_10
- 	default "5.15.148"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.75"	if BR2_KERNEL_HEADERS_6_1
--	default "6.6.14"	if BR2_KERNEL_HEADERS_6_6
-+	default "6.1.76"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.6.15"	if BR2_KERNEL_HEADERS_6_6
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+-KODI_PERIPHERAL_JOYSTICK_VERSION = 20.1.14-Nexus
++KODI_PERIPHERAL_JOYSTICK_VERSION = 20.1.15-Nexus
+ KODI_PERIPHERAL_JOYSTICK_SITE = $(call github,xbmc,peripheral.joystick,$(KODI_PERIPHERAL_JOYSTICK_VERSION))
+ KODI_PERIPHERAL_JOYSTICK_LICENSE = GPL-2.0+
+ KODI_PERIPHERAL_JOYSTICK_LICENSE_FILES = LICENSE.md
 -- 
 2.39.2
 
