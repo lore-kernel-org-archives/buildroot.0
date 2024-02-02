@@ -4,92 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD4F0C48291
-	for <buildroot@archiver.kernel.org>; Fri,  2 Feb 2024 09:36:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A11DC4828E
+	for <buildroot@archiver.kernel.org>; Fri,  2 Feb 2024 09:36:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 702F26FA45;
-	Fri,  2 Feb 2024 09:36:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 702F26FA45
+	by smtp3.osuosl.org (Postfix) with ESMTP id 39C9C6FA8B;
+	Fri,  2 Feb 2024 09:36:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 39C9C6FA8B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id o41vu1DBvc61; Fri,  2 Feb 2024 09:36:37 +0000 (UTC)
+	with ESMTP id m9wLA6jpWmwo; Fri,  2 Feb 2024 09:36:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 738CD6FA5B;
-	Fri,  2 Feb 2024 09:36:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 738CD6FA5B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 358656FA5D;
+	Fri,  2 Feb 2024 09:36:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 358656FA5D
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DF8381BF39D
- for <buildroot@lists.busybox.net>; Fri,  2 Feb 2024 09:36:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 565141BF39D
+ for <buildroot@lists.busybox.net>; Fri,  2 Feb 2024 09:36:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B85EA42E8D
- for <buildroot@lists.busybox.net>; Fri,  2 Feb 2024 09:36:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B85EA42E8D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2EF3642E60
+ for <buildroot@lists.busybox.net>; Fri,  2 Feb 2024 09:36:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2EF3642E60
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fVHF65Z5B30B for <buildroot@lists.busybox.net>;
- Fri,  2 Feb 2024 09:36:33 +0000 (UTC)
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com
- [IPv6:2a00:1450:4864:20::344])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6496642E60
+ with ESMTP id WCMSgwY94gsQ for <buildroot@lists.busybox.net>;
+ Fri,  2 Feb 2024 09:36:34 +0000 (UTC)
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com
+ [IPv6:2a00:1450:4864:20::443])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E203C42E73
  for <buildroot@buildroot.org>; Fri,  2 Feb 2024 09:36:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6496642E60
-Received: by mail-wm1-x344.google.com with SMTP id
- 5b1f17b1804b1-40fc654a56dso3718965e9.3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E203C42E73
+Received: by mail-wr1-x443.google.com with SMTP id
+ ffacd0b85a97d-33b1b95df3bso578922f8f.0
  for <buildroot@buildroot.org>; Fri, 02 Feb 2024 01:36:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1706866591; x=1707471391;
+ d=1e100.net; s=20230601; t=1706866592; x=1707471392;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=h7VLrNFxYSV1Ehty9WeFa7xIIzWXgr7BKpj03f96gzw=;
- b=X2sFYG59Aqv/q+ng5TUKxdTRiruqFF1JkOaoR2tJ4gn26WxCOj66b8q2nkxbGU5qZq
- 4v7bFYBHsJEfSOcuOevaLyE9aHza1M60xXB2DAVJcmwnRRFgVjXlpbwDfvRgwNRe2ZnY
- BZRhEBqHYt8MX8Coyg+070nYomCSVh1C8rDcNw9oY0JI6/oGyd5FFfr7iFErQL3lfvaK
- q6WsEXnZuRYgSl+kihL/v1CwfIC9v2gty7z5AlzaIEw9lrxNqKgYxB2ggtfka1IlSrrE
- Vd1/XI/VxAqy0EajHt/GQf0hTit52txUGVbSBTj3KQEmfkSzXRFgEdxOLShf3EzsbvmJ
- s6YA==
-X-Gm-Message-State: AOJu0Ywoxp201T5oPbtZRef8OhHyatn0ljZXiqZxSitmfMWpdorkjyGg
- gHei79ZWl75bRRRynL1AH0Bljiqu8Zr7B2mAqDlhe+lbNHnf/6lcAgpvFcgwDnoNtpd/fo6UNMf
- gj9nZBg==
-X-Google-Smtp-Source: AGHT+IHtQrPE2mvYM6CWvgtUcb06yv+d6PZ5TyvueK4QqGLkx77VkG9cvAQgGncc3fbFyf8Q0BGAiQ==
-X-Received: by 2002:a05:600c:4f4a:b0:40f:cd:3885 with SMTP id
- m10-20020a05600c4f4a00b0040f00cd3885mr1038987wmq.25.1706866590996; 
- Fri, 02 Feb 2024 01:36:30 -0800 (PST)
+ bh=ls7nw66oUs4L6enwDVBooIlbiG6ZkA2XoyCl9qCA7W4=;
+ b=CaCs2Be2QPdEs9oSt9SYzhu23IVycefMsjbae+PNebO5jbt52VuPy0Z5BZGeZIIjcr
+ OI0S7K6WBhKm+aj81T1A4TR0jf1vkqQKrCdkYVkmFU3//DUFNK1S5R4TBgDxMTE678yJ
+ +o13mzEdu4Pn9NH8tUiqJUMSkjY5imVYLfEaW1HrzXRU2g8prVf71+8tmReG7QdNLOVy
+ 2rYfKyPl60lRRQ7rON5nuESbDEJWEXUbXjKllbUfae1awvG5Nxh61SGi2CvBcLFvw+KT
+ sYnEJS+ik7of3nRntO8MlCucmqdrF0N3ew1WpirP21ca3CR5LF9Z5RIZruR0xAV0+e36
+ eTWA==
+X-Gm-Message-State: AOJu0YzkqlsszWN0owmrKO4ZI/SVGFwM79odxeMnqN0jMIodCNNgMEMc
+ lbEoSw9vylTvdImwU7f35waUQxj5SvHN1li8eK/iI0IRbumas2gCovnR0lGdy1ly6J9pDqhEOhT
+ WTn4IaA==
+X-Google-Smtp-Source: AGHT+IErJDbHLNB3F1hG24Y2eedQwveH7qP+OcV9TITgKKUkLoomfLs0mT1yF7NZAWsW/tzyiOnGVw==
+X-Received: by 2002:adf:b181:0:b0:33b:20f5:b908 with SMTP id
+ q1-20020adfb181000000b0033b20f5b908mr751382wra.9.1706866591852; 
+ Fri, 02 Feb 2024 01:36:31 -0800 (PST)
 X-Forwarded-Encrypted: i=0;
- AJvYcCU6GOlIKxJ+o753eRK0YLa/txGFTn4fC5DZ6UsxiX0bJrYmPJyNwOXdNEIdrcgA0W4a1xgkx7Nyg1UztlgIZ0SnjhRaoD5otHkS9oDqazQB2T0CQtZGseqU7KJilYa2FkRxnKZphi5FyXZnUW22qpqphaeWqi3sR+T+
+ AJvYcCXFriCYbK/wCP11qmRd3BfMWUx9csZnfpPp1Zz/eaHmhJS7+RqFomVCbp8ZDQVWNSX4fwIfaSVzntVVDFN4ArKC8jcIgRakiGwxZy214ankdkSqA1rCK93lLOQoxBIaagWbjuFWEKhiZzJxsqMEUqQixqAyeuNYnJR7
 Received: from localhost.localdomain ([80.215.186.96])
  by smtp.gmail.com with ESMTPSA id
- m1-20020adfe941000000b0033ae6fa7f20sm1504615wrn.65.2024.02.02.01.36.29
+ m1-20020adfe941000000b0033ae6fa7f20sm1504615wrn.65.2024.02.02.01.36.31
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 02 Feb 2024 01:36:30 -0800 (PST)
+ Fri, 02 Feb 2024 01:36:31 -0800 (PST)
 From: Antoine Coutant <antoine.coutant@smile.fr>
 To: buildroot@buildroot.org
-Date: Fri,  2 Feb 2024 10:36:19 +0100
-Message-Id: <20240202093625.1409559-2-antoine.coutant@smile.fr>
+Date: Fri,  2 Feb 2024 10:36:20 +0100
+Message-Id: <20240202093625.1409559-3-antoine.coutant@smile.fr>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20240202093625.1409559-1-antoine.coutant@smile.fr>
 References: <20240202093625.1409559-1-antoine.coutant@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1706866591; x=1707471391;
+ d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1706866592; x=1707471392;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=h7VLrNFxYSV1Ehty9WeFa7xIIzWXgr7BKpj03f96gzw=;
- b=I4By1YrkTaU7SwNp0ZGYHS2Tw/eDGIQrF+Juth4Di3rY2dPqOJV7xIgdXxdaWstP9+
- 6IiBtta6ZawVqVOtke3QT7fOB37zSdd0pFf7zdV3RXyQbEvdObjVuIzQKL+5MagQMAv/
- udYOgKpxkflqZrRGORG3pAupNVQ6TJlwoyaMM05Ix2xN/DQhswkIVNQsrkAHtLI3NYRx
- aqHW0bEw6ptPettC5Z0+lxjvSSiB7lgblI2o144SHjXM5BZjHw7STZPddO3n8dqiUulT
- jQc11wrZwUxzkYI/w/TXCJnoHdK9zvGSZVBPSsK68jQ9G52jXUS/x49PcoifWyF/r0R1
- 0trA==
+ bh=ls7nw66oUs4L6enwDVBooIlbiG6ZkA2XoyCl9qCA7W4=;
+ b=OYgG6s4NyAAPQfNttvFvumB25hxMdk4+ZyvSChqEzyvxOvsc4SGgWpJZAkFDUL23eF
+ zQzRdTLvTAR2iyFW28qhTdFaUsf3bWpthqsTXmGsi2T7JXt4s1OMBGpAXbEGmjpJ/sgY
+ 6UK6qWLbIbEEjHJ2/On7OMIk6ZRIOfb1hPB2WcTiCNm7zRNXoRfu8QU4jxgBFrHSwZHn
+ n9/Ia4QyluCNi7Z1GE9V93kUw8dtUOL/INntniBSJ1yO0+ESP5XKLLWOSkDBaLvQz20V
+ +HKjAMtNaMBSxmE118KVZkSwXAsBAiN9WQcQ1hFwsQ/HXmuTW7IGzIcUXqg/WOj8h6rn
+ yEzw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=smile-fr.20230601.gappssmtp.com
  header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=I4By1Yrk
-Subject: [Buildroot] [PATCH v4 1/7] package/meson: bump version to 1.3.1
+ header.s=20230601 header.b=OYgG6s4N
+Subject: [Buildroot] [PATCH v4 2/7] package/pkg-meson.mk: add rust
+ cross-compiler support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,159 +109,82 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The meson upgrade from 1.1.1 to 1.2.0 have been reverted
-because host-qemu (version v8.0.3) was searching
-libraries in the build machine instead of buildroot host
-directory [1].
-$ grep -r LINK_ARGS  * | grep "\-L/usr"
-build.ninja: LINK_ARGS =
-    -L/usr/lib/gcc/x86_64-linux-gnu/10 \
-    -L/usr/lib/gcc/x86_64-linux-gnu/10/../../../x86_64-linux-gnu -L/usr/lib/x86_64-linux-gnu \
-    -L/usr/lib/gcc/x86_64-linux-gnu/10/../../../../lib -L/usr/lib \
-    -L/lib/x86_64-linux-gnu \
-    -L/lib/../lib \
-    -L/usr/lib/../lib \
-    -L/usr/lib/gcc/x86_64-linux-gnu/10/../../.. \
-    -L/lib \
-    -I/[...]/host/include \
-    -L/[...]/host/lib \
-    -I/[...]/host/include/libfdt \
-    ...
+From: Romain Naour <romain.naour@smile.fr>
 
-Upgrading qemu to version v8.1.0 solves the problem:
-$ grep -r LINK_ARGS  * | grep "\-L/usr"
-build.ninja: LINK_ARGS =
-    -I/[...]/host/include \
-    -L/[...]/host/lib \
-    -I/[...]/host/include/libfdt \
-    ...
+This change is needed to be able to build target packages requiring
+rust. If a package has rust in its project or in an add_language()
+call in their meson.build file, meson will try to find a suitable
+compiler for this language[1]. If the language is classified as
+required but not found, it will abort the build.
 
-Those two tests were done with the same buildroot version
-(2023.08) on the same machine were the bug appeared. Using,
-git bisect, in this environment, it was found that the
-problem was fixed in qemu by the commit [2].
+It is necessary to specify rust and rust_ld separately in
+support/misc/cross-compilation.conf.in. If you specify it in one line
+just as "rust", it will generate the following warning:
+    WARNING: Please do not put -C linker= in your compiler command,
+    set rust_ld=command in your cross file or use the RUST_LD environment
+    variable, otherwise meson will override your selection.
 
-Thus, it is possible that the problem was introduced by
-improper use of meson by qemu <= v8.0.3. Also, meson has
-been updated to version 1.2.1 and 1.3.0 in yocto and it
-doesn't seem to create any issue. [3]
+[1] https://mesonbuild.com/Reference-manual_functions.html#add_languages
 
-The original problem is no longer present and some
-projects require meson > 1.1.1 (e.g. rusticl requires
-meson 1.2.0 since mesa 23.3.0 and meson 1.3.1 since mesa
-24.0.0).
-
-"pkgconfig" field is deprecated by meson 1.3.0 and
-replaced by "pkg-config". See: [4]
-
-The patch that adds the pkg_config_static property has
-been rebased.
-
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/acfdf21f0b752e844a33c70a0fd2f82f4534a5a0
-[2] https://gitlab.com/qemu-project/qemu/-/commit/Fc9a809e0d28417fa1e7f7efc19f845bda4c1be9
-[3] https://github.com/yoctoproject/poky/commits/master/meta/recipes-devtools/meson
-[4] https://mesonbuild.com/Release-notes-for-1-3-0.html#machine-files-pkgconfig-field-deprecated-and-replaced-by-pkgconfig
-
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
 Signed-off-by: Antoine Coutant <antoine.coutant@smile.fr>
 ---
-Changes v3 -> v4:
-	- cross-compilation.conf.in have been changed.
-	- Bump version from 1.3.0 to 1.3.1.
+ package/pkg-meson.mk                   | 13 +++++++++++++
+ support/misc/cross-compilation.conf.in |  2 ++
+ 2 files changed, 15 insertions(+)
 
-Signed-off-by: Antoine Coutant <antoine.coutant@smile.fr>
----
- ...dencies-base.py-add-pkg_config_stati.patch | 29 ++++++++++---------
- package/meson/meson.hash                      |  4 +--
- package/meson/meson.mk                        |  2 +-
- support/misc/cross-compilation.conf.in        |  2 +-
- 4 files changed, 19 insertions(+), 18 deletions(-)
-
-diff --git a/package/meson/0002-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch b/package/meson/0002-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch
-index 8e15d3210c..49a0ef93dc 100644
---- a/package/meson/0002-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch
-+++ b/package/meson/0002-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch
-@@ -1,4 +1,4 @@
--From 3d6a2db2270346236dd6247e0648ea0c949ba468 Mon Sep 17 00:00:00 2001
-+From 59934e2116e025ecfe23baf6febc4a0eb85f60cd Mon Sep 17 00:00:00 2001
- From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- Date: Sat, 15 Feb 2020 15:13:59 +0100
- Subject: [PATCH] mesonbuild/dependencies/base.py: add pkg_config_static
-@@ -20,24 +20,25 @@ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- Signed-off-by: Romain Naour <romain.naour@gmail.com>
- [Rebased on 0.57.1]
- Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+[rebased on 1.3.0]
-+Signed-off-by: Antoine Coutant <antoine.coutant@smile.fr>
- ---
-- mesonbuild/dependencies/pkgconfig.py | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
-+ mesonbuild/dependencies/pkgconfig.py | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index 65cabf23ba..25dd4f0d7f 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -82,6 +82,16 @@ else
+ PKG_MESON_TARGET_FC = /bin/false
+ endif
  
- diff --git a/mesonbuild/dependencies/pkgconfig.py b/mesonbuild/dependencies/pkgconfig.py
--index 1e8d9132e..d902ba215 100644
-+index e86206b88..94888657d 100644
- --- a/mesonbuild/dependencies/pkgconfig.py
- +++ b/mesonbuild/dependencies/pkgconfig.py
--@@ -338,7 +338,8 @@ class PkgConfigDependency(ExternalDependency):
--         env = None
--         libcmd = ['--libs']
-- 
---        if self.static:
--+        if self.static or \
--+            (self.env.properties[self.for_machine].get('pkg_config_static', None) == 'true'):
--             libcmd.append('--static')
-- 
--         libcmd.append(self.name)
-+@@ -169,7 +169,7 @@ class PkgConfigCLI(PkgConfigInterface):
-+             env['PKG_CONFIG_ALLOW_SYSTEM_LIBS'] = '1'
-+         args: T.List[str] = []
-+         args += self._define_variable_args(define_variable)
-+-        if static:
-++        if static or (self.env.properties[self.for_machine].get('pkg_config_static', None) == 'true'):
-+             args.append('--static')
-+         args += ['--libs', name]
-+         ret, out, err = self._call_pkgbin(args, env=env)
- -- 
- 2.25.1
- 
-diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-index cb36b674fa..150fd6d1bb 100644
---- a/package/meson/meson.hash
-+++ b/package/meson/meson.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://github.com/mesonbuild/meson/releases/download/1.1.1/meson-1.1.1.tar.gz.asc
--sha256  d04b541f97ca439fb82fab7d0d480988be4bd4e62563a5ca35fadb5400727b1c  meson-1.1.1.tar.gz
-+# https://github.com/mesonbuild/meson/releases/download/1.3.1/meson-1.3.1.tar.gz.asc
-+sha256  6020568bdede1643d4fb41e28215be38eff5d52da28ac7d125457c59e0032ad7  meson-1.3.1.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index 503aca8c25..467569d28b 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MESON_VERSION = 1.1.1
-+MESON_VERSION = 1.3.1
- MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
- MESON_LICENSE = Apache-2.0
- MESON_LICENSE_FILES = COPYING
++ifeq ($(BR2_PACKAGE_HOST_RUSTC),y)
++PKG_MESON_TARGET_RUSTC = $(HOST_DIR)/bin/rustc
++PKG_MESON_TARGET_RUSTC_LINKER = $(notdir $(TARGET_CROSS))gcc
++PKG_MESON_TARGET_RUSTC_TARGET_NAME = $(RUSTC_TARGET_NAME)
++else
++PKG_MESON_TARGET_RUSTC = /bin/false
++PKG_MESON_TARGET_RUSTC_LINKER = /bin/false
++PKG_MESON_TARGET_RUSTC_TARGET_NAME =
++endif
++
+ # Generates sed patterns for patching the cross-compilation.conf template,
+ # since Flags might contain commas the arguments are passed indirectly by
+ # variable name (stripped to deal with whitespaces).
+@@ -91,6 +101,7 @@ define PKG_MESON_CROSSCONFIG_SED
+         -e "s%@TARGET_CXX@%$(PKG_MESON_TARGET_CXX)%g" \
+         -e "s%@TARGET_AR@%$(TARGET_AR)%g" \
+         -e "s%@TARGET_FC@%$(PKG_MESON_TARGET_FC)%g" \
++        -e "s%@TARGET_RUSTC@%$(PKG_MESON_TARGET_RUSTC)%g" \
+         -e "s%@TARGET_STRIP@%$(TARGET_STRIP)%g" \
+         -e "s%@TARGET_ARCH@%$(PKG_MESON_TARGET_CPU_FAMILY)%g" \
+         -e "s%@TARGET_CPU@%$(GCC_TARGET_CPU)%g" \
+@@ -99,6 +110,8 @@ define PKG_MESON_CROSSCONFIG_SED
+         -e "s%@TARGET_CFLAGS@%$(call make-sq-comma-list,$($(strip $(1))))%g" \
+         -e "s%@TARGET_LDFLAGS@%$(call make-sq-comma-list,$($(strip $(3))))%g" \
+         -e "s%@TARGET_CXXFLAGS@%$(call make-sq-comma-list,$($(strip $(2))))%g" \
++        -e "s%@TARGET_RUSTC_LINKER@%$(PKG_MESON_TARGET_RUSTC_LINKER)%g" \
++        -e "s%@RUSTC_TARGET_NAME@%$(PKG_MESON_TARGET_RUSTC_TARGET_NAME)%g" \
+         -e "s%@BR2_CMAKE@%$(BR2_CMAKE)%g" \
+         -e "s%@PKGCONF_HOST_BINARY@%$(HOST_DIR)/bin/pkgconf%g" \
+         -e "s%@HOST_DIR@%$(HOST_DIR)%g" \
 diff --git a/support/misc/cross-compilation.conf.in b/support/misc/cross-compilation.conf.in
-index 7053df472b..a58ab553d0 100644
+index a58ab553d0..21cec10b82 100644
 --- a/support/misc/cross-compilation.conf.in
 +++ b/support/misc/cross-compilation.conf.in
-@@ -10,7 +10,7 @@ ar = '@TARGET_AR@'
- strip = '@TARGET_STRIP@'
- cmake = '@BR2_CMAKE@'
- fortran = '@TARGET_FC@'
--pkgconfig = '@PKGCONF_HOST_BINARY@'
-+pkg-config = '@PKGCONF_HOST_BINARY@'
+@@ -13,6 +13,8 @@ fortran = '@TARGET_FC@'
+ pkg-config = '@PKGCONF_HOST_BINARY@'
  g-ir-compiler = '@STAGING_DIR@/usr/bin/g-ir-compiler'
  g-ir-scanner = '@STAGING_DIR@/usr/bin/g-ir-scanner'
++rust = ['@TARGET_RUSTC@', '--target', '@RUSTC_TARGET_NAME@' ]
++rust_ld = '@TARGET_RUSTC_LINKER@'
  
+ [built-in options]
+ c_args = [@TARGET_CFLAGS@]
 -- 
 2.25.1
 
