@@ -4,93 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 522D1C48291
-	for <buildroot@archiver.kernel.org>; Fri,  2 Feb 2024 09:37:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EC1AC4828E
+	for <buildroot@archiver.kernel.org>; Fri,  2 Feb 2024 09:38:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0CF1F6FA6B;
-	Fri,  2 Feb 2024 09:37:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0CF1F6FA6B
+	by smtp3.osuosl.org (Postfix) with ESMTP id EF71F6FA5D;
+	Fri,  2 Feb 2024 09:38:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF71F6FA5D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gSnK23s9LiTK; Fri,  2 Feb 2024 09:37:53 +0000 (UTC)
+	with ESMTP id uSnSyCUFkjMy; Fri,  2 Feb 2024 09:38:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B8BCD6FA5D;
-	Fri,  2 Feb 2024 09:37:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B8BCD6FA5D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CEDEB1BF39D
- for <buildroot@lists.busybox.net>; Fri,  2 Feb 2024 09:36:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CE60C6FA6B;
+	Fri,  2 Feb 2024 09:38:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE60C6FA6B
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6FE501BF39D
+ for <buildroot@lists.busybox.net>; Fri,  2 Feb 2024 09:36:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B124384D1A
- for <buildroot@lists.busybox.net>; Fri,  2 Feb 2024 09:36:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B124384D1A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4916C6FA6B
+ for <buildroot@lists.busybox.net>; Fri,  2 Feb 2024 09:36:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4916C6FA6B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2PZWQaXj619K for <buildroot@lists.busybox.net>;
- Fri,  2 Feb 2024 09:36:38 +0000 (UTC)
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com
- [IPv6:2a00:1450:4864:20::442])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 37CD084D1C
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gF8yNsC53C_B for <buildroot@lists.busybox.net>;
+ Fri,  2 Feb 2024 09:36:39 +0000 (UTC)
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com
+ [IPv6:2a00:1450:4864:20::343])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 07FC76FA5B
  for <buildroot@buildroot.org>; Fri,  2 Feb 2024 09:36:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 37CD084D1C
-Received: by mail-wr1-x442.google.com with SMTP id
- ffacd0b85a97d-33929364bdaso1115622f8f.2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 07FC76FA5B
+Received: by mail-wm1-x343.google.com with SMTP id
+ 5b1f17b1804b1-40fb94d42e4so14584625e9.2
  for <buildroot@buildroot.org>; Fri, 02 Feb 2024 01:36:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1706866596; x=1707471396;
+ d=1e100.net; s=20230601; t=1706866597; x=1707471397;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=MKzdlqVDf75vPo1rx6MnlM5I8631d4KHHR3wB3TbauE=;
- b=t4E9AMAcmV+QWkhf9C16mHfzJdnnQmK8eC0P4/cMeqAGNz+Zfd1noCEplQ46x8lpez
- gVZ7js0Ob2MGJjLP3GRiajSY3j6HVQlGA1MwZJ/sPhVV4S28LNZEj20ZqeiaKsfBh7Wc
- tTlLMnyWnYdRZUhiGXnFx4936Nn+EySIkMEL4YUShVrDjk1iqe/2igbT3DaWOSt+EKJ1
- Qa0un2RCQZXAflvs2qra2ZGVmpQ9m1wY+ER1w6iGyvlm7C/rAG0CMLs/qFKCTfgAJ9ra
- qEDJmDvAk0Tr5cG6VOlQStFadsr6bNZHO2BgD9dPs4KHG7cP8q4k/CUUflLI11XcJyPx
- NDLA==
-X-Gm-Message-State: AOJu0YyZFGgyh54KQXkrbDPNr50aDysNPyHUqRgB4N0dDvq/FqFDEquk
- lgc6Y/qHDSapjf1MXgmPVprhl4qptbTbC5KmT8TnqQrXhyv/SZvbOpQUyg1cR38OWQ2M7fsr67a
- 3QP4F9w==
-X-Google-Smtp-Source: AGHT+IFUs1pC0tfsqtMZzmIclXJZZc7CWkcMH2ggq8QnKv52FlTK3mOSN8Cxs7wMvsEfWecXpSwM6Q==
-X-Received: by 2002:a5d:5088:0:b0:33a:eb59:accb with SMTP id
- a8-20020a5d5088000000b0033aeb59accbmr1018266wrt.8.1706866596073; 
+ bh=0toypdJ1xRGakh/nZjaqKzQtKTIcGfaBjeTo9F+Yzuo=;
+ b=NAdrbQtoe5/y55Poog4ww7Hqsgm3A2Gf7HZtEponr7jRKhvghpMFfJSda0OCYRwJXa
+ aFNfHWGDhdIVAxv4qzagoAJXEUFH7EFlgJ1ClgmRN2b9jwx3REtziaUcsW2q/kezxJ/J
+ eHchF9+wjz69GvvZsxNQkXNw9YA0Xx9OP+mugehbC1ivghYzhXVHuIPag0sijXIu80Nv
+ ETGl6/DXni4U3DomyhGvCvRSQaIk2aTI0sW69FGglj4iQgkecv9bRroOSkBSu+SdfZyV
+ rKkNYExV1d7QfQ9PZfxnAPlVfKgEGBf1a4umcEf5H0Tr+FkKl4A7tpl+AglJL+Qk1Dki
+ vVWw==
+X-Gm-Message-State: AOJu0YwEDTVe9mpmTU6qcOMFQtKMdLq5pGWwZSzh7Vg9elTz0AVwAgLB
+ XsvGDe+F9ttBDkdAUd+SVXIV4hysW2VuCmYsydEUjhSZh/z9dVVDafF+rpcHmydW60rt9ZbwcMO
+ x9S/17A==
+X-Google-Smtp-Source: AGHT+IFPcWvGloWWjQM6c7psbQZUHhCG5k0Bn9A55uS2iSvkDS/V+ds+UpOQ1i8EjpN7dPJol0vxgw==
+X-Received: by 2002:a5d:68cc:0:b0:33b:302:c08 with SMTP id
+ p12-20020a5d68cc000000b0033b03020c08mr3878138wrw.43.1706866596864; 
  Fri, 02 Feb 2024 01:36:36 -0800 (PST)
 X-Forwarded-Encrypted: i=0;
- AJvYcCUyp47L3IG240jWUf+48aq+rwPltK6D/mrHbNExdRT66dPlbxtStmRbmAeB0a2uQXuLEpkRd6WcKPrh0nWY9iXSspwrEhhDwp3vkAweSHHOFwxOLpJ29Npb3p7YrX+C5+vXFxMWyfJu3ijdDmqj52JPEjsssdnErzVs
+ AJvYcCVFQTHaQ8PvWmkrKqcBinwR5P3173BnXsENGltA4xGGTyU64iiO9K+CpelwEQ3tUBNY4TS8wSJsN0SF5vEZBJhgayg1HeJc1eO42uw5om/lotb5oYpXqwTbCRsUChULWcembpX/NFOV22QNnH1uQ24bG5IWTViATUhB
 Received: from localhost.localdomain ([80.215.186.96])
  by smtp.gmail.com with ESMTPSA id
- m1-20020adfe941000000b0033ae6fa7f20sm1504615wrn.65.2024.02.02.01.36.34
+ m1-20020adfe941000000b0033ae6fa7f20sm1504615wrn.65.2024.02.02.01.36.36
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 02 Feb 2024 01:36:35 -0800 (PST)
+ Fri, 02 Feb 2024 01:36:36 -0800 (PST)
 From: Antoine Coutant <antoine.coutant@smile.fr>
 To: buildroot@buildroot.org
-Date: Fri,  2 Feb 2024 10:36:24 +0100
-Message-Id: <20240202093625.1409559-7-antoine.coutant@smile.fr>
+Date: Fri,  2 Feb 2024 10:36:25 +0100
+Message-Id: <20240202093625.1409559-8-antoine.coutant@smile.fr>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20240202093625.1409559-1-antoine.coutant@smile.fr>
 References: <20240202093625.1409559-1-antoine.coutant@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1706866596; x=1707471396;
+ d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1706866597; x=1707471397;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=MKzdlqVDf75vPo1rx6MnlM5I8631d4KHHR3wB3TbauE=;
- b=VFPWSjd61GvR9XMBKXhURtNFVRkr+AzdBMwEOfg8JQyf9PIwl4Jy1XwdNyRD/kzcwM
- bcG5PfDioEVxaQ7ilbQFcbIhtkGHqiJK3pMJ6Is1paHTUWqzGL0ykODF5c8Zly/jIbF0
- pC4r41yY+h2F4FHsJ/2Tnc4QRp2mzIeM5MckdOD60h59rSGtxiuP053bOsE+LqXh4ZQP
- YlnvHxs16VOZCUEsn4TFWYXZQpY5Ut6dTAYLj+PG0HYAOLflEJN0/7NqVUuwzSFk07wq
- gRjMfq0I0mys9tsePQlXfbwJORdDxs6MOf4qUZ2ocEPv6b3NV+wzLcIr07RUjSc8j1Es
- kN7g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=0toypdJ1xRGakh/nZjaqKzQtKTIcGfaBjeTo9F+Yzuo=;
+ b=pt1UA1o5w1OoJsXFR/DbtbmLNkyu75v87/3KT+QTZaXh+3ae8x+DW1kNl+WEcbgz9v
+ OjtY4FlPBaqa6xWox48XjMnj3dM7NaiWYvhICda6sV4ypXdT6NQoPqgbQvLA0v2SFE0S
+ L4tblfo6LT/y2ltupwn+oen58HQP27oP/Ayz5gkay8ImrQkAdqQ9n8NNPKQEgWPqeLai
+ oRFFgLjioBS2h1S1qg/+wW3SRwiA1YpH3/Z9FuFZwZdTBiyb54+N2cp2NCgE7gED8HV2
+ Ub8LWdQhCQALCONoWfzQvIzfHAtF1F9TbwYGJt/RWH8FU8JIi+uThOU5LdjixuXIzp6L
+ DEnA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=smile-fr.20230601.gappssmtp.com
  header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=VFPWSjd6
-Subject: [Buildroot] [PATCH v4 6/7] package/llvm-project: add
- opencl-c-base.h on target
+ header.s=20230601 header.b=pt1UA1o5
+Subject: [Buildroot] [PATCH v4 7/7] package/mesa3d: add RustiCL support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,297 +103,120 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: sebastian.weyer@smile.fr, Antoine Coutant <antoine.coutant@smile.fr>,
  bernd@kuhls.net, romain.naour@smile.fr
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-rusticl depends on the mesa clc_compile_to_llvm_module function.
-This function requires opencl-c-base.h when LLVM version >= 15.
-
-The header is deleted automatically by CLANG_FILES_TO_REMOVE
-post install target hook in llvm-project/clang package.
-When rusticl is enabled, after the whole clang directory has
-been removed, the header is copied back to
-/usr/lib/clang/$(LLVM_PROJECT_VERSION)/include/
-
-By default, the mesa3d variable used to retrieve the header
-is set to the staging directory on the host machine. A merge
-request on mesa's gitlab solved this problem. See:
-
-https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/25568
-
-The patches have been backported to mesa 23.3.4.
-
-Signed-off-by: Antoine Coutant <antoine.coutant@smile.fr>
----
-Changes v3 -> v4:
-	- Add patches merged by mesa upstream.
----
-Running an app that uses rusticl leads to an error.
-Example:
-
-RUSTICL_ENABLE=panfrost clpeak
-
-Platform: rusticl
-  Device: Mali-G52 (Panfrost)
-    Driver version  : 23.3.4 (Linux ARM64)
-    Compute units   : 2
-    Clock frequency : 800 MHz
-    Build Log: <built-in>:1:10: fatal error: 'opencl-c-base.h' file not found
-Error executing LLVM compilation action.
-
-Signed-off-by: Antoine Coutant <antoine.coutant@smile.fr>
----
- package/llvm-project/clang/clang.mk           |  9 ++
- ...ncl-external-clang-headers-option-an.patch | 72 ++++++++++++++++
- ...or-every-user-when-using-shared-LLVM.patch | 40 +++++++++
- ...lc-retrieve-libclang-path-at-runtime.patch | 86 +++++++++++++++++++
- 4 files changed, 207 insertions(+)
- create mode 100644 package/mesa3d/0006-meson-remove-opencl-external-clang-headers-option-an.patch
- create mode 100644 package/mesa3d/0007-clc-force-fPIC-for-every-user-when-using-shared-LLVM.patch
- create mode 100644 package/mesa3d/0008-clc-retrieve-libclang-path-at-runtime.patch
-
-diff --git a/package/llvm-project/clang/clang.mk b/package/llvm-project/clang/clang.mk
-index 0bafd6461b..09aac7f0ec 100644
---- a/package/llvm-project/clang/clang.mk
-+++ b/package/llvm-project/clang/clang.mk
-@@ -90,6 +90,15 @@ define HOST_CLANG_INSTALL_CLANG_TBLGEN
- endef
- HOST_CLANG_POST_INSTALL_HOOKS = HOST_CLANG_INSTALL_CLANG_TBLGEN
- 
-+# Rusticl needs opencl-c-base.h to be present on the target.
-+define CLANG_OPENCL_C_BASE_HEADER_TO_TARGET
-+	mkdir -p $(TARGET_DIR)/usr/lib/clang/$(LLVM_PROJECT_VERSION)/include
-+	$(INSTALL) -D -m 0644 $(@D)/lib/Headers/opencl-c-base.h $(TARGET_DIR)/usr/lib/clang/$(LLVM_PROJECT_VERSION)/include/opencl-c-base.h
-+endef
-+ifeq ($(BR2_PACKAGE_MESA3D_RUSTICL),y)
-+CLANG_POST_INSTALL_TARGET_HOOKS += CLANG_OPENCL_C_BASE_HEADER_TO_TARGET
-+endif
-+
- # This option must be enabled to link libclang dynamically against libLLVM.so
- HOST_CLANG_CONF_OPTS += -DLLVM_LINK_LLVM_DYLIB=ON
- CLANG_CONF_OPTS += -DLLVM_LINK_LLVM_DYLIB=ON
-diff --git a/package/mesa3d/0006-meson-remove-opencl-external-clang-headers-option-an.patch b/package/mesa3d/0006-meson-remove-opencl-external-clang-headers-option-an.patch
-new file mode 100644
-index 0000000000..ebe3542627
---- /dev/null
-+++ b/package/mesa3d/0006-meson-remove-opencl-external-clang-headers-option-an.patch
-@@ -0,0 +1,72 @@
-+From b7f2ada31d85dfd2e9906a7343d14a3b0b85cf14 Mon Sep 17 00:00:00 2001
-+From: Karol Herbst <kherbst@redhat.com>
-+Date: Tue, 2 Jan 2024 22:58:39 +0100
-+Subject: [PATCH 1/3] meson: remove opencl-external-clang-headers option and
-+ rely on shared-llvm
-+
-+Setting opencl-external-clang-headers to enabled while using shared LLVM
-+was broken and this option was mostly used for windows to force static
-+inclusion of opencl base headers.
-+
-+Simply relying on the shared-llvm option here is enough to get what we
-+want.
-+
-+Signed-off-by: Karol Herbst <kherbst@redhat.com>
-+Reviewed-by: Jesse Natalie <jenatali@microsoft.com>
-+Part-of: <https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/25568>
-+[antoine.coutant@smile.fr: backported to mesa-23.3.4]
-+Signed-off-by: Antoine Coutant <antoine.coutant@smile.fr>
-+---
-+ .gitlab-ci/windows/mesa_build.ps1 | 1 -
-+ meson_options.txt                 | 7 -------
-+ src/compiler/clc/meson.build      | 4 +---
-+ 3 files changed, 1 insertion(+), 11 deletions(-)
-+
-+diff --git a/.gitlab-ci/windows/mesa_build.ps1 b/.gitlab-ci/windows/mesa_build.ps1
-+index a4f87c4eadb..e79eb6b6587 100644
-+--- a/.gitlab-ci/windows/mesa_build.ps1
-++++ b/.gitlab-ci/windows/mesa_build.ps1
-+@@ -59,7 +59,6 @@ meson setup `
-+ -Dopencl-spirv=true `
-+ -Dmicrosoft-clc=enabled `
-+ -Dstatic-libclc=all `
-+--Dopencl-external-clang-headers=disabled `
-+ -Dspirv-to-dxil=true `
-+ -Dbuild-tests=true `
-+ -Dwerror=true `
-+diff --git a/meson_options.txt b/meson_options.txt
-+index e885ba61a8a..537ba797407 100644
-+--- a/meson_options.txt
-++++ b/meson_options.txt
-+@@ -191,13 +191,6 @@ option(
-+   description : 'Link libclc SPIR-V statically.',
-+ )
-+ 
-+-option(
-+-  'opencl-external-clang-headers',
-+-  type : 'feature',
-+-  description : 'Use system Clang headers at runtime for OpenCL kernel ' +
-+-                'compilation.',
-+-)
-+-
-+ option(
-+   'd3d-drivers-path',
-+   type : 'string',
-+diff --git a/src/compiler/clc/meson.build b/src/compiler/clc/meson.build
-+index 3e4f1a7f441..81345225768 100644
-+--- a/src/compiler/clc/meson.build
-++++ b/src/compiler/clc/meson.build
-+@@ -30,9 +30,7 @@ _libmesaclc_c_args = []
-+ _libmesaclc_cpp_args = ['-DLLVM_LIB_DIR="@0@"'.format(llvm_libdir)]
-+ _libmesaclc_sources = []
-+ 
-+-if get_option('opencl-external-clang-headers') \
-+-   .disable_auto_if(host_machine.system() == 'windows') \
-+-   .disabled()
-++if not _shared_llvm
-+   # LLVM 16 moved clang header path from using full version to only major version
-+   if dep_llvm.version().version_compare('< 16')
-+     # Prior to LLVM 16, this path used a full version
-+-- 
-+2.25.1
-+
-diff --git a/package/mesa3d/0007-clc-force-fPIC-for-every-user-when-using-shared-LLVM.patch b/package/mesa3d/0007-clc-force-fPIC-for-every-user-when-using-shared-LLVM.patch
-new file mode 100644
-index 0000000000..3560f6805f
---- /dev/null
-+++ b/package/mesa3d/0007-clc-force-fPIC-for-every-user-when-using-shared-LLVM.patch
-@@ -0,0 +1,40 @@
-+From 56c85c4c7a757a9ba3d8ac08e6c4c4c7f19e6cab Mon Sep 17 00:00:00 2001
-+From: Karol Herbst <kherbst@redhat.com>
-+Date: Thu, 11 Jan 2024 14:55:46 +0100
-+Subject: [PATCH 2/3] clc: force fPIC for every user when using shared LLVM
-+
-+As we want to start using `dladdr`, this is needed to prevent `dladdr`
-+returning information of the wrong file.
-+
-+Fixes tag as it's required by the actual fix.
-+
-+Signed-off-by: Karol Herbst <kherbst@redhat.com>
-+Fixes: e22491c8326 ("clc: fetch clang resource dir at runtime")
-+Part-of: <https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/25568>
-+[antoine.coutant@smile.fr: backported to mesa-23.3.4]
-+Signed-off-by: Antoine Coutant <antoine.coutant@smile.fr>
-+---
-+ src/compiler/clc/meson.build | 6 ++++++
-+ 1 file changed, 6 insertions(+)
-+
-+diff --git a/src/compiler/clc/meson.build b/src/compiler/clc/meson.build
-+index 81345225768..442a583065b 100644
-+--- a/src/compiler/clc/meson.build
-++++ b/src/compiler/clc/meson.build
-+@@ -123,7 +123,13 @@ _libmesaclc = static_library(
-+                  idep_mesautil, dep_spirv_tools]
-+ )
-+ 
-++_idep_mesaclc_link_args = []
-++if _shared_llvm
-++  _idep_mesaclc_link_args += cc.get_supported_link_arguments('-fPIC')
-++endif
-++
-+ idep_mesaclc = declare_dependency(
-+   link_with : _libmesaclc,
-+   include_directories : include_directories('.'),
-++  link_args : _idep_mesaclc_link_args,
-+ )
-+-- 
-+2.25.1
-+
-diff --git a/package/mesa3d/0008-clc-retrieve-libclang-path-at-runtime.patch b/package/mesa3d/0008-clc-retrieve-libclang-path-at-runtime.patch
-new file mode 100644
-index 0000000000..c19ba7d2b7
---- /dev/null
-+++ b/package/mesa3d/0008-clc-retrieve-libclang-path-at-runtime.patch
-@@ -0,0 +1,86 @@
-+From fa2c045e04370beb454951c32bccc087638e04c7 Mon Sep 17 00:00:00 2001
-+From: Antoine Coutant <antoine.coutant@smile.fr>
-+Date: Thu, 30 Nov 2023 11:10:20 +0100
-+Subject: [PATCH 3/3] clc: retrieve libclang path at runtime.
-+
-+LLVM_LIB_DIR is a variable used for runtime compilations.
-+When cross compiling, LLVM_LIB_DIR must be set to the
-+libclang path on the target. So, this path should not
-+be retrieved during compilation but at runtime.
-+
-+dladdr uses an address to search for a loaded library.
-+If a library is found, it returns information about it.
-+The path to the libclang library can therefore be
-+retrieved using one of its functions. This is useful
-+because we don't know the name of the libclang library
-+(libclang.so.X or libclang-cpp.so.X)
-+
-+v2 (Karol): use clang::CompilerInvocation::CreateFromArgs for dladdr
-+v3 (Karol): follow symlinks to fix errors on debian
-+
-+Fixes: e22491c8326 ("clc: fetch clang resource dir at runtime")
-+Signed-off-by: Antoine Coutant <antoine.coutant@smile.fr>
-+Reviewed-by: Karol Herbst <kherbst@redhat.com>
-+Reviewed-by (v1): Jesse Natalie <jenatali@microsoft.com>
-+[antoine.coutant@smile.fr: backported to mesa-23.3.4]
-+
-+Part-of: <https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/25568>
-+---
-+ src/compiler/clc/clc_helpers.cpp | 24 +++++++++++++++++++++---
-+ 1 file changed, 21 insertions(+), 3 deletions(-)
-+
-+diff --git a/src/compiler/clc/clc_helpers.cpp b/src/compiler/clc/clc_helpers.cpp
-+index 55287f22683..22eb3495be9 100644
-+--- a/src/compiler/clc/clc_helpers.cpp
-++++ b/src/compiler/clc/clc_helpers.cpp
-+@@ -23,6 +23,7 @@
-+ // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-+ // OTHER DEALINGS IN THE SOFTWARE.
-+ 
-++#include <cstdlib>
-+ #include <filesystem>
-+ #include <sstream>
-+ #include <mutex>
-+@@ -57,6 +58,10 @@
-+ 
-+ #include "spirv.h"
-+ 
-++#if DETECT_OS_UNIX
-++#include <dlfcn.h>
-++#endif
-++
-+ #ifdef USE_STATIC_OPENCL_C_H
-+ #if LLVM_VERSION_MAJOR < 15
-+ #include "opencl-c.h.h"
-+@@ -876,12 +881,25 @@ clc_compile_to_llvm_module(LLVMContext &llvm_ctx,
-+ #endif
-+    }
-+ #else
-++
-++   Dl_info info;
-++   if (dladdr((void *)clang::CompilerInvocation::CreateFromArgs, &info) == 0) {
-++      clc_error(logger, "Couldn't find libclang path.\n");
-++      return {};
-++   }
-++
-++   char *clang_path = realpath(info.dli_fname, NULL);
-++   if (clang_path == nullptr) {
-++      clc_error(logger, "Couldn't find libclang path.\n");
-++      return {};
-++   }
-++
-+    // GetResourcePath is a way to retrive the actual libclang resource dir based on a given binary
-+-   // or library. The path doesn't even need to exist, we just have to put something in there,
-+-   // because we might have linked clang statically.
-++   // or library.
-+    auto libclang_path = fs::path(LLVM_LIB_DIR) / "libclang.so";
-+    auto clang_res_path =
-+-      fs::path(Driver::GetResourcesPath(libclang_path.string(), CLANG_RESOURCE_DIR)) / "include";
-++      fs::path(Driver::GetResourcesPath(std::string(clang_path), CLANG_RESOURCE_DIR)) / "include";
-++   free(clang_path);
-+ 
-+    c->getHeaderSearchOpts().UseBuiltinIncludes = true;
-+    c->getHeaderSearchOpts().UseStandardSystemIncludes = true;
-+-- 
-+2.25.1
-+
--- 
-2.25.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+RnJvbTogUm9tYWluIE5hb3VyIDxyb21haW4ubmFvdXJAc21pbGUuZnI+CgpUbyBidWlsZCBSdXN0
+aWNsIHlvdSBuZWVkIHRvIHNhdGlzZnkgdGhlIGZvbGxvd2luZyBidWlsZCBkZXBlbmRlbmNpZXM6
+CgogICAgcnVzdGMKICAgIHJ1c3RmbXQgKGhpZ2hseSByZWNvbW1lbmRlZCwgYnV0IG9ubHkgcmVx
+dWlyZWQgZm9yIENJIGJ1aWxkcyBvciB3aGVuIGF1dGhvcmluZyBwYXRjaGVzKQogICAgYmluZGdl
+bgogICAgTExWTSBidWlsdCB3aXRoIGxpYmNsYyBhbmQgLURMTFZNX0VOQUJMRV9EVU1QPU9OLgog
+ICAgU1BJUlYtVG9vbHMKICAgIFNQSVJWLUxMVk0tVHJhbnNsYXRvciBmb3IgYSBsaWJMTFZNU1BJ
+UlZMaWIuc28gbWF0Y2hpbmcgeW91ciB2ZXJzaW9uIG9mIExMVk0sIGkuZS4gaWYgeW914oCZcmUg
+dXNpbmcgTExWTSAxNSAobGliTExWTS5zby4xNSksIHRoZW4geW91IG5lZWQgYSBsaWJMTFZNU1BJ
+UlZMaWIuc28uMTUuCgpTZWU6Cmh0dHBzOi8vZG9jcy5tZXNhM2Qub3JnL3J1c3RpY2wuaHRtbAoK
+U2luY2UgcnVzdGljbCBpcyBhbiBpbXBsZW1lbnRhdGlvbiBvZiBPcGVuQ0wsIG1ha2UgaXQgYSBw
+cm92aWRlciBvZgpPcGVuQ0wuCgpXZSBuZWVkIHRvIHVzZSBvcGVuY2wtaWNkLWxvYWRlciBpbiBv
+cmRlciB0byBiZSBhYmxlIHRvIGNhcHR1cmUgQVBJCmNhbGxzIGFuZCBmb3J3YXJkIHRoZW0gdG8g
+dGhlIGNvcnJlY3QgaW1wbGVtZW50YXRpb24gb2YgT3BlbkNMIChSdXN0aUNMCmluIHRoaXMgY2Fz
+ZSkKCm9wZW5jbC1pY2QtbG9hZGVyIG5lZWRzIHRvIGJlIGluc3RhbGxlZCBpbiB0aGUgdG9vbGNo
+YWluJ3Mgc3lzcm9vdAphcyB3ZWxsIHRvIGJlIGFibGUgdG8gY29tcGlsZSBwYWNrYWdlcyBkZXBl
+bmRpbmcgb24gbGlib3BlbmNsIHNpbmNlCm90aGVyd2lzZSB0aGVyZSdzIG9ubHkgZm9yIGV4YW1w
+bGUgbGliUnVzdGlPcGVuQ0wuc28gYW5kIG5vCmxpYk9wZW5DTC5zbwoKTWFueSBHYWxsaXVtIGRy
+aXZlcnMgYXJlIGNvbXBhdGlibGUgd2l0aCBydXN0aWNsLiBIb3dldmVyLCB0ZXN0cyB3ZXJlCnBl
+cmZvcm1lZCB3aXRoIHBhbmZyb3N0LiBUaHVzIG9ubHkgcGFuZnJvc3QgaXMgYWN0aXZlZCBmb3Ig
+dGhlIG1vbWVudC4KVG8gYWN0aXZhdGUgYW5vdGhlciBkcml2ZXIsIG1ha2UgaXQgc2VsZWN0CkJS
+Ml9QQUNLQUdFX01FU0EzRF9SVVNUSUNMX1NVUFBPUlRFRF9EUklWRVIuIFRoZSBsaXN0IG9mIGFs
+bApjb21wYXRpYmxlIGRyaXZlcnMgY2FuIGJlIGZvdW5kIGhlcmU6CgpodHRwczovL2RvY3MubWVz
+YTNkLm9yZy9lbnZ2YXJzLmh0bWwjZW52dmFyLVJVU1RJQ0xfRU5BQkxFCgpTaWduZWQtb2ZmLWJ5
+OiBSb21haW4gTmFvdXIgPHJvbWFpbi5uYW91ckBzbWlsZS5mcj4KU2lnbmVkLW9mZi1ieTogU2Vi
+YXN0aWFuIFdleWVyIDxzZWJhc3RpYW4ud2V5ZXJAc21pbGUuZnI+ClNpZ25lZC1vZmYtYnk6IEFu
+dG9pbmUgQ291dGFudCA8YW50b2luZS5jb3V0YW50QHNtaWxlLmZyPgotLS0KdjI6IGNoYW5nZSBj
+b21taXQgaGVhZGVyIC0+IFJ1c3RpQ0wgc3VwcG9ydCBpcyBub3QgZXhwZXJpbWVudGFsCgpDaGFu
+Z2VzIHYzIC0+IHY0OgoJLSBBZGQgYSBtZW51Y29uZmlnIHRvIHNlbGVjdCBPcGVuQ0wgaW1wbGVt
+ZW50YXRpb24KCWJldHdlZW4gQ2xvdmVyIGFuZCBSdXN0aUNMCgktIEFkZCBCUjJfUEFDS0FHRV9N
+RVNBM0RfUlVTVElDTF9TVVBQT1JURURfRFJJVkVSLgoKU2lnbmVkLW9mZi1ieTogQW50b2luZSBD
+b3V0YW50IDxhbnRvaW5lLmNvdXRhbnRAc21pbGUuZnI+Ci0tLQogcGFja2FnZS9tZXNhM2QvQ29u
+ZmlnLmluIHwgNTAgKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrLS0tLQogcGFj
+a2FnZS9tZXNhM2QvbWVzYTNkLm1rIHwgMTggKysrKysrKysrKysrKy0tCiAyIGZpbGVzIGNoYW5n
+ZWQsIDYxIGluc2VydGlvbnMoKyksIDcgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvcGFja2Fn
+ZS9tZXNhM2QvQ29uZmlnLmluIGIvcGFja2FnZS9tZXNhM2QvQ29uZmlnLmluCmluZGV4IDM5YTRm
+NzA2ZTIuLjg0ZDI4MWEwYTkgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvbWVzYTNkL0NvbmZpZy5pbgor
+KysgYi9wYWNrYWdlL21lc2EzZC9Db25maWcuaW4KQEAgLTQ0LDE3ICs0NCw1NiBAQCBjb21tZW50
+ICJsbHZtIHN1cHBvcnQgbmVlZHMgYSB0b29sY2hhaW4gbm90IGFmZmVjdGVkIGJ5IEdDQyBidWcg
+NjQ3MzUiCiAJZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9MTFZNX0FSQ0hfU1VQUE9SVFMKIAlkZXBl
+bmRzIG9uIEJSMl9UT09MQ0hBSU5fSEFTX0dDQ19CVUdfNjQ3MzUKIAotIyBjbGFuZyBhbmQgbGli
+Y2xjIGRlcGVuZGVuY2llcyBhcmUgc2F0aXNmaWVkIGJ5Ci0jIEJSMl9QQUNLQUdFX01FU0EzRF9M
+TFZNCi1jb25maWcgQlIyX1BBQ0tBR0VfTUVTQTNEX09QRU5DTAorbWVudWNvbmZpZyBCUjJfUEFD
+S0FHRV9NRVNBM0RfT1BFTkNMCiAJYm9vbCAiT3BlbkNMIHN1cHBvcnQiCisJZGVmYXVsdCBuCiAJ
+ZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9NRVNBM0RfTExWTQogCWRlcGVuZHMgb24gQlIyX1BBQ0tB
+R0VfTUVTQTNEX0dBTExJVU1fRFJJVkVSX1I2MDAgfHwgXAotCQlCUjJfUEFDS0FHRV9NRVNBM0Rf
+R0FMTElVTV9EUklWRVJfUkFERU9OU0kKKwkJQlIyX1BBQ0tBR0VfTUVTQTNEX0dBTExJVU1fRFJJ
+VkVSX1JBREVPTlNJIHx8IFwKKwkJQlIyX1BBQ0tBR0VfSE9TVF9SVVNUQ19UQVJHRVRfQVJDSF9T
+VVBQT1JUUyAmJiBcCisJCUJSMl9QQUNLQUdFX01FU0EzRF9SVVNUSUNMX1NVUFBPUlRFRF9EUklW
+RVIKIAlzZWxlY3QgQlIyX1BBQ0tBR0VfTExWTV9SVFRJCiAJc2VsZWN0IEJSMl9QQUNLQUdFX0NM
+QU5HCiAJc2VsZWN0IEJSMl9QQUNLQUdFX0xJQkNMQwogCXNlbGVjdCBCUjJfUEFDS0FHRV9IQVNf
+TElCT1BFTkNMCisJaGVscAorCSAgT3BlbkNMIGlzIGEgc3RhbmRhcmQgZm9yIHBhcmFsbGVsIHBy
+b2dyYW1taW5nIG9mIGhldGVyb2dlbmVvdXMKKwkgIHN5c3RlbXMgKENQVXMsIEdQVXMsIERTUHMs
+IEZQR0FzLCBldGMuKQorCisJICBodHRwOi8vd3d3Lmtocm9ub3Mub3JnL29wZW5jbC8KKworaWYg
+QlIyX1BBQ0tBR0VfTUVTQTNEX09QRU5DTAorCisjIGNsYW5nIGFuZCBsaWJjbGMgZGVwZW5kZW5j
+aWVzIGFyZSBzYXRpc2ZpZWQgYnkKKyMgQlIyX1BBQ0tBR0VfTUVTQTNEX0xMVk0KK2NvbmZpZyBC
+UjJfUEFDS0FHRV9NRVNBM0RfQ0xPVkVSCisJYm9vbCAiQ2xvdmVyIgorCWRlcGVuZHMgb24gQlIy
+X1BBQ0tBR0VfTUVTQTNEX0dBTExJVU1fRFJJVkVSX1I2MDAgfHwgXAorCQlCUjJfUEFDS0FHRV9N
+RVNBM0RfR0FMTElVTV9EUklWRVJfUkFERU9OU0kKKworIyBsaWJjbGMgZGVwZW5kZW5jeSBpcyBz
+YXRpc2ZpZWQgYnkKKyMgQlIyX1BBQ0tBR0VfTUVTQTNEX0xMVk0KK2NvbmZpZyBCUjJfUEFDS0FH
+RV9NRVNBM0RfUlVTVElDTAorCWJvb2wgIlJ1c3RpQ0wiCisJZGVwZW5kcyBvbiBCUjJfUEFDS0FH
+RV9IT1NUX1JVU1RDX1RBUkdFVF9BUkNIX1NVUFBPUlRTCisJZGVwZW5kcyBvbiBCUjJfUEFDS0FH
+RV9NRVNBM0RfUlVTVElDTF9TVVBQT1JURURfRFJJVkVSCisJc2VsZWN0IEJSMl9QQUNLQUdFX0hP
+U1RfUlVTVEMKKwlzZWxlY3QgQlIyX1BBQ0tBR0VfTExWTV9EVU1QCisJc2VsZWN0IEJSMl9QQUNL
+QUdFX09QRU5DTF9JQ0RfTE9BREVSCisJc2VsZWN0IEJSMl9QQUNLQUdFX1NQSVJWX1RPT0xTCisJ
+c2VsZWN0IEJSMl9QQUNLQUdFX1NQSVJWX0xMVk1fVFJBTlNMQVRPUgorCWhlbHAKKwkgIFJ1c3Rp
+Q0wgaXMgYW4gT3BlbkNMIGltcGxlbWVudGF0aW9uIHdyaXR0ZW4gaW4gUnVzdC4KKworCSAgQnkg
+ZGVmYXVsdCBkZXZpY2VzIGFyZSBkaXNhYmxlZCBpbiBSdXN0aUNMLiBJZiB5b3Ugd2FudCB0byBl
+bmFibGUgYSBkZXZpY2UsCisJICB5b3UgbmVlZCB0byBzZXQgdGhlIGVudmlyb25tZW50IHZhcmlh
+YmxlIFJVU1RJQ0xfRU5BQkxFIHRvIHRoZSBkcml2ZXIgeW91CisJICBhcmUgdXNpbmcuCisJICBy
+ZWY6IGh0dHBzOi8vZG9jcy5tZXNhM2Qub3JnL2VudnZhcnMuaHRtbCNlbnZ2YXItUlVTVElDTF9F
+TkFCTEUKKworZW5kaWYgIyBCUjJfUEFDS0FHRV9NRVNBM0RfT1BFTkNMCisKK2NvbmZpZyBCUjJf
+UEFDS0FHRV9NRVNBM0RfUlVTVElDTF9TVVBQT1JURURfRFJJVkVSCisJYm9vbAogCiAjIGluZm9y
+bSB0aGUgLm1rIGZpbGUgb2YgZ2FsbGl1bSwgZHJpLCBkcmkzIG9yIHZ1bGthbiBkcml2ZXIgc2Vs
+ZWN0aW9uCiBjb25maWcgQlIyX1BBQ0tBR0VfTUVTQTNEX0RSSTMKQEAgLTE2MCw2ICsxOTksNyBA
+QCBjb25maWcgQlIyX1BBQ0tBR0VfTUVTQTNEX0dBTExJVU1fRFJJVkVSX1BBTkZST1NUCiAJZGVw
+ZW5kcyBvbiAoQlIyX1RPT0xDSEFJTl9IQVNfU1lOQ180ICYmICFCUjJfUklTQ1ZfMzIpIHx8ICFC
+UjJfUEFDS0FHRV9YT1JHNyAjIGxpYnhzaG1mZW5jZQogCXNlbGVjdCBCUjJfUEFDS0FHRV9NRVNB
+M0RfRFJJMyBpZiBCUjJfUEFDS0FHRV9YT1JHNwogCXNlbGVjdCBCUjJfUEFDS0FHRV9NRVNBM0Rf
+R0FMTElVTV9EUklWRVIKKwlzZWxlY3QgQlIyX1BBQ0tBR0VfTUVTQTNEX1JVU1RJQ0xfU1VQUE9S
+VEVEX0RSSVZFUgogCWhlbHAKIAkgIE1lc2EgZHJpdmVyIGZvciBBUk0gTWFsaSBNaWRnYXJkIGFu
+ZCBCaWZyb3N0IEdQVXMuCiAKQEAgLTM5Niw3ICs0MzYsNyBAQCBjb25maWcgQlIyX1BBQ0tBR0Vf
+UFJPVklERVNfTElCR0xFUwogCWRlZmF1bHQgIm1lc2EzZCIgaWYgQlIyX1BBQ0tBR0VfTUVTQTNE
+X09QRU5HTF9FUyAmJiAhQlIyX1BBQ0tBR0VfTElCR0xWTkQKIAogY29uZmlnIEJSMl9QQUNLQUdF
+X1BST1ZJREVTX0xJQk9QRU5DTAotCWRlZmF1bHQgIm1lc2EzZCIgaWYgQlIyX1BBQ0tBR0VfTUVT
+QTNEX09QRU5DTAorCWRlZmF1bHQgIm1lc2EzZCIgaWYgQlIyX1BBQ0tBR0VfTUVTQTNEX0NMT1ZF
+UiB8fCBCUjJfUEFDS0FHRV9NRVNBM0RfUlVTVElDTAogCiBlbmRpZiAjIEJSMl9QQUNLQUdFX01F
+U0EzRAogCmRpZmYgLS1naXQgYS9wYWNrYWdlL21lc2EzZC9tZXNhM2QubWsgYi9wYWNrYWdlL21l
+c2EzZC9tZXNhM2QubWsKaW5kZXggZDhkOGZiOGRkNi4uOWE4NmZkYWNkNyAxMDA2NDQKLS0tIGEv
+cGFja2FnZS9tZXNhM2QvbWVzYTNkLm1rCisrKyBiL3BhY2thZ2UvbWVzYTNkL21lc2EzZC5tawpA
+QCAtNTgsMTUgKzU4LDI5IEBAIGVsc2UKIE1FU0EzRF9DT05GX09QVFMgKz0gLURsbHZtPWRpc2Fi
+bGVkCiBlbmRpZgogCi0jIERpc2FibGUgb3BlbmNsLWljZDogT3BlbkNMIGxpYiB3aWxsIGJlIG5h
+bWVkIGxpYk9wZW5DTCBpbnN0ZWFkIG9mCi0jIGxpYk1lc2FPcGVuQ0wgYW5kIENMIGhlYWRlcnMg
+YXJlIGluc3RhbGxlZAogaWZlcSAoJChCUjJfUEFDS0FHRV9NRVNBM0RfT1BFTkNMKSx5KQogTUVT
+QTNEX1BST1ZJREVTICs9IGxpYm9wZW5jbAogTUVTQTNEX0RFUEVOREVOQ0lFUyArPSBjbGFuZyBs
+aWJjbGMKK2lmZXEgKCQoQlIyX1BBQ0tBR0VfTUVTQTNEX0NMT1ZFUikseSkKK2lmZXEgKCQoQlIy
+X1BBQ0tBR0VfT1BFTkNMX0lDRF9MT0FERVIpLHkpCitNRVNBM0RfQ09ORl9PUFRTICs9IC1EZ2Fs
+bGl1bS1vcGVuY2w9aWNkCitNRVNBM0RfREVQRU5ERU5DSUVTICs9ICBvcGVuY2wtaWNkLWxvYWRl
+cgorZWxzZQorIyBEaXNhYmxlIG9wZW5jbC1pY2Q6IE9wZW5DTCBsaWIgd2lsbCBiZSBuYW1lZCBs
+aWJPcGVuQ0wgaW5zdGVhZCBvZgorIyBsaWJNZXNhT3BlbkNMIGFuZCBDTCBoZWFkZXJzIGFyZSBp
+bnN0YWxsZWQKIE1FU0EzRF9DT05GX09QVFMgKz0gLURnYWxsaXVtLW9wZW5jbD1zdGFuZGFsb25l
+CitlbmRpZgogZWxzZQogTUVTQTNEX0NPTkZfT1BUUyArPSAtRGdhbGxpdW0tb3BlbmNsPWRpc2Fi
+bGVkCiBlbmRpZgoraWZlcSAoJChCUjJfUEFDS0FHRV9NRVNBM0RfUlVTVElDTCkseSkKK01FU0Ez
+RF9ERVBFTkRFTkNJRVMgKz0gaG9zdC1ydXN0YyBob3N0LXJ1c3QtYmluZGdlbiBvcGVuY2wtaWNk
+LWxvYWRlciBzcGlydi10b29scyBzcGlydi1sbHZtLXRyYW5zbGF0b3IKKyMgLURydXN0X3N0ZD0y
+MDIxOiBrbm93biBtZXNvbiBidWcgKGh0dHBzOi8vZ2l0aHViLmNvbS9tZXNvbmJ1aWxkL21lc29u
+L2lzc3Vlcy8xMDY2NCkKK01FU0EzRF9DT05GX09QVFMgKz0gLURnYWxsaXVtLXJ1c3RpY2w9dHJ1
+ZSAtRHJ1c3Rfc3RkPTIwMjEKK2Vsc2UKK01FU0EzRF9DT05GX09QVFMgKz0gLURnYWxsaXVtLXJ1
+c3RpY2w9ZmFsc2UKK2VuZGlmCitlbmRpZgogCiBpZmVxICgkKEJSMl9QQUNLQUdFX01FU0EzRF9O
+RUVEU19FTEZVVElMUykseSkKIE1FU0EzRF9ERVBFTkRFTkNJRVMgKz0gZWxmdXRpbHMKLS0gCjIu
+MjUuMQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVp
+bGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3Rz
+LmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
