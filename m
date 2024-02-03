@@ -4,84 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1528C4828D
-	for <buildroot@archiver.kernel.org>; Sat,  3 Feb 2024 18:42:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CC7EC4828D
+	for <buildroot@archiver.kernel.org>; Sat,  3 Feb 2024 18:43:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5F7CB405DE;
-	Sat,  3 Feb 2024 18:42:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5F7CB405DE
+	by smtp2.osuosl.org (Postfix) with ESMTP id 10BA5405CC;
+	Sat,  3 Feb 2024 18:43:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 10BA5405CC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id D26BcLTwXabi; Sat,  3 Feb 2024 18:42:40 +0000 (UTC)
+	with ESMTP id yoGtht92bXPU; Sat,  3 Feb 2024 18:43:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4A2F74054B;
-	Sat,  3 Feb 2024 18:42:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4A2F74054B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 072E11BF285
- for <buildroot@lists.busybox.net>; Sat,  3 Feb 2024 18:42:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A9882400A4;
+	Sat,  3 Feb 2024 18:43:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A9882400A4
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4A7DE1BF86B
+ for <buildroot@lists.busybox.net>; Sat,  3 Feb 2024 10:02:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D363F4054B
- for <buildroot@lists.busybox.net>; Sat,  3 Feb 2024 18:42:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D363F4054B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 42BD560BE0
+ for <buildroot@lists.busybox.net>; Sat,  3 Feb 2024 10:02:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dPAF2XL7WThX for <buildroot@lists.busybox.net>;
- Sat,  3 Feb 2024 18:42:35 +0000 (UTC)
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7B419400A4
- for <buildroot@buildroot.org>; Sat,  3 Feb 2024 18:42:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7B419400A4
-Received: by mail-wm1-x32d.google.com with SMTP id
- 5b1f17b1804b1-40fd55c7f93so1332045e9.1
- for <buildroot@buildroot.org>; Sat, 03 Feb 2024 10:42:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1706985753; x=1707590553;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=nZrjwHaABdLkPOXN1xCfizIQUzC9sTg84Nq6fLoqr5k=;
- b=S8zh7MHGMRNTUS8Bh2hPrWLm9xkgflNr17e66Ej7AQoez8JnUhrc0Nzhyzt7scsk5q
- RmD5OGO2/qRHXV6eKidL65RyvRLS0bQGlh/QEGFBT4v4qW6nPndh6VgO3oajrnarrDyu
- TZbwjZMf3FrWIC5wzRlt5vm5vux1KO86pR+9vrsAzUuj4tOhWPmu8jmCleXu+tFYnT/j
- X03Jj0+sQYAXH7aLPmYizgA3MLmmcOqWF75BZuPg+nOcIcUfQ5WzPw72vffPK1O+LMPF
- hBqOXwrGBUvlqF1O54xESZwsiF5GgJ+xtWBYR26G8M9ujL7bq/wxlgiXbQXvETEbRWbU
- r0Kw==
-X-Gm-Message-State: AOJu0YzJ95Ogr+IBUbGLpvzZuJUKgCDRWIN5ugaSFHeFGXvM95PXlUVE
- sowvpBmLkKRzypcQl48j7VGb2VjnVz3NcvAawMdgx3snUG6iRVMjZ+n/UuC9h2c=
-X-Google-Smtp-Source: AGHT+IH4jIrCuCjnGJIEOXfXq1PnKxYo2m8gfcE0+ts2VkuPs7oIUMTQ8+TgxP42r6+FuLzngX+dCA==
-X-Received: by 2002:a05:600c:46ce:b0:40e:d411:a16d with SMTP id
- q14-20020a05600c46ce00b0040ed411a16dmr1389258wmo.29.1706985753157; 
- Sat, 03 Feb 2024 10:42:33 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- m21-20020a05600c3b1500b0040fd2f3dc0esm1749751wms.45.2024.02.03.10.42.32
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 03 Feb 2024 10:42:32 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sat,  3 Feb 2024 19:42:31 +0100
-Message-ID: <20240203184231.166287-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2IePlgs7UC12 for <buildroot@lists.busybox.net>;
+ Sat,  3 Feb 2024 10:02:53 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
+ helo=relay6-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 33DF760812
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33DF760812
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 33DF760812
+ for <buildroot@buildroot.org>; Sat,  3 Feb 2024 10:02:52 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D4F0DC0006;
+ Sat,  3 Feb 2024 10:02:49 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1rWCrI-008iib-3C;
+ Sat, 03 Feb 2024 11:02:48 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Waldemar Brodkorb <wbx@openadk.org>
+References: <Zb0Qnnauhkwtp8Q0@waldemar-brodkorb.de>
+Date: Sat, 03 Feb 2024 11:02:48 +0100
+In-Reply-To: <Zb0Qnnauhkwtp8Q0@waldemar-brodkorb.de> (Waldemar Brodkorb's
+ message of "Fri, 2 Feb 2024 16:56:14 +0100")
+Message-ID: <87h6ipvp9z.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1706985753; x=1707590553; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=nZrjwHaABdLkPOXN1xCfizIQUzC9sTg84Nq6fLoqr5k=;
- b=NtGXtEBX20EDhhBsjWfGVBnkJz/2r6lzlIv/pWZCuEGCQe6xvGiakIxm+imccLwsr7
- +Z9k7J1S4g8RPFIIOuASqmpnZa+edOtyOkzkEoBVq9d08yJiIzbePLetyjlPvr9B03pX
- sFAhFUkORxlNsUt6ujaagV5N7XZcP7FXexy2Ces1dR9PxT5fqL8Nmq/e9aAG7zflLQn7
- GSOmC3cc9ymVeLhQaSgd1Y6nyLMg0Y+vBryFEE9USQLn+/hnAO5IGo/rx7RocVQ6UETW
- K3KxuA2tT4hOoUY2qWkrlOIeEVQUIGB9j4BjmBcKTftkOsmY89c6LoQezvj27z4n3iF+
- FkMQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=NtGXtEBX
-Subject: [Buildroot] [PATCH 1/1] package/c-ares: update C_ARES_CPE_ID_VENDOR
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/2 v2] package/libjwt: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,42 +68,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-cpe:2.3:a:c-ares_project:c-ares has been deprecated in favor of
-cpe:2.3:a:c-ares:c-ares in September 2023:
+>>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
 
-  <cpe-item name="cpe:/a:c-ares_project:c-ares:1.17.1" deprecated="true" deprecation_date="2023-09-15T11:42:40.183Z">
-    <title xml:lang="en-US">C-ares Project C-ares 1.17.1</title>
-      <reference href="https://github.com/c-ares/c-ares/releases">Change Log</reference>
-    <cpe-23:cpe23-item name="cpe:2.3:a:c-ares_project:c-ares:1.17.1:*:*:*:*:*:*:*">
-        <cpe-23:deprecated-by name="cpe:2.3:a:c-ares:c-ares:1.17.1:*:*:*:*:*:*:*" type="NAME_CORRECTION"/>
+ > JSON Web Tokens are an open, industry standard RFC 7519
+ > method for representing claims securely between two parties.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/c-ares/c-ares.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > This Library is used by Asterisk 20.6.0 and newer.
+ > We need to use autotools to install pkgconfig file.
 
-diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
-index 7a49b2639a..586fde9afb 100644
---- a/package/c-ares/c-ares.mk
-+++ b/package/c-ares/c-ares.mk
-@@ -10,7 +10,7 @@ C_ARES_INSTALL_STAGING = YES
- C_ARES_CONF_OPTS = --with-random=/dev/urandom
- C_ARES_LICENSE = MIT
- C_ARES_LICENSE_FILES = LICENSE.md
--C_ARES_CPE_ID_VENDOR = c-ares_project
-+C_ARES_CPE_ID_VENDOR = c-ares
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+ > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+ > ---
+ >  package/Config.in          |  1 +
+ >  package/libjwt/Config.in   |  9 +++++++++
+ >  package/libjwt/libjwt.hash |  3 +++
+ >  package/libjwt/libjwt.mk   | 16 ++++++++++++++++
+ >  4 files changed, 29 insertions(+)
+ >  create mode 100644 package/libjwt/Config.in
+ >  create mode 100644 package/libjwt/libjwt.hash
+ >  create mode 100644 package/libjwt/libjwt.mk
+
+ > diff --git a/package/Config.in b/package/Config.in
+ > index 426bd7d090..75a94177eb 100644
+ > --- a/package/Config.in
+ > +++ b/package/Config.in
+ > @@ -1846,6 +1846,7 @@ menu "JSON/XML"
+ >  	source "package/libbson/Config.in"
+ >  	source "package/libfastjson/Config.in"
+ >  	source "package/libjson/Config.in"
+ > +	source "package/libjwt/Config.in"
+ >  	source "package/libroxml/Config.in"
+ >  	source "package/libucl/Config.in"
+ >  	source "package/libxml2/Config.in"
+ > diff --git a/package/libjwt/Config.in b/package/libjwt/Config.in
+ > new file mode 100644
+ > index 0000000000..d6bca54adc
+ > --- /dev/null
+ > +++ b/package/libjwt/Config.in
+ > @@ -0,0 +1,9 @@
+ > +config BR2_PACKAGE_LIBJWT
+ > +	bool "libjwt"
+ > +	select BR2_PACKAGE_OPENSSL
+ > +	select BR2_PACKAGE_JANSSON
+ > +	help
+ > +	  JSON Web Tokens are an open, industry standard RFC 7519 
+
+I've dropped the trailing spaces here.
+
+> diff --git a/package/libjwt/libjwt.mk b/package/libjwt/libjwt.mk
+ > new file mode 100644
+ > index 0000000000..f7be28d206
+ > --- /dev/null
+ > +++ b/package/libjwt/libjwt.mk
+ > @@ -0,0 +1,16 @@
+ > +################################################################################
+ > +#
+ > +# libjwt
+ > +#
+ > +################################################################################
+ > +
+ > +LIBJWT_VERSION = 1.15.3
+ > +LIBJWT_SITE = $(call github,benmcollins,libjwt,v$(LIBJWT_VERSION))
+ > +LIBJWT_SOURCE = libjwt-$(LIBJWT_VERSION).tar.gz
+
+THis is the default value for _SOURCE as pointed out by
+./utils/check-package, so I've dropped that.
+
+> +LIBJWT_DEPENDENCIES = jansson openssl
+
+The configure script uses pkg-config, so I've added host-pkgconf here.
+
+You also forgot to add an entry to DEVELOPERS, so I've added that.
+
+Committed with those fixes, thanks.
+
 -- 
-2.43.0
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
