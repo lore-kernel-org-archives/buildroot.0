@@ -4,56 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1544C4828D
-	for <buildroot@archiver.kernel.org>; Sat,  3 Feb 2024 17:47:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 080D9C4828D
+	for <buildroot@archiver.kernel.org>; Sat,  3 Feb 2024 17:47:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6AA63416A4;
-	Sat,  3 Feb 2024 17:47:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6AA63416A4
+	by smtp4.osuosl.org (Postfix) with ESMTP id B564941EC3;
+	Sat,  3 Feb 2024 17:47:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B564941EC3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dGG1aJetJg6H; Sat,  3 Feb 2024 17:47:15 +0000 (UTC)
+	with ESMTP id 3OSr94t3ms69; Sat,  3 Feb 2024 17:47:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A6F0340887;
-	Sat,  3 Feb 2024 17:47:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A6F0340887
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 232871BF5B5
+	by smtp4.osuosl.org (Postfix) with ESMTP id EA8A241D66;
+	Sat,  3 Feb 2024 17:47:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA8A241D66
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7AA2D1BF33E
  for <buildroot@lists.busybox.net>; Sat,  3 Feb 2024 12:30:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 10FAA4027F
- for <buildroot@lists.busybox.net>; Sat,  3 Feb 2024 12:30:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 675CC60A97
+ for <buildroot@lists.busybox.net>; Sat,  3 Feb 2024 12:30:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SmTpq64vP9_A for <buildroot@lists.busybox.net>;
- Sat,  3 Feb 2024 12:30:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bWmkYgEY6nLO for <buildroot@lists.busybox.net>;
+ Sat,  3 Feb 2024 12:29:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8069E400E4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8069E400E4
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 520DA60AA4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 520DA60AA4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8069E400E4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 520DA60AA4
  for <buildroot@buildroot.org>; Sat,  3 Feb 2024 12:29:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1FD4086883; Sat,  3 Feb 2024 12:29:59 +0000 (UTC)
+ id F2CB986881; Sat,  3 Feb 2024 12:29:58 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 3 Feb 2024 13:24:48 +0100
+Date: Sat, 3 Feb 2024 13:23:40 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 67fa11afccc08f6ca9143a0feba63d0e7680e40e
-X-Git-Newrev: ab4fb4493e633c1e6946991646b92130c5c8d946
+X-Git-Oldrev: 3561064b8eb679fc75ea4e9cd20bc961308c28a5
+X-Git-Newrev: 51ec22b9b0685c9ba4ba584aa58da34ca56dbc64
 X-Patchwork-Hint: ignore
-Message-Id: <20240203122959.1FD4086883@busybox.osuosl.org>
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+Message-Id: <20240203122958.F2CB986881@busybox.osuosl.org>
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  spf=fail smtp.mailfrom=osuosl.org
-Subject: [Buildroot] [git commit branch/2023.02.x] package/python-numpy: add
- CPE variables
+Subject: [Buildroot] [git commit branch/2023.02.x]
+ package/python-pycryptodomex: add CPE variables
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,34 +71,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ab4fb4493e633c1e6946991646b92130c5c8d946
+commit: https://git.buildroot.net/buildroot/commit/?id=51ec22b9b0685c9ba4ba584aa58da34ca56dbc64
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-cpe:2.3:a:numpy:numpy is a valid CPE identifier for this package:
+cpe:2.3:a:pycryptodome:pycryptodomex is a valid CPE identifier for this
+package:
 
-  https://nvd.nist.gov/products/cpe/detail/C19878E8-7FFC-4BB4-B1A8-F396CB169DF2
+  https://nvd.nist.gov/products/cpe/detail/2A88F7B5-C414-4104-9B59-A6E28A1E119A
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 9899f06170f292bc70a57ac9b364490503c05e42)
+(cherry picked from commit 71ff1bd8a4f945ce405a941f806c54b73cf551d5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-numpy/python-numpy.mk | 2 ++
+ package/python-pycryptodomex/python-pycryptodomex.mk | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
-index 812bfdae4a..fda42e7d9d 100644
---- a/package/python-numpy/python-numpy.mk
-+++ b/package/python-numpy/python-numpy.mk
-@@ -14,6 +14,8 @@ PYTHON_NUMPY_LICENSE_FILES = \
- 	numpy/core/include/numpy/libdivide/LICENSE.txt \
- 	numpy/linalg/lapack_lite/LICENSE.txt \
- 	tools/npy_tempita/license.txt
-+PYTHON_NUMPY_CPE_ID_VENDOR = numpy
-+PYTHON_NUMPY_CPE_ID_PRODUCT = numpy
+diff --git a/package/python-pycryptodomex/python-pycryptodomex.mk b/package/python-pycryptodomex/python-pycryptodomex.mk
+index b566bdd066..1c927357fe 100644
+--- a/package/python-pycryptodomex/python-pycryptodomex.mk
++++ b/package/python-pycryptodomex/python-pycryptodomex.mk
+@@ -12,6 +12,8 @@ PYTHON_PYCRYPTODOMEX_LICENSE = \
+ 	BSD-2-Clause, \
+ 	Public Domain (pycrypto original code)
+ PYTHON_PYCRYPTODOMEX_LICENSE_FILES = LICENSE.rst Doc/LEGAL/COPYRIGHT.pycrypto
++PYTHON_PYCRYPTODOMEX_CPE_ID_VENDOR = pycryptodome
++PYTHON_PYCRYPTODOMEX_CPE_ID_PRODUCT = pycryptodomex
  
- PYTHON_NUMPY_SETUP_TYPE = setuptools
- PYTHON_NUMPY_DEPENDENCIES = host-python-cython
+ $(eval $(python-package))
+ $(eval $(host-python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
