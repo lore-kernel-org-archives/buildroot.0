@@ -4,60 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06025C4828D
-	for <buildroot@archiver.kernel.org>; Sat,  3 Feb 2024 17:44:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71F38C4828D
+	for <buildroot@archiver.kernel.org>; Sat,  3 Feb 2024 17:45:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B254C414E4;
-	Sat,  3 Feb 2024 17:44:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B254C414E4
+	by smtp4.osuosl.org (Postfix) with ESMTP id 282EE41C61;
+	Sat,  3 Feb 2024 17:45:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 282EE41C61
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BYrUmaq2CDTg; Sat,  3 Feb 2024 17:44:51 +0000 (UTC)
+	with ESMTP id T3rINMEPIFgy; Sat,  3 Feb 2024 17:45:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ED0654021F;
-	Sat,  3 Feb 2024 17:44:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED0654021F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 46F03414E5;
+	Sat,  3 Feb 2024 17:45:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46F03414E5
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 04ED01BF2A2
- for <buildroot@lists.busybox.net>; Sat,  3 Feb 2024 11:28:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id ED3FF1BF97E
+ for <buildroot@lists.busybox.net>; Sat,  3 Feb 2024 11:28:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E6F42607FE
- for <buildroot@lists.busybox.net>; Sat,  3 Feb 2024 11:28:14 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DB54260806
+ for <buildroot@lists.busybox.net>; Sat,  3 Feb 2024 11:28:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0H9AFW567yN4 for <buildroot@lists.busybox.net>;
- Sat,  3 Feb 2024 11:28:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
- helo=relay2-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ with ESMTP id Qq_UF88IM-Kh for <buildroot@lists.busybox.net>;
+ Sat,  3 Feb 2024 11:28:21 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E9C8C607D6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E9C8C607D6
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E9C8C607D6
- for <buildroot@buildroot.org>; Sat,  3 Feb 2024 11:28:13 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0511840003;
- Sat,  3 Feb 2024 11:28:10 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rWEBu-009LIa-1Q;
- Sat, 03 Feb 2024 12:28:10 +0100
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8B4D4607FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B4D4607FE
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8B4D4607FE
+ for <buildroot@buildroot.org>; Sat,  3 Feb 2024 11:28:20 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 74A43867B3; Sat,  3 Feb 2024 11:28:20 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Yann E. MORIN <yann.morin.1998@free.fr>
-References: <20240120214300.5069386308@busybox.osuosl.org>
-Date: Sat, 03 Feb 2024 12:28:10 +0100
-In-Reply-To: <20240120214300.5069386308@busybox.osuosl.org> (Yann E. MORIN's
- message of "Sat, 20 Jan 2024 21:44:12 +0100")
-Message-ID: <871q9tu6r9.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
+To: buildroot@buildroot.org
+Date: Sat, 3 Feb 2024 12:23:28 +0100
+X-Git-Refname: refs/heads/2023.11.x
+X-Git-Oldrev: 710935ea5f988ed36d0184cd0eb3fcfa695a0995
+X-Git-Newrev: 003d02c476b9ff88416f9cc99dbb4a3c0f78664a
+X-Patchwork-Hint: ignore
+Message-Id: <20240203112820.74A43867B3@busybox.osuosl.org>
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [git commit] package/flutter-engine/Config.in: Drop
- nptl dependency
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ spf=fail smtp.mailfrom=osuosl.org
+Subject: [Buildroot] [git commit branch/2023.11.x]
+ package/flutter-sdk-bin/Config.in.host: change flutter-pub-cache location
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,29 +65,94 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=003d02c476b9ff88416f9cc99dbb4a3c0f78664a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=019cfcfc4a108112306f30c38c1a17fc42841e15
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+When running the command "flutter pub get," the plugins are stored in the
+pub-cache directory along with their sha256sum hashes. The default location of
+the pub-cache directory is current $(HOST_DIR)/share/flutter/sdk/.pub-cache,
+which is not an acceptable choice by default because every plugin is
+re-downloaded during every build of a flutter application either during a new
+build or when building with the per-package-directory option enabled.
 
- > As Yann mentioned in commit 9d8497e79de3ced144877ba6ee38cc5b7181aaeb, a
- > dependency on a glibc toolchain implies a dependency on
- > BR2_TOOLCHAIN_HAS_THREADS_NPTL. As such, remove the dependency from
- > package/flutter-engine/Config.in.
+Furthermore, keeping the pub-cache in its current location prevents users from
+committing the pub-cache directory to git for faster rebuilds of a
+Buildroot-based system, as users cannot store the pub-cache for later use.
 
- > Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+To fix the above issue completely, the following two changes must occur:
 
-Committed to 2023.11.x, thanks.
+  - Change the hard-coded Flutter pub-cache location to
+    $(DL_DIR)/br-flutter-pub-cache.
 
--- 
-Bye, Peter Korsgaard
+  - Remove the `rm -rf $(HOST_FLUTTER_SDK_BIN_SDK)/.pub-cache` and the
+    associated comment about why the build system removes the .pub-cache
+    directory. After further research, the help text of the precache command
+    reads, "Populate the Flutter tool's cache of binary artifacts."
+    The current reasoning listed in the comments is not accurate for a
+    the following reasons:
+
+    1. We do not want to remove their directory if users already have a pub
+       cache they have symlinked to.
+
+    2. If the flutter-sdk-bin package previously set up the pub-cache, then
+       the pub-cache directory is set up with the options we want, and there
+       is no reason to remove the pub-cache directory.
+
+Note that upstream considers it safe to have multiple instances of
+readers/writers to the pub cache concurently, which is a situation that
+can happen when two flutter-based pacakges are going to be built in
+parallel. There have been reports upstream [0] [1] [2] where concurrency
+was an issue, and they have always been fixed [3] [4] (or considered
+fixed already). So we can assune that, if the conncurrent ccess to the
+shared pub-cache causes issues, that will be an upstream bug that will
+get solved.
+
+If that turns out to be an unsolvable problem, we'll still have the
+option to run the pub-get commands under flock.
+
+[0] https://github.com/dart-lang/pub/issues/1178
+[1] https://github.com/dart-lang/pub/issues/3404
+[2] https://github.com/dart-lang/pub/issues/3420
+[3] https://github.com/dart-lang/pub/issues/1178#issuecomment-1006489414
+[4] https://github.com/dart-lang/pub/issues/1178#issuecomment-1007273739
+
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+[yann.morin.1998@free.fr: add blurb about concurrent access]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 37809258fc014d743f7becbc5ba256234d807bd7)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/flutter-sdk-bin/flutter-sdk-bin.mk | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/package/flutter-sdk-bin/flutter-sdk-bin.mk b/package/flutter-sdk-bin/flutter-sdk-bin.mk
+index e8e71b6ab0..35bde00b9d 100644
+--- a/package/flutter-sdk-bin/flutter-sdk-bin.mk
++++ b/package/flutter-sdk-bin/flutter-sdk-bin.mk
+@@ -41,11 +41,8 @@ define HOST_FLUTTER_SDK_BIN_CONFIGURE_CMDS
+ 	$(HOST_FLUTTER_SDK_BIN_ENV) $(@D)/bin/dart --disable-analytics
+ endef
+ 
+-# Remove the cache, as we will run precache after setting up flutter and dart
+-# with the new config options.
+ define HOST_FLUTTER_SDK_BIN_BUILD_CMDS
+ 	mkdir -p $(HOST_FLUTTER_SDK_BIN_SDK)
+-	rm -rf $(HOST_FLUTTER_SDK_BIN_SDK)/.pub-cache
+ 	cd $(@D) && \
+ 		$(HOST_FLUTTER_SDK_BIN_ENV) $(@D)/bin/flutter precache;
+ endef
+@@ -96,4 +93,4 @@ HOST_FLUTTER_SDK_BIN_DART_BIN = \
+ $(eval $(host-generic-package))
+ 
+ # For target packages to locate said pub-cache
+-FLUTTER_SDK_BIN_PUB_CACHE = $(HOST_FLUTTER_SDK_BIN_SDK)/.pub-cache
++FLUTTER_SDK_BIN_PUB_CACHE = $(DL_DIR)/br-flutter-pub-cache
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
