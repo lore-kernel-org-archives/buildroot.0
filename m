@@ -4,56 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13FA5C4828D
-	for <buildroot@archiver.kernel.org>; Sat,  3 Feb 2024 17:46:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB4BEC4828D
+	for <buildroot@archiver.kernel.org>; Sat,  3 Feb 2024 17:46:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C3DC441E92;
-	Sat,  3 Feb 2024 17:46:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C3DC441E92
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6039340887;
+	Sat,  3 Feb 2024 17:46:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6039340887
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OxbsnlI7rPg3; Sat,  3 Feb 2024 17:46:18 +0000 (UTC)
+	with ESMTP id GYK2r9KGrJDW; Sat,  3 Feb 2024 17:46:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EA0C741C61;
-	Sat,  3 Feb 2024 17:46:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA0C741C61
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 341A21BF29D
- for <buildroot@lists.busybox.net>; Sat,  3 Feb 2024 12:28:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9519841E1F;
+	Sat,  3 Feb 2024 17:46:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9519841E1F
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 24DA61BF5B5
+ for <buildroot@lists.busybox.net>; Sat,  3 Feb 2024 12:30:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F275E41DE7
- for <buildroot@lists.busybox.net>; Sat,  3 Feb 2024 12:28:54 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 209C360AA5
+ for <buildroot@lists.busybox.net>; Sat,  3 Feb 2024 12:30:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TGzvj0z9YNPc for <buildroot@lists.busybox.net>;
- Sat,  3 Feb 2024 12:28:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id daje7e5_6TgN for <buildroot@lists.busybox.net>;
+ Sat,  3 Feb 2024 12:29:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B4BC441889
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B4BC441889
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DF5F060A97
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF5F060A97
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B4BC441889
- for <buildroot@buildroot.org>; Sat,  3 Feb 2024 12:28:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DF5F060A97
+ for <buildroot@buildroot.org>; Sat,  3 Feb 2024 12:29:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 42D818680F; Sat,  3 Feb 2024 12:28:52 +0000 (UTC)
+ id CE4A08687D; Sat,  3 Feb 2024 12:29:58 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 3 Feb 2024 13:23:46 +0100
-X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: a4e237535e056661a7f18c31d8a9a63496da99de
-X-Git-Newrev: b47de9692e837bcf181210648d2a9ffff97cbe11
+Date: Sat, 3 Feb 2024 13:10:46 +0100
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: 3c2621bb60178904ad7914637743a63104173655
+X-Git-Newrev: 91fffdac2eef6d12ea5aa5f987cb3053f721ab41
 X-Patchwork-Hint: ignore
-Message-Id: <20240203122852.42D818680F@busybox.osuosl.org>
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+Message-Id: <20240203122958.CE4A08687D@busybox.osuosl.org>
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  spf=fail smtp.mailfrom=osuosl.org
-Subject: [Buildroot] [git commit branch/2023.11.x]
- package/python-pycryptodomex: add CPE variables
+Subject: [Buildroot] [git commit branch/2023.02.x] package/qt5/qt5base: add
+ QT5BASE_CPE_ID_VENDOR and QT5BASE_CPE_ID_PRODUCT
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,35 +71,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b47de9692e837bcf181210648d2a9ffff97cbe11
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=91fffdac2eef6d12ea5aa5f987cb3053f721ab41
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-cpe:2.3:a:pycryptodome:pycryptodomex is a valid CPE identifier for this
+cpe:2.3:a:qt:qt:5.15.8:*:*:*:*:*:*:* is a valid CPE identifier for this
 package:
 
-  https://nvd.nist.gov/products/cpe/detail/2A88F7B5-C414-4104-9B59-A6E28A1E119A
+  https://nvd.nist.gov/products/cpe/detail/3A753A6D-0AFE-4E62-9C2F-58C8B630830C
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Christian Hitz <christian.hitz@bbv.ch>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 71ff1bd8a4f945ce405a941f806c54b73cf551d5)
+(cherry picked from commit 107d39c1a7e77b3668f923f2f84f961acfaefa53)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pycryptodomex/python-pycryptodomex.mk | 2 ++
+ package/qt5/qt5base/qt5base.mk | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/python-pycryptodomex/python-pycryptodomex.mk b/package/python-pycryptodomex/python-pycryptodomex.mk
-index d6eb2a9513..a7d5f7883a 100644
---- a/package/python-pycryptodomex/python-pycryptodomex.mk
-+++ b/package/python-pycryptodomex/python-pycryptodomex.mk
-@@ -12,6 +12,8 @@ PYTHON_PYCRYPTODOMEX_LICENSE = \
- 	BSD-2-Clause, \
- 	Public Domain (pycrypto original code)
- PYTHON_PYCRYPTODOMEX_LICENSE_FILES = LICENSE.rst Doc/LEGAL/COPYRIGHT.pycrypto
-+PYTHON_PYCRYPTODOMEX_CPE_ID_VENDOR = pycryptodome
-+PYTHON_PYCRYPTODOMEX_CPE_ID_PRODUCT = pycryptodomex
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index efa0e16e9a..a3161d62bb 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -7,6 +7,8 @@
+ QT5BASE_VERSION = 2ffb7ad8a1079a0444b9c72affe3d19b089b60de
+ QT5BASE_SITE = $(QT5_SITE)/qtbase/-/archive/$(QT5BASE_VERSION)
+ QT5BASE_SOURCE = qtbase-$(QT5BASE_VERSION).tar.bz2
++QT5BASE_CPE_ID_VENDOR = qt
++QT5BASE_CPE_ID_PRODUCT = qt
  
- PYTHON_PYCRYPTODOMEX_ENV = CFLAGS="$(TARGET_CFLAGS) -std=c99"
- HOST_PYTHON_PYCRYPTODOMEX_ENV = CFLAGS="$(HOST_CFLAGS) -std=c99"
+ QT5BASE_DEPENDENCIES = host-pkgconf pcre2 zlib
+ QT5BASE_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
