@@ -4,85 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82E36C4828F
-	for <buildroot@archiver.kernel.org>; Sat,  3 Feb 2024 18:08:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 750BAC4828D
+	for <buildroot@archiver.kernel.org>; Sat,  3 Feb 2024 18:13:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 39A8541D7B;
-	Sat,  3 Feb 2024 18:08:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39A8541D7B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2C75541BDF;
+	Sat,  3 Feb 2024 18:13:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C75541BDF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qTtMsWXPDNG2; Sat,  3 Feb 2024 18:08:20 +0000 (UTC)
+	with ESMTP id 2VHuF7gwYnOg; Sat,  3 Feb 2024 18:13:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8F79541B77;
-	Sat,  3 Feb 2024 18:08:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8F79541B77
+	by smtp4.osuosl.org (Postfix) with ESMTP id D165540242;
+	Sat,  3 Feb 2024 18:13:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D165540242
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C4B6F1BF285
- for <buildroot@lists.busybox.net>; Sat,  3 Feb 2024 18:08:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 47A521BF312
+ for <buildroot@lists.busybox.net>; Sat,  3 Feb 2024 10:42:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9D9FC60ABD
- for <buildroot@lists.busybox.net>; Sat,  3 Feb 2024 18:08:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D9FC60ABD
+ by smtp3.osuosl.org (Postfix) with ESMTP id 34F4C60A7F
+ for <buildroot@lists.busybox.net>; Sat,  3 Feb 2024 10:42:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IVh4PTtJ-82b for <buildroot@lists.busybox.net>;
- Sat,  3 Feb 2024 18:08:15 +0000 (UTC)
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 80BC860774
- for <buildroot@buildroot.org>; Sat,  3 Feb 2024 18:08:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80BC860774
-Received: by mail-wm1-x329.google.com with SMTP id
- 5b1f17b1804b1-40fc6343bd2so15228945e9.1
- for <buildroot@buildroot.org>; Sat, 03 Feb 2024 10:08:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1706983693; x=1707588493;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=u97W0gClWdJOLaQwi4Br7y4dxy9RVXwp+oui0GSxs+U=;
- b=J3v/xtAHv6Mszs6kpR4TEDl6ivMsNWvn9Mt0o+1pZJa43/NlYaZnfvHLN8/SWmQJSJ
- FyTdji4Sskrt2xhM41CFzALGmj2fXz4CoJSK3xn1iwY5D3jBi6AoX6/9TC9d3WWRS7sy
- pMhPWIAbFrCRlI6nAcKJuZYRuuMAApPIViSSBxOFvvHePnZELT9fAUVpRZORweAJvhoo
- MduFdlPt0yo3n2YzI1H/nxJ2xtwrs9PkJNLo8UxO418hUVAr2XeVfjmorSAlMJfZLWxI
- GSAi188qTAfu/ZW9argOu7Y7JzIb36/gl3pEYRK56q5NPWni2XkDot3Q8GbU9N5q2V/f
- 6eKQ==
-X-Gm-Message-State: AOJu0YwxMk5yF3Ds8xszAOtD5N0Hm2io7kEeH8ezv33nK/M8dbr+n07c
- gY5sjC56qNc136MPjzUTdypSYUiFXUanrvqaCmCzuEshWJzKLk3iXwsWJAtVSFw=
-X-Google-Smtp-Source: AGHT+IHlLNfEV6CyCdXz192DTxWtTmmrUvqkUmq82xWoprldbAbcg+EBqwjKEtYbdblvy+WW0uvJQg==
-X-Received: by 2002:a05:600c:5007:b0:40f:d34d:d4ea with SMTP id
- n7-20020a05600c500700b0040fd34dd4eamr1066505wmr.31.1706983693055; 
- Sat, 03 Feb 2024 10:08:13 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- m21-20020a05600c3b1500b0040fd2f3dc0esm1677200wms.45.2024.02.03.10.08.12
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 03 Feb 2024 10:08:12 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ with ESMTP id WeT3IypNdn_6 for <buildroot@lists.busybox.net>;
+ Sat,  3 Feb 2024 10:42:54 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 72773608F5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 72773608F5
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 72773608F5
+ for <buildroot@buildroot.org>; Sat,  3 Feb 2024 10:42:53 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 21F748679A; Sat,  3 Feb 2024 10:42:53 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat,  3 Feb 2024 19:08:10 +0100
-Message-ID: <20240203180810.146553-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1706983693; x=1707588493; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=u97W0gClWdJOLaQwi4Br7y4dxy9RVXwp+oui0GSxs+U=;
- b=R1D3g6at07CckAAeAwz25UVDadIL9oJ8o63FA+PesPdJFVSig5MKfWraFQNKPphY/B
- lQMkZZCXhNjiEpNZ2kW1WG8pjEvYmxJfhAVHMOCFBI/6nqDBrxvrJC4sWCkCikdcaaJJ
- w3X50Dfm+I3lBPycR5eypg/VUqvX11duEtmrUqLjS+dXyp9C3i2ngQNh6m6ceb1R/eLQ
- hxS7jhvrqIprlKEMlg8iDXK4V1dKZMsDIX5tJxt0SIMMuLcRVzsuPLuFsT8Jtrftfjvd
- a0WYMrTw7mcaaZWoicDcbsxnJSxA1Rk6KZixZ7vZpkE0a5j+eekHHGBxVx8UhxjSrTXY
- gkOg==
+Date: Sat, 3 Feb 2024 11:39:09 +0100
+X-Git-Refname: refs/heads/2023.11.x
+X-Git-Oldrev: 8526e60a1f09854b96016b03a2439fcb61200ee4
+X-Git-Newrev: 56c80a2830698da2b6d80081625f39697900325f
+X-Patchwork-Hint: ignore
+Message-Id: <20240203104253.21F748679A@busybox.osuosl.org>
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=R1D3g6at
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libXpm: update
- XLIB_LIBXPM_CPE_ID_VENDOR
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ spf=fail smtp.mailfrom=osuosl.org
+Subject: [Buildroot] [git commit branch/2023.11.x] package/libuwsc: fix
+ wolfssl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,42 +65,122 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-cpe:2.3:a:libxpm_project:libxpm has been deprecated in favor of
-cpe:2.3:a:x.org:libxpm in October 2023:
+commit: https://git.buildroot.net/buildroot/commit/?id=56c80a2830698da2b6d80081625f39697900325f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-  <cpe-item name="cpe:/a:libxpm_project:libxpm:3.5.15" deprecated="true" deprecation_date="2023-10-17T15:55:35.850Z">
-    <title xml:lang="en-US">Libxpm Project Libxpm 3.5.15</title>
-      <reference href="https://gitlab.freedesktop.org/xorg/lib/libxpm/-/tags">Version</reference>
-    <cpe-23:cpe23-item name="cpe:2.3:a:libxpm_project:libxpm:3.5.15:*:*:*:*:*:*:*">
-        <cpe-23:deprecated-by name="cpe:2.3:a:x.org:libxpm:3.5.15:*:*:*:*:*:*:*" type="NAME_CORRECTION"/>
+Commit 1567fbd72d4b547f70a7509247bf9abb73ab58e3 didn't fully fix the
+wolfssl build failure because the include on wolfssl/options.h was still
+missing:
+
+/home/autobuild/autobuild/instance-6/output-1/build/libuwsc-3.3.5/src/ssl.c:62:5: error: unknown type name 'SSL_CTX'
+   62 |     SSL_CTX *ctx;
+      |     ^~~~~~~
+
+While at it, add upstream tag to patches
+
+Fixes:
+ - http://autobuild.buildroot.org/results/edc49cce5b1f456d980841f4c315e7cd784b1561
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit e874fd08e01a8d543520f867d95ae8a6a9fa242e)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xlib_libXpm/xlib_libXpm.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .checkpackageignore                                |  2 --
+ .../0001-CMakeLists.txt-add-BUILD_EXAMPLE.patch    |  2 +-
+ package/libuwsc/0002-fix-bad-indentation.patch     |  3 +-
+ .../libuwsc/0003-src-ssl.c-fix-wolfssl-build.patch | 37 ++++++++++++++++++++++
+ 4 files changed, 39 insertions(+), 5 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXpm/xlib_libXpm.mk b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-index 0bba3ea946..1239ba0d4d 100644
---- a/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-+++ b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-@@ -9,7 +9,7 @@ XLIB_LIBXPM_SOURCE = libXpm-$(XLIB_LIBXPM_VERSION).tar.xz
- XLIB_LIBXPM_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBXPM_LICENSE = MIT
- XLIB_LIBXPM_LICENSE_FILES = COPYING COPYRIGHT
--XLIB_LIBXPM_CPE_ID_VENDOR = libxpm_project
-+XLIB_LIBXPM_CPE_ID_VENDOR = x.org
- XLIB_LIBXPM_CPE_ID_PRODUCT = libxpm
- XLIB_LIBXPM_INSTALL_STAGING = YES
- XLIB_LIBXPM_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXt xorgproto \
--- 
-2.43.0
-
+diff --git a/.checkpackageignore b/.checkpackageignore
+index dde9c6311e..0554ffde5b 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -755,8 +755,6 @@ package/libuhttpd/0001-add-compatibility-for-wolfssl-5-0.patch Upstream
+ package/libuio/0001-configure.ac-set-automake-strictness-to-foreign.patch Upstream
+ package/liburcu/0001-Only-blacklist-ARM-gcc-4.8.0-and-4.8.1.patch Upstream
+ package/libusbgx/0001-Add-include-of-sys-sysmacro.h.patch Upstream
+-package/libuwsc/0001-CMakeLists.txt-add-BUILD_EXAMPLE.patch Upstream
+-package/libuwsc/0002-fix-bad-indentation.patch Upstream
+ package/libvpx/0001-vpx_mem-vpx_mem.h-Fix-compilation-with-uClibc.patch Upstream
+ package/libwebsock/0001-Switch-to-use-pkg-config-to-detect-libevent-and-open.patch Upstream
+ package/libwebsock/0002-fix-ssl.patch Upstream
+diff --git a/package/libuwsc/0001-CMakeLists.txt-add-BUILD_EXAMPLE.patch b/package/libuwsc/0001-CMakeLists.txt-add-BUILD_EXAMPLE.patch
+index 197dd1de0f..87f343a9d9 100644
+--- a/package/libuwsc/0001-CMakeLists.txt-add-BUILD_EXAMPLE.patch
++++ b/package/libuwsc/0001-CMakeLists.txt-add-BUILD_EXAMPLE.patch
+@@ -6,7 +6,7 @@ Subject: [PATCH] CMakeLists.txt: add BUILD_EXAMPLE
+ Allow the user to disable example
+ 
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[yann.morin.1998@free.fr: backport from upstream]
++Upstream: https://github.com/zhaojh329/libuwsc/commit/bb71b21eb9407479ad729b3c858b0fc350fae335
+ Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ ---
+  CMakeLists.txt | 6 +++++-
+diff --git a/package/libuwsc/0002-fix-bad-indentation.patch b/package/libuwsc/0002-fix-bad-indentation.patch
+index f33f944d06..77cae92cf2 100644
+--- a/package/libuwsc/0002-fix-bad-indentation.patch
++++ b/package/libuwsc/0002-fix-bad-indentation.patch
+@@ -5,8 +5,7 @@ Subject: [PATCH] fix bad indentation
+ 
+ Fixes error with GCC11.
+ 
+-[Retrieved from:
+-https://github.com/zhaojh329/libuwsc/commit/8cb416140741a596235b8acc46b2b119b13ebfab]
++Upstream: https://github.com/zhaojh329/libuwsc/commit/8cb416140741a596235b8acc46b2b119b13ebfab
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ ---
+  src/lua/uwsc_lua.c | 2 +-
+diff --git a/package/libuwsc/0003-src-ssl.c-fix-wolfssl-build.patch b/package/libuwsc/0003-src-ssl.c-fix-wolfssl-build.patch
+new file mode 100644
+index 0000000000..4c652a63c2
+--- /dev/null
++++ b/package/libuwsc/0003-src-ssl.c-fix-wolfssl-build.patch
+@@ -0,0 +1,37 @@
++From 1c3579e99163a13d622c3ef44088c23d5eea306d Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 14 Jan 2024 16:44:13 +0100
++Subject: [PATCH] src/ssl.c: fix wolfssl build
++
++wolfssl/options.h must also be included by clients to avoid the
++following build failure because OPENSSL_ALL won't be defined:
++
++/home/autobuild/autobuild/instance-6/output-1/build/libuwsc-3.3.5/src/ssl.c:62:5: error: unknown type name 'SSL_CTX'
++   62 |     SSL_CTX *ctx;
++      |     ^~~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/edc49cce5b1f456d980841f4c315e7cd784b1561
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Upstream: N/A (already fixed by
++https://github.com/zhaojh329/ssl/commit/c40ebcd7b4277321acbbd4b00b4b10fd363c7a97)
++---
++ src/ssl.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/ssl.c b/src/ssl.c
++index 3640022..6a3d250 100644
++--- a/src/ssl.c
+++++ b/src/ssl.c
++@@ -54,6 +54,7 @@ struct uwsc_ssl_ctx {
++ #include <openssl/err.h>
++ #elif UWSC_HAVE_WOLFSSL
++ #define WC_NO_HARDEN
+++#include <wolfssl/options.h>
++ #include <wolfssl/openssl/ssl.h>
++ #include <wolfssl/openssl/err.h>
++ #endif
++-- 
++2.43.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
