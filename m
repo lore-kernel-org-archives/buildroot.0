@@ -4,59 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D924C4828D
-	for <buildroot@archiver.kernel.org>; Sat,  3 Feb 2024 18:00:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FF98C4828F
+	for <buildroot@archiver.kernel.org>; Sat,  3 Feb 2024 18:01:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BDB3941F8F;
-	Sat,  3 Feb 2024 18:00:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BDB3941F8F
+	by smtp4.osuosl.org (Postfix) with ESMTP id C808841FA3;
+	Sat,  3 Feb 2024 18:01:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C808841FA3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hMLbbJSS9ofd; Sat,  3 Feb 2024 18:00:56 +0000 (UTC)
+	with ESMTP id nHhGppoCal1d; Sat,  3 Feb 2024 18:01:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C861141B87;
-	Sat,  3 Feb 2024 18:00:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C861141B87
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1856641F3A;
+	Sat,  3 Feb 2024 18:01:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1856641F3A
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AB1B71BF990
- for <buildroot@lists.busybox.net>; Sat,  3 Feb 2024 10:31:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 604E61BF29D
+ for <buildroot@lists.busybox.net>; Sat,  3 Feb 2024 10:35:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A5A1560BE0
- for <buildroot@lists.busybox.net>; Sat,  3 Feb 2024 10:31:57 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4DD3B60B06
+ for <buildroot@lists.busybox.net>; Sat,  3 Feb 2024 10:35:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2L4S8MjkbOeG for <buildroot@lists.busybox.net>;
- Sat,  3 Feb 2024 10:31:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
- helo=relay7-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 652DB60AFC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 652DB60AFC
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 652DB60AFC
- for <buildroot@buildroot.org>; Sat,  3 Feb 2024 10:31:53 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 823FE20007;
- Sat,  3 Feb 2024 10:31:50 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rWDJN-009GM9-31;
- Sat, 03 Feb 2024 11:31:49 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Waldemar Brodkorb <wbx@openadk.org>
-References: <Zb0RQA8kV+RXOd0h@waldemar-brodkorb.de>
-Date: Sat, 03 Feb 2024 11:31:49 +0100
-In-Reply-To: <Zb0RQA8kV+RXOd0h@waldemar-brodkorb.de> (Waldemar Brodkorb's
- message of "Fri, 2 Feb 2024 16:58:56 +0100")
-Message-ID: <87msshu9d6.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+ with ESMTP id CxkIDPUjskpt for <buildroot@lists.busybox.net>;
+ Sat,  3 Feb 2024 10:35:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 213D560A7A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 213D560A7A
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 213D560A7A
+ for <buildroot@buildroot.org>; Sat,  3 Feb 2024 10:35:07 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id
+ ffacd0b85a97d-33b130f605eso1763377f8f.1
+ for <buildroot@buildroot.org>; Sat, 03 Feb 2024 02:35:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1706956505; x=1707561305;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=W8EHDrFQ5QJev/VjmoDEcMnLdT88mh8p0DHPcshpjDk=;
+ b=rvWv+SWfL5qJJir8wAxIw1mvz2qDqoMluTJJOygAJkT0YxKE618tmzrDcCB4Mmm3bl
+ nBiRu2+gmw203UlO2Glgq8jvENIf5TWBiZ+jIgfNTUnEvUBBNca16ViInWcwTKBLukqp
+ IQh917qRByJ7ZG5L8ayF99bNxxi4Mf5L62NfZhAnNkSpY6nzuNOd81gpFV1Hcypp0FLO
+ Ykn8Ixdm6YgGavG3iBCCeHTYAdXyqEGsw5WIUDb/r1GEQVNCsJXdA0JUH9XaA1+HEpD8
+ rvTwUmjzo5x43qfmBxn2Cv77fYZ3dLsg0hDbNRn5S+kTcEkf0maSgYuBCC57k30DiE6b
+ KSaQ==
+X-Gm-Message-State: AOJu0YyruG0PgWaDm7nO+MXakdYp6AIlmQDt5V74Peh8o0+C1PBBxHQf
+ ily9mKR90QTIWWZg7/O4ebElJQnfz8O+1GqZkD9qxmC41f5xZA9TNl9MEg2ImLw=
+X-Google-Smtp-Source: AGHT+IHUd9A9u/3zSk3WBTrDcQBwg08IsOBzAyZ1PIrPngkuPUL206FCBRz/7QNV86EX86TbeIpFPQ==
+X-Received: by 2002:adf:e3c2:0:b0:33b:304d:36b7 with SMTP id
+ k2-20020adfe3c2000000b0033b304d36b7mr448719wrm.56.1706956504883; 
+ Sat, 03 Feb 2024 02:35:04 -0800 (PST)
+X-Forwarded-Encrypted: i=0;
+ AJvYcCV2h0MKmJ/HXOmDv45zlUWrIjOIuhC4geuXAen/I7q/DZQ6TgZPr3IoJhcVcHYxkGzuesS2ERCJyW5yTkhaWjjCnGvaZNvIUfZgUg==
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ b1-20020a5d45c1000000b0033b28a784dcsm1762506wrs.114.2024.02.03.02.35.03
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 03 Feb 2024 02:35:04 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat,  3 Feb 2024 11:35:01 +0100
+Message-ID: <20240203103501.41738-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1706956505; x=1707561305; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=W8EHDrFQ5QJev/VjmoDEcMnLdT88mh8p0DHPcshpjDk=;
+ b=ktTc7GSamv0nE/06t1/1A4Sy0g0+KVzLNxAj+6J45dh0AdXIxvyydWmrCGt+LEXdcb
+ Ul5djYyHhZo1o1rNGBXF6Qz8fUu/CDtl//ZL5iMWdQhIKmjIdNhXAedYb4vERSi6KsCp
+ RwUJ93CAILc0dj9bjsGq+/rlKV0ZhFG6sRYsclyCfugSldozQ2QlzqNtCSSX+k47NH6W
+ w1KckpUU1j6iToYFbEdVZ4p2wSkNEuKAp8WvInF2Z04yQkuM6hW1i0b2hUagOjNJCuv0
+ ck0rHXhlWZxrz2tTlDX0FQeaW1HQnC5/G/TrPijXGpLRzmXFoXuZdPzxkTjKCn91yyqa
+ JcTw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 2/2 v2] package/asterisk: bump to 20.6.0
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=ktTc7GSa
+Subject: [Buildroot] [PATCH 1/1] package/rauc-hawkbit-updater: drop
+ RAUC_HAWKBIT_UPDATER_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,88 +103,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Colin Foster <colin.foster@in-advantage.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
+cpe:2.3:a:pengutronix:rauc-hawkbit-updater added by commit
+928b7219cd7079864eadadc66dbff21c5cd72804 has never been a valid CPE ID
+for this package:
 
- > See here for changes:
- > https://downloads.asterisk.org/pub/telephony/asterisk/ChangeLog-20-current.md
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe:2.3:a:pengutronix:rauc-hawkbit-updater
 
- > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
- > ---
- v1-> v2:
- >  - use separate libjwt package instead of bundled one, suggested by
- >    Peter Korsgaard
- > ---
- >  package/asterisk/Config.in     | 1 +
- >  package/asterisk/asterisk.hash | 2 +-
- >  package/asterisk/asterisk.mk   | 6 ++++--
- >  3 files changed, 6 insertions(+), 3 deletions(-)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/rauc-hawkbit-updater/rauc-hawkbit-updater.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
- > diff --git a/package/asterisk/Config.in b/package/asterisk/Config.in
- > index c52456f8fc..662f070dac 100644
- > --- a/package/asterisk/Config.in
- > +++ b/package/asterisk/Config.in
- > @@ -10,6 +10,7 @@ config BR2_PACKAGE_ASTERISK
- >  	select BR2_PACKAGE_LIBCURL
- >  	select BR2_PACKAGE_LIBEDIT
- >  	select BR2_PACKAGE_LIBILBC
- > +	select BR2_PACKAGE_LIBJWT
- >  	select BR2_PACKAGE_LIBXML2
- >  	select BR2_PACKAGE_SQLITE
- >  	select BR2_PACKAGE_UTIL_LINUX
- > diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
- > index 246f4219aa..d50955dd2b 100644
- > --- a/package/asterisk/asterisk.hash
- > +++ b/package/asterisk/asterisk.hash
- > @@ -1,5 +1,5 @@
- >  # Locally computed
- > -sha256  9def260ac8745a5eac7aceabe1c22f84a283b7812f0eccd760f87ce9eb991d22  asterisk-20.5.2.tar.gz
- > +sha256  088dbc08916e21528dba364f5452b2090b066dbba4548b32ec10af138d4b442f  asterisk-20.6.0.tar.gz
+diff --git a/package/rauc-hawkbit-updater/rauc-hawkbit-updater.mk b/package/rauc-hawkbit-updater/rauc-hawkbit-updater.mk
+index 10ba91abbb..a453f75a28 100644
+--- a/package/rauc-hawkbit-updater/rauc-hawkbit-updater.mk
++++ b/package/rauc-hawkbit-updater/rauc-hawkbit-updater.mk
+@@ -9,7 +9,6 @@ RAUC_HAWKBIT_UPDATER_SITE = https://github.com/rauc/rauc-hawkbit-updater/release
+ RAUC_HAWKBIT_UPDATER_SOURCE = rauc-hawkbit-updater-$(RAUC_HAWKBIT_UPDATER_VERSION).tar.xz
+ RAUC_HAWKBIT_UPDATER_LICENSE = LGPL-2.1
+ RAUC_HAWKBIT_UPDATER_LICENSE_FILES = LICENSE
+-RAUC_HAWKBIT_UPDATER_CPE_ID_VENDOR = pengutronix
+ RAUC_HAWKBIT_UPDATER_DEPENDENCIES = json-glib libcurl
  
- >  # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
- >  # sha256 locally computed
- > diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
- > index d1f3ea82d3..869e4128ff 100644
- > --- a/package/asterisk/asterisk.mk
- > +++ b/package/asterisk/asterisk.mk
- > @@ -4,7 +4,7 @@
- >  #
- >  ################################################################################
- 
- > -ASTERISK_VERSION = 20.5.2
- > +ASTERISK_VERSION = 20.6.0
- >  # Use the github mirror: it's an official mirror maintained by Digium, and
- >  # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
- >  ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
- > @@ -27,7 +27,7 @@ ASTERISK_SELINUX_MODULES = asterisk
- 
- >  # For patches 0002 and 0003
- >  ASTERISK_AUTORECONF = YES
- > -ASTERISK_AUTORECONF_OPTS = -Iautoconf -Ithird-party -Ithird-party/pjproject -Ithird-party/jansson
- > +ASTERISK_AUTORECONF_OPTS = -Iautoconf -Ithird-party -Ithird-party/pjproject -Ithird-party/jansson -Ithird-party/libjwt
-
-Why do we still need to point autoreconf to the bundle libjwt?
-
-Even worse, I see the following during the configure step:
-
-checking for embedded pjproject (may have to download)... configuring
-[pjproject]  Downloading https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/2.13.1/pjproject-2.13.1.tar.bz2 to /tmp/pjproject-2.13.1.tar.bz2
-[pjproject]  Verifying /tmp/pjproject-2.13.1.tar.bz2
-[pjproject]  Verify successful
-[pjproject]  Verifying /tmp/pjproject-2.13.1.tar.bz2
-[pjproject]  Verify successful
-[pjproject]  Unpacking /tmp/pjproject-2.13.1.tar.bz2
-
-We don't want packages to download stuff behind our back. Can we use an
-external pjproject?
-
+ $(eval $(meson-package))
 -- 
-Bye, Peter Korsgaard
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
