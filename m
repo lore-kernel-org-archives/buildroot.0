@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5AE7C4828D
-	for <buildroot@archiver.kernel.org>; Sat,  3 Feb 2024 18:44:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0BBEC4828F
+	for <buildroot@archiver.kernel.org>; Sat,  3 Feb 2024 18:44:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 48661408DC;
-	Sat,  3 Feb 2024 18:44:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 48661408DC
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8EB79400A4;
+	Sat,  3 Feb 2024 18:44:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8EB79400A4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YIlbJ0kaifTt; Sat,  3 Feb 2024 18:44:18 +0000 (UTC)
+	with ESMTP id 4q9VWFu-cVQd; Sat,  3 Feb 2024 18:44:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1E962400A4;
-	Sat,  3 Feb 2024 18:44:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1E962400A4
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4CBC4405CB;
+	Sat,  3 Feb 2024 18:44:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4CBC4405CB
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 95E1A1BF990
- for <buildroot@lists.busybox.net>; Sat,  3 Feb 2024 10:06:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F0E641BF990
+ for <buildroot@lists.busybox.net>; Sat,  3 Feb 2024 10:08:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8364960BE0
- for <buildroot@lists.busybox.net>; Sat,  3 Feb 2024 10:06:18 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D659960A8C
+ for <buildroot@lists.busybox.net>; Sat,  3 Feb 2024 10:08:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id W2JcrAq4Yv4S for <buildroot@lists.busybox.net>;
- Sat,  3 Feb 2024 10:06:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
- helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ with ESMTP id V59yl6d8rtO2 for <buildroot@lists.busybox.net>;
+ Sat,  3 Feb 2024 10:08:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
+ helo=relay5-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7748060BC0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7748060BC0
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7748060BC0
- for <buildroot@buildroot.org>; Sat,  3 Feb 2024 10:06:17 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7929B240003;
- Sat,  3 Feb 2024 10:06:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4962C6080B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4962C6080B
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4962C6080B
+ for <buildroot@buildroot.org>; Sat,  3 Feb 2024 10:08:32 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 32AC81C0003;
+ Sat,  3 Feb 2024 10:08:31 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rWCub-008j5s-2e;
- Sat, 03 Feb 2024 11:06:13 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rWCwo-008jNt-28;
+ Sat, 03 Feb 2024 11:08:30 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20240201175202.186929-1-fontaine.fabrice@gmail.com>
-Date: Sat, 03 Feb 2024 11:06:13 +0100
-In-Reply-To: <20240201175202.186929-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 1 Feb 2024 18:52:02 +0100")
-Message-ID: <874jepvp4a.fsf@48ers.dk>
+References: <20240201214304.301544-1-fontaine.fabrice@gmail.com>
+Date: Sat, 03 Feb 2024 11:08:30 +0100
+In-Reply-To: <20240201214304.301544-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 1 Feb 2024 22:43:04 +0100")
+Message-ID: <87zfwhuag1.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/mpfr: fix CPE variables
+Subject: Re: [Buildroot] [PATCH 1/1] package/lvm2: fix CPE variable
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,17 +76,33 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > cpe:2.3:a:gnu:mpfr added by commit
- > 63332c33aa0771532807fd2684d4eee4eb952435 has never been a valid CPE
- > identifier for this package
-
- > cpe:2.3:a:mpfr:gnu_mpfr is a valid CPE identifier for this package:
-
- >   https://nvd.nist.gov/products/cpe/detail/7B981E0A-5BAC-4A80-A734-5FD4B51B04EF
+ > Commit d70da0be78779699a296e21532665ee149a2a3b8 wrongly set
+ > LVM2_CPE_ID_PRODUCT instead of LVM2_CPE_ID_VENDOR
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
+
+ > ---
+ >  package/lvm2/lvm2.mk | 2 +-
+ >  1 file changed, 1 insertion(+), 1 deletion(-)
+
+ > diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+ > index ee43cb6c19..02ea748439 100644
+ > --- a/package/lvm2/lvm2.mk
+ > +++ b/package/lvm2/lvm2.mk
+ > @@ -10,7 +10,7 @@ LVM2_SITE = https://sourceware.org/ftp/lvm2
+ >  LVM2_INSTALL_STAGING = YES
+ >  LVM2_LICENSE = GPL-2.0, LGPL-2.1
+ >  LVM2_LICENSE_FILES = COPYING COPYING.LIB
+ > -LVM2_CPE_ID_PRODUCT = redhat
+ > +LVM2_CPE_ID_VENDOR = redhat
+ >  LVM2_SELINUX_MODULES = lvm
+ 
+ >  # Make sure that binaries and libraries are installed with write
+
+FYI, your tree is not in sync with master, so I had to apply this
+manually.
 
 -- 
 Bye, Peter Korsgaard
