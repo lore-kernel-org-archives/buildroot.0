@@ -4,56 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03CF5C4828D
-	for <buildroot@archiver.kernel.org>; Sat,  3 Feb 2024 17:59:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E977C4828D
+	for <buildroot@archiver.kernel.org>; Sat,  3 Feb 2024 18:00:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B1683417B3;
-	Sat,  3 Feb 2024 17:59:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B1683417B3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1BEF641D78;
+	Sat,  3 Feb 2024 18:00:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1BEF641D78
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tZvaE5AywhNV; Sat,  3 Feb 2024 17:59:54 +0000 (UTC)
+	with ESMTP id 52CunQG5d6Us; Sat,  3 Feb 2024 18:00:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CE76140241;
-	Sat,  3 Feb 2024 17:59:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE76140241
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B54151BF2F8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4E56441ED9;
+	Sat,  3 Feb 2024 18:00:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E56441ED9
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D75591BF2FD
  for <buildroot@lists.busybox.net>; Sat,  3 Feb 2024 09:20:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AF49C83FBD
+ by smtp3.osuosl.org (Postfix) with ESMTP id C55E860BE0
  for <buildroot@lists.busybox.net>; Sat,  3 Feb 2024 09:20:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5vofMPs-Lj6t for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1J_1e4hPyZF9 for <buildroot@lists.busybox.net>;
  Sat,  3 Feb 2024 09:20:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6A90D83FBB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A90D83FBB
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org BF44160B13
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BF44160B13
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6A90D83FBB
+ by smtp3.osuosl.org (Postfix) with ESMTP id BF44160B13
  for <buildroot@buildroot.org>; Sat,  3 Feb 2024 09:20:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 574FE8640A; Sat,  3 Feb 2024 09:20:54 +0000 (UTC)
+ id 7791686418; Sat,  3 Feb 2024 09:20:54 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 3 Feb 2024 10:14:20 +0100
+Date: Sat, 3 Feb 2024 10:15:28 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 881fbdb674878a010f0ddb3d5d9447be3fc8eea2
-X-Git-Newrev: 52a15667b122575919bd7207a16872e8eb229bfd
+X-Git-Oldrev: bd31d973d7550f27b954d7987e4a652ff451e7d0
+X-Git-Newrev: 62a5510c219e2b45fa6bb6c21b543d7a78c4fbdf
 X-Patchwork-Hint: ignore
-Message-Id: <20240203092054.574FE8640A@busybox.osuosl.org>
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+Message-Id: <20240203092054.7791686418@busybox.osuosl.org>
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  spf=fail smtp.mailfrom=osuosl.org
-Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 6.{1,
- 6}.x series
+Subject: [Buildroot] [git commit] package/onevpl-intel-gpu: bump version to
+ 24.1.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,58 +71,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=52a15667b122575919bd7207a16872e8eb229bfd
+commit: https://git.buildroot.net/buildroot/commit/?id=62a5510c219e2b45fa6bb6c21b543d7a78c4fbdf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 4 ++--
- package/linux-headers/Config.in.host | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/onevpl-intel-gpu/onevpl-intel-gpu.hash | 2 +-
+ package/onevpl-intel-gpu/onevpl-intel-gpu.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 662bd09162..da22b439e3 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
+diff --git a/package/onevpl-intel-gpu/onevpl-intel-gpu.hash b/package/onevpl-intel-gpu/onevpl-intel-gpu.hash
+index d1e671f96a..a45758a2c3 100644
+--- a/package/onevpl-intel-gpu/onevpl-intel-gpu.hash
++++ b/package/onevpl-intel-gpu/onevpl-intel-gpu.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  e0bd388c04740dd9f2e8ca989bc54428c13a531ed4c097d00f06aa6e58a6d15c  onevpl-intel-gpu-24.1.1.tar.gz
++sha256  15d34e4304d7aeb5ea5e529b6f51171109cef42525113321f675bc14e56c697e  onevpl-intel-gpu-24.1.3.tar.gz
+ sha256  c31c3cc5fd66d1250dbca1c3d9011a9f874537442ac71c8de80f2f0fed13f297  LICENSE
+diff --git a/package/onevpl-intel-gpu/onevpl-intel-gpu.mk b/package/onevpl-intel-gpu/onevpl-intel-gpu.mk
+index 52fbe2ed9b..509698ce26 100644
+--- a/package/onevpl-intel-gpu/onevpl-intel-gpu.mk
++++ b/package/onevpl-intel-gpu/onevpl-intel-gpu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.6.14" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.6.15" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index d7082aa629..10edcc2ed9 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,6 +1,6 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  fbe96b2db3f962cd2a96a849d554300e7a4555995160082d4f323c2a1dfa1584  linux-6.6.14.tar.xz
--sha256  6cd19410330c13ec4c18fd28a83d3e40fc12a152815fb7c3e1b0764329093a56  linux-6.1.75.tar.xz
-+sha256  ab290c7f8687f2f8af96e14abd0700ba8b282426151873690f51621d8d5f5faa  linux-6.6.15.tar.xz
-+sha256  0580cc0e81ff9aee245f79531d8c1c5c7d711eee227cd4cf52d1ff335727b1fd  linux-6.1.76.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
- sha256  c48575c97fd9f4767cbe50a13b1b2b40ee42830aba3182fabd35a03259a6e5d8  linux-5.15.148.tar.xz
- sha256  44e22fad647c638726a8eae23703c4263bead612d17c89ca7ad7ab32b5ce88d5  linux-5.10.209.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index bf55c8714a..a0e572adc0 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -407,8 +407,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "5.4.268"	if BR2_KERNEL_HEADERS_5_4
- 	default "5.10.209"	if BR2_KERNEL_HEADERS_5_10
- 	default "5.15.148"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.75"	if BR2_KERNEL_HEADERS_6_1
--	default "6.6.14"	if BR2_KERNEL_HEADERS_6_6
-+	default "6.1.76"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.6.15"	if BR2_KERNEL_HEADERS_6_6
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+-ONEVPL_INTEL_GPU_VERSION = 24.1.1
++ONEVPL_INTEL_GPU_VERSION = 24.1.3
+ ONEVPL_INTEL_GPU_SITE = $(call github,oneapi-src,oneVPL-intel-gpu,intel-onevpl-$(ONEVPL_INTEL_GPU_VERSION))
+ ONEVPL_INTEL_GPU_LICENSE = MIT
+ ONEVPL_INTEL_GPU_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
