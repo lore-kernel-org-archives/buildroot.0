@@ -4,86 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0AF9C4828D
-	for <buildroot@archiver.kernel.org>; Sat,  3 Feb 2024 18:02:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9098C4828D
+	for <buildroot@archiver.kernel.org>; Sat,  3 Feb 2024 18:02:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ADE8541FCF;
-	Sat,  3 Feb 2024 18:02:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ADE8541FCF
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6F2BC41D75;
+	Sat,  3 Feb 2024 18:02:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F2BC41D75
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SBBsTc-JwhwV; Sat,  3 Feb 2024 18:02:04 +0000 (UTC)
+	with ESMTP id m0YAnH1bZ62P; Sat,  3 Feb 2024 18:02:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E0CB341FCB;
-	Sat,  3 Feb 2024 18:02:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0CB341FCB
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EC2D01BF29D
- for <buildroot@lists.busybox.net>; Sat,  3 Feb 2024 17:58:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BD1D141B88;
+	Sat,  3 Feb 2024 18:02:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD1D141B88
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 886E51BF2B9
+ for <buildroot@lists.busybox.net>; Sat,  3 Feb 2024 18:02:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D24B283E5D
- for <buildroot@lists.busybox.net>; Sat,  3 Feb 2024 17:58:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D24B283E5D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6BB9560ABD
+ for <buildroot@lists.busybox.net>; Sat,  3 Feb 2024 18:02:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6BB9560ABD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id om69dr43Xv_J for <buildroot@lists.busybox.net>;
- Sat,  3 Feb 2024 17:58:46 +0000 (UTC)
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 174C283E58
- for <buildroot@buildroot.org>; Sat,  3 Feb 2024 17:58:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 174C283E58
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-40fcb4ef7bcso11544525e9.0
- for <buildroot@buildroot.org>; Sat, 03 Feb 2024 09:58:45 -0800 (PST)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4R_Y_l2IyavR for <buildroot@lists.busybox.net>;
+ Sat,  3 Feb 2024 18:02:53 +0000 (UTC)
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1C01460774
+ for <buildroot@buildroot.org>; Sat,  3 Feb 2024 18:02:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C01460774
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-40fcb4ef7bcso11567455e9.0
+ for <buildroot@buildroot.org>; Sat, 03 Feb 2024 10:02:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1706983123; x=1707587923;
+ d=1e100.net; s=20230601; t=1706983370; x=1707588170;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=HNPUXT4n1INEnAiXnwMnpxChF/ysf9LQRRq2bA4bmlg=;
- b=oAeCPJB6kYULU/MQmCAqZK1SDDpT+GVxtFY+CiHPZ8vaWEE0CsCONhFgpH9aoG5D+a
- bGu2vh7QvQl8vnQ/oY0mWrb43659r30Mk6Vfe01HpZNAv/4Qm2XP1AMMwVv3bex82L90
- TT1YJZvFchkiHq/WoNVEWbLCnAVT+lFmTFo0dXSbGy7xXsr+/6FxxlylDd5bbH4pypA4
- 1fgUvGs2WvJCptG1KaP0vCwZUCxhetHLyn4VOkuNFRyfSGlplgBFzWCSaB7mJeOk2X9U
- 9cueX7+pfC+p4nm0d4JB1vf8pQi7FUsw1YIfWq+qALwO0BDC/PL8FZWem+sQ/X4Y8pdd
- Qa4g==
-X-Gm-Message-State: AOJu0YxRCfBRUpUVa3um1+7/m8ZrSJbT3fHybGnjsrWeRR1I6D5NfWcJ
- oDrevhN4aDV00AhAWwuru0i4GIXFNTHtn8CYWr8EaYIEbdxfdTgYtaI36dKZLtM=
-X-Google-Smtp-Source: AGHT+IHTjprMRhPzEK02ubPcV75tj67sPxmwim3edtoJsonGbHHMr+LbHLExvhdowWssVuhH28AsyA==
-X-Received: by 2002:a05:600c:4fc6:b0:40e:f557:738d with SMTP id
- o6-20020a05600c4fc600b0040ef557738dmr1310647wmq.26.1706983123017; 
- Sat, 03 Feb 2024 09:58:43 -0800 (PST)
-X-Forwarded-Encrypted: i=0;
- AJvYcCW0ZiUHr12+aVAEaxz9AvEiIzkbIF+16QUrrry8kQuLv1ZsAJ6En5KTTM9IRe+tiIekD9tuw4MimxwfVJwO36Qryd1j2lLB+La4CA==
+ bh=wCGlr6cnwqoYhro0m6Ouecm9VI6lSkEQquma2z0kKWw=;
+ b=dOoZPezQeWWZATGcpkGPkiQX1/5oKsxQRgy7OSsNmC2NbaiqUhA6mfoZN4bkTBK+uQ
+ uHT24Z4kGOWDtrbRGZtMdMusmRn6peVDLe6tj8+izAxQL4u7UcqyxfASZ3frFQkXHHxP
+ EFfeT0CZ/x7o0LuCVtAhRO4kiOZ0bBGlpuInMTmktC98DHy39rs02r3gKgecljryVHU+
+ RUxdBGl8eoYhrxoo7hHPigE7zVZcTMqQ1tl2/6JKG53ck6c0+4hkHjsD1+C6kBdDTmQf
+ a1JSqZ3RAfHROYEQSY0e81ZzZuSSquDwNPVorUAmwdlRRi3PlWFwBt434GowJsYV4Kuf
+ hRTQ==
+X-Gm-Message-State: AOJu0YxfMOm+MYkgXRDKmOboVM4cfh2xEKjYRIbM8R9tjGWft5Oi73Xx
+ Lm4r9Qh2zdV5S2wsdGSGDFqf8etAneysVLvRbqYBBsBwZHHxN5oSvEWJvzjepRI=
+X-Google-Smtp-Source: AGHT+IEzMniZRiPnvsAV7pPwS5oT07nQOKqhqkVYzVxgcwGCfTA75HLVIHnN4ZrZfF4qaTc8EE/1eQ==
+X-Received: by 2002:a5d:6d8c:0:b0:33b:2eda:ebf5 with SMTP id
+ l12-20020a5d6d8c000000b0033b2edaebf5mr1657239wrs.67.1706983370213; 
+ Sat, 03 Feb 2024 10:02:50 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- o13-20020a05600c4fcd00b0040fccf7e8easm3261828wmq.36.2024.02.03.09.58.42
+ i18-20020a05600c355200b0040ef2e7041esm3551945wmq.6.2024.02.03.10.02.49
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 03 Feb 2024 09:58:42 -0800 (PST)
+ Sat, 03 Feb 2024 10:02:49 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat,  3 Feb 2024 18:58:40 +0100
-Message-ID: <20240203175840.141039-1-fontaine.fabrice@gmail.com>
+Date: Sat,  3 Feb 2024 19:02:47 +0100
+Message-ID: <20240203180247.143487-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1706983123; x=1707587923; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1706983370; x=1707588170; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=HNPUXT4n1INEnAiXnwMnpxChF/ysf9LQRRq2bA4bmlg=;
- b=nGdIgbryTG0UlViDKQeBHRTuxQqzHlKbo9xz6tYrvDq9PRuwxIII0l7yncgBdSxSbb
- JeBf8Lon9FcOUgPO0oxO1r2/iJIbd84q2rq4bzKrFPck0WUP32y5B3IxT3kXIiwTU0Ge
- LN8MYemT8ywT8U9y+C2XBJ7EzwLFJ88D/Mpn/vWezdWxD0p0jAM8QweuWx+D9nBAbZkX
- 7h0HsjJcW97X015QxflGihP1YvyeVkosxXgD/3thxnLv5PZE1QX9pF63VlL84IxMWvhz
- O4tQO5IAiDnpDHaFLVlk9jhOTFWMNjfnNk3r+FkUcccRO16YDu3Cc9hbEJfusITSyn3t
- lUFQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=wCGlr6cnwqoYhro0m6Ouecm9VI6lSkEQquma2z0kKWw=;
+ b=W+Y17KxHxzMRPB7LTPUeZWhJbNjmPFJlP46p9JQG8QucRvUiu3949nXhpO09a0oP37
+ /XWI3xzLz6wHkAm6brdXmI4jtQzzZV3aDFDvK7IIQkNvyDh65O0PXBN1BNt2UbdyVzgB
+ SlDAqcSRIr/hSrgfrwooahWpxC3e5s6uGR5qsoG/bv0iA8POT8BBuCEVgcDMdanzId61
+ C4O5x7DsTarROF/E0NkLjshu7DcCOryrbmFA9L5c3l7yo4m2D69mGOsS2LyHxWxtqiqu
+ taBYYWV4NZb/onSa0Nht4IwjnS/nBMDQOzlxiWOJkDFIFh9fsrferltgYR21JGuIp2U6
+ br6w==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=nGdIgbry
-Subject: [Buildroot] [PATCH 1/1] package/libjwt: add gnutls support
+ header.a=rsa-sha256 header.s=20230601 header.b=W+Y17KxH
+Subject: [Buildroot] [PATCH 1/1] package/netatalk: update
+ NETATALK_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,51 +100,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-gnutls can be used if openssl is not available since the addition of the
-package in commit 7251775773011e7da38e3a33c6817eceab6a9dfa
+cpe:2.3:a:netatalk_project:netatalk has been deprecated in favor of
+cpe:2.3:a:netatalk:netatalk in September 2023:
+
+  <cpe-item name="cpe:/a:netatalk_project:netatalk:3.1.13" deprecated="true" deprecation_date="2023-09-29T11:15:00.340Z">
+      <reference href="https://sourceforge.net/projects/netatalk/files/netatalk/">Version</reference>
+    <cpe-23:cpe23-item name="cpe:2.3:a:netatalk_project:netatalk:3.1.13:*:*:*:*:*:*:*">
+        <cpe-23:deprecated-by name="cpe:2.3:a:netatalk:netatalk:3.1.13:*:*:*:*:*:*:*" type="NAME_CORRECTION"/>
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libjwt/Config.in |  2 +-
- package/libjwt/libjwt.mk | 10 +++++++++-
- 2 files changed, 10 insertions(+), 2 deletions(-)
+ package/netatalk/netatalk.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libjwt/Config.in b/package/libjwt/Config.in
-index fa042d67ef..39d1665e0e 100644
---- a/package/libjwt/Config.in
-+++ b/package/libjwt/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_LIBJWT
- 	bool "libjwt"
--	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_GNUTLS
- 	select BR2_PACKAGE_JANSSON
- 	help
- 	  JSON Web Tokens are an open, industry standard RFC 7519
-diff --git a/package/libjwt/libjwt.mk b/package/libjwt/libjwt.mk
-index 6ae1717b7d..7e2ea03b09 100644
---- a/package/libjwt/libjwt.mk
-+++ b/package/libjwt/libjwt.mk
-@@ -6,10 +6,18 @@
+diff --git a/package/netatalk/netatalk.mk b/package/netatalk/netatalk.mk
+index a47bfa7e84..40e64dabeb 100644
+--- a/package/netatalk/netatalk.mk
++++ b/package/netatalk/netatalk.mk
+@@ -12,7 +12,7 @@ NETATALK_DEPENDENCIES = host-pkgconf openssl berkeleydb libgcrypt libgpg-error \
+ 	libevent
+ NETATALK_LICENSE = GPL-2.0+, LGPL-3.0+, MIT-like
+ NETATALK_LICENSE_FILES = COPYING COPYRIGHT
+-NETATALK_CPE_ID_VENDOR = netatalk_project
++NETATALK_CPE_ID_VENDOR = netatalk
  
- LIBJWT_VERSION = 1.15.3
- LIBJWT_SITE = $(call github,benmcollins,libjwt,v$(LIBJWT_VERSION))
--LIBJWT_DEPENDENCIES = host-pkgconf jansson openssl
-+LIBJWT_DEPENDENCIES = host-pkgconf jansson
- LIBJWT_AUTORECONF = YES
- LIBJWT_INSTALL_STAGING = YES
- LIBJWT_LICENSE = MPL-2.0
- LIBJWT_LICENSE_FILES = LICENSE
- 
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+LIBJWT_CONF_OPTS += --with-openssl
-+LIBJWT_DEPENDENCIES += openssl
-+else
-+LIBJWT_CONF_OPTS += --without-openssl
-+LIBJWT_DEPENDENCIES += gnutls
-+endif
-+
- $(eval $(autotools-package))
+ # Don't run ldconfig!
+ NETATALK_CONF_ENV += CC="$(TARGET_CC) -std=gnu99" \
 -- 
 2.43.0
 
