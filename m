@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BBF1C48286
-	for <buildroot@archiver.kernel.org>; Sun,  4 Feb 2024 21:16:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03DF0C4828F
+	for <buildroot@archiver.kernel.org>; Sun,  4 Feb 2024 21:17:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DFE5240420;
-	Sun,  4 Feb 2024 21:16:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DFE5240420
+	by smtp2.osuosl.org (Postfix) with ESMTP id A2BAD405C6;
+	Sun,  4 Feb 2024 21:17:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A2BAD405C6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BWlrmXEYO8lX; Sun,  4 Feb 2024 21:16:39 +0000 (UTC)
+	with ESMTP id naF_fuMMP5EG; Sun,  4 Feb 2024 21:17:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CD16E4055F;
-	Sun,  4 Feb 2024 21:16:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CD16E4055F
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A440D1BF407
- for <buildroot@lists.busybox.net>; Sun,  4 Feb 2024 21:16:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 97626405A9;
+	Sun,  4 Feb 2024 21:17:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 97626405A9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D43BE1BF407
+ for <buildroot@lists.busybox.net>; Sun,  4 Feb 2024 21:17:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7CAAF416C0
- for <buildroot@lists.busybox.net>; Sun,  4 Feb 2024 21:16:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7CAAF416C0
+ by smtp2.osuosl.org (Postfix) with ESMTP id AC011405A9
+ for <buildroot@lists.busybox.net>; Sun,  4 Feb 2024 21:17:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AC011405A9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id M_vvkzOPz4dO for <buildroot@lists.busybox.net>;
- Sun,  4 Feb 2024 21:16:36 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UEws7d3QRGHF for <buildroot@lists.busybox.net>;
+ Sun,  4 Feb 2024 21:17:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B673640225
- for <buildroot@buildroot.org>; Sun,  4 Feb 2024 21:16:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B673640225
+ by smtp2.osuosl.org (Postfix) with ESMTP id 993EB402F2
+ for <buildroot@buildroot.org>; Sun,  4 Feb 2024 21:17:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 993EB402F2
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9F76A86918; Sun,  4 Feb 2024 21:16:36 +0000 (UTC)
+ id 809C88691B; Sun,  4 Feb 2024 21:17:46 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 4 Feb 2024 22:10:52 +0100
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: c1297bfb5ad0d42535fb5049e6cd0b813caa6957
-X-Git-Newrev: e4fa5ebff17d899c3c0ef349b4eeb5af7b2aeb81
+Date: Sun, 4 Feb 2024 22:10:41 +0100
+X-Git-Refname: refs/heads/2023.11.x
+X-Git-Oldrev: 7d35d445a1ae2f9fe1682540159c2c32cb2114c1
+X-Git-Newrev: 42a271c32e4584c5b73561315825b5416cdf1819
 X-Patchwork-Hint: ignore
-Message-Id: <20240204211636.9F76A86918@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/micropython:
+Message-Id: <20240204211746.809C88691B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/micropython:
  libffi is optional, not mandatory
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e4fa5ebff17d899c3c0ef349b4eeb5af7b2aeb81
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=42a271c32e4584c5b73561315825b5416cdf1819
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
 libffi is optional, not mandatory since bump to version 1.22.0 in commit
 1e12b7dd49d1c64a5195f226e9e4da21e84f5d0c and
