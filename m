@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 641E8C48286
-	for <buildroot@archiver.kernel.org>; Sun,  4 Feb 2024 15:08:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12331C4828F
+	for <buildroot@archiver.kernel.org>; Sun,  4 Feb 2024 15:09:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1C16E4173A;
-	Sun,  4 Feb 2024 15:08:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C16E4173A
+	by smtp4.osuosl.org (Postfix) with ESMTP id B45824173D;
+	Sun,  4 Feb 2024 15:09:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B45824173D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id U4z0flzgen9f; Sun,  4 Feb 2024 15:08:17 +0000 (UTC)
+	with ESMTP id eUy-Hmyhj6u7; Sun,  4 Feb 2024 15:09:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 64E9641739;
-	Sun,  4 Feb 2024 15:08:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64E9641739
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F26AC1BF47A
- for <buildroot@lists.busybox.net>; Sun,  4 Feb 2024 15:08:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F0D7B41735;
+	Sun,  4 Feb 2024 15:09:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F0D7B41735
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9C2791BF47A
+ for <buildroot@lists.busybox.net>; Sun,  4 Feb 2024 15:09:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C714E607CA
- for <buildroot@lists.busybox.net>; Sun,  4 Feb 2024 15:08:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C714E607CA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 74EFE4017A
+ for <buildroot@lists.busybox.net>; Sun,  4 Feb 2024 15:09:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 74EFE4017A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id F4km8-cj1NTT for <buildroot@lists.busybox.net>;
- Sun,  4 Feb 2024 15:08:05 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Q-PCedhNkUxU for <buildroot@lists.busybox.net>;
+ Sun,  4 Feb 2024 15:09:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id ED7DC607FE
- for <buildroot@buildroot.org>; Sun,  4 Feb 2024 15:08:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED7DC607FE
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7764A4011F
+ for <buildroot@buildroot.org>; Sun,  4 Feb 2024 15:09:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7764A4011F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D457F868F8; Sun,  4 Feb 2024 15:08:04 +0000 (UTC)
+ id 65B3C868FB; Sun,  4 Feb 2024 15:09:17 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 4 Feb 2024 16:07:35 +0100
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: fcef868c6088a628eef2a82eac48af2fffe832aa
-X-Git-Newrev: c1297bfb5ad0d42535fb5049e6cd0b813caa6957
+Date: Sun, 4 Feb 2024 16:07:16 +0100
+X-Git-Refname: refs/heads/2023.11.x
+X-Git-Oldrev: 7964cf52a0f3137ca3359deef46bcd3e9472f504
+X-Git-Newrev: 7d35d445a1ae2f9fe1682540159c2c32cb2114c1
 X-Patchwork-Hint: ignore
-Message-Id: <20240204150804.D457F868F8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/micropython: fix
+Message-Id: <20240204150917.65B3C868FB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/micropython: fix
  building after dropping GIT_DIR=. workaround
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c1297bfb5ad0d42535fb5049e6cd0b813caa6957
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7d35d445a1ae2f9fe1682540159c2c32cb2114c1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
 The MICROPYTHON_MAKE_ENV variable contained two things;
   - the comon target environment variables CC, CFLAGS et al. defined in
