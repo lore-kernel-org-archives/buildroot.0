@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B4C2C4828F
-	for <buildroot@archiver.kernel.org>; Sun,  4 Feb 2024 22:34:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BF63C48286
+	for <buildroot@archiver.kernel.org>; Sun,  4 Feb 2024 22:34:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 01B00408AD;
-	Sun,  4 Feb 2024 22:34:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 01B00408AD
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2C910400C6;
+	Sun,  4 Feb 2024 22:34:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2C910400C6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EVQqujD8qxXc; Sun,  4 Feb 2024 22:34:15 +0000 (UTC)
+	with ESMTP id zf2zFpHnmKNh; Sun,  4 Feb 2024 22:34:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 058F5402F2;
-	Sun,  4 Feb 2024 22:34:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 058F5402F2
+	by smtp2.osuosl.org (Postfix) with ESMTP id C38A440377;
+	Sun,  4 Feb 2024 22:34:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C38A440377
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 06CAB1BF3A8
- for <buildroot@lists.busybox.net>; Sun,  4 Feb 2024 22:33:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 193991BF3A8
+ for <buildroot@lists.busybox.net>; Sun,  4 Feb 2024 22:33:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0B4D3402F2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 937344055F
  for <buildroot@lists.busybox.net>; Sun,  4 Feb 2024 22:33:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B4D3402F2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 937344055F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QIPQqDDj31Z2 for <buildroot@lists.busybox.net>;
- Sun,  4 Feb 2024 22:33:30 +0000 (UTC)
+ with ESMTP id tTc1DqqwgQJL for <buildroot@lists.busybox.net>;
+ Sun,  4 Feb 2024 22:33:31 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B6DF5405F6
+ by smtp2.osuosl.org (Postfix) with ESMTP id E57F940610
  for <buildroot@buildroot.org>; Sun,  4 Feb 2024 22:33:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B6DF5405F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E57F940610
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A15C78695B; Sun,  4 Feb 2024 22:33:30 +0000 (UTC)
+ id C60368695A; Sun,  4 Feb 2024 22:33:30 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 4 Feb 2024 22:51:45 +0100
+Date: Sun, 4 Feb 2024 22:52:01 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: c423dd4a45b4a9d2b4d8c9a186fcdb1961ddf5cc
-X-Git-Newrev: 79dc02abeeae25fcfd8d85c612bb51261e845277
+X-Git-Oldrev: 4fc43a34d4159a788c9f693dd5293e56c4e66ce7
+X-Git-Newrev: 3ab50b7e5914a6d9825b461aeb04201aa85d18fd
 X-Patchwork-Hint: ignore
-Message-Id: <20240204223330.A15C78695B@busybox.osuosl.org>
+Message-Id: <20240204223330.C60368695A@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2023.02.x] package/gnutls: bump
- version to 3.8.0
+ version to 3.8.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,71 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=79dc02abeeae25fcfd8d85c612bb51261e845277
+commit: https://git.buildroot.net/buildroot/commit/?id=3ab50b7e5914a6d9825b461aeb04201aa85d18fd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Updated license hashes due to upstream commit:
-"Sync GPL/LGPL license files from Gnulib"
-https://github.com/gnutls/gnutls/commit/a39e528897184c6f6a33d245b82891a8dc8090ce
-
-Removed configure options related to guile which were removed upstream:
-https://github.com/gnutls/gnutls/commit/100cc2a706b8e097cbeb63d08c7ea59717c906ca
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4528d5093c9a0002be6787024a342979666ce9af)
+(cherry picked from commit a91ad89fe3e4a28ca5ae2ce6e9bada243aa55456)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gnutls/gnutls.hash | 8 ++++----
- package/gnutls/gnutls.mk   | 6 ++----
- 2 files changed, 6 insertions(+), 8 deletions(-)
+ package/gnutls/gnutls.hash | 4 ++--
+ package/gnutls/gnutls.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index 303f1351e0..2f6dba9d3c 100644
+index a6ba6b22c6..6ad363f01d 100644
 --- a/package/gnutls/gnutls.hash
 +++ b/package/gnutls/gnutls.hash
 @@ -1,6 +1,6 @@
  # Locally calculated after checking pgp signature
--# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.7/gnutls-3.7.8.tar.xz.sig
--sha256  c58ad39af0670efe6a8aee5e3a8b2331a1200418b64b7c51977fb396d4617114  gnutls-3.7.8.tar.xz
-+# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.8/gnutls-3.8.0.tar.xz.sig
-+sha256  0ea0d11a1660a1e63f960f157b197abe6d0c8cb3255be24e1fb3815930b9bdc5  gnutls-3.8.0.tar.xz
+-# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.8/gnutls-3.8.1.tar.xz.sig
+-sha256  ba8b9e15ae20aba88f44661978f5b5863494316fe7e722ede9d069fe6294829c  gnutls-3.8.1.tar.xz
++# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.8/gnutls-3.8.2.tar.xz.sig
++sha256  e765e5016ffa9b9dd243e363a0460d577074444ee2491267db2e96c9c2adef77  gnutls-3.8.2.tar.xz
  # Locally calculated
--sha256  e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  doc/COPYING
--sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  doc/COPYING.LESSER
-+sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  doc/COPYING
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  doc/COPYING.LESSER
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  doc/COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  doc/COPYING.LESSER
 diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 6e2cc501ef..d6b8b229bd 100644
+index d9b9831fd6..3e9987cdce 100644
 --- a/package/gnutls/gnutls.mk
 +++ b/package/gnutls/gnutls.mk
-@@ -5,8 +5,8 @@
- ################################################################################
+@@ -6,7 +6,7 @@
  
  # When bumping, make sure *all* --without-libfoo-prefix options are in GNUTLS_CONF_OPTS
--GNUTLS_VERSION_MAJOR = 3.7
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).8
-+GNUTLS_VERSION_MAJOR = 3.8
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).0
+ GNUTLS_VERSION_MAJOR = 3.8
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).1
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).2
  GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
  GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
  GNUTLS_LICENSE = LGPL-2.1+ (core library)
-@@ -16,7 +16,6 @@ GNUTLS_DEPENDENCIES = host-pkgconf libtasn1 libunistring nettle
- GNUTLS_CPE_ID_VENDOR = gnu
- GNUTLS_CONF_OPTS = \
- 	--disable-doc \
--	--disable-guile \
- 	--disable-libdane \
- 	--disable-rpath \
- 	--disable-tests \
-@@ -44,7 +43,6 @@ GNUTLS_INSTALL_STAGING = YES
- HOST_GNUTLS_DEPENDENCIES = host-pkgconf host-libtasn1 host-libunistring host-nettle
- HOST_GNUTLS_CONF_OPTS = \
- 	--disable-doc \
--	--disable-guile \
- 	--disable-libdane \
- 	--disable-rpath \
- 	--disable-tests \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
