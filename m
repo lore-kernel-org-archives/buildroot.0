@@ -4,53 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C40D5C48286
-	for <buildroot@archiver.kernel.org>; Sun,  4 Feb 2024 09:06:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08DC2C4828F
+	for <buildroot@archiver.kernel.org>; Sun,  4 Feb 2024 09:07:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6970E41917;
-	Sun,  4 Feb 2024 09:06:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6970E41917
+	by smtp2.osuosl.org (Postfix) with ESMTP id AEBB0419DC;
+	Sun,  4 Feb 2024 09:06:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AEBB0419DC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uMvIaOw1jmzU; Sun,  4 Feb 2024 09:06:45 +0000 (UTC)
+	with ESMTP id fcUOpJDBNmZf; Sun,  4 Feb 2024 09:06:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 54A50419BF;
-	Sun,  4 Feb 2024 09:06:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 54A50419BF
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0D2AB1BF909
- for <buildroot@lists.busybox.net>; Sun,  4 Feb 2024 09:06:43 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BD6D5419D6;
+	Sun,  4 Feb 2024 09:06:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD6D5419D6
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 310B71BF34B
+ for <buildroot@lists.busybox.net>; Sun,  4 Feb 2024 09:06:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D7436419BF
- for <buildroot@lists.busybox.net>; Sun,  4 Feb 2024 09:06:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D7436419BF
+ by smtp1.osuosl.org (Postfix) with ESMTP id 16E4585061
+ for <buildroot@lists.busybox.net>; Sun,  4 Feb 2024 09:06:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 16E4585061
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zNIGGVnxWuAU for <buildroot@lists.busybox.net>;
- Sun,  4 Feb 2024 09:06:40 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0A28041917
- for <buildroot@buildroot.org>; Sun,  4 Feb 2024 09:06:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A28041917
-Received: by mail.gandi.net (Postfix) with ESMTPSA id BA9E51C0004;
- Sun,  4 Feb 2024 09:06:36 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rWYSR-009u3s-0t;
- Sun, 04 Feb 2024 10:06:35 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jXE754unJ1dH for <buildroot@lists.busybox.net>;
+ Sun,  4 Feb 2024 09:06:48 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3932B85039
+ for <buildroot@buildroot.org>; Sun,  4 Feb 2024 09:06:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3932B85039
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1FA6C867B7; Sun,  4 Feb 2024 09:06:48 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <20240117210756.265708-1-ju.o@free.fr> <Zazgd8sRYiHBY1CB@landeda>
-Date: Sun, 04 Feb 2024 10:06:35 +0100
-In-Reply-To: <Zazgd8sRYiHBY1CB@landeda> (Yann E. MORIN's message of "Sun, 21
- Jan 2024 10:14:31 +0100")
-Message-ID: <871q9sr42s.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/postgresql: fix service runtime
+To: buildroot@buildroot.org
+Date: Sun, 4 Feb 2024 10:03:18 +0100
+X-Git-Refname: refs/heads/2023.11.x
+X-Git-Oldrev: 7750b558a8c8795c8d41f28b9541cc57fa9e0335
+X-Git-Newrev: 70ab59e19895eb94083bd43fef32ee0bba31156b
+X-Patchwork-Hint: ignore
+Message-Id: <20240204090648.1FA6C867B7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/petitboot: fix
+ NLS build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,50 +57,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Maxim Kochetkov <fido_max@inbox.ru>, Julien Olivain <ju.o@free.fr>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=70ab59e19895eb94083bd43fef32ee0bba31156b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
- > Julien, All,
- > On 2024-01-17 22:07 +0100, Julien Olivain spake thusly:
- >> Since commit 2a8065e "package/postgresql: bump version to 16.1", the
- >> postgresql service fail to start at runtime with an error:
- >> 
- >> FATAL: could not load library
- >> "/usr/lib/postgresql/dict_snowball.so":
- >> /usr/lib/postgresql/dict_snowball.so: undefined symbol:
- >> CurrentMemoryContext
- >> 
- >> This is due to the Posgresql autotool configure script trying to
- >> detect whether the toolchain linker needs --export-dynamic or not.
- >> This test is done with a runtime execution of a test program, and
- >> therefore cannot run in cross-compilation. In that case, the
- >> configure script assumes it is not needed. See commit [1], included
- >> in PostgreSQL v16.0.
- >> 
- >> This commit fixes the issue by forcing the value in _CONF_ENV. The
- >> package has already a Kconfig dependency on !BR2_STATIC_LIBS, so the
- >> value can be unconditionally set.
- >> 
- >> [1]
- >> https://git.postgresql.org/gitweb/?p=postgresql.git;a=commitdiff;h=9db49fc5bfdc0126be03f4b8986013e59d93b91d
+Fix the following NLS build failure on musl raised commit
+bf9583a50276f52edbc37d9f85df5f2cc7fdb5dc:
 
- > I've added references to the ML thread upstream, with their position
- > that cross-compiling is not really a supoprted thing.
+/home/autobuild/autobuild/instance-4/output-1/host/lib/gcc/mips64el-buildroot-linux-musl/13.2.0/../../../../mips64el-buildroot-linux-musl/bin/ld: discover/pb_discover-pb-discover.o: undefined reference to symbol 'libintl_textdomain'
 
- >> Signed-off-by: Julien Olivain <ju.o@free.fr>
+Fixes:
+ - http://autobuild.buildroot.org/results/6d440d96e811674041b5a1fdae96d4c377824c2a
 
- > Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Laurent Vivier <laurent@vivier.eu>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 5159c5c730dc490aced7bc17477f951786f4c405)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/petitboot/petitboot.mk | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-Committed to 2023.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/petitboot/petitboot.mk b/package/petitboot/petitboot.mk
+index c4eb20b44d..2087f01b09 100644
+--- a/package/petitboot/petitboot.mk
++++ b/package/petitboot/petitboot.mk
+@@ -7,10 +7,18 @@
+ PETITBOOT_VERSION = 1.14
+ PETITBOOT_SOURCE = petitboot-v$(PETITBOOT_VERSION).tar.gz
+ PETITBOOT_SITE = https://github.com/open-power/petitboot/releases/download/v$(PETITBOOT_VERSION)
+-PETITBOOT_DEPENDENCIES = elfutils ncurses udev host-bison host-flex lvm2
++PETITBOOT_DEPENDENCIES = \
++	elfutils \
++	ncurses \
++	udev \
++	host-bison \
++	host-flex \
++	lvm2 \
++	$(TARGET_NLS_DEPENDENCIES)
+ PETITBOOT_LICENSE = GPL-2.0
+ PETITBOOT_LICENSE_FILES = COPYING
+ 
++PETITBOOT_CONF_ENV = LDFLAGS="$(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)"
+ PETITBOOT_CONF_OPTS = \
+ 	--enable-crypt \
+ 	--enable-platform-auto \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
