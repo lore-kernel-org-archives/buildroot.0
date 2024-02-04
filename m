@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B01CCC48286
-	for <buildroot@archiver.kernel.org>; Sun,  4 Feb 2024 22:33:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A80D3C48286
+	for <buildroot@archiver.kernel.org>; Sun,  4 Feb 2024 22:34:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 69FA840377;
-	Sun,  4 Feb 2024 22:33:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 69FA840377
+	by smtp2.osuosl.org (Postfix) with ESMTP id 53ECD405F5;
+	Sun,  4 Feb 2024 22:34:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 53ECD405F5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id unRuKRilooIb; Sun,  4 Feb 2024 22:33:47 +0000 (UTC)
+	with ESMTP id e28FyixZUGjA; Sun,  4 Feb 2024 22:34:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 842F5402F2;
-	Sun,  4 Feb 2024 22:33:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 842F5402F2
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C83BF1BF909
- for <buildroot@lists.busybox.net>; Sun,  4 Feb 2024 22:33:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5FFF9405A9;
+	Sun,  4 Feb 2024 22:34:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5FFF9405A9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0C9291BF3A8
+ for <buildroot@lists.busybox.net>; Sun,  4 Feb 2024 22:33:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A213282071
+ by smtp2.osuosl.org (Postfix) with ESMTP id D9E5F4055F
  for <buildroot@lists.busybox.net>; Sun,  4 Feb 2024 22:33:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A213282071
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D9E5F4055F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id X1yteL8Sj43v for <buildroot@lists.busybox.net>;
- Sun,  4 Feb 2024 22:33:31 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7C27ZUpO1W_k for <buildroot@lists.busybox.net>;
+ Sun,  4 Feb 2024 22:33:30 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E9C7C8206C
+ by smtp2.osuosl.org (Postfix) with ESMTP id AA707405F5
  for <buildroot@buildroot.org>; Sun,  4 Feb 2024 22:33:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9C7C8206C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AA707405F5
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D86C586935; Sun,  4 Feb 2024 22:33:30 +0000 (UTC)
+ id 8E9D18695A; Sun,  4 Feb 2024 22:33:30 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 4 Feb 2024 22:52:09 +0100
+Date: Sun, 4 Feb 2024 22:35:35 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 3ab50b7e5914a6d9825b461aeb04201aa85d18fd
-X-Git-Newrev: 95cbe9cc60c460291fbe6a3a680816c75bb6f35f
+X-Git-Oldrev: 892d471112cc8eef69fcd62653fbe51c775ee390
+X-Git-Newrev: c423dd4a45b4a9d2b4d8c9a186fcdb1961ddf5cc
 X-Patchwork-Hint: ignore
-Message-Id: <20240204223330.D86C586935@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/gnutls: security
- bump to 3.8.3
+Message-Id: <20240204223330.8E9D18695A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/uuu: fix build
+ failure with host gcc 13.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,47 +63,73 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=95cbe9cc60c460291fbe6a3a680816c75bb6f35f
+commit: https://git.buildroot.net/buildroot/commit/?id=c423dd4a45b4a9d2b4d8c9a186fcdb1961ddf5cc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-see CVE-2024-0553: Fix more timing side-channel inside RSA-PSK key exchange
-see CVE-2024-0567: Fix assertion failure when verifying a certificate chain with a cycle of cross signatures
+With gcc version >= 13.x stdint.h must be explicitly included according to
+[0] so backport a commit to explicitly include stdint.h.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit b136bed2fd703548610e2ac3e0d54b33128db716)
+[0]: https://gcc.gnu.org/gcc-13/porting_to.html
+
+Fixes:
+still not happened
+
+Signed-off-by: Giulio Benetti <giulio.benetti+tekvox@benettiengineering.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Reviewed-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 04dfeff6242516a1061973fc7af2cc9c5e3dd4e2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gnutls/gnutls.hash | 4 ++--
- package/gnutls/gnutls.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/uuu/0001-Fix-missing-references.patch | 40 +++++++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index 6ad363f01d..47fb34ea7c 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.8/gnutls-3.8.2.tar.xz.sig
--sha256  e765e5016ffa9b9dd243e363a0460d577074444ee2491267db2e96c9c2adef77  gnutls-3.8.2.tar.xz
-+# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.8/gnutls-3.8.3.tar.xz.sig
-+sha256  f74fc5954b27d4ec6dfbb11dea987888b5b124289a3703afcada0ee520f4173e  gnutls-3.8.3.tar.xz
- # Locally calculated
- sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  doc/COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  doc/COPYING.LESSER
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 3e9987cdce..8a4f3345aa 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -6,7 +6,7 @@
- 
- # When bumping, make sure *all* --without-libfoo-prefix options are in GNUTLS_CONF_OPTS
- GNUTLS_VERSION_MAJOR = 3.8
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).2
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).3
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = LGPL-2.1+ (core library)
+diff --git a/package/uuu/0001-Fix-missing-references.patch b/package/uuu/0001-Fix-missing-references.patch
+new file mode 100644
+index 0000000000..140c9755c7
+--- /dev/null
++++ b/package/uuu/0001-Fix-missing-references.patch
+@@ -0,0 +1,40 @@
++From 24fd043225903247f71ac10666d820277c0b10b1 Mon Sep 17 00:00:00 2001
++From: nixgnauhcuy <nixgnauhcuy@gmail.com>
++Date: Tue, 9 May 2023 14:32:33 +0800
++Subject: [PATCH] Fix missing references
++
++Upstream: https://github.com/nxp-imx/mfgtools/commit/24fd043225903247f71ac10666d820277c0b10b1
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ libuuu/libcomm.h | 1 +
++ uuu/buildincmd.h | 1 +
++ 2 files changed, 2 insertions(+)
++
++diff --git a/libuuu/libcomm.h b/libuuu/libcomm.h
++index 0afdfa3..38d622d 100644
++--- a/libuuu/libcomm.h
+++++ b/libuuu/libcomm.h
++@@ -28,6 +28,7 @@
++ * POSSIBILITY OF SUCH DAMAGE.
++ *
++ */
+++#include <stdint.h>
++ #include <string>
++ #include <stdarg.h>
++ #include <locale>
++diff --git a/uuu/buildincmd.h b/uuu/buildincmd.h
++index 9415117..46286cc 100644
++--- a/uuu/buildincmd.h
+++++ b/uuu/buildincmd.h
++@@ -31,6 +31,7 @@
++ 
++ #pragma once
++ 
+++#include <stdint.h>
++ #include <map>
++ #include <string>
++ #include <vector>
++-- 
++2.34.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
