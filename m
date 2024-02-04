@@ -1,65 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 769FEC48286
-	for <buildroot@archiver.kernel.org>; Sun,  4 Feb 2024 09:32:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07F8EC48286
+	for <buildroot@archiver.kernel.org>; Sun,  4 Feb 2024 10:07:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D5EF140193;
-	Sun,  4 Feb 2024 09:32:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D5EF140193
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8XDRNVrM-1Uf; Sun,  4 Feb 2024 09:32:06 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A33B2405E3;
-	Sun,  4 Feb 2024 09:32:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A33B2405E3
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7092C1BF860
- for <buildroot@lists.busybox.net>; Sun,  4 Feb 2024 09:32:03 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 562F785380
- for <buildroot@lists.busybox.net>; Sun,  4 Feb 2024 09:32:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 562F785380
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5F9D58518B;
+	Sun,  4 Feb 2024 10:07:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F9D58518B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SrM9OI5zRxvu for <buildroot@lists.busybox.net>;
- Sun,  4 Feb 2024 09:32:02 +0000 (UTC)
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 151568537F
- for <buildroot@buildroot.org>; Sun,  4 Feb 2024 09:32:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 151568537F
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 6C85113F89A;
- Sun,  4 Feb 2024 10:31:57 +0100 (CET)
-From: Julien Olivain <ju.o@free.fr>
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2E9HSplsACRU; Sun,  4 Feb 2024 10:07:13 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id C4B3485186;
+	Sun,  4 Feb 2024 10:07:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C4B3485186
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E76DD1BF41D
+ for <buildroot@lists.busybox.net>; Sun,  4 Feb 2024 10:07:10 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id BFE9F60F64
+ for <buildroot@lists.busybox.net>; Sun,  4 Feb 2024 10:07:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BFE9F60F64
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3eO6f1x4pMsa for <buildroot@lists.busybox.net>;
+ Sun,  4 Feb 2024 10:07:07 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 395A460EE5
+ for <buildroot@buildroot.org>; Sun,  4 Feb 2024 10:07:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 395A460EE5
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2674C86891; Sun,  4 Feb 2024 10:07:07 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun,  4 Feb 2024 10:31:48 +0100
-Message-ID: <20240204093148.11282-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.43.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1707039118;
- bh=RPrK+Rt5QKh+IqFXgVroY8dJb+skgwRVafvPAlV6QM4=;
- h=From:To:Cc:Subject:Date:From;
- b=jUeladGgtUgvQ7Nh1kqIV/kS5uaLlzAId50FD2DUTf0L6JzsSIOzzWnlb/W+1byOa
- ul0VJ7rdSxaE4HpvPQkD7om1T0j1e1p0U3uuun5LqoWnil4bepoXyY/cqUQXDkkmNR
- JE/Jt2QyRZhragWe4NwSKpkYfS0DlhdA8dPXLCuqRYcmOnd5w9HZBWlymbx6Je38Fb
- BDW6JSlt/0JXbsJkCHquqyluUii+eOBL0NdeeSggRC/k4wPiZutrFFnfl5VAaepE/h
- DIU7fcQnYl/RiFhGKBW04Ay2S3LbpZ5zK9mtazx3osxPwu4Sg/ixLRJnjYCW3TpG4v
- VryFSff+Wgxgg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=jUeladGg
-Subject: [Buildroot] [PATCH 1/1] support/testing: micropython: add
- micropython-lib test
+Date: Sun, 4 Feb 2024 11:06:13 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 05617160dd0bc4aef6cc91930d7985009e854142
+X-Git-Newrev: 380d4a75f5e3c2ae52ebc1afd409713fdb6ced37
+X-Patchwork-Hint: ignore
+Message-Id: <20240204100707.2674C86891@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/linux-firmware: drop
+ LINUX_FIRMWARE_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,80 +57,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit 8f403f0 "package/micropython-lib: merge with, and install
-as part of micropython" brought micropython library within the
-package.
+commit: https://git.buildroot.net/buildroot/commit/?id=380d4a75f5e3c2ae52ebc1afd409713fdb6ced37
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit improves the micropython runtime test by enabling the
-micropython-lib and by also adding a runtime test using one of its
-module.
+cpe:2.3:a:kernel:linux-firmware added by commit
+63332c33aa0771532807fd2684d4eee4eb952435 has never been a valid CPE ID
+for this package:
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe:2.3:a:kernel:linux-firmware
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- support/testing/tests/package/test_micropython.py | 13 ++++++++++++-
- .../test_micropython/rootfs-overlay/root/zcat.py  | 15 +++++++++++++++
- 2 files changed, 27 insertions(+), 1 deletion(-)
- create mode 100755 support/testing/tests/package/test_micropython/rootfs-overlay/root/zcat.py
+ package/linux-firmware/linux-firmware.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/support/testing/tests/package/test_micropython.py b/support/testing/tests/package/test_micropython.py
-index 0ecd4790bd..371deb2978 100644
---- a/support/testing/tests/package/test_micropython.py
-+++ b/support/testing/tests/package/test_micropython.py
-@@ -7,6 +7,7 @@ class TestMicroPython(infra.basetest.BRTest):
-     config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-         f"""
-         BR2_PACKAGE_MICROPYTHON=y
-+        BR2_PACKAGE_MICROPYTHON_LIB=y
-         BR2_ROOTFS_OVERLAY="{infra.filepath("tests/package/test_micropython/rootfs-overlay")}"
-         BR2_TARGET_ROOTFS_CPIO=y
-         # BR2_TARGET_ROOTFS_TAR is not set
-@@ -64,5 +65,15 @@ class TestMicroPython(infra.basetest.BRTest):
-         output = self.run_upy_code(py_code)
-         self.assertEqual(output[0], expected_output)
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 58fbaab1d7..60e8861abe 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -9,8 +9,6 @@ LINUX_FIRMWARE_SOURCE = linux-firmware-$(LINUX_FIRMWARE_VERSION).tar.xz
+ LINUX_FIRMWARE_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/firmware
+ LINUX_FIRMWARE_INSTALL_IMAGES = YES
  
--        # Finally, Check a small script can execute.
-+        # Check a small script can execute.
-         self.assertRunOk("/root/mandel.py", timeout=10)
-+
-+        # Check we can use a micropython-lib module.
-+        msg = "Hello Buildroot!"
-+        filename = "file.txt"
-+        gz_filename = f"{filename}.gz"
-+        self.assertRunOk(f"echo '{msg}' > {filename}")
-+        self.assertRunOk(f"gzip {filename}")
-+        out, ret = self.emulator.run(f"/root/zcat.py {gz_filename}")
-+        self.assertEqual(ret, 0)
-+        self.assertEqual(out[0], msg)
-diff --git a/support/testing/tests/package/test_micropython/rootfs-overlay/root/zcat.py b/support/testing/tests/package/test_micropython/rootfs-overlay/root/zcat.py
-new file mode 100755
-index 0000000000..3b8c60bdd1
---- /dev/null
-+++ b/support/testing/tests/package/test_micropython/rootfs-overlay/root/zcat.py
-@@ -0,0 +1,15 @@
-+#! /usr/bin/env micropython
-+
-+import gzip
-+import sys
-+
-+
-+def main(fname):
-+    with open(fname, "rb") as f:
-+        with gzip.GzipFile(fileobj=f) as g:
-+            s = g.read()
-+            print(s.decode("UTF-8"), end="")
-+
-+
-+if __name__ == "__main__":
-+    main(sys.argv[1])
--- 
-2.43.0
-
+-LINUX_FIRMWARE_CPE_ID_VENDOR = kernel
+-
+ # Intel SST DSP
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_INTEL_SST_DSP),y)
+ LINUX_FIRMWARE_FILES += intel/fw_sst_0f28.bin-48kHz_i2s_master
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
