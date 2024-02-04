@@ -4,48 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE8D5C4828F
-	for <buildroot@archiver.kernel.org>; Sun,  4 Feb 2024 21:27:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 048FFC4828F
+	for <buildroot@archiver.kernel.org>; Sun,  4 Feb 2024 21:32:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A0E84402F2;
-	Sun,  4 Feb 2024 21:27:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A0E84402F2
+	by smtp2.osuosl.org (Postfix) with ESMTP id 63D92402F2;
+	Sun,  4 Feb 2024 21:32:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 63D92402F2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OQmur6lF04A0; Sun,  4 Feb 2024 21:27:07 +0000 (UTC)
+	with ESMTP id zhONU2V6RQzH; Sun,  4 Feb 2024 21:32:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 91B5940420;
-	Sun,  4 Feb 2024 21:27:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 91B5940420
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A588E1BF407
- for <buildroot@lists.busybox.net>; Sun,  4 Feb 2024 21:27:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9E63840420;
+	Sun,  4 Feb 2024 21:32:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9E63840420
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 679671BF407
+ for <buildroot@lists.busybox.net>; Sun,  4 Feb 2024 21:32:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7E80B416FA
- for <buildroot@lists.busybox.net>; Sun,  4 Feb 2024 21:27:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E80B416FA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 47F9540420
+ for <buildroot@lists.busybox.net>; Sun,  4 Feb 2024 21:32:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 47F9540420
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ptcm88GxNIjr for <buildroot@lists.busybox.net>;
- Sun,  4 Feb 2024 21:27:03 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id AD1ED416D8
- for <buildroot@buildroot.org>; Sun,  4 Feb 2024 21:27:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD1ED416D8
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9BDC18693A; Sun,  4 Feb 2024 21:27:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ysKqAgRxC6hQ for <buildroot@lists.busybox.net>;
+ Sun,  4 Feb 2024 21:32:32 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5AE4B402F2
+ for <buildroot@buildroot.org>; Sun,  4 Feb 2024 21:32:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5AE4B402F2
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 76F1020003;
+ Sun,  4 Feb 2024 21:32:30 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1rWk6H-00A5Dp-1f;
+ Sun, 04 Feb 2024 22:32:29 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 4 Feb 2024 22:23:35 +0100
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: e4fa5ebff17d899c3c0ef349b4eeb5af7b2aeb81
-X-Git-Newrev: 892d471112cc8eef69fcd62653fbe51c775ee390
-X-Patchwork-Hint: ignore
-Message-Id: <20240204212703.9BDC18693A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/opencv4-contrib:
- fix INSTALL_TARGET value
+To: Adam Duskett <adam.duskett@amarulasolutions.com>
+References: <20240123190035.904936-1-adam.duskett@amarulasolutions.com>
+ <20240123190035.904936-2-adam.duskett@amarulasolutions.com>
+Date: Sun, 04 Feb 2024 22:32:29 +0100
+In-Reply-To: <20240123190035.904936-2-adam.duskett@amarulasolutions.com> (Adam
+ Duskett's message of "Tue, 23 Jan 2024 12:00:33 -0700")
+Message-ID: <875xz3x6du.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/3] package/flutter-pi: remove libgles
+ requirement for gstreamer audio plugin
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,39 +64,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=892d471112cc8eef69fcd62653fbe51c775ee390
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+>>>>> "Adam" == Adam Duskett <adam.duskett@amarulasolutions.com> writes:
 
-The variable should be a YES/NO value, FALSE is not a valid value.
-E.g. the yesno-to-bool cmd does not translate a FALSE value and therefore returns invalid JSON.
+ > package/flutter-pi: remove libgles requirement for gstreamer audio plugin
+ > I erroneously added the dependency BR2_PACKAGE_HAS_LIBGLES for the gstreamer
+ > audio player plugin, and the CMakeLists.txt file does not check for gles2 when
+ > the plugin is selected. This error was likely due to a copy/paste mistake.
+ > Remove the requirement.
 
-Signed-off-by: Maximilian Senftleben <maximilian.senftleben@frogblue-tec.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 9fa01e309781faec1395507405a128deb8f55c56)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/opencv4-contrib/opencv4-contrib.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 
-diff --git a/package/opencv4-contrib/opencv4-contrib.mk b/package/opencv4-contrib/opencv4-contrib.mk
-index 52d2682b26..f8c8cfd94c 100644
---- a/package/opencv4-contrib/opencv4-contrib.mk
-+++ b/package/opencv4-contrib/opencv4-contrib.mk
-@@ -6,7 +6,7 @@
- 
- OPENCV4_CONTRIB_VERSION = 4.8.1
- OPENCV4_CONTRIB_SITE = $(call github,opencv,opencv_contrib,$(OPENCV4_CONTRIB_VERSION))
--OPENCV4_CONTRIB_INSTALL_TARGET = FALSE
-+OPENCV4_CONTRIB_INSTALL_TARGET = NO
- OPENCV4_CONTRIB_LICENSE = Apache-2.0
- OPENCV4_CONTRIB_LICENSE_FILES = LICENSE
- 
+Committed to 2023.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
