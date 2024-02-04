@@ -4,61 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A63A7C48286
-	for <buildroot@archiver.kernel.org>; Sun,  4 Feb 2024 19:19:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 592EFC48286
+	for <buildroot@archiver.kernel.org>; Sun,  4 Feb 2024 20:17:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0BFFA415EC;
-	Sun,  4 Feb 2024 19:19:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0BFFA415EC
+	by smtp4.osuosl.org (Postfix) with ESMTP id D94CA41720;
+	Sun,  4 Feb 2024 20:17:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D94CA41720
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lMeqJX_G-WOo; Sun,  4 Feb 2024 19:19:37 +0000 (UTC)
+	with ESMTP id CuoWXMisZnxE; Sun,  4 Feb 2024 20:17:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 29BDE4168D;
-	Sun,  4 Feb 2024 19:19:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29BDE4168D
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 911531BF429
- for <buildroot@lists.busybox.net>; Sun,  4 Feb 2024 19:19:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 215B7416A5;
+	Sun,  4 Feb 2024 20:17:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 215B7416A5
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B9F621BF425
+ for <buildroot@lists.busybox.net>; Sun,  4 Feb 2024 20:17:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 69D6E60A9B
- for <buildroot@lists.busybox.net>; Sun,  4 Feb 2024 19:19:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69D6E60A9B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 896BA405F5
+ for <buildroot@lists.busybox.net>; Sun,  4 Feb 2024 20:17:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 896BA405F5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UiT_4NuU2-AV for <buildroot@lists.busybox.net>;
- Sun,  4 Feb 2024 19:19:33 +0000 (UTC)
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0A00160A9A
- for <buildroot@buildroot.org>; Sun,  4 Feb 2024 19:19:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A00160A9A
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id DC0BF13F846;
- Sun,  4 Feb 2024 20:19:27 +0100 (CET)
-From: Julien Olivain <ju.o@free.fr>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ukFMyAP_tHAh for <buildroot@lists.busybox.net>;
+ Sun,  4 Feb 2024 20:17:05 +0000 (UTC)
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 22147405D9
+ for <buildroot@buildroot.org>; Sun,  4 Feb 2024 20:17:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 22147405D9
+Received: by mail-wm1-x334.google.com with SMTP id
+ 5b1f17b1804b1-40fc52c2ae4so22888075e9.3
+ for <buildroot@buildroot.org>; Sun, 04 Feb 2024 12:17:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1707077822; x=1707682622;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=UECALV+pPnrrtdH7EezUqJy8MWuPYsoOSg6N++Vie9Q=;
+ b=uEyEZWdQu0GPJH1p3RIyDrlipvHWN7F/TEXU/Cd3bZojVribPAtv+1/DqizT7lx6XJ
+ qlFQMBS39nrYjLqsYkiGitubmZs66DZfMnWZzWwmYI/n4Up/bh7Ri5ZwxebR8RtwdUz2
+ QV9IM6z2k01NcLQx6CAm6+mCnznwm4wOibgk6B67J1Lihof6vUzIUiBRsfcIBl2vqGNh
+ 0i5WGWASIxRzNQQtJiICX6edWnrUhczdLDxBEiCirSuAl4gW2p37z0kkLuSi6bEQtbjC
+ oh08Pr6w2+bHxvu/K7E7aEwmJA1ukt9zhCZH+43qTysDrVGQyDXToZO35u/jDWkSptd/
+ Hwiw==
+X-Gm-Message-State: AOJu0YwP2S7IYLjdaKlNEb9/WEGaxlB1Cawr+D5+r6ABb/gAVuUFaK+L
+ W0fXCbIBjZfbBjKEpdyJfKKKjHCcChC/GxRHY4PMGhjJXi1T6FMdujSpyinfycCyDg==
+X-Google-Smtp-Source: AGHT+IHie3jvlWl7Dz5z9BoYljrFQAlauyZLh2sDZzbnJMzvcDzTF8fwpCJIqsfHoYOgsmFUhJh8pg==
+X-Received: by 2002:a05:600c:3147:b0:40f:b68e:165b with SMTP id
+ h7-20020a05600c314700b0040fb68e165bmr3022686wmo.24.1707077822250; 
+ Sun, 04 Feb 2024 12:17:02 -0800 (PST)
+X-Forwarded-Encrypted: i=0;
+ AJvYcCUB4OUAfnM+5NDpewgs5yF7jXTkWIpcpmr9SlunNg7XCbGXV1rAloMB54DYdBObA87mSYKf6vltSWY1TmLKC6BSAReIMdnCmDxmv48isA==
+Received: from aleksandr-System-Product-Name.lan ([146.70.124.140])
+ by smtp.gmail.com with ESMTPSA id
+ hg12-20020a05600c538c00b0040ef63a162dsm6458108wmb.26.2024.02.04.12.17.01
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 04 Feb 2024 12:17:01 -0800 (PST)
+From: Aleksandr Makarov <aleksandr.o.makarov@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  4 Feb 2024 20:19:22 +0100
-Message-ID: <20240204191922.366955-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.43.0
+Date: Sun,  4 Feb 2024 22:16:56 +0200
+Message-Id: <20240204201657.33079-1-aleksandr.o.makarov@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1707074369;
- bh=NJcnwXSykmIQVKtT9ykk2WKzofR6gnAuP50w/Jl61Fk=;
- h=From:To:Cc:Subject:Date:From;
- b=VuTTyywQmVwZla7H+94Ouc3Ku7xP+amRVU8k59qCg0qAqsD+hz5t3skcrwR3EXTzJ
- DQW9jHXQTDYrvmMTsS/hV5P9bX3bAZeTLY8qVnyJWPge90hHJR9BNTEBIzWWpk45Od
- VMiTW9ybGIehulckVz2CydbUrsJhojyn4lZvFQ6H5hD8ZSPiHkMJ0FT+O/LqhYpQgj
- IVsVqE2e+em00aQgWDMTjAElnyZyg6FkPfg4NFrte+7brtZ31hI7+dJXiuoAyb2t1J
- H9UAw0pN2/i48XHEy/sf9WrUozG6LDacw1VPDKW53NvsHMWkk9M4N54uHXc6tKXDtG
- Km0qN5fZQwPrQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=VuTTyywQ
-Subject: [Buildroot] [PATCH 1/1] support/testing: add libcamera runtime test
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1707077822; x=1707682622; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=UECALV+pPnrrtdH7EezUqJy8MWuPYsoOSg6N++Vie9Q=;
+ b=EL9z4bgRHTw5njT2gx1XGUxM47T7lAtCbycJGh2TtnjP17DYbwlCCh9W5qq71hELOI
+ uRsQsAHpiPJPzjZPZ6EZEXkzmrYl7QfpWyQ+JqJGc+DgwApe/jxnZ/w4HQ9v0wKMn/G1
+ uhXT6wBR247XJc4gVVp4OzZ5Z4Fh94KiQ2EQ36Td/n3O+MdzvA0anqllOpSxraNE9cAq
+ sFRoW/dc4Q6BpuJVa31W5kS1muju5Pjz1rjK+4BWQPhf7L4L5lvXJNmOC6L3naKV/b91
+ AiUB/xcWc1UImbNRKELHTuuOr2YCEPR3baWs0KIx70DWVsbTkbzBuUDC50Z1GwALDWLn
+ qfug==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=EL9z4bgR
+Subject: [Buildroot] [PATCH v2] package/haproxy: fix runtime 'FATAL ERROR:
+ invalid code detected -- cannot go further
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,131 +96,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+Cc: Aleksandr Makarov <aleksandr.o.makarov@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- DEVELOPERS                                    |  2 +
- .../testing/tests/package/test_libcamera.py   | 79 +++++++++++++++++++
- .../test_libcamera/linux-vimc.fragment        |  4 +
- 3 files changed, 85 insertions(+)
- create mode 100644 support/testing/tests/package/test_libcamera.py
- create mode 100644 support/testing/tests/package/test_libcamera/linux-vimc.fragment
+This is a re-spin of v1 that was modifying haproxy's Makefile and was
+rejected by upstream [1].
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 02b7516a92..0acf49296d 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1783,6 +1783,8 @@ F:	support/testing/tests/package/test_kexec/
- F:	support/testing/tests/package/test_kmscube.py
- F:	support/testing/tests/package/test_kmscube/
- F:	support/testing/tests/package/test_less.py
-+F:	support/testing/tests/package/test_libcamera.py
-+F:	support/testing/tests/package/test_libcamera/
- F:	support/testing/tests/package/test_libgpgme.py
- F:	support/testing/tests/package/test_libjxl.py
- F:	support/testing/tests/package/test_lrzip.py
-diff --git a/support/testing/tests/package/test_libcamera.py b/support/testing/tests/package/test_libcamera.py
-new file mode 100644
-index 0000000000..8953021b82
---- /dev/null
-+++ b/support/testing/tests/package/test_libcamera.py
-@@ -0,0 +1,79 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestLibCamera(infra.basetest.BRTest):
-+    # A specific configuration is needed for testing libcamera:
-+    # a kernel config fragment enables v4l2 vimc driver.
-+    # The libevent package is also enabled to have the libcamera "cam"
-+    # test application.
-+    kernel_fragment = \
-+        infra.filepath("tests/package/test_libcamera/linux-vimc.fragment")
-+    config = \
-+        f"""
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.76"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-+        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{kernel_fragment}"
-+        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+        BR2_PACKAGE_LIBCAMERA=y
-+        BR2_PACKAGE_LIBCAMERA_PIPELINE_VIMC=y
-+        BR2_PACKAGE_LIBEVENT=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        BR2_TARGET_ROOTFS_CPIO_GZIP=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
-+        kern = os.path.join(self.builddir, "images", "Image")
-+        self.emulator.boot(arch="aarch64",
-+                           kernel=kern,
-+                           kernel_cmdline=["console=ttyAMA0"],
-+                           options=["-M", "virt", "-cpu", "cortex-a57", "-m", "256M",
-+                                    "-initrd", img])
-+        self.emulator.login()
-+
-+        # The Kernel config of this test has only one v4l2 vimc
-+        # driver. The camera index is expected to be #1.
-+        cam_idx = 1
-+
-+        # We test libcamera with its simple "cam" application, by
-+        # requesting a list of available cameras.
-+        cmd = "cam --list"
-+        out, ret = self.emulator.run(cmd)
-+        self.assertEqual(ret, 0)
-+        # libcamera generates info messages. We filter only the
-+        # line(s) starting with our camera index.
-+        cam_line = [ln for ln in out if ln.startswith(f"{cam_idx}:")]
-+        # We should have the vimc camera in this line.
-+        self.assertIn("platform/vimc.0", cam_line[0])
-+
-+        # List the camera information.
-+        cmd = f"cam --camera {cam_idx} --info"
-+        self.assertRunOk(cmd)
-+
-+        # List the camera controls and check we have a brightness
-+        # control.
-+        cmd = f"cam --camera {cam_idx} --list-controls"
-+        out, ret = self.emulator.run(cmd)
-+        self.assertEqual(ret, 0)
-+        self.assertIn("Control: Brightness:", "\n".join(out))
-+
-+        # List the camera properties and check we have a camera
-+        # "Model" property.
-+        cmd = f"cam --camera {cam_idx} --list-properties"
-+        out, ret = self.emulator.run(cmd)
-+        self.assertEqual(ret, 0)
-+        self.assertIn("Property: Model = ", "\n".join(out))
-+
-+        # Capture few frames.
-+        cmd = f"cam --camera {cam_idx} --capture=5"
-+        cmd += " --stream width=160,height=120,role=video,pixelformat=RGB888"
-+        self.assertRunOk(cmd)
-diff --git a/support/testing/tests/package/test_libcamera/linux-vimc.fragment b/support/testing/tests/package/test_libcamera/linux-vimc.fragment
-new file mode 100644
-index 0000000000..04436e7518
---- /dev/null
-+++ b/support/testing/tests/package/test_libcamera/linux-vimc.fragment
-@@ -0,0 +1,4 @@
-+CONFIG_MEDIA_SUPPORT=y
-+CONFIG_MEDIA_TEST_SUPPORT=y
-+CONFIG_V4L_TEST_DRIVERS=y
-+CONFIG_VIDEO_VIMC=y
+I made a v2 that makes changes to haproxy.mk recipe instead and dropped
+the .patch to program source.
+
+[1] https://www.mail-archive.com/haproxy@formilux.org/msg44499.html
+
+
+Aleksandr Makarov (1):
+  package/haproxy: fix runtime 'FATAL ERROR: invalid code detected --
+    cannot go further'
+
+ package/haproxy/haproxy.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
 -- 
-2.43.0
+2.39.2
 
 _______________________________________________
 buildroot mailing list
