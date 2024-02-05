@@ -4,65 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53055C4828D
-	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 17:52:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 295F6C48292
+	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 17:56:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E1C9940135;
-	Mon,  5 Feb 2024 17:52:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1C9940135
+	by smtp2.osuosl.org (Postfix) with ESMTP id BB6FA40162;
+	Mon,  5 Feb 2024 17:56:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB6FA40162
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qp449Bub-51h; Mon,  5 Feb 2024 17:52:56 +0000 (UTC)
+	with ESMTP id 2xZXMa17FLoq; Mon,  5 Feb 2024 17:56:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C152F40162;
-	Mon,  5 Feb 2024 17:52:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C152F40162
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C313A1BF3D6
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 17:52:53 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6DE114018B;
+	Mon,  5 Feb 2024 17:56:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6DE114018B
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 96E001BF3D6
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 17:56:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9BE8281D67
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 17:52:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9BE8281D67
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7062A60B23
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 17:56:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7062A60B23
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Cr1qF5gIjF7Z for <buildroot@lists.busybox.net>;
- Mon,  5 Feb 2024 17:52:52 +0000 (UTC)
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AD79C81D65
- for <buildroot@buildroot.org>; Mon,  5 Feb 2024 17:52:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD79C81D65
-Received: from [192.168.17.123] (unknown [85.119.216.19])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id 6C1632C800D1
- for <buildroot@buildroot.org>; Mon,  5 Feb 2024 18:52:50 +0100 (CET)
-Message-ID: <e76ab143-f2cb-47e3-8383-0688df3e82a9@bubu1.eu>
-Date: Mon, 5 Feb 2024 18:52:48 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QNtwJzrYFYBO for <buildroot@lists.busybox.net>;
+ Mon,  5 Feb 2024 17:56:16 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 77F7E60AE6
+ for <buildroot@buildroot.org>; Mon,  5 Feb 2024 17:56:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 77F7E60AE6
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 58D5086DAD; Mon,  5 Feb 2024 17:56:16 +0000 (UTC)
 To: buildroot@buildroot.org
-References: <20240205164615.510688-1-james.hilliard1@gmail.com>
-In-Reply-To: <20240205164615.510688-1-james.hilliard1@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=bubu1.eu; s=bubu; 
- t=1707155570; bh=f3W0pZAIVRiHESKufXCaayQ5CObVkLURVPHGJE0vijY=;
- h=Date:Subject:To:References:From:In-Reply-To;
- b=Bz14eM25x8ZzXwIAoYkRGA0gpCxEJ6lFvwsdMyi637NQ3xNcYFVUTT3H/hf0G2d94
- QPQBSO3luIBSpCDB8ezIJUQyGOhWYziQ3f0hg3aGHnpOnPjMEZZqH2onJNsEEihs/l
- dnE9jfaB1+9O0qIMr4GBrDM5rnb+6jbpj73T3afTsgI6sYaRsdpb5wod2i49a24F+o
- FAH9+WGCwtuKcWr3isZrYF5T6sz7c1SO9IbaaGeOXmPoSz5kUo/QjQmmd0wnZ2K5Ff
- Tgb2R1m9ZOr8qgTUxucrzj7Qmw2NU5ykq6dFyzzIUGBPaytAtCMDIJ5IjRJI7S9sVe
- GRdrYvTd+NKAA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=bubu1.eu header.i=@bubu1.eu
- header.a=rsa-sha256 header.s=bubu header.b=Bz14eM25
-Subject: Re: [Buildroot] [PATCH 1/2] package/python-starlette: bump to
- version 0.36.3
+Date: Mon, 5 Feb 2024 18:51:35 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 14c0c37eaf0f91ef61a88b3085c15028f566a394
+X-Git-Newrev: 325fe1aecfd20d2653cce6bc189824c6fdfcafec
+X-Patchwork-Hint: ignore
+Message-Id: <20240205175616.58D5086DAD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/openssh: fix build error on powerpc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,52 +55,122 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============5056336251849721521=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 05.02.24 17:46, James Hilliard wrote:
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+--===============5056336251849721521==
+Content-Type: text/plain
 
-Reviewed-by: Marcus Hoffmann <buildroot@bubu1.eu>
+commit: https://git.buildroot.net/buildroot/commit/?id=325fe1aecfd20d2653cce6bc189824c6fdfcafec
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> ---
->   package/python-starlette/python-starlette.hash | 4 ++--
->   package/python-starlette/python-starlette.mk   | 4 ++--
->   2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/python-starlette/python-starlette.hash b/package/python-starlette/python-starlette.hash
-> index 820026b70b..03d77cf5be 100644
-> --- a/package/python-starlette/python-starlette.hash
-> +++ b/package/python-starlette/python-starlette.hash
-> @@ -1,5 +1,5 @@
->   # md5, sha256 from https://pypi.org/pypi/starlette/json
-> -md5  2ef2fc635691fd4a1823564218292dce  starlette-0.34.0.tar.gz
-> -sha256  ed050aaf3896945bfaae93bdf337e53ef3f29115a9d9c153e402985115cd9c8e  starlette-0.34.0.tar.gz
-> +md5  0a1e026d653dc448ae07f47eefe1dc8b  starlette-0.36.3.tar.gz
-> +sha256  90a671733cfb35771d8cc605e0b679d23b992f8dcfad48cc60b38cb29aeb7080  starlette-0.36.3.tar.gz
->   # Locally computed sha256 checksums
->   sha256  dcb95677a02240243187e964f941847d19b17821cf99e5afae684fab328c19bf  LICENSE.md
-> diff --git a/package/python-starlette/python-starlette.mk b/package/python-starlette/python-starlette.mk
-> index 07f9d6be5e..9d137f5f5a 100644
-> --- a/package/python-starlette/python-starlette.mk
-> +++ b/package/python-starlette/python-starlette.mk
-> @@ -4,9 +4,9 @@
->   #
->   ################################################################################
->   
-> -PYTHON_STARLETTE_VERSION = 0.34.0
-> +PYTHON_STARLETTE_VERSION = 0.36.3
->   PYTHON_STARLETTE_SOURCE = starlette-$(PYTHON_STARLETTE_VERSION).tar.gz
-> -PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/4f/36/168ba6d56a28382f3b081b23b0cc431de35786e120b94c1f372708ed3059
-> +PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/be/47/1bba49d42d63f4453f0a64a20acbf2d0bd2f5a8cde6a166ee66c074a08f8
->   PYTHON_STARLETTE_SETUP_TYPE = pep517
->   PYTHON_STARLETTE_LICENSE = BSD-3-Clause
->   PYTHON_STARLETTE_LICENSE_FILES = LICENSE.md
+Fixes the following error message introducted by OpenSSH v9.6p1.
+
+  sshkey.c: In function 'sshkey_set_filename':
+  sshkey.c:3705:1: sorry, unimplemented: '-fzero-call-used-regs' not supported on this target
+   3705 | }
+
+Fixes:
+http://autobuild.buildroot.org/results/ec7/ec780aed5b1c4fdf9b91f6e7be99e8d4c42efa58
+
+Signed-off-by: Brandon Maier <brandon.maier@collins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...-detection-of-broken-fzero-call-used-regs.patch | 57 ++++++++++++++++++++++
+ package/openssh/openssh.mk                         |  3 ++
+ 2 files changed, 60 insertions(+)
+
+diff --git a/package/openssh/0001-better-detection-of-broken-fzero-call-used-regs.patch b/package/openssh/0001-better-detection-of-broken-fzero-call-used-regs.patch
+new file mode 100644
+index 0000000000..5c056033a9
+--- /dev/null
++++ b/package/openssh/0001-better-detection-of-broken-fzero-call-used-regs.patch
+@@ -0,0 +1,57 @@
++From 1036d77b34a5fa15e56f516b81b9928006848cbd Mon Sep 17 00:00:00 2001
++From: Damien Miller <djm@mindrot.org>
++Date: Fri, 22 Dec 2023 17:56:26 +1100
++Subject: [PATCH] better detection of broken -fzero-call-used-regs
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++gcc 13.2.0 on ppc64le refuses to compile some function, including
++cipher.c:compression_alg_list() with an error:
++
++> sorry, unimplemented: argument ‘used’ is not supportedcw
++> for ‘-fzero-call-used-regs’ on this target
++
++This extends the autoconf will-it-work test with a similarly-
++structured function that seems to catch this.
++
++Spotted/tested by Colin Watson; bz3645
++
++Upstream: https://github.com/openssh/openssh-portable/commit/1036d77b34a5fa15e56f516b81b9928006848cbd.patch
++Signed-off-by: Brandon Maier <brandon.maier@collins.com>
++---
++ m4/openssh.m4 | 12 +++++++++---
++ 1 file changed, 9 insertions(+), 3 deletions(-)
++
++diff --git a/m4/openssh.m4 b/m4/openssh.m4
++index 5d4c56280fc..033df501c3d 100644
++--- a/m4/openssh.m4
+++++ b/m4/openssh.m4
++@@ -20,18 +20,24 @@ char *f2(char *s, ...) {
++ 	va_end(args);
++ 	return strdup(ret);
++ }
+++const char *f3(int s) {
+++	return s ? "good" : "gooder";
+++}
++ int main(int argc, char **argv) {
++-	(void)argv;
++ 	char b[256], *cp;
+++	const char *s;
++ 	/* Some math to catch -ftrapv problems in the toolchain */
++ 	int i = 123 * argc, j = 456 + argc, k = 789 - argc;
++ 	float l = i * 2.1;
++ 	double m = l / 0.5;
++ 	long long int n = argc * 12345LL, o = 12345LL * (long long int)argc;
+++	(void)argv;
++ 	f(1);
++-	snprintf(b, sizeof b, "%d %d %d %f %f %lld %lld\n", i,j,k,l,m,n,o);
+++	s = f3(f(2));
+++	snprintf(b, sizeof b, "%d %d %d %f %f %lld %lld %s\n", i,j,k,l,m,n,o,s);
++ 	if (write(1, b, 0) == -1) exit(0);
++-	cp = f2("%d %d %d %f %f %lld %lld\n", i,j,k,l,m,n,o);
+++	cp = f2("%d %d %d %f %f %lld %lld %s\n", i,j,k,l,m,n,o,s);
+++	if (write(1, cp, 0) == -1) exit(0);
++ 	free(cp);
++ 	/*
++ 	 * Test fallthrough behaviour.  clang 10's -Wimplicit-fallthrough does
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index ec9e6613b0..ef530cc850 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -13,6 +13,9 @@ OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
+ OPENSSH_LICENSE = BSD-3-Clause, BSD-2-Clause, Public Domain
+ OPENSSH_LICENSE_FILES = LICENCE
+ 
++# 0001-better-detection-of-broken-fzero-call-used-regs.patch
++OPENSSH_AUTORECONF = YES
++
+ OPENSSH_CONF_ENV = \
+ 	LD="$(TARGET_CC)" \
+ 	LDFLAGS="$(TARGET_CFLAGS)" \
+
+--===============5056336251849721521==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5056336251849721521==--
