@@ -4,93 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CEAD7C4828D
-	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 14:27:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDCB0C48297
+	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 14:34:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4C9DD404A8;
-	Mon,  5 Feb 2024 14:27:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C9DD404A8
+	by smtp2.osuosl.org (Postfix) with ESMTP id 747C74053F;
+	Mon,  5 Feb 2024 14:34:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 747C74053F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aNNgDwL2RmUI; Mon,  5 Feb 2024 14:27:46 +0000 (UTC)
+	with ESMTP id igcBIUYSrzCv; Mon,  5 Feb 2024 14:34:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 65C5F40B26;
-	Mon,  5 Feb 2024 14:27:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 65C5F40B26
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6AE2D40A49;
+	Mon,  5 Feb 2024 14:34:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6AE2D40A49
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 456771BF2B1
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 14:27:43 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 55E551BF2F0
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 14:34:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2AFCC40941
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 14:27:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2AFCC40941
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2DD6A41528
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 14:34:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2DD6A41528
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id K0Hadwuuf2Kc for <buildroot@lists.busybox.net>;
- Mon,  5 Feb 2024 14:27:41 +0000 (UTC)
-Received: from 18.mo561.mail-out.ovh.net (18.mo561.mail-out.ovh.net
- [87.98.172.162])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7021E4093D
- for <buildroot@buildroot.org>; Mon,  5 Feb 2024 14:27:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7021E4093D
-Received: from director1.ghost.mail-out.ovh.net (unknown [10.108.25.16])
- by mo561.mail-out.ovh.net (Postfix) with ESMTP id 1FD4C273E5
- for <buildroot@buildroot.org>; Mon,  5 Feb 2024 14:21:02 +0000 (UTC)
-Received: from ghost-submission-6684bf9d7b-88wql (unknown [10.110.178.153])
- by director1.ghost.mail-out.ovh.net (Postfix) with ESMTPS id B060F1FEB4;
- Mon,  5 Feb 2024 14:21:01 +0000 (UTC)
-Received: from armadeus.com ([37.59.142.101])
- by ghost-submission-6684bf9d7b-88wql with ESMTPSA
- id 4d2jJ83uwGVTyQAAtZgGBw
- (envelope-from <sebastien.szymanski@armadeus.com>);
- Mon, 05 Feb 2024 14:21:01 +0000
-X-OVh-ClientIp: 92.148.253.243
-Message-ID: <397f4464-2f02-4b7f-b71f-ca38f950fa7f@armadeus.com>
-Date: Mon, 5 Feb 2024 15:20:06 +0100
+ with ESMTP id kjhuqROH9k8V for <buildroot@lists.busybox.net>;
+ Mon,  5 Feb 2024 14:34:13 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3280041522
+ for <buildroot@buildroot.org>; Mon,  5 Feb 2024 14:34:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3280041522
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3918C1BF207;
+ Mon,  5 Feb 2024 14:34:10 +0000 (UTC)
+Date: Mon, 5 Feb 2024 15:34:09 +0100
+To: Petr Vorel <petr.vorel@gmail.com>
+Message-ID: <20240205153409.042e2be1@windsurf>
+In-Reply-To: <20240115214137.2350453-3-petr.vorel@gmail.com>
+References: <20240115214137.2350453-1-petr.vorel@gmail.com>
+ <20240115214137.2350453-3-petr.vorel@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: Fabio Estevam <festevam@gmail.com>, buildroot@buildroot.org
-References: <20240115105827.3179346-1-festevam@gmail.com>
-From: =?UTF-8?Q?S=C3=A9bastien_Szymanski?= <sebastien.szymanski@armadeus.com>
-Autocrypt: addr=sebastien.szymanski@armadeus.com; keydata=
- xsBNBFNfZLEBCACv1lqSePHJNpRgcnER+3emy+Arjz84zFax3XkogjY/e3ZneihIgWrVKe5M
- ql16pX4KTkzNgMUKz4bG/XwT3kjcrXshxFLlg7KrHMl287C+W+QOUjnjVeRi/su+SPmjz8VD
- yr11h+ZkVLAWhS+uQJ93jy1NwG8M4t1kBLAVHHD5Vw4FJ+3ouaVYIp1X1Cr8bVKQw33Q1aTd
- ro0kMBb96B9vNu7ciJZ3gvlaBzUEKOgNnq9KaywuLnqrqr4HUIn5JuxZjCjJzt9kTAKcTfp2
- cJM8qpp+2FF5qtbkse9fZ6M64qozgOPr9Tk4Amf9fZEUQ6UNw14mmBZuXSzoHe75gI7TABEB
- AAHNN1PDqWJhc3RpZW4gU1pZTUFOU0tJIDxzZWJhc3RpZW4uc3p5bWFuc2tpQGFybWFkZXVz
- LmNvbT7CwJAEEwEIADoCGyMHCwkIBwMCAQYVCAIJCgsEFgIDAQIeAQIXgBYhBJwGygpYm/1C
- /GCmwbCaKeiBMmTiBQJdhIHLAAoJELCaKeiBMmTixXIH/2W3kbzRG0UF81jtRRnp0H83rjDT
- v0H+8fgFMRL/7HCJ1QPArkfRJlM2wlJkN+ChP09CCarYfUEHfRCHlTb7At6Yyrz1jziD7ZwX
- 8IWHYRXnZkY5eZc5DsiUgq6JH49kt+GPzK8UVP9MTa6zkBpPCUf7LzZ4pD3FihdkT52BU3gI
- d9P49fSI0TYySlb/VKn815aOhvwEr7+Dh3mZUjSh7saofbRmVUOr7p+R3MvvGI19/IJZjeOE
- ZWliODDOt6HnBOtoGSXMcNIFF6snH52D5N5gY88njZjTwhgGGUBix1bsgf/EY0v4R5itZBXB
- B/Ze4Tm++YHaB75hZK6PQu/YRv7OwE0EU19ksQEIALo7jhXddrXBTRu5SAjelV53jyHBJTX/
- vN4nL/VbbW/saca+NJjDSxx5DBmotZbQdWIyZiSIjU/xnTREvtDrl6ZeSsKWd7ZqiuiY4fSR
- zwuQp9rd0yqRuxesrWeyJB1zCSdEvLyKASERt+nxkOA+IzJ4y1qLtvnWr+SL1AXgTMw+Tkyw
- KIDCRWHTIYas11ldGj82gOIpYeXnapeNLHfT4EQwg0NeWYHynJxAQWiX5aPlw0uSpAQSsBXQ
- FIe3fpoveMSnXK+PG2BBOzexYv7r4S70a6sF9sgTTPpfKqUaqqC+u1+bUX6alTAKhGKJywaF
- 6ViqLlgY8PfwohSyAlqlTRMAEQEAAcLAdgQYAQgAIAIbDBYhBJwGygpYm/1C/GCmwbCaKeiB
- MmTiBQJdhIHSAAoJELCaKeiBMmTitU8IAK7NQM3fEwaF5XaKtepYWsVka44CD8A9e4r7NVK9
- ugirKvXirIxBSDmN/Db862NmVpITsZ6ERNSNZLm/7k55N+TexKYiFZeU7G92TEfAM6qPElvx
- DLEcrkNMq9r08YZeUloacsq31AL5fK4LW+xdvXudkdiKRMJsdTpmff3x5kIziGOHjwFP9wve
- ZgEH52gpbRsP8Whx/Z2lNX/BBRmFM8OnEXFsjjqDzYThdxTq85wGPpkgvvUGyPNRD7TpbB1C
- pajOUUkPxgj5LKt77HD1afeZNudWhgcdkbtT5PMQTT0WY6wvMEj9S1+bGPeXRGWLYB7gHQ+L
- JNoSD7Kz6Y9qnKo=
-In-Reply-To: <20240115105827.3179346-1-festevam@gmail.com>
-X-Ovh-Tracer-Id: 17207409754596830069
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrfedvtddgieegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvfhfhjggtgfesthekredttddvjeenucfhrhhomhepuforsggrshhtihgvnhcuufiihihmrghnshhkihcuoehsvggsrghsthhivghnrdhsiiihmhgrnhhskhhisegrrhhmrgguvghushdrtghomheqnecuggftrfgrthhtvghrnheptddtieeihffhkeegheejkedtgeelheeiteejffehgfffteejgedtfeetheekuddunecuffhomhgrihhnpehgihhtlhgrsgdrtghomhdpsghuihhlughrohhothdrohhrghenucfkphepuddvjedrtddrtddruddpledvrddugeekrddvheefrddvgeefpdefjedrheelrddugedvrddutddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeoshgvsggrshhtihgvnhdrshiihihmrghnshhkihesrghrmhgruggvuhhsrdgtohhmqedpnhgspghrtghpthhtohepuddprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdfovfetjfhoshhtpehmohehiedupdhmohguvgepshhmthhpohhuth
-X-Mailman-Original-Authentication-Results: garm.ovh; auth=pass
- (GARM-101G0047d893a58-d770-4bfb-bccd-354ab1149dda,
- B61640D6B145E66104E0D0FA1FBCBF41853E9D36)
- smtp.auth=sebastien.szymanski@armadeus.com
-Subject: Re: [Buildroot] [PATCH] configs/imx8mpevk: select
- BR2_TARGET_UBOOT_NEEDS_OPENSSL
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1707143650;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=QD9JCCD3UspUT7bsp597quFUxADazAvILGM9Yw/KTgI=;
+ b=Fchmzt3a8fda8zycYPfyt626vVqq712UqDsU0DSP2chwEWDJVb2ZxUg3qNKwEQMJcwfl9H
+ 5I31zHW5Oiwba7lpVJ91o0WFSP9NTZPgSIzkDCLaslqX5mLiC0+oXgDWRJ5b+bzumD4Mfy
+ yc9Jgyo9k4dXYaiEzqf32C5dk8RSnNy0sUf17iJ7NpgDGtexE9fiRE9AWK6mJkCeM72PnB
+ uSRrcp9n/xyB6NSEM178mEF9vZ1b6aUQF03XHvb5nbYR8/8uAyvcR5xPpbbSAgU9e9mC44
+ WA4en2EeGyP7HIi2YBB79dT2xDW74m1JLw4hqoTZjZqdq++KAaLDmoRorlG9Sg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Fchmzt3a
+Subject: Re: [Buildroot] [PATCH 2/3] {linux, linux-headers}: bump 5.{10,
+ 15}.x / 6.{1, 6}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,34 +76,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>,
+ Bernd Kuhls <bernd@kuhls.net>,
+ Angelo Compagnucci <angelo@amarulasolutions.com>, "Yann
+ E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgRmFiaW8sIEFsbCwKCk9uIDEvMTUvMjQgMTE6NTgsIEZhYmlvIEVzdGV2YW0gd3JvdGU6Cj4g
-U2VsZWN0IEJSMl9UQVJHRVRfVUJPT1RfTkVFRFNfT1BFTlNTTCB0byBmaXggdGhlIGZvbGxvd2lu
-ZyBidWlsZAo+IGVycm9yOgo+IAo+IGluY2x1ZGUvaW1hZ2UuaDoxMzk0OjEyOiBmYXRhbCBlcnJv
-cjogb3BlbnNzbC9ldnAuaDogTm8gc3VjaCBmaWxlIG9yIGRpcmVjdG9yeQo+ICAgMTM5NCB8ICMg
-IGluY2x1ZGUgPG9wZW5zc2wvZXZwLmg+Cj4gICAKPiAKPiBGaXhlczogaHR0cHM6Ly9naXRsYWIu
-Y29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vam9icy81ODU4MTgwMDcwCj4gU2lnbmVkLW9m
-Zi1ieTogRmFiaW8gRXN0ZXZhbSA8ZmVzdGV2YW1AZ21haWwuY29tPgo+IC0tLQo+ICAgY29uZmln
-cy9mcmVlc2NhbGVfaW14OG1wZXZrX2RlZmNvbmZpZyB8IDEgKwo+ICAgMSBmaWxlIGNoYW5nZWQs
-IDEgaW5zZXJ0aW9uKCspCj4gCgpJIGNvbmZpcm1lZCB0aGlzIHBhdGNoIGZpeGVzIHRoZSBidWls
-ZCBlcnJvciBtZW50aW9uZWQ6CgpUZXN0ZWQtQnk6IFPDqWJhc3RpZW4gU3p5bWFuc2tpIDxzZWJh
-c3RpZW4uc3p5bWFuc2tpQGFybWFkZXVzLmNvbT4KClJlZ2FyZHMsCgo+IGRpZmYgLS1naXQgYS9j
-b25maWdzL2ZyZWVzY2FsZV9pbXg4bXBldmtfZGVmY29uZmlnIGIvY29uZmlncy9mcmVlc2NhbGVf
-aW14OG1wZXZrX2RlZmNvbmZpZwo+IGluZGV4IDgyZWQ2OGM1YTlmMS4uMmFlZDA0ODQ4MjY1IDEw
-MDY0NAo+IC0tLSBhL2NvbmZpZ3MvZnJlZXNjYWxlX2lteDhtcGV2a19kZWZjb25maWcKPiArKysg
-Yi9jb25maWdzL2ZyZWVzY2FsZV9pbXg4bXBldmtfZGVmY29uZmlnCj4gQEAgLTI5LDYgKzI5LDcg
-QEAgQlIyX1RBUkdFVF9VQk9PVF9DVVNUT01fVEFSQkFMTF9MT0NBVElPTj0iJChjYWxsIGdpdGh1
-YixueHAtaW14LHVib290LWlteCxsZi02LjEKPiAgIEJSMl9UQVJHRVRfVUJPT1RfQk9BUkRfREVG
-Q09ORklHPSJpbXg4bXBfZXZrIgo+ICAgQlIyX1RBUkdFVF9VQk9PVF9DT05GSUdfRlJBR01FTlRf
-RklMRVM9ImJvYXJkL2ZyZWVzY2FsZS9pbXg4bXBldmsvdWJvb3QtZnJhZ21lbnQuY29uZmlnIgo+
-ICAgQlIyX1RBUkdFVF9VQk9PVF9ORUVEU19EVEM9eQo+ICtCUjJfVEFSR0VUX1VCT09UX05FRURT
-X09QRU5TU0w9eQo+ICAgQlIyX1RBUkdFVF9VQk9PVF9ORUVEU19VVElMX0xJTlVYPXkKPiAgIEJS
-Ml9UQVJHRVRfVUJPT1RfTkVFRFNfR05VVExTPXkKPiAgIEJSMl9UQVJHRVRfVUJPT1RfRk9STUFU
-X0NVU1RPTT15CgotLSAKU8OpYmFzdGllbiBTenltYW5za2ksIEFybWFkZXVzIFN5c3RlbXMKU29m
-dHdhcmUgZW5naW5lZXIKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0
-cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Hello Petr,
+
+On Mon, 15 Jan 2024 22:41:36 +0100
+Petr Vorel <petr.vorel@gmail.com> wrote:
+
+>  # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+> -sha256  afe2e5a661bb886d762684ebea71607d1ee8cb9dd100279d2810ba20d9671e52  linux-6.6.11.tar.xz
+> -sha256  98dce69077c35cffca799dcdbbd32a02242aad6b0950eb931936bb2ef69f0926  linux-6.1.72.tar.xz
+> +sha256  1fd7ec8c3d9c4e4b3a41d11e2c6d151e5fbf875dd08b3577f73afd6ee6674605  linux-6.6.12.tar.xz
+> +sha256  6cad48706bf1cde342613dca2a2cd6dd4f79f88f9e4d356263564e4b2a5d7e87  linux-6.1.73.tar.xz
+>  # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+> -sha256  5a807a5fa2a80ada957d8079681dfb5cc196ec26f43244d1c8a4fd7af592d192  linux-5.15.146.tar.xz
+> -sha256  86ace9892296bf1534d574894edd27614b68de4085c03fd3f60121751a334f1b  linux-5.10.207.tar.xz
+> -sha256  da072f7e6fe719c01e517cac1fa9988b2f5fa87d62a8501b7dc16d3b62b2acb6  linux-5.4.266.tar.xz
+> +sha256  56c1e65625d201db431efda7a3816e7b424071e7cb0245b2ba594d15b1fdfcd4  linux-5.15.147.tar.xz
+> +sha256  9025147a09547f28ec8f496c12efc30bd2fc03b2824a668e8636b2ca0ef1fb6e  linux-5.10.208.tar.xz
+> +sha256  42d28def2cc1502251edbfeaca3b25ee764ad1e471b6c703ccb2267f38471c43  linux-5.4.267.tar.xz
+>  # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+> -sha256  cdc6a5d51aaff7c50bfe4ac4adf5cc3727043a24641145dc268e858db2a4b598  linux-4.19.304.tar.xz
+> +sha256  da82425c7410623dfb2405915347ee9617fc0e33a63ca821c33aeed160cddae8  linux-4.19.305.tar.xz
+
+Many of these bumps already took place (because we were too slow to
+apply your patch), but some did not (like the 5.15.x bump). Could you
+resubmit on top of master?
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
