@@ -4,55 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1589C4828D
-	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 17:40:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2433C48292
+	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 17:41:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6BBDB40135;
-	Mon,  5 Feb 2024 17:40:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6BBDB40135
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4C6B540468;
+	Mon,  5 Feb 2024 17:41:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C6B540468
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1JxIB2w1DdBv; Mon,  5 Feb 2024 17:40:48 +0000 (UTC)
+	with ESMTP id 8wVcgqU1wp-p; Mon,  5 Feb 2024 17:41:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 656FE40162;
-	Mon,  5 Feb 2024 17:40:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 656FE40162
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4F3A01BF3D6
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 17:40:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7506E40412;
+	Mon,  5 Feb 2024 17:41:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7506E40412
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1B5AF1BF3D6
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 17:41:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 321D160EA1
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 17:40:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 321D160EA1
+ by smtp1.osuosl.org (Postfix) with ESMTP id E890C81F54
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 17:41:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E890C81F54
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2HCS90nm46se for <buildroot@lists.busybox.net>;
- Mon,  5 Feb 2024 17:40:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jLF7hjcjpLt1 for <buildroot@lists.busybox.net>;
+ Mon,  5 Feb 2024 17:41:31 +0000 (UTC)
 Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3E66960E96
- for <buildroot@buildroot.org>; Mon,  5 Feb 2024 17:40:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3E66960E96
-Received: by mail.gandi.net (Postfix) with ESMTPSA id F402960002;
- Mon,  5 Feb 2024 17:40:41 +0000 (UTC)
+ [217.70.183.195])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 420D581F31
+ for <buildroot@busybox.net>; Mon,  5 Feb 2024 17:41:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 420D581F31
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7C71F60007;
+ Mon,  5 Feb 2024 17:41:29 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rX2xV-00CuKk-1T;
- Mon, 05 Feb 2024 18:40:41 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rX2yH-00CuP8-0c;
+ Mon, 05 Feb 2024 18:41:29 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-References: <20240109045635.3951040-1-james.hilliard1@gmail.com>
- <db063503-1757-4d25-8abb-20c43d968a9a@bubu1.eu>
-Date: Mon, 05 Feb 2024 18:40:41 +0100
-In-Reply-To: <db063503-1757-4d25-8abb-20c43d968a9a@bubu1.eu> (Marcus Hoffmann
- via buildroot's message of "Tue, 9 Jan 2024 18:49:24 +0100")
-Message-ID: <87ttmmrequ.fsf@48ers.dk>
+To: Francois Perrad <fperrad@gmail.com>
+References: <20240108192533.2720-1-francois.perrad@gadz.org>
+Date: Mon, 05 Feb 2024 18:41:29 +0100
+In-Reply-To: <20240108192533.2720-1-francois.perrad@gadz.org> (Francois
+ Perrad's message of "Mon, 8 Jan 2024 20:25:33 +0100")
+Message-ID: <87plxarepi.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-can: bump to version
- 4.3.1
+Subject: Re: [Buildroot] [PATCH] configs/olimex_a20_olinuxino_lime*: bump
+ Linux and U-Boot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,39 +63,17 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
- Marcus Hoffmann <buildroot@bubu1.eu>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Marcus" == Marcus Hoffmann via buildroot <buildroot@buildroot.org> writes:
+>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
- > Hi James,
- > On 09.01.24 05:56, James Hilliard wrote:
- >> Drop no longer used python-aenum runtime dependency.
- >> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
- >> ---
- >> package/python-can/Config.in       | 1 -
- >> package/python-can/python-can.hash | 4 ++--
- >> package/python-can/python-can.mk   | 4 ++--
- >> 3 files changed, 4 insertions(+), 5 deletions(-)
- >> diff --git a/package/python-can/Config.in
- >> b/package/python-can/Config.in
- >> index 68a9ffca71..27dc16fa33 100644
- >> --- a/package/python-can/Config.in
- >> +++ b/package/python-can/Config.in
- >> @@ -2,7 +2,6 @@ config BR2_PACKAGE_PYTHON_CAN
- >> bool "python-can"
- >> select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
+ > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
- > setuptools is no longer required as well:
-
- > https://github.com/hardbyte/python-can/commit/1a3f5e3769aa565ada8c27177a94f7db43d019dc
-
-Committed after dropping the setuptools dependency, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
