@@ -4,90 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5128C4828D
-	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 10:53:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 896E0C48291
+	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 10:53:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 73B8040108;
-	Mon,  5 Feb 2024 10:53:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 73B8040108
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4118A40B12;
+	Mon,  5 Feb 2024 10:53:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4118A40B12
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1_9ooYuO2TjJ; Mon,  5 Feb 2024 10:53:29 +0000 (UTC)
+	with ESMTP id H5i_VsaYEL3l; Mon,  5 Feb 2024 10:53:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 369D640168;
-	Mon,  5 Feb 2024 10:53:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 369D640168
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9F3111BF404
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 10:53:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3A43B40B42;
+	Mon,  5 Feb 2024 10:53:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A43B40B42
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8DD861BF404
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 10:53:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 836E140168
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 10:53:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 836E140168
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7458080EB3
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 10:53:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7458080EB3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qT_ZJQkvTQN4 for <buildroot@lists.busybox.net>;
- Mon,  5 Feb 2024 10:53:25 +0000 (UTC)
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3E57140108
- for <buildroot@buildroot.org>; Mon,  5 Feb 2024 10:53:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E57140108
-Received: by mail-wm1-x336.google.com with SMTP id
- 5b1f17b1804b1-40fc65783aeso26069605e9.2
- for <buildroot@buildroot.org>; Mon, 05 Feb 2024 02:53:25 -0800 (PST)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Nqi5mYV90nxS for <buildroot@lists.busybox.net>;
+ Mon,  5 Feb 2024 10:53:46 +0000 (UTC)
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6EBA280DA8
+ for <buildroot@buildroot.org>; Mon,  5 Feb 2024 10:53:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6EBA280DA8
+Received: by mail-wm1-x331.google.com with SMTP id
+ 5b1f17b1804b1-40fd2f7ef55so7608335e9.0
+ for <buildroot@buildroot.org>; Mon, 05 Feb 2024 02:53:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707130403; x=1707735203;
+ d=1e100.net; s=20230601; t=1707130424; x=1707735224;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=YD+0WOvEKT9Agn0oiu08cmcdAiZGNsdOPcOxaJxcTPs=;
- b=R8rVRACZPupotg1dmEXXVZktfEV4Otdhvnx9A7NVzxDyqVqvnZ3ZOdbBNbnEwByiL/
- SnAUH44mub3dqLTS5CxEmNoXuFrx9rot5jVHe4MYr/XHtCmakyJmssj3TpL1XhcbHRbF
- HEFexPTYvbWz+IOLxoKRQXejzCMKnH1YBA8TlvQncMnW61bWu3RW8dDP+/9XyaU6cOJr
- +CUFwG810tML1J7wA6FKyaslQ3ULyAu4vNDmROni1fSEB2vFVARRM9QcBtfXMIaRlaCn
- WBnPgpESdFT3x9i99Sy03YDf+BPxfhrHLWBYeiIM9TVwMMqLE879BhLp4FWnqHECruUe
- mOXQ==
-X-Gm-Message-State: AOJu0Yxrm5Q1f00y/Lk9DqERjBKlfF8G9ijlGZZvJy67PGCik4mW27O3
- G+Bf14X/GFBuzbZe8vhVNOf/KwPS4CH0foqx8CFSTQy4HABs+qo1Pj3gGlo6irU=
-X-Google-Smtp-Source: AGHT+IEMRS0TobrVDngkBwZIJLiTCEtVAaPFLSJYzmiZL9uLiMpi6FC8xXFwORDFVFov/RUE5sD2jg==
-X-Received: by 2002:a05:600c:1d23:b0:40e:b29c:7103 with SMTP id
- l35-20020a05600c1d2300b0040eb29c7103mr4624800wms.8.1707130403239; 
- Mon, 05 Feb 2024 02:53:23 -0800 (PST)
+ bh=HNvi0FiyMkgML0/qpyMi365Li/Y5CapFfG//ySff6F0=;
+ b=owt1lIQHUUCKB80uNcc+KVmfxLydUBzIwEj5awOY1HDNp/VJCBzKY3Qx1+eq/SiATu
+ 4Mq7NbSyRz+8Lnv8VIVTA2+2c2TD/BK8HEUxIaQ3BKdsNa8WIQH1dgPqE/9VYUVXTb6H
+ cbiDriWS/zcdKKmTm25Zs2Y46efjq21xdvSC2kP2ZbOy/f5lEdqvK7xlwLG761GC3uY7
+ Gjbu2IcG2HYjsU2+Zhn3RwzatDFaYGC779YWyyjhHdRnQmnxbUrou+GeY8iH8h/g6NZ+
+ /Y+G7aTJ7VndhU9uwJDAuAnRAPAnE/evoKR/h0uB1w2JXPH9jq+lyPFWr3Fwm/v14H4T
+ 8Lzw==
+X-Gm-Message-State: AOJu0YxFKY/sV6h+U+Ni0hFio/4MaK0n2zp3owTnkLHJbPpv+M2bfa3v
+ D7yC5PQbm7cBZQGwvHZegsuLHIW5CZBNmjD7y9yDTTatbzjxfkMGMNDfEQMDyYI=
+X-Google-Smtp-Source: AGHT+IFdU4KRvYOT7VLE5iex1sG2kaxeX6nMmNcgdJtJ/HvJBPnFA4Nx03Ke72VQnp5yCGBsShSptQ==
+X-Received: by 2002:a05:600c:4fc6:b0:40f:bbdb:4f2b with SMTP id
+ o6-20020a05600c4fc600b0040fbbdb4f2bmr3702979wmq.19.1707130424532; 
+ Mon, 05 Feb 2024 02:53:44 -0800 (PST)
 X-Forwarded-Encrypted: i=0;
- AJvYcCXWyzmeQm6PcShyaQ7Abl+WwVuR4agOm5vMM6lwDkNCbCWI5xvStf38KT5aFMSnPB6yhJeM2dczdtaR6eXTUQX/9LPerUB0tA==
+ AJvYcCUdaIBU9izjfl14Go/wopSKRK9BpWOaZNLfCXiqTMFa4uP6rtNHKEUyKkyoJp7SLogwiOgiM1luZRwE6O/eZ2t70GVVP8NM/A==
 Received: from [192.168.16.188] ([85.119.216.19])
  by smtp.gmail.com with ESMTPSA id
- s10-20020a05600c044a00b0040efc268713sm8101947wmb.26.2024.02.05.02.53.21
+ s10-20020a05600c044a00b0040efc268713sm8101947wmb.26.2024.02.05.02.53.43
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 05 Feb 2024 02:53:22 -0800 (PST)
-Message-ID: <f1a6c111-4e3c-4ba6-bdec-486cdec2affd@mind.be>
-Date: Mon, 5 Feb 2024 11:53:20 +0100
+ Mon, 05 Feb 2024 02:53:44 -0800 (PST)
+Message-ID: <a052f707-35d9-4c71-80f1-2ecf1242a800@mind.be>
+Date: Mon, 5 Feb 2024 11:53:42 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Content-Language: en-GB
 To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
-References: <20240111051107.2905870-1-james.hilliard1@gmail.com>
-In-Reply-To: <20240111051107.2905870-1-james.hilliard1@gmail.com>
+References: <20240111051726.2918732-1-james.hilliard1@gmail.com>
+In-Reply-To: <20240111051726.2918732-1-james.hilliard1@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1707130403; x=1707735203; darn=buildroot.org;
+ d=mind.be; s=google; t=1707130424; x=1707735224; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=YD+0WOvEKT9Agn0oiu08cmcdAiZGNsdOPcOxaJxcTPs=;
- b=GxLE3ESj5XsqIdPgKvjgsQuTyDmUe+p/fWpLiFWpFRyKLNresLeYz4vE2cuzjn2XP9
- jYBri10pe0Kjs4MAWG6dh58UzOPpJMe9L2hWVhLYTL+US+byhssbz29BdPb8YJR8LMZm
- IXR1cM+0RQsCRYiXOXgSA1qTFRpT3jjABG36CZacbxTRiLgApaXfnOIp8i7yMBvKfNTM
- H9L7GwDj7emLi27CX9cIzhcwaSUxbx8hMOm+xvWLuvce2zvP6x1WY6Mej1n7xDNRNiz2
- fr4uJh6Jxw6hUOfc9efSFbCpAf2AVe1++Xr4MfRR54+OwVlbLGBPpd3JAE0WGSLeUV0r
- QndQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=HNvi0FiyMkgML0/qpyMi365Li/Y5CapFfG//ySff6F0=;
+ b=Le6+q7KPK3LO2fdEr/B2cTIi02TyVMz+Mvn4DOtiwlf2KmZFcrMW6cXohE2cKD6CZY
+ A562GiZoMfGkNve6AO9rt6zBlgKzrTDk8U15cVMD8C5ovfNz1D6e2DkGqe9+l/DzUebW
+ nXF7XWEJ35fqgZZiriw0yNa4UhkDetU5HvwpfckigtlCcer6BEK4V2SinUfe/eRe+eNF
+ YdS/MSLaZWPMfWv2DNfGstgkWdoYn1WMy0wWj8w1okeSjRqJeSck6XrgQY/xswGMRg22
+ 6gUoE6TYVhnnAOdtYj9wsV008F6Bq3xbX2bBzPpc2oHd99nMHzhsRyXveI2m00E5gCrt
+ 6PXw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=GxLE3ESj
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-requests-toolbelt: bump
- to version 1.0.0
+ header.a=rsa-sha256 header.s=google header.b=Le6+q7KP
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-rpds-py: bump to version
+ 0.16.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -109,7 +109,7 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 11/01/2024 06:11, James Hilliard wrote:
+On 11/01/2024 06:17, James Hilliard wrote:
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
   Applied to master, thanks.
@@ -118,49 +118,36 @@ On 11/01/2024 06:11, James Hilliard wrote:
   Arnout
 
 > ---
->   package/python-requests-toolbelt/Config.in                    | 2 +-
->   .../python-requests-toolbelt/python-requests-toolbelt.hash    | 4 ++--
->   package/python-requests-toolbelt/python-requests-toolbelt.mk  | 4 ++--
->   3 files changed, 5 insertions(+), 5 deletions(-)
+>   package/python-rpds-py/python-rpds-py.hash | 2 +-
+>   package/python-rpds-py/python-rpds-py.mk   | 4 ++--
+>   2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/python-requests-toolbelt/Config.in b/package/python-requests-toolbelt/Config.in
-> index ba2b95152e..7d5b4b65c2 100644
-> --- a/package/python-requests-toolbelt/Config.in
-> +++ b/package/python-requests-toolbelt/Config.in
-> @@ -4,4 +4,4 @@ config BR2_PACKAGE_PYTHON_REQUESTS_TOOLBELT
->   	help
->   	  A utility belt for advanced users of python-requests.
->   
-> -	  https://toolbelt.readthedocs.org
-> +	  https://toolbelt.readthedocs.io/
-> diff --git a/package/python-requests-toolbelt/python-requests-toolbelt.hash b/package/python-requests-toolbelt/python-requests-toolbelt.hash
-> index 28abf2c628..12bc58131d 100644
-> --- a/package/python-requests-toolbelt/python-requests-toolbelt.hash
-> +++ b/package/python-requests-toolbelt/python-requests-toolbelt.hash
-> @@ -1,5 +1,5 @@
->   # md5, sha256 from https://pypi.org/pypi/requests-toolbelt/json
-> -md5  636d226d03632d013269aebbc85f4f4b  requests-toolbelt-0.10.1.tar.gz
-> -sha256  62e09f7ff5ccbda92772a29f394a49c3ad6cb181d568b1337626b2abb628a63d  requests-toolbelt-0.10.1.tar.gz
-> +md5  6a8348cfc9991b44e499345db1c6f925  requests-toolbelt-1.0.0.tar.gz
-> +sha256  7681a0a3d047012b5bdc0ee37d7f8f07ebe76ab08caeccfc3921ce23c88d5bc6  requests-toolbelt-1.0.0.tar.gz
+> diff --git a/package/python-rpds-py/python-rpds-py.hash b/package/python-rpds-py/python-rpds-py.hash
+> index b04aa210d3..8c4b6181d0 100644
+> --- a/package/python-rpds-py/python-rpds-py.hash
+> +++ b/package/python-rpds-py/python-rpds-py.hash
+> @@ -1,4 +1,4 @@
+>   # Locally calculated after vendoring
+> -sha256  87361601241744fff6235e35050addfe34d00508172d2bd4f178193a28727287  rpds_py-0.12.0.tar.gz
+> +sha256  861b1fa8c37819b2e2cebbde6dea66ac2fa1247e4a7c3933dbf4c89244d7fecb  rpds_py-0.16.2.tar.gz
 >   # Locally computed sha256 checksums
->   sha256  1f8cf8bdacd98ed6d36d0fec0c07f7765acebd6e81205962ab5146023b3c858d  LICENSE
-> diff --git a/package/python-requests-toolbelt/python-requests-toolbelt.mk b/package/python-requests-toolbelt/python-requests-toolbelt.mk
-> index 8c141e3aa9..d0bcb1bb21 100644
-> --- a/package/python-requests-toolbelt/python-requests-toolbelt.mk
-> +++ b/package/python-requests-toolbelt/python-requests-toolbelt.mk
+>   sha256  314e4e91be3baa93c0fb4bccc9e4e97cd643eb839b065af921782c2175fe9909  LICENSE
+> diff --git a/package/python-rpds-py/python-rpds-py.mk b/package/python-rpds-py/python-rpds-py.mk
+> index 6f71d02047..5f0d30d002 100644
+> --- a/package/python-rpds-py/python-rpds-py.mk
+> +++ b/package/python-rpds-py/python-rpds-py.mk
 > @@ -4,9 +4,9 @@
 >   #
 >   ################################################################################
 >   
-> -PYTHON_REQUESTS_TOOLBELT_VERSION = 0.10.1
-> +PYTHON_REQUESTS_TOOLBELT_VERSION = 1.0.0
->   PYTHON_REQUESTS_TOOLBELT_SOURCE = requests-toolbelt-$(PYTHON_REQUESTS_TOOLBELT_VERSION).tar.gz
-> -PYTHON_REQUESTS_TOOLBELT_SITE = https://files.pythonhosted.org/packages/0c/4c/07f01c6ac44f7784fa399137fbc8d0cdc1b5d35304e8c0f278ad82105b58
-> +PYTHON_REQUESTS_TOOLBELT_SITE = https://files.pythonhosted.org/packages/f3/61/d7545dafb7ac2230c70d38d31cbfe4cc64f7144dc41f6e4e4b78ecd9f5bb
->   PYTHON_REQUESTS_TOOLBELT_SETUP_TYPE = setuptools
->   PYTHON_REQUESTS_TOOLBELT_LICENSE = Apache-2.0
->   PYTHON_REQUESTS_TOOLBELT_LICENSE_FILES = LICENSE
+> -PYTHON_RPDS_PY_VERSION = 0.12.0
+> +PYTHON_RPDS_PY_VERSION = 0.16.2
+>   PYTHON_RPDS_PY_SOURCE = rpds_py-$(PYTHON_RPDS_PY_VERSION).tar.gz
+> -PYTHON_RPDS_PY_SITE = https://files.pythonhosted.org/packages/75/be/e3f366aa4cd1e3a814f136773e506fc5423eff903ef0372a251df34e6e45
+> +PYTHON_RPDS_PY_SITE = https://files.pythonhosted.org/packages/c2/63/94a1e9406b34888bdf8506e91d654f1cd84365a5edafa5f8ff0c97d4d9e1
+>   PYTHON_RPDS_PY_SETUP_TYPE = maturin
+>   PYTHON_RPDS_PY_LICENSE = MIT
+>   PYTHON_RPDS_PY_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
