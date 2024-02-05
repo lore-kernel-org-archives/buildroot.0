@@ -4,92 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 977F3C48291
-	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 09:54:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 835E7C4828D
+	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 10:01:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 535E84177C;
-	Mon,  5 Feb 2024 09:54:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 535E84177C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 32231415E4;
+	Mon,  5 Feb 2024 10:01:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 32231415E4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9d76V47M9l_p; Mon,  5 Feb 2024 09:54:38 +0000 (UTC)
+	with ESMTP id EKzLtBDlkAvn; Mon,  5 Feb 2024 10:01:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 369F041691;
-	Mon,  5 Feb 2024 09:54:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 369F041691
+	by smtp4.osuosl.org (Postfix) with ESMTP id ED224415C8;
+	Mon,  5 Feb 2024 10:01:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED224415C8
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8E0201BF40B
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 09:54:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5B28B1BF40B
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 10:01:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6648160E83
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 09:54:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6648160E83
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3432D60F03
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 10:01:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3432D60F03
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LIE_dOnFukrX for <buildroot@lists.busybox.net>;
- Mon,  5 Feb 2024 09:54:34 +0000 (UTC)
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A1DA3607F5
- for <buildroot@buildroot.org>; Mon,  5 Feb 2024 09:54:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A1DA3607F5
-Received: by mail-wr1-x42a.google.com with SMTP id
- ffacd0b85a97d-3392b12dd21so2323022f8f.0
- for <buildroot@buildroot.org>; Mon, 05 Feb 2024 01:54:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707126872; x=1707731672;
- h=content-transfer-encoding:in-reply-to:from:references:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=joWFGdlNvSXzf178TdVvRBbbM9VSf1RVZfCfAO6u0iI=;
- b=Dg8bINJ1weCmNws2vl9jV18UI9VZ2JkFGFPLivr3bgnvpk/qU1SRDVLzky/Yadol7Y
- PB/HxVyPGC/guAOVvZIzuUnhh56XcDQrVAq+qcOH+oNu9HzUj0u3zpMLbNPHNZj2pwF3
- 169eRQyxQeqMYFEGwN32CSJS8Wu69PFVVvYnb4ALgazOfLZjAnuLHXiR81qqCCiuZRGF
- oVpdmIvXL9LCirp5cW0ZwlZIAL0Zud5IDBteVEHfe7fIHAqOhPlsrVLF4nOR32Bncx7Z
- b2Xo6XKFi9uJ5ydjHDGnU7gW6MnEH6q2OR5HfsjZA3QdVgLI96pUfFzRJ9xMf3tFOWk8
- z/rQ==
-X-Gm-Message-State: AOJu0Yx5qFpubitYrAnb97ZSnHUekKpDsdVzsTnWE/fRdhhjaKhfeUJQ
- nDSx49IZAo15HjpSHezuUKBO/GoJ/UQzCKx+AeHrGOvukaFlXPvDPypmNFKC3yHGVszUDzb1yPG
- L
-X-Google-Smtp-Source: AGHT+IEID1JzarDw8f4vLO9K8xIF6MFV8LTMhbbXj9ZfjLguzR467Dg+sERmB2pDUt2f9R8jMQJ/sA==
-X-Received: by 2002:adf:ed10:0:b0:33a:e9dd:5b6b with SMTP id
- a16-20020adfed10000000b0033ae9dd5b6bmr6578330wro.9.1707126871638; 
- Mon, 05 Feb 2024 01:54:31 -0800 (PST)
-X-Forwarded-Encrypted: i=0;
- AJvYcCVfJK7VMYdXmUK5XYy9TLvoS3oG0lDad3FGea76TaxIDrR9BnqXViubgvWy77OmJb5f7oAQemrUJqk7aapk+6RLGutNY+LpZw==
-Received: from [192.168.16.188] ([85.119.216.19])
- by smtp.gmail.com with ESMTPSA id
- p8-20020a056000018800b0033b3bb05e19sm2421089wrx.32.2024.02.05.01.54.30
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 05 Feb 2024 01:54:31 -0800 (PST)
-Message-ID: <bb86e02f-1b6e-43b4-9188-f84930f7e226@mind.be>
-Date: Mon, 5 Feb 2024 10:54:29 +0100
+ with ESMTP id NWdXLC66NNQM for <buildroot@lists.busybox.net>;
+ Mon,  5 Feb 2024 10:01:00 +0000 (UTC)
+Received: from smtpdh16-2.aruba.it (smtpdh16-2.aruba.it [62.149.155.101])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A7A6560EFD
+ for <buildroot@buildroot.org>; Mon,  5 Feb 2024 10:00:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A7A6560EFD
+Received: from [192.168.50.221] ([84.33.84.190])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id WvmZruUs7l81fWvmarQgDp; Mon, 05 Feb 2024 11:00:56 +0100
+Message-ID: <57cacd5b-aa2c-4199-b1d0-1de38b5ffd27@benettiengineering.com>
+Date: Mon, 5 Feb 2024 11:00:55 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Content-Language: en-GB
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- buildroot@buildroot.org
-References: <20240122160949.4052959-1-giulio.benetti@benettiengineering.com>
-In-Reply-To: <20240122160949.4052959-1-giulio.benetti@benettiengineering.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1707126872; x=1707731672; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:references:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=joWFGdlNvSXzf178TdVvRBbbM9VSf1RVZfCfAO6u0iI=;
- b=cny07myPCfv06h5jq5Ffu+0ZtpYxEF5XlMPu0LxGYkaVnGGc25OVH12PSV310zRfr/
- 9kcuNmM1Vxkp0C0L/hLp9cgCEkqHJjqypsqu823QuHh2px3QmH/iEQPoTm35EEwHBh9h
- a3D98Wp35oCVLw4hv0rgQLZuAusFdnnVHEX3QMkuVciidoLrogzXehTvwgfHCU0rMArT
- 2DrBfAJ7DouU3r6YFZThdgtui6Xan7jnU/zvgzOLb4+j7FZGDe0pHV3KqcevhjzC2rd3
- mpunxdTk37W2PLYGgOE1YAFU99cQ7sDJQH+60OwTwbSF3A/B3E9pTJhqtZdbj6y/3Uit
- uzGw==
+Content-Language: en-US
+To: Indrek Kruusa <indrek.kruusa@gmail.com>, buildroot@buildroot.org
+References: <20230907200013.11620-1-indrek.kruusa@gmail.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <20230907200013.11620-1-indrek.kruusa@gmail.com>
+X-CMAE-Envelope: MS4xfLIo+fxKVR9x18bsHke9Tc/9q/75to35bXa3V4hMR/ZmmskpDgGkhitLKbJTknJNIPrLs3i15uJaaQF7ONUsEL/HssJvUjEXuVMk+KKHohn4b7rk1xKi
+ aZUT+pwHJ7YJWnHRtyoVdGqZzvxmmBqegHvbX1b8ozphEh76R8hy26tUnt6IYDnucbcDu4KKS+H8Cw2ERLz31RK48BwOecodqnP4vEanP/mn8yF9376cNpBN
+ ni0vQWDPyMgvtXCrzFBt2OKOPpuLER6dBFnpyLueJhQoCD/Eal56UkMWdNOYlBxV
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1707127256; bh=cTADRpC5vC+VdsVKB1vOMqETXWqtdMPdNMYQhvCFpZ0=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=OWLF/uP4gkM6hXye1hr3+wHGbGRpUnoXUKkIJDzRHMlX0JTAiKdnf89OtTOKu3x2V
+ iVEyyrmGxi0uFLYclEaGMlMTGVA8Td+lE1v+aSBK1Ymlp5X/mVaK+u1aDN32huHEAv
+ cTCFORUJK2pNFrlCp5/4pdCL5Xa+VinTmEVBMmO9AvE+Hgn8cT4pQiQpPGfzM5GmAU
+ oD6UP4/XJrreB+UP1P2XoViMZNLdz+NWH9vp7XPnALoT4TC4ZCEVrwrsnzV2jnfyi5
+ Sf7bT+abAPTpdRZS+Lk9kkMPtkFxny4vSpfM5GN77NUiCJZnzPw5wguhVDuk9l8pDu
+ YK6Bb5UQzeEYg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=cny07myP
-Subject: Re: [Buildroot] [PATCH v2] package/libblockdev: bump to version
- 3.1.0
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=OWLF/uP4
+Subject: Re: [Buildroot] [PATCH v4 1/1] configs/mangopi_mangopi_mq_d1s: new
+ defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,295 +75,506 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: thomas.petazzoni@bootlin.com
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Hi Indrek,
 
+sorry for the late reply,
 
-On 22/01/2024 17:09, Giulio Benetti wrote:
-> * Rework strerror_l() patch by declaring it only in utils.h as a macro
-> * select BR2_PACKAGE_UTIL_LINUX_LIBUUID since it's now mandatory
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+On 07/09/23 22:00, Indrek Kruusa wrote:
+
+Here we need a commit log, something like:
+"
+Add support for MangoPi MQ1RW:
+https://mangopi.org/mqr
+
+An Allwinner D1S(1xRISCV C906 R1S0 + 64MB DDR2-1066 embedded) based SBC
+with:
+* USB-OTG Type-C socket
+* USB-HOST Type-C socket
+* 2x 18 pin GPIO headers
+* TF card slot
+* RTL8723DS WiFi module with ext. antenna connector
+* 40 pin RGB FPC connector
+* 6 pin CTP FPC connector
+* 24 pin DVP FPC connector
+* onboard mic
+* onboard audio amplifier
+* FEL,reset button
+"
+
+> Signed-off-by: Indrek Kruusa <indrek.kruusa@gmail.com>
 > ---
-> V1->V2:
-> * reworked local strerror_l() patch as a macro to avoid adding a second patch
-> * selected BR2_PACKAGE_UTIL_LINUX_LIBUUID by default
-> ---
->   ...-replacement-function-for-strerror_l.patch | 160 ++++--------------
->   package/libblockdev/Config.in                 |   5 +-
->   package/libblockdev/libblockdev.hash          |   2 +-
->   package/libblockdev/libblockdev.mk            |   2 +-
->   4 files changed, 35 insertions(+), 134 deletions(-)
+> Changes v3 -> v4:
+> - fixed whitespace errors in readme.txt
+> - linux kernel bump to 6.4.14
 > 
-> diff --git a/package/libblockdev/0001-Provide-replacement-function-for-strerror_l.patch b/package/libblockdev/0001-Provide-replacement-function-for-strerror_l.patch
-> index 987d28f82e..e5819a4e9c 100644
-> --- a/package/libblockdev/0001-Provide-replacement-function-for-strerror_l.patch
-> +++ b/package/libblockdev/0001-Provide-replacement-function-for-strerror_l.patch
-> @@ -1,29 +1,25 @@
-> -From 2acf5a8d4858035396ee45d96c824e0481644d36 Mon Sep 17 00:00:00 2001
-> -From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> -Date: Sat, 29 Aug 2020 16:04:15 +0200
-> +From 01883cc14904e55d90955ad7cd9fc55bc18364ac Mon Sep 17 00:00:00 2001
-> +From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-
-  You really should have kept Thomas as the author.
-
-> +Date: Sat, 20 Jan 2024 13:29:28 +0100
->   Subject: [PATCH] Provide replacement function for strerror_l()
->   
->   strerror_l() is not implemented in some C libraries, such as uClibc,
-> -so let's provide a simple replacement function that falls back on
-> -strerror().
-> +so let's provide a simple replacement define that falls back on
-> +strerror() in utils.h header and include it where missing.
->   
-> -Upstream status: Not Applicable since it's due uclibc only
-> +Upstream: N/A since it's due uclibc only
-
-  This fixes check-package, so it must be removed from .checkpackageignore.
-
-
-  Applied to master with those two fixed, thanks.
-
-  Regards,
-  Arnout
-
->   
->   Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
->   Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> -[Giulio: ported to version 3.0+]
-> +[Giulio: ported to version 3.0 and 3.1]
->   ---
-> - configure.ac                    | 2 ++
-> - src/plugins/crypto.c            | 7 +++++++
-> - src/plugins/nvme/nvme-error.c   | 8 ++++++++
-> - src/plugins/nvme/nvme-fabrics.c | 8 ++++++++
-> - src/plugins/nvme/nvme-op.c      | 8 ++++++++
-> - src/plugins/part.c              | 9 +++++++++
-> - src/utils/module.c              | 8 +++++++-
-> - 7 files changed, 49 insertions(+), 1 deletion(-)
-> + configure.ac       | 2 ++
-> + src/utils/module.c | 1 +
-> + src/utils/utils.h  | 4 ++++
-> + 3 files changed, 7 insertions(+)
->   
->   diff --git a/configure.ac b/configure.ac
-> -index 0a8ce4a7..dfbddb39 100644
-> +index 02b26e3e..67341134 100644
->   --- a/configure.ac
->   +++ b/configure.ac
->   @@ -120,6 +120,8 @@ AC_CHECK_HEADERS([dlfcn.h string.h unistd.h sys/fcntl.h sys/ioctl.h linux/random
-> @@ -35,127 +31,33 @@ index 0a8ce4a7..dfbddb39 100644
->    AC_ARG_WITH([escrow],
->        AS_HELP_STRING([--with-escrow], [support escrow @<:@default=yes@:>@]),
->        [],
-> -diff --git a/src/plugins/crypto.c b/src/plugins/crypto.c
-> -index c5f719ca..b2ae3f56 100644
-> ---- a/src/plugins/crypto.c
-> -+++ b/src/plugins/crypto.c
-> -@@ -62,6 +62,13 @@
-> -
-> - #define UNUSED __attribute__((unused))
-> -
-> -+#if !defined(HAVE_STRERROR_L)
-> -+static char *strerror_l(int errnum, locale_t locale UNUSED)
-> -+{
-> -+	return strerror(errnum);
-> -+}
-> -+#endif
-> -+
-> - /**
-> -  * SECTION: crypto
-> -  * @short_description: plugin for operations with encrypted devices
-> -diff --git a/src/plugins/nvme/nvme-error.c b/src/plugins/nvme/nvme-error.c
-> -index 4bd4d771..618b6aef 100644
-> ---- a/src/plugins/nvme/nvme-error.c
-> -+++ b/src/plugins/nvme/nvme-error.c
-> -@@ -34,6 +34,14 @@
-> - #include "nvme.h"
-> - #include "nvme-private.h"
-> -
-> -+#define UNUSED __attribute__((unused))
-> -+
-> -+#if !defined(HAVE_STRERROR_L)
-> -+static char *strerror_l(int errnum, locale_t locale UNUSED)
-> -+{
-> -+    return strerror(errnum);
-> -+}
-> -+#endif
-> -
-> - /**
-> -  * bd_nvme_error_quark: (skip)
-> -diff --git a/src/plugins/nvme/nvme-fabrics.c b/src/plugins/nvme/nvme-fabrics.c
-> -index 1877845f..5fcbeddc 100644
-> ---- a/src/plugins/nvme/nvme-fabrics.c
-> -+++ b/src/plugins/nvme/nvme-fabrics.c
-> -@@ -36,6 +36,14 @@
-> - #include "nvme.h"
-> - #include "nvme-private.h"
-> -
-> -+#define UNUSED __attribute__((unused))
-> -+
-> -+#if !defined(HAVE_STRERROR_L)
-> -+static char *strerror_l(int errnum, locale_t locale UNUSED)
-> -+{
-> -+    return strerror(errnum);
-> -+}
-> -+#endif
-> -
-> - /* nvme-cli defaults */
-> - #define PATH_NVMF_CONFIG  "/etc/nvme/config.json"
-> -diff --git a/src/plugins/nvme/nvme-op.c b/src/plugins/nvme/nvme-op.c
-> -index dbef4f3a..7bafd7a3 100644
-> ---- a/src/plugins/nvme/nvme-op.c
-> -+++ b/src/plugins/nvme/nvme-op.c
-> -@@ -35,6 +35,14 @@
-> - #include "nvme.h"
-> - #include "nvme-private.h"
-> -
-> -+#define UNUSED __attribute__((unused))
-> -+
-> -+#if !defined(HAVE_STRERROR_L)
-> -+static char *strerror_l(int errnum, locale_t locale UNUSED)
-> -+{
-> -+    return strerror(errnum);
-> -+}
-> -+#endif
-> -
-> - /**
-> -  * bd_nvme_device_self_test:
-> -diff --git a/src/plugins/part.c b/src/plugins/part.c
-> -index 46d31137..6234e013 100644
-> ---- a/src/plugins/part.c
-> -+++ b/src/plugins/part.c
-> -@@ -26,6 +26,15 @@
-> -
-> - #include "part.h"
-> -
-> -+#define UNUSED __attribute__((unused))
-> -+
-> -+#if !defined(HAVE_STRERROR_L)
-> -+static char *strerror_l(int errnum, locale_t locale UNUSED)
-> -+{
-> -+	return strerror(errnum);
-> -+}
-> -+#endif
-> -+
-> - /**
-> -  * SECTION: part
-> -  * @short_description: plugin for operations with partition tables
->   diff --git a/src/utils/module.c b/src/utils/module.c
-> -index 6557c3ab..69dd4731 100644
-> +index 6557c3ab..5893f0ac 100644
->   --- a/src/utils/module.c
->   +++ b/src/utils/module.c
-> -@@ -74,6 +74,13 @@ static void set_kmod_logging (struct kmod_ctx *ctx) {
-> -     kmod_set_log_fn (ctx, utils_kmod_log_redirect, NULL);
-> - }
-> +@@ -28,6 +28,7 @@
-> + #include "module.h"
-> + #include "exec.h"
-> + #include "logging.h"
-> ++#include "utils.h"
+> Changes v2 -> v3:
+> - resend without line wrapping
+> 
+> Changes v1 -> v2:
+> - using "mangopi" as a vendor string, so creating the boards/mangopi/ folder
+>   - renaming board's config accordingly
+>   - updating DEVELOPERS' entry
+>   - updating readme.txt
+> - using custom defconfig for linux kernel instead of linux.fragment
+> - linux kernel version bump to 6.4.11
+> - renaming custom uboot config file to uboot.config
+> - custom uboot version points to a certain commit now
+> 
+>   board/mangopi/mangopi-mq-d1s/genimage.cfg     |  20 ++
+>   board/mangopi/mangopi-mq-d1s/linux.config     | 226 ++++++++++++++++++
+>   .../overlay/boot/extlinux/extlinux.conf       |   4 +
+>   .../overlay/etc/network/interfaces            |   6 +
+>   .../overlay/etc/wpa_supplicant.conf           |   8 +
+>   board/mangopi/mangopi-mq-d1s/readme.txt       |  48 ++++
+>   board/mangopi/mangopi-mq-d1s/uboot.config     |  10 +
+>   configs/mangopi_mangopi_mq_d1s_defconfig      |  47 ++++
+>   8 files changed, 369 insertions(+)
+>   create mode 100644 board/mangopi/mangopi-mq-d1s/genimage.cfg
+>   create mode 100644 board/mangopi/mangopi-mq-d1s/linux.config
+>   create mode 100644 board/mangopi/mangopi-mq-d1s/overlay/boot/extlinux/extlinux.conf
+>   create mode 100644 board/mangopi/mangopi-mq-d1s/overlay/etc/network/interfaces
+>   create mode 100644 board/mangopi/mangopi-mq-d1s/overlay/etc/wpa_supplicant.conf
+>   create mode 100644 board/mangopi/mangopi-mq-d1s/readme.txt
+>   create mode 100644 board/mangopi/mangopi-mq-d1s/uboot.config
+>   create mode 100644 configs/mangopi_mangopi_mq_d1s_defconfig
+> 
+> diff --git a/board/mangopi/mangopi-mq-d1s/genimage.cfg b/board/mangopi/mangopi-mq-d1s/genimage.cfg
+> new file mode 100644
+> index 0000000000..3acf78a3ab
+> --- /dev/null
+> +++ b/board/mangopi/mangopi-mq-d1s/genimage.cfg
+> @@ -0,0 +1,20 @@
+> +# Minimal SD card image for the MangoPi MQ F133 D1s
+> +# https://mangopi.org/mangopi_mq
 > +
-> + #define UNUSED __attribute__((unused))
+> +image sdcard.img {
+> +	hdimage {
+> +	}
 > +
-> +diff --git a/src/utils/utils.h b/src/utils/utils.h
-> +index 801a8b6e..b2bdf0d0 100644
-> +--- a/src/utils/utils.h
-> ++++ b/src/utils/utils.h
-> +@@ -9,6 +9,10 @@
-> + #include "dbus.h"
-> + #include "logging.h"
->    
->   +#if !defined(HAVE_STRERROR_L)
-> -+static char *strerror_l(int errnum, locale_t locale UNUSED)
-> -+{
-> -+	return strerror(errnum);
-> -+}
-> ++#define strerror_l(errnum, locale)      strerror(errnum)
->   +#endif
->   +
->    /**
-> -  * bd_utils_have_kernel_module:
-> -  * @module_name: name of the kernel module to check
-> -@@ -259,7 +266,6 @@ gboolean bd_utils_unload_kernel_module (const gchar *module_name, GError **error
-> -     return TRUE;
-> - }
-> -
-> --
-> - static BDUtilsLinuxVersion detected_linux_ver;
-> - static gboolean have_linux_ver = FALSE;
-> -
-> +  * SECTION: utils
-> +  * @short_description: library providing utility functions used by the blockdev library and its plugins
->   --
->   2.34.1
->   
-> diff --git a/package/libblockdev/Config.in b/package/libblockdev/Config.in
-> index 527ba79e4e..e0449628b4 100644
-> --- a/package/libblockdev/Config.in
-> +++ b/package/libblockdev/Config.in
-> @@ -8,6 +8,8 @@ config BR2_PACKAGE_LIBBLOCKDEV
->   	depends on BR2_ENABLE_LOCALE
->   	select BR2_PACKAGE_KMOD
->   	select BR2_PACKAGE_LIBGLIB2
-> +	select BR2_PACKAGE_UTIL_LINUX
-> +	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
->   	help
->   	  libblockdev is a C library supporting GObject introspection
->   	  for manipulation of block devices. It has a plugin-based
-> @@ -30,7 +32,6 @@ config BR2_PACKAGE_LIBBLOCKDEV_CRYPTO
->   config BR2_PACKAGE_LIBBLOCKDEV_FS
->   	bool "filesystem"
->   	depends on BR2_ENABLE_LOCALE # parted
-> -	select BR2_PACKAGE_UTIL_LINUX
->   	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
->   	select BR2_PACKAGE_PARTED
->   	select BR2_PACKAGE_E2FSPROGS
-> @@ -62,7 +63,6 @@ config BR2_PACKAGE_LIBBLOCKDEV_PART
->   	bool "part"
->   	depends on BR2_ENABLE_LOCALE # parted
->   	select BR2_PACKAGE_PARTED
-> -	select BR2_PACKAGE_UTIL_LINUX
->   	select BR2_PACKAGE_UTIL_LINUX_LIBFDISK
->   
->   comment "part plugin needs a toolchain w/ locale"
-> @@ -70,7 +70,6 @@ comment "part plugin needs a toolchain w/ locale"
->   
->   config BR2_PACKAGE_LIBBLOCKDEV_SWAP
->   	bool "swap"
-> -	select BR2_PACKAGE_UTIL_LINUX
->   	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
->   
->   endif
-> diff --git a/package/libblockdev/libblockdev.hash b/package/libblockdev/libblockdev.hash
-> index 5f9a8a7e6c..79700a4996 100644
-> --- a/package/libblockdev/libblockdev.hash
-> +++ b/package/libblockdev/libblockdev.hash
-> @@ -1,3 +1,3 @@
->   # Locally calculated
-> -sha256  49841ff92db0ab032931e6f2b5eab63e5969b0ddc14b067b60e46a6eb6c60e47  libblockdev-3.0.4.tar.gz
-> +sha256  41e4af66c9d78e795302d37825dfd88a4970f82da7b4ebe6487feba2afae44fb  libblockdev-3.1.0.tar.gz
->   sha256  97bdc721d875501b6243a456333fdfdb1ab64d31c4da2554de845caf4674b946  LICENSE
-> diff --git a/package/libblockdev/libblockdev.mk b/package/libblockdev/libblockdev.mk
-> index e0fca2b95c..ebf01acfb5 100644
-> --- a/package/libblockdev/libblockdev.mk
-> +++ b/package/libblockdev/libblockdev.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
->   
-> -LIBBLOCKDEV_VERSION = 3.0.4
-> +LIBBLOCKDEV_VERSION = 3.1.0
->   LIBBLOCKDEV_SITE = https://github.com/storaged-project/libblockdev/releases/download/$(LIBBLOCKDEV_VERSION)-1
->   LIBBLOCKDEV_LICENSE = LGPL-2.1
->   LIBBLOCKDEV_LICENSE_FILES = LICENSE
+> +	partition u-boot {
+> +		in-partition-table = false
+> +		image = "u-boot-sunxi-with-spl.bin"
+> +		offset = 8K
+> +	}
+> +
+> +	partition rootfs {
+> +		partition-type = 0x83
+> +		image = "rootfs.ext4"
+> +		bootable = "true"
+> +		offset = 1M
+> +	}
+> +}
+> diff --git a/board/mangopi/mangopi-mq-d1s/linux.config b/board/mangopi/mangopi-mq-d1s/linux.config
+> new file mode 100644
+> index 0000000000..8bdf6134e4
+> --- /dev/null
+> +++ b/board/mangopi/mangopi-mq-d1s/linux.config
+> @@ -0,0 +1,226 @@
+> +CONFIG_SYSVIPC=y
+> +CONFIG_POSIX_MQUEUE=y
+> +CONFIG_NO_HZ_IDLE=y
+> +CONFIG_HIGH_RES_TIMERS=y
+> +CONFIG_BPF_SYSCALL=y
+> +CONFIG_PREEMPT=y
+> +CONFIG_IKCONFIG=y
+> +CONFIG_IKCONFIG_PROC=y
+> +CONFIG_CGROUPS=y
+> +CONFIG_MEMCG=y
+> +CONFIG_CGROUP_SCHED=y
+> +CONFIG_CFS_BANDWIDTH=y
+> +CONFIG_RT_GROUP_SCHED=y
+> +CONFIG_CGROUP_PIDS=y
+> +CONFIG_CGROUP_FREEZER=y
+> +CONFIG_CGROUP_DEVICE=y
+> +CONFIG_CGROUP_CPUACCT=y
+> +CONFIG_CGROUP_BPF=y
+> +CONFIG_NAMESPACES=y
+> +CONFIG_USER_NS=y
+> +CONFIG_EXPERT=y
+> +# CONFIG_SYSFS_SYSCALL is not set
+> +CONFIG_PERF_EVENTS=y
+> +CONFIG_ARCH_SUNXI=y
+> +CONFIG_NONPORTABLE=y
+> +# CONFIG_EFI is not set
+> +CONFIG_PM=y
+> +CONFIG_CPU_IDLE=y
+> +CONFIG_RISCV_SBI_CPUIDLE=y
+> +CONFIG_JUMP_LABEL=y
+> +# CONFIG_STACKPROTECTOR is not set
+> +# CONFIG_GCC_PLUGINS is not set
+> +CONFIG_MODULES=y
+> +CONFIG_MODULE_UNLOAD=y
+> +# CONFIG_BLOCK_LEGACY_AUTOLOAD is not set
+> +# CONFIG_BLK_DEBUG_FS is not set
+> +# CONFIG_MQ_IOSCHED_DEADLINE is not set
+> +# CONFIG_MQ_IOSCHED_KYBER is not set
+> +# CONFIG_IOSCHED_BFQ is not set
+> +# CONFIG_SWAP is not set
+> +CONFIG_PAGE_REPORTING=y
+> +CONFIG_NET=y
+> +CONFIG_PACKET=y
+> +CONFIG_UNIX=y
+> +CONFIG_XFRM_USER=m
+> +CONFIG_INET=y
+> +CONFIG_IP_MULTICAST=y
+> +CONFIG_IP_ADVANCED_ROUTER=y
+> +CONFIG_IP_PNP=y
+> +CONFIG_IP_PNP_DHCP=y
+> +CONFIG_IP_PNP_BOOTP=y
+> +CONFIG_IP_PNP_RARP=y
+> +CONFIG_INET_ESP=m
+> +CONFIG_NETFILTER=y
+> +CONFIG_BRIDGE_NETFILTER=m
+> +CONFIG_NF_CONNTRACK=m
+> +CONFIG_NF_CONNTRACK_FTP=m
+> +CONFIG_NF_CONNTRACK_TFTP=m
+> +CONFIG_NETFILTER_XT_MARK=m
+> +CONFIG_NETFILTER_XT_MATCH_ADDRTYPE=m
+> +CONFIG_NETFILTER_XT_MATCH_CONNTRACK=m
+> +CONFIG_NETFILTER_XT_MATCH_IPVS=m
+> +CONFIG_IP_VS=m
+> +CONFIG_IP_VS_PROTO_TCP=y
+> +CONFIG_IP_VS_PROTO_UDP=y
+> +CONFIG_IP_VS_RR=m
+> +CONFIG_IP_VS_NFCT=y
+> +CONFIG_NF_LOG_ARP=m
+> +CONFIG_NF_LOG_IPV4=m
+> +CONFIG_IP_NF_IPTABLES=m
+> +CONFIG_IP_NF_FILTER=m
+> +CONFIG_IP_NF_TARGET_REJECT=m
+> +CONFIG_IP_NF_NAT=m
+> +CONFIG_IP_NF_TARGET_MASQUERADE=m
+> +CONFIG_IP_NF_TARGET_REDIRECT=m
+> +CONFIG_IP_NF_MANGLE=m
+> +CONFIG_NF_LOG_IPV6=m
+> +CONFIG_IP6_NF_IPTABLES=m
+> +CONFIG_IP6_NF_MATCH_IPV6HEADER=m
+> +CONFIG_IP6_NF_FILTER=m
+> +CONFIG_IP6_NF_TARGET_REJECT=m
+> +CONFIG_IP6_NF_MANGLE=m
+> +CONFIG_BRIDGE=m
+> +CONFIG_BRIDGE_VLAN_FILTERING=y
+> +CONFIG_VLAN_8021Q=m
+> +CONFIG_NET_SCHED=y
+> +CONFIG_NET_CLS_CGROUP=m
+> +CONFIG_NETLINK_DIAG=y
+> +CONFIG_CGROUP_NET_PRIO=y
+> +CONFIG_CFG80211=y
+> +CONFIG_MAC80211=y
+> +CONFIG_PCI=y
+> +CONFIG_PCIEPORTBUS=y
+> +CONFIG_PCI_HOST_GENERIC=y
+> +CONFIG_PCIE_XILINX=y
+> +CONFIG_DEVTMPFS=y
+> +CONFIG_DEVTMPFS_MOUNT=y
+> +CONFIG_SUN50I_DE2_BUS=y
+> +CONFIG_SUNXI_RSB=y
+> +CONFIG_BLK_DEV_LOOP=y
+> +CONFIG_NETDEVICES=y
+> +CONFIG_DUMMY=m
+> +CONFIG_MACVLAN=m
+> +CONFIG_IPVLAN=m
+> +CONFIG_VXLAN=m
+> +CONFIG_VETH=m
+> +CONFIG_VIRTIO_NET=y
+> +# CONFIG_ETHERNET is not set
+> +CONFIG_MDIO_DEVICE=y
+> +# CONFIG_USB_NET_DRIVERS is not set
+> +# CONFIG_WLAN is not set
+> +CONFIG_INPUT_MOUSEDEV=y
+> +CONFIG_KEYBOARD_SUN4I_LRADC=m
+> +# CONFIG_LEGACY_PTYS is not set
+> +# CONFIG_LEGACY_TIOCSTI is not set
+> +CONFIG_SERIAL_8250=y
+> +CONFIG_SERIAL_8250_CONSOLE=y
+> +# CONFIG_SERIAL_8250_PCI is not set
+> +CONFIG_SERIAL_8250_DW=y
+> +CONFIG_SERIAL_OF_PLATFORM=y
+> +CONFIG_VIRTIO_CONSOLE=y
+> +CONFIG_HW_RANDOM=y
+> +CONFIG_HW_RANDOM_VIRTIO=y
+> +CONFIG_I2C_MV64XXX=m
+> +CONFIG_PINCTRL=y
+> +CONFIG_GPIO_GENERIC_PLATFORM=y
+> +CONFIG_POWER_RESET=y
+> +CONFIG_POWER_RESET_SYSCON=y
+> +CONFIG_POWER_RESET_SYSCON_POWEROFF=y
+> +CONFIG_POWER_SUPPLY=y
+> +CONFIG_WATCHDOG=y
+> +CONFIG_SUNXI_WATCHDOG=y
+> +CONFIG_REGULATOR=y
+> +CONFIG_REGULATOR_FIXED_VOLTAGE=y
+> +CONFIG_DRM=m
+> +CONFIG_DRM_I2C_CH7006=m
+> +CONFIG_DRM_I2C_SIL164=m
+> +CONFIG_DRM_SUN4I=m
+> +CONFIG_FB=y
+> +CONFIG_BACKLIGHT_CLASS_DEVICE=m
+> +CONFIG_FRAMEBUFFER_CONSOLE=y
+> +CONFIG_USB=y
+> +CONFIG_USB_XHCI_HCD=y
+> +CONFIG_USB_XHCI_PLATFORM=y
+> +CONFIG_USB_EHCI_HCD=y
+> +CONFIG_USB_EHCI_HCD_PLATFORM=y
+> +CONFIG_USB_OHCI_HCD=y
+> +CONFIG_USB_OHCI_HCD_PLATFORM=y
+> +CONFIG_USB_MUSB_HDRC=m
+> +CONFIG_USB_MUSB_SUNXI=m
+> +CONFIG_NOP_USB_XCEIV=m
+> +CONFIG_MMC=y
+> +CONFIG_MMC_SDHCI=y
+> +CONFIG_MMC_SDHCI_PLTFM=y
+> +CONFIG_MMC_SDHCI_CADENCE=y
+> +CONFIG_MMC_SUNXI=y
+> +CONFIG_RTC_CLASS=y
+> +CONFIG_RTC_DRV_SUN6I=y
+> +CONFIG_RTC_DRV_GOLDFISH=y
+> +CONFIG_DMADEVICES=y
+> +CONFIG_DMA_SUN6I=m
+> +# CONFIG_VIRTIO_MENU is not set
+> +# CONFIG_VHOST_MENU is not set
+> +CONFIG_SUN8I_DE2_CCU=m
+> +CONFIG_SUN50I_IOMMU=y
+> +CONFIG_RPMSG_CHAR=y
+> +CONFIG_RPMSG_CTRL=y
+> +CONFIG_RPMSG_VIRTIO=y
+> +CONFIG_PHY_SUN4I_USB=m
+> +CONFIG_NVMEM_SUNXI_SID=y
+> +CONFIG_EXT4_FS=y
+> +CONFIG_EXT4_FS_POSIX_ACL=y
+> +CONFIG_EXT4_FS_SECURITY=y
+> +CONFIG_BTRFS_FS=m
+> +CONFIG_BTRFS_FS_POSIX_ACL=y
+> +CONFIG_AUTOFS4_FS=y
+> +CONFIG_OVERLAY_FS=m
+> +CONFIG_ISO9660_FS=y
+> +CONFIG_JOLIET=y
+> +CONFIG_ZISOFS=y
+> +CONFIG_MSDOS_FS=y
+> +CONFIG_VFAT_FS=y
+> +CONFIG_PROC_CHILDREN=y
+> +CONFIG_TMPFS=y
+> +CONFIG_TMPFS_POSIX_ACL=y
+> +CONFIG_HUGETLBFS=y
+> +CONFIG_NFS_FS=y
+> +CONFIG_NFS_V4=y
+> +CONFIG_NFS_V4_1=y
+> +CONFIG_NFS_V4_2=y
+> +CONFIG_ROOT_NFS=y
+> +CONFIG_NLS_CODEPAGE_437=y
+> +CONFIG_NLS_ISO8859_1=m
+> +CONFIG_SECURITY=y
+> +CONFIG_SECURITY_SELINUX=y
+> +CONFIG_SECURITY_APPARMOR=y
+> +CONFIG_DEFAULT_SECURITY_DAC=y
+> +CONFIG_CRYPTO_USER_API_HASH=y
+> +CONFIG_CRYPTO_DEV_VIRTIO=y
+> +# CONFIG_RAID6_PQ_BENCHMARK is not set
+> +CONFIG_CRC_ITU_T=y
+> +CONFIG_CRC7=y
+> +CONFIG_XZ_DEC=y
+> +CONFIG_PRINTK_TIME=y
+> +CONFIG_DEBUG_FS=y
+> +CONFIG_DEBUG_PAGEALLOC=y
+> +CONFIG_SCHED_STACK_END_CHECK=y
+> +CONFIG_DEBUG_VM=y
+> +CONFIG_DEBUG_VM_PGFLAGS=y
+> +CONFIG_DEBUG_MEMORY_INIT=y
+> +CONFIG_SOFTLOCKUP_DETECTOR=y
+> +CONFIG_WQ_WATCHDOG=y
+> +CONFIG_DEBUG_TIMEKEEPING=y
+> +CONFIG_DEBUG_RT_MUTEXES=y
+> +CONFIG_DEBUG_SPINLOCK=y
+> +CONFIG_DEBUG_MUTEXES=y
+> +CONFIG_DEBUG_RWSEMS=y
+> +CONFIG_DEBUG_ATOMIC_SLEEP=y
+> +CONFIG_DEBUG_LIST=y
+> +CONFIG_DEBUG_PLIST=y
+> +CONFIG_DEBUG_SG=y
+> +# CONFIG_RCU_TRACE is not set
+> +CONFIG_RCU_EQS_DEBUG=y
+> +# CONFIG_FTRACE is not set
+> +# CONFIG_RUNTIME_TESTING_MENU is not set
+> +CONFIG_MEMTEST=y
+> diff --git a/board/mangopi/mangopi-mq-d1s/overlay/boot/extlinux/extlinux.conf b/board/mangopi/mangopi-mq-d1s/overlay/boot/extlinux/extlinux.conf
+> new file mode 100644
+> index 0000000000..c825ad4667
+> --- /dev/null
+> +++ b/board/mangopi/mangopi-mq-d1s/overlay/boot/extlinux/extlinux.conf
+> @@ -0,0 +1,4 @@
+> +label linux
+> +  kernel /boot/Image
+> +  # use devicetree from u-boot
+> +  append console=ttyS3,115200 root=/dev/mmcblk0p1 ro rootwait
+> diff --git a/board/mangopi/mangopi-mq-d1s/overlay/etc/network/interfaces b/board/mangopi/mangopi-mq-d1s/overlay/etc/network/interfaces
+> new file mode 100644
+> index 0000000000..89e7d74aff
+> --- /dev/null
+> +++ b/board/mangopi/mangopi-mq-d1s/overlay/etc/network/interfaces
+> @@ -0,0 +1,6 @@
+> +auto lo
+> +iface lo inet loopback
+> +
+> +auto wlan0
+> +iface wlan0 inet dhcp
+> +wpa-conf /etc/wpa_supplicant.conf
+> diff --git a/board/mangopi/mangopi-mq-d1s/overlay/etc/wpa_supplicant.conf b/board/mangopi/mangopi-mq-d1s/overlay/etc/wpa_supplicant.conf
+> new file mode 100644
+> index 0000000000..b43292b0a7
+> --- /dev/null
+> +++ b/board/mangopi/mangopi-mq-d1s/overlay/etc/wpa_supplicant.conf
+> @@ -0,0 +1,8 @@
+> +ap_scan=1
+> +
+> +network={
+> +        ssid="YOURSSID"
+> +        scan_ssid=1
+> +        key_mgmt=WPA-PSK
+> +        psk="YOURPASSWD"
+> +}
+> diff --git a/board/mangopi/mangopi-mq-d1s/readme.txt b/board/mangopi/mangopi-mq-d1s/readme.txt
+> new file mode 100644
+> index 0000000000..0f8114f46a
+> --- /dev/null
+> +++ b/board/mangopi/mangopi-mq-d1s/readme.txt
+> @@ -0,0 +1,48 @@
+> +MangoPi MQ D1s (RISC-V)
+> +=======================
+> +
+> +MangoPi MQ D1s (board model MQ1W) is a tiny (4x4cm) RISC-V based single board computer. It's built around
+> +Allwinner D1s (also referred as F133) single core 1GHz CPU with integrated 64MB DDR2 RAM.
+> +Board features:
+> +- USB-OTG Type-C socket
+> +- USB-HOST Type-C socket
+> +- 2x 22 pin GPIO headers
+> +- TF card slot
+> +- RTL8189FTV WiFi module with ext. antenna connector
+> +- 15 pin DSI FPC connector
+> +- 40 pin RGB FPC connector
+> +- 6 pin CTP FPC connector
+> +- 24 pin DVP FPC connector
+> +- onboard mic
+> +- onboard audio amplifier
+> +- FEL,reset button
+> +
+> +There is no HDMI connector.
+> +
+> +How to build
+> +============
+> +
+> +$ make mangopi_mangopi_mq_d1s_defconfig
+> +$ make
+> +
+> +Wifi
+> +==========
+> +
+> +Edit  board/mangopi/mangopi-mq-d1s/overlay/etc/wpa_supplicant.conf or
+> +/etc/wpa_supplicant.conf once connected to the board:
+> +
+> +* Replace YOURSSID with your AP ssid
+> +* Replace YOURPASSWD with your AP password
+> +
+> +How to write the SD card
+> +========================
+> +
+> +Once the build process is finished you will have an image called "sdcard.img"
+> +in the output/images/ directory.
+> +
+> +Copy the bootable "sdcard.img" onto an SD card with "dd":
+> +
+> +  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
+> +
+> +Connect a TTL UART to the UART3 on P8 header (unpopulated), insert the microSD card and
+> +plug in a USB-C cable to the OTG or HOST connector to boot the system.
+> diff --git a/board/mangopi/mangopi-mq-d1s/uboot.config b/board/mangopi/mangopi-mq-d1s/uboot.config
+> new file mode 100644
+> index 0000000000..0a3d8ded01
+> --- /dev/null
+> +++ b/board/mangopi/mangopi-mq-d1s/uboot.config
+> @@ -0,0 +1,10 @@
+> +CONFIG_RISCV=y
+> +CONFIG_DEFAULT_DEVICE_TREE="sun20i-d1s-mangopi-mq"
+> +CONFIG_TARGET_SUN20I_D1=y
+> +CONFIG_ARCH_RV64I=y
+> +CONFIG_RISCV_SMODE=y
+> +# CONFIG_SPL_SMP is not set
+> +CONFIG_SYS_SPL_MALLOC=y
+> +CONFIG_SPL_OPENSBI_SCRATCH_OPTIONS=0x0
+> +# CONFIG_SYS_I2C_MVTWSI is not set
+> +CONFIG_DM_REGULATOR_FIXED=y
+> diff --git a/configs/mangopi_mangopi_mq_d1s_defconfig b/configs/mangopi_mangopi_mq_d1s_defconfig
+> new file mode 100644
+> index 0000000000..11f1e94bd7
+> --- /dev/null
+> +++ b/configs/mangopi_mangopi_mq_d1s_defconfig
+> @@ -0,0 +1,47 @@
+> +BR2_riscv=y
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_4=y
+> +BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+> +BR2_ROOTFS_OVERLAY="board/mangopi/mangopi-mq-d1s/overlay"
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+> +BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/mangopi/mangopi-mq-d1s/genimage.cfg"
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.4.14"
+> +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/mangopi/mangopi-mq-d1s/linux.config"
+> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun20i-d1s-mangopi-mq"
+> +BR2_LINUX_KERNEL_INSTALL_TARGET=y
+
+Here we need:
+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+
+> +BR2_PACKAGE_RTL8189FS=y
+> +BR2_PACKAGE_WIRELESS_TOOLS=y
+> +BR2_PACKAGE_WPA_SUPPLICANT=y
+> +BR2_PACKAGE_WPA_SUPPLICANT_AUTOSCAN=y
+> +BR2_PACKAGE_WPA_SUPPLICANT_NL80211=y
+> +BR2_PACKAGE_WPA_SUPPLICANT_CLI=y
+> +BR2_PACKAGE_WPA_SUPPLICANT_WPA_CLIENT_SO=y
+> +BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
+> +BR2_PACKAGE_WPA_SUPPLICANT_CTRL_IFACE=y
+> +BR2_TARGET_ROOTFS_EXT2=y
+> +BR2_TARGET_ROOTFS_EXT2_4=y
+> +# BR2_TARGET_ROOTFS_TAR is not set
+> +BR2_TARGET_OPENSBI=y
+> +BR2_TARGET_OPENSBI_PLAT="generic"
+> +# BR2_TARGET_OPENSBI_INSTALL_JUMP_IMG is not set
+> +BR2_TARGET_OPENSBI_LATEST_VERSION=y
+> +# BR2_TARGET_OPENSBI_CUSTOM_VERSION is not set
+> +BR2_TARGET_OPENSBI_VERSION="1.3"
+> +BR2_TARGET_UBOOT=y
+> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> +BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+> +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,smaeul,u-boot,3f3b76b3749e796edd4b8cac9081c55574be49c7)/uboot-3f3b76b3749e796edd4b8cac9081c55574be49c7.tar.gz"
+> +# BR2_TARGET_UBOOT_USE_DEFCONFIG is not set
+> +BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG=y
+> +BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE="board/mangopi/mangopi-mq-d1s/uboot.config"
+> +BR2_TARGET_UBOOT_NEEDS_DTC=y
+> +BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+> +BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+> +BR2_TARGET_UBOOT_NEEDS_OPENSBI=y
+> +# BR2_TARGET_UBOOT_FORMAT_BIN is not set
+> +BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+> +BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
+> +BR2_PACKAGE_HOST_GENIMAGE=y
+
+I've build tested successfully with the change above using utils/docker
+run and the rest looks good to me so with the commit log reworded and
+the missing "BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y" added:
+Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+
+Best regards
+-- 
+Giulio Benetti
+CEO&CTO@Benetti Engineering sas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
