@@ -4,66 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48968C4828D
-	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 09:25:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5C1FC48291
+	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 09:28:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F2F6C60F2A;
-	Mon,  5 Feb 2024 09:25:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F2F6C60F2A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 933946062F;
+	Mon,  5 Feb 2024 09:28:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 933946062F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id M0g4xdMCIfqw; Mon,  5 Feb 2024 09:25:22 +0000 (UTC)
+	with ESMTP id bQaHN6GVZaiH; Mon,  5 Feb 2024 09:28:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 342F860F31;
-	Mon,  5 Feb 2024 09:25:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 342F860F31
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D22221BF40B
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 09:25:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9700F605EC;
+	Mon,  5 Feb 2024 09:28:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9700F605EC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0FCC31BF40B
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 09:27:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B7C6881E4A
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 09:25:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B7C6881E4A
+ by smtp2.osuosl.org (Postfix) with ESMTP id DAA1C40A67
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 09:27:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DAA1C40A67
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id trBuizsZmVZ2 for <buildroot@lists.busybox.net>;
- Mon,  5 Feb 2024 09:25:18 +0000 (UTC)
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 69B1882382
- for <buildroot@buildroot.org>; Mon,  5 Feb 2024 09:25:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 69B1882382
-Received: from ymorin.is-a-geek.org (unknown [85.119.216.19])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 6E8B713F838;
- Mon,  5 Feb 2024 10:25:12 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 05 Feb 2024 10:25:10 +0100
-Date: Mon, 5 Feb 2024 10:25:10 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Aleksandr Makarov <aleksandr.o.makarov@gmail.com>
-Message-ID: <ZcCpdoR2fzshSSzf@landeda>
-References: <20240204201657.33079-1-aleksandr.o.makarov@gmail.com>
- <20240204201657.33079-2-aleksandr.o.makarov@gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YNQi2zhk8bfB for <buildroot@lists.busybox.net>;
+ Mon,  5 Feb 2024 09:27:57 +0000 (UTC)
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7CC9A40108
+ for <buildroot@buildroot.org>; Mon,  5 Feb 2024 09:27:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7CC9A40108
+Received: by mail-wr1-x42d.google.com with SMTP id
+ ffacd0b85a97d-33b401fd72bso299209f8f.3
+ for <buildroot@buildroot.org>; Mon, 05 Feb 2024 01:27:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1707125275; x=1707730075;
+ h=mime-version:user-agent:content-transfer-encoding:references
+ :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=0E/9RtSlLwHFYK126nCNShHCWiOZGrKuT8MiqfIIQY0=;
+ b=AYmJWO4IjKNZ3ldp4oE86NiCeAhp681dmf5X3+r8P98pnqaRXJ0q3wT3tMRg6fBLf1
+ GGK/h0N1JPjsOiZICs9htGwTZMRehP9O2ef9jiFr6PpVPBGHHriKmH96PPBVPrSDLqG6
+ H/xc60i7VG0CPMRdzohPhJIH024RV5mRUjqZpzHbqkQTAMbaX415uhtetaOPO/zZv8Ey
+ vpguhywNy2Gfup+tYkG0K8AtbETEFymFO9DsLLbP52HRY1sJcE+aZppshGrED819jyAS
+ +2R3kbx7kXTrDQ8Zzjwu6e7V0fKBNs2dBNvz81cP8gSry3eNgsh0TJx5io5PFv+c3wmq
+ KszA==
+X-Gm-Message-State: AOJu0YyFRWK4lu9pKUZ2dKBTeELn9BITRNLNFZEMAtCrsrNQjWtgHAQX
+ evpg8/mudUgckt+naIGWSJc5iXOyZnrokhGkVWdcaBwOJw8zHXCS
+X-Google-Smtp-Source: AGHT+IEyDTUlZMLja/stlfFV7ReNoSjb9heHFCaBCOH30mVVvbv7Ow4R0fUdXYLseu79+2L5J/nNow==
+X-Received: by 2002:a5d:64c5:0:b0:33b:3c99:357a with SMTP id
+ f5-20020a5d64c5000000b0033b3c99357amr1685328wri.28.1707125275271; 
+ Mon, 05 Feb 2024 01:27:55 -0800 (PST)
+Received: from [192.168.100.115] ([138.199.7.138])
+ by smtp.gmail.com with ESMTPSA id
+ l4-20020adfa384000000b0033b12167a98sm7733296wrb.8.2024.02.05.01.27.54
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 05 Feb 2024 01:27:54 -0800 (PST)
+Message-ID: <10609434cc80f8c547228c26bf16a04ce1f14b72.camel@gmail.com>
+From: Uladzimir Bely <wiselord1983@gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 05 Feb 2024 12:27:55 +0300
+In-Reply-To: <20240205101344.7725e2ea@windsurf>
+References: <20240204085128.5059-1-wiselord1983@gmail.com>
+ <20240205101344.7725e2ea@windsurf>
+User-Agent: Evolution 3.50.3 (by Flathub.org) 
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240204201657.33079-2-aleksandr.o.makarov@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1707125115;
- bh=swOpJrgFNeR2Z4Ovm67mE/Z6GgrczFiXwCfwwh8NAvk=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=TK1UZQykwEzpSSD8gNnZN/6bVUlIXoN0SX2msC1p5AigqcbqeejFskw+3ihmcjPD/
- +Ect+v4qrZr/+8uIvEV+WRcj1Mt1wyCVoet+PJlTgQFdij0CKVKi+Fz43Bmuj8HOKz
- 8N2OTRfh6glCKd6TDxLHfXIWZ+HZvabsjrx/1vLE/ekx3fV+C5he2u4JcVNJHWv+Ev
- 1CJmZxgI+6AVGPzZA9y0kGhTSTNpv1Kw/1qeo6XVfKYAoVJqBO8qHwVQijJL1Ikcks
- u+pFUZXWkZtqTs86fKXyoA+t3V3LXF2J9PKfty0cn4OYffMdUybLXLBdUjNgjkzhwH
- oLwK16R1tCtpg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=TK1UZQyk
-Subject: Re: [Buildroot] [PATCH v2] package/haproxy: fix runtime 'FATAL
- ERROR: invalid code detected -- cannot go further'
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1707125275; x=1707730075; darn=buildroot.org;
+ h=mime-version:user-agent:content-transfer-encoding:references
+ :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=0E/9RtSlLwHFYK126nCNShHCWiOZGrKuT8MiqfIIQY0=;
+ b=SQ0lJRhoPzVXHLi4zeJYB7NU7YAEoff0ffF98VLGpZddc0A7fkECl+oAFnO/sf7s2E
+ cQXmHJdwJKK53T4+xOy0ZnJc3u+gjGdSRHc2tHQL74bxAWo05zQDHjq3BKKutnXTYnP+
+ IFBt7nYyECKZuUyZAPb+L1h1JpDGwafOJLyNnkMkHp3s2Kg3RaPAAhVDfQtVj7pq6VSP
+ py8G+Y8d0H1WgZ+2OIC7mNk03YBpcwBMdaf3rlIMv/2D8j0uIdUMg0fmCgSLq1qrXzGU
+ 0o5tV1PUSCmKlebI+Z8jM74fmKJxCMVuv5X3OxOZWFRFwUZC+s7J6P3dBUYS8/C4LzHE
+ eZ2A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=SQ0lJRho
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-mpd2: bump to version
+ 3.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,75 +98,25 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Aleksandr, All,
-
-On 2024-02-04 22:16 +0200, Aleksandr Makarov spake thusly:
-> Setting HAPROXY_CFLAGS on the haproxy build command line overrides CFLAGS
-> which were internally set by the haproxy Makefile.
-> 
-> Among those omitted CFLAGS is -fwrapv. Compiling haproxy without it and
-> and then running the program results in runtime error:
-> 
-> $ haproxy
-> FATAL ERROR: invalid code detected -- cannot go further, please recompile!
-> ...
-> 
-> To address this issue, include HAPROXY_CFLAGS in the DEFINE variable instead
-> of CFLAGS in haproxy.mk.
-
-You forgot to add your Signed-off-by line here, but I messed up and
-applied and pushed.
-
-/me goes fumble with his git hooks to understand why that was not
-caught...
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
-> Changes v1 -> v2
->   - Drop patch for haproxy program Makefile, make changes to haproxy.mk instead
-> ---
->  package/haproxy/haproxy.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
-> index 63a92090f3..61a9ebebe4 100644
-> --- a/package/haproxy/haproxy.mk
-> +++ b/package/haproxy/haproxy.mk
-> @@ -82,7 +82,7 @@ endif
->  
->  define HAPROXY_BUILD_CMDS
->  	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
-> -		$(HAPROXY_MAKE_OPTS) CFLAGS="$(HAPROXY_CFLAGS)" -C $(@D)
-> +		$(HAPROXY_MAKE_OPTS) DEFINE="$(HAPROXY_CFLAGS)" -C $(@D)
->  endef
->  
->  define HAPROXY_INSTALL_TARGET_CMDS
-> -- 
-> 2.39.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+0JIg0J/QvSwgMDUvMDIvMjAyNCDQsiAxMDoxMyArMDEwMCwgVGhvbWFzIFBldGF6em9uaSDQv9C4
+0YjQtdGCOgo+IEhlbGxvLAo+IAo+IE9uIFN1bizCoCA0IEZlYiAyMDI0IDExOjUxOjI4ICswMzAw
+Cj4gV2lzZUxvcmQgPHdpc2Vsb3JkMTk4M0BnbWFpbC5jb20+IHdyb3RlOgo+IAo+ID4gU2lnbmVk
+LW9mZi1ieTogV2lzZUxvcmQgPHdpc2Vsb3JkMTk4M0BnbWFpbC5jb20+Cj4gCj4gVGhhbmtzIGEg
+bG90IGZvciB5b3VyIGNvbnRyaWJ1dGlvbiEgQ291bGQgeW91IGNsYXJpZnkgd2hldGhlcgo+ICJX
+aXNlTG9yZCIgaXMgeW91ciByZWFsIG5hbWU/IEluZGVlZCwgd2UgdW5mb3J0dW5hdGVseSBjYW5u
+b3QgYWNjZXB0Cj4gY29udHJpYnV0aW9ucyBzdWJtaXR0ZWQgdW5kZXIgcHNldWRvbnltcy4KPiAK
+PiBUaGFua3MgYSBsb3QgaW4gYWR2YW5jZSBmb3IgeW91ciBjbGFyaWZpY2F0aW9uLAo+IAo+IFRo
+b21hcwoKSGVsbG8sIFRob21hcy4KClNvcnJ5LCB0aGUgbmlja25hbWUgd2FzIHNldCBpbiBteSAu
+Z2l0Y29uZmlnIGZpbGUuCgpJIGNvdWxkIGVpdGhlciByZXNlbmQgdGhlIHBhdGNoIHdpdGggYSBw
+cm9wZXIgdXNlcm5hbWUgKGUuZy4sCiJVbGFkemltaXIgQmVseSA8d2lzZWxvcmQxOTgzQGdtYWls
+LmNvbT4iKSwgb3IgeW91IGFyZSBmcmVlIHRvIGVkaXQgdGhlCnBhdGNoIG9uIHlvdXIgb3duLgoK
+UmVnYXJkcywKVWxhZHppbWlyIEJlbHkuCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9v
+dC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRy
+b290Cg==
