@@ -4,47 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10A4CC4828D
-	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 10:17:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2FFEC4828D
+	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 10:18:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C1A7641568;
-	Mon,  5 Feb 2024 10:17:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C1A7641568
+	by smtp4.osuosl.org (Postfix) with ESMTP id 518D04025A;
+	Mon,  5 Feb 2024 10:18:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 518D04025A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0EiI59o2ls8p; Mon,  5 Feb 2024 10:17:25 +0000 (UTC)
+	with ESMTP id uWBZL-0ZbDLi; Mon,  5 Feb 2024 10:18:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F17EB4159D;
-	Mon,  5 Feb 2024 10:17:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F17EB4159D
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 23EC31BF404
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 10:17:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A8DA04159D;
+	Mon,  5 Feb 2024 10:18:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A8DA04159D
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 26FBE1BF404
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 10:18:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F0DFF60F72
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 10:17:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F0DFF60F72
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0CC35825B1
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 10:18:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0CC35825B1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rq-AarEGOGV9 for <buildroot@lists.busybox.net>;
- Mon,  5 Feb 2024 10:17:22 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 33E4C60F5D
- for <buildroot@buildroot.org>; Mon,  5 Feb 2024 10:17:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33E4C60F5D
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2390F86A14; Mon,  5 Feb 2024 10:17:22 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 5 Feb 2024 11:15:30 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0c80a1b9f19b8cb7c40aa0f9b34a2b9214d2451d
-X-Git-Newrev: 6925d696c1fdd89e2e86fca5ae70dc36c3b11d0a
-X-Patchwork-Hint: ignore
-Message-Id: <20240205101722.2390F86A14@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pyrsistent: bump to version
- 0.20.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xQlQJ2jWecI9 for <buildroot@lists.busybox.net>;
+ Mon,  5 Feb 2024 10:18:35 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EC8B382572
+ for <buildroot@busybox.net>; Mon,  5 Feb 2024 10:18:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC8B382572
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C569B1BF209;
+ Mon,  5 Feb 2024 10:18:31 +0000 (UTC)
+Date: Mon, 5 Feb 2024 11:18:30 +0100
+To: Francois Perrad <fperrad@gmail.com>
+Message-ID: <20240205111830.14a6a456@windsurf>
+In-Reply-To: <20240118182808.551258-1-francois.perrad@gadz.org>
+References: <20240118182808.551258-1-francois.perrad@gadz.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1707128312;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=YN2ZzUa/7rBxwPK2M9676zAWoRppHOs72bPwX1Wf+7k=;
+ b=ce5g+WZ2ZXZ4q4HZzmM8L55BtCRKmzsWBmaV95mROjXKcSy14OpQ5nuoNhz19xo107sXip
+ Fav/NqFk1nH7sYjccrCKovWk2Gk3V5PYESbaO7G7EBfMMfB0Qm023XvJmRdf8LmB351svy
+ ZKtC6Epn8KIhOrsB2QYXsJRde9vDcWSDyhAB7jfMUEUMeNhVhs/IRn9It5xuVpbRjS1Gv5
+ 55vATQapAi9i2DApEiTSs6aaeZAVamlo/lOAk3P2jcUpbVQwIhvJWB2ULF58tFFbNpJOq7
+ zyxqSAWdSZ1Ph1J49t/k77/AqeYsJPqrllsmtOikff5c3AQt5i7Mx8AKPaKL9Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=ce5g+WZ2
+Subject: Re: [Buildroot] [PATCH] package/autoconf: bump to version 2.72
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,57 +74,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@busybox.net
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6925d696c1fdd89e2e86fca5ae70dc36c3b11d0a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-License hash changed due to year update:
-https://github.com/tobgu/pyrsistent/commit/acdffe6967a821165155ac16bee48054fd61385a
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
----
- package/python-pyrsistent/python-pyrsistent.hash | 6 +++---
- package/python-pyrsistent/python-pyrsistent.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/package/python-pyrsistent/python-pyrsistent.hash b/package/python-pyrsistent/python-pyrsistent.hash
-index d5c9a22656..780a7f09d9 100644
---- a/package/python-pyrsistent/python-pyrsistent.hash
-+++ b/package/python-pyrsistent/python-pyrsistent.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyrsistent/json
--md5  761266eab1f9dc9280cdb0a6d2dedb08  pyrsistent-0.19.3.tar.gz
--sha256  1a2994773706bbb4995c31a97bc94f1418314923bd1048c6d964837040376440  pyrsistent-0.19.3.tar.gz
-+md5  dce0f9a13668dbf8bb76f74954b4a42a  pyrsistent-0.20.0.tar.gz
-+sha256  4c48f78f62ab596c679086084d0dd13254ae4f3d6c72a83ffdf5ebdef8f265a4  pyrsistent-0.20.0.tar.gz
- # Locally computed sha256 checksums
--sha256  3ea56753cbd0cc897d3f4414a902f5694991db7c1b3abb8230216381185f9112  LICENSE.mit
-+sha256  3fd3d3d1ab9c733ee453fbf3bbbaa845440d0d8c20d7b5a039d2e46a2ed7fc01  LICENSE.mit
-diff --git a/package/python-pyrsistent/python-pyrsistent.mk b/package/python-pyrsistent/python-pyrsistent.mk
-index f3457feebe..6c52d7dbc8 100644
---- a/package/python-pyrsistent/python-pyrsistent.mk
-+++ b/package/python-pyrsistent/python-pyrsistent.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYRSISTENT_VERSION = 0.19.3
-+PYTHON_PYRSISTENT_VERSION = 0.20.0
- PYTHON_PYRSISTENT_SOURCE = pyrsistent-$(PYTHON_PYRSISTENT_VERSION).tar.gz
--PYTHON_PYRSISTENT_SITE = https://files.pythonhosted.org/packages/bf/90/445a7dbd275c654c268f47fa9452152709134f61f09605cf776407055a89
-+PYTHON_PYRSISTENT_SITE = https://files.pythonhosted.org/packages/ce/3a/5031723c09068e9c8c2f0bc25c3a9245f2b1d1aea8396c787a408f2b95ca
- PYTHON_PYRSISTENT_SETUP_TYPE = setuptools
- PYTHON_PYRSISTENT_LICENSE = MIT
- PYTHON_PYRSISTENT_LICENSE_FILES = LICENSE.mit
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gRnJhbsOnb2lzLAoKT24gVGh1LCAxOCBKYW4gMjAyNCAxOToyODowOCArMDEwMApGcmFu
+Y29pcyBQZXJyYWQgPGZwZXJyYWRAZ21haWwuY29tPiB3cm90ZToKCj4gaHR0cHM6Ly9naXQuc2F2
+YW5uYWguZ251Lm9yZy9jZ2l0L2F1dG9jb25mLmdpdC90cmVlL05FV1M/aD12Mi43Mgo+IFNpZ25l
+ZC1vZmYtYnk6IEZyYW5jb2lzIFBlcnJhZCA8ZnJhbmNvaXMucGVycmFkQGdhZHoub3JnPgo+IC0t
+LQo+ICBwYWNrYWdlL2F1dG9jb25mLzAwMDEtZG9udC1hZGQtZGlydHktdG8tdmVyc2lvbi5wYXRj
+aCB8IDIgKy0KPiAgcGFja2FnZS9hdXRvY29uZi9hdXRvY29uZi5oYXNoICAgICAgICAgICAgICAg
+ICAgICAgICAgfCAyICstCj4gIHBhY2thZ2UvYXV0b2NvbmYvYXV0b2NvbmYubWsgICAgICAgICAg
+ICAgICAgICAgICAgICAgIHwgMiArLQo+ICAzIGZpbGVzIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygr
+KSwgMyBkZWxldGlvbnMoLSkKCkZvbGxvd2luZyB5b3VyIGZlZWRiYWNrLCBJIGFwcGxpZWQgYW5k
+IHB1c2hlZCB5b3VyIHBhdGNoIHRvIG1hc3Rlci4KTGV0J3Mgd2F0Y2ggYW5kIHNlZSBob3cgdGhp
+bmdzIGdvIGluIHRoZSBhdXRvYnVpbGRlcnMgaW4gdGhlIG5leHQgZmV3CmRheXMuCgpUaGFua3Mh
+CgpUaG9tYXMKLS0gClRob21hcyBQZXRhenpvbmksIENUTywgQm9vdGxpbgpFbWJlZGRlZCBMaW51
+eCBhbmQgS2VybmVsIGVuZ2luZWVyaW5nCmh0dHBzOi8vYm9vdGxpbi5jb20KX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlz
+dApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFp
+bG1hbi9saXN0aW5mby9idWlsZHJvb3QK
