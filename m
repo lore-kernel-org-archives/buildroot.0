@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 880CAC4828D
-	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 15:13:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56861C48295
+	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 15:13:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2A35E41A46;
-	Mon,  5 Feb 2024 15:13:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A35E41A46
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1223E41AFD;
+	Mon,  5 Feb 2024 15:13:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1223E41AFD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id A7WZAxrpOD2V; Mon,  5 Feb 2024 15:13:08 +0000 (UTC)
+	with ESMTP id yMfjreu_ze5a; Mon,  5 Feb 2024 15:13:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 883C6419C3;
-	Mon,  5 Feb 2024 15:13:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 883C6419C3
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9FCD01BF215
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1C3D841A84;
+	Mon,  5 Feb 2024 15:13:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C3D841A84
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C5C8B1BF954
  for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 15:13:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 72DBC60F11
+ by smtp1.osuosl.org (Postfix) with ESMTP id AC1C982BFD
  for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 15:13:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 72DBC60F11
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC1C982BFD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ahjc8fX3XTny for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id baB_sdSW-jfP for <buildroot@lists.busybox.net>;
  Mon,  5 Feb 2024 15:13:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AA49260EF8
+ by smtp1.osuosl.org (Postfix) with ESMTP id B355682ADD
  for <buildroot@buildroot.org>; Mon,  5 Feb 2024 15:13:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA49260EF8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B355682ADD
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8299E86D19; Mon,  5 Feb 2024 15:13:04 +0000 (UTC)
+ id 97F5286D07; Mon,  5 Feb 2024 15:13:04 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 5 Feb 2024 16:10:18 +0100
+Date: Mon, 5 Feb 2024 16:12:36 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1b2dc9add3f84196f3dd326c26f64abaf84642c0
-X-Git-Newrev: 20b622fd05785906cd8bf6bfd8348cc52830cfb5
+X-Git-Oldrev: 20b622fd05785906cd8bf6bfd8348cc52830cfb5
+X-Git-Newrev: 0f50c4cd2b72b8a04600e525e9d848df0ad42e14
 X-Patchwork-Hint: ignore
-Message-Id: <20240205151304.8299E86D19@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/iputils: bump release to 20240117
+Message-Id: <20240205151304.97F5286D07@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: add pciutils runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,41 +63,117 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=20b622fd05785906cd8bf6bfd8348cc52830cfb5
+commit: https://git.buildroot.net/buildroot/commit/?id=0f50c4cd2b72b8a04600e525e9d848df0ad42e14
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/iputils/iputils.hash | 4 ++--
- package/iputils/iputils.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ DEVELOPERS                                     |  1 +
+ support/testing/tests/package/test_pciutils.py | 83 ++++++++++++++++++++++++++
+ 2 files changed, 84 insertions(+)
 
-diff --git a/package/iputils/iputils.hash b/package/iputils/iputils.hash
-index c2f6a40797..a3e48d60a9 100644
---- a/package/iputils/iputils.hash
-+++ b/package/iputils/iputils.hash
-@@ -1,5 +1,5 @@
--# https://github.com/iputils/iputils/releases/download/20231222/sha256sums.asc
--sha256  e3ce5e1a1f795c2d520985463b90e20f9388b7060796d54ad64509aa8e4af775  iputils-20231222.tar.gz
-+# https://github.com/iputils/iputils/releases/download/20240117/sha256sums.asc
-+sha256  7ed46e876e4157e1d20c40ec945e1ce0f3af3b10b5f6373e423135c6f22cd116  iputils-20240117.tar.gz
- # Locally computed
- sha256  2c9f29d982c48665c30b3adaf400c048988fd256eb91c691e351eb3b6a8b2036  LICENSE
- sha256  9acc4bc871a4742550158e3696dcb381953172ef808d04ca248184f9f6322712  Documentation/LICENSE.BSD3
-diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-index bcf440ec93..58e44d673a 100644
---- a/package/iputils/iputils.mk
-+++ b/package/iputils/iputils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IPUTILS_VERSION = 20231222
-+IPUTILS_VERSION = 20240117
- IPUTILS_SITE = https://github.com/iputils/iputils/releases/download/$(IPUTILS_VERSION)
- IPUTILS_LICENSE = GPL-2.0+, BSD-3-Clause
- IPUTILS_LICENSE_FILES = LICENSE Documentation/LICENSE.BSD3 Documentation/LICENSE.GPL2
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ebc1af84cb..31496cbcc6 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1804,6 +1804,7 @@ F:	support/testing/tests/package/test_octave.py
+ F:	support/testing/tests/package/test_ola.py
+ F:	support/testing/tests/package/test_ola/
+ F:	support/testing/tests/package/test_openblas.py
++F:	support/testing/tests/package/test_pciutils.py
+ F:	support/testing/tests/package/test_perftest.py
+ F:	support/testing/tests/package/test_pigz.py
+ F:	support/testing/tests/package/test_python_distro.py
+diff --git a/support/testing/tests/package/test_pciutils.py b/support/testing/tests/package/test_pciutils.py
+new file mode 100644
+index 0000000000..3221b0cfd1
+--- /dev/null
++++ b/support/testing/tests/package/test_pciutils.py
+@@ -0,0 +1,83 @@
++import os
++
++import infra.basetest
++
++
++class TestPCIUtils(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_PCIUTILS=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++
++        # Note: we add a qemu pci-testdev in order to have a stable
++        # device ID, and for writing in configuration space without
++        # interfering with the rest of the emulation. See:
++        # https://www.qemu.org/docs/master/specs/pci-testdev.html
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file,
++                                    "-device", "pci-testdev"])
++        self.emulator.login()
++
++        # Check the program executes. This test also check that we
++        # have "lspci" from the pciutils package, rather than the
++        # busybox applet (which does not recognize the --version
++        # option)"
++        self.assertRunOk("lspci --version")
++
++        # Check few program invocations.
++        self.assertRunOk("lspci")
++        for lspci_opt in ["-t", "-n", "-v", "-vv", "-x"]:
++            self.assertRunOk(f"lspci {lspci_opt}")
++
++        # Check we can see the qemu pci-testdev.
++        # Vendor: 1b36: Red Hat, Inc.
++        # Device: 0005: QEMU PCI Test Device
++        pci_vendor_id = "1b36"
++        pci_device_id = "0005"
++        pci_dev = f"{pci_vendor_id}:{pci_device_id}"
++        cmd = f"lspci -d {pci_dev}"
++        output, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
++        self.assertIn("Red Hat, Inc.", output[0])
++        self.assertIn("QEMU PCI Test Device", output[0])
++
++        # We disable INTx emulation by setting bit 10 of the COMMAND
++        # register in the configuration space. See:
++        # https://git.kernel.org/pub/scm/utils/pciutils/pciutils.git/tree/lib/header.h?h=v3.10.0#n26
++        dis_int_x = 0x400
++        data_mask = f"{hex(dis_int_x)}:{hex(dis_int_x)}"
++        cmd = f"setpci -d {pci_dev} COMMAND.w={data_mask}"
++        self.assertRunOk(cmd)
++
++        # We read back and check the value.
++        cmd = f"setpci -d {pci_dev} COMMAND.w"
++        output, exit_code = self.emulator.run(cmd)
++        read_value = int(output[0], 16)
++        self.assertEqual(exit_code, 0)
++        self.assertTrue((read_value & dis_int_x) == dis_int_x)
++
++        # We check lspci now see the disabled INTx emulation.
++        cmd = f"lspci -vv -d {pci_dev} | grep -F 'DisINTx+'"
++        self.assertRunOk(cmd)
++
++        # We re-enable the INTx emulation by clearing the bit 10.
++        data_mask = f"0x0:{hex(dis_int_x)}"
++        cmd = f"setpci -d {pci_dev} COMMAND.w={data_mask}"
++        self.assertRunOk(cmd)
++
++        # We read back and check the value, again.
++        cmd = f"setpci -d {pci_dev} COMMAND.w"
++        output, exit_code = self.emulator.run(cmd)
++        read_value = int(output[0], 16)
++        self.assertEqual(exit_code, 0)
++        self.assertTrue((read_value & dis_int_x) == 0)
++
++        # We check lspci now see the enabled INTx emulation.
++        cmd = f"lspci -vv -d {pci_dev} | grep -F 'DisINTx-'"
++        self.assertRunOk(cmd)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
