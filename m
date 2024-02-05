@@ -4,66 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B61D1C4828D
-	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 11:47:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDB20C48291
+	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 12:03:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EDD6E605A9;
-	Mon,  5 Feb 2024 11:47:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EDD6E605A9
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7CA5C60FF1;
+	Mon,  5 Feb 2024 12:03:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7CA5C60FF1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Xr5QALgVWNhA; Mon,  5 Feb 2024 11:47:28 +0000 (UTC)
+	with ESMTP id hrlfhh03V_lT; Mon,  5 Feb 2024 12:03:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 13FDB60F0D;
-	Mon,  5 Feb 2024 11:47:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 13FDB60F0D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C9A081BF281
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 11:47:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6B8ED61005;
+	Mon,  5 Feb 2024 12:03:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B8ED61005
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8192F1BF288
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 12:03:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A297782C35
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 11:47:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A297782C35
+ by smtp4.osuosl.org (Postfix) with ESMTP id 674A941511
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 12:03:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 674A941511
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id k37E9-_3cWMG for <buildroot@lists.busybox.net>;
- Mon,  5 Feb 2024 11:47:23 +0000 (UTC)
-Received: from smtpdh17-2.aruba.it (smtpdh17-2.aruba.it [62.149.155.117])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5A7C882C33
- for <buildroot@buildroot.org>; Mon,  5 Feb 2024 11:47:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A7C882C33
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gmKYRVx5x3lK for <buildroot@lists.busybox.net>;
+ Mon,  5 Feb 2024 12:03:13 +0000 (UTC)
+Received: from smtpdh16-2.aruba.it (smtpdh16-2.aruba.it [62.149.155.101])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C59A54088C
+ for <buildroot@buildroot.org>; Mon,  5 Feb 2024 12:03:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C59A54088C
 Received: from [192.168.50.221] ([84.33.84.190])
  by Aruba Outgoing Smtp  with ESMTPSA
- id WxRYrjByHD7V9WxRZrkcrt; Mon, 05 Feb 2024 12:47:21 +0100
-Message-ID: <8d3fbd57-3100-46f5-8740-0998ead5b029@benettiengineering.com>
-Date: Mon, 5 Feb 2024 12:47:20 +0100
+ id Wxgqrwun2l81fWxgrrSOqz; Mon, 05 Feb 2024 13:03:09 +0100
+Message-ID: <ce79378a-0fa8-477f-9e2a-8488ab76de55@benettiengineering.com>
+Date: Mon, 5 Feb 2024 13:03:08 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
+To: =?UTF-8?Q?Ga=C3=ABl_PORTAY?= <gael.portay@rtone.fr>,
+ buildroot@buildroot.org
+References: <20231121193448.1151936-1-gael.portay@rtone.fr>
+ <20231121193448.1151936-4-gael.portay@rtone.fr>
 Content-Language: en-US
-To: Maciej Grela <enki@fsck.pl>, buildroot@buildroot.org
-References: <20231004131256.2113233-2-enki@fsck.pl>
- <20231006140511.3840643-3-enki@fsck.pl>
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20231006140511.3840643-3-enki@fsck.pl>
-X-CMAE-Envelope: MS4xfBtAbmqdb+MTu6y4Wn2FHEEnVfiGuwlGkhMH2Dj7z7dCe5LAXP70OqzkZhJitDQ8mKIg+9RLIynEHjhIwdKH04tdNtZFUDyedUqnBA8opyVq4DCvcpvn
- ix6tgVG6XCBXJa/WleSG69TyQFnc+Vae7ZtXUFHFZLeIg7nXy6gSIZeAvsrS576xYpdYAxSd+aANACIuPcoBff5Ssh0uKAlSqkU8WzOY3ujR3PflgKTAP0ob
- GVgxz1JRyOXPM68zrEf/iSSlRXDl6fy0DYl/4vANOPYRAHZYVsxxqqcnB9D3ZZW/
+In-Reply-To: <20231121193448.1151936-4-gael.portay@rtone.fr>
+X-CMAE-Envelope: MS4xfGDEPhYuKxt+26DxdX6WgZaP0tlB/xBeq0OOk0vjutHYup84o4K79RBniBFb15myOqTSTxmkWthfJpuZepCnRDnVzl+KBnUwjc+SW02mUA43qS3i+WkJ
+ Ggzhk7EFoSHdeUJcqhcHKsMBBeYuqqWocuAG3vkyseoJnszwGeaRKvh/DwP8k+vEpUWsAG4xcW6L4E2xEquFWTapxdl4XDDgCPSHpv1AhqhF1USTszwgVGrm
+ 3eHKE5DKKJz0ahnRiDmOpmcoSgGz+4y6pgu1kKVYl/xNVQfdfJ3OHJ/bIaPqq2JrqSttMIEW4f3a3XLLE236l5Qbhdl9ESp9n8/arLlWxuuiFvFq8xiGCzAn
+ KrrG8SC3qQRGt3hchEv9JL9GMoSXHbgo5f89qjQhqt+HVAME5Tw=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1707133641; bh=M79eRBkUArALULKRn7H5Sc7O0MZWWvPN8mKhsAwSTbU=;
+ t=1707134589; bh=RniZmxuwPHbwgyHKi7DTu8/Y7wjx2L/o342C+QQreDo=;
  h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=j4rYhMzbsEfjRb/uACmsdpjXP+XJdjGQd1s3WTahd5jDo39pG6rrE2LiWbH3R9dWq
- m/tBSrSJp2QzONTkO1r6ZDBt2m8NeXDN/d3gwJH/Gu1IBdQ/T8k7RVZ5bNwxDg6IUe
- LlrXEwBddFTn9Ym+gIQ6D79T416yecqL43NOF2WwSqkZvJhOKxSPwMnrMt3+jkS0TS
- y3nAMeP97xT5x/eUVeeQd1OkM8Rj0OAumEHnG6sMgXq1+X45ZHPjUD3WB34FeWtUSA
- t/zTOPSLOpSxtyAM67TuLglIcelTqObJNDq/CT45F85FK/bROUNolXGyUhZopK7yWB
- WG9ufo6b4luSg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=M9KgjzD1L55XQqDp2GuEEX8BlAVJj7XOPcLPowlIXUpC06CL5VAq3fvZeCeoSsL0y
+ CR+ALVr+Mmv8IDW0YKwSE9mwg78cXBV+AjkxSvd+ry5KpA+QxrJgHz6pY+4jwmvXIR
+ cJKhHztjEtK5nYTxhrjCeTw0wFlEx+akxKSSDa4CLLm9oIpNYgVRiWj1UWSDPdprYO
+ YFTzz5YXqfEXSdQMe8pkEAo7A413Gs570p/hX1G7xdXuH7sAspZzjrTpltpiuH9GWN
+ WW23slh1uqIJtj7HkktBTykzP1Ppw6SaI4TtbuyzLlFFsnZqsvjOFdjkRn30lB9Bca
+ kAEgx53zOfXgQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=j4rYhMzb
-Subject: Re: [Buildroot] [PATCH v3 2/3] package/dns320l-daemon: new package
+ header.a=rsa-sha256 header.s=a1 header.b=M9KgjzD1
+Subject: Re: [Buildroot] [v1 3/4] configs/raspberrypi*: bump kernel version
+ to feb4ea5 (6.1.55)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,195 +78,198 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Martin Bark <martin@barkynet.com>,
+ Julien Grossholtz <julien.grossholtz@openest.io>,
+ Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Maciej,
-
-On 06/10/23 16:05, Maciej Grela wrote:
-> dns320l-daemon is a simple system management daemon for the D-Link DNS-320L
-> NAS. It handles power, Wake-on-LAN, temperature, fan speed and some LEDs.
-> 
-> Signed-off-by: Maciej Grela <enki@fsck.pl>
-> ---
->   package/Config.in                             |  1 +
->   .../0001-listen-on-localhost.patch            | 21 ++++++++++
->   package/dns320l-daemon/Config.in              |  8 ++++
->   package/dns320l-daemon/S50dns320l-daemon      | 42 +++++++++++++++++++
->   package/dns320l-daemon/dns320l-daemon.hash    |  1 +
->   package/dns320l-daemon/dns320l-daemon.mk      | 32 ++++++++++++++
->   6 files changed, 105 insertions(+)
->   create mode 100644 package/dns320l-daemon/0001-listen-on-localhost.patch
->   create mode 100644 package/dns320l-daemon/Config.in
->   create mode 100644 package/dns320l-daemon/S50dns320l-daemon
->   create mode 100644 package/dns320l-daemon/dns320l-daemon.hash
->   create mode 100644 package/dns320l-daemon/dns320l-daemon.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 228e9eb1e3..f1c451890f 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -2684,6 +2684,7 @@ menu "System tools"
->   	source "package/dcron/Config.in"
->   	source "package/ddrescue/Config.in"
->   	source "package/debianutils/Config.in"
-> +	source "package/dns320l-daemon/Config.in"
->   	source "package/docker-cli/Config.in"
->   	source "package/docker-compose/Config.in"
->   	source "package/docker-engine/Config.in"
-> diff --git a/package/dns320l-daemon/0001-listen-on-localhost.patch b/package/dns320l-daemon/0001-listen-on-localhost.patch
-> new file mode 100644
-> index 0000000000..50da024024
-> --- /dev/null
-> +++ b/package/dns320l-daemon/0001-listen-on-localhost.patch
-> @@ -0,0 +1,21 @@
-> +# HG changeset patch
-> +# User Maciej Grela <enki@fsck.pl>
-> +# Date 1696540279 -7200
-> +#      Thu Oct 05 23:11:19 2023 +0200
-> +# Node ID eca5ed65582402e64c36145290c214aee84b012b
-> +# Parent  1f945ce22321a876143b38aaf5610c8915172b90
-> +Subject: [PATCH] Listen on localhost by default
-> +Signed-off-by: Maciej Grela <enki@fsck.pl>
-> +
-> +diff -r 1f945ce22321 -r eca5ed655824 dns320l-daemon.ini
-> +--- a/dns320l-daemon.ini        Tue Dec 09 12:24:29 2014 +0100
-> ++++ b/dns320l-daemon.ini        Thu Oct 05 23:11:19 2023 +0200
-> +@@ -4,7 +4,7 @@
-> +
-> + [Daemon]
-> + ServerPort = 57367
-> +-ServerAddr = 0.0.0.0
-> ++ServerAddr = 127.0.0.1
-> + SyncTimeOnStartup = 0
-> + SyncTimeOnShutdown = 0
-> + DeviceShutdownDelay = 30
-> diff --git a/package/dns320l-daemon/Config.in b/package/dns320l-daemon/Config.in
-> new file mode 100644
-> index 0000000000..35bd30a9e5
-> --- /dev/null
-> +++ b/package/dns320l-daemon/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_DNS320L_DAEMON
-> +	bool "dns320l-daemon"
-> +	depends on BR2_USE_MMU # fork()
-> +	select BR2_PACKAGE_INIPARSER
-> +	help
-> +	  MCU Daemon for the D-Link DNS-320L
-> +
-> +	  https://www.aboehler.at/hg/dns320l-daemon
-> diff --git a/package/dns320l-daemon/S50dns320l-daemon b/package/dns320l-daemon/S50dns320l-daemon
-> new file mode 100644
-> index 0000000000..3bc2a60d0b
-> --- /dev/null
-> +++ b/package/dns320l-daemon/S50dns320l-daemon
-> @@ -0,0 +1,42 @@
-> +#!/bin/sh
-> +
-> +DAEMON="dns320l-daemon"
-> +
-> +start() {
-> +	printf 'Starting %s: ' "$DAEMON"
-> +	start-stop-daemon -S -x "/usr/bin/$DAEMON"
-> +	status="$?"
-> +	if [ "$status" -eq 0 ]; then
-> +		echo "OK"
-> +	else
-> +		echo "FAIL"
-> +	fi
-> +	return "$status"
-> +}
-> +
-> +stop() {
-> +	printf 'Stopping %s: ' "$DAEMON"
-> +	start-stop-daemon -s INT -K -x "/usr/bin/$DAEMON"
-> +}
-> +
-> +poweroff() {
-> +	printf 'Stopping %s: ' "$DAEMON"
-> +	start-stop-daemon -s TERM -K -x "/usr/bin/$DAEMON"
-> +}
-> +
-> +restart() {
-> +	stop
-> +	sleep 1
-> +	start
-> +}
-> +
-> +case "$1" in
-> +	start|stop|restart)
-> +		"$1";;
-> +	reload)
-> +		restart;;
-> +	*)
-> +		echo "Usage: $0 {start|stop|restart|poweroff}"
-> +		exit 1
-> +		;;
-> +esac
-> diff --git a/package/dns320l-daemon/dns320l-daemon.hash b/package/dns320l-daemon/dns320l-daemon.hash
-> new file mode 100644
-> index 0000000000..4396eb8f5d
-> --- /dev/null
-> +++ b/package/dns320l-daemon/dns320l-daemon.hash
-> @@ -0,0 +1 @@
-> +sha256  eac74a64f0d4127748e629b8a5f723eab58ac83064a3f249f97b85bcd7faf061  tip.tar.bz2
-> diff --git a/package/dns320l-daemon/dns320l-daemon.mk b/package/dns320l-daemon/dns320l-daemon.mk
-> new file mode 100644
-> index 0000000000..bc24a553c2
-> --- /dev/null
-> +++ b/package/dns320l-daemon/dns320l-daemon.mk
-> @@ -0,0 +1,32 @@
-> +################################################################################
-> +#
-> +# dns320l-daemon
-> +#
-> +################################################################################
-> +
-> +DNS320L_DAEMON_VERSION = 1.0
-> +DNS320L_DAEMON_SOURCE = tip.tar.bz2
-> +DNS320L_DAEMON_SITE = https://www.aboehler.at/hg/dns320l-daemon/archive
-
-URL has moved to:
-https://gitlab.aboehler.at/andreas/dns320l-daemon
-
-and there are no Releases or git tags, so can you use as VERSION the
-latest git SHA1?
-
-Thank you
-Best regards
--- 
-Giulio Benetti
-CEO&CTO@Benetti Engineering sas
-
-> +DNS320L_DAEMON_LICENSE = GPL-3
-> +DNS320L_DAEMON_DEPENDENCIES = iniparser
-> +DNS320l_DAEMON_PATCH = 0001-listen-on-localhost.patch
-> +
-> +define DNS320L_DAEMON_BUILD_CMDS
-> +	$(TARGET_CONFIGURE_OPTS) $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-> +		CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
-> +endef
-> +
-> +define DNS320L_DAEMON_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -D -m 0755 $(@D)/dns320l-daemon $(TARGET_DIR)/usr/bin/
-> +	$(INSTALL) -D -m 0600 $(@D)/dns320l-daemon.ini $(TARGET_DIR)/etc/
-> +endef
-> +
-> +define DNS320L_DAEMON_INSTALL_INIT_SYSTEMD
-> +	$(INSTALL) -D -m 0644 $(@D)/dns320l-daemon.service $(TARGET_DIR)/lib/systemd/system/
-> +endef
-> +
-> +define DNS320L_DAEMON_INSTALL_INIT_SYSV
-> +	$(INSTALL) -D -m 0755 package/dns320l-daemon/S50dns320l-daemon $(TARGET_DIR)/etc/init.d/S50dns320l-daemon
-> +endef
-> +
-> +$(eval $(generic-package))
-
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgR2HDq2wsCgp1bmZvcnR1bmF0ZWx5IHRoaXMgcGF0Y2ggaGFzIGJlZW4gc3VwZXJzZWRlZCBi
+eSB0aGUgZm9sbG93aW5nIG9uZSB0aGF0J3MKYmVlbiBjb21taXR0ZWQ6Cmh0dHBzOi8vZ2l0bGFi
+LmNvbS9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC8tL2NvbW1pdC8xM2JhNjY4YTJkYTNhMGRjYjM4
+NjU3OGNlMTViMDBhNDQ0MTAxZGJlCgpTbyBpdCBjYW4gYmUgZHJvcHBlZCBmcm9tIFBhdGNod29y
+ay4KCkJlc3QgcmVnYXJkcwotLSAKR2l1bGlvIEJlbmV0dGkKQ0VPJkNUT0BCZW5ldHRpIEVuZ2lu
+ZWVyaW5nIHNhcwoKT24gMjEvMTEvMjMgMjA6MzQsIEdhw6tsIFBPUlRBWSB3cm90ZToKPiBOb3cg
+YmFzZWQgb24gNi4xLjU1IChmcm9tIDUuMTAuOTIpLgo+IAo+IFNpZ25lZC1vZmYtYnk6IEdhw6ts
+IFBPUlRBWSA8Z2FlbC5wb3J0YXlAcnRvbmUuZnI+Cj4gLS0tCj4gICBjb25maWdzL3Jhc3BiZXJy
+eXBpMF9kZWZjb25maWcgICAgICAgIHwgMiArLQo+ICAgY29uZmlncy9yYXNwYmVycnlwaTB3X2Rl
+ZmNvbmZpZyAgICAgICB8IDIgKy0KPiAgIGNvbmZpZ3MvcmFzcGJlcnJ5cGkyX2RlZmNvbmZpZyAg
+ICAgICAgfCAyICstCj4gICBjb25maWdzL3Jhc3BiZXJyeXBpM182NF9kZWZjb25maWcgICAgIHwg
+MiArLQo+ICAgY29uZmlncy9yYXNwYmVycnlwaTNfZGVmY29uZmlnICAgICAgICB8IDIgKy0KPiAg
+IGNvbmZpZ3MvcmFzcGJlcnJ5cGkzX3F0NXdlX2RlZmNvbmZpZyAgfCAyICstCj4gICBjb25maWdz
+L3Jhc3BiZXJyeXBpNF82NF9kZWZjb25maWcgICAgIHwgMiArLQo+ICAgY29uZmlncy9yYXNwYmVy
+cnlwaTRfZGVmY29uZmlnICAgICAgICB8IDIgKy0KPiAgIGNvbmZpZ3MvcmFzcGJlcnJ5cGlfZGVm
+Y29uZmlnICAgICAgICAgfCAyICstCj4gICBjb25maWdzL3Jhc3BiZXJyeXBpY200aW9fNjRfZGVm
+Y29uZmlnIHwgMiArLQo+ICAgY29uZmlncy9yYXNwYmVycnlwaWNtNGlvX2RlZmNvbmZpZyAgICB8
+IDIgKy0KPiAgIGNvbmZpZ3MvcmFzcGJlcnJ5cGl6ZXJvMndfZGVmY29uZmlnICAgfCAyICstCj4g
+ICAxMiBmaWxlcyBjaGFuZ2VkLCAxMiBpbnNlcnRpb25zKCspLCAxMiBkZWxldGlvbnMoLSkKPiAK
+PiBkaWZmIC0tZ2l0IGEvY29uZmlncy9yYXNwYmVycnlwaTBfZGVmY29uZmlnIGIvY29uZmlncy9y
+YXNwYmVycnlwaTBfZGVmY29uZmlnCj4gaW5kZXggNDUwNmU5NGJjZS4uNmJlYjY5ZDNjMyAxMDA2
+NDQKPiAtLS0gYS9jb25maWdzL3Jhc3BiZXJyeXBpMF9kZWZjb25maWcKPiArKysgYi9jb25maWdz
+L3Jhc3BiZXJyeXBpMF9kZWZjb25maWcKPiBAQCAtOSw3ICs5LDcgQEAgQlIyX1RPT0xDSEFJTl9C
+VUlMRFJPT1RfQ1hYPXkKPiAgIAo+ICAgQlIyX0xJTlVYX0tFUk5FTD15Cj4gICBCUjJfTElOVVhf
+S0VSTkVMX0NVU1RPTV9UQVJCQUxMPXkKPiAtQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVEFSQkFM
+TF9MT0NBVElPTj0iJChjYWxsIGdpdGh1YixyYXNwYmVycnlwaSxsaW51eCwwYjU0ZGJkYTNjY2Ey
+YmViNTFlMjM2YTI1NzM4Nzg0ZTkwODUzYjY0KS9saW51eC0wYjU0ZGJkYTNjY2EyYmViNTFlMjM2
+YTI1NzM4Nzg0ZTkwODUzYjY0LnRhci5neiIKPiArQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVEFS
+QkFMTF9MT0NBVElPTj0iJChjYWxsIGdpdGh1YixyYXNwYmVycnlwaSxsaW51eCxmZWI0ZWE1MWU3
+N2FmMDljMWE0YzdjM2U1ZGQzMzIzNzc1MGY5NWNkKS9saW51eC1mZWI0ZWE1MWU3N2FmMDljMWE0
+YzdjM2U1ZGQzMzIzNzc1MGY5NWNkLnRhci5neiIKPiAgIEJSMl9MSU5VWF9LRVJORUxfREVGQ09O
+RklHPSJiY21ycGkiCj4gICAKPiAgICMgQnVpbGQgdGhlIERUQnMgZm9yIEEvQiBmcm9tIHRoZSBr
+ZXJuZWwgc291cmNlczogdGhlIHplcm8gaXMgdGhlIHNhbWUKPiBkaWZmIC0tZ2l0IGEvY29uZmln
+cy9yYXNwYmVycnlwaTB3X2RlZmNvbmZpZyBiL2NvbmZpZ3MvcmFzcGJlcnJ5cGkwd19kZWZjb25m
+aWcKPiBpbmRleCA3YTM1Nzk0YzJkLi40ZGIyNDRlNzE5IDEwMDY0NAo+IC0tLSBhL2NvbmZpZ3Mv
+cmFzcGJlcnJ5cGkwd19kZWZjb25maWcKPiArKysgYi9jb25maWdzL3Jhc3BiZXJyeXBpMHdfZGVm
+Y29uZmlnCj4gQEAgLTksNyArOSw3IEBAIEJSMl9UT09MQ0hBSU5fQlVJTERST09UX0NYWD15Cj4g
+ICAKPiAgIEJSMl9MSU5VWF9LRVJORUw9eQo+ICAgQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVEFS
+QkFMTD15Cj4gLUJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1RBUkJBTExfTE9DQVRJT049IiQoY2Fs
+bCBnaXRodWIscmFzcGJlcnJ5cGksbGludXgsMGI1NGRiZGEzY2NhMmJlYjUxZTIzNmEyNTczODc4
+NGU5MDg1M2I2NCkvbGludXgtMGI1NGRiZGEzY2NhMmJlYjUxZTIzNmEyNTczODc4NGU5MDg1M2I2
+NC50YXIuZ3oiCj4gK0JSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1RBUkJBTExfTE9DQVRJT049IiQo
+Y2FsbCBnaXRodWIscmFzcGJlcnJ5cGksbGludXgsZmViNGVhNTFlNzdhZjA5YzFhNGM3YzNlNWRk
+MzMyMzc3NTBmOTVjZCkvbGludXgtZmViNGVhNTFlNzdhZjA5YzFhNGM3YzNlNWRkMzMyMzc3NTBm
+OTVjZC50YXIuZ3oiCj4gICBCUjJfTElOVVhfS0VSTkVMX0RFRkNPTkZJRz0iYmNtcnBpIgo+ICAg
+QlIyX0xJTlVYX0tFUk5FTF9EVFNfU1VQUE9SVD15Cj4gICBCUjJfTElOVVhfS0VSTkVMX0lOVFJF
+RV9EVFNfTkFNRT0iYmNtMjcwOC1ycGktemVyby13Igo+IGRpZmYgLS1naXQgYS9jb25maWdzL3Jh
+c3BiZXJyeXBpMl9kZWZjb25maWcgYi9jb25maWdzL3Jhc3BiZXJyeXBpMl9kZWZjb25maWcKPiBp
+bmRleCA5YjQ4NGM1NTg4Li44ZjJlZDNhMjFmIDEwMDY0NAo+IC0tLSBhL2NvbmZpZ3MvcmFzcGJl
+cnJ5cGkyX2RlZmNvbmZpZwo+ICsrKyBiL2NvbmZpZ3MvcmFzcGJlcnJ5cGkyX2RlZmNvbmZpZwo+
+IEBAIC0xMiw3ICsxMiw3IEBAIEJSMl9QQUNLQUdFX0hPU1RfTElOVVhfSEVBREVSU19DVVNUT01f
+NV8xMD15Cj4gICAKPiAgIEJSMl9MSU5VWF9LRVJORUw9eQo+ICAgQlIyX0xJTlVYX0tFUk5FTF9D
+VVNUT01fVEFSQkFMTD15Cj4gLUJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1RBUkJBTExfTE9DQVRJ
+T049IiQoY2FsbCBnaXRodWIscmFzcGJlcnJ5cGksbGludXgsMGI1NGRiZGEzY2NhMmJlYjUxZTIz
+NmEyNTczODc4NGU5MDg1M2I2NCkvbGludXgtMGI1NGRiZGEzY2NhMmJlYjUxZTIzNmEyNTczODc4
+NGU5MDg1M2I2NC50YXIuZ3oiCj4gK0JSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1RBUkJBTExfTE9D
+QVRJT049IiQoY2FsbCBnaXRodWIscmFzcGJlcnJ5cGksbGludXgsZmViNGVhNTFlNzdhZjA5YzFh
+NGM3YzNlNWRkMzMyMzc3NTBmOTVjZCkvbGludXgtZmViNGVhNTFlNzdhZjA5YzFhNGM3YzNlNWRk
+MzMyMzc3NTBmOTVjZC50YXIuZ3oiCj4gICBCUjJfTElOVVhfS0VSTkVMX0RFRkNPTkZJRz0iYmNt
+MjcwOSIKPiAgIAo+ICAgIyBCdWlsZCB0aGUgRFRCIGZyb20gdGhlIGtlcm5lbCBzb3VyY2VzCj4g
+ZGlmZiAtLWdpdCBhL2NvbmZpZ3MvcmFzcGJlcnJ5cGkzXzY0X2RlZmNvbmZpZyBiL2NvbmZpZ3Mv
+cmFzcGJlcnJ5cGkzXzY0X2RlZmNvbmZpZwo+IGluZGV4IDRkODM4YWUwZTguLjA5NDZiYjlmOWEg
+MTAwNjQ0Cj4gLS0tIGEvY29uZmlncy9yYXNwYmVycnlwaTNfNjRfZGVmY29uZmlnCj4gKysrIGIv
+Y29uZmlncy9yYXNwYmVycnlwaTNfNjRfZGVmY29uZmlnCj4gQEAgLTExLDcgKzExLDcgQEAgQlIy
+X1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV81XzEwPXkKPiAgIAo+ICAgQlIyX0xJ
+TlVYX0tFUk5FTD15Cj4gICBCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9UQVJCQUxMPXkKPiAtQlIy
+X0xJTlVYX0tFUk5FTF9DVVNUT01fVEFSQkFMTF9MT0NBVElPTj0iJChjYWxsIGdpdGh1YixyYXNw
+YmVycnlwaSxsaW51eCwwYjU0ZGJkYTNjY2EyYmViNTFlMjM2YTI1NzM4Nzg0ZTkwODUzYjY0KS9s
+aW51eC0wYjU0ZGJkYTNjY2EyYmViNTFlMjM2YTI1NzM4Nzg0ZTkwODUzYjY0LnRhci5neiIKPiAr
+QlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVEFSQkFMTF9MT0NBVElPTj0iJChjYWxsIGdpdGh1Yixy
+YXNwYmVycnlwaSxsaW51eCxmZWI0ZWE1MWU3N2FmMDljMWE0YzdjM2U1ZGQzMzIzNzc1MGY5NWNk
+KS9saW51eC1mZWI0ZWE1MWU3N2FmMDljMWE0YzdjM2U1ZGQzMzIzNzc1MGY5NWNkLnRhci5neiIK
+PiAgIEJSMl9MSU5VWF9LRVJORUxfREVGQ09ORklHPSJiY21ycGkzIgo+ICAgCj4gICAjIEJ1aWxk
+IHRoZSBEVEIgZnJvbSB0aGUga2VybmVsIHNvdXJjZXMKPiBkaWZmIC0tZ2l0IGEvY29uZmlncy9y
+YXNwYmVycnlwaTNfZGVmY29uZmlnIGIvY29uZmlncy9yYXNwYmVycnlwaTNfZGVmY29uZmlnCj4g
+aW5kZXggMGE1OWFiNDJhOS4uMjZhMTE4ZjJmMSAxMDA2NDQKPiAtLS0gYS9jb25maWdzL3Jhc3Bi
+ZXJyeXBpM19kZWZjb25maWcKPiArKysgYi9jb25maWdzL3Jhc3BiZXJyeXBpM19kZWZjb25maWcK
+PiBAQCAtMTEsNyArMTEsNyBAQCBCUjJfUEFDS0FHRV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VTVE9N
+XzVfMTA9eQo+ICAgCj4gICBCUjJfTElOVVhfS0VSTkVMPXkKPiAgIEJSMl9MSU5VWF9LRVJORUxf
+Q1VTVE9NX1RBUkJBTEw9eQo+IC1CUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9UQVJCQUxMX0xPQ0FU
+SU9OPSIkKGNhbGwgZ2l0aHViLHJhc3BiZXJyeXBpLGxpbnV4LDBiNTRkYmRhM2NjYTJiZWI1MWUy
+MzZhMjU3Mzg3ODRlOTA4NTNiNjQpL2xpbnV4LTBiNTRkYmRhM2NjYTJiZWI1MWUyMzZhMjU3Mzg3
+ODRlOTA4NTNiNjQudGFyLmd6Igo+ICtCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9UQVJCQUxMX0xP
+Q0FUSU9OPSIkKGNhbGwgZ2l0aHViLHJhc3BiZXJyeXBpLGxpbnV4LGZlYjRlYTUxZTc3YWYwOWMx
+YTRjN2MzZTVkZDMzMjM3NzUwZjk1Y2QpL2xpbnV4LWZlYjRlYTUxZTc3YWYwOWMxYTRjN2MzZTVk
+ZDMzMjM3NzUwZjk1Y2QudGFyLmd6Igo+ICAgQlIyX0xJTlVYX0tFUk5FTF9ERUZDT05GSUc9ImJj
+bTI3MDkiCj4gICAKPiAgICMgQnVpbGQgdGhlIERUQiBmcm9tIHRoZSBrZXJuZWwgc291cmNlcwo+
+IGRpZmYgLS1naXQgYS9jb25maWdzL3Jhc3BiZXJyeXBpM19xdDV3ZV9kZWZjb25maWcgYi9jb25m
+aWdzL3Jhc3BiZXJyeXBpM19xdDV3ZV9kZWZjb25maWcKPiBpbmRleCA0MGQwYzBmODg4Li41MDFm
+MTI0MzVmIDEwMDY0NAo+IC0tLSBhL2NvbmZpZ3MvcmFzcGJlcnJ5cGkzX3F0NXdlX2RlZmNvbmZp
+Zwo+ICsrKyBiL2NvbmZpZ3MvcmFzcGJlcnJ5cGkzX3F0NXdlX2RlZmNvbmZpZwo+IEBAIC0xMiw3
+ICsxMiw3IEBAIEJSMl9QQUNLQUdFX0hPU1RfTElOVVhfSEVBREVSU19DVVNUT01fNV8xMD15Cj4g
+ICAKPiAgIEJSMl9MSU5VWF9LRVJORUw9eQo+ICAgQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVEFS
+QkFMTD15Cj4gLUJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1RBUkJBTExfTE9DQVRJT049IiQoY2Fs
+bCBnaXRodWIscmFzcGJlcnJ5cGksbGludXgsMGI1NGRiZGEzY2NhMmJlYjUxZTIzNmEyNTczODc4
+NGU5MDg1M2I2NCkvbGludXgtMGI1NGRiZGEzY2NhMmJlYjUxZTIzNmEyNTczODc4NGU5MDg1M2I2
+NC50YXIuZ3oiCj4gK0JSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1RBUkJBTExfTE9DQVRJT049IiQo
+Y2FsbCBnaXRodWIscmFzcGJlcnJ5cGksbGludXgsZmViNGVhNTFlNzdhZjA5YzFhNGM3YzNlNWRk
+MzMyMzc3NTBmOTVjZCkvbGludXgtZmViNGVhNTFlNzdhZjA5YzFhNGM3YzNlNWRkMzMyMzc3NTBm
+OTVjZC50YXIuZ3oiCj4gICBCUjJfTElOVVhfS0VSTkVMX0RFRkNPTkZJRz0iYmNtMjcwOSIKPiAg
+IAo+ICAgIyBCdWlsZCB0aGUgRFRCIGZyb20gdGhlIGtlcm5lbCBzb3VyY2VzCj4gZGlmZiAtLWdp
+dCBhL2NvbmZpZ3MvcmFzcGJlcnJ5cGk0XzY0X2RlZmNvbmZpZyBiL2NvbmZpZ3MvcmFzcGJlcnJ5
+cGk0XzY0X2RlZmNvbmZpZwo+IGluZGV4IDU5NDJmN2M0ZTEuLjE3YTJmOGNiYjIgMTAwNjQ0Cj4g
+LS0tIGEvY29uZmlncy9yYXNwYmVycnlwaTRfNjRfZGVmY29uZmlnCj4gKysrIGIvY29uZmlncy9y
+YXNwYmVycnlwaTRfNjRfZGVmY29uZmlnCj4gQEAgLTExLDcgKzExLDcgQEAgQlIyX1BBQ0tBR0Vf
+SE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV81XzEwPXkKPiAgIAo+ICAgQlIyX0xJTlVYX0tFUk5F
+TD15Cj4gICBCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9UQVJCQUxMPXkKPiAtQlIyX0xJTlVYX0tF
+Uk5FTF9DVVNUT01fVEFSQkFMTF9MT0NBVElPTj0iJChjYWxsIGdpdGh1YixyYXNwYmVycnlwaSxs
+aW51eCwwYjU0ZGJkYTNjY2EyYmViNTFlMjM2YTI1NzM4Nzg0ZTkwODUzYjY0KS9saW51eC0wYjU0
+ZGJkYTNjY2EyYmViNTFlMjM2YTI1NzM4Nzg0ZTkwODUzYjY0LnRhci5neiIKPiArQlIyX0xJTlVY
+X0tFUk5FTF9DVVNUT01fVEFSQkFMTF9MT0NBVElPTj0iJChjYWxsIGdpdGh1YixyYXNwYmVycnlw
+aSxsaW51eCxmZWI0ZWE1MWU3N2FmMDljMWE0YzdjM2U1ZGQzMzIzNzc1MGY5NWNkKS9saW51eC1m
+ZWI0ZWE1MWU3N2FmMDljMWE0YzdjM2U1ZGQzMzIzNzc1MGY5NWNkLnRhci5neiIKPiAgIEJSMl9M
+SU5VWF9LRVJORUxfREVGQ09ORklHPSJiY20yNzExIgo+ICAgCj4gICAjIEJ1aWxkIHRoZSBEVEIg
+ZnJvbSB0aGUga2VybmVsIHNvdXJjZXMKPiBkaWZmIC0tZ2l0IGEvY29uZmlncy9yYXNwYmVycnlw
+aTRfZGVmY29uZmlnIGIvY29uZmlncy9yYXNwYmVycnlwaTRfZGVmY29uZmlnCj4gaW5kZXggNGU1
+NTgwYzE0MC4uMTk0YWYwYTFiOCAxMDA2NDQKPiAtLS0gYS9jb25maWdzL3Jhc3BiZXJyeXBpNF9k
+ZWZjb25maWcKPiArKysgYi9jb25maWdzL3Jhc3BiZXJyeXBpNF9kZWZjb25maWcKPiBAQCAtMTEs
+NyArMTEsNyBAQCBCUjJfUEFDS0FHRV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VTVE9NXzVfMTA9eQo+
+ICAgCj4gICBCUjJfTElOVVhfS0VSTkVMPXkKPiAgIEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1RB
+UkJBTEw9eQo+IC1CUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9UQVJCQUxMX0xPQ0FUSU9OPSIkKGNh
+bGwgZ2l0aHViLHJhc3BiZXJyeXBpLGxpbnV4LDBiNTRkYmRhM2NjYTJiZWI1MWUyMzZhMjU3Mzg3
+ODRlOTA4NTNiNjQpL2xpbnV4LTBiNTRkYmRhM2NjYTJiZWI1MWUyMzZhMjU3Mzg3ODRlOTA4NTNi
+NjQudGFyLmd6Igo+ICtCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9UQVJCQUxMX0xPQ0FUSU9OPSIk
+KGNhbGwgZ2l0aHViLHJhc3BiZXJyeXBpLGxpbnV4LGZlYjRlYTUxZTc3YWYwOWMxYTRjN2MzZTVk
+ZDMzMjM3NzUwZjk1Y2QpL2xpbnV4LWZlYjRlYTUxZTc3YWYwOWMxYTRjN2MzZTVkZDMzMjM3NzUw
+Zjk1Y2QudGFyLmd6Igo+ICAgQlIyX0xJTlVYX0tFUk5FTF9ERUZDT05GSUc9ImJjbTI3MTEiCj4g
+ICAKPiAgICMgQnVpbGQgdGhlIERUQiBmcm9tIHRoZSBrZXJuZWwgc291cmNlcwo+IGRpZmYgLS1n
+aXQgYS9jb25maWdzL3Jhc3BiZXJyeXBpX2RlZmNvbmZpZyBiL2NvbmZpZ3MvcmFzcGJlcnJ5cGlf
+ZGVmY29uZmlnCj4gaW5kZXggY2NhNTNmOWIzNy4uM2Q1MGY4MTI3OCAxMDA2NDQKPiAtLS0gYS9j
+b25maWdzL3Jhc3BiZXJyeXBpX2RlZmNvbmZpZwo+ICsrKyBiL2NvbmZpZ3MvcmFzcGJlcnJ5cGlf
+ZGVmY29uZmlnCj4gQEAgLTExLDcgKzExLDcgQEAgQlIyX1RPT0xDSEFJTl9CVUlMRFJPT1RfQ1hY
+PXkKPiAgIAo+ICAgQlIyX0xJTlVYX0tFUk5FTD15Cj4gICBCUjJfTElOVVhfS0VSTkVMX0NVU1RP
+TV9UQVJCQUxMPXkKPiAtQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVEFSQkFMTF9MT0NBVElPTj0i
+JChjYWxsIGdpdGh1YixyYXNwYmVycnlwaSxsaW51eCwwYjU0ZGJkYTNjY2EyYmViNTFlMjM2YTI1
+NzM4Nzg0ZTkwODUzYjY0KS9saW51eC0wYjU0ZGJkYTNjY2EyYmViNTFlMjM2YTI1NzM4Nzg0ZTkw
+ODUzYjY0LnRhci5neiIKPiArQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVEFSQkFMTF9MT0NBVElP
+Tj0iJChjYWxsIGdpdGh1YixyYXNwYmVycnlwaSxsaW51eCxmZWI0ZWE1MWU3N2FmMDljMWE0Yzdj
+M2U1ZGQzMzIzNzc1MGY5NWNkKS9saW51eC1mZWI0ZWE1MWU3N2FmMDljMWE0YzdjM2U1ZGQzMzIz
+Nzc1MGY5NWNkLnRhci5neiIKPiAgIEJSMl9MSU5VWF9LRVJORUxfREVGQ09ORklHPSJiY21ycGki
+Cj4gICAKPiAgICMgQnVpbGQgdGhlIERUQnMgZm9yIEEvQiwgQSsvQisgYW5kIGNvbXB1dGUgbW9k
+dWxlIGZyb20gdGhlIGtlcm5lbCBzb3VyY2VzCj4gZGlmZiAtLWdpdCBhL2NvbmZpZ3MvcmFzcGJl
+cnJ5cGljbTRpb182NF9kZWZjb25maWcgYi9jb25maWdzL3Jhc3BiZXJyeXBpY200aW9fNjRfZGVm
+Y29uZmlnCj4gaW5kZXggMjljYjA0NzJkNy4uZjhmMGQ2YzIzYSAxMDA2NDQKPiAtLS0gYS9jb25m
+aWdzL3Jhc3BiZXJyeXBpY200aW9fNjRfZGVmY29uZmlnCj4gKysrIGIvY29uZmlncy9yYXNwYmVy
+cnlwaWNtNGlvXzY0X2RlZmNvbmZpZwo+IEBAIC0xMSw3ICsxMSw3IEBAIEJSMl9QQUNLQUdFX0hP
+U1RfTElOVVhfSEVBREVSU19DVVNUT01fNV8xMD15Cj4gICAKPiAgIEJSMl9MSU5VWF9LRVJORUw9
+eQo+ICAgQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVEFSQkFMTD15Cj4gLUJSMl9MSU5VWF9LRVJO
+RUxfQ1VTVE9NX1RBUkJBTExfTE9DQVRJT049IiQoY2FsbCBnaXRodWIscmFzcGJlcnJ5cGksbGlu
+dXgsMGI1NGRiZGEzY2NhMmJlYjUxZTIzNmEyNTczODc4NGU5MDg1M2I2NCkvbGludXgtMGI1NGRi
+ZGEzY2NhMmJlYjUxZTIzNmEyNTczODc4NGU5MDg1M2I2NC50YXIuZ3oiCj4gK0JSMl9MSU5VWF9L
+RVJORUxfQ1VTVE9NX1RBUkJBTExfTE9DQVRJT049IiQoY2FsbCBnaXRodWIscmFzcGJlcnJ5cGks
+bGludXgsZmViNGVhNTFlNzdhZjA5YzFhNGM3YzNlNWRkMzMyMzc3NTBmOTVjZCkvbGludXgtZmVi
+NGVhNTFlNzdhZjA5YzFhNGM3YzNlNWRkMzMyMzc3NTBmOTVjZC50YXIuZ3oiCj4gICBCUjJfTElO
+VVhfS0VSTkVMX0RFRkNPTkZJRz0iYmNtMjcxMSIKPiAgIAo+ICAgIyBCdWlsZCB0aGUgRFRCIGZy
+b20gdGhlIGtlcm5lbCBzb3VyY2VzCj4gZGlmZiAtLWdpdCBhL2NvbmZpZ3MvcmFzcGJlcnJ5cGlj
+bTRpb19kZWZjb25maWcgYi9jb25maWdzL3Jhc3BiZXJyeXBpY200aW9fZGVmY29uZmlnCj4gaW5k
+ZXggMDE3YWVjYzBkZC4uMWYwNzAzNDkzYiAxMDA2NDQKPiAtLS0gYS9jb25maWdzL3Jhc3BiZXJy
+eXBpY200aW9fZGVmY29uZmlnCj4gKysrIGIvY29uZmlncy9yYXNwYmVycnlwaWNtNGlvX2RlZmNv
+bmZpZwo+IEBAIC0xMSw3ICsxMSw3IEBAIEJSMl9QQUNLQUdFX0hPU1RfTElOVVhfSEVBREVSU19D
+VVNUT01fNV8xMD15Cj4gICAKPiAgIEJSMl9MSU5VWF9LRVJORUw9eQo+ICAgQlIyX0xJTlVYX0tF
+Uk5FTF9DVVNUT01fVEFSQkFMTD15Cj4gLUJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1RBUkJBTExf
+TE9DQVRJT049IiQoY2FsbCBnaXRodWIscmFzcGJlcnJ5cGksbGludXgsMGI1NGRiZGEzY2NhMmJl
+YjUxZTIzNmEyNTczODc4NGU5MDg1M2I2NCkvbGludXgtMGI1NGRiZGEzY2NhMmJlYjUxZTIzNmEy
+NTczODc4NGU5MDg1M2I2NC50YXIuZ3oiCj4gK0JSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1RBUkJB
+TExfTE9DQVRJT049IiQoY2FsbCBnaXRodWIscmFzcGJlcnJ5cGksbGludXgsZmViNGVhNTFlNzdh
+ZjA5YzFhNGM3YzNlNWRkMzMyMzc3NTBmOTVjZCkvbGludXgtZmViNGVhNTFlNzdhZjA5YzFhNGM3
+YzNlNWRkMzMyMzc3NTBmOTVjZC50YXIuZ3oiCj4gICBCUjJfTElOVVhfS0VSTkVMX0RFRkNPTkZJ
+Rz0iYmNtMjcxMSIKPiAgIAo+ICAgIyBCdWlsZCB0aGUgRFRCIGZyb20gdGhlIGtlcm5lbCBzb3Vy
+Y2VzCj4gZGlmZiAtLWdpdCBhL2NvbmZpZ3MvcmFzcGJlcnJ5cGl6ZXJvMndfZGVmY29uZmlnIGIv
+Y29uZmlncy9yYXNwYmVycnlwaXplcm8yd19kZWZjb25maWcKPiBpbmRleCAyZWE1MDNjYTI0Li4w
+OTA4MmRiYzRkIDEwMDY0NAo+IC0tLSBhL2NvbmZpZ3MvcmFzcGJlcnJ5cGl6ZXJvMndfZGVmY29u
+ZmlnCj4gKysrIGIvY29uZmlncy9yYXNwYmVycnlwaXplcm8yd19kZWZjb25maWcKPiBAQCAtOSw3
+ICs5LDcgQEAgQlIyX1RPT0xDSEFJTl9CVUlMRFJPT1RfQ1hYPXkKPiAgIAo+ICAgQlIyX0xJTlVY
+X0tFUk5FTD15Cj4gICBCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9UQVJCQUxMPXkKPiAtQlIyX0xJ
+TlVYX0tFUk5FTF9DVVNUT01fVEFSQkFMTF9MT0NBVElPTj0iJChjYWxsIGdpdGh1YixyYXNwYmVy
+cnlwaSxsaW51eCwwYjU0ZGJkYTNjY2EyYmViNTFlMjM2YTI1NzM4Nzg0ZTkwODUzYjY0KS9saW51
+eC0wYjU0ZGJkYTNjY2EyYmViNTFlMjM2YTI1NzM4Nzg0ZTkwODUzYjY0LnRhci5neiIKPiArQlIy
+X0xJTlVYX0tFUk5FTF9DVVNUT01fVEFSQkFMTF9MT0NBVElPTj0iJChjYWxsIGdpdGh1YixyYXNw
+YmVycnlwaSxsaW51eCxmZWI0ZWE1MWU3N2FmMDljMWE0YzdjM2U1ZGQzMzIzNzc1MGY5NWNkKS9s
+aW51eC1mZWI0ZWE1MWU3N2FmMDljMWE0YzdjM2U1ZGQzMzIzNzc1MGY5NWNkLnRhci5neiIKPiAg
+IEJSMl9MSU5VWF9LRVJORUxfREVGQ09ORklHPSJiY20yNzA5Igo+ICAgCj4gICAjIEJ1aWxkIHRo
+ZSBEVEIgZnJvbSB0aGUga2VybmVsIHNvdXJjZXMKCl9fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1
+aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8v
+YnVpbGRyb290Cg==
