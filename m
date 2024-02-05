@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E9A8C48295
-	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 10:13:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C74BC4828D
+	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 10:14:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 47B30417B1;
-	Mon,  5 Feb 2024 10:13:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 47B30417B1
+	by smtp4.osuosl.org (Postfix) with ESMTP id D76DA417C9;
+	Mon,  5 Feb 2024 10:14:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D76DA417C9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TGBCWXsSN6SX; Mon,  5 Feb 2024 10:13:36 +0000 (UTC)
+	with ESMTP id 7sctMQTaRnUu; Mon,  5 Feb 2024 10:14:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6799741763;
-	Mon,  5 Feb 2024 10:13:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6799741763
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3F7F61BF404
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 10:13:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2876341568;
+	Mon,  5 Feb 2024 10:14:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2876341568
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id F422C1BF404
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 10:14:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 18FB660F58
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 10:13:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18FB660F58
+ by smtp4.osuosl.org (Postfix) with ESMTP id AE206417B1
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 10:14:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE206417B1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xMmAC4AhA5cc for <buildroot@lists.busybox.net>;
- Mon,  5 Feb 2024 10:13:26 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4B25260F51
- for <buildroot@buildroot.org>; Mon,  5 Feb 2024 10:13:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B25260F51
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 37C90869EA; Mon,  5 Feb 2024 10:13:26 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 5 Feb 2024 11:12:22 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7f1e3841f5c2da36e1833068ba948c52a58c07ae
-X-Git-Newrev: 8120f29935c0070c2c7ebdcfeceb37d2c3dc0d7d
-X-Patchwork-Hint: ignore
-Message-Id: <20240205101326.37C90869EA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pymysql: bump to version
- 1.1.0
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EufYAB4OcGeF for <buildroot@lists.busybox.net>;
+ Mon,  5 Feb 2024 10:14:37 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8623D40978
+ for <buildroot@buildroot.org>; Mon,  5 Feb 2024 10:14:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8623D40978
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7A6A2E000A;
+ Mon,  5 Feb 2024 10:14:34 +0000 (UTC)
+Date: Mon, 5 Feb 2024 11:14:33 +0100
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20240205111433.1a82d7e2@windsurf>
+In-Reply-To: <20240131213512.2261698-1-fontaine.fabrice@gmail.com>
+References: <20240131213512.2261698-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1707128074;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=XzCr5AgO5DALXbtNjd6ycKp7QXSnWFg2lFboD/kXnhU=;
+ b=oqwFKhxrHiQPnbXH6oaOVXsgZj+L4TzuPqLYAQyAnNC3XIbapY6/q6rFKAwPZTIy+bKKsQ
+ EY99vu1A2548/27qOTIRljPhJ0Bft6NipWe5+5SXIlOv3uAg7W7Z/7Y0Egi7ZXmVaEzI0/
+ NO5cHynZ/HxaWOdj4WakvaFp43+IcCs2s67Zv7jWGjWMWVyEWI4lBNaKBz0cWFcJOSWLEe
+ 1R6YqUw3kED4Snt9G2AlKBz+HhN/up2ERljyBOdmMXmRLTTeC0ATmbrWpyRWaeHW/A0eoB
+ eaQJERBtmqV8uJoPS1u/4LsLTtIcxIFrf67ipNkR5LC/hIgGkSZf6JRH/95owA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=oqwFKhxr
+Subject: Re: [Buildroot] [PATCH 1/1] package/libwebsockets: bump to version
+ 4.3.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,52 +75,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-MIME-Version: 1.0
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8120f29935c0070c2c7ebdcfeceb37d2c3dc0d7d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, 31 Jan 2024 22:35:12 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
----
- package/python-pymysql/python-pymysql.hash | 4 ++--
- package/python-pymysql/python-pymysql.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+> Drop first patch (already in version)
+> 
+> https://github.com/warmcat/libwebsockets/compare/v4.3.2...v4.3.3
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  .checkpackageignore                           |  1 -
+>  ...Lists.txt-fix-build-with-pkg-config.patch} |  0
+>  ...eLists.txt-fix-build-without-threads.patch | 47 -------------------
+>  package/libwebsockets/libwebsockets.hash      |  2 +-
+>  package/libwebsockets/libwebsockets.mk        |  2 +-
+>  5 files changed, 2 insertions(+), 50 deletions(-)
+>  rename package/libwebsockets/{0002-lib-tls-CMakeLists.txt-fix-build-with-pkg-config.patch => 0001-lib-tls-CMakeLists.txt-fix-build-with-pkg-config.patch} (100%)
+>  delete mode 100644 package/libwebsockets/0001-lib-tls-CMakeLists.txt-fix-build-without-threads.patch
 
-diff --git a/package/python-pymysql/python-pymysql.hash b/package/python-pymysql/python-pymysql.hash
-index dd81bdab7e..641d5dba97 100644
---- a/package/python-pymysql/python-pymysql.hash
-+++ b/package/python-pymysql/python-pymysql.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pymysql/json
--md5  3fe6ff2eefb58af5c54d335c6e0216de  PyMySQL-1.0.2.tar.gz
--sha256  816927a350f38d56072aeca5dfb10221fe1dc653745853d30a216637f5d7ad36  PyMySQL-1.0.2.tar.gz
-+md5  81d559c87414017075de030d8ce93257  PyMySQL-1.1.0.tar.gz
-+sha256  4f13a7df8bf36a51e81dd9f3605fede45a4878fe02f9236349fd82a3f0612f96  PyMySQL-1.1.0.tar.gz
- # Locally computed sha256 checksums
- sha256  314120dc65f0800f738a4b31400c76ee14decd1fbe77ce9c3540a421b86ea7b6  LICENSE
-diff --git a/package/python-pymysql/python-pymysql.mk b/package/python-pymysql/python-pymysql.mk
-index 3703572f35..c600fe515c 100644
---- a/package/python-pymysql/python-pymysql.mk
-+++ b/package/python-pymysql/python-pymysql.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYMYSQL_VERSION = 1.0.2
-+PYTHON_PYMYSQL_VERSION = 1.1.0
- PYTHON_PYMYSQL_SOURCE = PyMySQL-$(PYTHON_PYMYSQL_VERSION).tar.gz
--PYTHON_PYMYSQL_SITE = https://files.pythonhosted.org/packages/60/ea/33b8430115d9b617b713959b21dfd5db1df77425e38efea08d121e83b712
-+PYTHON_PYMYSQL_SITE = https://files.pythonhosted.org/packages/41/9d/ee68dee1c8821c839bb31e6e5f40e61035a5278f7c1307dde758f0c90452
- PYTHON_PYMYSQL_LICENSE = MIT
- PYTHON_PYMYSQL_LICENSE_FILES = LICENSE
- PYTHON_PYMYSQL_SETUP_TYPE = setuptools
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
