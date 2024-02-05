@@ -4,87 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B78B6C4828D
-	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 16:58:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37143C48292
+	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 17:02:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3A66540459;
-	Mon,  5 Feb 2024 16:58:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A66540459
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7770840459;
+	Mon,  5 Feb 2024 17:02:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7770840459
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JOxbehpRdL5w; Mon,  5 Feb 2024 16:58:57 +0000 (UTC)
+	with ESMTP id AIDqgJC6RB4z; Mon,  5 Feb 2024 17:02:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 106D740528;
-	Mon,  5 Feb 2024 16:58:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 106D740528
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1CF521BF2B1
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 16:58:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 52C9D404A0;
+	Mon,  5 Feb 2024 17:02:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 52C9D404A0
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9894D1BF2B1
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 17:02:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 03006408BF
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 16:58:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03006408BF
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6ABB7404A0
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 17:02:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6ABB7404A0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ej7wgcKjHAj1 for <buildroot@lists.busybox.net>;
- Mon,  5 Feb 2024 16:58:53 +0000 (UTC)
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com
- [IPv6:2607:f8b0:4864:20::134])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 07067408BD
- for <buildroot@buildroot.org>; Mon,  5 Feb 2024 16:58:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 07067408BD
-Received: by mail-il1-x134.google.com with SMTP id
- e9e14a558f8ab-363c5ad8a1eso4086555ab.0
- for <buildroot@buildroot.org>; Mon, 05 Feb 2024 08:58:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707152331; x=1707757131;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=FLULAyigDavtzB+jJNUzmNbsoP6qWhUck6dWCzz4m+Y=;
- b=ln86F/MFt4wz8afXxNvhFWb5ZIIFS+ZAz9SpFZkNvMts9WyZ6KVhgR9Z+LwydxawBW
- b0YMGTzhrLzMf066EkrW3H1dioM6aBiWpEgo9hKc5CFutk+RGTKAwPf6zJmAURittqrq
- +dFrhjoveGCAnga9kRbn528XGA3aFZEgrnPRQHLjICh31yV/j52cmDZgCPGNFnxU+ISr
- 90YSFdOdTE4XLQ6rU2bRRnrcEho3sCsj9+K2hSlgX1/JBjy1+fWRCldVL7yDciwEAS8q
- Z+c08ZHZK2aTj72ksXF9qe+7d+sLsO5opqnko8eyXnuevw6U/Wgef23CKSt6ydw8tgzp
- slNA==
-X-Gm-Message-State: AOJu0YyNbdn7GcfHed7FpAB5KejqDLFNZsrLrLfaB8mb2CygxJw9Zm6e
- sC7qK9wAtpWuQCdvV66GGgfjTHB1NIxBJydO6hkVh79+LdYfbaosbM9ujJCd
-X-Google-Smtp-Source: AGHT+IE49Uom9wcNCjcP/KhiIPXn+0yqAUe2ozyPXYLV77+HNuEvamK4GeLNetYKTAjleiZllIQANA==
-X-Received: by 2002:a05:6e02:1a61:b0:363:86dd:b35 with SMTP id
- w1-20020a056e021a6100b0036386dd0b35mr232481ilv.10.1707152331512; 
- Mon, 05 Feb 2024 08:58:51 -0800 (PST)
-X-Forwarded-Encrypted: i=0;
- AJvYcCUfcJrMYsXUPRDgzJrtZMgtHrAjS44gSNGarIQp0eLkGPIy2GOp+X1YSevH+kp1m1ndVi1hBvtfRJ34QLPZSR0FoGkFWXTmwwRvMPoFLaZpbrPy2sit/hKIUT6ZnHW+fi6XmF4HOGHRx2eM1cKCMwTIjvDalH5ci0o=
-Received: from james-x399.localdomain (71-218-247-10.hlrn.qwest.net.
- [71.218.247.10]) by smtp.gmail.com with ESMTPSA id
- v6-20020a02cba6000000b0046ef8c433basm42394jap.145.2024.02.05.08.58.50
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 05 Feb 2024 08:58:50 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon,  5 Feb 2024 09:58:48 -0700
-Message-Id: <20240205165848.519437-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nnwxx9m_S3EM for <buildroot@lists.busybox.net>;
+ Mon,  5 Feb 2024 17:02:48 +0000 (UTC)
+Received: from 13.mo582.mail-out.ovh.net (13.mo582.mail-out.ovh.net
+ [188.165.56.124])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A99D240459
+ for <buildroot@buildroot.org>; Mon,  5 Feb 2024 17:02:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A99D240459
+Received: from director10.ghost.mail-out.ovh.net (unknown [10.109.176.170])
+ by mo582.mail-out.ovh.net (Postfix) with ESMTP id AB8B226BBB
+ for <buildroot@buildroot.org>; Mon,  5 Feb 2024 16:53:56 +0000 (UTC)
+Received: from ghost-submission-6684bf9d7b-d2w8j (unknown [10.110.178.109])
+ by director10.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 5DD5E1FD22;
+ Mon,  5 Feb 2024 16:53:56 +0000 (UTC)
+Received: from armadeus.com ([37.59.142.95])
+ by ghost-submission-6684bf9d7b-d2w8j with ESMTPSA
+ id FVbDE6QSwWVjPwEA5uOYuQ
+ (envelope-from <sebastien.szymanski@armadeus.com>);
+ Mon, 05 Feb 2024 16:53:56 +0000
+X-OVh-ClientIp: 92.148.253.243
+Message-ID: <506452af-5722-41d3-a5f2-2a9eed0d4263@armadeus.com>
+Date: Mon, 5 Feb 2024 17:53:00 +0100
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1707152331; x=1707757131; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=FLULAyigDavtzB+jJNUzmNbsoP6qWhUck6dWCzz4m+Y=;
- b=m2+XEueDMffFH4Uri8DO5DA+5UeHqYGS5CHjPAmYsCaJmS/jY44DKsaiZghWl6wb9l
- TQPBMRhiQS6Qq8vPSHWUme8tctyyFifwNykk02ckdCM7O1stI94ln1A/LCSAjo0eG7dU
- keP6Tz+EvNeLZRFr3p5g+i+pwYqyET24RldeUTGgVMVIturWM+IMvenFKvvsyNuvKdk9
- kK1BOkJggHzY3CDA0lq9qqHJuq2EFXeEE2A6nlsdJf/ZL0okskGuKMOqV8WujNXrwfo+
- Ao9UlWrUb3i5PN2R8lsino1FTv5fsFUT3FyMLuXiHvucEIpCQ++BZQwDdhmeIYhkU83T
- l/zg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=m2+XEueD
-Subject: [Buildroot] [PATCH 1/1] package/python-pymodbus: bump to version
- 3.6.4
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: Wojciech Nizinski <wojciech.nizinski@grinn-global.com>,
+ buildroot@buildroot.org
+References: <20230914165046.3687491-1-wojciech.nizinski@grinn-global.com>
+From: =?UTF-8?Q?S=C3=A9bastien_Szymanski?= <sebastien.szymanski@armadeus.com>
+Autocrypt: addr=sebastien.szymanski@armadeus.com; keydata=
+ xsBNBFNfZLEBCACv1lqSePHJNpRgcnER+3emy+Arjz84zFax3XkogjY/e3ZneihIgWrVKe5M
+ ql16pX4KTkzNgMUKz4bG/XwT3kjcrXshxFLlg7KrHMl287C+W+QOUjnjVeRi/su+SPmjz8VD
+ yr11h+ZkVLAWhS+uQJ93jy1NwG8M4t1kBLAVHHD5Vw4FJ+3ouaVYIp1X1Cr8bVKQw33Q1aTd
+ ro0kMBb96B9vNu7ciJZ3gvlaBzUEKOgNnq9KaywuLnqrqr4HUIn5JuxZjCjJzt9kTAKcTfp2
+ cJM8qpp+2FF5qtbkse9fZ6M64qozgOPr9Tk4Amf9fZEUQ6UNw14mmBZuXSzoHe75gI7TABEB
+ AAHNN1PDqWJhc3RpZW4gU1pZTUFOU0tJIDxzZWJhc3RpZW4uc3p5bWFuc2tpQGFybWFkZXVz
+ LmNvbT7CwJAEEwEIADoCGyMHCwkIBwMCAQYVCAIJCgsEFgIDAQIeAQIXgBYhBJwGygpYm/1C
+ /GCmwbCaKeiBMmTiBQJdhIHLAAoJELCaKeiBMmTixXIH/2W3kbzRG0UF81jtRRnp0H83rjDT
+ v0H+8fgFMRL/7HCJ1QPArkfRJlM2wlJkN+ChP09CCarYfUEHfRCHlTb7At6Yyrz1jziD7ZwX
+ 8IWHYRXnZkY5eZc5DsiUgq6JH49kt+GPzK8UVP9MTa6zkBpPCUf7LzZ4pD3FihdkT52BU3gI
+ d9P49fSI0TYySlb/VKn815aOhvwEr7+Dh3mZUjSh7saofbRmVUOr7p+R3MvvGI19/IJZjeOE
+ ZWliODDOt6HnBOtoGSXMcNIFF6snH52D5N5gY88njZjTwhgGGUBix1bsgf/EY0v4R5itZBXB
+ B/Ze4Tm++YHaB75hZK6PQu/YRv7OwE0EU19ksQEIALo7jhXddrXBTRu5SAjelV53jyHBJTX/
+ vN4nL/VbbW/saca+NJjDSxx5DBmotZbQdWIyZiSIjU/xnTREvtDrl6ZeSsKWd7ZqiuiY4fSR
+ zwuQp9rd0yqRuxesrWeyJB1zCSdEvLyKASERt+nxkOA+IzJ4y1qLtvnWr+SL1AXgTMw+Tkyw
+ KIDCRWHTIYas11ldGj82gOIpYeXnapeNLHfT4EQwg0NeWYHynJxAQWiX5aPlw0uSpAQSsBXQ
+ FIe3fpoveMSnXK+PG2BBOzexYv7r4S70a6sF9sgTTPpfKqUaqqC+u1+bUX6alTAKhGKJywaF
+ 6ViqLlgY8PfwohSyAlqlTRMAEQEAAcLAdgQYAQgAIAIbDBYhBJwGygpYm/1C/GCmwbCaKeiB
+ MmTiBQJdhIHSAAoJELCaKeiBMmTitU8IAK7NQM3fEwaF5XaKtepYWsVka44CD8A9e4r7NVK9
+ ugirKvXirIxBSDmN/Db862NmVpITsZ6ERNSNZLm/7k55N+TexKYiFZeU7G92TEfAM6qPElvx
+ DLEcrkNMq9r08YZeUloacsq31AL5fK4LW+xdvXudkdiKRMJsdTpmff3x5kIziGOHjwFP9wve
+ ZgEH52gpbRsP8Whx/Z2lNX/BBRmFM8OnEXFsjjqDzYThdxTq85wGPpkgvvUGyPNRD7TpbB1C
+ pajOUUkPxgj5LKt77HD1afeZNudWhgcdkbtT5PMQTT0WY6wvMEj9S1+bGPeXRGWLYB7gHQ+L
+ JNoSD7Kz6Y9qnKo=
+In-Reply-To: <20230914165046.3687491-1-wojciech.nizinski@grinn-global.com>
+X-Ovh-Tracer-Id: 1343198590839679861
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrfedvuddgtdefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvfhfhjggtgfesthekredttddvjeenucfhrhhomhepuforsggrshhtihgvnhcuufiihihmrghnshhkihcuoehsvggsrghsthhivghnrdhsiiihmhgrnhhskhhisegrrhhmrgguvghushdrtghomheqnecuggftrfgrthhtvghrnhepkedvvedugeejffegleeuieefudfgvdeugfevhffgveelhfdtudevgfehtefftedunecukfhppeduvdejrddtrddtrddupdelvddrudegkedrvdehfedrvdegfedpfeejrdehledrudegvddrleehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeoshgvsggrshhtihgvnhdrshiihihmrghnshhkihesrghrmhgruggvuhhsrdgtohhmqedpnhgspghrtghpthhtohepuddprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdfovfetjfhoshhtpehmohehkedvpdhmohguvgepshhmthhpohhuth
+X-Mailman-Original-Authentication-Results: garm.ovh; auth=pass
+ (GARM-95G0015bc5913c-623b-4759-bc43-84ce73490728,
+ B61640D6B145E66104E0D0FA1FBCBF41853E9D36)
+ smtp.auth=sebastien.szymanski@armadeus.com
+Subject: Re: [Buildroot] [PATCH 1/1] board/freescale/common/imx:
+ imx8-bootloader-prepare: enable error checking
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,75 +103,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Falco Hyfing <hyfinglists@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-License hash changed due to year range update:
-https://github.com/pymodbus-dev/pymodbus/commit/131d30391efd9c64f1fec857ae0372746374e6d2
-
-Drop no longer required python-six runtime dependency.
-
-Drop no longer required python-serial runtime dependency.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-pymodbus/Config.in            | 6 ++----
- package/python-pymodbus/python-pymodbus.hash | 6 +++---
- package/python-pymodbus/python-pymodbus.mk   | 4 ++--
- 3 files changed, 7 insertions(+), 9 deletions(-)
-
-diff --git a/package/python-pymodbus/Config.in b/package/python-pymodbus/Config.in
-index 0ba6fb88f0..dac6716b87 100644
---- a/package/python-pymodbus/Config.in
-+++ b/package/python-pymodbus/Config.in
-@@ -1,8 +1,6 @@
- config BR2_PACKAGE_PYTHON_PYMODBUS
- 	bool "python-pymodbus"
--	select BR2_PACKAGE_PYTHON_SIX # runtime
--	select BR2_PACKAGE_PYTHON_SERIAL # runtime
- 	help
--	  Pymodbus is a full Modbus protocol implementation.
-+	  A fully featured modbus protocol stack in python.
- 
--	  https://github.com/riptideio/pymodbus
-+	  https://github.com/pymodbus-dev/pymodbus/
-diff --git a/package/python-pymodbus/python-pymodbus.hash b/package/python-pymodbus/python-pymodbus.hash
-index d9337ffe84..2e9e87148a 100644
---- a/package/python-pymodbus/python-pymodbus.hash
-+++ b/package/python-pymodbus/python-pymodbus.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pymodbus/json
--md5  89da6585b27b8c4b3887eb9f7d1e950b  pymodbus-3.0.2.tar.gz
--sha256  704cb7fb90631c45f9c3a70b89d0c990fe0e208ac56f14a5c449e21bebd1e201  pymodbus-3.0.2.tar.gz
-+md5  977e0f1fa05dc5b07fd151544c508675  pymodbus-3.6.4.tar.gz
-+sha256  6eee2c7eedb794317784c967096fa1fe42200357e9b5a349d838ee9159624fe2  pymodbus-3.6.4.tar.gz
- # Locally computed sha256 checksums
--sha256  796a47993313691ea404d8af7e4c0f9daf1d2760e3900938985b59c9008eee2f  LICENSE
-+sha256  47f904249172e795a6b32de91f471073297befffd74e17cafc288d348a55972e  LICENSE
-diff --git a/package/python-pymodbus/python-pymodbus.mk b/package/python-pymodbus/python-pymodbus.mk
-index 54879d38e9..c1c17ae799 100644
---- a/package/python-pymodbus/python-pymodbus.mk
-+++ b/package/python-pymodbus/python-pymodbus.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYMODBUS_VERSION = 3.0.2
-+PYTHON_PYMODBUS_VERSION = 3.6.4
- PYTHON_PYMODBUS_SOURCE = pymodbus-$(PYTHON_PYMODBUS_VERSION).tar.gz
--PYTHON_PYMODBUS_SITE = https://files.pythonhosted.org/packages/94/f7/6149a1b107fa54378a7adec83db7cd3679bf02216a6f5c83b37f55335897
-+PYTHON_PYMODBUS_SITE = https://files.pythonhosted.org/packages/5b/7f/51eb8704092417ef8ab1d883ad793c27f7f34d67468efe36ca03c6c7863d
- PYTHON_PYMODBUS_SETUP_TYPE = setuptools
- PYTHON_PYMODBUS_LICENSE = BSD-3-Clause
- PYTHON_PYMODBUS_LICENSE_FILES = LICENSE
--- 
-2.34.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgV29qY2llY2gsIEFsbCwKCkkgdGVzdGVkIHlvdXIgcGF0Y2ggYW5kIGl0IGRvZXMgd29yay4g
+SSBoYXZlIHNvbWUgY29tbWVudHMgdGhvdWdoLCBzZWUgCmJlbG93Li4uCgpPbiA5LzE0LzIzIDE4
+OjUwLCBXb2pjaWVjaCBOaXppbnNraSB3cm90ZToKPiBSdW4gc2NyaXB0IHdpdGggJ2VycmV4aXQn
+IGJhc2ggb3B0aW9uIHRvIGRldGVjdCBhbnkgZXJyb3JzIGZyb20KPiBzdWJjb21tYW5kcy4KPiAK
+PiBJdCB3aWxsIGZpeCBzaXR1YXRpb24gd2hlcmUgJ2Rkcl9mdy5iaW4nIHdhcyBtaXNzaW5nIGJ1
+dCBzdWNjZXNzZnVsbAo+IGJ1aWxkIGNyZWF0ZWQgYnJva2VuIGJvb3QgaW1hZ2UuIFBvc3QgaW1h
+Z2Ugc2NyaXB0IHJlcG9ydCB0aGlzIGJ5Ogo+IAo+IGNhdDogL2hvbWUvdXNlci9idWlsZHJvb3Qv
+b3V0cHV0L2ltYWdlcy9kZHJfZncuYmluOiBObyBzdWNoIGZpbGUgb3IKPiBkaXJlY3RvcnkKPiAK
+PiBhbmQgYnVpbGQgZmluaXNoIHdpdGggc3VjY2Vzcy4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBXb2pj
+aWVjaCBOaXppbnNraSA8d29qY2llY2gubml6aW5za2lAZ3Jpbm4tZ2xvYmFsLmNvbT4KPiAtLS0K
+PiAgIGJvYXJkL2ZyZWVzY2FsZS9jb21tb24vaW14L2lteDgtYm9vdGxvYWRlci1wcmVwYXJlLnNo
+IHwgMSArCj4gICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKykKPiAKPiBkaWZmIC0tZ2l0
+IGEvYm9hcmQvZnJlZXNjYWxlL2NvbW1vbi9pbXgvaW14OC1ib290bG9hZGVyLXByZXBhcmUuc2gg
+Yi9ib2FyZC9mcmVlc2NhbGUvY29tbW9uL2lteC9pbXg4LWJvb3Rsb2FkZXItcHJlcGFyZS5zaAo+
+IGluZGV4IDdlYmYxNWI2ZmYuLjhkNDRlNTg4YzUgMTAwNzU1Cj4gLS0tIGEvYm9hcmQvZnJlZXNj
+YWxlL2NvbW1vbi9pbXgvaW14OC1ib290bG9hZGVyLXByZXBhcmUuc2gKPiArKysgYi9ib2FyZC9m
+cmVlc2NhbGUvY29tbW9uL2lteC9pbXg4LWJvb3Rsb2FkZXItcHJlcGFyZS5zaAo+IEBAIC03Myw0
+ICs3Myw1IEBAIG1haW4gKCkKPiAgIAlleGl0ICQ/Cj4gICB9Cj4gICAKPiArc2V0IC1vIGVycmV4
+aXQKCkZvciBjb25zaXN0ZW5jeSwgbWF5YmUgeW91IHNob3VsZCB1c2UgJ3NldCAtZScgaGVyZS4g
+KHV0aWxzL2RvY2tlci1ydW4gCmlzIHRoZSBvbmx5IHNjcmlwdCB0aGF0IHVzZXMgJytzZXQgLW8g
+ZXJyZXhpdCcpCgpBbHNvLCB0aGUgb25seSB3YXkgKEkgYW0gdGhpbmtpbmcgb2YpIHRvIG5vdCBo
+YXZlIHRoZSBkZHJfZncuYmluIGZpbGUgaXMgCmlmIHRoZSB1c2VyIGRpZG4ndCBzZWxlY3QgdGhl
+IGZpcm13YXJlLWlteCBwYWNrYWdlLiBNYXliZSwgdGhlIHNjcmlwdCAKc2hvdWxkIHByb2R1Y2Vz
+IGFuIGhpbnQgdG8gdGhlIHVzZXIgYWJvdXQgaG93IHRvIGdldCB0aGF0IGRkcl9mdyBiaW4gZmls
+ZT8KCiJkZHJfZncgZmlsZSBub3QgZm91bmQ6IGRpZCB5b3Ugc2VsZWN0IGZpcm13YXJlLWlteCBw
+YWNrYWdlPyIKClJlZ2FyZHMsCgo+ICAgbWFpbiAkQAoKLS0gClPDqWJhc3RpZW4gU3p5bWFuc2tp
+LCBBcm1hZGV1cyBTeXN0ZW1zClNvZnR3YXJlIGVuZ2luZWVyCgpfX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxk
+cm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xp
+c3RpbmZvL2J1aWxkcm9vdAo=
