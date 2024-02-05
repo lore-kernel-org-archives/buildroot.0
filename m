@@ -4,65 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A503C48295
-	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 13:24:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2A7CC48295
+	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 13:24:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D7FE260E50;
-	Mon,  5 Feb 2024 13:24:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D7FE260E50
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8FE1960F2F;
+	Mon,  5 Feb 2024 13:24:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8FE1960F2F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id C_9hS3xJgVNr; Mon,  5 Feb 2024 13:24:23 +0000 (UTC)
+	with ESMTP id Vcy9LDPmbe4C; Mon,  5 Feb 2024 13:24:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1243560BDD;
-	Mon,  5 Feb 2024 13:24:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1243560BDD
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 43DEB1BF40D
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 13:24:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A7BAC60E32;
+	Mon,  5 Feb 2024 13:24:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A7BAC60E32
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 128151BF40D
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 13:24:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DA0FA41841
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 13:24:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA0FA41841
+ by smtp1.osuosl.org (Postfix) with ESMTP id DFACF82171
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 13:24:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DFACF82171
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lvGPQ56wQ3w8 for <buildroot@lists.busybox.net>;
- Mon,  5 Feb 2024 13:24:19 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C14E04182F
- for <buildroot@buildroot.org>; Mon,  5 Feb 2024 13:24:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C14E04182F
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C7CD82000D;
- Mon,  5 Feb 2024 13:24:15 +0000 (UTC)
-Date: Mon, 5 Feb 2024 14:24:14 +0100
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20240205142414.07741505@windsurf>
-In-Reply-To: <20240110215515.1263859-1-fontaine.fabrice@gmail.com>
-References: <20240110215515.1263859-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id m3lHiqc5-Zx2 for <buildroot@lists.busybox.net>;
+ Mon,  5 Feb 2024 13:24:42 +0000 (UTC)
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6EA5D82115
+ for <buildroot@buildroot.org>; Mon,  5 Feb 2024 13:24:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6EA5D82115
+Received: from ymorin.is-a-geek.org (unknown [85.119.216.19])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 3F2B913F81D;
+ Mon,  5 Feb 2024 14:24:36 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Mon, 05 Feb 2024 14:24:34 +0100
+Date: Mon, 5 Feb 2024 14:24:34 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Abilio Marques <abiliojr@gmail.com>
+Message-ID: <ZcDhkvk_uO8wbQoz@landeda>
+References: <20240204062645.3616072-1-abiliojr@gmail.com>
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1707139456;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=lJRApU+NgsgsG0QJK26OUD0B0W7Bi7igGYIvj4UHpEg=;
- b=ke6MBjASwFh9FXtIiRPPdl8w7t9tNz6NHW/KUfhzcT3uYBY7Et4UgRe4IdWp4PBEP6o381
- V4jFH0Z7fZKYCKBHeIWcQuzwtF7h5tpzFV/6lg8rTi3wn0kTH9RTqb/M0KPySOf9vA4R8A
- woHIeHGZr66jpleIUiqOzzgYDV1dnqiplJ1/xUOlORJ1yTONK2njmZtHgttdFDCwk8ldjV
- xbfds5qH+odmLegYjrEuKGYCu0VIehi+vRPtWM2l3VAfNYyHLMSOmaivvH+MowK6guIeV4
- mEL7sBrKHNQSLDOEQRCd8m4OlhWJz67ZxUhhiFmOsexuZIsgIPcm4fjZPAbujA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=ke6MBjAS
-Subject: Re: [Buildroot] [PATCH 1/1] package/libzenoh-pico: fix or1k build
+Content-Disposition: inline
+In-Reply-To: <20240204062645.3616072-1-abiliojr@gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1707139479;
+ bh=QvwFFRUnsYScuxkYv3gUut3G5Pubd/Qu9r31FLG9QRc=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=M3AMZXG0ZafBBDX3xggEdOtS7qKUrqtll1IfaFribJ7CkGxabWOdTU9U5BMq3xGlP
+ EgnnL/vYC7EmP1gqNKthqOAl9fLAFnoS4rllZDki3WzA0DxvwyyVePSvtbxGzQUgzF
+ vcPYERDlGKTsj/Fpc8neZRpBRSpQ8Nfc1nCTJcppPtLG9KSdHkvLuja+/eorIPRZpZ
+ zpnozBjvI90iERlVSFhTa1Pfy0bS7xBXBtW3vC5DEqyiw4v1zXffCNIePkN8DtYVek
+ s1ktFjxpembD/thSVtHTY/4Ka3S5GDdcDzoUPQb+JwRiHFlIukVkKldDVPx34J2/Zq
+ wXBcO0YJ+RHxQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=M3AMZXG0
+Subject: Re: [Buildroot] [PATCH] package/micropython: add support for
+ manifest.py in the configuration
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,49 +74,96 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Alex Michel <alex.michel@wiedemann-group.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Chris Packham <judge.packham@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 10 Jan 2024 22:55:15 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-
-> Fix the following build failure with or1k raises since the addition of
-> the package in commit a96361901dcc7b962a0c43f163e97a2de65687f3:
-> 
-> /home/autobuild/autobuild/instance-1/output-1/build/libzenoh-pico-0.10.0-rc/src/link/endpoint.c: Assembler messages:
-> /home/autobuild/autobuild/instance-1/output-1/build/libzenoh-pico-0.10.0-rc/src/link/endpoint.c:358: Error: unrecognized instruction `nop'
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/fd0b2c666a1dc1537162d15b27743abd270243ed
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...001-Remove-nop-or-replace-with-macro.patch | 131 ++++++++++++++++++
->  package/libzenoh-pico/libzenoh-pico.mk        |   6 +
->  2 files changed, 137 insertions(+)
->  create mode 100644 package/libzenoh-pico/0001-Remove-nop-or-replace-with-macro.patch
-
-Thanks a lot for this new patch. We discussed it with Arnout, and even
-with this upstream patch the whole thing is still very messy. There
-seems to be absolutely no reason for upstream to need this ZP_ASM_NOP
-macro. So rather than piling bogus things on top of more bogus things,
-I went ahead and applied a fix that just disables this package on or1k.
-Ideally, we should explain to upstream that these asm("nop") are
-useless.
-
-Thanks for your work!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+QWJpbGlvLCBBbGwsCgpPbiAyMDI0LTAyLTAzIDIyOjI2IC0wODAwLCBBYmlsaW8gTWFycXVlcyBz
+cGFrZSB0aHVzbHk6Cj4gTWljcm9weXRob24gY2FuIGVtYmVkIHBhY2thZ2VzIGFuIG1vZHVsZXMg
+YXMgZnJvemVuIGJ5dGVjb2RlLiBXaGF0IGNvZGUKPiBnZXRzIGJ1aWx0IHRoaXMgd2F5IGNhbiBi
+ZSBkZWZpbmVkIGJ5IG1lYW5zIG9mIGEgIm1hbmlmZXN0LnB5IiBmaWxlLgo+IAo+IFRoaXMgY29t
+bWl0IGV4cG9zZXMgdGhlIHZhcmlhYmxlIEZST1pFTl9NQU5JRkVTVCB0byBCdWlsZHJvb3QgdXNl
+cnMKPiB0aHJvdWdoIGEgbmV3IHZhcmlhYmxlIGNhbGxlZCBCUjJfUEFDS0FHRV9NSUNST1BZVEhP
+Tl9NQU5JRkVTVC4KPiAKPiBQbGVhc2UgY2hlY2sgTWljcm9weXRob24ncyBkb2N1bWVudGF0aW9u
+IGZvciBtb3JlIGluZm9ybWF0aW9uOgo+IGh0dHBzOi8vZG9jcy5taWNyb3B5dGhvbi5vcmcvZW4v
+bGF0ZXN0L3JlZmVyZW5jZS9tYW5pZmVzdC5odG1sCgpNaW5vciBuaXQ6IHRoaXMgYmx1cmIgc2hv
+dWxkIGhhdmUgYmVlbiBpbiB0aGUgaGVscCB0ZXh0IG9mIHRoZSBuZXcKb3B0aW9uLCBhbmQgSSBj
+b3VsZCBoYXZlIGRvbmUgdGhhdCB3aGVuIGFwcGx5aW5nLCBidXQgSSBoYXZlIGEgbXVjaAptb3Jl
+IGludm9sdmVkIHF1ZXN0aW9uLCBzZWUgYmVsb3cuCgo+IFNpZ25lZC1vZmYtYnk6IEFiaWxpbyBN
+YXJxdWVzIDxhYmlsaW9qckBnbWFpbC5jb20+Cj4gLS0tCj4gIHBhY2thZ2UvbWljcm9weXRob24v
+Q29uZmlnLmluICAgICAgfCA4ICsrKysrKysrCj4gIHBhY2thZ2UvbWljcm9weXRob24vbWljcm9w
+eXRob24ubWsgfCA1ICsrKysrCj4gIDIgZmlsZXMgY2hhbmdlZCwgMTMgaW5zZXJ0aW9ucygrKQo+
+IAo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL21pY3JvcHl0aG9uL0NvbmZpZy5pbiBiL3BhY2thZ2Uv
+bWljcm9weXRob24vQ29uZmlnLmluCj4gaW5kZXggMjZhMDBiYWFiMC4uNTI3MTdkODE1YSAxMDA2
+NDQKPiAtLS0gYS9wYWNrYWdlL21pY3JvcHl0aG9uL0NvbmZpZy5pbgo+ICsrKyBiL3BhY2thZ2Uv
+bWljcm9weXRob24vQ29uZmlnLmluCj4gQEAgLTE3LDYgKzE3LDE0IEBAIGNvbmZpZyBCUjJfUEFD
+S0FHRV9NSUNST1BZVEhPTl9MSUIKPiAgCWhlbHAKPiAgCSAgQ29yZSBQeXRob24gbGlicmFyaWVz
+IHBvcnRlZCB0byBNaWNyb1B5dGhvbi4KPiAgCj4gK2NvbmZpZyBCUjJfUEFDS0FHRV9NSUNST1BZ
+VEhPTl9NQU5JRkVTVAo+ICsJc3RyaW5nICJQYXRoIHRvIGEgbWFuaWZlc3QucHkgZmlsZSIKPiAr
+CWhlbHAKPiArCSAgTWljcm9QeXRob24gYWxsb3dzIFB5dGhvbiBjb2RlIHRvIGJlIOKAnGZyb3pl
+buKAnSBhcyBieXRlY29kZQo+ICsJICBpbnRvIGl0cyBiaW5hcnksIGFzIGFuIGFsdGVybmF0aXZl
+IHRvIGxvYWRpbmcgY29kZSBmcm9tCj4gKwkgIHRoZSBmaWxlc3lzdGVtLiBTZWUgTWljcm9QeXRo
+b24ncyBkb2N1bWVudGF0aW9uIGZvciBtb3JlCj4gKwkgIGluZm9ybWF0aW9uLgo+ICsKPiAgZW5k
+aWYgIyBCUjJfUEFDS0FHRV9NSUNST1BZVEhPTgo+ICAKPiAgY29tbWVudCAibWljcm9weXRob24g
+bmVlZHMgYSB0b29sY2hhaW4gdy8gdGhyZWFkcywgZHluYW1pYyBsaWJyYXJ5Igo+IGRpZmYgLS1n
+aXQgYS9wYWNrYWdlL21pY3JvcHl0aG9uL21pY3JvcHl0aG9uLm1rIGIvcGFja2FnZS9taWNyb3B5
+dGhvbi9taWNyb3B5dGhvbi5tawo+IGluZGV4IDEyNWEwZWRjZmIuLjVhMmMxMzY1NDcgMTAwNjQ0
+Cj4gLS0tIGEvcGFja2FnZS9taWNyb3B5dGhvbi9taWNyb3B5dGhvbi5tawo+ICsrKyBiL3BhY2th
+Z2UvbWljcm9weXRob24vbWljcm9weXRob24ubWsKPiBAQCAtNDMsNiArNDMsMTEgQEAgZWxzZQo+
+ICBNSUNST1BZVEhPTl9NQUtFX09QVFMgKz0gTUlDUk9QWV9QWV9GRkk9MAo+ICBlbmRpZgo+ICAK
+PiAraWZuZXEgKCQoQlIyX1BBQ0tBR0VfTUlDUk9QWVRIT05fTUFOSUZFU1QpLCIiKQo+ICtNSUNS
+T1BZVEhPTl9NQUtFX09QVFMgKz0gXAo+ICsJRlJPWkVOX01BTklGRVNUPSQoQlIyX1BBQ0tBR0Vf
+TUlDUk9QWVRIT05fTUFOSUZFU1QpCj4gK2VuZGlmCgpTbywgYXMgSSB1bmRlcnN0YW5kIHRoaXMs
+IG1pY3JvcHl0aG9uIHdpbGwgZ3JhYiB0aGUgZmlsZXMgKGZyb20gbW9kdWxlcywKZmlsZXMsIGV0
+Yy4uLikgbGlzdGVkIGZyb20gdGhlIG1hbmlmZXN0IGFuZCBidW5kbGUgdGhlbSBpbiB0aGUKbWlj
+cm9weXRob24gZXhlY3V0YWJsZS4gSXQgc2VlbXMgdGhlIHBhdGhzIGluIHRoZSBtYW5pZmVzdCBj
+YW4gYmUgZWl0aGVyCmFic29sdXRlLCBvciByZWxhdGl2ZTsgaW4gdGhlIGxhdHRlciBjYXNlLCBp
+dCBub3QgZG9jdW1lbnRlZCB3aGF0IHRoZXkKd291bGQgYmUgcmVsYXRpdmUgdG87IGFkZGl0aW9u
+YWxseSB0aGVyZSBhcmUgcGxhY2Vob2xkZXJzIChzZWUgYmVsb3cpCnRoYXQgY2FuIGJlIHVzZWQg
+YnV0IGFyZSBhYnNvbHV0ZSBwYXRocy4KClNvIHRoaXMgaGFzIGEgZmV3IGltcGxpY2F0aW9uczoK
+CiAgLSB0aGUgZmlsZXMgbXVzdCBiZSBhdmFpbGFibGUgYmVmb3JlIG1pY3JvcHl0aG9uIGlzIGJ1
+aWx0LCBzbyBzb21lCiAgICBkZXBlbmRlbmN5IG9yZGVyIGlzIG5lZWRlZCB0byBlbnN1cmUgdGhh
+dDogaWYgZmlsZXMgYXJlIHByb3ZpZGVkIGluCiAgICBhIHBhY2thZ2UsIHRoZW4gd2UgbmVlZCBh
+IGRlcGVuZGVuY3kgYW5kIGl0IGlzIGdvaW5nIHRvIGJlIGEgbGl0dGxlCiAgICBiaXQgZGlmZmlj
+dWx0IHRvIGRvIGFuZCB3ZSBuZWVkIGEgd2F5IHRvIGFkZHJlc3MgdGhhdDsKCiAgLSB0aGUgcGF0
+aHMgY2FuJ3QgYmUgaGFyZC1jb2RlZCB0byBhYnNvbHV0ZSBwYXRocyBpbiB0aGUgbWFuaWZlc3Qg
+ZmlsZQogICAgaXRzZWxmLCBiZWNhdXNlIHdlIGRvbid0IGtub3cgYmVmb3JlaGFuZCB3aGVyZSB0
+aGUgYnVpbGRyb290IGJ1aWxkCiAgICBkaXJlY3Rvcnkgd2lsbCBiZSwgc28gd2UgbmVlZCBhIHdh
+eSB0byBzaG9laG9ybiAkKFRPUERJUikgb3Igc29tZQogICAgc3VjaCB2YXJpYWJsZSBpbiB0aGUg
+bWFuaWZlc3Q7CgogIC0gYWJzb2x1dGUgcGF0aHMgbXVzdCBiZSBmaXhlZCB0byBhY2NvbW1vZGF0
+ZSB0aGUgcGVyLXBhY2thZ2Ugb3B0aW9uLAogICAgYmVjYXVzZSB0aG9zZSBwYXRocyBjaGFuZ2Ug
+Zm9yIGVhYWNoIHBhY2thZ2UuCgpGcm9tIHRoZSBtaWNyb3B5dGhvbiBkb2MsIHRoYXQgeW91IHBv
+aW50ZWQgYWJvdmUsIHRoZXJlIGFyZSBhIGZldwpwbGFjZWhvbGRlcnMgdGhhdCB3aWxsIGJlIHJl
+cGxhY2VkIGluIHRoZSBtYW5pZmVzdCwgYnV0IEkgZG9uJ3QgdGhpbmsKd2UgY2FuIHJldXNlIHRo
+b3NlOgoKICAgIEFueSBwYXRocyB1c2VkIGluIG1hbmlmZXN0IGZpbGVzIGNhbiBpbmNsdWRlIHRo
+ZSBmb2xsb3dpbmcgdmFyaWFibGVzLgogICAgVGhlc2UgYWxsIHJlc29sdmUgdG8gYWJzb2x1dGUg
+cGF0aHMuCiAgICAgICogJChNUFlfRElSKSDigJMgcGF0aCB0byB0aGUgbWljcm9weXRob24gcmVw
+by4KICAgICAgKiAkKE1QWV9MSUJfRElSKSDigJMgcGF0aCB0byB0aGUgbWljcm9weXRob24tbGli
+IHN1Ym1vZHVsZS4gUHJlZmVyIHRvIHVzZSByZXF1aXJlKCkuCiAgICAgICogJChQT1JUX0RJUikg
+4oCTIHBhdGggdG8gdGhlIGN1cnJlbnQgcG9ydCAoZS5nLiBwb3J0cy9zdG0zMikKICAgICAgKiAk
+KEJPQVJEX0RJUikg4oCTIHBhdGggdG8gdGhlIGN1cnJlbnQgYm9hcmQgKGUuZy4gIHBvcnRzL3N0
+bTMyL2JvYXJkcy9QWUJWMTEpCgpTbyB3ZSBuZWVkIGEgYml0IG1vcmUgaW5mb3JtYXRpb24gaG93
+IHRoaXMgZmVhdHVyZSBpcyB0byBiZSB1c2VkLCBhbmQgYW4KZXhhbXBsZSAob3IgYSBmZXcpIHdv
+dWxkIHByb2JhYmx5IGhlbHAgYSBsb3QgaW4gdGhpcyByZXNwZWN0LiBXZSBhbHNvCmhhdmUgYSBy
+dW50aW1lIHRlc3QgZm9yIG1pY3JvcHl0aG9uLCBpbjoKICAgIHN1cHBvcnQvdGVzdGluZy90ZXN0
+cy9wYWNrYWdlL3Rlc3RfbWljcm9weXRob24ucHkKCkl0IHdvdWxkIGJlIG5pY2UgdG8gZXh0ZW5k
+IHRoYXQgcnVudGltZSB0ZXN0IGFzIHdlbGwuCgpSZWdhcmRzLApZYW5uIEUuIE1PUklOLgoKPiAg
+ZGVmaW5lIE1JQ1JPUFlUSE9OX0JVSUxEX0NNRFMKPiAgCSQoVEFSR0VUX01BS0VfRU5WKSAkKE1B
+S0UpIC1DICQoQEQpL21weS1jcm9zcwo+ICAJJChUQVJHRVRfTUFLRV9FTlYpICQoTUFLRSkgLUMg
+JChARCkvcG9ydHMvdW5peCBcCj4gLS0gCj4gMi40My4wCj4gCj4gX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4g
+YnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFp
+bG1hbi9saXN0aW5mby9idWlsZHJvb3QKCi0tIAouLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0t
+LS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLgp8ICBZ
+YW5uIEUuIE1PUklOICB8IFJlYWwtVGltZSBFbWJlZGRlZCB8IC8iXCBBU0NJSSBSSUJCT04gfCBF
+cmljcycgY29uc3BpcmFjeTogfAp8ICszMyA2NjIgMzc2IDA1NiB8IFNvZnR3YXJlICBEZXNpZ25l
+ciB8IFwgLyBDQU1QQUlHTiAgICAgfCAgX19fICAgICAgICAgICAgICAgfAp8ICszMyA1NjEgMDk5
+IDQyNyBgLS0tLS0tLS0tLS0tLi0tLS0tLS06ICBYICBBR0FJTlNUICAgICAgfCAgXGUvICBUaGVy
+ZSBpcyBubyAgfAp8IGh0dHA6Ly95bW9yaW4uaXMtYS1nZWVrLm9yZy8gfCBfLypcXyB8IC8gXCBI
+VE1MIE1BSUwgICAgfCAgIHYgICBjb25zcGlyYWN5LiAgfAonLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tXi0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLS0t
+JwpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJv
+b3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVp
+bGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
