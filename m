@@ -4,67 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC89DC4828D
-	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 09:45:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A498CC4828D
+	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 09:46:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 746EB4176C;
-	Mon,  5 Feb 2024 09:45:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 746EB4176C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5305D4176A;
+	Mon,  5 Feb 2024 09:46:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5305D4176A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bjZbd0MihVDS; Mon,  5 Feb 2024 09:45:04 +0000 (UTC)
+	with ESMTP id INm02jwtJ6qM; Mon,  5 Feb 2024 09:46:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9B80E41763;
-	Mon,  5 Feb 2024 09:45:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B80E41763
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DE37B1BF40B
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 09:45:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 63D664176C;
+	Mon,  5 Feb 2024 09:46:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 63D664176C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9D14C1BF40B
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 09:46:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B034060F03
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 09:45:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B034060F03
+ by smtp2.osuosl.org (Postfix) with ESMTP id 748DB40A06
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 09:46:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 748DB40A06
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aAnfnb-HPiLa for <buildroot@lists.busybox.net>;
- Mon,  5 Feb 2024 09:44:59 +0000 (UTC)
-Received: from smtpdh16-2.aruba.it (smtpdh16-2.aruba.it [62.149.155.101])
- by smtp3.osuosl.org (Postfix) with ESMTPS id ECBF760EFD
- for <buildroot@buildroot.org>; Mon,  5 Feb 2024 09:44:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ECBF760EFD
-Received: from [192.168.50.221] ([84.33.84.190])
- by Aruba Outgoing Smtp  with ESMTPSA
- id WvX5ruDrPl81fWvX5rQTI3; Mon, 05 Feb 2024 10:44:55 +0100
-Message-ID: <0c46f788-ff09-4506-a1dd-bde02986c438@benettiengineering.com>
-Date: Mon, 5 Feb 2024 10:44:55 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: =?UTF-8?Q?Gero_Schw=C3=A4ricke?= <gero@schwaericke.email>,
- buildroot@buildroot.org
-References: <20221105194712.541286-1-gero@schwaericke.email>
- <20230810204844.803954-1-gero@schwaericke.email>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20230810204844.803954-1-gero@schwaericke.email>
-X-CMAE-Envelope: MS4xfLFrx+1QV5SizdDOS2VRlOt/nNSXrEqHWqYruoaHlx8P+oFYhvPIKPUko5alZ3ZcyHYzmHctkoac8zoULKGbHWRBEOA+5mzKjyp03JqsIpwHXKCfh+k6
- JnVHGJi4O2R7tQssdzVVwMbxlQRzgbocVnfiMh49d8aZEI0xmPU1KnP/ipfU6B/ZRmeiu/DJ0UrRi2k0NrbB6/budj2TfYpx2KaoJ7caAWKPwRTGdpWroIpE
- M5FdVuCF9yOAqjJ4TSDZsQ==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1707126295; bh=levBjy9A1QKHaHMwcaAkj5RXJm0kMA3JxLsQF4psHS4=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=AgqRpseKqZPKqi/vBj1jAl6JVjm/nu20gnx+l5olfgYmJVTBXdGzS6vt+VZ97fwsp
- jYy+eC2hNZ0YtMnyNVd9VhRGXmoq7YL6KI4CTvqbzcrk/Md/P8X2aGrZ+68m7yAYtI
- 6Iejg/NXA31T/oxN8CqJbCoq0eQLKLtpGCBZNmwmC41bFyWJ9SZJN1Vs0owLsArjXE
- pz+Mq5l4x7Pron9Hky0cdtv9kHzM2eK07fUVRWOtbWSip/z3QY9KxqYoOFbm5+Yd0G
- OJlAPsnrF2b8qZVxioh6zfvqWUF0NClwxFE1Ga0L+KQcUWAZs71Kcz50Es03SRhlAd
- ICNgIf0qbr6cA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=AgqRpseK
-Subject: Re: [Buildroot] [PATCH v2] configs/cubieboard1: new defconfig
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id n3tvWJsJxL2J for <buildroot@lists.busybox.net>;
+ Mon,  5 Feb 2024 09:46:51 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3EC0C40204
+ for <buildroot@buildroot.org>; Mon,  5 Feb 2024 09:46:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3EC0C40204
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 29EFA8699D; Mon,  5 Feb 2024 09:46:51 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 5 Feb 2024 10:46:40 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9b90ef61784d314147ace4972f9bdc0cb4fcce77
+X-Git-Newrev: 7794fa4c4e1d19a245bb0367cde94560432a2bc5
+X-Patchwork-Hint: ignore
+Message-Id: <20240205094651.29EFA8699D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] packge/linux-pam: bump to version 1.6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,101 +55,157 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============0062796006643343876=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgR2VybywKCnNvcnJ5IGZvciB0aGUgbGF0ZSByZXBseSwKCk9uIDEwLzA4LzIzIDIyOjQ4LCBH
-ZXJvIFNjaHfDpHJpY2tlIHdyb3RlOgo+IFN1cHBvcnQgZm9yIEN1YmllYm9hcmQgMSBmcm9tIEN1
-YmlldGVjaC4KCmNvbW1pdCBsb2cgbGFja3MgcHJvZHVjdCBVUkwuIEknZCBnbyB3aXRoOgoiClRo
-aXMgcGF0Y2ggYWRkcyBzdXBwb3J0IGZvciBDdWJpZXRlY2ggQ3ViaWVib2FyZDEuCgpDdWJpZWJv
-YXJkMSBmZWF0dXJlcyBjYW4gYmUgZm91bmQgaGVyZToKaHR0cDovL3d3dy5jdWJpZXRlY2guY29t
-L3Byb2R1Y3QtZGV0YWlsL2N1YmllYm9hcmQxLwoiCgo+IFNpZ25lZC1vZmYtYnk6IEdlcm8gU2No
-d8Okcmlja2UgPGdlcm9Ac2Nod2Flcmlja2UuZW1haWw+Cj4gLS0tCj4gQ2hhbmdlcyB2MSAtPiB2
-MjoKPiAgICAtIGZpeCBjb21taXQgc3ViamVjdCBmb3JtYXQKPiAgICAtIGFkZCBteXNlbGYgdG8g
-REVWRUxPUEVSUwo+ICAgIC0gYWRkIGJvYXJkL2N1YmllYm9hcmQxL3JlYWRtZS50eHQKPiAgICAt
-IHVzZSBleHRsaW51eC5jb25mIGluc3RlYWQgb2YgYm9vdC5jbWQKPiAKPiAgIERFVkVMT1BFUlMg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICA0ICsrKwo+ICAgYm9hcmQvY3Vi
-aWV0ZWNoL2N1YmllYm9hcmQxL2dlbmltYWdlLmNmZyAgICAgIHwgMTYgKysrKysrKysrCj4gICBi
-b2FyZC9jdWJpZXRlY2gvY3ViaWVib2FyZDEvcmVhZG1lLnR4dCAgICAgICAgfCAyOSArKysrKysr
-KysrKysrKysrCj4gICAuLi4vYm9vdC9leHRsaW51eC9leHRsaW51eC5jb25mICAgICAgICAgICAg
-ICAgfCAgNSArKysKPiAgIGNvbmZpZ3MvY3ViaWVib2FyZDFfZGVmY29uZmlnICAgICAgICAgICAg
-ICAgICB8IDM0ICsrKysrKysrKysrKysrKysrKysKPiAgIDUgZmlsZXMgY2hhbmdlZCwgODggaW5z
-ZXJ0aW9ucygrKQo+ICAgY3JlYXRlIG1vZGUgMTAwNjQ0IGJvYXJkL2N1YmlldGVjaC9jdWJpZWJv
-YXJkMS9nZW5pbWFnZS5jZmcKPiAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBib2FyZC9jdWJpZXRlY2gv
-Y3ViaWVib2FyZDEvcmVhZG1lLnR4dAo+ICAgY3JlYXRlIG1vZGUgMTAwNjQ0IGJvYXJkL2N1Ymll
-dGVjaC9jdWJpZWJvYXJkMS9yb290ZnNfb3ZlcmxheS9ib290L2V4dGxpbnV4L2V4dGxpbnV4LmNv
-bmYKPiAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBjb25maWdzL2N1YmllYm9hcmQxX2RlZmNvbmZpZwo+
-IAo+IC0tCj4gMi4yNS4xCj4gCj4gZGlmZiAtLWdpdCBhL0RFVkVMT1BFUlMgYi9ERVZFTE9QRVJT
-Cj4gaW5kZXggNmZmYTNlZTY5My4uODJmMmY4YzhjZCAxMDA2NDQKPiAtLS0gYS9ERVZFTE9QRVJT
-Cj4gKysrIGIvREVWRUxPUEVSUwo+IEBAIC0xMTM3LDYgKzExMzcsMTAgQEAgRjoJcGFja2FnZS9m
-bGFubmVsLwo+ICAgTjoJR2VvZmZyZXkgUmFnb3QgPGdlb2ZmcmV5cmFnb3RAZ21haWwuY29tPgo+
-ICAgRjoJcGFja2FnZS9weXRob24tcHl5YW1sLwo+IAo+ICtOOglHZXJvIFNjaHdhZXJpY2tlIDxn
-ZXJvQHNjaHdhZXJpY2tlLmVtYWlsPgo+ICtGOglib2FyZC9jdWJpZXRlY2gvY3ViaWVib2FyZDEv
-Cj4gK0Y6CWNvbmZpZ3MvY3ViaWVib2FyZDFfZGVmY29uZmlnCj4gKwo+ICAgTjoJR2lsbGVzIFRh
-bGlzIDxnaWxsZXMudGFsaXNAZ21haWwuY29tPgo+ICAgRjoJYm9hcmQvZnJlZXNjYWxlL2lteDht
-bWV2ay8KPiAgIEY6CWJvYXJkL2ZyaWVuZGx5YXJtL25hbm9waS1yMnMvCj4gZGlmZiAtLWdpdCBh
-L2JvYXJkL2N1YmlldGVjaC9jdWJpZWJvYXJkMS9nZW5pbWFnZS5jZmcgYi9ib2FyZC9jdWJpZXRl
-Y2gvY3ViaWVib2FyZDEvZ2VuaW1hZ2UuY2ZnCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRl
-eCAwMDAwMDAwMDAwLi45MmM4Njc3NTQ1Cj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL2JvYXJkL2N1
-YmlldGVjaC9jdWJpZWJvYXJkMS9nZW5pbWFnZS5jZmcKPiBAQCAtMCwwICsxLDE2IEBACj4gK2lt
-YWdlIHNkY2FyZC5pbWcgewo+ICsJaGRpbWFnZSB7Cj4gKwl9Cj4gKwo+ICsJcGFydGl0aW9uIHUt
-Ym9vdCB7Cj4gKwkJaW4tcGFydGl0aW9uLXRhYmxlID0gIm5vIgo+ICsJCWltYWdlID0gInUtYm9v
-dC1zdW54aS13aXRoLXNwbC5iaW4iCj4gKwkJb2Zmc2V0ID0gOEsKPiArCQlzaXplID0gMTAxNksg
-IyAxTUIgLSA4S0IKPiArCX0KPiArCj4gKwlwYXJ0aXRpb24gcm9vdGZzIHsKPiArCQlwYXJ0aXRp
-b24tdHlwZSA9IDB4ODMKPiArCQlpbWFnZSA9ICJyb290ZnMuZXh0NCIKPiArCX0KPiArfQo+IGRp
-ZmYgLS1naXQgYS9ib2FyZC9jdWJpZXRlY2gvY3ViaWVib2FyZDEvcmVhZG1lLnR4dCBiL2JvYXJk
-L2N1YmlldGVjaC9jdWJpZWJvYXJkMS9yZWFkbWUudHh0Cj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQK
-PiBpbmRleCAwMDAwMDAwMDAwLi4yOTRiNGU1ZWVjCj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL2Jv
-YXJkL2N1YmlldGVjaC9jdWJpZWJvYXJkMS9yZWFkbWUudHh0Cj4gQEAgLTAsMCArMSwyOSBAQAo+
-ICtDdWJpZXRlY2ggQ3ViaWVib2FyZDEKPiArPT09PT09PT09PT09PT09PT09PT09Cj4gKwo+ICtN
-aW5pbWFsIGNvbmZpZ3VyYXRpb24gZm9yIHRoZSBDdWJpZXRlY2ggQ3ViaWVib2FyZDEuIEl0IGlu
-Y2x1ZGVzIGp1c3Qgd2hhdCBpcwo+ICtuZWVkZWQgdG8gYm9vdCBhIGJhcmUgTGludXggYW5kIGxv
-Z2luIHZpYSBzZXJpYWwgY29uc29sZS4KPiArCj4gKwo+ICtCdWlsZGluZwo+ICs9PT09PT09PQo+
-ICsKPiArQ29uZmlndXJlIGFuZCBidWlsZCB3aXRoCj4gKwo+ICsJbWFrZSBjdWJpZWJvYXJkMV9k
-ZWZjb25maWcKPiArCW1ha2UKPiArCj4gKwo+ICtGbGFzaGluZwo+ICs9PT09PT09PQo+ICsKPiAr
-Rmxhc2ggdGhlIHNkY2FyZCBpbWFnZSBvbnRvIGEgbWljcm8gc2RjYXJkIHdpdGgKPiArCj4gKwlk
-ZCBpZj1vdXRwdXQvaW1hZ2VzL3NkY2FyZC5pbWcgb2Y9L2Rldi9zZFggYnM9MU0gY29udj1mc3lu
-Ywo+ICsKPiArCj4gK1J1bm5pbmcKPiArPT09PT09PQo+ICsKPiArQ29ubmVjdCBhIDNWMyBzZXJp
-YWwgaW50ZXJmYWNlIHRvIHRoZSBzZXJpYWwgaGVhZGVyIG9uIHRoZSB0b3Agc2lkZSBvZiB0aGUg
-Ym9hcmQKPiArKGJldHdlZW4gdGhlIFVTQiBqYWNrcyBhbmQgdGhlIEExMCBjaGlwKS4gVGhlbiBw
-cm92aWRlIHBvd2VyIHRvIHRoZSBib2FyZC4KPiBkaWZmIC0tZ2l0IGEvYm9hcmQvY3ViaWV0ZWNo
-L2N1YmllYm9hcmQxL3Jvb3Rmc19vdmVybGF5L2Jvb3QvZXh0bGludXgvZXh0bGludXguY29uZiBi
-L2JvYXJkL2N1YmlldGVjaC9jdWJpZWJvYXJkMS9yb290ZnNfb3ZlcmxheS9ib290L2V4dGxpbnV4
-L2V4dGxpbnV4LmNvbmYKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAu
-LjJmZGU2ODNmMzgKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvYm9hcmQvY3ViaWV0ZWNoL2N1Ymll
-Ym9hcmQxL3Jvb3Rmc19vdmVybGF5L2Jvb3QvZXh0bGludXgvZXh0bGludXguY29uZgo+IEBAIC0w
-LDAgKzEsNSBAQAo+ICtERUZBVUxUIGxpbnV4Cj4gK0xBQkVMIGxpbnV4Cj4gKyAgS0VSTkVMIC9i
-b290L3pJbWFnZQo+ICsgIERFVklDRVRSRUUgL2Jvb3Qvc3VuNGktYTEwLWN1YmllYm9hcmQuZHRi
-Cj4gKyAgQVBQRU5EIGNvbnNvbGU9dHR5UzAsMTE1MjAwIGVhcmx5cHJpbnRrIHJvb3Q9L2Rldi9t
-bWNibGswcDEgcm9vdHdhaXQKPiBkaWZmIC0tZ2l0IGEvY29uZmlncy9jdWJpZWJvYXJkMV9kZWZj
-b25maWcgYi9jb25maWdzL2N1YmllYm9hcmQxX2RlZmNvbmZpZwo+IG5ldyBmaWxlIG1vZGUgMTAw
-NjQ0Cj4gaW5kZXggMDAwMDAwMDAwMC4uN2VmMjBkYjY2OQo+IC0tLSAvZGV2L251bGwKPiArKysg
-Yi9jb25maWdzL2N1YmllYm9hcmQxX2RlZmNvbmZpZwo+IEBAIC0wLDAgKzEsMzQgQEAKPiArIyBB
-cmNoaXRlY3R1cmUKPiArQlIyX2FybT15Cj4gK0JSMl9jb3J0ZXhfYTg9eQo+ICsKPiArIyBUb29s
-Y2hhaW4gb3B0aW9ucwo+ICtCUjJfUEFDS0FHRV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VTVE9NXzZf
-ND15Cj4gKwo+ICsjIEJvb3Rsb2FkZXIKPiArQlIyX1RBUkdFVF9VQk9PVD15Cj4gK0JSMl9UQVJH
-RVRfVUJPT1RfQ1VTVE9NX1ZFUlNJT049eQo+ICtCUjJfVEFSR0VUX1VCT09UX0NVU1RPTV9WRVJT
-SU9OX1ZBTFVFPSIyMDIzLjA3Igo+ICtCUjJfVEFSR0VUX1VCT09UX0JVSUxEX1NZU1RFTV9LQ09O
-RklHPXkKPiArQlIyX1RBUkdFVF9VQk9PVF9CT0FSRF9ERUZDT05GSUc9IkN1YmllYm9hcmQiCj4g
-K0JSMl9UQVJHRVRfVUJPT1RfTkVFRFNfUFlMSUJGRFQ9eQo+ICtCUjJfVEFSR0VUX1VCT09UX05F
-RURTX09QRU5TU0w9eQo+ICtCUjJfVEFSR0VUX1VCT09UX1NQTD15Cj4gK0JSMl9UQVJHRVRfVUJP
-T1RfU1BMX05BTUU9InUtYm9vdC1zdW54aS13aXRoLXNwbC5iaW4iCj4gKwo+ICsjIEtlcm5lbAo+
-ICtCUjJfTElOVVhfS0VSTkVMPXkKPiArQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTj15
-Cj4gK0JSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjYuNC45Igo+ICtCUjJf
-TElOVVhfS0VSTkVMX0RFRkNPTkZJRz0ic3VueGkiCj4gK0JSMl9MSU5VWF9LRVJORUxfRFRTX1NV
-UFBPUlQ9eQo+ICtCUjJfTElOVVhfS0VSTkVMX0lOVFJFRV9EVFNfTkFNRT0ic3VuNGktYTEwLWN1
-YmllYm9hcmQiCj4gK0JSMl9MSU5VWF9LRVJORUxfSU5TVEFMTF9UQVJHRVQ9eQo+ICsKPiArIyBG
-aWxlc3lzdGVtCj4gK0JSMl9UQVJHRVRfUk9PVEZTX0VYVDI9eQo+ICtCUjJfVEFSR0VUX1JPT1RG
-U19FWFQyXzQ9eQo+ICtCUjJfUk9PVEZTX09WRVJMQVk9ImJvYXJkL2N1YmlldGVjaC9jdWJpZWJv
-YXJkMS9yb290ZnNfb3ZlcmxheSIKPiArQlIyX1BBQ0tBR0VfSE9TVF9HRU5JTUFHRT15Cj4gK0JS
-Ml9ST09URlNfUE9TVF9JTUFHRV9TQ1JJUFQ9InN1cHBvcnQvc2NyaXB0cy9nZW5pbWFnZS5zaCIK
-PiArQlIyX1JPT1RGU19QT1NUX1NDUklQVF9BUkdTPSItYyBib2FyZC9jdWJpZXRlY2gvY3ViaWVi
-b2FyZDEvZ2VuaW1hZ2UuY2ZnIgoKSSd2ZSBidWlsZCB0ZXN0ZWQgc3VjY2Vzc2Z1bGx5IHVzaW5n
-IHV0aWxzL2RvY2tlci1ydW4gYW5kIHRoZSByZXN0IGxvb2tzCmdvb2QgdG8gbWUgc286ClJldmll
-d2VkLWJ5OiBHaXVsaW8gQmVuZXR0aSA8Z2l1bGlvLmJlbmV0dGlAYmVuZXR0aWVuZ2luZWVyaW5n
-LmNvbT4KCkJlc3QgcmVnYXJkcwotLSAKR2l1bGlvIEJlbmV0dGkKQ0VPJkNUT0BCZW5ldHRpIEVu
-Z2luZWVyaW5nIHNhcwpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBz
-Oi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+--===============0062796006643343876==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=7794fa4c4e1d19a245bb0367cde94560432a2bc5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Drop patches (already in version)
+
+https://github.com/linux-pam/linux-pam/releases/tag/v1.6.0
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0001-examples-tty_conv-fix-build-on-musl.patch | 40 ----------------------
+ ...0002-Fix-build-if-crypt_r-isn-t-available.patch | 37 --------------------
+ package/linux-pam/linux-pam.hash                   |  4 +--
+ package/linux-pam/linux-pam.mk                     |  2 +-
+ 4 files changed, 3 insertions(+), 80 deletions(-)
+
+diff --git a/package/linux-pam/0001-examples-tty_conv-fix-build-on-musl.patch b/package/linux-pam/0001-examples-tty_conv-fix-build-on-musl.patch
+deleted file mode 100644
+index c1257d64da..0000000000
+--- a/package/linux-pam/0001-examples-tty_conv-fix-build-on-musl.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From 5374f677e4cae669eb9accf2449178b602e8a40a Mon Sep 17 00:00:00 2001
+-From: Violet Purcell <vimproved@inventati.org>
+-Date: Thu, 11 May 2023 12:50:34 -0400
+-Subject: [PATCH] examples/tty_conv: fix build on musl
+-
+-termio.h is the old System V version of the interface header, and is
+-only provided in glibc and dietlibc as far as I can tell.
+-This fixes it to use the POSIX termios.h instead.
+-
+-Upstream: https://github.com/linux-pam/linux-pam/commit/5374f677e4cae669eb9accf2449178b602e8a40a
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- examples/tty_conv.c | 5 +++--
+- 1 file changed, 3 insertions(+), 2 deletions(-)
+-
+-diff --git a/examples/tty_conv.c b/examples/tty_conv.c
+-index 23f0684cc..9a0e1ad99 100644
+---- a/examples/tty_conv.c
+-+++ b/examples/tty_conv.c
+-@@ -6,8 +6,9 @@
+- #include <string.h>
+- #include <errno.h>
+- #include <unistd.h>
+--#include <termio.h>
+-+#include <termios.h>
+- #include <security/pam_appl.h>
+-+#include <sys/ioctl.h>
+- 
+- /***************************************
+-  * @brief echo off/on
+-@@ -16,7 +17,7 @@
+-  ***************************************/
+- static void echoOff(int fd, int off)
+- {
+--    struct termio tty;
+-+    struct termios tty;
+-     if (ioctl(fd, TCGETA, &tty) < 0)
+-     {
+-         fprintf(stderr, "TCGETA failed: %s\n", strerror(errno));
+diff --git a/package/linux-pam/0002-Fix-build-if-crypt_r-isn-t-available.patch b/package/linux-pam/0002-Fix-build-if-crypt_r-isn-t-available.patch
+deleted file mode 100644
+index c7fdd8be36..0000000000
+--- a/package/linux-pam/0002-Fix-build-if-crypt_r-isn-t-available.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From b82acc21f1e2f76d4cb0c75bb4958751562039ab Mon Sep 17 00:00:00 2001
+-From: Bernhard Rosenkränzer <bero@lindev.ch>
+-Date: Wed, 7 Jun 2023 19:49:01 +0200
+-Subject: [PATCH] Fix build if crypt_r isn't available
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-retval was being defined only in #ifdef HAVE_CRYPT_R, but used
+-unconditionally.
+-
+-Signed-off-by: Bernhard Rosenkränzer <bero@lindev.ch>
+-Fixes: bcba17939e1b ("modules: make use of secure memory erasure")
+-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+-Upstream: https://github.com/linux-pam/linux-pam/commit/b82acc21f1e2f76d4cb0c75bb4958751562039ab
+----
+- modules/pam_pwhistory/opasswd.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/modules/pam_pwhistory/opasswd.c b/modules/pam_pwhistory/opasswd.c
+-index 479e3fc4..fc610e2f 100644
+---- a/modules/pam_pwhistory/opasswd.c
+-+++ b/modules/pam_pwhistory/opasswd.c
+-@@ -128,9 +128,9 @@ static int
+- compare_password(const char *newpass, const char *oldpass)
+- {
+-   char *outval;
+-+  int retval;
+- #ifdef HAVE_CRYPT_R
+-   struct crypt_data output;
+--  int retval;
+- 
+-   output.initialized = 0;
+- 
+--- 
+-2.39.2
+-
+diff --git a/package/linux-pam/linux-pam.hash b/package/linux-pam/linux-pam.hash
+index 97acbd7adc..cd882715cb 100644
+--- a/package/linux-pam/linux-pam.hash
++++ b/package/linux-pam/linux-pam.hash
+@@ -1,6 +1,6 @@
+ # Locally computed hashes after checking signature at
+-# https://github.com/linux-pam/linux-pam/releases/download/v1.5.3/Linux-PAM-1.5.3.tar.xz.asc
++# https://github.com/linux-pam/linux-pam/releases/download/v1.6.0/Linux-PAM-1.6.0.tar.xz.asc
+ # signed with the key 8C6BFD92EE0F42EDF91A6A736D1A7F052E5924BB
+-sha256  7ac4b50feee004a9fa88f1dfd2d2fa738a82896763050cd773b3c54b0a818283  Linux-PAM-1.5.3.tar.xz
++sha256  fff4a34e5bbee77e2e8f1992f27631e2329bcbf8a0563ddeb5c3389b4e3169ad  Linux-PAM-1.6.0.tar.xz
+ # Locally computed
+ sha256  133d98e7a2ab3ffd330b4debb0bfc10fea21e4b2b5a5b09de2e924293be5ff08  Copyright
+diff --git a/package/linux-pam/linux-pam.mk b/package/linux-pam/linux-pam.mk
+index 92d8c952ac..89a46e81df 100644
+--- a/package/linux-pam/linux-pam.mk
++++ b/package/linux-pam/linux-pam.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LINUX_PAM_VERSION = 1.5.3
++LINUX_PAM_VERSION = 1.6.0
+ LINUX_PAM_SOURCE = Linux-PAM-$(LINUX_PAM_VERSION).tar.xz
+ LINUX_PAM_SITE = https://github.com/linux-pam/linux-pam/releases/download/v$(LINUX_PAM_VERSION)
+ LINUX_PAM_INSTALL_STAGING = YES
+
+--===============0062796006643343876==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0062796006643343876==--
