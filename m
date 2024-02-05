@@ -4,90 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82286C48295
-	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 13:23:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A503C48295
+	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 13:24:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3E50860E43;
-	Mon,  5 Feb 2024 13:23:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3E50860E43
+	by smtp3.osuosl.org (Postfix) with ESMTP id D7FE260E50;
+	Mon,  5 Feb 2024 13:24:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D7FE260E50
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wSh46SFion0M; Mon,  5 Feb 2024 13:23:45 +0000 (UTC)
+	with ESMTP id C_9hS3xJgVNr; Mon,  5 Feb 2024 13:24:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 872F9607AA;
-	Mon,  5 Feb 2024 13:23:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 872F9607AA
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6C8B21BF40D
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 13:23:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1243560BDD;
+	Mon,  5 Feb 2024 13:24:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1243560BDD
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 43DEB1BF40D
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 13:24:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4552F80C97
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 13:23:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4552F80C97
+ by smtp4.osuosl.org (Postfix) with ESMTP id DA0FA41841
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 13:24:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA0FA41841
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SwsnmcE7uadX for <buildroot@lists.busybox.net>;
- Mon,  5 Feb 2024 13:23:41 +0000 (UTC)
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7749980B44
- for <buildroot@buildroot.org>; Mon,  5 Feb 2024 13:23:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7749980B44
-Received: by mail-wr1-x436.google.com with SMTP id
- ffacd0b85a97d-33b35323341so1059262f8f.3
- for <buildroot@buildroot.org>; Mon, 05 Feb 2024 05:23:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707139419; x=1707744219;
- h=content-transfer-encoding:in-reply-to:from:references:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=808msWLxGvfsbh5AgdMQCUKAWahdzitlXjZyxnyRg4M=;
- b=JlD37p3P7SQNzKKqz5YZYc70Sg7CqNoy1ulUCktO9i9zHKDCLMvTqLi+EnRvEWTY7J
- XOuDJgAR+bxFB2BPzVJ8S+teJSaM9PEMpi52cONcp+bg80aL7egZKvXV+Kv+3GhLrdXT
- dRtqV6fSRM22lFT/vGXGYIlEiIiFowaPlHg0m8B8A0BKyJfIlKRNLDUs4zTRbR10smpn
- NzDEqxAhCuyfLyGXhxNqrnMz+gjrCBz0TpS25cKQCLiFCxMNQVUbDrvSWTRUSmFrMWjH
- /HknGT+qtrRryGY+/EEDPSAd7AxfEpN+UinSMNKEe+y8uzZ9ktjmIoNRIIMs54k08d4+
- Jcnw==
-X-Gm-Message-State: AOJu0YyFuNnlxIVh2iWwcAIC/BPXWO2RSwuM5ES0ivv07AT24y9hYPZP
- Zd/OGvAyrZ/5XisPn0pwbZDgXNGZw1Yntp471ZfZKFlR1PRIXarMc3RpEwH/FnU=
-X-Google-Smtp-Source: AGHT+IE1fXAR1igiqjsfFEv/hsLliaqu++MMqRMCo6lUtwsmdi+FCW2aSRPNpWdLXJdhgC+0OcNPTw==
-X-Received: by 2002:adf:f24c:0:b0:33a:e6f4:d22f with SMTP id
- b12-20020adff24c000000b0033ae6f4d22fmr6445479wrp.13.1707139419509; 
- Mon, 05 Feb 2024 05:23:39 -0800 (PST)
-X-Forwarded-Encrypted: i=0;
- AJvYcCUk46Fvne4xfAkx+sEm3frMZFEflgGXc09t7Gq9RWmsJ6a402b+CpRPq+8pZvphdnrXgAcf6sfDNupXxOSjEVZSwEX0XaZUdg==
-Received: from [192.168.16.188] ([85.119.216.19])
- by smtp.gmail.com with ESMTPSA id
- p4-20020a5d4e04000000b0033b3ceda5dbsm2282272wrt.44.2024.02.05.05.23.38
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 05 Feb 2024 05:23:39 -0800 (PST)
-Message-ID: <afc4d71e-4ae5-4450-a6b6-c905e36cb116@mind.be>
-Date: Mon, 5 Feb 2024 14:23:37 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lvGPQ56wQ3w8 for <buildroot@lists.busybox.net>;
+ Mon,  5 Feb 2024 13:24:19 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C14E04182F
+ for <buildroot@buildroot.org>; Mon,  5 Feb 2024 13:24:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C14E04182F
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C7CD82000D;
+ Mon,  5 Feb 2024 13:24:15 +0000 (UTC)
+Date: Mon, 5 Feb 2024 14:24:14 +0100
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20240205142414.07741505@windsurf>
+In-Reply-To: <20240110215515.1263859-1-fontaine.fabrice@gmail.com>
+References: <20240110215515.1263859-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-GB
-To: Alexander Egorenkov <egorenar@linux.ibm.com>, buildroot@buildroot.org
-References: <20240108071410.118585-1-egorenar@linux.ibm.com>
-In-Reply-To: <20240108071410.118585-1-egorenar@linux.ibm.com>
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1707139419; x=1707744219; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:references:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=808msWLxGvfsbh5AgdMQCUKAWahdzitlXjZyxnyRg4M=;
- b=ZxO8McFTcIkTySKOTcY4AO0MuBFTBNZ0iyFKbuyvV5nQ2Dqgk+36zMTnMFMM84+nNa
- Ud20xGk22QO5Yh34ztjatEUXLAb62uWitQL860SIf7nTqLRnCM5G19o0db6YzyGkUvOp
- k3jZfwB7lpgV4Q87UULIbLyjaj0zFAsBQ722A3JP/q+ZwQnek5YArw1tr4oGFUKO/cNp
- zLltj0sLkg4IOSVH+USr7BcdcLfd10hon9YaE8v6o3faeTl8NzmVhyQv+QevSL7VbsG4
- XklbPYZWO4vQVPjPnKOWRtOUh0cq75jngEDkJzvjYtZLIJWxfD4QZUxidJB4BVbt+SdK
- vZQg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=ZxO8McFT
-Subject: Re: [Buildroot] [PATCH 1/1] package/s390-tools: bump version to
- 2.30.0
+ d=bootlin.com; s=gm1; t=1707139456;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=lJRApU+NgsgsG0QJK26OUD0B0W7Bi7igGYIvj4UHpEg=;
+ b=ke6MBjASwFh9FXtIiRPPdl8w7t9tNz6NHW/KUfhzcT3uYBY7Et4UgRe4IdWp4PBEP6o381
+ V4jFH0Z7fZKYCKBHeIWcQuzwtF7h5tpzFV/6lg8rTi3wn0kTH9RTqb/M0KPySOf9vA4R8A
+ woHIeHGZr66jpleIUiqOzzgYDV1dnqiplJ1/xUOlORJ1yTONK2njmZtHgttdFDCwk8ldjV
+ xbfds5qH+odmLegYjrEuKGYCu0VIehi+vRPtWM2l3VAfNYyHLMSOmaivvH+MowK6guIeV4
+ mEL7sBrKHNQSLDOEQRCd8m4OlhWJz67ZxUhhiFmOsexuZIsgIPcm4fjZPAbujA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=ke6MBjAS
+Subject: Re: [Buildroot] [PATCH 1/1] package/libzenoh-pico: fix or1k build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,50 +74,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Alex Michel <alex.michel@wiedemann-group.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+On Wed, 10 Jan 2024 22:55:15 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-
-On 08/01/2024 08:14, Alexander Egorenkov wrote:
-> Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
-
-  Applied to master, thanks.
-
-  Regards,
-  Arnout
-
-> ---
->   package/s390-tools/s390-tools.hash | 2 +-
->   package/s390-tools/s390-tools.mk   | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
+> Fix the following build failure with or1k raises since the addition of
+> the package in commit a96361901dcc7b962a0c43f163e97a2de65687f3:
 > 
-> diff --git a/package/s390-tools/s390-tools.hash b/package/s390-tools/s390-tools.hash
-> index a00e95437b96..c70bf69f008c 100644
-> --- a/package/s390-tools/s390-tools.hash
-> +++ b/package/s390-tools/s390-tools.hash
-> @@ -1,3 +1,3 @@
->   # Locally computed:
-> -sha256  849ff400dc6c1eb7eebe4aa3e7a4871721c25bcee6cfdd0535a056a038fd3ab0  s390-tools-2.29.0.tar.gz
-> +sha256  9e565701cc6df4808243027706ee0a76c5fc0c7f9aae0afce1479fd4ff68bcdf  s390-tools-2.30.0.tar.gz
->   sha256  cca17a9a944ebec769adee4aebd805c912c357785ff2705a99ffe68563021f75  LICENSE
-> diff --git a/package/s390-tools/s390-tools.mk b/package/s390-tools/s390-tools.mk
-> index c3155a13ff5a..bc39a9bd1970 100644
-> --- a/package/s390-tools/s390-tools.mk
-> +++ b/package/s390-tools/s390-tools.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
->   
-> -S390_TOOLS_VERSION = 2.29.0
-> +S390_TOOLS_VERSION = 2.30.0
->   S390_TOOLS_SITE = $(call github,ibm-s390-linux,s390-tools,v$(S390_TOOLS_VERSION))
->   S390_TOOLS_LICENSE = MIT
->   S390_TOOLS_LICENSE_FILES = LICENSE
+> /home/autobuild/autobuild/instance-1/output-1/build/libzenoh-pico-0.10.0-rc/src/link/endpoint.c: Assembler messages:
+> /home/autobuild/autobuild/instance-1/output-1/build/libzenoh-pico-0.10.0-rc/src/link/endpoint.c:358: Error: unrecognized instruction `nop'
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/fd0b2c666a1dc1537162d15b27743abd270243ed
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...001-Remove-nop-or-replace-with-macro.patch | 131 ++++++++++++++++++
+>  package/libzenoh-pico/libzenoh-pico.mk        |   6 +
+>  2 files changed, 137 insertions(+)
+>  create mode 100644 package/libzenoh-pico/0001-Remove-nop-or-replace-with-macro.patch
+
+Thanks a lot for this new patch. We discussed it with Arnout, and even
+with this upstream patch the whole thing is still very messy. There
+seems to be absolutely no reason for upstream to need this ZP_ASM_NOP
+macro. So rather than piling bogus things on top of more bogus things,
+I went ahead and applied a fix that just disables this package on or1k.
+Ideally, we should explain to upstream that these asm("nop") are
+useless.
+
+Thanks for your work!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
