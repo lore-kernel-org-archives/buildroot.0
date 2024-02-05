@@ -4,53 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8673C4828D
-	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 17:21:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF490C4828D
+	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 17:22:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 790EA40468;
-	Mon,  5 Feb 2024 17:21:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 790EA40468
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5C504419BA;
+	Mon,  5 Feb 2024 17:22:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5C504419BA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tPcMaKnUzFpE; Mon,  5 Feb 2024 17:21:43 +0000 (UTC)
+	with ESMTP id dpe7mx8hM3a5; Mon,  5 Feb 2024 17:22:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7B82D419B2;
-	Mon,  5 Feb 2024 17:21:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7B82D419B2
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B0FB91BF3D6
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 17:21:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6158A40AB8;
+	Mon,  5 Feb 2024 17:22:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6158A40AB8
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5C35C1BF3D6
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 17:22:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 89C7F60E96
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 17:21:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 89C7F60E96
+ by smtp2.osuosl.org (Postfix) with ESMTP id 339C740AB8
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 17:22:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 339C740AB8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id poTTVlQbQy-8 for <buildroot@lists.busybox.net>;
- Mon,  5 Feb 2024 17:21:32 +0000 (UTC)
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 94D8060E4E
- for <buildroot@buildroot.org>; Mon,  5 Feb 2024 17:21:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 94D8060E4E
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B1C09C0005;
- Mon,  5 Feb 2024 17:21:29 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KNxPjEX9hhYl for <buildroot@lists.busybox.net>;
+ Mon,  5 Feb 2024 17:22:47 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 107CC40438
+ for <buildroot@buildroot.org>; Mon,  5 Feb 2024 17:22:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 107CC40438
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4210FE0006;
+ Mon,  5 Feb 2024 17:22:44 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rX2ev-00CUlc-0l;
- Mon, 05 Feb 2024 18:21:29 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rX2g7-00CUsC-2s;
+ Mon, 05 Feb 2024 18:22:43 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20240203175840.141039-1-fontaine.fabrice@gmail.com>
-Date: Mon, 05 Feb 2024 18:21:29 +0100
-In-Reply-To: <20240203175840.141039-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 3 Feb 2024 18:58:40 +0100")
-Message-ID: <87eddqsu7a.fsf@48ers.dk>
+References: <20240110173916.1113864-1-fontaine.fabrice@gmail.com>
+Date: Mon, 05 Feb 2024 18:22:43 +0100
+In-Reply-To: <20240110173916.1113864-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 10 Jan 2024 18:39:16 +0100")
+Message-ID: <87a5oesu58.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/libjwt: add gnutls support
+Subject: Re: [Buildroot] [PATCH 1/1] package/sqlciper: bump to version 4.5.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,8 +70,10 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > gnutls can be used if openssl is not available since the addition of the
- > package in commit 7251775773011e7da38e3a33c6817eceab6a9dfa
+ > Update hash of LICENSE file (update in year:
+ > https://github.com/sqlcipher/sqlcipher/commit/b942636547ad68b1c38053099e7e877b2495d4cc)
+
+ > https://github.com/sqlcipher/sqlcipher/blob/v4.5.5/CHANGELOG.md
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
