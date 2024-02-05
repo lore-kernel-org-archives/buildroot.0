@@ -4,87 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EB8AC4828D
-	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 16:54:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B78B6C4828D
+	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 16:58:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BD4D94048B;
-	Mon,  5 Feb 2024 16:54:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD4D94048B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3A66540459;
+	Mon,  5 Feb 2024 16:58:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A66540459
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZvWDpErQJ7Lg; Mon,  5 Feb 2024 16:54:04 +0000 (UTC)
+	with ESMTP id JOxbehpRdL5w; Mon,  5 Feb 2024 16:58:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C8DFF40528;
-	Mon,  5 Feb 2024 16:54:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C8DFF40528
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7BA881BF2B1
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 16:54:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 106D740528;
+	Mon,  5 Feb 2024 16:58:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 106D740528
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1CF521BF2B1
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 16:58:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 61DBE60E6A
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 16:54:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 61DBE60E6A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 03006408BF
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 16:58:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03006408BF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id w0HVqu5zIcw3 for <buildroot@lists.busybox.net>;
- Mon,  5 Feb 2024 16:54:01 +0000 (UTC)
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com
- [IPv6:2607:f8b0:4864:20::d2c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 83C2760EA1
- for <buildroot@buildroot.org>; Mon,  5 Feb 2024 16:54:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 83C2760EA1
-Received: by mail-io1-xd2c.google.com with SMTP id
- ca18e2360f4ac-7c00cfd7156so190790439f.0
- for <buildroot@buildroot.org>; Mon, 05 Feb 2024 08:54:01 -0800 (PST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ej7wgcKjHAj1 for <buildroot@lists.busybox.net>;
+ Mon,  5 Feb 2024 16:58:53 +0000 (UTC)
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com
+ [IPv6:2607:f8b0:4864:20::134])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 07067408BD
+ for <buildroot@buildroot.org>; Mon,  5 Feb 2024 16:58:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 07067408BD
+Received: by mail-il1-x134.google.com with SMTP id
+ e9e14a558f8ab-363c5ad8a1eso4086555ab.0
+ for <buildroot@buildroot.org>; Mon, 05 Feb 2024 08:58:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707152040; x=1707756840;
+ d=1e100.net; s=20230601; t=1707152331; x=1707757131;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=SqjQcCfRVZacgug9XFkci5pqS9jNlCz3ke9UnxCJl3E=;
- b=kZFpYSkxlU9okmUFBDkifQ3GAG0LFdZ0fGWrwHsmqdI8/OjuRxgK/ToeOC27B/m1rn
- yhTE1GhrFANeU+ulqrhCQrCw7iZXLA31dt0hNnjul9aVqlFLP03/0bN5LEVgGnaRzh+d
- Wbus5Yj/h1m3DitqHyhXaleAjcFD25KdoOKh4uJi9562dOgyIkuMx5Y+kE7hs534MU3B
- aHya0scGF1JjoT1iH3dhl9dmkwKldU5z49fNKWoBchnbLJykxZnrLIaVjLqM320nHp6q
- JGYuIcK2KhZ1G4wutSvxDS0Adqw8D3lBz5U3qHF0fCZe1ZPH534NFWSPyjTJyK0xPtZd
- Nybw==
-X-Gm-Message-State: AOJu0Yw/Sd5CThqok9N9tT+Mwq8jyxDBgyk7opJEPa9Cyc5oKwniMrjN
- s+gGqmqv3c1HoRj6LZIbupcV6m2z8jh0Jp5g4JByX3Y8R4RWK6G2hrfYi7iR
-X-Google-Smtp-Source: AGHT+IHSMUjLwe9Rpq5xclPCl2Lu5xI2wwXd74D6bJKKDw1SsUBCPOQNhJNNyfrJHSdlF2HwrqoAYw==
-X-Received: by 2002:a92:cda3:0:b0:360:11a:850f with SMTP id
- g3-20020a92cda3000000b00360011a850fmr457999ild.0.1707152040261; 
- Mon, 05 Feb 2024 08:54:00 -0800 (PST)
+ bh=FLULAyigDavtzB+jJNUzmNbsoP6qWhUck6dWCzz4m+Y=;
+ b=ln86F/MFt4wz8afXxNvhFWb5ZIIFS+ZAz9SpFZkNvMts9WyZ6KVhgR9Z+LwydxawBW
+ b0YMGTzhrLzMf066EkrW3H1dioM6aBiWpEgo9hKc5CFutk+RGTKAwPf6zJmAURittqrq
+ +dFrhjoveGCAnga9kRbn528XGA3aFZEgrnPRQHLjICh31yV/j52cmDZgCPGNFnxU+ISr
+ 90YSFdOdTE4XLQ6rU2bRRnrcEho3sCsj9+K2hSlgX1/JBjy1+fWRCldVL7yDciwEAS8q
+ Z+c08ZHZK2aTj72ksXF9qe+7d+sLsO5opqnko8eyXnuevw6U/Wgef23CKSt6ydw8tgzp
+ slNA==
+X-Gm-Message-State: AOJu0YyNbdn7GcfHed7FpAB5KejqDLFNZsrLrLfaB8mb2CygxJw9Zm6e
+ sC7qK9wAtpWuQCdvV66GGgfjTHB1NIxBJydO6hkVh79+LdYfbaosbM9ujJCd
+X-Google-Smtp-Source: AGHT+IE49Uom9wcNCjcP/KhiIPXn+0yqAUe2ozyPXYLV77+HNuEvamK4GeLNetYKTAjleiZllIQANA==
+X-Received: by 2002:a05:6e02:1a61:b0:363:86dd:b35 with SMTP id
+ w1-20020a056e021a6100b0036386dd0b35mr232481ilv.10.1707152331512; 
+ Mon, 05 Feb 2024 08:58:51 -0800 (PST)
 X-Forwarded-Encrypted: i=0;
- AJvYcCVh4XHYsieoF1zwS1oMTsP43lckwK8yt1QHZ1aplYUy+simjazAjGqMqhwNgfOQTv9ZeKA9W2lpt/BsXbW/NAmXahBlOrIbUUasqlYJ1r7RyMgXHnzJJYGzqJZ5+AJ1cMH23wfjfA==
+ AJvYcCUfcJrMYsXUPRDgzJrtZMgtHrAjS44gSNGarIQp0eLkGPIy2GOp+X1YSevH+kp1m1ndVi1hBvtfRJ34QLPZSR0FoGkFWXTmwwRvMPoFLaZpbrPy2sit/hKIUT6ZnHW+fi6XmF4HOGHRx2eM1cKCMwTIjvDalH5ci0o=
 Received: from james-x399.localdomain (71-218-247-10.hlrn.qwest.net.
  [71.218.247.10]) by smtp.gmail.com with ESMTPSA id
- h28-20020a02c73c000000b004712d122b44sm41621jao.64.2024.02.05.08.53.59
+ v6-20020a02cba6000000b0046ef8c433basm42394jap.145.2024.02.05.08.58.50
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 05 Feb 2024 08:53:59 -0800 (PST)
+ Mon, 05 Feb 2024 08:58:50 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon,  5 Feb 2024 09:53:53 -0700
-Message-Id: <20240205165353.515894-1-james.hilliard1@gmail.com>
+Date: Mon,  5 Feb 2024 09:58:48 -0700
+Message-Id: <20240205165848.519437-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1707152040; x=1707756840; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1707152331; x=1707757131; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=SqjQcCfRVZacgug9XFkci5pqS9jNlCz3ke9UnxCJl3E=;
- b=hk5IFXzA9jgsukcf+5jLaIV5Sa7LiuYmVUAzavU7wFqikk1SqtHCkUPxC46EeqBo3J
- d/TjWFWJ3/yh+v6z1K8vsOyVWF1a5PDDZwOoC+VdtQyqUHruw7SVhJ0HFI/eodxFWyIG
- S2AW7n5bQdrZRSO0lUUc/JcC20xsdhIC2PXf8ZdhzOTKXiLrcyOT2IcIxD74cBCWUbVG
- P4A3lMtlTP42e6MZ8HhIkZ6xr7XvZDCz5pCpfGEvVnuz2MIiiUiBvV5Kn6E71DIaPM4G
- LM0SLlB+NJxSUvWSY0NHgHuo0OslrWwdVzhySeEC9qNbty/2V6S0EGI15bShb6am3ssk
- xrlw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=FLULAyigDavtzB+jJNUzmNbsoP6qWhUck6dWCzz4m+Y=;
+ b=m2+XEueDMffFH4Uri8DO5DA+5UeHqYGS5CHjPAmYsCaJmS/jY44DKsaiZghWl6wb9l
+ TQPBMRhiQS6Qq8vPSHWUme8tctyyFifwNykk02ckdCM7O1stI94ln1A/LCSAjo0eG7dU
+ keP6Tz+EvNeLZRFr3p5g+i+pwYqyET24RldeUTGgVMVIturWM+IMvenFKvvsyNuvKdk9
+ kK1BOkJggHzY3CDA0lq9qqHJuq2EFXeEE2A6nlsdJf/ZL0okskGuKMOqV8WujNXrwfo+
+ Ao9UlWrUb3i5PN2R8lsino1FTv5fsFUT3FyMLuXiHvucEIpCQ++BZQwDdhmeIYhkU83T
+ l/zg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=hk5IFXzA
-Subject: [Buildroot] [PATCH 1/1] package/python-rpds-py: bump to version
- 0.17.1
+ header.a=rsa-sha256 header.s=20230601 header.b=m2+XEueD
+Subject: [Buildroot] [PATCH 1/1] package/python-pymodbus: bump to version
+ 3.6.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,44 +96,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: Falco Hyfing <hyfinglists@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+License hash changed due to year range update:
+https://github.com/pymodbus-dev/pymodbus/commit/131d30391efd9c64f1fec857ae0372746374e6d2
+
+Drop no longer required python-six runtime dependency.
+
+Drop no longer required python-serial runtime dependency.
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-rpds-py/python-rpds-py.hash | 2 +-
- package/python-rpds-py/python-rpds-py.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-pymodbus/Config.in            | 6 ++----
+ package/python-pymodbus/python-pymodbus.hash | 6 +++---
+ package/python-pymodbus/python-pymodbus.mk   | 4 ++--
+ 3 files changed, 7 insertions(+), 9 deletions(-)
 
-diff --git a/package/python-rpds-py/python-rpds-py.hash b/package/python-rpds-py/python-rpds-py.hash
-index b04aa210d3..4650d9c385 100644
---- a/package/python-rpds-py/python-rpds-py.hash
-+++ b/package/python-rpds-py/python-rpds-py.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after vendoring
--sha256  87361601241744fff6235e35050addfe34d00508172d2bd4f178193a28727287  rpds_py-0.12.0.tar.gz
-+sha256  760b05720269195d86071ac7cf627b3a4ab9366680d8d449a6a63b84d96a5bc0  rpds_py-0.17.1.tar.gz
+diff --git a/package/python-pymodbus/Config.in b/package/python-pymodbus/Config.in
+index 0ba6fb88f0..dac6716b87 100644
+--- a/package/python-pymodbus/Config.in
++++ b/package/python-pymodbus/Config.in
+@@ -1,8 +1,6 @@
+ config BR2_PACKAGE_PYTHON_PYMODBUS
+ 	bool "python-pymodbus"
+-	select BR2_PACKAGE_PYTHON_SIX # runtime
+-	select BR2_PACKAGE_PYTHON_SERIAL # runtime
+ 	help
+-	  Pymodbus is a full Modbus protocol implementation.
++	  A fully featured modbus protocol stack in python.
+ 
+-	  https://github.com/riptideio/pymodbus
++	  https://github.com/pymodbus-dev/pymodbus/
+diff --git a/package/python-pymodbus/python-pymodbus.hash b/package/python-pymodbus/python-pymodbus.hash
+index d9337ffe84..2e9e87148a 100644
+--- a/package/python-pymodbus/python-pymodbus.hash
++++ b/package/python-pymodbus/python-pymodbus.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pymodbus/json
+-md5  89da6585b27b8c4b3887eb9f7d1e950b  pymodbus-3.0.2.tar.gz
+-sha256  704cb7fb90631c45f9c3a70b89d0c990fe0e208ac56f14a5c449e21bebd1e201  pymodbus-3.0.2.tar.gz
++md5  977e0f1fa05dc5b07fd151544c508675  pymodbus-3.6.4.tar.gz
++sha256  6eee2c7eedb794317784c967096fa1fe42200357e9b5a349d838ee9159624fe2  pymodbus-3.6.4.tar.gz
  # Locally computed sha256 checksums
- sha256  314e4e91be3baa93c0fb4bccc9e4e97cd643eb839b065af921782c2175fe9909  LICENSE
-diff --git a/package/python-rpds-py/python-rpds-py.mk b/package/python-rpds-py/python-rpds-py.mk
-index 6f71d02047..80670f2e4f 100644
---- a/package/python-rpds-py/python-rpds-py.mk
-+++ b/package/python-rpds-py/python-rpds-py.mk
+-sha256  796a47993313691ea404d8af7e4c0f9daf1d2760e3900938985b59c9008eee2f  LICENSE
++sha256  47f904249172e795a6b32de91f471073297befffd74e17cafc288d348a55972e  LICENSE
+diff --git a/package/python-pymodbus/python-pymodbus.mk b/package/python-pymodbus/python-pymodbus.mk
+index 54879d38e9..c1c17ae799 100644
+--- a/package/python-pymodbus/python-pymodbus.mk
++++ b/package/python-pymodbus/python-pymodbus.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_RPDS_PY_VERSION = 0.12.0
-+PYTHON_RPDS_PY_VERSION = 0.17.1
- PYTHON_RPDS_PY_SOURCE = rpds_py-$(PYTHON_RPDS_PY_VERSION).tar.gz
--PYTHON_RPDS_PY_SITE = https://files.pythonhosted.org/packages/75/be/e3f366aa4cd1e3a814f136773e506fc5423eff903ef0372a251df34e6e45
-+PYTHON_RPDS_PY_SITE = https://files.pythonhosted.org/packages/b7/0a/e3bdcc977e6db3bf32a3f42172f583adfa7c3604091a03d512333e0161fe
- PYTHON_RPDS_PY_SETUP_TYPE = maturin
- PYTHON_RPDS_PY_LICENSE = MIT
- PYTHON_RPDS_PY_LICENSE_FILES = LICENSE
+-PYTHON_PYMODBUS_VERSION = 3.0.2
++PYTHON_PYMODBUS_VERSION = 3.6.4
+ PYTHON_PYMODBUS_SOURCE = pymodbus-$(PYTHON_PYMODBUS_VERSION).tar.gz
+-PYTHON_PYMODBUS_SITE = https://files.pythonhosted.org/packages/94/f7/6149a1b107fa54378a7adec83db7cd3679bf02216a6f5c83b37f55335897
++PYTHON_PYMODBUS_SITE = https://files.pythonhosted.org/packages/5b/7f/51eb8704092417ef8ab1d883ad793c27f7f34d67468efe36ca03c6c7863d
+ PYTHON_PYMODBUS_SETUP_TYPE = setuptools
+ PYTHON_PYMODBUS_LICENSE = BSD-3-Clause
+ PYTHON_PYMODBUS_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
