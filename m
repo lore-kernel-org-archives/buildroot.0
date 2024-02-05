@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40175C4829A
-	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 22:21:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C432EC4829A
+	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 22:22:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EEA5241B4A;
-	Mon,  5 Feb 2024 22:21:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EEA5241B4A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7E85D41B79;
+	Mon,  5 Feb 2024 22:22:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E85D41B79
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id c8Qzop3sQGt1; Mon,  5 Feb 2024 22:21:56 +0000 (UTC)
+	with ESMTP id gVv9pQ2DmJQB; Mon,  5 Feb 2024 22:22:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4158E418AA;
-	Mon,  5 Feb 2024 22:21:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4158E418AA
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 44BCD1BF319
+	by smtp4.osuosl.org (Postfix) with ESMTP id C40EC41B66;
+	Mon,  5 Feb 2024 22:22:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C40EC41B66
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 515831BF954
  for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 22:21:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1EA3A418AA
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2B97F81FED
  for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 22:21:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1EA3A418AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B97F81FED
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eHs5t7mWw6Bs for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Nn1IrMFAfxxT for <buildroot@lists.busybox.net>;
  Mon,  5 Feb 2024 22:21:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4CE82418A3
+ by smtp1.osuosl.org (Postfix) with ESMTP id 58CB681FEA
  for <buildroot@buildroot.org>; Mon,  5 Feb 2024 22:21:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4CE82418A3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 58CB681FEA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 39D0886E70; Mon,  5 Feb 2024 22:21:52 +0000 (UTC)
+ id 4675386E71; Mon,  5 Feb 2024 22:21:52 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 5 Feb 2024 23:20:22 +0100
+Date: Mon, 5 Feb 2024 23:20:23 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f72ba67d081a728a13f76cb8d18e2b5b781d2a46
-X-Git-Newrev: d64b36ba1577d6c0169787a14101b2f43ddac206
+X-Git-Oldrev: d64b36ba1577d6c0169787a14101b2f43ddac206
+X-Git-Newrev: 3b342b77938622d89fbe6eca20ed5d251a884569
 X-Patchwork-Hint: ignore
-Message-Id: <20240205222152.39D0886E70@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: add ltrace runtime test
+Message-Id: <20240205222152.4675386E71@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: add trace-cmd runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,66 +62,97 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d64b36ba1577d6c0169787a14101b2f43ddac206
+commit: https://git.buildroot.net/buildroot/commit/?id=3b342b77938622d89fbe6eca20ed5d251a884569
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS                                   |  1 +
- support/testing/tests/package/test_ltrace.py | 32 ++++++++++++++++++++++++++++
- 2 files changed, 33 insertions(+)
+ DEVELOPERS                                         |  2 +
+ support/testing/tests/package/test_trace_cmd.py    | 54 ++++++++++++++++++++++
+ .../package/test_trace_cmd/linux-ftrace.fragment   |  1 +
+ 3 files changed, 57 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 187c8eeca7..a8e1ac9a27 100644
+index a8e1ac9a27..12df3bef13 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1790,6 +1790,7 @@ F:	support/testing/tests/package/test_less.py
- F:	support/testing/tests/package/test_libgpgme.py
- F:	support/testing/tests/package/test_libjxl.py
- F:	support/testing/tests/package/test_lrzip.py
-+F:	support/testing/tests/package/test_ltrace.py
- F:	support/testing/tests/package/test_lzip.py
- F:	support/testing/tests/package/test_lsof.py
- F:	support/testing/tests/package/test_lz4.py
-diff --git a/support/testing/tests/package/test_ltrace.py b/support/testing/tests/package/test_ltrace.py
+@@ -1830,6 +1830,8 @@ F:	support/testing/tests/package/test_tcl.py
+ F:	support/testing/tests/package/test_tcl/
+ F:	support/testing/tests/package/test_tcpdump.py
+ F:	support/testing/tests/package/test_tesseract_ocr.py
++F:	support/testing/tests/package/test_trace_cmd.py
++F:	support/testing/tests/package/test_trace_cmd/
+ F:	support/testing/tests/package/test_weston.py
+ F:	support/testing/tests/package/test_weston/
+ F:	support/testing/tests/package/test_xz.py
+diff --git a/support/testing/tests/package/test_trace_cmd.py b/support/testing/tests/package/test_trace_cmd.py
 new file mode 100644
-index 0000000000..9ef64ba5dd
+index 0000000000..e7d5e13bce
 --- /dev/null
-+++ b/support/testing/tests/package/test_ltrace.py
-@@ -0,0 +1,32 @@
++++ b/support/testing/tests/package/test_trace_cmd.py
+@@ -0,0 +1,54 @@
 +import os
 +
 +import infra.basetest
 +
 +
-+class TestLtrace(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_PACKAGE_LTRACE=y
++class TestTraceCmd(infra.basetest.BRTest):
++    # A specific configuration is needed for testing trace-cmd.
++    # The function tracer need to be enabled in the Kernel.
++    kern_fragment = \
++        infra.filepath("tests/package/test_trace_cmd/linux-ftrace.fragment")
++    config = \
++        f"""
++        BR2_aarch64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.74"
++        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
++        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{kern_fragment}"
++        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++        BR2_PACKAGE_TRACE_CMD=y
 +        BR2_TARGET_ROOTFS_CPIO=y
++        BR2_TARGET_ROOTFS_CPIO_GZIP=y
 +        # BR2_TARGET_ROOTFS_TAR is not set
 +        """
 +
 +    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
++        img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
++        kern = os.path.join(self.builddir, "images", "Image")
++        self.emulator.boot(arch="aarch64",
++                           kernel=kern,
++                           kernel_cmdline=["console=ttyAMA0"],
++                           options=["-M", "virt",
++                                    "-cpu", "cortex-a57",
++                                    "-m", "256M",
++                                    "-initrd", img])
 +        self.emulator.login()
 +
-+        # Check the program can execute
-+        self.assertRunOk("ltrace --version")
++        # Record calls to kmalloc() from a simple command.
++        self.assertRunOk("trace-cmd record -e kmalloc ls -l /")
 +
-+        # Run ltrace on a ls
-+        cmd = "ltrace -a 0 -o ltrace.log ls /"
-+        self.assertRunOk(cmd)
++        # Show information about the trace.dat file.
++        self.assertRunOk("trace-cmd dump")
 +
-+        # Check the ltrace log contains occurrences of libc malloc()
-+        cmd = "grep -Ec 'malloc\\([0-9]+\\)' ltrace.log"
-+        out, ret = self.emulator.run(cmd)
-+        self.assertEqual(ret, 0)
-+        self.assertGreater(int(out[0]), 0)
++        # Generate a text report of the trace.
++        self.assertRunOk("trace-cmd report > trace.txt")
++
++        # Check we have occurrences of "kmalloc:" in the trace report.
++        cmd = "grep -Fc kmalloc: trace.txt"
++        output, exit_code = self.emulator.run(cmd)
++        self.assertEquals(exit_code, 0)
++        self.assertTrue(int(output[0]) > 0)
+diff --git a/support/testing/tests/package/test_trace_cmd/linux-ftrace.fragment b/support/testing/tests/package/test_trace_cmd/linux-ftrace.fragment
+new file mode 100644
+index 0000000000..ef82146616
+--- /dev/null
++++ b/support/testing/tests/package/test_trace_cmd/linux-ftrace.fragment
+@@ -0,0 +1 @@
++CONFIG_FTRACE=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
