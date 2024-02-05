@@ -4,48 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C434CC4828D
-	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 14:56:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3DFBC4828D
+	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 14:57:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7BB674188C;
-	Mon,  5 Feb 2024 14:56:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7BB674188C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5DBE6417B7;
+	Mon,  5 Feb 2024 14:57:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5DBE6417B7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id viYsrfKZrXf1; Mon,  5 Feb 2024 14:56:37 +0000 (UTC)
+	with ESMTP id VjL8ivgch-f8; Mon,  5 Feb 2024 14:57:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AACC141B4B;
-	Mon,  5 Feb 2024 14:56:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AACC141B4B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 70FAA1BF2F0
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 14:56:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B6C9D4185D;
+	Mon,  5 Feb 2024 14:57:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B6C9D4185D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2860A1BF2F0
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 14:57:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 57CA060E6B
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 14:56:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 57CA060E6B
+ by smtp2.osuosl.org (Postfix) with ESMTP id E039040A49
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 14:57:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E039040A49
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nBMVHTmmXF6P for <buildroot@lists.busybox.net>;
- Mon,  5 Feb 2024 14:56:09 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 361D460F0C
- for <buildroot@buildroot.org>; Mon,  5 Feb 2024 14:56:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 361D460F0C
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2427F86CF3; Mon,  5 Feb 2024 14:56:09 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 5 Feb 2024 15:55:54 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c47da268be75a64fe264f4833538be7bae1320c7
-X-Git-Newrev: 8366622fc8eba8187240a0141147326e99a4f932
-X-Patchwork-Hint: ignore
-Message-Id: <20240205145609.2427F86CF3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi-inputstream-adaptive: bump
- version to 20.3.17-Nexus
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3YiBLVSrWPoy for <buildroot@lists.busybox.net>;
+ Mon,  5 Feb 2024 14:57:19 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7BC8040377
+ for <buildroot@buildroot.org>; Mon,  5 Feb 2024 14:57:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7BC8040377
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9800FE000D;
+ Mon,  5 Feb 2024 14:57:16 +0000 (UTC)
+Date: Mon, 5 Feb 2024 15:57:15 +0100
+To: Andreas Naumann <anaumann@ultratronik.de>
+Message-ID: <20240205155715.77215856@windsurf>
+In-Reply-To: <20240117130522.628211-1-anaumann@ultratronik.de>
+References: <20240117130522.628211-1-anaumann@ultratronik.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1707145036;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=7ang75BlHdGsl3tNIq+XslTBl69h6XMLApNqHpvh5h4=;
+ b=So/GkTuXrOIHobBTqvl+ZiwIJn1msH/XeqqUj5Oko5Ft4V8Nc4++LMGbsnbHfXEtWsn5JN
+ udb3+3KUgVzFZ2BYdxJOItF/uApqbiXvhSw3eR5ytQzsva1F7kqUEFtiGn2LJFvfsCsCMX
+ llAHX+5D0jKsR2Mp+K3f8uCTo3gisFWLT1CMiRpu5phCSkq3SPJsAak79t4pqPcPO48p+v
+ 7R+RO/s9bngTXhLFw+ETVaWIq5/gwcoDSYuhGNUb2xPQ6fL5K2bPDl3ibvBW1A+ZCTqYfo
+ By2GRCpLSUOFD2OHAVSKsdA/Ivknw4FFlG6Haujhtxg3A5ErFmlHxvU6Io40iw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=So/GkTuX
+Subject: Re: [Buildroot] [PATCH 1/1] package/libevdev: bump to version 1.13.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,46 +74,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8366622fc8eba8187240a0141147326e99a4f932
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, 17 Jan 2024 14:05:22 +0100
+Andreas Naumann <anaumann@ultratronik.de> wrote:
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash | 2 +-
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+> ---
+>  package/libevdev/libevdev.hash | 6 +++---
+>  package/libevdev/libevdev.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-index ebcf32fd4a..e38191c0c4 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  1d7c933d05534e591e11fd204e836a3498fffc6a0717d5427c89acfd16fb9d40  kodi-inputstream-adaptive-20.3.15-Nexus.tar.gz
-+sha256  f67cfef057f8842716db4521a8cd3966c37a1da8fc3fb297527f6f25be20688a  kodi-inputstream-adaptive-20.3.17-Nexus.tar.gz
- sha256  48632d57fbb6ab8f50cbf4deced5c91e733fa7ff292687c4816b77f28e483df9  LICENSE.md
- sha256  02f864f3e07456785625968022ce811c5640301bfd2ae70963efea89d306790a  LICENSES/README.md
- sha256  0b7f5dcb3d2c28ff78d999786028930e762df0baa2f52955782e378ec5b636a8  LICENSES/BSD-2-Clause-Views
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-index 267541ace9..ba4f6de61a 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_INPUTSTREAM_ADAPTIVE_VERSION = 20.3.15-Nexus
-+KODI_INPUTSTREAM_ADAPTIVE_VERSION = 20.3.17-Nexus
- KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE = \
- 	BSD-2-Clause-Views \
+Applied to master, thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
