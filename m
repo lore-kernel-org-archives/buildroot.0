@@ -4,53 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E9C2C48292
-	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 21:56:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42004C48292
+	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 22:04:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 176F541A88;
-	Mon,  5 Feb 2024 21:56:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 176F541A88
+	by smtp4.osuosl.org (Postfix) with ESMTP id DBBB641A84;
+	Mon,  5 Feb 2024 22:04:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DBBB641A84
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fH4wu1Y11m51; Mon,  5 Feb 2024 21:56:34 +0000 (UTC)
+	with ESMTP id YlLlcMkbDSc2; Mon,  5 Feb 2024 22:04:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 77FA8417DE;
-	Mon,  5 Feb 2024 21:56:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77FA8417DE
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C37741BF341
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 21:56:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 427D94191B;
+	Mon,  5 Feb 2024 22:04:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 427D94191B
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 567821BF319
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 22:04:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9E1CB81F98
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 21:56:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E1CB81F98
+ by smtp3.osuosl.org (Postfix) with ESMTP id 30EF960F10
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 22:04:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 30EF960F10
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YqQmD4HSZVXp for <buildroot@lists.busybox.net>;
- Mon,  5 Feb 2024 21:56:31 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E340C81F8B
- for <buildroot@buildroot.org>; Mon,  5 Feb 2024 21:56:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E340C81F8B
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5DD1E40002;
- Mon,  5 Feb 2024 21:56:29 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rDRAjVjS1Kit for <buildroot@lists.busybox.net>;
+ Mon,  5 Feb 2024 22:04:41 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7F7EE605A9
+ for <buildroot@buildroot.org>; Mon,  5 Feb 2024 22:04:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7F7EE605A9
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7C0BC1C0005;
+ Mon,  5 Feb 2024 22:04:38 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rX6x2-00DCh3-31;
- Mon, 05 Feb 2024 22:56:28 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rX74l-00DDVF-2J;
+ Mon, 05 Feb 2024 23:04:27 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Julien Olivain <ju.o@free.fr>
-References: <20240124222236.15954-1-ju.o@free.fr>
-Date: Mon, 05 Feb 2024 22:56:28 +0100
-In-Reply-To: <20240124222236.15954-1-ju.o@free.fr> (Julien Olivain's message
- of "Wed, 24 Jan 2024 23:22:36 +0100")
-Message-ID: <87bk8ua837.fsf@48ers.dk>
+References: <20240124222403.16360-1-ju.o@free.fr>
+Date: Mon, 05 Feb 2024 23:04:27 +0100
+In-Reply-To: <20240124222403.16360-1-ju.o@free.fr> (Julien Olivain's message
+ of "Wed, 24 Jan 2024 23:24:03 +0100")
+Message-ID: <877cjia7pw.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] support/testing: add ltrace runtime test
+Subject: Re: [Buildroot] [PATCH 1/1] support/testing: add trace-cmd runtime
+ test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,6 +72,18 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 >>>>> "Julien" == Julien Olivain <ju.o@free.fr> writes:
 
  > Signed-off-by: Julien Olivain <ju.o@free.fr>
+ > ---
+ > Patch tested on branch master at commit bc680b5 with commands:
+
+ >     make check-package
+ >     ...
+ >     0 warnings generated
+
+ >     support/testing/run-tests \
+ >         -d dl -o output_folder \
+ >         tests.package.test_trace_cmd
+ >     ...
+ >     OK
 
 Committed, thanks.
 
