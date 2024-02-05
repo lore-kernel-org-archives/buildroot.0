@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A59F7C4828D
-	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 22:18:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB569C4828D
+	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 22:18:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 525ED407D7;
-	Mon,  5 Feb 2024 22:18:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 525ED407D7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 64EEF41B79;
+	Mon,  5 Feb 2024 22:18:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64EEF41B79
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GfM-fyqeW54O; Mon,  5 Feb 2024 22:18:01 +0000 (UTC)
+	with ESMTP id 2dPMnR8Eakln; Mon,  5 Feb 2024 22:18:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 304A141A88;
-	Mon,  5 Feb 2024 22:18:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 304A141A88
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6340541A88;
+	Mon,  5 Feb 2024 22:18:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6340541A88
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 885EC1BF319
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 22:17:46 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BF2F11BF319
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 22:17:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6F08641A84
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 22:17:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F08641A84
+ by smtp4.osuosl.org (Postfix) with ESMTP id 94FC241A84
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 22:17:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 94FC241A84
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ro4xH4hbfBhD for <buildroot@lists.busybox.net>;
- Mon,  5 Feb 2024 22:17:45 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 501FB407D7
- for <buildroot@buildroot.org>; Mon,  5 Feb 2024 22:17:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 501FB407D7
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3AAD786E4A; Mon,  5 Feb 2024 22:17:45 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ with ESMTP id 25FMhsC9PqY5 for <buildroot@lists.busybox.net>;
+ Mon,  5 Feb 2024 22:17:48 +0000 (UTC)
+Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3F159407D7
+ for <buildroot@buildroot.org>; Mon,  5 Feb 2024 22:17:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F159407D7
+Received: from [10.11.2.50] (220.211-78-194.adsl-static.isp.belgacom.be
+ [194.78.211.220])
+ (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+ key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+ (No client certificate requested)
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id 337812C800D1
+ for <buildroot@buildroot.org>; Mon,  5 Feb 2024 23:17:46 +0100 (CET)
+Message-ID: <7e311fd3-0eac-4cff-a87e-da53f01abdf8@bubu1.eu>
+Date: Mon, 5 Feb 2024 23:17:38 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
 To: buildroot@buildroot.org
-Date: Mon, 5 Feb 2024 23:10:54 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 61295f5ced0749db34095bfbe8b34ed86a692828
-X-Git-Newrev: 7371cb294df4792147fcf1da51139aafb759784a
-X-Patchwork-Hint: ignore
-Message-Id: <20240205221745.3AAD786E4A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/watchdogd: bump to version 4.0
+References: <170717110256.12359.16509380444438086733-0@git.sr.ht>
+In-Reply-To: <170717110256.12359.16509380444438086733-0@git.sr.ht>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=bubu1.eu; s=bubu; 
+ t=1707171466; bh=7mHAAyodVnrFVdmAg4FN57PmPH+1IhEVP1fti2D8zpg=;
+ h=Date:Subject:To:References:From:In-Reply-To;
+ b=aT/fZVo36s+3CLITjzOsscfI0TLP4oOMjBoEFbzPj3KpzVNBAT2dlQT3s0qGWroma
+ 5oVcgPHIu5Kiin9d7oer4V0h630MKR1xrZzZ+HeR2DcuJQ4DqpOwLEhgnNWMSg08VG
+ eOkR6e55P2vumpf475CMqO83in/nAatBjmw0WS1XVNdGzNODBbmFcg8AqoNLV4wf1o
+ zqVFbodh7iE2989QesPXS94PghGZ987ySMCXEpbE+402oKmU8bNwTuaYI4nt9UpLPD
+ fphpVZiSzgqfNapnAerghJqG+3tERUMNIS+vpmO8AaBi2FTQ+4Qo/ANEJfnR31JNEk
+ k3gKh1MM76eRQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=bubu1.eu header.i=@bubu1.eu
+ header.a=rsa-sha256 header.s=bubu header.b=aT/fZVo3
+Subject: Re: [Buildroot] [PATCH buildroot] support/testing: add
+ python-uvloop runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,243 +75,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7371cb294df4792147fcf1da51139aafb759784a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Eventually I'll manage to sign-off my commits ...
 
-For details, see https://github.com/troglobit/watchdogd/releases/tag/4.0
+On 05.02.24 22:47, ~bubu wrote:
+> From: Marcus Hoffmann <buildroot@bubu1.eu>
 
- - Major feature upgrade, command line and .conf files compatible
- - LICENSE hash update due to update in copyright years
- - Enabling system monitor plugins have changed syntax upstream.  The
-   `--with-foo=SECONDS` is now just `--with-foo`
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 
-This last upstream change require converting affected Config.in options
-from int -> bool.  Legacy _WRAP:ers have been added to Config.legacy.in,
-modeled on BR2_TARGET_ROOTFS_EXT2_BLOCKS.
-
-Forcibly disable new monitors; they'll be enabled in a followup commit.
-
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
-[yann.morin.1998@free.fr:
-  - forcibly disable new monitors
-  - minor tweaks in Config.in.legacy
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- Config.in.legacy                 | 60 ++++++++++++++++++++++++++++++++++++++++
- package/watchdogd/Config.in      | 36 +++++++++++-------------
- package/watchdogd/watchdogd.hash |  4 +--
- package/watchdogd/watchdogd.mk   | 27 +++++++++++-------
- 4 files changed, 95 insertions(+), 32 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 82387338d9..9421d07aa1 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -202,6 +202,66 @@ config BR2_KERNEL_HEADERS_6_5
- 	  Version 6.5.x of the Linux kernel headers are no longer
- 	  maintained upstream and are now removed.
- 
-+config BR2_PACKAGE_WATCHDOGD_GENERIC_POLL
-+	int "watchdogd generic poll has been replaced"
-+	default 0
-+	help
-+	  The generic script poll interval has been replaced upstream
-+	  with a boolean on/off.  Your configuration has been migrated.
-+
-+	  Set this legacy option to 0 here to remove the warning.
-+
-+# Note: BR2_PACKAGE_WATCHDOGD_*_POLL_WRAP referenced in package/watchdogd/Config.in
-+config BR2_PACKAGE_WATCHDOGD_GENERIC_POLL_WRAP
-+	bool
-+	default y if BR2_PACKAGE_WATCHDOGD_GENERIC_POLL != 0
-+	select BR2_LEGACY
-+
-+config BR2_PACKAGE_WATCHDOGD_LOADAVG_POLL
-+	int "watchdogd loadavg poll has been replaced"
-+	default 0
-+	help
-+	  The CPU load average poll interval has been replaced upstream
-+	  with a boolean on/off.  Your configuration has been migrated.
-+
-+	  Set this legacy option to 0 here to remove the warning.
-+
-+# Note: BR2_PACKAGE_WATCHDOGD_*_POLL_WRAP referenced in package/watchdogd/Config.in
-+config BR2_PACKAGE_WATCHDOGD_LOADAVG_POLL_WRAP
-+	bool
-+	default y if BR2_PACKAGE_WATCHDOGD_LOADAVG_POLL != 0
-+	select BR2_LEGACY
-+
-+config BR2_PACKAGE_WATCHDOGD_FILENR_POLL
-+	int "watchdogd filenr poll has been replaced"
-+	default 0
-+	help
-+	  The file descriptor leak poll has been replaced upstream with
-+	  a boolean on/off.  Your configuration has been migrated.
-+
-+	  Set this legacy option to 0 here to remove the warning.
-+
-+# Note: BR2_PACKAGE_WATCHDOGD_*_POLL_WRAP referenced in package/watchdogd/Config.in
-+config BR2_PACKAGE_WATCHDOGD_FILENR_POLL_WRAP
-+	bool
-+	default y if BR2_PACKAGE_WATCHDOGD_FILENR_POLL != 0
-+	select BR2_LEGACY
-+
-+config BR2_PACKAGE_WATCHDOGD_MEMINFO_POLL
-+	int "watchdogd meminfo poll has been replaced"
-+	default 0
-+	help
-+	  The memleak detector poll interval has been replaced upstream
-+	  with a boolean on/off.  Your configuration has been migrated.
-+
-+	  Set this legacy option to 0 here to remove the warning.
-+
-+# Note: BR2_PACKAGE_WATCHDOGD_*_POLL_WRAP referenced in package/watchdogd/Config.in
-+config BR2_PACKAGE_WATCHDOGD_MEMINFO_POLL_WRAP
-+	bool
-+	default y if BR2_PACKAGE_WATCHDOGD_MEMINFO_POLL != 0
-+	select BR2_LEGACY
-+
- comment "Legacy options removed in 2023.11"
- 
- config BR2_PACKAGE_PYTHON_PYXB
-diff --git a/package/watchdogd/Config.in b/package/watchdogd/Config.in
-index ca5933848d..0b0480ea27 100644
---- a/package/watchdogd/Config.in
-+++ b/package/watchdogd/Config.in
-@@ -27,32 +27,28 @@ config BR2_PACKAGE_WATCHDOGD_TEST_SUITE
- 	  They can be used to verify correct operation of watchdogd and
- 	  the kernel watchdog driver.
- 
--config BR2_PACKAGE_WATCHDOGD_GENERIC_POLL
--	int "Generic script monitor poll interval (sec)"
--	default "300"
-+config BR2_PACKAGE_WATCHDOGD_GENERIC
-+	bool "Generic script monitor"
-+	default y if BR2_PACKAGE_WATCHDOGD_GENERIC_POLL_WRAP # legacy 2024.02
- 	help
--	  Poll interval for generic script monitor, in seconds.  A value
--	  of zero (0) disables the monitor.
-+	  Enable generic script monitor.
- 
--config BR2_PACKAGE_WATCHDOGD_LOADAVG_POLL
--	int "CPU load average monitor poll interval (sec)"
--	default "300"
-+config BR2_PACKAGE_WATCHDOGD_LOADAVG
-+	bool "CPU load average monitor"
-+	default y if BR2_PACKAGE_WATCHDOGD_LOADAVG_POLL_WRAP # legacy 2024.02
- 	help
--	  Poll interval for CPU load average monitor, in seconds.  A
--	  value of zero (0) disables the monitor.
-+	  Enable CPU load average monitor.
- 
--config BR2_PACKAGE_WATCHDOGD_FILENR_POLL
--	int "File descriptor leak monitor poll interval (sec)"
--	default "300"
-+config BR2_PACKAGE_WATCHDOGD_FILENR
-+	bool "File descriptor leak monitor"
-+	default y if BR2_PACKAGE_WATCHDOGD_FILENR_POLL_WRAP # legacy 2024.02
- 	help
--	  Poll interval for file descriptor leak monitor, in seconds.  A
--	  value of zero (0) disables the monitor.
-+	  Enable file descriptor leak monitor.
- 
--config BR2_PACKAGE_WATCHDOGD_MEMINFO_POLL
--	int "Memory leak monitor poll interval (sec)"
--	default "300"
-+config BR2_PACKAGE_WATCHDOGD_MEMINFO
-+	bool "Memory leak monitor"
-+	default y if BR2_PACKAGE_WATCHDOGD_MEMINFO_POLL_WRAP # legacy 2024.02
- 	help
--	  Poll interval for memory leak monitor, in seconds.  A value of
--	  zero (0) disables the monitor.
-+	  Enable memory leak monitor.
- 
- endif
-diff --git a/package/watchdogd/watchdogd.hash b/package/watchdogd/watchdogd.hash
-index 4ff1a3485b..0c228666bd 100644
---- a/package/watchdogd/watchdogd.hash
-+++ b/package/watchdogd/watchdogd.hash
-@@ -1,5 +1,5 @@
- # Upstream .sha256 from GitHub
--sha256  33ec4edc8cb4ada7a4d8324a27d897d33aae5e83257ed64d3d37508825c11237  watchdogd-3.5.tar.gz
-+sha256  7f38bc691353a51fc6feb2ccab60417c0284dd3f4d55c50d8b1781fda70d8101  watchdogd-4.0.tar.gz
- 
- # Locally calculated
--sha256  fd685e20931174308c45a26418a7ce34d66704c4e4b92ab1d8299deb255cd676  LICENSE
-+sha256  e233c56d807c74c67f2eff47ad03c216144cdd374d8d7578b996c28c260eadda  LICENSE
-diff --git a/package/watchdogd/watchdogd.mk b/package/watchdogd/watchdogd.mk
-index ea033b4e71..56816de94f 100644
---- a/package/watchdogd/watchdogd.mk
-+++ b/package/watchdogd/watchdogd.mk
-@@ -4,44 +4,51 @@
- #
- ################################################################################
- 
--WATCHDOGD_VERSION = 3.5
-+WATCHDOGD_VERSION = 4.0
- WATCHDOGD_SITE = https://github.com/troglobit/watchdogd/releases/download/$(WATCHDOGD_VERSION)
- WATCHDOGD_LICENSE = ISC
- WATCHDOGD_LICENSE_FILES = LICENSE
- WATCHDOGD_CPE_ID_VENDOR = troglobit
- WATCHDOGD_INSTALL_STAGING = YES
- WATCHDOGD_DEPENDENCIES = host-pkgconf libconfuse libite libuev
--WATCHDOGD_CONF_OPTS = --disable-compat --disable-examples --disable-test-mode
- WATCHDOGD_SELINUX_MODULES = watchdog
- 
-+WATCHDOGD_CONF_OPTS = \
-+	--disable-compat \
-+	--disable-examples \
-+	--disable-test-mode \
-+	--without-fsmon \
-+	--without-tempmon
-+
- ifneq ($(BR2_PACKAGE_WATCHDOGD_TEST_SUITE),y)
- WATCHDOGD_CONF_OPTS += --disable-builtin-tests
- else
- WATCHDOGD_CONF_OPTS += --enable-builtin-tests
- endif
- 
--ifeq ($(BR2_PACKAGE_WATCHDOGD_GENERIC_POLL),0)
-+ifneq ($(BR2_PACKAGE_WATCHDOGD_GENERIC),y)
- WATCHDOGD_CONF_OPTS += --without-generic
- else
--WATCHDOGD_CONF_OPTS += --with-generic=$(BR2_PACKAGE_WATCHDOGD_GENERIC_POLL)
-+WATCHDOGD_CONF_OPTS += --with-generic
- endif
- 
--ifeq ($(BR2_PACKAGE_WATCHDOGD_LOADAVG_POLL),0)
-+ifneq ($(BR2_PACKAGE_WATCHDOGD_LOADAVG),y)
- WATCHDOGD_CONF_OPTS += --without-loadavg
- else
--WATCHDOGD_CONF_OPTS += --with-loadavg=$(BR2_PACKAGE_WATCHDOGD_LOADAVG_POLL)
-+WATCHDOGD_CONF_OPTS += --with-loadavg
- endif
- 
--ifeq ($(BR2_PACKAGE_WATCHDOGD_FILENR_POLL),0)
-+ifneq ($(BR2_PACKAGE_WATCHDOGD_FILENR),y)
- WATCHDOGD_CONF_OPTS += --without-filenr
- else
--WATCHDOGD_CONF_OPTS += --with-filenr=$(BR2_PACKAGE_WATCHDOGD_FILENR_POLL)
-+WATCHDOGD_CONF_OPTS += --with-filenr
- endif
- 
--ifeq ($(BR2_PACKAGE_WATCHDOGD_MEMINFO_POLL),0)
-+ifneq ($(BR2_PACKAGE_WATCHDOGD_MEMINFO),y)
- WATCHDOGD_CONF_OPTS += --without-meminfo
- else
--WATCHDOGD_CONF_OPTS += --with-meminfo=$(BR2_PACKAGE_WATCHDOGD_MEMINFO_POLL)
-+WATCHDOGD_CONF_OPTS += --with-meminfo
-+endif
- endif
- 
- define WATCHDOGD_INSTALL_INIT_SYSV
+> 
+> ---
+>   .../tests/package/sample_python_uvloop.py     |  6 +++++
+>   .../tests/package/test_python_uvloop.py       | 22 +++++++++++++++++++
+>   2 files changed, 28 insertions(+)
+>   create mode 100644 support/testing/tests/package/sample_python_uvloop.py
+>   create mode 100644 support/testing/tests/package/test_python_uvloop.py
+> 
+> diff --git a/support/testing/tests/package/sample_python_uvloop.py b/support/testing/tests/package/sample_python_uvloop.py
+> new file mode 100644
+> index 0000000000..dc85d3e04e
+> --- /dev/null
+> +++ b/support/testing/tests/package/sample_python_uvloop.py
+> @@ -0,0 +1,6 @@
+> +import uvloop
+> +
+> +async def main():
+> +    print("Hello world!")
+> +
+> +uvloop.run(main())
+> diff --git a/support/testing/tests/package/test_python_uvloop.py b/support/testing/tests/package/test_python_uvloop.py
+> new file mode 100644
+> index 0000000000..c5079ba59c
+> --- /dev/null
+> +++ b/support/testing/tests/package/test_python_uvloop.py
+> @@ -0,0 +1,22 @@
+> +import os
+> +
+> +from tests.package.test_python import TestPythonPackageBase
+> +
+> +
+> +class TestPythonPy3Uvloop(TestPythonPackageBase):
+> +    __test__ = True
+> +    config = TestPythonPackageBase.config + \
+> +        """
+> +        BR2_PACKAGE_PYTHON3=y
+> +        BR2_PACKAGE_PYTHON_UVLOOP=y
+> +        """
+> +    sample_scripts = ["tests/package/sample_python_uvloop.py"]
+> +
+> +    def test_run(self):
+> +        self.login()
+> +        self.check_sample_scripts_exist()
+> +
+> +        cmd = "%s %s" % (self.interpreter, os.path.basename(self.sample_scripts[0]))
+> +        output, exit_code = self.emulator.run(cmd)
+> +        self.assertEqual(exit_code, 0)
+> +        self.assertEqual(output[0], "Hello world!")
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
