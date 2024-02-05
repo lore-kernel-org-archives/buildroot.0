@@ -4,90 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5DC0C4828D
-	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 13:21:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F449C4828D
+	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 13:22:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7DCA060E43;
-	Mon,  5 Feb 2024 13:21:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7DCA060E43
+	by smtp3.osuosl.org (Postfix) with ESMTP id EA3BD60F31;
+	Mon,  5 Feb 2024 13:22:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA3BD60F31
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Zz4rar4cRWaI; Mon,  5 Feb 2024 13:21:41 +0000 (UTC)
+	with ESMTP id FKzQWPeoXwWL; Mon,  5 Feb 2024 13:22:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BF0DB60EF8;
-	Mon,  5 Feb 2024 13:21:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BF0DB60EF8
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E8BA41BF40D
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 13:21:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 421D860EF8;
+	Mon,  5 Feb 2024 13:22:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 421D860EF8
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4FB071BF40D
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 13:22:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C0F5141767
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 13:21:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C0F5141767
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2880860E50
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 13:22:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2880860E50
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id E37nC7cL78b0 for <buildroot@lists.busybox.net>;
- Mon,  5 Feb 2024 13:21:37 +0000 (UTC)
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9D84741734
- for <buildroot@buildroot.org>; Mon,  5 Feb 2024 13:21:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D84741734
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-40fb804e330so40183695e9.0
- for <buildroot@buildroot.org>; Mon, 05 Feb 2024 05:21:37 -0800 (PST)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CowX-Y4NDHBQ for <buildroot@lists.busybox.net>;
+ Mon,  5 Feb 2024 13:22:05 +0000 (UTC)
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EBE5560EF8
+ for <buildroot@buildroot.org>; Mon,  5 Feb 2024 13:22:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EBE5560EF8
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-40fc6343bd2so27027495e9.1
+ for <buildroot@buildroot.org>; Mon, 05 Feb 2024 05:22:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707139295; x=1707744095;
+ d=1e100.net; s=20230601; t=1707139323; x=1707744123;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=Gdnt3qUiMixdoH/A9u/sK1PLUtS8PGH2mEn4DxWVWt8=;
- b=G1km3cksNb1uHVtPO2l9CnByzl14CA1Oc5+69OqxeLxsp0iWsEfEu4g/IDFdFuCqph
- HoSLNpfiENmSqDUVxzaJCSF7KgbOwZ8KLHNwZJTUZEvB6iOLwUYuJNDpRB6tfNX+eAnw
- Ks/SeYHp17cFvGpmCFykgEhziJZTbbj7bNeANRjYSz8SpMuCX9Wy4CGLP3Xq/Xj4Bm2R
- mLVnfRF4fjWgUoNkxqqs95CZOcZrTkxdTfLad62OOeJ7EpcK31DO7CAtw4LX85vEltu4
- SpPkAecdE+HCTet9+XV+EkVQpvADU159OC/eQw1+a0lQh5wKnQIPRySKd7gg3zbAlUL6
- OcCA==
-X-Gm-Message-State: AOJu0YzfAPKEtEtU3HdCDeQQjGbU89HOTOfCU3bxNrbsjOEhKmQSRL2A
- 3XmJu/CivGXaTpInL0Aet5c+fsj/PgDWHlvG/Oybsb30XrKF6qdYXM3zBOIZ8XM=
-X-Google-Smtp-Source: AGHT+IHJEhgCgGNqQ2rSrc0NqwUwbApWqBhdTvSTPMesn7VqEekxwhVJs8oMzb95fPZjWBdTNM4K5Q==
-X-Received: by 2002:adf:cf11:0:b0:33b:150a:858 with SMTP id
- o17-20020adfcf11000000b0033b150a0858mr9756599wrj.5.1707139295572; 
- Mon, 05 Feb 2024 05:21:35 -0800 (PST)
+ bh=uE2cUsotrmLthQg537KqBVZRTUvpJr4M3HByx7h6xr8=;
+ b=jWaDtX76GP79aRVHmwHPGNSnLzQeNztKKBxzxgy+Mbp/jZQcGmCXJhv1dB5sJ+fh4i
+ vmacERYoaPs1ZZ7KaN0ainqMq9bkfEZebJCrq8L8p/x4WY2Xl83t2YVUUBIhmPrnMI6y
+ QKLgut/vqnVvKBNPFyX3OsoRdine5ID7CbKINoXQMPhTmJrwDBDDbxenMYak97bFY4Hk
+ T2SJgMZEqyhfw5Y7u6lGdOjNq5f1xVy2xqCAZ//wh1/XOgyXVVbRSkJKIZH+2ZhbzbpD
+ MZTZcgMFp17XMrZ0Kz/vfkiHf2MBkT7atHhO+VzwNlWcwdSF3iHs61hDwDQYVmWv+Yba
+ zpYw==
 X-Forwarded-Encrypted: i=0;
- AJvYcCUL/F6AnQpIzL9e34uppDmfS0jfyYVbO7/2LLvL9nEDr4j8dRb26rNvTyTFIoZhjtYzb3Or+7vrZIcyzSMxk2nE/pGQi00AKQ==
+ AJvYcCVzyhG94hioHBVq48BwFKBSNPfrwPjie5L6K8niXRFNCk8C1jKP3OyQZdeHFeiNCfsBH1O8VR2UitL8uNEpChWmoSw6Hf0JaA==
+X-Gm-Message-State: AOJu0Yx32hlgyD1RiaOkzhJd5HF++3A7eDA6JhZUDITbYpxf7jYC6WJx
+ HVExjjbTSxLuAMm9qxOk6pNScS03yXGpAeTuW/hZ8Mog2NgNTli1vUnN0JBhqus=
+X-Google-Smtp-Source: AGHT+IG9sA9wWQRZ9N8B5NwP5ofZ4RzFowENvWkqeIUUbPUG3j3U7XpPaIuuxq/14GE3EnuMi4WF0Q==
+X-Received: by 2002:a5d:6a07:0:b0:33b:318f:cb0f with SMTP id
+ m7-20020a5d6a07000000b0033b318fcb0fmr3912132wru.59.1707139322743; 
+ Mon, 05 Feb 2024 05:22:02 -0800 (PST)
+X-Forwarded-Encrypted: i=0;
+ AJvYcCUF9EZUdjk+IVnoE26QFYBQMTNMRe4hZNaghhHc1vvCABS4864v6rkfbT1E3ZU4X/z+zIXTKkeWqZlXXd93xnxMWPal00xWOQ==
 Received: from [192.168.16.188] ([85.119.216.19])
  by smtp.gmail.com with ESMTPSA id
- p4-20020a5d4e04000000b0033b3ceda5dbsm2282272wrt.44.2024.02.05.05.21.34
+ p4-20020a5d4e04000000b0033b3ceda5dbsm2282272wrt.44.2024.02.05.05.22.02
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 05 Feb 2024 05:21:35 -0800 (PST)
-Message-ID: <d4473b58-387f-469d-93e2-dc000257de97@mind.be>
-Date: Mon, 5 Feb 2024 14:21:33 +0100
+ Mon, 05 Feb 2024 05:22:02 -0800 (PST)
+Message-ID: <b62faa8a-f87e-4941-a884-f764d0e01939@mind.be>
+Date: Mon, 5 Feb 2024 14:22:01 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Content-Language: en-GB
 To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
-References: <20240108070310.3462577-1-james.hilliard1@gmail.com>
-In-Reply-To: <20240108070310.3462577-1-james.hilliard1@gmail.com>
+References: <20240107203517.3310719-1-james.hilliard1@gmail.com>
+In-Reply-To: <20240107203517.3310719-1-james.hilliard1@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1707139295; x=1707744095; darn=buildroot.org;
+ d=mind.be; s=google; t=1707139323; x=1707744123; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=Gdnt3qUiMixdoH/A9u/sK1PLUtS8PGH2mEn4DxWVWt8=;
- b=Igo0eM9eC35xpg7F6K6AqRpmc0uBjwG3xLHGSZSiCBLAWcy3dQq+/nSsIdgsK+5AqB
- pCC5pQMOdgdW6tKFbk+v4KHjPIXI8q7ChWnTCBsMkbB62TFK25riYQE3ZLKEScqw4Q3R
- rc9I8f1nzxDTshPC01yKEIsjogb0nSenjxQp8NeHHgMkAOH/XLx0+te8vqKnC6SbzDsR
- TOr90Czgz3sLRhjvZ7Ypol6gQox4vVbX6H1oehW8ild2N9XP6QJkFr4rHHTj4XS15MKW
- 80/dHMMDBkteszRYZybbWG1eaK36xl28kc8zqOJILriT6haPQDx0koif0zh2LFwJm2r2
- 3KRw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=uE2cUsotrmLthQg537KqBVZRTUvpJr4M3HByx7h6xr8=;
+ b=fzoSpYZhCvujuaLHLeAwbzoinlmojzc0TZ+bNH4bg3LSLU8nmmtWpvd9ckazPwAU0d
+ 32hQGDyhR8GWXhPTTDXyJh7sml9euH/VexLTYt7jDKZ/3dVgjR9YibcjbwrCop+2v0ck
+ OZ2wYT+hYZ4k5bbTLJmHL+1V5HBnOV2Z8C0kVxJWbxLN8K1Dj/QL3Es8qyDbmxT9JMIH
+ VCl1L03416Q4TGXxDyW+NOyr3/LCftF15/RhBSf5OcSxMZEwAXBO8LH2fWblnrBWkvPx
+ us4GL9WzfC34zqgQYoCG2gM+fCalKAAYH2eE1Mx2RnGsLKV61HmT+7o4aQcZkGv02YwZ
+ Oedw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Igo0eM9e
-Subject: Re: [Buildroot] [PATCH 1/2] package/python-hatch-fancy-pypi-readme:
- bump to version 24.1.0
+ header.a=rsa-sha256 header.s=google header.b=fzoSpYZh
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-aioconsole: bump to
+ version 0.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -109,7 +111,7 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 08/01/2024 08:03, James Hilliard wrote:
+On 07/01/2024 21:35, James Hilliard wrote:
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
   Applied to master, thanks.
@@ -118,39 +120,38 @@ On 08/01/2024 08:03, James Hilliard wrote:
   Arnout
 
 > ---
->   .../python-hatch-fancy-pypi-readme.hash                     | 6 +++---
->   .../python-hatch-fancy-pypi-readme.mk                       | 4 ++--
->   2 files changed, 5 insertions(+), 5 deletions(-)
+>   package/python-aioconsole/python-aioconsole.hash | 4 ++--
+>   package/python-aioconsole/python-aioconsole.mk   | 4 ++--
+>   2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/python-hatch-fancy-pypi-readme/python-hatch-fancy-pypi-readme.hash b/package/python-hatch-fancy-pypi-readme/python-hatch-fancy-pypi-readme.hash
-> index d9fdb88e1f..e3a6363eb7 100644
-> --- a/package/python-hatch-fancy-pypi-readme/python-hatch-fancy-pypi-readme.hash
-> +++ b/package/python-hatch-fancy-pypi-readme/python-hatch-fancy-pypi-readme.hash
+> diff --git a/package/python-aioconsole/python-aioconsole.hash b/package/python-aioconsole/python-aioconsole.hash
+> index b8237ed76c..b52140cca5 100644
+> --- a/package/python-aioconsole/python-aioconsole.hash
+> +++ b/package/python-aioconsole/python-aioconsole.hash
 > @@ -1,5 +1,5 @@
-> -# md5, sha256 from https://pypi.org/pypi/hatch_fancy_pypi_readme/json
-> -md5  8755cce1a4a4d5e5d84992089801acbf  hatch_fancy_pypi_readme-23.1.0.tar.gz
-> -sha256  b1df44063094af1e8248ceacd47a92c9cf313d6b9823bf66af8a927c3960287d  hatch_fancy_pypi_readme-23.1.0.tar.gz
-> +# md5, sha256 from https://pypi.org/pypi/hatch-fancy-pypi-readme/json
-> +md5  f5f9e639f066c91f8e623ec6231beae9  hatch_fancy_pypi_readme-24.1.0.tar.gz
-> +sha256  44dd239f1a779b9dcf8ebc9401a611fd7f7e3e14578dcf22c265dfaf7c1514b8  hatch_fancy_pypi_readme-24.1.0.tar.gz
+>   # md5, sha256 from https://pypi.org/pypi/aioconsole/json
+> -md5  0f7e4db85113d1ffdc5f0fa1dc0a37de  aioconsole-0.6.2.tar.gz
+> -sha256  bac11286f1062613d2523ceee1ba81c676cd269812b865b66b907448a7b5f63e  aioconsole-0.6.2.tar.gz
+> +md5  e8cb2e4dc434e20a3e75acb54d89bdf3  aioconsole-0.7.0.tar.gz
+> +sha256  c702d24406378d37d9873f91e03ce71520bac503d5ab03f81d8b563ff010bd54  aioconsole-0.7.0.tar.gz
 >   # Locally computed sha256 checksums
->   sha256  e69ea57f96e599e617f61af3e85bf326b87e833994709fb5e5908a81197730a2  LICENSE.txt
-> diff --git a/package/python-hatch-fancy-pypi-readme/python-hatch-fancy-pypi-readme.mk b/package/python-hatch-fancy-pypi-readme/python-hatch-fancy-pypi-readme.mk
-> index 6195a30436..2a26892388 100644
-> --- a/package/python-hatch-fancy-pypi-readme/python-hatch-fancy-pypi-readme.mk
-> +++ b/package/python-hatch-fancy-pypi-readme/python-hatch-fancy-pypi-readme.mk
+>   sha256  e1c0ad728983d8a57335e52cf1064f1affd1d454173d8cebd3ed8b4a72b48704  LICENSE
+> diff --git a/package/python-aioconsole/python-aioconsole.mk b/package/python-aioconsole/python-aioconsole.mk
+> index 602564c290..b109d8e358 100644
+> --- a/package/python-aioconsole/python-aioconsole.mk
+> +++ b/package/python-aioconsole/python-aioconsole.mk
 > @@ -4,9 +4,9 @@
 >   #
 >   ################################################################################
 >   
-> -PYTHON_HATCH_FANCY_PYPI_README_VERSION = 23.1.0
-> +PYTHON_HATCH_FANCY_PYPI_README_VERSION = 24.1.0
->   PYTHON_HATCH_FANCY_PYPI_README_SOURCE = hatch_fancy_pypi_readme-$(PYTHON_HATCH_FANCY_PYPI_README_VERSION).tar.gz
-> -PYTHON_HATCH_FANCY_PYPI_README_SITE = https://files.pythonhosted.org/packages/85/a6/58d585eba4321bf2e7a4d1ed2af141c99d88c1afa4b751926be160f09325
-> +PYTHON_HATCH_FANCY_PYPI_README_SITE = https://files.pythonhosted.org/packages/b4/c2/c9094283a07dd96c5a8f7a5f1910259d40d2e29223b95dd875a6ca13b58f
->   PYTHON_HATCH_FANCY_PYPI_README_LICENSE = MIT
->   PYTHON_HATCH_FANCY_PYPI_README_LICENSE_FILES = LICENSE.txt
->   PYTHON_HATCH_FANCY_PYPI_README_SETUP_TYPE = pep517
+> -PYTHON_AIOCONSOLE_VERSION = 0.6.2
+> +PYTHON_AIOCONSOLE_VERSION = 0.7.0
+>   PYTHON_AIOCONSOLE_SOURCE = aioconsole-$(PYTHON_AIOCONSOLE_VERSION).tar.gz
+> -PYTHON_AIOCONSOLE_SITE = https://files.pythonhosted.org/packages/5f/14/e5c634fad6a95ffd602fbbd1aa107f05a8ffb79d33ec0d0477f3b137f8a9
+> +PYTHON_AIOCONSOLE_SITE = https://files.pythonhosted.org/packages/85/da/6a238a72274fa338b2ff20007f026944a6721245fa65d3bd4adeb83be419
+>   PYTHON_AIOCONSOLE_SETUP_TYPE = setuptools
+>   PYTHON_AIOCONSOLE_LICENSE = GPL-3.0
+>   PYTHON_AIOCONSOLE_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
