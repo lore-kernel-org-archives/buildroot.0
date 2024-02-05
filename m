@@ -4,68 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3ED0C48295
-	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 15:16:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C23CC48295
+	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 15:27:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6A5CF41A84;
-	Mon,  5 Feb 2024 15:16:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A5CF41A84
+	by smtp4.osuosl.org (Postfix) with ESMTP id B80B94010B;
+	Mon,  5 Feb 2024 15:27:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B80B94010B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id n7FVedJxM_D0; Mon,  5 Feb 2024 15:16:26 +0000 (UTC)
+	with ESMTP id HtbUVNI_Ms3A; Mon,  5 Feb 2024 15:27:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C61384149F;
-	Mon,  5 Feb 2024 15:16:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C61384149F
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8C3271BF215
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 15:16:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B9168415E9;
+	Mon,  5 Feb 2024 15:27:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B9168415E9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4BAA71BF2F6
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 15:27:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6572860EF8
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 15:16:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6572860EF8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 30A38400D9
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 15:27:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 30A38400D9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id otsaF5BUPsPZ for <buildroot@lists.busybox.net>;
- Mon,  5 Feb 2024 15:16:23 +0000 (UTC)
-Received: from smtpdh16-1.aruba.it (smtpdh16-1.aruba.it [62.149.155.100])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CFF1860EEE
- for <buildroot@buildroot.org>; Mon,  5 Feb 2024 15:16:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFF1860EEE
-Received: from [192.168.50.221] ([84.33.84.190])
- by Aruba Outgoing Smtp  with ESMTPSA
- id X0hnr0Cq9l81fX0hnrUjCW; Mon, 05 Feb 2024 16:16:20 +0100
-Message-ID: <0f0ddd79-6aee-4fa7-8b60-dce12339e94b@benettiengineering.com>
-Date: Mon, 5 Feb 2024 16:16:19 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- buildroot@buildroot.org
-References: <20231123134052.239690-1-dario.binacchi@amarulasolutions.com>
- <20231123134052.239690-2-dario.binacchi@amarulasolutions.com>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20231123134052.239690-2-dario.binacchi@amarulasolutions.com>
-X-CMAE-Envelope: MS4xfK//f8GHZq+K8ILP2yzqocxm2YnbKjAVNkEnQY+nGnCNC3ZTMGNETjqpOIbKpTBw2MOY05LxRU7ytHkQf0K4ZPJKnrZeR1awyPukmyhgSyHV6wUcoDwq
- xwZvQJSCmyeeD0w9OAsvhtW6DOJKU7OUeMq+xxVMRE2edKgSVuOQfZDPHqpPDZAoDm7fXk51tgnHAGQ2YdyKoB3bqo9nNVSE9wxNv4zk2ySanb9LYGg+LTfm
- sdcv7pQZF1O08Dk0xWHkM1kktOaBUplxxlYtIncas0Liirwd4HPXHyQxJ1kQnloZSPlTXdv688MNbxQs+TR0ZUyqQryrdyWzFlqii/3xHr8=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1707146180; bh=eqHOcob64Dg7qTJbjH9u6ygcw4uPXAefng7z9vyeYtY=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=U3veP/QHuFMCEFs+vRI2/n3kMh+xw3y8NehUdC5r4b+5oCWGou2wMcsR+rja3oYzk
- TeILJrGMImVgcVbLFxWju0rElcbMtPSIIXcMVS+uaAJ2W/D3WRjPaecT4frczS6INO
- rvHpLam6pdbPpOU/ZX0extY9FHJ4gOOimQUsozc81heUDBhch0HLlfOgfVGX4+L+ci
- QgBkBklpR6ZrAUg+GcM0kvcAyf+y8QQxw+EzK9CgNNNH2rdnZFRXyjY0yP+ljQJo5r
- +OZMogmzFDstFzUd7RSzcLo2h1jUCu9GFp9LNn5/XAzvKF5mMgzU5vK/D2fxhUI83c
- Zu2l3sOTucO7w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=U3veP/QH
-Subject: Re: [Buildroot] [PATCH 2/2] configs/ti_am62x_sk_defconfig: drop
- redundant defconfig choice
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kVQQV0vroAVb for <buildroot@lists.busybox.net>;
+ Mon,  5 Feb 2024 15:27:43 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id C768540022
+ for <buildroot@buildroot.org>; Mon,  5 Feb 2024 15:27:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C768540022
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B295586D2E; Mon,  5 Feb 2024 15:27:43 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 5 Feb 2024 16:26:31 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8fb52098859fa5cf7ecf4db30ff8e0276687832f
+X-Git-Newrev: d5524c00656c314626862e54b2cd38865486cf55
+X-Patchwork-Hint: ignore
+Message-Id: <20240205152743.B295586D2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libtracefs: needs threads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,44 +55,105 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Xuanhao Shi <X15000177@gmail.com>, Anand Gadiyar <gadiyar@ti.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Dario,
+commit: https://git.buildroot.net/buildroot/commit/?id=d5524c00656c314626862e54b2cd38865486cf55
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 23/11/23 14:40, Dario Binacchi wrote:
-> The defconfig choice is the default one, so it is redundant and can be
-> removed without effect.
-> 
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> ---
->   configs/ti_am62x_sk_defconfig | 1 -
->   1 file changed, 1 deletion(-)
-> 
-> diff --git a/configs/ti_am62x_sk_defconfig b/configs/ti_am62x_sk_defconfig
-> index 6610e6fcf890..130d092e304f 100644
-> --- a/configs/ti_am62x_sk_defconfig
-> +++ b/configs/ti_am62x_sk_defconfig
-> @@ -24,7 +24,6 @@ BR2_TARGET_OPTEE_OS=y
->   BR2_TARGET_OPTEE_OS_PLATFORM="k3"
->   BR2_TARGET_TI_K3_IMAGE_GEN=y
->   BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62X=y
-> -BR2_TARGET_TI_K3_IMAGE_GEN_SECTYPE_GP=y
+libtracefs needs threads resulting in the following build failure since
+its addition in commit b1dbd3f679e6660325472e3fdca72127d74e6929:
 
+In file included from /home/autobuild/autobuild/instance-2/output-1/host/xtensa-buildroot-linux-uclibc/sysroot/usr/include/stdio.h:27,
+                 from ../src/tracefs-instance.c:10:
+/home/autobuild/autobuild/instance-2/output-1/host/xtensa-buildroot-linux-uclibc/sysroot/usr/include/features.h:218:5: warning: #warning requested reentrant code, but thread support was disabled [-Wcpp]
+  218 | #   warning requested reentrant code, but thread support was disabled
+      |     ^~~~~~~
+../src/tracefs-instance.c:20:10: fatal error: pthread.h: No such file or directory
+   20 | #include <pthread.h>
+      |          ^~~~~~~~~~~
+
+Fixes:
+ - http://autobuild.buildroot.org/results/e0a8dd0781a1d1824a4cb78f47dcff4055083959
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libtracefs/Config.in  | 5 +++--
+ package/linux-tools/Config.in | 5 +++--
+ package/trace-cmd/Config.in   | 6 ++++--
+ 3 files changed, 10 insertions(+), 6 deletions(-)
 
-Best regards
--- 
-Giulio Benetti
-CEO&CTO@Benetti Engineering sas
-
->   BR2_TARGET_TI_K3_R5_LOADER=y
->   BR2_TARGET_TI_K3_R5_LOADER_BOARD_DEFCONFIG="am62x_evm_r5"
->   BR2_TARGET_UBOOT=y
-
+diff --git a/package/libtracefs/Config.in b/package/libtracefs/Config.in
+index bb0777b16c..a46bbe0bb1 100644
+--- a/package/libtracefs/Config.in
++++ b/package/libtracefs/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBTRACEFS
+ 	bool "libtracefs"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS # libtraceevent
+ 	select BR2_PACKAGE_LIBTRACEEVENT
+ 	help
+@@ -8,5 +9,5 @@ config BR2_PACKAGE_LIBTRACEFS
+ 
+ 	  https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/
+ 
+-comment "libtracefs needs a toolchain w/ dynamic library"
+-	depends on BR2_STATIC_LIBS
++comment "libtracefs needs a toolchain w/ threads, dynamic library"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
+index ce744663f1..fb158f84d4 100644
+--- a/package/linux-tools/Config.in
++++ b/package/linux-tools/Config.in
+@@ -104,6 +104,7 @@ endif
+ 
+ config BR2_PACKAGE_LINUX_TOOLS_RTLA
+ 	bool "rtla"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libtracefs
+ 	depends on !BR2_STATIC_LIBS # libtracefs
+ 	select BR2_PACKAGE_LINUX_TOOLS
+ 	select BR2_PACKAGE_LIBTRACEFS
+@@ -124,8 +125,8 @@ config BR2_PACKAGE_LINUX_TOOLS_RTLA
+ 	  not available in Buildroot, so only rtla in kernels 5.19
+ 	  onwards is actually supported in Buildroot.
+ 
+-comment "rtla needs a toolchain w/ dynamic library"
+-	depends on BR2_STATIC_LIBS
++comment "rtla needs a toolchain w/ threads, dynamic library"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+ 
+ config BR2_PACKAGE_LINUX_TOOLS_SELFTESTS
+ 	bool"selftests"
+diff --git a/package/trace-cmd/Config.in b/package/trace-cmd/Config.in
+index 00b9ebbd9a..c47b1f57ca 100644
+--- a/package/trace-cmd/Config.in
++++ b/package/trace-cmd/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_TRACE_CMD
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on !BR2_STATIC_LIBS # dlopen()
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libtracefs
+ 	select BR2_PACKAGE_LIBTRACEEVENT
+ 	select BR2_PACKAGE_LIBTRACEFS
+ 	help
+@@ -16,6 +17,7 @@ config BR2_PACKAGE_TRACE_CMD
+ 
+ 	  http://git.kernel.org/cgit/linux/kernel/git/rostedt/trace-cmd.git
+ 
+-comment "trace-cmd needs a toolchain w/ NPTL, dynamic library"
++comment "trace-cmd needs a toolchain w/ threads, NPTL, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
