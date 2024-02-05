@@ -1,93 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0990C4828F
-	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 00:03:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDD31C4828D
+	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 07:03:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 16AED402F2;
-	Mon,  5 Feb 2024 00:03:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 16AED402F2
+	by smtp1.osuosl.org (Postfix) with ESMTP id 06B9382292;
+	Mon,  5 Feb 2024 07:03:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 06B9382292
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wtf30fh3APeE; Mon,  5 Feb 2024 00:03:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id h_WlQ6EfbFIf; Mon,  5 Feb 2024 07:03:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 25A2B405B7;
-	Mon,  5 Feb 2024 00:03:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 25A2B405B7
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DFE1C1BF376
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 00:03:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 45BD78229C;
+	Mon,  5 Feb 2024 07:03:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 45BD78229C
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 683C61BF3FF
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 07:03:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B8AC2605EA
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 00:03:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B8AC2605EA
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4597F8229C
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 07:03:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4597F8229C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RDa7MBPVcx-3 for <buildroot@lists.busybox.net>;
- Mon,  5 Feb 2024 00:03:41 +0000 (UTC)
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E8D6D605AE
- for <buildroot@buildroot.org>; Mon,  5 Feb 2024 00:03:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E8D6D605AE
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-40fc654a718so21261865e9.2
- for <buildroot@buildroot.org>; Sun, 04 Feb 2024 16:03:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707091419; x=1707696219;
- h=in-reply-to:content-disposition:mime-version:references:reply-to
- :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=SKFKX7WmQs46Yf1IteJ6pRhOq3PRGNHVtAhGD3wkxP4=;
- b=nZdwt2tdUmgpMoBJNQ8u9SSvKUfNVE5dtm7/zOT0pu6oFXf31W/vJSUp3BD/cr+ZTB
- gqreMqgewaC1TEpGFrWM/apZRthh7FEKKIdD6OWe6v5+GbrXcbXC0CK4g02b6BI+GJzq
- QL1OfyU4vFjGcqqokyOFsYNj1Lct8RwNGpSevPJ8Ao3TydfedyvL4H9ZbG35VGYqWN7K
- pojGBxnrbC/NNzt8wOU1cbnjGzj+ZfQ3unvjdyLqp+OEbvVDqARW7ADf4W2wtfgPS5yt
- x/zvnMKVkreNrwKVWlGT/rPETOxMyhpoBjgXi78miqcl8TbUaTNAF5oZpj2nq/Gz6tLS
- z5Kg==
-X-Gm-Message-State: AOJu0YwSz3IifGpL8Z0u+CzUH4vOet1S41t3NAH+4DouyveSowkH+wUY
- rFyn5UZPCFNLcJZhVw0I2dy0YcjoAyXQ+zIwCMkvDwnZJjgwgdDK
-X-Google-Smtp-Source: AGHT+IHBBqC6CSiTwS/kLbYLVglQ4siNE0IZfrI0oVrVjuRIkohwPAdDkCpETWngD2BgVfpc18cXfQ==
-X-Received: by 2002:a05:600c:468d:b0:40f:dc51:1882 with SMTP id
- p13-20020a05600c468d00b0040fdc511882mr333631wmo.8.1707091418658; 
- Sun, 04 Feb 2024 16:03:38 -0800 (PST)
-X-Forwarded-Encrypted: i=0;
- AJvYcCW11qxeuhHJwd/V5uvpV6Z1JneYVnQ/xPI+ZRMz47Kvx2B2TdTvTA07Syk8pcCikDK9CyuZ79zaucvjXIf8uHnEoK6fy4kBT1m8QwQ6bNsghRDiOYUn
-Received: from pevik (gw1.ms-free.net. [185.243.124.10])
- by smtp.gmail.com with ESMTPSA id
- v10-20020a05600c470a00b0040fc5ccf3easm6930951wmo.38.2024.02.04.16.03.37
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 04 Feb 2024 16:03:37 -0800 (PST)
-Date: Mon, 5 Feb 2024 01:03:37 +0100
-From: Petr Vorel <petr.vorel@gmail.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20240205000337.GA166229@pevik>
-References: <20240204102056.1409453-1-fontaine.fabrice@gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ETLDCYLHAtKW for <buildroot@lists.busybox.net>;
+ Mon,  5 Feb 2024 07:03:15 +0000 (UTC)
+X-Greylist: delayed 536 seconds by postgrey-1.37 at util1.osuosl.org;
+ Mon, 05 Feb 2024 07:03:14 UTC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E23FA82292
+Received: from mail.desaster-games.net (mail.desaster-games.net [176.9.84.136])
+ by smtp1.osuosl.org (Postfix) with ESMTP id E23FA82292
+ for <buildroot@busybox.net>; Mon,  5 Feb 2024 07:03:14 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.desaster-games.net (Postfix) with ESMTP id F00949593;
+ Mon,  5 Feb 2024 07:54:14 +0100 (CET)
+X-Virus-Scanned: Amavis at mail.desaster-games.com
+Received: from mail.desaster-games.net ([127.0.0.1])
+ by localhost (mail.desaster-games.net [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PF3ymwSwBUGz; Mon,  5 Feb 2024 07:54:01 +0100 (CET)
+Received: from ymir.nue2.suse.org (unknown [81.95.8.245])
+ by mail.desaster-games.net (Postfix) with ESMTPSA id 858AA9591;
+ Mon,  5 Feb 2024 07:54:01 +0100 (CET)
+From: Michael Vetter <jubalh@iodoru.org>
+To: buildroot@busybox.net
+Date: Mon,  5 Feb 2024 07:53:35 +0100
+Message-Id: <20240205065335.22493-1-jubalh@iodoru.org>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240204102056.1409453-1-fontaine.fabrice@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1707091419; x=1707696219; darn=buildroot.org;
- h=in-reply-to:content-disposition:mime-version:references:reply-to
- :message-id:subject:cc:to:from:date:from:to:cc:subject:date
- :message-id:reply-to;
- bh=SKFKX7WmQs46Yf1IteJ6pRhOq3PRGNHVtAhGD3wkxP4=;
- b=bMCfzUgJ7mJ/810BICsDuBmYya+XCo/bE1GYWeiQTn/dNnepVPKQv8IhiudCllaG+p
- fmaGW9MzeKbE/JXP4TNALDmmdrW0/nPaRba4h2xiPThVHuu4eeMATnR3M3KSPCwEV4dy
- bsV1PYXRtY3MLxd30rRjLuywAPip3Vkssz9iAgojYs59iX19NuLRzmlNVFsUGN+vjYBs
- GZA95wX3YIes/gvADfyRGZBVsKthPiJD9wG+sTRHcHykqqONQQz63m8m1EdlFnKAqis1
- zgSk5Z5/27Skb2fRw+vuQ5SwXWdPpDIODlWfoRSWe8h5zMWfXErOsvgbU47hlZPqfGbq
- MDdQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=bMCfzUgJ
-Subject: Re: [Buildroot] [PATCH 1/1] package/nfs-utils: drop
- NFS_UTILS_AUTORECONF
+Subject: [Buildroot] [PATCH 1/1] package/libstrophe: bump to version 0.13.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,23 +64,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Reply-To: Petr Vorel <petr.vorel@gmail.com>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- buildroot@buildroot.org
+Cc: Michael Vetter <jubalh@iodoru.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-> Commit 63332c33aa0771532807fd2684d4eee4eb952435 wrongly set
-> NFS_UTILS_AUTORECONF
+Signed-off-by: Michael Vetter <jubalh@iodoru.org>
+---
+ package/libstrophe/libstrophe.hash | 2 +-
+ package/libstrophe/libstrophe.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Hi Fabrice,
+diff --git a/package/libstrophe/libstrophe.hash b/package/libstrophe/libstrophe.hash
+index a6a529eb6c..e284e8cca6 100644
+--- a/package/libstrophe/libstrophe.hash
++++ b/package/libstrophe/libstrophe.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  d82e9e8585b8fc68fb91791377fbfb0051b98259a0ec64cf31c8a09bb7e2621e  libstrophe-0.12.3.tar.xz
++sha256  8d7c17c694efff7d2e2d3632684537e7ba874ce3d7f0e750a539f2299021bbaa  libstrophe-0.13.0.tar.xz
+ sha256  82476f36ffd5e895a176013c0812166ba7b7d99f3d536fc7f5ed2e33e9f74a08  MIT-LICENSE.txt
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  GPL-LICENSE.txt
+diff --git a/package/libstrophe/libstrophe.mk b/package/libstrophe/libstrophe.mk
+index ad0860ad30..257593bbec 100644
+--- a/package/libstrophe/libstrophe.mk
++++ b/package/libstrophe/libstrophe.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBSTROPHE_VERSION = 0.12.3
++LIBSTROPHE_VERSION = 0.13.0
+ LIBSTROPHE_SOURCE = libstrophe-$(LIBSTROPHE_VERSION).tar.xz
+ LIBSTROPHE_SITE = https://github.com/strophe/libstrophe/releases/download/$(LIBSTROPHE_VERSION)
+ LIBSTROPHE_DEPENDENCIES = host-pkgconf
+-- 
+2.35.3
 
-thanks! (too late to review - merged).
-
-Kind regards,
-Petr
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
