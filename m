@@ -4,66 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E32EFC4829A
-	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 22:20:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8801EC4829A
+	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 22:21:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9C8A5418A3;
-	Mon,  5 Feb 2024 22:20:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C8A5418A3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 44E84418AC;
+	Mon,  5 Feb 2024 22:21:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 44E84418AC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4K1KQH8kMHw8; Mon,  5 Feb 2024 22:20:56 +0000 (UTC)
+	with ESMTP id tjzoqO0Ah9CY; Mon,  5 Feb 2024 22:21:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A9DFF418AC;
-	Mon,  5 Feb 2024 22:20:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A9DFF418AC
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C462C1BF319
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6B36241B51;
+	Mon,  5 Feb 2024 22:21:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B36241B51
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id EF04C1BF954
  for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 22:20:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9C65840198
+ by smtp1.osuosl.org (Postfix) with ESMTP id C897B82001
  for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 22:20:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9C65840198
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C897B82001
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ns0mMCM-EXkQ for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FVvyf7Ashxau for <buildroot@lists.busybox.net>;
  Mon,  5 Feb 2024 22:20:53 +0000 (UTC)
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0E8A540022
- for <buildroot@buildroot.org>; Mon,  5 Feb 2024 22:20:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E8A540022
-Received: from ymorin.is-a-geek.org (unknown [194.78.211.220])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id BDD1319F741;
- Mon,  5 Feb 2024 23:20:48 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 05 Feb 2024 23:20:46 +0100
-Date: Mon, 5 Feb 2024 23:20:46 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Joachim Wiberg <troglobit@gmail.com>
-Message-ID: <ZcFfPoK1A5m53B5B@landeda>
-References: <20240130215628.884512-1-troglobit@gmail.com>
- <20240130215628.884512-2-troglobit@gmail.com>
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com
+ [IPv6:2a00:1450:4864:20::631])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6960881FF5
+ for <buildroot@buildroot.org>; Mon,  5 Feb 2024 22:20:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6960881FF5
+Received: by mail-ej1-x631.google.com with SMTP id
+ a640c23a62f3a-a2f79e79f0cso22992366b.2
+ for <buildroot@buildroot.org>; Mon, 05 Feb 2024 14:20:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1707171651; x=1707776451;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=+b7BRHLEg3V8GH/vvQOgH4GMiJtPgGtZAerch60gPLU=;
+ b=U4Bg8X4n6P3NJeWKjx86nECA9In8yp//6ZxqxnNxepFy/A/RppXFgl1lluIbEGOyo9
+ +Jlxi6Naka/1dPaV3qhBMpXaXHeKJTFsI3d0+oBIAPc7jH1tpOINEmL+6J/UcQq2zrR9
+ 9xp3afZU/HUZkRyCXyIoibbX1u1xAJ9/yEKSw7y1T1zut2znon+6rtZsUhVDRIPkknOZ
+ vM610hzhqY1G3zyZDjirLr5JL9k2YdoG7cQOvADu39DOQDyFA1ZrilWE028GKybn8aPN
+ g8RJ9QcaV5cgko7yJ8qa+CBWh/28pUIbCicu9u6O8ZAjAvBC0QO9JEqpYcnxGhSaiyQX
+ hRCg==
+X-Gm-Message-State: AOJu0YwzotBB9AcYwhf/X10UYJdBMRz/VsCmQKZyAkqbeq0QKo4q3WQR
+ bpZXGNc1RNv7dwOB0diXBzr3WmBaF/7169a646chifvaLyrEcxgiSGMvwlpVcQU=
+X-Google-Smtp-Source: AGHT+IEVOfyfVf8/AbzldjYwk6p0LiKTrChfwvmovVXSDLuNeRAqMiE7VRPvD4M7K5YLq5YouhY3tA==
+X-Received: by 2002:a17:907:7798:b0:a38:b54:a87 with SMTP id
+ ky24-20020a170907779800b00a380b540a87mr347213ejc.11.1707171651514; 
+ Mon, 05 Feb 2024 14:20:51 -0800 (PST)
+X-Forwarded-Encrypted: i=0;
+ AJvYcCWOZgfEGTA1ZqikJe/vgGmFQklvyLP04YllvbP9g6t6Hyv5dbwHi95MHPazMuN8lXF9vi8XsD2TEPG1qukyZhIq5/vUPGsgWA==
+Received: from [192.168.101.106] (87-88-191-254.abo.bbox.fr. [87.88.191.254])
+ by smtp.gmail.com with ESMTPSA id
+ hw19-20020a170907a0d300b00a36c6b0485asm323303ejc.103.2024.02.05.14.20.51
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 05 Feb 2024 14:20:51 -0800 (PST)
+Message-ID: <3d4fe1c8-8d8f-4740-9185-2a6ff43405fc@smile.fr>
+Date: Mon, 5 Feb 2024 23:20:50 +0100
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240130215628.884512-2-troglobit@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1707171651;
- bh=6iopw7fpmN0fBZRizCOkYRa1Xg8/G09OG2eOWnt7gkk=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=cOcMPaOLqQrFv5fM9UHuQwVqkLYe8nG9a3brWaRa/dbtNY9IBPiLOr9Cin6UiSLDn
- UJSTdeOeUab/Lcv966tznZBGzWmkG5Tq/JsT2EBCQUbjfIoQgPkWlvIEtdkURVwBMU
- c9ATPz5+EhrTtXYfWKTgAcJ0uX0fKOrOmCr59dHn/d2XWmbbvpvo1dIP7V6zQnYvjm
- k7kl/K07oAHYNfgQT/H1pG7nCpRvuCcbmVhu0yQbDkUvfIOEToWIJjd3D0FP6dYsdE
- vM6/mCbXa10HhaF1yjU3e4SKtcw+mJk4CBk19QSc0rEbqAXtmx/bVV+QuP4vdLAtj6
- 73XFVu7MALulw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=cOcMPaOL
-Subject: Re: [Buildroot] [PATCH v2 1/2] package/watchdogd: bump to version
- 4.0
+User-Agent: Mozilla Thunderbird
+To: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
+References: <20240205214837.3497535-1-ju.o@free.fr>
+Content-Language: fr
+From: Romain Naour <romain.naour@smile.fr>
+In-Reply-To: <20240205214837.3497535-1-ju.o@free.fr>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1707171651; x=1707776451;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:to:subject:user-agent:mime-version:date:message-id:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=+b7BRHLEg3V8GH/vvQOgH4GMiJtPgGtZAerch60gPLU=;
+ b=0cgUMWX//cYJKy0DNx2KjJ6UD98lEQPL0wKGYpltzs+hffo71bZx8wG8BWKesWmTTv
+ bHli0la3JGs702CiLuS+9fufYzFsf/A0Q1f4zEHzXA7UOhu1F8Uahisni62T2m7TpDtN
+ XZ/Q2fDL/iOHnshbw7OIk0PUOJELkJtt0uLdFL5pel5lUlj9UbL+zdgtyPZCHOQZzfWF
+ 2y7F69YPfLi1DMVRi8Tr3kUEc+9Ki34BpEGgDy1c6zC0sX0k5kMoV6PKsbJ4oG8UHx0m
+ sUk9mr2JJiNdHpk2GB+n/g3+fE4wMY0cn70VWs58HcyrUj6ztbB4UEyiTNex5x1UzNz1
+ bJvg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=smile-fr.20230601.gappssmtp.com
+ header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=0cgUMWX/
+Subject: Re: [Buildroot] [PATCH 1/1] support/testing: netcat: improve test
+ robustness
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,193 +102,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Joachim, All,
-
-On 2024-01-30 22:56 +0100, Joachim Wiberg spake thusly:
-> For details, see https://github.com/troglobit/watchdogd/releases/tag/4.0
-> 
->  - Major feature upgrade, command line and .conf files compatible
->  - LICENSE hash update due to update in copyright years
->  - Enabling system monitor plugins have changed syntax upstream.  The
->    `--with-foo=SECONDS` is now just `--with-foo`
-> 
-> This last upstream change require converting affected Config.in options
-> from int -> bool.  Legacy _WRAP:ers have been added to Config.legacy.in,
-> modeled on BR2_TARGET_ROOTFS_EXT2_BLOCKS.
-> 
-> Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
-> ---
-[--SNIP--]
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index 82387338d9..b6e72d0f24 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -202,6 +202,64 @@ config BR2_KERNEL_HEADERS_6_5
->  	  Version 6.5.x of the Linux kernel headers are no longer
->  	  maintained upstream and are now removed.
->  
-> +config BR2_PACKAGE_WATCHDOGD_GENERIC_POLL
-> +	int "watchdogd generic poll has been replaced"
-> +	default 0
-> +	help
-> +	  The generic script poll interval has been replaced upstream
-> +	  with a boolean on/off.  Your configuration has been migrated.
-> +
-> +	  Set this legacy option to 0 here to remove the warning.
-[--SNIP--]
-> +# Note: BR2_PACKAGE_WATCHDOGD_*_POLL still referenced in package/watchdogd/Config.in
-
-This comment is wrong: it's the _WRAP options that are referenced. So I
-changed it. I also duplicated right above each such option so it's
-easier to spot rather than a lone comment way below (I know you did like
-the existing ext legacy, but that does not prevent improving! ;-) ).
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
->  comment "Legacy options removed in 2023.11"
->  
->  config BR2_PACKAGE_PYTHON_PYXB
-> diff --git a/package/watchdogd/Config.in b/package/watchdogd/Config.in
-> index ca5933848d..0b0480ea27 100644
-> --- a/package/watchdogd/Config.in
-> +++ b/package/watchdogd/Config.in
-> @@ -27,32 +27,28 @@ config BR2_PACKAGE_WATCHDOGD_TEST_SUITE
->  	  They can be used to verify correct operation of watchdogd and
->  	  the kernel watchdog driver.
->  
-> -config BR2_PACKAGE_WATCHDOGD_GENERIC_POLL
-> -	int "Generic script monitor poll interval (sec)"
-> -	default "300"
-> +config BR2_PACKAGE_WATCHDOGD_GENERIC
-> +	bool "Generic script monitor"
-> +	default y if BR2_PACKAGE_WATCHDOGD_GENERIC_POLL_WRAP # legacy 2024.02
->  	help
-> -	  Poll interval for generic script monitor, in seconds.  A value
-> -	  of zero (0) disables the monitor.
-> +	  Enable generic script monitor.
->  
-> -config BR2_PACKAGE_WATCHDOGD_LOADAVG_POLL
-> -	int "CPU load average monitor poll interval (sec)"
-> -	default "300"
-> +config BR2_PACKAGE_WATCHDOGD_LOADAVG
-> +	bool "CPU load average monitor"
-> +	default y if BR2_PACKAGE_WATCHDOGD_LOADAVG_POLL_WRAP # legacy 2024.02
->  	help
-> -	  Poll interval for CPU load average monitor, in seconds.  A
-> -	  value of zero (0) disables the monitor.
-> +	  Enable CPU load average monitor.
->  
-> -config BR2_PACKAGE_WATCHDOGD_FILENR_POLL
-> -	int "File descriptor leak monitor poll interval (sec)"
-> -	default "300"
-> +config BR2_PACKAGE_WATCHDOGD_FILENR
-> +	bool "File descriptor leak monitor"
-> +	default y if BR2_PACKAGE_WATCHDOGD_FILENR_POLL_WRAP # legacy 2024.02
->  	help
-> -	  Poll interval for file descriptor leak monitor, in seconds.  A
-> -	  value of zero (0) disables the monitor.
-> +	  Enable file descriptor leak monitor.
->  
-> -config BR2_PACKAGE_WATCHDOGD_MEMINFO_POLL
-> -	int "Memory leak monitor poll interval (sec)"
-> -	default "300"
-> +config BR2_PACKAGE_WATCHDOGD_MEMINFO
-> +	bool "Memory leak monitor"
-> +	default y if BR2_PACKAGE_WATCHDOGD_MEMINFO_POLL_WRAP # legacy 2024.02
->  	help
-> -	  Poll interval for memory leak monitor, in seconds.  A value of
-> -	  zero (0) disables the monitor.
-> +	  Enable memory leak monitor.
->  
->  endif
-> diff --git a/package/watchdogd/watchdogd.hash b/package/watchdogd/watchdogd.hash
-> index 4ff1a3485b..0c228666bd 100644
-> --- a/package/watchdogd/watchdogd.hash
-> +++ b/package/watchdogd/watchdogd.hash
-> @@ -1,5 +1,5 @@
->  # Upstream .sha256 from GitHub
-> -sha256  33ec4edc8cb4ada7a4d8324a27d897d33aae5e83257ed64d3d37508825c11237  watchdogd-3.5.tar.gz
-> +sha256  7f38bc691353a51fc6feb2ccab60417c0284dd3f4d55c50d8b1781fda70d8101  watchdogd-4.0.tar.gz
->  
->  # Locally calculated
-> -sha256  fd685e20931174308c45a26418a7ce34d66704c4e4b92ab1d8299deb255cd676  LICENSE
-> +sha256  e233c56d807c74c67f2eff47ad03c216144cdd374d8d7578b996c28c260eadda  LICENSE
-> diff --git a/package/watchdogd/watchdogd.mk b/package/watchdogd/watchdogd.mk
-> index ea033b4e71..2e67c2847e 100644
-> --- a/package/watchdogd/watchdogd.mk
-> +++ b/package/watchdogd/watchdogd.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -WATCHDOGD_VERSION = 3.5
-> +WATCHDOGD_VERSION = 4.0
->  WATCHDOGD_SITE = https://github.com/troglobit/watchdogd/releases/download/$(WATCHDOGD_VERSION)
->  WATCHDOGD_LICENSE = ISC
->  WATCHDOGD_LICENSE_FILES = LICENSE
-> @@ -20,28 +20,29 @@ else
->  WATCHDOGD_CONF_OPTS += --enable-builtin-tests
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_WATCHDOGD_GENERIC_POLL),0)
-> +ifneq ($(BR2_PACKAGE_WATCHDOGD_GENERIC),y)
->  WATCHDOGD_CONF_OPTS += --without-generic
->  else
-> -WATCHDOGD_CONF_OPTS += --with-generic=$(BR2_PACKAGE_WATCHDOGD_GENERIC_POLL)
-> +WATCHDOGD_CONF_OPTS += --with-generic
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_WATCHDOGD_LOADAVG_POLL),0)
-> +ifneq ($(BR2_PACKAGE_WATCHDOGD_LOADAVG),y)
->  WATCHDOGD_CONF_OPTS += --without-loadavg
->  else
-> -WATCHDOGD_CONF_OPTS += --with-loadavg=$(BR2_PACKAGE_WATCHDOGD_LOADAVG_POLL)
-> +WATCHDOGD_CONF_OPTS += --with-loadavg
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_WATCHDOGD_FILENR_POLL),0)
-> +ifneq ($(BR2_PACKAGE_WATCHDOGD_FILENR),y)
->  WATCHDOGD_CONF_OPTS += --without-filenr
->  else
-> -WATCHDOGD_CONF_OPTS += --with-filenr=$(BR2_PACKAGE_WATCHDOGD_FILENR_POLL)
-> +WATCHDOGD_CONF_OPTS += --with-filenr
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_WATCHDOGD_MEMINFO_POLL),0)
-> +ifneq ($(BR2_PACKAGE_WATCHDOGD_MEMINFO),y)
->  WATCHDOGD_CONF_OPTS += --without-meminfo
->  else
-> -WATCHDOGD_CONF_OPTS += --with-meminfo=$(BR2_PACKAGE_WATCHDOGD_MEMINFO_POLL)
-> +WATCHDOGD_CONF_OPTS += --with-meminfo
-> +endif
->  endif
->  
->  define WATCHDOGD_INSTALL_INIT_SYSV
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gSnVsaWVuLAoKTGUgMDUvMDIvMjAyNCDDoCAyMjo0OCwgSnVsaWVuIE9saXZhaW4gYSDD
+qWNyaXTCoDoKPiBVbmRlciBzb21lIGNvbmRpdGlvbnMgKG1vc3RseSBzbG93IGV4ZWN1dGlvbiBk
+dWUgdG8gdGVzdCBob3N0IGxvYWQpLAo+IHRoZSBuZXRjYXQgcnVudGltZSB0ZXN0IGNhbiByYW5k
+b21seSBmYWlsLiBUaGlzIGlzIGR1ZSB0byBzZXZlcmFsCj4gZmFjdHM6Cj4gCj4gLSB0aGUgc2xl
+ZXAgdGltZSBiZXR3ZWVuIHRoZSBzZXJ2ZXIgYW5kIGNsaWVudCBpcyB0b28gc2hvcnQsCj4gLSB0
+aGUgdXNlIG9mIG5ldGNhdCBvcHRpb24gLWMgY291bGQgY2xvc2UgdGhlIGNvbm5lY3Rpb24gYmVm
+b3JlIHRoZQo+ICAgc2VydmVyIGNvdWxkIHJlY2VpdmUgYWxsIHRoZSBkYXRhLgo+IAo+IFRoaXMg
+Y29tbWl0IGltcHJvdmVzIHRoZSB0ZXN0IHJvYnVzdG5lc3MgYnkgaW5jcmVhc2luZyB0aGUgc2xl
+ZXAgdGltZSwKPiBhbmQgYnkgcmVkdWNpbmcgdGhlIGFtb3VudCBvZiB0cmFuc2ZlcnJlZCBkYXRh
+IChmcm9tIDFNQiBvZiByYW5kb20gZGF0YSwKPiB0byBhIHNpbXBsZXIgc3RyaW5nIG9mIGZldyBi
+eXRlcykuIEFsc28sIHRvIG1ha2Ugc3VyZSBuZXRjYXQgY2Fubm90IHdhaXQKPiBvbiBETlMgcmVz
+b2x1dGlvbiwgdGhpcyBjb21taXQgYWxzbyBhZGRzIHRoZSAtbiBvcHRpb24uCj4gCj4gRml4ZXM6
+Cj4gaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vam9icy82MDkz
+ODU0NjY0CgpBcHBsaWVkIHRvIG1hc3RlciwgdGhhbmtzLgoKQmVzdCByZWdhcmRzLApSb21haW4K
+Cj4gCj4gU2lnbmVkLW9mZi1ieTogSnVsaWVuIE9saXZhaW4gPGp1Lm9AZnJlZS5mcj4KPiAtLS0K
+PiAgc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF9uZXRjYXQucHkgfCAxOSArKysr
+KysrKystLS0tLS0tLS0tCj4gIDEgZmlsZSBjaGFuZ2VkLCA5IGluc2VydGlvbnMoKyksIDEwIGRl
+bGV0aW9ucygtKQo+IAo+IGRpZmYgLS1naXQgYS9zdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2Fn
+ZS90ZXN0X25ldGNhdC5weSBiL3N1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfbmV0
+Y2F0LnB5Cj4gaW5kZXggYjNlZmE0YzQwYi4uODhkNThhNzJmMyAxMDA2NDQKPiAtLS0gYS9zdXBw
+b3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS90ZXN0X25ldGNhdC5weQo+ICsrKyBiL3N1cHBvcnQv
+dGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfbmV0Y2F0LnB5Cj4gQEAgLTIyLDIwICsyMiwxOSBA
+QCBjbGFzcyBUZXN0TmV0Q2F0KGluZnJhLmJhc2V0ZXN0LkJSVGVzdCk6Cj4gIAo+ICAgICAgICAg
+IHNlbGYuYXNzZXJ0UnVuT2soIm5jIC0tdmVyc2lvbiIpCj4gIAo+IC0gICAgICAgIGluX2ZpbGUg
+PSAiaW5wdXQuYmluIgo+IC0gICAgICAgIG91dF9maWxlID0gIm91dHB1dC5iaW4iCj4gKyAgICAg
+ICAgbXNnID0gIkhlbGxvIEJ1aWxkcm9vdCEiCj4gKyAgICAgICAgb3V0X2ZpbGUgPSAib3V0cHV0
+LnR4dCIKPiAgICAgICAgICBwb3J0ID0gMTIzNDUKPiAgCj4gLSAgICAgICAgY21kID0gZiJkZCBp
+Zj0vZGV2L3VyYW5kb20gb2Y9e2luX2ZpbGV9IGJzPTFrIGNvdW50PTFrIgo+ICsgICAgICAgIGNt
+ZCA9IGYibmMgLW4gLWwgLXAge3BvcnR9ID4ge291dF9maWxlfSAyPiAvZGV2L251bGwgJiIKPiAg
+ICAgICAgICBzZWxmLmFzc2VydFJ1bk9rKGNtZCkKPiAgCj4gLSAgICAgICAgY21kID0gZiJuYyAt
+bCAtcCB7cG9ydH0gPiB7b3V0X2ZpbGV9ICYiCj4gLSAgICAgICAgc2VsZi5hc3NlcnRSdW5Payhj
+bWQpCj4gLQo+IC0gICAgICAgIHRpbWUuc2xlZXAoMSkKPiArICAgICAgICB0aW1lLnNsZWVwKDUp
+Cj4gIAo+IC0gICAgICAgIGNtZCA9IGYiY2F0IHtpbl9maWxlfSB8IG5jIC1jIDEyNy4wLjAuMSB7
+cG9ydH0iCj4gKyAgICAgICAgY21kID0gZiJlY2hvICd7bXNnfScgfCBuYyAtbiAtYyAxMjcuMC4w
+LjEge3BvcnR9Igo+ICAgICAgICAgIHNlbGYuYXNzZXJ0UnVuT2soY21kKQo+ICAKPiAtICAgICAg
+ICBjbWQgPSBmImNtcCB7aW5fZmlsZX0ge291dF9maWxlfSIKPiAtICAgICAgICBzZWxmLmFzc2Vy
+dFJ1bk9rKGNtZCkKPiArICAgICAgICBjbWQgPSBmImNhdCB7b3V0X2ZpbGV9Igo+ICsgICAgICAg
+IG91dCwgcmV0ID0gc2VsZi5lbXVsYXRvci5ydW4oY21kKQo+ICsgICAgICAgIHNlbGYuYXNzZXJ0
+RXF1YWwocmV0LCAwKQo+ICsgICAgICAgIHNlbGYuYXNzZXJ0RXF1YWwob3V0WzBdLCBtc2cpCgpf
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3Qg
+bWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRy
+b290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
