@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC6DBC4828D
-	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 10:31:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73496C48291
+	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 10:31:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 77584417E3;
-	Mon,  5 Feb 2024 10:31:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77584417E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2E0B04179D;
+	Mon,  5 Feb 2024 10:31:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E0B04179D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8tQLdwcGeUmL; Mon,  5 Feb 2024 10:31:30 +0000 (UTC)
+	with ESMTP id toAOmbGWzkec; Mon,  5 Feb 2024 10:31:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 94B30417DE;
-	Mon,  5 Feb 2024 10:31:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 94B30417DE
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 051791BF404
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6677241806;
+	Mon,  5 Feb 2024 10:31:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6677241806
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 104851BF954
  for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 10:31:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DFC8F82690
+ by smtp3.osuosl.org (Postfix) with ESMTP id DD69960F51
  for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 10:31:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DFC8F82690
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD69960F51
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kRZUVqQwsd0S for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bX3-dGPYC2Lx for <buildroot@lists.busybox.net>;
  Mon,  5 Feb 2024 10:31:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id F219D8268F
+ by smtp3.osuosl.org (Postfix) with ESMTP id E947660F31
  for <buildroot@buildroot.org>; Mon,  5 Feb 2024 10:31:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F219D8268F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E947660F31
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DF6B386A88; Mon,  5 Feb 2024 10:31:17 +0000 (UTC)
+ id D430C86A81; Mon,  5 Feb 2024 10:31:17 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 5 Feb 2024 11:31:01 +0100
+Date: Mon, 5 Feb 2024 11:30:59 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4a7afebe03803484261a82b5ca3fa59813e9b324
-X-Git-Newrev: 0149b50166e11d90c90f603dc488c2b964c019a6
+X-Git-Oldrev: 4585259743e0ff3977c05c864dc752c040023738
+X-Git-Newrev: 4a7afebe03803484261a82b5ca3fa59813e9b324
 X-Patchwork-Hint: ignore
-Message-Id: <20240205103117.DF6B386A88@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pytest: bump to version
- 7.4.4
+Message-Id: <20240205103117.D430C86A81@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pytest-asyncio: bump to
+ version 0.23.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,60 +64,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0149b50166e11d90c90f603dc488c2b964c019a6
+commit: https://git.buildroot.net/buildroot/commit/?id=4a7afebe03803484261a82b5ca3fa59813e9b324
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop no longer required python-py runtime dependency.
+Add new host-python-setuptools-scm build dependency.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Reviewed-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/python-pytest/Config.in          | 1 -
- package/python-pytest/python-pytest.hash | 4 ++--
- package/python-pytest/python-pytest.mk   | 4 ++--
- 3 files changed, 4 insertions(+), 5 deletions(-)
+ package/python-pytest-asyncio/python-pytest-asyncio.hash | 4 ++--
+ package/python-pytest-asyncio/python-pytest-asyncio.mk   | 5 +++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pytest/Config.in b/package/python-pytest/Config.in
-index c8f9a6eb5b..b42457e67d 100644
---- a/package/python-pytest/Config.in
-+++ b/package/python-pytest/Config.in
-@@ -4,7 +4,6 @@ config BR2_PACKAGE_PYTHON_PYTEST
- 	select BR2_PACKAGE_PYTHON_INICONFIG # runtime
- 	select BR2_PACKAGE_PYTHON_PACKAGING # runtime
- 	select BR2_PACKAGE_PYTHON_PLUGGY # runtime
--	select BR2_PACKAGE_PYTHON_PY # runtime
- 	select BR2_PACKAGE_PYTHON3_PYEXPAT # runtime
- 	select BR2_PACKAGE_PYTHON3_ZLIB # runtime
- 	help
-diff --git a/package/python-pytest/python-pytest.hash b/package/python-pytest/python-pytest.hash
-index 7f79b94d8d..e710003535 100644
---- a/package/python-pytest/python-pytest.hash
-+++ b/package/python-pytest/python-pytest.hash
+diff --git a/package/python-pytest-asyncio/python-pytest-asyncio.hash b/package/python-pytest-asyncio/python-pytest-asyncio.hash
+index f6cc1d2413..29a38c7dc7 100644
+--- a/package/python-pytest-asyncio/python-pytest-asyncio.hash
++++ b/package/python-pytest-asyncio/python-pytest-asyncio.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pytest/json
--md5  8620558e8971b11207b2d6b083906cf9  pytest-7.4.2.tar.gz
--sha256  a766259cfab564a2ad52cb1aae1b881a75c3eb7e34ca3779697c23ed47c47069  pytest-7.4.2.tar.gz
-+md5  e2ac4c70861f26d735b64e5687bb218e  pytest-7.4.4.tar.gz
-+sha256  2cf0005922c6ace4a3e2ec8b4080eb0d9753fdc93107415332f50ce9e7994280  pytest-7.4.4.tar.gz
- # Locally computer sha256
- sha256  ca836a5f9ecca3b2f350230faa20a48fb8b145653b5568d784862df864706b9b  LICENSE
-diff --git a/package/python-pytest/python-pytest.mk b/package/python-pytest/python-pytest.mk
-index 326d951a32..3170a1a9db 100644
---- a/package/python-pytest/python-pytest.mk
-+++ b/package/python-pytest/python-pytest.mk
-@@ -4,9 +4,9 @@
+ # md5, sha256 from https://pypi.org/pypi/pytest-asyncio/json
+-md5  1d10f607444a375c1425a2a90960006e  pytest-asyncio-0.21.1.tar.gz
+-sha256  40a7eae6dded22c7b604986855ea48400ab15b069ae38116e8c01238e9eeb64d  pytest-asyncio-0.21.1.tar.gz
++md5  0c81f6de855e546180de424c0db05c20  pytest-asyncio-0.23.3.tar.gz
++sha256  af313ce900a62fbe2b1aed18e37ad757f1ef9940c6b6a88e2954de38d6b1fb9f  pytest-asyncio-0.23.3.tar.gz
+ # Locally computed sha256 checksums
+ sha256  a8ad31b1c3f40dca5a84119351b8fa8ddc868edd77fad8a8ebf6d8f2d16fa4ae  LICENSE
+diff --git a/package/python-pytest-asyncio/python-pytest-asyncio.mk b/package/python-pytest-asyncio/python-pytest-asyncio.mk
+index 5c5efd819c..8464c70f5f 100644
+--- a/package/python-pytest-asyncio/python-pytest-asyncio.mk
++++ b/package/python-pytest-asyncio/python-pytest-asyncio.mk
+@@ -4,11 +4,12 @@
  #
  ################################################################################
  
--PYTHON_PYTEST_VERSION = 7.4.2
-+PYTHON_PYTEST_VERSION = 7.4.4
- PYTHON_PYTEST_SOURCE = pytest-$(PYTHON_PYTEST_VERSION).tar.gz
--PYTHON_PYTEST_SITE = https://files.pythonhosted.org/packages/e5/d0/18209bb95db8ee693a9a04fe056ab0663c6d6b1baf67dd50819dd9cd4bd7
-+PYTHON_PYTEST_SITE = https://files.pythonhosted.org/packages/80/1f/9d8e98e4133ffb16c90f3b405c43e38d3abb715bb5d7a63a5a684f7e46a3
- PYTHON_PYTEST_SETUP_TYPE = setuptools
- PYTHON_PYTEST_LICENSE = MIT
- PYTHON_PYTEST_LICENSE_FILES = LICENSE
+-PYTHON_PYTEST_ASYNCIO_VERSION = 0.21.1
++PYTHON_PYTEST_ASYNCIO_VERSION = 0.23.3
+ PYTHON_PYTEST_ASYNCIO_SOURCE = pytest-asyncio-$(PYTHON_PYTEST_ASYNCIO_VERSION).tar.gz
+-PYTHON_PYTEST_ASYNCIO_SITE = https://files.pythonhosted.org/packages/5a/85/d39ef5f69d5597a206f213ce387bcdfa47922423875829f7a98a87d33281
++PYTHON_PYTEST_ASYNCIO_SITE = https://files.pythonhosted.org/packages/1d/27/f036ec4bcbfd056c54572d7169ba3dbb54e7181f02f21caadd3aecb9cf5b
+ PYTHON_PYTEST_ASYNCIO_SETUP_TYPE = setuptools
+ PYTHON_PYTEST_ASYNCIO_LICENSE = Apache-2.0
+ PYTHON_PYTEST_ASYNCIO_LICENSE_FILES = LICENSE
++PYTHON_PYTEST_ASYNCIO_DEPENDENCIES = host-python-setuptools-scm
+ 
+ $(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
