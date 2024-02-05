@@ -4,46 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D6D3C48292
-	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 18:09:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3AD77C4828D
+	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 18:11:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0AA164023F;
-	Mon,  5 Feb 2024 18:09:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0AA164023F
+	by smtp2.osuosl.org (Postfix) with ESMTP id CF7704023F;
+	Mon,  5 Feb 2024 18:11:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CF7704023F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KXr2QAQTbvce; Mon,  5 Feb 2024 18:09:16 +0000 (UTC)
+	with ESMTP id GmU3euX4gYwD; Mon,  5 Feb 2024 18:11:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 781B940468;
-	Mon,  5 Feb 2024 18:09:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 781B940468
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 447BA1BF379
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 18:09:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9339940468;
+	Mon,  5 Feb 2024 18:11:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9339940468
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1E0141BF379
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 18:11:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1D2B060AE6
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 18:09:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D2B060AE6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 015B240468
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 18:11:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 015B240468
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kw2ascHxzIIc for <buildroot@lists.busybox.net>;
- Mon,  5 Feb 2024 18:09:13 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E7C8160AC3
- for <buildroot@buildroot.org>; Mon,  5 Feb 2024 18:09:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E7C8160AC3
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D25CA86DC7; Mon,  5 Feb 2024 18:09:12 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 5 Feb 2024 19:09:04 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f6c33f3e89f7f26e5b7613a757c82c9efc62654a
-X-Git-Newrev: e97fc89e7ba75f5f664161916b44e727820a04a5
-X-Patchwork-Hint: ignore
-Message-Id: <20240205180912.D25CA86DC7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/protobuf-c: bump to version 1.5.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kooTcQg-Cum6 for <buildroot@lists.busybox.net>;
+ Mon,  5 Feb 2024 18:11:13 +0000 (UTC)
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com
+ [IPv6:2607:f8b0:4864:20::436])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 822B74023F
+ for <buildroot@buildroot.org>; Mon,  5 Feb 2024 18:11:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 822B74023F
+Received: by mail-pf1-x436.google.com with SMTP id
+ d2e1a72fcca58-6e03d97bdd0so20914b3a.3
+ for <buildroot@buildroot.org>; Mon, 05 Feb 2024 10:11:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1707156673; x=1707761473;
+ h=content-transfer-encoding:mime-version:user-agent:organization
+ :references:in-reply-to:date:cc:to:reply-to:subject:message-id:from
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=VZfk0IiZ1ScWpdiUG9E0Rqf6GEm7a8qM1KrhZeZc5PA=;
+ b=WGBllJvaVLuBvp7TxiJb1CcyiDlvTF9jqkhqwS6SMB1+FyXTSeJXdaCIgOIsAfbYmL
+ WDWTpmAN+WOJBnRDUM9GcnEKSRiAxnn1ZNyThhQqiFPxqsAVPP9vuEkOWxevw0tNwZ6M
+ CEJgXRll1wxlll9AEYzSOUVS6OlslBrH/xVBTPs1n5eIFoG4pBm6ZD5V/djBhpgqK8CL
+ aHZTakIw3dynY3MgddWs7LWl2BC4bUFF6pMOxBTsBJSMdRBPsWZJIizEp7nWJMvM91Sw
+ 4nRE/mpfu6IRaGQjlSLLItpnHprLk/M/E2eTzKRO3kkMMkIqZbTB04P3lyxn/0cBfc8I
+ aZLw==
+X-Gm-Message-State: AOJu0YxyseLQdT0fptiYw4+mVcCkXa3x+rJ/h2AuBqmia8pRRBoVpdfJ
+ h80chbvlFN4PbuS1oIspX4kzKbx9pgPQDw8L4zYDsG0NvAIu7AwzsdkV2AF8Sm8=
+X-Google-Smtp-Source: AGHT+IEMZ8a1GSS7/Xk7aD01CTMJz0ve5+F9IZHjT7FRB52eiXt9IfeNZHJOfCUusCf6lGAVZAIgbg==
+X-Received: by 2002:aa7:8c5a:0:b0:6e0:3f63:ed64 with SMTP id
+ e26-20020aa78c5a000000b006e03f63ed64mr293241pfd.34.1707156672693; 
+ Mon, 05 Feb 2024 10:11:12 -0800 (PST)
+X-Forwarded-Encrypted: i=0;
+ AJvYcCXyj1XF4IXpBA6t3nWoIV3tC6nLSsjPwqoGQ32Q+fQBcHosnoQdGlBQlv4hJqEI7/tpDHh+XKFhl+VstzcN0XbebruYVCv96VIWE01e0w/P
+Received: from [10.10.10.151] (97-120-67-139.ptld.qwest.net. [97.120.67.139])
+ by smtp.gmail.com with ESMTPSA id
+ j71-20020a638b4a000000b005cfd70edc1bsm314424pge.7.2024.02.05.10.11.11
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 05 Feb 2024 10:11:12 -0800 (PST)
+X-Google-Original-From: Kris Bahnsen <kris@embeddedTS.com>
+Message-ID: <fda17439795949fef1527435444baada90bcf38b.camel@embeddedTS.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Date: Mon, 05 Feb 2024 10:11:12 -0800
+In-Reply-To: <ZcC2MgwHx2F8fACA@landeda>
+References: <399bbbdbc865bb5fab6fa7dbdad653f9aa240da2.camel@embeddedTS.com>
+ <ZcC2MgwHx2F8fACA@landeda>
+Organization: embeddedTS
+User-Agent: Evolution 3.38.3-1+deb11u2 
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=embeddedts.com; s=google; t=1707156673; x=1707761473; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:user-agent:organization
+ :references:in-reply-to:date:cc:to:reply-to:subject:message-id:from
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=VZfk0IiZ1ScWpdiUG9E0Rqf6GEm7a8qM1KrhZeZc5PA=;
+ b=qC9vMeKXS+2ppZjvcMmwwxIanJFD0dPqodGzYUmZEUUF17frYo8tZaOl3GTClLXCnP
+ lhYpXRTh2SZuJHeZ+Y8QVcfKRMtrwZWPsKmQAQuh+Ry+w12PNvVf49wT7ON9Y83adHaF
+ nTFI3lTrlBgok5wSR0IOyeeO4yLFjFdFnJqFw=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=embeddedts.com header.i=@embeddedts.com
+ header.a=rsa-sha256 header.s=google header.b=qC9vMeKX
+Subject: Re: [Buildroot] [PATCH 1/1] package/wilc_firmware: bump to 16.1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,206 +97,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Kris Bahnsen via buildroot <buildroot@buildroot.org>
+Reply-To: kris@embeddedTS.com
+Cc: Ludovic Desroches <ludovic.desroches@microchip.com>,
+ buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e97fc89e7ba75f5f664161916b44e727820a04a5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-- drops support for proto2
-- fixes compatibility with protobuf >= 22.0 (which we did not yet bump)
-- to be compatible with new protobuf versions c++17 is now required
-  when building with protoc (which we only do for the host package) [0]
-  hence require host gcc >= 7 for c++17 support, propagate to
-  depending packages
-- the license file has changed with a change of the copyright years,
-  nothing else
-
-[0] https://github.com/protobuf-c/protobuf-c/pull/673
-
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/collectd/Config.in         | 10 ++++++++--
- package/criu/Config.in             |  6 ++++--
- package/kismet/Config.in           |  6 ++++--
- package/protobuf-c/Config.in       |  5 +++--
- package/protobuf-c/protobuf-c.hash |  4 ++--
- package/protobuf-c/protobuf-c.mk   |  6 +++---
- package/riemann-c-client/Config.in |  6 ++++--
- 7 files changed, 28 insertions(+), 15 deletions(-)
-
-diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index d3b686771d..a0c367c78d 100644
---- a/package/collectd/Config.in
-+++ b/package/collectd/Config.in
-@@ -738,12 +738,17 @@ config BR2_PACKAGE_COLLECTD_RIEMANN
- 	# riemann-c-client -> protobuf-c
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
-+	depends on BR2_HOST_GCC_AT_LEAST_7 # protobuf-c
- 	select BR2_PACKAGE_RIEMANN_C_CLIENT
- 	select BR2_PACKAGE_LIBTOOL
- 	help
- 	  Sends data to Riemann, a stream processing and monitoring
- 	  system.
- 
-+comment "riemann needs a toolchain w/ C++, host gcc >= 7"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_HOST_GCC_AT_LEAST_7
-+	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
-+
- config BR2_PACKAGE_COLLECTD_UNIXSOCK
- 	bool "unixsock"
- 	help
-@@ -772,14 +777,15 @@ config BR2_PACKAGE_COLLECTD_WRITEPROMETHEUS
- 	bool "write_prometheus"
- 	depends on BR2_INSTALL_LIBSTDCPP # protobuf-c
- 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS # protobuf-c
-+	depends on BR2_HOST_GCC_AT_LEAST_7 # protobuf-c
- 	select BR2_PACKAGE_LIBMICROHTTPD
- 	select BR2_PACKAGE_PROTOBUF_C
- 	help
- 	  Publishes values using an embedded HTTP server, in a format
- 	  compatible with Prometheus' collectd_exporter.
- 
--comment "write_prometheus needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "write_prometheus needs a toolchain w/ C++, host gcc >= 7"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_HOST_GCC_AT_LEAST_7
- 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
- 
- config BR2_PACKAGE_COLLECTD_WRITEREDIS
-diff --git a/package/criu/Config.in b/package/criu/Config.in
-index a5adc0cedd..30b131cd30 100644
---- a/package/criu/Config.in
-+++ b/package/criu/Config.in
-@@ -18,6 +18,7 @@ config BR2_PACKAGE_CRIU_ARCH_SUPPORTS
- config BR2_PACKAGE_CRIU
- 	bool "criu"
- 	depends on BR2_PACKAGE_CRIU_ARCH_SUPPORTS
-+	depends on BR2_HOST_GCC_AT_LEAST_7 # protobuf-c
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # -march=armv7-a+fp
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18 # rseq.h
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no aio.h
-@@ -43,9 +44,10 @@ config BR2_PACKAGE_CRIU
- 
- 	  https://criu.org/Main_Page
- 
--comment "criu needs a glibc or musl toolchain w/ threads, gcc >= 8, headers >= 4.18, C++, dynamic library, wchar"
-+comment "criu needs a glibc or musl toolchain w/ threads, host gcc >= 7, gcc >= 8, headers >= 4.18, C++, dynamic library, wchar"
- 	depends on BR2_PACKAGE_CRIU_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_8 || !BR2_TOOLCHAIN_HAS_THREADS \
- 		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18 \
- 		|| BR2_TOOLCHAIN_USES_UCLIBC || !BR2_INSTALL_LIBSTDCPP \
--		|| BR2_STATIC_LIBS || !BR2_USE_WCHAR
-+		|| BR2_STATIC_LIBS || !BR2_USE_WCHAR \
-+		|| BR2_HOST_GCC_AT_LEAST_7
-diff --git a/package/kismet/Config.in b/package/kismet/Config.in
-index 80e68743a5..2e1e0cfbd0 100644
---- a/package/kismet/Config.in
-+++ b/package/kismet/Config.in
-@@ -1,8 +1,9 @@
--comment "kismet needs a toolchain w/ threads, C++, gcc >= 5"
-+comment "kismet needs a toolchain w/ threads, C++, gcc >= 5, host gcc >= 7"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_5 || \
-+		!BR2_HOST_GCC_AT_LEAST_7
- 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
- 
- config BR2_PACKAGE_KISMET
-@@ -11,6 +12,7 @@ config BR2_PACKAGE_KISMET
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS # protobuf-c
-+	depends on BR2_HOST_GCC_AT_LEAST_7 # protobuf-c
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # C++14
- 	select BR2_PACKAGE_LIBPCAP
- 	select BR2_PACKAGE_PROTOBUF_C
-diff --git a/package/protobuf-c/Config.in b/package/protobuf-c/Config.in
-index d96cd7b382..a438b32221 100644
---- a/package/protobuf-c/Config.in
-+++ b/package/protobuf-c/Config.in
-@@ -4,12 +4,13 @@ config BR2_PACKAGE_PROTOBUF_C
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	# host-protobuf only builds on certain architectures
- 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
-+	depends on BR2_HOST_GCC_AT_LEAST_7 # c++17 for host variant
- 	help
- 	  Code generator and runtime libraries to use Protocol Buffers
- 	  from pure C (not C++).
- 
- 	  https://github.com/protobuf-c/protobuf-c
- 
--comment "protobuf-c needs a toolchain w/ C++, threads"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+comment "protobuf-c needs a toolchain w/ C++, threads, host gcc >= 7"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_HOST_GCC_AT_LEAST_7
- 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
-diff --git a/package/protobuf-c/protobuf-c.hash b/package/protobuf-c/protobuf-c.hash
-index ec00442277..aafd98416a 100644
---- a/package/protobuf-c/protobuf-c.hash
-+++ b/package/protobuf-c/protobuf-c.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  4cc4facd508172f3e0a4d3a8736225d472418aee35b4ad053384b137b220339f  protobuf-c-1.4.1.tar.gz
--sha256  b8999cb392cc5bbe8cd679de59584ad8d2f26033123e76f1d662fa14b9d4f287  LICENSE
-+sha256  7b404c63361ed35b3667aec75cc37b54298d56dd2bcf369de3373212cc06fd98  protobuf-c-1.5.0.tar.gz
-+sha256  ad28bbf89340b86d15aad1ff62c4f4590025d836415307dc66cf0338235cc2f4  LICENSE
-diff --git a/package/protobuf-c/protobuf-c.mk b/package/protobuf-c/protobuf-c.mk
-index 0742a33db2..ccabd4723f 100644
---- a/package/protobuf-c/protobuf-c.mk
-+++ b/package/protobuf-c/protobuf-c.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PROTOBUF_C_VERSION = 1.4.1
-+PROTOBUF_C_VERSION = 1.5.0
- PROTOBUF_C_SITE = https://github.com/protobuf-c/protobuf-c/releases/download/v$(PROTOBUF_C_VERSION)
- PROTOBUF_C_DEPENDENCIES = host-protobuf-c
- HOST_PROTOBUF_C_DEPENDENCIES = host-protobuf host-pkgconf
-@@ -15,8 +15,8 @@ PROTOBUF_C_LICENSE = BSD-2-Clause
- PROTOBUF_C_LICENSE_FILES = LICENSE
- PROTOBUF_C_CPE_ID_VENDOR = protobuf-c_project
- 
--# host-protobuf needs c++11 (since 3.6.0)
--HOST_PROTOBUF_C_CONF_ENV += CXXFLAGS="$(HOST_CXXFLAGS) -std=c++11"
-+# when building with protoc (from host-protobuf) c++17 is now required
-+HOST_PROTOBUF_C_CONF_ENV += CXXFLAGS="$(HOST_CXXFLAGS) -std=c++17"
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
-diff --git a/package/riemann-c-client/Config.in b/package/riemann-c-client/Config.in
-index 6c3c35caf8..0985972a8b 100644
---- a/package/riemann-c-client/Config.in
-+++ b/package/riemann-c-client/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_RIEMANN_C_CLIENT
- 	depends on BR2_INSTALL_LIBSTDCPP # protobuf-c
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf-c
- 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS # protobuf-c
-+	depends on BR2_HOST_GCC_AT_LEAST_7 # protobuf-c
- 	select BR2_PACKAGE_PROTOBUF_C
- 	help
- 	  Riemann-c-client is a C client library for the Riemann
-@@ -12,6 +13,7 @@ config BR2_PACKAGE_RIEMANN_C_CLIENT
- 
- 	  https://github.com/algernon/riemann-c-client
- 
--comment "riemann-c-client needs a toolchain w/ C++, threads"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+comment "riemann-c-client needs a toolchain w/ C++, threads, host gcc >= 7"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_HOST_GCC_AT_LEAST_7
- 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8sCgpLcmlzLCBBbGwsCgpPbiAyMDI0LTAyLTAxIDEzOjU5IC0wODAwLCBLcmlzIEJhaG5z
+ZW4gdmlhIGJ1aWxkcm9vdCBzcGFrZSB0aHVzbHk6Cj4gRnJvbSA1NWU4ZDI5NDk5N2FmOTMzYmIz
+ZDgzMmI3MzIyOWJlYmVmYTQ1MDQ0IE1vbiBTZXAgMTcgMDA6MDA6MDAKPiAyMDAxCj4gRnJvbTog
+S3JpcyBCYWhuc2VuIDxrcmlzQGVtYmVkZGVkVFMuY29tPgo+IERhdGU6IFRodSwgMSBGZWIgMjAy
+NCAyMDo0NjozOSArMDAwMAo+IFN1YmplY3Q6IFtQQVRDSCAxLzFdIHBhY2thZ2Uvd2lsY19maXJt
+d2FyZTogYnVtcCB0byAxNi4xLjIKPiAKPiBSZWxlYXNlIGNoYW5nZWxvZzoKPiAtIFVzZSBkZWZh
+dWx0IHZhbHVlcyBmb3IgSVEgY2FsaWJyYXRpb24gY29ycmVjdGlvbiB3aGVuIHRoZSBlRnVzZQo+
+IHJlZ2lzdGVyIGhhcyB6ZXJvIHZhbHVlcy4KPiAtIEZpeCBmb3IgIldJTEMxMDAwIEZpcm13YXJl
+IGluaXRpYWxpemF0aW9uIGlzc3VlIiBieSB1cGRhdGluZwo+IHRoZSBQTVUgY2xvY2sgc3dpdGNo
+aW5nIHNlcXVlbmNlIGR1cmluZyBmaXJtd2FyZSBpbml0aWFsaXphdGlvbi4KPiAKPiBTaWduZWQt
+b2ZmLWJ5OiBLcmlzIEJhaG5zZW4gPGtyaXNAZW1iZWRkZWRUUy5jb20+CgpJdCBzZWVtcyB5b3Vy
+IHBhdGNoIGdvdCBiYWRseSBtYW5nbGVkLCBhbmQgSSBoYWQgaXNzdWVzIGFwcGx5aW5nIGl0Cihn
+aXQtYW0gd2hpbmVkIHRoZSBwYXRjaCB3YXMgZW1wdHkpLiBBbmQgSSBub3RpY2UgdGhhdCB0aGUg
+bWFpbCBoZWFkZXJzCmFyZSBpbmNsdWRlZCBpbiB0aGUgcGF0Y2guIE5vdCBzdXJlIHdoYXQgaGFw
+cGVuLiBVc2luZyAiZ2l0IHNlbmQtZW1haWwiCmlzIGtub3duIHRvIHNlbmQgY29ycmVjdGx5IGZv
+cm1hdHRlZCBwYXRjaGVzLCBzbyBtYXliZSBjaGVjayBpZiB5b3UgY2FuCmRvIHRoYXQgbmV4dCB0
+aW1lLgoKTXkgYXBvbG9naWVzLCBJIHVzdWFsbHkgdXNlIGBnaXQgc2VuZC1lbWFpbGAsIGJ1dCBo
+YWQgdG8gdXNlIGFuIGVtYWlsCmNsaWVudCB0byBzZW5kIHRoaXMgcGF0Y2ggKGFuZCBvYnZpb3Vz
+bHkgZGlkIGl0IGluY29ycmVjdGx5KS4gRnV0dXJlCnBhdGNoZXMgd2lsbCBhbGwgY29tZSBpbiBv
+biBgZ2l0IHNlbmQtZW1haWxgLiBUaGFua3MhCgoKQXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcy4K
+ClJlZ2FyZHMsCllhbm4gRS4gTU9SSU4uCgo+IC0tLQo+IMKgcGFja2FnZS93aWxjLWZpcm13YXJl
+L3dpbGMtZmlybXdhcmUuaGFzaCB8IDIgKy0KPiDCoHBhY2thZ2Uvd2lsYy1maXJtd2FyZS93aWxj
+LWZpcm13YXJlLm1rwqDCoCB8IDIgKy0KPiDCoDIgZmlsZXMgY2hhbmdlZCwgMiBpbnNlcnRpb25z
+KCspLCAyIGRlbGV0aW9ucygtKQo+IAo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3dpbGMtZmlybXdh
+cmUvd2lsYy1maXJtd2FyZS5oYXNoIGIvcGFja2FnZS93aWxjLQo+IGZpcm13YXJlL3dpbGMtZmly
+bXdhcmUuaGFzaAo+IGluZGV4IDgwMmNiNGY5YjEuLjhhNzk1N2ExZDIgMTAwNjQ0Cj4gLS0tIGEv
+cGFja2FnZS93aWxjLWZpcm13YXJlL3dpbGMtZmlybXdhcmUuaGFzaAo+ICsrKyBiL3BhY2thZ2Uv
+d2lsYy1maXJtd2FyZS93aWxjLWZpcm13YXJlLmhhc2gKPiBAQCAtMSwzICsxLDMgQEAKPiDCoCMg
+TG9jYWxseSBjYWxjdWxhdGVkCj4gLXNoYTI1NsKgCj4gYTA2YTZhNDZlMDNjYTAwZDM1ZGEyMjBm
+N2E5ZjM1M2NjNjUwZTVlNTY1N2E3OTg4ZWE3MzI5MTNhZDI2ZDlhMMKgCj4gd2lsYy1maXJtd2Fy
+ZS13aWxjX2xpbnV4XzE2XzEudGFyLmd6Cj4gK3NoYTI1NsKgCj4gNmNkNWZjNTIxNTA1MjBiZWRi
+NzM2ZjU4MTI0MDYzMDQxYjRkOTg0OWVhMzM0ODFhOGIwNzVmNTFhZWM2NGY4ZcKgCj4gd2lsYy1m
+aXJtd2FyZS13aWxjX2xpbnV4XzE2XzFfMi50YXIuZ3oKPiDCoHNoYTI1NsKgCj4gNzEzNTVlZWU5
+NDdhMzEyNTk0ZGJkYWFjMDM5ODI3NTQ0ZjkzZDIzOTQ5YjY1YzM1NmI3YjBjZTA5ZTI2MDBmYsKg
+Cj4gTElDRU5TRS53aWxjX2Z3Cj4gZGlmZiAtLWdpdCBhL3BhY2thZ2Uvd2lsYy1maXJtd2FyZS93
+aWxjLWZpcm13YXJlLm1rIGIvcGFja2FnZS93aWxjLQo+IGZpcm13YXJlL3dpbGMtZmlybXdhcmUu
+bWsKPiBpbmRleCAxMmM4MjVjZjkyLi4zMzgxMTYyYmJkIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2Uv
+d2lsYy1maXJtd2FyZS93aWxjLWZpcm13YXJlLm1rCj4gKysrIGIvcGFja2FnZS93aWxjLWZpcm13
+YXJlL3dpbGMtZmlybXdhcmUubWsKPiBAQCAtNCw3ICs0LDcgQEAKPiDCoCMKPiDCoCMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjCj4gIyMjIyMjIyMjIyMjCj4gwqAKPiAtV0lMQ19GSVJNV0FSRV9WRVJTSU9OID0gd2lsY19s
+aW51eF8xNl8xCj4gK1dJTENfRklSTVdBUkVfVkVSU0lPTiA9IHdpbGNfbGludXhfMTZfMV8yCj4g
+wqBXSUxDX0ZJUk1XQVJFX1NJVEUgPSAkKGNhbGwKPiBnaXRodWIsbGludXg0d2lsYyxmaXJtd2Fy
+ZSwkKFdJTENfRklSTVdBUkVfVkVSU0lPTikpCj4gwqAKPiDCoFdJTENfRklSTVdBUkVfTElDRU5T
+RSA9IFBST1BSSUVUQVJZCj4gLS0gCj4gMi4zNC4xCj4gCj4gX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4gYnVp
+bGRyb290QGJ1aWxkcm9vdC5vcmcKPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
+bi9saXN0aW5mby9idWlsZHJvb3QKCgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290
+Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJv
+b3QK
