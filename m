@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC97CC4828D
-	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 22:22:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E999C4828D
+	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 22:22:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 62EAA418AA;
-	Mon,  5 Feb 2024 22:22:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62EAA418AA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0638A41B71;
+	Mon,  5 Feb 2024 22:22:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0638A41B71
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id N6Izv3Nf4Jto; Mon,  5 Feb 2024 22:22:21 +0000 (UTC)
+	with ESMTP id dwsTb2inPgv8; Mon,  5 Feb 2024 22:22:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 77684418AC;
-	Mon,  5 Feb 2024 22:22:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77684418AC
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 777AB1BF319
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 22:21:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3EB2B41B51;
+	Mon,  5 Feb 2024 22:22:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3EB2B41B51
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 09E3A1BF319
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 22:22:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4F50481FEA
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 22:21:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F50481FEA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3544641B71
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 22:22:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3544641B71
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bZtGZDN8D7xb for <buildroot@lists.busybox.net>;
- Mon,  5 Feb 2024 22:21:52 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 65A2781FEC
- for <buildroot@buildroot.org>; Mon,  5 Feb 2024 22:21:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 65A2781FEC
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5383186E72; Mon,  5 Feb 2024 22:21:52 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 5 Feb 2024 23:20:25 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3b342b77938622d89fbe6eca20ed5d251a884569
-X-Git-Newrev: 9ce02d84ada4fdf6fbf45a60a7934a5edae05c8f
-X-Patchwork-Hint: ignore
-Message-Id: <20240205222152.5383186E72@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: add usbutils runtime test
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Sg3uYW_bqYQ3 for <buildroot@lists.busybox.net>;
+ Mon,  5 Feb 2024 22:22:21 +0000 (UTC)
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3D08D41B7F
+ for <buildroot@buildroot.org>; Mon,  5 Feb 2024 22:22:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D08D41B7F
+Received: from ymorin.is-a-geek.org (unknown [194.78.211.220])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id 7744619F5C6;
+ Mon,  5 Feb 2024 23:22:17 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Mon, 05 Feb 2024 23:22:15 +0100
+Date: Mon, 5 Feb 2024 23:22:15 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Joachim Wiberg <troglobit@gmail.com>
+Message-ID: <ZcFfl7qCM9_NYuHJ@landeda>
+References: <20240130215628.884512-1-troglobit@gmail.com>
+ <20240130215628.884512-2-troglobit@gmail.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20240130215628.884512-2-troglobit@gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1707171739;
+ bh=vj1NXPUetp29PGPsG0U7HFBqcCbFUF9z6j1s/Hk+Pro=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=EjqYjTnrDbxBHHkciZPsBWGhVpjZ6mGIiX5I5zwtSIm+/3HujkpKwrZhrhVh5qkgT
+ CoDGb26vh8uhQTBv5IwHlwqMuc5riXhYDmUeGvAGmjI4p24bokthHI57cJDahtpL1g
+ 79lOK1s8kNN1SWsIS9t43FiPGUSoHtUo1DG0faKrBoBCRx9vMXZZzZLtNJ2VP3xKAk
+ /V6WmSoKin2DMhTEM4Szjy/pPspZ35b0MyZ8K8UyR7EOuGzsKQu1KiDnj6qrH7tUmx
+ mO0BxfTQo9iK1gQcez1PUkKRA/DsCuuxMBX+iizLaZZSVWEaRhLbcgmC4JCaRxzD/d
+ qbkggvkOO9tlQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=EjqYjTnr
+Subject: Re: [Buildroot] [PATCH v2 1/2] package/watchdogd: bump to version
+ 4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,112 +75,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9ce02d84ada4fdf6fbf45a60a7934a5edae05c8f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Joachim, All,
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-[Peter: add comment about USB keyboard/mouse]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- DEVELOPERS                                         |  2 +
- support/testing/tests/package/test_usbutils.py     | 61 ++++++++++++++++++++++
- .../package/test_usbutils/linux-usbutils.fragment  |  2 +
- 3 files changed, 65 insertions(+)
+On 2024-01-30 22:56 +0100, Joachim Wiberg spake thusly:
+> For details, see https://github.com/troglobit/watchdogd/releases/tag/4.0
+> 
+>  - Major feature upgrade, command line and .conf files compatible
+>  - LICENSE hash update due to update in copyright years
+>  - Enabling system monitor plugins have changed syntax upstream.  The
+>    `--with-foo=SECONDS` is now just `--with-foo`
+> 
+> This last upstream change require converting affected Config.in options
+> from int -> bool.  Legacy _WRAP:ers have been added to Config.legacy.in,
+> modeled on BR2_TARGET_ROOTFS_EXT2_BLOCKS.
+> 
+> Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+> ---
+[--SNIP--]
+> diff --git a/package/watchdogd/watchdogd.mk b/package/watchdogd/watchdogd.mk
+> index ea033b4e71..2e67c2847e 100644
+> --- a/package/watchdogd/watchdogd.mk
+> +++ b/package/watchdogd/watchdogd.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -WATCHDOGD_VERSION = 3.5
+> +WATCHDOGD_VERSION = 4.0
+>  WATCHDOGD_SITE = https://github.com/troglobit/watchdogd/releases/download/$(WATCHDOGD_VERSION)
+>  WATCHDOGD_LICENSE = ISC
+>  WATCHDOGD_LICENSE_FILES = LICENSE
+> @@ -20,28 +20,29 @@ else
+>  WATCHDOGD_CONF_OPTS += --enable-builtin-tests
+>  endif
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 12df3bef13..f7a10c364d 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1832,6 +1832,8 @@ F:	support/testing/tests/package/test_tcpdump.py
- F:	support/testing/tests/package/test_tesseract_ocr.py
- F:	support/testing/tests/package/test_trace_cmd.py
- F:	support/testing/tests/package/test_trace_cmd/
-+F:	support/testing/tests/package/test_usbutils.py
-+F:	support/testing/tests/package/test_usbutils/
- F:	support/testing/tests/package/test_weston.py
- F:	support/testing/tests/package/test_weston/
- F:	support/testing/tests/package/test_xz.py
-diff --git a/support/testing/tests/package/test_usbutils.py b/support/testing/tests/package/test_usbutils.py
-new file mode 100644
-index 0000000000..83c3f7f920
---- /dev/null
-+++ b/support/testing/tests/package/test_usbutils.py
-@@ -0,0 +1,61 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestUsbUtils(infra.basetest.BRTest):
-+    # A specific configuration is needed for testing usbutils, to
-+    # enable USB 2.0 support in the Kernel.
-+    linux_fragment = \
-+        infra.filepath("tests/package/test_usbutils/linux-usbutils.fragment")
-+    config = \
-+        f"""
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.73"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-+        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{linux_fragment}"
-+        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+        BR2_PACKAGE_EUDEV=y
-+        BR2_PACKAGE_USBUTILS=y
-+        BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        BR2_TARGET_ROOTFS_CPIO_GZIP=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
-+        kern = os.path.join(self.builddir, "images", "Image")
-+        # We add a USB keyboard and mouse devices for the test.
-+        self.emulator.boot(arch="aarch64",
-+                           kernel=kern,
-+                           kernel_cmdline=["console=ttyAMA0"],
-+                           options=["-M", "virt", "-cpu", "cortex-a57", "-m", "256M",
-+                                    "-initrd", img,
-+                                    "-device", "usb-ehci,id=ehci",
-+                                    "-device", "usb-kbd,bus=ehci.0",
-+                                    "-device", "usb-mouse,bus=ehci.0"])
-+        self.emulator.login()
-+
-+        # Check the program can execute. We also check the version
-+        # string to make sure we have the usbutils version. The
-+        # BusyBox lsusb ignores arguments.
-+        output, exit_code = self.emulator.run("lsusb --version")
-+        self.assertEqual(exit_code, 0)
-+        self.assertTrue(output[0].startswith("lsusb (usbutils)"))
-+
-+        # Test few simple and common invocations
-+        self.assertRunOk("lsusb")
-+        self.assertRunOk("lsusb --tree")
-+        self.assertRunOk("lsusb --verbose")
-+        # 1d6b:0002 is Linux Foundation 2.0 root hub
-+        # it should be present. lsusb return an error if no device
-+        # is found.
-+        self.assertRunOk("lsusb -d 1d6b:0002")
-+        # we emulate a USB keyboard and mouse, so usbhid-dump should find them
-+        self.assertRunOk("usbhid-dump")
-diff --git a/support/testing/tests/package/test_usbutils/linux-usbutils.fragment b/support/testing/tests/package/test_usbutils/linux-usbutils.fragment
-new file mode 100644
-index 0000000000..d9abd2821e
---- /dev/null
-+++ b/support/testing/tests/package/test_usbutils/linux-usbutils.fragment
-@@ -0,0 +1,2 @@
-+CONFIG_USB=y
-+CONFIG_USB_EHCI_HCD=y
+I also added explicit --without-XXX options for the new monitors, by the
+way.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
