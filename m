@@ -4,76 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93CE1C4828D
-	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 21:30:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E87D0C48292
+	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 21:31:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 47C384012F;
-	Mon,  5 Feb 2024 21:30:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 47C384012F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 95E0140160;
+	Mon,  5 Feb 2024 21:31:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 95E0140160
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3zuNtXylVVTv; Mon,  5 Feb 2024 21:30:46 +0000 (UTC)
+	with ESMTP id RPTnoRbgitjQ; Mon,  5 Feb 2024 21:31:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7F48A40160;
-	Mon,  5 Feb 2024 21:30:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7F48A40160
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5C446403A2;
+	Mon,  5 Feb 2024 21:30:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5C446403A2
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6E3971BF341
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 21:30:43 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D040C1BF341
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 21:30:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 550EE81EAB
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 21:30:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 550EE81EAB
+ by smtp1.osuosl.org (Postfix) with ESMTP id AA39181E10
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 21:30:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA39181E10
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EH7dFAyEp3Wi for <buildroot@lists.busybox.net>;
- Mon,  5 Feb 2024 21:30:42 +0000 (UTC)
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com
- [209.85.128.54])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B906881E10
- for <buildroot@buildroot.org>; Mon,  5 Feb 2024 21:30:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B906881E10
-Received: by mail-wm1-f54.google.com with SMTP id
- 5b1f17b1804b1-40fdd65a9bdso9162415e9.2
- for <buildroot@buildroot.org>; Mon, 05 Feb 2024 13:30:41 -0800 (PST)
+ with ESMTP id bcPcUAHWjgiz for <buildroot@lists.busybox.net>;
+ Mon,  5 Feb 2024 21:30:43 +0000 (UTC)
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com
+ [209.85.221.43])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3D9ED81E9E
+ for <buildroot@buildroot.org>; Mon,  5 Feb 2024 21:30:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D9ED81E9E
+Received: by mail-wr1-f43.google.com with SMTP id
+ ffacd0b85a97d-33adec41b55so3118951f8f.0
+ for <buildroot@buildroot.org>; Mon, 05 Feb 2024 13:30:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707168640; x=1707773440;
+ d=1e100.net; s=20230601; t=1707168641; x=1707773441;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=7hJrbdoBD31b0pfWMHDmrg2ch6ULAM3NatO3GZITfn4=;
- b=m6BnZbxjuD/S6x1BpNg/Uh5FYQuXNUr/9r6USkLcUa/wtbvhwbvJSHwZKXXNHhamd0
- TboenAqoM15agIU6AdpcErwEmi1wQMKNmiGc0qxh3kUI8/vMSJfcITO3niPwY7WWtIuA
- nIgWZZErofGCjgdDj94bN4BCIuAZbmME57MPPfOeTO+MGEJfkdX5bsSYyJduSK7LxQhN
- KUJrU93+XtCWmVCDoeJi+zvvZY4wEVjY7KrYhMYVK5LEN5/D8vKP9YEtbw9uXvDbAYvJ
- Edvf5NlmL5HhvV1dTuJESnMu68Rx/nIAIaXIw7CNV8cmrAdeNMfuhLRTiyocwYWUWLJt
- UHsQ==
-X-Gm-Message-State: AOJu0YzB54QDtpBakPs5/11I4gHUtw87fY/dUsH86/EqeqMeTwz8ZHfo
- l8/oMvLZcp+Lb9kVgCTPMnuZ/dE5TtoH93Uo03qdJ3WKoQp5LUPDywjxD6RC4Pk=
-X-Google-Smtp-Source: AGHT+IGue7UI+HYHTeaxmKLMSuoV9Yh4liqsDnO0g+Rhi8hRq4I7unO0gp8AZLWRbHxJgpAjMx27Ww==
-X-Received: by 2002:a05:6000:d92:b0:33b:1ae4:10be with SMTP id
- dv18-20020a0560000d9200b0033b1ae410bemr536549wrb.46.1707168639424; 
- Mon, 05 Feb 2024 13:30:39 -0800 (PST)
+ bh=c6q4zDBOM+uO4AA3UutruTxokb8SoE71d0MjmOwICnk=;
+ b=pJ46h/4HsgQkQfZKOPxZuTF8/hjbmVev54Y9456PxXprtKUkbzs8pY1sUsq3jN4oKy
+ LdGi/dJMxbRYGckgU8zSDpqVGApDQGnvTi1HUFBneX/2JPt6stBd3IX+MQyYzWzhMC0o
+ I5B1gInbxMT0t0lJJPfRCeDRPSW2xmu2U+RN+l5U2xRZElFValgo1aX8gHjPv59HgHIh
+ Nlw59P0V/1m5KJGe6N9IWNy0ezG29a3z7fYxnzmeCzKjLF4TMWX9iMvSVqB1iLtxjTnj
+ y65piWisYrOd5O1R/B3adq9sGRGRBfnf5n8zo0AihQD3Uj14tYT9MlWeO9dV6MRI0P7n
+ Rpqw==
+X-Gm-Message-State: AOJu0Yw9ouGI+1DnmV+9L+GamQ9Hq/fEm+a+WA8nvSi8bpdkuqVNQDjs
+ GvKAqY1u2s/IJqJHCLdKYN2/GQ1+UJSuJ/E9ikl6yz0m+5e0gm4k
+X-Google-Smtp-Source: AGHT+IELQCA7LBHMvGIwiI52eyvZMTvHpOPVn4wXM2K1B0KYL22gV5wrKFk6wX5u52YM6teKlyMBog==
+X-Received: by 2002:a5d:56c6:0:b0:33b:17c5:f25c with SMTP id
+ m6-20020a5d56c6000000b0033b17c5f25cmr592592wrw.44.1707168641010; 
+ Mon, 05 Feb 2024 13:30:41 -0800 (PST)
 X-Forwarded-Encrypted: i=0;
- AJvYcCU6wxb5WJxlz2ezEPjCy626rdLEMFrVh6HVJwthoaWUWRhGqzi7HSTr1VouOvD8m6Weciqxw6kW4Pyi8/qrIuSc6FDk8kmfzMEO4kOsV05NV3c5E/Bh89XEsusONU7ZT7sUeFCawgfoju8e1JFvjaUyHBFMIstq5BY2C4m3gcZLO++VdioesNEMyZuOvPnR8PkuqKaGLOjCkGUq3ND/4UPDb1FLdWYDgAPsgK0agoGT+XlDwyJ31WZY8Hy/p6uGdCyERfalBaZrh5uR
+ AJvYcCUIEMinBPKo0XfVckZPSyBu2jckQjNIondwfeOgqSneL6GLBro+0zvHRAjk2HPxZuaYNe1gg48B+7fIn6Temzab6/8Pbd5wC2OXCXQxhBM0Yp0LI7JqB6qSZP02hbi/3iEfaOzM9m+DmIPpQfy+mv7UCby+fS+MXnTIaBnuicVDolftzO7WLGJU94cTYADhqHyj6wQ1sQC2KV5vTj3MLwEqYkl8hbvw6io0XfmTflfYl18+c+iZ0P3PzKsISMJZhqIA60e6R9ZdWpmA
 Received: from localhost.localdomain
  ([2a02:a03f:eb68:2f00:57d3:fa5a:150f:8385])
  by smtp.gmail.com with ESMTPSA id
- h5-20020a05600016c500b0033b464bc0d9sm65205wrf.24.2024.02.05.13.30.38
+ h5-20020a05600016c500b0033b464bc0d9sm65205wrf.24.2024.02.05.13.30.40
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 05 Feb 2024 13:30:39 -0800 (PST)
+ Mon, 05 Feb 2024 13:30:40 -0800 (PST)
 From: Thomas Devoogdt <thomas@devoogdt.com>
 To: thomas@devoogdt.com
-Date: Mon,  5 Feb 2024 22:30:34 +0100
-Message-Id: <20240205213035.3180167-1-thomas@devoogdt.com>
+Date: Mon,  5 Feb 2024 22:30:35 +0100
+Message-Id: <20240205213035.3180167-2-thomas@devoogdt.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240205212300.3178519-2-thomas@devoogdt.com>
+In-Reply-To: <20240205213035.3180167-1-thomas@devoogdt.com>
 References: <20240205212300.3178519-2-thomas@devoogdt.com>
+ <20240205213035.3180167-1-thomas@devoogdt.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v8 1/2] package/cairo: move to the meson build
- system
+Subject: [Buildroot] [PATCH v8 2/2] package/cairo: bump to 1.18.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,553 +93,330 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Moved BR2_PACKAGE_CAIRO_{SCRIPT,PS,PDF,XML} to Config.in.legacy
-  since they are not selectable anymore in the meson-build options.
-  BR2_PACKAGE_CAIRO_ZLIB serves for all of them now.
+News:
+ - https://www.cairographics.org/news/cairo-1.17.8/
+ - https://www.cairographics.org/news/cairo-1.18.0/
 
-- Moved BR2_PACKAGE_CAIRO_SVG to Config.in.legacy since the PNG
-  option already selects that one. This is now in sync with the
-  meson build options.
+Some options are renamed/dropped so fix that along.
+ - GL and GLES drawing has been dropped in 1.17.8.
+ - The XML surface has been removed in 1.18.0.
+ - xlib-xcb was added [1]
 
-- Note that the dependencies for the various options are slightly changed,
-  but there is not much mentioned about that, the meson introduction is done
-  in one big commit: [1].
+Patches:
+ - drop 0001-_arc_max_angle_for_tolerance_normalized-fix-infinite.patch, upstream: [2]
+ - drop 0002-Fix-mask-usage-in-image-compositor.patch, upstream: [3]
+ - drop 0004-meson-allow-skipping-of-run-check-for-IPC_RMID_DEFER.patch, upstream: [4]
 
-- Added xlib_libXrender dependency, which was already required
-  before meson, it just came to my attention since it's a hard
-  error now.
-
-- Added two patches to fix cross compiling, upstream: [2].
-
-[1]: https://gitlab.freedesktop.org/cairo/cairo/-/commit/596a82f2d185b101bd74645492821fe2f9e0daa0
-[2]: https://gitlab.freedesktop.org/cairo/cairo/-/merge_requests/534
+[1]: https://gitlab.freedesktop.org/cairo/cairo/-/commit/3468c67fe91f0c37e0ec5d335082653a6fa609b6
+[2]: https://gitlab.freedesktop.org/cairo/cairo/-/commit/ab2c5ee21e5f3d3ee4b3f67cfcd5811a4f99c3a0
+[3]: https://gitlab.freedesktop.org/cairo/cairo/-/commit/03a820b173ed1fdef6ff14b4468f5dbc02ff59be
+[4]: https://gitlab.freedesktop.org/cairo/cairo/-/commit/1bec56ea8a931e1ae1c74cc740134497ec365267
 
 Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
 ---
-v2: added -std=gnu11 (allow inline int declaration in if loop, 99 caused some directives problems)
-v3: enabled host-zlib, needed for librsvg
-v4: also added gnu11 for host-cairo compiling (fixes my compilation on a gcc 4.9.2 based system)
 v5: split in 3 commits: https://lore.kernel.org/buildroot/20240105101105.6a181dcd@windsurf/
-v6: fix host-zlib option (again)
-v7: reworked patch by moving the old config options to legacy and by restoring their original order
+v7: rebased on v7-0001-package-cairo-move-to-the-meson-build-system
+v8: forgot .checkpackageignore 
 ---
- Config.in.legacy                              |  35 ++++
- ...ping-of-run-check-for-IPC_RMID_DEFER.patch |  62 +++++++
- ...p-IPC_RMID_DEFERRED_RELEASE-check-wh.patch |  41 +++++
- package/cairo/Config.in                       |  28 +--
- package/cairo/cairo.mk                        | 160 +++++-------------
- package/libgtk2/Config.in                     |   5 +-
- package/libgtk3/Config.in                     |   5 +-
- package/librsvg/Config.in                     |   2 +-
- package/libsvg-cairo/Config.in                |   2 +-
- package/rrdtool/Config.in                     |   4 +-
- 10 files changed, 194 insertions(+), 150 deletions(-)
- create mode 100644 package/cairo/0004-meson-allow-skipping-of-run-check-for-IPC_RMID_DEFER.patch
- create mode 100644 package/cairo/0005-meson-always-skip-IPC_RMID_DEFERRED_RELEASE-check-wh.patch
+ .checkpackageignore                           |  2 -
+ ...or_tolerance_normalized-fix-infinite.patch | 39 ------------
+ ...rivate.h-fix-missing-FT_Color-error.patch} |  0
+ ...2-Fix-mask-usage-in-image-compositor.patch | 56 -----------------
+ ...-IPC_RMID_DEFERRED_RELEASE-check-wh.patch} |  0
+ ...ping-of-run-check-for-IPC_RMID_DEFER.patch | 62 -------------------
+ package/cairo/cairo.hash                      |  6 +-
+ package/cairo/cairo.mk                        | 21 ++++---
+ 8 files changed, 14 insertions(+), 172 deletions(-)
+ delete mode 100644 package/cairo/0001-_arc_max_angle_for_tolerance_normalized-fix-infinite.patch
+ rename package/cairo/{0003-cairo-ft-private.h-fix-missing-FT_Color-error.patch => 0001-cairo-ft-private.h-fix-missing-FT_Color-error.patch} (100%)
+ delete mode 100644 package/cairo/0002-Fix-mask-usage-in-image-compositor.patch
+ rename package/cairo/{0005-meson-always-skip-IPC_RMID_DEFERRED_RELEASE-check-wh.patch => 0002-meson-always-skip-IPC_RMID_DEFERRED_RELEASE-check-wh.patch} (100%)
+ delete mode 100644 package/cairo/0004-meson-allow-skipping-of-run-check-for-IPC_RMID_DEFER.patch
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 82387338d9..431552afe7 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,41 @@ endif
- 
- comment "Legacy options removed in 2024.02"
- 
-+config BR2_PACKAGE_CAIRO_SVG
-+	bool "cairo svg support"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_CAIRO_PNG
-+	help
-+	  Cairo SVG is compiled together with PNG, so no need to have this config.
-+
-+config BR2_PACKAGE_CAIRO_SCRIPT
-+	bool "cairo script support"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_CAIRO_ZLIB
-+	help
-+	  Cairo script got merged in to cairo zlib with the introduction of meson.
-+
-+config BR2_PACKAGE_CAIRO_PS
-+	bool "cairo postscript support"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_CAIRO_ZLIB
-+	help
-+	  Cairo PS got merged in to cairo zlib with the introduction of meson.
-+
-+config BR2_PACKAGE_CAIRO_PDF
-+	bool "cairo pdf support"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_CAIRO_ZLIB
-+	help
-+	  Cairo PDF got merged in to cairo zlib with the introduction of meson.
-+
-+config BR2_PACKAGE_CAIRO_XML
-+	bool "cairo xml support"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_CAIRO_ZLIB
-+	help
-+	  Cairo XML got merged in to cairo zlib with the introduction of meson.
-+
- config BR2_KERNEL_HEADERS_4_14
- 	bool "kernel headers version 4.14.x are no longer supported"
- 	select BR2_LEGACY
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 348cf3d289..86a774139a 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -227,8 +227,6 @@ package/c-icap/0001-Required-fixes-to-compile-and-run-under-cygwin.patch Upstrea
+ package/c-icap/S96cicap Indent Shellcheck Variables
+ package/ca-certificates/0001-mozilla-certdata2pem.py-make-cryptography-module-opt.patch Upstream
+ package/cache-calibrator/0001-Fix-conflicting-round-function.patch Upstream
+-package/cairo/0001-_arc_max_angle_for_tolerance_normalized-fix-infinite.patch Upstream
+-package/cairo/0002-Fix-mask-usage-in-image-compositor.patch Upstream
+ package/caps/0001-Fix-stdint-types-with-musl.patch Upstream
+ package/cdrkit/0001-no-rcmd.patch Upstream
+ package/cdrkit/0002-define-__THROW-to-avoid-build-issue-with-musl.patch Upstream
+diff --git a/package/cairo/0001-_arc_max_angle_for_tolerance_normalized-fix-infinite.patch b/package/cairo/0001-_arc_max_angle_for_tolerance_normalized-fix-infinite.patch
+deleted file mode 100644
+index 078e90fa42..0000000000
+--- a/package/cairo/0001-_arc_max_angle_for_tolerance_normalized-fix-infinite.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From ab2c5ee21e5f3d3ee4b3f67cfcd5811a4f99c3a0 Mon Sep 17 00:00:00 2001
+-From: Heiko Lewin <hlewin@gmx.de>
+-Date: Sun, 1 Aug 2021 11:16:03 +0000
+-Subject: [PATCH] _arc_max_angle_for_tolerance_normalized: fix infinite loop
+-
+-[Retrieved from:
+-https://gitlab.freedesktop.org/cairo/cairo/-/commit/ab2c5ee21e5f3d3ee4b3f67cfcd5811a4f99c3a0]
+-Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+----
+- src/cairo-arc.c | 4 +++-
+- 1 file changed, 3 insertions(+), 1 deletion(-)
+-
+-diff --git a/src/cairo-arc.c b/src/cairo-arc.c
+-index 390397bae..1c891d1a0 100644
+---- a/src/cairo-arc.c
+-+++ b/src/cairo-arc.c
+-@@ -90,16 +90,18 @@ _arc_max_angle_for_tolerance_normalized (double tolerance)
+- 	{ M_PI / 11.0,  9.81410988043554039085e-09 },
+-     };
+-     int table_size = ARRAY_LENGTH (table);
+-+    const int max_segments = 1000; /* this value is chosen arbitrarily. this gives an error of about 1.74909e-20 */
+- 
+-     for (i = 0; i < table_size; i++)
+- 	if (table[i].error < tolerance)
+- 	    return table[i].angle;
+- 
+-     ++i;
+-+
+-     do {
+- 	angle = M_PI / i++;
+- 	error = _arc_error_normalized (angle);
+--    } while (error > tolerance);
+-+    } while (error > tolerance && i < max_segments);
+- 
+-     return angle;
+- }
+--- 
+-2.38.1
+-
+diff --git a/package/cairo/0003-cairo-ft-private.h-fix-missing-FT_Color-error.patch b/package/cairo/0001-cairo-ft-private.h-fix-missing-FT_Color-error.patch
+similarity index 100%
+rename from package/cairo/0003-cairo-ft-private.h-fix-missing-FT_Color-error.patch
+rename to package/cairo/0001-cairo-ft-private.h-fix-missing-FT_Color-error.patch
+diff --git a/package/cairo/0002-Fix-mask-usage-in-image-compositor.patch b/package/cairo/0002-Fix-mask-usage-in-image-compositor.patch
+deleted file mode 100644
+index 54a95593c5..0000000000
+--- a/package/cairo/0002-Fix-mask-usage-in-image-compositor.patch
++++ /dev/null
+@@ -1,56 +0,0 @@
+-From 03a820b173ed1fdef6ff14b4468f5dbc02ff59be Mon Sep 17 00:00:00 2001
+-From: Heiko Lewin <heiko.lewin@worldiety.de>
+-Date: Tue, 15 Dec 2020 16:48:19 +0100
+-Subject: [PATCH] Fix mask usage in image-compositor
+-
+-[Retrieved from
+-https://gitlab.freedesktop.org/cairo/cairo/-/commit/03a820b173ed1fdef6ff14b4468f5dbc02ff59be]
+-[Removed changes in test/ directory to remove binary diff so that the
+-patch can be applied by `patch` tool]
+-Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+----
+- src/cairo-image-compositor.c | 8 ++++----
+- 1 file changed, 4 insertions(+), 4 deletions(-)
+-
+-diff --git a/src/cairo-image-compositor.c b/src/cairo-image-compositor.c
+-index bbf4cf228..2352c478e 100644
+---- a/src/cairo-image-compositor.c
+-+++ b/src/cairo-image-compositor.c
+-@@ -2601,14 +2601,14 @@ _inplace_src_spans (void *abstract_renderer, int y, int h,
+- 		    unsigned num_spans)
+- {
+-     cairo_image_span_renderer_t *r = abstract_renderer;
+--    uint8_t *m;
+-+    uint8_t *m, *base = (uint8_t*)pixman_image_get_data(r->mask);
+-     int x0;
+- 
+-     if (num_spans == 0)
+- 	return CAIRO_STATUS_SUCCESS;
+- 
+-     x0 = spans[0].x;
+--    m = r->_buf;
+-+    m = base;
+-     do {
+- 	int len = spans[1].x - spans[0].x;
+- 	if (len >= r->u.composite.run_length && spans[0].coverage == 0xff) {
+-@@ -2646,7 +2646,7 @@ _inplace_src_spans (void *abstract_renderer, int y, int h,
+- 				      spans[0].x, y,
+- 				      spans[1].x - spans[0].x, h);
+- 
+--	    m = r->_buf;
+-+	    m = base;
+- 	    x0 = spans[1].x;
+- 	} else if (spans[0].coverage == 0x0) {
+- 	    if (spans[0].x != x0) {
+-@@ -2675,7 +2675,7 @@ _inplace_src_spans (void *abstract_renderer, int y, int h,
+- #endif
+- 	    }
+- 
+--	    m = r->_buf;
+-+	    m = base;
+- 	    x0 = spans[1].x;
+- 	} else {
+- 	    *m++ = spans[0].coverage;
+--- 
+-2.38.1
+-
+diff --git a/package/cairo/0005-meson-always-skip-IPC_RMID_DEFERRED_RELEASE-check-wh.patch b/package/cairo/0002-meson-always-skip-IPC_RMID_DEFERRED_RELEASE-check-wh.patch
+similarity index 100%
+rename from package/cairo/0005-meson-always-skip-IPC_RMID_DEFERRED_RELEASE-check-wh.patch
+rename to package/cairo/0002-meson-always-skip-IPC_RMID_DEFERRED_RELEASE-check-wh.patch
 diff --git a/package/cairo/0004-meson-allow-skipping-of-run-check-for-IPC_RMID_DEFER.patch b/package/cairo/0004-meson-allow-skipping-of-run-check-for-IPC_RMID_DEFER.patch
-new file mode 100644
-index 0000000000..193a210391
---- /dev/null
-+++ b/package/cairo/0004-meson-allow-skipping-of-run-check-for-IPC_RMID_DEFER.patch
-@@ -0,0 +1,62 @@
-+From 39cbc3c1f1caf558188bd2203c976bae8de2f6a7 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Tim-Philipp=20M=C3=BCller?= <tim@centricular.com>
-+Date: Thu, 25 Feb 2021 10:52:45 +0000
-+Subject: [PATCH] meson: allow skipping of run check for
-+ IPC_RMID_DEFERRED_RELEASE
-+
-+The run check is particularly annoying in cross-compile scenarios,
-+so allow bypassing the check by having the user provide the value
-+via a cross file or native file:
-+
-+  [properties]
-+  ipc_rmid_deferred_release = true
-+
-+Closes #408
-+
-+Upstream: https://gitlab.freedesktop.org/cairo/cairo/-/commit/1bec56ea8a931e1ae1c74cc740134497ec365267
-+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-+---
-+ meson.build | 25 ++++++++++++++++++++-----
-+ 1 file changed, 20 insertions(+), 5 deletions(-)
-+
-+diff --git a/meson.build b/meson.build
-+index b159b4071..5f593e54d 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -264,13 +264,28 @@ if x11_dep.found() and xext_dep.found()
-+     ['X11/extensions/shmstr.h', {'extra-headers': extra_headers}],
-+   ]
-+   deps += [x11_dep, xext_dep]
-+-  res = cc.run(files('meson-cc-tests/ipc_rmid_deferred_release.c'),
-+-    dependencies: [x11_dep, xext_dep],
-+-    name: 'shmctl IPC_RMID allowes subsequent attaches')
-+ 
-+-  if res.returncode() == 0
-+-    conf.set('IPC_RMID_DEFERRED_RELEASE', 1)
-++  # Can skip the run check by providing the result in a cross file or
-++  # native file as bool property value.
-++  prop = meson.get_external_property('ipc_rmid_deferred_release', 'auto')
-++  # We don't know the type of prop (bool, string) but need to differentiate
-++  # between a set value (bool) or the fallback value (string), so convert to
-++  # a string and chec the string value.
-++  prop_str = '@0@'.format(prop)
-++  if prop_str in ['true', 'false']
-++    ipc_rmid_deferred_release = (prop_str == 'true')
-++    message('IPC_RMID_DEFERRED_RELEASE:', ipc_rmid_deferred_release)
-++  elif prop_str == 'auto'
-++    res = cc.run(files('meson-cc-tests/ipc_rmid_deferred_release.c'),
-++      dependencies: [x11_dep, xext_dep],
-++      name: 'shmctl IPC_RMID allowes subsequent attaches')
-++
-++    ipc_rmid_deferred_release = (res.returncode() == 0)
-++  else
-++    error('Unexpected value for external property ipc_rmid_deferred_release: @0@'.format(prop_str))
-+   endif
-++
-++  conf.set10('IPC_RMID_DEFERRED_RELEASE', ipc_rmid_deferred_release)
-+ endif
-+ 
-+ if feature_conf.get('CAIRO_HAS_XLIB_SURFACE', 0) == 1
-+-- 
-+2.34.1
-+
-diff --git a/package/cairo/0005-meson-always-skip-IPC_RMID_DEFERRED_RELEASE-check-wh.patch b/package/cairo/0005-meson-always-skip-IPC_RMID_DEFERRED_RELEASE-check-wh.patch
-new file mode 100644
-index 0000000000..b57379fced
---- /dev/null
-+++ b/package/cairo/0005-meson-always-skip-IPC_RMID_DEFERRED_RELEASE-check-wh.patch
-@@ -0,0 +1,41 @@
-+From d628c24e757e35e53e6e19fea5f23c93611c9cda Mon Sep 17 00:00:00 2001
-+From: Thomas Devoogdt <thomas@devoogdt.com>
-+Date: Mon, 5 Feb 2024 17:47:07 +0100
-+Subject: [PATCH] meson: always skip IPC_RMID_DEFERRED_RELEASE check when cross
-+ compiling
-+
-+../../br-test-pkg/bootlin-armv5-uclibc/build/cairo-1.17.4/meson.build:279:13:
-+ERROR: Can not run test applications in this cross environment.
-+
-+Commit 1bec56ea8a931e1ae1c74cc740134497ec365267 added support to define
-+ipc_rmid_deferred_release in a cross-compile config, but still kept
-+the default to auto, which anyhow results in an error when cross-compiling.
-+
-+Fix that by always assuming 'true', the compilation might fail if IPC_RMID,
-+is not defined, but that is perhaps desirable.
-+
-+See https://www.man7.org/linux/man-pages/man2/shmctl.2.html for more info
-+about the call defined in meson-cc-tests/ipc_rmid_deferred_release.c
-+
-+Upstream: https://gitlab.freedesktop.org/cairo/cairo/-/merge_requests/534
-+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-+---
-+ meson.build | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/meson.build b/meson.build
-+index 9100152ee..1de0fac0d 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -369,7 +369,7 @@ if x11_dep.found() and xext_dep.found()
-+ 
-+   # Can skip the run check by providing the result in a cross file or
-+   # native file as bool property value.
-+-  prop = meson.get_external_property('ipc_rmid_deferred_release', 'auto')
-++  prop = meson.get_external_property('ipc_rmid_deferred_release', meson.is_cross_build() ? 'true' : 'auto')
-+   # We don't know the type of prop (bool, string) but need to differentiate
-+   # between a set value (bool) or the fallback value (string), so convert to
-+   # a string and check the string value.
-+-- 
-+2.34.1
-+
-diff --git a/package/cairo/Config.in b/package/cairo/Config.in
-index 0c87a2904b..c41a12fe81 100644
---- a/package/cairo/Config.in
-+++ b/package/cairo/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_FONTCONFIG
- 	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXRENDER if BR2_PACKAGE_XORG7
- 	help
- 	  Cairo is a 2D graphics library with support for multiple
- 	  output devices. Currently supported output targets include
-@@ -15,34 +16,15 @@ config BR2_PACKAGE_CAIRO
- 
- if BR2_PACKAGE_CAIRO
- 
--config BR2_PACKAGE_CAIRO_PS
--	bool "postscript support"
--	select BR2_PACKAGE_ZLIB
--	select BR2_PACKAGE_CAIRO_PDF
+deleted file mode 100644
+index 193a210391..0000000000
+--- a/package/cairo/0004-meson-allow-skipping-of-run-check-for-IPC_RMID_DEFER.patch
++++ /dev/null
+@@ -1,62 +0,0 @@
+-From 39cbc3c1f1caf558188bd2203c976bae8de2f6a7 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?Tim-Philipp=20M=C3=BCller?= <tim@centricular.com>
+-Date: Thu, 25 Feb 2021 10:52:45 +0000
+-Subject: [PATCH] meson: allow skipping of run check for
+- IPC_RMID_DEFERRED_RELEASE
 -
--config BR2_PACKAGE_CAIRO_PDF
--	bool "pdf support"
--	select BR2_PACKAGE_ZLIB
+-The run check is particularly annoying in cross-compile scenarios,
+-so allow bypassing the check by having the user provide the value
+-via a cross file or native file:
 -
- config BR2_PACKAGE_CAIRO_PNG
--	bool "png support"
-+	bool "png support (png and svg surfaces)"
- 	select BR2_PACKAGE_LIBPNG
--	select BR2_PACKAGE_ZLIB
+-  [properties]
+-  ipc_rmid_deferred_release = true
 -
--config BR2_PACKAGE_CAIRO_SCRIPT
--	bool "script support"
--	select BR2_PACKAGE_CAIRO_PNG
+-Closes #408
 -
--config BR2_PACKAGE_CAIRO_SVG
--	bool "svg support"
--	select BR2_PACKAGE_CAIRO_PNG
--	select BR2_PACKAGE_CAIRO_PDF
+-Upstream: https://gitlab.freedesktop.org/cairo/cairo/-/commit/1bec56ea8a931e1ae1c74cc740134497ec365267
+-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+----
+- meson.build | 25 ++++++++++++++++++++-----
+- 1 file changed, 20 insertions(+), 5 deletions(-)
+-
+-diff --git a/meson.build b/meson.build
+-index b159b4071..5f593e54d 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -264,13 +264,28 @@ if x11_dep.found() and xext_dep.found()
+-     ['X11/extensions/shmstr.h', {'extra-headers': extra_headers}],
+-   ]
+-   deps += [x11_dep, xext_dep]
+--  res = cc.run(files('meson-cc-tests/ipc_rmid_deferred_release.c'),
+--    dependencies: [x11_dep, xext_dep],
+--    name: 'shmctl IPC_RMID allowes subsequent attaches')
+- 
+--  if res.returncode() == 0
+--    conf.set('IPC_RMID_DEFERRED_RELEASE', 1)
+-+  # Can skip the run check by providing the result in a cross file or
+-+  # native file as bool property value.
+-+  prop = meson.get_external_property('ipc_rmid_deferred_release', 'auto')
+-+  # We don't know the type of prop (bool, string) but need to differentiate
+-+  # between a set value (bool) or the fallback value (string), so convert to
+-+  # a string and chec the string value.
+-+  prop_str = '@0@'.format(prop)
+-+  if prop_str in ['true', 'false']
+-+    ipc_rmid_deferred_release = (prop_str == 'true')
+-+    message('IPC_RMID_DEFERRED_RELEASE:', ipc_rmid_deferred_release)
+-+  elif prop_str == 'auto'
+-+    res = cc.run(files('meson-cc-tests/ipc_rmid_deferred_release.c'),
+-+      dependencies: [x11_dep, xext_dep],
+-+      name: 'shmctl IPC_RMID allowes subsequent attaches')
+-+
+-+    ipc_rmid_deferred_release = (res.returncode() == 0)
+-+  else
+-+    error('Unexpected value for external property ipc_rmid_deferred_release: @0@'.format(prop_str))
+-   endif
+-+
+-+  conf.set10('IPC_RMID_DEFERRED_RELEASE', ipc_rmid_deferred_release)
+- endif
+- 
+- if feature_conf.get('CAIRO_HAS_XLIB_SURFACE', 0) == 1
+--- 
+-2.34.1
+-
+diff --git a/package/cairo/cairo.hash b/package/cairo/cairo.hash
+index fca9ff678c..df9c693bad 100644
+--- a/package/cairo/cairo.hash
++++ b/package/cairo/cairo.hash
+@@ -1,7 +1,5 @@
+-# From https://www.cairographics.org/snapshots/cairo-1.17.4.tar.xz.sha1
+-sha1  68712ae1039b114347be3b7200bc1c901d47a636  cairo-1.17.4.tar.xz
+-# Calculated based on the hash above
+-sha256  74b24c1ed436bbe87499179a3b27c43f4143b8676d8ad237a6fa787401959705  cairo-1.17.4.tar.xz
++# From https://www.cairographics.org/releases/cairo-1.18.0.tar.xz.sha256sum
++sha256  243a0736b978a33dee29f9cca7521733b78a65b5418206fef7bd1c3d4cf10b64  cairo-1.18.0.tar.xz
  
- config BR2_PACKAGE_CAIRO_TEE
- 	bool "tee support"
- 
--config BR2_PACKAGE_CAIRO_XML
--	bool "xml support"
--	select BR2_PACKAGE_CAIRO_PNG
-+config BR2_PACKAGE_CAIRO_ZLIB
-+	bool "zlib support (script, ps, pdf, and xml surfaces)"
-+	select BR2_PACKAGE_ZLIB
- 
- endif
+ # Hash for license files:
+ sha256  67228a9f7c5f9b67c58f556f1be178f62da4d9e2e6285318d8c74d567255abdf  COPYING
 diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
-index 4515b76075..3d2a67a6c5 100644
+index 3d2a67a6c5..4ace04ebbe 100644
 --- a/package/cairo/cairo.mk
 +++ b/package/cairo/cairo.mk
-@@ -17,168 +17,96 @@ CAIRO_IGNORE_CVES += CVE-2019-6462
- # 0002-Fix-mask-usage-in-image-compositor.patch
- CAIRO_IGNORE_CVES += CVE-2020-35492
+@@ -4,19 +4,14 @@
+ #
+ ################################################################################
  
--CAIRO_CONF_ENV = LIBS="$(CAIRO_LIBS)"
-+CAIRO_CFLAGS = $(TARGET_CFLAGS)
-+CAIRO_LDFLAGS = $(TARGET_LDFLAGS)
+-CAIRO_VERSION = 1.17.4
++CAIRO_VERSION = 1.18.0
+ CAIRO_SOURCE = cairo-$(CAIRO_VERSION).tar.xz
+ CAIRO_LICENSE = LGPL-2.1 or MPL-1.1 (library)
+ CAIRO_LICENSE_FILES = COPYING COPYING-LGPL-2.1 COPYING-MPL-1.1
+ CAIRO_CPE_ID_VENDOR = cairographics
+-CAIRO_SITE = http://cairographics.org/snapshots
++CAIRO_SITE = http://cairographics.org/releases
+ CAIRO_INSTALL_STAGING = YES
  
- # relocation truncated to fit: R_68K_GOT16O
- ifeq ($(BR2_m68k_cf),y)
--CAIRO_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -mxgot"
--endif
+-# 0001-_arc_max_angle_for_tolerance_normalized-fix-infinite.patch
+-CAIRO_IGNORE_CVES += CVE-2019-6462
+-# 0002-Fix-mask-usage-in-image-compositor.patch
+-CAIRO_IGNORE_CVES += CVE-2020-35492
 -
--ifeq ($(BR2_TOOLCHAIN_HAS_THREADS_NPTL),)
--CAIRO_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) -DCAIRO_NO_MUTEX=1"
-+CAIRO_CFLAGS += -mxgot
- endif
+ CAIRO_CFLAGS = $(TARGET_CFLAGS)
+ CAIRO_LDFLAGS = $(TARGET_LDFLAGS)
  
- # cairo can use C++11 atomics when available, so we need to link with
- # libatomic for the architectures who need libatomic.
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
--CAIRO_LIBS += -latomic
-+CAIRO_LDFLAGS += -latomic
+@@ -32,9 +27,13 @@ CAIRO_LDFLAGS += -latomic
  endif
  
  CAIRO_CONF_OPTS = \
--	--enable-trace=no \
--	--enable-interpreter=no
--
--CAIRO_DEPENDENCIES = host-pkgconf fontconfig pixman
-+	-Dfontconfig=enabled \
-+	-Dtests=disabled \
-+	-Dspectre=disabled \
-+	-Dc_std=gnu11
-+CAIRO_DEPENDENCIES = \
-+	host-pkgconf \
-+	fontconfig \
-+	pixman
++	-Ddwrite=disabled \
+ 	-Dfontconfig=enabled \
++	-Dquartz=disabled \
+ 	-Dtests=disabled \
+ 	-Dspectre=disabled \
++	-Dsymbol-lookup=disabled \
++	-Dgtk_doc=false \
+ 	-Dc_std=gnu11
+ CAIRO_DEPENDENCIES = \
+ 	host-pkgconf \
+@@ -43,9 +42,11 @@ CAIRO_DEPENDENCIES = \
  
  # Just the bare minimum to make other host-* packages happy
  HOST_CAIRO_CONF_OPTS = \
--	--enable-trace=no \
--	--enable-interpreter=no \
--	--disable-directfb \
--	--enable-ft \
--	--enable-gobject \
--	--disable-glesv2 \
--	--disable-vg \
--	--disable-xlib \
--	--disable-xcb \
--	--without-x \
--	--disable-xlib-xrender \
--	--disable-ps \
--	--disable-pdf \
--	--enable-png \
--	--enable-script \
--	--disable-svg \
--	--disable-tee \
--	--disable-xml
-+	-Dfontconfig=enabled \
-+	-Dfreetype=enabled \
-+	-Dpng=enabled \
-+	-Dtee=disabled \
-+	-Dxcb=disabled \
-+	-Dxlib=disabled \
-+	-Dzlib=enabled \
-+	-Dtests=disabled \
-+	-Dglib=enabled \
-+	-Dspectre=disabled \
-+	-Dc_std=gnu11
++	-Ddwrite=disabled \
+ 	-Dfontconfig=enabled \
+ 	-Dfreetype=enabled \
+ 	-Dpng=enabled \
++	-Dquartz=disabled \
+ 	-Dtee=disabled \
+ 	-Dxcb=disabled \
+ 	-Dxlib=disabled \
+@@ -53,6 +54,8 @@ HOST_CAIRO_CONF_OPTS = \
+ 	-Dtests=disabled \
+ 	-Dglib=enabled \
+ 	-Dspectre=disabled \
++	-Dsymbol-lookup=disabled \
++	-Dgtk_doc=false \
+ 	-Dc_std=gnu11
  HOST_CAIRO_DEPENDENCIES = \
  	host-freetype \
- 	host-fontconfig \
- 	host-libglib2 \
- 	host-libpng \
- 	host-pixman \
--	host-pkgconf
-+	host-pkgconf \
-+	host-zlib
- 
--# DirectFB svg support rely on Cairo and Cairo DirectFB support depends on
--# DirectFB. Break circular dependency by disabling DirectFB support in Cairo
--# (which is experimental)
--ifeq ($(BR2_PACKAGE_DIRECTFB)x$(BR2_PACKAGE_DIRECTFB_SVG),yx)
--CAIRO_CONF_OPTS += --enable-directfb
--CAIRO_DEPENDENCIES += directfb
--else
--CAIRO_CONF_OPTS += --disable-directfb
-+ifeq ($(BR2_PACKAGE_LZO),y)
-+CAIRO_DEPENDENCIES += lzo
- endif
- 
- ifeq ($(BR2_PACKAGE_FREETYPE),y)
--CAIRO_CONF_OPTS += --enable-ft
-+CAIRO_CONF_OPTS += -Dfreetype=enabled
- CAIRO_DEPENDENCIES += freetype
- else
--CAIRO_CONF_OPTS += --disable-ft
--endif
--
--ifeq ($(BR2_PACKAGE_LIBEXECINFO),y)
--CAIRO_DEPENDENCIES += libexecinfo
--CAIRO_LIBS += -lexecinfo
-+CAIRO_CONF_OPTS += -Dfreetype=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
--CAIRO_CONF_OPTS += --enable-gobject
-+CAIRO_CONF_OPTS += -Dglib=enabled
- CAIRO_DEPENDENCIES += libglib2
- else
--CAIRO_CONF_OPTS += --disable-gobject
--endif
--
--# Can use GL or GLESv2 but not both
--ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
--CAIRO_CONF_OPTS += --enable-gl --disable-glesv2
--CAIRO_DEPENDENCIES += libgl
--else
--ifeq ($(BR2_PACKAGE_HAS_LIBGLES),y)
--CAIRO_CONF_OPTS += --disable-gl --enable-glesv2
--CAIRO_DEPENDENCIES += libgles
--else
--CAIRO_CONF_OPTS += --disable-gl --disable-glesv2
--endif
--endif
--
--ifeq ($(BR2_PACKAGE_HAS_LIBOPENVG),y)
--CAIRO_CONF_OPTS += --enable-vg
--CAIRO_DEPENDENCIES += libopenvg
--else
--CAIRO_CONF_OPTS += --disable-vg
--endif
--
--ifeq ($(BR2_PACKAGE_LZO),y)
--CAIRO_DEPENDENCIES += lzo
-+CAIRO_CONF_OPTS += -Dglib=disabled
+@@ -82,10 +85,10 @@ CAIRO_CONF_OPTS += -Dglib=disabled
  endif
  
  ifeq ($(BR2_PACKAGE_XORG7),y)
--CAIRO_CONF_OPTS += --enable-xlib --enable-xcb --with-x
--CAIRO_DEPENDENCIES += xlib_libX11 xlib_libXext
--else
--CAIRO_CONF_OPTS += --disable-xlib --disable-xcb --without-x
--endif
--
--ifeq ($(BR2_PACKAGE_XLIB_LIBXRENDER),y)
--CAIRO_CONF_OPTS += --enable-xlib-xrender
--CAIRO_DEPENDENCIES += xlib_libXrender
--else
--CAIRO_CONF_OPTS += --disable-xlib-xrender
--endif
--
--ifeq ($(BR2_PACKAGE_CAIRO_PS),y)
--CAIRO_CONF_OPTS += --enable-ps
--CAIRO_DEPENDENCIES += zlib
-+CAIRO_CONF_OPTS += -Dxcb=enabled -Dxlib=enabled
-+CAIRO_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXrender
+-CAIRO_CONF_OPTS += -Dxcb=enabled -Dxlib=enabled
++CAIRO_CONF_OPTS += -Dxcb=enabled -Dxlib=enabled -Dxlib-xcb=enabled
+ CAIRO_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXrender
  else
--CAIRO_CONF_OPTS += --disable-ps
--endif
--
--ifeq ($(BR2_PACKAGE_CAIRO_PDF),y)
--CAIRO_CONF_OPTS += --enable-pdf
--CAIRO_DEPENDENCIES += zlib
--else
--CAIRO_CONF_OPTS += --disable-pdf
-+CAIRO_CONF_OPTS += -Dxcb=disabled -Dxlib=disabled
+-CAIRO_CONF_OPTS += -Dxcb=disabled -Dxlib=disabled
++CAIRO_CONF_OPTS += -Dxcb=disabled -Dxlib=disabled -Dxlib-xcb=disabled
  endif
  
  ifeq ($(BR2_PACKAGE_CAIRO_PNG),y)
--CAIRO_CONF_OPTS += --enable-png
-+CAIRO_CONF_OPTS += -Dpng=enabled
- CAIRO_DEPENDENCIES += libpng
- else
--CAIRO_CONF_OPTS += --disable-png
--endif
--
--ifeq ($(BR2_PACKAGE_CAIRO_SCRIPT),y)
--CAIRO_CONF_OPTS += --enable-script
--else
--CAIRO_CONF_OPTS += --disable-script
--endif
--
--ifeq ($(BR2_PACKAGE_CAIRO_SVG),y)
--CAIRO_CONF_OPTS += --enable-svg
--else
--CAIRO_CONF_OPTS += --disable-svg
-+CAIRO_CONF_OPTS += -Dpng=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_CAIRO_TEE),y)
--CAIRO_CONF_OPTS += --enable-tee
-+CAIRO_CONF_OPTS += -Dtee=enabled
- else
--CAIRO_CONF_OPTS += --disable-tee
-+CAIRO_CONF_OPTS += -Dtee=disabled
- endif
- 
--ifeq ($(BR2_PACKAGE_CAIRO_XML),y)
--CAIRO_CONF_OPTS += --enable-xml
-+ifeq ($(BR2_PACKAGE_CAIRO_ZLIB),y)
-+CAIRO_CONF_OPTS += -Dzlib=enabled
-+CAIRO_DEPENDENCIES += zlib
- else
--CAIRO_CONF_OPTS += --disable-xml
-+CAIRO_CONF_OPTS += -Dzlib=disabled
- endif
- 
--$(eval $(autotools-package))
--$(eval $(host-autotools-package))
-+$(eval $(meson-package))
-+$(eval $(host-meson-package))
-diff --git a/package/libgtk2/Config.in b/package/libgtk2/Config.in
-index f2888b2f51..f8821ba246 100644
---- a/package/libgtk2/Config.in
-+++ b/package/libgtk2/Config.in
-@@ -9,9 +9,8 @@ config BR2_PACKAGE_LIBGTK2
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
- 	select BR2_PACKAGE_AT_SPI2_CORE
- 	select BR2_PACKAGE_CAIRO
--	select BR2_PACKAGE_CAIRO_PS
--	select BR2_PACKAGE_CAIRO_PDF
--	select BR2_PACKAGE_CAIRO_SVG
-+	select BR2_PACKAGE_CAIRO_PNG
-+	select BR2_PACKAGE_CAIRO_ZLIB
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_PANGO
- 	select BR2_PACKAGE_GDK_PIXBUF
-diff --git a/package/libgtk3/Config.in b/package/libgtk3/Config.in
-index 34b8d49eb3..9f9a081ecb 100644
---- a/package/libgtk3/Config.in
-+++ b/package/libgtk3/Config.in
-@@ -25,9 +25,8 @@ config BR2_PACKAGE_LIBGTK3
- 		BR2_PACKAGE_HAS_LIBGL
- 	select BR2_PACKAGE_AT_SPI2_CORE
- 	select BR2_PACKAGE_CAIRO
--	select BR2_PACKAGE_CAIRO_PS
--	select BR2_PACKAGE_CAIRO_PDF
--	select BR2_PACKAGE_CAIRO_SVG
-+	select BR2_PACKAGE_CAIRO_PNG
-+	select BR2_PACKAGE_CAIRO_ZLIB
- 	select BR2_PACKAGE_LIBEPOXY
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_PANGO
-diff --git a/package/librsvg/Config.in b/package/librsvg/Config.in
-index 270b524b37..d74359dfc9 100644
---- a/package/librsvg/Config.in
-+++ b/package/librsvg/Config.in
-@@ -9,7 +9,7 @@ config BR2_PACKAGE_LIBRSVG
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
- 	select BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_CAIRO_PNG
--	select BR2_PACKAGE_CAIRO_SCRIPT
-+	select BR2_PACKAGE_CAIRO_ZLIB
- 	select BR2_PACKAGE_GDK_PIXBUF
- 	select BR2_PACKAGE_HOST_RUSTC
- 	select BR2_PACKAGE_LIBGLIB2
-diff --git a/package/libsvg-cairo/Config.in b/package/libsvg-cairo/Config.in
-index 9577c69bf0..4602e93c2a 100644
---- a/package/libsvg-cairo/Config.in
-+++ b/package/libsvg-cairo/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_LIBSVG_CAIRO
- 	bool "libsvg-cairo"
- 	select BR2_PACKAGE_CAIRO
--	select BR2_PACKAGE_CAIRO_SVG
-+	select BR2_PACKAGE_CAIRO_PNG
- 	select BR2_PACKAGE_LIBSVG
- 	help
- 	  Libsvg-cairo provides the ability to render SVG content from
-diff --git a/package/rrdtool/Config.in b/package/rrdtool/Config.in
-index 5ffdc92618..d954fd1214 100644
---- a/package/rrdtool/Config.in
-+++ b/package/rrdtool/Config.in
-@@ -19,10 +19,8 @@ config BR2_PACKAGE_RRDTOOL_RRDGRAPH
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
- 	depends on BR2_INSTALL_LIBSTDCPP # freetype support from pango
- 	select BR2_PACKAGE_CAIRO
--	select BR2_PACKAGE_CAIRO_PDF
- 	select BR2_PACKAGE_CAIRO_PNG
--	select BR2_PACKAGE_CAIRO_PS
--	select BR2_PACKAGE_CAIRO_SVG
-+	select BR2_PACKAGE_CAIRO_ZLIB
- 	select BR2_PACKAGE_PANGO
- 	help
- 	  This enables the graphing capabilities ('rrdgraph').
 -- 
 2.34.1
 
