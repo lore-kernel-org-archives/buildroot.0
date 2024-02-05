@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB3B9C48291
-	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 11:07:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 847CFC48291
+	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 11:08:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 877C640B42;
-	Mon,  5 Feb 2024 11:07:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 877C640B42
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3263A40ADD;
+	Mon,  5 Feb 2024 11:08:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3263A40ADD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CbVmrY4C3Dxs; Mon,  5 Feb 2024 11:07:52 +0000 (UTC)
+	with ESMTP id ZlCaRNMzRaSF; Mon,  5 Feb 2024 11:08:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3806440B55;
-	Mon,  5 Feb 2024 11:07:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3806440B55
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1A5B7414FE;
+	Mon,  5 Feb 2024 11:08:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A5B7414FE
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9B2B51BF281
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 11:06:44 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id ACB381BF281
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 11:06:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2EF794189A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 702884189D
  for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 11:06:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2EF794189A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 702884189D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cH8ChPNPB3YL for <buildroot@lists.busybox.net>;
+ with ESMTP id UrfKKLe-h1Ew for <buildroot@lists.busybox.net>;
  Mon,  5 Feb 2024 11:06:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8B18D4189D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 559A74175A
  for <buildroot@buildroot.org>; Mon,  5 Feb 2024 11:06:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B18D4189D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 559A74175A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7A27C86B6E; Mon,  5 Feb 2024 11:06:40 +0000 (UTC)
+ id 42D0C86B6D; Mon,  5 Feb 2024 11:06:40 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 5 Feb 2024 12:05:58 +0100
+Date: Mon, 5 Feb 2024 12:05:52 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 585b0bab9e263f57b0aef60502eb34b73214e8c8
-X-Git-Newrev: 7d1fc26f04698517afa225968cdfcd4c615870fa
+X-Git-Oldrev: 101f5f276cfc74c906a2a66181b5b0f3ab29e3d7
+X-Git-Newrev: fff23fd15d6b22e5099304b7e914ee2f81c930f8
 X-Patchwork-Hint: ignore
-Message-Id: <20240205110640.7A27C86B6E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-regex: bump to version
- 2023.12.25
+Message-Id: <20240205110640.42D0C86B6D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pypng: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,55 +63,73 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7d1fc26f04698517afa225968cdfcd4c615870fa
+commit: https://git.buildroot.net/buildroot/commit/?id=fff23fd15d6b22e5099304b7e914ee2f81c930f8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/python-regex/Config.in         | 2 +-
- package/python-regex/python-regex.hash | 4 ++--
- package/python-regex/python-regex.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/Config.in                      |  1 +
+ package/python-pypng/Config.in         |  6 ++++++
+ package/python-pypng/python-pypng.hash |  5 +++++
+ package/python-pypng/python-pypng.mk   | 14 ++++++++++++++
+ 4 files changed, 26 insertions(+)
 
-diff --git a/package/python-regex/Config.in b/package/python-regex/Config.in
-index 5f582d085a..89ead69c04 100644
---- a/package/python-regex/Config.in
-+++ b/package/python-regex/Config.in
-@@ -3,4 +3,4 @@ config BR2_PACKAGE_PYTHON_REGEX
- 	help
- 	  Alternative regular expression module, to replace re.
- 
--	  https://bitbucket.org/mrabarnett/mrab-regex
-+	  https://github.com/mrabarnett/mrab-regex
-diff --git a/package/python-regex/python-regex.hash b/package/python-regex/python-regex.hash
-index 11a5765e41..7454db99bb 100644
---- a/package/python-regex/python-regex.hash
-+++ b/package/python-regex/python-regex.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/regex/json
--md5  a85ced10be8bfe76fed4f30c42d32d5c  regex-2022.10.31.tar.gz
--sha256  a3a98921da9a1bf8457aeee6a551948a83601689e5ecdd736894ea9bbec77e83  regex-2022.10.31.tar.gz
-+md5  3f97f0aef9bf334fe50ae5980b183e68  regex-2023.12.25.tar.gz
-+sha256  29171aa128da69afdf4bde412d5bedc335f2ca8fcfe4489038577d05f16181e5  regex-2023.12.25.tar.gz
- # Locally computed sha256 checksums
- sha256  bff55ef4cdcc8c14ce259f8e8ab60e264418440d6335f4dc138273fbd506144d  LICENSE.txt
-diff --git a/package/python-regex/python-regex.mk b/package/python-regex/python-regex.mk
-index 81bd460ecc..6b1938bc0c 100644
---- a/package/python-regex/python-regex.mk
-+++ b/package/python-regex/python-regex.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_REGEX_VERSION = 2022.10.31
-+PYTHON_REGEX_VERSION = 2023.12.25
- PYTHON_REGEX_SOURCE = regex-$(PYTHON_REGEX_VERSION).tar.gz
--PYTHON_REGEX_SITE = https://files.pythonhosted.org/packages/27/b5/92d404279fd5f4f0a17235211bb0f5ae7a0d9afb7f439086ec247441ed28
-+PYTHON_REGEX_SITE = https://files.pythonhosted.org/packages/b5/39/31626e7e75b187fae7f121af3c538a991e725c744ac893cc2cfd70ce2853
- PYTHON_REGEX_SETUP_TYPE = setuptools
- PYTHON_REGEX_LICENSE = Apache-2.0
- PYTHON_REGEX_LICENSE_FILES = LICENSE.txt
+diff --git a/package/Config.in b/package/Config.in
+index 75a94177eb..ca1368124f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1275,6 +1275,7 @@ menu "External python modules"
+ 	source "package/python-pyparsing/Config.in"
+ 	source "package/python-pyparted/Config.in"
+ 	source "package/python-pyphen/Config.in"
++	source "package/python-pypng/Config.in"
+ 	source "package/python-pyqrcode/Config.in"
+ 	source "package/python-pyqt5/Config.in"
+ 	source "package/python-pyratemp/Config.in"
+diff --git a/package/python-pypng/Config.in b/package/python-pypng/Config.in
+new file mode 100644
+index 0000000000..c1ed405615
+--- /dev/null
++++ b/package/python-pypng/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_PYPNG
++	bool "python-pypng"
++	help
++	  Pure Python library for saving and loading PNG images.
++
++	  https://gitlab.com/drj11/pypng
+diff --git a/package/python-pypng/python-pypng.hash b/package/python-pypng/python-pypng.hash
+new file mode 100644
+index 0000000000..0f55eef702
+--- /dev/null
++++ b/package/python-pypng/python-pypng.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/pypng/json
++md5  7d9cce86ceb19524784ade86fb13a063  pypng-0.20220715.0.tar.gz
++sha256  739c433ba96f078315de54c0db975aee537cbc3e1d0ae4ed9aab0ca1e427e2c1  pypng-0.20220715.0.tar.gz
++# Locally computed sha256 checksums
++sha256  8dd127d87bb901ab9c8f584e98b7c7aa8539db27fe62ff01b1ee4be93b6a513a  LICENCE
+diff --git a/package/python-pypng/python-pypng.mk b/package/python-pypng/python-pypng.mk
+new file mode 100644
+index 0000000000..07ad16b67b
+--- /dev/null
++++ b/package/python-pypng/python-pypng.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-pypng
++#
++################################################################################
++
++PYTHON_PYPNG_VERSION = 0.20220715.0
++PYTHON_PYPNG_SOURCE = pypng-$(PYTHON_PYPNG_VERSION).tar.gz
++PYTHON_PYPNG_SITE = https://files.pythonhosted.org/packages/93/cd/112f092ec27cca83e0516de0a3368dbd9128c187fb6b52aaaa7cde39c96d
++PYTHON_PYPNG_SETUP_TYPE = setuptools
++PYTHON_PYPNG_LICENSE = MIT
++PYTHON_PYPNG_LICENSE_FILES = LICENCE
++
++$(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
