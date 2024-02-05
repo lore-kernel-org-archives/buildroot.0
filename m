@@ -4,67 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B6F9C48291
-	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 11:36:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45A4FC48291
+	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 11:37:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AB1C4419B2;
-	Mon,  5 Feb 2024 11:36:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB1C4419B2
+	by smtp2.osuosl.org (Postfix) with ESMTP id EA165419BD;
+	Mon,  5 Feb 2024 11:37:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA165419BD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kim1K76UN5x7; Mon,  5 Feb 2024 11:36:57 +0000 (UTC)
+	with ESMTP id YGQkqh1dvYa8; Mon,  5 Feb 2024 11:37:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A4490418E2;
-	Mon,  5 Feb 2024 11:36:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A4490418E2
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 885271BF281
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 11:36:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1AEA941768;
+	Mon,  5 Feb 2024 11:37:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1AEA941768
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 25B061BF281
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 11:37:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 609B882AC6
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 11:36:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 609B882AC6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0A4C241766
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 11:37:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A4C241766
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kplugznWioyV for <buildroot@lists.busybox.net>;
- Mon,  5 Feb 2024 11:36:53 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 450FD82BD6
- for <buildroot@buildroot.org>; Mon,  5 Feb 2024 11:36:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 450FD82BD6
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 987C820005;
- Mon,  5 Feb 2024 11:36:51 +0000 (UTC)
-Date: Mon, 5 Feb 2024 12:36:50 +0100
-To: Kevin Cui <bh@bugs.cc>
-Message-ID: <20240205123650.23b78a48@windsurf>
-In-Reply-To: <20240129034403.10232-2-bh@bugs.cc>
-References: <87ede3236l.fsf@48ers.dk>
-	<20240129034403.10232-2-bh@bugs.cc>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1707133011;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=UXxd9uryPMqCTnEsgPuUaMvKsdejhDD3VMivohVetY4=;
- b=VBeU7PfRDyQC9PwlkP6rmvNozs5UYQ4d4m4wwqYBgY1HwGWaYbTAqwJssIxAo/zRd4tU1G
- ZeAA52oMmeCffQsgp0CoD1qlroRjcr3rp2WWrC8lNEFUJ1Bz4lr+zcS91v95JocbC+uOjA
- It1pSotOk7F31eIC4V5noicn6Ku3CQ/DxyTXrR10+Adq23n7IeHt/teJDZfWLbo8Sx8qeH
- dM2rf1KEIz/yWQDScrKoTo6cHwNYJrYSh2LVFPQbjr5Dr3X7CjbLXHehX8DH/8Q3DtSTLn
- urd8BS1lKCJB1s+DnXFFoJrbQW7d6zp309w+84BpqF+o0r38Z2tEAbu6HncHkA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=VBeU7PfR
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/libxml-parser-perl: bump to
- version 2.47
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id j343iQUO2Aqs for <buildroot@lists.busybox.net>;
+ Mon,  5 Feb 2024 11:37:20 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id D138C4175C
+ for <buildroot@buildroot.org>; Mon,  5 Feb 2024 11:37:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D138C4175C
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id BBE6F86C04; Mon,  5 Feb 2024 11:37:20 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Mon, 5 Feb 2024 12:36:04 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7fd6473a2b8c4ca274bd8a3b53e55d6af5242f9a
+X-Git-Newrev: ac774255e87a934f43f8048f7dd9a9d82de79cd0
+X-Patchwork-Hint: ignore
+Message-Id: <20240205113720.BBE6F86C04@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-scipy: bump to version
+ 1.11.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,49 +57,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 29 Jan 2024 11:44:04 +0800
-Kevin Cui <bh@bugs.cc> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=ac774255e87a934f43f8048f7dd9a9d82de79cd0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Kevin Cui <bh@bugs.cc>
-> 
-> ---
-> Changes for v2:
->   - use real name in "From" and "Signed-off-by"
-> ---
->  package/libxml-parser-perl/libxml-parser-perl.hash | 4 ++--
->  package/libxml-parser-perl/libxml-parser-perl.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python-scipy/python-scipy.hash | 6 ++++--
+ package/python-scipy/python-scipy.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-Thanks for your patch! You forgot to explain in the commit log why the
-README file hash changed. It's important to look into this and provide
-explanation in the commit log, as it's the very reason why we have
-those hashes in the first place: to detect license changes and account
-for them.
-
-And it turns out that a separate LICENSE file got added in 2.47. But
-(!) this new license file is wrong: it doesn't contain the right
-license text. This was already seen by Debian, and reported upstream:
-https://github.com/cpan-authors/XML-Parser/pull/99.
-
-So I expanded significantly the commit log to explain all of this. See
-the final commit at
-https://gitlab.com/buildroot.org/buildroot/-/commit/7fd6473a2b8c4ca274bd8a3b53e55d6af5242f9a.
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-scipy/python-scipy.hash b/package/python-scipy/python-scipy.hash
+index 9634771139..bee5d698a0 100644
+--- a/package/python-scipy/python-scipy.hash
++++ b/package/python-scipy/python-scipy.hash
+@@ -1,5 +1,7 @@
+-# Locally generated
+-sha256  f9b0248cb9d08eead44cde47cbf6339f1e9aa0dfde28f5fb27950743e317bd5d  scipy-1.11.0.tar.gz
++# md5, sha256 from https://pypi.org/pypi/scipy/json
++md5  0e8eea0f7c4fe7d8102366230c96d66d  scipy-1.11.4.tar.gz
++sha256  90a2b78e7f5733b9de748f589f09225013685f9b218275257f8a8168ededaeaa  scipy-1.11.4.tar.gz
++# Locally computed sha256 checksums
+ sha256  5517022426a56179540ee6eace15fd723ef8fdb83b2900fed2152dd2e2f972a2  LICENSE.txt
+ sha256  606209a000716c5f66e33e180ce08434b96ed17db4975ab9723c6b5fbcc89609  scipy/ndimage/LICENSE.txt
+ sha256  3df9207af2fdb861af0ae3b22026f163b9bcfab4e525dc4943afe2ffa3f77624  scipy/optimize/tnc/LICENSE
+diff --git a/package/python-scipy/python-scipy.mk b/package/python-scipy/python-scipy.mk
+index 3010cfbd54..6626826e33 100644
+--- a/package/python-scipy/python-scipy.mk
++++ b/package/python-scipy/python-scipy.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_SCIPY_VERSION = 1.11.0
++PYTHON_SCIPY_VERSION = 1.11.4
+ PYTHON_SCIPY_SOURCE = scipy-$(PYTHON_SCIPY_VERSION).tar.gz
+-PYTHON_SCIPY_SITE = https://files.pythonhosted.org/packages/fa/d0/724c8204f87b6f807e3e67de32b8b4922d579154a448ce94e89129064bf1
++PYTHON_SCIPY_SITE = https://files.pythonhosted.org/packages/6e/1f/91144ba78dccea567a6466262922786ffc97be1e9b06ed9574ef0edc11e1
+ PYTHON_SCIPY_LICENSE = \
+ 	BSD-3-Clause, \
+ 	BSD-2-Clause, \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
