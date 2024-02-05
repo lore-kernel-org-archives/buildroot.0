@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 309DAC4828D
-	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 13:34:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD85FC48295
+	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 13:34:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DC4DF60F2F;
-	Mon,  5 Feb 2024 13:34:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC4DF60F2F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7A082606E6;
+	Mon,  5 Feb 2024 13:34:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A082606E6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OtNQcOS9Qq_I; Mon,  5 Feb 2024 13:34:06 +0000 (UTC)
+	with ESMTP id t_PPFH02hMT2; Mon,  5 Feb 2024 13:34:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 14BCA60FAB;
-	Mon,  5 Feb 2024 13:34:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14BCA60FAB
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C799D1BF95D
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 13:34:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A5A2F61006;
+	Mon,  5 Feb 2024 13:34:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5A2F61006
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id F1BA71BF95D
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 13:34:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A086F60FAC
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 13:34:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A086F60FAC
+ by smtp2.osuosl.org (Postfix) with ESMTP id D4A2B40AB6
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 13:34:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D4A2B40AB6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vP8XCkKvadAk for <buildroot@lists.busybox.net>;
- Mon,  5 Feb 2024 13:34:02 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qLaJ21mQSVWW for <buildroot@lists.busybox.net>;
+ Mon,  5 Feb 2024 13:34:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B54B960F2B
+ by smtp2.osuosl.org (Postfix) with ESMTP id AF39240A87
  for <buildroot@buildroot.org>; Mon,  5 Feb 2024 13:34:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B54B960F2B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AF39240A87
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A37FF86C90; Mon,  5 Feb 2024 13:34:02 +0000 (UTC)
+ id 99DAC86C8F; Mon,  5 Feb 2024 13:34:02 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 5 Feb 2024 14:33:50 +0100
+Date: Mon, 5 Feb 2024 14:33:49 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5351578b9698021704df06e840047b0b0c7b372b
-X-Git-Newrev: f62d1ad32a2d1903840be8416b7d5b5f419fa86e
+X-Git-Oldrev: ae20955be340cbf9133c6a13a7695759aa4f464b
+X-Git-Newrev: 5351578b9698021704df06e840047b0b0c7b372b
 X-Patchwork-Hint: ignore
-Message-Id: <20240205133402.A37FF86C90@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pytablewriter: bump to
- version 1.2.0
+Message-Id: <20240205133402.99DAC86C8F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-tcolorpy: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,76 +63,74 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f62d1ad32a2d1903840be8416b7d5b5f419fa86e
+commit: https://git.buildroot.net/buildroot/commit/?id=5351578b9698021704df06e840047b0b0c7b372b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Drop no longer required python-msgfy runtime dependency.
-
-Drop no longer required python-six runtime dependency.
-
-Add new python-tcolorpy runtime dependency.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pytablewriter/Config.in                 | 11 ++++++-----
- package/python-pytablewriter/python-pytablewriter.hash |  4 ++--
- package/python-pytablewriter/python-pytablewriter.mk   |  4 ++--
- 3 files changed, 10 insertions(+), 9 deletions(-)
+ package/Config.in                            |  1 +
+ package/python-tcolorpy/Config.in            |  7 +++++++
+ package/python-tcolorpy/python-tcolorpy.hash |  5 +++++
+ package/python-tcolorpy/python-tcolorpy.mk   | 14 ++++++++++++++
+ 4 files changed, 27 insertions(+)
 
-diff --git a/package/python-pytablewriter/Config.in b/package/python-pytablewriter/Config.in
-index 041c30eb6c..e0252625cd 100644
---- a/package/python-pytablewriter/Config.in
-+++ b/package/python-pytablewriter/Config.in
-@@ -2,14 +2,15 @@ config BR2_PACKAGE_PYTHON_PYTABLEWRITER
- 	bool "python-pytablewriter"
- 	select BR2_PACKAGE_PYTHON_DATAPROPERTY # runtime
- 	select BR2_PACKAGE_PYTHON_MBSTRDECODER # runtime
--	select BR2_PACKAGE_PYTHON_MSGFY # runtime
- 	select BR2_PACKAGE_PYTHON_PATHVALIDATE # runtime
--	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	select BR2_PACKAGE_PYTHON_TABLEDATA # runtime
-+	select BR2_PACKAGE_PYTHON_TCOLORPY # runtime
- 	select BR2_PACKAGE_PYTHON_TYPEPY # runtime
- 	help
--	  pytablewriter is a python library to write a table in various
--	  formats: CSV, HTML, JavaScript, JSON, Markdown, Excel, Pandas,
--	  Python, reStructuredText.
-+	  pytablewriter is a Python library to write a table in
-+	  various formats: AsciiDoc / CSV / Elasticsearch / HTML /
-+	  JavaScript / JSON / LaTeX / LDJSON / LTSV / Markdown /
-+	  MediaWiki / NumPy / Excel / Pandas / Python /
-+	  reStructuredText / SQLite / TOML / TSV / YAML.
- 
- 	  https://github.com/thombashi/pytablewriter
-diff --git a/package/python-pytablewriter/python-pytablewriter.hash b/package/python-pytablewriter/python-pytablewriter.hash
-index f082542dfb..d4432ee121 100644
---- a/package/python-pytablewriter/python-pytablewriter.hash
-+++ b/package/python-pytablewriter/python-pytablewriter.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pytablewriter/json
--md5  0eaa4a2429d22389b5e4b8c5f5135bbb  pytablewriter-0.64.2.tar.gz
--sha256  99409d401d6ef5f06d1bc40f265a8e3053afe4cbfbaf709f71124076afb40dbb  pytablewriter-0.64.2.tar.gz
-+md5  4e3d421d026f30fadec4ac1670e524ee  pytablewriter-1.2.0.tar.gz
-+sha256  0204a4bb684a22140d640f2599f09e137bcdc18b3dd49426f4a555016e246b46  pytablewriter-1.2.0.tar.gz
- # Locally computed sha256 checksums
- sha256  a93d75bcb0774e2990106380cadad6dcb2de193c55d435ffc56ba345a08b1dc2  LICENSE
-diff --git a/package/python-pytablewriter/python-pytablewriter.mk b/package/python-pytablewriter/python-pytablewriter.mk
-index d865a89330..d8bc3615dd 100644
---- a/package/python-pytablewriter/python-pytablewriter.mk
-+++ b/package/python-pytablewriter/python-pytablewriter.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYTABLEWRITER_VERSION = 0.64.2
-+PYTHON_PYTABLEWRITER_VERSION = 1.2.0
- PYTHON_PYTABLEWRITER_SOURCE = pytablewriter-$(PYTHON_PYTABLEWRITER_VERSION).tar.gz
--PYTHON_PYTABLEWRITER_SITE = https://files.pythonhosted.org/packages/a6/e1/50c1cd9734a9edc1386913b178f9e4757c1bc37665c1855a6596c25957d6
-+PYTHON_PYTABLEWRITER_SITE = https://files.pythonhosted.org/packages/cc/a9/76aa4430d32ae10b23e4347006dc4c67a3e2a00621e4bb38a60c1a77f15e
- PYTHON_PYTABLEWRITER_SETUP_TYPE = setuptools
- PYTHON_PYTABLEWRITER_LICENSE = MIT
- PYTHON_PYTABLEWRITER_LICENSE_FILES = LICENSE
+diff --git a/package/Config.in b/package/Config.in
+index ca1368124f..7fc383da83 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1365,6 +1365,7 @@ menu "External python modules"
+ 	source "package/python-starlette/Config.in"
+ 	source "package/python-systemd/Config.in"
+ 	source "package/python-tabledata/Config.in"
++	source "package/python-tcolorpy/Config.in"
+ 	source "package/python-tempora/Config.in"
+ 	source "package/python-termcolor/Config.in"
+ 	source "package/python-terminaltables/Config.in"
+diff --git a/package/python-tcolorpy/Config.in b/package/python-tcolorpy/Config.in
+new file mode 100644
+index 0000000000..e3e9058483
+--- /dev/null
++++ b/package/python-tcolorpy/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_TCOLORPY
++	bool "python-tcolorpy"
++	help
++	  Tcolopy is a Python library to apply true color for
++	  terminal text.
++
++	  https://github.com/thombashi/tcolorpy
+diff --git a/package/python-tcolorpy/python-tcolorpy.hash b/package/python-tcolorpy/python-tcolorpy.hash
+new file mode 100644
+index 0000000000..cf5ca0e5f3
+--- /dev/null
++++ b/package/python-tcolorpy/python-tcolorpy.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/tcolorpy/json
++md5  ca571cccff812ecdc0c73968c9d24ebf  tcolorpy-0.1.4.tar.gz
++sha256  f0dceb1cb95e554cee63024b3cd2fd8d4628c568773de2d1e6b4f0478461901c  tcolorpy-0.1.4.tar.gz
++# Locally computed sha256 checksums
++sha256  f41a0456d5f2bba25fd4d7e50b51a95de304770ff1db5a79515d03397a914d8d  LICENSE
+diff --git a/package/python-tcolorpy/python-tcolorpy.mk b/package/python-tcolorpy/python-tcolorpy.mk
+new file mode 100644
+index 0000000000..5c42320c17
+--- /dev/null
++++ b/package/python-tcolorpy/python-tcolorpy.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-tcolorpy
++#
++################################################################################
++
++PYTHON_TCOLORPY_VERSION = 0.1.4
++PYTHON_TCOLORPY_SOURCE = tcolorpy-$(PYTHON_TCOLORPY_VERSION).tar.gz
++PYTHON_TCOLORPY_SITE = https://files.pythonhosted.org/packages/ba/e0/20b99847e76bb89784b68634399261d770b01054bca16cd19a06ac9c2e67
++PYTHON_TCOLORPY_SETUP_TYPE = setuptools
++PYTHON_TCOLORPY_LICENSE = MIT
++PYTHON_TCOLORPY_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
