@@ -4,66 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB569C4828D
-	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 22:18:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 850A6C4829A
+	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 22:20:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 64EEF41B79;
-	Mon,  5 Feb 2024 22:18:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64EEF41B79
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1BDFB418AC;
+	Mon,  5 Feb 2024 22:20:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1BDFB418AC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2dPMnR8Eakln; Mon,  5 Feb 2024 22:18:15 +0000 (UTC)
+	with ESMTP id B-n30JO3QZfm; Mon,  5 Feb 2024 22:20:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6340541A88;
-	Mon,  5 Feb 2024 22:18:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6340541A88
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BF2F11BF319
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 22:17:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 48DDD418A9;
+	Mon,  5 Feb 2024 22:20:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 48DDD418A9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 21FFE1BF319
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 22:20:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 94FC241A84
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 22:17:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 94FC241A84
+ by smtp2.osuosl.org (Postfix) with ESMTP id EEB3B40198
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 22:19:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EEB3B40198
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 25FMhsC9PqY5 for <buildroot@lists.busybox.net>;
- Mon,  5 Feb 2024 22:17:48 +0000 (UTC)
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3F159407D7
- for <buildroot@buildroot.org>; Mon,  5 Feb 2024 22:17:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F159407D7
-Received: from [10.11.2.50] (220.211-78-194.adsl-static.isp.belgacom.be
- [194.78.211.220])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id 337812C800D1
- for <buildroot@buildroot.org>; Mon,  5 Feb 2024 23:17:46 +0100 (CET)
-Message-ID: <7e311fd3-0eac-4cff-a87e-da53f01abdf8@bubu1.eu>
-Date: Mon, 5 Feb 2024 23:17:38 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gxPMbhzecV4r for <buildroot@lists.busybox.net>;
+ Mon,  5 Feb 2024 22:19:59 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7F14440022
+ for <buildroot@buildroot.org>; Mon,  5 Feb 2024 22:19:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7F14440022
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C6A611C0002;
+ Mon,  5 Feb 2024 22:19:56 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1rX7Ji-00DEwq-2Y;
+ Mon, 05 Feb 2024 23:19:54 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Julien Olivain <ju.o@free.fr>
+References: <20240124222523.16703-1-ju.o@free.fr>
+Date: Mon, 05 Feb 2024 23:19:54 +0100
+In-Reply-To: <20240124222523.16703-1-ju.o@free.fr> (Julien Olivain's message
+ of "Wed, 24 Jan 2024 23:25:23 +0100")
+Message-ID: <8734u6a705.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: buildroot@buildroot.org
-References: <170717110256.12359.16509380444438086733-0@git.sr.ht>
-In-Reply-To: <170717110256.12359.16509380444438086733-0@git.sr.ht>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=bubu1.eu; s=bubu; 
- t=1707171466; bh=7mHAAyodVnrFVdmAg4FN57PmPH+1IhEVP1fti2D8zpg=;
- h=Date:Subject:To:References:From:In-Reply-To;
- b=aT/fZVo36s+3CLITjzOsscfI0TLP4oOMjBoEFbzPj3KpzVNBAT2dlQT3s0qGWroma
- 5oVcgPHIu5Kiin9d7oer4V0h630MKR1xrZzZ+HeR2DcuJQ4DqpOwLEhgnNWMSg08VG
- eOkR6e55P2vumpf475CMqO83in/nAatBjmw0WS1XVNdGzNODBbmFcg8AqoNLV4wf1o
- zqVFbodh7iE2989QesPXS94PghGZ987ySMCXEpbE+402oKmU8bNwTuaYI4nt9UpLPD
- fphpVZiSzgqfNapnAerghJqG+3tERUMNIS+vpmO8AaBi2FTQ+4Qo/ANEJfnR31JNEk
- k3gKh1MM76eRQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=bubu1.eu header.i=@bubu1.eu
- header.a=rsa-sha256 header.s=bubu header.b=aT/fZVo3
-Subject: Re: [Buildroot] [PATCH buildroot] support/testing: add
- python-uvloop runtime test
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] support/testing: add usbutils runtime
+ test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,68 +63,121 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Eventually I'll manage to sign-off my commits ...
+>>>>> "Julien" == Julien Olivain <ju.o@free.fr> writes:
 
-On 05.02.24 22:47, ~bubu wrote:
-> From: Marcus Hoffmann <buildroot@bubu1.eu>
+ > Signed-off-by: Julien Olivain <ju.o@free.fr>
+ > ---
+ > Patch tested on branch master at commit 7a59c3a with commands:
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+ >     make check-package
+ >     ...
+ >     0 warnings generated
 
-> 
-> ---
->   .../tests/package/sample_python_uvloop.py     |  6 +++++
->   .../tests/package/test_python_uvloop.py       | 22 +++++++++++++++++++
->   2 files changed, 28 insertions(+)
->   create mode 100644 support/testing/tests/package/sample_python_uvloop.py
->   create mode 100644 support/testing/tests/package/test_python_uvloop.py
-> 
-> diff --git a/support/testing/tests/package/sample_python_uvloop.py b/support/testing/tests/package/sample_python_uvloop.py
-> new file mode 100644
-> index 0000000000..dc85d3e04e
-> --- /dev/null
-> +++ b/support/testing/tests/package/sample_python_uvloop.py
-> @@ -0,0 +1,6 @@
-> +import uvloop
-> +
-> +async def main():
-> +    print("Hello world!")
-> +
-> +uvloop.run(main())
-> diff --git a/support/testing/tests/package/test_python_uvloop.py b/support/testing/tests/package/test_python_uvloop.py
-> new file mode 100644
-> index 0000000000..c5079ba59c
-> --- /dev/null
-> +++ b/support/testing/tests/package/test_python_uvloop.py
-> @@ -0,0 +1,22 @@
-> +import os
-> +
-> +from tests.package.test_python import TestPythonPackageBase
-> +
-> +
-> +class TestPythonPy3Uvloop(TestPythonPackageBase):
-> +    __test__ = True
-> +    config = TestPythonPackageBase.config + \
-> +        """
-> +        BR2_PACKAGE_PYTHON3=y
-> +        BR2_PACKAGE_PYTHON_UVLOOP=y
-> +        """
-> +    sample_scripts = ["tests/package/sample_python_uvloop.py"]
-> +
-> +    def test_run(self):
-> +        self.login()
-> +        self.check_sample_scripts_exist()
-> +
-> +        cmd = "%s %s" % (self.interpreter, os.path.basename(self.sample_scripts[0]))
-> +        output, exit_code = self.emulator.run(cmd)
-> +        self.assertEqual(exit_code, 0)
-> +        self.assertEqual(output[0], "Hello world!")
+ >     support/testing/run-tests \
+ >         -d dl -o output_folder \
+ >         tests.package.test_usbutils
+ >     ...
+ >     OK
+ > ---
+ >  DEVELOPERS                                    |  2 +
+ >  .../testing/tests/package/test_usbutils.py    | 60 +++++++++++++++++++
+ >  .../test_usbutils/linux-usbutils.fragment     |  2 +
+ >  3 files changed, 64 insertions(+)
+ >  create mode 100644 support/testing/tests/package/test_usbutils.py
+ >  create mode 100644 support/testing/tests/package/test_usbutils/linux-usbutils.fragment
+
+ > diff --git a/DEVELOPERS b/DEVELOPERS
+ > index f5b04937b6..5a5ce47d73 100644
+ > --- a/DEVELOPERS
+ > +++ b/DEVELOPERS
+ > @@ -1814,6 +1814,8 @@ F:	support/testing/tests/package/test_screen.py
+ >  F:	support/testing/tests/package/test_stress_ng.py
+ >  F:	support/testing/tests/package/test_tcl.py
+ >  F:	support/testing/tests/package/test_tcl/
+ > +F:	support/testing/tests/package/test_usbutils.py
+ > +F:	support/testing/tests/package/test_usbutils/
+ >  F:	support/testing/tests/package/test_weston.py
+ >  F:	support/testing/tests/package/test_weston/
+ >  F:	support/testing/tests/package/test_xz.py
+ > diff --git a/support/testing/tests/package/test_usbutils.py b/support/testing/tests/package/test_usbutils.py
+ > new file mode 100644
+ > index 0000000000..9a5484d5e6
+ > --- /dev/null
+ > +++ b/support/testing/tests/package/test_usbutils.py
+ > @@ -0,0 +1,60 @@
+ > +import os
+ > +
+ > +import infra.basetest
+ > +
+ > +
+ > +class TestUsbUtils(infra.basetest.BRTest):
+ > +    # A specific configuration is needed for testing usbutils, to
+ > +    # enable USB 2.0 support in the Kernel.
+ > +    linux_fragment = \
+ > +        infra.filepath("tests/package/test_usbutils/linux-usbutils.fragment")
+ > +    config = \
+ > +        f"""
+ > +        BR2_aarch64=y
+ > +        BR2_TOOLCHAIN_EXTERNAL=y
+ > +        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+ > +        BR2_LINUX_KERNEL=y
+ > +        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ > +        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.73"
+ > +        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ > +        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
+ > +        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{linux_fragment}"
+ > +        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ > +        BR2_PACKAGE_EUDEV=y
+ > +        BR2_PACKAGE_USBUTILS=y
+ > +        BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+ > +        BR2_TARGET_ROOTFS_CPIO=y
+ > +        BR2_TARGET_ROOTFS_CPIO_GZIP=y
+ > +        # BR2_TARGET_ROOTFS_TAR is not set
+ > +        """
+ > +
+ > +    def test_run(self):
+ > +        img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
+ > +        kern = os.path.join(self.builddir, "images", "Image")
+ > +        # We add a USB keyboard and mouse devices for the test.
+ > +        self.emulator.boot(arch="aarch64",
+ > +                           kernel=kern,
+ > +                           kernel_cmdline=["console=ttyAMA0"],
+ > +                           options=["-M", "virt", "-cpu", "cortex-a57", "-m", "256M",
+ > +                                    "-initrd", img,
+ > +                                    "-device", "usb-ehci,id=ehci",
+ > +                                    "-device", "usb-kbd,bus=ehci.0",
+ > +                                    "-device", "usb-mouse,bus=ehci.0"])
+ > +        self.emulator.login()
+ > +
+ > +        # Check the program can execute. We also check the version
+ > +        # string to make sure we have the usbutils version. The
+ > +        # BusyBox lsusb ignores arguments.
+ > +        output, exit_code = self.emulator.run("lsusb --version")
+ > +        self.assertEqual(exit_code, 0)
+ > +        self.assertTrue(output[0].startswith("lsusb (usbutils)"))
+ > +
+ > +        # Test few simple and common invocations
+ > +        self.assertRunOk("lsusb")
+ > +        self.assertRunOk("lsusb --tree")
+ > +        self.assertRunOk("lsusb --verbose")
+ > +        # 1d6b:0002 is Linux Foundation 2.0 root hub
+ > +        # it should be present. lsusb return an error if no device
+ > +        # is found.
+ > +        self.assertRunOk("lsusb -d 1d6b:0002")
+ > +        self.assertRunOk("usbhid-dump")
+
+It was not directly obvious why this would not fail until I noticed that
+you configure qemu to emulate a USB keyboard and a mouse, so I added a
+comment about this and applied - Thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
