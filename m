@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C9C6C48291
-	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 11:17:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5355AC48291
+	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 11:18:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4955441750;
-	Mon,  5 Feb 2024 11:17:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4955441750
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0309E41743;
+	Mon,  5 Feb 2024 11:18:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0309E41743
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fwCUOi0o7J86; Mon,  5 Feb 2024 11:17:56 +0000 (UTC)
+	with ESMTP id pgg84GqYIljq; Mon,  5 Feb 2024 11:18:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 36D2A4174F;
-	Mon,  5 Feb 2024 11:17:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 36D2A4174F
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 510F11BF954
+	by smtp2.osuosl.org (Postfix) with ESMTP id C0B4841766;
+	Mon,  5 Feb 2024 11:18:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C0B4841766
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C16441BF281
  for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 11:17:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 28D2860F9F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9ACD181E11
  for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 11:17:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 28D2860F9F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9ACD181E11
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9AageTIRjfgu for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OpNaTKZxv79y for <buildroot@lists.busybox.net>;
  Mon,  5 Feb 2024 11:17:38 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3372B60F1B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 23F82828BA
  for <buildroot@buildroot.org>; Mon,  5 Feb 2024 11:17:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3372B60F1B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 23F82828BA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1F14586BBB; Mon,  5 Feb 2024 11:17:38 +0000 (UTC)
+ id 0FC3D86BBA; Mon,  5 Feb 2024 11:17:38 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 5 Feb 2024 12:17:24 +0100
+Date: Mon, 5 Feb 2024 12:17:23 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8928608c19048ac140cfc5e5f0e84d50d5d590d5
-X-Git-Newrev: 9eb7860257442d7ab98ec7a417a7fb8d99fe797a
+X-Git-Oldrev: 83763e58de2393eac2db52af3f5ea825bf77f88f
+X-Git-Newrev: 8928608c19048ac140cfc5e5f0e84d50d5d590d5
 X-Patchwork-Hint: ignore
-Message-Id: <20240205111738.1F14586BBB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-stack-data: bump to version
- 0.6.3
+Message-Id: <20240205111738.0FC3D86BBA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-starlette: bump to version
+ 0.34.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9eb7860257442d7ab98ec7a417a7fb8d99fe797a
+commit: https://git.buildroot.net/buildroot/commit/?id=8928608c19048ac140cfc5e5f0e84d50d5d590d5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-stack-data/python-stack-data.hash | 4 ++--
- package/python-stack-data/python-stack-data.mk   | 4 ++--
+ package/python-starlette/python-starlette.hash | 4 ++--
+ package/python-starlette/python-starlette.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-stack-data/python-stack-data.hash b/package/python-stack-data/python-stack-data.hash
-index 6decd3ca8e..b155a77c81 100644
---- a/package/python-stack-data/python-stack-data.hash
-+++ b/package/python-stack-data/python-stack-data.hash
+diff --git a/package/python-starlette/python-starlette.hash b/package/python-starlette/python-starlette.hash
+index a7f1f66446..820026b70b 100644
+--- a/package/python-starlette/python-starlette.hash
++++ b/package/python-starlette/python-starlette.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/stack_data/json
--md5  bf86c3c81a0158e1e7f3979da5a0033b  stack_data-0.6.2.tar.gz
--sha256  32d2dd0376772d01b6cb9fc996f3c8b57a357089dec328ed4b6553d037eaf815  stack_data-0.6.2.tar.gz
-+md5  d04f7cda6589138e90691aec1edbf0d5  stack_data-0.6.3.tar.gz
-+sha256  836a778de4fec4dcd1dcd89ed8abff8a221f58308462e1c4aa2a3cf30148f0b9  stack_data-0.6.3.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/starlette/json
+-md5  5193c4b7d2ea4c93635c340a7ba9b54f  starlette-0.27.0.tar.gz
+-sha256  6a6b0d042acb8d469a01eba54e9cda6cbd24ac602c4cd016723117d6a7e73b75  starlette-0.27.0.tar.gz
++md5  2ef2fc635691fd4a1823564218292dce  starlette-0.34.0.tar.gz
++sha256  ed050aaf3896945bfaae93bdf337e53ef3f29115a9d9c153e402985115cd9c8e  starlette-0.34.0.tar.gz
  # Locally computed sha256 checksums
- sha256  a476a2cb0ef4c41450340a577a28b91ac4c7f669136b2ee148047fabd5fc4181  LICENSE.txt
-diff --git a/package/python-stack-data/python-stack-data.mk b/package/python-stack-data/python-stack-data.mk
-index 1a85938311..7c38d2c4eb 100644
---- a/package/python-stack-data/python-stack-data.mk
-+++ b/package/python-stack-data/python-stack-data.mk
+ sha256  dcb95677a02240243187e964f941847d19b17821cf99e5afae684fab328c19bf  LICENSE.md
+diff --git a/package/python-starlette/python-starlette.mk b/package/python-starlette/python-starlette.mk
+index b04b95a797..07f9d6be5e 100644
+--- a/package/python-starlette/python-starlette.mk
++++ b/package/python-starlette/python-starlette.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_STACK_DATA_VERSION = 0.6.2
-+PYTHON_STACK_DATA_VERSION = 0.6.3
- PYTHON_STACK_DATA_SOURCE = stack_data-$(PYTHON_STACK_DATA_VERSION).tar.gz
--PYTHON_STACK_DATA_SITE = https://files.pythonhosted.org/packages/db/18/aa7f2b111aeba2cd83503254d9133a912d7f61f459a0c8561858f0d72a56
-+PYTHON_STACK_DATA_SITE = https://files.pythonhosted.org/packages/28/e3/55dcc2cfbc3ca9c29519eb6884dd1415ecb53b0e934862d3559ddcb7e20b
- PYTHON_STACK_DATA_SETUP_TYPE = pep517
- PYTHON_STACK_DATA_LICENSE = MIT
- PYTHON_STACK_DATA_LICENSE_FILES = LICENSE.txt
+-PYTHON_STARLETTE_VERSION = 0.27.0
++PYTHON_STARLETTE_VERSION = 0.34.0
+ PYTHON_STARLETTE_SOURCE = starlette-$(PYTHON_STARLETTE_VERSION).tar.gz
+-PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/06/68/559bed5484e746f1ab2ebbe22312f2c25ec62e4b534916d41a8c21147bf8
++PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/4f/36/168ba6d56a28382f3b081b23b0cc431de35786e120b94c1f372708ed3059
+ PYTHON_STARLETTE_SETUP_TYPE = pep517
+ PYTHON_STARLETTE_LICENSE = BSD-3-Clause
+ PYTHON_STARLETTE_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
