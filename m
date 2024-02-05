@@ -4,54 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 850A6C4829A
-	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 22:20:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12C5DC4828D
+	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 22:20:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1BDFB418AC;
-	Mon,  5 Feb 2024 22:20:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1BDFB418AC
+	by smtp4.osuosl.org (Postfix) with ESMTP id BEA0641AE1;
+	Mon,  5 Feb 2024 22:20:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BEA0641AE1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id B-n30JO3QZfm; Mon,  5 Feb 2024 22:20:02 +0000 (UTC)
+	with ESMTP id zBgsauNLBzL7; Mon,  5 Feb 2024 22:20:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 48DDD418A9;
-	Mon,  5 Feb 2024 22:20:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 48DDD418A9
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 21FFE1BF319
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 22:20:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0F980418A9;
+	Mon,  5 Feb 2024 22:20:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0F980418A9
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 423431BF319
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 22:20:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EEB3B40198
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 22:19:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EEB3B40198
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1C05B81FEC
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 22:20:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C05B81FEC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gxPMbhzecV4r for <buildroot@lists.busybox.net>;
- Mon,  5 Feb 2024 22:19:59 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7F14440022
- for <buildroot@buildroot.org>; Mon,  5 Feb 2024 22:19:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7F14440022
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C6A611C0002;
- Mon,  5 Feb 2024 22:19:56 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rX7Ji-00DEwq-2Y;
- Mon, 05 Feb 2024 23:19:54 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Julien Olivain <ju.o@free.fr>
-References: <20240124222523.16703-1-ju.o@free.fr>
-Date: Mon, 05 Feb 2024 23:19:54 +0100
-In-Reply-To: <20240124222523.16703-1-ju.o@free.fr> (Julien Olivain's message
- of "Wed, 24 Jan 2024 23:25:23 +0100")
-Message-ID: <8734u6a705.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] support/testing: add usbutils runtime
- test
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id utlTBuFWawCf for <buildroot@lists.busybox.net>;
+ Mon,  5 Feb 2024 22:20:13 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 11EAA81FEA
+ for <buildroot@buildroot.org>; Mon,  5 Feb 2024 22:20:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 11EAA81FEA
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id F025586E52; Mon,  5 Feb 2024 22:20:12 +0000 (UTC)
+From: Romain Naour <romain.naour@smile.fr>
+To: buildroot@buildroot.org
+Date: Mon, 5 Feb 2024 23:19:26 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 3aecae1802f28d1662e29b31167f7959bfe6a7ce
+X-Git-Newrev: f72ba67d081a728a13f76cb8d18e2b5b781d2a46
+X-Patchwork-Hint: ignore
+Message-Id: <20240205222012.F025586E52@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: netcat: improve test
+ robustness
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,121 +57,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Julien" == Julien Olivain <ju.o@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=f72ba67d081a728a13f76cb8d18e2b5b781d2a46
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Julien Olivain <ju.o@free.fr>
- > ---
- > Patch tested on branch master at commit 7a59c3a with commands:
+Under some conditions (mostly slow execution due to test host load),
+the netcat runtime test can randomly fail. This is due to several
+facts:
 
- >     make check-package
- >     ...
- >     0 warnings generated
+- the sleep time between the server and client is too short,
+- the use of netcat option -c could close the connection before the
+  server could receive all the data.
 
- >     support/testing/run-tests \
- >         -d dl -o output_folder \
- >         tests.package.test_usbutils
- >     ...
- >     OK
- > ---
- >  DEVELOPERS                                    |  2 +
- >  .../testing/tests/package/test_usbutils.py    | 60 +++++++++++++++++++
- >  .../test_usbutils/linux-usbutils.fragment     |  2 +
- >  3 files changed, 64 insertions(+)
- >  create mode 100644 support/testing/tests/package/test_usbutils.py
- >  create mode 100644 support/testing/tests/package/test_usbutils/linux-usbutils.fragment
+This commit improves the test robustness by increasing the sleep time,
+and by reducing the amount of transferred data (from 1MB of random data,
+to a simpler string of few bytes). Also, to make sure netcat cannot wait
+on DNS resolution, this commit also adds the -n option.
 
- > diff --git a/DEVELOPERS b/DEVELOPERS
- > index f5b04937b6..5a5ce47d73 100644
- > --- a/DEVELOPERS
- > +++ b/DEVELOPERS
- > @@ -1814,6 +1814,8 @@ F:	support/testing/tests/package/test_screen.py
- >  F:	support/testing/tests/package/test_stress_ng.py
- >  F:	support/testing/tests/package/test_tcl.py
- >  F:	support/testing/tests/package/test_tcl/
- > +F:	support/testing/tests/package/test_usbutils.py
- > +F:	support/testing/tests/package/test_usbutils/
- >  F:	support/testing/tests/package/test_weston.py
- >  F:	support/testing/tests/package/test_weston/
- >  F:	support/testing/tests/package/test_xz.py
- > diff --git a/support/testing/tests/package/test_usbutils.py b/support/testing/tests/package/test_usbutils.py
- > new file mode 100644
- > index 0000000000..9a5484d5e6
- > --- /dev/null
- > +++ b/support/testing/tests/package/test_usbutils.py
- > @@ -0,0 +1,60 @@
- > +import os
- > +
- > +import infra.basetest
- > +
- > +
- > +class TestUsbUtils(infra.basetest.BRTest):
- > +    # A specific configuration is needed for testing usbutils, to
- > +    # enable USB 2.0 support in the Kernel.
- > +    linux_fragment = \
- > +        infra.filepath("tests/package/test_usbutils/linux-usbutils.fragment")
- > +    config = \
- > +        f"""
- > +        BR2_aarch64=y
- > +        BR2_TOOLCHAIN_EXTERNAL=y
- > +        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
- > +        BR2_LINUX_KERNEL=y
- > +        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- > +        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.73"
- > +        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- > +        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
- > +        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{linux_fragment}"
- > +        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- > +        BR2_PACKAGE_EUDEV=y
- > +        BR2_PACKAGE_USBUTILS=y
- > +        BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
- > +        BR2_TARGET_ROOTFS_CPIO=y
- > +        BR2_TARGET_ROOTFS_CPIO_GZIP=y
- > +        # BR2_TARGET_ROOTFS_TAR is not set
- > +        """
- > +
- > +    def test_run(self):
- > +        img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
- > +        kern = os.path.join(self.builddir, "images", "Image")
- > +        # We add a USB keyboard and mouse devices for the test.
- > +        self.emulator.boot(arch="aarch64",
- > +                           kernel=kern,
- > +                           kernel_cmdline=["console=ttyAMA0"],
- > +                           options=["-M", "virt", "-cpu", "cortex-a57", "-m", "256M",
- > +                                    "-initrd", img,
- > +                                    "-device", "usb-ehci,id=ehci",
- > +                                    "-device", "usb-kbd,bus=ehci.0",
- > +                                    "-device", "usb-mouse,bus=ehci.0"])
- > +        self.emulator.login()
- > +
- > +        # Check the program can execute. We also check the version
- > +        # string to make sure we have the usbutils version. The
- > +        # BusyBox lsusb ignores arguments.
- > +        output, exit_code = self.emulator.run("lsusb --version")
- > +        self.assertEqual(exit_code, 0)
- > +        self.assertTrue(output[0].startswith("lsusb (usbutils)"))
- > +
- > +        # Test few simple and common invocations
- > +        self.assertRunOk("lsusb")
- > +        self.assertRunOk("lsusb --tree")
- > +        self.assertRunOk("lsusb --verbose")
- > +        # 1d6b:0002 is Linux Foundation 2.0 root hub
- > +        # it should be present. lsusb return an error if no device
- > +        # is found.
- > +        self.assertRunOk("lsusb -d 1d6b:0002")
- > +        self.assertRunOk("usbhid-dump")
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/6093854664
 
-It was not directly obvious why this would not fail until I noticed that
-you configure qemu to emulate a USB keyboard and a mouse, so I added a
-comment about this and applied - Thanks.
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+---
+ support/testing/tests/package/test_netcat.py | 19 +++++++++----------
+ 1 file changed, 9 insertions(+), 10 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/support/testing/tests/package/test_netcat.py b/support/testing/tests/package/test_netcat.py
+index b3efa4c40b..88d58a72f3 100644
+--- a/support/testing/tests/package/test_netcat.py
++++ b/support/testing/tests/package/test_netcat.py
+@@ -22,20 +22,19 @@ class TestNetCat(infra.basetest.BRTest):
+ 
+         self.assertRunOk("nc --version")
+ 
+-        in_file = "input.bin"
+-        out_file = "output.bin"
++        msg = "Hello Buildroot!"
++        out_file = "output.txt"
+         port = 12345
+ 
+-        cmd = f"dd if=/dev/urandom of={in_file} bs=1k count=1k"
++        cmd = f"nc -n -l -p {port} > {out_file} 2> /dev/null &"
+         self.assertRunOk(cmd)
+ 
+-        cmd = f"nc -l -p {port} > {out_file} &"
+-        self.assertRunOk(cmd)
+-
+-        time.sleep(1)
++        time.sleep(5)
+ 
+-        cmd = f"cat {in_file} | nc -c 127.0.0.1 {port}"
++        cmd = f"echo '{msg}' | nc -n -c 127.0.0.1 {port}"
+         self.assertRunOk(cmd)
+ 
+-        cmd = f"cmp {in_file} {out_file}"
+-        self.assertRunOk(cmd)
++        cmd = f"cat {out_file}"
++        out, ret = self.emulator.run(cmd)
++        self.assertEqual(ret, 0)
++        self.assertEqual(out[0], msg)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
