@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50408C48292
-	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 21:28:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1948BC4828D
+	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 21:28:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D6F184012F;
-	Mon,  5 Feb 2024 21:28:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D6F184012F
+	by smtp2.osuosl.org (Postfix) with ESMTP id A422C40C02;
+	Mon,  5 Feb 2024 21:28:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A422C40C02
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5ANqqcMtUv-Y; Mon,  5 Feb 2024 21:28:28 +0000 (UTC)
+	with ESMTP id 0HDmcHIq71Ya; Mon,  5 Feb 2024 21:28:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A5B2040AFF;
-	Mon,  5 Feb 2024 21:28:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A5B2040AFF
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D8F5D1BF954
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 21:28:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9EFFB40B5B;
+	Mon,  5 Feb 2024 21:28:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9EFFB40B5B
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1C8001BF341
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 21:28:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B372460ECE
+ by smtp2.osuosl.org (Postfix) with ESMTP id E97F840160
  for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 21:28:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B372460ECE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E97F840160
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 63xDmp4gfVMF for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WHVVUd_nnhZS for <buildroot@lists.busybox.net>;
  Mon,  5 Feb 2024 21:28:12 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F16B860E2E
+ by smtp2.osuosl.org (Postfix) with ESMTP id DCBFE4012F
  for <buildroot@buildroot.org>; Mon,  5 Feb 2024 21:28:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F16B860E2E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DCBFE4012F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D248F86DFB; Mon,  5 Feb 2024 21:28:11 +0000 (UTC)
+ id C762386DF9; Mon,  5 Feb 2024 21:28:11 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 5 Feb 2024 22:26:04 +0100
+Date: Mon, 5 Feb 2024 22:25:50 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f27b0322a5019c4016d2800ccc1b586eb6af7bd5
-X-Git-Newrev: 840849afff07f91668f88570c5055eaf6687deb2
+X-Git-Oldrev: a627753d35d2ba97d5bddfc2491ca8b5577eba49
+X-Git-Newrev: f27b0322a5019c4016d2800ccc1b586eb6af7bd5
 X-Patchwork-Hint: ignore
-Message-Id: <20240205212811.D248F86DFB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wlroots: update patch with
- upstream status
+Message-Id: <20240205212811.C762386DF9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wlroots: vulkan renderer depends
+ on vulkan loader
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,48 +64,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=840849afff07f91668f88570c5055eaf6687deb2
+commit: https://git.buildroot.net/buildroot/commit/?id=f27b0322a5019c4016d2800ccc1b586eb6af7bd5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-package/wlroots/0001-Add-feature-macros-to-more-C-files-.patch has been
-rejected upstream, and the initial pull request was moved to the
-freedesktop gitlab. Update the patch to reflect these changes.
+Without the vulkan-loader package present, the configure step fails with the
+following error message:
+
+```
+Run-time dependency vulkan found: NO (tried pkgconfig and system)
+Message: Install "vulkan" or pass "-Dvulkan=disabled" to disable it.
+```
+
+The above error is due to the lack of the vulkan.pc file provided by the
+vulkan-loader package. A search of autobuild failures containing
+BR2_PACKAGE_WLROOTS=y and BR2_PACKAGE_MESA3D_VULKAN_DRIVER=y shows two build
+failures. However, the failure reasons happened before wlroots could compile.
+One for gerbera-1.10.0 and another for host-rust-1.64.0.
+
+Add a dependency on the vulkan-loader package to resolve the above issue.
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .checkpackageignore                                            | 1 -
- package/wlroots/0001-Add-feature-macros-to-more-C-files-.patch | 4 +++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/wlroots/wlroots.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 2fc974e2f2..31ed5bb5cc 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1395,7 +1395,6 @@ package/wilc-driver/0005-Fix-cast-warnings.patch Upstream
- package/wipe/0001-musl.patch Upstream
- package/wireless_tools/0001-remove-bzero.patch Upstream
- package/wireshark/0001-cmake-lemon-wipe-CMAKE_-EXE_LINKER_FLAGS-SYSROOT-if-.patch Upstream
--package/wlroots/0001-Add-feature-macros-to-more-C-files-.patch Upstream
- package/woff2/0001-CMake-Handle-multiple-libraries-being-returned-for-B.patch Upstream
- package/wpa_supplicant/0001-build-re-enable-options-for-libwpa_client.so-and-.patch Upstream
- package/wpa_supplicant/ifupdown.sh Shellcheck
-diff --git a/package/wlroots/0001-Add-feature-macros-to-more-C-files-.patch b/package/wlroots/0001-Add-feature-macros-to-more-C-files-.patch
-index 0ba078708a..0e1ae9d87a 100644
---- a/package/wlroots/0001-Add-feature-macros-to-more-C-files-.patch
-+++ b/package/wlroots/0001-Add-feature-macros-to-more-C-files-.patch
-@@ -5,8 +5,10 @@ Subject: [PATCH] Add feature macros to more C files
+diff --git a/package/wlroots/wlroots.mk b/package/wlroots/wlroots.mk
+index bb5c8f497d..fdd2fb8250 100644
+--- a/package/wlroots/wlroots.mk
++++ b/package/wlroots/wlroots.mk
+@@ -41,9 +41,9 @@ else
+ WLROOTS_CONF_OPTS += -Dxwayland=disabled
+ endif
  
- These source files use "struct timespec", which is POSIX 1993.09.
+-ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER),y)
++ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER)$(BR2_PACKAGE_VULKAN_LOADER),yy)
+ WLROOTS_RENDERERS += vulkan
+-WLROOTS_DEPENDENCIES += mesa3d
++WLROOTS_DEPENDENCIES += mesa3d vulkan-loader
+ endif
  
--Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-+Upstream: Rejected (Upstream does not want these workarounds)
-+see: https://gitlab.freedesktop.org/wlroots/wlroots/-/merge_requests/2493
- 
-+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
- [Retrieved from: https://github.com/swaywm/wlroots/pull/2493]
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- ---
+ WLROOTS_CONF_OPTS += \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
