@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 527A3C48291
-	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 11:08:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E696C4828D
+	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 11:10:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EE5F940B55;
-	Mon,  5 Feb 2024 11:08:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE5F940B55
+	by smtp2.osuosl.org (Postfix) with ESMTP id 37CEE41754;
+	Mon,  5 Feb 2024 11:10:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 37CEE41754
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vzIxg_LnErgd; Mon,  5 Feb 2024 11:08:20 +0000 (UTC)
+	with ESMTP id bk8PY4Ewuo69; Mon,  5 Feb 2024 11:10:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3885241752;
-	Mon,  5 Feb 2024 11:08:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3885241752
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 42FA71BF281
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 11:08:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 32F9C4174F;
+	Mon,  5 Feb 2024 11:10:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 32F9C4174F
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 418CE1BF281
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 11:10:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1C36F82907
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 11:08:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C36F82907
+ by smtp3.osuosl.org (Postfix) with ESMTP id 13D1260FE1
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 11:10:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 13D1260FE1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hgyjzCFPidH6 for <buildroot@lists.busybox.net>;
- Mon,  5 Feb 2024 11:08:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ficePn70YDVl for <buildroot@lists.busybox.net>;
+ Mon,  5 Feb 2024 11:10:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4E99682160
- for <buildroot@buildroot.org>; Mon,  5 Feb 2024 11:08:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E99682160
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3B7ED60FD1
+ for <buildroot@buildroot.org>; Mon,  5 Feb 2024 11:10:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B7ED60FD1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3DC8E86B74; Mon,  5 Feb 2024 11:08:01 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 246EB86B8E; Mon,  5 Feb 2024 11:10:25 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 5 Feb 2024 12:06:49 +0100
+Date: Mon, 5 Feb 2024 12:10:03 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2f996ed3a8e8274d4acc604097909550b0a09087
-X-Git-Newrev: 4c8ba31a722affbbfade9e5c9411ef0bc7b461bd
+X-Git-Oldrev: 4c8ba31a722affbbfade9e5c9411ef0bc7b461bd
+X-Git-Newrev: 094fb84320ab99ab508879b4f1230ea81bf00da8
 X-Patchwork-Hint: ignore
-Message-Id: <20240205110801.3DC8E86B74@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/uboot-tools: install
- host-fit_check_sign
+Message-Id: <20240205111025.246EB86B8E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: micropython: add
+ micropython-lib test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,43 +63,76 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4c8ba31a722affbbfade9e5c9411ef0bc7b461bd
+commit: https://git.buildroot.net/buildroot/commit/?id=094fb84320ab99ab508879b4f1230ea81bf00da8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-fit_check_sign is a tool for verifying fit image signatures, which gets
-built if host-uboot-tools is built with fit signature support.
+Commit 8f403f0 "package/micropython-lib: merge with, and install
+as part of micropython" brought micropython library within the
+package.
 
-Install it if so.
+This commit improves the micropython runtime test by enabling the
+micropython-lib and by also adding a runtime test using one of its
+module. We choose to use the gzip module, and check whther decodign q
+simple gziped file works; the micropython-lib gzip can only decompress,
+so we need to prepare it from the shell.
 
-Signed-off-by: Woodrow Douglass <wdouglass@carnegierobotics.com>
-[Peter: reword commit message]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/uboot-tools/uboot-tools.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ support/testing/tests/package/test_micropython.py         | 13 ++++++++++++-
+ .../package/test_micropython/rootfs-overlay/root/zcat.py  | 15 +++++++++++++++
+ 2 files changed, 27 insertions(+), 1 deletion(-)
 
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index d884a010fb..12e10dea91 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -130,6 +130,9 @@ endif
- ifeq ($(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),y)
- HOST_UBOOT_TOOLS_MAKE_OPTS += CONFIG_FIT_SIGNATURE=y CONFIG_FIT_SIGNATURE_MAX_SIZE=0x10000000
- HOST_UBOOT_TOOLS_DEPENDENCIES += host-openssl
-+define HOST_UBOOT_TOOLS_INSTALL_FIT_CHECK_SIGN
-+	$(INSTALL) -m 0755 -D $(@D)/tools/fit_check_sign $(HOST_DIR)/bin/fit_check_sign
-+endef
- endif
+diff --git a/support/testing/tests/package/test_micropython.py b/support/testing/tests/package/test_micropython.py
+index 0ecd4790bd..371deb2978 100644
+--- a/support/testing/tests/package/test_micropython.py
++++ b/support/testing/tests/package/test_micropython.py
+@@ -7,6 +7,7 @@ class TestMicroPython(infra.basetest.BRTest):
+     config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
+         f"""
+         BR2_PACKAGE_MICROPYTHON=y
++        BR2_PACKAGE_MICROPYTHON_LIB=y
+         BR2_ROOTFS_OVERLAY="{infra.filepath("tests/package/test_micropython/rootfs-overlay")}"
+         BR2_TARGET_ROOTFS_CPIO=y
+         # BR2_TARGET_ROOTFS_TAR is not set
+@@ -64,5 +65,15 @@ class TestMicroPython(infra.basetest.BRTest):
+         output = self.run_upy_code(py_code)
+         self.assertEqual(output[0], expected_output)
  
- ifeq ($(BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE),y)
-@@ -215,6 +218,7 @@ define HOST_UBOOT_TOOLS_INSTALL_CMDS
- 	$(INSTALL) -m 0755 -D $(@D)/tools/mkeficapsule $(HOST_DIR)/bin/mkeficapsule
- 	$(INSTALL) -m 0755 -D $(@D)/tools/mkenvimage $(HOST_DIR)/bin/mkenvimage
- 	$(INSTALL) -m 0755 -D $(@D)/tools/dumpimage $(HOST_DIR)/bin/dumpimage
-+	$(HOST_UBOOT_TOOLS_INSTALL_FIT_CHECK_SIGN)
- 	$(INSTALL) -m 0755 -D $(@D)/tools/env/fw_printenv $(HOST_DIR)/bin/fw_printenv
- 	ln -sf $(HOST_DIR)/bin/fw_printenv $(HOST_DIR)/bin/fw_setenv
- 	$(HOST_UBOOT_TOOLS_INSTALL_ENVIMAGE)
+-        # Finally, Check a small script can execute.
++        # Check a small script can execute.
+         self.assertRunOk("/root/mandel.py", timeout=10)
++
++        # Check we can use a micropython-lib module.
++        msg = "Hello Buildroot!"
++        filename = "file.txt"
++        gz_filename = f"{filename}.gz"
++        self.assertRunOk(f"echo '{msg}' > {filename}")
++        self.assertRunOk(f"gzip {filename}")
++        out, ret = self.emulator.run(f"/root/zcat.py {gz_filename}")
++        self.assertEqual(ret, 0)
++        self.assertEqual(out[0], msg)
+diff --git a/support/testing/tests/package/test_micropython/rootfs-overlay/root/zcat.py b/support/testing/tests/package/test_micropython/rootfs-overlay/root/zcat.py
+new file mode 100755
+index 0000000000..3b8c60bdd1
+--- /dev/null
++++ b/support/testing/tests/package/test_micropython/rootfs-overlay/root/zcat.py
+@@ -0,0 +1,15 @@
++#! /usr/bin/env micropython
++
++import gzip
++import sys
++
++
++def main(fname):
++    with open(fname, "rb") as f:
++        with gzip.GzipFile(fileobj=f) as g:
++            s = g.read()
++            print(s.decode("UTF-8"), end="")
++
++
++if __name__ == "__main__":
++    main(sys.argv[1])
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
