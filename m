@@ -4,47 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E143C48295
-	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 13:31:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BEEEC4828D
+	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 13:31:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E362661018;
-	Mon,  5 Feb 2024 13:31:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E362661018
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5753561063;
+	Mon,  5 Feb 2024 13:31:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5753561063
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BsFdsukXqkqC; Mon,  5 Feb 2024 13:31:10 +0000 (UTC)
+	with ESMTP id cYJBfZXIcYKc; Mon,  5 Feb 2024 13:31:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2AEDB6105C;
-	Mon,  5 Feb 2024 13:31:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2AEDB6105C
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7E8961BF954
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 13:29:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A8CB860F0B;
+	Mon,  5 Feb 2024 13:31:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A8CB860F0B
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 61EBF1BF95D
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 13:29:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1A8DA60F1A
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 13:29:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A8DA60F1A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3AF1E826FF
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 13:29:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3AF1E826FF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id s2Jq0iOjyvs1 for <buildroot@lists.busybox.net>;
- Mon,  5 Feb 2024 13:29:15 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0763360E6B
- for <buildroot@buildroot.org>; Mon,  5 Feb 2024 13:29:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0763360E6B
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DA41A86C7B; Mon,  5 Feb 2024 13:29:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4IrL1mSNE8wW for <buildroot@lists.busybox.net>;
+ Mon,  5 Feb 2024 13:29:49 +0000 (UTC)
+Received: from mail-a.sr.ht (mail-a.sr.ht [46.23.81.152])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 69CF7826EF
+ for <buildroot@buildroot.org>; Mon,  5 Feb 2024 13:29:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 69CF7826EF
+Received: from git.sr.ht (unknown [46.23.81.155])
+ by mail-a.sr.ht (Postfix) with ESMTPSA id 3ACFC200ED
+ for <buildroot@buildroot.org>; Mon,  5 Feb 2024 13:29:57 +0000 (UTC)
+From: ~bubu <bubu@git.sr.ht>
+Date: Mon, 05 Feb 2024 14:08:32 +0100
+Message-ID: <170713978507.21324.6362507954144029814-0@git.sr.ht>
+X-Mailer: git.sr.ht
 To: buildroot@buildroot.org
-Date: Mon, 5 Feb 2024 14:28:12 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cd3ec6b977a84a324639682f16f82b459382f8e5
-X-Git-Newrev: fa51f4ac41327eb8277938f2e8f5c11c59113cb3
-X-Patchwork-Hint: ignore
-Message-Id: <20240205132914.DA41A86C7B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-alembic: bump to version
- 1.13.1
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ bh=ROVyoGP5OX/aEnmg7vjErrJ68jnbepB+ohewNTvcHAw=; 
+ c=simple/simple; d=git.sr.ht; h=From:Date:Subject:Reply-to:To; q=dns/txt;
+ s=20240113; t=1707139797; v=1;
+ b=BnHwRiztSFMgYnnM7tJs1RQIfPTl9Xl95VMljiG8rxoo0eRN9AxBYjM37MeBqdpcVLSZ3h5U
+ K6SwCkfVnOcRVWHFzYQvQ/tjdlKJEnPzWq7zXZv2AunGFEpFP/t9ssFTImcTHHH1GCdMxEIoHH2
+ oLVQUJUcM5ZwLDyUP0kS4YHEjGjR7WJOAc3NMW0Pq2YbJV5hFq7FgS6qSm8+tgB3YQK8zx9P3UO
+ Umkmw72Rsy36Wxy+nyKcrxjPXPoCYi6ECJKcgDVn6tv/SPnaH/aPfjx8YMc5WfJc/LWfWgLXfSo
+ jiEzHwPfCS2KhuNa5lBVRIGoQbzwGxH+bk02aBBsvpfUg==
+Subject: [Buildroot] [PATCH buildroot] support/testing: add minimalmodbus
+ runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,71 +65,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-MIME-Version: 1.0
+Reply-To: ~bubu <bubu@bubu1.eu>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fa51f4ac41327eb8277938f2e8f5c11c59113cb3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Marcus Hoffmann <bubu@bubu1.eu>
 
-Add new runtime dependencies:
- - python-sqlalchemy
- - python-mako
- - python-typing-extensions
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Marcus Hoffmann <bubu@bubu1.eu>
 ---
- package/python-alembic/Config.in           | 3 +++
- package/python-alembic/python-alembic.hash | 4 ++--
- package/python-alembic/python-alembic.mk   | 4 ++--
- 3 files changed, 7 insertions(+), 4 deletions(-)
+ .../tests/package/sample_python_minimalmodbus.py      |  7 +++++++
+ .../tests/package/test_python_minimalmodbus.py        | 11 +++++++++++
+ 2 files changed, 18 insertions(+)
+ create mode 100644 support/testing/tests/package/sample_python_minimalmodbus.py
+ create mode 100644 support/testing/tests/package/test_python_minimalmodbus.py
 
-diff --git a/package/python-alembic/Config.in b/package/python-alembic/Config.in
-index a53dde7f7f..33fe3c3682 100644
---- a/package/python-alembic/Config.in
-+++ b/package/python-alembic/Config.in
-@@ -1,5 +1,8 @@
- config BR2_PACKAGE_PYTHON_ALEMBIC
- 	bool "python-alembic"
-+	select BR2_PACKAGE_PYTHON_MAKO # runtime
-+	select BR2_PACKAGE_PYTHON_SQLALCHEMY # runtime
-+	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
- 	help
- 	  Alembic is a database migrations tool written by the author
- 	  of SQLAlchemy.
-diff --git a/package/python-alembic/python-alembic.hash b/package/python-alembic/python-alembic.hash
-index df1f4fba02..1f752ebc7e 100644
---- a/package/python-alembic/python-alembic.hash
-+++ b/package/python-alembic/python-alembic.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/alembic/json
--md5  642d563af853b317f018026f3edd5dba  alembic-1.12.1.tar.gz
--sha256  bca5877e9678b454706347bc10b97cb7d67f300320fa5c3a94423e8266e2823f  alembic-1.12.1.tar.gz
-+md5  29579d34ea694627280b52a3d3116664  alembic-1.13.1.tar.gz
-+sha256  4932c8558bf68f2ee92b9bbcb8218671c627064d5b08939437af6d77dc05e595  alembic-1.13.1.tar.gz
- # Locally computed sha256 checksums
- sha256  b285268a86f4416eaf4d05b2ae3880c156f7c59a8f935a402bc056eafb33af08  LICENSE
-diff --git a/package/python-alembic/python-alembic.mk b/package/python-alembic/python-alembic.mk
-index fd41e0df66..52e30e39ba 100644
---- a/package/python-alembic/python-alembic.mk
-+++ b/package/python-alembic/python-alembic.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_ALEMBIC_VERSION = 1.12.1
-+PYTHON_ALEMBIC_VERSION = 1.13.1
- PYTHON_ALEMBIC_SOURCE = alembic-$(PYTHON_ALEMBIC_VERSION).tar.gz
--PYTHON_ALEMBIC_SITE = https://files.pythonhosted.org/packages/44/b4/253fe31261d9f5d603d89bd9e6fba1625494a6d761d319902dfe4db59016
-+PYTHON_ALEMBIC_SITE = https://files.pythonhosted.org/packages/7b/24/ddce068e2ac9b5581bd58602edb2a1be1b0752e1ff2963c696ecdbe0470d
- PYTHON_ALEMBIC_SETUP_TYPE = setuptools
- PYTHON_ALEMBIC_LICENSE = MIT
- PYTHON_ALEMBIC_LICENSE_FILES = LICENSE
+diff --git a/support/testing/tests/package/sample_python_minimalmodbus.py b/support/testing/tests/package/sample_python_minimalmodbus.py
+new file mode 100644
+index 0000000000..a75145f900
+--- /dev/null
++++ b/support/testing/tests/package/sample_python_minimalmodbus.py
+@@ -0,0 +1,7 @@
++import minimalmodbus
++from serial.serialutil import SerialException
++
++try:
++    instrument = minimalmodbus.Instrument('/dev/ttyUSB99', 1)
++except SerialException:
++    pass
+diff --git a/support/testing/tests/package/test_python_minimalmodbus.py b/support/testing/tests/package/test_python_minimalmodbus.py
+new file mode 100644
+index 0000000000..53813406de
+--- /dev/null
++++ b/support/testing/tests/package/test_python_minimalmodbus.py
+@@ -0,0 +1,11 @@
++from tests.package.test_python import TestPythonPackageBase
++
++
++class TestPythonPy3Minimalmodbus(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_MINIMALMODBUS=y
++        """
++    sample_scripts = ["tests/package/sample_python_minimalmodbus.py"]
+-- 
+2.38.5
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
