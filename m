@@ -4,65 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D040C48292
-	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 18:04:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D6D3C48292
+	for <buildroot@archiver.kernel.org>; Mon,  5 Feb 2024 18:09:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0840A40162;
-	Mon,  5 Feb 2024 18:04:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0840A40162
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0AA164023F;
+	Mon,  5 Feb 2024 18:09:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0AA164023F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jiHoVDLmRfmu; Mon,  5 Feb 2024 18:04:42 +0000 (UTC)
+	with ESMTP id KXr2QAQTbvce; Mon,  5 Feb 2024 18:09:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2C5584018B;
-	Mon,  5 Feb 2024 18:04:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2C5584018B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1BD9E1BF379
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 18:04:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 781B940468;
+	Mon,  5 Feb 2024 18:09:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 781B940468
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 447BA1BF379
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 18:09:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E41D481E38
- for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 18:04:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E41D481E38
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1D2B060AE6
+ for <buildroot@lists.busybox.net>; Mon,  5 Feb 2024 18:09:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D2B060AE6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IC8FsYQOzLgg for <buildroot@lists.busybox.net>;
- Mon,  5 Feb 2024 18:04:37 +0000 (UTC)
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9D7A981E33
- for <buildroot@buildroot.org>; Mon,  5 Feb 2024 18:04:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D7A981E33
-Received: from ymorin.is-a-geek.org (unknown [85.119.216.19])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 267BD13F8D7;
- Mon,  5 Feb 2024 19:04:32 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 05 Feb 2024 19:04:30 +0100
-Date: Mon, 5 Feb 2024 19:04:30 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: gsmecher@threespeedlogic.com
-Message-ID: <ZcEjLpAWFjQuYCWc@landeda>
-References: <20240129204032.1980414-1-gsmecher@threespeedlogic.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240129204032.1980414-1-gsmecher@threespeedlogic.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1707156274;
- bh=f/PtKzunLqqtJfbGweQVN9reayTYG0CeeGEnJSJ4ndk=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=Lu1zcycL/lTzsPfClBt/a/w8OviDEk1nlUs4McgFywGHqIfRW1pCGo86wox+4ddFW
- gFW9IvBWjdibKJRpHzjInSdUAIWc8C8Vm0lNHhCcVDOd6NX1c/HXGcBaijcnaBGl5k
- 4x4zsW8uLeaAbv0oxCvyZk70Jfq07sioVnT3IIx+hRLxtKHRBkSJKwvS8wxL5wrJu4
- jOK0VxC1sP9eHmzGgwIzCEtzYtbRnPQ4NXS/P88c0pHzydkJvR9VpbD2W5ODjMB68r
- sKrju+X0Y008JlPW/aLi7Lfvn8CmR0ZuUYDLpE6kcNKAaj33M4J1hUvh+SVVn4VaIK
- 96s4E68+NJvGg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Lu1zcycL
-Subject: Re: [Buildroot] [PATCH] host-python-numpy: correct implied
- host-lapack/host-blas dependency.
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kw2ascHxzIIc for <buildroot@lists.busybox.net>;
+ Mon,  5 Feb 2024 18:09:13 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id E7C8160AC3
+ for <buildroot@buildroot.org>; Mon,  5 Feb 2024 18:09:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E7C8160AC3
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D25CA86DC7; Mon,  5 Feb 2024 18:09:12 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 5 Feb 2024 19:09:04 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f6c33f3e89f7f26e5b7613a757c82c9efc62654a
+X-Git-Newrev: e97fc89e7ba75f5f664161916b44e727820a04a5
+X-Patchwork-Hint: ignore
+Message-Id: <20240205180912.D25CA86DC7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/protobuf-c: bump to version 1.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,88 +55,205 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Graeme, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=e97fc89e7ba75f5f664161916b44e727820a04a5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2024-01-29 12:40 -0800, gsmecher@threespeedlogic.com spake thusly:
-> From: Graeme Smecher <gsmecher@threespeedlogic.com>
-> 
-> Before this patch, host-python-numpy attempted (and failed) to detect
-> OpenBLAS as follows:
-> 
->     buildroot$ make
->     >>> host-python-numpy 1.25.0 Configuring
->     [...]
->     Run-time dependency openblas found: NO (tried pkgconfig and cmake)
->     WARNING: CMake Toolchain: Failed to determine CMake compilers state
->     Run-time dependency openblas found: YES 0.3.21
->     Dependency openblas found: YES 0.3.21 (cached)
->     Program _build_utils/process_src_template.py found: YES (/path/to/buildroot/output/host/bin/python3 /path/to/buildroot/output/build/host-python-numpy-1.25.0/numpy/_build_utils/process_src_template.py)
->     Program _build_utils/tempita.py found: YES (/path/to/buildroot/output/build/host-python-numpy-1.25.0/numpy/_build_utils/tempita.py)
-> 
->     output/build/host-python-numpy-1.25.0/numpy/meson.build:201:44: ERROR: Could not get cmake variable and no default provided for <CMakeDependency OpenBLAS: True None>
->     [...]
+- drops support for proto2
+- fixes compatibility with protobuf >= 22.0 (which we did not yet bump)
+- to be compatible with new protobuf versions c++17 is now required
+  when building with protoc (which we only do for the host package) [0]
+  hence require host gcc >= 7 for c++17 support, propagate to
+  depending packages
+- the license file has changed with a change of the copyright years,
+  nothing else
 
-So I dug in the Numpy git history, and before we bumped to 1.25, it was
-using distutils, which would only warn and disable BLAS support if not
-found, but the meson switch made the default to fail.
+[0] https://github.com/protobuf-c/protobuf-c/pull/673
 
-> Two obvious ways to correct this:
-> 
-> - Add some kind of host-lapack / host-openblas dependency to
->   host-python-numpy, or
-> - Tell host-python-numpy not to look for (or rely on) external code.
-> 
-> Because the host numpy environment shouldn't be doing any numerical
-> heavy lifting, we opt for the latter here.
-> 
-> Signed-off-by: Graeme Smecher <gsmecher@threespeedlogic.com>
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/collectd/Config.in         | 10 ++++++++--
+ package/criu/Config.in             |  6 ++++--
+ package/kismet/Config.in           |  6 ++++--
+ package/protobuf-c/Config.in       |  5 +++--
+ package/protobuf-c/protobuf-c.hash |  4 ++--
+ package/protobuf-c/protobuf-c.mk   |  6 +++---
+ package/riemann-c-client/Config.in |  6 ++++--
+ 7 files changed, 28 insertions(+), 15 deletions(-)
 
-Applied to master, with an extended commit log about the history,
-thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/python-numpy/python-numpy.mk | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
-> index b52e0da17d..cc5dfc9224 100644
-> --- a/package/python-numpy/python-numpy.mk
-> +++ b/package/python-numpy/python-numpy.mk
-> @@ -36,6 +36,10 @@ else
->  PYTHON_NUMPY_CONF_OPTS += -Dblas=""
->  endif
->  
-> +# Rather than add a host-blas or host-lapack dependencies, just use unoptimized,
-> +# in-tree code.
-> +HOST_PYTHON_NUMPY_CONF_OPTS = -Dblas="" -Dlapack=""
-> +
->  # Fixup the npymath.ini prefix path with actual target staging area where
->  # numpy core was built. Without this, target builds using numpy distutils
->  # extensions like python-scipy, python-numba cannot find -lnpymath since
-> -- 
-> 2.39.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index d3b686771d..a0c367c78d 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -738,12 +738,17 @@ config BR2_PACKAGE_COLLECTD_RIEMANN
+ 	# riemann-c-client -> protobuf-c
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
++	depends on BR2_HOST_GCC_AT_LEAST_7 # protobuf-c
+ 	select BR2_PACKAGE_RIEMANN_C_CLIENT
+ 	select BR2_PACKAGE_LIBTOOL
+ 	help
+ 	  Sends data to Riemann, a stream processing and monitoring
+ 	  system.
+ 
++comment "riemann needs a toolchain w/ C++, host gcc >= 7"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_HOST_GCC_AT_LEAST_7
++	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
++
+ config BR2_PACKAGE_COLLECTD_UNIXSOCK
+ 	bool "unixsock"
+ 	help
+@@ -772,14 +777,15 @@ config BR2_PACKAGE_COLLECTD_WRITEPROMETHEUS
+ 	bool "write_prometheus"
+ 	depends on BR2_INSTALL_LIBSTDCPP # protobuf-c
+ 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS # protobuf-c
++	depends on BR2_HOST_GCC_AT_LEAST_7 # protobuf-c
+ 	select BR2_PACKAGE_LIBMICROHTTPD
+ 	select BR2_PACKAGE_PROTOBUF_C
+ 	help
+ 	  Publishes values using an embedded HTTP server, in a format
+ 	  compatible with Prometheus' collectd_exporter.
+ 
+-comment "write_prometheus needs a toolchain w/ C++"
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "write_prometheus needs a toolchain w/ C++, host gcc >= 7"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_HOST_GCC_AT_LEAST_7
+ 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
+ 
+ config BR2_PACKAGE_COLLECTD_WRITEREDIS
+diff --git a/package/criu/Config.in b/package/criu/Config.in
+index a5adc0cedd..30b131cd30 100644
+--- a/package/criu/Config.in
++++ b/package/criu/Config.in
+@@ -18,6 +18,7 @@ config BR2_PACKAGE_CRIU_ARCH_SUPPORTS
+ config BR2_PACKAGE_CRIU
+ 	bool "criu"
+ 	depends on BR2_PACKAGE_CRIU_ARCH_SUPPORTS
++	depends on BR2_HOST_GCC_AT_LEAST_7 # protobuf-c
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # -march=armv7-a+fp
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18 # rseq.h
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no aio.h
+@@ -43,9 +44,10 @@ config BR2_PACKAGE_CRIU
+ 
+ 	  https://criu.org/Main_Page
+ 
+-comment "criu needs a glibc or musl toolchain w/ threads, gcc >= 8, headers >= 4.18, C++, dynamic library, wchar"
++comment "criu needs a glibc or musl toolchain w/ threads, host gcc >= 7, gcc >= 8, headers >= 4.18, C++, dynamic library, wchar"
+ 	depends on BR2_PACKAGE_CRIU_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_8 || !BR2_TOOLCHAIN_HAS_THREADS \
+ 		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18 \
+ 		|| BR2_TOOLCHAIN_USES_UCLIBC || !BR2_INSTALL_LIBSTDCPP \
+-		|| BR2_STATIC_LIBS || !BR2_USE_WCHAR
++		|| BR2_STATIC_LIBS || !BR2_USE_WCHAR \
++		|| BR2_HOST_GCC_AT_LEAST_7
+diff --git a/package/kismet/Config.in b/package/kismet/Config.in
+index 80e68743a5..2e1e0cfbd0 100644
+--- a/package/kismet/Config.in
++++ b/package/kismet/Config.in
+@@ -1,8 +1,9 @@
+-comment "kismet needs a toolchain w/ threads, C++, gcc >= 5"
++comment "kismet needs a toolchain w/ threads, C++, gcc >= 5, host gcc >= 7"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_5 || \
++		!BR2_HOST_GCC_AT_LEAST_7
+ 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
+ 
+ config BR2_PACKAGE_KISMET
+@@ -11,6 +12,7 @@ config BR2_PACKAGE_KISMET
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS # protobuf-c
++	depends on BR2_HOST_GCC_AT_LEAST_7 # protobuf-c
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # C++14
+ 	select BR2_PACKAGE_LIBPCAP
+ 	select BR2_PACKAGE_PROTOBUF_C
+diff --git a/package/protobuf-c/Config.in b/package/protobuf-c/Config.in
+index d96cd7b382..a438b32221 100644
+--- a/package/protobuf-c/Config.in
++++ b/package/protobuf-c/Config.in
+@@ -4,12 +4,13 @@ config BR2_PACKAGE_PROTOBUF_C
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	# host-protobuf only builds on certain architectures
+ 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
++	depends on BR2_HOST_GCC_AT_LEAST_7 # c++17 for host variant
+ 	help
+ 	  Code generator and runtime libraries to use Protocol Buffers
+ 	  from pure C (not C++).
+ 
+ 	  https://github.com/protobuf-c/protobuf-c
+ 
+-comment "protobuf-c needs a toolchain w/ C++, threads"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++comment "protobuf-c needs a toolchain w/ C++, threads, host gcc >= 7"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_HOST_GCC_AT_LEAST_7
+ 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
+diff --git a/package/protobuf-c/protobuf-c.hash b/package/protobuf-c/protobuf-c.hash
+index ec00442277..aafd98416a 100644
+--- a/package/protobuf-c/protobuf-c.hash
++++ b/package/protobuf-c/protobuf-c.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  4cc4facd508172f3e0a4d3a8736225d472418aee35b4ad053384b137b220339f  protobuf-c-1.4.1.tar.gz
+-sha256  b8999cb392cc5bbe8cd679de59584ad8d2f26033123e76f1d662fa14b9d4f287  LICENSE
++sha256  7b404c63361ed35b3667aec75cc37b54298d56dd2bcf369de3373212cc06fd98  protobuf-c-1.5.0.tar.gz
++sha256  ad28bbf89340b86d15aad1ff62c4f4590025d836415307dc66cf0338235cc2f4  LICENSE
+diff --git a/package/protobuf-c/protobuf-c.mk b/package/protobuf-c/protobuf-c.mk
+index 0742a33db2..ccabd4723f 100644
+--- a/package/protobuf-c/protobuf-c.mk
++++ b/package/protobuf-c/protobuf-c.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PROTOBUF_C_VERSION = 1.4.1
++PROTOBUF_C_VERSION = 1.5.0
+ PROTOBUF_C_SITE = https://github.com/protobuf-c/protobuf-c/releases/download/v$(PROTOBUF_C_VERSION)
+ PROTOBUF_C_DEPENDENCIES = host-protobuf-c
+ HOST_PROTOBUF_C_DEPENDENCIES = host-protobuf host-pkgconf
+@@ -15,8 +15,8 @@ PROTOBUF_C_LICENSE = BSD-2-Clause
+ PROTOBUF_C_LICENSE_FILES = LICENSE
+ PROTOBUF_C_CPE_ID_VENDOR = protobuf-c_project
+ 
+-# host-protobuf needs c++11 (since 3.6.0)
+-HOST_PROTOBUF_C_CONF_ENV += CXXFLAGS="$(HOST_CXXFLAGS) -std=c++11"
++# when building with protoc (from host-protobuf) c++17 is now required
++HOST_PROTOBUF_C_CONF_ENV += CXXFLAGS="$(HOST_CXXFLAGS) -std=c++17"
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+diff --git a/package/riemann-c-client/Config.in b/package/riemann-c-client/Config.in
+index 6c3c35caf8..0985972a8b 100644
+--- a/package/riemann-c-client/Config.in
++++ b/package/riemann-c-client/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_RIEMANN_C_CLIENT
+ 	depends on BR2_INSTALL_LIBSTDCPP # protobuf-c
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf-c
+ 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS # protobuf-c
++	depends on BR2_HOST_GCC_AT_LEAST_7 # protobuf-c
+ 	select BR2_PACKAGE_PROTOBUF_C
+ 	help
+ 	  Riemann-c-client is a C client library for the Riemann
+@@ -12,6 +13,7 @@ config BR2_PACKAGE_RIEMANN_C_CLIENT
+ 
+ 	  https://github.com/algernon/riemann-c-client
+ 
+-comment "riemann-c-client needs a toolchain w/ C++, threads"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++comment "riemann-c-client needs a toolchain w/ C++, threads, host gcc >= 7"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_HOST_GCC_AT_LEAST_7
+ 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
