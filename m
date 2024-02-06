@@ -1,84 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DD63C4828D
-	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 16:09:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC90DC48297
+	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 16:15:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2F7C6400E7;
-	Tue,  6 Feb 2024 16:09:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2F7C6400E7
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4D33B61129;
+	Tue,  6 Feb 2024 16:15:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D33B61129
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7uXGNEapZH5q; Tue,  6 Feb 2024 16:09:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id L5zCfUvBL_SE; Tue,  6 Feb 2024 16:15:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F044840189;
-	Tue,  6 Feb 2024 16:09:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F044840189
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2C0461BF215
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 16:09:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 67CCB612CA;
+	Tue,  6 Feb 2024 16:15:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 67CCB612CA
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7F7EE1BF311
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 16:15:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with UTF8SMTP id 11AF641E92
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 16:09:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11AF641E92
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6B25682B5E
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 16:15:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with UTF8SMTP id Iev33H_PcJUB for <buildroot@lists.busybox.net>;
- Tue,  6 Feb 2024 16:09:47 +0000 (UTC)
-X-Greylist: delayed 28891 seconds by postgrey-1.37 at util1.osuosl.org;
- Tue, 06 Feb 2024 16:09:45 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 589D641E81
-Received: from out162-62-57-49.mail.qq.com (out162-62-57-49.mail.qq.com
- [162.62.57.49])
- by smtp4.osuosl.org (Postfix) with UTF8SMTPS id 589D641E81
- for <buildroot@buildroot.org>; Tue,  6 Feb 2024 16:09:44 +0000 (UTC)
-X-QQ-FEAT: oHWrrGTW1dDtz/MFGzupqCMH20Bzyq2O
-X-QQ-SSF: 00000000000000F0000000000000
-X-QQ-XMRINFO: Nq+8W0+stu50PRdwbJxPCL0=
-X-QQ-XMAILINFO: N21t3Bf2hPbkBrPIQlkd27BcvlXQh8Me+OKdRovLHy73bLLL91LD7B7UJtRU1g
- T0qbmRgqJOl/1IlIb43TnwnGaRotY7ogqRc5yE0krV14HmGc0Y3xFlhN95BEMLeHdLOV3gnURn6HA
- BkvvtohORxNJ/JIqNSZifXALoNYJgI+NzVrnua8OdvO6/WPGym9zvuV2vvon7MMvP3a5qRksSJQDz
- X9Xmo4myLdHQ6xnIzCxVLWad75ZHK9CIo+2iVM1AtiNso33fNHZmZ22zHRPGbsACLXdaGNdDCR69D
- fraHcyCv2a+GoPDJJMPWAU3AnLUiDhL+8fnQ4PBjOAVticg2AAOjH/re0F2SzBJS73lebLusVkb4d
- ms8qXuKmf4YqP9k9WQGQivlxkoa1bS14o0qL68F23q6vxGhxHVO7CYX/TqmOuNxd+jpBcVyIMAr+5
- j8ZiVbNdc1o9EVBo3O4m0gnbrkfJML+ldFXiUtDLMFnA2VOQ5znzKMcXi0YAwIVXSSgrI5W2DFHXe
- BqUgBZ5qMNhXVSGSaKobYrGIZx1v2a+uFkZICItsi3S9Cw/mZkGm9RevU158P1iZXojYKAkiDkwQx
- gGt+lG5V4H5BeWOPJTxXtqsHZBrGO4r+aKqaC/YP5q7pEnx9yDUtZB4+iiE7LB5LuBRrSaJ+Beznb
- LelW9RY5gugl1o3/SUDtoGORewWg9rpkCO2jBVoq5p9GSgYQl5r4rVuvzQPFcwM6Eu5WewGz4w5CN
- 7XPUABgdiGUQ646PRZsA6c9K5+s6b3wGv4h3HbHHI7iFWpmSJmH18YtWTx0oS6AeqL3zKzbwyvdF0
- 8FjSYiQnxKhGoLCV+pHSAMzBA9HLb1ubDKn8BSQFIIZxIp76m2XlPIDVYnR4xjvitXp1TRlujgGRb
- 839Ef9AMfIdg0WGgJcEfvZuBpx7kKn4+UPZyq63es+6B8tE1w/miqNq/tKPdGm1
-X-HAS-ATTACH: no
-X-QQ-BUSINESS-ORIGIN: 2
-X-Originating-IP: 36.101.46.39
-X-QQ-STYLE: 
-X-QQ-mid: webmail281t1707235290t2193112
-To: "=?gb18030?B?R2l1bGlvIEJlbmV0dGk=?="
- <giulio.benetti@benettiengineering.com>,
- "=?gb18030?B?YnVpbGRyb290?=" <buildroot@buildroot.org>
-Mime-Version: 1.0
-Date: Wed, 7 Feb 2024 00:01:29 +0800
-X-Priority: 3
-Message-ID: <tencent_02D8179765F226C0BF4CC902C70600813106@qq.com>
-X-QQ-MIME: TCMime 1.0 by Tencent
-X-Mailer: QQMail 2.x
-X-QQ-Mailer: QQMail 2.x
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=qq.com; s=s201512; 
- t=1707235781; bh=Ts9IuJJgxtURLlM8ArT7HrB/oToLcvja2YnwbDpxiuc=;
- h=From:To:Subject:Date;
- b=ruqfWoiW6+/hzDyquYTDzRd16v0C8G75M2ry+qR1RCvuNmWkk1HqQWEcZ5zZijZWD
- edma334dftJQvE0im4ksOmMxGd3FGrCe53gOXahMuIBPo7rJKzlvGc+2RAd0Vq2dwF
- lfSm0gsJACfu9yP7YVXJa0xzcFAKvv61QxaOf3sA=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.a=rsa-sha256
- header.s=s201512 header.b=ruqfWoiW
-Subject: Re: [Buildroot] [PATCH v3 2/2] configs/milkv_duo: new defconfig
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BbzBGDOcrtlY for <buildroot@lists.busybox.net>;
+ Tue,  6 Feb 2024 16:15:48 +0000 (UTC)
+Received-SPF: None (mailfrom) identity=mailfrom; client-ip=62.149.156.86;
+ helo=smtpcmd0986.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9F57E82D2F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F57E82D2F
+Received: from smtpcmd0986.aruba.it (smtpcmd0986.aruba.it [62.149.156.86])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9F57E82D2F
+ for <buildroot@buildroot.org>; Tue,  6 Feb 2024 16:15:46 +0000 (UTC)
+Received: from [192.168.50.221] ([84.33.84.190])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id XO6prKvnDoTDCXO6qr1402; Tue, 06 Feb 2024 17:15:44 +0100
+Message-ID: <40f3713a-2cbe-4cdf-9b7b-3f30d5742b56@benettiengineering.com>
+Date: Tue, 6 Feb 2024 17:15:43 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: Vincent Fazio <vfazio@xes-inc.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20240206161152.0e178414@windsurf>
+ <20240206155413.1349720-1-giulio.benetti@benettiengineering.com>
+ <PH1P110MB160351713AB054CEFD33B1439F46A@PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <PH1P110MB160351713AB054CEFD33B1439F46A@PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM>
+X-CMAE-Envelope: MS4xfOwRV5+TxS0uPtoMHAb2/f8duyjy2REMrkeqjH512WkwFOjm+RQ9rOj3mMWunuZsR1yTV5Zf66qUUU+tfh9dSy9tMD5RytucnF+03SKw9M0v8ZxPGtkk
+ DgvL2auuiOdkiIDRJmcM3iO+NQKi1PQHxDhQFwX3pKgasEcb832uycmZ1MIe+lwUy7Pb3xgp7KapfNoOYpzZyruq65PhZERo1gWce//1rBUJ8FeasSDNq8HQ
+ fd9FzJtF8pxkEiT/jBRhYrTXSdbRIEIBax1Sm5L6f5S5a4WhzgLMSykUf2TKn0GlSWz6jWBkmGtO+iYVqEjHHEaARJxIbbdeWUwPI04GoHo=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1707236144; bh=LHSRMrf6B6bFKLmlrI0NqA5gg3Wt2cg3SR+60uIQ4T4=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=PpTs1uhOusweGkukdUCKXBrm6mYtd8nnlzdS8KuF1yoxii+UuxINu2IrhyW9R5hTg
+ vYjIGIpbgt54sFZXIxZp0EJai/KjcKrpytLn3N3N//AOj1wIirvlaWsyNc/SABpG6/
+ kCkYwmKHAA3XgsyFbSdjR6ftQxr/aKj6FKBO6fD49LTzimJn/ZCS58EtOKFC9Rmys5
+ QbfUM6XgJrijh4C9eZgeY9v0SbLnTNrQJveJ9Qv89CxEgD+SLI6Pg/OSQgsnSibOJ2
+ jhYWmfSgPYxMEPyoesPerniVWowBfCovCuIwK4SVYJ7izrsYL75G+5FRUPkQaMSod3
+ l2TQgFlhUFf4w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=fail (p=none dis=none)
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=PpTs1uhO
+Subject: Re: [Buildroot] [External] - [PATCH] package/attr: fix build
+ failure on Microblaze architecture
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,98 +86,156 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: hanyuan-z via buildroot <buildroot@buildroot.org>
-Reply-To: =?gb18030?B?aGFueXVhbi16?= <hanyuan-z@qq.com>
-Content-Type: text/plain; charset="gb18030"
-Content-Transfer-Encoding: base64
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gR2l1bGlvLAoKVGhhbmtzIGZvciB5b3VyIGNhcmVmdWwgcmV2aWV3ISBIb3dldmVyIHRo
-ZXJlIGFyZSBhIGZldwp0aGluZ3MgSSBzdGlsbCBnZXQgY29uZnVzZWQgYWJvdXQuIENvdWxkIHlv
-dSBwbGVhc2UgZ2l2ZSBtZQpzb21lIGhpbnRzPwoKJmd0OyBIZXJlIHlvdSBkZWZpbmV0ZWx5IG5l
-ZWQgdG8gYWRkIHRoYXQgdGhpcyBwYXRjaCBkZXBlbmRzIG9uIHRoaXMKJmd0OyBwYXRjaHNldDoK
-Jmd0OyBodHRwczovL3BhdGNod29yay5vemxhYnMub3JnL3Byb2plY3QvYnVpbGRyb290L2xpc3Qv
-P3Nlcmllcz0zOTM2NjcKJmd0OyB0byB3b3JrLWFyb3VuZCBhIGdjYyBidWcgb24gaHRvcCBwYWNr
-YWdlLgoKRG8geW91IG1lYW4gdGhhdCBJIHNob3VsZCBzdWJtaXQgbXkgcGF0Y2hlcyBhZnRlciB5
-b3VycyBnZXRzIG1lcmdlZD8KT3Igc2hvdWxkIEkgZGVjbGFyZSB0aGF0IG15IHBhdGNoIGRlcGVu
-ZHMgb24geW91cnMsIGFuZCBob3c/CgomZ3Q7IEFmdGVyIHRoZSAzIGRhc2hlcyBhYm92ZSB5b3Ug
-c2hvdWxkIGFkZCBjaGFuZ2VzIGJldHdlZW4gcGF0Y2ggdmVyc2lvbnMgbGlrZToKJmd0OyBWMS0m
-Z3Q7VjI6CiZndDsgKiBjaGFuZ2VkIHRoaXMKJmd0OyAqIGNoYW5nZWQgdGhhdAomZ3Q7IAomZ3Q7
-IFYyLSZndDtWMzoKJmd0OyAqIGNoYW5nZSB0aGVlCgpDb3VsZCBJIG9ubHkgYWRkIGxpbmVzIGZy
-b20gVjIgLSZndDsgVjMgc2luY2UgdGhlIFYxIC0mZ3Q7IFYyIHdhcyBoYXBwZW5lZApuZWFybHkg
-dHdvIG1vbnRocyBhZ28gYW5kIHRoZSBjaGFuZ2VzIGZyb20gVjEgLSZndDsgVjIgd2VyZSB2ZXJ5
-IGJpZy4KCiZndDsgcGxlYXNlIGRyb3AgZnJvbSBoZXJlLi4uCiZndDsgCiZndDsgJmd0OyArVG8g
-Y29uZmlndXJlIHRoZSBsaW51eCBrZXJuZWwgb3IgdS1ib290OgomZ3Q7ICZndDsgKwomZ3Q7ICZn
-dDsgKyAgICAkIG1ha2UgbGludXgtbWVudWNvbmZpZwomZ3Q7ICZndDsgKwomZ3Q7ICZndDsgK1Rv
-IHJlYnVpbGQgc29tZXRoaW5nIChlLmcuIGxpbnV4KToKJmd0OyAmZ3Q7ICsKJmd0OyAmZ3Q7ICsg
-ICAgJCBtYWtlIGxpbnV4LXJlYnVpbGQKJmd0OyAmZ3Q7ICsKJmd0OyAKJmd0OyAuLi50byBoZXJl
-LCBzaW5jZSBpdCdzIHBhcnQgb2YgQnVpbGRyb290IG1hbnVhbCBhbmQgYWxzbwomZ3Q7IHlvdSBz
-aG91bGQgcG9pbnQgImxpbnV4LW1lbnVjb25maWcgYW5kIHVib290LW1lbnVjb25maWciLAomZ3Q7
-IGJ1dCBpdCBkb2Vzbid0IG1ha2Ugc2Vuc2UgdG8gbWUsIHNvIHllcyBwbGVhc2UgZHJvcCBpdCwK
-CkRvIHlvdSBtZWFuIHRoYXQgSSBzaG91bGQgcmVtb3ZlIHRob3NlIGxpbmVzPwoKJmd0OyBIZXJl
-IEkgd291bGQgZXhwYW5kIGNvbW1lbnQgYnkgcG9pbnRpbmcgdGhhdCBnbGliYyBpcyBub3Qgc3Vp
-dGFibGUgYW5kCiZndDsgd2h5LiBJdCBzaG91bGQgYmUgYSBnY2MgSUNFLCBzbyBtYXliZSBzb21l
-b25lIGNhbiBmaXggb3Igd29yayBpdCBhcm91bmQKJmd0OyBsYXRlciB3aXRoIHRoaXMgaW5kaWNh
-dGlvbi4KClllcywgdGhlIHByb2JsZW0gaXMgZ2NjIElDRS4gTW9yZSBkZXRhaWxlZCwgdGhlIElD
-RSBpcyBjb21pbmcgZnJvbSB0aGUgdC1oZWFkCm9wdGltaXphdGlvbnMuIE9uY2UgdC1oZWFkIHN0
-dWZmIHJlbW92ZWQsIG5vIG1vcmUgSUNFLiBObyBtb3JlIGdsaWJjIGFuZCBodG9wCnByb2JsZW1z
-LiBIb3dldmVyIG9uY2UgdGhlIG9wdGltaXphdGlvbnMgcmVtb3ZlZCwgdGhlIE1pbGstdiBkdW8g
-Ym9hcmQncwphcmNoaXRlY3QgYW5kIHBlcmZvcm1hbmNlIGZlYXR1cmVzIGFyZSBnb25lLiBTbyBp
-dCBpcyB0cm91Ymxlc29tZS4gQW5kIEkgdGhpbmsgdGhpcwpwcm9ibGVtIGlzIGFzc29jaWF0ZWQg
-d2l0aCB0aGUgb25lIGZyb20gYW5vdGhlciBlbWFpbC4gTGV0IG1lIHB1dCB0aGVtIHRvZ2V0aGVy
-LgoKJmd0OyAmZ3Q7IEkgdGhpbmsgSSBzaG91bGQgdGVsbCB5b3UgdGhpcy4gSW4gZmFjdCBJIGVu
-Y291bnRlcmVkIGFub3RoZXIgZ2NjIGJ1ZwomZ3Q7ICZndDsgd2hlbiB1c2luZyBhbGwgdGhlIHQt
-aGVhZKGvcyBvcHRpbWl6YXRpb25zIHdpdGggdGhlIGdsaWJjLiBUaGUgZ2NjIHJlcG9ydGVkCiZn
-dDsgJmd0OyBpbnRlcm5hbCBlcnJvcnMgd2hlbiB3ZQomZ3Q7ICZndDsKJmd0OyAmZ3Q7ICtCUjJf
-VEFSR0VUX09QVElNSVpBVElPTj0iLW1hcmNoPXJ2NjRpbWFmZGNfeHRoZWFkYmFfeHRoZWFkYmJf
-eHRoZWFkYnNfeHRoZWFkY21vX3h0aGVhZGNvbmRtb3ZfeHRoZWFkZm1lbWlkeF94dGhlYWRmbXZf
-eHRoZWFkaW50X3h0aGVhZG1hY194dGhlYWRtZW1pZHhfeHRoZWFkbWVtcGFpcl94dGhlYWRzeW5j
-IgomZ3Q7ICZndDsKJmd0OyAmZ3Q7IFNvIHdlIGhhdmUgdG8gdXNlIG11c2wgYW5kIGZpbmQgdGhp
-cyBidWcgaXMgbm90IHJlcG9ydGVkIGFueW1vcmUuCgomZ3Q7IEkgd2FzIHdvbmRlcmluZyB3aHkg
-eW91IHdlcmUgdXNpbmcgZXhhY3RseSBtdXNsIGFuZCBJIHN1c3BlY3RlZAomZ3Q7IHNvbWV0aGlu
-ZyBsaWtlIHRoYXQuCgpUaGUgcmVhc29uIEkgdXNlIG11c2wgaXMgdGhhdCB0aGUgb3JpZ2luYWwg
-c2RrIG5vdCBwcmVwYXJlZCBmb3IgdGhlCm1haW5saW5lIGJ1aWxkcm9vdCBpcyB1c2luZyB0aGUg
-bXVzbC4gQW5kIGZvciB0aGUgY29tcGF0aWJpbGl0eSBJIHRoaW5rCml0J3MgYmV0dGVyIHRvIHVz
-ZSBtdXNsIGhlcmUgdG8gcmF0aGVyIHRoYW4gdGhlIHJlc3Qgb3B0aW9uIHVDbGliYy1uZywKdGhv
-dWdoIGl0IHdvcmtzIGZpbmUuCgpTbyBzaG91bGQgSSBwdXQgbW9yZSBsaW5lcyBhdCB0aGUgZGVm
-Y29uZmlnIHRvIGNvbW1lbnQgbW9yZSBhYm91dAp0aGVzZSBlbWJhcnJhc3Npbmcgc2l0dWF0aW9u
-cz8KCiZndDsgUGxlYXNlIGZvciBhbGwgb2NjdXJlbmNlcyB1c2UgTWFrZWZpbGUgIiQoaWYgLi4u
-KSIgc3RhdGVtZW50IGluc3RlYWQgb2YKJmd0OyAiaWYgWyAuLi4gPSB5IF0iCgpTb3JyeSBmb3Ig
-dGhlIGluY29uc2lzdGVuY3kuIEhvd2V2ZXIgdGhlIE1ha2VmaWxlJ3MgaWYgc3RhdGVtZW50IGlz
-CnRvbyB3ZWlyZCBmb3IgbWUgdG8gaW1wbGVtZW50IHN1Y2ggYSBicmFuY2ggb2YgdGhpbmdzIHRv
-IG1ha2UuClNvIEkgc3BlbmQgYSBsb3Qgb2YgdGltZSB0byBmaW5kIHRoYXQgdGhlIHNoZWxsJ3Mg
-aWYgc3RhdGVtZW50IGNvdWxkIHdvcmsKdGhpcyB3YXkuIEFuZCBJIGhhdmUgZmluZCBleGFtcGxl
-cyB0aGF0IGFyZSB1c2luZyB0aGUgc2FtZSB0ZWNobmlxdWUuCkZvciBleGFtcGxlIHRoZSBsaW5l
-IDY5OSBhdCBwYWNrYWdlL3N5c3RlbWQvc3lzdGVtZC5tay4gQ291bGQgeW91CnBsZWFzZSBraW5k
-bHkgZ2l2ZSBtZSBhbiBleGVtcHRpb24gaGVyZT8KCiZndDsgJmd0OyArCiZndDsgJmd0OyArIGNk
-ICQoQEQpL2N2aXRlay9idWlsZC90YXNrICZhbXA7JmFtcDsgXAomZ3Q7ICZndDsgKyAkKFRBUkdF
-VF9NQUtFX0VOVikgJChNSUxLVl9EVU9fU01BTExDT1JFX0ZSRUVSVE9TX0NPTkZfRU5WKSAkKEJS
-Ml9DTUFLRSkgLUcgTmluamEgLURDSElQPWN2MTgweCBcCiZndDsgJmd0OyArIC1EUlVOX0FSQ0g9
-cmlzY3Y2NCBcCiZndDsgJmd0OyArIC1EUlVOX1RZUEU9Q1ZJUlRPUyBcCiZndDsgJmd0OyArIC1E
-VE9QX0RJUj0kKEBEKS9jdml0ZWsgXAomZ3Q7ICZndDsgKyAtREJVSUxEX0VOVl9QQVRIPSQoQEQp
-L2N2aXRlay9idWlsZCBcCiZndDsgJmd0OyArIC1EQk9BUkRfRlBHQT1uIFwKJmd0OyAmZ3Q7ICsg
-LURDTUFLRV9UT09MQ0hBSU5fRklMRT0kKEBEKS9jdml0ZWsvc2NyaXB0cy90b29sY2hhaW4tcmlz
-Y3Y2NC1lbGYuY21ha2UgXAomZ3Q7IAomZ3Q7IFRoZSBidWlsZCBjb21tYW5kIGlzIGNvbW1vbiBm
-b3IgZXZlcnkgInRhcmdldCIsIHNvIHBsZWFzZSBkZWNsYXJlIGl0CiZndDsgaW50byBhIHZhcmlh
-YmxlIG9uIHRoZSB0b3AuCiZndDsgCiZndDsgJmd0OyArICQoQEQpL2N2aXRlay90YXNrCiZndDsg
-Jmd0OyArIGNkICQoQEQpL2N2aXRlay9idWlsZC90YXNrICZhbXA7JmFtcDsgJChUQVJHRVRfTUFL
-RV9FTlYpICQoTUlMS1ZfRFVPX1NNQUxMQ09SRV9GUkVFUlRPU19DT05GX0VOVikgJChCUjJfQ01B
-S0UpIC0tYnVpbGQgLiAtLXRhcmdldCBpbnN0YWxsIC0tIC12CiZndDsgJmd0OyArIGNkICQoQEQp
-L2N2aXRlay9idWlsZC90YXNrICZhbXA7JmFtcDsgJChUQVJHRVRfTUFLRV9FTlYpICQoTUlMS1Zf
-RFVPX1NNQUxMQ09SRV9GUkVFUlRPU19DT05GX0VOVikgJChCUjJfQ01BS0UpIC0tYnVpbGQgLiAt
-LXRhcmdldCBjdmlydG9zLmJpbiAtLSAtdgomZ3Q7IAomZ3Q7IFRvIHRlbGwgdGhlIHRydXRoIGFs
-bCB0aGUgcG9pbnRzIGFib3ZlIGNhbiBiZSBzaHJpbmtlZCB1c2luZyBhIGZvcmVhY2gKJmd0OyBs
-b29wIHRocm91Z2ggYWxsIHRoZSBidWlsZCBkaXJlY3RvcmllcyBzaW5jZSB0aGV5IGFsbCBsb29r
-IHRoZSBzYW1lCiZndDsgZXhjZXB0IGRpcmVjdG9yeSBuYW1lLiBDYW4geW91IHByb3ZpZGUgc3Vj
-aCBjaGFuZ2U/CgpUaGVzZSBhcmUgdG9vIHBhaW5mdWwgZm9yIG1lLiBDb3VsZCBJIG1vdmUgdGhl
-c2UgY29kZSBpbnRvIHRoZSByZW1vdGUKY29kZSByZXBvIHNvIHRoYXQgdGhlc2UgYW5ub3lpbmcg
-Y29kZSB3aWxsIG5vdCBiZSBpbmNsdWRlZCBpbiB0aGUgYnVpbGRyb290PwpBbmQgdGhlbiB0aGUg
-YnVpbGRyb290IHBhY2thZ2Ugd291bGQgb25seSBoYXZlIGdvb2QgbGluZXMKbGlrZSAiJChldmFs
-ICQoZ2VuZXJpYy1wYWNrYWdlKSkiCgpHcmVhdCB0aGFua3MgYWdhaW4gZm9yIHlvdXIgdGhvcm91
-Z2ggcmV2aWV3IGFuZCBpbnNpZ2h0ZnVsIGZlZWRiYWNrIG9uIG15CmNvZGUhIEkgdHJ1bHkgYXBw
-cmVjaWF0ZSB5b3VyIHBhdGllbmNlIGFuZCB0aGUgdmFsdWFibGUgdGltZSB5b3Ugc3BlbmQgb24K
-bXkgcGF0Y2hlcy4KCkJlc3QgcmVnYXJkcywKSGFueXVhbiBaaGFvCl9fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVp
-bGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
-bGlzdGluZm8vYnVpbGRyb290Cg==
+Hi Vincent,
+
+my thought is,
+
+On 06/02/24 17:05, Vincent Fazio wrote:
+> All,
+> 
+> Would it make sense to patch GCC for Microblaze to address these at the compiler level instead of constantly patching the packages?
+
+until gcc is not fixed yes, but,
+
+> I tested https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101766#c6 back when we were solving this problem for xz and had no issues https://gcc.gnu.org/pipermail/gcc/2023-March/240834.html
+
+this absolutely makes sense. It would great if you could backport those
+patches for all gcc versions we deal with like I've done time ago fo
+OpenRisc and when they merge them upstream we can drop them after
+bumping gcc versions with that patch applied.
+
+-- 
+Giulio Benetti
+CEO&CTO@Benetti Engineering sas
+
+> 
+>> -----Original Message-----
+>> From: buildroot <buildroot-bounces@buildroot.org> On Behalf Of Giulio
+>> Benetti
+>> Sent: Tuesday, February 6, 2024 9:54 AM
+>> To: buildroot@buildroot.org; Thomas Petazzoni
+>> <thomas.petazzoni@bootlin.com>
+>> Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>; Fabrice
+>> Fontaine <fontaine.fabrice@gmail.com>
+>> Subject: [External] - [Buildroot] [PATCH] package/attr: fix build failure on
+>> Microblaze architecture
+>>
+>> On Microblaze architecture __has_attribute(__symver__) support is broken
+>> and always return true even if symver is not supported so let's add a local
+>> patch pending upstream to detect if symver is supported during autoreconf.
+>>
+>> Fixes:
+>> http://autobuild.buildroot.org/results/29c76e02becedf922bd7dc0533338c078
+>> bf77d2a
+>>
+>> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>> ---
+>>   ...dd-detection-of-symver-gcc-attribute.patch | 56 +++++++++++++++++++
+>>   package/attr/attr.mk                          |  3 +
+>>   2 files changed, 59 insertions(+)
+>>   create mode 100644 package/attr/0002-configure.ac-add-detection-of-
+>> symver-gcc-attribute.patch
+>>
+>> diff --git a/package/attr/0002-configure.ac-add-detection-of-symver-gcc-
+>> attribute.patch b/package/attr/0002-configure.ac-add-detection-of-symver-
+>> gcc-attribute.patch
+>> new file mode 100644
+>> index 0000000000..15bd266d7b
+>> --- /dev/null
+>> +++ b/package/attr/0002-configure.ac-add-detection-of-symver-gcc-attribu
+>> +++ te.patch
+>> @@ -0,0 +1,56 @@
+>> +From 1be7c2251040f1152de9ceb5263e6e96fa5c3d75 Mon Sep 17 00:00:00
+>> 2001
+>> +From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+>> +Date: Tue, 6 Feb 2024 15:33:15 +0100
+>> +Subject: [PATCH] configure.ac: add detection of symver gcc attribute
+>> +
+>> +Upstream:
+>> +https://lists.gnu.org/archive/html/savannah-hackers-public/2024-02/msg0
+>> +0009.html
+>> +
+>> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+>> +Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>> +---
+>> + configure.ac       | 15 +++++++++++++++
+>> + libattr/syscalls.c |  2 +-
+>> + 2 files changed, 16 insertions(+), 1 deletion(-)
+>> +
+>> +diff --git a/configure.ac b/configure.ac index 7e362e9..98477b5 100644
+>> +--- a/configure.ac
+>> ++++ b/configure.ac
+>> +@@ -57,6 +57,21 @@ AS_CASE([$host_os],
+>> +       [linux*], [os_linux=yes])
+>> + AM_CONDITIONAL([OS_LINUX], [test "x$os_linux" = "xyes"])
+>> +
+>> ++AC_CACHE_CHECK(whether __attribute__((__symver__())) is supported,
+>> ++      gcc_cv_symver_attribute,
+>> ++      [cat > conftest.c <<EOF
+>> ++void foo (void) {}
+>> ++__typeof(foo) foo __attribute__ ((__symver__("foo@foo"))); EOF
+>> ++      gcc_cv_symver_attribute=no
+>> ++      if ${CC-cc} -Werror -S conftest.c -o conftest.s >/dev/null 2>&1; then \
+>> ++          gcc_cv_symver_attribute=yes
+>> ++      fi
+>> ++      rm -f conftest.[cs]
+>> ++])
+>> ++AS_IF([test $gcc_cv_symver_attribute = yes],
+>> ++      [AC_DEFINE(HAVE_SYMVER_ATTRIBUTE, [], [GCC supports symver
+>> ++attribute])])
+>> ++
+>> + AC_CONFIG_COMMANDS([include/attr],
+>> +       [dnl
+>> +       rm -rf include/attr
+>> +diff --git a/libattr/syscalls.c b/libattr/syscalls.c index
+>> +907560a..caa70bc 100644
+>> +--- a/libattr/syscalls.c
+>> ++++ b/libattr/syscalls.c
+>> +@@ -32,7 +32,7 @@
+>> +  * fall back to traditional .symver asm directive otherwise.
+>> +  */
+>> + #ifdef __has_attribute
+>> +-# if __has_attribute(__symver__)
+>> ++# if defined(HAVE_SYMVER_ATTRIBUTE)
+>> + #  define SYMVER(cn, vn) __typeof(cn) cn
+>> +__attribute__((__symver__(vn)))  # elif __has_attribute(__no_reorder__)
+>> +    /*
+>> +--
+>> +2.43.0
+>> +
+>> diff --git a/package/attr/attr.mk b/package/attr/attr.mk index
+>> 6ecf5c53f4..f4f911333a 100644
+>> --- a/package/attr/attr.mk
+>> +++ b/package/attr/attr.mk
+>> @@ -11,6 +11,9 @@ ATTR_LICENSE = GPL-2.0+ (programs), LGPL-2.1+
+>> (libraries)  ATTR_LICENSE_FILES = doc/COPYING doc/COPYING.LGPL
+>> ATTR_CPE_ID_VENDOR = attr_project
+>>
+>> +# Flag added for patch dealing with symver in configure.ac
+>> +ATTR_AUTORECONF = YES
+>> +
+>>   ATTR_INSTALL_STAGING = YES
+>>
+>>   ATTR_CONF_OPTS = --disable-nls
+>> --
+>> 2.34.1
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot@buildroot.org
+>> https://lists.buildroot.org/mailman/listinfo/buildroot
+>> CAUTION: This email originated from outside of the organization. Do not click
+>> links or open attachments unless you recognize the sender and know the
+>> content is safe.
+> 
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
