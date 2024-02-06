@@ -4,48 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D44DC48297
-	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 14:22:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DD6FC4828D
+	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 14:25:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D6CB441F27;
-	Tue,  6 Feb 2024 14:22:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6CB441F27
+	by smtp4.osuosl.org (Postfix) with ESMTP id F215741E3F;
+	Tue,  6 Feb 2024 14:25:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F215741E3F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pdXWUnhdABdt; Tue,  6 Feb 2024 14:22:07 +0000 (UTC)
+	with ESMTP id 0Y0QBnqOzlV7; Tue,  6 Feb 2024 14:25:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 429D741EEC;
-	Tue,  6 Feb 2024 14:22:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 429D741EEC
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5175B41E39;
+	Tue,  6 Feb 2024 14:25:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5175B41E39
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E23761BF576
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 14:22:03 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4F56E1BF423
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 14:25:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BA4F1418E8
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 14:22:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA4F1418E8
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2810E41E38
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 14:25:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2810E41E38
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LZJQgNbINItq for <buildroot@lists.busybox.net>;
- Tue,  6 Feb 2024 14:22:03 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 08F91417B7
- for <buildroot@buildroot.org>; Tue,  6 Feb 2024 14:22:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 08F91417B7
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E939287096; Tue,  6 Feb 2024 14:22:02 +0000 (UTC)
+ with ESMTP id urGbDsDxXIVQ for <buildroot@lists.busybox.net>;
+ Tue,  6 Feb 2024 14:25:07 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2E28541E36
+ for <buildroot@buildroot.org>; Tue,  6 Feb 2024 14:25:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E28541E36
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 062921C0005;
+ Tue,  6 Feb 2024 14:25:03 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1rXMNj-00Ds4E-14;
+ Tue, 06 Feb 2024 15:25:03 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 6 Feb 2024 15:21:29 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 008fabd150c68d55ac1b0d676607d243df97545e
-X-Git-Newrev: 25c255ece8c171adeb86a4b905b72715b05c2bcf
-X-Patchwork-Hint: ignore
-Message-Id: <20240206142202.E939287096@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/azure-iot-sdk-c: bump to version
- LTS_08_2023
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20240115212003.7847-1-fontaine.fabrice@gmail.com>
+Date: Tue, 06 Feb 2024 15:25:03 +0100
+In-Reply-To: <20240115212003.7847-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 15 Jan 2024 22:20:03 +0100")
+Message-ID: <87jznh7jr4.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] package/tcf-agent: fix powerpc64 build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,48 +62,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Eugene Tarassov <eugene@largest.net>, Norbert Lange <nolange79@gmail.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=25c255ece8c171adeb86a4b905b72715b05c2bcf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Release notes: https://github.com/Azure/azure-iot-sdk-c/releases/tag/LTS_08_2023
+ > Translation of ppc64 to powerpc has been removed since version 1.8.0 and
+ > https://git.eclipse.org/c/tcf/org.eclipse.tcf.agent.git/commit/?id=94fa43963538afffc1fff77623cd1561a05d0e21
+ > resulting in the following build failure since commit
+ > 81802e263a12e173e0e1028449d1e1e11b2e5974:
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/azure-iot-sdk-c/azure-iot-sdk-c.hash | 2 +-
- package/azure-iot-sdk-c/azure-iot-sdk-c.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > In file included from /home/buildroot/autobuild/instance-0/output-1/build/tcf-agent-1.8.0/agent/system/GNU/Linux/tcf/context-linux.c:58:
+ > /home/buildroot/autobuild/instance-0/output-1/build/tcf-agent-1.8.0/agent/../agent/system/GNU/Linux/tcf/regset.h:25:10: fatal error: tcf/regset-mdep.h: No such file or directory
+ >    25 | #include <tcf/regset-mdep.h>
+ >       |          ^~~~~~~~~~~~~~~~~~~
 
-diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.hash b/package/azure-iot-sdk-c/azure-iot-sdk-c.hash
-index b960c0e571..d51dcc60aa 100644
---- a/package/azure-iot-sdk-c/azure-iot-sdk-c.hash
-+++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  7b52b9886a3aff20a55a0d5bc5e140c212f85fd06af18c31291c15d363743a77  azure-iot-sdk-c-LTS_01_2023_Ref02-br1.tar.gz
-+sha256  b853d5ab04f3c6863fe78e3936f0d0840012d5260ae4a3b23f03e157395dc15b  azure-iot-sdk-c-LTS_08_2023-br1.tar.gz
- 
- # Hash for license files:
- sha256  be2e9913fad9ff33607287c728f392579e2a6cc83e51b203ef6274c41db02ee7  LICENSE
-diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-index e07cdf986e..4d0ecb077f 100644
---- a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-+++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--AZURE_IOT_SDK_C_VERSION = LTS_01_2023_Ref02
-+AZURE_IOT_SDK_C_VERSION = LTS_08_2023
- AZURE_IOT_SDK_C_SITE = https://github.com/Azure/azure-iot-sdk-c
- AZURE_IOT_SDK_C_SITE_METHOD = git
- AZURE_IOT_SDK_C_GIT_SUBMODULES = YES
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/821049a692d4a64fa45b73e8e18eb48c36d46e6b
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
