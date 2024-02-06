@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CC4AC48297
-	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 22:22:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26201C48297
+	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 22:23:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8DC5442096;
-	Tue,  6 Feb 2024 22:22:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 51BBC420E4;
+	Tue,  6 Feb 2024 22:23:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ypRiYYEMmVfd; Tue,  6 Feb 2024 22:22:48 +0000 (UTC)
+	with ESMTP id iKWolVxYWI85; Tue,  6 Feb 2024 22:22:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E83BD42098
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 068304209B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E83BD42098;
-	Tue,  6 Feb 2024 22:22:47 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B8B971BF95D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 068304209B;
+	Tue,  6 Feb 2024 22:22:54 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B10D91BF276
  for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 22:22:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9F8B44031E
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 22:22:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AA11B833C9
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 22:22:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id B5icpT53WS_8 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dOG-W73JVOSl for <buildroot@lists.busybox.net>;
  Tue,  6 Feb 2024 22:22:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7D90C4031D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6ACF58339C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7D90C4031D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6ACF58339C
  for <buildroot@buildroot.org>; Tue,  6 Feb 2024 22:22:31 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6834B87482; Tue,  6 Feb 2024 22:22:31 +0000 (UTC)
+ id 55E6B87481; Tue,  6 Feb 2024 22:22:31 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 6 Feb 2024 23:21:20 +0100
+Date: Tue, 6 Feb 2024 23:21:19 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bd8b5d18507b9e01075fa6f90b981e79b400e3f8
-X-Git-Newrev: dcf0c3612dff3445d2de5862d34246ab18a43b8d
+X-Git-Oldrev: 84fd8580aaaa346176e43df35823b78fd3fa686a
+X-Git-Newrev: bd8b5d18507b9e01075fa6f90b981e79b400e3f8
 X-Patchwork-Hint: ignore
-Message-Id: <20240206222231.6834B87482@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-crossbar: drop package
+Message-Id: <20240206222231.55E6B87481@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pygame: drop package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,426 +60,278 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6565235035996925827=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dcf0c3612dff3445d2de5862d34246ab18a43b8d
+--===============6565235035996925827==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=bd8b5d18507b9e01075fa6f90b981e79b400e3f8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The current package has not recieved an update since Sat Oct 9 2021
-33ece2446e25e20929d1c7eefa9f3244a3b79a92 and is not python 3.12 compatible.
+The python-pygame package has not recieved any update since
+Sun May 1 22:15:17 2016 (commit: a9ec96e545102ae5ccd4280323d35360b0a5072d)
 
-Furthermore, the current version requires at least 42 new packages worth of
-depedencies of which several require patches to be python 3.12 compatible.
-As nobody has stepped up to maintain the package and its ever-growing list of
-dependencies, along with the other problems, it is time to drop the package.
+Also, this package no longer builds properly against python 3.12.0. Receiving
+the following error when building:
+
+```
+src/surface.c:2812:14: error: invalid type argument of unary ‘*’ (have
+‘int’)
+ 2812 |         ch = *PyUnicode_AS_UNICODE (obj);
+      |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/surface.c: In function ‘PySurface_Blit’:
+```
+
+If someone wants to re-introduce this package at a later date they are more
+than welcome to do so!
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .checkpackageignore                                |  3 -
- Config.in.legacy                                   | 16 +++++
- DEVELOPERS                                         |  1 -
- package/Config.in                                  |  1 -
- .../0001-Avoid-intentional-syntax-error.patch      | 29 ---------
- ...ements-min.txt-drop-indirect-dependencies.patch | 74 ----------------------
- ...bservice-wap-use-markupsafe-instead-of-we.patch | 53 ----------------
- package/python-crossbar/Config.in                  | 72 ---------------------
- package/python-crossbar/python-crossbar.hash       |  5 --
- package/python-crossbar/python-crossbar.mk         | 14 ----
- .../tests/package/sample_python_crossbar.py        |  3 -
- .../testing/tests/package/test_python_crossbar.py  | 23 -------
- 12 files changed, 16 insertions(+), 278 deletions(-)
+ Config.in.legacy                         |   7 ++
+ DEVELOPERS                               |   1 -
+ package/Config.in                        |   1 -
+ package/python-pygame/Config.in          |  50 --------------
+ package/python-pygame/python-pygame.hash |   3 -
+ package/python-pygame/python-pygame.mk   | 111 -------------------------------
+ 6 files changed, 7 insertions(+), 166 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 1f85ff2e07..bda57f46b0 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1064,9 +1064,6 @@ package/pulseview/0002-Fix-broken-build-due-to-C-template-behind-C-linkage.patch
- package/pulseview/0003-Support-glibmm-2.68.patch Upstream
- package/python-aiohttp-remotes/0001-Fix-flit_core-build-requires-backend.patch Upstream
- package/python-automat/0001-Remove-uneeded-dependency-to-wheel.patch Upstream
--package/python-crossbar/0001-Avoid-intentional-syntax-error.patch Upstream
--package/python-crossbar/0002-requirements-min.txt-drop-indirect-dependencies.patch Upstream
--package/python-crossbar/0003-crossbar-webservice-wap-use-markupsafe-instead-of-we.patch Upstream
- package/python-daphne/0001-remove-pytest-runner-requirement.patch Upstream
- package/python-pybind/0001-pybind11-commands.py-support-STAGING_DIR.patch Upstream
- package/python-pylibftdi/0001-do-not-use-find-library.patch Upstream
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 208f8347c4..5fbe5d9030 100644
+index 9421d07aa1..208f8347c4 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -146,6 +146,22 @@ endif
+@@ -146,6 +146,13 @@ endif
  
  comment "Legacy options removed in 2024.02"
  
-+config BR2_PACKAGE_PYTHON_CROSSBAR
-+	bool "python-crossbar removed"
++config BR2_PACKAGE_PYTHON_PYGAME
++	bool "python-pygame removed"
 +	select BR2_LEGACY
 +	help
-+	  python-crossbar has been removed. The current package has
-+	  not received an update since Sat Oct 9 13:55:06 2021 commit:
-+	  33ece2446e25e20929d1c7eefa9f3244a3b79a92 and is not python
-+	  3.12.0 compatible.
++	  python-pygame has been removed due to being abandoned and
++	  the old version no longer building with python 3.12.0.
 +
-+	  Furthermore, the current version requires at least 42 new
-+	  packages worth of depedencies of which several require
-+	  patches to be python 3.12.0 compatible. As nobody has
-+	  stepped up to maintain the package and its ever-growing list
-+	  of dependencies, along with the other problems, it was time
-+	  to drop the package.
-+
- config BR2_PACKAGE_PYTHON_PYGAME
- 	bool "python-pygame removed"
+ config BR2_KERNEL_HEADERS_4_14
+ 	bool "kernel headers version 4.14.x are no longer supported"
  	select BR2_LEGACY
 diff --git a/DEVELOPERS b/DEVELOPERS
-index cf98d56aa1..3e0b2e5c9c 100644
+index 376a1662d9..cf98d56aa1 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2155,7 +2155,6 @@ F:	package/python-autobahn/
- F:	package/python-cbor/
- F:	package/python-characteristic/
- F:	package/python-click/
--F:	package/python-crossbar/
- F:	package/python-lmdb/
- F:	package/python-mistune/
- F:	package/python-netaddr/
+@@ -1704,7 +1704,6 @@ F:	package/libcddb/
+ F:	package/libmodbus/
+ F:	package/ltris/
+ F:	package/opentyrian/
+-F:	package/python-pygame/
+ 
+ N:	Julien Corjon <corjon.j@ecagroup.com>
+ F:	package/qt5/
 diff --git a/package/Config.in b/package/Config.in
-index e10fbd8b35..047877c960 100644
+index b48f9eb1c7..e10fbd8b35 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1047,7 +1047,6 @@ menu "External python modules"
- 	source "package/python-crc16/Config.in"
- 	source "package/python-crcmod/Config.in"
- 	source "package/python-crontab/Config.in"
--	source "package/python-crossbar/Config.in"
- 	source "package/python-cryptography/Config.in"
- 	source "package/python-cssselect/Config.in"
- 	source "package/python-cssselect2/Config.in"
-diff --git a/package/python-crossbar/0001-Avoid-intentional-syntax-error.patch b/package/python-crossbar/0001-Avoid-intentional-syntax-error.patch
+@@ -1259,7 +1259,6 @@ menu "External python modules"
+ 	source "package/python-pydyf/Config.in"
+ 	source "package/python-pyelftools/Config.in"
+ 	source "package/python-pyftpdlib/Config.in"
+-	source "package/python-pygame/Config.in"
+ 	source "package/python-pygments/Config.in"
+ 	source "package/python-pyhamcrest/Config.in"
+ 	source "package/python-pyicu/Config.in"
+diff --git a/package/python-pygame/Config.in b/package/python-pygame/Config.in
 deleted file mode 100644
-index 0ff7cae21a..0000000000
---- a/package/python-crossbar/0001-Avoid-intentional-syntax-error.patch
+index 57eb020742..0000000000
+--- a/package/python-pygame/Config.in
 +++ /dev/null
-@@ -1,29 +0,0 @@
--From 423a1b081f6b7198f6a921ca83043270ebbace1a Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Sun, 1 May 2016 15:35:32 +0200
--Subject: [PATCH] Avoid intentional syntax error
--
--This file has an intentional syntax error, meant to validate QA, but
--it breaks byte compilation of this package.
--
--Issue reported upstream:
--https://github.com/crossbario/crossbar/issues/750.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- crossbar/worker/test/examples/syntaxerror.py | 2 --
-- 1 file changed, 2 deletions(-)
--
--diff --git a/crossbar/worker/test/examples/syntaxerror.py b/crossbar/worker/test/examples/syntaxerror.py
--index 7b88e088..cd7de901 100644
----- a/crossbar/worker/test/examples/syntaxerror.py
--+++ b/crossbar/worker/test/examples/syntaxerror.py
--@@ -27,5 +27,3 @@
-- #  with this program. If not, see <http://www.gnu.org/licenses/agpl-3.0.en.html>.
-- #
-- #####################################################################################
---
---class # noqa
---- 
--2.20.1
--
-diff --git a/package/python-crossbar/0002-requirements-min.txt-drop-indirect-dependencies.patch b/package/python-crossbar/0002-requirements-min.txt-drop-indirect-dependencies.patch
-deleted file mode 100644
-index 12027d779c..0000000000
---- a/package/python-crossbar/0002-requirements-min.txt-drop-indirect-dependencies.patch
-+++ /dev/null
-@@ -1,74 +0,0 @@
--From 3ae2b36e48fc0f75f0bb6c89f893ece033bccd87 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Date: Sun, 7 Aug 2022 18:44:29 +0200
--Subject: [PATCH] requirements-min.txt: drop indirect dependencies
--
--For some interesting reason, the crossbar maintainers have decided to
--include indirect dependencies in their requirements-min.txt, i.e
--dependencies that they don't use directly, but that packages they
--depend on themselves depend on.
--
--This makes the packaging in Buildroot confusing, as it means not all
--dependencies in requirements-min.txt should be taken into
--account. Also some of these indirect dependencies cause issues due to
--upper bounds set on the version (which is the case for idna and
--urllib3).
--
--This patch therefore clarifies the situation by removing such indirect
--dependencies from requirements-min.txt. As the patch is obviously not
--upstreamable, it will require some maintenance effort, but that effort
--is anyway already there to sort out direct dependencies from indirect
--dependencies when updating the Buildroot packaging for crossbar.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- requirements-min.txt | 12 ------------
-- 1 file changed, 12 deletions(-)
--
--diff --git a/requirements-min.txt b/requirements-min.txt
--index 5ac4e0ee..cdd82d27 100644
----- a/requirements-min.txt
--+++ b/requirements-min.txt
--@@ -1,20 +1,13 @@
---attrs>=17.2.0
-- autobahn[asyncio,twisted,encryption,compress,serialization,scram]>=21.3.1
-- bitstring>=3.1.5
---bcrypt>=3.1.6
-- cbor>=1.0.0
-- click>=6.7
-- colorama>=0.4.4
---constantly>=15.1.0
-- cryptography>=2.6.1
---h2>=3.2.0
---idna<2.6,>=2.5
-- importlib-resources>=4.1.1
---incremental>=17.5.0
-- jinja2>=2.10.1
-- lmdb>=0.92
-- mistune>=0.7.4
---netaddr>=0.7.19
-- passlib>=1.7.1
-- priority>=1.3.0
-- psutil>=5.2.2
--@@ -28,7 +21,6 @@ pyqrcode>=1.2.1
-- pytrie>=0.3
-- pyyaml>=4.2b4
-- sdnotify>=0.3.1
---service_identity>=17.0.0
-- setproctitle>=1.1.10
-- setuptools>=36.2.7
-- treq>=20.4.1
--@@ -37,10 +29,6 @@ twisted[tls,conch,http2,osx_platform]>=20.3.0; sys_platform == 'darwin'
-- twisted[tls,conch,http2,windows_platform]>=20.3.0; sys_platform == 'win32'
-- txaio>=21.2.1
-- txtorcon>=20.0.0
---u-msgpack-python>=2.4.1
---# urllib3 is an indirect dependency, but we force a recent version because of https://nvd.nist.gov/vuln/detail/CVE-2019-11324
---# workaround for version conflict in requests vs sth else:
---urllib3<1.25,>=1.21.1
-- vmprof>=0.4.12; platform_machine=='x86_64' or platform_machine=='i386' or platform_machine=='arm'
-- watchdog>=0.8.3
-- werkzeug>=0.14.1
---- 
--2.37.1
--
-diff --git a/package/python-crossbar/0003-crossbar-webservice-wap-use-markupsafe-instead-of-we.patch b/package/python-crossbar/0003-crossbar-webservice-wap-use-markupsafe-instead-of-we.patch
-deleted file mode 100644
-index ab2d4709bd..0000000000
---- a/package/python-crossbar/0003-crossbar-webservice-wap-use-markupsafe-instead-of-we.patch
-+++ /dev/null
-@@ -1,53 +0,0 @@
--From a6866509b0387ab6d6f99f68cd82bcac922fe839 Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@gmail.com>
--Date: Mon, 30 May 2022 19:38:11 +0200
--Subject: [PATCH] crossbar/webservice/wap: use markupsafe instead of werkzeug
--
--wap.py use escape from werkzeug but it has been removed since
--the version 2.1.0 [1].
--
--Replace with escape from markupsafe like upstream commit [2]
--(wihout other changes).
--
--[1] https://github.com/pallets/werkzeug/commit/22d1e9ac13829b83347107a9b4d77072a8e1af6a
--[2] https://github.com/crossbario/crossbar/commit/ca8d383f01231e2b3f986e791f215f12f2deee5d
--
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
-----
-- crossbar/webservice/wap.py | 7 ++++++-
-- requirements-min.txt       | 1 +
-- 2 files changed, 7 insertions(+), 1 deletion(-)
--
--diff --git a/crossbar/webservice/wap.py b/crossbar/webservice/wap.py
--index 825558b1..6daa9b21 100644
----- a/crossbar/webservice/wap.py
--+++ b/crossbar/webservice/wap.py
--@@ -36,7 +36,12 @@ from collections.abc import Mapping, Sequence
-- 
-- from werkzeug.routing import Map, Rule
-- from werkzeug.exceptions import NotFound, MethodNotAllowed
---from werkzeug.utils import escape
--+
--+try:
--+    # removed in werkzeug 2.1.0
--+    from werkzeug.utils import escape
--+except ImportError:
--+    from markupsafe import escape
-- 
-- from jinja2 import Environment, FileSystemLoader
-- from jinja2.sandbox import SandboxedEnvironment
--diff --git a/requirements-min.txt b/requirements-min.txt
--index cdd82d27..50cb1489 100644
----- a/requirements-min.txt
--+++ b/requirements-min.txt
--@@ -7,6 +7,7 @@ cryptography>=2.6.1
-- importlib-resources>=4.1.1
-- jinja2>=2.10.1
-- lmdb>=0.92
--+MarkupSafe>=1.1.1
-- mistune>=0.7.4
-- passlib>=1.7.1
-- priority>=1.3.0
---- 
--2.37.1
--
-diff --git a/package/python-crossbar/Config.in b/package/python-crossbar/Config.in
-deleted file mode 100644
-index 357be4803c..0000000000
---- a/package/python-crossbar/Config.in
-+++ /dev/null
-@@ -1,72 +0,0 @@
--config BR2_PACKAGE_PYTHON_CROSSBAR
--	bool "python-crossbar"
--	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-cryptography
--	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS # python-numpy
--	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9 # python-numpy
--	depends on BR2_INSTALL_LIBSTDCPP # python-autobahn's compress and serialization
--	# All the following dependencies are runtime dependencies. It
--	# matches almost 1:1 the requirements-min.txt from crossbar
--	# with the following exceptions:
--	# - importlib-resources is in Python itself, so no external
--	#   module is needed
--	# - vmprof, while listed as a needed dependency, isn't
--	#   actually strictly necesary
--	# - wsaccel is not a direct dependency, it is there to make
--	#   sure autobahn has the 'accelerate' feature, when the
--	#   Python implementation is CPython, and our package does
--	#   enable autobahn[accelerate]
--	select BR2_PACKAGE_PYTHON_AUTOBAHN
--	select BR2_PACKAGE_PYTHON_AUTOBAHN_ACCELERATE
--	select BR2_PACKAGE_PYTHON_AUTOBAHN_COMPRESS
--	select BR2_PACKAGE_PYTHON_AUTOBAHN_ENCRYPTION
--	select BR2_PACKAGE_PYTHON_AUTOBAHN_SCRAM
--	select BR2_PACKAGE_PYTHON_AUTOBAHN_SERIALIZATION
--	select BR2_PACKAGE_PYTHON_AUTOBAHN_TWISTED
--	select BR2_PACKAGE_PYTHON_BITSTRING
--	select BR2_PACKAGE_PYTHON_CBOR
--	select BR2_PACKAGE_PYTHON_CLICK
--	select BR2_PACKAGE_PYTHON_COLORAMA
--	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY
--	select BR2_PACKAGE_PYTHON_JINJA2
--	select BR2_PACKAGE_PYTHON_LMDB
--	select BR2_PACKAGE_PYTHON_MARKUPSAFE
--	select BR2_PACKAGE_PYTHON_MISTUNE
--	select BR2_PACKAGE_PYTHON_PASSLIB
--	select BR2_PACKAGE_PYTHON_PRIORITY
--	select BR2_PACKAGE_PYTHON_PSUTIL
--	select BR2_PACKAGE_PYTHON_PYASN1
--	select BR2_PACKAGE_PYTHON_PYASN1_MODULES
--	select BR2_PACKAGE_PYTHON_PYGMENTS
--	select BR2_PACKAGE_PYTHON_PYNACL
--	select BR2_PACKAGE_PYTHON_PYOPENSSL
--	select BR2_PACKAGE_PYTHON_PYQRCODE
--	select BR2_PACKAGE_PYTHON_PYTRIE
--	select BR2_PACKAGE_PYTHON_PYYAML
--	select BR2_PACKAGE_PYTHON_SDNOTIFY
--	select BR2_PACKAGE_PYTHON_SETPROCTITLE
--	select BR2_PACKAGE_PYTHON_SETUPTOOLS
--	select BR2_PACKAGE_PYTHON_TREQ
--	select BR2_PACKAGE_PYTHON_TWISTED
--	select BR2_PACKAGE_PYTHON_TWISTED_CONCH
--	select BR2_PACKAGE_PYTHON_TWISTED_HTTP2
--	select BR2_PACKAGE_PYTHON_TWISTED_TLS
--	select BR2_PACKAGE_PYTHON_TXAIO
--	select BR2_PACKAGE_PYTHON_TXTORCON
--	select BR2_PACKAGE_PYTHON_UBJSON
--	select BR2_PACKAGE_PYTHON_WATCHDOG
--	select BR2_PACKAGE_PYTHON_WERKZEUG
--	select BR2_PACKAGE_PYTHON_ZLMDB
--	select BR2_PACKAGE_PYTHON_ZOPE_INTERFACE
+@@ -1,50 +0,0 @@
+-config BR2_PACKAGE_PYTHON_PYGAME
+-	bool "python-pygame"
+-	select BR2_PACKAGE_SDL
 -	help
--	  Crossbar.io is an open-source WAMP application router that
--	  allows to build advanced applications from loosely-coupled
--	  components that can talk in real-time with each other.
+-	  Pygame is a cross-platfrom library designed to make it easy
+-	  to write multimedia software, such as games, in
+-	  Python. Pygame requires the Python language and SDL
+-	  multimedia library.
+-	  It can also make use of several other popular libraries.
 -
--	  https://pypi.python.org/pypi/crossbar
+-	  http://www.pygame.org/
 -
--comment "python-crossbar needs a glibc or musl toolchain w/ C++, gcc >= 9"
--	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
--	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
--	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL) || \
--		!BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_9
-diff --git a/package/python-crossbar/python-crossbar.hash b/package/python-crossbar/python-crossbar.hash
+-if BR2_PACKAGE_PYTHON_PYGAME
+-config BR2_PACKAGE_PYTHON_PYGAME_IMAGE
+-	bool "pygame.image"
+-	select BR2_PACKAGE_SDL_IMAGE
+-	select BR2_PACKAGE_SDL_IMAGE_PNG
+-	select BR2_PACKAGE_SDL_IMAGE_JPEG
+-	help
+-	  pygame module for loading, saving and transfering images.
+-	  Will autoselect sdl_image with png and jpeg support.
+-
+-config BR2_PACKAGE_PYTHON_PYGAME_EXAMPLES
+-	bool "pygame.examples"
+-	help
+-	  Include examples.
+-	  Selecting this option adds about 1.5 MB to the target file
+-	  system.
+-
+-config BR2_PACKAGE_PYTHON_PYGAME_FONT
+-	bool "pygame.font"
+-	select BR2_PACKAGE_SDL_TTF
+-	help
+-	  pygame module for loading and rendering fonts.
+-	  Will autoselect sdl_ttf.
+-
+-config BR2_PACKAGE_PYTHON_PYGAME_MIXER
+-	bool "pygame.mixer"
+-	select BR2_PACKAGE_SDL_MIXER
+-	help
+-	  pygame module for loading and playing sounds.
+-	  Will autoselect sdl_mixer.
+-
+-config BR2_PACKAGE_PYTHON_PYGAME_SCRAP
+-	bool "pygame.scrap"
+-	depends on BR2_PACKAGE_SDL_X11
+-	help
+-	  pygame module for clipboard support (X11 needed)
+-
+-endif
+diff --git a/package/python-pygame/python-pygame.hash b/package/python-pygame/python-pygame.hash
 deleted file mode 100644
-index 4441578a29..0000000000
---- a/package/python-crossbar/python-crossbar.hash
-+++ /dev/null
-@@ -1,5 +0,0 @@
--# md5, sha256 from https://pypi.org/pypi/crossbar/json
--md5  df576100bcf6e423cdc1e2e96b602140  crossbar-21.3.1.tar.gz
--sha256  ac71959f0c57ab08d43f7830b85c6312e000b25543a179cd751ac357944dd7ef  crossbar-21.3.1.tar.gz
--# Locally computed
--sha256  57c8ff33c9c0cfc3ef00e650a1cc910d7ee479a8bc509f6c9209a7c2a11399d6  crossbar/LICENSE
-diff --git a/package/python-crossbar/python-crossbar.mk b/package/python-crossbar/python-crossbar.mk
-deleted file mode 100644
-index aae61cd2e8..0000000000
---- a/package/python-crossbar/python-crossbar.mk
-+++ /dev/null
-@@ -1,14 +0,0 @@
--################################################################################
--#
--# python-crossbar
--#
--################################################################################
--
--PYTHON_CROSSBAR_VERSION = 21.3.1
--PYTHON_CROSSBAR_SOURCE = crossbar-$(PYTHON_CROSSBAR_VERSION).tar.gz
--PYTHON_CROSSBAR_SITE = https://files.pythonhosted.org/packages/17/37/aafc4ec30068fd7ebb97f1a00d4ddf8de482dfa4c1d2a1fc6bb814d91400
--PYTHON_CROSSBAR_LICENSE = AGPL-3.0
--PYTHON_CROSSBAR_LICENSE_FILES = crossbar/LICENSE
--PYTHON_CROSSBAR_SETUP_TYPE = setuptools
--
--$(eval $(python-package))
-diff --git a/support/testing/tests/package/sample_python_crossbar.py b/support/testing/tests/package/sample_python_crossbar.py
-deleted file mode 100644
-index 3695fe92c0..0000000000
---- a/support/testing/tests/package/sample_python_crossbar.py
+index c0496515e2..0000000000
+--- a/package/python-pygame/python-pygame.hash
 +++ /dev/null
 @@ -1,3 +0,0 @@
--import crossbar
--
--crossbar.run(["version"])
-diff --git a/support/testing/tests/package/test_python_crossbar.py b/support/testing/tests/package/test_python_crossbar.py
+-# Locally computed
+-sha256  f95a7dd68ea294d415e36e068d2f533c5a01c67773452d14a535c5c7455681fe  pygame-d61ea8eabd56.tar.gz
+-sha256  a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7  LGPL
+diff --git a/package/python-pygame/python-pygame.mk b/package/python-pygame/python-pygame.mk
 deleted file mode 100644
-index e67ab9ff6e..0000000000
---- a/support/testing/tests/package/test_python_crossbar.py
+index 84fd6df4e2..0000000000
+--- a/package/python-pygame/python-pygame.mk
 +++ /dev/null
-@@ -1,23 +0,0 @@
--from tests.package.test_python import TestPythonPackageBase
--import os
+@@ -1,111 +0,0 @@
+-################################################################################
+-#
+-# python-pygame
+-#
+-################################################################################
 -
+-# stable 1.9.1 release requires V4L which has been wiped out of recent Linux
+-# kernels, so use latest mercurial revision until next stable release is out.
+-PYTHON_PYGAME_VERSION = d61ea8eabd56
+-PYTHON_PYGAME_SOURCE = pygame-$(PYTHON_PYGAME_VERSION).tar.gz
+-PYTHON_PYGAME_SITE = https://bitbucket.org/pygame/pygame
+-PYTHON_PYGAME_SITE_METHOD = hg
+-PYTHON_PYGAME_SETUP_TYPE = setuptools
+-PYTHON_PYGAME_LICENSE = LGPL-2.1+
+-PYTHON_PYGAME_LICENSE_FILES = LGPL
 -
--class TestPythonPy3Crossbar(TestPythonPackageBase):
--    __test__ = True
--    config = TestPythonPackageBase.config + \
--        """
--        BR2_PACKAGE_PYTHON3=y
--        BR2_PACKAGE_PYTHON_CROSSBAR=y
--        BR2_TARGET_ROOTFS_EXT2=y
--        BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
--        """
--    sample_scripts = ["tests/package/sample_python_crossbar.py"]
--    timeout = 60
+-ifeq ($(BR2_PACKAGE_PYTHON_PYGAME_IMAGE),y)
+-PYTHON_PYGAME_OPT_DEPENDS += sdl_image
+-endif
 -
--    def login(self):
--        ext2_file = os.path.join(self.builddir, "images", "rootfs.ext2")
--        self.emulator.boot(arch="armv5",
--                           kernel="builtin",
--                           options=["-drive", "file=%s,if=scsi,format=raw" % ext2_file],
--                           kernel_cmdline=["rootwait", "root=/dev/sda"])
--        self.emulator.login()
+-ifeq ($(BR2_PACKAGE_PYTHON_PYGAME_FONT),y)
+-PYTHON_PYGAME_OPT_DEPENDS += sdl_ttf
+-endif
+-
+-ifeq ($(BR2_PACKAGE_PYTHON_PYGAME_MIXER),y)
+-PYTHON_PYGAME_OPT_DEPENDS += sdl_mixer
+-endif
+-
+-PYTHON_PYGAME_DEPENDENCIES = sdl $(PYTHON_PYGAME_OPT_DEPENDS)
+-
+-ifneq ($(BR2_PACKAGE_PYTHON_PYGAME_IMAGE),y)
+-define PYTHON_PYGAME_UNCONFIGURE_IMAGE
+-	$(SED) 's/^imageext/#imageext/' $(@D)/Setup
+-endef
+-endif
+-
+-ifneq ($(BR2_PACKAGE_PYTHON_PYGAME_FONT),y)
+-define PYTHON_PYGAME_UNCONFIGURE_FONT
+-	$(SED) 's/^font/#font/' $(@D)/Setup
+-endef
+-endif
+-
+-ifneq ($(BR2_PACKAGE_PYTHON_PYGAME_MIXER),y)
+-define PYTHON_PYGAME_UNCONFIGURE_MIXER
+-	$(SED) 's/^mixer/#mixer/g' $(@D)/Setup
+-endef
+-endif
+-
+-# Both require numpy or numeric python module
+-define PYTHON_PYGAME_UNCONFIGURE_SNDARRAY
+-	$(SED) 's/^_numericsndarray/#_numericsndarray/' $(@D)/Setup
+-endef
+-
+-define PYTHON_PYGAME_UNCONFIGURE_SURFARRAY
+-	$(SED) 's/^_numericsurfarray/#_numericsurfarray/' $(@D)/Setup
+-endef
+-
+-# Requires smpeg
+-define PYTHON_PYGAME_UNCONFIGURE_MOVIE
+-	$(SED) 's/^movie/#movie/' $(@D)/Setup
+-endef
+-
+-ifneq ($(BR2_PACKAGE_PYTHON_PYGAME_SCRAP),y)
+-define PYTHON_PYGAME_UNCONFIGURE_SCRAP
+-	$(SED) 's/^scrap/#scrap/' $(@D)/Setup
+-endef
+-endif
+-
+-define PYTHON_PYGAME_UNCONFIGURE_FREETYPE
+-	$(SED) 's/^_freetype/#_freetype/' $(@D)/Setup
+-endef
+-
+-PYTHON_PYGAME_SDL_FLAGS = `$(STAGING_DIR)/usr/bin/sdl-config --cflags`
+-PYTHON_PYGAME_SDL_FLAGS += `$(STAGING_DIR)/usr/bin/sdl-config --libs`
+-
+-# Pygame needs a Setup file where options should be commented out if
+-# dependencies are not available
+-define PYTHON_PYGAME_CONFIGURE_CMDS
+-	cp -f $(@D)/Setup.in $(@D)/Setup
+-	$(SED) "s~^SDL = ~SDL = $(PYTHON_PYGAME_SDL_FLAGS) \n#~" $(@D)/Setup
+-	$(SED) 's/^pypm/#pypm/' $(@D)/Setup
+-	$(PYTHON_PYGAME_UNCONFIGURE_IMAGE)
+-	$(PYTHON_PYGAME_UNCONFIGURE_FONT)
+-	$(PYTHON_PYGAME_UNCONFIGURE_MIXER)
+-	$(PYTHON_PYGAME_UNCONFIGURE_SNDARRAY)
+-	$(PYTHON_PYGAME_UNCONFIGURE_SURFARRAY)
+-	$(PYTHON_PYGAME_UNCONFIGURE_MOVIE)
+-	$(PYTHON_PYGAME_UNCONFIGURE_SCRAP)
+-	$(PYTHON_PYGAME_UNCONFIGURE_FREETYPE)
+-endef
+-
+-define PYTHON_PYGAME_REMOVE_DOC
+-	rm -rf $(TARGET_DIR)/usr/lib/python*/site-packages/pygame/docs
+-endef
+-
+-PYTHON_PYGAME_POST_INSTALL_TARGET_HOOKS += PYTHON_PYGAME_REMOVE_DOC
+-
+-define PYTHON_PYGAME_REMOVE_TESTS
+-	rm -rf $(TARGET_DIR)/usr/lib/python*/site-packages/pygame/tests
+-endef
+-
+-PYTHON_PYGAME_POST_INSTALL_TARGET_HOOKS += PYTHON_PYGAME_REMOVE_TESTS
+-
+-ifneq ($(BR2_PACKAGE_PYTHON_PYGAME_EXAMPLES),y)
+-define PYTHON_PYGAME_REMOVE_EXAMPLES
+-	rm -rf $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/pygame/examples
+-endef
+-PYTHON_PYGAME_POST_INSTALL_TARGET_HOOKS += PYTHON_PYGAME_REMOVE_EXAMPLES
+-endif
+-
+-$(eval $(python-package))
+
+--===============6565235035996925827==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6565235035996925827==--
