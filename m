@@ -4,48 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55D08C4828D
-	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 10:22:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C518C4828D
+	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 10:22:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 11DAE41E67;
-	Tue,  6 Feb 2024 10:22:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11DAE41E67
+	by smtp4.osuosl.org (Postfix) with ESMTP id E622141E6F;
+	Tue,  6 Feb 2024 10:22:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E622141E6F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LnGUd9LiD2eb; Tue,  6 Feb 2024 10:22:13 +0000 (UTC)
+	with ESMTP id 2fxpmk8tt8Vf; Tue,  6 Feb 2024 10:22:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5C15B41E9F;
-	Tue,  6 Feb 2024 10:22:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C15B41E9F
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0539B1BF311
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 10:21:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 48BD641E9E;
+	Tue,  6 Feb 2024 10:22:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 48BD641E9E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 894FC1BF311
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 10:22:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DFAEA41E59
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 10:21:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DFAEA41E59
+ by smtp2.osuosl.org (Postfix) with ESMTP id 61A3E40448
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 10:22:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 61A3E40448
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KbCtYfrrBlcX for <buildroot@lists.busybox.net>;
- Tue,  6 Feb 2024 10:21:52 +0000 (UTC)
-Received: from dd5108.kasserver.com (dd5108.kasserver.com [85.13.130.47])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7D1DC41E78
- for <buildroot@buildroot.org>; Tue,  6 Feb 2024 10:21:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D1DC41E78
-Received: from wslxew206.. (ipb21bd56e.dynamic.kabel-deutschland.de
- [178.27.213.110])
- by dd5108.kasserver.com (Postfix) with ESMTPA id B75325240C9E;
- Tue,  6 Feb 2024 11:21:49 +0100 (CET)
-From: Andreas Naumann <anaumann@ultratronik.de>
-To: buildroot@buildroot.org
-Date: Tue,  6 Feb 2024 11:21:44 +0100
-Message-Id: <20240206102144.1831146-1-anaumann@ultratronik.de>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ABekLvYWMthT for <buildroot@lists.busybox.net>;
+ Tue,  6 Feb 2024 10:22:21 +0000 (UTC)
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com
+ [IPv6:2a00:1450:4864:20::230])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7E25D4037E
+ for <buildroot@buildroot.org>; Tue,  6 Feb 2024 10:22:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E25D4037E
+Received: by mail-lj1-x230.google.com with SMTP id
+ 38308e7fff4ca-2d066b82658so80429271fa.3
+ for <buildroot@buildroot.org>; Tue, 06 Feb 2024 02:22:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1707214938; x=1707819738;
+ h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=gnZ6oUbLLfOfJlS/iXXCegNBN7SJ6pvisg3InWXoPXo=;
+ b=N326Et5AztTJV5iuEpZ7qL/KZm+4J9vlqdHPTau3CBGk/NnK/YQrr+lrfINMbH8hmV
+ XmebuJRL8jfaMJdczsCzawAbRlc5/mj6H7+HVosKvdNoVZU85k0vKLtW3a3EcMVWF5GE
+ 4u8A3erq9GCpyaOqTjDKGMaz8VcFarkvMxaIIHyJ6X4f1i26xIWG5O3VfXoQBj3yVgMr
+ dsqIcb3V2Ksx0Yic0Q8wTWQblCEemKh+7CPOomsbT6bo+oxalzXIMQ+nogrzOh9h3Rae
+ sdsdGXSbKYjxEgjrHxDYhRoz0L7c0FJlgsd4jyzSnuQuolNjRAl0bkzHK8FiHVjAiN9U
+ NnVw==
+X-Gm-Message-State: AOJu0YxiAaobDaRliRlEPvP9BPv+d7+4K9UE4ys6NmS3aZZgbXj86adB
+ 7EAIu2GgLjV3rlgqJVTaN/TXq/X4lzoEXXtRMK21qOhRL7/9YsVUbRcKkJE/FlAbwQ30aGgqZfn
+ j5HxxJEdj66ul2QQGFZnYhnM4KPRPmYqx
+X-Google-Smtp-Source: AGHT+IFjfdSPoxtLkQOz+V/dSVq7hHmIe94SEIrsfCfRGQLGgUuNx11mX2Oxlb8ERaIpKUGuwv5B718w4cZIxPrbH5Y=
+X-Received: by 2002:a2e:910a:0:b0:2d0:a758:51b7 with SMTP id
+ m10-20020a2e910a000000b002d0a75851b7mr1635287ljg.7.1707214938407; Tue, 06 Feb
+ 2024 02:22:18 -0800 (PST)
 MIME-Version: 1.0
-X-Spamd-Bar: +++
-Subject: [Buildroot] [PATCH 1/1] package/glm: Bump to 1.0.0
+Date: Tue, 6 Feb 2024 11:22:06 +0100
+Message-ID: <CAGm1_kv4kcNXwz4J2cNBje3VhbMX1xcwteAX1=j7QtsdAveQCg@mail.gmail.com>
+To: buildroot <buildroot@buildroot.org>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=googlemail.com; s=20230601; t=1707214938; x=1707819738; darn=buildroot.org; 
+ h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=gnZ6oUbLLfOfJlS/iXXCegNBN7SJ6pvisg3InWXoPXo=;
+ b=VFAO7clfjUdfEqPYovS6+AeA4Ub9wg3y5Oh8XR1pTHJeplHNBhXfV5DQvbCfkgYz5u
+ sHRN6SqmUpFRJXlQXcgM62L0aUtwaqbQ2hmkBka+DOkJt4N6dNSSHCah8YhiEHDDkb7C
+ NEK4yCwHSv6HfMEP1lPUlwlKQTdXV1YRF0Fyg8ya0L8whMjUmh9HfIQW6mKCUP4Vpkgu
+ zRNYtGoeXu5Okl6tXKYs1dBNFQ3FY3oARm7svSOCmUmbBiUl1Bq5Iu1oHbftwW+ZQW1p
+ buGKvxKXTNYJYFfT0QKbpnyDtM39juxMEull0Fpn1H+MvE1Wq3Q3FKHYWCFvwHnkR6MB
+ cYUA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=VFAO7clf
+Subject: [Buildroot] Ignore build directories created via make O=dir or the
+ default one
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,67 +87,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: fontaine.fabrice@gmail.com, Andreas Naumann <anaumann@ultratronik.de>
+From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
+Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-glm did not install headers since [1], at least in a per-package
-build. Bumping to 1.0.0 fixes that.
-The cmake option to avoid building the lib has changed
+Hi all,
 
-Partially fixes [2], where cegui failed to configure because of
-the missing glm headers.
+what about adding a .gitignore file with an "*" everytime we create an
+output directory? Does anything speak against such an approach?
 
-[1] 01ad113  package/glm: bump to version 0.9.9.8
-[2] http://autobuild.buildroot.org/results/241/241a60f8ecb6fec5dc122d64dd438dd4249f8c3e/
-
-Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
----
-note: 0.9.9.8 from 2020 was the latest tag until a 1.0.0 was cut about
-two weeks ago (24th january 2024). I've seen commit 3a4b550 which might
-have been responsible but didnt check since 1.0.0 was available.
-
-
- package/glm/glm.hash | 2 +-
- package/glm/glm.mk   | 5 ++---
- 2 files changed, 3 insertions(+), 4 deletions(-)
-
-diff --git a/package/glm/glm.hash b/package/glm/glm.hash
-index c4e21016047..0084bd0930c 100644
---- a/package/glm/glm.hash
-+++ b/package/glm/glm.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  7d508ab72cb5d43227a3711420f06ff99b0a0cb63ee2f93631b162bfe1fe9592  glm-0.9.9.8.tar.gz
-+sha256  e51f6c89ff33b7cfb19daafb215f293d106cd900f8d681b9b1295312ccadbd23  glm-1.0.0.tar.gz
- sha256  62d2d642c7d054d4fb4c9b42faad617d6c88fcd91e317f8035aa9f277cc159c3  copying.txt
-diff --git a/package/glm/glm.mk b/package/glm/glm.mk
-index ef549931f6a..ce8efc11a78 100644
---- a/package/glm/glm.mk
-+++ b/package/glm/glm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GLM_VERSION = 0.9.9.8
-+GLM_VERSION = 1.0.0
- GLM_SITE = $(call github,g-truc,glm,$(GLM_VERSION))
- GLM_LICENSE = MIT
- GLM_LICENSE_FILES = copying.txt
-@@ -17,7 +17,6 @@ GLM_INSTALL_TARGET = NO
- # Don't build libraries as GLM is header-only
- GLM_CONF_OPTS = \
- 	-DGLM_TEST_ENABLE=OFF \
--	-DBUILD_SHARED_LIBS=OFF \
--	-DBUILD_STATIC_LIBS=OFF
-+	-DGLM_BUILD_LIBRARY=OFF
- 
- $(eval $(cmake-package))
--- 
-2.34.1
-
+Regards,
+Yegor
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
