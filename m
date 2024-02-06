@@ -4,61 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0732C48286
-	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 08:16:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1000C4828D
+	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 08:48:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AB35141E0D;
-	Tue,  6 Feb 2024 08:16:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB35141E0D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 40CFF41DE4;
+	Tue,  6 Feb 2024 08:48:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 40CFF41DE4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bJ2kSyRJ8iDj; Tue,  6 Feb 2024 08:16:38 +0000 (UTC)
+	with ESMTP id J4oCjCqbMuxA; Tue,  6 Feb 2024 08:48:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0465B41E03;
-	Tue,  6 Feb 2024 08:16:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0465B41E03
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7D5881BF2BC
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 08:16:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A8ACD41D92;
+	Tue,  6 Feb 2024 08:48:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A8ACD41D92
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6B5821BF2BC
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 08:48:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 78018820B5
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 08:16:36 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4474D60BAC
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 08:48:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4474D60BAC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SUnWCGpduCaH for <buildroot@lists.busybox.net>;
- Tue,  6 Feb 2024 08:16:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.178.240;
- helo=mslow1.mail.gandi.net; envelope-from=peter@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AEF38820B1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AEF38820B1
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AEF38820B1
- for <buildroot@buildroot.net>; Tue,  6 Feb 2024 08:16:35 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::229])
- by mslow1.mail.gandi.net (Postfix) with ESMTP id A55C4C24FD
- for <buildroot@buildroot.net>; Tue,  6 Feb 2024 08:16:32 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7FA49FF808;
- Tue,  6 Feb 2024 08:16:27 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rXGd1-00DKsD-0Q;
- Tue, 06 Feb 2024 09:16:27 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Nicola Di Lieto <nicola.dilieto@gmail.com>
-References: <ZcFJSqCW36QdHnDj@einstein.dilieto.eu>
-Date: Tue, 06 Feb 2024 09:16:27 +0100
-In-Reply-To: <ZcFJSqCW36QdHnDj@einstein.dilieto.eu> (Nicola Di Lieto's message
- of "Mon, 5 Feb 2024 21:47:06 +0100")
-Message-ID: <87zfwe6m90.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 61Iuw0wX7Z1c for <buildroot@lists.busybox.net>;
+ Tue,  6 Feb 2024 08:48:32 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id A893F60ABA
+ for <buildroot@uclibc.org>; Tue,  6 Feb 2024 08:48:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A893F60ABA
+Received: by busybox.osuosl.org (Postfix, from userid 81)
+ id 902108687A; Tue,  6 Feb 2024 08:48:32 +0000 (UTC)
+From: bugzilla@busybox.net
+To: buildroot@uclibc.org
+Date: Tue, 06 Feb 2024 08:48:32 +0000
+X-Bugzilla-Reason: CC
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: buildroot
+X-Bugzilla-Component: Outdated package
+X-Bugzilla-Version: 2023.08.2
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: ian_ormshaw@waters.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-15850-163-9NtWWJsih8@https.bugs.busybox.net/>
+In-Reply-To: <bug-15850-163@https.bugs.busybox.net/>
+References: <bug-15850-163@https.bugs.busybox.net/>
+X-Bugzilla-URL: https://bugs.busybox.net/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/uacme: bump version to 1.7.5
+Subject: [Buildroot] [Bug 15850] Nodejs failes to build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,20 +73,21 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Nicola" == Nicola Di Lieto <nicola.dilieto@gmail.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=15850
 
- > Signed-off-by: Nicola Di Lieto <nicola.dilieto@gmail.com>
-
-Committed, thanks.
+--- Comment #2 from Dr I J Ormshaw <ian_ormshaw@waters.com> ---
+The problem only seems to occur with Target Architecture Variant of x86-64-v4.
+With Target Architecture Variant x86-64 and skylake nodejs compiles
+successfully
 
 -- 
-Bye, Peter Korsgaard
+You are receiving this mail because:
+You are on the CC list for the bug.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
