@@ -4,83 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A51A3C4828D
-	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 17:59:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60CAFC4828D
+	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 18:04:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 70EA6831A2;
-	Tue,  6 Feb 2024 17:59:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 273D981CAF;
+	Tue,  6 Feb 2024 18:04:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rSLGzpkEEcKd; Tue,  6 Feb 2024 17:59:17 +0000 (UTC)
+	with ESMTP id z8K-BCuK7Z01; Tue,  6 Feb 2024 18:04:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 738AE83196
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2FCFA81BF5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 738AE83196;
-	Tue,  6 Feb 2024 17:59:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2FCFA81BF5;
+	Tue,  6 Feb 2024 18:04:34 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1F43B1BF27C
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 17:59:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 516961BF31F
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 18:04:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E6C3E41696
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 17:59:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E6C3E41696
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2941B40B67
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 18:04:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2941B40B67
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UWNSLXJThjQp for <buildroot@lists.busybox.net>;
- Tue,  6 Feb 2024 17:59:14 +0000 (UTC)
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com
- [IPv6:2a00:1450:4864:20::12b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 75E2540A39
- for <buildroot@buildroot.org>; Tue,  6 Feb 2024 17:59:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 75E2540A39
-Received: by mail-lf1-x12b.google.com with SMTP id
- 2adb3069b0e04-5114cd44fdbso5141376e87.2
- for <buildroot@buildroot.org>; Tue, 06 Feb 2024 09:59:14 -0800 (PST)
+ with ESMTP id Mu1uWX1_fxCX for <buildroot@lists.busybox.net>;
+ Tue,  6 Feb 2024 18:04:31 +0000 (UTC)
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C070040A39
+ for <buildroot@buildroot.org>; Tue,  6 Feb 2024 18:04:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C070040A39
+Received: by mail-wr1-x432.google.com with SMTP id
+ ffacd0b85a97d-33b401fd72bso1644134f8f.3
+ for <buildroot@buildroot.org>; Tue, 06 Feb 2024 10:04:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707242352; x=1707847152;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=iPZnSmijU+THnDIs+5dF1nap2aq7k4yxxLXZuZjntqw=;
- b=fGpdngOAh/lgKQmLIhSUh5anptkHqcufJrINJOWBZrgR3c/SIvytxfXr4BuwDUAtwe
- VpOvk+290isbD83MFYjrI9d3Kr6pGGWS8Kv6kgHQeoplQonBKz5BvfZONNkPcbBdCsnN
- MflpKZzQWs2rIxiRUSI8cdgTF+C1I2wyNw5UTgL1CD4T+MCiSKyx7GKNg+enwnGIs5N8
- sv5i0tnZtGQo0a4OhyPKaUpeyFLz2Wp0h0Tp98OnpnH0K7UOP57ZewqaAhvLfXm75UXT
- 7cSFX1BeuB0M+XJmRdwpNBR1YmVIFVE0EwsJDw8uVIkLte36dhNFr9QfNZBhf1R+q5WV
- tmxw==
-X-Gm-Message-State: AOJu0YxVfQu16EwTa2Df+aqwqfIwVmi2KWnN7FCDRAx2I//ydwh2G7Cx
- 0apSLrhhxr/U/Mxb0/RHwXGchkiD3XT+yjviUwhmX9wdtHNyOSuL1A3WdZoHZxvG04TmjT1kz/W
- 0HrS2m8PE6SYlGk4rwv7rqAVY9poEqP6ag+3uXg==
-X-Google-Smtp-Source: AGHT+IH4Mpa43djDutnNBi+BxmgVmiXnFMxgqucw9x0AyszW+JtYaO01iBiZCE3F6jpqLzY3eGFLYR2B9ZwoF/slX4E=
-X-Received: by 2002:a19:8c46:0:b0:50e:b2cf:4e20 with SMTP id
- i6-20020a198c46000000b0050eb2cf4e20mr2334599lfj.24.1707242352028; Tue, 06 Feb
- 2024 09:59:12 -0800 (PST)
-MIME-Version: 1.0
-References: <20240106101202.495801-1-fontaine.fabrice@gmail.com>
- <2be6d0df-6165-4da9-b69c-ad0deb5444be@smile.fr>
-In-Reply-To: <2be6d0df-6165-4da9-b69c-ad0deb5444be@smile.fr>
+ d=1e100.net; s=20230601; t=1707242668; x=1707847468;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=L0rSTpFmChtX7lX3UAUf8PMqqJHahvrBim7dB7EHats=;
+ b=VxrXl3/uQJVvo9m1FXxorHV+fuAoETH0XwO+GOykPn6ROEOudq+wKp9KdC0imnYuZd
+ JivDnfKDdqQIZe/rMxCXIsrRhXQGxD+GStsJTqzinJkvl+HZpR94dIflMvcSVWE4bn9b
+ YrGrZvMVXR//1Bx4TSrAK8I7L58R9kpzhWSvlKUWLLHeYsAfcJdW0RxVLxYSzK0WgEPG
+ P/fL4/J7n4n7DTUqUO6EEpWlxgPgwors5dQNi9Bf1Ftc5+Ju3s18Bz2PWJq27SXYSr0E
+ yB2jl2d0Ibqw3ncO5ZgDGj6/1/UPlldZlqWjkRTwdCakeHcsbpCjmLOq/gFrJC7cT24l
+ oZww==
+X-Gm-Message-State: AOJu0Yx1Br14vEaHXFiBlAFYAoxqbQlH1eci3bxjkoOtC/jPERjrNvD0
+ 7zm0RilZ8SNSuwi/Jml+4mLpSGD/ty1p00Q/BSVc/bX7nivQZAUgjcLSjLURIlo=
+X-Google-Smtp-Source: AGHT+IFERILqZKTpWjvKGO9nRwYbUumJo3Ftasb/4/7Ou0Uffofyvkg9zZolX/wGrHzkJKiIL9ZBLQ==
+X-Received: by 2002:a05:6000:4008:b0:33a:edaf:13ec with SMTP id
+ cp8-20020a056000400800b0033aedaf13ecmr2452149wrb.14.1707242667795; 
+ Tue, 06 Feb 2024 10:04:27 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ w4-20020a5d4044000000b0033b3cd4ad89sm2612596wrp.59.2024.02.06.10.04.01
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 06 Feb 2024 10:04:15 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 6 Feb 2024 18:59:00 +0100
-Message-ID: <CAPi7W81fffV_0zMh50hgB7bw7++JZzkdSpFUXXbHMPMKmHtbQw@mail.gmail.com>
-To: Romain Naour <romain.naour@smile.fr>
+To: buildroot@buildroot.org
+Date: Tue,  6 Feb 2024 19:03:41 +0100
+Message-ID: <20240206180341.3910-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1707242352; x=1707847152; darn=buildroot.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=iPZnSmijU+THnDIs+5dF1nap2aq7k4yxxLXZuZjntqw=;
- b=QTDXfOvoX8XpdWHPFj8KPPMvdSvN/ExAiW/pNYao6XlWRvp+b8jPNyhaPXDTzQJOUA
- 33vKti55kcO6oeYm1gPbYA/0ECC0uQMvA92NeIMqQ+91AeHsH+93/BYMbnBHfHc4nGg0
- ezHjkLODikKUj25ZEh7Dgk+h0j2nporT+8B/Dqam+G8lFJ62/0ario8s1ElFDHwvUL1+
- uCLaHSY4mTh49N7JBZ18qT+z210+Yb1omeG6pjFjFtSOgOSWTFQVjJYlH4R/pIU2lRG2
- WDn/5Iu6SUi/FnNz81KhVdgzh0Kez1hMZ6jj4Koi3H5UK7Rg8c9Y9VxCPykFSNIT5T+O
- VNoQ==
+ d=gmail.com; s=20230601; t=1707242668; x=1707847468; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=L0rSTpFmChtX7lX3UAUf8PMqqJHahvrBim7dB7EHats=;
+ b=cODDgejD7Ye52yP2aSLPA7QQJxEvWpJjTYhMwiOblSumix2t/4Q+tmpCIPTzKBA29e
+ cm7pBckawRwKph3FDuFUPc17fT26mHtgcU8DjSEebgm0/+4y3hkztZc3VFdCfIjXxM7+
+ SZrj5TrNKOpDtcWUHWnj6+SZGHQXEzHdueJY1VucF0cU+pmhhpUKUg66fF/YyF9FsZoA
+ 0dXf5RzhsNLXDZu/+Q8SJ2Xy6CMOU1HRTPZaXjOtn2gQK+lHXD9hShN6T/9koOVtloNM
+ Ia3Qk+tQpMCMZSTLHxk8J3TYBGUCZxpm+9wc8ITWb3T4hGX1aQ+w71Wfd8M7sZI3RNWN
+ MdvQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=QTDXfOvo
-Subject: Re: [Buildroot] [PATCH 1/1] package/ncmpc: don't set NLS
+ header.a=rsa-sha256 header.s=20230601 header.b=cODDgejD
+Subject: [Buildroot] [PATCH 1/1] package/linux-pam: fix musl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,65 +93,85 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gUm9tYWluLAoKTGUgbWFyLiA2IGbDqXZyLiAyMDI0IMOgIDE4OjMyLCBSb21haW4gTmFv
-dXIgPHJvbWFpbi5uYW91ckBzbWlsZS5mcj4gYSDDqWNyaXQgOgo+Cj4gSGVsbG8sCj4KPiBMZSAw
-Ni8wMS8yMDI0IMOgIDExOjEyLCBGYWJyaWNlIEZvbnRhaW5lIGEgw6ljcml0IDoKPiA+IG5jbXBj
-IGlzIGFibGUgdG8gYXV0b21hdGljYWxseSBkZXRlY3QgTkxTIHN1cHBvcnQgc2luY2UgdmVyc2lv
-biAwLjQ3IGFuZAo+ID4gaHR0cHM6Ly9naXRodWIuY29tL011c2ljUGxheWVyRGFlbW9uL25jbXBj
-L2NvbW1pdC9jMjY0ZGIwNGRkMzBhZjMwMWU3ZDg1YzlkMTQ1YmIxZjFhZTNmZWEzCj4gPiBzbyBs
-ZXQgaXQgaGFuZGxlIGF1dG9tYXRpY2FsbHkgdG8gYXZvaWQgdGhlIGZvbGxvd2luZyBidWlsZCBm
-YWlsdXJlIHdpdGgKPiA+IGEgYm9vdGxpbiB0b29sY2hhaW4gd2hpY2ggZW1iZWRzIGEgZ2V0dGV4
-dCBkZWZpbml0aW9uIGluIGxpYmludGwuaCB3aGljaAo+ID4gd2lsbCBjbGFzaCB3aXRoIHRoZSBm
-YWtlIGdldHRleHQgZGVmaW5pdGlvbiBwcm92aWRlZCBieSBuY21wYyBzaW5jZQo+ID4gaHR0cHM6
-Ly9naXRodWIuY29tL011c2ljUGxheWVyRGFlbW9uL25jbXBjL2NvbW1pdC85NWFmMjdhYjJkM2Nl
-YjlkZjI2ZWJiNGUwZDkzNmUzOTJhODRjMTUzOgo+ID4KPiA+IEluIGZpbGUgaW5jbHVkZWQgZnJv
-bSAuLi9zcmMvc2F2ZV9wbGF5bGlzdC5jeHg6ODoKPiA+IC9ob21lL2J1aWxkcm9vdC9hdXRvYnVp
-bGQvaW5zdGFuY2UtMi9vdXRwdXQtMS9ob3N0L29yMWstYnVpbGRyb290LWxpbnV4LWdudS9zeXNy
-b290L3Vzci9pbmNsdWRlL2xpYmludGwuaDozOToxNDogZXJyb3I6IGV4cGVjdGVkIHVucXVhbGlm
-aWVkLWlkIGJlZm9yZSAnY29uc3QnCj4gPiAgICAzOSB8IGV4dGVybiBjaGFyICpnZXR0ZXh0IChj
-b25zdCBjaGFyICpfX21zZ2lkKQo+ID4gICAgICAgfCAgICAgICAgICAgICAgXn5+fn5+fgo+ID4g
-L2hvbWUvYnVpbGRyb290L2F1dG9idWlsZC9pbnN0YW5jZS0yL291dHB1dC0xL2hvc3Qvb3Ixay1i
-dWlsZHJvb3QtbGludXgtZ251L3N5c3Jvb3QvdXNyL2luY2x1ZGUvbGliaW50bC5oOjM5OjE0OiBl
-cnJvcjogZXhwZWN0ZWQgJyknIGJlZm9yZSAnY29uc3QnCj4gPiAuLi9zcmMvaTE4bi5oOjIyOjIw
-OiBub3RlOiB0byBtYXRjaCB0aGlzICcoJwo+ID4gICAgMjIgfCAjZGVmaW5lIGdldHRleHQoeCkg
-KHgpCj4gPiAgICAgICB8ICAgICAgICAgICAgICAgICAgICBeCj4gPgo+ID4gSW5kZWVkLCBldmVu
-IGlmIE5MUyBpcyBkaXNhYmxlZCBieSB0aGUgdXNlciwgbGliaW50bC5oIHdpbGwgYmUgaW5jbHVk
-ZWQKPiA+IGJ5Cj4gPiAvaG9tZS9mYWJyaWNlL2J1aWxkcm9vdC9vdXRwdXQvaG9zdC9vcHQvZXh0
-LXRvb2xjaGFpbi9vcjFrLWJ1aWxkcm9vdC1saW51eC1nbnUvaW5jbHVkZS9jKysvMTMuMi4wL29y
-MWstYnVpbGRyb290LWxpbnV4LWdudS9iaXRzL21lc3NhZ2VzX21lbWJlcnMuaAo+ID4gdGhvdWdo
-IGluY2x1ZGUgPGNocm9ubz4KPgo+IFdlIHVzdWFsbHkgd2FudCB0byBleHBsaWNpdGx5IGhhbmRs
-ZSBzdWNoIG9wdGlvbiBmcm9tIEJ1aWxkcm9vdCBwYWNrYWdlIHRvIG5vdAo+IHJlbHkgb24gYXV0
-b21hdGljIGRldGVjdGlvbiAoYXMgY3VycmVudGx5IGRvbmUpLgo+Cj4gSXQgbG9vayBsaWtlIG1v
-cmUgYSBidWcgaW4gbmNtcGMgYnVpbGQgc3lzdGVtPwoKSSBkb24ndCBrbm93LCB1cHN0cmVhbSB3
-YW50cyB0byBoYXZlIHRoZSBzYW1lIGNvZGUgd2l0aCBhbmQgd2l0aG91dApOTFMsIHNvIHRoZXkg
-ZGVjaWRlZCB0byBkZWZpbmUgYSBnZXR0ZXh0IG1hY3JvIHdoZW4gTkxTIGlzIGRpc2FibGVkLgpJ
-IGNvdWxkIGZpbmQgYW4gdXBzdHJlYW1hYmxlIHNvbHV0aW9uIGFzIHVwc3RyZWFtIHdpbGwgcHJv
-YmFibHkgcmVqZWN0CmEgcGF0Y2ggdGhhdCByZW1vdmVzIHRoaXMgZ2V0dGV4dCBkZWZpbmUgYW5k
-IHB1dHMgI2lmZGVmIEVOQUJMRV9OTFMKYmVmb3JlIGV2ZXJ5IGdldHRleHQgY2FsbHMuCkRvIHlv
-dSBoYXZlIGFuIHVwc3RyZWFtYWJsZSBzb2x1dGlvbiBvciBzaG91bGQgd2UganVzdCBhZGQgYSBO
-TFMKZGVwZW5kZW5jeSB0byBuY21wYz8KCj4KPiBCZXN0IHJlZ2FyZHMsCj4gUm9tYWluCj4KPgo+
-ID4KPiA+IEZpeGVzOgo+ID4gIC0gaHR0cDovL2F1dG9idWlsZC5idWlsZHJvb3Qub3JnL3Jlc3Vs
-dHMvYzg2MGU2NDkwOWRkM2I3ZmEwMzNkYjA5NzBlMWNmYzEzNzZjNGVjNQo+ID4gIC0gaHR0cDov
-L2F1dG9idWlsZC5idWlsZHJvb3Qub3JnL3Jlc3VsdHMvMzZlYWI1NTZmYWM4MDEyNDc1NWJmZjQx
-MTBhZjNlNDNmZTZlZGQ3OAo+ID4KPiA+IFNpZ25lZC1vZmYtYnk6IEZhYnJpY2UgRm9udGFpbmUg
-PGZvbnRhaW5lLmZhYnJpY2VAZ21haWwuY29tPgo+ID4gLS0tCj4gPiAgcGFja2FnZS9uY21wYy9u
-Y21wYy5tayB8IDMgKy0tCj4gPiAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAyIGRl
-bGV0aW9ucygtKQo+ID4KPiA+IGRpZmYgLS1naXQgYS9wYWNrYWdlL25jbXBjL25jbXBjLm1rIGIv
-cGFja2FnZS9uY21wYy9uY21wYy5tawo+ID4gaW5kZXggYmM4YTYyZGFlYS4uMDk2NTk4MWYyMyAx
-MDA2NDQKPiA+IC0tLSBhL3BhY2thZ2UvbmNtcGMvbmNtcGMubWsKPiA+ICsrKyBiL3BhY2thZ2Uv
-bmNtcGMvbmNtcGMubWsKPiA+IEBAIC0yMCw4ICsyMCw3IEBAIE5DTVBDX0NQRV9JRF9WRU5ET1Ig
-PSBuY21wY19wcm9qZWN0Cj4gPgo+ID4gIE5DTVBDX0NPTkZfT1BUUyA9IFwKPiA+ICAgICAgIC1E
-Y3Vyc2VzPW5jdXJzZXMgXAo+ID4gLSAgICAgLURkb2N1bWVudGF0aW9uPWRpc2FibGVkIFwKPiA+
-IC0gICAgICQoaWYgJChCUjJfU1lTVEVNX0VOQUJMRV9OTFMpLC1EbmxzPWVuYWJsZWQsLURubHM9
-ZGlzYWJsZWQpCj4gPiArICAgICAtRGRvY3VtZW50YXRpb249ZGlzYWJsZWQKPiA+Cj4gPiAgaWZl
-cSAoJChCUjJfUEFDS0FHRV9MSVJDX1RPT0xTKSx5KQo+ID4gIE5DTVBDX0RFUEVOREVOQ0lFUyAr
-PSBsaXJjLXRvb2xzCj4KCkJlc3QgUmVnYXJkcywKCkZhYnJpY2UKX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWls
-ZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
-aXN0aW5mby9idWlsZHJvb3QK
+Fix the following musl build failure raised since bump to version 1.6.0
+in commit 7794fa4c4e1d19a245bb0367cde94560432a2bc5:
+
+pam_namespace.c: In function 'process_line':
+pam_namespace.c:649:41: error: 'SIZE_MAX' undeclared (first use in this function)
+  649 |         if (count > UINT_MAX || count > SIZE_MAX / sizeof(uid_t)) {
+      |                                         ^~~~~~~~
+pam_namespace.c:41:1: note: 'SIZE_MAX' is defined in header '<stdint.h>'; did you forget to '#include <stdint.h>'?
+   40 | #include "argv_parse.h"
+  +++ |+#include <stdint.h>
+   41 |
+
+Fixes:
+ - http://autobuild.buildroot.org/results/f07360f33010a2cf19aace266faae14a834bd9a4
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../0001-pam_namespace-include-stdint-h.patch | 42 +++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 package/linux-pam/0001-pam_namespace-include-stdint-h.patch
+
+diff --git a/package/linux-pam/0001-pam_namespace-include-stdint-h.patch b/package/linux-pam/0001-pam_namespace-include-stdint-h.patch
+new file mode 100644
+index 0000000000..59d2e8700f
+--- /dev/null
++++ b/package/linux-pam/0001-pam_namespace-include-stdint-h.patch
+@@ -0,0 +1,42 @@
++From cc9d40b7cdbd3e15ccaa324a0dda1680ef9dea13 Mon Sep 17 00:00:00 2001
++From: Jacob Heider <jacob@pkgx.dev>
++Date: Wed, 17 Jan 2024 11:49:26 -0500
++Subject: [PATCH] pam_namespace: include stdint.h
++
++pam_namespace.c makes use of SIZE_MAX but doesn't include stdint.h,
++resulting in the following build failures on 1.6.0:
++
++  pam_namespace.c: In function 'process_line':
++  pam_namespace.c:649:41: error: 'SIZE_MAX' undeclared (first use in this function)
++    649 |         if (count > UINT_MAX || count > SIZE_MAX / sizeof(uid_t)) {
++        |                                         ^~~~~~~~
++  pam_namespace.c:41:1: note: 'SIZE_MAX' is defined in header '<stdint.h>'; did you forget to '#include <stdint.h>'?
++     40 | #include "argv_parse.h"
++    +++ |+#include <stdint.h>
++     41 |
++  pam_namespace.c:649:41: note: each undeclared identifier is reported only once for each function it appears in
++    649 |         if (count > UINT_MAX || count > SIZE_MAX / sizeof(uid_t)) {
++        |                                         ^~~~~~~~
++
++Fixes: v1.6.0~100 ("pam_namespace: validate amount of uids in config")
++Resolves: https://github.com/linux-pam/linux-pam/issues/733
++
++Upstream: https://github.com/linux-pam/linux-pam/commit/cc9d40b7cdbd3e15ccaa324a0dda1680ef9dea13
++SIgned-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ modules/pam_namespace/pam_namespace.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/modules/pam_namespace/pam_namespace.c b/modules/pam_namespace/pam_namespace.c
++index f72d67189..b16731c22 100644
++--- a/modules/pam_namespace/pam_namespace.c
+++++ b/modules/pam_namespace/pam_namespace.c
++@@ -34,6 +34,8 @@
++ 
++ #define _ATFILE_SOURCE
++ 
+++#include "config.h"
+++#include <stdint.h>
++ #include "pam_cc_compat.h"
++ #include "pam_inline.h"
++ #include "pam_namespace.h"
+-- 
+2.43.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
