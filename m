@@ -4,49 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 558C3C48297
-	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 22:31:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 222D8C4828D
+	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 22:32:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 20EBA4203B;
-	Tue,  6 Feb 2024 22:31:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E081342094;
+	Tue,  6 Feb 2024 22:32:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BETMHWbYyOxT; Tue,  6 Feb 2024 22:31:32 +0000 (UTC)
+	with ESMTP id M8ozKDcvnl6l; Tue,  6 Feb 2024 22:32:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC4414209B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF4B4420A6
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EC4414209B;
-	Tue,  6 Feb 2024 22:31:31 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4D10B1BF276
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 22:31:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EF4B4420A6;
+	Tue,  6 Feb 2024 22:32:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B67791BF276
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 22:32:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DEB164031F
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 22:31:28 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A3CD183417
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 22:32:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cQX8JfJAhkcf for <buildroot@lists.busybox.net>;
- Tue,  6 Feb 2024 22:31:27 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9kAKeHZHnxOX for <buildroot@lists.busybox.net>;
+ Tue,  6 Feb 2024 22:32:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
+ helo=relay8-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C689A403C6
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C689A403C6
- for <buildroot@buildroot.org>; Tue,  6 Feb 2024 22:31:27 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BB378870FE; Tue,  6 Feb 2024 22:31:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8760B8341A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8760B8341A
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8760B8341A
+ for <buildroot@buildroot.org>; Tue,  6 Feb 2024 22:32:07 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 571681BF206;
+ Tue,  6 Feb 2024 22:32:05 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1rXTz2-00EMP8-0n;
+ Tue, 06 Feb 2024 23:32:04 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 6 Feb 2024 23:29:14 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 22f9ce63a30200696dbcbe6ae3a6cc417f007979
-X-Git-Newrev: 568bd6c39d1a28f27d6509d885e09de281953e63
-X-Patchwork-Hint: ignore
-Message-Id: <20240206223127.BB378870FE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/go: bump version to go1.21.7
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20240206220725.910499-1-fontaine.fabrice@gmail.com>
+Date: Tue, 06 Feb 2024 23:32:04 +0100
+In-Reply-To: <20240206220725.910499-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 6 Feb 2024 23:07:25 +0100")
+Message-ID: <87mssd2pi3.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-lmdb: add CPE variables
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,49 +68,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Mauro Condarelli <mc5686@mclink.it>,
+ James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=568bd6c39d1a28f27d6509d885e09de281953e63
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-go1.21.7 (released 2024-02-06) includes fixes to the compiler, the go command,
-the runtime, and the crypto/x509 package.
+ > cpe:2.3:a:py-lmdb_project:py-lmdb is a valid CPE identifier for this
+ > package:
 
-https://go.dev/doc/devel/release#go1.21.7
+ >   https://nvd.nist.gov/products/cpe/detail/AFE6D0BA-D905-43F6-81FE-308D591A82B8
 
-Signed-off-by: Christian Stewart <christian@aperture.us>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index bee10089a7..d008019e94 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://go.dev/dl
--sha256  124926a62e45f78daabbaedb9c011d97633186a33c238ffc1e25320c02046248  go1.21.6.src.tar.gz
-+sha256  00197ab20f33813832bff62fd93cca1c42a08cc689a32a6672ca49591959bff6  go1.21.7.src.tar.gz
- sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index f9d31aacac..9efd4a3123 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GO_VERSION = 1.21.6
-+GO_VERSION = 1.21.7
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
