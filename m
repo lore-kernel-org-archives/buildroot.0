@@ -4,94 +4,106 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A077FC48297
-	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 18:35:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13E9BC48297
+	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 19:26:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3C787822F5;
-	Tue,  6 Feb 2024 18:35:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BE7DF81462;
+	Tue,  6 Feb 2024 19:26:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Sx-UksyPiS8M; Tue,  6 Feb 2024 18:35:46 +0000 (UTC)
+	with ESMTP id agXyTqAda9E9; Tue,  6 Feb 2024 19:26:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 395B582322
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5C8681444
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 395B582322;
-	Tue,  6 Feb 2024 18:35:46 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 692161BF2C4
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 18:35:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B5C8681444;
+	Tue,  6 Feb 2024 19:26:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id EFCC41BF2FB
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 19:26:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5666460BE1
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 18:35:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E9DF4404D0
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 19:26:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6bnVl9Po97_T for <buildroot@lists.busybox.net>;
- Tue,  6 Feb 2024 18:35:43 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
- envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2257660675
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2257660675
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2257660675
- for <buildroot@buildroot.org>; Tue,  6 Feb 2024 18:35:42 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id
- ffacd0b85a97d-33b4b0a3bddso346962f8f.2
- for <buildroot@buildroot.org>; Tue, 06 Feb 2024 10:35:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707244540; x=1707849340;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=Nl3Y5ugYDQP176nbQpKK+VtzPXYEvTohBnFtbaAj3i0=;
- b=j56tceyD+9+DQp43j4GbNkUM5JgupG/JdN6ROF0ZpcGcBzrIYePQNsLZctBdFEBprI
- lktSqgE4rSLHhjr338+SGHiicaVHgFEZiNRvV0zeVuBqIIJQ5+4/gPD+S5nR6kKcsp+h
- nPo8cbFREkxAT7XgL07dwjHOWh9c6dAKTCZ3d5uYC8Osj2QJIZ2uTlKfgOQ/UgYolAA2
- mSUFvRfcPIaE/P3UxN3uxXpIojbmDnbyJxWBU56yXT7Wmg7ADNZWao8qWMB6Wj+iHF5a
- ZUc1Y+8M0RThO5IYyf89sPbwbKI/azZSKm6zpDr9YUcwH4LmDCyQTyzNtUG8iea6BHFY
- hvGA==
-X-Gm-Message-State: AOJu0YwIFu92ZV76BVWQcCCiC/CIFG3Yn0qbttAq8nMTHGEpLyRmIh/N
- 0sGzLa7XGlb5G61mk6bsSdJUuHsNXC6zP4ymX2DawUATLp7fGEh58CkyAAwIVj0=
-X-Google-Smtp-Source: AGHT+IE4Wxzyp9rs/ICIcdprEVtiY7Fv9/2geH1u9o8ORVKqU4Me4WGp0MFEPrDsWbzdUdIh5OtR0Q==
-X-Received: by 2002:adf:f346:0:b0:33b:3275:2721 with SMTP id
- e6-20020adff346000000b0033b32752721mr1816095wrp.40.1707244539667; 
- Tue, 06 Feb 2024 10:35:39 -0800 (PST)
-X-Forwarded-Encrypted: i=0;
- AJvYcCUfH058HounK9gxwcsywExwmvBdZvDxho8y6ox4VurPjGF5o0rUgdh7SSlTiWmZbEk8tSl9G6atb44jfSpI0i4N5JtV7icIMpFG06aUX2RaGX926aSYTEhKC+ALbq1FEp8iqyaC20NIViaxxtRGllc6xdXg366ftzwxxu/A9iQDu5CHZio4PgjeqpayFJQM5U+VjXa5rwEqWuZnYi8W
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- e5-20020a5d5945000000b0033b47ee01f1sm1902325wri.49.2024.02.06.10.35.38
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 06 Feb 2024 10:35:39 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue,  6 Feb 2024 19:35:36 +0100
-Message-ID: <20240206183536.284845-1-fontaine.fabrice@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Yci09Fad-jXU for <buildroot@lists.busybox.net>;
+ Tue,  6 Feb 2024 19:26:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=45.89.224.132;
+ helo=mx1.sberdevices.ru; envelope-from=ddrokosov@salutedevices.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9AA76404BF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9AA76404BF
+Received: from mx1.sberdevices.ru (mx2.sberdevices.ru [45.89.224.132])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9AA76404BF
+ for <buildroot@buildroot.org>; Tue,  6 Feb 2024 19:26:01 +0000 (UTC)
+Received: from p-infra-ksmg-sc-msk02 (localhost [127.0.0.1])
+ by mx1.sberdevices.ru (Postfix) with ESMTP id 19447120018;
+ Tue,  6 Feb 2024 22:26:00 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 19447120018
+Received: from smtp.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru
+ [172.16.192.107])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by mx1.sberdevices.ru (Postfix) with ESMTPS;
+ Tue,  6 Feb 2024 22:25:59 +0300 (MSK)
+Received: from CAB-WSD-L081021.sberdevices.ru (100.64.160.123) by
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Tue, 6 Feb 2024 22:25:59 +0300
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, "Yann E . MORIN"
+ <yann.morin.1998@free.fr>, Herve Codina <herve.codina@bootlin.com>
+Date: Tue, 6 Feb 2024 22:25:34 +0300
+Message-ID: <20240206192543.7179-3-ddrokosov@salutedevices.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240206192543.7179-1-ddrokosov@salutedevices.com>
+References: <20240206192543.7179-1-ddrokosov@salutedevices.com>
 MIME-Version: 1.0
+X-Originating-IP: [100.64.160.123]
+X-ClientProxiedBy: p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) To
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 183246 [Feb 06 2024]
+X-KSMG-AntiSpam-Version: 6.1.0.3
+X-KSMG-AntiSpam-Envelope-From: ddrokosov@salutedevices.com
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 7 0.3.7
+ 6d6bf5bd8eea7373134f756a2fd73e9456bb7d1a,
+ {Tracking_from_domain_doesnt_match_to}, 127.0.0.199:7.1.2;
+ 100.64.160.123:7.1.2; salutedevices.com:7.1.1;
+ d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;
+ smtp.sberdevices.ru:5.0.1,7.1.1, FromAlignment: s, ApMailHostAddress:
+ 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean
+X-KSMG-LinksScanning: Clean
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960,
+ bases: 2024/02/06 15:39:00 #23379857
+X-KSMG-AntiVirus-Status: Clean, skipped
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1707244540; x=1707849340; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Nl3Y5ugYDQP176nbQpKK+VtzPXYEvTohBnFtbaAj3i0=;
- b=CpFJOd+BeV+0GQqNgkwNkVa8+d2mYAuUPcF1PjybrSEXQDR399JOdd8puQYiaWCYLB
- JSiUGpLKDKJz2RQlRo/bWx3PkRz0u/Z1PCltwwXwPoOJ4e1YY/4hNDDkCYtH+oOKHEiR
- hxXsA3G6aj+0s5d2t5zKuj+dB//OF39rO/UzSWW5T2ChgFJNO9rfnqMnw38/zrGUcWNF
- hNgVKbir/mjVIPQ59NTstCdto5qTvgz/u+1+9AxRWFAzPReB4CXxZMA5cdkRzhJirAOd
- sjONMSnKzhWjYSuytSPvlgmW0QUgd2KJcg4PUTonnAeGdFoWS4afSZ+PuUBhBu/vc7Dv
- 81cA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=salutedevices.com; s=mail; t=1707247560;
+ bh=06X1qtfBkJMTOw+l+CuneME+iYYsd2Bcjejo+JcorNs=;
+ h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
+ b=f3CVXeCRxQnec5bOCEwm/oD+pBOlUIck1Q6FaZ9wFBQCRCcpiEtH02lLbnNA3UGZC
+ k+Qwut2O0nR7NoLa3EAqmsKn18i7kQ5/oLc1ai21qOzJAGI6HsW351/YHR/rKVOlqJ
+ YENJuqMbXyEmiPQcJ7AKfoteWJgLrDMoGj6x4o/qlouqkCy/QmuilHTeW4zowGVtNU
+ ugcWRH7+DSA3gqwWLie5JLl+iFBEul8CYptbZmSO7Mok9d5Fm8/KEJ3rUNL9P4V64w
+ QMhdNVm0gOLrpFNW/fHXXD3C5O25k/FVKnIoQGgJYkDh9BHTqv14g12OUhgGzFi1r9
+ BhsZgw6IpTP9Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=salutedevices.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=CpFJOd+B
-Subject: [Buildroot] [PATCH 1/1] package/python-opcua-asyncio: add CPE
- variables
+ unprotected) header.d=salutedevices.com header.i=@salutedevices.com
+ header.a=rsa-sha256 header.s=mail header.b=f3CVXeCR
+Subject: [Buildroot] [PATCH v2 2/2] package/linux-tools: multilib build
+ supported
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,36 +115,138 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>,
- James Hilliard <james.hilliard1@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+From: Dmitry Rokosov via buildroot <buildroot@buildroot.org>
+Reply-To: Dmitry Rokosov <ddrokosov@salutedevices.com>
+Cc: Dmitry Rokosov <ddrokosov@salutedevices.com>, chopps@chopps.org,
+ Konstantin Menyaev <KAMenyaev@sberdevices.ru>, sdfw_system_team@sberdevices.ru,
+ kernel@sberdevices.ru, rockosov@gmail.com, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-cpe:2.3:a:freeopcua:opcua-asyncio is a valid CPE identifier for this
-package:
+From: Konstantin Menyaev <KAMenyaev@sberdevices.ru>
 
-  https://nvd.nist.gov/products/cpe/detail/39E826E8-04D1-465F-AA4E-7A41B387D7CE
+- LINUX_TOOLS_MAKE_OPTS option introduced:
+    allows to override CROSS_COMPILE param
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Konstantin Menyaev <KAMenyaev@sberdevices.ru>
+Signed-off-by: Dmitry Rokosov <ddrokosov@salutedevices.com>
 ---
- package/python-opcua-asyncio/python-opcua-asyncio.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/linux-tools/linux-tool-gpio.mk.in      | 2 +-
+ package/linux-tools/linux-tool-iio.mk.in       | 2 +-
+ package/linux-tools/linux-tool-mm.mk.in        | 2 +-
+ package/linux-tools/linux-tool-pci.mk.in       | 2 +-
+ package/linux-tools/linux-tool-perf.mk.in      | 2 +-
+ package/linux-tools/linux-tool-selftests.mk.in | 2 +-
+ package/linux-tools/linux-tool-tmon.mk.in      | 2 +-
+ package/linux-tools/linux-tools.mk             | 2 ++
+ 8 files changed, 9 insertions(+), 7 deletions(-)
 
-diff --git a/package/python-opcua-asyncio/python-opcua-asyncio.mk b/package/python-opcua-asyncio/python-opcua-asyncio.mk
-index a8be2c8722..226b9bbc21 100644
---- a/package/python-opcua-asyncio/python-opcua-asyncio.mk
-+++ b/package/python-opcua-asyncio/python-opcua-asyncio.mk
-@@ -10,5 +10,7 @@ PYTHON_OPCUA_ASYNCIO_SITE = https://files.pythonhosted.org/packages/bf/c6/3c17b8
- PYTHON_OPCUA_ASYNCIO_SETUP_TYPE = setuptools
- PYTHON_OPCUA_ASYNCIO_LICENSE = LGPL-3.0+
- PYTHON_OPCUA_ASYNCIO_LICENSE_FILES = COPYING
-+PYTHON_OPCUA_ASYNCIO_CPE_ID_VENDOR = freeopcua
-+PYTHON_OPCUA_ASYNCIO_CPE_ID_PRODUCT = opcua-asyncio
+diff --git a/package/linux-tools/linux-tool-gpio.mk.in b/package/linux-tools/linux-tool-gpio.mk.in
+index e825db1b1127..dcee11002e8c 100644
+--- a/package/linux-tools/linux-tool-gpio.mk.in
++++ b/package/linux-tools/linux-tool-gpio.mk.in
+@@ -6,7 +6,7 @@
  
- $(eval $(python-package))
+ LINUX_TOOLS += gpio
+ 
+-GPIO_MAKE_OPTS = $(LINUX_MAKE_FLAGS) LDFLAGS="$(TARGET_LDFLAGS)"
++GPIO_MAKE_OPTS = $(LINUX_TOOLS_MAKE_OPTS) LDFLAGS="$(TARGET_LDFLAGS)"
+ 
+ define GPIO_BUILD_CMDS
+ 	$(Q)if ! grep install $(LINUX_DIR)/tools/gpio/Makefile >/dev/null 2>&1 ; then \
+diff --git a/package/linux-tools/linux-tool-iio.mk.in b/package/linux-tools/linux-tool-iio.mk.in
+index 27ab0ed7ed63..1372faafd1a8 100644
+--- a/package/linux-tools/linux-tool-iio.mk.in
++++ b/package/linux-tools/linux-tool-iio.mk.in
+@@ -6,7 +6,7 @@
+ 
+ LINUX_TOOLS += iio
+ 
+-IIO_MAKE_OPTS = $(LINUX_MAKE_FLAGS) LDFLAGS="$(TARGET_LDFLAGS)"
++IIO_MAKE_OPTS = $(LINUX_TOOLS_MAKE_OPTS) LDFLAGS="$(TARGET_LDFLAGS)"
+ 
+ define IIO_BUILD_CMDS
+ 	$(Q)if ! grep install $(LINUX_DIR)/tools/iio/Makefile >/dev/null 2>&1 ; then \
+diff --git a/package/linux-tools/linux-tool-mm.mk.in b/package/linux-tools/linux-tool-mm.mk.in
+index 5431e0574b04..51a54026dea4 100644
+--- a/package/linux-tools/linux-tool-mm.mk.in
++++ b/package/linux-tools/linux-tool-mm.mk.in
+@@ -7,7 +7,7 @@
+ LINUX_TOOLS += mm
+ 
+ MM_DEPENDENCIES = linux
+-MM_MAKE_OPTS = $(LINUX_MAKE_FLAGS) CC="$(TARGET_CC)"
++MM_MAKE_OPTS = $(LINUX_TOOLS_MAKE_OPTS) CC="$(TARGET_CC)"
+ 
+ define MM_BUILD_CMDS
+ 	$(Q)if test -f $(LINUX_DIR)/tools/vm/Makefile ; then \
+diff --git a/package/linux-tools/linux-tool-pci.mk.in b/package/linux-tools/linux-tool-pci.mk.in
+index 17246f5d7ed2..48c3435a5c8a 100644
+--- a/package/linux-tools/linux-tool-pci.mk.in
++++ b/package/linux-tools/linux-tool-pci.mk.in
+@@ -6,7 +6,7 @@
+ 
+ LINUX_TOOLS += pci
+ 
+-PCI_MAKE_OPTS = $(LINUX_MAKE_FLAGS) LDFLAGS="$(TARGET_LDFLAGS)"
++PCI_MAKE_OPTS = $(LINUX_TOOLS_MAKE_OPTS) LDFLAGS="$(TARGET_LDFLAGS)"
+ 
+ define PCI_BUILD_CMDS
+ 	$(Q)if ! grep install $(LINUX_DIR)/tools/pci/Makefile >/dev/null 2>&1 ; then \
+diff --git a/package/linux-tools/linux-tool-perf.mk.in b/package/linux-tools/linux-tool-perf.mk.in
+index ee308a85dfd1..38910cda7d75 100644
+--- a/package/linux-tools/linux-tool-perf.mk.in
++++ b/package/linux-tools/linux-tool-perf.mk.in
+@@ -19,7 +19,7 @@ PERF_ARCH=$(NORMALIZED_ARCH)
+ endif
+ 
+ PERF_MAKE_FLAGS = \
+-	$(LINUX_MAKE_FLAGS) \
++	$(LINUX_TOOLS_MAKE_OPTS) \
+ 	JOBS=$(PARALLEL_JOBS) \
+ 	ARCH=$(PERF_ARCH) \
+ 	DESTDIR=$(TARGET_DIR) \
+diff --git a/package/linux-tools/linux-tool-selftests.mk.in b/package/linux-tools/linux-tool-selftests.mk.in
+index e29c7f59debd..144dd6616f2b 100644
+--- a/package/linux-tools/linux-tool-selftests.mk.in
++++ b/package/linux-tools/linux-tool-selftests.mk.in
+@@ -22,7 +22,7 @@ SELFTESTS_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_OPENSSL),openssl)
+ 
+ SELFTESTS_MAKE_FLAGS = \
+-	$(LINUX_MAKE_FLAGS) \
++	$(LINUX_TOOLS_MAKE_OPTS) \
+ 	ARCH=$(SELFTESTS_ARCH)
+ 
+ # O must be redefined here to overwrite the one used by Buildroot for
+diff --git a/package/linux-tools/linux-tool-tmon.mk.in b/package/linux-tools/linux-tool-tmon.mk.in
+index 56c328c51fd7..7c33915049c2 100644
+--- a/package/linux-tools/linux-tool-tmon.mk.in
++++ b/package/linux-tools/linux-tool-tmon.mk.in
+@@ -7,7 +7,7 @@
+ LINUX_TOOLS += tmon
+ 
+ TMON_DEPENDENCIES = host-pkgconf ncurses
+-TMON_MAKE_OPTS = $(LINUX_MAKE_FLAGS) \
++TMON_MAKE_OPTS = $(LINUX_TOOLS_MAKE_OPTS) \
+ 	CC=$(TARGET_CC) \
+ 	LDFLAGS="$(TARGET_LDFLAGS)" \
+ 	PKG_CONFIG_PATH=$(STAGING_DIR)/usr/lib/pkgconfig
+diff --git a/package/linux-tools/linux-tools.mk b/package/linux-tools/linux-tools.mk
+index 81b1fbc17605..38bb2c83966a 100644
+--- a/package/linux-tools/linux-tools.mk
++++ b/package/linux-tools/linux-tools.mk
+@@ -26,6 +26,8 @@ LINUX_TOOLS_PATCH_DEPENDENCIES = linux
+ # may install shared libraries and headers (e.g. cpupower).
+ LINUX_TOOLS_INSTALL_STAGING = YES
+ 
++LINUX_TOOLS_MAKE_OPTS = $(LINUX_MAKE_FLAGS) CROSS_COMPILE="$(TARGET_CROSS)"
++
+ LINUX_TOOLS_DEPENDENCIES += $(foreach tool,$(LINUX_TOOLS),\
+ 	$(if $(BR2_PACKAGE_LINUX_TOOLS_$(call UPPERCASE,$(tool))),\
+ 		$($(call UPPERCASE,$(tool))_DEPENDENCIES)))
 -- 
 2.43.0
 
