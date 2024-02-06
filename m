@@ -4,90 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7944C48297
-	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 17:47:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50142C4829C
+	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 17:48:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4A9B582951;
-	Tue,  6 Feb 2024 17:47:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 047C582668;
+	Tue,  6 Feb 2024 17:48:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nHu2i2CSvijy; Tue,  6 Feb 2024 17:47:34 +0000 (UTC)
+	with ESMTP id sZe9qA6d58Xo; Tue,  6 Feb 2024 17:48:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 01FE5830AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 003388300C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 01FE5830AB;
-	Tue,  6 Feb 2024 17:47:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 085481BF3A1
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 17:47:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 003388300C;
+	Tue,  6 Feb 2024 17:48:24 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 666451BF3A1
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 17:48:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DFB5F40A39
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 17:47:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DFB5F40A39
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4A1F941F99
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 17:48:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A1F941F99
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5cYWG027Vt-c for <buildroot@lists.busybox.net>;
- Tue,  6 Feb 2024 17:47:25 +0000 (UTC)
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id CBF20400E5
- for <buildroot@buildroot.org>; Tue,  6 Feb 2024 17:47:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CBF20400E5
-Received: by mail-wm1-x32d.google.com with SMTP id
- 5b1f17b1804b1-40ffd94a707so1238065e9.1
- for <buildroot@buildroot.org>; Tue, 06 Feb 2024 09:47:24 -0800 (PST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fRKVHuCb9Evl for <buildroot@lists.busybox.net>;
+ Tue,  6 Feb 2024 17:48:22 +0000 (UTC)
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CB47041F9F
+ for <buildroot@buildroot.org>; Tue,  6 Feb 2024 17:48:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB47041F9F
+Received: by mail-wr1-x435.google.com with SMTP id
+ ffacd0b85a97d-33b0f36b808so3867450f8f.3
+ for <buildroot@buildroot.org>; Tue, 06 Feb 2024 09:48:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707241643; x=1707846443;
+ d=1e100.net; s=20230601; t=1707241700; x=1707846500;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=MyUIbEGThZexg7G9Z+FydLO/dsutNi0EnKI+EyxyksA=;
- b=tENKr5q5fsS0kjI4aiTrSeNxaX5N1F+gGP9/rpaZJG3rHlkivLAMAu8/ieL7m1Urh6
- YCR/fr3puQN5ekD4CJ3gTaIuRxzbJP2Bg5bd9gDe4orPrPqDDzaNG0htAFb4ooCYbRaN
- W7fMO3r1A4dsrhkQSOEnvnzgvOgyJbAx4QNkxgSHVeLCgMBFVFunukzLiEnZytmHePPb
- 9R7wMuTDWPCuQvhZECah0X7GWYcuUM7x23sILA84Ru8+EQajwN8/pd3BjUfUV84f1xPp
- 3Py1R9LRQ6Yl2HpkcJiYz/xVzJMfmuJO7lQz6hMLoLiLjh/aNmJE2gJGZa8PRssXk2F6
- Ye+g==
-X-Gm-Message-State: AOJu0Yxz2vUK3JKIVsmYAnRpU5tetFz61m57yZuJEd6q7fsPXJR/84Hv
- rR39G4WRZdETeWdWtsenKO92dXHbITJk/Cgw3IFWsjyOawENWMYP8JBaaICgED4=
-X-Google-Smtp-Source: AGHT+IFWMk/5aT9KKvLX/s8uenF3PaTHvJ+jR0rDsxAVo2yOI7U/nKk/XFj9OQXDS2DILq3DBpuUtw==
-X-Received: by 2002:a05:600c:1551:b0:40e:f626:483d with SMTP id
- f17-20020a05600c155100b0040ef626483dmr2189516wmg.13.1707241642947; 
- Tue, 06 Feb 2024 09:47:22 -0800 (PST)
+ bh=r9e9QGF8Msfrr7KqQvICNBbysSNq2Bxr6ZCB7T9Uta0=;
+ b=xRxUSbqFHtJnGpaWVMPhN7G6CDsJSznuMWVEVD2/ZuDcSIB2vLzBnCtfBu4MCE9Fp8
+ e2hkL1jGseQ+ve0Dr4VnJ5dZAsOlFgq5R088OFoszyAKZEeL9gkNcLLq/9+zlUnL5WPN
+ bo8Sug6Oxdro/ZSq24BM9W/bK+iL4ttJW0DNGsJlGja5E3jSyOvTZoToKTxBPsH2bvGP
+ qQR4IZfv3dkdqvc4IGWEXVkq+yBRifCN1VKfFzroziHXsSmWviif0BXPj+QSZEj8zoMi
+ T1D02tz7U0f74zskIRPdocpB2Q/6b+NsT/KYt17os7OlX23iJWy/XGg1hxBvM04Y0tx0
+ AAMg==
+X-Gm-Message-State: AOJu0YymFOWDjCki2djS5OO/h6e2RZGQP9PZGh2MPomBSpuzDF0XMP3t
+ IxaITov3wRIjbQEdiPJfdfa0IYVjYNgljcvUOHaxnMm9hUBwWoja6+y5MKPDnEc=
+X-Google-Smtp-Source: AGHT+IGigQ6fFeltkARhV+Np5UMtb/XojYqeuqKTnLBuFqddllKqDYySFmeG5169WsZB1nMUjuf0WQ==
+X-Received: by 2002:a5d:4e85:0:b0:33b:21f9:cd9a with SMTP id
+ e5-20020a5d4e85000000b0033b21f9cd9amr2220713wru.19.1707241699953; 
+ Tue, 06 Feb 2024 09:48:19 -0800 (PST)
 X-Forwarded-Encrypted: i=0;
- AJvYcCXAeP1DC8wCVA/ZUrdifCEt27CV1cR0ufVzdIklcJl61Dp8EBqxkMYphk8DVcsppYQX7mSmw4SRf2NE3KIxTOgSG+dDF3tS2CuUHasNLCwzvvOm7Mr8I7RrnK3VREJEfGI+jI24wQ==
+ AJvYcCU9oORKmjETEPNT5U+pHnjZl9DqYlsj3Rv8ud9zXiIZOD8caPi0hW4yDIiVd4dQfnMSMuKBhe4wHJelAoF9KdK1yM0bPrJ/taUfrkA0cnb6Js4+YvNBvxdRmp0CZOSJuKB7726TqWNyvf/6chhDzvGXDVU/JC4vNQY=
 Received: from [192.168.16.188] ([85.119.216.19])
  by smtp.gmail.com with ESMTPSA id
- m14-20020adffa0e000000b0033b43d7394bsm2574259wrr.55.2024.02.06.09.47.22
+ m14-20020adffa0e000000b0033b43d7394bsm2574259wrr.55.2024.02.06.09.48.19
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 06 Feb 2024 09:47:22 -0800 (PST)
-Message-ID: <28d526e3-7700-4588-881e-2aeaf63e742c@mind.be>
-Date: Tue, 6 Feb 2024 18:47:20 +0100
+ Tue, 06 Feb 2024 09:48:19 -0800 (PST)
+Message-ID: <e8e8c35f-d160-4902-a579-5c235cd461de@mind.be>
+Date: Tue, 6 Feb 2024 18:48:18 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Content-Language: en-GB
 To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
-References: <20231214091504.101102-1-james.hilliard1@gmail.com>
- <20231214091504.101102-2-james.hilliard1@gmail.com>
-In-Reply-To: <20231214091504.101102-2-james.hilliard1@gmail.com>
+References: <20231124225945.163643-1-james.hilliard1@gmail.com>
+In-Reply-To: <20231124225945.163643-1-james.hilliard1@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1707241643; x=1707846443; darn=buildroot.org;
+ d=mind.be; s=google; t=1707241700; x=1707846500; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=MyUIbEGThZexg7G9Z+FydLO/dsutNi0EnKI+EyxyksA=;
- b=hd8YNXMHouVoKQ5CJ8jki8EQT3x8JtsEC/KWFcyuFh7IFA2j7rneb/ljWTwS7XVeY6
- q3yKGFm9CXvlLSBQum4TYmnex7uQIhrOfUNrYQm+jkDVnsvLVYtC46hu50OOk9IZ9EaI
- NoISkzyT3HrqpnIYuRZoe0UBqtsbYdNrt778ZHcBAuQeonqu86qM+saC2Hk7gKuTpDJ9
- wStl8LukVUQ6Ugb2hC7f+JFtV6GABNtefjUy/MH4J4LFYkZfUNkAcF7h45L7P2bbWUqR
- Pv9PH2kbERCeTSi94ervGGv9WhZ8h+dem3zw4JfKeyYAqG2nuaJ9/Um6ZQYYFDka97GR
- 5NVw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=r9e9QGF8Msfrr7KqQvICNBbysSNq2Bxr6ZCB7T9Uta0=;
+ b=SbnY1QRXWqvTqgNVX5l94AAL6ukYT12d4SreS0j/bdKHe2Y7oEJtLMGrr3gz7yPCdu
+ RGxjEVhmsVUr9VJTQjXkdxXAuNUFSaMRfC4T+8OXmGXV/CTYxYUFI3wPHaKbBMJXOg9D
+ xM6fn6grD5/Xxncaya9UxgllWv1yD/tQVgE2lFLzo8KxlRI8/QMfTrUMTcMr1qSysRx0
+ EQOylahaRvqkXL1kHGC5Mh+0FWquRFM+v43NcXnh/kSTLZhn+6jLCbWXgRWtK759w/7t
+ cv9NMYSK/6De0TeBBXa2R2cRaHQRwTliEG75kTOBX5eneTButw5QQxnUiLtQk5KvEikx
+ ZCWA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=hd8YNXMH
-Subject: Re: [Buildroot] [PATCH 2/4] package/python-aiosqlite: new package
+ header.a=rsa-sha256 header.s=google header.b=SbnY1QRX
+Subject: Re: [Buildroot] [PATCH 1/2] package/python-aiosqlite: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,7 +100,8 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+Cc: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Asaf Kahlon <asafka7@gmail.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
@@ -110,26 +110,26 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 14/12/2023 10:15, James Hilliard wrote:
+On 24/11/2023 23:59, James Hilliard wrote:
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-  Applied both to master, thanks.
+  Applied to master, thanks.
 
   Regards,
   Arnout
 
 > ---
 >   package/Config.in                              |  1 +
->   package/python-aiosqlite/Config.in             |  6 ++++++
+>   package/python-aiosqlite/Config.in             |  7 +++++++
 >   package/python-aiosqlite/python-aiosqlite.hash |  5 +++++
 >   package/python-aiosqlite/python-aiosqlite.mk   | 14 ++++++++++++++
->   4 files changed, 26 insertions(+)
+>   4 files changed, 27 insertions(+)
 >   create mode 100644 package/python-aiosqlite/Config.in
 >   create mode 100644 package/python-aiosqlite/python-aiosqlite.hash
 >   create mode 100644 package/python-aiosqlite/python-aiosqlite.mk
 > 
 > diff --git a/package/Config.in b/package/Config.in
-> index fcc09b07c4..d24db2550e 100644
+> index 5a3410d758..1f7d262265 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
 > @@ -971,6 +971,7 @@ menu "External python modules"
@@ -142,16 +142,17 @@ On 14/12/2023 10:15, James Hilliard wrote:
 >   	source "package/python-alsaaudio/Config.in"
 > diff --git a/package/python-aiosqlite/Config.in b/package/python-aiosqlite/Config.in
 > new file mode 100644
-> index 0000000000..950c879a49
+> index 0000000000..6f2af23cef
 > --- /dev/null
 > +++ b/package/python-aiosqlite/Config.in
-> @@ -0,0 +1,6 @@
+> @@ -0,0 +1,7 @@
 > +config BR2_PACKAGE_PYTHON_AIOSQLITE
 > +	bool "python-aiosqlite"
 > +	help
-> +	  asyncio bridge to the standard sqlite3 module.
+> +	  aiosqlite provides a friendly, async interface to sqlite
+> +	  databases.
 > +
-> +	  https://aiosqlite.omnilib.dev/
+> +	  https://aiosqlite.omnilib.dev
 > diff --git a/package/python-aiosqlite/python-aiosqlite.hash b/package/python-aiosqlite/python-aiosqlite.hash
 > new file mode 100644
 > index 0000000000..e06061346c
