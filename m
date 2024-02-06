@@ -4,62 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FA24C4828D
-	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 10:53:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99BC1C4829A
+	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 10:54:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DCAF141E87;
-	Tue,  6 Feb 2024 10:53:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DCAF141E87
+	by smtp4.osuosl.org (Postfix) with ESMTP id 40EAF41B5D;
+	Tue,  6 Feb 2024 10:54:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 40EAF41B5D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5SXSIav021iA; Tue,  6 Feb 2024 10:53:48 +0000 (UTC)
+	with ESMTP id etHne2VGWlSA; Tue,  6 Feb 2024 10:54:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4340841B5D;
-	Tue,  6 Feb 2024 10:53:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4340841B5D
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C35721BF311
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 10:53:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9113A41EBD;
+	Tue,  6 Feb 2024 10:53:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9113A41EBD
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8295E1BF311
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 10:53:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AA09261124
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 10:53:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA09261124
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5A0AA41E94
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 10:53:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A0AA41E94
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cSsPAsjl6GKx for <buildroot@lists.busybox.net>;
- Tue,  6 Feb 2024 10:53:45 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id B1P7CzXIxHnu for <buildroot@lists.busybox.net>;
+ Tue,  6 Feb 2024 10:53:49 +0000 (UTC)
 Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 165F26111E
- for <buildroot@buildroot.org>; Tue,  6 Feb 2024 10:53:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 165F26111E
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 790CD41B5D
+ for <buildroot@buildroot.org>; Tue,  6 Feb 2024 10:53:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 790CD41B5D
 Received: from bubutux.localdomain (unknown [85.119.216.19])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
  key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
  (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id 14C0C2C80CDD;
- Tue,  6 Feb 2024 11:53:43 +0100 (CET)
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id 759972C80CDD;
+ Tue,  6 Feb 2024 11:53:47 +0100 (CET)
 To: buildroot@buildroot.org
-Date: Tue,  6 Feb 2024 11:52:37 +0100
-Message-ID: <20240206105246.1220945-1-buildroot@bubu1.eu>
+Date: Tue,  6 Feb 2024 11:52:38 +0100
+Message-ID: <20240206105246.1220945-2-buildroot@bubu1.eu>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240206105246.1220945-1-buildroot@bubu1.eu>
+References: <20240206105246.1220945-1-buildroot@bubu1.eu>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=bubu1.eu; s=bubu; 
- t=1707216823; bh=dxb6AfNfJtHYL8uGSwJHaTp6M1HJNV256kMK54U2VbQ=;
- h=From:To:Cc:Subject:Date;
- b=s1WfSVHolHQxqQW2qq0efJa3PsdFZ3yjvCmgTioc0joYZopRNoQ4hWE6D/n4B9Ijy
- 4RNAI2BLB04+9DqyUWox3MUOXRaODqJ2cEdN9TxRGf/8ke6dSSlfwFA/TE/fTiXHFA
- TtVb18EwkGl0iS40Ma1V1aTijTTzjTaKwTnmV0GsdNsM/4V4R+ycwJ672z6coVqhle
- WEN6cMbwkDraF3+jb8I7EhF5AM6P+YUwT81QveI4XkKMBnkMKcEwNrQnYSuzhqs4sX
- uLcC9h6cKb2XnL04wdMKSHIutrwSuoUQsbGE9HZSTM+VPR0PbQMdqG1V3VSuGleCJV
- 78Y+n14VIxTZA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ t=1707216827; bh=yKJokFr2qTeGGSiJU9sENSQQ8C8yKc1icumzhv9YvfI=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References;
+ b=THc7DdGKSRpaNZei7JsFS+uVRFW7YbdbBojHGD9yAofwaVbmwW3vyUuO/oTYfnhqS
+ J/jQA67Tnp8UpAAQpu1UswejIugQ551YWu31r5Tgdn91QvUByVf5Z3ugKJvNTu+qeE
+ GZAzgaSQIooOZZzZjaubI1oQD+hpgw6LBSHsI/QnjVPV/f9ujoikmfp6rPHNG8LZaE
+ x2rjV9wW9vOqzcaaXqcMdz0puVyS4dDZ0eSwSX4kuvgvf7Gxaq30Jd5B+lPRdW8YCi
+ cWB8v2H3fczDDLU2yaVDki+iKuNDzlty3Wje/0KPwxqpe1WvexkEi7KfrhNIXuX3GD
+ 8GVlUz0+wVeCw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=bubu1.eu header.i=@bubu1.eu
- header.a=rsa-sha256 header.s=bubu header.b=s1WfSVHo
-Subject: [Buildroot] [PATCH 1/6] utils/readme.txt: expand check-package
- description
+ header.a=rsa-sha256 header.s=bubu header.b=THc7DdGK
+Subject: [Buildroot] [PATCH 2/6] utils/readme.txt: document docker-run script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,32 +80,26 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-check-package does a lot more by now than checking .mk and
-Config.in files. Add this to the description.
-
 Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 ---
- utils/readme.txt | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ utils/readme.txt | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/utils/readme.txt b/utils/readme.txt
-index 3e8833c4ea..d5cda70bfc 100644
+index d5cda70bfc..2cb6b0af9b 100644
 --- a/utils/readme.txt
 +++ b/utils/readme.txt
-@@ -12,8 +12,11 @@ brmake
-     nothing.
+@@ -18,6 +18,10 @@ check-package
+     It checks the .checkpackageignore file if errors should be ignored and
+     errors if there's a file listed that doesn't produce an error.
  
- check-package
--    a script that checks the coding style of a package's Config.in and
--    .mk files, and also tests them for various types of typoes.
-+    a script that checks the coding style across the buildroot tree. It
-+    checks package's Config.in and .mk files, runs shellcheck for all shell
-+    scripts, flake8 for python files, checks for typoes, etc.
-+    It checks the .checkpackageignore file if errors should be ignored and
-+    errors if there's a file listed that doesn't produce an error.
- 
++docker-run
++    a script that runs a command (like make check-package) inside the buildroot
++    ci docker container.
++
  genrandconfig
      a script that generates a random configuration, used by the autobuilders
+     (http://autobuild.buildroot.org). It selects a random toolchain from
 -- 
 2.43.0
 
