@@ -4,72 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE0E3C4828D
-	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 10:28:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0C32C4829A
+	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 10:34:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7285841E68;
-	Tue,  6 Feb 2024 10:28:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7285841E68
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8C5B341BA3;
+	Tue,  6 Feb 2024 10:34:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C5B341BA3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TrUrVk78REGm; Tue,  6 Feb 2024 10:28:02 +0000 (UTC)
+	with ESMTP id y5DIOTYWZPPi; Tue,  6 Feb 2024 10:34:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D476641E73;
-	Tue,  6 Feb 2024 10:28:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D476641E73
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5DDE51BF95D
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 10:27:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D3A954175F;
+	Tue,  6 Feb 2024 10:34:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D3A954175F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BB2991BF311
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 10:34:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5849382167
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 10:27:25 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A1DDA41559
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 10:34:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1DDA41559
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GY-oXHZXy6KE for <buildroot@lists.busybox.net>;
- Tue,  6 Feb 2024 10:27:24 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
- helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5638B8213A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5638B8213A
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5638B8213A
- for <buildroot@buildroot.org>; Tue,  6 Feb 2024 10:27:23 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3C78860007;
- Tue,  6 Feb 2024 10:27:22 +0000 (UTC)
-Date: Tue, 6 Feb 2024 11:27:21 +0100
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20240206112721.7ba51303@windsurf>
-In-Reply-To: <20240109071001.4022321-1-james.hilliard1@gmail.com>
-References: <20240109071001.4022321-1-james.hilliard1@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1707215242;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=IKEfxLdyk/OoXXan8K8VHKUdtAuF2g3i0vvwYzjZV5Q=;
- b=Hzx5bANTIby/RiUUhgjA1EHKqhi408q1YC6K3yxg63QVNkwPV4aUsIQ15JxSrdthvAM1C8
- xybh9k/UUsOOXzamo40C+DM3frnKxkS2e5u0+EhNVXKQ1jdlMq8uqWf/cHMBiuNOADSLiE
- hwDKxePZlPOU7zi6Nu1OP8ValTMDwGW7t+hu3DV/hOlt6Uk5g25iyrETpw9ICx1I5t1pLd
- F/sCNt0LA3Sr3mjexydr+KwWuta7uA/27SBzf//qtEFnzmBG36cLj1i/sKkl7IvrvcnK2n
- +JAjPecco0LruHvbACGVOilZrJ2ik4kRA/+n5ozWwqDy8YobYPtJDD50neFk7Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Hzx5bANT
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-dominate: bump to
- version 2.9.1
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LDe-e1hOj9yc for <buildroot@lists.busybox.net>;
+ Tue,  6 Feb 2024 10:34:28 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id D989B415CA
+ for <buildroot@buildroot.org>; Tue,  6 Feb 2024 10:34:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D989B415CA
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C45B886F9C; Tue,  6 Feb 2024 10:34:28 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 6 Feb 2024 11:28:10 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 4771d62dd0576c6eb5880aadced514c3c4d15d74
+X-Git-Newrev: ff17367e73119a26a0b763cb5484938ed7bbca05
+X-Patchwork-Hint: ignore
+Message-Id: <20240206103428.C45B886F9C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-engineio: bump to version
+ 4.8.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,28 +58,49 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue,  9 Jan 2024 00:10:01 -0700
-James Hilliard <james.hilliard1@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=ff17367e73119a26a0b763cb5484938ed7bbca05
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/python-dominate/python-dominate.hash | 4 ++--
->  package/python-dominate/python-dominate.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-engineio/python-engineio.hash | 4 ++--
+ package/python-engineio/python-engineio.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-engineio/python-engineio.hash b/package/python-engineio/python-engineio.hash
+index 98fe647f68..c1b02350bc 100644
+--- a/package/python-engineio/python-engineio.hash
++++ b/package/python-engineio/python-engineio.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/python-engineio/json
+-md5  45870fb7b12e6e5dca3cb6a828f70928  python-engineio-4.8.0.tar.gz
+-sha256  2a32585d8fecd0118264fe0c39788670456ca9aa466d7c026d995cfff68af164  python-engineio-4.8.0.tar.gz
++md5  619e7fce0257a8219187f50aa94844a3  python-engineio-4.8.2.tar.gz
++sha256  f8609e3afdda318fdc336b4ba2de8dd397bb8f9b8a1b43e56c27330e32c2e34c  python-engineio-4.8.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  c9e97d3dbc1fbbcdb4f7808b282cd646db887aff4f5313fe6bbe8d4c31405a9c  LICENSE
+diff --git a/package/python-engineio/python-engineio.mk b/package/python-engineio/python-engineio.mk
+index e84acee88f..7702b5f294 100644
+--- a/package/python-engineio/python-engineio.mk
++++ b/package/python-engineio/python-engineio.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-PYTHON_ENGINEIO_VERSION = 4.8.0
+-PYTHON_ENGINEIO_SITE = https://files.pythonhosted.org/packages/c4/5c/4fa0bf79eb1a433d1e9b69430b3ac818837283c642640658f12949620813
++PYTHON_ENGINEIO_VERSION = 4.8.2
++PYTHON_ENGINEIO_SITE = https://files.pythonhosted.org/packages/e2/24/4a69dd119d10e31c4439f910a2a0f71b540b9f835ab60efa1f0f7bcae0c7
+ PYTHON_ENGINEIO_SETUP_TYPE = setuptools
+ PYTHON_ENGINEIO_LICENSE = MIT
+ PYTHON_ENGINEIO_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
