@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3954C4828D
-	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 13:43:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 420CEC48297
+	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 13:43:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 74CFB60B73;
-	Tue,  6 Feb 2024 13:43:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 74CFB60B73
+	by smtp3.osuosl.org (Postfix) with ESMTP id EF607610CE;
+	Tue,  6 Feb 2024 13:43:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF607610CE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id O3UXDPHjtYoc; Tue,  6 Feb 2024 13:43:37 +0000 (UTC)
+	with ESMTP id xgayjEfEANvl; Tue,  6 Feb 2024 13:43:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B51C461162;
-	Tue,  6 Feb 2024 13:43:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B51C461162
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2E5B160B73;
+	Tue,  6 Feb 2024 13:43:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E5B160B73
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 92AD51BF5AD
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 13:43:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A42A91BF5AD
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 13:43:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6BA1F610F7
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7BC6161112
  for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 13:43:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6BA1F610F7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7BC6161112
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6ZQeZ-8uavKh for <buildroot@lists.busybox.net>;
+ with ESMTP id vRIw4Qe0OEto for <buildroot@lists.busybox.net>;
  Tue,  6 Feb 2024 13:43:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A46CD610E8
+ by smtp3.osuosl.org (Postfix) with ESMTP id A1F526104A
  for <buildroot@buildroot.org>; Tue,  6 Feb 2024 13:43:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A46CD610E8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A1F526104A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9062987063; Tue,  6 Feb 2024 13:43:34 +0000 (UTC)
+ id 80DFB87070; Tue,  6 Feb 2024 13:43:34 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 6 Feb 2024 14:43:17 +0100
+Date: Tue, 6 Feb 2024 14:43:16 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: dd5f808be1057434575322711b0e4775403e4d38
-X-Git-Newrev: 00702e3ffde1ebce9e2a2cfb63af7992a627c149
+X-Git-Oldrev: 47647814f57482568683190a399745543cb029aa
+X-Git-Newrev: dd5f808be1057434575322711b0e4775403e4d38
 X-Patchwork-Hint: ignore
-Message-Id: <20240206134334.9062987063@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-rtoml: bump to version
- 0.10.0
+Message-Id: <20240206134334.80DFB87070@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-rpds-py: bump to version
+ 0.16.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +63,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=00702e3ffde1ebce9e2a2cfb63af7992a627c149
+commit: https://git.buildroot.net/buildroot/commit/?id=dd5f808be1057434575322711b0e4775403e4d38
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Migrate from setuptools-rust to maturin infrastructure.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-rtoml/python-rtoml.hash | 2 +-
- package/python-rtoml/python-rtoml.mk   | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-rpds-py/python-rpds-py.hash | 2 +-
+ package/python-rpds-py/python-rpds-py.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-rtoml/python-rtoml.hash b/package/python-rtoml/python-rtoml.hash
-index 04d22ed1a4..59f17d9d62 100644
---- a/package/python-rtoml/python-rtoml.hash
-+++ b/package/python-rtoml/python-rtoml.hash
+diff --git a/package/python-rpds-py/python-rpds-py.hash b/package/python-rpds-py/python-rpds-py.hash
+index b04aa210d3..8c4b6181d0 100644
+--- a/package/python-rpds-py/python-rpds-py.hash
++++ b/package/python-rpds-py/python-rpds-py.hash
 @@ -1,4 +1,4 @@
  # Locally calculated after vendoring
--sha256  821a430ab6587bdaaf7cb95044e8e0d99c77c6aed0adce5a370045b270f7ee20  rtoml-0.8.0.tar.gz
-+sha256  987d3d9e9d56761b17c3e4e172937cbcc793bf24b0ebb2730647a9a2cf86c789  rtoml-0.10.0.tar.gz
+-sha256  87361601241744fff6235e35050addfe34d00508172d2bd4f178193a28727287  rpds_py-0.12.0.tar.gz
++sha256  861b1fa8c37819b2e2cebbde6dea66ac2fa1247e4a7c3933dbf4c89244d7fecb  rpds_py-0.16.2.tar.gz
  # Locally computed sha256 checksums
- sha256  cd5ffde80e6d3286a2e2e5f02fb2cb07b823931ca368e7c735a6c5f5aebe7103  LICENSE
-diff --git a/package/python-rtoml/python-rtoml.mk b/package/python-rtoml/python-rtoml.mk
-index 819dcf3288..16f9dea573 100644
---- a/package/python-rtoml/python-rtoml.mk
-+++ b/package/python-rtoml/python-rtoml.mk
-@@ -4,10 +4,10 @@
+ sha256  314e4e91be3baa93c0fb4bccc9e4e97cd643eb839b065af921782c2175fe9909  LICENSE
+diff --git a/package/python-rpds-py/python-rpds-py.mk b/package/python-rpds-py/python-rpds-py.mk
+index 6f71d02047..5f0d30d002 100644
+--- a/package/python-rpds-py/python-rpds-py.mk
++++ b/package/python-rpds-py/python-rpds-py.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_RTOML_VERSION = 0.8.0
-+PYTHON_RTOML_VERSION = 0.10.0
- PYTHON_RTOML_SOURCE = rtoml-$(PYTHON_RTOML_VERSION).tar.gz
--PYTHON_RTOML_SITE = https://files.pythonhosted.org/packages/33/a6/b42d8e0e28bec9fd7fdbafb2d76db3f8578f151a669eba564d422756d909
--PYTHON_RTOML_SETUP_TYPE = setuptools-rust
-+PYTHON_RTOML_SITE = https://files.pythonhosted.org/packages/ca/b2/0e77a00e75ed582ec1c4c3a9e1eeed886a15c195bcce87b7daf1171c4115
-+PYTHON_RTOML_SETUP_TYPE = maturin
- PYTHON_RTOML_LICENSE = MIT
- PYTHON_RTOML_LICENSE_FILES = LICENSE
- 
+-PYTHON_RPDS_PY_VERSION = 0.12.0
++PYTHON_RPDS_PY_VERSION = 0.16.2
+ PYTHON_RPDS_PY_SOURCE = rpds_py-$(PYTHON_RPDS_PY_VERSION).tar.gz
+-PYTHON_RPDS_PY_SITE = https://files.pythonhosted.org/packages/75/be/e3f366aa4cd1e3a814f136773e506fc5423eff903ef0372a251df34e6e45
++PYTHON_RPDS_PY_SITE = https://files.pythonhosted.org/packages/c2/63/94a1e9406b34888bdf8506e91d654f1cd84365a5edafa5f8ff0c97d4d9e1
+ PYTHON_RPDS_PY_SETUP_TYPE = maturin
+ PYTHON_RPDS_PY_LICENSE = MIT
+ PYTHON_RPDS_PY_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
