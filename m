@@ -4,70 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70F08C4829A
-	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 10:54:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB808C4828D
+	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 10:54:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1B71141F08;
-	Tue,  6 Feb 2024 10:54:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B71141F08
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8503041F2D;
+	Tue,  6 Feb 2024 10:54:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8503041F2D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id stUA1VtP1UFX; Tue,  6 Feb 2024 10:54:25 +0000 (UTC)
+	with ESMTP id 4LW-Z70fEv_6; Tue,  6 Feb 2024 10:54:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5B04041F09;
-	Tue,  6 Feb 2024 10:54:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B04041F09
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9E2461BF311
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 10:53:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D2A5D41E87;
+	Tue,  6 Feb 2024 10:54:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D2A5D41E87
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 762681BF311
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 10:53:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9920F821AF
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 10:53:52 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4F4B941E94
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 10:53:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F4B941E94
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cs1QxURWiaxs for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8XTFlKGBmvcC for <buildroot@lists.busybox.net>;
  Tue,  6 Feb 2024 10:53:52 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
- helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B8BD0821A6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8BD0821A6
 Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B8BD0821A6
- for <buildroot@buildroot.org>; Tue,  6 Feb 2024 10:53:51 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7A56A41B5D
+ for <buildroot@buildroot.org>; Tue,  6 Feb 2024 10:53:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A56A41B5D
 Received: from bubutux.localdomain (unknown [85.119.216.19])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
  key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
  (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id A9BBE2C8377C;
- Tue,  6 Feb 2024 11:53:49 +0100 (CET)
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id 6FB862C80CDD;
+ Tue,  6 Feb 2024 11:53:50 +0100 (CET)
 To: buildroot@buildroot.org
-Date: Tue,  6 Feb 2024 11:52:40 +0100
-Message-ID: <20240206105246.1220945-4-buildroot@bubu1.eu>
+Date: Tue,  6 Feb 2024 11:52:41 +0100
+Message-ID: <20240206105246.1220945-5-buildroot@bubu1.eu>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240206105246.1220945-1-buildroot@bubu1.eu>
 References: <20240206105246.1220945-1-buildroot@bubu1.eu>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=bubu1.eu; s=bubu; 
- t=1707216829; bh=EncFTw4+kP6SNO4V4G5tc/X1uXzO+G0BSft8j4rBdYs=;
+ t=1707216830; bh=+b1jSaMLyoZ0kyOJZUkT4JT+KwatRi4qf0rrtnri5Bk=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References;
- b=GSHZkKxon+Cr97eI8wmR4LfBKD9/egDIgcB/TRj1/tULvHfgTPrqxFwRE1vgQq1U6
- PYBLPfOs4nicoRZrZyxnP5WJ03KrpmWWVbHoG4/QI+wP807Q4bz7DeGFVZfPUixWYk
- 7CYhQzH/hSRneZcOr2PwiJq62mr42w30uRlkVibr1GbDjDPR8JJHQy+J3F2qqM9QM5
- q+9WnLMfj3X0mHrnCNpkCte7/dmJafpNmTw74Jb35i+QyHF7Sr4/2OMzvYKpm6iDop
- YTuWqyH9eMqG2jB7ZIaVgLfr/drLR5oSj6YKnQhTA0FgK9XRXj6vNWAwVJcETKDXaQ
- 6BSYI/KXjWwIA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
- header.s=bubu header.b=GSHZkKxo
-Subject: [Buildroot] [PATCH 4/6] docs/website/support.html: document irc
- channel permission changes
+ b=o64cNS0203dDqGtBg48CpRflKqWsd9B1KYfYhrBPjAcXyQ48qZt0BFdyL4rL1/sUi
+ qi2pJlf+S8zZbx48N+oCxDeCMy8kVSYGHL+3rsNebXXq3J8LrD7x24x1cWoJgfZXha
+ EpEDB+/0wDyIQ2aLywZceZujuIHvMJhBCKTuU95ldkSBuAHWJNudF+FI2ysGqi+x6x
+ eWkm6rUqsOcZq8J9MrC3MDW6Y5BU497XR3jkQQABuwLpcUG2ZUuYfse3AWhLmImLoR
+ qK9mCVLuUMJ/86cdjjp6CNoshBhwdjTHbN/rWnGr6UosqIxzZAENy7iMyzjd2+glH9
+ E9t69B5IaWURg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=bubu1.eu header.i=@bubu1.eu
+ header.a=rsa-sha256 header.s=bubu header.b=o64cNS02
+Subject: [Buildroot] [PATCH 5/6] docs/manual/contribute.adoc: link to
+ git-send-email.io
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,45 +75,35 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
 Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
-Cc: Marcus Hoffmann <buildroot@bubu1.eu>
+Cc: Marcus Hoffmann <buildroot@bubu1.eu>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The #buildroot IRC channel recently changed from only allowing
-registered users to join to allowing anyone to join but only allowing
-registered users to talk in the channel. This still avoids the spam
-problem on IRC while allowing an exception for users bridged from
-matrix.org. These already have a username registered on the matrix side
-and thus similar properties as a registered IRC user/nick.
-
-The commands to set these options were:
-
-* Set +q on all unregistered nicks: ~/mode #buildroot +q $~a~ this lets
-  people join but they can't talk
-* Set exempt on matrix hosts: ~/mode #buildroot +e $x:matrix.org~
+https://git-send-email.io/ is a page maintained by sourcehut which
+explains how to setup git send-email on many OS's for many popular email
+providers.
 
 Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 ---
- docs/website/support.html | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ docs/manual/contribute.adoc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/docs/website/support.html b/docs/website/support.html
-index 13d63b13a9..28873c6d76 100644
---- a/docs/website/support.html
-+++ b/docs/website/support.html
-@@ -27,8 +27,8 @@
- 		    When asking for help on IRC, share relevant logs or pieces of code using a code
- 		    sharing website.</p>
+diff --git a/docs/manual/contribute.adoc b/docs/manual/contribute.adoc
+index 2b90d13b41..684e9f4809 100644
+--- a/docs/manual/contribute.adoc
++++ b/docs/manual/contribute.adoc
+@@ -369,7 +369,7 @@ $ git send-email origin/master
+ ---------------------
  
--		  <p>Note that due to excessive spamming on IRC, the channel can only be
--		    joined if you are a registered user with
-+		  <p>Note that due to excessive spamming on IRC, you can only talk in the
-+		    channel if you are a registered user with
- 		    <a href="https://www.oftc.net/Services/">OFTC NickServ</a>
- 		    service. Follow the instructions to register as a user with a password,
- 		    and then join the <code>#buildroot</code> channel.</p>
+ Note that +git+ should be configured to use your mail account.
+-To configure +git+, see +man git-send-email+ or google it.
++To configure +git+, see +man git-send-email+ or https://git-send-email.io/.
+ 
+ If you do not use +git send-email+, make sure posted *patches are not
+ line-wrapped*, otherwise they cannot easily be applied. In such a case,
 -- 
 2.43.0
 
