@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 230FBC4828D
-	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 16:57:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B536AC48297
+	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 16:58:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D3A18612CE;
-	Tue,  6 Feb 2024 16:57:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D3A18612CE
+	by smtp3.osuosl.org (Postfix) with ESMTP id 71ADE61042;
+	Tue,  6 Feb 2024 16:58:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 71ADE61042
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5Udo6fy6b4Gt; Tue,  6 Feb 2024 16:57:47 +0000 (UTC)
+	with ESMTP id i-Qj3r7LUt_4; Tue,  6 Feb 2024 16:57:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0064161042;
-	Tue,  6 Feb 2024 16:57:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0064161042
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 66FBE1BF95D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9616160BA1;
+	Tue,  6 Feb 2024 16:57:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9616160BA1
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6B4E31BF976
  for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 16:57:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 40B9E42037
+ by smtp3.osuosl.org (Postfix) with ESMTP id 451D1612C5
  for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 16:57:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 40B9E42037
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 451D1612C5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kGJzLXGaAMtt for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 27WsWGV-JS4c for <buildroot@lists.busybox.net>;
  Tue,  6 Feb 2024 16:57:31 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3EC3942010
+ by smtp3.osuosl.org (Postfix) with ESMTP id 62969612CB
  for <buildroot@buildroot.org>; Tue,  6 Feb 2024 16:57:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3EC3942010
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62969612CB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2947487177; Tue,  6 Feb 2024 16:57:31 +0000 (UTC)
+ id 4FD9687179; Tue,  6 Feb 2024 16:57:31 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 6 Feb 2024 17:57:17 +0100
+Date: Tue, 6 Feb 2024 17:57:19 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 99186e42f0243c33666a188c6a1e2bead50e8b97
-X-Git-Newrev: 7befbaaea74ff282b4b8ec5b3c3ad52be0d99937
+X-Git-Oldrev: 11b439ce1bd28506051fff14646f8bbdbbbe58d8
+X-Git-Newrev: f1bfab23d0cc024425a0b6d69a8cd6e7c6b50432
 X-Patchwork-Hint: ignore
-Message-Id: <20240206165731.2947487177@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] toolchain/toolchain-bare-metal-buildroot:
- new toolchain
+Message-Id: <20240206165731.4FD9687179@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gcc-bare-metal: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,128 +58,137 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3435631041592902664=="
+Content-Type: multipart/mixed; boundary="===============1794298696923730407=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3435631041592902664==
+--===============1794298696923730407==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7befbaaea74ff282b4b8ec5b3c3ad52be0d99937
+commit: https://git.buildroot.net/buildroot/commit/?id=f1bfab23d0cc024425a0b6d69a8cd6e7c6b50432
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch adds a new virtual package for adding a bare-metal
-toolchain to Buildroot. For now, it depends on nothing, so it will not
-actually build anything, but it defines some options that will be
-needed by the various packages that will be part of this toolchain
-build process.
+This patch adds a new package for building gcc for a bare-metal toolchain.
+The cpu architecture is defined by a toolchain-bare-metal virtual package.
+While any cpu architecture could be used, the default configuration will be a
+Xilinx microblaze little endian architecture, so that buildroot will be able
+to build the microblaze firmware applications for zynqmp and versal.
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
 Signed-off-by: Ibai Erkiaga <ibai.erkiaga-elorza@amd.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                                   |  4 ++++
- toolchain/Config.in                                          | 10 ++++++++++
- toolchain/toolchain-bare-metal-buildroot/Config.in           |  9 +++++++++
- .../toolchain-bare-metal-buildroot.mk                        | 12 ++++++++++++
- utils/checksymbolslib/br.py                                  |  3 +++
- 5 files changed, 38 insertions(+)
+ DEVELOPERS                                 |  2 +
+ package/gcc-bare-metal/13.2.0              |  1 +
+ package/gcc-bare-metal/gcc-bare-metal.hash |  1 +
+ package/gcc-bare-metal/gcc-bare-metal.mk   | 61 ++++++++++++++++++++++++++++++
+ 4 files changed, 65 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 94952f72a8..5cc4d37aef 100644
+index 9f93746015..0a6e5a9c06 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1385,6 +1385,9 @@ F:	package/mrp/
- N:	Ian Haylock <haylocki@yahoo.co.uk>
- F:	package/python-rpi-gpio/
+@@ -1387,6 +1387,7 @@ F:	package/python-rpi-gpio/
  
-+N:	Ibai Erkiaga <ibai.erkiaga-elorza@amd.com>
-+F:	toolchain/toolchain-bare-metal-buildroot/
-+
+ N:	Ibai Erkiaga <ibai.erkiaga-elorza@amd.com>
+ F:	package/binutils-bare-metal/
++F:	package/gcc-bare-metal/
+ F:	toolchain/toolchain-bare-metal-buildroot/
+ 
  N:	Ignacy Gawędzki <ignacy.gawedzki@green-communications.fr>
- F:	package/angularjs/
- 
-@@ -2268,6 +2271,7 @@ F:	configs/zynqmp_zcu104_defconfig
+@@ -2272,6 +2273,7 @@ F:	configs/zynqmp_zcu104_defconfig
  F:	configs/zynqmp_zcu106_defconfig
+ F:	package/binutils-bare-metal/
  F:	package/bootgen/
++F:	package/gcc-bare-metal/
  F:	package/versal-firmware/
-+F:	toolchain/toolchain-bare-metal-buildroot/
+ F:	toolchain/toolchain-bare-metal-buildroot/
  
- N:	Nicola Di Lieto <nicola.dilieto@gmail.com>
- F:	package/uacme/
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 34e0ae2c5f..64a07f91dc 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -923,4 +923,14 @@ config BR2_TOOLCHAIN_HAS_LIBQUADMATH
- 	default y if BR2_i386 || BR2_x86_64
- 	default y if BR2_POWERPC_CPU_HAS_VSX
- 
-+comment "Bare metal toolchain"
-+
-+config BR2_TOOLCHAIN_BARE_METAL_BUILDROOT
-+	bool "Build a bare metal toolchain"
-+	help
-+	  Select if you need a bare-metal toolchain for building
-+	  platform specific firmware images.
-+
-+source "toolchain/toolchain-bare-metal-buildroot/Config.in"
-+
- endmenu
-diff --git a/toolchain/toolchain-bare-metal-buildroot/Config.in b/toolchain/toolchain-bare-metal-buildroot/Config.in
-new file mode 100644
-index 0000000000..3c99c7e1b5
+diff --git a/package/gcc-bare-metal/13.2.0 b/package/gcc-bare-metal/13.2.0
+new file mode 120000
+index 0000000000..b7a75dc7dd
 --- /dev/null
-+++ b/toolchain/toolchain-bare-metal-buildroot/Config.in
-@@ -0,0 +1,9 @@
-+if BR2_TOOLCHAIN_BARE_METAL_BUILDROOT
-+
-+config BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH
-+	string "architecture tuple"
-+	help
-+	  This option allows to define the architecture tuple for the
-+	  bare-metal toolchain.
-+
-+endif # BR2_TOOLCHAIN_BARE_METAL_BUILDROOT
-diff --git a/toolchain/toolchain-bare-metal-buildroot/toolchain-bare-metal-buildroot.mk b/toolchain/toolchain-bare-metal-buildroot/toolchain-bare-metal-buildroot.mk
-new file mode 100644
-index 0000000000..4dc36ef3f3
++++ b/package/gcc-bare-metal/13.2.0
+@@ -0,0 +1 @@
++../gcc/13.2.0/
+\ No newline at end of file
+diff --git a/package/gcc-bare-metal/gcc-bare-metal.hash b/package/gcc-bare-metal/gcc-bare-metal.hash
+new file mode 120000
+index 0000000000..d417b0dc77
 --- /dev/null
-+++ b/toolchain/toolchain-bare-metal-buildroot/toolchain-bare-metal-buildroot.mk
-@@ -0,0 +1,12 @@
++++ b/package/gcc-bare-metal/gcc-bare-metal.hash
+@@ -0,0 +1 @@
++../gcc/gcc.hash
+\ No newline at end of file
+diff --git a/package/gcc-bare-metal/gcc-bare-metal.mk b/package/gcc-bare-metal/gcc-bare-metal.mk
+new file mode 100644
+index 0000000000..f391f094fe
+--- /dev/null
++++ b/package/gcc-bare-metal/gcc-bare-metal.mk
+@@ -0,0 +1,61 @@
 +################################################################################
 +#
-+# toolchain-bare-metal-buildroot
++# gcc-bare-metal
 +#
 +################################################################################
 +
-+TOOLCHAIN_BARE_METAL_BUILDROOT_DEPENDENCIES =
-+TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE = $(call qstrip,$(BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH))
-+TOOLCHAIN_BARE_METAL_BUILDROOT_SYSROOT = $(HOST_DIR)/$(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE)/sysroot
-+TOOLCHAIN_BARE_METAL_BUILDROOT_ADD_TOOLCHAIN_DEPENDENCY = NO
++HOST_GCC_BARE_METAL_VERSION = 13.2.0
++HOST_GCC_BARE_METAL_SITE = \
++	https://ftp.gnu.org/gnu/gcc/gcc-$(HOST_GCC_BARE_METAL_VERSION)
++HOST_GCC_BARE_METAL_SOURCE = gcc-$(HOST_GCC_BARE_METAL_VERSION).tar.xz
 +
-+$(eval $(virtual-package))
-diff --git a/utils/checksymbolslib/br.py b/utils/checksymbolslib/br.py
-index 846a609829..f9dc336e64 100644
---- a/utils/checksymbolslib/br.py
-+++ b/utils/checksymbolslib/br.py
-@@ -36,11 +36,14 @@ symbols_defined_only_for_barebox_variant = [
- ]
- # toolchain/toolchain/toolchain.mk
- # toolchain/toolchain-buildroot/toolchain-buildroot.mk
-+# toolchain/toolchain-bare-metal-buildroot/toolchain-bare-metal-buildroot.mk
- symbols_not_defined_for_fake_virtual_packages = [
-     'BR2_PACKAGE_HAS_TOOLCHAIN',
-     'BR2_PACKAGE_HAS_TOOLCHAIN_BUILDROOT',
-+    'BR2_PACKAGE_HAS_TOOLCHAIN_BARE_METAL_BUILDROOT',
-     'BR2_PACKAGE_PROVIDES_TOOLCHAIN',
-     'BR2_PACKAGE_PROVIDES_TOOLCHAIN_BUILDROOT',
-+    'BR2_PACKAGE_PROVIDES_TOOLCHAIN_BARE_METAL_BUILDROOT',
- ]
- # fs/common.mk
- suffixes_not_defined_for_all_rootfs_types = [
++HOST_GCC_BARE_METAL_LICENSE = GPL-2.0, GPL-3.0, LGPL-2.1, LGPL-3.0
++HOST_GCC_BARE_METAL_LICENSE_FILES = COPYING COPYING3 COPYING.LIB COPYING3.LIB
++
++HOST_GCC_BARE_METAL_DEPENDENCIES = \
++	host-binutils-bare-metal \
++	host-gmp \
++	host-mpc \
++	host-mpfr \
++	host-isl
++
++# gcc doesn't support in-tree build, so we create a 'build'
++# subdirectory in the gcc sources, and build from there.
++define GCC_BARE_METAL_CONFIGURE_SYMLINK
++	mkdir -p $(@D)/build
++	ln -sf ../configure $(@D)/build/configure
++endef
++
++HOST_GCC_BARE_METAL_PRE_CONFIGURE_HOOKS += GCC_BARE_METAL_CONFIGURE_SYMLINK
++HOST_GCC_BARE_METAL_SUBDIR = build
++
++HOST_GCC_BARE_METAL_MAKE_OPTS = \
++	$(HOST_GCC_COMMON_MAKE_OPTS) \
++	all-gcc \
++	all-target-libgcc
++
++HOST_GCC_BARE_METAL_INSTALL_OPTS = install-gcc install-target-libgcc
++
++HOST_GCC_BARE_METAL_CONF_OPTS = \
++	--target=$(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE) \
++	--disable-initfini_array \
++	--disable-__cxa_atexit \
++	--disable-libstdcxx-pch \
++	--with-newlib \
++	--disable-threads \
++	--enable-plugins \
++	--with-gnu-as \
++	--disable-libitm \
++	--without-long-double-128 \
++	--without-headers \
++	--enable-languages=c \
++	--disable-multilib \
++	--with-gmp=$(HOST_DIR) \
++	--with-mpc=$(HOST_DIR) \
++	--with-mpfr=$(HOST_DIR) \
++	--with-isl=$(HOST_DIR) \
++	--with-sysroot=$(TOOLCHAIN_BARE_METAL_BUILDROOT_SYSROOT) \
++	AR_FOR_TARGET=$(HOST_DIR)/bin/$(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE)-ar \
++	RANLIB_FOR_TARGET=$(HOST_DIR)/bin/$(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE)-ranlib
++
++$(eval $(host-autotools-package))
 
---===============3435631041592902664==
+--===============1794298696923730407==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -191,4 +199,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============3435631041592902664==--
+--===============1794298696923730407==--
