@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D634FC4828D
-	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 21:55:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FEB3C4828D
+	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 21:55:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A40C640919;
-	Tue,  6 Feb 2024 21:55:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 584824094D;
+	Tue,  6 Feb 2024 21:55:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QcU9X2fU5MoJ; Tue,  6 Feb 2024 21:55:38 +0000 (UTC)
+	with ESMTP id mSZcRBIoANKQ; Tue,  6 Feb 2024 21:55:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C076E40931
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B5EBC40959
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C076E40931;
-	Tue,  6 Feb 2024 21:55:38 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5D33D1BF400
+	by smtp4.osuosl.org (Postfix) with ESMTP id B5EBC40959;
+	Tue,  6 Feb 2024 21:55:40 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B6A281BF400
  for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 21:55:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4ACB2612D4
+ by smtp2.osuosl.org (Postfix) with ESMTP id A323B4031D
  for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 21:55:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id agQkRO5e6SCO for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TcYgj_FmvBzD for <buildroot@lists.busybox.net>;
  Tue,  6 Feb 2024 21:55:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8ADC360B58
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9129D401B1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8ADC360B58
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9129D401B1
  for <buildroot@buildroot.org>; Tue,  6 Feb 2024 21:55:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8612787421; Tue,  6 Feb 2024 21:55:36 +0000 (UTC)
+ id 7AE8587420; Tue,  6 Feb 2024 21:55:36 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 6 Feb 2024 22:54:55 +0100
+Date: Tue, 6 Feb 2024 22:53:23 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b3803513e87cb75795edfd3205337996ad971bb3
-X-Git-Newrev: fa44cc4aaa7f47f6fb0e725d33c776d526a82da0
+X-Git-Oldrev: c7bbea9a6c4780210afc6ff6da3513b83a8a0270
+X-Git-Newrev: b3803513e87cb75795edfd3205337996ad971bb3
 X-Patchwork-Hint: ignore
-Message-Id: <20240206215536.8612787421@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-opcua-asyncio: add CPE
- variables
+Message-Id: <20240206215536.7AE8587420@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pydantic: add CPE variables
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,32 +64,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fa44cc4aaa7f47f6fb0e725d33c776d526a82da0
+commit: https://git.buildroot.net/buildroot/commit/?id=b3803513e87cb75795edfd3205337996ad971bb3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:freeopcua:opcua-asyncio is a valid CPE identifier for this
+cpe:2.3:a:pydantic_project:pydantic is a valid CPE identifier for this
 package:
 
-  https://nvd.nist.gov/products/cpe/detail/39E826E8-04D1-465F-AA4E-7A41B387D7CE
+  https://nvd.nist.gov/products/cpe/detail/9B7C28E5-ACB1-4252-AE8F-4225C1AF739E
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-opcua-asyncio/python-opcua-asyncio.mk | 2 ++
+ package/python-pydantic/python-pydantic.mk | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/python-opcua-asyncio/python-opcua-asyncio.mk b/package/python-opcua-asyncio/python-opcua-asyncio.mk
-index a8be2c8722..226b9bbc21 100644
---- a/package/python-opcua-asyncio/python-opcua-asyncio.mk
-+++ b/package/python-opcua-asyncio/python-opcua-asyncio.mk
-@@ -10,5 +10,7 @@ PYTHON_OPCUA_ASYNCIO_SITE = https://files.pythonhosted.org/packages/bf/c6/3c17b8
- PYTHON_OPCUA_ASYNCIO_SETUP_TYPE = setuptools
- PYTHON_OPCUA_ASYNCIO_LICENSE = LGPL-3.0+
- PYTHON_OPCUA_ASYNCIO_LICENSE_FILES = COPYING
-+PYTHON_OPCUA_ASYNCIO_CPE_ID_VENDOR = freeopcua
-+PYTHON_OPCUA_ASYNCIO_CPE_ID_PRODUCT = opcua-asyncio
- 
- $(eval $(python-package))
+diff --git a/package/python-pydantic/python-pydantic.mk b/package/python-pydantic/python-pydantic.mk
+index 7ad7abeb8d..0cce5a153f 100644
+--- a/package/python-pydantic/python-pydantic.mk
++++ b/package/python-pydantic/python-pydantic.mk
+@@ -10,6 +10,8 @@ PYTHON_PYDANTIC_SITE = https://files.pythonhosted.org/packages/aa/3f/56142232152
+ PYTHON_PYDANTIC_SETUP_TYPE = pep517
+ PYTHON_PYDANTIC_LICENSE = MIT
+ PYTHON_PYDANTIC_LICENSE_FILES = LICENSE
++PYTHON_PYDANTIC_CPE_ID_VENDOR = pydantic_project
++PYTHON_PYDANTIC_CPE_ID_PRODUCT = pydantic
+ PYTHON_PYDANTIC_DEPENDENCIES = \
+ 	host-python-hatchling \
+ 	host-python-hatch-fancy-pypi-readme
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
