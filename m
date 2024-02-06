@@ -4,71 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6448C4828D
-	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 15:20:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D252AC4828D
+	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 15:20:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5660E41585;
-	Tue,  6 Feb 2024 15:20:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5660E41585
+	by smtp2.osuosl.org (Postfix) with ESMTP id 873BE41595;
+	Tue,  6 Feb 2024 15:20:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 873BE41595
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uFqOYATgJ7zB; Tue,  6 Feb 2024 15:20:24 +0000 (UTC)
+	with ESMTP id CvNS4BZZEWuP; Tue,  6 Feb 2024 15:20:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6FE9F41665;
-	Tue,  6 Feb 2024 15:20:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6FE9F41665
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 316581BF215
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 15:20:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 960884157E;
+	Tue,  6 Feb 2024 15:20:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 960884157E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 107581BF215
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 15:20:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 098FA41B1B
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 15:20:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 098FA41B1B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0B8AB82319
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 15:20:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id q3eswXSBbTnY for <buildroot@lists.busybox.net>;
- Tue,  6 Feb 2024 15:20:13 +0000 (UTC)
-Received: from smtpcmd12132.aruba.it (smtpcmd12132.aruba.it [62.149.156.132])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 228A740293
- for <buildroot@buildroot.org>; Tue,  6 Feb 2024 15:20:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 228A740293
-Received: from [192.168.50.221] ([84.33.84.190])
- by Aruba Outgoing Smtp  with ESMTPSA
- id XNF4rjDOvlzzoXNF4rf82P; Tue, 06 Feb 2024 16:20:10 +0100
-Message-ID: <f136603a-2c1c-4e2a-ae55-446a33952b73@benettiengineering.com>
-Date: Tue, 6 Feb 2024 16:20:09 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0NO9T8AA2PfH for <buildroot@lists.busybox.net>;
+ Tue,  6 Feb 2024 15:20:42 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0B7218136E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B7218136E
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0B7218136E
+ for <buildroot@buildroot.org>; Tue,  6 Feb 2024 15:20:41 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3D5A11C000A;
+ Tue,  6 Feb 2024 15:20:40 +0000 (UTC)
+Date: Tue, 6 Feb 2024 16:20:39 +0100
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20240206162039.7feb7ac9@windsurf>
+In-Reply-To: <20240110044601.1084866-1-james.hilliard1@gmail.com>
+References: <20240110044601.1084866-1-james.hilliard1@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20240116065831.9471-1-fontaine.fabrice@gmail.com>
- <20240116065831.9471-2-fontaine.fabrice@gmail.com>
- <20240206161152.0e178414@windsurf>
-Content-Language: en-US
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20240206161152.0e178414@windsurf>
-X-CMAE-Envelope: MS4xfHH7h1UvxHrC5Mfpn3JbKgvYcPhYYjyPC/43JK49UeJ/8cj/Xf6zizN4bhEVBV6Cs8GRmwL1yD+MI3jUi2KAUFRY5pmBqBgWY3rsWj/PyIpZ8v0PClqt
- 5hzF8wce57ZwpQkTjFbJjFHiIxq6HtwmmK6CCq8bAdL9T9tc7d11Hb7s4AQ2gRZulvHABlIWF+wn/26b2Ba2YT13mGQraB1P7PqJSe/skChk8HRnCEcUWQDz
- Zms8+IOEQCM30x3Ex4v8z626z7yVlbcXO7iLzglSfeGkIgYvv5zUP4CUypbwEnYQU4SdHAdmUB2a9OC2K6v7ewUiQZWnj6QMH0nrwWNWFBZEgtOlqXpIdgOv
- QdsOssac3cG7CXQSt2B47NDjGbY6peQTgS6oPyJUoJ8dt/hVaVODZnBJrnK1xWtEg1Iaqw77X5BWudvXsCVeGyXY4VUGS3raEtub9G6ALwA34KXyitcYFGEv
- oxh/L7vzJRxMa3TQ
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1707232810; bh=qoN2W6XW1xd+N2QJvM71OHUhqF9eXxBtXq2Qri/Q0P8=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=i45Ua1ClfxnQj4QGadBMhPXJtaAXIzXgqgCS2k0I/ZmS4mhv/lfQt9OYt+FMGiypz
- BEmpq7b63t2ZPIW36Rfv/RCoVQQs/ztT99aHdAOJOB+TZ5/FkoywuselDg58108uX6
- BmTzZApjURkSJY+dW6gCdwWWRYGNMYLEhV9GTCPLowJBUt1H+bu7WVHBLydkb5tMQp
- tNMcg0Bq3KzjfQHGIfwjc6WlNLjWEOzV7eGOr5ze5Ig7MSRUjb/DzSB9GIztk2KVR1
- Af4byGUj5/IPM3aR9lG3mbVFoVX4D6wtUHwGl35KC4vQP5M9T1GEJfOFV2HVQh2Mjl
- lXdpeqfrQ+gDg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=i45Ua1Cl
-Subject: Re: [Buildroot] [PATCH v2,
- 2/2] package/attr: affected by gcc bug 101766
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1707232840;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=yOVCFLA971KCcicBxVIJAzSSDxlMWelMrYjt1ggqxz0=;
+ b=Fxu61Cl3Zdtbhen4mN57GaxBU3H7QnF1uJyYIT7w5UhecrCpXQSjYWd3CJsBXczGr/BZrG
+ jMLqyinxnLm8sJgAtfi9aOxj72o3Adve2CLedcXY4O4dYDm+AKKn+WT6PzZxeJNNj+dtR3
+ l9DR67fuvipdp3z33sOSWxSRKyiIKM+cxH7EnD6w3MTu85Ai39/RhMxWNwCeyrrrOWFzoy
+ Q+e0nse+FwP0DJEq4beQ1AG+EbQWQMBQ34jqlHCqxd1LL2oMNTv2aIeGS0gWTSqxwIzVvf
+ BQM0qX4SqGO68lE2vfcfyjfqztAVhbwjffUBS24j8sfi/KyGBcUz7by/CMngog==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Fxu61Cl3
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-pycryptodomex: bump to
+ version 3.19.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,69 +81,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sen Hastings <sen@phobosdpl.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org,
- Romain Naour <romain.naour@gmail.com>, Norbert Lange <nolange79@gmail.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas, Fabrice,
+On Tue,  9 Jan 2024 21:46:01 -0700
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-On 06/02/24 16:11, Thomas Petazzoni via buildroot wrote:
-> Hello Fabrice,
-> 
-> On Tue, 16 Jan 2024 07:58:31 +0100
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-> 
->> attr is affected by gcc bug 101766 since version 1.5.2 and
->> https://git.savannah.nongnu.org/cgit/attr.git/commit/?id=11b9069098b4d4c23efb06c9457a085b784354d4
->> resulting in the following build failure on microblaze since commit
->> b31b91296e7f985b909f104f06a098adddef1fea:
->>
->> libattr/syscalls.c:133:10: error: symver is only supported on ELF platforms
->>    133 | # pragma GCC visibility pop
->>        |          ^~~
->>
->> So let's disable package attr and packages depending on it.
->>
->> Fixes:
->>   - http://autobuild.buildroot.org/results/29c76e02becedf922bd7dc0533338c078bf77d2a
->>
->> Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
->> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> 
-> I don't like this very much. It's annoying to propagate this dependency
-> to all reverse dependencies of attr, and make it unavailable on
-> Microblaze for this silly reason. So I came up with the attached patch
-> for attr, which rather detects if __attribute__(__symver__) works or
-> not, and fall backs to another mechanism if not (this fallback already
-> exists in the attr code).
-> 
-> Could you have a look at my proposal, and if it suits you, submit it
-> upstream and as a patch to Buildroot ? :-)
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/python-pycryptodomex/python-pycryptodomex.hash | 4 ++--
+>  package/python-pycryptodomex/python-pycryptodomex.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-I deal with attached patch.
+Applied to master, thanks.
 
+Thomas
 -- 
-Giulio Benetti
-CEO&CTO@Benetti Engineering sas
-
-> (Yeah, I know I'm pushing some of the work for you, my goal is to be
-> able to continue review/merge other patches)
-> 
-> Thanks a lot!
-> 
-> Thomas
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
