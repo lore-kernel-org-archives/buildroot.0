@@ -4,69 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A90CBC4828D
-	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 13:39:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BBA2C4828D
+	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 13:39:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5B4286104A;
-	Tue,  6 Feb 2024 13:39:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B4286104A
+	by smtp3.osuosl.org (Postfix) with ESMTP id A6EE86111E;
+	Tue,  6 Feb 2024 13:39:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A6EE86111E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mHmUhFInBQwj; Tue,  6 Feb 2024 13:39:32 +0000 (UTC)
+	with ESMTP id nKMOTxm4ATsl; Tue,  6 Feb 2024 13:39:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A3B1F60F82;
-	Tue,  6 Feb 2024 13:39:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3B1F60F82
+	by smtp3.osuosl.org (Postfix) with ESMTP id 07B66610EE;
+	Tue,  6 Feb 2024 13:39:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 07B66610EE
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AEDCF1BF5AD
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 13:39:29 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 317F71BF5AD
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 13:39:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8F55A60E2E
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 13:39:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F55A60E2E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 09F06610EE
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 13:39:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 09F06610EE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KVwoh4gsaHkc for <buildroot@lists.busybox.net>;
- Tue,  6 Feb 2024 13:39:28 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8EE76605A5
- for <buildroot@buildroot.org>; Tue,  6 Feb 2024 13:39:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8EE76605A5
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 854BBFF802;
- Tue,  6 Feb 2024 13:39:26 +0000 (UTC)
-Date: Tue, 6 Feb 2024 14:39:25 +0100
-To: Arnout Vandecappelle <arnout@mind.be>
-Message-ID: <20240206143925.24537bba@windsurf>
-In-Reply-To: <018bc3f7-2ae5-4d36-8c6b-485f41b4f319@mind.be>
-References: <20231219121508.1695768-1-marleen.vos@mind.be>
- <20231219121508.1695768-5-marleen.vos@mind.be>
- <20240206142549.2ad91f3b@windsurf>
- <018bc3f7-2ae5-4d36-8c6b-485f41b4f319@mind.be>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1707226766;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=Ux/CmmrnLTfHpVAjhk14SCfOeCOOWS8OjqA+9sjutlY=;
- b=WSxLh76FG58Ee9BjVhAsnO6jM5H1hVPIMwIxhR4m2VVI6VP21xcOpgotXZ2pac5XEhY/Yl
- zLyn/v9HFYWAUr9D++X4nVdteKU/bRH4UFJv1mRX4OPvb5/D/jjs3BNS/eD/f2SgDzYzEn
- Kbvw77EWfz5ElpqcKId4FQntlANaUGOIiOe52xAnnZeqANOtOAxsJ/KP9aPQdm3X9gicTP
- agSwXFVD0o6FvJWi+whHBo75f1UsqMXC7XEic1lbox69lbPmPsYJl/WoMoFkHKiM5JHj+Z
- +AUekzvZ0DvmJJJq76Z3NwiNsK/n0wVSnLdsHJCBslbMT1YFgsRgQCb2afeB4g==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=WSxLh76F
-Subject: Re: [Buildroot] [PATCH 4/7] boot/arm-trusted-firmware: add config
- option to use latest lts-v2.8.13
+ with ESMTP id D_9nDxeOdy_7 for <buildroot@lists.busybox.net>;
+ Tue,  6 Feb 2024 13:39:52 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4B44460F82
+ for <buildroot@buildroot.org>; Tue,  6 Feb 2024 13:39:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B44460F82
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3813187064; Tue,  6 Feb 2024 13:39:52 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 6 Feb 2024 14:28:02 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 404a0b6a2a3e8a2ec31f448d0f397361da4e8be2
+X-Git-Newrev: 47647814f57482568683190a399745543cb029aa
+X-Patchwork-Hint: ignore
+Message-Id: <20240206133952.3813187064@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/arm-trusted-firmware: bump latest
+ version to v2.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,28 +58,56 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Marleen Vos <marleen.vos@mind.be>, marleen.vos@essensium.com,
- Marleen Vos via buildroot <buildroot@buildroot.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 6 Feb 2024 14:38:31 +0100
-Arnout Vandecappelle <arnout@mind.be> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=47647814f57482568683190a399745543cb029aa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> > Thanks a lot for this patch. However, I don't think we want to add
-> > explicit choice options for all "random" versions of TF-A.  
-> 
->   This is the current situation however:
+Patch 0001-build-tools-avoid-unnecessary-link.patch that was applied to
+v2.9 is already in v2.10, so no new patch dir for v2.10 is added
 
-Yes, but there is no explicit choice options for all those versions.
+Signed-off-by: Marleen Vos <marleen.vos@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ boot/arm-trusted-firmware/Config.in                 | 4 ++--
+ boot/arm-trusted-firmware/arm-trusted-firmware.hash | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
+index a5ac987172..c65f4aaba2 100644
+--- a/boot/arm-trusted-firmware/Config.in
++++ b/boot/arm-trusted-firmware/Config.in
+@@ -14,7 +14,7 @@ choice
+ 	  Select the specific ATF version you want to use
+ 
+ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION
+-	bool "v2.7"
++	bool "v2.10"
+ 
+ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -42,7 +42,7 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE
+ 
+ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_VERSION
+ 	string
+-	default "v2.7"		if BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION
++	default "v2.10"		if BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION
+ 	default "custom"	if BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL
+ 	default BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION \
+ 				if BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.hash b/boot/arm-trusted-firmware/arm-trusted-firmware.hash
+index d931610dc4..c63e9d30b0 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.hash
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  327c65b1bc231608a7a808b068b00c1a22310e9fc86158813cd10a9711d5725e  arm-trusted-firmware-v2.7.tar.gz
++sha256  2e18b881ada9198173238cca80086c787b1fa3f698944bde1743142823fc511c  arm-trusted-firmware-v2.10.tar.gz
+ sha256  130d0c6e5159fa454b1e969fd281fa1d388819aefb203f65dd282544b5ab7ba9  docs/license.rst
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
