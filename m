@@ -4,73 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79DE3C48297
-	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 22:33:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46C85C4828D
+	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 22:42:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 49DCB41C03;
-	Tue,  6 Feb 2024 22:33:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0273042048;
+	Tue,  6 Feb 2024 22:42:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iuC3jvAyOkMh; Tue,  6 Feb 2024 22:33:23 +0000 (UTC)
+	with ESMTP id fo77EYWSMurv; Tue,  6 Feb 2024 22:42:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 513F841FA5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EBB3442064
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 513F841FA5;
-	Tue,  6 Feb 2024 22:33:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 28E9B1BF5A4
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 22:33:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EBB3442064;
+	Tue,  6 Feb 2024 22:42:34 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 15BC01BF2C4
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 22:42:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0F57540332
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 22:33:22 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1032F83412
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 22:42:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SR3wR6WEk_CB for <buildroot@lists.busybox.net>;
- Tue,  6 Feb 2024 22:33:21 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
- helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xR9rM3jkF9RL for <buildroot@lists.busybox.net>;
+ Tue,  6 Feb 2024 22:42:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
+ helo=relay3-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9A4044031E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9A4044031E
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9A4044031E
- for <buildroot@buildroot.org>; Tue,  6 Feb 2024 22:33:20 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E2727240002;
- Tue,  6 Feb 2024 22:33:18 +0000 (UTC)
-Date: Tue, 6 Feb 2024 23:33:18 +0100
-To: Adam Duskett <adam.duskett@amarulasolutions.com>
-Message-ID: <20240206233318.593730bd@windsurf>
-In-Reply-To: <20231218220457.1705749-3-adam.duskett@amarulasolutions.com>
-References: <20231218220457.1705749-1-adam.duskett@amarulasolutions.com>
- <20231218220457.1705749-3-adam.duskett@amarulasolutions.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0762083372
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0762083372
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0762083372
+ for <buildroot@buildroot.org>; Tue,  6 Feb 2024 22:42:32 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 921B860002;
+ Tue,  6 Feb 2024 22:42:29 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1rXU92-00ENTG-0F;
+ Tue, 06 Feb 2024 23:42:24 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+References: <20240108064820.3450359-1-james.hilliard1@gmail.com>
+ <0eb549da-1140-4071-8e58-376d9dd5f434@bubu1.eu>
+ <a7c57251-16f3-4c1f-b271-df3108f2d8bc@bubu1.eu>
+Date: Tue, 06 Feb 2024 23:42:18 +0100
+In-Reply-To: <a7c57251-16f3-4c1f-b271-df3108f2d8bc@bubu1.eu> (Marcus Hoffmann
+ via buildroot's message of "Tue, 6 Feb 2024 13:42:02 +0100")
+Message-ID: <87fry52p11.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1707258799;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=KDJK7h/nnUeKplyGSYrnTOFVLWRq678LTDCX65/YCh4=;
- b=GIfcQMTIV6fYdrob68DBpQjYQ2MJkVgAyiDbZ4ByutXKfMs3Q6kd7E5NyX7MIXdwksOLun
- SqX3OmmhgEDaWurI7X43szG3TlNts3rQrF8JcgddWii98b64TjfYKFcsl+B5fOqVpqeclu
- fhVuvHah4hxixyRoHJruOxZcsSIiQTX9ZDlCa8An7OZ3wnOcvZnEgZpcbBXwrEBuzciRzw
- ZlMye4mYcaCvAi9IQP6sCit1cnhvA4GASvv4qJr0zDG6ucEz7qqBeRxPr1BP91E1So1RI+
- 9bSNZofZkW8Sl6aCZsVW0sSZ2ZCr/xTwqZnWkWbsXbFdAfCxeRgwvU/KFZQ4ig==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=GIfcQMTI
-Subject: Re: [Buildroot] [PATCH v4 3/3] package/python3: bump version to
- 3.12.1
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-anyio: bump to version
+ 4.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,53 +71,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Marcus Hoffmann <buildroot@bubu1.eu>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Adam,
-
-On Mon, 18 Dec 2023 15:04:56 -0700
-Adam Duskett <adam.duskett@amarulasolutions.com> wrote:
-
-> Python 3.12.1 has removed distutils support. As such, we remove the distutils
-> option from pkg-python.mk as well.
-> 
-> Tested on Fedora 39, and Debian 11. All 68 package tests pass.
-> 
-> Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-> ---
-> v3 -> v4:
->   - Drop distutils in pkg-python.mk
->   - 3.12.0 -> 3.12.1
-
-I applied, but after doing a number of changes. The most important one
-is that I had to reintroduce some of our --disable options: for
-ncurses, sqlite and expat. Indeed, without these, you ended up with the
-Python code installed, but not the correspond native library (the
-py_cv_module__<something>=n/a only disables building the native
-library).
-
-I split up the pkg-python.mk change into a separate commit, which is
-made before the python 3.12 bump. Indeed, it's semantically separate.
-
-Finally, I updated the Buildroot manual to no longer mention distutils
-support. And I did a separate commit to update the Buildroot manual
-with other _SETUP_TYPE values that we support.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Pj4+Pj4gIk1hcmN1cyIgPT0gTWFyY3VzIEhvZmZtYW5uIHZpYSBidWlsZHJvb3QgPGJ1aWxkcm9v
+dEBidWlsZHJvb3Qub3JnPiB3cml0ZXM6CgogPiBIaSwKID4gT24gMDguMDEuMjQgMTQ6MDMsIE1h
+cmN1cyBIb2ZmbWFubiB2aWEgYnVpbGRyb290IHdyb3RlOgogPj4gSGkgSmFtZXMsCiA+PiBPbiAw
+OC4wMS4yNCAwNzo0OCwgSmFtZXMgSGlsbGlhcmQgd3JvdGU6CiA+Pj4gU2lnbmVkLW9mZi1ieTog
+SmFtZXMgSGlsbGlhcmQgPGphbWVzLmhpbGxpYXJkMUBnbWFpbC5jb20+CiA+Pj4gLS0tCiA+Pj4g
+wqAgcGFja2FnZS9weXRob24tYW55aW8vcHl0aG9uLWFueWlvLmhhc2ggfCA0ICsrLS0KID4+PiDC
+oCBwYWNrYWdlL3B5dGhvbi1hbnlpby9weXRob24tYW55aW8ubWvCoMKgIHwgNCArKy0tCiA+Pj4g
+wqAgMiBmaWxlcyBjaGFuZ2VkLCA0IGluc2VydGlvbnMoKyksIDQgZGVsZXRpb25zKC0pCiA+Pj4g
+CiA+Pj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvcHl0aG9uLWFueWlvL3B5dGhvbi1hbnlpby5oYXNo
+CiA+Pj4gYi9wYWNrYWdlL3B5dGhvbi1hbnlpby9weXRob24tYW55aW8uaGFzaAogPj4+IGluZGV4
+IDFjZWE1NDliYzEuLmU3N2QzMDI0OWMgMTAwNjQ0CiA+Pj4gLS0tIGEvcGFja2FnZS9weXRob24t
+YW55aW8vcHl0aG9uLWFueWlvLmhhc2gKID4+PiArKysgYi9wYWNrYWdlL3B5dGhvbi1hbnlpby9w
+eXRob24tYW55aW8uaGFzaAogPj4+IEBAIC0xLDUgKzEsNSBAQAogPj4+IMKgICMgbWQ1LCBzaGEy
+NTYgZnJvbSBodHRwczovL3B5cGkub3JnL3B5cGkvYW55aW8vanNvbgogPj4+IC1tZDXCoCA1OGQy
+ODhkZDg0ZTI4ZTI1MDdmZjljZTdlNDYyMDAxMMKgIGFueWlvLTMuNy4xLnRhci5negogPj4+IC1z
+aGEyNTYKID4+PiA0NGEzYzlhYmEwZjVkZWZhNDMyNjFhOGIzZWZiOTc4OTFmMmJkN2Q4MDRlMGUx
+ZjU2NDE5YmVmYTFhZGZjNzgwCiA+Pj4gYW55aW8tMy43LjEudGFyLmd6CiA+Pj4gK21kNcKgIDIy
+ZTY2MGZmZjFhNTg0ZTcyMjgxZjBkNmEwODNlNGUwwqAgYW55aW8tNC4yLjAudGFyLmd6CiA+Pj4g
+K3NoYTI1NgogPj4+IGUxODc1YmI0YjRlMmRlMTY2OWY0YmM3ODY5YjZkM2Y1NDIzMWNkY2VkNzE2
+MDVlNmU2NGM5YmU3N2UzYmU1MGYKID4+PiBhbnlpby00LjIuMC50YXIuZ3oKID4+IFRoaXMgd2Fz
+IGludHJvZHVjZWQgaW4gdGhpcyB2ZXJzaW9uIGJlY2F1c2UgZmFzdGFwaSBkaWRuJ3Qgc3VwcG9y
+dCBhCiA+PiBuZXdlciB2ZXJzaW9uLgogPj4gRmFzdGFwaSAwLjEwOC4wIHN1cHBvcnRzIHN0YXJs
+ZXR0ZSAwLjMyIG5vdywgd2hpY2ggc3VwcG9ydHMgYW55aW8KID4+IDQuMi4wLgogPj4gU28gSSB0
+aGluayB0aGVzZSBzaG91bGQgYmUgYnVtcGVkIHRvZ2V0aGVyL2luIHRoZSBzYW1lIHNlcmllcz8K
+CiA+IE5vdyB0aGF0IG1vcmUgcmVjZW50IGZhc3RhcGkgYW5kIHN0YXJsZXR0ZSB2ZXJzaW9ucyBh
+cmUgYXZhaWxhYmxlIHRoaXMKID4gY2FuIGJlIGFwcGxpZWQuCgpDb21taXR0ZWQsIHRoYW5rcy4K
+Ci0tIApCeWUsIFBldGVyIEtvcnNnYWFyZApfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJv
+b3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxk
+cm9vdAo=
