@@ -4,71 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECB6FC48297
-	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 14:17:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB76FC4829A
+	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 14:18:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9F73C41ECE;
-	Tue,  6 Feb 2024 14:17:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F73C41ECE
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7292740928;
+	Tue,  6 Feb 2024 14:18:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7292740928
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TnaM4ndaHmPC; Tue,  6 Feb 2024 14:17:14 +0000 (UTC)
+	with ESMTP id cRmBoOPxbC-q; Tue,  6 Feb 2024 14:18:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D4BCA41EC0;
-	Tue,  6 Feb 2024 14:17:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D4BCA41EC0
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B185F1BF576
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 14:17:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 984D340869;
+	Tue,  6 Feb 2024 14:18:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 984D340869
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5677D1BF95D
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 14:18:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AC6C882328
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 14:17:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2F60040590
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 14:18:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F60040590
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5Wvt4YTgXnJI for <buildroot@lists.busybox.net>;
- Tue,  6 Feb 2024 14:17:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
- helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9FDF48231C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9FDF48231C
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9FDF48231C
- for <buildroot@buildroot.org>; Tue,  6 Feb 2024 14:17:11 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id EFE8A24000B;
- Tue,  6 Feb 2024 14:17:09 +0000 (UTC)
-Date: Tue, 6 Feb 2024 15:17:09 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20240206151709.61d8e308@windsurf>
-In-Reply-To: <20240114174823.2732695-1-bernd@kuhls.net>
-References: <20240114174823.2732695-1-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1707229030;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=hJ0PpuIuNoVoqZ3nFZ1QVQt/XRp/zAYuioqQtvPr/78=;
- b=ZCRsqngIhQbLsChnCSkMwQoZWCxfYdcT2+1YWj3htTZdj/dMn3eP01O6xlOVMTDfWP5UsH
- 0roGO/vzcOIztpPvY9ia/suyn1EVHEGSnYofKrZ+YiwwBC+JhIeWkUCgDd2jL1u5jNIkWo
- 1tVgbD0Zt/IJ+GmxLf2UnQ8rEOvt8yTWEHS4c+mPrsoKGfV2vVCLLiY4CGAedRB/taX85v
- 9EnWBMAWntKwo4/hKs2EZCyPsmjt2ezsLOQgT+o6tqoO1cU4ZtQ+uS4Q346bigIf7C0X2n
- Ii507IVELXAi4cIfzjzZaYOPiX7bf+mdE8T75Ues0V5CFbtXxm1kakDtfdhblQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=ZCRsqngI
-Subject: Re: [Buildroot] [PATCH 1/2] package/kodi: needs host-cmake >= 3.26
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id L9JttZ3xQTWp for <buildroot@lists.busybox.net>;
+ Tue,  6 Feb 2024 14:18:42 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5CB734085B
+ for <buildroot@buildroot.org>; Tue,  6 Feb 2024 14:18:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5CB734085B
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 49D1B8708D; Tue,  6 Feb 2024 14:18:42 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 6 Feb 2024 15:18:31 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f9ba407d991e108ca40a2059f979ec731f505dc2
+X-Git-Newrev: 81b9842d2ad534e3e01b9efb2b353ab3ecc1e4f7
+X-Patchwork-Hint: ignore
+Message-Id: <20240206141842.49D1B8708D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-jsonschema: bump to version
+ 4.20.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,51 +58,51 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 14 Jan 2024 18:48:22 +0100
-Bernd Kuhls <bernd@kuhls.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=81b9842d2ad534e3e01b9efb2b353ab3ecc1e4f7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fixes build error on Debian bookworm with
-> 
-> $ cmake --version
-> cmake version 3.25.1
-> 
-> -- Found Python3: /home/buildroot/br2/output/per-package/kodi/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/python3.11
->  (found suitable exact version "3.11.6") found components: Development Development.Module Development.Embed
-> -- Could NOT find Python3 (missing: Interpreter)
->     Reason given by package:
->         Interpreter: Cannot run the interpreter
->         "/home/buildroot/br2/output/per-package/kodi/host/x86_64-buildroot-linux-gnu/sysroot/usr/bin/python3"
-> 
-> CMake Error at cmake/scripts/common/Macros.cmake:432 (message):
->   PYTHON enabled but not found
-> Call Stack (most recent call first):
->   CMakeLists.txt:214 (core_optional_dep)
-> 
-> -- Configuring incomplete, errors occurred!
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  package/kodi/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-jsonschema/python-jsonschema.hash | 4 ++--
+ package/python-jsonschema/python-jsonschema.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Since when does kodi needs host-cmake >= 3.26 ? Indeed, we need to
-understand that so that we can understand if this patch needs to be
-backported to one of the LTS/stable branches. Could you check this, and
-submit an updated version that includes those details in the commit log.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-jsonschema/python-jsonschema.hash b/package/python-jsonschema/python-jsonschema.hash
+index f421b8a48b..645a6657fe 100644
+--- a/package/python-jsonschema/python-jsonschema.hash
++++ b/package/python-jsonschema/python-jsonschema.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/jsonschema/json
+-md5  8bf5f0a2342dc4c8390c28a99be555e7  jsonschema-4.19.2.tar.gz
+-sha256  c9ff4d7447eed9592c23a12ccee508baf0dd0d59650615e847feb6cdca74f392  jsonschema-4.19.2.tar.gz
++md5  e758f0f6a8f3f59d754e7e35ea9f0792  jsonschema-4.20.0.tar.gz
++sha256  4f614fd46d8d61258610998997743ec5492a648b33cf478c1ddc23ed4598a5fa  jsonschema-4.20.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  4f92a015a13c4d1a040bef018aa13430b4f1bc73b41b16bb846c346766de7439  COPYING
+ sha256  837402bd25fad9b704265801ca3f92566a98157c1f9a7acd6f446299ba1c305a  json/LICENSE
+diff --git a/package/python-jsonschema/python-jsonschema.mk b/package/python-jsonschema/python-jsonschema.mk
+index dee87e8f9d..512c92aa77 100644
+--- a/package/python-jsonschema/python-jsonschema.mk
++++ b/package/python-jsonschema/python-jsonschema.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_JSONSCHEMA_VERSION = 4.19.2
++PYTHON_JSONSCHEMA_VERSION = 4.20.0
+ PYTHON_JSONSCHEMA_SOURCE = jsonschema-$(PYTHON_JSONSCHEMA_VERSION).tar.gz
+-PYTHON_JSONSCHEMA_SITE = https://files.pythonhosted.org/packages/95/18/618159fb2efbe3fb2cd32b16c40278954cde94744957734ef0482286a052
++PYTHON_JSONSCHEMA_SITE = https://files.pythonhosted.org/packages/a8/74/77bf12d3dd32b764692a71d4200f03429c41eee2e8a9225d344d91c03aff
+ PYTHON_JSONSCHEMA_SETUP_TYPE = pep517
+ PYTHON_JSONSCHEMA_LICENSE = MIT
+ PYTHON_JSONSCHEMA_LICENSE_FILES = COPYING json/LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
