@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD079C4829A
-	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 10:21:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43CAEC4828D
+	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 10:21:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9807541E6A;
-	Tue,  6 Feb 2024 10:21:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9807541E6A
+	by smtp4.osuosl.org (Postfix) with ESMTP id F12E241E56;
+	Tue,  6 Feb 2024 10:21:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F12E241E56
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id E35WV9_UAPtf; Tue,  6 Feb 2024 10:21:22 +0000 (UTC)
+	with ESMTP id itNR8lfAtfZU; Tue,  6 Feb 2024 10:21:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C513141E56;
-	Tue,  6 Feb 2024 10:21:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C513141E56
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2CBA41BF311
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 10:20:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3F1F641E6A;
+	Tue,  6 Feb 2024 10:21:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F1F641E6A
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 020031BF311
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 10:20:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 048E9403CA
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 10:20:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 048E9403CA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 922F441E51
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 10:20:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 922F441E51
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UqL_Z-ZmDbHi for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id A9-ySeHxM_tS for <buildroot@lists.busybox.net>;
  Tue,  6 Feb 2024 10:20:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CBD1B400FE
+ by smtp4.osuosl.org (Postfix) with ESMTP id BB5F841E55
  for <buildroot@buildroot.org>; Tue,  6 Feb 2024 10:20:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CBD1B400FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB5F841E55
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B756686F43; Tue,  6 Feb 2024 10:20:53 +0000 (UTC)
+ id A5C9E86F41; Tue,  6 Feb 2024 10:20:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 6 Feb 2024 11:17:54 +0100
+Date: Tue, 6 Feb 2024 11:17:51 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9eb47ddad84fe099d2a57ffd428602b06e3bc5c3
-X-Git-Newrev: bea49c2cd3168e11ecf6e858b7e0004f963b4069
+X-Git-Oldrev: 3c2f84e70f592bb3986b5696d9a3e8c8d5268822
+X-Git-Newrev: 9eb47ddad84fe099d2a57ffd428602b06e3bc5c3
 X-Patchwork-Hint: ignore
-Message-Id: <20240206102053.B756686F43@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-distlib: bump to version
- 0.3.8
+Message-Id: <20240206102053.A5C9E86F41@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-construct: bump to version
+ 2.10.70
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,44 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bea49c2cd3168e11ecf6e858b7e0004f963b4069
+commit: https://git.buildroot.net/buildroot/commit/?id=9eb47ddad84fe099d2a57ffd428602b06e3bc5c3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-distlib/python-distlib.hash | 4 ++--
- package/python-distlib/python-distlib.mk   | 4 ++--
+ package/python-construct/python-construct.hash | 4 ++--
+ package/python-construct/python-construct.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-distlib/python-distlib.hash b/package/python-distlib/python-distlib.hash
-index 506d10824c..1a14e6ba77 100644
---- a/package/python-distlib/python-distlib.hash
-+++ b/package/python-distlib/python-distlib.hash
+diff --git a/package/python-construct/python-construct.hash b/package/python-construct/python-construct.hash
+index a72a79a5b3..395de7a18b 100644
+--- a/package/python-construct/python-construct.hash
++++ b/package/python-construct/python-construct.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/distlib/json
--md5  44e4357e35bbd77fdf1b81e174e34f20  distlib-0.3.7.tar.gz
--sha256  9dafe54b34a028eafd95039d5e5d4851a13734540f1331060d31c9916e7147a8  distlib-0.3.7.tar.gz
-+md5  c4df5794463d3710bae3d162bf953ba6  distlib-0.3.8.tar.gz
-+sha256  1530ea13e350031b6312d8580ddb6b27a104275a31106523b8f123787f494f64  distlib-0.3.8.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/construct/json
+-md5  d881ab2198ec6597e603a2d985307353  construct-2.10.69.tar.gz
+-sha256  08573d1573827a6fe6b846756d54270650e221a6cec6a72e06b582cde775599e  construct-2.10.69.tar.gz
++md5  e880b97796c16ae362600b7e32339a7e  construct-2.10.70.tar.gz
++sha256  4d2472f9684731e58cc9c56c463be63baa1447d674e0d66aeb5627b22f512c29  construct-2.10.70.tar.gz
  # Locally computed sha256 checksums
- sha256  808e10c8a6ab8deb149ff9b3fb19f447a808094606d712a9ca57fead3552599d  LICENSE.txt
-diff --git a/package/python-distlib/python-distlib.mk b/package/python-distlib/python-distlib.mk
-index cae025dbdb..2eba3ae64f 100644
---- a/package/python-distlib/python-distlib.mk
-+++ b/package/python-distlib/python-distlib.mk
+ sha256  1552d70acfd0d3fe464ce13d30113ddc6fe4bac21e52212acc98509e3cc1a8f4  LICENSE
+diff --git a/package/python-construct/python-construct.mk b/package/python-construct/python-construct.mk
+index 1e30651129..46cae959ea 100644
+--- a/package/python-construct/python-construct.mk
++++ b/package/python-construct/python-construct.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_DISTLIB_VERSION = 0.3.7
-+PYTHON_DISTLIB_VERSION = 0.3.8
- PYTHON_DISTLIB_SOURCE = distlib-$(PYTHON_DISTLIB_VERSION).tar.gz
--PYTHON_DISTLIB_SITE = https://files.pythonhosted.org/packages/29/34/63be59bdf57b3a8a8dcc252ef45c40f3c018777dc8843d45dd9b869868f0
-+PYTHON_DISTLIB_SITE = https://files.pythonhosted.org/packages/c4/91/e2df406fb4efacdf46871c25cde65d3c6ee5e173b7e5a4547a47bae91920
- PYTHON_DISTLIB_SETUP_TYPE = setuptools
- PYTHON_DISTLIB_LICENSE = PSF-2.0
- PYTHON_DISTLIB_LICENSE_FILES = LICENSE.txt
+-PYTHON_CONSTRUCT_VERSION = 2.10.69
++PYTHON_CONSTRUCT_VERSION = 2.10.70
+ PYTHON_CONSTRUCT_SOURCE = construct-$(PYTHON_CONSTRUCT_VERSION).tar.gz
+-PYTHON_CONSTRUCT_SITE = https://files.pythonhosted.org/packages/02/88/e34d7265863f3c96077aea24041b067d4646d77d596d979110eb94758b03
++PYTHON_CONSTRUCT_SITE = https://files.pythonhosted.org/packages/02/77/8c84b98eca70d245a2a956452f21d57930d22ab88cbeed9290ca630cf03f
+ PYTHON_CONSTRUCT_SETUP_TYPE = setuptools
+ PYTHON_CONSTRUCT_LICENSE = MIT
+ PYTHON_CONSTRUCT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
