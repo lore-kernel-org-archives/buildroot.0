@@ -4,49 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4BAEC4828D
-	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 12:58:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1C20C48297
+	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 12:58:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A6284826BB;
-	Tue,  6 Feb 2024 12:58:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B0B01822E0;
+	Tue,  6 Feb 2024 12:58:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zzFHQFg3NUcM; Tue,  6 Feb 2024 12:58:55 +0000 (UTC)
+	with ESMTP id myWlu6LIYO2J; Tue,  6 Feb 2024 12:58:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 82BB3826DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 389AE82718
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 82BB3826DE;
-	Tue,  6 Feb 2024 12:58:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 70B731BF33B
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 12:58:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 389AE82718;
+	Tue,  6 Feb 2024 12:58:58 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2D3691BF33B
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 12:58:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0460781E14
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6949640534
  for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 12:58:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6949640534
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id P89SxH9Wxw9L for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id h300kygMWPz8 for <buildroot@lists.busybox.net>;
  Tue,  6 Feb 2024 12:58:34 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3579D8228C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3579D8228C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 591604044A
  for <buildroot@buildroot.org>; Tue,  6 Feb 2024 12:58:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 591604044A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 23DBD8702A; Tue,  6 Feb 2024 12:58:34 +0000 (UTC)
+ id 538707FCE7; Tue,  6 Feb 2024 12:58:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 6 Feb 2024 13:58:19 +0100
+Date: Tue, 6 Feb 2024 13:58:21 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 94dd060c8f8a00e1bf9dc8072c3c4c543866c946
-X-Git-Newrev: 914040cb73a7b3d2082b70e05fba4a2c1268732e
+X-Git-Oldrev: 5fe80ca7d55bbffedf49ac3be979f9c3baeb978c
+X-Git-Newrev: 0f9ce75df41e9ae4caee9231b9052edb57b25cfe
 X-Patchwork-Hint: ignore
-Message-Id: <20240206125834.23DBD8702A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pillow: bump to version
- 10.2.0
+Message-Id: <20240206125834.538707FCE7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-prompt-toolkit: bump to
+ version 3.0.43
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,50 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=914040cb73a7b3d2082b70e05fba4a2c1268732e
+commit: https://git.buildroot.net/buildroot/commit/?id=0f9ce75df41e9ae4caee9231b9052edb57b25cfe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-License hash changed due to year update:
-https://github.com/python-pillow/Pillow/commit/ee6e12a8032a8255b2f7a60a40c50377c17a03fe
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pillow/python-pillow.hash | 6 +++---
- package/python-pillow/python-pillow.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/python-prompt-toolkit/python-prompt-toolkit.hash | 4 ++--
+ package/python-prompt-toolkit/python-prompt-toolkit.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
-index 92258a6712..001fb62676 100644
---- a/package/python-pillow/python-pillow.hash
-+++ b/package/python-pillow/python-pillow.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/pillow/json
--md5  a55618c5d2fd64048dd3ea41bc39f7cd  Pillow-10.1.0.tar.gz
--sha256  e6bf8de6c36ed96c86ea3b6e1d5273c53f46ef518a062464cd7ef5dd2cf92e38  Pillow-10.1.0.tar.gz
-+md5  13de96f9f98bc1c26439d64576a48ac6  pillow-10.2.0.tar.gz
-+sha256  e87f0b2c78157e12d7686b27d63c070fd65d994e8ddae6f328e0dcf4a0cd007e  pillow-10.2.0.tar.gz
- 
+diff --git a/package/python-prompt-toolkit/python-prompt-toolkit.hash b/package/python-prompt-toolkit/python-prompt-toolkit.hash
+index 54130f3ae0..1821d4d65c 100644
+--- a/package/python-prompt-toolkit/python-prompt-toolkit.hash
++++ b/package/python-prompt-toolkit/python-prompt-toolkit.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/prompt-toolkit/json
+-md5  252a5d200e41d46b65a3076d2bc0a4bd  prompt_toolkit-3.0.41.tar.gz
+-sha256  941367d97fc815548822aa26c2a269fdc4eb21e9ec05fc5d447cf09bad5d75f0  prompt_toolkit-3.0.41.tar.gz
++md5  f33c0f4ae8d11addababf6d90c98f8bc  prompt_toolkit-3.0.43.tar.gz
++sha256  3527b7af26106cbc65a040bcc84839a3566ec1b051bb0bfe953631e704b0ff7d  prompt_toolkit-3.0.43.tar.gz
  # Locally computed sha256 checksums
--sha256  0fdb68ffb39062553be40be4e6eaea9700b4f5e870a720ae86b8925d67613ddd  LICENSE
-+sha256  e706384c6f299d1b6fa782ae657740b372b4bd7938a1a318bf94ac249114758a  LICENSE
-diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
-index bc94062da8..10939d8467 100644
---- a/package/python-pillow/python-pillow.mk
-+++ b/package/python-pillow/python-pillow.mk
+ sha256  303574d9bdd85c757d6025017942bf17baeedf2778f62bd7f425d07d880f4c4a  LICENSE
+diff --git a/package/python-prompt-toolkit/python-prompt-toolkit.mk b/package/python-prompt-toolkit/python-prompt-toolkit.mk
+index db40f6c7eb..31c0d9783f 100644
+--- a/package/python-prompt-toolkit/python-prompt-toolkit.mk
++++ b/package/python-prompt-toolkit/python-prompt-toolkit.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PILLOW_VERSION = 10.1.0
--PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/80/d7/c4b258c9098b469c4a4e77b0a99b5f4fd21e359c2e486c977d231f52fc71
--PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
-+PYTHON_PILLOW_VERSION = 10.2.0
-+PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/f8/3e/32cbd0129a28686621434cbf17bb64bf1458bfb838f1f668262fefce145c
-+PYTHON_PILLOW_SOURCE = pillow-$(PYTHON_PILLOW_VERSION).tar.gz
- PYTHON_PILLOW_LICENSE = HPND
- PYTHON_PILLOW_LICENSE_FILES = LICENSE
- PYTHON_PILLOW_CPE_ID_VENDOR = python
+-PYTHON_PROMPT_TOOLKIT_VERSION = 3.0.41
++PYTHON_PROMPT_TOOLKIT_VERSION = 3.0.43
+ PYTHON_PROMPT_TOOLKIT_SOURCE = prompt_toolkit-$(PYTHON_PROMPT_TOOLKIT_VERSION).tar.gz
+-PYTHON_PROMPT_TOOLKIT_SITE = https://files.pythonhosted.org/packages/d9/7b/7d88d94427e1e179e0a62818e68335cf969af5ca38033c0ca02237ab6ee7
++PYTHON_PROMPT_TOOLKIT_SITE = https://files.pythonhosted.org/packages/cc/c6/25b6a3d5cd295304de1e32c9edbcf319a52e965b339629d37d42bb7126ca
+ PYTHON_PROMPT_TOOLKIT_SETUP_TYPE = setuptools
+ PYTHON_PROMPT_TOOLKIT_LICENSE = BSD-3-Clause
+ PYTHON_PROMPT_TOOLKIT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
