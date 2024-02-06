@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43CAEC4828D
-	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 10:21:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3F09C4828D
+	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 10:21:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F12E241E56;
-	Tue,  6 Feb 2024 10:21:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F12E241E56
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5C9AC41E6A;
+	Tue,  6 Feb 2024 10:21:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C9AC41E6A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id itNR8lfAtfZU; Tue,  6 Feb 2024 10:21:35 +0000 (UTC)
+	with ESMTP id CDhyaatCy_oC; Tue,  6 Feb 2024 10:21:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3F1F641E6A;
-	Tue,  6 Feb 2024 10:21:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F1F641E6A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9940E41E56;
+	Tue,  6 Feb 2024 10:21:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9940E41E56
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 020031BF311
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 10:20:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 26C4E1BF311
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 10:20:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 922F441E51
+ by smtp4.osuosl.org (Postfix) with ESMTP id AD11741E55
  for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 10:20:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 922F441E51
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD11741E55
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id A9-ySeHxM_tS for <buildroot@lists.busybox.net>;
- Tue,  6 Feb 2024 10:20:53 +0000 (UTC)
+ with ESMTP id IVAlm78SbJUF for <buildroot@lists.busybox.net>;
+ Tue,  6 Feb 2024 10:20:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BB5F841E55
+ by smtp4.osuosl.org (Postfix) with ESMTP id DC73941E56
  for <buildroot@buildroot.org>; Tue,  6 Feb 2024 10:20:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB5F841E55
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC73941E56
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A5C9E86F41; Tue,  6 Feb 2024 10:20:53 +0000 (UTC)
+ id C7B6A86F40; Tue,  6 Feb 2024 10:20:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 6 Feb 2024 11:17:51 +0100
+Date: Tue, 6 Feb 2024 11:17:59 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3c2f84e70f592bb3986b5696d9a3e8c8d5268822
-X-Git-Newrev: 9eb47ddad84fe099d2a57ffd428602b06e3bc5c3
+X-Git-Oldrev: bea49c2cd3168e11ecf6e858b7e0004f963b4069
+X-Git-Newrev: 7c83d1e930c23d0e62de4eedb99716bc5c0f6a29
 X-Patchwork-Hint: ignore
-Message-Id: <20240206102053.A5C9E86F41@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-construct: bump to version
- 2.10.70
+Message-Id: <20240206102053.C7B6A86F40@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-distro: bump to version
+ 1.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,44 +64,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9eb47ddad84fe099d2a57ffd428602b06e3bc5c3
+commit: https://git.buildroot.net/buildroot/commit/?id=7c83d1e930c23d0e62de4eedb99716bc5c0f6a29
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-construct/python-construct.hash | 4 ++--
- package/python-construct/python-construct.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-distro/python-distro.hash | 8 ++++----
+ package/python-distro/python-distro.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-construct/python-construct.hash b/package/python-construct/python-construct.hash
-index a72a79a5b3..395de7a18b 100644
---- a/package/python-construct/python-construct.hash
-+++ b/package/python-construct/python-construct.hash
+diff --git a/package/python-distro/python-distro.hash b/package/python-distro/python-distro.hash
+index 3d3e4258de..7f8277896d 100644
+--- a/package/python-distro/python-distro.hash
++++ b/package/python-distro/python-distro.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/construct/json
--md5  d881ab2198ec6597e603a2d985307353  construct-2.10.69.tar.gz
--sha256  08573d1573827a6fe6b846756d54270650e221a6cec6a72e06b582cde775599e  construct-2.10.69.tar.gz
-+md5  e880b97796c16ae362600b7e32339a7e  construct-2.10.70.tar.gz
-+sha256  4d2472f9684731e58cc9c56c463be63baa1447d674e0d66aeb5627b22f512c29  construct-2.10.70.tar.gz
- # Locally computed sha256 checksums
- sha256  1552d70acfd0d3fe464ce13d30113ddc6fe4bac21e52212acc98509e3cc1a8f4  LICENSE
-diff --git a/package/python-construct/python-construct.mk b/package/python-construct/python-construct.mk
-index 1e30651129..46cae959ea 100644
---- a/package/python-construct/python-construct.mk
-+++ b/package/python-construct/python-construct.mk
+-# From https://pypi.org/pypi/distro/json
+-md5  a1e81972bbcfc0dc77dd0cde590c22a6  distro-1.8.0.tar.gz
+-sha256  02e111d1dc6a50abb8eed6bf31c3e48ed8b0830d1ea2a1b78c61765c2513fdd8  distro-1.8.0.tar.gz
+-# Locally computed
++# md5, sha256 from https://pypi.org/pypi/distro/json
++md5  c4eee99e1d05691230f223c37b895027  distro-1.9.0.tar.gz
++sha256  2fa77c6fd8940f116ee1d6b94a2f90b13b5ea8d019b98bc8bafdcabcdd9bdbed  distro-1.9.0.tar.gz
++# Locally computed sha256 checksums
+ sha256  cb5e8e7e5f4a3988e1063c142c60dc2df75605f4c46515e776e3aca6df976e14  LICENSE
+diff --git a/package/python-distro/python-distro.mk b/package/python-distro/python-distro.mk
+index e079d8e265..05faab3888 100644
+--- a/package/python-distro/python-distro.mk
++++ b/package/python-distro/python-distro.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CONSTRUCT_VERSION = 2.10.69
-+PYTHON_CONSTRUCT_VERSION = 2.10.70
- PYTHON_CONSTRUCT_SOURCE = construct-$(PYTHON_CONSTRUCT_VERSION).tar.gz
--PYTHON_CONSTRUCT_SITE = https://files.pythonhosted.org/packages/02/88/e34d7265863f3c96077aea24041b067d4646d77d596d979110eb94758b03
-+PYTHON_CONSTRUCT_SITE = https://files.pythonhosted.org/packages/02/77/8c84b98eca70d245a2a956452f21d57930d22ab88cbeed9290ca630cf03f
- PYTHON_CONSTRUCT_SETUP_TYPE = setuptools
- PYTHON_CONSTRUCT_LICENSE = MIT
- PYTHON_CONSTRUCT_LICENSE_FILES = LICENSE
+-PYTHON_DISTRO_VERSION = 1.8.0
+-PYTHON_DISTRO_SITE = https://files.pythonhosted.org/packages/4b/89/eaa3a3587ebf8bed93e45aa79be8c2af77d50790d15b53f6dfc85b57f398
++PYTHON_DISTRO_VERSION = 1.9.0
+ PYTHON_DISTRO_SOURCE = distro-$(PYTHON_DISTRO_VERSION).tar.gz
++PYTHON_DISTRO_SITE = https://files.pythonhosted.org/packages/fc/f8/98eea607f65de6527f8a2e8885fc8015d3e6f5775df186e443e0964a11c3
+ PYTHON_DISTRO_LICENSE = Apache-2.0
+ PYTHON_DISTRO_LICENSE_FILES = LICENSE
+ PYTHON_DISTRO_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
