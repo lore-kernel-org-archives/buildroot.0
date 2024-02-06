@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 875E2C48260
-	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 03:33:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27033C48260
+	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 03:34:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C9BC74189E;
-	Tue,  6 Feb 2024 03:33:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C9BC74189E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 913D4418A0;
+	Tue,  6 Feb 2024 03:34:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 913D4418A0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EsUuWqqlTbri; Tue,  6 Feb 2024 03:33:23 +0000 (UTC)
+	with ESMTP id r8rjerB9UKZk; Tue,  6 Feb 2024 03:34:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 087814188F;
-	Tue,  6 Feb 2024 03:33:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 087814188F
+	by smtp4.osuosl.org (Postfix) with ESMTP id B2F7141898;
+	Tue,  6 Feb 2024 03:34:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B2F7141898
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 354721BF215
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 03:33:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 099E11BF215
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 03:34:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1ADDB4188F
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 03:33:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1ADDB4188F
+ by smtp4.osuosl.org (Postfix) with ESMTP id D4AE041898
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 03:34:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D4AE041898
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XLMYsWBgGldk for <buildroot@lists.busybox.net>;
- Tue,  6 Feb 2024 03:33:20 +0000 (UTC)
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com
- [IPv6:2607:f8b0:4864:20::830])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1AA874187F
- for <buildroot@buildroot.org>; Tue,  6 Feb 2024 03:33:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1AA874187F
-Received: by mail-qt1-x830.google.com with SMTP id
- d75a77b69052e-429de32dad9so29259221cf.2
- for <buildroot@buildroot.org>; Mon, 05 Feb 2024 19:33:19 -0800 (PST)
+ with ESMTP id lALKAEvApBgq for <buildroot@lists.busybox.net>;
+ Tue,  6 Feb 2024 03:34:52 +0000 (UTC)
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com
+ [IPv6:2607:f8b0:4864:20::72c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8093E4188F
+ for <buildroot@buildroot.org>; Tue,  6 Feb 2024 03:34:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8093E4188F
+Received: by mail-qk1-x72c.google.com with SMTP id
+ af79cd13be357-783f553fdabso12388085a.0
+ for <buildroot@buildroot.org>; Mon, 05 Feb 2024 19:34:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707190399; x=1707795199;
+ d=1e100.net; s=20230601; t=1707190491; x=1707795291;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=3FMDpjF53A+TS9r40haljn5zv0rtDoNSTiWrZJ7DmnA=;
- b=KkeGtubO2kLEyCzWMBMVkERTqOyMLd5RLjYYevXsLK4RkKk7+YSEZ9w6Au0y+4jYnA
- sU2AaiPeUi40bQsoeJaWdCi7FyP73cRqYPvcX8EqKRlYr884mRryzfTFtK7VAuvF4Brc
- O5HOSVmsIQSmw12jV+ARUcYSkemyTbJohAUHLWhRLiw0mU3frSlmbbZESC5lZNqqHWac
- 6M1n8win7VRuXIczurcuMYTQ35nUWHHg6rdZK0OjLjvM7Tku3tdd9qPOH3jsP0a/hB/l
- RB5SRqAq8zxB6Xso0PYusOp54howhsy+njkOU9iy823w0P5sKLluGkVxEF0IM+B4nLlk
- CC7g==
-X-Gm-Message-State: AOJu0YzPD+vlTbAk5ebP61BN9GsOREsOUZRqmXpKaumm8062HIfMZzfX
- yWCqy1/EqNlfMxqKO+NqNDAoG4ZmqhkirL5o28Ll/O9xEwKCL/sd8I8iF1epIct3cw==
-X-Google-Smtp-Source: AGHT+IEdtcJ9ZELmVcC2YDia8vu1YhXBtQmr5luSh43vrTxqKXNYyMK7W/XRAvGu47Ph8eb/YZYgTA==
-X-Received: by 2002:ac8:7f42:0:b0:42b:fd5b:a48c with SMTP id
- g2-20020ac87f42000000b0042bfd5ba48cmr1388170qtk.2.1707190398510; 
- Mon, 05 Feb 2024 19:33:18 -0800 (PST)
+ bh=BonMA9A7SCmtBAjj6oamP9nqNFawOcfqKm2Z5FdQABI=;
+ b=vWEAEDBavYjeKsDDDvqIazI743f8NxJRVOynyJwcIYBZNBqp+KBFCPrPA9GYKQYSlP
+ tUNY2Z00wRfi5ISs01/cxXSmYFnsg7keFrwAsJoF36fpUY8UbjdDE0PNxT8UmsIc7NNt
+ bTxCryvaP0pPTJhJMYiujJmYEXt1pqM/wz40FwLqfQ8mtbxCz49EfqSL96zMkZK8eKCI
+ xezyq0C83IOPp3365vHsed6Id/ffP/wANgOH07f7Ebjkfjb8x4emk9IiSbouFEalX9jr
+ eQg4hCEzEKKso8d0i8/FV5HraSZOAt6mgrTpqJMnWoOR7ldG2WuaEZT7rpGG/mtXpdJ9
+ OgEw==
+X-Gm-Message-State: AOJu0YwCKIS9/nlMAvbDxTd1q+NAOF4qXEXd5tn1M4xJLUOBEJmyDxoz
+ b9CzA1HAeJVRCbVO15AkerdZloxiz4vCbl/mth/91/inciy3KyNX+DPuVB1AMwV0zg==
+X-Google-Smtp-Source: AGHT+IGQPx+MRRgO3OR+PNUAjzL6sla03HIHQDAWZKS/3LTnmIqHh2Q+bv91LMbYI+J4twu8UXhkTw==
+X-Received: by 2002:a05:620a:911:b0:785:469c:3ef5 with SMTP id
+ v17-20020a05620a091100b00785469c3ef5mr11804690qkv.13.1707190490847; 
+ Mon, 05 Feb 2024 19:34:50 -0800 (PST)
 X-Forwarded-Encrypted: i=0;
- AJvYcCWO4Tlpw8+8101FI28DdubYXEPCZ3lcMBZdWI074A8xps/5qCX0R2nE9zn1GhJpIAFW+kMk1TBnnR/xPQksU35CoSdWfusLHTHVtGBHpX4GXLO5FYlYT8pJWnwpaAbE8OM8/7IaVktMPn56zvxu
+ AJvYcCW3wzN/AU0i3Xi3NsJDWXYFJIPmS6X6baNCp7YGKHgLe+OW5Vacmn05ibJCEf6xloCoc/9IcZEyvSv8paErQ3uZ/TjFo/UpzUYoTonDD/c1tGJFphyu7KpKEC1u8E5vpRSHAWiKXxf8n7+RSSzE
 Received: from localhost.localdomain (61-216-248-199.hinet-ip.hinet.net.
  [61.216.248.199]) by smtp.gmail.com with ESMTPSA id
- g5-20020ac84dc5000000b0042a41b27d3fsm525072qtw.90.2024.02.05.19.33.16
+ a2-20020a05620a02e200b007853f736893sm551985qko.5.2024.02.05.19.34.49
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 05 Feb 2024 19:33:18 -0800 (PST)
+ Mon, 05 Feb 2024 19:34:50 -0800 (PST)
 From: Nigel Wang <asd617140123@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue,  6 Feb 2024 11:33:03 +0800
-Message-Id: <20240206033303.38280-1-asd617140123@gmail.com>
+Date: Tue,  6 Feb 2024 11:34:36 +0800
+Message-Id: <20240206033436.38436-1-asd617140123@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1707190399; x=1707795199; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1707190491; x=1707795291; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=3FMDpjF53A+TS9r40haljn5zv0rtDoNSTiWrZJ7DmnA=;
- b=Dkgi5EUxesMZO/bHZaJE7hUJgkVTDVsNtinOpfyn6bJSVRKXia6qdSP5KdySYEFoih
- mhuSQkWrH3cWZoKVawRN+g2huyumPy2MikXWTVk3+LKNU7lrBEtS/rvOzwKQHRq7NEww
- omVxqouL6hbU64QpFpQ8EJxOnO8vijyhkrptq+dqY79zBf2DBHoxekhkIEUaOQUl1ZuL
- 8olVEVuDCZLze5R7k3SzOrSc6OBG7vJ37eOmavFqGP8KOYACdE+M2s1WU9x6r+OJPjQM
- QF85lZEYB2kYxzcI6JyY8WPbkgCEeWTrsl5RA36cHzvxRBHn4v3Opff/iYX4DZbp3pIZ
- Uv+g==
+ bh=BonMA9A7SCmtBAjj6oamP9nqNFawOcfqKm2Z5FdQABI=;
+ b=kVdRZ2djuuS0qpB/dAgGM88TKg+OU4BKHL3SA5mbaIjXlk/waHY3hSbdaOcAVyYheJ
+ OcMLe6TFa2ueOg0bQJk05IMT8jh2f7YgpvXMxXAXwzn5odKt5T46dBl1aQbmHqv9qCoC
+ xW6Ii60Z0qte1LPqgQQtYw4FR7YPL7rSV+lQAiegUUd9Ajlu+vlgpKWJlpx1MaJ2VZtV
+ aKbL6Me9/Es/XcLqixdB/h2Yc9om4iu67MDoRjHBWb7NJlnWwL0rB7Gvut2qpEkN/YsN
+ XJ0DQ1AU5j+z9yfbaoQFqMgw8vUZefN3Nf7/x3UOB6fvE6bhYOh+ZEQWbXcqpsSjScOH
+ X+Pw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Dkgi5EUx
+ header.a=rsa-sha256 header.s=20230601 header.b=kVdRZ2dj
 Subject: [Buildroot] [PATCH v2] board/cubietech/cubieboard4 : Add config
  file for cubieboard4.
 X-BeenThere: buildroot@buildroot.org
@@ -105,20 +105,23 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: nigel_wang <asd617140123@gmail.com>
 
-configs/cubieboard4_defconfig : add defconfig for cubieboard4.
+This is a new defconfig for cubieboard4. The following is board's
+detail.
+- SOC: sunxiA80.
+- DRAM: 2GiB DDR3 @ 672MHZ.
+- NAND: 8GBeMMC
+- Power: DC 5V.
+- Network: Wifi 80211 b/g/n.
+- Ethernet: RTL8211E
+reference:
+https://linux-sunxi.org/Cubietech_Cubieboard4
 
-board/cubietech/cubieboard4/extlinux.conf: using the config to make
-device can boot uboot/kernel correctly.
-board/cubietech/cubieboard4/genimage.cfg: Adjust boot dtb/sdcard memory
-layout.
-board/cubietech/cubieboard4/post-image.sh: using extlinux.conf in the
-file, it can use "genimage" to generate sdcard image.
-modified: configs/cubieboard4_defconfig: remove unnecessary option.
-
-Replaced boot.cmd by extlinux.conf.
-Append name in DEVELOPERS file.
+Board support package includes the following components:
+- mainline Linux Kernel 6.6.8
+- mainline U-boot 2021.10.
 
 Signed-off-by: Nigel Wang <asd617140123@gmail.com>
+
 ---
  DEVELOPERS                                |  4 +++
  board/cubietech/cubieboard4/extlinux.conf |  5 +++
@@ -267,7 +270,7 @@ index 0000000000..0592fe4a2d
 +BR2_PACKAGE_HOST_GENIMAGE=y
 +BR2_PACKAGE_HOST_MTOOLS=y
 +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
--- 
+--
 2.34.1
 
 _______________________________________________
