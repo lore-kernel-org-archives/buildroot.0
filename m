@@ -4,66 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85E56C4828D
-	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 17:04:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41A57C48297
+	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 17:05:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 26D4661142;
-	Tue,  6 Feb 2024 17:04:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 26D4661142
+	by smtp3.osuosl.org (Postfix) with ESMTP id DB0B0612C0;
+	Tue,  6 Feb 2024 17:05:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB0B0612C0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CgzwJfqlVwdG; Tue,  6 Feb 2024 17:04:47 +0000 (UTC)
+	with ESMTP id zR2CMelqO6uy; Tue,  6 Feb 2024 17:05:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8041C60B8E;
-	Tue,  6 Feb 2024 17:04:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8041C60B8E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2C09461142;
+	Tue,  6 Feb 2024 17:05:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C09461142
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A2EA41BF3A1
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 17:04:44 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1E0571BF3A1
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 17:05:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7B75E4046D
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 17:04:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B75E4046D
+ by smtp4.osuosl.org (Postfix) with ESMTP id EB61D4046D
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 17:05:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB61D4046D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Cnak2xxXBuQ4 for <buildroot@lists.busybox.net>;
- Tue,  6 Feb 2024 17:04:43 +0000 (UTC)
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 076F640530
- for <buildroot@buildroot.org>; Tue,  6 Feb 2024 17:04:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 076F640530
-Received: from [192.168.17.123] (unknown [85.119.216.19])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id C7FBB2C80CDD;
- Tue,  6 Feb 2024 18:04:40 +0100 (CET)
-Message-ID: <d56a02ae-30d4-4a92-9a2d-953f75b36422@bubu1.eu>
-Date: Tue, 6 Feb 2024 18:04:37 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
+ with ESMTP id l0BVFNZ7I-HX for <buildroot@lists.busybox.net>;
+ Tue,  6 Feb 2024 17:05:13 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 34AE3402C5
+ for <buildroot@buildroot.org>; Tue,  6 Feb 2024 17:05:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 34AE3402C5
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2087287185; Tue,  6 Feb 2024 17:05:13 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-References: <20240206155140.2351424-1-romain.naour@smile.fr>
- <20240206155140.2351424-2-romain.naour@smile.fr>
-In-Reply-To: <20240206155140.2351424-2-romain.naour@smile.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=bubu1.eu; s=bubu; 
- t=1707239080; bh=PPq1o58fleE06nr2HGnTHMA94KlANN0X5F7+o4h7RxQ=;
- h=Date:Subject:To:References:From:Cc:In-Reply-To;
- b=qqd+be6s1h1/PEumkRMSXCekyReWedyzn4JgF4PMRlanH21+pVvcVcv0zOlA9uwxW
- NfMSuJOss/U3n01MgM1To57/JSkqRiARoNhJOplLosrg4aLwKrpCkOUZZrRFzEuu/w
- PgToenYcd0wyEXUx3bYWNyROtbWXI6dnGIHEnvznqJ/+9NtsSObtMr+RbllRa7lIDD
- 2Q1H6Wscg9uDbjb3ZjWmOilbyUPN22EZjH0xVP4LmSGhv/0kRk9ppt9D+eqkbrQOxQ
- MPFptCo/WTwxXadLj9/hcQJL5DcN6EE1nKcOwctsUzpnXAp0Yn0x/YD6J8sEDge6P4
- kKZFCFr6sT5kQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=bubu1.eu header.i=@bubu1.eu
- header.a=rsa-sha256 header.s=bubu header.b=qqd+be6s
-Subject: Re: [Buildroot] [PATCH 2/2] package/python-bitstring: add missing
- runtime dependency
+Date: Tue, 6 Feb 2024 18:03:57 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e0e7a1d3d15727a2f14db83b7c651db73f2a50f1
+X-Git-Newrev: fc3d2bcb40e5cc47b4d6a3dd73fc145c1f00db50
+X-Patchwork-Hint: ignore
+Message-Id: <20240206170513.2087287185@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] docs/manual/contribute.adoc: mention sr.ht
+ as a fallback for sending patches
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,71 +57,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
-Cc: james.hilliard1@gmail.com, Romain Naour <romain.naour@smile.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Romain,
+commit: https://git.buildroot.net/buildroot/commit/?id=fc3d2bcb40e5cc47b4d6a3dd73fc145c1f00db50
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 06.02.24 16:51, Romain Naour wrote:
-> python-bitstring require python-bitarray and python-zlib at runtime
-> since 4.0.1 release [1][2].
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+[yann.morin.1998@free.fr: make it explicit it is not the official way]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ docs/manual/contribute.adoc | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-I needed to look at the version numbers 3 times, but this dependency 
-actually got introduced in 4.1.0  :-). [1]
-
-> 
-> python-zlib is now needed for the "Experimental support for two 8-bit
-> float types".
-
-Is there a reference to that somewhere? (I know, nobody documents their 
-dependencies on internal python modules, but where is the quote from?)
-
-> 
-> Intended to fixes (fixed locally):
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/6104227183 (TestPythonPy3Bitstring)
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/6093854810 (TestPythonPy3Crossbar)
-
-This test failed for a different reason: It ran with bitstring version 
-4.1.2 which included a bogus python file with invalid syntax [2] which 
-the pyc compilation step stumbles over. The version bump to 4.1.4 
-already solved this.
-
-[1] 
-https://github.com/scott-griffiths/bitstring/releases/tag/bitstring-4.1.0
-[2] https://github.com/scott-griffiths/bitstring/issues/293
-
-> 
-> gitlab-ci reports another issue at build time not reproduced locally:
-> 
->    *** Error compiling '[...]/TestPythonPy3Bitstring/target/usr/lib/python3.11/site-packages/bitstring/plugin_test.py'...
->    Sorry: IndentationError: expected an indented block after function definition on line 6 (plugin_test.py, line 8)
-> 
-> [1] https://github.com/scott-griffiths/bitstring/releases/tag/bitstring-4.1.1
-> [2] https://github.com/scott-griffiths/bitstring/commit/70c8af4d8bef557bc7d96f809d37e2c241587dd0
-> 
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
-> Cc: James Hilliard <james.hilliard1@gmail.com>
-> ---
->   package/python-bitstring/Config.in | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/python-bitstring/Config.in b/package/python-bitstring/Config.in
-> index 93d7682577..82d0bb29c6 100644
-> --- a/package/python-bitstring/Config.in
-> +++ b/package/python-bitstring/Config.in
-> @@ -1,5 +1,7 @@
->   config BR2_PACKAGE_PYTHON_BITSTRING
->   	bool "python-bitstring"
-> +	select BR2_PACKAGE_PYTHON_BITARRAY # runtime
-> +	select BR2_PACKAGE_PYTHON3_ZLIB # runtime
->   	help
->   	  Simple construction, analysis and modification of binary data.
->   
+diff --git a/docs/manual/contribute.adoc b/docs/manual/contribute.adoc
+index 684e9f4809..6ff6c15314 100644
+--- a/docs/manual/contribute.adoc
++++ b/docs/manual/contribute.adoc
+@@ -375,6 +375,15 @@ If you do not use +git send-email+, make sure posted *patches are not
+ line-wrapped*, otherwise they cannot easily be applied. In such a case,
+ fix your e-mail client, or better yet, learn to use +git send-email+.
+ 
++https://sr.ht also has a light-weight UI for
++https://man.sr.ht/git.sr.ht/#sending-patches-upstream[preparing patchseries]
++and can also send out the patches for you. There are a few drawbacks to
++this, as you cannot edit your patches' status in Patchwork and you
++currently can't edit your display name with which the match emails are
++sent out but it is an option if you cannot get git send-email to work
++with your mail provider (i.e. O365); it shall not be considered the
++official way of sending patches, but just a fallback.
++
+ ==== Cover letter
+ 
+ If you want to present the whole patch set in a separate mail, add
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
