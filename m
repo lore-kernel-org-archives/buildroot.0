@@ -4,59 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 222D8C4828D
-	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 22:32:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BE27C48297
+	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 22:32:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E081342094;
-	Tue,  6 Feb 2024 22:32:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 27D3042091;
+	Tue,  6 Feb 2024 22:32:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id M8ozKDcvnl6l; Tue,  6 Feb 2024 22:32:10 +0000 (UTC)
+	with ESMTP id uOv2cXSKgztn; Tue,  6 Feb 2024 22:32:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF4B4420A6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0EA3542096
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EF4B4420A6;
-	Tue,  6 Feb 2024 22:32:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0EA3542096;
+	Tue,  6 Feb 2024 22:32:44 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B67791BF276
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 22:32:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B62091BF276
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 22:32:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A3CD183417
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 22:32:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B17B383417
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 22:32:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9kAKeHZHnxOX for <buildroot@lists.busybox.net>;
- Tue,  6 Feb 2024 22:32:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
- helo=relay8-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ with ESMTP id SXFypxUdwaX1 for <buildroot@lists.busybox.net>;
+ Tue,  6 Feb 2024 22:32:42 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8760B8341A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8760B8341A
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8760B8341A
- for <buildroot@buildroot.org>; Tue,  6 Feb 2024 22:32:07 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 571681BF206;
- Tue,  6 Feb 2024 22:32:05 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rXTz2-00EMP8-0n;
- Tue, 06 Feb 2024 23:32:04 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EECF981F5E
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id EECF981F5E
+ for <buildroot@buildroot.org>; Tue,  6 Feb 2024 22:32:41 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EAF89873F6; Tue,  6 Feb 2024 22:32:41 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20240206220725.910499-1-fontaine.fabrice@gmail.com>
-Date: Tue, 06 Feb 2024 23:32:04 +0100
-In-Reply-To: <20240206220725.910499-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 6 Feb 2024 23:07:25 +0100")
-Message-ID: <87mssd2pi3.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-lmdb: add CPE variables
+To: buildroot@buildroot.org
+Date: Tue, 6 Feb 2024 23:31:43 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 568bd6c39d1a28f27d6509d885e09de281953e63
+X-Git-Newrev: 5d496d7a215af398e9708cfd8d1f458b8b92dbfe
+X-Patchwork-Hint: ignore
+Message-Id: <20240206223241.EAF89873F6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-lmdb: add CPE variables
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,27 +58,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Mauro Condarelli <mc5686@mclink.it>,
- James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=5d496d7a215af398e9708cfd8d1f458b8b92dbfe
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > cpe:2.3:a:py-lmdb_project:py-lmdb is a valid CPE identifier for this
- > package:
+cpe:2.3:a:py-lmdb_project:py-lmdb is a valid CPE identifier for this
+package:
 
- >   https://nvd.nist.gov/products/cpe/detail/AFE6D0BA-D905-43F6-81FE-308D591A82B8
+  https://nvd.nist.gov/products/cpe/detail/AFE6D0BA-D905-43F6-81FE-308D591A82B8
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python-lmdb/python-lmdb.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/python-lmdb/python-lmdb.mk b/package/python-lmdb/python-lmdb.mk
+index 52617b6ed0..7906d388ae 100644
+--- a/package/python-lmdb/python-lmdb.mk
++++ b/package/python-lmdb/python-lmdb.mk
+@@ -9,6 +9,8 @@ PYTHON_LMDB_SOURCE = lmdb-$(PYTHON_LMDB_VERSION).tar.gz
+ PYTHON_LMDB_SITE = https://files.pythonhosted.org/packages/de/13/dd9b0c1924f0becc93e0bacd123a4e7a347966e3e74753ace3b1e85acc39
+ PYTHON_LMDB_LICENSE = OLDAP-2.8
+ PYTHON_LMDB_LICENSE_FILES = LICENSE
++PYTHON_LMDB_CPE_ID_VENDOR = py-lmdb_project
++PYTHON_LMDB_CPE_ID_PRODUCT = py-lmdb
+ PYTHON_LMDB_SETUP_TYPE = setuptools
+ PYTHON_LMDB_DEPENDENCIES = host-python-cffi
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
