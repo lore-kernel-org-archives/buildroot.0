@@ -4,91 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E59FC48297
-	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 12:38:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FC33C4828D
+	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 12:40:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2E5AC81F33;
-	Tue,  6 Feb 2024 12:38:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 478EE81EE9;
+	Tue,  6 Feb 2024 12:40:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id I69M4wmzwiM8; Tue,  6 Feb 2024 12:38:42 +0000 (UTC)
+	with ESMTP id fkoJpwh-CAva; Tue,  6 Feb 2024 12:40:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 327B981F4B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3304481F33
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 327B981F4B;
-	Tue,  6 Feb 2024 12:38:42 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9206C1BF33B
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 12:38:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3304481F33;
+	Tue,  6 Feb 2024 12:40:02 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id AE4F21BF33B
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 12:40:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6ADC1402B2
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 12:38:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6ADC1402B2
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8730D60AEB
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 12:40:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8730D60AEB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lKfYKYP2ozH0 for <buildroot@lists.busybox.net>;
- Tue,  6 Feb 2024 12:38:39 +0000 (UTC)
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
- [IPv6:2a00:1450:4864:20::334])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4F66D4024C
- for <buildroot@buildroot.org>; Tue,  6 Feb 2024 12:38:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F66D4024C
-Received: by mail-wm1-x334.google.com with SMTP id
- 5b1f17b1804b1-40fe282b8adso4446195e9.2
- for <buildroot@buildroot.org>; Tue, 06 Feb 2024 04:38:39 -0800 (PST)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FOAMOL12Z8wK for <buildroot@lists.busybox.net>;
+ Tue,  6 Feb 2024 12:39:59 +0000 (UTC)
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8F79B60AE4
+ for <buildroot@buildroot.org>; Tue,  6 Feb 2024 12:39:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F79B60AE4
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-40fe33fb7a1so4063505e9.2
+ for <buildroot@buildroot.org>; Tue, 06 Feb 2024 04:39:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707223117; x=1707827917;
+ d=1e100.net; s=20230601; t=1707223197; x=1707827997;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=YLscTyIf671/DrhZc7RIokjN31nfg8uagyk67nUuAzo=;
- b=n07fBncRAd9V9U/kj7XdqxUIhTi5r5mioLjRPGBxRhhRwp31A3tKJCznDTqVghfMWv
- X1xcs/I2yHZB8qZXizgVVPRow4VfoJpe1FxjpvHa/CEVYpySddRUvsBGfUIaAZ7gZFnm
- FhyCnBohxXoMFiwHemBMIV10/AZ5y4vEp78ozD0wbv5jdf2TYdWUeiEYWMpGxdaSoHbo
- Btv/nR5gG93VhiLXA5s8VzmuXyx7nxi52LdORDuoEYjR4Ks0RvX5sVRhEf3JyOXp3uyu
- H4oj+Iz0JA4CAjgCeuohlQEeFJOc+XlguI+s4kiNFSTiK8SJaqU17TiZ+CUtEjH0Ccsz
- uX0w==
-X-Gm-Message-State: AOJu0YwVL5kPaTMiG/P2TccSHmcZMbuoBLz1c4T48iFiWh9NPHUY+VlP
- 30VxhIOTAWVIiDswujtk33Jk4c/ua9/LSzkhrxyXQSFYBoBqtrkceNDyi9+Ajr/SmKR/vb+QDGQ
- 3
-X-Google-Smtp-Source: AGHT+IEOGdRf9OhnettMrTdQwJs/b/tYaFW5Pp5DDMPbKc0l64s/I8T9e1mCi4E1KrMwPr3e29Ch6g==
-X-Received: by 2002:a05:600c:3553:b0:40e:fc26:8719 with SMTP id
- i19-20020a05600c355300b0040efc268719mr1896630wmq.35.1707223117352; 
- Tue, 06 Feb 2024 04:38:37 -0800 (PST)
+ bh=vSwZks9nsbe1j9+b5AbqieGX9KS8bV2IRO5foR5qhe4=;
+ b=HTexjUuAZfX+7pqPSX/ZDEEifj7ajOmb05xb3g7aNtIvS3/0wmDpATepJFMe6FOqN5
+ RwlEdq4+MyQvHTKn9VO3fsJJRGeVZBUhsEQiWbiD4AUJsfMyZ9jJFhBVx93WShQr93+W
+ SJ7vd6WrnMgTKLsLQJ8TSWOm2hW6IO37xRBSGvdddS/FVKvkSuZelJ9LVUReDSKE82TU
+ zs2f8CsKlVeE2LCZ1XVyESIDsjcwfvb00DT9XvukA5xKyDMgN6GcdppDwRbfAKmWTXfj
+ 0NyxLi5dOo0g+P185oQHwyiKIIqcbVei57OlcylIBzbvAvhFj8sv0Zf5abp9r6feZC7p
+ MU1Q==
+X-Gm-Message-State: AOJu0YzCzDrULd1U4CPW2W8wD18ZBB4qYAfp5gB09+flhoeto1vvBsja
+ Q8P1Dalfql74Dl6x+65vFQJyyclaUreGosFO+wlaxVF3Oy46FGfJtYEzd7amX/4=
+X-Google-Smtp-Source: AGHT+IGjHoYtp5Moenk9yF0GrIz1MfPjgHNQjIZC5ZWt+9uI/i3nSA3ht4WyKxaGIKIqwDPWuC9ckA==
+X-Received: by 2002:a05:600c:3d8e:b0:40f:e930:9eb8 with SMTP id
+ bi14-20020a05600c3d8e00b0040fe9309eb8mr813964wmb.0.1707223197604; 
+ Tue, 06 Feb 2024 04:39:57 -0800 (PST)
 X-Forwarded-Encrypted: i=1;
- AJvYcCXVR+7aesSJMkM/0X9b/ha7NRJmagUku/bdsGnjlTFheQiTsYHDcAdVFLWqNkFs0ICPK9npEb+PvJcYXcXj5/wZ7rUtE4O7C/vZmqsZyyrfLdLnt9F8V3mi5Nc=
+ AJvYcCV+9c5Ad+9/0NAhopKxVnKQHWWp0DmjQbW+mCvj6AGypLs2HNyRAHcNN7yuSTmUtJhKRW3PhNSNIdEAbYgs3gPh/Rc8W2OYst7p8AWeVNFkUb70Hr5Y6w9nqMo=
 Received: from [192.168.16.188] ([85.119.216.19])
  by smtp.gmail.com with ESMTPSA id
- hu23-20020a05600ca29700b0040fdf204fe7sm1842438wmb.38.2024.02.06.04.38.36
+ hu23-20020a05600ca29700b0040fdf204fe7sm1842438wmb.38.2024.02.06.04.39.56
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 06 Feb 2024 04:38:36 -0800 (PST)
-Message-ID: <20938ad1-04e4-4536-8f2c-b85af0c650ca@mind.be>
-Date: Tue, 6 Feb 2024 13:38:34 +0100
+ Tue, 06 Feb 2024 04:39:57 -0800 (PST)
+Message-ID: <300bce9b-5a17-49aa-a946-4bfbac6a7fba@mind.be>
+Date: Tue, 6 Feb 2024 13:39:55 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Content-Language: en-GB
-To: ~bubu <buildroot@bubu1.eu>, buildroot@buildroot.org
-References: <170715586410.13905.2351857620201846100-0@git.sr.ht>
-In-Reply-To: <170715586410.13905.2351857620201846100-0@git.sr.ht>
+To: ~bubu <bubu@bubu1.eu>, buildroot@buildroot.org
+References: <170715461915.13905.5968173515742280918-1@git.sr.ht>
+In-Reply-To: <170715461915.13905.5968173515742280918-1@git.sr.ht>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1707223117; x=1707827917; darn=buildroot.org;
+ d=mind.be; s=google; t=1707223197; x=1707827997; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=YLscTyIf671/DrhZc7RIokjN31nfg8uagyk67nUuAzo=;
- b=G3IUwqn8oZzz0Ar5ghsgM83hwEQfUw17J7F/Av4rWBCjQeOxO72iHBWAyHV9wqEaFA
- sXs2x3FXK8q/AYHINvI58Ou0LqV1XBhWPrXI20EDNGDjC1Q0q4CSgysg9KRG4tsqR2Ek
- TedZ5mJ/e2OGyZHdbxRpJsotwJ5vgtEjGIdOvu4+cB/Nzm6KoiOmOzY1kZx02LgireNP
- ZwtBM7m8BM6iuHzvTFPT96d64Avq10HeP5wjcIo8asvZm026Oh4XuwjJcTY4H922slwD
- 3zwJX+DdufUiFcoH5iHvC5lb9nf9iWUGpv0YaGeVtptijRpE0/Q51VgVs/LfahUgxtB/
- hsPQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=vSwZks9nsbe1j9+b5AbqieGX9KS8bV2IRO5foR5qhe4=;
+ b=PYVCylMZ6ydJqYv1J+uJLoCWgWaDLt78Hi+gyaiki8SeSq19FKchToSD+k/Mh53olA
+ NKv+X1uZKVJ33O9KXrSWfOpQ7ic6j5Q7Rlhx5km9GRSWkf3r3mkALlMKRXH+euVyfzZK
+ vakQYNGBpm4/ZolGbwv5H5wC/NjOqP/maBSlewHruslX0NriUkRHkq6RNLWc1oXvVBmY
+ HNYjAmcfAqIN5AqRU0geQ3lux3y2EYOH1/ncpk8ykQj/+GNh6DWb+oYaDvPXTl2oaIV5
+ 9nN+BZd2TJWQMUyueC09tkaXfRy5jkXu9c3rWV0ENhqK2b3AL1gQFR1AJ0zWrqNOY7+Z
+ evCg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=G3IUwqn8
-Subject: Re: [Buildroot] [PATCH buildroot] package/python-fastapi: bump to
- 0.109.2
+ header.a=rsa-sha256 header.s=google header.b=PYVCylMZ
+Subject: Re: [Buildroot] [PATCH buildroot v2 2/2] support/testing: add
+ fastapi runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -110,64 +109,109 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 05/02/2024 15:12, ~bubu wrote:
+On 05/02/2024 18:25, ~bubu wrote:
 > From: Marcus Hoffmann <bubu@bubu1.eu>
 > 
-> Drop no longer required dependency on python-anyio.
+> Add a runtime test for fastapi. Use uvicorn as the asgi server
+> application as does the fastapi hello world example [1].
 > 
-> Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+> Fastapi depends on PydanticV2 now which is written in rust so we need to
+> run the test on armv7.
+> 
+> [1] https://fastapi.tiangolo.com/tutorial/first-steps/
+> 
+> Signed-off-by: Marcus Hoffmann <bubu@bubu1.eu>
 
-  Applied to master, thanks.
+  Both applied to master, but this one with a bunch of modifications:
+
+      - fix flake8 errors
+support/testing/tests/package/sample_python_fastapi.py:5:1: E302 expected 2 
+blank lines, found 1
+support/testing/tests/package/sample_python_fastapi.py:8:1: W391 blank line at 
+end of file
+      - Remove BR2_CCACHE (as requested by Marcus).
+      - Add a comment explaining that this also tests uvicorn and pydantic.
+      - Re-try wget in a loop instead of a fixed timeout of 30 seconds.
+      - Add a DEVELOPERS entry.
+
 
   Regards,
   Arnout
 
 > ---
->   package/python-fastapi/Config.in           | 1 -
->   package/python-fastapi/python-fastapi.hash | 4 ++--
->   package/python-fastapi/python-fastapi.mk   | 4 ++--
->   3 files changed, 4 insertions(+), 5 deletions(-)
+>   .../tests/package/sample_python_fastapi.py    |  8 ++++
+>   .../tests/package/test_python_fastapi.py      | 47 +++++++++++++++++++
+>   2 files changed, 55 insertions(+)
+>   create mode 100644 support/testing/tests/package/sample_python_fastapi.py
+>   create mode 100644 support/testing/tests/package/test_python_fastapi.py
 > 
-> diff --git a/package/python-fastapi/Config.in b/package/python-fastapi/Config.in
-> index 7d376d3dd7..d4a527c601 100644
-> --- a/package/python-fastapi/Config.in
-> +++ b/package/python-fastapi/Config.in
-> @@ -1,7 +1,6 @@
->   config BR2_PACKAGE_PYTHON_FASTAPI
->   	bool "python-fastapi"
->   	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-pydantic -> python-pydantic-core
-> -	select BR2_PACKAGE_PYTHON_ANYIO # runtime
->   	select BR2_PACKAGE_PYTHON_PYDANTIC # runtime
->   	select BR2_PACKAGE_PYTHON_STARLETTE # runtime
->   	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
-> diff --git a/package/python-fastapi/python-fastapi.hash b/package/python-fastapi/python-fastapi.hash
-> index 3dc1578cb7..c16b7d22de 100644
-> --- a/package/python-fastapi/python-fastapi.hash
-> +++ b/package/python-fastapi/python-fastapi.hash
-> @@ -1,5 +1,5 @@
->   # md5, sha256 from https://pypi.org/pypi/fastapi/json
-> -md5  06bfa7c610fc9e81d05b0319eb70cae7  fastapi-0.105.0.tar.gz
-> -sha256  4d12838819aa52af244580675825e750ad67c9df4614f557a769606af902cf22  fastapi-0.105.0.tar.gz
-> +md5  b48191c0322fb5479773925af005b2c1  fastapi-0.109.2.tar.gz
-> +sha256  f3817eac96fe4f65a2ebb4baa000f394e55f5fccdaf7f75250804bc58f354f73  fastapi-0.109.2.tar.gz
->   # Locally computed sha256 checksums
->   sha256  4ec89ffc81485b97fec584b2d4a961032eeffe834453894fd9c1274906cc744e  LICENSE
-> diff --git a/package/python-fastapi/python-fastapi.mk b/package/python-fastapi/python-fastapi.mk
-> index dc6d919926..a2191c73b7 100644
-> --- a/package/python-fastapi/python-fastapi.mk
-> +++ b/package/python-fastapi/python-fastapi.mk
-> @@ -4,9 +4,9 @@
->   #
->   ################################################################################
->   
-> -PYTHON_FASTAPI_VERSION = 0.105.0
-> +PYTHON_FASTAPI_VERSION = 0.109.2
->   PYTHON_FASTAPI_SOURCE = fastapi-$(PYTHON_FASTAPI_VERSION).tar.gz
-> -PYTHON_FASTAPI_SITE = https://files.pythonhosted.org/packages/77/bb/5941e6e2ce3020f64b539a49d39f49be05de17d0c47fea95012589f812a5
-> +PYTHON_FASTAPI_SITE = https://files.pythonhosted.org/packages/01/d5/33a8992fe0e811211cd1cbc219cefa4732f9fb0555921346a59d1fec0040
->   PYTHON_FASTAPI_SETUP_TYPE = pep517
->   PYTHON_FASTAPI_LICENSE = MIT
->   PYTHON_FASTAPI_LICENSE_FILES = LICENSE
+> diff --git a/support/testing/tests/package/sample_python_fastapi.py b/support/testing/tests/package/sample_python_fastapi.py
+> new file mode 100644
+> index 0000000000..3116df3a93
+> --- /dev/null
+> +++ b/support/testing/tests/package/sample_python_fastapi.py
+> @@ -0,0 +1,8 @@
+> +from fastapi import FastAPI
+> +
+> +app = FastAPI()
+> +
+> +@app.get("/")
+> +async def root():
+> +    return {"message": "Hello World"}
+> +
+> diff --git a/support/testing/tests/package/test_python_fastapi.py b/support/testing/tests/package/test_python_fastapi.py
+> new file mode 100644
+> index 0000000000..1a78fa6c58
+> --- /dev/null
+> +++ b/support/testing/tests/package/test_python_fastapi.py
+> @@ -0,0 +1,47 @@
+> +import os
+> +import time
+> +
+> +from tests.package.test_python import TestPythonPackageBase
+> +
+> +
+> +class TestPythonPy3Fastapi(TestPythonPackageBase):
+> +    __test__ = True
+> +    config = \
+> +        """
+> +        BR2_arm=y
+> +        BR2_cortex_a9=y
+> +        BR2_ARM_ENABLE_NEON=y
+> +        BR2_ARM_ENABLE_VFP=y
+> +        BR2_TOOLCHAIN_EXTERNAL=y
+> +        BR2_PACKAGE_PYTHON3=y
+> +        BR2_PACKAGE_PYTHON_FASTAPI=y
+> +        BR2_PACKAGE_PYTHON_UVICORN=y
+> +        BR2_TARGET_ROOTFS_CPIO=y
+> +        # BR2_TARGET_ROOTFS_TAR is not set
+> +        BR2_CCACHE=y
+> +        BR2_CCACHE_DIR="/home/bubu/.buildroot-ccache"
+> +        """
+> +    sample_scripts = ["tests/package/sample_python_fastapi.py"]
+> +    timeout = 60
+> +
+> +    def test_run(self):
+> +        self.login()
+> +        self.check_sample_scripts_exist()
+> +        cmd = "uvicorn sample_python_fastapi:app > /dev/null 2>&1 &"
+> +
+> +        _, exit_code = self.emulator.run(cmd, timeout=self.timeout)
+> +
+> +        # Give enough time for the uvicorn server to start up
+> +        time.sleep(30)
+> +
+> +        cmd = "wget -q -O - http://127.0.0.1:8000/"
+> +        output, exit_code = self.emulator.run(cmd, timeout=self.timeout)
+> +        self.assertEqual(exit_code, 0)
+> +        self.assertEqual(output[0], '{"message":"Hello World"}')
+> +
+> +    def login(self):
+> +        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
+> +        self.emulator.boot(arch="armv7",
+> +                           kernel="builtin",
+> +                           options=["-initrd", cpio_file])
+> +        self.emulator.login()
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
