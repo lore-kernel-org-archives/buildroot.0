@@ -4,49 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A846C4828D
-	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 10:34:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3934EC4829A
+	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 10:34:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 301EB41E73;
-	Tue,  6 Feb 2024 10:34:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 301EB41E73
+	by smtp4.osuosl.org (Postfix) with ESMTP id C961B41E79;
+	Tue,  6 Feb 2024 10:34:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C961B41E79
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3xiGDk53tgDb; Tue,  6 Feb 2024 10:34:44 +0000 (UTC)
+	with ESMTP id IVET7Aq3k9Zc; Tue,  6 Feb 2024 10:34:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 63A3041E90;
-	Tue,  6 Feb 2024 10:34:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 63A3041E90
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C14151BF95D
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 10:34:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0B78341E72;
+	Tue,  6 Feb 2024 10:34:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B78341E72
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0574C1BF311
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 10:34:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BCD3B817BA
+ by smtp2.osuosl.org (Postfix) with ESMTP id CDCAA4149E
  for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 10:34:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CDCAA4149E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5yUaJjJZ9is9 for <buildroot@lists.busybox.net>;
- Tue,  6 Feb 2024 10:34:29 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0A96381412
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xyJ44yHI1n8i for <buildroot@lists.busybox.net>;
+ Tue,  6 Feb 2024 10:34:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0A96381412
- for <buildroot@buildroot.org>; Tue,  6 Feb 2024 10:34:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CA20D4149A
+ for <buildroot@buildroot.org>; Tue,  6 Feb 2024 10:34:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CA20D4149A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EAF8386F9B; Tue,  6 Feb 2024 10:34:28 +0000 (UTC)
+ id B3A7D86F9B; Tue,  6 Feb 2024 10:34:28 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 6 Feb 2024 11:28:25 +0100
+Date: Tue, 6 Feb 2024 11:28:06 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 40af3cb08a26b797370fd99c51954831edd6a966
-X-Git-Newrev: 0b2ec7d40f8ac385f29f9ef740dfa5d92e68f318
+X-Git-Oldrev: bc7bab307a77561e5d297312990e7af89ada0730
+X-Git-Newrev: 4771d62dd0576c6eb5880aadced514c3c4d15d74
 X-Patchwork-Hint: ignore
-Message-Id: <20240206103428.EAF8386F9B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-falcon: bump to version
- 3.1.3
+Message-Id: <20240206103428.B3A7D86F9B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-dtschema: bump to version
+ 2023.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,44 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b2ec7d40f8ac385f29f9ef740dfa5d92e68f318
+commit: https://git.buildroot.net/buildroot/commit/?id=4771d62dd0576c6eb5880aadced514c3c4d15d74
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-falcon/python-falcon.hash | 4 ++--
- package/python-falcon/python-falcon.mk   | 4 ++--
+ package/python-dtschema/python-dtschema.hash | 4 ++--
+ package/python-dtschema/python-dtschema.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-falcon/python-falcon.hash b/package/python-falcon/python-falcon.hash
-index 497b5d2b57..2d54d27837 100644
---- a/package/python-falcon/python-falcon.hash
-+++ b/package/python-falcon/python-falcon.hash
+diff --git a/package/python-dtschema/python-dtschema.hash b/package/python-dtschema/python-dtschema.hash
+index a391e4ab21..3e1dd22133 100644
+--- a/package/python-dtschema/python-dtschema.hash
++++ b/package/python-dtschema/python-dtschema.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/falcon/json
--md5  383673fc6378428d0db5861a416cad0d  falcon-3.1.1.tar.gz
--sha256  5dd393dbf01cbaf99493893de4832121bd495dc49a46c571915b79c59aad7ef4  falcon-3.1.1.tar.gz
-+md5  22a5c32f3d9dd96d498febe8e16ddffe  falcon-3.1.3.tar.gz
-+sha256  23335dbccd44f29e85ec55f2f35d5a0bc12bd7a509f641ab81f5c64b65626263  falcon-3.1.3.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/dtschema/json
+-md5  bb0ecd8b8680b76f7cb55da002f58d62  dtschema-2023.9.tar.gz
+-sha256  52c6d271065155ca134d8a0bcf7e0ebed67b3991acbbd7a98b74eb8642f67d87  dtschema-2023.9.tar.gz
++md5  cc4be8cfc01804cc31a123b56f68aeb1  dtschema-2023.11.tar.gz
++sha256  cf9a449ea743c0a955cf6034ef246668fa5ea177684977c61fef7604af5f273b  dtschema-2023.11.tar.gz
  # Locally computed sha256 checksums
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/python-falcon/python-falcon.mk b/package/python-falcon/python-falcon.mk
-index b5ebc399dc..6c96bf16eb 100644
---- a/package/python-falcon/python-falcon.mk
-+++ b/package/python-falcon/python-falcon.mk
+ sha256  ca0d66263406dc684fe9db60577b234f65ffdf620d7e041c708e969447b69111  LICENSE.txt
+diff --git a/package/python-dtschema/python-dtschema.mk b/package/python-dtschema/python-dtschema.mk
+index 0fc13073f8..e1dd5009fd 100644
+--- a/package/python-dtschema/python-dtschema.mk
++++ b/package/python-dtschema/python-dtschema.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_FALCON_VERSION = 3.1.1
-+PYTHON_FALCON_VERSION = 3.1.3
- PYTHON_FALCON_SOURCE = falcon-$(PYTHON_FALCON_VERSION).tar.gz
--PYTHON_FALCON_SITE = https://files.pythonhosted.org/packages/29/bc/c11c9a14bb5b4d18a024ee51da15b793d1c869d151bb4101e324e0d055a8
-+PYTHON_FALCON_SITE = https://files.pythonhosted.org/packages/3b/30/a7bc770025b6a7a36d0508e3d735dca239df7c27b862856e54d661f24632
- PYTHON_FALCON_SETUP_TYPE = setuptools
- PYTHON_FALCON_LICENSE = Apache-2.0
- PYTHON_FALCON_LICENSE_FILES = LICENSE
+-PYTHON_DTSCHEMA_VERSION = 2023.9
++PYTHON_DTSCHEMA_VERSION = 2023.11
+ PYTHON_DTSCHEMA_SOURCE = dtschema-$(PYTHON_DTSCHEMA_VERSION).tar.gz
+-PYTHON_DTSCHEMA_SITE = https://files.pythonhosted.org/packages/24/97/daa9109a854727cd4e1a715e4123198e5abd47db10c131de5bc0cef0acc3
++PYTHON_DTSCHEMA_SITE = https://files.pythonhosted.org/packages/5a/94/7890ef663fba1cca84cf0ab64c7f68685343c921ab883f0356cd9978b605
+ PYTHON_DTSCHEMA_SETUP_TYPE = setuptools
+ PYTHON_DTSCHEMA_LICENSE = BSD-2-Clause
+ PYTHON_DTSCHEMA_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
