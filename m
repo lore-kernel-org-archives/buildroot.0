@@ -1,91 +1,100 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1939AC48297
-	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 11:21:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4657C4828D
+	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 12:33:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B6C0660B45;
-	Tue,  6 Feb 2024 11:21:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6C0660B45
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4DE1882049;
+	Tue,  6 Feb 2024 12:33:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QXztYYagFpjD; Tue,  6 Feb 2024 11:21:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9W65yQ03Ls4F; Tue,  6 Feb 2024 12:33:15 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 60A92820EC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 27B3A60AEB;
-	Tue,  6 Feb 2024 11:21:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 27B3A60AEB
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D2E691BF3F9
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 11:21:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 60A92820EC;
+	Tue,  6 Feb 2024 12:33:15 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3A8691BF33B
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 12:33:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AC38360AEB
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 11:21:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC38360AEB
+ by smtp1.osuosl.org (Postfix) with ESMTP id 26E4E822C9
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 12:33:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jnLhVAT_dxqO for <buildroot@lists.busybox.net>;
- Tue,  6 Feb 2024 11:21:34 +0000 (UTC)
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com
- [IPv6:2607:f8b0:4864:20::533])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B479F60AE4
- for <buildroot@buildroot.org>; Tue,  6 Feb 2024 11:21:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B479F60AE4
-Received: by mail-pg1-x533.google.com with SMTP id
- 41be03b00d2f7-5cddc5455aeso4749827a12.1
- for <buildroot@buildroot.org>; Tue, 06 Feb 2024 03:21:33 -0800 (PST)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bjJuXUA3CyjM for <buildroot@lists.busybox.net>;
+ Tue,  6 Feb 2024 12:33:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D7E9F820EC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7E9F820EC
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D7E9F820EC
+ for <buildroot@buildroot.org>; Tue,  6 Feb 2024 12:33:12 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id
+ ffacd0b85a97d-33b1a51743fso4074446f8f.0
+ for <buildroot@buildroot.org>; Tue, 06 Feb 2024 04:33:12 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707218493; x=1707823293;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=4n2ON9fxyb4g+pkxbZPEsNWI/GNmI6XoTyeyd4d1qyc=;
- b=gFzHAe/JLuNoYTzDsrAUiENv4OeXLDMw2Ulw+zIcEJh0GsIhGVmTrmP1SXxjrJzuy9
- bhjAsUIDbNP98yCXXj/PlAJ/5qsN+WD1LkD/j+gAoERJcDWAKQAjm+evHnF/3izLuzp8
- qrhgLywMt5pnOXimpLKoT0FtEKf6zjkIFdxfunmxdNtt0ohFctbhXMIpz3JlWd+g2yX/
- h1Fun8d2oUrcudwvC9JZAH0PIrd+TOosc75sq8eyW4F9uB4KTlMR2euJlPJZEdFkcg8W
- Bqh7KnrG3/PLxCs0SH9d20LIv9uA6vVBbv0hOBoDiS34AC2x8Cxmnc78r1kZe/8G+6so
- Y+tg==
-X-Gm-Message-State: AOJu0YxHfdu1XHoEb4JGLeHJFiVsVoOQxl9wFmDGS8RilMd9AfKm7I+6
- R+S2pCfs72YJOQMsxIamm2iSmkSxT0SLRxRDtSCzVMOG5NrvYb16ElTu2032XUdg3DcfilxkP+I
- 5hN0=
-X-Google-Smtp-Source: AGHT+IE+HUR41chKVMA0grvkjJW1KAFfDUl8bTghzUcPTWOZ2urD3bw8P47koMxFQi3yqykdDLLm1Q==
-X-Received: by 2002:a05:6a20:9396:b0:19e:99cf:6ce3 with SMTP id
- x22-20020a056a20939600b0019e99cf6ce3mr1443876pzh.40.1707218492718; 
- Tue, 06 Feb 2024 03:21:32 -0800 (PST)
-Received: from desktop.. ([2804:7f0:6401:3d0a:25b6:2c76:96f:3f60])
+ d=1e100.net; s=20230601; t=1707222790; x=1707827590;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=VFSoqqAZQGRqfrGpGEEWaR21yr6cqJ1GsN5avE4zSt4=;
+ b=GL5xFHiX/WN8V8QtPv8qAo80qGfgAEg5vUB2X8r8jSTpz2T0Trl0TPmTZZggi7W1xC
+ ZkKLMNYNe8nFbL74Bh7jo8UnLbrIXsKVipajcO4ftrzhGjVrLQ/tVY5S+Ewh94T9Ry1n
+ 7HutI/kbY76dEyCsHZXTUVyYPzW0+8S3OhfzQz5DchwGyD6ZhbAiPeBPxy9fiPqbc9ST
+ 1Eq6/XPi4VoBasCBNso1Cc685zvBsm97dK3+AOogG2GNm1dnvTq8syVvWDK//P2CV3FR
+ LXIkA56dZwu+m4erhXvRFoTKbcF8pPeGgLFjvvyRCGqcp0QGKo1v1sYbdhiRtav2nLiV
+ GkGA==
+X-Gm-Message-State: AOJu0Yw0rzXl247iDQUMzEz5WnfyWOZAghFJxYHqtoRg+UJOqkgkHl90
+ EK6U9IgM+feh5jooaHC5JGM13yxs8lQMRmBll2jfGc0vNxF0CeVv3Gi44m8y/Cs=
+X-Google-Smtp-Source: AGHT+IFhK7QUkoGxeYnrcEOywDS8P6/z9ATzu3Ghi2X8yx+D2HCCl8UwAoVbHPRI9aOoE5NJ/2Gh1w==
+X-Received: by 2002:a5d:588d:0:b0:33b:1545:fe6b with SMTP id
+ n13-20020a5d588d000000b0033b1545fe6bmr1260614wrf.32.1707222790589; 
+ Tue, 06 Feb 2024 04:33:10 -0800 (PST)
+X-Forwarded-Encrypted: i=0;
+ AJvYcCVP7b8lsPT4ASJTROUAV7i5gpdE9HnutHHsLqjzyFgzFuE+I4zY33R3+mVmPGF41WmIDyxCAJ7BJSYBm4LNWyssKOTOPFQsCz0VUnVzshRJsFfyLrCOGDzsWkomuZMjfoWa
+Received: from [192.168.16.188] ([85.119.216.19])
  by smtp.gmail.com with ESMTPSA id
- w13-20020aa79a0d000000b006dda103efe6sm1604288pfj.167.2024.02.06.03.21.31
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 06 Feb 2024 03:21:32 -0800 (PST)
-From: sergio.prado@e-labworks.com
-To: buildroot@buildroot.org
-Date: Tue,  6 Feb 2024 08:21:09 -0300
-Message-Id: <20240206112109.2175948-1-sergio.prado@e-labworks.com>
-X-Mailer: git-send-email 2.34.1
+ v14-20020a5d4b0e000000b0033b3c2e73e2sm1981606wrq.113.2024.02.06.04.33.08
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 06 Feb 2024 04:33:10 -0800 (PST)
+Message-ID: <931454f1-052c-4146-9c91-706cd65770ba@mind.be>
+Date: Tue, 6 Feb 2024 13:33:06 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: en-GB
+To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+References: <20240205164615.510688-1-james.hilliard1@gmail.com>
+ <20240205164615.510688-2-james.hilliard1@gmail.com>
+In-Reply-To: <20240205164615.510688-2-james.hilliard1@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=e-labworks-com.20230601.gappssmtp.com; s=20230601; t=1707218493; x=1707823293;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=4n2ON9fxyb4g+pkxbZPEsNWI/GNmI6XoTyeyd4d1qyc=;
- b=QbD9E2lUr80bJzK2IPzpOyWLjdgCxQjuo4Pw/h+GIUqHdHVZUYtA6oRkx0/LEkRJTI
- 2O1Iedl7rbB9VsoY4oraLF//QwP44ypC0wq28EVrd53NvKwAgtK8sUtWpesE4r7++oaj
- w7KST7Bt1s41wwWwQFhoFXH+Qc1uW36qvJfIToI2EByuMAhRAWQwAxhpJ/cgRzs6hvvD
- Q/CJAQhayxmqQ32kqS5SCymInj1Gk0Z7noK+TwITtVdRUzW7bkSY8upPLQ6TnTQqyOVx
- J6Bv5Smhy31swrQbgJ5JD9OluTj/lFx4NEJ7gwa5LtcpAHrg1QCt+maH5fR+9I960Kd4
- 0lBg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=e-labworks-com.20230601.gappssmtp.com
- header.i=@e-labworks-com.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=QbD9E2lU
-Subject: [Buildroot] [PATCH] package/azure-iot-sdk-c: bump to version
- LTS_08_2023
+ d=mind.be; s=google; t=1707222790; x=1707827590; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=VFSoqqAZQGRqfrGpGEEWaR21yr6cqJ1GsN5avE4zSt4=;
+ b=CumPgMM7TbJ6K3rX9jPh7fUXvD8FvZyC3jWSpD8sRK9ldexW1hSlkP2bdX4/RiwJZb
+ lTxuEQZ7Q61QxO2CMPwvAagShd8pW/96G8pGkP/LsdgorxOKL1S4AdtqBW6AfNYkMA1B
+ mDGnR6iHfzrS7CdqaCfSSh7tyE5T6fNhP2bv8WZT9bfUXsCuwzz7Tp96T8BqF3WyYcxN
+ rzUaAO6+pUrEeReopa23m4Ow0BoIN0z0cCeBYyrSz4j4F3jvktviwQZ4/Bq9Nwvv30Ch
+ 3tRRwmFNdHOzb5jniOi8bLLexeVAyjkhSTpQ5jpNFS3DPYN3EyrF0iUoRA69AUf0aKHM
+ vJQg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=CumPgMM7
+Subject: Re: [Buildroot] [PATCH 2/2] package/python-fastapi: bump to version
+ 0.109.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,49 +106,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergio Prado <sergio.prado@e-labworks.com>
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: Marcus Hoffmann <m.hoffmann@cartelsol.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Sergio Prado <sergio.prado@e-labworks.com>
 
-Release notes: https://github.com/Azure/azure-iot-sdk-c/releases/tag/LTS_08_2023
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
----
- package/azure-iot-sdk-c/azure-iot-sdk-c.hash | 2 +-
- package/azure-iot-sdk-c/azure-iot-sdk-c.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 05/02/2024 17:46, James Hilliard wrote:
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.hash b/package/azure-iot-sdk-c/azure-iot-sdk-c.hash
-index b960c0e571d0..d51dcc60aab2 100644
---- a/package/azure-iot-sdk-c/azure-iot-sdk-c.hash
-+++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  7b52b9886a3aff20a55a0d5bc5e140c212f85fd06af18c31291c15d363743a77  azure-iot-sdk-c-LTS_01_2023_Ref02-br1.tar.gz
-+sha256  b853d5ab04f3c6863fe78e3936f0d0840012d5260ae4a3b23f03e157395dc15b  azure-iot-sdk-c-LTS_08_2023-br1.tar.gz
- 
- # Hash for license files:
- sha256  be2e9913fad9ff33607287c728f392579e2a6cc83e51b203ef6274c41db02ee7  LICENSE
-diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-index e07cdf986e4f..4d0ecb077f8b 100644
---- a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-+++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--AZURE_IOT_SDK_C_VERSION = LTS_01_2023_Ref02
-+AZURE_IOT_SDK_C_VERSION = LTS_08_2023
- AZURE_IOT_SDK_C_SITE = https://github.com/Azure/azure-iot-sdk-c
- AZURE_IOT_SDK_C_SITE_METHOD = git
- AZURE_IOT_SDK_C_GIT_SUBMODULES = YES
--- 
-2.34.1
+  Instead of this one, I applied Marcus's one.
 
+  Regards,
+  Arnout
+
+> ---
+>   package/python-fastapi/python-fastapi.hash | 4 ++--
+>   package/python-fastapi/python-fastapi.mk   | 4 ++--
+>   2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/python-fastapi/python-fastapi.hash b/package/python-fastapi/python-fastapi.hash
+> index 3dc1578cb7..c16b7d22de 100644
+> --- a/package/python-fastapi/python-fastapi.hash
+> +++ b/package/python-fastapi/python-fastapi.hash
+> @@ -1,5 +1,5 @@
+>   # md5, sha256 from https://pypi.org/pypi/fastapi/json
+> -md5  06bfa7c610fc9e81d05b0319eb70cae7  fastapi-0.105.0.tar.gz
+> -sha256  4d12838819aa52af244580675825e750ad67c9df4614f557a769606af902cf22  fastapi-0.105.0.tar.gz
+> +md5  b48191c0322fb5479773925af005b2c1  fastapi-0.109.2.tar.gz
+> +sha256  f3817eac96fe4f65a2ebb4baa000f394e55f5fccdaf7f75250804bc58f354f73  fastapi-0.109.2.tar.gz
+>   # Locally computed sha256 checksums
+>   sha256  4ec89ffc81485b97fec584b2d4a961032eeffe834453894fd9c1274906cc744e  LICENSE
+> diff --git a/package/python-fastapi/python-fastapi.mk b/package/python-fastapi/python-fastapi.mk
+> index dc6d919926..a2191c73b7 100644
+> --- a/package/python-fastapi/python-fastapi.mk
+> +++ b/package/python-fastapi/python-fastapi.mk
+> @@ -4,9 +4,9 @@
+>   #
+>   ################################################################################
+>   
+> -PYTHON_FASTAPI_VERSION = 0.105.0
+> +PYTHON_FASTAPI_VERSION = 0.109.2
+>   PYTHON_FASTAPI_SOURCE = fastapi-$(PYTHON_FASTAPI_VERSION).tar.gz
+> -PYTHON_FASTAPI_SITE = https://files.pythonhosted.org/packages/77/bb/5941e6e2ce3020f64b539a49d39f49be05de17d0c47fea95012589f812a5
+> +PYTHON_FASTAPI_SITE = https://files.pythonhosted.org/packages/01/d5/33a8992fe0e811211cd1cbc219cefa4732f9fb0555921346a59d1fec0040
+>   PYTHON_FASTAPI_SETUP_TYPE = pep517
+>   PYTHON_FASTAPI_LICENSE = MIT
+>   PYTHON_FASTAPI_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
