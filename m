@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74EDAC4829A
-	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 10:39:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2549AC4828D
+	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 10:39:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2E03D41EE6;
-	Tue,  6 Feb 2024 10:39:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E03D41EE6
+	by smtp4.osuosl.org (Postfix) with ESMTP id C45F341F24;
+	Tue,  6 Feb 2024 10:39:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C45F341F24
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id P47A8eRHttC6; Tue,  6 Feb 2024 10:39:07 +0000 (UTC)
+	with ESMTP id 0sw9cxV5bcjp; Tue,  6 Feb 2024 10:39:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 823C641C6A;
-	Tue,  6 Feb 2024 10:39:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 823C641C6A
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E1ABE1BF311
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 10:35:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 06E3B41EA0;
+	Tue,  6 Feb 2024 10:39:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 06E3B41EA0
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 75D8E1BF311
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 10:35:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BB07B41EA3
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 10:35:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB07B41EA3
+ by smtp2.osuosl.org (Postfix) with ESMTP id 40459400FE
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 10:35:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 40459400FE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UkVXqf1qsoJ5 for <buildroot@lists.busybox.net>;
- Tue,  6 Feb 2024 10:35:40 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C8B3141E86
- for <buildroot@buildroot.org>; Tue,  6 Feb 2024 10:35:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C8B3141E86
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 01BF01C0002;
- Tue,  6 Feb 2024 10:35:36 +0000 (UTC)
-Date: Tue, 6 Feb 2024 11:35:36 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2pzrzkeKyHkb for <buildroot@lists.busybox.net>;
+ Tue,  6 Feb 2024 10:35:44 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0AC3A403CA
+ for <buildroot@buildroot.org>; Tue,  6 Feb 2024 10:35:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0AC3A403CA
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 153DA240002;
+ Tue,  6 Feb 2024 10:35:42 +0000 (UTC)
+Date: Tue, 6 Feb 2024 11:35:41 +0100
 To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20240206113536.11f06c7e@windsurf>
-In-Reply-To: <20240109075836.4057394-1-james.hilliard1@gmail.com>
-References: <20240109075836.4057394-1-james.hilliard1@gmail.com>
+Message-ID: <20240206113541.1e26c600@windsurf>
+In-Reply-To: <20240109080239.4060095-1-james.hilliard1@gmail.com>
+References: <20240109080239.4060095-1-james.hilliard1@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1707215737;
+ d=bootlin.com; s=gm1; t=1707215742;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=ROp6Eqd0BZ3q9glSkGYMRicse2HtAp5K8ZSgkVqT8xg=;
- b=Ucizj60orJe9TNW3QJ7nWBbequFBlxxQYkg5Ljym2wGXvhmBFDMa3ROQ8I+dhID5izfK/s
- 4FrsRQZqJE0BgWM3/W3jKvcsDnkRL4A/o/aKRm/2OL+XWHwEFGXNUH9GjB7yhwXyqncwKE
- GNmmdMgSJadEsMSSfNoNx/ASd+vcZQh32+SFkDjPY175vrzUJixV5yE5kfpsEfRxYhrpqe
- O8BUIpeil7b2b+wAg5ZN1AUKnpGYHacWjTZ6DabOaOp7QqC3PMfUIlUaX1ddqInd1ZqLdj
- NdXsRO1wImykejC5oOQ1cg5Ruk9M9Xu4xhmuWgbQyHaChSlC8dg7bpcf/d0NLA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=anU7ovGurFbyEOgHwnmKqTbiPbr1QTBTFkCIU4ryRM4=;
+ b=m/TR8XFp9/3ktms2JWz368HMDSWLHya7pHZUGvPOhW4titrbpMtsg0/K47NUUfRk8PmVNO
+ H1QZliXbP/Z4e8B75GRctFjSPVPcZHbMk4wjeKyxAtHZeNLAQREwzZcJjk6PxQLFYlBSju
+ yluR+LhbSJS2c4FVNLsvnDNrbHNnrWjUIZ/OBDuUQmMZvorDw/k3cnfjI0SSyAxrvANwe8
+ xV4EUyPm9ENi6gyDCDF1QZkAj0RY4Fntd2nErtnumM/wiNUsO+MO6gSQ58CskpD/bD9mQ4
+ sTUoFPyuCCmF6WhoLDlQ6NCuxFW8vdZSaoxKLOHWKrcEHIxkIBfwACuJhGLS5g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Ucizj60o
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-greenlet: bump to
- version 3.0.3
+ header.s=gm1 header.b=m/TR8XFp
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-hatch-vcs: bump to
+ version 0.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,13 +83,13 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue,  9 Jan 2024 00:58:36 -0700
+On Tue,  9 Jan 2024 01:02:39 -0700
 James Hilliard <james.hilliard1@gmail.com> wrote:
 
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  package/python-greenlet/python-greenlet.hash | 4 ++--
->  package/python-greenlet/python-greenlet.mk   | 4 ++--
+>  package/python-hatch-vcs/python-hatch-vcs.hash | 4 ++--
+>  package/python-hatch-vcs/python-hatch-vcs.mk   | 4 ++--
 >  2 files changed, 4 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
