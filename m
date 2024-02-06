@@ -4,46 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1E85C4828D
-	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 10:52:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3598C4829A
+	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 10:53:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 323C341E78;
-	Tue,  6 Feb 2024 10:52:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 323C341E78
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5EC2C41ED3;
+	Tue,  6 Feb 2024 10:53:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5EC2C41ED3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tEpEp5jZHXg8; Tue,  6 Feb 2024 10:52:36 +0000 (UTC)
+	with ESMTP id JxebANlzNBKe; Tue,  6 Feb 2024 10:53:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 72E8741E67;
-	Tue,  6 Feb 2024 10:52:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72E8741E67
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AF2BB1BF311
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 10:52:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 43A1341EB9;
+	Tue,  6 Feb 2024 10:53:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 43A1341EB9
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id EB29C1BF311
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 10:53:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 93307405C4
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 10:52:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 93307405C4
+ by smtp3.osuosl.org (Postfix) with ESMTP id BC73C61124
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 10:53:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC73C61124
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mglh7zRpb43G for <buildroot@lists.busybox.net>;
- Tue,  6 Feb 2024 10:52:32 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4468F40176
- for <buildroot@buildroot.org>; Tue,  6 Feb 2024 10:52:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4468F40176
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 28F4C86FAA; Tue,  6 Feb 2024 10:52:32 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 6 Feb 2024 11:52:09 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 73813c56c8bb3e781376f333125a13048be690b9
-X-Git-Newrev: 738fb6dfa48b19f39e4a8df38ac9dcc0b37e0aa4
-X-Patchwork-Hint: ignore
-Message-Id: <20240206105232.28F4C86FAA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] docs/manual: extend makedev syntax section
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7U78O-JS7bZA for <buildroot@lists.busybox.net>;
+ Tue,  6 Feb 2024 10:53:03 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A7CA16111E
+ for <buildroot@buildroot.org>; Tue,  6 Feb 2024 10:53:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A7CA16111E
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1D71C40003;
+ Tue,  6 Feb 2024 10:53:01 +0000 (UTC)
+Date: Tue, 6 Feb 2024 11:53:00 +0100
+To: <yann.morin@orange.com>
+Message-ID: <20240206115300.0bd8b584@windsurf>
+In-Reply-To: <e050e870b2afb35643036a87df540add584c95b4.1705594130.git.yann.morin@orange.com>
+References: <e050e870b2afb35643036a87df540add584c95b4.1705594130.git.yann.morin@orange.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1707216781;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=qE8TtJlv5hBpMl/on16+4eKWwW0ZhuSoKf7EfFcV+M8=;
+ b=IWrztJwZwXKk5lEgEDKkl+RXXFGvulzZeBco5c/DuFPYS23nTLeQ1YvJexInsTzObQyOrr
+ 2udiSN34vUeaYMbWekMMv02m1SNNp7YzWI1bRM+EMkrUnxzkbN3pk+xa9gvfXYCsL1bUdn
+ Q1lBEtZVpH8YOVr4JIi6Rf4wqpjIK42q6pl4N+04rRsObLgOkMHqBr47t5FBP4XUcUIwGa
+ j9OVNUgwWzVZWHQMvQ7lXwgOiNjBOfbQ9KzIp70zygKTfwRBAN9pPWq8IFreGq7Y0+CG4y
+ IUO3GRwfTm0wfFEGe1ppCbrQEot8P/4qLYs7wV1JTf3AyBbSGkZ/pmJcEv3bmg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=IWrztJwZ
+Subject: Re: [Buildroot] [PATCH] docs/manual: extend makedev syntax section
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,110 +76,57 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=738fb6dfa48b19f39e4a8df38ac9dcc0b37e0aa4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 18 Jan 2024 17:08:50 +0100
+<yann.morin@orange.com> wrote:
 
-The section of the manual describing the makedev syntax is not
-up-to-date with the current features, and does not properly describe
-existing ones.
+> From: "Yann E. MORIN" <yann.morin@orange.com>
+> 
+> The section of the manual describing the makedev syntax is not
+> up-to-date with the current features, and does not properly describe
+> existing ones.
+> 
+>   - extend the list of types with the requirements on the existence of
+>     the target file or directory; for 'c', 'b', and 'p', the existence
+>     requirement is inherited from mknod(2):
+> 
+>     ERRORS
+>         ...
+>         ENOENT A directory component in pathname does not exist or is a
+>                dangling symbolic link.
+> 
+>     for the other types, the existence requirements are extracted from
+>     the source of makedev.c;
+> 
+>   - format the types fags, so they are rendered in monospace;
+> 
+>   - extend the 'mode' description, as it can be set to -1 for 'f', 'd',
+>     or 'r', so that only the uid and gid are set. This is most useful
+>     for 'r', where setting the same mode recursively for all the
+>     sub-directories and files alike does not really make sense; indeed
+>     in this case, the modes are usually set correctly when the package
+>     (or rootfs overlay) installs the files, and only the uid and gid are
+>     interesting to set;
+> 
+>   - extend and update the examples to show-case the -1 mode use-case.
+> 
+> Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+> ---
+>  docs/manual/makedev-syntax.adoc | 33 +++++++++++++++++++--------------
+>  1 file changed, 19 insertions(+), 14 deletions(-)
 
-  - extend the list of types with the requirements on the existence of
-    the target file or directory; for 'c', 'b', and 'p', the existence
-    requirement is inherited from mknod(2):
+Applied to master (with the typo in the commit log fixed), thanks!
 
-    ERRORS
-        ...
-        ENOENT A directory component in pathname does not exist or is a
-               dangling symbolic link.
-
-    for the other types, the existence requirements are extracted from
-    the source of makedev.c;
-
-  - format the types flags, so they are rendered in monospace;
-
-  - extend the 'mode' description, as it can be set to -1 for 'f', 'd',
-    or 'r', so that only the uid and gid are set. This is most useful
-    for 'r', where setting the same mode recursively for all the
-    sub-directories and files alike does not really make sense; indeed
-    in this case, the modes are usually set correctly when the package
-    (or rootfs overlay) installs the files, and only the uid and gid are
-    interesting to set;
-
-  - extend and update the examples to show-case the -1 mode use-case.
-
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- docs/manual/makedev-syntax.adoc | 33 +++++++++++++++++++--------------
- 1 file changed, 19 insertions(+), 14 deletions(-)
-
-diff --git a/docs/manual/makedev-syntax.adoc b/docs/manual/makedev-syntax.adoc
-index d6efb31d42..e63c9233eb 100644
---- a/docs/manual/makedev-syntax.adoc
-+++ b/docs/manual/makedev-syntax.adoc
-@@ -22,14 +22,19 @@ There are a few non-trivial blocks:
- 
- - +name+ is the path to the file you want to create/modify
- - +type+ is the type of the file, being one of:
--  * f: a regular file
--  * d: a directory
--  * r: a directory recursively
--  * c: a character device file
--  * b: a block device file
--  * p: a named pipe
-+  * `f`: a regular file, which must already exist
-+  * `F`: a regular file, which is ignored and not created if missing
-+  * `d`: a directory, which is created, as well as its parents, if missing
-+  * `r`: a directory recursively, which must already exist
-+  * `c`: a character device file, which parent directory must exist
-+  * `b`: a block device file, which parent directory must exist
-+  * `p`: a named pipe, which parent directory must exist
- - +mode+ are the usual permissions settings (only numerical values
--  are allowed)
-+  are allowed);
-+  for type `d`, the mode of existing parents is not changed, but the mode
-+  of created parents is set;
-+  for types `f`, `F`, and `r`, +mode+ can also be set to +-1+ to not
-+  change the mode (and only change uid and gid)
- - +uid+ and +gid+ are the UID and GID to set on this file; can be
-   either numerical values or actual names
- - +major+ and +minor+ are here for device files, set to +-+ for other
-@@ -38,22 +43,22 @@ There are a few non-trivial blocks:
-   of files, and can be reduced to a loop, beginning at +start+,
-   incrementing its counter by +inc+ until it reaches +count+
- 
--Let's say you want to change the permissions of a given file; using
--this syntax, you will need to write:
-+Let's say you want to change the ownership and permissions of a given
-+file; using this syntax, you will need to write:
- 
- ----
- /usr/bin/foo f 755 0 0 - - - - -
- /usr/bin/bar f 755 root root - - - - -
- /data/buz f 644 buz-user buz-group - - - - -
-+/data/baz f -1 baz-user baz-group - - - - -
- ----
- 
--Alternatively, if you want to change owner/permission of a directory
--recursively, you can write (to set UID to foo, GID to bar and access
--rights to rwxr-x--- for the directory /usr/share/myapp and all files
--and directories below it):
-+Alternatively, if you want to change owner of a directory recursively,
-+you can write (to set UID to `foo` and GID to `bar` for the directory
-+`/usr/share/myapp` and all files and directories below it):
- 
- ----
--/usr/share/myapp r 750 foo bar - - - - -
-+/usr/share/myapp r -1 foo bar - - - - -
- ----
- 
- On the other hand, if you want to create the device file +/dev/hda+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
