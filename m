@@ -4,85 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D081BC48286
-	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 08:56:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D987FC48286
+	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 08:57:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 60A1A40351;
-	Tue,  6 Feb 2024 08:56:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 60A1A40351
+	by smtp4.osuosl.org (Postfix) with ESMTP id 93F1140357;
+	Tue,  6 Feb 2024 08:57:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 93F1140357
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8SIbf51jdwIi; Tue,  6 Feb 2024 08:56:03 +0000 (UTC)
+	with ESMTP id tkNYO40y6Asm; Tue,  6 Feb 2024 08:57:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C0B7440330;
-	Tue,  6 Feb 2024 08:56:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C0B7440330
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 659141BF2BC
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 08:56:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B3DF740345;
+	Tue,  6 Feb 2024 08:57:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B3DF740345
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 39F281BF2BC
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 08:57:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3EBBF60E09
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 08:56:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3EBBF60E09
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1105A4032F
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 08:57:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1105A4032F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PEnrGxx3ZGvE for <buildroot@lists.busybox.net>;
- Tue,  6 Feb 2024 08:56:00 +0000 (UTC)
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com
- [IPv6:2a00:1450:4864:20::12e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 749BD60BF4
- for <buildroot@buildroot.org>; Tue,  6 Feb 2024 08:56:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 749BD60BF4
-Received: by mail-lf1-x12e.google.com with SMTP id
- 2adb3069b0e04-5114b1e8819so3141221e87.1
- for <buildroot@buildroot.org>; Tue, 06 Feb 2024 00:56:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707209758; x=1707814558;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=4u03kbFOr5eK5cbWLXyg/NOs/n+PQIUgr0FTbeb8sTI=;
- b=SqSbCooKv3vKZ62UzE9h+fhc74Rnut6nfvgLR1/4S3DLObz6cyrPLo6e0lz1PCpAYc
- 2T/z7v2UrWGRPrgLSnhXTKoh03BwEPKCSjPuHbmcti9/4NrDoLbwLbTOPr9j+0aZq8lL
- LppBXC6IpQDhv+rdTPLeS+r3f7vHzD56G43Ve4uvy4ef42F5Vi4Hyy2DHrUuDP5fFg1H
- B622AjrQuCqcrEDL1L0yu1x6chHlxe/NrcZdeu++/jzI/uPj9BozLpcBOQgwabgqTDN3
- 8TGWhH6bWiHtuC2tCZTYNP7I/OAO3OAVD5IcTh69p3nDTr5OCVVgTKIz4hlOXKR68yzd
- iLpg==
-X-Gm-Message-State: AOJu0YzZYRJK4tdFoqn0a1mYGJnLp2jZfmiKdadGJlmAFQ5dG68Lxvaf
- vEjnovmG9AYr1E1SufNf0aoH7zZUrQW7bbdUNivMdXA/CM5e6NZE3O+fm7Ju
-X-Google-Smtp-Source: AGHT+IHqcXlfP5iFPEUfL+4SFLlousZSTIVaPSmjjdFUOG+YOyvKZHYyZ3T8KwUjx00QcJ3ZUiQh4g==
-X-Received: by 2002:a19:4f4e:0:b0:511:610f:4ec3 with SMTP id
- a14-20020a194f4e000000b00511610f4ec3mr62676lfk.53.1707209757781; 
- Tue, 06 Feb 2024 00:55:57 -0800 (PST)
-Received: from localhost.localdomain (83-233-6-197.cust.bredband2.com.
- [83.233.6.197]) by smtp.gmail.com with ESMTPSA id
- f18-20020a0565123b1200b005115edd71c9sm97306lfv.165.2024.02.06.00.55.57
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 06 Feb 2024 00:55:57 -0800 (PST)
-From: Marcus Folkesson <marcus.folkesson@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xH3c8qbgOEeA for <buildroot@lists.busybox.net>;
+ Tue,  6 Feb 2024 08:57:02 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 15D0F40318
+ for <buildroot@buildroot.org>; Tue,  6 Feb 2024 08:57:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15D0F40318
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id F3E0586EEF; Tue,  6 Feb 2024 08:57:01 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue,  6 Feb 2024 10:00:48 +0100
-Message-ID: <20240206090048.2214719-1-marcus.folkesson@gmail.com>
-X-Mailer: git-send-email 2.43.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1707209758; x=1707814558; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=4u03kbFOr5eK5cbWLXyg/NOs/n+PQIUgr0FTbeb8sTI=;
- b=REntLGTLSR3AjMcHo1WA+gi0gba4Imbj9r6W8LgCARWNBa2sBh4qcV4AyvqZdDNxVM
- OXOYy+Zkjeh10FmZvdWIQm6FGnq2Oa0NFWx9Vz+ElHCpTBmvsBVPsn4fkfVex9Pfk9RO
- 8Jbsin+zbfxlrQ9Oz97gidLv1nc+opGRMb2+LVWbh7f0utEGZXY1mgi6NKHZcGbzMROQ
- oCqdrFWnWPrc+5GRiO6X9ndh7WXMh8UXGviw0IqHXoiEreLnrASfcPJdv+c4VoSk8x93
- aMhy/Oas1fLc7b9IZYmDyP7mEe5cNSe4Q/Rx+oAoUgBgDLt5aZ/EdJtGYcqcKh/KVTT/
- Tr9A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=REntLGTL
-Subject: [Buildroot] [PATCH] package/makedevs: describe the recursive type
- in the README
+Date: Tue, 6 Feb 2024 09:56:21 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 71d971fa3bba0528011b4c6419ebbdcd420cf493
+X-Git-Newrev: 0a1f2fce0494388080af0a4130e62522c26fe4a9
+X-Patchwork-Hint: ignore
+Message-Id: <20240206085701.F3E0586EEF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rlwrap: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,35 +55,156 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Marcus Folkesson <marcus.folkesson@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The recursive type is described everywhere else, so add it to
-the README as well.
+commit: https://git.buildroot.net/buildroot/commit/?id=0a1f2fce0494388080af0a4130e62522c26fe4a9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+Signed-off-by: Matt Silva <dev@matt-silva.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/makedevs/README | 1 +
- 1 file changed, 1 insertion(+)
+ DEVELOPERS                 |  3 +++
+ package/Config.in          |  1 +
+ package/rlwrap/Config.in   | 42 ++++++++++++++++++++++++++++++++++++++++++
+ package/rlwrap/rlwrap.hash |  6 ++++++
+ package/rlwrap/rlwrap.mk   | 37 +++++++++++++++++++++++++++++++++++++
+ 5 files changed, 89 insertions(+)
 
-diff --git a/package/makedevs/README b/package/makedevs/README
-index 70844bf802..6c583609a5 100644
---- a/package/makedevs/README
-+++ b/package/makedevs/README
-@@ -26,6 +26,7 @@ where name is the file name,  type can be one of:
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 2d3d2cdda8..c18ae46054 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2122,6 +2122,9 @@ F:	board/technologic/ts4900/
+ F:	configs/ts4900_defconfig
+ F:	package/ts4900-fpga/
  
-       f: A regular file
-       d: Directory
-+      r: Directory recursively
-       c: Character special device file
-       b: Block special device file
-       p: Fifo (named pipe)
--- 
-2.43.0
-
++N:	Matt Silva <dev@matt-silva.com>
++F:	package/rlwrap/
++
+ N:	Mauro Condarelli <mc5686@mclink.it>
+ F:	package/mc/
+ F:	package/python-autobahn/
+diff --git a/package/Config.in b/package/Config.in
+index 7fc383da83..97f590e2b7 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2690,6 +2690,7 @@ comment "Utilities"
+ 	source "package/pinentry/Config.in"
+ 	source "package/qprint/Config.in"
+ 	source "package/ranger/Config.in"
++	source "package/rlwrap/Config.in"
+ 	source "package/rtty/Config.in"
+ 	source "package/screen/Config.in"
+ 	source "package/screenfetch/Config.in"
+diff --git a/package/rlwrap/Config.in b/package/rlwrap/Config.in
+new file mode 100644
+index 0000000000..0cb3e33fa7
+--- /dev/null
++++ b/package/rlwrap/Config.in
+@@ -0,0 +1,42 @@
++config BR2_PACKAGE_RLWRAP
++	bool "rlwrap"
++	select BR2_PACKAGE_READLINE
++	help
++	  rlwrap is a 'readline wrapper', a small utility that uses the
++	  GNU Readline library to allow the editing of keyboard input
++	  for any command.
++
++	  https://github.com/hanslub42/rlwrap
++
++if BR2_PACKAGE_RLWRAP
++
++config BR2_PACKAGE_RLWRAP_SPY_ON_READLINE
++	bool "spy on readline"
++	default y
++	help
++	  If we want to keep the display tidy when re-sizing the
++	  terminal window or printing multi-line prompts, we have to
++	  know whether or not readline is in horizontal-scroll-mode
++	  (i.e. wheter long lines are scrolled or wrapped). At present,
++	  this involves a look at a private readline variable - if you
++	  feel guilty about that, disable this option
++
++config BR2_PACKAGE_RLWRAP_HOMEGROWN_REDISPLAY
++	bool "homegrown redisplay"
++	help
++	  Some people report double echoing of user input. Enabling this
++	  option will cure the problem - though the display will then
++	  flicker over slow connections (cf. BUGS)
++
++config BR2_PACKAGE_RLWRAP_MULTIBYTE_AWARE
++	bool "multibyte awareness"
++	default y
++	depends on BR2_USE_WCHAR
++	help
++	  Prevent rlwrap from seeing multibyte characters as multiple
++	  characters
++
++comment "rlwrap multibyte awareness needs a toolchain w/ wchar"
++	depends on !BR2_USE_WCHAR
++
++endif
+diff --git a/package/rlwrap/rlwrap.hash b/package/rlwrap/rlwrap.hash
+new file mode 100644
+index 0000000000..b7005e860e
+--- /dev/null
++++ b/package/rlwrap/rlwrap.hash
+@@ -0,0 +1,6 @@
++# from https://github.com/hanslub42/rlwrap/releases/tag/0.46.1
++sha256  2711986a1248f6ac59e2aecf5586205835970040d300a42b4bf8014397e73e37  rlwrap-0.46.1.tar.gz
++
++# license files, locally calculated
++sha256  656d25fab58016ac6ac11bb126709e4f860ea063d11795232eb55987172f78ff  AUTHORS
++sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/rlwrap/rlwrap.mk b/package/rlwrap/rlwrap.mk
+new file mode 100644
+index 0000000000..e3973e841b
+--- /dev/null
++++ b/package/rlwrap/rlwrap.mk
+@@ -0,0 +1,37 @@
++################################################################################
++#
++# rlwrap
++#
++################################################################################
++
++RLWRAP_VERSION = 0.46.1
++RLWRAP_SITE = https://github.com/hanslub42/rlwrap/releases/download/$(RLWRAP_VERSION)
++RLWRAP_LICENSE = GPL-2.0+
++RLWRAP_LICENSE_FILES = AUTHORS COPYING
++
++RLWRAP_DEPENDENCIES = readline
++
++ifeq ($(BR2_PACKAGE_RLWRAP_SPY_ON_READLINE),y)
++RLWRAP_CONF_OPTS += --enable-spy-on-readline
++else
++RLWRAP_CONF_OPTS += --disable-spy-on-readline
++endif
++
++ifeq ($(BR2_PACKAGE_RLWRAP_HOMEGROWN_REDISPLAY),y)
++RLWRAP_CONF_OPTS += --enable-homegrown-redisplay
++else
++RLWRAP_CONF_OPTS += --disable-homegrown-redisplay
++endif
++
++ifeq ($(BR2_PACKAGE_RLWRAP_MULTIBYTE_AWARE),y)
++RLWRAP_CONF_OPTS += --enable-multibyte-aware
++else
++RLWRAP_CONF_OPTS += --disable-multibyte-aware
++endif
++
++define RLWRAP_REMOVE_FILTERS
++	$(RM) -rf $(TARGET_DIR)/usr/share/rlwrap/filters
++endef
++RLWRAP_POST_INSTALL_TARGET_HOOKS += RLWRAP_REMOVE_FILTERS
++
++$(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
