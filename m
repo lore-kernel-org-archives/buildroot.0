@@ -4,47 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99D8DC4828D
-	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 13:20:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5163DC48297
+	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 13:22:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2B3D7611F4;
-	Tue,  6 Feb 2024 13:20:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B3D7611F4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0E5A361200;
+	Tue,  6 Feb 2024 13:22:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E5A361200
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5dMQHhJmE8z4; Tue,  6 Feb 2024 13:20:50 +0000 (UTC)
+	with ESMTP id 2K0XDMY_GbGw; Tue,  6 Feb 2024 13:22:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 54A8F611F8;
-	Tue,  6 Feb 2024 13:20:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 54A8F611F8
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1756B1BF95D
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 13:20:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5784E611F4;
+	Tue,  6 Feb 2024 13:22:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5784E611F4
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 19F861BF5AD
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 13:21:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E447B4144E
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 13:20:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E447B4144E
+ by smtp4.osuosl.org (Postfix) with ESMTP id E540B41E73
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 13:21:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E540B41E73
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sqaMerhYOzNi for <buildroot@lists.busybox.net>;
- Tue,  6 Feb 2024 13:20:21 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id BBD0340C88
- for <buildroot@buildroot.org>; Tue,  6 Feb 2024 13:20:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BBD0340C88
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A58A98705B; Tue,  6 Feb 2024 13:20:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4nlU5O735jm6 for <buildroot@lists.busybox.net>;
+ Tue,  6 Feb 2024 13:21:54 +0000 (UTC)
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com
+ [IPv6:2a00:1450:4864:20::232])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 15BB841E6E
+ for <buildroot@buildroot.org>; Tue,  6 Feb 2024 13:21:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15BB841E6E
+Received: by mail-lj1-x232.google.com with SMTP id
+ 38308e7fff4ca-2d0abdde3easo26040811fa.2
+ for <buildroot@buildroot.org>; Tue, 06 Feb 2024 05:21:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1707225711; x=1707830511;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=hgjksmOrOTrnCXyuvaoQWjhuJysJtT0g/8g9h6556QA=;
+ b=THrf9GGE4gDlLWyPEDbrdXKmF6IsxkCZr247CMpu8Bq/BAqeAlW0MdQk4EI7gYRqqg
+ /YVTwTHQt2gwyqW6Ewu0gpFcCfSYQaaROc8nTus+Gab3ATJnsxoxvixzCl+S8c6uBVPS
+ 2SB69vZVVNoBozm2waQGGO1oqyDZMP2h28JSDIbGVZ283YaL9IFbUeO6yBAo8aczjmh8
+ y5PRJTePECDD3gOWFnWYESspqQXotzN3/M1klzy3MW39ZF5KdrpyR8qySEUlSw5sng5L
+ vZxgSxOCvEv9aVYmTJFmrPC6sMZIXhrmw+JibrsV7XfOjZD3pycA9LvDo6YnOTWX7v97
+ H2Dg==
+X-Gm-Message-State: AOJu0YzrIgtRYsu3v63B0fDhyQ6lT1obzaguEWB1WSr281SwXcLGZ9+x
+ lPJoDihJ2TOfSc2fVlAsn+tP0ZyDL8oZ3A22530s4JbLOaf8unumndSDQVAJ
+X-Google-Smtp-Source: AGHT+IETcx2TMvuWCkLGQ+Geyym8rMfYeH0ZeUktUqlLhHuKEDPGOgCnhZgVqgzMcq//PttYSpqsdg==
+X-Received: by 2002:a2e:9417:0:b0:2d0:b2e6:1133 with SMTP id
+ i23-20020a2e9417000000b002d0b2e61133mr1847445ljh.24.1707225710529; 
+ Tue, 06 Feb 2024 05:21:50 -0800 (PST)
+X-Forwarded-Encrypted: i=0;
+ AJvYcCVcwi1kuCUtv5fpdeOr/gE5ZxMrXzrLaJZrkrmJWlpekp6xISTAZTYMxbxU12RKvjarJHyZf70Q3L/+jI+s/iCYlBrEEBUnfb9WLA==
+Received: from development2.visionsystems.de (mail.visionsystems.de.
+ [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
+ g23-20020aa7d1d7000000b0055f0f643ebcsm1017966edp.96.2024.02.06.05.21.49
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 06 Feb 2024 05:21:49 -0800 (PST)
 To: buildroot@buildroot.org
-Date: Tue, 6 Feb 2024 14:19:10 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e3b99c79d9dc5325f33353d3f66e7b0fb2c1cc15
-X-Git-Newrev: e3debd90836ffa7f30175587e79bbcb13c7b30f5
-X-Patchwork-Hint: ignore
-Message-Id: <20240206132021.A58A98705B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] board/stmicroelectronics: generalise
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES regex
+Date: Tue,  6 Feb 2024 14:20:51 +0100
+Message-Id: <20240206132051.2838897-1-yegorslists@googlemail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=googlemail.com; s=20230601; t=1707225711; x=1707830511; darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=hgjksmOrOTrnCXyuvaoQWjhuJysJtT0g/8g9h6556QA=;
+ b=mzgOYUhQ5KYcpvqxPfQTIzvYS9BowyGoyqsllA+wCb96Rc7FF9VRG3cwAPbBBEAp3V
+ V1Kg5ir88/6d0Kfhuvm9xT6YOndQVfXLCyBU5awIEv6d5LRgNvIOpK2ppQ0cPo66oCJw
+ Rk+mwgH9an0u7q6REOQiZiKPjRd0DochNLB9l5zNEHOQZ3/ON3TYA9tMgJhB6AcLo5oV
+ OI4bR2uJYzRK8UJFEbp+PfNfXB22hxIsWCyFTYrJQqIJyv9CUa5hw9h5C8LPi2uee76q
+ OUkhymzenaYYmWvM4NCUwhliJlnaNGb2fpA931yTsJlASXrQDmCQa0rMo2CvSagAA8rd
+ FcMA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=mzgOYUhQ
+Subject: [Buildroot] [PATCH] Create a .gitignore file in the CANONICAL_O
+ directory
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,47 +95,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+From: yegorslists--- via buildroot <buildroot@buildroot.org>
+Reply-To: yegorslists@googlemail.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e3debd90836ffa7f30175587e79bbcb13c7b30f5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-The regex was a bit too strict in which characters it allowed. Thus,
-if e.g. a file name appears in the
-BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES string, it no
-longer matches, and we end up with an empty ATF_VARIABLES. This makes
-the subsequent grep fail, and the post-image.sh script fails without
-any error message (thanks to the -e option).
+This .gitignore file ignores all files in an output directory and
+hence doesn't change the git status.
 
-Simplify the regex to match everything except the closing quotation
-mark. Note that Kconfig doesn't allow quotation marks at all inside a
-string (even escaped ones), so this regular expression is always OK.
+Remove "/output" entry from the main .gitignore file as it is already
+handled by this general approach.
 
-Signed-off-by: Marleen Vos <marleen.vos@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- board/stmicroelectronics/common/stm32mp157/post-image.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .gitignore | 1 -
+ Makefile   | 3 +++
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/board/stmicroelectronics/common/stm32mp157/post-image.sh b/board/stmicroelectronics/common/stm32mp157/post-image.sh
-index 65809e46a4..0cf52f4564 100755
---- a/board/stmicroelectronics/common/stm32mp157/post-image.sh
-+++ b/board/stmicroelectronics/common/stm32mp157/post-image.sh
-@@ -8,7 +8,7 @@
- #
- atf_image()
- {
--	ATF_VARIABLES="$(sed -n 's/^BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="\([\/a-zA-Z0-9_=. \-]*\)"$/\1/p' ${BR2_CONFIG})"
-+	ATF_VARIABLES="$(sed -n 's/^BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="\([^\"]*\)"$/\1/p' ${BR2_CONFIG})"
- 	# make sure DTB_FILE_NAME is set
- 	printf '%s\n' "${ATF_VARIABLES}" | grep -Eq 'DTB_FILE_NAME=[0-9A-Za-z_\-]*'
- 	# extract the value
+diff --git a/.gitignore b/.gitignore
+index bb02d9f572..14b7ca5040 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -1,4 +1,3 @@
+-/output
+ /dl
+ /.auto.deps
+ /.config.cmd
+diff --git a/Makefile b/Makefile
+index ac625152c6..86d4444745 100644
+--- a/Makefile
++++ b/Makefile
+@@ -63,6 +63,9 @@ ifneq ($(findstring @,$(CANONICAL_O)),)
+ $(error The build directory can not contain a '@')
+ endif
+ 
++# Create a default .gitignore file that ignores everything
++$(shell echo "*" > "$(CANONICAL_O)/.gitignore")
++
+ CANONICAL_CURDIR = $(realpath $(CURDIR))
+ 
+ REQ_UMASK = 0022
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
