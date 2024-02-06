@@ -4,86 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5163DC48297
-	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 13:22:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B48D9C4828D
+	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 13:23:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0E5A361200;
-	Tue,  6 Feb 2024 13:22:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E5A361200
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5EB5D60B6A;
+	Tue,  6 Feb 2024 13:23:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5EB5D60B6A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2K0XDMY_GbGw; Tue,  6 Feb 2024 13:22:02 +0000 (UTC)
+	with ESMTP id gKs_vp_SMWhg; Tue,  6 Feb 2024 13:23:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5784E611F4;
-	Tue,  6 Feb 2024 13:22:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5784E611F4
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 19F861BF5AD
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 13:21:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B6CC060B0C;
+	Tue,  6 Feb 2024 13:23:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6CC060B0C
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 38ABF1BF5AD
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 13:23:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E540B41E73
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 13:21:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E540B41E73
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3385C8232A
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 13:23:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4nlU5O735jm6 for <buildroot@lists.busybox.net>;
- Tue,  6 Feb 2024 13:21:54 +0000 (UTC)
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com
- [IPv6:2a00:1450:4864:20::232])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 15BB841E6E
- for <buildroot@buildroot.org>; Tue,  6 Feb 2024 13:21:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15BB841E6E
-Received: by mail-lj1-x232.google.com with SMTP id
- 38308e7fff4ca-2d0abdde3easo26040811fa.2
- for <buildroot@buildroot.org>; Tue, 06 Feb 2024 05:21:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707225711; x=1707830511;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=hgjksmOrOTrnCXyuvaoQWjhuJysJtT0g/8g9h6556QA=;
- b=THrf9GGE4gDlLWyPEDbrdXKmF6IsxkCZr247CMpu8Bq/BAqeAlW0MdQk4EI7gYRqqg
- /YVTwTHQt2gwyqW6Ewu0gpFcCfSYQaaROc8nTus+Gab3ATJnsxoxvixzCl+S8c6uBVPS
- 2SB69vZVVNoBozm2waQGGO1oqyDZMP2h28JSDIbGVZ283YaL9IFbUeO6yBAo8aczjmh8
- y5PRJTePECDD3gOWFnWYESspqQXotzN3/M1klzy3MW39ZF5KdrpyR8qySEUlSw5sng5L
- vZxgSxOCvEv9aVYmTJFmrPC6sMZIXhrmw+JibrsV7XfOjZD3pycA9LvDo6YnOTWX7v97
- H2Dg==
-X-Gm-Message-State: AOJu0YzrIgtRYsu3v63B0fDhyQ6lT1obzaguEWB1WSr281SwXcLGZ9+x
- lPJoDihJ2TOfSc2fVlAsn+tP0ZyDL8oZ3A22530s4JbLOaf8unumndSDQVAJ
-X-Google-Smtp-Source: AGHT+IETcx2TMvuWCkLGQ+Geyym8rMfYeH0ZeUktUqlLhHuKEDPGOgCnhZgVqgzMcq//PttYSpqsdg==
-X-Received: by 2002:a2e:9417:0:b0:2d0:b2e6:1133 with SMTP id
- i23-20020a2e9417000000b002d0b2e61133mr1847445ljh.24.1707225710529; 
- Tue, 06 Feb 2024 05:21:50 -0800 (PST)
-X-Forwarded-Encrypted: i=0;
- AJvYcCVcwi1kuCUtv5fpdeOr/gE5ZxMrXzrLaJZrkrmJWlpekp6xISTAZTYMxbxU12RKvjarJHyZf70Q3L/+jI+s/iCYlBrEEBUnfb9WLA==
-Received: from development2.visionsystems.de (mail.visionsystems.de.
- [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- g23-20020aa7d1d7000000b0055f0f643ebcsm1017966edp.96.2024.02.06.05.21.49
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 06 Feb 2024 05:21:49 -0800 (PST)
-To: buildroot@buildroot.org
-Date: Tue,  6 Feb 2024 14:20:51 +0100
-Message-Id: <20240206132051.2838897-1-yegorslists@googlemail.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hi4dPnOUvngR for <buildroot@lists.busybox.net>;
+ Tue,  6 Feb 2024 13:23:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
+ helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E76E382306
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E76E382306
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E76E382306
+ for <buildroot@buildroot.org>; Tue,  6 Feb 2024 13:23:40 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 02E83E0004;
+ Tue,  6 Feb 2024 13:23:38 +0000 (UTC)
+Date: Tue, 6 Feb 2024 14:23:38 +0100
+To: Marleen Vos via buildroot <buildroot@buildroot.org>
+Message-ID: <20240206142338.59a0a577@windsurf>
+In-Reply-To: <20231219121508.1695768-2-marleen.vos@mind.be>
+References: <20231219121508.1695768-1-marleen.vos@mind.be>
+ <20231219121508.1695768-2-marleen.vos@mind.be>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20230601; t=1707225711; x=1707830511; darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=hgjksmOrOTrnCXyuvaoQWjhuJysJtT0g/8g9h6556QA=;
- b=mzgOYUhQ5KYcpvqxPfQTIzvYS9BowyGoyqsllA+wCb96Rc7FF9VRG3cwAPbBBEAp3V
- V1Kg5ir88/6d0Kfhuvm9xT6YOndQVfXLCyBU5awIEv6d5LRgNvIOpK2ppQ0cPo66oCJw
- Rk+mwgH9an0u7q6REOQiZiKPjRd0DochNLB9l5zNEHOQZ3/ON3TYA9tMgJhB6AcLo5oV
- OI4bR2uJYzRK8UJFEbp+PfNfXB22hxIsWCyFTYrJQqIJyv9CUa5hw9h5C8LPi2uee76q
- OUkhymzenaYYmWvM4NCUwhliJlnaNGb2fpA931yTsJlASXrQDmCQa0rMo2CvSagAA8rd
- FcMA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
- header.a=rsa-sha256 header.s=20230601 header.b=mzgOYUhQ
-Subject: [Buildroot] [PATCH] Create a .gitignore file in the CANONICAL_O
- directory
+ d=bootlin.com; s=gm1; t=1707225819;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=KEbyMqTvpIPyUC8nWXEYGlyxkfvY9d6xjg2SW6KzhpU=;
+ b=jjI4InDeAM0GHsLHRzCpmmcDzVtB55PhTa4iIE3MbUhsM8SOALjIGDuACd/ouoAX4k5765
+ rJfu+U6sqq5DWux1+todY7q7akLgHPEBfL7nuAfeeDu5GSaoSa3au6G25cysJHuZvPfYux
+ MWtq5NUAKHfYbZBcr8ysanOO6ptAzfsCGjHasL7QgVQeFKQviJ5rqHNM4VBNyUesi8iKrN
+ 5ttUgvCgs+q9jfTgoW/WtFRBYQNq7XndgXGTGEJXXsAT2Ffc6sDVAIqpsAtppFZDWeFtQd
+ w6IUM/O7Jn8jU+UccEHERYyysHpIMd2KEpQbv54KqFmIayds7Axh+DeRC3JJjA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=jjI4InDe
+Subject: Re: [Buildroot] [PATCH 1/7] DEVELOPERS: added marleen.vos@mind.be
+ for boards/configs based on stm32mp15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,53 +82,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: yegorslists--- via buildroot <buildroot@buildroot.org>
-Reply-To: yegorslists@googlemail.com
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Marleen Vos <marleen.vos@mind.be>, marleen.vos@essensium.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+On Tue, 19 Dec 2023 13:15:02 +0100
+Marleen Vos via buildroot <buildroot@buildroot.org> wrote:
 
-This .gitignore file ignores all files in an output directory and
-hence doesn't change the git status.
+> From: Marleen Vos <marleen.vos@mind.be>
+> 
+> The buildroot manual says this kind of commit should be done together
+> with the actual changes made to a config/board. But since a number of
+> changes will follow for some boards and configs, it seemed more
+> logical to make a separate commit for this.
+> 
+> Signed-off-by: Marleen Vos <marleen.vos@mind.be>
+> ---
+>  DEVELOPERS | 6 ++++++
+>  1 file changed, 6 insertions(+)
 
-Remove "/output" entry from the main .gitignore file as it is already
-handled by this general approach.
+Applied to master, thanks.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- .gitignore | 1 -
- Makefile   | 3 +++
- 2 files changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/.gitignore b/.gitignore
-index bb02d9f572..14b7ca5040 100644
---- a/.gitignore
-+++ b/.gitignore
-@@ -1,4 +1,3 @@
--/output
- /dl
- /.auto.deps
- /.config.cmd
-diff --git a/Makefile b/Makefile
-index ac625152c6..86d4444745 100644
---- a/Makefile
-+++ b/Makefile
-@@ -63,6 +63,9 @@ ifneq ($(findstring @,$(CANONICAL_O)),)
- $(error The build directory can not contain a '@')
- endif
- 
-+# Create a default .gitignore file that ignores everything
-+$(shell echo "*" > "$(CANONICAL_O)/.gitignore")
-+
- CANONICAL_CURDIR = $(realpath $(CURDIR))
- 
- REQ_UMASK = 0022
+Thomas
 -- 
-2.34.1
-
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
