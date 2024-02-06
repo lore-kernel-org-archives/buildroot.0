@@ -4,49 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D969C48297
-	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 22:26:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77FF7C48297
+	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 22:31:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BCB2F41E08;
-	Tue,  6 Feb 2024 22:26:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 45DBB41ED7;
+	Tue,  6 Feb 2024 22:31:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Li48VbIQvkQq; Tue,  6 Feb 2024 22:26:54 +0000 (UTC)
+	with ESMTP id Hs8Nrv0rIEtD; Tue,  6 Feb 2024 22:31:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 97C8C41E8C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B20741E95
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 97C8C41E8C;
-	Tue,  6 Feb 2024 22:26:54 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5AD3A1BF276
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 22:26:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4B20741E95;
+	Tue,  6 Feb 2024 22:31:05 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E5F401BF276
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 22:31:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 541494031E
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 22:26:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E03E883065
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 22:31:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nbB0yk1HBA3v for <buildroot@lists.busybox.net>;
- Tue,  6 Feb 2024 22:26:25 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yIFvOyKDKJpA for <buildroot@lists.busybox.net>;
+ Tue,  6 Feb 2024 22:31:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
+ helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06A9D4031F
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 06A9D4031F
- for <buildroot@buildroot.org>; Tue,  6 Feb 2024 22:26:24 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6E52587494; Tue,  6 Feb 2024 22:26:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E26AC81F5E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E26AC81F5E
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E26AC81F5E
+ for <buildroot@buildroot.org>; Tue,  6 Feb 2024 22:31:02 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C0F9FE0003;
+ Tue,  6 Feb 2024 22:31:00 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1rXTxb-00EMFQ-0o;
+ Tue, 06 Feb 2024 23:30:35 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 6 Feb 2024 23:26:02 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 89e67a96383f1a0d8f44a9385637798f8c31ef3f
-X-Git-Newrev: 22f9ce63a30200696dbcbe6ae3a6cc417f007979
-X-Patchwork-Hint: ignore
-Message-Id: <20240206222624.6E52587494@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: add libcamera runtime test
+To: Christian Stewart <christian@aperture.us>
+References: <20240206221722.33303-1-christian@aperture.us>
+Date: Tue, 06 Feb 2024 23:30:35 +0100
+In-Reply-To: <20240206221722.33303-1-christian@aperture.us> (Christian
+ Stewart's message of "Tue, 6 Feb 2024 14:17:22 -0800")
+Message-ID: <87r0hp2pkk.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH v1 1/1] package/go: bump version to go1.21.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,131 +68,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Anisse Astier <anisse@astier.eu>, "Yann E .
+ MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=22f9ce63a30200696dbcbe6ae3a6cc417f007979
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Christian" == Christian Stewart <christian@aperture.us> writes:
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- DEVELOPERS                                         |  2 +
- support/testing/tests/package/test_libcamera.py    | 79 ++++++++++++++++++++++
- .../package/test_libcamera/linux-vimc.fragment     |  4 ++
- 3 files changed, 85 insertions(+)
+ > go1.21.7 (released 2024-02-06) includes fixes to the compiler, the go command,
+ > the runtime, and the crypto/x509 package.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3e0b2e5c9c..fc47c51d33 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1797,6 +1797,8 @@ F:	support/testing/tests/package/test_kexec/
- F:	support/testing/tests/package/test_kmscube.py
- F:	support/testing/tests/package/test_kmscube/
- F:	support/testing/tests/package/test_less.py
-+F:	support/testing/tests/package/test_libcamera.py
-+F:	support/testing/tests/package/test_libcamera/
- F:	support/testing/tests/package/test_libgpgme.py
- F:	support/testing/tests/package/test_libjxl.py
- F:	support/testing/tests/package/test_lrzip.py
-diff --git a/support/testing/tests/package/test_libcamera.py b/support/testing/tests/package/test_libcamera.py
-new file mode 100644
-index 0000000000..8953021b82
---- /dev/null
-+++ b/support/testing/tests/package/test_libcamera.py
-@@ -0,0 +1,79 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestLibCamera(infra.basetest.BRTest):
-+    # A specific configuration is needed for testing libcamera:
-+    # a kernel config fragment enables v4l2 vimc driver.
-+    # The libevent package is also enabled to have the libcamera "cam"
-+    # test application.
-+    kernel_fragment = \
-+        infra.filepath("tests/package/test_libcamera/linux-vimc.fragment")
-+    config = \
-+        f"""
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.76"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-+        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{kernel_fragment}"
-+        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+        BR2_PACKAGE_LIBCAMERA=y
-+        BR2_PACKAGE_LIBCAMERA_PIPELINE_VIMC=y
-+        BR2_PACKAGE_LIBEVENT=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        BR2_TARGET_ROOTFS_CPIO_GZIP=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
-+        kern = os.path.join(self.builddir, "images", "Image")
-+        self.emulator.boot(arch="aarch64",
-+                           kernel=kern,
-+                           kernel_cmdline=["console=ttyAMA0"],
-+                           options=["-M", "virt", "-cpu", "cortex-a57", "-m", "256M",
-+                                    "-initrd", img])
-+        self.emulator.login()
-+
-+        # The Kernel config of this test has only one v4l2 vimc
-+        # driver. The camera index is expected to be #1.
-+        cam_idx = 1
-+
-+        # We test libcamera with its simple "cam" application, by
-+        # requesting a list of available cameras.
-+        cmd = "cam --list"
-+        out, ret = self.emulator.run(cmd)
-+        self.assertEqual(ret, 0)
-+        # libcamera generates info messages. We filter only the
-+        # line(s) starting with our camera index.
-+        cam_line = [ln for ln in out if ln.startswith(f"{cam_idx}:")]
-+        # We should have the vimc camera in this line.
-+        self.assertIn("platform/vimc.0", cam_line[0])
-+
-+        # List the camera information.
-+        cmd = f"cam --camera {cam_idx} --info"
-+        self.assertRunOk(cmd)
-+
-+        # List the camera controls and check we have a brightness
-+        # control.
-+        cmd = f"cam --camera {cam_idx} --list-controls"
-+        out, ret = self.emulator.run(cmd)
-+        self.assertEqual(ret, 0)
-+        self.assertIn("Control: Brightness:", "\n".join(out))
-+
-+        # List the camera properties and check we have a camera
-+        # "Model" property.
-+        cmd = f"cam --camera {cam_idx} --list-properties"
-+        out, ret = self.emulator.run(cmd)
-+        self.assertEqual(ret, 0)
-+        self.assertIn("Property: Model = ", "\n".join(out))
-+
-+        # Capture few frames.
-+        cmd = f"cam --camera {cam_idx} --capture=5"
-+        cmd += " --stream width=160,height=120,role=video,pixelformat=RGB888"
-+        self.assertRunOk(cmd)
-diff --git a/support/testing/tests/package/test_libcamera/linux-vimc.fragment b/support/testing/tests/package/test_libcamera/linux-vimc.fragment
-new file mode 100644
-index 0000000000..04436e7518
---- /dev/null
-+++ b/support/testing/tests/package/test_libcamera/linux-vimc.fragment
-@@ -0,0 +1,4 @@
-+CONFIG_MEDIA_SUPPORT=y
-+CONFIG_MEDIA_TEST_SUPPORT=y
-+CONFIG_V4L_TEST_DRIVERS=y
-+CONFIG_VIDEO_VIMC=y
+ > https://go.dev/doc/devel/release#go1.21.7
+
+ > Signed-off-by: Christian Stewart <christian@aperture.us>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
