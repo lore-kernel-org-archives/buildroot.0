@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18CF4C4829A
-	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 10:22:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55D08C4828D
+	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 10:22:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C776741E67;
-	Tue,  6 Feb 2024 10:22:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C776741E67
+	by smtp4.osuosl.org (Postfix) with ESMTP id 11DAE41E67;
+	Tue,  6 Feb 2024 10:22:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11DAE41E67
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xiartmqqaqrR; Tue,  6 Feb 2024 10:22:00 +0000 (UTC)
+	with ESMTP id LnGUd9LiD2eb; Tue,  6 Feb 2024 10:22:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1A9B141E6A;
-	Tue,  6 Feb 2024 10:21:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A9B141E6A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5C15B41E9F;
+	Tue,  6 Feb 2024 10:22:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C15B41E9F
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2E3FF1BF311
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 10:20:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0539B1BF311
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 10:21:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CC67D41E56
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 10:20:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC67D41E56
+ by smtp4.osuosl.org (Postfix) with ESMTP id DFAEA41E59
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 10:21:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DFAEA41E59
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XgtJgaDGkqbG for <buildroot@lists.busybox.net>;
- Tue,  6 Feb 2024 10:20:54 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E9D0A41E59
- for <buildroot@buildroot.org>; Tue,  6 Feb 2024 10:20:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E9D0A41E59
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D7C9286F41; Tue,  6 Feb 2024 10:20:53 +0000 (UTC)
+ with ESMTP id KbCtYfrrBlcX for <buildroot@lists.busybox.net>;
+ Tue,  6 Feb 2024 10:21:52 +0000 (UTC)
+Received: from dd5108.kasserver.com (dd5108.kasserver.com [85.13.130.47])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7D1DC41E78
+ for <buildroot@buildroot.org>; Tue,  6 Feb 2024 10:21:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D1DC41E78
+Received: from wslxew206.. (ipb21bd56e.dynamic.kabel-deutschland.de
+ [178.27.213.110])
+ by dd5108.kasserver.com (Postfix) with ESMTPA id B75325240C9E;
+ Tue,  6 Feb 2024 11:21:49 +0100 (CET)
+From: Andreas Naumann <anaumann@ultratronik.de>
 To: buildroot@buildroot.org
-Date: Tue, 6 Feb 2024 11:18:04 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7c83d1e930c23d0e62de4eedb99716bc5c0f6a29
-X-Git-Newrev: dba7e8abaadae87a2e96de92f9f4f59dc590a77c
-X-Patchwork-Hint: ignore
-Message-Id: <20240206102053.D7C9286F41@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-django: bump to version
- 5.0.1
+Date: Tue,  6 Feb 2024 11:21:44 +0100
+Message-Id: <20240206102144.1831146-1-anaumann@ultratronik.de>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+X-Spamd-Bar: +++
+Subject: [Buildroot] [PATCH 1/1] package/glm: Bump to 1.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,54 +57,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: fontaine.fabrice@gmail.com, Andreas Naumann <anaumann@ultratronik.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dba7e8abaadae87a2e96de92f9f4f59dc590a77c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+glm did not install headers since [1], at least in a per-package
+build. Bumping to 1.0.0 fixes that.
+The cmake option to avoid building the lib has changed
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Reviewed-by: Marcus Hoffmann <buildroot@bubu1.eu>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Partially fixes [2], where cegui failed to configure because of
+the missing glm headers.
+
+[1] 01ad113  package/glm: bump to version 0.9.9.8
+[2] http://autobuild.buildroot.org/results/241/241a60f8ecb6fec5dc122d64dd438dd4249f8c3e/
+
+Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
 ---
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+note: 0.9.9.8 from 2020 was the latest tag until a 1.0.0 was cut about
+two weeks ago (24th january 2024). I've seen commit 3a4b550 which might
+have been responsible but didnt check since 1.0.0 was available.
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index 98c338f9d4..39fd9afdae 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5  d7afe6a68b631725a1dac116a7832b10  Django-4.2.7.tar.gz
--sha256  8e0f1c2c2786b5c0e39fe1afce24c926040fad47c8ea8ad30aaf1188df29fc41  Django-4.2.7.tar.gz
-+md5  5ff3c69d7e6b4f5ed378ec5713af8df7  Django-5.0.1.tar.gz
-+sha256  8c8659665bc6e3a44fefe1ab0a291e5a3fb3979f9a8230be29de975e57e8f854  Django-5.0.1.tar.gz
- # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index 9b710412fa..ed4f4bcdf1 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
+
+ package/glm/glm.hash | 2 +-
+ package/glm/glm.mk   | 5 ++---
+ 2 files changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/package/glm/glm.hash b/package/glm/glm.hash
+index c4e21016047..0084bd0930c 100644
+--- a/package/glm/glm.hash
++++ b/package/glm/glm.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  7d508ab72cb5d43227a3711420f06ff99b0a0cb63ee2f93631b162bfe1fe9592  glm-0.9.9.8.tar.gz
++sha256  e51f6c89ff33b7cfb19daafb215f293d106cd900f8d681b9b1295312ccadbd23  glm-1.0.0.tar.gz
+ sha256  62d2d642c7d054d4fb4c9b42faad617d6c88fcd91e317f8035aa9f277cc159c3  copying.txt
+diff --git a/package/glm/glm.mk b/package/glm/glm.mk
+index ef549931f6a..ce8efc11a78 100644
+--- a/package/glm/glm.mk
++++ b/package/glm/glm.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_DJANGO_VERSION = 4.2.7
-+PYTHON_DJANGO_VERSION = 5.0.1
- PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/5c/62/0c6ab2f3ac9a242b4562b6be1c418685fa7d1ccb8ca302cdb97e0b23cf4b
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/53/82/c8e8ed137da1c72fa110e3be9ab0f26bcfcf6f3d2994601d164dfac86269
- PYTHON_DJANGO_LICENSE = BSD-3-Clause
- PYTHON_DJANGO_LICENSE_FILES = LICENSE
- PYTHON_DJANGO_CPE_ID_VENDOR = djangoproject
+-GLM_VERSION = 0.9.9.8
++GLM_VERSION = 1.0.0
+ GLM_SITE = $(call github,g-truc,glm,$(GLM_VERSION))
+ GLM_LICENSE = MIT
+ GLM_LICENSE_FILES = copying.txt
+@@ -17,7 +17,6 @@ GLM_INSTALL_TARGET = NO
+ # Don't build libraries as GLM is header-only
+ GLM_CONF_OPTS = \
+ 	-DGLM_TEST_ENABLE=OFF \
+-	-DBUILD_SHARED_LIBS=OFF \
+-	-DBUILD_STATIC_LIBS=OFF
++	-DGLM_BUILD_LIBRARY=OFF
+ 
+ $(eval $(cmake-package))
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
