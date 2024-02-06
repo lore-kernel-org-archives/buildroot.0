@@ -4,68 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1217EC4828D
-	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 14:13:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 469B9C4828D
+	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 14:15:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A1D9C40266;
-	Tue,  6 Feb 2024 14:13:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1D9C40266
+	by smtp4.osuosl.org (Postfix) with ESMTP id ED51741EC0;
+	Tue,  6 Feb 2024 14:15:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED51741EC0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5pk_rhAtT49d; Tue,  6 Feb 2024 14:13:37 +0000 (UTC)
+	with ESMTP id Gh3-LnCoh60e; Tue,  6 Feb 2024 14:15:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EDA3D41ECD;
-	Tue,  6 Feb 2024 14:13:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EDA3D41ECD
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4C4BB1BF576
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 14:13:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 37E1E41E88;
+	Tue,  6 Feb 2024 14:15:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37E1E41E88
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BD5D21BF576
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 14:15:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 325A161122
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 14:13:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 325A161122
+ by smtp4.osuosl.org (Postfix) with ESMTP id 95C4941E88
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 14:15:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 95C4941E88
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WL7AbgRqgyNz for <buildroot@lists.busybox.net>;
- Tue,  6 Feb 2024 14:13:31 +0000 (UTC)
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CB2A6606FF
- for <buildroot@buildroot.org>; Tue,  6 Feb 2024 14:13:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB2A6606FF
-Received: by mail.gandi.net (Postfix) with ESMTPSA id BCF5F1BF203;
- Tue,  6 Feb 2024 14:13:27 +0000 (UTC)
-Date: Tue, 6 Feb 2024 15:13:27 +0100
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Message-ID: <20240206151327.0855d4b8@windsurf>
-In-Reply-To: <ZYa0TdSBU2JrexMt@landeda>
-References: <20231220200110.1819507-1-thomas.petazzoni@bootlin.com>
- <20231220200110.1819507-3-thomas.petazzoni@bootlin.com>
- <ZYa0TdSBU2JrexMt@landeda>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QkrW2KQzwfPo for <buildroot@lists.busybox.net>;
+ Tue,  6 Feb 2024 14:15:06 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 58C5B4030C
+ for <buildroot@buildroot.org>; Tue,  6 Feb 2024 14:15:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 58C5B4030C
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9764940008;
+ Tue,  6 Feb 2024 14:15:03 +0000 (UTC)
+Date: Tue, 6 Feb 2024 15:15:02 +0100
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20240206151502.5ceb586b@windsurf>
+In-Reply-To: <20240109083922.4085395-1-james.hilliard1@gmail.com>
+References: <20240109083922.4085395-1-james.hilliard1@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1707228808;
+ d=bootlin.com; s=gm1; t=1707228903;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=GFTLlwBm87fQaQsqAofrNs5mHCoYw8KhjIVGbATp2LY=;
- b=frmviuGKFj3lBJ0ixk6v7BqPPZvsde6m2vXcCPwZTqdKX9NICdHh5gK+w02CJn+yaWAy6J
- cMif2MX2b+MsExjSrk//G474uFU8JURIcoaq5EjaY3SlXWbRI7C4igwqE4AYukiRzX18Rm
- qY/R/BymSfDwxII2hJKpvvFlHArOW0Sd/XLwUi/X4l8oYo6RlpULUfObWaD+o7aYOYcJa6
- 0MxZpxuR/F4gEli8ZiFFoHpDbRUTOQh2B275S04THc9u5jkoxFbLODlFuVPG5/dYPbjlAD
- 4HwlkUBrhCv8P27cSnUTbiaPUxchSXL93AzrWa1IWmLwldFIGj8mydFDErDi4g==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=Uig4zTI4Cc2h3nb9C3w24BhuG2na7m618WETp5Vidc4=;
+ b=OLEwzG4o2j7e6U20zsc3Q5tzr2qGP/RyOawa1xo12Q7oOEuu6iDvhYmTGCY8hp7uRB2FcY
+ PR6TiOKmJP7ZUaKgtDLpel50CMwWWMfioL9OevO7clOhXzPhQNAOsDB+WCuvHGZ3zzqXnS
+ ocMom5cbE/RpUiYFx0w/Nfvf48PDq+30ef92r0u6RUXwzw7tmC3Ntmdh885P/fm79WxuSL
+ xzUCkkETevCO0yPeTd7ClOfMRQW8s2Xt2UFigdHYYuedv6KPLetbW5JGxXbipP2mXNwtiS
+ aQuDqC5gkOa9VwamdQGlEoWB9HquNrRKIrmZa+zs+ZIGaOG2+hOvdk0xoT/STA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=frmviuGK
-Subject: Re: [Buildroot] [PATCH 3/3] package/glibc: ignore CVE-2023-0687,
- disputed
+ header.s=gm1 header.b=OLEwzG4o
+Subject: Re: [Buildroot] [PATCH 1/1]
+ package/python-jsonschema-specifications: bump to version 2023.12.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,38 +77,27 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: peter.verbrugge@technolution.nl, Romain Naour <romain.naour@gmail.com>,
- Buildroot List <buildroot@buildroot.org>
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Yann,
+On Tue,  9 Jan 2024 01:39:22 -0700
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-On Sat, 23 Dec 2023 11:19:57 +0100
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  .../python-jsonschema-specifications.hash                     | 4 ++--
+>  .../python-jsonschema-specifications.mk                       | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-> This CVE is supposed to be fixed by 801af9fafd46 (gmon: Fix allocated
-> buffer overflow (bug 29444)) which is in 2.38:
-> 
->     $ git tag --contains 801af9fafd46
->     glibc-2.38
->     glibc-2.38.9000
-> 
-> So the CVE DB should be updated to state that glibc >= 2.38 is not
-> affected.
-
-Good point. Sorry for the delay in getting back to you. I just send a
-mail to the NVD maintainers, Cc'ed to the Buildroot mailing list. I'll
-mark my patch as Rejected in patchwork.
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
