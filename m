@@ -1,68 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85242C48286
-	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 06:55:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 761E2C4828D
+	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 08:08:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2AED2400CE;
-	Tue,  6 Feb 2024 06:55:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2AED2400CE
+	by smtp4.osuosl.org (Postfix) with ESMTP id DD9F24034D;
+	Tue,  6 Feb 2024 08:08:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD9F24034D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1JbT2TCqE1eO; Tue,  6 Feb 2024 06:55:20 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id IeBcLAou_GYt; Tue,  6 Feb 2024 08:08:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B0174402DC;
-	Tue,  6 Feb 2024 06:55:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B0174402DC
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 28F3F1BF215
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 06:55:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9ABFA41D99;
+	Tue,  6 Feb 2024 08:08:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9ABFA41D99
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CBFFA1BF2BC
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 08:08:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 15C0481D7D
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 06:55:17 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with UTF8SMTP id A3EC641D6C
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 08:08:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3EC641D6C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TUsc9ToQwjwq for <buildroot@lists.busybox.net>;
- Tue,  6 Feb 2024 06:55:15 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
- helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1CCAE81D73
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1CCAE81D73
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1CCAE81D73
- for <buildroot@buildroot.org>; Tue,  6 Feb 2024 06:55:14 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id DAE78E0005
- for <buildroot@buildroot.org>; Tue,  6 Feb 2024 06:55:11 +0000 (UTC)
-MIME-Version: 1.0
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with UTF8SMTP id xdjRG9VLnjuR for <buildroot@lists.busybox.net>;
+ Tue,  6 Feb 2024 08:08:35 +0000 (UTC)
+Received: from out203-205-221-221.mail.qq.com (out203-205-221-221.mail.qq.com
+ [203.205.221.221])
+ by smtp4.osuosl.org (Postfix) with UTF8SMTPS id B48FC41D99
+ for <buildroot@buildroot.org>; Tue,  6 Feb 2024 08:08:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B48FC41D99
+Received: from localhost.localdomain ([36.101.134.205])
+ by newxmesmtplogicsvrszb6-0.qq.com (NewEsmtp) with SMTP
+ id 1F32BCBA; Tue, 06 Feb 2024 16:07:51 +0800
+X-QQ-mid: xmsmtpt1707206872t4ywh8nhn
+Message-ID: <tencent_3D7A01628C29BF242C6737C7FF6F4A3A3809@qq.com>
+X-QQ-XMAILINFO: OZiGlmjmGvyhZwnUkkOcTveE2RBE8AOFid6FTDI1VV8rumQDROfyTNmi0ROp7y
+ jV8zS4PwCdspz5iogHbQLSjeXhxuxYzBl8X7N4gelGC+9sLHp6YnEfIqHvBU/UVd+5isnf4q+Doo
+ MEFaK3iotkNMyOKQDm3CW4CgbsMyRv1EgQtvYycsg6pTY8eaH9JbkR6LpfM2HAysgdnFaVmYMtk7
+ d8IQZ4jnUbVOjpT2ww3i7/z7vM1m7WVOWhrWwzsWQWTxRakfjkMKzqBen7rbeJNCTvMixEI8OEWD
+ vidRqOC6VcviuuePkT3l069ZkVP/AviOsLBV1HfTJlka5hDsawRjKLlCrqLaOfwJZNO8u9vBl0ar
+ j6VxmsrmplG1NM8lwBLPSmh9WMDVYc/rmYyNmiH/ZmfZnpcaqRHqWpf2AhikG9fSSbKcH166IPzK
+ 7YlM1Il71GwfBrZb7SUUFemFDD4TP9wQOHVgJI42bdtPcGdVkErbJnckRefoaRyFr96mpOm1QQqV
+ o6FLwXTCeJ/EsInx2EDHIVXq2hHDzf2LxgIheqfOqgl03XqUefkhF7u2kvvkhutifSn8+uw0u1z3
+ SnHndJs2IVS8SnXoyYNUPdWUVfIkWQ0RZCwI8hK0eq/NoOGU7e1NzSk7mgGBEWAczj/lsc4nqUjU
+ dNJY9uyWSlQtltaMThFY48Vp0wUEgvcly2rIq61YFymCYenBziVaSVeUcz8d+VUTJ8Yxr/c8n/9h
+ ulADL/rCpB8Gz6ZUh4zKOwdnqeGNoaVRaHwP4nm5xmB0C02zmRT5ePvW1StbHyQNRDor62NPP//H
+ gHIFeZsvc6gkJS9UnE4UK3lS8QSm3XikG+YXOtYlrMkYIDuwskpyF/eq98CKm2PWzW9WjQXKMJKY
+ SnE4XuF0Ay0NZdYo/yaxKZAHAyC3tMYNKYe+0S0gAQPyQ9AHMDfG555bhUgMqJQ7PVZ3ftQ12ide
+ 2qMm1KWQT8c6VyITcTX9eUDzTNe4wkPQEKAsHrZeEKEOd9otTHScQr7ZhbNmNVoohw3rAOK58=
+X-QQ-XMRINFO: M/715EihBoGSf6IYSX1iLFg=
 To: buildroot@buildroot.org
-Date: Tue, 06 Feb 2024 06:55:11 -0000
-X-GND-Sasl: bot@bootlin.com
+Date: Tue,  6 Feb 2024 16:06:03 +0800
+X-OQ-MSGID: <20240206080603.28916-2-hanyuan-z@qq.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240206080603.28916-1-hanyuan-z@qq.com>
+References: <20240206080603.28916-1-hanyuan-z@qq.com>
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; 
- t=1707202511; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
- mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding;
- bh=hYuSL/FuPYXz1yMV7y/SuoyTTpP9F/ybsSN6vsm4aLU=;
- b=pMEQRcb3DZA9hXnA4FUUBUrCS+verj2g7PZ8/cIPvphkd/+JPHelq6+HwSEt9tK+puNNvZ
- 7K6ibgMkqaxddFKdgjD4zrUQYSxzJ0S9O3w7hQUrbzxGEJ7zn4UR5a8ID+buNymb5dSHkE
- 6cIZcPNI+ha4ycZOxI2VXtNOL/R112DJB3L6IHftjvaRLJjGY6kn+UPP1da69bmGea6IC+
- 3z17pvwKxdUs33zV8shpqp3fkhwzwszGDb7fZ8xPMJlGXc5Ei0i++g9fHT81ebibrKkeBV
- xzfsg/ZEs6uWgdX4UvyQaku08bGaPty2ttRF7ElVmgorDn+cZPbkARpl4pxPUg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=pMEQRcb3
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2024-02-05
+ d=qq.com; s=s201512; 
+ t=1707206904; bh=29HTG27O1Y/EUeaJdN8AXxm/O9kDXC6v7AwIvqYq9ZQ=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References;
+ b=dgfgWSRkvrRbZiIACO6e2YXdy5ZeX9Kf93Q3l4MtY4i3K78t/ICp9NgOBx0orQwA4
+ A7nYzLD+UYFHwevozJzqSXIHBkvTeVKdc7eyk+0CK+9nD5NjocLpRIlCV/ItOPWo0w
+ kTyMWTUhngdPQ4D/ntF9+TP1qO8M2IRxnvEybZ9A=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.a=rsa-sha256
+ header.s=s201512 header.b=dgfgWSRk
+Subject: [Buildroot] [PATCH v3 2/2] configs/milkv_duo: new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,175 +84,325 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Hanyuan Zhao via buildroot <buildroot@buildroot.org>
+Reply-To: Hanyuan Zhao <hanyuan-z@qq.com>
+Cc: Emil S <emil.soltys@outlook.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Hanyuan Zhao <hanyuan-z@qq.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ GP Orcullo <kinsamanka@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-Message-Id: <20240206065522.2AED2400CE@smtp2.osuosl.org>
 
-Hello,
+Milk-V Duo is an ultra-compact embedded RISC-V development platform based on the CV1800B chip.
+It can run Linux and RTOS, providing a reliable, low-cost, and high-performance platform
+for professionals, industrial ODMs, AIoT enthusiasts, DIY hobbyists, and creators.
 
-Autobuild statistics for 2024-02-05
-===================================
+https://milkv.io/duo
 
-      branch |  OK | NOK | TIM | TOT |
-  2023.02.x  |  5  |  3  |  0  |  8  |
-  2023.11.x  |  0  |  5  |  0  |  5  |
-    master   | 45  | 44  |  0  | 89  |
+Co-authored-by: Emil S <emil.soltys@outlook.com>
+Co-authored-by: GP Orcullo <kinsamanka@gmail.com>
+Signed-off-by: Hanyuan Zhao <hanyuan-z@qq.com>
+---
+ board/milkv/duo/genimage.cfg                 | 25 ++++++++
+ board/milkv/duo/post-image.sh                | 47 +++++++++++++++
+ board/milkv/duo/readme.txt                   | 54 +++++++++++++++++
+ configs/milkv_duo_musl_riscv64_defconfig     | 63 ++++++++++++++++++++
+ configs/milkv_duo_musl_riscv64_ion_defconfig | 63 ++++++++++++++++++++
+ 5 files changed, 252 insertions(+)
+ create mode 100644 board/milkv/duo/genimage.cfg
+ create mode 100755 board/milkv/duo/post-image.sh
+ create mode 100644 board/milkv/duo/readme.txt
+ create mode 100644 configs/milkv_duo_musl_riscv64_defconfig
+ create mode 100644 configs/milkv_duo_musl_riscv64_ion_defconfig
 
-Classification of failures by reason for master
------------------------------------------------
-
-               libpthsem-2.0.8 | 5 
-                       unknown | 5 
-        host-sentry-cli-2.20.3 | 3 
-                    attr-2.5.2 | 2 
-glibc-2.38-44-gd37c2b20a478... | 2 
-  gobject-introspection-1.76.1 | 2 
-                   libnss-3.97 | 2 
-                libressl-3.8.2 | 2 
-                  linux-6.6.15 | 2 
- Makefile:727: target-finalize | 2 
-cegui-00b4e1fe174da53b7ed72... | 1 
-                elfutils-0.189 | 1 
-                    eza-0.16.0 | 1 
-fs/jffs2/jffs2.mk:71: /home... | 1 
-              host-rust-1.74.1 | 1 
-      libabseil-cpp-20230802.1 | 1 
-              libarchive-3.7.2 | 1 
-     linux-5.10.162-cip24-rt10 | 1 
-               linux-pam-1.6.0 | 1 
-                   linux-tools | 1 
-                memtest86-6.20 | 1 
-                 openssh-9.6p1 | 1 
-                   rsync-3.2.7 | 1 
-                  stunnel-5.71 | 1 
-             util-linux-2.39.2 | 1 
-           v4l2loopback-0.12.7 | 1 
-               valgrind-3.22.0 | 1 
-
-
-Detail of failures for master
------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-microblazeel |           attr-2.5.2           | NOK | http://autobuild.buildroot.net/results/dff81bf3ca25bd0fab6085ad6f1bd19d3f8db2ce |     
- microblaze  |           attr-2.5.2           | NOK | http://autobuild.buildroot.net/results/a381bb39e8422bb8ddf118a576ea2c705844637f |     
-    mips     | cegui-00b4e1fe174da53b7ed72... | NOK | http://autobuild.buildroot.net/results/44890d6ee506c7428f7a1898a0f73222efc5b426 |     
-    m68k     |         elfutils-0.189         | NOK | http://autobuild.buildroot.net/results/7c863e736ad4896f26dcc895c8ffba3e95e360ae | ORPH
-   armeb     |           eza-0.16.0           | NOK | http://autobuild.buildroot.net/results/b61bda2df58ef0a866f747d8a05e49986d043aa4 |     
- powerpc64   | fs/jffs2/jffs2.mk:71: /home... | NOK | http://autobuild.buildroot.net/results/386e725437b9d4bf4000cd8aafae9080dfe8bc8d |     
-  powerpc    | glibc-2.38-44-gd37c2b20a478... | NOK | http://autobuild.buildroot.net/results/54f1a4303530f18a140577e575c7084a20468aef |     
-  riscv64    | glibc-2.38-44-gd37c2b20a478... | NOK | http://autobuild.buildroot.net/results/d9c6a4db7fd02c45cebb5a9687b636cd0fc99a0c |     
-   sh4aeb    |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/51289ee681e3971e65dd24eaa8c025fbc2888529 | ORPH
-   nios2     |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/c253a6bce2ee6afad5c36bf84d0d00a4714d024c | ORPH
-  aarch64    |        host-rust-1.74.1        | NOK | http://autobuild.buildroot.net/results/4613ff68965114990566a923c306682bd8c80a82 |     
-  riscv64    |     host-sentry-cli-2.20.3     | NOK | http://autobuild.buildroot.net/results/fc1f5f93d2425d923e2fce51eda6bd11886485b5 |     
-  riscv32    |     host-sentry-cli-2.20.3     | NOK | http://autobuild.buildroot.net/results/5db3fcc34cb47d0d948aadbf37f6449ed34e918c |     
-   xtensa    |     host-sentry-cli-2.20.3     | NOK | http://autobuild.buildroot.net/results/9709362a679a1a8b302eb51bebec363a62fabe25 |     
-  mips64el   |    libabseil-cpp-20230802.1    | NOK | http://autobuild.buildroot.net/results/e2a44832f3965e4586de399672827e35524ebc0f |     
-   s390x     |        libarchive-3.7.2        | NOK | http://autobuild.buildroot.net/results/bb88b8c73112af3383625b3cc06134e3eaeaf41e |     
-  mips64el   |          libnss-3.97           | NOK | http://autobuild.buildroot.net/results/2dd0dfb535c8fe9079be4c9e743e342344c89e9a |     
-powerpc64le  |          libnss-3.97           | NOK | http://autobuild.buildroot.net/results/765a13e3d9377a8042415b0e83b5fe22eda84e8a |     
-    arc      |        libpthsem-2.0.8         | NOK | http://autobuild.buildroot.net/results/34e7ce3144b9aa253440e5621fce14990e266afc |     
-    arm      |        libpthsem-2.0.8         | NOK | http://autobuild.buildroot.net/results/9c7d636d3532805ef14d6cfb7fa62900c065ab60 |     
-  aarch64    |        libpthsem-2.0.8         | NOK | http://autobuild.buildroot.net/results/ed9e1a47a668cdeec71a40f13cbb37dbf608d0ce |     
-    or1k     |        libpthsem-2.0.8         | NOK | http://autobuild.buildroot.net/results/17794a49cdb4748f6282a1b8602e323a7b18d296 |     
- microblaze  |        libpthsem-2.0.8         | NOK | http://autobuild.buildroot.net/results/ef75e960a3cbccb38c14631762937e183f4827b3 |     
-   arceb     |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/c18ec22b16d7ce0857d228ae8dc51c876ce0e928 | ORPH
-    or1k     |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/aeb55fceceeb5938db68411be446e9c462c78bcd | ORPH
-    arc      |   linux-5.10.162-cip24-rt10    | NOK | http://autobuild.buildroot.net/results/9d9471934f55f45cbd5d6658a73e7cb33e247b14 | ORPH
-   mips64    |          linux-6.6.15          | NOK | http://autobuild.buildroot.net/results/49f8d5e73465cec539c067382c515be73656816b | ORPH
-    sh4a     |          linux-6.6.15          | NOK | http://autobuild.buildroot.net/results/797a0bde20d4a257ffdc66c38577fc139a6e5bea | ORPH
-  mips64el   |        linux-pam-1.6.0         | NOK | http://autobuild.buildroot.net/results/f07360f33010a2cf19aace266faae14a834bd9a4 | ORPH
-   x86_64    |          linux-tools           | NOK | http://autobuild.buildroot.net/results/80abb2e78ad63e28b5717ec4a54aa3fbc2b2251a | ORPH
-   armeb     | Makefile:727: target-finalize  | NOK | http://autobuild.buildroot.net/results/668800cc90bcd69aca63a20ca19ddbe53c8571ec |     
-   mips64    | Makefile:727: target-finalize  | NOK | http://autobuild.buildroot.net/results/de0be520e60019becd07523f08448a66070a9f7e |     
-    i686     |         memtest86-6.20         | NOK | http://autobuild.buildroot.net/results/5a37403206d1af3317c05ee63d92d4fa0488c53c |     
- powerpc64   |         openssh-9.6p1          | NOK | http://autobuild.buildroot.net/results/75e39ca694f09e5ef8bc7f31bf63dff7f0876816 | ORPH
-microblazeel |          rsync-3.2.7           | NOK | http://autobuild.buildroot.net/results/b8589e42e14dbf54809284d577593896cf99fa69 |     
- aarch64_be  |          stunnel-5.71          | NOK | http://autobuild.buildroot.net/results/5d6fcf716f41ab0b7ad465ed7ed2a7e5465bbefd |     
-   mips64    |            unknown             | NOK | http://autobuild.buildroot.net/results/addebf4d3d3f837f03ee80ea8161a75da9a703e4 |     
-   armeb     |            unknown             | NOK | http://autobuild.buildroot.net/results/a385e8d7f3441b3867105a75dccd49c8ccc47386 |     
- microblaze  |            unknown             | NOK | http://autobuild.buildroot.net/results/7f398fbfe488d8701ca3a04c02d704a72771d5cd |     
-    mips     |            unknown             | NOK | http://autobuild.buildroot.net/results/1cc45b9e1516a1ab08120765f6b2a304e9c18208 |     
-   s390x     |            unknown             | NOK | http://autobuild.buildroot.net/results/098c036f661b1793df31c0bdc7420252eb1bfdf6 |     
-    sh4      |       util-linux-2.39.2        | NOK | http://autobuild.buildroot.net/results/1b214c4c2bd524ac2a47b80da2e0252c628be6d0 | ORPH
-   mips64    |      v4l2loopback-0.12.7       | NOK | http://autobuild.buildroot.net/results/af5adb61ea068c3be571c34f49ef8d493a3f99ed |     
-  powerpc    |        valgrind-3.22.0         | NOK | http://autobuild.buildroot.net/results/1a2562d8d8a31312b3e2d84ba3e7ec21b05315a7 | ORPH
-
-
-Classification of failures by reason for 2023.02.x
---------------------------------------------------
-
-                  linux-6.1.72 | 1 
-              mosquitto-2.0.18 | 1 
-                 raptor-2.0.15 | 1 
-
-
-Detail of failures for 2023.02.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    m68k     |          linux-6.1.72          | NOK | http://autobuild.buildroot.net/results/bbea1197de634560cdce29ef3277724bf3253443 | ORPH
-    or1k     |        mosquitto-2.0.18        | NOK | http://autobuild.buildroot.net/results/ac2575c5aba9531acb6bcd08753237d0f7d1bbe3 |     
-   arceb     |         raptor-2.0.15          | NOK | http://autobuild.buildroot.net/results/b7b62e544182f31a8de1ccb3850a23497b69d17d | ORPH
-
-
-Classification of failures by reason for 2023.11.x
---------------------------------------------------
-
-              e2fsprogs-1.47.0 | 1 
-  gobject-introspection-1.76.1 | 1 
-                libressl-3.8.2 | 1 
-                  spice-0.15.0 | 1 
-                       unknown | 1 
-
-
-Detail of failures for 2023.11.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-   sh4aeb    |        e2fsprogs-1.47.0        | NOK | http://autobuild.buildroot.net/results/45f21ce9dbeec86eae8df45022b4fb408c1ada88 | ORPH
-  powerpc    |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/d5c69580e4948da4145de172c4357b9859e605e8 | ORPH
-    arm      |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/44faea13cdcfe54f6ec2b49aa49cd778a2b8f059 | ORPH
-   x86_64    |          spice-0.15.0          | NOK | http://autobuild.buildroot.net/results/c1ab7fbc5c62671238a07ef91feccea573008329 |     
-   mipsel    |            unknown             | NOK | http://autobuild.buildroot.net/results/0bbbb0e8264369cd552b58a6941c63bfaf72ecc0 |     
-
-
-Gitlab CI results for 2024-02-05
-================================
-
-Detail of runtime-test failures for master
-------------------------------------------
-
-             runtime-test |                        link to the job                        | orph?
---------------------------+---------------------------------------------------------------+------
-      TestCpioDracutGlibc | https://gitlab.com/buildroot.org/buildroot/-/jobs/6093853966  | ORPH 
-...ioDracutGlibcMergedUsr | https://gitlab.com/buildroot.org/buildroot/-/jobs/6093853979  | ORPH 
-       TestCpioDracutMusl | https://gitlab.com/buildroot.org/buildroot/-/jobs/6093854009  | ORPH 
-...pioDracutMuslMergedUsr | https://gitlab.com/buildroot.org/buildroot/-/jobs/6093854017  | ORPH 
-     TestCpioDracutUclibc | https://gitlab.com/buildroot.org/buildroot/-/jobs/6093854027  | ORPH 
-...oDracutUclibcMergedUsr | https://gitlab.com/buildroot.org/buildroot/-/jobs/6093854034  | ORPH 
-        TestDockerCompose | https://gitlab.com/buildroot.org/buildroot/-/jobs/6093854423  | ORPH 
-              TestGlxinfo | https://gitlab.com/buildroot.org/buildroot/-/jobs/6093854455  | ORPH 
-         TestGrubX8664EFI | https://gitlab.com/buildroot.org/buildroot/-/jobs/6093853712  | ORPH 
-   TestPythonPy3Bitstring | https://gitlab.com/buildroot.org/buildroot/-/jobs/6093854785  | ORPH 
-    TestPythonPy3Crossbar | https://gitlab.com/buildroot.org/buildroot/-/jobs/6093854810  | ORPH 
-    TestPythonPy3Dtschema | https://gitlab.com/buildroot.org/buildroot/-/jobs/6093854842  | ORPH 
-...honPy3FlaskExpectsJson | https://gitlab.com/buildroot.org/buildroot/-/jobs/6093854855  | ORPH 
-                 TestRust | https://gitlab.com/buildroot.org/buildroot/-/jobs/6093854998  | ORPH 
-             TestZfsGlibc | https://gitlab.com/buildroot.org/buildroot/-/jobs/6093855074  | ORPH 
-
-
-
+diff --git a/board/milkv/duo/genimage.cfg b/board/milkv/duo/genimage.cfg
+new file mode 100644
+index 0000000000..1fd74f845a
+--- /dev/null
++++ b/board/milkv/duo/genimage.cfg
+@@ -0,0 +1,25 @@
++image boot.vfat {
++	vfat {
++		files = {
++			"fip.bin",
++			"boot.sd",
++		}
++	}
++	size = 8M
++}
++
++image sdcard.img {
++	hdimage {
++	}
++
++	partition boot {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++	}
++}
+diff --git a/board/milkv/duo/post-image.sh b/board/milkv/duo/post-image.sh
+new file mode 100755
+index 0000000000..c58233003e
+--- /dev/null
++++ b/board/milkv/duo/post-image.sh
+@@ -0,0 +1,47 @@
++#!/bin/sh
++
++###########################################################
++# File: post-image.sh
++# Author: GP Orcullo <kinsamanka@gmail.com>
++#         Hanyuan Zhao <zhaohy22@mails.tsinghua.edu.cn>
++# Description: this sh will make the fip.bin and boot.sd,
++#              then pack everything to an image file.
++###########################################################
++
++FIPTOOL_OPTS="genfip ${BINARIES_DIR}/fip.bin \
++	--MONITOR_RUNADDR=0x80000000 \
++	--CHIP_CONF=${BINARIES_DIR}/chip_conf.bin \
++	--NOR_INFO=FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF \
++	--NAND_INFO=00000000 \
++	--BL2=${BINARIES_DIR}/bl2.bin \
++	--BLCP_IMG_RUNADDR=0x05200200 \
++	--BLCP_PARAM_LOADADDR=0 \
++	--DDR_PARAM=${BINARIES_DIR}/ddr_param.bin \
++	--MONITOR=${BINARIES_DIR}/fw_dynamic.bin \
++	--LOADER_2ND=${BINARIES_DIR}/u-boot.bin"
++
++if [ -f ${BINARIES_DIR}/cvirtos.bin ]; then
++	FIPTOOL_OPTS="${FIPTOOL_OPTS} \
++		--BLCP=${BINARIES_DIR}/empty.bin \
++		--BLCP_2ND=${BINARIES_DIR}/cvirtos.bin \
++		--BLCP_2ND_RUNADDR=0x83f40000"
++	echo "[Duo Post-Image fiptool.py] Integrating FreeRTOS"
++fi
++
++${BINARIES_DIR}/fiptool.py ${FIPTOOL_OPTS}\
++> ${BINARIES_DIR}/fip.log 2>&1
++if [ -f ${BINARIES_DIR}/fip.bin ]; then
++	echo "[Duo Post-Image fiptool.py] > fip.bin generated!"
++fi
++
++cp ${BINARIES_DIR}/u-boot.dtb ${BINARIES_DIR}/cv1800b_milkv_duo_sd.dtb
++lzma -fk ${BINARIES_DIR}/Image
++mkimage -f ${BINARIES_DIR}/multi.its ${BINARIES_DIR}/boot.sd
++if [ -f ${BINARIES_DIR}/boot.sd ]; then
++	echo "[Duo Post-Image] > boot.sd generated!"
++fi
++support/scripts/genimage.sh -c $(pwd)/board/milkv/duo/genimage.cfg
++gzip -fk ${BINARIES_DIR}/sdcard.img
++if [ -f ${BINARIES_DIR}/sdcard.img ]; then
++	echo "[Duo Post-Image] > sdcard.img generated!"
++fi
+diff --git a/board/milkv/duo/readme.txt b/board/milkv/duo/readme.txt
+new file mode 100644
+index 0000000000..1623fa97c5
+--- /dev/null
++++ b/board/milkv/duo/readme.txt
+@@ -0,0 +1,54 @@
++Milk-V Duo (https://milkv.io/docs/duo/overview)
++
++Intro
++=====
++
++Milk-V Duo is an ultra-compact embedded development platform
++based on the rv64 CV1800B chip. It can run Linux and RTOS,
++providing a reliable, cost-effective, and high-performance
++platform for professionals, industrial ODMs, AIoT enthusiasts,
++DIY enthusiasts, and creators.
++
++How to build it
++===============
++
++Configure Buildroot:
++
++    $ make milkv_duo_musl_riscv64_defconfig
++
++The milkv_duo_musl_riscv64_defconfig will by default provide
++the full 64MiB free RAM. If you want to build with memory
++reserved for ION (generalized memory manager in linux, i.e.
++some memory will be reserved for the camera algorithms), please try:
++
++    $ make milkv_duo_musl_riscv64_ion_defconfig
++
++For more information about the ION, please refer to
++
++https://github.com/milkv-duo/duo-buildroot-sdk/blob/develop/README.md?plain=1#L436
++
++Modify configuration if needed, e.g. add more packages to target:
++
++    $ make menuconfig
++
++Compile everything and build the SD card image:
++
++    $ make
++
++To configure the linux kernel or u-boot:
++
++    $ make linux-menuconfig
++
++To rebuild something (e.g. linux):
++
++    $ make linux-rebuild
++
++How to write the SD card
++========================
++
++Once the build process is finished you will have an image
++called "sdcard.img" in the output/images/ directory.
++
++Copy the bootable "sdcard.img" onto an SD card with "dd":
++
++  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
+diff --git a/configs/milkv_duo_musl_riscv64_defconfig b/configs/milkv_duo_musl_riscv64_defconfig
+new file mode 100644
+index 0000000000..4155ad1f57
+--- /dev/null
++++ b/configs/milkv_duo_musl_riscv64_defconfig
+@@ -0,0 +1,63 @@
++# Architecture
++BR2_riscv=y
++BR2_riscv_g=y
++BR2_RISCV_ISA_RVC=y
++
++# Linux headers same as kernel 5.10 series
++BR2_KERNEL_HEADERS_5_10=y
++
++# Using gcc13 and musl to have t-head's optimization and features
++BR2_GCC_VERSION_13_X=y
++BR2_TOOLCHAIN_BUILDROOT_MUSL=y
++BR2_TARGET_OPTIMIZATION="-march=rv64imafdc_xtheadba_xtheadbb_xtheadbs_xtheadcmo_xtheadcondmov_xtheadfmemidx_xtheadfmv_xtheadint_xtheadmac_xtheadmemidx_xtheadmempair_xtheadsync"
++
++# opensbi
++BR2_TARGET_OPENSBI=y
++BR2_TARGET_OPENSBI_CUSTOM_GIT=y
++BR2_TARGET_OPENSBI_CUSTOM_REPO_URL="https://github.com/milkv-duo/milkv-duo-opensbi.git"
++BR2_TARGET_OPENSBI_CUSTOM_REPO_VERSION="ee78f99daf8ac5956c6bf95458983ead52142548"
++BR2_TARGET_OPENSBI_PLAT="generic"
++BR2_TARGET_OPENSBI_UBOOT_PAYLOAD=y
++BR2_TARGET_OPENSBI_FW_FDT_PATH=y
++
++# u-boot
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/milkv-duo/milkv-duo-u-boot.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="v2021.10_64mb"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="cvitek_cv1800b_milkv_duo_sd"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_OPENSBI=y
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/milkv-duo/milkv-duo-linux.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="duo-linux-5.10.4"
++BR2_LINUX_KERNEL_DEFCONFIG="cvitek_cv1800b_milkv_duo_sd"
++BR2_LINUX_KERNEL_LZMA=y
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++
++# SD card image generating script
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/milkv/duo/post-image.sh"
++
++# rootfs
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++
++# Packages for the sdcard image generating
++BR2_PACKAGE_MILKV_DUO_LIBRARIES=y
++BR2_PACKAGE_MILKV_DUO_FIRMWARE_FSBL=y
++BR2_PACKAGE_MILKV_DUO_FIRMWARE_FSBL_64MB=y
++BR2_PACKAGE_MILKV_DUO_PINMUX=y
++BR2_PACKAGE_MILKV_DUO_FEATURES=y
++BR2_PACKAGE_MILKV_DUO_SMALLCORE_FREERTOS=y
++
++# Host packages for the sdcard image generating
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_LZMA_ALONE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
+diff --git a/configs/milkv_duo_musl_riscv64_ion_defconfig b/configs/milkv_duo_musl_riscv64_ion_defconfig
+new file mode 100644
+index 0000000000..7af0d9a44d
+--- /dev/null
++++ b/configs/milkv_duo_musl_riscv64_ion_defconfig
+@@ -0,0 +1,63 @@
++# Architecture
++BR2_riscv=y
++BR2_riscv_g=y
++BR2_RISCV_ISA_RVC=y
++
++# Linux headers same as kernel 5.10 series
++BR2_KERNEL_HEADERS_5_10=y
++
++# Using gcc13 and musl to have t-head's optimization and features
++BR2_GCC_VERSION_13_X=y
++BR2_TOOLCHAIN_BUILDROOT_MUSL=y
++BR2_TARGET_OPTIMIZATION="-march=rv64imafdc_xtheadba_xtheadbb_xtheadbs_xtheadcmo_xtheadcondmov_xtheadfmemidx_xtheadfmv_xtheadint_xtheadmac_xtheadmemidx_xtheadmempair_xtheadsync"
++
++# opensbi
++BR2_TARGET_OPENSBI=y
++BR2_TARGET_OPENSBI_CUSTOM_GIT=y
++BR2_TARGET_OPENSBI_CUSTOM_REPO_URL="https://github.com/milkv-duo/milkv-duo-opensbi.git"
++BR2_TARGET_OPENSBI_CUSTOM_REPO_VERSION="ee78f99daf8ac5956c6bf95458983ead52142548"
++BR2_TARGET_OPENSBI_PLAT="generic"
++BR2_TARGET_OPENSBI_UBOOT_PAYLOAD=y
++BR2_TARGET_OPENSBI_FW_FDT_PATH=y
++
++# u-boot
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/milkv-duo/milkv-duo-u-boot.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="v2021.10_ion"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="cvitek_cv1800b_milkv_duo_sd"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_OPENSBI=y
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/milkv-duo/milkv-duo-linux.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="duo-linux-5.10.4"
++BR2_LINUX_KERNEL_DEFCONFIG="cvitek_cv1800b_milkv_duo_sd"
++BR2_LINUX_KERNEL_LZMA=y
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++
++# SD card image generating script
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/milkv/duo/post-image.sh"
++
++# rootfs
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++
++# Packages for the sdcard image generating
++BR2_PACKAGE_MILKV_DUO_LIBRARIES=y
++BR2_PACKAGE_MILKV_DUO_FIRMWARE_FSBL=y
++BR2_PACKAGE_MILKV_DUO_SMALLCORE_FREERTOS=y
++BR2_PACKAGE_MILKV_DUO_PINMUX=y
++BR2_PACKAGE_MILKV_DUO_FEATURES=y
++BR2_PACKAGE_MILKV_DUO_SMALLCORE_FREERTOS=y
++
++# Host packages for the sdcard image generating
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_LZMA_ALONE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
 -- 
-http://autobuild.buildroot.net
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
