@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58AEBC4828D
-	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 15:19:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4DBCC48297
+	for <buildroot@archiver.kernel.org>; Tue,  6 Feb 2024 15:19:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0683641573;
-	Tue,  6 Feb 2024 15:19:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0683641573
+	by smtp2.osuosl.org (Postfix) with ESMTP id 90763415C6;
+	Tue,  6 Feb 2024 15:19:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 90763415C6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oKWVbgVhvHk6; Tue,  6 Feb 2024 15:19:28 +0000 (UTC)
+	with ESMTP id dl71zYTt3QOt; Tue,  6 Feb 2024 15:19:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E99C841579;
-	Tue,  6 Feb 2024 15:19:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E99C841579
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 24E1C1BF215
+	by smtp2.osuosl.org (Postfix) with ESMTP id 77411415BA;
+	Tue,  6 Feb 2024 15:19:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 77411415BA
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A8F9F1BF95D
  for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 15:18:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 08C1961290
- for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 15:18:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 08C1961290
+ by smtp1.osuosl.org (Postfix) with ESMTP id BE5CC82A0B
+ for <buildroot@lists.busybox.net>; Tue,  6 Feb 2024 15:18:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NGcLy1Dac57Z for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8I4PlHMKIYht for <buildroot@lists.busybox.net>;
  Tue,  6 Feb 2024 15:18:16 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC07282A3B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2F28861299
- for <buildroot@buildroot.org>; Tue,  6 Feb 2024 15:18:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2F28861299
+ by smtp1.osuosl.org (Postfix) with ESMTP id EC07282A3B
+ for <buildroot@buildroot.org>; Tue,  6 Feb 2024 15:18:15 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F2B2F870F3; Tue,  6 Feb 2024 15:18:15 +0000 (UTC)
+ id E99E5870F1; Tue,  6 Feb 2024 15:18:15 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 6 Feb 2024 16:18:06 +0100
+Date: Tue, 6 Feb 2024 16:18:05 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: eb2f00f621315054b7f6ac5a8b99681af5c4af35
-X-Git-Newrev: 0f8cd4499afa28b0757013781c7f0509a810092c
+X-Git-Oldrev: 17c6737d5eb659f4708338aeb147eb304d3083ba
+X-Git-Newrev: eb2f00f621315054b7f6ac5a8b99681af5c4af35
 X-Patchwork-Hint: ignore
-Message-Id: <20240206151815.F2B2F870F3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pylibftdi: bump to version
- 0.21.0
+Message-Id: <20240206151815.E99E5870F1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pyjwt: bump to version 2.8.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,81 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f8cd4499afa28b0757013781c7f0509a810092c
+commit: https://git.buildroot.net/buildroot/commit/?id=eb2f00f621315054b7f6ac5a8b99681af5c4af35
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-License hash changed due to year update:
-https://github.com/codedstructure/pylibftdi/commit/c96231bb8134a2afeb0b77c12474b97a3355d2dc
-
-Fixup patch so that it applies against 0.21.0.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../python-pylibftdi/0001-do-not-use-find-library.patch   | 15 ++++++++-------
- package/python-pylibftdi/python-pylibftdi.hash            |  6 +++---
- package/python-pylibftdi/python-pylibftdi.mk              |  4 ++--
- 3 files changed, 13 insertions(+), 12 deletions(-)
+ package/python-pyjwt/python-pyjwt.hash | 4 ++--
+ package/python-pyjwt/python-pyjwt.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pylibftdi/0001-do-not-use-find-library.patch b/package/python-pylibftdi/0001-do-not-use-find-library.patch
-index 192ed43e54..19dabebffe 100644
---- a/package/python-pylibftdi/0001-do-not-use-find-library.patch
-+++ b/package/python-pylibftdi/0001-do-not-use-find-library.patch
-@@ -15,17 +15,18 @@ this package.
- Signed-off-by: Christian Kellermann <christian.kellermann@solectrix.de>
- 
- ---
--diff -purN pylibftdi-0.15.0.orig/pylibftdi/driver.py pylibftdi-0.15.0/pylibftdi/driver.py
----- pylibftdi-0.15.0.orig/pylibftdi/driver.py	2015-04-26 22:41:39.000000000 +0200
--+++ pylibftdi-0.15.0/pylibftdi/driver.py	2017-02-27 13:08:56.502958000 +0100
--@@ -121,8 +121,8 @@ class Driver(object):
-+diff -purN pylibftdi-0.21.0.orig/src/pylibftdi/driver.py pylibftdi-0.21.0/src/pylibftdi/driver.py
-+--- pylibftdi-0.21.0.orig/src/pylibftdi/driver.py	2015-04-26 22:41:39.000000000 +0200
-++++ pylibftdi-0.21.0/src/pylibftdi/driver.py	2017-02-27 13:08:56.502958000 +0100
-+@@ -148,9 +148,8 @@ class Driver:
-                      lib = getattr(cdll, lib_path)
-                      break
-          if lib is None:
---            raise LibraryMissingError('{} library not found (search: {})'.format(
---                name, search_list))
-+-            raise LibraryMissingError(
-+-                f"{name} library not found (search: {str(search_list)})"
-+-            )
- +            return cdll.LoadLibrary(name + '.so')
- +
-          return lib
-- 
-+
-      @property
-diff --git a/package/python-pylibftdi/python-pylibftdi.hash b/package/python-pylibftdi/python-pylibftdi.hash
-index ee0ba127ca..5d8a19647f 100644
---- a/package/python-pylibftdi/python-pylibftdi.hash
-+++ b/package/python-pylibftdi/python-pylibftdi.hash
+diff --git a/package/python-pyjwt/python-pyjwt.hash b/package/python-pyjwt/python-pyjwt.hash
+index 249f0e478e..06b91bc14a 100644
+--- a/package/python-pyjwt/python-pyjwt.hash
++++ b/package/python-pyjwt/python-pyjwt.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pylibftdi/json
--md5  fb43ade3283b809d4ebe92bf4a60d7fc  pylibftdi-0.20.0.tar.gz
--sha256  f4a87fc4af2c9c7d42badd4192ca9b529f32c9d96fdc8daea7e29c509226df5f  pylibftdi-0.20.0.tar.gz
-+md5  75b63f325b760cc6342b7d35fbb84fde  pylibftdi-0.21.0.tar.gz
-+sha256  eb7e2f5052852547f4c6c46022a1665f9d7453439639171eade56fdc80a58832  pylibftdi-0.21.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/PyJWT/json
+-md5  228adbf1f9d2bcd42bbfb6d3b43dc48a  PyJWT-2.7.0.tar.gz
+-sha256  bd6ca4a3c4285c1a2d4349e5a035fdf8fb94e04ccd0fcbe6ba289dae9cc3e074  PyJWT-2.7.0.tar.gz
++md5  a683445793adb7fcf39ad3e55c5c347c  PyJWT-2.8.0.tar.gz
++sha256  57e28d156e3d5c10088e0c68abb90bfac3df82b40a71bd0daa20c65ccd5c23de  PyJWT-2.8.0.tar.gz
  # Locally computed sha256 checksums
--sha256  0d3f1af06b566a783091422061b60e864fc5d5853418b71643041e254b4ae7f9  LICENSE.txt
-+sha256  b8a7b113cfaa2c01d0701183de16ba653465692b1e29e0229244eee42fb3a9a8  LICENSE.txt
-diff --git a/package/python-pylibftdi/python-pylibftdi.mk b/package/python-pylibftdi/python-pylibftdi.mk
-index 34040b72ac..7dca37e416 100644
---- a/package/python-pylibftdi/python-pylibftdi.mk
-+++ b/package/python-pylibftdi/python-pylibftdi.mk
+ sha256  797a7a20231d4c433e9f1911db1731d06b5828b98f499819a034f7c0f56f5ce5  LICENSE
+diff --git a/package/python-pyjwt/python-pyjwt.mk b/package/python-pyjwt/python-pyjwt.mk
+index 982bc758df..d4cf226941 100644
+--- a/package/python-pyjwt/python-pyjwt.mk
++++ b/package/python-pyjwt/python-pyjwt.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYLIBFTDI_VERSION = 0.20.0
-+PYTHON_PYLIBFTDI_VERSION = 0.21.0
- PYTHON_PYLIBFTDI_SOURCE = pylibftdi-$(PYTHON_PYLIBFTDI_VERSION).tar.gz
--PYTHON_PYLIBFTDI_SITE = https://files.pythonhosted.org/packages/b8/03/4f778ce6dceea58dc5bfd555c22fdb265afc922d81d3c4496a791a54c479
-+PYTHON_PYLIBFTDI_SITE = https://files.pythonhosted.org/packages/d2/ce/ff3e83f3a14eb5b7950ff3657f07cdc3033dd0ded5c8ed093db515e1de33
- PYTHON_PYLIBFTDI_LICENSE = MIT
- PYTHON_PYLIBFTDI_LICENSE_FILES = LICENSE.txt
- PYTHON_PYLIBFTDI_DEPENDENCIES = libftdi
+-PYTHON_PYJWT_VERSION = 2.7.0
++PYTHON_PYJWT_VERSION = 2.8.0
+ PYTHON_PYJWT_SOURCE = PyJWT-$(PYTHON_PYJWT_VERSION).tar.gz
+-PYTHON_PYJWT_SITE = https://files.pythonhosted.org/packages/e0/f0/9804c72e9a314360c135f42c434eb42eaabb5e7ebad760cbd8fc7023be38
++PYTHON_PYJWT_SITE = https://files.pythonhosted.org/packages/30/72/8259b2bccfe4673330cea843ab23f86858a419d8f1493f66d413a76c7e3b
+ PYTHON_PYJWT_SETUP_TYPE = setuptools
+ PYTHON_PYJWT_LICENSE = MIT
+ PYTHON_PYJWT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
