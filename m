@@ -4,71 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 718E9C4828F
-	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 15:31:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BE40C4828D
+	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 15:35:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1FC2681C19;
-	Wed,  7 Feb 2024 15:31:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EA1F782849;
+	Wed,  7 Feb 2024 15:35:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0WastXcM-1Xm; Wed,  7 Feb 2024 15:31:02 +0000 (UTC)
+	with ESMTP id uTHKz7GdNEGy; Wed,  7 Feb 2024 15:35:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C78D881E1E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8E6F81FD2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C78D881E1E;
-	Wed,  7 Feb 2024 15:31:01 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 741771BF471
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 15:31:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B8E6F81FD2;
+	Wed,  7 Feb 2024 15:35:25 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 83EE01BF471
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 15:35:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6E50D81E1E
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 15:31:00 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 71A6A613F2
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 15:35:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id U2NTzyEQ3SbN for <buildroot@lists.busybox.net>;
- Wed,  7 Feb 2024 15:30:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 202A281C19
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 202A281C19
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 202A281C19
- for <buildroot@buildroot.org>; Wed,  7 Feb 2024 15:30:59 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown [85.119.216.19])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id C028C13F88F;
- Wed,  7 Feb 2024 16:30:51 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Wed, 07 Feb 2024 16:30:51 +0100
-Date: Wed, 7 Feb 2024 16:30:51 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Antoine Coutant <antoine.coutant@smile.fr>
-Message-ID: <ZcOiK1W5bhQj7-UG@landeda>
-References: <20240202093625.1409559-1-antoine.coutant@smile.fr>
- <20240202093625.1409559-2-antoine.coutant@smile.fr>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id luT8y8o-zq22 for <buildroot@lists.busybox.net>;
+ Wed,  7 Feb 2024 15:35:23 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3A1BB60BD3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A1BB60BD3
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3A1BB60BD3
+ for <buildroot@buildroot.org>; Wed,  7 Feb 2024 15:35:22 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-40fc549ab9bso6638425e9.0
+ for <buildroot@buildroot.org>; Wed, 07 Feb 2024 07:35:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1707320121; x=1707924921;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=JVtq6sBUKkkLU0JwWf/DoAqtB5taP8UpRKKXD3W98w0=;
+ b=mk0v+izc25y6XpeUKNMJFgmwIiBvaRFyeB7I/ZnirR0fOUE0yt4frAGOeRdOjJiQtk
+ kYVCjm8in3qkqiJwblxfhjwlykx3WblBlj/HO05fe2rwDxulPTxKGNAtD/fKd5Qm6OOP
+ YKgNKYOjr4doSKr07W8OoHBWlqnYyCFGp6uLgzxdQwpK6yOUMRT2l+Iizy5dqMHUo/iM
+ +z1iXvBEmNBqaWqkh3mCO5Y22IqEX/abZwkWq0R8RZ4f93m55nMwXe1/CIkdqcn5UoDN
+ /bIn6CaI2oJsaiYAjBGd3PZpIMGGjFB1y1MmSWPpVzpROnUHKr/LGDi5juVUe/eu6r7h
+ EMHg==
+X-Gm-Message-State: AOJu0YzGAQgxQ0XZS257y7uqjca1QkyowVfzA0nwsWIjGZyWpZ3EHBPO
+ H+Q9tq1MAJwMU4KBYlZ3+u/r7+dFda+F2rH5CDi4Y4vLq0nuv96hN8ZGwWUwVoyYkdZOzG/R1dZ
+ Z
+X-Google-Smtp-Source: AGHT+IEy6PC87BldYixCI1jdpqm/6ttB91FWRkZEvpoYgSFwC5flvOWPu5B+bkiw7pjuRsA9aWeXeA==
+X-Received: by 2002:a5d:444d:0:b0:33b:49b4:5b75 with SMTP id
+ x13-20020a5d444d000000b0033b49b45b75mr3676553wrr.59.1707320120701; 
+ Wed, 07 Feb 2024 07:35:20 -0800 (PST)
+Received: from arnoutx1.. ([85.119.216.19]) by smtp.gmail.com with ESMTPSA id
+ o5-20020a05600c510500b0040fddaf9ff4sm5703632wms.40.2024.02.07.07.35.20
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 07 Feb 2024 07:35:20 -0800 (PST)
+To: buildroot@buildroot.org
+Date: Wed,  7 Feb 2024 16:35:17 +0100
+Message-ID: <20240207153519.657048-1-arnout@mind.be>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240202093625.1409559-2-antoine.coutant@smile.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1707319857;
- bh=YJxl+Z2+HHuhtOEqYIx0o+ySgVQyBo8Ry2MfajMQ5aQ=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=JKNvkb4cDzYwWhmvs4uAn2bBrLWyHHtBwgS4P7YsF1fmg0k+uo56CF4CpmzRLjsT0
- sg77IdkEEgskd/D0xh2FdmoyJv2Me3b1UD4kVGB3HuCl0qSinXJG60oNdO+SYrJ2Zx
- NJCZagvrCTXU2pf5qfkX9iblru7P6ZvyHfJT/Yw7H41xP3r3nwIJ9OTMiZzHxSg4Hs
- XNAY7XjNLJQH4Ea7FLplvKt3RJK554suqH/KIKmgNKxyOvl1qk2eYyArOvJMAMaeVy
- 7Q4WP9zfC7FpPVS9Kobzh7XCU/0nNcrm24AapQxr7rvxOJziF2jYFORQudKXxETdAm
- 11epE7j5X5enQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=JKNvkb4c
-Subject: Re: [Buildroot] [PATCH v4 1/7] package/meson: bump version to 1.3.1
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1707320121; x=1707924921; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=JVtq6sBUKkkLU0JwWf/DoAqtB5taP8UpRKKXD3W98w0=;
+ b=NSrMLf9uBl+Hopk1qrcBCvk6lecheeJUgWvgjw25+evAIK77tjh9XkpYs3qjhlWuBz
+ Fazss7cHpqSnWhZo0qTrz+e+ND+wMQX07DUQWVVBsAr7QYTOpHun/EOvTbBNFRKOzyCv
+ VEUkKM8a3Lco80CaqNt+uAQpT4ffs3qOf0zJzJ21XQya6hVajBSNpfRxuFtOohME3zcp
+ JL9zLrbrlYl0rmGox4P/sZIeoc6iim2RBPx5ooviarocZyu4rFPI/jQydbAPXvPdB/yE
+ AOtRIXk9OuN6559mXGLz4fDUZCN9mTwUsOfhTe7rc8S+DTwZNskcyM2DdmmziUDNNYzy
+ 7faQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=NSrMLf9u
+Subject: [Buildroot] [PATCH 1/3] support/scripts/pkg-stats: remove checking
+ the CPE database
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,165 +100,126 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: sebastian.weyer@smile.fr, bernd@kuhls.net, romain.naour@smile.fr,
- buildroot@buildroot.org
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Antoine, All,
+We currently check the CPE database to see if the CPE ID we use
+(including the version) is already in the database.
 
-(sorry, I sent too fast, here are a bit more details below...)
+However, the version part of the CPE ID is not actually used for CVE
+matching. Instead, the CVEs have a range of versions associated with
+them and we match against those ranges.
 
-On 2024-02-02 10:36 +0100, Antoine Coutant spake thusly:
-> The meson upgrade from 1.1.1 to 1.2.0 have been reverted
-> because host-qemu (version v8.0.3) was searching
-> libraries in the build machine instead of buildroot host
-> directory [1].
-> $ grep -r LINK_ARGS  * | grep "\-L/usr"
-> build.ninja: LINK_ARGS =
->     -L/usr/lib/gcc/x86_64-linux-gnu/10 \
->     -L/usr/lib/gcc/x86_64-linux-gnu/10/../../../x86_64-linux-gnu -L/usr/lib/x86_64-linux-gnu \
->     -L/usr/lib/gcc/x86_64-linux-gnu/10/../../../../lib -L/usr/lib \
->     -L/lib/x86_64-linux-gnu \
->     -L/lib/../lib \
->     -L/usr/lib/../lib \
->     -L/usr/lib/gcc/x86_64-linux-gnu/10/../../.. \
->     -L/lib \
->     -I/[...]/host/include \
->     -L/[...]/host/lib \
->     -I/[...]/host/include/libfdt \
->     ...
-> 
-> Upgrading qemu to version v8.1.0 solves the problem:
-> $ grep -r LINK_ARGS  * | grep "\-L/usr"
-> build.ninja: LINK_ARGS =
->     -I/[...]/host/include \
->     -L/[...]/host/lib \
->     -I/[...]/host/include/libfdt \
->     ...
-> 
-> Those two tests were done with the same buildroot version
-> (2023.08) on the same machine were the bug appeared. Using,
-> git bisect, in this environment, it was found that the
-> problem was fixed in qemu by the commit [2].
-> 
-> Thus, it is possible that the problem was introduced by
-> improper use of meson by qemu <= v8.0.3. Also, meson has
-> been updated to version 1.2.1 and 1.3.0 in yocto and it
-> doesn't seem to create any issue. [3]
-> 
-> The original problem is no longer present and some
-> projects require meson > 1.1.1 (e.g. rusticl requires
-> meson 1.2.0 since mesa 23.3.0 and meson 1.3.1 since mesa
-> 24.0.0).
-> 
-> "pkgconfig" field is deprecated by meson 1.3.0 and
-> replaced by "pkg-config". See: [4]
-> 
-> The patch that adds the pkg_config_static property has
-> been rebased.
+In addition, NVD is moving to a new API for accessing the CPE database.
+It will not longer be possible to simply download all the CPE IDs, and
+due to rate limiting, the download will have to be done in several
+queries.
 
-I reflowed the commit log to approach the 72-char limit on line length
-(I needed soemthing to do while there aas a test-build on-going!)
+Since all of this is anyway of limited use, drop the CPE database lookup
+entirely. Instead, as long as a CPE ID is defined in a package, it is
+considered OK, without any checks.
 
-> [1] https://gitlab.com/buildroot.org/buildroot/-/commit/acfdf21f0b752e844a33c70a0fd2f82f4534a5a0
-> [2] https://gitlab.com/qemu-project/qemu/-/commit/Fc9a809e0d28417fa1e7f7efc19f845bda4c1be9
-> [3] https://github.com/yoctoproject/poky/commits/master/meta/recipes-devtools/meson
-> [4] https://mesonbuild.com/Release-notes-for-1-3-0.html#machine-files-pkgconfig-field-deprecated-and-replaced-by-pkgconfig
-> 
-> Signed-off-by: Antoine Coutant <antoine.coutant@smile.fr>
-> ---
-[--SNIP--]
->  diff --git a/mesonbuild/dependencies/pkgconfig.py b/mesonbuild/dependencies/pkgconfig.py
-> -index 1e8d9132e..d902ba215 100644
-> +index e86206b88..94888657d 100644
->  --- a/mesonbuild/dependencies/pkgconfig.py
->  +++ b/mesonbuild/dependencies/pkgconfig.py
-> -@@ -338,7 +338,8 @@ class PkgConfigDependency(ExternalDependency):
-> -         env = None
-> -         libcmd = ['--libs']
-> - 
-> --        if self.static:
-> -+        if self.static or \
-> -+            (self.env.properties[self.for_machine].get('pkg_config_static', None) == 'true'):
-> -             libcmd.append('--static')
-> - 
-> -         libcmd.append(self.name)
-> +@@ -169,7 +169,7 @@ class PkgConfigCLI(PkgConfigInterface):
-> +             env['PKG_CONFIG_ALLOW_SYSTEM_LIBS'] = '1'
-> +         args: T.List[str] = []
-> +         args += self._define_variable_args(define_variable)
-> +-        if static:
-> ++        if static or (self.env.properties[self.for_machine].get('pkg_config_static', None) == 'true'):
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+---
+ support/scripts/pkg-stats | 50 ++-------------------------------------
+ 1 file changed, 2 insertions(+), 48 deletions(-)
 
-I changed that code back to have our addition on a separate line, so
-that it stands out better when updating the patch.
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> +             args.append('--static')
-> +         args += ['--libs', name]
-> +         ret, out, err = self._call_pkgbin(args, env=env)
->  -- 
->  2.25.1
->  
-> diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-> index cb36b674fa..150fd6d1bb 100644
-> --- a/package/meson/meson.hash
-> +++ b/package/meson/meson.hash
-> @@ -1,4 +1,4 @@
->  # Locally calculated after checking pgp signature
-> -# https://github.com/mesonbuild/meson/releases/download/1.1.1/meson-1.1.1.tar.gz.asc
-> -sha256  d04b541f97ca439fb82fab7d0d480988be4bd4e62563a5ca35fadb5400727b1c  meson-1.1.1.tar.gz
-> +# https://github.com/mesonbuild/meson/releases/download/1.3.1/meson-1.3.1.tar.gz.asc
-> +sha256  6020568bdede1643d4fb41e28215be38eff5d52da28ac7d125457c59e0032ad7  meson-1.3.1.tar.gz
->  sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
-> diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-> index 503aca8c25..467569d28b 100644
-> --- a/package/meson/meson.mk
-> +++ b/package/meson/meson.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -MESON_VERSION = 1.1.1
-> +MESON_VERSION = 1.3.1
->  MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
->  MESON_LICENSE = Apache-2.0
->  MESON_LICENSE_FILES = COPYING
-> diff --git a/support/misc/cross-compilation.conf.in b/support/misc/cross-compilation.conf.in
-> index 7053df472b..a58ab553d0 100644
-> --- a/support/misc/cross-compilation.conf.in
-> +++ b/support/misc/cross-compilation.conf.in
-> @@ -10,7 +10,7 @@ ar = '@TARGET_AR@'
->  strip = '@TARGET_STRIP@'
->  cmake = '@BR2_CMAKE@'
->  fortran = '@TARGET_FC@'
-> -pkgconfig = '@PKGCONF_HOST_BINARY@'
-> +pkg-config = '@PKGCONF_HOST_BINARY@'
->  g-ir-compiler = '@STAGING_DIR@/usr/bin/g-ir-compiler'
->  g-ir-scanner = '@STAGING_DIR@/usr/bin/g-ir-scanner'
->  
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 05f0cd9e4a..caef159afe 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -40,7 +40,6 @@ from getdeveloperlib import parse_developers  # noqa: E402
+ 
+ INFRA_RE = re.compile(r"\$\(eval \$\(([a-z-]*)-package\)\)")
+ URL_RE = re.compile(r"\s*https?://\S*\s*$")
+-CPEDB_URL = "https://static.nvd.nist.gov/feeds/xml/cpe/dictionary/official-cpe-dictionary_v2.3.xml.gz"
+ 
+ RM_API_STATUS_ERROR = 1
+ RM_API_STATUS_FOUND_BY_DISTRO = 2
+@@ -282,8 +281,7 @@ class Package:
+ 
+         if var in self.all_cpeids:
+             self.cpeid = self.all_cpeids[var]
+-            # Set a preliminary status, it might be overridden by check_package_cpes()
+-            self.status['cpe'] = ("warning", "not checked against CPE dictionary")
++            self.status['cpe'] = ("ok", "(not checked against CPE dictionary)")
+         else:
+             self.status['cpe'] = ("error", "no verified CPE identifier")
+ 
+@@ -674,47 +672,6 @@ def check_package_cves(nvd_path, packages):
+                 pkg.status['cve'] = ("ok", "not affected by CVEs")
+ 
+ 
+-def check_package_cpes(nvd_path, packages):
+-    class CpeXmlParser:
+-        cpes = []
+-
+-        def start(self, tag, attrib):
+-            if tag == "{http://scap.nist.gov/schema/cpe-extension/2.3}cpe23-item":
+-                self.cpes.append(attrib['name'])
+-
+-        def close(self):
+-            return self.cpes
+-
+-    print("CPE: Setting up NIST dictionary")
+-    if not os.path.exists(os.path.join(nvd_path, "cpe")):
+-        os.makedirs(os.path.join(nvd_path, "cpe"))
+-
+-    cpe_dict_local = os.path.join(nvd_path, "cpe", os.path.basename(CPEDB_URL))
+-    if not os.path.exists(cpe_dict_local) or os.stat(cpe_dict_local).st_mtime < time.time() - 86400:
+-        print("CPE: Fetching xml manifest from [" + CPEDB_URL + "]")
+-        cpe_dict = requests.get(CPEDB_URL)
+-        open(cpe_dict_local, "wb").write(cpe_dict.content)
+-
+-    print("CPE: Unzipping xml manifest...")
+-    nist_cpe_file = gzip.GzipFile(fileobj=open(cpe_dict_local, 'rb'))
+-
+-    parser = xml.etree.ElementTree.XMLParser(target=CpeXmlParser())
+-    while True:
+-        c = nist_cpe_file.read(1024*1024)
+-        if not c:
+-            break
+-        parser.feed(c)
+-    cpes = parser.close()
+-
+-    for p in packages:
+-        if not p.cpeid:
+-            continue
+-        if p.cpeid in cpes:
+-            p.status['cpe'] = ("ok", "verified CPE identifier")
+-        else:
+-            p.status['cpe'] = ("error", "CPE version unknown in CPE database")
+-
+-
+ def calculate_stats(packages):
+     stats = defaultdict(int)
+     stats['packages'] = len(packages)
+@@ -1309,7 +1266,7 @@ def parse_args():
+     parser.add_argument('--nvd-path', dest='nvd_path',
+                         help='Path to the local NVD database', type=resolvepath)
+     parser.add_argument('--disable', type=list_str,
+-                        help='Features to disable, comma-separated (cve, upstream, url, cpe, warning)',
++                        help='Features to disable, comma-separated (cve, upstream, url, warning)',
+                         default=[])
+     args = parser.parse_args()
+     if not args.html and not args.json:
+@@ -1372,9 +1329,6 @@ def __main__():
+     if "cve" not in args.disable and args.nvd_path:
+         print("Checking packages CVEs")
+         check_package_cves(args.nvd_path, packages)
+-    if "cpe" not in args.disable and args.nvd_path:
+-        print("Checking packages CPEs")
+-        check_package_cpes(args.nvd_path, packages)
+     print("Calculate stats")
+     stats = calculate_stats(packages)
+     if args.html:
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
