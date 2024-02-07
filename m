@@ -4,50 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7860C4828D
-	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 16:19:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60C2AC4828D
+	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 16:24:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B893680C19;
-	Wed,  7 Feb 2024 16:19:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1C8ED80C15;
+	Wed,  7 Feb 2024 16:24:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FVFnD-f_WJRT; Wed,  7 Feb 2024 16:19:58 +0000 (UTC)
+	with ESMTP id 6QBM-nF_66nd; Wed,  7 Feb 2024 16:24:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7AE880C1C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 82E1D80C33
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D7AE880C1C;
-	Wed,  7 Feb 2024 16:19:57 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DD7B51BF3DF
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 16:19:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 82E1D80C33;
+	Wed,  7 Feb 2024 16:24:25 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 22E221BF59A
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 16:24:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C8E2F421C8
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 16:19:55 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0F67961439
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 16:24:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wG27rMiilYiY for <buildroot@lists.busybox.net>;
- Wed,  7 Feb 2024 16:19:54 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TVWnpORxumzU for <buildroot@lists.busybox.net>;
+ Wed,  7 Feb 2024 16:24:23 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
+ helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 687DF420AA
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 687DF420AA
- for <buildroot@buildroot.org>; Wed,  7 Feb 2024 16:19:54 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 61A0287616; Wed,  7 Feb 2024 16:19:54 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Wed, 7 Feb 2024 17:19:42 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 34da86d1ef85226f758e83a381a81c03c6824734
-X-Git-Newrev: 538332d944883ebeb2b91d3b31425593165c0d34
-X-Patchwork-Hint: ignore
-Message-Id: <20240207161954.61A0287616@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-rpds-py: bump to version
- 0.17.1
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7B32A61431
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B32A61431
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7B32A61431
+ for <buildroot@buildroot.org>; Wed,  7 Feb 2024 16:24:22 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 87E331BF208;
+ Wed,  7 Feb 2024 16:24:19 +0000 (UTC)
+Date: Wed, 7 Feb 2024 17:24:18 +0100
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20240207172418.45613b76@windsurf>
+In-Reply-To: <20240106224233.3637602-1-fontaine.fabrice@gmail.com>
+References: <20240106224233.3637602-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1707323059;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=VrYYVf9VKFVrqHB57ZLx23fmM/1o03dqaWSi//1BoSM=;
+ b=ovkx/+EVyWWs+uzRP+zg3gV3SJO8hXexJlnFNVt5P4oEPVtB8VEZK41A0Et9eYy89WCYuk
+ 8B6NDfzB8UOQ2EHePgcBKjJmKmX6lKKBFD8rtHaDLnaATZxBrkBTFhYOqdWxCWxediWVML
+ +QPNF82zmumwQsyUDtQ66nsWI/YG126NfyHhXlS6VQl+kXkEK+maF3rVtmwUc+yPMa9Ip6
+ ILUPeeyGvCzwea/Upbttg7wWz6RiKhOpffYCsEgOZs7MQSAkUyn1nDBJyD/EHg4htSXi6/
+ 3+MMrQIrFnZnqYB2W1ccHIA5h6R1yg4qC8wx68Zi81PKPScXyHv0oQOt0cmePg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=ovkx/+EV
+Subject: Re: [Buildroot] [PATCH 1/1] package/bayer2rgb-neon: fix aarch64
+ build with BR2_OPTIMIZE_0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,48 +81,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Eloi Bail <eloi.bail@savoirfairelinux.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=538332d944883ebeb2b91d3b31425593165c0d34
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat,  6 Jan 2024 23:42:33 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/python-rpds-py/python-rpds-py.hash | 2 +-
- package/python-rpds-py/python-rpds-py.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> Fix the following build failure with aarch64 and BR2_OPTIMIZE_0 raised
+> since commit 0512910e4901edcb78bb1daa4eb3be9bdc4dc8a9:
+> 
+> src/convert-neon-body-bayer8.inc.h: In function 'bayer2rgb_convert_neon':
+> src/convert-neon.c:233:17: error: third argument to '__builtin_prefetch' must be a constant
+>   233 |                 __builtin_prefetch(((void const *)(_addr)) + 64, 0, (_lvl)); \
+>       |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> src/convert-neon-body-bayer8.inc.h:8:9: note: in expansion of macro 'do_prefetch'
+>     8 |         do_prefetch(&in[+1*stride - 1], (rows_per_loop) < 3 ? 3 : 0);
+>       |         ^~~~~~~~~~~
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/307c1c448becd99dfba3a17b3ef816db0bb5cad6
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/bayer2rgb-neon/bayer2rgb-neon.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-diff --git a/package/python-rpds-py/python-rpds-py.hash b/package/python-rpds-py/python-rpds-py.hash
-index 8c4b6181d0..4650d9c385 100644
---- a/package/python-rpds-py/python-rpds-py.hash
-+++ b/package/python-rpds-py/python-rpds-py.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after vendoring
--sha256  861b1fa8c37819b2e2cebbde6dea66ac2fa1247e4a7c3933dbf4c89244d7fecb  rpds_py-0.16.2.tar.gz
-+sha256  760b05720269195d86071ac7cf627b3a4ab9366680d8d449a6a63b84d96a5bc0  rpds_py-0.17.1.tar.gz
- # Locally computed sha256 checksums
- sha256  314e4e91be3baa93c0fb4bccc9e4e97cd643eb839b065af921782c2175fe9909  LICENSE
-diff --git a/package/python-rpds-py/python-rpds-py.mk b/package/python-rpds-py/python-rpds-py.mk
-index 5f0d30d002..80670f2e4f 100644
---- a/package/python-rpds-py/python-rpds-py.mk
-+++ b/package/python-rpds-py/python-rpds-py.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_RPDS_PY_VERSION = 0.16.2
-+PYTHON_RPDS_PY_VERSION = 0.17.1
- PYTHON_RPDS_PY_SOURCE = rpds_py-$(PYTHON_RPDS_PY_VERSION).tar.gz
--PYTHON_RPDS_PY_SITE = https://files.pythonhosted.org/packages/c2/63/94a1e9406b34888bdf8506e91d654f1cd84365a5edafa5f8ff0c97d4d9e1
-+PYTHON_RPDS_PY_SITE = https://files.pythonhosted.org/packages/b7/0a/e3bdcc977e6db3bf32a3f42172f583adfa7c3604091a03d512333e0161fe
- PYTHON_RPDS_PY_SETUP_TYPE = maturin
- PYTHON_RPDS_PY_LICENSE = MIT
- PYTHON_RPDS_PY_LICENSE_FILES = LICENSE
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
