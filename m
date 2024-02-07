@@ -4,71 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18611C4828F
-	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 11:10:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44DEEC4828F
+	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 11:24:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BE901829A9;
-	Wed,  7 Feb 2024 11:10:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E191381E54;
+	Wed,  7 Feb 2024 11:24:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Jxv61K7pI97a; Wed,  7 Feb 2024 11:10:34 +0000 (UTC)
+	with ESMTP id 9rthsxJk6DIT; Wed,  7 Feb 2024 11:24:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C537182ACA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF89881E5C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C537182ACA;
-	Wed,  7 Feb 2024 11:10:34 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 656221BF599
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 11:10:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EF89881E5C;
+	Wed,  7 Feb 2024 11:24:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 345791BF599
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 11:24:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5ED89404CE
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 11:10:32 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2040B402C3
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 11:24:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pm7yeoT29oSe for <buildroot@lists.busybox.net>;
- Wed,  7 Feb 2024 11:10:31 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5FED340318
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5FED340318
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5FED340318
- for <buildroot@buildroot.org>; Wed,  7 Feb 2024 11:10:30 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown [85.119.216.19])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 07DDC13F8A2;
- Wed,  7 Feb 2024 12:10:25 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Wed, 07 Feb 2024 12:10:25 +0100
-Date: Wed, 7 Feb 2024 12:10:25 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Marcus Folkesson <marcus.folkesson@gmail.com>
-Message-ID: <ZcNlIaMSPs2_IVpV@landeda>
-References: <20240206090048.2214719-1-marcus.folkesson@gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BECIk4JTmGt1 for <buildroot@lists.busybox.net>;
+ Wed,  7 Feb 2024 11:24:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
+ helo=relay7-d.mail.gandi.net; envelope-from=peko@48ers.dk; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3A25E40025
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A25E40025
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3A25E40025
+ for <buildroot@buildroot.org>; Wed,  7 Feb 2024 11:24:42 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 827B120007;
+ Wed,  7 Feb 2024 11:24:39 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peko@48ers.dk>) id 1rXg2g-00FZqp-31;
+ Wed, 07 Feb 2024 12:24:38 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Wed,  7 Feb 2024 12:24:34 +0100
+Message-Id: <20240207112435.3712652-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240206090048.2214719-1-marcus.folkesson@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1707304228;
- bh=Qeqv/XXq2lQg/KShSvksLe+cYa3RrNYOXkkw9tfVHMk=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=KKFAGQ+8YWiq3fnB1KXSXZdvZz48X4usD6XFgIJ9wR1JvsNzh1cYA4pT/+1/3jQgv
- f5m8GFkmsQWtyAxdwYhWgWe4IE8K81/XI0w5wFa3Nv9ILE5a9a+IYCwMoDplzD3oKE
- jleoW+NODri5HQ5rk827BxXI3GdPWLmSuHCmm3zU1uqMbNyN14UvaYmy8Sdw8DMFtr
- qv0IZge+8av4CAVCOwxWZEMIpj2HzraDi/R+4Ll5PGpOoLsUeNSfxVWVO3+H6rPkJe
- FjUN4lXNy04LIqK2kh+DWT8mPO7y6dqmPZj+PStas2NfjFVFNz5LRai/wVAb1Xdd5q
- rU++PTByzbEFw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=KKFAGQ+8
-Subject: Re: [Buildroot] [PATCH] package/makedevs: describe the recursive
- type in the README
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: [Buildroot] [PATCH] package/libtalloc: bump version to 2.4.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,63 +64,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: David GOUARIN <dgouarin@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Marcus, All,
+Fixes build issue of the python support with python 3.12 (2.3.4
+unconditionally uses distutils).
 
-On 2024-02-06 10:00 +0100, Marcus Folkesson spake thusly:
-> The recursive type is described everywhere else, so add it to
-> the README as well.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libtalloc/libtalloc.hash | 4 ++--
+ package/libtalloc/libtalloc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Instead of updating the README file, I removed it and repalced it with
-a symlink to the corresponding section in the manujal, to avoid
-duplicating the documentation.
-
-Indeed, the manual section for makedevs was already recently updated,
-but the README was missed. Having the symlink will prevvent the two from
-diverging in the future.
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
-> ---
->  package/makedevs/README | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/makedevs/README b/package/makedevs/README
-> index 70844bf802..6c583609a5 100644
-> --- a/package/makedevs/README
-> +++ b/package/makedevs/README
-> @@ -26,6 +26,7 @@ where name is the file name,  type can be one of:
->  
->        f: A regular file
->        d: Directory
-> +      r: Directory recursively
->        c: Character special device file
->        b: Block special device file
->        p: Fifo (named pipe)
-> -- 
-> 2.43.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/libtalloc/libtalloc.hash b/package/libtalloc/libtalloc.hash
+index 0bc8edb695..5577583881 100644
+--- a/package/libtalloc/libtalloc.hash
++++ b/package/libtalloc/libtalloc.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  179f9ebe265e67e4ab2c26cad2b7de4b6a77c6c212f966903382869f06be6505  talloc-2.3.4.tar.gz
+-sha256  f8340c449dd64a55c6605b02fcad2aec6f473612ac6026739a22995380a8043c  talloc.h
++sha256  85ecf9e465e20f98f9950a52e9a411e14320bc555fa257d87697b7e7a9b1d8a6  talloc-2.4.2.tar.gz
++sha256  e01fb092aaed2b431be26674e2b791c77fb5984537c29b514e957582c6b31465  talloc.h
+diff --git a/package/libtalloc/libtalloc.mk b/package/libtalloc/libtalloc.mk
+index ca15180d22..676076b857 100644
+--- a/package/libtalloc/libtalloc.mk
++++ b/package/libtalloc/libtalloc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBTALLOC_VERSION = 2.3.4
++LIBTALLOC_VERSION = 2.4.2
+ LIBTALLOC_SOURCE = talloc-$(LIBTALLOC_VERSION).tar.gz
+ LIBTALLOC_SITE = https://www.samba.org/ftp/talloc
+ LIBTALLOC_LICENSE = LGPL-3.0+
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.39.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
