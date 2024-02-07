@@ -4,71 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BC7CC4828F
-	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 07:08:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04DFCC4828D
+	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 07:08:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C4A8D61376;
-	Wed,  7 Feb 2024 07:08:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C6D9161375;
+	Wed,  7 Feb 2024 07:08:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RGoH07zA0ZuC; Wed,  7 Feb 2024 07:08:03 +0000 (UTC)
+	with ESMTP id MhSxztaF1MDy; Wed,  7 Feb 2024 07:08:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D370761371
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DEE9F61376
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D370761371;
-	Wed,  7 Feb 2024 07:08:02 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 51B3C1BF836
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 07:08:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DEE9F61376;
+	Wed,  7 Feb 2024 07:08:30 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F1A4C1BF836
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 07:08:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3F52B837D2
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 07:08:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DE9A761383
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 07:08:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AbG5Cnn9kUUD for <buildroot@lists.busybox.net>;
- Wed,  7 Feb 2024 07:07:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
- helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1D17E8367C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1D17E8367C
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1D17E8367C
- for <buildroot@busybox.net>; Wed,  7 Feb 2024 07:07:58 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3B2CA1C000B;
- Wed,  7 Feb 2024 07:07:55 +0000 (UTC)
-Date: Wed, 7 Feb 2024 08:07:54 +0100
-To: Francois Perrad <fperrad@gmail.com>
-Message-ID: <20240207080754.606a403e@windsurf>
-In-Reply-To: <20240118182808.551258-1-francois.perrad@gadz.org>
-References: <20240118182808.551258-1-francois.perrad@gadz.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nEWIxLAGYH93 for <buildroot@lists.busybox.net>;
+ Wed,  7 Feb 2024 07:08:16 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2001:868:100:600::216; helo=shout01.mail.de;
+ envelope-from=kilian.zinnecker@mail.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2FBE361382
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2FBE361382
+Received: from shout01.mail.de (shout01.mail.de [IPv6:2001:868:100:600::216])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2FBE361382
+ for <buildroot@buildroot.org>; Wed,  7 Feb 2024 07:08:16 +0000 (UTC)
+Received: from postfix02.mail.de (postfix02.bt.mail.de [10.0.121.126])
+ by shout01.mail.de (Postfix) with ESMTP id 51900241119;
+ Wed,  7 Feb 2024 08:08:14 +0100 (CET)
+Received: from smtp01.mail.de (smtp01.bt.mail.de [10.0.121.211])
+ by postfix02.mail.de (Postfix) with ESMTP id 34E2EA00E2;
+ Wed,  7 Feb 2024 08:08:14 +0100 (CET)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+ (No client certificate requested)
+ by smtp01.mail.de (Postfix) with ESMTPSA id 42A6C240CB8;
+ Wed,  7 Feb 2024 08:08:13 +0100 (CET)
+To: buildroot@buildroot.org
+Date: Wed,  7 Feb 2024 08:08:05 +0100
+Message-Id: <20240207070806.7331-1-kilian.zinnecker@mail.de>
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1707289675;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=M4I8NjxgkDLRvuhcUV0yq8y2iX0raVxyYUaUnRYvG98=;
- b=TO9LbkIznirZbuQTaxbagf5fn1IVhos3B8AY6WggXFuNXXdZLn8TR1m8DuqwNbnrY3WT1f
- pFCU7AmaPBrWJyAg5kjLOsUIW4ZCPFNqhj8ss0mYOhAkqkuuJrFPG5h5+7FrmSneEw01dE
- BeEkQ8m70BUyyRLD4dTRrQ7ic9wvyzA2h5oJVGD5db2hAeFNbxb15YDlFCt11bnLj5p27Y
- rb3lUDNKbUXqfaJ8nKtAUXKTciffxOqhdZLig+Hwn9JKd7T0wIV5xjP1WJswh/qWz4gsOv
- 7jwuK5JDOZEKu+rGFowWbnRKmaxuBosnxoXGqwzohOcyeoCjOPPH2QJFM0EiPQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-purgate: clean
+X-purgate: This mail is considered clean (visit http://www.eleven.de for
+ further information)
+X-purgate-type: clean
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is considered clean (visit http://www.eleven.de for
+ further information)
+X-purgate: clean
+X-purgate-size: 496
+X-purgate-ID: 154282::1707289694-FCDBC670-E8C0C971/0/0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=mail.de; s=mailde202009; t=1707289694;
+ bh=70AG46JVIMZna+k/6MXvEGC6KG+vY9Q/lvkzIaQ+J4E=;
+ h=From:To:Cc:Subject:Date:Message-Id:From:To:CC:Subject:Reply-To;
+ b=sZkT8bfH3aBXhJ/h0kV8mvAnWr/e9DwHE71TrA8+8WMRgMNJykCncjj3+cDUD49Lr
+ qM9XCpjEE4ntoaVoK0zKcN/rUz5n9og8Y3rK9RxtsMJPyG+SxqMlvKqQlpwiA5iUS/
+ eTXHK8emBDwBh8WfV7MRPjpgBpfe+MLNOQ3Hq+MVRG3aIgcqpUOV210317X/ZvPfWk
+ +ytOf6rjErey02IsNxV6LJXrwt10SlSxTHigCP/ZbSZNn2SQMh6CO8FIp0bC94a8mM
+ u0eNAeDq2O6OP509EJfFAs7g2DhFB0Mb4lNvMwl8cwibKZ/XdhbceE0ZRiNMsMoBfx
+ k345iunwwgC2A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mail.de
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=TO9LbkIz
-Subject: Re: [Buildroot] [PATCH] package/autoconf: bump to version 2.72
+ unprotected) header.d=mail.de header.i=@mail.de header.a=rsa-sha256
+ header.s=mailde202009 header.b=sZkT8bfH
+Subject: [Buildroot] [PATCH 0/1] Fix alphabetical order of DEVELOPERS file
+ entry
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,40 +93,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@busybox.net
+From: Kilian Zinnecker via buildroot <buildroot@buildroot.org>
+Reply-To: Kilian Zinnecker <kilian.zinnecker@mail.de>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Kilian Zinnecker <kilian.zinnecker@mail.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 18 Jan 2024 19:28:08 +0100
-Francois Perrad <fperrad@gmail.com> wrote:
+The files in my own entry in the DEVELOPERS file are not in
+alphabetical order. I currently have two further board supports
+submitted. I was asked to fix that seperately, and this makes sense,
+because else the patches of the two board supports can easily become
+non compatible, if they both try to fix the DEVELOPERS file.
 
-> https://git.savannah.gnu.org/cgit/autoconf.git/tree/NEWS?h=v2.72
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/autoconf/0001-dont-add-dirty-to-version.patch | 2 +-
->  package/autoconf/autoconf.hash                        | 2 +-
->  package/autoconf/autoconf.mk                          | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
+Kilian Zinnecker (1):
+  Fix alphabetical order of DEVELOPER's file entry
 
-This version bump broke the build of host-erlang:
+ DEVELOPERS | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-http://autobuild.buildroot.net/results/cab/cabca5a5ed9bb0874ed33e58a69947b50a6e2318/build-end.log
-
-Could you have a look? Perhaps it's just the host-erlang configure
-machinery that is too strict, and simply their check needs to be
-relaxed.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
