@@ -4,80 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A4DFC4828F
-	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 07:51:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 942A0C4828D
+	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 07:51:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 835FE8208C;
-	Wed,  7 Feb 2024 07:51:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3F3E3838DB;
+	Wed,  7 Feb 2024 07:51:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JAZUfU5cirvt; Wed,  7 Feb 2024 07:51:01 +0000 (UTC)
+	with ESMTP id WcQEpAJHjPMK; Wed,  7 Feb 2024 07:51:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B4BD81FD4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC77C820C6
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3B4BD81FD4;
-	Wed,  7 Feb 2024 07:51:01 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B16E01BF21A
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 07:50:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CC77C820C6;
+	Wed,  7 Feb 2024 07:51:54 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5A02B1BF21A
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 07:51:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with UTF8SMTP id 9D47C40A59
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 07:50:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with UTF8SMTP id 46980820C6
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 07:51:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with UTF8SMTP id 72GNfhfhvlVD for <buildroot@lists.busybox.net>;
- Wed,  7 Feb 2024 07:50:58 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=203.205.221.233;
- helo=out203-205-221-233.mail.qq.com; envelope-from=hanyuan-z@qq.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with UTF8SMTP id UOC6k-eFgrh6 for <buildroot@lists.busybox.net>;
+ Wed,  7 Feb 2024 07:51:52 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=203.205.221.231;
+ helo=out203-205-221-231.mail.qq.com; envelope-from=hanyuan-z@qq.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 50CEB40A48
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 50CEB40A48
-Received: from out203-205-221-233.mail.qq.com (out203-205-221-233.mail.qq.com
- [203.205.221.233])
- by smtp2.osuosl.org (Postfix) with UTF8SMTPS id 50CEB40A48
- for <buildroot@buildroot.org>; Wed,  7 Feb 2024 07:50:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0835D81FB6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0835D81FB6
+Received: from out203-205-221-231.mail.qq.com (out203-205-221-231.mail.qq.com
+ [203.205.221.231])
+ by smtp1.osuosl.org (Postfix) with UTF8SMTPS id 0835D81FB6
+ for <buildroot@buildroot.org>; Wed,  7 Feb 2024 07:51:50 +0000 (UTC)
 Received: from localhost.localdomain ([36.101.73.56])
  by newxmesmtplogicsvrszc5-0.qq.com (NewEsmtp) with SMTP
  id CAB11A20; Wed, 07 Feb 2024 15:50:43 +0800
-X-QQ-mid: xmsmtpt1707292243tpu7mnqna
-Message-ID: <tencent_8285BE4A2D0B360BFED14B9C383000EA8C09@qq.com>
-X-QQ-XMAILINFO: NyTsQ4JOu2J2opr+7k5sHR9DrxhY5BXzNjv4VarDYkqz95j16EQi16nFCuVKOG
- R7goVVjdSnyWc23mzF88FnhF/wmlWP+3n8kpA/3/HVPmkw2KFS9UaidgdriAuNB1P/hmvsbBXsk4
- 6mvUVLOlc2TNtFuukTSsK0L5oRZzrmnMNnozImBHHs81CBe30vMPnaYuJUcx/UVJ3x6XqQGKne5D
- XuthaUrE+aoRfqeAsqjtrsoix1k2lKtFuksAgU7Nk0KBWy1X9NQoiRqYln/KsUPg6BU4SZqWdkfG
- M3/FwJlaM56vwI2Jb7mL4WAH10nAhgOl/QpcpZZyECtJ6NAtNNiyuXya9ROoierDOBnSkiUDDYpe
- wuC0csgIwqGBhmcxo0PZ/+hkC+qBtybCD2ckmAJKKKvfM5m1zd8YuirFzzchq716boFOxBETQcMf
- Qcp7/HgvpmRkzLn6H62gzRY9zKH+qRJKnhGu2lHTcYhuaQp3sR2gP5BjuyFJW1DrO+Vi2X+P6kRj
- FtzDp56YaOxKSEr0+fgexP83s3NxvpItBuTxlzZHCctxy4R096ztnszg2/A+1jejms64+r4MKg6I
- 5zaeCzWjyOHzOrDxxncabnqTCiVRwz44Xk5yiOi4yz45LO9uNsAhyScvohrQhDH16JU7zMsAuLIo
- VOY672nZ67sBeQkY7KbariIgf14QOpJAeiN0LaEJU8k2ZLf9zUN/E4sv9Ae/R80f3g+voCLfn6X3
- N0FCu/uj7Loub77kSI/RVMmUjdwNl7jhu5vrJuGpz0cgvHw/lGSoArwfjnWKA3j1xs4fzBy+rAIK
- RTKL5Xj1TWhSCY+0k9JTONUWX3oANWTQd6i0Zqsxm2xICjHTeHZKM1Zat16geIGNsf5KfKffTjOe
- /fsiaNAXf/6HnL4Z2lvDlun2UN99mit+LWMzm3zkVGrYqExfZpiz+cSoc1pQVVgtvrc6M7UQFbRg
- n9UYJPw6h4H/Byh1Jl+fJQ+B7mnE44ddkdc6iwQMNJvymnPt5rskCuLObMHxt8cxygh7IujsA=
-X-QQ-XMRINFO: NI4Ajvh11aEj8Xl/2s1/T8w=
+X-QQ-mid: xmsmtpt1707292268tf2njzxug
+Message-ID: <tencent_7C8E1E802D63F62F30CBE54D84FFAB120907@qq.com>
+X-QQ-XMAILINFO: NQR8mRxMnur9WwA+8baecEZqggJ/SLY6beKOAhSm2zfn1XNN0unzdnO6joio4W
+ AgN6CTsL9YcoT9qoP3NMaFQjzL1ce+GZ5+OFKRGMhY8az/5JHrm3QIwXxabFaZbEiyc9+Lj7pg2z
+ S/8CzRx/lcetIZPM0kAHyMFpOgIKZlSzu/A8ZiR8yrgQpCs4kDX1zSerA1XMxP6cgyMFjXEodsjy
+ S6g9+hbSBcS6ZGB8Aigw96z+PwJX2BSZ60Fqhhvn3mSndlEMHbZfGxtA+ftVYQWgtbCwxwQFiv6V
+ kC/rJ/ipzlgXOR9namX0mk4NWz0DiCpKsgitrbJbEg0lCQas39ZYBcCOFfPKxMtT7T/FTbe9w2eD
+ fHJOWxrJ5Tga/AM1LEDVFXIHSHbRcUUELUY0AcPX9Ks+MNB05N55zJsp4P5A6RAbzwddXMQRo2cD
+ hQTt2i/Godh8tBPy6muj2FeNnEFYbL4VasjSTA1r2MQblTHF1dvIiy9HgXjhJipRF0kreCYIvQm5
+ pHxmWDCDmcU3duibI1/t5UFUrbRcyJ9S7HToYVT3qZorBXlSVC2pUfev6Eu+cFqkRy/VW/zoqw9T
+ UXH4zcKW4YmaEMggdKINGExq5KiW6tgobVePG/jlCLNUxib9vvaJNdLso0BFYchjQbzsGrPjY8xR
+ rV920KPT8CEc6cP/m6Cy6za/wD+9KiadJrvPXRPvEohSrRlHXF/ruc/ceoLL/dBICz8isgXg+eCy
+ TBCbu+MasnutKsqqO3be3rIl6B0qMk3YI2RKCtFNU9WcYfXtOhsSsEcxzpe3wG1E3I3hBfENNfFT
+ jCRNX2LhKjoL58nQOYKMeJkLCnVwcTpP0Eoa/ocV9aE8T4so8qCDPbDXe7z3fduE/qFyf2veDneT
+ urI/3Hw9RIHACuDZWR3uaICeUXQFV4bWJYDQm0am1tPHKVZc7nZIqt1ctSnF75K1qfoioa8fkfvH
+ XMYjIEw8ky9bGQ6+sX9j1xH3Axs4/FTzATpgvOxp+6kTrW4QK6AZheGTt2+/Ykhp5lXfGVWSYp5S
+ giMErGHQ==
+X-QQ-XMRINFO: MPJ6Tf5t3I/ycC2BItcBVIA=
 To: buildroot@buildroot.org
-Date: Wed,  7 Feb 2024 15:49:49 +0800
-X-OQ-MSGID: <20240207074950.2049-1-hanyuan-z@qq.com>
+Date: Wed,  7 Feb 2024 15:49:53 +0800
+X-OQ-MSGID: <20240207074950.2049-3-hanyuan-z@qq.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240207074950.2049-1-hanyuan-z@qq.com>
+References: <20240207074950.2049-1-hanyuan-z@qq.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=qq.com; s=s201512; 
- t=1707292245; bh=8Hc7kXs82nyzIxl22NJsPtdmq+svTAlcdQDp0sLmFOg=;
- h=From:To:Cc:Subject:Date;
- b=iWV7O9G6eipPsyK37TbkvWfdPnqPbwxIsZOvWpoRmMT0wjcBvAHTXdFIu83FbeEt6
- Xy69kIUvlHvlBLdshttsW8rRT090flb6yMkCVdyweGm9ZeJfvgEyq2zIozp9JcgXaw
- JfMKIpzoHiisBUXE13+LCamRb/WZZ+uU3roGLHyc=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ t=1707292308; bh=3sH8fKM73dBf7NcHIgqfs3mGbWxm5Ck9wDOr1eTmgAg=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References;
+ b=ci260Yr/Q/pUT9AvIzyTaj92LEbrvdt8CTkoX+CFXWtOIoTeEByIjYgU+dQecSTLV
+ F/NqsZjwodtQUEYNboP99buMVU5Ed77806kAXDjCmFuy1j1V6lxZR+xqwcVaKSm5fh
+ aw6dL9iAQBHdDon5ZIk3ZfAbf/3v17cW7hC0v4Uw=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=qq.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=qq.com header.i=@qq.com header.a=rsa-sha256
- header.s=s201512 header.b=iWV7O9G6
-Subject: [Buildroot] [PATCH v4 1/3] package/milkv-duo-libraries: new package
+ header.s=s201512 header.b=ci260Yr/
+Subject: [Buildroot] [PATCH v4 3/3] configs/milkv_duo: new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,178 +97,340 @@ Reply-To: Hanyuan Zhao <hanyuan-z@qq.com>
 Cc: Emil S <emil.soltys@outlook.com>,
  Giulio Benetti <giulio.benetti@benettiengineering.com>,
  Hanyuan Zhao <hanyuan-z@qq.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ GP Orcullo <kinsamanka@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This commit adds the libraries for RISC-V dev board
-milk-v duo, containing board-specific firmware and
-hardware tools.
+Milk-V Duo is an ultra-compact embedded RISC-V development platform based on the CV1800B chip.
+It can run Linux and RTOS, providing a reliable, low-cost, and high-performance platform
+for professionals, industrial ODMs, AIoT enthusiasts, DIY hobbyists, and creators.
 
-https://github.com/milkv-duo/milkv-duo-buildroot-libraries
+https://milkv.io/duo
 
 Co-authored-by: Emil S <emil.soltys@outlook.com>
+Co-authored-by: GP Orcullo <kinsamanka@gmail.com>
 Signed-off-by: Hanyuan Zhao <hanyuan-z@qq.com>
+Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+[Build Tested only both defconfigs]
+Tested-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
+---
+This patch depends on:
+https://patchwork.ozlabs.org/project/buildroot/list/?series=393667
+to work-around a gcc bug on htop package.
 ---
 Changes v3 -> v4:
-  - Update the info in help section
-  - Provide more info about ION (camera memory use)
+  - Lint the code
+  - Add more comments about gcc ICE in defconfig
+  - Remove unnecessary comments
 
 Changes v2 -> v3:
-  - Update the desc's repo url
+  - Remove BR2_TOOLCHAIN_BUILDROOT_CXX in defconfig
+  - Refactor post-image.sh
+  - Provide more info about ION and camera memory use
 
 Changes v1 -> v2:
-  - Lint the code
-  - Refactor the select and depend logic
+  - Refactor defconfig
+  - Set the boot partition size to 8M
+  - Refactor the image generating logic
 ---
- package/Config.in                             |  1 +
- package/milkv-duo-libraries/Config.in         | 63 +++++++++++++++++++
- .../milkv-duo-libraries.mk                    | 51 +++++++++++++++
- 3 files changed, 115 insertions(+)
- create mode 100644 package/milkv-duo-libraries/Config.in
- create mode 100644 package/milkv-duo-libraries/milkv-duo-libraries.mk
+ board/milkv/duo/genimage.cfg                 | 25 ++++++++
+ board/milkv/duo/post-image.sh                | 47 ++++++++++++++
+ board/milkv/duo/readme.txt                   | 46 ++++++++++++++
+ configs/milkv_duo_musl_riscv64_defconfig     | 67 ++++++++++++++++++++
+ configs/milkv_duo_musl_riscv64_ion_defconfig | 67 ++++++++++++++++++++
+ 5 files changed, 252 insertions(+)
+ create mode 100644 board/milkv/duo/genimage.cfg
+ create mode 100755 board/milkv/duo/post-image.sh
+ create mode 100644 board/milkv/duo/readme.txt
+ create mode 100644 configs/milkv_duo_musl_riscv64_defconfig
+ create mode 100644 configs/milkv_duo_musl_riscv64_ion_defconfig
 
-diff --git a/package/Config.in b/package/Config.in
-index 047877c960..322aba90b8 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -564,6 +564,7 @@ endmenu
- 	source "package/memtester/Config.in"
- 	source "package/memtool/Config.in"
- 	source "package/mhz/Config.in"
-+	source "package/milkv-duo-libraries/Config.in"
- 	source "package/minicom/Config.in"
- 	source "package/msr-tools/Config.in"
- 	source "package/nanocom/Config.in"
-diff --git a/package/milkv-duo-libraries/Config.in b/package/milkv-duo-libraries/Config.in
+diff --git a/board/milkv/duo/genimage.cfg b/board/milkv/duo/genimage.cfg
 new file mode 100644
-index 0000000000..047b78fb7b
+index 0000000000..1fd74f845a
 --- /dev/null
-+++ b/package/milkv-duo-libraries/Config.in
-@@ -0,0 +1,63 @@
-+config BR2_PACKAGE_MILKV_DUO_LIBRARIES
-+	bool "milk-v duo libraries"
-+	depends on BR2_riscv
-+	help
-+	  Package providing board-specific firmware and hardware tools
-+	  for Milk-V Duo platform.
++++ b/board/milkv/duo/genimage.cfg
+@@ -0,0 +1,25 @@
++image boot.vfat {
++	vfat {
++		files = {
++			"fip.bin",
++			"boot.sd",
++		}
++	}
++	size = 8M
++}
 +
-+	  https://github.com/milkv-duo/milkv-duo-buildroot-libraries
++image sdcard.img {
++	hdimage {
++	}
 +
-+if BR2_PACKAGE_MILKV_DUO_LIBRARIES
++	partition boot {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
++	}
 +
-+config BR2_PACKAGE_MILKV_DUO_FIRMWARE_FSBL
-+	bool "milkv-duo-firmware-fsbl"
-+	select BR2_PACKAGE_HOST_MTOOLS
-+	help
-+	  This package is obtained from
-+	  https://github.com/milkv-duo/duo-buildroot-sdk,
-+	  from which we download the first stage bootloader source and
-+	  compile it, generating the ATF bl2.bin. At the mean time, we
-+	  will use the fiptool.py in this package to create the binary
-+	  file fip.bin to pack the opensbi, u-boot and so on.
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++	}
++}
+diff --git a/board/milkv/duo/post-image.sh b/board/milkv/duo/post-image.sh
+new file mode 100755
+index 0000000000..3856d977df
+--- /dev/null
++++ b/board/milkv/duo/post-image.sh
+@@ -0,0 +1,47 @@
++#!/bin/sh
 +
-+	  If you intend to generate the whole sdcard image or the
-+	  fip.bin for milk-v duo, you must say Y to this package!
++###########################################################
++# File: post-image.sh
++# Author: GP Orcullo <kinsamanka@gmail.com>
++#         Hanyuan Zhao <zhaohy22@mails.tsinghua.edu.cn>
++# Description: this sh will make the fip.bin and boot.sd,
++#              then pack everything to an image file.
++###########################################################
 +
-+config BR2_PACKAGE_MILKV_DUO_FIRMWARE_FSBL_64MB
-+	bool "64 MiB free ram"
-+	default n
-+	depends on BR2_PACKAGE_MILKV_DUO_FIRMWARE_FSBL
-+	help
-+	  Say Y to this will disable the ION (Camera Algorithm Memory)
-+	  in order to have the all 64MiB Free memory.
++FIPTOOL_OPTS="genfip ${BINARIES_DIR}/fip.bin \
++	--MONITOR_RUNADDR=0x80000000 \
++	--CHIP_CONF=${BINARIES_DIR}/chip_conf.bin \
++	--NOR_INFO=FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF \
++	--NAND_INFO=00000000 \
++	--BL2=${BINARIES_DIR}/bl2.bin \
++	--BLCP_IMG_RUNADDR=0x05200200 \
++	--BLCP_PARAM_LOADADDR=0 \
++	--DDR_PARAM=${BINARIES_DIR}/ddr_param.bin \
++	--MONITOR=${BINARIES_DIR}/fw_dynamic.bin \
++	--LOADER_2ND=${BINARIES_DIR}/u-boot.bin"
 +
-+config BR2_PACKAGE_MILKV_DUO_PINMUX
-+	bool "duo-pinmux tool"
-+	default n
-+	help
-+	  Say Y to this will compile the duo-pinmux, which can
-+	  get or set function of any Milk-V Duo GPIO Pin. More info at
++if [ -f ${BINARIES_DIR}/cvirtos.bin ]; then
++	FIPTOOL_OPTS="${FIPTOOL_OPTS} \
++		--BLCP=${BINARIES_DIR}/empty.bin \
++		--BLCP_2ND=${BINARIES_DIR}/cvirtos.bin \
++		--BLCP_2ND_RUNADDR=0x83f40000"
++	echo "[Duo Post-Image fiptool.py] Integrating FreeRTOS"
++fi
 +
-+	  https://milkv.io/docs/duo/application-development/pinmux
++${BINARIES_DIR}/fiptool.py ${FIPTOOL_OPTS} \
++> ${BINARIES_DIR}/fip.log 2>&1
++if [ -f ${BINARIES_DIR}/fip.bin ]; then
++	echo "[Duo Post-Image fiptool.py] > fip.bin generated!"
++fi
 +
-+config BR2_PACKAGE_MILKV_DUO_FEATURES
-+	bool "duo usb features"
-+	default n
-+	select BR2_PACKAGE_DHCPCD
-+	select BR2_PACKAGE_DNSMASQ
-+	select BR2_PACKAGE_DROPBEAR
-+	select BR2_PACKAGE_LRZSZ
-+	select BR2_PACKAGE_HTOP
-+	help
-+	  Say Y to this will copy the cvitek usb shell scripts to have
-+	  the USB features. The role could be configured at
-+
-+	  /etc/milkv-duo.conf
-+
-+	  Supported usb functions are rndis, host and mass-storage.
-+	  By default Duo has the LED blinking. It could be configured
-+	  in that conf file as well. Say Y to this will also select
-+	  some packages automatically, to have the same experience
-+	  with the official release.
-+
-+endif
-diff --git a/package/milkv-duo-libraries/milkv-duo-libraries.mk b/package/milkv-duo-libraries/milkv-duo-libraries.mk
++cp ${BINARIES_DIR}/u-boot.dtb ${BINARIES_DIR}/cv1800b_milkv_duo_sd.dtb
++lzma -fk ${BINARIES_DIR}/Image
++mkimage -f ${BINARIES_DIR}/multi.its ${BINARIES_DIR}/boot.sd
++if [ -f ${BINARIES_DIR}/boot.sd ]; then
++	echo "[Duo Post-Image] > boot.sd generated!"
++fi
++support/scripts/genimage.sh -c $(pwd)/board/milkv/duo/genimage.cfg
++gzip -fk ${BINARIES_DIR}/sdcard.img
++if [ -f ${BINARIES_DIR}/sdcard.img ]; then
++	echo "[Duo Post-Image] > sdcard.img generated!"
++fi
+diff --git a/board/milkv/duo/readme.txt b/board/milkv/duo/readme.txt
 new file mode 100644
-index 0000000000..a5cf40a764
+index 0000000000..bb05050245
 --- /dev/null
-+++ b/package/milkv-duo-libraries/milkv-duo-libraries.mk
-@@ -0,0 +1,51 @@
-+################################################################################
-+#
-+# milkv-duo-libraries
-+#
-+################################################################################
++++ b/board/milkv/duo/readme.txt
+@@ -0,0 +1,46 @@
++Milk-V Duo (https://milkv.io/docs/duo/overview)
 +
-+MILKV_DUO_LIBRARIES_VERSION = f359994bd497f942bb67734280d81f6640c7c168
-+MILKV_DUO_LIBRARIES_SITE = $(call github,milkv-duo,milkv-duo-buildroot-libraries,$(MILKV_DUO_LIBRARIES_VERSION))
-+MILKV_DUO_LIBRARIES_INSTALL_STAGING = YES
-+MILKV_DUO_LIBRARIES_DEPENDENCIES = host-python3 host-mtools
-+MILKV_DUO_LIBRARIES_FSBL_64MB = ION
++Intro
++=====
 +
-+ifeq ($(BR2_PACKAGE_MILKV_DUO_FIRMWARE_FSBL_64MB),y)
-+MILKV_DUO_LIBRARIES_FSBL_64MB = 64MB
-+endif
++Milk-V Duo is an ultra-compact embedded development platform
++based on the rv64 CV1800B chip. It can run Linux and RTOS,
++providing a reliable, cost-effective, and high-performance
++platform for professionals, industrial ODMs, AIoT enthusiasts,
++DIY enthusiasts, and creators.
 +
-+define MILKV_DUO_LIBRARIES_BUILD_CMDS
-+	if [ $(BR2_PACKAGE_MILKV_DUO_FIRMWARE_FSBL) = y ]; then \
-+		$(MAKE) -C $(@D)/firmware \
-+		ARCH=riscv BOOT_CPU=riscv CHIP_ARCH=cv180x \
-+		PROJECT_FULLNAME=cv1800b_milkv_duo_sd \
-+		CROSS_COMPILE=$(TARGET_CROSS) \
-+		FREE_RAM_SIZE=$(MILKV_DUO_LIBRARIES_FSBL_64MB) \
-+		bl2; \
-+	fi
++How to build it
++===============
 +
-+	if [ $(BR2_PACKAGE_MILKV_DUO_PINMUX) = y ]; then \
-+		$(TARGET_MAKE_ENV) $(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
-+		-I $(@D)/pinmux/include $(@D)/pinmux/src/*.c -o $(@D)/pinmux/duo-pinmux; \
-+	fi
-+endef
++Configure Buildroot:
 +
-+define MILKV_DUO_LIBRARIES_INSTALL_STAGING_CMDS
-+	if [ $(BR2_PACKAGE_MILKV_DUO_FIRMWARE_FSBL) = y ]; then \
-+		$(INSTALL) -D -m 0755 $(@D)/firmware/build/cv180x/bl2.bin $(BINARIES_DIR)/bl2.bin; \
-+		$(INSTALL) -D -m 0755 $(@D)/firmware/plat/cv180x/chip_conf.bin $(BINARIES_DIR)/chip_conf.bin; \
-+		$(INSTALL) -D -m 0755 $(@D)/firmware/plat/cv180x/fiptool.py $(BINARIES_DIR)/fiptool.py; \
-+		$(INSTALL) -D -m 0644 $(@D)/firmware/plat/cv180x/multi.its $(BINARIES_DIR)/multi.its; \
-+		$(INSTALL) -D -m 0755 $(@D)/firmware/test/cv181x/ddr_param.bin $(BINARIES_DIR)/ddr_param.bin; \
-+	fi
++    $ make milkv_duo_musl_riscv64_defconfig
 +
-+	if [ $(BR2_PACKAGE_MILKV_DUO_PINMUX) = y ]; then \
-+		$(INSTALL) -D -m 0755 $(@D)/pinmux/duo-pinmux $(TARGET_DIR)/usr/bin/; \
-+	fi
++The milkv_duo_musl_riscv64_defconfig will by default provide
++the full 64MiB free RAM. If you want to build with memory
++reserved for ION (generalized memory manager in linux, i.e.
++some memory will be reserved for the camera algorithms), please try:
 +
-+	if [ $(BR2_PACKAGE_MILKV_DUO_FEATURES) = y ]; then \
-+		cp $(@D)/overlay/* -r $(TARGET_DIR); \
-+	fi
-+endef
++    $ make milkv_duo_musl_riscv64_ion_defconfig
 +
-+$(eval $(generic-package))
++For more information about the ION, please refer to
++
++https://github.com/milkv-duo/duo-buildroot-sdk/blob/develop/README.md?plain=1#L436
++
++Modify configuration if needed, e.g. add more packages to target:
++
++    $ make menuconfig
++
++Compile everything and build the SD card image:
++
++    $ make
++
++How to write the SD card
++========================
++
++Once the build process is finished you will have an image
++called "sdcard.img" in the output/images/ directory.
++
++Copy the bootable "sdcard.img" onto an SD card with "dd":
++
++  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
+diff --git a/configs/milkv_duo_musl_riscv64_defconfig b/configs/milkv_duo_musl_riscv64_defconfig
+new file mode 100644
+index 0000000000..0773924072
+--- /dev/null
++++ b/configs/milkv_duo_musl_riscv64_defconfig
+@@ -0,0 +1,67 @@
++# Architecture
++BR2_riscv=y
++BR2_riscv_g=y
++BR2_RISCV_ISA_RVC=y
++
++# Linux headers same as kernel 5.10 series
++BR2_KERNEL_HEADERS_5_10=y
++
++# Since gcc 13 and later versions with the t-head's optimizations
++# below are currently not well compatible with glibc, which will
++# throw gcc ICE (Internal Compiler Error) when the buildroot is
++# compiling the glibc, so we choose musl used by the official sdk
++# until this ICE gets fixed.
++BR2_GCC_VERSION_13_X=y
++BR2_TOOLCHAIN_BUILDROOT_MUSL=y
++BR2_TARGET_OPTIMIZATION="-march=rv64imafdc_xtheadba_xtheadbb_xtheadbs_xtheadcmo_xtheadcondmov_xtheadfmemidx_xtheadfmv_xtheadint_xtheadmac_xtheadmemidx_xtheadmempair_xtheadsync"
++
++# opensbi
++BR2_TARGET_OPENSBI=y
++BR2_TARGET_OPENSBI_CUSTOM_GIT=y
++BR2_TARGET_OPENSBI_CUSTOM_REPO_URL="https://github.com/milkv-duo/milkv-duo-opensbi.git"
++BR2_TARGET_OPENSBI_CUSTOM_REPO_VERSION="ee78f99daf8ac5956c6bf95458983ead52142548"
++BR2_TARGET_OPENSBI_PLAT="generic"
++BR2_TARGET_OPENSBI_UBOOT_PAYLOAD=y
++BR2_TARGET_OPENSBI_FW_FDT_PATH=y
++
++# u-boot
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/milkv-duo/milkv-duo-u-boot.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="v2021.10_64mb"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="cvitek_cv1800b_milkv_duo_sd"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_OPENSBI=y
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/milkv-duo/milkv-duo-linux.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="duo-linux-5.10.4"
++BR2_LINUX_KERNEL_DEFCONFIG="cvitek_cv1800b_milkv_duo_sd"
++BR2_LINUX_KERNEL_LZMA=y
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++
++# SD card image generating script
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/milkv/duo/post-image.sh"
++
++# rootfs
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++
++# Packages for the sdcard image generating
++BR2_PACKAGE_MILKV_DUO_LIBRARIES=y
++BR2_PACKAGE_MILKV_DUO_FIRMWARE_FSBL=y
++BR2_PACKAGE_MILKV_DUO_FIRMWARE_FSBL_64MB=y
++BR2_PACKAGE_MILKV_DUO_PINMUX=y
++BR2_PACKAGE_MILKV_DUO_FEATURES=y
++BR2_PACKAGE_MILKV_DUO_SMALLCORE_FREERTOS=y
++
++# Host packages for the sdcard image generating
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_LZMA_ALONE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
+diff --git a/configs/milkv_duo_musl_riscv64_ion_defconfig b/configs/milkv_duo_musl_riscv64_ion_defconfig
+new file mode 100644
+index 0000000000..18458726d9
+--- /dev/null
++++ b/configs/milkv_duo_musl_riscv64_ion_defconfig
+@@ -0,0 +1,67 @@
++# Architecture
++BR2_riscv=y
++BR2_riscv_g=y
++BR2_RISCV_ISA_RVC=y
++
++# Linux headers same as kernel 5.10 series
++BR2_KERNEL_HEADERS_5_10=y
++
++# Since gcc 13 and later versions with the t-head's optimizations
++# below are currently not well compatible with glibc, which will
++# throw gcc ICE (Internal Compiler Error) when the buildroot is
++# compiling the glibc, so we choose musl used by the official sdk
++# until this ICE gets fixed.
++BR2_GCC_VERSION_13_X=y
++BR2_TOOLCHAIN_BUILDROOT_MUSL=y
++BR2_TARGET_OPTIMIZATION="-march=rv64imafdc_xtheadba_xtheadbb_xtheadbs_xtheadcmo_xtheadcondmov_xtheadfmemidx_xtheadfmv_xtheadint_xtheadmac_xtheadmemidx_xtheadmempair_xtheadsync"
++
++# opensbi
++BR2_TARGET_OPENSBI=y
++BR2_TARGET_OPENSBI_CUSTOM_GIT=y
++BR2_TARGET_OPENSBI_CUSTOM_REPO_URL="https://github.com/milkv-duo/milkv-duo-opensbi.git"
++BR2_TARGET_OPENSBI_CUSTOM_REPO_VERSION="ee78f99daf8ac5956c6bf95458983ead52142548"
++BR2_TARGET_OPENSBI_PLAT="generic"
++BR2_TARGET_OPENSBI_UBOOT_PAYLOAD=y
++BR2_TARGET_OPENSBI_FW_FDT_PATH=y
++
++# u-boot
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/milkv-duo/milkv-duo-u-boot.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="v2021.10_ion"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="cvitek_cv1800b_milkv_duo_sd"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_OPENSBI=y
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/milkv-duo/milkv-duo-linux.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="duo-linux-5.10.4"
++BR2_LINUX_KERNEL_DEFCONFIG="cvitek_cv1800b_milkv_duo_sd"
++BR2_LINUX_KERNEL_LZMA=y
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++
++# SD card image generating script
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/milkv/duo/post-image.sh"
++
++# rootfs
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++
++# Packages for the sdcard image generating
++BR2_PACKAGE_MILKV_DUO_LIBRARIES=y
++BR2_PACKAGE_MILKV_DUO_FIRMWARE_FSBL=y
++BR2_PACKAGE_MILKV_DUO_SMALLCORE_FREERTOS=y
++BR2_PACKAGE_MILKV_DUO_PINMUX=y
++BR2_PACKAGE_MILKV_DUO_FEATURES=y
++BR2_PACKAGE_MILKV_DUO_SMALLCORE_FREERTOS=y
++
++# Host packages for the sdcard image generating
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_LZMA_ALONE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
 -- 
 2.34.1
 
