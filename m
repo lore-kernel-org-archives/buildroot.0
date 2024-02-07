@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8208C4828D
-	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 09:02:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89048C4828D
+	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 09:02:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 882C583A7E;
-	Wed,  7 Feb 2024 09:02:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 36ED083A7F;
+	Wed,  7 Feb 2024 09:02:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Fz4nwWELpQlG; Wed,  7 Feb 2024 09:02:29 +0000 (UTC)
+	with ESMTP id 5S5jlL-Mc1WG; Wed,  7 Feb 2024 09:02:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A2AD783A7F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C492A83A9C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A2AD783A7F;
-	Wed,  7 Feb 2024 09:02:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C492A83A9C;
+	Wed,  7 Feb 2024 09:02:31 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DEB3A1BF836
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 09:02:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2BD481BF836
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 09:02:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CBE46421EF
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 09:02:27 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2450A421E4
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 09:02:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OEJR0NB7N4N6 for <buildroot@lists.busybox.net>;
+ with ESMTP id uR5fW_0PbI-z for <buildroot@lists.busybox.net>;
  Wed,  7 Feb 2024 09:02:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0265B421E4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04EBD421EA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0265B421E4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 04EBD421EA
  for <buildroot@buildroot.org>; Wed,  7 Feb 2024 09:02:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D2BED87500; Wed,  7 Feb 2024 09:02:26 +0000 (UTC)
+ id E11FD874F3; Wed,  7 Feb 2024 09:02:26 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 7 Feb 2024 10:02:01 +0100
+Date: Wed, 7 Feb 2024 10:02:02 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 39aaf091ae0a88a7f84c50d52aff84c36caeadaa
-X-Git-Newrev: e37b73f7a2a6f4d2628c7d35f402557357a11101
+X-Git-Oldrev: e37b73f7a2a6f4d2628c7d35f402557357a11101
+X-Git-Newrev: 457db5c328d777ada4c9c0d5ff3c84c189dea5e2
 X-Patchwork-Hint: ignore
-Message-Id: <20240207090226.D2BED87500@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/nerdctl: bump version to v1.7.3
+Message-Id: <20240207090226.E11FD874F3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/docker-compose: bump version to
+ v2.24.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,40 +65,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e37b73f7a2a6f4d2628c7d35f402557357a11101
+commit: https://git.buildroot.net/buildroot/commit/?id=457db5c328d777ada4c9c0d5ff3c84c189dea5e2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/containerd/nerdctl/releases/tag/v1.7.3
+https://github.com/docker/compose/releases/tag/v2.24.5
 
 Signed-off-by: Christian Stewart <christian@aperture.us>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nerdctl/nerdctl.hash | 2 +-
- package/nerdctl/nerdctl.mk   | 2 +-
+ package/docker-compose/docker-compose.hash | 2 +-
+ package/docker-compose/docker-compose.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nerdctl/nerdctl.hash b/package/nerdctl/nerdctl.hash
-index 1fb0649fb2..52e249824f 100644
---- a/package/nerdctl/nerdctl.hash
-+++ b/package/nerdctl/nerdctl.hash
+diff --git a/package/docker-compose/docker-compose.hash b/package/docker-compose/docker-compose.hash
+index afccafd994..92f7b227d3 100644
+--- a/package/docker-compose/docker-compose.hash
++++ b/package/docker-compose/docker-compose.hash
 @@ -1,3 +1,3 @@
- # Computed locally
--sha256  574438dd7c88e6a607c6f82932f8ada174b1133a66ee0fa0f7510e7c3bebacb4  nerdctl-1.3.1.tar.gz
-+sha256  fff8c348efa4ff6753e1aacded0dedddcb255c50b00d8b3a37a660b1fb1dd31a  nerdctl-1.7.3.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/nerdctl/nerdctl.mk b/package/nerdctl/nerdctl.mk
-index 43e862f7f9..66b22df646 100644
---- a/package/nerdctl/nerdctl.mk
-+++ b/package/nerdctl/nerdctl.mk
+ # Locally computed
+-sha256  8a1109124e7dfef736ad3db0457d807eb41a0068211bd13e52051252cab28dda  docker-compose-2.23.0.tar.gz
++sha256  ed132bcc226261a595469f5ca6d4ea20b02965867216b56d4e7a5962efb46570  docker-compose-2.24.5.tar.gz
+ sha256  58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd  LICENSE
+diff --git a/package/docker-compose/docker-compose.mk b/package/docker-compose/docker-compose.mk
+index 54557b9841..947f09d0b3 100644
+--- a/package/docker-compose/docker-compose.mk
++++ b/package/docker-compose/docker-compose.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NERDCTL_VERSION = 1.3.1
-+NERDCTL_VERSION = 1.7.3
- NERDCTL_SITE = $(call github,containerd,nerdctl,v$(NERDCTL_VERSION))
- 
- NERDCTL_LICENSE = Apache-2.0
+-DOCKER_COMPOSE_VERSION = 2.23.0
++DOCKER_COMPOSE_VERSION = 2.24.5
+ DOCKER_COMPOSE_SITE = $(call github,docker,compose,v$(DOCKER_COMPOSE_VERSION))
+ DOCKER_COMPOSE_LICENSE = Apache-2.0
+ DOCKER_COMPOSE_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
