@@ -4,71 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 859E7C4828D
-	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 18:49:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75C20C4828F
+	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 18:51:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4FCF8607A3;
-	Wed,  7 Feb 2024 18:49:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BA9E760F22;
+	Wed,  7 Feb 2024 18:51:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZLzwxqrisldK; Wed,  7 Feb 2024 18:49:44 +0000 (UTC)
+	with ESMTP id 9noSo2lNRufx; Wed,  7 Feb 2024 18:51:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 575C3607F0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8DBA360ABE
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 575C3607F0;
-	Wed,  7 Feb 2024 18:49:44 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C05DF1BF20D
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 18:49:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8DBA360ABE;
+	Wed,  7 Feb 2024 18:51:41 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7946B1BF20D
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 18:51:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BA1324085C
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 18:49:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 647D5403AA
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 18:51:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id U2gufX4nDMMa for <buildroot@lists.busybox.net>;
- Wed,  7 Feb 2024 18:49:42 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
- helo=smtp5-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pl8u1R0OOZM8 for <buildroot@lists.busybox.net>;
+ Wed,  7 Feb 2024 18:51:39 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 92CC3401F0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 92CC3401F0
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 92CC3401F0
- for <buildroot@buildroot.org>; Wed,  7 Feb 2024 18:49:40 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown [84.198.244.196])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id C27F360137;
- Wed,  7 Feb 2024 19:49:35 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Wed, 07 Feb 2024 19:49:35 +0100
-Date: Wed, 7 Feb 2024 19:49:35 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Message-ID: <ZcPQv10uGwEEseaj@landeda>
-References: <20240207173911.3704142-1-dario.binacchi@amarulasolutions.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240207173911.3704142-1-dario.binacchi@amarulasolutions.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1707331778;
- bh=gU6eQnTX+UtBUvoSeGaGquZR8y5ggubLF0NnCBLL9yU=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=eF1mfVZ8Sp11a2Ux3Gt+ty1q3sfptftaMt8q66kA0kMUH3vBvHtbIzzLAEzAJ8zKB
- QjqmuzdyMzOANMo4RY8SY/3Ha43nDMIUUu64KUeQbeGlf9QaDeSc14MHU3iIFRe7Ub
- 2vv+WvXCNsUPlsOBS6vivEvh1uJm8rUUjj1wrCu4KZC5FJbbxIyfLPSb0yKX+L0Pqs
- 3yJBnxSvKcmJN3KpVu/b8vGjLAkpx4Wceyl9Cy71BHHoSwfoYOAIL6g2XMRqUGX3Cc
- FbcgcSJxUJwAgtKOrABIHECjpRQ55WrFscfMWKKsKEgnCr8POlJ4caaYahhFJ9g44F
- vm+Dg2rmZcz9A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=eF1mfVZ8
-Subject: Re: [Buildroot] [PATCH 1/1] package/uuu: drop README.md from
- license files
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E7CBB40338
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id E7CBB40338
+ for <buildroot@buildroot.org>; Wed,  7 Feb 2024 18:51:38 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id CB0DC8769C; Wed,  7 Feb 2024 18:51:38 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 7 Feb 2024 19:51:23 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b5d83b4b649ee1e77811d9bf8ca6398725f6cce1
+X-Git-Newrev: 55c6ae5656a0bbd04baf5d6fbbeb060124e71e4a
+X-Patchwork-Hint: ignore
+Message-Id: <20240207185138.CB0DC8769C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libopenssl: add patches fixing
+ hangs asn1parse
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,72 +58,208 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Darrio, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=55c6ae5656a0bbd04baf5d6fbbeb060124e71e4a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2024-02-07 18:39 +0100, Dario Binacchi spake thusly:
-> The patch drops the file README.md from the license files. Indeed, the
-> licensing terms apply to third-party libraries that uuu links to, and
-> even though they are bundled in the source tree of uuu|mfgtools, they
-> are not used by Buildroot as we use the ones we build. Therefore, the
-> actual license file of the package is the file LICENSE.
-> 
-> Moreover, this also leads to simplifying the bump to new versions.
-> 
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+The asn1parse command hangs forever on 3.2.0 when the genstr or genconf
+option is passed.
 
-Applied to master from Brussels airport, thanks.
+This commit fixes the issue by adding upstream commits [1] [2].
 
-Regards,
-Yann E. MORIN.
+[1] https://github.com/openssl/openssl/commit/a552c23c6502592c1b3c67d93dd7e5ffbe958aa4
+[2] https://github.com/openssl/openssl/commit/749fcc0e3ce796474a15d6fac221e57daeacff1e
 
-> ---
->  package/uuu/uuu.hash | 1 -
->  package/uuu/uuu.mk   | 2 +-
->  2 files changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/package/uuu/uuu.hash b/package/uuu/uuu.hash
-> index c231d5d729f0..e45cbb868078 100644
-> --- a/package/uuu/uuu.hash
-> +++ b/package/uuu/uuu.hash
-> @@ -1,4 +1,3 @@
->  # locally computed
->  sha256  6e65fc028afacc94b805ae376e3da3864dcb2570d425037820e716207ab70373  uuu_source-uuu_1.5.165.tar.gz
->  sha256  cc8d47f7b9260f6669ecd41c24554c552f17581d81ee8fc602c6d23edb8bf495  LICENSE
-> -sha256  1b3d030a1824d633f75194743bd92bc1ed2d9a4bf1915bc11e49bf4c0c54012d  README.md
-> diff --git a/package/uuu/uuu.mk b/package/uuu/uuu.mk
-> index 80d5e1937a97..5800277b10d5 100644
-> --- a/package/uuu/uuu.mk
-> +++ b/package/uuu/uuu.mk
-> @@ -8,7 +8,7 @@ UUU_VERSION = 1.5.165
->  UUU_SOURCE = uuu_source-uuu_$(UUU_VERSION).tar.gz
->  UUU_SITE = https://github.com/NXPmicro/mfgtools/releases/download/uuu_$(UUU_VERSION)
->  UUU_LICENSE = BSD 3-Clause "New" or "Revised" License
-> -UUU_LICENSE_FILES = LICENSE README.md
-> +UUU_LICENSE_FILES = LICENSE
->  HOST_UUU_DEPENDENCIES = \
->  	host-bzip2 \
->  	host-libusb \
-> -- 
-> 2.43.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+Signed-off-by: Martin Kurbanov <mmkurbanov@salutedevices.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...05-Fix-genstr-genconf-option-in-asn1parse.patch |  42 +++++++
+ ...-Harden-asn1-oid-loader-to-invalid-inputs.patch | 122 +++++++++++++++++++++
+ 2 files changed, 164 insertions(+)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libopenssl/0005-Fix-genstr-genconf-option-in-asn1parse.patch b/package/libopenssl/0005-Fix-genstr-genconf-option-in-asn1parse.patch
+new file mode 100644
+index 0000000000..9fa36d83be
+--- /dev/null
++++ b/package/libopenssl/0005-Fix-genstr-genconf-option-in-asn1parse.patch
+@@ -0,0 +1,42 @@
++From 749fcc0e3ce796474a15d6fac221e57daeacff1e Mon Sep 17 00:00:00 2001
++From: Neil Horman <nhorman@openssl.org>
++Date: Tue, 5 Dec 2023 14:50:01 -0500
++Subject: [PATCH] Fix genstr/genconf option in asn1parse
++
++At some point the asn1parse applet was changed to default the inform to
++PEM, and defalt input file to stdin.  Doing so broke the -genstr|conf options,
++in that, before we attempt to generate an ASN1 block from the provided
++genstr string, we attempt to read a PEM input from stdin.  As a result,
++this command:
++openssl asn1parse -genstr OID:1.2.3.4
++hangs because we are attempting a blocking read on stdin, waiting for
++data that never arrives
++
++Fix it by giving priority to genstr|genconf, such that, if set, will just run
++do_generate on that string and exit
++
++Reviewed-by: Hugo Landau <hlandau@openssl.org>
++Reviewed-by: Tomas Mraz <tomas@openssl.org>
++(Merged from https://github.com/openssl/openssl/pull/22957)
++Upstream: https://github.com/openssl/openssl/commit/749fcc0e3ce796474a15d6fac221e57daeacff1e
++Signed-off-by: Martin Kurbanov <mmkurbanov@salutedevices.com>
++---
++ apps/asn1parse.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/apps/asn1parse.c b/apps/asn1parse.c
++index 097b0cc1ed..6597a6180b 100644
++--- a/apps/asn1parse.c
+++++ b/apps/asn1parse.c
++@@ -178,7 +178,7 @@ int asn1parse_main(int argc, char **argv)
++ 
++     if ((buf = BUF_MEM_new()) == NULL)
++         goto end;
++-    if (informat == FORMAT_PEM) {
+++    if (genstr == NULL && informat == FORMAT_PEM) {
++         if (PEM_read_bio(in, &name, &header, &str, &num) != 1) {
++             BIO_printf(bio_err, "Error reading PEM file\n");
++             ERR_print_errors(bio_err);
++-- 
++2.40.0
++
+diff --git a/package/libopenssl/0006-Harden-asn1-oid-loader-to-invalid-inputs.patch b/package/libopenssl/0006-Harden-asn1-oid-loader-to-invalid-inputs.patch
+new file mode 100644
+index 0000000000..299ecbc2ed
+--- /dev/null
++++ b/package/libopenssl/0006-Harden-asn1-oid-loader-to-invalid-inputs.patch
+@@ -0,0 +1,122 @@
++From a552c23c6502592c1b3c67d93dd7e5ffbe958aa4 Mon Sep 17 00:00:00 2001
++From: Neil Horman <nhorman@openssl.org>
++Date: Tue, 5 Dec 2023 15:24:20 -0500
++Subject: [PATCH] Harden asn1 oid loader to invalid inputs
++
++In the event that a config file contains this sequence:
++=======
++openssl_conf = openssl_init
++
++config_diagnostics = 1
++
++[openssl_init]
++oid_section = oids
++
++[oids]
++testoid1 = 1.2.3.4.1
++testoid2 = A Very Long OID Name, 1.2.3.4.2
++testoid3 = ,1.2.3.4.3
++======
++
++The leading comma in testoid3 can cause a heap buffer overflow, as the
++parsing code will move the string pointer back 1 character, thereby
++pointing to an invalid memory space
++
++correct the parser to detect this condition and handle it by treating it
++as if the comma doesn't exist (i.e. an empty long oid name)
++
++Reviewed-by: Hugo Landau <hlandau@openssl.org>
++Reviewed-by: Tomas Mraz <tomas@openssl.org>
++(Merged from https://github.com/openssl/openssl/pull/22957)
++Upstream: https://github.com/openssl/openssl/commit/a552c23c6502592c1b3c67d93dd7e5ffbe958aa4
++Signed-off-by: Martin Kurbanov <mmkurbanov@salutedevices.com>
++---
++ apps/asn1parse.c                  |  2 +-
++ crypto/asn1/asn_moid.c            |  4 ++++
++ test/recipes/04-test_asn1_parse.t | 26 ++++++++++++++++++++++++++
++ test/test_asn1_parse.cnf          | 12 ++++++++++++
++ 4 files changed, 43 insertions(+), 1 deletion(-)
++ create mode 100644 test/recipes/04-test_asn1_parse.t
++ create mode 100644 test/test_asn1_parse.cnf
++
++diff --git a/apps/asn1parse.c b/apps/asn1parse.c
++index 6597a6180b..bf62f85947 100644
++--- a/apps/asn1parse.c
+++++ b/apps/asn1parse.c
++@@ -178,7 +178,7 @@ int asn1parse_main(int argc, char **argv)
++ 
++     if ((buf = BUF_MEM_new()) == NULL)
++         goto end;
++-    if (genstr == NULL && informat == FORMAT_PEM) {
+++    if (genconf == NULL && genstr == NULL && informat == FORMAT_PEM) {
++         if (PEM_read_bio(in, &name, &header, &str, &num) != 1) {
++             BIO_printf(bio_err, "Error reading PEM file\n");
++             ERR_print_errors(bio_err);
++diff --git a/crypto/asn1/asn_moid.c b/crypto/asn1/asn_moid.c
++index 6f816307af..1e183f4f18 100644
++--- a/crypto/asn1/asn_moid.c
+++++ b/crypto/asn1/asn_moid.c
++@@ -67,6 +67,10 @@ static int do_create(const char *value, const char *name)
++     if (p == NULL) {
++         ln = name;
++         ostr = value;
+++    } else if (p == value) {
+++        /* we started with a leading comma */
+++        ln = name;
+++        ostr = p + 1;
++     } else {
++         ln = value;
++         ostr = p + 1;
++diff --git a/test/recipes/04-test_asn1_parse.t b/test/recipes/04-test_asn1_parse.t
++new file mode 100644
++index 0000000000..f3af436592
++--- /dev/null
+++++ b/test/recipes/04-test_asn1_parse.t
++@@ -0,0 +1,26 @@
+++#! /usr/bin/env perl
+++# Copyright 2023 The OpenSSL Project Authors. All Rights Reserved.
+++#
+++# Licensed under the Apache License 2.0 (the "License").  You may not use
+++# this file except in compliance with the License.  You can obtain a copy
+++# in the file LICENSE in the source distribution or at
+++# https://www.openssl.org/source/license.html
+++
+++use strict;
+++use OpenSSL::Test qw(:DEFAULT srctop_file);
+++use OpenSSL::Test::Utils;
+++
+++setup("test_asn1_parse");
+++
+++plan tests => 3;
+++
+++$ENV{OPENSSL_CONF} = srctop_file("test", "test_asn1_parse.cnf");
+++
+++ok(run(app(([ 'openssl', 'asn1parse',
+++              '-genstr', 'OID:1.2.3.4.1']))));
+++
+++ok(run(app(([ 'openssl', 'asn1parse',
+++              '-genstr', 'OID:1.2.3.4.2']))));
+++
+++ok(run(app(([ 'openssl', 'asn1parse',
+++              '-genstr', 'OID:1.2.3.4.3']))));
++diff --git a/test/test_asn1_parse.cnf b/test/test_asn1_parse.cnf
++new file mode 100644
++index 0000000000..5f0305657e
++--- /dev/null
+++++ b/test/test_asn1_parse.cnf
++@@ -0,0 +1,12 @@
+++openssl_conf = openssl_init
+++
+++# Comment out the next line to ignore configuration errors
+++config_diagnostics = 1
+++
+++[openssl_init]
+++oid_section = oids
+++
+++[oids]
+++testoid1 = 1.2.3.4.1
+++testoid2 = A Very Long OID Name, 1.2.3.4.2
+++testoid3 = ,1.2.3.4.3
++-- 
++2.40.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
