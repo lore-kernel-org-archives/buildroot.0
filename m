@@ -4,55 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44DEEC4828F
-	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 11:24:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04D4CC4828F
+	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 11:25:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E191381E54;
-	Wed,  7 Feb 2024 11:24:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CC6EB8374F;
+	Wed,  7 Feb 2024 11:25:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9rthsxJk6DIT; Wed,  7 Feb 2024 11:24:47 +0000 (UTC)
+	with ESMTP id caPoxhVvgW9i; Wed,  7 Feb 2024 11:25:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF89881E5C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE87C8378A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EF89881E5C;
-	Wed,  7 Feb 2024 11:24:46 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 345791BF599
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 11:24:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EE87C8378A;
+	Wed,  7 Feb 2024 11:25:18 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 862E51BF599
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 11:25:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2040B402C3
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 11:24:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 726FC4221D
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 11:25:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BECIk4JTmGt1 for <buildroot@lists.busybox.net>;
- Wed,  7 Feb 2024 11:24:43 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
- helo=relay7-d.mail.gandi.net; envelope-from=peko@48ers.dk; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3A25E40025
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A25E40025
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3A25E40025
- for <buildroot@buildroot.org>; Wed,  7 Feb 2024 11:24:42 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 827B120007;
- Wed,  7 Feb 2024 11:24:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id L56qUmERE1mU for <buildroot@lists.busybox.net>;
+ Wed,  7 Feb 2024 11:25:16 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
+ helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 76487421F8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 76487421F8
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 76487421F8
+ for <buildroot@buildroot.org>; Wed,  7 Feb 2024 11:25:15 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5BE4FE0002;
+ Wed,  7 Feb 2024 11:25:14 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@48ers.dk>) id 1rXg2g-00FZqp-31;
- Wed, 07 Feb 2024 12:24:38 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rXg3G-00FZuD-0A;
+ Wed, 07 Feb 2024 12:25:14 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed,  7 Feb 2024 12:24:34 +0100
-Message-Id: <20240207112435.3712652-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.2
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20240111194242.2572172-1-fontaine.fabrice@gmail.com>
+Date: Wed, 07 Feb 2024 12:25:14 +0100
+In-Reply-To: <20240111194242.2572172-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 11 Jan 2024 20:42:42 +0100")
+Message-ID: <87wmrgzfc5.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: [Buildroot] [PATCH] package/libtalloc: bump version to 2.4.2
+Subject: Re: [Buildroot] [PATCH 1/1] package/freeradius-server: fix python3
+ build with -Ofast
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,47 +69,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: David GOUARIN <dgouarin@gmail.com>
+Cc: David GOUARIN <dgouarin@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes build issue of the python support with python 3.12 (2.3.4
-unconditionally uses distutils).
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libtalloc/libtalloc.hash | 4 ++--
- package/libtalloc/libtalloc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > Fix the following python3 build failure with -Ofast raised since commit
+ > 4513f5198a8f24af7bd24fdfc1ede143eb4e844a:
 
-diff --git a/package/libtalloc/libtalloc.hash b/package/libtalloc/libtalloc.hash
-index 0bc8edb695..5577583881 100644
---- a/package/libtalloc/libtalloc.hash
-+++ b/package/libtalloc/libtalloc.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  179f9ebe265e67e4ab2c26cad2b7de4b6a77c6c212f966903382869f06be6505  talloc-2.3.4.tar.gz
--sha256  f8340c449dd64a55c6605b02fcad2aec6f473612ac6026739a22995380a8043c  talloc.h
-+sha256  85ecf9e465e20f98f9950a52e9a411e14320bc555fa257d87697b7e7a9b1d8a6  talloc-2.4.2.tar.gz
-+sha256  e01fb092aaed2b431be26674e2b791c77fb5984537c29b514e957582c6b31465  talloc.h
-diff --git a/package/libtalloc/libtalloc.mk b/package/libtalloc/libtalloc.mk
-index ca15180d22..676076b857 100644
---- a/package/libtalloc/libtalloc.mk
-+++ b/package/libtalloc/libtalloc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBTALLOC_VERSION = 2.3.4
-+LIBTALLOC_VERSION = 2.4.2
- LIBTALLOC_SOURCE = talloc-$(LIBTALLOC_VERSION).tar.gz
- LIBTALLOC_SITE = https://www.samba.org/ftp/talloc
- LIBTALLOC_LICENSE = LGPL-3.0+
+ > powerpc64-buildroot-linux-gnu-gcc.br_real: error: ast: linker input
+ > file not found: No such file or directory
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/904c43241b99a8d848c1891cb5af132a291311b4
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed, thanks.
+
 -- 
-2.39.2
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
