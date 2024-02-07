@@ -4,94 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18489C4828F
-	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 09:25:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDABBC4828F
+	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 09:25:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DAF08812DA;
-	Wed,  7 Feb 2024 09:25:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BFC548132F;
+	Wed,  7 Feb 2024 09:25:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xo-RA-aFpLOT; Wed,  7 Feb 2024 09:25:22 +0000 (UTC)
+	with ESMTP id eefSWNVkjSBW; Wed,  7 Feb 2024 09:25:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E643F812DB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E06181339
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E643F812DB;
-	Wed,  7 Feb 2024 09:25:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0AE701BF868
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 09:24:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4E06181339;
+	Wed,  7 Feb 2024 09:25:24 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8222D1BF868
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 09:24:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 05285812C0
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 09:24:55 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7B7A640105
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 09:24:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7SFAOCwUu_xr for <buildroot@lists.busybox.net>;
- Wed,  7 Feb 2024 09:24:54 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LsU3v9Ea7SVJ for <buildroot@lists.busybox.net>;
+ Wed,  7 Feb 2024 09:24:55 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::130; helo=mail-lf1-x130.google.com;
+ client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
  envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B7B27812A5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B7B27812A5
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com
- [IPv6:2a00:1450:4864:20::130])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B7B27812A5
- for <buildroot@buildroot.org>; Wed,  7 Feb 2024 09:24:53 +0000 (UTC)
-Received: by mail-lf1-x130.google.com with SMTP id
- 2adb3069b0e04-51149561a39so393324e87.0
- for <buildroot@buildroot.org>; Wed, 07 Feb 2024 01:24:53 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 94EEE400B9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94EEE400B9
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 94EEE400B9
+ for <buildroot@buildroot.org>; Wed,  7 Feb 2024 09:24:54 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-40fc549ab9bso3204235e9.0
+ for <buildroot@buildroot.org>; Wed, 07 Feb 2024 01:24:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707297891; x=1707902691;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=njwkuUc/bifu6IckamKlRhjgILbBLG7pTk598FszQnI=;
- b=PbLuyz4WzY3xWR7MGAMKbg5xYpN9aPWmAJtscwu2nz42xPyQ5XXJmUn645Rvn+ZmNs
- ypZ+5XyuRX1NAVOX69SIAcmyqEfHXi6Tng/mgZNPPkruZ+rBQchZYf/CUwOo4noys8in
- Oad2awPjyjlAyOGqflTsO0VQU5E5mYlN4+IxWw+esUk2uEBQMvZCZlPlUhJTp0SQmjip
- rCbLGl2IUkafbn9kVSiEbnmxQhT07LqeON3Fdc3VjwbpNGi1fi1JDxzMkkij4kTeTS0E
- W2XqpUzYYtBODOAKVypQWK6EdzFsbmc9Og+uJAobkbCbIrnSU4bqM+Grkyx59NUVwoOV
- 8O1g==
-X-Gm-Message-State: AOJu0Yw02y86Ex0Q/sIFgPG2W/+zmYHcTyEhjqtZ9AEbi8kLEdIpijzv
- EO3bAlVDBNaowZi8xpMbCHsTjfDpzPaPSbm+EkYg0MPuDE/k4k912dp1cpDjiGEVw3hyfNhLWHx
- z3xI=
-X-Google-Smtp-Source: AGHT+IGC1z1LFJVAR79jrtVEjxvqo8fB7BCujToO42J/VI9B1c9vXkpWFLfXfFtA46yPZIbRIYwyww==
-X-Received: by 2002:a05:6512:480c:b0:511:6512:9d3e with SMTP id
- eo12-20020a056512480c00b0051165129d3emr970480lfb.33.1707297891224; 
- Wed, 07 Feb 2024 01:24:51 -0800 (PST)
+ d=1e100.net; s=20230601; t=1707297892; x=1707902692;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=Zf+qRA+AP+wjhSCS2cjqaHBsjzus0xtIB/upUqgUgdw=;
+ b=eiu1aJ/iQ7c3zqHQrTk6n9kPgTWcNIw9pG5hRl7REHZfXG+ljc+S+MxlX5j3sI8uG4
+ VdB8yvx8O9f5NjBOpHlRshMAlOO2pQnZ4KsdirT1dL1ojhrjY00jawjBwjWHy7uxGZnT
+ Lov8fVlegkcecnNDQ6+nWry0DhntU5feD3/rslKLiVv3m2ztSsUTfRzqochYIOJ/Y2FZ
+ 0sWcQ85X7wcFXEabFMQFEx1hD6GsEPnUIRpjp8d1rKZhv3X8wp5ZC5NfF8wUfswBl7XE
+ aK3oMZzVruoSypA4sG/aWUwU728jQJYwcSCjLC1g4cFsxlbO8IPulgAmQxoJqcl3JbZG
+ Qfow==
+X-Gm-Message-State: AOJu0YwHCfW4tIlW865UieJvOWExxAiGnjhTkhzPnwnkuXLo2/1moV6H
+ NHs2afeLZ+tFFTAO78ZdJxsYRCN5vAqVYVtKVsfu+dfXnqd7/yZzBkhZ4hoBFx1f7V7127AXLh7
+ EsQE=
+X-Google-Smtp-Source: AGHT+IGYhdC4qplexuZBL83NESfiPauM7Nmh5bY9+jP0GIMQOSNb0xJtCNHJyPMPS0IC3m1w8Y18eg==
+X-Received: by 2002:a05:600c:190e:b0:40e:4932:3995 with SMTP id
+ j14-20020a05600c190e00b0040e49323995mr4066833wmq.14.1707297892231; 
+ Wed, 07 Feb 2024 01:24:52 -0800 (PST)
 X-Forwarded-Encrypted: i=1;
- AJvYcCWdtaWrTsnV91U36ljzGLSwDhCYXWxgBFwaBrbKbZRiI4/htgzfA2aqIFY5lQRcDZ1y0At8bTaGTUDcetaknSPz+i5t0CmiWvlOX2XF3RpltM+drk460qjWEoj+MAyn/DXb9c/LXJFm
+ AJvYcCWyei3nDbnapbFTFx9MkJFjD6CT+no7pvDzK2b0MwDzIk9O67ZpiGF+a7oPuDrmVgKEQ5bNf5f2g+JtqTXRtZJqExAWlfmG+h8TzcZTYQ4sZhkqkc4SsN1En3mZiseeMvTzBS3CgqYB
 Received: from dario-ThinkPad-T14s-Gen-2i.amarulasolutions.com
  (mob-5-90-63-114.net.vodafone.it. [5.90.63.114])
  by smtp.gmail.com with ESMTPSA id
- o5-20020a05600c510500b0040fddaf9ff4sm4656822wms.40.2024.02.07.01.24.50
+ o5-20020a05600c510500b0040fddaf9ff4sm4656822wms.40.2024.02.07.01.24.51
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 07 Feb 2024 01:24:50 -0800 (PST)
+ Wed, 07 Feb 2024 01:24:51 -0800 (PST)
 From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Wed,  7 Feb 2024 10:24:45 +0100
-Message-ID: <20240207092447.2094160-1-dario.binacchi@amarulasolutions.com>
+Date: Wed,  7 Feb 2024 10:24:46 +0100
+Message-ID: <20240207092447.2094160-2-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240207092447.2094160-1-dario.binacchi@amarulasolutions.com>
+References: <20240207092447.2094160-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1707297891; x=1707902691;
+ d=amarulasolutions.com; s=google; t=1707297892; x=1707902692;
  darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=njwkuUc/bifu6IckamKlRhjgILbBLG7pTk598FszQnI=;
- b=atyg10ALqdk2X/mxAlxzGN4h+jXoxVHEOtW20y8D5KTanHk+l9XFI2ifyW8fPh2kFJ
- F5Ayh3jT3lzyBErHT1MHmYRhZt63YN24e3MOzpCHopKNzGcekjJ1lMJkggHut4fR1/1r
- JjHTQVjYmFjuqBtLZIIhMGirbDF/esDFY75vI=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=Zf+qRA+AP+wjhSCS2cjqaHBsjzus0xtIB/upUqgUgdw=;
+ b=W5TmstXw1iDMo+yDW2KzbIe9CiOeBNPeLl7lWYoyiPorCJFAdoPO0iqZWi4GrzjUap
+ 9U2Pcb9T+fWW54XTLOV1ddRlktJZp4ldd3XbWM6VWINwtDoC1xvur9U+KJpwxcrO6oW6
+ 8LBTa7jM9n4z6xIs2YFO1UgHNBPCbUWLUgkwI=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=atyg10AL
-Subject: [Buildroot] [PATCH v3 1/3] package/davinci-bootcount: update GitHub
- URL
+ header.a=rsa-sha256 header.s=google header.b=W5TmstXw
+Subject: [Buildroot] [PATCH v3 2/3] package/davinci-bootcount: rename to
+ uboot-bootcount
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -111,41 +114,167 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The patch updates the GitHub URL, which has recently changed.
+Born as a project to read/write the bootcount on the TI am3xx platform,
+over time it has introduced bootcount management on EEPROM and for the
+stm32mp1 platform. As a result, the project removed the 'davinci' tag
+from its name and GitHub link.
+The patch aligns the package name in Buildroot with the current one on
+GitHub.
 
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-
 ---
+ Config.in.legacy                                  |  6 ++++++
+ DEVELOPERS                                        |  2 +-
+ package/Config.in                                 |  2 +-
+ package/davinci-bootcount/Config.in               | 11 -----------
+ package/davinci-bootcount/davinci-bootcount.mk    | 15 ---------------
+ package/uboot-bootcount/Config.in                 | 10 ++++++++++
+ .../uboot-bootcount.hash}                         |  2 +-
+ package/uboot-bootcount/uboot-bootcount.mk        | 15 +++++++++++++++
+ 8 files changed, 34 insertions(+), 29 deletions(-)
+ delete mode 100644 package/davinci-bootcount/Config.in
+ delete mode 100644 package/davinci-bootcount/davinci-bootcount.mk
+ create mode 100644 package/uboot-bootcount/Config.in
+ rename package/{davinci-bootcount/davinci-bootcount.hash => uboot-bootcount/uboot-bootcount.hash} (80%)
+ create mode 100644 package/uboot-bootcount/uboot-bootcount.mk
 
-(no changes since v2)
-
- package/davinci-bootcount/Config.in            | 2 +-
- package/davinci-bootcount/davinci-bootcount.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 5fbe5d903074..cf32f887d4b0 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
+ 
+ comment "Legacy options removed in 2024.02"
+ 
++config BR2_PACKAGE_DAVINCI_BOOTCOUNT
++	bool "davinci-bootcount has been renamed"
++	select BR2_LEGACY
++	help
++	  The davinci-bootcount package has been renamed.
++
+ config BR2_PACKAGE_PYTHON_CROSSBAR
+ 	bool "python-crossbar removed"
+ 	select BR2_LEGACY
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 7906a940a9b2..43dd5c8cb49d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -760,7 +760,7 @@ F:	package/sscep/
+ F:	package/uuu/
+ 
+ N:	Dario Binacchi <dariobin@libero.it>
+-F:	package/davinci-bootcount/
++F:	package/uboot-bootcount/
+ F:	package/libmnl/
+ 
+ N:	David Bachelart <david.bachelart@bbright.com>
+diff --git a/package/Config.in b/package/Config.in
+index 24e5f04ed671..4c6deb13337c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -486,7 +486,6 @@ endmenu
+ 	source "package/cwiid/Config.in"
+ 	source "package/dahdi-linux/Config.in"
+ 	source "package/dahdi-tools/Config.in"
+-	source "package/davinci-bootcount/Config.in"
+ 	source "package/dbus/Config.in"
+ 	source "package/dbus-broker/Config.in"
+ 	source "package/dbus-cpp/Config.in"
+@@ -638,6 +637,7 @@ endmenu
+ 	source "package/ti-utils/Config.in"
+ 	source "package/tio/Config.in"
+ 	source "package/triggerhappy/Config.in"
++	source "package/uboot-bootcount/Config.in"
+ 	source "package/uboot-tools/Config.in"
+ 	source "package/ubus/Config.in"
+ 	source "package/udev/Config.in"
 diff --git a/package/davinci-bootcount/Config.in b/package/davinci-bootcount/Config.in
-index e34adde570af..0201530f9166 100644
+deleted file mode 100644
+index 0201530f9166..000000000000
 --- a/package/davinci-bootcount/Config.in
-+++ b/package/davinci-bootcount/Config.in
-@@ -8,4 +8,4 @@ config BR2_PACKAGE_DAVINCI_BOOTCOUNT
- 	  SCRATCH2 register. This tool allows to read and write this
- 	  register from userspace.
- 
--	  https://github.com/VoltServer/uboot-davinci-bootcount
-+	  https://github.com/VoltServer/uboot-bootcount
++++ /dev/null
+@@ -1,11 +0,0 @@
+-config BR2_PACKAGE_DAVINCI_BOOTCOUNT
+-	bool "davinci-bootcount"
+-	depends on BR2_arm # only relevant for TI am335x
+-	help
+-	  U-Boot implements a boot count scheme that can be used to
+-	  detect multiple failed attempts to boot Linux. On Davinci
+-	  platform (TI AM 335x) the `bootcount' is stored in the RTC
+-	  SCRATCH2 register. This tool allows to read and write this
+-	  register from userspace.
+-
+-	  https://github.com/VoltServer/uboot-bootcount
 diff --git a/package/davinci-bootcount/davinci-bootcount.mk b/package/davinci-bootcount/davinci-bootcount.mk
-index 695d39688ac6..884bf420f396 100644
+deleted file mode 100644
+index 884bf420f396..000000000000
 --- a/package/davinci-bootcount/davinci-bootcount.mk
-+++ b/package/davinci-bootcount/davinci-bootcount.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- DAVINCI_BOOTCOUNT_VERSION = 2.0.0
--DAVINCI_BOOTCOUNT_SITE = $(call github,VoltServer,uboot-davinci-bootcount,v$(DAVINCI_BOOTCOUNT_VERSION))
-+DAVINCI_BOOTCOUNT_SITE = $(call github,VoltServer,uboot-bootcount,v$(DAVINCI_BOOTCOUNT_VERSION))
- DAVINCI_BOOTCOUNT_LICENSE = GPL-3.0
- DAVINCI_BOOTCOUNT_LICENSE_FILES = COPYING
- 
++++ /dev/null
+@@ -1,15 +0,0 @@
+-################################################################################
+-#
+-# davinci-bootcount
+-#
+-################################################################################
+-
+-DAVINCI_BOOTCOUNT_VERSION = 2.0.0
+-DAVINCI_BOOTCOUNT_SITE = $(call github,VoltServer,uboot-bootcount,v$(DAVINCI_BOOTCOUNT_VERSION))
+-DAVINCI_BOOTCOUNT_LICENSE = GPL-3.0
+-DAVINCI_BOOTCOUNT_LICENSE_FILES = COPYING
+-
+-# sources fetched from github, no configure script
+-DAVINCI_BOOTCOUNT_AUTORECONF = YES
+-
+-$(eval $(autotools-package))
+diff --git a/package/uboot-bootcount/Config.in b/package/uboot-bootcount/Config.in
+new file mode 100644
+index 000000000000..53a0bd9174a4
+--- /dev/null
++++ b/package/uboot-bootcount/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_UBOOT_BOOTCOUNT
++	bool "uboot-bootcount"
++	default y if BR2_PACKAGE_DAVINCI_BOOTCOUNT # legacy
++	help
++	  U-Boot implements a boot count scheme that can be used to
++	  detect multiple failed attempts to boot Linux. This tool
++	  allows to read and write bootcount from userspace for some
++	  platforms (TI AM335X or STM32MP1) or from I2C EEPROM.
++
++	  https://github.com/VoltServer/uboot-bootcount
+diff --git a/package/davinci-bootcount/davinci-bootcount.hash b/package/uboot-bootcount/uboot-bootcount.hash
+similarity index 80%
+rename from package/davinci-bootcount/davinci-bootcount.hash
+rename to package/uboot-bootcount/uboot-bootcount.hash
+index 53435b1d1d6d..e1ebc442357e 100644
+--- a/package/davinci-bootcount/davinci-bootcount.hash
++++ b/package/uboot-bootcount/uboot-bootcount.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  12b5aa83736efb2fefd22cd4d9f305a25c68dfaa10401d5efb17e55a5163934e  davinci-bootcount-2.0.0.tar.gz
++sha256  12b5aa83736efb2fefd22cd4d9f305a25c68dfaa10401d5efb17e55a5163934e  uboot-bootcount-2.0.0.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/uboot-bootcount/uboot-bootcount.mk b/package/uboot-bootcount/uboot-bootcount.mk
+new file mode 100644
+index 000000000000..07b52ab89eb5
+--- /dev/null
++++ b/package/uboot-bootcount/uboot-bootcount.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# uboot-bootcount
++#
++################################################################################
++
++UBOOT_BOOTCOUNT_VERSION = 2.0.0
++UBOOT_BOOTCOUNT_SITE = $(call github,VoltServer,uboot-bootcount,v$(UBOOT_BOOTCOUNT_VERSION))
++UBOOT_BOOTCOUNT_LICENSE = GPL-3.0
++UBOOT_BOOTCOUNT_LICENSE_FILES = COPYING
++
++# sources fetched from github, no configure script
++UBOOT_BOOTCOUNT_AUTORECONF = YES
++
++$(eval $(autotools-package))
 -- 
 2.43.0
 
