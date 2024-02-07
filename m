@@ -4,49 +4,99 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B153C4828D
-	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 08:21:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59CFBC4828D
+	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 08:23:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CCA3C81EA9;
-	Wed,  7 Feb 2024 08:21:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 13C0781F19;
+	Wed,  7 Feb 2024 08:23:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JDucpKz-Q3rO; Wed,  7 Feb 2024 08:21:08 +0000 (UTC)
+	with ESMTP id 650u43j4_ll8; Wed,  7 Feb 2024 08:23:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C997281EDB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F77781FC5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C997281EDB;
-	Wed,  7 Feb 2024 08:21:07 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 39BED1BF350
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 08:21:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0F77781FC5;
+	Wed,  7 Feb 2024 08:23:28 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C4F9B1BF350
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 08:23:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1593961317
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 08:21:06 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id AAC6840A59
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 08:23:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id W2cPPsEUIc7g for <buildroot@lists.busybox.net>;
- Wed,  7 Feb 2024 08:21:05 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2616E60BBF
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2616E60BBF
- for <buildroot@buildroot.org>; Wed,  7 Feb 2024 08:21:05 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 001BE874DA; Wed,  7 Feb 2024 08:21:04 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 7 Feb 2024 09:20:38 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3e1b7be3abb5424a906d57fb4e5bcb64db5b4fda
-X-Git-Newrev: d90ac63d9b3448a239bb9aa8030326699a3fdc3d
-X-Patchwork-Hint: ignore
-Message-Id: <20240207082105.001BE874DA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/minisign: new package
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZDl3sJi66_ff for <buildroot@lists.busybox.net>;
+ Wed,  7 Feb 2024 08:23:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::130; helo=mail-lf1-x130.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 298A140B2E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 298A140B2E
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com
+ [IPv6:2a00:1450:4864:20::130])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 298A140B2E
+ for <buildroot@buildroot.org>; Wed,  7 Feb 2024 08:23:23 +0000 (UTC)
+Received: by mail-lf1-x130.google.com with SMTP id
+ 2adb3069b0e04-511689e02d0so95612e87.2
+ for <buildroot@buildroot.org>; Wed, 07 Feb 2024 00:23:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1707294201; x=1707899001;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=y52tBikGDx5nzaHrRIjGywnIEt4m6dz4PCa+H/O4THM=;
+ b=I1VOYlhWaIc1GJgo65bQP1L8R2qwSuAmhaK34o0Jvgn2GE5dj29Ka4C8T3CHjxZCks
+ Aj/NLLPi0986eYzNRGbH6JGjcljKkVwiqKPIZCLbuuqpB6Mz+tDOfAv4ggClFhjKqZfd
+ Wz3gzBj1Qaab6qvPK0LM65p3Q4DoE5g4eXRVIEPL4OccLQhmQ8k+GNNP4yoOhuQgqq6c
+ A7X1xzQ+GEukXty2DZHpBifNmHFAX/AfopzlrFj0UFDvtQcaLxfH37C664y8E2TLrW/7
+ mbWOTA9teD5hf5uQg5siuFe06+cCt2QFPlVKWYV5/X25ZbmLqeurB9zJsj+M+tvXMNEq
+ dtdQ==
+X-Gm-Message-State: AOJu0YzopdHRh0MtSb8vQQBB4er8H0oR00eVsA9EKzsNB6acGCoAIBx1
+ 6leDM78mDsnrAFeT5RBWFKDsAJFe2wsXZ5RT0X5N3b4+y/ou65DyZ58QAFG3dwM=
+X-Google-Smtp-Source: AGHT+IG2DaqxflppVwKzpqlh9oVYUjJGsYzRqzoDfaLkKuBTI2GPHZLxw/DmjdsEwOVFj9RBA0opUw==
+X-Received: by 2002:a05:6512:1091:b0:511:5ca2:2a3f with SMTP id
+ j17-20020a056512109100b005115ca22a3fmr4211830lfg.9.1707294201372; 
+ Wed, 07 Feb 2024 00:23:21 -0800 (PST)
+X-Forwarded-Encrypted: i=1;
+ AJvYcCXwRKaOodSzNjqA2Ph7f8JSObyUkawCi9/VyapJVgf9X1xgoVeOdgpguIUnNAEs3UEXL9pXt4oCAbY2TVk6FIE2ngTwwQWsk07i9rYcfoqETFV4etv6CLONVqduIfPtIA==
+Received: from [192.168.16.188] ([85.119.216.19])
+ by smtp.gmail.com with ESMTPSA id
+ p7-20020a05600c358700b0040fe308ff25sm4404700wmq.24.2024.02.07.00.23.20
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 07 Feb 2024 00:23:20 -0800 (PST)
+Message-ID: <9b42a9e2-c741-41f3-be5a-cc36c421b1bf@mind.be>
+Date: Wed, 7 Feb 2024 09:23:15 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: en-GB
+To: James Hilliard <james.hilliard1@gmail.com>
+References: <20240106214410.3294887-1-james.hilliard1@gmail.com>
+ <d2c62f63-c48e-4969-a287-b10ecb7b3b21@mind.be>
+ <CADvTj4oueQe50PUw-9enTdUZ1pk3picVygzU3vkZPJsGDe+UwQ@mail.gmail.com>
+In-Reply-To: <CADvTj4oueQe50PUw-9enTdUZ1pk3picVygzU3vkZPJsGDe+UwQ@mail.gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1707294201; x=1707899001; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=y52tBikGDx5nzaHrRIjGywnIEt4m6dz4PCa+H/O4THM=;
+ b=RGgwlyIcsOYAPHDAWwsipBTs1W+ZWugRjQzn54P2+CoXVeEzyE7mJ/Ls3D8BtcHoZb
+ JNcWvDBMjmUejSsBwJuXboh6SS5Rjatvg3NITqJQETNKD8Be13vbz5OCfpZd6k03oTGS
+ papqF9dYchiMfPLyp2VJIV+XAUE1PYdnc+t6m1xqaJVmrwa8MxF5QMw6GCrgcizk979j
+ ZImnaSY5XUtNUHkwbFr7/VfVeBgbyRnZZSxOaRtdc4JfB1izUM2u2fHrYLN5UcHrtwHe
+ q9h9yydtZ2f3v89N8cMaZ3nyrCE5xUJKXvcCFPXwYhtwnlGC0AZZitnup6+gAwbHx9G1
+ eoDg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=RGgwlyIc
+Subject: Re: [Buildroot] [PATCH v2 1/4] package/python-poetry-core: new host
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,130 +108,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: Asaf Kahlon <asafka7@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d90ac63d9b3448a239bb9aa8030326699a3fdc3d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Patrick Oppenlander <patrick.oppenlander@gmail.com>
-[Peter: Fix check-package warnings, move to "Shell and utilities" and add
-	DEVELOPERS entry]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- DEVELOPERS                      |  3 +++
- package/Config.in               |  1 +
- package/Config.in.host          |  1 +
- package/minisign/Config.in      |  9 +++++++++
- package/minisign/Config.in.host |  7 +++++++
- package/minisign/minisign.hash  |  3 +++
- package/minisign/minisign.mk    | 19 +++++++++++++++++++
- 7 files changed, 43 insertions(+)
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index fc47c51d33..471c739678 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2402,6 +2402,9 @@ N:	Patrick Havelange <patrick.havelange@essensium.com>
- F:	support/testing/tests/package/test_lxc.py
- F:	support/testing/tests/package/test_lxc/
- 
-+N:	Patrick Oppenlander <patrick.oppenlander@gmail.com>
-+F:	package/minisign/
-+
- N:	Paul Cercueil <paul@crapouillou.net>
- F:	package/libiio/
- F:	package/lightning/
-diff --git a/package/Config.in b/package/Config.in
-index 047877c960..24e5f04ed6 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2685,6 +2685,7 @@ comment "Utilities"
- 	source "package/lockfile-progs/Config.in"
- 	source "package/logrotate/Config.in"
- 	source "package/logsurfer/Config.in"
-+	source "package/minisign/Config.in"
- 	source "package/neofetch/Config.in"
- 	source "package/pdmenu/Config.in"
- 	source "package/pinentry/Config.in"
-diff --git a/package/Config.in.host b/package/Config.in.host
-index c80842c33a..f03ca16b7b 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -64,6 +64,7 @@ menu "Host utilities"
- 	source "package/meson-tools/Config.in.host"
- 	source "package/mfgtools/Config.in.host"
- 	source "package/microchip-hss-payload-generator/Config.in.host"
-+	source "package/minisign/Config.in.host"
- 	source "package/mkpasswd/Config.in.host"
- 	source "package/moby-buildkit/Config.in.host"
- 	source "package/mosquitto/Config.in.host"
-diff --git a/package/minisign/Config.in b/package/minisign/Config.in
-new file mode 100644
-index 0000000000..b852903921
---- /dev/null
-+++ b/package/minisign/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_MINISIGN
-+	bool "minisign"
-+	select BR2_PACKAGE_LIBSODIUM
-+	select BR2_PACKAGE_LIBSODIUM_FULL
-+	help
-+	  Minisign is a dead simple tool to sign files and verify
-+	  signatures.
-+
-+	  https://github.com/jedisct1/minisign
-diff --git a/package/minisign/Config.in.host b/package/minisign/Config.in.host
-new file mode 100644
-index 0000000000..99a89b7cf3
---- /dev/null
-+++ b/package/minisign/Config.in.host
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_HOST_MINISIGN
-+	bool "host minisign"
-+	help
-+	  Minisign is a dead simple tool to sign files and verify
-+	  signatures.
-+
-+	  https://github.com/jedisct1/minisign
-diff --git a/package/minisign/minisign.hash b/package/minisign/minisign.hash
-new file mode 100644
-index 0000000000..12cde42a43
---- /dev/null
-+++ b/package/minisign/minisign.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  74c2c78a1cd51a43a6c98f46a4eabefbc8668074ca9aa14115544276b663fc55  minisign-0.11.tar.gz
-+sha256  d775d155cbf31638714c31c6f990f9fdc5f07998d91e42d1bf15483bd2d1706b  LICENSE
-diff --git a/package/minisign/minisign.mk b/package/minisign/minisign.mk
-new file mode 100644
-index 0000000000..34b3f4046e
---- /dev/null
-+++ b/package/minisign/minisign.mk
-@@ -0,0 +1,19 @@
-+################################################################################
-+#
-+# minisign
-+#
-+################################################################################
-+
-+MINISIGN_VERSION = 0.11
-+MINISIGN_SITE = $(call github,jedisct1,minisign,$(MINISIGN_VERSION))
-+MINISIGN_LICENSE = ISC
-+MINISIGN_LICENSE_FILES = LICENSE
-+MINISIGN_DEPENDENCIES = libsodium
-+HOST_MINISIGN_DEPENDENCIES = host-libsodium
-+
-+ifeq ($(BR2_STATIC_LIBS),y)
-+MINISIGN_CONF_OPTS += -DBUILD_STATIC_EXECUTABLES=1
-+endif
-+
-+$(eval $(cmake-package))
-+$(eval $(host-cmake-package))
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+CgpPbiAwNi8wMi8yMDI0IDIwOjMyLCBKYW1lcyBIaWxsaWFyZCB3cm90ZToKPiBPbiBUdWUsIEZl
+YiA2LCAyMDI0IGF0IDEwOjQz4oCvQU0gQXJub3V0IFZhbmRlY2FwcGVsbGUgPGFybm91dEBtaW5k
+LmJlPiB3cm90ZToKPj4KPj4gICAgSGkgSmFtZXMsCj4+Cj4+IE9uIDA2LzAxLzIwMjQgMjI6NDQs
+IEphbWVzIEhpbGxpYXJkIHdyb3RlOgo+Pj4gU2lnbmVkLW9mZi1ieTogSmFtZXMgSGlsbGlhcmQg
+PGphbWVzLmhpbGxpYXJkMUBnbWFpbC5jb20+Cj4+PiAtLS0KPj4+ICAgIHBhY2thZ2UvcHl0aG9u
+LXBvZXRyeS1jb3JlL3B5dGhvbi1wb2V0cnktY29yZS5oYXNoIHwgIDUgKysrKysKPj4+ICAgIHBh
+Y2thZ2UvcHl0aG9uLXBvZXRyeS1jb3JlL3B5dGhvbi1wb2V0cnktY29yZS5tayAgIHwgMTQgKysr
+KysrKysrKysrKysKPj4+ICAgIDIgZmlsZXMgY2hhbmdlZCwgMTkgaW5zZXJ0aW9ucygrKQo+Pj4g
+ICAgY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvcHl0aG9uLXBvZXRyeS1jb3JlL3B5dGhvbi1w
+b2V0cnktY29yZS5oYXNoCj4+PiAgICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9weXRob24t
+cG9ldHJ5LWNvcmUvcHl0aG9uLXBvZXRyeS1jb3JlLm1rCj4+Pgo+Pj4gZGlmZiAtLWdpdCBhL3Bh
+Y2thZ2UvcHl0aG9uLXBvZXRyeS1jb3JlL3B5dGhvbi1wb2V0cnktY29yZS5oYXNoIGIvcGFja2Fn
+ZS9weXRob24tcG9ldHJ5LWNvcmUvcHl0aG9uLXBvZXRyeS1jb3JlLmhhc2gKPj4+IG5ldyBmaWxl
+IG1vZGUgMTAwNjQ0Cj4+PiBpbmRleCAwMDAwMDAwMDAwLi4zYzA3ZmVmMDRmCj4+PiAtLS0gL2Rl
+di9udWxsCj4+PiArKysgYi9wYWNrYWdlL3B5dGhvbi1wb2V0cnktY29yZS9weXRob24tcG9ldHJ5
+LWNvcmUuaGFzaAo+Pj4gQEAgLTAsMCArMSw1IEBACj4+PiArIyBtZDUsIHNoYTI1NiBmcm9tIGh0
+dHBzOi8vcHlwaS5vcmcvcHlwaS9wb2V0cnktY29yZS9qc29uCj4+PiArbWQ1ICA5ZWQyZjJlOTI0
+NDE2NWIzNGQ3MjMzYzMwNmEzNGEyYSAgcG9ldHJ5X2NvcmUtMS44LjEudGFyLmd6Cj4+PiArc2hh
+MjU2ICA2N2E3NmM2NzFkYTJhNzBlNTUwNDdjZGRkYTgzNTY2MDM1YjcwMWY3ZTQ2M2IzMmEyYWJm
+ZWFjNmUyYTE2Mzc2ICBwb2V0cnlfY29yZS0xLjguMS50YXIuZ3oKPj4+ICsjIExvY2FsbHkgY29t
+cHV0ZWQgc2hhMjU2IGNoZWNrc3Vtcwo+Pj4gK3NoYTI1NiAgZjE5NzgxMzM3ODJiOTBmNDczM2Jj
+MzA4ZGRiMTkyNjdjM2ZlMDQ3OTdjODhkOWVkM2JjMjE5MDMyNDk1YTk4MiAgTElDRU5TRQo+Pj4g
+ZGlmZiAtLWdpdCBhL3BhY2thZ2UvcHl0aG9uLXBvZXRyeS1jb3JlL3B5dGhvbi1wb2V0cnktY29y
+ZS5tayBiL3BhY2thZ2UvcHl0aG9uLXBvZXRyeS1jb3JlL3B5dGhvbi1wb2V0cnktY29yZS5tawo+
+Pj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPj4+IGluZGV4IDAwMDAwMDAwMDAuLmUxYWNmMzE3OWMK
+Pj4+IC0tLSAvZGV2L251bGwKPj4+ICsrKyBiL3BhY2thZ2UvcHl0aG9uLXBvZXRyeS1jb3JlL3B5
+dGhvbi1wb2V0cnktY29yZS5tawo+Pj4gQEAgLTAsMCArMSwxNCBAQAo+Pj4gKyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjCj4+PiArIwo+Pj4gKyMgcHl0aG9uLXBvZXRyeS1jb3JlCj4+PiArIwo+Pj4g
+KyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4+PiArCj4+PiArUFlUSE9OX1BPRVRSWV9DT1JFX1ZF
+UlNJT04gPSAxLjguMQo+Pj4gK1BZVEhPTl9QT0VUUllfQ09SRV9TT1VSQ0UgPSBwb2V0cnlfY29y
+ZS0kKFBZVEhPTl9QT0VUUllfQ09SRV9WRVJTSU9OKS50YXIuZ3oKPj4+ICtQWVRIT05fUE9FVFJZ
+X0NPUkVfU0lURSA9IGh0dHBzOi8vZmlsZXMucHl0aG9uaG9zdGVkLm9yZy9wYWNrYWdlcy8zNi82
+Ni82YWYyODkxNDk1ZDEyMDIwNDE5Yzg0NDdkMGIyOWMxZTk2ZjNiZTE2NjMxZmFhZWQ2YmRhNWI4
+ODZkNWQKPj4+ICtQWVRIT05fUE9FVFJZX0NPUkVfU0VUVVBfVFlQRSA9IHBlcDUxNwo+Pj4gK1BZ
+VEhPTl9QT0VUUllfQ09SRV9MSUNFTlNFID0gTUlUCj4+PiArUFlUSE9OX1BPRVRSWV9DT1JFX0xJ
+Q0VOU0VfRklMRVMgPSBMSUNFTlNFCj4+Cj4+ICAgIFRoaXMgcGFja2FnZSBoYXMgNCB2ZW5kb3Jl
+ZCBkZXBlbmRlbmNpZXMsIGVhY2ggd2l0aCB0aGVpciBvd24gbGljZW5zZS4gVGhvc2UKPj4gc2hv
+dWxkIGFsc28gYmUgc3BlY2lmaWVkIGluIHRoZSBMSUNFTlNFIGFuZCBMSUNFTlNFX0ZJTEVTLgo+
+IAo+IERvZXMgdGhpcyBsb29rIHJpZ2h0Pwo+IGh0dHBzOi8vcGF0Y2h3b3JrLm96bGFicy5vcmcv
+cHJvamVjdC9idWlsZHJvb3QvcGF0Y2gvMjAyNDAyMDYxOTMwNDguNjU4MDAzLTEtamFtZXMuaGls
+bGlhcmQxQGdtYWlsLmNvbS8KCiAgRXhjZWxsZW50LCB0aGFuayB5b3UhCgogIFJlZ2FyZHMsCiAg
+QXJub3V0Cgo+IAo+Pgo+PiAgICBJbiBhZGRpdGlvbiwgZm9yIGxhcmssIHRoZXJlJ3MgYSBmaWxl
+IHVuZGVyIE1QTCBhbmQgYSBmaWxlIHVuZGVyIEdQTCwgZXZlbgo+PiB0aG91Z2ggbmVpdGhlciBp
+ZiB0aG9zZSBsaWNlbnNlcyBpcyBtZW50aW9uZWQgaW4gdGhlIGxhcmsgbGljZW5zZS4gSWRlYWxs
+eSB0aG9zZQo+PiB0d28gc2hvdWxkIGJlIG1lbnRpb25lZCBpbiB0aGUgTElDRU5TRVMgYXMgd2Vs
+bC4gQW5kIG9mIGNvdXJzZSwgdGhpcyBzaG91bGQKPj4gaWRlYWxseSBhbHNvIGJlIGRvbmUgZm9y
+IHRoZSBweXRob24tbGFyayBwYWNrYWdlIHdoaWNoIHN1ZmZlcnMgZnJvbSB0aGUgc2FtZQo+PiBp
+c3N1ZS4uLgo+Pgo+PiAgICBSZWdhcmRzLAo+PiAgICBBcm5vdXQKPj4KPj4+ICsKPj4+ICskKGV2
+YWwgJChob3N0LXB5dGhvbi1wYWNrYWdlKSkKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRy
+b290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWls
+ZHJvb3QK
