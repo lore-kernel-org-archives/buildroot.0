@@ -4,78 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EB59C4828F
-	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 06:33:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA7D6C4828D
+	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 07:05:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8A6DB61346;
-	Wed,  7 Feb 2024 06:33:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 74AD861371;
+	Wed,  7 Feb 2024 07:05:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id da4L9lWSDQB1; Wed,  7 Feb 2024 06:33:34 +0000 (UTC)
+	with ESMTP id lD1LkblripYq; Wed,  7 Feb 2024 07:05:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 953FB61367
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9468E61377
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 953FB61367;
-	Wed,  7 Feb 2024 06:33:34 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 94FD21BF32D
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 06:33:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9468E61377;
+	Wed,  7 Feb 2024 07:05:51 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4AB0A1BF836
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 07:05:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 76B5361367
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 06:33:32 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3657B40144
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 07:05:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 20cJmdIbin2L for <buildroot@lists.busybox.net>;
- Wed,  7 Feb 2024 06:33:31 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=95.163.41.75;
- helo=smtp34.i.mail.ru; envelope-from=fido_max@inbox.ru; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 116A561346
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 116A561346
-Received: from smtp34.i.mail.ru (smtp34.i.mail.ru [95.163.41.75])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 116A561346
- for <buildroot@buildroot.org>; Wed,  7 Feb 2024 06:33:29 +0000 (UTC)
-Received: by smtp34.i.mail.ru with esmtpa (envelope-from <fido_max@inbox.ru>)
- id 1rXbUs-0000000GWBD-0aFf; Wed, 07 Feb 2024 09:33:26 +0300
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tA_lNHRbeC9o for <buildroot@lists.busybox.net>;
+ Wed,  7 Feb 2024 07:05:47 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
+ helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B00B0400B9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B00B0400B9
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B00B0400B9
+ for <buildroot@buildroot.org>; Wed,  7 Feb 2024 07:05:46 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id DDE3F60006;
+ Wed,  7 Feb 2024 07:05:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed,  7 Feb 2024 09:33:24 +0300
-Message-ID: <20240207063324.1003727-1-fido_max@inbox.ru>
+Date: Wed,  7 Feb 2024 08:05:40 +0100
+Message-ID: <20240207070541.2296330-1-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Mailru-Src: smtp
-X-7564579A: B8F34718100C35BD
-X-77F55803: 4F1203BC0FB41BD94C460F083DF69F51F716FD8A96C6C408CD848DA42FE26380182A05F5380850404505A7583CCF5D57479CDAE959BF642456D9EB469C07AB780213D7449A2EA4B66E399A284FE16A5F
-X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7AC5438007118D6FAEA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F79006375AC38C7EC4509C8B8638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D872211F09058463576B55C399037FA85553B16A584740021420879F7C8C5043D14489FFFB0AA5F4BF176DF2183F8FC7C0C8FBEF6EAD8577B08941B15DA834481FA18204E546F3947C4B6F6234D9065C97F6B57BC7E64490618DEB871D839B7333395957E7521B51C2DFABB839C843B9C08941B15DA834481F8AA50765F79006370A32D918A17158F1389733CBF5DBD5E9B5C8C57E37DE458B9E9CE733340B9D5F3BBE47FD9DD3FB595F5C1EE8F4F765FCF1175FABE1C0F9B6E2021AF6380DFAD18AA50765F790063735872C767BF85DA227C277FBC8AE2E8BDCE939D40DBB93CA75ECD9A6C639B01B4E70A05D1297E1BBCB5012B2E24CD356
-X-C1DE0DAB: 0D63561A33F958A508BBDC55BBEC912C5002B1117B3ED6962719838CE31E391F3D2BBC1EF78EDEBE823CB91A9FED034534781492E4B8EEAD01200A96CB7104FFC79554A2A72441328621D336A7BC284946AD531847A6065AED8438A78DFE0A9EBDAD6C7F3747799A
-X-C8649E89: 1C3962B70DF3F0ADE00A9FD3E00BEEDF77DD89D51EBB7742D3581295AF09D3DF87807E0823442EA2ED31085941D9CD0AF7F820E7B07EA4CFE44EE1FA91C72E5232B7C733790E205F729B65452BC52E84EA39E4261A9814ACF397AE266BD3C14B807D692F32DC70325D382190CCFED1D53FC8FB5AF11234910F9CA24D68180CB2111DC66A97D0BFE2913E6812662D5F2A17D6C1CDD2003EB8E03787203701020945C72C348FB7EED3
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojh/iSjD2txnNYn/IjWRicXQ==
-X-Mailru-Sender: 689FA8AB762F7393590D8C940224AE33B14F1F41200347CD67B445DF6E4DF007661CA61B5EB6C07990DE4A6105A3658D481B2AED7BCCC0A49AE3A01A4DD0D55C6C99E19F044156F45FEEDEB644C299C0ED14614B50AE0675
-X-Mras: Ok
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=inbox.ru; 
- s=mail4; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:Cc:
- To:From:From:Sender:Reply-To:To:Cc:Content-Type:Content-Transfer-Encoding:
- Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
- Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
- List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive:
- X-Cloud-Ids:Disposition-Notification-To;
- bh=4PsBK0qU3nJZg7R7hjfB5HPSQYtOmsqe8LLrmFLKRfg=; t=1707287611; x=1707377611; 
- b=beMzDJW6SBwv3jSJKef+ej1PBbo//hGmPRBxY4Omkyh7QkhdleshbzW+46VFMBp+J2Icc/7bPxh
- kR8SMa2ylsI0TQPXRcElw8pjMwa51jp2ikiplorCSAcnXG6WwxN7OX1WCCKyKe8z6AaTho08IZAjB
- +Yw7L6o9evbN4KzMJTXesvA5kqfHZ2r1VfJEz1wumbEDzLwp7fz0o7sy5nHPRjKVRMWScWP7N5ilW
- y5RGOiZMmseAjYU24A6xu/lIZNSK6zFj1S02Ih2XWHHoWMW/wypDVoC3fwCWZV/8wS22Rva7qdD+4
- RfA8CMAxiyB1N3mhCheZcQuJYWfAy6tbus5g==;
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1707289544;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=VJClkTwCkxiVNQQ+xiN4orZBAiPTSEEolYqYX2VyvHQ=;
+ b=JBrv57eHPr+4Crg232auGFs37ZXXkYiryr2GUtsv69yx5TxuWGOxY2bzrKKPBxCZeF9f/7
+ kwxfz9X4YRjtqiGfJRcyOkmSsB+OU+T/UT/7TYcdZ2Ws0EIa6SdZyB2sSPmusbywLWbpxT
+ OnsmoScEWC/+066lrbxXxc3pW3gdm5eJGaM/tV9W+aawtvxDaLGQyeqL4bXHEnMayHygie
+ +ddAI0YXCo4kykG7NTVxLWd4GjDBEQohE1xVfuGfkS1VixlXhQLm94f5KObJa6Qn2N45Ag
+ hi1P7IJ00k7OMf7LE+oBx4XaOFxqExJ7UKD8VSReQmfNtSvSwiGLRGQUlvBSFA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=inbox.ru
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=inbox.ru header.i=@inbox.ru header.a=rsa-sha256
- header.s=mail4 header.b=beMzDJW6
-X-Mailman-Original-Authentication-Results: smtp34.i.mail.ru; auth=pass
- smtp.auth=fido_max@inbox.ru smtp.mailfrom=fido_max@inbox.ru
-Subject: [Buildroot] [PATCH 1/1] package/timescaledb: bump version to 2.13.1
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=JBrv57eH
+Subject: [Buildroot] [PATCH] utils/genrandconfig: add default setting for
+ bare-metal toolchain arch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,44 +77,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Maxim Kochetkov via buildroot <buildroot@buildroot.org>
-Reply-To: Maxim Kochetkov <fido_max@inbox.ru>
-Cc: Maxim Kochetkov <fido_max@inbox.ru>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes: https://github.com/timescale/timescaledb/blob/2.13.1/CHANGELOG.md
+We recently added support for building a bare-metal toolchain, and the
+autobuilders are therefore trying to build such toolchains. However,
+by default the BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH option is
+empty, causing the target tuple to be empty, and therefore
+host-gcc-bare-metal tries to build a toolchain for the target
+"x86_64-pc-linux-gnu", which isn't a bare-metal target, and fails
+badly.
 
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+In order to properly test this bare-metal support, this commit adjusts
+the genrandconfig script so that it injects a valid target
+architecture tuple.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/6cb1514b19bfe056fb984d3538bdccdda5e174c1/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/timescaledb/timescaledb.hash | 2 +-
- package/timescaledb/timescaledb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ utils/genrandconfig | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/timescaledb/timescaledb.hash b/package/timescaledb/timescaledb.hash
-index b7e4c71774..8d0fc125d6 100644
---- a/package/timescaledb/timescaledb.hash
-+++ b/package/timescaledb/timescaledb.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  584a351c7775f0e067eaa0e7277ea88cab9077cc4c455cbbf09a5d9723dce95d  timescaledb-2.13.0.tar.gz
-+sha256  ca4f48147cb1bf3bf22af9f643822a5931e12a89909cc73c4a89ddae3c828ac1  timescaledb-2.13.1.tar.gz
- sha256  0378e0948feefd85f579319c74d6e2b671194037f550c7176ef26649d94c895b  LICENSE
-diff --git a/package/timescaledb/timescaledb.mk b/package/timescaledb/timescaledb.mk
-index 34a48ad0c3..a5d77eda80 100644
---- a/package/timescaledb/timescaledb.mk
-+++ b/package/timescaledb/timescaledb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index 52edad06d8..eb1f8cbd4a 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -315,6 +315,10 @@ def fixup_config(sysinfo, configfile):
+        'BR2_TOOLCHAIN_BUILDROOT=y' in configlines:
+         return False
  
--TIMESCALEDB_VERSION = 2.13.0
-+TIMESCALEDB_VERSION = 2.13.1
- TIMESCALEDB_SITE = $(call github,timescale,timescaledb,$(TIMESCALEDB_VERSION))
- TIMESCALEDB_LICENSE = Apache-2.0
- TIMESCALEDB_LICENSE_FILES = LICENSE
++    if 'BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y' in configlines:
++        configlines.remove('BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH=""')
++        configlines.add('BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf"')
++
+     if 'BR2_PACKAGE_AUFS_UTIL=y\n' in configlines and \
+        'BR2_PACKAGE_AUFS_UTIL_VERSION=""\n' in configlines:
+         return False
 -- 
 2.43.0
 
