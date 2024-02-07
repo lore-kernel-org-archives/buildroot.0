@@ -4,73 +4,101 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0333C4828F
-	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 11:07:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9158EC4828D
+	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 11:07:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9225A82919;
-	Wed,  7 Feb 2024 11:07:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4BB3D823F6;
+	Wed,  7 Feb 2024 11:07:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Y3vnQLILpjLF; Wed,  7 Feb 2024 11:07:07 +0000 (UTC)
+	with ESMTP id hEyw94_QfaDz; Wed,  7 Feb 2024 11:07:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2C516826C7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 364BE824BD
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2C516826C7;
-	Wed,  7 Feb 2024 11:07:06 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 28D5B1BF599
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 11:07:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 364BE824BD;
+	Wed,  7 Feb 2024 11:07:38 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A80661BF599
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 11:07:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 201F540447
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 11:07:00 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 94BD841E12
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 11:07:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FQzPC6dUmmsL for <buildroot@lists.busybox.net>;
- Wed,  7 Feb 2024 11:06:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.162;
- helo=smtpcmd14162.aruba.it;
- envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 25C4940025
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 25C4940025
-Received: from smtpcmd14162.aruba.it (smtpcmd14162.aruba.it [62.149.156.162])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 25C4940025
- for <buildroot@buildroot.org>; Wed,  7 Feb 2024 11:06:55 +0000 (UTC)
-Received: from [192.168.50.221] ([84.33.84.190])
- by Aruba Outgoing Smtp  with ESMTPSA
- id XflUrmpZGWf5XXflVrk9Wv; Wed, 07 Feb 2024 12:06:53 +0100
-Message-ID: <0e623797-b573-4604-b89e-737c7c503350@benettiengineering.com>
-Date: Wed, 7 Feb 2024 12:06:52 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Pl0vLLFLUNWH for <buildroot@lists.busybox.net>;
+ Wed,  7 Feb 2024 11:07:16 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::129; helo=mail-lf1-x129.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4DFFC42184
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4DFFC42184
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com
+ [IPv6:2a00:1450:4864:20::129])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4DFFC42184
+ for <buildroot@buildroot.org>; Wed,  7 Feb 2024 11:07:16 +0000 (UTC)
+Received: by mail-lf1-x129.google.com with SMTP id
+ 2adb3069b0e04-51165efb684so855008e87.3
+ for <buildroot@buildroot.org>; Wed, 07 Feb 2024 03:07:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1707304034; x=1707908834;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=1BW4Y7T4rOfTTDdojoaHm7nKAo08QfvEZ0UnCk7cmic=;
+ b=uyTqnsyspIaCWG17EQKisKK7eRp1Z0r6Aj0fi7j5r8F2yKpkFKj5/UAiPXd11KHf2z
+ eYxWxDq6XGzsj7fJMPnDibvjcSlizrN7PJ2+WWnavPVBsVmZwnVgsiD58oyTAeNGMVRw
+ mV/zDen7mPbCf7WdjGRwIjVWytOvsyIpCvqaIJd5BxAJCczYxUjV4tsxsHITEhZmf4Nz
+ yg7fk4LOndCuCT2iev0GXizioE/foes393E6EKbgrgIOe1Isdd8yyMf0RPMDjguGno3a
+ /EnjPxcy9GST11f2LlFr4mh6ZTGCEmzmTaNCL+fsTrRneVcHdfdJTeJp1fV0S+7PUd//
+ l2uw==
+X-Gm-Message-State: AOJu0YwbEqlBSGkOVxODyLbtJsDGyL9ibGqPMYw5nS32s8qLz0IRH8oo
+ 0ICciBpgR1IBNdgsiho5kTfZNn5RBCgjzh9O/QkRTiy6BrM7avhsqzv20WT9jeyicCOlq4RaQts
+ wEzc=
+X-Google-Smtp-Source: AGHT+IFYriiYMzIq7+u4kpE4m14LG3XAUZXu3dLh+cgVh3AImbceoNN2FHTL2acl18J+2zCgiGbP+Q==
+X-Received: by 2002:a05:6512:31c7:b0:511:5711:4f36 with SMTP id
+ j7-20020a05651231c700b0051157114f36mr4698307lfe.54.1707304033871; 
+ Wed, 07 Feb 2024 03:07:13 -0800 (PST)
+X-Forwarded-Encrypted: i=1;
+ AJvYcCUi4Pwk8u/pC7U5vV0endkvkFCQ1Q9n/hqhZrC2ljKaN9+fPRwsgWBoqdcC697Mgl72JJ8c+wK0JIKWb65swWsIgPCEZQigjg==
+Received: from [192.168.17.126] ([85.119.216.19])
+ by smtp.gmail.com with ESMTPSA id
+ p22-20020a05600c359600b0040ffe1ca25bsm1729667wmq.21.2024.02.07.03.07.13
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 07 Feb 2024 03:07:13 -0800 (PST)
+Message-ID: <7fdd9207-c7e1-40db-a20e-e64cd8709a94@smile.fr>
+Date: Wed, 7 Feb 2024 12:07:12 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Content-Language: en-US
-To: Nigel Wang <asd617140123@gmail.com>, buildroot@buildroot.org
-References: <20240207030339.3910-1-asd617140123@gmail.com>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20240207030339.3910-1-asd617140123@gmail.com>
-X-CMAE-Envelope: MS4xfJ0ayVcqe/Rx6aafZlWVveDm3ezOqU3+RMuz+GLxXPjm73kw87OxBsE9ZuNluLOI8mzbpKXPqrdaDeq4Ca3BPzzKcwaFZlVjTLTnSXPJh/P/2CCca8xk
- HXZGRn+Bt+T/1oOdphpwICzXT9sKCwrbIUeFcOWzSxyOn7NOcYLvJfko66pbu+BEtmocx93Ba/mKhDVk953/CdT1ykMu3N80vue0OveSi0Yrw2Ys3MzQ2ymF
- rM/yVI2s2Mw5Ssp7eKBIxUd7kxBV9hVLYwljpwjNMNBLDI5odftm4G4RzbHng7w7pAo8kRwxlENRdqqETraOJGeQeiJYumASTMiTXQchWEs=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1707304013; bh=dO6O1Poj+Qs53ltK00/yQdIKJFozAuFDto6bCvz+1zY=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=dxqFpK5BqrvWYzobOB7ygN/4lEVaJb36Es4LYmbZBXYguGHtnIm3LY8aKROZC+czb
- Lwa9FEv1P70f1NgffJtgJAyz/pM9tq1MWiG3CC0v6yDNl6lPZd2C7IEPvIlevsFISd
- iYvHlUdzyWUZqOGzNTYFS09UM6GMf8IO8VzAca1rKaByeZ6ti1OLoTJspgG1Z2ZD8z
- ocW182Pi581Rr8eEuOHXAhmhCNV+LUOV2b8Ls2T9skpN0WIKBUCqOtDX6SlEu4l6Jz
- v92+WAkRYwh71nzkTYrXN20I4icMk4gAjhZafzOiHc8pDH+fpA6ck8DjCOOWWnmGww
- /xS51q1n+Ynjw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ buildroot@buildroot.org
+References: <20240207100459.2896502-1-dario.binacchi@amarulasolutions.com>
+From: Romain Naour <romain.naour@smile.fr>
+In-Reply-To: <20240207100459.2896502-1-dario.binacchi@amarulasolutions.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1707304034; x=1707908834;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=1BW4Y7T4rOfTTDdojoaHm7nKAo08QfvEZ0UnCk7cmic=;
+ b=dOjLWvhWqJHy/TUh2WHXsAe0lE9pa1NtMv6u6K3mT/Lv/A9Rst2QYOaIbKTQI86TV0
+ idIBhPz4k9slHWWZwMwHrqlsXyV7G9BicUwz8Eim12q2tlcaJnpDfy8MwuPtbMoM5LFN
+ AMBN6sQbl6BjUsHC6Es7R4BODh6rvSePquawgmAE9Crcre8woZ+aj05DF6BH83B4ZhhL
+ hz/nXwnZFIwYZMFZkPgTJcbFZvk2izVpHLa496H/t2W4J15/9IUwN4mj7R94Sz9Kb9mI
+ 8mFSAtXG4j7qT2oIKSlAsezxAIKkfvMEBnj04LLNoKRcnkSAcUg4aENpPYNFkdtB36CS
+ 6hXA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=dxqFpK5B
-Subject: Re: [Buildroot] [PATCH v2] board/cubietech/cubieboard4 : Add config
- file for cubieboard4.
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=smile-fr.20230601.gappssmtp.com
+ header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=dOjLWvhW
+Subject: Re: [Buildroot] [PATCH 1/4] configs/stm32f429_disco_xip_defconfig:
+ drop redundant defconfig choice
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,231 +110,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: thomas.petazzoni@free-electrons.com, Romain Naour <romain.naour@gmail.com>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Cc: Christophe Priouzeau <christophe.priouzeau@foss.st.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Nigel,
-
-On 07/02/24 04:03, Nigel Wang wrote:
-> From: nigel_wang <asd617140123@gmail.com>
-> 
-> add Cubieboard4 board support.
-> 
-> - SOC: Allwinner A80.
-> - DRAM: 2GiB DDR3 @ 672MHZ.
-> - NAND: 8GBeMMC
-> - Power: DC 5V.
-> - Wifi: 80211 b/g/n. (module is AP6330)
-> Reference: https://hirokun.jp/AP6330.pdf
-> - Ethernet: RTL8211E
-> 
-> The detail of board: https://linux-sunxi.org/Cubietech_Cubieboard4
-> 
-> Board support package includes the following components:
-> - mainline Linux Kernel 6.6.8
-> - mainline U-boot 2021.10.
-> 
-> Signed-off-by: Nigel Wang <asd617140123@gmail.com>
-
-Here you have to keep the previous tags when sending new version of patches:
-
-Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-[Build Tested]
-Tested-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-
-> ---
-> v1 -> v2
-> * Add BR2_cortex_a15_a7=y in buildroot defconfig.
-> * Bump linux version to 6.6.8
-> * Using sunxi_defconfig in kernel.
-> * Using "make savedefconfig" to save defconfig.
-> * Remove boot.cmd.
-
-this patch had to be V3, but don't mind at this point.
-I ask you when you send newer patches to set as superseded
-the previous patch in patchwork:
-https://patchwork.ozlabs.org/project/buildroot/list/
-
-> ---
->   DEVELOPERS                                |  4 +++
->   board/cubietech/cubieboard4/extlinux.conf |  5 +++
->   board/cubietech/cubieboard4/genimage.cfg  | 38 ++++++++++++++++++++++
->   board/cubietech/cubieboard4/post-image.sh | 18 +++++++++++
->   configs/cubieboard4_defconfig             | 39 +++++++++++++++++++++++
->   5 files changed, 104 insertions(+)
->   create mode 100644 board/cubietech/cubieboard4/extlinux.conf
->   create mode 100644 board/cubietech/cubieboard4/genimage.cfg
->   create mode 100755 board/cubietech/cubieboard4/post-image.sh
->   create mode 100644 configs/cubieboard4_defconfig
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index a03018ab2b..bffb8f2069 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -3297,3 +3297,7 @@ F:	package/quazip/
->   F:	package/shapelib/
->   F:	package/simple-mail/
->   F:	package/tinc/
-> +
-> +N:	Nigel Wang <asd617140123@gmail.com>
-> +F:	board/cubietech/cubieboard4/
-> +F:	configs/cubieboard4_defconfig
-> diff --git a/board/cubietech/cubieboard4/extlinux.conf b/board/cubietech/cubieboard4/extlinux.conf
-> new file mode 100644
-> index 0000000000..5084e2237b
-> --- /dev/null
-> +++ b/board/cubietech/cubieboard4/extlinux.conf
-> @@ -0,0 +1,5 @@
-> +label linux
-> +    kernel /boot/zImage
-> +    devicetree /sun9i-a80-cubieboard4.dtb
-> +    append console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
-> +
-> diff --git a/board/cubietech/cubieboard4/genimage.cfg b/board/cubietech/cubieboard4/genimage.cfg
-> new file mode 100644
-> index 0000000000..f1dee13923
-> --- /dev/null
-> +++ b/board/cubietech/cubieboard4/genimage.cfg
-> @@ -0,0 +1,38 @@
-> +# Minimal SD card image for the Cubieboard2
-> +# Based in the Orange Pi genimage.cfg
-> +
-> +image boot.vfat {
-> +	vfat {
-> +		files = {
-> +			"zImage",
-> +			"sun9i-a80-cubieboard4.dtb",
-> +			"extlinux"
-> +		}
-> +	}
-> +
-> +	size = 8M
-> +}
-> +
-> +image sdcard.img {
-> +	hdimage {
-> +	}
-> +
-> +	partition u-boot {
-> +		in-partition-table = "no"
-> +		image = "u-boot-sunxi-with-spl.bin"
-> +		offset = 8K
-> +		size = 1016K # 1MB - 8KB
-> +	}
-> +
-> +	partition boot {
-> +		partition-type = 0xC
-> +		bootable = "true"
-> +		image = "boot.vfat"
-> +	}
-> +
-> +	partition rootfs {
-> +		partition-type = 0x83
-> +		image = "rootfs.ext4"
-> +		size = 512M
-> +	}
-> +}
-> diff --git a/board/cubietech/cubieboard4/post-image.sh b/board/cubietech/cubieboard4/post-image.sh
-> new file mode 100755
-> index 0000000000..e37b960a4d
-> --- /dev/null
-> +++ b/board/cubietech/cubieboard4/post-image.sh
-> @@ -0,0 +1,18 @@
-> +#!/bin/sh
-> +
-> +BOARD_DIR="$(dirname "$0")"
-> +install -m 0644 -D $BOARD_DIR/extlinux.conf $BINARIES_DIR/extlinux/extlinux.conf
-> +
-> +GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
-> +GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
-> +
-> +rm -rf "${GENIMAGE_TMP}"
-> +
-> +genimage                           \
-> +	--rootpath "${TARGET_DIR}"     \
-> +	--tmppath "${GENIMAGE_TMP}"    \
-> +	--inputpath "${BINARIES_DIR}"  \
-> +	--outputpath "${BINARIES_DIR}" \
-> +	--config "${GENIMAGE_CFG}"
-> +
-> +exit $?
-> diff --git a/configs/cubieboard4_defconfig b/configs/cubieboard4_defconfig
-> new file mode 100644
-> index 0000000000..0592fe4a2d
-> --- /dev/null
-> +++ b/configs/cubieboard4_defconfig
-> @@ -0,0 +1,39 @@
-> +# Architecture
-> +BR2_arm=y
-> +BR2_cortex_a15_a7=y
-> +BR2_ARM_FPU_NEON_VFPV4=y
-> +
-> +# System
-> +BR2_TARGET_GENERIC_HOSTNAME="Cubieboard4"
-> +BR2_TARGET_GENERIC_ISSUE="Welcome to Cubieboard4!"
-> +BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/cubietech/cubieboard4/post-image.sh"
-
-Here the option below is missing and it's needed otherwise the newest
-Linux version will be picked and build will fail.
-Now we don't see the problem because the latest version is exactly 6.6,
-so need this:
-
-# Linux headers same as kernel, a 6.6 series
-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-
-> +# Kernel
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.8"
-> +BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
-> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun9i-a80-cubieboard4"
-> +
-> +# Filesystem
-> +BR2_TARGET_ROOTFS_EXT2=y
-> +BR2_TARGET_ROOTFS_EXT2_4=y
-> +
-> +# Bootloader
-> +BR2_TARGET_UBOOT=y
-> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
-> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Cubieboard4"
-> +BR2_TARGET_UBOOT_NEEDS_DTC=y
-> +BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-> +BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS=y
-> +BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-> +BR2_TARGET_UBOOT_SPL=y
-> +BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
-> +BR2_PACKAGE_HOST_DOSFSTOOLS=y
-> +BR2_PACKAGE_HOST_GENIMAGE=y
-> +BR2_PACKAGE_HOST_MTOOLS=y
-> +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-> --
-> 2.34.1
-> 
-
-This patch looks to me, except missing Linux header version.
-
-I've added that option and re-built successfully so I confirm my:
-Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-[Build Tested]
-Tested-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-
-Maybe a Maintainer can edit while committing, of if you can please send
-a V3 with that missing line.
-
-Thank you!
-
-Best regards
--- 
-Giulio Benetti
-CEO&CTO@Benetti Engineering sas
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gRGFyaW8sCgpMZSAwNy8wMi8yMDI0IMOgIDExOjA0LCBEYXJpbyBCaW5hY2NoaSBhIMOp
+Y3JpdMKgOgo+IFRoZSBwYWNrYWdlL2J1c3lib3gvYnVzeWJveC1taW5pbWFsLmNvbmZpZyBpcyB0
+aGUgZGVmYXVsdCBjb25maWd1cmF0aW9uCj4gZm9yIE1NVS1sZXNzIHN5c3RlbXMsIHNvIHRoZSBz
+ZXR0aW5nIGlzIHJlZHVuZGFudCBhbmQgY2FuIGJlIHJlbW92ZWQKPiB3aXRob3V0IGVmZmVjdC4K
+ClRoaXMgaXMgZHVlIHRvIGEgY2hhbmdlIGluIEJ1aWxkcm9vdCAyMDIzLjExIFsxXSBhbmQgc2V2
+ZXJhbCBvdGhlciBib2FyZHMgYXJlCmV4cGxpY2l0bHkgc2VsZWN0aW5nIGJ1c3lib3gtbWluaW1h
+bC5jb25maWcKCiQgZ2l0IGdyZXAgQlIyX1BBQ0tBR0VfQlVTWUJPWF9DT05GSUcgfCBncmVwIG1p
+bmltYWwKY29uZmlncy9jYW5hYW5fa2QyMzNfZGVmY29uZmlnOkJSMl9QQUNLQUdFX0JVU1lCT1hf
+Q09ORklHPSJwYWNrYWdlL2J1c3lib3gvYnVzeWJveC1taW5pbWFsLmNvbmZpZyIKY29uZmlncy9p
+bXhydDEwNTAtZXZrX2RlZmNvbmZpZzpCUjJfUEFDS0FHRV9CVVNZQk9YX0NPTkZJRz0icGFja2Fn
+ZS9idXN5Ym94L2J1c3lib3gtbWluaW1hbC5jb25maWciCmNvbmZpZ3MvcWVtdV9tNjhrX21jZjUy
+MDhfZGVmY29uZmlnOkJSMl9QQUNLQUdFX0JVU1lCT1hfQ09ORklHPSJwYWNrYWdlL2J1c3lib3gv
+YnVzeWJveC1taW5pbWFsLmNvbmZpZyIKY29uZmlncy9xZW11X3Jpc2N2NjRfbm9tbXVfdmlydF9k
+ZWZjb25maWc6QlIyX1BBQ0tBR0VfQlVTWUJPWF9DT05GSUc9InBhY2thZ2UvYnVzeWJveC9idXN5
+Ym94LW1pbmltYWwuY29uZmlnIgpjb25maWdzL3FlbXVfeHRlbnNhX2x4NjBfbm9tbXVfZGVmY29u
+ZmlnOkJSMl9QQUNLQUdFX0JVU1lCT1hfQ09ORklHPSJwYWNrYWdlL2J1c3lib3gvYnVzeWJveC1t
+aW5pbWFsLmNvbmZpZyIKY29uZmlncy9zaXBlZWRfbWFpeF9iaXRfZGVmY29uZmlnOkJSMl9QQUNL
+QUdFX0JVU1lCT1hfQ09ORklHPSJwYWNrYWdlL2J1c3lib3gvYnVzeWJveC1taW5pbWFsLmNvbmZp
+ZyIKY29uZmlncy9zaXBlZWRfbWFpeF9iaXRfc2RjYXJkX2RlZmNvbmZpZzpCUjJfUEFDS0FHRV9C
+VVNZQk9YX0NPTkZJRz0icGFja2FnZS9idXN5Ym94L2J1c3lib3gtbWluaW1hbC5jb25maWciCmNv
+bmZpZ3Mvc2lwZWVkX21haXhfZG9ja19kZWZjb25maWc6QlIyX1BBQ0tBR0VfQlVTWUJPWF9DT05G
+SUc9InBhY2thZ2UvYnVzeWJveC9idXN5Ym94LW1pbmltYWwuY29uZmlnIgpjb25maWdzL3NpcGVl
+ZF9tYWl4X2RvY2tfc2RjYXJkX2RlZmNvbmZpZzpCUjJfUEFDS0FHRV9CVVNZQk9YX0NPTkZJRz0i
+cGFja2FnZS9idXN5Ym94L2J1c3lib3gtbWluaW1hbC5jb25maWciCmNvbmZpZ3Mvc2lwZWVkX21h
+aXhfZ29fZGVmY29uZmlnOkJSMl9QQUNLQUdFX0JVU1lCT1hfQ09ORklHPSJwYWNrYWdlL2J1c3li
+b3gvYnVzeWJveC1taW5pbWFsLmNvbmZpZyIKY29uZmlncy9zaXBlZWRfbWFpeF9nb19zZGNhcmRf
+ZGVmY29uZmlnOkJSMl9QQUNLQUdFX0JVU1lCT1hfQ09ORklHPSJwYWNrYWdlL2J1c3lib3gvYnVz
+eWJveC1taW5pbWFsLmNvbmZpZyIKY29uZmlncy9zaXBlZWRfbWFpeGR1aW5vX2RlZmNvbmZpZzpC
+UjJfUEFDS0FHRV9CVVNZQk9YX0NPTkZJRz0icGFja2FnZS9idXN5Ym94L2J1c3lib3gtbWluaW1h
+bC5jb25maWciCmNvbmZpZ3Mvc2lwZWVkX21haXhkdWlub19zZGNhcmRfZGVmY29uZmlnOkJSMl9Q
+QUNLQUdFX0JVU1lCT1hfQ09ORklHPSJwYWNrYWdlL2J1c3lib3gvYnVzeWJveC1taW5pbWFsLmNv
+bmZpZyIKY29uZmlncy9zdG0zMmY0MjlfZGlzY29feGlwX2RlZmNvbmZpZzpCUjJfUEFDS0FHRV9C
+VVNZQk9YX0NPTkZJRz0icGFja2FnZS9idXN5Ym94L2J1c3lib3gtbWluaW1hbC5jb25maWciCmNv
+bmZpZ3Mvc3RtMzJmNDY5X2Rpc2NvX3NkX2RlZmNvbmZpZzpCUjJfUEFDS0FHRV9CVVNZQk9YX0NP
+TkZJRz0icGFja2FnZS9idXN5Ym94L2J1c3lib3gtbWluaW1hbC5jb25maWciCmNvbmZpZ3Mvc3Rt
+MzJmNDY5X2Rpc2NvX3hpcF9kZWZjb25maWc6QlIyX1BBQ0tBR0VfQlVTWUJPWF9DT05GSUc9InBh
+Y2thZ2UvYnVzeWJveC9idXN5Ym94LW1pbmltYWwuY29uZmlnIgpjb25maWdzL3N0bTMyZjc2OV9k
+aXNjb19zZF9kZWZjb25maWc6QlIyX1BBQ0tBR0VfQlVTWUJPWF9DT05GSUc9InBhY2thZ2UvYnVz
+eWJveC9idXN5Ym94LW1pbmltYWwuY29uZmlnIgoKQ2FuIHlvdSBkbyB0aGlzIGNoYW5nZSBpbiBv
+bmUgY29tbWl0ID8KClsxXQpodHRwczovL2dpdGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJv
+b3QvLS9jb21taXQvODBiNTY4ODcwMDZjZmJhNTA4MzM4ODFkYzMxZjA0NWQ0OTRhZjE4NQoKQmVz
+dCByZWdhcmRzLApSb21haW4KCj4gCj4gU2lnbmVkLW9mZi1ieTogRGFyaW8gQmluYWNjaGkgPGRh
+cmlvLmJpbmFjY2hpQGFtYXJ1bGFzb2x1dGlvbnMuY29tPgo+IC0tLQo+ICBjb25maWdzL3N0bTMy
+ZjQyOV9kaXNjb194aXBfZGVmY29uZmlnIHwgMSAtCj4gIDEgZmlsZSBjaGFuZ2VkLCAxIGRlbGV0
+aW9uKC0pCj4gCj4gZGlmZiAtLWdpdCBhL2NvbmZpZ3Mvc3RtMzJmNDI5X2Rpc2NvX3hpcF9kZWZj
+b25maWcgYi9jb25maWdzL3N0bTMyZjQyOV9kaXNjb194aXBfZGVmY29uZmlnCj4gaW5kZXggZDRl
+MDAwNDg3YTgwLi45OWFlOGNjNzUzM2IgMTAwNjQ0Cj4gLS0tIGEvY29uZmlncy9zdG0zMmY0Mjlf
+ZGlzY29feGlwX2RlZmNvbmZpZwo+ICsrKyBiL2NvbmZpZ3Mvc3RtMzJmNDI5X2Rpc2NvX3hpcF9k
+ZWZjb25maWcKPiBAQCAtMTMsNyArMTMsNiBAQCBCUjJfTElOVVhfS0VSTkVMX0lNQUdFX1RBUkdF
+VF9DVVNUT009eQo+ICBCUjJfTElOVVhfS0VSTkVMX0lNQUdFX1RBUkdFVF9OQU1FPSJ4aXBJbWFn
+ZSIKPiAgQlIyX0xJTlVYX0tFUk5FTF9EVFNfU1VQUE9SVD15Cj4gIEJSMl9MSU5VWF9LRVJORUxf
+SU5UUkVFX0RUU19OQU1FPSJzdG0zMmY0MjktZGlzY28iCj4gLUJSMl9QQUNLQUdFX0JVU1lCT1hf
+Q09ORklHPSJwYWNrYWdlL2J1c3lib3gvYnVzeWJveC1taW5pbWFsLmNvbmZpZyIKPiAgQlIyX1BB
+Q0tBR0VfQlVTWUJPWF9DT05GSUdfRlJBR01FTlRfRklMRVM9ImJvYXJkL3N0bWljcm9lbGVjdHJv
+bmljcy9jb21tb24vc3RtMzJmNHh4L2J1c3lib3guZnJhZ21lbnQiCj4gICMgQlIyX1BBQ0tBR0Vf
+SUZVUERPV05fU0NSSVBUUyBpcyBub3Qgc2V0Cj4gIEJSMl9UQVJHRVRfUk9PVEZTX0lOSVRSQU1G
+Uz15CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWls
+ZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMu
+YnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
