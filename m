@@ -1,58 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CA32C4828D
-	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 18:06:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58E90C4828F
+	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 18:49:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5208681F54;
-	Wed,  7 Feb 2024 18:06:35 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EHMc-ffZvMxi; Wed,  7 Feb 2024 18:06:34 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C94382075
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4C94382075;
-	Wed,  7 Feb 2024 18:06:34 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8A49C1BF20D
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 18:06:32 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 77C4560D78
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 18:06:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F0AD761476;
+	Wed,  7 Feb 2024 18:49:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6JafgklFA9eu for <buildroot@lists.busybox.net>;
- Wed,  7 Feb 2024 18:06:31 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
- helo=relay5-d.mail.gandi.net; envelope-from=peko@48ers.dk; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A535A610F2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A535A610F2
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A535A610F2
- for <buildroot@buildroot.org>; Wed,  7 Feb 2024 18:06:30 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A622C1C0003;
- Wed,  7 Feb 2024 18:06:25 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@48ers.dk>) id 1rXmJT-001Fd2-0Q;
- Wed, 07 Feb 2024 19:06:23 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id p0F0orHDIWNb; Wed,  7 Feb 2024 18:49:05 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1573061478
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1573061478;
+	Wed,  7 Feb 2024 18:49:05 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C3DB01BF20D
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 18:49:03 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id B0C6D81AF6
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 18:49:03 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id z7zfI6uRiDM6 for <buildroot@lists.busybox.net>;
+ Wed,  7 Feb 2024 18:49:02 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C75681AF3
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0C75681AF3
+ for <buildroot@buildroot.org>; Wed,  7 Feb 2024 18:49:02 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EAC7C87694; Wed,  7 Feb 2024 18:49:01 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed,  7 Feb 2024 19:06:19 +0100
-Message-Id: <20240207180620.298393-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.2
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: [Buildroot] [PATCH] package/ruby: build host-ruby with yaml support
+Date: Wed, 7 Feb 2024 19:48:22 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 29524958d52db07f749aef9d405ef06dee47ba22
+X-Git-Newrev: b5d83b4b649ee1e77811d9bf8ca6398725f6cce1
+X-Patchwork-Hint: ignore
+Message-Id: <20240207184901.EAC7C87694@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/uuu: drop README.md from license
+ files
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,52 +59,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-webkitgtk/wpewebkit needs a host-ruby with yaml support, otherwise the build
-fails with errors like:
+commit: https://git.buildroot.net/buildroot/commit/?id=b5d83b4b649ee1e77811d9bf8ca6398725f6cce1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cd /home/peko/source/buildroot/output/build/webkitgtk-2.42.2/Source/WebCore && \
-  /home/peko/source/buildroot/output/host/bin/ruby \
-    /home/peko/source/buildroot/output/build/webkitgtk-2.42.2/Source/WebCore/Scripts/GenerateSettings.rb \
-    --outputDir /home/peko/source/buildroot/output/build/webkitgtk-2.42.2/WebCore/DerivedSources \
-    --template /home/peko/source/buildroot/output/build/webkitgtk-2.42.2/Source/WebCore/Scripts/SettingsTemplates/InternalSettingsGenerated.cpp.erb \
-    --template /home/peko/source/buildroot/output/build/webkitgtk-2.42.2/Source/WebCore/Scripts/SettingsTemplates/InternalSettingsGenerated.idl.erb \
-    --template /home/peko/source/buildroot/output/build/webkitgtk-2.42.2/Source/WebCore/Scripts/SettingsTemplates/InternalSettingsGenerated.h.erb \
-    --template /home/peko/source/buildroot/output/build/webkitgtk-2.42.2/Source/WebCore/Scripts/SettingsTemplates/Settings.cpp.erb \
-    --template /home/peko/source/buildroot/output/build/webkitgtk-2.42.2/Source/WebCore/Scripts/SettingsTemplates/Settings.h.erb \
-    /home/peko/source/buildroot/output/build/webkitgtk-2.42.2/WTF/Scripts/Preferences/UnifiedWebPreferences.yaml \
-    /home/peko/source/buildroot/output/build/webkitgtk-2.42.2/Source/WebCore/page/Settings.yaml
-/home/peko/source/buildroot/output/host/lib/ruby/3.3.0/yaml.rb:3: warning: It seems your ruby installation is missing psych (for YAML output).
-To eliminate this warning, please install libyaml and reinstall your ruby.
+The patch drops the file README.md from the license files. Indeed, the
+licensing terms apply to third-party libraries that uuu links to, and
+even though they are bundled in the source tree of uuu|mfgtools, they
+are not used by Buildroot as we use the ones we build. Therefore, the
+actual license file of the package is the file LICENSE.
 
-We do not currently have any Config.in.host options for ruby or libyaml, but
-given how small/fast libyaml is to build just do it unconditionally.
+Moreover, this also leads to simplifying the bump to new versions.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/ruby/ruby.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/uuu/uuu.hash | 1 -
+ package/uuu/uuu.mk   | 2 +-
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index 4b9ce80e67..00fa0e0f65 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -20,7 +20,7 @@ RUBY_LICENSE_FILES = LEGAL COPYING BSDL
- RUBY_CPE_ID_VENDOR = ruby-lang
- 
- RUBY_DEPENDENCIES = host-pkgconf host-ruby
--HOST_RUBY_DEPENDENCIES = host-pkgconf host-openssl
-+HOST_RUBY_DEPENDENCIES = host-libyaml host-pkgconf host-openssl
- RUBY_MAKE_ENV = $(TARGET_MAKE_ENV)
- RUBY_CONF_OPTS = \
- 	--disable-install-doc \
--- 
-2.39.2
-
+diff --git a/package/uuu/uuu.hash b/package/uuu/uuu.hash
+index c231d5d729..e45cbb8680 100644
+--- a/package/uuu/uuu.hash
++++ b/package/uuu/uuu.hash
+@@ -1,4 +1,3 @@
+ # locally computed
+ sha256  6e65fc028afacc94b805ae376e3da3864dcb2570d425037820e716207ab70373  uuu_source-uuu_1.5.165.tar.gz
+ sha256  cc8d47f7b9260f6669ecd41c24554c552f17581d81ee8fc602c6d23edb8bf495  LICENSE
+-sha256  1b3d030a1824d633f75194743bd92bc1ed2d9a4bf1915bc11e49bf4c0c54012d  README.md
+diff --git a/package/uuu/uuu.mk b/package/uuu/uuu.mk
+index 80d5e1937a..5800277b10 100644
+--- a/package/uuu/uuu.mk
++++ b/package/uuu/uuu.mk
+@@ -8,7 +8,7 @@ UUU_VERSION = 1.5.165
+ UUU_SOURCE = uuu_source-uuu_$(UUU_VERSION).tar.gz
+ UUU_SITE = https://github.com/NXPmicro/mfgtools/releases/download/uuu_$(UUU_VERSION)
+ UUU_LICENSE = BSD 3-Clause "New" or "Revised" License
+-UUU_LICENSE_FILES = LICENSE README.md
++UUU_LICENSE_FILES = LICENSE
+ HOST_UUU_DEPENDENCIES = \
+ 	host-bzip2 \
+ 	host-libusb \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
