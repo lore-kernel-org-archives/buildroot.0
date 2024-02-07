@@ -4,97 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 051B6C4828F
-	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 16:40:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29F51C4828D
+	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 16:40:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C097381BE3;
-	Wed,  7 Feb 2024 16:40:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EDD1881B69;
+	Wed,  7 Feb 2024 16:40:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PzqC8NBn3MLi; Wed,  7 Feb 2024 16:40:19 +0000 (UTC)
+	with ESMTP id 106gynIxcifv; Wed,  7 Feb 2024 16:40:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AB84C81C0A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1DA7E81B71
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AB84C81C0A;
-	Wed,  7 Feb 2024 16:40:19 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id ACEF81BF954
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 16:40:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1DA7E81B71;
+	Wed,  7 Feb 2024 16:40:45 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0FFB21BF86C
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 16:40:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9893541553
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 16:40:18 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id F20D561427
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 16:40:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YSXVEf85zD-i for <buildroot@lists.busybox.net>;
- Wed,  7 Feb 2024 16:40:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
- envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5AF2441461
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5AF2441461
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5AF2441461
- for <buildroot@buildroot.org>; Wed,  7 Feb 2024 16:40:17 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- 5b1f17b1804b1-40fc549ab9bso7404305e9.0
- for <buildroot@buildroot.org>; Wed, 07 Feb 2024 08:40:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707324015; x=1707928815;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=TrfuWgExoHVeriU8T9Tu6taKbK2ifbJ9gUey1q+wb6E=;
- b=fMITAIGZ7ZGiCRiMTkqQqYobR+qW5+MfnqmowKWJXyXyeznWVJ2he2lgUOwv8czXJ9
- QsYVNmDJjz5wa6V+Ut0u1uFVFVBP5pKPvjWAR2f6EH320AiJ4v1dFq5/wt/8G+3CE1+O
- wCylMRx05Ji8n7IqN9dH0NvD9A6ByulDYL8goTc6p4oy/ZUXfKNPuDshyV0ya/FDbvQB
- JccJqbdVqv6fUhczXLRt7YvvOszhiJV1HIXNHuuS0r4esJMZ3UI1qTNcX53er3nmC7DZ
- lSo5UGpp5rf9bImI07fcpkyf6jDvr3FUk03kybe6MhdWoY5f7x9D3whRUcXI+dCxvEIj
- fVhQ==
-X-Gm-Message-State: AOJu0YyKy358n6abEltjbffJCRNAmPe9267uY3i2641YhJWeS8SXYq+s
- sGBMODUUnoCFC3Mshkh+qhQqSKCXnioFWlthxKY07CRgVusDNaUnca5G604rrf4XmnI7msezO/Y
- /
-X-Google-Smtp-Source: AGHT+IGYBn9kIsX+5RX5nU6sqd7BNWR2Q4yNKp8Lss2Lu5o2sbHrc6zHX2uykH0U37BWAt7It1rX8g==
-X-Received: by 2002:a5d:4986:0:b0:33b:139e:9110 with SMTP id
- r6-20020a5d4986000000b0033b139e9110mr3906163wrq.36.1707324015374; 
- Wed, 07 Feb 2024 08:40:15 -0800 (PST)
-X-Forwarded-Encrypted: i=1;
- AJvYcCXUSj3VEJiK+XMu8gWmBAOhx/dEmmy8R3ancl+Yd194RZx258sYklTRh9pnydUJz2pxGNxI7NIPwr+vq/ZC8O2H/JCrG/L8jMdgpb11ryn5+BqmenpqjzyEa0U=
-Received: from [192.168.16.188] ([85.119.216.19])
- by smtp.gmail.com with ESMTPSA id
- n15-20020adff08f000000b0033b1c321070sm1855608wro.31.2024.02.07.08.40.14
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 07 Feb 2024 08:40:15 -0800 (PST)
-Message-ID: <8275fdf4-c20b-4f30-b6bd-a3ef1c03575c@mind.be>
-Date: Wed, 7 Feb 2024 17:40:10 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lCulIV7CQYDZ for <buildroot@lists.busybox.net>;
+ Wed,  7 Feb 2024 16:40:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6640460BBF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6640460BBF
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6640460BBF
+ for <buildroot@buildroot.org>; Wed,  7 Feb 2024 16:40:42 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E51ED40007;
+ Wed,  7 Feb 2024 16:40:38 +0000 (UTC)
+Date: Wed, 7 Feb 2024 17:40:32 +0100
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Message-ID: <20240207174032.5de5fb81@windsurf>
+In-Reply-To: <20240207161704.2981151-1-dario.binacchi@amarulasolutions.com>
+References: <20240207161704.2981151-1-dario.binacchi@amarulasolutions.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-GB
-To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
-References: <20240111065011.3057364-1-james.hilliard1@gmail.com>
-In-Reply-To: <20240111065011.3057364-1-james.hilliard1@gmail.com>
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1707324015; x=1707928815; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=TrfuWgExoHVeriU8T9Tu6taKbK2ifbJ9gUey1q+wb6E=;
- b=GKMPrPU0IeQ3J3oa4PALo6ehMtlQw13k69g1W6pOX88ZBjqHzZPyPEIuAAZS/Ku68b
- IS7PE3Bamu7qo49a4SFSUp35A/bjNYLUFW12dMfyUAhFYZo4rSIAxSugoE9JWze+bCUH
- BQeDnpwir83hwHG5P0hVY8pDpNcczOd682S4jXgfupjS0KNRX4RjmYTPPfvA2dE8RJGM
- u8Cm2uoE9ThUxvmwcM+zhshpFjicZ3mjHVcEqnDxeCfMxnTGVwmLFSam0IxW5xRCNKe1
- M3PUQOPwB5xCuB4wWlOGhWw6jzeNL6BlJyScPPcBTWKJ7aZ+rSJEJNrZoeiKXT5yGRDG
- wlOA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=GKMPrPU0
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-simplejson: bump to
- version 3.19.2
+ d=bootlin.com; s=gm1; t=1707324039;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Bn1y8UwGYGXQwcDTJ0idRaPsqRX+9o0aPGImOS7xR3o=;
+ b=fqPcA3leVaevsbFj16udLHE4Uj9z3VynTrWMi52XNpU1Tat1JXALrVkoYfFc0RQ1DWQ3je
+ O70xT6ZC70H7gyQG8+QY2Ae/hQ/0MerOrJ2GvyvvEvZAfkPI2svmVGwbLZd6BFc8PGbMRR
+ QPkcImC1Q9zIqNbEpf7vjojHEaPlvYZOVMgpq/s1L6LY/h7BSBd657QDPCvwwiFPRhN4Ei
+ 6ENYlZf0P2HFP2jZiZWZbQJEi4T158oSwGCkV3u5zAUXU7+6v69grvjGb6oqaU00TQrgpz
+ hPeCikV0bDRXaWYrV17orOJyVfAqGA7N3EUIhkEWbHS6eQ9iRwI1ATX1Gr4Baw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=fqPcA3le
+Subject: Re: [Buildroot] [PATCH 1/1] configs: drop redundant configuration
+ for no MMU platforms
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,58 +81,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: Ludovic Desroches <ludovic.desroches@microchip.com>,
- Asaf Kahlon <asafka7@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Niklas Cassel <niklas.cassel@wdc.com>, Thomas Huth <huth@tuxfamily.org>,
+ Jesse Taube <Mr.Bossman075@gmail.com>, Damien Le Moal <dlemoal@kernel.org>,
+ Christophe Priouzeau <christophe.priouzeau@foss.st.com>,
+ buildroot@buildroot.org, Romain Naour <romain.naour@smile.fr>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+On Wed,  7 Feb 2024 17:17:04 +0100
+Dario Binacchi <dario.binacchi@amarulasolutions.com> wrote:
 
-
-On 11/01/2024 07:50, James Hilliard wrote:
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-
-  Applied to master, thanks.
-
-  Regards,
-  Arnout
-
-> ---
->   package/python-simplejson/python-simplejson.hash | 4 ++--
->   package/python-simplejson/python-simplejson.mk   | 4 ++--
->   2 files changed, 4 insertions(+), 4 deletions(-)
+> The package/busybox/busybox-minimal.config is the default configuration
+> for MMU-less systems, so the setting is redundant and can be removed
+> without effect.
 > 
-> diff --git a/package/python-simplejson/python-simplejson.hash b/package/python-simplejson/python-simplejson.hash
-> index a8b946b2c4..9f96f99bf4 100644
-> --- a/package/python-simplejson/python-simplejson.hash
-> +++ b/package/python-simplejson/python-simplejson.hash
-> @@ -1,5 +1,5 @@
->   # md5, sha256 from https://pypi.org/pypi/simplejson/json
-> -md5  ecd07fca7a7fa0bcc9acdf9d82e41eb1  simplejson-3.18.1.tar.gz
-> -sha256  746086e3ef6d74b53599df31b491d88a355abf2e31c837137dd90f8c4561cafa  simplejson-3.18.1.tar.gz
-> +md5  3b334627d870a3c849e1322d18a7bfe7  simplejson-3.19.2.tar.gz
-> +sha256  9eb442a2442ce417801c912df68e1f6ccfcd41577ae7274953ab3ad24ef7d82c  simplejson-3.19.2.tar.gz
->   # Locally computed sha256 checksums
->   sha256  fcaa1e313a99304322e2e0836ea4ee7d839ce9a480438f3922a853edfdde129f  LICENSE.txt
-> diff --git a/package/python-simplejson/python-simplejson.mk b/package/python-simplejson/python-simplejson.mk
-> index 5782626387..d5ba3948b7 100644
-> --- a/package/python-simplejson/python-simplejson.mk
-> +++ b/package/python-simplejson/python-simplejson.mk
-> @@ -4,9 +4,9 @@
->   #
->   ################################################################################
->   
-> -PYTHON_SIMPLEJSON_VERSION = 3.18.1
-> +PYTHON_SIMPLEJSON_VERSION = 3.19.2
->   PYTHON_SIMPLEJSON_SOURCE = simplejson-$(PYTHON_SIMPLEJSON_VERSION).tar.gz
-> -PYTHON_SIMPLEJSON_SITE = https://files.pythonhosted.org/packages/0f/a0/79d2bec499cb53678bc20d41f9706ca02777f0876efa9b29a69fb3d55dfd
-> +PYTHON_SIMPLEJSON_SITE = https://files.pythonhosted.org/packages/79/79/3ccb95bb4154952532f280f7a41979fbfb0fbbaee4d609810ecb01650afa
->   PYTHON_SIMPLEJSON_LICENSE = Academic Free License (AFL), MIT
->   PYTHON_SIMPLEJSON_LICENSE_FILES = LICENSE.txt
->   PYTHON_SIMPLEJSON_CPE_ID_VENDOR = simplejson_project
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> ---
+>  configs/canaan_kd233_defconfig            | 1 -
+>  configs/imxrt1050-evk_defconfig           | 3 ---
+>  configs/qemu_m68k_mcf5208_defconfig       | 3 ---
+>  configs/qemu_riscv64_nommu_virt_defconfig | 3 ---
+>  configs/qemu_xtensa_lx60_nommu_defconfig  | 3 ---
+>  configs/sipeed_maix_bit_defconfig         | 1 -
+>  configs/sipeed_maix_bit_sdcard_defconfig  | 1 -
+>  configs/sipeed_maix_dock_defconfig        | 1 -
+>  configs/sipeed_maix_dock_sdcard_defconfig | 1 -
+>  configs/sipeed_maix_go_defconfig          | 1 -
+>  configs/sipeed_maix_go_sdcard_defconfig   | 1 -
+>  configs/sipeed_maixduino_defconfig        | 1 -
+>  configs/sipeed_maixduino_sdcard_defconfig | 1 -
+>  configs/stm32f429_disco_xip_defconfig     | 1 -
+>  configs/stm32f469_disco_sd_defconfig      | 1 -
+>  configs/stm32f469_disco_xip_defconfig     | 1 -
+>  configs/stm32f769_disco_sd_defconfig      | 1 -
+>  17 files changed, 25 deletions(-)
+
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
