@@ -4,91 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D908DC4828F
-	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 20:49:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12C49C4828F
+	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 21:48:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 833B683CCA;
-	Wed,  7 Feb 2024 20:49:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9401785586;
+	Wed,  7 Feb 2024 21:48:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id m2n3dRMIoIb2; Wed,  7 Feb 2024 20:49:09 +0000 (UTC)
+	with ESMTP id bWogbLybwXSH; Wed,  7 Feb 2024 21:48:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA03083CCE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C41FC85584
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AA03083CCE;
-	Wed,  7 Feb 2024 20:49:09 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0FDA91BF3DF
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 20:49:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C41FC85584;
+	Wed,  7 Feb 2024 21:48:53 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5B72A1BF3DF
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 21:48:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F0C4D41714
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 20:49:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B3A024EBF0
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 21:47:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3a5pEjfVgSOx for <buildroot@lists.busybox.net>;
- Wed,  7 Feb 2024 20:49:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::131; helo=mail-lf1-x131.google.com;
- envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6F55C41718
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F55C41718
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com
- [IPv6:2a00:1450:4864:20::131])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6F55C41718
- for <buildroot@buildroot.org>; Wed,  7 Feb 2024 20:49:05 +0000 (UTC)
-Received: by mail-lf1-x131.google.com with SMTP id
- 2adb3069b0e04-51165efb684so2058192e87.3
- for <buildroot@buildroot.org>; Wed, 07 Feb 2024 12:49:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707338944; x=1707943744;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=hJTLnWLU8qxiNkT0ea+1RZX3YjTEjI3zLio/D6DlGmA=;
- b=strwT3yTwZDSP7AGs8s/m6TUYI5BJQdzaGEjHfJIZCvnmowfSHji7Gnh0ThhYL9YY1
- jBCfFdJVfXF1MHeumzVwcmJHZ7beXVn5FcmYTO0U1+DOPWIMJaQKq3EPyB8DLAYdeQvU
- XvSxalYOql77dC+PO5QKZ0OSMlbAUtUAh4DlE6YJItxGzRbzlwWw/5UG8n27tIVBmvWu
- wv0NopB/d9FOTw/kZigDpvJo+ECMxdC3n3OIuxe6hjgNF+O2W16tg3KHSTQwF/svpCrF
- DxvS1KtpwtCJT57br6MEUAtV0Ks/+asFhl0UGirGtDL0UB2GkJz2R5p7XpMnYn+HUJW2
- OK9g==
-X-Gm-Message-State: AOJu0YxYHkj8jKV2cF7b6ehJO1+8YNFqt6EMeqMPP3mRoXPJIW5NOYLX
- k1e6MFH2pdQyTSrnPc8/f6Hocnd7gjU+mzgVKDZlHRSEq4GBRcN9dddLRIoNGppB9H8tXhuRU/c
- BWePyDMriP+zlbN8qR0eZ7YY3Ngs=
-X-Google-Smtp-Source: AGHT+IFbuiDr2Gu7VEW/Q9F2fVnTl62jRCAABsN6aO2KcYK3NixmjtYf6fQ0w39fXAb2m7abxE1H7P8TGU6aljM8EZ4=
-X-Received: by 2002:ac2:5b85:0:b0:511:fb6:b1a0 with SMTP id
- o5-20020ac25b85000000b005110fb6b1a0mr5107998lfn.52.1707338943437; Wed, 07 Feb
- 2024 12:49:03 -0800 (PST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id emKfZrauqEeT for <buildroot@lists.busybox.net>;
+ Wed,  7 Feb 2024 21:47:36 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.42;
+ helo=smtpcmd0642.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 545144EBE1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 545144EBE1
+Received: from smtpcmd0642.aruba.it (smtpcmd0642.aruba.it [62.149.156.42])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 545144EBE1
+ for <buildroot@buildroot.org>; Wed,  7 Feb 2024 21:47:33 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id XplSrgAP7m8ALXplSruKVK; Wed, 07 Feb 2024 22:47:31 +0100
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Date: Wed,  7 Feb 2024 22:47:29 +0100
+Message-Id: <20240207214729.115691-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20240114135446.1156025-1-fontaine.fabrice@gmail.com>
- <20240207164741.1bad9b44@windsurf>
-In-Reply-To: <20240207164741.1bad9b44@windsurf>
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 7 Feb 2024 21:48:51 +0100
-Message-ID: <CAPi7W83R+a-vwbBVS-Lk-u7gW5isBmfz8aJpCYUQap1cRM54Ug@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1707338944; x=1707943744; darn=buildroot.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=hJTLnWLU8qxiNkT0ea+1RZX3YjTEjI3zLio/D6DlGmA=;
- b=AM9CUMV3RevF55ypNBzpAbW2KIMcnJLQ2khaP2NgcrreDaV6aoartiFfOKOsdPo6Xr
- EYNuWZa7ygBsg3g35g9lB+E+LOx9JS90gJRdM5O4z9oKiKdowtcqmSPnel3+WiShd5m1
- x2W9AMM3b4qOwXAMa2hr++LsMGZHBgEVRl3q1jeu3vTZqz7fjIYl8brln31/rLgVvMiN
- 8aWeyVHKKm62P2mqmYQs9ccgWMMqaI0MjqliLpvw0DP0wxK0C7KBOzop3MOKBR7ABC0p
- xNlNeW4tueUuyd0ehtk57+WMu+04OdufFpXLGxnerA2MMb80kuw0kO8CuFhbbf8UrhiV
- syTw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-CMAE-Envelope: MS4xfCxDBV/yWv6daORpbbJlEJA8mOJCXZrXAUdrKoZ3oKtB+qDRQpQC5MgmquwAdA9Zf8Al8hqYD2hBo3tUflRxGjHpOb2eEprd/PFy3k9ziCLTjAlkMtUE
+ f+qkO95pn2/JqFYkAR1Zm0IqspLaSAf+JNXu97QvqEKX08jjETEI3lHQ2IqrdoEYm2tJaJgI/0OTdKFBOPf8f4sZjqc8s9MK2GBi2ybvCllYQq70EgIpomP0
+ GUjCiSSBlnYCfrzJyQ5vlJgVB3AXCld1uhb5PUQMCVCHnQj+0RGikB71+b6ygqvQEBnvRvUupW1oZnVm+EF2wA==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1707342451; bh=DLVc1TOl7njn3g0je90eJKq/VPJ2Wglt/lcVR6BB8L8=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=BAJP1Mr4BZpkPDWXrBLQwGTDjtjQPtc11FviRnQ0eg5ZS0f9lTwKh/yARyN/f7qb0
+ y64VSVaC2zqA+0/ohI6CTMGRBwGboelsPA5hm/W8UYnzNHdnzdxL07jKOfQDLuQ3T3
+ KKNT3kWyldxkpkQq4zQyU17LmEoRJrbH7NIuK+2vPz/rjkH9H6u+2bvsNPS2SjtT4E
+ EnJlzwIdPW2fKUWnblEI6+5u6dJhJa0vdBTYrCPqvkfJU4fgclNoLYLZ3LKE/pud1m
+ 0tIQ5xPR7r2in/2cGXJ/FlK/8EVtj7Z5MfMtxxYh/mTKzQAF8Ytn/MR6UKvDT3jQtb
+ dTmYPyqZMUfOA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=AM9CUMV3
-Subject: Re: [Buildroot] [PATCH v2,
- 1/1] package/tinymembench: force arm mode instead of Thumb mode
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=BAJP1Mr4
+Subject: [Buildroot] [PATCH] package/rtl8188eu: bump to 2024-02-06 version
+ on v5.2.2.4 branch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,41 +79,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Luca Ceresoli <luca.ceresoli@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8sCgpMZSBtZXIuIDcgZsOpdnIuIDIwMjQgw6AgMTY6NDcsIFRob21hcyBQZXRhenpvbmkK
-PHRob21hcy5wZXRhenpvbmlAYm9vdGxpbi5jb20+IGEgw6ljcml0IDoKPgo+IEhlbGxvIEZhYnJp
-Y2UsCj4KPiBPbiBTdW4sIDE0IEphbiAyMDI0IDE0OjU0OjQ2ICswMTAwCj4gRmFicmljZSBGb250
-YWluZSA8Zm9udGFpbmUuZmFicmljZUBnbWFpbC5jb20+IHdyb3RlOgo+Cj4gPiArIyB0aW55bWVt
-YmVuY2ggaGFzIHNvbWUgYXNzZW1ibHkgZnVuY3Rpb24gdGhhdCBpcyBub3QgcHJlc2VudCBpbiBU
-aHVtYiBtb2RlOgo+ID4gKyMgRXJyb3I6IGluc3RydWN0aW9uIG5vdCBzdXBwb3J0ZWQgaW4gVGh1
-bWIxNiBtb2RlIC0tIGBzdWJzIHIxLHIxLCMxNicKPiA+ICsjIHNvLCB3ZSBkZXNhY3RpdmF0ZSBU
-aHVtYiBtb2RlCj4gPiAraWZlcSAoJChCUjJfQVJNX0lOU1RSVUNUSU9OU19USFVNQikseSkKPiA+
-ICtUSU5ZTUVNQkVOQ0hfTUFLRV9PUFRTICs9IENGTEFHUz0iJChUQVJHRVRfQ0ZMQUdTKSAtbWFy
-bSIKPiA+ICtlbmRpZgo+Cj4gV2h5IGRvbid0IHdlIHNpbXBseSBleHRlbmQgdGhlIGV4aXN0aW5n
-IHBhdGNoIGluIHRoZSBzYW1lIHdheT8gSXQncwo+IGp1c3QgdGhhdCBuZXcgY29kZSBoYXMgYmVl
-biBhZGRlZCBpbiBtYWluLmMgdGhhdCBpc24ndCBUaHVtYgo+IGNvbXBhdGlibGUsIHNvIEkgdGhp
-bmsgeW91IGNvdWxkIGNoYW5nZToKPgo+ICNpZmRlZiBfX2FybV9fCj4KPiB0bwo+Cj4gI2lmIGRl
-ZmluZWQoX19hcm1fXykgJiYgZGVmaW5lZChfX0FSTV9BUkNIX0lTQV9BUk0pCj4KPiBpbiBtYWlu
-LmMsIGFuZCB0aGlzIHNob3VsZCBnZXQgeW91IGdvaW5nLiBDb3VsZCB5b3UgdHJ5IHRoaXMgaW5z
-dGVhZD8KCkZpcnN0LCBpdCBzaG91bGQgYmUgbm90ZWQgdGhhdCB0aGUgYnVpbGQgZmFpbHVyZSBp
-cyBub3QgcmVsYXRlZCB0byBhbnkKbmV3IGNvZGUsIHRoaXMgY29kZSB3YXMgYWxyZWFkeSB0aGVy
-ZSBpbiB2MC4zOgpodHRwczovL2dpdGh1Yi5jb20vc3N2Yi90aW55bWVtYmVuY2gvYmxvYi92MC4z
-L21haW4uYwoKTW9yZW92ZXIsIEkgYWxyZWFkeSB0cmllZCB0aGF0IGFwcHJvYWNoIGFuZCB0aGlz
-IGRvZXNuJ3Qgd29yayBhcwpfX0FSTV9BUkNIX0lTQV9BUk0gaXMgZGVmaW5lZCBieSB0aGUgdG9v
-bGNoYWluLgpfX0FSTV9BUkNIX0lTQV9USFVNQiB2YWx1ZSBjb3VsZCBiZSBjaGVja2VkIGluc3Rl
-YWQgYnV0IEkgd2FzIG5vdApjb25maWRlbnQgaW4gdGhpcyBzb2x1dGlvbiBhczoKIC0gSSBkb24n
-dCBmdWxseSB1bmRlcnN0YW5kIHdoYXQgYXJlIHRoZSBkaWZmZXJlbnQgbWVhbmluZyBvZgpfX0FS
-TV9BUkNIX0lTQV97QVJNLFRIVU1CfSB2YWx1ZXMKIC0gdXBzdHJlYW0gZmVlZGJhY2sgb24gZmly
-c3QgcGF0Y2ggd2FzIG5vdCByZWFsbHkgcG9zaXRpdmUgYmFjayBpbiAyMDE3CiAtIHVwc3RyZWFt
-IHNlZW1zIGRlYWQgbm93IHNvIG5vbiB1cHN0cmVhbWFibGUgcGF0Y2hlcyB3aWxsIGhhdmUgdG8g
-YmUKa2VwdCAiZm9yZXZlciIKCj4KPiBUaGFua3MhCj4KPiBUaG9tYXMKPiAtLQo+IFRob21hcyBQ
-ZXRhenpvbmksIGNvLW93bmVyIGFuZCBDRU8sIEJvb3RsaW4KPiBFbWJlZGRlZCBMaW51eCBhbmQg
-S2VybmVsIGVuZ2luZWVyaW5nIGFuZCB0cmFpbmluZwo+IGh0dHBzOi8vYm9vdGxpbi5jb20KCkJl
-c3QgUmVnYXJkcywKCkZhYnJpY2UKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9y
-ZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+This version allows to build with Linux 6.8
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/rtl8188eu/rtl8188eu.hash | 2 +-
+ package/rtl8188eu/rtl8188eu.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/rtl8188eu/rtl8188eu.hash b/package/rtl8188eu/rtl8188eu.hash
+index eb28e6cf0a..4f8f83e78c 100644
+--- a/package/rtl8188eu/rtl8188eu.hash
++++ b/package/rtl8188eu/rtl8188eu.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  8cb10a047d39f13c776b0097ef1290f6b3c63590fd57bc0827e8638c878819f0  rtl8188eu-306f3e62cf7cddf8cee74f70f88a7a7b3af46f56.tar.gz
++sha256  507d32eb91d3d407c7758319c81a36a9dc69e2b89378cabcd382411153927b7b  rtl8188eu-f42fc9c45d2086c415dce70d3018031b54a7beef.tar.gz
+ sha256  af8067302947c01fd9eee72befa54c7e3ef8a48fecde7fd71277f2290b2bf0f7  COPYING
+diff --git a/package/rtl8188eu/rtl8188eu.mk b/package/rtl8188eu/rtl8188eu.mk
+index 36a84d34de..eca0fb8007 100644
+--- a/package/rtl8188eu/rtl8188eu.mk
++++ b/package/rtl8188eu/rtl8188eu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RTL8188EU_VERSION = 306f3e62cf7cddf8cee74f70f88a7a7b3af46f56
++RTL8188EU_VERSION = f42fc9c45d2086c415dce70d3018031b54a7beef
+ RTL8188EU_SITE = $(call github,lwfinger,rtl8188eu,$(RTL8188EU_VERSION))
+ RTL8188EU_LICENSE = GPL-2.0, proprietary (rtl8188eufw.bin firmware blob)
+ RTL8188EU_LICENSE_FILES = COPYING
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
