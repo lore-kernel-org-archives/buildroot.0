@@ -4,49 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02E82C4828F
-	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 15:58:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 095AFC4828D
+	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 15:59:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B7F5583BBB;
-	Wed,  7 Feb 2024 15:58:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C070B83BCB;
+	Wed,  7 Feb 2024 15:59:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lM8jIvZb6AHZ; Wed,  7 Feb 2024 15:58:42 +0000 (UTC)
+	with ESMTP id n4rLptPExQSs; Wed,  7 Feb 2024 15:59:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6C0D83BBC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B13A183BCC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C6C0D83BBC;
-	Wed,  7 Feb 2024 15:58:41 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 135AF1BF471
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 15:58:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B13A183BCC;
+	Wed,  7 Feb 2024 15:59:11 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B77461BF21A
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 15:59:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 009FA61418
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 15:58:40 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A4FA383BCC
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 15:59:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Bkv2-Z8YPPjm for <buildroot@lists.busybox.net>;
- Wed,  7 Feb 2024 15:58:39 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4aNcjJyVjIfD for <buildroot@lists.busybox.net>;
+ Wed,  7 Feb 2024 15:59:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0CEC561409
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0CEC561409
- for <buildroot@buildroot.org>; Wed,  7 Feb 2024 15:58:39 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 036E7875F4; Wed,  7 Feb 2024 15:58:39 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 7 Feb 2024 16:58:11 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e2abe228230a017a7014d7aefd002ebb2c904442
-X-Git-Newrev: cc1181524da559b684320ee4d3a5a0fdd69dc3bc
-X-Patchwork-Hint: ignore
-Message-Id: <20240207155839.036E7875F4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-sentry-sdk: bump to version
- 1.39.2
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 850C683BCB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 850C683BCB
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 850C683BCB
+ for <buildroot@buildroot.org>; Wed,  7 Feb 2024 15:59:08 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown [85.119.216.19])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id F176913F89C;
+ Wed,  7 Feb 2024 16:58:59 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Wed, 07 Feb 2024 16:58:59 +0100
+Date: Wed, 7 Feb 2024 16:58:59 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Antoine Coutant <antoine.coutant@smile.fr>
+Message-ID: <ZcOow6Wd11qTf8Qs@landeda>
+References: <20240202093625.1409559-1-antoine.coutant@smile.fr>
+ <20240202093625.1409559-5-antoine.coutant@smile.fr>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20240202093625.1409559-5-antoine.coutant@smile.fr>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1707321545;
+ bh=HPx5oezH/1z2ovpW/gY7j7AKvHh5PvD2lPhzVQSf6PI=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=YKLjpQXjVMfHIhEqKUncRBveclMm1kHNw0MqeW/iA4JsLxxwKSwCjENRN6T9jq92a
+ Rde04HCC4INphvxU+Ai3h47jAmt8Qr1roQ1cQKl5i0VxtQ2Sdp1j4ipstMhGsPMeGc
+ U9Qy1vHfpExRuoJWzZ8ZN81pd0dM7P0z459+fhGjtZVvblScMs3v895ko0ygn3cmtd
+ HyyBIUADGDNqLLsklittagekSTPnOdccRCMAR4YKg8w1hqZYLI0RgS3UumN/1wyWyZ
+ JAtEXndCdt8YVU1TwsEtwSDMYAakEJKss0cr1mP6eQOpO+iJYoGV+aEUhMhSdtRPgO
+ R3NFBr8A42qTQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=YKLjpQXj
+Subject: Re: [Buildroot] [PATCH v4 4/7] package/opencl-headers: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,59 +80,107 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-MIME-Version: 1.0
+Cc: sebastian.weyer@smile.fr, bernd@kuhls.net, romain.naour@smile.fr,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc1181524da559b684320ee4d3a5a0fdd69dc3bc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Antoine, All,
 
-License changed to MIT:
-https://github.com/getsentry/sentry-python/commit/9ed5e27636d05bc30cd363c19a032ace8447f5ad
+On 2024-02-02 10:36 +0100, Antoine Coutant spake thusly:
+> From: Sebastian Weyer <sebastian.weyer@smile.fr>
+> 
+> These headers provide the C language API bindings. It is a complement to
+> the C++ bindings already available in opencl-clhpp. This package is
+> required to build opencl-icd-loader:
+> 
+> https://github.com/KhronosGroup/OpenCL-ICD-Loader#dependencies
+> 
+> Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
+> Signed-off-by: Antoine Coutant <antoine.coutant@smile.fr>
+> ---
+[--SNIP--]
+> diff --git a/package/opencl-headers/Config.in b/package/opencl-headers/Config.in
+> new file mode 100644
+> index 0000000000..092d8a2a4d
+> --- /dev/null
+> +++ b/package/opencl-headers/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_OPENCL_HEADERS
+> +	bool "opencl-headers"
+> +	depends on BR2_PACKAGE_HAS_LIBOPENCL
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
----
- package/python-sentry-sdk/python-sentry-sdk.hash | 6 +++---
- package/python-sentry-sdk/python-sentry-sdk.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+BR2_PACKAGE_HAS_LIBOPENCL can be set by mesa3d when BR2_PACKAGE_MESA3D_OPENCL
+is enabled. In this case, will mesa3d install its own headers? If so,
+that will generate a conflict.
 
-diff --git a/package/python-sentry-sdk/python-sentry-sdk.hash b/package/python-sentry-sdk/python-sentry-sdk.hash
-index 38ae3380a8..2534a48221 100644
---- a/package/python-sentry-sdk/python-sentry-sdk.hash
-+++ b/package/python-sentry-sdk/python-sentry-sdk.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/sentry-sdk/json
--md5  ea2d728c847879f66c3d24cfbade2026  sentry-sdk-1.12.1.tar.gz
--sha256  5bbe4b72de22f9ac1e67f2a4e6efe8fbd595bb59b7b223443f50fe5802a5551c  sentry-sdk-1.12.1.tar.gz
-+md5  94ba9002bbfaf8c443c496b05bbc32eb  sentry-sdk-1.39.2.tar.gz
-+sha256  24c83b0b41c887d33328a9166f5950dc37ad58f01c9f2fbff6b87a6f1094170c  sentry-sdk-1.39.2.tar.gz
- # Locally computed sha256 checksums
--sha256  59404d4c854e579097d41bfccd5006afde9d6d70e646cf55074cdbfead5ecf1c  LICENSE
-+sha256  2a140d660f462812fa290bc740d04633126c5ec45d84b79b569e127b0eeddd0b  LICENSE
-diff --git a/package/python-sentry-sdk/python-sentry-sdk.mk b/package/python-sentry-sdk/python-sentry-sdk.mk
-index c3092a5184..f1c5648f07 100644
---- a/package/python-sentry-sdk/python-sentry-sdk.mk
-+++ b/package/python-sentry-sdk/python-sentry-sdk.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
- 
--PYTHON_SENTRY_SDK_VERSION = 1.12.1
-+PYTHON_SENTRY_SDK_VERSION = 1.39.2
- PYTHON_SENTRY_SDK_SOURCE = sentry-sdk-$(PYTHON_SENTRY_SDK_VERSION).tar.gz
--PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/32/03/496a7c8313658dec419303e8add969f314b7538c29f4ec5ebe6d86fb8ce2
-+PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/66/90/9deac5c137e9f0ede908757d886af77938ef28f94b24decedbdf98f1ca4d
- PYTHON_SENTRY_SDK_SETUP_TYPE = setuptools
--PYTHON_SENTRY_SDK_LICENSE = BSD-2-Clause
-+PYTHON_SENTRY_SDK_LICENSE = MIT
- PYTHON_SENTRY_SDK_LICENSE_FILES = LICENSE
- 
- $(eval $(python-package))
+Furthermore, this will also conflict with mesa3d-headers, and it also
+installs CL headers.
+
+So, why do we need opencl-headers and can't rely on the existing
+mesa3d-headers package?
+
+Regards,
+Yann E. MORIN.
+
+> +	help
+> +	  C language headers for the OpenCL API
+> +
+> +	  https://github.com/KhronosGroup/OpenCL-Headers
+> diff --git a/package/opencl-headers/opencl-headers.hash b/package/opencl-headers/opencl-headers.hash
+> new file mode 100644
+> index 0000000000..802ed05450
+> --- /dev/null
+> +++ b/package/opencl-headers/opencl-headers.hash
+> @@ -0,0 +1,3 @@
+> +#Locally generated
+> +sha256  407d5e109a70ec1b6cd3380ce357c21e3d3651a91caae6d0d8e1719c69a1791d  OpenCL-Headers-2023.12.14.tar.gz
+> +sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+> diff --git a/package/opencl-headers/opencl-headers.mk b/package/opencl-headers/opencl-headers.mk
+> new file mode 100644
+> index 0000000000..7aa0e0d168
+> --- /dev/null
+> +++ b/package/opencl-headers/opencl-headers.mk
+> @@ -0,0 +1,22 @@
+> +################################################################################
+> +#
+> +# opencl-headers
+> +#
+> +################################################################################
+> +
+> +OPENCL_HEADERS_VERSION = 2023.12.14
+> +OPENCL_HEADERS_SOURCE = OpenCL-Headers-$(OPENCL_HEADERS_VERSION).tar.gz
+> +OPENCL_HEADERS_SITE = $(call github,KhronosGroup,OpenCL-Headers,v$(OPENCL_HEADERS_VERSION))
+> +OPENCL_HEADERS_LICENSE = Apache-2.0
+> +OPENCL_HEADERS_LICENSE_FILES = LICENSE
+> +OPENCL_HEADERS_INSTALL_STAGING = YES
+> +
+> +OPENCL_HEADERS_INSTALL_TARGET = NO
+> +
+> +define OPENCL_HEADERS_INSTALL_STAGING_CMDS
+> +	mkdir -p $(STAGING_DIR)/usr/include/CL
+> +	$(INSTALL) -D -m 0644 $(@D)/CL/* \
+> +		$(STAGING_DIR)/usr/include/CL
+> +endef
+> +
+> +$(eval $(generic-package))
+> -- 
+> 2.25.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
