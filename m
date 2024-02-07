@@ -4,73 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69B3CC4828F
-	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 22:55:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8118C4828D
+	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 23:22:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0062441B95;
-	Wed,  7 Feb 2024 22:55:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 65F1E426D2;
+	Wed,  7 Feb 2024 23:22:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vw2RuqNr4IhJ; Wed,  7 Feb 2024 22:55:31 +0000 (UTC)
+	with ESMTP id rQzi9ywCLdUi; Wed,  7 Feb 2024 23:22:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF9494032A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 65A8E42883
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EF9494032A;
-	Wed,  7 Feb 2024 22:55:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2A0041BF82C
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 22:55:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 65A8E42883;
+	Wed,  7 Feb 2024 23:22:28 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A00951BF82C
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 23:22:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 23CD24025A
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 22:55:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8D3C785082
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 23:22:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 885fnVAOa0VI for <buildroot@lists.busybox.net>;
- Wed,  7 Feb 2024 22:55:28 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 29CC2401BC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29CC2401BC
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 29CC2401BC
- for <buildroot@buildroot.org>; Wed,  7 Feb 2024 22:55:27 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id DFC8678035B;
- Wed,  7 Feb 2024 23:55:24 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:40968])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 07 Feb 2024 23:55:24 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KJ4kCVZjrgdS for <buildroot@lists.busybox.net>;
+ Wed,  7 Feb 2024 23:22:25 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2001:868:100:600::216; helo=shout01.mail.de;
+ envelope-from=kilian.zinnecker@mail.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DDF3F8509F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DDF3F8509F
+Received: from shout01.mail.de (shout01.mail.de [IPv6:2001:868:100:600::216])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DDF3F8509F
+ for <buildroot@buildroot.org>; Wed,  7 Feb 2024 23:22:24 +0000 (UTC)
+Received: from postfix01.mail.de (postfix01.bt.mail.de [10.0.121.125])
+ by shout01.mail.de (Postfix) with ESMTP id A8403240C87;
+ Thu,  8 Feb 2024 00:22:22 +0100 (CET)
+Received: from smtp01.mail.de (smtp04.bt.mail.de [10.0.121.214])
+ by postfix01.mail.de (Postfix) with ESMTP id 8C9AD80292;
+ Thu,  8 Feb 2024 00:22:22 +0100 (CET)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+ (No client certificate requested)
+ by smtp01.mail.de (Postfix) with ESMTPSA id 81CDF240AC8;
+ Thu,  8 Feb 2024 00:22:21 +0100 (CET)
+To: buildroot@buildroot.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Thu, 08 Feb 2024 00:22:21 +0100
+Message-ID: <2254622.iZASKD2KPV@laptop>
+In-Reply-To: <20240207204337.561d3b54@windsurf>
+References: <20231130223101.132221-1-kilian.zinnecker@mail.de>
+ <20240207204337.561d3b54@windsurf>
 MIME-Version: 1.0
-Date: Wed, 07 Feb 2024 23:55:24 +0100
-From: Julien Olivain <ju.o@free.fr>
-To: Romain Naour <romain.naour@smile.fr>
-In-Reply-To: <0d0380e0-e56c-4b0a-bdfa-4a6253124b0b@smile.fr>
-References: <20221216221934.465323-1-ju.o@free.fr>
- <0d0380e0-e56c-4b0a-bdfa-4a6253124b0b@smile.fr>
-User-Agent: Webmail Free/1.6.5
-Message-ID: <7111666ff232bb1c937f292eb04a01fe@free.fr>
-X-Sender: ju.o@free.fr
+X-purgate: clean
+X-purgate: This mail is considered clean (visit http://www.eleven.de for
+ further information)
+X-purgate-type: clean
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is considered clean (visit http://www.eleven.de for
+ further information)
+X-purgate: clean
+X-purgate-size: 1753
+X-purgate-ID: 154282::1707348142-077EF338-94738AEF/0/0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1707346526;
- bh=uBpqcgbNGHnHkK7uuYs1imIMEGwLDUC1UyJdmmRb14w=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=J2Xjds0sQKo7lJo6Fi9Yiy8u4cLijSOHnaSnhOGDvmdcaFEczNxRSOEYzMKrBQfCL
- FgL/5PjfAXhbbIktfobBXGs6ZIPhZtzHpbMcWDJikpR18ozeIG/0O9ZA50BGeft00J
- Y0vCANL4q24fL1RaaoDOjYPEQEADKN8/letisD3NkYmnlfFliX3CNyyTQRV8FMANx6
- dbQRe0G8czLMessdLl21qkVjs3OLZPhUTYfTit8IjdusB4SmrDn8z8sD3uQeMceASf
- J8CwjmKA11IOvTG4+1sNJHk3Sqz91OQb8HSnk99gO3TuZGg2iPGmO4AxtxHkpbslDV
- harN7UsRtFcDA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=J2Xjds0s
-Subject: Re: [Buildroot] [PATCH 1/1] package/swipl: new package
+ d=mail.de; s=mailde202009; t=1707348142;
+ bh=oCgyvdWqy2yL65j6ZmBCBC1rgiQlRLOO1QzsYL9uUMo=;
+ h=From:To:Cc:Subject:Date:Message-ID:From:To:CC:Subject:Reply-To;
+ b=imyHD70Ip24PSHHZ8rZRQ8VV1aLIsdJd3SyeA96/4TFm5bbQUOJaSkwRMIyGaQHOi
+ UCOoQqJJu5y3rm/ww+DUMASlBnoe4H7uN51sSnxQecKtO8ISH/YxBSFO70XIbGmW+y
+ Um+fJtMAQ0YF7nJRHCsrDDSKZwgdAoGbR2kIm2+0/iV2ABQcexDAsvVogiWuDsPclB
+ 4Lkahb5vn2euHdoPANJDGrXknc4v/EIDpfdCC7GJBs7Rmst06+YAukT6l311B0Lkux
+ f7j/9iHKAY8l0KUyT/4jNKWRX+GAATX5A5WqwEEqNkWoip3uC3fKrNNqYrSvK3PuQz
+ mEJvo8T9JYOMw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mail.de
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=fail reason="signature verification failed" (2048-bit key,
+ unprotected) header.d=mail.de header.i=@mail.de header.a=rsa-sha256
+ header.s=mailde202009 header.b=imyHD70I
+Subject: Re: [Buildroot] [PATCH 1/1] configs/rzboard_v2L_defconfig: new
+ defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,43 +97,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+From: "kilian.zinnecker--- via buildroot" <buildroot@buildroot.org>
+Reply-To: kilian.zinnecker@mail.de
+Cc: "kilian.zinnecker@mail.de" <kilian.zinnecker@mail.de>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgUm9tYWluLAoKT24gMDcvMDIvMjAyNCAxMjo0OSwgUm9tYWluIE5hb3VyIHdyb3RlOgo+IEhl
-bGxvIEp1bGllbiwKPiAKPiBMZSAxNi8xMi8yMDIyIMOgIDIzOjE5LCBKdWxpZW4gT2xpdmFpbiBh
-IMOpY3JpdMKgOgo+PiBTV0ktUHJvbG9nIG9mZmVycyBhIGNvbXByZWhlbnNpdmUgZnJlZSBQcm9s
-b2cgZW52aXJvbm1lbnQuIFNpbmNlIGl0cwo+PiBzdGFydCBpbiAxOTg3LCBTV0ktUHJvbG9nIGRl
-dmVsb3BtZW50IGhhcyBiZWVuIGRyaXZlbiBieSB0aGUgbmVlZHMgb2YKPj4gcmVhbCB3b3JsZCBh
-cHBsaWNhdGlvbnMuIFNXSS1Qcm9sb2cgaXMgd2lkZWx5IHVzZWQgaW4gcmVzZWFyY2ggYW5kCj4+
-IGVkdWNhdGlvbiBhcyB3ZWxsIGFzIGNvbW1lcmNpYWwgYXBwbGljYXRpb25zLgo+PiAKPj4gU2ln
-bmVkLW9mZi1ieTogSnVsaWVuIE9saXZhaW4gPGp1Lm9AZnJlZS5mcj4KClsuLi5dCgo+PiArY2xh
-c3MgVGVzdFNXSVBMKGluZnJhLmJhc2V0ZXN0LkJSVGVzdCk6Cj4+ICsgICAgIyBOZWVkIHRvIHVz
-ZSBhIGRpZmZlcmVudCB0b29sY2hhaW4gdGhhbiB0aGUgZGVmYXVsdCBkdWUgdG8KPj4gKyAgICAj
-IHN3aXBsIHJlcXVpcmluZyBmZW52Lmggbm90IHByb3ZpZGVkIGJ5IHVjbGliYy4KPiAKPiBUaGlz
-IG5vdCB0cnVlIGFueW1vcmUsIHRoZSBCdWlsZHJvb3QgdGVzdGluZyBpbmZyYXN0cnVjdHVyZSBz
-d2l0Y2hlZCAKPiBmcm9tIHVDbGliYwo+IHRvIEdsaWJjIHNvbWV3aGVyZSBiZXR3ZWVuIDIwMjIg
-YW5kIDIwMjQgOikKPiAKPiBIb3BlZnVsbHkgdGhlIHJ1bnRpbWUgdGVzdCBzdGlsbCBwYXNzIG9u
-IHRoZSBjdXJyZW50IEJ1aWxkcm9vdCBtYXN0ZXI6Cj4gCj4gLi9zdXBwb3J0L3Rlc3RpbmcvcnVu
-LXRlc3RzIC1rIC1kIGRsLyAtbyB0ZXN0c3VpdGUtbWFzdGVyCj4gdGVzdHMucGFja2FnZS50ZXN0
-X3N3aXBsLlRlc3RTV0lQTAo+IDEyOjMzOjA4IFRlc3RTV0lQTCAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgU3RhcnRpbmcKPiAxMjozMzowOSBUZXN0U1dJUEwgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgIEJ1aWxkaW5nCj4gMTI6MzU6NDkgVGVzdFNXSVBMICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICBCdWlsZGluZyBkb25lCj4gMTI6MzY6MDIgVGVzdFNXSVBMICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICBDbGVhbmluZyB1cAo+IC4KPiAtLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tCj4gUmFuIDEgdGVzdCBpbiAxNzMuNDUxcwo+IAo+IFRoZSBjb21wbGV4aXR5IG9mIHRoZSBh
-cmNoaXRlY3R1cmUgZGVwZW5kZW5jeSBhbmQgdGhlIGJ1aWxkc3lzdGVtIG1ha2UgCj4gaXQKPiBk
-aWZmaWN1bHQgdG8gcmV2aWV3IGluIGRldGFpbHMuCj4gCj4gV2l0aG91dCBnb2luZyBpbnRvIHRo
-ZSBkZXRhaWxzLCBpdCBzZWVtcyBvayBmb3IgbWUuCj4gCj4gT2J2aW91c2x5LCB0aGUgREVWRUxP
-UEVSUyBmaWxlIGNvbmZsaWN0IG5vd2FkYXlzIHNpbmNlIHNldmVyYWwgZW50cmllcyAKPiBoYXMg
-YmVlbgo+IGFkZGVkIHNpbmNlIHRoZW4uCgpUaGFua3MgZm9yIHRoZSByZXZpZXcuIEkgc2VudCBh
-IHYyIHRvIHJlZnJlc2ggdGhpcyBvbGQgcGF0Y2guIFNlZToKaHR0cHM6Ly9wYXRjaHdvcmsub3ps
-YWJzLm9yZy9wcm9qZWN0L2J1aWxkcm9vdC9wYXRjaC8yMDI0MDIwNzIyNTEwMC4xMzIwODM3LTEt
-anUub0BmcmVlLmZyLwoKPiAKPiBCZXN0IHJlZ2FyZHMsCj4gUm9tYWluCj4gCgpCZXN0IHJlZ2Fy
-ZHMsCgpKdWxpZW4uCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6
-Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Hello Thomas, Giulio, all,
+
+Thanks Giulio for reviewing my patch and your feedback!
+
+[--SNIP--]
+
+> Thanks, I have applied to master, after renaming to
+> avnet_rzboard_v2l_defconfig, and taking into account the feedback from
+> Giulio.
+
+Thanks for fixing the issues and applying the patch!
+
+> However, I find it not so nice that we don't build a fully bootable
+> image that includes U-Boot. Could you work on this and submit a
+> follow-up patch?
+> 
+> There is a DIP switch on the board that allows to boot from SD, see
+> page 15 of the board hardware manual;
+
+Yes, I agree and would prefer a bootable image, containing a uboot built by 
+buildroot as part of the boot chain, too. I therefore tried to run uboot from 
+SD card at first (using the information from the hardware manual you refered 
+to), but I was not successful. Hence I asked the author of a hackster.io 
+article about the RZBoard V2L boot [1], whether he could help me. He told me, 
+that he asked the Avnet BSP team, and "they confirmed there is no official 
+support for storing bootloader files on micro sd". This matches his article, 
+listing only eMMC and QSPI as possible locations for the bootloader.
+
+However, maybe this information is incomplete and there is in fact a way to 
+run uboot from SD card, which I just was not able to get working. I can try to 
+reach out to the Avnet support myself. And even if there is no way to do that, 
+I can try to adjust the board support to build uboot, figure out how to flash 
+uboot to the eMMC and document that in the readme. May take me some time 
+though at the moment. 
+
+Best regards,
+Kilian
+
+[1] https://www.hackster.io/lucas-keller/mastering-rzboardv2l-emmc-micro-sd-and-network-booting-dc87f3
+
+
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
