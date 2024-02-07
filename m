@@ -4,71 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F004FC4828F
-	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 15:23:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 718E9C4828F
+	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 15:31:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A46628237B;
-	Wed,  7 Feb 2024 15:23:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1FC2681C19;
+	Wed,  7 Feb 2024 15:31:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id V9X9hxJ-_6DQ; Wed,  7 Feb 2024 15:23:35 +0000 (UTC)
+	with ESMTP id 0WastXcM-1Xm; Wed,  7 Feb 2024 15:31:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 738DD8248F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C78D881E1E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 738DD8248F;
-	Wed,  7 Feb 2024 15:23:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EE5D91BF471
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 15:23:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C78D881E1E;
+	Wed,  7 Feb 2024 15:31:01 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 741771BF471
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 15:31:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DB2FF40347
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 15:23:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6E50D81E1E
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 15:31:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id g9a4vHImIb0y for <buildroot@lists.busybox.net>;
- Wed,  7 Feb 2024 15:23:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id U2NTzyEQ3SbN for <buildroot@lists.busybox.net>;
+ Wed,  7 Feb 2024 15:30:59 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
  helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6B22B40345
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B22B40345
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 202A281C19
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 202A281C19
 Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6B22B40345
- for <buildroot@buildroot.org>; Wed,  7 Feb 2024 15:23:32 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 202A281C19
+ for <buildroot@buildroot.org>; Wed,  7 Feb 2024 15:30:59 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown [85.119.216.19])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id E275113F8D7;
- Wed,  7 Feb 2024 16:23:23 +0100 (CET)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id C028C13F88F;
+ Wed,  7 Feb 2024 16:30:51 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Wed, 07 Feb 2024 16:23:23 +0100
-Date: Wed, 7 Feb 2024 16:23:23 +0100
+ Wed, 07 Feb 2024 16:30:51 +0100
+Date: Wed, 7 Feb 2024 16:30:51 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Antoine Coutant <antoine.coutant@smile.fr>
-Message-ID: <ZcOga45F_toue37O@landeda>
+Message-ID: <ZcOiK1W5bhQj7-UG@landeda>
 References: <20240202093625.1409559-1-antoine.coutant@smile.fr>
  <20240202093625.1409559-2-antoine.coutant@smile.fr>
 MIME-Version: 1.0
 Content-Disposition: inline
 In-Reply-To: <20240202093625.1409559-2-antoine.coutant@smile.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1707319409;
- bh=cfferFWQ0CZNxwoNQYlPWqCPaE9EWVy7MVDt06Zm6nk=;
+ d=free.fr; s=smtp-20201208; t=1707319857;
+ bh=YJxl+Z2+HHuhtOEqYIx0o+ySgVQyBo8Ry2MfajMQ5aQ=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=Ax9WIB5rUuj8t4hMpCEG27M4ZYRTbk8UhJHtLCQDPud/kjkR/Ld/dwj5YNK8WiydC
- u8zqdExKjITSGpwGO40GO6J9tLX0GDFZFX9z08EPafXigzistJMSEVSnaEf3I0nJNB
- xX4OTCF+Li4+vUOxxC8p5lajK7J1AeW/6zCd6rtSSggjwUV5+HDOvCOWKCzqQua3cb
- WCmOMToLxKCvkNLlxcf8zsx9SXG57YWp2Ab19q/9FuU3zX+NudiLOh4L0IQJD46J+S
- 3tt0VePFX5Fy1D6P88LI7F8SLtFvM20u4AFXU/8gvvFtUaCF1CNECSO4y3OjSXQh+T
- r3eDGbmjYFmtA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=JKNvkb4cDzYwWhmvs4uAn2bBrLWyHHtBwgS4P7YsF1fmg0k+uo56CF4CpmzRLjsT0
+ sg77IdkEEgskd/D0xh2FdmoyJv2Me3b1UD4kVGB3HuCl0qSinXJG60oNdO+SYrJ2Zx
+ NJCZagvrCTXU2pf5qfkX9iblru7P6ZvyHfJT/Yw7H41xP3r3nwIJ9OTMiZzHxSg4Hs
+ XNAY7XjNLJQH4Ea7FLplvKt3RJK554suqH/KIKmgNKxyOvl1qk2eYyArOvJMAMaeVy
+ 7Q4WP9zfC7FpPVS9Kobzh7XCU/0nNcrm24AapQxr7rvxOJziF2jYFORQudKXxETdAm
+ 11epE7j5X5enQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=Ax9WIB5r
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=JKNvkb4c
 Subject: Re: [Buildroot] [PATCH v4 1/7] package/meson: bump version to 1.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -89,6 +88,8 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Antoine, All,
+
+(sorry, I sent too fast, here are a bit more details below...)
 
 On 2024-02-02 10:36 +0100, Antoine Coutant spake thusly:
 > The meson upgrade from 1.1.1 to 1.2.0 have been reverted
@@ -138,54 +139,18 @@ On 2024-02-02 10:36 +0100, Antoine Coutant spake thusly:
 > 
 > The patch that adds the pkg_config_static property has
 > been rebased.
-> 
+
+I reflowed the commit log to approach the 72-char limit on line length
+(I needed soemthing to do while there aas a test-build on-going!)
+
 > [1] https://gitlab.com/buildroot.org/buildroot/-/commit/acfdf21f0b752e844a33c70a0fd2f82f4534a5a0
 > [2] https://gitlab.com/qemu-project/qemu/-/commit/Fc9a809e0d28417fa1e7f7efc19f845bda4c1be9
 > [3] https://github.com/yoctoproject/poky/commits/master/meta/recipes-devtools/meson
 > [4] https://mesonbuild.com/Release-notes-for-1-3-0.html#machine-files-pkgconfig-field-deprecated-and-replaced-by-pkgconfig
 > 
 > Signed-off-by: Antoine Coutant <antoine.coutant@smile.fr>
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
 > ---
-> Changes v3 -> v4:
-> 	- cross-compilation.conf.in have been changed.
-> 	- Bump version from 1.3.0 to 1.3.1.
-> 
-> Signed-off-by: Antoine Coutant <antoine.coutant@smile.fr>
-> ---
->  ...dencies-base.py-add-pkg_config_stati.patch | 29 ++++++++++---------
->  package/meson/meson.hash                      |  4 +--
->  package/meson/meson.mk                        |  2 +-
->  support/misc/cross-compilation.conf.in        |  2 +-
->  4 files changed, 19 insertions(+), 18 deletions(-)
-> 
-> diff --git a/package/meson/0002-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch b/package/meson/0002-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch
-> index 8e15d3210c..49a0ef93dc 100644
-> --- a/package/meson/0002-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch
-> +++ b/package/meson/0002-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch
-> @@ -1,4 +1,4 @@
-> -From 3d6a2db2270346236dd6247e0648ea0c949ba468 Mon Sep 17 00:00:00 2001
-> +From 59934e2116e025ecfe23baf6febc4a0eb85f60cd Mon Sep 17 00:00:00 2001
->  From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->  Date: Sat, 15 Feb 2020 15:13:59 +0100
->  Subject: [PATCH] mesonbuild/dependencies/base.py: add pkg_config_static
-> @@ -20,24 +20,25 @@ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->  Signed-off-by: Romain Naour <romain.naour@gmail.com>
->  [Rebased on 0.57.1]
->  Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> +[rebased on 1.3.0]
-> +Signed-off-by: Antoine Coutant <antoine.coutant@smile.fr>
->  ---
-> - mesonbuild/dependencies/pkgconfig.py | 3 ++-
-> - 1 file changed, 2 insertions(+), 1 deletion(-)
-> + mesonbuild/dependencies/pkgconfig.py | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
->  
+[--SNIP--]
 >  diff --git a/mesonbuild/dependencies/pkgconfig.py b/mesonbuild/dependencies/pkgconfig.py
 > -index 1e8d9132e..d902ba215 100644
 > +index e86206b88..94888657d 100644
@@ -207,6 +172,15 @@ Yann E. MORIN.
 > +         args += self._define_variable_args(define_variable)
 > +-        if static:
 > ++        if static or (self.env.properties[self.for_machine].get('pkg_config_static', None) == 'true'):
+
+I changed that code back to have our addition on a separate line, so
+that it stands out better when updating the patch.
+
+Applied to master, thanks.
+
+Regards,
+Yann E. MORIN.
+
 > +             args.append('--static')
 > +         args += ['--libs', name]
 > +         ret, out, err = self._call_pkgbin(args, env=env)
