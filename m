@@ -4,96 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5821EC4828D
-	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 16:38:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB5F7C4828F
+	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 16:38:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 23B3382726;
-	Wed,  7 Feb 2024 16:38:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id ADBC282726;
+	Wed,  7 Feb 2024 16:38:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xnCirfBKGGAx; Wed,  7 Feb 2024 16:38:32 +0000 (UTC)
+	with ESMTP id Cn98PWN51Kzy; Wed,  7 Feb 2024 16:38:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2C3E383C1A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A627883C12
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2C3E383C1A;
-	Wed,  7 Feb 2024 16:38:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A9C431BF86C
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 16:38:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A627883C12;
+	Wed,  7 Feb 2024 16:38:43 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id F08B11BF86C
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 16:38:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A0F9283C32
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 16:38:29 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DDC76404E2
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 16:38:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id G0DPJakXpC2a for <buildroot@lists.busybox.net>;
- Wed,  7 Feb 2024 16:38:28 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::436; helo=mail-wr1-x436.google.com;
- envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 80D7683C12
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 80D7683C12
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 80D7683C12
- for <buildroot@buildroot.org>; Wed,  7 Feb 2024 16:38:28 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id
- ffacd0b85a97d-33b0f36b808so658489f8f.3
- for <buildroot@buildroot.org>; Wed, 07 Feb 2024 08:38:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707323906; x=1707928706;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=OKBP0mR3EQEF3oR+a6dpICDE2vmSWxkF0nYIWAxZK10=;
- b=TwPeBdwC2YaqRuHb5/ZjINK5JFwNthhqoFDxF01h7N08E3YBH/yKd7Wtbg8UkSsRIw
- G3cEdNXO5UokFddwhp3ZOmi5NyfDUSpEAJphrMefu/wUSyHNkDoQq7JVWx3/d52ahY34
- DUUg10fKK8b9dJntm9NrrsS5zMl0zJaRBGBURC/NzdrxeAET1qeakrJgmJa4zR3rNRbP
- rHMnc9lO7LDyLYop+PF2CpXt5Ak587dan4JDpqzBFEJ+NOMqvNGapZfza/k5Tp7RpUUs
- 60+/o4I0Ey3mFmsAqDkWppD5QoyD0EfZuParzMSKyI93SO1Xdbf+sNAq5JA8DmCtwnv4
- K4TA==
-X-Gm-Message-State: AOJu0YxKIC1RKUp2kaMxdUK8gTNiQ4tg5YOzFQfevZr5kuY3A+Hi7AA4
- rHRmAIEde2CCZNSBPBOiD2j3wWOT+mon6oIzcVuPc9EO/s5L1ohRXH1KP5aEKuU=
-X-Google-Smtp-Source: AGHT+IF/wJX2bZQ2YwAPlTjyxe3u2ShtPZZjKcTkuKgpsOnHxyQdqxM4zYx8gJVLYf305sPZJWzX+A==
-X-Received: by 2002:a05:6000:1372:b0:33b:44d0:63ea with SMTP id
- q18-20020a056000137200b0033b44d063eamr3986378wrz.59.1707323906213; 
- Wed, 07 Feb 2024 08:38:26 -0800 (PST)
-X-Forwarded-Encrypted: i=1;
- AJvYcCXcx5mt5f2yTRe6Ni8VjlKaB5Qq+B1jCzRIG2lHW3GN5+8QOXCOT7M7VXR+mujb7e01x4pdASe9u6cxi8S8roRRV2dR+onzKw==
-Received: from [192.168.16.188] ([85.119.216.19])
- by smtp.gmail.com with ESMTPSA id
- n15-20020adff08f000000b0033b1c321070sm1855608wro.31.2024.02.07.08.38.25
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 07 Feb 2024 08:38:25 -0800 (PST)
-Message-ID: <01de635a-74e6-4784-9b1a-d5b357a41603@mind.be>
-Date: Wed, 7 Feb 2024 17:38:24 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-GB
-To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
-References: <20240111064140.3051598-1-james.hilliard1@gmail.com>
-In-Reply-To: <20240111064140.3051598-1-james.hilliard1@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1707323906; x=1707928706; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=OKBP0mR3EQEF3oR+a6dpICDE2vmSWxkF0nYIWAxZK10=;
- b=NqmGDrRlnQOXhDVMwhi74DZ86gJyk2lsLVaIpXWcIDOPPvMQG6Ze4Khp292UuWshc+
- 3gVkxw7FyJSUt+IM9iX4l2feEaSVHmbFVd8LfTNZuOBiWUTSHcxGxpDb4RuvcCBOTlK+
- AC25SaIQBzZPS3zm1ztPQycSkyT1t/TToSrXe6y+ZbGdmnrqNqybaQGbbvegjU0b1GaP
- 0cN45fuwCP1MaFc7U1xxJDP3b6qfRVCalfbx1P5q+z3IbUkF0T5ZnC5+M0ORusXFF6L9
- jTtGo2KCNEyaKmXeIYsu0bU0Kcvnpd0NC+V/HquFmlCSOo9ms9hberyfOrZ47HzQqvY7
- VD/w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=NqmGDrRl
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-setuptools: bump to
- version 69.0.3
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Y0ufXQhe54Em for <buildroot@lists.busybox.net>;
+ Wed,  7 Feb 2024 16:38:40 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D5F01404D2
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id D5F01404D2
+ for <buildroot@buildroot.org>; Wed,  7 Feb 2024 16:38:40 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id BB1CF87653; Wed,  7 Feb 2024 16:38:40 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 7 Feb 2024 17:29:13 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 98a49edda69e868c95bd8cf4e923eb0bd0a65ff7
+X-Git-Newrev: 2bf75464d6027b8079431c34410ab9d070b818f4
+X-Patchwork-Hint: ignore
+Message-Id: <20240207163840.BB1CF87653@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/scripts/pkg-stats: remove checking
+ the CPE database
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,58 +58,139 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: Asaf Kahlon <asafka7@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+commit: https://git.buildroot.net/buildroot/commit/?id=2bf75464d6027b8079431c34410ab9d070b818f4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+We currently check the CPE database to see if the CPE ID we use
+(including the version) is already in the database.
 
-On 11/01/2024 07:41, James Hilliard wrote:
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+However, the version part of the CPE ID is not actually used for CVE
+matching. Instead, the CVEs have a range of versions associated with
+them and we match against those ranges.
 
-  Applied to master, thanks.
+In addition, NVD is moving to a new API for accessing the CPE database.
+It will not longer be possible to simply download all the CPE IDs, and
+due to rate limiting, the download will have to be done in several
+queries.
 
-  Regards,
-  Arnout
+Since all of this is anyway of limited use, drop the CPE database lookup
+entirely. Instead, as long as a CPE ID is defined in a package, it is
+considered OK, without any checks.
 
-> ---
->   package/python-setuptools/python-setuptools.hash | 7 ++++---
->   package/python-setuptools/python-setuptools.mk   | 4 ++--
->   2 files changed, 6 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/python-setuptools/python-setuptools.hash b/package/python-setuptools/python-setuptools.hash
-> index 6e1df42e3f..7f13ac3896 100644
-> --- a/package/python-setuptools/python-setuptools.hash
-> +++ b/package/python-setuptools/python-setuptools.hash
-> @@ -1,4 +1,5 @@
-> -# From https://pypi.org/pypi/setuptools/json
-> -md5  d967ca2ba7f46db887daee2d5c9bd6a2  setuptools-68.2.2.tar.gz
-> -sha256  4ac1475276d2f1c48684874089fefcd83bd7162ddaafb81fac866ba0db282a87  setuptools-68.2.2.tar.gz
-> +# md5, sha256 from https://pypi.org/pypi/setuptools/json
-> +md5  b82de45aaa6b9bb911226660212ebb83  setuptools-69.0.3.tar.gz
-> +sha256  be1af57fc409f93647f2e8e4573a142ed38724b8cdd389706a867bb4efcf1e78  setuptools-69.0.3.tar.gz
-> +# Locally computed sha256 checksums
->   sha256  86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741  LICENSE
-> diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
-> index f26f427ccc..0aea3c6cfa 100644
-> --- a/package/python-setuptools/python-setuptools.mk
-> +++ b/package/python-setuptools/python-setuptools.mk
-> @@ -4,9 +4,9 @@
->   #
->   ################################################################################
->   
-> -PYTHON_SETUPTOOLS_VERSION = 68.2.2
-> +PYTHON_SETUPTOOLS_VERSION = 69.0.3
->   PYTHON_SETUPTOOLS_SOURCE = setuptools-$(PYTHON_SETUPTOOLS_VERSION).tar.gz
-> -PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/ef/cc/93f7213b2ab5ed383f98ce8020e632ef256b406b8569606c3f160ed8e1c9
-> +PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/fc/c9/b146ca195403e0182a374e0ea4dbc69136bad3cd55bc293df496d625d0f7
->   PYTHON_SETUPTOOLS_LICENSE = MIT
->   PYTHON_SETUPTOOLS_LICENSE_FILES = LICENSE
->   PYTHON_SETUPTOOLS_CPE_ID_VENDOR = python
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/scripts/pkg-stats | 54 ++---------------------------------------------
+ 1 file changed, 2 insertions(+), 52 deletions(-)
+
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 05f0cd9e4a..7835cb3d62 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -28,10 +28,6 @@ import re
+ import subprocess
+ import json
+ import sys
+-import time
+-import gzip
+-import xml.etree.ElementTree
+-import requests
+ 
+ brpath = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", ".."))
+ 
+@@ -40,7 +36,6 @@ from getdeveloperlib import parse_developers  # noqa: E402
+ 
+ INFRA_RE = re.compile(r"\$\(eval \$\(([a-z-]*)-package\)\)")
+ URL_RE = re.compile(r"\s*https?://\S*\s*$")
+-CPEDB_URL = "https://static.nvd.nist.gov/feeds/xml/cpe/dictionary/official-cpe-dictionary_v2.3.xml.gz"
+ 
+ RM_API_STATUS_ERROR = 1
+ RM_API_STATUS_FOUND_BY_DISTRO = 2
+@@ -282,8 +277,7 @@ class Package:
+ 
+         if var in self.all_cpeids:
+             self.cpeid = self.all_cpeids[var]
+-            # Set a preliminary status, it might be overridden by check_package_cpes()
+-            self.status['cpe'] = ("warning", "not checked against CPE dictionary")
++            self.status['cpe'] = ("ok", "(not checked against CPE dictionary)")
+         else:
+             self.status['cpe'] = ("error", "no verified CPE identifier")
+ 
+@@ -674,47 +668,6 @@ def check_package_cves(nvd_path, packages):
+                 pkg.status['cve'] = ("ok", "not affected by CVEs")
+ 
+ 
+-def check_package_cpes(nvd_path, packages):
+-    class CpeXmlParser:
+-        cpes = []
+-
+-        def start(self, tag, attrib):
+-            if tag == "{http://scap.nist.gov/schema/cpe-extension/2.3}cpe23-item":
+-                self.cpes.append(attrib['name'])
+-
+-        def close(self):
+-            return self.cpes
+-
+-    print("CPE: Setting up NIST dictionary")
+-    if not os.path.exists(os.path.join(nvd_path, "cpe")):
+-        os.makedirs(os.path.join(nvd_path, "cpe"))
+-
+-    cpe_dict_local = os.path.join(nvd_path, "cpe", os.path.basename(CPEDB_URL))
+-    if not os.path.exists(cpe_dict_local) or os.stat(cpe_dict_local).st_mtime < time.time() - 86400:
+-        print("CPE: Fetching xml manifest from [" + CPEDB_URL + "]")
+-        cpe_dict = requests.get(CPEDB_URL)
+-        open(cpe_dict_local, "wb").write(cpe_dict.content)
+-
+-    print("CPE: Unzipping xml manifest...")
+-    nist_cpe_file = gzip.GzipFile(fileobj=open(cpe_dict_local, 'rb'))
+-
+-    parser = xml.etree.ElementTree.XMLParser(target=CpeXmlParser())
+-    while True:
+-        c = nist_cpe_file.read(1024*1024)
+-        if not c:
+-            break
+-        parser.feed(c)
+-    cpes = parser.close()
+-
+-    for p in packages:
+-        if not p.cpeid:
+-            continue
+-        if p.cpeid in cpes:
+-            p.status['cpe'] = ("ok", "verified CPE identifier")
+-        else:
+-            p.status['cpe'] = ("error", "CPE version unknown in CPE database")
+-
+-
+ def calculate_stats(packages):
+     stats = defaultdict(int)
+     stats['packages'] = len(packages)
+@@ -1309,7 +1262,7 @@ def parse_args():
+     parser.add_argument('--nvd-path', dest='nvd_path',
+                         help='Path to the local NVD database', type=resolvepath)
+     parser.add_argument('--disable', type=list_str,
+-                        help='Features to disable, comma-separated (cve, upstream, url, cpe, warning)',
++                        help='Features to disable, comma-separated (cve, upstream, url, warning)',
+                         default=[])
+     args = parser.parse_args()
+     if not args.html and not args.json:
+@@ -1372,9 +1325,6 @@ def __main__():
+     if "cve" not in args.disable and args.nvd_path:
+         print("Checking packages CVEs")
+         check_package_cves(args.nvd_path, packages)
+-    if "cpe" not in args.disable and args.nvd_path:
+-        print("Checking packages CPEs")
+-        check_package_cpes(args.nvd_path, packages)
+     print("Calculate stats")
+     stats = calculate_stats(packages)
+     if args.html:
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
