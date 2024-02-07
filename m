@@ -4,86 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20256C4828F
-	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 07:08:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92DE1C4828F
+	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 07:12:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 575E360FC2;
-	Wed,  7 Feb 2024 07:08:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 45F5A61371;
+	Wed,  7 Feb 2024 07:12:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6ZxTa3oJ03PE; Wed,  7 Feb 2024 07:08:33 +0000 (UTC)
+	with ESMTP id 4MnoPMUVUIDI; Wed,  7 Feb 2024 07:12:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1474361385
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F7DA61376
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1474361385;
-	Wed,  7 Feb 2024 07:08:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EB3BE1BF836
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 07:08:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3F7DA61376;
+	Wed,  7 Feb 2024 07:12:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E55D61BF836
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 07:12:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E46144031F
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 07:08:20 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D20DD61371
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 07:12:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LSyoF5kkQTER for <buildroot@lists.busybox.net>;
- Wed,  7 Feb 2024 07:08:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2001:868:100:600::216; helo=shout01.mail.de;
- envelope-from=kilian.zinnecker@mail.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 00C9E40144
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 00C9E40144
-Received: from shout01.mail.de (shout01.mail.de [IPv6:2001:868:100:600::216])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 00C9E40144
- for <buildroot@buildroot.org>; Wed,  7 Feb 2024 07:08:19 +0000 (UTC)
-Received: from postfix03.mail.de (postfix03.bt.mail.de [10.0.121.127])
- by shout01.mail.de (Postfix) with ESMTP id 28B7C241115;
- Wed,  7 Feb 2024 08:08:17 +0100 (CET)
-Received: from smtp01.mail.de (smtp01.bt.mail.de [10.0.121.211])
- by postfix03.mail.de (Postfix) with ESMTP id 0AA5180428;
- Wed,  7 Feb 2024 08:08:17 +0100 (CET)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp01.mail.de (Postfix) with ESMTPSA id B08BD240CA2;
- Wed,  7 Feb 2024 08:08:16 +0100 (CET)
-To: buildroot@buildroot.org
-Date: Wed,  7 Feb 2024 08:08:06 +0100
-Message-Id: <20240207070806.7331-2-kilian.zinnecker@mail.de>
-In-Reply-To: <20240207070806.7331-1-kilian.zinnecker@mail.de>
-References: <20240207070806.7331-1-kilian.zinnecker@mail.de>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BhYytZ8xyvhH for <buildroot@lists.busybox.net>;
+ Wed,  7 Feb 2024 07:12:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
+ helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1E2A161376
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1E2A161376
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1E2A161376
+ for <buildroot@buildroot.org>; Wed,  7 Feb 2024 07:12:10 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E0BAA240004;
+ Wed,  7 Feb 2024 07:12:07 +0000 (UTC)
+Date: Wed, 7 Feb 2024 08:12:07 +0100
+To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Message-ID: <20240207081207.27f3ca68@windsurf>
+In-Reply-To: <20240110204909.795AC85DB2@busybox.osuosl.org>
+References: <20240110204909.795AC85DB2@busybox.osuosl.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-purgate: clean
-X-purgate: This mail is considered clean (visit http://www.eleven.de for
- further information)
-X-purgate-type: clean
-X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
-X-purgate: This mail is considered clean (visit http://www.eleven.de for
- further information)
-X-purgate: clean
-X-purgate-size: 639
-X-purgate-ID: 154282::1707289696-FCDBC670-B8194BEC/0/0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=mail.de; s=mailde202009; t=1707289697;
- bh=ro7Y9JRC6CNnCsDAC+5GMGcVpSs+NwUWGQNLdajl6HU=;
- h=From:To:Cc:Subject:Date:Message-Id:From:To:CC:Subject:Reply-To;
- b=CWOpLvx8TzdaWzZ6vY2xiavEK5ShCBwDkFofrFCdc7XRE8T+leBPTfuX4qoSNVDMq
- 2MrYNsa87rQ3re22xaP5gTyh/r/SvC/x9sKhQQxigM0eeDebMZLRuvF3/GHkmO+uFG
- aHk9QGvwvWUpMiacGMTcnQBao/B30vhT562OIf3WGINyXCODm3pmUHxA4+tJCu9vk6
- zaAWjnY1UAHn0CCWhDRK2VS4EVuhy6AtGhKkgyyNqiMd9L/Ueu87f7SDSjzz7THynm
- NP3J6ZEN04gEWcghTOeCyFKTLMPSoaadtRM5/0hASpE6mZG7PYjYz098DnfLj2wkMH
- q/FAVTsghvuNQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mail.de
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1707289928;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=LsTPW2htV5jYQnCFJp8IwI14VzI61GUlTSI6I5monlQ=;
+ b=UQLRRlxGglbO8C0X7CnFhT9FeQF5q1AvO7SRX2e7SEFkZPA6308H5PzRlmy9A1GncEfYw4
+ FwYiX8u8kX+P1b56b2I2CGVoUqp6KmttRlFW+h8Eb8RxS0YHDcq23EshmqAu0jluwE/f+G
+ CdUtx4kIyS5KguuVH4m4uFdhrREPEaedMmlG1fVuwhJuosUs2I+3BRE03V8GMyHv39pGr6
+ g3XxGaF1fAwI1c0xk7rXMUX/eDym73mruvz6K+lQhymGZGDDcL3hlifgbsYAybdFnMEKvL
+ eqSxRts79FBhZPbbH27lIqgryL48bYQdRAm0bSbbAwtOvxQ+fzBSkNUBtgx12g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=mail.de header.i=@mail.de header.a=rsa-sha256
- header.s=mailde202009 header.b=CWOpLvx8
-Subject: [Buildroot] [PATCH 1/1] Fix alphabetical order of DEVELOPERS file
- entry
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=UQLRRlxG
+Subject: Re: [Buildroot] [git commit] support/dependencies/dependencies.sh:
+ libopenssl needs perl Math::BigInt on s390
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,39 +81,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Kilian Zinnecker via buildroot <buildroot@buildroot.org>
-Reply-To: Kilian Zinnecker <kilian.zinnecker@mail.de>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Kilian Zinnecker <kilian.zinnecker@mail.de>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Kilian Zinnecker <kilian.zinnecker@mail.de>
----
- DEVELOPERS | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Hello Fabrice,
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index fc47c51d33..dd29f395d9 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1887,9 +1887,9 @@ N:	Kieran Bingham <kieran.bingham@ideasonboard.com>
- F:	package/libcamera/
- 
- N:	Kilian Zinnecker <kilian.zinnecker@mail.de>
--F:	package/rockchip-rkbin/
--F:	configs/rock5b_defconfig
- F:	board/radxa/rock5b/
-+F:	configs/rock5b_defconfig
-+F:	package/rockchip-rkbin/
- 
- N:	Klaus Heinrich Kiwi <klaus@linux.vnet.ibm.com>
- F:	package/wqy-zenhei/
+It looks like this patch isn't sufficient (or there is some other
+issue?) because the issue pops up in the autobuilders:
+
+  http://autobuild.buildroot.net/results/dfd/dfdb7c1892f7ee7889496d28957a7a61b19571aa/build-end.log
+
+Could you have a look?
+
+Thomas
+
+On Wed, 10 Jan 2024 21:22:57 +0100
+Thomas Petazzoni via buildroot <buildroot@buildroot.org> wrote:
+
+> commit: https://git.buildroot.net/buildroot/commit/?id=7ea38660e01a87ab70c02e38c78a49202e8e5c21
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> 
+> libopenssl needs perl Math::BigInt for s390x asm to avoid the following
+> build failure since commit a5cacb63082b9e58194c4b9f8b2af2c3e38ff15c:
+> 
+> Can't locate bigint.pm in @INC (you may need to install the bigint module) (@INC contains: /home/buildroot/autobuild/instance-0/output-1/build/libopenssl-3.2.0/crypto/poly1305/asm/../.. /home/buildroot/autobuild/instance-0/output-1/host/lib/perl /usr/local/lib64/perl5/5.36 /usr/local/share/perl5/5.36 /usr/lib64/perl5/vendor_perl /usr/share/perl5/vendor_perl /usr/lib64/perl5 /usr/share/perl5) at /home/buildroot/autobuild/instance-0/output-1/build/libopenssl-3.2.0/crypto/poly1305/asm/../../perlasm/s390x.pm line 16.
+> BEGIN failed--compilation aborted at /home/buildroot/autobuild/instance-0/output-1/build/libopenssl-3.2.0/crypto/poly1305/asm/../../perlasm/s390x.pm line 16.
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/986cb07d368c7214ffbc9d60c378e7ac00797f00
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  support/dependencies/dependencies.sh | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+> index 6e7d067ccd..3d83cb3285 100755
+> --- a/support/dependencies/dependencies.sh
+> +++ b/support/dependencies/dependencies.sh
+> @@ -282,6 +282,10 @@ required_perl_modules="$required_perl_modules Thread::Queue" # Used by host-auto
+>  required_perl_modules="$required_perl_modules FindBin" # Used by (host-)libopenssl
+>  required_perl_modules="$required_perl_modules IPC::Cmd" # Used by (host-)libopenssl
+>  
+> +if grep -q ^BR2_PACKAGE_LIBOPENSSL=y $BR2_CONFIG && grep -q ^BR2_s390x=y $BR2_CONFIG ; then
+> +    required_perl_modules="$required_perl_modules Math::BigInt"
+> +fi
+> +
+>  if grep -q ^BR2_PACKAGE_MOSH=y $BR2_CONFIG ; then
+>      required_perl_modules="$required_perl_modules diagnostics"
+>  fi
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+
+
 -- 
-2.34.1
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
