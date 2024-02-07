@@ -1,97 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B16F3C48297
-	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 03:03:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EB59C4828F
+	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 06:33:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 43380400D9;
-	Wed,  7 Feb 2024 03:03:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8A6DB61346;
+	Wed,  7 Feb 2024 06:33:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KQXJolikdNvO; Wed,  7 Feb 2024 03:03:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id da4L9lWSDQB1; Wed,  7 Feb 2024 06:33:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C7A54042B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 953FB61367
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0C7A54042B;
-	Wed,  7 Feb 2024 03:03:52 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EEAC41BF976
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 03:03:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 953FB61367;
+	Wed,  7 Feb 2024 06:33:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 94FD21BF32D
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 06:33:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2F356404EC
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 03:03:49 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 76B5361367
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 06:33:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7vBFF4ftXVfF for <buildroot@lists.busybox.net>;
- Wed,  7 Feb 2024 03:03:47 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::534; helo=mail-pg1-x534.google.com;
- envelope-from=asd617140123@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9DCF14044C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9DCF14044C
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com
- [IPv6:2607:f8b0:4864:20::534])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9DCF14044C
- for <buildroot@buildroot.org>; Wed,  7 Feb 2024 03:03:47 +0000 (UTC)
-Received: by mail-pg1-x534.google.com with SMTP id
- 41be03b00d2f7-5cddc5455aeso102984a12.1
- for <buildroot@buildroot.org>; Tue, 06 Feb 2024 19:03:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707275026; x=1707879826;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=gZFvplNzFFdamPS1yxRI7kuktFFERZ9x0tg61NsLhF8=;
- b=v2i8brGrtawfGAJzQd5ygnXSpB8SQpaw9Ba8+36YiUbBdIjFaQr/khnd+c4tmpXG8l
- 0ZUYb+1wyPwq7N2H3DNwYL2DARO3yqK4UWsKB9cmcYCa/jBlX8aA+zmL9pvxEdEZskA+
- 1SQt2HiNeaea2f//PHVi+d+l/BKgmmW6TqeEozIAt4jRbVaoLQLFzaxn8sIghz2tWGbO
- toRzIyYdagLqMkkT/2MbenAoAWC1n1yFmU4SqAfRReyix552t1OCzrxiswFDyWe4NKZE
- LpSSdLGZD4HFkN4ZZT3T6cD1nyDRQzxglrjT1oizScuKGuCnK58iu1i+isXNCb93DR7n
- 5T6A==
-X-Gm-Message-State: AOJu0YwzCniMtG57UfgPC9kujhbuMHbtJb1pNYblKQ+b4yqpyC2x1E3j
- rqEer4anWP2XMTM18gtTAuLVIDILLwXhLN/ZI+GELOV+XTy5ggy4X6DUEDCacUnwYQ==
-X-Google-Smtp-Source: AGHT+IEcc2Gmni4tWMSqZiimmtaUeRvt3tc41SkbhZ+2XlAGgf18Cazin3rg6KHOZkr9QSlgAU9vHw==
-X-Received: by 2002:a17:90a:e601:b0:296:dde5:58dc with SMTP id
- j1-20020a17090ae60100b00296dde558dcmr1088872pjy.10.1707275026321; 
- Tue, 06 Feb 2024 19:03:46 -0800 (PST)
-X-Forwarded-Encrypted: i=1;
- AJvYcCXdwlmLpMaQPGoiKuwZTCNdlrbyqNpsY/5ni3ZdVyZvzDPAR+PRX/XltXwzGQw+fS9e8iRlPuimGP6XGKQKTjErGFju8ofFGSdhh2OtAIokZftanDEfd0fvzcqIY909B5RbKRnDtJ+pwoFe3T1p
-Received: from localhost.localdomain (61-216-248-199.hinet-ip.hinet.net.
- [61.216.248.199]) by smtp.gmail.com with ESMTPSA id
- ph6-20020a17090b3bc600b00296dd430e3fsm322965pjb.5.2024.02.06.19.03.45
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 06 Feb 2024 19:03:46 -0800 (PST)
-From: Nigel Wang <asd617140123@gmail.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 20cJmdIbin2L for <buildroot@lists.busybox.net>;
+ Wed,  7 Feb 2024 06:33:31 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=95.163.41.75;
+ helo=smtp34.i.mail.ru; envelope-from=fido_max@inbox.ru; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 116A561346
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 116A561346
+Received: from smtp34.i.mail.ru (smtp34.i.mail.ru [95.163.41.75])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 116A561346
+ for <buildroot@buildroot.org>; Wed,  7 Feb 2024 06:33:29 +0000 (UTC)
+Received: by smtp34.i.mail.ru with esmtpa (envelope-from <fido_max@inbox.ru>)
+ id 1rXbUs-0000000GWBD-0aFf; Wed, 07 Feb 2024 09:33:26 +0300
 To: buildroot@buildroot.org
-Date: Wed,  7 Feb 2024 11:03:39 +0800
-Message-Id: <20240207030339.3910-1-asd617140123@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Wed,  7 Feb 2024 09:33:24 +0300
+Message-ID: <20240207063324.1003727-1-fido_max@inbox.ru>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1707275026; x=1707879826; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=gZFvplNzFFdamPS1yxRI7kuktFFERZ9x0tg61NsLhF8=;
- b=Xm4WNie3Bt0FfE/qLc1VKBNOC1SNCPVdS73YX+glTJBYdpLaeHrFR9AffVShIZK1gv
- aJangxavHATTcqTPGTob8qvE1sGVpIZdBfHbUjbOgsPfvu/c44ulJLOjIa3L096qYMhL
- qQrIrCHCHM1+qeqUpi286vXK51x6+yCDU6BsULbOcwpV0yeOq0QaEsGA8U6ClZ/W0KbZ
- vwWLmocsiyTJUzi4r0GtBaCm4nRI5QNpU8vAQeFGkqtBevA613TbWahJGP/H3dBqA0qj
- 0bIz5/c7clUxTL4ermRbitD3w5Pc+9IrnNQe1tQvw4PQDdt+Fsh60bQuDmqxXOVG34LE
- zj2g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailru-Src: smtp
+X-7564579A: B8F34718100C35BD
+X-77F55803: 4F1203BC0FB41BD94C460F083DF69F51F716FD8A96C6C408CD848DA42FE26380182A05F5380850404505A7583CCF5D57479CDAE959BF642456D9EB469C07AB780213D7449A2EA4B66E399A284FE16A5F
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7AC5438007118D6FAEA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F79006375AC38C7EC4509C8B8638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D872211F09058463576B55C399037FA85553B16A584740021420879F7C8C5043D14489FFFB0AA5F4BF176DF2183F8FC7C0C8FBEF6EAD8577B08941B15DA834481FA18204E546F3947C4B6F6234D9065C97F6B57BC7E64490618DEB871D839B7333395957E7521B51C2DFABB839C843B9C08941B15DA834481F8AA50765F79006370A32D918A17158F1389733CBF5DBD5E9B5C8C57E37DE458B9E9CE733340B9D5F3BBE47FD9DD3FB595F5C1EE8F4F765FCF1175FABE1C0F9B6E2021AF6380DFAD18AA50765F790063735872C767BF85DA227C277FBC8AE2E8BDCE939D40DBB93CA75ECD9A6C639B01B4E70A05D1297E1BBCB5012B2E24CD356
+X-C1DE0DAB: 0D63561A33F958A508BBDC55BBEC912C5002B1117B3ED6962719838CE31E391F3D2BBC1EF78EDEBE823CB91A9FED034534781492E4B8EEAD01200A96CB7104FFC79554A2A72441328621D336A7BC284946AD531847A6065AED8438A78DFE0A9EBDAD6C7F3747799A
+X-C8649E89: 1C3962B70DF3F0ADE00A9FD3E00BEEDF77DD89D51EBB7742D3581295AF09D3DF87807E0823442EA2ED31085941D9CD0AF7F820E7B07EA4CFE44EE1FA91C72E5232B7C733790E205F729B65452BC52E84EA39E4261A9814ACF397AE266BD3C14B807D692F32DC70325D382190CCFED1D53FC8FB5AF11234910F9CA24D68180CB2111DC66A97D0BFE2913E6812662D5F2A17D6C1CDD2003EB8E03787203701020945C72C348FB7EED3
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojh/iSjD2txnNYn/IjWRicXQ==
+X-Mailru-Sender: 689FA8AB762F7393590D8C940224AE33B14F1F41200347CD67B445DF6E4DF007661CA61B5EB6C07990DE4A6105A3658D481B2AED7BCCC0A49AE3A01A4DD0D55C6C99E19F044156F45FEEDEB644C299C0ED14614B50AE0675
+X-Mras: Ok
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=inbox.ru; 
+ s=mail4; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:Cc:
+ To:From:From:Sender:Reply-To:To:Cc:Content-Type:Content-Transfer-Encoding:
+ Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+ Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+ List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive:
+ X-Cloud-Ids:Disposition-Notification-To;
+ bh=4PsBK0qU3nJZg7R7hjfB5HPSQYtOmsqe8LLrmFLKRfg=; t=1707287611; x=1707377611; 
+ b=beMzDJW6SBwv3jSJKef+ej1PBbo//hGmPRBxY4Omkyh7QkhdleshbzW+46VFMBp+J2Icc/7bPxh
+ kR8SMa2ylsI0TQPXRcElw8pjMwa51jp2ikiplorCSAcnXG6WwxN7OX1WCCKyKe8z6AaTho08IZAjB
+ +Yw7L6o9evbN4KzMJTXesvA5kqfHZ2r1VfJEz1wumbEDzLwp7fz0o7sy5nHPRjKVRMWScWP7N5ilW
+ y5RGOiZMmseAjYU24A6xu/lIZNSK6zFj1S02Ih2XWHHoWMW/wypDVoC3fwCWZV/8wS22Rva7qdD+4
+ RfA8CMAxiyB1N3mhCheZcQuJYWfAy6tbus5g==;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=inbox.ru
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=Xm4WNie3
-Subject: [Buildroot] [PATCH v2] board/cubietech/cubieboard4 : Add config
- file for cubieboard4.
+ unprotected) header.d=inbox.ru header.i=@inbox.ru header.a=rsa-sha256
+ header.s=mail4 header.b=beMzDJW6
+X-Mailman-Original-Authentication-Results: smtp34.i.mail.ru; auth=pass
+ smtp.auth=fido_max@inbox.ru smtp.mailfrom=fido_max@inbox.ru
+Subject: [Buildroot] [PATCH 1/1] package/timescaledb: bump version to 2.13.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,189 +87,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: thomas.petazzoni@free-electrons.com, nigel_wang <asd617140123@gmail.com>,
- giulio.benetti@benettiengineering.com
+From: Maxim Kochetkov via buildroot <buildroot@buildroot.org>
+Reply-To: Maxim Kochetkov <fido_max@inbox.ru>
+Cc: Maxim Kochetkov <fido_max@inbox.ru>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: nigel_wang <asd617140123@gmail.com>
+Release notes: https://github.com/timescale/timescaledb/blob/2.13.1/CHANGELOG.md
 
-add Cubieboard4 board support.
-
-- SOC: Allwinner A80.
-- DRAM: 2GiB DDR3 @ 672MHZ.
-- NAND: 8GBeMMC
-- Power: DC 5V.
-- Wifi: 80211 b/g/n. (module is AP6330)
-Reference: https://hirokun.jp/AP6330.pdf
-- Ethernet: RTL8211E
-
-The detail of board: https://linux-sunxi.org/Cubietech_Cubieboard4
-
-Board support package includes the following components:
-- mainline Linux Kernel 6.6.8
-- mainline U-boot 2021.10.
-
-Signed-off-by: Nigel Wang <asd617140123@gmail.com>
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 ---
-v1 -> v2
-* Add BR2_cortex_a15_a7=y in buildroot defconfig.
-* Bump linux version to 6.6.8
-* Using sunxi_defconfig in kernel.
-* Using "make savedefconfig" to save defconfig.
-* Remove boot.cmd.
----
- DEVELOPERS                                |  4 +++
- board/cubietech/cubieboard4/extlinux.conf |  5 +++
- board/cubietech/cubieboard4/genimage.cfg  | 38 ++++++++++++++++++++++
- board/cubietech/cubieboard4/post-image.sh | 18 +++++++++++
- configs/cubieboard4_defconfig             | 39 +++++++++++++++++++++++
- 5 files changed, 104 insertions(+)
- create mode 100644 board/cubietech/cubieboard4/extlinux.conf
- create mode 100644 board/cubietech/cubieboard4/genimage.cfg
- create mode 100755 board/cubietech/cubieboard4/post-image.sh
- create mode 100644 configs/cubieboard4_defconfig
+ package/timescaledb/timescaledb.hash | 2 +-
+ package/timescaledb/timescaledb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index a03018ab2b..bffb8f2069 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3297,3 +3297,7 @@ F:	package/quazip/
- F:	package/shapelib/
- F:	package/simple-mail/
- F:	package/tinc/
-+
-+N:	Nigel Wang <asd617140123@gmail.com>
-+F:	board/cubietech/cubieboard4/
-+F:	configs/cubieboard4_defconfig
-diff --git a/board/cubietech/cubieboard4/extlinux.conf b/board/cubietech/cubieboard4/extlinux.conf
-new file mode 100644
-index 0000000000..5084e2237b
---- /dev/null
-+++ b/board/cubietech/cubieboard4/extlinux.conf
-@@ -0,0 +1,5 @@
-+label linux
-+    kernel /boot/zImage
-+    devicetree /sun9i-a80-cubieboard4.dtb
-+    append console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
-+
-diff --git a/board/cubietech/cubieboard4/genimage.cfg b/board/cubietech/cubieboard4/genimage.cfg
-new file mode 100644
-index 0000000000..f1dee13923
---- /dev/null
-+++ b/board/cubietech/cubieboard4/genimage.cfg
-@@ -0,0 +1,38 @@
-+# Minimal SD card image for the Cubieboard2
-+# Based in the Orange Pi genimage.cfg
-+
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"zImage",
-+			"sun9i-a80-cubieboard4.dtb",
-+			"extlinux"
-+		}
-+	}
-+
-+	size = 8M
-+}
-+
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition u-boot {
-+		in-partition-table = "no"
-+		image = "u-boot-sunxi-with-spl.bin"
-+		offset = 8K
-+		size = 1016K # 1MB - 8KB
-+	}
-+
-+	partition boot {
-+		partition-type = 0xC
-+		bootable = "true"
-+		image = "boot.vfat"
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+		size = 512M
-+	}
-+}
-diff --git a/board/cubietech/cubieboard4/post-image.sh b/board/cubietech/cubieboard4/post-image.sh
-new file mode 100755
-index 0000000000..e37b960a4d
---- /dev/null
-+++ b/board/cubietech/cubieboard4/post-image.sh
-@@ -0,0 +1,18 @@
-+#!/bin/sh
-+
-+BOARD_DIR="$(dirname "$0")"
-+install -m 0644 -D $BOARD_DIR/extlinux.conf $BINARIES_DIR/extlinux/extlinux.conf
-+
-+GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
-+GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
-+
-+rm -rf "${GENIMAGE_TMP}"
-+
-+genimage                           \
-+	--rootpath "${TARGET_DIR}"     \
-+	--tmppath "${GENIMAGE_TMP}"    \
-+	--inputpath "${BINARIES_DIR}"  \
-+	--outputpath "${BINARIES_DIR}" \
-+	--config "${GENIMAGE_CFG}"
-+
-+exit $?
-diff --git a/configs/cubieboard4_defconfig b/configs/cubieboard4_defconfig
-new file mode 100644
-index 0000000000..0592fe4a2d
---- /dev/null
-+++ b/configs/cubieboard4_defconfig
-@@ -0,0 +1,39 @@
-+# Architecture
-+BR2_arm=y
-+BR2_cortex_a15_a7=y
-+BR2_ARM_FPU_NEON_VFPV4=y
-+
-+# System
-+BR2_TARGET_GENERIC_HOSTNAME="Cubieboard4"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to Cubieboard4!"
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/cubietech/cubieboard4/post-image.sh"
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.8"
-+BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun9i-a80-cubieboard4"
-+
-+# Filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+
-+# Bootloader
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Cubieboard4"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-+BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
---
-2.34.1
+diff --git a/package/timescaledb/timescaledb.hash b/package/timescaledb/timescaledb.hash
+index b7e4c71774..8d0fc125d6 100644
+--- a/package/timescaledb/timescaledb.hash
++++ b/package/timescaledb/timescaledb.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  584a351c7775f0e067eaa0e7277ea88cab9077cc4c455cbbf09a5d9723dce95d  timescaledb-2.13.0.tar.gz
++sha256  ca4f48147cb1bf3bf22af9f643822a5931e12a89909cc73c4a89ddae3c828ac1  timescaledb-2.13.1.tar.gz
+ sha256  0378e0948feefd85f579319c74d6e2b671194037f550c7176ef26649d94c895b  LICENSE
+diff --git a/package/timescaledb/timescaledb.mk b/package/timescaledb/timescaledb.mk
+index 34a48ad0c3..a5d77eda80 100644
+--- a/package/timescaledb/timescaledb.mk
++++ b/package/timescaledb/timescaledb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TIMESCALEDB_VERSION = 2.13.0
++TIMESCALEDB_VERSION = 2.13.1
+ TIMESCALEDB_SITE = $(call github,timescale,timescaledb,$(TIMESCALEDB_VERSION))
+ TIMESCALEDB_LICENSE = Apache-2.0
+ TIMESCALEDB_LICENSE_FILES = LICENSE
+-- 
+2.43.0
 
 _______________________________________________
 buildroot mailing list
