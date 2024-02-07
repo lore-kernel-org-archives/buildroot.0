@@ -4,82 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D58EC4828D
-	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 19:32:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADA21C4828F
+	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 19:42:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BE1B342146;
-	Wed,  7 Feb 2024 19:32:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4AF6B42203;
+	Wed,  7 Feb 2024 19:42:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id E2-vd4hbRn5w; Wed,  7 Feb 2024 19:32:17 +0000 (UTC)
+	with ESMTP id EBMrdkdQsTfI; Wed,  7 Feb 2024 19:42:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 390C842159
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 40E6142206
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 390C842159;
-	Wed,  7 Feb 2024 19:32:17 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BD13C1BF577
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 19:31:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 40E6142206;
+	Wed,  7 Feb 2024 19:42:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B21CA1BF350
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 19:42:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AA9E26141C
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 19:31:34 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9EEEA42206
+ for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 19:42:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FErxokZiHT4m for <buildroot@lists.busybox.net>;
- Wed,  7 Feb 2024 19:31:33 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.128.43;
- helo=mail-wm1-f43.google.com; envelope-from=thomas.devoogdt@gmail.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 162D36147E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 162D36147E
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com
- [209.85.128.43])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 162D36147E
- for <buildroot@buildroot.org>; Wed,  7 Feb 2024 19:31:32 +0000 (UTC)
-Received: by mail-wm1-f43.google.com with SMTP id
- 5b1f17b1804b1-4102d50ce70so1055215e9.3
- for <buildroot@buildroot.org>; Wed, 07 Feb 2024 11:31:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707334291; x=1707939091;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=igsnue0PRSOy5Un+5/f+4ezPPv1pHtRRuEgUBa/lHd0=;
- b=gKOuuZM08D6fmtQLWRLCaPTy6/olbqD5Gn6xLPWNQ5zf6ZzlFM38k/Mil+6FM18i1V
- cx1xHycSJJg0ufuufZ8D1mVIu3J1/EJnFuOlmdruicaxBqTOpC2VzCcetKFj1SnG54Hw
- zE7G4x1mqPj8UqYOBkAWaH9MkLGBvZKGwYmMq3/w9dTwy+9ZFUaPOdt9KC3pG16uAWmy
- xy50DMJlcWa9MUPaSo3nbXBp010YBXWI8mzr3E0jgFjICdWENqwALsuUamxZaQ16jGMb
- sB54B5jMC/GtmJB81SCaxpZzCTfSqltBR4lzMH6gTuOGPbMgduZb0h3wVGHucPa+B65C
- wxUg==
-X-Gm-Message-State: AOJu0YwkaAO5LxWOxufI+1/LciOgFVVLgoBMkCVWUWG0yoCTRaovP9JE
- Qf6BgA87BkCCbd9BmkrlIs9kf93ZQxQktps9JYW2j1GXVmmljZiZ
-X-Google-Smtp-Source: AGHT+IFrpunArUyfaC4WVJKJSrGLWDqbsYXh9mFE9z1wB/cbFDjdsfNUMZ5JyGz74fv1Af/WH0ekjw==
-X-Received: by 2002:a05:600c:19c7:b0:40e:fc29:f503 with SMTP id
- u7-20020a05600c19c700b0040efc29f503mr5734433wmq.2.1707334290878; 
- Wed, 07 Feb 2024 11:31:30 -0800 (PST)
-X-Forwarded-Encrypted: i=1;
- AJvYcCVkBUFJA2/BpWSnzJBOSnVrU8kOT5zGEO8YUmPDGAIfq5K3tOXKSnPxQK3oT9k+b3RVoQ2ZzlVWyMyoLTWBdfmpKWCKeEHqpVcvfn4UMsMUE4JVrRILXrB1wvqVQzhdUa58zBDPk0KB5F+RScngap5JQakyP8yuemeyPWPzcz1sa+Ia9cJtWw29I5Ubksomgx4PJWq9Ea7/W9Oe//ojWlapU9cu7ea7+NKxYYmb9z13BoYjQAHYdzhpGDTyjnPZYqJQSPR0pQjmpJ7k
-Received: from localhost.localdomain
- ([2a02:a03f:eb68:2f00:a047:8b15:d321:16d6])
- by smtp.gmail.com with ESMTPSA id
- w8-20020a05600c474800b00410219f126bsm1157164wmo.37.2024.02.07.11.31.30
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 07 Feb 2024 11:31:30 -0800 (PST)
-From: Thomas Devoogdt <thomas@devoogdt.com>
-To: thomas@devoogdt.com
-Date: Wed,  7 Feb 2024 20:31:23 +0100
-Message-Id: <20240207193123.3400214-2-thomas@devoogdt.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240207193123.3400214-1-thomas@devoogdt.com>
-References: <CACXRmJhGiYC3tN9+0hPhMsvO-DzvqTMPOB1HufaBzYszoT5eTg@mail.gmail.com>
- <20240207193123.3400214-1-thomas@devoogdt.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id L8y9_wchrJde for <buildroot@lists.busybox.net>;
+ Wed,  7 Feb 2024 19:42:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 95BB642203
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 95BB642203
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 95BB642203
+ for <buildroot@buildroot.org>; Wed,  7 Feb 2024 19:42:42 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id C4BEE13F88E;
+ Wed,  7 Feb 2024 20:42:38 +0100 (CET)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Wed,  7 Feb 2024 20:42:33 +0100
+Message-ID: <20240207194233.590328-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=devoogdt.com
-Subject: [Buildroot] [PATCH v9 2/2] package/cairo: bump to 1.18.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1707334960;
+ bh=/AmhWw0OBWbsXnVVByBTrZmChfLnAFTRl7qLFuV+PSM=;
+ h=From:To:Cc:Subject:Date:From;
+ b=GKmdEF8S87Iym67PHiavtX1uPiaQ+QBrAVEGMbpzeyHoZa+BNRZUYwK2MNoNozJ2Y
+ XTwpYCM0Iox2tNiEqq3BBqyWCP91hSQXnhipRwIEROI1Ggyemu3Er/WA4U6Tcl8lIA
+ dzfBNSkCr40mT9b4jh/75x9TJZZi9tAvtBjb4aq5aSxIuDc3UTZpZvlCnTHlH4i3UP
+ zhLFoYnPy7eZHCzIU940kd/94xSKrnpagVrLo03MWxrRwekYZgSBxRlVC0pawXZF8N
+ khaa9AZF350PAz2jBD15FTQgHFk98fpvnLgV0sdoo3yW4M4wetqMQ50VaFoIpQYtOe
+ 9sKWFDaiHPdtQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=GKmdEF8S
+Subject: [Buildroot] [PATCH 1/1] package/gnupg2: security bump to version
+ 2.4.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,341 +76,99 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: eric.le.bihan.dev@free.fr, yann.morin.1998@free.fr,
- thomas.petazzoni@bootlin.com, buildroot@buildroot.org, aperez@igalia.com,
- fontaine.fabrice@gmail.com
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-News:
- - https://www.cairographics.org/news/cairo-1.17.8/
- - https://www.cairographics.org/news/cairo-1.18.0/
+See release announce:
+https://lists.gnupg.org/pipermail/gnupg-announce/2024q1/000481.html
 
-Some options are renamed/dropped so fix that along.
- - GL and GLES drawing has been dropped in 1.17.8.
- - The XML surface has been removed in 1.18.0.
- - xlib-xcb was added [1]
+For the details about the security advisory for GnuPG created
+smartcard keys, see:
+https://gnupg.org/blog/20240125-smartcard-backup-key.html
 
-Patches:
- - drop 0001-_arc_max_angle_for_tolerance_normalized-fix-infinite.patch, upstream: [2]
- - drop 0002-Fix-mask-usage-in-image-compositor.patch, upstream: [3]
- - drop 0004-meson-allow-skipping-of-run-check-for-IPC_RMID_DEFER.patch, upstream: [4]
+This commit also drops the package patch, which is now included in
+this new version.
 
-[1]: https://gitlab.freedesktop.org/cairo/cairo/-/commit/3468c67fe91f0c37e0ec5d335082653a6fa609b6
-[2]: https://gitlab.freedesktop.org/cairo/cairo/-/commit/ab2c5ee21e5f3d3ee4b3f67cfcd5811a4f99c3a0
-[3]: https://gitlab.freedesktop.org/cairo/cairo/-/commit/03a820b173ed1fdef6ff14b4468f5dbc02ff59be
-[4]: https://gitlab.freedesktop.org/cairo/cairo/-/commit/1bec56ea8a931e1ae1c74cc740134497ec365267
-
-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
-v5: split in 3 commits: https://lore.kernel.org/buildroot/20240105101105.6a181dcd@windsurf/
-v7: rebased on v7-0001-package-cairo-move-to-the-meson-build-system
-v8: forgot .checkpackageignore 
-v9: n/a
----
- .checkpackageignore                           |  2 -
- ...or_tolerance_normalized-fix-infinite.patch | 39 ------------
- ...rivate.h-fix-missing-FT_Color-error.patch} |  0
- ...2-Fix-mask-usage-in-image-compositor.patch | 56 -----------------
- ...-IPC_RMID_DEFERRED_RELEASE-check-wh.patch} |  0
- ...ping-of-run-check-for-IPC_RMID_DEFER.patch | 62 -------------------
- package/cairo/cairo.hash                      |  6 +-
- package/cairo/cairo.mk                        | 21 ++++---
- 8 files changed, 14 insertions(+), 172 deletions(-)
- delete mode 100644 package/cairo/0001-_arc_max_angle_for_tolerance_normalized-fix-infinite.patch
- rename package/cairo/{0003-cairo-ft-private.h-fix-missing-FT_Color-error.patch => 0001-cairo-ft-private.h-fix-missing-FT_Color-error.patch} (100%)
- delete mode 100644 package/cairo/0002-Fix-mask-usage-in-image-compositor.patch
- rename package/cairo/{0005-meson-always-skip-IPC_RMID_DEFERRED_RELEASE-check-wh.patch => 0002-meson-always-skip-IPC_RMID_DEFERRED_RELEASE-check-wh.patch} (100%)
- delete mode 100644 package/cairo/0004-meson-allow-skipping-of-run-check-for-IPC_RMID_DEFER.patch
+ ...he-call-of-ks_ldap_help_variables-wh.patch | 36 -------------------
+ package/gnupg2/gnupg2.hash                    |  4 +--
+ package/gnupg2/gnupg2.mk                      |  2 +-
+ 3 files changed, 3 insertions(+), 39 deletions(-)
+ delete mode 100644 package/gnupg2/0001-dirmngr-Enable-the-call-of-ks_ldap_help_variables-wh.patch
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 348cf3d289..86a774139a 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -227,8 +227,6 @@ package/c-icap/0001-Required-fixes-to-compile-and-run-under-cygwin.patch Upstrea
- package/c-icap/S96cicap Indent Shellcheck Variables
- package/ca-certificates/0001-mozilla-certdata2pem.py-make-cryptography-module-opt.patch Upstream
- package/cache-calibrator/0001-Fix-conflicting-round-function.patch Upstream
--package/cairo/0001-_arc_max_angle_for_tolerance_normalized-fix-infinite.patch Upstream
--package/cairo/0002-Fix-mask-usage-in-image-compositor.patch Upstream
- package/caps/0001-Fix-stdint-types-with-musl.patch Upstream
- package/cdrkit/0001-no-rcmd.patch Upstream
- package/cdrkit/0002-define-__THROW-to-avoid-build-issue-with-musl.patch Upstream
-diff --git a/package/cairo/0001-_arc_max_angle_for_tolerance_normalized-fix-infinite.patch b/package/cairo/0001-_arc_max_angle_for_tolerance_normalized-fix-infinite.patch
+diff --git a/package/gnupg2/0001-dirmngr-Enable-the-call-of-ks_ldap_help_variables-wh.patch b/package/gnupg2/0001-dirmngr-Enable-the-call-of-ks_ldap_help_variables-wh.patch
 deleted file mode 100644
-index 078e90fa42..0000000000
---- a/package/cairo/0001-_arc_max_angle_for_tolerance_normalized-fix-infinite.patch
+index 53dd39cf47..0000000000
+--- a/package/gnupg2/0001-dirmngr-Enable-the-call-of-ks_ldap_help_variables-wh.patch
 +++ /dev/null
-@@ -1,39 +0,0 @@
--From ab2c5ee21e5f3d3ee4b3f67cfcd5811a4f99c3a0 Mon Sep 17 00:00:00 2001
--From: Heiko Lewin <hlewin@gmx.de>
--Date: Sun, 1 Aug 2021 11:16:03 +0000
--Subject: [PATCH] _arc_max_angle_for_tolerance_normalized: fix infinite loop
+@@ -1,36 +0,0 @@
+-From dc13361524c1477b2106c7385f2059f9ea111b84 Mon Sep 17 00:00:00 2001
+-From: NIIBE Yutaka <gniibe@fsij.org>
+-Date: Wed, 5 Jul 2023 09:29:54 +0900
+-Subject: [PATCH] dirmngr: Enable the call of ks_ldap_help_variables when
+- USE_LDAP.
 -
--[Retrieved from:
--https://gitlab.freedesktop.org/cairo/cairo/-/commit/ab2c5ee21e5f3d3ee4b3f67cfcd5811a4f99c3a0]
--Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+-* dirmngr/server.c [USE_LDAP] (cmd_ad_query): Conditionalize.
+-
+---
+-
+-Signed-off-by: NIIBE Yutaka <gniibe@fsij.org>
+-
+-Upstream: https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gnupg.git;a=commitdiff;h=dc13361524c1477b2106c7385f2059f9ea111b84
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ----
-- src/cairo-arc.c | 4 +++-
-- 1 file changed, 3 insertions(+), 1 deletion(-)
+- dirmngr/server.c | 2 ++
+- 1 file changed, 2 insertions(+)
 -
--diff --git a/src/cairo-arc.c b/src/cairo-arc.c
--index 390397bae..1c891d1a0 100644
----- a/src/cairo-arc.c
--+++ b/src/cairo-arc.c
--@@ -90,16 +90,18 @@ _arc_max_angle_for_tolerance_normalized (double tolerance)
-- 	{ M_PI / 11.0,  9.81410988043554039085e-09 },
--     };
--     int table_size = ARRAY_LENGTH (table);
--+    const int max_segments = 1000; /* this value is chosen arbitrarily. this gives an error of about 1.74909e-20 */
+-diff --git a/dirmngr/server.c b/dirmngr/server.c
+-index 51a149cb2..ee61f63d6 100644
+---- a/dirmngr/server.c
+-+++ b/dirmngr/server.c
+-@@ -2776,7 +2776,9 @@ cmd_ad_query (assuan_context_t ctx, char *line)
 - 
--     for (i = 0; i < table_size; i++)
-- 	if (table[i].error < tolerance)
-- 	    return table[i].angle;
-- 
--     ++i;
--+
--     do {
-- 	angle = M_PI / i++;
-- 	error = _arc_error_normalized (angle);
---    } while (error > tolerance);
--+    } while (error > tolerance && i < max_segments);
-- 
--     return angle;
-- }
+-   if (opt_help)
+-     {
+-+#if USE_LDAP
+-       ks_ldap_help_variables (ctrl);
+-+#endif
+-       err = 0;
+-       goto leave;
+-     }
 --- 
--2.38.1
+-2.11.0
 -
-diff --git a/package/cairo/0003-cairo-ft-private.h-fix-missing-FT_Color-error.patch b/package/cairo/0001-cairo-ft-private.h-fix-missing-FT_Color-error.patch
-similarity index 100%
-rename from package/cairo/0003-cairo-ft-private.h-fix-missing-FT_Color-error.patch
-rename to package/cairo/0001-cairo-ft-private.h-fix-missing-FT_Color-error.patch
-diff --git a/package/cairo/0002-Fix-mask-usage-in-image-compositor.patch b/package/cairo/0002-Fix-mask-usage-in-image-compositor.patch
-deleted file mode 100644
-index 54a95593c5..0000000000
---- a/package/cairo/0002-Fix-mask-usage-in-image-compositor.patch
-+++ /dev/null
-@@ -1,56 +0,0 @@
--From 03a820b173ed1fdef6ff14b4468f5dbc02ff59be Mon Sep 17 00:00:00 2001
--From: Heiko Lewin <heiko.lewin@worldiety.de>
--Date: Tue, 15 Dec 2020 16:48:19 +0100
--Subject: [PATCH] Fix mask usage in image-compositor
--
--[Retrieved from
--https://gitlab.freedesktop.org/cairo/cairo/-/commit/03a820b173ed1fdef6ff14b4468f5dbc02ff59be]
--[Removed changes in test/ directory to remove binary diff so that the
--patch can be applied by `patch` tool]
--Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-----
-- src/cairo-image-compositor.c | 8 ++++----
-- 1 file changed, 4 insertions(+), 4 deletions(-)
--
--diff --git a/src/cairo-image-compositor.c b/src/cairo-image-compositor.c
--index bbf4cf228..2352c478e 100644
----- a/src/cairo-image-compositor.c
--+++ b/src/cairo-image-compositor.c
--@@ -2601,14 +2601,14 @@ _inplace_src_spans (void *abstract_renderer, int y, int h,
-- 		    unsigned num_spans)
-- {
--     cairo_image_span_renderer_t *r = abstract_renderer;
---    uint8_t *m;
--+    uint8_t *m, *base = (uint8_t*)pixman_image_get_data(r->mask);
--     int x0;
-- 
--     if (num_spans == 0)
-- 	return CAIRO_STATUS_SUCCESS;
-- 
--     x0 = spans[0].x;
---    m = r->_buf;
--+    m = base;
--     do {
-- 	int len = spans[1].x - spans[0].x;
-- 	if (len >= r->u.composite.run_length && spans[0].coverage == 0xff) {
--@@ -2646,7 +2646,7 @@ _inplace_src_spans (void *abstract_renderer, int y, int h,
-- 				      spans[0].x, y,
-- 				      spans[1].x - spans[0].x, h);
-- 
---	    m = r->_buf;
--+	    m = base;
-- 	    x0 = spans[1].x;
-- 	} else if (spans[0].coverage == 0x0) {
-- 	    if (spans[0].x != x0) {
--@@ -2675,7 +2675,7 @@ _inplace_src_spans (void *abstract_renderer, int y, int h,
-- #endif
-- 	    }
-- 
---	    m = r->_buf;
--+	    m = base;
-- 	    x0 = spans[1].x;
-- 	} else {
-- 	    *m++ = spans[0].coverage;
---- 
--2.38.1
--
-diff --git a/package/cairo/0005-meson-always-skip-IPC_RMID_DEFERRED_RELEASE-check-wh.patch b/package/cairo/0002-meson-always-skip-IPC_RMID_DEFERRED_RELEASE-check-wh.patch
-similarity index 100%
-rename from package/cairo/0005-meson-always-skip-IPC_RMID_DEFERRED_RELEASE-check-wh.patch
-rename to package/cairo/0002-meson-always-skip-IPC_RMID_DEFERRED_RELEASE-check-wh.patch
-diff --git a/package/cairo/0004-meson-allow-skipping-of-run-check-for-IPC_RMID_DEFER.patch b/package/cairo/0004-meson-allow-skipping-of-run-check-for-IPC_RMID_DEFER.patch
-deleted file mode 100644
-index 193a210391..0000000000
---- a/package/cairo/0004-meson-allow-skipping-of-run-check-for-IPC_RMID_DEFER.patch
-+++ /dev/null
-@@ -1,62 +0,0 @@
--From 39cbc3c1f1caf558188bd2203c976bae8de2f6a7 Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Tim-Philipp=20M=C3=BCller?= <tim@centricular.com>
--Date: Thu, 25 Feb 2021 10:52:45 +0000
--Subject: [PATCH] meson: allow skipping of run check for
-- IPC_RMID_DEFERRED_RELEASE
--
--The run check is particularly annoying in cross-compile scenarios,
--so allow bypassing the check by having the user provide the value
--via a cross file or native file:
--
--  [properties]
--  ipc_rmid_deferred_release = true
--
--Closes #408
--
--Upstream: https://gitlab.freedesktop.org/cairo/cairo/-/commit/1bec56ea8a931e1ae1c74cc740134497ec365267
--Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-----
-- meson.build | 25 ++++++++++++++++++++-----
-- 1 file changed, 20 insertions(+), 5 deletions(-)
--
--diff --git a/meson.build b/meson.build
--index b159b4071..5f593e54d 100644
----- a/meson.build
--+++ b/meson.build
--@@ -264,13 +264,28 @@ if x11_dep.found() and xext_dep.found()
--     ['X11/extensions/shmstr.h', {'extra-headers': extra_headers}],
--   ]
--   deps += [x11_dep, xext_dep]
---  res = cc.run(files('meson-cc-tests/ipc_rmid_deferred_release.c'),
---    dependencies: [x11_dep, xext_dep],
---    name: 'shmctl IPC_RMID allowes subsequent attaches')
-- 
---  if res.returncode() == 0
---    conf.set('IPC_RMID_DEFERRED_RELEASE', 1)
--+  # Can skip the run check by providing the result in a cross file or
--+  # native file as bool property value.
--+  prop = meson.get_external_property('ipc_rmid_deferred_release', 'auto')
--+  # We don't know the type of prop (bool, string) but need to differentiate
--+  # between a set value (bool) or the fallback value (string), so convert to
--+  # a string and chec the string value.
--+  prop_str = '@0@'.format(prop)
--+  if prop_str in ['true', 'false']
--+    ipc_rmid_deferred_release = (prop_str == 'true')
--+    message('IPC_RMID_DEFERRED_RELEASE:', ipc_rmid_deferred_release)
--+  elif prop_str == 'auto'
--+    res = cc.run(files('meson-cc-tests/ipc_rmid_deferred_release.c'),
--+      dependencies: [x11_dep, xext_dep],
--+      name: 'shmctl IPC_RMID allowes subsequent attaches')
--+
--+    ipc_rmid_deferred_release = (res.returncode() == 0)
--+  else
--+    error('Unexpected value for external property ipc_rmid_deferred_release: @0@'.format(prop_str))
--   endif
--+
--+  conf.set10('IPC_RMID_DEFERRED_RELEASE', ipc_rmid_deferred_release)
-- endif
-- 
-- if feature_conf.get('CAIRO_HAS_XLIB_SURFACE', 0) == 1
---- 
--2.34.1
--
-diff --git a/package/cairo/cairo.hash b/package/cairo/cairo.hash
-index fca9ff678c..df9c693bad 100644
---- a/package/cairo/cairo.hash
-+++ b/package/cairo/cairo.hash
-@@ -1,7 +1,5 @@
--# From https://www.cairographics.org/snapshots/cairo-1.17.4.tar.xz.sha1
--sha1  68712ae1039b114347be3b7200bc1c901d47a636  cairo-1.17.4.tar.xz
--# Calculated based on the hash above
--sha256  74b24c1ed436bbe87499179a3b27c43f4143b8676d8ad237a6fa787401959705  cairo-1.17.4.tar.xz
-+# From https://www.cairographics.org/releases/cairo-1.18.0.tar.xz.sha256sum
-+sha256  243a0736b978a33dee29f9cca7521733b78a65b5418206fef7bd1c3d4cf10b64  cairo-1.18.0.tar.xz
- 
- # Hash for license files:
- sha256  67228a9f7c5f9b67c58f556f1be178f62da4d9e2e6285318d8c74d567255abdf  COPYING
-diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
-index 3d2a67a6c5..4ace04ebbe 100644
---- a/package/cairo/cairo.mk
-+++ b/package/cairo/cairo.mk
-@@ -4,19 +4,14 @@
+diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
+index 4b770fa520..c821afb55e 100644
+--- a/package/gnupg2/gnupg2.hash
++++ b/package/gnupg2/gnupg2.hash
+@@ -1,5 +1,5 @@
+ # From https://www.gnupg.org/download/integrity_check.html
+-sha1  79a60c8e415e3daaa33d0546398174252a56f7ac  gnupg-2.4.3.tar.bz2
+-sha256  a271ae6d732f6f4d80c258ad9ee88dd9c94c8fdc33c3e45328c4d7c126bd219d  gnupg-2.4.3.tar.bz2
++sha1  228b3984325fdeebc5e3f2d165c6419a5ebc28de  gnupg-2.4.4.tar.bz2
++sha256  67ebe016ca90fa7688ce67a387ebd82c6261e95897db7b23df24ff335be85bc6  gnupg-2.4.4.tar.bz2
+ # Locally calculated
+ sha256  bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index d21c1e242d..986da4790c 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CAIRO_VERSION = 1.17.4
-+CAIRO_VERSION = 1.18.0
- CAIRO_SOURCE = cairo-$(CAIRO_VERSION).tar.xz
- CAIRO_LICENSE = LGPL-2.1 or MPL-1.1 (library)
- CAIRO_LICENSE_FILES = COPYING COPYING-LGPL-2.1 COPYING-MPL-1.1
- CAIRO_CPE_ID_VENDOR = cairographics
--CAIRO_SITE = http://cairographics.org/snapshots
-+CAIRO_SITE = http://cairographics.org/releases
- CAIRO_INSTALL_STAGING = YES
- 
--# 0001-_arc_max_angle_for_tolerance_normalized-fix-infinite.patch
--CAIRO_IGNORE_CVES += CVE-2019-6462
--# 0002-Fix-mask-usage-in-image-compositor.patch
--CAIRO_IGNORE_CVES += CVE-2020-35492
--
- CAIRO_CFLAGS = $(TARGET_CFLAGS)
- CAIRO_LDFLAGS = $(TARGET_LDFLAGS)
- 
-@@ -32,9 +27,13 @@ CAIRO_LDFLAGS += -latomic
- endif
- 
- CAIRO_CONF_OPTS = \
-+	-Ddwrite=disabled \
- 	-Dfontconfig=enabled \
-+	-Dquartz=disabled \
- 	-Dtests=disabled \
- 	-Dspectre=disabled \
-+	-Dsymbol-lookup=disabled \
-+	-Dgtk_doc=false \
- 	-Dc_std=gnu11
- CAIRO_DEPENDENCIES = \
- 	host-pkgconf \
-@@ -43,9 +42,11 @@ CAIRO_DEPENDENCIES = \
- 
- # Just the bare minimum to make other host-* packages happy
- HOST_CAIRO_CONF_OPTS = \
-+	-Ddwrite=disabled \
- 	-Dfontconfig=enabled \
- 	-Dfreetype=enabled \
- 	-Dpng=enabled \
-+	-Dquartz=disabled \
- 	-Dtee=disabled \
- 	-Dxcb=disabled \
- 	-Dxlib=disabled \
-@@ -53,6 +54,8 @@ HOST_CAIRO_CONF_OPTS = \
- 	-Dtests=disabled \
- 	-Dglib=enabled \
- 	-Dspectre=disabled \
-+	-Dsymbol-lookup=disabled \
-+	-Dgtk_doc=false \
- 	-Dc_std=gnu11
- HOST_CAIRO_DEPENDENCIES = \
- 	host-freetype \
-@@ -82,10 +85,10 @@ CAIRO_CONF_OPTS += -Dglib=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_XORG7),y)
--CAIRO_CONF_OPTS += -Dxcb=enabled -Dxlib=enabled
-+CAIRO_CONF_OPTS += -Dxcb=enabled -Dxlib=enabled -Dxlib-xcb=enabled
- CAIRO_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXrender
- else
--CAIRO_CONF_OPTS += -Dxcb=disabled -Dxlib=disabled
-+CAIRO_CONF_OPTS += -Dxcb=disabled -Dxlib=disabled -Dxlib-xcb=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_CAIRO_PNG),y)
+-GNUPG2_VERSION = 2.4.3
++GNUPG2_VERSION = 2.4.4
+ GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
+ GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
+ GNUPG2_LICENSE = GPL-3.0+
 -- 
-2.34.1
+2.43.0
 
 _______________________________________________
 buildroot mailing list
