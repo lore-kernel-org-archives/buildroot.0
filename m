@@ -4,94 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B006C4828F
-	for <buildroot@archiver.kernel.org>; Thu,  8 Feb 2024 09:41:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39F3BC48260
+	for <buildroot@archiver.kernel.org>; Thu,  8 Feb 2024 09:55:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B925941A68;
-	Thu,  8 Feb 2024 09:41:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7812441B9D;
+	Thu,  8 Feb 2024 09:55:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YMhphxuSgNho; Thu,  8 Feb 2024 09:41:51 +0000 (UTC)
+	with ESMTP id oAvF2ln123nU; Thu,  8 Feb 2024 09:55:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C46D41B6C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0614441B29
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6C46D41B6C;
-	Thu,  8 Feb 2024 09:41:51 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A02341BF831
- for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 09:41:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0614441B29;
+	Thu,  8 Feb 2024 09:55:39 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7AFEA1BF831
+ for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 09:55:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8CF0742E1A
- for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 09:41:49 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 75A70616CC
+ for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 09:55:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RNXxPCxP2hb1 for <buildroot@lists.busybox.net>;
- Thu,  8 Feb 2024 09:41:48 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::136; helo=mail-lf1-x136.google.com;
- envelope-from=roykollensvendsen@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7B81642DFD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B81642DFD
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com
- [IPv6:2a00:1450:4864:20::136])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7B81642DFD
- for <buildroot@buildroot.org>; Thu,  8 Feb 2024 09:41:48 +0000 (UTC)
-Received: by mail-lf1-x136.google.com with SMTP id
- 2adb3069b0e04-51142b5b76dso2638341e87.2
- for <buildroot@buildroot.org>; Thu, 08 Feb 2024 01:41:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707385306; x=1707990106;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=GlztSVVMGm8NmyrmcWgwLBE2NMkJivNTUTGjTyo0eU0=;
- b=QxBoBL2KE7Lj/X5radppN/n2rp29xeZKW8QxdK4txiXAzI1JvZh46KbWrJTiqwKA7c
- 5o6Y5JZl+JIPpnmv9AvA4mMBUnaiLYU4XTCjrA5DrCQpcfZc88DAtsY9I2KpW4wrS/fS
- 3CFs5TsQuSDeGN2A1oNHCNcV6XImzkj8vEyvSGgqgA917mPUZ6LWxnKDVLrsGJ67atZO
- XYmYulVS7ngV6WkeRxVTMTt9420Vg88fGfDoxZUXeMQiy9VV/ozqd0E7mOeZdkp6NXsu
- NAu5C9wtHUmMceYaqDGH+LMTWDxjA+nYkAReMg9q86xc9HuqJFYBeQPWtjnr51idpkcO
- vWhg==
-X-Gm-Message-State: AOJu0YzZGFZi3jHEKb0DmJ9I09boQOY98l8cUWP2AbXtTVvpUExYMwvM
- 6R5UavqM+zO8DZZjRrly5ZLGcTVNo8jgbfXVYq98AdLHZO9u5gmLNJ4FD+DtDWI=
-X-Google-Smtp-Source: AGHT+IHmNw/eZ5Q5+tgezxXbGgW3AI6pAxjSOuF/Tng3THbav5WZTKdmfsBcTwgPD1IdlEgCqiWxdA==
-X-Received: by 2002:ac2:554e:0:b0:511:4db5:99f1 with SMTP id
- l14-20020ac2554e000000b005114db599f1mr6378943lfk.47.1707385305973; 
- Thu, 08 Feb 2024 01:41:45 -0800 (PST)
-X-Forwarded-Encrypted: i=1;
- AJvYcCUHt46TelibiKtleNv6V2FoWa//CloMbLMaxC/jxFdeT/2GzfO0UGpvqGce67F7HRQhOWSkcCORijXvBY+4gjmJn/FCREw5O2ti65l9+HMTvGKkQe1gwEYK9Pz7+Jv9HzobUQ5T/WhQvigeHJSefXOc8U0DGx1iP824dIVqeTIpKhAwm/XjCA52JVNxiPn9GZ83UEFhcDI=
-Received: from precision7530-arch-roy.lan ([79.161.254.12])
- by smtp.gmail.com with ESMTPSA id
- h24-20020a0565123c9800b00511619cd1c3sm491369lfv.10.2024.02.08.01.41.44
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 08 Feb 2024 01:41:45 -0800 (PST)
-From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-X-Google-Original-From: Roy Kollen Svendsen
- <roy.kollen.svendsen@akersolutions.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mjvKlSk6BzXr for <buildroot@lists.busybox.net>;
+ Thu,  8 Feb 2024 09:55:36 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=213.97.179.56;
+ helo=fanzine2.igalia.com; envelope-from=aperez@igalia.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 78725616B8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 78725616B8
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 78725616B8
+ for <buildroot@buildroot.org>; Thu,  8 Feb 2024 09:55:36 +0000 (UTC)
+Received: from 91-153-34-210.elisa-laajakaista.fi ([91.153.34.210] helo=kodama)
+ by fanzine2.igalia.com with esmtpsa 
+ (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+ id 1rY180-00F8hL-Vh; Thu, 08 Feb 2024 10:55:33 +0100
+Received: from localhost (kodama [local])
+ by kodama (OpenSMTPD) with ESMTPA id 701358e0;
+ Thu, 8 Feb 2024 09:55:31 +0000 (UTC)
+From: Adrian Perez de Castro <aperez@igalia.com>
 To: buildroot@buildroot.org
-Date: Thu,  8 Feb 2024 10:41:36 +0100
-Message-ID: <20240208094137.2396094-1-roy.kollen.svendsen@akersolutions.com>
+Date: Thu,  8 Feb 2024 11:55:28 +0200
+Message-ID: <20240208095531.99049-2-aperez@igalia.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240208095531.99049-1-aperez@igalia.com>
+References: <20240208095531.99049-1-aperez@igalia.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1707385306; x=1707990106; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=GlztSVVMGm8NmyrmcWgwLBE2NMkJivNTUTGjTyo0eU0=;
- b=EqLD/7QhreHfSJR0OuF18/JJcMo/KHtK5q69OlP7VRaqIke754+5CirgS+MdzXMOWX
- qcldTFq3Gj1dXE7Zn2JslZtW44C5A8r931lh77u6mUG0y9EyipwTEy/mKLduTxyI9KDE
- YOaH74w9IKzQQP5SrQ9gsfT+0ZMvULo1EEtVavYA0mqfnj1MWQxSJuJ9UHecLujhYbWn
- /pt22KsuIihuFenSxcg4Iya0V4r9q/zIjY5SpOBAtPa/cF7yDEp3h24Npl4XPk4L9zjW
- oL535o1+dSV6aFPhM5+E2PjyGONQ0Nc2+sr4Wz0t5G5oY7NvJjFFjW0mD7JMWX0is8ZG
- EDUg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=EqLD/7Qh
-Subject: [Buildroot] [PATCH] package/python3: fix install
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=igalia.com; 
+ s=20170329; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
+ Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+ Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+ :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=jDKtECMVxWr3Pjyj+n2HI3nayjq3JRcCUlpfaoJ/yiA=; b=K91xd+iJWEDjd8I0bFVcxthRlA
+ NTwRS4aEJuFkhbZ5/14Ap9eFcwrr6GSjsXDSJ/XnLzDuXRzCNr2lnIxLMvNM+SSi9yXZY30gDWRAs
+ bdxhoGBR10rhjWwfc9Lg7wHFC1/TU35Ue983i4YX4XwpkfpITyX/B3lTE7+Vlf9hV0nA4pb9FQArk
+ xpig9v+cOmQQ3SROLCYAsa9z6WCfqqLn4gikR5advbLG7Hp4zeHavS9hRO/g+to1jJht7Wwy6ZW3F
+ Tek3WSQhAhfjugZjbB/2q9uBcD43OqORw92DgUxpsJKGS8+/u0q9zJLhZCN0HbWEFp0MrtNK7GrfM
+ 5ClZBW7A==;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=igalia.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256
+ header.s=20170329 header.b=K91xd+iJ
+Subject: [Buildroot] [PATCH 1/3] package/wpebackend-rdk: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,65 +83,170 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Roy Kollen Svendsen <roy.kollen.svendsen@akersolutions.com>,
- James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Asaf Kahlon <asafka7@gmail.com>
+Cc: Adrian Perez de Castro <aperez@igalia.com>,
+ Samuel Martin <s.martin49@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes the following failure in the install step of host-python3:
-    ...
-    /usr/bin/install -c -m 644 pyconfig.h output/host/include/python3.12/pyconfig.h
-    [ERROR] _tkinter failed to import: output/build/host-python3-3.12.1/build/lib.linux-x86_64-3.12/_tkinter.cpython-312-x86_64-linux-gnu.so: undefined symbol: Tcl_AddErrorInfo
-    The following modules are *disabled* in configure script:
-    _ctypes_test          _testbuffer           _testcapi
-    _testclinic           _testimportmultiple   _testinternalcapi
-    _testmultiphase       _xxtestfuzz           xxsubtype
+The wpebackend-rdk can be used as an alternative to wpebackend-fdo in
+some cases, and also supports a few additional configurations. For now
+only the Wayland-EGL and Broadcom RaspberryPi userland implementations
+can be enabled. The former is useful for testing, and the latter allows
+using WPE WebKit directly on top of Dispmanx in combination with the
+rpi-userland package in supported RaspberryPi models.
 
-    Following modules built successfully but were removed because they could not be imported:
-    _tkinter
+This only adds the new package, follow-up commits will un-hardcode the
+usage of wpebackend-fdo and allow selecting either which of both to
+build.
 
-    Checked 110 modules (31 built-in, 54 shared, 15 n/a on linux-x86_64, 9 disabled, 0 missing, 1 failed on import)
-    ...
-    /usr/bin/install -c -m 644 ./Lib/types.py output/host/lib/python3.12
-    /usr/bin/install: cannot stat 'Modules/_tkinter.cpython-312-x86_64-linux-gnu.so': No such file or directory
-    /usr/bin/install -c -m 644 ./Lib/typing.py output/host/lib/python3.12
-    make[3]: *** [Makefile:2068: sharedinstall] Error 1
-    ...
-
-Signed-off-by: Roy Kollen Svendsen <roy.kollen.svendsen@akersolutions.com>
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
-Changes v1 -> v2:
-  Make the --disable-tk option automatically set py_cv_module__tkinter=n/a (suggested by Thomas Petazzoni)
----
- .../python3/0012-Add-an-option-to-disable-the-tk-module.patch | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/Config.in                          |  1 +
+ package/wpebackend-rdk/Config.in           | 57 ++++++++++++++++++++++
+ package/wpebackend-rdk/wpebackend-rdk.hash |  5 ++
+ package/wpebackend-rdk/wpebackend-rdk.mk   | 43 ++++++++++++++++
+ 4 files changed, 106 insertions(+)
+ create mode 100644 package/wpebackend-rdk/Config.in
+ create mode 100644 package/wpebackend-rdk/wpebackend-rdk.hash
+ create mode 100644 package/wpebackend-rdk/wpebackend-rdk.mk
 
-diff --git a/package/python3/0012-Add-an-option-to-disable-the-tk-module.patch b/package/python3/0012-Add-an-option-to-disable-the-tk-module.patch
-index 7fafbedddb..08617241a6 100644
---- a/package/python3/0012-Add-an-option-to-disable-the-tk-module.patch
-+++ b/package/python3/0012-Add-an-option-to-disable-the-tk-module.patch
-@@ -62,7 +62,7 @@ diff --git a/configure.ac b/configure.ac
- index c8ae60aa6b5..7caa361138d 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -4503,6 +4503,11 @@ AC_ARG_ENABLE(pydoc,
-+@@ -4503,6 +4503,13 @@ AC_ARG_ENABLE(pydoc,
-  	AS_HELP_STRING([--disable-pydoc], [disable pydoc]),
-  	[ PYDOC="${enableval}" ], [ PYDOC=yes ])
-  
-@@ -70,6 +70,8 @@ index c8ae60aa6b5..7caa361138d 100644
- +AC_ARG_ENABLE(tk,
- +	AS_HELP_STRING([--disable-tk], [disable tk]),
- +	[ TK="${enableval}" ], [ TK=yes ])
-++AS_IF([test "$TK" = "no"],
-++	[PY_STDLIB_MOD_SET_NA([_tkinter])])
- +
-  # Check for enable-ipv6
-  AH_TEMPLATE([ENABLE_IPV6], [Define if --enable-ipv6 is specified])
+diff --git a/package/Config.in b/package/Config.in
+index 91a6f1de00d..99bd6fee22e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1723,6 +1723,7 @@ menu "Graphics"
+ 	source "package/wlroots/Config.in"
+ 	source "package/woff2/Config.in"
+ 	source "package/wpebackend-fdo/Config.in"
++	source "package/wpebackend-rdk/Config.in"
+ 	source "package/wpewebkit/Config.in"
+ 	source "package/zbar/Config.in"
+ 	source "package/zxing-cpp/Config.in"
+diff --git a/package/wpebackend-rdk/Config.in b/package/wpebackend-rdk/Config.in
+new file mode 100644
+index 00000000000..6125911bec9
+--- /dev/null
++++ b/package/wpebackend-rdk/Config.in
+@@ -0,0 +1,57 @@
++comment "wpebackend-rdk needs a toolchain w/ C++, wchar, threads, dynamic library, and rpi-userland or an OpenGL-capable Wayland backend"
++	depends on !(BR2_PACKAGE_RPI_USERLAND || BR2_PACKAGE_HAS_LIBEGL_WAYLAND) \
++		|| !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
++		|| !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
++
++config BR2_PACKAGE_WPEBACKEND_RDK
++	bool "wpebackend-rdk"
++	depends on !BR2_STATIC_LIBS # wayland
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland, libglib2
++	depends on BR2_USE_WCHAR # libglib2
++	depends on BR2_USE_MMU # libglib2
++	depends on BR2_PACKAGE_RPI_USERLAND || BR2_PACKAGE_HAS_LIBEGL_WAYLAND
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_LIBWPE
++	help
++	  WPEBackend interface supporting a number of configurations.
++
++if BR2_PACKAGE_WPEBACKEND_RDK
++
++choice
++	prompt Implementation
++	default BR2_PACKAGE_WPEBACKEND_RDK_IMPL_BRCM_RPI if BR2_PACKAGE_RPI_USERLAND
++	default BR2_PACKAGE_WPEBACKEND_RDK_IMPL_WAYLAND_EGL if BR2_PACKAGE_HAS_LIBEGL_WAYLAND
++
++comment "brcm-rpi needs rpi-userland"
++	depends on !BR2_PACKAGE_RPI_USERLAND || !BR2_arm
++
++config BR2_PACKAGE_WPEBACKEND_RDK_IMPL_BRCM_RPI
++	bool "brcm-rpi"
++	depends on BR2_arm
++	depends on BR2_PACKAGE_RPI_USERLAND
++	help
++	  Build RaspberryPi support using Broadcom's rpi-userland.
++
++comment "wayland-egl needs an EGL capable Wayland implementation"
++	depends on !BR2_PACKAGE_HAS_LIBEGL_WAYLAND
++
++config BR2_PACKAGE_WPEBACKEND_RDK_IMPL_WAYLAND_EGL
++	bool "wayland-egl"
++	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND
++	help
++	  Build Wayland-EGL support.
++
++endchoice
++
++if BR2_PACKAGE_WPEBACKEND_RDK_IMPL_BRCM_RPI
++
++config BR2_PACKAGE_WPEBACKEND_RDK_LIBINPUT
++	bool "libinput support"
++	select BR2_PACKAGE_LIBINPUT
++	help
++	  Support keyboard and mouse input through libinput
++
++endif
++
++endif
+diff --git a/package/wpebackend-rdk/wpebackend-rdk.hash b/package/wpebackend-rdk/wpebackend-rdk.hash
+new file mode 100644
+index 00000000000..af7dab6a365
+--- /dev/null
++++ b/package/wpebackend-rdk/wpebackend-rdk.hash
+@@ -0,0 +1,5 @@
++# Generated locally
++sha256  4c6ae288cf66f0a47052a50972e3d3727617c4c3e104db20494a3c5feb262f40  wpebackend-rdk-4.4.1.tar.gz
++
++# License files
++sha256  a5ba969938c2896411ea1a23ee7d9ccb68306a65615b6711afe738c8f6ff2153  COPYING
+diff --git a/package/wpebackend-rdk/wpebackend-rdk.mk b/package/wpebackend-rdk/wpebackend-rdk.mk
+new file mode 100644
+index 00000000000..f9740eb46cd
+--- /dev/null
++++ b/package/wpebackend-rdk/wpebackend-rdk.mk
+@@ -0,0 +1,43 @@
++################################################################################
++#
++# wpebackend-rdk
++#
++################################################################################
++
++WPEBACKEND_RDK_VERSION = 4.4.1
++WPEBACKEND_RDK_SITE = $(call github,WebPlatformForEmbedded,WPEBackend-rdk,R$(WPEBACKEND_RDK_VERSION))
++WPEBACKEND_RDK_INSTALL_STAGING = YES
++WPEBACKEND_RDK_LICENSE = BSD-2-Clause
++WPEBACKEND_RDK_LICENSE_FILES = COPYING
++WPEBACKEND_RDK_DEPENDENCIES = libglib2 libwpe
++WPEBACKEND_RDK_CONF_OPTS = \
++	-DUSE_BACKEND_BCM_NEXUS=OFF \
++	-DUSE_BACKEND_BCM_NEXUS_WAYLAND=OFF \
++	-DUSE_BACKEND_INTEL_CE=OFF \
++	-DUSE_BACKEND_WESTEROS=OFF \
++	-DUSE_BACKEND_WPEFRAMEWORK=OFF \
++	-DUSE_HOLE_PUNCH_GSTREAMER=OFF \
++	-DUSE_VIRTUAL_KEYBOARD=OFF
++
++ifeq ($(BR2_PACKAGE_WPEBACKEND_RDK_IMPL_BRCM_RPI),y)
++WPEBACKEND_RDK_CONF_OPTS += -DUSE_BACKEND_BCM_RPI=ON
++WPEBACKEND_RDK_DEPENDENCIES += rpi-userland
++else
++WPEBACKEND_RDK_CONF_OPTS += -DUSE_BACKEND_BCM_RPI=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_WPEBACKEND_RDK_IMPL_WAYLAND_EGL),y)
++WPEBACKEND_RDK_CONF_OPTS += -DUSE_BACKEND_WAYLAND_EGL=ON
++WPEBACKEND_RDK_DEPENDENCIES += libegl wayland
++else
++WPEBACKEND_RDK_CONF_OPTS += -DUSE_BACKEND_WAYLAND_EGL=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_WPEBACKEND_RDK_LIBINPUT),y)
++WPEBACKEND_RDK_CONF_OPTS += -DUSE_INPUT_LIBINPUT=ON
++WPEBACKEND_RDK_DEPENDENCIES += libinput
++else
++WPEBACKEND_RDK_CONF_OPTS += -DUSE_INPUT_LIBINPUT=OFF
++endif
++
++$(eval $(cmake-package))
 -- 
 2.43.0
 
