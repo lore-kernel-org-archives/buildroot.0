@@ -1,74 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAB05C48260
-	for <buildroot@archiver.kernel.org>; Thu,  8 Feb 2024 08:01:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B252C4828F
+	for <buildroot@archiver.kernel.org>; Thu,  8 Feb 2024 08:03:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 629C84258F;
-	Thu,  8 Feb 2024 08:01:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5FDFC41ADE;
+	Thu,  8 Feb 2024 08:03:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EPGbK8CmNml3; Thu,  8 Feb 2024 08:01:28 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0yEublruFz_R; Thu,  8 Feb 2024 08:03:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 73D784268A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 28C0341B01
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 73D784268A;
-	Thu,  8 Feb 2024 08:01:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 28C0341B01;
+	Thu,  8 Feb 2024 08:03:04 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 280B51BF476
- for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 08:01:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8DD931BF476
+ for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 08:03:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1320A41B01
- for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 08:01:27 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 79B8541B01
+ for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 08:03:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id POQAETZHgvlu for <buildroot@lists.busybox.net>;
- Thu,  8 Feb 2024 08:01:25 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
- helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ with ESMTP id 5eLMxMrkc7Bb for <buildroot@lists.busybox.net>;
+ Thu,  8 Feb 2024 08:03:01 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 12B1441ADE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 12B1441ADE
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 12B1441ADE
- for <buildroot@buildroot.org>; Thu,  8 Feb 2024 08:01:24 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2E40224000E;
- Thu,  8 Feb 2024 08:01:21 +0000 (UTC)
-Date: Thu, 8 Feb 2024 09:01:20 +0100
-To: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-Message-ID: <20240208090120.4d886b8c@windsurf>
-In-Reply-To: <20240208074901.1654224-1-roy.kollen.svendsen@akersolutions.com>
-References: <20240208074901.1654224-1-roy.kollen.svendsen@akersolutions.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F34DF41ADE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F34DF41ADE
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F34DF41ADE
+ for <buildroot@buildroot.org>; Thu,  8 Feb 2024 08:03:00 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 333E140002;
+ Thu,  8 Feb 2024 08:02:57 +0000 (UTC)
+Date: Thu, 8 Feb 2024 09:02:56 +0100
+To: kilian.zinnecker@mail.de
+Message-ID: <20240208090256.25b75053@windsurf>
+In-Reply-To: <2254622.iZASKD2KPV@laptop>
+References: <20231130223101.132221-1-kilian.zinnecker@mail.de>
+ <20240207204337.561d3b54@windsurf> <2254622.iZASKD2KPV@laptop>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1707379281;
+ d=bootlin.com; s=gm1; t=1707379377;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=LFhWP1KACet/M+nNO06FnLOXjOwYmfhpWEoPcOrtFxw=;
- b=GmuM5HMgRwEvQ1aGzFn3JnVqLzE+zKRIzH7VithuoIo0KtfGhGdlapezgcSB18EnmzXJgu
- HWH182rY6cGqpLnIwhSsV20LNvux5gCvqIjD/wOgnAq2UeuPijXvU/2yYoirEtDLU8m9tA
- 9UWRDTAdEGAHgWdbetAciXYYzlm7yRNgeaK6Q86XHufgDtWgIkYAN8YOTY14JFUcMfgYyH
- S4Rv0KGk+TyOvcqboZRrYkE3iIbQ5YtYTR19X4BXhqUp/PtqVQlrMQ1uuKJE54Yz+qxyGV
- QpsrLg5t5Nb7VT6piAED/kdXrroc6U7Nf1Hkr8U1ueUNeZon/wGzBr1ZvS1r3A==
+ bh=hKtYX6S9bWgY+R0vy0oBoGCbC8fEXVGjURZiAmqLPpk=;
+ b=hfgrTrn4ZYh1N8mYbDBp8HGsleG6KREXjRf7lkaLGPeMgjL1/GBwCowGUUS5Z2Dy571mil
+ IL2oePx4Gt6EzUUhaOkc8vLP3oBLmNSchr3RvMke+n6XklwP8bXsWbdQo5FgKg981WXBUi
+ TrmfQZlA38dlHKsTca1xei52v+zQHxY0W0TTca3wZYTsWXYY5oP1bVW/Avv62UNDCHDud0
+ T4wzXdkj3tZM2Nhd7NCUjfsQN2LsYZtjh7HdAJ8EQfbU2kh4MIlCl7IN0HfTrjrQFt//tY
+ XFTeiKfGk2CtmVv8HO0l0edHtHRGj7gmkCkLuHEmS0OCmttPC3dpPp3zsJqNAg==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=GmuM5HMg
-Subject: Re: [Buildroot] [PATCH] package/python3: fix install
+ header.s=gm1 header.b=hfgrTrn4
+Subject: Re: [Buildroot] [PATCH 1/1] configs/rzboard_v2L_defconfig: new
+ defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,57 +84,39 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Roy Kollen Svendsen <roy.kollen.svendsen@akersolutions.com>,
- James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
  buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Roy,
+Hello Kilian,
 
-On Thu,  8 Feb 2024 08:49:00 +0100
-Roy Kollen Svendsen <roykollensvendsen@gmail.com> wrote:
+On Thu, 08 Feb 2024 00:22:21 +0100
+kilian.zinnecker@mail.de wrote:
 
-> diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-> index 42765abcf4..81d9a904c7 100644
-> --- a/package/python3/python3.mk
-> +++ b/package/python3/python3.mk
-> @@ -34,6 +34,7 @@ HOST_PYTHON3_CONF_OPTS += \
->  HOST_PYTHON3_CONF_ENV += \
->  	LDFLAGS="$(HOST_LDFLAGS) -Wl,--enable-new-dtags" \
->  	py_cv_module_nis=n/a \
-> +	py_cv_module__tkinter=n/a \
->  	py_cv_module_unicodedata=yes \
->  	py_cv_module__codecs_cn=n/a \
->  	py_cv_module__codecs_hk=n/a \
+> Yes, I agree and would prefer a bootable image, containing a uboot built by 
+> buildroot as part of the boot chain, too. I therefore tried to run uboot from 
+> SD card at first (using the information from the hardware manual you refered 
+> to), but I was not successful. Hence I asked the author of a hackster.io 
+> article about the RZBoard V2L boot [1], whether he could help me. He told me, 
+> that he asked the Avnet BSP team, and "they confirmed there is no official 
+> support for storing bootloader files on micro sd". This matches his article, 
+> listing only eMMC and QSPI as possible locations for the bootloader.
+> 
+> However, maybe this information is incomplete and there is in fact a way to 
+> run uboot from SD card, which I just was not able to get working. I can try to 
+> reach out to the Avnet support myself. And even if there is no way to do that, 
+> I can try to adjust the board support to build uboot, figure out how to flash 
+> uboot to the eMMC and document that in the readme. May take me some time 
+> though at the moment. 
 
-Thanks a lot for your patch! However, in order to be consistent with
-how we do it with ncurses, sqlite, etc, I think it is the --disable-tk
-option that should automatically set py_cv_module__tkinter=n/a.
+Thanks for the additional details. Indeed in this case, the best option
+would be to have our defconfig build a uboot that works on QSPI, or
+eMMC, and provide the instructions on how to reflash the QSPI or eMMC.
 
-+AC_SUBST(TK)
-+AC_ARG_ENABLE(tk,
-+       AS_HELP_STRING([--disable-tk], [disable tk]),
-+       [ TK="${enableval}" ], [ TK=yes ])
-
-should be followed by something like
-
-AS_IF([test "${enable_tk}" = "no"], [PY_STDLIB_MOD_SET_NA([_tkinter])])
-
-something like this (in
-package/python3/0012-Add-an-option-to-disable-the-tk-module.patch).
-
-Or, we need to turn around how things are done, and instead of adding
-those --enable/--disable, look at whether py_cv_module_<foo> is passed
-to appropriately disable things. Might be more upstreamable (but I
-thought about this idea *after* redoing the 3.12 patches).
-
-That said, the 3.12 bump is for now causing quite a few issues, so it
-is not impossible that we revert it before the 2024.02 release.
-
-Best regards,
+Thanks a lot!
 
 Thomas
 -- 
