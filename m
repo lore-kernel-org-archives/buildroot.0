@@ -4,88 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8118C4828D
-	for <buildroot@archiver.kernel.org>; Wed,  7 Feb 2024 23:22:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27F98C4828F
+	for <buildroot@archiver.kernel.org>; Thu,  8 Feb 2024 07:09:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 65F1E426D2;
-	Wed,  7 Feb 2024 23:22:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3511342E5E;
+	Thu,  8 Feb 2024 07:09:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rQzi9ywCLdUi; Wed,  7 Feb 2024 23:22:28 +0000 (UTC)
+	with ESMTP id SWuhk4w6RpkI; Thu,  8 Feb 2024 07:09:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 65A8E42883
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A48D42E63
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 65A8E42883;
-	Wed,  7 Feb 2024 23:22:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1A48D42E63;
+	Thu,  8 Feb 2024 07:09:54 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A00951BF82C
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 23:22:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CBB681BF403
+ for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 07:09:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8D3C785082
- for <buildroot@lists.busybox.net>; Wed,  7 Feb 2024 23:22:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B86A384677
+ for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 07:09:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KJ4kCVZjrgdS for <buildroot@lists.busybox.net>;
- Wed,  7 Feb 2024 23:22:25 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2001:868:100:600::216; helo=shout01.mail.de;
- envelope-from=kilian.zinnecker@mail.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DDF3F8509F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DDF3F8509F
-Received: from shout01.mail.de (shout01.mail.de [IPv6:2001:868:100:600::216])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DDF3F8509F
- for <buildroot@buildroot.org>; Wed,  7 Feb 2024 23:22:24 +0000 (UTC)
-Received: from postfix01.mail.de (postfix01.bt.mail.de [10.0.121.125])
- by shout01.mail.de (Postfix) with ESMTP id A8403240C87;
- Thu,  8 Feb 2024 00:22:22 +0100 (CET)
-Received: from smtp01.mail.de (smtp04.bt.mail.de [10.0.121.214])
- by postfix01.mail.de (Postfix) with ESMTP id 8C9AD80292;
- Thu,  8 Feb 2024 00:22:22 +0100 (CET)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp01.mail.de (Postfix) with ESMTPSA id 81CDF240AC8;
- Thu,  8 Feb 2024 00:22:21 +0100 (CET)
-To: buildroot@buildroot.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Thu, 08 Feb 2024 00:22:21 +0100
-Message-ID: <2254622.iZASKD2KPV@laptop>
-In-Reply-To: <20240207204337.561d3b54@windsurf>
-References: <20231130223101.132221-1-kilian.zinnecker@mail.de>
- <20240207204337.561d3b54@windsurf>
+ with ESMTP id Kz9tBqUrB_Q2 for <buildroot@lists.busybox.net>;
+ Thu,  8 Feb 2024 07:09:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
+ helo=relay7-d.mail.gandi.net; envelope-from=peko@48ers.dk; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 618CF8435E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 618CF8435E
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 618CF8435E
+ for <buildroot@buildroot.org>; Thu,  8 Feb 2024 07:09:49 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 0C19420009;
+ Thu,  8 Feb 2024 07:09:45 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peko@48ers.dk>) id 1rXyXZ-0024JB-0S;
+ Thu, 08 Feb 2024 08:09:45 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Thu,  8 Feb 2024 08:09:39 +0100
+Message-Id: <20240208070939.493203-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-purgate: clean
-X-purgate: This mail is considered clean (visit http://www.eleven.de for
- further information)
-X-purgate-type: clean
-X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
-X-purgate: This mail is considered clean (visit http://www.eleven.de for
- further information)
-X-purgate: clean
-X-purgate-size: 1753
-X-purgate-ID: 154282::1707348142-077EF338-94738AEF/0/0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=mail.de; s=mailde202009; t=1707348142;
- bh=oCgyvdWqy2yL65j6ZmBCBC1rgiQlRLOO1QzsYL9uUMo=;
- h=From:To:Cc:Subject:Date:Message-ID:From:To:CC:Subject:Reply-To;
- b=imyHD70Ip24PSHHZ8rZRQ8VV1aLIsdJd3SyeA96/4TFm5bbQUOJaSkwRMIyGaQHOi
- UCOoQqJJu5y3rm/ww+DUMASlBnoe4H7uN51sSnxQecKtO8ISH/YxBSFO70XIbGmW+y
- Um+fJtMAQ0YF7nJRHCsrDDSKZwgdAoGbR2kIm2+0/iV2ABQcexDAsvVogiWuDsPclB
- 4Lkahb5vn2euHdoPANJDGrXknc4v/EIDpfdCC7GJBs7Rmst06+YAukT6l311B0Lkux
- f7j/9iHKAY8l0KUyT/4jNKWRX+GAATX5A5WqwEEqNkWoip3uC3fKrNNqYrSvK3PuQz
- mEJvo8T9JYOMw==
+X-GND-Sasl: peter@korsgaard.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mail.de
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=fail reason="signature verification failed" (2048-bit key,
- unprotected) header.d=mail.de header.i=@mail.de header.a=rsa-sha256
- header.s=mailde202009 header.b=imyHD70I
-Subject: Re: [Buildroot] [PATCH 1/1] configs/rzboard_v2L_defconfig: new
- defconfig
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: [Buildroot] [PATCH] package/webkitgtk: security bump to version
+ 2.42.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,55 +65,145 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: "kilian.zinnecker--- via buildroot" <buildroot@buildroot.org>
-Reply-To: kilian.zinnecker@mail.de
-Cc: "kilian.zinnecker@mail.de" <kilian.zinnecker@mail.de>
+Cc: Adrian Perez de Castro <aperez@igalia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Thomas, Giulio, all,
+Fixes the following security issues:
 
-Thanks Giulio for reviewing my patch and your feedback!
+https://webkitgtk.org/security/WSA-2024-0001.html
 
-[--SNIP--]
+- CVE-2024-23222: Processing maliciously crafted web content may lead to
+  arbitrary code execution.  Apple is aware of a report that this issue may
+  have been exploited.  Description: A type confusion issue was addressed
+  with improved checks.
 
-> Thanks, I have applied to master, after renaming to
-> avnet_rzboard_v2l_defconfig, and taking into account the feedback from
-> Giulio.
+- CVE-2024-23206: A maliciously crafted webpage may be able to fingerprint
+  the user.  Description: An access issue was addressed with improved access
+  restrictions.
 
-Thanks for fixing the issues and applying the patch!
+- CVE-2024-23213: Processing web content may lead to arbitrary code execution.
+  Description: The issue was addressed with improved memory handling.
 
-> However, I find it not so nice that we don't build a fully bootable
-> image that includes U-Boot. Could you work on this and submit a
-> follow-up patch?
-> 
-> There is a DIP switch on the board that allows to boot from SD, see
-> page 15 of the board hardware manual;
+- CVE-2023-40414: Processing web content may lead to arbitrary code
+  execution.  Description: A use-after-free issue was addressed with
+  improved memory management.
 
-Yes, I agree and would prefer a bootable image, containing a uboot built by 
-buildroot as part of the boot chain, too. I therefore tried to run uboot from 
-SD card at first (using the information from the hardware manual you refered 
-to), but I was not successful. Hence I asked the author of a hackster.io 
-article about the RZBoard V2L boot [1], whether he could help me. He told me, 
-that he asked the Avnet BSP team, and "they confirmed there is no official 
-support for storing bootloader files on micro sd". This matches his article, 
-listing only eMMC and QSPI as possible locations for the bootloader.
+- CVE-2023-42833: Processing web content may lead to arbitrary code execution.
+  Description: A correctness issue was addressed with improved checks.
 
-However, maybe this information is incomplete and there is in fact a way to 
-run uboot from SD card, which I just was not able to get working. I can try to 
-reach out to the Avnet support myself. And even if there is no way to do that, 
-I can try to adjust the board support to build uboot, figure out how to flash 
-uboot to the eMMC and document that in the readme. May take me some time 
-though at the moment. 
+- CVE-2014-1745: Processing a file may lead to a denial-of-service or
+  potentially disclose memory contents.  Description: The issue was
+  addressed with improved checks.
 
-Best regards,
-Kilian
+https://webkitgtk.org/security/WSA-2023-0012.html
 
-[1] https://www.hackster.io/lucas-keller/mastering-rzboardv2l-emmc-micro-sd-and-network-booting-dc87f3
+- CVE-2023-42883: Processing a SVG image may lead to a denial-of-service.
+  Description: The issue was addressed with improved memory handling.
 
+- CVE-2023-42890: Processing web content may lead to arbitrary code
+  execution.  Description: The issue was addressed with improved memory
+  handling.
 
+https://webkitgtk.org/security/WSA-2023-0011.html
+
+- CVE-2023-42916: Processing web content may disclose sensitive information.
+  Apple is aware of a report that this issue may have been actively
+  exploited.  Description: An out-of-bounds read was addressed with improved
+  input validation.
+
+- CVE-2023-42917: Processing web content may lead to arbitrary code
+  execution.  Apple is aware of a report that this issue may have been
+  actively exploited.  Description: A memory corruption vulnerability was
+  addressed with improved locking.
+
+Add an upstream post-2.42.5 patch to fix an issue with an invalid backport
+causing a build issue.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...velInterpreter.cpp-339-21-error-t6-w.patch | 39 +++++++++++++++++++
+ package/webkitgtk/webkitgtk.hash              |  6 +--
+ package/webkitgtk/webkitgtk.mk                |  2 +-
+ 3 files changed, 43 insertions(+), 4 deletions(-)
+ create mode 100644 package/webkitgtk/0001-GTK-2.42.5-LowLevelInterpreter.cpp-339-21-error-t6-w.patch
+
+diff --git a/package/webkitgtk/0001-GTK-2.42.5-LowLevelInterpreter.cpp-339-21-error-t6-w.patch b/package/webkitgtk/0001-GTK-2.42.5-LowLevelInterpreter.cpp-339-21-error-t6-w.patch
+new file mode 100644
+index 0000000000..c9667fedbd
+--- /dev/null
++++ b/package/webkitgtk/0001-GTK-2.42.5-LowLevelInterpreter.cpp-339-21-error-t6-w.patch
+@@ -0,0 +1,39 @@
++From 3d5373575695b293b8559155431d0079a6153aff Mon Sep 17 00:00:00 2001
++From: Michael Catanzaro <mcatanzaro@redhat.com>
++Date: Mon, 5 Feb 2024 11:00:49 -0600
++Subject: [PATCH] =?UTF-8?q?[GTK]=20[2.42.5]=20LowLevelInterpreter.cpp:339:?=
++ =?UTF-8?q?21:=20error:=20=E2=80=98t6=E2=80=99=20was=20not=20declared=20in?=
++ =?UTF-8?q?=20this=20scope=20https://bugs.webkit.org/show=5Fbug.cgi=3Fid?=
++ =?UTF-8?q?=3D268739?=
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Unreviewed build fix. Seems a backport went badly, and we didn't notice
++because the code is architecture-specific.
++
++* Source/JavaScriptCore/llint/LowLevelInterpreter.cpp:
++(JSC::CLoop::execute):
++
++Upstream: https://github.com/WebKit/WebKit/commit/3d5373575695b293b8559155431d0079a6153aff
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ Source/JavaScriptCore/llint/LowLevelInterpreter.cpp | 2 --
++ 1 file changed, 2 deletions(-)
++
++diff --git a/Source/JavaScriptCore/llint/LowLevelInterpreter.cpp b/Source/JavaScriptCore/llint/LowLevelInterpreter.cpp
++index 5064ead6cd2e..9a2e2653b121 100644
++--- a/Source/JavaScriptCore/llint/LowLevelInterpreter.cpp
+++++ b/Source/JavaScriptCore/llint/LowLevelInterpreter.cpp
++@@ -336,8 +336,6 @@ JSValue CLoop::execute(OpcodeID entryOpcodeID, void* executableAddress, VM* vm,
++     UNUSED_VARIABLE(t2);
++     UNUSED_VARIABLE(t3);
++     UNUSED_VARIABLE(t5);
++-    UNUSED_VARIABLE(t6);
++-    UNUSED_VARIABLE(t7);
++ 
++     struct StackPointerScope {
++         StackPointerScope(CLoopStack& stack)
++-- 
++2.39.2
++
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 59782732c3..ac4799d4cf 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,6 +1,6 @@
+-# From https://www.webkitgtk.org/releases/webkitgtk-2.42.2.tar.xz.sums
+-sha1  05bec6a824e46f043b865478735bc8395249510e  webkitgtk-2.42.2.tar.xz
+-sha256  5720aa3e8627f1b9f63252187d4df0f8233ae71d697b1796ebfbe5ca750bd118  webkitgtk-2.42.2.tar.xz
++# From https://www.webkitgtk.org/releases/webkitgtk-2.42.5.tar.xz.sums
++sha1  c3ffb2beaac56f1089029f2254482f48d9e3db37  webkitgtk-2.42.5.tar.xz
++sha256  b64278c1f20b8cfdbfb5ff573c37d871aba74a1db26d9b39f74e8953fe61e749  webkitgtk-2.42.5.tar.xz
+ 
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 611d7f65d3..075a36654f 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WEBKITGTK_VERSION = 2.42.2
++WEBKITGTK_VERSION = 2.42.5
+ WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
+-- 
+2.39.2
 
 _______________________________________________
 buildroot mailing list
