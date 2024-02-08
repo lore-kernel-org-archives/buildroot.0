@@ -1,93 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3801AC48260
-	for <buildroot@archiver.kernel.org>; Thu,  8 Feb 2024 19:01:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B63DC48260
+	for <buildroot@archiver.kernel.org>; Thu,  8 Feb 2024 19:54:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8063583FA9;
-	Thu,  8 Feb 2024 19:01:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 540304031C;
+	Thu,  8 Feb 2024 19:54:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7SkyzCl3fLoa; Thu,  8 Feb 2024 19:01:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id D7NJmPOZsNks; Thu,  8 Feb 2024 19:54:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 71CDA83FEF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C7DD240471
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 71CDA83FEF;
-	Thu,  8 Feb 2024 19:01:30 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7BEE31BF30C
- for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 19:01:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C7DD240471;
+	Thu,  8 Feb 2024 19:54:51 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 61A371BF31B
+ for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 19:54:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 68B2B83FEF
- for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 19:01:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4DD494031C
+ for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 19:54:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QTIYP4g6kMTU for <buildroot@lists.busybox.net>;
- Thu,  8 Feb 2024 19:01:27 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id N1uWgEja4F6P for <buildroot@lists.busybox.net>;
+ Thu,  8 Feb 2024 19:54:47 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::136; helo=mail-lf1-x136.google.com;
+ client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
  envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 169C483FA9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 169C483FA9
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com
- [IPv6:2a00:1450:4864:20::136])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 169C483FA9
- for <buildroot@buildroot.org>; Thu,  8 Feb 2024 19:01:26 +0000 (UTC)
-Received: by mail-lf1-x136.google.com with SMTP id
- 2adb3069b0e04-51168572090so234677e87.0
- for <buildroot@buildroot.org>; Thu, 08 Feb 2024 11:01:26 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 75CD34023B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 75CD34023B
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 75CD34023B
+ for <buildroot@buildroot.org>; Thu,  8 Feb 2024 19:54:47 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id
+ ffacd0b85a97d-33b2fba3176so42740f8f.0
+ for <buildroot@buildroot.org>; Thu, 08 Feb 2024 11:54:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707418885; x=1708023685;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=7Vv9bOSjj3TnT1tnod7EkST4IjU4oQqm324uO3v791s=;
- b=JV3XEPQkonYnXTtvwl6Gc+YqdfuZdk2KgQy9XSg9azexigbMXfO4/dFwPx/qXTN9GG
- DZkzfXl/Jy74nGuvps54YxrzGqx0OUgohkAJTCUyrteFO0L/9YNc0Vv2axAoitD6AAXz
- l2VjJTPwmkzabaMAl9cPuFLvgTKCNmyW3NBPT30/4SKcdtLzez1YDYeWkwf8Ml/79TWp
- 5iMM1SqvEwLzP/v3AkBtJjPDYUjxh3DlbyPG7d/Olizxk6n9zE5llk9a23wdoDjZwkW/
- Ss1v/iA3Eq3v13O2axkUTGzJWXqqonx4jB3mK2xFWhyi2XyXNCARB+KxfOq8svIww5hr
- fCxw==
-X-Gm-Message-State: AOJu0YzhFG8XSHYTQGc+kyLFBMGfSRFETDJcHRXOmpvYRQA25EvhILYs
- E0FdUfjqQnsv7Myi2JSkQVZT4uV+yroOe8RBMT7ehGFih6cmboCG9uWZc3gEUfL+fIvfpGGIn1F
- h2vUkqt2N7N2ojZzk9aTqXkAeCJ3B5ysahOKczw==
-X-Google-Smtp-Source: AGHT+IH9BpYYgK6JNKcbIE7LxMOtzsA/HOsdIeE9BGEDvqYBd+C5GysH4lxjwgRW3x90CHzrH2VKDIIAMgz+qNY1X7Y=
-X-Received: by 2002:a05:6512:2216:b0:511:7549:1940 with SMTP id
- h22-20020a056512221600b0051175491940mr45699lfu.26.1707418884620; Thu, 08 Feb
- 2024 11:01:24 -0800 (PST)
-MIME-Version: 1.0
-References: <mailman.3620.1707247855.145104.buildroot@buildroot.org>
- <e7cbd25938f13eeb6b674f836fef9619@umbiko.net>
- <a5777d5db49e22b535a9adb4f5996d4f@umbiko.net>
-In-Reply-To: <a5777d5db49e22b535a9adb4f5996d4f@umbiko.net>
+ d=1e100.net; s=20230601; t=1707422083; x=1708026883;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=uyw2orcx4FkvRZG2N1v/UZoE3yxI4PJTmDt0toPMzYk=;
+ b=ehW7Qw3tJ5xmQHCdvvBZJdhtXVMdVBvXvXj9QXfKZiQxkH+29vu4SbzWXIEvF0iW+j
+ PYpYx9vstnH3mWSCu/8rSPYCG6byjuuXAGe3A5MwI8Y4iwKFwlqoNc/QmiEMWOKp5b9S
+ V+njnEQuAiMq6qa+calmbSgxf8YY5rLz70s5PCzi5vdmW5Ybr5JsdNHkirJrRdP1BSKK
+ gotKr1r9iAzRII93K0dXi08Ot09SAtF6tsrT96pA5LSCHWg5BQGh16MhQP0MQ5miSlIp
+ 68H+ZKOvnNf2TDTmgU+8E1FNZtJ2wEEcfxzaITzL0RVtb9KU4BvFoyryBYZLwCTekZjZ
+ 6DvQ==
+X-Gm-Message-State: AOJu0YxeggfqRfZsstwQuHzZui6X/98++TGdpfYBFsMQwzh1MN0ywxZ3
+ jIrGpF/LHAl//pSgLW+oIcH4DbM2dy1RZFcS8ZN6I4x1v03OibKq+7+3u8gHSEw=
+X-Google-Smtp-Source: AGHT+IFAG214v81/6al7et6p1kKhza1UnlIvKLPygKcEbnvhq3yVPGFhyUOb4fVE3FPCKxL2vDnncw==
+X-Received: by 2002:adf:ed4e:0:b0:33b:4f07:5b4f with SMTP id
+ u14-20020adfed4e000000b0033b4f075b4fmr354533wro.69.1707422083319; 
+ Thu, 08 Feb 2024 11:54:43 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ b18-20020a5d45d2000000b0033b1b1da2adsm45866wrs.99.2024.02.08.11.54.42
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 08 Feb 2024 11:54:42 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 8 Feb 2024 20:01:13 +0100
-Message-ID: <CAPi7W81FbkSWdhAoXR2w2WULnouu8Vz=5LRxC9unw-kmcFo6Tw@mail.gmail.com>
-To: Andreas Ziegler <br015@umbiko.net>
+To: buildroot@buildroot.org
+Date: Thu,  8 Feb 2024 20:54:38 +0100
+Message-ID: <20240208195438.89814-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1707418885; x=1708023685; darn=buildroot.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=7Vv9bOSjj3TnT1tnod7EkST4IjU4oQqm324uO3v791s=;
- b=Yqf+vaLYOSUXhe7ytFK3NdTS74yn59Xvfh8C3Jc+tZNJay6aCFw/BECuGpOldmLbrz
- HJ0OYtgnym7ZytTSg1bUe8OifBZ0YjE5kwJHxN4IE0CanbJo2De4ly8761PAOisB2MGL
- wA9rMVdoC9iMGFoWgB7bl8enP2h2StrOMFWdKLcpGOVVJkSscxMcrlWbR8FVKxaz9q6V
- asbKT2925UXdl08EVlsHzvNB/r7fuNGXGoXevspbOUs5t2tcNYnZBXNLirkj4inpo7CT
- AObnKvZ2bZJ62O8zVOg0/TZkqJCCaY9q77ZC/jQey0hrl5+kb/mA6ygQFeEUy2rnoEt9
- arhQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=gmail.com; s=20230601; t=1707422083; x=1708026883; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=uyw2orcx4FkvRZG2N1v/UZoE3yxI4PJTmDt0toPMzYk=;
+ b=TdKDmKjCU3HroIoKmy6xw4dYrJkJKbW+OKQC+w5KVm9rx+BzC4AtQQJ1Eu8CV16r23
+ EaVceqQ4lUPug6J70z6+3G75LM3v9uGUE6Zye01HqVbYTkXF80fotEynOBOltzZ3+vKc
+ hRAJa4m64kWXt4/N5RgH5PSVbRHNKh62WDrgDr/VvrWw1kPKX0nY7txQnO9yc6ft2EJi
+ Dgb+K623RLAI8XuUDQBnxpUcdMUY86kD3wPiNonnZFUzn8KNIkpq6WDM3gYofTdyPXQ5
+ Faan7cGOCXCBHAIGceW4S6ejEM0qlMmbbvTX61mZT+WTriXl5qU/il9ifPUIWq2Dpn+w
+ pOeQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Yqf+vaLY
-Subject: Re: [Buildroot] [PATCH 1/1] package/ncmpc: don't set NLS
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=TdKDmKjC
+Subject: [Buildroot] [PATCH 1/1] package/tinymembench: drop package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,128 +100,210 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@smile.fr>, buildroot <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgQW5kcmVhcywgUm9tYWluLAoKTGUgamV1LiA4IGbDqXZyLiAyMDI0IMOgIDA4OjU5LCBBbmRy
-ZWFzIFppZWdsZXIgPGJyMDE1QHVtYmlrby5uZXQ+IGEgw6ljcml0IDoKPgo+IEhpIEZhYnJpY2Us
-IFJvbWFpbiwgKiwKPgo+IG1vcmUgY29tcGxpY2F0ZWQgdGhhbiBJIHRob3VnaHQgLi4uCj4KPiBP
-biAyMDI0LTAyLTA3IDExOjMwLCBBbmRyZWFzIFppZWdsZXIgd3JvdGU6Cj4gPiBIaSBGYWJyaWNl
-LAo+ID4KPiA+IHNvcnJ5IGluIGNhc2UgSSBkbyBub3QgcmVwbHkgdG8gdGhlIGxhdGVzdCBtZXNz
-YWdlIGluIHRoZSB0aHJlYWQ7IG15Cj4gPiBpbi1ib3ggaXMgY3VycmVudGx5IGEgYml0IGNyb3dk
-ZWQgLi4uCj4gPgo+ID4gT24gMjAyNC0wMi0wNiAxODo1OSwgRmFicmljZSBGb250YWluZSB3cm90
-ZToKPiA+Cj4gPj4gTWVzc2FnZTogMzAKPiA+PiBEYXRlOiBUdWUsIDYgRmViIDIwMjQgMTg6NTk6
-MDAgKzAxMDAKPiA+PiBGcm9tOiBGYWJyaWNlIEZvbnRhaW5lIDxmb250YWluZS5mYWJyaWNlQGdt
-YWlsLmNvbT4KPiA+PiBUbzogUm9tYWluIE5hb3VyIDxyb21haW4ubmFvdXJAc21pbGUuZnI+Cj4g
-Pj4gQ2M6IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gPj4gU3ViamVjdDogUmU6IFtCdWlsZHJv
-b3RdIFtQQVRDSCAxLzFdIHBhY2thZ2UvbmNtcGM6IGRvbid0IHNldCBOTFMKPiA+PiBNZXNzYWdl
-LUlEOgo+ID4+ICAgICAgPENBUGk3VzgxZmZmVl8wek1oNTBoZ0I3Ync3KytKWnprZFNwRlVYWGJI
-TVBNS21IdGJRd0BtYWlsLmdtYWlsLmNvbT4KPiA+PiBDb250ZW50LVR5cGU6IHRleHQvcGxhaW47
-IGNoYXJzZXQ9IlVURi04Igo+ID4+Cj4gPj4gSGVsbG8gUm9tYWluLAo+ID4+Cj4gPj4gTGUgbWFy
-LiA2IGY/dnIuIDIwMjQgPyAxODozMiwgUm9tYWluIE5hb3VyIDxyb21haW4ubmFvdXJAc21pbGUu
-ZnI+IGEKPiA+PiA/Y3JpdCA6Cj4gPj4+Cj4gPj4+IEhlbGxvLAo+ID4+Pgo+ID4+PiBMZSAwNi8w
-MS8yMDI0ID8gMTE6MTIsIEZhYnJpY2UgRm9udGFpbmUgYSA/Y3JpdCA6Cj4gPj4+ID4gbmNtcGMg
-aXMgYWJsZSB0byBhdXRvbWF0aWNhbGx5IGRldGVjdCBOTFMgc3VwcG9ydCBzaW5jZSB2ZXJzaW9u
-IDAuNDcgYW5kCj4gPj4+ID4gaHR0cHM6Ly9naXRodWIuY29tL011c2ljUGxheWVyRGFlbW9uL25j
-bXBjL2NvbW1pdC9jMjY0ZGIwNGRkMzBhZjMwMWU3ZDg1YzlkMTQ1YmIxZjFhZTNmZWEzCj4gPj4+
-ID4gc28gbGV0IGl0IGhhbmRsZSBhdXRvbWF0aWNhbGx5IHRvIGF2b2lkIHRoZSBmb2xsb3dpbmcg
-YnVpbGQgZmFpbHVyZSB3aXRoCj4gPj4+ID4gYSBib290bGluIHRvb2xjaGFpbiB3aGljaCBlbWJl
-ZHMgYSBnZXR0ZXh0IGRlZmluaXRpb24gaW4gbGliaW50bC5oIHdoaWNoCj4gPj4+ID4gd2lsbCBj
-bGFzaCB3aXRoIHRoZSBmYWtlIGdldHRleHQgZGVmaW5pdGlvbiBwcm92aWRlZCBieSBuY21wYyBz
-aW5jZQo+ID4+PiA+IGh0dHBzOi8vZ2l0aHViLmNvbS9NdXNpY1BsYXllckRhZW1vbi9uY21wYy9j
-b21taXQvOTVhZjI3YWIyZDNjZWI5ZGYyNmViYjRlMGQ5MzZlMzkyYTg0YzE1MzoKPiA+Pj4gPgo+
-ID4+PiA+IEluIGZpbGUgaW5jbHVkZWQgZnJvbSAuLi9zcmMvc2F2ZV9wbGF5bGlzdC5jeHg6ODoK
-PiA+Pj4gPiAvaG9tZS9idWlsZHJvb3QvYXV0b2J1aWxkL2luc3RhbmNlLTIvb3V0cHV0LTEvaG9z
-dC9vcjFrLWJ1aWxkcm9vdC1saW51eC1nbnUvc3lzcm9vdC91c3IvaW5jbHVkZS9saWJpbnRsLmg6
-Mzk6MTQ6IGVycm9yOiBleHBlY3RlZCB1bnF1YWxpZmllZC1pZCBiZWZvcmUgJ2NvbnN0Jwo+ID4+
-PiA+ICAgIDM5IHwgZXh0ZXJuIGNoYXIgKmdldHRleHQgKGNvbnN0IGNoYXIgKl9fbXNnaWQpCj4g
-Pj4+ID4gICAgICAgfCAgICAgICAgICAgICAgXn5+fn5+fgo+ID4+PiA+IC9ob21lL2J1aWxkcm9v
-dC9hdXRvYnVpbGQvaW5zdGFuY2UtMi9vdXRwdXQtMS9ob3N0L29yMWstYnVpbGRyb290LWxpbnV4
-LWdudS9zeXNyb290L3Vzci9pbmNsdWRlL2xpYmludGwuaDozOToxNDogZXJyb3I6IGV4cGVjdGVk
-ICcpJyBiZWZvcmUgJ2NvbnN0Jwo+ID4+PiA+IC4uL3NyYy9pMThuLmg6MjI6MjA6IG5vdGU6IHRv
-IG1hdGNoIHRoaXMgJygnCj4gPj4+ID4gICAgMjIgfCAjZGVmaW5lIGdldHRleHQoeCkgKHgpCj4g
-Pj4+ID4gICAgICAgfCAgICAgICAgICAgICAgICAgICAgXgo+ID4+PiA+Cj4gPj4+ID4gSW5kZWVk
-LCBldmVuIGlmIE5MUyBpcyBkaXNhYmxlZCBieSB0aGUgdXNlciwgbGliaW50bC5oIHdpbGwgYmUg
-aW5jbHVkZWQKPiA+Pj4gPiBieQo+ID4+PiA+IC9ob21lL2ZhYnJpY2UvYnVpbGRyb290L291dHB1
-dC9ob3N0L29wdC9leHQtdG9vbGNoYWluL29yMWstYnVpbGRyb290LWxpbnV4LWdudS9pbmNsdWRl
-L2MrKy8xMy4yLjAvb3Ixay1idWlsZHJvb3QtbGludXgtZ251L2JpdHMvbWVzc2FnZXNfbWVtYmVy
-cy5oCj4gPj4+ID4gdGhvdWdoIGluY2x1ZGUgPGNocm9ubz4KPiA+Pj4KPiA+Pj4gV2UgdXN1YWxs
-eSB3YW50IHRvIGV4cGxpY2l0bHkgaGFuZGxlIHN1Y2ggb3B0aW9uIGZyb20gQnVpbGRyb290Cj4g
-Pj4+IHBhY2thZ2UgdG8gbm90Cj4gPj4+IHJlbHkgb24gYXV0b21hdGljIGRldGVjdGlvbiAoYXMg
-Y3VycmVudGx5IGRvbmUpLgo+ID4+Pgo+ID4+PiBJdCBsb29rIGxpa2UgbW9yZSBhIGJ1ZyBpbiBu
-Y21wYyBidWlsZCBzeXN0ZW0/Cj4gPj4KPiA+PiBJIGRvbid0IGtub3csIHVwc3RyZWFtIHdhbnRz
-IHRvIGhhdmUgdGhlIHNhbWUgY29kZSB3aXRoIGFuZCB3aXRob3V0Cj4gPj4gTkxTLCBzbyB0aGV5
-IGRlY2lkZWQgdG8gZGVmaW5lIGEgZ2V0dGV4dCBtYWNybyB3aGVuIE5MUyBpcyBkaXNhYmxlZC4K
-PiA+PiBJIGNvdWxkIGZpbmQgYW4gdXBzdHJlYW1hYmxlIHNvbHV0aW9uIGFzIHVwc3RyZWFtIHdp
-bGwgcHJvYmFibHkgcmVqZWN0Cj4gPj4gYSBwYXRjaCB0aGF0IHJlbW92ZXMgdGhpcyBnZXR0ZXh0
-IGRlZmluZSBhbmQgcHV0cyAjaWZkZWYgRU5BQkxFX05MUwo+ID4+IGJlZm9yZSBldmVyeSBnZXR0
-ZXh0IGNhbGxzLgo+ID4+IERvIHlvdSBoYXZlIGFuIHVwc3RyZWFtYWJsZSBzb2x1dGlvbiBvciBz
-aG91bGQgd2UganVzdCBhZGQgYSBOTFMKPiA+PiBkZXBlbmRlbmN5IHRvIG5jbXBjPwo+ID4KPiA+
-IFRoaXMgaXMgcHJvYmFibHkgbm90IHJlbGF0ZWQgdG8gTkxTLCBidXQgdG8gZ2V0dGV4dCBiZWlu
-ZyBpbmNsdWRlZCBpbgo+ID4gdGhlIGJ1aWxkIGJ5IHNvbWUgb3RoZXIgcGFja2FnZS4gVGhpcyB0
-cmlja3MgTWVzb24gaW50byBiZWxpZXZpbmcgdGhhdAo+ID4gTkxTIGlzIGVuYWJsZWQuCj4gPgo+
-ID4gQWxzbywgdGhlIGNvZGUgaW4gbWVzb24udHh0IG1heSBsZWFkIHRvIHVuZXhwZWN0ZWQgcmVz
-dWx0czoKPiA+Cj4gPiBpZiBtZXNvbi52ZXJzaW9uKCkudmVyc2lvbl9jb21wYXJlKCc+PSAwLjU5
-JykgYW5kIG5vdCBtaW5pCj4gPiAgICMgTWVzb24gMC41OSBoYXMgbmF0aXZlIGxpYmludGwgc3Vw
-cG9ydAo+ID4gICBpbnRsX2RlcCA9IGRlcGVuZGVuY3koJ2ludGwnLCByZXF1aXJlZDogZW5hYmxl
-X25scykKPiA+ICAgZW5hYmxlX25scyA9IGludGxfZGVwLmZvdW5kKCkKPiA+IGVsaWYgZW5hYmxl
-X25scy5kaXNhYmxlZCgpIG9yIG1pbmkKPiA+ICAgaW50bF9kZXAgPSBkZXBlbmRlbmN5KCcnLCBy
-ZXF1aXJlZDogZmFsc2UpCj4gPiAgIGVuYWJsZV9ubHMgPSBmYWxzZQo+ID4gZWxpZiBjYy5oYXNf
-aGVhZGVyKCdsaWJpbnRsLmgnKQo+ID4gICBpbnRsX2RlcCA9IGRlcGVuZGVuY3koJycsIHJlcXVp
-cmVkOiBmYWxzZSkKPiA+ICAgZW5hYmxlX25scyA9IHRydWUKPiA+IGVsaWYgZW5hYmxlX25scy5h
-dXRvKCkKPiA+ICAgaW50bF9kZXAgPSBkZXBlbmRlbmN5KCcnLCByZXF1aXJlZDogZmFsc2UpCj4g
-PiAgIGVuYWJsZV9ubHMgPSBmYWxzZQo+ID4gZWxzZQo+ID4gICBlcnJvcignbGliaW50bC5oIG5v
-dCBmb3VuZCcpCj4gPgo+Cj4gPGN1dD4KPgo+IG1lc29uLnR4dCB3b3JrcyBsaWtlIG5scz1hdXRv
-IHdpdGhpbiBCdWlsZHJvb3QsIHRodXMgcmVmbGVjdGluZyB0aGUKPiBzZXR0aW5nIG9mIEJSMl9T
-WVNURU1fRU5BQkxFX05MUywgc28gbm8gd29ycmllcy4KPgo+IFRoZSB0b29sY2hhaW4gc2VlbXMg
-dG8gaGF2ZSBiZWVuIGJ1aWx0IHdpdGggTkxTIHN1cHBvcnQ7IHRoZSBDKysgbGlicmFyeQo+IG1h
-a2VzIHVzZSBvZiB0aGlzOgo+Cj4gWzMvNzNdIENvbXBpbGluZyBDKysgb2JqZWN0IHNyYy9ldmVu
-dC9saWJldmVudC5hLnAvVGltZXJMaXN0LmN4eC5vCj4gRkFJTEVEOiBzcmMvZXZlbnQvbGliZXZl
-bnQuYS5wL1RpbWVyTGlzdC5jeHgubwo+IC9ob21lL2RhdGEvdGVzdC9hdXRvYnVpbGQvaG9zdC9i
-aW4vb3Ixay1saW51eC1nKysKPiAtSXNyYy9ldmVudC9saWJldmVudC5hLnAgLUlzcmMvZXZlbnQg
-LUkuLi9zcmMvZXZlbnQgLUlzcmMgLUkuLi9zcmMgLUkuCj4gLUkuLiAtZmRpYWdub3N0aWNzLWNv
-bG9yPWFsd2F5cyAtV2FsbCAtV2ludmFsaWQtcGNoIC1XZXh0cmEgLVdwZWRhbnRpYwo+IC1zdGQ9
-YysrMmEgLU8zIC1XY2FzdC1xdWFsIC1XY2FzdC1hbGlnbiAtV2RvdWJsZS1wcm9tb3Rpb24KPiAt
-V21pc3NpbmctZGVjbGFyYXRpb25zIC1XbWlzc2luZy1mb3JtYXQtYXR0cmlidXRlIC1XbWlzc2lu
-Zy1ub3JldHVybgo+IC1XcmVkdW5kYW50LWRlY2xzIC1Xc2hhZG93IC1XdW5kZWYgLVd2bGEgLVd3
-cml0ZS1zdHJpbmdzCj4gLWZuby10aHJlYWRzYWZlLXN0YXRpY3MgLWZtZXJnZS1hbGwtY29uc3Rh
-bnRzIC1Xbm8tbm9uLXZpcnR1YWwtZHRvcgo+IC1Xbm8tZm9ybWF0LXRydW5jYXRpb24gLURfR05V
-X1NPVVJDRSAtZnZpc2liaWxpdHk9aGlkZGVuCj4gLWZmdW5jdGlvbi1zZWN0aW9ucyAtZmRhdGEt
-c2VjdGlvbnMgLURfTEFSR0VGSUxFX1NPVVJDRQo+IC1EX0xBUkdFRklMRTY0X1NPVVJDRSAtRF9G
-SUxFX09GRlNFVF9CSVRTPTY0IC1PMyAtZzAgLURfRk9SVElGWV9TT1VSQ0U9Mgo+IC1mUElDIC1N
-RCAtTVEgc3JjL2V2ZW50L2xpYmV2ZW50LmEucC9UaW1lckxpc3QuY3h4Lm8gLU1GCj4gc3JjL2V2
-ZW50L2xpYmV2ZW50LmEucC9UaW1lckxpc3QuY3h4Lm8uZCAtbwo+IHNyYy9ldmVudC9saWJldmVu
-dC5hLnAvVGltZXJMaXN0LmN4eC5vIC1jIC4uL3NyYy9ldmVudC9UaW1lckxpc3QuY3h4Cj4gSW4g
-ZmlsZSBpbmNsdWRlZCBmcm9tCj4gL2hvbWUvZGF0YS90ZXN0L2F1dG9idWlsZC9ob3N0L29wdC9l
-eHQtdG9vbGNoYWluL29yMWstYnVpbGRyb290LWxpbnV4LWdudS9pbmNsdWRlL2MrKy8xMy4yLjAv
-b3Ixay1idWlsZHJvb3QtbGludXgtZ251L2JpdHMvbWVzc2FnZXNfbWVtYmVycy5oOjM2LAo+ICAg
-ICAgICAgICAgICAgICAgIGZyb20KPiAvaG9tZS9kYXRhL3Rlc3QvYXV0b2J1aWxkL2hvc3Qvb3B0
-L2V4dC10b29sY2hhaW4vb3Ixay1idWlsZHJvb3QtbGludXgtZ251L2luY2x1ZGUvYysrLzEzLjIu
-MC9iaXRzL2xvY2FsZV9mYWNldHNfbm9uaW8uaDoyMDY0LAo+ICAgICAgICAgICAgICAgICAgIGZy
-b20KPiAvaG9tZS9kYXRhL3Rlc3QvYXV0b2J1aWxkL2hvc3Qvb3B0L2V4dC10b29sY2hhaW4vb3Ix
-ay1idWlsZHJvb3QtbGludXgtZ251L2luY2x1ZGUvYysrLzEzLjIuMC9sb2NhbGU6NDMsCj4gICAg
-ICAgICAgICAgICAgICAgZnJvbQo+IC9ob21lL2RhdGEvdGVzdC9hdXRvYnVpbGQvaG9zdC9vcHQv
-ZXh0LXRvb2xjaGFpbi9vcjFrLWJ1aWxkcm9vdC1saW51eC1nbnUvaW5jbHVkZS9jKysvMTMuMi4w
-L2lvbWFuaXA6NDUsCj4gICAgICAgICAgICAgICAgICAgZnJvbQo+IC9ob21lL2RhdGEvdGVzdC9h
-dXRvYnVpbGQvaG9zdC9vcHQvZXh0LXRvb2xjaGFpbi9vcjFrLWJ1aWxkcm9vdC1saW51eC1nbnUv
-aW5jbHVkZS9jKysvMTMuMi4wL2JpdHMvY2hyb25vX2lvLmg6MzgsCj4gICAgICAgICAgICAgICAg
-ICAgZnJvbQo+IC9ob21lL2RhdGEvdGVzdC9hdXRvYnVpbGQvaG9zdC9vcHQvZXh0LXRvb2xjaGFp
-bi9vcjFrLWJ1aWxkcm9vdC1saW51eC1nbnUvaW5jbHVkZS9jKysvMTMuMi4wL2Nocm9ubzozMzMw
-LAo+ICAgICAgICAgICAgICAgICAgIGZyb20gLi4vc3JjL2V2ZW50L0Nocm9uby5oeHg6NiwKPiAg
-ICAgICAgICAgICAgICAgICBmcm9tIC4uL3NyYy9ldmVudC9UaW1lckxpc3QuaHh4OjcsCj4gICAg
-ICAgICAgICAgICAgICAgZnJvbSAuLi9zcmMvZXZlbnQvVGltZXJMaXN0LmN4eDo1Ogo+IC9ob21l
-L2RhdGEvdGVzdC9hdXRvYnVpbGQvaG9zdC9vcjFrLWJ1aWxkcm9vdC1saW51eC1nbnUvc3lzcm9v
-dC91c3IvaW5jbHVkZS9saWJpbnRsLmg6MjM6MjoKPiBlcnJvcjogI2Vycm9yICJsaWJpbnRsLmgg
-aW5jbHVkZWQgaGVyZSIKPiAgICAgMjMgfCAjZXJyb3IgImxpYmludGwuaCBpbmNsdWRlZCBoZXJl
-Igo+ICAgICAgICB8ICBefn5+fgo+Cj4gUHJvYmFibHkgdGhlIGxlYXN0IGludmFzaXZlIHNvbHV0
-aW9uIHdvdWxkIGJlIHRvIGFkZCBhIG5ldyBuY21wYwo+IGRlcGVuZGVuY3k6Cj4KPiArIGRlcGVu
-ZHMgb24gIUJSMl9UT09MQ0hBSU5fSEFTX0ZVTExfR0VUVEVYVCB8fCBCUjJfU1lTVEVNX0VOQUJM
-RV9OTFMKClRoZSBmb2xsb3dpbmcgUFIgc2hvdWxkIGZpeCB0aGUgaXNzdWU6Cmh0dHBzOi8vZ2l0
-aHViLmNvbS9NdXNpY1BsYXllckRhZW1vbi9uY21wYy9wdWxsLzE0MgpXYWl0aW5nIGZvciB1cHN0
-cmVhbSBmZWVkYmFjay4KCj4KPiBLaW5kIHJlZ2FyZHMsCj4gQW5kcmVhcwoKQmVzdCBSZWdhcmRz
-LAoKRmFicmljZQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-XwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8v
-bGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+As advised by Thomas Petazzoni in [1], drop tinymembench which is
+abandonned (last commit in 2017). Moreover, it raises the following
+build failure in Thumb mode:
+
+/tmp/ccaZHrla.s:40: Error: instruction not supported in Thumb16 mode -- `subs r1,r1,#16'
+/tmp/ccaZHrla.s:43: Error: instruction not supported in Thumb16 mode -- `subs r1,r1,#16'
+main.c:45: Error: selected processor does not support `mla r2,r10,r2,r5' in Thumb mode
+main.c:46: Error: unshifted register required -- `and r8,r7,r2,lsr#16'
+main.c:47: Error: selected processor does not support `mla r2,r10,r2,r5' in Thumb mode
+main.c:48: Error: unshifted register required -- `and r9,r6,r2,lsr#8'
+main.c:49: Error: selected processor does not support `mla r2,r10,r2,r5' in Thumb mode
+
+[1]: https://patchwork.ozlabs.org/project/buildroot/patch/20240114135446.1156025-1-fontaine.fabrice@gmail.com/
+
+Fixes:
+ - http://autobuild.buildroot.org/results/1e359c294a8d71fb1833e5d04a6bc7d4fd533510
+ - http://autobuild.buildroot.org/results/c06010d7a2bdb33a1707266133a3880e14be7657
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .checkpackageignore                           |  1 -
+ Config.in.legacy                              |  6 +++
+ DEVELOPERS                                    |  1 -
+ package/Config.in                             |  1 -
+ ...ix-build-on-Thumb-only-architectures.patch | 47 -------------------
+ package/tinymembench/Config.in                | 12 -----
+ package/tinymembench/tinymembench.hash        |  3 --
+ package/tinymembench/tinymembench.mk          | 21 ---------
+ 8 files changed, 6 insertions(+), 86 deletions(-)
+ delete mode 100644 package/tinymembench/0001-arm-fix-build-on-Thumb-only-architectures.patch
+ delete mode 100644 package/tinymembench/Config.in
+ delete mode 100644 package/tinymembench/tinymembench.hash
+ delete mode 100644 package/tinymembench/tinymembench.mk
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 4a1041a84a..a2b5c14a94 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1265,7 +1265,6 @@ package/tinyalsa/0001-include-time.h-before-asound.h.patch Upstream
+ package/tinycbor/0001-Makefile-add-DISABLE_WERROR.patch Upstream
+ package/tinycompress/0001-wave-add-time.h-missing-header-inclusion.patch Upstream
+ package/tinydtls/0001-sha2-sha2.c-fix-build-on-big-endian.patch Upstream
+-package/tinymembench/0001-arm-fix-build-on-Thumb-only-architectures.patch Upstream
+ package/tinyproxy/0001-prevent-junk-from-showing-up-in-error-page-in-invalid-requests.patch Upstream
+ package/tinyxml/0001-In-stamp-always-advance-the-pointer-if-p-0xef.patch Upstream
+ package/tpm2-abrmd/S80tpm2-abrmd Indent Shellcheck Variables
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 5e0db855cc..a869279af7 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
+ 
+ comment "Legacy options removed in 2024.02"
+ 
++config BR2_PACKAGE_TINYMEMBENCH
++	bool "tinymembench removed"
++	select BR2_LEGACY
++	help
++	  tinymembench has been removed due to being abandoned.
++
+ config BR2_PACKAGE_DAVINCI_BOOTCOUNT
+ 	bool "davinci-bootcount has been renamed"
+ 	select BR2_LEGACY
+diff --git a/DEVELOPERS b/DEVELOPERS
+index eeca05cd94..5632d2771d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1064,7 +1064,6 @@ F:	package/snort3/
+ F:	package/suricata/
+ F:	package/tinycbor/
+ F:	package/tinydtls/
+-F:	package/tinymembench/
+ F:	package/whois/
+ F:	package/x11r7/xlib_libXpresent/
+ F:	package/zeek/
+diff --git a/package/Config.in b/package/Config.in
+index ee4058155d..ebcc8c2655 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -156,7 +156,6 @@ menu "Debugging, profiling and benchmark"
+ 	source "package/sysdig/Config.in"
+ 	source "package/sysprof/Config.in"
+ 	source "package/tcf-agent/Config.in"
+-	source "package/tinymembench/Config.in"
+ 	source "package/trace-cmd/Config.in"
+ 	source "package/trinity/Config.in"
+ 	source "package/uclibc-ng-test/Config.in"
+diff --git a/package/tinymembench/0001-arm-fix-build-on-Thumb-only-architectures.patch b/package/tinymembench/0001-arm-fix-build-on-Thumb-only-architectures.patch
+deleted file mode 100644
+index 88559ec012..0000000000
+--- a/package/tinymembench/0001-arm-fix-build-on-Thumb-only-architectures.patch
++++ /dev/null
+@@ -1,47 +0,0 @@
+-From 034a3552e9700c6d424bd706db106f5bce1f5a5e Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Fri, 11 Nov 2016 21:49:39 +0100
+-Subject: [PATCH] arm: fix build on Thumb-only architectures
+-
+-Building tinymembench for ARM Cortex-M currently fails, because the
+-arm-neon.S file contains ARM code that doesn't build on Thumb-only
+-architectures. To account for this and fix the build for Cortex-M,
+-this patch adjusts the compile time condition to also verify that the
+-architecture supports the ARM instruction set, by testing the
+-__ARM_ARCH_ISA_ARM compiler define.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- arm-neon.S | 2 +-
+- asm-opt.c  | 2 +-
+- 2 files changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/arm-neon.S b/arm-neon.S
+-index 4db78ce..19c30ad 100644
+---- a/arm-neon.S
+-+++ b/arm-neon.S
+-@@ -21,7 +21,7 @@
+-  * DEALINGS IN THE SOFTWARE.
+-  */
+- 
+--#ifdef __arm__
+-+#if defined(__arm__) && defined(__ARM_ARCH_ISA_ARM)
+- 
+- .text
+- .fpu neon
+-diff --git a/asm-opt.c b/asm-opt.c
+-index 9da4596..eba1183 100644
+---- a/asm-opt.c
+-+++ b/asm-opt.c
+-@@ -202,7 +202,7 @@ bench_info *get_asm_framebuffer_benchmarks(void)
+-         return empty;
+- }
+- 
+--#elif defined(__arm__)
+-+#elif defined(__arm__) && defined(__ARM_ARCH_ISA_ARM)
+- 
+- #include "arm-neon.h"
+- 
+--- 
+-2.7.4
+-
+diff --git a/package/tinymembench/Config.in b/package/tinymembench/Config.in
+deleted file mode 100644
+index 8f6e1a2b35..0000000000
+--- a/package/tinymembench/Config.in
++++ /dev/null
+@@ -1,12 +0,0 @@
+-config BR2_PACKAGE_TINYMEMBENCH
+-	bool "tinymembench"
+-	depends on !BR2_MIPS_NABI32 && !BR2_MIPS_NABI64
+-	help
+-	  Tinymembench is a simple memory benchmark program, which
+-	  tries to measure the peak bandwidth of sequential memory
+-	  accesses and the latency of random memory accesses.
+-	  Bandwidth is measured by running different assembly code for
+-	  the aligned memory blocks and attempting different prefetch
+-	  strategies.
+-
+-	  https://github.com/ssvb/tinymembench
+diff --git a/package/tinymembench/tinymembench.hash b/package/tinymembench/tinymembench.hash
+deleted file mode 100644
+index 04dbd30f81..0000000000
+--- a/package/tinymembench/tinymembench.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally calculated
+-sha256  e37a2682065b2778f2fa7f22bd59472f5ca2191be48503952ae020b8f023f23d  tinymembench-0.4.tar.gz
+-sha256  8ba473aced4630aee2808efe17b53e904a9d68a9b3361de491717f9a4e75da39  LICENSE
+diff --git a/package/tinymembench/tinymembench.mk b/package/tinymembench/tinymembench.mk
+deleted file mode 100644
+index 016d680ce7..0000000000
+--- a/package/tinymembench/tinymembench.mk
++++ /dev/null
+@@ -1,21 +0,0 @@
+-################################################################################
+-#
+-# tinymembench
+-#
+-################################################################################
+-
+-TINYMEMBENCH_VERSION = 0.4
+-TINYMEMBENCH_SITE = $(call github,ssvb,tinymembench,v$(TINYMEMBENCH_VERSION))
+-TINYMEMBENCH_LICENSE = MIT
+-TINYMEMBENCH_LICENSE_FILES = LICENSE
+-
+-define TINYMEMBENCH_BUILD_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+-endef
+-
+-define TINYMEMBENCH_INSTALL_TARGET_CMDS
+-	$(INSTALL) -m 0755 -D $(@D)/tinymembench \
+-		$(TARGET_DIR)/usr/bin/tinymembench
+-endef
+-
+-$(eval $(generic-package))
+-- 
+2.43.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
