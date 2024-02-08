@@ -4,70 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2196C4828F
-	for <buildroot@archiver.kernel.org>; Thu,  8 Feb 2024 13:05:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E80CC4828F
+	for <buildroot@archiver.kernel.org>; Thu,  8 Feb 2024 13:08:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5B20D40994;
-	Thu,  8 Feb 2024 13:05:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C9EC8484E0;
+	Thu,  8 Feb 2024 13:08:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xh2YUTxodNFQ; Thu,  8 Feb 2024 13:05:27 +0000 (UTC)
+	with ESMTP id y6IeclvrQdTX; Thu,  8 Feb 2024 13:08:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5542940910
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DF180487EC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5542940910;
-	Thu,  8 Feb 2024 13:05:27 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 96FDD1BF99F
- for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 13:05:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DF180487EC;
+	Thu,  8 Feb 2024 13:08:47 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id F2A8D1BF422
+ for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 13:08:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 84DB240900
- for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 13:05:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DA93941DBD
+ for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 13:08:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Mv7MKj4Llylj for <buildroot@lists.busybox.net>;
- Thu,  8 Feb 2024 13:05:25 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=46.105.63.121;
- helo=1.mo560.mail-out.ovh.net; envelope-from=sebastien.szymanski@armadeus.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5EBF240047
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5EBF240047
-Received: from 1.mo560.mail-out.ovh.net (1.mo560.mail-out.ovh.net
- [46.105.63.121])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5EBF240047
- for <buildroot@buildroot.org>; Thu,  8 Feb 2024 13:05:24 +0000 (UTC)
-Received: from director4.ghost.mail-out.ovh.net (unknown [10.108.25.74])
- by mo560.mail-out.ovh.net (Postfix) with ESMTP id E65C428323
- for <buildroot@buildroot.org>; Thu,  8 Feb 2024 12:55:35 +0000 (UTC)
-Received: from ghost-submission-6684bf9d7b-kdf48 (unknown [10.110.168.250])
- by director4.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 514DA1FE0D;
- Thu,  8 Feb 2024 12:55:35 +0000 (UTC)
-Received: from armadeus.com ([37.59.142.106])
- by ghost-submission-6684bf9d7b-kdf48 with ESMTPSA
- id h+h4EEfPxGWDugAAre/mpQ
- (envelope-from <sebastien.szymanski@armadeus.com>);
- Thu, 08 Feb 2024 12:55:35 +0000
-X-OVh-ClientIp: 92.148.253.243
-From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9qaSlXxD1H3V for <buildroot@lists.busybox.net>;
+ Thu,  8 Feb 2024 13:08:45 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
+ helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7992E41DAD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7992E41DAD
+Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7992E41DAD
+ for <buildroot@buildroot.org>; Thu,  8 Feb 2024 13:08:44 +0000 (UTC)
+Received: from tuxedoOT.fritz.box (unknown [212.37.174.96])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+ (No client certificate requested)
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id 7B4752C8386B;
+ Thu,  8 Feb 2024 14:08:42 +0100 (CET)
 To: buildroot@buildroot.org
-Date: Thu,  8 Feb 2024 13:54:20 +0100
-Message-ID: <20240115-imx93-support-v5-0-c2c950104c58@armadeus.com>
-X-Mailer: git-send-email 2.43.0
+Date: Thu,  8 Feb 2024 14:08:37 +0100
+Message-Id: <20240208130838.196406-1-buildroot@bubu1.eu>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Ovh-Tracer-Id: 14935906691734367211
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrtdeggdegfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffogggtgfesthekredtredtjeenucfhrhhomhepuforsggrshhtihgvnhcuufiihihmrghnshhkihcuoehsvggsrghsthhivghnrdhsiiihmhgrnhhskhhisegrrhhmrgguvghushdrtghomheqnecuggftrfgrthhtvghrnhepvddttddvffdvteekieejheffhfdvhefhjeeltdeluedvuddviefhjefhtdegtdelnecuffhomhgrihhnpeguvghngidruggvnecukfhppeduvdejrddtrddtrddupdelvddrudegkedrvdehfedrvdegfedpfeejrdehledrudegvddruddtieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehsvggsrghsthhivghnrdhsiiihmhgrnhhskhhisegrrhhmrgguvghushdrtghomheqpdhnsggprhgtphhtthhopedupdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdpoffvtefjohhsthepmhhoheeitddpmhhouggvpehsmhhtphhouhht
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=armadeus.com
-X-Mailman-Original-Authentication-Results: garm.ovh; auth=pass
- (GARM-106R00620122513-853a-456a-8a5f-4ae70c9a4389,
- EE170601DD7FCE57948E905AF537FA7E68A97F37)
- smtp.auth=sebastien.szymanski@armadeus.com
-Subject: [Buildroot] [PATCH v5 0/3] i.MX91 and i.MX93 support
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=bubu1.eu; s=bubu; 
+ t=1707397722; bh=L+jng98BA3VvVmxe8DWizQWLl4pH5ITFkkihDUvAnPQ=;
+ h=From:To:Cc:Subject:Date;
+ b=oVV8MIH1cTawIgaGERX7CYMWFth5rESvowuehYiaNKqLDaL+sKd83awUUoHLen7/H
+ BVB9yiSesvZfc2qoDLq4m/FkgC0QkVBUdzN5Ta1kvDp6xGANkONxVu7iVDLXELgvay
+ CLnzMveNF2MyIRCk2WC0csUXbE0UcUVCeUX0MttYwWrnnCPmzJXqqrMNWTwxvTKJHS
+ SDpAvwBsNCRyDmEejG9fTHhfc7T4GxFUGFYADCbTLOF44gxxJcRwC2lYKeoiIy7MQY
+ Xq/7rqJNajWBLmRRq7spk60metRWTUrTi8Nvsr4kaCCo+AFdKuJBAAJ5JB1GGKCjYd
+ Jh9B64e+v/3hg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bubu1.eu
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=bubu1.eu header.i=@bubu1.eu
+ header.a=rsa-sha256 header.s=bubu header.b=oVV8MIH1
+Subject: [Buildroot] [PATCH] package/python-django: security bump to 5.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,56 +75,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gary Bisson <bisson.gary@gmail.com>, Fabio Estevam <festevam@gmail.com>,
- Refik Tuzakli <tuzakli.refik@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Oli Vogt <oli.vogt.pub01@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhpcyBzZXJpZXMgYWRkcyBpLk1YOTEsIGkuTVg5MyBhbmQgaS5NWDkzIDExeDExIEVWSyB0byBC
-dWlsZHJvb3QuCgotLS0KQ2hhbmdlcyBmb3IgdjU6Ci0gZm9sbG93IEJSIGNvZGluZyBzdHlsZSBm
-b3IgdGhlIGdlbmltYWdlLmNmZy50ZW1wbGF0ZV9pbXg5IGZpbGUKICAoR2l1bGlvIEJlbmV0dGkp
-CgpDaGFuZ2VzIGZvciB2NDoKIC0gImkuTVggcGxhdGZvcm0gYXNpYyB2ZXJzaW9uIiAtPiAiaS5N
-WCBTaWxpY29uIFJldmlzaW9uIiAoR2FyeSBCaXNzb24pCiAtIG1vdmUgaS5NWCBTaWxpY29uIFJl
-dmlzaW9uIGNoYW5nZXMgaW50byBmaXJzdCBwYXRjaCAoR2FyeSBCaXNzb24pCiAtIEJSMl9QQUNL
-QUdFX0ZJUk1XQVJFX0lNWF9ERFJfVkVSU0lPTiBkZWZhdWx0IHRvICJ2MjAyMjAxIiBpbnN0ZWFk
-IG9mCiAgIGp1c3QgIjIwMjIwMSIgKEdhcnkgQmlzc29uKQogLSBDb3B5IGFsbCBERFIgZmlsZXMg
-dG8gJChCSU5BUklFU19ESVIpIGFzIFUtQm9vdCBjYW4gbm93IGNyZWF0ZSBhCiAgIGJvb3RhYmxl
-IGltYWdlOgogICBodHRwczovL3NvdXJjZS5kZW54LmRlL3UtYm9vdC91LWJvb3QvLS9jb21taXQv
-ZjYzN2RmZThjNDY4MjI5YzlmYjMxM2QxM2M0NmQ1MWNkYmI4ODgyNAogLSByZW1vdmUgInBtdV90
-cmFpbiIgZnJvbSBnZW5lcmF0ZWQgX3BhZCBiaW5hcnkgZmlsZSBuYW1lcwoKQ2hhbmdlcyBmb3Ig
-djM6CiAtIHJlbmFtZSBwYWNrYWdlIGZpcm13YXJlLXNlbnRpbmVsIHRvIGZpcm13YXJlLWVsZS1p
-bXgKIC0gYWRkIGEgbm90ZSBhYm91dCB0aGUgZGVidWcgVUFSVCBpbiB0aGUgcmVhZG1lLnR4dCBm
-aWxlIChKdWxpZW4gT2xpdmFpbikKIC0gYWRkIEJSMl9UQVJHRVRfVUJPT1RfTkVFRFNfT1BFTlNT
-TD15IGFuZAogICBCUjJfVEFSR0VUX1VCT09UX05FRURTX0dOVVRMUz15IHRvIHRoZSBkZWZjb25m
-aWcgZmlsZSAoSnVsaWVuIE9saXZhaW4pCiAtIGJ1bXAgQVRGLCBVLUJvb3QgYW5kIExpbnV4IHRv
-IGxhdGVzdCBOWFAgcmVsZWFzZSBsZi02LjEuNTUtMi4yLjAKICAgKEp1bGllbiBPbGl2YWluKQoK
-Q2hhbmdlcyBmb3IgdjI6CiAtIHBhdGNoIDEgb2YgdjEgaGFzIGJlZW4gYXBwbGllZAogLSBtb3Zl
-IFNvQyBhc2ljIHZlcnNpb24gc2VsZWN0aW9uIHRvIHBhY2thZ2UvZnJlZXNjYWxlLWlteC9Db25m
-aWcuaW4KIC0gbWlub3IgZml4ZXMgaW4gbGF0ZXN0IHBhdGNoCgotLS0KU8OpYmFzdGllbiBTenlt
-YW5za2kgKDMpOgogICAgICBwYWNrYWdlL2ZyZWVzY2FsZS1pbXg6IGFkZCBpLk1YOTEgYW5kIGku
-TVg5MyBTb0Mgc3VwcG9ydAogICAgICBwYWNrYWdlL2ZyZWVzY2FsZS1pbXgvZmlybXdhcmUtZWxl
-LWlteDogbmV3IHBhY2thZ2UKICAgICAgY29uZmlncy9mcmVlc2NhbGVfaW14OTNldms6IG5ldyBk
-ZWZjb25maWcKCiAuLi4vY29tbW9uL2lteC9nZW5pbWFnZS5jZmcudGVtcGxhdGVfaW14OSAgICAg
-ICAgICB8IDQyICsrKysrKysrKysrKwogLi4uL2NvbW1vbi9pbXgvaW14OS1ib290bG9hZGVyLXBy
-ZXBhcmUuc2ggICAgICAgICAgfCAzNCArKysrKysrKysrCiBib2FyZC9mcmVlc2NhbGUvY29tbW9u
-L2lteC9wb3N0LWltYWdlLnNoICAgICAgICAgICB8ICA0ICsrCiBib2FyZC9mcmVlc2NhbGUvaW14
-OTNldmsvcmVhZG1lLnR4dCAgICAgICAgICAgICAgICB8IDc3ICsrKysrKysrKysrKysrKysrKysr
-KysKIGNvbmZpZ3MvZnJlZXNjYWxlX2lteDkzZXZrX2RlZmNvbmZpZyAgICAgICAgICAgICAgIHwg
-MzkgKysrKysrKysrKysKIHBhY2thZ2UvZnJlZXNjYWxlLWlteC9Db25maWcuaW4gICAgICAgICAg
-ICAgICAgICAgIHwgMzggKysrKysrKysrKysKIHBhY2thZ2UvZnJlZXNjYWxlLWlteC9maXJtd2Fy
-ZS1lbGUtaW14L0NvbmZpZy5pbiAgIHwgMjEgKysrKysrCiAuLi4vZmlybXdhcmUtZWxlLWlteC9m
-aXJtd2FyZS1lbGUtaW14Lmhhc2ggICAgICAgICB8ICA0ICsrCiAuLi4vZmlybXdhcmUtZWxlLWlt
-eC9maXJtd2FyZS1lbGUtaW14Lm1rICAgICAgICAgICB8IDI3ICsrKysrKysrCiBwYWNrYWdlL2Zy
-ZWVzY2FsZS1pbXgvZmlybXdhcmUtaW14L0NvbmZpZy5pbiAgICAgICB8ICA5ICsrKwogcGFja2Fn
-ZS9mcmVlc2NhbGUtaW14L2Zpcm13YXJlLWlteC9maXJtd2FyZS1pbXgubWsgfCAyNSArKysrKysr
-CiAxMSBmaWxlcyBjaGFuZ2VkLCAzMjAgaW5zZXJ0aW9ucygrKQotLS0KYmFzZS1jb21taXQ6IGFl
-NTI3NGRkNTQ1ZWIwMTFmMThjYWUyNDMzMTMwMGQ5NDRiOGJlMGYKY2hhbmdlLWlkOiAyMDI0MDEx
-NS1pbXg5My1zdXBwb3J0LTE2NjcxYjViN2YxMgoKQmVzdCByZWdhcmRzLAotLSAKU8OpYmFzdGll
-biBTenltYW5za2kgPHNlYmFzdGllbi5zenltYW5za2lAYXJtYWRldXMuY29tPgpfX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBs
-aXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9t
-YWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Minor 5.0 bugfix release [1] fixing one "moderate" severity CVE.
+
+Fixes: CVE-2024-24680
+
+[1] https://docs.djangoproject.com/en/5.0/releases/5.0.2/#django-5-0-2-release-notes
+
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+---
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index 39fd9afdae..20b66a4106 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5  5ff3c69d7e6b4f5ed378ec5713af8df7  Django-5.0.1.tar.gz
+-sha256  8c8659665bc6e3a44fefe1ab0a291e5a3fb3979f9a8230be29de975e57e8f854  Django-5.0.1.tar.gz
++md5  5d0df847e1b751a4a5d2bde1563c75fc  Django-5.0.2.tar.gz
++sha256  b5bb1d11b2518a5f91372a282f24662f58f66749666b0a286ab057029f728080  Django-5.0.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index ed4f4bcdf1..231de0b833 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-PYTHON_DJANGO_VERSION = 5.0.1
++PYTHON_DJANGO_VERSION = 5.0.2
+ PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/53/82/c8e8ed137da1c72fa110e3be9ab0f26bcfcf6f3d2994601d164dfac86269
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/50/98/499a2d11eb0b22fdd55ce5895e0f5ce6d7d4957a785f237a89317cb478fa
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE
+ PYTHON_DJANGO_CPE_ID_VENDOR = djangoproject
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
