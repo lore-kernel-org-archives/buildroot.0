@@ -1,77 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 371D4C4829D
-	for <buildroot@archiver.kernel.org>; Thu,  8 Feb 2024 10:53:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19D0AC4828F
+	for <buildroot@archiver.kernel.org>; Thu,  8 Feb 2024 11:12:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C47D241B89;
-	Thu,  8 Feb 2024 10:53:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1F3FD846F0;
+	Thu,  8 Feb 2024 11:12:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hv33vlzvDS9j; Thu,  8 Feb 2024 10:53:07 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bGPcH8pRmZOP; Thu,  8 Feb 2024 11:12:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 982FA41BAD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 131D584E51
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 982FA41BAD;
-	Thu,  8 Feb 2024 10:53:07 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 47DE41BF2A1
- for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 10:53:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 131D584E51;
+	Thu,  8 Feb 2024 11:12:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E16DE1BF267
+ for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 11:12:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2F76141BAD
- for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 10:53:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DBBC642C95
+ for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 11:12:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jSRJQkcALH-I for <buildroot@lists.busybox.net>;
- Thu,  8 Feb 2024 10:53:04 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B5D2841B89
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B5D2841B89
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tz0k4FOA_ySI for <buildroot@lists.busybox.net>;
+ Thu,  8 Feb 2024 11:12:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+ helo=relay9-d.mail.gandi.net; envelope-from=peko@48ers.dk; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9912242C88
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9912242C88
 Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B5D2841B89
- for <buildroot@buildroot.org>; Thu,  8 Feb 2024 10:53:03 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 45E8EFF802;
- Thu,  8 Feb 2024 10:53:00 +0000 (UTC)
-Date: Thu, 8 Feb 2024 11:52:59 +0100
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20240208115259.150a3219@windsurf>
-In-Reply-To: <CAPi7W83R+a-vwbBVS-Lk-u7gW5isBmfz8aJpCYUQap1cRM54Ug@mail.gmail.com>
-References: <20240114135446.1156025-1-fontaine.fabrice@gmail.com>
- <20240207164741.1bad9b44@windsurf>
- <CAPi7W83R+a-vwbBVS-Lk-u7gW5isBmfz8aJpCYUQap1cRM54Ug@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+ [217.70.183.199])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9912242C88
+ for <buildroot@buildroot.org>; Thu,  8 Feb 2024 11:12:18 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7ACD8FF80A;
+ Thu,  8 Feb 2024 11:12:16 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peko@48ers.dk>) id 1rY2KF-002qtf-2X;
+ Thu, 08 Feb 2024 12:12:15 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Thu,  8 Feb 2024 12:12:13 +0100
+Message-Id: <20240208111214.679980-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1707389580;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=dgIxa0k9IwX2aCGwzT03JjGN0l5SReJCfJD5FIjsMEQ=;
- b=U6FG9EmiBkMUx6rVWb2/gRbROPpM9IslJTtgVem/y4wlC76BKzl8Iu4R1ZkvwI+HtTGlmb
- fiNBbJo82+4DN2JQbOMgCEVSB46QMv4ndNMOsFOoywle6tLaGU2vklwk6vTu+ohzyWAuFQ
- 9zxoeKz757s0R+jBMhfDkuh+xsXA3REm8ynoTycRaA/KTvVi6Z+u3aR5VBvVE+MSf3Kd80
- heLm/i90cTZsyuwUnL88gBoxNYwpKSDfvKRUqIUyLFT+My3iiZfQCMEQ4koSkLr+rrU7y0
- 5dmTNMu3rAgLiNyXMARv7dkvIcPrZS/wjdcFZ0YYnSVSy7xQ6NBSdHuNm72BxA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=U6FG9Emi
-Subject: Re: [Buildroot] [PATCH v2,
- 1/1] package/tinymembench: force arm mode instead of Thumb mode
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: [Buildroot] [PATCH] package/libopenssl: security bump to version
+ 3.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,29 +65,277 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 7 Feb 2024 21:48:51 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+And drop the now upstreamed patches.
 
->  - upstream seems dead now so non upstreamable patches will have to be
-> kept "forever"
+Fixes the following (low severity) issues:
 
-Indeed. The repo has not seen any commits since 11 years, despite PRs
-and issues being opened by several people. I think we should drop this
-package, and stop bothering.
+- CVE-2023-6129 POLY1305 MAC implementation corrupts vector registers on
+  PowerPC
+  https://www.openssl.org/news/secadv/20240109.txt
 
-Thomas
+- CVE-2023-6237 Excessive time spent checking invalid RSA public keys
+  https://www.openssl.org/news/secadv/20240115.txt
+
+- CVE-2024-0727 PKCS12 Decoding crashes
+  https://www.openssl.org/news/secadv/20240125.txt
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...x-mispelling-of-extension-test-macro.patch |  30 -----
+ ...x-genstr-genconf-option-in-asn1parse.patch |  42 ------
+ ...en-asn1-oid-loader-to-invalid-inputs.patch | 122 ------------------
+ package/libopenssl/libopenssl.hash            |   4 +-
+ package/libopenssl/libopenssl.mk              |   2 +-
+ 5 files changed, 3 insertions(+), 197 deletions(-)
+ delete mode 100644 package/libopenssl/0004-riscv-Fix-mispelling-of-extension-test-macro.patch
+ delete mode 100644 package/libopenssl/0005-Fix-genstr-genconf-option-in-asn1parse.patch
+ delete mode 100644 package/libopenssl/0006-Harden-asn1-oid-loader-to-invalid-inputs.patch
+
+diff --git a/package/libopenssl/0004-riscv-Fix-mispelling-of-extension-test-macro.patch b/package/libopenssl/0004-riscv-Fix-mispelling-of-extension-test-macro.patch
+deleted file mode 100644
+index 93b191a61c..0000000000
+--- a/package/libopenssl/0004-riscv-Fix-mispelling-of-extension-test-macro.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From 68c549df05892c16b99603b9a831c79c540f268c Mon Sep 17 00:00:00 2001
+-From: Grant Nichol <me@grantnichol.com>
+-Date: Fri, 22 Dec 2023 23:46:39 -0600
+-Subject: [PATCH] riscv: Fix mispelling of extension test macro
+-
+-When refactoring the riscv extension test macros,
+-RISCV_HAS_ZKND_AND_ZKNE was mispelled.
+-
+-Upstream: https://github.com/openssl/openssl/pull/23139
+-Signed-off-by: Grant Nichol <me@grantnichol.com>
+----
+- providers/implementations/ciphers/cipher_aes_xts_hw.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/providers/implementations/ciphers/cipher_aes_xts_hw.c b/providers/implementations/ciphers/cipher_aes_xts_hw.c
+-index b35b71020e..65adc47d1f 100644
+---- a/providers/implementations/ciphers/cipher_aes_xts_hw.c
+-+++ b/providers/implementations/ciphers/cipher_aes_xts_hw.c
+-@@ -285,7 +285,7 @@ static const PROV_CIPHER_HW aes_xts_rv32i_zbkb_zknd_zkne = {                   \
+- # define PROV_CIPHER_HW_select_xts()                                           \
+- if (RISCV_HAS_ZBKB_AND_ZKND_AND_ZKNE())                                        \
+-     return &aes_xts_rv32i_zbkb_zknd_zkne;                                      \
+--if (RISCV_HAS_ZKND_ZKNE())                                                     \
+-+if (RISCV_HAS_ZKND_AND_ZKNE())                                                     \
+-     return &aes_xts_rv32i_zknd_zkne;
+- # else
+- /* The generic case */
+---
+-2.43.0
+-
+diff --git a/package/libopenssl/0005-Fix-genstr-genconf-option-in-asn1parse.patch b/package/libopenssl/0005-Fix-genstr-genconf-option-in-asn1parse.patch
+deleted file mode 100644
+index 9fa36d83be..0000000000
+--- a/package/libopenssl/0005-Fix-genstr-genconf-option-in-asn1parse.patch
++++ /dev/null
+@@ -1,42 +0,0 @@
+-From 749fcc0e3ce796474a15d6fac221e57daeacff1e Mon Sep 17 00:00:00 2001
+-From: Neil Horman <nhorman@openssl.org>
+-Date: Tue, 5 Dec 2023 14:50:01 -0500
+-Subject: [PATCH] Fix genstr/genconf option in asn1parse
+-
+-At some point the asn1parse applet was changed to default the inform to
+-PEM, and defalt input file to stdin.  Doing so broke the -genstr|conf options,
+-in that, before we attempt to generate an ASN1 block from the provided
+-genstr string, we attempt to read a PEM input from stdin.  As a result,
+-this command:
+-openssl asn1parse -genstr OID:1.2.3.4
+-hangs because we are attempting a blocking read on stdin, waiting for
+-data that never arrives
+-
+-Fix it by giving priority to genstr|genconf, such that, if set, will just run
+-do_generate on that string and exit
+-
+-Reviewed-by: Hugo Landau <hlandau@openssl.org>
+-Reviewed-by: Tomas Mraz <tomas@openssl.org>
+-(Merged from https://github.com/openssl/openssl/pull/22957)
+-Upstream: https://github.com/openssl/openssl/commit/749fcc0e3ce796474a15d6fac221e57daeacff1e
+-Signed-off-by: Martin Kurbanov <mmkurbanov@salutedevices.com>
+----
+- apps/asn1parse.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/apps/asn1parse.c b/apps/asn1parse.c
+-index 097b0cc1ed..6597a6180b 100644
+---- a/apps/asn1parse.c
+-+++ b/apps/asn1parse.c
+-@@ -178,7 +178,7 @@ int asn1parse_main(int argc, char **argv)
+- 
+-     if ((buf = BUF_MEM_new()) == NULL)
+-         goto end;
+--    if (informat == FORMAT_PEM) {
+-+    if (genstr == NULL && informat == FORMAT_PEM) {
+-         if (PEM_read_bio(in, &name, &header, &str, &num) != 1) {
+-             BIO_printf(bio_err, "Error reading PEM file\n");
+-             ERR_print_errors(bio_err);
+--- 
+-2.40.0
+-
+diff --git a/package/libopenssl/0006-Harden-asn1-oid-loader-to-invalid-inputs.patch b/package/libopenssl/0006-Harden-asn1-oid-loader-to-invalid-inputs.patch
+deleted file mode 100644
+index 299ecbc2ed..0000000000
+--- a/package/libopenssl/0006-Harden-asn1-oid-loader-to-invalid-inputs.patch
++++ /dev/null
+@@ -1,122 +0,0 @@
+-From a552c23c6502592c1b3c67d93dd7e5ffbe958aa4 Mon Sep 17 00:00:00 2001
+-From: Neil Horman <nhorman@openssl.org>
+-Date: Tue, 5 Dec 2023 15:24:20 -0500
+-Subject: [PATCH] Harden asn1 oid loader to invalid inputs
+-
+-In the event that a config file contains this sequence:
+-=======
+-openssl_conf = openssl_init
+-
+-config_diagnostics = 1
+-
+-[openssl_init]
+-oid_section = oids
+-
+-[oids]
+-testoid1 = 1.2.3.4.1
+-testoid2 = A Very Long OID Name, 1.2.3.4.2
+-testoid3 = ,1.2.3.4.3
+-======
+-
+-The leading comma in testoid3 can cause a heap buffer overflow, as the
+-parsing code will move the string pointer back 1 character, thereby
+-pointing to an invalid memory space
+-
+-correct the parser to detect this condition and handle it by treating it
+-as if the comma doesn't exist (i.e. an empty long oid name)
+-
+-Reviewed-by: Hugo Landau <hlandau@openssl.org>
+-Reviewed-by: Tomas Mraz <tomas@openssl.org>
+-(Merged from https://github.com/openssl/openssl/pull/22957)
+-Upstream: https://github.com/openssl/openssl/commit/a552c23c6502592c1b3c67d93dd7e5ffbe958aa4
+-Signed-off-by: Martin Kurbanov <mmkurbanov@salutedevices.com>
+----
+- apps/asn1parse.c                  |  2 +-
+- crypto/asn1/asn_moid.c            |  4 ++++
+- test/recipes/04-test_asn1_parse.t | 26 ++++++++++++++++++++++++++
+- test/test_asn1_parse.cnf          | 12 ++++++++++++
+- 4 files changed, 43 insertions(+), 1 deletion(-)
+- create mode 100644 test/recipes/04-test_asn1_parse.t
+- create mode 100644 test/test_asn1_parse.cnf
+-
+-diff --git a/apps/asn1parse.c b/apps/asn1parse.c
+-index 6597a6180b..bf62f85947 100644
+---- a/apps/asn1parse.c
+-+++ b/apps/asn1parse.c
+-@@ -178,7 +178,7 @@ int asn1parse_main(int argc, char **argv)
+- 
+-     if ((buf = BUF_MEM_new()) == NULL)
+-         goto end;
+--    if (genstr == NULL && informat == FORMAT_PEM) {
+-+    if (genconf == NULL && genstr == NULL && informat == FORMAT_PEM) {
+-         if (PEM_read_bio(in, &name, &header, &str, &num) != 1) {
+-             BIO_printf(bio_err, "Error reading PEM file\n");
+-             ERR_print_errors(bio_err);
+-diff --git a/crypto/asn1/asn_moid.c b/crypto/asn1/asn_moid.c
+-index 6f816307af..1e183f4f18 100644
+---- a/crypto/asn1/asn_moid.c
+-+++ b/crypto/asn1/asn_moid.c
+-@@ -67,6 +67,10 @@ static int do_create(const char *value, const char *name)
+-     if (p == NULL) {
+-         ln = name;
+-         ostr = value;
+-+    } else if (p == value) {
+-+        /* we started with a leading comma */
+-+        ln = name;
+-+        ostr = p + 1;
+-     } else {
+-         ln = value;
+-         ostr = p + 1;
+-diff --git a/test/recipes/04-test_asn1_parse.t b/test/recipes/04-test_asn1_parse.t
+-new file mode 100644
+-index 0000000000..f3af436592
+---- /dev/null
+-+++ b/test/recipes/04-test_asn1_parse.t
+-@@ -0,0 +1,26 @@
+-+#! /usr/bin/env perl
+-+# Copyright 2023 The OpenSSL Project Authors. All Rights Reserved.
+-+#
+-+# Licensed under the Apache License 2.0 (the "License").  You may not use
+-+# this file except in compliance with the License.  You can obtain a copy
+-+# in the file LICENSE in the source distribution or at
+-+# https://www.openssl.org/source/license.html
+-+
+-+use strict;
+-+use OpenSSL::Test qw(:DEFAULT srctop_file);
+-+use OpenSSL::Test::Utils;
+-+
+-+setup("test_asn1_parse");
+-+
+-+plan tests => 3;
+-+
+-+$ENV{OPENSSL_CONF} = srctop_file("test", "test_asn1_parse.cnf");
+-+
+-+ok(run(app(([ 'openssl', 'asn1parse',
+-+              '-genstr', 'OID:1.2.3.4.1']))));
+-+
+-+ok(run(app(([ 'openssl', 'asn1parse',
+-+              '-genstr', 'OID:1.2.3.4.2']))));
+-+
+-+ok(run(app(([ 'openssl', 'asn1parse',
+-+              '-genstr', 'OID:1.2.3.4.3']))));
+-diff --git a/test/test_asn1_parse.cnf b/test/test_asn1_parse.cnf
+-new file mode 100644
+-index 0000000000..5f0305657e
+---- /dev/null
+-+++ b/test/test_asn1_parse.cnf
+-@@ -0,0 +1,12 @@
+-+openssl_conf = openssl_init
+-+
+-+# Comment out the next line to ignore configuration errors
+-+config_diagnostics = 1
+-+
+-+[openssl_init]
+-+oid_section = oids
+-+
+-+[oids]
+-+testoid1 = 1.2.3.4.1
+-+testoid2 = A Very Long OID Name, 1.2.3.4.2
+-+testoid3 = ,1.2.3.4.3
+--- 
+-2.40.0
+-
+diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
+index 9e09e12461..841d4b4cfd 100644
+--- a/package/libopenssl/libopenssl.hash
++++ b/package/libopenssl/libopenssl.hash
+@@ -1,5 +1,5 @@
+-# From https://www.openssl.org/source/openssl-3.2.0.tar.gz.sha256
+-sha256  14c826f07c7e433706fb5c69fa9e25dab95684844b4c962a2cf1bf183eb4690e  openssl-3.2.0.tar.gz
++# From https://www.openssl.org/source/openssl-3.2.1.tar.gz.sha256
++sha256  83c7329fe52c850677d75e5d0b0ca245309b97e8ecbcfdc1dfdc4ab9fac35b39  openssl-3.2.1.tar.gz
+ 
+ # License files
+ sha256  7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a  LICENSE.txt
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index 7dc6d93256..feb5026c02 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBOPENSSL_VERSION = 3.2.0
++LIBOPENSSL_VERSION = 3.2.1
+ LIBOPENSSL_SITE = https://www.openssl.org/source
+ LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
+ LIBOPENSSL_LICENSE = Apache-2.0
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.39.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
