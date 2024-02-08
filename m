@@ -4,56 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27F98C4828F
-	for <buildroot@archiver.kernel.org>; Thu,  8 Feb 2024 07:09:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B70CC4828F
+	for <buildroot@archiver.kernel.org>; Thu,  8 Feb 2024 07:49:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3511342E5E;
-	Thu,  8 Feb 2024 07:09:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A132E42ECE;
+	Thu,  8 Feb 2024 07:49:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SWuhk4w6RpkI; Thu,  8 Feb 2024 07:09:54 +0000 (UTC)
+	with ESMTP id muhzHiWzDEsj; Thu,  8 Feb 2024 07:49:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A48D42E63
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB40E42ED4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1A48D42E63;
-	Thu,  8 Feb 2024 07:09:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CBB681BF403
- for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 07:09:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AB40E42ED4;
+	Thu,  8 Feb 2024 07:49:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D33481BF476
+ for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 07:49:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B86A384677
- for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 07:09:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C0384616E7
+ for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 07:49:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Kz9tBqUrB_Q2 for <buildroot@lists.busybox.net>;
- Thu,  8 Feb 2024 07:09:51 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
- helo=relay7-d.mail.gandi.net; envelope-from=peko@48ers.dk; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 618CF8435E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 618CF8435E
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 618CF8435E
- for <buildroot@buildroot.org>; Thu,  8 Feb 2024 07:09:49 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0C19420009;
- Thu,  8 Feb 2024 07:09:45 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@48ers.dk>) id 1rXyXZ-0024JB-0S;
- Thu, 08 Feb 2024 08:09:45 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id abuXz2_k094B for <buildroot@lists.busybox.net>;
+ Thu,  8 Feb 2024 07:49:34 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::232; helo=mail-lj1-x232.google.com;
+ envelope-from=roykollensvendsen@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A5D176165D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5D176165D
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com
+ [IPv6:2a00:1450:4864:20::232])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A5D176165D
+ for <buildroot@buildroot.org>; Thu,  8 Feb 2024 07:49:33 +0000 (UTC)
+Received: by mail-lj1-x232.google.com with SMTP id
+ 38308e7fff4ca-2d073b54359so20958491fa.0
+ for <buildroot@buildroot.org>; Wed, 07 Feb 2024 23:49:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1707378571; x=1707983371;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=d4Dq+ww5LuK9lpKCkfmE9QnsMcb92jJ+YbcgTLSeJPc=;
+ b=CYwu6855U2oYHDcAZg4JIFmFXPIkLus4A2Uv3OA0EdsxvmHW6VKmF2LxltvdHgkDgf
+ fKbLYmzfee89piTT8f/ONKw98p907NyZw2fdoj2zKNYueJpGo653CGVuP8fbgp8QhuTF
+ lTp2L84svEsjDjRnFhkKnSS41pAfLXlZ9/F5HVEYlW+NK2kCR7n0gTEawf9hAhzFwj0I
+ ScVqFSFvDSNy59Z9coiwYXsXkP63RcRaEAoJzIr5sIAiCti1yTD2dxLDPNAB4lWS6/7Y
+ QgTefx1GbsidFykqtAKXKdK5uxswN90mtj1ysc2wb9my0e0z/9Oy6UVrjmcw7KZ0cgWu
+ 4GBg==
+X-Gm-Message-State: AOJu0YynuWYMQQF8E1MiVaGWA+NLw+23w85rEaVQi+P8eu0qT87xp3s9
+ x2ixf2oV3l8yDqaOVPBzXrTMtb+qfch+CH2aN3Xt+oA1Xzh4l5Q3zN56SxuRjZE=
+X-Google-Smtp-Source: AGHT+IFxXRYEYekL3BNRchJm+y8qTOCT4AN6W3dhNFoCDFU8nFGrSRwvLcMIHt3OMUN9N2CVrk5KFw==
+X-Received: by 2002:a05:651c:782:b0:2d0:b758:93a5 with SMTP id
+ g2-20020a05651c078200b002d0b75893a5mr4925069lje.18.1707378571084; 
+ Wed, 07 Feb 2024 23:49:31 -0800 (PST)
+X-Forwarded-Encrypted: i=1;
+ AJvYcCW4gMR30EdBDq25kad2cr1wjjlLXl6XcKCfsyuu4sLb6wCLADZoviiwULdbmS2Ni7QE+1k7C8APR8QTfYj7XuvRDBzVv2RZjTkyNNQEEZquKeaaFO03PXhxkZrEFkK02R1C1U7db3mteK0kLu/f2YfFz/zO34o69NfogHKqT0Bia/G0ri7kkU3NBoQyLS3MCymbak8uGvQ=
+Received: from precision7530-arch-roy.lan ([79.161.254.12])
+ by smtp.gmail.com with ESMTPSA id
+ z16-20020a2e7e10000000b002d0ca6e0f9fsm366371ljc.15.2024.02.07.23.49.30
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 07 Feb 2024 23:49:30 -0800 (PST)
+From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+X-Google-Original-From: Roy Kollen Svendsen
+ <roy.kollen.svendsen@akersolutions.com>
 To: buildroot@buildroot.org
-Date: Thu,  8 Feb 2024 08:09:39 +0100
-Message-Id: <20240208070939.493203-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.2
+Date: Thu,  8 Feb 2024 08:49:00 +0100
+Message-ID: <20240208074901.1654224-1-roy.kollen.svendsen@akersolutions.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: [Buildroot] [PATCH] package/webkitgtk: security bump to version
- 2.42.5
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1707378571; x=1707983371; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=d4Dq+ww5LuK9lpKCkfmE9QnsMcb92jJ+YbcgTLSeJPc=;
+ b=SWwFwhOLC8RMiZBsLuR2tB44TAxhVT3/gJCgW6bsTJHSbxh2EcjmS+hqFBPACbzSf5
+ E3GE0aZXGBXYWzh0oN6v9QHCXUw800l4kUObuVP4VI/QGGN2FydrmtUphFr9kLQ40Dsf
+ CYffPBE0UOPUfVHhCDH2eDXbrFGOIxP5yY5Uu4CsgEir4DuCMU1NpTwB4q5qW1ws00Kr
+ mGBFQ3ngk+KZwNGcU8jUng9CkQDRJHYfMFO3CxiJRFf+s1YiXFt9Mpu1j1lcAY4nJRdM
+ 7Rqf9J0UOvCiVGFRXYIT11am0G/gCXwHOOj4zEjhSX2N5SEXFh6z3QDNWL0u0DhLA8Wp
+ U88w==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=SWwFwhOL
+Subject: [Buildroot] [PATCH] package/python3: fix install
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,145 +103,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adrian Perez de Castro <aperez@igalia.com>
+Cc: Roy Kollen Svendsen <roy.kollen.svendsen@akersolutions.com>,
+ James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes the following security issues:
+Fixes the following failure in the install step of host-python3:
+    ...
+    /usr/bin/install -c -m 644 pyconfig.h output/host/include/python3.12/pyconfig.h
+    [ERROR] _tkinter failed to import: output/build/host-python3-3.12.1/build/lib.linux-x86_64-3.12/_tkinter.cpython-312-x86_64-linux-gnu.so: undefined symbol: Tcl_AddErrorInfo
+    The following modules are *disabled* in configure script:
+    _ctypes_test          _testbuffer           _testcapi
+    _testclinic           _testimportmultiple   _testinternalcapi
+    _testmultiphase       _xxtestfuzz           xxsubtype
 
-https://webkitgtk.org/security/WSA-2024-0001.html
+    Following modules built successfully but were removed because they could not be imported:
+    _tkinter
 
-- CVE-2024-23222: Processing maliciously crafted web content may lead to
-  arbitrary code execution.  Apple is aware of a report that this issue may
-  have been exploited.  Description: A type confusion issue was addressed
-  with improved checks.
-
-- CVE-2024-23206: A maliciously crafted webpage may be able to fingerprint
-  the user.  Description: An access issue was addressed with improved access
-  restrictions.
-
-- CVE-2024-23213: Processing web content may lead to arbitrary code execution.
-  Description: The issue was addressed with improved memory handling.
-
-- CVE-2023-40414: Processing web content may lead to arbitrary code
-  execution.  Description: A use-after-free issue was addressed with
-  improved memory management.
-
-- CVE-2023-42833: Processing web content may lead to arbitrary code execution.
-  Description: A correctness issue was addressed with improved checks.
-
-- CVE-2014-1745: Processing a file may lead to a denial-of-service or
-  potentially disclose memory contents.  Description: The issue was
-  addressed with improved checks.
-
-https://webkitgtk.org/security/WSA-2023-0012.html
-
-- CVE-2023-42883: Processing a SVG image may lead to a denial-of-service.
-  Description: The issue was addressed with improved memory handling.
-
-- CVE-2023-42890: Processing web content may lead to arbitrary code
-  execution.  Description: The issue was addressed with improved memory
-  handling.
-
-https://webkitgtk.org/security/WSA-2023-0011.html
-
-- CVE-2023-42916: Processing web content may disclose sensitive information.
-  Apple is aware of a report that this issue may have been actively
-  exploited.  Description: An out-of-bounds read was addressed with improved
-  input validation.
-
-- CVE-2023-42917: Processing web content may lead to arbitrary code
-  execution.  Apple is aware of a report that this issue may have been
-  actively exploited.  Description: A memory corruption vulnerability was
-  addressed with improved locking.
-
-Add an upstream post-2.42.5 patch to fix an issue with an invalid backport
-causing a build issue.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+    Checked 110 modules (31 built-in, 54 shared, 15 n/a on linux-x86_64, 9 disabled, 0 missing, 1 failed on import)
+    ...
+    /usr/bin/install -c -m 644 ./Lib/types.py output/host/lib/python3.12
+    /usr/bin/install: cannot stat 'Modules/_tkinter.cpython-312-x86_64-linux-gnu.so': No such file or directory
+    /usr/bin/install -c -m 644 ./Lib/typing.py output/host/lib/python3.12
+    make[3]: *** [Makefile:2068: sharedinstall] Error 1
+    ...
 ---
- ...velInterpreter.cpp-339-21-error-t6-w.patch | 39 +++++++++++++++++++
- package/webkitgtk/webkitgtk.hash              |  6 +--
- package/webkitgtk/webkitgtk.mk                |  2 +-
- 3 files changed, 43 insertions(+), 4 deletions(-)
- create mode 100644 package/webkitgtk/0001-GTK-2.42.5-LowLevelInterpreter.cpp-339-21-error-t6-w.patch
+ package/python3/python3.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/webkitgtk/0001-GTK-2.42.5-LowLevelInterpreter.cpp-339-21-error-t6-w.patch b/package/webkitgtk/0001-GTK-2.42.5-LowLevelInterpreter.cpp-339-21-error-t6-w.patch
-new file mode 100644
-index 0000000000..c9667fedbd
---- /dev/null
-+++ b/package/webkitgtk/0001-GTK-2.42.5-LowLevelInterpreter.cpp-339-21-error-t6-w.patch
-@@ -0,0 +1,39 @@
-+From 3d5373575695b293b8559155431d0079a6153aff Mon Sep 17 00:00:00 2001
-+From: Michael Catanzaro <mcatanzaro@redhat.com>
-+Date: Mon, 5 Feb 2024 11:00:49 -0600
-+Subject: [PATCH] =?UTF-8?q?[GTK]=20[2.42.5]=20LowLevelInterpreter.cpp:339:?=
-+ =?UTF-8?q?21:=20error:=20=E2=80=98t6=E2=80=99=20was=20not=20declared=20in?=
-+ =?UTF-8?q?=20this=20scope=20https://bugs.webkit.org/show=5Fbug.cgi=3Fid?=
-+ =?UTF-8?q?=3D268739?=
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Unreviewed build fix. Seems a backport went badly, and we didn't notice
-+because the code is architecture-specific.
-+
-+* Source/JavaScriptCore/llint/LowLevelInterpreter.cpp:
-+(JSC::CLoop::execute):
-+
-+Upstream: https://github.com/WebKit/WebKit/commit/3d5373575695b293b8559155431d0079a6153aff
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ Source/JavaScriptCore/llint/LowLevelInterpreter.cpp | 2 --
-+ 1 file changed, 2 deletions(-)
-+
-+diff --git a/Source/JavaScriptCore/llint/LowLevelInterpreter.cpp b/Source/JavaScriptCore/llint/LowLevelInterpreter.cpp
-+index 5064ead6cd2e..9a2e2653b121 100644
-+--- a/Source/JavaScriptCore/llint/LowLevelInterpreter.cpp
-++++ b/Source/JavaScriptCore/llint/LowLevelInterpreter.cpp
-+@@ -336,8 +336,6 @@ JSValue CLoop::execute(OpcodeID entryOpcodeID, void* executableAddress, VM* vm,
-+     UNUSED_VARIABLE(t2);
-+     UNUSED_VARIABLE(t3);
-+     UNUSED_VARIABLE(t5);
-+-    UNUSED_VARIABLE(t6);
-+-    UNUSED_VARIABLE(t7);
-+ 
-+     struct StackPointerScope {
-+         StackPointerScope(CLoopStack& stack)
-+-- 
-+2.39.2
-+
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index 59782732c3..ac4799d4cf 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,6 +1,6 @@
--# From https://www.webkitgtk.org/releases/webkitgtk-2.42.2.tar.xz.sums
--sha1  05bec6a824e46f043b865478735bc8395249510e  webkitgtk-2.42.2.tar.xz
--sha256  5720aa3e8627f1b9f63252187d4df0f8233ae71d697b1796ebfbe5ca750bd118  webkitgtk-2.42.2.tar.xz
-+# From https://www.webkitgtk.org/releases/webkitgtk-2.42.5.tar.xz.sums
-+sha1  c3ffb2beaac56f1089029f2254482f48d9e3db37  webkitgtk-2.42.5.tar.xz
-+sha256  b64278c1f20b8cfdbfb5ff573c37d871aba74a1db26d9b39f74e8953fe61e749  webkitgtk-2.42.5.tar.xz
- 
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 611d7f65d3..075a36654f 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WEBKITGTK_VERSION = 2.42.2
-+WEBKITGTK_VERSION = 2.42.5
- WEBKITGTK_SITE = https://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 42765abcf4..81d9a904c7 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -34,6 +34,7 @@ HOST_PYTHON3_CONF_OPTS += \
+ HOST_PYTHON3_CONF_ENV += \
+ 	LDFLAGS="$(HOST_LDFLAGS) -Wl,--enable-new-dtags" \
+ 	py_cv_module_nis=n/a \
++	py_cv_module__tkinter=n/a \
+ 	py_cv_module_unicodedata=yes \
+ 	py_cv_module__codecs_cn=n/a \
+ 	py_cv_module__codecs_hk=n/a \
 -- 
-2.39.2
+2.43.0
 
 _______________________________________________
 buildroot mailing list
