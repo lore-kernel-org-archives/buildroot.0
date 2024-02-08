@@ -4,68 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A142C48260
-	for <buildroot@archiver.kernel.org>; Thu,  8 Feb 2024 07:59:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAB05C48260
+	for <buildroot@archiver.kernel.org>; Thu,  8 Feb 2024 08:01:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D260042EFA;
-	Thu,  8 Feb 2024 07:59:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 629C84258F;
+	Thu,  8 Feb 2024 08:01:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id E-0VuX5Xr0Zr; Thu,  8 Feb 2024 07:59:27 +0000 (UTC)
+	with ESMTP id EPGbK8CmNml3; Thu,  8 Feb 2024 08:01:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 94B2B42EFD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 73D784268A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 94B2B42EFD;
-	Thu,  8 Feb 2024 07:59:27 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4C90E1BF36A
- for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 07:59:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 73D784268A;
+	Thu,  8 Feb 2024 08:01:28 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 280B51BF476
+ for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 08:01:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 396068129B
- for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 07:59:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1320A41B01
+ for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 08:01:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cSxlhy89Ikp1 for <buildroot@lists.busybox.net>;
- Thu,  8 Feb 2024 07:59:25 +0000 (UTC)
-Received-SPF: None (mailfrom) identity=mailfrom;
- client-ip=2a01:4f8:151:30a2::163; helo=serv15.avernis.de;
- envelope-from=br015@umbiko.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 52A2280E50
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 52A2280E50
-Received: from serv15.avernis.de (serv15.avernis.de
- [IPv6:2a01:4f8:151:30a2::163])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 52A2280E50
- for <buildroot@buildroot.org>; Thu,  8 Feb 2024 07:59:23 +0000 (UTC)
-Received: by serv15.avernis.de (Postfix) with ESMTPSA id A3C0FBDE1553;
- Thu,  8 Feb 2024 08:59:20 +0100 (CET)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id POQAETZHgvlu for <buildroot@lists.busybox.net>;
+ Thu,  8 Feb 2024 08:01:25 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
+ helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 12B1441ADE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 12B1441ADE
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 12B1441ADE
+ for <buildroot@buildroot.org>; Thu,  8 Feb 2024 08:01:24 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2E40224000E;
+ Thu,  8 Feb 2024 08:01:21 +0000 (UTC)
+Date: Thu, 8 Feb 2024 09:01:20 +0100
+To: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+Message-ID: <20240208090120.4d886b8c@windsurf>
+In-Reply-To: <20240208074901.1654224-1-roy.kollen.svendsen@akersolutions.com>
+References: <20240208074901.1654224-1-roy.kollen.svendsen@akersolutions.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Date: Thu, 08 Feb 2024 07:59:20 +0000
-From: Andreas Ziegler <br015@umbiko.net>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-In-Reply-To: <e7cbd25938f13eeb6b674f836fef9619@umbiko.net>
-References: <mailman.3620.1707247855.145104.buildroot@buildroot.org>
- <e7cbd25938f13eeb6b674f836fef9619@umbiko.net>
-Message-ID: <a5777d5db49e22b535a9adb4f5996d4f@umbiko.net>
-X-Sender: br015@umbiko.net
-X-Virus-Scanned: clamav-milter 1.0.3 at serv15.avernis.de
-X-Virus-Status: Clean
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=umbiko.net; s=mail; 
- t=1707379160; bh=n9gzxRiiQOVqinrghGQEUUeYavLt4/lioe6PEJ0cA7Y=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References;
- b=wdvjtN8hBo40adB6Sy888NGGFeVDg7SftpvrlF12uyWhAmxZZyfvJ1X03UdNjUA72
- kafTQX5b3Du7OPD9DEqP8wXy+3203cd0Sdy2isE4+T3pnf2VsfgIl5ewdASiPHiMSh
- racxf26mmM/nhmcivBnldfSp5qjSNb573RP/Ru4A=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=umbiko.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=umbiko.net header.i=@umbiko.net header.a=rsa-sha256
- header.s=mail header.b=wdvjtN8h
-Subject: Re: [Buildroot] [PATCH 1/1] package/ncmpc: don't set NLS
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1707379281;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=LFhWP1KACet/M+nNO06FnLOXjOwYmfhpWEoPcOrtFxw=;
+ b=GmuM5HMgRwEvQ1aGzFn3JnVqLzE+zKRIzH7VithuoIo0KtfGhGdlapezgcSB18EnmzXJgu
+ HWH182rY6cGqpLnIwhSsV20LNvux5gCvqIjD/wOgnAq2UeuPijXvU/2yYoirEtDLU8m9tA
+ 9UWRDTAdEGAHgWdbetAciXYYzlm7yRNgeaK6Q86XHufgDtWgIkYAN8YOTY14JFUcMfgYyH
+ S4Rv0KGk+TyOvcqboZRrYkE3iIbQ5YtYTR19X4BXhqUp/PtqVQlrMQ1uuKJE54Yz+qxyGV
+ QpsrLg5t5Nb7VT6piAED/kdXrroc6U7Nf1Hkr8U1ueUNeZon/wGzBr1ZvS1r3A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=GmuM5HMg
+Subject: Re: [Buildroot] [PATCH] package/python3: fix install
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,150 +80,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@smile.fr>, buildroot <buildroot@buildroot.org>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Roy Kollen Svendsen <roy.kollen.svendsen@akersolutions.com>,
+ James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
+ buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Fabrice, Romain, *,
+Hello Roy,
 
-more complicated than I thought ...
+On Thu,  8 Feb 2024 08:49:00 +0100
+Roy Kollen Svendsen <roykollensvendsen@gmail.com> wrote:
 
-On 2024-02-07 11:30, Andreas Ziegler wrote:
-> Hi Fabrice,
-> 
-> sorry in case I do not reply to the latest message in the thread; my 
-> in-box is currently a bit crowded ...
-> 
-> On 2024-02-06 18:59, Fabrice Fontaine wrote:
-> 
->> Message: 30
->> Date: Tue, 6 Feb 2024 18:59:00 +0100
->> From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->> To: Romain Naour <romain.naour@smile.fr>
->> Cc: buildroot@buildroot.org
->> Subject: Re: [Buildroot] [PATCH 1/1] package/ncmpc: don't set NLS
->> Message-ID:
->> 	<CAPi7W81fffV_0zMh50hgB7bw7++JZzkdSpFUXXbHMPMKmHtbQw@mail.gmail.com>
->> Content-Type: text/plain; charset="UTF-8"
->> 
->> Hello Romain,
->> 
->> Le mar. 6 f?vr. 2024 ? 18:32, Romain Naour <romain.naour@smile.fr> a 
->> ?crit :
->>> 
->>> Hello,
->>> 
->>> Le 06/01/2024 ? 11:12, Fabrice Fontaine a ?crit :
->>> > ncmpc is able to automatically detect NLS support since version 0.47 and
->>> > https://github.com/MusicPlayerDaemon/ncmpc/commit/c264db04dd30af301e7d85c9d145bb1f1ae3fea3
->>> > so let it handle automatically to avoid the following build failure with
->>> > a bootlin toolchain which embeds a gettext definition in libintl.h which
->>> > will clash with the fake gettext definition provided by ncmpc since
->>> > https://github.com/MusicPlayerDaemon/ncmpc/commit/95af27ab2d3ceb9df26ebb4e0d936e392a84c153:
->>> >
->>> > In file included from ../src/save_playlist.cxx:8:
->>> > /home/buildroot/autobuild/instance-2/output-1/host/or1k-buildroot-linux-gnu/sysroot/usr/include/libintl.h:39:14: error: expected unqualified-id before 'const'
->>> >    39 | extern char *gettext (const char *__msgid)
->>> >       |              ^~~~~~~
->>> > /home/buildroot/autobuild/instance-2/output-1/host/or1k-buildroot-linux-gnu/sysroot/usr/include/libintl.h:39:14: error: expected ')' before 'const'
->>> > ../src/i18n.h:22:20: note: to match this '('
->>> >    22 | #define gettext(x) (x)
->>> >       |                    ^
->>> >
->>> > Indeed, even if NLS is disabled by the user, libintl.h will be included
->>> > by
->>> > /home/fabrice/buildroot/output/host/opt/ext-toolchain/or1k-buildroot-linux-gnu/include/c++/13.2.0/or1k-buildroot-linux-gnu/bits/messages_members.h
->>> > though include <chrono>
->>> 
->>> We usually want to explicitly handle such option from Buildroot 
->>> package to not
->>> rely on automatic detection (as currently done).
->>> 
->>> It look like more a bug in ncmpc build system?
->> 
->> I don't know, upstream wants to have the same code with and without
->> NLS, so they decided to define a gettext macro when NLS is disabled.
->> I could find an upstreamable solution as upstream will probably reject
->> a patch that removes this gettext define and puts #ifdef ENABLE_NLS
->> before every gettext calls.
->> Do you have an upstreamable solution or should we just add a NLS
->> dependency to ncmpc?
-> 
-> This is probably not related to NLS, but to gettext being included in 
-> the build by some other package. This tricks Meson into believing that 
-> NLS is enabled.
-> 
-> Also, the code in meson.txt may lead to unexpected results:
-> 
-> if meson.version().version_compare('>= 0.59') and not mini
->   # Meson 0.59 has native libintl support
->   intl_dep = dependency('intl', required: enable_nls)
->   enable_nls = intl_dep.found()
-> elif enable_nls.disabled() or mini
->   intl_dep = dependency('', required: false)
->   enable_nls = false
-> elif cc.has_header('libintl.h')
->   intl_dep = dependency('', required: false)
->   enable_nls = true
-> elif enable_nls.auto()
->   intl_dep = dependency('', required: false)
->   enable_nls = false
-> else
->   error('libintl.h not found')
-> 
+> diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+> index 42765abcf4..81d9a904c7 100644
+> --- a/package/python3/python3.mk
+> +++ b/package/python3/python3.mk
+> @@ -34,6 +34,7 @@ HOST_PYTHON3_CONF_OPTS += \
+>  HOST_PYTHON3_CONF_ENV += \
+>  	LDFLAGS="$(HOST_LDFLAGS) -Wl,--enable-new-dtags" \
+>  	py_cv_module_nis=n/a \
+> +	py_cv_module__tkinter=n/a \
+>  	py_cv_module_unicodedata=yes \
+>  	py_cv_module__codecs_cn=n/a \
+>  	py_cv_module__codecs_hk=n/a \
 
-<cut>
+Thanks a lot for your patch! However, in order to be consistent with
+how we do it with ncurses, sqlite, etc, I think it is the --disable-tk
+option that should automatically set py_cv_module__tkinter=n/a.
 
-meson.txt works like nls=auto within Buildroot, thus reflecting the 
-setting of BR2_SYSTEM_ENABLE_NLS, so no worries.
++AC_SUBST(TK)
++AC_ARG_ENABLE(tk,
++       AS_HELP_STRING([--disable-tk], [disable tk]),
++       [ TK="${enableval}" ], [ TK=yes ])
 
-The toolchain seems to have been built with NLS support; the C++ library 
-makes use of this:
+should be followed by something like
 
-[3/73] Compiling C++ object src/event/libevent.a.p/TimerList.cxx.o
-FAILED: src/event/libevent.a.p/TimerList.cxx.o
-/home/data/test/autobuild/host/bin/or1k-linux-g++ 
--Isrc/event/libevent.a.p -Isrc/event -I../src/event -Isrc -I../src -I. 
--I.. -fdiagnostics-color=always -Wall -Winvalid-pch -Wextra -Wpedantic 
--std=c++2a -O3 -Wcast-qual -Wcast-align -Wdouble-promotion 
--Wmissing-declarations -Wmissing-format-attribute -Wmissing-noreturn 
--Wredundant-decls -Wshadow -Wundef -Wvla -Wwrite-strings 
--fno-threadsafe-statics -fmerge-all-constants -Wno-non-virtual-dtor 
--Wno-format-truncation -D_GNU_SOURCE -fvisibility=hidden 
--ffunction-sections -fdata-sections -D_LARGEFILE_SOURCE 
--D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -O3 -g0 -D_FORTIFY_SOURCE=2 
--fPIC -MD -MQ src/event/libevent.a.p/TimerList.cxx.o -MF 
-src/event/libevent.a.p/TimerList.cxx.o.d -o 
-src/event/libevent.a.p/TimerList.cxx.o -c ../src/event/TimerList.cxx
-In file included from 
-/home/data/test/autobuild/host/opt/ext-toolchain/or1k-buildroot-linux-gnu/include/c++/13.2.0/or1k-buildroot-linux-gnu/bits/messages_members.h:36,
-                  from 
-/home/data/test/autobuild/host/opt/ext-toolchain/or1k-buildroot-linux-gnu/include/c++/13.2.0/bits/locale_facets_nonio.h:2064,
-                  from 
-/home/data/test/autobuild/host/opt/ext-toolchain/or1k-buildroot-linux-gnu/include/c++/13.2.0/locale:43,
-                  from 
-/home/data/test/autobuild/host/opt/ext-toolchain/or1k-buildroot-linux-gnu/include/c++/13.2.0/iomanip:45,
-                  from 
-/home/data/test/autobuild/host/opt/ext-toolchain/or1k-buildroot-linux-gnu/include/c++/13.2.0/bits/chrono_io.h:38,
-                  from 
-/home/data/test/autobuild/host/opt/ext-toolchain/or1k-buildroot-linux-gnu/include/c++/13.2.0/chrono:3330,
-                  from ../src/event/Chrono.hxx:6,
-                  from ../src/event/TimerList.hxx:7,
-                  from ../src/event/TimerList.cxx:5:
-/home/data/test/autobuild/host/or1k-buildroot-linux-gnu/sysroot/usr/include/libintl.h:23:2: 
-error: #error "libintl.h included here"
-    23 | #error "libintl.h included here"
-       |  ^~~~~
+AS_IF([test "${enable_tk}" = "no"], [PY_STDLIB_MOD_SET_NA([_tkinter])])
 
-Probably the least invasive solution would be to add a new ncmpc 
-dependency:
+something like this (in
+package/python3/0012-Add-an-option-to-disable-the-tk-module.patch).
 
-+ depends on !BR2_TOOLCHAIN_HAS_FULL_GETTEXT || BR2_SYSTEM_ENABLE_NLS
+Or, we need to turn around how things are done, and instead of adding
+those --enable/--disable, look at whether py_cv_module_<foo> is passed
+to appropriately disable things. Might be more upstreamable (but I
+thought about this idea *after* redoing the 3.12 patches).
 
-Kind regards,
-Andreas
+That said, the 3.12 bump is for now causing quite a few issues, so it
+is not impossible that we revert it before the 2024.02 release.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
