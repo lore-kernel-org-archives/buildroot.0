@@ -4,74 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03012C48260
-	for <buildroot@archiver.kernel.org>; Thu,  8 Feb 2024 09:55:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE6CCC4828F
+	for <buildroot@archiver.kernel.org>; Thu,  8 Feb 2024 09:55:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 357B641C3A;
-	Thu,  8 Feb 2024 09:55:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5136241C8D;
+	Thu,  8 Feb 2024 09:55:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FO_T7iL4vmwt; Thu,  8 Feb 2024 09:55:45 +0000 (UTC)
+	with ESMTP id do4P7pR9YEph; Thu,  8 Feb 2024 09:55:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 13FA841BA1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D5F6A41C50
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 13FA841BA1;
-	Thu,  8 Feb 2024 09:55:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D5F6A41C50;
+	Thu,  8 Feb 2024 09:55:47 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2B2D21BF831
- for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 09:55:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 06E451BF831
+ for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 09:55:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1815041B29
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8B97D403B9
  for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 09:55:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aslEVkf_JXpA for <buildroot@lists.busybox.net>;
- Thu,  8 Feb 2024 09:55:36 +0000 (UTC)
+ with ESMTP id XCng8vHok3xq for <buildroot@lists.busybox.net>;
+ Thu,  8 Feb 2024 09:55:37 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=213.97.179.56;
  helo=fanzine2.igalia.com; envelope-from=aperez@igalia.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8DE89403B9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8DE89403B9
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6606741A68
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6606741A68
 Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8DE89403B9
- for <buildroot@buildroot.org>; Thu,  8 Feb 2024 09:55:36 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6606741A68
+ for <buildroot@buildroot.org>; Thu,  8 Feb 2024 09:55:37 +0000 (UTC)
 Received: from 91-153-34-210.elisa-laajakaista.fi ([91.153.34.210] helo=kodama)
  by fanzine2.igalia.com with esmtpsa 
  (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
- id 1rY181-00F8hL-Fs; Thu, 08 Feb 2024 10:55:33 +0100
+ id 1rY180-00F8hL-FB; Thu, 08 Feb 2024 10:55:32 +0100
 Received: from localhost (kodama [local])
- by kodama (OpenSMTPD) with ESMTPA id 1fa70103;
+ by kodama (OpenSMTPD) with ESMTPA id b9d860e2;
  Thu, 8 Feb 2024 09:55:31 +0000 (UTC)
 From: Adrian Perez de Castro <aperez@igalia.com>
 To: buildroot@buildroot.org
-Date: Thu,  8 Feb 2024 11:55:29 +0200
-Message-ID: <20240208095531.99049-3-aperez@igalia.com>
+Date: Thu,  8 Feb 2024 11:55:27 +0200
+Message-ID: <20240208095531.99049-1-aperez@igalia.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240208095531.99049-1-aperez@igalia.com>
-References: <20240208095531.99049-1-aperez@igalia.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
  c=relaxed/relaxed; d=igalia.com; 
- s=20170329; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
- Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
- Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
- :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
+ Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+ Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+ In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
  List-Post:List-Owner:List-Archive;
- bh=5TApq4vd6e1ppRwHOazHdGESszB4G4PuYBQKiMJJTzg=; b=YkH8PmsdLpn6msy3wt3job4wH6
- L3IsTU9udQOUWPMxnVH0/x6WDk9j1ozhnDMWCP5OJa3oufkou9m56VauebWnA8s9ovppyrxxt+SMi
- JHDCDKW19mU5sMCnM5g8DwqlkvaSVyHVcj2LS1/zGYtPGkcoe+aUU0BFu+Gy7dIO53Lr+B6Q13uqy
- ei+xtcrpE7GjTkqxWPMZb4KdBsz9b4CztCAqRVWVHPh78z6l6rzVjS2zjsyxHnTgsxlb+bBJ+tDPy
- SNvXX1fNjKlpF+0arcduyMwHHyu5dJcJ8wjTyxCn8f3uPVHrRWDIev5vuRDlnp38Syr4C1ThRboi1
- h+aZ+1KA==;
+ bh=U0/TfSoyPDe4lwmmsWW9EaqB7uXz1bd28/SR9YkqW1M=; b=MuJeVg1YofcuwPkbpp/Clg8HK4
+ 0OzDwkJ1Dpi0/bfW2tvf/qcrB+gbztqAtg2SJiudZG/Ki0A0lp5q0H1hQxOcOyFiVMczUtVYldM5X
+ M5jVAw19BiKOyZEskznZxmP/kJwNnyZg5T+SUhlVP8+L3pLWxg+K/tMkT3OXVBC1hYeLI8eK1CTAs
+ /gl5tPALoKyEQ+7Pb9eyo+09UD+mmpIA8SOn5PUiJ8Jdk/iF1FkbjPY5/+Tkhkk07fPZWH9pcg3AZ
+ 4quviVFf+yhE1gALTPJ1/u/jE6rmoPwfzOuIRmCRfzLpfCkVM7fEcV93cy2QAYxUsUFcNkCnNFlB9
+ A21iYdUA==;
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=igalia.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com
- header.a=rsa-sha256 header.s=20170329 header.b=YkH8Pmsd
-Subject: [Buildroot] [PATCH 2/3] package/cog: depend on wpebackend-fdo only
- if needed
+ header.a=rsa-sha256 header.s=20170329 header.b=MuJeVg1Y
+Subject: [Buildroot] [PATCH 0/3] Add support for the WPE WebKit RDK backend
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,130 +87,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Make the Cog headless platform plug-in selectable, allowing to configure
-the build without any plug-in at all. When all plug-ins are disabled,
-Cog does not require wpebackend-fdo at build time, and it is still
-able to use its built-in "fallback" support to load other WPE backends
-like wpebackend-rdk.
+Hello all,
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
----
- package/cog/Config.in | 28 ++++++++++++++++++++++++++--
- package/cog/cog.mk    | 13 ++++++++++---
- 2 files changed, 36 insertions(+), 5 deletions(-)
+This patch series allows using the RDK backend for WPE WebKit. Currently the
+main use case is to run WPEWebKit on RaspberryPi boards using on Dispmanx via
+the rpi-userland EGL/GLES libraries.
 
-diff --git a/package/cog/Config.in b/package/cog/Config.in
-index d2a910f9b89..d706b045b15 100644
---- a/package/cog/Config.in
-+++ b/package/cog/Config.in
-@@ -19,6 +19,10 @@ config BR2_PACKAGE_COG
- 
- if BR2_PACKAGE_COG
- 
-+config BR2_PACKAGE_COG_NEEDS_WPEBACKEND_FDO
-+	bool
-+	default n
-+
- config BR2_PACKAGE_COG_PROGRAMS_HOME_URI
- 	string "home uri"
- 	default "https://wpewebkit.org"
-@@ -30,6 +34,8 @@ config BR2_PACKAGE_COG_PROGRAMS_HOME_URI
- config BR2_PACKAGE_COG_PLATFORM_FDO
- 	bool "Wayland backend"
- 	default y
-+	depends on BR2_PACKAGE_WPEBACKEND_FDO
-+	select BR2_PACKAGE_COG_NEEDS_WPEBACKEND_FDO
- 	select BR2_PACKAGE_LIBXKBCOMMON
- 	select BR2_PACKAGE_WAYLAND_PROTOCOLS
- 	help
-@@ -43,6 +49,8 @@ config BR2_PACKAGE_COG_PLATFORM_DRM
- 	depends on BR2_PACKAGE_HAS_LIBGBM
- 	depends on BR2_PACKAGE_LIBGBM_HAS_FEATURE_DMA_BUF
- 	depends on BR2_PACKAGE_LIBGBM_HAS_FEATURE_FORMAT_MODIFIER_PLANE_COUNT
-+	depends on BR2_PACKAGE_WPEBACKEND_FDO
-+	select BR2_PACKAGE_COG_NEEDS_WPEBACKEND_FDO
- 	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_LIBINPUT
- 	help
-@@ -50,16 +58,32 @@ config BR2_PACKAGE_COG_PLATFORM_DRM
- 	  with video drivers that support kernel mode-setting (KMS)
- 	  via the DRM user-space API.
- 
-+config BR2_PACKAGE_COG_PLATFORM_HEADLESS
-+	bool "Headless backend"
-+	depends on BR2_PACKAGE_WPEBACKEND_FDO
-+	select BR2_PACKAGE_COG_NEEDS_WPEBACKEND_FDO
-+	help
-+	  Enable the headless platform backend.
-+
- config BR2_PACKAGE_COG_USE_SYSTEM_DBUS
- 	bool "expose system D-Bus control interface"
- 	help
- 	  Expose remote control interface on system bus
- 
--comment "DRM platform needs EGL and GBM"
-+comment "Headless platform needs wpebackend-fdo"
-+	depends on \
-+		!BR2_PACKAGE_WPEBACKEND_FDO
-+
-+comment "DRM platform needs EGL, GBM, wpebackend-fdo"
- 	depends on \
- 		!BR2_PACKAGE_HAS_LIBEGL || \
- 		!BR2_PACKAGE_HAS_LIBGBM || \
- 		!BR2_PACKAGE_LIBGBM_HAS_FEATURE_DMA_BUF || \
--		!BR2_PACKAGE_LIBGBM_HAS_FEATURE_FORMAT_MODIFIER_PLANE_COUNT
-+		!BR2_PACKAGE_LIBGBM_HAS_FEATURE_FORMAT_MODIFIER_PLANE_COUNT || \
-+		!BR2_PACKAGE_WPEBACKEND_FDO
-+
-+comment "Wayland platform needs wpebackend-fdo"
-+	depends on \
-+		!BR2_PACKAGE_WPEBACKEND_FDO
- 
- endif
-diff --git a/package/cog/cog.mk b/package/cog/cog.mk
-index e96909f7796..8fc50de56f1 100644
---- a/package/cog/cog.mk
-+++ b/package/cog/cog.mk
-@@ -8,7 +8,7 @@ COG_VERSION = 0.18.2
- COG_SITE = https://wpewebkit.org/releases
- COG_SOURCE = cog-$(COG_VERSION).tar.xz
- COG_INSTALL_STAGING = YES
--COG_DEPENDENCIES = dbus wpewebkit wpebackend-fdo wayland
-+COG_DEPENDENCIES = dbus wpewebkit wayland
- COG_LICENSE = MIT
- COG_LICENSE_FILES = COPYING
- COG_CONF_OPTS = \
-@@ -19,8 +19,6 @@ COG_CONF_OPTS = \
- 	-Dcog_home_uri='$(call qstrip,$(BR2_PACKAGE_COG_PROGRAMS_HOME_URI))' \
- 	-Dplatforms='$(subst $(space),$(comma),$(strip $(COG_PLATFORMS_LIST)))'
- 
--COG_PLATFORMS_LIST = headless
--
- ifeq ($(BR2_PACKAGE_WESTON),y)
- COG_CONF_OPTS += -Dwayland_weston_direct_display=true
- COG_DEPENDENCIES += weston
-@@ -28,6 +26,11 @@ else
- COG_CONF_OPTS += -Dwayland_weston_direct_display=false
- endif
- 
-+ifeq ($(BR2_PACKAGE_COG_PLATFORM_HEADLESS),y)
-+COG_PLATFORMS_LIST += headless
-+COG_DEPENDENCIES += wpebackend-fdo
-+endif
-+
- ifeq ($(BR2_PACKAGE_COG_PLATFORM_FDO),y)
- COG_PLATFORMS_LIST += wayland
- COG_DEPENDENCIES += libxkbcommon wayland-protocols
-@@ -48,4 +51,8 @@ ifeq ($(BR2_PACKAGE_LIBMANETTE),y)
- COG_DEPENDENCIES += libmanette
- endif
- 
-+ifeq ($(BR2_PACKAGE_COG_NEEDS_WPEBACKEND_FDO),y)
-+COG_DEPENDENCIES += wpebackend-fdo
-+endif
-+
- $(eval $(meson-package))
--- 
+In order to allow using the new wpebackend-rdk package I needed to un-hardcode
+usage of wpebackend-fdo, in two places:
+
+ - The cog package may be built without wpebackend-fdo, passing an empty
+   list of platform plug-ins. It has built-in support to load "simple"
+   WPE backends like wpebackend-rdk. This was done by adding a config
+   option for the headless plug-in, instead of always building it, and
+   adjusting dependencies.
+
+ - The wpewebkit package does not need wpebackend-fdo at all during the
+   build. It only needs a backend installed at run time. This means it is
+   enough to make wpewebkit have a "depends on" on any of the backends,
+   to make sure they will be in the build, but none needs to be listed in
+   WPEWEBKIT_DEPENDENCIES.
+
+I have tested this making builds based on raspberrypi3_defconfig, adding
+rpi-userland and then picking wpebackend-rdk + wpewebkit + cog.
+
+Hopefully the patch set is fine and nothing has slipped in the Kconfig
+dependencies (typically my weakest part of Buildroot contributions).
+
+Best regards,
+-Adrian
+
+Adrian Perez de Castro (3):
+  package/wpebackend-rdk: new package
+  package/cog: depend on wpebackend-fdo only if needed
+  package/wpewebkit: do not depend on wpebackend-fdo
+
+ package/Config.in                          |  1 +
+ package/cog/Config.in                      | 28 ++++++++++-
+ package/cog/cog.mk                         | 13 +++--
+ package/wpebackend-rdk/Config.in           | 57 ++++++++++++++++++++++
+ package/wpebackend-rdk/wpebackend-rdk.hash |  5 ++
+ package/wpebackend-rdk/wpebackend-rdk.mk   | 43 ++++++++++++++++
+ package/wpewebkit/Config.in                |  9 ++--
+ package/wpewebkit/wpewebkit.mk             |  2 +-
+ 8 files changed, 147 insertions(+), 11 deletions(-)
+ create mode 100644 package/wpebackend-rdk/Config.in
+ create mode 100644 package/wpebackend-rdk/wpebackend-rdk.hash
+ create mode 100644 package/wpebackend-rdk/wpebackend-rdk.mk
+
+--
 2.43.0
 
 _______________________________________________
