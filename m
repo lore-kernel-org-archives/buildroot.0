@@ -4,56 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19D0AC4828F
-	for <buildroot@archiver.kernel.org>; Thu,  8 Feb 2024 11:12:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B220FC4828F
+	for <buildroot@archiver.kernel.org>; Thu,  8 Feb 2024 11:28:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1F3FD846F0;
-	Thu,  8 Feb 2024 11:12:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6BC478516F;
+	Thu,  8 Feb 2024 11:28:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bGPcH8pRmZOP; Thu,  8 Feb 2024 11:12:23 +0000 (UTC)
+	with ESMTP id kLCmGf6G3YNv; Thu,  8 Feb 2024 11:28:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 131D584E51
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 53E7285175
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 131D584E51;
-	Thu,  8 Feb 2024 11:12:23 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E16DE1BF267
- for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 11:12:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 53E7285175;
+	Thu,  8 Feb 2024 11:28:20 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B79F01BF267
+ for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 11:28:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DBBC642C95
- for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 11:12:20 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id ADF6041AFE
+ for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 11:28:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tz0k4FOA_ySI for <buildroot@lists.busybox.net>;
- Thu,  8 Feb 2024 11:12:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
- helo=relay9-d.mail.gandi.net; envelope-from=peko@48ers.dk; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9912242C88
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9912242C88
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9912242C88
- for <buildroot@buildroot.org>; Thu,  8 Feb 2024 11:12:18 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7ACD8FF80A;
- Thu,  8 Feb 2024 11:12:16 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@48ers.dk>) id 1rY2KF-002qtf-2X;
- Thu, 08 Feb 2024 12:12:15 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu,  8 Feb 2024 12:12:13 +0100
-Message-Id: <20240208111214.679980-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.2
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id x7CiHaw_Lj3Q for <buildroot@lists.busybox.net>;
+ Thu,  8 Feb 2024 11:28:15 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::634; helo=mail-ej1-x634.google.com;
+ envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 82C0840193
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 82C0840193
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com
+ [IPv6:2a00:1450:4864:20::634])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 82C0840193
+ for <buildroot@buildroot.org>; Thu,  8 Feb 2024 11:28:14 +0000 (UTC)
+Received: by mail-ej1-x634.google.com with SMTP id
+ a640c23a62f3a-a39e31e1aa9so91319766b.0
+ for <buildroot@buildroot.org>; Thu, 08 Feb 2024 03:28:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1707391692; x=1707996492;
+ h=content-transfer-encoding:in-reply-to:content-language:references
+ :cc:to:subject:from:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=Ya97RrdDla2Hgj7v8kwnmI5ImjMlMSL9SDCLpxRdDPY=;
+ b=MMngCtGRzYrvwo98v1qdM7H2CBxh0VHLNSGgfKxJyN3Qw8EUAq12whZRuHyen0cSgP
+ D8kEsxAw6UUjYLfhRRhZECBWA7cCLCpIC7auYd+SUzd391jVre0bkrMpjLd10ixpaS5/
+ IBysWf7mvb+5ISAR9X9CxWNvS410l7eaG39ENecSofslJ9YhJFWwvdemCU6TGUvJOQWY
+ 7LbmU1sMk7UF95TJBp7kqpy3rH2UtacPhNW7Dj3IYy6Q+Y6tzvlifXv58q8W2Iz6/D1U
+ q2vrLwIQVQ2soogDWCjf4PyjAZAPxFVRvkql0HzAnDBBr8gvg+rfxBaYe9WLr5OvF2x+
+ QsZQ==
+X-Gm-Message-State: AOJu0Yza0vuOHJz9ReUm8o0arziGxbLkobPoUV22wlU5FE21kLbUTOif
+ haPr0l0rfbEHzjqwePwoa0P446zVM1OKnWlC3w6ywNI+n2wJqem0ayvlEAM36Hc=
+X-Google-Smtp-Source: AGHT+IGox2TdxYMuzaRHdVdKZ7lPV9Zc3Ewj8vFUI0INu4sgWCgcYFzEYA8NNI4TUQkGwBqFsKV/jw==
+X-Received: by 2002:a17:906:538a:b0:a38:2bba:c4c7 with SMTP id
+ g10-20020a170906538a00b00a382bbac4c7mr4990971ejo.7.1707391692079; 
+ Thu, 08 Feb 2024 03:28:12 -0800 (PST)
+X-Forwarded-Encrypted: i=1;
+ AJvYcCVv5vO5GIin5VIss6ewxZu68Vzja8rBtvWypApnMd71zx03BMYSZabg2XpOVuvOKYUHSpth9ENvUsBTOc5OVQ4A8Bl/S7Q7BXvWjl1zdoY9P6vFIssXJC/wy9wvmYewfUtjLWbY7z4Ac8K5F0e/6EMMrvu6XCl0LJ3Lar/rAeSuC5iUDJtBlvoE/96hvGYvkIzJNwhu/uq95vQPRig6nkI=
+Received: from [10.1.0.163] (ip-188-118-3-185.reverse.destiny.be.
+ [188.118.3.185]) by smtp.gmail.com with ESMTPSA id
+ a21-20020a170906245500b00a381eb99d97sm1782577ejb.181.2024.02.08.03.28.11
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 08 Feb 2024 03:28:11 -0800 (PST)
+Message-ID: <454a12aa-fe40-4435-8c6e-5f020d960bb5@mind.be>
+Date: Thu, 8 Feb 2024 12:28:10 +0100
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: [Buildroot] [PATCH] package/libopenssl: security bump to version
- 3.2.1
+User-Agent: Mozilla Thunderbird
+To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+References: <20240110093850.2302133-1-james.hilliard1@gmail.com>
+ <20240110093850.2302133-6-james.hilliard1@gmail.com>
+Content-Language: en-US
+In-Reply-To: <20240110093850.2302133-6-james.hilliard1@gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1707391692; x=1707996492; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:content-language:references
+ :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+ :cc:subject:date:message-id:reply-to;
+ bh=Ya97RrdDla2Hgj7v8kwnmI5ImjMlMSL9SDCLpxRdDPY=;
+ b=hZduIbjOMswE1ZcuSVbGjpwbIVrqIdVeamQisCG9ke+IH9deY+ZJD2RIpXF20hSYq2
+ vP7BWCi7J3j6paRdJkKzBxnzTVtCLsNhAAImctLl28se8Emg5jssSPRzoRCguqJwny8n
+ PtSqY3fcUJMI2in2Nt5MW1kxc0/DbMk1bziLjlrSOLUA0ob6JQRnkQQD0i2QM2H8QJ4w
+ nflNBNd48B8oTp36Y1bDTvPDPzm+D636yrRk+eFNC4NlvXovyLLO6dnjGtq6AGBNSrCs
+ cp0W2gqRx64KUDscVCZWK2lgL0u1pwxBSzeFPJreG4U0Iez9PmbEx6eLS6Q/m2y799us
+ qB3Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=hZduIbjO
+Subject: Re: [Buildroot] [PATCH 6/6] package/python-pymupdf: bump to version
+ 1.23.9rc2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,278 +106,98 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: =?utf-8?q?Rapha=C3=ABl_M=C3=A9lotte_via_buildroot?=
+ <buildroot@buildroot.org>
+Reply-To: =?UTF-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= <raphael.melotte@mind.be>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>, Julien Olivain <ju.o@free.fr>,
+ Asaf Kahlon <asafka7@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-And drop the now upstreamed patches.
-
-Fixes the following (low severity) issues:
-
-- CVE-2023-6129 POLY1305 MAC implementation corrupts vector registers on
-  PowerPC
-  https://www.openssl.org/news/secadv/20240109.txt
-
-- CVE-2023-6237 Excessive time spent checking invalid RSA public keys
-  https://www.openssl.org/news/secadv/20240115.txt
-
-- CVE-2024-0727 PKCS12 Decoding crashes
-  https://www.openssl.org/news/secadv/20240125.txt
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...x-mispelling-of-extension-test-macro.patch |  30 -----
- ...x-genstr-genconf-option-in-asn1parse.patch |  42 ------
- ...en-asn1-oid-loader-to-invalid-inputs.patch | 122 ------------------
- package/libopenssl/libopenssl.hash            |   4 +-
- package/libopenssl/libopenssl.mk              |   2 +-
- 5 files changed, 3 insertions(+), 197 deletions(-)
- delete mode 100644 package/libopenssl/0004-riscv-Fix-mispelling-of-extension-test-macro.patch
- delete mode 100644 package/libopenssl/0005-Fix-genstr-genconf-option-in-asn1parse.patch
- delete mode 100644 package/libopenssl/0006-Harden-asn1-oid-loader-to-invalid-inputs.patch
-
-diff --git a/package/libopenssl/0004-riscv-Fix-mispelling-of-extension-test-macro.patch b/package/libopenssl/0004-riscv-Fix-mispelling-of-extension-test-macro.patch
-deleted file mode 100644
-index 93b191a61c..0000000000
---- a/package/libopenssl/0004-riscv-Fix-mispelling-of-extension-test-macro.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From 68c549df05892c16b99603b9a831c79c540f268c Mon Sep 17 00:00:00 2001
--From: Grant Nichol <me@grantnichol.com>
--Date: Fri, 22 Dec 2023 23:46:39 -0600
--Subject: [PATCH] riscv: Fix mispelling of extension test macro
--
--When refactoring the riscv extension test macros,
--RISCV_HAS_ZKND_AND_ZKNE was mispelled.
--
--Upstream: https://github.com/openssl/openssl/pull/23139
--Signed-off-by: Grant Nichol <me@grantnichol.com>
-----
-- providers/implementations/ciphers/cipher_aes_xts_hw.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/providers/implementations/ciphers/cipher_aes_xts_hw.c b/providers/implementations/ciphers/cipher_aes_xts_hw.c
--index b35b71020e..65adc47d1f 100644
----- a/providers/implementations/ciphers/cipher_aes_xts_hw.c
--+++ b/providers/implementations/ciphers/cipher_aes_xts_hw.c
--@@ -285,7 +285,7 @@ static const PROV_CIPHER_HW aes_xts_rv32i_zbkb_zknd_zkne = {                   \
-- # define PROV_CIPHER_HW_select_xts()                                           \
-- if (RISCV_HAS_ZBKB_AND_ZKND_AND_ZKNE())                                        \
--     return &aes_xts_rv32i_zbkb_zknd_zkne;                                      \
---if (RISCV_HAS_ZKND_ZKNE())                                                     \
--+if (RISCV_HAS_ZKND_AND_ZKNE())                                                     \
--     return &aes_xts_rv32i_zknd_zkne;
-- # else
-- /* The generic case */
----
--2.43.0
--
-diff --git a/package/libopenssl/0005-Fix-genstr-genconf-option-in-asn1parse.patch b/package/libopenssl/0005-Fix-genstr-genconf-option-in-asn1parse.patch
-deleted file mode 100644
-index 9fa36d83be..0000000000
---- a/package/libopenssl/0005-Fix-genstr-genconf-option-in-asn1parse.patch
-+++ /dev/null
-@@ -1,42 +0,0 @@
--From 749fcc0e3ce796474a15d6fac221e57daeacff1e Mon Sep 17 00:00:00 2001
--From: Neil Horman <nhorman@openssl.org>
--Date: Tue, 5 Dec 2023 14:50:01 -0500
--Subject: [PATCH] Fix genstr/genconf option in asn1parse
--
--At some point the asn1parse applet was changed to default the inform to
--PEM, and defalt input file to stdin.  Doing so broke the -genstr|conf options,
--in that, before we attempt to generate an ASN1 block from the provided
--genstr string, we attempt to read a PEM input from stdin.  As a result,
--this command:
--openssl asn1parse -genstr OID:1.2.3.4
--hangs because we are attempting a blocking read on stdin, waiting for
--data that never arrives
--
--Fix it by giving priority to genstr|genconf, such that, if set, will just run
--do_generate on that string and exit
--
--Reviewed-by: Hugo Landau <hlandau@openssl.org>
--Reviewed-by: Tomas Mraz <tomas@openssl.org>
--(Merged from https://github.com/openssl/openssl/pull/22957)
--Upstream: https://github.com/openssl/openssl/commit/749fcc0e3ce796474a15d6fac221e57daeacff1e
--Signed-off-by: Martin Kurbanov <mmkurbanov@salutedevices.com>
-----
-- apps/asn1parse.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/apps/asn1parse.c b/apps/asn1parse.c
--index 097b0cc1ed..6597a6180b 100644
----- a/apps/asn1parse.c
--+++ b/apps/asn1parse.c
--@@ -178,7 +178,7 @@ int asn1parse_main(int argc, char **argv)
-- 
--     if ((buf = BUF_MEM_new()) == NULL)
--         goto end;
---    if (informat == FORMAT_PEM) {
--+    if (genstr == NULL && informat == FORMAT_PEM) {
--         if (PEM_read_bio(in, &name, &header, &str, &num) != 1) {
--             BIO_printf(bio_err, "Error reading PEM file\n");
--             ERR_print_errors(bio_err);
---- 
--2.40.0
--
-diff --git a/package/libopenssl/0006-Harden-asn1-oid-loader-to-invalid-inputs.patch b/package/libopenssl/0006-Harden-asn1-oid-loader-to-invalid-inputs.patch
-deleted file mode 100644
-index 299ecbc2ed..0000000000
---- a/package/libopenssl/0006-Harden-asn1-oid-loader-to-invalid-inputs.patch
-+++ /dev/null
-@@ -1,122 +0,0 @@
--From a552c23c6502592c1b3c67d93dd7e5ffbe958aa4 Mon Sep 17 00:00:00 2001
--From: Neil Horman <nhorman@openssl.org>
--Date: Tue, 5 Dec 2023 15:24:20 -0500
--Subject: [PATCH] Harden asn1 oid loader to invalid inputs
--
--In the event that a config file contains this sequence:
--=======
--openssl_conf = openssl_init
--
--config_diagnostics = 1
--
--[openssl_init]
--oid_section = oids
--
--[oids]
--testoid1 = 1.2.3.4.1
--testoid2 = A Very Long OID Name, 1.2.3.4.2
--testoid3 = ,1.2.3.4.3
--======
--
--The leading comma in testoid3 can cause a heap buffer overflow, as the
--parsing code will move the string pointer back 1 character, thereby
--pointing to an invalid memory space
--
--correct the parser to detect this condition and handle it by treating it
--as if the comma doesn't exist (i.e. an empty long oid name)
--
--Reviewed-by: Hugo Landau <hlandau@openssl.org>
--Reviewed-by: Tomas Mraz <tomas@openssl.org>
--(Merged from https://github.com/openssl/openssl/pull/22957)
--Upstream: https://github.com/openssl/openssl/commit/a552c23c6502592c1b3c67d93dd7e5ffbe958aa4
--Signed-off-by: Martin Kurbanov <mmkurbanov@salutedevices.com>
-----
-- apps/asn1parse.c                  |  2 +-
-- crypto/asn1/asn_moid.c            |  4 ++++
-- test/recipes/04-test_asn1_parse.t | 26 ++++++++++++++++++++++++++
-- test/test_asn1_parse.cnf          | 12 ++++++++++++
-- 4 files changed, 43 insertions(+), 1 deletion(-)
-- create mode 100644 test/recipes/04-test_asn1_parse.t
-- create mode 100644 test/test_asn1_parse.cnf
--
--diff --git a/apps/asn1parse.c b/apps/asn1parse.c
--index 6597a6180b..bf62f85947 100644
----- a/apps/asn1parse.c
--+++ b/apps/asn1parse.c
--@@ -178,7 +178,7 @@ int asn1parse_main(int argc, char **argv)
-- 
--     if ((buf = BUF_MEM_new()) == NULL)
--         goto end;
---    if (genstr == NULL && informat == FORMAT_PEM) {
--+    if (genconf == NULL && genstr == NULL && informat == FORMAT_PEM) {
--         if (PEM_read_bio(in, &name, &header, &str, &num) != 1) {
--             BIO_printf(bio_err, "Error reading PEM file\n");
--             ERR_print_errors(bio_err);
--diff --git a/crypto/asn1/asn_moid.c b/crypto/asn1/asn_moid.c
--index 6f816307af..1e183f4f18 100644
----- a/crypto/asn1/asn_moid.c
--+++ b/crypto/asn1/asn_moid.c
--@@ -67,6 +67,10 @@ static int do_create(const char *value, const char *name)
--     if (p == NULL) {
--         ln = name;
--         ostr = value;
--+    } else if (p == value) {
--+        /* we started with a leading comma */
--+        ln = name;
--+        ostr = p + 1;
--     } else {
--         ln = value;
--         ostr = p + 1;
--diff --git a/test/recipes/04-test_asn1_parse.t b/test/recipes/04-test_asn1_parse.t
--new file mode 100644
--index 0000000000..f3af436592
----- /dev/null
--+++ b/test/recipes/04-test_asn1_parse.t
--@@ -0,0 +1,26 @@
--+#! /usr/bin/env perl
--+# Copyright 2023 The OpenSSL Project Authors. All Rights Reserved.
--+#
--+# Licensed under the Apache License 2.0 (the "License").  You may not use
--+# this file except in compliance with the License.  You can obtain a copy
--+# in the file LICENSE in the source distribution or at
--+# https://www.openssl.org/source/license.html
--+
--+use strict;
--+use OpenSSL::Test qw(:DEFAULT srctop_file);
--+use OpenSSL::Test::Utils;
--+
--+setup("test_asn1_parse");
--+
--+plan tests => 3;
--+
--+$ENV{OPENSSL_CONF} = srctop_file("test", "test_asn1_parse.cnf");
--+
--+ok(run(app(([ 'openssl', 'asn1parse',
--+              '-genstr', 'OID:1.2.3.4.1']))));
--+
--+ok(run(app(([ 'openssl', 'asn1parse',
--+              '-genstr', 'OID:1.2.3.4.2']))));
--+
--+ok(run(app(([ 'openssl', 'asn1parse',
--+              '-genstr', 'OID:1.2.3.4.3']))));
--diff --git a/test/test_asn1_parse.cnf b/test/test_asn1_parse.cnf
--new file mode 100644
--index 0000000000..5f0305657e
----- /dev/null
--+++ b/test/test_asn1_parse.cnf
--@@ -0,0 +1,12 @@
--+openssl_conf = openssl_init
--+
--+# Comment out the next line to ignore configuration errors
--+config_diagnostics = 1
--+
--+[openssl_init]
--+oid_section = oids
--+
--+[oids]
--+testoid1 = 1.2.3.4.1
--+testoid2 = A Very Long OID Name, 1.2.3.4.2
--+testoid3 = ,1.2.3.4.3
---- 
--2.40.0
--
-diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
-index 9e09e12461..841d4b4cfd 100644
---- a/package/libopenssl/libopenssl.hash
-+++ b/package/libopenssl/libopenssl.hash
-@@ -1,5 +1,5 @@
--# From https://www.openssl.org/source/openssl-3.2.0.tar.gz.sha256
--sha256  14c826f07c7e433706fb5c69fa9e25dab95684844b4c962a2cf1bf183eb4690e  openssl-3.2.0.tar.gz
-+# From https://www.openssl.org/source/openssl-3.2.1.tar.gz.sha256
-+sha256  83c7329fe52c850677d75e5d0b0ca245309b97e8ecbcfdc1dfdc4ab9fac35b39  openssl-3.2.1.tar.gz
- 
- # License files
- sha256  7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a  LICENSE.txt
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index 7dc6d93256..feb5026c02 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBOPENSSL_VERSION = 3.2.0
-+LIBOPENSSL_VERSION = 3.2.1
- LIBOPENSSL_SITE = https://www.openssl.org/source
- LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
- LIBOPENSSL_LICENSE = Apache-2.0
--- 
-2.39.2
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgSmFtZXMsIGFsbCwKClRoYW5rcyBmb3IgdGhlIHBhdGNoZXMhCkkgYWRkZWQgYSBmZXcgY29t
+bWVudHMvcXVlc3Rpb25zIGJlbG93LgoKT24gMS8xMC8yNCAxMDozOCwgSmFtZXMgSGlsbGlhcmQg
+d3JvdGU6Cj4gTWlncmF0ZSB0byBpbiB0cmVlIHBlcDUxNyBiYXNlZCBidWlsZCBiYWNrZW5kLgo+
+IAoKRG9lcyB0aGlzIG5ldyB2ZXJzaW9uIGNyb3NzLWNvbXBpbGUgZm9yIHlvdT8KSSBnZXQgdGhl
+IGZvbGxvd2luZyBlcnJvciBiZWNhdXNlIHRoZSB3cm9uZyBweXRob24tY29uZmlnIGlzIHVzZWQg
+KEkgb25seSBicmllZmx5IHRyaWVkIGFybXY1IHNvIGZhcik6CgplcnJvcjogI2Vycm9yICJMT05H
+X0JJVCBkZWZpbml0aW9uIGFwcGVhcnMgd3JvbmcgZm9yIHBsYXRmb3JtIChiYWQgZ2NjL2dsaWJj
+IGNvbmZpZz8pLiIKCj4gTm90ZSB0aGF0IHZlcnNpb24gMS4yMy44IGlzIG5vdCBjb21wYXRpYmxl
+IHdpdGggbXVwZGYgMS4yMy44IGR1ZSB0bwo+IGhlYWRlciBjb25mbGljdCBidWdzIHRoYXQgd2Vy
+ZSBmaXhlZCBhZnRlciB0aGUgMS4yMy44IHJlbGVhc2UuCj4gCj4gU2lnbmVkLW9mZi1ieTogSmFt
+ZXMgSGlsbGlhcmQgPGphbWVzLmhpbGxpYXJkMUBnbWFpbC5jb20+Cj4gLS0tCj4gICBwYWNrYWdl
+L3B5dGhvbi1weW11cGRmL3B5dGhvbi1weW11cGRmLmhhc2ggfCAgNCArLS0KPiAgIHBhY2thZ2Uv
+cHl0aG9uLXB5bXVwZGYvcHl0aG9uLXB5bXVwZGYubWsgICB8IDMzICsrKysrKysrKysrKy0tLS0t
+LS0tLS0KPiAgIDIgZmlsZXMgY2hhbmdlZCwgMjAgaW5zZXJ0aW9ucygrKSwgMTcgZGVsZXRpb25z
+KC0pCj4gCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvcHl0aG9uLXB5bXVwZGYvcHl0aG9uLXB5bXVw
+ZGYuaGFzaCBiL3BhY2thZ2UvcHl0aG9uLXB5bXVwZGYvcHl0aG9uLXB5bXVwZGYuaGFzaAo+IGlu
+ZGV4IDlmZDgxNTAwODguLmU1NzY1MmFiNjkgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9weXRob24t
+cHltdXBkZi9weXRob24tcHltdXBkZi5oYXNoCj4gKysrIGIvcGFja2FnZS9weXRob24tcHltdXBk
+Zi9weXRob24tcHltdXBkZi5oYXNoCj4gQEAgLTEsNSArMSw1IEBACj4gICAjIG1kNSwgc2hhMjU2
+IGZyb20gaHR0cHM6Ly9weXBpLm9yZy9weXBpL3B5bXVwZGYvanNvbgo+IC1tZDUgIDQ2OGZlNTYz
+NzVhMWZjYTk5ZTgzZmUwYWEwYjlmOGJkICBQeU11UERGLTEuMjIuMC50YXIuZ3oKPiAtc2hhMjU2
+ICA2ZTE2OTRlNWMwY2Q4YjkyZDUwM2E1MDZlZThlNGJhMWJlZDc2ODUyOGRlNTg2ODg5ZDNlYzkw
+ZTlkYzRhN2QzICBQeU11UERGLTEuMjIuMC50YXIuZ3oKPiArbWQ1ICBlYjBiNjVlYWEwNjNjMjQx
+N2Q4OWM1NDUzZTdjODJhZCAgUHlNdVBERi0xLjIzLjlyYzIudGFyLmd6Cj4gK3NoYTI1NiAgYmE2
+ZmRkOTA3ODE0YWNiOTY4Y2U2NjlmNDliMGMxNGVmOWVmOGIxZTJkMTYxODI5YjdhMzE0NjFhYWIw
+NDQyOSAgUHlNdVBERi0xLjIzLjlyYzIudGFyLmd6Cj4gICAjIExvY2FsbHkgY29tcHV0ZWQgc2hh
+MjU2IGNoZWNrc3Vtcwo+ICAgc2hhMjU2ICA1N2M4ZmYzM2M5YzBjZmMzZWYwMGU2NTBhMWNjOTEw
+ZDdlZTQ3OWE4YmM1MDlmNmM5MjA5YTdjMmExMTM5OWQ2ICBDT1BZSU5HCj4gZGlmZiAtLWdpdCBh
+L3BhY2thZ2UvcHl0aG9uLXB5bXVwZGYvcHl0aG9uLXB5bXVwZGYubWsgYi9wYWNrYWdlL3B5dGhv
+bi1weW11cGRmL3B5dGhvbi1weW11cGRmLm1rCj4gaW5kZXggNjM5Y2UwZTAwZS4uYWM3NmFmYTNm
+NiAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL3B5dGhvbi1weW11cGRmL3B5dGhvbi1weW11cGRmLm1r
+Cj4gKysrIGIvcGFja2FnZS9weXRob24tcHltdXBkZi9weXRob24tcHltdXBkZi5tawo+IEBAIC01
+LDI1ICs1LDI4IEBACj4gICAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+ICAgCj4gICAjIHB5dGhv
+bi1weW11cGRmJ3MgdmVyc2lvbiBtdXN0IG1hdGNoIG11cGRmJ3MgdmVyc2lvbgo+IC1QWVRIT05f
+UFlNVVBERl9WRVJTSU9OID0gMS4yMi4wCj4gK1BZVEhPTl9QWU1VUERGX1ZFUlNJT04gPSAxLjIz
+LjlyYzIKPiAgIFBZVEhPTl9QWU1VUERGX1NPVVJDRSA9IFB5TXVQREYtJChQWVRIT05fUFlNVVBE
+Rl9WRVJTSU9OKS50YXIuZ3oKPiAtUFlUSE9OX1BZTVVQREZfU0lURSA9IGh0dHBzOi8vZmlsZXMu
+cHl0aG9uaG9zdGVkLm9yZy9wYWNrYWdlcy8yOC9iYS9kNmJiNmZkNjc4ZTgzOTZkN2I5NDQ4NzAy
+ODZmYjI1ZmQ2ZjQ5OWI4Y2I1OTliNTQzNmM4ZjcyNWFkYmYKPiAtUFlUSE9OX1BZTVVQREZfU0VU
+VVBfVFlQRSA9IHNldHVwdG9vbHMKPiArUFlUSE9OX1BZTVVQREZfU0lURSA9IGh0dHBzOi8vZmls
+ZXMucHl0aG9uaG9zdGVkLm9yZy9wYWNrYWdlcy9iNC9mZi9kYjQ0MzAzZDYwYjhjYzMxMGE3MTg3
+ZDUwMGM3NzY1YjNiNDhhYTExM2M4NjQyOGQ1ZDFjMzkwYjhmYjUKPiArUFlUSE9OX1BZTVVQREZf
+U0VUVVBfVFlQRSA9IHBlcDUxNwo+ICAgUFlUSE9OX1BZTVVQREZfTElDRU5TRSA9IEFHUEwtMy4w
+Kwo+ICAgUFlUSE9OX1BZTVVQREZfTElDRU5TRV9GSUxFUyA9IENPUFlJTkcKPiAgICMgTm8gbGlj
+ZW5zZSBmaWxlIGluY2x1ZGVkIGluIHBpcCwgYnV0IGl0J3MgcHJlc2VudCBvbiBnaXRodWIKPiAt
+UFlUSE9OX1BZTVVQREZfREVQRU5ERU5DSUVTID0gZnJlZXR5cGUgaG9zdC1zd2lnIG11cGRmIHps
+aWIKPiArUFlUSE9OX1BZTVVQREZfREVQRU5ERU5DSUVTID0gXAo+ICsJaG9zdC1weXRob24tbGli
+Y2xhbmcgXAoKSXNuJ3QgbGliY2xhbmcgb25seSByZXF1aXJlZCBieSB0aGUgUHlNdVBERiBwbHVt
+YmluZyB3aGVuIGl0IGJ1aWxkcyB0aGUgYnVuZGxlZCBNdVBERj8KSW4gb3VyIGNhc2Ugc2luY2Ug
+d2UncmUgYnVpbGRpbmcgTXVQREYgYXMgYSBzZXBhcmF0ZSBwYWNrYWdlLCB3ZSBob3BlZnVsbHkg
+ZG9uJ3QgbmVlZCBpdC4uLgoKPiArCWhvc3QtcHl0aG9uLXBzdXRpbCBcCgogRnJvbSBhIHF1aWNr
+IGxvb2sgYXQgdGhlIFB5TXVQREYgY29kZSwgdGhpcyBzZWVtcyB0byBiZSBuZWVkZWQgb25seSBm
+b3IgYSBzaW5nbGUgdGVzdCAod2hpY2ggd2UgZG9uJ3QgcnVuLCBzbyB3ZSBkb24ndCBuZWVkIGl0
+KS4KCj4gKwlob3N0LXB5dGhvbi1zZXR1cHRvb2xzIFwKPiArCWhvc3QtcHl0aG9uLXN3aWcgXAoK
+VGhlIHdheSBJIHVuZGVyc3RhbmQgaXQsIFB5TXVQREYgYWRkZWQgdGhpcyBob3N0LXB5dGhvbi1z
+d2lnIGRlcGVuZGVuY3kgYXMgYSB3YXkgdG8gbWFrZSBzdXJlIHN3aWcgaXMgYXZhaWxhYmxlIHdo
+ZW4gYnVpbGRpbmcuClNpbmNlIHdlIGFscmVhZHkgaGF2ZSBob3N0LXN3aWcgYXMgYSBkZXBlbmRl
+bmN5LCB3ZSBjYW4gcHJvYmFibHkgdXNlIHRoYXQgb25lIHRvIGJ1aWxkIGFzIFlhbm4gc3VnZ2Vz
+dGVkPwoKPiArCWhvc3Qtc3dpZyBcCj4gKwlmcmVldHlwZSBcCj4gKwltdXBkZiBcCj4gKwl6bGli
+Cj4gICAKPiAtUFlUSE9OX1BZTVVQREZfRU5WID0gQ0ZMQUdTPSItSSQoU1RBR0lOR19ESVIpL3Vz
+ci9pbmNsdWRlL211cGRmIC1JJChTVEFHSU5HX0RJUikvdXNyL2luY2x1ZGUvZnJlZXR5cGUyIgo+
+IC0KPiAtIyBXZSBuZWVkIHRvIHJlbW92ZSB0aGUgb3JpZ2luYWwgcGF0aHMgYXMgd2UgcHJvdmlk
+ZSB0aGVtIGluIHRoZSBDRkxBR1M6Cj4gLWRlZmluZSBQWVRIT05fUFlNVVBERl9SRU1PVkVfUEFU
+SFMKPiAtCXNlZCAtaSAiL1wvdXNyXC9pbmNsdWRlXC9tdXBkZi9kIiAkKEBEKS9zZXR1cC5weQo+
+IC0Jc2VkIC1pICIvXC91c3JcL2luY2x1ZGVcL2ZyZWV0eXBlMi9kIiAkKEBEKS9zZXR1cC5weQo+
+IC0Jc2VkIC1pICIvXC91c3JcL2xvY2FsXC9pbmNsdWRlXC9tdXBkZi9kIiAkKEBEKS9zZXR1cC5w
+eQo+IC0Jc2VkIC1pICIvbXVwZGZcL3RoaXJkcGFydHlcL2ZyZWV0eXBlXC9pbmNsdWRlL2QiICQo
+QEQpL3NldHVwLnB5Cj4gLWVuZGVmCj4gLQo+IC1QWVRIT05fUFlNVVBERl9QT1NUX1BBVENIX0hP
+T0tTID0gUFlUSE9OX1BZTVVQREZfUkVNT1ZFX1BBVEhTCj4gK1BZVEhPTl9QWU1VUERGX0VOViA9
+IFwKPiArCVBZTVVQREZfSU5DTFVERVM9IiQoU1RBR0lOR19ESVIpL3Vzci9pbmNsdWRlL2ZyZWV0
+eXBlMjokKFNUQUdJTkdfRElSKS91c3IvaW5jbHVkZSIgXAo+ICsJUFlNVVBERl9NVVBERl9MSUI9
+IiQoU1RBR0lOR19ESVIpL3Vzci9saWIiIFwKPiArCVBZTVVQREZfU0VUVVBfRkxBVk9VUj1wIFw+
+ICsJUFlNVVBERl9TRVRVUF9JTVBMRU1FTlRBVElPTlM9YSBcCgpJdCdzIHdvcnRoIG5vdGluZyB0
+aGF0IFB5TXVQREYgaXMgZ3JhZHVhbGx5IHN3aXRjaGluZyB0byBhIG5ldyBpbXBsZW1lbnRhdGlv
+biB3aGljaCB3aWxsIHJlcXVpcmUgTXVQREYgdG8gYmUgYnVpbHQgd2l0aCBweXRob24gYmluZGlu
+Z3MgaW4gdGhlIGZ1dHVyZSAoYnV0IGZvciBub3csIGJvdGggaW1wbGVtZW50YXRpb25zIGFyZSBz
+dGlsbCBhdmFpbGFibGUgQUZBSUNUKS4KCj4gKwlQWU1VUERGX1NFVFVQX01VUERGX0JVSUxEPQo+
+ICAgCj4gICAkKGV2YWwgJChweXRob24tcGFja2FnZSkpCgpUaGVyZSBzZWVtIHRvIGJlIG1vcmUg
+d29yayBuZWVkZWQgdG8gZ2V0IHRoaXMgbmV3IHZlcnNpb24gdG8gd29yaywgSSdsbCB0cnkgdG8g
+aGF2ZSBhIGNsb3NlciBsb29rIGF0IGl0IGluIHRoZSBuZXh0IGZldyBkYXlzLgoKCktpbmQgcmVn
+YXJkcywKClJhcGhhw6tsCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0
+cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
