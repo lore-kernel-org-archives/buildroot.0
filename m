@@ -4,94 +4,103 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B48AAC4828F
-	for <buildroot@archiver.kernel.org>; Thu,  8 Feb 2024 09:56:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B76E4C48260
+	for <buildroot@archiver.kernel.org>; Thu,  8 Feb 2024 10:26:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 56A2941A68;
-	Thu,  8 Feb 2024 09:56:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E531041C60;
+	Thu,  8 Feb 2024 10:26:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3j1xDM6n4-Sh; Thu,  8 Feb 2024 09:56:33 +0000 (UTC)
+	with ESMTP id KrZfrT6wf1gl; Thu,  8 Feb 2024 10:26:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 16E50403B9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 47D6641BEB
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 16E50403B9;
-	Thu,  8 Feb 2024 09:56:33 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D2F071BF831
- for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 09:56:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 47D6641BEB;
+	Thu,  8 Feb 2024 10:26:23 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2DA711BF2A1
+ for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 10:26:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C027484DA2
- for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 09:56:30 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1AA0A61683
+ for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 10:26:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wP0KxUeCnl7b for <buildroot@lists.busybox.net>;
- Thu,  8 Feb 2024 09:56:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hH46TKdhD-d9 for <buildroot@lists.busybox.net>;
+ Thu,  8 Feb 2024 10:26:21 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::130; helo=mail-lf1-x130.google.com;
- envelope-from=roykollensvendsen@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7E21084D91
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E21084D91
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com
- [IPv6:2a00:1450:4864:20::130])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7E21084D91
- for <buildroot@buildroot.org>; Thu,  8 Feb 2024 09:56:29 +0000 (UTC)
-Received: by mail-lf1-x130.google.com with SMTP id
- 2adb3069b0e04-51142b5b76dso2654052e87.2
- for <buildroot@buildroot.org>; Thu, 08 Feb 2024 01:56:29 -0800 (PST)
+ client-ip=2a00:1450:4864:20::62b; helo=mail-ej1-x62b.google.com;
+ envelope-from=antoine.coutant@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5AD2461604
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5AD2461604
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
+ [IPv6:2a00:1450:4864:20::62b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5AD2461604
+ for <buildroot@buildroot.org>; Thu,  8 Feb 2024 10:26:19 +0000 (UTC)
+Received: by mail-ej1-x62b.google.com with SMTP id
+ a640c23a62f3a-a39e31e1aa9so81892166b.0
+ for <buildroot@buildroot.org>; Thu, 08 Feb 2024 02:26:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707386187; x=1707990987;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=GlztSVVMGm8NmyrmcWgwLBE2NMkJivNTUTGjTyo0eU0=;
- b=GDuyb5zu9Hkt9RiaJ8mBdyYLhuXCYi5QLe1/dg4Z+Ix206pXzFOYJIh2YC1t3oFONc
- Mdx+haY+FpNXH7AXNmQqcWojupHwFQeR4Yk6u3bErh5roO3kddbZ7bPdgrKMzqWDf9xC
- NqFlHRk/qJalHZaN+juuRomyskDUjvmb+QUf/vvxr2y45rarg8W1iT/JkEQW+/LDi+nu
- tII/w6eVoIxJZ+dOzfVV3um6m1KOTeEaxhuU1sN+5jt1esNazYriEX/a8zodDK3npgMP
- FATKxaRRZz4/rdHAZ+zTwXyWQnPM1g//BQ1pJLJ2oa1dUNqohwXfsZSDhzbPY1h/wBut
- RAmQ==
-X-Gm-Message-State: AOJu0Yx0V6qWXyEuNsdiWg2co+x/bAqIknImnjVLSTkyGaIeQUW9Yfvt
- Ahc58lx8sUPHfBCr+5WKX+AKQomOOqb/ctLXhi1ruztsoDgUnabc8EYY7zF/abo=
-X-Google-Smtp-Source: AGHT+IGjAUJGEwm2Eyl2ziKD3BDnFNMK4h3FVW1bipdw1hkSySv4UMo6rPEnj3J99Gqjb99zJ2lx3Q==
-X-Received: by 2002:a05:6512:b84:b0:511:4975:30b1 with SMTP id
- b4-20020a0565120b8400b00511497530b1mr6963517lfv.0.1707386187202; 
- Thu, 08 Feb 2024 01:56:27 -0800 (PST)
+ d=1e100.net; s=20230601; t=1707387978; x=1707992778;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=+3Twr1jA3tNwce4rZaWlAqp4nTPFgDdiNqSoSXTiHmM=;
+ b=XO3cxVM6sL2zPIr8v+tVKK/QbAJ/Wzy6svcp0GazHeg6uSj2KGR2yBO9FRbWSkyXtD
+ XAqT16FgK9UppJFHjciY9xa3UFB6pY1DGAI5wqRlCLZdylN1F+o9UeufujwV0t7DCz+8
+ 14CfbNvVzPSRb4HBNDBG+REHWft11jCk9jIKpdqZB3IcZrcoxhalDwED8GXgM6yc7Gd2
+ Tnk37yGB1clIWPANjTyxEzbkLTB328yBRlHKG9q/4XBOehouQJykYx/qJFnWIWi0RxSq
+ F1MhUONGHLowKck0h0QFN/DXKVX7tcNgrYXPtUOF2au5w4vgFEGq9zdyxXs0SKeM3n/i
+ 35Cw==
+X-Gm-Message-State: AOJu0YyiBsI+tm7ZZUacv71z8+UkhWLiX+D6/VZL3JHrKZDTAkuuTmNu
+ LdJcgDDcRfwvzX3SIjrJp4bp3ZdKnyxNDvBxYV5hnm+Aw5I9GFQgLC9lZi0JtEP+doz2il3PZi8
+ z
+X-Google-Smtp-Source: AGHT+IFFuO/sp47Mx2Bj8RNjyN1MDERU4K4fEZL7ZquTrF0fm/IZVZ1KP+Jn4EBfh6r5RQ5rG7In/g==
+X-Received: by 2002:a17:907:507:b0:a38:43c1:68d7 with SMTP id
+ wj7-20020a170907050700b00a3843c168d7mr3844137ejb.72.1707387978061; 
+ Thu, 08 Feb 2024 02:26:18 -0800 (PST)
 X-Forwarded-Encrypted: i=1;
- AJvYcCV9OEdlxnDcBrN9l3rcrkCIjr8z88wfpiKWjKKyctxc0oNzZtdMhaokKNGvQPbuEcKSVqWD8JA8yqy9rOuuxX1xHibaj4BK/jREjbJ23lJQG8RMRdLuDcg7/78P4VVEG7MeKbIWxAeeqn2HcP1Sim+XRx7xAqOOU1Zz2GVeXkYo6HwMwWsp1UxijX4Ys583qA1s0nA9J9o=
-Received: from precision7530-arch-roy.lan ([79.161.254.12])
+ AJvYcCUOcYdZahKBA+gUz5UXRmDziZeAJWS+aqCc/qGMUnxGx78dPm3nZ5kFqUX6QSc9m9LhPtKQ9xHJLaZJCXdVvrTx96yMAZNj4nllTo+nErYgjVXbkwf/occOUMrc2EpbIRP+Ys1ykujUPRg4lSRSaR0i
+Received: from [10.5.0.41] (202-122-190-109.dsl.ovh.fr. [109.190.122.202])
  by smtp.gmail.com with ESMTPSA id
- d23-20020a056512369700b005115edd71c9sm491275lfs.165.2024.02.08.01.56.26
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 08 Feb 2024 01:56:26 -0800 (PST)
-From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-X-Google-Original-From: Roy Kollen Svendsen
- <roy.kollen.svendsen@akersolutions.com>
-To: buildroot@buildroot.org
-Date: Thu,  8 Feb 2024 10:56:14 +0100
-Message-ID: <20240208095615.2397148-1-roy.kollen.svendsen@akersolutions.com>
-X-Mailer: git-send-email 2.43.0
+ jl16-20020a17090775d000b00a384365e3b9sm1734526ejc.195.2024.02.08.02.26.17
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 08 Feb 2024 02:26:17 -0800 (PST)
+Message-ID: <e909675f-1e8f-49af-b3cb-01c44ced4705@smile.fr>
+Date: Thu, 8 Feb 2024 11:25:22 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20240202093625.1409559-1-antoine.coutant@smile.fr>
+ <20240202093625.1409559-3-antoine.coutant@smile.fr>
+ <ZcOeEMfwX4XlRXO7@landeda>
+Content-Language: en-US
+From: Antoine Coutant <antoine.coutant@smile.fr>
+In-Reply-To: <ZcOeEMfwX4XlRXO7@landeda>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1707386187; x=1707990987; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=GlztSVVMGm8NmyrmcWgwLBE2NMkJivNTUTGjTyo0eU0=;
- b=g5DTz+X/PLRdge7TCSH+xy/uv9JBDIiqcTrjsmf+8rMJjbT9vZG3VwTDTZh02/w2nP
- AB8Ac3TXzMoVSSK8Pu8lQu/hfa782nFVD9FXMxFGqVBVsXS42UPrgNAmU6CopGDN8zu/
- diqqmPcgb78p8+C0BHva/n363j6fsbaQsFIuPhhS7Bdi84OdBVWkAtJ5UxAOXfLph/EO
- Q4G99J85Nkz1VKXzm/ryfEJHt+TrkT4CvOL6oeyRtQMD2ESb7qBhkz9w1+zl9A/uBRNI
- bAmzhajhPar6E2mSrXguP3imM8T6vWDRsTqrW7bhcVbt4aM+S5v5ZDv1EJlpQT/SdG9X
- pjXA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1707387978; x=1707992778;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=+3Twr1jA3tNwce4rZaWlAqp4nTPFgDdiNqSoSXTiHmM=;
+ b=trHAdXticCpOjFIkFJq1iUGv9t2vl/TyyLB7p6wPVmll5Wwz4gWgL3vfYn+n54C70e
+ ZjrVVYoo6JsU4Dyh8gD1iCr2Q9QFGSvAVM+NUF1n+FxuIhzKGAQTnH8nMt3jtBBPbn3l
+ XuOzKDDfO1eyllEp+Vnp7fC8nctkWI74DL27ArMUfB/AuZreUu4yI4A2wjs1nKdIhrt2
+ UH+09m+8O0uYVIo4qdxrXl8jucwroXyBFjvce1hhoJvY5vg8A2pQ55gOGCDKaqNWAVrf
+ uKQelpxPEtTcHbp1n0v0wxi6/aFEQSpAtzgxkEbIIE7+K81Tsh1x5+soaRSd5BlGLO1Z
+ hMFw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=g5DTz+X/
-Subject: [Buildroot] [PATCH] package/python3: fix install
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=smile-fr.20230601.gappssmtp.com
+ header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=trHAdXti
+Subject: Re: [Buildroot] [PATCH v4 2/7] package/pkg-meson.mk: add rust
+ cross-compiler support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,67 +112,122 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Roy Kollen Svendsen <roy.kollen.svendsen@akersolutions.com>,
- James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: sebastian.weyer@smile.fr, bernd@kuhls.net, romain.naour@smile.fr,
+ buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes the following failure in the install step of host-python3:
-    ...
-    /usr/bin/install -c -m 644 pyconfig.h output/host/include/python3.12/pyconfig.h
-    [ERROR] _tkinter failed to import: output/build/host-python3-3.12.1/build/lib.linux-x86_64-3.12/_tkinter.cpython-312-x86_64-linux-gnu.so: undefined symbol: Tcl_AddErrorInfo
-    The following modules are *disabled* in configure script:
-    _ctypes_test          _testbuffer           _testcapi
-    _testclinic           _testimportmultiple   _testinternalcapi
-    _testmultiphase       _xxtestfuzz           xxsubtype
 
-    Following modules built successfully but were removed because they could not be imported:
-    _tkinter
+On 07/02/2024 16:13, Yann E. MORIN wrote:
+> Antoine, All,
+>
+> On 2024-02-02 10:36 +0100, Antoine Coutant spake thusly:
+>> From: Romain Naour <romain.naour@smile.fr>
+>>
+>> This change is needed to be able to build target packages requiring
+>> rust. If a package has rust in its project or in an add_language()
+>> call in their meson.build file, meson will try to find a suitable
+>> compiler for this language[1]. If the language is classified as
+>> required but not found, it will abort the build.
+>>
+>> It is necessary to specify rust and rust_ld separately in
+>> support/misc/cross-compilation.conf.in. If you specify it in one line
+>> just as "rust", it will generate the following warning:
+>>      WARNING: Please do not put -C linker= in your compiler command,
+>>      set rust_ld=command in your cross file or use the RUST_LD environment
+>>      variable, otherwise meson will override your selection.
+>>
+>> [1] https://mesonbuild.com/Reference-manual_functions.html#add_languages
+>>
+>> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+>> Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
+>> Signed-off-by: Antoine Coutant <antoine.coutant@smile.fr>
+>> ---
+>>   package/pkg-meson.mk                   | 13 +++++++++++++
+>>   support/misc/cross-compilation.conf.in |  2 ++
+>>   2 files changed, 15 insertions(+)
+>>
+>> diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+>> index 65cabf23ba..25dd4f0d7f 100644
+>> --- a/package/pkg-meson.mk
+>> +++ b/package/pkg-meson.mk
+>> @@ -82,6 +82,16 @@ else
+>>   PKG_MESON_TARGET_FC = /bin/false
+>>   endif
+>>   
+>> +ifeq ($(BR2_PACKAGE_HOST_RUSTC),y)
+>> +PKG_MESON_TARGET_RUSTC = $(HOST_DIR)/bin/rustc
+>> +PKG_MESON_TARGET_RUSTC_LINKER = $(notdir $(TARGET_CROSS))gcc
+> Why can't PKG_MESON_TARGET_RUSTC_LINKER be an absolute path, when
+> PKG_MESON_TARGET_RUSTC is one, and [...]
 
-    Checked 110 modules (31 built-in, 54 shared, 15 n/a on linux-x86_64, 9 disabled, 0 missing, 1 failed on import)
-    ...
-    /usr/bin/install -c -m 644 ./Lib/types.py output/host/lib/python3.12
-    /usr/bin/install: cannot stat 'Modules/_tkinter.cpython-312-x86_64-linux-gnu.so': No such file or directory
-    /usr/bin/install -c -m 644 ./Lib/typing.py output/host/lib/python3.12
-    make[3]: *** [Makefile:2068: sharedinstall] Error 1
-    ...
+I tested with an absolute path and it worked. I don't know
 
-Signed-off-by: Roy Kollen Svendsen <roy.kollen.svendsen@akersolutions.com>
----
-Changes v1 -> v2:
-  Make the --disable-tk option automatically set py_cv_module__tkinter=n/a (suggested by Thomas Petazzoni)
----
- .../python3/0012-Add-an-option-to-disable-the-tk-module.patch | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+why I chose to use a relative path.
 
-diff --git a/package/python3/0012-Add-an-option-to-disable-the-tk-module.patch b/package/python3/0012-Add-an-option-to-disable-the-tk-module.patch
-index 7fafbedddb..08617241a6 100644
---- a/package/python3/0012-Add-an-option-to-disable-the-tk-module.patch
-+++ b/package/python3/0012-Add-an-option-to-disable-the-tk-module.patch
-@@ -62,7 +62,7 @@ diff --git a/configure.ac b/configure.ac
- index c8ae60aa6b5..7caa361138d 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -4503,6 +4503,11 @@ AC_ARG_ENABLE(pydoc,
-+@@ -4503,6 +4503,13 @@ AC_ARG_ENABLE(pydoc,
-  	AS_HELP_STRING([--disable-pydoc], [disable pydoc]),
-  	[ PYDOC="${enableval}" ], [ PYDOC=yes ])
-  
-@@ -70,6 +70,8 @@ index c8ae60aa6b5..7caa361138d 100644
- +AC_ARG_ENABLE(tk,
- +	AS_HELP_STRING([--disable-tk], [disable tk]),
- +	[ TK="${enableval}" ], [ TK=yes ])
-++AS_IF([test "$TK" = "no"],
-++	[PY_STDLIB_MOD_SET_NA([_tkinter])])
- +
-  # Check for enable-ipv6
-  AH_TEMPLATE([ENABLE_IPV6], [Define if --enable-ipv6 is specified])
--- 
-2.43.0
 
+Thanks for the report, I will make the change in the v5.
+
+
+Regards,
+
+Antoine Coutant
+
+>> +PKG_MESON_TARGET_RUSTC_TARGET_NAME = $(RUSTC_TARGET_NAME)
+>> +else
+>> +PKG_MESON_TARGET_RUSTC = /bin/false
+>> +PKG_MESON_TARGET_RUSTC_LINKER = /bin/false
+> [...] especially since here PKG_MESON_TARGET_RUSTC_LINKER is an absolute
+> path?
+>
+> Regards,
+> Yann E. MORIN.
+>
+>> +PKG_MESON_TARGET_RUSTC_TARGET_NAME =
+>> +endif
+>> +
+>>   # Generates sed patterns for patching the cross-compilation.conf template,
+>>   # since Flags might contain commas the arguments are passed indirectly by
+>>   # variable name (stripped to deal with whitespaces).
+>> @@ -91,6 +101,7 @@ define PKG_MESON_CROSSCONFIG_SED
+>>           -e "s%@TARGET_CXX@%$(PKG_MESON_TARGET_CXX)%g" \
+>>           -e "s%@TARGET_AR@%$(TARGET_AR)%g" \
+>>           -e "s%@TARGET_FC@%$(PKG_MESON_TARGET_FC)%g" \
+>> +        -e "s%@TARGET_RUSTC@%$(PKG_MESON_TARGET_RUSTC)%g" \
+>>           -e "s%@TARGET_STRIP@%$(TARGET_STRIP)%g" \
+>>           -e "s%@TARGET_ARCH@%$(PKG_MESON_TARGET_CPU_FAMILY)%g" \
+>>           -e "s%@TARGET_CPU@%$(GCC_TARGET_CPU)%g" \
+>> @@ -99,6 +110,8 @@ define PKG_MESON_CROSSCONFIG_SED
+>>           -e "s%@TARGET_CFLAGS@%$(call make-sq-comma-list,$($(strip $(1))))%g" \
+>>           -e "s%@TARGET_LDFLAGS@%$(call make-sq-comma-list,$($(strip $(3))))%g" \
+>>           -e "s%@TARGET_CXXFLAGS@%$(call make-sq-comma-list,$($(strip $(2))))%g" \
+>> +        -e "s%@TARGET_RUSTC_LINKER@%$(PKG_MESON_TARGET_RUSTC_LINKER)%g" \
+>> +        -e "s%@RUSTC_TARGET_NAME@%$(PKG_MESON_TARGET_RUSTC_TARGET_NAME)%g" \
+>>           -e "s%@BR2_CMAKE@%$(BR2_CMAKE)%g" \
+>>           -e "s%@PKGCONF_HOST_BINARY@%$(HOST_DIR)/bin/pkgconf%g" \
+>>           -e "s%@HOST_DIR@%$(HOST_DIR)%g" \
+>> diff --git a/support/misc/cross-compilation.conf.in b/support/misc/cross-compilation.conf.in
+>> index a58ab553d0..21cec10b82 100644
+>> --- a/support/misc/cross-compilation.conf.in
+>> +++ b/support/misc/cross-compilation.conf.in
+>> @@ -13,6 +13,8 @@ fortran = '@TARGET_FC@'
+>>   pkg-config = '@PKGCONF_HOST_BINARY@'
+>>   g-ir-compiler = '@STAGING_DIR@/usr/bin/g-ir-compiler'
+>>   g-ir-scanner = '@STAGING_DIR@/usr/bin/g-ir-scanner'
+>> +rust = ['@TARGET_RUSTC@', '--target', '@RUSTC_TARGET_NAME@' ]
+>> +rust_ld = '@TARGET_RUSTC_LINKER@'
+>>   
+>>   [built-in options]
+>>   c_args = [@TARGET_CFLAGS@]
+>> -- 
+>> 2.25.1
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot@buildroot.org
+>> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
