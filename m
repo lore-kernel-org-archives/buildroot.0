@@ -4,50 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74F1EC4828F
-	for <buildroot@archiver.kernel.org>; Thu,  8 Feb 2024 12:58:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CEA4C48260
+	for <buildroot@archiver.kernel.org>; Thu,  8 Feb 2024 13:02:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 43A656FAC5;
-	Thu,  8 Feb 2024 12:58:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 43AC66FAF2;
+	Thu,  8 Feb 2024 13:02:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IFq_IlOVegyR; Thu,  8 Feb 2024 12:58:13 +0000 (UTC)
+	with ESMTP id b5jWh6OJPAa4; Thu,  8 Feb 2024 13:02:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 26C916FACE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E0F5E6FAF4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 26C916FACE;
-	Thu,  8 Feb 2024 12:58:13 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2B2E41BF403
- for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 12:58:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E0F5E6FAF4;
+	Thu,  8 Feb 2024 13:02:30 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 599C11BF99D
+ for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 13:02:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EB24442CE2
- for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 12:58:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5241D41BB5
+ for <buildroot@lists.busybox.net>; Thu,  8 Feb 2024 13:02:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7euejraFSbao for <buildroot@lists.busybox.net>;
- Thu,  8 Feb 2024 12:58:07 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TvKrvqXCbkQu for <buildroot@lists.busybox.net>;
+ Thu,  8 Feb 2024 13:02:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=87.98.184.158;
+ helo=11.mo561.mail-out.ovh.net; envelope-from=sebastien.szymanski@armadeus.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2073E42CCC
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2073E42CCC
- for <buildroot@buildroot.org>; Thu,  8 Feb 2024 12:58:07 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0D3CA87565; Thu,  8 Feb 2024 12:58:07 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0C47B41C52
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C47B41C52
+Received: from 11.mo561.mail-out.ovh.net (11.mo561.mail-out.ovh.net
+ [87.98.184.158])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0C47B41C52
+ for <buildroot@buildroot.org>; Thu,  8 Feb 2024 13:02:26 +0000 (UTC)
+Received: from director4.ghost.mail-out.ovh.net (unknown [10.108.2.89])
+ by mo561.mail-out.ovh.net (Postfix) with ESMTP id 7BE5B29865
+ for <buildroot@buildroot.org>; Thu,  8 Feb 2024 12:55:36 +0000 (UTC)
+Received: from ghost-submission-6684bf9d7b-kdf48 (unknown [10.110.168.250])
+ by director4.ghost.mail-out.ovh.net (Postfix) with ESMTPS id EB9BD1FE89;
+ Thu,  8 Feb 2024 12:55:35 +0000 (UTC)
+Received: from armadeus.com ([37.59.142.106])
+ by ghost-submission-6684bf9d7b-kdf48 with ESMTPSA
+ id gBqwN0fPxGWDugAAre/mpQ
+ (envelope-from <sebastien.szymanski@armadeus.com>);
+ Thu, 08 Feb 2024 12:55:35 +0000
+X-OVh-ClientIp: 92.148.253.243
+From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
 To: buildroot@buildroot.org
-Date: Thu, 8 Feb 2024 13:52:57 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 74682e07df455aa49a637ebbda580df969e64ccf
-X-Git-Newrev: de3684f57df79c19eba34dac98418ceeaccd03db
-X-Patchwork-Hint: ignore
-Message-Id: <20240208125807.0D3CA87565@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/webkitgtk: security bump to
- version 2.42.5
+Date: Thu,  8 Feb 2024 13:54:21 +0100
+Message-ID: <20240115-imx93-support-v5-1-c2c950104c58@armadeus.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240115-imx93-support-v5-0-c2c950104c58@armadeus.com>
+References: <20240115-imx93-support-v5-0-c2c950104c58@armadeus.com>
+MIME-Version: 1.0
+X-Ovh-Tracer-Id: 14936188165463796715
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrtdeggdeggecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffojghfgggtgfesthekredtredtjeenucfhrhhomhepuforsggrshhtihgvnhcuufiihihmrghnshhkihcuoehsvggsrghsthhivghnrdhsiiihmhgrnhhskhhisegrrhhmrgguvghushdrtghomheqnecuggftrfgrthhtvghrnhepfefgfeeuhfejhefgheeuiefffeetudfffffffeeuffetveduudfhveduvdehvdevnecuffhomhgrihhnpehngihprdgtohhmpdguvghngidruggvnecukfhppeduvdejrddtrddtrddupdelvddrudegkedrvdehfedrvdegfedpfeejrdehledrudegvddruddtieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehsvggsrghsthhivghnrdhsiiihmhgrnhhskhhisegrrhhmrgguvghushdrtghomheqpdhnsggprhgtphhtthhopedupdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdpoffvtefjohhsthepmhhoheeiuddpmhhouggvpehsmhhtphhouhht
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=armadeus.com
+X-Mailman-Original-Authentication-Results: garm.ovh; auth=pass
+ (GARM-106R006f07741d1-2c13-4d05-a29f-4f06250cffaa,
+ EE170601DD7FCE57948E905AF537FA7E68A97F37)
+ smtp.auth=sebastien.szymanski@armadeus.com
+Subject: [Buildroot] [PATCH v5 1/3] package/freescale-imx: add i.MX91 and
+ i.MX93 SoC support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,148 +82,132 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Gary Bisson <bisson.gary@gmail.com>, Fabio Estevam <festevam@gmail.com>,
+ Refik Tuzakli <tuzakli.refik@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de3684f57df79c19eba34dac98418ceeaccd03db
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes the following security issues:
-
-https://webkitgtk.org/security/WSA-2024-0001.html
-
-- CVE-2024-23222: Processing maliciously crafted web content may lead to
-  arbitrary code execution.  Apple is aware of a report that this issue may
-  have been exploited.  Description: A type confusion issue was addressed
-  with improved checks.
-
-- CVE-2024-23206: A maliciously crafted webpage may be able to fingerprint
-  the user.  Description: An access issue was addressed with improved access
-  restrictions.
-
-- CVE-2024-23213: Processing web content may lead to arbitrary code execution.
-  Description: The issue was addressed with improved memory handling.
-
-- CVE-2023-40414: Processing web content may lead to arbitrary code
-  execution.  Description: A use-after-free issue was addressed with
-  improved memory management.
-
-- CVE-2023-42833: Processing web content may lead to arbitrary code execution.
-  Description: A correctness issue was addressed with improved checks.
-
-- CVE-2014-1745: Processing a file may lead to a denial-of-service or
-  potentially disclose memory contents.  Description: The issue was
-  addressed with improved checks.
-
-https://webkitgtk.org/security/WSA-2023-0012.html
-
-- CVE-2023-42883: Processing a SVG image may lead to a denial-of-service.
-  Description: The issue was addressed with improved memory handling.
-
-- CVE-2023-42890: Processing web content may lead to arbitrary code
-  execution.  Description: The issue was addressed with improved memory
-  handling.
-
-https://webkitgtk.org/security/WSA-2023-0011.html
-
-- CVE-2023-42916: Processing web content may disclose sensitive information.
-  Apple is aware of a report that this issue may have been actively
-  exploited.  Description: An out-of-bounds read was addressed with improved
-  input validation.
-
-- CVE-2023-42917: Processing web content may lead to arbitrary code
-  execution.  Apple is aware of a report that this issue may have been
-  actively exploited.  Description: A memory corruption vulnerability was
-  addressed with improved locking.
-
-Add an upstream post-2.42.5 patch to fix an issue with an invalid backport
-causing a build issue.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Acked-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...LowLevelInterpreter.cpp-339-21-error-t6-w.patch | 39 ++++++++++++++++++++++
- package/webkitgtk/webkitgtk.hash                   |  6 ++--
- package/webkitgtk/webkitgtk.mk                     |  2 +-
- 3 files changed, 43 insertions(+), 4 deletions(-)
-
-diff --git a/package/webkitgtk/0001-GTK-2.42.5-LowLevelInterpreter.cpp-339-21-error-t6-w.patch b/package/webkitgtk/0001-GTK-2.42.5-LowLevelInterpreter.cpp-339-21-error-t6-w.patch
-new file mode 100644
-index 0000000000..c9667fedbd
---- /dev/null
-+++ b/package/webkitgtk/0001-GTK-2.42.5-LowLevelInterpreter.cpp-339-21-error-t6-w.patch
-@@ -0,0 +1,39 @@
-+From 3d5373575695b293b8559155431d0079a6153aff Mon Sep 17 00:00:00 2001
-+From: Michael Catanzaro <mcatanzaro@redhat.com>
-+Date: Mon, 5 Feb 2024 11:00:49 -0600
-+Subject: [PATCH] =?UTF-8?q?[GTK]=20[2.42.5]=20LowLevelInterpreter.cpp:339:?=
-+ =?UTF-8?q?21:=20error:=20=E2=80=98t6=E2=80=99=20was=20not=20declared=20in?=
-+ =?UTF-8?q?=20this=20scope=20https://bugs.webkit.org/show=5Fbug.cgi=3Fid?=
-+ =?UTF-8?q?=3D268739?=
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Unreviewed build fix. Seems a backport went badly, and we didn't notice
-+because the code is architecture-specific.
-+
-+* Source/JavaScriptCore/llint/LowLevelInterpreter.cpp:
-+(JSC::CLoop::execute):
-+
-+Upstream: https://github.com/WebKit/WebKit/commit/3d5373575695b293b8559155431d0079a6153aff
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ Source/JavaScriptCore/llint/LowLevelInterpreter.cpp | 2 --
-+ 1 file changed, 2 deletions(-)
-+
-+diff --git a/Source/JavaScriptCore/llint/LowLevelInterpreter.cpp b/Source/JavaScriptCore/llint/LowLevelInterpreter.cpp
-+index 5064ead6cd2e..9a2e2653b121 100644
-+--- a/Source/JavaScriptCore/llint/LowLevelInterpreter.cpp
-++++ b/Source/JavaScriptCore/llint/LowLevelInterpreter.cpp
-+@@ -336,8 +336,6 @@ JSValue CLoop::execute(OpcodeID entryOpcodeID, void* executableAddress, VM* vm,
-+     UNUSED_VARIABLE(t2);
-+     UNUSED_VARIABLE(t3);
-+     UNUSED_VARIABLE(t5);
-+-    UNUSED_VARIABLE(t6);
-+-    UNUSED_VARIABLE(t7);
-+ 
-+     struct StackPointerScope {
-+         StackPointerScope(CLoopStack& stack)
-+-- 
-+2.39.2
-+
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index 59782732c3..ac4799d4cf 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,6 +1,6 @@
--# From https://www.webkitgtk.org/releases/webkitgtk-2.42.2.tar.xz.sums
--sha1  05bec6a824e46f043b865478735bc8395249510e  webkitgtk-2.42.2.tar.xz
--sha256  5720aa3e8627f1b9f63252187d4df0f8233ae71d697b1796ebfbe5ca750bd118  webkitgtk-2.42.2.tar.xz
-+# From https://www.webkitgtk.org/releases/webkitgtk-2.42.5.tar.xz.sums
-+sha1  c3ffb2beaac56f1089029f2254482f48d9e3db37  webkitgtk-2.42.5.tar.xz
-+sha256  b64278c1f20b8cfdbfb5ff573c37d871aba74a1db26d9b39f74e8953fe61e749  webkitgtk-2.42.5.tar.xz
- 
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 611d7f65d3..075a36654f 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WEBKITGTK_VERSION = 2.42.2
-+WEBKITGTK_VERSION = 2.42.5
- WEBKITGTK_SITE = https://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+VGhpcyBjb21taXQgYWRkcyBpLk1YOTEgYW5kIGkuTVg5MyBzdXBwb3J0IHRvIEJ1aWxkcm9vdC4K
+aHR0cHM6Ly93d3cubnhwLmNvbS9wcm9kdWN0cy9wcm9jZXNzb3JzLWFuZC1taWNyb2NvbnRyb2xs
+ZXJzL2FybS1wcm9jZXNzb3JzL2ktbXgtYXBwbGljYXRpb25zLXByb2Nlc3NvcnMvaS1teC05LXBy
+b2Nlc3NvcnM6SU1YOS1QUk9DRVNTT1JTCgpUaGVyZSBpcyBubyBpLk1YOTUgc29mdHdhcmUgcHJv
+dmlkZWQgYnkgTlhQIGF0IHRoZSBtb21lbnQgdGhhdCdzIHdoeQppLk1YOTUgaXMgbGVmdCBiZWhp
+bmQuCgpBZGFwdCBwYWNrYWdlIGZpcm13YXJlLWlteCBmb3IgdGhlIExQUERSNCBmaXJ3bWFyZXMg
+YmluYXJpZXMuCgpSZXZpZXdlZC1ieTogR2FyeSBCaXNzb24gPGJpc3Nvbi5nYXJ5QGdtYWlsLmNv
+bT4KU2lnbmVkLW9mZi1ieTogU8OpYmFzdGllbiBTenltYW5za2kgPHNlYmFzdGllbi5zenltYW5z
+a2lAYXJtYWRldXMuY29tPgotLS0KQ2hhbmdlcyBmb3IgdjU6CiAtIG5vbmUKCkNoYW5nZXMgZm9y
+IHY0CiAtIG1vdmUgaS5NWCBTaWxpY29uIFJldmlzaW9uIGNoYW5nZXMgaW50byB0aGlzIHBhdGNo
+IChHYXJ5IEJpc3NvbikKIC0gQlIyX1BBQ0tBR0VfRklSTVdBUkVfSU1YX0REUl9WRVJTSU9OIGRl
+ZmF1bHQgdG8gInYyMDIyMDEiIGluc3RlYWQgb2YKICAganVzdCAiMjAyMjAxIiAoR2FyeSBCaXNz
+b24pCiAtIENvcHkgYWxsIEREUiBmaWxlcyB0byAkKEJJTkFSSUVTX0RJUikgYXMgVS1Cb290IGNh
+biBub3cgY3JlYXRlIGEKICAgYm9vdGFibGUgaW1hZ2U6CiAgIGh0dHBzOi8vc291cmNlLmRlbngu
+ZGUvdS1ib290L3UtYm9vdC8tL2NvbW1pdC9mNjM3ZGZlOGM0NjgyMjljOWZiMzEzZDEzYzQ2ZDUx
+Y2RiYjg4ODI0CiAtIHJlbW92ZSAicG11X3RyYWluIiBmcm9tIGdlbmVyYXRlZCBfcGFkIGJpbmFy
+eSBmaWxlIG5hbWVzCgpDaGFuZ2VzIGZvciB2MzoKIC0gbm9uZQoKQ2hhbmdlcyBmb3IgdjI6CiAt
+IG5vbmUKLS0tCiBwYWNrYWdlL2ZyZWVzY2FsZS1pbXgvQ29uZmlnLmluICAgICAgICAgICAgICAg
+ICAgICB8IDM3ICsrKysrKysrKysrKysrKysrKysrKysKIHBhY2thZ2UvZnJlZXNjYWxlLWlteC9m
+aXJtd2FyZS1pbXgvQ29uZmlnLmluICAgICAgIHwgIDkgKysrKysrCiBwYWNrYWdlL2ZyZWVzY2Fs
+ZS1pbXgvZmlybXdhcmUtaW14L2Zpcm13YXJlLWlteC5tayB8IDI1ICsrKysrKysrKysrKysrKwog
+MyBmaWxlcyBjaGFuZ2VkLCA3MSBpbnNlcnRpb25zKCspCgpkaWZmIC0tZ2l0IGEvcGFja2FnZS9m
+cmVlc2NhbGUtaW14L0NvbmZpZy5pbiBiL3BhY2thZ2UvZnJlZXNjYWxlLWlteC9Db25maWcuaW4K
+aW5kZXggMWMyNmIzY2M2ZjRjLi5iYTE2OWVhZDE4Y2IgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvZnJl
+ZXNjYWxlLWlteC9Db25maWcuaW4KKysrIGIvcGFja2FnZS9mcmVlc2NhbGUtaW14L0NvbmZpZy5p
+bgpAQCAtNjEsNiArNjEsNDEgQEAgY29uZmlnIEJSMl9QQUNLQUdFX0ZSRUVTQ0FMRV9JTVhfUExB
+VEZPUk1fSU1YOFgKIGNvbmZpZyBCUjJfUEFDS0FHRV9GUkVFU0NBTEVfSU1YX1BMQVRGT1JNX0lN
+WDhEWEwKIAlib29sICJpbXg4ZHhsIgogCitjb25maWcgQlIyX1BBQ0tBR0VfRlJFRVNDQUxFX0lN
+WF9QTEFURk9STV9JTVg5MQorCWJvb2wgImlteDkxIgorCitjb25maWcgQlIyX1BBQ0tBR0VfRlJF
+RVNDQUxFX0lNWF9QTEFURk9STV9JTVg5MworCWJvb2wgImlteDkzIgorCitlbmRjaG9pY2UKKwor
+Y2hvaWNlCisJcHJvbXB0ICJpLk1YIFNpbGljb24gUmV2aXNpb24iCisJZGVmYXVsdCBCUjJfUEFD
+S0FHRV9GUkVFU0NBTEVfSU1YX1BMQVRGT1JNX0lNWDkxQTEgXAorCQlpZiBCUjJfUEFDS0FHRV9G
+UkVFU0NBTEVfSU1YX1BMQVRGT1JNX0lNWDkxCisJZGVmYXVsdCBCUjJfUEFDS0FHRV9GUkVFU0NB
+TEVfSU1YX1BMQVRGT1JNX0lNWDkzQTEgXAorCQlpZiBCUjJfUEFDS0FHRV9GUkVFU0NBTEVfSU1Y
+X1BMQVRGT1JNX0lNWDkzCisJZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9GUkVFU0NBTEVfSU1YX1BM
+QVRGT1JNX0lNWDkxIHx8IFwKKwkJQlIyX1BBQ0tBR0VfRlJFRVNDQUxFX0lNWF9QTEFURk9STV9J
+TVg5MworCWhlbHAKKwkgIFNvbWUgcGFja2FnZXMgcmVsYXRlZCB0byB0aGUgc2VsZWN0ZWQgaS5N
+WCBwbGF0Zm9ybSBuZWVkIHRvIGtub3cgdGhlCisJICBzaWxpY29uIHJldmlzaW9uIG9mIHRoZSBw
+bGF0Zm9ybSB0aGV5IHdpbGwgcnVuIG9uLgorCSAgSWYgeW91IGRvbid0IGtub3csIGxlYXZlIHRo
+ZSBkZWZhdWx0IHZhbHVlLgorCisJICBOb3RlIC0gbWlzbWF0Y2hlcyBtYXkgcmVzdWx0IGluIGEg
+ZmFpbHVyZSB0byBib290IQorCitjb25maWcgQlIyX1BBQ0tBR0VfRlJFRVNDQUxFX0lNWF9QTEFU
+Rk9STV9JTVg5MUExCisJYm9vbCAiaW14OTFhMSIKKwlkZXBlbmRzIG9uIEJSMl9QQUNLQUdFX0ZS
+RUVTQ0FMRV9JTVhfUExBVEZPUk1fSU1YOTEKKworY29uZmlnIEJSMl9QQUNLQUdFX0ZSRUVTQ0FM
+RV9JTVhfUExBVEZPUk1fSU1YOTNBMAorCWJvb2wgImlteDkzYTAiCisJZGVwZW5kcyBvbiBCUjJf
+UEFDS0FHRV9GUkVFU0NBTEVfSU1YX1BMQVRGT1JNX0lNWDkzCisKK2NvbmZpZyBCUjJfUEFDS0FH
+RV9GUkVFU0NBTEVfSU1YX1BMQVRGT1JNX0lNWDkzQTEKKwlib29sICJpbXg5M2ExIgorCWRlcGVu
+ZHMgb24gQlIyX1BBQ0tBR0VfRlJFRVNDQUxFX0lNWF9QTEFURk9STV9JTVg5MworCiBlbmRjaG9p
+Y2UKIAogY29uZmlnIEJSMl9QQUNLQUdFX0ZSRUVTQ0FMRV9JTVhfUExBVEZPUk0KQEAgLTgwLDYg
+KzExNSw4IEBAIGNvbmZpZyBCUjJfUEFDS0FHRV9GUkVFU0NBTEVfSU1YX1BMQVRGT1JNCiAJZGVm
+YXVsdCAiSU1YOE1NIiBpZiBCUjJfUEFDS0FHRV9GUkVFU0NBTEVfSU1YX1BMQVRGT1JNX0lNWDhN
+TQogCWRlZmF1bHQgIklNWDhNTiIgaWYgQlIyX1BBQ0tBR0VfRlJFRVNDQUxFX0lNWF9QTEFURk9S
+TV9JTVg4TU4KIAlkZWZhdWx0ICJJTVg4TVAiIGlmIEJSMl9QQUNLQUdFX0ZSRUVTQ0FMRV9JTVhf
+UExBVEZPUk1fSU1YOE1QCisJZGVmYXVsdCAiSU1YOTEiIGlmIEJSMl9QQUNLQUdFX0ZSRUVTQ0FM
+RV9JTVhfUExBVEZPUk1fSU1YOTEKKwlkZWZhdWx0ICJJTVg5MyIgaWYgQlIyX1BBQ0tBR0VfRlJF
+RVNDQUxFX0lNWF9QTEFURk9STV9JTVg5MwogCiBjb25maWcgQlIyX1BBQ0tBR0VfRlJFRVNDQUxF
+X0lNWF9IQVNfVlBVCiAJYm9vbApkaWZmIC0tZ2l0IGEvcGFja2FnZS9mcmVlc2NhbGUtaW14L2Zp
+cm13YXJlLWlteC9Db25maWcuaW4gYi9wYWNrYWdlL2ZyZWVzY2FsZS1pbXgvZmlybXdhcmUtaW14
+L0NvbmZpZy5pbgppbmRleCAwODdkZGVmODc3MWIuLmQ4M2I1ZTEyOWE5ZiAxMDA2NDQKLS0tIGEv
+cGFja2FnZS9mcmVlc2NhbGUtaW14L2Zpcm13YXJlLWlteC9Db25maWcuaW4KKysrIGIvcGFja2Fn
+ZS9mcmVlc2NhbGUtaW14L2Zpcm13YXJlLWlteC9Db25maWcuaW4KQEAgLTU1LDYgKzU1LDggQEAg
+Y29uZmlnIEJSMl9QQUNLQUdFX0ZJUk1XQVJFX0lNWF9ORUVEU19ERFJfRlcKIAlkZWZhdWx0IHkg
+aWYgQlIyX1BBQ0tBR0VfRlJFRVNDQUxFX0lNWF9QTEFURk9STV9JTVg4TU0KIAlkZWZhdWx0IHkg
+aWYgQlIyX1BBQ0tBR0VfRlJFRVNDQUxFX0lNWF9QTEFURk9STV9JTVg4TU4KIAlkZWZhdWx0IHkg
+aWYgQlIyX1BBQ0tBR0VfRlJFRVNDQUxFX0lNWF9QTEFURk9STV9JTVg4TVAKKwlkZWZhdWx0IHkg
+aWYgQlIyX1BBQ0tBR0VfRlJFRVNDQUxFX0lNWF9QTEFURk9STV9JTVg5MQorCWRlZmF1bHQgeSBp
+ZiBCUjJfUEFDS0FHRV9GUkVFU0NBTEVfSU1YX1BMQVRGT1JNX0lNWDkzCiAKIGlmIEJSMl9QQUNL
+QUdFX0ZJUk1XQVJFX0lNWF9ORUVEU19ERFJfRlcKIApAQCAtNzMsMTEgKzc1LDE1IEBAIGNvbmZp
+ZyBCUjJfUEFDS0FHRV9GSVJNV0FSRV9JTVhfTFBERFI0CiAKIGNvbmZpZyBCUjJfUEFDS0FHRV9G
+SVJNV0FSRV9JTVhfRERSNAogCWJvb2wgIkREUjQiCisJZGVwZW5kcyBvbiAhQlIyX1BBQ0tBR0Vf
+RlJFRVNDQUxFX0lNWF9QTEFURk9STV9JTVg5MQorCWRlcGVuZHMgb24gIUJSMl9QQUNLQUdFX0ZS
+RUVTQ0FMRV9JTVhfUExBVEZPUk1fSU1YOTMKIAloZWxwCiAJICBVc2UgRERSNCBiaW5hcmllcyAo
+aS5lLjogZGRyNF8qXzIwMTgxMC5iaW4pLgogCiBjb25maWcgQlIyX1BBQ0tBR0VfRklSTVdBUkVf
+SU1YX0REUjMKIAlib29sICJERFIzIgorCWRlcGVuZHMgb24gIUJSMl9QQUNLQUdFX0ZSRUVTQ0FM
+RV9JTVhfUExBVEZPUk1fSU1YOTEKKwlkZXBlbmRzIG9uICFCUjJfUEFDS0FHRV9GUkVFU0NBTEVf
+SU1YX1BMQVRGT1JNX0lNWDkzCiAJaGVscAogCSAgVXNlIEREUjMgYmluYXJpZXMgKGkuZS46IGRk
+cjNfKl8yMDE4MTAuYmluKS4KIApAQCAtODksNiArOTUsOSBAQCBjb25maWcgQlIyX1BBQ0tBR0Vf
+RklSTVdBUkVfSU1YX0REUl9WRVJTSU9OCiAJIyB1bmNvbmRpdGlvbmFsbHkgdXNlIEhXIHZlcnNp
+b24gMjAxODEwIHdoZW4gRERSMy9ERFI0IHdhcwogCSMgc2VsZWN0ZWQKIAlkZWZhdWx0ICIyMDE4
+MTAiIGlmIEJSMl9QQUNLQUdFX0ZJUk1XQVJFX0lNWF9ERFIzIHx8IEJSMl9QQUNLQUdFX0ZJUk1X
+QVJFX0lNWF9ERFI0CisJZGVmYXVsdCAidjIwMjIwMSIgaWYgXAorCQlCUjJfUEFDS0FHRV9GUkVF
+U0NBTEVfSU1YX1BMQVRGT1JNX0lNWDkxIHx8IFwKKwkJQlIyX1BBQ0tBR0VfRlJFRVNDQUxFX0lN
+WF9QTEFURk9STV9JTVg5MwogCWhlbHAKIAkgIFVzZSBhIHNwZWNpZmljIHZlcnNpb24gb2YgdGhl
+IGlteCBkZHIgYmluYXJpZXMuIExlYXZpbmcgdGhpcwogCSAgZmllbGQgZW1wdHkgd2lsbCBzZWxl
+Y3QgdGhlIGRlZmF1bHQgdmVyc2lvbi4KZGlmZiAtLWdpdCBhL3BhY2thZ2UvZnJlZXNjYWxlLWlt
+eC9maXJtd2FyZS1pbXgvZmlybXdhcmUtaW14Lm1rIGIvcGFja2FnZS9mcmVlc2NhbGUtaW14L2Zp
+cm13YXJlLWlteC9maXJtd2FyZS1pbXgubWsKaW5kZXggNjZlZjhjMzkzMGJlLi4xZjM2ZjkxN2Nk
+YzggMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvZnJlZXNjYWxlLWlteC9maXJtd2FyZS1pbXgvZmlybXdh
+cmUtaW14Lm1rCisrKyBiL3BhY2thZ2UvZnJlZXNjYWxlLWlteC9maXJtd2FyZS1pbXgvZmlybXdh
+cmUtaW14Lm1rCkBAIC00OCw2ICs0OCwzMCBAQCBlbmRpZgogaWZlcSAoJChCUjJfUEFDS0FHRV9G
+SVJNV0FSRV9JTVhfTFBERFI0KSx5KQogRklSTVdBUkVfSU1YX0REUkZXX0RJUiA9ICQoQEQpL2Zp
+cm13YXJlL2Rkci9zeW5vcHN5cwogCitpZmVxICgkKEJSMl9QQUNLQUdFX0ZSRUVTQ0FMRV9JTVhf
+UExBVEZPUk1fSU1YOTEpJChCUjJfUEFDS0FHRV9GUkVFU0NBTEVfSU1YX1BMQVRGT1JNX0lNWDkz
+KSx5KQorZGVmaW5lIEZJUk1XQVJFX0lNWF9JTlNUQUxMX0lNQUdFX0REUl9GVworCSMgQ3JlYXRl
+IHBhZGRlZCB2ZXJzaW9ucyBvZiBscGRkcjRfe2QsaX1tZW1fezEsMn1kXyogYW5kIGdlbmVyYXRl
+IGxwZGRyNF9mdy5iaW4uCisJIyBscGRkcjRfZncuYmluIGlzIG5lZWRlZCB3aGVuIGdlbmVyYXRp
+bmcgaW14OS1ib290LXNkLmJpbgorCSMgd2hpY2ggaXMgZG9uZSBpbiBwb3N0LWltYWdlIHNjcmlw
+dC4KKwkkKGNhbGwgRklSTVdBUkVfSU1YX1BSRVBBUkVfRERSX0ZXLCBcCisJCWxwZGRyNF9pbWVt
+XzFkJChGSVJNV0FSRV9JTVhfRERSX1ZFUlNJT05fU1VGRklYKSwKKwkJbHBkZHI0X2RtZW1fMWQk
+KEZJUk1XQVJFX0lNWF9ERFJfVkVSU0lPTl9TVUZGSVgpLAorCQlscGRkcjRfMWRfZncpCisJJChj
+YWxsIEZJUk1XQVJFX0lNWF9QUkVQQVJFX0REUl9GVywgXAorCQlscGRkcjRfaW1lbV8yZCQoRklS
+TVdBUkVfSU1YX0REUl9WRVJTSU9OX1NVRkZJWCksCisJCWxwZGRyNF9kbWVtXzJkJChGSVJNV0FS
+RV9JTVhfRERSX1ZFUlNJT05fU1VGRklYKSwKKwkJbHBkZHI0XzJkX2Z3KQorCWNhdCAkKEZJUk1X
+QVJFX0lNWF9ERFJGV19ESVIpL2xwZGRyNF8xZF9mdy5iaW4gXAorCQkkKEZJUk1XQVJFX0lNWF9E
+RFJGV19ESVIpL2xwZGRyNF8yZF9mdy5iaW4gPiBcCisJCSQoQklOQVJJRVNfRElSKS9scGRkcjRf
+ZncuYmluCisJbG4gLXNmICQoQklOQVJJRVNfRElSKS9scGRkcjRfZncuYmluICQoQklOQVJJRVNf
+RElSKS9kZHJfZncuYmluCisKKwkjIFUtQm9vdCBzdXBwb3J0cyBjcmVhdGlvbiBvZiB0aGUgY29t
+YmluZWQgZmxhc2guYmluIGltYWdlLiBUbyBtYWtlCisJIyBzdXJlIHRoYXQgVS1Cb290IGNhbiBh
+Y2Nlc3MgYWxsIGF2YWlsYWJsZSBmaWxlcyBjb3B5IHRoZW0gdG8KKwkjIHRoZSBiaW5hcnkgZGly
+LgorCWNwICQoRklSTVdBUkVfSU1YX0REUkZXX0RJUikvbHBkZHI0Ki5iaW4gJChCSU5BUklFU19E
+SVIpLworZW5kZWYKK2Vsc2UKIGRlZmluZSBGSVJNV0FSRV9JTVhfSU5TVEFMTF9JTUFHRV9ERFJf
+RlcKIAkjIENyZWF0ZSBwYWRkZWQgdmVyc2lvbnMgb2YgbHBkZHI0X3BtdV8qIGFuZCBnZW5lcmF0
+ZSBscGRkcjRfcG11X3RyYWluX2Z3LmJpbi4KIAkjIGxwZGRyNF9wbXVfdHJhaW5fZncuYmluIGlz
+IG5lZWRlZCB3aGVuIGdlbmVyYXRpbmcgaW14OC1ib290LXNkLmJpbgpAQCAtNzEsNiArOTUsNyBA
+QCBkZWZpbmUgRklSTVdBUkVfSU1YX0lOU1RBTExfSU1BR0VfRERSX0ZXCiAJY3AgJChGSVJNV0FS
+RV9JTVhfRERSRldfRElSKS9scGRkcjQqLmJpbiAkKEJJTkFSSUVTX0RJUikvCiBlbmRlZgogZW5k
+aWYKK2VuZGlmCiAKIGlmZXEgKCQoQlIyX1BBQ0tBR0VfRklSTVdBUkVfSU1YX0REUjQpLHkpCiBG
+SVJNV0FSRV9JTVhfRERSRldfRElSID0gJChARCkvZmlybXdhcmUvZGRyL3N5bm9wc3lzCgotLSAK
+Mi40My4wCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1
+aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0
+cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
