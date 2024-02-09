@@ -4,90 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F20D6C4828F
-	for <buildroot@archiver.kernel.org>; Fri,  9 Feb 2024 20:45:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1D86C48297
+	for <buildroot@archiver.kernel.org>; Fri,  9 Feb 2024 20:46:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 79BCD40542;
-	Fri,  9 Feb 2024 20:45:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 16B27403EA;
+	Fri,  9 Feb 2024 20:46:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jvkq_VDsGvfz; Fri,  9 Feb 2024 20:45:00 +0000 (UTC)
+	with ESMTP id VdK3Vy3y5pkV; Fri,  9 Feb 2024 20:46:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B574B401E1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9FE7D41B63
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B574B401E1;
-	Fri,  9 Feb 2024 20:45:00 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 662F41BF3A6
- for <buildroot@lists.busybox.net>; Fri,  9 Feb 2024 20:44:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9FE7D41B63;
+	Fri,  9 Feb 2024 20:46:05 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 850F41BF3A6
+ for <buildroot@lists.busybox.net>; Fri,  9 Feb 2024 20:46:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5FFAA84185
- for <buildroot@lists.busybox.net>; Fri,  9 Feb 2024 20:44:59 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 715B2401E1
+ for <buildroot@lists.busybox.net>; Fri,  9 Feb 2024 20:46:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ldaf8KaOQ8Vj for <buildroot@lists.busybox.net>;
- Fri,  9 Feb 2024 20:44:58 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 12AdUfcPeIoK for <buildroot@lists.busybox.net>;
+ Fri,  9 Feb 2024 20:46:02 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::436; helo=mail-wr1-x436.google.com;
+ client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
  envelope-from=gael.portay@rtone.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7569784176
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7569784176
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7569784176
- for <buildroot@buildroot.org>; Fri,  9 Feb 2024 20:44:57 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id
- ffacd0b85a97d-3394ca0c874so761706f8f.2
- for <buildroot@buildroot.org>; Fri, 09 Feb 2024 12:44:57 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6AB78400D0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6AB78400D0
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6AB78400D0
+ for <buildroot@buildroot.org>; Fri,  9 Feb 2024 20:46:01 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ 5b1f17b1804b1-41089cc9ae4so364435e9.1
+ for <buildroot@buildroot.org>; Fri, 09 Feb 2024 12:46:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707511495; x=1708116295;
+ d=1e100.net; s=20230601; t=1707511559; x=1708116359;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
  bh=XRJEFEHkS7HphzS3Bqhr1KAhNmsmZjnoJZL1s+g0j9w=;
- b=LL6RdKUFSZ2OZvDd+SxX2yumduZFlOMEex/i+QBi0Wvr5eM2qU+6e56QfTujWR+BAm
- uzaoWVvhmZK5eDL6vYx20GLvIwjDMF0HUefGmj2/8G0fyzWslsWHFfHpDrJJH6rAn31F
- hkd2RANU4jnoo+zukF8dGL3lO9cfyMiZsVdQBWysYzf2IRQoFlwiCB3ybPBKeOdVDvjs
- 0b9PeFugR/JtyJJntDZN2KAlTY4RZ4HIPV4DRf3hy3btc81JY8+DPbhEQHdWOWgBxQFs
- jfTUhY1wPcavM32OJT+gQZyhcjgul7bWYD30TI8FiZarLUfnNPqp+s1Sza5ql3ipZag1
- iZRQ==
-X-Gm-Message-State: AOJu0YwnRTd88Vmh1rHspPI6lAIvHofaskFFdZ40yfmZfatvw03v07BN
- qwlO6QL3oivA8B8Apt+YZqOoLlkx3VgRQqCnOHi3hkpHip0Bc47ktN4zcmTXrz+lqcAANIEdO+m
- B
-X-Google-Smtp-Source: AGHT+IGv5AhqGkCkkttdUVS5F8UJKDrDOez8pMH3lxjitF+O1EBV83NVuv27slZuLqSVNx4rZzbGOw==
-X-Received: by 2002:a5d:490b:0:b0:33b:2fdd:daf8 with SMTP id
- x11-20020a5d490b000000b0033b2fdddaf8mr92646wrq.21.1707511494551; 
- Fri, 09 Feb 2024 12:44:54 -0800 (PST)
+ b=YG0X8QCKi6fHxkFrpvl7bMmrBl1kbyXNMD3pIZVDHQShaVf8XI9G2a78Dur+0gRoT/
+ YnZ+z4vE1nabY1cCee7lttzi+8DP1o5zPFkh53Mn/QrVaZ4QgNarprogoO5hH1D31M5M
+ /YSb3VHwpyoqq3lJgv1AtmantgUgqSDBL8RA/VIGTUvpxil1ohnFzjGu9WTvwu36VFTT
+ BQjGWFrFnmqCxBPxuTgoJisxh7VBADIohGrOf5f4ingglphPDFy/bR3jzKwbLznRGjts
+ GEU7+IU3kz+KvKDqQguA5HFmZqCcdhVj0DML0hPRlwYLrtQGgXB4tucfA9OLa3p00UZw
+ Mrbw==
+X-Gm-Message-State: AOJu0Yy9PN/019AKSX49xRLouT5/Cd4b9wJr7Ayjrh9+cXtJ3yk/n77N
+ h48MBiDJ4ga/yNBDv3QhZesutmstytYXuquaj9vFNE3S+oXjzP6iRcxtydnqwMHm7vn3cOl4p+y
+ 6
+X-Google-Smtp-Source: AGHT+IEn3tpxrh5Kun6OPD6/mpsq56iIDUdwA9bHA6uU89Bk96VokTBU7sMx068bAsYoexFN1UPaIA==
+X-Received: by 2002:a05:600c:a004:b0:410:84b9:b9fc with SMTP id
+ jg4-20020a05600ca00400b0041084b9b9fcmr337170wmb.15.1707511558853; 
+ Fri, 09 Feb 2024 12:45:58 -0800 (PST)
 X-Forwarded-Encrypted: i=1;
- AJvYcCUfZtxfTi6KSqEsak+7iitPpswKebzDkWosLOd9walynC0Upe8RYhDIi+wWqdgUEPkrUxO2lYgwUZHfxfHwFVZPpK7NGUxgt8GoW29SW2miFs87vng31HDBPSEbFrrw/v0U6X/oCCxTUozHNWYSyooJ4VgbE7xK9JnohhUQFHT4I7rLN60qbR2P7ug3TEBV/F2eLzG8I29UWqbkW5d7
+ AJvYcCXpJHdOVunDisomgD20Mh20kqT2qDhs3nt2Y/1+12L/PoqpBdHc0pxDrT8SYVn7nKWR8nmWoHhIxujZnXF/mPvRsJdFPqKp9n/VgeiVTY4umdc/OV18H+oImbwAknNyYInss2oeTJ2fEqWXKdlrhh67lsMaWBo+JcoYo0PVSniu4IgURzhGSgMAA2PXjncmoxsQyO9//DvMPt1jvGuV
 Received: from localhost.localdomain ([2a01:e0a:ce:f2f0:2a6b:35ff:feb8:77d9])
  by smtp.gmail.com with ESMTPSA id
- bk26-20020a0560001d9a00b0033b1277e95dsm134141wrb.77.2024.02.09.12.44.54
+ jr6-20020a05600c560600b0041079d336c7sm1591264wmb.39.2024.02.09.12.45.58
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 09 Feb 2024 12:44:54 -0800 (PST)
+ Fri, 09 Feb 2024 12:45:58 -0800 (PST)
 From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@rtone.fr>
 To: buildroot@buildroot.org
-Date: Fri,  9 Feb 2024 21:44:39 +0100
-Message-ID: <20240209204441.86187-1-gael.portay@rtone.fr>
+Date: Fri,  9 Feb 2024 21:45:44 +0100
+Message-ID: <20240209204545.86221-1-gael.portay@rtone.fr>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rtone.fr; s=google; t=1707511495; x=1708116295; darn=buildroot.org;
+ d=rtone.fr; s=google; t=1707511559; x=1708116359; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
  bh=XRJEFEHkS7HphzS3Bqhr1KAhNmsmZjnoJZL1s+g0j9w=;
- b=IEs8laEjV+/QbrUkb8tq8YHAamqJhGbTQp9w1CNGVYXuj3Mb/Cs8IK2QIMCFc5lQ0T
- Dnk2KcTbprQ97eOkc0OP0IaDkqHZpbE/rPrIwuB4Bbym8l1vjBWVElm5amkXjWuLz5WU
- 8nZDPZQcjcVlK2I26ZDYAckjwbWughKun6klI=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=C77i1yvaT1KnZUwLkuu3ebHhI68t33obvNqZtbDX6v2yTNtrqATth3sfM4+4ta6Dfa
+ hobBMkX/nkFbWXQ/m6k837XsHXpzi3i3RJGOtEemxSwKWePHfrhJzbhXcdvzFhabFRhC
+ 0Z9a4+VTmWFxM1mZsax7/d5arDymuNDLK5Hik=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=rtone.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=rtone.fr header.i=@rtone.fr header.a=rsa-sha256
- header.s=google header.b=IEs8laEj
+ header.s=google header.b=C77i1yva
 Subject: [Buildroot] [PATCH v3 1/1] configs: add raspberrypi 5 defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
