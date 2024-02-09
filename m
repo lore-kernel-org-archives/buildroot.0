@@ -4,66 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1B46C48297
-	for <buildroot@archiver.kernel.org>; Fri,  9 Feb 2024 19:37:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B4F2C4828F
+	for <buildroot@archiver.kernel.org>; Fri,  9 Feb 2024 19:50:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7A1E640141;
-	Fri,  9 Feb 2024 19:37:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1CE6040141;
+	Fri,  9 Feb 2024 19:50:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gy2OXU4ZJw89; Fri,  9 Feb 2024 19:37:53 +0000 (UTC)
+	with ESMTP id t7cNDSgt6WPW; Fri,  9 Feb 2024 19:50:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3BB124033F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C6DA44033F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3BB124033F;
-	Fri,  9 Feb 2024 19:37:53 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C6DA44033F;
+	Fri,  9 Feb 2024 19:50:31 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 657651BF318
- for <buildroot@lists.busybox.net>; Fri,  9 Feb 2024 19:37:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D45D91BF318
+ for <buildroot@lists.busybox.net>; Fri,  9 Feb 2024 19:50:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 52263421D4
- for <buildroot@lists.busybox.net>; Fri,  9 Feb 2024 19:37:52 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C162740585
+ for <buildroot@lists.busybox.net>; Fri,  9 Feb 2024 19:50:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZaWg2N1sJl9w for <buildroot@lists.busybox.net>;
- Fri,  9 Feb 2024 19:37:51 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9E26D421C8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E26D421C8
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9E26D421C8
- for <buildroot@buildroot.org>; Fri,  9 Feb 2024 19:37:51 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 10BD013F81D;
- Fri,  9 Feb 2024 20:37:48 +0100 (CET)
-From: Julien Olivain <ju.o@free.fr>
+ with ESMTP id 7XcVk01G_Z5H for <buildroot@lists.busybox.net>;
+ Fri,  9 Feb 2024 19:50:29 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C3D0D40563
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C3D0D40563
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C3D0D40563
+ for <buildroot@buildroot.org>; Fri,  9 Feb 2024 19:50:28 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 5b1f17b1804b1-4105006bf11so11045115e9.3
+ for <buildroot@buildroot.org>; Fri, 09 Feb 2024 11:50:28 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1707508226; x=1708113026;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=8gDvQhPjml4hS1tDv2LLvOBbnyg036n/qGJRjSbHDf4=;
+ b=kd/1ta6vfXUk3Y4vhS+zNW3QAx9ygxRMv8nArBgwm6YhhEwiAp5cc8k+CtGM6iqoku
+ EdDZ0xblNCdFYWpwIenDnU+CdWfOgqLbu1Q4rxrH0b7mjEp3vwfYCXx/wg62PK8Xe8kn
+ 4WHpzfgdjXi0rdR1ewm6A4lG7SUOj87FZrnozITtyCG0MFxBVHC8w805vF+26TKmhqXF
+ BlN2Zf8T14Zla7pI10bN96JdXDATDB+hHq/x/quU7Jh4GeYet8nn891LB5DMl7nn93zN
+ cIw3ZrnR7ss19JFxMkZz8FnWuQQUxWFStdQVT5n3NKAaNbuRNxts65KUwHfaXpvqlhjm
+ LR0w==
+X-Gm-Message-State: AOJu0YzZX6Ttbf4MvnC4cmy8HKw0cNVpkIunwmXeSUexfhvjNt+bABkR
+ yBSKcODPnsRbvrEtaPwTf06k0Km+tVgVHhyyKkWlX2mXOEcOCmntE4juqiu6n10=
+X-Google-Smtp-Source: AGHT+IGCCRg8VSZfDIp12jYIjAebtWaHqYNnFvHC190AX+BFFRx2mHjXNF5HpzP05FtfDmcRsLlRUg==
+X-Received: by 2002:a05:6000:144:b0:33b:649a:1a1b with SMTP id
+ r4-20020a056000014400b0033b649a1a1bmr14070wrx.49.1707508225676; 
+ Fri, 09 Feb 2024 11:50:25 -0800 (PST)
+X-Forwarded-Encrypted: i=1;
+ AJvYcCVOzVEGaXndUI0QM4QcOFILdcSWwKu3dJnsLmx2nuwpkTO2KZm9776MLwthARpRTOghf5JrsTLcMzOnC+GiQoNFMI8rRdRF7fczGg==
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ k15-20020a05600c1c8f00b0040fd18f231fsm1591139wms.3.2024.02.09.11.50.25
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 09 Feb 2024 11:50:25 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri,  9 Feb 2024 20:37:43 +0100
-Message-ID: <20240209193743.1204013-1-ju.o@free.fr>
+Date: Fri,  9 Feb 2024 20:50:21 +0100
+Message-ID: <20240209195021.341782-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1707507469;
- bh=mJjVmM1HICW0hW7scMqQkY3k+kKJFD8gRetczRAAzIE=;
- h=From:To:Cc:Subject:Date:From;
- b=BVGh4Eq14FHQc2D2Qpe6mKzAtkYT7UHvJBfD+YXy4gblMLNFe6VEjKiZi7qaA4uyG
- iN+jlyNtOHv6+aV5LTtj77ccRzpcV1cmIozGp8URft8BLksr6OJF8Ow2kbaPWFYnzi
- rZYYzv8P8FCYqKvXdhN8hicsVJlueTfe2/u0YJqss59NdRKTLQujvUr6RIsSPq2VLO
- t1490n81r6P8kmGRJm0WBkOBfR/2asQS0fTzMirSDjpdn/im1wxqLOSthXxyKbi8Il
- hPqsODwMa8A2NB+kIORSGU/WqV6YSeaAu2H6oOGC/w5PrDNUxXoQx+wrSquNFlH+Ty
- CTg+xpjXEccjQ==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1707508226; x=1708113026; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=8gDvQhPjml4hS1tDv2LLvOBbnyg036n/qGJRjSbHDf4=;
+ b=TBIAVst9foMf7TA2mshddolQK5uvBZlwqXBaXfe88ki0U/0lssQ2qnEx5ML69BA+gY
+ mEyq9ce9Smtyw0nPG3nnJ5UX3xwYS5fFSjCIBCQf9mdoZXKwYN7kYVihS8RyMK7NiGvI
+ j4FWlKV8YQBqGDj9ALVSrZD3Dc21J0bZISl4xTHy5aesij62UWJfa0jYan9QJiZAUkfi
+ zMDMFg3UBCbGC8dpI1L8KlPWt+aT3vPuhBHnR4j8z62btmWNzqXxDB5dtltv9/TSQrj3
+ 8ydLrb0e4LiqDju9zkgynZKD2cFRGjpZDrG9lpKVQMTAEY62S4JXgfWgoG7Kppx9Eie2
+ Nxkw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=BVGh4Eq1
-Subject: [Buildroot] [PATCH 1/1] support/testing: add iozone runtime test
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=TBIAVst9
+Subject: [Buildroot] [PATCH 1/1] package/rlwrap: needs MMU
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,59 +101,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Matt Silva <dev@matt-silva.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- DEVELOPERS                                   |  1 +
- support/testing/tests/package/test_iozone.py | 22 ++++++++++++++++++++
- 2 files changed, 23 insertions(+)
- create mode 100644 support/testing/tests/package/test_iozone.py
+Fix the following build failure raised since the addition of the package
+in commit 0a1f2fce0494388080af0a4130e62522c26fe4a9:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 1c6c84b05b..45cafc6a03 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1791,6 +1791,7 @@ F:	support/testing/tests/package/test_gnuradio/
- F:	support/testing/tests/package/test_gzip.py
- F:	support/testing/tests/package/test_highway.py
- F:	support/testing/tests/package/test_hwloc.py
-+F:	support/testing/tests/package/test_iozone.py
- F:	support/testing/tests/package/test_iperf3.py
- F:	support/testing/tests/package/test_jq.py
- F:	support/testing/tests/package/test_jq/
-diff --git a/support/testing/tests/package/test_iozone.py b/support/testing/tests/package/test_iozone.py
-new file mode 100644
-index 0000000000..9a9843df56
---- /dev/null
-+++ b/support/testing/tests/package/test_iozone.py
-@@ -0,0 +1,22 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestIozone(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_PACKAGE_IOZONE=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        self.assertRunOk("iozone -v")
-+        self.assertRunOk("iozone -s64 -r4")
+/home/autobuild/autobuild/instance-0/output-1/host/riscv64-buildroot-linux-uclibc/bin/ld.real: pty.o: in function `my_pty_fork':
+pty.c:(.text+0x68): undefined reference to `fork'
+/home/autobuild/autobuild/instance-0/output-1/host/riscv64-buildroot-linux-uclibc/bin/ld.real: filter.o: in function `.L0 ':
+filter.c:(.text+0x134): undefined reference to `fork'
+
+Fixes:
+ - http://autobuild.buildroot.org/results/0a3a68cfb181bc67a7dbf1d44f64b0a29df75987
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/rlwrap/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/rlwrap/Config.in b/package/rlwrap/Config.in
+index 0cb3e33fa7..4e18dfde52 100644
+--- a/package/rlwrap/Config.in
++++ b/package/rlwrap/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_RLWRAP
+ 	bool "rlwrap"
++	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_READLINE
+ 	help
+ 	  rlwrap is a 'readline wrapper', a small utility that uses the
 -- 
 2.43.0
 
