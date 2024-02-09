@@ -4,67 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97B9AC4828F
-	for <buildroot@archiver.kernel.org>; Fri,  9 Feb 2024 10:26:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C429C4828F
+	for <buildroot@archiver.kernel.org>; Fri,  9 Feb 2024 10:47:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5FA0042CF9;
-	Fri,  9 Feb 2024 10:26:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 03DAC4EC0C;
+	Fri,  9 Feb 2024 10:47:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UOpntNIasBJA; Fri,  9 Feb 2024 10:26:03 +0000 (UTC)
+	with ESMTP id yRTGkMKuXGO3; Fri,  9 Feb 2024 10:47:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 563F642D21
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC85D4EC1B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 563F642D21;
-	Fri,  9 Feb 2024 10:26:03 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 378DF1BF31E
- for <buildroot@lists.busybox.net>; Fri,  9 Feb 2024 10:26:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EC85D4EC1B;
+	Fri,  9 Feb 2024 10:47:31 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1C08E1BF31E
+ for <buildroot@lists.busybox.net>; Fri,  9 Feb 2024 10:47:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2546261AF9
- for <buildroot@lists.busybox.net>; Fri,  9 Feb 2024 10:26:02 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 162DB4EC1B
+ for <buildroot@lists.busybox.net>; Fri,  9 Feb 2024 10:47:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9FF6F2zgZcWx for <buildroot@lists.busybox.net>;
- Fri,  9 Feb 2024 10:26:00 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
- helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3082761791
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3082761791
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3082761791
- for <buildroot@buildroot.org>; Fri,  9 Feb 2024 10:25:59 +0000 (UTC)
-Received: from tuxedoOT.fritz.box (unknown [212.37.174.96])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id 83DAA2C832C5;
- Fri,  9 Feb 2024 11:25:57 +0100 (CET)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fTK-cpAPxlJK for <buildroot@lists.busybox.net>;
+ Fri,  9 Feb 2024 10:47:28 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
+ envelope-from=sebastian.weyer@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6257C4EC0C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6257C4EC0C
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6257C4EC0C
+ for <buildroot@buildroot.org>; Fri,  9 Feb 2024 10:47:26 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 5b1f17b1804b1-4105a6be071so4375715e9.1
+ for <buildroot@buildroot.org>; Fri, 09 Feb 2024 02:47:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1707475644; x=1708080444;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=hfA5SiMLfScgqFLL0/mDAfnNrSk0PIwK7iEQXazXpY4=;
+ b=RDvGIjxteqUXzznU7lQjB321V7uDOYgpr0JY4MLhzEydy3+fnBhgM223rMW4FLs0ra
+ qbJcIy/2xOMuFveYV+yiNMrWDgJTHlO5XJ3ymT8ktktiPuznTg3rYcdBGjUwcLn2FoHZ
+ smccEIRw0DBbhH9MCpEuSyO7aKKwxJpDU4sEtDle4LOjehaDpEQoCSpTLjt9zHHilZ7+
+ h+Z8PiV6bL875av7lS96D9MQlHbbbetiowuU9J62AghvpoorA5KSW35CSJ+K8PgWfSeq
+ EglDmdtiV9HvW9DTJ3ukKsSOfAiScQwvHW+mRkcBeHEG/cf1JmOMc5rOmYTru7VmA2kN
+ E7sQ==
+X-Gm-Message-State: AOJu0Yz6EfJ1KY4PbJXeN4Pr+9oJkM4VNEZUpoeC5gVM2WYUcJAL2Ki+
+ 8fbY3+hBXgjTzDG/54ZW6xt5xaDZkEcaZXrfpCMW+k0C65PrFGHiMQ3gIb+ljI601SILNE6HG80
+ 0
+X-Google-Smtp-Source: AGHT+IGLyk432iJKgAdQnkSLvurXqvd6pId1PWeSh/V/EtCmfpaB2RiRhHLGqgxTSbWWhwovcLekjw==
+X-Received: by 2002:a05:600c:4ec6:b0:40f:ba02:d172 with SMTP id
+ g6-20020a05600c4ec600b0040fba02d172mr793143wmq.17.1707475644324; 
+ Fri, 09 Feb 2024 02:47:24 -0800 (PST)
+X-Forwarded-Encrypted: i=1;
+ AJvYcCWS164qtpBenjGOMGtfhnjAMB4XQvlhirxwQl9g86Rd3YmKg+Zm7iom/+tr5LNc5TVJrg2U042GUQoilM5j/E5WfmltjQvrfrTI4VzPOf2MMxguvFepM+PTYTfQ2datMglycaqgEO9npVnGNiI=
+Received: from DJJ6N8Z3.kohlerco.com ([136.144.97.40])
+ by smtp.gmail.com with ESMTPSA id
+ dn7-20020a05600c654700b0040fa661ee82sm205283wmb.44.2024.02.09.02.47.23
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 09 Feb 2024 02:47:24 -0800 (PST)
+From: Sebastian Weyer <sebastian.weyer@smile.fr>
 To: buildroot@buildroot.org
-Date: Fri,  9 Feb 2024 11:25:55 +0100
-Message-Id: <20240209102556.2020962-1-buildroot@bubu1.eu>
-X-Mailer: git-send-email 2.34.1
+Date: Fri,  9 Feb 2024 11:47:04 +0100
+Message-ID: <20240209104705.1825396-1-sebastian.weyer@smile.fr>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=bubu1.eu; s=bubu; 
- t=1707474357; bh=8ynsZPCPQCL2FDqKwjICaBMkSSr0zQnai+OuMxJ7qJQ=;
- h=From:To:Cc:Subject:Date;
- b=Rj+CtBQz499T2jNosfWrC4L0xn9cUNApaZwb4xLebupOpBtoTiwQggKM2wYzQRpMs
- MBUZ0rnwVQ644jnS3kjipDj7/FKtqPlqhNdlGgIigMWu6+QL9wTofxrUcoxKEEgpha
- x2KbzU6p3qvpu0TtRnbCyL4f6blTeXbS5/VNX4Qf3WF1NU3dCpRcBFqcP0WyvRO/99
- BK0Js3v/QbGkE2QsM5prfCN1aXzshNakmdZpPug0qISdyHSLpotG6vZV0MxWVtvd7L
- TEwdbTDcm6ll+CoFnXThlKSaK1JXgffuvH4RW4IlU/xLQlb4r3JLzpVoJ8LWyOfMlm
- SyRiAxAy2TO1A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1707475644; x=1708080444;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=hfA5SiMLfScgqFLL0/mDAfnNrSk0PIwK7iEQXazXpY4=;
+ b=f0z4/1Hat8VSyKNnnN5pphQAtiDSxXxIPPN5H2Aupl92zlIh1wesjAIhAAa7cIIl3T
+ IYdqKSQUwBJf9kZ+j8106zepyBbdBG9RxAAIGgIE+urkOtKe/oAiaxF5Ou0QtRmvxgPv
+ XZco8YbZV5mvv4qdujVggrzNq1OCtUEcCgUC1jko+4tAJVIQHGhIDo2mRQzgfYns32Vo
+ aRrWxk3sYYsIAkyuHFi6K0vG0EnMjF1uy+iLKrdbQ3c+E+90MroALbyZtHj/OZByPvwJ
+ fRILWjjz9l7gMEAZSVRP+NS/uc7QgAjpcnH+m3bnPKl6oVsS1Aw0FZfVdp9ID260Hwch
+ bHPg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
- header.s=bubu header.b=Rj+CtBQz
-Subject: [Buildroot] [PATCH] package/python-jc: new package
+ unprotected) header.d=smile-fr.20230601.gappssmtp.com
+ header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=f0z4/1Ha
+Subject: [Buildroot] [PATCH 1/1] package/qt5doc: bump to latest kde
+ submodule version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,128 +106,80 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Sebastian Weyer <sebastian.weyer@smile.fr>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Julien Corjon <corjon.j@ecagroup.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This version still requires xmltodict and pyexpat for the cli tool to
-work correctly but this should become optional in a future release. [1]
+Bump qt5doc that was missing from the latest version bump to latest
+submodule versions from:
+https://invent.kde.org/qt/qt/qt5/-/tree/kde/5.15
 
-The other dependencies are already optional and this only mentioned in
-the package's help text. [2]
-
-[1] https://github.com/kellyjonbrazil/jc/issues/537
-[2] https://github.com/kellyjonbrazil/jc/issues/108
-
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
 ---
- package/Config.in                             |  1 +
- package/python-jc/Config.in                   | 12 ++++++++++
- package/python-jc/python-jc.hash              |  5 +++++
- package/python-jc/python-jc.mk                | 14 ++++++++++++
- .../testing/tests/package/test_python_jc.py   | 22 +++++++++++++++++++
- 5 files changed, 54 insertions(+)
- create mode 100644 package/python-jc/Config.in
- create mode 100644 package/python-jc/python-jc.hash
- create mode 100644 package/python-jc/python-jc.mk
- create mode 100644 support/testing/tests/package/test_python_jc.py
+This was not the only package that was not touched in the latest  update
+of the submodule versions. Here is a list of the missing packages and
+the reason why it hasn't been updated:
 
-diff --git a/package/Config.in b/package/Config.in
-index 91a6f1de00..7f4d0740ac 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1151,6 +1151,7 @@ menu "External python modules"
- 	source "package/python-janus/Config.in"
- 	source "package/python-jaraco-classes/Config.in"
- 	source "package/python-jaraco-functools/Config.in"
-+	source "package/python-jc/Config.in"
- 	source "package/python-jedi/Config.in"
- 	source "package/python-jeepney/Config.in"
- 	source "package/python-jinja2/Config.in"
-diff --git a/package/python-jc/Config.in b/package/python-jc/Config.in
-new file mode 100644
-index 0000000000..ec1f855b8c
---- /dev/null
-+++ b/package/python-jc/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_PYTHON_JC
-+	bool "python-jc"
-+	select BR2_PACKAGE_PYTHON3_PYEXPAT
-+	select BR2_PACKAGE_PYTHON_XMLTODICT
-+	help
-+	  Converts the output of popular command-line tools and file-
-+	  types to JSON.
-+
-+	  Optionally requires python-pygments for syntax highlighting,
-+	  python-ruamel-yaml for yaml parsing and output.
-+
-+	  https://github.com/kellyjonbrazil/jc
-diff --git a/package/python-jc/python-jc.hash b/package/python-jc/python-jc.hash
-new file mode 100644
-index 0000000000..b06c660a51
---- /dev/null
-+++ b/package/python-jc/python-jc.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/jc/json
-+md5  dffc3f8e92e4c535f5653641abfa5397  jc-1.25.0.tar.gz
-+sha256  eba4aaaf5128f18a16121c0bcfc1b794fc80b665ee97f6a25da9c156559da54e  jc-1.25.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256  6493f2db400f4166ca0956cf192a41aa092bd1396ff463e7fdaf51f257c10497  LICENSE.md
-diff --git a/package/python-jc/python-jc.mk b/package/python-jc/python-jc.mk
-new file mode 100644
-index 0000000000..872c1aa377
---- /dev/null
-+++ b/package/python-jc/python-jc.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-jc
-+#
-+################################################################################
-+
-+PYTHON_JC_VERSION = 1.25.0
-+PYTHON_JC_SOURCE = jc-$(PYTHON_JC_VERSION).tar.gz
-+PYTHON_JC_SITE = https://files.pythonhosted.org/packages/b7/42/be8a1d0410bfddc1a30c06d77d06a1856c49fb18ec5545474a6f17dc3399
-+PYTHON_JC_SETUP_TYPE = setuptools
-+PYTHON_JC_LICENSE = MIT
-+PYTHON_JC_LICENSE_FILES = LICENSE.md
-+
-+$(eval $(python-package))
-diff --git a/support/testing/tests/package/test_python_jc.py b/support/testing/tests/package/test_python_jc.py
-new file mode 100644
-index 0000000000..6c7fb34cac
---- /dev/null
-+++ b/support/testing/tests/package/test_python_jc.py
-@@ -0,0 +1,22 @@
-+from tests.package.test_python import TestPythonPackageBase
-+
-+
-+class TestPythonJc(TestPythonPackageBase):
-+    __test__ = True
-+    # We deliberately run the test without the optional dependencies,
-+    # as this configuration is less tested upstream.
-+    config = TestPythonPackageBase.config + \
-+        """
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_JC=y
-+        """
-+    timeout = 60
-+
-+    def test_run(self):
-+        self.login()
-+        cmd = "jc -h > /dev/null 2>&1"
-+        self.assertRunOk(cmd, timeout=self.timeout)
-+        cmd = "jc id | grep -q root"
-+        self.assertRunOk(cmd, timeout=self.timeout)
-+        cmd = "jc env | grep -q PATH"
-+        self.assertRunOk(cmd, self.timeout)
+- qt53d: does not compile
+  qgltf.cpp:29:10: fatal error: assimp/Importer.hpp: No such file or directory
+   29 | #include <assimp/Importer.hpp>
+
+- qt5coap: no tag 5.15.11, last one 5.15.2, already at latest version
+
+- qt5enginio: no tag 5.15.11, last one 5.6.3, already at latest version
+
+- qt5knx: no tag 5.15.11, last one 5.15.2, already at latest version
+
+- qt5mqtt: no tag 5.15.11, last one 5.15.2, already at latest version
+
+- qt5opcua: no tag 5.15.11, last one 5.15.2, already at latest version
+
+- qt5script: already got updated to 5.15.11 during version bump to 5.15.10
+  in commit 6b23dff9e71786191797d3b41ce80afe659f0396
+
+- qt5webengine-chromium: no tag 5.15.11, last one 5.15.2, already at latest
+  version
+
+- qt5webengine-chromium-catapult: no tags in repo, not sure which version
+  corresponds to 5.15.11
+
+- qt5webkit: no tag 5.15.11, last stable version 5.5.0, currently used
+  version 5.212.0-alpha4
+
+Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
+---
+ package/qt5/qt5doc/qt5doc.hash | 2 +-
+ package/qt5/qt5doc/qt5doc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/qt5/qt5doc/qt5doc.hash b/package/qt5/qt5doc/qt5doc.hash
+index ec84ecdcb5..13a3167211 100644
+--- a/package/qt5/qt5doc/qt5doc.hash
++++ b/package/qt5/qt5doc/qt5doc.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  87ef0ba72ede78148dfae8fbe78c839f0e9966e1ab4a58d7725041144c0de70f  qtdoc-897e90fe304d844beaf694b82a93a50237fa8b9e.tar.bz2
++sha256  1dda7d710bc463cc0d33ad6c88762f5a7fe4606ad9cb73feb24b3c4ea8ab66f5  qtdoc-b7b96305c8cdc23bfd63e77a336802d0d3d99004.tar.bz2
+ sha256  ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d  LICENSE.FDL
+diff --git a/package/qt5/qt5doc/qt5doc.mk b/package/qt5/qt5doc/qt5doc.mk
+index 77845a347f..5dbfafd94a 100644
+--- a/package/qt5/qt5doc/qt5doc.mk
++++ b/package/qt5/qt5doc/qt5doc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QT5DOC_VERSION = 897e90fe304d844beaf694b82a93a50237fa8b9e
++QT5DOC_VERSION = b7b96305c8cdc23bfd63e77a336802d0d3d99004
+ QT5DOC_SITE = $(QT5_SITE)/qtdoc/-/archive/$(QT5DOC_VERSION)
+ QT5DOC_SOURCE = qtdoc-$(QT5DOC_VERSION).tar.bz2
+ QT5DOC_DEPENDENCIES = qt5declarative
 -- 
-2.34.1
+2.42.0
 
 _______________________________________________
 buildroot mailing list
