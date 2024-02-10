@@ -1,70 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B38F8C4829A
-	for <buildroot@archiver.kernel.org>; Sat, 10 Feb 2024 09:32:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69EF8C48260
+	for <buildroot@archiver.kernel.org>; Sat, 10 Feb 2024 10:09:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 46F7C4090D;
-	Sat, 10 Feb 2024 09:32:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F122383D5B;
+	Sat, 10 Feb 2024 10:09:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RrB9soNvkKEN; Sat, 10 Feb 2024 09:32:24 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Vsrh0dZq3_bG; Sat, 10 Feb 2024 10:09:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 539204090E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 086C883D5C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 539204090E;
-	Sat, 10 Feb 2024 09:32:24 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C3B861BF25B
- for <buildroot@lists.busybox.net>; Sat, 10 Feb 2024 09:32:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 086C883D5C;
+	Sat, 10 Feb 2024 10:09:44 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 677471BF5F6
+ for <buildroot@lists.busybox.net>; Sat, 10 Feb 2024 10:09:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id ACE1C405F9
- for <buildroot@lists.busybox.net>; Sat, 10 Feb 2024 09:32:22 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5463B83D5B
+ for <buildroot@lists.busybox.net>; Sat, 10 Feb 2024 10:09:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id w_NuECxFROH7 for <buildroot@lists.busybox.net>;
- Sat, 10 Feb 2024 09:32:21 +0000 (UTC)
-X-Greylist: delayed 7880 seconds by postgrey-1.37 at util1.osuosl.org;
- Sat, 10 Feb 2024 09:32:21 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8705D4016D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8705D4016D
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.70.40.130;
- helo=mail-40130.protonmail.ch; envelope-from=cjts@protonmail.ch;
- receiver=<UNKNOWN> 
-Received: from mail-40130.protonmail.ch (mail-40130.protonmail.ch
- [185.70.40.130])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8705D4016D
- for <buildroot@buildroot.org>; Sat, 10 Feb 2024 09:32:21 +0000 (UTC)
-Date: Sat, 10 Feb 2024 09:32:00 +0000
-To: "buildroot@buildroot.org" <buildroot@buildroot.org>
-Message-ID: <OMSrLj3kDtDll4-Ofu6yacSybx-Zy5Se_kfLtX3og4wFi256KTFvnNxCoo-zWkklZQfERwk_odXaL8S0LS0PJqKDqCzi_KF3bIX6kdWZwOI=@protonmail.ch>
-Feedback-ID: 6739919:user:proton
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PfnPO4-J1xCP for <buildroot@lists.busybox.net>;
+ Sat, 10 Feb 2024 10:09:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0CC3583D54
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0CC3583D54
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0CC3583D54
+ for <buildroot@buildroot.org>; Sat, 10 Feb 2024 10:09:40 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 3272813F8BA;
+ Sat, 10 Feb 2024 11:09:34 +0100 (CET)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 10 Feb 2024 11:09:28 +0100
+Message-ID: <20240210100928.172584-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=protonmail.ch; 
- s=protonmail3; t=1707557538; x=1707816738;
- bh=3u0xeEH/EQWhoqiMfjewio3NUcs+ijK2slzSmFi+Pdw=;
- h=Date:To:From:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
- Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
- b=hLWSKKEVZd3MkFBFp8kqvdpjlSNN4Lhn3zM8Yc+dXc/lUKy5Jtqkka6WOMb1zUaSN
- k0aF828Wp6M9cN9b1qlPBxZA/9L/za8veMAtArAGzdsxIhhLR9Q9SqIb5+mGQWEAPG
- XzAwELjeotklfvhs0O+u2HcGihPOCoEGdVpf65hNR0hqLxP74C2v5HF+4rbgIYlKsx
- 1j2D01uSGXec2S5HjWMvvUeTqygzt996Gt0YlQLyLIBx5SulZ2oA0TDoUag/LgP+1h
- oDsUzzpVygnPGJuKWkkjtdusKlk2mqWiXs08olEPV0+CZd0ACU5H9yda7+/CNWrsfA
- 20Mch5WI760XA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=protonmail.ch
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1707559777;
+ bh=HeraaRgkJ9kYQVcr4HlGUQgtvLHsWVyKI7zE4prABzQ=;
+ h=From:To:Cc:Subject:Date:From;
+ b=aY8VogqR+PIPShajMhDrqxim8ruZ7EXACDIPfxLPiOjqFBvlg3njocFVT7UlTlV3h
+ PHiL1ab1ICwLoS3X9ETMEdvYc7BC0OjRKm+8V6ur0Z9bvU76HMAcPkz9BxyQjLTv4O
+ N1X5x10auyFb5QhB/XdkkUH+OjvK719+PHUFV1JvBVN9ldIR/ZtiDmXkGdo8Cn3P51
+ OSq0y+VTxXgLm50ym30z5HBkDTB6iwANHVQP5sxWbkIjEAi1qBg5+CVA4gO/Yldwrh
+ rWNXzJ3VpSQRvkvaTPcpAcLWV6YG2Bx3oRrImDYblI8U4sNGkC1ktcZrOrbAq2NAtg
+ zKzABV46NLY/Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=protonmail.ch header.i=@protonmail.ch
- header.a=rsa-sha256 header.s=protonmail3 header.b=hLWSKKEV
-Subject: [Buildroot] Unable to build host python3.12
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=aY8VogqR
+Subject: [Buildroot] [PATCH 1/1] package/ghostscript: security bump to
+ version 10.02.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,29 +77,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: cjts via buildroot <buildroot@buildroot.org>
-Reply-To: cjts <cjts@protonmail.ch>
+Cc: Bernd Kuhls <bernd@kuhls.net>, Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi
+For release note, see:
+https://ghostscript.readthedocs.io/en/gs10.02.1/News.html
 
-I checked out the master branch at  8ab4a0a348b255a074d16b640e8a372fe94596dc and tried to build a defconfig (x86_64) with HOST_PYTHON3 enabled.
+For detailed history, see:
+https://git.ghostscript.com/?p=ghostpdl.git;a=shortlog;h=refs/tags/ghostpdl-10.02.1
 
-The install part fails thus:
-ost/lib/python3.12/lib-dynload/_tkinter.cpython-312-x86_64-linux-gnu.so
-/usr/bin/install -c -m 644 ./Lib/shutil.py /mnt/vmtmp/buildroot/output/host/lib/python3.12
-/usr/bin/install -c -m 644 ./Lib/signal.py /mnt/vmtmp/buildroot/output/host/lib/python3.12
-/usr/bin/install: cannot stat 'Modules/_tkinter.cpython-312-x86_64-linux-gnu.so': No such file or directory
+Fixes:
+- CVE-2023-46751:
+  https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-46751
 
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/ghostscript/ghostscript.hash | 4 ++--
+ package/ghostscript/ghostscript.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-I looked at the makefile.pre.in but I cannot see why tkinter is being included. 
+diff --git a/package/ghostscript/ghostscript.hash b/package/ghostscript/ghostscript.hash
+index 77c8faccbe..849f6c64ba 100644
+--- a/package/ghostscript/ghostscript.hash
++++ b/package/ghostscript/ghostscript.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs10020/SHA512SUMS
+-sha512  c49344151063e915add55a0a842c2a645d8362a5cbca663bd07638f4bd3699a08cade37a9efe905ad5a41e014353e5e1b1268b7925e43128ad30d5b031396b71  ghostscript-10.02.0.tar.xz
++# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs10021/SHA512SUMS
++sha512  ee0f754c1bd8a18428ad14eaa3ead80ff8b96275af5012e7a8384f1f10490da056eec9ae3cc791a7a13a24e16e54df5bccdd109c7d53a14534bbd7360a300b11  ghostscript-10.02.1.tar.xz
+ 
+ # Hash for license file:
+ sha256  8ce064f423b7c24a011b6ebf9431b8bf9861a5255e47c84bfb23fc526d030a8b  LICENSE
+diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
+index 161521f970..da23ebbadb 100644
+--- a/package/ghostscript/ghostscript.mk
++++ b/package/ghostscript/ghostscript.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GHOSTSCRIPT_VERSION = 10.02.0
++GHOSTSCRIPT_VERSION = 10.02.1
+ GHOSTSCRIPT_SOURCE = ghostscript-$(GHOSTSCRIPT_VERSION).tar.xz
+ GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs$(subst .,,$(GHOSTSCRIPT_VERSION))
+ GHOSTSCRIPT_LICENSE = AGPL-3.0
+-- 
+2.43.0
 
-Cheers
-
-CJ
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
