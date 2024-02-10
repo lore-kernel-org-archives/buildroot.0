@@ -4,93 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28348C4829C
-	for <buildroot@archiver.kernel.org>; Sat, 10 Feb 2024 21:49:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EBF9C4829C
+	for <buildroot@archiver.kernel.org>; Sat, 10 Feb 2024 21:50:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D767560625;
-	Sat, 10 Feb 2024 21:49:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DB5DA6061B;
+	Sat, 10 Feb 2024 21:50:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id q4Wuf1KNftKq; Sat, 10 Feb 2024 21:49:55 +0000 (UTC)
+	with ESMTP id u6XOvxj2wzxv; Sat, 10 Feb 2024 21:50:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8EF0560617
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5D4EC60600
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8EF0560617;
-	Sat, 10 Feb 2024 21:49:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A15021BF295
- for <buildroot@lists.busybox.net>; Sat, 10 Feb 2024 21:49:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5D4EC60600;
+	Sat, 10 Feb 2024 21:50:24 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 63DFE1BF295
+ for <buildroot@lists.busybox.net>; Sat, 10 Feb 2024 21:50:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B488542A99
- for <buildroot@lists.busybox.net>; Sat, 10 Feb 2024 21:25:04 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B9238416DA
+ for <buildroot@lists.busybox.net>; Sat, 10 Feb 2024 21:25:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bOUzqbLp40wz for <buildroot@lists.busybox.net>;
- Sat, 10 Feb 2024 21:25:03 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id r9jzZaW-Vi53 for <buildroot@lists.busybox.net>;
+ Sat, 10 Feb 2024 21:25:01 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::432; helo=mail-wr1-x432.google.com;
+ client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
  envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B125641A92
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B125641A92
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B125641A92
- for <buildroot@buildroot.org>; Sat, 10 Feb 2024 21:25:02 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id
- ffacd0b85a97d-33b748a1eefso209619f8f.3
- for <buildroot@buildroot.org>; Sat, 10 Feb 2024 13:25:02 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B87EA4EBEE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B87EA4EBEE
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B87EA4EBEE
+ for <buildroot@buildroot.org>; Sat, 10 Feb 2024 21:25:00 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ 5b1f17b1804b1-4109236b855so4620385e9.1
+ for <buildroot@buildroot.org>; Sat, 10 Feb 2024 13:25:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707600300; x=1708205100;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=MffC1nSLpwfN8vnjRb3kM4TRXkoFI9hpi0sAxIYhlQw=;
- b=vSJaztVoEWR+WuTH2+l3zcpuLCItWuryxgcoaxWjxHAmLlvabdsqy5Nbqb76wKpbr5
- hiMYF4JVTn9HBGV6VT2Ap/wwz+V5IoHQyDp5ILsr3qeZ9bsZrstxiWG8MlwGstyQ9tEK
- Li2rQngeBQakQX7CS5cMa2SJyAp4HoGCh6lv3yOfjEM3hiBbDvi4xrg6GhaD0YBSazxx
- AwSTqAuYTqXc7Um/GGWnWZVqR4jL0RRP4g/cBPkY9eV+bU0FkK7UcihmZ8ApBEGqIzER
- hO+vQyxdi6LPubMxw83OWB3KSuLrMGzhmV+B8D93kjF8lBwXV8q9kaEGNbbGTwSAR1Eu
- Og/g==
-X-Gm-Message-State: AOJu0YwxP8Kq7UvQkEWlFifvQZEkPNJy4aKUfRjQVLZrXLAHYJnFarmH
- W6QvA6u4E1Z8Uu3W4BqgQnyjWGqBIZ70bzQDfADVKy1CpU9p0saLNxlbOoIV
-X-Google-Smtp-Source: AGHT+IFU7tVE/XXXTrc5LZRX/IiQlZOmDwPEE8/6MW+S0QW/xUdBPc4USVgUMK4dRABT72i5GqWK8w==
-X-Received: by 2002:a5d:518e:0:b0:33b:697b:bcdc with SMTP id
- k14-20020a5d518e000000b0033b697bbcdcmr1684393wrv.23.1707600300455; 
- Sat, 10 Feb 2024 13:25:00 -0800 (PST)
+ d=1e100.net; s=20230601; t=1707600298; x=1708205098;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=mnV5jtgeJVDlexTr3GqmANy2+fNkaIjHcCvARGkEYAI=;
+ b=JX2Q2KdXMrV8Im/EDgOiICwq8txNIcCovXNKftoUaU8xYsHpdsDaQiOAQuATHNm/dG
+ B0az+5eJtkTIv9N2C8BjyRrm4RiGmHW+wxhfrhs4yoQ7vbr0AgnD0jecFHgjHaVw5l1S
+ phF9yEq65cQ4U7tPpcMVSn5Snm9WmUeVEyQdqMxDAxW4ltA8TinPuqdJBWB4AYTo7DM3
+ 1AoYTeNoxOnay2z9sBMdLuQlXarjHXwDViVnWD7+9qSBDMQig/SiDItOIEEnkRV5+Tno
+ GZ/gzYrwuXDGc9JIT6K8gE9Om0yTY9fQZjxlp51X497n4SFd7whpgngfuP0zdUip7YDi
+ ZQHw==
+X-Gm-Message-State: AOJu0YwpmyBnOMJFCCzeJUK1eSrX40F4VPiQT01uFWV20WajUP5biB1I
+ jSD9OZEp7aWC0VuITvfYaDk+ML+JoNQjqwtjFI7Z89zxZ1eAu74DU9v6/Tcj
+X-Google-Smtp-Source: AGHT+IEpK2Hw8m6xg7waaMeENbLWRWz2OS5ke+nz5peGHiGiytb7uuMXRYWAu7GlSweUheW6tAWcpQ==
+X-Received: by 2002:adf:cc85:0:b0:33b:2884:edf2 with SMTP id
+ p5-20020adfcc85000000b0033b2884edf2mr2301184wrj.56.1707600297977; 
+ Sat, 10 Feb 2024 13:24:57 -0800 (PST)
+X-Forwarded-Encrypted: i=1;
+ AJvYcCW0jzV41OF+Vm4vhFXZjzSZ3NQmIO2h6e3IRsQO6Rmvbf+k4OJW4e8GuacGZ/O40QvpUsp/oD/W/UYW8/RI5sKFb9s+RsyUrv8lNr/yf3IfE4WfG2cmXSXtA7kb1bnYXoGOu+t4PPI=
 Received: from landeda.home ([2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
  by smtp.gmail.com with ESMTPSA id
- ba23-20020a0560001c1700b0033946c0f9e7sm2728962wrb.17.2024.02.10.13.24.59
+ c8-20020adfef48000000b0033b47ee01f1sm2701826wrp.49.2024.02.10.13.24.56
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 10 Feb 2024 13:25:00 -0800 (PST)
+ Sat, 10 Feb 2024 13:24:57 -0800 (PST)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 10 Feb 2024 22:24:55 +0100
-Message-ID: <62cf7f8a3ab7e42c2354cfa3881477d35ae5890d.1707600292.git.yann.morin.1998@free.fr>
+Date: Sat, 10 Feb 2024 22:24:56 +0100
+Message-ID: <cover.1707600292.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1707600292.git.yann.morin.1998@free.fr>
-References: <cover.1707600292.git.yann.morin.1998@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1707600300; x=1708205100; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
- :message-id:reply-to;
- bh=MffC1nSLpwfN8vnjRb3kM4TRXkoFI9hpi0sAxIYhlQw=;
- b=S1lTBJSuiZZOgtKFmolF2x9NTxOw8oLSelQ2JEXCwD+lrUgp++QXGDk28l2rvAqmCo
- nTVX+e90OadYnaWBb/zpUf3VD82gndnM73613u3deXyQucEhseJA5bRIE52pxWFNBNtI
- jBtMI/IKb+BYeJ9FKi8qlX/OwUdjRDzURpot39Rjzy09yea1y7vm9bKh5kPswVE+gHkv
- ncZDns6g2p1HGuptou27IBFcG/sOZTUfN5tkex/IF7KBdoh/9+HWDdCrSVJXe3wwCFbm
- +VyHJUzNWahKR7PkqPRrZyE+UBfgRYnXWQaywhnsTgbF8PSCTiw1rFPFo7mnbs+Co2sP
- DdOA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=gmail.com; s=20230601; t=1707600298; x=1708205098; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=mnV5jtgeJVDlexTr3GqmANy2+fNkaIjHcCvARGkEYAI=;
+ b=CJAnpw2XReqOTxsgiWm19maHyW7TQnxwMLgxFTOgIjLAHVBMhTFnU/vlWXTCI+LVn/
+ bzveiC70X38gPr+iWF7lvUmpp5MpuYIQTvw7Y4Dd39u7T9///GpJXRnVHLyzgY/1rb3k
+ z5vB54AITxSxWDK2WU79TufXam6gpdHQ/IRt/6cwiLcWUFSLXjBByq5RoATO7Qyhx7Eb
+ U1D887sYUaE7jjlt23pv//eSqDg3hJdLk4zuEamoRc82at6Pf996aErkTbKU0osCPKzv
+ y35hx8UfVV6yG9eFKseo7UGRGiHuYCQCzGR0Y1bCUxavtOKB3UOG231RFf/6PNwdTAFd
+ aKoA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=fail (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=S1lTBJSu
-Subject: [Buildroot] [PATCH 2/6 v2] doc/manual: fixup ordered lists
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=CJAnpw2X
+Subject: [Buildroot] [PATCH 0/6 v2] utils/checkpackagelib: check CPE
+ variables (branch yem/checkpkg-cpe)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,187 +103,228 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Ricardo Martincoski <ricardo.martincoski@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-With recent asiidoc versions (at least 10.2.0 is known to report that),
-rendering the manual yields a few warnings related to ordered lists:
-
-    asciidoc: WARNING: customize-quick-guide.adoc: line 13: list item index: expected 2 got 1
-    asciidoc: WARNING: customize-quick-guide.adoc: line 15: list item index: expected 3 got 1
-    [...]
-    asciidoc: WARNING: customize-quick-guide.adoc: line 65: list item index: expected 13 got 1
-    asciidoc: WARNING: customize-quick-guide.adoc: line 66: list item index: expected 14 got 1
-    asciidoc: WARNING: adding-packages-gettext.adoc: line 30: list item index: expected 2 got 1
-    asciidoc: WARNING: adding-packages-gettext.adoc: line 41: list item index: expected 3 got 1
-
-The reason is that we use the same index to tell asciidoc to
-automatically number items.
-
-However, the official way to provide an automatic index is to write no
-index:
-
-    https://docs.asciidoctor.org/asciidoc/latest/lists/ordered/
-
-    [...] since the numbering is obvious, the AsciiDoc processor will
-    insert the numbers for you if you omit them:
-    [...]
-    If you number the ordered list explicitly, you have to manually keep
-    the list numerals sequential. Otherwise, you will get a warning.
-
-So, abide by the documentation, and drop the repeating indices to
-ordered lists where we want automatic numbering.
-
-Note that there is another ordered list, in adding-packages-directory.adoc,
-but it does use explicit, sequential numbering. For consistency within
-the whole document, we also convert it.
-
-To avoid extra useless churn, the indentation of the items is not
-changed to match the elided indices.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- docs/manual/adding-packages-directory.adoc | 14 +++++------
- docs/manual/adding-packages-gettext.adoc   |  6 ++---
- docs/manual/customize-quick-guide.adoc     | 28 +++++++++++-----------
- 3 files changed, 24 insertions(+), 24 deletions(-)
-
-diff --git a/docs/manual/adding-packages-directory.adoc b/docs/manual/adding-packages-directory.adoc
-index 03249ca06f..0b7221aae0 100644
---- a/docs/manual/adding-packages-directory.adoc
-+++ b/docs/manual/adding-packages-directory.adoc
-@@ -44,13 +44,13 @@ project after an empty line.
- As a convention specific to Buildroot, the ordering of the attributes
- is as follows:
- 
--1. The type of option: +bool+, +string+... with the prompt
--2. If needed, the +default+ value(s)
--3. Any dependencies on the target in +depends on+ form
--4. Any dependencies on the toolchain in +depends on+ form
--5. Any dependencies on other packages in +depends on+ form
--6. Any dependency of the +select+ form
--7. The help keyword and help text.
-+. The type of option: +bool+, +string+... with the prompt
-+. If needed, the +default+ value(s)
-+. Any dependencies on the target in +depends on+ form
-+. Any dependencies on the toolchain in +depends on+ form
-+. Any dependencies on other packages in +depends on+ form
-+. Any dependency of the +select+ form
-+. The help keyword and help text.
- 
- You can add other sub-options into a +if BR2_PACKAGE_LIBFOO...endif+
- statement to configure particular things in your software. You can look at
-diff --git a/docs/manual/adding-packages-gettext.adoc b/docs/manual/adding-packages-gettext.adoc
-index e9c6968e79..739bed25d5 100644
---- a/docs/manual/adding-packages-gettext.adoc
-+++ b/docs/manual/adding-packages-gettext.adoc
-@@ -23,11 +23,11 @@ Due to this, and in order to make sure that Native Language Support is
- properly handled, packages in Buildroot that can use NLS support
- should:
- 
--1. Ensure NLS support is enabled when +BR2_SYSTEM_ENABLE_NLS=y+. This
-+. Ensure NLS support is enabled when +BR2_SYSTEM_ENABLE_NLS=y+. This
-    is done automatically for 'autotools' packages and therefore should
-    only be done for packages using other package infrastructures.
- 
--1. Add +$(TARGET_NLS_DEPENDENCIES)+ to the package
-+. Add +$(TARGET_NLS_DEPENDENCIES)+ to the package
-    +<pkg>_DEPENDENCIES+ variable. This addition should be done
-    unconditionally: the value of this variable is automatically
-    adjusted by the core infrastructure to contain the relevant list of
-@@ -38,7 +38,7 @@ should:
-    also contains +gettext+ in order to get the full-blown 'gettext'
-    implementation.
- 
--1. If needed, add +$(TARGET_NLS_LIBS)+ to the linker flags, so that
-+. If needed, add +$(TARGET_NLS_LIBS)+ to the linker flags, so that
-    the package gets linked with +libintl+. This is generally not
-    needed with 'autotools' packages as they usually detect
-    automatically that they should link with +libintl+. However,
-diff --git a/docs/manual/customize-quick-guide.adoc b/docs/manual/customize-quick-guide.adoc
-index 627ecbacb1..315027c590 100644
---- a/docs/manual/customize-quick-guide.adoc
-+++ b/docs/manual/customize-quick-guide.adoc
-@@ -9,11 +9,11 @@ now summarize all this by providing step-by-step instructions to storing your
- project-specific customizations. Clearly, the steps that are not relevant to
- your project can be skipped.
- 
--1. +make menuconfig+ to configure toolchain, packages and kernel.
--1. +make linux-menuconfig+ to update the kernel config, similar for
-+. +make menuconfig+ to configure toolchain, packages and kernel.
-+. +make linux-menuconfig+ to update the kernel config, similar for
-    other configuration like busybox, uclibc, ...
--1. +mkdir -p board/<manufacturer>/<boardname>+
--1. Set the following options to +board/<manufacturer>/<boardname>/<package>.config+
-+. +mkdir -p board/<manufacturer>/<boardname>+
-+. Set the following options to +board/<manufacturer>/<boardname>/<package>.config+
-    (as far as they are relevant):
-    * +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE+
-    * +BR2_PACKAGE_BUSYBOX_CONFIG+
-@@ -21,7 +21,7 @@ your project can be skipped.
-    * +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE+
-    * +BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE+
-    * +BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE+
--1. Write the configuration files:
-+. Write the configuration files:
-    * +make linux-update-defconfig+
-    * +make busybox-update-config+
-    * +make uclibc-update-config+
-@@ -29,38 +29,38 @@ your project can be skipped.
-      board/<manufacturer>/<boardname>/at91bootstrap3.config+
-    * +make barebox-update-defconfig+
-    * +make uboot-update-defconfig+
--1. Create +board/<manufacturer>/<boardname>/rootfs-overlay/+ and fill it
-+. Create +board/<manufacturer>/<boardname>/rootfs-overlay/+ and fill it
-    with additional files you need on your rootfs, e.g.
-    +board/<manufacturer>/<boardname>/rootfs-overlay/etc/inittab+.
-    Set +BR2_ROOTFS_OVERLAY+
-    to +board/<manufacturer>/<boardname>/rootfs-overlay+.
--1. Create a post-build script
-+. Create a post-build script
-    +board/<manufacturer>/<boardname>/post_build.sh+. Set
-    +BR2_ROOTFS_POST_BUILD_SCRIPT+ to
-    +board/<manufacturer>/<boardname>/post_build.sh+
--1. If additional setuid permissions have to be set or device nodes have
-+. If additional setuid permissions have to be set or device nodes have
-    to be created, create +board/<manufacturer>/<boardname>/device_table.txt+
-    and add that path to +BR2_ROOTFS_DEVICE_TABLE+.
--1. If additional user accounts have to be created, create
-+. If additional user accounts have to be created, create
-    +board/<manufacturer>/<boardname>/users_table.txt+ and add that path
-    to +BR2_ROOTFS_USERS_TABLES+.
--1. To add custom patches to certain packages, set +BR2_GLOBAL_PATCH_DIR+
-+. To add custom patches to certain packages, set +BR2_GLOBAL_PATCH_DIR+
-    to +board/<manufacturer>/<boardname>/patches/+ and add your patches
-    for each package in a subdirectory named after the package. Each
-    patch should be called +<packagename>-<num>-<description>.patch+.
--1. Specifically for the Linux kernel, there also exists the option
-+. Specifically for the Linux kernel, there also exists the option
-    +BR2_LINUX_KERNEL_PATCH+ with as main advantage that it can also
-    download patches from a URL. If you do not need this,
-    +BR2_GLOBAL_PATCH_DIR+ is preferred. U-Boot, Barebox, at91bootstrap
-    and at91bootstrap3 also have separate options, but these do not
-    provide any advantage over +BR2_GLOBAL_PATCH_DIR+ and will likely be
-    removed in the future.
--1. If you need to add project-specific packages, create
-+. If you need to add project-specific packages, create
-    +package/<manufacturer>/+ and place your packages in that
-    directory. Create an overall +<manufacturer>.mk+ file that
-    includes the +.mk+ files of all your packages. Create an overall
-    +Config.in+ file that sources the +Config.in+ files of all your
-    packages. Include this +Config.in+ file from Buildroot's
-    +package/Config.in+ file.
--1. +make savedefconfig+ to save the buildroot configuration.
--1. +cp defconfig configs/<boardname>_defconfig+
-+. +make savedefconfig+ to save the buildroot configuration.
-+. +cp defconfig configs/<boardname>_defconfig+
--- 
-2.43.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gQWxsIQoKVGhpcyBzZXJpZXMgcmVtb3ZlcyBzdXBlcmZsdW91cyBDUEUgdmFyaWFibGVz
+IHRoYXQgYXJlIHNldCB0byB0aGVpcgpkZWZhdWx0IHZhbHVlcywgcmVwbGFjZXMgdGhlbSB3aXRo
+IHRoZSBzcGVjaWZpYyBfQ1BFX1ZBTElEIG9uZSwgIGFuZApldmVudHVhbGx5IGFkZHMgYSBjaGVj
+ay1wYWNrYWdlIHRlc3QgdGhhdCBlbnN1cmVzIG5vbmUgY3JvcCBpbiBiYWNrCmluIHRoZSBmdXR1
+cmUuCgpUaGUgc2VyaWVzIGFsc28gaW5jbHVkZXMgYSBmZXcgcHJlbGltaW5hcnkgY2xlYW51cHMg
+YW5kIGZpeGVzLgoKQ2hhxYtlcyB2MSAtPiB2MjoKICAtIGRyb3AgYXBwbGllZCBwYXRjaGVzCiAg
+LSB1c2UgQ1BFX0lEX1ZBTElEIHRvIGFzc2VydCB0aGUgZGVmYXVsdHMgYXJlIHZhbGlkCiAgLSBt
+YW51YWwgY2xlYW51cHMKICAtIGh0dHBzIFVSTCEKClJlZ2FyZHMsCllhbm4gRS4gTU9SSU4uCgoK
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLQpZYW5uIEUuIE1PUklOICg2KToKICAgICAgdXRpbHMvY2hlY2stcGFja2FnZTogdXNl
+IGh0dHBzIGZvciB0aGUgbWFudWFsIFVSTAogICAgICBkb2MvbWFudWFsOiBmaXh1cCBvcmRlcmVk
+IGxpc3RzCiAgICAgIGRvYy9tYW51YWw6IGluZGVudCB0aGUgQ1ZFIGV4YW1wbGUgdGhlIHNhbWUg
+YXMgdGhlIENWRSBsaXN0IGl0ZW0KICAgICAgZG9jL21hbnVhbDogZG9jdW1lbnQgX0NQRV9JRF9W
+QUxJRAogICAgICBwYWNrYWdlOiBzd2l0Y2ggdG8gX0NQRV9JRF9WQUxJRAogICAgICB1dGlscy9j
+aGVja3BhY2thZ2VsaWI6IGFkZCBjaGVjayBmb3IgQ1BFIHZhcmlhYmxlcyBzZXQgdG8gZGVmYXVs
+dCB2YWx1ZXMKCiBkb2NzL21hbnVhbC9hZGRpbmctcGFja2FnZXMtZGlyZWN0b3J5LmFkb2MgICAg
+ICAgICB8IDE0ICsrLS0tCiBkb2NzL21hbnVhbC9hZGRpbmctcGFja2FnZXMtZ2VuZXJpYy5hZG9j
+ICAgICAgICAgICB8ICA4ICsrLQogZG9jcy9tYW51YWwvYWRkaW5nLXBhY2thZ2VzLWdldHRleHQu
+YWRvYyAgICAgICAgICAgfCAgNiArLQogZG9jcy9tYW51YWwvY3VzdG9taXplLXF1aWNrLWd1aWRl
+LmFkb2MgICAgICAgICAgICAgfCAyOCArKysrLS0tLS0KIHBhY2thZ2UvYWNsL2FjbC5tayAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvYXNuMWMvYXNuMWMu
+bWsgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvYXRmdHAvYXRm
+dHAubWsgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvYXRvcC9h
+dG9wLm1rICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvYXR0
+ci9hdHRyLm1rICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2Uv
+YXhlbC9heGVsLm1rICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2th
+Z2UvYmR3Z2MvYmR3Z2MubWsgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBh
+Y2thZ2UvYmVlY3J5cHQvYmVlY3J5cHQubWsgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0K
+IHBhY2thZ2UvYmxrdHJhY2UvYmxrdHJhY2UubWsgICAgICAgICAgICAgICAgICAgICAgIHwgIDIg
+Ky0KIHBhY2thZ2UvYm90YW4vYm90YW4ubWsgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwg
+IDIgKy0KIHBhY2thZ2UvYndtLW5nL2J3bS1uZy5tayAgICAgICAgICAgICAgICAgICAgICAgICAg
+IHwgIDIgKy0KIHBhY2thZ2UvYy1pY2FwL2MtaWNhcC5tayAgICAgICAgICAgICAgICAgICAgICAg
+ICAgIHwgIDIgKy0KIHBhY2thZ2UvYy1wZXJpcGhlcnkvYy1wZXJpcGhlcnkubWsgICAgICAgICAg
+ICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvY2dyb3VwZnMtbW91bnQvY2dyb3VwZnMtbW91bnQubWsg
+ICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvY2l2ZXR3ZWIvY2l2ZXR3ZWIubWsgICAgICAgICAg
+ICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvY2pzb24vY2pzb24ubWsgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvY21ha2UvY21ha2UubWsgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvY3JhY2tsaWIvY3JhY2tsaWIubWsg
+ICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvY3J1bi9jcnVuLm1rICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvY3J5cHRzZXR1cC9jcnlw
+dHNldHVwLm1rICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvY3Vwcy1way1oZWxw
+ZXIvY3Vwcy1way1oZWxwZXIubWsgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvZGFya2h0dHBk
+L2RhcmtodHRwZC5tayAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvZGJ1cy1i
+cm9rZXIvZGJ1cy1icm9rZXIubWsgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvZGhj
+cGNkL2RoY3BjZC5tayAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2Uv
+ZG9zZnN0b29scy9kb3Nmc3Rvb2xzLm1rICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2th
+Z2UvZHJhY3V0L2RyYWN1dC5tayAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBh
+Y2thZ2UvZHRjL2R0Yy5tayAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0K
+IHBhY2thZ2UvZHVrdGFwZS9kdWt0YXBlLm1rICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIg
+Ky0KIHBhY2thZ2UvZTJmc3Byb2dzL2UyZnNwcm9ncy5tayAgICAgICAgICAgICAgICAgICAgIHwg
+IDIgKy0KIHBhY2thZ2UvZWxmdXRpbHMvZWxmdXRpbHMubWsgICAgICAgICAgICAgICAgICAgICAg
+IHwgIDIgKy0KIHBhY2thZ2UvZXhlbXBpL2V4ZW1waS5tayAgICAgICAgICAgICAgICAgICAgICAg
+ICAgIHwgIDIgKy0KIHBhY2thZ2UvZXhmYXQvZXhmYXQubWsgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvZjJmcy10b29scy9mMmZzLXRvb2xzLm1rICAgICAgICAg
+ICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvZmVoL2ZlaC5tayAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvZmlsZS9maWxlLm1rICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvZmxhYy9mbGFjLm1rICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvZm9udGNvbmZpZy9mb250Y29uZmln
+Lm1rICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvZ2lmbGliL2dpZmxpYi5tayAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvZ251cGxvdC9nbnVwbG90
+Lm1rICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvZ3BzZC9ncHNkLm1r
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvZ3V0ZW5wcmlu
+dC9ndXRlbnByaW50Lm1rICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvaGFyZmJ1
+enovaGFyZmJ1enoubWsgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvaGFz
+ZXJsL2hhc2VybC5tayAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2Uv
+aGVpbWRhbC9oZWltZGFsLm1rICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2th
+Z2UvaTJjLXRvb2xzL2kyYy10b29scy5tayAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBh
+Y2thZ2UvaXBtaXRvb2wvaXBtaXRvb2wubWsgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0K
+IHBhY2thZ2UvaXByb3V0ZTIvaXByb3V0ZTIubWsgICAgICAgICAgICAgICAgICAgICAgIHwgIDIg
+Ky0KIHBhY2thZ2UvaXB1dGlscy9pcHV0aWxzLm1rICAgICAgICAgICAgICAgICAgICAgICAgIHwg
+IDIgKy0KIHBhY2thZ2UvaXVjb2RlLXRvb2wvaXVjb2RlLXRvb2wubWsgICAgICAgICAgICAgICAg
+IHwgIDIgKy0KIHBhY2thZ2UvamFuc3Nvbi9qYW5zc29uLm1rICAgICAgICAgICAgICAgICAgICAg
+ICAgIHwgIDIgKy0KIHBhY2thZ2UvamFzcGVyL2phc3Blci5tayAgICAgICAgICAgICAgICAgICAg
+ICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvamhlYWQvamhlYWQubWsgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvanEvanEubWsgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvanNvbi1mb3ItbW9kZXJuLWNwcC9qc29uLWZv
+ci1tb2Rlcm4tY3BwLm1rIHwgIDIgKy0KIHBhY2thZ2UvanNvbmNwcC9qc29uY3BwLm1rICAgICAg
+ICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvanN6aXAvanN6aXAubWsgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2Uva2V5dXRpbHMva2V5dXRpbHMu
+bWsgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2Uva3ZtdG9vbC9rdm10b29s
+Lm1rICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvbGFtZS9sYW1lLm1r
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvbGFwYWNrL2xh
+cGFjay5tayAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvbGZ0cC9s
+ZnRwLm1rICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvbGli
+YWlvL2xpYmFpby5tayAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2Uv
+bGliYXNzL2xpYmFzcy5tayAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2th
+Z2UvbGliYXRvbWljX29wcy9saWJhdG9taWNfb3BzLm1rICAgICAgICAgICAgIHwgIDIgKy0KIHBh
+Y2thZ2UvbGliYnBmL2xpYmJwZi5tayAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0K
+IHBhY2thZ2UvbGliY2FwLW5nL2xpYmNhcC1uZy5tayAgICAgICAgICAgICAgICAgICAgIHwgIDIg
+Ky0KIHBhY2thZ2UvbGliY2FwL2xpYmNhcC5tayAgICAgICAgICAgICAgICAgICAgICAgICAgIHwg
+IDIgKy0KIHBhY2thZ2UvbGliY2dyb3VwL2xpYmNncm91cC5tayAgICAgICAgICAgICAgICAgICAg
+IHwgIDIgKy0KIHBhY2thZ2UvbGliY29uZnVzZS9saWJjb25mdXNlLm1rICAgICAgICAgICAgICAg
+ICAgIHwgIDIgKy0KIHBhY2thZ2UvbGliZGFlbW9uL2xpYmRhZW1vbi5tayAgICAgICAgICAgICAg
+ICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvbGliZXNtdHAvbGliZXNtdHAubWsgICAgICAgICAgICAg
+ICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvbGliZXZlbnQvbGliZXZlbnQubWsgICAgICAgICAg
+ICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvbGliZXhpZi9saWJleGlmLm1rICAgICAgICAg
+ICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvbGliZmZpL2xpYmZmaS5tayAgICAgICAg
+ICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvbGliZnVzZS9saWJmdXNlLm1rICAg
+ICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvbGliZ2l0Mi9saWJnaXQyLm1r
+ICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvbGliaWNhbC9saWJpY2Fs
+Lm1rICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvbGlianhsL2xpYmp4
+bC5tayAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvbGlibW1zL2xp
+Ym1tcy5tayAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvbGlibmV0
+L2xpYm5ldC5tayAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvbGli
+bmlkcy9saWJuaWRzLm1rICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2Uv
+bGlibmwvbGlibmwubWsgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2th
+Z2UvbGlicW1pL2xpYnFtaS5tayAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBh
+Y2thZ2UvbGlicnN5bmMvbGlicnN5bmMubWsgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0K
+IHBhY2thZ2UvbGlic2FtcGxlcmF0ZS9saWJzYW1wbGVyYXRlLm1rICAgICAgICAgICAgIHwgIDIg
+Ky0KIHBhY2thZ2UvbGlic2VjY29tcC9saWJzZWNjb21wLm1rICAgICAgICAgICAgICAgICAgIHwg
+IDIgKy0KIHBhY2thZ2UvbGlic25kZmlsZS9saWJzbmRmaWxlLm1rICAgICAgICAgICAgICAgICAg
+IHwgIDIgKy0KIHBhY2thZ2UvbGlidGlycGMvbGlidGlycGMubWsgICAgICAgICAgICAgICAgICAg
+ICAgIHwgIDIgKy0KIHBhY2thZ2UvbGlidW53aW5kL2xpYnVud2luZC5tayAgICAgICAgICAgICAg
+ICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvbGlidXBucC9saWJ1cG5wLm1rICAgICAgICAgICAgICAg
+ICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvbGlidm5jc2VydmVyL2xpYnZuY3NlcnZlci5tayAg
+ICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvbGludXhwdHAvbGludXhwdHAubWsgICAgICAg
+ICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvbGxkcGQvbGxkcGQubWsgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvbG9ncm90YXRlL2xvZ3JvdGF0ZS5t
+ayAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvbHJ6c3ovbHJ6c3oubWsgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvbHNvZi9sc29mLm1rICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvbHlueC9seW54Lm1r
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvbHo0L2x6NC5t
+ayAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvbHpvL2x6
+by5tayAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvbWF0
+aW8vbWF0aW8ubWsgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2Uv
+bWRhZG0vbWRhZG0ubWsgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2th
+Z2UvbWluaWNvbS9taW5pY29tLm1rICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBh
+Y2thZ2UvbW90aW9uL21vdGlvbi5tayAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0K
+IHBhY2thZ2UvbmNtcGMvbmNtcGMubWsgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIg
+Ky0KIHBhY2thZ2UvbmV0LXRvb2xzL25ldC10b29scy5tayAgICAgICAgICAgICAgICAgICAgIHwg
+IDIgKy0KIHBhY2thZ2UvbmV0Y2F0L25ldGNhdC5tayAgICAgICAgICAgICAgICAgICAgICAgICAg
+IHwgIDIgKy0KIHBhY2thZ2UvbmV0dGxlL25ldHRsZS5tayAgICAgICAgICAgICAgICAgICAgICAg
+ICAgIHwgIDIgKy0KIHBhY2thZ2Uvb25pZ3VydW1hL29uaWd1cnVtYS5tayAgICAgICAgICAgICAg
+ICAgICAgIHwgIDIgKy0KIHBhY2thZ2Uvb3Blbi1pc2NzaS9vcGVuLWlzY3NpLm1rICAgICAgICAg
+ICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2Uvb3BlbmJsYXMvb3BlbmJsYXMubWsgICAgICAgICAg
+ICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2Uvb3BlbnJjL29wZW5yYy5tayAgICAgICAgICAg
+ICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2Uvb3BlbnJlc29sdi9vcGVucmVzb2x2Lm1r
+ICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2Uvb3BlbnNjL29wZW5zYy5tayAgICAg
+ICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvcDExLWtpdC9wMTEta2l0Lm1r
+ICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvcGFydGVkL3BhcnRlZC5t
+ayAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvcGNtYW5mbS9wY21h
+bmZtLm1rICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvcGljb2NvbS9w
+aWNvY29tLm1rICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvcG9sa2l0
+L3BvbGtpdC5tayAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvcG9w
+dC9wb3B0Lm1rICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2Uv
+cG93ZXJwYy11dGlscy9wb3dlcnBjLXV0aWxzLm1rICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2th
+Z2UvcHJvY3BzLW5nL3Byb2Nwcy1uZy5tayAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBh
+Y2thZ2UvcHJvdG9idWYtYy9wcm90b2J1Zi1jLm1rICAgICAgICAgICAgICAgICAgIHwgIDIgKy0K
+IHBhY2thZ2UvcHJveHljaGFpbnMtbmcvcHJveHljaGFpbnMtbmcubWsgICAgICAgICAgIHwgIDIg
+Ky0KIHBhY2thZ2UvcHVnaXhtbC9wdWdpeG1sLm1rICAgICAgICAgICAgICAgICAgICAgICAgIHwg
+IDIgKy0KIHBhY2thZ2UvcHdnZW4vcHdnZW4ubWsgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+IHwgIDIgKy0KIHBhY2thZ2UvcHl0aG9uLWVjZHNhL3B5dGhvbi1lY2RzYS5tayAgICAgICAgICAg
+ICAgIHwgIDIgKy0KIHBhY2thZ2UvcHl0aG9uLWVuZ2luZWlvL3B5dGhvbi1lbmdpbmVpby5tayAg
+ICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvcHl0aG9uLW1hcmtkb3duMi9weXRob24tbWFya2Rvd24y
+Lm1rICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvcHl0aG9uLXJzYS9weXRob24tcnNhLm1rICAgICAg
+ICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvcWRlY29kZXIvcWRlY29kZXIubWsgICAgICAg
+ICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvcXBkZi9xcGRmLm1rICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvcXVhemlwL3F1YXppcC5tayAgICAg
+ICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvcXVpY2tqcy9xdWlja2pzLm1r
+ICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvcmFiYml0bXEtYy9yYWJi
+aXRtcS1jLm1rICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2Uvcmhhc2gvcmhhc2gu
+bWsgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvcmlwZ3JlcC9y
+aXBncmVwLm1rICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2Uvcm5nLXRv
+b2xzL3JuZy10b29scy5tayAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvcnAt
+cHBwb2UvcnAtcHBwb2UubWsgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2Uv
+cnBjYmluZC9ycGNiaW5kLm1rICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2th
+Z2UvcnRsXzQzMy9ydGxfNDMzLm1rICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBh
+Y2thZ2UvcnRtcGR1bXAvcnRtcGR1bXAubWsgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0K
+IHBhY2thZ2Uvc2FuZS1iYWNrZW5kcy9zYW5lLWJhY2tlbmRzLm1rICAgICAgICAgICAgIHwgIDIg
+Ky0KIHBhY2thZ2Uvc2hlbGxpbmFib3gvc2hlbGxpbmFib3gubWsgICAgICAgICAgICAgICAgIHwg
+IDIgKy0KIHBhY2thZ2Uvc3BpY2Uvc3BpY2UubWsgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+IHwgIDIgKy0KIHBhY2thZ2Uvc3F1YXNoZnMvc3F1YXNoZnMubWsgICAgICAgICAgICAgICAgICAg
+ICAgIHwgIDIgKy0KIHBhY2thZ2Uvc3NsaC9zc2xoLm1rICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgIHwgIDIgKy0KIHBhY2thZ2Uvc3RyYWNlL3N0cmFjZS5tayAgICAgICAgICAgICAgICAg
+ICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2Uvc3lscGhlZWQvc3lscGhlZWQubWsgICAgICAgICAg
+ICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2Uvc3lza2xvZ2Qvc3lza2xvZ2QubWsgICAgICAg
+ICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2Uvc3lzc3RhdC9zeXNzdGF0Lm1rICAgICAg
+ICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2Uvc3lzdGVtZC9zeXN0ZW1kLm1rICAg
+ICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2Uvc3lzdmluaXQvc3lzdmluaXQu
+bWsgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvdGFyZ2V0Y2xpLWZiL3Rh
+cmdldGNsaS1mYi5tayAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvdGNsYXAvdGNsYXAu
+bWsgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvdGluaS90aW5p
+Lm1rICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvdGlueXBy
+b3h5L3Rpbnlwcm94eS5tayAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvdGlu
+eXhtbC90aW55eG1sLm1rICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2Uv
+dGlueXhtbDIvdGlueXhtbDIubWsgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2th
+Z2UvdG11eC90bXV4Lm1rICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBh
+Y2thZ2UvdHBtMi10b29scy90cG0yLXRvb2xzLm1rICAgICAgICAgICAgICAgICAgIHwgIDIgKy0K
+IHBhY2thZ2UvdHJpbml0eS90cmluaXR5Lm1rICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIg
+Ky0KIHBhY2thZ2UvdW56aXAvdW56aXAubWsgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwg
+IDIgKy0KIHBhY2thZ2UvdXB4L3VweC5tayAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+IHwgIDIgKy0KIHBhY2thZ2UvdXNiZ3VhcmQvdXNiZ3VhcmQubWsgICAgICAgICAgICAgICAgICAg
+ICAgIHwgIDIgKy0KIHBhY2thZ2UvdmFsaWpzb24vdmFsaWpzb24ubWsgICAgICAgICAgICAgICAg
+ICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvdnNmdHBkL3ZzZnRwZC5tayAgICAgICAgICAgICAgICAg
+ICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UveDExdm5jL3gxMXZuYy5tayAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UveHNjcmVlbnNhdmVyL3hzY3JlZW5zYXZlci5t
+ayAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UveWFqbC95YWpsLm1rICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UveWFtbC1jcHAveWFtbC1jcHAubWsg
+ICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvemJhci96YmFyLm1rICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvemxvZy96bG9nLm1rICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvenppcGxpYi96emlw
+bGliLm1rICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHV0aWxzL2NoZWNrLXBhY2th
+Z2UgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHV0aWxzL2NoZWNrcGFj
+a2FnZWxpYi9saWJfbWsucHkgICAgICAgICAgICAgICAgICAgIHwgNzMgKysrKysrKysrKysrKysr
+KysrKysrKwogMTc5IGZpbGVzIGNoYW5nZWQsIDI3NyBpbnNlcnRpb25zKCspLCAyMDAgZGVsZXRp
+b25zKC0pCgotLQouLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0t
+LS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLgp8ICBZYW5uIEUuIE1PUklOICB8IFJl
+YWwtVGltZSBFbWJlZGRlZCB8IC8iXCBBU0NJSSBSSUJCT04gfCBFcmljcycgY29uc3BpcmFjeTog
+fAp8ICszMyA2NjIgMzc2IDA1NiB8IFNvZnR3YXJlICBEZXNpZ25lciB8IFwgLyBDQU1QQUlHTiAg
+ICAgfCAgX19fICAgICAgICAgICAgICAgfAp8ICszMyA1NjEgMDk5IDQyNyBgLS0tLS0tLS0tLS0t
+Li0tLS0tLS06ICBYICBBR0FJTlNUICAgICAgfCAgXGUvICBUaGVyZSBpcyBubyAgfAp8IGh0dHA6
+Ly95bW9yaW4uaXMtYS1nZWVrLm9yZy8gfCBfLypcXyB8IC8gXCBIVE1MIE1BSUwgICAgfCAgIHYg
+ICBjb25zcGlyYWN5LiAgfAonLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS1e
+LS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLS0tJwpfX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1
+aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFu
+L2xpc3RpbmZvL2J1aWxkcm9vdAo=
