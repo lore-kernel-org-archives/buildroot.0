@@ -1,61 +1,61 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D834EC48260
-	for <buildroot@archiver.kernel.org>; Sat, 10 Feb 2024 15:22:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1950BC4829A
+	for <buildroot@archiver.kernel.org>; Sat, 10 Feb 2024 18:37:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3BFF78139A;
-	Sat, 10 Feb 2024 15:22:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B896F60646;
+	Sat, 10 Feb 2024 18:37:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dksM26rr8oQp; Sat, 10 Feb 2024 15:22:17 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZIzIfrVdR1Xt; Sat, 10 Feb 2024 18:37:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E10B813C0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD6A46067A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4E10B813C0;
-	Sat, 10 Feb 2024 15:22:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CD6A46067A;
+	Sat, 10 Feb 2024 18:37:28 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6C3AA1BF5F6
- for <buildroot@lists.busybox.net>; Sat, 10 Feb 2024 15:22:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id AD5011BF365
+ for <buildroot@lists.busybox.net>; Sat, 10 Feb 2024 18:37:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 669BC813C0
- for <buildroot@lists.busybox.net>; Sat, 10 Feb 2024 15:22:16 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A79BF833CD
+ for <buildroot@lists.busybox.net>; Sat, 10 Feb 2024 18:37:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id i4DnuF8bEfk3 for <buildroot@lists.busybox.net>;
- Sat, 10 Feb 2024 15:22:15 +0000 (UTC)
+ with ESMTP id tR1isUaxDWVy for <buildroot@lists.busybox.net>;
+ Sat, 10 Feb 2024 18:37:27 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
  client-ip=2001:868:100:600::216; helo=shout01.mail.de;
  envelope-from=kilian.zinnecker@mail.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0E6808139A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0E6808139A
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A45B4833CA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A45B4833CA
 Received: from shout01.mail.de (shout01.mail.de [IPv6:2001:868:100:600::216])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0E6808139A
- for <buildroot@buildroot.org>; Sat, 10 Feb 2024 15:22:14 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A45B4833CA
+ for <buildroot@buildroot.org>; Sat, 10 Feb 2024 18:37:26 +0000 (UTC)
 Received: from postfix01.mail.de (postfix01.bt.mail.de [10.0.121.125])
- by shout01.mail.de (Postfix) with ESMTP id D333C240B7C;
- Sat, 10 Feb 2024 16:22:12 +0100 (CET)
-Received: from smtp01.mail.de (smtp01.bt.mail.de [10.0.121.211])
- by postfix01.mail.de (Postfix) with ESMTP id B7191801CB;
- Sat, 10 Feb 2024 16:22:12 +0100 (CET)
+ by shout01.mail.de (Postfix) with ESMTP id 9BBF9240D28;
+ Sat, 10 Feb 2024 19:37:24 +0100 (CET)
+Received: from smtp01.mail.de (smtp04.bt.mail.de [10.0.121.214])
+ by postfix01.mail.de (Postfix) with ESMTP id 80A3D801CB;
+ Sat, 10 Feb 2024 19:37:24 +0100 (CET)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
  key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
  (No client certificate requested)
- by smtp01.mail.de (Postfix) with ESMTPSA id 5865724054C;
- Sat, 10 Feb 2024 16:22:11 +0100 (CET)
-To: kilian.zinnecker@mail.de, buildroot@buildroot.org
-Date: Sat, 10 Feb 2024 16:22:10 +0100
-Message-ID: <4544153.LvFx2qVVIh@laptop>
-In-Reply-To: <08b6187c-94f2-4cbc-b0e8-0066ca687796@benettiengineering.com>
-References: <20231204231212.36450-1-kilian.zinnecker@mail.de>
- <20231204231212.36450-2-kilian.zinnecker@mail.de>
- <08b6187c-94f2-4cbc-b0e8-0066ca687796@benettiengineering.com>
+ by smtp01.mail.de (Postfix) with ESMTPSA id 7EE25240A5D;
+ Sat, 10 Feb 2024 19:37:23 +0100 (CET)
+To: kilian.zinnecker@mail.de, buildroot@buildroot.org,
+ Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 10 Feb 2024 19:37:22 +0100
+Message-ID: <1956485.PYKUYFuaPT@laptop>
+In-Reply-To: <b52d94dd-072c-42bc-8958-58141e8a20e2@mind.be>
+References: <2716329.mvXUDI8C0e@laptop>
+ <b52d94dd-072c-42bc-8958-58141e8a20e2@mind.be>
 MIME-Version: 1.0
 X-purgate: clean
 X-purgate: This mail is considered clean (visit http://www.eleven.de for
@@ -65,26 +65,27 @@ X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
 X-purgate: This mail is considered clean (visit http://www.eleven.de for
  further information)
 X-purgate: clean
-X-purgate-size: 1106
-X-purgate-ID: 154282::1707578532-47DBA670-47838CED/0/0
+X-purgate-size: 1920
+X-purgate-ID: 154282::1707590244-B77EF338-4BD8B222/0/0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=mail.de; s=mailde202009; t=1707578532;
- bh=P+yBt4io141fhg3vWx1NXjeaoqE/SZh7BqYd+qVfF6M=;
- h=From:To:Cc:Subject:Date:Message-ID:From:To:CC:Subject:Reply-To;
- b=29+0gMPIWyepc2+9AfOuFOTbk4oBxTHeckng4BW8E8MmTF0lkRrY2mPMC56vd65Vm
- pBEgrori6Gh+G8KvOGmpYWwG+sDBxtHuBK1DMVw/5aW7smV3X9RfDPZij7EI7e4hNE
- tE8nyz8FvOP+KLFg+AyDxxGqqy5IkM601k6WOhRGEO1EpfwF9apRtFfrnJSLuSrgQz
- Eml8QQ9UABUA31IauXCnA79D/q/CE0Yq84sNrHVrEbeThEvLUce/i6gTzb8CW7+av0
- yARPwvbDdspKqnr5Qcn3osTBaToLh+9zAfG34tmP7Ph3HasXsMOSjP2DEhrQt7dRnH
- jyEMo99eB9G1A==
+ d=mail.de; s=mailde202009; t=1707590244;
+ bh=hyTLQtXl60sWknBz3+ISk3wSGsae93h3h4acYVR2P6A=;
+ h=From:To:Subject:Date:Message-ID:From:To:CC:Subject:Reply-To;
+ b=R+nvgT/G9KLsr8tg6ts/VxTf7kmcEWGbCQf+SnlRdy7xOvmY6FA7dfEqskt/IRQAK
+ 9eIyGeQO/0QiZeMWLLdfl4adRWGTjIL7jNSYFc5kQgvzieoWfJ8mepnRVliBuSMqMQ
+ bVX20/D3zRsTJ6+sJaD0fu9tSbPOkyqFLCP7Uv58yet7R5BxYyyWJUr4oUjZqobRqV
+ dqz8Udw/rFTwdEkomB1ITzEwcPqL1gHf2milkDZj/V2b+5yyzg94lXwXsR7xPbEg+G
+ wPSZ8tSFhQNWfkFCS36Bq6ZUwvvO7l2tlL3vZiGArO5NKuR7/i2dIO6IbHEAROIfaD
+ Bt50JhPdFsRLQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mail.de
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
+ dkim=fail reason="signature verification failed" (2048-bit key,
  unprotected) header.d=mail.de header.i=@mail.de header.a=rsa-sha256
- header.s=mailde202009 header.b=29+0gMPI
-Subject: Re: [Buildroot] [PATCH v2 1/2] package/xuantie-bins: new package
+ header.s=mailde202009 header.b=R+nvgT/G
+Subject: Re: [Buildroot] [help] configs/rock5b_defconfig: Switch to mainline
+ kernel
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,43 +99,56 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: "kilian.zinnecker--- via buildroot" <buildroot@buildroot.org>
 Reply-To: kilian.zinnecker@mail.de
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Robert Nelson <robertcnelson@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Giulio, all,
+Hello Arnout, all,
 
-> Hi Yegor, Kilian,
+I was told that from kernel 6.7 on the ethernet of the Rock5B is supported, so 
+I switched to that version (precisely 6.7.4 currently).
 
-This is strange, maybe someone can have a look here: On ozlabs, there are a 
-lot of patches, which have the submitter "kilian.zinnecker--- via buildroot". 
-However, most of them are NOT from me. E.g., one from Yegor Yefremov [1] is 
-marked with submitter "kilian.zinnecker--- via buildroot" - However, I am 
-definitively not Yegor, and none of his patches is from me. There are even more 
-patches marked with "kilian.zinnecker--- via buildroot" [2], some of them even 
-from before I ever submitted my first patch (the Rock5B board support) to 
-buildroot. Does anyone have any idea what this is about, or can have a deeper 
-look at this? (The BeagleV-Ahead patches are from me.)
+>   Clearly, the rootfs is on mmcblk1p2, not mmcblk0p2. So if you have
+> mmcblk0p2 on your command line, and rootwait, it will just wait
+> indefinitely for the rootfs to appear.
 
-[1] https://patchwork.ozlabs.org/project/buildroot/patch/
-20240206132051.2838897-1-yegorslists@googlemail.com/
+Yes, correct, when I switch to mmcblk1p2 it works now! But I also switched to 
+kernel 6.7.4 for now and switched the console in the bootargs to ttyS2 again.
 
-[2] https://patchwork.ozlabs.org/project/buildroot/list/?
-submitter=82609&archive=both&state=*
+> > [   31.717905] vdd_gpu_s0: disabling
+> > [  115.285576] random: crng init done
+> 
+>   That's pretty late for the RNG to be initialized, you'll need the RNG
+> seeder from userspace - but this is enabled by default in Buildroot I
+> think.
 
-[--SNIP--]
+How could I check that?
 
-Thanks for your review Giulio. I will try to address the issues and prepare a 
-new version of the patches.
+> > Of course it could be, that it is just not configured anymore to put a
+> > shell on the serial interface, but I already tried to address that with:
+> > 
+> > BR2_TARGET_GENERIC_GETTY=y
+> > BR2_TARGET_GENERIC_GETTY_PORT="serial2"
+> > 
+> > However, that did not seem to help. Could it be, that there is something
+> > wrong with the SD card formatting? It at least complains about it, but I
+> > am too unfamiliar with that, so I don't know whether it is a problem.
+> 
+>   That's normal. It's because the generated image is not the exact size of
+> your SD card, so the backup GPT partition table is somewhere in the middle
+> instead of at the end. You can run parted on your laptop after writing the
+> SD card and before booting it to fix the issue. But it shouldn't make any
+> difference at all for booting.
 
-Best regards,
+Thanks, I am not familiar with this and thought, it might cause some troubles.
+
+Currently the Rock5B does boot now with the 6.7.4 upstream kernel, but 
+ethernet does not work yet. I try to figure out how to get it working, then I 
+will submit a patch.
+
+Thanks for your help and best regards,
 Kilian
-
-
 
 
 
