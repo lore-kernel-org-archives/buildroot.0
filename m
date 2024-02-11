@@ -1,70 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D9BBC4829A
-	for <buildroot@archiver.kernel.org>; Sun, 11 Feb 2024 10:12:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F848C4829B
+	for <buildroot@archiver.kernel.org>; Sun, 11 Feb 2024 12:09:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1B88560782;
-	Sun, 11 Feb 2024 10:12:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CB55B82263;
+	Sun, 11 Feb 2024 12:09:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7R56td-naJ3m; Sun, 11 Feb 2024 10:12:26 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0NfkgSiLRJlD; Sun, 11 Feb 2024 12:09:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E2E6360653
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C2A248226C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E2E6360653;
-	Sun, 11 Feb 2024 10:12:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9355C1BF36E
- for <buildroot@lists.busybox.net>; Sun, 11 Feb 2024 10:12:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C2A248226C;
+	Sun, 11 Feb 2024 12:09:12 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0FA581BF33A
+ for <buildroot@lists.busybox.net>; Sun, 11 Feb 2024 12:09:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 80297407B0
- for <buildroot@lists.busybox.net>; Sun, 11 Feb 2024 10:12:24 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id ECD678226C
+ for <buildroot@lists.busybox.net>; Sun, 11 Feb 2024 12:09:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YNBeu94UEV51 for <buildroot@lists.busybox.net>;
- Sun, 11 Feb 2024 10:12:23 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0586C407AF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0586C407AF
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0586C407AF
- for <buildroot@buildroot.org>; Sun, 11 Feb 2024 10:12:22 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 0754413F88D;
- Sun, 11 Feb 2024 11:12:18 +0100 (CET)
-From: Julien Olivain <ju.o@free.fr>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hbywhY3YzfX9 for <buildroot@lists.busybox.net>;
+ Sun, 11 Feb 2024 12:09:10 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2001:868:100:600::217; helo=shout02.mail.de;
+ envelope-from=kilian.zinnecker@mail.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D281F82263
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D281F82263
+Received: from shout02.mail.de (shout02.mail.de [IPv6:2001:868:100:600::217])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D281F82263
+ for <buildroot@buildroot.org>; Sun, 11 Feb 2024 12:09:09 +0000 (UTC)
+Received: from postfix03.mail.de (postfix03.bt.mail.de [10.0.121.127])
+ by shout02.mail.de (Postfix) with ESMTP id 696F02409F5;
+ Sun, 11 Feb 2024 13:09:07 +0100 (CET)
+Received: from smtp01.mail.de (smtp01.bt.mail.de [10.0.121.211])
+ by postfix03.mail.de (Postfix) with ESMTP id 4C91F8020A;
+ Sun, 11 Feb 2024 13:09:07 +0100 (CET)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+ (No client certificate requested)
+ by smtp01.mail.de (Postfix) with ESMTPSA id 235F2244670;
+ Sun, 11 Feb 2024 13:09:05 +0100 (CET)
 To: buildroot@buildroot.org
-Date: Sun, 11 Feb 2024 11:12:12 +0100
-Message-ID: <20240211101212.171127-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.43.0
+Date: Sun, 11 Feb 2024 13:08:54 +0100
+Message-Id: <20240211120857.6622-1-kilian.zinnecker@mail.de>
 MIME-Version: 1.0
+X-purgate: clean
+X-purgate: This mail is considered clean (visit http://www.eleven.de for
+ further information)
+X-purgate-type: clean
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is considered clean (visit http://www.eleven.de for
+ further information)
+X-purgate: clean
+X-purgate-size: 2983
+X-purgate-ID: 154282::1707653347-455BD670-D8A422F6/0/0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1707646340;
- bh=p1eSF8ERSJkWW1kUHnNzWHPcime7Sh5dimKT6+xD3nU=;
- h=From:To:Cc:Subject:Date:From;
- b=RL2w0VohHT0794GlaLnFDPFPwKq4lrVv8ow+jwSvtgmFljV/jjxSCuAmvnd64jtm+
- iYwHewnsZ8TwYEbQbEsvl6YqiIXYXKjuphKqq4JBflOPDR7dQcTBTwqx00V+E3K55g
- LnXsK5DaZkTM6LFwBw9m11yX8JenZJ7t3qXffMfd1hss7vyc5i/B3un0bpFs4IXcNQ
- eWLkfqrlPgkSPdhhRap/ZWGq3t5Tf5TCI92yclpm2N9YQwdeIP3yFWs0nT5oZzKxld
- Qh6bCneGV5pREgsCQo55QTCpsXu7caqGosrlO/o3p9QeiAVgj0WewNAGZG6VXOhXUT
- J4RtEEUdyAZNg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=mail.de; s=mailde202009; t=1707653347;
+ bh=JkQ0HFBk+j6X2R3V5IzI0rbDupqI3nNh89Y2Bb1FqLQ=;
+ h=From:To:Cc:Subject:Date:Message-Id:From:To:CC:Subject:Reply-To;
+ b=R4LtBwEoOGfnUHpG7SNr3N8hzJUwEQe9m6M68LpSUa0R9m4EmRoshG9eHVFnwWBK6
+ mgA+6YJXpgB8byGSeN2AuaAG/jRrWvmO7RvPia4ld4kKGWRlRjVTD2KrtOaVxZJVoo
+ d5MY8xlF2J55gh7Dpvy2g55kDzhmS/nTBV4px0tkUw1PQFgBqx948stQazXliqXiDz
+ m1r/Dvut7wuSr62pQiH3+M3DpJ+KiWHooTy5njFjK99nQNH1HxEeoB+/NkKTofKTHJ
+ McpTDt7ujG8IJat+i80LKvbjgQW7gzDtksymoUdEn1UkDGDwgZ7szZPlm4lksWFfz8
+ j3LBkdhN9lLXQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mail.de
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=RL2w0Voh
-Subject: [Buildroot] [PATCH 1/1] support/testing: add jailhouse runtime test
+ unprotected) header.d=mail.de header.i=@mail.de header.a=rsa-sha256
+ header.s=mailde202009 header.b=R4LtBwEo
+Subject: [Buildroot] [PATCH v3 0/2] Add board support for the BeagleV-Ahead
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,142 +92,85 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+From: Kilian Zinnecker via buildroot <buildroot@buildroot.org>
+Reply-To: Kilian Zinnecker <kilian.zinnecker@mail.de>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Robert Nelson <robertcnelson@gmail.com>,
+ Kilian Zinnecker <kilian.zinnecker@mail.de>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- DEVELOPERS                                    |   1 +
- .../testing/tests/package/test_jailhouse.py   | 103 ++++++++++++++++++
- 2 files changed, 104 insertions(+)
- create mode 100644 support/testing/tests/package/test_jailhouse.py
+This patch series adds board support for the BeagleV-Ahead.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 1c6c84b05b..1826fd59c6 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1792,6 +1792,7 @@ F:	support/testing/tests/package/test_gzip.py
- F:	support/testing/tests/package/test_highway.py
- F:	support/testing/tests/package/test_hwloc.py
- F:	support/testing/tests/package/test_iperf3.py
-+F:	support/testing/tests/package/test_jailhouse.py
- F:	support/testing/tests/package/test_jq.py
- F:	support/testing/tests/package/test_jq/
- F:	support/testing/tests/package/test_kexec.py
-diff --git a/support/testing/tests/package/test_jailhouse.py b/support/testing/tests/package/test_jailhouse.py
-new file mode 100644
-index 0000000000..4634fc4de2
---- /dev/null
-+++ b/support/testing/tests/package/test_jailhouse.py
-@@ -0,0 +1,103 @@
-+import os
-+import time
-+
-+import infra.basetest
-+
-+
-+class TestJailhouse(infra.basetest.BRTest):
-+    # This test uses a specific configuration, mainly for matching the
-+    # requirements of the Jailhouse Qemu inmate demo. We also use the
-+    # Linux kernel from Siemens, which includes patches for
-+    # Jailhouse. Finally, we use the kernel config from
-+    # board/qemu/aarch64-virt rather than the Kernel defconfig, for
-+    # faster build (as it enable less components, but includes
-+    # everything needed for this test).
-+    kernel_ver = "eb6927f7eea77f823b96c0c22ad9d4a2d7ffdfce"
-+    kernel_url = \
-+        f"$(call github,siemens,linux,{kernel_ver})/linux-{kernel_ver}.tar.gz"
-+    config = \
-+        f"""
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+        BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="{kernel_url}"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-+        BR2_PACKAGE_JAILHOUSE=y
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        BR2_TARGET_ROOTFS_EXT2_4=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        drive = os.path.join(self.builddir, "images", "rootfs.ext4")
-+        kern = os.path.join(self.builddir, "images", "Image")
-+        # Qemu option and Kernel args are taken from Jailhouse demo. See:
-+        # https://github.com/siemens/jailhouse/blob/master/README.md
-+        # We also add oops=panic to improve the test coverage.
-+        self.emulator.boot(arch="aarch64",
-+                           kernel=kern,
-+                           kernel_cmdline=["root=/dev/vda console=ttyAMA0 mem=768M oops=panic"],
-+                           options=["-M", "virt,gic-version=3,virtualization=on,its=off",
-+                                    "-cpu", "cortex-a57",
-+                                    "-m", "1G",
-+                                    "-smp", "16",
-+                                    "-drive", f"file={drive},if=none,format=raw,id=hd0",
-+                                    "-device", "virtio-blk-device,drive=hd0"])
-+        self.emulator.login()
-+
-+        # Check the program can execute.
-+        self.assertRunOk("jailhouse --version")
-+
-+        # Load the kernel module.
-+        self.assertRunOk("modprobe jailhouse")
-+
-+        # Check the device is present.
-+        self.assertRunOk("ls -al /dev/jailhouse")
-+
-+        # Load the cell config this this qemu test.
-+        self.assertRunOk("jailhouse enable /etc/jailhouse/qemu-arm64.cell")
-+
-+        # Dump the jailhouse console, and check we see its
-+        # initialization string.
-+        out, ret = self.emulator.run("jailhouse console")
-+        self.assertEqual(ret, 0)
-+        self.assertIn("Initializing Jailhouse hypervisor", "\n".join(out))
-+
-+        # Create the cell.
-+        cell_cfg = "/etc/jailhouse/qemu-arm64-inmate-demo.cell"
-+        cmd = f"jailhouse cell create {cell_cfg}"
-+        self.assertRunOk(cmd)
-+
-+        # Load the demo image.
-+        cell_name = "inmate-demo"
-+        img = "/usr/libexec/jailhouse/demos/gic-demo.bin"
-+        cmd = f"jailhouse cell load {cell_name} {img}"
-+        self.assertRunOk(cmd)
-+
-+        # List Jailhouse cells and check we see the one we loaded.
-+        out, ret = self.emulator.run("jailhouse cell list")
-+        self.assertEqual(ret, 0)
-+        self.assertIn(cell_name, "\n".join(out))
-+
-+        # We should also see our cell in sysfs.
-+        cmd = "cat /sys/devices/jailhouse/cells/1/name"
-+        out, ret = self.emulator.run(cmd)
-+        self.assertEqual(ret, 0)
-+        self.assertEqual(out[0], cell_name)
-+
-+        # Start the cell.
-+        self.assertRunOk(f"jailhouse cell start {cell_name}")
-+
-+        # Let the demo cell run for few seconds...
-+        time.sleep(3)
-+
-+        # Stop and unload the cell.
-+        self.assertRunOk(f"jailhouse cell shutdown {cell_name}")
-+        self.assertRunOk(f"jailhouse cell destroy {cell_name}")
-+
-+        # Stop and unload jailhouse.
-+        self.assertRunOk("jailhouse disable")
-+        self.assertRunOk("modprobe -r jailhouse")
+This patch series introduces a package which fetches binaries for the
+SoC, i.e., one binary blob for an on-chip FPGA and one binary blob for
+audio. Currently they are not used, but are intended to be used in the
+future.
+
+This board support generates an image suitable for SD card. The boot
+command for uboot to boot the kernel could not easily be changed. It
+seemed that a default boot command was persisent and any change to it
+by normal means (e.g., uboot config parameters like
+CONFIG_BOOT_COMMAND) did not have any effect. Hence a patch for the
+custom u-boot is introduced for now, to insert the proper boot
+command.
+
+v2 -> v3:
+
+  - Added brief description what the xuantie bin binaries are for
+  - Unrolled loop in XUANTIE_BINS_INSTALL_IMAGES_CMDS of
+    package/xuantie-bins/xuantie-bins.mk
+  - Added a second product page link to board's readme.txt
+  - Added URL to the product page to git commit message
+  - Dropped "_CUSTOM" from all "BR2_RISCV_ISA_*" in the board's
+    defconfig
+  - Add description to the board's readme.txt and defconfig  why GCC
+    v13 is chosen
+  - Added BR2_PACKAGE_HOST_DOSFSTOOLS to board's defconfig
+
+v1 -> v2:
+
+  - Added hash file for xuantie-bins package
+  - Now uses uEnv.txt for actual boot commands
+  - Removed extlinux.conf
+  - Removed superflous comments inside config files
+
+
+Kilian Zinnecker (2):
+  package/xuantie-bins: new package
+  configs/beaglev_ahead: new defconfig
+
+ DEVELOPERS                                    |  3 +
+ board/beaglev-ahead/genimage.cfg              | 62 +++++++++++++++
+ board/beaglev-ahead/linux.fragment            |  2 +
+ .../0001-Overwrite-bootcmd-by-force.patch     | 30 +++++++
+ board/beaglev-ahead/post-image.sh             |  6 ++
+ board/beaglev-ahead/readme.txt                | 78 +++++++++++++++++++
+ board/beaglev-ahead/uEnv.txt                  |  4 +
+ board/beaglev-ahead/uboot.fragment            |  2 +
+ configs/beaglev_ahead_defconfig               | 46 +++++++++++
+ package/Config.in                             |  1 +
+ package/xuantie-bins/Config.in                |  8 ++
+ package/xuantie-bins/xuantie-bins.hash        |  1 +
+ package/xuantie-bins/xuantie-bins.mk          | 23 ++++++
+ 13 files changed, 266 insertions(+)
+ create mode 100644 board/beaglev-ahead/genimage.cfg
+ create mode 100644 board/beaglev-ahead/linux.fragment
+ create mode 100644 board/beaglev-ahead/patches/uboot/0001-Overwrite-bootcmd-by-force.patch
+ create mode 100755 board/beaglev-ahead/post-image.sh
+ create mode 100644 board/beaglev-ahead/readme.txt
+ create mode 100644 board/beaglev-ahead/uEnv.txt
+ create mode 100644 board/beaglev-ahead/uboot.fragment
+ create mode 100644 configs/beaglev_ahead_defconfig
+ create mode 100644 package/xuantie-bins/Config.in
+ create mode 100644 package/xuantie-bins/xuantie-bins.hash
+ create mode 100644 package/xuantie-bins/xuantie-bins.mk
+
 -- 
-2.43.0
+2.34.1
 
 _______________________________________________
 buildroot mailing list
