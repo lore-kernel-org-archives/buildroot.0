@@ -1,139 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73447C4829A
-	for <buildroot@archiver.kernel.org>; Sun, 11 Feb 2024 13:17:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E725C4829A
+	for <buildroot@archiver.kernel.org>; Sun, 11 Feb 2024 14:54:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 121F6821B4;
-	Sun, 11 Feb 2024 13:17:35 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oBySs1VWDvBt; Sun, 11 Feb 2024 13:17:34 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 298E482244
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 298E482244;
-	Sun, 11 Feb 2024 13:17:34 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7B7601BF301
- for <buildroot@lists.busybox.net>; Sun, 11 Feb 2024 13:17:32 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 67A0340176
- for <buildroot@lists.busybox.net>; Sun, 11 Feb 2024 13:17:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2A56C4025D;
+	Sun, 11 Feb 2024 14:54:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZB2FtX_6VTBi for <buildroot@lists.busybox.net>;
- Sun, 11 Feb 2024 13:17:31 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:2417::700;
- helo=nam12-dm6-obe.outbound.protection.outlook.com;
- envelope-from=sen@phobosdpl.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E092640106
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E092640106
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com
- (mail-dm6nam12on20700.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:2417::700])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E092640106
- for <buildroot@buildroot.org>; Sun, 11 Feb 2024 13:17:30 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PKbYaQ500COrm2JbONrvhHL9GyBLhDcLyjtxDlA/x6mTTAA3jOgwi434XGltMaxk7VQm82tbqvx94pm4h+J9sMSEROkNtD9ns8pwaiFZOhTT2mAmJ8viu257gx2V05fbBrCA2z3yshfIrVz3/sHdI6ggufMQJ9MhkW17hp62EY68eT/rZyA8Grbg+EfAj95xTo5713zRjYUDloMjrJflit6fl6XpBeHnu0/wVc6ce2JtUT3cMeF9GM7T/Ssy4viR6LPLxc0Ig/x6a3sMpLmInlTjpqJij7q5cbeQpov2nOib/xuAl8aYezj9BuhvmUFR6+PyoQqFEeyNF34ToB+2Vg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kCkb99u3iTXTAX3MuTTPA5JiINEGiF88EPFQSatw65A=;
- b=f17Jq9xns9vGO7T8eVzGc8tlk3HjtkT/aiyzdY7J5IiGmReO8jKwCtZcegIlcpA01vtwiVF1eoGfRJZPcXSbUWAWFULayXcpmjVAquDcpXDKbfGVdTiJZpc6u2MBmMaXcaeUxs6Lg1vSUgFk7CpieuGDQCcF7HHql2869zIYneXHoxk1A6PT9torbvFXbi6+r7ViPsidZ4F7K8lhHVPxAdi8jhL47p+Blekdz6zkVnxhHjPV8dcqFw2yo4kNsmRQekWzj3XtA+v4spzVYjRulUPFwEKG9sUs8ZClLUWZTt7ma9x6OLBfSvXjxGPYAQtWM1Xm4CPQONRexZMfORCvJw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=phobosdpl.com; dmarc=pass action=none
- header.from=phobosdpl.com; dkim=pass header.d=phobosdpl.com; arc=none
-Received: from SA1PR17MB4562.namprd17.prod.outlook.com (2603:10b6:806:191::17)
- by MW4PR17MB4420.namprd17.prod.outlook.com (2603:10b6:303:78::14)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7270.35; Sun, 11 Feb
- 2024 13:17:27 +0000
-Received: from SA1PR17MB4562.namprd17.prod.outlook.com
- ([fe80::d6d2:2149:7e07:cbe9]) by SA1PR17MB4562.namprd17.prod.outlook.com
- ([fe80::d6d2:2149:7e07:cbe9%7]) with mapi id 15.20.7270.025; Sun, 11 Feb 2024
- 13:17:27 +0000
-From: Sen Hastings <sen@phobosdpl.com>
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sbLHV81HJw0I; Sun, 11 Feb 2024 14:54:56 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F207402B1
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6F207402B1;
+	Sun, 11 Feb 2024 14:54:56 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 926311BF20F
+ for <buildroot@lists.busybox.net>; Sun, 11 Feb 2024 14:54:54 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 800F6821E5
+ for <buildroot@lists.busybox.net>; Sun, 11 Feb 2024 14:54:54 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jqBWNwHEJ0YG for <buildroot@lists.busybox.net>;
+ Sun, 11 Feb 2024 14:54:53 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D8BA9821DD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D8BA9821DD
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D8BA9821DD
+ for <buildroot@buildroot.org>; Sun, 11 Feb 2024 14:54:51 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0164.dip0.t-ipconnect.de [91.58.1.100])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 6468BA4C089E;
+ Sun, 11 Feb 2024 15:54:48 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:40814)
+ by fli4l.lan.fli4l with esmtp (Exim 4.97.1)
+ (envelope-from <bernd@kuhls.net>) id 1rZBEE-000000001pX-261g;
+ Sun, 11 Feb 2024 15:54:46 +0100
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun, 11 Feb 2024 13:16:35 +0000
-Message-Id: <20240211131635.152044-1-sen@phobosdpl.com>
-X-Mailer: git-send-email 2.25.1
-X-ClientProxiedBy: LO6P265CA0003.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:339::10) To SA1PR17MB4562.namprd17.prod.outlook.com
- (2603:10b6:806:191::17)
+Date: Sun, 11 Feb 2024 15:54:46 +0100
+Message-Id: <20240211145446.270865-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA1PR17MB4562:EE_|MW4PR17MB4420:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6a4f984f-1a77-4f6c-1332-08dc2b03cb0d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 50qTU/SJqkY1NmcUFLcOuvXECYWkh8phR/sddR1cPnY3VIzAypHWcp49JTmC/cR0rCqkMPc4HgOFTFXNwADop9yXvFgmiwSWoSy2oA3e7PoP4+xu0xxEK37p/wpqahX0+FdhiXBqGvJiwzwtA3aFrV/+Mc9BSJ8enf/mmAWWnoaj5X4nKp7S9Qw+77YPgLbPFEOXQUcIUpZs8M1BNzLvPlKH7VvaxpZXplLs32mTUrycBAAxQuTMNil/VameSaMfG+Prnva+aXcVTs6GMvAXQMAVk+o4Dfv4JBKEKWfF9rsFnXlIlnkq02Rp6vd0NXtkIdx8v2rUcIVrHMbHt7USO9o6/lYWPs7iYE/8QcDy2utlBpHrNY4fBjB7/SOyGUkLVwFxdsqUKCEBfvsknb1O6oTJczsyZ2SIaU04P4EGZCrcHzMkNRNTZJTDu3dkdHoObeZlWbNjF2nVQxS43BWTY0aVn2iTcqRGuh50fSDyEs9oxxNDHDyaxp00iO2h2prl9aPwfH5+BXz8MdDCwZCtRkv3CJJXvNyb7oynMtEG8L5wtdrdYCb13+wEmzAzMHS3Av2L9WvbO1YhO0cOS0bCwzRLoNogBYnC98xxisY180xFghmGqztcNpX5ma58GmQ3
-X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:SA1PR17MB4562.namprd17.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230031)(136003)(376002)(346002)(39830400003)(366004)(396003)(230922051799003)(186009)(64100799003)(451199024)(1800799012)(2906002)(4744005)(8936002)(4326008)(8676002)(5660300002)(83380400001)(2616005)(26005)(1076003)(107886003)(38100700002)(36756003)(86362001)(38350700005)(6916009)(66556008)(66476007)(316002)(66946007)(6506007)(52116002)(6666004)(6512007)(478600001)(6486002)(41300700001);
- DIR:OUT; SFP:1102; 
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dXW30EkYEahGEuvWE2LQiysrlthj3Eqeoi7hF/zsNK19JB/I+J6J3bhnB7ap?=
- =?us-ascii?Q?LSvjKC/BGmMrBAOfTYiNejlvAB6Rct/xM0ewX7+CeGwM6uwLUItVnMJpmabU?=
- =?us-ascii?Q?SuLI3tNTknXBD0lByzfIFesPWZJZz79UFoKgYYRRTQLFvrPmOd5Rj28+WpiM?=
- =?us-ascii?Q?Cgt7lZSYoDYEf2tuYNmdY7trEeyaTTUz2Trv8IkCZ9BKWhXMaZyGw4rh27GJ?=
- =?us-ascii?Q?le2yuZRySboeSRuDOXjOoG4eCZT/yY1z36SXtPKXHQozbrWHanhDTOmR5Flt?=
- =?us-ascii?Q?D24wSP14MbfK105cDlexWfaz7zjjP9ugdPbRLH8ybPRDFU3ZJQcyM6+2C4T9?=
- =?us-ascii?Q?wzrTvblScneorumK+xYn67inT77qtmnbSbJJu9ZfVo6e2/1CrmEUgEKgg2Cu?=
- =?us-ascii?Q?7nrX8OvkF5ZM1txwld+DaJaJJoD3ood3G8BvICQrpuCy6hbSJdWkZ1dlj0j8?=
- =?us-ascii?Q?zEKhu9MSoAcOSETN1bfxCnMhs4xMFBtD3TXUa/fgE1NcFYmEepSB+y+t6hcu?=
- =?us-ascii?Q?jUjbv8yRa1pppn/smIiaaeSfsuYZP2ETc8y1cHKuSwZ5Dj8K8vsTMNf5Sr2d?=
- =?us-ascii?Q?h9M3mJnQDQkvigCDDVAoU+GGXLSi42zyn1iMBzQle/iFpkypwQ7H9SXsumDP?=
- =?us-ascii?Q?Y7QkhvCfBZ7IsMnuAwXQ9JbHl0HHQ1tpggInBz+I0jCg2LU5LGSRFrtnQsBq?=
- =?us-ascii?Q?ci4xfFf15rfC30Zum9xJjoO5E99ne8LAa9Hc6eAaGGeb7Zt7PUNGp4/vYMmZ?=
- =?us-ascii?Q?XMwVx16GekjNb8eTVoacfk62q2bi4tkPTI2JsLMqdDnNFpnV5uyxryT5NWQH?=
- =?us-ascii?Q?dnaWyBfnpFKl8YXqxMMIob9BSpuFyXZHmhk6aANWWazwpxhUB8aAL7omFKhk?=
- =?us-ascii?Q?5/NOS2FqDEadv1S/t2DC/hPuKMjEyIk+v7RxbOXKX0sT39MU8YTsqCQQ0YcX?=
- =?us-ascii?Q?K5qVe9cb/l/C/NJ4tfnWI+x43v+d273zihb2qaJFasKbN4kk78uOKVoM/Vcr?=
- =?us-ascii?Q?FbcqK8b2x47SNBLxU6PLYiA1kF9wqSNSGUK12fC+MUqwesn0v8ee1ontiuds?=
- =?us-ascii?Q?H2uU7LNZdzCES6rYuPs5HJexCELGnzOvGNbpmx0KEeGqMZVlbvX/7z8+pSTO?=
- =?us-ascii?Q?3cPASpJ0Ow+zG96KNkEXeYpxgpkTIPepwPnFWW2fMQ5BAycqEKk3Edr3bXiI?=
- =?us-ascii?Q?3RN5U3UR78fa/fSLKU+SsiVbJWx+c0GRROs7h3Xi+sX+UCjvZSa9F3kWhHMb?=
- =?us-ascii?Q?u+oxmKOhiDc06IUxmN/H3hSm3UHngxe5ZRnSXj86pccD+Oke1UVeylh+tpbt?=
- =?us-ascii?Q?gNgNVgYbdh/re2LcawJjOqDtR45QoKOksdL6NStxUUumES9x4pdIMpZe9AI+?=
- =?us-ascii?Q?FlnO5WeYvf4FcaZDf0rTllf04JUfMHZ2YtyBKsyXfw1OBg6BsOBS17QH71sf?=
- =?us-ascii?Q?KZblsN3Qm8JH/TTkONIc9f69LUxfo7+xThK4M4OBC9m5+mc93WYcsP5Lj51f?=
- =?us-ascii?Q?QosQ6LVs1e039jaYETqeFTF2N5Jcz0kAPZerR+TJ+14BEO7+FmRsANzF9nmb?=
- =?us-ascii?Q?px71WJ0RBEe9uuh8S9pfgPxSfcU+ouxbJEBOdvaS?=
-X-OriginatorOrg: phobosdpl.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6a4f984f-1a77-4f6c-1332-08dc2b03cb0d
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR17MB4562.namprd17.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Feb 2024 13:17:27.3433 (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 07b76dd5-c518-427b-a15a-2e07dfd0130a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: vZ17DdsO6XfSGVPbDLpwQWc/wxy94v1FPlAq+LeASjNmiC7NOtLxuf4W27ZVvTKg5amxcO1/o6RQbB672NdfJw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR17MB4420
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=centc.onmicrosoft.com; 
- s=selector2-centc-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kCkb99u3iTXTAX3MuTTPA5JiINEGiF88EPFQSatw65A=;
- b=3FRqK8fQGmw4Nv3hGsVBuIubkp6EZ08jOJZ02Z/NwdeCVThtaW1H8u8dIbFtOr1lJ0Zu7rj1uapiCvIO2L3uuj7901IbNRLPnP/uRTInm1vPvHU+Wt1fqOSBbT9/9K+NHdPZZ86fip2GApQBS+LP1A8JEMjJCD2RfWaKVECJfD0=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=phobosdpl.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=centc.onmicrosoft.com header.i=@centc.onmicrosoft.com
- header.a=rsa-sha256 header.s=selector2-centc-onmicrosoft-com
- header.b=3FRqK8fQ
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=phobosdpl.com;
-Subject: [Buildroot] [PATCH 1/1] update sen hastings email in DEVELOPERS file
+ d=kuhls.net; 
+ s=kas202312101026; t=1707663288;
+ bh=dN47lrvhIFdBQ9SsXJNfYqGWDsFATwSzKuYrVKH7jyk=;
+ h=From:To:Cc:Subject:Date:From;
+ b=UjS+vHIT761eLFlLQMAEYYZw9jqmf92aLKXnyVallgz3C/azIGGZZzUCPE2495e09
+ sTDCpp2UWT1FAvRDBLsBgTPZf58uh0gDZG15E9ZGrfP56VXxNsZKPvBmzeAwy6oeXP
+ 2VS6tlrKqRHko0VLhP/AFToPcG/PC6TQ+0EhfpjopkIX6L8EhJAWo+c9rQYEjZX6rs
+ 3iudn5VSDvmr//0JGHdWIFDN2F/g+ZPIGTbaRtDwBuxrN7SazNWVW+gL48SMsWtfVn
+ r+3FZDMD4s5n2F+ydI77ewzETwJSbJiW4M2jkO7/C+wWO+az+ULyDJooFPp/IIGnlh
+ Nj/jC5cVhifKw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202312101026 header.b=UjS+vHIT
+Subject: [Buildroot] [PATCH 1/1] package/libcurl: bump version to 8.6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -145,35 +80,139 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sen Hastings <sen@phobosdpl.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-phobosdpl is an old work email I don't really use anymore,
-so I'm changing it to my personal email.
+Changelog: https://curl.se/changes.html#8_6_0
 
-Signed-off-by: Sen Hastings <sen@phobosdpl.com>
+Removed patch which was included in upstream release.
+
+Updated license hash due to copyright year bump:
+https://github.com/curl/curl/commit/57cc70e559aa065426021e22e2af8166af6084f6
+
+Added configure options for optional libpsl support due to upstream
+commit which throws an error during configure when libpsl is missing and
+--without-libpsl was not used:
+https://github.com/curl/curl/commit/2998874bb61ac6ef3b72d6a61467cd2aaf6e53ea
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- DEVELOPERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...nutls-fix-build-with-disable-verbose.patch | 60 -------------------
+ package/libcurl/libcurl.hash                  |  6 +-
+ package/libcurl/libcurl.mk                    |  9 ++-
+ 3 files changed, 11 insertions(+), 64 deletions(-)
+ delete mode 100644 package/libcurl/0001-gnutls-fix-build-with-disable-verbose.patch
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 1c6c84b05b..1c035eeb8f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2765,7 +2765,7 @@ F:	package/libbson/
- F:	package/lua-resty-http/
- F:	package/mpir/
+diff --git a/package/libcurl/0001-gnutls-fix-build-with-disable-verbose.patch b/package/libcurl/0001-gnutls-fix-build-with-disable-verbose.patch
+deleted file mode 100644
+index 25e389c972..0000000000
+--- a/package/libcurl/0001-gnutls-fix-build-with-disable-verbose.patch
++++ /dev/null
+@@ -1,60 +0,0 @@
+-From 0d9f9c5ea8c15c70eb420242b60179d9083c70b7 Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Mon, 11 Dec 2023 20:45:01 +0200
+-Subject: [PATCH] gnutls: fix build with --disable-verbose
+-
+-infof() parameters must be defined event with --disable-verbose since
+-commit dac293cfb702 ("lib: apache style infof and trace
+-macros/functions").
+-
+-Move also 'ptr' definition under !CURL_DISABLE_VERBOSE_STRINGS.
+-
+-Fixes the following build failure:
+-
+-In file included from ../lib/sendf.h:29,
+-                 from vtls/gtls.c:44:
+-vtls/gtls.c: In function 'Curl_gtls_verifyserver':
+-vtls/gtls.c:841:34: error: 'version' undeclared (first use in this function); did you mean 'session'?
+-  841 |         gnutls_protocol_get_name(version), ptr);
+-      |                                  ^~~~~~~
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+-Upstream: https://github.com/curl/curl/commit/af520ac9fec7d88e942f05fdcd90704adb9fa566
+----
+- lib/vtls/gtls.c | 4 +++-
+- 1 file changed, 3 insertions(+), 1 deletion(-)
+-
+-diff --git a/lib/vtls/gtls.c b/lib/vtls/gtls.c
+-index f42b6d6691de..b95c5be3c5e5 100644
+---- a/lib/vtls/gtls.c
+-+++ b/lib/vtls/gtls.c
+-@@ -818,16 +818,17 @@ Curl_gtls_verifyserver(struct Curl_easy *data,
+-   char certname[65] = ""; /* limited to 64 chars by ASN.1 */
+-   size_t size;
+-   time_t certclock;
+--  const char *ptr;
+-   int rc;
+-   CURLcode result = CURLE_OK;
+- #ifndef CURL_DISABLE_VERBOSE_STRINGS
+-+  const char *ptr;
+-   unsigned int algo;
+-   unsigned int bits;
+-   gnutls_protocol_t version = gnutls_protocol_get_version(session);
+- #endif
+-   long * const certverifyresult = &ssl_config->certverifyresult;
+- 
+-+#ifndef CURL_DISABLE_VERBOSE_STRINGS
+-   /* the name of the cipher suite used, e.g. ECDHE_RSA_AES_256_GCM_SHA384. */
+-   ptr = gnutls_cipher_suite_get_name(gnutls_kx_get(session),
+-                                      gnutls_cipher_get(session),
+-@@ -835,6 +836,7 @@ Curl_gtls_verifyserver(struct Curl_easy *data,
+- 
+-   infof(data, "SSL connection using %s / %s",
+-         gnutls_protocol_get_name(version), ptr);
+-+#endif
+- 
+-   /* This function will return the peer's raw certificate (chain) as sent by
+-      the peer. These certificates are in raw format (DER encoded for
+--- 
+-2.43.0
+-
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index d5c20d29d3..1f3dce0fd5 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.se/download/curl-8.5.0.tar.xz.asc
++# https://curl.se/download/curl-8.6.0.tar.xz.asc
+ # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+-sha256  42ab8db9e20d8290a3b633e7fbb3cec15db34df65fd1015ef8ac1e4723750eeb  curl-8.5.0.tar.xz
+-sha256  b1d7feb949ea5023552029fbe0bf5db4f23c2f85e9b8e51e18536f0ecbf9c524  COPYING
++sha256  3ccd55d91af9516539df80625f818c734dc6f2ecf9bada33c76765e99121db15  curl-8.6.0.tar.xz
++sha256  adb1fc06547fd136244179809f7b7c2d2ae6c4534f160aa513af9b6a12866a32  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 83845b8e87..9dafe90c82 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--N:	Sen Hastings <sen@phobosdpl.com>
-+N:	Sen Hastings <sen@hastings.org>
- F:	package/systemd
- F:	support/scripts/pkg-stats
+-LIBCURL_VERSION = 8.5.0
++LIBCURL_VERSION = 8.6.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
+@@ -112,6 +112,13 @@ else
+ LIBCURL_CONF_OPTS += --without-libidn2
+ endif
  
++ifeq ($(BR2_PACKAGE_LIBPSL),y)
++LIBCURL_DEPENDENCIES += libpsl
++LIBCURL_CONF_OPTS += --with-libpsl
++else
++LIBCURL_CONF_OPTS += --without-libpsl
++endif
++
+ # Configure curl to support libssh2
+ ifeq ($(BR2_PACKAGE_LIBSSH2),y)
+ LIBCURL_DEPENDENCIES += libssh2
 -- 
-2.25.1
+2.39.2
 
 _______________________________________________
 buildroot mailing list
