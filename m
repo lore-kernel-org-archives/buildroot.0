@@ -4,72 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 447E0C4829B
-	for <buildroot@archiver.kernel.org>; Sun, 11 Feb 2024 17:33:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 428A6C4829B
+	for <buildroot@archiver.kernel.org>; Sun, 11 Feb 2024 17:55:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CFF5F404D8;
-	Sun, 11 Feb 2024 17:33:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 21B42404D8;
+	Sun, 11 Feb 2024 17:55:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ofpOJs2flyhJ; Sun, 11 Feb 2024 17:33:31 +0000 (UTC)
+	with ESMTP id avAsK4d-LH8y; Sun, 11 Feb 2024 17:55:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3F4B04028D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8BFD240486
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3F4B04028D;
-	Sun, 11 Feb 2024 17:33:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 53B271BF4D5
- for <buildroot@lists.busybox.net>; Sun, 11 Feb 2024 17:33:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8BFD240486;
+	Sun, 11 Feb 2024 17:55:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B9C8C1BF4D5
+ for <buildroot@lists.busybox.net>; Sun, 11 Feb 2024 17:54:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4746D40774
- for <buildroot@lists.busybox.net>; Sun, 11 Feb 2024 17:33:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A651F40486
+ for <buildroot@lists.busybox.net>; Sun, 11 Feb 2024 17:54:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FYOZoypu0eKf for <buildroot@lists.busybox.net>;
- Sun, 11 Feb 2024 17:33:28 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 59B3240773
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 59B3240773
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 59B3240773
- for <buildroot@buildroot.org>; Sun, 11 Feb 2024 17:33:26 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a0164.dip0.t-ipconnect.de [91.58.1.100])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id AF990A4C0686;
- Sun, 11 Feb 2024 18:33:23 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:50022)
- by fli4l.lan.fli4l with esmtp (Exim 4.97.1)
- (envelope-from <bernd@kuhls.net>) id 1rZDhj-000000004jX-1bkx;
- Sun, 11 Feb 2024 18:33:23 +0100
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Sun, 11 Feb 2024 18:33:23 +0100
-Message-Id: <20240211173323.2755976-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id A_lzUI8I_Sfg for <buildroot@lists.busybox.net>;
+ Sun, 11 Feb 2024 17:54:58 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3F27C4028D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3F27C4028D
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3F27C4028D
+ for <buildroot@buildroot.org>; Sun, 11 Feb 2024 17:54:57 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id A3C1913F8B8;
+ Sun, 11 Feb 2024 18:54:51 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 11 Feb 2024 18:54:51 +0100
+Date: Sun, 11 Feb 2024 18:54:51 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Abilio Marques <abiliojr@gmail.com>
+Message-ID: <ZckJ608XA98Pfo-Z@landeda>
+References: <20240204062645.3616072-1-abiliojr@gmail.com>
+ <ZcDhkvk_uO8wbQoz@landeda>
+ <CAEWqYrVOgiBYqYad3RDX5BfRvqF2LJxSTvdqgwQ9aVA7SWfKEQ@mail.gmail.com>
 MIME-Version: 1.0
-X-Spamd-Bar: /
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202312101026; t=1707672803;
- bh=wfJby8rYBb0zwpGFreZGIukqIURyx2ohfGsF9JBfXkM=;
- h=From:To:Cc:Subject:Date:From;
- b=ZD6OKiEg+My7ggdAcDUq9nhUxuE4DT5ViU6ZjcTSsz4ZIzaNe0kQXfL4uB8u5Fp0R
- Y8ZCpYrfxDhWdzuKPdmacMRD0O3dazfM7L+25VzaaKnzsuE/euMrqpbIjiIcFZ0gTV
- t8QLKEOK8CYWIjM8JxiTwzoKUPq+MBqNOrHb7V5pRIumvDU36rv67YyRjQumFgOCM4
- 8zTQuPQHOlhAoHE09FiKbJTKplL9d7znWc+xmIaBomFPjfbDmNu9Un9wBl5SWXTgLn
- h4sXfJefkw8fJpHl8iY94p7cxJxCfWtAFeFlR91VOs0we9XXb655zF7YgkSoWwIkxY
- jRCGn/Usu8EBw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+Content-Disposition: inline
+In-Reply-To: <CAEWqYrVOgiBYqYad3RDX5BfRvqF2LJxSTvdqgwQ9aVA7SWfKEQ@mail.gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1707674094;
+ bh=VCcku8Hy6YIdV9sqoguXspy4EnG1VS6Ahdn92osp7uM=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=PIlXKk4CNUlF+IJBw/oTRqIDTKPTaQOOKNGKofkNJjmg7Rx83IffvroZv70QfM4CZ
+ bIh8LoH4MV8/GN7n9ZTDna6tHcDdnXOqAxSqY6+AsARAwlBoI7H57KqMgWPA3mDSEl
+ HdyNS43isJipeYh5gJlus0ZkXtbuu/CCC2pLFosgpan9irTwQdC6Tu1UYesBQCZ87r
+ QHdwRCPTfiHkOpJ9AisIr0GkMCRDoEQVnj87JpHXADrRl4Dukn/iu66ePseQb8+BwF
+ Tibzoix+6Xpa+NFloOK8F/frnXtlKUulimmVG186nc4J3sZP4DLmWLhyGPjZ6QDPiB
+ CiUs0sThK8iAw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202312101026 header.b=ZD6OKiEg
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 24.0.0
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=PIlXKk4C
+Subject: Re: [Buildroot] [PATCH] package/micropython: add support for
+ manifest.py in the configuration
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,99 +83,95 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Chris Packham <judge.packham@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-UmVsZWFzZSBub3RlczoKaHR0cHM6Ly9saXN0cy5mcmVlZGVza3RvcC5vcmcvYXJjaGl2ZXMvbWVz
-YS1hbm5vdW5jZS8yMDI0LUZlYnJ1YXJ5LzAwMDc0Ny5odG1sCmh0dHBzOi8vY2dpdC5mcmVlZGVz
-a3RvcC5vcmcvbWVzYS9tZXNhL3RyZWUvZG9jcy9yZWxub3Rlcy8yNC4wLjAucnN0P2g9MjQuMAoK
-UmVtb3ZlZCBwYXRjaCB3aGljaCBpcyBpbmNsdWRlZCBpbiB0aGlzIHJlbGVhc2UuCgpTaWduZWQt
-b2ZmLWJ5OiBCZXJuZCBLdWhscyA8YmVybmRAa3VobHMubmV0PgotLS0KIHBhY2thZ2UvbWVzYTNk
-LWhlYWRlcnMvbWVzYTNkLWhlYWRlcnMubWsgICAgICB8ICAyICstCiAuLi5lX2Rlc2NyaXB0aW9u
-LWZpeC11bmtub3duLWxpbnV4LTMuNS0ucGF0Y2ggfCA2OCAtLS0tLS0tLS0tLS0tLS0tLS0tCiBw
-YWNrYWdlL21lc2EzZC9tZXNhM2QuaGFzaCAgICAgICAgICAgICAgICAgICAgfCAgNiArLQogcGFj
-a2FnZS9tZXNhM2QvbWVzYTNkLm1rICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIDQgZmls
-ZXMgY2hhbmdlZCwgNSBpbnNlcnRpb25zKCspLCA3MyBkZWxldGlvbnMoLSkKIGRlbGV0ZSBtb2Rl
-IDEwMDY0NCBwYWNrYWdlL21lc2EzZC8wMDA1LXV0aWwtb3Nfc2FtZV9maWxlX2Rlc2NyaXB0aW9u
-LWZpeC11bmtub3duLWxpbnV4LTMuNS0ucGF0Y2gKCmRpZmYgLS1naXQgYS9wYWNrYWdlL21lc2Ez
-ZC1oZWFkZXJzL21lc2EzZC1oZWFkZXJzLm1rIGIvcGFja2FnZS9tZXNhM2QtaGVhZGVycy9tZXNh
-M2QtaGVhZGVycy5tawppbmRleCBiOWIzMjhiMjY4Li4xZDAwNmRiYzkxIDEwMDY0NAotLS0gYS9w
-YWNrYWdlL21lc2EzZC1oZWFkZXJzL21lc2EzZC1oZWFkZXJzLm1rCisrKyBiL3BhY2thZ2UvbWVz
-YTNkLWhlYWRlcnMvbWVzYTNkLWhlYWRlcnMubWsKQEAgLTEyLDcgKzEyLDcgQEAgZW5kaWYKIAog
-IyBOb3QgcG9zc2libGUgdG8gZGlyZWN0bHkgcmVmZXIgdG8gbWVzYTNkIHZhcmlhYmxlcywgYmVj
-YXVzZSBvZgogIyBmaXJzdC9zZWNvbmQgZXhwYW5zaW9uIHRyaWNrZXJ5Li4uCi1NRVNBM0RfSEVB
-REVSU19WRVJTSU9OID0gMjMuMy41CitNRVNBM0RfSEVBREVSU19WRVJTSU9OID0gMjQuMC4wCiBN
-RVNBM0RfSEVBREVSU19TT1VSQ0UgPSBtZXNhLSQoTUVTQTNEX0hFQURFUlNfVkVSU0lPTikudGFy
-Lnh6CiBNRVNBM0RfSEVBREVSU19TSVRFID0gaHR0cHM6Ly9hcmNoaXZlLm1lc2EzZC5vcmcKIE1F
-U0EzRF9IRUFERVJTX0RMX1NVQkRJUiA9IG1lc2EzZApkaWZmIC0tZ2l0IGEvcGFja2FnZS9tZXNh
-M2QvMDAwNS11dGlsLW9zX3NhbWVfZmlsZV9kZXNjcmlwdGlvbi1maXgtdW5rbm93bi1saW51eC0z
-LjUtLnBhdGNoIGIvcGFja2FnZS9tZXNhM2QvMDAwNS11dGlsLW9zX3NhbWVfZmlsZV9kZXNjcmlw
-dGlvbi1maXgtdW5rbm93bi1saW51eC0zLjUtLnBhdGNoCmRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0
-NAppbmRleCBjMDExNTgwZjZiLi4wMDAwMDAwMDAwCi0tLSBhL3BhY2thZ2UvbWVzYTNkLzAwMDUt
-dXRpbC1vc19zYW1lX2ZpbGVfZGVzY3JpcHRpb24tZml4LXVua25vd24tbGludXgtMy41LS5wYXRj
-aAorKysgL2Rldi9udWxsCkBAIC0xLDY4ICswLDAgQEAKLUZyb20gYjYwOTc0ZmFjOGEyZjRjODVj
-YmIyY2E3ODhmYzRlYzNlODE5OThmOSBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKLUZyb206IFRo
-b21hcyBEZXZvb2dkdCA8dGhvbWFzLmRldm9vZ2R0QGJhcmNvLmNvbT4KLURhdGU6IFR1ZSwgMTcg
-QXVnIDIwMjEgMTE6NTQ6NDkgKzAyMDAKLVN1YmplY3Q6IFtQQVRDSF0gdXRpbDogb3Nfc2FtZV9m
-aWxlX2Rlc2NyaXB0aW9uOiBmaXggdW5rbm93biBsaW51eCA8IDMuNQotIHN5c2NhbGwgU1lTX2tj
-bXAKLU1JTUUtVmVyc2lvbjogMS4wCi1Db250ZW50LVR5cGU6IHRleHQvcGxhaW47IGNoYXJzZXQ9
-VVRGLTgKLUNvbnRlbnQtVHJhbnNmZXItRW5jb2Rpbmc6IDhiaXQKLQotaHR0cHM6Ly9tYW43Lm9y
-Zy9saW51eC9tYW4tcGFnZXMvbWFuMi9rY21wLjIuaHRtbAotCi1UaGUga2NtcCgpIHN5c3RlbSBj
-YWxsIGZpcnN0IGFwcGVhcmVkIGluIExpbnV4IDMuNS4KLQotQnV0IHdhcyBwcm9iYWJseSBhbHNv
-IG5vdCBzdXBwb3J0ZWQgYnkgYWxsIG1ham9yIHBsYXRmb3JtcwotYXQgdGhhdCB0aW1lLiBTbyBm
-YWxsYmFjayB0byB0aGUgY2hlY2sgdGhhdCBpcyBkb25lIGZvciB3aW5kb3dzLgotCi1TaWduZWQt
-b2ZmLWJ5OiBUaG9tYXMgRGV2b29nZHQgPHRob21hcy5kZXZvb2dkdEBiYXJjby5jb20+Ci1BY2tl
-ZC1ieTogWW9uZ2dhbmcgTHVvIDxsdW95b25nZ2FuZ0BnbWFpbC5jb20+Ci1BY2tlZC1ieTogTWlj
-aGVsIETDpG56ZXIgPG1kYWVuemVyQHJlZGhhdC5jb20+Ci1VcHN0cmVhbTogaHR0cHM6Ly9naXRs
-YWIuZnJlZWRlc2t0b3Aub3JnL21lc2EvbWVzYS8tL2NvbW1pdC8zZWY1MTQ5ODI0NDFjZTQ5NmFh
-MTI3NjExZWRkMjZiOTg2N2Y0Yjk1Ci1TaWduZWQtb2ZmLWJ5OiBUaG9tYXMgRGV2b29nZHQgPHRo
-b21hc0BkZXZvb2dkdC5jb20+Ci0tLS0KLSBzcmMvdXRpbC9vc19maWxlLmMgfCAxOCArKysrKyst
-LS0tLS0tLS0tLS0KLSAxIGZpbGUgY2hhbmdlZCwgNiBpbnNlcnRpb25zKCspLCAxMiBkZWxldGlv
-bnMoLSkKLQotZGlmZiAtLWdpdCBhL3NyYy91dGlsL29zX2ZpbGUuYyBiL3NyYy91dGlsL29zX2Zp
-bGUuYwotaW5kZXggNWZiMzBmMmQ5MDguLjQ2NDQyNWE5Yjg3IDEwMDY0NAotLS0tIGEvc3JjL3V0
-aWwvb3NfZmlsZS5jCi0rKysgYi9zcmMvdXRpbC9vc19maWxlLmMKLUBAIC0yMDIsMjkgKzIwMiwy
-MyBAQCBvc19yZWFkX2ZpbGUoY29uc3QgY2hhciAqZmlsZW5hbWUsIHNpemVfdCAqc2l6ZSkKLSAv
-KiBjb3BpZWQgZnJvbSA8bGludXgva2NtcC5oPiAqLwotICNkZWZpbmUgS0NNUF9GSUxFIDAKLSAK
-LSsjZW5kaWYKLSsKLSBpbnQKLSBvc19zYW1lX2ZpbGVfZGVzY3JpcHRpb24oaW50IGZkMSwgaW50
-IGZkMikKLSB7Ci0rI2lmZGVmIFNZU19rY21wCi0gICAgcGlkX3QgcGlkID0gZ2V0cGlkKCk7Ci0r
-I2VuZGlmCi0gCi0gICAgLyogU2FtZSBmaWxlIGRlc2NyaXB0b3IgdHJpdmlhbGx5IGltcGxpZXMg
-c2FtZSBmaWxlIGRlc2NyaXB0aW9uICovCi0gICAgaWYgKGZkMSA9PSBmZDIpCi0gICAgICAgcmV0
-dXJuIDA7Ci0gCi0rI2lmZGVmIFNZU19rY21wCi0gICAgcmV0dXJuIHN5c2NhbGwoU1lTX2tjbXAs
-IHBpZCwgcGlkLCBLQ01QX0ZJTEUsIGZkMSwgZmQyKTsKLS19Ci0tCi0gI2Vsc2UKLS0KLS1pbnQK
-LS1vc19zYW1lX2ZpbGVfZGVzY3JpcHRpb24oaW50IGZkMSwgaW50IGZkMikKLS17Ci0tICAgLyog
-U2FtZSBmaWxlIGRlc2NyaXB0b3IgdHJpdmlhbGx5IGltcGxpZXMgc2FtZSBmaWxlIGRlc2NyaXB0
-aW9uICovCi0tICAgaWYgKGZkMSA9PSBmZDIpCi0tICAgICAgcmV0dXJuIDA7Ci0tCi0gICAgLyog
-T3RoZXJ3aXNlIHdlIGNhbid0IHRlbGwgKi8KLSAgICByZXR1cm4gLTE7Ci0tfQotLQotICNlbmRp
-ZgotK30KLS0tIAotMi4zNC4xCi0KZGlmZiAtLWdpdCBhL3BhY2thZ2UvbWVzYTNkL21lc2EzZC5o
-YXNoIGIvcGFja2FnZS9tZXNhM2QvbWVzYTNkLmhhc2gKaW5kZXggN2U0OTExOWM0MS4uNDliNDJl
-MjEzMiAxMDA2NDQKLS0tIGEvcGFja2FnZS9tZXNhM2QvbWVzYTNkLmhhc2gKKysrIGIvcGFja2Fn
-ZS9tZXNhM2QvbWVzYTNkLmhhc2gKQEAgLTEsNSArMSw1IEBACi0jIEZyb20gaHR0cHM6Ly9saXN0
-cy5mcmVlZGVza3RvcC5vcmcvYXJjaGl2ZXMvbWVzYS1hbm5vdW5jZS8yMDI0LUZlYnJ1YXJ5LzAw
-MDc0OC5odG1sCi1zaGEyNTYgIDY5Y2NiMTI3ODY0MWZmNWJhZDcxY2EwZjg2NjE4OGFlYjFhOTJh
-YWRjNGRiYjlkMzVmNTBhZWJlYzViOGI1MGYgIG1lc2EtMjMuMy41LnRhci54egotc2hhNTEyICAx
-YWQyOWY1MjRjYWVlMDAwMGVmNTFhYmU1OGQyOWQ5Njg3ZGU1ZmJjNTE2OGY3ZTY3N2JiNGU2OWM1
-ZTlhOTQ5MThkNWZiZjZlMTBjNjc1N2ZlN2NlNmQ0N2JhYjEwOWU0NTJmMGZhMmUyNmFhZDJlNmY4
-YmZiNzQ0MzgzYjVlYSAgbWVzYS0yMy4zLjUudGFyLnh6CisjIEZyb20gaHR0cHM6Ly9saXN0cy5m
-cmVlZGVza3RvcC5vcmcvYXJjaGl2ZXMvbWVzYS1hbm5vdW5jZS8yMDI0LUZlYnJ1YXJ5LzAwMDc0
-Ny5odG1sCitzaGEyNTYgIGRjN2U4YzA3N2JjNTg4NGRmOTU0NzgyNjNiMzRiZGViYjdlODhlNjAw
-Njg5Y2I1NmZiMDdiZTJiOGMzMDRjMzYgIG1lc2EtMjQuMC4wLnRhci54egorc2hhNTEyICA5ZGZk
-ZWE3Y2ViYjM3YjljMDIwMzM1ZTI0MTk0YjM5YjM5OWY0OGI1YWY2ZWVjMzBjMzQ1NTEwODI3NmFj
-NGUyOWU3YjA2ZGY5NDJjYjJhYmM3YWZhNjY3Nzg0OTY4YzBjNDNkMTliOWFmZTMwZWYwMzAyMWI5
-Y2I2YTc4OWYxNSAgbWVzYS0yNC4wLjAudGFyLnh6CiAjIExpY2Vuc2UKIHNoYTI1NiAgYTAwMjc1
-YTUzMTc4ZTI2NDVmYjY1YmU5OWE3ODVjMTEwNTEzNDQ2YTUwNzFmZjJjNjk4ZWQyNjBhZDkxN2Q3
-NSAgZG9jcy9saWNlbnNlLnJzdApkaWZmIC0tZ2l0IGEvcGFja2FnZS9tZXNhM2QvbWVzYTNkLm1r
-IGIvcGFja2FnZS9tZXNhM2QvbWVzYTNkLm1rCmluZGV4IDRlNmNiMzU3MWEuLjJkMTNmNzMzNmYg
-MTAwNjQ0Ci0tLSBhL3BhY2thZ2UvbWVzYTNkL21lc2EzZC5taworKysgYi9wYWNrYWdlL21lc2Ez
-ZC9tZXNhM2QubWsKQEAgLTUsNyArNSw3IEBACiAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwogCiAj
-IFdoZW4gdXBkYXRpbmcgdGhlIHZlcnNpb24sIHBsZWFzZSBhbHNvIHVwZGF0ZSBtZXNhM2QtaGVh
-ZGVycwotTUVTQTNEX1ZFUlNJT04gPSAyMy4zLjUKK01FU0EzRF9WRVJTSU9OID0gMjQuMC4wCiBN
-RVNBM0RfU09VUkNFID0gbWVzYS0kKE1FU0EzRF9WRVJTSU9OKS50YXIueHoKIE1FU0EzRF9TSVRF
-ID0gaHR0cHM6Ly9hcmNoaXZlLm1lc2EzZC5vcmcKIE1FU0EzRF9MSUNFTlNFID0gTUlULCBTR0ks
-IEtocm9ub3MKLS0gCjIuMzkuMgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9y
-ZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Abilio, All,
+
+[Please, don't top-post, but reply in-line]
+
+On 2024-02-11 09:15 -0800, Abilio Marques spake thusly:
+> One of the uses of manifest.py is to specify which modules of
+> micropython-lib should be frozen within the binary.  For those modules you
+> don't need to include the path. e.g.,
+> package('os')
+> 
+> That's the application I'm going for. I know it seems limited but it's
+> really useful,
+
+OK, so maybe this can be explained in the help text of the new option,
+like:
+
+    Note: in Buildroot, only modules provided with micropython-lib
+    can be frozen with a manifest; freezing arbitrary files is not
+    supported.
+
+along with a little blurb in the commit log, statng something like;
+
+    We only support freezing of modules from micropython-lib. Freezing
+    arbitrary modules would require some handling of absoulte paths, and
+    a guarantee that the files be available before micropython is built,
+    which is considered a bit too complex; an interested party can
+    provide such support in the future.
+
+And thus, would it be possible to sanity-check the manifest to ensure
+that it indeed only references modules from icropython-lib, so that
+people do not get the impression it works when in fact it does not?
+
+Like, grep that only require(...) are used?
+
+(Note: you mentioned package(...) but that is not limited to files from
+micropython-lib; require(...) however is.)
+
+> and probably welcomed by other people using Micropython in
+> the next release of Buildroot.
+
+One question I was wondering about: if a module is frozen in the binary,
+then it is no longer needed in the filesystem, right? If so, should we
+have a way to remove them?
+
+> I have ideas on how to solve the path and dependency order problem while
+> still using the "official" manifest.py concept. The biggest challenge is
+> that currently there are no other 3rd party Micropython modules available
+> for Buildroot, so that makes it all very theoretical. All solutions require
+> a bigger amount of work than the one needed for this patch. Also, I would
+> like to discuss them before actually presenting a patch that allows 3rd
+> party modules to be frozen.
+
+Indeed, without a few actual examples, it's going to be difficult to see
+a common pattern and abstract that away. Are there any pulicly
+available?
+
+> I always try to go for an incremental approach, where I get the bigger bang
+> for the buck. I believe that allowing people to freeze the official
+> Micropython modules is already a big step forward. But at the same time,
+> I'm new to the Buildroot project, so please advice on the approach.
+
+The incremental path is totally OK; I even prefer it. Of course, any
+limitation (such as those we are discussing) should be explained in the
+commit log.
+
+Given all the feedback in this thread, can you respin a v2 taking the
+comments into account?
+
+As for your ideas for lifting those limitations, you can just explain
+them in a reply in this thread. Usually, a patchset doing the job is
+also a good first step to start the dicsussion.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
