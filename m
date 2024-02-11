@@ -4,71 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90B75C4829B
-	for <buildroot@archiver.kernel.org>; Sun, 11 Feb 2024 22:12:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15E78C4829A
+	for <buildroot@archiver.kernel.org>; Sun, 11 Feb 2024 22:12:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 64F7284F74;
-	Sun, 11 Feb 2024 22:12:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D386684F6C;
+	Sun, 11 Feb 2024 22:12:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ElXskhfiYPPu; Sun, 11 Feb 2024 22:12:02 +0000 (UTC)
+	with ESMTP id ntfQXkmGkIh4; Sun, 11 Feb 2024 22:12:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7844384F75
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C82A284F7C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7844384F75;
-	Sun, 11 Feb 2024 22:12:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C82A284F7C;
+	Sun, 11 Feb 2024 22:12:16 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AB18B1BF44A
- for <buildroot@lists.busybox.net>; Sun, 11 Feb 2024 22:12:00 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A3E141BF44A
+ for <buildroot@lists.busybox.net>; Sun, 11 Feb 2024 22:12:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9848984F75
- for <buildroot@lists.busybox.net>; Sun, 11 Feb 2024 22:12:00 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9127984F6C
+ for <buildroot@lists.busybox.net>; Sun, 11 Feb 2024 22:12:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id skNYzNyltc-d for <buildroot@lists.busybox.net>;
- Sun, 11 Feb 2024 22:11:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
- helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ with ESMTP id i-2IvjH0T4my for <buildroot@lists.busybox.net>;
+ Sun, 11 Feb 2024 22:12:13 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4333284F74
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4333284F74
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4333284F74
- for <buildroot@buildroot.org>; Sun, 11 Feb 2024 22:11:59 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3295720003;
- Sun, 11 Feb 2024 22:11:57 +0000 (UTC)
-Date: Sun, 11 Feb 2024 23:11:56 +0100
-To: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-Message-ID: <20240211231156.68fa41ab@windsurf>
-In-Reply-To: <20240208095615.2397148-1-roy.kollen.svendsen@akersolutions.com>
-References: <20240208095615.2397148-1-roy.kollen.svendsen@akersolutions.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1707689517;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=/AmJsTF/Cbravu2DVh76C81AN/TGfaUDw1sc5e9Ht0o=;
- b=iXwNCgBFeyAbrXZ4TCG0DpK7c/9bP5s49vVZN2g5N4BfvFyWM6t9O7mKB9UrFJm3W+Ec8C
- HUsUOoR3JFDZNbZuQK2meNmGBkINuiNxzwdKZytBE/DpUk0/goV6NfkYk1/ljgH0Ruef/3
- kIgDoNA26G5cmoQsU24Qgfd1GkXCZiFJUJ34ywVJH8Xr/wQBU0elIZadE8Hy2QUL7fyA3w
- SC6rdVaAT3bUvOzBMUkP4LzvqPv5qynAK4XPe/ZT+wPGqtdaxcbRX/csxcM0BVp/BKItL0
- mXfGZ+axydMHHU5XeBqN1cr4fg1WYOdUIH6ysfYpEoNx5BYkej7IkUDiLdCcGQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=iXwNCgBF
-Subject: Re: [Buildroot] [PATCH] package/python3: fix install
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B814684F7C
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id B814684F7C
+ for <buildroot@buildroot.org>; Sun, 11 Feb 2024 22:12:13 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A68FF8781B; Sun, 11 Feb 2024 22:12:13 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 11 Feb 2024 23:10:57 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d4abcf5872cd14cd2b1633142ffed3794b838ac1
+X-Git-Newrev: 687b96db4d3518eadd16f74f7defdc05b1cfb736
+X-Patchwork-Hint: ignore
+Message-Id: <20240211221213.A68FF8781B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python3: fix install when tk is
+ disabled
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,55 +60,65 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Roy Kollen Svendsen <roy.kollen.svendsen@akersolutions.com>,
- James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu,  8 Feb 2024 10:56:14 +0100
-Roy Kollen Svendsen <roykollensvendsen@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=687b96db4d3518eadd16f74f7defdc05b1cfb736
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fixes the following failure in the install step of host-python3:
->     ...
->     /usr/bin/install -c -m 644 pyconfig.h output/host/include/python3.12/pyconfig.h
->     [ERROR] _tkinter failed to import: output/build/host-python3-3.12.1/build/lib.linux-x86_64-3.12/_tkinter.cpython-312-x86_64-linux-gnu.so: undefined symbol: Tcl_AddErrorInfo
->     The following modules are *disabled* in configure script:
->     _ctypes_test          _testbuffer           _testcapi
->     _testclinic           _testimportmultiple   _testinternalcapi
->     _testmultiphase       _xxtestfuzz           xxsubtype
-> 
->     Following modules built successfully but were removed because they could not be imported:
->     _tkinter
-> 
->     Checked 110 modules (31 built-in, 54 shared, 15 n/a on linux-x86_64, 9 disabled, 0 missing, 1 failed on import)
->     ...
->     /usr/bin/install -c -m 644 ./Lib/types.py output/host/lib/python3.12
->     /usr/bin/install: cannot stat 'Modules/_tkinter.cpython-312-x86_64-linux-gnu.so': No such file or directory
->     /usr/bin/install -c -m 644 ./Lib/typing.py output/host/lib/python3.12
->     make[3]: *** [Makefile:2068: sharedinstall] Error 1
->     ...
-> 
-> Signed-off-by: Roy Kollen Svendsen <roy.kollen.svendsen@akersolutions.com>
-> ---
-> Changes v1 -> v2:
->   Make the --disable-tk option automatically set py_cv_module__tkinter=n/a (suggested by Thomas Petazzoni)
-> ---
->  .../python3/0012-Add-an-option-to-disable-the-tk-module.patch | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+Fixes the following failure in the install step of host-python3:
+    ...
+    /usr/bin/install -c -m 644 pyconfig.h output/host/include/python3.12/pyconfig.h
+    [ERROR] _tkinter failed to import: output/build/host-python3-3.12.1/build/lib.linux-x86_64-3.12/_tkinter.cpython-312-x86_64-linux-gnu.so: undefined symbol: Tcl_AddErrorInfo
+    The following modules are *disabled* in configure script:
+    _ctypes_test          _testbuffer           _testcapi
+    _testclinic           _testimportmultiple   _testinternalcapi
+    _testmultiphase       _xxtestfuzz           xxsubtype
 
-Applied to master after improving the commit title, and extending the
-commit log to indicate which commit this is fixing.
+    Following modules built successfully but were removed because they could not be imported:
+    _tkinter
 
-Thanks!
+    Checked 110 modules (31 built-in, 54 shared, 15 n/a on linux-x86_64, 9 disabled, 0 missing, 1 failed on import)
+    ...
+    /usr/bin/install -c -m 644 ./Lib/types.py output/host/lib/python3.12
+    /usr/bin/install: cannot stat 'Modules/_tkinter.cpython-312-x86_64-linux-gnu.so': No such file or directory
+    /usr/bin/install -c -m 644 ./Lib/typing.py output/host/lib/python3.12
+    make[3]: *** [Makefile:2068: sharedinstall] Error 1
+    ...
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes: 36e635d2d5c0166476858aa239ccbe78e8f2af14 ("package/python3: bump version to 3.12.1")
+
+Signed-off-by: Roy Kollen Svendsen <roy.kollen.svendsen@akersolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python3/0012-Add-an-option-to-disable-the-tk-module.patch | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/package/python3/0012-Add-an-option-to-disable-the-tk-module.patch b/package/python3/0012-Add-an-option-to-disable-the-tk-module.patch
+index 7fafbedddb..08617241a6 100644
+--- a/package/python3/0012-Add-an-option-to-disable-the-tk-module.patch
++++ b/package/python3/0012-Add-an-option-to-disable-the-tk-module.patch
+@@ -62,7 +62,7 @@ diff --git a/configure.ac b/configure.ac
+ index c8ae60aa6b5..7caa361138d 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -4503,6 +4503,11 @@ AC_ARG_ENABLE(pydoc,
++@@ -4503,6 +4503,13 @@ AC_ARG_ENABLE(pydoc,
+  	AS_HELP_STRING([--disable-pydoc], [disable pydoc]),
+  	[ PYDOC="${enableval}" ], [ PYDOC=yes ])
+  
+@@ -70,6 +70,8 @@ index c8ae60aa6b5..7caa361138d 100644
+ +AC_ARG_ENABLE(tk,
+ +	AS_HELP_STRING([--disable-tk], [disable tk]),
+ +	[ TK="${enableval}" ], [ TK=yes ])
+++AS_IF([test "$TK" = "no"],
+++	[PY_STDLIB_MOD_SET_NA([_tkinter])])
+ +
+  # Check for enable-ipv6
+  AH_TEMPLATE([ENABLE_IPV6], [Define if --enable-ipv6 is specified])
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
