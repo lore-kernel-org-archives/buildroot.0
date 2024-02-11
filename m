@@ -4,71 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46777C4829B
-	for <buildroot@archiver.kernel.org>; Sun, 11 Feb 2024 15:28:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 396A8C4829B
+	for <buildroot@archiver.kernel.org>; Sun, 11 Feb 2024 15:28:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D705940497;
-	Sun, 11 Feb 2024 15:28:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F0FDD403A4;
+	Sun, 11 Feb 2024 15:28:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id W4tobq7nhGh7; Sun, 11 Feb 2024 15:28:03 +0000 (UTC)
+	with ESMTP id k5_SIHyIcdcY; Sun, 11 Feb 2024 15:28:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C11D7404C3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8FA844052F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C11D7404C3;
-	Sun, 11 Feb 2024 15:28:02 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7D8C21BF39A
- for <buildroot@lists.busybox.net>; Sun, 11 Feb 2024 15:27:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8FA844052F;
+	Sun, 11 Feb 2024 15:28:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 71ABD1BF39A
+ for <buildroot@lists.busybox.net>; Sun, 11 Feb 2024 15:28:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6AD43403AC
- for <buildroot@lists.busybox.net>; Sun, 11 Feb 2024 15:27:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5D3F682141
+ for <buildroot@lists.busybox.net>; Sun, 11 Feb 2024 15:28:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jOWCTrbLIvyE for <buildroot@lists.busybox.net>;
- Sun, 11 Feb 2024 15:27:58 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
- helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pYECziFBt_U8 for <buildroot@lists.busybox.net>;
+ Sun, 11 Feb 2024 15:28:05 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 881004038B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 881004038B
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 881004038B
- for <buildroot@buildroot.org>; Sun, 11 Feb 2024 15:27:57 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A040E1C0003;
- Sun, 11 Feb 2024 15:27:55 +0000 (UTC)
-Date: Sun, 11 Feb 2024 16:27:54 +0100
-To: Kadambini Nema <kadambini.nema@gmail.com>
-Message-ID: <20240211162754.68a62dfd@windsurf>
-In-Reply-To: <20240211051907.551771-1-kadambini.nema@gmail.com>
-References: <20240211051907.551771-1-kadambini.nema@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1707665275;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=f98FsjlsO/OmLEv0bIytu/j3qorhS2Fpuizt7Ektd/U=;
- b=b4uV6J2JXqwzvG40IeHV7chdCL5kCF0r7h7ArtS6XTmXaeo4Hx+VkUmftUkXTY/tt3uuKD
- jki2n+TQ9smZnKcDpFwoPtfN+ebHfIqaGeAvhpqObN4RFBQ2DJlx0AdGVVqDVpimcAiojz
- o7Fe8QLoo7IVrqY2hMv7naxxQEXamukqSdPbpKOTkFgVEDrWoY6SkPBYqaLQAS0SBt9183
- PiEaieYYaELZ2yQOSruB/OwMojlBDf+2c9luAbAgJR6UtDTEf+4sgD7keAatJrb1QTLNKr
- QIPMhL5Y5ukqJtuBvBaplWr5fQF1EcFz8nJ2YHvjO8QbkldmlXZLQC1pkG0MYQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=b4uV6J2J
-Subject: Re: [Buildroot] [PATCH 1/1] package/strace: bump to version 6.7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C7F8382142
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C7F8382142
+ for <buildroot@buildroot.org>; Sun, 11 Feb 2024 15:28:05 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6F7568757E; Sun, 11 Feb 2024 15:28:05 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 11 Feb 2024 16:11:56 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 79f38212c5fc95f64fc59c96b651024dc39cc0ae
+X-Git-Newrev: ebeb4f435303bf6802b647ac83373d5ed9980de5
+X-Patchwork-Hint: ignore
+Message-Id: <20240211152805.6F7568757E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/strace: bump to version 6.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,31 +59,51 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 10 Feb 2024 21:19:07 -0800
-Kadambini Nema <kadambini.nema@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=ebeb4f435303bf6802b647ac83373d5ed9980de5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> - Updated hash of COPYING (year updated with
->   https://github.com/strace/strace/commit/eba0ac1fc4f8896b938d41081e0643cb06283a9b)
-> 
-> Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
-> ---
->  package/strace/strace.hash | 6 +++---
->  package/strace/strace.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+- Updated hash of COPYING (year updated with
+  https://github.com/strace/strace/commit/eba0ac1fc4f8896b938d41081e0643cb06283a9b)
 
-Applied to master, thanks.
+Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/strace/strace.hash | 6 +++---
+ package/strace/strace.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/strace/strace.hash b/package/strace/strace.hash
+index 75a35d7cf4..a35d2b0be6 100644
+--- a/package/strace/strace.hash
++++ b/package/strace/strace.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
+-# https://strace.io/files/6.6/strace-6.6.tar.xz.asc
+-sha256  421b4186c06b705163e64dc85f271ebdcf67660af8667283147d5e859fc8a96c  strace-6.6.tar.xz
+-sha256  6e5648c0ed522b163f9df1dc500c73491b1743495bd78388e99685cecfa79707  COPYING
++# https://strace.io/files/6.7/strace-6.7.tar.xz.asc
++sha256  2090201e1a3ff32846f4fe421c1163b15f440bb38e31355d09f82d3949922af7  strace-6.7.tar.xz
++sha256  1988d0e1aa101d68855e8c4f940aacf2531051b82f6b608eb026c5fad1f33df1  COPYING
+ sha256  7c379436436a562834aa7d2f5dcae1f80a25230fa74201046ca1fba4367d39aa  LGPL-2.1-or-later
+diff --git a/package/strace/strace.mk b/package/strace/strace.mk
+index 6279622fdb..f916936207 100644
+--- a/package/strace/strace.mk
++++ b/package/strace/strace.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-STRACE_VERSION = 6.6
++STRACE_VERSION = 6.7
+ STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
+ STRACE_SITE = https://github.com/strace/strace/releases/download/v$(STRACE_VERSION)
+ STRACE_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
