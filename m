@@ -4,54 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F848C4829B
-	for <buildroot@archiver.kernel.org>; Sun, 11 Feb 2024 12:09:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8268C4829B
+	for <buildroot@archiver.kernel.org>; Sun, 11 Feb 2024 12:09:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CB55B82263;
-	Sun, 11 Feb 2024 12:09:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D7E4082273;
+	Sun, 11 Feb 2024 12:09:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0NfkgSiLRJlD; Sun, 11 Feb 2024 12:09:13 +0000 (UTC)
+	with ESMTP id 9yEJEm3BCmQZ; Sun, 11 Feb 2024 12:09:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C2A248226C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C3E298227F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C2A248226C;
-	Sun, 11 Feb 2024 12:09:12 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0FA581BF33A
- for <buildroot@lists.busybox.net>; Sun, 11 Feb 2024 12:09:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C3E298227F;
+	Sun, 11 Feb 2024 12:09:16 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 691601BF33A
+ for <buildroot@lists.busybox.net>; Sun, 11 Feb 2024 12:09:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id ECD678226C
- for <buildroot@lists.busybox.net>; Sun, 11 Feb 2024 12:09:10 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 61C2A402B1
+ for <buildroot@lists.busybox.net>; Sun, 11 Feb 2024 12:09:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hbywhY3YzfX9 for <buildroot@lists.busybox.net>;
- Sun, 11 Feb 2024 12:09:10 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Tmf8BkUHYqUq for <buildroot@lists.busybox.net>;
+ Sun, 11 Feb 2024 12:09:14 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2001:868:100:600::217; helo=shout02.mail.de;
+ client-ip=2001:868:100:600::216; helo=shout01.mail.de;
  envelope-from=kilian.zinnecker@mail.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D281F82263
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D281F82263
-Received: from shout02.mail.de (shout02.mail.de [IPv6:2001:868:100:600::217])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D281F82263
- for <buildroot@buildroot.org>; Sun, 11 Feb 2024 12:09:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org EFF33400FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EFF33400FE
+Received: from shout01.mail.de (shout01.mail.de [IPv6:2001:868:100:600::216])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EFF33400FE
+ for <buildroot@buildroot.org>; Sun, 11 Feb 2024 12:09:13 +0000 (UTC)
 Received: from postfix03.mail.de (postfix03.bt.mail.de [10.0.121.127])
- by shout02.mail.de (Postfix) with ESMTP id 696F02409F5;
- Sun, 11 Feb 2024 13:09:07 +0100 (CET)
+ by shout01.mail.de (Postfix) with ESMTP id 95AAC240BC5;
+ Sun, 11 Feb 2024 13:09:11 +0100 (CET)
 Received: from smtp01.mail.de (smtp01.bt.mail.de [10.0.121.211])
- by postfix03.mail.de (Postfix) with ESMTP id 4C91F8020A;
- Sun, 11 Feb 2024 13:09:07 +0100 (CET)
+ by postfix03.mail.de (Postfix) with ESMTP id 6CEA080283;
+ Sun, 11 Feb 2024 13:09:11 +0100 (CET)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
  key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
  (No client certificate requested)
- by smtp01.mail.de (Postfix) with ESMTPSA id 235F2244670;
- Sun, 11 Feb 2024 13:09:05 +0100 (CET)
+ by smtp01.mail.de (Postfix) with ESMTPSA id 85B99240C90;
+ Sun, 11 Feb 2024 13:09:10 +0100 (CET)
 To: buildroot@buildroot.org
-Date: Sun, 11 Feb 2024 13:08:54 +0100
-Message-Id: <20240211120857.6622-1-kilian.zinnecker@mail.de>
+Date: Sun, 11 Feb 2024 13:08:55 +0100
+Message-Id: <20240211120857.6622-2-kilian.zinnecker@mail.de>
+In-Reply-To: <20240211120857.6622-1-kilian.zinnecker@mail.de>
+References: <20240211120857.6622-1-kilian.zinnecker@mail.de>
 MIME-Version: 1.0
 X-purgate: clean
 X-purgate: This mail is considered clean (visit http://www.eleven.de for
@@ -61,26 +63,26 @@ X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
 X-purgate: This mail is considered clean (visit http://www.eleven.de for
  further information)
 X-purgate: clean
-X-purgate-size: 2983
-X-purgate-ID: 154282::1707653347-455BD670-D8A422F6/0/0
+X-purgate-size: 3383
+X-purgate-ID: 154282::1707653351-455BD670-96D5C219/0/0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=mail.de; s=mailde202009; t=1707653347;
- bh=JkQ0HFBk+j6X2R3V5IzI0rbDupqI3nNh89Y2Bb1FqLQ=;
+ d=mail.de; s=mailde202009; t=1707653351;
+ bh=ranGwht6VXmolwXJOc5+8tYwAswiDx5ixtsdoENnoQg=;
  h=From:To:Cc:Subject:Date:Message-Id:From:To:CC:Subject:Reply-To;
- b=R4LtBwEoOGfnUHpG7SNr3N8hzJUwEQe9m6M68LpSUa0R9m4EmRoshG9eHVFnwWBK6
- mgA+6YJXpgB8byGSeN2AuaAG/jRrWvmO7RvPia4ld4kKGWRlRjVTD2KrtOaVxZJVoo
- d5MY8xlF2J55gh7Dpvy2g55kDzhmS/nTBV4px0tkUw1PQFgBqx948stQazXliqXiDz
- m1r/Dvut7wuSr62pQiH3+M3DpJ+KiWHooTy5njFjK99nQNH1HxEeoB+/NkKTofKTHJ
- McpTDt7ujG8IJat+i80LKvbjgQW7gzDtksymoUdEn1UkDGDwgZ7szZPlm4lksWFfz8
- j3LBkdhN9lLXQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=eq7qMtf09mEU4iMS7p2H+/bOKtVL8KU3vkzsikrbPW4nBC17piFpARWTNaQ8yRTm3
+ fq9Hv/PSUsOPYoT9YZ/7SE9jRlTiWIvJ64q0u5QfaDnkfl633NyF3GvxyRgH3vAiv7
+ Qv15+mDWcwaabAIwQpbgQ71J3UukLhEyUl7rcIQeHHxQ+MGBtMOydZnZ/A+UqyJUdb
+ jjx0Fyr6Sjz+fEl9kKZLLHXP6neCnYE7pvw4qhT9vlN/PsqnwH7soJX0XjJFGDZYZP
+ qr/rdDtXJERYLboeUXKscYtra8b2G1EohGC6+DQ9TpV3fxO5CrDM2VGbcH2buU+5vq
+ uMB5JNCjEuDKA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mail.de
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=mail.de header.i=@mail.de header.a=rsa-sha256
- header.s=mailde202009 header.b=R4LtBwEo
-Subject: [Buildroot] [PATCH v3 0/2] Add board support for the BeagleV-Ahead
+ header.s=mailde202009 header.b=eq7qMtf0
+Subject: [Buildroot] [PATCH v3 1/2] package/xuantie-bins: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,72 +105,95 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch series adds board support for the BeagleV-Ahead.
+This patch adds a package for Xuantie binary blobs. These binaries
+are needed for the BeagleV-Ahead.
 
-This patch series introduces a package which fetches binaries for the
-SoC, i.e., one binary blob for an on-chip FPGA and one binary blob for
-audio. Currently they are not used, but are intended to be used in the
-future.
-
-This board support generates an image suitable for SD card. The boot
-command for uboot to boot the kernel could not easily be changed. It
-seemed that a default boot command was persisent and any change to it
-by normal means (e.g., uboot config parameters like
-CONFIG_BOOT_COMMAND) did not have any effect. Hence a patch for the
-custom u-boot is introduced for now, to insert the proper boot
-command.
-
-v2 -> v3:
-
-  - Added brief description what the xuantie bin binaries are for
-  - Unrolled loop in XUANTIE_BINS_INSTALL_IMAGES_CMDS of
-    package/xuantie-bins/xuantie-bins.mk
-  - Added a second product page link to board's readme.txt
-  - Added URL to the product page to git commit message
-  - Dropped "_CUSTOM" from all "BR2_RISCV_ISA_*" in the board's
-    defconfig
-  - Add description to the board's readme.txt and defconfig  why GCC
-    v13 is chosen
-  - Added BR2_PACKAGE_HOST_DOSFSTOOLS to board's defconfig
-
-v1 -> v2:
-
-  - Added hash file for xuantie-bins package
-  - Now uses uEnv.txt for actual boot commands
-  - Removed extlinux.conf
-  - Removed superflous comments inside config files
-
-
-Kilian Zinnecker (2):
-  package/xuantie-bins: new package
-  configs/beaglev_ahead: new defconfig
-
- DEVELOPERS                                    |  3 +
- board/beaglev-ahead/genimage.cfg              | 62 +++++++++++++++
- board/beaglev-ahead/linux.fragment            |  2 +
- .../0001-Overwrite-bootcmd-by-force.patch     | 30 +++++++
- board/beaglev-ahead/post-image.sh             |  6 ++
- board/beaglev-ahead/readme.txt                | 78 +++++++++++++++++++
- board/beaglev-ahead/uEnv.txt                  |  4 +
- board/beaglev-ahead/uboot.fragment            |  2 +
- configs/beaglev_ahead_defconfig               | 46 +++++++++++
- package/Config.in                             |  1 +
- package/xuantie-bins/Config.in                |  8 ++
- package/xuantie-bins/xuantie-bins.hash        |  1 +
- package/xuantie-bins/xuantie-bins.mk          | 23 ++++++
- 13 files changed, 266 insertions(+)
- create mode 100644 board/beaglev-ahead/genimage.cfg
- create mode 100644 board/beaglev-ahead/linux.fragment
- create mode 100644 board/beaglev-ahead/patches/uboot/0001-Overwrite-bootcmd-by-force.patch
- create mode 100755 board/beaglev-ahead/post-image.sh
- create mode 100644 board/beaglev-ahead/readme.txt
- create mode 100644 board/beaglev-ahead/uEnv.txt
- create mode 100644 board/beaglev-ahead/uboot.fragment
- create mode 100644 configs/beaglev_ahead_defconfig
+Signed-off-by: Kilian Zinnecker <kilian.zinnecker@mail.de>
+---
+ DEVELOPERS                             |  1 +
+ package/Config.in                      |  1 +
+ package/xuantie-bins/Config.in         |  8 ++++++++
+ package/xuantie-bins/xuantie-bins.hash |  1 +
+ package/xuantie-bins/xuantie-bins.mk   | 23 +++++++++++++++++++++++
+ 5 files changed, 34 insertions(+)
  create mode 100644 package/xuantie-bins/Config.in
  create mode 100644 package/xuantie-bins/xuantie-bins.hash
  create mode 100644 package/xuantie-bins/xuantie-bins.mk
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1c6c84b05b..fa0596fd6b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1894,6 +1894,7 @@ F:	board/radxa/rock5b/
+ F:	configs/rock5b_defconfig
+ F:	configs/avnet_rzboard_v2l_defconfig
+ F:	package/rockchip-rkbin/
++F:	package/xuantie-bins/
+ 
+ N:	Klaus Heinrich Kiwi <klaus@linux.vnet.ibm.com>
+ F:	package/wqy-zenhei/
+diff --git a/package/Config.in b/package/Config.in
+index 91a6f1de00..5e28fb6e88 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -657,6 +657,7 @@ endmenu
+ 	source "package/wipe/Config.in"
+ 	source "package/xorriso/Config.in"
+ 	source "package/xr819-xradio/Config.in"
++	source "package/xuantie-bins/Config.in"
+ endmenu
+ 
+ menu "Interpreter languages and scripting"
+diff --git a/package/xuantie-bins/Config.in b/package/xuantie-bins/Config.in
+new file mode 100644
+index 0000000000..40388edd06
+--- /dev/null
++++ b/package/xuantie-bins/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_XUANTIE_BINS
++	bool "xuantie-bins"
++	depends on BR2_riscv
++	help
++	  This package provides binary blobs, needed for the
++	  BeagleV-Ahead's SoC (TH1520). They contain an FPGA binary
++          (light_aon_fpga.bin) for power management and a binary for
++          the audio system (light_c906_audio.bin).
+diff --git a/package/xuantie-bins/xuantie-bins.hash b/package/xuantie-bins/xuantie-bins.hash
+new file mode 100644
+index 0000000000..4d1ec297c9
+--- /dev/null
++++ b/package/xuantie-bins/xuantie-bins.hash
+@@ -0,0 +1 @@
++sha256  608e9fec79823996004f65ba692a76d741307b0de23552d147ad1b567e7054dc  xuantie-bins-0a2e02bb53758cc12448d8670e65c854528a96b4-br1.tar.gz
+diff --git a/package/xuantie-bins/xuantie-bins.mk b/package/xuantie-bins/xuantie-bins.mk
+new file mode 100644
+index 0000000000..6db18685bc
+--- /dev/null
++++ b/package/xuantie-bins/xuantie-bins.mk
+@@ -0,0 +1,23 @@
++################################################################################
++#
++# xuantie-bins
++#
++################################################################################
++
++XUANTIE_BINS_VERSION = 0a2e02bb53758cc12448d8670e65c854528a96b4
++XUANTIE_BINS_SITE = https://github.com/beagleboard/xuantie-ubuntu.git
++XUANTIE_BINS_SITE_METHOD = git
++XUANTIE_BINS_LICENSE = PROPRIETARY
++
++XUANTIE_BINS_INSTALL_IMAGES = YES
++XUANTIE_BINS_INSTALL_TARGET = NO
++
++XUANTIE_BINS_FPGA_BIN_FILENAME = "bins/light_aon_fpga.bin"
++XUANTIE_BINS_AUDIO_BIN_FILENAME = "bins/light_c906_audio.bin"
++
++define XUANTIE_BINS_INSTALL_IMAGES_CMDS
++	$(INSTALL) -D -m 0644 -t $(BINARIES_DIR) $(@D)/$(XUANTIE_BINS_FPGA_BIN_FILENAME)
++	$(INSTALL) -D -m 0644 -t $(BINARIES_DIR) $(@D)/$(XUANTIE_BINS_AUDIO_BIN_FILENAME)
++endef
++
++$(eval $(generic-package))
 -- 
 2.34.1
 
