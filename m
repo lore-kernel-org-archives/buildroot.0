@@ -4,71 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC748C4829B
-	for <buildroot@archiver.kernel.org>; Sun, 11 Feb 2024 21:42:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD499C4829B
+	for <buildroot@archiver.kernel.org>; Sun, 11 Feb 2024 21:43:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A19158513E;
-	Sun, 11 Feb 2024 21:42:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 72017850F9;
+	Sun, 11 Feb 2024 21:43:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BtqCX4z6WgNO; Sun, 11 Feb 2024 21:42:28 +0000 (UTC)
+	with ESMTP id CH9LBOoYfxDy; Sun, 11 Feb 2024 21:43:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D969850F1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 178F8850C1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5D969850F1;
-	Sun, 11 Feb 2024 21:42:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 96C2C1BF2EF
- for <buildroot@lists.busybox.net>; Sun, 11 Feb 2024 21:42:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 178F8850C1;
+	Sun, 11 Feb 2024 21:43:52 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 85EF11BF2EF
+ for <buildroot@lists.busybox.net>; Sun, 11 Feb 2024 21:43:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8313F4012F
- for <buildroot@lists.busybox.net>; Sun, 11 Feb 2024 21:42:26 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 732EE60ED8
+ for <buildroot@lists.busybox.net>; Sun, 11 Feb 2024 21:43:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9AJMG-2qc-GZ for <buildroot@lists.busybox.net>;
- Sun, 11 Feb 2024 21:42:24 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RS2JslemdES6 for <buildroot@lists.busybox.net>;
+ Sun, 11 Feb 2024 21:43:49 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 85E994011D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 85E994011D
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 85E994011D
- for <buildroot@buildroot.org>; Sun, 11 Feb 2024 21:42:23 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 3679913F880;
- Sun, 11 Feb 2024 22:42:20 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 11 Feb 2024 22:42:19 +0100
-Date: Sun, 11 Feb 2024 22:42:19 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <Zck_Ow8QFhJxQINj@landeda>
-References: <20240208195438.89814-1-fontaine.fabrice@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240208195438.89814-1-fontaine.fabrice@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1707687742;
- bh=gMCo/EzVPviQgQKvHZxwQT7/JsPBNEpYdY4EMt2RJhw=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=YQpBnhN5Qg/tBDyqmfVA+sWFrUct578blsgFl/GazK8DaTs5E54SuIgviwQyC5Yjw
- ZCUxUpw3PccXm2ybX7JmLOsx6CBOZvGUC1UzKi9kZwRGKOdilizM0uX0XAUnpeJ9C/
- OM5mFWHRUS1Q2eDgd5NgfC/hs32AJZFLG7CrBCTq/RodbmwXsAv9g1sxlwSpAM2bwF
- aYpTvCCnUXnS/EsRwFPQcFqvURefRgrgNRqXySiQ8WFEhLhUWlYhjLhmsD3InnM9R4
- xdmV7WqznDLKQhkdBt9ZfTmjKR+PLtGoPUUiCxk2tndYS6mW1wumjFQlanT7CEQDo5
- 0YMETsb8YAoPg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=YQpBnhN5
-Subject: Re: [Buildroot] [PATCH 1/1] package/tinymembench: drop package
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4BD1460EA5
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4BD1460EA5
+ for <buildroot@buildroot.org>; Sun, 11 Feb 2024 21:43:49 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E9E8A877CD; Sun, 11 Feb 2024 21:43:48 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 11 Feb 2024 22:43:00 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 16eec251427b3075d68ea43d7f1395567e2effe4
+X-Git-Newrev: ce4d278739953c830cea0c017836f26ceabef63a
+X-Patchwork-Hint: ignore
+Message-Id: <20240211214348.E9E8A877CD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libopenssl: security bump to
+ version 3.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,230 +59,276 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=ce4d278739953c830cea0c017836f26ceabef63a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2024-02-08 20:54 +0100, Fabrice Fontaine spake thusly:
-> As advised by Thomas Petazzoni in [1], drop tinymembench which is
-> abandonned (last commit in 2017). Moreover, it raises the following
-> build failure in Thumb mode:
-> 
-> /tmp/ccaZHrla.s:40: Error: instruction not supported in Thumb16 mode -- `subs r1,r1,#16'
-> /tmp/ccaZHrla.s:43: Error: instruction not supported in Thumb16 mode -- `subs r1,r1,#16'
-> main.c:45: Error: selected processor does not support `mla r2,r10,r2,r5' in Thumb mode
-> main.c:46: Error: unshifted register required -- `and r8,r7,r2,lsr#16'
-> main.c:47: Error: selected processor does not support `mla r2,r10,r2,r5' in Thumb mode
-> main.c:48: Error: unshifted register required -- `and r9,r6,r2,lsr#8'
-> main.c:49: Error: selected processor does not support `mla r2,r10,r2,r5' in Thumb mode
-> 
-> [1]: https://patchwork.ozlabs.org/project/buildroot/patch/20240114135446.1156025-1-fontaine.fabrice@gmail.com/
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/1e359c294a8d71fb1833e5d04a6bc7d4fd533510
->  - http://autobuild.buildroot.org/results/c06010d7a2bdb33a1707266133a3880e14be7657
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+And drop the now upstreamed patches.
 
-Applied to master, thanks.
+Fixes the following (low severity) issues:
 
-Regards,
-Yann E. MORIN.
+- CVE-2023-6129 POLY1305 MAC implementation corrupts vector registers on
+  PowerPC
+  https://www.openssl.org/news/secadv/20240109.txt
 
-> ---
->  .checkpackageignore                           |  1 -
->  Config.in.legacy                              |  6 +++
->  DEVELOPERS                                    |  1 -
->  package/Config.in                             |  1 -
->  ...ix-build-on-Thumb-only-architectures.patch | 47 -------------------
->  package/tinymembench/Config.in                | 12 -----
->  package/tinymembench/tinymembench.hash        |  3 --
->  package/tinymembench/tinymembench.mk          | 21 ---------
->  8 files changed, 6 insertions(+), 86 deletions(-)
->  delete mode 100644 package/tinymembench/0001-arm-fix-build-on-Thumb-only-architectures.patch
->  delete mode 100644 package/tinymembench/Config.in
->  delete mode 100644 package/tinymembench/tinymembench.hash
->  delete mode 100644 package/tinymembench/tinymembench.mk
-> 
-> diff --git a/.checkpackageignore b/.checkpackageignore
-> index 4a1041a84a..a2b5c14a94 100644
-> --- a/.checkpackageignore
-> +++ b/.checkpackageignore
-> @@ -1265,7 +1265,6 @@ package/tinyalsa/0001-include-time.h-before-asound.h.patch Upstream
->  package/tinycbor/0001-Makefile-add-DISABLE_WERROR.patch Upstream
->  package/tinycompress/0001-wave-add-time.h-missing-header-inclusion.patch Upstream
->  package/tinydtls/0001-sha2-sha2.c-fix-build-on-big-endian.patch Upstream
-> -package/tinymembench/0001-arm-fix-build-on-Thumb-only-architectures.patch Upstream
->  package/tinyproxy/0001-prevent-junk-from-showing-up-in-error-page-in-invalid-requests.patch Upstream
->  package/tinyxml/0001-In-stamp-always-advance-the-pointer-if-p-0xef.patch Upstream
->  package/tpm2-abrmd/S80tpm2-abrmd Indent Shellcheck Variables
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index 5e0db855cc..a869279af7 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -146,6 +146,12 @@ endif
->  
->  comment "Legacy options removed in 2024.02"
->  
-> +config BR2_PACKAGE_TINYMEMBENCH
-> +	bool "tinymembench removed"
-> +	select BR2_LEGACY
-> +	help
-> +	  tinymembench has been removed due to being abandoned.
-> +
->  config BR2_PACKAGE_DAVINCI_BOOTCOUNT
->  	bool "davinci-bootcount has been renamed"
->  	select BR2_LEGACY
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index eeca05cd94..5632d2771d 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1064,7 +1064,6 @@ F:	package/snort3/
->  F:	package/suricata/
->  F:	package/tinycbor/
->  F:	package/tinydtls/
-> -F:	package/tinymembench/
->  F:	package/whois/
->  F:	package/x11r7/xlib_libXpresent/
->  F:	package/zeek/
-> diff --git a/package/Config.in b/package/Config.in
-> index ee4058155d..ebcc8c2655 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -156,7 +156,6 @@ menu "Debugging, profiling and benchmark"
->  	source "package/sysdig/Config.in"
->  	source "package/sysprof/Config.in"
->  	source "package/tcf-agent/Config.in"
-> -	source "package/tinymembench/Config.in"
->  	source "package/trace-cmd/Config.in"
->  	source "package/trinity/Config.in"
->  	source "package/uclibc-ng-test/Config.in"
-> diff --git a/package/tinymembench/0001-arm-fix-build-on-Thumb-only-architectures.patch b/package/tinymembench/0001-arm-fix-build-on-Thumb-only-architectures.patch
-> deleted file mode 100644
-> index 88559ec012..0000000000
-> --- a/package/tinymembench/0001-arm-fix-build-on-Thumb-only-architectures.patch
-> +++ /dev/null
-> @@ -1,47 +0,0 @@
-> -From 034a3552e9700c6d424bd706db106f5bce1f5a5e Mon Sep 17 00:00:00 2001
-> -From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> -Date: Fri, 11 Nov 2016 21:49:39 +0100
-> -Subject: [PATCH] arm: fix build on Thumb-only architectures
-> -
-> -Building tinymembench for ARM Cortex-M currently fails, because the
-> -arm-neon.S file contains ARM code that doesn't build on Thumb-only
-> -architectures. To account for this and fix the build for Cortex-M,
-> -this patch adjusts the compile time condition to also verify that the
-> -architecture supports the ARM instruction set, by testing the
-> -__ARM_ARCH_ISA_ARM compiler define.
-> -
-> -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ----
-> - arm-neon.S | 2 +-
-> - asm-opt.c  | 2 +-
-> - 2 files changed, 2 insertions(+), 2 deletions(-)
-> -
-> -diff --git a/arm-neon.S b/arm-neon.S
-> -index 4db78ce..19c30ad 100644
-> ---- a/arm-neon.S
-> -+++ b/arm-neon.S
-> -@@ -21,7 +21,7 @@
-> -  * DEALINGS IN THE SOFTWARE.
-> -  */
-> - 
-> --#ifdef __arm__
-> -+#if defined(__arm__) && defined(__ARM_ARCH_ISA_ARM)
-> - 
-> - .text
-> - .fpu neon
-> -diff --git a/asm-opt.c b/asm-opt.c
-> -index 9da4596..eba1183 100644
-> ---- a/asm-opt.c
-> -+++ b/asm-opt.c
-> -@@ -202,7 +202,7 @@ bench_info *get_asm_framebuffer_benchmarks(void)
-> -         return empty;
-> - }
-> - 
-> --#elif defined(__arm__)
-> -+#elif defined(__arm__) && defined(__ARM_ARCH_ISA_ARM)
-> - 
-> - #include "arm-neon.h"
-> - 
-> --- 
-> -2.7.4
-> -
-> diff --git a/package/tinymembench/Config.in b/package/tinymembench/Config.in
-> deleted file mode 100644
-> index 8f6e1a2b35..0000000000
-> --- a/package/tinymembench/Config.in
-> +++ /dev/null
-> @@ -1,12 +0,0 @@
-> -config BR2_PACKAGE_TINYMEMBENCH
-> -	bool "tinymembench"
-> -	depends on !BR2_MIPS_NABI32 && !BR2_MIPS_NABI64
-> -	help
-> -	  Tinymembench is a simple memory benchmark program, which
-> -	  tries to measure the peak bandwidth of sequential memory
-> -	  accesses and the latency of random memory accesses.
-> -	  Bandwidth is measured by running different assembly code for
-> -	  the aligned memory blocks and attempting different prefetch
-> -	  strategies.
-> -
-> -	  https://github.com/ssvb/tinymembench
-> diff --git a/package/tinymembench/tinymembench.hash b/package/tinymembench/tinymembench.hash
-> deleted file mode 100644
-> index 04dbd30f81..0000000000
-> --- a/package/tinymembench/tinymembench.hash
-> +++ /dev/null
-> @@ -1,3 +0,0 @@
-> -# Locally calculated
-> -sha256  e37a2682065b2778f2fa7f22bd59472f5ca2191be48503952ae020b8f023f23d  tinymembench-0.4.tar.gz
-> -sha256  8ba473aced4630aee2808efe17b53e904a9d68a9b3361de491717f9a4e75da39  LICENSE
-> diff --git a/package/tinymembench/tinymembench.mk b/package/tinymembench/tinymembench.mk
-> deleted file mode 100644
-> index 016d680ce7..0000000000
-> --- a/package/tinymembench/tinymembench.mk
-> +++ /dev/null
-> @@ -1,21 +0,0 @@
-> -################################################################################
-> -#
-> -# tinymembench
-> -#
-> -################################################################################
-> -
-> -TINYMEMBENCH_VERSION = 0.4
-> -TINYMEMBENCH_SITE = $(call github,ssvb,tinymembench,v$(TINYMEMBENCH_VERSION))
-> -TINYMEMBENCH_LICENSE = MIT
-> -TINYMEMBENCH_LICENSE_FILES = LICENSE
-> -
-> -define TINYMEMBENCH_BUILD_CMDS
-> -	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
-> -endef
-> -
-> -define TINYMEMBENCH_INSTALL_TARGET_CMDS
-> -	$(INSTALL) -m 0755 -D $(@D)/tinymembench \
-> -		$(TARGET_DIR)/usr/bin/tinymembench
-> -endef
-> -
-> -$(eval $(generic-package))
-> -- 
-> 2.43.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+- CVE-2023-6237 Excessive time spent checking invalid RSA public keys
+  https://www.openssl.org/news/secadv/20240115.txt
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+- CVE-2024-0727 PKCS12 Decoding crashes
+  https://www.openssl.org/news/secadv/20240125.txt
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...cv-Fix-mispelling-of-extension-test-macro.patch |  30 -----
+ ...05-Fix-genstr-genconf-option-in-asn1parse.patch |  42 -------
+ ...-Harden-asn1-oid-loader-to-invalid-inputs.patch | 122 ---------------------
+ package/libopenssl/libopenssl.hash                 |   4 +-
+ package/libopenssl/libopenssl.mk                   |   2 +-
+ 5 files changed, 3 insertions(+), 197 deletions(-)
+
+diff --git a/package/libopenssl/0004-riscv-Fix-mispelling-of-extension-test-macro.patch b/package/libopenssl/0004-riscv-Fix-mispelling-of-extension-test-macro.patch
+deleted file mode 100644
+index 93b191a61c..0000000000
+--- a/package/libopenssl/0004-riscv-Fix-mispelling-of-extension-test-macro.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From 68c549df05892c16b99603b9a831c79c540f268c Mon Sep 17 00:00:00 2001
+-From: Grant Nichol <me@grantnichol.com>
+-Date: Fri, 22 Dec 2023 23:46:39 -0600
+-Subject: [PATCH] riscv: Fix mispelling of extension test macro
+-
+-When refactoring the riscv extension test macros,
+-RISCV_HAS_ZKND_AND_ZKNE was mispelled.
+-
+-Upstream: https://github.com/openssl/openssl/pull/23139
+-Signed-off-by: Grant Nichol <me@grantnichol.com>
+----
+- providers/implementations/ciphers/cipher_aes_xts_hw.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/providers/implementations/ciphers/cipher_aes_xts_hw.c b/providers/implementations/ciphers/cipher_aes_xts_hw.c
+-index b35b71020e..65adc47d1f 100644
+---- a/providers/implementations/ciphers/cipher_aes_xts_hw.c
+-+++ b/providers/implementations/ciphers/cipher_aes_xts_hw.c
+-@@ -285,7 +285,7 @@ static const PROV_CIPHER_HW aes_xts_rv32i_zbkb_zknd_zkne = {                   \
+- # define PROV_CIPHER_HW_select_xts()                                           \
+- if (RISCV_HAS_ZBKB_AND_ZKND_AND_ZKNE())                                        \
+-     return &aes_xts_rv32i_zbkb_zknd_zkne;                                      \
+--if (RISCV_HAS_ZKND_ZKNE())                                                     \
+-+if (RISCV_HAS_ZKND_AND_ZKNE())                                                     \
+-     return &aes_xts_rv32i_zknd_zkne;
+- # else
+- /* The generic case */
+---
+-2.43.0
+-
+diff --git a/package/libopenssl/0005-Fix-genstr-genconf-option-in-asn1parse.patch b/package/libopenssl/0005-Fix-genstr-genconf-option-in-asn1parse.patch
+deleted file mode 100644
+index 9fa36d83be..0000000000
+--- a/package/libopenssl/0005-Fix-genstr-genconf-option-in-asn1parse.patch
++++ /dev/null
+@@ -1,42 +0,0 @@
+-From 749fcc0e3ce796474a15d6fac221e57daeacff1e Mon Sep 17 00:00:00 2001
+-From: Neil Horman <nhorman@openssl.org>
+-Date: Tue, 5 Dec 2023 14:50:01 -0500
+-Subject: [PATCH] Fix genstr/genconf option in asn1parse
+-
+-At some point the asn1parse applet was changed to default the inform to
+-PEM, and defalt input file to stdin.  Doing so broke the -genstr|conf options,
+-in that, before we attempt to generate an ASN1 block from the provided
+-genstr string, we attempt to read a PEM input from stdin.  As a result,
+-this command:
+-openssl asn1parse -genstr OID:1.2.3.4
+-hangs because we are attempting a blocking read on stdin, waiting for
+-data that never arrives
+-
+-Fix it by giving priority to genstr|genconf, such that, if set, will just run
+-do_generate on that string and exit
+-
+-Reviewed-by: Hugo Landau <hlandau@openssl.org>
+-Reviewed-by: Tomas Mraz <tomas@openssl.org>
+-(Merged from https://github.com/openssl/openssl/pull/22957)
+-Upstream: https://github.com/openssl/openssl/commit/749fcc0e3ce796474a15d6fac221e57daeacff1e
+-Signed-off-by: Martin Kurbanov <mmkurbanov@salutedevices.com>
+----
+- apps/asn1parse.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/apps/asn1parse.c b/apps/asn1parse.c
+-index 097b0cc1ed..6597a6180b 100644
+---- a/apps/asn1parse.c
+-+++ b/apps/asn1parse.c
+-@@ -178,7 +178,7 @@ int asn1parse_main(int argc, char **argv)
+- 
+-     if ((buf = BUF_MEM_new()) == NULL)
+-         goto end;
+--    if (informat == FORMAT_PEM) {
+-+    if (genstr == NULL && informat == FORMAT_PEM) {
+-         if (PEM_read_bio(in, &name, &header, &str, &num) != 1) {
+-             BIO_printf(bio_err, "Error reading PEM file\n");
+-             ERR_print_errors(bio_err);
+--- 
+-2.40.0
+-
+diff --git a/package/libopenssl/0006-Harden-asn1-oid-loader-to-invalid-inputs.patch b/package/libopenssl/0006-Harden-asn1-oid-loader-to-invalid-inputs.patch
+deleted file mode 100644
+index 299ecbc2ed..0000000000
+--- a/package/libopenssl/0006-Harden-asn1-oid-loader-to-invalid-inputs.patch
++++ /dev/null
+@@ -1,122 +0,0 @@
+-From a552c23c6502592c1b3c67d93dd7e5ffbe958aa4 Mon Sep 17 00:00:00 2001
+-From: Neil Horman <nhorman@openssl.org>
+-Date: Tue, 5 Dec 2023 15:24:20 -0500
+-Subject: [PATCH] Harden asn1 oid loader to invalid inputs
+-
+-In the event that a config file contains this sequence:
+-=======
+-openssl_conf = openssl_init
+-
+-config_diagnostics = 1
+-
+-[openssl_init]
+-oid_section = oids
+-
+-[oids]
+-testoid1 = 1.2.3.4.1
+-testoid2 = A Very Long OID Name, 1.2.3.4.2
+-testoid3 = ,1.2.3.4.3
+-======
+-
+-The leading comma in testoid3 can cause a heap buffer overflow, as the
+-parsing code will move the string pointer back 1 character, thereby
+-pointing to an invalid memory space
+-
+-correct the parser to detect this condition and handle it by treating it
+-as if the comma doesn't exist (i.e. an empty long oid name)
+-
+-Reviewed-by: Hugo Landau <hlandau@openssl.org>
+-Reviewed-by: Tomas Mraz <tomas@openssl.org>
+-(Merged from https://github.com/openssl/openssl/pull/22957)
+-Upstream: https://github.com/openssl/openssl/commit/a552c23c6502592c1b3c67d93dd7e5ffbe958aa4
+-Signed-off-by: Martin Kurbanov <mmkurbanov@salutedevices.com>
+----
+- apps/asn1parse.c                  |  2 +-
+- crypto/asn1/asn_moid.c            |  4 ++++
+- test/recipes/04-test_asn1_parse.t | 26 ++++++++++++++++++++++++++
+- test/test_asn1_parse.cnf          | 12 ++++++++++++
+- 4 files changed, 43 insertions(+), 1 deletion(-)
+- create mode 100644 test/recipes/04-test_asn1_parse.t
+- create mode 100644 test/test_asn1_parse.cnf
+-
+-diff --git a/apps/asn1parse.c b/apps/asn1parse.c
+-index 6597a6180b..bf62f85947 100644
+---- a/apps/asn1parse.c
+-+++ b/apps/asn1parse.c
+-@@ -178,7 +178,7 @@ int asn1parse_main(int argc, char **argv)
+- 
+-     if ((buf = BUF_MEM_new()) == NULL)
+-         goto end;
+--    if (genstr == NULL && informat == FORMAT_PEM) {
+-+    if (genconf == NULL && genstr == NULL && informat == FORMAT_PEM) {
+-         if (PEM_read_bio(in, &name, &header, &str, &num) != 1) {
+-             BIO_printf(bio_err, "Error reading PEM file\n");
+-             ERR_print_errors(bio_err);
+-diff --git a/crypto/asn1/asn_moid.c b/crypto/asn1/asn_moid.c
+-index 6f816307af..1e183f4f18 100644
+---- a/crypto/asn1/asn_moid.c
+-+++ b/crypto/asn1/asn_moid.c
+-@@ -67,6 +67,10 @@ static int do_create(const char *value, const char *name)
+-     if (p == NULL) {
+-         ln = name;
+-         ostr = value;
+-+    } else if (p == value) {
+-+        /* we started with a leading comma */
+-+        ln = name;
+-+        ostr = p + 1;
+-     } else {
+-         ln = value;
+-         ostr = p + 1;
+-diff --git a/test/recipes/04-test_asn1_parse.t b/test/recipes/04-test_asn1_parse.t
+-new file mode 100644
+-index 0000000000..f3af436592
+---- /dev/null
+-+++ b/test/recipes/04-test_asn1_parse.t
+-@@ -0,0 +1,26 @@
+-+#! /usr/bin/env perl
+-+# Copyright 2023 The OpenSSL Project Authors. All Rights Reserved.
+-+#
+-+# Licensed under the Apache License 2.0 (the "License").  You may not use
+-+# this file except in compliance with the License.  You can obtain a copy
+-+# in the file LICENSE in the source distribution or at
+-+# https://www.openssl.org/source/license.html
+-+
+-+use strict;
+-+use OpenSSL::Test qw(:DEFAULT srctop_file);
+-+use OpenSSL::Test::Utils;
+-+
+-+setup("test_asn1_parse");
+-+
+-+plan tests => 3;
+-+
+-+$ENV{OPENSSL_CONF} = srctop_file("test", "test_asn1_parse.cnf");
+-+
+-+ok(run(app(([ 'openssl', 'asn1parse',
+-+              '-genstr', 'OID:1.2.3.4.1']))));
+-+
+-+ok(run(app(([ 'openssl', 'asn1parse',
+-+              '-genstr', 'OID:1.2.3.4.2']))));
+-+
+-+ok(run(app(([ 'openssl', 'asn1parse',
+-+              '-genstr', 'OID:1.2.3.4.3']))));
+-diff --git a/test/test_asn1_parse.cnf b/test/test_asn1_parse.cnf
+-new file mode 100644
+-index 0000000000..5f0305657e
+---- /dev/null
+-+++ b/test/test_asn1_parse.cnf
+-@@ -0,0 +1,12 @@
+-+openssl_conf = openssl_init
+-+
+-+# Comment out the next line to ignore configuration errors
+-+config_diagnostics = 1
+-+
+-+[openssl_init]
+-+oid_section = oids
+-+
+-+[oids]
+-+testoid1 = 1.2.3.4.1
+-+testoid2 = A Very Long OID Name, 1.2.3.4.2
+-+testoid3 = ,1.2.3.4.3
+--- 
+-2.40.0
+-
+diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
+index 9e09e12461..841d4b4cfd 100644
+--- a/package/libopenssl/libopenssl.hash
++++ b/package/libopenssl/libopenssl.hash
+@@ -1,5 +1,5 @@
+-# From https://www.openssl.org/source/openssl-3.2.0.tar.gz.sha256
+-sha256  14c826f07c7e433706fb5c69fa9e25dab95684844b4c962a2cf1bf183eb4690e  openssl-3.2.0.tar.gz
++# From https://www.openssl.org/source/openssl-3.2.1.tar.gz.sha256
++sha256  83c7329fe52c850677d75e5d0b0ca245309b97e8ecbcfdc1dfdc4ab9fac35b39  openssl-3.2.1.tar.gz
+ 
+ # License files
+ sha256  7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a  LICENSE.txt
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index 7dc6d93256..feb5026c02 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBOPENSSL_VERSION = 3.2.0
++LIBOPENSSL_VERSION = 3.2.1
+ LIBOPENSSL_SITE = https://www.openssl.org/source
+ LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
+ LIBOPENSSL_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
