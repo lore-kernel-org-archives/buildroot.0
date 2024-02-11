@@ -1,95 +1,96 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 914A8C4829B
-	for <buildroot@archiver.kernel.org>; Sun, 11 Feb 2024 05:21:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7FB5C4829A
+	for <buildroot@archiver.kernel.org>; Sun, 11 Feb 2024 09:16:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 03139407B5;
-	Sun, 11 Feb 2024 05:21:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4E3DD405DB;
+	Sun, 11 Feb 2024 09:16:48 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0QVakkmVSklD; Sun, 11 Feb 2024 09:16:47 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D9AC6405E8
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id D9AC6405E8;
+	Sun, 11 Feb 2024 09:16:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 47F131BF3D0
+ for <buildroot@lists.busybox.net>; Sun, 11 Feb 2024 09:16:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 41BB34086D
+ for <buildroot@lists.busybox.net>; Sun, 11 Feb 2024 09:16:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mx8PK89plVkr; Sun, 11 Feb 2024 05:21:15 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 125E4407B6
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 125E4407B6;
-	Sun, 11 Feb 2024 05:21:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 490EF1BF30B
- for <buildroot@lists.busybox.net>; Sun, 11 Feb 2024 05:21:14 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 32B2082BFD
- for <buildroot@lists.busybox.net>; Sun, 11 Feb 2024 05:21:14 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Mznr0_Zg0kva for <buildroot@lists.busybox.net>;
- Sun, 11 Feb 2024 05:21:12 +0000 (UTC)
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ggoDcCC-zGwt for <buildroot@lists.busybox.net>;
+ Sun, 11 Feb 2024 09:16:44 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::634; helo=mail-pl1-x634.google.com;
+ client-ip=2607:f8b0:4864:20::534; helo=mail-pg1-x534.google.com;
  envelope-from=kadambini.nema@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A165782AA7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A165782AA7
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com
- [IPv6:2607:f8b0:4864:20::634])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A165782AA7
- for <buildroot@buildroot.org>; Sun, 11 Feb 2024 05:21:12 +0000 (UTC)
-Received: by mail-pl1-x634.google.com with SMTP id
- d9443c01a7336-1d73066880eso20748245ad.3
- for <buildroot@buildroot.org>; Sat, 10 Feb 2024 21:21:12 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 461294086C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 461294086C
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com
+ [IPv6:2607:f8b0:4864:20::534])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 461294086C
+ for <buildroot@buildroot.org>; Sun, 11 Feb 2024 09:16:44 +0000 (UTC)
+Received: by mail-pg1-x534.google.com with SMTP id
+ 41be03b00d2f7-5ce6b5e3c4eso1687213a12.2
+ for <buildroot@buildroot.org>; Sun, 11 Feb 2024 01:16:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707628871; x=1708233671;
+ d=1e100.net; s=20230601; t=1707643003; x=1708247803;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=vw89Cg+V219sRdbvI6seBAhYeZSywHgtxxPqHav3oZc=;
- b=ZdGS4kMHEPYj2NieWfJYo2+HqD7vpWfkcqcu2KNZ8LekEGqBwcECuuCbbjSc5BOkUf
- zfC510eSmZW9sAkY6kdDYUbRtWzp2a11KtedOJQ9Nvp5EoKKB/oMqigV9Pn7BAXvHbcb
- cSDxdspvO7K5gDiP6J1a8pkJMXtWN7ehEKomgaoetihMFsN8AKQKPfcTOiKL1IVudGog
- yebR9rjkR5xevohN65ue4HkDqnUTytHRIfSypSJi0yL6J1tVqkiwueqD8IlTFr2yKX+y
- WDOcywJ2yLIUBabQd662CIK+vSerVYVKojC6wW+BN+itABxuoEm5lpYjDCI6anoT3fuI
- s1MQ==
-X-Gm-Message-State: AOJu0YxT8VQpcr/zA8YWiZ95uC5DERh/u34/d4WrtTl8lCCnj27y+tqA
- xm/++zMYQ7PjRF32luKajzRB5/QN8MDBpnPHlXte5964++JJX9/+tNJb6H/pVb0=
-X-Google-Smtp-Source: AGHT+IH1PbOuqmWIq5BtGyscHmUDjvVVyA3Ur/i/CiM6fJghr+Mgvm2jdQtzmkkFRar9Q9oXyYWY8w==
-X-Received: by 2002:a17:902:ea08:b0:1da:192f:3ecc with SMTP id
- s8-20020a170902ea0800b001da192f3eccmr5644608plg.53.1707628871215; 
- Sat, 10 Feb 2024 21:21:11 -0800 (PST)
+ bh=TFCBZYu33bwqmoNZGMFadD0BrgcQB8zYeUBk6Z5Cj84=;
+ b=rE3IVPHqsln1TORBriatSvBUWxC97HYgM5A7vZoIQ+6M7ghCKcXqYLlMXNU4CiM4IQ
+ IUOqO+hpTNGRRzAKJxNBfuRcrQIaPMJG7pXeBYR8dpnotVX6QYwL9XuyJlZAlJHKPXMC
+ MWBWATG4wlJZPdNv5SGWIi1EMLM311XE+R7+VNiFyTt4KkJniBmfxI8wfDsF6HRuySno
+ JW29yJXoNktrqevpWeQTch1m33uD7wQXgj/J/z2/0dFglbpTHrIiDNmoOq5HGT7Mxqbk
+ bmI+qxFkv64R3kTote7jmHLCHpT9XkeNVIQQHjgfBpsBIaidnB44ANIEFaj5itW3nsBq
+ r/iA==
+X-Gm-Message-State: AOJu0YyQUsfsvRq2JFcIqsKDeBodAGsLcXmMPj3PVNQAXePqHen7Vx7a
+ ITExstBGcxRhvLotkVDehck7jknoU8SUEskUGv8tZkgPMjcJis76ZzIHqHbdP0E=
+X-Google-Smtp-Source: AGHT+IGs5MLELlWX40xCNvBB5H8E2vizbZmWjSZ9p8yHBY3qU1OVEySyPzYID2D+NaEYIbExQlQfgQ==
+X-Received: by 2002:a05:6a00:4fc6:b0:6e0:ad61:6a8d with SMTP id
+ le6-20020a056a004fc600b006e0ad616a8dmr2444545pfb.1.1707643002587; 
+ Sun, 11 Feb 2024 01:16:42 -0800 (PST)
 X-Forwarded-Encrypted: i=1;
- AJvYcCWwf15QRWWuSis/3qoFvwkkTIf+KTOcQZsp27OYoyLNE3NiIeyv2dVRg92pfZWtpId8J6cZ543u8NgXi2/dJbockkV8G+kwFIE=
+ AJvYcCWgU+FwiLgvPNsbLHRn6ouM0jRDbiky4bhEP3vChZyj309EyfnLdXsRZEQ0Erg1LYzQD+/c8eYU1wE4YtF/c3QBMGES2S5okMQ=
 Received: from localhost.localdomain (ip72-203-121-181.oc.oc.cox.net.
  [72.203.121.181]) by smtp.gmail.com with ESMTPSA id
- z23-20020a17090ad79700b00296b57ac914sm4461164pju.38.2024.02.10.21.21.10
+ n3-20020aa79843000000b006e053c0509esm3455543pfq.69.2024.02.11.01.16.41
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 10 Feb 2024 21:21:10 -0800 (PST)
+ Sun, 11 Feb 2024 01:16:42 -0800 (PST)
 From: Kadambini Nema <kadambini.nema@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 10 Feb 2024 21:19:07 -0800
-Message-Id: <20240211051907.551771-1-kadambini.nema@gmail.com>
+Date: Sun, 11 Feb 2024 01:14:22 -0800
+Message-Id: <20240211091422.597625-1-kadambini.nema@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1707628871; x=1708233671; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1707643003; x=1708247803; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=vw89Cg+V219sRdbvI6seBAhYeZSywHgtxxPqHav3oZc=;
- b=j5NlIVvDHJXOHQxijLPaO+z0lVgEELJBfl/AvEpv4735j9vhJBxpeeXQju87hHZSbU
- ProheMvGkJCBDzAMDPYHjc55Z0Mu7T/rrX9PDVAH/q24Ov7b+YGVOLqjQOCsyY+dMX01
- 3omR+yFrYkxjpVXDYSW0R9iipZ4e7N91VL0ulAsFWnzmC43DZl+RD+7TMQsHXl2JeqOs
- uR05yfw6VgkmPtT28/NeUDTkKW/UqarKsw7Oh8ECJMom5WDrBU4WgIfIMTiZLHeDMko4
- +vQp40vVUzPjrQmxqu4A/Jzt23dQHN3rak5KjFKUA1vMUHqQOQwfyPSJuvzdDlP7HJnd
- RgSA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=TFCBZYu33bwqmoNZGMFadD0BrgcQB8zYeUBk6Z5Cj84=;
+ b=kuuMW4nK9Zl60NHPTyS+Uancl5RppPyvypQFux+ZTED/2lRMjgYtnp85d+ECzQ2f27
+ RMVi/2hY1D5Z+Er7g/2gHIEncA8ZhWV2g5qtSfaVhqJsffabr4+UZS9Oqj2zNiRuKmy/
+ E5dxF3eOITTFNIlf/t9bNz3QGTNlSIvmxfKQb0+kHmLOLWjPmT1YwoYPkDCngugOEqoA
+ ES0L/q1n8XjRcINzyM84NW7xAuBBeQsUji/QMQeNSRGKJKEfSpAe7MD0SxGHZxNkMJ+q
+ 8YLAaPtN7rHDXTCB/CnxmVuWhJwc3OZAEPsUbn5+jOi914dfp71nchX2ExKlgqK37Ezo
+ ELaw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=j5NlIVvD
-Subject: [Buildroot] [PATCH 1/1] package/strace: bump to version 6.7
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=kuuMW4nK
+Subject: [Buildroot] [PATCH 1/1] package/ustreamer: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,47 +102,116 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Kadambini Nema <kadambini.nema@gmail.com>
+Cc: Kadambini Nema <kadambini.nema@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Updated hash of COPYING (year updated with
-  https://github.com/strace/strace/commit/eba0ac1fc4f8896b938d41081e0643cb06283a9b)
+Lightweight and fast MJPEG-HTTP streamer
+(https://github.com/pikvm/ustreamer/tree/master#%C2%B5streamer)
 
 Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
 ---
- package/strace/strace.hash | 6 +++---
- package/strace/strace.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ DEVELOPERS                       |  3 +++
+ package/Config.in                |  1 +
+ package/ustreamer/Config.in      | 17 +++++++++++++++++
+ package/ustreamer/ustreamer.hash |  3 +++
+ package/ustreamer/ustreamer.mk   | 24 ++++++++++++++++++++++++
+ 5 files changed, 48 insertions(+)
+ create mode 100644 package/ustreamer/Config.in
+ create mode 100644 package/ustreamer/ustreamer.hash
+ create mode 100644 package/ustreamer/ustreamer.mk
 
-diff --git a/package/strace/strace.hash b/package/strace/strace.hash
-index 75a35d7cf4..a35d2b0be6 100644
---- a/package/strace/strace.hash
-+++ b/package/strace/strace.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
--# https://strace.io/files/6.6/strace-6.6.tar.xz.asc
--sha256  421b4186c06b705163e64dc85f271ebdcf67660af8667283147d5e859fc8a96c  strace-6.6.tar.xz
--sha256  6e5648c0ed522b163f9df1dc500c73491b1743495bd78388e99685cecfa79707  COPYING
-+# https://strace.io/files/6.7/strace-6.7.tar.xz.asc
-+sha256  2090201e1a3ff32846f4fe421c1163b15f440bb38e31355d09f82d3949922af7  strace-6.7.tar.xz
-+sha256  1988d0e1aa101d68855e8c4f940aacf2531051b82f6b608eb026c5fad1f33df1  COPYING
- sha256  7c379436436a562834aa7d2f5dcae1f80a25230fa74201046ca1fba4367d39aa  LGPL-2.1-or-later
-diff --git a/package/strace/strace.mk b/package/strace/strace.mk
-index 6279622fdb..f916936207 100644
---- a/package/strace/strace.mk
-+++ b/package/strace/strace.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1c6c84b05b..cf22054970 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1870,6 +1870,9 @@ F:	package/easy-rsa/
+ N:	Justin Maggard <jmaggard@netgear.com>
+ F:	package/dtach/
  
--STRACE_VERSION = 6.6
-+STRACE_VERSION = 6.7
- STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
- STRACE_SITE = https://github.com/strace/strace/releases/download/v$(STRACE_VERSION)
- STRACE_LICENSE = LGPL-2.1+
++N:	Kadambini Nema <kadambini.nema@gmail.com>
++F:	package/ustreamer/
++
+ N:	Kamel Bouhara <kamel.bouhara@gmail.com>
+ F:	package/libodb-boost/
+ F:	package/libodb-mysql/
+diff --git a/package/Config.in b/package/Config.in
+index 91a6f1de00..ea3ecd6fdc 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2596,6 +2596,7 @@ endif
+ 	source "package/uredir/Config.in"
+ 	source "package/ushare/Config.in"
+ 	source "package/ussp-push/Config.in"
++	source "package/ustreamer/Config.in"
+ 	source "package/vde2/Config.in"
+ 	source "package/vdr/Config.in"
+ 	source "package/vdr-plugin-vnsiserver/Config.in"
+diff --git a/package/ustreamer/Config.in b/package/ustreamer/Config.in
+new file mode 100644
+index 0000000000..52c511e22d
+--- /dev/null
++++ b/package/ustreamer/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_USTREAMER
++	bool "ustreamer"
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16 # V4L2_EVENT_SOURCE_CHANGE
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU
++	depends on !BR2_STATIC_LIBS
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC
++	select BR2_PACKAGE_JPEG
++	select BR2_PACKAGE_LIBEVENT
++	select BR2_PACKAGE_LIBBSD
++	select BR2_PACKAGE_LIBGPIOD
++	help
++	  Lightweight and fast MJPEG-HTTP streamer
++
++	  https://github.com/pikvm/ustreamer
++
++comment "ustreamer needs a toolchain w/ threads, headers >= 3.16, dynamic library"
+diff --git a/package/ustreamer/ustreamer.hash b/package/ustreamer/ustreamer.hash
+new file mode 100644
+index 0000000000..b7a85ca2d5
+--- /dev/null
++++ b/package/ustreamer/ustreamer.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  198283aaea5e7aa51da54426eb79ea436641ffb9b431e9ebace8fe5a76dfb105  ustreamer-b2ebcf99c8c51f97c44eccb6c768f5e824ecf952.tar.gz
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
+diff --git a/package/ustreamer/ustreamer.mk b/package/ustreamer/ustreamer.mk
+new file mode 100644
+index 0000000000..86ce18f476
+--- /dev/null
++++ b/package/ustreamer/ustreamer.mk
+@@ -0,0 +1,24 @@
++################################################################################
++#
++# ustreamer
++#
++################################################################################
++
++USTREAMER_VERSION = b2ebcf99c8c51f97c44eccb6c768f5e824ecf952
++USTREAMER_SITE = $(call github,pikvm,ustreamer,$(USTREAMER_VERSION))
++USTREAMER_SUBDIR = ustreamer
++USTREAMER_LICENSE = GPL-3.0-or-later
++USTREAMER_LICENSE_FILES = $(USTREAMER_SUBDIR)/LICENSE
++USTREAMER_DEPENDENCIES = jpeg libevent libbsd libgpiod
++USTREAMER_CONF_ENV = "CFLAGS=$(TARGET_CFLAGS)"
++
++define USTREAMER_BUILD_CMDS
++	$(MAKE)  $(if $(BR2_PACKAGE_SYSTEMD),WITH_SYSTEMD=1, ) WITH_PTHREAD_NP=1  WITH_SETPROCTITLE=1 HAS_PDEATHSIG=1 $(TARGET_CONFIGURE_OPTS) -C $(@D)
++endef
++
++define USTREAMER_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/ustreamer $(TARGET_DIR)/usr/bin/ustreamer
++	$(INSTALL) -D -m 0755 $(@D)/ustreamer-dump $(TARGET_DIR)/usr/bin/ustreamer-dump
++endef
++
++$(eval $(generic-package))
 -- 
 2.25.1
 
