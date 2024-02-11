@@ -4,49 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DD2BC4829B
-	for <buildroot@archiver.kernel.org>; Sun, 11 Feb 2024 22:10:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B75DC4829B
+	for <buildroot@archiver.kernel.org>; Sun, 11 Feb 2024 22:10:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EB28A84F60;
-	Sun, 11 Feb 2024 22:10:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1C30084F61;
+	Sun, 11 Feb 2024 22:10:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sW0HGb5pizlx; Sun, 11 Feb 2024 22:10:48 +0000 (UTC)
+	with ESMTP id kHsrCocxtzRW; Sun, 11 Feb 2024 22:10:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DC51884F61
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2237884F62
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DC51884F61;
-	Sun, 11 Feb 2024 22:10:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9757F1BF44A
- for <buildroot@lists.busybox.net>; Sun, 11 Feb 2024 22:10:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2237884F62;
+	Sun, 11 Feb 2024 22:10:52 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 54DF81BF44A
+ for <buildroot@lists.busybox.net>; Sun, 11 Feb 2024 22:10:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 84BBA6109C
- for <buildroot@lists.busybox.net>; Sun, 11 Feb 2024 22:10:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 417534167E
+ for <buildroot@lists.busybox.net>; Sun, 11 Feb 2024 22:10:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kRuwvzgL5qVt for <buildroot@lists.busybox.net>;
- Sun, 11 Feb 2024 22:10:44 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FPqp91UrN-Re for <buildroot@lists.busybox.net>;
+ Sun, 11 Feb 2024 22:10:49 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
+ helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 53D6C61099
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 53D6C61099
- for <buildroot@buildroot.org>; Sun, 11 Feb 2024 22:10:44 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3B6F48780D; Sun, 11 Feb 2024 22:10:44 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 11 Feb 2024 23:08:34 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7593aea519dee34cb25715296c1b03f471123ee2
-X-Git-Newrev: d4abcf5872cd14cd2b1633142ffed3794b838ac1
-X-Patchwork-Hint: ignore
-Message-Id: <20240211221044.3B6F48780D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-uvicorn: bump to
- 0.27.0.post1
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 11BF841591
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11BF841591
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 11BF841591
+ for <buildroot@buildroot.org>; Sun, 11 Feb 2024 22:10:48 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 561C0240003;
+ Sun, 11 Feb 2024 22:10:47 +0000 (UTC)
+Date: Sun, 11 Feb 2024 23:10:46 +0100
+To: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Message-ID: <20240211231046.27b4371b@windsurf>
+In-Reply-To: <20240208140802.984184-1-buildroot@bubu1.eu>
+References: <20240208140802.984184-1-buildroot@bubu1.eu>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1707689447;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=0ew9ZF+pT69XXmfLErQzA/Gq82HigQGb5r8C+rBldzY=;
+ b=EqXQr6Yy8dK2qCfZ9E4Wlk/bzcfNMrCSQovxkQhKBf1FM0m37SG5JQHAKAVRqxFa91YabE
+ GdWJxEzdNaJ9UJNpAyqe5dK9edTjfz2bhgQwUQYgjKjX20N4ug6noYlGrNj+jf0oSS/hWt
+ xaEkvinXCp2xs8wpoENMxdZNhe6XBLFvfN8aM9vaQZ76XMaBE3PKT9QtKS5RvtSSY3qL6k
+ XYZZPVKUDt1pz4Q+KbNI5IcRIcX3srvadstwBiwChgsS0GIsuOxeujBdHg7Se+j/ozRG/e
+ 5q7rZcDFwzVsxTGVvs1q6pvpQR68tO8eRGeR9UIcE1v6X/X+tQC54QOJYvfZGQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=EqXQr6Yy
+Subject: Re: [Buildroot] [PATCH] package/python-uvicorn: bump to 0.27.0.post1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,54 +82,33 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Marcus Hoffmann <buildroot@bubu1.eu>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d4abcf5872cd14cd2b1633142ffed3794b838ac1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu,  8 Feb 2024 15:08:01 +0100
+Marcus Hoffmann via buildroot <buildroot@buildroot.org> wrote:
 
-Changelog:
+> Changelog:
+> 
+> https://github.com/encode/uvicorn/blob/master/CHANGELOG.md#0270post1---2024-01-29
+> 
+> Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+> ---
+>  package/python-uvicorn/python-uvicorn.hash | 4 ++--
+>  package/python-uvicorn/python-uvicorn.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-https://github.com/encode/uvicorn/blob/master/CHANGELOG.md#0270post1---2024-01-29
+Applied to master, thanks.
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/python-uvicorn/python-uvicorn.hash | 4 ++--
- package/python-uvicorn/python-uvicorn.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/python-uvicorn/python-uvicorn.hash b/package/python-uvicorn/python-uvicorn.hash
-index cfa999e210..c7feaf3bfe 100644
---- a/package/python-uvicorn/python-uvicorn.hash
-+++ b/package/python-uvicorn/python-uvicorn.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/uvicorn/json
--md5  a1af843e7e305d551030abfa09dd3b15  uvicorn-0.24.0.post1.tar.gz
--sha256  09c8e5a79dc466bdf28dead50093957db184de356fcdc48697bad3bde4c2588e  uvicorn-0.24.0.post1.tar.gz
-+md5  a98f96c2578d9e6d454e271d0eae3ba3  uvicorn-0.27.0.post1.tar.gz
-+sha256  54898fcd80c13ff1cd28bf77b04ec9dbd8ff60c5259b499b4b12bb0917f22907  uvicorn-0.27.0.post1.tar.gz
- # Locally computed sha256 checksums
- sha256  efe1acf3e62fb99c288b0ec73e5a773b7268ef4320fe757ea994214e4b63c371  LICENSE.md
-diff --git a/package/python-uvicorn/python-uvicorn.mk b/package/python-uvicorn/python-uvicorn.mk
-index 04e6dd66a7..502cc06ad8 100644
---- a/package/python-uvicorn/python-uvicorn.mk
-+++ b/package/python-uvicorn/python-uvicorn.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_UVICORN_VERSION = 0.24.0.post1
-+PYTHON_UVICORN_VERSION = 0.27.0.post1
- PYTHON_UVICORN_SOURCE = uvicorn-$(PYTHON_UVICORN_VERSION).tar.gz
--PYTHON_UVICORN_SITE = https://files.pythonhosted.org/packages/e5/84/d43ce8fe6b31a316ef0ed04ea0d58cab981bdf7f17f8423491fa8b4f50b6
-+PYTHON_UVICORN_SITE = https://files.pythonhosted.org/packages/38/56/7bc5cf1d693d0c8e5d9dd66c29808691c17260b31346e4ddfbee26ba9bc2
- PYTHON_UVICORN_SETUP_TYPE = pep517
- PYTHON_UVICORN_LICENSE = BSD-3-Clause
- PYTHON_UVICORN_LICENSE_FILES = LICENSE.md
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
