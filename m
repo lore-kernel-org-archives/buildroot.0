@@ -4,94 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5864C48297
-	for <buildroot@archiver.kernel.org>; Mon, 12 Feb 2024 17:53:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72F89C4829E
+	for <buildroot@archiver.kernel.org>; Mon, 12 Feb 2024 18:13:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6A8B840272;
-	Mon, 12 Feb 2024 17:53:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 20504403E5;
+	Mon, 12 Feb 2024 18:13:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9Bsyhf2fNF69; Mon, 12 Feb 2024 17:53:00 +0000 (UTC)
+	with ESMTP id yOs9uyJwcakA; Mon, 12 Feb 2024 18:13:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A1F8402F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E313E40278
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0A1F8402F3;
-	Mon, 12 Feb 2024 17:53:00 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0CA961BF39C
- for <buildroot@lists.busybox.net>; Mon, 12 Feb 2024 17:52:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E313E40278;
+	Mon, 12 Feb 2024 18:13:57 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 781D81BF35E
+ for <buildroot@lists.busybox.net>; Mon, 12 Feb 2024 18:13:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 05EAF405CE
- for <buildroot@lists.busybox.net>; Mon, 12 Feb 2024 17:52:58 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6531682036
+ for <buildroot@lists.busybox.net>; Mon, 12 Feb 2024 18:13:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FuneD3_efULx for <buildroot@lists.busybox.net>;
- Mon, 12 Feb 2024 17:52:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
- envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D83D9405CD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D83D9405CD
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D83D9405CD
- for <buildroot@buildroot.org>; Mon, 12 Feb 2024 17:52:56 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id
- ffacd0b85a97d-3394b892691so2319873f8f.1
- for <buildroot@buildroot.org>; Mon, 12 Feb 2024 09:52:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707760374; x=1708365174;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=XT1PeMU/PwrmbrQ63n9x8Iw9PznpZpw5gzaYVL9HVds=;
- b=bS4isy8HmHHFXGRoAFz5OPsyDL9mRtuSHAQhxFov099QEjT3Wjpn4AgHnkWhTIgG/v
- 78X2CYwyaXAA5fXiUdrrsVZCKlMSYKH7uMwfshnE3UZjHq3ozY6KrvS/Q1IdvMbZNGck
- c2L1xxbIsUlXvt12gnWBKJeLHCDPOeGz8VtzEplH+esbLt9YolvL/uIQ2S/0sDOqco9c
- KmwnAstW7UA+8vqGtiIqaIehxZ+mH4Els12XxS2Ag9/PbNvWwwZyXOdnr7mPKd94hYly
- ebq01KhzY0ta6twktslAX+GAxgEPpj+832vh7NNXreow3E8SavTHMsIp3RCvmISRGcEi
- CuQQ==
-X-Gm-Message-State: AOJu0Yx0pw3842JwPTlV/44MQ0KAzxnnxrNbmmqH93rMJ/lgiY1mBXn7
- GcGUaW4tyasdkqDysoJ7BB3IBEqOMXW+cXB+ila8TsCmLzZyZcJoOHoNgK42wDM=
-X-Google-Smtp-Source: AGHT+IFz8gAe1nVs38howAWB7ca+ThjnbUp4Kw1hBgVF1m4g2T3Okqpzz/5rpjrojcJ8gpWCpdq+dQ==
-X-Received: by 2002:a5d:680a:0:b0:33b:58c7:8281 with SMTP id
- w10-20020a5d680a000000b0033b58c78281mr177151wru.10.1707760373701; 
- Mon, 12 Feb 2024 09:52:53 -0800 (PST)
-X-Forwarded-Encrypted: i=1;
- AJvYcCXb1UAwfQj4IOxhunD4Abljmzh23YjZaJQxeGDK18av+0NX3cUd8K0yPKWj3t3jyziAL9oEko6t67t08HGfmxtlxAHIJeqPDX9Yog==
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- y12-20020a056000108c00b0033b40a3f92asm7414362wrw.25.2024.02.12.09.52.52
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 12 Feb 2024 09:52:52 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon, 12 Feb 2024 18:52:51 +0100
-Message-ID: <20240212175251.721803-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PxlndO1nb1G6 for <buildroot@lists.busybox.net>;
+ Mon, 12 Feb 2024 18:13:54 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.234.176.197;
+ helo=aposti.net; envelope-from=paul@crapouillou.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3B9D482035
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B9D482035
+Received: from aposti.net (aposti.net [89.234.176.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3B9D482035
+ for <buildroot@buildroot.org>; Mon, 12 Feb 2024 18:13:54 +0000 (UTC)
+Message-ID: <80b6517820300e318ea9b5c89572115f5d4c3a44.camel@crapouillou.net>
+From: Paul Cercueil <paul@crapouillou.net>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Adam Duskett
+ <adam.duskett@amarulasolutions.com>
+Date: Mon, 12 Feb 2024 19:13:48 +0100
+In-Reply-To: <20240205222949.2805f50f@windsurf>
+References: <20240121204252.152952-1-adam.duskett@amarulasolutions.com>
+ <20240121204252.152952-2-adam.duskett@amarulasolutions.com>
+ <20240205222949.2805f50f@windsurf>
+Autocrypt: addr=paul@crapouillou.net; prefer-encrypt=mutual;
+ keydata=mQENBF0KhcEBCADkfmrzdTOp/gFOMQX0QwKE2WgeCJiHPWkpEuPH81/HB2dpjPZNW03ZMLQfECbbaEkdbN4YnPfXgcc1uBe5mwOAPV1MBlaZcEt4M67iYQwSNrP7maPS3IaQJ18ES8JJ5Uf5UzFZaUawgH+oipYGW+v31cX6L3k+dGsPRM0Pyo0sQt52fsopNPZ9iag0iY7dGNuKenaEqkYNjwEgTtNz8dt6s3hMpHIKZFL3OhAGi88wF/21isv0zkF4J0wlf9gYUTEEY3Eulx80PTVqGIcHZzfavlWIdzhe+rxHTDGVwseR2Y1WjgFGQ2F+vXetAB8NEeygXee+i9nY5qt9c07m8mzjABEBAAG0JFBhdWwgQ2VyY3VlaWwgPHBhdWxAY3JhcG91aWxsb3UubmV0PokBTgQTAQoAOBYhBNdHYd8OeCBwpMuVxnPua9InSr1BBQJdCoXBAhsDBQsJCAcCBhUKCQgLAgQWAgMBAh4BAheAAAoJEHPua9InSr1BgvIH/0kLyrI3V0f33a6D3BJwc1grbygPVYGuC5l5eMnAI+rDmLR19E2yvibRpgUc87NmPEQPpbbtAZt8On/2WZoE5OIPdlId/AHNpdgAtGXo0ZX4LGeVPjxjdkbrKVHxbcdcnY+zzaFglpbVSvp76pxqgVg8PgxkAAeeJV+ET4t0823Gz2HzCL/6JZhvKAEtHVulOWoBh368SYdolp1TSfORWmHzvQiCCCA+j0cMkYVGzIQzEQhX7Urf9N/nhU5/SGLFEi9DcBfXoGzhyQyLXflhJtKm3XGB1K/pPulbKaPcKAl6rIDWPuFpHkSbmZ9r4KFlBwgAhlGy6nqP7O3u7q23hRW5AQ0EXQqFwQEIAMo+MgvYHsyjX3Ja4Oolg1Txzm8woj30ch2nACFCqaO0R/1kLj2VVeLrDyQUOlXx9PD6IQI4M8wy8m0sR4wV2p/g/paw7k65cjzYYLh+FdLNyO7IW
+ YXndJO+wDPi3aK/YKUYepqlP+QsmaHNYNdXEQDRKqNfJg8t0f5rfzp9ryxd1tCnbV+tG8VHQWiZXNqN7062DygSNXFUfQ0vZ3J2D4oAcIAEXTymRQ2+hr3Hf7I61KMHWeSkCvCG2decTYsHlw5Erix/jYWqVOtX0roOOLqWkqpQQJWtU+biWrAksmFmCp5fXIg1Nlg39v21xCXBGxJkxyTYuhdWyu1yDQ+LSIUAEQEAAYkBNgQYAQoAIBYhBNdHYd8OeCBwpMuVxnPua9InSr1BBQJdCoXBAhsMAAoJEHPua9InSr1B4wsH/Az767YCT0FSsMNt1jkkdLCBi7nY0GTW+PLP1a4zvVqFMo/vD6uz1ZflVTUAEvcTi3VHYZrlgjcxmcGu239oruqUS8Qy/xgZBp9KF0NTWQSl1iBfVbIU5VV1vHS6r77W5x0qXgfvAUWOH4gmN3MnF01SH2zMcLiaUGF+mcwl15rHbjnT3Nu2399aSE6cep86igfCAyFUOXjYEGlJy+c6UyT+DUylpjQg0nl8MlZ/7Whg2fAU9+FALIbQYQzGlT4c71SibR9T741jnegHhlmV4WXXUD6roFt54t0MSAFSVxzG8mLcSjR2cLUJ3NIPXixYUSEn3tQhfZj07xIIjWxAYZo=
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1707760374; x=1708365174; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=XT1PeMU/PwrmbrQ63n9x8Iw9PznpZpw5gzaYVL9HVds=;
- b=WaGhS+hAqDfesDb23PYUAOKML5nfvFFJ8VxzMs3UlVPBoYLTrouquJd9eZuOYTv8Zr
- iLZG/NG2sRFdJKkwR9vI2Ce7qFzV1NDzCY9iSgMkBOsrvnsm1HzcAyHihHIqLMWkf4JN
- pFl8olBD3NMXHUUz1TS4yvp3MuhCZykWVSIUe0Bn2Q6yo/ivuUI1yUI9ZvoQ/70hQGhW
- 3qcuRygMDuoyXypX6ardrdhlgF2Q5MjlZcUBoLt+O4OViojxF/06mBaqTV12iGAXzrJZ
- Eyx9V0aGAlwOP3RPzPCHVefEFCo1cjLmEnJEj68vYG9oXPvBSvAL11o6chT3nUTlGFoY
- ky6Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=crapouillou.net; s=mail; t=1707761630;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+ bh=TSv7xrR3grot12SWWuCjhebfS8ErhzAOaoaNKMiKD9E=;
+ b=ukXs2utXrAVhmqEhSyV2I4i3PFowS3wiD4kIkcxUl3fd8QDvdubdGq/H4qBCx1ULxuPmYO
+ zlhhuhmD2h19BZ5xYYGvdvzu6J89QMqPPlUJsiPfEZoNajZIigp1atSvfweFQ73UYd1gMq
+ jZ6E1DRZGdvPSsJ8cKCNISSmFbp6+BQ=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=WaGhS+hA
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/cracklib: python needs autoreconf
+ header.from=crapouillou.net
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=crapouillou.net header.i=@crapouillou.net
+ header.a=rsa-sha256 header.s=mail header.b=ukXs2utX
+Subject: Re: [Buildroot] [PATCH 2/2] package/wlroots: Update patch with
+ upstream status
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,72 +79,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- =?UTF-8?q?Stefan=20S=C3=B8rensen?= <stefan.sorensen@spectralink.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Adrian Perez de Castro <aperez@igalia.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Set CRACKLIB_AUTORECONF when building python to regenerate py-compile
-and avoid the following build failure with python 3.12 (which removed
-imp module) raised since commit
-36e635d2d5c0166476858aa239ccbe78e8f2af14:
-
-Traceback (most recent call last):
-  File "<string>", line 2, in <module>
-ModuleNotFoundError: No module named 'imp'
-make[3]: *** [Makefile:485: install-pythonPYTHON] Error 1
-
-Indeed, after autoreconf, py-compile will contain:
-
-if test "$python_major" -le 2; then
-  import_lib=imp
-  import_test="hasattr(imp, 'get_tag')"
-  import_call=imp.cache_from_source
-  import_arg2=', False' # needed in one call and not the other
-else
-  import_lib=importlib
-  import_test="hasattr(sys.implementation, 'cache_tag')"
-  import_call=importlib.util.cache_from_source
-  import_arg2=
-fi
-
-$PYTHON -c "
-import sys, os, py_compile, $import_lib
-
-instead of:
-
-import sys, os, py_compile, imp
-
-Fixes: 36e635d2d5c0166476858aa239ccbe78e8f2af14
- - http://autobuild.buildroot.org/results/aec4c19fdf8087c76c1d5f472e855e0f84fcf7fd
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Give more details in commit message
-
- package/cracklib/cracklib.mk | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/package/cracklib/cracklib.mk b/package/cracklib/cracklib.mk
-index c5226b3326..9f5f32c87a 100644
---- a/package/cracklib/cracklib.mk
-+++ b/package/cracklib/cracklib.mk
-@@ -22,6 +22,8 @@ CRACKLIB_CONF_OPTS += --without-zlib
- endif
- 
- ifeq ($(BR2_PACKAGE_PYTHON3),y)
-+# py-compile must be rebuilt because python 3.12 removed imp module
-+CRACKLIB_AUTORECONF = YES
- CRACKLIB_CONF_OPTS += --with-python
- CRACKLIB_CONF_ENV += \
- 	ac_cv_path_PYTHON=$(HOST_DIR)/bin/python3 \
--- 
-2.43.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+UGF0Y2hlcyB3ZXJlIG1lcmdlZCB1cHN0cmVhbSwgYm90aCBpbiB3bHJvb3RzIGFuZCB1Q2xpYmM6
+CgpodHRwczovL2dpdGxhYi5mcmVlZGVza3RvcC5vcmcvd2xyb290cy93bHJvb3RzLy0vbWVyZ2Vf
+cmVxdWVzdHMvNDU0MApodHRwczovL21haWxtYW4ub3BlbmFkay5vcmcvbWFpbG1hbjMvaHlwZXJr
+aXR0eS9saXN0L2RldmVsQHVjbGliYy1uZy5vcmcvdGhyZWFkL09NTUdTUDdQRFhRRE9RTlVYVEtS
+RzVEV0VMQUQyQ0lJLwoKQ2hlZXJzLAotUGF1bAoKCkxlIGx1bmRpIDA1IGbDqXZyaWVyIDIwMjQg
+w6AgMjI6MjkgKzAxMDAsIFRob21hcyBQZXRhenpvbmkgYSDDqWNyaXTCoDoKPiBIZWxsbyBBZGFt
+LAo+IAo+ICtQYXVsIENlcmN1ZWlsIGluIENjLCBzZWUgYmVsb3cuCj4gCj4gT24gU3VuLCAyMSBK
+YW4gMjAyNCAxMzo0Mjo1MiAtMDcwMAo+IEFkYW0gRHVza2V0dCA8YWRhbS5kdXNrZXR0QGFtYXJ1
+bGFzb2x1dGlvbnMuY29tPiB3cm90ZToKPiAKPiA+IHBhY2thZ2Uvd2xyb290cy8wMDAxLUFkZC1m
+ZWF0dXJlLW1hY3Jvcy10by1tb3JlLUMtZmlsZXMtLnBhdGNoIGhhcwo+ID4gYmVlbgo+ID4gcmVq
+ZWN0ZWQgdXBzdHJlYW0sIGFuZCB0aGUgaW5pdGlhbCBwdWxsIHJlcXVlc3Qgd2FzIG1vdmVkIHRv
+IHRoZQo+ID4gZnJlZWRlc2t0b3AgZ2l0bGFiLiBVcGRhdGUgdGhlIHBhdGNoIHRvIHJlZmxlY3Qg
+dGhlc2UgY2hhbmdlcy4KPiA+IAo+ID4gU2lnbmVkLW9mZi1ieTogQWRhbSBEdXNrZXR0IDxhZGFt
+LmR1c2tldHRAYW1hcnVsYXNvbHV0aW9ucy5jb20+Cj4gCj4gVGhhbmtzLCBhcHBsaWVkIQo+IAo+
+IFBhdWw6IGNvdWxkIHlvdSBmb2xsb3ctdXAgd2l0aCB1cHN0cmVhbSAoZWl0aGVyIHdscm9vdHMs
+IG9yIHVjbGliYywKPiBvcgo+IGJvdGgpIHRvIHRyeSB0byBmaW5kIGFuIGFjY2VwdGFibGUgc29s
+dXRpb24gc28gdGhhdCBzb21lIGRheSB3ZSBjYW4KPiBkcm9wIHRoaXMgcGF0Y2g/Cj4gCj4gVGhh
+bmtzIGEgbG90IQo+IAo+IFRob21hcwoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290
+Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJv
+b3QK
