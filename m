@@ -1,93 +1,97 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DA04C48297
-	for <buildroot@archiver.kernel.org>; Mon, 12 Feb 2024 17:26:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5864C48297
+	for <buildroot@archiver.kernel.org>; Mon, 12 Feb 2024 17:53:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D3DED402B0;
-	Mon, 12 Feb 2024 17:26:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6A8B840272;
+	Mon, 12 Feb 2024 17:53:01 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9Bsyhf2fNF69; Mon, 12 Feb 2024 17:53:00 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A1F8402F3
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0A1F8402F3;
+	Mon, 12 Feb 2024 17:53:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0CA961BF39C
+ for <buildroot@lists.busybox.net>; Mon, 12 Feb 2024 17:52:58 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 05EAF405CE
+ for <buildroot@lists.busybox.net>; Mon, 12 Feb 2024 17:52:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xBrmrksP8Nwa; Mon, 12 Feb 2024 17:26:27 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF744402A9
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AF744402A9;
-	Mon, 12 Feb 2024 17:26:27 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id ABA651BF39C
- for <buildroot@lists.busybox.net>; Mon, 12 Feb 2024 17:26:25 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A5F1C812E7
- for <buildroot@lists.busybox.net>; Mon, 12 Feb 2024 17:26:25 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xBqH9x1FMB3e for <buildroot@lists.busybox.net>;
- Mon, 12 Feb 2024 17:26:24 +0000 (UTC)
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FuneD3_efULx for <buildroot@lists.busybox.net>;
+ Mon, 12 Feb 2024 17:52:57 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
- envelope-from=fperrad@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6372D812A1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6372D812A1
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6372D812A1
- for <buildroot@busybox.net>; Mon, 12 Feb 2024 17:26:24 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-410e676c6bbso7177905e9.1
- for <buildroot@busybox.net>; Mon, 12 Feb 2024 09:26:24 -0800 (PST)
+ client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D83D9405CD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D83D9405CD
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D83D9405CD
+ for <buildroot@buildroot.org>; Mon, 12 Feb 2024 17:52:56 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id
+ ffacd0b85a97d-3394b892691so2319873f8f.1
+ for <buildroot@buildroot.org>; Mon, 12 Feb 2024 09:52:56 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707758782; x=1708363582;
+ d=1e100.net; s=20230601; t=1707760374; x=1708365174;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=H7SctcAmaYCen7uQwWz7PCF9nyYBcQI5/IdDyWhZuPA=;
- b=dyqjpLM2yT7ESqjOQdtjhJByS5wWOOwFiKwTQSnfPJGTTno7Spz5jmUgkILr762nsj
- 8SZPg+8LiDFBfX+DSpSvY59IG1h1l6kcMkwAsAe0qvKZK3S0nMLItg8ZXcBhOlLZoJH8
- PX3BFZwB0A9ZbjiCmhbrlLYw1JIfwE6tPGq12xpa21NZ5YHOdfI3X5lYJCHL02gRN8bO
- 7vmPw+853c33SYI7eQzGbu2jrTQfJYFu96DTiFYLH6CDMoHChapAYwE45BW24/RTPA0K
- 5TsiG7eCahy3Wj/8+U0BwXZumiZQ4dfCgsMVWcpGTyt3X9bRWnFop8YAP/pfuMsj6jW8
- KA6A==
-X-Gm-Message-State: AOJu0YxkImaF3cj+z/e0+995JnKbJf1pjIPj9PiVTw/abzz1ug8mf0B6
- CZdDnVEOUM6Sdrt9wM4Mgf78tJp4D2jI1i0XAPLoPCrCtKCifDULqfmeJOO6
-X-Google-Smtp-Source: AGHT+IFjozvGj//7eKsAdgskHpMr0/TxyTNVvdm6OoNIUlCcsfUtsvGiiEQ84vex1mQQtaI/wJuKtg==
-X-Received: by 2002:a05:600c:4ed0:b0:410:8240:38e with SMTP id
- g16-20020a05600c4ed000b004108240038emr5789840wmq.7.1707758782065; 
- Mon, 12 Feb 2024 09:26:22 -0800 (PST)
-Received: from xubuntu-23.. ([37.66.33.127]) by smtp.gmail.com with ESMTPSA id
- a4-20020a05600c224400b00410ebcf8180sm2157392wmm.43.2024.02.12.09.26.21
+ bh=XT1PeMU/PwrmbrQ63n9x8Iw9PznpZpw5gzaYVL9HVds=;
+ b=bS4isy8HmHHFXGRoAFz5OPsyDL9mRtuSHAQhxFov099QEjT3Wjpn4AgHnkWhTIgG/v
+ 78X2CYwyaXAA5fXiUdrrsVZCKlMSYKH7uMwfshnE3UZjHq3ozY6KrvS/Q1IdvMbZNGck
+ c2L1xxbIsUlXvt12gnWBKJeLHCDPOeGz8VtzEplH+esbLt9YolvL/uIQ2S/0sDOqco9c
+ KmwnAstW7UA+8vqGtiIqaIehxZ+mH4Els12XxS2Ag9/PbNvWwwZyXOdnr7mPKd94hYly
+ ebq01KhzY0ta6twktslAX+GAxgEPpj+832vh7NNXreow3E8SavTHMsIp3RCvmISRGcEi
+ CuQQ==
+X-Gm-Message-State: AOJu0Yx0pw3842JwPTlV/44MQ0KAzxnnxrNbmmqH93rMJ/lgiY1mBXn7
+ GcGUaW4tyasdkqDysoJ7BB3IBEqOMXW+cXB+ila8TsCmLzZyZcJoOHoNgK42wDM=
+X-Google-Smtp-Source: AGHT+IFz8gAe1nVs38howAWB7ca+ThjnbUp4Kw1hBgVF1m4g2T3Okqpzz/5rpjrojcJ8gpWCpdq+dQ==
+X-Received: by 2002:a5d:680a:0:b0:33b:58c7:8281 with SMTP id
+ w10-20020a5d680a000000b0033b58c78281mr177151wru.10.1707760373701; 
+ Mon, 12 Feb 2024 09:52:53 -0800 (PST)
+X-Forwarded-Encrypted: i=1;
+ AJvYcCXb1UAwfQj4IOxhunD4Abljmzh23YjZaJQxeGDK18av+0NX3cUd8K0yPKWj3t3jyziAL9oEko6t67t08HGfmxtlxAHIJeqPDX9Yog==
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ y12-20020a056000108c00b0033b40a3f92asm7414362wrw.25.2024.02.12.09.52.52
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 12 Feb 2024 09:26:21 -0800 (PST)
-From: Francois Perrad <fperrad@gmail.com>
-X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Mon, 12 Feb 2024 18:26:19 +0100
-Message-Id: <20240212172619.13550-1-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.40.1
+ Mon, 12 Feb 2024 09:52:52 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon, 12 Feb 2024 18:52:51 +0100
+Message-ID: <20240212175251.721803-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1707758782; x=1708363582; darn=busybox.net;
+ d=gmail.com; s=20230601; t=1707760374; x=1708365174; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=H7SctcAmaYCen7uQwWz7PCF9nyYBcQI5/IdDyWhZuPA=;
- b=S9R+LqMgZninyko34xG7RNRWp8YoHTlwmw5ljK0IdkK3P6P+W6kWdrZmvLPPiz0ywp
- aHZsb4taz7WOLLb9SjEIeszzoj0e76JAKAz5jWvb0cxZOsEZew+n78HLdWjf8e+BFS8b
- GljPSthfgCWqbuc1XBuuy+2lntZc+7C5bO8eUrE2uo/BGg4cxZTciHTfuGa7Be4dz1FP
- bwJb2nbLvMfsaoYmt+PiA0xlbwUEL6ZuiijYU9vR7YRd4B73tNpg0HNS/o81Bo4hI70u
- +8DwylXIE2OOYP2zlpPk3AptleY++y3Csjhl7C9TCJfNAUPpSjevdgTlAeapHEGhVKmz
- yLNA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=XT1PeMU/PwrmbrQ63n9x8Iw9PznpZpw5gzaYVL9HVds=;
+ b=WaGhS+hAqDfesDb23PYUAOKML5nfvFFJ8VxzMs3UlVPBoYLTrouquJd9eZuOYTv8Zr
+ iLZG/NG2sRFdJKkwR9vI2Ce7qFzV1NDzCY9iSgMkBOsrvnsm1HzcAyHihHIqLMWkf4JN
+ pFl8olBD3NMXHUUz1TS4yvp3MuhCZykWVSIUe0Bn2Q6yo/ivuUI1yUI9ZvoQ/70hQGhW
+ 3qcuRygMDuoyXypX6ardrdhlgF2Q5MjlZcUBoLt+O4OViojxF/06mBaqTV12iGAXzrJZ
+ Eyx9V0aGAlwOP3RPzPCHVefEFCo1cjLmEnJEj68vYG9oXPvBSvAL11o6chT3nUTlGFoY
+ ky6Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=S9R+LqMg
-Subject: [Buildroot] [PATCH v2] package/lua-http: fix CVE-2023-4540
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=WaGhS+hA
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/cracklib: python needs autoreconf
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,112 +103,70 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ =?UTF-8?q?Stefan=20S=C3=B8rensen?= <stefan.sorensen@spectralink.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-see https://nvd.nist.gov/vuln/detail/CVE-2023-4540
-  & https://cert.pl/en/posts/2023/09/CVE-2023-4540
+Set CRACKLIB_AUTORECONF when building python to regenerate py-compile
+and avoid the following build failure with python 3.12 (which removed
+imp module) raised since commit
+36e635d2d5c0166476858aa239ccbe78e8f2af14:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Traceback (most recent call last):
+  File "<string>", line 2, in <module>
+ModuleNotFoundError: No module named 'imp'
+make[3]: *** [Makefile:485: install-pythonPYTHON] Error 1
+
+Indeed, after autoreconf, py-compile will contain:
+
+if test "$python_major" -le 2; then
+  import_lib=imp
+  import_test="hasattr(imp, 'get_tag')"
+  import_call=imp.cache_from_source
+  import_arg2=', False' # needed in one call and not the other
+else
+  import_lib=importlib
+  import_test="hasattr(sys.implementation, 'cache_tag')"
+  import_call=importlib.util.cache_from_source
+  import_arg2=
+fi
+
+$PYTHON -c "
+import sys, os, py_compile, $import_lib
+
+instead of:
+
+import sys, os, py_compile, imp
+
+Fixes: 36e635d2d5c0166476858aa239ccbe78e8f2af14
+ - http://autobuild.buildroot.org/results/aec4c19fdf8087c76c1d5f472e855e0f84fcf7fd
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...andle-EOF-when-body_read_type-length.patch | 71 +++++++++++++++++++
- package/lua-http/lua-http.mk                  |  3 +
- 2 files changed, 74 insertions(+)
- create mode 100644 package/lua-http/0001-http-h1_stream-handle-EOF-when-body_read_type-length.patch
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - Give more details in commit message
 
-diff --git a/package/lua-http/0001-http-h1_stream-handle-EOF-when-body_read_type-length.patch b/package/lua-http/0001-http-h1_stream-handle-EOF-when-body_read_type-length.patch
-new file mode 100644
-index 000000000..fdbf5243f
---- /dev/null
-+++ b/package/lua-http/0001-http-h1_stream-handle-EOF-when-body_read_type-length.patch
-@@ -0,0 +1,71 @@
-+From ddab2835c583d45dec62680ca8d3cbde55e0bae6 Mon Sep 17 00:00:00 2001
-+From: daurnimator <quae@daurnimator.com>
-+Date: Tue, 22 Aug 2023 23:30:20 +1000
-+Subject: [PATCH] http/h1_stream: handle EOF when `body_read_type==length`
-+
-+If a client closes the connection before sending the expected number of bytes
-+then return `EPIPE`.
-+This fixes a potential infinite draining loop when trying to trying to
-+`:shutdown()` a stream.
-+
-+Upstream: https://github.com/daurnimator/lua-http/commit/ddab2835c583d45dec62680ca8d3cbde55e0bae6
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-+---
-+ http/h1_stream.lua      |  2 ++
-+ spec/h1_stream_spec.lua | 27 +++++++++++++++++++++++++++
-+ 2 files changed, 29 insertions(+)
-+
-+diff --git a/lua-http-0.4/http/h1_stream.lua b/lua-http-0.4/http/h1_stream.lua
-+index b2469a1..b0ca821 100644
-+--- a/lua-http-0.4/http/h1_stream.lua
-++++ b/lua-http-0.4/http/h1_stream.lua
-+@@ -861,6 +861,8 @@ function stream_methods:read_next_chunk(timeout)
-+ 			if chunk ~= nil then
-+ 				self.body_read_left = length_n - #chunk
-+ 				end_stream = (self.body_read_left == 0)
-++			elseif err == nil then
-++				return nil, ce.strerror(ce.EPIPE), ce.EPIPE
-+ 			end
-+ 		elseif length_n == 0 then
-+ 			chunk = ""
-+diff --git a/lua-http-0.4/spec/h1_stream_spec.lua b/lua-http-0.4/spec/h1_stream_spec.lua
-+index f9cfea9..1303f94 100644
-+--- a/lua-http-0.4/spec/h1_stream_spec.lua
-++++ b/lua-http-0.4/spec/h1_stream_spec.lua
-+@@ -295,6 +295,33 @@ describe("http1 stream", function()
-+ 		server:close()
-+ 		client:close()
-+ 	end)
-++	it("Doesn't hang when a content-length delimited stream is closed", function()
-++		local server, client = new_pair(1.1)
-++		local cq = cqueues.new()
-++		cq:wrap(function()
-++			local stream = client:new_stream()
-++			local headers = new_headers()
-++			headers:append(":method", "GET")
-++			headers:append(":scheme", "http")
-++			headers:append(":authority", "myauthority")
-++			headers:append(":path", "/a")
-++			assert(stream:write_headers(headers, true))
-++		end)
-++		cq:wrap(function()
-++			local stream = server:get_next_incoming_stream()
-++			assert(stream:get_headers())
-++			local res_headers = new_headers()
-++			res_headers:append(":status", "200")
-++			res_headers:append("content-length", "100")
-++			assert(stream:write_headers(res_headers, false))
-++			assert(stream:write_chunk("foo", false))
-++			assert(stream:shutdown())
-++		end)
-++		assert_loop(cq, TEST_TIMEOUT)
-++		assert.truthy(cq:empty())
-++		server:close()
-++		client:close()
-++	end)
-+ 	it("allows pipelining", function()
-+ 		local server, client = new_pair(1.1)
-+ 		local cq = cqueues.new()
-+-- 
-+2.40.1
-+
-diff --git a/package/lua-http/lua-http.mk b/package/lua-http/lua-http.mk
-index df3e2c005..34387c12e 100644
---- a/package/lua-http/lua-http.mk
-+++ b/package/lua-http/lua-http.mk
-@@ -13,4 +13,7 @@ LUA_HTTP_LICENSE_FILES = $(LUA_HTTP_SUBDIR)/LICENSE.md
- LUA_HTTP_CPE_ID_VERSION = $(LUA_HTTP_VERSION_UPSTREAM)
- LUA_HTTP_CPE_ID_VENDOR = daurnimator
+ package/cracklib/cracklib.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/cracklib/cracklib.mk b/package/cracklib/cracklib.mk
+index c5226b3326..9f5f32c87a 100644
+--- a/package/cracklib/cracklib.mk
++++ b/package/cracklib/cracklib.mk
+@@ -22,6 +22,8 @@ CRACKLIB_CONF_OPTS += --without-zlib
+ endif
  
-+# 0001-http-h1_stream-handle-EOF-when-body_read_type-length.patch
-+LUA_HTTP_IGNORE_CVES += CVE-2023-4540
-+
- $(eval $(luarocks-package))
+ ifeq ($(BR2_PACKAGE_PYTHON3),y)
++# py-compile must be rebuilt because python 3.12 removed imp module
++CRACKLIB_AUTORECONF = YES
+ CRACKLIB_CONF_OPTS += --with-python
+ CRACKLIB_CONF_ENV += \
+ 	ac_cv_path_PYTHON=$(HOST_DIR)/bin/python3 \
 -- 
-2.40.1
+2.43.0
 
 _______________________________________________
 buildroot mailing list
