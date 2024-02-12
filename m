@@ -4,103 +4,104 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4D5DC4829B
-	for <buildroot@archiver.kernel.org>; Mon, 12 Feb 2024 13:44:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D8F1C4829B
+	for <buildroot@archiver.kernel.org>; Mon, 12 Feb 2024 14:19:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 31D2C40025;
-	Mon, 12 Feb 2024 13:44:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 98950401A4;
+	Mon, 12 Feb 2024 14:19:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AK2hXGcABqXw; Mon, 12 Feb 2024 13:44:34 +0000 (UTC)
+	with ESMTP id Kiw5yXFSOlJK; Mon, 12 Feb 2024 14:19:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7453A400EF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C32A440144
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7453A400EF;
-	Mon, 12 Feb 2024 13:44:34 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1C8FB1BF2B0
- for <buildroot@lists.busybox.net>; Mon, 12 Feb 2024 13:44:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C32A440144;
+	Mon, 12 Feb 2024 14:19:25 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CB2EF1BF28F
+ for <buildroot@lists.busybox.net>; Mon, 12 Feb 2024 14:19:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 00D96400EF
- for <buildroot@lists.busybox.net>; Mon, 12 Feb 2024 13:44:33 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B7D5241D92
+ for <buildroot@lists.busybox.net>; Mon, 12 Feb 2024 14:19:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9kz4adocJraO for <buildroot@lists.busybox.net>;
- Mon, 12 Feb 2024 13:44:30 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id M6YBA8Vko_0B for <buildroot@lists.busybox.net>;
+ Mon, 12 Feb 2024 14:19:23 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::22e; helo=mail-lj1-x22e.google.com;
+ client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
  envelope-from=antoine.coutant@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1115640025
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1115640025
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com
- [IPv6:2a00:1450:4864:20::22e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1115640025
- for <buildroot@buildroot.org>; Mon, 12 Feb 2024 13:44:29 +0000 (UTC)
-Received: by mail-lj1-x22e.google.com with SMTP id
- 38308e7fff4ca-2d0f7585d89so12116371fa.3
- for <buildroot@buildroot.org>; Mon, 12 Feb 2024 05:44:29 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3C47141D87
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C47141D87
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3C47141D87
+ for <buildroot@buildroot.org>; Mon, 12 Feb 2024 14:19:23 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id
+ ffacd0b85a97d-33b401fd72bso2162791f8f.3
+ for <buildroot@buildroot.org>; Mon, 12 Feb 2024 06:19:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707745467; x=1708350267;
- h=in-reply-to:from:content-language:references:cc:to:subject
- :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
- :cc:subject:date:message-id:reply-to;
- bh=f0fXpWva4edLXKors2GgfrO/o4i6oXegv3PF39oxdRM=;
- b=sIzpXG4fiVXDwNx7HADp0FJcz8EADrxioIyN55n7g6hnkRVLXu1DaP2sPO2HAoi6oh
- Lu7cBXGZwV3yLxyHr8/XY6uWxCUev0MdNxGlh68kyh70HEpkymTJ0jfVTds238ZHeX4J
- bBuv1pDJJrXnX3Bfmmhth7FSZnFAX6X9IbTnTOUaHROwR+ccsA38wNxigBXwX8h/skN8
- 5i1ht97ZeAa8/iiRGvlWD8K0259E8YBLerPCdRqdKuYd5mmyksj04OfOwOt3FXbW5M6o
- javCAmMils7zl1zozVl0X+jdfLGZIvP92f61cOLf4TC0Y7p1USQSU+sx1liqwtioGtQP
- Wxjg==
-X-Gm-Message-State: AOJu0YxvqXIBGRvqms0bdb1SJWbeWN+WYTibqWTvEFTcnJdoKBUyV3vj
- hUDhznZQxML5UQV/TyfZlDIR/FN/lY0QOk2GplWCusRo2sf4hlX5o9DFCy5kv+Q=
-X-Google-Smtp-Source: AGHT+IGEHCVO27vQjA9b75VDYzRHdot0ZF1cBaRKK5RtoIqSCZn5MrrYqvVA+Hp70sCWJg7hh4WX2w==
-X-Received: by 2002:ac2:4579:0:b0:511:87b7:6d88 with SMTP id
- k25-20020ac24579000000b0051187b76d88mr2690293lfm.32.1707745467084; 
- Mon, 12 Feb 2024 05:44:27 -0800 (PST)
+ d=1e100.net; s=20230601; t=1707747561; x=1708352361;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=IgzzBsnqyQF3VBIShznZBBPPvMx/L5PYyB6xyP3AKV8=;
+ b=oWkvaa3RkcacSdOV/8terK3Qapzpdhs8AX3vjVDxIP6f7sydwrcPG1AKe4qhJgDBOY
+ /W35lnkK5/2qKBIX/+/+3iov7U9ULMazeDKyBVyxrtR5ymdTJew8yo6QLqt2eep70gib
+ j9CAcB+jmqcmJvnmKncxrK9JAmq9JwN5yyvsegi5IF3VouZy9rHg5AAWNaew+ELKT2yZ
+ SkvD/+tLkBfuyqyLRiyyg3pI5P8QlJucJEtI06fpGp9s2UGO6H8H2Z4udbOUq5tu0nlT
+ KvspCaokIgC89oakhR4lF1JytSyuwzmCeQNh+tMibf6rP7KP1WRZQV+QAkC8KDImDumD
+ bPZw==
+X-Gm-Message-State: AOJu0YwXwQtEr/PAJhaR8kqZrDOwBJ9VjPvCtjkHd7TY3T2qWMbAUGpQ
+ aioWqwHtaRb0Zfo9ltQUeh0eI+Yfn+02NJBJ8f+eShWVRtBF2p+CfjRrNJhiH1w=
+X-Google-Smtp-Source: AGHT+IF1y5yNj9sbuzCghBR6L+mC8VM8JCqRcSGDDfp4XVmBoxPGhIs8/BuAbI/k873b47BSlL7p/g==
+X-Received: by 2002:adf:fa49:0:b0:33b:4f08:ac9c with SMTP id
+ y9-20020adffa49000000b0033b4f08ac9cmr4823626wrr.33.1707747561032; 
+ Mon, 12 Feb 2024 06:19:21 -0800 (PST)
 X-Forwarded-Encrypted: i=1;
- AJvYcCUSQjOJzrVtyg5vuaWbixPhvwseUH5Z7m3aa5NmygRkkPNsh2t7om/ntmrBrl+gAv/eAFxF0tyGfnKkrRiu4MiQk8ZlzKTN6/5Ijw8hw6dyHhvNs6rNln9v5sCJA2EYz84Ec0d9J1VQU0c7BJko3usC
+ AJvYcCW88pVvkp/i5VgmbgFPA8UgiwH+Kl4bwI6qj6vW82qjs6VqXfs967QsB6e63epDJ0UQxo1S6KN2InJYj0PxKDOtulO/xE9dKUjKFR+Ua+wfhdYfLJSZY3rFZB8Fjqg5vMcBBDlNPmB7/zCjQZsow7WC
 Received: from ?IPV6:2a01:cb08:8680:f100:ee18:d70:d8d8:5591?
  (2a01cb088680f100ee180d70d8d85591.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8680:f100:ee18:d70:d8d8:5591])
  by smtp.gmail.com with ESMTPSA id
- iv15-20020a05600c548f00b004107686650esm8779525wmb.36.2024.02.12.05.44.26
+ u8-20020a056000038800b0033ae50e2c6asm7001625wrf.83.2024.02.12.06.19.20
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 12 Feb 2024 05:44:26 -0800 (PST)
-Message-ID: <a2e41a71-7b71-4807-9120-6c27d61b4e2c@smile.fr>
-Date: Mon, 12 Feb 2024 14:44:25 +0100
+ Mon, 12 Feb 2024 06:19:20 -0800 (PST)
+Message-ID: <8e198a6f-ccb7-4438-9a0d-e983a6fcc29a@smile.fr>
+Date: Mon, 12 Feb 2024 15:19:20 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
+Content-Language: en-US
 To: "Yann E. MORIN" <yann.morin.1998@free.fr>
 References: <20240202093625.1409559-1-antoine.coutant@smile.fr>
- <20240202093625.1409559-5-antoine.coutant@smile.fr>
- <ZcOow6Wd11qTf8Qs@landeda>
-Content-Language: en-US
+ <20240202093625.1409559-6-antoine.coutant@smile.fr>
+ <ZcOpY6BjPUgrj5r-@landeda>
 From: Antoine Coutant <antoine.coutant@smile.fr>
-In-Reply-To: <ZcOow6Wd11qTf8Qs@landeda>
+In-Reply-To: <ZcOpY6BjPUgrj5r-@landeda>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1707745467; x=1708350267;
+ d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1707747561; x=1708352361;
  darn=buildroot.org; 
- h=in-reply-to:from:content-language:references:cc:to:subject
- :user-agent:mime-version:date:message-id:from:to:cc:subject:date
- :message-id:reply-to;
- bh=f0fXpWva4edLXKors2GgfrO/o4i6oXegv3PF39oxdRM=;
- b=lRfJ6Y4OglG+KkCu7iZILRG1hwG2pj9XxcuSa4BJVtVRLkCEJHCZmiXfP+QZD3iaTs
- KapEwlqV53dxcULLyHoaXOeS3iY7L+KLF9CLndWtR4wWg+hRxptl1EEsIJdseSzI8g2p
- /G2D9+XV0Gq2jpSf3hsT8H/gz31Bu4cQFIA06VqObNT0yCvMlC6Z3D8eEFPj8gTd16k9
- +ntgkzFZxrInnVPw491Q58+FE04UimqJPVROH31XY/pOWM8txS1ekIQfatSzQTICc8uW
- VSqLCb5CgGdMU5txpLOX4N7CyzEg5dz789zBWKZcVKOn2aQ5pxFBCUoaRvaMXOy1QhGC
- 1CJg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=IgzzBsnqyQF3VBIShznZBBPPvMx/L5PYyB6xyP3AKV8=;
+ b=zuQJRmdNNPb6eUdnQp1FIYtzOjfw9OLGThCLfWUA83IEBRJow8carrAldUorJQSkzJ
+ krhF8RFDk1DKB60OwcecLjoEIiGbc7oV3wEaR2qfrO2nBqtWM8a1vNf5Btd/Tgw4l+Zk
+ jHoiU9th0fymCFnovABAWyhNlXW5Hhay2GWkFYf9BHZCGFJbPm8UBv4YcqJ850wq3M3/
+ UvgQ305wLXrJ8oosHJF+uss4z1+fZSN+5OudG19LGuP7+CwGr3c6wihlzVDY+Sw+tbe2
+ mD2F0EuAJPOT5yRi/nUmhElDZADb//xKYRaG33dk8xDGrqWAjVaBheeNPlxLpd6SgBNH
+ hnjQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=smile-fr.20230601.gappssmtp.com
  header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=lRfJ6Y4O
-Subject: Re: [Buildroot] [PATCH v4 4/7] package/opencl-headers: new package
+ header.s=20230601 header.b=zuQJRmdN
+Subject: Re: [Buildroot] [PATCH v4 5/7] package/opencl-icd-loader: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -114,122 +115,69 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: sebastian.weyer@smile.fr, bernd@kuhls.net, romain.naour@smile.fr,
  buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============3995979541987964549=="
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This is a multi-part message in MIME format.
---===============3995979541987964549==
-Content-Type: multipart/alternative;
- boundary="------------aknPGgQxYHLWf198OBqxNShr"
-Content-Language: en-US
-
-This is a multi-part message in MIME format.
---------------aknPGgQxYHLWf198OBqxNShr
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-
 Yann, All,
 
-On 07/02/2024 16:58, Yann E. MORIN wrote:
+
+On 07/02/2024 17:01, Yann E. MORIN wrote:
 > Antoine, All,
 >
 > On 2024-02-02 10:36 +0100, Antoine Coutant spake thusly:
->> From: Sebastian Weyer<sebastian.weyer@smile.fr>
+>> From: Sebastian Weyer <sebastian.weyer@smile.fr>
 >>
->> These headers provide the C language API bindings. It is a complement to
->> the C++ bindings already available in opencl-clhpp. This package is
->> required to build opencl-icd-loader:
+>> With this package it is possible to have multiple implementations of
+>> OpenCL at the same time. This package provides a libOpenCL.so file that
+>> captures the OpenCL API calls and forwards them to the correct
+>> implementation of OpenCL. OpenCL implementations can be manually
+>> registered by creating a file containing its full file path in
+>> /etc/OpenCL/vendors/<implementation>.icd[1]
 >>
->> https://github.com/KhronosGroup/OpenCL-ICD-Loader#dependencies
+>> This package is required by certain OpenCL implementations, for example
+>> Mesa3D's Clover implementation if it is not built in standalone mode.
 >>
->> Signed-off-by: Sebastian Weyer<sebastian.weyer@smile.fr>
->> Signed-off-by: Antoine Coutant<antoine.coutant@smile.fr>
+>> [1] https://github.com/KhronosGroup/OpenCL-ICD-Loader#registering-icds
+>>
+>> Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
+>> Signed-off-by: Antoine Coutant <antoine.coutant@smile.fr>
 >> ---
 > [--SNIP--]
->> diff --git a/package/opencl-headers/Config.in b/package/opencl-headers/Config.in
+>> diff --git a/package/opencl-icd-loader/Config.in b/package/opencl-icd-loader/Config.in
 >> new file mode 100644
->> index 0000000000..092d8a2a4d
+>> index 0000000000..405dc5401a
 >> --- /dev/null
->> +++ b/package/opencl-headers/Config.in
->> @@ -0,0 +1,7 @@
->> +config BR2_PACKAGE_OPENCL_HEADERS
->> +	bool "opencl-headers"
+>> +++ b/package/opencl-icd-loader/Config.in
+>> @@ -0,0 +1,12 @@
+>> +config BR2_PACKAGE_OPENCL_ICD_LOADER
+>> +	bool "OpenCL-ICD-Loader"
+>> +	depends on BR2_INSTALL_LIBSTDCPP
 >> +	depends on BR2_PACKAGE_HAS_LIBOPENCL
-> BR2_PACKAGE_HAS_LIBOPENCL can be set by mesa3d when BR2_PACKAGE_MESA3D_OPENCL
-> is enabled. In this case, will mesa3d install its own headers? If so,
-> that will generate a conflict.
+>> +	select BR2_PACKAGE_OPENCL_HEADERS
+> Following on the review of the previous patch: maybe that could rely on
+> mesa3d-headers, and if so, we'ds not need to introduce a new
+> opencl-headers package.
 
-BR2_PACKAGE_HAS_LIBOPENCL doesn't guarantee that CL headers
+As I answered to the previous patch review, the headers installed
 
-will be installed. Mesa3d install headers if Clover is enabled and
+by mesa differ from those installed by OpenCL-Headers. Indeed,
 
-opencl-icd is disabled [1]. So you are right, it will generate conflict in
+mesa headers are fetched from OpenCL-Headers by [1] but
 
-case OpenCL-Headers and Clover are built without icd mode.
+nothing guarantees that their version will match OpenCL-ICD-Loader
 
-> Furthermore, this will also conflict with mesa3d-headers, and it also
-> installs CL headers.
-Yes, this will generate the same conflict here...
->
-> So, why do we need opencl-headers and can't rely on the existing
-> mesa3d-headers package?
+version. Therefore, the OpenCL-ICD-Loader build fails with mesa
 
-The problem is that the headers installed by mesa differ from those
-
-in the OpenCL-Headers package.
-
-$ diff -q OpenCL-Headers/CL/cl_icd.h mesa/include/CL/cl_icd.h
-Files OpenCL-Headers/CL/cl_icd.h and mesa/include/CL/cl_icd.h differ
-
-This diff was performed using OpenCL-Headers v2023.12.14 and
-
-mesa-23.3.4. Moreover, cl_layer.h, cl_half.h and cl_function_types.h 
-files are
-
-missing from mesa headers. These differences causes errors when building
-
-opencl-icd-loader:
-
-...
-
-./build/opencl-icd-loader-2023.12.14/loader/icd.c:23:10: fatal error: 
-CL/cl_layer.h: No such file or directory
-
-    23 | #include <CL/cl_layer.h>
-
-| ^~~~~~~~~~~~~~~
-
-compilation terminated.
-
-./build/opencl-icd-loader-2023.12.14/loader/icd_dispatch.c:26:8: error: 
-unknown type name ‘clGetICDLoaderInfoOCLICD_t’
-
-    26 | static clGetICDLoaderInfoOCLICD_t clGetICDLoaderInfoOCLICD;
-
-| ^~~~~~~~~~~~~~~~~~~~~~~~~~
-
-...
-
-This is why we cannot rely on mesa3d headers and why OpenCL-Headers
-
-package is required.
-
-> Regards,
-> Yann E. MORIN.
-
-I will add guards to prevent conflicts in the v5. And add some lines
-
-in the commit log to explain why mesa3d headers can't be used to
-
-build OpenCL-ICD-Loader.
+headers. That's why we need OpenCL-Headers here.
 
 
-Thanks for your feedback !
+I'll explain it in the v5 commit message.
 
 
-[1]: 
-https://gitlab.freedesktop.org/mesa/mesa/-/blob/23.3/include/meson.build?ref_type=heads#L135
+[1}: 
+https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/bin/khronos-update.py
 
 
 Regards,
@@ -237,47 +185,50 @@ Regards,
 Antoine Coutant
 
 >
+> Regards,
+> Yann E. MORIN.
+>
 >> +	help
->> +	  C language headers for the OpenCL API
+>> +	  OpenCL defines an Installable Client Driver (ICD) mechanism to
+>> +	  allow developers to build applications against an Installable
+>> +	  Client Driver loader (ICD loader) rather than linking their
+>> +	  applications against a specific OpenCL implementation.
 >> +
->> +	https://github.com/KhronosGroup/OpenCL-Headers
->> diff --git a/package/opencl-headers/opencl-headers.hash b/package/opencl-headers/opencl-headers.hash
+>> +	  https://github.com/KhronosGroup/OpenCL-ICD-Loader
+>> diff --git a/package/opencl-icd-loader/opencl-icd-loader.hash b/package/opencl-icd-loader/opencl-icd-loader.hash
 >> new file mode 100644
->> index 0000000000..802ed05450
+>> index 0000000000..1c894f1293
 >> --- /dev/null
->> +++ b/package/opencl-headers/opencl-headers.hash
+>> +++ b/package/opencl-icd-loader/opencl-icd-loader.hash
 >> @@ -0,0 +1,3 @@
->> +#Locally generated
->> +sha256  407d5e109a70ec1b6cd3380ce357c21e3d3651a91caae6d0d8e1719c69a1791d  OpenCL-Headers-2023.12.14.tar.gz
->> +sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
->> diff --git a/package/opencl-headers/opencl-headers.mk b/package/opencl-headers/opencl-headers.mk
+>> +# locally generated
+>> +sha256  af8df96f1e1030329e8d4892ba3aa761b923838d4c689ef52d97822ab0bd8917  OpenCL-ICD-Loader-2023.12.14.tar.gz
+>> +sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
+>> diff --git a/package/opencl-icd-loader/opencl-icd-loader.mk b/package/opencl-icd-loader/opencl-icd-loader.mk
 >> new file mode 100644
->> index 0000000000..7aa0e0d168
+>> index 0000000000..04f6fb4b85
 >> --- /dev/null
->> +++ b/package/opencl-headers/opencl-headers.mk
->> @@ -0,0 +1,22 @@
+>> +++ b/package/opencl-icd-loader/opencl-icd-loader.mk
+>> @@ -0,0 +1,19 @@
 >> +################################################################################
 >> +#
->> +# opencl-headers
+>> +# opencl-icd-loader
 >> +#
 >> +################################################################################
 >> +
->> +OPENCL_HEADERS_VERSION = 2023.12.14
->> +OPENCL_HEADERS_SOURCE = OpenCL-Headers-$(OPENCL_HEADERS_VERSION).tar.gz
->> +OPENCL_HEADERS_SITE = $(call github,KhronosGroup,OpenCL-Headers,v$(OPENCL_HEADERS_VERSION))
->> +OPENCL_HEADERS_LICENSE = Apache-2.0
->> +OPENCL_HEADERS_LICENSE_FILES = LICENSE
->> +OPENCL_HEADERS_INSTALL_STAGING = YES
+>> +OPENCL_ICD_LOADER_VERSION = 2023.12.14
+>> +OPENCL_ICD_LOADER_SOURCE = OpenCL-ICD-Loader-$(OPENCL_ICD_LOADER_VERSION).tar.gz
+>> +OPENCL_ICD_LOADER_SITE = $(call github,KhronosGroup,OpenCL-ICD-Loader,v$(OPENCL_ICD_LOADER_VERSION))
+>> +OPENCL_ICD_LOADER_LICENSE = Apache-2.0
+>> +OPENCL_ICD_LOADER_LICENSE_FILES = LICENSE
+>> +OPENCL_ICD_LOADER_INSTALL_STAGING = YES
 >> +
->> +OPENCL_HEADERS_INSTALL_TARGET = NO
+>> +OPENCL_ICD_LOADER_DEPENDENCIES = opencl-headers
 >> +
->> +define OPENCL_HEADERS_INSTALL_STAGING_CMDS
->> +	mkdir -p $(STAGING_DIR)/usr/include/CL
->> +	$(INSTALL) -D -m 0644 $(@D)/CL/* \
->> +		$(STAGING_DIR)/usr/include/CL
->> +endef
+>> +OPENCL_ICD_LOADER_CONF_OPTS += -DOPENCL_ICD_LOADER_HEADERS_DIR=$(STAGING_DIR)/usr/include
 >> +
->> +$(eval $(generic-package))
+>> +$(eval $(cmake-package))
+>> +$(eval $(host-cmake-package))
 >> -- 
 >> 2.25.1
 >>
@@ -285,240 +236,7 @@ Antoine Coutant
 >> buildroot mailing list
 >> buildroot@buildroot.org
 >> https://lists.buildroot.org/mailman/listinfo/buildroot
---------------aknPGgQxYHLWf198OBqxNShr
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  </head>
-  <body>
-    <p>Yann, All,<br>
-    </p>
-    <div class="moz-cite-prefix">On 07/02/2024 16:58, Yann E. MORIN
-      wrote:<br>
-    </div>
-    <blockquote type="cite" cite="mid:ZcOow6Wd11qTf8Qs@landeda">
-      <pre class="moz-quote-pre" wrap="">Antoine, All,
-
-On 2024-02-02 10:36 +0100, Antoine Coutant spake thusly:
-</pre>
-      <blockquote type="cite">
-        <pre class="moz-quote-pre" wrap="">From: Sebastian Weyer <a class="moz-txt-link-rfc2396E" href="mailto:sebastian.weyer@smile.fr">&lt;sebastian.weyer@smile.fr&gt;</a>
-
-These headers provide the C language API bindings. It is a complement to
-the C++ bindings already available in opencl-clhpp. This package is
-required to build opencl-icd-loader:
-
-<a class="moz-txt-link-freetext" href="https://github.com/KhronosGroup/OpenCL-ICD-Loader#dependencies">https://github.com/KhronosGroup/OpenCL-ICD-Loader#dependencies</a>
-
-Signed-off-by: Sebastian Weyer <a class="moz-txt-link-rfc2396E" href="mailto:sebastian.weyer@smile.fr">&lt;sebastian.weyer@smile.fr&gt;</a>
-Signed-off-by: Antoine Coutant <a class="moz-txt-link-rfc2396E" href="mailto:antoine.coutant@smile.fr">&lt;antoine.coutant@smile.fr&gt;</a>
----
-</pre>
-      </blockquote>
-      <pre class="moz-quote-pre" wrap="">[--SNIP--]
-</pre>
-      <blockquote type="cite">
-        <pre class="moz-quote-pre" wrap="">diff --git a/package/opencl-headers/Config.in b/package/opencl-headers/Config.in
-new file mode 100644
-index 0000000000..092d8a2a4d
---- /dev/null
-+++ b/package/opencl-headers/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_OPENCL_HEADERS
-+	bool "opencl-headers"
-+	depends on BR2_PACKAGE_HAS_LIBOPENCL
-</pre>
-      </blockquote>
-      <pre class="moz-quote-pre" wrap="">
-BR2_PACKAGE_HAS_LIBOPENCL can be set by mesa3d when BR2_PACKAGE_MESA3D_OPENCL
-is enabled. In this case, will mesa3d install its own headers? If so,
-that will generate a conflict.</pre>
-    </blockquote>
-    <p>BR2_PACKAGE_HAS_LIBOPENCL doesn't guarantee that CL headers</p>
-    <p>will be installed. Mesa3d install headers if Clover is enabled
-      and</p>
-    <p>opencl-icd is disabled [1]. So you are right, it will generate
-      conflict in</p>
-    <p>case OpenCL-Headers and Clover are built without icd mode<span
-      style="white-space: pre-wrap">.
-</span><span style="white-space: pre-wrap">
-</span></p>
-    <blockquote type="cite" cite="mid:ZcOow6Wd11qTf8Qs@landeda">
-      <pre class="moz-quote-pre" wrap="">Furthermore, this will also conflict with mesa3d-headers, and it also
-installs CL headers.</pre>
-    </blockquote>
-    Yes, this will generate the same conflict here...<br>
-    <blockquote type="cite" cite="mid:ZcOow6Wd11qTf8Qs@landeda">
-      <pre class="moz-quote-pre" wrap="">
-
-So, why do we need opencl-headers and can't rely on the existing
-mesa3d-headers package?</pre>
-    </blockquote>
-    <p>The problem is that the headers installed by mesa differ <span
-        class="HwtZe" lang="en"><span class="jCAhz ChMk0b"><span
-            class="ryNqvb"> from those</span></span></span></p>
-    <p><span class="HwtZe" lang="en"><span class="jCAhz ChMk0b"><span
-            class="ryNqvb">in the OpenCL-Headers package.</span></span></span><br>
-    </p>
-    <p>$ diff -q OpenCL-Headers/CL/cl_icd.h mesa/include/CL/cl_icd.h <br>
-      Files OpenCL-Headers/CL/cl_icd.h and mesa/include/CL/cl_icd.h
-      differ</p>
-    <p>This diff was performed using OpenCL-Headers v2023.12.14 and <br>
-    </p>
-    <p>mesa-23.3.4. Moreover, <span
-style="color: rgb(0, 0, 0); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"
-      id="docs-internal-guid-5b3621eb-7fff-e850-ee6c-bf935e9d0caf">cl_layer.h, </span><span
-style="color: rgb(0, 0, 0); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"
-      id="docs-internal-guid-87b3d705-7fff-0b31-2fee-2794221ab283">cl_half.h and </span><span
-style="color: rgb(0, 0, 0); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"
-      id="docs-internal-guid-2e385c92-7fff-2fcd-a6ef-43f2a6496c0a">cl_function_types.h files are</span></p>
-    <p><span
-style="color: rgb(0, 0, 0); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"
-      id="docs-internal-guid-2e385c92-7fff-2fcd-a6ef-43f2a6496c0a">missing from mesa headers. These differences causes errors when building</span></p>
-    <p><span
-style="color: rgb(0, 0, 0); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"
-      id="docs-internal-guid-2e385c92-7fff-2fcd-a6ef-43f2a6496c0a">opencl-icd-loader:</span></p>
-    <p><span
-style="color: rgb(0, 0, 0); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"
-      id="docs-internal-guid-2e385c92-7fff-2fcd-a6ef-43f2a6496c0a">...</span></p>
-    <p><span
-style="color: rgb(0, 0, 0); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">./build/opencl-icd-loader-2023.12.14/loader/icd.c:23:10: fatal error: CL/cl_layer.h: No such file or directory</span></p>
-    <p dir="ltr"
-      style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
-style="color: rgb(0, 0, 0); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">   23 | #include &lt;CL/cl_layer.h&gt;</span></p>
-    <p dir="ltr"
-      style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
-style="color: rgb(0, 0, 0); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">  </span><span
-style="color: rgb(0, 0, 0); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"><span
-      class="Apple-tab-span" style="white-space:pre;">	</span></span><span
-style="color: rgb(0, 0, 0); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">|      </span><span
-style="color: rgb(0, 0, 0); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"><span
-      class="Apple-tab-span" style="white-space:pre;">	</span></span><span
-style="color: rgb(0, 0, 0); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">^~~~~~~~~~~~~~~</span></p>
-    <p dir="ltr"
-      style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
-style="color: rgb(0, 0, 0); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">compilation terminated.</span></p>
-    <p dir="ltr"
-      style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
-style="color: rgb(0, 0, 0); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">./build/opencl-icd-loader-2023.12.14/loader/icd_dispatch.c:26:8: error: unknown type name ‘clGetICDLoaderInfoOCLICD_t’</span></p>
-    <p dir="ltr"
-      style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
-style="color: rgb(0, 0, 0); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">   26 | static clGetICDLoaderInfoOCLICD_t clGetICDLoaderInfoOCLICD;</span></p>
-    <p><span
-style="color: rgb(0, 0, 0); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">  </span><span
-style="color: rgb(0, 0, 0); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"><span
-      class="Apple-tab-span" style="white-space:pre;">	</span></span><span
-style="color: rgb(0, 0, 0); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">|    </span><span
-style="color: rgb(0, 0, 0); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"><span
-      class="Apple-tab-span" style="white-space:pre;">	</span></span><span
-style="color: rgb(0, 0, 0); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">^~~~~~~~~~~~~~~~~~~~~~~~~~</span></p>
-    <p><span
-style="color: rgb(0, 0, 0); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">...</span></p>
-    <p><span
-style="color: rgb(0, 0, 0); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;"></span><span
-style="color: rgb(0, 0, 0); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">This is why we cannot rely on mesa3d headers and why OpenCL-Headers</span></p>
-    <p><span
-style="color: rgb(0, 0, 0); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">package is required.</span><span
-style="font-family: Arial, sans-serif; color: rgb(0, 0, 0); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">
-</span></p>
-    <p></p>
-    <blockquote type="cite" cite="mid:ZcOow6Wd11qTf8Qs@landeda">
-      <pre class="moz-quote-pre" wrap="">
-Regards,
-Yann E. MORIN.</pre>
-    </blockquote>
-    <p>I will add guards to prevent conflicts in the v5. And add some
-      lines</p>
-    <p>in the commit log to explain why mesa3d headers can't be used to</p>
-    <p>build OpenCL-ICD-Loader.</p>
-    <p><br>
-    </p>
-    <p>Thanks for your feedback !</p>
-    <p><br>
-    </p>
-    <p>[1]:
-<a class="moz-txt-link-freetext" href="https://gitlab.freedesktop.org/mesa/mesa/-/blob/23.3/include/meson.build?ref_type=heads#L135">https://gitlab.freedesktop.org/mesa/mesa/-/blob/23.3/include/meson.build?ref_type=heads#L135</a></p>
-    <p><br>
-    </p>
-    <p>Regards,</p>
-    <p>Antoine Coutant<br>
-    </p>
-    <blockquote type="cite" cite="mid:ZcOow6Wd11qTf8Qs@landeda">
-      <pre class="moz-quote-pre" wrap="">
-
-</pre>
-      <blockquote type="cite">
-        <pre class="moz-quote-pre" wrap="">+	help
-+	  C language headers for the OpenCL API
-+
-+	  <a class="moz-txt-link-freetext" href="https://github.com/KhronosGroup/OpenCL-Headers">https://github.com/KhronosGroup/OpenCL-Headers</a>
-diff --git a/package/opencl-headers/opencl-headers.hash b/package/opencl-headers/opencl-headers.hash
-new file mode 100644
-index 0000000000..802ed05450
---- /dev/null
-+++ b/package/opencl-headers/opencl-headers.hash
-@@ -0,0 +1,3 @@
-+#Locally generated
-+sha256  407d5e109a70ec1b6cd3380ce357c21e3d3651a91caae6d0d8e1719c69a1791d  OpenCL-Headers-2023.12.14.tar.gz
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/opencl-headers/opencl-headers.mk b/package/opencl-headers/opencl-headers.mk
-new file mode 100644
-index 0000000000..7aa0e0d168
---- /dev/null
-+++ b/package/opencl-headers/opencl-headers.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# opencl-headers
-+#
-+################################################################################
-+
-+OPENCL_HEADERS_VERSION = 2023.12.14
-+OPENCL_HEADERS_SOURCE = OpenCL-Headers-$(OPENCL_HEADERS_VERSION).tar.gz
-+OPENCL_HEADERS_SITE = $(call github,KhronosGroup,OpenCL-Headers,v$(OPENCL_HEADERS_VERSION))
-+OPENCL_HEADERS_LICENSE = Apache-2.0
-+OPENCL_HEADERS_LICENSE_FILES = LICENSE
-+OPENCL_HEADERS_INSTALL_STAGING = YES
-+
-+OPENCL_HEADERS_INSTALL_TARGET = NO
-+
-+define OPENCL_HEADERS_INSTALL_STAGING_CMDS
-+	mkdir -p $(STAGING_DIR)/usr/include/CL
-+	$(INSTALL) -D -m 0644 $(@D)/CL/* \
-+		$(STAGING_DIR)/usr/include/CL
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.25.1
-
-_______________________________________________
-buildroot mailing list
-<a class="moz-txt-link-abbreviated" href="mailto:buildroot@buildroot.org">buildroot@buildroot.org</a>
-<a class="moz-txt-link-freetext" href="https://lists.buildroot.org/mailman/listinfo/buildroot">https://lists.buildroot.org/mailman/listinfo/buildroot</a>
-</pre>
-      </blockquote>
-      <pre class="moz-quote-pre" wrap="">
-</pre>
-    </blockquote>
-  </body>
-</html>
-
---------------aknPGgQxYHLWf198OBqxNShr--
-
---===============3995979541987964549==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3995979541987964549==--
