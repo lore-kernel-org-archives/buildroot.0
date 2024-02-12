@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55790C4829D
-	for <buildroot@archiver.kernel.org>; Mon, 12 Feb 2024 21:56:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87E41C4829E
+	for <buildroot@archiver.kernel.org>; Mon, 12 Feb 2024 21:56:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2397A40523;
-	Mon, 12 Feb 2024 21:56:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1769F407BD;
+	Mon, 12 Feb 2024 21:56:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fbTVQm1KiiL1; Mon, 12 Feb 2024 21:56:10 +0000 (UTC)
+	with ESMTP id r0aoJpRqiGJf; Mon, 12 Feb 2024 21:56:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3AF8840695
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D22D407A6
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3AF8840695;
-	Mon, 12 Feb 2024 21:56:10 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9777C1BF853
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2D22D407A6;
+	Mon, 12 Feb 2024 21:56:12 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9ECB41BF868
  for <buildroot@lists.busybox.net>; Mon, 12 Feb 2024 21:56:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 84C5160A49
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8BB0E40695
  for <buildroot@lists.busybox.net>; Mon, 12 Feb 2024 21:56:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yYk_q2cnYxTo for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 47nQ36TlN9Ca for <buildroot@lists.busybox.net>;
  Mon, 12 Feb 2024 21:56:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C096D608D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B926440523
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C096D608D1
+ by smtp4.osuosl.org (Postfix) with ESMTP id B926440523
  for <buildroot@buildroot.org>; Mon, 12 Feb 2024 21:56:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AD88C878D2; Mon, 12 Feb 2024 21:56:07 +0000 (UTC)
+ id A299C878D1; Mon, 12 Feb 2024 21:56:07 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 12 Feb 2024 22:55:54 +0100
+Date: Mon, 12 Feb 2024 22:54:22 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fa9893ad8fb94278d7e8b80cd3e795469223faf0
-X-Git-Newrev: ed804a9f0c09a151f32be36f63ae4c924b9dc360
+X-Git-Oldrev: 835c647375182da571bfb0170b7cd7750cad38e4
+X-Git-Newrev: fa9893ad8fb94278d7e8b80cd3e795469223faf0
 X-Patchwork-Hint: ignore
-Message-Id: <20240212215607.AD88C878D2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/elfutils: drop ELFUTILS_{C,
- CPP}FLAGS
+Message-Id: <20240212215607.A299C878D1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gnu-efi: bump to version 3.0.17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,36 +65,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ed804a9f0c09a151f32be36f63ae4c924b9dc360
+commit: https://git.buildroot.net/buildroot/commit/?id=fa9893ad8fb94278d7e8b80cd3e795469223faf0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-ELFUTILS_CFLAGS and ELFUTILS_CPPFLAGS are empty since commit
-7593aea519dee34cb25715296c1b03f471123ee2 so drop them to avoid setting
-incorrect flags
+For commit logs, see:
+https://sourceforge.net/p/gnu-efi/code/ci/3.0.17/log/
 
-Fixes: 7593aea519dee34cb25715296c1b03f471123ee2
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/elfutils/elfutils.mk | 4 ----
- 1 file changed, 4 deletions(-)
+ package/gnu-efi/gnu-efi.hash | 6 +++---
+ package/gnu-efi/gnu-efi.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
-index cb4293b0c3..87b51aa5b5 100644
---- a/package/elfutils/elfutils.mk
-+++ b/package/elfutils/elfutils.mk
-@@ -29,10 +29,6 @@ HOST_ELFUTILS_CONF_OPTS = \
- 	--without-zstd \
- 	--disable-progs
+diff --git a/package/gnu-efi/gnu-efi.hash b/package/gnu-efi/gnu-efi.hash
+index 251a99e5d7..7d98650991 100644
+--- a/package/gnu-efi/gnu-efi.hash
++++ b/package/gnu-efi/gnu-efi.hash
+@@ -1,6 +1,6 @@
+ # From http://sourceforge.net/projects/gnu-efi/files
+-md5  192d94e995ddd4ebdce4903adfd06039  gnu-efi-3.0.15.tar.bz2
+-sha1  40c8a4715cf8c409a093c8d2ca9f5d5b24d73058  gnu-efi-3.0.15.tar.bz2
++md5  832496719182e7d6a4b12bc7c0b534d2  gnu-efi-3.0.17.tar.bz2
++sha1  9715285022124b231520d58b26709f5ab338e981  gnu-efi-3.0.17.tar.bz2
+ # Locally computed
+-sha256  931a257b9c5c1ba65ff519f18373c438a26825f2db7866b163e96d1b168f20ea  gnu-efi-3.0.15.tar.bz2
++sha256  7807e903349343a7a142ebb934703a2872235e89688cf586c032b0a1087bcaf4  gnu-efi-3.0.17.tar.bz2
+ sha256  42d352e9c28dd446fd0209cd6f75588c8e41f0934540bb382bbd61c752360265  README.efilib
+diff --git a/package/gnu-efi/gnu-efi.mk b/package/gnu-efi/gnu-efi.mk
+index 686a14be01..8b9a6aa4c6 100644
+--- a/package/gnu-efi/gnu-efi.mk
++++ b/package/gnu-efi/gnu-efi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--ELFUTILS_CONF_ENV += \
--	CFLAGS="$(ELFUTILS_CFLAGS)" \
--	CPPFLAGS="$(ELFUTILS_CPPFLAGS)"
--
- ELFUTILS_LDFLAGS = $(TARGET_LDFLAGS) \
- 	$(TARGET_NLS_LIBS)
- 
+-GNU_EFI_VERSION = 3.0.15
++GNU_EFI_VERSION = 3.0.17
+ GNU_EFI_SOURCE = gnu-efi-$(GNU_EFI_VERSION).tar.bz2
+ GNU_EFI_SITE = http://downloads.sourceforge.net/project/gnu-efi
+ GNU_EFI_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
