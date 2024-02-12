@@ -4,104 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D8F1C4829B
-	for <buildroot@archiver.kernel.org>; Mon, 12 Feb 2024 14:19:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0CECC48297
+	for <buildroot@archiver.kernel.org>; Mon, 12 Feb 2024 14:32:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 98950401A4;
-	Mon, 12 Feb 2024 14:19:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7536940144;
+	Mon, 12 Feb 2024 14:32:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Kiw5yXFSOlJK; Mon, 12 Feb 2024 14:19:26 +0000 (UTC)
+	with ESMTP id Y5d4Q_bLP09u; Mon, 12 Feb 2024 14:32:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C32A440144
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 75EBF401A4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C32A440144;
-	Mon, 12 Feb 2024 14:19:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 75EBF401A4;
+	Mon, 12 Feb 2024 14:32:33 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CB2EF1BF28F
- for <buildroot@lists.busybox.net>; Mon, 12 Feb 2024 14:19:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B92AA1BF28F
+ for <buildroot@lists.busybox.net>; Mon, 12 Feb 2024 14:32:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B7D5241D92
- for <buildroot@lists.busybox.net>; Mon, 12 Feb 2024 14:19:24 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B2667415B7
+ for <buildroot@lists.busybox.net>; Mon, 12 Feb 2024 14:32:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id M6YBA8Vko_0B for <buildroot@lists.busybox.net>;
- Mon, 12 Feb 2024 14:19:23 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
- envelope-from=antoine.coutant@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3C47141D87
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C47141D87
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3C47141D87
- for <buildroot@buildroot.org>; Mon, 12 Feb 2024 14:19:23 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id
- ffacd0b85a97d-33b401fd72bso2162791f8f.3
- for <buildroot@buildroot.org>; Mon, 12 Feb 2024 06:19:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707747561; x=1708352361;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=IgzzBsnqyQF3VBIShznZBBPPvMx/L5PYyB6xyP3AKV8=;
- b=oWkvaa3RkcacSdOV/8terK3Qapzpdhs8AX3vjVDxIP6f7sydwrcPG1AKe4qhJgDBOY
- /W35lnkK5/2qKBIX/+/+3iov7U9ULMazeDKyBVyxrtR5ymdTJew8yo6QLqt2eep70gib
- j9CAcB+jmqcmJvnmKncxrK9JAmq9JwN5yyvsegi5IF3VouZy9rHg5AAWNaew+ELKT2yZ
- SkvD/+tLkBfuyqyLRiyyg3pI5P8QlJucJEtI06fpGp9s2UGO6H8H2Z4udbOUq5tu0nlT
- KvspCaokIgC89oakhR4lF1JytSyuwzmCeQNh+tMibf6rP7KP1WRZQV+QAkC8KDImDumD
- bPZw==
-X-Gm-Message-State: AOJu0YwXwQtEr/PAJhaR8kqZrDOwBJ9VjPvCtjkHd7TY3T2qWMbAUGpQ
- aioWqwHtaRb0Zfo9ltQUeh0eI+Yfn+02NJBJ8f+eShWVRtBF2p+CfjRrNJhiH1w=
-X-Google-Smtp-Source: AGHT+IF1y5yNj9sbuzCghBR6L+mC8VM8JCqRcSGDDfp4XVmBoxPGhIs8/BuAbI/k873b47BSlL7p/g==
-X-Received: by 2002:adf:fa49:0:b0:33b:4f08:ac9c with SMTP id
- y9-20020adffa49000000b0033b4f08ac9cmr4823626wrr.33.1707747561032; 
- Mon, 12 Feb 2024 06:19:21 -0800 (PST)
-X-Forwarded-Encrypted: i=1;
- AJvYcCW88pVvkp/i5VgmbgFPA8UgiwH+Kl4bwI6qj6vW82qjs6VqXfs967QsB6e63epDJ0UQxo1S6KN2InJYj0PxKDOtulO/xE9dKUjKFR+Ua+wfhdYfLJSZY3rFZB8Fjqg5vMcBBDlNPmB7/zCjQZsow7WC
-Received: from ?IPV6:2a01:cb08:8680:f100:ee18:d70:d8d8:5591?
- (2a01cb088680f100ee180d70d8d85591.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8680:f100:ee18:d70:d8d8:5591])
- by smtp.gmail.com with ESMTPSA id
- u8-20020a056000038800b0033ae50e2c6asm7001625wrf.83.2024.02.12.06.19.20
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 12 Feb 2024 06:19:20 -0800 (PST)
-Message-ID: <8e198a6f-ccb7-4438-9a0d-e983a6fcc29a@smile.fr>
-Date: Mon, 12 Feb 2024 15:19:20 +0100
+ with ESMTP id FoaEfFn_4EOO for <buildroot@lists.busybox.net>;
+ Mon, 12 Feb 2024 14:32:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=213.97.179.56;
+ helo=fanzine2.igalia.com; envelope-from=aperez@igalia.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CA0D341559
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA0D341559
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CA0D341559
+ for <buildroot@buildroot.org>; Mon, 12 Feb 2024 14:32:28 +0000 (UTC)
+Received: from 91-153-34-210.elisa-laajakaista.fi ([91.153.34.210] helo=kodama)
+ by fanzine2.igalia.com with esmtpsa 
+ (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+ id 1rZXM9-00GWZJ-1U; Mon, 12 Feb 2024 15:32:25 +0100
+Received: from localhost (kodama [local])
+ by kodama (OpenSMTPD) with ESMTPA id e3fdf137;
+ Mon, 12 Feb 2024 14:32:23 +0000 (UTC)
+From: Adrian Perez de Castro <aperez@igalia.com>
+To: buildroot@buildroot.org
+Date: Mon, 12 Feb 2024 16:32:19 +0200
+Message-ID: <20240212143222.1555220-3-aperez@igalia.com>
+X-Mailer: git-send-email 2.43.1
+In-Reply-To: <20240212143222.1555220-1-aperez@igalia.com>
+References: <20240212143222.1555220-1-aperez@igalia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <20240202093625.1409559-1-antoine.coutant@smile.fr>
- <20240202093625.1409559-6-antoine.coutant@smile.fr>
- <ZcOpY6BjPUgrj5r-@landeda>
-From: Antoine Coutant <antoine.coutant@smile.fr>
-In-Reply-To: <ZcOpY6BjPUgrj5r-@landeda>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1707747561; x=1708352361;
- darn=buildroot.org; 
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=IgzzBsnqyQF3VBIShznZBBPPvMx/L5PYyB6xyP3AKV8=;
- b=zuQJRmdNNPb6eUdnQp1FIYtzOjfw9OLGThCLfWUA83IEBRJow8carrAldUorJQSkzJ
- krhF8RFDk1DKB60OwcecLjoEIiGbc7oV3wEaR2qfrO2nBqtWM8a1vNf5Btd/Tgw4l+Zk
- jHoiU9th0fymCFnovABAWyhNlXW5Hhay2GWkFYf9BHZCGFJbPm8UBv4YcqJ850wq3M3/
- UvgQ305wLXrJ8oosHJF+uss4z1+fZSN+5OudG19LGuP7+CwGr3c6wihlzVDY+Sw+tbe2
- mD2F0EuAJPOT5yRi/nUmhElDZADb//xKYRaG33dk8xDGrqWAjVaBheeNPlxLpd6SgBNH
- hnjQ==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=igalia.com; 
+ s=20170329; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
+ Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+ Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+ :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=DW8cKlzLmKJZ0UPmv7BNToCyp7tvSaV1WOqVW2vfvYw=; b=CURC4OreUOE6ziAAHgxAwSTfKm
+ KLyYevYuVOvzdOcZY8987oXWv8opM1/qx8OWn/VmcIN1fr84Uhr4gvJAumYk/bJ4hY47OQ7J+7kOQ
+ UVk7sV+qks3H9/VzoZUxc4fy/hLjAWhPZbtjTb/Uikp+QJfNUIszrbsv5oMXcv6ft7k4xXxLlzP1F
+ uaVHB9Zn28Kplce3U3nJQJyLuW9AaCvJwmnB8SdW/T/zEqHx+WgjpKvzI0z5q+1Ejs+rSdgQjxDlF
+ 1k1dEfPGnKlOwq2PM/d8QZOhyj8LZNtrFx3juh/Rtj2azl126ssYtd9nytZaa0QpqFZ+p0UACZWTs
+ 1t7fIACA==;
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=smile.fr
+ dmarc=none (p=none dis=none)
+ header.from=igalia.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=smile-fr.20230601.gappssmtp.com
- header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=zuQJRmdN
-Subject: Re: [Buildroot] [PATCH v4 5/7] package/opencl-icd-loader: new
- package
+ unprotected) header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256
+ header.s=20170329 header.b=CURC4Ore
+Subject: [Buildroot] [PATCH 2/2] package/wpewebkit: update ARM NEON patch
+ for 2.42.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -113,129 +84,311 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: sebastian.weyer@smile.fr, bernd@kuhls.net, romain.naour@smile.fr,
- buildroot@buildroot.org
+Cc: Adrian Perez de Castro <aperez@igalia.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Yann, All,
+Update patch to compile correctly with newer versions of GCC, which
+has gotten stricter about the placement of the alignas() attribute.
 
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+---
+ ...cpp-fails-to-build-NEON-fast-path-se.patch | 105 ++++++++++--------
+ 1 file changed, 57 insertions(+), 48 deletions(-)
 
-On 07/02/2024 17:01, Yann E. MORIN wrote:
-> Antoine, All,
->
-> On 2024-02-02 10:36 +0100, Antoine Coutant spake thusly:
->> From: Sebastian Weyer <sebastian.weyer@smile.fr>
->>
->> With this package it is possible to have multiple implementations of
->> OpenCL at the same time. This package provides a libOpenCL.so file that
->> captures the OpenCL API calls and forwards them to the correct
->> implementation of OpenCL. OpenCL implementations can be manually
->> registered by creating a file containing its full file path in
->> /etc/OpenCL/vendors/<implementation>.icd[1]
->>
->> This package is required by certain OpenCL implementations, for example
->> Mesa3D's Clover implementation if it is not built in standalone mode.
->>
->> [1] https://github.com/KhronosGroup/OpenCL-ICD-Loader#registering-icds
->>
->> Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
->> Signed-off-by: Antoine Coutant <antoine.coutant@smile.fr>
->> ---
-> [--SNIP--]
->> diff --git a/package/opencl-icd-loader/Config.in b/package/opencl-icd-loader/Config.in
->> new file mode 100644
->> index 0000000000..405dc5401a
->> --- /dev/null
->> +++ b/package/opencl-icd-loader/Config.in
->> @@ -0,0 +1,12 @@
->> +config BR2_PACKAGE_OPENCL_ICD_LOADER
->> +	bool "OpenCL-ICD-Loader"
->> +	depends on BR2_INSTALL_LIBSTDCPP
->> +	depends on BR2_PACKAGE_HAS_LIBOPENCL
->> +	select BR2_PACKAGE_OPENCL_HEADERS
-> Following on the review of the previous patch: maybe that could rely on
-> mesa3d-headers, and if so, we'ds not need to introduce a new
-> opencl-headers package.
+diff --git a/package/wpewebkit/0001-FELightningNEON.cpp-fails-to-build-NEON-fast-path-se.patch b/package/wpewebkit/0001-FELightningNEON.cpp-fails-to-build-NEON-fast-path-se.patch
+index ea1676abb6..17d4957657 100644
+--- a/package/wpewebkit/0001-FELightningNEON.cpp-fails-to-build-NEON-fast-path-se.patch
++++ b/package/wpewebkit/0001-FELightningNEON.cpp-fails-to-build-NEON-fast-path-se.patch
+@@ -1,4 +1,4 @@
+-From da159b0150cba0e5e5251e4cc6a090440f73cb7c Mon Sep 17 00:00:00 2001
++From 5ba2d275457c4fdf1efdcca8351792400bda5679 Mon Sep 17 00:00:00 2001
+ From: Adrian Perez de Castro <aperez@igalia.com>
+ Date: Thu, 2 Jun 2022 11:19:06 +0300
+ Subject: [PATCH] FELightningNEON.cpp fails to build, NEON fast path seems
+@@ -33,38 +33,47 @@ left for a follow-up fix.
+ * Source/WebCore/platform/graphics/filters/software/FELightingSoftwareApplier.h:
+ 
+ Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+-[Upstream status: https://bugs.webkit.org/show_bug.cgi?id=241182]
++Upstream: https://bugs.webkit.org/show_bug.cgi?id=241182
+ ---
+  Source/WebCore/Sources.txt                    |  1 +
+- .../cpu/arm/filters/FELightingNEON.cpp        |  4 +-
++ .../cpu/arm/filters/FELightingNEON.cpp        |  6 +--
+  .../graphics/cpu/arm/filters/FELightingNEON.h | 54 +++++++++----------
+  .../graphics/filters/DistantLightSource.h     |  4 ++
+  .../platform/graphics/filters/FELighting.h    |  7 ---
+  .../graphics/filters/PointLightSource.h       |  4 ++
+  .../graphics/filters/SpotLightSource.h        |  4 ++
+  .../software/FELightingSoftwareApplier.h      | 16 ++++++
+- 8 files changed, 58 insertions(+), 36 deletions(-)
++ 8 files changed, 59 insertions(+), 37 deletions(-)
+ 
+ diff --git a/Source/WebCore/Sources.txt b/Source/WebCore/Sources.txt
+-index 8ce3510fe1a8..efd56bcb8746 100644
++index 9ca28a7b2bc0..ed2c7f9f41ee 100644
+ --- a/Source/WebCore/Sources.txt
+ +++ b/Source/WebCore/Sources.txt
+-@@ -2136,6 +2136,7 @@ platform/graphics/WebMResourceClient.cpp
+- platform/graphics/WOFFFileFormat.cpp
+- platform/graphics/WidthIterator.cpp
++@@ -2303,6 +2303,7 @@ platform/graphics/controls/MeterPart.cpp
++ platform/graphics/controls/ProgressBarPart.cpp
++ platform/graphics/controls/SliderTrackPart.cpp
+  platform/graphics/cpu/arm/filters/FEBlendNeonApplier.cpp
+ +platform/graphics/cpu/arm/filters/FELightingNEON.cpp
+  platform/graphics/displaylists/DisplayList.cpp
+  platform/graphics/displaylists/DisplayListDrawingContext.cpp
+  platform/graphics/displaylists/DisplayListItems.cpp
+ diff --git a/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.cpp b/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.cpp
+-index f6ff8c20a5a8..42a97ffc5372 100644
++index f6ff8c20a5a8..dced3d55eb4e 100644
+ --- a/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.cpp
+ +++ b/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.cpp
++@@ -35,7 +35,7 @@ namespace WebCore {
++ //   ALPHAX_Q ALPHAY_Q REMAPX_D REMAPY_D
++
++
++-static alignas(16) short s_FELightingConstantsForNeon[] = {
+++alignas(16) static short s_FELightingConstantsForNeon[] = {
++     // Alpha coefficients.
++     -2, 1, 0, -1, 2, 1, 0, -1,
++     0, -1, -2, -1, 0, 1, 2, 1,
+ @@ -49,7 +49,7 @@ short* feLightingConstantsForNeon()
+      return s_FELightingConstantsForNeon;
+  }
+- 
++
+ -void FELighting::platformApplyNeonWorker(FELightingPaintingDataForNeon* parameters)
+ +void FELightingSoftwareApplier::platformApplyNeonWorker(FELightingPaintingDataForNeon* parameters)
+  {
+@@ -73,26 +82,26 @@ index f6ff8c20a5a8..42a97ffc5372 100644
+ @@ -464,7 +464,7 @@ TOSTRING(neonDrawLighting) ":" NL
+      "b .lightStrengthCalculated" NL
+  ); // NOLINT
+- 
++
+ -int FELighting::getPowerCoefficients(float exponent)
+ +int FELightingSoftwareApplier::getPowerCoefficients(float exponent)
+  {
+      // Calling a powf function from the assembly code would require to save
+      // and reload a lot of NEON registers. Since the base is in range [0..1]
+ diff --git a/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.h b/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.h
+-index b17c603d40d3..c6d17f573eca 100644
++index b17c603d40d3..fd23e31cce29 100644
+ --- a/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.h
+ +++ b/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.h
+ @@ -24,14 +24,15 @@
+   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+   */
+- 
++
+ -#ifndef FELightingNEON_h
+ -#define FELightingNEON_h
+ +#pragma once
+- 
++
+  #if CPU(ARM_NEON) && CPU(ARM_TRADITIONAL) && COMPILER(GCC_COMPATIBLE)
+- 
++
+ -#include "FELighting.h"
+ +#include "FELightingSoftwareApplier.h"
+ +#include "ImageBuffer.h"
+@@ -100,19 +109,19 @@ index b17c603d40d3..c6d17f573eca 100644
+  #include "SpotLightSource.h"
+ +#include <wtf/ObjectIdentifier.h>
+  #include <wtf/ParallelJobs.h>
+- 
++
+  namespace WebCore {
+ @@ -93,14 +94,14 @@ extern "C" {
+  void neonDrawLighting(FELightingPaintingDataForNeon*);
+  }
+- 
++
+ -inline void FELighting::platformApplyNeon(const LightingData& data, const LightSource::PaintingData& paintingData)
+ +inline void FELightingSoftwareApplier::applyPlatformNeon(const FELightingSoftwareApplier::LightingData& data, const LightSource::PaintingData& paintingData)
+  {
+ -    alignas(16) FELightingFloatArgumentsForNeon floatArguments;
+ -    FELightingPaintingDataForNeon neonData = {
+ -        data.pixels->data(),
+-+    WebCore::FELightingFloatArgumentsForNeon alignas(16) floatArguments;
+++    alignas(16) WebCore::FELightingFloatArgumentsForNeon floatArguments;
+ +    WebCore::FELightingPaintingDataForNeon neonData = {
+ +        data.pixels->bytes(),
+          1,
+@@ -126,15 +135,15 @@ index b17c603d40d3..c6d17f573eca 100644
+ @@ -111,23 +112,23 @@ inline void FELighting::platformApplyNeon(const LightingData& data, const LightS
+      // Set light source arguments.
+      floatArguments.constOne = 1;
+- 
++
+ -    auto color = m_lightingColor.toColorTypeLossy<SRGBA<uint8_t>>().resolved();
+ +    auto color = data.lightingColor.toColorTypeLossy<SRGBA<uint8_t>>().resolved();
+- 
++
+      floatArguments.colorRed = color.red;
+      floatArguments.colorGreen = color.green;
+      floatArguments.colorBlue = color.blue;
+      floatArguments.padding4 = 0;
+- 
++
+ -    if (m_lightSource->type() == LS_POINT) {
+ +    if (data.lightSource->type() == LS_POINT) {
+          neonData.flags |= FLAG_POINT_LIGHT;
+@@ -181,7 +190,7 @@ index b17c603d40d3..c6d17f573eca 100644
+      }
+      if (floatArguments.diffuseConstant == 1)
+          neonData.flags |= FLAG_DIFFUSE_CONST_IS_1;
+- 
++
+ -    int optimalThreadNumber = ((data.widthDecreasedByOne - 1) * (data.heightDecreasedByOne - 1)) / s_minimalRectDimension;
+ +    static constexpr int minimalRectDimension = 100 * 100; // Empirical data limit for parallel jobs
+ +    int optimalThreadNumber = ((data.width - 2) * (data.height - 2)) / minimalRectDimension;
+@@ -189,7 +198,7 @@ index b17c603d40d3..c6d17f573eca 100644
+          // Initialize parallel jobs
+ -        ParallelJobs<FELightingPaintingDataForNeon> parallelJobs(&WebCore::FELighting::platformApplyNeonWorker, optimalThreadNumber);
+ +        ParallelJobs<FELightingPaintingDataForNeon> parallelJobs(&FELightingSoftwareApplier::platformApplyNeonWorker, optimalThreadNumber);
+- 
++
+          // Fill the parameter array
+          int job = parallelJobs.numberOfJobs();
+          if (job > 1) {
+@@ -213,42 +222,42 @@ index b17c603d40d3..c6d17f573eca 100644
+              return;
+ @@ -199,5 +201,3 @@ inline void FELighting::platformApplyNeon(const LightingData& data, const LightS
+  } // namespace WebCore
+- 
++
+  #endif // CPU(ARM_NEON) && COMPILER(GCC_COMPATIBLE)
+ -
+ -#endif // FELightingNEON_h
+ diff --git a/Source/WebCore/platform/graphics/filters/DistantLightSource.h b/Source/WebCore/platform/graphics/filters/DistantLightSource.h
+-index 0660143fc1cf..2b1e86d99fa4 100644
++index 70f583b36e2c..7d5d27e5ccf8 100644
+ --- a/Source/WebCore/platform/graphics/filters/DistantLightSource.h
+ +++ b/Source/WebCore/platform/graphics/filters/DistantLightSource.h
+-@@ -25,6 +25,10 @@
+- #include "LightSource.h"
++@@ -26,6 +26,10 @@
++ #include <wtf/ArgumentCoder.h>
+  #include <wtf/Ref.h>
+- 
++
+ +namespace WTF {
+ +class TextStream;
+ +} // namespace WTF
+ +
+  namespace WebCore {
+- 
++
+  class DistantLightSource : public LightSource {
+ diff --git a/Source/WebCore/platform/graphics/filters/FELighting.h b/Source/WebCore/platform/graphics/filters/FELighting.h
+-index 0c073bc13f8c..e0db00545c17 100644
++index 179edf6dba24..694d712d56fd 100644
+ --- a/Source/WebCore/platform/graphics/filters/FELighting.h
+ +++ b/Source/WebCore/platform/graphics/filters/FELighting.h
+ @@ -35,8 +35,6 @@
+- 
++
+  namespace WebCore {
+- 
++
+ -struct FELightingPaintingDataForNeon;
+ -
+  class FELighting : public FilterEffect {
+  public:
+-     const Color& lightingColor() const { return m_lightingColor; }
+-@@ -67,11 +65,6 @@ protected:
+- 
++     bool operator==(const FELighting&) const;
++@@ -68,11 +66,6 @@ protected:
++
+      std::unique_ptr<FilterEffectApplier> createSoftwareApplier() const override;
+- 
++
+ -#if CPU(ARM_NEON) && CPU(ARM_TRADITIONAL) && COMPILER(GCC_COMPATIBLE)
+ -    static int getPowerCoefficients(float exponent);
+ -    inline void platformApplyNeon(const LightingData&, const LightSource::PaintingData&);
+@@ -258,34 +267,34 @@ index 0c073bc13f8c..e0db00545c17 100644
+      float m_surfaceScale;
+      float m_diffuseConstant;
+ diff --git a/Source/WebCore/platform/graphics/filters/PointLightSource.h b/Source/WebCore/platform/graphics/filters/PointLightSource.h
+-index 126b3b2350f6..d906db21aa9c 100644
++index a8cfdab895a9..34f867bba237 100644
+ --- a/Source/WebCore/platform/graphics/filters/PointLightSource.h
+ +++ b/Source/WebCore/platform/graphics/filters/PointLightSource.h
+ @@ -26,6 +26,10 @@
+  #include "LightSource.h"
+  #include <wtf/Ref.h>
+- 
++
+ +namespace WTF {
+ +class TextStream;
+ +} // namespace WTF
+ +
+  namespace WebCore {
+- 
++
+  class PointLightSource : public LightSource {
+ diff --git a/Source/WebCore/platform/graphics/filters/SpotLightSource.h b/Source/WebCore/platform/graphics/filters/SpotLightSource.h
+-index 641b205f986d..64380d9b6eb8 100644
++index 6404467a5b6f..5cac38f22362 100644
+ --- a/Source/WebCore/platform/graphics/filters/SpotLightSource.h
+ +++ b/Source/WebCore/platform/graphics/filters/SpotLightSource.h
+ @@ -26,6 +26,10 @@
+  #include "LightSource.h"
+  #include <wtf/Ref.h>
+- 
++
+ +namespace WTF {
+ +class TextStream;
+ +} // namespace WTF
+ +
+  namespace WebCore {
+- 
++
+  class SpotLightSource : public LightSource {
+ diff --git a/Source/WebCore/platform/graphics/filters/software/FELightingSoftwareApplier.h b/Source/WebCore/platform/graphics/filters/software/FELightingSoftwareApplier.h
+ index c974d92115ff..e2896660cfbd 100644
+@@ -293,14 +302,14 @@ index c974d92115ff..e2896660cfbd 100644
+ +++ b/Source/WebCore/platform/graphics/filters/software/FELightingSoftwareApplier.h
+ @@ -36,6 +36,7 @@
+  namespace WebCore {
+- 
++
+  class FELighting;
+ +struct FELightingPaintingDataForNeon;
+- 
++
+  class FELightingSoftwareApplier final : public FilterEffectConcreteApplier<FELighting> {
+      WTF_MAKE_FAST_ALLOCATED;
+ @@ -132,8 +133,23 @@ private:
+- 
++
+      static void applyPlatformGenericPaint(const LightingData&, const LightSource::PaintingData&, int startY, int endY);
+      static void applyPlatformGenericWorker(ApplyParameters*);
+ +
+@@ -319,10 +328,10 @@ index c974d92115ff..e2896660cfbd 100644
+ +
+      static void applyPlatform(const LightingData&);
+  };
+- 
++
+  } // namespace WebCore
+ +
+ +#include "FELightingNEON.h"
+--- 
+-2.37.3
++--
++2.43.1
+ 
+-- 
+2.43.1
 
-As I answered to the previous patch review, the headers installed
-
-by mesa differ from those installed by OpenCL-Headers. Indeed,
-
-mesa headers are fetched from OpenCL-Headers by [1] but
-
-nothing guarantees that their version will match OpenCL-ICD-Loader
-
-version. Therefore, the OpenCL-ICD-Loader build fails with mesa
-
-headers. That's why we need OpenCL-Headers here.
-
-
-I'll explain it in the v5 commit message.
-
-
-[1}: 
-https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/bin/khronos-update.py
-
-
-Regards,
-
-Antoine Coutant
-
->
-> Regards,
-> Yann E. MORIN.
->
->> +	help
->> +	  OpenCL defines an Installable Client Driver (ICD) mechanism to
->> +	  allow developers to build applications against an Installable
->> +	  Client Driver loader (ICD loader) rather than linking their
->> +	  applications against a specific OpenCL implementation.
->> +
->> +	  https://github.com/KhronosGroup/OpenCL-ICD-Loader
->> diff --git a/package/opencl-icd-loader/opencl-icd-loader.hash b/package/opencl-icd-loader/opencl-icd-loader.hash
->> new file mode 100644
->> index 0000000000..1c894f1293
->> --- /dev/null
->> +++ b/package/opencl-icd-loader/opencl-icd-loader.hash
->> @@ -0,0 +1,3 @@
->> +# locally generated
->> +sha256  af8df96f1e1030329e8d4892ba3aa761b923838d4c689ef52d97822ab0bd8917  OpenCL-ICD-Loader-2023.12.14.tar.gz
->> +sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
->> diff --git a/package/opencl-icd-loader/opencl-icd-loader.mk b/package/opencl-icd-loader/opencl-icd-loader.mk
->> new file mode 100644
->> index 0000000000..04f6fb4b85
->> --- /dev/null
->> +++ b/package/opencl-icd-loader/opencl-icd-loader.mk
->> @@ -0,0 +1,19 @@
->> +################################################################################
->> +#
->> +# opencl-icd-loader
->> +#
->> +################################################################################
->> +
->> +OPENCL_ICD_LOADER_VERSION = 2023.12.14
->> +OPENCL_ICD_LOADER_SOURCE = OpenCL-ICD-Loader-$(OPENCL_ICD_LOADER_VERSION).tar.gz
->> +OPENCL_ICD_LOADER_SITE = $(call github,KhronosGroup,OpenCL-ICD-Loader,v$(OPENCL_ICD_LOADER_VERSION))
->> +OPENCL_ICD_LOADER_LICENSE = Apache-2.0
->> +OPENCL_ICD_LOADER_LICENSE_FILES = LICENSE
->> +OPENCL_ICD_LOADER_INSTALL_STAGING = YES
->> +
->> +OPENCL_ICD_LOADER_DEPENDENCIES = opencl-headers
->> +
->> +OPENCL_ICD_LOADER_CONF_OPTS += -DOPENCL_ICD_LOADER_HEADERS_DIR=$(STAGING_DIR)/usr/include
->> +
->> +$(eval $(cmake-package))
->> +$(eval $(host-cmake-package))
->> -- 
->> 2.25.1
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot@buildroot.org
->> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
