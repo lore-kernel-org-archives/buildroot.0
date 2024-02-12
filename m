@@ -4,65 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5CEC3C4829B
-	for <buildroot@archiver.kernel.org>; Mon, 12 Feb 2024 12:48:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 674D7C4829B
+	for <buildroot@archiver.kernel.org>; Mon, 12 Feb 2024 12:56:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DD2C083C19;
-	Mon, 12 Feb 2024 12:48:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1114483CC0;
+	Mon, 12 Feb 2024 12:56:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zrD7CGnhVew3; Mon, 12 Feb 2024 12:48:05 +0000 (UTC)
+	with ESMTP id mNJFTX_ITyK2; Mon, 12 Feb 2024 12:56:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F118583C1A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1ABE583CC2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F118583C1A;
-	Mon, 12 Feb 2024 12:48:04 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BBFB01BF3D8
- for <buildroot@lists.busybox.net>; Mon, 12 Feb 2024 12:48:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1ABE583CC2;
+	Mon, 12 Feb 2024 12:56:55 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 495511BF3D8
+ for <buildroot@lists.busybox.net>; Mon, 12 Feb 2024 12:56:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A934C610DD
- for <buildroot@lists.busybox.net>; Mon, 12 Feb 2024 12:48:03 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 36C2283CC2
+ for <buildroot@lists.busybox.net>; Mon, 12 Feb 2024 12:56:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4n0T-RPsrYty for <buildroot@lists.busybox.net>;
- Mon, 12 Feb 2024 12:48:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id W08JtXwEJ9T3 for <buildroot@lists.busybox.net>;
+ Mon, 12 Feb 2024 12:56:52 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
  helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org CAD026105B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CAD026105B
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6600383CC0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6600383CC0
 Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CAD026105B
- for <buildroot@buildroot.org>; Mon, 12 Feb 2024 12:48:02 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6600383CC0
+ for <buildroot@buildroot.org>; Mon, 12 Feb 2024 12:56:52 +0000 (UTC)
 Received: from tuxedoOT.fritz.box (unknown [212.37.174.96])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
  key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
  (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id 906792C837B0
- for <buildroot@buildroot.org>; Mon, 12 Feb 2024 13:48:00 +0100 (CET)
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id 167AB2C837B0
+ for <buildroot@buildroot.org>; Mon, 12 Feb 2024 13:56:50 +0100 (CET)
 To: buildroot@buildroot.org
-Date: Mon, 12 Feb 2024 13:47:59 +0100
-Message-Id: <20240212124759.209203-1-buildroot@bubu1.eu>
+Date: Mon, 12 Feb 2024 13:56:49 +0100
+Message-Id: <20240212125649.210272-1-buildroot@bubu1.eu>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=bubu1.eu; s=bubu; 
- t=1707742080; bh=jWRCzsNXhLQ7OryaaPqRNQFzWiqa4i4UR93BS+Dv5F0=;
+ t=1707742610; bh=YlSt+kWtQAJx2WfKsWDjUXEEn/iW8Qt+8NvmkEYCHaU=;
  h=From:To:Subject:Date;
- b=GxPVFxOSFe0uaZJTpTmwydVkcd+xwWXVdsO6+ah2fEYZiSldph6XIIADeMqFxXu4d
- j09K6695d9ESogYDL1Sq7PJoGZa39vdlSbv9i0hUuTTMjUCb2NdM0HtN3c7GDgqHN4
- x2rsl5TnNWm+yh8Mg2ugg8zg6uktLg6QkdMROlg8gXKKCPJo+8UYpQt5x5ct8ZEyUn
- Mir4PG5i9n1QmVuwmneQnXiGv+oUQ049aZ8A5T/+jMS8sAYkt2/cW9PUsp7sgIKJCU
- he+iDR3V+2uW3M0k7/XY0K85jCeAhNxl4d+t6SJiFXc5YJxLj4PBVW5YkTg1iL9v5b
- H2KGNMLbLZRAw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=U0N9uwpZMjfqZrNied8enePkokb94rRUO7gd0viAKd7t3bU+vx0lPv6DuPcCYQf2J
+ FTtVgJk9lWVRm69PQwX/QP8sDzkW13jkMDWYAYHn16b30REov03qIOUvsNbz54hIkG
+ Sph8v40Mc4qBwaFkiVLFOO37x7rVPuUV+LTYb3FkDRJxg/zRRO6ocRqg9VDC8HBrga
+ 9L/nqob0geIYa5ZTnBtX/k9CC89p6fkJbTFDyWJ6DG0HisKe2+g4vy4F9ugGg0VECG
+ YIDsfjEW/yuk2JXBhx/wkGJBGw4zcx2KPTv0t6cE7bzulW7xPtD/TgFGJ3ObpK8dVH
+ OgMYpps9PsrBw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=bubu1.eu header.i=@bubu1.eu
- header.a=rsa-sha256 header.s=bubu header.b=GxPVFxOS
+ header.a=rsa-sha256 header.s=bubu header.b=U0N9uwpZ
 Subject: [Buildroot] [PATCH] support/testing: add python-asn1crypto runtime
  test
 X-BeenThere: buildroot@buildroot.org
@@ -83,6 +83,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 ---
  .../tests/package/sample_python_asn1crypto.py       | 11 +++++++++++
  .../testing/tests/package/test_python_asn1crypto.py | 13 +++++++++++++
