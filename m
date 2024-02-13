@@ -4,67 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A737C48260
-	for <buildroot@archiver.kernel.org>; Tue, 13 Feb 2024 20:49:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75678C4829A
+	for <buildroot@archiver.kernel.org>; Tue, 13 Feb 2024 21:01:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A840180E34;
-	Tue, 13 Feb 2024 20:49:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 07F0381EAD;
+	Tue, 13 Feb 2024 21:01:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hGBYx5DK4iUo; Tue, 13 Feb 2024 20:49:28 +0000 (UTC)
+	with ESMTP id ry-0S-wXBZPp; Tue, 13 Feb 2024 21:01:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C2AB280C16
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 18E5C81EB0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C2AB280C16;
-	Tue, 13 Feb 2024 20:49:28 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 06B341BF2AF
- for <buildroot@lists.busybox.net>; Tue, 13 Feb 2024 20:49:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 18E5C81EB0;
+	Tue, 13 Feb 2024 21:01:00 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B7F3C1BF2AF
+ for <buildroot@lists.busybox.net>; Tue, 13 Feb 2024 21:00:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E6D8B409FC
- for <buildroot@lists.busybox.net>; Tue, 13 Feb 2024 20:49:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B250A81EAD
+ for <buildroot@lists.busybox.net>; Tue, 13 Feb 2024 21:00:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id o0mN-JQSt5Ch for <buildroot@lists.busybox.net>;
- Tue, 13 Feb 2024 20:49:25 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 04D91409F5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04D91409F5
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 04D91409F5
- for <buildroot@buildroot.org>; Tue, 13 Feb 2024 20:49:24 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 8417213F846;
- Tue, 13 Feb 2024 21:49:20 +0100 (CET)
-From: Julien Olivain <ju.o@free.fr>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sZKmwM_1qWEI for <buildroot@lists.busybox.net>;
+ Tue, 13 Feb 2024 21:00:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 59BBF81EA9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 59BBF81EA9
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 59BBF81EA9
+ for <buildroot@buildroot.org>; Tue, 13 Feb 2024 21:00:56 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id
+ ffacd0b85a97d-337d05b8942so3902484f8f.3
+ for <buildroot@buildroot.org>; Tue, 13 Feb 2024 13:00:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1707858054; x=1708462854;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=dp04HjSsci6ZkepgDqOyJCAPYqcmkVHxSS74DBt/psc=;
+ b=HPYCBRP03DtzrsjI2TVmD5ulfwjXQEhsO5YF6VdYPH/8XPO0v7CB9uxMLznToxb0XH
+ suvA0dhIVTC9GqLxAi8+9+HL1zaGqEK2E7MsU9B75JX3PPbVdhEikjhgBDLIxjL1GJOz
+ 4WSHiY/xCP+oWixTt+Wo/UCJ3HddCbHRFJKqtz8FTji/M8RP4fHevc3dKb5xkEDrYh1v
+ T+SgVvX1/3E0vCZe5d0SBCz4UMEmnyg5G1mXRGrVuuX8oYutXZ97fcaHR1wouMkv7wgl
+ K7VtTBEjAA5QIfYtuN2gW2mLH4Tjk6RQp+gHdQC8NpDtM/Q7go+as/YHIx5DpUktTD+1
+ KPLA==
+X-Gm-Message-State: AOJu0Yxhn+HRXftnBpiujKmNjtFbS0NjA0xkdzS3VvVGVaZCC4qIO8/5
+ 2XHuqTcCdWq2Gxulo1ADj0qZTwB888h7S4Pp5RMoSRuJDcKEo+r28LyoiyDMALo=
+X-Google-Smtp-Source: AGHT+IGfDVBUYYDKFotBcYXxF4lEKSukNEYblSFhYayxhAAJf30MgcolORLQzVsNl7KhQfS77CAI6w==
+X-Received: by 2002:a5d:4651:0:b0:33b:3fe8:640e with SMTP id
+ j17-20020a5d4651000000b0033b3fe8640emr296915wrs.16.1707858054084; 
+ Tue, 13 Feb 2024 13:00:54 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ r4-20020a05600c298400b0040fdc7f4fcdsm12745941wmd.4.2024.02.13.13.00.53
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 13 Feb 2024 13:00:53 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 13 Feb 2024 21:49:15 +0100
-Message-ID: <20240213204915.27898-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.43.1
+Date: Tue, 13 Feb 2024 22:00:51 +0100
+Message-ID: <20240213210051.162913-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1707857361;
- bh=NiaxqZ5+cHKGljgRtoKpxj3zgmWHaucbRDErRzIgtGo=;
- h=From:To:Cc:Subject:Date:From;
- b=NrEDX3rsJWN/CjQi/KWTjruoB0+YG6R0daUk5fTPhBERyj7t9ePtpftC3pV2Nck4w
- 82dSM1XiZ265u5t+rVoiUvdXPueGce/ZueR64UbCWqIvS42DlGlE1huhEp3aMhORR5
- /3C/YYhXhKT/+ptH6DHSex6rfUVVM/av5thax/D/xu01f2gh06PtaICb3nUjrb6mYl
- fbal+fb+vil/rXXlIZDVr8hGI0ycdQS5c6gB3cr89ZQe8kla2ggI3ka1YGzG+Wd9/S
- +KbJnKpJztY2tsLplPIHfB9Dyvc6QQhMahuA4WGyXHze1pXLeOAo7eM75mQUbEfkaN
- iwd2+zR0rqonw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1707858054; x=1708462854; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=dp04HjSsci6ZkepgDqOyJCAPYqcmkVHxSS74DBt/psc=;
+ b=k2p3fSKnV6z0Bo1dOgnyvVoqVKq043Ls9uxVCFvr16g7XpXwhf28/70yidyk+DHAzK
+ 3eqjstG5OJH/ZAl+ev/TYfzHeJJaYwLuYXeXvKLc7eWNlWI2VjywzYWr510tXg2izL/M
+ li3QPxWC7hWCPLoRdBdsZZxQDvj4vzigsxc20BZpX3AGGZJeHYB0fkg9xwQE7RCBSXdB
+ a9RCeRBzcivDef2jPUhUawVULyRCWz4p3ZKHzVn/RbK1hjBI/ZTek5gHcuJjl6/bTFRU
+ YbuVBwajOPifG5C2AbahzrgkM8Q1+nXCg2eAz+cJZa1CmLsE9awVZX7milPwTx12/HaH
+ m4bg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=NrEDX3rs
-Subject: [Buildroot] [PATCH 1/1] support/testing: add lvm2 runtime test
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=k2p3fSKn
+Subject: [Buildroot] [PATCH 1/1] package/botan: fix uclibc build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,213 +99,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- DEVELOPERS                                    |   2 +
- support/testing/tests/package/test_lvm2.py    | 163 ++++++++++++++++++
- .../package/test_lvm2/linux-lvm2.fragment     |   2 +
- 3 files changed, 167 insertions(+)
- create mode 100644 support/testing/tests/package/test_lvm2.py
- create mode 100644 support/testing/tests/package/test_lvm2/linux-lvm2.fragment
+getentropy is enabled by default since version 3.0 and
+https://github.com/randombit/botan/commit/8642f2a99deefc85cdb512ee50d9f62c5e0ae4b8
+and explicit_bzero is also enabled since version 3.0 and
+https://github.com/randombit/botan/commit/e6819a380fb67c1be546dc618248b62d93266423
+resulting in the following build failure since bump to version 3.2.0 in
+commit 2f8feb66204ff661e9fd5f508e2dfd1ebc0f2813:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 0d12c3abcb..e6d79f3675 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1810,6 +1810,8 @@ F:	support/testing/tests/package/test_libgpgme.py
- F:	support/testing/tests/package/test_libjxl.py
- F:	support/testing/tests/package/test_lrzip.py
- F:	support/testing/tests/package/test_ltrace.py
-+F:	support/testing/tests/package/test_lvm2.py
-+F:	support/testing/tests/package/test_lvm2/
- F:	support/testing/tests/package/test_lzip.py
- F:	support/testing/tests/package/test_lsof.py
- F:	support/testing/tests/package/test_lz4.py
-diff --git a/support/testing/tests/package/test_lvm2.py b/support/testing/tests/package/test_lvm2.py
-new file mode 100644
-index 0000000000..bdbae7a4ec
---- /dev/null
-+++ b/support/testing/tests/package/test_lvm2.py
-@@ -0,0 +1,163 @@
-+import os
-+import subprocess
-+
-+import infra.basetest
-+
-+
-+class TestLvm2(infra.basetest.BRTest):
-+    # This test creates a lvm2 volume. A specific Kernel need to be
-+    # built with a config fragment enabling this support. This test
-+    # also uses resize2fs from e2fsprogs.
-+    kernel_fragment = \
-+        infra.filepath("tests/package/test_lvm2/linux-lvm2.fragment")
-+    config = \
-+        f"""
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.77"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-+        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{kernel_fragment}"
-+        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+        BR2_PACKAGE_E2FSPROGS=y
-+        BR2_PACKAGE_E2FSPROGS_RESIZE2FS=y
-+        BR2_PACKAGE_LVM2=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        BR2_TARGET_ROOTFS_CPIO_GZIP=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def get_free_disk_space(self, path):
-+        out, ret = self.emulator.run(f"df -k {path}")
-+        self.assertEqual(ret, 0)
-+        return int(out[1].split()[3])
-+
-+    def test_run(self):
-+        # Test configuration:
-+        storage_devs = ["/dev/vda", "/dev/vdb", "/dev/vdc"]
-+        storage_size = 16                       # Mega Bytes
-+        lvm_vg = "br_vg"                        # Volume Group name
-+        lvm_lv = "br_lv"                        # Logical Volume name
-+        lv_dev = f"/dev/{lvm_vg}/{lvm_lv}"      # Logical Volume dev name
-+        mnt_pt = "/mnt/lvm2-storage"
-+        data_file = f"{mnt_pt}/data.bin"
-+
-+        qemu_storage_opts = []
-+        for i in range(len(storage_devs)):
-+            disk_file = os.path.join(self.builddir, "images", f"disk{i}.img")
-+            self.emulator.logfile.write(f"Creating disk image: {disk_file}\n")
-+            self.emulator.logfile.flush()
-+            subprocess.check_call(
-+                ["dd", "if=/dev/zero", f"of={disk_file}",
-+                 "bs=1M", f"count={storage_size}"],
-+                stdout=self.emulator.logfile,
-+                stderr=self.emulator.logfile)
-+            opts = ["-drive", f"file={disk_file},if=virtio,format=raw"]
-+            qemu_storage_opts += opts
-+
-+        img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
-+        kern = os.path.join(self.builddir, "images", "Image")
-+        self.emulator.boot(arch="aarch64",
-+                           kernel=kern,
-+                           kernel_cmdline=["console=ttyAMA0"],
-+                           options=["-M", "virt", "-cpu", "cortex-a57", "-m", "256M",
-+                                    "-initrd", img] + qemu_storage_opts)
-+        self.emulator.login()
-+
-+        # Test the program can execute.
-+        self.assertRunOk("lvm version")
-+
-+        # We did not created any Physical Volume yet. We should NOT
-+        # see any of our storage devices in a pvscan.
-+        out, ret = self.emulator.run("pvscan")
-+        self.assertEqual(ret, 0)
-+        for dev in storage_devs:
-+            self.assertNotIn(dev, "\n".join(out))
-+
-+        # We initialize our Physical Volumes (PVs).
-+        pv_devs = " ".join(storage_devs)
-+        self.assertRunOk(f"pvcreate {pv_devs}")
-+
-+        # We run few diagnostic commands related to PVs.
-+        self.assertRunOk(f"pvck {pv_devs}")
-+        self.assertRunOk(f"pvdisplay {pv_devs}")
-+        self.assertRunOk("pvs")
-+
-+        # Now we initialized the PVs, we should see them in a pvscan.
-+        out, ret = self.emulator.run("pvscan")
-+        self.assertEqual(ret, 0)
-+        for dev in storage_devs:
-+            self.assertIn(dev, "\n".join(out))
-+
-+        # We create a Volume Group (VG) including two of our three
-+        # PVs.
-+        cmd = f"vgcreate {lvm_vg} {storage_devs[0]} {storage_devs[1]}"
-+        self.assertRunOk(cmd)
-+
-+        # We run few diagnostic commands related to VGs.
-+        self.assertRunOk(f"vgck {lvm_vg}")
-+        self.assertRunOk(f"vgdisplay {lvm_vg}")
-+        self.assertRunOk("vgscan")
-+        self.assertRunOk("vgs")
-+
-+        # We create a Logical Volume (LV) in our VG.
-+        self.assertRunOk(f"lvcreate -l 100%FREE -n {lvm_lv} {lvm_vg}")
-+
-+        # We check LVM created the LV device.
-+        self.assertRunOk(f"ls -al {lv_dev}")
-+
-+        # We run few diagnostic commands related to LVs.
-+        self.assertRunOk("lvscan")
-+        self.assertRunOk("lvs")
-+
-+        # We create a ext4 filesystem on our LV.
-+        self.assertRunOk(f"mkfs.ext4 {lv_dev}")
-+
-+        # We create a mount point directory and mount the device.
-+        self.assertRunOk(f"mkdir -p {mnt_pt}")
-+        self.assertRunOk(f"mount {lv_dev} {mnt_pt}")
-+
-+        # We create a data file in our new filesystem. Note: this file
-+        # is slightly larger than a single PV. This data file should
-+        # span over the two PVs in the VG.
-+        data_size = storage_size + 4
-+        cmd = f"dd if=/dev/urandom of={data_file} bs=1M count={data_size}"
-+        self.assertRunOk(cmd)
-+
-+        # We compute the hash of our data, and save it for later.
-+        hash_cmd = f"sha256sum {data_file}"
-+        out, ret = self.emulator.run(hash_cmd)
-+        self.assertEqual(ret, 0)
-+        data_sha256 = out[0]
-+
-+        # We compute the free space of the mount point.
-+        fs_free_space = self.get_free_disk_space(mnt_pt)
-+
-+        # We extend of VG with our third PV.
-+        self.assertRunOk(f"vgextend {lvm_vg} {storage_devs[2]}")
-+
-+        # We grow the LV to use all the space of the VG.
-+        self.assertRunOk(f"lvresize -l +100%FREE {lvm_vg}/{lvm_lv}")
-+
-+        # We resize the filesystem to use all the LV space.
-+        self.assertRunOk(f"resize2fs {lv_dev}")
-+
-+        # Now we grew the LV and resized the filesystem, we recompute
-+        # the free space and check we have more.
-+        fs2_free_space = self.get_free_disk_space(mnt_pt)
-+        self.assertGreater(fs2_free_space, fs_free_space)
-+
-+        # With all those on-the-fly operations on the mounted
-+        # filesystem, the data file should be intact. We should
-+        # recompute the same data checksum as before.
-+        out, ret = self.emulator.run(hash_cmd)
-+        self.assertEqual(ret, 0)
-+        self.assertEqual(out[0], data_sha256)
-+
-+        # Finally, we unmount the filesystem. It should not contain
-+        # any error.
-+        self.assertRunOk(f"umount {mnt_pt}")
-+        self.assertRunOk(f"e2fsck -f -n {lv_dev}")
-diff --git a/support/testing/tests/package/test_lvm2/linux-lvm2.fragment b/support/testing/tests/package/test_lvm2/linux-lvm2.fragment
-new file mode 100644
-index 0000000000..0fade167a3
---- /dev/null
-+++ b/support/testing/tests/package/test_lvm2/linux-lvm2.fragment
-@@ -0,0 +1,2 @@
-+CONFIG_MD=y
-+CONFIG_BLK_DEV_DM=y
+src/lib/entropy/getentropy/getentropy.cpp:26:9: error: '::getentropy' has not been declared; did you mean 'Getentropy'?
+   26 |    if(::getentropy(buf.data(), buf.size()) == 0) {
+      |         ^~~~~~~~~~
+      |         Getentropy
+
+Fixes: 2f8feb66204ff661e9fd5f508e2dfd1ebc0f2813
+ - http://autobuild.buildroot.org/results/d58c4730c770467b42af426545dd917ecc5fed17
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/botan/botan.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/botan/botan.mk b/package/botan/botan.mk
+index 7c290f04ad..88dbfa5807 100644
+--- a/package/botan/botan.mk
++++ b/package/botan/botan.mk
+@@ -49,7 +49,7 @@ BOTAN_CONF_OPTS += --without-stack-protector
+ endif
+ 
+ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+-BOTAN_CONF_OPTS += --without-os-feature=getauxval
++BOTAN_CONF_OPTS += --without-os-feature=explicit_bzero,getauxval,getentropy
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_BOOST_FILESYSTEM)$(BR2_PACKAGE_BOOST_SYSTEM),yy)
 -- 
-2.43.1
+2.43.0
 
 _______________________________________________
 buildroot mailing list
