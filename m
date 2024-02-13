@@ -4,76 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 701CAC48260
-	for <buildroot@archiver.kernel.org>; Tue, 13 Feb 2024 20:40:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F4A7C48260
+	for <buildroot@archiver.kernel.org>; Tue, 13 Feb 2024 20:43:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 12FB18224F;
-	Tue, 13 Feb 2024 20:40:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CEEA1822A3;
+	Tue, 13 Feb 2024 20:43:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8s30H_qZdJCW; Tue, 13 Feb 2024 20:40:29 +0000 (UTC)
+	with ESMTP id eBvGA5IcDqO6; Tue, 13 Feb 2024 20:43:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 351448227F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CDBFD822A6
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 351448227F;
-	Tue, 13 Feb 2024 20:40:29 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1D7F51BF2AF
- for <buildroot@lists.busybox.net>; Tue, 13 Feb 2024 20:40:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CDBFD822A6;
+	Tue, 13 Feb 2024 20:43:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E6C821BF2AF
+ for <buildroot@lists.busybox.net>; Tue, 13 Feb 2024 20:43:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0ADF38227F
- for <buildroot@lists.busybox.net>; Tue, 13 Feb 2024 20:40:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D42DB409F0
+ for <buildroot@lists.busybox.net>; Tue, 13 Feb 2024 20:43:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T2re6L0JCFMI for <buildroot@lists.busybox.net>;
- Tue, 13 Feb 2024 20:40:27 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.221.47;
- helo=mail-wr1-f47.google.com; envelope-from=thomas.devoogdt@gmail.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id h_6pbyuZFhxJ for <buildroot@lists.busybox.net>;
+ Tue, 13 Feb 2024 20:43:22 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.221.51;
+ helo=mail-wr1-f51.google.com; envelope-from=thomas.devoogdt@gmail.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D209A8224F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D209A8224F
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com
- [209.85.221.47])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D209A8224F
- for <buildroot@buildroot.org>; Tue, 13 Feb 2024 20:40:26 +0000 (UTC)
-Received: by mail-wr1-f47.google.com with SMTP id
- ffacd0b85a97d-33ce2d1882fso327877f8f.2
- for <buildroot@buildroot.org>; Tue, 13 Feb 2024 12:40:26 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C2461409ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2461409ED
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com
+ [209.85.221.51])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C2461409ED
+ for <buildroot@buildroot.org>; Tue, 13 Feb 2024 20:43:21 +0000 (UTC)
+Received: by mail-wr1-f51.google.com with SMTP id
+ ffacd0b85a97d-33ce2d1ab86so302984f8f.2
+ for <buildroot@buildroot.org>; Tue, 13 Feb 2024 12:43:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707856824; x=1708461624;
+ d=1e100.net; s=20230601; t=1707856999; x=1708461799;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=OPl+dXgmXjX/5qqFD/8bIeNrsraeWsgoaToFpe7qZOo=;
- b=KXnszg0rD2YMdmMvnL/8nEg39eC4gJ2k0vTKXvkkFgDtRZO8KerpDfjYpnpPTtrzf7
- UEFCX8jda+yH0+fOzkiXBekkKP5UWZP21CebUMNZniWNX1/MwKtYNrJDSJXMLRPn8aUI
- ZFY3YExj+bIn8oWVfM9jteu8gNLjXgJNF6/E43VpB6VZQ/RjFkYESqEb1mr8Dsj7MvJN
- jnyN/dI+UuQ9O+B/PDwjHt9GqAz4HgCDeaxnDFAOkb3C9J9SRXbwsTg8ixnFB/ulZk51
- PPNRSB9KFveT0CT507xZReqa1vJlEGNL6E1RE2oTeZ8cldgZWde6vNZCV+E+WWyDHtbJ
- dNQA==
-X-Gm-Message-State: AOJu0Yw/BrjNJ4I12beFfbUA6Hcv6VHjNLOTs9Nv5ok8I4pLHdBcM4Tx
- 1F1U9YQwRzRvklzLQ/++yHqKE1TgSN5GSZLPih/RLOueDleNFcfuUa6inWas
-X-Google-Smtp-Source: AGHT+IEbbLCG7qEFURNZtL07SsVs3cqjEx7hyxsf9+TZqFQ4JbnDAiRMz9dAI2rEhzEL9bxvM9+7gA==
-X-Received: by 2002:adf:f4d2:0:b0:33c:e2ca:8fcd with SMTP id
- h18-20020adff4d2000000b0033ce2ca8fcdmr248692wrp.22.1707856823446; 
- Tue, 13 Feb 2024 12:40:23 -0800 (PST)
+ bh=xTArRcD+9rz+6H+xEIwH8BDtCeP8B+zTT6dNwJfr7bg=;
+ b=E9I5x63cF6mMwELjXFoK+qu/o0i32PVHHItcPHUc4Wec+50uerJNjKk7hzKZvC6FQB
+ lK0nms2BJgASJVubhja2yW/fPb7gai1BXJuSAi3Out9zp6JH1Mjp1C3AhmlZxoglhT0P
+ L9OmIadDHHz2W0c6FXfjak6OOOQqMqVVzvYDkSpELRjkdrerBvYnZTj5wVC5bK33Izh2
+ TCoymsWUVNP9vRsvtxy7Rlo0AxCqwUMGCJLyps/LPmtRX62Z+4ta56FIEaBlJ5ldBr0Q
+ AXq+Rodz5ZReXHo9ZWD9ERZRdfhdTXzVOy+kBwt1fARGEGDU9OpKYJC971gDHqXrTxwh
+ DMgw==
+X-Gm-Message-State: AOJu0YxQC5g2QcsTO7n0ggy7XzImn60SZD+Zh0AfANr5TmGCQuRpB4Yc
+ K9maEcJ9ux8jfKAFo6UfQuNgLYDntwmP51NxRiMlhSnpY4Dzf+ZjNzPZMwHo
+X-Google-Smtp-Source: AGHT+IEW/vLxdL4KWQKa0E28X+Xge88sHSfJI3mgcxdhUjqlQ54Q2NbM5LD1+5ITO/NHfxhlWZmQGQ==
+X-Received: by 2002:a5d:458d:0:b0:33a:e7de:aa8b with SMTP id
+ p13-20020a5d458d000000b0033ae7deaa8bmr257843wrq.26.1707856998514; 
+ Tue, 13 Feb 2024 12:43:18 -0800 (PST)
 Received: from localhost.localdomain ([2a02:a03f:eb68:2f00:4e64:96a7:94:e878])
  by smtp.gmail.com with ESMTPSA id
- a13-20020a5d4d4d000000b0033b13922263sm10371147wru.60.2024.02.13.12.40.22
+ a8-20020adffb88000000b0033cdcd309bdsm2257517wrr.81.2024.02.13.12.43.18
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 13 Feb 2024 12:40:22 -0800 (PST)
+ Tue, 13 Feb 2024 12:43:18 -0800 (PST)
 From: Thomas Devoogdt <thomas@devoogdt.com>
 To: buildroot@buildroot.org
-Date: Tue, 13 Feb 2024 21:40:13 +0100
-Message-Id: <20240213204013.104794-1-thomas@devoogdt.com>
+Date: Tue, 13 Feb 2024 21:42:40 +0100
+Message-Id: <20240213204240.105047-1-thomas@devoogdt.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=devoogdt.com
-Subject: [Buildroot] [PATCH v1] package/wayland-protocols: bump to 1.33
+Subject: [Buildroot] [PATCH v2] package/wayland-protocols: bump to 1.33
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,10 +91,12 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-[ANNOUNCE] wayland-protocols 1.32
-https://lists.freedesktop.org/archives/wayland-devel/2023-July/042836.html
+Announce:
+  https://lists.freedesktop.org/archives/wayland-devel/2024-January/043400.html
 
 Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+---
+v2: fix wrong announce version in git message
 ---
  package/wayland-protocols/wayland-protocols.hash | 6 +++---
  package/wayland-protocols/wayland-protocols.mk   | 2 +-
