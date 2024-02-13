@@ -4,96 +4,100 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C35EC4829A
-	for <buildroot@archiver.kernel.org>; Tue, 13 Feb 2024 17:28:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BC67C48260
+	for <buildroot@archiver.kernel.org>; Tue, 13 Feb 2024 17:28:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CA48841601;
-	Tue, 13 Feb 2024 17:28:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3F99041606;
+	Tue, 13 Feb 2024 17:28:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JdhGXTwdLep7; Tue, 13 Feb 2024 17:28:31 +0000 (UTC)
+	with ESMTP id dJ3rOZxFk91G; Tue, 13 Feb 2024 17:28:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17AE841605
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E65E54161B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 17AE841605;
-	Tue, 13 Feb 2024 17:28:31 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3879B1BF909
- for <buildroot@lists.busybox.net>; Tue, 13 Feb 2024 17:28:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E65E54161B;
+	Tue, 13 Feb 2024 17:28:34 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5BDDD1BF30E
+ for <buildroot@lists.busybox.net>; Tue, 13 Feb 2024 17:28:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 258DA4010F
- for <buildroot@lists.busybox.net>; Tue, 13 Feb 2024 17:28:24 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 560AB41586
+ for <buildroot@lists.busybox.net>; Tue, 13 Feb 2024 17:28:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zf4hRmlUgy-L for <buildroot@lists.busybox.net>;
- Tue, 13 Feb 2024 17:28:22 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SMshYNmSgOsl for <buildroot@lists.busybox.net>;
+ Tue, 13 Feb 2024 17:28:24 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::432; helo=mail-wr1-x432.google.com;
+ client-ip=2a00:1450:4864:20::430; helo=mail-wr1-x430.google.com;
  envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 25D52400D8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 25D52400D8
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 25D52400D8
- for <buildroot@buildroot.org>; Tue, 13 Feb 2024 17:28:21 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id
- ffacd0b85a97d-33b1d7f736bso807949f8f.3
- for <buildroot@buildroot.org>; Tue, 13 Feb 2024 09:28:21 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2265D4157F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2265D4157F
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2265D4157F
+ for <buildroot@buildroot.org>; Tue, 13 Feb 2024 17:28:24 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id
+ ffacd0b85a97d-337cc8e72f5so3272315f8f.1
+ for <buildroot@buildroot.org>; Tue, 13 Feb 2024 09:28:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707845300; x=1708450100;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=wfuNWHRBMWjzJiKPHRQmNi08ARgYmCcTCg13zw2Dgxw=;
- b=VqCTu2kdMxdqk5Wt2bronXJPUZQ3029lbkgrQyjgZ3zt9kVYPiJl3056OP5C4riBOu
- fHTex17vvycrwzXOnDPih2NdSprOtYMBNea3eGCRE1fhuuQlGtduAyQ/YoZQ8PYAe9rG
- PkkHES8xk04nVfVrtQTWV9BjDGmxb6pvksEpBikLQnEkI3v5ymw5EBRKK7I9jxhyM2xG
- uEdzO5hpmw0f+JINEPqV8QgitoSzeBZriESv9PQb9MAeP7EuEoNy+45GJVPlnvMcrvwC
- 21S2itGHbla2GDlgQRMshEs4mKYGoi1A0gQP5p44p1SUOqHiX56KVwmQv4Fq2lli7i0z
- mGYQ==
-X-Gm-Message-State: AOJu0YxeKeoF/Q193HuPnLeE3Me6kIPowP6ZvQf03Olp5p4kJ8wH4bR+
- 26KGNzKkhlhYbn6TzHd+NTpFfn0tR4V7ZZu8Rbsg4W7/TPr36c6MT0vDNxy1TGTqXFuQPiuYFr5
- 7
-X-Google-Smtp-Source: AGHT+IHAbKKchb/8IYtHZSaPbozOsDFOU4VMoRGE2qiXW3SrNBfeZUmiq+zhUB/4qbvcdJLcddHang==
-X-Received: by 2002:a5d:6c6d:0:b0:33c:d88b:bc5a with SMTP id
- r13-20020a5d6c6d000000b0033cd88bbc5amr2042715wrz.34.1707845300081; 
- Tue, 13 Feb 2024 09:28:20 -0800 (PST)
+ d=1e100.net; s=20230601; t=1707845302; x=1708450102;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=mOLh0RsIFJ1lNpZKv3g/pkFhpAvbE74KoQbd+ITTrTw=;
+ b=vcE/5eWXUWrwszu1iwjZsHO5+XrtNF8Ak8srEiG72mOVcsPF5yhakGrpChuhVS0ISk
+ re00SX+Gcoz7BoGk9TQQN2ngSjloFuSARZZgR+UIE9voEynR63lAk9Yh4qDtH2GbSETm
+ a7Bc7Q4irrWCTPk76oQP9jsfkq1cr2LYyzXcdzDnZnEKN5Ru2fFWYVzYlgCQX472Ggiv
+ rVQW+h3hc13DXlvBfj9Fxz53sgzmVDlxmQ5kE6Zx100UVUuK/YPqzol9ol27bTmC0RkS
+ wYOjPp/eqnLgyr16Ooffn+W/mmYq9NarQisMXvLsurIuVpunD/dGDj4od8Acw4kv9C/m
+ EvNg==
+X-Gm-Message-State: AOJu0YxZ9I4GAHKTns+B9k31r2/ZjAteKv0geat4LN1jmNUf/+F0esbK
+ 1PUGDwVbfbM/4ApjuavcSJq21gevkLZ9iQwJxeFd13JgCkzI4GRjOWmHd8Ec1KLJiqB2r1JE/U0
+ 8
+X-Google-Smtp-Source: AGHT+IFnRjmcDX14htdaGbI2Tivjb4MvTsvxmX9vDfbQuGRp2p62hXuDJxd7rnZpkngWq65+Z7Wvhw==
+X-Received: by 2002:adf:e8ce:0:b0:33b:7b43:4ea4 with SMTP id
+ k14-20020adfe8ce000000b0033b7b434ea4mr4812064wrn.28.1707845302259; 
+ Tue, 13 Feb 2024 09:28:22 -0800 (PST)
+X-Forwarded-Encrypted: i=1;
+ AJvYcCUjjw7Vijq9bk3kRegGpqN/zo9+2hVdfTr6ggMCQcXgefYMJ5j3AxpX6Jc6359k8jirXUuTY0mprT0AcshEduEFFLtJF5DZzZhhxCvVEkiVCh/Yvs0ct0yOaXM/nR2wksM8yw8=
 Received: from P-NTS-Evian.home
  (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
  [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
  by smtp.gmail.com with ESMTPSA id
- by19-20020a056000099300b0033b79440fa9sm7850146wrb.111.2024.02.13.09.28.19
+ by19-20020a056000099300b0033b79440fa9sm7850146wrb.111.2024.02.13.09.28.21
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 13 Feb 2024 09:28:19 -0800 (PST)
+ Tue, 13 Feb 2024 09:28:22 -0800 (PST)
 From: Romain Naour <romain.naour@smile.fr>
 To: buildroot@buildroot.org
-Date: Tue, 13 Feb 2024 18:27:56 +0100
-Message-ID: <20240213172817.2872849-1-romain.naour@smile.fr>
+Date: Tue, 13 Feb 2024 18:28:00 +0100
+Message-ID: <20240213172817.2872849-5-romain.naour@smile.fr>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240213172817.2872849-1-romain.naour@smile.fr>
+References: <20240213172817.2872849-1-romain.naour@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1707845300; x=1708450100;
+ d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1707845302; x=1708450102;
  darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=wfuNWHRBMWjzJiKPHRQmNi08ARgYmCcTCg13zw2Dgxw=;
- b=muvAYk0BOKPSKYx8y3p7/lA8my5ib6EeUs1OgjRLy3DTCv9ojKzBcSZq6j851fjk8U
- aji1PWA7RihCnV12k0hIQUWWwihSsmQ0eZNVvgadieHWiW/V5KIQaYl7hHNsbDbz0BgB
- 0vTI4zlDxr6YGR8jcau3f6iU7toTwhicj0X9+5o/41ECngZzvdIJsaauQfG+W/OiZiDI
- cAHNiYxVrkptuq6aI+4j70e4PmOJ+bxT2Tc1ne3EeOznvuzgsePnSjP6UBLmyZH7ff4l
- l/rqbl0xBCKGtZMnxN8S853WtTLCBEqbkkRs8oVtnkfe9FL3st4+igSVvBcH62V+WIII
- 9vnw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=mOLh0RsIFJ1lNpZKv3g/pkFhpAvbE74KoQbd+ITTrTw=;
+ b=2piENZ5wdB3RPpxwu6atw/vb6GP8YOFqkbtCJxV8+T/A56koksTCCYuei6HUxB0l8Q
+ XT/ooxK3e6lL3ybRTHB0DzXManABHz6jotHNf8Q/bxXl30RmxtmFZcGtvIYHkLeSomzx
+ KnF9xLH3hL2Ha8s5xSxvmmWuR2s1e25RKlBXdsRDE6Cs27JtBN5AOKy+LZaas7ut9Zll
+ +QRi/d0b1k1EKrIMz4bqhr6FVF5qmUi0y4acsbt5Wp/5rKbAJe5Clp0L7c8KuGY7ZHe/
+ LxugsxfGJag1bAncs88LIr8inAsvuvRK4BEg1VSu4oYCpAmeBF9pmDwxclaeh+UMp2Zf
+ TAjw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=smile-fr.20230601.gappssmtp.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=smile-fr.20230601.gappssmtp.com
  header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=muvAYk0B
-Subject: [Buildroot] [PATCH 00/21] Add ti_j721e_sk_defconfig
+ header.s=20230601 header.b=2piENZ5w
+Subject: [Buildroot] [PATCH 04/21] package/python-attrs: add host variant
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,101 +109,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@smile.fr>
+Cc: Romain Naour <romain.naour@smile.fr>,
+ Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ Michael Trimarchi <michael@amarulasolutions.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This series aim to add the SK-TDA4VM board support based on TI K3 j721e SoC.
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
-This series start by adding U-boot binman support already submitted in the
-preview series "Add support for AM62x-SK HS-FS devices" from Dario Binacchi
-[1], with small improvements.
-See the FOSDEM 2024 talk "Standardizing the generation and signing of boot images" [2]
+Recent version of U-Boot use binman to provide a mechanism for building
+images, from simple SPL + U-Boot combinations, to more complex
+arrangements with many parts. This package is required by binman.
 
-With binman support, we can add the TI K3 j721e SoC support by
-providing all required firmware generated by the build.
+On some plateforms (curently TI K3 SoC familly) binman uses
+python-jsonschema [1] on the host that requires host-python-attrs.
 
-Add the new ti_j721e_sk_defconfig file to build a basic SD card image to
-boot the board (serial debug and ethernet working).
+[1] https://source.denx.de/u-boot/u-boot/-/blob/v2024.01/tools/buildman/requirements.txt
 
-Thanks to binman support, we can remove the ti-k3-image-gen tool from
-Buildroot. To do that, we have to update existing defconfig (am62, am64).
+Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
+Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+[Romain: extend commit log]
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+---
+Changes in v4:
+- extend commit log
+Changes in v3:
+- Drop Config.in.host
+---
+ package/python-attrs/python-attrs.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Followup commits can improve TI K3 HS-FS devices based on binman instead
-of legacy core-secdev-k3 tool.
-
-[1] http://lists.busybox.net/pipermail/buildroot/2023-December/681139.html
-[2] https://fosdem.org/2024/events/attachments/fosdem-2024-3067-standardizing-the-generation-and-signing-of-boot-images/slides/22808/FOSDEM24_Speaker_Slides_y7FsIKM.pdf
-
-Best regards,
-Romain
-
-Dario Binacchi (5):
-  package/python-attrs: add host variant
-  package/python-rpds-py: add host variant
-  package/python-referencing: add host variant
-  package/python-jsonschema-specifications: add host variant
-  package/python-jsonschema: add host variant
-
-Romain Naour (16):
-  DEVELOPERS: add Romain Naour for am574x_idk_defconfig
-  configs/ti_am62x_sk_defconfig: fix optee-os plateform
-  configs/ti_am64x_sk_defconfig: fix optee-os plateform
-  boot/uboot: add BR2_TARGET_UBOOT_USE_BINMAN option
-  boot/ti-k3-r5-loader: add BR2_TARGET_TI_K3_R5_LOADER_USE_BINMAN option
-  boot/ti-k3-r5-loader: install tiboot3.bin and sysfw.itb to
-    BINARIES_DIR
-  boot/ti-k3-boot-firmware: introduce
-    BR2_TARGET_TI_K3_BOOT_FIRMWARE_SOC_{AM62AX,AM62X,AM64X,AM65X}
-  boot/uboot: use DM firmware name defined by ti-k3-boot-firmware
-    package
-  boot/ti-k3-boot-firmware: add BR2_TARGET_TI_K3_BOOT_FIRMWARE_SOC_J721E
-  boot/uboot: replace ti-k3-image-gen options by ti-k3-firmware options
-  boot/uboot: enable TI K3 Device Manager (DM) for j721e
-  boot/ti-k3-boot-firmware: bump to version 09.02.00.004
-  configs/ti_j721e_sk_defconfig: new defconfig
-  configs/ti_am62x_sk_defconfig: update to uboot 2024.01 to use binman
-    tool
-  configs/ti_am64x_sk_defconfig: update to uboot 2024.01 to use binman
-    tool
-  boot/ti-k3-image-gen: remove package
-
- Config.in.legacy                              |  7 ++
- DEVELOPERS                                    |  6 +-
- board/ti/j721e-sk/genimage.cfg                | 28 +++++++
- board/ti/j721e-sk/post-build.sh               | 16 ++++
- board/ti/j721e-sk/readme.txt                  | 34 ++++++++
- boot/Config.in                                |  1 -
- boot/ti-k3-boot-firmware/Config.in            | 39 ++++++++++
- .../ti-k3-boot-firmware.hash                  |  2 +-
- .../ti-k3-boot-firmware.mk                    | 16 ++--
- boot/ti-k3-image-gen/Config.in                | 77 -------------------
- boot/ti-k3-image-gen/ti-k3-image-gen.hash     |  3 -
- boot/ti-k3-image-gen/ti-k3-image-gen.mk       | 54 -------------
- boot/ti-k3-r5-loader/Config.in                |  8 ++
- boot/ti-k3-r5-loader/ti-k3-r5-loader.mk       | 23 ++++++
- boot/uboot/Config.in                          | 27 ++++---
- boot/uboot/uboot.mk                           | 10 ++-
- configs/ti_am62x_sk_defconfig                 | 14 ++--
- configs/ti_am64x_sk_defconfig                 | 14 ++--
- ...62x_sk_defconfig => ti_j721e_sk_defconfig} | 34 ++++----
- package/python-attrs/python-attrs.mk          |  6 ++
- .../python-jsonschema-specifications.mk       | 10 +++
- .../python-jsonschema/python-jsonschema.mk    | 14 ++++
- .../python-referencing/python-referencing.mk  | 11 +++
- package/python-rpds-py/python-rpds-py.mk      |  1 +
- 24 files changed, 275 insertions(+), 180 deletions(-)
- create mode 100644 board/ti/j721e-sk/genimage.cfg
- create mode 100755 board/ti/j721e-sk/post-build.sh
- create mode 100644 board/ti/j721e-sk/readme.txt
- delete mode 100644 boot/ti-k3-image-gen/Config.in
- delete mode 100644 boot/ti-k3-image-gen/ti-k3-image-gen.hash
- delete mode 100644 boot/ti-k3-image-gen/ti-k3-image-gen.mk
- copy configs/{ti_am62x_sk_defconfig => ti_j721e_sk_defconfig} (54%)
-
---
+diff --git a/package/python-attrs/python-attrs.mk b/package/python-attrs/python-attrs.mk
+index 8a1236cc44..fb1729e62f 100644
+--- a/package/python-attrs/python-attrs.mk
++++ b/package/python-attrs/python-attrs.mk
+@@ -15,4 +15,10 @@ PYTHON_ATTRS_DEPENDENCIES = \
+ 	host-python-hatch-fancy-pypi-readme \
+ 	host-python-hatch-vcs
+ 
++HOST_PYTHON_ATTRS_DEPENDENCIES = \
++	host-python-hatchling \
++	host-python-hatch-fancy-pypi-readme \
++	host-python-hatch-vcs
++
+ $(eval $(python-package))
++$(eval $(host-python-package))
+-- 
 2.43.0
 
 _______________________________________________
