@@ -4,91 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CA56C4829D
-	for <buildroot@archiver.kernel.org>; Tue, 13 Feb 2024 02:06:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4171CC4829D
+	for <buildroot@archiver.kernel.org>; Tue, 13 Feb 2024 02:19:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F00B64051E;
-	Tue, 13 Feb 2024 02:06:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D76A6405F6;
+	Tue, 13 Feb 2024 02:19:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LUavpU5mq1Y9; Tue, 13 Feb 2024 02:06:30 +0000 (UTC)
+	with ESMTP id AlC0-8eQi5oN; Tue, 13 Feb 2024 02:19:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E651840521
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BEFEE405F7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E651840521;
-	Tue, 13 Feb 2024 02:06:29 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0381E1BF343
- for <buildroot@lists.busybox.net>; Tue, 13 Feb 2024 02:06:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BEFEE405F7;
+	Tue, 13 Feb 2024 02:19:57 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BB1861BF343
+ for <buildroot@lists.busybox.net>; Tue, 13 Feb 2024 02:19:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E480F40521
- for <buildroot@lists.busybox.net>; Tue, 13 Feb 2024 02:06:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A7C3440529
+ for <buildroot@lists.busybox.net>; Tue, 13 Feb 2024 02:19:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OJjZd7Aern8I for <buildroot@lists.busybox.net>;
- Tue, 13 Feb 2024 02:06:28 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GT8cUqm0FFNn for <buildroot@lists.busybox.net>;
+ Tue, 13 Feb 2024 02:19:54 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2001:4860:4864:20::2f; helo=mail-oa1-x2f.google.com;
+ client-ip=2607:f8b0:4864:20::102f; helo=mail-pj1-x102f.google.com;
  envelope-from=kadambini.nema@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DD89F4051E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD89F4051E
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com
- [IPv6:2001:4860:4864:20::2f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DD89F4051E
- for <buildroot@buildroot.org>; Tue, 13 Feb 2024 02:06:27 +0000 (UTC)
-Received: by mail-oa1-x2f.google.com with SMTP id
- 586e51a60fabf-219122781a3so2516121fac.0
- for <buildroot@buildroot.org>; Mon, 12 Feb 2024 18:06:27 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E7FCD404F5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E7FCD404F5
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com
+ [IPv6:2607:f8b0:4864:20::102f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E7FCD404F5
+ for <buildroot@buildroot.org>; Tue, 13 Feb 2024 02:19:53 +0000 (UTC)
+Received: by mail-pj1-x102f.google.com with SMTP id
+ 98e67ed59e1d1-2906773c7e9so2155588a91.1
+ for <buildroot@buildroot.org>; Mon, 12 Feb 2024 18:19:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707789986; x=1708394786;
+ d=1e100.net; s=20230601; t=1707790792; x=1708395592;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=kd9bKMaA0Cc5IqyB2BV6jlc9d5zwXBY+unnXEQKx6Pw=;
- b=QlhKb0b4gu1yjc+7lGK1uswfUdG/E69LhlDnilYt76u5xX0L7PhgIdxZrwWu3XQaVe
- QxNS5e50FJ+DRSR9nXpAKAwAK7e0UrfsFjtV2/dm4gbnfzY5rKwNm0fTM21L4WoPUJTg
- mKc/Rr6m39E2OaZNvoN6HfwTiDpP6C9zwDPhiqU3K5i9bcsXekI2n3mNb+OP2m/MSdMV
- HiWqSdwsUwWBjaw88LOk68aB4ay2HuAKumqkdIDBN5Op0+Nu+CuCsgaQUPe8Vdy/qcyF
- SC+k/esDj00VZKhUDlEbBwQ2x0PG5zm74LwdptnlPN9m9pzjK/lmoRj1C0Vbh87S7RoD
- WK6g==
-X-Gm-Message-State: AOJu0YwKy1tSFwZjGEO2AaVeAn28uvoW7W6Og4obvbh3tmDJ61MW7+DG
- ObPf6qusdokVvtjIfCloA/cC7nAg9m2Kp3uQDkTyYSlbbQ7yZBTRYJsQAQu2OPg=
-X-Google-Smtp-Source: AGHT+IFyRAU2GpPqsvILpFB2x1GBnNWJhdGvfSGLGSR6F0lr0kA1SHrDsGeYY2AZ8QX8YYSWR+w40w==
-X-Received: by 2002:a05:6871:888:b0:219:eeb6:2ebc with SMTP id
- r8-20020a056871088800b00219eeb62ebcmr10389858oaq.51.1707789986071; 
- Mon, 12 Feb 2024 18:06:26 -0800 (PST)
+ bh=k/yQpxaU6TCNWafyHhrRoC26bDcWORXzypmzKEy/FZY=;
+ b=KY7Ewux2iY5UANX8nYDu6w+3xq2ES1x8o+xTSc3q4RuOVVW/aJa5Yts9r0arwedO1N
+ QnUIULUYHDQzFrG7N0vLkGDsWhFP//dSQiIuc2JnYwfoPhZr5ppISDsCkw9sL/ggkyFE
+ dvKCQrlrMHjNeoj4+WExmKH9JrekC4Y/uBI7AOdUYx17edG5RJNUssaH/hrToZpHMh2T
+ 1shRLQGPvkPRwT7ngqgkvnKVlOP0F+71/zwc/+ZTmPhPPg6+Fk3bh5Imqm4Uy7yg568f
+ 0TkvJAuNQm0zJ3PHgCymZp4PeveE6uZQe9y2E07+haxjJ1HZDFxLkW3NZ6yaYtKppWwu
+ gYQA==
+X-Gm-Message-State: AOJu0YxZyKK8IkpJ3HFC/S9jLvwDzRnDjpn9F9i0zRCzJhNQqEHwQhRn
+ PegU6NjaFcQmSwgIUTPOHx2QYTQ4iSfxNRCpgEx7iUHAcfw/FbXDdDO6rO74Nfc=
+X-Google-Smtp-Source: AGHT+IHmWKv5Snn17R0rIkycdRkVTaCtnbTxc4Tg5tZoiSxTcFGuoHIRdFSDhPFmm1OBlbxeZYPmuQ==
+X-Received: by 2002:a17:90a:7286:b0:296:e93:cdc with SMTP id
+ e6-20020a17090a728600b002960e930cdcmr4545324pjg.16.1707790792451; 
+ Mon, 12 Feb 2024 18:19:52 -0800 (PST)
 Received: from localhost.localdomain (ip72-203-121-181.oc.oc.cox.net.
  [72.203.121.181]) by smtp.gmail.com with ESMTPSA id
- q23-20020a638c57000000b005d6a0b2efb3sm1137738pgn.21.2024.02.12.18.06.25
+ ph8-20020a17090b3bc800b0029899165611sm701704pjb.35.2024.02.12.18.19.51
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 12 Feb 2024 18:06:25 -0800 (PST)
+ Mon, 12 Feb 2024 18:19:52 -0800 (PST)
 From: Kadambini Nema <kadambini.nema@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 12 Feb 2024 18:04:20 -0800
-Message-Id: <20240213020420.1339668-1-kadambini.nema@gmail.com>
+Date: Mon, 12 Feb 2024 18:17:44 -0800
+Message-Id: <20240213021745.1350798-1-kadambini.nema@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1707789986; x=1708394786; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1707790792; x=1708395592; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=kd9bKMaA0Cc5IqyB2BV6jlc9d5zwXBY+unnXEQKx6Pw=;
- b=YEE13daJV/Ax3CvIvIOMg1wHtkU0wB4CH/IEXH1fJd6NDO1fW2gDFL16XHvoOrrryf
- HT5gwtU3VDzee8+yhYymg5TXyX37BaF67X0+abH71pFYTnhMNeEvelPQqGMPLLrjdIYZ
- l9Seg3tbjhrgne0Mx1dqnt8HZWOKyxBODhUtO6NiYYsMuSRJfyHmFOh0+nZe2DdPAXGo
- y6CmUL2tWfOutM7VPhPnFzA49LbowupGQ5jZrIR+4j4Vy+zvWsfU6ETFtJBbRQcupguo
- egYjJCkm4hImAxFIteaPZtAgLQnRiP27Vpkav4b3Y38r1SvzRKNwLih6dsWAppEf+kCu
- N6wg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=k/yQpxaU6TCNWafyHhrRoC26bDcWORXzypmzKEy/FZY=;
+ b=dw+UBVmyfyzBPdTwlR5kALMLmTm2Fnrw+6w/sb4A4kQtBlTSRRpS7hXhRShQq/9zim
+ xhyRjTqsw2Zd6YJc4eQVMzSrOH/Zvg8XNjYqq2kQVp3+Gr0BvJWjQa6GXgbj7Sj0tPfR
+ N0r55IjlokKoGAVNkaO1nIkzXxoM2K22FUdeQQB7xkYnl3KfpJu7oYDf9SG6YfxzgJ28
+ 43FKxFasm/rwGBev+DYvOHtKsD8YjXvUm6chddIE0/vnusrj0OharX5mvd8iGTZiwGQR
+ cLf60v3Td+ib8IMoGlB/j+vqLYvMJDoJWs+0C8Ch6qe/olHuDCnV0Hl5NUPQjJF4669B
+ beIw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=YEE13daJ
-Subject: [Buildroot] [PATCH 1/1] package/xz: bump version to 5.4.6
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=dw+UBVmy
+Subject: [Buildroot] [PATCH 1/1] package/zlib-ng: bump version to 2.1.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,48 +105,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Change Log - https://github.com/tukaani-project/xz/commit/0ef8192e8d5af4e6200d5d4aee22d1f177f7a2df
-Updated hash of the COPYING.
-
 Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
 ---
- package/xz/xz.hash | 6 +++---
- package/xz/xz.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/zlib-ng/zlib-ng.hash | 2 +-
+ package/zlib-ng/zlib-ng.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/xz/xz.hash b/package/xz/xz.hash
-index 3d93ad6b5e..e8025a8065 100644
---- a/package/xz/xz.hash
-+++ b/package/xz/xz.hash
-@@ -1,9 +1,9 @@
- # Locally calculated after checking pgp signature
--# https://tukaani.org/xz/xz-5.4.5.tar.bz2.sig
--sha256  8ccf5fff868c006f29522e386fb4c6a1b66463fbca65a4cfc3c4bd596e895e79  xz-5.4.5.tar.bz2
-+# https://github.com/tukaani-project/xz/releases/download/v5.4.6/xz-5.4.6.tar.bz2.sig
-+sha256  913851b274e8e1d31781ec949f1c23e8dbcf0ecf6e73a2436dc21769dd3e6f49  xz-5.4.6.tar.bz2
- 
- # Hash for license files
--sha256  72d7ef9c98be319fd34ce88b45203b36d5936f9c49e82bf3198ffee5e0c7d87e  COPYING
-+sha256  29a1e305b2e34eefe5d4602d00cde1d528b71c5d9f2eec5106972cf6ddb6f73f  COPYING
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
- sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING.GPLv3
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPLv2.1
-diff --git a/package/xz/xz.mk b/package/xz/xz.mk
-index 547959c743..40fa59ca7c 100644
---- a/package/xz/xz.mk
-+++ b/package/xz/xz.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/zlib-ng/zlib-ng.hash b/package/zlib-ng/zlib-ng.hash
+index a2fe98435c..908164aa60 100644
+--- a/package/zlib-ng/zlib-ng.hash
++++ b/package/zlib-ng/zlib-ng.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  d20e55f89d71991c59f1c5ad1ef944815e5850526c0d9cd8e504eaed5b24491a  zlib-ng-2.1.3.tar.gz
++sha256  a5d504c0d52e2e2721e7e7d86988dec2e290d723ced2307145dedd06aeb6fef2  zlib-ng-2.1.6.tar.gz
+ sha256  d3c80be055d94d798eaa786116e84fa0b010bc11420b5d2060d978ea77845436  LICENSE.md
+diff --git a/package/zlib-ng/zlib-ng.mk b/package/zlib-ng/zlib-ng.mk
+index fbb906503a..2fb6ea763f 100644
+--- a/package/zlib-ng/zlib-ng.mk
++++ b/package/zlib-ng/zlib-ng.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XZ_VERSION = 5.4.5
-+XZ_VERSION = 5.4.6
- XZ_SOURCE = xz-$(XZ_VERSION).tar.bz2
--XZ_SITE = https://tukaani.org/xz
-+XZ_SITE = https://github.com/tukaani-project/xz/releases/download/v$(XZ_VERSION)
- XZ_INSTALL_STAGING = YES
- XZ_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
- XZ_LICENSE = Public Domain, GPL-2.0+, GPL-3.0+, LGPL-2.1+
+-ZLIB_NG_VERSION = 2.1.3
++ZLIB_NG_VERSION = 2.1.6
+ ZLIB_NG_SITE = $(call github,zlib-ng,zlib-ng,$(ZLIB_NG_VERSION))
+ ZLIB_NG_LICENSE = Zlib
+ ZLIB_NG_LICENSE_FILES = LICENSE.md
 -- 
 2.25.1
 
