@@ -4,101 +4,100 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70CECC4829A
-	for <buildroot@archiver.kernel.org>; Tue, 13 Feb 2024 17:28:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B1D5C4829A
+	for <buildroot@archiver.kernel.org>; Tue, 13 Feb 2024 17:28:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 45A1041694;
-	Tue, 13 Feb 2024 17:28:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BAACC41688;
+	Tue, 13 Feb 2024 17:28:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id H2l9EQfzs7w5; Tue, 13 Feb 2024 17:28:51 +0000 (UTC)
+	with ESMTP id 5OQfMEjJfaiE; Tue, 13 Feb 2024 17:28:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29FB141612
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 54CC9416C7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 29FB141612;
-	Tue, 13 Feb 2024 17:28:51 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0D07D1BF30E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 54CC9416C7;
+	Tue, 13 Feb 2024 17:28:53 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 659781BF30E
  for <buildroot@lists.busybox.net>; Tue, 13 Feb 2024 17:28:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EB653415FA
- for <buildroot@lists.busybox.net>; Tue, 13 Feb 2024 17:28:27 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 60EC960B79
+ for <buildroot@lists.busybox.net>; Tue, 13 Feb 2024 17:28:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SVK1u1yqM9wP for <buildroot@lists.busybox.net>;
- Tue, 13 Feb 2024 17:28:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wy2cRLO4nBpu for <buildroot@lists.busybox.net>;
+ Tue, 13 Feb 2024 17:28:27 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
+ client-ip=2a00:1450:4864:20::432; helo=mail-wr1-x432.google.com;
  envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 65BE741586
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 65BE741586
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 65BE741586
- for <buildroot@buildroot.org>; Tue, 13 Feb 2024 17:28:26 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id
- ffacd0b85a97d-3394bec856fso3354079f8f.0
- for <buildroot@buildroot.org>; Tue, 13 Feb 2024 09:28:26 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4221660B65
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4221660B65
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4221660B65
+ for <buildroot@buildroot.org>; Tue, 13 Feb 2024 17:28:27 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id
+ ffacd0b85a97d-33ce55ab993so9024f8f.1
+ for <buildroot@buildroot.org>; Tue, 13 Feb 2024 09:28:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707845304; x=1708450104;
+ d=1e100.net; s=20230601; t=1707845305; x=1708450105;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=w52QdIrvvxtVXLHHxNE0DX1TQi0oErJZbiXFWIw7/rY=;
- b=e5agIy1EL9+KI/dnZ2Sd0BCMr1r/pd52aJyJagNeNfuZOwSufF2tGEbmslVzv+SWwE
- eLBjiN+XlhX5waC21fu4kiVYDAU6BIbHtYEoAqSoJ8/p/Iaot7Z2pAKUJUy+q/U/CcJM
- B4H0nObrnicrJQFKJZmvr60gkVWnz3g6d8s82nTPqZ1DBME+SLrjR2GWukj0RSQXLqtU
- AxKOJ1dl/USskkabYDpa4LwskqqCGJoFyD+07C3+afry/sTSyS6s1HVL0/r1Nk6Wfliq
- V5++n27RVz/JKDUd9noqFUvJWAABArYHst3HZC0wLCoas7L4VUSBm7caMe1HV0n334hT
- A7Tg==
-X-Gm-Message-State: AOJu0YwjatMOBxDxSllN/Uv6iKN81WyoYyfAJYCyh4Fw5LnQST3by0aj
- sbLUY6t1qjSsaqNWxcN6PGGZr/zZtfLlnYauyxGQeBtei/y5Pr108YqoGjbE38um4O80iS8SX1i
- K
-X-Google-Smtp-Source: AGHT+IEZSrYVz/leQi7Sb3/91t0j4RlejpuwxOjss9VtbSfGgJWNBCQzv0xOb77xPMgbrqO6LpKNbQ==
-X-Received: by 2002:a5d:6a90:0:b0:33b:133a:8e3e with SMTP id
- s16-20020a5d6a90000000b0033b133a8e3emr94979wru.11.1707845304474; 
- Tue, 13 Feb 2024 09:28:24 -0800 (PST)
-X-Forwarded-Encrypted: i=1;
- AJvYcCW7p3kfWDidIiA3XTBnIuobPpbby7ATNojP8AOsfoyFuhSgetmhaxTVkan19DXmu2nqMA5WIkUgutLLwpKIQLL5Lz/v1a9Rt0UoPiFvMppzT9EhUUXtA/v9vV89V60oCoeVyJs=
+ bh=uTAgpTAtpHzHlmM3BkcKdoh4Mb1HzYUjgZ4/pqPE1Yc=;
+ b=iXopuHzG7+Mtlzv7Ewiif/0/ppmZxd8PvgKmNvrC5Ih6rcsTPy9fTRf6Fd0bkbdDqR
+ W/EhF9i32PDKofy6MvfBSIC2K0cKAAWylxaNS7/FOG+oZ3glbJjDqRneY5o/roOORy8Z
+ onCbo+kgamVSTYKTh+eGvkyOno+a2IQJWLfGb5X/gOFC6ZbL9PmRf/U9d+rUip0JrlV5
+ QdDlieSgjxAUuED9hWOIrekLEUfTwUau2sTMQdFOV0qxOVRZI4XSy3r4zwv1KjHGh2pl
+ hkM/8UJMmYAtm8yfd8Ftw/szfxJ5gL3LKgOz5NWtF3pdIKEXRxwcmdHznciCqRuST/S9
+ G8og==
+X-Gm-Message-State: AOJu0YwT39FPAp8kzRgcoJGgJum4f+HL9n16DqZsoXxnOPxihgbL4qU1
+ t20FYP/ACoQfb2JfN+ypgjWAYh4PqdNJbwwQfICR1/GWUAfz9Ep00DYdQed4360qoqIDP9e2DWS
+ T
+X-Google-Smtp-Source: AGHT+IH06C44C1qGUvJ63lhbHFlKCImyFbhFxb06Ev2dlh2lChnbGNl2INySWVk59HWbofyPoqCQwg==
+X-Received: by 2002:adf:f0c7:0:b0:33c:d57d:3749 with SMTP id
+ x7-20020adff0c7000000b0033cd57d3749mr1892319wro.51.1707845305371; 
+ Tue, 13 Feb 2024 09:28:25 -0800 (PST)
 Received: from P-NTS-Evian.home
  (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
  [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
  by smtp.gmail.com with ESMTPSA id
- by19-20020a056000099300b0033b79440fa9sm7850146wrb.111.2024.02.13.09.28.24
+ by19-20020a056000099300b0033b79440fa9sm7850146wrb.111.2024.02.13.09.28.25
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 13 Feb 2024 09:28:24 -0800 (PST)
+ Tue, 13 Feb 2024 09:28:25 -0800 (PST)
 From: Romain Naour <romain.naour@smile.fr>
 To: buildroot@buildroot.org
-Date: Tue, 13 Feb 2024 18:28:04 +0100
-Message-ID: <20240213172817.2872849-9-romain.naour@smile.fr>
+Date: Tue, 13 Feb 2024 18:28:06 +0100
+Message-ID: <20240213172817.2872849-11-romain.naour@smile.fr>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240213172817.2872849-1-romain.naour@smile.fr>
 References: <20240213172817.2872849-1-romain.naour@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1707845304; x=1708450104;
+ d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1707845305; x=1708450105;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=w52QdIrvvxtVXLHHxNE0DX1TQi0oErJZbiXFWIw7/rY=;
- b=qDjF3R1+vNvIf4k6qkXl1oR8izTWvInmJcYlrUrsVI/P2wz4oiCKGrzOp5dTaNlt5a
- rLG/chAV96ntBgB86a8AnFgy2C+UCcVTE2dU0xwLHXbY7xt6czTvtABFyqJxEc6tMPVy
- BYfwn7VPDXFzT+83wVndznMBKxkWqUgtaXSTDYQWLUw8TqLh/Y+fZpDNjoRQSJPJAvre
- BMbXT08bxaIu3Y7OFtvSVQfw3u5diBGNQ3rz5yQrexdEK/UC9Af+IKQ2mPERRmuIpMtK
- fNsbKxPlm9TgmydpNRWPVTmi7UhOggtD70hpD2pZEjg4gbrrmOf7dVtzZNPRamsL0pfd
- BrMA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=uTAgpTAtpHzHlmM3BkcKdoh4Mb1HzYUjgZ4/pqPE1Yc=;
+ b=lbHt2ynyJjl8FfvzM91yNu3dTFHFYEy6SSh1AHE7NMRSDIj2z06PNRqiy9TWwWfItb
+ jntlLf9R4Tk626S65DBkGgLin/LUl1LZThkT/K7U6ub3bDBe2+F/Ko0yuNtExU5SJoww
+ X5b+teQirrHWYkS5EGU4X5xdgpOfjP6snMnZrUCVWU4qSJ74clkf2/wc9pI4pSruYNEA
+ LdUZ9TtPm4BuCnuI7AXk4CqdgzeVcaQol1ugYh+GVPStu3/tAqkrW4XORamGd8OF1UnB
+ ujQyAbrSA44LFx9NcTvYYglPDM269TU16qaZejAu2TG1+1AkEZhOf4YI/ilg53KRvqTE
+ vjHA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=smile-fr.20230601.gappssmtp.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=smile-fr.20230601.gappssmtp.com
  header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=qDjF3R1+
-Subject: [Buildroot] [PATCH 08/21] package/python-jsonschema: add host
- variant
+ header.s=20230601 header.b=lbHt2yny
+Subject: [Buildroot] [PATCH 10/21] boot/ti-k3-r5-loader: add
+ BR2_TARGET_TI_K3_R5_LOADER_USE_BINMAN option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -110,69 +109,82 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@smile.fr>,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- Michael Trimarchi <michael@amarulasolutions.com>
+Cc: Romain Naour <romain.naour@smile.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-
 Recent version of U-Boot use binman to provide a mechanism for building
 images, from simple SPL + U-Boot combinations, to more complex
-arrangements with many parts. This package is required by binman.
+arrangements with many parts.
 
-On some plateforms (curently TI K3 SoC familly) binman uses
-python-jsonschema [1] add all missing runtime rependencies
-for the host variant.
+As for U-boot package, this tool uses additional host python modules
+that must be provided by Buildroot. So introduce a new option
+BR2_TARGET_TI_K3_R5_LOADER_USE_BINMAN to add additional host packages
+in U-Boot build dependency to use binman.
 
-We don't have the concept of runtime dependencies for host packages,
-so we must add them as build dependencies of the host variant.
+The binman requirement is directly included in buildman dependency
+(tools/buildman/requirements.txt) since within U-Boot, binman is
+invoked by the build system, here buildman [1].
 
-[1] https://source.denx.de/u-boot/u-boot/-/blob/v2024.01/tools/buildman/requirements.txt
+Make sure that all binman requirements are build before
+ti-k3-r5-loader.
 
-Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
-Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-[Romain:
-  - extend commit log
-  - add missing host runtime dependencies]
+[1] https://docs.u-boot.org/en/v2024.01/develop/package/binman.html#invoking-binman-within-u-boot
+
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
-Changes in v4:
-- extend commit log
-- add missing host runtime dependencies
-Changes in v3:
-- Drop Config.in.host
+Note:
+  binman is bundled in U-Boot source code. Use "USE_BINMAN" instead of
+  "NEEDS_BINMAN" since it's not an external U-Boot dependency.
 ---
- package/python-jsonschema/python-jsonschema.mk | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ boot/ti-k3-r5-loader/Config.in          |  8 ++++++++
+ boot/ti-k3-r5-loader/ti-k3-r5-loader.mk | 14 ++++++++++++++
+ 2 files changed, 22 insertions(+)
 
-diff --git a/package/python-jsonschema/python-jsonschema.mk b/package/python-jsonschema/python-jsonschema.mk
-index 512c92aa77..9e8b6e18b8 100644
---- a/package/python-jsonschema/python-jsonschema.mk
-+++ b/package/python-jsonschema/python-jsonschema.mk
-@@ -15,4 +15,18 @@ PYTHON_JSONSCHEMA_DEPENDENCIES = \
- 	host-python-hatch-fancy-pypi-readme \
- 	host-python-hatch-vcs
+diff --git a/boot/ti-k3-r5-loader/Config.in b/boot/ti-k3-r5-loader/Config.in
+index 8c8368a1a5..d678bd17c2 100644
+--- a/boot/ti-k3-r5-loader/Config.in
++++ b/boot/ti-k3-r5-loader/Config.in
+@@ -93,4 +93,12 @@ config BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_CONFIG_FILE
+ 	help
+ 	  Path to the TI K3 R5 Loader configuration file.
  
-+HOST_PYTHON_JSONSCHEMA_DEPENDENCIES = \
-+	host-python-hatchling \
-+	host-python-hatch-fancy-pypi-readme \
-+	host-python-hatch-vcs
++config BR2_TARGET_TI_K3_R5_LOADER_USE_BINMAN
++	bool "ti-k3-r5-loader use binman"
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-rpds-py -> python-jsonschema
++	help
++	  Use binman tool for generation and signing of boot images.
 +
-+# This is a runtime dependency, but we don't have the concept of
-+# runtime dependencies for host packages.
-+HOST_PYTHON_JSONSCHEMA_DEPENDENCIES += \
-+	host-python-attrs \
-+	host-python-jsonschema-specifications \
-+	host-python-referencing \
-+	host-python-rpds-py
++	  https://docs.u-boot.org/en/v2024.01/develop/package/binman.html
 +
- $(eval $(python-package))
-+$(eval $(host-python-package))
+ endif
+diff --git a/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk b/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
+index 0ffcb8235f..8f86e0fb07 100644
+--- a/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
++++ b/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
+@@ -60,6 +60,20 @@ TI_K3_R5_LOADER_MAKE_OPTS = \
+ 	HOSTCC="$(HOSTCC) $(subst -I/,-isystem /,$(subst -I /,-isystem /,$(HOST_CFLAGS)))" \
+ 	HOSTLDFLAGS="$(HOST_LDFLAGS)"
+ 
++ifeq ($(BR2_TARGET_TI_K3_R5_LOADER_USE_BINMAN),y)
++# https://source.denx.de/u-boot/u-boot/-/blob/v2024.01/tools/buildman/requirements.txt
++TI_K3_R5_LOADER_DEPENDENCIES += \
++	host-python-jsonschema \
++	host-python-pyyaml
++# Make sure that all binman requirements are build before ti-k3-r5-loader.
++TI_K3_R5_LOADER_DEPENDENCIES += \
++	host-python3 \
++	host-python-setuptools \
++	host-python-pylibfdt \
++	host-python-pyelftools
++TI_K3_R5_LOADER_MAKE_OPTS += BINMAN_INDIRS=$(BINARIES_DIR)
++endif
++
+ define TI_K3_R5_LOADER_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(TI_K3_R5_LOADER_MAKE) -C $(@D) $(TI_K3_R5_LOADER_MAKE_OPTS)
+ endef
 -- 
 2.43.0
 
