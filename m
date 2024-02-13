@@ -4,96 +4,96 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4454BC48260
-	for <buildroot@archiver.kernel.org>; Tue, 13 Feb 2024 21:16:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC2C1C48260
+	for <buildroot@archiver.kernel.org>; Tue, 13 Feb 2024 21:16:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A349E82279;
-	Tue, 13 Feb 2024 21:16:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id ACB0882316;
+	Tue, 13 Feb 2024 21:16:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 18X-D201mthT; Tue, 13 Feb 2024 21:16:20 +0000 (UTC)
+	with ESMTP id okrWDwiq5qfT; Tue, 13 Feb 2024 21:16:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C55A88220A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 65097822EC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C55A88220A;
-	Tue, 13 Feb 2024 21:16:18 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 386DF1BF909
- for <buildroot@lists.busybox.net>; Tue, 13 Feb 2024 21:15:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 65097822EC;
+	Tue, 13 Feb 2024 21:16:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 18EC21BF310
+ for <buildroot@lists.busybox.net>; Tue, 13 Feb 2024 21:15:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BAA7A415FE
- for <buildroot@lists.busybox.net>; Tue, 13 Feb 2024 21:15:51 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id F0C8F822B4
+ for <buildroot@lists.busybox.net>; Tue, 13 Feb 2024 21:15:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id d9UgckC56ra1 for <buildroot@lists.busybox.net>;
- Tue, 13 Feb 2024 21:15:50 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8N1oS7bqWeoS for <buildroot@lists.busybox.net>;
+ Tue, 13 Feb 2024 21:15:52 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::134; helo=mail-il1-x134.google.com;
+ client-ip=2607:f8b0:4864:20::d2a; helo=mail-io1-xd2a.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5B369400DC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B369400DC
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com
- [IPv6:2607:f8b0:4864:20::134])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5B369400DC
- for <buildroot@buildroot.org>; Tue, 13 Feb 2024 21:15:50 +0000 (UTC)
-Received: by mail-il1-x134.google.com with SMTP id
- e9e14a558f8ab-363ba083d84so517345ab.1
- for <buildroot@buildroot.org>; Tue, 13 Feb 2024 13:15:50 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9F1B1822AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F1B1822AB
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com
+ [IPv6:2607:f8b0:4864:20::d2a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9F1B1822AB
+ for <buildroot@buildroot.org>; Tue, 13 Feb 2024 21:15:51 +0000 (UTC)
+Received: by mail-io1-xd2a.google.com with SMTP id
+ ca18e2360f4ac-7bf2c826a5aso64858539f.0
+ for <buildroot@buildroot.org>; Tue, 13 Feb 2024 13:15:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707858949; x=1708463749;
+ d=1e100.net; s=20230601; t=1707858950; x=1708463750;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=KnbhPrY13WjsvxSNbDdvbSpvZVXn2QZQERjvF9bT180=;
- b=mcpcjgIvMeq/kU2d6AOVe0jpZ3R+bYPXdKZ6Ne78mUjVKED3Vjl3+gC4FbZst4ZnV4
- DSjfPj29BtqwyjTASKDzxNcYoeTKQORhWsO3rh+iGoKjMaI2M3++VsWMOAlx8xM/h4Xx
- cW70YYJqsDBfp1oZb6tG9vlklJeWdmlQXSxDeSo07ErtXpMsGCX4D8V5R5IlhRkrs67V
- Qd8aSC1N7k6kwJrt+GtU+s8BS5C5Mvd8n6hHPBdSX0MHDmNyp0hNxoqbNoQf6E/1S8iD
- dkVap7/UqZRtXmCZ6byBv2kU+9d77KGijx4M/Z1HXKjKsRFmxnmoW8yjUfRlynFLdc79
- yFag==
-X-Gm-Message-State: AOJu0YxwZxXJetBaPXyF3A7Vg8ewKv/+H5Lgm5oKc/fqlrYzNleJy9dQ
- M+0SXrtBE+opjAQlnbRjbdmCgGRIJXtizOiOfTT6ungu9D4RePyBcO891zqNx6y56A==
-X-Google-Smtp-Source: AGHT+IEev3GyfYVHntcFJcqJP1VlgqfdDej6voyISrZdriIVOUONs03n9lnWDMiGp4ea/pQG8oevgQ==
-X-Received: by 2002:a05:6e02:1c05:b0:363:8607:1fe8 with SMTP id
- l5-20020a056e021c0500b0036386071fe8mr21340ilh.11.1707858948878; 
- Tue, 13 Feb 2024 13:15:48 -0800 (PST)
+ bh=yAQovp2pP9uWY1RKgs/JXJhJZs6eU+yRrbQmJYY1xY4=;
+ b=chZNDLKflFDNsD1UQbj4flwPpWywi9Ziv3yP9xCn9I4AQOBE311Ze3xMsOTzhoRDhw
+ 0kiMZYa4xvl27G4yiFidJ+hnVKF7uBwqH2iOwxn13vo/ujCbgxwXUeIIFJNk/n3nGZSO
+ RvtmogUHA/VZwaU+izTNUqENgJ2/qHlg4WRSziK8OdmJWq46QEFBmTXHQS/0r3JDZCKo
+ f2qkQUZ0c8M4R3bFFjGYrzgcXRIXP23/KGvN9zxjwfgVkAoivFtBHjT4apD3dnpQnkof
+ SLTuCQCx5156ELt1+mji1RK+dV8GGJvTFVf7g4vmV/aOW7VrUjjsFJ/EZNQjNU2H+UaZ
+ jRuQ==
+X-Gm-Message-State: AOJu0Yyh6Lzbd0puYEVjmrMV8BQXlaZkfx5Gz79r0Lqu71ASb5EZEaqC
+ ekKY5RDLjyVHKVWYW3Gw9WASGLvAEGVgER/ZmDuKv5ev/G19j6WcYuixymnJJiwvyQ==
+X-Google-Smtp-Source: AGHT+IFmPd6J5chRpSbSRm4MsGTbf95O9sARYfZmmoEnsKsL8dWR/LUZ1SsIBcIE/N0+4ELCjGBdeg==
+X-Received: by 2002:a05:6602:2bee:b0:7c4:7e9a:c8d2 with SMTP id
+ d14-20020a0566022bee00b007c47e9ac8d2mr896066ioy.20.1707858950340; 
+ Tue, 13 Feb 2024 13:15:50 -0800 (PST)
 X-Forwarded-Encrypted: i=1;
- AJvYcCXbaCChrd+JjazGpAEMhaGz6u3zBf4jfAS5ORiZvZBUO8ZmePPSRtvVYigqQC6NNV2yBNZqUv4nts/q1agQniIDjO7wd9QQ1UiOBuylsCw8Zvpfh91WlOjiX09ewZJa/di338qaBdaiwvxfIMvIl/yNXzUmtYq96OZq+DtkmyiPuiVcFe1dgL0KRN8Ct3Sml/hLxQMNx/BHYmW9Vs0heuABnW5ya0z1hOix9kpHDkMeFmLBhHCt9aGMIX/zDv/y4i2l0AFpkzdxKdqb0fVyihclDbllIgsUpakYewKUlLk1lV8bRPGrA+7vbMLdTbl5gzvi8gSJ5uJZHfDE98nUAG5vH6jhHNKk6qIS4ZvrBlCb8fsI2jJoxo/g65kyg+9Gg7fJu+4mNBtlrlqOPQ5g3BdoTKDHuQCYQu3Hm+pxwaTNysS5lqHKNXuohPjfGIdaHZay4jC8P0TW7tJyq55dux2pv0ioK+7MOvgj/89OpGrCU/MnjUtr1o0/f3VrUWBCx6zQtB++DM0K6omViFGbsMlB5QbfvJsMBJTpkRLYqxl22DxEtB592JV9M5X1srYLO3HkBifkkVejhJ7DfRvfP5AgRsJ3ZU25tZdRIZdO2Q6+GSb79wPh/AWbxMINzFYfZXfOeUt6k6AiEX0JL5QhmNYN0b1cuyZBk+h5mn9yRIcQP48VPLacu9s1tLK+BaybKXuFRHxRUFMshQQZjTtq7ojF8poIbFrvHEUyMdl7QyKU34XeeFR6Lw==
+ AJvYcCVYEJbnCXCj8EajDiKbKuxBPpSCx9eqT4XI39KclGNJleB0nJegtO/LlNQxy8V3l2kTxALi2UOOWbEyi751g/dYCcyBjm807h5C6kSF9l6Z/IdQoLH1sYghBWGVUgn9diJDrBxjF0zQ0jdELxHV0dOb2un6pv72Y+9bZp0/uW1ygRRVRpNAmrls7e7HuOhezH0OimBfRVqUhGVJ+LKAPQjotk8kpH2BNNHxDmBuzuA+FyJU/uYoA11BOPoIbW8vKXoTASO106G6ef7GJ2mdyny6ion8Uhm90znP/Pi2h1/jPv50ZlU1P1iHG0eZ1HRFLqb/HVTvU1R30tkE9sIkb/fn3qnV7XUDJRjtbAubuoJmaKm7m/QGMj+sE3iQTS4Ow+vM9cae3yzBTZBrbHy0x2kRoIPMGA8QdTjCSa7QWr8tgwsMVW0ZcqQPP/lFZklz2LDWU0sbaox1r99vz5PRpxNPtDQ+bNGu1+jbIgdzmTRa+eC8UZYqLK7+2G6Mvwx8UmhVz1QjqDAyS7bkpCSCaXBvB2T7U9JXnTldIutemZG+U3vCZw38FuzDFgeSx/dA7RgesqQ6klj1gYRA7FPrau5BNhvk1dXoXDgmTpmSzREWPHi4JNK/7zjeOSItnQDUW+fYLAjCicGfJ1ZBwEkbw0hgy6wdXO0Opn6tyEuzkvzBZkO5oG7eYtBdf7TjTRiZEBq6c+m0BGd2s8Hn3aevA1HvkAQmLCNJwrWgCIfTxlz+mbLQdwGcMg==
 Received: from james-x399.localdomain (71-218-247-10.hlrn.qwest.net.
  [71.218.247.10]) by smtp.gmail.com with ESMTPSA id
- ei14-20020a05663829ae00b0047151636e0dsm2080336jab.10.2024.02.13.13.15.47
+ ei14-20020a05663829ae00b0047151636e0dsm2080336jab.10.2024.02.13.13.15.48
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 13 Feb 2024 13:15:47 -0800 (PST)
+ Tue, 13 Feb 2024 13:15:49 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 13 Feb 2024 14:15:00 -0700
-Message-Id: <20240213211512.3918044-14-james.hilliard1@gmail.com>
+Date: Tue, 13 Feb 2024 14:15:01 -0700
+Message-Id: <20240213211512.3918044-15-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240213211512.3918044-1-james.hilliard1@gmail.com>
 References: <20240213211512.3918044-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1707858949; x=1708463749; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1707858950; x=1708463750; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=KnbhPrY13WjsvxSNbDdvbSpvZVXn2QZQERjvF9bT180=;
- b=V5xjAIPMGyV10d2evxN6xTQugazQO6DhUfQlN/fJrC+1iIFM4IADo4PqEd1b7WzCHX
- GjgOKXw2Tsi9MpvMsr6swjAJOZ93+ixhGzRPBpyYoduqPEoTN9Ng5rCxNH+XjYg33tZb
- Yl91TYiPyM/2H8KqsSHsrAGG/jOlw8Fc8a37fl15bV5viR+312+QdbGvWAryGoYj7CpV
- /39YdbwLl91C+qhWARSkXk/XnZG8TWq8rEA8KRWXfMKsXg8djI0TUABle/8T7l1UV94q
- po5HsWHZlNJuIXCpggh8ANQfbpO9ss/Rs324sl7TnIlzom6fQNPbCrPJI6KOXnyCFrnu
- M9FQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=yAQovp2pP9uWY1RKgs/JXJhJZs6eU+yRrbQmJYY1xY4=;
+ b=YSqSfmdyJRT5CWugPETgT7Ih0QF03NQuIWRkkH2ojT0wzdjf8TU5FP9WvM9lHdPgke
+ WCbO1Kjz+aFqDUn7Z8naknPssCADPMHWvi9JE36kQSeu9RKSXfIvJR8RDDVSo2t+98jK
+ 0FOgVhfvZb98LjCY3J4nity5111p+cC609ZKrfrtQVjmfoZ2kkh6rF54+2WCqglpSznX
+ /Ioy5z4pGCXmWFHeyLrL4zCrQUQI86omZ5FUF1dQBwtAvvZW92mv7bFdghoheK8QOhu6
+ CTqoTkmj05gmM8Jw/lBgV1hHY+kZH0lLId4fhK6ojg5gKmjYntsXjsUvAjL7obHl/gVe
+ dTXA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=V5xjAIPM
-Subject: [Buildroot] [PATCH v8 14/26] package/python-expandvars: new host
- package
+ header.a=rsa-sha256 header.s=20230601 header.b=YSqSfmdy
+Subject: [Buildroot] [PATCH v8 15/26] package/python-frozenlist: migrate to
+ in-tree pep517 build backend
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -127,46 +127,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+When building with a pep517 frontend we need to use the specified
+build backend as opposed to the fallback setuptools build which
+only works when not building with a pep517 frontend.
+
+This package currently builds using setuptools as we do not yet
+use setuptools with a pep517 build frontend. The package contains
+a setuptools fallback which only can be used when using setuptools
+without a pep517 frontend as the pep517 frontend will only use the
+build backend specified in the package pyproject.toml which is
+hatchling and not setuptools.
+
+The custom in tree backend depends on setuptools and expandvars,
+additionally it depends on cython 3 unless disabled.
+
+As we do not currently support cython 3 lets use the pure python
+build instead.
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-expandvars/python-expandvars.hash |  5 +++++
- package/python-expandvars/python-expandvars.mk   | 15 +++++++++++++++
- 2 files changed, 20 insertions(+)
- create mode 100644 package/python-expandvars/python-expandvars.hash
- create mode 100644 package/python-expandvars/python-expandvars.mk
+ package/python-frozenlist/python-frozenlist.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/python-expandvars/python-expandvars.hash b/package/python-expandvars/python-expandvars.hash
-new file mode 100644
-index 0000000000..0123ed5420
---- /dev/null
-+++ b/package/python-expandvars/python-expandvars.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/expandvars/json
-+md5  8091f578a547e2b4b9df59100a179266  expandvars-0.12.0.tar.gz
-+sha256  7d1adfa55728cf4b5d812ece3d087703faea953e0c0a1a78415de9df5024d844  expandvars-0.12.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256  b8a43c35080fc5855e4f8171e4d0d002f6ff1633d8cfc0b5dee0ac4ced2deac7  LICENSE
-diff --git a/package/python-expandvars/python-expandvars.mk b/package/python-expandvars/python-expandvars.mk
-new file mode 100644
-index 0000000000..5c9a7249b3
---- /dev/null
-+++ b/package/python-expandvars/python-expandvars.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-expandvars
-+#
-+################################################################################
-+
-+PYTHON_EXPANDVARS_VERSION = 0.12.0
-+PYTHON_EXPANDVARS_SOURCE = expandvars-$(PYTHON_EXPANDVARS_VERSION).tar.gz
-+PYTHON_EXPANDVARS_SITE = https://files.pythonhosted.org/packages/2b/a5/46d1f58edcae1d632fafdfee313e378240e002ae45d26502bac938bd8751
-+PYTHON_EXPANDVARS_SETUP_TYPE = pep517
-+PYTHON_EXPANDVARS_LICENSE = MIT
-+PYTHON_EXPANDVARS_LICENSE_FILES = LICENSE
-+HOST_PYTHON_EXPANDVARS_DEPENDENCIES = host-python-hatchling
-+
-+$(eval $(host-python-package))
+diff --git a/package/python-frozenlist/python-frozenlist.mk b/package/python-frozenlist/python-frozenlist.mk
+index 9333598808..92670b3cbd 100644
+--- a/package/python-frozenlist/python-frozenlist.mk
++++ b/package/python-frozenlist/python-frozenlist.mk
+@@ -7,8 +7,12 @@
+ PYTHON_FROZENLIST_VERSION = 1.4.1
+ PYTHON_FROZENLIST_SOURCE = frozenlist-$(PYTHON_FROZENLIST_VERSION).tar.gz
+ PYTHON_FROZENLIST_SITE = https://files.pythonhosted.org/packages/cf/3d/2102257e7acad73efc4a0c306ad3953f68c504c16982bbdfee3ad75d8085
+-PYTHON_FROZENLIST_SETUP_TYPE = setuptools
++PYTHON_FROZENLIST_SETUP_TYPE = pep517
+ PYTHON_FROZENLIST_LICENSE = Apache-2.0
+ PYTHON_FROZENLIST_LICENSE_FILES = LICENSE
++PYTHON_FROZENLIST_DEPENDENCIES = \
++	host-python-expandvars \
++	host-python-setuptools
++PYTHON_FROZENLIST_BUILD_OPTS = -C=pure-python=true
+ 
+ $(eval $(python-package))
 -- 
 2.34.1
 
