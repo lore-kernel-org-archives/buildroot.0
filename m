@@ -4,75 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECAE6C48260
-	for <buildroot@archiver.kernel.org>; Tue, 13 Feb 2024 18:17:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4098DC48260
+	for <buildroot@archiver.kernel.org>; Tue, 13 Feb 2024 18:19:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9B75B81E4F;
-	Tue, 13 Feb 2024 18:17:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0253B80B74;
+	Tue, 13 Feb 2024 18:19:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iNVhN83Ua7KS; Tue, 13 Feb 2024 18:17:56 +0000 (UTC)
+	with ESMTP id rpzCMKmxhSir; Tue, 13 Feb 2024 18:19:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5F3D82237
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1E1E580B7C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B5F3D82237;
-	Tue, 13 Feb 2024 18:17:56 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 656FB1BF284
- for <buildroot@lists.busybox.net>; Tue, 13 Feb 2024 18:17:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1E1E580B7C;
+	Tue, 13 Feb 2024 18:19:30 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A13EF1BF284
+ for <buildroot@lists.busybox.net>; Tue, 13 Feb 2024 18:19:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5243860D70
- for <buildroot@lists.busybox.net>; Tue, 13 Feb 2024 18:17:55 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8E31980B44
+ for <buildroot@lists.busybox.net>; Tue, 13 Feb 2024 18:19:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KJajjENBwTaG for <buildroot@lists.busybox.net>;
- Tue, 13 Feb 2024 18:17:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id r4QGM2Qjg1Ns for <buildroot@lists.busybox.net>;
+ Tue, 13 Feb 2024 18:19:27 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.217;
  helo=smtpcmd01-g.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A1EA160D6F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A1EA160D6F
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 64E6080B13
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 64E6080B13
 Received: from smtpcmd01-g.aruba.it (smtpcmd01-g.aruba.it [62.149.158.217])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A1EA160D6F
- for <buildroot@buildroot.org>; Tue, 13 Feb 2024 18:17:51 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 64E6080B13
+ for <buildroot@buildroot.org>; Tue, 13 Feb 2024 18:19:27 +0000 (UTC)
 Received: from [192.168.50.221] ([84.33.84.190])
  by Aruba Outgoing Smtp  with ESMTPSA
- id ZxLorabghPNlaZxLprz0Pn; Tue, 13 Feb 2024 19:17:49 +0100
-Message-ID: <75e279f2-ff11-4ff8-bb59-f33b352ea3f7@benettiengineering.com>
-Date: Tue, 13 Feb 2024 19:17:48 +0100
+ id ZxLorabghPNlaZxNMrz19I; Tue, 13 Feb 2024 19:19:25 +0100
+Message-ID: <ce5a8cb8-42ad-4366-87c7-0924ccbd0354@benettiengineering.com>
+Date: Tue, 13 Feb 2024 19:19:24 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Content-Language: en-US
 To: kilian.zinnecker@mail.de, buildroot@buildroot.org
 References: <20231204231212.36450-1-kilian.zinnecker@mail.de>
- <20231204231212.36450-3-kilian.zinnecker@mail.de>
- <8f6baf1d-3caa-4b47-aad9-a34fa0761058@benettiengineering.com>
- <2172310.irdbgypaU6@laptop>
+ <20231204231212.36450-2-kilian.zinnecker@mail.de>
+ <08b6187c-94f2-4cbc-b0e8-0066ca687796@benettiengineering.com>
+ <6015348.lOV4Wx5bFT@laptop>
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <2172310.irdbgypaU6@laptop>
-X-CMAE-Envelope: MS4xfGAQ+hMd5zM6Ks8K0Qws9ctP9oPCxdI6cB9SbdBjw+BhSVw7Pt2xfMj6JELezvueN0x8cv5MldB7PUQvq2jPt7qHcgor3v0dfSTIfEsr9rjk3kxmZ/cb
- hDiweMgSKKEgERhMIkqdiv9iTZ2X4/d4LIScRRe9S2GuYJdwl+FVQbSgBZNt+qv+6ZTVC7pUZRk8eCvFVIn+IKmkOQM1ZQSkhazLqPjdtAB3/mZRfEoTAlxZ
- 94EDZ0TbPKoLQhCeOkiG6T79M/nBHEPFHZOE6BVr3NXVxPyf6mmS5W4nB03hW/q1l4VdS/xKM6wkBaWGosrfKQuEcfsw+xYh3rZy8izqtM4=
+In-Reply-To: <6015348.lOV4Wx5bFT@laptop>
+X-CMAE-Envelope: MS4xfKC6rqQwX1I9xrb5r2EIHgMzndONQv+t4pJEoJIEJrqlNrDgTX/fG3laRXVAgQqT04RDs0NFD/CPN/nEv5nfySifXcluWt2MjW/lUSXR88+1H6sJ4KoQ
+ ZX99BsPFleyCLnQ1E6N5BWOAclXR4IjUAlgLLKPmd7QVHyoGDYa9uQGLyikbR1oEZxQZ92DsSnobnocTbBuCmE7Rr2rUGM73+FciQeEYunaVQLK2CURVeqtk
+ HzIfxorYYRpvUDKqJxdYrFPsN7CP0JzkB+0F5lHGm15346bkNhoRFcPyKsMpojRs/bzi2du05Uke4yhseSsGFxquYeV6CPG9CZLa2jA6UCQ=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1707848269; bh=LLZha5Hnl1fq+nnN2WbB0ZCLBOmN6EJ1isLdmX2aIcg=;
+ t=1707848365; bh=7c+rTMY7mUhsI/5oN0vtZIzaeS9HrrmYlz2WgK+KKf0=;
  h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=ZmmjaZj/ClGYQSs0eNEE5BQkqjSKiibmX0l2gTHEuQ+QumapeODBgMMrzD430ArKU
- irZh4eFRz+03lKhA7VCy9ErD5wsG0PozOW+05VHkN76EagkqiCv0jiX0EcG2KAZacY
- YE5qMZgB5SmbZFq1Pd30e/aam+eEE7vg6+BQvIIqA/bgXG8B3ZjTxQ7ngnt5/30Lsu
- e/b+6AG+WWt9dengITTQ0OvnNKxeOoc2eosEyDub/iTjTObT1iblhebemOWiQ/tMqW
- Oabv5rSU0TOHvJ10srr+15RbFIqUxVFlr7/kbFRfz3EecIT9oNg4Dm3nm/+adhM0L0
- nwmxPHx4QhLxw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=MBUFRQQfbg26Lmrs6dN3869tUY/529KLWdfmhdJtzuao7L9wanWb1gd6LpksTE3K+
+ Yeq7L6IDDNqPoPHTfjrEJiKxLxZbFV1ftypLSCYNf+I0ucy3lkTcvuzd+juB4htN4C
+ EBhM8r7zIqJX9b/e1btakp/6IgBuGogfeuX6pYxXMPWNSAmWxgDEQ2sTeB/1+oUd7n
+ Z4RZ0Zb/RWqqEEIVkUx009anIqBhtXAbXQj1SwZi28JEyCIkBjRMDV5FZnSobEdrrW
+ zjEWO/QwiR9QK0HY3E29tCOpFhRFFc8HU89lugG/nWYOzqsF5QHWmdPGBZDbfyeglT
+ rW+2eUMm0fltA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=ZmmjaZj/
-Subject: Re: [Buildroot] [PATCH v2 2/2] configs/beaglev_ahead: new defconfig
+ header.s=a1 header.b=MBUFRQQf
+Subject: Re: [Buildroot] [PATCH v2 1/2] package/xuantie-bins: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,109 +93,71 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Hi Kilian,
 
-On 11/02/24 13:24, kilian.zinnecker--- via buildroot wrote:
+On 11/02/24 13:15, kilian.zinnecker--- via buildroot wrote:
 > Hello Giulio, all,
 > 
->>> This patch adds board support for the BeagleV-Ahead. It uses a
->>> custom kernel for the board's SoC. As the SoC has an outdated and
->>> currently not supported version of the RISC-V vector extension, the
->>> vector extension is disabled.
->>
->> can you please provide an URL to the product page?
+> [--SNIP--]
+>> can you please provide a separate patch to alphabetize?
 > 
-> Yes, I added an URL into the commit message of v3.
+> I did so: https://gitlab.com/buildroot.org/buildroot/-/commit/
+> 53fad3242d74b9fad11978429d6cc2879f783f4b
+> 
+> However, unfortunately Thomas de-alphabetized it again when he applied my
+> RZBoard V2L patches: https://gitlab.com/buildroot.org/buildroot/-/commit/
+> f003675119c9ca503afa19c04074e81c49538baf
+> 
+> I just send a v3 of the BeagleV-Ahead patches. After we get this series
+> applied, I will then again send a single patch to alphabetize.
+
+Please send the alphabetize patch along with the V4 patchset,
+
 > 
 > [--SNIP--]
 >>> --- /dev/null
->>> +++ b/board/beaglev-ahead/post-image.sh
+>>> +++ b/package/xuantie-bins/Config.in
 >>> @@ -0,0 +1,6 @@
->>> +#!/usr/bin/env bash
->>> +set -e
->>> +
->>> +cp -r ${BUILD_DIR}/linux-custom/arch/riscv/boot/dts/thead/overlays/
->>> ${BINARIES_DIR}
->> linux-custom should substituted with $(LINUX_DIR)
+>>> +config BR2_PACKAGE_XUANTIE_BINS
+>>> +	bool "xuantie-bins"
+>>> +	depends on BR2_riscv
+>>> +	help
+>>> +	  This package provides binary blobs, needed for the
+>>> +	  BeagleV-Ahead's SoC (TH1520).
+>>
+>> Can you please describe a bit what those binaries are meant for?
 > 
-> I tried $(LINUX_DIR) and ${LINUX_DIR}, but both resulted in an empty string
-> and as a consequence in a wrong path and broke the build. 
+> 
+> I gave a brief description, but I don't know much about these. Maybe Robert
+> can give even more information, if more is needed?
 
-You're right, LINUX_DIR is not exported in Makefile, that's why it can't
-be found in scripts.
+I see sufficient explanation in V3
+
+> 
+> [--SNIP--]
+>>> +XUANTIE_BINS_FPGA_BIN_FILENAME = "bins/light_aon_fpga.bin"
+>>> +XUANTIE_BINS_AUDIO_BIN_FILENAME = "bins/light_c906_audio.bin"
+>>> +
+>>> +define XUANTIE_BINS_INSTALL_IMAGES_CMDS
+>>> +	$(foreach f, \
+>>> +		$(XUANTIE_BINS_FPGA_BIN_FILENAME) \
+>>> +		$(XUANTIE_BINS_AUDIO_BIN_FILENAME) \
+>>> +		, \
+>>> +		$(INSTALL) -D -m 0644 -t $(BINARIES_DIR) $(@D)/$(f)
+>>> +	)
+>>> +endef
+>>
+>> Being only 2 files to be installed I'd prefer to see 2 lines instead of
+>> foreach loop. Can you please change it accordingly?
+> 
+> I unrolled the loop in my v3 of the patches.
+
+Fine, see V3 comments.
+
+Thank you!
 
 Best regards
 -- 
 Giulio Benetti
 CEO&CTO@Benetti Engineering sas
-
-> So in my v3 I kept it as it is for now. Should I try something else?
-> 
->>> --- /dev/null
->>> +++ b/configs/beaglev_ahead_defconfig
->>> @@ -0,0 +1,44 @@
->>> +BR2_riscv=y
->>> +BR2_riscv_custom=y
->>> +BR2_RISCV_ISA_CUSTOM_RVM=y
->>> +BR2_RISCV_ISA_CUSTOM_RVA=y
->>> +BR2_RISCV_ISA_CUSTOM_RVF=y
->>> +BR2_RISCV_ISA_CUSTOM_RVD=y
->>> +BR2_RISCV_ISA_CUSTOM_RVC=y
->>
->> With commit cbd91e89e43d600172c62fd1cbd33aa74d0a851a all "_CUSTOM" have
->> been dropped, so can you please replace all the:
->> BR2_RISCV_ISA_CUSTOM_*
->> occurences with:
->> BR2_RISCV_ISA_*
->> ?
-> 
-> I fixed it, thanks.
-> 
->>> +BR2_GCC_VERSION_13_X=y
->>
->> I think there is a reason you force using gcc 13, can you describe it in
->> the commit log and here?
-> 
-> Yes, there were problems. I am not 100% sure, but as I remember it: the
-> OpenSBI used has an old version and in its build, it does not define certain
-> flags, which are needed by GCC 12 to activate the needed zifencei and zicsr
-> extension. Those extension where redefined to be in some other extension pack
-> of RiscV (or something like that, I don't remeber this exactly). Anyway it
-> threw an error in GCC 12, and I thinkt to fix that, one would have to touch the
-> old OpenSBI version. Switching to GCC 13 (where it works out of the box) seems
-> then to be cleaner for me.
-> 
-> [--SNIP--]
->>> +BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/beaglev-ahead/uboot.fragmen
->>> t" +BR2_TARGET_UBOOT_FORMAT_BIN=y
->>> +BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
->>> +BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-with-spl.bin"
->>
->> Here you need to add:
->> BR2_PACKAGE_HOST_DOSFSTOOLS=y
->> otherwise it fails to build under buildroot/utils/docker-run
-> 
-> Added dosfstools to the defconfig, thanks!
-> 
->>> +BR2_PACKAGE_HOST_MTOOLS=y
->>> +BR2_PACKAGE_HOST_GENIMAGE=y
->>> +BR2_PACKAGE_XUANTIE_BINS=y
->>
->> After enabling BR2_RISCV_ISA_ options it builds successfully using
->> buildroot/utils/docker-run
-> 
-> I build the image with buildroot/utils/docker-run and it boots. Thanks for the
-> hint, I will use buildroot/utils/docker-run in the future as well!
-> 
-> Thanks for your review and best regards,
-> Kilian
-> 
-> 
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
