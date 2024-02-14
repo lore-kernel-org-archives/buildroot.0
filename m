@@ -4,66 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14E01C48BC4
-	for <buildroot@archiver.kernel.org>; Wed, 14 Feb 2024 09:31:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B01CC48BC4
+	for <buildroot@archiver.kernel.org>; Wed, 14 Feb 2024 09:32:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CA98040343;
-	Wed, 14 Feb 2024 09:31:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F1BB440343;
+	Wed, 14 Feb 2024 09:32:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wn5enfvmQE8q; Wed, 14 Feb 2024 09:31:49 +0000 (UTC)
+	with ESMTP id 1AtfEA2IzWkU; Wed, 14 Feb 2024 09:32:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1651404DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E2914404DE
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D1651404DE;
-	Wed, 14 Feb 2024 09:31:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E2914404DE;
+	Wed, 14 Feb 2024 09:32:25 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C1E871BF398
- for <buildroot@lists.busybox.net>; Wed, 14 Feb 2024 09:31:46 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2769A1BF398
+ for <buildroot@lists.busybox.net>; Wed, 14 Feb 2024 09:32:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BC489822D7
- for <buildroot@lists.busybox.net>; Wed, 14 Feb 2024 09:31:46 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 146AA82368
+ for <buildroot@lists.busybox.net>; Wed, 14 Feb 2024 09:32:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id k281dymi044W for <buildroot@lists.busybox.net>;
- Wed, 14 Feb 2024 09:31:46 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
- helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C1586822C8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1586822C8
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C1586822C8
- for <buildroot@buildroot.org>; Wed, 14 Feb 2024 09:31:45 +0000 (UTC)
-Received: from tuxedoOT.fritz.box (unknown [212.37.174.96])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id 390902C80C0F;
- Wed, 14 Feb 2024 10:31:43 +0100 (CET)
-To: buildroot@buildroot.org
-Date: Wed, 14 Feb 2024 10:31:41 +0100
-Message-Id: <20240214093142.3423721-1-buildroot@bubu1.eu>
-X-Mailer: git-send-email 2.34.1
+ with ESMTP id orSiWZm8Evsq for <buildroot@lists.busybox.net>;
+ Wed, 14 Feb 2024 09:32:23 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=134.158.66.156;
+ helo=cczrelay02.in2p3.fr; envelope-from=david.picard@clermont.in2p3.fr;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DA6B582363
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA6B582363
+Received: from cczrelay02.in2p3.fr (cczrelay06.in2p3.fr [134.158.66.156])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DA6B582363
+ for <buildroot@buildroot.org>; Wed, 14 Feb 2024 09:32:22 +0000 (UTC)
+Received: from [134.158.124.135] (clrelecpo09w.in2p3.fr [134.158.124.135])
+ (authenticated bits=0)
+ by cczrelay02.in2p3.fr (8.14.4/8.14.4) with ESMTP id 41E9WK2v005847
+ (version=TLSv1/SSLv3 cipher=AES128-GCM-SHA256 bits=128 verify=NO);
+ Wed, 14 Feb 2024 10:32:20 +0100
+Message-ID: <abcd4153-41e2-45ce-a89a-e198e86ba337@clermont.in2p3.fr>
+Date: Wed, 14 Feb 2024 10:32:20 +0100
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=bubu1.eu; s=bubu; 
- t=1707903103; bh=SSvpSHajVNfNOEKs4dxoNVg0YVjBZeKonjU+PNGIU48=;
- h=From:To:Cc:Subject:Date;
- b=IJ6nZm2uJQU4zgsoQGAuE6JhBaVEiWhZ32dY/hjrPxvWazROEtMaD8Acuz0TXv81s
- 8l8IMhd3Yg+hHhoxEUidV9lbCvTpQTWCfShm8hCd7KC8Bot6MZw0WUD6kByf52hGmN
- /DenOr5oiOuekSrDnBrZb1fxMt05c4sBu/ZKCwHE9C/1IPTMZ3oZLnQCWq4KPaj8r9
- JsJ1c1LwCGj7IbDfsvMkj/s2/dTYf+kWXw9nC7bGNaVmO43ZN3fzdIvDDQYhpptUY1
- DBh1i9KSKAEzn13/C6frwetnflvRT2Z509aNBNQ2pIuLzASubSAOmuDOcFc6EHm5Gb
- zAk2gCz6Ji0Cw==
+User-Agent: Mozilla Thunderbird
+From: David Picard <david.picard@clermont.in2p3.fr>
+To: buildroot@buildroot.org
+Content-Language: fr
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=bubu1.eu header.i=@bubu1.eu
- header.a=rsa-sha256 header.s=bubu header.b=IJ6nZm2u
-Subject: [Buildroot] [PATCH] package/python-pytz: bump to 2024.1
+ dmarc=none (p=none dis=none)
+ header.from=clermont.in2p3.fr
+Subject: [Buildroot] [PATCH 1/1] package/intel-socfpga-hwlib: add new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,50 +64,120 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: David Picard <david.picard@clermont.in2p3.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
----
- package/python-pytz/python-pytz.hash | 4 ++--
- package/python-pytz/python-pytz.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Add a package for the Intel/Altera SoC FPGA hardware library. It is
+used to let the HPS and the FPGA fabric communicate with each other.
 
-diff --git a/package/python-pytz/python-pytz.hash b/package/python-pytz/python-pytz.hash
-index be6f0e976b..a8bfe67817 100644
---- a/package/python-pytz/python-pytz.hash
-+++ b/package/python-pytz/python-pytz.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pytz/json
--md5  84e6569fcc917b096cca1063819c4ab0  pytz-2023.3.post1.tar.gz
--sha256  7b4fddbeb94a1eba4b557da24f19fdf9db575192544270a9101d8509f9f43d7b  pytz-2023.3.post1.tar.gz
-+md5  b26bb090d1fe96064019bf7068eeb801  pytz-2024.1.tar.gz
-+sha256  2a29735ea9c18baf14b448846bde5a48030ed267578472d8955cd0e7443a9812  pytz-2024.1.tar.gz
- # Locally computed sha256 checksums
- sha256  be8b1a37ebe26c592a90f6c0eb33103a7f383ce2f4d7498c0af9a526990a07b8  LICENSE.txt
-diff --git a/package/python-pytz/python-pytz.mk b/package/python-pytz/python-pytz.mk
-index 182d8156fc..300e26befe 100644
---- a/package/python-pytz/python-pytz.mk
-+++ b/package/python-pytz/python-pytz.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYTZ_VERSION = 2023.3.post1
-+PYTHON_PYTZ_VERSION = 2024.1
- PYTHON_PYTZ_SOURCE = pytz-$(PYTHON_PYTZ_VERSION).tar.gz
--PYTHON_PYTZ_SITE = https://files.pythonhosted.org/packages/69/4f/7bf883f12ad496ecc9514cd9e267b29a68b3e9629661a2bbc24f80eff168
-+PYTHON_PYTZ_SITE = https://files.pythonhosted.org/packages/90/26/9f1f00a5d021fff16dee3de13d43e5e978f3d58928e129c3a62cf7eb9738
- PYTHON_PYTZ_SETUP_TYPE = setuptools
- PYTHON_PYTZ_LICENSE = MIT
- PYTHON_PYTZ_LICENSE_FILES = LICENSE.txt
+Signed-off-by: David Picard <david.picard@clermont.in2p3.fr>
+---
+package/Config.in | 1 +
+package/intel-socfpga-hwlib/Config.in | 12 ++++++
+.../intel-socfpga-hwlib.hash | 2 +
+.../intel-socfpga-hwlib.mk | 39 +++++++++++++++++++
+4 files changed, 54 insertions(+)
+create mode 100644 package/intel-socfpga-hwlib/Config.in
+create mode 100644 package/intel-socfpga-hwlib/intel-socfpga-hwlib.hash
+create mode 100644 package/intel-socfpga-hwlib/intel-socfpga-hwlib.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index bf0fe078b9..cd6c6bcaba 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1736,6 +1736,7 @@ menu "Hardware handling"
+source "package/gnu-efi/Config.in"
+source "package/hackrf/Config.in"
+source "package/hidapi/Config.in"
++ source "package/intel-socfpga-hwlib/Config.in"
+source "package/jitterentropy-library/Config.in"
+source "package/lcdapi/Config.in"
+source "package/let-me-create/Config.in"
+diff --git a/package/intel-socfpga-hwlib/Config.in 
+b/package/intel-socfpga-hwlib/Config.in
+new file mode 100644
+index 0000000000..ced6483a59
+--- /dev/null
++++ b/package/intel-socfpga-hwlib/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_INTEL_SOCFPGA_HWLIB
++ bool "intel-socfpga-hwlib"
++ depends on BR2_arm
++ help
++ This package provides the Intel SoC FPGA HWLIB for
++ Intel/Altera SoC FPGA chips.
++ This library allows to communicate with the FPGA fabric from
++ Linux, running on the HPS device.
++ The source code is not compiled. Instead, a symlink is added
++ to $(STAGING_DIR)/lib.
++
++ https://github.com/altera-opensource/intel-socfpga-hwlib
+diff --git a/package/intel-socfpga-hwlib/intel-socfpga-hwlib.hash 
+b/package/intel-socfpga-hwlib/intel-socfpga-hwlib.hash
+new file mode 100644
+index 0000000000..60efe9013e
+--- /dev/null
++++ b/package/intel-socfpga-hwlib/intel-socfpga-hwlib.hash
+@@ -0,0 +1,2 @@
++sha256 bbf0767facfdf18ca3dbead66b1e98090c4e9731e2b87cf35c3bf13db0c315e4 
+intel-socfpga-hwlib-23.12.02.tar.gz
++sha256 2ed04f9cc773f88c8d52c05c04bb3d28f376c082bf99b6a3cb5590b1627ad484 
+License.txt
+diff --git a/package/intel-socfpga-hwlib/intel-socfpga-hwlib.mk 
+b/package/intel-socfpga-hwlib/intel-socfpga-hwlib.mk
+new file mode 100644
+index 0000000000..bf18c23560
+--- /dev/null
++++ b/package/intel-socfpga-hwlib/intel-socfpga-hwlib.mk
+@@ -0,0 +1,39 @@
++################################################################################
++#
++# intel-socfpga-hwlib
++#
++################################################################################
++
++INTEL_SOCFPGA_HWLIB_VERSION = 23.12.02
++INTEL_SOCFPGA_HWLIB_SITE = $(call 
+github,altera-opensource,intel-socfpga-hwlib,rel_master_$(INTEL_SOCFPGA_HWLIB_VERSION)_pr)
++INTEL_SOCFPGA_HWLIB_LICENSE = PROPRIETARY
++INTEL_SOCFPGA_HWLIB_LICENSE_FILES = License.txt
++INTEL_SOCFPGA_HWLIB_REDISTRIBUTE = YES
++INTEL_SOCFPGA_HWLIB_INSTALL_STAGING = YES
++
++define INTEL_SOCFPGA_HWLIB_INSTALL_STAGING_CMDS
++ ln -s $(BUILD_DIR)/intel-socfpga-hwlib-$(INTEL_SOCFPGA_HWLIB_VERSION) 
+$(STAGING_DIR)/lib/intel-socfpga-hwlib
++endef
++
++# define INTEL_SOCFPGA_HWLIB_INSTALL_IMAGES_CMDS
++# mkdir -p $(BINARIES_DIR)/intel-ucode
++# $(INSTALL) -m 0644 -t $(BINARIES_DIR)/intel-ucode \
++# $(@D)/intel-ucode/*
++# endef
++#
++# ifeq ($(BR2_PACKAGE_INTEL_SOCFPGA_HWLIB_INSTALL_TARGET),y)
++# define INTEL_SOCFPGA_HWLIB_INSTALL_TARGET_CMDS
++# mkdir -p $(TARGET_DIR)/lib/firmware/intel-ucode
++# $(INSTALL) -m 0644 -t $(TARGET_DIR)/lib/firmware/intel-ucode \
++# $(@D)/intel-ucode/*
++# endef
++# else
++# INTEL_SOCFPGA_HWLIB_INSTALL_TARGET = NO
++# endif
++
++# define INTEL_SOCFPGA_HWLIB_LINUX_CONFIG_FIXUPS
++# $(call KCONFIG_ENABLE_OPT,CONFIG_MICROCODE)
++# $(call KCONFIG_ENABLE_OPT,CONFIG_MICROCODE_INTEL)
++# endef
++
++$(eval $(generic-package))
+
 -- 
-2.34.1
+2.40.1
 
 _______________________________________________
 buildroot mailing list
