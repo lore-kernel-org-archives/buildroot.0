@@ -4,94 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 475A1C48BC3
-	for <buildroot@archiver.kernel.org>; Wed, 14 Feb 2024 22:44:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93098C48BEB
+	for <buildroot@archiver.kernel.org>; Wed, 14 Feb 2024 23:01:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CBF08418C2;
-	Wed, 14 Feb 2024 22:44:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5F27340999;
+	Wed, 14 Feb 2024 23:01:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id McyUH0KqWv6F; Wed, 14 Feb 2024 22:44:04 +0000 (UTC)
+	with ESMTP id XR187iHHRZL2; Wed, 14 Feb 2024 23:01:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E21EE418E5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 61ECD40816
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E21EE418E5;
-	Wed, 14 Feb 2024 22:44:03 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4BF511BF57B
- for <buildroot@lists.busybox.net>; Wed, 14 Feb 2024 22:44:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 61ECD40816;
+	Wed, 14 Feb 2024 23:01:47 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 919251BF57B
+ for <buildroot@lists.busybox.net>; Wed, 14 Feb 2024 23:01:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 458F2418E5
- for <buildroot@lists.busybox.net>; Wed, 14 Feb 2024 22:44:02 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8BC8B60835
+ for <buildroot@lists.busybox.net>; Wed, 14 Feb 2024 23:01:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FgP1A28P0wM8 for <buildroot@lists.busybox.net>;
- Wed, 14 Feb 2024 22:44:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TQmpCgBU9use for <buildroot@lists.busybox.net>;
+ Wed, 14 Feb 2024 23:01:45 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::42b; helo=mail-pf1-x42b.google.com;
+ client-ip=2607:f8b0:4864:20::52c; helo=mail-pg1-x52c.google.com;
  envelope-from=vineetg@rivosinc.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 26374418C2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 26374418C2
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com
- [IPv6:2607:f8b0:4864:20::42b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 26374418C2
- for <buildroot@buildroot.org>; Wed, 14 Feb 2024 22:44:00 +0000 (UTC)
-Received: by mail-pf1-x42b.google.com with SMTP id
- d2e1a72fcca58-6e0a4823881so238619b3a.0
- for <buildroot@buildroot.org>; Wed, 14 Feb 2024 14:44:00 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7CA5D6075D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7CA5D6075D
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com
+ [IPv6:2607:f8b0:4864:20::52c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7CA5D6075D
+ for <buildroot@buildroot.org>; Wed, 14 Feb 2024 23:01:44 +0000 (UTC)
+Received: by mail-pg1-x52c.google.com with SMTP id
+ 41be03b00d2f7-5c229dabbb6so208808a12.0
+ for <buildroot@buildroot.org>; Wed, 14 Feb 2024 15:01:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707950640; x=1708555440;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=H7v4PILcv6wjuaNZG+G+euvfsHPNa2vxKEu15/gDVq0=;
- b=pwb5/FDNLdJHonZ2yMmr13gF1yFVfN9FypEu5298kwdg5PWEb7ACAyconwVALO7apZ
- II85dusCbHSASvAH38coouVcHkEsyHiTWbtm44tthdJOXrKMuTv4ypyHqUKyvC+fEx/k
- KJbtE0pD3SZdb7VOau7bfcPQIXBmjQNa1bHUkWFdgv6lMbx5QaTDtRTdRrgH/wR0inoB
- BoMKyLpDBSn2JV9xHtHSRqR/5FxRbsOjbT8VYaqFrmPSt5jyy6IyQ5MLLrDCoVzy20VM
- SRq2wjxD+GQQqeibzh0zOtUPjbpB6Yh8UnB7l2jQG0NOk+lpOUj76nf+z9qSttslviNZ
- 34lA==
-X-Gm-Message-State: AOJu0YwBRZYIn0dIyUJr23N0AWTaQmp2W65mG4ze9qszNTVVyJ6U4aAt
- rOyg3Yv0HoGl5Trutye/kdXknQeiYLevSPHfXkfBZOVciAntQaIqm1MhVecYiO290PkHrNbjmL9
- /
-X-Google-Smtp-Source: AGHT+IFVHKoqWpk2/muSYhN4bDkBWpQHt4psgnfXhdG9TY7emiJNKF4hT7PDCEJYXhTxNNpcLSV2ng==
-X-Received: by 2002:a05:6a21:1690:b0:1a0:6856:d128 with SMTP id
- np16-20020a056a21169000b001a06856d128mr229261pzb.9.1707950640048; 
- Wed, 14 Feb 2024 14:44:00 -0800 (PST)
+ d=1e100.net; s=20230601; t=1707951703; x=1708556503;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=JxlxXjpvROVqB5V+MReceg8qankVCwW7zfEG6/aE9qY=;
+ b=f0y20EZph7ybko5KI2zE/tlSUScq6i1eBR32d1LAo01bu9ZzViHSQNjkXgQbwX30EX
+ DXwB7h9gCLpRcH6gWz7oTLVwh6su2DiXCwrPlgc/94ylAIuckfC+KbQf3PcEqcHTCBxd
+ lrXKde5QzrOPv7S4Om8UcJSFgX+gRbdCbnsOULl9luU0ClxI3n+zAcC4UAtEulanNKUp
+ YsxCNmRNYyxXWtbzI3kTpD9Xwx4j1Dilw7tf9spmwphEdgJeP9gHa3l8Yq5+hWyuAveO
+ mnvpkntfVrNEvuaKaRo5zxH5xhUftmX+Y0UQhsqXQqw4hJNwMe0jlSr7cLKq75ZOiGUz
+ U1ZA==
+X-Gm-Message-State: AOJu0Yx62ttLvnXiO0ZM7i6E2zepktbX53+k4c03gSJmdgSr7SpArVeY
+ 5HSSybXUaWzto5QScerC4UkpY+v3kXjVz0aasTKJFwXCtVXykbPgvmKDOvNhS04Z9D4Dfo0+Kpz
+ 0
+X-Google-Smtp-Source: AGHT+IH9PGMeweRDKddZa4OBuoZB8BPMJ3JWF2xxjz8T2WZ4EzPd0BkJCrkKnm4kynULjD1KQx9OhQ==
+X-Received: by 2002:a17:90a:bc88:b0:299:4e:6b17 with SMTP id
+ x8-20020a17090abc8800b00299004e6b17mr97308pjr.20.1707951703450; 
+ Wed, 14 Feb 2024 15:01:43 -0800 (PST)
 Received: from vineet-framework.hq.rivosinc.com ([12.44.203.122])
  by smtp.gmail.com with ESMTPSA id
- q4-20020a17090a178400b002960e3745d9sm2175152pja.13.2024.02.14.14.43.59
+ js5-20020a17090b148500b00298d6b4e8c9sm26460pjb.10.2024.02.14.15.01.41
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 14 Feb 2024 14:43:59 -0800 (PST)
+ Wed, 14 Feb 2024 15:01:42 -0800 (PST)
 From: Vineet Gupta <vineetg@rivosinc.com>
 To: buildroot@buildroot.org
-Date: Wed, 14 Feb 2024 14:43:55 -0800
-Message-Id: <20240214224355.551010-1-vineetg@rivosinc.com>
+Date: Wed, 14 Feb 2024 15:01:14 -0800
+Message-Id: <20240214230114.551779-1-vineetg@rivosinc.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240214224355.551010-1-vineetg@rivosinc.com>
+References: <20240214224355.551010-1-vineetg@rivosinc.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1707950640; x=1708555440;
+ d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1707951703; x=1708556503;
  darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=H7v4PILcv6wjuaNZG+G+euvfsHPNa2vxKEu15/gDVq0=;
- b=yQ57VFpW5uxkQWcDB3ZBmIU1j9VqYiAPalJ5wIQaW1Gv1ZN/8mFAOx+q7RqJi41Ujd
- zQnrojkJGw+Zhop/zM9agGYaLKrMI2w9V0gbMegC76u93SNM8dXFeSZI2wI2H0qT5tcF
- IEMrnnQyWDLfZAjDrAF5XnI51gLpBjvwkPsNcxkwJdjbOw+dSYvjYQ0ld//X6fNi01SH
- n4PTxr/GU6isTvTBQ6WQIVsdWY1oq4/PzXZlGDQawnIlYR0/SA/XQuTZCleSVtVIFbRu
- /4GPeMJFhJwJuJgzOj5BG3J5y1E8/3k5bjWKaoZ+RylBz1QgHZyRO7X7nZOMygxvMU1H
- dUCQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=JxlxXjpvROVqB5V+MReceg8qankVCwW7zfEG6/aE9qY=;
+ b=UX2xdEdI0UdWutH84dXvNFrkI9Sc0ZjDM7v/zRF++Ffn7crXclVA9gpydWsP8/5hzG
+ M5aJBcbeU/uJd2rjFqJaY01fABP33pj6xlWD0pTczoa5Bum+2j0bz1QB+qtuRzZIT0dS
+ X7U+WBgUcRgsXeyzcwC7AWLgXhFZMYqTjiTdDZn7O2dkxY5fNRb3AUCUjpMuoHkIJFQd
+ 74ClJvzsPhT4CiSxA+T+P9IjWhdoc/1SWE3DwvPFFS1QIh87OFhBtg5ZMV68tssosbFL
+ +imWOsSAHKmQfAcZBe5CY8eq17se+up45CPCE72Bl4OzdiUGSLbTCDSvD1CGjMiVVdqE
+ kV3w==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=rivosinc.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=rivosinc-com.20230601.gappssmtp.com
  header.i=@rivosinc-com.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=yQ57VFpW
-Subject: [Buildroot] [PATCH] glibc: build: honor toplevel
+ header.s=20230601 header.b=UX2xdEdI
+Subject: [Buildroot] [PATCH v2] glibc: build: honor toplevel
  BR2_TARGET_OPTIMIZATION
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -116,11 +119,14 @@ force a certain build toogle from top level.
 
 Signed-off-by: Vineet Gupta <vineetg@rivosinc.com>
 ---
+Changes since v1:
+  - Add to exisiting GLIBC_EXTRA_CFLAGS if any
+---
  package/glibc/glibc.mk | 3 +++
  1 file changed, 3 insertions(+)
 
 diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index d198d6f04cb2..72031907c252 100644
+index d198d6f04cb2..ebcd7b2bdb21 100644
 --- a/package/glibc/glibc.mk
 +++ b/package/glibc/glibc.mk
 @@ -80,6 +80,9 @@ GLIBC_INSTALL_STAGING = YES
@@ -128,7 +134,7 @@ index d198d6f04cb2..72031907c252 100644
  GLIBC_INSTALL_STAGING_OPTS = install_root=$(STAGING_DIR) install
  
 +# Seed with any special toggles user may have setup in config
-+GLIBC_EXTRA_CFLAGS = $(BR2_TARGET_OPTIMIZATION)
++GLIBC_EXTRA_CFLAGS += $(BR2_TARGET_OPTIMIZATION)
 +
  # Thumb build is broken, build in ARM mode
  ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
