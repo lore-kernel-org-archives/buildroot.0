@@ -1,61 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40B0DC48BEB
-	for <buildroot@archiver.kernel.org>; Wed, 14 Feb 2024 23:03:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8E43C48BC4
+	for <buildroot@archiver.kernel.org>; Wed, 14 Feb 2024 23:30:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 002F140816;
-	Wed, 14 Feb 2024 23:03:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7C5328230D;
+	Wed, 14 Feb 2024 23:30:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UxfRqRxWA4Uf; Wed, 14 Feb 2024 23:03:15 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id umUOuzIjgawE; Wed, 14 Feb 2024 23:30:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F027D4081B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DC47A82304
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F027D4081B;
-	Wed, 14 Feb 2024 23:03:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 17CA21BF57B
- for <buildroot@lists.busybox.net>; Wed, 14 Feb 2024 23:03:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DC47A82304;
+	Wed, 14 Feb 2024 23:30:40 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5B5FD1BF3C0
+ for <buildroot@lists.busybox.net>; Wed, 14 Feb 2024 23:30:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 047D74081B
- for <buildroot@lists.busybox.net>; Wed, 14 Feb 2024 23:03:14 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 47A5582304
+ for <buildroot@lists.busybox.net>; Wed, 14 Feb 2024 23:30:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3JfQ89Sjd9v9 for <buildroot@lists.busybox.net>;
- Wed, 14 Feb 2024 23:03:13 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fAIVHWH6GJ2I for <buildroot@lists.busybox.net>;
+ Wed, 14 Feb 2024 23:30:38 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
  client-ip=2001:868:100:600::216; helo=shout01.mail.de;
  envelope-from=kilian.zinnecker@mail.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E2A6540816
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E2A6540816
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 790D1822F8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 790D1822F8
 Received: from shout01.mail.de (shout01.mail.de [IPv6:2001:868:100:600::216])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E2A6540816
- for <buildroot@buildroot.org>; Wed, 14 Feb 2024 23:03:12 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 790D1822F8
+ for <buildroot@buildroot.org>; Wed, 14 Feb 2024 23:30:38 +0000 (UTC)
 Received: from postfix01.mail.de (postfix01.bt.mail.de [10.0.121.125])
- by shout01.mail.de (Postfix) with ESMTP id 01B9724113B;
- Thu, 15 Feb 2024 00:03:11 +0100 (CET)
+ by shout01.mail.de (Postfix) with ESMTP id B73EC240E59;
+ Thu, 15 Feb 2024 00:30:36 +0100 (CET)
 Received: from smtp01.mail.de (smtp02.bt.mail.de [10.0.121.212])
- by postfix01.mail.de (Postfix) with ESMTP id D7BC4801CB;
- Thu, 15 Feb 2024 00:03:10 +0100 (CET)
+ by postfix01.mail.de (Postfix) with ESMTP id 99E60801CB;
+ Thu, 15 Feb 2024 00:30:36 +0100 (CET)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
  key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
  (No client certificate requested)
- by smtp01.mail.de (Postfix) with ESMTPSA id 9C7A0240A1B;
- Thu, 15 Feb 2024 00:03:09 +0100 (CET)
-To: Kilian Zinnecker <kilian.zinnecker@mail.de>, buildroot@buildroot.org
-Date: Thu, 15 Feb 2024 00:03:08 +0100
-Message-ID: <4868466.GXAFRqVoOG@laptop>
-In-Reply-To: <bf30e91f-1061-4aab-8670-c1ef9f7d895d@benettiengineering.com>
-References: <20240211120857.6622-1-kilian.zinnecker@mail.de>
- <20240211120857.6622-3-kilian.zinnecker@mail.de>
- <bf30e91f-1061-4aab-8670-c1ef9f7d895d@benettiengineering.com>
+ by smtp01.mail.de (Postfix) with ESMTPSA id 55BBE240A5B;
+ Thu, 15 Feb 2024 00:30:34 +0100 (CET)
+To: buildroot@buildroot.org
+Date: Thu, 15 Feb 2024 00:30:25 +0100
+Message-Id: <20240214233028.1226645-1-kilian.zinnecker@mail.de>
 MIME-Version: 1.0
 X-purgate: clean
 X-purgate: This mail is considered clean (visit http://www.eleven.de for
@@ -65,26 +61,26 @@ X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
 X-purgate: This mail is considered clean (visit http://www.eleven.de for
  further information)
 X-purgate: clean
-X-purgate-size: 3096
-X-purgate-ID: 154282::1707951790-19D2D878-9D5E7C5D/0/0
+X-purgate-size: 2884
+X-purgate-ID: 154282::1707953436-BD52E878-FB702EDD/0/0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=mail.de; s=mailde202009; t=1707951790;
- bh=2qgp+EOcWID4I4TALQ+ZRzHnwVBxWA78UORVxK55DsE=;
- h=From:To:Cc:Subject:Date:Message-ID:From:To:CC:Subject:Reply-To;
- b=GTgU56kL9Z3DvPS9uaYYqolHl4PNBS44QgB6U4kioYWgwJ2Ot5pg1IygZIwVLddQj
- 6VLHCt3h4rz6mO+YVT3H0yK84OWstrNVrgxFxCQeWeFt4EqDshT6sw+9lFIrE162d5
- b70LRH5SpTrTpSq74XDDMocus49VhqtT1GEvliuXSXAhLrvYFrFCXJ7XkoyWUReVIL
- 68ZHVTHvMGE6V/LFUPiuKh1uoquqVipn2gnRkbaOE9Upsod2WJaMNNNJFzLpv6AC9z
- rWcmlcpLliJtYgd7uY+ELW78rAL8VbKuVJ5CX+wDnsLWdxfdFigBQzoOXV5vyEp5fK
- VnHPBQeXhYHFA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=mail.de; s=mailde202009; t=1707953436;
+ bh=5H6hNqE6TZqouioxh16gKqFq9iag3wu+sOFcteYdlmg=;
+ h=From:To:Cc:Subject:Date:Message-Id:From:To:CC:Subject:Reply-To;
+ b=C9kKt7y9cjPredO6Ns6r2PQ4aX2fn3DJjuKbY9HrJ8NyWexskZrZBDg4Tx+64e53c
+ H8Kd9/Kc89cb1sgmgggy1dWhgGe/6eK8jK8G5b2U8WpW4DfCNGKfEWTltzU/z8HJAZ
+ NsldHQytE45aYGAprEufYbrNnZ1cev6WbWtwVsLA6VRamBqcPvZHSOHSqAa7ziOQNJ
+ 3vU3zWVVXAUBJDOjUWmkfLV31kDtmNzD/inoofgWiS/7AAisnthLnU4pz22EGMF301
+ oiDMCXM2TJZG4aQhT1xR3rSG+2zLRy12gP71qqUgFDJ2VsvJWCmq3lHTuwwh/SDqjl
+ 9iOjhxvFvWMww==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mail.de
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=mail.de header.i=@mail.de header.a=rsa-sha256
- header.s=mailde202009 header.b=GTgU56kL
-Subject: Re: [Buildroot] [PATCH v3 2/2] configs/beaglev_ahead: new defconfig
+ header.s=mailde202009 header.b=C9kKt7y9
+Subject: [Buildroot] [PATCH v4 0/3] Add board support for the BeagleV-Ahead
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,89 +92,81 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: "kilian.zinnecker--- via buildroot" <buildroot@buildroot.org>
-Reply-To: kilian.zinnecker@mail.de
+From: Kilian Zinnecker via buildroot <buildroot@buildroot.org>
+Reply-To: Kilian Zinnecker <kilian.zinnecker@mail.de>
 Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
  Robert Nelson <robertcnelson@gmail.com>,
+ Kilian Zinnecker <kilian.zinnecker@mail.de>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Giulio, all,
+This patch series adds board support for the BeagleV-Ahead.
 
-[--SNIP--]
+v3 -> v4:
+  - Improved descriptions in commit messages
+  - Patch to alphabetize own DEVELOPERS entry
+  - Fix in package/xuantie-bins/Config.in: Spaces -> tabs
+  - Github helper and removal of superfluous variables in xuantie-bins.mk
+  - Added patch to disable CLOCK_ALLOW_WRITE_DEBUGFS in custom kernel
 
-> > a/board/beaglev-ahead/patches/uboot/0001-Overwrite-bootcmd-by-force.patch
-> > b/board/beaglev-ahead/patches/uboot/0001-Overwrite-bootcmd-by-force.patch
-> > new file mode 100644
-> > index 0000000000..bcf5b965ce
-> > --- /dev/null
-> > +++
-> > b/board/beaglev-ahead/patches/uboot/0001-Overwrite-bootcmd-by-force.patch
-> > @@ -0,0 +1,30 @@
-> > +From 81db2d155db74192e127ae1d98dd4ec415f53dd3 Mon Sep 17 00:00:00 2001
-> > +From: Kilian Zinnecker <kilian.zinnecker@mail.de>
-> > +Date: Mon, 21 Aug 2023 23:51:59 +0200
-> > +Subject: [PATCH] Overwrite bootcmd by force
-> > +
-> > +This patch is a dirty hack: Trying to overwrite the bootcmd via the
-> > +usual BOOT_COMMAND had no effect: Upon boot the bootcmd defaulted
-> > +to some preset value and could not be changed easily. Therefore a
-> > +hook is used to force the bootcmd to be overwritten.
-> 
-> This is strange because if so also the bootcmd content of uEnv.txt below
-> should be skipped, or maybe there is a bug in this u-boot that evaluates
-> bootcmd too early without taking into account environment variables.
-> But I'm also noticing that you have your Environment variables in Fat,
-> but it depends how u-boot deals with environment variables. Usually
-> you have to specificy an offset in memory where environment variables
-> live.
-> 
-> But I see in your "make uboot-menuconfig" that CONFIG_ENV_IS_IN_FAT is
-> not enabled, but only CONFIG_ENV_IS_IN_MMC is and you have to specify:
-> CONFIG_ENV_OFFSET
-> CONFIG_ENV_SIZE
-> 
-> So if you want to go with vfat way you need to enable
-> CONFIG_ENV_IS_IN_FAT and specify:
-> CONFIG_ENV_FAT_INTERFACE
-> CONFIG_ENV_FAT_DEVICE_AND_PART
-> and most of all:
-> CONFIG_ENV_FAT_FILE=uEnv.txt
-> in uboot.fragment below
-> 
-> I would go with this last way instead of adding such dirty hack, can you
-> work on that?
+v2 -> v3:
 
-I tried, but so far I am not successful, maybe due to my lack of experience 
-with uboot or maybe due to the customization of this particular uboot. I 
-removed my custom-uboot patch and added the following configs to the 
-uboot.fragment file, but it did not work yet:
+  - Added brief description what the xuantie bin binaries are for
+  - Unrolled loop in XUANTIE_BINS_INSTALL_IMAGES_CMDS of
+    package/xuantie-bins/xuantie-bins.mk
+  - Added a second product page link to board's readme.txt
+  - Added URL to the product page to git commit message
+  - Dropped "_CUSTOM" from all "BR2_RISCV_ISA_*" in the board's
+    defconfig
+  - Add description to the board's readme.txt and defconfig  why GCC
+    v13 is chosen
+  - Added BR2_PACKAGE_HOST_DOSFSTOOLS to board's defconfig
 
-# CONFIG_ENV_IS_IN_MMC is not set
-CONFIG_ENV_IS_IN_FAT=y
-CONFIG_ENV_FAT_INTERFACE="mmc"
-CONFIG_ENV_FAT_DEVICE_AND_PART="1:1"
-CONFIG_ENV_FAT_FILE="uEnv.txt"
+v1 -> v2:
 
-I also tried to use mainline uboot v2024.01, which features the Lichee Pi 4A, 
-which features the same SoC, but this didn't work either. I had a look at the 
-custom uboot source and it defines a lot of configs inside this header file:
+  - Added hash file for xuantie-bins package
+  - Now uses uEnv.txt for actual boot commands
+  - Removed extlinux.conf
+  - Removed superflous comments inside config files
 
-https://openbeagle.org/beaglev-ahead/beaglev-ahead-u-boot/-/blob/beaglev-v2020.01-1.1.2-ubuntu/include/configs/light-c910.h?ref_type=heads#L363-388
+Kilian Zinnecker (3):
+  Fix alphabetical order of DEVELOPERS file entry
+  package/xuantie-bins: new package
+  configs/beaglev_ahead: new defconfig
 
-I tried to remove the hard-coded bootcmd from this header, but that also 
-didn't work. I don't understand the inner workings of uboot well enough yet to 
-get it properly working, so I appreciate all hints and any help here.
+ DEVELOPERS                                    |  5 +-
+ board/beaglev-ahead/genimage.cfg              | 62 +++++++++++++++
+ board/beaglev-ahead/linux.fragment            |  2 +
+ ...01-Disable-CLOCK_ALLOW_WRITE_DEBUGFS.patch | 30 +++++++
+ .../0001-Overwrite-bootcmd-by-force.patch     | 30 +++++++
+ board/beaglev-ahead/post-image.sh             |  6 ++
+ board/beaglev-ahead/readme.txt                | 78 +++++++++++++++++++
+ board/beaglev-ahead/uEnv.txt                  |  4 +
+ board/beaglev-ahead/uboot.fragment            |  2 +
+ configs/beaglev_ahead_defconfig               | 46 +++++++++++
+ package/Config.in                             |  1 +
+ package/xuantie-bins/Config.in                |  8 ++
+ package/xuantie-bins/xuantie-bins.hash        |  2 +
+ package/xuantie-bins/xuantie-bins.mk          | 19 +++++
+ 14 files changed, 294 insertions(+), 1 deletion(-)
+ create mode 100644 board/beaglev-ahead/genimage.cfg
+ create mode 100644 board/beaglev-ahead/linux.fragment
+ create mode 100644 board/beaglev-ahead/patches/linux/0001-Disable-CLOCK_ALLOW_WRITE_DEBUGFS.patch
+ create mode 100644 board/beaglev-ahead/patches/uboot/0001-Overwrite-bootcmd-by-force.patch
+ create mode 100755 board/beaglev-ahead/post-image.sh
+ create mode 100644 board/beaglev-ahead/readme.txt
+ create mode 100644 board/beaglev-ahead/uEnv.txt
+ create mode 100644 board/beaglev-ahead/uboot.fragment
+ create mode 100644 configs/beaglev_ahead_defconfig
+ create mode 100644 package/xuantie-bins/Config.in
+ create mode 100644 package/xuantie-bins/xuantie-bins.hash
+ create mode 100644 package/xuantie-bins/xuantie-bins.mk
 
-However, I will already send a v4 of the patches, in which I try to address 
-all the other issues.
-
-Thanks again for reviewing and best regards,
-Kilian
-
+-- 
+2.34.1
 
 _______________________________________________
 buildroot mailing list
