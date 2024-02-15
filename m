@@ -1,94 +1,93 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CA79C4829E
-	for <buildroot@archiver.kernel.org>; Thu, 15 Feb 2024 06:10:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3DDFC4829E
+	for <buildroot@archiver.kernel.org>; Thu, 15 Feb 2024 07:02:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 07F10403C7;
-	Thu, 15 Feb 2024 06:10:24 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id n8sAAbdgjXSO; Thu, 15 Feb 2024 06:10:23 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C0D2F40420
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C0D2F40420;
-	Thu, 15 Feb 2024 06:10:22 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 51B491BF2A6
- for <buildroot@lists.busybox.net>; Thu, 15 Feb 2024 06:10:21 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4C35D81F51
- for <buildroot@lists.busybox.net>; Thu, 15 Feb 2024 06:10:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8371B82EDB;
+	Thu, 15 Feb 2024 07:02:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id h56y18plx-QC for <buildroot@lists.busybox.net>;
- Thu, 15 Feb 2024 06:10:20 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nPYlpSwjbt_z; Thu, 15 Feb 2024 07:02:19 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8AFF182F06
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8AFF182F06;
+	Thu, 15 Feb 2024 07:02:19 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3274E1BF5AE
+ for <buildroot@lists.busybox.net>; Thu, 15 Feb 2024 07:02:18 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2CC0460819
+ for <buildroot@lists.busybox.net>; Thu, 15 Feb 2024 07:02:18 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bC_J8P6QkINk for <buildroot@lists.busybox.net>;
+ Thu, 15 Feb 2024 07:02:17 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::32d; helo=mail-ot1-x32d.google.com;
+ client-ip=2607:f8b0:4864:20::62a; helo=mail-pl1-x62a.google.com;
  envelope-from=kadambini.nema@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4330381F45
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4330381F45
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com
- [IPv6:2607:f8b0:4864:20::32d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4330381F45
- for <buildroot@buildroot.org>; Thu, 15 Feb 2024 06:10:20 +0000 (UTC)
-Received: by mail-ot1-x32d.google.com with SMTP id
- 46e09a7af769-6e2e44aad03so288275a34.2
- for <buildroot@buildroot.org>; Wed, 14 Feb 2024 22:10:20 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0757C6077B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0757C6077B
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com
+ [IPv6:2607:f8b0:4864:20::62a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0757C6077B
+ for <buildroot@buildroot.org>; Thu, 15 Feb 2024 07:02:16 +0000 (UTC)
+Received: by mail-pl1-x62a.google.com with SMTP id
+ d9443c01a7336-1d944e8f367so4976185ad.0
+ for <buildroot@buildroot.org>; Wed, 14 Feb 2024 23:02:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707977418; x=1708582218;
+ d=1e100.net; s=20230601; t=1707980536; x=1708585336;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=NpWQJHaIHu6tXObvx3TL5O+KGHO+Kg9L6YxB1bvsmTI=;
- b=MLHMMKljygWma7rWywCxBjcOKcxvTNMOQl8k/IYinbAKXoReid0zq3X/nINPtbYnC8
- IkjRCHHIiBwOOfugwBcR02fIMQGd78R0FnpvMyZL6woLZeheqj3VfrNTckQRQxb4HPWf
- 2NcZX0ehCJMnLHSk1dwpLsYImv3tTabaKplL01rhUGt5Ulbmv9xRr37zq8pwsnUqvRKb
- V2nvtqaYg6Np34tQSDjIfwiDxn9zbudewpiy6Z3iw/lE4JeOfb85gsUGBE21jxL9IMVp
- A6JMLCU8McyW0EhIP9+AQab5wtQFcesUJuBy7T7LvnxK/pF7hVjGZvB5p28qur61mU0B
- 1E6A==
-X-Gm-Message-State: AOJu0Yyjru8vMo3AU0XkH1uziL4pNxWfsEMgh2ouCUUhpMPBY7mgAHcM
- B86GQbjgitk0w+yZPkFHZsENoD7Ok31xOt9Q3ppz0t8SzwRtsyRqwKG8FI+eBWY=
-X-Google-Smtp-Source: AGHT+IEDdbqiugEJOXKND+vYnFj2ku3yzlhEj/FXDKs0yZ21r4epJcuOVxpb9zhTeqe4ASwq6L6hZA==
-X-Received: by 2002:a05:6358:d5a8:b0:179:292:223 with SMTP id
- ms40-20020a056358d5a800b0017902920223mr880948rwb.28.1707977418476; 
- Wed, 14 Feb 2024 22:10:18 -0800 (PST)
+ bh=hOYrXakO7HS2RWgGRJo16tKZGj461dZVFPBFhBGy2Cs=;
+ b=S6fcCpIyYDT7HV5hafiLS8X/mBmJXhoWLLIoyd8kueQVBQ0335hssNXXddFRO7K16Y
+ bSCxoxIeiE+dEGsyCWAcNT6yAZgIP7K6nJQVwFW8m8FJFN1nBjnU0UIvXJGXs8qFPQeU
+ QI2Shmeos66wZaP9TMiP1U4PEupUbH8LgcLdaBQHYfIOMtNYQrCwKtFuR40Ed4AwTDq3
+ 4PZeUZCmRfpn+CaWH/TWKpvxtFEhw58bdf5wk9ycSzAX0A++1muyZBa7Jm6wAehBADbo
+ m08x/3/KIw/8XAx76Z6KVRGKufwuYDzlvoAec8/IWr0UYtRu0z2onXq/LpTLqv71gRrW
+ vMxg==
+X-Gm-Message-State: AOJu0YyR2s9H9yTc/ZOJwXzfPbkA0rPNRR9Rxsa0u0aPiNla4GtsWUIN
+ 4XobpBo71vpb7W1cwfN08cCbg4JDBPMSVfVl3U8mFUxibx1Bs8itYtQi5kRetMo=
+X-Google-Smtp-Source: AGHT+IGlZ5L2MeN2vjrnPyRTnBYX+pdtT+CwebxsLjLh6apr5gmnSHSsu5rdkJ0hhJ/n94pOko8rSA==
+X-Received: by 2002:a17:903:124b:b0:1d7:691e:2704 with SMTP id
+ u11-20020a170903124b00b001d7691e2704mr1304233plh.35.1707980535374; 
+ Wed, 14 Feb 2024 23:02:15 -0800 (PST)
 Received: from localhost.localdomain (ip72-203-121-181.oc.oc.cox.net.
  [72.203.121.181]) by smtp.gmail.com with ESMTPSA id
- y4-20020a170902e18400b001d8ee19ab34sm451510pla.29.2024.02.14.22.10.17
+ r15-20020a170903020f00b001d9a41daf85sm547640plh.256.2024.02.14.23.02.14
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 14 Feb 2024 22:10:18 -0800 (PST)
+ Wed, 14 Feb 2024 23:02:14 -0800 (PST)
 From: Kadambini Nema <kadambini.nema@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 14 Feb 2024 22:08:14 -0800
-Message-Id: <20240215060814.2618098-1-kadambini.nema@gmail.com>
+Date: Wed, 14 Feb 2024 23:00:11 -0800
+Message-Id: <20240215070011.2668708-1-kadambini.nema@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1707977418; x=1708582218; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1707980535; x=1708585335; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=NpWQJHaIHu6tXObvx3TL5O+KGHO+Kg9L6YxB1bvsmTI=;
- b=faqTgfy950vT7qi9X0pw0EI0AjVju0nSq6GNdEVMDuCY/ja2HCBiwXBgwGPGmObjvW
- whbBuKPjKgsaP2E5aJn+PX4er0fzEUUhYM9Vez9PUmpL47nsSh2HpFwS9a99Lae/fxKN
- EaOxfFA6WS7Ldz0JpPkioEjKQ7ds/ywZU6r+PAs5nO/J40/LCRpYwQIFk3LbnL3dXuug
- b29HQj7RxI7/tleS7tUb5O7HxaJIoJU9mL1GjXZ6lef3KLN2YUhu3L6c93ZFqriQOoZy
- rB+VPRnCh60IWpfoXyccNO9xVlHE3jyH8xSMwaCORh4gxdo6N3Y3IBSoU/G9FQcmaxRu
- g5Qg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=hOYrXakO7HS2RWgGRJo16tKZGj461dZVFPBFhBGy2Cs=;
+ b=no7XKsAErq4bAUe5gNbfdMEcJwQzKnJU4Pv3WISaDj5lksE7zOWG97oJtdNEyQHU9X
+ vGoEOpK4ZAvXIfBfo2aNs5LuZR2XDddlbn6fqPQEG4gmlcVwSJRtCgZWrXc3o6mA4pdj
+ wH05f+HEzjY4qdjTs8lKWtFcjUsWxdDEBqvwE8WFmZ/61tERs15hzrOTL/vvRMSYH6pI
+ QxEuvBnOC6P4LXoJbfoyuq1cYsSZz1XTtHYco0+qDioqvSeAarNc1DyPYwmMqXn+9DXv
+ 3+h5IotJbUV58KC3OjvopANv3+d8n5qqPiElMd3P3+esuqrxy7x3/b7E2bQaCz9rPZG3
+ qQeA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=faqTgfy9
-Subject: [Buildroot] [PATCH 1/1] package/bash: bump to version 5.2.21
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=no7XKsAE
+Subject: [Buildroot] [PATCH 1/1] package/iperf3: bump to version 3.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,47 +105,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Build tested using the following config option:
-    BR2_PACKAGE_BASH=y
-$ ./utils/test-pkg -c bash.config  -p bash
-                    bootlin-armv5-uclibc [1/6]: OK
-                     bootlin-armv7-glibc [2/6]: OK
-                   bootlin-armv7m-uclibc [3/6]: SKIPPED
-                     bootlin-x86-64-musl [4/6]: OK
-                      br-arm-full-static [5/6]: OK
-                            sourcery-arm [6/6]: OK
-6 builds, 1 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+Release notes - https://github.com/esnet/iperf/releases/tag/3.16
 
 Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
 ---
- package/bash/bash.hash | 4 ++--
- package/bash/bash.mk   | 2 +-
+ package/iperf3/iperf3.hash | 4 ++--
+ package/iperf3/iperf3.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/bash/bash.hash b/package/bash/bash.hash
-index e0a1ebac91..44c1c5ed50 100644
---- a/package/bash/bash.hash
-+++ b/package/bash/bash.hash
+diff --git a/package/iperf3/iperf3.hash b/package/iperf3/iperf3.hash
+index 02ada0dcc6..a8634c4a7e 100644
+--- a/package/iperf3/iperf3.hash
++++ b/package/iperf3/iperf3.hash
 @@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature from
--# https://ftp.gnu.org/gnu/bash/bash-5.2.15.tar.gz.sig
--sha256  13720965b5f4fc3a0d4b61dd37e7565c741da9a5be24edc2ae00182fc1b3588c  bash-5.2.15.tar.gz
-+# https://ftp.gnu.org/gnu/bash/bash-5.2.21.tar.gz.sig
-+sha256  c8e31bdc59b69aaffc5b36509905ba3e5cbb12747091d27b4b977f078560d5b8  bash-5.2.21.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/bash/bash.mk b/package/bash/bash.mk
-index 9a73ed8c36..9d173a5c7c 100644
---- a/package/bash/bash.mk
-+++ b/package/bash/bash.mk
+-# From https://downloads.es.net/pub/iperf/iperf-3.14.tar.gz.sha256
+-sha256  723fcc430a027bc6952628fa2a3ac77584a1d0bd328275e573fc9b206c155004  iperf-3.14.tar.gz
++# From https://downloads.es.net/pub/iperf/iperf-3.16.tar.gz.sha256
++sha256  cc740c6bbea104398cc3e466befc515a25896ec85e44a662d5f4a767b9cf713e  iperf-3.16.tar.gz
+ # Locally computed
+ sha256  35aa7c4618b9884d6faa9b43a4e70291b35ea9f89329d5d33becd852e85221b0  LICENSE
+diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
+index c00b16ce61..6d902c3b13 100644
+--- a/package/iperf3/iperf3.mk
++++ b/package/iperf3/iperf3.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BASH_VERSION = 5.2.15
-+BASH_VERSION = 5.2.21
- BASH_SITE = $(BR2_GNU_MIRROR)/bash
- BASH_DEPENDENCIES = ncurses readline host-bison
- BASH_LICENSE = GPL-3.0+
+-IPERF3_VERSION = 3.14
++IPERF3_VERSION = 3.16
+ IPERF3_SITE = https://downloads.es.net/pub/iperf
+ IPERF3_SOURCE = iperf-$(IPERF3_VERSION).tar.gz
+ IPERF3_LICENSE = BSD-3-Clause, BSD-2-Clause, MIT
 -- 
 2.25.1
 
