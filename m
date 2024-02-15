@@ -4,95 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8838C4829E
-	for <buildroot@archiver.kernel.org>; Thu, 15 Feb 2024 14:24:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DAC8C48BC4
+	for <buildroot@archiver.kernel.org>; Thu, 15 Feb 2024 14:24:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 680BA60FC9;
-	Thu, 15 Feb 2024 14:24:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5B0E060FCD;
+	Thu, 15 Feb 2024 14:24:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rAHMO9qttapv; Thu, 15 Feb 2024 14:24:41 +0000 (UTC)
+	with ESMTP id ZQKruaBinQzf; Thu, 15 Feb 2024 14:24:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C99C860FAE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5101460F9B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C99C860FAE;
-	Thu, 15 Feb 2024 14:24:40 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 24C991BF844
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5101460F9B;
+	Thu, 15 Feb 2024 14:24:44 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 002271BF844
  for <buildroot@lists.busybox.net>; Thu, 15 Feb 2024 14:24:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 09C316081B
+ by smtp1.osuosl.org (Postfix) with ESMTP id E1F2781826
  for <buildroot@lists.busybox.net>; Thu, 15 Feb 2024 14:24:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9elbn5ZaioOx for <buildroot@lists.busybox.net>;
- Thu, 15 Feb 2024 14:24:35 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id egllnvtoF2T5 for <buildroot@lists.busybox.net>;
+ Thu, 15 Feb 2024 14:24:36 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::1130; helo=mail-yw1-x1130.google.com;
+ client-ip=2607:f8b0:4864:20::112a; helo=mail-yw1-x112a.google.com;
  envelope-from=gilles.talis@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0972160608
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0972160608
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com
- [IPv6:2607:f8b0:4864:20::1130])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0972160608
- for <buildroot@buildroot.org>; Thu, 15 Feb 2024 14:24:34 +0000 (UTC)
-Received: by mail-yw1-x1130.google.com with SMTP id
- 00721157ae682-60782336a3aso7313837b3.2
- for <buildroot@buildroot.org>; Thu, 15 Feb 2024 06:24:34 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DC7DE817B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DC7DE817B1
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com
+ [IPv6:2607:f8b0:4864:20::112a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DC7DE817B1
+ for <buildroot@buildroot.org>; Thu, 15 Feb 2024 14:24:35 +0000 (UTC)
+Received: by mail-yw1-x112a.google.com with SMTP id
+ 00721157ae682-607e54b6cf5so2021077b3.0
+ for <buildroot@buildroot.org>; Thu, 15 Feb 2024 06:24:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1708007073; x=1708611873;
+ d=1e100.net; s=20230601; t=1708007074; x=1708611874;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=dLIsKcTvURUMkvvvhBZxJUzVCP3yzWPMLgsmyYvWi4E=;
- b=Ok2vnpxC65eUhubFaLVY8aa5nEXF9OQqqVUzdBEqhAQvt7O5EOETPOK1jX+f3mGh82
- zQr4Wk1JcfmqxkVKY6nIvhNEvektUNE6tyriD8H5VdZHjqMYw5wLx43uctBJs8RYcJKl
- EAHBS9WEE7KBH5CuwMwtGEobzj/NADcUjw4g9vVu4zuFG5tvXvasUUs5U+9i6W8ceWZ2
- fUqvaR/lrZRNqH5JsQcmgTpKY3jCbv2UWHSkhSgl06duz/3tKiZmNf9JhQq6ktP4cR2L
- X2ix0mMB7GzB4TZLAC4yHbj1apVQuIMPIaKLXOSiKn+MZUrZ7hjL7wAIU/j1ZNo+ZHUv
- pb1A==
-X-Gm-Message-State: AOJu0YwgQddjaucbkGTa/hloPvwtDlbJggn8zSUAjY6/h+oCSFOWb1cT
- WzDFUwmyAUl2iNlWyb8P71q5i3ARoa+1TxbLAS+TXKWVdxUUVxKMc/bUBkFjJLo=
-X-Google-Smtp-Source: AGHT+IF+oKFlShgBwKRKLKRKZBXsPzGrej6O55tm/lCQA1xyFuJv2encVFfTZlzY8YCqIsIg2OAZ+w==
-X-Received: by 2002:a81:4902:0:b0:607:a98c:81a6 with SMTP id
- w2-20020a814902000000b00607a98c81a6mr1733624ywa.44.1708007072846; 
- Thu, 15 Feb 2024 06:24:32 -0800 (PST)
+ bh=wEwzdL9lN5BKjeete4TD2hIVdbXb7ojhwXVem0aKkCA=;
+ b=wtrhZ7FhP7V5tQPsAbG6cSYM74GakaCKQgQ8g4psB6AAeS3CeeXSVzx19Rmeu0mZbm
+ EjPi3FnsrfHhILdRzfLeWaKUgfOD4RhoyxbWIktcoBTuSKH4CMGAP5e8ORijzJ4IDKx9
+ mJ7NoSiBygF9QlQwZB4N3d8xH3u4rnBCOeL2GovYXXiTgqpSFqSdhIOMlsVKujyvJgnM
+ FHWBdNNHGLCJjiY1df3fNBgzhrZS4awGrALpCzZYRekIqpREMeyqb1WhxJzio6hZaTUx
+ ijdmJ+K4s73ra9pgaY4v15EKRlKWwIjrFZWWNIu3+yj6Z+EeWyAPoktwpo7p7YVR0Qa8
+ 92/Q==
+X-Gm-Message-State: AOJu0YziSSui+ZiA2D4cvqPJK3EucFXJMhMRgWA9dlMZQWSpaZPmqysA
+ oeSJSd6OmokvAemJm6Gs1hZ+8Fc31ATTtBZYTgnLvaDtWTBPEBSs+O1OOF14IlQ=
+X-Google-Smtp-Source: AGHT+IE9JNT4ISr6XMgYy6Z2XKD+TbJwsfmPBEGY0U18mAypVA0hZ1EvMPxqJDHXp6j1jN9YRi1Zeg==
+X-Received: by 2002:a0d:ea43:0:b0:604:9729:6b4d with SMTP id
+ t64-20020a0dea43000000b0060497296b4dmr1309931ywe.4.1708007074372; 
+ Thu, 15 Feb 2024 06:24:34 -0800 (PST)
 Received: from gilles-Precision-3571.lan
  ([2605:59c8:6662:b310:7f4:4b02:4a36:4d21])
  by smtp.gmail.com with ESMTPSA id
- i197-20020a0ddfce000000b0060437133f85sm260967ywe.7.2024.02.15.06.24.31
+ i197-20020a0ddfce000000b0060437133f85sm260967ywe.7.2024.02.15.06.24.32
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 15 Feb 2024 06:24:32 -0800 (PST)
+ Thu, 15 Feb 2024 06:24:33 -0800 (PST)
 From: Gilles Talis <gilles.talis@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 15 Feb 2024 10:24:08 -0400
-Message-Id: <20240215142413.451505-3-gilles.talis@gmail.com>
+Date: Thu, 15 Feb 2024 10:24:09 -0400
+Message-Id: <20240215142413.451505-4-gilles.talis@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240215142413.451505-1-gilles.talis@gmail.com>
 References: <20240215142413.451505-1-gilles.talis@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1708007073; x=1708611873; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1708007074; x=1708611874; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=dLIsKcTvURUMkvvvhBZxJUzVCP3yzWPMLgsmyYvWi4E=;
- b=NjaAqlHnAhyXb/SWOtejZArjghhE11AHWv4BasmlpI/cnssgFrULMAcAKjy84m0sFx
- YY6RRRAL5ifFjUaQgClWO5R/IDI7ukYGw25YDO7IRZycygSeGdlA1BERZQEJucGIJcgt
- y/sKIxN0LTK8g/jG0/CMw2M2JWt7OCPhpKz7mD0Monmrq3IeF2F2xjfakKF/721tTO7s
- /8UHJ8IEX2WVKTcW0ipiCL+rqlRBfAAdK0QX7LwPRIEw9A2/o/U0FJSh4ED8d40Yw1vr
- SWT5TwHWxTjyuOsiChVHj79zwkP+wiYH6NwhNO1A2eM44z6B0UmAeNm5hih+b7LIkmls
- T7Xw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=wEwzdL9lN5BKjeete4TD2hIVdbXb7ojhwXVem0aKkCA=;
+ b=BZU2MZGfVA9dksCfItlls1K560IFReUXz9+sa792Mb/cCoHyGRWOjyg2XpFkOXsBg5
+ sm9gbmZ461g9UuYgEeydgcLPdjxAHbQj0HGc9ELAE7LFyoziGidapNiv/LkyTwRZG0It
+ nmEgi5+RVHZJh1n1CEiRCMBVDrORMi7ckvCJLdg7i1zNzWY6bY2k1yNSGroph/xW0t3k
+ m9VUktqqvLjHOxkga7u5JzsbkmB6em7kW+As4ADA7gmNpbFp5GdlVu2pBlhkPf4n+/gO
+ d8a1Uj5QE56hwmObQZBqvmG10cm2pRLgMLo8b/kxMcFBKIuLb+faDVkOVj5xMyMfU2Bw
+ ujUw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=NjaAqlHn
-Subject: [Buildroot] [PATCH] package/leptonica: bump to version 1.84.1
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=BZU2MZGf
+Subject: [Buildroot] [PATCH] package/libolm: bump to version 3.2.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -111,36 +110,36 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Change log:
-http://www.leptonica.org/source/version-notes.html
+https://gitlab.matrix.org/matrix-org/olm/-/blob/master/CHANGELOG.rst
 
 Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 ---
- package/leptonica/leptonica.hash | 2 +-
- package/leptonica/leptonica.mk   | 2 +-
+ package/libolm/libolm.hash | 2 +-
+ package/libolm/libolm.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/leptonica/leptonica.hash b/package/leptonica/leptonica.hash
-index 6511d6b410..3416cfeb39 100644
---- a/package/leptonica/leptonica.hash
-+++ b/package/leptonica/leptonica.hash
+diff --git a/package/libolm/libolm.hash b/package/libolm/libolm.hash
+index 044bb24f06..a95115d2fe 100644
+--- a/package/libolm/libolm.hash
++++ b/package/libolm/libolm.hash
 @@ -1,3 +1,3 @@
- # locally computed hash
--sha256  8f18615e0743af7df7f50985c730dfcf0c93548073d1f56621e4156a8b54d3dd  leptonica-1.83.1.tar.gz
-+sha256  2b3e1254b1cca381e77c819b59ca99774ff43530209b9aeb511e1d46588a64f6  leptonica-1.84.1.tar.gz
- sha256  87829abb5bbb00b55a107365da89e9a33f86c4250169e5a1e5588505be7d5806  leptonica-license.txt
-diff --git a/package/leptonica/leptonica.mk b/package/leptonica/leptonica.mk
-index 4cb73296e8..0e902c6488 100644
---- a/package/leptonica/leptonica.mk
-+++ b/package/leptonica/leptonica.mk
+ # locally computed
+-sha256  614c0e4dc4721f57e56c3385bd8def2f71c6631f928a480efd0b4bd8e5435df9  olm-3.2.9.tar.gz
++sha256  1e90f9891009965fd064be747616da46b232086fe270b77605ec9bda34272a68  olm-3.2.16.tar.gz
+ sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
+diff --git a/package/libolm/libolm.mk b/package/libolm/libolm.mk
+index 6f06686555..5c8bcd1f59 100644
+--- a/package/libolm/libolm.mk
++++ b/package/libolm/libolm.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LEPTONICA_VERSION = 1.83.1
-+LEPTONICA_VERSION = 1.84.1
- LEPTONICA_SITE = https://github.com/DanBloomberg/leptonica/releases/download/$(LEPTONICA_VERSION)
- LEPTONICA_LICENSE = BSD-2-Clause
- LEPTONICA_LICENSE_FILES = leptonica-license.txt
+-LIBOLM_VERSION = 3.2.9
++LIBOLM_VERSION = 3.2.16
+ LIBOLM_SOURCE = olm-$(LIBOLM_VERSION).tar.gz
+ LIBOLM_SITE = https://gitlab.matrix.org/matrix-org/olm/-/archive/$(LIBOLM_VERSION)
+ LIBOLM_LICENSE = Apache-2.0
 -- 
 2.39.2
 
