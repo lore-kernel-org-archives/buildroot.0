@@ -4,93 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CC9EC4829E
-	for <buildroot@archiver.kernel.org>; Thu, 15 Feb 2024 17:19:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1C45C4829E
+	for <buildroot@archiver.kernel.org>; Thu, 15 Feb 2024 17:22:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 72E0641D87;
-	Thu, 15 Feb 2024 17:19:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 52CBB41E03;
+	Thu, 15 Feb 2024 17:22:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id i5zyDanSdUsG; Thu, 15 Feb 2024 17:19:11 +0000 (UTC)
+	with ESMTP id 5i9ONXyncJ31; Thu, 15 Feb 2024 17:22:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 811B041E70
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 34E4641E56
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 811B041E70;
-	Thu, 15 Feb 2024 17:19:10 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F271A1BF33D
- for <buildroot@lists.busybox.net>; Thu, 15 Feb 2024 17:19:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 34E4641E56;
+	Thu, 15 Feb 2024 17:22:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 974BA1BF33D
+ for <buildroot@lists.busybox.net>; Thu, 15 Feb 2024 17:22:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DEFC860FFA
- for <buildroot@lists.busybox.net>; Thu, 15 Feb 2024 17:19:08 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9118441E03
+ for <buildroot@lists.busybox.net>; Thu, 15 Feb 2024 17:22:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5uX1ng0jShqW for <buildroot@lists.busybox.net>;
- Thu, 15 Feb 2024 17:19:08 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::529; helo=mail-ed1-x529.google.com;
- envelope-from=kazemi.ms@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 907406069B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 907406069B
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
- [IPv6:2a00:1450:4864:20::529])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 907406069B
- for <buildroot@buildroot.org>; Thu, 15 Feb 2024 17:19:07 +0000 (UTC)
-Received: by mail-ed1-x529.google.com with SMTP id
- 4fb4d7f45d1cf-563b7b48b9aso871775a12.2
- for <buildroot@buildroot.org>; Thu, 15 Feb 2024 09:19:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1708017545; x=1708622345;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=q7aOPMNRlj2q2yn5N9UNVunisQl+edP6iQitp+kcCNg=;
- b=JT3pX5odisBY6w/7kAvyAuv1SU7tBOtQeksgvbnJqH84fYbYLUUdpPtkBCfer6bvXi
- 2pPhSv9sZLovOAfKu1V8lnn6BXZD9WZGp0yUrZhGcN++4uk01lDFo3bN9bXc6hBkAt74
- mVVyOJGWg8MBsOIUkpr/eM8ppsyAgJISmyn6ggkp8suFv8H5TDpo75XEvyMUSHVycVJE
- o2vbby96X6H1zLsdbHQaF+7RRplmOtoPLDy7NxhkmSd64Mi8UiJKR6c3qCegeBBkeVuF
- 1PDLAtg+KXpcOR6QwNdj5kkjQHTFmEMXypAdkIccfcNxijWcihimW8LGHNFyOSihWmBQ
- jEFw==
-X-Gm-Message-State: AOJu0Yx+1OC08FeJDesTAYXN/7IGeeM/5PV1+5qm52+Lr4ACL6gzRoe6
- hUrkyb17PKOXRwrgJ6ijqcIKshI2lUNhw/f49KmaT3c2JombFnp44/DCwzNkTis=
-X-Google-Smtp-Source: AGHT+IF9Aey65BOihAR88pEE0LXWzsz6JihyrmwINKyRA4TzbEGUJRqAQb7Fy3HnMobCk9KXzcB26g==
-X-Received: by 2002:a17:906:2c50:b0:a3c:f0bb:eec7 with SMTP id
- f16-20020a1709062c5000b00a3cf0bbeec7mr1830698ejh.6.1708017544923; 
- Thu, 15 Feb 2024 09:19:04 -0800 (PST)
-Received: from saeedkazemi-ThinkPad.abbrnd.local
- (2001-1c00-0b13-1d00-10fc-1feb-1a69-befd.cable.dynamic.v6.ziggo.nl.
- [2001:1c00:b13:1d00:10fc:1feb:1a69:befd])
- by smtp.gmail.com with ESMTPSA id
- x12-20020a170906298c00b00a3d6395156esm741516eje.168.2024.02.15.09.19.03
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 15 Feb 2024 09:19:03 -0800 (PST)
-From: Saeed Kazemi <kazemi.ms@gmail.com>
-To: buildroot@buildroot.org
-Date: Thu, 15 Feb 2024 18:18:52 +0100
-Message-Id: <20240215171852.226396-1-kazemi.ms@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lv8hACVaUY58 for <buildroot@lists.busybox.net>;
+ Thu, 15 Feb 2024 17:22:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.117;
+ helo=smtpcmd11117.aruba.it;
+ envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D73B641E56
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D73B641E56
+Received: from smtpcmd11117.aruba.it (smtpcmd11117.aruba.it [62.149.156.117])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D73B641E56
+ for <buildroot@buildroot.org>; Thu, 15 Feb 2024 17:22:26 +0000 (UTC)
+Received: from [192.168.50.221] ([84.33.84.190])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id afRHrMCtLa6zwafRHrcrgB; Thu, 15 Feb 2024 18:22:24 +0100
+Message-ID: <2191bba4-462a-4168-bbbc-91997f1e108d@benettiengineering.com>
+Date: Thu, 15 Feb 2024 18:22:23 +0100
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1708017545; x=1708622345; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=q7aOPMNRlj2q2yn5N9UNVunisQl+edP6iQitp+kcCNg=;
- b=KCT1djLheTWC8JaTyFu5udlaNlSitnj319Chr6QtxQpeAjE4qfv94a7bWOp07hBBig
- d3pitZQxFq2eoxvsKVSYn7zUyOoN7NXIjJ2asb1X26+pneNG72mSFMxhsrM5gpoy+N+5
- lwKKr21mA4TRGFg1qN1imMIk6ooVP+6dghWECguYF/3QCyB1SDe9fijhReaBeANhGh12
- GI8paGZZpMp1/4Lb43FMC9mcAVztkx+GSv6kHP1tYLnnBzoarlElHlodzSNdqDSfbAZS
- grOS444HGfXEk0kGVS9iLYV83eBGIhSXDJ5fLbHqz01mQP5BA87wYKQmKjnlqNLwrMZD
- T9TA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: kilian.zinnecker@mail.de, buildroot@buildroot.org
+References: <20240211120857.6622-1-kilian.zinnecker@mail.de>
+ <20240211120857.6622-3-kilian.zinnecker@mail.de>
+ <bf30e91f-1061-4aab-8670-c1ef9f7d895d@benettiengineering.com>
+ <4868466.GXAFRqVoOG@laptop>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <4868466.GXAFRqVoOG@laptop>
+X-CMAE-Envelope: MS4xfKW2V7uUduuK1VfyUjW3ah9+2J0wLh9YqZVno5g9j+oTnANFw0KQGvJYbi13sLKYdLyANc5IMYQa495HXDHGmX+hE3gKkA87ZamUt3vcGEZDKjZ82zfr
+ JCcn5TNnJSViQe387/xDSRMHfstE4trrHu1thGR4pknSKEfgoAYZurNpy4ewd5/VYAdgSvkzI9FmJ9L5NjObndpSW01eOR/Juz0LW59CuQyGtd7d0kvkaTgV
+ gwcbyvFicAEstoZmN0q3P1UAUleP8ViFlwAEsQhHDjpaTFVG53SfPfRJPV3y46CxsG/JFVt45aow8ICc53VBwzxb5HeJrZH4zwRXeCvkQAw=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1708017744; bh=WReD7sdKsyF8R5nVihomjDUqaSRn6SDWzSyYm7bjpao=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=iZ5uF7qkxTSMoAQb9kbGaApFmHGaMws3YlOpp9a/vLxD8f1R/z9uPQVvkKehYrxBn
+ 1t3jHSCvLwM89C8X7ONBsJanrQDbJoZ77YfWDfmH+JFkOA7bocYFk88wOeGJQuL8p+
+ 1SkalIV+KZDyvS2XLTebHQSlbAINcc9aW+IIF/7jdE4kyJ+0wgZy5HOcASXKLIudRW
+ R+wrGpqP7CDoFdMw7qb44oqF1bhLK88YS3InR0lAdbcOLHxg2m7aSqkOoT7gjq8rHe
+ t36Mn1GL43YXBccmicmuebtWlOAZ7MYDNJPFDN5kp8iwCK1kcODi/lOUiIoMD0yowV
+ Eg/XNHu6vK+7g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=KCT1djLh
-Subject: [Buildroot] [PATCH 1/1] package/eza: bump to version 0.18.3
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=iZ5uF7qk
+Subject: Re: [Buildroot] [PATCH v3 2/2] configs/beaglev_ahead: new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,46 +84,115 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Saeed Kazemi <kazemi.ms@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Robert Nelson <robertcnelson@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://github.com/eza-community/eza/releases/tag/v0.18.3
+Hi Kilian,
 
-Signed-off-by: Saeed Kazemi <kazemi.ms@gmail.com>
----
- package/eza/eza.hash | 2 +-
- package/eza/eza.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 15/02/24 00:03, kilian.zinnecker--- via buildroot wrote:
+> Hello Giulio, all,
+> 
+> [--SNIP--]
+> 
+>>> a/board/beaglev-ahead/patches/uboot/0001-Overwrite-bootcmd-by-force.patch
+>>> b/board/beaglev-ahead/patches/uboot/0001-Overwrite-bootcmd-by-force.patch
+>>> new file mode 100644
+>>> index 0000000000..bcf5b965ce
+>>> --- /dev/null
+>>> +++
+>>> b/board/beaglev-ahead/patches/uboot/0001-Overwrite-bootcmd-by-force.patch
+>>> @@ -0,0 +1,30 @@
+>>> +From 81db2d155db74192e127ae1d98dd4ec415f53dd3 Mon Sep 17 00:00:00 2001
+>>> +From: Kilian Zinnecker <kilian.zinnecker@mail.de>
+>>> +Date: Mon, 21 Aug 2023 23:51:59 +0200
+>>> +Subject: [PATCH] Overwrite bootcmd by force
+>>> +
+>>> +This patch is a dirty hack: Trying to overwrite the bootcmd via the
+>>> +usual BOOT_COMMAND had no effect: Upon boot the bootcmd defaulted
+>>> +to some preset value and could not be changed easily. Therefore a
+>>> +hook is used to force the bootcmd to be overwritten.
+>>
+>> This is strange because if so also the bootcmd content of uEnv.txt below
+>> should be skipped, or maybe there is a bug in this u-boot that evaluates
+>> bootcmd too early without taking into account environment variables.
+>> But I'm also noticing that you have your Environment variables in Fat,
+>> but it depends how u-boot deals with environment variables. Usually
+>> you have to specificy an offset in memory where environment variables
+>> live.
+>>
+>> But I see in your "make uboot-menuconfig" that CONFIG_ENV_IS_IN_FAT is
+>> not enabled, but only CONFIG_ENV_IS_IN_MMC is and you have to specify:
+>> CONFIG_ENV_OFFSET
+>> CONFIG_ENV_SIZE
+>>
+>> So if you want to go with vfat way you need to enable
+>> CONFIG_ENV_IS_IN_FAT and specify:
+>> CONFIG_ENV_FAT_INTERFACE
+>> CONFIG_ENV_FAT_DEVICE_AND_PART
+>> and most of all:
+>> CONFIG_ENV_FAT_FILE=uEnv.txt
+>> in uboot.fragment below
+>>
+>> I would go with this last way instead of adding such dirty hack, can you
+>> work on that?
+> 
+> I tried, but so far I am not successful, maybe due to my lack of experience
+> with uboot or maybe due to the customization of this particular uboot. I
+> removed my custom-uboot patch and added the following configs to the
+> uboot.fragment file, but it did not work yet:
+> 
+> # CONFIG_ENV_IS_IN_MMC is not set
+> CONFIG_ENV_IS_IN_FAT=y
+> CONFIG_ENV_FAT_INTERFACE="mmc"
+> CONFIG_ENV_FAT_DEVICE_AND_PART="1:1"
+> CONFIG_ENV_FAT_FILE="uEnv.txt"
 
-diff --git a/package/eza/eza.hash b/package/eza/eza.hash
-index 64f46759d7..48c2fa8ffe 100644
---- a/package/eza/eza.hash
-+++ b/package/eza/eza.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  11e6127a615744b52d52d66ebcdf9e5366f62746e8123b3eec00e35a057db988  eza-0.16.0.tar.gz
-+sha256  995a77848e75737a267b64613acaa6096ba8943f048676d5722c3ff238fb29f9  eza-0.18.3.tar.gz
- sha256  2762990c7fbba9d550802a2593c1d857dcd52596bb0f9f192a97e9a7ac5f4f9e  LICENCE
-diff --git a/package/eza/eza.mk b/package/eza/eza.mk
-index b11c1a1e7f..7ec3f127b4 100644
---- a/package/eza/eza.mk
-+++ b/package/eza/eza.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EZA_VERSION = 0.16.0
-+EZA_VERSION = 0.18.3
- EZA_SITE = $(call github,eza-community,eza,v$(EZA_VERSION))
- EZA_LICENSE = MIT
- EZA_LICENSE_FILES = LICENCE
+First of all you have to give a try using ush(u-boot shell) to see if
+you can really access fat partition and read uEnv.txt file.
+Like:
+=> fatload ...
+to a memory address
+
+If that works then you should also:
+=> printenv
+and check if the variables you want to override look like expected
+
+> 
+> I also tried to use mainline uboot v2024.01, which features the Lichee Pi 4A,
+> which features the same SoC, but this didn't work either. I had a look at the
+> custom uboot source and it defines a lot of configs inside this header file:
+> 
+> https://openbeagle.org/beaglev-ahead/beaglev-ahead-u-boot/-/blob/beaglev-v2020.01-1.1.2-ubuntu/include/configs/light-c910.h?ref_type=heads#L363-388
+
+This is a usual way for the these variables. You can dig into it or 
+override them as you're trying to do. But you need to make sure uEnv.txt
+is really read from your sd-card.
+
+For example it could be a problem with CONFIG_ENV_FAT_INTERFACE name or
+CONFIG_ENV_FAT_DEVICE_AND_PART numbering.
+If you try using ush everything will be clearer.
+
+> 
+> I tried to remove the hard-coded bootcmd from this header, but that also
+> didn't work. I don't understand the inner workings of uboot well enough yet to
+> get it properly working, so I appreciate all hints and any help here.
+
+Above there is some explanation. Anyway do all the tests without the
+uboot patch applied.
+
+> However, I will already send a v4 of the patches, in which I try to address
+> all the other issues. > Thanks again for reviewing and best regards,
+
+You're welcome, the goal is to make this patch looks the best it could.
+
+Best regards
 -- 
-2.34.1
-
+Giulio Benetti
+CEO&CTO@Benetti Engineering sas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
