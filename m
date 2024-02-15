@@ -4,95 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F637C48BC4
-	for <buildroot@archiver.kernel.org>; Thu, 15 Feb 2024 14:24:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8838C4829E
+	for <buildroot@archiver.kernel.org>; Thu, 15 Feb 2024 14:24:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 909BB60FA4;
-	Thu, 15 Feb 2024 14:24:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 680BA60FC9;
+	Thu, 15 Feb 2024 14:24:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id m9mndVw6JJgD; Thu, 15 Feb 2024 14:24:38 +0000 (UTC)
+	with ESMTP id rAHMO9qttapv; Thu, 15 Feb 2024 14:24:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A90B606EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C99C860FAE
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9A90B606EA;
-	Thu, 15 Feb 2024 14:24:38 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B71441BF844
- for <buildroot@lists.busybox.net>; Thu, 15 Feb 2024 14:24:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C99C860FAE;
+	Thu, 15 Feb 2024 14:24:40 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 24C991BF844
+ for <buildroot@lists.busybox.net>; Thu, 15 Feb 2024 14:24:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A2A7340407
- for <buildroot@lists.busybox.net>; Thu, 15 Feb 2024 14:24:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 09C316081B
+ for <buildroot@lists.busybox.net>; Thu, 15 Feb 2024 14:24:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id k1OhUTEPK1NN for <buildroot@lists.busybox.net>;
- Thu, 15 Feb 2024 14:24:33 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9elbn5ZaioOx for <buildroot@lists.busybox.net>;
+ Thu, 15 Feb 2024 14:24:35 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::112c; helo=mail-yw1-x112c.google.com;
+ client-ip=2607:f8b0:4864:20::1130; helo=mail-yw1-x1130.google.com;
  envelope-from=gilles.talis@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 65FBC4014D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 65FBC4014D
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com
- [IPv6:2607:f8b0:4864:20::112c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 65FBC4014D
- for <buildroot@buildroot.org>; Thu, 15 Feb 2024 14:24:33 +0000 (UTC)
-Received: by mail-yw1-x112c.google.com with SMTP id
- 00721157ae682-607dca92fcaso3875077b3.1
- for <buildroot@buildroot.org>; Thu, 15 Feb 2024 06:24:33 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0972160608
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0972160608
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com
+ [IPv6:2607:f8b0:4864:20::1130])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0972160608
+ for <buildroot@buildroot.org>; Thu, 15 Feb 2024 14:24:34 +0000 (UTC)
+Received: by mail-yw1-x1130.google.com with SMTP id
+ 00721157ae682-60782336a3aso7313837b3.2
+ for <buildroot@buildroot.org>; Thu, 15 Feb 2024 06:24:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1708007072; x=1708611872;
+ d=1e100.net; s=20230601; t=1708007073; x=1708611873;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=2vdP9vWMcyLRsAHXg9+6AeH+NeQ9Pj5BoIvHZSG0vNA=;
- b=ASVNxy9sXiIAWDpf8khw7ifHFILVMkZFmOf868/Rt7RcbAQcMbt62fQGP/r5ashABj
- eadx4Tv/wBxkAKblmN5j8P5QoauZjKhAbp8Z9NZP6l/LlM7CHV9lpzDBVkOgVINM+wzm
- eXSZP3jzaciypGzxwgElnJMkdLitfz8CaR8krRMMDJ3AS2943TcPrpkZiy80OUincXsK
- xHd3/Ri8f/nS75OGbqWSU2JnR8ubf/48bt3dKyc9DOoRW3+jb1/xCOSwdklj+2nUaS39
- dMbCuaYK24NfbCI/1+yFQtTCf8ebBEGz9nlXUMCOVhd+Rmbpz/jrHx+uoatwj1xUANhC
- WBzw==
-X-Gm-Message-State: AOJu0YyDBbT7+t8sB9PF/inaSFVBp0P+rKvPYXh0vGXSgHkuOU4RGw3Y
- H91PKgIR39ITbu7CpUBYlPFELLftbYDUOD0rVjyMlSHTWxffGOAccYUoNmaJT+c=
-X-Google-Smtp-Source: AGHT+IGARZxjX4hyLyfs4LBjH5ZKjHSBoWB3p+KLqyW3uSMayB+S0AX+vQ+Gwui+SbXtQHbWC2YGrQ==
-X-Received: by 2002:a81:a606:0:b0:607:e909:557e with SMTP id
- i6-20020a81a606000000b00607e909557emr515458ywa.23.1708007071755; 
- Thu, 15 Feb 2024 06:24:31 -0800 (PST)
+ bh=dLIsKcTvURUMkvvvhBZxJUzVCP3yzWPMLgsmyYvWi4E=;
+ b=Ok2vnpxC65eUhubFaLVY8aa5nEXF9OQqqVUzdBEqhAQvt7O5EOETPOK1jX+f3mGh82
+ zQr4Wk1JcfmqxkVKY6nIvhNEvektUNE6tyriD8H5VdZHjqMYw5wLx43uctBJs8RYcJKl
+ EAHBS9WEE7KBH5CuwMwtGEobzj/NADcUjw4g9vVu4zuFG5tvXvasUUs5U+9i6W8ceWZ2
+ fUqvaR/lrZRNqH5JsQcmgTpKY3jCbv2UWHSkhSgl06duz/3tKiZmNf9JhQq6ktP4cR2L
+ X2ix0mMB7GzB4TZLAC4yHbj1apVQuIMPIaKLXOSiKn+MZUrZ7hjL7wAIU/j1ZNo+ZHUv
+ pb1A==
+X-Gm-Message-State: AOJu0YwgQddjaucbkGTa/hloPvwtDlbJggn8zSUAjY6/h+oCSFOWb1cT
+ WzDFUwmyAUl2iNlWyb8P71q5i3ARoa+1TxbLAS+TXKWVdxUUVxKMc/bUBkFjJLo=
+X-Google-Smtp-Source: AGHT+IF+oKFlShgBwKRKLKRKZBXsPzGrej6O55tm/lCQA1xyFuJv2encVFfTZlzY8YCqIsIg2OAZ+w==
+X-Received: by 2002:a81:4902:0:b0:607:a98c:81a6 with SMTP id
+ w2-20020a814902000000b00607a98c81a6mr1733624ywa.44.1708007072846; 
+ Thu, 15 Feb 2024 06:24:32 -0800 (PST)
 Received: from gilles-Precision-3571.lan
  ([2605:59c8:6662:b310:7f4:4b02:4a36:4d21])
  by smtp.gmail.com with ESMTPSA id
- i197-20020a0ddfce000000b0060437133f85sm260967ywe.7.2024.02.15.06.24.30
+ i197-20020a0ddfce000000b0060437133f85sm260967ywe.7.2024.02.15.06.24.31
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 15 Feb 2024 06:24:30 -0800 (PST)
+ Thu, 15 Feb 2024 06:24:32 -0800 (PST)
 From: Gilles Talis <gilles.talis@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 15 Feb 2024 10:24:07 -0400
-Message-Id: <20240215142413.451505-2-gilles.talis@gmail.com>
+Date: Thu, 15 Feb 2024 10:24:08 -0400
+Message-Id: <20240215142413.451505-3-gilles.talis@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240215142413.451505-1-gilles.talis@gmail.com>
 References: <20240215142413.451505-1-gilles.talis@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1708007072; x=1708611872; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1708007073; x=1708611873; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=2vdP9vWMcyLRsAHXg9+6AeH+NeQ9Pj5BoIvHZSG0vNA=;
- b=AbhY0KFS8TCxIRJ2mymMB4HhUFkkpjCUTQ/WF9CLNC8xssoi5Li2mnYw3BCoNIan8A
- WFeks/sFSDj5X7DzR+7YHnPGJPe41VAn8/ObJM5sEKontR4F6bx6wBimGPZKWyHzWDu9
- CYkkrUHTpDO0Y2ldl/jSDGNNhyrY34qYPDvdaaVarlwdOEQHByyyF3O5UV8ryVxYLx/1
- QuyfuJmuj6yEffYPQ8nqRbnnOcgyrfgox5wa6V/gEfJaVTtnXkk2GkSBXTDaB3wRo5nG
- 87nOyurxCBYSqcP5W397UOcfz3Vaj+k/cG6u52nDv/BZeDVR1Spg24Q9OLTlVNIu+esl
- Q9hA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=dLIsKcTvURUMkvvvhBZxJUzVCP3yzWPMLgsmyYvWi4E=;
+ b=NjaAqlHnAhyXb/SWOtejZArjghhE11AHWv4BasmlpI/cnssgFrULMAcAKjy84m0sFx
+ YY6RRRAL5ifFjUaQgClWO5R/IDI7ukYGw25YDO7IRZycygSeGdlA1BERZQEJucGIJcgt
+ y/sKIxN0LTK8g/jG0/CMw2M2JWt7OCPhpKz7mD0Monmrq3IeF2F2xjfakKF/721tTO7s
+ /8UHJ8IEX2WVKTcW0ipiCL+rqlRBfAAdK0QX7LwPRIEw9A2/o/U0FJSh4ED8d40Yw1vr
+ SWT5TwHWxTjyuOsiChVHj79zwkP+wiYH6NwhNO1A2eM44z6B0UmAeNm5hih+b7LIkmls
+ T7Xw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=AbhY0KFS
-Subject: [Buildroot] [PATCH] package/iozone: bump to version 3.506
+ header.s=20230601 header.b=NjaAqlHn
+Subject: [Buildroot] [PATCH] package/leptonica: bump to version 1.84.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -110,35 +110,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Change log:
+http://www.leptonica.org/source/version-notes.html
+
 Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 ---
- package/iozone/iozone.hash | 2 +-
- package/iozone/iozone.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/leptonica/leptonica.hash | 2 +-
+ package/leptonica/leptonica.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/iozone/iozone.hash b/package/iozone/iozone.hash
-index 9ecf1d1af8..c506b41db2 100644
---- a/package/iozone/iozone.hash
-+++ b/package/iozone/iozone.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  5a52f5017e022e737f5b55f320cc6ada0f2a8c831a5f996cce2a44e03e91c038  iozone3_493.tgz
-+sha256  114ce5c071873b9a2c7ba6e73d05d5ef7e66564392acbfcdc0b3261db10fcbe7  iozone3_506.tar
-diff --git a/package/iozone/iozone.mk b/package/iozone/iozone.mk
-index 2df4a2aa84..7cce15c53d 100644
---- a/package/iozone/iozone.mk
-+++ b/package/iozone/iozone.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/leptonica/leptonica.hash b/package/leptonica/leptonica.hash
+index 6511d6b410..3416cfeb39 100644
+--- a/package/leptonica/leptonica.hash
++++ b/package/leptonica/leptonica.hash
+@@ -1,3 +1,3 @@
+ # locally computed hash
+-sha256  8f18615e0743af7df7f50985c730dfcf0c93548073d1f56621e4156a8b54d3dd  leptonica-1.83.1.tar.gz
++sha256  2b3e1254b1cca381e77c819b59ca99774ff43530209b9aeb511e1d46588a64f6  leptonica-1.84.1.tar.gz
+ sha256  87829abb5bbb00b55a107365da89e9a33f86c4250169e5a1e5588505be7d5806  leptonica-license.txt
+diff --git a/package/leptonica/leptonica.mk b/package/leptonica/leptonica.mk
+index 4cb73296e8..0e902c6488 100644
+--- a/package/leptonica/leptonica.mk
++++ b/package/leptonica/leptonica.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IOZONE_VERSION = 3.493
--IOZONE_SOURCE = iozone$(subst .,_,$(IOZONE_VERSION)).tgz
-+IOZONE_VERSION = 3.506
-+IOZONE_SOURCE = iozone$(subst .,_,$(IOZONE_VERSION)).tar
- IOZONE_SITE = http://www.iozone.org/src/current
- IOZONE_LICENSE = IOzone license (NO DERIVED WORKS ALLOWED)
- # IOzone license details can be found at:
+-LEPTONICA_VERSION = 1.83.1
++LEPTONICA_VERSION = 1.84.1
+ LEPTONICA_SITE = https://github.com/DanBloomberg/leptonica/releases/download/$(LEPTONICA_VERSION)
+ LEPTONICA_LICENSE = BSD-2-Clause
+ LEPTONICA_LICENSE_FILES = leptonica-license.txt
 -- 
 2.39.2
 
