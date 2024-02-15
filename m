@@ -1,106 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DDC0C4829E
-	for <buildroot@archiver.kernel.org>; Thu, 15 Feb 2024 11:27:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 461AFC4829E
+	for <buildroot@archiver.kernel.org>; Thu, 15 Feb 2024 14:13:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2636B40A01;
-	Thu, 15 Feb 2024 11:27:00 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jamrBprLMOlM; Thu, 15 Feb 2024 11:26:59 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E27C6404EE
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E27C6404EE;
-	Thu, 15 Feb 2024 11:26:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2CA951BF575
- for <buildroot@lists.busybox.net>; Thu, 15 Feb 2024 11:26:57 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1A0186085B
- for <buildroot@lists.busybox.net>; Thu, 15 Feb 2024 11:26:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A5DE7605CE;
+	Thu, 15 Feb 2024 14:13:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LQWvztekRSzB for <buildroot@lists.busybox.net>;
- Thu, 15 Feb 2024 11:26:56 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id V3hABw5NbMPv; Thu, 15 Feb 2024 14:13:26 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D534F606F0
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id D534F606F0;
+	Thu, 15 Feb 2024 14:13:25 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6699F1BF844
+ for <buildroot@lists.busybox.net>; Thu, 15 Feb 2024 14:13:24 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5451083ACB
+ for <buildroot@lists.busybox.net>; Thu, 15 Feb 2024 14:13:24 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PqTF16s8ZC9b for <buildroot@lists.busybox.net>;
+ Thu, 15 Feb 2024 14:13:23 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C1B68607EF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C1B68607EF
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C1B68607EF
- for <buildroot@buildroot.org>; Thu, 15 Feb 2024 11:26:55 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-411f895c8b6so6418045e9.1
- for <buildroot@buildroot.org>; Thu, 15 Feb 2024 03:26:55 -0800 (PST)
+ client-ip=2607:f8b0:4864:20::d29; helo=mail-io1-xd29.google.com;
+ envelope-from=dave.mehler@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AE57583147
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE57583147
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com
+ [IPv6:2607:f8b0:4864:20::d29])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AE57583147
+ for <buildroot@buildroot.org>; Thu, 15 Feb 2024 14:13:23 +0000 (UTC)
+Received: by mail-io1-xd29.google.com with SMTP id
+ ca18e2360f4ac-7c029beb8efso27890139f.0
+ for <buildroot@buildroot.org>; Thu, 15 Feb 2024 06:13:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707996414; x=1708601214;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=1DQHmZNnPV7VtrejRpyMoBHDNOfnAqnkuw8d0EZIg2M=;
- b=uKwoDgx9Sj4B25X36Iw+efOcbRAGXx7ggdpc4qGIFI4fSDed5Cz2o6/M8CfG/XC7cN
- 6+Wi949P0T1OF+LNTg+sDbwRxnbdChQcOnop1WmLRFbBdylt/UuU5uaeXoQwJELw3Cqy
- 4dslivJj6xmyxFm+EA7oLeqsQQW/xb/P1i8KFmGkH8QwbcS0ok5JQUb+XyAxSQ+UihKh
- MV2Kbbe9mpqZWkgG+4g/O9tLDbQjPQAb8x6k4395qbyEGe296/3DcJovu8YnxgR/QUAY
- kUdlXb9mecfgJ0WNp9dK8ZfrFpLe6C6HH3FWDxeMweftFzOU476Cc1VY77fCofN5nsmo
- +c5g==
-X-Forwarded-Encrypted: i=1;
- AJvYcCU2Bj6lzcgQ945BDyGVpcHN4rKqozgZKRwTqkByB0Ejy8sCAIggiJsVMNZVJyTymXTqP6fcdcLWzg1KTGvK1FzXw6lBi0emCA==
-X-Gm-Message-State: AOJu0YztQwYVcC374N8HzoKD+gW+2FCHJTwie7atmJ85GKBcHml4ZcM+
- MdLHlzwt6vCo/5OSEPcpacpb6cm/B/DSzJhDx+RnRXwv2v66ciLx8BMtqQT04xM=
-X-Google-Smtp-Source: AGHT+IET18n3jyDRx+9WhC4qoFKevQxhr0FAFCNdJ7colu9JjuzGv46rFeqrsNiX9vi6WPqEJ2/Ehg==
-X-Received: by 2002:a05:600c:3d8e:b0:410:e54c:68e2 with SMTP id
- bi14-20020a05600c3d8e00b00410e54c68e2mr1231017wmb.9.1707996413719; 
- Thu, 15 Feb 2024 03:26:53 -0800 (PST)
-Received: from ?IPV6:2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31?
- (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
- [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
- by smtp.gmail.com with ESMTPSA id
- hg27-20020a05600c539b00b0040fc56712e8sm1630033wmb.17.2024.02.15.03.26.53
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 15 Feb 2024 03:26:53 -0800 (PST)
-Message-ID: <7e253e56-25f4-494a-98d9-e0d908517acd@smile.fr>
-Date: Thu, 15 Feb 2024 12:26:52 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: fr
-To: Alexander Sverdlin <alexander.sverdlin@gmail.com>, buildroot@buildroot.org
-References: <20240213172817.2872849-1-romain.naour@smile.fr>
- <20240213172817.2872849-22-romain.naour@smile.fr>
- <8981fdd9313957b6f0174ac03006db1063b395f7.camel@gmail.com>
-From: Romain Naour <romain.naour@smile.fr>
-In-Reply-To: <8981fdd9313957b6f0174ac03006db1063b395f7.camel@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1707996414; x=1708601214;
- darn=buildroot.org; 
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
+ d=1e100.net; s=20230601; t=1708006402; x=1708611202;
+ h=to:subject:message-id:date:from:mime-version:x-gm-message-state
  :from:to:cc:subject:date:message-id:reply-to;
- bh=1DQHmZNnPV7VtrejRpyMoBHDNOfnAqnkuw8d0EZIg2M=;
- b=TL8zmopczCSJEvvFmSfMVQWRuyYVrokBPIF/EWZ6zu7E52thfn6IuUVxmvmgDdAWC8
- XEtmakuqlPm8yoVfX2vhQq2wpFexLPmq4k8t2Yj5uz6GpIMXmghT0qC/ctQbU2tCFcal
- yPucv7LsTHPS99G/+HffX76pk3Imfl5v0Ua/MSNnE75PQ7gSVnx7SmLVO4f2QSsXqNnJ
- SOT1T60XBn3FbGlteXZsutmt8ZFvvWYPAkHL2ClO1xd9OMB3Xgd4FRqIUot/cBPMw1eJ
- Lt8SnaK5sYi3bFbAE5c+nkkLQ8uC8ZIog0WeITb5UuEs4lCLvO3aeCETgUDvuVuXYENb
- EZBw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=DpjHaUXsVz/MAFArxhMTxTdfqRvgrnQDIbU2ioddWOc=;
+ b=YYN+m+ma0iETvjpURTypnhlh8D1TKjgHvzRsfexN/Xcxown+fgr+rT87DHLHjiC3Ys
+ nLyCIEeQG4d7dZ1WBcW0wS6Be7YYFtlv4qvXszFu7fuy57qzW+84+w555GEzXTA10Mh9
+ hPfP2NFURYPRz2AXSWSBEsZsstN7A0SfNP35Ou/0T8U8XnWtpjfBQOLXtEZAm9Dso+sl
+ 5K94lrn54Hj5/pc6OzJKoaJi53os7e6fErvs6RFjfsIiSyDsSyD1z7sIERhK5uwpT/IB
+ YB/aXLrd489Go8jXBNJFsEgf9YjGUUd0MxDpF2cC/4jr4ZblKAw+76yYkgPCqIuTI1sx
+ WvlQ==
+X-Gm-Message-State: AOJu0YwpEETn98CgxhFcs5vcQXdfN9YjQiJPi2yxrKaU003KM9HIUK43
+ LzzHDbN36RAAkE9jADmaxf6YHLKpIS45rmaMk0QiHS220jR3vsOi15+ExCnTiI/9/qvTpKHFoJk
+ Lbr8X/Yr8XE0PabZJuB+gU3czjgYfYwx5ieU=
+X-Google-Smtp-Source: AGHT+IGFtF1gHhhMR5OKTDm1a3bmPuDObs/Pzk5ZARWFULRSYM15zHnpzOW5RmN0X0n8kf+epMixftartCnwjW9VzB8=
+X-Received: by 2002:a5d:9f18:0:b0:7c4:9c9b:30a4 with SMTP id
+ q24-20020a5d9f18000000b007c49c9b30a4mr598881iot.4.1708006402435; Thu, 15 Feb
+ 2024 06:13:22 -0800 (PST)
+MIME-Version: 1.0
+Received: by 2002:a02:bb0e:0:b0:471:32cc:1378 with HTTP; Thu, 15 Feb 2024
+ 06:13:21 -0800 (PST)
+From: David Mehler <dave.mehler@gmail.com>
+Date: Thu, 15 Feb 2024 09:13:21 -0500
+Message-ID: <CAPORhP6xkxChh7ptk4dWctcLJjB3RkrVUe21y-Nu0KTe6u5L7w@mail.gmail.com>
+To: buildroot@buildroot.org
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1708006402; x=1708611202; darn=buildroot.org;
+ h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=DpjHaUXsVz/MAFArxhMTxTdfqRvgrnQDIbU2ioddWOc=;
+ b=Ld8bX0A8hARFci52ZqKnQLhyMOv4sTFEfCTcTY/zOp6yAGvnAQL2gUxc16FlDtXncu
+ 25zlxCskEEfMBSjHYhcd5nnSWtU19LIUykr6REpuYj/QaUoRz9VMOjrotEsOUw7Ah5WG
+ 6Zomstd1WtmEW2YNWDQIo6SRKs1nmNZDD+d8FpgmLj60XVzXEy5HQG8g/tJNFn+wZLTu
+ Yusa+QniPMubMRZxoQqTL4scSAex6dGKs0jSMB8UqPHvOVX/X0fJC6ZflFGVcwTW70sI
+ a0/PQez/u8oSAsZjXOKeta4wISV3fEL/sx73tKZ3w//f/fBlfGmVO0elkIvou4uiagHv
+ d0KA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=smile-fr.20230601.gappssmtp.com
- header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=TL8zmopc
-Subject: Re: [Buildroot] [PATCH 21/21] boot/ti-k3-image-gen: remove package
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=Ld8bX0A8
+Subject: [Buildroot] Headless setup, Raspberry Pi 4B and zero 2 w, Wi-Fi,
+ Bluetooth, SSH?
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -112,38 +96,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Xuanhao Shi <X15000177@gmail.com>, Anand Gadiyar <gadiyar@ti.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgQWxleGFuZGVyLAoKTGUgMTUvMDIvMjAyNCDDoCAxMToyMCwgQWxleGFuZGVyIFN2ZXJkbGlu
-IGEgw6ljcml0wqA6Cj4gSGkgUm9tYWluLAo+IAo+IE9uIFR1ZSwgMjAyNC0wMi0xMyBhdCAxODoy
-OCArMDEwMCwgUm9tYWluIE5hb3VyIHdyb3RlOgo+PiAtY2hvaWNlCj4+IC0JcHJvbXB0ICJTZWN1
-cml0eSB0eXBlIgo+PiAtCWhlbHAKPj4gLQnCoCBUaGUgdGFyZ2V0IFNvQyBzZWN1cml0eSB0eXBl
-IG9wdGlvbiBmb3IgaW1hZ2UgZ2VuLsKgIFZhbGlkCj4+IC0JwqAgb3B0aW9ucyBhcmUgImdwIiBm
-b3IgR2VuZXJhbCBQdXJwb3NlIGRldmljZXMsICJocy1mcyIgZm9yCj4+IC0JwqAgSGlnaCBTZWN1
-cml0eSAtIEZpZWxkIFNlY3VyYWJsZSBkZXZpY2VzLCBvciAiaHMiIGZvciBIaWdoCj4+IC0JwqAg
-U2VjdXJpdHkgLSBTZWN1cml0eSBFbmZvcmNpbmcgZGV2aWNlcy7CoCBOb3RlIGZvciBhbGwgSGln
-aAo+PiAtCcKgIFNlY3VyaXR5IGRldmljZSB2YXJpYW50cyB0aGUgVElfU0VDVVJFX0RFVl9QS0cg
-ZW52aXJvbm1lbnRhbAo+PiAtCcKgIHZhcmlhYmxlIG11c3QgYmUgZGVmaW5lZCBhdCBidWlsZCB0
-aW1lIHBvaW50aW5nIHRvIGEgdmFsaWQKPj4gLQnCoCBjb3JlLXNlY2Rldi1rMyBmb2xkZXIgbG9j
-YXRpb24sIG90aGVyd2lzZSB0aGUgYnVpbGQgd2lsbAo+PiAtCcKgIGZhaWwsIHNlZQo+PiAtCcKg
-IGh0dHBzOi8vZ2l0LnRpLmNvbS9jZ2l0L3NlY3VyaXR5LWRldmVsb3BtZW50LXRvb2xzL2NvcmUt
-c2VjZGV2LWszCj4+IC0KPj4gLWNvbmZpZyBCUjJfVEFSR0VUX1RJX0szX0lNQUdFX0dFTl9TRUNU
-WVBFX0dQCj4+IC0JYm9vbCAiZ3AiCj4+IC0KPj4gLWNvbmZpZyBCUjJfVEFSR0VUX1RJX0szX0lN
-QUdFX0dFTl9TRUNUWVBFX0hTX0ZTCj4+IC0JYm9vbCAiaHMtZnMiCj4+IC0KPj4gLWNvbmZpZyBC
-UjJfVEFSR0VUX1RJX0szX0lNQUdFX0dFTl9TRUNUWVBFX0hTCj4+IC0JYm9vbCAiaHMiCj4+IC0K
-Pj4gLWVuZGNob2ljZQo+IAo+IGFub3RoZXIgb2JzZXJ2YXRpb24gSSBtYWRlIGp1c3Qgbm93OiBw
-cmV2aW91c2x5IEJSMl9UQVJHRVRfVElfSzNfSU1BR0VfR0VOX1NFQ1RZUEVfR1A9eQo+IHdhcyB0
-aGUgZGVmYXVsdCwgd2hpY2ggZGlkbid0IGJvb3Qgb24gbXkgSFMtRlMgU29DLgo+IAo+IFlvdSBw
-YXRjaHNldCBzdGFydGVkIG91dC1vZi10aGUtYm94LCB3aGljaCwgSSBjb25jbHVkZSwgbWVhbnMs
-IEhTLUZTIGlzIG5vdyB0aGUKPiBkZWZhdWx0IGZvciBBTTYyeC4gSSdtIG5vdCBzdXJlIGlmIHRo
-aXMgaXMgYSBwcm9ibGVtLCB0aG91Z2guCj4gCgpJIGRvbid0IHRoaW5rIHNvLCB0aGUgYW02Mngg
-ZGVmY29uZmlnIHNob3VsZCBzdGlsbCBiZSBmb3IgR1AgU29DIGJ5IGRlZmF1bHQuCgpPaywgbWF5
-YmUgdGhlcmUgaXMgc29tZXRoaW5nIHRvIGltcHJvdmUgaW4gdGhpcyBzZXJpZXMgYnV0IEkgZG9u
-J3QgaGF2ZSBhbnkKSFMvSFMtRlMgU29DIGZvciB0ZXN0aW5nLi4uCgpCZXN0IHJlZ2FyZHMsClJv
-bWFpbgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVp
-bGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3Rz
-LmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Hello,
+
+I'm using the latest buildroot and apparently I'm finding outdated
+information on these subjects because nothing I'm trying is working.
+I've got two Raspberry PIs, one a 4b the other a zero 2 w, on both I'm
+wanting to use them headlessly, so I'd like to do the following:
+
+1. Get Wi-Fi going on boot and connect to a dedicated wireless network
+2. Get bluetooth up and running (and set up a bluetooth serial console)
+3. Enable ssh so that option is available
+4. Install different custom packages for each unit, the 4 and the zero
+won't have the same packages aside from the Wi-Fi/bluetooth/ssh setup
+
+and in the case of the Zero 2 w:
+5. Configure the camera module so it is up and running and ready to go
+
+Up to date information welcome.
+Thanks.
+Dave.
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
