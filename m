@@ -4,59 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 310A6C48BC4
-	for <buildroot@archiver.kernel.org>; Thu, 15 Feb 2024 14:32:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BAB2DC48BC4
+	for <buildroot@archiver.kernel.org>; Thu, 15 Feb 2024 14:42:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EFE3360F8D;
-	Thu, 15 Feb 2024 14:32:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 83E616067B;
+	Thu, 15 Feb 2024 14:42:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id X649fDaWws4o; Thu, 15 Feb 2024 14:32:38 +0000 (UTC)
+	with ESMTP id tlNOBbS4Odrd; Thu, 15 Feb 2024 14:42:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D6C760F9A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A4F9A606B1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1D6C760F9A;
-	Thu, 15 Feb 2024 14:32:38 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 609091BF844
- for <buildroot@lists.busybox.net>; Thu, 15 Feb 2024 14:32:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A4F9A606B1;
+	Thu, 15 Feb 2024 14:42:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 45BF31BF844
+ for <buildroot@lists.busybox.net>; Thu, 15 Feb 2024 14:42:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A33AF83BFA
- for <buildroot@lists.busybox.net>; Thu, 15 Feb 2024 14:32:35 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3219041D8E
+ for <buildroot@lists.busybox.net>; Thu, 15 Feb 2024 14:42:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id W4gex-WDkdLX for <buildroot@lists.busybox.net>;
- Thu, 15 Feb 2024 14:32:34 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.84.136;
- helo=mail.desaster-games.net; envelope-from=jubalh@iodoru.org;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CE1E983BFC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE1E983BFC
-Received: from mail.desaster-games.net (mail.desaster-games.net [176.9.84.136])
- by smtp1.osuosl.org (Postfix) with ESMTP id CE1E983BFC
- for <buildroot@busybox.net>; Thu, 15 Feb 2024 14:32:31 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by mail.desaster-games.net (Postfix) with ESMTP id A7A2D13022;
- Thu, 15 Feb 2024 15:32:29 +0100 (CET)
-X-Virus-Scanned: Amavis at mail.desaster-games.com
-Received: from mail.desaster-games.net ([127.0.0.1])
- by localhost (mail.desaster-games.net [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id G7cTMNo0sTqT; Thu, 15 Feb 2024 15:32:16 +0100 (CET)
-Received: from ymir.nue2.suse.org (unknown [81.95.8.245])
- by mail.desaster-games.net (Postfix) with ESMTPSA id 563D013020;
- Thu, 15 Feb 2024 15:32:16 +0100 (CET)
-From: Michael Vetter <jubalh@iodoru.org>
-To: buildroot@busybox.net
-Date: Thu, 15 Feb 2024 15:31:44 +0100
-Message-Id: <20240215143144.31911-1-jubalh@iodoru.org>
-X-Mailer: git-send-email 2.35.3
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WNlSxmIa0KTP for <buildroot@lists.busybox.net>;
+ Thu, 15 Feb 2024 14:42:48 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
+ helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CD2CD41C56
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD2CD41C56
+Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CD2CD41C56
+ for <buildroot@buildroot.org>; Thu, 15 Feb 2024 14:42:47 +0000 (UTC)
+Received: from tuxedoOT.fritz.box (unknown [212.37.174.96])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+ (No client certificate requested)
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id A1C412C800D1;
+ Thu, 15 Feb 2024 15:42:44 +0100 (CET)
+To: buildroot@buildroot.org
+Date: Thu, 15 Feb 2024 15:42:41 +0100
+Message-Id: <20240215144243.3538255-1-buildroot@bubu1.eu>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=iodoru.org
-Subject: [Buildroot] [PATCH 1/1] package/shadow: bump to version 4.14.5
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=bubu1.eu; s=bubu; 
+ t=1708008165; bh=MCnms7Wdon1nDRWpHU3ufe/oHXb7A2lKrXmP/76dn7k=;
+ h=From:To:Cc:Subject:Date;
+ b=Mh47a80/25n5dCKyoDsOOYsFHvNO8UD/D7jVwH8nVmLfYYfUTVLaeKqeEs8YAOZ7n
+ UYdrkgdAEmrdLNneDKr2XlBD6anBayoUeKcMTBybxM/DZqz3QqV3gMwFiPhGp6KhPi
+ /9s8MeRiAah914ZMG8EganIWISzgbswjy3Hqqu1PncCkuWCxDM+0tvlDQFvM53C5o3
+ qYv2ZFtsQP9gtdvbpSHV5qsgHkJWdS5UY4q0YGDqArWlycbvvTswdYILPmwYlSAPLs
+ sfY1NYK7BLJVIbFmsrhjPe2it8DkypTcD6EsfYVg0R30mN14PDa6V56FhIjQ3NfP9W
+ kV9+Z7pZcPjvA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bubu1.eu
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
+ header.s=bubu header.b=Mh47a80/
+Subject: [Buildroot] [PATCH 1/3] package/libmbim: bump to 1.30.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,46 +76,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Michael Vetter <jubalh@iodoru.org>
+From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
+Cc: Aleksander Morgado <aleksander@aleksander.es>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Omit 4.14.4 since it was broken.
+Explicitly disable newly introduced fuzzer build option.
 
-Signed-off-by: Michael Vetter <jubalh@iodoru.org>
+Changelog:
+https://gitlab.freedesktop.org/mobile-broadband/libmbim/-/blob/mbim-1-30/NEWS
+
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 ---
- package/shadow/shadow.hash | 4 ++--
- package/shadow/shadow.mk   | 2 +-
+ package/libmbim/libmbim.hash | 2 +-
+ package/libmbim/libmbim.mk   | 4 ++--
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/shadow/shadow.hash b/package/shadow/shadow.hash
-index 4689a994de..23c292d659 100644
---- a/package/shadow/shadow.hash
-+++ b/package/shadow/shadow.hash
+diff --git a/package/libmbim/libmbim.hash b/package/libmbim/libmbim.hash
+index 8e7633cb94..ebc37504c5 100644
+--- a/package/libmbim/libmbim.hash
++++ b/package/libmbim/libmbim.hash
 @@ -1,4 +1,4 @@
--# Verified from https://github.com/shadow-maint/shadow/releases/download/4.14.3/shadow-4.14.3.tar.xz.asc
-+# Verified from https://github.com/shadow-maint/shadow/releases/download/4.14.5/shadow-4.14.5.tar.xz.asc
- # with key A9348594CE31283A826FBDD8D57633D441E25BB5
--sha256  6969279236fe3152768573a38c9f83cb9ca109851a5a990aec1fc672ac2cfcd2  shadow-4.14.3.tar.xz
-+sha256  cba74bc7b05d89c015afe23131f9159ece38779d40a8af4cf162852e6e85ca23  shadow-4.14.5.tar.xz
- sha256  3d25ab8f43fdc14624296a56ff8dc3e72e499ad35f32ae0c803f4959cfe17c0a  COPYING
-diff --git a/package/shadow/shadow.mk b/package/shadow/shadow.mk
-index 03eb16a3f4..4b831908a2 100644
---- a/package/shadow/shadow.mk
-+++ b/package/shadow/shadow.mk
+ # Locally computed
+-sha256  cf74682c56f4c34ca4aee86de3b8c425a89fc2c0782052815295faf6a8e0a9fb  libmbim-1.28.2.tar.gz
++sha256  cfc729d23b9bf699b23a7ef2f5d732d6eff96234e31fed36b778771a6e3d3ee5  libmbim-1.30.0.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0-or-later.txt
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSES/LGPL-2.1-or-later.txt
+diff --git a/package/libmbim/libmbim.mk b/package/libmbim/libmbim.mk
+index 59f55a57bc..717c2396f7 100644
+--- a/package/libmbim/libmbim.mk
++++ b/package/libmbim/libmbim.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SHADOW_VERSION = 4.14.3
-+SHADOW_VERSION = 4.14.5
- SHADOW_SITE = https://github.com/shadow-maint/shadow/releases/download/$(SHADOW_VERSION)
- SHADOW_SOURCE = shadow-$(SHADOW_VERSION).tar.xz
- SHADOW_LICENSE = BSD-3-Clause
+-LIBMBIM_VERSION = 1.28.2
++LIBMBIM_VERSION = 1.30.0
+ LIBMBIM_SITE = https://gitlab.freedesktop.org/mobile-broadband/libmbim/-/archive/$(LIBMBIM_VERSION)
+ LIBMBIM_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (programs)
+ LIBMBIM_LICENSE_FILES = \
+@@ -13,7 +13,7 @@ LIBMBIM_CPE_ID_VENDOR = freedesktop
+ LIBMBIM_INSTALL_STAGING = YES
+ 
+ LIBMBIM_DEPENDENCIES = libglib2
+-LIBMBIM_CONF_OPTS = -Dman=false
++LIBMBIM_CONF_OPTS = -Dman=false -Dfuzzer=false
+ 
+ ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+ LIBMBIM_DEPENDENCIES += gobject-introspection
 -- 
-2.35.3
+2.34.1
 
 _______________________________________________
 buildroot mailing list
