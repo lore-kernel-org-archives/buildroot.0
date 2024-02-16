@@ -1,72 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EEFCC48260
-	for <buildroot@archiver.kernel.org>; Fri, 16 Feb 2024 20:59:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7C0FC48260
+	for <buildroot@archiver.kernel.org>; Fri, 16 Feb 2024 21:13:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 14A0160E60;
-	Fri, 16 Feb 2024 20:59:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8108F41E02;
+	Fri, 16 Feb 2024 21:13:30 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QA7E853jF_hO; Fri, 16 Feb 2024 21:13:29 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 972F2421AA
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 972F2421AA;
+	Fri, 16 Feb 2024 21:13:29 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DFCFA1BF287
+ for <buildroot@lists.busybox.net>; Fri, 16 Feb 2024 21:13:27 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id CDD076062D
+ for <buildroot@lists.busybox.net>; Fri, 16 Feb 2024 21:13:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cOoOCA9lHUqA; Fri, 16 Feb 2024 20:59:14 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3043661160
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3043661160;
-	Fri, 16 Feb 2024 20:59:14 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 13F071BF284
- for <buildroot@lists.busybox.net>; Fri, 16 Feb 2024 20:59:12 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 00FD984089
- for <buildroot@lists.busybox.net>; Fri, 16 Feb 2024 20:59:12 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oDCzdqfMb3dl for <buildroot@lists.busybox.net>;
- Fri, 16 Feb 2024 20:59:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.86;
- helo=smtpcmd0986.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8ED4D81F19
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8ED4D81F19
-Received: from smtpcmd0986.aruba.it (smtpcmd0986.aruba.it [62.149.156.86])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8ED4D81F19
- for <buildroot@buildroot.org>; Fri, 16 Feb 2024 20:59:07 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mYDcm8ZxfFXx for <buildroot@lists.busybox.net>;
+ Fri, 16 Feb 2024 21:13:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.116;
+ helo=smtpcmd11116.aruba.it;
+ envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2BAD060618
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2BAD060618
+Received: from smtpcmd11116.aruba.it (smtpcmd11116.aruba.it [62.149.156.116])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2BAD060618
+ for <buildroot@buildroot.org>; Fri, 16 Feb 2024 21:13:25 +0000 (UTC)
 Received: from localhost.localdomain ([84.33.84.190])
  by Aruba Outgoing Smtp  with ESMTPSA
- id b5IWrQaBZuLAqb5IXrmUlV; Fri, 16 Feb 2024 21:59:05 +0100
+ id b5WMrrbOSce1vb5WMr5JJt; Fri, 16 Feb 2024 22:13:22 +0100
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Fri, 16 Feb 2024 21:59:04 +0100
-Message-Id: <20240216205904.242339-1-giulio.benetti@benettiengineering.com>
+Date: Fri, 16 Feb 2024 22:13:21 +0100
+Message-Id: <20240216211321.470283-1-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfDAW5LyyOTFIappxajILyK/5Ngl/LX+OQFVdiEUav9e6vqfdn4bq+sQsixVSwe4Fuag8KUdjyFZTO12+NX7L4HjwT+v7Z1ZTMXSaIGIKbmhm0z1J7ULK
- fWuKgraoYcmRfUsp31DFUiFMnoMyQyU/1n6TmCdM4BCMnsoc9n2biASGW3MJEyMbCFLTQ7uRPXp/c68DxyuA/0wO7kb98o33d3Zmf1Yf7NMmwhBJFKldgT8a
- LS+wtmdw3DfMkhHb5cW6t8OSmK3fVe5Q4P2ys6a8t6K29BaoEoedK+/CY3dM1PwXXFzr+Pbzeyxib1XN7aC/WQ==
+X-CMAE-Envelope: MS4xfDRbI8y9g5GiwGePeO9WIZGCTZdcHWA7dFzgtYCD/PiIzYc9sVu19+yDV3oTQlhrMHI+XZSAZcGgJc2BCi/AGbMx+pftYT+PEhHvH+msjjyLuCdARwam
+ wimSVGKsL96xhosdGJFOBOt+7Lsib4M1TZyfYUIeHW0jq2hH0CEutc5W9CLdbLF6lFU8vMUDo4tQjVBgwKyNsP/CXB4ri8z7lP5fhm9wUEWov6qrwWJ1Spt9
+ alKjGSk0NkboCllG6LHzNbxdDpe5nD1JIDOITzkQSno=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1708117145; bh=J22zgCYz55cBKuxc98BKf1CzNEHXUcJiPtkaAqgANXU=;
+ t=1708118002; bh=ycbHSo/SN0Nmo96vrqaCcjJwGvhb/5PoZwDURkSu9sE=;
  h=From:To:Subject:Date:MIME-Version;
- b=gsDZC49YQqNNcL7664su42cSP3aN3nCNup4Yin5Y3sLauWAwrLP1Pi75LTE3bB9kB
- zCKu/EC5AdvDMPZJaTYcMw7acjuulTnlt9anKsn7VEm0Rjg/q020icDOQLG5qSk6vi
- hp4Kikc9I+IfBj6f/6Tt74CAiIR3UZTTpdYRLGZ7Qh0yx5dSp84t8sISALihZVlUhA
- xAuIcGmQ1ClOb+TjysvQnCpTZWIwXproLdfiGaUMtkZxnENq2VIGkR10Imn3BhYKi4
- 8RUDL92RWVjqJO6PW+9Z7MvNeVuZ+EQHM+bTnQDfzHw2f0xRSpQlKN5YImy+9QcIrp
- qiH+lLYLKGNAg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=lDhz+OTVL4qaX0Zh1rg2wEn2+xUBsN6NHJE6URYfGCqe+lR/zkNtYUMD16ZhqcOjP
+ awDf+cblppk+8npuqjuNXWlPgUuvXhhMvPrji4/7fyffSjALofdK8c7jvOVk7gtayg
+ OWMriehKcp/mZGXT7YF6bXqsfgKCegZRox1jwlMfBDbTjCmavZ6Tq0rQT9mvFA4sJD
+ 0NFG7i/i9Aaed6lcKfJE0jcg7a4T2YL+9G5u/j0BjJTMwYnri1d3MM0VXiLxKMSINw
+ pEKge6/neaD6gxl+I7vvUKHBL/nVAjQQHr4TrFu4uKQ2qGINDTasL4L3lUvfi3r+Qp
+ GlWfboMKCfoPg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=gsDZC49Y
-Subject: [Buildroot] [PATCH] package/libnss: bump version to 3.98
+ header.s=a1 header.b=lDhz+OTV
+Subject: [Buildroot] [PATCH] package/libnvme: bump to version 1.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,8 +78,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -87,34 +86,32 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libnvme/libnvme.hash | 2 +-
+ package/libnvme/libnvme.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index fdfe9773d2..51701724ed 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_97_RTM/src/SHA256SUMS
--sha256  078efb8393f32e40b1fb4bf6930fff7f1aabed01287fcc5fe58aba736765fa0a  nss-3.97.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_98_RTM/src/SHA256SUMS
-+sha256  f549cc33d35c0601674bfacf7c6ad683c187595eb4125b423238d3e9aa4209ce  nss-3.98.tar.gz
- # Locally calculated
- sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 60a33456b0..90e66ca885 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
+diff --git a/package/libnvme/libnvme.hash b/package/libnvme/libnvme.hash
+index 69963578cd..469006d632 100644
+--- a/package/libnvme/libnvme.hash
++++ b/package/libnvme/libnvme.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated sha256 checksums
+-sha256  e9c3ad59c068788faf0f0af4296f92f8ce410d12749f0f35a541d6a21e630393  libnvme-1.7.1.tar.gz
++sha256  d59939a280eec41eb7a716e1681d0d0c612099385204ffb55d07134a6be08d75  libnvme-1.8.tar.gz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libnvme/libnvme.mk b/package/libnvme/libnvme.mk
+index 813f7279e8..bf131d2a38 100644
+--- a/package/libnvme/libnvme.mk
++++ b/package/libnvme/libnvme.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBNSS_VERSION = 3.97
-+LIBNSS_VERSION = 3.98
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+-LIBNVME_VERSION = 1.7.1
++LIBNVME_VERSION = 1.8
+ LIBNVME_SITE = $(call github,linux-nvme,libnvme,v$(LIBNVME_VERSION))
+ LIBNVME_LICENSE = LGPL-2.1
+ LIBNVME_LICENSE_FILES = COPYING
 -- 
 2.34.1
 
