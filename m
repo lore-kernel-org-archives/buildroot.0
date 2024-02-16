@@ -4,90 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 400C3C48BF3
-	for <buildroot@archiver.kernel.org>; Fri, 16 Feb 2024 21:18:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9041C48260
+	for <buildroot@archiver.kernel.org>; Fri, 16 Feb 2024 21:25:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 04BD0417F6;
-	Fri, 16 Feb 2024 21:18:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 64E6842095;
+	Fri, 16 Feb 2024 21:25:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nCoaPIViYzed; Fri, 16 Feb 2024 21:18:25 +0000 (UTC)
+	with ESMTP id 6g8uo1agBIMF; Fri, 16 Feb 2024 21:25:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D873941EB6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4619C4208F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D873941EB6;
-	Fri, 16 Feb 2024 21:18:24 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A7F061BF287
- for <buildroot@lists.busybox.net>; Fri, 16 Feb 2024 21:18:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4619C4208F;
+	Fri, 16 Feb 2024 21:25:53 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4830F1BF2C7
+ for <buildroot@lists.busybox.net>; Fri, 16 Feb 2024 21:25:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A1F4941C3B
- for <buildroot@lists.busybox.net>; Fri, 16 Feb 2024 21:18:23 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 358BD4208F
+ for <buildroot@lists.busybox.net>; Fri, 16 Feb 2024 21:25:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id whhmydcJ53Lz for <buildroot@lists.busybox.net>;
- Fri, 16 Feb 2024 21:18:22 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
- envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 400AF400E5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 400AF400E5
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 400AF400E5
- for <buildroot@buildroot.org>; Fri, 16 Feb 2024 21:18:22 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-41259b54121so12745e9.3
- for <buildroot@buildroot.org>; Fri, 16 Feb 2024 13:18:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1708118299; x=1708723099;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=iYx3TCRmxQzQ/iYEgOpOIBx7a/fNWgcEtonBVWpMdjA=;
- b=iVkIS0UumblK53SW98t8WpwZRXNft2YDY9UCHkYd6597a+CKaSNyNPtkTytq3eETD4
- DSMHMX86Hsceiks18+m8UJJEs/pAXCrAmHPmzcchhMgFbLJbZwzsAMKE5euxSmgf95aU
- hLZxquB4AZ4hSl0/CZTUyzu6LQmu1Np7UlX3xsuIW3plk+1XcAMGmmWXJxJt9eXPMHiT
- JGz/vJjT/7rUyVA0zahpsEXM9IIxDcmizAFhrUs4NusU1oWFUB6fS8Zv0L4z2L6uy4ra
- 3jLlsJdPr6wEFV/eSIynR2jvy3OjVIlRph/IbEf+spMWCWrWkd9oh9Aq+2+TSx9E4kum
- A+EA==
-X-Gm-Message-State: AOJu0YxSMeyZUmNbg9ChIowk8hLWv2y6Vhs3ZZfm++I4qIETp2TF9gv/
- NYGMG0HMyADwgXyqggGQZ4VGEb9E2AwsB8w3DLdmWXLbe12VZBWy7TsFqow5tcI=
-X-Google-Smtp-Source: AGHT+IFL0tnqiLpQXgCGQjlocFO8Pef+4heU9Q6qvvuZWes5jwAhYjgXvfSmfBZVX11mUXl/KRSKEw==
-X-Received: by 2002:a05:600c:3d89:b0:412:3e42:f7a4 with SMTP id
- bi9-20020a05600c3d8900b004123e42f7a4mr2480892wmb.12.1708118299180; 
- Fri, 16 Feb 2024 13:18:19 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- l20-20020a05600c1d1400b0041256ab5becsm376913wms.26.2024.02.16.13.18.18
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 16 Feb 2024 13:18:18 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id orI_s0p6d9jO for <buildroot@lists.busybox.net>;
+ Fri, 16 Feb 2024 21:25:50 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.87;
+ helo=smtpcmd0987.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D17BB42049
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D17BB42049
+Received: from smtpcmd0987.aruba.it (smtpcmd0987.aruba.it [62.149.156.87])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D17BB42049
+ for <buildroot@buildroot.org>; Fri, 16 Feb 2024 21:25:47 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id b5iLrQoMVuLAqb5iLrmcIM; Fri, 16 Feb 2024 22:25:45 +0100
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Fri, 16 Feb 2024 22:18:13 +0100
-Message-ID: <20240216211813.1846842-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Date: Fri, 16 Feb 2024 22:25:43 +0100
+Message-Id: <20240216212543.474327-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1708118299; x=1708723099; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=iYx3TCRmxQzQ/iYEgOpOIBx7a/fNWgcEtonBVWpMdjA=;
- b=k/xXN/qj9TevDRBWmZxTj2E3Bc7ael9pO7x5zwU4gtOhzYEhy6JjfgbWWOlAMmC4EO
- ki4Jq6NDOiapV4G2/2YNOQ/swYV8L2DZQVjSuhBcoMHlQmohGUz8yPfRvtsbifHio88B
- GQDpVqViphrhZyPTMmLlIDYQYcm1Xc6N4kZEFq+kAMgleuLDAj9KwZYRUTPOoxYnMfzD
- t88T+VU09TSbAGtU34gkQEWXrNUtyPBvoWnn67W7FG4AhNvNd3yBIEC2vCq9OzOKTQtL
- kppUMQpiv+fPaXIq/8lCuW+meCCAHexzvMd/YcXi0mL+UDQAfROxvnfjmlPe5VUUIcse
- ZWng==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-CMAE-Envelope: MS4xfMu12pzmxNOhQC3lhFC3qVLNJGSaaPWXZ07JoewSzuPy2fe+p/sFUIye82NSpSHWCiScKR2wNjEP6q3dRaaRfTeZoBcQ5pSbZKVGfMjJzISq/SXFKNO8
+ SBB70rvR3KpBcvZV198jxRarV5SPUXa/dyHQumgMJEPDEFj+hOfERDvMjv0O5vK+HGklmsjmptmYangSGzSslLRKOBFTTiMa9BI98tlP7q8jb9+n2ZKt2b/A
+ /h+QtSmdXeXCjN6Qn0JZvEkXq5u79Tz3QQZ6YaKyZ8VFPz+8Zbuen2N3sDQozk9WQwzeoNog2PnEm2m/zHOJ90F4pSZiKiYM7TJ5IA19pEexvbajS/BGUqIt
+ FMLMQjZy
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1708118745; bh=A4MdIOWfD4CuaeURvpo5JAR75w+VJr4fQXAabgTDikE=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=lnIJpWtwq1zef1dHh9WQeAPc4+eBgXSAExmRJN0qRizWq/+46TyAp5VZ7EbynmwwI
+ 2jbG0KvxfvLzBdmir/1hROjt+gfmo7r+8Ubwlg48u5Zn7eQxJfHLYhj/XFAK3qoHB6
+ DBr3i2cOMK+4T7R9o/KnGUephUC0BxfgpQM0uCz1n+rDbC2mC+/LJH2YR9WGieKuDk
+ CpjcRSFBHkkN5VKVzek3X7CI/MMMvvW/BPOjFN6eE507Rnlk99FKqk2lk4YfWJrICR
+ saKENKtL1KK+upL+RyJvk73jEtnG1cdUrr+irwmDiQZpDPQzghLaaqJKuJcKPc4Sv8
+ 8bh8fZiTcOj+Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=k/xXN/qj
-Subject: [Buildroot] [PATCH 1/1] package/liburing: fix uclibc build
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=lnIJpWtw
+Subject: [Buildroot] [PATCH v2] package/attr: fix build failure on
+ Microblaze architecture
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,78 +80,124 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure with uclibc-ng raised since bump to
-version 2.4 in commit 3cc1b539e7e9fd49f571441e395e7daa8597dbec and
-https://github.com/axboe/liburing/commit/c6bc86e2125bcd6fa10ff2b128cd86486acadff6:
+On Microblaze architecture __has_attribute(__symver__) support is broken
+and always return true even if symver is not supported so let's add a local
+patch pending upstream to detect if symver is supported during autoreconf.
+Let's also add ATTR_AUTORECONF = YES to let patch to affect building.
 
-In file included from lib.h:12,
-                 from setup.c:4:
-arch/aarch64/lib.h:7:10: fatal error: sys/auxv.h: No such file or directory
-    7 | #include <sys/auxv.h>
-      |          ^~~~~~~~~~~~
+Fixes:
+http://autobuild.buildroot.org/results/29c76e02becedf922bd7dc0533338c078bf77d2a
 
-Fixes: 3cc1b539e7e9fd49f571441e395e7daa8597dbec
- - http://autobuild.buildroot.org/results/cc44d714c9267dd7a98debeb8c81c4ee1efe4ebb
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- ...01-src-arch-aarch64-fix-uclibc-build.patch | 39 +++++++++++++++++++
- 1 file changed, 39 insertions(+)
- create mode 100644 package/liburing/0001-src-arch-aarch64-fix-uclibc-build.patch
+V1->V2:
+* written commit log as suggested by Thomas(there was no commit log at all
+  since this patch has been pointed during Buildroot Dev Days in IRC to me)
+* re-sent local patch to the correct maililng list and updated Upstream:
+  URL
+---
+ ...dd-detection-of-symver-gcc-attribute.patch | 68 +++++++++++++++++++
+ package/attr/attr.mk                          |  3 +
+ 2 files changed, 71 insertions(+)
+ create mode 100644 package/attr/0002-configure.ac-add-detection-of-symver-gcc-attribute.patch
 
-diff --git a/package/liburing/0001-src-arch-aarch64-fix-uclibc-build.patch b/package/liburing/0001-src-arch-aarch64-fix-uclibc-build.patch
+diff --git a/package/attr/0002-configure.ac-add-detection-of-symver-gcc-attribute.patch b/package/attr/0002-configure.ac-add-detection-of-symver-gcc-attribute.patch
 new file mode 100644
-index 0000000000..4468105e4f
+index 0000000000..ca773cf0fc
 --- /dev/null
-+++ b/package/liburing/0001-src-arch-aarch64-fix-uclibc-build.patch
-@@ -0,0 +1,39 @@
-+From f03f8da34fe96ac35a916ca3058b0f41971eae3b Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 16 Feb 2024 18:59:42 +0100
-+Subject: [PATCH] src/arch/aarch64: fix uclibc build
++++ b/package/attr/0002-configure.ac-add-detection-of-symver-gcc-attribute.patch
+@@ -0,0 +1,68 @@
++From 1be7c2251040f1152de9ceb5263e6e96fa5c3d75 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Tue, 6 Feb 2024 15:33:15 +0100
++Subject: [PATCH] configure.ac: add detection of symver gcc attribute
 +
-+Fix the following build failure with uclibc-ng raised since version 2.3
-+and
-+https://github.com/axboe/liburing/commit/c6bc86e2125bcd6fa10ff2b128cd86486acadff6:
++On non-ELF platforms, such as microblaze, builds will fail when trying
++to add symver information because  __attribute__((symver ..)) is not
++supported even though __has_attribute(__symver__) returns true.
 +
-+In file included from lib.h:12,
-+                 from setup.c:4:
-+arch/aarch64/lib.h:7:10: fatal error: sys/auxv.h: No such file or directory
-+    7 | #include <sys/auxv.h>
-+      |          ^~~~~~~~~~~~
++Support for symver needs to be detected via a compile test since
++__has_attribute can report false positives [0].
 +
-+Fixes:
-+ - http://autobuild.buildroot.org/results/cc44d714c9267dd7a98debeb8c81c4ee1efe4ebb
++Add a configure compile check for __attribute__((symver ..)) to ensure
++it is supported and define a variable to advertise support.
 +
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Upstream: https://github.com/axboe/liburing/commit/32f9c27a76c43627f79bb77469d2da8583e4d3df
++[0] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101766#c1
++
++Upstream: https://lists.nongnu.org/archive/html/acl-devel/2024-02/msg00003.html
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 +---
-+ src/arch/aarch64/lib.h | 1 -
-+ 1 file changed, 1 deletion(-)
++ configure.ac       | 15 +++++++++++++++
++ libattr/syscalls.c |  2 +-
++ 2 files changed, 16 insertions(+), 1 deletion(-)
 +
-+diff --git a/src/arch/aarch64/lib.h b/src/arch/aarch64/lib.h
-+index 3b701b1..41bcfc9 100644
-+--- a/src/arch/aarch64/lib.h
-++++ b/src/arch/aarch64/lib.h
-+@@ -4,7 +4,6 @@
-+ #define LIBURING_ARCH_AARCH64_LIB_H
++diff --git a/configure.ac b/configure.ac
++index 7e362e9..98477b5 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -57,6 +57,21 @@ AS_CASE([$host_os],
++ 	[linux*], [os_linux=yes])
++ AM_CONDITIONAL([OS_LINUX], [test "x$os_linux" = "xyes"])
 + 
-+ #include <elf.h>
-+-#include <sys/auxv.h>
-+ #include "../../syscall.h"
-+ 
-+ static inline long __get_page_size(void)
+++AC_CACHE_CHECK(whether __attribute__((__symver__())) is supported,
+++	gcc_cv_symver_attribute,
+++	[cat > conftest.c <<EOF
+++void foo (void) {}
+++__typeof(foo) foo __attribute__ ((__symver__("foo@foo")));
+++EOF
+++	gcc_cv_symver_attribute=no
+++	if ${CC-cc} -Werror -S conftest.c -o conftest.s >/dev/null 2>&1; then \
+++	    gcc_cv_symver_attribute=yes
+++	fi
+++	rm -f conftest.[cs]
+++])
+++AS_IF([test $gcc_cv_symver_attribute = yes],
+++      [AC_DEFINE(HAVE_SYMVER_ATTRIBUTE, [], [GCC supports symver attribute])])
+++
++ AC_CONFIG_COMMANDS([include/attr],
++ 	[dnl
++ 	rm -rf include/attr
++diff --git a/libattr/syscalls.c b/libattr/syscalls.c
++index 907560a..caa70bc 100644
++--- a/libattr/syscalls.c
+++++ b/libattr/syscalls.c
++@@ -32,7 +32,7 @@
++  * fall back to traditional .symver asm directive otherwise.
++  */
++ #ifdef __has_attribute
++-# if __has_attribute(__symver__)
+++# if defined(HAVE_SYMVER_ATTRIBUTE)
++ #  define SYMVER(cn, vn) __typeof(cn) cn __attribute__((__symver__(vn)))
++ # elif __has_attribute(__no_reorder__)
++    /*
 +-- 
 +2.43.0
 +
+diff --git a/package/attr/attr.mk b/package/attr/attr.mk
+index d1397921ff..1d24144f46 100644
+--- a/package/attr/attr.mk
++++ b/package/attr/attr.mk
+@@ -11,6 +11,9 @@ ATTR_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
+ ATTR_LICENSE_FILES = doc/COPYING doc/COPYING.LGPL
+ ATTR_CPE_ID_VALID = YES
+ 
++# Flag added for patch dealing with symver in configure.ac
++ATTR_AUTORECONF = YES
++
+ ATTR_INSTALL_STAGING = YES
+ 
+ ATTR_CONF_OPTS = --disable-nls
 -- 
-2.43.0
+2.34.1
 
 _______________________________________________
 buildroot mailing list
