@@ -4,95 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46A64C48BC3
-	for <buildroot@archiver.kernel.org>; Sat, 17 Feb 2024 16:03:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70D90C48BC3
+	for <buildroot@archiver.kernel.org>; Sat, 17 Feb 2024 16:03:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1622583D5E;
-	Sat, 17 Feb 2024 16:03:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 347D383D70;
+	Sat, 17 Feb 2024 16:03:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mIYpU9uQ0jqa; Sat, 17 Feb 2024 16:03:19 +0000 (UTC)
+	with ESMTP id pubWfTDt37fK; Sat, 17 Feb 2024 16:03:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 11A4F83D61
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EBECF83D7A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 11A4F83D61;
-	Sat, 17 Feb 2024 16:03:19 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4EB0E1BF5A3
- for <buildroot@lists.busybox.net>; Sat, 17 Feb 2024 16:03:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EBECF83D7A;
+	Sat, 17 Feb 2024 16:03:21 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BDC7A1BF5A3
+ for <buildroot@lists.busybox.net>; Sat, 17 Feb 2024 16:03:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 49FA560BB8
- for <buildroot@lists.busybox.net>; Sat, 17 Feb 2024 16:03:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A9EE24076E
+ for <buildroot@lists.busybox.net>; Sat, 17 Feb 2024 16:03:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KEYB7WYOro8F for <buildroot@lists.busybox.net>;
- Sat, 17 Feb 2024 16:03:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2lHCxp7B1aKn for <buildroot@lists.busybox.net>;
+ Sat, 17 Feb 2024 16:03:07 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::534; helo=mail-ed1-x534.google.com;
+ client-ip=2a00:1450:4864:20::52d; helo=mail-ed1-x52d.google.com;
  envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 58E3F60BE4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 58E3F60BE4
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com
- [IPv6:2a00:1450:4864:20::534])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 58E3F60BE4
- for <buildroot@buildroot.org>; Sat, 17 Feb 2024 16:03:06 +0000 (UTC)
-Received: by mail-ed1-x534.google.com with SMTP id
- 4fb4d7f45d1cf-563e330351dso1869108a12.0
- for <buildroot@buildroot.org>; Sat, 17 Feb 2024 08:03:06 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7C0D64076A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C0D64076A
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com
+ [IPv6:2a00:1450:4864:20::52d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7C0D64076A
+ for <buildroot@buildroot.org>; Sat, 17 Feb 2024 16:03:07 +0000 (UTC)
+Received: by mail-ed1-x52d.google.com with SMTP id
+ 4fb4d7f45d1cf-56439b7c7a9so248786a12.3
+ for <buildroot@buildroot.org>; Sat, 17 Feb 2024 08:03:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1708185784; x=1708790584;
+ d=1e100.net; s=20230601; t=1708185785; x=1708790585;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=HJYPoPpL9DxSBCUnFk+DLKquUY9Xlz7p5BzyKzNizk0=;
- b=owdHevd5Nkt6xI/SYZEEeTr3oVgUYOHpI/BM2wrovj6J8AspHJkjg05yfdVcrPW+9q
- yR08GDDASoTpt+jHvoYyP/k05R9ePU+Nz+Gd/VOyWA6J2LCIM2wgt0y0aIw5JyJDp5Ow
- 1vRSfEl/l/JJryaO3VTrE/tPDQOcUndhcPI49qGWpHKtbUOKEGPmDnVDLBje85E9Fls7
- WOXi2mkiEOVvktStz64yYWfiPGGVuj3oB9npLzGtI45W36PX/U6aATp1Ftcg3LejG2LV
- 7+ZhjrUJs9zTPj+xLCexu/eMIU5SV2IEu7GOJkYUmlrv98YKaVD3cyR/DPB4J3jxFaoJ
- UMuQ==
-X-Gm-Message-State: AOJu0Yxs68vAcv2lN62Bf5p0XEGsZHIMJnen8T0OHLVxiQcvh6S1nLtU
- /2B3Ls4oi3FPLt4S4sCMGRX5ST8MhVrHlaeaI9Nwq/2FJWEm2SgxOpQs5bTwQkTdmXU6IzGv9PP
- IIEU=
-X-Google-Smtp-Source: AGHT+IFjNSwwct4mzlRMfPc2Kih5SJEMZ4KaJq+B7ubEg1kJ0J4ZgyAaxtQk0Jth7Jhrqe+Y88897A==
-X-Received: by 2002:a50:cdd8:0:b0:563:eca6:733c with SMTP id
- h24-20020a50cdd8000000b00563eca6733cmr2821077edj.15.1708185783815; 
- Sat, 17 Feb 2024 08:03:03 -0800 (PST)
+ bh=LxoK0wXZRjnm5ouPEha6hjnbLPaEL1fB9DCk54pXwSE=;
+ b=foMK/WQn7u/Q+H9oK6i+ffA6W6RstoFtc2KT6zD6gmYZPOkBByJ75XY1oRKY1ofk9k
+ 500W524YTLwJTHFsN5+QiuvwhbVrB8WA8rwB4ouNdJ40UuQ10xAAk05OWT88SHAGWUNX
+ kA/IbG6GaRaLICF2TjTRBmqIPkvpcxd3DVAvixQsm0j6Ws80YRSF8lIwFmXqH7E/AfjS
+ PPaVrStVUMv/I9b+0Oixv22TNnvCMlMmqka99pGHj2vCfCoCoYit6/zilF5JUf4tW6JA
+ NwYyNoyazCcarnbg8jCorJqtE4aoPyg/speb02QoksbX0LBqeiLVlRCo6wv1e5nm0Fsz
+ b7YA==
+X-Gm-Message-State: AOJu0YzgZZhPuHuXFRzxMYY1MkbGjgffOsVTOnlosPyQA2zSkJv2FpME
+ UG7POw7r10IT4MDVjWNA22rvW1jAE0QY5jpgtvjJRCoaHX/4N/QObdHA3kJKIXLkVSeUlUcpocY
+ vG0g=
+X-Google-Smtp-Source: AGHT+IHgDnwOFqlM5HF3rbdW9Hb37n2Y8OyX/w3aOX13ilqzJpoHQGkaATSrw4ofZ0PGM/7ChtcUGA==
+X-Received: by 2002:aa7:d341:0:b0:561:8bc4:b05f with SMTP id
+ m1-20020aa7d341000000b005618bc4b05fmr6346590edr.0.1708185785381; 
+ Sat, 17 Feb 2024 08:03:05 -0800 (PST)
 Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
  (host-87-5-96-195.retail.telecomitalia.it. [87.5.96.195])
  by smtp.gmail.com with ESMTPSA id
- dj13-20020a05640231ad00b0055f0b3ec5d8sm973414edb.36.2024.02.17.08.03.02
+ dj13-20020a05640231ad00b0055f0b3ec5d8sm973414edb.36.2024.02.17.08.03.04
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 17 Feb 2024 08:03:03 -0800 (PST)
+ Sat, 17 Feb 2024 08:03:05 -0800 (PST)
 From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Sat, 17 Feb 2024 17:02:29 +0100
-Message-ID: <20240217160244.1320482-6-dario.binacchi@amarulasolutions.com>
+Date: Sat, 17 Feb 2024 17:02:30 +0100
+Message-ID: <20240217160244.1320482-7-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240217160244.1320482-1-dario.binacchi@amarulasolutions.com>
 References: <20240217160244.1320482-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1708185784; x=1708790584;
+ d=amarulasolutions.com; s=google; t=1708185785; x=1708790585;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=HJYPoPpL9DxSBCUnFk+DLKquUY9Xlz7p5BzyKzNizk0=;
- b=jVFEF2+9c1W3ljFd/ehyfnIV09EC5hhUFgaFHEvrvdmQ9Kyv0f0NJ147DkOQZ2NWyA
- rCwG+0JdO+qyTARCfzeX5LoIiYoGEKGpgmGuEEX1XmiB/hGkaVEzDI4FuHoQxna1grXk
- LwcJ7LM+SF+4cxSYHMG+FlyKRTB4Wuph0YrXI=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=LxoK0wXZRjnm5ouPEha6hjnbLPaEL1fB9DCk54pXwSE=;
+ b=AlaWAkQyVk4UK2Ctdy8lUXY/6IIyBve/Wk6IlueeAOPl5pg1diu1DLih0TpDemT4Z3
+ jDOzH52cLwu6liqE0nw21XN5zq3G3sdSn5FYhWLhje9x66ynhCkGvgnEf+l1QJN0YX/4
+ 9zUzd3c8NPUDlecVIaK2O4qm3XcNW2py2yNx8=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=jVFEF2+9
-Subject: [Buildroot] [PATCH v4 05/20] boot/ti-k3-r5-loader: bump to version
- 2024.01
+ header.b=AlaWAkQy
+Subject: [Buildroot] [PATCH v4 06/20] boot/ti-k3-core-secdev: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -117,52 +116,108 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-All in-tree configs with the ti-k3-r5 bootloader use a custom version,
-so this patch is mostly for the menuconfig default version
+This is a security development package containing tools for
+High-Security(HS) TI K3 platform devices.
 
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
 ---
 
-Added in v4
+Changes in v4:
+- Remove the trailing '/' at the end of the url in the help of
+  Config.in
+- Fixed license issues
+- Use $(BINARIES_DIR)/ti-k3-core-secdev as the directory where to
+  install files.
 
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
- boot/ti-k3-r5-loader/Config.in            | 4 ++--
- boot/ti-k3-r5-loader/ti-k3-r5-loader.hash | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ DEVELOPERS                                    |  1 +
+ boot/Config.in                                |  1 +
+ boot/ti-k3-core-secdev/Config.in              |  9 ++++++++
+ boot/ti-k3-core-secdev/ti-k3-core-secdev.hash |  3 +++
+ boot/ti-k3-core-secdev/ti-k3-core-secdev.mk   | 22 +++++++++++++++++++
+ 5 files changed, 36 insertions(+)
+ create mode 100644 boot/ti-k3-core-secdev/Config.in
+ create mode 100644 boot/ti-k3-core-secdev/ti-k3-core-secdev.hash
+ create mode 100644 boot/ti-k3-core-secdev/ti-k3-core-secdev.mk
 
-diff --git a/boot/ti-k3-r5-loader/Config.in b/boot/ti-k3-r5-loader/Config.in
-index 8c8368a1a5a8..5f86c045c99f 100644
---- a/boot/ti-k3-r5-loader/Config.in
-+++ b/boot/ti-k3-r5-loader/Config.in
-@@ -16,7 +16,7 @@ choice
- 	  here as it is used to build the main U-Boot package.
- 
- config BR2_TARGET_TI_K3_R5_LOADER_LATEST_VERSION
--	bool "2022.10"
-+	bool "2024.01"
- 
- config BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -60,7 +60,7 @@ endif
- 
- config BR2_TARGET_TI_K3_R5_LOADER_VERSION
- 	string
--	default "2022.10"	if BR2_TARGET_TI_K3_R5_LOADER_LATEST_VERSION
-+	default "2024.01"	if BR2_TARGET_TI_K3_R5_LOADER_LATEST_VERSION
- 	default BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION_VALUE \
- 		if BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_TARBALL
-diff --git a/boot/ti-k3-r5-loader/ti-k3-r5-loader.hash b/boot/ti-k3-r5-loader/ti-k3-r5-loader.hash
-index c5d1cb8e09f0..fbe5d215409d 100644
---- a/boot/ti-k3-r5-loader/ti-k3-r5-loader.hash
-+++ b/boot/ti-k3-r5-loader/ti-k3-r5-loader.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  50b4482a505bc281ba8470c399a3c26e145e29b23500bc35c50debd7fa46bdf8  u-boot-2022.10.tar.bz2
-+sha256  b99611f1ed237bf3541bdc8434b68c96a6e05967061f992443cb30aabebef5b3  u-boot-2024.01.tar.bz2
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0d12c3abcb11..33d99ab2440f 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -753,6 +753,7 @@ F:	package/xinetd/
+ N:	Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ F:	board/bsh/
+ F:	board/stmicroelectronics/stm32f769-disco/
++F:	boot/ti-k3-core-secdev/
+ F:	configs/imx8mn_bsh_smm_s2_defconfig
+ F:	configs/imx8mn_bsh_smm_s2_pro_defconfig
+ F:	configs/stm32f769_disco_sd_defconfig
+diff --git a/boot/Config.in b/boot/Config.in
+index e5fdf7ad439e..18a7d268f95a 100644
+--- a/boot/Config.in
++++ b/boot/Config.in
+@@ -20,6 +20,7 @@ source "boot/s500-bootloader/Config.in"
+ source "boot/shim/Config.in"
+ source "boot/syslinux/Config.in"
+ source "boot/ti-k3-boot-firmware/Config.in"
++source "boot/ti-k3-core-secdev/Config.in"
+ source "boot/ti-k3-image-gen/Config.in"
+ source "boot/ti-k3-r5-loader/Config.in"
+ source "boot/uboot/Config.in"
+diff --git a/boot/ti-k3-core-secdev/Config.in b/boot/ti-k3-core-secdev/Config.in
+new file mode 100644
+index 000000000000..f7b4e2962042
+--- /dev/null
++++ b/boot/ti-k3-core-secdev/Config.in
+@@ -0,0 +1,9 @@
++config BR2_TARGET_TI_K3_CORE_SECDEV
++	bool "ti-k3-core-secdev"
++	depends on BR2_aarch64
++	help
++	  This package downloads and installs development tools for
++	  High-Security(HS) TI K3 platforms (which include AM62x,
++	  AM64x, AM65x and more).
++
++	  https://git.ti.com/cgit/security-development-tools/core-secdev-k3
+diff --git a/boot/ti-k3-core-secdev/ti-k3-core-secdev.hash b/boot/ti-k3-core-secdev/ti-k3-core-secdev.hash
+new file mode 100644
+index 000000000000..e3074a398d62
+--- /dev/null
++++ b/boot/ti-k3-core-secdev/ti-k3-core-secdev.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  b6d3bca0d561d055c6869c5564b06f2fb1b9f67e4ef180c2baf8a14a6a6afa06  core-secdev-k3-08.06.00.007.tar.xz
++sha256  3e5cf4f5ab9f0333f46cd68fabede3f21e55de1a9e3c6ad673f241f4514d8369  manifest/k3-secdev-0.2-manifest.html
+diff --git a/boot/ti-k3-core-secdev/ti-k3-core-secdev.mk b/boot/ti-k3-core-secdev/ti-k3-core-secdev.mk
+new file mode 100644
+index 000000000000..f7655a0fefc8
+--- /dev/null
++++ b/boot/ti-k3-core-secdev/ti-k3-core-secdev.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# ti-k3-core-secdev
++#
++################################################################################
++
++TI_K3_CORE_SECDEV_VERSION = 08.06.00.007
++TI_K3_CORE_SECDEV_SITE = https://git.ti.com/cgit/security-development-tools/core-secdev-k3/snapshot
++TI_K3_CORE_SECDEV_SOURCE = core-secdev-k3-$(TI_K3_CORE_SECDEV_VERSION).tar.xz
++TI_K3_CORE_SECDEV_INSTALL_IMAGES = YES
++TI_K3_CORE_SECDEV_LICENSE = BSD-3-Clause
++TI_K3_CORE_SECDEV_LICENSE_FILES = manifest/k3-secdev-0.2-manifest.html
++
++TI_K3_CORE_SECDEV_INSTALL_DIR = $(BINARIES_DIR)/ti-k3-core-secdev
++
++define TI_K3_CORE_SECDEV_INSTALL_IMAGES_CMDS
++	mkdir -p $(TI_K3_CORE_SECDEV_INSTALL_DIR)
++	cp -dpfr $(@D)/keys $(TI_K3_CORE_SECDEV_INSTALL_DIR)/
++	cp -dpfr $(@D)/scripts $(TI_K3_CORE_SECDEV_INSTALL_DIR)/
++endef
++
++$(eval $(generic-package))
 -- 
 2.43.0
 
