@@ -4,94 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B286C48BC4
-	for <buildroot@archiver.kernel.org>; Sat, 17 Feb 2024 16:03:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC876C48BC4
+	for <buildroot@archiver.kernel.org>; Sat, 17 Feb 2024 16:03:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 310D480AAF;
-	Sat, 17 Feb 2024 16:03:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A46B783CE7;
+	Sat, 17 Feb 2024 16:03:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3K3WMCRbNFkY; Sat, 17 Feb 2024 16:03:06 +0000 (UTC)
+	with ESMTP id bVlWRFf7SoV2; Sat, 17 Feb 2024 16:03:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E136A83C8F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 97E1683CE8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E136A83C8F;
-	Sat, 17 Feb 2024 16:03:05 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DADCE1BF5A3
- for <buildroot@lists.busybox.net>; Sat, 17 Feb 2024 16:03:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 97E1683CE8;
+	Sat, 17 Feb 2024 16:03:09 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1A7001BF5A3
+ for <buildroot@lists.busybox.net>; Sat, 17 Feb 2024 16:03:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D4F374076E
- for <buildroot@lists.busybox.net>; Sat, 17 Feb 2024 16:03:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 06F5F4012E
+ for <buildroot@lists.busybox.net>; Sat, 17 Feb 2024 16:03:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id j07ko2fEqE67 for <buildroot@lists.busybox.net>;
- Sat, 17 Feb 2024 16:03:01 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JrOMtHA_GZRB for <buildroot@lists.busybox.net>;
+ Sat, 17 Feb 2024 16:03:02 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::531; helo=mail-ed1-x531.google.com;
+ client-ip=2a00:1450:4864:20::536; helo=mail-ed1-x536.google.com;
  envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D953B4076A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D953B4076A
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
- [IPv6:2a00:1450:4864:20::531])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D953B4076A
- for <buildroot@buildroot.org>; Sat, 17 Feb 2024 16:03:00 +0000 (UTC)
-Received: by mail-ed1-x531.google.com with SMTP id
- 4fb4d7f45d1cf-564372fb762so401774a12.0
- for <buildroot@buildroot.org>; Sat, 17 Feb 2024 08:03:00 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9E665400C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9E665400C4
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
+ [IPv6:2a00:1450:4864:20::536])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9E665400C4
+ for <buildroot@buildroot.org>; Sat, 17 Feb 2024 16:03:01 +0000 (UTC)
+Received: by mail-ed1-x536.google.com with SMTP id
+ 4fb4d7f45d1cf-563bb51c36eso2910396a12.2
+ for <buildroot@buildroot.org>; Sat, 17 Feb 2024 08:03:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1708185778; x=1708790578;
+ d=1e100.net; s=20230601; t=1708185779; x=1708790579;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=w8ihKOPSN/NZ9MCVF7/RjnvvbBWognxcyWiU/eEmu7g=;
- b=X85sRfUGfYxl/GcXic1Oa93TdiM2CLsaQBKThY19mDFPqlc4dFpTKb2VYqZ/XkqhVh
- DVpJhCEEBxkGPqP/MXTHXK939VMWGgpFcFrl2kRAnIMyYuZnefSaSGiukyzv9+kqZk3j
- y0zlOPD9BCN/McdASil1kUo2IAJZlwfh1MrKRwa/c1wAha09u+VrDCBN6/GVa41MdmT6
- BSgFH1DReiH+7T4RHOw54rW8kkITGIbOnK8lOutAJU0BfB459b0Vu/ny7etyBwPnXZQP
- 1I/pdji6f5KTRNhDua/cXn/02QtJbJcUNo+euc/17QIjfQx7NN4tibj8eqmEI8hGhgRH
- hlCw==
-X-Gm-Message-State: AOJu0YyQsz/poLe5mPXUCKPO3GJ3QIS+ozRJVdYQAfRgEP0G1lw6WWI3
- eOg1nhFiuDP2Mab75PcPzYhIZ8AFZldn7xYvnskEOqwY85RdFOF2MH2PLdqr72Mj/2QgP/mAlNY
- ydbQ=
-X-Google-Smtp-Source: AGHT+IGo2m5ENBnQywyPut6+TpwLksyKjgn3k/52Dh2Dxg9RygeN1glqXwvrfshH8mXmmZYrjEqxWw==
-X-Received: by 2002:a05:6402:1844:b0:564:3830:b9a5 with SMTP id
- v4-20020a056402184400b005643830b9a5mr523785edy.21.1708185778137; 
- Sat, 17 Feb 2024 08:02:58 -0800 (PST)
+ bh=wx+NANK+aJ4wOuSRGTX/E6rScIr6RB7wkbjBzZ0CJXs=;
+ b=OXoMMn8DqCitXtxKmORS9n7vHxmh30ddbu1VINTbrhp+cp1rx6FaMEyYZu0cr0asoT
+ 3aydcsVAP0EAOqKT5SirVUZxhvg7VFrjYo/W1qdfuMlnqZxinphch2EGStp1oroICYA9
+ UnPfx9LKbgmJvo5UbaAJfQyQMK/RQYL61nN7L+ZOhk7TP75y29ljR64Y1S47FIFshHsr
+ xFAPyuxbCaAM0AGatTGUKx7lRlW42ogkZtTluHzgto0qFjoYtp+eZtjLfltMHOTrntJo
+ Ho7Ry3aDNWGtEbgtp74qKiIYNm+uKNZRN/vgeoQKcseSAJcVrzhhgPpprQbusS+CpwVP
+ SBZw==
+X-Gm-Message-State: AOJu0Yw0gqVoptF1PLD3uTWgF2PBp05sA6Q+COAi9z06ixKfzV0Y3FNR
+ 8Viky77ewEOk4MHzfEYgyOwNOu7GRCB169prk0WBMTDLW0fFGTk0YBcupbqPDxLc6N3mUPUfoYV
+ JsPY=
+X-Google-Smtp-Source: AGHT+IHHTd72CAVDAFOIgiXfPB9dB+lqn7HfOesF3g3AJYpAsxneW0FYpwe9kFISfC0TSA9i5KD6Sg==
+X-Received: by 2002:a05:6402:3788:b0:563:ccd1:26bc with SMTP id
+ et8-20020a056402378800b00563ccd126bcmr5023787edb.7.1708185779442; 
+ Sat, 17 Feb 2024 08:02:59 -0800 (PST)
 Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
  (host-87-5-96-195.retail.telecomitalia.it. [87.5.96.195])
  by smtp.gmail.com with ESMTPSA id
- dj13-20020a05640231ad00b0055f0b3ec5d8sm973414edb.36.2024.02.17.08.02.57
+ dj13-20020a05640231ad00b0055f0b3ec5d8sm973414edb.36.2024.02.17.08.02.58
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 17 Feb 2024 08:02:57 -0800 (PST)
+ Sat, 17 Feb 2024 08:02:59 -0800 (PST)
 From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Sat, 17 Feb 2024 17:02:25 +0100
-Message-ID: <20240217160244.1320482-2-dario.binacchi@amarulasolutions.com>
+Date: Sat, 17 Feb 2024 17:02:26 +0100
+Message-ID: <20240217160244.1320482-3-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240217160244.1320482-1-dario.binacchi@amarulasolutions.com>
 References: <20240217160244.1320482-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1708185778; x=1708790578;
+ d=amarulasolutions.com; s=google; t=1708185779; x=1708790579;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=w8ihKOPSN/NZ9MCVF7/RjnvvbBWognxcyWiU/eEmu7g=;
- b=rhLHeJr1YAr5hvwroYkojgATr5ZLzwcaOSMweHW/lcA24B6ZJDZJfYAbCAeIbbof8G
- uzoEU/vhMaVOj/1xLdg9Fu3R0BUSRDw3RC6lPsOUMl50F269uoAYzRud+wKqK449Ih84
- f/Q4XXuezq46QyaoIIn1lFOcPCM6MP7q6u7nQ=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=wx+NANK+aJ4wOuSRGTX/E6rScIr6RB7wkbjBzZ0CJXs=;
+ b=IqJtrhzEHP9HBLDUYe1YqxasfhChF6XcMfFeGlh7tJazSKU4bQWUaU2Dz+JRNjkoGI
+ xdjbZGQqEdsr7Th51iaf38WwOWLaZYxjG8c2udptR+BWAtrn62zhLgB8AD8Wbi9KjE21
+ a0Eo6OZelYlmEaxwFAIQr5qlJLNUdfGs4HdYU=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=rhLHeJr1
-Subject: [Buildroot] [PATCH v4 01/20] configs/ti_am62x_sk_defconfig: fix
+ header.a=rsa-sha256 header.s=google header.b=IqJtrhzE
+Subject: [Buildroot] [PATCH v4 02/20] configs/ti_am64x_sk_defconfig: fix
  BR2_TARGET_OPTEE_OS_PLATFORM setting
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -120,8 +120,8 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 Checking the output of the command `git grep PLATFORM | grep k3`, we can
 found the proper settings for the optee-os package:
 
-.github/workflows/ci.yml:          _make PLATFORM=k3-am62x
-.github/workflows/ci.yml:          _make PLATFORM=k3-am62x CFG_ARM64_core=y
+.github/workflows/ci.yml:          _make PLATFORM=k3-am64x
+.github/workflows/ci.yml:          _make PLATFORM=k3-am64x CFG_ARM64_core=y
 ...
 core/arch/arm/plat-k3/conf.mk:ifneq (,$(filter ${PLATFORM_FLAVOR},am65x j721e j784s4 am64x am62x))
 
@@ -134,22 +134,22 @@ Added in v4
 
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
- configs/ti_am62x_sk_defconfig | 3 ++-
+ configs/ti_am64x_sk_defconfig | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/configs/ti_am62x_sk_defconfig b/configs/ti_am62x_sk_defconfig
-index f88252a89c68..fde6f8f5636a 100644
---- a/configs/ti_am62x_sk_defconfig
-+++ b/configs/ti_am62x_sk_defconfig
+diff --git a/configs/ti_am64x_sk_defconfig b/configs/ti_am64x_sk_defconfig
+index 4bfd31f0c8d3..98476c88626b 100644
+--- a/configs/ti_am64x_sk_defconfig
++++ b/configs/ti_am64x_sk_defconfig
 @@ -21,7 +21,8 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="k3"
  BR2_TARGET_ARM_TRUSTED_FIRMWARE_TARGET_BOARD="lite"
  BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE=y
  BR2_TARGET_OPTEE_OS=y
 -BR2_TARGET_OPTEE_OS_PLATFORM="k3"
-+BR2_TARGET_OPTEE_OS_PLATFORM="k3-am62x"
-+BR2_TARGET_OPTEE_OS_PLATFORM_FLAVOR="am62x"
++BR2_TARGET_OPTEE_OS_PLATFORM="k3-am64x"
++BR2_TARGET_OPTEE_OS_PLATFORM_FLAVOR="am64x"
  BR2_TARGET_TI_K3_IMAGE_GEN=y
- BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62X=y
+ BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM64X=y
  BR2_TARGET_TI_K3_R5_LOADER=y
 -- 
 2.43.0
