@@ -4,95 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C97A9C48BC4
-	for <buildroot@archiver.kernel.org>; Sat, 17 Feb 2024 16:04:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43E52C48BC3
+	for <buildroot@archiver.kernel.org>; Sat, 17 Feb 2024 16:04:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B0C2C83F63;
-	Sat, 17 Feb 2024 16:03:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 131BD83F61;
+	Sat, 17 Feb 2024 16:04:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id S0CDXDQgIvG8; Sat, 17 Feb 2024 16:03:58 +0000 (UTC)
+	with ESMTP id vVGWYbehv7gS; Sat, 17 Feb 2024 16:04:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D36B83F3B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 998A483F77
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7D36B83F3B;
-	Sat, 17 Feb 2024 16:03:57 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EF4631BF5A3
- for <buildroot@lists.busybox.net>; Sat, 17 Feb 2024 16:03:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 998A483F77;
+	Sat, 17 Feb 2024 16:04:01 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5051B1BF5A3
+ for <buildroot@lists.busybox.net>; Sat, 17 Feb 2024 16:03:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D6B5F4076E
- for <buildroot@lists.busybox.net>; Sat, 17 Feb 2024 16:03:24 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4794E83D6C
+ for <buildroot@lists.busybox.net>; Sat, 17 Feb 2024 16:03:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jsq3x0oQjpDq for <buildroot@lists.busybox.net>;
- Sat, 17 Feb 2024 16:03:23 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aNZqjDpzV5vk for <buildroot@lists.busybox.net>;
+ Sat, 17 Feb 2024 16:03:25 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::52e; helo=mail-ed1-x52e.google.com;
+ client-ip=2a00:1450:4864:20::531; helo=mail-ed1-x531.google.com;
  envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9EB3D4076A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9EB3D4076A
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
- [IPv6:2a00:1450:4864:20::52e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9EB3D4076A
- for <buildroot@buildroot.org>; Sat, 17 Feb 2024 16:03:23 +0000 (UTC)
-Received: by mail-ed1-x52e.google.com with SMTP id
- 4fb4d7f45d1cf-56399fb02b3so3703384a12.1
- for <buildroot@buildroot.org>; Sat, 17 Feb 2024 08:03:23 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0696C83D50
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0696C83D50
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
+ [IPv6:2a00:1450:4864:20::531])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0696C83D50
+ for <buildroot@buildroot.org>; Sat, 17 Feb 2024 16:03:24 +0000 (UTC)
+Received: by mail-ed1-x531.google.com with SMTP id
+ 4fb4d7f45d1cf-55ee686b5d5so2116243a12.0
+ for <buildroot@buildroot.org>; Sat, 17 Feb 2024 08:03:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1708185801; x=1708790601;
+ d=1e100.net; s=20230601; t=1708185802; x=1708790602;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=SxHuKzo6ZR/Q9Kv9kJm/EEGNy0GjIlHEj4XhFg3le+k=;
- b=VSh5Ed4GesV5lsJgi783hb6lTG3JHpwQakHBMcpWYVzyGxHcztLqgu5IBpCd3DN/67
- uSKuQQEoQW/RBc1CwSi/iclqgXO8yP4gmM+xqH2mE2XOLlWyEXZaVG8WyLgszzmxrY3G
- 9hA/JGQ+u5GvS8TL5Hk17a8Kl0Xg4PD0C++lUDGfLH0W4nrwR4/hypACQAAu831uzG48
- wZodBrDF4cEU+CI9S3ErAwihPaoL//bTP0btBr2idBaInRy8R3ZnZtHl5kDMlVNbHpPI
- jSSICzyJ9Eu+ZNB09dB+jk5xKYEZsmz6FFtjJ1ZLNmdaTSvevG3Zf33rTIKMseCBY1uG
- erLA==
-X-Gm-Message-State: AOJu0YxfryKi4BquusBBWzgiVkaWe0XxFJwxsEOHdOBfGK2H4V6/jVwh
- JSY3G0ydjZEDrs7s+NveRYEoPZOsOjF8Dt0oYIf2JEFjepu35tHerY9F1M69VKkzA71P4PJed7o
- NMog=
-X-Google-Smtp-Source: AGHT+IHyFblnUh4PndUZoHldA8F7F7F/Md/QaqoOSPOmA/me+FWT1xFt1DvuC2UP4imIdaP1Y5+SwA==
-X-Received: by 2002:a50:cd58:0:b0:563:e5e0:85e1 with SMTP id
- d24-20020a50cd58000000b00563e5e085e1mr3869379edj.25.1708185801600; 
- Sat, 17 Feb 2024 08:03:21 -0800 (PST)
+ bh=lz0FBjYVL02fSOFknV9/WyKWRqLvz9cqyl66/8Btm6E=;
+ b=qhwAG0Buofu8pRekt+54R+/Tt4WWQ42Dww6ez/nHlm6fvXKOg/nhEcP4450gOxJiFi
+ DFnq6Y6pM5rsN6wqZmdQ9Je17+DHB2fdFIAbzsYDPmtws2BjwAVrEm7A9+lQ46teoiwc
+ ueLbXa2j+k6oEUK1lncE7luzZhbqWdcIxai/dwonT5dtx27WXVwo+Yz4yhWik5F8Nlbt
+ 1EK9pudRH3k8BrWlZADulCz3bRZROcYHUcSQY0+VstpWOTRGJztH8Rxk1L/BWlnWMoam
+ q+hFCPb1uwxolyPhpkKASk2VV9SQXGTr8YD7ue4DOu/VlfmHPbylRlA0v3x3cqMRbxCz
+ 4FMQ==
+X-Gm-Message-State: AOJu0YxbNIr5Taoz7VUsOC0YKRXVFOK0QoqtK0gNCQ7lPwCOoj8AUNQ6
+ TkrIGmvbkRIS54ghYe0sMmtw4O0miJxiQEh9v0JucEEePczRTBB8IKypvrTXm7LWMxVU+yWna+s
+ 4Ac0=
+X-Google-Smtp-Source: AGHT+IHSrbvNsCMOEm4AzXWSliJbU5aPQj0Yh651UoSYmFiKQ18/xZxXQhszNDNc9fMWHdHLarZLGA==
+X-Received: by 2002:a05:6402:2812:b0:563:c54e:ee with SMTP id
+ h18-20020a056402281200b00563c54e00eemr7306704ede.2.1708185802708; 
+ Sat, 17 Feb 2024 08:03:22 -0800 (PST)
 Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
  (host-87-5-96-195.retail.telecomitalia.it. [87.5.96.195])
  by smtp.gmail.com with ESMTPSA id
- dj13-20020a05640231ad00b0055f0b3ec5d8sm973414edb.36.2024.02.17.08.03.20
+ dj13-20020a05640231ad00b0055f0b3ec5d8sm973414edb.36.2024.02.17.08.03.21
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 17 Feb 2024 08:03:21 -0800 (PST)
+ Sat, 17 Feb 2024 08:03:22 -0800 (PST)
 From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Sat, 17 Feb 2024 17:02:42 +0100
-Message-ID: <20240217160244.1320482-19-dario.binacchi@amarulasolutions.com>
+Date: Sat, 17 Feb 2024 17:02:43 +0100
+Message-ID: <20240217160244.1320482-20-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240217160244.1320482-1-dario.binacchi@amarulasolutions.com>
 References: <20240217160244.1320482-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1708185801; x=1708790601;
+ d=amarulasolutions.com; s=google; t=1708185802; x=1708790602;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=SxHuKzo6ZR/Q9Kv9kJm/EEGNy0GjIlHEj4XhFg3le+k=;
- b=NhgJypa5M4ryoiQofb49QHvEi6uu5ICPTZCIrfE7dmLXjb9tajVhQpRf5DEEO5Q63y
- IuXijERDigrZ/oONsRK8GhEVsyhJtkWttCsH3Yaqe1uAufgUzPZv1fl8KzZCuhlIURyl
- pR1LqxzmSmLggR+/XNV+wCMHl78CK2z/WsUy0=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=lz0FBjYVL02fSOFknV9/WyKWRqLvz9cqyl66/8Btm6E=;
+ b=C8THLRXsguBg2iAxgvjDjLwFMrves47+8EZBwUcC9nD/MceXTSnHL3BIF5lwOP1hEX
+ TJ0P++24HxTV7EjQipS7BP8ogqEpcIafjxxelzIilvlyh3Ebu/+/5XkjzrgQtB3RZ3IC
+ p4vlfqR++udcG+TpsFt5OZos4yRlFtYZ+UObE=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=NhgJypa5
-Subject: [Buildroot] [PATCH v4 18/20] boot/ti-k3: move TI_K3_{SECTYPE,
- SOC} out of the image-gen scope
+ header.b=C8THLRXs
+Subject: [Buildroot] [PATCH v4 19/20] boot/ti-k3/ti-k3-r5-loader: install
+ tiboot3.bin
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -117,11 +117,10 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Recent versions of U-Boot can use Binman to compile and sign the generated
-binaries, thus making the use of custom tools like ti-k3-image-gen no
-longer necessary. In ti-k3-image-gen, options such as SECTYPE and SOC were
-configured and used outside of it. This patch allows setting such options
-even if the package is not enabled.
+Recent versions of U-Boot are capable of building tiboot3.bin using
+Binman. In this case, let's copy it to the binaries directory.
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
 ---
 
@@ -129,225 +128,25 @@ Added in v4
 
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
- boot/ti-k3/Config.in                          | 46 ++++++++++++++
- boot/ti-k3/ti-k3-image-gen/Config.in          | 63 ++-----------------
- boot/ti-k3/ti-k3-image-gen/ti-k3-image-gen.mk |  6 +-
- boot/uboot/Config.in                          |  7 +--
- configs/ti_am62x_sk_defconfig                 |  2 +-
- configs/ti_am64x_sk_defconfig                 |  2 +-
- 6 files changed, 59 insertions(+), 67 deletions(-)
+ boot/ti-k3/ti-k3-r5-loader/ti-k3-r5-loader.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/boot/ti-k3/Config.in b/boot/ti-k3/Config.in
-index 06dda2f156a9..9e508326c9c8 100644
---- a/boot/ti-k3/Config.in
-+++ b/boot/ti-k3/Config.in
-@@ -5,6 +5,52 @@ config BR2_TARGET_TI_K3
+diff --git a/boot/ti-k3/ti-k3-r5-loader/ti-k3-r5-loader.mk b/boot/ti-k3/ti-k3-r5-loader/ti-k3-r5-loader.mk
+index 2a10024aedaa..643298a1e70a 100644
+--- a/boot/ti-k3/ti-k3-r5-loader/ti-k3-r5-loader.mk
++++ b/boot/ti-k3/ti-k3-r5-loader/ti-k3-r5-loader.mk
+@@ -75,8 +75,11 @@ define TI_K3_R5_LOADER_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(TI_K3_R5_LOADER_MAKE) -C $(@D) $(TI_K3_R5_LOADER_MAKE_OPTS)
+ endef
  
- if BR2_TARGET_TI_K3
++TI_K3_R5_LOADER_SECTYPE = $(call qstrip,$(BR2_TARGET_TI_K3_SECTYPE))
++
+ define TI_K3_R5_LOADER_INSTALL_IMAGES_CMDS
+ 	cp $(@D)/spl/u-boot-spl.bin $(BINARIES_DIR)/r5-u-boot-spl.bin
++	find $(@D) -name "tiboot3-*-$(TI_K3_R5_LOADER_SECTYPE)-*.bin" -type f -exec cp {} $(BINARIES_DIR)/tiboot3.bin \;
+ endef
  
-+choice
-+	prompt "SoC family"
-+
-+config BR2_TARGET_TI_K3_SOC_AM62AX
-+	bool "am62ax"
-+
-+config BR2_TARGET_TI_K3_SOC_AM62X
-+	bool "am62x"
-+
-+config BR2_TARGET_TI_K3_SOC_AM64X
-+	bool "am64x"
-+
-+config BR2_TARGET_TI_K3_SOC_AM65X
-+	bool "am65x"
-+
-+endchoice
-+
-+choice
-+	prompt "Security type"
-+	help
-+	  The target SoC security type option.
-+
-+config BR2_TARGET_TI_K3_SECTYPE_GP
-+	bool "gp"
-+
-+config BR2_TARGET_TI_K3_SECTYPE_HS_FS
-+	bool "hs-fs"
-+
-+config BR2_TARGET_TI_K3_SECTYPE_HS
-+	bool "hs"
-+
-+endchoice
-+
-+config BR2_TARGET_TI_K3_SOC
-+	string
-+	default "am62ax" if BR2_TARGET_TI_K3_SOC_AM62AX
-+	default "am62x"  if BR2_TARGET_TI_K3_SOC_AM62X
-+	default "am64x"  if BR2_TARGET_TI_K3_SOC_AM64X
-+	default "am65x"  if BR2_TARGET_TI_K3_SOC_AM65X
-+
-+config BR2_TARGET_TI_K3_SECTYPE
-+	string
-+	default "gp"    if BR2_TARGET_TI_K3_SECTYPE_GP
-+	default "hs-fs" if BR2_TARGET_TI_K3_SECTYPE_HS_FS
-+	default "hs"    if BR2_TARGET_TI_K3_SECTYPE_HS
-+
- source "boot/ti-k3/ti-k3-boot-firmware/Config.in"
- source "boot/ti-k3/ti-k3-core-secdev/Config.in"
- source "boot/ti-k3/ti-k3-image-gen/Config.in"
-diff --git a/boot/ti-k3/ti-k3-image-gen/Config.in b/boot/ti-k3/ti-k3-image-gen/Config.in
-index 38d1598d9fc0..2d53d62dd4ee 100644
---- a/boot/ti-k3/ti-k3-image-gen/Config.in
-+++ b/boot/ti-k3/ti-k3-image-gen/Config.in
-@@ -2,7 +2,7 @@ config BR2_TARGET_TI_K3_IMAGE_GEN
- 	bool "ti-k3-image-gen"
- 	depends on BR2_TARGET_TI_K3_R5_LOADER
- 	select BR2_TARGET_TI_K3_BOOT_FIRMWARE
--	select BR2_TARGET_TI_K3_CORE_SECDEV if BR2_TARGET_TI_K3_IMAGE_GEN_SECTYPE_HS_FS || BR2_TARGET_TI_K3_IMAGE_GEN_SECTYPE_HS
-+	select BR2_TARGET_TI_K3_CORE_SECDEV if BR2_TARGET_TI_K3_SECTYPE_HS_FS || BR2_TARGET_TI_K3_SECTYPE_HS
- 	# We need FIT support in uboot-tools, which is why we select a
- 	# host package
- 	select BR2_PACKAGE_HOST_UBOOT_TOOLS
-@@ -14,65 +14,12 @@ config BR2_TARGET_TI_K3_IMAGE_GEN
- 	  https://git.ti.com/cgit/k3-image-gen/k3-image-gen/
- 
- if BR2_TARGET_TI_K3_IMAGE_GEN
--choice
--	prompt "SoC family"
--
--config BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62AX
--	bool "am62ax"
--
--config BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62X
--	bool "am62x"
--
--config BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM64X
--	bool "am64x"
--
--config BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM65X
--	bool "am65x"
--
--endchoice
--
--choice
--	prompt "Security type"
--	help
--	  The target SoC security type option for image gen.  Valid
--	  options are "gp" for General Purpose devices, "hs-fs" for
--	  High Security - Field Securable devices, or "hs" for High
--	  Security - Security Enforcing devices.  Note for all High
--	  Security device variants the TI_SECURE_DEV_PKG environmental
--	  variable must be defined at build time pointing to a valid
--	  core-secdev-k3 folder location, otherwise the build will
--	  fail, see
--	  https://git.ti.com/cgit/security-development-tools/core-secdev-k3
--
--config BR2_TARGET_TI_K3_IMAGE_GEN_SECTYPE_GP
--	bool "gp"
--
--config BR2_TARGET_TI_K3_IMAGE_GEN_SECTYPE_HS_FS
--	bool "hs-fs"
--
--config BR2_TARGET_TI_K3_IMAGE_GEN_SECTYPE_HS
--	bool "hs"
--
--endchoice
--
--config BR2_TARGET_TI_K3_IMAGE_GEN_SOC
--	string
--	default "am62ax" if BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62AX
--	default "am62x"  if BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62X
--	default "am64x"  if BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM64X
--	default "am65x"  if BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM65X
- 
- config BR2_TARGET_TI_K3_IMAGE_GEN_FW_TYPE
- 	string
--	default "ti-fs"  if BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62AX
--	default "ti-fs"  if BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62X
--	default "ti-sci" if BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM64X
--	default "ti-sci" if BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM65X
--
--config BR2_TARGET_TI_K3_IMAGE_GEN_SECTYPE
--	string
--	default "gp"    if BR2_TARGET_TI_K3_IMAGE_GEN_SECTYPE_GP
--	default "hs-fs" if BR2_TARGET_TI_K3_IMAGE_GEN_SECTYPE_HS_FS
--	default "hs"    if BR2_TARGET_TI_K3_IMAGE_GEN_SECTYPE_HS
-+	default "ti-fs"  if BR2_TARGET_TI_K3_SOC_AM62AX
-+	default "ti-fs"  if BR2_TARGET_TI_K3_SOC_AM62X
-+	default "ti-sci" if BR2_TARGET_TI_K3_SOC_AM64X
-+	default "ti-sci" if BR2_TARGET_TI_K3_SOC_AM65X
- 
- endif
-diff --git a/boot/ti-k3/ti-k3-image-gen/ti-k3-image-gen.mk b/boot/ti-k3/ti-k3-image-gen/ti-k3-image-gen.mk
-index 74b4fcb4bf89..834d8f7d5cd5 100644
---- a/boot/ti-k3/ti-k3-image-gen/ti-k3-image-gen.mk
-+++ b/boot/ti-k3/ti-k3-image-gen/ti-k3-image-gen.mk
-@@ -26,10 +26,10 @@ TI_K3_IMAGE_GEN_DEPENDENCIES = \
- 	$(BR2_MAKE_HOST_DEPENDENCY)
- 
- TI_K3_IMAGE_GEN_FW_TYPE = $(call qstrip,$(BR2_TARGET_TI_K3_IMAGE_GEN_FW_TYPE))
--TI_K3_IMAGE_GEN_SOC = $(call qstrip,$(BR2_TARGET_TI_K3_IMAGE_GEN_SOC))
--TI_K3_IMAGE_GEN_SECTYPE = $(call qstrip,$(BR2_TARGET_TI_K3_IMAGE_GEN_SECTYPE))
-+TI_K3_IMAGE_GEN_SOC = $(call qstrip,$(BR2_TARGET_TI_K3_SOC))
-+TI_K3_IMAGE_GEN_SECTYPE = $(call qstrip,$(BR2_TARGET_TI_K3_SECTYPE))
- 
--ifeq ($(BR2_TARGET_TI_K3_IMAGE_GEN_SECTYPE_GP),y)
-+ifeq ($(BR2_TARGET_TI_K3_SECTYPE_GP),y)
- TI_K3_IMAGE_GEN_SYSFW = \
- 	$(TI_K3_IMAGE_GEN_FW_TYPE)-firmware-$(TI_K3_IMAGE_GEN_SOC)-$(TI_K3_IMAGE_GEN_SECTYPE).bin
- else
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index beafb38930db..1a9d21e7c6d1 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -244,8 +244,7 @@ config BR2_TARGET_UBOOT_NEEDS_TI_K3_DM
- 	bool "U-Boot needs TI K3 Device Manager (DM)"
- 	# We use the SoC selection defined for the ti-k3-image-gen
- 	# package
--	depends on BR2_TARGET_TI_K3_IMAGE_GEN
--	depends on BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62AX || BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62X
-+	depends on BR2_TARGET_TI_K3_SOC_AM62AX || BR2_TARGET_TI_K3_SOC_AM62X
- 	help
- 	  Some TI K3 devices need the Device Manager (DM) firmware to
- 	  be available for the U-Boot build.
-@@ -254,8 +253,8 @@ if BR2_TARGET_UBOOT_NEEDS_TI_K3_DM
- 
- config BR2_TARGET_UBOOT_TI_K3_DM_SOCNAME
- 	string
--	default "am62axx" if BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62AX
--	default "am62xx"  if BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62X
-+	default "am62axx" if BR2_TARGET_TI_K3_SOC_AM62AX
-+	default "am62xx"  if BR2_TARGET_TI_K3_SOC_AM62X
- 
- endif
- 
-diff --git a/configs/ti_am62x_sk_defconfig b/configs/ti_am62x_sk_defconfig
-index cd26235342e4..cfefce0a77a4 100644
---- a/configs/ti_am62x_sk_defconfig
-+++ b/configs/ti_am62x_sk_defconfig
-@@ -24,8 +24,8 @@ BR2_TARGET_OPTEE_OS=y
- BR2_TARGET_OPTEE_OS_PLATFORM="k3-am62x"
- BR2_TARGET_OPTEE_OS_PLATFORM_FLAVOR="am62x"
- BR2_TARGET_TI_K3=y
-+BR2_TARGET_TI_K3_SOC_AM62X=y
- BR2_TARGET_TI_K3_IMAGE_GEN=y
--BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62X=y
- BR2_TARGET_TI_K3_R5_LOADER=y
- BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION=y
- BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION_VALUE="2024.01"
-diff --git a/configs/ti_am64x_sk_defconfig b/configs/ti_am64x_sk_defconfig
-index 1befeb4ab96c..daf78dbffff8 100644
---- a/configs/ti_am64x_sk_defconfig
-+++ b/configs/ti_am64x_sk_defconfig
-@@ -24,8 +24,8 @@ BR2_TARGET_OPTEE_OS=y
- BR2_TARGET_OPTEE_OS_PLATFORM="k3-am64x"
- BR2_TARGET_OPTEE_OS_PLATFORM_FLAVOR="am64x"
- BR2_TARGET_TI_K3=y
-+BR2_TARGET_TI_K3_SOC_AM64X=y
- BR2_TARGET_TI_K3_IMAGE_GEN=y
--BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM64X=y
- BR2_TARGET_TI_K3_R5_LOADER=y
- BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION=y
- BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION_VALUE="2022.10"
+ $(eval $(kconfig-package))
 -- 
 2.43.0
 
