@@ -4,93 +4,106 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EBA3C48BC3
-	for <buildroot@archiver.kernel.org>; Sat, 17 Feb 2024 21:05:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C568CC48BC4
+	for <buildroot@archiver.kernel.org>; Sat, 17 Feb 2024 21:14:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C2B60407B6;
-	Sat, 17 Feb 2024 21:05:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5F75B40891;
+	Sat, 17 Feb 2024 21:14:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cqCVTRIO475N; Sat, 17 Feb 2024 21:05:26 +0000 (UTC)
+	with ESMTP id k0WmnuKJw41V; Sat, 17 Feb 2024 21:14:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17AF4407C3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5206640895
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 17AF4407C3;
-	Sat, 17 Feb 2024 21:05:26 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EABE31BF2A3
- for <buildroot@lists.busybox.net>; Sat, 17 Feb 2024 21:05:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5206640895;
+	Sat, 17 Feb 2024 21:14:29 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4E26B1BF2A3
+ for <buildroot@lists.busybox.net>; Sat, 17 Feb 2024 21:14:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E568280B86
- for <buildroot@lists.busybox.net>; Sat, 17 Feb 2024 21:05:24 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3BA7E608A9
+ for <buildroot@lists.busybox.net>; Sat, 17 Feb 2024 21:14:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tfEN_JjLEPd0 for <buildroot@lists.busybox.net>;
- Sat, 17 Feb 2024 21:05:23 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VkJTgKzelAFu for <buildroot@lists.busybox.net>;
+ Sat, 17 Feb 2024 21:14:26 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::42d; helo=mail-pf1-x42d.google.com;
- envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2F07F80AF0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F07F80AF0
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com
- [IPv6:2607:f8b0:4864:20::42d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2F07F80AF0
- for <buildroot@buildroot.org>; Sat, 17 Feb 2024 21:05:22 +0000 (UTC)
-Received: by mail-pf1-x42d.google.com with SMTP id
- d2e1a72fcca58-6d9f94b9186so2614587b3a.0
- for <buildroot@buildroot.org>; Sat, 17 Feb 2024 13:05:22 -0800 (PST)
+ client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
+ envelope-from=alexander.sverdlin@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 018D76086C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 018D76086C
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 018D76086C
+ for <buildroot@buildroot.org>; Sat, 17 Feb 2024 21:14:25 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id
+ ffacd0b85a97d-33d3a9f377aso153453f8f.3
+ for <buildroot@buildroot.org>; Sat, 17 Feb 2024 13:14:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1708203922; x=1708808722;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=r8eXBm4ULpPEhT7BXc16Itn+k6GvPLg4AzsjhMmoobU=;
- b=HqMmuYBJh5YP1Z31IP3XPPInlapTKQ9+yz/5Rqrr22rxlSli5VQ8Esxc+QAnsU03kD
- fgP/ZaIxUDgFeDUGi08Vbs3V89c92hVN0vCDcAFljO/Ned2v7gVI+NZppGHN14RuWbb4
- w/pNPhMd0peEF0X5VNJFYPcwpRriZccS7bbguGUrWZtpCybX/sAu06HLaNXNE7AQX8NZ
- DO8d7gGop1yWXIej1UM62nb6/IPO/hjjckK3pdiAOTCoV4mV+hhkcJp5T26Hy+g63/GH
- K8VCDdyJzDYlczYF3E9E02e1kSYIzZFZUgz9K+IMsSeAhrvglzva4WGwNfA7vQM9kvLV
- Rr0g==
+ d=1e100.net; s=20230601; t=1708204464; x=1708809264;
+ h=mime-version:user-agent:content-transfer-encoding:autocrypt
+ :references:in-reply-to:date:cc:to:from:subject:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=Eq4KHIR1cbPinBGdCFYyUUYY2h0yCY3orX/T8SoznoY=;
+ b=fRmFIAtzkvWyRIRdmAtShXsH2xEiZBztdLJyi1QhclwPi5xdZFgmfnbHUbb95QpJDW
+ nQpuIsVMVpf8DZWVjqOh9VxnwJVfVoe7fjfuZOgl1oMqdsCBK1Bs3AqKk6dDdx79R/nB
+ GRJ1T6TOqhsEuOwrq1u+85S1Wgc+QKEyH+6pT9Kyu/7pE1cBYvG0QHWLqzufWy/a+rs2
+ F6gJVNL5gkCg7wZgbqyQefI4i3KHVpop4krJd4ATjrudt1GZEHp4YASGLNxmfzbzdkd9
+ 9A6OXz8CmpD7ZmwiiSPw8Pg5yeXOUDA7YTr+TRwtBbUbi6YHJk4/mwh07NTWR93oPSCN
+ fneg==
 X-Forwarded-Encrypted: i=1;
- AJvYcCVap9ThRfufLqsgbJudXqanHlnS58Snbf/qz5l9GOpZdedGEtS7q6qaHKNYyZUGzc1R4hPmC00dOmEVfyAQ06BNueIvnZ4kZA==
-X-Gm-Message-State: AOJu0YwmlGIZRF+0/NdOxi5A2BIf+XG2J5pmjXrnt+ydj022HNCWBs2f
- pkMatU2Ug1j3T4Dr0CJ70NDmo877fYz3WWhL9ES4lah9ZRpJVdm6IYHOW6LbFMrJ4XXqmR73T68
- z8IAaSbMVoIoHiFjcX73iC7E+rvb0RNE+cTR8
-X-Google-Smtp-Source: AGHT+IHlhChJWYqzqxlE9HG1GTKLGYSg63naPWrfK83Qk1u1itcoxvRW6XdfzvDfI0gkgTI8gVVjR+3dh4a3yEDUVzw=
-X-Received: by 2002:a05:6a21:394c:b0:19e:4aa7:e6ab with SMTP id
- ac12-20020a056a21394c00b0019e4aa7e6abmr9274374pzc.47.1708203921612; Sat, 17
- Feb 2024 13:05:21 -0800 (PST)
-MIME-Version: 1.0
-References: <20240217160244.1320482-1-dario.binacchi@amarulasolutions.com>
- <20240217160244.1320482-18-dario.binacchi@amarulasolutions.com>
-In-Reply-To: <20240217160244.1320482-18-dario.binacchi@amarulasolutions.com>
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sat, 17 Feb 2024 22:05:10 +0100
-Message-ID: <CAAE6iEW4mrOJ5aRTb3C493V5bUQvTRPWH5LkTnbD5_qtkE=aTQ@mail.gmail.com>
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ AJvYcCUlJXbrWkC8hjJiElFNYY1Bh+qSaGzzQz81TJULNdADhvYksq5xUebEeVb9AjJ0fyot1XwGe7MyIjB7EIeTmwhk7MKA9eFkig==
+X-Gm-Message-State: AOJu0YwWREJG+oq/sM0ZBrR41kp/op601qQ93WB2HTOrzJBiHwKNHZ4H
+ QLDvjqb56m97QJyEgVeysV0EvDtXyQ5mL29XoMNV4IIhVGh4UTgn
+X-Google-Smtp-Source: AGHT+IGbqrJaPevml2n3GhwOZkwoyAiUlG6OlH99cOs1Aj8BnwOCarKRoHopsLWYdKYGdSZ+UbnVkA==
+X-Received: by 2002:adf:fe47:0:b0:33d:1896:de92 with SMTP id
+ m7-20020adffe47000000b0033d1896de92mr4242417wrs.10.1708204463939; 
+ Sat, 17 Feb 2024 13:14:23 -0800 (PST)
+Received: from giga-mm-1.home ([2a02:1210:8690:9300:82ee:73ff:feb8:99e3])
+ by smtp.gmail.com with ESMTPSA id
+ b17-20020a05600010d100b0033ce1ef4e7asm5772800wrx.13.2024.02.17.13.14.23
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 17 Feb 2024 13:14:23 -0800 (PST)
+Message-ID: <50656de7f9f23a436adeafeb47b13412904c7b17.camel@gmail.com>
+From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>, 
  buildroot@buildroot.org
+Date: Sat, 17 Feb 2024 22:14:29 +0100
+In-Reply-To: <20240217160244.1320482-1-dario.binacchi@amarulasolutions.com>
+References: <20240217160244.1320482-1-dario.binacchi@amarulasolutions.com>
+Autocrypt: addr=alexander.sverdlin@gmail.com; prefer-encrypt=mutual;
+ keydata=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
+User-Agent: Evolution 3.50.4 
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gadz.org; s=google; t=1708203922; x=1708808722; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=r8eXBm4ULpPEhT7BXc16Itn+k6GvPLg4AzsjhMmoobU=;
- b=K6t/phwhl+k3ewkxle9i+ma8mhHn5fV7ORnujpNiKQUHaqhh9+RTtr6QvKpgpacVzN
- bhehKw+U6v+YAXIZtulrUp09uqeP0vFOf6gHeGEeRmtNKg//xyibwELvdu1vWkCb1Si4
- 2Z2j4TMFV/zk3AIDM8gyyxflLtycXssmyuZohV2DZPmuBz2rxBQG1YpYgVBPoAgmXgw4
- 7xTil8k4E9MC9I7iFqqRz48SbNh9kNTXfcBtuO/CA575y6ITQvWkfdTjdZPYgESfq8cJ
- rrq/W0qc+EdEh2stG+kHOFbHX0i5qcgKmCLX3JZX2bIUMtS8Wh+ikT301BHJoSeFPqo8
- 3Vng==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=gmail.com; s=20230601; t=1708204464; x=1708809264; darn=buildroot.org;
+ h=mime-version:user-agent:content-transfer-encoding:autocrypt
+ :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+ :cc:subject:date:message-id:reply-to;
+ bh=Eq4KHIR1cbPinBGdCFYyUUYY2h0yCY3orX/T8SoznoY=;
+ b=WAQs1Q0WLYmj6AQuXPAdRrVhG0EVyS8WZdMXJgGqFPdCv0F+xiVudRgLS1yrw1IR5S
+ o1v2tKczhi+LsCWKIxlXkF3zO1EFahLT+RxHIYoQfzGQPpgxl7gED85Jk/6BkrxFy94Q
+ 18UPpEpln5KXtsvzhUQUSloei4gJ134b7aEL5O02k0LnuQ+4pcQmSIBnXCP5khOlP+3t
+ Wvr/S7we9P4BoY4gGz8+0wIXLGQJ7/628xS4C3FkxddBBJcbjLGMvhAnZLT7EfHmBSbP
+ JIm2ft6AZgAyHBeAEenE0ZbUjuxpKLDbBLR9jCxoTiArvvAZYZ5zIMGVmv+7HX0keUXe
+ wu1A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gadz.org
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gadz.org header.i=@gadz.org header.a=rsa-sha256
- header.s=google header.b=K6t/phwh
-Subject: Re: [Buildroot] [PATCH v4 17/20] boot: move ti-k3-* packages to
- 'ti-k3' directory
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=WAQs1Q0W
+Subject: Re: [Buildroot] [PATCH v4 00/20] Add support for AM62x-SK HS-FS
+ devices
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,480 +115,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: michael@amarulasolutions.com, linux-amarula@amarulasolutions.com,
- Asaf Kahlon <asafka7@gmail.com>, Xuanhao Shi <X15000177@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>,
+Cc: michael@amarulasolutions.com, Asaf Kahlon <asafka7@gmail.com>,
+ Xuanhao Shi <X15000177@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Romain Naour <romain.naour@smile.fr>, Andreas Dannenberg <dannenberg@ti.com>,
- Alexander Sverdlin <alexander.sverdlin@gmail.com>, bryce@redpinelabs.com,
+ linux-amarula@amarulasolutions.com, bryce@redpinelabs.com,
  Anand Gadiyar <gadiyar@ti.com>
-Content-Type: multipart/mixed; boundary="===============0623353164543187078=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0623353164543187078==
-Content-Type: multipart/alternative; boundary="000000000000f421fc06119a3799"
-
---000000000000f421fc06119a3799
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Le sam. 17 f=C3=A9vr. 2024 =C3=A0 17:03, Dario Binacchi <
-dario.binacchi@amarulasolutions.com> a =C3=A9crit :
-
-> Move all TI K3 packages to the directory ti-k3.
->
-
-The Buildroot documentation states that "New subdirectories are
-discouraged".
-See https://buildroot.org/downloads/manual/manual.html#_package_directory
-
-Fran=C3=A7ois
-
-
-> This patch is preparatory for future developments.
->
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
->
-> ---
->
-> Added in v4
->
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> ---
->  boot/Config.in                                      |  5 +----
->  boot/ti-k3/Config.in                                | 13 +++++++++++++
->  boot/ti-k3/common.mk                                |  1 +
->  boot/{ =3D> ti-k3}/ti-k3-boot-firmware/Config.in      |  0
->  .../ti-k3-boot-firmware/ti-k3-boot-firmware.hash    |  0
->  .../ti-k3-boot-firmware/ti-k3-boot-firmware.mk      |  0
->  boot/{ =3D> ti-k3}/ti-k3-core-secdev/Config.in        |  0
->  .../ti-k3-core-secdev/ti-k3-core-secdev.hash        |  0
->  .../ti-k3-core-secdev/ti-k3-core-secdev.mk          |  0
->  boot/{ =3D> ti-k3}/ti-k3-image-gen/Config.in          |  0
->  .../ti-k3-image-gen/ti-k3-image-gen.hash            |  0
->  boot/{ =3D> ti-k3}/ti-k3-image-gen/ti-k3-image-gen.mk |  0
->  boot/{ =3D> ti-k3}/ti-k3-r5-loader/Config.in          |  0
->  .../ti-k3-r5-loader/ti-k3-r5-loader.hash            |  0
->  boot/{ =3D> ti-k3}/ti-k3-r5-loader/ti-k3-r5-loader.mk |  0
->  configs/ti_am62x_sk_defconfig                       |  1 +
->  configs/ti_am64x_sk_defconfig                       |  1 +
->  17 files changed, 17 insertions(+), 4 deletions(-)
->  create mode 100644 boot/ti-k3/Config.in
->  create mode 100644 boot/ti-k3/common.mk
->  rename boot/{ =3D> ti-k3}/ti-k3-boot-firmware/Config.in (100%)
->  rename boot/{ =3D> ti-k3}/ti-k3-boot-firmware/ti-k3-boot-firmware.hash
-> (100%)
->  rename boot/{ =3D> ti-k3}/ti-k3-boot-firmware/ti-k3-boot-firmware.mk (10=
-0%)
->  rename boot/{ =3D> ti-k3}/ti-k3-core-secdev/Config.in (100%)
->  rename boot/{ =3D> ti-k3}/ti-k3-core-secdev/ti-k3-core-secdev.hash (100%=
-)
->  rename boot/{ =3D> ti-k3}/ti-k3-core-secdev/ti-k3-core-secdev.mk (100%)
->  rename boot/{ =3D> ti-k3}/ti-k3-image-gen/Config.in (100%)
->  rename boot/{ =3D> ti-k3}/ti-k3-image-gen/ti-k3-image-gen.hash (100%)
->  rename boot/{ =3D> ti-k3}/ti-k3-image-gen/ti-k3-image-gen.mk (100%)
->  rename boot/{ =3D> ti-k3}/ti-k3-r5-loader/Config.in (100%)
->  rename boot/{ =3D> ti-k3}/ti-k3-r5-loader/ti-k3-r5-loader.hash (100%)
->  rename boot/{ =3D> ti-k3}/ti-k3-r5-loader/ti-k3-r5-loader.mk (100%)
->
-> diff --git a/boot/Config.in b/boot/Config.in
-> index 18a7d268f95a..74a64a096afc 100644
-> --- a/boot/Config.in
-> +++ b/boot/Config.in
-> @@ -19,10 +19,7 @@ source "boot/opensbi/Config.in"
->  source "boot/s500-bootloader/Config.in"
->  source "boot/shim/Config.in"
->  source "boot/syslinux/Config.in"
-> -source "boot/ti-k3-boot-firmware/Config.in"
-> -source "boot/ti-k3-core-secdev/Config.in"
-> -source "boot/ti-k3-image-gen/Config.in"
-> -source "boot/ti-k3-r5-loader/Config.in"
-> +source "boot/ti-k3/Config.in"
->  source "boot/uboot/Config.in"
->  source "boot/vexpress-firmware/Config.in"
->
-> diff --git a/boot/ti-k3/Config.in b/boot/ti-k3/Config.in
-> new file mode 100644
-> index 000000000000..06dda2f156a9
-> --- /dev/null
-> +++ b/boot/ti-k3/Config.in
-> @@ -0,0 +1,13 @@
-> +config BR2_TARGET_TI_K3
-> +       bool "TI K3"
-> +       help
-> +         The TI K3 bootloaders and tools.
-> +
-> +if BR2_TARGET_TI_K3
-> +
-> +source "boot/ti-k3/ti-k3-boot-firmware/Config.in"
-> +source "boot/ti-k3/ti-k3-core-secdev/Config.in"
-> +source "boot/ti-k3/ti-k3-image-gen/Config.in"
-> +source "boot/ti-k3/ti-k3-r5-loader/Config.in"
-> +
-> +endif
-> diff --git a/boot/ti-k3/common.mk b/boot/ti-k3/common.mk
-> new file mode 100644
-> index 000000000000..18a1329baa4c
-> --- /dev/null
-> +++ b/boot/ti-k3/common.mk
-> @@ -0,0 +1 @@
-> +include $(sort $(wildcard boot/ti-k3/*/*.mk))
-> diff --git a/boot/ti-k3-boot-firmware/Config.in
-> b/boot/ti-k3/ti-k3-boot-firmware/Config.in
-> similarity index 100%
-> rename from boot/ti-k3-boot-firmware/Config.in
-> rename to boot/ti-k3/ti-k3-boot-firmware/Config.in
-> diff --git a/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.hash
-> b/boot/ti-k3/ti-k3-boot-firmware/ti-k3-boot-firmware.hash
-> similarity index 100%
-> rename from boot/ti-k3-boot-firmware/ti-k3-boot-firmware.hash
-> rename to boot/ti-k3/ti-k3-boot-firmware/ti-k3-boot-firmware.hash
-> diff --git a/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk
-> b/boot/ti-k3/ti-k3-boot-firmware/ti-k3-boot-firmware.mk
-> similarity index 100%
-> rename from boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk
-> rename to boot/ti-k3/ti-k3-boot-firmware/ti-k3-boot-firmware.mk
-> diff --git a/boot/ti-k3-core-secdev/Config.in
-> b/boot/ti-k3/ti-k3-core-secdev/Config.in
-> similarity index 100%
-> rename from boot/ti-k3-core-secdev/Config.in
-> rename to boot/ti-k3/ti-k3-core-secdev/Config.in
-> diff --git a/boot/ti-k3-core-secdev/ti-k3-core-secdev.hash
-> b/boot/ti-k3/ti-k3-core-secdev/ti-k3-core-secdev.hash
-> similarity index 100%
-> rename from boot/ti-k3-core-secdev/ti-k3-core-secdev.hash
-> rename to boot/ti-k3/ti-k3-core-secdev/ti-k3-core-secdev.hash
-> diff --git a/boot/ti-k3-core-secdev/ti-k3-core-secdev.mk
-> b/boot/ti-k3/ti-k3-core-secdev/ti-k3-core-secdev.mk
-> similarity index 100%
-> rename from boot/ti-k3-core-secdev/ti-k3-core-secdev.mk
-> rename to boot/ti-k3/ti-k3-core-secdev/ti-k3-core-secdev.mk
-> diff --git a/boot/ti-k3-image-gen/Config.in
-> b/boot/ti-k3/ti-k3-image-gen/Config.in
-> similarity index 100%
-> rename from boot/ti-k3-image-gen/Config.in
-> rename to boot/ti-k3/ti-k3-image-gen/Config.in
-> diff --git a/boot/ti-k3-image-gen/ti-k3-image-gen.hash
-> b/boot/ti-k3/ti-k3-image-gen/ti-k3-image-gen.hash
-> similarity index 100%
-> rename from boot/ti-k3-image-gen/ti-k3-image-gen.hash
-> rename to boot/ti-k3/ti-k3-image-gen/ti-k3-image-gen.hash
-> diff --git a/boot/ti-k3-image-gen/ti-k3-image-gen.mk
-> b/boot/ti-k3/ti-k3-image-gen/ti-k3-image-gen.mk
-> similarity index 100%
-> rename from boot/ti-k3-image-gen/ti-k3-image-gen.mk
-> rename to boot/ti-k3/ti-k3-image-gen/ti-k3-image-gen.mk
-> diff --git a/boot/ti-k3-r5-loader/Config.in
-> b/boot/ti-k3/ti-k3-r5-loader/Config.in
-> similarity index 100%
-> rename from boot/ti-k3-r5-loader/Config.in
-> rename to boot/ti-k3/ti-k3-r5-loader/Config.in
-> diff --git a/boot/ti-k3-r5-loader/ti-k3-r5-loader.hash
-> b/boot/ti-k3/ti-k3-r5-loader/ti-k3-r5-loader.hash
-> similarity index 100%
-> rename from boot/ti-k3-r5-loader/ti-k3-r5-loader.hash
-> rename to boot/ti-k3/ti-k3-r5-loader/ti-k3-r5-loader.hash
-> diff --git a/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
-> b/boot/ti-k3/ti-k3-r5-loader/ti-k3-r5-loader.mk
-> similarity index 100%
-> rename from boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
-> rename to boot/ti-k3/ti-k3-r5-loader/ti-k3-r5-loader.mk
-> diff --git a/configs/ti_am62x_sk_defconfig b/configs/ti_am62x_sk_defconfi=
-g
-> index 4de39fb897fd..cd26235342e4 100644
-> --- a/configs/ti_am62x_sk_defconfig
-> +++ b/configs/ti_am62x_sk_defconfig
-> @@ -23,6 +23,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE=3Dy
->  BR2_TARGET_OPTEE_OS=3Dy
->  BR2_TARGET_OPTEE_OS_PLATFORM=3D"k3-am62x"
->  BR2_TARGET_OPTEE_OS_PLATFORM_FLAVOR=3D"am62x"
-> +BR2_TARGET_TI_K3=3Dy
->  BR2_TARGET_TI_K3_IMAGE_GEN=3Dy
->  BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62X=3Dy
->  BR2_TARGET_TI_K3_R5_LOADER=3Dy
-> diff --git a/configs/ti_am64x_sk_defconfig b/configs/ti_am64x_sk_defconfi=
-g
-> index 5fd9653b5b8f..1befeb4ab96c 100644
-> --- a/configs/ti_am64x_sk_defconfig
-> +++ b/configs/ti_am64x_sk_defconfig
-> @@ -23,6 +23,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE=3Dy
->  BR2_TARGET_OPTEE_OS=3Dy
->  BR2_TARGET_OPTEE_OS_PLATFORM=3D"k3-am64x"
->  BR2_TARGET_OPTEE_OS_PLATFORM_FLAVOR=3D"am64x"
-> +BR2_TARGET_TI_K3=3Dy
->  BR2_TARGET_TI_K3_IMAGE_GEN=3Dy
->  BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM64X=3Dy
->  BR2_TARGET_TI_K3_R5_LOADER=3Dy
-> --
-> 2.43.0
->
->
-
---000000000000f421fc06119a3799
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
-<div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0sam. 17 f=C3=A9vr. 2024 =C3=
-=A0=C2=A017:03, Dario Binacchi &lt;<a href=3D"mailto:dario.binacchi@amarula=
-solutions.com">dario.binacchi@amarulasolutions.com</a>&gt; a =C3=A9crit=C2=
-=A0:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px=
- 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">Move all TI=
- K3 packages to the directory ti-k3.<br></blockquote><div><br></div><div>Th=
-e Buildroot documentation states that &quot;New subdirectories are discoura=
-ged&quot;.<br></div><div>See <a href=3D"https://buildroot.org/downloads/man=
-ual/manual.html#_package_directory">https://buildroot.org/downloads/manual/=
-manual.html#_package_directory</a><br><br></div><div>Fran=C3=A7ois<br></div=
-><div>=C2=A0</div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px=
- 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">
-This patch is preparatory for future developments.<br>
-<br>
-Signed-off-by: Dario Binacchi &lt;<a href=3D"mailto:dario.binacchi@amarulas=
-olutions.com" target=3D"_blank">dario.binacchi@amarulasolutions.com</a>&gt;=
-<br>
-<br>
----<br>
-<br>
-Added in v4<br>
-<br>
-Signed-off-by: Dario Binacchi &lt;<a href=3D"mailto:dario.binacchi@amarulas=
-olutions.com" target=3D"_blank">dario.binacchi@amarulasolutions.com</a>&gt;=
-<br>
----<br>
-=C2=A0boot/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 |=C2=A0 5 +----<br>
-=C2=A0boot/ti-k3/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 | 13 +++++++=
-++++++<br>
-=C2=A0boot/ti-k3/<a href=3D"http://common.mk" rel=3D"noreferrer" target=3D"=
-_blank">common.mk</a>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 1 +<br>
-=C2=A0boot/{ =3D&gt; ti-k3}/ti-k3-boot-firmware/Config.in=C2=A0 =C2=A0 =C2=
-=A0 |=C2=A0 0<br>
-=C2=A0.../ti-k3-boot-firmware/ti-k3-boot-firmware.hash=C2=A0 =C2=A0 |=C2=A0=
- 0<br>
-=C2=A0.../ti-k3-boot-firmware/<a href=3D"http://ti-k3-boot-firmware.mk" rel=
-=3D"noreferrer" target=3D"_blank">ti-k3-boot-firmware.mk</a>=C2=A0 =C2=A0 =
-=C2=A0 |=C2=A0 0<br>
-=C2=A0boot/{ =3D&gt; ti-k3}/ti-k3-core-secdev/Config.in=C2=A0 =C2=A0 =C2=A0=
- =C2=A0 |=C2=A0 0<br>
-=C2=A0.../ti-k3-core-secdev/ti-k3-core-secdev.hash=C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 |=C2=A0 0<br>
-=C2=A0.../ti-k3-core-secdev/<a href=3D"http://ti-k3-core-secdev.mk" rel=3D"=
-noreferrer" target=3D"_blank">ti-k3-core-secdev.mk</a>=C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 |=C2=A0 0<br>
-=C2=A0boot/{ =3D&gt; ti-k3}/ti-k3-image-gen/Config.in=C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 |=C2=A0 0<br>
-=C2=A0.../ti-k3-image-gen/ti-k3-image-gen.hash=C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 |=C2=A0 0<br>
-=C2=A0boot/{ =3D&gt; ti-k3}/ti-k3-image-gen/<a href=3D"http://ti-k3-image-g=
-en.mk" rel=3D"noreferrer" target=3D"_blank">ti-k3-image-gen.mk</a> |=C2=A0 =
-0<br>
-=C2=A0boot/{ =3D&gt; ti-k3}/ti-k3-r5-loader/Config.in=C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 |=C2=A0 0<br>
-=C2=A0.../ti-k3-r5-loader/ti-k3-r5-loader.hash=C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 |=C2=A0 0<br>
-=C2=A0boot/{ =3D&gt; ti-k3}/ti-k3-r5-loader/<a href=3D"http://ti-k3-r5-load=
-er.mk" rel=3D"noreferrer" target=3D"_blank">ti-k3-r5-loader.mk</a> |=C2=A0 =
-0<br>
-=C2=A0configs/ti_am62x_sk_defconfig=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 1 +<br>
-=C2=A0configs/ti_am64x_sk_defconfig=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 1 +<br>
-=C2=A017 files changed, 17 insertions(+), 4 deletions(-)<br>
-=C2=A0create mode 100644 boot/ti-k3/Config.in<br>
-=C2=A0create mode 100644 boot/ti-k3/<a href=3D"http://common.mk" rel=3D"nor=
-eferrer" target=3D"_blank">common.mk</a><br>
-=C2=A0rename boot/{ =3D&gt; ti-k3}/ti-k3-boot-firmware/Config.in (100%)<br>
-=C2=A0rename boot/{ =3D&gt; ti-k3}/ti-k3-boot-firmware/ti-k3-boot-firmware.=
-hash (100%)<br>
-=C2=A0rename boot/{ =3D&gt; ti-k3}/ti-k3-boot-firmware/<a href=3D"http://ti=
--k3-boot-firmware.mk" rel=3D"noreferrer" target=3D"_blank">ti-k3-boot-firmw=
-are.mk</a> (100%)<br>
-=C2=A0rename boot/{ =3D&gt; ti-k3}/ti-k3-core-secdev/Config.in (100%)<br>
-=C2=A0rename boot/{ =3D&gt; ti-k3}/ti-k3-core-secdev/ti-k3-core-secdev.hash=
- (100%)<br>
-=C2=A0rename boot/{ =3D&gt; ti-k3}/ti-k3-core-secdev/<a href=3D"http://ti-k=
-3-core-secdev.mk" rel=3D"noreferrer" target=3D"_blank">ti-k3-core-secdev.mk=
-</a> (100%)<br>
-=C2=A0rename boot/{ =3D&gt; ti-k3}/ti-k3-image-gen/Config.in (100%)<br>
-=C2=A0rename boot/{ =3D&gt; ti-k3}/ti-k3-image-gen/ti-k3-image-gen.hash (10=
-0%)<br>
-=C2=A0rename boot/{ =3D&gt; ti-k3}/ti-k3-image-gen/<a href=3D"http://ti-k3-=
-image-gen.mk" rel=3D"noreferrer" target=3D"_blank">ti-k3-image-gen.mk</a> (=
-100%)<br>
-=C2=A0rename boot/{ =3D&gt; ti-k3}/ti-k3-r5-loader/Config.in (100%)<br>
-=C2=A0rename boot/{ =3D&gt; ti-k3}/ti-k3-r5-loader/ti-k3-r5-loader.hash (10=
-0%)<br>
-=C2=A0rename boot/{ =3D&gt; ti-k3}/ti-k3-r5-loader/<a href=3D"http://ti-k3-=
-r5-loader.mk" rel=3D"noreferrer" target=3D"_blank">ti-k3-r5-loader.mk</a> (=
-100%)<br>
-<br>
-diff --git a/boot/Config.in b/boot/Config.in<br>
-index 18a7d268f95a..74a64a096afc 100644<br>
---- a/boot/Config.in<br>
-+++ b/boot/Config.in<br>
-@@ -19,10 +19,7 @@ source &quot;boot/opensbi/Config.in&quot;<br>
-=C2=A0source &quot;boot/s500-bootloader/Config.in&quot;<br>
-=C2=A0source &quot;boot/shim/Config.in&quot;<br>
-=C2=A0source &quot;boot/syslinux/Config.in&quot;<br>
--source &quot;boot/ti-k3-boot-firmware/Config.in&quot;<br>
--source &quot;boot/ti-k3-core-secdev/Config.in&quot;<br>
--source &quot;boot/ti-k3-image-gen/Config.in&quot;<br>
--source &quot;boot/ti-k3-r5-loader/Config.in&quot;<br>
-+source &quot;boot/ti-k3/Config.in&quot;<br>
-=C2=A0source &quot;boot/uboot/Config.in&quot;<br>
-=C2=A0source &quot;boot/vexpress-firmware/Config.in&quot;<br>
-<br>
-diff --git a/boot/ti-k3/Config.in b/boot/ti-k3/Config.in<br>
-new file mode 100644<br>
-index 000000000000..06dda2f156a9<br>
---- /dev/null<br>
-+++ b/boot/ti-k3/Config.in<br>
-@@ -0,0 +1,13 @@<br>
-+config BR2_TARGET_TI_K3<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0bool &quot;TI K3&quot;<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0help<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0The TI K3 bootloaders and tools.<br>
-+<br>
-+if BR2_TARGET_TI_K3<br>
-+<br>
-+source &quot;boot/ti-k3/ti-k3-boot-firmware/Config.in&quot;<br>
-+source &quot;boot/ti-k3/ti-k3-core-secdev/Config.in&quot;<br>
-+source &quot;boot/ti-k3/ti-k3-image-gen/Config.in&quot;<br>
-+source &quot;boot/ti-k3/ti-k3-r5-loader/Config.in&quot;<br>
-+<br>
-+endif<br>
-diff --git a/boot/ti-k3/<a href=3D"http://common.mk" rel=3D"noreferrer" tar=
-get=3D"_blank">common.mk</a> b/boot/ti-k3/<a href=3D"http://common.mk" rel=
-=3D"noreferrer" target=3D"_blank">common.mk</a><br>
-new file mode 100644<br>
-index 000000000000..18a1329baa4c<br>
---- /dev/null<br>
-+++ b/boot/ti-k3/<a href=3D"http://common.mk" rel=3D"noreferrer" target=3D"=
-_blank">common.mk</a><br>
-@@ -0,0 +1 @@<br>
-+include $(sort $(wildcard boot/ti-k3/*/*.mk))<br>
-diff --git a/boot/ti-k3-boot-firmware/Config.in b/boot/ti-k3/ti-k3-boot-fir=
-mware/Config.in<br>
-similarity index 100%<br>
-rename from boot/ti-k3-boot-firmware/Config.in<br>
-rename to boot/ti-k3/ti-k3-boot-firmware/Config.in<br>
-diff --git a/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.hash b/boot/ti-k3=
-/ti-k3-boot-firmware/ti-k3-boot-firmware.hash<br>
-similarity index 100%<br>
-rename from boot/ti-k3-boot-firmware/ti-k3-boot-firmware.hash<br>
-rename to boot/ti-k3/ti-k3-boot-firmware/ti-k3-boot-firmware.hash<br>
-diff --git a/boot/ti-k3-boot-firmware/<a href=3D"http://ti-k3-boot-firmware=
-.mk" rel=3D"noreferrer" target=3D"_blank">ti-k3-boot-firmware.mk</a> b/boot=
-/ti-k3/ti-k3-boot-firmware/<a href=3D"http://ti-k3-boot-firmware.mk" rel=3D=
-"noreferrer" target=3D"_blank">ti-k3-boot-firmware.mk</a><br>
-similarity index 100%<br>
-rename from boot/ti-k3-boot-firmware/<a href=3D"http://ti-k3-boot-firmware.=
-mk" rel=3D"noreferrer" target=3D"_blank">ti-k3-boot-firmware.mk</a><br>
-rename to boot/ti-k3/ti-k3-boot-firmware/<a href=3D"http://ti-k3-boot-firmw=
-are.mk" rel=3D"noreferrer" target=3D"_blank">ti-k3-boot-firmware.mk</a><br>
-diff --git a/boot/ti-k3-core-secdev/Config.in b/boot/ti-k3/ti-k3-core-secde=
-v/Config.in<br>
-similarity index 100%<br>
-rename from boot/ti-k3-core-secdev/Config.in<br>
-rename to boot/ti-k3/ti-k3-core-secdev/Config.in<br>
-diff --git a/boot/ti-k3-core-secdev/ti-k3-core-secdev.hash b/boot/ti-k3/ti-=
-k3-core-secdev/ti-k3-core-secdev.hash<br>
-similarity index 100%<br>
-rename from boot/ti-k3-core-secdev/ti-k3-core-secdev.hash<br>
-rename to boot/ti-k3/ti-k3-core-secdev/ti-k3-core-secdev.hash<br>
-diff --git a/boot/ti-k3-core-secdev/<a href=3D"http://ti-k3-core-secdev.mk"=
- rel=3D"noreferrer" target=3D"_blank">ti-k3-core-secdev.mk</a> b/boot/ti-k3=
-/ti-k3-core-secdev/<a href=3D"http://ti-k3-core-secdev.mk" rel=3D"noreferre=
-r" target=3D"_blank">ti-k3-core-secdev.mk</a><br>
-similarity index 100%<br>
-rename from boot/ti-k3-core-secdev/<a href=3D"http://ti-k3-core-secdev.mk" =
-rel=3D"noreferrer" target=3D"_blank">ti-k3-core-secdev.mk</a><br>
-rename to boot/ti-k3/ti-k3-core-secdev/<a href=3D"http://ti-k3-core-secdev.=
-mk" rel=3D"noreferrer" target=3D"_blank">ti-k3-core-secdev.mk</a><br>
-diff --git a/boot/ti-k3-image-gen/Config.in b/boot/ti-k3/ti-k3-image-gen/Co=
-nfig.in<br>
-similarity index 100%<br>
-rename from boot/ti-k3-image-gen/Config.in<br>
-rename to boot/ti-k3/ti-k3-image-gen/Config.in<br>
-diff --git a/boot/ti-k3-image-gen/ti-k3-image-gen.hash b/boot/ti-k3/ti-k3-i=
-mage-gen/ti-k3-image-gen.hash<br>
-similarity index 100%<br>
-rename from boot/ti-k3-image-gen/ti-k3-image-gen.hash<br>
-rename to boot/ti-k3/ti-k3-image-gen/ti-k3-image-gen.hash<br>
-diff --git a/boot/ti-k3-image-gen/<a href=3D"http://ti-k3-image-gen.mk" rel=
-=3D"noreferrer" target=3D"_blank">ti-k3-image-gen.mk</a> b/boot/ti-k3/ti-k3=
--image-gen/<a href=3D"http://ti-k3-image-gen.mk" rel=3D"noreferrer" target=
-=3D"_blank">ti-k3-image-gen.mk</a><br>
-similarity index 100%<br>
-rename from boot/ti-k3-image-gen/<a href=3D"http://ti-k3-image-gen.mk" rel=
-=3D"noreferrer" target=3D"_blank">ti-k3-image-gen.mk</a><br>
-rename to boot/ti-k3/ti-k3-image-gen/<a href=3D"http://ti-k3-image-gen.mk" =
-rel=3D"noreferrer" target=3D"_blank">ti-k3-image-gen.mk</a><br>
-diff --git a/boot/ti-k3-r5-loader/Config.in b/boot/ti-k3/ti-k3-r5-loader/Co=
-nfig.in<br>
-similarity index 100%<br>
-rename from boot/ti-k3-r5-loader/Config.in<br>
-rename to boot/ti-k3/ti-k3-r5-loader/Config.in<br>
-diff --git a/boot/ti-k3-r5-loader/ti-k3-r5-loader.hash b/boot/ti-k3/ti-k3-r=
-5-loader/ti-k3-r5-loader.hash<br>
-similarity index 100%<br>
-rename from boot/ti-k3-r5-loader/ti-k3-r5-loader.hash<br>
-rename to boot/ti-k3/ti-k3-r5-loader/ti-k3-r5-loader.hash<br>
-diff --git a/boot/ti-k3-r5-loader/<a href=3D"http://ti-k3-r5-loader.mk" rel=
-=3D"noreferrer" target=3D"_blank">ti-k3-r5-loader.mk</a> b/boot/ti-k3/ti-k3=
--r5-loader/<a href=3D"http://ti-k3-r5-loader.mk" rel=3D"noreferrer" target=
-=3D"_blank">ti-k3-r5-loader.mk</a><br>
-similarity index 100%<br>
-rename from boot/ti-k3-r5-loader/<a href=3D"http://ti-k3-r5-loader.mk" rel=
-=3D"noreferrer" target=3D"_blank">ti-k3-r5-loader.mk</a><br>
-rename to boot/ti-k3/ti-k3-r5-loader/<a href=3D"http://ti-k3-r5-loader.mk" =
-rel=3D"noreferrer" target=3D"_blank">ti-k3-r5-loader.mk</a><br>
-diff --git a/configs/ti_am62x_sk_defconfig b/configs/ti_am62x_sk_defconfig<=
-br>
-index 4de39fb897fd..cd26235342e4 100644<br>
---- a/configs/ti_am62x_sk_defconfig<br>
-+++ b/configs/ti_am62x_sk_defconfig<br>
-@@ -23,6 +23,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE=3Dy<br>
-=C2=A0BR2_TARGET_OPTEE_OS=3Dy<br>
-=C2=A0BR2_TARGET_OPTEE_OS_PLATFORM=3D&quot;k3-am62x&quot;<br>
-=C2=A0BR2_TARGET_OPTEE_OS_PLATFORM_FLAVOR=3D&quot;am62x&quot;<br>
-+BR2_TARGET_TI_K3=3Dy<br>
-=C2=A0BR2_TARGET_TI_K3_IMAGE_GEN=3Dy<br>
-=C2=A0BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62X=3Dy<br>
-=C2=A0BR2_TARGET_TI_K3_R5_LOADER=3Dy<br>
-diff --git a/configs/ti_am64x_sk_defconfig b/configs/ti_am64x_sk_defconfig<=
-br>
-index 5fd9653b5b8f..1befeb4ab96c 100644<br>
---- a/configs/ti_am64x_sk_defconfig<br>
-+++ b/configs/ti_am64x_sk_defconfig<br>
-@@ -23,6 +23,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE=3Dy<br>
-=C2=A0BR2_TARGET_OPTEE_OS=3Dy<br>
-=C2=A0BR2_TARGET_OPTEE_OS_PLATFORM=3D&quot;k3-am64x&quot;<br>
-=C2=A0BR2_TARGET_OPTEE_OS_PLATFORM_FLAVOR=3D&quot;am64x&quot;<br>
-+BR2_TARGET_TI_K3=3Dy<br>
-=C2=A0BR2_TARGET_TI_K3_IMAGE_GEN=3Dy<br>
-=C2=A0BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM64X=3Dy<br>
-=C2=A0BR2_TARGET_TI_K3_R5_LOADER=3Dy<br>
--- <br>
-2.43.0<br>
-<br>
-</blockquote></div></div>
-
---000000000000f421fc06119a3799--
-
---===============0623353164543187078==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0623353164543187078==--
+SGkgRGFyaW8sCgpPbiBTYXQsIDIwMjQtMDItMTcgYXQgMTc6MDIgKzAxMDAsIERhcmlvIEJpbmFj
+Y2hpIHdyb3RlOgo+IFRoZSBTSy1BTTYyQi1QMSBpcyB0aGUgbmV3ZXN0IHZlcnNpb24gb2YgU0st
+QU02MiB3aGljaCBpbmNsdWRlcwo+IGhpZ2gtc2VjdXJpdHkgZmllbGQtc2VjdXJhYmxlIChIUy1G
+Uykgc2lsaWNvbiB0byBvcHRpb25hbGx5IGN1c3RvbWl6ZSBrZXlzCj4gYW5kIGVuY3J5cHRpb24g
+Zm9yIHNlY3VyaXR5IGFwcGxpY2F0aW9ucy4KPiBUaGlzIHJlcXVpcmVzIGVuYWJsaW5nIHRoZSBC
+UjJfVEFSR0VUX1RJX0szX0lNQUdFX0dFTl9TRUNUWVBFX0hTX0ZTIG9wdGlvbiwKPiB3aGljaCwg
+aG93ZXZlciwgd2FzIGJ1Z2d5LiBUaGlzIHNlcmllcyBmaXhlcyB0aGUgZXJyb3JzIGFuZCBidW1w
+cyB0aGUgTGludXgKPiBrZXJuZWwgYW5kIFUtQm9vdCByZXF1aXJlZCBmb3Igc3VjaCBhIG5ldyBk
+ZXZpY2UuCj4gCj4gVGhpcyBzZXJpZXMsIHdoaWNoIGluIG15IGh1bWJsZSBvcGluaW9uLCBzaG91
+bGQgaGF2ZSBiZWVuIGltbWVkaWF0ZWx5Cj4gY29uc2lkZXJlZCB0byBjb3JyZWN0IHRoZSBjb21w
+aWxhdGlvbiBlcnJvcnMgaW4gY2FzZSBvZiBIUy1GUyBkZXZjaWVzLCBoYXMKPiBzZWVuIGFuIGlu
+Y3JlYXNlIGluIHBhdGNoZXMgaW4gdmVyc2lvbiA0IHRvIHJlbW92ZSB0aGUgdGktazMtaW1hZ2Ut
+Z2VuCj4gcGFja2FnZSB0aGFua3MgdG8gQmlubWFuLiBBZGRpdGlvbmFsbHksIGl0IHNoYXJlcyBz
+b21lIG1vZGlmaWNhdGlvbnMgYW5kCj4gdmlld3Mgb24gaG93IHRvIGltcGxlbWVudCBjZXJ0YWlu
+IGNoYW5nZXMgd2l0aCB0aGUgc2VyaWVzCj4gaHR0cHM6Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9w
+cm9qZWN0L2J1aWxkcm9vdC9saXN0Lz9zZXJpZXM9Mzk0ODQwLgo+IFRoZXJlZm9yZSwgSSB0aGlu
+ayBpdCBpcyBuZWNlc3Nhcnkgbm90IHRvIHJ1biB0aGVtIGluIHBhcmFsbGVsIGJ1dCB0byBkZWNp
+ZGUKPiB3aGV0aGVyIHRvIG1lcmdlIG9uZSBiZWZvcmUgdGhlIG90aGVyIG9yIHRvIGNvbnNpZGVy
+IGEgc2luZ2xlIHNlcmllcyB3aGVyZQo+IHRoZSBwYXRjaGVzIGNhbiBiZSBjb2hlcmVudCB3aXRo
+IGVhY2ggb3RoZXIuIEkgYW0gYXZhaWxhYmxlIGZvciBib3RoIHNvbHV0aW9ucy4KPiBMZXQgbWUg
+a25vdy4KPiAKPiBEYXJpbyBCaW5hY2NoaSAoMjApOgo+IMKgIGNvbmZpZ3MvdGlfYW02Mnhfc2tf
+ZGVmY29uZmlnOiBmaXggQlIyX1RBUkdFVF9PUFRFRV9PU19QTEFURk9STQo+IMKgwqDCoCBzZXR0
+aW5nCj4gwqAgY29uZmlncy90aV9hbTY0eF9za19kZWZjb25maWc6IGZpeCBCUjJfVEFSR0VUX09Q
+VEVFX09TX1BMQVRGT1JNCj4gwqDCoMKgIHNldHRpbmcKPiDCoCBjb25maWdzL3RpX2FtNjJ4X3Nr
+X2RlZmNvbmZpZzogZXhwbGljaXRseSBzZXQgdGhlIHRpLWszLXI1LWxvYWRlcgo+IMKgwqDCoCB2
+ZXJzaW9uCj4gwqAgY29uZmlncy90aV9hbTY0eF9za19kZWZjb25maWc6IGV4cGxpY2l0bHkgc2V0
+IHRoZSB0aS1rMy1yNS1sb2FkZXIKPiDCoMKgwqAgdmVyc2lvbgo+IMKgIGJvb3QvdGktazMtcjUt
+bG9hZGVyOiBidW1wIHRvIHZlcnNpb24gMjAyNC4wMQo+IMKgIGJvb3QvdGktazMtY29yZS1zZWNk
+ZXY6IG5ldyBwYWNrYWdlCj4gwqAgYm9vdC90aS1rMy1pbWFnZS1nZW46IG1hbmFnZSBIUyBoYXJk
+d2FyZQo+IMKgIHBhY2thZ2UvcHl0aG9uLWpzb25zY2hlbWE6IGFkZCBob3N0IHZhcmlhbnQKPiDC
+oCBwYWNrYWdlL3B5dGhvbi1hdHRyczogYWRkIGhvc3QgdmFyaWFudAo+IMKgIHBhY2thZ2UvcHl0
+aG9uLXJlZmVyZW5jaW5nOiBhZGQgaG9zdCB2YXJpYW50Cj4gwqAgcGFja2FnZS9weXRob24tcnBk
+cy1weTogYWRkIGhvc3QgdmFyaWFudAo+IMKgIHBhY2thZ2UvcHl0aG9uLWpzb25zY2hlbWEtc3Bl
+Y2lmaWNhdGlvbnM6IGFkZCBob3N0IHZhcmlhbnQKPiDCoCBib290L3RpLWszLXI1LWxvYWRlcjog
+c2V0IGJpbm1hbiBlbnZpcm9ubWVudAo+IMKgIGJvb3QvdWJvb3Q6IHNldCBCSU5NQU5fSU5ESVJT
+IGZvciBUSSBLMyBETQo+IMKgIGNvbmZpZ3MvdGlfYW02Mnhfc2tfZGVmY29uZmlnOiBidW1wIFUt
+Qm9vdCB2ZXJzaW9uIHRvIDIwMjQuMDEKPiDCoCBjb25maWdzL3RpX2FtNjJ4X3NrX2RlZmNvbmZp
+ZzogYnVtcCBMaW51eCB2ZXJzaW9uIHRvIDYuNi4xCj4gwqAgYm9vdDogbW92ZSB0aS1rMy0qIHBh
+Y2thZ2VzIHRvICd0aS1rMycgZGlyZWN0b3J5Cj4gwqAgYm9vdC90aS1rMzogbW92ZSBUSV9LM197
+U0VDVFlQRSxTT0N9IG91dCBvZiB0aGUgaW1hZ2UtZ2VuIHNjb3BlCj4gwqAgYm9vdC90aS1rMy90
+aS1rMy1yNS1sb2FkZXI6IGluc3RhbGwgdGlib290My5iaW4KPiDCoCBjb25maWdzL3RpX2FtNjJ4
+X3NrX2RlZmNvbmZpZzogZG9uJ3QgdXNlIHRpLWszLWltYWdlLWdlbiBhbnltb3JlCgp0aGUgc2Vy
+aWVzOgotIGJ1aWxkcyBhbmQgc3RhcnRzIG9uIFNLLUFNNjJCIChIUy1GUykKLSBidWlsZHMgZm9y
+IGFtNjJ4IEdQCgpUZXN0ZWQtYnk6IEFsZXhhbmRlciBTdmVyZGxpbiA8YWxleGFuZGVyLnN2ZXJk
+bGluQGdtYWlsLmNvbT4KCi0tIApBbGV4YW5kZXIgU3ZlcmRsaW4uCgpfX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1
+aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFu
+L2xpc3RpbmZvL2J1aWxkcm9vdAo=
