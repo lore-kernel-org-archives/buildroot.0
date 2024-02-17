@@ -4,107 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B84CAC48BC4
-	for <buildroot@archiver.kernel.org>; Sat, 17 Feb 2024 17:28:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A72BC48BC3
+	for <buildroot@archiver.kernel.org>; Sat, 17 Feb 2024 17:29:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6E17E415A2;
-	Sat, 17 Feb 2024 17:28:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B71D1415A1;
+	Sat, 17 Feb 2024 17:29:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id peEn2DCo18Jq; Sat, 17 Feb 2024 17:28:36 +0000 (UTC)
+	with ESMTP id FOc3_4jaraav; Sat, 17 Feb 2024 17:29:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8715E415AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A2A70415AA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8715E415AA;
-	Sat, 17 Feb 2024 17:28:36 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 34DBD1BF5A8
- for <buildroot@lists.busybox.net>; Sat, 17 Feb 2024 17:28:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A2A70415AA;
+	Sat, 17 Feb 2024 17:29:28 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 612771BF5A8
+ for <buildroot@lists.busybox.net>; Sat, 17 Feb 2024 17:29:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2CAC6401D8
- for <buildroot@lists.busybox.net>; Sat, 17 Feb 2024 17:28:35 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4E74480B8B
+ for <buildroot@lists.busybox.net>; Sat, 17 Feb 2024 17:29:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yANaGhD2BIhF for <buildroot@lists.busybox.net>;
- Sat, 17 Feb 2024 17:28:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WinkMPpMRT7J for <buildroot@lists.busybox.net>;
+ Sat, 17 Feb 2024 17:29:26 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::229; helo=mail-lj1-x229.google.com;
- envelope-from=alexander.sverdlin@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A0A0E4012E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A0A0E4012E
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com
- [IPv6:2a00:1450:4864:20::229])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A0A0E4012E
- for <buildroot@buildroot.org>; Sat, 17 Feb 2024 17:28:33 +0000 (UTC)
-Received: by mail-lj1-x229.google.com with SMTP id
- 38308e7fff4ca-2d107900457so43029931fa.1
- for <buildroot@buildroot.org>; Sat, 17 Feb 2024 09:28:33 -0800 (PST)
+ client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
+ envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1D90780B6C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1D90780B6C
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1D90780B6C
+ for <buildroot@buildroot.org>; Sat, 17 Feb 2024 17:29:25 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id
+ 5b1f17b1804b1-4125cf71eecso3049785e9.1
+ for <buildroot@buildroot.org>; Sat, 17 Feb 2024 09:29:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1708190911; x=1708795711;
- h=mime-version:user-agent:content-transfer-encoding:autocrypt
- :references:in-reply-to:date:cc:to:from:subject:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=vtDOKSR/FSvMxuHlmYi5UiCThEWLJ9eC+xstdn9n8O8=;
- b=uBtHhlc9pDJPHQcSooF3qE76ogPTuq1m1yMXOD7By5pN3hGG53o6aMWQOO6cgn3cud
- dmsJ4e5c3GYs0OAeDhv/ryk8gSvsQn3r31vLPoBz1Ud84q4amvvNpPTPwqj2t3bSFmAy
- MFSPLTuQV764g+UqoEjD5vFMQQ+kS1ngGWRMbbWoOf1sqyXp6B3fq8WuCd/bJVK6pT4y
- jy/YUpVfqUfKjHfc4jhM7gYkgOp8w/EBrMGHgMzGZt6bAmnYJau2hiqbY7MqK7nhkyLf
- eXBTRGm1/K4zeO21UQKz8BAdr6lnkyg868DPrC8qST863i9pdktRhKghG8IqKRjHC+E/
- UVWg==
-X-Forwarded-Encrypted: i=1;
- AJvYcCXPECIn4YeNJmdIaBA25BpniZxrlH8VVo1QJ+ts33ISdL6StW0VYesl0iBkg28j6BjqDdwM3lctvK8AIlQXEqHnsAkr2Y0t3A==
-X-Gm-Message-State: AOJu0YzrqDT9GOSzFb+XaH4swhc36PLsHgTuSknzWklRi60JisAccq2m
- imh8iT///Rx6MBgxrnPW7m7lwrd5s6HpBjLNKHo7Ier83w/MhnJl
-X-Google-Smtp-Source: AGHT+IHtYBUvAV9Fz5UUpoenobH1oe4pvkweHBimp6KYw5l50zzGZgQPXrsn9Bzs2BS/nUmKKpPzyg==
-X-Received: by 2002:a2e:9c07:0:b0:2d0:de6f:c697 with SMTP id
- s7-20020a2e9c07000000b002d0de6fc697mr5272551lji.13.1708190911012; 
- Sat, 17 Feb 2024 09:28:31 -0800 (PST)
-Received: from giga-mm-1.home ([2a02:1210:8690:9300:82ee:73ff:feb8:99e3])
+ d=1e100.net; s=20230601; t=1708190964; x=1708795764;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=Z4XHHzwsX30CiSum0aC4ivR2B5H1vSeozlc6gBR2IgM=;
+ b=jcns8ck9tFnjeM5CHHyza4LJjUcWPuz5gmEdO55lkcw2A69eoghPQBFdikQ3Tkuh5W
+ yQgH7R8R645lHEDaFMhCvhMyaccRNtBLQhGyjMWhkkq30LyBWfaQcxF6npSZvvtPpJGD
+ oMkNJu2LRTciQvEqAb+mjzj8SP6fSwLRoeaOrssOkhJX5QjRuezzh/ZBbiHxWU4dThya
+ gOHx0hjRrZ1WQCcCJwL63mXf6k8rbmhgxbnQi0JQa552fiNaxVaO1Z+mUJ/Gr6SSieig
+ KKnsnaVZ5qbpy+qRPJeo3BCVLuszvW8hU7B2oLLMWrlEV9mB7lWQ3zhQrj90uxQHzZju
+ 1U1A==
+X-Gm-Message-State: AOJu0YysTG2DDKGqKqwC2qqq15+3OwhXQp7ENPT0FuiP9kDVlJm9y3hp
+ kRL2A7pMxsjHOrT3QUPcAgDMNqEukkY4SarA3GhSK0QfMewjDPW9ZDLs+BiP
+X-Google-Smtp-Source: AGHT+IF8xWBoAQrFrCniln6CXkk1OWqHh5DlJPkL1Gkwri32vV7gqIHs7re0tYjm5qcYWtpeqFpy1g==
+X-Received: by 2002:a05:600c:4f0f:b0:410:e830:24 with SMTP id
+ l15-20020a05600c4f0f00b00410e8300024mr6634866wmq.7.1708190963971; 
+ Sat, 17 Feb 2024 09:29:23 -0800 (PST)
+Received: from landeda.home ([2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
  by smtp.gmail.com with ESMTPSA id
- u7-20020a05600c00c700b0040fb783ad93sm5656947wmm.48.2024.02.17.09.28.30
+ 13-20020a05600c020d00b00410dd253008sm5700104wmi.42.2024.02.17.09.29.23
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 17 Feb 2024 09:28:30 -0800 (PST)
-Message-ID: <8662a0c59b8cea111c15cabb121c6b598d5a1d04.camel@gmail.com>
-From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>, 
- buildroot@buildroot.org
-Date: Sat, 17 Feb 2024 18:28:35 +0100
-In-Reply-To: <20240217160244.1320482-20-dario.binacchi@amarulasolutions.com>
-References: <20240217160244.1320482-1-dario.binacchi@amarulasolutions.com>
- <20240217160244.1320482-20-dario.binacchi@amarulasolutions.com>
-Autocrypt: addr=alexander.sverdlin@gmail.com; prefer-encrypt=mutual;
- keydata=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
-User-Agent: Evolution 3.50.4 
+ Sat, 17 Feb 2024 09:29:23 -0800 (PST)
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 17 Feb 2024 18:29:23 +0100
+Message-ID: <20240217172923.3629905-1-yann.morin.1998@free.fr>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1708190911; x=1708795711; darn=buildroot.org;
- h=mime-version:user-agent:content-transfer-encoding:autocrypt
- :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
- :cc:subject:date:message-id:reply-to;
- bh=vtDOKSR/FSvMxuHlmYi5UiCThEWLJ9eC+xstdn9n8O8=;
- b=E6INhK1XRm4otdS6CfLGdfZhpp7qA/rOlQcVC2ILr0hb1BHQGfVFtsg9TK7I8DSmCV
- Bsdsj3WvX+Muh6UdBHatdNO6psTsT7G1gI5Vsm9A0Auzl5j5lL4ITb9JVARJXl3H6BcP
- l8iv/qzEc2sigI20KzlzPyosnK9VKVcxA6TJ873+NZ0x/yNNWnzeIBBEp7yVNYsGB/0K
- TTdM19T02lTbF1AMf9qncQoFBmrUlEpaLgQSCOxTUxC6nVVJkqcpYBZchGTr0Swh+CQG
- hvlc4B1nEaLi1F5Ud05yXKXhEq+aDOKgVeOTZXR0rF8WXsEuHBawb/IT79gOPYYW5aFg
- EUog==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=gmail.com; s=20230601; t=1708190964; x=1708795764; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=Z4XHHzwsX30CiSum0aC4ivR2B5H1vSeozlc6gBR2IgM=;
+ b=GqubcFnoqaLb+pnZaO8E38G6UtV28FuuDS3PtnLfx+RiyjCC5f0g5MxIwhgoLL9SfG
+ T8HlX6ZhZN/QNRHC9xc/ygl4Zz8pRIOS5+sJqHq0IdO+nND9BMpRBE9GwGnGw6nrM4GE
+ jqzXUFzc9fw47U7GAf0bsAMI0H2m5/Isu0eCobZ+Hcyme6r+JUa3Wc+blSYvP+P/fkA4
+ 1O7itasHZSFgMapt65ycRL1/NvgvBVPnGHa6n4msoNU+IU5S+6+vYIgMmvvwJH7sro0G
+ rwvvYyjA+iCWvdv1mHvw4pQjhs7kFbNg/71d7C/HL82YxQjdAAb6XFSRjmhWdEoj1cws
+ v0wA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=fail (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=E6INhK1X
-Subject: Re: [Buildroot] [PATCH v4 19/20] boot/ti-k3/ti-k3-r5-loader:
- install tiboot3.bin
+ header.s=20230601 header.b=GqubcFno
+Subject: [Buildroot] [PATCH] package/sudo: drop legacy, useless,
+ and broken post-configure hook
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -116,42 +101,100 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: michael@amarulasolutions.com, Asaf Kahlon <asafka7@gmail.com>,
- Xuanhao Shi <X15000177@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Romain Naour <romain.naour@smile.fr>, Andreas Dannenberg <dannenberg@ti.com>,
- linux-amarula@amarulasolutions.com, bryce@redpinelabs.com,
- Anand Gadiyar <gadiyar@ti.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Christian Stewart <christian@aperture.us>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgRGFyaW8sCgpPbiBTYXQsIDIwMjQtMDItMTcgYXQgMTc6MDIgKzAxMDAsIERhcmlvIEJpbmFj
-Y2hpIHdyb3RlOgo+IFJlY2VudCB2ZXJzaW9ucyBvZiBVLUJvb3QgYXJlIGNhcGFibGUgb2YgYnVp
-bGRpbmcgdGlib290My5iaW4gdXNpbmcKPiBCaW5tYW4uIEluIHRoaXMgY2FzZSwgbGV0J3MgY29w
-eSBpdCB0byB0aGUgYmluYXJpZXMgZGlyZWN0b3J5Lgo+IAo+IFNpZ25lZC1vZmYtYnk6IERhcmlv
-IEJpbmFjY2hpIDxkYXJpby5iaW5hY2NoaUBhbWFydWxhc29sdXRpb25zLmNvbT4KCmh0dHBzOi8v
-cGF0Y2h3b3JrLm96bGFicy5vcmcvcHJvamVjdC9idWlsZHJvb3QvcGF0Y2gvMjAyNDAyMTMxNzI4
-MTcuMjg3Mjg0OS0xMi1yb21haW4ubmFvdXJAc21pbGUuZnIvCgpsb29rcyBtb3JlIGNvbXBsZXRl
-IHdpdGggc3lzZncuaXRiPwoKPiAtLS0KPiAKPiBBZGRlZCBpbiB2NAo+IAo+IFNpZ25lZC1vZmYt
-Ynk6IERhcmlvIEJpbmFjY2hpIDxkYXJpby5iaW5hY2NoaUBhbWFydWxhc29sdXRpb25zLmNvbT4K
-PiAtLS0KPiDCoGJvb3QvdGktazMvdGktazMtcjUtbG9hZGVyL3RpLWszLXI1LWxvYWRlci5tayB8
-IDMgKysrCj4gwqAxIGZpbGUgY2hhbmdlZCwgMyBpbnNlcnRpb25zKCspCj4gCj4gZGlmZiAtLWdp
-dCBhL2Jvb3QvdGktazMvdGktazMtcjUtbG9hZGVyL3RpLWszLXI1LWxvYWRlci5tayBiL2Jvb3Qv
-dGktazMvdGktazMtcjUtbG9hZGVyL3RpLWszLXI1LWxvYWRlci5tawo+IGluZGV4IDJhMTAwMjRh
-ZWRhYS4uNjQzMjk4YTFlNzBhIDEwMDY0NAo+IC0tLSBhL2Jvb3QvdGktazMvdGktazMtcjUtbG9h
-ZGVyL3RpLWszLXI1LWxvYWRlci5tawo+ICsrKyBiL2Jvb3QvdGktazMvdGktazMtcjUtbG9hZGVy
-L3RpLWszLXI1LWxvYWRlci5tawo+IEBAIC03NSw4ICs3NSwxMSBAQCBkZWZpbmUgVElfSzNfUjVf
-TE9BREVSX0JVSUxEX0NNRFMKPiDCoAkkKFRBUkdFVF9DT05GSUdVUkVfT1BUUykgJChUSV9LM19S
-NV9MT0FERVJfTUFLRSkgLUMgJChARCkgJChUSV9LM19SNV9MT0FERVJfTUFLRV9PUFRTKQo+IMKg
-ZW5kZWYKPiDCoAo+ICtUSV9LM19SNV9MT0FERVJfU0VDVFlQRSA9ICQoY2FsbCBxc3RyaXAsJChC
-UjJfVEFSR0VUX1RJX0szX1NFQ1RZUEUpKQo+ICsKPiDCoGRlZmluZSBUSV9LM19SNV9MT0FERVJf
-SU5TVEFMTF9JTUFHRVNfQ01EUwo+IMKgCWNwICQoQEQpL3NwbC91LWJvb3Qtc3BsLmJpbiAkKEJJ
-TkFSSUVTX0RJUikvcjUtdS1ib290LXNwbC5iaW4KPiArCWZpbmQgJChARCkgLW5hbWUgInRpYm9v
-dDMtKi0kKFRJX0szX1I1X0xPQURFUl9TRUNUWVBFKS0qLmJpbiIgLXR5cGUgZiAtZXhlYyBjcCB7
-fSAkKEJJTkFSSUVTX0RJUikvdGlib290My5iaW4gXDsKPiDCoGVuZGVmCj4gwqAKPiDCoCQoZXZh
-bCAkKGtjb25maWctcGFja2FnZSkpCgotLSAKQWxleGFuZGVyIFN2ZXJkbGluLgoKX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcg
-bGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcv
-bWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Commit b9e89b340e27 (sudo: bump version) introduced the explicit build
+of mksigname and mksiglist as host tools, as they were required to run
+on the build machine, to generate C code then used to build the target
+program.
+
+This is now failing to build since the bump to sudo 1.9.15p5 in commit
+c87746afefe7 (package/sudo: security bump to version 1.9.15p5)
+(lines manually wrapped and slightly elided for ease of reviewing):
+
+    /usr/bin/cpp \
+        -I/home/ymorin/dev/buildroot/O/master/per-package/sudo/host/include \
+        -I../../include \
+        -I../.. \
+        ./sys_signame.h \
+    | /usr/bin/sed -e '1,/^int sudo_end_of_headers;/d' -e '/^#/d' > mksigname.h
+    In file included from /usr/include/features.h:394,
+                     from /usr/include/sys/types.h:25,
+                     from ./sys_signame.h:4:
+    /usr/include/features-time64.h:26:5: error: #error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
+       26 | #   error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
+          |     ^~~~~
+    /usr/bin/gcc -I../../include -I../.. -I. -I. \
+        -D_PATH_SUDO_CONF=\"/etc/sudo.conf\"
+        -I/home/ymorin/dev/buildroot/O/master/per-package/sudo/host/include \
+        -DDEFAULT_TEXT_DOMAIN=\"sudo\" \
+        -O2 \
+        -I/home/ymorin/dev/buildroot/O/master/per-package/sudo/host/include \
+        ./mksigname.c -o mksigname
+    In file included from /usr/include/features.h:394,
+                     from /usr/include/bits/libc-header-start.h:33,
+                     from /usr/include/stdlib.h:26,
+                     from ./mksigname.c:27:
+    /usr/include/features-time64.h:26:5: error: #error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
+       26 | #   error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
+          |     ^~~~~
+    make[2]: *** [Makefile:263: mksigname] Error 1
+
+The core of the issue has not been really identifie, but it turns out
+that neither mksiglist nor mksignames is used during the build. This has
+been tested with a minimal sudo with no option, and with a sudo with all
+options enabled (linux-pam, zlib, opensldap, and openssl), with the
+three types of C libraries (glibc, musl, and uClibc-ng).
+
+Digging in the sudo buildsystem did not reveal an obvious reason when
+those would be needed either.
+
+Drop the hook now it seems it is no longer used and is atually breasking
+the build.
+
+Fixes: http://autobuild.buildroot.org/results/72f/72ff18fb9b41394a29006f881ee1fbea67a66a09/
+
+Note that there is a second issue in there: the call to the host cpp
+fails, but since it is on the LHS of a pipe, the error is lost, as the
+RHS of the pipe (the sed call) succeeds; a fix for that will be send
+in a separate patch.
+
+Reported-by: Christian Stewart <christian@aperture.us>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/sudo/sudo.mk | 9 ---------
+ 1 file changed, 9 deletions(-)
+
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index a4e838dd94..7961a99002 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -58,15 +58,6 @@ else
+ SUDO_CONF_OPTS += --disable-openssl
+ endif
+ 
+-# mksigname/mksiglist needs to run on build host to generate source files
+-define SUDO_BUILD_MKSIGNAME_MKSIGLIST_HOST
+-	$(MAKE) $(HOST_CONFIGURE_OPTS) \
+-		CPPFLAGS="$(HOST_CPPFLAGS) -I../../include -I../.." \
+-		-C $(@D)/lib/util mksigname mksiglist
+-endef
+-
+-SUDO_POST_CONFIGURE_HOOKS += SUDO_BUILD_MKSIGNAME_MKSIGLIST_HOST
+-
+ define SUDO_PERMISSIONS
+ 	/usr/bin/sudo f 4755 0 0 - - - - -
+ endef
+-- 
+2.43.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
