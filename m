@@ -4,91 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91E1FC4829E
-	for <buildroot@archiver.kernel.org>; Sun, 18 Feb 2024 06:27:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 081E3C4829E
+	for <buildroot@archiver.kernel.org>; Sun, 18 Feb 2024 08:09:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7107C4049D;
-	Sun, 18 Feb 2024 06:27:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 39D0B400CF;
+	Sun, 18 Feb 2024 08:09:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id m0GihbIBA67M; Sun, 18 Feb 2024 06:27:17 +0000 (UTC)
+	with ESMTP id xBZMxx8DpX7b; Sun, 18 Feb 2024 08:09:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92DBB40480
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C801940126
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 92DBB40480;
-	Sun, 18 Feb 2024 06:27:17 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2234F1BF23C
- for <buildroot@lists.busybox.net>; Sun, 18 Feb 2024 06:27:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C801940126;
+	Sun, 18 Feb 2024 08:09:27 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 860B91BF3C1
+ for <buildroot@lists.busybox.net>; Sun, 18 Feb 2024 08:09:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0E0D740475
- for <buildroot@lists.busybox.net>; Sun, 18 Feb 2024 06:27:16 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7319F60A40
+ for <buildroot@lists.busybox.net>; Sun, 18 Feb 2024 08:09:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6_MEF_F7MS-p for <buildroot@lists.busybox.net>;
- Sun, 18 Feb 2024 06:27:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::32f; helo=mail-ot1-x32f.google.com;
- envelope-from=kadambini.nema@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6940D401CC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6940D401CC
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com
- [IPv6:2607:f8b0:4864:20::32f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6940D401CC
- for <buildroot@buildroot.org>; Sun, 18 Feb 2024 06:27:12 +0000 (UTC)
-Received: by mail-ot1-x32f.google.com with SMTP id
- 46e09a7af769-6e432514155so1483753a34.1
- for <buildroot@buildroot.org>; Sat, 17 Feb 2024 22:27:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1708237630; x=1708842430;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=Iyr3WvzV2M3vsDekXME7RueCGqr5sYeX6HLhsj81ZD0=;
- b=nZ+PTZmLmlouFeb/gWrXf/qPuJ06eoRoN5nhWWFsibIWNCDGdcL+FiiYQMf6sDOsdB
- ZAQ++TV5eKiqwDqJ1TNnnCk8t4l8SDjpk161OC7KQR64XcXihvh9L4xK7T2QCNb/tgc/
- IiKlvSNXAtitnyedNaE+rtcYioMqloTGQLRn6bxsIw5aht9uX/w08uPO8xFdB/EZzoPB
- 2u52WMGCrFuchU6feFUzyiUYEO6UosNL10Eje4pMb34//h98IyjnYXoRhCO7hUEdn/nN
- VbJKyAWIZ8EdZjTQoarq7Lva1NT5mcF6riiauroPMN4Vu5LtcMJl0oz+SUFNtWVhzHG0
- M2CA==
-X-Gm-Message-State: AOJu0YyTUlPSmbzmrqTKUywS6NFGltqsyCliXB5V1cJH7nEzJryTg3wq
- s5Oap5if3/8ZOv4wehLd4EwUXxixd7d5CN3IRHFJWBtJ15702HcKPeP6MR9QS9s=
-X-Google-Smtp-Source: AGHT+IHLCKw2fzZ9QLBDbtIoGytDSAp33V6n7ka+fXj2TCWHLxoVmg6FymRaXUN0IsphbT/i+aZGVw==
-X-Received: by 2002:a05:6808:2207:b0:3c1:3a97:7be5 with SMTP id
- bd7-20020a056808220700b003c13a977be5mr10503456oib.21.1708237630525; 
- Sat, 17 Feb 2024 22:27:10 -0800 (PST)
-Received: from localhost.localdomain (ip72-203-121-181.oc.oc.cox.net.
- [72.203.121.181]) by smtp.gmail.com with ESMTPSA id
- gb16-20020a17090b061000b0029681231ae1sm2712911pjb.28.2024.02.17.22.27.09
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 17 Feb 2024 22:27:10 -0800 (PST)
-From: Kadambini Nema <kadambini.nema@gmail.com>
-To: buildroot@buildroot.org
-Date: Sat, 17 Feb 2024 22:27:07 -0800
-Message-Id: <20240218062707.1056854-1-kadambini.nema@gmail.com>
-X-Mailer: git-send-email 2.25.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GG6GQye3UKhr for <buildroot@lists.busybox.net>;
+ Sun, 18 Feb 2024 08:09:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.177;
+ helo=smtpcmd15177.aruba.it;
+ envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9C049608F1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C049608F1
+Received: from smtpcmd15177.aruba.it (smtpcmd15177.aruba.it [62.149.156.177])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9C049608F1
+ for <buildroot@buildroot.org>; Sun, 18 Feb 2024 08:09:21 +0000 (UTC)
+Received: from [192.168.50.163] ([84.33.84.190])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id bcEfrsFOY7rb2bcEgrkjBi; Sun, 18 Feb 2024 09:09:18 +0100
+Message-ID: <ba5719b0-9b18-4148-bdfe-8a16ef06c4ee@benettiengineering.com>
+Date: Sun, 18 Feb 2024 09:09:16 +0100
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1708237630; x=1708842430; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Iyr3WvzV2M3vsDekXME7RueCGqr5sYeX6HLhsj81ZD0=;
- b=Znm1ijvDrG94gQVp+xkwWmS/rBDc23F6hJe2ATsqlYQvNURtUM0vJMwxl6GMxYl9Ef
- euOIZctpQkt5QTs6Q8V0bvPLEGt7O96tX7AMvBGgyGUcFI7nHs/rXGyiTpLyqR9qcI6I
- R0lcmsc7yHPnpcoPMlE9gfFfxCx7YZ+Em34Sc1yW9tjMk5HLgYSugBOXtxv2ktVCOcpQ
- jmtHRmWoF3+cICt8OITUIlxiKo2nO2s++BIY+kkgbMj69N+a7dcPzjjHyyDM+r4Vk5Ie
- qgAh92zik+Jxq8ESfvPsmDOGCFH/SRy+CCaL/Xa3qlAmbzoagc86MPBi3c5kwfBwQ0zm
- zEAw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+User-Agent: Mozilla Thunderbird
+To: Kadambini Nema <kadambini.nema@gmail.com>, buildroot@buildroot.org
+References: <20240218062239.1052785-1-kadambini.nema@gmail.com>
+Content-Language: en-US
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <20240218062239.1052785-1-kadambini.nema@gmail.com>
+X-CMAE-Envelope: MS4xfK4sJFeLeU+X94tDyi1pNRmuuLZaxzvkY+yO6G+2WfzeSgEGRPr3eoQRd3rnYCO5bxUWflWdYzysl6GEpDCez9n+H/NVzpr3pd6KKIb278BKSxaMqroM
+ bfw0tcnhgd9mfLfpUbXkL9FV1VXPA95D37+R3+qbXnVkicExLu8+YdzZEQmR8ikpZCYM5bOTceJGk5VgY+LviKdu/8hWl5BCZfncZMLJRqJg0uUqtLLHp8Dx
+ IVJoQnQq7CTC2WyRefcFfoaGrEVn2sWNZ0Kh+c9NMYTHcCzht1dhr/Qy3Znvo+zYjhbckdX/ahM25K6wn3HQvZbM90br/k9/0pGIkQJwQZU=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1708243758; bh=fsG+QGgyzntBhJHdCXYS2wfIcecZuewhCcyKn1bOeII=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=hX/4K5bPmhGpWoYNJWTYRlrCuAKrnItu4ksE1w1zlUkVMH4EE2rs1UaIJo+Ap6ilY
+ ZQhSJ+9pq3IIKI8Y9CII0H8kFunSPRCmD54vVLpLjGlvJbtyG/Y07v4qyjhy9bmd64
+ 3phTnuPeIZqTHEDxfXjY1Hry72yA8K54ihTDeLGUwBEeXwMy53p1fyxx2sNTiukkXI
+ f+YvJYing0hNx+LX3Q1VSJbjEUn3Fr3hMZqtFqWMCoz+Foxgmra7vrw0Rqa6c3dkrV
+ fPB2CAWE8PI33rapfYxfRanECUXw28+MR4/zl9MSxn3rNvg58qQMP/fl9Sz+HJ9Ejk
+ +iLDKoS9gzG9g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=Znm1ijvD
-Subject: [Buildroot] [PATCH 1/1] package/sysstat: bump version to 12.7.5
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=hX/4K5bP
+Subject: Re: [Buildroot] [PATCH 1/1] package {sysrepo,
+ libyang}: bump to version 2.2.150 (sysrepo), 2.1.148 (libyang)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,57 +82,92 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Kadambini Nema <kadambini.nema@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: =?UTF-8?Q?Jan_Kundr=C3=A1t?= <jan.kundrat@cesnet.cz>,
+ Heiko Thiery <heiko.thiery@gmail.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes: https://sysstat.github.io/2023/12/17/sysstat-12.7.5.html
+Hello Nema,
 
-./utils/test-pkg -c sysstat.config  -p sysstat
-                    bootlin-armv5-uclibc [1/6]: OK
-                     bootlin-armv7-glibc [2/6]: OK
-                   bootlin-armv7m-uclibc [3/6]: SKIPPED
-                     bootlin-x86-64-musl [4/6]: OK
-                      br-arm-full-static [5/6]: OK
-                            sourcery-arm [6/6]: OK
-6 builds, 1 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+thank you for contributing!
 
-Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
----
- package/sysstat/sysstat.hash | 6 +++---
- package/sysstat/sysstat.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Can you please split this into 2 patches?
 
-diff --git a/package/sysstat/sysstat.hash b/package/sysstat/sysstat.hash
-index b47f000e57..31821d9e3f 100644
---- a/package/sysstat/sysstat.hash
-+++ b/package/sysstat/sysstat.hash
-@@ -1,5 +1,5 @@
--# From: http://sebastien.godard.pagesperso-orange.fr/download.html
--sha1  a730982e0c2d4964a0022c1509f3ea0a345402bc  sysstat-12.6.1.tar.xz
-+# From: https://sysstat.github.io/2023/12/17/sysstat-12.7.5.html
-+sha1  f329edff36f462385a7c20d2a136b667ab8db735  sysstat-12.7.5.tar.xz
- # Locally calculated
--sha256  18ff5a4e149e2568e43385637f72437fe6bafcc1322a93d13d1981e9464a0342  sysstat-12.6.1.tar.xz
-+sha256  57664040a549d33bb06a1121c7124d4cadd9b8b35f815856c194393047cd4d6b  sysstat-12.7.5.tar.xz
- sha256  db296f2f7f35bca3a174efb0eb392b3b17bd94b341851429a3dff411b1c2fc73  COPYING
-diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
-index f77a60b1da..cfa97834c3 100644
---- a/package/sysstat/sysstat.mk
-+++ b/package/sysstat/sysstat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SYSSTAT_VERSION = 12.6.1
-+SYSSTAT_VERSION = 12.7.5
- SYSSTAT_SOURCE = sysstat-$(SYSSTAT_VERSION).tar.xz
- SYSSTAT_SITE = https://sysstat.github.io/sysstat-packages
- SYSSTAT_CONF_OPTS = --disable-file-attr
+If one package version requires another package minimum version then
+please point it in the commit log.
+
+Best regards
 -- 
-2.25.1
+Giulio Benetti
+CEO&CTO@Benetti Engineering sas
+
+On 18/02/24 07:22, Kadambini Nema wrote:
+> Release notes: https://github.com/sysrepo/sysrepo/releases
+>                 https://github.com/CESNET/libyang/releases/tag/v2.1.148
+> 
+> $ ./utils/test-pkg -d br_test -k -c sysrepo.config sysrepo
+>                      bootlin-armv5-uclibc [1/6]: OK
+>                       bootlin-armv7-glibc [2/6]: OK
+>                     bootlin-armv7m-uclibc [3/6]: SKIPPED
+>                       bootlin-x86-64-musl [4/6]: OK
+>                        br-arm-full-static [5/6]: SKIPPED
+>                              sourcery-arm [6/6]: OK
+> 6 builds, 2 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+> 
+> Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
+> ---
+>   package/libyang/libyang.hash | 2 +-
+>   package/libyang/libyang.mk   | 2 +-
+>   package/sysrepo/sysrepo.hash | 2 +-
+>   package/sysrepo/sysrepo.mk   | 2 +-
+>   4 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/libyang/libyang.hash b/package/libyang/libyang.hash
+> index 3658b20e4e..e03278adfd 100644
+> --- a/package/libyang/libyang.hash
+> +++ b/package/libyang/libyang.hash
+> @@ -1,3 +1,3 @@
+>   # Locally calculated
+> -sha256  3e52b922fcf371933ad7de1686ad83504e3358236e7817b5af795b0db52fa221  libyang-2.1.111.tar.gz
+> +sha256  77a0aaaeb3df720aeb70d6896e32e2c2be099d48df73e3cfb52567051af3e44b  libyang-2.1.148.tar.gz
+>   sha256  0b7ec43747d211a1e49c53588b0822062947bab6bdcc95238578beab34cba5bb  LICENSE
+> diff --git a/package/libyang/libyang.mk b/package/libyang/libyang.mk
+> index 5533c7c68e..fca0cd63f8 100644
+> --- a/package/libyang/libyang.mk
+> +++ b/package/libyang/libyang.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -LIBYANG_VERSION = 2.1.111
+> +LIBYANG_VERSION = 2.1.148
+>   LIBYANG_SITE = $(call github,CESNET,libyang,v$(LIBYANG_VERSION))
+>   LIBYANG_LICENSE = BSD-3-Clause
+>   LIBYANG_LICENSE_FILES = LICENSE
+> diff --git a/package/sysrepo/sysrepo.hash b/package/sysrepo/sysrepo.hash
+> index 6a5e98f41b..056f70787d 100644
+> --- a/package/sysrepo/sysrepo.hash
+> +++ b/package/sysrepo/sysrepo.hash
+> @@ -1,3 +1,3 @@
+>   # Locally calculated
+> -sha256  bebb7901682eb23bf4c73d086d0a45c124ec751a67793a66024f1d4203425730  sysrepo-2.2.36.tar.gz
+> +sha256  467efed8d0f62c26a0d200602b911096eb2d67858e620937ab68f96b316fa9b7  sysrepo-2.2.150.tar.gz
+>   sha256  88f1b7e5c64d2c113e07105aa9c0fb80639b40287565be1c2afd0949df83d826  LICENSE
+> diff --git a/package/sysrepo/sysrepo.mk b/package/sysrepo/sysrepo.mk
+> index 6b031ae6f9..7f2570bd7d 100644
+> --- a/package/sysrepo/sysrepo.mk
+> +++ b/package/sysrepo/sysrepo.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -SYSREPO_VERSION = 2.2.36
+> +SYSREPO_VERSION = 2.2.150
+>   SYSREPO_SITE = $(call github,sysrepo,sysrepo,v$(SYSREPO_VERSION))
+>   SYSREPO_INSTALL_STAGING = YES
+>   SYSREPO_LICENSE = BSD-3-Clause
 
 _______________________________________________
 buildroot mailing list
