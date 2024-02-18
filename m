@@ -4,72 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7003C48BF6
-	for <buildroot@archiver.kernel.org>; Sun, 18 Feb 2024 19:50:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B92DC48BF6
+	for <buildroot@archiver.kernel.org>; Sun, 18 Feb 2024 20:12:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3758E402AF;
-	Sun, 18 Feb 2024 19:50:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4D80C4060F;
+	Sun, 18 Feb 2024 20:12:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tqXI6AUxZ6p4; Sun, 18 Feb 2024 19:50:36 +0000 (UTC)
+	with ESMTP id u-fcTGjSLW3u; Sun, 18 Feb 2024 20:12:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41B9E402BC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 02A60405FF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 41B9E402BC;
-	Sun, 18 Feb 2024 19:50:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8A07B1BF83B
- for <buildroot@lists.busybox.net>; Sun, 18 Feb 2024 19:50:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 02A60405FF;
+	Sun, 18 Feb 2024 20:12:42 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 22A911BF488
+ for <buildroot@lists.busybox.net>; Sun, 18 Feb 2024 20:12:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7770F81E5C
- for <buildroot@lists.busybox.net>; Sun, 18 Feb 2024 19:50:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0ED6B60675
+ for <buildroot@lists.busybox.net>; Sun, 18 Feb 2024 20:12:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LXQ37kB3Is_m for <buildroot@lists.busybox.net>;
- Sun, 18 Feb 2024 19:50:33 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VZxZOLLV4ghQ for <buildroot@lists.busybox.net>;
+ Sun, 18 Feb 2024 20:12:39 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7655181E5B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7655181E5B
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7655181E5B
- for <buildroot@buildroot.org>; Sun, 18 Feb 2024 19:50:33 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 6684A13F861;
- Sun, 18 Feb 2024 20:50:29 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 18 Feb 2024 20:50:29 +0100
-Date: Sun, 18 Feb 2024 20:50:29 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Nuno =?utf-8?Q?Gon=C3=A7alves?= <nunog@fr24.com>
-Message-ID: <ZdJfha-psWo-bUZk@landeda>
-References: <20240218193112.1048370-1-nunog@fr24.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240218193112.1048370-1-nunog@fr24.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1708285831;
- bh=YnAcvBXp27u5pmEgxRacaiMhVopTNU62OG3pw6lUKDw=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=nrI6NEA7rIZgKH1nw6sAg1JDlUBuqzxU42SQpW/iFkcgahfwB7FkcZtoRTArUAX8N
- i+r3wfjXn2sEGoM0lw1knetv9DxIMMWRvXQKSProFXWsHmmUrW/6KVcwWj3T64rIFi
- 5ZKKmo7sJsy9V1V2WslZz8LIXnsqWBRGPiZGnJHPaWfVZXrvrpQ7+SU3WYEkUfdecf
- uRDmYni/4zdTmlbJ98HB6u89z6anpeiWlzkFqhr9u+X1osnx3/nnDUxH8Ud7DKvshH
- Tjhj5ew2fFV8gwunwIS+dCDtfeIgJ7IOjXmtKKQq7jbpOODkvB3UBvAnqB79Eg/6v9
- U5uf/HrXLd4fA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=nrI6NEA7
-Subject: Re: [Buildroot] [PATCH] package/google-breakpad: fix tools option
- identation in menuconfig
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 187A060639
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 187A060639
+ for <buildroot@buildroot.org>; Sun, 18 Feb 2024 20:12:38 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B8B5A87876; Sun, 18 Feb 2024 20:12:38 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 18 Feb 2024 21:12:15 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 2c6dc1fed354696a706fe5ecc93c4089b8bd64bd
+X-Git-Newrev: 4b34b8ccfa5159d643ecbac12c42c638e3b27e5e
+X-Patchwork-Hint: ignore
+Message-Id: <20240218201238.B8B5A87876@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/attr: fix build failure on
+ Microblaze architecture
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,55 +59,126 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-TnVubywgQWxsLAoKT24gMjAyNC0wMi0xOCAxOTozMCArMDAwMCwgTnVubyBHb27Dp2FsdmVzIHZp
-YSBidWlsZHJvb3Qgc3Bha2UgdGh1c2x5Ogo+IE1vdmUgY29tbWVudCBpbiBDb25maWcuaW4gdG8g
-ZW5kIG9mIGZpbGUgc28gdGhhdAo+IEJSMl9QQUNLQUdFX0dPT0dMRV9CUkVBS1BBRF9UT09MUyBp
-cyBwcm9wZXJseSBpZGVudGVkLgoKQWggeWVzLCBpdCB3YXMgYm90aGVyaW5nIG1lIHRoZSBvdGhl
-ciBkYXksIGJ1dCBJIGRpZCBub3QgZ2V0IHRvIGl0Li4uCgo+IFNpZ25lZC1vZmYtYnk6IE51bm8g
-R29uw6dhbHZlcyA8bnVub2dAZnIyNC5jb20+CgpBcHBsaWVkIHRvIG1hc3RlciwgdGhhbmtzLgoK
-UmVnYXJkcywKWWFubiBFLiBNT1JJTi4KCj4gLS0tCj4gIHBhY2thZ2UvZ29vZ2xlLWJyZWFrcGFk
-L0NvbmZpZy5pbiB8IDE2ICsrKysrKysrLS0tLS0tLS0KPiAgMSBmaWxlIGNoYW5nZWQsIDggaW5z
-ZXJ0aW9ucygrKSwgOCBkZWxldGlvbnMoLSkKPiAKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9nb29n
-bGUtYnJlYWtwYWQvQ29uZmlnLmluIGIvcGFja2FnZS9nb29nbGUtYnJlYWtwYWQvQ29uZmlnLmlu
-Cj4gaW5kZXggMGQyMWZkMmU1Yy4uNWM3ZjRiYjdiYSAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL2dv
-b2dsZS1icmVha3BhZC9Db25maWcuaW4KPiArKysgYi9wYWNrYWdlL2dvb2dsZS1icmVha3BhZC9D
-b25maWcuaW4KPiBAQCAtMzUsMTQgKzM1LDYgQEAgY29uZmlnIEJSMl9QQUNLQUdFX0dPT0dMRV9C
-UkVBS1BBRAo+ICAKPiAgCSAgaHR0cHM6Ly9jaHJvbWl1bS5nb29nbGVzb3VyY2UuY29tL2JyZWFr
-cGFkL2JyZWFrcGFkCj4gIAo+IC1jb21tZW50ICJnb29nbGUtYnJlYWtwYWQgcmVxdWlyZXMgYSBn
-bGliYyB0b29sY2hhaW4gdy8gd2NoYXIsIHRocmVhZCwgQysrLCBnY2MgPj0gNC44Igo+IC0JZGVw
-ZW5kcyBvbiBCUjJfUEFDS0FHRV9HT09HTEVfQlJFQUtQQURfQVJDSF9TVVBQT1JUUwo+IC0JZGVw
-ZW5kcyBvbiBCUjJfUEFDS0FHRV9IT1NUX0dPT0dMRV9CUkVBS1BBRF9BUkNIX1NVUFBPUlRTCj4g
-LQlkZXBlbmRzIG9uICFCUjJfSU5TVEFMTF9MSUJTVERDUFAgfHwgIUJSMl9VU0VfV0NIQVIgfHwg
-XAo+IC0JCSFCUjJfVE9PTENIQUlOX0hBU19USFJFQURTIHx8IFwKPiAtCQkhQlIyX1RPT0xDSEFJ
-Tl9VU0VTX0dMSUJDIHx8IFwKPiAtCQkhQlIyX1RPT0xDSEFJTl9HQ0NfQVRfTEVBU1RfNF84Cj4g
-LQo+ICBpZiBCUjJfUEFDS0FHRV9HT09HTEVfQlJFQUtQQUQKPiAgCj4gIGNvbmZpZyBCUjJfUEFD
-S0FHRV9HT09HTEVfQlJFQUtQQURfVE9PTFMKPiBAQCAtNTIsMyArNDQsMTEgQEAgY29uZmlnIEJS
-Ml9QQUNLQUdFX0dPT0dMRV9CUkVBS1BBRF9UT09MUwo+ICAJICBtaW5pZHVtcF9zdGFja3dhbGsg
-YW5kIG1pY3JvZHVtcF9zdGFja3dhbGsuCj4gIAo+ICBlbmRpZgo+ICsKPiArY29tbWVudCAiZ29v
-Z2xlLWJyZWFrcGFkIHJlcXVpcmVzIGEgZ2xpYmMgdG9vbGNoYWluIHcvIHdjaGFyLCB0aHJlYWQs
-IEMrKywgZ2NjID49IDQuOCIKPiArCWRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfR09PR0xFX0JSRUFL
-UEFEX0FSQ0hfU1VQUE9SVFMKPiArCWRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfSE9TVF9HT09HTEVf
-QlJFQUtQQURfQVJDSF9TVVBQT1JUUwo+ICsJZGVwZW5kcyBvbiAhQlIyX0lOU1RBTExfTElCU1RE
-Q1BQIHx8ICFCUjJfVVNFX1dDSEFSIHx8IFwKPiArCQkhQlIyX1RPT0xDSEFJTl9IQVNfVEhSRUFE
-UyB8fCBcCj4gKwkJIUJSMl9UT09MQ0hBSU5fVVNFU19HTElCQyB8fCBcCj4gKwkJIUJSMl9UT09M
-Q0hBSU5fR0NDX0FUX0xFQVNUXzRfOAo+IC0tIAo+IDIuNDMuMgo+IAo+IF9fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gYnVpbGRyb290IG1haWxpbmcgbGlz
-dAo+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3Jn
-L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290CgotLSAKLi0tLS0tLS0tLS0tLS0tLS0tLi0tLS0t
-LS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4K
-fCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9O
-IHwgRXJpY3MnIGNvbnNwaXJhY3k6IHwKfCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVz
-aWduZXIgfCBcIC8gQ0FNUEFJR04gICAgIHwgIF9fXyAgICAgICAgICAgICAgIHwKfCArMzMgNTYx
-IDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAgQUdBSU5TVCAgICAgIHwgIFxlLyAg
-VGhlcmUgaXMgbm8gIHwKfCBodHRwOi8veW1vcmluLmlzLWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAv
-IFwgSFRNTCBNQUlMICAgIHwgICB2ICAgY29uc3BpcmFjeS4gIHwKJy0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0t
-LS0tLScKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVp
-bGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3Rz
-LmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+commit: https://git.buildroot.net/buildroot/commit/?id=4b34b8ccfa5159d643ecbac12c42c638e3b27e5e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+On Microblaze architecture __has_attribute(__symver__) support is broken
+and always return true even if symver is not supported so let's add an
+upstream patch to detect if symver is supported during autoreconf. Let's
+also add ATTR_AUTORECONF = YES to let patch to affect building.
+
+Fixes:
+http://autobuild.buildroot.org/results/29c76e02becedf922bd7dc0533338c078bf77d2a
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ....ac-add-detection-of-symver-gcc-attribute.patch | 75 ++++++++++++++++++++++
+ package/attr/attr.mk                               |  3 +
+ 2 files changed, 78 insertions(+)
+
+diff --git a/package/attr/0002-configure.ac-add-detection-of-symver-gcc-attribute.patch b/package/attr/0002-configure.ac-add-detection-of-symver-gcc-attribute.patch
+new file mode 100644
+index 0000000000..ee029e9735
+--- /dev/null
++++ b/package/attr/0002-configure.ac-add-detection-of-symver-gcc-attribute.patch
+@@ -0,0 +1,75 @@
++From 365426c28f8bf73d34d77cc06b7d5ffeae17f13a Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Tue, 6 Feb 2024 15:33:15 +0100
++Subject: [PATCH] configure.ac: add detection of symver gcc attribute
++
++On non-ELF platforms, such as microblaze, builds will fail when trying
++to add symver information because  __attribute__((symver ..)) is not
++supported even though __has_attribute(__symver__) returns true.
++
++Support for symver needs to be detected via a compile test since
++__has_attribute can report false positives [0].
++
++Add a configure compile check for __attribute__((symver ..)) to ensure
++it is supported and define a variable to advertise support.
++
++[0] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101766#c1
++
++Upstream: https://git.savannah.nongnu.org/cgit/attr.git/commit/?id=943c776089dbb24ebbfb7432ba9841f1845bf95a
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++[Giulio: rework local patch for #if nesting]
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ configure.ac       | 15 +++++++++++++++
++ libattr/syscalls.c |  8 ++++----
++ 2 files changed, 19 insertions(+), 4 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 7e362e9..98477b5 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -57,6 +57,21 @@ AS_CASE([$host_os],
++ 	[linux*], [os_linux=yes])
++ AM_CONDITIONAL([OS_LINUX], [test "x$os_linux" = "xyes"])
++ 
+++AC_CACHE_CHECK(whether __attribute__((__symver__())) is supported,
+++	gcc_cv_symver_attribute,
+++	[cat > conftest.c <<EOF
+++void foo (void) {}
+++__typeof(foo) foo __attribute__ ((__symver__("foo@foo")));
+++EOF
+++	gcc_cv_symver_attribute=no
+++	if ${CC-cc} -Werror -S conftest.c -o conftest.s >/dev/null 2>&1; then \
+++	    gcc_cv_symver_attribute=yes
+++	fi
+++	rm -f conftest.[cs]
+++])
+++AS_IF([test $gcc_cv_symver_attribute = yes],
+++      [AC_DEFINE(HAVE_SYMVER_ATTRIBUTE, [], [GCC supports symver attribute])])
+++
++ AC_CONFIG_COMMANDS([include/attr],
++ 	[dnl
++ 	rm -rf include/attr
++diff --git a/libattr/syscalls.c b/libattr/syscalls.c
++index 907560a..7ee6d39 100644
++--- a/libattr/syscalls.c
+++++ b/libattr/syscalls.c
++@@ -31,10 +31,10 @@
++  * prefer symver attribute if available (since gcc 10),
++  * fall back to traditional .symver asm directive otherwise.
++  */
++-#ifdef __has_attribute
++-# if __has_attribute(__symver__)
++-#  define SYMVER(cn, vn) __typeof(cn) cn __attribute__((__symver__(vn)))
++-# elif __has_attribute(__no_reorder__)
+++#if defined(HAVE_SYMVER_ATTRIBUTE)
+++# define SYMVER(cn, vn) __typeof(cn) cn __attribute__((__symver__(vn)))
+++#elif defined(__has_attribute)
+++# if __has_attribute(__no_reorder__)
++    /*
++     * Avoid wrong partitioning with older gcc and LTO. May not work reliably
++     * with all versions; use -flto-partition=none if you encounter problems.
++-- 
++2.34.1
++
+diff --git a/package/attr/attr.mk b/package/attr/attr.mk
+index d1397921ff..1d24144f46 100644
+--- a/package/attr/attr.mk
++++ b/package/attr/attr.mk
+@@ -11,6 +11,9 @@ ATTR_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
+ ATTR_LICENSE_FILES = doc/COPYING doc/COPYING.LGPL
+ ATTR_CPE_ID_VALID = YES
+ 
++# Flag added for patch dealing with symver in configure.ac
++ATTR_AUTORECONF = YES
++
+ ATTR_INSTALL_STAGING = YES
+ 
+ ATTR_CONF_OPTS = --disable-nls
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
