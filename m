@@ -1,93 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A103C48BF6
-	for <buildroot@archiver.kernel.org>; Sun, 18 Feb 2024 14:02:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2C8AC48BF6
+	for <buildroot@archiver.kernel.org>; Sun, 18 Feb 2024 17:26:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D6896405D2;
-	Sun, 18 Feb 2024 14:02:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 368278218E;
+	Sun, 18 Feb 2024 17:26:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yhyjEtaK0fR6; Sun, 18 Feb 2024 14:02:13 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rXh6w2Yrromt; Sun, 18 Feb 2024 17:25:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 88A22405E1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2EAA58218F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 88A22405E1;
-	Sun, 18 Feb 2024 14:02:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2EAA58218F;
+	Sun, 18 Feb 2024 17:25:59 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5C2B11BF31A
- for <buildroot@lists.busybox.net>; Sun, 18 Feb 2024 14:02:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B81621BF396
+ for <buildroot@lists.busybox.net>; Sun, 18 Feb 2024 17:25:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 565A682073
- for <buildroot@lists.busybox.net>; Sun, 18 Feb 2024 14:02:12 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B31728218F
+ for <buildroot@lists.busybox.net>; Sun, 18 Feb 2024 17:25:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4HPuATrEGT5k for <buildroot@lists.busybox.net>;
- Sun, 18 Feb 2024 14:02:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::b2b; helo=mail-yb1-xb2b.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 031EF82079
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 031EF82079
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com
- [IPv6:2607:f8b0:4864:20::b2b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 031EF82079
- for <buildroot@buildroot.org>; Sun, 18 Feb 2024 14:02:10 +0000 (UTC)
-Received: by mail-yb1-xb2b.google.com with SMTP id
- 3f1490d57ef6-dc6e080c1f0so3124058276.2
- for <buildroot@buildroot.org>; Sun, 18 Feb 2024 06:02:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1708264929; x=1708869729;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=gT82sKxuLVtWJxGUlnLVsbjKgjDumCxu70f/26Th57I=;
- b=Rsi4F4o+HFK2YvWNm4WeHjGVpMQ/KpHziE6+sbv7Hbwqli8+vHeQ5ocMvFSAz+iCWk
- Lmp2rYy3yBbsLH31NC1NvYsea18+EhfAv/a90ro4V2/jY5Nklei+OHtPs75J/XB19bmz
- 1au1WA+zO+OChtFH0wbiHu7Sel18msAF1a8MABnWu+VFQmZrnk+qagiuXZ8c1pgzczAj
- qFhm3hXtrjl2oOf6T2kHWQMaf4vou36dLQdp6TuVCDlEawM8V527TMoUoXfAeAcc+Qmw
- fCs0hZ0vgQvImNxw/zBf+2ZGhuvPrGzPyRQ5ZoUVn1lPfTeRViE6fhwT11fq14xmOiBb
- O/Rg==
-X-Gm-Message-State: AOJu0YxkOApLP51JZC+OwJz1Xt1VQnWBMOzLsTPFUB8mgeLJjT3APRqu
- ZBRGwtcQhO43Ky1sTCWNcvua1zDwoou6yzMixoyf9/4wD0CabuiYItMnRWqfCYvlsdK64zogbL1
- WXdy4fAiOFd73IX2ujKiEygnxDDBNO51+iE5MNw==
-X-Google-Smtp-Source: AGHT+IH8bSi+rLEXYvVp/2mmQOLvSjnXhk4EUXJjuAWivuDTv0QKPBTpEjA6TVlfBRLbJ6U9xMfiDHS00o2+aBI3i0c=
-X-Received: by 2002:a05:6902:248f:b0:dcc:bea8:8333 with SMTP id
- ds15-20020a056902248f00b00dccbea88333mr10638309ybb.61.1708264929389; Sun, 18
- Feb 2024 06:02:09 -0800 (PST)
+ with ESMTP id E2XVz-zjRXm0 for <buildroot@lists.busybox.net>;
+ Sun, 18 Feb 2024 17:25:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6D6EE8218E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D6EE8218E
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6D6EE8218E
+ for <buildroot@buildroot.org>; Sun, 18 Feb 2024 17:25:55 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id C3EEB13F846;
+ Sun, 18 Feb 2024 18:25:51 +0100 (CET)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 18 Feb 2024 18:25:47 +0100
+Message-ID: <20240218172547.262368-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.43.2
 MIME-Version: 1.0
-References: <20240217160244.1320482-1-dario.binacchi@amarulasolutions.com>
- <20240217160244.1320482-8-dario.binacchi@amarulasolutions.com>
- <8e9c142cd6c74585b1545fd3a3f5e0b7fe221917.camel@gmail.com>
-In-Reply-To: <8e9c142cd6c74585b1545fd3a3f5e0b7fe221917.camel@gmail.com>
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date: Sun, 18 Feb 2024 15:01:58 +0100
-Message-ID: <CABGWkvqYc9FX=4vGXkkVHP7=Hddg-NWuHtrQPHvX2vsguNhtvA@mail.gmail.com>
-To: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1708264929; x=1708869729;
- darn=buildroot.org; 
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=gT82sKxuLVtWJxGUlnLVsbjKgjDumCxu70f/26Th57I=;
- b=jw2f9lrn3wvCfUaZGPrUav9NLj8r8JmYcftFr+sNExd1TFSMOcnGNbbCCk1J9No5WV
- bgQHVmvV/5z4qsed+BIotV4i3b4R2x5p+qEr5sOA5KYv77eCPf20zF20LGBDQJd+5gV/
- +L2Vcmv1ap9KAFKb4LfCyk2HRmKDnU/ps7UtY=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1708277153;
+ bh=wzELClp5zPYr+I6rzPEbrkPTQqk0rfb9zQDS2pEHQBA=;
+ h=From:To:Cc:Subject:Date:From;
+ b=ZeqlvTEflq6x6nLZUHPSpo6dHP902idd1a776G4XaTPi6zq4Q4mMM4IXtODh1ncQR
+ JblxYM2cki0yIusvAjlSyfuyUGZP9yz6DKOTgf2gz8JBBMvFdnwBWqbmMEljNwjstU
+ IL1Il2QYoWKAkWA5Yg1gfvccouGuy+qWSTSsEcxPf0EouE90DYnx0NQnn8321YIoNB
+ Kq2AzQjpi2wyf4h0layJ81FsKO43dFIQ1xAduOBf85PhXhbkq6jFPVtHq9vtTdip4N
+ kWe5yksONIwxmDWeWGLBMvx2Tp/Sp87aq73nI7QRfXoSIK2PPGMCW77Oh9jU1rjGle
+ CQoAQT1snR9gQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
+ header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=jw2f9lrn
-Subject: Re: [Buildroot] [PATCH v4 07/20] boot/ti-k3-image-gen: manage HS
- hardware
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=ZeqlvTEf
+Subject: [Buildroot] [PATCH 1/1] support/testing: add sox runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,141 +76,115 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: michael@amarulasolutions.com, Asaf Kahlon <asafka7@gmail.com>,
- Xuanhao Shi <X15000177@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
- Romain Naour <romain.naour@smile.fr>, Anand Gadiyar <gadiyar@ti.com>,
- linux-amarula@amarulasolutions.com, bryce@redpinelabs.com,
- Andreas Dannenberg <dannenberg@ti.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgQWxleGFuZGVyLAoKT24gU3VuLCBGZWIgMTgsIDIwMjQgYXQgMTI6NDXigK9BTSBBbGV4YW5k
-ZXIgU3ZlcmRsaW4KPGFsZXhhbmRlci5zdmVyZGxpbkBnbWFpbC5jb20+IHdyb3RlOgo+Cj4gSGkg
-RGFyaW8sCj4KPiBPbiBTYXQsIDIwMjQtMDItMTcgYXQgMTc6MDIgKzAxMDAsIERhcmlvIEJpbmFj
-Y2hpIHdyb3RlOgo+ID4gVGhlIHBhdGNoIHNldHMgdGhlIGNvbmZpZ3VyYXRpb25zIHJlcXVpcmVk
-IGJ5IFRJIEhTIHN5c3RlbXMuIFNvbWUgb2YgdGhlc2UKPiA+IGNvbmZpZ3VyYXRpb25zIChpLiBl
-LiBIUyBTWVNGVyBpbWFnZSBzaWduaW5nIGtleSwgSFMgU29mdHdhcmUgUmV2aXNpb24pCj4gPiBh
-cmUgcHJvdmlkZWQgYnkgdGhlIHRpLWszLWNvcmUtc2VjZGV2IHBhY2thZ2UgaW4gdGhlIGJpbmFy
-aWVzIGRpcmVjdG9yeS4KPiA+Cj4gPiBTaWduZWQtb2ZmLWJ5OiBEYXJpbyBCaW5hY2NoaSA8ZGFy
-aW8uYmluYWNjaGlAYW1hcnVsYXNvbHV0aW9ucy5jb20+Cj4KPiBzbyBmb3IgdGVzdCBJJ3ZlIHJl
-dmVydGVkIHRoZSBwcmV2aW91cyAiYm9vdC90aS1rMy1jb3JlLXNlY2RldjogbmV3IHBhY2thZ2Ui
-Cj4gY29tbWl0LCB0aGVuLi4uCj4KPiA+IC0tLQo+ID4KPiA+IG5vIGNoYW5nZXMgc2luY2UgdjM6
-Cj4gPgo+ID4gU2lnbmVkLW9mZi1ieTogRGFyaW8gQmluYWNjaGkgPGRhcmlvLmJpbmFjY2hpQGFt
-YXJ1bGFzb2x1dGlvbnMuY29tPgo+ID4gLS0tCj4gPiAgYm9vdC90aS1rMy1pbWFnZS1nZW4vQ29u
-ZmlnLmluICAgICAgICAgIHwgIDEgKwo+ID4gIGJvb3QvdGktazMtaW1hZ2UtZ2VuL3RpLWszLWlt
-YWdlLWdlbi5tayB8IDE2ICsrKysrKysrKysrKysrLS0KPiA+ICAyIGZpbGVzIGNoYW5nZWQsIDE1
-IGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCj4gPgo+ID4gZGlmZiAtLWdpdCBhL2Jvb3Qv
-dGktazMtaW1hZ2UtZ2VuL0NvbmZpZy5pbiBiL2Jvb3QvdGktazMtaW1hZ2UtZ2VuL0NvbmZpZy5p
-bgo+ID4gaW5kZXggZDc2Y2VmODJlOTExLi4zOGQxNTk4ZDlmYzAgMTAwNjQ0Cj4gPiAtLS0gYS9i
-b290L3RpLWszLWltYWdlLWdlbi9Db25maWcuaW4KPiA+ICsrKyBiL2Jvb3QvdGktazMtaW1hZ2Ut
-Z2VuL0NvbmZpZy5pbgo+ID4gQEAgLTIsNiArMiw3IEBAIGNvbmZpZyBCUjJfVEFSR0VUX1RJX0sz
-X0lNQUdFX0dFTgo+ID4gICAgICAgYm9vbCAidGktazMtaW1hZ2UtZ2VuIgo+ID4gICAgICAgZGVw
-ZW5kcyBvbiBCUjJfVEFSR0VUX1RJX0szX1I1X0xPQURFUgo+ID4gICAgICAgc2VsZWN0IEJSMl9U
-QVJHRVRfVElfSzNfQk9PVF9GSVJNV0FSRQo+ID4gKyAgICAgc2VsZWN0IEJSMl9UQVJHRVRfVElf
-SzNfQ09SRV9TRUNERVYgaWYgQlIyX1RBUkdFVF9USV9LM19JTUFHRV9HRU5fU0VDVFlQRV9IU19G
-UyB8fCBCUjJfVEFSR0VUX1RJX0szX0lNQUdFX0dFTl9TRUNUWVBFX0hTCj4KPiAuLi4gcmVtb3Zl
-ZCB0aGlzLCAuLi4KPgo+ID4gICAgICAgIyBXZSBuZWVkIEZJVCBzdXBwb3J0IGluIHVib290LXRv
-b2xzLCB3aGljaCBpcyB3aHkgd2Ugc2VsZWN0IGEKPiA+ICAgICAgICMgaG9zdCBwYWNrYWdlCj4g
-PiAgICAgICBzZWxlY3QgQlIyX1BBQ0tBR0VfSE9TVF9VQk9PVF9UT09MUwo+ID4gZGlmZiAtLWdp
-dCBhL2Jvb3QvdGktazMtaW1hZ2UtZ2VuL3RpLWszLWltYWdlLWdlbi5tayBiL2Jvb3QvdGktazMt
-aW1hZ2UtZ2VuL3RpLWszLWltYWdlLWdlbi5tawo+ID4gaW5kZXggNjRiZTlhMThmMmM0Li43NGI0
-ZmNiNGJmODkgMTAwNjQ0Cj4gPiAtLS0gYS9ib290L3RpLWszLWltYWdlLWdlbi90aS1rMy1pbWFn
-ZS1nZW4ubWsKPiA+ICsrKyBiL2Jvb3QvdGktazMtaW1hZ2UtZ2VuL3RpLWszLWltYWdlLWdlbi5t
-awo+ID4gQEAgLTI5LDEwICsyOSwyMSBAQCBUSV9LM19JTUFHRV9HRU5fRldfVFlQRSA9ICQoY2Fs
-bCBxc3RyaXAsJChCUjJfVEFSR0VUX1RJX0szX0lNQUdFX0dFTl9GV19UWVBFKSkKPiA+ICBUSV9L
-M19JTUFHRV9HRU5fU09DID0gJChjYWxsIHFzdHJpcCwkKEJSMl9UQVJHRVRfVElfSzNfSU1BR0Vf
-R0VOX1NPQykpCj4gPiAgVElfSzNfSU1BR0VfR0VOX1NFQ1RZUEUgPSAkKGNhbGwgcXN0cmlwLCQo
-QlIyX1RBUkdFVF9USV9LM19JTUFHRV9HRU5fU0VDVFlQRSkpCj4gPgo+ID4gLVRJX0szX0lNQUdF
-X0dFTl9TWVNGVyA9ICQoVElfSzNfSU1BR0VfR0VOX0ZXX1RZUEUpLWZpcm13YXJlLSQoVElfSzNf
-SU1BR0VfR0VOX1NPQyktJChUSV9LM19JTUFHRV9HRU5fU0VDVFlQRSkuYmluCj4gPiAraWZlcSAo
-JChCUjJfVEFSR0VUX1RJX0szX0lNQUdFX0dFTl9TRUNUWVBFX0dQKSx5KQo+ID4gK1RJX0szX0lN
-QUdFX0dFTl9TWVNGVyA9IFwKPiA+ICsgICAgICQoVElfSzNfSU1BR0VfR0VOX0ZXX1RZUEUpLWZp
-cm13YXJlLSQoVElfSzNfSU1BR0VfR0VOX1NPQyktJChUSV9LM19JTUFHRV9HRU5fU0VDVFlQRSku
-YmluCj4gPiArZWxzZQo+ID4gK1RJX0szX0lNQUdFX0dFTl9ERVBFTkRFTkNJRVMgKz0gdGktazMt
-Y29yZS1zZWNkZXYKPgo+IC4uLiB0aGUgYWJvdmUgbGluZSwgLi4uCj4KPiA+ICsKPiA+ICtUSV9L
-M19JTUFHRV9HRU5fU1lTRlcgPSBcCj4gPiArICAgICAkKFRJX0szX0lNQUdFX0dFTl9GV19UWVBF
-KS1maXJtd2FyZS0kKFRJX0szX0lNQUdFX0dFTl9TT0MpLSQoVElfSzNfSU1BR0VfR0VOX1NFQ1RZ
-UEUpLWVuYy5iaW4gXAo+ID4gKyAgICAgJChUSV9LM19JTUFHRV9HRU5fRldfVFlQRSktZmlybXdh
-cmUtJChUSV9LM19JTUFHRV9HRU5fU09DKS0kKFRJX0szX0lNQUdFX0dFTl9TRUNUWVBFKS1jZXJ0
-LmJpbgo+ID4gK2VuZGlmCj4gPgo+ID4gIGRlZmluZSBUSV9LM19JTUFHRV9HRU5fQ09ORklHVVJF
-X0NNRFMKPiA+IC0gICAgIGNwICQoQklOQVJJRVNfRElSKS90aS1zeXNmdy8kKFRJX0szX0lNQUdF
-X0dFTl9TWVNGVykgJChARCkKPiA+ICsgICAgICQoZm9yZWFjaCB0LCQoVElfSzNfSU1BR0VfR0VO
-X1NZU0ZXKSxcCj4gPiArICAgICAgICAgICAgIGNwICQoQklOQVJJRVNfRElSKS90aS1zeXNmdy8k
-KHQpICQoQEQpLwo+ID4gKyAgICAgKQo+ID4gIGVuZGVmCj4gPgo+ID4gIGRlZmluZSBUSV9LM19J
-TUFHRV9HRU5fQlVJTERfQ01EUwo+ID4gQEAgLTQwLDYgKzUxLDcgQEAgZGVmaW5lIFRJX0szX0lN
-QUdFX0dFTl9CVUlMRF9DTURTCj4gPiAgICAgICAkKEJSMl9NQUtFKSAtQyAkKEBEKSBcCj4gPiAg
-ICAgICAgICAgICAgIFNPQz0kKFRJX0szX0lNQUdFX0dFTl9TT0MpIFwKPiA+ICAgICAgICAgICAg
-ICAgU09DX1RZUEU9JChUSV9LM19JTUFHRV9HRU5fU0VDVFlQRSkgXAo+ID4gKyAgICAgICAgICAg
-ICBUSV9TRUNVUkVfREVWX1BLRz0kKEJJTkFSSUVTX0RJUikvdGktazMtY29yZS1zZWNkZXYgXAo+
-Cj4gLi4uIGFuZCB0aGlzIGxpbmUuLi4KPgo+ID4gICAgICAgICAgICAgICBDT05GSUc9ZXZtIFwK
-PiA+ICAgICAgICAgICAgICAgQ1JPU1NfQ09NUElMRT0kKEhPU1RfRElSKS9iaW4vYXJtLW5vbmUt
-ZWFiaS0gXAo+ID4gICAgICAgICAgICAgICBTQkw9JChCSU5BUklFU19ESVIpL3I1LXUtYm9vdC1z
-cGwuYmluIFwKPgo+IC4uLiBhbmQgZXZlcnl0aGluZyBzdGlsbCBidWlsZHMgYW5kIGJvb3RzIGZp
-bmUgb24gU0stQU02MkIgKEhTLUZTKToKClRoYW5rcyBmb3IgeW91ciBpbmZvLApJIHdpbGwgY29u
-c2lkZXIgdGhlbSBmb3IgdmVyc2lvbiA1LgoKVGhhbmtzIGFuZCByZWdhcmRzLApEYXJpbwoKPgo+
-IFUtQm9vdCBTUEwgMjAyNC4wMSAoRmViIDE4IDIwMjQgLSAwMDowMjo0MyArMDEwMCkKPiBTWVNG
-VyBBQkk6IDMuMSAoZmlybXdhcmUgcmV2IDB4MDAwOCAnOC42LjQtLXYwOC4wNi4wNCAoQ2hpbGwg
-Q2FweWJhcicpCj4gU1BMIGluaXRpYWwgc3RhY2sgdXNhZ2U6IDEzNDAwIGJ5dGVzCj4gVHJ5aW5n
-IHRvIGJvb3QgZnJvbSBNTUMyCj4gQXV0aGVudGljYXRpb24gcGFzc2VkCj4gQXV0aGVudGljYXRp
-b24gcGFzc2VkCj4gQXV0aGVudGljYXRpb24gcGFzc2VkCj4gQXV0aGVudGljYXRpb24gcGFzc2Vk
-Cj4gQXV0aGVudGljYXRpb24gcGFzc2VkCj4gU3RhcnRpbmcgQVRGIG9uIEFSTTY0IGNvcmUuLi4K
-Pgo+IE5PVElDRTogIEJMMzE6IHYyLjcocmVsZWFzZSk6djIuNwo+IE5PVElDRTogIEJMMzE6IEJ1
-aWx0IDogMjM6NTc6NDMsIEZlYiAxNyAyMDI0Cj4gSS9UQzoKPiBJL1RDOiBPUC1URUUgdmVyc2lv
-bjogVW5rbm93bl80LjAgKGdjYyB2ZXJzaW9uIDEyLjMuMCAoQnVpbGRyb290IDIwMjMuMTEtMTE5
-OS1nNDcwYjIwNjllNCkpICMxIFNhdCBGZWIgMTcgMjI6NTc6MzggVVRDIDIwMjQgYWFyY2g2NAo+
-IEkvVEM6IFdBUk5JTkc6IFRoaXMgT1AtVEVFIGNvbmZpZ3VyYXRpb24gbWlnaHQgYmUgaW5zZWN1
-cmUhCj4gSS9UQzogV0FSTklORzogUGxlYXNlIGNoZWNrIGh0dHBzOi8vb3B0ZWUucmVhZHRoZWRv
-Y3MuaW8vZW4vbGF0ZXN0L2FyY2hpdGVjdHVyZS9wb3J0aW5nX2d1aWRlbGluZXMuaHRtbAo+IEkv
-VEM6IFByaW1hcnkgQ1BVIGluaXRpYWxpemluZwo+IEkvVEM6IFNZU0ZXIEFCSTogMy4xIChmaXJt
-d2FyZSByZXYgMHgwMDA4ICc4LjYuNC0tdjA4LjA2LjA0IChDaGlsbCBDYXB5YmFyJykKPiBJL1RD
-OiBIVUsgSW5pdGlhbGl6ZWQKPiBJL1RDOiBBY3RpdmF0ZWQgU0EyVUwgZGV2aWNlCj4gSS9UQzog
-RW5hYmxlZCBmaXJld2FsbHMgZm9yIFNBMlVMIFRSTkcgZGV2aWNlCj4gSS9UQzogU0EyVUwgVFJO
-RyBpbml0aWFsaXplZAo+IEkvVEM6IFNBMlVMIERyaXZlcnMgaW5pdGlhbGl6ZWQKPiBJL1RDOiBQ
-cmltYXJ5IENQVSBzd2l0Y2hpbmcgdG8gbm9ybWFsIHdvcmxkIGJvb3QKPgo+IFUtQm9vdCBTUEwg
-MjAyNC4wMSAoRmViIDE4IDIwMjQgLSAwMDowMzozMCArMDEwMCkKPiBTWVNGVyBBQkk6IDMuMSAo
-ZmlybXdhcmUgcmV2IDB4MDAwOCAnOC42LjQtLXYwOC4wNi4wNCAoQ2hpbGwgQ2FweWJhcicpCj4g
-U1BMIGluaXRpYWwgc3RhY2sgdXNhZ2U6IDE4NzIgYnl0ZXMKPiBUcnlpbmcgdG8gYm9vdCBmcm9t
-IE1NQzIKPiBBdXRoZW50aWNhdGlvbiBwYXNzZWQKPiBBdXRoZW50aWNhdGlvbiBwYXNzZWQKPgo+
-Cj4gVS1Cb290IDIwMjQuMDEgKEZlYiAxOCAyMDI0IC0gMDA6MDM6MzAgKzAxMDApCj4KPiBTb0M6
-ICAgQU02MlggU1IxLjAgSFMtRlMKPiBNb2RlbDogVGV4YXMgSW5zdHJ1bWVudHMgQU02MjUgU0sK
-PiBEUkFNOiAgMiBHaUIKPiBDb3JlOiAgNTYgZGV2aWNlcywgMjMgdWNsYXNzZXMsIGRldmljZXRy
-ZWU6IHNlcGFyYXRlCj4gTU1DOiAgIG1tY0BmYTEwMDAwOiAwLCBtbWNAZmEwMDAwMDogMQo+IExv
-YWRpbmcgRW52aXJvbm1lbnQgZnJvbSBub3doZXJlLi4uIE9LCj4gSW46ICAgIHNlcmlhbEAyODAw
-MDAwCj4gT3V0OiAgIHNlcmlhbEAyODAwMDAwCj4gRXJyOiAgIHNlcmlhbEAyODAwMDAwCj4gTmV0
-OiAgIGV0aDA6IGV0aGVybmV0QDgwMDAwMDBwb3J0QDEKPiBIaXQgYW55IGtleSB0byBzdG9wIGF1
-dG9ib290OiAgMAo+IHN3aXRjaCB0byBwYXJ0aXRpb25zICMwLCBPSwo+IG1tYzEgaXMgY3VycmVu
-dCBkZXZpY2UKPiBTRC9NTUMgZm91bmQgb24gZGV2aWNlIDEKPiBGYWlsZWQgdG8gbG9hZCAndUVu
-di50eHQnCj4gU2Nhbm5pbmcgZm9yIGJvb3RmbG93cyBpbiBhbGwgYm9vdGRldnMKPiBTZXEgIE1l
-dGhvZCAgICAgICBTdGF0ZSAgIFVjbGFzcyAgICBQYXJ0ICBOYW1lICAgICAgICAgICAgICAgICAg
-ICAgIEZpbGVuYW1lCj4gLS0tICAtLS0tLS0tLS0tLSAgLS0tLS0tICAtLS0tLS0tLSAgLS0tLSAg
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tICAtLS0tLS0tLS0tLS0tLS0tCj4gU2Nhbm5pbmcgZ2xv
-YmFsIGJvb3RtZXRoICdlZmlfbWdyJzoKPiBObyBFRkkgc3lzdGVtIHBhcnRpdGlvbgo+IE5vIEVG
-SSBzeXN0ZW0gcGFydGl0aW9uCj4gRmFpbGVkIHRvIHBlcnNpc3QgRUZJIHZhcmlhYmxlcwo+IFNj
-YW5uaW5nIGJvb3RkZXYgJ21tY0BmYTAwMDAwLmJvb3RkZXYnOgo+ICAgMCAgZXh0bGludXggICAg
-IHJlYWR5ICAgbW1jICAgICAgICAgIDEgIG1tY0BmYTAwMDAwLmJvb3RkZXYucGFydF8gL2V4dGxp
-bnV4L2V4dGxpbnV4LmNvbmYKPiAqKiBCb290aW5nIGJvb3RmbG93ICdtbWNAZmEwMDAwMC5ib290
-ZGV2LnBhcnRfMScgd2l0aCBleHRsaW51eAo+IDE6ICAgICAgYW02Mngtc2stYnVpbGRyb290Cj4g
-UmV0cmlldmluZyBmaWxlOiAvSW1hZ2UKPiBhcHBlbmQ6IGNvbnNvbGU9dHR5UzIsMTE1MjAwbjgg
-cm9vdD0vZGV2L21tY2JsazFwMiBydyByb290ZnN0eXBlPWV4dDQgcm9vdHdhaXQgZWFybHljb249
-bnMxNjU1MGEsbW1pbzMyLDB4MDI4MDAwMDAKPiBSZXRyaWV2aW5nIGZpbGU6IC9rMy1hbTYyeC5k
-dGIKPiAjIyBGbGF0dGVuZWQgRGV2aWNlIFRyZWUgYmxvYiBhdCBmZmIxNDcwMAo+ICAgIEJvb3Rp
-bmcgdXNpbmcgdGhlIGZkdCBibG9iIGF0IDB4ZmZiMTQ3MDAKPiBXb3JraW5nIEZEVCBzZXQgdG8g
-ZmZiMTQ3MDAKPiAgICBMb2FkaW5nIERldmljZSBUcmVlIHRvIDAwMDAwMDAwOGZmZWQwMDAsIGVu
-ZCAwMDAwMDAwMDhmZmZmNjg3IC4uLiBPSwo+IFdvcmtpbmcgRkRUIHNldCB0byA4ZmZlZDAwMAo+
-Cj4gU3RhcnRpbmcga2VybmVsIC4uLgo+Cj4gWyAgICAwLjAwMDAwMF0gQm9vdGluZyBMaW51eCBv
-biBwaHlzaWNhbCBDUFUgMHgwMDAwMDAwMDAwIFsweDQxMGZkMDM0XQo+IFsgICAgMC4wMDAwMDBd
-IExpbnV4IHZlcnNpb24gNi42LjEgKC4uLikgKGFhcmNoNjQtYnVpbGRyb290LWxpbnV4LWdudS1n
-Y2MuYnJfcmVhbCAoQnVpbGRyb290IDIwMjMuMTEtMTE5OS1nNDcwYjIwNjllNCkgMTIuMy4wLCBH
-TlUgbGQgKEdOVSBCaW51dGlscykgMi40MCkgIzEgU01QIFBSRUVNUFQgU3VuIEZlYiAxOAo+IDAw
-OjM3OjQ3IENFVCAyMDI0Cj4KPgo+Cj4gLS0KPiBBbGV4YW5kZXIgU3ZlcmRsaW4uCj4KCgotLSAK
-CkRhcmlvIEJpbmFjY2hpCgpTZW5pb3IgRW1iZWRkZWQgTGludXggRGV2ZWxvcGVyCgpkYXJpby5i
-aW5hY2NoaUBhbWFydWxhc29sdXRpb25zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fXwoKCkFtYXJ1bGEgU29sdXRpb25zIFNSTAoKVmlhIExlIENhbmV2YXJlIDMwLCAzMTEw
-MCBUcmV2aXNvLCBWZW5ldG8sIElUCgpULiArMzkgMDQyIDI0MyA1MzEwCmluZm9AYW1hcnVsYXNv
-bHV0aW9ucy5jb20KCnd3dy5hbWFydWxhc29sdXRpb25zLmNvbQpfX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxk
-cm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xp
-c3RpbmZvL2J1aWxkcm9vdAo=
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ DEVELOPERS                                |  1 +
+ support/testing/tests/package/test_sox.py | 74 +++++++++++++++++++++++
+ 2 files changed, 75 insertions(+)
+ create mode 100644 support/testing/tests/package/test_sox.py
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0d12c3abcb..34dc87e98f 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1848,6 +1848,7 @@ F:	support/testing/tests/package/test_rdma_core.py
+ F:	support/testing/tests/package/test_rdma_core/
+ F:	support/testing/tests/package/test_screen.py
+ F:	support/testing/tests/package/test_sed.py
++F:	support/testing/tests/package/test_sox.py
+ F:	support/testing/tests/package/test_sqlite.py
+ F:	support/testing/tests/package/test_strace.py
+ F:	support/testing/tests/package/test_stress_ng.py
+diff --git a/support/testing/tests/package/test_sox.py b/support/testing/tests/package/test_sox.py
+new file mode 100644
+index 0000000000..74f784a36f
+--- /dev/null
++++ b/support/testing/tests/package/test_sox.py
+@@ -0,0 +1,74 @@
++import math
++import os
++
++import infra.basetest
++
++
++class TestSox(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_AUBIO=y
++        BR2_PACKAGE_SOX=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def note_from_freq(self, freq):
++        """Return a note number from the input frequency in Hertz."""
++        return round((12 * math.log(freq / 440) / math.log(2)) + 69)
++
++    def check_audio_note(self, input_file, expected_note):
++        """Check the input_file include the expected_note."""
++        out, ret = self.emulator.run(f"aubionotes {input_file}", timeout=20)
++        self.assertEqual(ret, 0)
++        note_found = False
++        for line in out:
++            values = line.split()
++            if len(values) == 3:
++                note = round(float(values[0]))
++                if note == expected_note:
++                    note_found = True
++        self.assertTrue(note_found, "The expected note was not found")
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        # Check the program can execute.
++        self.assertRunOk("sox --version")
++
++        freq = 440  # General Midi note A3
++        expected_note = self.note_from_freq(freq)
++        wav_file = "ref.wav"
++        tmpwav_file = "tmp.wav"
++
++        # Generate a sinusoidal tone.
++        cmd = "sox -V -r 48000 -n -b 16 -c 1"
++        cmd += f" {wav_file} synth 3 sin {freq} vol -10dB"
++        self.assertRunOk(cmd)
++
++        # Compute statistics on the generated file.
++        self.assertRunOk(f"sox {wav_file} -n stat")
++
++        # We check the generated wave file includes the expected note.
++        self.check_audio_note(wav_file, expected_note)
++
++        # We resample the reference file.
++        cmd = f"sox -V {wav_file} -r 22050 {tmpwav_file}"
++        self.assertRunOk(cmd)
++
++        # We should still detect our expected note.
++        self.check_audio_note(tmpwav_file, expected_note)
++
++        # We convert the file by changing the speed by a factor.
++        speed_factor = 2
++        cmd = f"sox -V {wav_file} {tmpwav_file} speed {speed_factor}"
++        self.assertRunOk(cmd)
++
++        # We compute the new expected note from this test controller
++        # side, and check we detect this new note in the audio file.
++        new_expected_note = self.note_from_freq(freq * speed_factor)
++        self.check_audio_note(tmpwav_file, new_expected_note)
+-- 
+2.43.2
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
