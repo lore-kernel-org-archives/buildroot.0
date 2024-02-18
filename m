@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E56E9C48BF6
-	for <buildroot@archiver.kernel.org>; Sun, 18 Feb 2024 18:46:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01FD2C48BF6
+	for <buildroot@archiver.kernel.org>; Sun, 18 Feb 2024 18:46:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AA68E82166;
-	Sun, 18 Feb 2024 18:46:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C585981F41;
+	Sun, 18 Feb 2024 18:46:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oHXl3eXUcPzu; Sun, 18 Feb 2024 18:46:09 +0000 (UTC)
+	with ESMTP id 5tWtn1vEyouZ; Sun, 18 Feb 2024 18:46:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B588A82169
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A734082173
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B588A82169;
-	Sun, 18 Feb 2024 18:46:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0F3A61BF41F
+	by smtp1.osuosl.org (Postfix) with ESMTP id A734082173;
+	Sun, 18 Feb 2024 18:46:11 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2B6E81BF86C
  for <buildroot@lists.busybox.net>; Sun, 18 Feb 2024 18:45:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 65DCC400C8
- for <buildroot@lists.busybox.net>; Sun, 18 Feb 2024 18:45:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 163D2405BD
+ for <buildroot@lists.busybox.net>; Sun, 18 Feb 2024 18:45:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pd1NELKM_3vm for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Qfm4rBmaAkbN for <buildroot@lists.busybox.net>;
  Sun, 18 Feb 2024 18:45:43 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.117;
  helo=smtpcmd11117.aruba.it;
  envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DE5AF40148
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE5AF40148
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BA54340731
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA54340731
 Received: from smtpcmd11117.aruba.it (smtpcmd11117.aruba.it [62.149.156.117])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DE5AF40148
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BA54340731
  for <buildroot@buildroot.org>; Sun, 18 Feb 2024 18:45:42 +0000 (UTC)
 Received: from localhost.localdomain ([84.33.84.190])
  by Aruba Outgoing Smtp  with ESMTPSA
- id bmASrFAK1ce1vbmAWrHZK8; Sun, 18 Feb 2024 19:45:40 +0100
+ id bmASrFAK1ce1vbmAWrHZJt; Sun, 18 Feb 2024 19:45:40 +0100
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Feb 2024 19:45:36 +0100
-Message-Id: <20240218184536.1922309-9-giulio.benetti@benettiengineering.com>
+Date: Sun, 18 Feb 2024 19:45:35 +0100
+Message-Id: <20240218184536.1922309-8-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240218184536.1922309-1-giulio.benetti@benettiengineering.com>
 References: <20240218184536.1922309-1-giulio.benetti@benettiengineering.com>
@@ -56,21 +56,22 @@ X-CMAE-Envelope: MS4xfPD5j9wmPlTkWrcMaGf2I30KURWS0NCKMGBRQBVsETU4+xjeqOzDLsSGUYE
  21Q=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1708281940; bh=MGA02+T+s66BGa/+Flq+CcLI58fqJzNiuIkfOFogmew=;
+ t=1708281940; bh=jHFO1XTMWT6VtOkf8Amh1cAwAq8QZpwiiZGMzHIfz3A=;
  h=From:To:Subject:Date:MIME-Version;
- b=X+90X6I4O5NYcGj+6oVow90nBH9Osm8oFxerD8EGE/NRa8McZDJdmEQAmvgM3hZGf
- HZHtrf8yxIRjHZO4Iz0pRtfDfw1pZF1vSFw2Oag6LHDNVK6duKA45i503jvwzJV0EH
- R2a2wlDVy8X9LWJq6H//gVjjF/h59YqGFd6ZF6ywF2x2hc0IsP2rLi+1arYiPbp4/J
- d0V+IbyjMWfD1GCozFueQmvKrD9gsamCgcmm+GtJGKqK3pSDNhjlxbd/4Ff0uwpNhD
- xAUi3Rlq8pOYNkFVaewU96nNH6n0dyDZS9awOFuFnTHdb6R9XRowRNtaTS4lEF3Qxe
- 51GLaWtf7Q73A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=JxSRmxoAzu5B//ngtheL/Cwm7+c+f370LWSEofaOchlCbrQ1eCss0kOvQV0/emf87
+ QbwQwZjvYA3+o/xR4upxKihhDNs16BW167/HPeCsAQEsVR0ETfdEHWpR1WL1TyvuoL
+ u7OLq9r4/yLEzmmryamRZBBN1ySpSVfFDpiuvuNILIo/O3v7I9CgrZUkxFeeVVOUFd
+ TTxI1QVd2HPKhk9D8pZbK+wseUF1E+Vye9O0S8Ox1ZwsiTzFIkEsMxsRJjsL/JyClp
+ 57tfXhT0nJXVpTyKy2mCwq3WuQDQhegrNMNCbNvMGX0cMDxQu0u7VZViiFrjZKm2Wo
+ KiNSBdyEaB65A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=X+90X6I4
-Subject: [Buildroot] [PATCH 8/8] toolchain: remove binutils bug 27597
+ header.a=rsa-sha256 header.s=a1 header.b=JxSRmxoA
+Subject: [Buildroot] [PATCH 7/8] package/postgis: drop nios2 binutils bug
+ 27597 dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,30 +96,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Binutils bug 27597 is not present anymore in Buildroot so let's remove it.
+Now that binutils patch has been backported to every Buildroot binutils
+version we can drop nios2 binutils bug 27597 dependency.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- toolchain/Config.in | 6 ------
- 1 file changed, 6 deletions(-)
+ package/postgis/Config.in | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 407a03c42e..9e6cff1950 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -71,12 +71,6 @@ source "package/gdb/Config.in.host"
+diff --git a/package/postgis/Config.in b/package/postgis/Config.in
+index 7d42390677..78569d63be 100644
+--- a/package/postgis/Config.in
++++ b/package/postgis/Config.in
+@@ -5,7 +5,6 @@ config BR2_PACKAGE_POSTGIS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libgeos
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libgeos, proj
+ 	depends on BR2_USE_WCHAR # libgeos, proj
+-	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597 # libgeos
+ 	select BR2_PACKAGE_LIBGEOS
+ 	select BR2_PACKAGE_PROJ
+ 	select BR2_PACKAGE_LIBXML2
+@@ -18,7 +17,6 @@ config BR2_PACKAGE_POSTGIS
  
- comment "Toolchain Generic Options"
+ 	  https://postgis.net/
  
--# https://sourceware.org/bugzilla/show_bug.cgi?id=27597
--# Affect toolchains built with binutils 2.36.1, still not fixed.
--config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
--	bool
--	default y if BR2_nios2
--
- # https://sourceware.org/bugzilla/show_bug.cgi?id=30730
- # Affect toolchains built with binutils 2.40, still not fixed.
- config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_30730
+-comment "postgis needs a toolchain w/ C++, threads, wchar, gcc >= 4.9, not binutils bug 27597"
++comment "postgis needs a toolchain w/ C++, threads, wchar, gcc >= 4.9"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+-		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
+-		BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
++		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
 -- 
 2.34.1
 
