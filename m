@@ -4,94 +4,106 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6424EC48BC3
-	for <buildroot@archiver.kernel.org>; Mon, 19 Feb 2024 21:34:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 223FCC48BF8
+	for <buildroot@archiver.kernel.org>; Mon, 19 Feb 2024 21:35:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1F67B40BA3;
-	Mon, 19 Feb 2024 21:34:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BCAFD40359;
+	Mon, 19 Feb 2024 21:35:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Qg8dorc9mgnZ; Mon, 19 Feb 2024 21:34:11 +0000 (UTC)
+	with ESMTP id i47RGcGNpyxZ; Mon, 19 Feb 2024 21:34:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A8ED340BB5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 49D5240B8C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A8ED340BB5;
-	Mon, 19 Feb 2024 21:34:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 49D5240B8C;
+	Mon, 19 Feb 2024 21:34:59 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D1F641BF3A3
- for <buildroot@lists.busybox.net>; Mon, 19 Feb 2024 21:34:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C21711BF3A3
+ for <buildroot@lists.busybox.net>; Mon, 19 Feb 2024 21:34:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BE2DF40BB5
- for <buildroot@lists.busybox.net>; Mon, 19 Feb 2024 21:34:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id AD5CF40B8C
+ for <buildroot@lists.busybox.net>; Mon, 19 Feb 2024 21:34:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lE9C0SHi4eRG for <buildroot@lists.busybox.net>;
- Mon, 19 Feb 2024 21:34:06 +0000 (UTC)
+ with ESMTP id soOHFiex_CmU for <buildroot@lists.busybox.net>;
+ Mon, 19 Feb 2024 21:34:56 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::635; helo=mail-pl1-x635.google.com;
- envelope-from=kadambini.nema@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4B14C40BA3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4B14C40BA3
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com
- [IPv6:2607:f8b0:4864:20::635])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4B14C40BA3
- for <buildroot@buildroot.org>; Mon, 19 Feb 2024 21:34:06 +0000 (UTC)
-Received: by mail-pl1-x635.google.com with SMTP id
- d9443c01a7336-1d71cb97937so46549745ad.3
- for <buildroot@buildroot.org>; Mon, 19 Feb 2024 13:34:06 -0800 (PST)
+ client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9DEEC40359
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9DEEC40359
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9DEEC40359
+ for <buildroot@buildroot.org>; Mon, 19 Feb 2024 21:34:55 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-4125df3c40aso20298865e9.3
+ for <buildroot@buildroot.org>; Mon, 19 Feb 2024 13:34:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1708378445; x=1708983245;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=eWgRbt7JWHm374sZibHGLENU86NG/lAcvrEt1l7h4bk=;
- b=idA3/4RydyMY+ZpyrrUv75yXUvqxawMVOrApoRltDI5e/pwbTHjmuLZ20/+YGRloZw
- Q5MQ+4Bc3Xn+2NyTV3RObpImsOVfqA7l0WE8J5R8IYOIhiu2oJwrTQARlDzGJ93syfiw
- ddRHGuGFCFmGejyViIQmiZLX76bWM5zWLhCyqv6Pmm5/DnzqS8JMVL9kaICt1UGDhBP2
- 6OZkK/Se+mClgnksOLU+xD3TVBU3ZDBaFKt1vO6CskMK2e1GF6z7OLMH6EL20pWPZrg9
- KQixiAlqTE6XTLTPg8ScrJ3HStGPmOC6XcOznmpEogoQQDMH071U1Hxz7YsBFlpEWqgX
- TlHA==
-X-Gm-Message-State: AOJu0YxXyo343mCypeBrrqclLRa+dOycFG+k95AgEeqzCxh39qhmuAg9
- Ui8Y6Es4HEtYa0xROA+/kAktgbhAvc00EbNz59NW3KZoJ8Mzj+htIJhVZyH45lw=
-X-Google-Smtp-Source: AGHT+IELSCVzjf/z6nBsGACtBiCiXLdS9kH2eG/rQmtzy5NbR91zBi1D9PjUEM7tytCNPUvuKtzBoQ==
-X-Received: by 2002:a17:903:1c2:b0:1db:ea2b:d2b4 with SMTP id
- e2-20020a17090301c200b001dbea2bd2b4mr4426223plh.15.1708378445125; 
- Mon, 19 Feb 2024 13:34:05 -0800 (PST)
-Received: from localhost.localdomain (ip72-203-121-181.oc.oc.cox.net.
- [72.203.121.181]) by smtp.gmail.com with ESMTPSA id
- ja12-20020a170902efcc00b001d8cde39e8bsm4906190plb.194.2024.02.19.13.34.04
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 19 Feb 2024 13:34:04 -0800 (PST)
-From: Kadambini Nema <kadambini.nema@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon, 19 Feb 2024 13:34:02 -0800
-Message-Id: <20240219213402.186876-1-kadambini.nema@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240212002607.12158-1-kadambini.nema@gmail.com>
-References: <20240212002607.12158-1-kadambini.nema@gmail.com>
+ d=1e100.net; s=20230601; t=1708378493; x=1708983293;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=LSafQsYbyCpytSv8q3g5cGXp3QRV38ILA/P8BvZHtnY=;
+ b=HoU6mXU8Oq2rAdHtOiUmIpm0B+E4ZN6NbljHNmoaSe76mlIwBqSptGYIzw0afA2yTg
+ jc6F8oMQTJ5PbTig4/p0fiovtVCOnoh5qT1O/W/4LKHJ72+00zgHwZvwCIkBy+3kuSJP
+ z11W46XIqZlUfY2FY3QlnW+UPJUGGvQCogDuFRpsqWK7nu4FiK0ZDEB5NIUKdScoZnyz
+ EF2E9OHDUvmyQMYolLi9L6iti1fSJAK7A9v5u+nVxhi5yL8uCK08T4meBFQxvcpd5dq4
+ OECv7QQtf/mptzFucAzuNo8XLL5UQy7sYtIN9Zf0OaphI4Y5XTcSasswVc5snrEtUS6/
+ 7nDQ==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCU24PREzKToO/6d6Fxez90aPZaRioIs1KH5lfNvk1zzJzBCFv5XrdwT43E5aJI6BLpg+qv141mlCKqKrL2DsWbhJFkJmfh+1Q==
+X-Gm-Message-State: AOJu0YwfWEHdBRsyHu/yKeYgTBo4qMUPc9FSV4QufbZQM9TKvLj7OjTt
+ 8K2BHcTq39RXN12W+tDvrjQk8jkdeYbAx7blQEjIHJ9LYfOgUkGR+dY4Y2nmWJQ=
+X-Google-Smtp-Source: AGHT+IFZP75FIo1WsKXSiyyysfuUoq4oST3Tx7VNQ/9eqxwDoQ7Lv4MQoqh0ZmD1SWTAVaz1ouhiLg==
+X-Received: by 2002:a05:600c:4f0d:b0:410:7428:1fb5 with SMTP id
+ l13-20020a05600c4f0d00b0041074281fb5mr10208488wmq.27.1708378493279; 
+ Mon, 19 Feb 2024 13:34:53 -0800 (PST)
+Received: from ?IPV6:2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31?
+ (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
+ by smtp.gmail.com with ESMTPSA id
+ o8-20020a05600c510800b004105528c61fsm12643721wms.35.2024.02.19.13.34.52
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 19 Feb 2024 13:34:53 -0800 (PST)
+Message-ID: <63d28259-ff96-4450-bdc5-e1bc209d8e59@smile.fr>
+Date: Mon, 19 Feb 2024 22:34:52 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: Andreas Dannenberg <dannenberg@ti.com>,
+ Alexander Sverdlin <alexander.sverdlin@gmail.com>
+References: <20240217160244.1320482-1-dario.binacchi@amarulasolutions.com>
+ <20240217160244.1320482-15-dario.binacchi@amarulasolutions.com>
+ <95a8a71f608575339cd61ba5ed09b93d8714c01c.camel@gmail.com>
+ <20240219205157.5ukm426gmzbvn33f@dasso>
+From: Romain Naour <romain.naour@smile.fr>
+In-Reply-To: <20240219205157.5ukm426gmzbvn33f@dasso>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1708378445; x=1708983245; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=eWgRbt7JWHm374sZibHGLENU86NG/lAcvrEt1l7h4bk=;
- b=DPCJwiOQAyDu22I8mF33AuYu6tOUMGuf/XFt3fM2HVQsRq/kgrLQqwkihjO+6yZIJA
- VZVR3DDSzZ7j8Yb+rvdiQG+YIjRWNGm6yR7O6HmrZpjzBLxeeet3ZBTuU5A8KOoGdUcK
- HaNPX3SBQsMUXbxX85M1iHQCCZGOT4NCqBqqqDQLiXJPIs0ice6Dy3RxWJiyW9KTBBD0
- 34j+mHs+wIBdPQEYxAjhmOmRtZSe7+ruiWasNnNcSdt2Uuc0ZRtn1k5KiaiW6G+ai17d
- gAh9MVQRFavd+AjrXv6LhEYOg2h6R/8ye9owH7MSaSUM7/JWyIFI82zKuCTj88Dy1cQe
- 1ZPg==
+ d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1708378493; x=1708983293;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=LSafQsYbyCpytSv8q3g5cGXp3QRV38ILA/P8BvZHtnY=;
+ b=V5klAvAmR+/VknC1iO1TPwCO0roix+0sIqNSXjpz+dkPuL02Wp6DAaa5WBWGi4vzHP
+ c59ahDVGV7qBDOeRKpVhMUo8+8t6cfatYn6B/YmvjN7ITkEEEKY+d9AdL/hRB19yYvXt
+ iOv0zfkUT0CMPR8FWaToUQvQCJiBuzdB/6EcnGrwtKu0g/EowOP8B2TlKJGgRsNJ0SEp
+ VsVU/B6gOrJ9+lpzyRrH0eMpL39NE+aeUv4/gBhZ6LFtMSDh6SG4yEdsj70E32APwh5t
+ 8L9nniQLPp4NSDF8NAaiEP7aH1LJxAMfLKxsFD4Z636lCK5smbnSnlPfERnduzcLR9ei
+ 3iVQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ header.from=smile.fr
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=DPCJwiOQ
-Subject: [Buildroot] [PATCH 1/1] package/ustreamer: new package
+ unprotected) header.d=smile-fr.20230601.gappssmtp.com
+ header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=V5klAvAm
+Subject: Re: [Buildroot] [PATCH v4 14/20] boot/uboot: set BINMAN_INDIRS for
+ TI K3 DM
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,139 +115,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Kadambini Nema <kadambini.nema@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: michael@amarulasolutions.com, Asaf Kahlon <asafka7@gmail.com>,
+ Xuanhao Shi <X15000177@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
+ Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ linux-amarula@amarulasolutions.com, bryce@redpinelabs.com,
+ Anand Gadiyar <gadiyar@ti.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Lightweight and fast MJPEG-HTTP streamer
-(https://github.com/pikvm/ustreamer/tree/master#%C2%B5streamer)
-
-Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
----
-Changes v1 -> v2:
-  - Fix 'make legal-info' with ustreamer package enabled.
-Changes v2 -> v3:
-  - Fix a build failure with uclibc. (https://github.com/pikvm/ustreamer/commit/13af11a3a64cf9f08014e89f35e52e001fb10cad)
-  - Upgrade to the latest version - 5.51
----
-$ ./utils/test-pkg -k -c ustreamer.config  -p ustreamer
-                    bootlin-armv5-uclibc [1/6]: OK
-                     bootlin-armv7-glibc [2/6]: OK
-                   bootlin-armv7m-uclibc [3/6]: SKIPPED
-                     bootlin-x86-64-musl [4/6]: OK
-                      br-arm-full-static [5/6]: SKIPPED
-                            sourcery-arm [6/6]: SKIPPED
-6 builds, 3 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
----
-
-Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
----
- DEVELOPERS                       |  3 +++
- package/Config.in                |  1 +
- package/ustreamer/Config.in      | 17 +++++++++++++++++
- package/ustreamer/ustreamer.hash |  3 +++
- package/ustreamer/ustreamer.mk   | 25 +++++++++++++++++++++++++
- 5 files changed, 49 insertions(+)
- create mode 100644 package/ustreamer/Config.in
- create mode 100644 package/ustreamer/ustreamer.hash
- create mode 100644 package/ustreamer/ustreamer.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 0d12c3abcb..a6182777c0 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1875,6 +1875,9 @@ F:	package/easy-rsa/
- N:	Justin Maggard <jmaggard@netgear.com>
- F:	package/dtach/
- 
-+N:	Kadambini Nema <kadambini.nema@gmail.com>
-+F:	package/ustreamer/
-+
- N:	Kamel Bouhara <kamel.bouhara@gmail.com>
- F:	package/libodb-boost/
- F:	package/libodb-mysql/
-diff --git a/package/Config.in b/package/Config.in
-index bf0fe078b9..479c8b6657 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2595,6 +2595,7 @@ endif
- 	source "package/uredir/Config.in"
- 	source "package/ushare/Config.in"
- 	source "package/ussp-push/Config.in"
-+	source "package/ustreamer/Config.in"
- 	source "package/vde2/Config.in"
- 	source "package/vdr/Config.in"
- 	source "package/vdr-plugin-vnsiserver/Config.in"
-diff --git a/package/ustreamer/Config.in b/package/ustreamer/Config.in
-new file mode 100644
-index 0000000000..52c511e22d
---- /dev/null
-+++ b/package/ustreamer/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_USTREAMER
-+	bool "ustreamer"
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16 # V4L2_EVENT_SOURCE_CHANGE
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
-+	select BR2_PACKAGE_JPEG
-+	select BR2_PACKAGE_LIBEVENT
-+	select BR2_PACKAGE_LIBBSD
-+	select BR2_PACKAGE_LIBGPIOD
-+	help
-+	  Lightweight and fast MJPEG-HTTP streamer
-+
-+	  https://github.com/pikvm/ustreamer
-+
-+comment "ustreamer needs a toolchain w/ threads, headers >= 3.16, dynamic library"
-diff --git a/package/ustreamer/ustreamer.hash b/package/ustreamer/ustreamer.hash
-new file mode 100644
-index 0000000000..a8cb1695e5
---- /dev/null
-+++ b/package/ustreamer/ustreamer.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  88f107e02a0b5c6493d55ed1bce0c85f66ce83d2bc0271ff6319ad593c6584bc  v5.51.tar.gz
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
-diff --git a/package/ustreamer/ustreamer.mk b/package/ustreamer/ustreamer.mk
-new file mode 100644
-index 0000000000..71de097a22
---- /dev/null
-+++ b/package/ustreamer/ustreamer.mk
-@@ -0,0 +1,25 @@
-+################################################################################
-+#
-+# ustreamer
-+#
-+################################################################################
-+
-+USTREAMER_VERSION = 5.51
-+USTREAMER_SITE = $(call github,pikvm,ustreamer,refs/tags)
-+USTREAMER_SOURCE = v$(USTREAMER_VERSION).tar.gz
-+USTREAMER_SUBDIR = ustreamer
-+USTREAMER_LICENSE = GPL-3.0-or-later
-+USTREAMER_LICENSE_FILES = LICENSE
-+USTREAMER_DEPENDENCIES = jpeg libevent libbsd libgpiod
-+USTREAMER_CONF_ENV = "CFLAGS=$(TARGET_CFLAGS)"
-+
-+define USTREAMER_BUILD_CMDS
-+	$(MAKE)  $(if $(BR2_PACKAGE_SYSTEMD),WITH_SYSTEMD=1, ) WITH_PTHREAD_NP=1  WITH_SETPROCTITLE=1 HAS_PDEATHSIG=1 $(TARGET_CONFIGURE_OPTS) -C $(@D)
-+endef
-+
-+define USTREAMER_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/ustreamer $(TARGET_DIR)/usr/bin/ustreamer
-+	$(INSTALL) -D -m 0755 $(@D)/ustreamer-dump $(TARGET_DIR)/usr/bin/ustreamer-dump
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.25.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gQW5kcmVhcywKCkxlIDE5LzAyLzIwMjQgw6AgMjE6NTEsIEFuZHJlYXMgRGFubmVuYmVy
+ZyBhIMOpY3JpdMKgOgo+IE9uIFNhdCwgRmViIDE3LCAyMDI0IGF0IDA5OjQ0OjI5UE0gKzAxMDAs
+IEFsZXhhbmRlciBTdmVyZGxpbiB3cm90ZToKPj4gSGkgRGFyaW8sCj4+Cj4+IE9uIFNhdCwgMjAy
+NC0wMi0xNyBhdCAxNzowMiArMDEwMCwgRGFyaW8gQmluYWNjaGkgd3JvdGU6Cj4+PiBBcyBleHBs
+YWluZWQgaW4gWzFdLCBhZGRpbmcgc3VwcG9ydCBmb3IgQU02MnggTFAgU0sgaW4gVS1Cb290LCBy
+ZXF1aXJlcwo+Pj4gYmlubWFuIGZvciBidWlsZGluZyBib290bG9hZGVyIGltYWdlcy4gVGhlIEJJ
+Tk1BTl9JTkRJUlMgZW52aXJvbm1lbnQKPj4+IHZhcmlhYmxlIGlzIHVzZWQgdG8gcHJvdmlkZSBh
+IHNwYWNlLXNlcGFyYXRlZCBsaXN0IG9mIGRpcmVjdG9yaWVzIHRvCj4+PiBzZWFyY2ggZm9yIGJp
+bmFyeSBibG9icy4KPj4+Cj4+PiBbMV0gaHR0cHM6Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9wcm9q
+ZWN0L3Vib290L3BhdGNoLzIwMjMxMDMwMTEwMTM4LjEzNDc2MDMtMy1uLXlhZGF2QHRpLmNvbS8K
+Pj4+IFNpZ25lZC1vZmYtYnk6IERhcmlvIEJpbmFjY2hpIDxkYXJpby5iaW5hY2NoaUBhbWFydWxh
+c29sdXRpb25zLmNvbT4KPj4+Cj4+PiAtLS0KPj4+Cj4+PiBubyBjaGFuZ2VzIHNpbmNlIHYxOgo+
+Pj4KPj4+IFNpZ25lZC1vZmYtYnk6IERhcmlvIEJpbmFjY2hpIDxkYXJpby5iaW5hY2NoaUBhbWFy
+dWxhc29sdXRpb25zLmNvbT4KPj4+IC0tLQo+Pj4gwqBib290L3Vib290L3Vib290Lm1rIHwgMyAr
+Ky0KPj4+IMKgMSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQo+
+Pj4KPj4+IGRpZmYgLS1naXQgYS9ib290L3Vib290L3Vib290Lm1rIGIvYm9vdC91Ym9vdC91Ym9v
+dC5tawo+Pj4gaW5kZXggZGRhNjA2YTg4MDU5Li5jZjcwZjg2YTQxMzIgMTAwNjQ0Cj4+PiAtLS0g
+YS9ib290L3Vib290L3Vib290Lm1rCj4+PiArKysgYi9ib290L3Vib290L3Vib290Lm1rCj4+PiBA
+QCAtMTg5LDcgKzE4OSw4IEBAIGVuZGlmCj4+PiDCoGlmZXEgKCQoQlIyX1RBUkdFVF9VQk9PVF9O
+RUVEU19USV9LM19ETSkseSkKPj4+IMKgVUJPT1RfVElfSzNfRE1fU09DTkFNRSA9ICQoY2FsbCBx
+c3RyaXAsJChCUjJfVEFSR0VUX1VCT09UX1RJX0szX0RNX1NPQ05BTUUpKQo+Pj4gwqBVQk9PVF9E
+RVBFTkRFTkNJRVMgKz0gdGktazMtYm9vdC1maXJtd2FyZQo+Pj4gLVVCT09UX01BS0VfT1BUUyAr
+PSBETT0kKEJJTkFSSUVTX0RJUikvdGktZG0vJChVQk9PVF9USV9LM19ETV9TT0NOQU1FKS9pcGNf
+ZWNob190ZXN0Yl9tY3UxXzBfcmVsZWFzZV9zdHJpcC54ZXI1Zgo+Pj4gK1VCT09UX01BS0VfT1BU
+UyArPSBETT0kKEJJTkFSSUVTX0RJUikvdGktZG0vJChVQk9PVF9USV9LM19ETV9TT0NOQU1FKS9p
+cGNfZWNob190ZXN0Yl9tY3UxXzBfcmVsZWFzZV9zdHJpcC54ZXI1ZiBcCj4+Cj4+IElzIHRoZSBh
+Ym92ZSBhY3R1YWxseSBzdGlsbCByZXF1aXJlZCB3aXRoIGJpbm1hbj8KPj4gVGhlIG5hbWVzIGFy
+ZSBoYXJkY29kZWQgaW4gVS1Cb290IGluIGFyY2gvYXJtL2R0cy9rMy1hbTYyNS1zay1iaW5tYW4u
+ZHRzaQo+Pgo+Pj4gKwlCSU5NQU5fSU5ESVJTPSQoQklOQVJJRVNfRElSKQo+Pgo+PiBUaGlzIHNl
+ZW1zIHRvIGJlIHRoZSBvbmx5IHJlcXVpcmVkIHBhcnQuCj4gCj4gQ29ycmVjdC4gJ0RNPScgaXMg
+bm8gbG9uZ2VyIHVzZWQsIGFsc28gc2VlIHRoZSBvZmZpY2lhbCBVLUJvb3QgYnVpbGQKPiBpbnN0
+cnVjdGlvbnMgZm9yIFRJIHBsYXRmb3JtcyBpbiB0aGUgU0RLIGRvY3VtZW50YXRpb24gWzFdICh0
+ZWNobmljYWxseQo+IHNwZWFraW5nIHRoaXMgZG9jdW1lbnRhdGlvbiBpcyBmb3IgdGhlIFUtQm9v
+dCB2ZW5kb3IgdHJlZSwgYnV0IHRoZSBzYW1lCj4gcHJpbmNpcGxlIGFwcGxpZXMgdG8gdXBzdHJl
+YW0gVS1Cb290IGJ1aWxkcykuCj4gCj4gUmV2aWV3ZWQtYnk6IEFuZHJlYXMgRGFubmVuYmVyZyA8
+ZGFubmVuYmVyZ0B0aS5jb20+Cj4gCj4gWzFdIGh0dHBzOi8vc29mdHdhcmUtZGwudGkuY29tL3By
+b2Nlc3Nvci1zZGstbGludXgvZXNkL0FNNjJYLzA5XzAxXzAwXzA4L2V4cG9ydHMvZG9jcy9saW51
+eC9Gb3VuZGF0aW9uYWxfQ29tcG9uZW50cy9VLUJvb3QvVUctR2VuZXJhbC1JbmZvLmh0bWwKCkl0
+IG1lYW5zIHRoYXQgd2UgY2FuIHJlbW92ZSBCUjJfVEFSR0VUX1VCT09UX05FRURTX1RJX0szX0RN
+IGFuZApVQk9PVF9USV9LM19ETV9TT0NOQU1FIHRvby4KCm1ldGEtdGkgc3RpbGwgdXNlIERNPSBi
+dXQgcHJvYmFibHkgdG8gc3VwcG9ydCB1LWJvb3QtdGktc3RhZ2luZ18yMDIzLjA0IHRoYXQgaXMK
+c3RpbGwgYXZhaWxhYmxlIFsxXS4KClRoZSB1LWJvb3QgZG9jdW1lbnRhdGlvbiBhbHNvIGNvbnRh
+aW5zIGEgc2ltaWxhciBub3RlIFsyXS4KCkluIHRoZSBlbmQgd2Ugb25seSBuZWVkIGFuIG9wdGlv
+biB0byBzZWxlY3Qgd2hpY2ggU29DIHR5cGUgd2Ugd2FudCB0byB1c2UKKEdQLEhTLEhTLUZTKS4K
+ClsxXQpodHRwczovL2dpdC55b2N0b3Byb2plY3Qub3JnL21ldGEtdGkvdHJlZS9tZXRhLXRpLWJz
+cC9yZWNpcGVzLWJzcC91LWJvb3QvdS1ib290LXRpLmluYz9oPWNpY2QubWFzdGVyLjIwMjQwMjEz
+MDEwMCNuNTIKClsyXQpodHRwczovL2dpdGxhYi5jb20vdS1ib290L3UtYm9vdC8tL2Jsb2IvbWFz
+dGVyL2RvYy9ib2FyZC90aS9rMy5yc3Q/cmVmX3R5cGU9aGVhZHMmcGxhaW49MSNMMzcyCgpCZXN0
+IHJlZ2FyZHMsClJvbWFpbgoKPiAKPiAKPiAKPj4KPj4+IMKgZW5kaWYKPj4+IMKgCj4+PiDCoGlm
+ZXEgKCQoQlIyX1RBUkdFVF9VQk9PVF9ORUVEU19PUEVOU0JJKSx5KQo+Pgo+PiAtLSAKPj4gQWxl
+eGFuZGVyIFN2ZXJkbGluLgo+PgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9y
+ZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
