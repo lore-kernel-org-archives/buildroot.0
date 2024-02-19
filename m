@@ -4,106 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 223FCC48BF8
-	for <buildroot@archiver.kernel.org>; Mon, 19 Feb 2024 21:35:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C05C3C48BC3
+	for <buildroot@archiver.kernel.org>; Mon, 19 Feb 2024 21:55:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BCAFD40359;
-	Mon, 19 Feb 2024 21:35:00 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E647D40359;
+	Mon, 19 Feb 2024 21:55:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id i47RGcGNpyxZ; Mon, 19 Feb 2024 21:34:59 +0000 (UTC)
+	with ESMTP id qr_px0Sztlil; Mon, 19 Feb 2024 21:55:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 49D5240B8C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 696AC403A5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 49D5240B8C;
-	Mon, 19 Feb 2024 21:34:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 696AC403A5;
+	Mon, 19 Feb 2024 21:55:06 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C21711BF3A3
- for <buildroot@lists.busybox.net>; Mon, 19 Feb 2024 21:34:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A9A0F1BF3A3
+ for <buildroot@lists.busybox.net>; Mon, 19 Feb 2024 21:55:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AD5CF40B8C
- for <buildroot@lists.busybox.net>; Mon, 19 Feb 2024 21:34:57 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 96617403A5
+ for <buildroot@lists.busybox.net>; Mon, 19 Feb 2024 21:55:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id soOHFiex_CmU for <buildroot@lists.busybox.net>;
- Mon, 19 Feb 2024 21:34:56 +0000 (UTC)
+ with ESMTP id R4m26cTuheQ9 for <buildroot@lists.busybox.net>;
+ Mon, 19 Feb 2024 21:55:03 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9DEEC40359
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9DEEC40359
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9DEEC40359
- for <buildroot@buildroot.org>; Mon, 19 Feb 2024 21:34:55 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-4125df3c40aso20298865e9.3
- for <buildroot@buildroot.org>; Mon, 19 Feb 2024 13:34:55 -0800 (PST)
+ client-ip=2607:f8b0:4864:20::62c; helo=mail-pl1-x62c.google.com;
+ envelope-from=kadambini.nema@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 36F2D40359
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 36F2D40359
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com
+ [IPv6:2607:f8b0:4864:20::62c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 36F2D40359
+ for <buildroot@buildroot.org>; Mon, 19 Feb 2024 21:55:03 +0000 (UTC)
+Received: by mail-pl1-x62c.google.com with SMTP id
+ d9443c01a7336-1d7393de183so38031115ad.3
+ for <buildroot@buildroot.org>; Mon, 19 Feb 2024 13:55:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1708378493; x=1708983293;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=LSafQsYbyCpytSv8q3g5cGXp3QRV38ILA/P8BvZHtnY=;
- b=HoU6mXU8Oq2rAdHtOiUmIpm0B+E4ZN6NbljHNmoaSe76mlIwBqSptGYIzw0afA2yTg
- jc6F8oMQTJ5PbTig4/p0fiovtVCOnoh5qT1O/W/4LKHJ72+00zgHwZvwCIkBy+3kuSJP
- z11W46XIqZlUfY2FY3QlnW+UPJUGGvQCogDuFRpsqWK7nu4FiK0ZDEB5NIUKdScoZnyz
- EF2E9OHDUvmyQMYolLi9L6iti1fSJAK7A9v5u+nVxhi5yL8uCK08T4meBFQxvcpd5dq4
- OECv7QQtf/mptzFucAzuNo8XLL5UQy7sYtIN9Zf0OaphI4Y5XTcSasswVc5snrEtUS6/
- 7nDQ==
-X-Forwarded-Encrypted: i=1;
- AJvYcCU24PREzKToO/6d6Fxez90aPZaRioIs1KH5lfNvk1zzJzBCFv5XrdwT43E5aJI6BLpg+qv141mlCKqKrL2DsWbhJFkJmfh+1Q==
-X-Gm-Message-State: AOJu0YwfWEHdBRsyHu/yKeYgTBo4qMUPc9FSV4QufbZQM9TKvLj7OjTt
- 8K2BHcTq39RXN12W+tDvrjQk8jkdeYbAx7blQEjIHJ9LYfOgUkGR+dY4Y2nmWJQ=
-X-Google-Smtp-Source: AGHT+IFZP75FIo1WsKXSiyyysfuUoq4oST3Tx7VNQ/9eqxwDoQ7Lv4MQoqh0ZmD1SWTAVaz1ouhiLg==
-X-Received: by 2002:a05:600c:4f0d:b0:410:7428:1fb5 with SMTP id
- l13-20020a05600c4f0d00b0041074281fb5mr10208488wmq.27.1708378493279; 
- Mon, 19 Feb 2024 13:34:53 -0800 (PST)
-Received: from ?IPV6:2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31?
- (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
- [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
- by smtp.gmail.com with ESMTPSA id
- o8-20020a05600c510800b004105528c61fsm12643721wms.35.2024.02.19.13.34.52
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 19 Feb 2024 13:34:53 -0800 (PST)
-Message-ID: <63d28259-ff96-4450-bdc5-e1bc209d8e59@smile.fr>
-Date: Mon, 19 Feb 2024 22:34:52 +0100
+ d=1e100.net; s=20230601; t=1708379702; x=1708984502;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=iqnyWs2OfWhJqidDlTNDza6//lTlxLGQBMeNpOXpQQE=;
+ b=QcG4k2i+AV4UCL9EvDkYX8GUBigTIs69Xl3bk2JxEAevXZtjsH5cUaD1OO81cATny2
+ kSlPWPgbd0NNADrTr2N7NewrQH+HdDqYu2FZ0bQ/UfuZtiZaq4d+sstRS/TUyCpURQxy
+ BCB2QfuSjVW0vNe5Mp5g5VS41fp/SlBSxk+bzhQH8e45afp4Rj98S7lP8s+syxOBFe4n
+ TGR5XiynVQh3Ag+LE6h2F/RQnmAKhW19yTHyX8M0IjQAfUUwmHoRm3HWJl2NnDFYphrZ
+ tPQWLAw/uSc44wQw9y7A2NMToCdNn6prw4H49vdeaZfctb7gAyC6ObCTpGTsfoPL8F+r
+ h1QA==
+X-Gm-Message-State: AOJu0Yy80+815rYeDrCe5ApcKBcBxgzDchZaoZt/Nl70mFuipcBqkJGf
+ b4wYcYoBMrG/iD7H8wC9wHFMz8dRe2mFyNTbgzfYTawupXYhBro57TskWPgwL1w=
+X-Google-Smtp-Source: AGHT+IFtdNP7gwFfkpaT+RHsMpxOU7aE01LvA0XyWOnMZxopUnbSHtgPkjy3JU1HkjyZecDKIXQrtw==
+X-Received: by 2002:a17:902:d486:b0:1dc:687:26d6 with SMTP id
+ c6-20020a170902d48600b001dc068726d6mr2683206plg.18.1708379701576; 
+ Mon, 19 Feb 2024 13:55:01 -0800 (PST)
+Received: from localhost.localdomain (ip72-203-121-181.oc.oc.cox.net.
+ [72.203.121.181]) by smtp.gmail.com with ESMTPSA id
+ iw11-20020a170903044b00b001db5e807cd2sm4863554plb.82.2024.02.19.13.55.00
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 19 Feb 2024 13:55:01 -0800 (PST)
+From: Kadambini Nema <kadambini.nema@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon, 19 Feb 2024 13:54:58 -0800
+Message-Id: <20240219215458.187716-1-kadambini.nema@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <ZdJ2KOazjyVO-_tM@landeda>
+References: <ZdJ2KOazjyVO-_tM@landeda>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: Andreas Dannenberg <dannenberg@ti.com>,
- Alexander Sverdlin <alexander.sverdlin@gmail.com>
-References: <20240217160244.1320482-1-dario.binacchi@amarulasolutions.com>
- <20240217160244.1320482-15-dario.binacchi@amarulasolutions.com>
- <95a8a71f608575339cd61ba5ed09b93d8714c01c.camel@gmail.com>
- <20240219205157.5ukm426gmzbvn33f@dasso>
-From: Romain Naour <romain.naour@smile.fr>
-In-Reply-To: <20240219205157.5ukm426gmzbvn33f@dasso>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1708378493; x=1708983293;
- darn=buildroot.org; 
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=LSafQsYbyCpytSv8q3g5cGXp3QRV38ILA/P8BvZHtnY=;
- b=V5klAvAmR+/VknC1iO1TPwCO0roix+0sIqNSXjpz+dkPuL02Wp6DAaa5WBWGi4vzHP
- c59ahDVGV7qBDOeRKpVhMUo8+8t6cfatYn6B/YmvjN7ITkEEEKY+d9AdL/hRB19yYvXt
- iOv0zfkUT0CMPR8FWaToUQvQCJiBuzdB/6EcnGrwtKu0g/EowOP8B2TlKJGgRsNJ0SEp
- VsVU/B6gOrJ9+lpzyRrH0eMpL39NE+aeUv4/gBhZ6LFtMSDh6SG4yEdsj70E32APwh5t
- 8L9nniQLPp4NSDF8NAaiEP7aH1LJxAMfLKxsFD4Z636lCK5smbnSnlPfERnduzcLR9ei
- 3iVQ==
+ d=gmail.com; s=20230601; t=1708379702; x=1708984502; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=iqnyWs2OfWhJqidDlTNDza6//lTlxLGQBMeNpOXpQQE=;
+ b=iVyUISwqbTtIItNwTyaz8i0sKrmOwIlD4YTD1QFDTI2UClFeA9Y2Rq+LDlNVyT39uX
+ 9dliw1lAlzmJ653XfONIYOlrnLYsbo9HYdBA+aCnfTSrZs7LBf4FzJ6DilYBZH/EHf4l
+ bITH6g1XtP4K1bQdNxwZAgczNrVNqPqgjYJWyhJbwBtL2hScQSDu+YGxBg2pmv8lYXxx
+ z+vRQV8aOi/1lb0gAWAlAsfZoR7lQQFrsq9loZvR9vgkKq5lCfjm/2RM0buYIDYwLXF/
+ +Si3x0lHAbbfja7FwRVyyCJRMhzc140Ul6tvA99kon/7Q0/DydCkeItLDGZG3H8/2kGN
+ DX5w==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=smile.fr
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=smile-fr.20230601.gappssmtp.com
- header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=V5klAvAm
-Subject: Re: [Buildroot] [PATCH v4 14/20] boot/uboot: set BINMAN_INDIRS for
- TI K3 DM
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=iVyUISwq
+Subject: [Buildroot] [PATCH 1/1] package dhcpdump: bump to version 1.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -115,67 +102,124 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: michael@amarulasolutions.com, Asaf Kahlon <asafka7@gmail.com>,
- Xuanhao Shi <X15000177@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- linux-amarula@amarulasolutions.com, bryce@redpinelabs.com,
- Anand Gadiyar <gadiyar@ti.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Kadambini Nema <kadambini.nema@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gQW5kcmVhcywKCkxlIDE5LzAyLzIwMjQgw6AgMjE6NTEsIEFuZHJlYXMgRGFubmVuYmVy
-ZyBhIMOpY3JpdMKgOgo+IE9uIFNhdCwgRmViIDE3LCAyMDI0IGF0IDA5OjQ0OjI5UE0gKzAxMDAs
-IEFsZXhhbmRlciBTdmVyZGxpbiB3cm90ZToKPj4gSGkgRGFyaW8sCj4+Cj4+IE9uIFNhdCwgMjAy
-NC0wMi0xNyBhdCAxNzowMiArMDEwMCwgRGFyaW8gQmluYWNjaGkgd3JvdGU6Cj4+PiBBcyBleHBs
-YWluZWQgaW4gWzFdLCBhZGRpbmcgc3VwcG9ydCBmb3IgQU02MnggTFAgU0sgaW4gVS1Cb290LCBy
-ZXF1aXJlcwo+Pj4gYmlubWFuIGZvciBidWlsZGluZyBib290bG9hZGVyIGltYWdlcy4gVGhlIEJJ
-Tk1BTl9JTkRJUlMgZW52aXJvbm1lbnQKPj4+IHZhcmlhYmxlIGlzIHVzZWQgdG8gcHJvdmlkZSBh
-IHNwYWNlLXNlcGFyYXRlZCBsaXN0IG9mIGRpcmVjdG9yaWVzIHRvCj4+PiBzZWFyY2ggZm9yIGJp
-bmFyeSBibG9icy4KPj4+Cj4+PiBbMV0gaHR0cHM6Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9wcm9q
-ZWN0L3Vib290L3BhdGNoLzIwMjMxMDMwMTEwMTM4LjEzNDc2MDMtMy1uLXlhZGF2QHRpLmNvbS8K
-Pj4+IFNpZ25lZC1vZmYtYnk6IERhcmlvIEJpbmFjY2hpIDxkYXJpby5iaW5hY2NoaUBhbWFydWxh
-c29sdXRpb25zLmNvbT4KPj4+Cj4+PiAtLS0KPj4+Cj4+PiBubyBjaGFuZ2VzIHNpbmNlIHYxOgo+
-Pj4KPj4+IFNpZ25lZC1vZmYtYnk6IERhcmlvIEJpbmFjY2hpIDxkYXJpby5iaW5hY2NoaUBhbWFy
-dWxhc29sdXRpb25zLmNvbT4KPj4+IC0tLQo+Pj4gwqBib290L3Vib290L3Vib290Lm1rIHwgMyAr
-Ky0KPj4+IMKgMSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQo+
-Pj4KPj4+IGRpZmYgLS1naXQgYS9ib290L3Vib290L3Vib290Lm1rIGIvYm9vdC91Ym9vdC91Ym9v
-dC5tawo+Pj4gaW5kZXggZGRhNjA2YTg4MDU5Li5jZjcwZjg2YTQxMzIgMTAwNjQ0Cj4+PiAtLS0g
-YS9ib290L3Vib290L3Vib290Lm1rCj4+PiArKysgYi9ib290L3Vib290L3Vib290Lm1rCj4+PiBA
-QCAtMTg5LDcgKzE4OSw4IEBAIGVuZGlmCj4+PiDCoGlmZXEgKCQoQlIyX1RBUkdFVF9VQk9PVF9O
-RUVEU19USV9LM19ETSkseSkKPj4+IMKgVUJPT1RfVElfSzNfRE1fU09DTkFNRSA9ICQoY2FsbCBx
-c3RyaXAsJChCUjJfVEFSR0VUX1VCT09UX1RJX0szX0RNX1NPQ05BTUUpKQo+Pj4gwqBVQk9PVF9E
-RVBFTkRFTkNJRVMgKz0gdGktazMtYm9vdC1maXJtd2FyZQo+Pj4gLVVCT09UX01BS0VfT1BUUyAr
-PSBETT0kKEJJTkFSSUVTX0RJUikvdGktZG0vJChVQk9PVF9USV9LM19ETV9TT0NOQU1FKS9pcGNf
-ZWNob190ZXN0Yl9tY3UxXzBfcmVsZWFzZV9zdHJpcC54ZXI1Zgo+Pj4gK1VCT09UX01BS0VfT1BU
-UyArPSBETT0kKEJJTkFSSUVTX0RJUikvdGktZG0vJChVQk9PVF9USV9LM19ETV9TT0NOQU1FKS9p
-cGNfZWNob190ZXN0Yl9tY3UxXzBfcmVsZWFzZV9zdHJpcC54ZXI1ZiBcCj4+Cj4+IElzIHRoZSBh
-Ym92ZSBhY3R1YWxseSBzdGlsbCByZXF1aXJlZCB3aXRoIGJpbm1hbj8KPj4gVGhlIG5hbWVzIGFy
-ZSBoYXJkY29kZWQgaW4gVS1Cb290IGluIGFyY2gvYXJtL2R0cy9rMy1hbTYyNS1zay1iaW5tYW4u
-ZHRzaQo+Pgo+Pj4gKwlCSU5NQU5fSU5ESVJTPSQoQklOQVJJRVNfRElSKQo+Pgo+PiBUaGlzIHNl
-ZW1zIHRvIGJlIHRoZSBvbmx5IHJlcXVpcmVkIHBhcnQuCj4gCj4gQ29ycmVjdC4gJ0RNPScgaXMg
-bm8gbG9uZ2VyIHVzZWQsIGFsc28gc2VlIHRoZSBvZmZpY2lhbCBVLUJvb3QgYnVpbGQKPiBpbnN0
-cnVjdGlvbnMgZm9yIFRJIHBsYXRmb3JtcyBpbiB0aGUgU0RLIGRvY3VtZW50YXRpb24gWzFdICh0
-ZWNobmljYWxseQo+IHNwZWFraW5nIHRoaXMgZG9jdW1lbnRhdGlvbiBpcyBmb3IgdGhlIFUtQm9v
-dCB2ZW5kb3IgdHJlZSwgYnV0IHRoZSBzYW1lCj4gcHJpbmNpcGxlIGFwcGxpZXMgdG8gdXBzdHJl
-YW0gVS1Cb290IGJ1aWxkcykuCj4gCj4gUmV2aWV3ZWQtYnk6IEFuZHJlYXMgRGFubmVuYmVyZyA8
-ZGFubmVuYmVyZ0B0aS5jb20+Cj4gCj4gWzFdIGh0dHBzOi8vc29mdHdhcmUtZGwudGkuY29tL3By
-b2Nlc3Nvci1zZGstbGludXgvZXNkL0FNNjJYLzA5XzAxXzAwXzA4L2V4cG9ydHMvZG9jcy9saW51
-eC9Gb3VuZGF0aW9uYWxfQ29tcG9uZW50cy9VLUJvb3QvVUctR2VuZXJhbC1JbmZvLmh0bWwKCkl0
-IG1lYW5zIHRoYXQgd2UgY2FuIHJlbW92ZSBCUjJfVEFSR0VUX1VCT09UX05FRURTX1RJX0szX0RN
-IGFuZApVQk9PVF9USV9LM19ETV9TT0NOQU1FIHRvby4KCm1ldGEtdGkgc3RpbGwgdXNlIERNPSBi
-dXQgcHJvYmFibHkgdG8gc3VwcG9ydCB1LWJvb3QtdGktc3RhZ2luZ18yMDIzLjA0IHRoYXQgaXMK
-c3RpbGwgYXZhaWxhYmxlIFsxXS4KClRoZSB1LWJvb3QgZG9jdW1lbnRhdGlvbiBhbHNvIGNvbnRh
-aW5zIGEgc2ltaWxhciBub3RlIFsyXS4KCkluIHRoZSBlbmQgd2Ugb25seSBuZWVkIGFuIG9wdGlv
-biB0byBzZWxlY3Qgd2hpY2ggU29DIHR5cGUgd2Ugd2FudCB0byB1c2UKKEdQLEhTLEhTLUZTKS4K
-ClsxXQpodHRwczovL2dpdC55b2N0b3Byb2plY3Qub3JnL21ldGEtdGkvdHJlZS9tZXRhLXRpLWJz
-cC9yZWNpcGVzLWJzcC91LWJvb3QvdS1ib290LXRpLmluYz9oPWNpY2QubWFzdGVyLjIwMjQwMjEz
-MDEwMCNuNTIKClsyXQpodHRwczovL2dpdGxhYi5jb20vdS1ib290L3UtYm9vdC8tL2Jsb2IvbWFz
-dGVyL2RvYy9ib2FyZC90aS9rMy5yc3Q/cmVmX3R5cGU9aGVhZHMmcGxhaW49MSNMMzcyCgpCZXN0
-IHJlZ2FyZHMsClJvbWFpbgoKPiAKPiAKPiAKPj4KPj4+IMKgZW5kaWYKPj4+IMKgCj4+PiDCoGlm
-ZXEgKCQoQlIyX1RBUkdFVF9VQk9PVF9ORUVEU19PUEVOU0JJKSx5KQo+Pgo+PiAtLSAKPj4gQWxl
-eGFuZGVyIFN2ZXJkbGluLgo+PgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9y
-ZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+- Change the site to a well maintained fork - https://github.com/bbonev/dhcpdump
+
+Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
+---
+- Build test results
+  ./utils/test-pkg -d br_test -k -c dhcpdump.config  -p dhcpdump
+                    bootlin-armv5-uclibc [1/6]: OK
+                     bootlin-armv7-glibc [2/6]: OK
+                   bootlin-armv7m-uclibc [3/6]: OK
+                     bootlin-x86-64-musl [4/6]: OK
+                      br-arm-full-static [5/6]: OK
+                            sourcery-arm [6/6]: OK
+6 builds, 0 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+---
+
+Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
+---
+ ...Fix-build-with-gcc4.8-use-br-fortify.patch | 12 ++++++++++
+ .../0001-use-non-bsd-structures.patch         | 23 -------------------
+ package/dhcpdump/Config.in                    |  2 +-
+ package/dhcpdump/dhcpdump.hash                |  2 +-
+ package/dhcpdump/dhcpdump.mk                  |  5 ++--
+ 5 files changed, 17 insertions(+), 27 deletions(-)
+ create mode 100644 package/dhcpdump/0001-Fix-build-with-gcc4.8-use-br-fortify.patch
+ delete mode 100644 package/dhcpdump/0001-use-non-bsd-structures.patch
+
+diff --git a/package/dhcpdump/0001-Fix-build-with-gcc4.8-use-br-fortify.patch b/package/dhcpdump/0001-Fix-build-with-gcc4.8-use-br-fortify.patch
+new file mode 100644
+index 0000000000..c48d28c23d
+--- /dev/null
++++ b/package/dhcpdump/0001-Fix-build-with-gcc4.8-use-br-fortify.patch
+@@ -0,0 +1,12 @@
++Upstream: None
++Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
++diff -Naur a/Makefile b/Makefile
++--- a/Makefile	2024-02-17 13:57:08.166161973 -0800
+++++ b/Makefile	2024-02-17 13:57:45.055153969 -0800
++@@ -1,5 +1,5 @@
++ CFLAGS+=${CPPFLAGS}
++-CFLAGS+=-Wall -Wextra -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g -O3 -fPIE
+++CFLAGS+=-Wall -Wextra -Wformat -Werror=format-security -g -O3 -fPIE
++ LDFLAGS+=-g -Wl,-z,relro -Wl,-z,now -fPIE -pie
++ LIBS+=-lpcap
++ 
+diff --git a/package/dhcpdump/0001-use-non-bsd-structures.patch b/package/dhcpdump/0001-use-non-bsd-structures.patch
+deleted file mode 100644
+index 40115fb640..0000000000
+--- a/package/dhcpdump/0001-use-non-bsd-structures.patch
++++ /dev/null
+@@ -1,23 +0,0 @@
+-The udphdr structure has uh_* fields when _FAVOR_BSD is
+-defined. Otherwise, the fields are just named source, dest, len and
+-check. See <netinet/udp.h>.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: dhcpdump-1.8/dhcpdump.c
+-===================================================================
+---- dhcpdump-1.8.orig/dhcpdump.c	2011-05-17 20:20:46.506980003 +0200
+-+++ dhcpdump-1.8/dhcpdump.c	2011-05-17 20:20:59.338979999 +0200
+-@@ -163,10 +163,10 @@
+- 	strcpy(ip_origin, (u_char *)inet_ntoa(ip->ip_src));
+- 	strcpy(ip_destination, (u_char *)inet_ntoa(ip->ip_dst));
+- 
+--	if (hmask && check_ch((u_char *)(sp + offset), ntohs(udp->uh_ulen)))
+-+	if (hmask && check_ch((u_char *)(sp + offset), ntohs(udp->len)))
+- 		return;
+- 
+--	printdata((u_char *)(sp + offset), ntohs(udp->uh_ulen));
+-+	printdata((u_char *)(sp + offset), ntohs(udp->len));
+- }
+- 
+- // check for matching CHADDR (Peter Apian-Bennewitz <apian@ise.fhg.de>)
+diff --git a/package/dhcpdump/Config.in b/package/dhcpdump/Config.in
+index e0abe040fc..30e42928e4 100644
+--- a/package/dhcpdump/Config.in
++++ b/package/dhcpdump/Config.in
+@@ -4,4 +4,4 @@ config BR2_PACKAGE_DHCPDUMP
+ 	help
+ 	  A tool for monitoring dhcp requests using tcpdump.
+ 
+-	  http://www.mavetju.org/unix/general.php
++	  https://github.com/bbonev/dhcpdump
+diff --git a/package/dhcpdump/dhcpdump.hash b/package/dhcpdump/dhcpdump.hash
+index a24db5b275..fdf3243ad1 100644
+--- a/package/dhcpdump/dhcpdump.hash
++++ b/package/dhcpdump/dhcpdump.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  6d5eb9418162fb738bc56e4c1682ce7f7392dd96e568cc996e44c28de7f77190  dhcpdump-1.8.tar.gz
++sha256  3658ac21cc33e79e72bed070454e49c543017991cb6c37f4253c85e9176869d1  dhcpdump-1.9.tar.xz
+ sha256  bab6ca76b7e93885396513689b1248dfb0e8fd662695b8bd1b26784ef71a0192  LICENSE
+diff --git a/package/dhcpdump/dhcpdump.mk b/package/dhcpdump/dhcpdump.mk
+index ec9571c0af..4ce5047b2e 100644
+--- a/package/dhcpdump/dhcpdump.mk
++++ b/package/dhcpdump/dhcpdump.mk
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
+ 
+-DHCPDUMP_VERSION = 1.8
+-DHCPDUMP_SITE = http://www.mavetju.org/download
++DHCPDUMP_VERSION = 1.9
++DHCPDUMP_SITE = https://github.com/bbonev/dhcpdump/releases/download/v$(DHCPDUMP_VERSION)
++DHCPDUMP_SOURCE = dhcpdump-$(DHCPDUMP_VERSION).tar.xz
+ DHCPDUMP_DEPENDENCIES = libpcap
+ DHCPDUMP_LICENSE = BSD-2-Clause
+ DHCPDUMP_LICENSE_FILES = LICENSE
+-- 
+2.25.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
