@@ -1,71 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11492C48BC3
-	for <buildroot@archiver.kernel.org>; Mon, 19 Feb 2024 11:30:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6AEC8C48BC3
+	for <buildroot@archiver.kernel.org>; Mon, 19 Feb 2024 14:52:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CB56F40A5F;
-	Mon, 19 Feb 2024 11:30:35 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MWpVT9eDADJU; Mon, 19 Feb 2024 11:30:34 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A1BEE40A65
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A1BEE40A65;
-	Mon, 19 Feb 2024 11:30:34 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5E0921BF370
- for <buildroot@lists.busybox.net>; Mon, 19 Feb 2024 11:30:33 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4B5FE406AF
- for <buildroot@lists.busybox.net>; Mon, 19 Feb 2024 11:30:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E987740883;
+	Mon, 19 Feb 2024 14:52:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id a3q_y1mQ2xik for <buildroot@lists.busybox.net>;
- Mon, 19 Feb 2024 11:30:32 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yVWlPw8FfkS8; Mon, 19 Feb 2024 14:52:27 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 74ABF408CA
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 74ABF408CA;
+	Mon, 19 Feb 2024 14:52:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0A1BB1BF41F
+ for <buildroot@lists.busybox.net>; Mon, 19 Feb 2024 14:52:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0175B4040A
+ for <buildroot@lists.busybox.net>; Mon, 19 Feb 2024 14:52:26 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nS9bOpkBCM6o for <buildroot@lists.busybox.net>;
+ Mon, 19 Feb 2024 14:52:24 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
  helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DF0E040607
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DF0E040607
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 49797400C8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 49797400C8
 Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DF0E040607
- for <buildroot@buildroot.org>; Mon, 19 Feb 2024 11:30:31 +0000 (UTC)
-Received: from tuxedoOT.fritz.box (unknown [212.37.174.96])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 49797400C8
+ for <buildroot@buildroot.org>; Mon, 19 Feb 2024 14:52:22 +0000 (UTC)
+Received: from [192.168.178.36] (unknown [212.37.174.96])
+ (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
  key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
  (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id C82092C83326;
- Mon, 19 Feb 2024 12:30:28 +0100 (CET)
-To: buildroot@buildroot.org
-Date: Mon, 19 Feb 2024 12:30:27 +0100
-Message-Id: <20240219113028.607141-1-buildroot@bubu1.eu>
-X-Mailer: git-send-email 2.34.1
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id 2992A2C83847;
+ Mon, 19 Feb 2024 15:52:20 +0100 (CET)
+Message-ID: <82397d49-8d5a-4349-aef5-50e83e5a9b40@bubu1.eu>
+Date: Mon, 19 Feb 2024 15:52:19 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+References: <20240211222706.2959549-1-thomas.petazzoni@bootlin.com>
+In-Reply-To: <20240211222706.2959549-1-thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=bubu1.eu; s=bubu; 
- t=1708342229; bh=U3TOKTP0TWv60sE247f2PLvTs+lXjZ7sCi4H9MCfsSI=;
- h=From:To:Cc:Subject:Date;
- b=c9j0+DW6Fq9QEGFFTrfS3ZyaahmlSBWeZ8R2JvqhAWHe1pPh5p90OUmtT60mP/QiK
- gsAKvhFp7Qsub5h8+Z43nNdxqH0CQpNcwntF1IA2MJnCg6oncRI2zMUcrahlkg3huL
- 9WnSNU9b0HjyOOs73RLwSVdM+aN4IkFA5OP5rrgYM5JtbKlUPOuCECUiAhHmLX/wd3
- xMTQY4J2E0J8I6kOJPfpb5iwe0rjYIlMjDs5hoBWtL29zRn69URObhvELq7+RAO/nT
- x4zEwcKTDuosA574Ft5I1Oi0OXyqKkWfLCy3SUY4e/2Qn8+wcYN85PLnIVQ1Z7KTZv
- HBCutp7YAIo4g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ t=1708354340; bh=55V3DNKqQMi8LYf8Bv81WPylaX2Tk5DpQnP4gzoS9W4=;
+ h=Date:Subject:To:References:From:In-Reply-To;
+ b=SQr2BTVlHkZ+ObEoxsoDxP79WkJA4MiCFcT3oEbe6tKX5up4EwYV7XcIk/7p8BywA
+ H6jsiJFmRsYjvB2GWNC4PVFUg4zBt86oSB+WfJMAuCzBLg92qSrIfWafhyh/5uzxIf
+ vd5GWnvVBQN0ROs5aKU939MJPeYjQgT+kew37+C7bWd1fdmzJMXIj7fKOQHWRzfQ3Q
+ zpYJAbISx6/V9KM5wZYsbxT9i3bW6Hk2y9hvAJM/gtjyLXcxnngzIKeQnVFKm/zEf5
+ MxDXzxI7Ln7S+TR61EtP6gn9WK2DA93OROt0UC8PSzcWn1DjU2a0K03MtemTkb1TWO
+ Tr94GTZYPXJcw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
- header.s=bubu header.b=c9j0+DW6
-Subject: [Buildroot] [PATCH] package/python-django: add patch to fix crash
- with .pyc-only builds
+ header.s=bubu header.b=SQr2BTVl
+Subject: Re: [Buildroot] [PATCH] package/util-linux: bump to version 2.39.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,78 +81,240 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
 Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Oli Vogt <oli.vogt.pub01@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Backport an upstream patch that fixes django auth and admin apps not
-working in .pyc only builds.
+Hi Thomas,
 
-Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/6148209453
+On 11.02.24 23:27, Thomas Petazzoni via buildroot wrote:
+> Changes between 2.39.2 and 2.39.3:
+> 
+> 2da5c904e18fdcffd2b252d641e6f76374c7b406 build-sys: release++ (v2.39.3)
+> 03c939edda81c5a4d6e5f5c1cb896e79c1e82e16 docs: update v2.39.3-ReleaseNotes
+> dafb120ef79c878cfd1b65c1d1c46497f17a7f7e docs: update AUTHORS file
+> bfc9691ce5d964b87f6c02cc236361b4772456d0 po-man: merge changes
+> d2232b60963a6e4e43fd359d1a4b552c4291b327 po: merge changes
+> 4ab356c1c02c34cd3935e1bb0aa47ed6e27cfe3c po: add ro.po (from translationproject.org)
+> 7e147d16c06f14b3f760b620d4f359cef12fe4ad po: update es.po (from translationproject.org)
+> e8cb61f07430d5f1d624245a219c2e21694c5f52 lsfd: fix memory leak in append_filter_expr()
+> 192d8aaa07e088e44fcb78736a53baae1ead7ccd lsfd: avoid undefined behavior
+> 756588f8c8b2ed93c124ca15cfb3f0efc4a0f9f6 lsfd: (man) fix the form for the optional argument of --inet option
+> 8d78c1306d1a9d5ebf9ec058344685da0360b87b Add Phytium FTC310 & FTC664 support
+> b75322cdb13c6c0b3789ff8fc19dcd017c069784 Add Phytium FTC862 cpu model. fix:#2486
+> ec1b0eb36bd6c5a5079293ab03241163f61a8bf4 libmount: accept '\' as escape for options separator
+> 2e5f5c8d85338811595d321a77647a40e12321c9 tests: add ts_skip_docker
+> 0b3254cac3a275bbe32af57c6037cd29c21324d7 Merge branch 'stable-2.39/bcachefs-fixes' of https://github.com/t-8ch/util-linux into PR/stable-v2.39.3
+> 6498439340a16e6acee54987df016c6b7928b17a tests: skip broken tests on docker
+> fa9b5365861934faab9ba73bd405095f56f02e45 libblkid: (bcachefs) add support for sub-device labels
+> 3c5d991b0323b33816e661e52da5d6f5402f47b5 libblkid: (bcachefs) adapt to major.minor version
+> ece194082fb318d0fa3fec31193ce6f61b97c67a libuuid: avoid truncate clocks.txt to improve performance
+> 84a62c1a5a614bde2530544bf2558c73f0179d42 libuuid/src/gen_uuid.c: fix cs_min declaration
+> 93239aa7869ddd236db8e5a28b4e6873ce6e0f22 libmount: fix possible NULL dereference [coverity scan]
+> a6def815e21d50db7a99ec74080c3fd7eb64e934 meson: install wall executable with group 'tty'
+> c6c1c69c3e83606eced938d841af03c1acef03a0 meson: install write executable with group 'tty'
+> bf2cd1d5a6eb273fbb11931b86ae165e7da5a397 libmount: improve mnt_table_next_child_fs()
+> c14f5bf37adf681c378fc004f0996e0bcfd30ce0 docs: add SPDX to boilerplate.c
+> fdd9f11f5e38b044617d3bc5f6c00789096b233f disk-utils: add SPDX and Copyright notices
+> e7dbe9c788da98b86f8cf87bc20ec74e32206451 include/audit-arch: add missing SPDX
+> 5ec7b14a72d9893d2a8d8c7f40cd45b44c9575c9 setterm: avoid restoring flags from uninitialized memory
+> 64d2300e6443c311219f187433046751a86ed18e Fix man page for col to correct documentation error
+> 7cc2c962567fe40daa9b12481224e5a0e6f96c47 Update col.c to fix option mistake
+> 122d7e7afb44d8a823e362673b0d2d1e31f7d478 umount: handle bindmounts during --recursive
+> da18b31ff1cb504e3d288f77d1f1d1179c39e4d8 lscpu: fix caches separator for --parse=<list>
+> 3a5c9c1dd6935fb16f15f210b80ce9c5228e6a19 Use empty libuser config file.
+> 7058d793def09c3d4645e9efd1d8a5d212e839b0 libblkid: exfat: fix fail to find volume label
+> d065ff00a36b7244842f743372099837bc61328b blkpr: store return value of getopt_long in int
+> 9ca6f1712a5803e32e26e065e32e99837ba8b5d2 lib/path: Set errno in case of fgets failure
+> e2f0aa5c25c0295ef6187d3c53c2801fe17385e5 autotools: fix AC_DEFINE_UNQUOTED() use
+> cefd05c479e5456af8db2a86fabad165d247176b autotools: fix librtas check
+> f27fbafb24bdcefaa2463d47abc18491c3497451 lib/path: fix typos
+> f8ab70477e2ca7ac050fd4e2337b76a1972c8aa3 lib/path: set errno in case of error
+> 5ec30a362a5dd91c018c04a64fd1a481029dc4c6 lib/path: fix possible out of boundary access
+> edc723cd3341ff3d3e660051525dca40a2af6b3b libblkid: reset errno before calling probefuncs
+> 8de89778b945d552796f09576925310810ce798b setpriv: fix group argument completion
+> 41599054c7248f12c8a54d02f7161d0aff4275a9 libfdisk: reset errno before calling read()
+> cce4e44059405f3170b166fbf1774bf4b89c11c4 blkid: fix call to err_exclusive_options
+> b718f985cb6cc3bc65618649e9f231ecafcf81fb docs: use HTTPS for GitHub clone URLs
+> 2bddfa6928af328675b2ffbfc9b6546e9ee81722 libblkid: (probe) handle probe without chain gracefully
+> 3d31216787d6725fed361d27f0f01aff6ef46981 lib/idcache: always gracefully handle null cache
+> 368521e45e1c9cb44145fc72c04d1cc903a883e8 script-playutils: close filestream in case ignore_line() fails
+> 087b0d2383b8ab1ee4564d692d5f797ac781896f libblkid: (vxfs) report endianness
+> 7e5056f33bdfd867ce6f1a642f560fdf0b402c1e libblkid: (ntfs) validate that sector_size is a power of two
+> f368ccc759f9684338da723a93449764d0a8e312 libsmartcols: handle nameless tables in export format
+> f5cace8da07291c94b76b5cf80da1f921be67419 ldattach: don't call exit() from signal handler
+> 03c12a34c58d2550c6c718275950866d387d33f5 lslogins: fix realloc() loop allocation size
+> 83ba179b12d3c6c5f400bf78f2f742b1cc7ce256 lib/env: avoid underflow of read_all_alloc() return value
+> 813851fba28cb3ecde6a7f0c90a7e343920cd8c7 libblkid: avoid memory leak of cachefile path
+> 4459623cde42a5d021a6d71e38fcdfd4fff3e171 libmount: gracefully handle NULL path in mnt_resolve_target()
+> dbde7a537f27b23d64a8d3f583af472357de7192 more: avoid out-of-bound access
+> c26badd5d4295d52e987c75e69113edfb407fb27 libfdisk: handle allocation failure in fdisk_new_partition
+> 5c250aa6425fc3e35c07bce019eb4b7fa34bf722 login: Use pid_t for child_pid
+> be3f1712ee2e1e43d9b82b7cf4987c8a609a81ef login: move comment
+> 98be90b5bafa66d98655f8639efb3ffa984fc530 build-sys: fix libmount/src/hooks.c use
+> a711af02d32c0a0a31f1bbb943ffff2e94203e86 lscpu: Use 4K buffer size instead of BUFSIZ
+> 45c6136cba5f7607cca08c5aaab8e9b22ef87c25 autotools: fix typos
+> aa98c4ecc938a3459ffb759a444a8a585a9d0a3a libmount: make.stx_mnt_id use more robust
+> c697c2bb69f55aa24b6c0e2e752548f823c53796 libmount: report statx in features list
+> 13711f3ab79dfa92e8815eb9b752ec2bf4832d80 libmount: fix statx() includes
+> e9ed5a2b80bf8a76924caf8cd93b4cfff4d210a7 libblkid: (vfat) avoid modifying shared buffer
+> d2cadf0992cce589bfffeb603325c3c2fe54a991 libblkid: (jmicron_raid) use checksum APIs
+> c54c99efd0c3fc7f1e8db8b7191a6e1e3b295f1f libblkid: (jmicron_raid) avoid modifying shared buffer
+> 64418c52bc594abf01fc4ae8148e7aa93e4b3f22 libblkid: (zonefs) avoid modifying shared buffer
+> b66da7ce4a04d6c960817a56fe82498c4e7dea44 losetup: fix JSON MAJ:MIN
+> 44d7bf2c8d1c6d34a40416807d16db6c07ac4916 lslogins: (man) fix -y option formatting
+> 7d6c71e51ed3c5f8505c67962b6d03490738a879 include: add DragonFlyBSD GPT partition types
+> 6b9fda87c4e5d0c6f945d7565197f157b9fa3d5f libblkid: (bcachefs) fix size validation
+> acbf17ae8f8ee0f941fe98ed12f115f2b349bba8 libblkid: (bcachefs) fix compiler warning [-Werror=sign-compare]
+> 1ec71634aa4ef5ddca23d65c8a296f3614231e8a libblkid: (bcachefs) fix not detecting large superblocks
+> 68564ebb50f8afab5a9527c534417e247cca0b27 libmount: Fix regression when mounting with atime
+> 
+> We can drop 0001-libuuid-src-gen_uuid.c-fix-cs_min-declaration.patch
+> as it was backported by upstream to the 2.39.x branch, and included in
+> 2.39.3.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>   ...rc-gen_uuid.c-fix-cs_min-declaration.patch | 80 -------------------
+>   package/util-linux/util-linux.hash            |  2 +-
+>   package/util-linux/util-linux.mk              |  2 +-
+>   3 files changed, 2 insertions(+), 82 deletions(-)
+>   delete mode 100644 package/util-linux/0001-libuuid-src-gen_uuid.c-fix-cs_min-declaration.patch
+> 
+> diff --git a/package/util-linux/0001-libuuid-src-gen_uuid.c-fix-cs_min-declaration.patch b/package/util-linux/0001-libuuid-src-gen_uuid.c-fix-cs_min-declaration.patch
+> deleted file mode 100644
+> index bba4d54619..0000000000
+> --- a/package/util-linux/0001-libuuid-src-gen_uuid.c-fix-cs_min-declaration.patch
+> +++ /dev/null
+> @@ -1,80 +0,0 @@
+> -From bcd11dece7d278bb0b76b138d08dedea80fa8262 Mon Sep 17 00:00:00 2001
+> -From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> -Date: Tue, 7 Nov 2023 18:43:57 +0100
+> -Subject: [PATCH] libuuid/src/gen_uuid.c: fix cs_min declaration
+> -
+> -Define cs_min through a define and not a const int to avoid the
+> -following build failure with -O0 raised since version 2.39 and
+> -https://github.com/util-linux/util-linux/commit/2fa4168c8bc9d5438bc1dfadda293c7c21b6fa59:
+> -
+> -libuuid/src/gen_uuid.c: In function 'uuid_generate_time_generic':
+> -libuuid/src/gen_uuid.c:536:33: error: initializer element is not constant
+> -  THREAD_LOCAL int  cache_size = cs_min;
+> -                                 ^~~~~~
+> -
+> -For consistency, also use define for cs_max and cs_factor
+> -
+> -Fixes:
+> - - http://autobuild.buildroot.org/results/2f80a5cdb523cc3c8c0f3693607a1be036b2ae98
+> -
+> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> -Upstream: https://github.com/util-linux/util-linux/commit/07e5c29d501c19e7af84fecb5915e0f9f94cb49f
+> ----
+> - libuuid/src/gen_uuid.c | 19 ++++++++++---------
+> - 1 file changed, 10 insertions(+), 9 deletions(-)
+> -
+> -diff --git a/libuuid/src/gen_uuid.c b/libuuid/src/gen_uuid.c
+> -index 619ef0131..db793c374 100644
+> ---- a/libuuid/src/gen_uuid.c
+> -+++ b/libuuid/src/gen_uuid.c
+> -@@ -518,6 +518,10 @@ int __uuid_generate_time_cont(uuid_t out, int *num, uint32_t cont_offset)
+> - 	return __uuid_generate_time_internal(out, num, cont_offset);
+> - }
+> -
+> -+#define CS_MIN		(1<<6)
+> -+#define CS_MAX		(1<<18)
+> -+#define CS_FACTOR	2
+> -+
+> - /*
+> -  * Generate time-based UUID and store it to @out
+> -  *
+> -@@ -529,11 +533,8 @@ int __uuid_generate_time_cont(uuid_t out, int *num, uint32_t cont_offset)
+> - static int uuid_generate_time_generic(uuid_t out) {
+> - #ifdef HAVE_TLS
+> - 	/* thread local cache for uuidd based requests */
+> --	const int			cs_min = (1<<6);
+> --	const int			cs_max = (1<<18);
+> --	const int			cs_factor = 2;
+> - 	THREAD_LOCAL int		num = 0;
+> --	THREAD_LOCAL int		cache_size = cs_min;
+> -+	THREAD_LOCAL int		cache_size = CS_MIN;
+> - 	THREAD_LOCAL int		last_used = 0;
+> - 	THREAD_LOCAL struct uuid	uu;
+> - 	THREAD_LOCAL time_t		last_time = 0;
+> -@@ -552,10 +553,10 @@ static int uuid_generate_time_generic(uuid_t out) {
+> - 		 * Start with a small cache size to cover short running applications
+> - 		 * and adjust the cache size over the runntime.
+> - 		 */
+> --		if ((last_used == cache_size) && (cache_size < cs_max))
+> --			cache_size *= cs_factor;
+> --		else if ((last_used < (cache_size / cs_factor)) && (cache_size > cs_min))
+> --			cache_size /= cs_factor;
+> -+		if ((last_used == cache_size) && (cache_size < CS_MAX))
+> -+			cache_size *= CS_FACTOR;
+> -+		else if ((last_used < (cache_size / CS_FACTOR)) && (cache_size > CS_MIN))
+> -+			cache_size /= CS_FACTOR;
+> -
+> - 		num = cache_size;
+> -
+> -@@ -568,7 +569,7 @@ static int uuid_generate_time_generic(uuid_t out) {
+> - 		}
+> - 		/* request to daemon failed, reset cache */
+> - 		num = 0;
+> --		cache_size = cs_min;
+> -+		cache_size = CS_MIN;
+> - 	}
+> - 	if (num > 0) { /* serve uuid from cache */
+> - 		uu.time_low++;
+> ---
+> -2.43.0
+> -
+> diff --git a/package/util-linux/util-linux.hash b/package/util-linux/util-linux.hash
+> index 1638cd9967..480f82d751 100644
+> --- a/package/util-linux/util-linux.hash
+> +++ b/package/util-linux/util-linux.hash
+> @@ -1,5 +1,5 @@
+>   # From https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.39/sha256sums.asc
+> -sha256  87abdfaa8e490f8be6dde976f7c80b9b5ff9f301e1b67e3899e1f05a59a1531f  util-linux-2.39.2.tar.xz
+> +sha256  7b6605e48d1a49f43cc4b4cfc59f313d0dd5402fa40b96810bd572e167dfed0f  util-linux-2.39.3.tar.xz
+>   # License files, locally calculated
+>   sha256  64dfeae1519bf0e27563d905a71264310fb6a8fa74e5cf99bb36e4d30d7ef455  README.licensing
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
----
- ...d-sensitive_variables-sensitive_post.patch | 45 +++++++++++++++++++
- 1 file changed, 45 insertions(+)
- create mode 100644 package/python-django/0001-Fixed-sensitive_variables-sensitive_post.patch
+This fails make legal-info now:
 
-diff --git a/package/python-django/0001-Fixed-sensitive_variables-sensitive_post.patch b/package/python-django/0001-Fixed-sensitive_variables-sensitive_post.patch
-new file mode 100644
-index 0000000000..90dc9c7dd0
---- /dev/null
-+++ b/package/python-django/0001-Fixed-sensitive_variables-sensitive_post.patch
-@@ -0,0 +1,45 @@
-+From d294b7679f2cb51c7231d6a7fb22e76eb74e49ec Mon Sep 17 00:00:00 2001
-+From: Mariusz Felisiak <felisiak.mariusz@gmail.com>
-+Date: Sat, 17 Feb 2024 08:15:59 +0100
-+Subject: [PATCH] Fixed #35187 -- Fixed
-+ @sensitive_variables/sensitive_post_parameters decorators crash with
-+ .pyc-only builds.
-+
-+Thanks Jon Janzen for the implementation idea.
-+
-+Thanks Marcus Hoffmann for the report.
-+
-+Regression in 38e391e95fe5258bc6d2467332dc9cd44ce6ba52.
-+Backport of d1be05b3e9209fd0787841c71a95819d81061187 from main
-+
-+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-+Upstream: https://github.com/django/django/commit/41a4bba817f139f3cfd94f04e728e046560c9a18
-+---
-+ django/views/decorators/debug.py | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/django/views/decorators/debug.py b/django/views/decorators/debug.py
-+index 7ea8a540de..6540fc0651 100644
-+--- a/django/views/decorators/debug.py
-++++ b/django/views/decorators/debug.py
-+@@ -47,7 +47,6 @@ def sensitive_variables(*variables):
-+ 
-+             try:
-+                 file_path = inspect.getfile(wrapped_func)
-+-                _, first_file_line = inspect.getsourcelines(wrapped_func)
-+             except TypeError:  # Raises for builtins or native functions.
-+                 raise ValueError(
-+                     f"{func.__name__} cannot safely be wrapped by "
-+@@ -55,7 +54,8 @@ def sensitive_variables(*variables):
-+                     "Python file (not a builtin or from a native extension)."
-+                 )
-+             else:
-+-                key = hash(f"{file_path}:{first_file_line}")
-++                first_line_number = wrapped_func.__code__.co_firstlineno
-++                key = hash(f"{file_path}:{first_line_number}")
-+ 
-+             if variables:
-+                 coroutine_functions_to_sensitive_variables[key] = variables
-+-- 
-+2.34.1
-+
--- 
-2.34.1
+ >>> util-linux 2.39.3 Collecting legal info
+ERROR: README.licensing has wrong sha256 hash:
+ERROR: expected: 
+64dfeae1519bf0e27563d905a71264310fb6a8fa74e5cf99bb36e4d30d7ef455
+ERROR: got     : 
+13f0ea46d12d798c095a6ad39d7ddc988e2e4d274c6494115f6b463f7bc4f702
+ERROR: Incomplete download, or man-in-the-middle (MITM) attack
 
+
+Likely due to 
+https://github.com/util-linux/util-linux/commit/fdd9f11f5e38b044617d3bc5f6c00789096b233f
+
+Which as far as I read it doesn't change any licensing but clarifies in 
+the top level license readme that part of the code base (fdisk.c) is 
+GPL-1.0-or-later licensed which wasn't mentioned before. The file in 
+question already had correct license information before.
+
+>   sha256  9b718a9460fed5952466421235bc79eb49d4e9eacc920d7a9dd6285ab8fd6c6d  Documentation/licenses/COPYING.BSD-3-Clause
+> diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+> index 72126adb00..a9e5b0bf68 100644
+> --- a/package/util-linux/util-linux.mk
+> +++ b/package/util-linux/util-linux.mk
+> @@ -8,7 +8,7 @@
+>   # util-linux-libs/util-linux-libs.mk needs to be updated accordingly as well.
+>   
+>   UTIL_LINUX_VERSION_MAJOR = 2.39
+> -UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).2
+> +UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).3
+>   UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.xz
+>   UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
+>   
+
+Best,
+Marcus
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
