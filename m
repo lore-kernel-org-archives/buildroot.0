@@ -4,81 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54B7AC48BC3
-	for <buildroot@archiver.kernel.org>; Mon, 19 Feb 2024 20:15:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FD63C48BC3
+	for <buildroot@archiver.kernel.org>; Mon, 19 Feb 2024 20:19:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F36804060C;
-	Mon, 19 Feb 2024 20:15:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 457F740B6F;
+	Mon, 19 Feb 2024 20:19:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id T7mai_4iHAgb; Mon, 19 Feb 2024 20:15:39 +0000 (UTC)
+	with ESMTP id YJfBKiuJre-1; Mon, 19 Feb 2024 20:19:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6102C40B69
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C74B940B73
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6102C40B69;
-	Mon, 19 Feb 2024 20:15:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C74B940B73;
+	Mon, 19 Feb 2024 20:19:15 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C7FB71BF41C
- for <buildroot@lists.busybox.net>; Mon, 19 Feb 2024 20:15:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 15B3C1BF41C
+ for <buildroot@lists.busybox.net>; Mon, 19 Feb 2024 20:19:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B5D5D60770
- for <buildroot@lists.busybox.net>; Mon, 19 Feb 2024 20:15:37 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0F506607C4
+ for <buildroot@lists.busybox.net>; Mon, 19 Feb 2024 20:19:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BavFbRaPu5Mm for <buildroot@lists.busybox.net>;
- Mon, 19 Feb 2024 20:15:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=198.47.19.142;
- helo=fllv0016.ext.ti.com; envelope-from=dannenberg@ti.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8B14D606A2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B14D606A2
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8B14D606A2
- for <buildroot@buildroot.org>; Mon, 19 Feb 2024 20:15:36 +0000 (UTC)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
- by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 41JKFW5p103196;
- Mon, 19 Feb 2024 14:15:32 -0600
-Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
- by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 41JKFWNh018318
+ with ESMTP id ZhK3RYTHIKb8 for <buildroot@lists.busybox.net>;
+ Mon, 19 Feb 2024 20:19:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=198.47.23.248;
+ helo=lelv0143.ext.ti.com; envelope-from=dannenberg@ti.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org ECDAA607A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ECDAA607A7
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id ECDAA607A7
+ for <buildroot@buildroot.org>; Mon, 19 Feb 2024 20:19:12 +0000 (UTC)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+ by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 41JKJ9pH124460;
+ Mon, 19 Feb 2024 14:19:09 -0600
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+ by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 41JKJ9kW005501
  (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
- Mon, 19 Feb 2024 14:15:32 -0600
-Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 19
- Feb 2024 14:15:31 -0600
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE114.ent.ti.com
+ Mon, 19 Feb 2024 14:19:09 -0600
+Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE114.ent.ti.com
  (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 19
+ Feb 2024 14:19:08 -0600
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 19 Feb 2024 14:15:31 -0600
+ Frontend Transport; Mon, 19 Feb 2024 14:19:08 -0600
 Received: from dasso (dasso.dhcp.ti.com [128.247.79.182])
- by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 41JKFV6p122219;
- Mon, 19 Feb 2024 14:15:31 -0600
-Date: Mon, 19 Feb 2024 14:15:31 -0600
+ by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 41JKJ8Kv004363;
+ Mon, 19 Feb 2024 14:19:08 -0600
+Date: Mon, 19 Feb 2024 14:19:08 -0600
 To: Romain Naour <romain.naour@smile.fr>
-Message-ID: <20240219201531.bekohv6hmfkdftct@dasso>
+Message-ID: <20240219201908.zqxhfa5bewy6lohx@dasso>
 References: <20240217160244.1320482-1-dario.binacchi@amarulasolutions.com>
- <20240217160244.1320482-7-dario.binacchi@amarulasolutions.com>
- <5f007c47-0c4c-438b-8978-4fe6e2515db1@smile.fr>
+ <20240217160244.1320482-8-dario.binacchi@amarulasolutions.com>
+ <8dca9e04-832f-4ffc-b6b0-d1deed31259b@smile.fr>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <5f007c47-0c4c-438b-8978-4fe6e2515db1@smile.fr>
+In-Reply-To: <8dca9e04-832f-4ffc-b6b0-d1deed31259b@smile.fr>
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=ti.com; s=ti-com-17Q1; t=1708373732;
- bh=F/4nuYIl9c42T5wfPto1DqzXw5QaMcyH3dI9WwSzmFo=;
+ d=ti.com; s=ti-com-17Q1; t=1708373949;
+ bh=kGZCyvBQSQCJyVLR03mBWZJQavoWi0j8f986M8bOQ1Q=;
  h=Date:From:To:CC:Subject:References:In-Reply-To;
- b=bcyrPsFiM6AdhC9okGqywi+AfAT8RBK+vq+tfQyR9WQeyySZBz4TsnMtjFzjtFcjr
- V8qoLihy7O5TKmcHIWRZv96t89NCSCEhhuP5NWiPIH2D9Mi/Qyg+AX0nbp+j+Uiw4P
- PnF3p5zavuohzgsv8Q6zlPQaj4dvb8GyxbVno/k4=
+ b=B+QdC4egRqkntaGGuWswjbKX8WJAdBPxekUJy6Y4vwp7LdlSlueqjb1yrxp0u65Ed
+ 3NOSEgjFEy+IsP9BrjYgmDy245lnItw+/uQkVTcTCltEQK7UWbop05g7+p/cgb1IzF
+ 7lNpoFEskaMFhQ/WFsO2CsNZ5ncfQtgC7W2dg3jk=
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=ti.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
- header.s=ti-com-17Q1 header.b=bcyrPsFi
-Subject: Re: [Buildroot] [PATCH v4 06/20] boot/ti-k3-core-secdev: new package
+ header.s=ti-com-17Q1 header.b=B+QdC4eg
+Subject: Re: [Buildroot] [PATCH v4 07/20] boot/ti-k3-image-gen: manage HS
+ hardware
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,40 +105,42 @@ Content-Transfer-Encoding: quoted-printable
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Romain, All,
-
-On Mon, Feb 19, 2024 at 10:48:59AM +0100, Romain Naour wrote:
+On Mon, Feb 19, 2024 at 10:58:26AM +0100, Romain Naour wrote:
 > Hello Dario,
 > =
 
 > Le 17/02/2024 =E0 17:02, Dario Binacchi a =E9crit=A0:
-> > This is a security development package containing tools for
-> > High-Security(HS) TI K3 platform devices.
+> > The patch sets the configurations required by TI HS systems. Some of th=
+ese
+> > configurations (i. e. HS SYSFW image signing key, HS Software Revision)
+> > are provided by the ti-k3-core-secdev package in the binaries directory.
 > =
 
-> Note: this tool can also handle TI "legacy" platform such AM57xx or AM43x=
-x (not
-> sure we really want do that).
-
-While there are secure variants of those older platforms, it is very
-much controlled/restricted and not something readily available. So not
-something somebody easily can obtain to test, etc. Either way the secure
-dev source package associated with 'ti-k3-core-secdev' here is also only
-for K3 generation of devices and won't compatible with AM57xx or AM43xx
-anyways.
-
+> Such keys has been added to u-boot v2023.10:
 > =
 
-> Can you try without this package when using binman?
-> This tool doesn't seems "future proof".
+> https://git.ti.com/cgit/security-development-tools/core-secdev-k3/tree/ke=
+ys
 > =
 
-> http://lists.busybox.net/pipermail/buildroot/2024-February/685820.html
+> https://source.denx.de/u-boot/u-boot/-/commit/d5b1ef30d7ffabb9f57d5c62b9f=
+0608837af0f4f
+> =
 
-Yes we should drop the package.
+> Do we need something else from ti-k3-core-secdev package that is not alre=
+ady
+> provided by u-boot?
 
-Thanks, Andreas
+No, we don't need anything from that. If you look at TI's current SDKs/Yocto
+builds this package is not used at all. The TI goal is to do things in a
+standard upstream way (in upstream) as much as possible, hence we are
+trying to move away from all these "vendor quirks" however possible.
 
+Regards, Andreas
+
+
+
+> =
 
 > Best regards,
 > Romain
@@ -151,113 +154,77 @@ Thanks, Andreas
 > > ---
 > > =
 
-> > Changes in v4:
-> > - Remove the trailing '/' at the end of the url in the help of
-> >   Config.in
-> > - Fixed license issues
-> > - Use $(BINARIES_DIR)/ti-k3-core-secdev as the directory where to
-> >   install files.
+> > no changes since v3:
 > > =
 
 > > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 > > ---
-> >  DEVELOPERS                                    |  1 +
-> >  boot/Config.in                                |  1 +
-> >  boot/ti-k3-core-secdev/Config.in              |  9 ++++++++
-> >  boot/ti-k3-core-secdev/ti-k3-core-secdev.hash |  3 +++
-> >  boot/ti-k3-core-secdev/ti-k3-core-secdev.mk   | 22 +++++++++++++++++++
-> >  5 files changed, 36 insertions(+)
-> >  create mode 100644 boot/ti-k3-core-secdev/Config.in
-> >  create mode 100644 boot/ti-k3-core-secdev/ti-k3-core-secdev.hash
-> >  create mode 100644 boot/ti-k3-core-secdev/ti-k3-core-secdev.mk
+> >  boot/ti-k3-image-gen/Config.in          |  1 +
+> >  boot/ti-k3-image-gen/ti-k3-image-gen.mk | 16 ++++++++++++++--
+> >  2 files changed, 15 insertions(+), 2 deletions(-)
 > > =
 
-> > diff --git a/DEVELOPERS b/DEVELOPERS
-> > index 0d12c3abcb11..33d99ab2440f 100644
-> > --- a/DEVELOPERS
-> > +++ b/DEVELOPERS
-> > @@ -753,6 +753,7 @@ F:	package/xinetd/
-> >  N:	Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> >  F:	board/bsh/
-> >  F:	board/stmicroelectronics/stm32f769-disco/
-> > +F:	boot/ti-k3-core-secdev/
-> >  F:	configs/imx8mn_bsh_smm_s2_defconfig
-> >  F:	configs/imx8mn_bsh_smm_s2_pro_defconfig
-> >  F:	configs/stm32f769_disco_sd_defconfig
-> > diff --git a/boot/Config.in b/boot/Config.in
-> > index e5fdf7ad439e..18a7d268f95a 100644
-> > --- a/boot/Config.in
-> > +++ b/boot/Config.in
-> > @@ -20,6 +20,7 @@ source "boot/s500-bootloader/Config.in"
-> >  source "boot/shim/Config.in"
-> >  source "boot/syslinux/Config.in"
-> >  source "boot/ti-k3-boot-firmware/Config.in"
-> > +source "boot/ti-k3-core-secdev/Config.in"
-> >  source "boot/ti-k3-image-gen/Config.in"
-> >  source "boot/ti-k3-r5-loader/Config.in"
-> >  source "boot/uboot/Config.in"
-> > diff --git a/boot/ti-k3-core-secdev/Config.in b/boot/ti-k3-core-secdev/=
-Config.in
-> > new file mode 100644
-> > index 000000000000..f7b4e2962042
-> > --- /dev/null
-> > +++ b/boot/ti-k3-core-secdev/Config.in
-> > @@ -0,0 +1,9 @@
-> > +config BR2_TARGET_TI_K3_CORE_SECDEV
-> > +	bool "ti-k3-core-secdev"
-> > +	depends on BR2_aarch64
-> > +	help
-> > +	  This package downloads and installs development tools for
-> > +	  High-Security(HS) TI K3 platforms (which include AM62x,
-> > +	  AM64x, AM65x and more).
+> > diff --git a/boot/ti-k3-image-gen/Config.in b/boot/ti-k3-image-gen/Conf=
+ig.in
+> > index d76cef82e911..38d1598d9fc0 100644
+> > --- a/boot/ti-k3-image-gen/Config.in
+> > +++ b/boot/ti-k3-image-gen/Config.in
+> > @@ -2,6 +2,7 @@ config BR2_TARGET_TI_K3_IMAGE_GEN
+> >  	bool "ti-k3-image-gen"
+> >  	depends on BR2_TARGET_TI_K3_R5_LOADER
+> >  	select BR2_TARGET_TI_K3_BOOT_FIRMWARE
+> > +	select BR2_TARGET_TI_K3_CORE_SECDEV if BR2_TARGET_TI_K3_IMAGE_GEN_SEC=
+TYPE_HS_FS || BR2_TARGET_TI_K3_IMAGE_GEN_SECTYPE_HS
+> >  	# We need FIT support in uboot-tools, which is why we select a
+> >  	# host package
+> >  	select BR2_PACKAGE_HOST_UBOOT_TOOLS
+> > diff --git a/boot/ti-k3-image-gen/ti-k3-image-gen.mk b/boot/ti-k3-image=
+-gen/ti-k3-image-gen.mk
+> > index 64be9a18f2c4..74b4fcb4bf89 100644
+> > --- a/boot/ti-k3-image-gen/ti-k3-image-gen.mk
+> > +++ b/boot/ti-k3-image-gen/ti-k3-image-gen.mk
+> > @@ -29,10 +29,21 @@ TI_K3_IMAGE_GEN_FW_TYPE =3D $(call qstrip,$(BR2_TAR=
+GET_TI_K3_IMAGE_GEN_FW_TYPE))
+> >  TI_K3_IMAGE_GEN_SOC =3D $(call qstrip,$(BR2_TARGET_TI_K3_IMAGE_GEN_SOC=
+))
+> >  TI_K3_IMAGE_GEN_SECTYPE =3D $(call qstrip,$(BR2_TARGET_TI_K3_IMAGE_GEN=
+_SECTYPE))
+> >  =
+
+> > -TI_K3_IMAGE_GEN_SYSFW =3D $(TI_K3_IMAGE_GEN_FW_TYPE)-firmware-$(TI_K3_=
+IMAGE_GEN_SOC)-$(TI_K3_IMAGE_GEN_SECTYPE).bin
+> > +ifeq ($(BR2_TARGET_TI_K3_IMAGE_GEN_SECTYPE_GP),y)
+> > +TI_K3_IMAGE_GEN_SYSFW =3D \
+> > +	$(TI_K3_IMAGE_GEN_FW_TYPE)-firmware-$(TI_K3_IMAGE_GEN_SOC)-$(TI_K3_IM=
+AGE_GEN_SECTYPE).bin
+> > +else
+> > +TI_K3_IMAGE_GEN_DEPENDENCIES +=3D ti-k3-core-secdev
 > > +
-> > +	  https://git.ti.com/cgit/security-development-tools/core-secdev-k3
-> > diff --git a/boot/ti-k3-core-secdev/ti-k3-core-secdev.hash b/boot/ti-k3=
--core-secdev/ti-k3-core-secdev.hash
-> > new file mode 100644
-> > index 000000000000..e3074a398d62
-> > --- /dev/null
-> > +++ b/boot/ti-k3-core-secdev/ti-k3-core-secdev.hash
-> > @@ -0,0 +1,3 @@
-> > +# Locally calculated
-> > +sha256  b6d3bca0d561d055c6869c5564b06f2fb1b9f67e4ef180c2baf8a14a6a6afa=
-06  core-secdev-k3-08.06.00.007.tar.xz
-> > +sha256  3e5cf4f5ab9f0333f46cd68fabede3f21e55de1a9e3c6ad673f241f4514d83=
-69  manifest/k3-secdev-0.2-manifest.html
-> > diff --git a/boot/ti-k3-core-secdev/ti-k3-core-secdev.mk b/boot/ti-k3-c=
-ore-secdev/ti-k3-core-secdev.mk
-> > new file mode 100644
-> > index 000000000000..f7655a0fefc8
-> > --- /dev/null
-> > +++ b/boot/ti-k3-core-secdev/ti-k3-core-secdev.mk
-> > @@ -0,0 +1,22 @@
-> > +######################################################################=
-##########
-> > +#
-> > +# ti-k3-core-secdev
-> > +#
-> > +######################################################################=
-##########
-> > +
-> > +TI_K3_CORE_SECDEV_VERSION =3D 08.06.00.007
-> > +TI_K3_CORE_SECDEV_SITE =3D https://git.ti.com/cgit/security-developmen=
-t-tools/core-secdev-k3/snapshot
-> > +TI_K3_CORE_SECDEV_SOURCE =3D core-secdev-k3-$(TI_K3_CORE_SECDEV_VERSIO=
-N).tar.xz
-> > +TI_K3_CORE_SECDEV_INSTALL_IMAGES =3D YES
-> > +TI_K3_CORE_SECDEV_LICENSE =3D BSD-3-Clause
-> > +TI_K3_CORE_SECDEV_LICENSE_FILES =3D manifest/k3-secdev-0.2-manifest.ht=
-ml
-> > +
-> > +TI_K3_CORE_SECDEV_INSTALL_DIR =3D $(BINARIES_DIR)/ti-k3-core-secdev
-> > +
-> > +define TI_K3_CORE_SECDEV_INSTALL_IMAGES_CMDS
-> > +	mkdir -p $(TI_K3_CORE_SECDEV_INSTALL_DIR)
-> > +	cp -dpfr $(@D)/keys $(TI_K3_CORE_SECDEV_INSTALL_DIR)/
-> > +	cp -dpfr $(@D)/scripts $(TI_K3_CORE_SECDEV_INSTALL_DIR)/
-> > +endef
-> > +
-> > +$(eval $(generic-package))
+> > +TI_K3_IMAGE_GEN_SYSFW =3D \
+> > +	$(TI_K3_IMAGE_GEN_FW_TYPE)-firmware-$(TI_K3_IMAGE_GEN_SOC)-$(TI_K3_IM=
+AGE_GEN_SECTYPE)-enc.bin \
+> > +	$(TI_K3_IMAGE_GEN_FW_TYPE)-firmware-$(TI_K3_IMAGE_GEN_SOC)-$(TI_K3_IM=
+AGE_GEN_SECTYPE)-cert.bin
+> > +endif
+> >  =
+
+> >  define TI_K3_IMAGE_GEN_CONFIGURE_CMDS
+> > -	cp $(BINARIES_DIR)/ti-sysfw/$(TI_K3_IMAGE_GEN_SYSFW) $(@D)
+> > +	$(foreach t,$(TI_K3_IMAGE_GEN_SYSFW),\
+> > +		cp $(BINARIES_DIR)/ti-sysfw/$(t) $(@D)/
+> > +	)
+> >  endef
+> >  =
+
+> >  define TI_K3_IMAGE_GEN_BUILD_CMDS
+> > @@ -40,6 +51,7 @@ define TI_K3_IMAGE_GEN_BUILD_CMDS
+> >  	$(BR2_MAKE) -C $(@D) \
+> >  		SOC=3D$(TI_K3_IMAGE_GEN_SOC) \
+> >  		SOC_TYPE=3D$(TI_K3_IMAGE_GEN_SECTYPE) \
+> > +		TI_SECURE_DEV_PKG=3D$(BINARIES_DIR)/ti-k3-core-secdev \
+> >  		CONFIG=3Devm \
+> >  		CROSS_COMPILE=3D$(HOST_DIR)/bin/arm-none-eabi- \
+> >  		SBL=3D$(BINARIES_DIR)/r5-u-boot-spl.bin \
 > =
 
 _______________________________________________
