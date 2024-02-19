@@ -4,82 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35DFEC48BC3
-	for <buildroot@archiver.kernel.org>; Mon, 19 Feb 2024 20:52:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F216C48BC3
+	for <buildroot@archiver.kernel.org>; Mon, 19 Feb 2024 20:53:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D7E6740242;
-	Mon, 19 Feb 2024 20:52:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 16EF040B99;
+	Mon, 19 Feb 2024 20:53:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EgbyOHQsD3kq; Mon, 19 Feb 2024 20:52:05 +0000 (UTC)
+	with ESMTP id sHnYuqbSbzES; Mon, 19 Feb 2024 20:53:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5C94440B8C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9B8CF40B8C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5C94440B8C;
-	Mon, 19 Feb 2024 20:52:05 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9B8CF40B8C;
+	Mon, 19 Feb 2024 20:53:12 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 492741BF41C
- for <buildroot@lists.busybox.net>; Mon, 19 Feb 2024 20:52:03 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A82871BF41C
+ for <buildroot@lists.busybox.net>; Mon, 19 Feb 2024 20:53:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4373F60813
- for <buildroot@lists.busybox.net>; Mon, 19 Feb 2024 20:52:03 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9532060813
+ for <buildroot@lists.busybox.net>; Mon, 19 Feb 2024 20:53:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3VoXCfbg_tlZ for <buildroot@lists.busybox.net>;
- Mon, 19 Feb 2024 20:52:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=198.47.19.142;
- helo=fllv0016.ext.ti.com; envelope-from=dannenberg@ti.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 483B660810
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 483B660810
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 483B660810
- for <buildroot@buildroot.org>; Mon, 19 Feb 2024 20:52:02 +0000 (UTC)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
- by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 41JKpwob110061;
- Mon, 19 Feb 2024 14:51:58 -0600
-Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
- by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 41JKpwDJ022104
- (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
- Mon, 19 Feb 2024 14:51:58 -0600
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 19
- Feb 2024 14:51:58 -0600
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 19 Feb 2024 14:51:57 -0600
-Received: from dasso (dasso.dhcp.ti.com [128.247.79.182])
- by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 41JKpvW8034464;
- Mon, 19 Feb 2024 14:51:57 -0600
-Date: Mon, 19 Feb 2024 14:51:57 -0600
-To: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Message-ID: <20240219205157.5ukm426gmzbvn33f@dasso>
-References: <20240217160244.1320482-1-dario.binacchi@amarulasolutions.com>
- <20240217160244.1320482-15-dario.binacchi@amarulasolutions.com>
- <95a8a71f608575339cd61ba5ed09b93d8714c01c.camel@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <95a8a71f608575339cd61ba5ed09b93d8714c01c.camel@gmail.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=ti.com; s=ti-com-17Q1; t=1708375918;
- bh=mVuBttPyYmVLFMy7B/a01CBufEWxqEhMZ8R0I0n56vQ=;
- h=Date:From:To:CC:Subject:References:In-Reply-To;
- b=xuPR38VXhWR4KjW5oolrsmekSHqQLBu/SH5UQBZ45/tS2VyN4IpaYS2vIehp1HV4j
- O7GVtMaUOwkr8CgcjyJy7/riHcFfJIiAPmmFHr6lS0IFprQXgcMyHWuap8eSA8uyY2
- xz4CoVvlPyVJZMnm0iHlrz7RiWbyMl87OhDb+XSY=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=ti.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
- header.s=ti-com-17Q1 header.b=xuPR38VX
-Subject: Re: [Buildroot] [PATCH v4 14/20] boot/uboot: set BINMAN_INDIRS for
- TI K3 DM
+ with ESMTP id hrDwnZW9IIEW for <buildroot@lists.busybox.net>;
+ Mon, 19 Feb 2024 20:53:09 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9511E60810
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9511E60810
+ for <buildroot@buildroot.org>; Mon, 19 Feb 2024 20:53:09 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 850AE87912; Mon, 19 Feb 2024 20:53:09 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Mon, 19 Feb 2024 21:52:34 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: df5594644ff0fa2ed9128e2a9e9daefd305b795b
+X-Git-Newrev: 85d1c86acabb07f7d8ace564ae68a64eb6335a62
+X-Patchwork-Hint: ignore
+Message-Id: <20240219205309.850AE87912@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-django: add patch to fix
+ crash with .pyc-only builds
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,96 +59,77 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Andreas Dannenberg via buildroot <buildroot@buildroot.org>
-Reply-To: Andreas Dannenberg <dannenberg@ti.com>
-Cc: michael@amarulasolutions.com, Asaf Kahlon <asafka7@gmail.com>,
- Xuanhao Shi <X15000177@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
- Romain Naour <romain.naour@smile.fr>,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- linux-amarula@amarulasolutions.com, bryce@redpinelabs.com,
- Anand Gadiyar <gadiyar@ti.com>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, Feb 17, 2024 at 09:44:29PM +0100, Alexander Sverdlin wrote:
-> Hi Dario,
-> =
+commit: https://git.buildroot.net/buildroot/commit/?id=85d1c86acabb07f7d8ace564ae68a64eb6335a62
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> On Sat, 2024-02-17 at 17:02 +0100, Dario Binacchi wrote:
-> > As explained in [1], adding support for AM62x LP SK in U-Boot, requires
-> > binman for building bootloader images. The BINMAN_INDIRS environment
-> > variable is used to provide a space-separated list of directories to
-> > search for binary blobs.
-> > =
+Backport an upstream patch that fixes django auth and admin apps not
+working in .pyc only builds.
 
-> > [1] https://patchwork.ozlabs.org/project/uboot/patch/20231030110138.134=
-7603-3-n-yadav@ti.com/
-> > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> > =
+Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/6148209453
 
-> > ---
-> > =
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...-Fixed-sensitive_variables-sensitive_post.patch | 45 ++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
-> > no changes since v1:
-> > =
-
-> > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> > ---
-> > =A0boot/uboot/uboot.mk | 3 ++-
-> > =A01 file changed, 2 insertions(+), 1 deletion(-)
-> > =
-
-> > diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> > index dda606a88059..cf70f86a4132 100644
-> > --- a/boot/uboot/uboot.mk
-> > +++ b/boot/uboot/uboot.mk
-> > @@ -189,7 +189,8 @@ endif
-> > =A0ifeq ($(BR2_TARGET_UBOOT_NEEDS_TI_K3_DM),y)
-> > =A0UBOOT_TI_K3_DM_SOCNAME =3D $(call qstrip,$(BR2_TARGET_UBOOT_TI_K3_DM=
-_SOCNAME))
-> > =A0UBOOT_DEPENDENCIES +=3D ti-k3-boot-firmware
-> > -UBOOT_MAKE_OPTS +=3D DM=3D$(BINARIES_DIR)/ti-dm/$(UBOOT_TI_K3_DM_SOCNA=
-ME)/ipc_echo_testb_mcu1_0_release_strip.xer5f
-> > +UBOOT_MAKE_OPTS +=3D DM=3D$(BINARIES_DIR)/ti-dm/$(UBOOT_TI_K3_DM_SOCNA=
-ME)/ipc_echo_testb_mcu1_0_release_strip.xer5f \
-> =
-
-> Is the above actually still required with binman?
-> The names are hardcoded in U-Boot in arch/arm/dts/k3-am625-sk-binman.dtsi
-> =
-
-> > +	BINMAN_INDIRS=3D$(BINARIES_DIR)
-> =
-
-> This seems to be the only required part.
-
-Correct. 'DM=3D' is no longer used, also see the official U-Boot build
-instructions for TI platforms in the SDK documentation [1] (technically
-speaking this documentation is for the U-Boot vendor tree, but the same
-principle applies to upstream U-Boot builds).
-
-Reviewed-by: Andreas Dannenberg <dannenberg@ti.com>
-
-[1] https://software-dl.ti.com/processor-sdk-linux/esd/AM62X/09_01_00_08/ex=
-ports/docs/linux/Foundational_Components/U-Boot/UG-General-Info.html
-
-
-
-> =
-
-> > =A0endif
-> > =A0
-> > =A0ifeq ($(BR2_TARGET_UBOOT_NEEDS_OPENSBI),y)
-> =
-
-> -- =
-
-> Alexander Sverdlin.
-> =
-
+diff --git a/package/python-django/0001-Fixed-sensitive_variables-sensitive_post.patch b/package/python-django/0001-Fixed-sensitive_variables-sensitive_post.patch
+new file mode 100644
+index 0000000000..90dc9c7dd0
+--- /dev/null
++++ b/package/python-django/0001-Fixed-sensitive_variables-sensitive_post.patch
+@@ -0,0 +1,45 @@
++From d294b7679f2cb51c7231d6a7fb22e76eb74e49ec Mon Sep 17 00:00:00 2001
++From: Mariusz Felisiak <felisiak.mariusz@gmail.com>
++Date: Sat, 17 Feb 2024 08:15:59 +0100
++Subject: [PATCH] Fixed #35187 -- Fixed
++ @sensitive_variables/sensitive_post_parameters decorators crash with
++ .pyc-only builds.
++
++Thanks Jon Janzen for the implementation idea.
++
++Thanks Marcus Hoffmann for the report.
++
++Regression in 38e391e95fe5258bc6d2467332dc9cd44ce6ba52.
++Backport of d1be05b3e9209fd0787841c71a95819d81061187 from main
++
++Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
++Upstream: https://github.com/django/django/commit/41a4bba817f139f3cfd94f04e728e046560c9a18
++---
++ django/views/decorators/debug.py | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/django/views/decorators/debug.py b/django/views/decorators/debug.py
++index 7ea8a540de..6540fc0651 100644
++--- a/django/views/decorators/debug.py
+++++ b/django/views/decorators/debug.py
++@@ -47,7 +47,6 @@ def sensitive_variables(*variables):
++ 
++             try:
++                 file_path = inspect.getfile(wrapped_func)
++-                _, first_file_line = inspect.getsourcelines(wrapped_func)
++             except TypeError:  # Raises for builtins or native functions.
++                 raise ValueError(
++                     f"{func.__name__} cannot safely be wrapped by "
++@@ -55,7 +54,8 @@ def sensitive_variables(*variables):
++                     "Python file (not a builtin or from a native extension)."
++                 )
++             else:
++-                key = hash(f"{file_path}:{first_file_line}")
+++                first_line_number = wrapped_func.__code__.co_firstlineno
+++                key = hash(f"{file_path}:{first_line_number}")
++ 
++             if variables:
++                 coroutine_functions_to_sensitive_variables[key] = variables
++-- 
++2.34.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
