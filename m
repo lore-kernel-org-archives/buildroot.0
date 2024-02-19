@@ -4,94 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49D3AC48BF8
-	for <buildroot@archiver.kernel.org>; Mon, 19 Feb 2024 19:59:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 934CAC48BF8
+	for <buildroot@archiver.kernel.org>; Mon, 19 Feb 2024 19:59:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DC8D540B87;
-	Mon, 19 Feb 2024 19:59:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 58D4140BA3;
+	Mon, 19 Feb 2024 19:59:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Y9TeVLdPNX8v; Mon, 19 Feb 2024 19:59:26 +0000 (UTC)
+	with ESMTP id WZ3i8ywinDi4; Mon, 19 Feb 2024 19:59:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 89EF940B6D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 022C640BC1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 89EF940B6D;
-	Mon, 19 Feb 2024 19:59:26 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D142A1BF228
- for <buildroot@lists.busybox.net>; Mon, 19 Feb 2024 19:59:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 022C640BC1;
+	Mon, 19 Feb 2024 19:59:31 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1DBFB1BF228
+ for <buildroot@lists.busybox.net>; Mon, 19 Feb 2024 19:59:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BE50140837
- for <buildroot@lists.busybox.net>; Mon, 19 Feb 2024 19:59:24 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A163881FB9
+ for <buildroot@lists.busybox.net>; Mon, 19 Feb 2024 19:59:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eaLuA7YWNSY9 for <buildroot@lists.busybox.net>;
- Mon, 19 Feb 2024 19:59:24 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::42d; helo=mail-pf1-x42d.google.com;
- envelope-from=kadambini.nema@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E993E407BE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E993E407BE
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com
- [IPv6:2607:f8b0:4864:20::42d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E993E407BE
- for <buildroot@buildroot.org>; Mon, 19 Feb 2024 19:59:23 +0000 (UTC)
-Received: by mail-pf1-x42d.google.com with SMTP id
- d2e1a72fcca58-6e4560664b5so1266312b3a.1
- for <buildroot@buildroot.org>; Mon, 19 Feb 2024 11:59:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1708372762; x=1708977562;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=AixJj0a4w31XdFFTxN3FK42mAGM84iuLn5VGsDW4zsU=;
- b=qX6mkyudiPWMlyTf+qf3cUq9kyDodUQopkXUlS/tq1BpQgTaTrjC+3G285qKkWDaDN
- 0F3A8lGiopE8JKgYTkRFAQCEncTkrx0WQ5Rq/PyIRa/7wGi51fo67Qpiz08Snm3ironS
- 8OdmgVltKjtK5Mqd+r0ceGcTJIesTCfi5rsMgnVjNPvivJ5WyF3pkQ+F2s8bl+syTQvS
- cpwZ+GDIIJyuLUoalgRL94GVbL+vVLpEajLYdKg5NlNQ0Mu90uUMEWMZbHnTh598F7YU
- lxQ7a2WUp9XpDmlpR6GQ+LjzCzzZuvyeygjmu6YdzgqcT6oDENuySqj3iSYBf8XeI++h
- +QHA==
-X-Gm-Message-State: AOJu0YyPXRzCL5QNbEUBKCGG4sWt1mBumEIQf1r0kSwNBSG8JHPQKR9E
- peNLojTcXILuaiDxiFNxzbMN4moMyLdGb263j7J8SOP4CE/81k6B1T++biSMKbw=
-X-Google-Smtp-Source: AGHT+IGFNSbQ/+USfN0c6bIDPZ6NDasMIGZk8pt/a0n8Qvmqfplr86bQiIJUEOb+myLBYqzTlhsJAQ==
-X-Received: by 2002:a05:6a00:4c1a:b0:6e4:6878:8d55 with SMTP id
- ea26-20020a056a004c1a00b006e468788d55mr3483189pfb.28.1708372762475; 
- Mon, 19 Feb 2024 11:59:22 -0800 (PST)
-Received: from localhost.localdomain (ip72-203-121-181.oc.oc.cox.net.
- [72.203.121.181]) by smtp.gmail.com with ESMTPSA id
- o19-20020a637313000000b005dbed0ffb10sm5041245pgc.83.2024.02.19.11.59.21
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 19 Feb 2024 11:59:22 -0800 (PST)
-From: Kadambini Nema <kadambini.nema@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon, 19 Feb 2024 11:59:11 -0800
-Message-Id: <20240219195911.43452-2-kadambini.nema@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240219195911.43452-1-kadambini.nema@gmail.com>
-References: <ba5719b0-9b18-4148-bdfe-8a16ef06c4ee@benettiengineering.com>
- <20240219195911.43452-1-kadambini.nema@gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pB4-HBH3ou-l for <buildroot@lists.busybox.net>;
+ Mon, 19 Feb 2024 19:59:25 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=198.47.23.248;
+ helo=lelv0143.ext.ti.com; envelope-from=dannenberg@ti.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8D66981FB4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8D66981FB4
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8D66981FB4
+ for <buildroot@buildroot.org>; Mon, 19 Feb 2024 19:59:25 +0000 (UTC)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+ by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 41JJxOGD120839;
+ Mon, 19 Feb 2024 13:59:24 -0600
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+ by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 41JJxONh116415
+ (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+ Mon, 19 Feb 2024 13:59:24 -0600
+Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 19
+ Feb 2024 13:59:24 -0600
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 19 Feb 2024 13:59:24 -0600
+Received: from dasso (dasso.dhcp.ti.com [128.247.79.182])
+ by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 41JJxOJD101169;
+ Mon, 19 Feb 2024 13:59:24 -0600
+Date: Mon, 19 Feb 2024 13:59:24 -0600
+To: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Message-ID: <20240219195924.smciairp2ts3655m@dasso>
+References: <20240213172817.2872849-1-romain.naour@smile.fr>
+ <20240216201903.lhhkjevrgzcp5msz@dasso>
+ <735636d6-c0f8-4226-ab8a-1576c2133189@smile.fr>
+ <20240216222012.eaes5ktamizu6n5c@dasso>
+ <3570b01e6a258bbafa2d6317ba8619ecb39f66ec.camel@gmail.com>
 MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <3570b01e6a258bbafa2d6317ba8619ecb39f66ec.camel@gmail.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1708372762; x=1708977562; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=AixJj0a4w31XdFFTxN3FK42mAGM84iuLn5VGsDW4zsU=;
- b=Yn33Mz/s5yIm1AcNmE44B6UIzachsiE+wN9HepWFX2twFm/y5sPHnWaqfGM9zbzwkP
- wzBmApZT7SPq06zk25tFytBoPlGW2YlRV1TvOFNoM69nQR+TtX5hee4CihJDyewcsiGI
- ASD4q8WZ44t5HAizoIANT0XEkrofkwAlQW/p4vBznbm+Y+jPJj52aKLQjqykw1U/4TJa
- 1YKOIoWC4ItcGNomvDGERsD5fjPfnb2KlQoODSDbm4LygweWTLei4FHLhorO4FGeTNWN
- mtNvKVx4oeKDP7k8dOrWqBYz5RHro14ngW3+u00wofj0RoiSAXz+DADiAgDW4BnCnWcu
- ihgg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Yn33Mz/s
-Subject: [Buildroot] [PATCH 2/2] package/sysrepo: bump version to 2.2.150
+ d=ti.com; s=ti-com-17Q1; t=1708372764;
+ bh=s8nYQv4qA87n1aX/QmKStc3mx55i0jCmghVbuJ8ID7E=;
+ h=Date:From:To:CC:Subject:References:In-Reply-To;
+ b=QL+zvcURdbeaf2dtoioKxA+8jIzA8BMgN+5d7n6DAsVGUIO5oP5eydWwbt09/IFLA
+ 01b4Wi3bhhRpuSSuWMbbJrQ8FS/nyklQ67BFY9tz2qhg1Lc+hCp2SN4tBFzYfgLS3+
+ wuVhE//5z6IyyEzo01iLOCw7vebsBRcRQ0FweCus=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=ti.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
+ header.s=ti-com-17Q1 header.b=QL+zvcUR
+Subject: Re: [Buildroot] [PATCH 00/21] Add ti_j721e_sk_defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,47 +92,125 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: giulio.benetti@benettiengineering.com,
- Heiko Thiery <heiko.thiery@gmail.com>,
- =?UTF-8?q?Jan=20Kundr=C3=A1t?= <jan.kundrat@cesnet.cz>,
- Kadambini Nema <kadambini.nema@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Andreas Dannenberg via buildroot <buildroot@buildroot.org>
+Reply-To: Andreas Dannenberg <dannenberg@ti.com>
+Cc: Romain Naour <romain.naour@smile.fr>, buildroot@buildroot.org
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Note: This release depends on libyang (v2.1.148) (https://github.com/sysrepo/sysrepo/releases/tag/v2.2.150)
+Hi Alexander,
 
-Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
----
- package/sysrepo/sysrepo.hash | 2 +-
- package/sysrepo/sysrepo.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Sat, Feb 17, 2024 at 04:13:16AM +0100, Alexander Sverdlin wrote:
+> Hello Andreas,
+> =
 
-diff --git a/package/sysrepo/sysrepo.hash b/package/sysrepo/sysrepo.hash
-index 6a5e98f41b..056f70787d 100644
---- a/package/sysrepo/sysrepo.hash
-+++ b/package/sysrepo/sysrepo.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  bebb7901682eb23bf4c73d086d0a45c124ec751a67793a66024f1d4203425730  sysrepo-2.2.36.tar.gz
-+sha256  467efed8d0f62c26a0d200602b911096eb2d67858e620937ab68f96b316fa9b7  sysrepo-2.2.150.tar.gz
- sha256  88f1b7e5c64d2c113e07105aa9c0fb80639b40287565be1c2afd0949df83d826  LICENSE
-diff --git a/package/sysrepo/sysrepo.mk b/package/sysrepo/sysrepo.mk
-index 6b031ae6f9..7f2570bd7d 100644
---- a/package/sysrepo/sysrepo.mk
-+++ b/package/sysrepo/sysrepo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SYSREPO_VERSION = 2.2.36
-+SYSREPO_VERSION = 2.2.150
- SYSREPO_SITE = $(call github,sysrepo,sysrepo,v$(SYSREPO_VERSION))
- SYSREPO_INSTALL_STAGING = YES
- SYSREPO_LICENSE = BSD-3-Clause
--- 
-2.25.1
+> On Fri, 2024-02-16 at 16:20 -0600, Andreas Dannenberg wrote:
+> > On Fri, Feb 16, 2024 at 10:52:21PM +0100, Romain Naour wrote:
+> > > Hello Andreas,
+> > > =
+
+> > > Le 16/02/2024 =E0 21:19, Andreas Dannenberg a =E9crit=A0:
+> > > > On Tue, Feb 13, 2024 at 06:27:56PM +0100, Romain Naour wrote:
+> > > > > This series aim to add the SK-TDA4VM board support based on TI K3=
+ j721e SoC.
+> > > > > =
+
+> > > > > This series start by adding U-boot binman support already submitt=
+ed in the
+> > > > > preview series "Add support for AM62x-SK HS-FS devices" from Dari=
+o Binacchi
+> > > > > [1], with small improvements.
+> > > > > See the FOSDEM 2024 talk "Standardizing the generation and signin=
+g of boot images" [2]
+> > > > =
+
+> > > > Thanks Romain and Dario for all the work on this, and submitting th=
+is.
+> > > > Will be spending some time over the next few days to see how I can =
+help
+> > > > out with this effort. I can already see many great improvements sin=
+ce
+> > > > the last time I worked on AM62x/AM64x support last year.
+> > > =
+
+> > > Your feed back on HS-FS devices is really helpful. Alexander Sverdlin=
+ also
+> > > helped on AM62x.
+> > > =
+
+> > > Maybe if you can also test on AM64x just to be sure the defconfig is =
+working.
+> > =
+
+> > I'm planning on testing the entire series here pretty soon and will
+> > provide feedback (I have access to any and all boards:)
+> > =
+
+> > One of the things I'm trying to assess is what's still missing vs. the
+> > previous attempt I made upstreaming this. For example, AM62x graphics
+> > isn't there yet (ti-rogue-km / ti-rogue-um).
+> =
+
+> maybe you could shed some light onto the AM62x situation. My conclusion
+> is that since your initial buildroot BSP U-Boot has been switched
+> to standard boot (CONFIG_BOOTSTD), refer to (U-Boot repo):
+> =
+
+> commit 355c0afcd4b7c8c442c4d03e07649c24194b8e06
+> Author: Nishanth Menon <nm@ti.com>
+> Date:   Fri Aug 25 13:02:52 2023 -0500
+> =
+
+>     configs: am62x_evm_a53_defconfig: Switch to bootstd
+> =
+
+> and
+> =
+
+> commit ab54d9b28d8578cc43b214d39009e7b1def797e4
+> Author: Roger Quadros <rogerq@kernel.org>
+> Date:   Thu Oct 5 16:06:41 2023 +0300
+> =
+
+>     board: ti: am62x: am62x.env: Fix boot_targets
+>     =
+
+>     ti_mmc is not a valid boot_target for standard boot flow so
+> =
+
+> I suppose TI's BSP still uses older U-Boot and is still not affected.
+> Do we need uEnv.txt now? Do you have an idea which distro Nishanth may
+> have tested with BOOTSTD change?
+
+I wasn't aware of those changes but I just looked at some of them. Looks
+like most of the effort was targeted around the BeaglePlay board.
+
+And this was tested with Debian. You can find one of Nishanth's boot
+logs here [1]. It was referenced in the cover letter [2] of the U-Boot
+series that introduced the 'Switch to bootstd' change you pointed out.
+
+If this indeed causes some widespread breakage including Buildroot we
+need to understand and think about how to best resolve this. Will dig
+into this some more as I'm trying to get back into helping with the
+Buildroot effort here.
+
+Thanks, Andreas
+
+
+
+[1] https://gist.github.com/nmenon/c74acb3a895053e05623e886df77c8fe
+[2] https://lore.kernel.org/all/20230824031101.3460411-1-nm@ti.com/
+
+
+
+> =
+
+> -- =
+
+> Alexander Sverdlin.
+> =
 
 _______________________________________________
 buildroot mailing list
