@@ -4,71 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3DF4C5475B
-	for <buildroot@archiver.kernel.org>; Tue, 20 Feb 2024 18:50:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B77CC48BC3
+	for <buildroot@archiver.kernel.org>; Tue, 20 Feb 2024 19:06:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7B844606A0;
-	Tue, 20 Feb 2024 18:50:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B852C605ED;
+	Tue, 20 Feb 2024 19:06:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VjqcWm7zvCRM; Tue, 20 Feb 2024 18:50:35 +0000 (UTC)
+	with ESMTP id mf-81TCXwe_H; Tue, 20 Feb 2024 19:06:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 89E3E608BE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D3101606F5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 89E3E608BE;
-	Tue, 20 Feb 2024 18:50:35 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 473BE1BF2FD
- for <buildroot@lists.busybox.net>; Tue, 20 Feb 2024 18:50:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D3101606F5;
+	Tue, 20 Feb 2024 19:06:01 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AFAE81BF2A2
+ for <buildroot@lists.busybox.net>; Tue, 20 Feb 2024 19:06:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 40FEC81E10
- for <buildroot@lists.busybox.net>; Tue, 20 Feb 2024 18:50:33 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9B3BE401F3
+ for <buildroot@lists.busybox.net>; Tue, 20 Feb 2024 19:06:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OqIEWK1Csq3i for <buildroot@lists.busybox.net>;
- Tue, 20 Feb 2024 18:50:32 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4392D81E07
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4392D81E07
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4392D81E07
- for <buildroot@buildroot.org>; Tue, 20 Feb 2024 18:50:32 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a0164.dip0.t-ipconnect.de [91.58.1.100])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 6B18BA4C0835
- for <buildroot@buildroot.org>; Tue, 20 Feb 2024 19:50:30 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:54332)
- by fli4l.lan.fli4l with esmtp (Exim 4.97.1)
- (envelope-from <bernd@kuhls.net>) id 1rcVCI-0000000049I-0ekg
- for buildroot@buildroot.org; Tue, 20 Feb 2024 19:50:30 +0100
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9rxUyXyMCJ8E for <buildroot@lists.busybox.net>;
+ Tue, 20 Feb 2024 19:05:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::432; helo=mail-wr1-x432.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 31F5D40196
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 31F5D40196
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 31F5D40196
+ for <buildroot@buildroot.org>; Tue, 20 Feb 2024 19:05:59 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id
+ ffacd0b85a97d-33d2710f3acso2566298f8f.0
+ for <buildroot@buildroot.org>; Tue, 20 Feb 2024 11:05:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1708455957; x=1709060757;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=OABNkaBKqj6Xeurm9lPIK0TT459MAIPff+LuRNgc2T8=;
+ b=fmrukxDinTRjhhbnpGyXNMryE5ZPtf4u6cuHPW+ozWL86lDOnnOUq3nADg78kHumFP
+ qVITjt85ECwieAQF3CgDW6oNiCYfsB11l8NXCemUhzYeNSBfUL9WBwdr7RFDm5tHdaCr
+ kXZF1WlXAxfJEP/INeqx8PCqxYNB4qKZiBvsAKguBQ11JF8fqRZplXg0rF4RvHJfYwMW
+ jZ1vtWwo1r0zVV6oC4MFumEY995n6TmVSupJw73wqfb53iOBUmaUq7XxCq2tUTq8P2rl
+ Rgo6ttJm322eskUD/MU+CmYpqkNNt0f5oDkr0vqa9IqZL7ug+5mR+k0dPiDNFLndu7ux
+ uA+A==
+X-Gm-Message-State: AOJu0YwNEwJCtBt39VCEAjy5HTW32BFck9chn2lyvk3lfrO7Ec3uJBN8
+ YdMh73UPb6fGMbPKGVL/F9uGnb0MwQmYo3n3OMBW/iEKEy75KcWNt0J4NLoTBGY=
+X-Google-Smtp-Source: AGHT+IGAmMbonDP4mBUJ8GbFCwFMWfuFqytxCIk13t0V3H08Otx7EkC9fyypk6iHB9vLSxHeyranrg==
+X-Received: by 2002:a5d:4e4d:0:b0:33d:1fc3:68ed with SMTP id
+ r13-20020a5d4e4d000000b0033d1fc368edmr12239760wrt.2.1708455956474; 
+ Tue, 20 Feb 2024 11:05:56 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ ba1-20020a0560001c0100b0033d67bdce97sm3451374wrb.84.2024.02.20.11.05.55
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 20 Feb 2024 11:05:55 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 20 Feb 2024 19:50:30 +0100
-Message-Id: <20240220185030.92016-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
+Date: Tue, 20 Feb 2024 20:05:53 +0100
+Message-ID: <20240220190553.3237-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202312101026; t=1708455030;
- bh=b16EERK/so0ov88lJcJVBZ/foglpOVtJWyuGyei+osA=;
- h=From:To:Subject:Date:From;
- b=m1eVQWIfpCRwEVFOrMqxAy/jrYcM0J0VNWlSjwG3cJDxVWJlR1IANtrOqFbPHillK
- quDKdsNBpga8xlOideVzht4PU8nM1yU+prawRatqYtRzfZZUvcF7t2Y+cYPuwTkJLd
- lTxR49PkTWeRPiDnowYrRis2qC3tDQWit83xx9I+BrCKlJWj1aPzpZ7aOfJF7I0U2b
- kMW+zxMdFqmBVz6ZOeTfHnxphYikJ3euPJzj8sY1kwAB1kyZHpjMd4H/2tv0QKZmXj
- n7y3spFr6ACut6j6iYbGnIUF331uzs1sny/pD31Sl7aqXQNyp0dbzCcsoP1SdyVYkx
- j/moDrZEXPM4Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=gmail.com; s=20230601; t=1708455957; x=1709060757; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=OABNkaBKqj6Xeurm9lPIK0TT459MAIPff+LuRNgc2T8=;
+ b=YfGKZbxn80sWBQyODWNe2jli5aBHzodQWtnk1XE27wK39IKN5rUnfLrI/ZN8gTs0qX
+ Aq8TuFucwfrvB+BsAatKUfKG1lpyguGXXJkFcnmJHKSSUBXFgMve2Ghr0mkx/kPjlCg3
+ LweqRDj+/FzyoInqNjRjPAgBQriuFlRHHx0Xbkq2mP1WVXAXdrOEdR6Lh5UoLRJBpaZC
+ kVUHbfU8b1Z4JxHgqCvx8W3QMWNvfqLmvZwgM+RtnQSP4nQXUXXFzQpydGy7NHMx7Cam
+ WhGBA7fnSczj1LGQzks0kNBvAupZSdpvoKi9BxdH8j90JRq3ZL5zQW1QD674JuJ3K3k5
+ QUFg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202312101026 header.b=m1eVQWIf
-Subject: [Buildroot] [PATCH 1/1] package/bind: security bump version to
- 9.16.48
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=YfGKZbxn
+Subject: [Buildroot] [PATCH 1/1] package/ltris: drop unrecognized option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,53 +99,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Julien Boibessot <julien.boibessot@armadeus.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog: https://ftp.isc.org/isc/bind9/9.16.48/CHANGES
+--enable-sound has been dropped since version 1.2.4 and
+https://sourceforge.net/p/lgames/code/432:
 
-Version 9.16.46 fixes
-- CVE-2023-4408
-- CVE-2023-5517
-- CVE-2023-5679
-- CVE-2023-6516
+configure: WARNING: unrecognized options: --disable-gtk-doc, --disable-gtk-doc-html, --disable-doc, --disable-docs, --disable-documentation, --with-xmlto, --with-fop, --enable-ipv6, --enable-static, --disable-shared, --enable-sound
 
-Version 9.16.47 fixes CVE-2023-50387.
+Fixes: 61848605cd26d29f54c16de862aedba7cf334be4
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/bind/bind.hash | 4 ++--
- package/bind/bind.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/ltris/ltris.mk | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index d500b61128..482b046c8d 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,4 +1,4 @@
--# Verified from https://ftp.isc.org/isc/bind9/9.16.44/bind-9.16.44.tar.xz.asc
-+# Verified from https://ftp.isc.org/isc/bind9/9.16.48/bind-9.16.48.tar.xz.asc
- # with key AADBBA5074F1402F7B69D56BC5B4EE931A9F9DFD
--sha256  cfaa953c36d5ca42d9584fcf9653d07c85527b59687e7c4d4cb8071272db6754  bind-9.16.44.tar.xz
-+sha256  8d3814582348f90dead1ad410b1019094cd399d3d83930abebb2b3b1eb0b2bbb  bind-9.16.48.tar.xz
- sha256  13491a682dc0f5ee2273cebd3949e2be62f9470fe659419a03a308d4f444773b  COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 03ffcbec42..0d81ffabd6 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/ltris/ltris.mk b/package/ltris/ltris.mk
+index 98902de44c..b34ac142ce 100644
+--- a/package/ltris/ltris.mk
++++ b/package/ltris/ltris.mk
+@@ -18,12 +18,9 @@ LTRIS_CONF_ENV = \
  
--BIND_VERSION = 9.16.44
-+BIND_VERSION = 9.16.48
- BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
- BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- # bind does not support parallel builds.
+ ifeq ($(BR2_PACKAGE_LTRIS_AUDIO),y)
+ LTRIS_DEPENDENCIES += sdl_mixer host-pkgconf
+-LTRIS_CONF_OPTS += --enable-sound
+ # configure script does NOT use pkg-config to figure out how to link
+ # with sdl_mixer, breaking static linking as sdl_mixer can use libmad
+ LTRIS_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs SDL_mixer`
+-else
+-LTRIS_CONF_OPTS += --disable-sound
+ endif
+ 
+ $(eval $(autotools-package))
 -- 
-2.39.2
+2.43.0
 
 _______________________________________________
 buildroot mailing list
