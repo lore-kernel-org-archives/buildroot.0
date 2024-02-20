@@ -1,86 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4EE2C48BF8
-	for <buildroot@archiver.kernel.org>; Tue, 20 Feb 2024 00:41:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4511C48BC3
+	for <buildroot@archiver.kernel.org>; Tue, 20 Feb 2024 01:28:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 03FBF400B5;
-	Tue, 20 Feb 2024 00:41:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7A1BA407BE;
+	Tue, 20 Feb 2024 01:28:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iskROw6cXqDE; Tue, 20 Feb 2024 00:41:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YD0808mnfTjP; Tue, 20 Feb 2024 01:28:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9069040544
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0EB02407E3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9069040544;
-	Tue, 20 Feb 2024 00:41:09 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C7D4B1BF955
- for <buildroot@lists.busybox.net>; Tue, 20 Feb 2024 00:41:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0EB02407E3;
+	Tue, 20 Feb 2024 01:28:57 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E24021BF330
+ for <buildroot@lists.busybox.net>; Tue, 20 Feb 2024 01:28:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AD0EE40544
- for <buildroot@lists.busybox.net>; Tue, 20 Feb 2024 00:41:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C8753407E3
+ for <buildroot@lists.busybox.net>; Tue, 20 Feb 2024 01:28:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZF9cI9gnJClw for <buildroot@lists.busybox.net>;
- Tue, 20 Feb 2024 00:41:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=198.47.23.248;
- helo=lelv0143.ext.ti.com; envelope-from=dannenberg@ti.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 908CE400B5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 908CE400B5
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 908CE400B5
- for <buildroot@buildroot.org>; Tue, 20 Feb 2024 00:41:04 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id l2AZZ8Oqy9H6 for <buildroot@lists.busybox.net>;
+ Tue, 20 Feb 2024 01:28:53 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=198.47.19.141;
+ helo=fllv0015.ext.ti.com; envelope-from=dannenberg@ti.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 54C8D407BE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 54C8D407BE
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 54C8D407BE
+ for <buildroot@buildroot.org>; Tue, 20 Feb 2024 01:28:52 +0000 (UTC)
 Received: from lelv0265.itg.ti.com ([10.180.67.224])
- by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 41K0f0cj039567;
- Mon, 19 Feb 2024 18:41:00 -0600
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
- by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 41K0f0xT004777
+ by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 41K1Smcq009691;
+ Mon, 19 Feb 2024 19:28:48 -0600
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+ by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 41K1Sm5Z024688
  (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
- Mon, 19 Feb 2024 18:41:00 -0600
-Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ Mon, 19 Feb 2024 19:28:48 -0600
+Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 19
- Feb 2024 18:41:00 -0600
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ Feb 2024 19:28:48 -0600
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 19 Feb 2024 18:41:00 -0600
+ Frontend Transport; Mon, 19 Feb 2024 19:28:48 -0600
 Received: from dasso (dasso.dhcp.ti.com [128.247.79.182])
- by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 41K0f0W6065114;
- Mon, 19 Feb 2024 18:41:00 -0600
-Date: Mon, 19 Feb 2024 18:41:00 -0600
+ by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 41K1SmGj129114;
+ Mon, 19 Feb 2024 19:28:48 -0600
+Date: Mon, 19 Feb 2024 19:28:48 -0600
 To: Romain Naour <romain.naour@smile.fr>
-Message-ID: <20240220004100.3yzqapeplx6olarz@dasso>
+Message-ID: <20240220012848.76amyog5pecsgld4@dasso>
 References: <20240217160244.1320482-1-dario.binacchi@amarulasolutions.com>
- <90dd167b-bceb-4e42-86c3-255caf825f41@smile.fr>
- <CAOf5uwka5w7DEAOox1pAfZ=mkpostmNATBJ_Ny1xuyYesXUwoQ@mail.gmail.com>
- <bf687add-2677-45fe-8eb1-cf04bd95bf57@smile.fr>
+ <20240217160244.1320482-19-dario.binacchi@amarulasolutions.com>
+ <3aa236a2-d78d-42aa-881d-72747eaffe70@smile.fr>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <bf687add-2677-45fe-8eb1-cf04bd95bf57@smile.fr>
+In-Reply-To: <3aa236a2-d78d-42aa-881d-72747eaffe70@smile.fr>
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=ti.com; s=ti-com-17Q1; t=1708389660;
- bh=OyJhL+auMv/UghjbIMHfhzJNOeUe6Vn0yBcq99YnIF4=;
+ d=ti.com; s=ti-com-17Q1; t=1708392528;
+ bh=jIs9Ep9sTLEm/MYFOh+Y586pNLCMmgcixkBAtp0e0yo=;
  h=Date:From:To:CC:Subject:References:In-Reply-To;
- b=i0XxpAXzePomDh6R9pDfT1ZfWgE/4po8yx4mCFagSOz9lPaCW1wD3GJw/drdNr7Hx
- gHZPVjbm9plQWAtDW3uKsCJxDp/O1OKHxLYf3aChKsjB/JtkSrFEHuXRQ0TgBGVZvB
- drAeZsv3alEF5/ZcL1/gSGJGd87djiCKy9o7dCqA=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=uLiJI0JMedxGzQ7vF3NbEN6kramc6eVBBp3dvldFyH2sRpUYXgbD7AYmchnMLPHXC
+ MB7tW7p4Mpf1P512KMydMEtVhngEPM6e47cUQ4pidiMvY/ED76sQQAikqt2ytHJjdn
+ yHY+brtJ4T+1vQ2Qfy/taqZG08MzhhnIkKbUOpbw=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=ti.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
- header.s=ti-com-17Q1 header.b=i0XxpAXz
-Subject: Re: [Buildroot] [PATCH v4 00/20] Add support for AM62x-SK HS-FS
- devices
+ header.s=ti-com-17Q1 header.b=uLiJI0JM
+Subject: Re: [Buildroot] [PATCH v4 18/20] boot/ti-k3: move TI_K3_{SECTYPE,
+ SOC} out of the image-gen scope
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,162 +93,320 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Andreas Dannenberg via buildroot <buildroot@buildroot.org>
 Reply-To: Andreas Dannenberg <dannenberg@ti.com>
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- linux-amarula@amarulasolutions.com, Asaf Kahlon <asafka7@gmail.com>,
- Xuanhao Shi <X15000177@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
+Cc: michael@amarulasolutions.com, linux-amarula@amarulasolutions.com,
+ Asaf Kahlon <asafka7@gmail.com>, Xuanhao Shi <X15000177@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
- Michael Nazzareno Trimarchi <michael@amarulasolutions.com>,
+ Dario Binacchi <dario.binacchi@amarulasolutions.com>,
  Alexander Sverdlin <alexander.sverdlin@gmail.com>, bryce@redpinelabs.com,
  Anand Gadiyar <gadiyar@ti.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gTW9uLCBGZWIgMTksIDIwMjQgYXQgMTI6MjQ6NTJQTSArMDEwMCwgUm9tYWluIE5hb3VyIHdy
-b3RlOgo+IEhlbGxvIE1pY2hhZWwsCj4gCj4gTGUgMTkvMDIvMjAyNCDDoCAxMjowMiwgTWljaGFl
-bCBOYXp6YXJlbm8gVHJpbWFyY2hpIGEgw6ljcml0wqA6Cj4gPiBIaSBSb21haW4KPiA+IAo+ID4g
-T24gTW9uLCBGZWIgMTksIDIwMjQgYXQgMTA6MzDigK9BTSBSb21haW4gTmFvdXIgPHJvbWFpbi5u
-YW91ckBzbWlsZS5mcj4gd3JvdGU6Cj4gPj4KPiA+PiBIZWxsbyBEYXJpbywKPiA+Pgo+ID4+IExl
-IDE3LzAyLzIwMjQgw6AgMTc6MDIsIERhcmlvIEJpbmFjY2hpIGEgw6ljcml0IDoKPiA+Pj4gVGhl
-IFNLLUFNNjJCLVAxIGlzIHRoZSBuZXdlc3QgdmVyc2lvbiBvZiBTSy1BTTYyIHdoaWNoIGluY2x1
-ZGVzCj4gPj4+IGhpZ2gtc2VjdXJpdHkgZmllbGQtc2VjdXJhYmxlIChIUy1GUykgc2lsaWNvbiB0
-byBvcHRpb25hbGx5IGN1c3RvbWl6ZSBrZXlzCj4gPj4+IGFuZCBlbmNyeXB0aW9uIGZvciBzZWN1
-cml0eSBhcHBsaWNhdGlvbnMuCj4gPj4+IFRoaXMgcmVxdWlyZXMgZW5hYmxpbmcgdGhlIEJSMl9U
-QVJHRVRfVElfSzNfSU1BR0VfR0VOX1NFQ1RZUEVfSFNfRlMgb3B0aW9uLAo+ID4+PiB3aGljaCwg
-aG93ZXZlciwgd2FzIGJ1Z2d5LiBUaGlzIHNlcmllcyBmaXhlcyB0aGUgZXJyb3JzIGFuZCBidW1w
-cyB0aGUgTGludXgKPiA+Pj4ga2VybmVsIGFuZCBVLUJvb3QgcmVxdWlyZWQgZm9yIHN1Y2ggYSBu
-ZXcgZGV2aWNlLgo+ID4+Pgo+ID4+PiBUaGlzIHNlcmllcywgd2hpY2ggaW4gbXkgaHVtYmxlIG9w
-aW5pb24sIHNob3VsZCBoYXZlIGJlZW4gaW1tZWRpYXRlbHkKPiA+Pj4gY29uc2lkZXJlZCB0byBj
-b3JyZWN0IHRoZSBjb21waWxhdGlvbiBlcnJvcnMgaW4gY2FzZSBvZiBIUy1GUyBkZXZjaWVzLCBo
-YXMKPiA+Pj4gc2VlbiBhbiBpbmNyZWFzZSBpbiBwYXRjaGVzIGluIHZlcnNpb24gNCB0byByZW1v
-dmUgdGhlIHRpLWszLWltYWdlLWdlbgo+ID4+PiBwYWNrYWdlIHRoYW5rcyB0byBCaW5tYW4uIEFk
-ZGl0aW9uYWxseSwgaXQgc2hhcmVzIHNvbWUgbW9kaWZpY2F0aW9ucyBhbmQKPiA+Pj4gdmlld3Mg
-b24gaG93IHRvIGltcGxlbWVudCBjZXJ0YWluIGNoYW5nZXMgd2l0aCB0aGUgc2VyaWVzCj4gPj4+
-IGh0dHBzOi8vcGF0Y2h3b3JrLm96bGFicy5vcmcvcHJvamVjdC9idWlsZHJvb3QvbGlzdC8/c2Vy
-aWVzPTM5NDg0MC4KPiA+Pj4gVGhlcmVmb3JlLCBJIHRoaW5rIGl0IGlzIG5lY2Vzc2FyeSBub3Qg
-dG8gcnVuIHRoZW0gaW4gcGFyYWxsZWwgYnV0IHRvIGRlY2lkZQo+ID4+PiB3aGV0aGVyIHRvIG1l
-cmdlIG9uZSBiZWZvcmUgdGhlIG90aGVyIG9yIHRvIGNvbnNpZGVyIGEgc2luZ2xlIHNlcmllcyB3
-aGVyZQo+ID4+PiB0aGUgcGF0Y2hlcyBjYW4gYmUgY29oZXJlbnQgd2l0aCBlYWNoIG90aGVyLiBJ
-IGFtIGF2YWlsYWJsZSBmb3IgYm90aCBzb2x1dGlvbnMuCj4gPj4+IExldCBtZSBrbm93Lgo+ID4+
-Cj4gPj4gVGhhbmtzIGZvciB0aGlzIG5ldyB2ZXJzaW9uLiBJIGJlbGVpdmUgYm90aCBzZXJpZXMg
-c2hvdWxkIGJlIG1lcmdlZCBpbnRvIG9uZQo+ID4+IHNpbmNlIHdlIHdhbnQgdG8gZm9sbG93IHUt
-Ym9vdCBzd2l0Y2ggdG8gYmlubWFuLCBhZGQgbW9yZSBUSSBLMyBTb0Mgc3VwcG9ydCBhbmQKPiA+
-PiBrZWVwaW5nIGV4aXNpbmcgYW02MnggYW5zIGFtNjR4IHdvcmtpbmcgaW4gR1Agb3IgSFMvSFMt
-RlMuCj4gPj4KPiA+IAo+ID4gQmVjYXVzZSB0aGUgRGFyaW8gcGF0Y2hzZXQgd2FzIHNlbnQgYmVm
-b3JlIChlbmQgb2YgTm92ZW1iZXIpLCBpdCdzCj4gPiByZWFzb25hYmxlIHRvIHJldmlldyBhbmQg
-YWRqdXN0IHRoYXQgb25lCj4gPiBhbmQgYXBwbHkgeW91ciBjaGFuZ2VzIGZvciB0aV9qNzIxZV9z
-ayBvbiB0b3Agb2YgaXQuIEl0IHRoaW5rIHRoYXQgaXMKPiA+IGEgc3RhbmRhcmQgd2F5IHRvIG1h
-a2UgcGVvcGxlIGhhcHB5IGFib3V0Cj4gPiB0aGVpciB3b3JrIGFuZCBjb250cmlidXRpb24uCj4g
-Cj4gQWN0dWFsbHksIHRoZSB0d28gc2VyaWVzIGFyZSBhYm91dCB0aGUgc2FtZSB0b3BpYzogVEkg
-SzMgU29DIHN1cHBvcnQgKEdQLCBIUywKPiBIUy1GUykgbm90IG9ubHkgQU02MngtU0sgSFMtRlMg
-ZGV2aWNlcwo+IAo+IEJ1dCBkdWUgdG8gdGhlIGNvbXBsZXhpdHkgb2YgdGhlIEJTUCwgdGhlIGJv
-b3QgZmxvdyAoNCB3YXkgdG8gYm9vdCEpIGFuZCB0aGUKPiBzd2l0Y2ggZnJvbSBjdXN0b20gdG9v
-bCB0byBiaW5tYW4uLi4gdGhpcyBzZXJpZXMgaXMgcmVhbGx5IGRpZmZpY3VsdCB0byByZXZpZXcK
-PiB3aXRob3V0IGhhdmluZyBhIGdvb2QgdW5kZXJzdGFuZGluZyBvZiBUSSBLMyBhcmNoaXRlY3R1
-cmUgcGVjdWxpYXJpdHkgYW5kIGhhdmluZwo+IG9uZSBvZiBlYWNoIFRJIGV2YWx1YXRpb24gYm9h
-cmRzIPCfmYIKCkFsdGhvdWdoIEkgaGVscGVkIGNvbmNlaXZlIHNvbWUgb2YgdGhpcyBhbmQgdGhl
-IGFzc29jaWF0ZWQgdG9vbGluZyBlYXJseQpvbiwgc29tZSBvZiB0aGUgd2hhdCBtYXkgbG9vayBz
-dHJhbmdlIGFyY2hpdGVjdHVyYWwgZGVjaXNpb25zIHdlcmUgZHJpdmVuCmJ5IGRpZmZlcmVudCB1
-c2UgY2FzZXMgYW5kIHJlcXVpcmVtZW50cyBmb3IgdGhlIGRpZmZlcmVudCBkZXZpY2VzCihlc3Bl
-Y2lhbGx5IGFyb3VuZCBhdXRvbW90aXZlIGZhc3QvZWFybHkgYm9vdCwgYnV0IGFsc28gc2VjdXJp
-dHkpIGluCmNvbWJpbmF0aW9uIHdpdGggbGltaXRlZCBvbi1jaGlwIFNSQU0uLi4gU28gdGhpcyB3
-aGVyZSB3ZSBhcmUgYXQgbm93LiBBCmZ1dHVyZSBBTTZ4IGRldmljZSB2YXJpYW50IHdpbGwgaGF2
-ZSB5ZXQgYW5vdGhlciBib290IGZsb3csIGJ1dCBJIGNhbgphbHJlYWR5IHNheSBpdCB3aWxsIGJl
-IHZlcnkgbXVjaCBzaW1wbGlmaWVkIG92ZXIgd2hhdCB3ZSBoYXZlIHRvZGF5IDopCgo+IFRoZSBz
-ZXJpZXMgKGJhc2VkIG9uIERhcmlvJ3Mgd29yaykgYWJvdXQgdGlfajcyMWVfc2sgc3VnZ2VzdGVk
-IHRvIHJlbW92ZSBUSQo+IGN1c3RvbSB0b29scyByZXBsYWNlZCBieSBiaW5tYW4gYWxvbmcgd2l0
-aCBvdGhlciBpbXByb3ZlbWVudHMuCj4gCj4gSSdsbCB3YXkgZm9yIHY1IGFuZCByZWJhc2UgdGhl
-IHRpX2o3MjFlX3NrIG9uIHRvcCBvZiBpdC4KClRoYW5rIHlvdSBSb21haW4gZm9yIHlvdXIgYnV5
-LWluLiBMZXQncyBmb2N1cyBvbiBnZXR0aW5nIERhcmlvJ3Mgc2VyaWVzCmluIGdvb2Qgc2hhcGUg
-YW5kIHRoZW4gbW92ZSBvbnRvIHlvdXJzLiBJJ2QgYWxzbyBsaWtlIHRvIHJlLWludHJvZHVjZQpn
-cmFwaGljcyAoSSBoYWQgdGhhdCB3b3JraW5nIGJlZm9yZSkgYnV0IEkgbmVlZCB0byB3YWl0IGZv
-ciBhbGwgdGhlCiJiYXNlbGluZSIgc3R1ZmYgdG8gc2V0dGxlIGZpcnN0LgoKCi0tCkFuZHJlYXMg
-RGFubmVuYmVyZwpUZXhhcyBJbnN0cnVtZW50cyBJbmMKCgoKPiAKPiBCZXN0IHJlZ2FyZHMsCj4g
-Um9tYWluCj4gCj4gCj4gPiAKPiA+IE1pY2hhZWwKPiA+IAo+ID4+IE15IG1haW4gY29uY2VybiBp
-cyB0byBhdm9pZCBhZGRpbmcgYSBuZXcgcGFja2FnZSBmb3IgYSB0b29sIHRoYXQgaXMgYWxyZWFk
-eQo+ID4+IGRlcHJlY2F0ZWQgdGktazMtaW1hZ2UtZ2VuIChub3Qgc3VyZSBpZiB0aS1rMy1jb3Jl
-LXNlY2RldiBpcyByZWFsbHkgZGVwcmVjYXRlZCkgWzFdLgo+ID4+Cj4gPj4gQWxzbyB0aGUgdG9w
-aWMgaXMgbm90IG9ubHkgIkFNNjJ4LVNLIEhTLUZTIGRldmljZXMiIGJ1dCAiVEkgSzMgSFMtRlMg
-ZGV2aWNlcyIuCj4gPj4KPiA+PiBbMV0gaHR0cDovL2xpc3RzLmJ1c3lib3gubmV0L3BpcGVybWFp
-bC9idWlsZHJvb3QvMjAyNC1GZWJydWFyeS82ODU4MjAuaHRtbAo+ID4+Cj4gPj4gQmVzdCByZWdh
-cmRzLAo+ID4+IFJvbWFpbgo+ID4+Cj4gPj4+Cj4gPj4+IERhcmlvIEJpbmFjY2hpICgyMCk6Cj4g
-Pj4+ICAgY29uZmlncy90aV9hbTYyeF9za19kZWZjb25maWc6IGZpeCBCUjJfVEFSR0VUX09QVEVF
-X09TX1BMQVRGT1JNCj4gPj4+ICAgICBzZXR0aW5nCj4gPj4+ICAgY29uZmlncy90aV9hbTY0eF9z
-a19kZWZjb25maWc6IGZpeCBCUjJfVEFSR0VUX09QVEVFX09TX1BMQVRGT1JNCj4gPj4+ICAgICBz
-ZXR0aW5nCj4gPj4+ICAgY29uZmlncy90aV9hbTYyeF9za19kZWZjb25maWc6IGV4cGxpY2l0bHkg
-c2V0IHRoZSB0aS1rMy1yNS1sb2FkZXIKPiA+Pj4gICAgIHZlcnNpb24KPiA+Pj4gICBjb25maWdz
-L3RpX2FtNjR4X3NrX2RlZmNvbmZpZzogZXhwbGljaXRseSBzZXQgdGhlIHRpLWszLXI1LWxvYWRl
-cgo+ID4+PiAgICAgdmVyc2lvbgo+ID4+PiAgIGJvb3QvdGktazMtcjUtbG9hZGVyOiBidW1wIHRv
-IHZlcnNpb24gMjAyNC4wMQo+ID4+PiAgIGJvb3QvdGktazMtY29yZS1zZWNkZXY6IG5ldyBwYWNr
-YWdlCj4gPj4+ICAgYm9vdC90aS1rMy1pbWFnZS1nZW46IG1hbmFnZSBIUyBoYXJkd2FyZQo+ID4+
-PiAgIHBhY2thZ2UvcHl0aG9uLWpzb25zY2hlbWE6IGFkZCBob3N0IHZhcmlhbnQKPiA+Pj4gICBw
-YWNrYWdlL3B5dGhvbi1hdHRyczogYWRkIGhvc3QgdmFyaWFudAo+ID4+PiAgIHBhY2thZ2UvcHl0
-aG9uLXJlZmVyZW5jaW5nOiBhZGQgaG9zdCB2YXJpYW50Cj4gPj4+ICAgcGFja2FnZS9weXRob24t
-cnBkcy1weTogYWRkIGhvc3QgdmFyaWFudAo+ID4+PiAgIHBhY2thZ2UvcHl0aG9uLWpzb25zY2hl
-bWEtc3BlY2lmaWNhdGlvbnM6IGFkZCBob3N0IHZhcmlhbnQKPiA+Pj4gICBib290L3RpLWszLXI1
-LWxvYWRlcjogc2V0IGJpbm1hbiBlbnZpcm9ubWVudAo+ID4+PiAgIGJvb3QvdWJvb3Q6IHNldCBC
-SU5NQU5fSU5ESVJTIGZvciBUSSBLMyBETQo+ID4+PiAgIGNvbmZpZ3MvdGlfYW02Mnhfc2tfZGVm
-Y29uZmlnOiBidW1wIFUtQm9vdCB2ZXJzaW9uIHRvIDIwMjQuMDEKPiA+Pj4gICBjb25maWdzL3Rp
-X2FtNjJ4X3NrX2RlZmNvbmZpZzogYnVtcCBMaW51eCB2ZXJzaW9uIHRvIDYuNi4xCj4gPj4+ICAg
-Ym9vdDogbW92ZSB0aS1rMy0qIHBhY2thZ2VzIHRvICd0aS1rMycgZGlyZWN0b3J5Cj4gPj4+ICAg
-Ym9vdC90aS1rMzogbW92ZSBUSV9LM197U0VDVFlQRSxTT0N9IG91dCBvZiB0aGUgaW1hZ2UtZ2Vu
-IHNjb3BlCj4gPj4+ICAgYm9vdC90aS1rMy90aS1rMy1yNS1sb2FkZXI6IGluc3RhbGwgdGlib290
-My5iaW4KPiA+Pj4gICBjb25maWdzL3RpX2FtNjJ4X3NrX2RlZmNvbmZpZzogZG9uJ3QgdXNlIHRp
-LWszLWltYWdlLWdlbiBhbnltb3JlCj4gPj4+Cj4gPj4+ICBERVZFTE9QRVJTICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgfCAgMSArCj4gPj4+ICBib2FyZC90aS9hbTYyeC1zay9n
-ZW5pbWFnZS5jZmcgICAgICAgICAgICAgICAgfCAgNyArLQo+ID4+PiAgYm9hcmQvdGkvYW02Mngt
-c2svcG9zdC1idWlsZC5zaCAgICAgICAgICAgICAgIHwgNDkgKysrKysrKysrKysrCj4gPj4+ICBi
-b2FyZC90aS9hbTYyeC1zay9wb3N0LWltYWdlLnNoICAgICAgICAgICAgICAgfCAgNSArKwo+ID4+
-PiAgYm9vdC9Db25maWcuaW4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDQgKy0K
-PiA+Pj4gIGJvb3QvdGktazMtaW1hZ2UtZ2VuL0NvbmZpZy5pbiAgICAgICAgICAgICAgICB8IDc3
-IC0tLS0tLS0tLS0tLS0tLS0tLS0KPiA+Pj4gIGJvb3QvdGktazMvQ29uZmlnLmluICAgICAgICAg
-ICAgICAgICAgICAgICAgICB8IDU5ICsrKysrKysrKysrKysrCj4gPj4+ICBib290L3RpLWszL2Nv
-bW1vbi5tayAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgMSArCj4gPj4+ICAuLi4veyA9PiB0
-aS1rM30vdGktazMtYm9vdC1maXJtd2FyZS9Db25maWcuaW4gfCAgMAo+ID4+PiAgLi4uL3RpLWsz
-LWJvb3QtZmlybXdhcmUuaGFzaCAgICAgICAgICAgICAgICAgIHwgIDAKPiA+Pj4gIC4uLi90aS1r
-My1ib290LWZpcm13YXJlLm1rICAgICAgICAgICAgICAgICAgICB8ICAwCj4gPj4+ICBib290L3Rp
-LWszL3RpLWszLWNvcmUtc2VjZGV2L0NvbmZpZy5pbiAgICAgICAgfCAgOSArKysKPiA+Pj4gIC4u
-Li90aS1rMy1jb3JlLXNlY2Rldi90aS1rMy1jb3JlLXNlY2Rldi5oYXNoICB8ICAzICsKPiA+Pj4g
-IC4uLi90aS1rMy1jb3JlLXNlY2Rldi90aS1rMy1jb3JlLXNlY2Rldi5tayAgICB8IDIyICsrKysr
-Kwo+ID4+PiAgYm9vdC90aS1rMy90aS1rMy1pbWFnZS1nZW4vQ29uZmlnLmluICAgICAgICAgIHwg
-MjUgKysrKysrCj4gPj4+ICAuLi4vdGktazMtaW1hZ2UtZ2VuL3RpLWszLWltYWdlLWdlbi5oYXNo
-ICAgICAgfCAgMAo+ID4+PiAgLi4uL3RpLWszLWltYWdlLWdlbi90aS1rMy1pbWFnZS1nZW4ubWsg
-ICAgICAgIHwgMjAgKysrKy0KPiA+Pj4gIGJvb3QveyA9PiB0aS1rM30vdGktazMtcjUtbG9hZGVy
-L0NvbmZpZy5pbiAgICB8ICA0ICstCj4gPj4+ICAuLi4vdGktazMtcjUtbG9hZGVyL3RpLWszLXI1
-LWxvYWRlci5oYXNoICAgICAgfCAgMiArLQo+ID4+PiAgLi4uL3RpLWszLXI1LWxvYWRlci90aS1r
-My1yNS1sb2FkZXIubWsgICAgICAgIHwgMTYgKysrLQo+ID4+PiAgYm9vdC91Ym9vdC9Db25maWcu
-aW4gICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDcgKy0KPiA+Pj4gIGJvb3QvdWJvb3QvdWJv
-b3QubWsgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAzICstCj4gPj4+ICBjb25maWdzL3Rp
-X2FtNjJ4X3NrX2RlZmNvbmZpZyAgICAgICAgICAgICAgICAgfCAyMyArKystLS0KPiA+Pj4gIGNv
-bmZpZ3MvdGlfYW02NHhfc2tfZGVmY29uZmlnICAgICAgICAgICAgICAgICB8ICA4ICstCj4gPj4+
-ICBwYWNrYWdlL3B5dGhvbi1hdHRycy9weXRob24tYXR0cnMubWsgICAgICAgICAgfCAgNiArKwo+
-ID4+PiAgLi4uL3B5dGhvbi1qc29uc2NoZW1hLXNwZWNpZmljYXRpb25zLm1rICAgICAgIHwgIDUg
-KysKPiA+Pj4gIC4uLi9weXRob24tanNvbnNjaGVtYS9weXRob24tanNvbnNjaGVtYS5tayAgICB8
-ICA2ICsrCj4gPj4+ICAuLi4vcHl0aG9uLXJlZmVyZW5jaW5nL3B5dGhvbi1yZWZlcmVuY2luZy5t
-ayAgfCAgNSArKwo+ID4+PiAgcGFja2FnZS9weXRob24tcnBkcy1weS9weXRob24tcnBkcy1weS5t
-ayAgICAgIHwgIDEgKwo+ID4+PiAgMjkgZmlsZXMgY2hhbmdlZCwgMjYzIGluc2VydGlvbnMoKyks
-IDEwNSBkZWxldGlvbnMoLSkKPiA+Pj4gIGNyZWF0ZSBtb2RlIDEwMDc1NSBib2FyZC90aS9hbTYy
-eC1zay9wb3N0LWJ1aWxkLnNoCj4gPj4+ICBjcmVhdGUgbW9kZSAxMDA3NTUgYm9hcmQvdGkvYW02
-Mngtc2svcG9zdC1pbWFnZS5zaAo+ID4+PiAgZGVsZXRlIG1vZGUgMTAwNjQ0IGJvb3QvdGktazMt
-aW1hZ2UtZ2VuL0NvbmZpZy5pbgo+ID4+PiAgY3JlYXRlIG1vZGUgMTAwNjQ0IGJvb3QvdGktazMv
-Q29uZmlnLmluCj4gPj4+ICBjcmVhdGUgbW9kZSAxMDA2NDQgYm9vdC90aS1rMy9jb21tb24ubWsK
-PiA+Pj4gIHJlbmFtZSBib290L3sgPT4gdGktazN9L3RpLWszLWJvb3QtZmlybXdhcmUvQ29uZmln
-LmluICgxMDAlKQo+ID4+PiAgcmVuYW1lIGJvb3QveyA9PiB0aS1rM30vdGktazMtYm9vdC1maXJt
-d2FyZS90aS1rMy1ib290LWZpcm13YXJlLmhhc2ggKDEwMCUpCj4gPj4+ICByZW5hbWUgYm9vdC97
-ID0+IHRpLWszfS90aS1rMy1ib290LWZpcm13YXJlL3RpLWszLWJvb3QtZmlybXdhcmUubWsgKDEw
-MCUpCj4gPj4+ICBjcmVhdGUgbW9kZSAxMDA2NDQgYm9vdC90aS1rMy90aS1rMy1jb3JlLXNlY2Rl
-di9Db25maWcuaW4KPiA+Pj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBib290L3RpLWszL3RpLWszLWNv
-cmUtc2VjZGV2L3RpLWszLWNvcmUtc2VjZGV2Lmhhc2gKPiA+Pj4gIGNyZWF0ZSBtb2RlIDEwMDY0
-NCBib290L3RpLWszL3RpLWszLWNvcmUtc2VjZGV2L3RpLWszLWNvcmUtc2VjZGV2Lm1rCj4gPj4+
-ICBjcmVhdGUgbW9kZSAxMDA2NDQgYm9vdC90aS1rMy90aS1rMy1pbWFnZS1nZW4vQ29uZmlnLmlu
-Cj4gPj4+ICByZW5hbWUgYm9vdC97ID0+IHRpLWszfS90aS1rMy1pbWFnZS1nZW4vdGktazMtaW1h
-Z2UtZ2VuLmhhc2ggKDEwMCUpCj4gPj4+ICByZW5hbWUgYm9vdC97ID0+IHRpLWszfS90aS1rMy1p
-bWFnZS1nZW4vdGktazMtaW1hZ2UtZ2VuLm1rICg2NyUpCj4gPj4+ICByZW5hbWUgYm9vdC97ID0+
-IHRpLWszfS90aS1rMy1yNS1sb2FkZXIvQ29uZmlnLmluICg5NyUpCj4gPj4+ICByZW5hbWUgYm9v
-dC97ID0+IHRpLWszfS90aS1rMy1yNS1sb2FkZXIvdGktazMtcjUtbG9hZGVyLmhhc2ggKDU0JSkK
-PiA+Pj4gIHJlbmFtZSBib290L3sgPT4gdGktazN9L3RpLWszLXI1LWxvYWRlci90aS1rMy1yNS1s
-b2FkZXIubWsgKDg1JSkKPiA+Pj4KPiA+Pgo+IApfX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWls
-ZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1
-aWxkcm9vdAo=
+Romain, Dario,
+
+On Mon, Feb 19, 2024 at 11:28:59AM +0100, Romain Naour wrote:
+> Hello Dario,
+> =
+
+> Le 17/02/2024 =E0 17:02, Dario Binacchi a =E9crit=A0:
+> > Recent versions of U-Boot can use Binman to compile and sign the genera=
+ted
+> > binaries, thus making the use of custom tools like ti-k3-image-gen no
+> > longer necessary. In ti-k3-image-gen, options such as SECTYPE and SOC w=
+ere
+> > configured and used outside of it. This patch allows setting such optio=
+ns
+> > even if the package is not enabled.
+> =
+
+> I'm agree that Buildroot doesn't provide any "Platform selection" as the =
+Linux
+> kernel and I'm not sure where those TI_K3_{SECTYPE,SOC} should belong.
+
+There were discussions/suggestions around this before by Yann E Morin
+[1] and Thomas Petazzoni [2]. I think the gist of it was to move the
+selection to a new package like BR2_PACKAGE_TI_K3_PLATFORM containing
+all the K3 SoC specific selections. And then other packages and Kconfig
+menues can depend on it more cleanly. Like it's currently done with
+package/freescale-imx/Config.in.  This would also bring some consistency
+in how those NXP and TI device families are managed, which will make for
+a better end-user experience I think.
+
+
+
+--
+Andreas Dannenberg
+Texas Instruments Inc
+
+[1] http://lists.busybox.net/pipermail/buildroot/2023-June/669342.html
+[2] http://lists.busybox.net/pipermail/buildroot/2023-August/673292.html
+
+
+> =
+
+> Best regards,
+> Romain
+> =
+
+> =
+
+> > =
+
+> > ---
+> > =
+
+> > Added in v4
+> > =
+
+> > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> > ---
+> >  boot/ti-k3/Config.in                          | 46 ++++++++++++++
+> >  boot/ti-k3/ti-k3-image-gen/Config.in          | 63 ++-----------------
+> >  boot/ti-k3/ti-k3-image-gen/ti-k3-image-gen.mk |  6 +-
+> >  boot/uboot/Config.in                          |  7 +--
+> >  configs/ti_am62x_sk_defconfig                 |  2 +-
+> >  configs/ti_am64x_sk_defconfig                 |  2 +-
+> >  6 files changed, 59 insertions(+), 67 deletions(-)
+> > =
+
+> > diff --git a/boot/ti-k3/Config.in b/boot/ti-k3/Config.in
+> > index 06dda2f156a9..9e508326c9c8 100644
+> > --- a/boot/ti-k3/Config.in
+> > +++ b/boot/ti-k3/Config.in
+> > @@ -5,6 +5,52 @@ config BR2_TARGET_TI_K3
+> >  =
+
+> >  if BR2_TARGET_TI_K3
+> >  =
+
+> > +choice
+> > +	prompt "SoC family"
+> > +
+> > +config BR2_TARGET_TI_K3_SOC_AM62AX
+> > +	bool "am62ax"
+> > +
+> > +config BR2_TARGET_TI_K3_SOC_AM62X
+> > +	bool "am62x"
+> > +
+> > +config BR2_TARGET_TI_K3_SOC_AM64X
+> > +	bool "am64x"
+> > +
+> > +config BR2_TARGET_TI_K3_SOC_AM65X
+> > +	bool "am65x"
+> > +
+> > +endchoice
+> > +
+> > +choice
+> > +	prompt "Security type"
+> > +	help
+> > +	  The target SoC security type option.
+> > +
+> > +config BR2_TARGET_TI_K3_SECTYPE_GP
+> > +	bool "gp"
+> > +
+> > +config BR2_TARGET_TI_K3_SECTYPE_HS_FS
+> > +	bool "hs-fs"
+> > +
+> > +config BR2_TARGET_TI_K3_SECTYPE_HS
+> > +	bool "hs"
+> > +
+> > +endchoice
+> > +
+> > +config BR2_TARGET_TI_K3_SOC
+> > +	string
+> > +	default "am62ax" if BR2_TARGET_TI_K3_SOC_AM62AX
+> > +	default "am62x"  if BR2_TARGET_TI_K3_SOC_AM62X
+> > +	default "am64x"  if BR2_TARGET_TI_K3_SOC_AM64X
+> > +	default "am65x"  if BR2_TARGET_TI_K3_SOC_AM65X
+> > +
+> > +config BR2_TARGET_TI_K3_SECTYPE
+> > +	string
+> > +	default "gp"    if BR2_TARGET_TI_K3_SECTYPE_GP
+> > +	default "hs-fs" if BR2_TARGET_TI_K3_SECTYPE_HS_FS
+> > +	default "hs"    if BR2_TARGET_TI_K3_SECTYPE_HS
+> > +
+> >  source "boot/ti-k3/ti-k3-boot-firmware/Config.in"
+> >  source "boot/ti-k3/ti-k3-core-secdev/Config.in"
+> >  source "boot/ti-k3/ti-k3-image-gen/Config.in"
+> > diff --git a/boot/ti-k3/ti-k3-image-gen/Config.in b/boot/ti-k3/ti-k3-im=
+age-gen/Config.in
+> > index 38d1598d9fc0..2d53d62dd4ee 100644
+> > --- a/boot/ti-k3/ti-k3-image-gen/Config.in
+> > +++ b/boot/ti-k3/ti-k3-image-gen/Config.in
+> > @@ -2,7 +2,7 @@ config BR2_TARGET_TI_K3_IMAGE_GEN
+> >  	bool "ti-k3-image-gen"
+> >  	depends on BR2_TARGET_TI_K3_R5_LOADER
+> >  	select BR2_TARGET_TI_K3_BOOT_FIRMWARE
+> > -	select BR2_TARGET_TI_K3_CORE_SECDEV if BR2_TARGET_TI_K3_IMAGE_GEN_SEC=
+TYPE_HS_FS || BR2_TARGET_TI_K3_IMAGE_GEN_SECTYPE_HS
+> > +	select BR2_TARGET_TI_K3_CORE_SECDEV if BR2_TARGET_TI_K3_SECTYPE_HS_FS=
+ || BR2_TARGET_TI_K3_SECTYPE_HS
+> >  	# We need FIT support in uboot-tools, which is why we select a
+> >  	# host package
+> >  	select BR2_PACKAGE_HOST_UBOOT_TOOLS
+> > @@ -14,65 +14,12 @@ config BR2_TARGET_TI_K3_IMAGE_GEN
+> >  	  https://git.ti.com/cgit/k3-image-gen/k3-image-gen/
+> >  =
+
+> >  if BR2_TARGET_TI_K3_IMAGE_GEN
+> > -choice
+> > -	prompt "SoC family"
+> > -
+> > -config BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62AX
+> > -	bool "am62ax"
+> > -
+> > -config BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62X
+> > -	bool "am62x"
+> > -
+> > -config BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM64X
+> > -	bool "am64x"
+> > -
+> > -config BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM65X
+> > -	bool "am65x"
+> > -
+> > -endchoice
+> > -
+> > -choice
+> > -	prompt "Security type"
+> > -	help
+> > -	  The target SoC security type option for image gen.  Valid
+> > -	  options are "gp" for General Purpose devices, "hs-fs" for
+> > -	  High Security - Field Securable devices, or "hs" for High
+> > -	  Security - Security Enforcing devices.  Note for all High
+> > -	  Security device variants the TI_SECURE_DEV_PKG environmental
+> > -	  variable must be defined at build time pointing to a valid
+> > -	  core-secdev-k3 folder location, otherwise the build will
+> > -	  fail, see
+> > -	  https://git.ti.com/cgit/security-development-tools/core-secdev-k3
+> > -
+> > -config BR2_TARGET_TI_K3_IMAGE_GEN_SECTYPE_GP
+> > -	bool "gp"
+> > -
+> > -config BR2_TARGET_TI_K3_IMAGE_GEN_SECTYPE_HS_FS
+> > -	bool "hs-fs"
+> > -
+> > -config BR2_TARGET_TI_K3_IMAGE_GEN_SECTYPE_HS
+> > -	bool "hs"
+> > -
+> > -endchoice
+> > -
+> > -config BR2_TARGET_TI_K3_IMAGE_GEN_SOC
+> > -	string
+> > -	default "am62ax" if BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62AX
+> > -	default "am62x"  if BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62X
+> > -	default "am64x"  if BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM64X
+> > -	default "am65x"  if BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM65X
+> >  =
+
+> >  config BR2_TARGET_TI_K3_IMAGE_GEN_FW_TYPE
+> >  	string
+> > -	default "ti-fs"  if BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62AX
+> > -	default "ti-fs"  if BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62X
+> > -	default "ti-sci" if BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM64X
+> > -	default "ti-sci" if BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM65X
+> > -
+> > -config BR2_TARGET_TI_K3_IMAGE_GEN_SECTYPE
+> > -	string
+> > -	default "gp"    if BR2_TARGET_TI_K3_IMAGE_GEN_SECTYPE_GP
+> > -	default "hs-fs" if BR2_TARGET_TI_K3_IMAGE_GEN_SECTYPE_HS_FS
+> > -	default "hs"    if BR2_TARGET_TI_K3_IMAGE_GEN_SECTYPE_HS
+> > +	default "ti-fs"  if BR2_TARGET_TI_K3_SOC_AM62AX
+> > +	default "ti-fs"  if BR2_TARGET_TI_K3_SOC_AM62X
+> > +	default "ti-sci" if BR2_TARGET_TI_K3_SOC_AM64X
+> > +	default "ti-sci" if BR2_TARGET_TI_K3_SOC_AM65X
+> >  =
+
+> >  endif
+> > diff --git a/boot/ti-k3/ti-k3-image-gen/ti-k3-image-gen.mk b/boot/ti-k3=
+/ti-k3-image-gen/ti-k3-image-gen.mk
+> > index 74b4fcb4bf89..834d8f7d5cd5 100644
+> > --- a/boot/ti-k3/ti-k3-image-gen/ti-k3-image-gen.mk
+> > +++ b/boot/ti-k3/ti-k3-image-gen/ti-k3-image-gen.mk
+> > @@ -26,10 +26,10 @@ TI_K3_IMAGE_GEN_DEPENDENCIES =3D \
+> >  	$(BR2_MAKE_HOST_DEPENDENCY)
+> >  =
+
+> >  TI_K3_IMAGE_GEN_FW_TYPE =3D $(call qstrip,$(BR2_TARGET_TI_K3_IMAGE_GEN=
+_FW_TYPE))
+> > -TI_K3_IMAGE_GEN_SOC =3D $(call qstrip,$(BR2_TARGET_TI_K3_IMAGE_GEN_SOC=
+))
+> > -TI_K3_IMAGE_GEN_SECTYPE =3D $(call qstrip,$(BR2_TARGET_TI_K3_IMAGE_GEN=
+_SECTYPE))
+> > +TI_K3_IMAGE_GEN_SOC =3D $(call qstrip,$(BR2_TARGET_TI_K3_SOC))
+> > +TI_K3_IMAGE_GEN_SECTYPE =3D $(call qstrip,$(BR2_TARGET_TI_K3_SECTYPE))
+> >  =
+
+> > -ifeq ($(BR2_TARGET_TI_K3_IMAGE_GEN_SECTYPE_GP),y)
+> > +ifeq ($(BR2_TARGET_TI_K3_SECTYPE_GP),y)
+> >  TI_K3_IMAGE_GEN_SYSFW =3D \
+> >  	$(TI_K3_IMAGE_GEN_FW_TYPE)-firmware-$(TI_K3_IMAGE_GEN_SOC)-$(TI_K3_IM=
+AGE_GEN_SECTYPE).bin
+> >  else
+> > diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+> > index beafb38930db..1a9d21e7c6d1 100644
+> > --- a/boot/uboot/Config.in
+> > +++ b/boot/uboot/Config.in
+> > @@ -244,8 +244,7 @@ config BR2_TARGET_UBOOT_NEEDS_TI_K3_DM
+> >  	bool "U-Boot needs TI K3 Device Manager (DM)"
+> >  	# We use the SoC selection defined for the ti-k3-image-gen
+> >  	# package
+> > -	depends on BR2_TARGET_TI_K3_IMAGE_GEN
+> > -	depends on BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62AX || BR2_TARGET_TI_K3_=
+IMAGE_GEN_SOC_AM62X
+> > +	depends on BR2_TARGET_TI_K3_SOC_AM62AX || BR2_TARGET_TI_K3_SOC_AM62X
+> >  	help
+> >  	  Some TI K3 devices need the Device Manager (DM) firmware to
+> >  	  be available for the U-Boot build.
+> > @@ -254,8 +253,8 @@ if BR2_TARGET_UBOOT_NEEDS_TI_K3_DM
+> >  =
+
+> >  config BR2_TARGET_UBOOT_TI_K3_DM_SOCNAME
+> >  	string
+> > -	default "am62axx" if BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62AX
+> > -	default "am62xx"  if BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62X
+> > +	default "am62axx" if BR2_TARGET_TI_K3_SOC_AM62AX
+> > +	default "am62xx"  if BR2_TARGET_TI_K3_SOC_AM62X
+> >  =
+
+> >  endif
+> >  =
+
+> > diff --git a/configs/ti_am62x_sk_defconfig b/configs/ti_am62x_sk_defcon=
+fig
+> > index cd26235342e4..cfefce0a77a4 100644
+> > --- a/configs/ti_am62x_sk_defconfig
+> > +++ b/configs/ti_am62x_sk_defconfig
+> > @@ -24,8 +24,8 @@ BR2_TARGET_OPTEE_OS=3Dy
+> >  BR2_TARGET_OPTEE_OS_PLATFORM=3D"k3-am62x"
+> >  BR2_TARGET_OPTEE_OS_PLATFORM_FLAVOR=3D"am62x"
+> >  BR2_TARGET_TI_K3=3Dy
+> > +BR2_TARGET_TI_K3_SOC_AM62X=3Dy
+> >  BR2_TARGET_TI_K3_IMAGE_GEN=3Dy
+> > -BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62X=3Dy
+> >  BR2_TARGET_TI_K3_R5_LOADER=3Dy
+> >  BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION=3Dy
+> >  BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION_VALUE=3D"2024.01"
+> > diff --git a/configs/ti_am64x_sk_defconfig b/configs/ti_am64x_sk_defcon=
+fig
+> > index 1befeb4ab96c..daf78dbffff8 100644
+> > --- a/configs/ti_am64x_sk_defconfig
+> > +++ b/configs/ti_am64x_sk_defconfig
+> > @@ -24,8 +24,8 @@ BR2_TARGET_OPTEE_OS=3Dy
+> >  BR2_TARGET_OPTEE_OS_PLATFORM=3D"k3-am64x"
+> >  BR2_TARGET_OPTEE_OS_PLATFORM_FLAVOR=3D"am64x"
+> >  BR2_TARGET_TI_K3=3Dy
+> > +BR2_TARGET_TI_K3_SOC_AM64X=3Dy
+> >  BR2_TARGET_TI_K3_IMAGE_GEN=3Dy
+> > -BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM64X=3Dy
+> >  BR2_TARGET_TI_K3_R5_LOADER=3Dy
+> >  BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION=3Dy
+> >  BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION_VALUE=3D"2022.10"
+> =
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
