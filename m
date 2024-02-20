@@ -4,72 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12674C48BC4
-	for <buildroot@archiver.kernel.org>; Tue, 20 Feb 2024 21:12:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4063CC48BC3
+	for <buildroot@archiver.kernel.org>; Tue, 20 Feb 2024 21:12:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C0492605E2;
-	Tue, 20 Feb 2024 21:12:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E3C6B60645;
+	Tue, 20 Feb 2024 21:12:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rVBsHQqxuInY; Tue, 20 Feb 2024 21:12:23 +0000 (UTC)
+	with ESMTP id E243cqDCbcyb; Tue, 20 Feb 2024 21:12:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C1B856062E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D939D6062E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C1B856062E;
-	Tue, 20 Feb 2024 21:12:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B5FF01BF475
- for <buildroot@lists.busybox.net>; Tue, 20 Feb 2024 21:12:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D939D6062E;
+	Tue, 20 Feb 2024 21:12:36 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 09C931BF955
+ for <buildroot@lists.busybox.net>; Tue, 20 Feb 2024 21:12:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B00AA81E1A
- for <buildroot@lists.busybox.net>; Tue, 20 Feb 2024 21:12:21 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E988B414D0
+ for <buildroot@lists.busybox.net>; Tue, 20 Feb 2024 21:12:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UE9ytDZq0bZN for <buildroot@lists.busybox.net>;
- Tue, 20 Feb 2024 21:12:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VPcHIknzKITv for <buildroot@lists.busybox.net>;
+ Tue, 20 Feb 2024 21:12:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
  helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9068581E10
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9068581E10
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9068581E10
- for <buildroot@buildroot.org>; Tue, 20 Feb 2024 21:12:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 64C5840162
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 64C5840162
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 64C5840162
+ for <buildroot@buildroot.org>; Tue, 20 Feb 2024 21:12:33 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 51F1113F88D;
- Tue, 20 Feb 2024 22:12:15 +0100 (CET)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 4A19513F86A;
+ Tue, 20 Feb 2024 22:12:29 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 20 Feb 2024 22:12:15 +0100
-Date: Tue, 20 Feb 2024 22:12:15 +0100
+ Tue, 20 Feb 2024 22:12:29 +0100
+Date: Tue, 20 Feb 2024 22:12:29 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Martin Kepplinger <martink@posteo.de>
-Message-ID: <ZdUVr89TMi6HKcC6@landeda>
-References: <20240220073251.251521-1-martink@posteo.de>
+To: Marcus Hoffmann <buildroot@bubu1.eu>
+Message-ID: <ZdUVvX2EvkdcjqBI@landeda>
+References: <20240220151931.2141682-1-buildroot@bubu1.eu>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20240220073251.251521-1-martink@posteo.de>
+In-Reply-To: <20240220151931.2141682-1-buildroot@bubu1.eu>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1708463537;
- bh=1+GvFMqf41dza0SkPcmp+0xkCaH7EL+bq506Vi6enWU=;
+ d=free.fr; s=smtp-20201208; t=1708463551;
+ bh=cYJR9WpvOfEwrJn6ta72YWiQ4htm8XMRY5N+TYbE5TU=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=BXraBewHPm8cmtWw3+tp5MDs7DeGZJfRkoUAcELsW9EfdVXYuZs4f65v9T6+c+LB7
- T699sP6IbkNW5pA0S3BVJfIl6nSQVQpLbq+BHtzVEp1w7JZKzmSyvakeVEYBA/lsWZ
- cWXu5Rj52E/9CGK9crFglE46+QUlICNEu1zY+ydkqlTwOJrtwfYr0kbQMseHnd7x1X
- L6vzyHh5ccA/iQGfzNRvHY4sTxVc/0Ek8IbROCXBL4JU7xd4JuoZqIkpTh/UdBscKm
- NldFPp6GvMZ1n09Z0WO06CE4pIY7JiLQtrq4ygeDCr4P6bPg12LLKn6/4CPOvmHiPE
- HUpGdZkhegYcw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=azMpaap+3kKdBoeSgNotvQXpmkcRavXx9g3m9r6CUaAfMlgc7LgV9vAi0kMKqLS8T
+ 4dkuZRzEIU2bwZ7V4lL9DWOszCVjaulfESTJiJidHTbbdEgLE3tGiH9nxU8AA4/V/E
+ hCvgQ+V4lRHVjfFJ8cbUVyPUPlXxikU9lx/PDgMGvQSxHitRPsGW8a+rUQmthJZUOZ
+ e6LhI36OX5+Zrz71DBEUlcIbPFrLtfNlZsdXl5j96ewXf/LIbWSqW4VmO7oDspqd2i
+ HOEFaknBTUZCo8oUO6gi4Qv2C+7gswFchfdyHhU7PT6zkHvgrGIgeb0/wQqwonYGJ/
+ cBd72/gplfk/Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=BXraBewH
-Subject: Re: [Buildroot] [PATCH 1/1] package/tslib: bump version to 1.23
+ header.s=smtp-20201208 header.b=azMpaap+
+Subject: Re: [Buildroot] [PATCH] package/c-ares: bump to version 1.26.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,18 +87,12 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Martin, All,
+Marcus, All,
 
-On 2024-02-20 07:32 +0000, Martin Kepplinger spake thusly:
-> Release notes from https://github.com/libts/tslib/releases :
+On 2024-02-20 16:19 +0100, Marcus Hoffmann via buildroot spake thusly:
+> Changelog: https://c-ares.org/changelog.html#1_26_0
 > 
-> This release includes libts version 0.10.5 and the following changes:
-> 
->  *  new filter module: module crop
->  *  some build and security fixes
->  *  improved release procedure
-> 
-> Signed-off-by: Martin Kepplinger <martink@posteo.de>
+> Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 
 Applied to master, thanks.
 
@@ -106,47 +100,36 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/tslib/tslib.hash | 4 ++--
->  package/tslib/tslib.mk   | 5 +++--
->  2 files changed, 5 insertions(+), 4 deletions(-)
+>  package/c-ares/c-ares.hash | 2 +-
+>  package/c-ares/c-ares.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
-> index 762fbebb26..6fe35633aa 100644
-> --- a/package/tslib/tslib.hash
-> +++ b/package/tslib/tslib.hash
+> diff --git a/package/c-ares/c-ares.hash b/package/c-ares/c-ares.hash
+> index c2897f6e44..ee097a53c9 100644
+> --- a/package/c-ares/c-ares.hash
+> +++ b/package/c-ares/c-ares.hash
 > @@ -1,5 +1,5 @@
-> -# https://github.com/libts/tslib/releases/download/1.22/tslib-1.22.tar.xz.sha256
-> -sha256  aaf0aed410a268d7b51385d07fe4d9d64312038e87c447ec8a24c8db0a15617a  tslib-1.22.tar.xz
-> +# https://github.com/libts/tslib/releases/download/1.23/tslib-1.23.tar.xz.sha256
-> +sha256  9b489a54d48006201f2fe955a88c3f857535ac93b6cf8e5a16c7b166c8991dac  tslib-1.23.tar.xz
+>  # Locally calculated after checking pgp signature
+> -sha256  de24a314844cb157909730828560628704f4f896d167dd7da0fa2fb93ea18b10  c-ares-1.20.1.tar.gz
+> +sha256  bed58c4f02b009080ebda6c2467ba469722ac6aebbf4497dc44a83d8c6194e50  c-ares-1.26.0.tar.gz
 >  
->  # Locally computed
->  sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  COPYING
-> diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
-> index 45e29808bd..e8eb3beeaf 100644
-> --- a/package/tslib/tslib.mk
-> +++ b/package/tslib/tslib.mk
+>  # Hash for license file
+>  sha256  80fff25340df53b0cf0c3cddbca9050b559b9cbed2ad71830327cfef54959aef  LICENSE.md
+> diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
+> index 586fde9afb..29da6baa4b 100644
+> --- a/package/c-ares/c-ares.mk
+> +++ b/package/c-ares/c-ares.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -TSLIB_VERSION = 1.22
-> +TSLIB_VERSION = 1.23
->  TSLIB_SITE = https://github.com/libts/tslib/releases/download/$(TSLIB_VERSION)
->  TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
->  TSLIB_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
-> @@ -29,7 +29,8 @@ TSLIB_CONF_OPTS += \
->  	--enable-skip=static \
->  	--enable-lowpass=static \
->  	--enable-invert=static \
-> -	--enable-evthres=static
-> +	--enable-evthres=static \
-> +	--enable-crop=static
->  endif
->  
->  $(eval $(autotools-package))
+> -C_ARES_VERSION = 1.20.1
+> +C_ARES_VERSION = 1.26.0
+>  C_ARES_SITE = http://c-ares.haxx.se/download
+>  C_ARES_INSTALL_STAGING = YES
+>  C_ARES_CONF_OPTS = --with-random=/dev/urandom
 > -- 
-> 2.39.2
+> 2.34.1
 > 
 > _______________________________________________
 > buildroot mailing list
