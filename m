@@ -1,57 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BEDB1C48BC3
-	for <buildroot@archiver.kernel.org>; Mon, 19 Feb 2024 20:05:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04EBBC48BC4
+	for <buildroot@archiver.kernel.org>; Tue, 20 Feb 2024 11:33:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7B63F40B5A;
-	Mon, 19 Feb 2024 20:05:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A6C1A40821;
+	Tue, 20 Feb 2024 11:33:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id g52gSPiD0WFl; Mon, 19 Feb 2024 20:05:14 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id IXHpQdeRRhhe; Tue, 20 Feb 2024 11:33:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5F35C40B6D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A657940893
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5F35C40B6D;
-	Mon, 19 Feb 2024 20:05:14 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2702E1BF41C
- for <buildroot@lists.busybox.net>; Mon, 19 Feb 2024 20:05:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A657940893;
+	Tue, 20 Feb 2024 11:33:47 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BD5101BF3A9
+ for <buildroot@lists.busybox.net>; Tue, 20 Feb 2024 11:33:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E4E9460770
- for <buildroot@lists.busybox.net>; Mon, 19 Feb 2024 20:05:11 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B80D581EF3
+ for <buildroot@lists.busybox.net>; Tue, 20 Feb 2024 11:33:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rc2jJMlV0Az3 for <buildroot@lists.busybox.net>;
- Mon, 19 Feb 2024 20:05:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=116.202.254.214;
- helo=ciao.gmane.io; envelope-from=gclub-buildroot@m.gmane-mx.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6imttxyc1UnZ for <buildroot@lists.busybox.net>;
+ Tue, 20 Feb 2024 11:33:45 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=bugzilla@busybox.net;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0BCC660649
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0BCC660649
-Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0BCC660649
- for <buildroot@uclibc.org>; Mon, 19 Feb 2024 20:05:10 +0000 (UTC)
-Received: from list by ciao.gmane.io with local (Exim 4.92)
- (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1rc9sx-0005uj-Ti
- for buildroot@uclibc.org; Mon, 19 Feb 2024 21:05:07 +0100
-X-Injected-Via-Gmane: http://gmane.org/
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 022D781EEF
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 022D781EEF
+ for <buildroot@uclibc.org>; Tue, 20 Feb 2024 11:33:45 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 81)
+ id DC37586E85; Tue, 20 Feb 2024 11:33:44 +0000 (UTC)
+From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-From: Bernd Kuhls <bernd@kuhls.net>
-Date: Mon, 19 Feb 2024 21:04:12 +0100
-Message-ID: <pan$8ffb8$216c5e07$61fb4f0$f3d6d79f@ID-313208.user.individual.net>
-References: <20240211214935.1603160-1-ju.o__4871.99223586998$1707688208$gmane$org@free.fr>
-Mime-Version: 1.0
-User-Agent: Pan/0.154 (Izium; 517acf4)
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=fail (p=none dis=none)
- header.from=kuhls.net
-Subject: Re: [Buildroot] [PATCH 1/1] package/gnu-efi: bump to version 3.0.17
+Date: Tue, 20 Feb 2024 11:33:44 +0000
+X-Bugzilla-Reason: CC
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: buildroot
+X-Bugzilla-Component: Other
+X-Bugzilla-Version: 2023.11.1
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: critical
+X-Bugzilla-Who: ian_ormshaw@waters.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter cc
+ target_milestone attachments.created
+Message-ID: <bug-15952-163@https.bugs.busybox.net/>
+X-Bugzilla-URL: https://bugs.busybox.net/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
+Subject: [Buildroot] [Bug 15952] New: Grub fails to load large rootfs files
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,18 +80,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am Sun, 11 Feb 2024 22:49:35 +0100 schrieb Julien Olivain:
+https://bugs.busybox.net/show_bug.cgi?id=15952
 
-> For commit logs, see:
-> https://sourceforge.net/p/gnu-efi/code/ci/3.0.17/log/
+            Bug ID: 15952
+           Summary: Grub fails to load large rootfs files
+           Product: buildroot
+           Version: 2023.11.1
+          Hardware: PC
+                OS: Linux
+            Status: NEW
+          Severity: critical
+          Priority: P5
+         Component: Other
+          Assignee: unassigned@buildroot.uclibc.org
+          Reporter: ian_ormshaw@waters.com
+                CC: buildroot@uclibc.org
+  Target Milestone: ---
 
-Hi Julien,
+Created attachment 9715
+  --> https://bugs.busybox.net/attachment.cgi?id=9715&action=edit
+Patch file
 
-this bump breaks building syslinux (not yet caught by the autobuilders):
-https://bugs.gentoo.org/921597
+In some systems grub fails to load the rootfs.cpio as an initrd if it is too
+large.
 
-Regards, Bernd
+On the system I am currently testing a 61MB file load successfully while a
+174MB file does not.  With the larger file grub outputs an out of memory error.
+ The attached patch file allows the system to boot successfully.
 
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
