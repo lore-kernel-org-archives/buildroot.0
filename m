@@ -4,81 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD7E2C48BC3
-	for <buildroot@archiver.kernel.org>; Tue, 20 Feb 2024 22:34:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49795C48BC3
+	for <buildroot@archiver.kernel.org>; Tue, 20 Feb 2024 22:50:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7A7C9605C6;
-	Tue, 20 Feb 2024 22:34:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F2B8560BC4;
+	Tue, 20 Feb 2024 22:50:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KyascG_QF3I3; Tue, 20 Feb 2024 22:34:31 +0000 (UTC)
+	with ESMTP id Pn9nHuvAOPbl; Tue, 20 Feb 2024 22:50:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 72E166060A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 17ADC606CB
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 72E166060A;
-	Tue, 20 Feb 2024 22:34:31 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 395001BF29D
- for <buildroot@lists.busybox.net>; Tue, 20 Feb 2024 22:34:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 17ADC606CB;
+	Tue, 20 Feb 2024 22:50:34 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 82D121BF29D
+ for <buildroot@lists.busybox.net>; Tue, 20 Feb 2024 22:50:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 33E0880BF3
- for <buildroot@lists.busybox.net>; Tue, 20 Feb 2024 22:34:29 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6FEDA405B8
+ for <buildroot@lists.busybox.net>; Tue, 20 Feb 2024 22:50:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4N6ffJ3umXss for <buildroot@lists.busybox.net>;
- Tue, 20 Feb 2024 22:34:28 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=198.47.23.249;
- helo=lelv0142.ext.ti.com; envelope-from=dannenberg@ti.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5F48980BBB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F48980BBB
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5F48980BBB
- for <buildroot@buildroot.org>; Tue, 20 Feb 2024 22:34:27 +0000 (UTC)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
- by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 41KMYO3Y026981;
- Tue, 20 Feb 2024 16:34:24 -0600
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
- by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 41KMYO6l003755
- (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
- Tue, 20 Feb 2024 16:34:24 -0600
-Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 20
- Feb 2024 16:34:23 -0600
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 20 Feb 2024 16:34:23 -0600
-Received: from dasso (dasso.dhcp.ti.com [128.247.79.182])
- by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 41KMYNU5080361;
- Tue, 20 Feb 2024 16:34:23 -0600
-Date: Tue, 20 Feb 2024 16:34:23 -0600
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Message-ID: <20240220223423.bnrqouwcuuxhw43f@dasso>
-References: <20240217160244.1320482-1-dario.binacchi@amarulasolutions.com>
- <20240217160244.1320482-20-dario.binacchi@amarulasolutions.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YKUq-AkA_twg for <buildroot@lists.busybox.net>;
+ Tue, 20 Feb 2024 22:50:31 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DA5214035D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA5214035D
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DA5214035D
+ for <buildroot@buildroot.org>; Tue, 20 Feb 2024 22:50:30 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id
+ 5b1f17b1804b1-4127188dd5cso6100915e9.0
+ for <buildroot@buildroot.org>; Tue, 20 Feb 2024 14:50:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1708469428; x=1709074228;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=bDm8WOjWUUVqzv/EgRx0YD0AbiihwuEN7SrY2GcbBsw=;
+ b=vW8OWZmaTrVIX3iLN8OGrx0JfJFUxx7/swNVrsKzDrttzAkMUVINDnih5QdbF6JhkN
+ wuPmvxkK6/GIxhX7rVCVqzO/5k9dXMycgTDqUeMizNflIJGp8dXYa6XkQx5KFUgOhtSR
+ j2a86Ur6b3Z3whxV7fiQk1uYnqRGLClqciSbirmxaiAJHYtQRWnfQi+SB8QiYzxZ15hb
+ S7Jw2px68PlE/40NiN/sIiOt+v+RTSEoKf4tAtKf/FGOlIeO1dp+ktYHcg5o35YGB1Zr
+ F2zWyDW/btyoLyhKcUpXmjRhQT/wYwuSpnr/5g/uxza5Czw+AWCDxBlc+8WzLHReOTKi
+ 9j7A==
+X-Gm-Message-State: AOJu0Yzwp3HXiYuKQyrC23vorgQ64084Djg+km0PHeXa6AFQx7ssPTNC
+ EF3aZMSufRP/6M2xqo/h8ILeRXnpa5Nl/MFBcBbapnI2PmeQwBbsNdjGg3Q6G/0gdQDdf8fSCxM
+ S
+X-Google-Smtp-Source: AGHT+IHsojZN2VFKieYWKB5MLp2veUnCAdoj+OcLAgw6g3Pn2u3U+ZaA+U6Cul8w3qZ6dTJMnJ+Kqg==
+X-Received: by 2002:a7b:cd8a:0:b0:412:a6b:d572 with SMTP id
+ y10-20020a7bcd8a000000b004120a6bd572mr11666116wmj.34.1708469428255; 
+ Tue, 20 Feb 2024 14:50:28 -0800 (PST)
+Received: from P-NTS-Evian.home
+ (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
+ by smtp.gmail.com with ESMTPSA id
+ k4-20020a5d5184000000b0033b4f82b301sm15060057wrv.3.2024.02.20.14.50.27
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 20 Feb 2024 14:50:28 -0800 (PST)
+From: Romain Naour <romain.naour@smile.fr>
+To: buildroot@buildroot.org
+Date: Tue, 20 Feb 2024 23:50:24 +0100
+Message-ID: <20240220225025.781466-1-romain.naour@smile.fr>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240217160244.1320482-20-dario.binacchi@amarulasolutions.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=ti.com; s=ti-com-17Q1; t=1708468464;
- bh=WGbYZ9kA8R1KPhxoFzg7nL8Qdu3VnedV0PaQLNFlvP0=;
- h=Date:From:To:CC:Subject:References:In-Reply-To;
- b=P73pMCi5Lf04BDf2NFrxgZjP6cJHHbge8/Dg8EW7K0tZ8wpUqHMTs8WAumqV/KE/D
- aktV4dwKlNiLns4t0VNrwlkC6rAAUbWo3ldZI6KnN1xC9ykMPxvIevC9mfh1D1pFTi
- u/JGugc8cVWvwq50VpzU4nSRuy3YhZbw5UlPLe0U=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=ti.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
- header.s=ti-com-17Q1 header.b=P73pMCi5
-Subject: Re: [Buildroot] [PATCH v4 19/20] boot/ti-k3/ti-k3-r5-loader:
- install tiboot3.bin
+ d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1708469428; x=1709074228;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=bDm8WOjWUUVqzv/EgRx0YD0AbiihwuEN7SrY2GcbBsw=;
+ b=MlWEgjzbvWPyOnZylCEJZVWW3bD/ila/1DWY/djCQEx30XBpKSmi51Cj4QEYjonIr3
+ MZhDcu6ks2KS4y4sJqCWXettJH/WWk9gtE/eZHrILDGAsGn+ZhDRPwDNKFYBwlIqhsJC
+ sVIRip7Tks1zJXS8R+MUQQrIKRxcxylWxQRwEOYMmKYhUq/zWUgXO6zEGVni6ki5zIrC
+ CQG51+EnHpXPKhWeHe7J/754Eva0ugXbGfUgK4t7hD+DBIMUh+oDDsteWEGego0cpdBL
+ V77W8imUhm7r1fhhVLmJnfw3lmhBPIbiU2zQXHe+epMza7EUcZIq+DuuQrI3J5rmCDo+
+ 6j9Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=smile-fr.20230601.gappssmtp.com
+ header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=MlWEgjzb
+Subject: [Buildroot] [PATCH] DEVELOPERS: add Romain Naour for
+ am574x_idk_defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,91 +106,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Andreas Dannenberg via buildroot <buildroot@buildroot.org>
-Reply-To: Andreas Dannenberg <dannenberg@ti.com>
-Cc: linux-amarula@amarulasolutions.com, Asaf Kahlon <asafka7@gmail.com>,
- Xuanhao Shi <X15000177@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
- Romain Naour <romain.naour@smile.fr>, michael@amarulasolutions.com,
- Alexander Sverdlin <alexander.sverdlin@gmail.com>, bryce@redpinelabs.com,
- Anand Gadiyar <gadiyar@ti.com>
+Cc: Romain Naour <romain.naour@smile.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Dario,
+The DEVELOPERS entry was missing.
 
-On Sat, Feb 17, 2024 at 05:02:43PM +0100, Dario Binacchi wrote:
-> Recent versions of U-Boot are capable of building tiboot3.bin using
-> Binman. In this case, let's copy it to the binaries directory.
-> 
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> 
-> ---
-> 
-> Added in v4
-> 
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> ---
->  boot/ti-k3/ti-k3-r5-loader/ti-k3-r5-loader.mk | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/boot/ti-k3/ti-k3-r5-loader/ti-k3-r5-loader.mk b/boot/ti-k3/ti-k3-r5-loader/ti-k3-r5-loader.mk
-> index 2a10024aedaa..643298a1e70a 100644
-> --- a/boot/ti-k3/ti-k3-r5-loader/ti-k3-r5-loader.mk
-> +++ b/boot/ti-k3/ti-k3-r5-loader/ti-k3-r5-loader.mk
-> @@ -75,8 +75,11 @@ define TI_K3_R5_LOADER_BUILD_CMDS
->  	$(TARGET_CONFIGURE_OPTS) $(TI_K3_R5_LOADER_MAKE) -C $(@D) $(TI_K3_R5_LOADER_MAKE_OPTS)
->  endef
->  
-> +TI_K3_R5_LOADER_SECTYPE = $(call qstrip,$(BR2_TARGET_TI_K3_SECTYPE))
-> +
->  define TI_K3_R5_LOADER_INSTALL_IMAGES_CMDS
->  	cp $(@D)/spl/u-boot-spl.bin $(BINARIES_DIR)/r5-u-boot-spl.bin
-> +	find $(@D) -name "tiboot3-*-$(TI_K3_R5_LOADER_SECTYPE)-*.bin" -type f -exec cp {} $(BINARIES_DIR)/tiboot3.bin \;
->  endef
+Fixes: 35eb74c634 ("configs/am574x_idk_defconfig: new defconfig")
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+---
+ DEVELOPERS | 2 ++
+ 1 file changed, 2 insertions(+)
 
-I like how this picks/renames the tiboot3.bin corresponding to the
-device security type, this way allowing to generate a tailored and
-readily bootable image depending on GP, HS-FS, HS device type.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0d12c3abcb..ff44741f9f 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2667,7 +2667,9 @@ F:	package/vnstat/
+ 
+ N:	Romain Naour <romain.naour@gmail.com>
+ F:	board/qemu/
++F:	board/ti/am574x-idk/
+ F:	configs/qemu_*
++F:	configs/am574x_idk_defconfig
+ F:	package/alure/
+ F:	package/aubio/
+ F:	package/binutils/
+-- 
+2.43.0
 
-However the find/copy approach may not always work as intended. Consider
-the build output of R5 U-Boot SPL for AM64x for example:
-
-$ ll tiboot3-*.bin
--rw-rw-r-- 1 a0797059 a0797059 304431 Feb 20 15:34 tiboot3-am64x-gp-evm.bin
--rw-rw-r-- 1 a0797059 a0797059 532270 Feb 20 15:34 tiboot3-am64x_sr2-hs-evm.bin
--rw-rw-r-- 1 a0797059 a0797059 532270 Feb 20 15:34 tiboot3-am64x_sr2-hs-fs-evm.bin
-
-Note how there's a '_sr2' (Silicon Revision 2.0) in the filename of some
-of the boot binaries. I did look at the different K3 devices supported
-in U-Boot at the moment, and it looks like currently this will not be an
-issue that will manifest itself as the device security type happens to
-be unique enough to also pick the right silicon revision. But of course
-this doesn't mean it'll always stay like this....
-
-So it might be better to leverage BR2_TARGET_TI_K3_SOC to be more
-specific in that find/copy operation and use this to replace the
-asterisk in "tiboot3-*". So then somebody can use "am64x" or "am64x_sr2"
-for example as BR2_TARGET_TI_K3_SOC, and you would guarantee the right
-file gets used to populate the final tiboot3.bin.
-
-
---
-Andreas Dannenberg
-Texas Instruments Inc
-
-
-
-
-
-
->  
->  $(eval $(kconfig-package))
-> -- 
-> 2.43.0
-> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
