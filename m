@@ -4,104 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DCD3C48BC3
-	for <buildroot@archiver.kernel.org>; Tue, 20 Feb 2024 22:26:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD7E2C48BC3
+	for <buildroot@archiver.kernel.org>; Tue, 20 Feb 2024 22:34:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3C615605E0;
-	Tue, 20 Feb 2024 22:26:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7A7C9605C6;
+	Tue, 20 Feb 2024 22:34:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DkwpVZaK3Hls; Tue, 20 Feb 2024 22:26:42 +0000 (UTC)
+	with ESMTP id KyascG_QF3I3; Tue, 20 Feb 2024 22:34:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E388F605E2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 72E166060A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E388F605E2;
-	Tue, 20 Feb 2024 22:26:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 72E166060A;
+	Tue, 20 Feb 2024 22:34:31 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 91B0A1BF29D
- for <buildroot@lists.busybox.net>; Tue, 20 Feb 2024 22:26:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 395001BF29D
+ for <buildroot@lists.busybox.net>; Tue, 20 Feb 2024 22:34:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7E485820BA
- for <buildroot@lists.busybox.net>; Tue, 20 Feb 2024 22:26:40 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 33E0880BF3
+ for <buildroot@lists.busybox.net>; Tue, 20 Feb 2024 22:34:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tMtUYjGUbLeG for <buildroot@lists.busybox.net>;
- Tue, 20 Feb 2024 22:26:39 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EE85E81F8C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE85E81F8C
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
- [IPv6:2a00:1450:4864:20::32e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EE85E81F8C
- for <buildroot@buildroot.org>; Tue, 20 Feb 2024 22:26:38 +0000 (UTC)
-Received: by mail-wm1-x32e.google.com with SMTP id
- 5b1f17b1804b1-41272d44adcso3644245e9.3
- for <buildroot@buildroot.org>; Tue, 20 Feb 2024 14:26:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1708467997; x=1709072797;
- h=content-transfer-encoding:in-reply-to:from:references:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=EQHrlJTYb6Zm6IjX/NepPP1nSAKl/YjGdMIGGJVJNmA=;
- b=ljKBtwWxlRzQQ3vZLlWUAE3QyQZ0flm7DVunfrNp1U5/AzGIoHfSOq6uR6XsZHTS8O
- tuNZ4cxgYmMC7bSkMUN7qYmuIwa3Bn0Cw4CH/ikC4V3MdZbrdaS2II5+5ZSUwCXaLSGB
- AhDBLNthIarrA431nE8itZ1lzGe7H8Q3/XW5nMwlgWWZMyIcDaP7J70dV+5qgeWCJowT
- Wgryb9DcXz0XroQg5B6Wrma2yGsFhtJEAiz+nPtZuc2LQOm/DfNyGlwQp0mQHc0rRE6h
- ldvPVjU2tUDGCRrlJapQVtspljr/l8ByoSBocTKAxb/H8CX0FnTDxPGJeSXn0Cifvfzh
- IpNQ==
-X-Forwarded-Encrypted: i=1;
- AJvYcCUnt9WTFenwwnxuRxg+mW0pccRgZ8YYe1pkHt3YOhVdqv8t1dDzi9FapVSrbj7sfYad/2zp166CCBFBSQMa+9A/uwJ31ig1hA==
-X-Gm-Message-State: AOJu0Yzoc8MslFr0EHThMczUUlcXqHlbDtXvKcBu1lmQuQL7B9MfFf6H
- kblRWH33V17ewKLP0Leb+b63gFH9e80UkHS1lLO/VteeWBadPszI9V+VrDUFSLbr5AHFRw6wMb+
- O
-X-Google-Smtp-Source: AGHT+IGUI8S0dzTOkoLy8psuBtnjfCmIx4vYFi1p/bF6I+nkDq3Mj/KH9g66O0xWMB8345E2oNGzvw==
-X-Received: by 2002:a05:600c:1391:b0:410:e41a:fc0d with SMTP id
- u17-20020a05600c139100b00410e41afc0dmr12765101wmf.24.1708467996937; 
- Tue, 20 Feb 2024 14:26:36 -0800 (PST)
-Received: from ?IPV6:2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31?
- (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
- [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
- by smtp.gmail.com with ESMTPSA id
- n3-20020a05600c4f8300b00410395dc7d1sm396809wmq.7.2024.02.20.14.26.36
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 20 Feb 2024 14:26:36 -0800 (PST)
-Message-ID: <643b99fe-655d-45b9-80dd-f47bb53efcb2@smile.fr>
-Date: Tue, 20 Feb 2024 23:26:36 +0100
+ with ESMTP id 4N6ffJ3umXss for <buildroot@lists.busybox.net>;
+ Tue, 20 Feb 2024 22:34:28 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=198.47.23.249;
+ helo=lelv0142.ext.ti.com; envelope-from=dannenberg@ti.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5F48980BBB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F48980BBB
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5F48980BBB
+ for <buildroot@buildroot.org>; Tue, 20 Feb 2024 22:34:27 +0000 (UTC)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+ by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 41KMYO3Y026981;
+ Tue, 20 Feb 2024 16:34:24 -0600
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+ by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 41KMYO6l003755
+ (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+ Tue, 20 Feb 2024 16:34:24 -0600
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 20
+ Feb 2024 16:34:23 -0600
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 20 Feb 2024 16:34:23 -0600
+Received: from dasso (dasso.dhcp.ti.com [128.247.79.182])
+ by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 41KMYNU5080361;
+ Tue, 20 Feb 2024 16:34:23 -0600
+Date: Tue, 20 Feb 2024 16:34:23 -0600
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Message-ID: <20240220223423.bnrqouwcuuxhw43f@dasso>
+References: <20240217160244.1320482-1-dario.binacchi@amarulasolutions.com>
+ <20240217160244.1320482-20-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: fr
-To: David Picard <david.picard@clermont.in2p3.fr>, buildroot@buildroot.org
-References: <c90e4512-405c-40fb-b597-1a04d7449afa@clermont.in2p3.fr>
- <d2a4dc21-1140-497d-91d6-2dde78e98cd0@smile.fr>
- <a6433199-1362-4d80-9ccf-389d8e7ed517@clermont.in2p3.fr>
-From: Romain Naour <romain.naour@smile.fr>
-In-Reply-To: <a6433199-1362-4d80-9ccf-389d8e7ed517@clermont.in2p3.fr>
+Content-Disposition: inline
+In-Reply-To: <20240217160244.1320482-20-dario.binacchi@amarulasolutions.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1708467997; x=1709072797;
- darn=buildroot.org; 
- h=content-transfer-encoding:in-reply-to:from:references:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=EQHrlJTYb6Zm6IjX/NepPP1nSAKl/YjGdMIGGJVJNmA=;
- b=H27NtJ32/irsAZnNVFWYFgRiNOWx8BT9E3ZZmii9eJfccvt6Po8oSyQGd5h+29otnN
- H2ltaHWhU97vxRN0z30D5a+WDeYhi0JV+O/5kDXBMF9dDXvqt1kl7CzCNVH57qipwta8
- nohdm0wGp0sZBNjIg3MJ+Tc9R1nNm6lOl8QakzPgw7GXrotJWdnwDxdEPR6gOFQKb2Ph
- y+8OFK4CXj35LHqfLIK2h/nA0To3WGinqojgYl8WErTEVO5u9v8D+1OiToMUcN0aYAaS
- 4rirFAGFgVJFeE/mZ0njfVc3hiCAyO4ybxgOojZ6QiDZ2ZZGB5lhKVsJ5RLaM0gT9Bh+
- eP1g==
+ d=ti.com; s=ti-com-17Q1; t=1708468464;
+ bh=WGbYZ9kA8R1KPhxoFzg7nL8Qdu3VnedV0PaQLNFlvP0=;
+ h=Date:From:To:CC:Subject:References:In-Reply-To;
+ b=P73pMCi5Lf04BDf2NFrxgZjP6cJHHbge8/Dg8EW7K0tZ8wpUqHMTs8WAumqV/KE/D
+ aktV4dwKlNiLns4t0VNrwlkC6rAAUbWo3ldZI6KnN1xC9ykMPxvIevC9mfh1D1pFTi
+ u/JGugc8cVWvwq50VpzU4nSRuy3YhZbw5UlPLe0U=
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=smile.fr
+ dmarc=pass (p=quarantine dis=none)
+ header.from=ti.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=smile-fr.20230601.gappssmtp.com
- header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=H27NtJ32
-Subject: Re: [Buildroot] [PATCH 1/1] package/intel-socfpga-hwlib: add new
- package
+ dkim=pass (1024-bit key,
+ unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
+ header.s=ti-com-17Q1 header.b=P73pMCi5
+Subject: Re: [Buildroot] [PATCH v4 19/20] boot/ti-k3/ti-k3-r5-loader:
+ install tiboot3.bin
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -113,131 +90,92 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Andreas Dannenberg via buildroot <buildroot@buildroot.org>
+Reply-To: Andreas Dannenberg <dannenberg@ti.com>
+Cc: linux-amarula@amarulasolutions.com, Asaf Kahlon <asafka7@gmail.com>,
+ Xuanhao Shi <X15000177@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
+ Romain Naour <romain.naour@smile.fr>, michael@amarulasolutions.com,
+ Alexander Sverdlin <alexander.sverdlin@gmail.com>, bryce@redpinelabs.com,
+ Anand Gadiyar <gadiyar@ti.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gRGF2aWQsCgpMZSAyMC8wMi8yMDI0IMOgIDIyOjE4LCBEYXZpZCBQaWNhcmQgYSDDqWNy
-aXTCoDoKPiBIaSwKPiAKPiBJIGNoZWNrZWQgbXkgc3Vic2NyaXB0aW9uIG9wdGlvbnMsIGJ1dCBJ
-IGRvbid0IHJlY2VpdmUgdGhlIG1lc3NhZ2VzIEkgc2VuZCB0bwo+IHRoZSBsaXN0Lgo+IAo+IE15
-IGNvbW1lbnRzIGFyZSBpbiB0aGUgdGV4dC4KPiAKPiBMZSAxNC8wMi8yMDI0IMOgIDE3OjIzLCBS
-b21haW4gTmFvdXIgYSDDqWNyaXTCoDoKPj4gSGVsbG8gRGF2aWQsCj4+Cj4+IExlIDE0LzAyLzIw
-MjQgw6AgMTA6MzQsIERhdmlkIFBpY2FyZCBhIMOpY3JpdMKgOgo+Pj4gQWRkIGEgcGFja2FnZSBm
-b3IgdGhlIEludGVsL0FsdGVyYSBTb0MgRlBHQSBoYXJkd2FyZSBsaWJyYXJ5LiBJdCBpcwo+Pj4g
-dXNlZCB0byBsZXQgdGhlIEhQUyBhbmQgdGhlIEZQR0EgZmFicmljIGNvbW11bmljYXRlIHdpdGgg
-ZWFjaCBvdGhlci4KPj4gV2UgcmVjZWl2ZWQgNCB0aGltZSB0aGUgc2FtZSBwYXRjaCBvbiB0aGUg
-bWFpbGluZyBsaXN0Ogo+Pgo+PiBodHRwOi8vcGF0Y2h3b3JrLm96bGFicy5vcmcvcHJvamVjdC9i
-dWlsZHJvb3QvcGF0Y2gvMjAyNDAyMTQwODE5MjEuNDY2My0xLWRhdmlkLnBpY2FyZEBjbGVybW9u
-dC5pbjJwMy5mci8KPj4KPj4gaHR0cDovL3BhdGNod29yay5vemxhYnMub3JnL3Byb2plY3QvYnVp
-bGRyb290L3BhdGNoLzI3NzBiMmFjLTRjZWMtNGQ1Ni04MWU5LTg5ZGZkMzNmNzg2YUBjbGVybW9u
-dC5pbjJwMy5mci8KPj4KPj4gaHR0cDovL3BhdGNod29yay5vemxhYnMub3JnL3Byb2plY3QvYnVp
-bGRyb290L3BhdGNoL2FiY2Q0MTUzLTQxZTItNDVjZS1hODlhLWUxOThlODZiYTMzN0BjbGVybW9u
-dC5pbjJwMy5mci8KPj4KPj4gaHR0cDovL3BhdGNod29yay5vemxhYnMub3JnL3Byb2plY3QvYnVp
-bGRyb290L3BhdGNoL2M5MGU0NTEyLTQwNWMtNDBmYi1iNTk3LTFhMDRkNzQ0OWFmYUBjbGVybW9u
-dC5pbjJwMy5mci8KPj4KPj4gV2hpY2ggb25lIHNob3VsZCB3ZSByZXZpZXc/Cj4+Cj4+IFBsZWFz
-ZSwgc2VuZCBwYXRjaCB1c2luZyBnaXQgc2VuZC1lbWFpbCB0b29sLgo+Pgo+PiAoaHR0cHM6Ly9u
-aWdodGx5LmJ1aWxkcm9vdC5vcmcvbWFudWFsLmh0bWwjc3VibWl0dGluZy1wYXRjaGVzKQo+Pgo+
-PiBBbHNvLCB3aGVuIHlvdSByZXNlbmQgYSBwYXRjaCwgYWRkIHRoZSBjaGFuZ2Vsb2cgaW5mby4K
-Pj4KPj4gaHR0cHM6Ly9uaWdodGx5LmJ1aWxkcm9vdC5vcmcvbWFudWFsLmh0bWwjX3BhdGNoX3Jl
-dmlzaW9uX2NoYW5nZWxvZwo+Pgo+Pgo+Pj4gU2lnbmVkLW9mZi1ieTogRGF2aWQgUGljYXJkIDxk
-YXZpZC5waWNhcmRAY2xlcm1vbnQuaW4ycDMuZnI+Cj4+PiAtLS0KPj4+IHBhY2thZ2UvQ29uZmln
-LmluIHwgMSArCj4+PiBwYWNrYWdlL2ludGVsLXNvY2ZwZ2EtaHdsaWIvQ29uZmlnLmluIHwgMTIg
-KysrKysrCj4+PiAuLi4vaW50ZWwtc29jZnBnYS1od2xpYi5oYXNoIHwgMiArCj4+PiAuLi4vaW50
-ZWwtc29jZnBnYS1od2xpYi5tayB8IDM5ICsrKysrKysrKysrKysrKysrKysKPj4+IDQgZmlsZXMg
-Y2hhbmdlZCwgNTQgaW5zZXJ0aW9ucygrKQo+Pj4gY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2Uv
-aW50ZWwtc29jZnBnYS1od2xpYi9Db25maWcuaW4KPj4+IGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNr
-YWdlL2ludGVsLXNvY2ZwZ2EtaHdsaWIvaW50ZWwtc29jZnBnYS1od2xpYi5oYXNoCj4+PiBjcmVh
-dGUgbW9kZSAxMDA2NDQgcGFja2FnZS9pbnRlbC1zb2NmcGdhLWh3bGliL2ludGVsLXNvY2ZwZ2Et
-aHdsaWIubWsKPj4+Cj4+PiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9Db25maWcuaW4gYi9wYWNrYWdl
-L0NvbmZpZy5pbgo+Pj4gaW5kZXggYmYwZmUwNzhiOS4uY2Q2YzZiY2FiYSAxMDA2NDQKPj4+IC0t
-LSBhL3BhY2thZ2UvQ29uZmlnLmluCj4+PiArKysgYi9wYWNrYWdlL0NvbmZpZy5pbgo+Pj4gQEAg
-LTE3MzYsNiArMTczNiw3IEBAIG1lbnUgIkhhcmR3YXJlIGhhbmRsaW5nIgo+Pj4gc291cmNlICJw
-YWNrYWdlL2dudS1lZmkvQ29uZmlnLmluIgo+Pj4gc291cmNlICJwYWNrYWdlL2hhY2tyZi9Db25m
-aWcuaW4iCj4+PiBzb3VyY2UgInBhY2thZ2UvaGlkYXBpL0NvbmZpZy5pbiIKPj4+ICsgc291cmNl
-ICJwYWNrYWdlL2ludGVsLXNvY2ZwZ2EtaHdsaWIvQ29uZmlnLmluIgo+Pj4gc291cmNlICJwYWNr
-YWdlL2ppdHRlcmVudHJvcHktbGlicmFyeS9Db25maWcuaW4iCj4+PiBzb3VyY2UgInBhY2thZ2Uv
-bGNkYXBpL0NvbmZpZy5pbiIKPj4+IHNvdXJjZSAicGFja2FnZS9sZXQtbWUtY3JlYXRlL0NvbmZp
-Zy5pbiIKPj4+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2ludGVsLXNvY2ZwZ2EtaHdsaWIvQ29uZmln
-LmluCj4+PiBiL3BhY2thZ2UvaW50ZWwtc29jZnBnYS1od2xpYi9Db25maWcuaW4KPj4+IG5ldyBm
-aWxlIG1vZGUgMTAwNjQ0Cj4+PiBpbmRleCAwMDAwMDAwMDAwLi5jZWQ2NDgzYTU5Cj4+PiAtLS0g
-L2Rldi9udWxsCj4+PiArKysgYi9wYWNrYWdlL2ludGVsLXNvY2ZwZ2EtaHdsaWIvQ29uZmlnLmlu
-Cj4+PiBAQCAtMCwwICsxLDEyIEBACj4+PiArY29uZmlnIEJSMl9QQUNLQUdFX0lOVEVMX1NPQ0ZQ
-R0FfSFdMSUIKPj4+ICsgYm9vbCAiaW50ZWwtc29jZnBnYS1od2xpYiIKPj4+ICsgZGVwZW5kcyBv
-biBCUjJfYXJtCj4+PiArIGhlbHAKPj4+ICsgVGhpcyBwYWNrYWdlIHByb3ZpZGVzIHRoZSBJbnRl
-bCBTb0MgRlBHQSBIV0xJQiBmb3IKPj4+ICsgSW50ZWwvQWx0ZXJhIFNvQyBGUEdBIGNoaXBzLgo+
-Pj4gKyBUaGlzIGxpYnJhcnkgYWxsb3dzIHRvIGNvbW11bmljYXRlIHdpdGggdGhlIEZQR0EgZmFi
-cmljIGZyb20KPj4+ICsgTGludXgsIHJ1bm5pbmcgb24gdGhlIEhQUyBkZXZpY2UuCj4+PiArIFRo
-ZSBzb3VyY2UgY29kZSBpcyBub3QgY29tcGlsZWQuIEluc3RlYWQsIGEgc3ltbGluayBpcyBhZGRl
-ZAo+Pj4gKyB0byAkKFNUQUdJTkdfRElSKS9saWIuCj4+PiArCj4+PiArIGh0dHBzOi8vZ2l0aHVi
-LmNvbS9hbHRlcmEtb3BlbnNvdXJjZS9pbnRlbC1zb2NmcGdhLWh3bGliCj4+IENoZWNrIHRoZSBj
-b2Rpbmcgc3R5bGUgd2l0aCAuL3V0aWxzL2NoZWNrLXBhY2thZ2UKPj4KPj4+IGRpZmYgLS1naXQg
-YS9wYWNrYWdlL2ludGVsLXNvY2ZwZ2EtaHdsaWIvaW50ZWwtc29jZnBnYS1od2xpYi5oYXNoCj4+
-PiBiL3BhY2thZ2UvaW50ZWwtc29jZnBnYS1od2xpYi9pbnRlbC1zb2NmcGdhLWh3bGliLmhhc2gK
-Pj4+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4+PiBpbmRleCAwMDAwMDAwMDAwLi42MGVmZTkwMTNl
-Cj4+PiAtLS0gL2Rldi9udWxsCj4+PiArKysgYi9wYWNrYWdlL2ludGVsLXNvY2ZwZ2EtaHdsaWIv
-aW50ZWwtc29jZnBnYS1od2xpYi5oYXNoCj4+PiBAQCAtMCwwICsxLDIgQEAKPj4+ICtzaGEyNTYg
-YmJmMDc2N2ZhY2ZkZjE4Y2EzZGJlYWQ2NmIxZTk4MDkwYzRlOTczMWUyYjg3Y2YzNWMzYmYxM2Ri
-MGMzMTVlNAo+Pj4gaW50ZWwtc29jZnBnYS1od2xpYi0yMy4xMi4wMi50YXIuZ3oKPj4+ICtzaGEy
-NTYgMmVkMDRmOWNjNzczZjg4YzhkNTJjMDVjMDRiYjNkMjhmMzc2YzA4MmJmOTliNmEzY2I1NTkw
-YjE2MjdhZDQ4NAo+Pj4gTGljZW5zZS50eHQKPj4+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2ludGVs
-LXNvY2ZwZ2EtaHdsaWIvaW50ZWwtc29jZnBnYS1od2xpYi5tawo+Pj4gYi9wYWNrYWdlL2ludGVs
-LXNvY2ZwZ2EtaHdsaWIvaW50ZWwtc29jZnBnYS1od2xpYi5tawo+Pj4gbmV3IGZpbGUgbW9kZSAx
-MDA2NDQKPj4+IGluZGV4IDAwMDAwMDAwMDAuLmJmMThjMjM1NjAKPj4+IC0tLSAvZGV2L251bGwK
-Pj4+ICsrKyBiL3BhY2thZ2UvaW50ZWwtc29jZnBnYS1od2xpYi9pbnRlbC1zb2NmcGdhLWh3bGli
-Lm1rCj4+PiBAQCAtMCwwICsxLDM5IEBACj4+PiArIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKPj4+
-ICsjCj4+PiArIyBpbnRlbC1zb2NmcGdhLWh3bGliCj4+PiArIwo+Pj4gKyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjCj4+PiArCj4+PiArSU5URUxfU09DRlBHQV9IV0xJQl9WRVJTSU9OID0gMjMuMTIu
-MDIKPj4+ICtJTlRFTF9TT0NGUEdBX0hXTElCX1NJVEUgPSAkKGNhbGwKPj4+IGdpdGh1YixhbHRl
-cmEtb3BlbnNvdXJjZSxpbnRlbC1zb2NmcGdhLWh3bGliLHJlbF9tYXN0ZXJfJChJTlRFTF9TT0NG
-UEdBX0hXTElCX1ZFUlNJT04pX3ByKQo+Pj4gK0lOVEVMX1NPQ0ZQR0FfSFdMSUJfTElDRU5TRSA9
-IFBST1BSSUVUQVJZCj4+IEl0J3MgdW5leHBlY3RlZCB0byBmaW5kIGEgUFJPUFJJRVRBUlkgdG9v
-bCBpbiBhIGdpdGJ1YiBhY2NvdW5kIHdpdGggIm9wZW5zb3VyY2UiCj4+IGluIHRoZWlyIG5hbWUg
-OikKPiBJIHRoaW5rICJJbnRlbCIgaXMgdGhlIGJlc3QgbWF0Y2ggOiBodHRwczovL3NwZHgub3Jn
-L2xpY2Vuc2VzL0ludGVsLmh0bWwKClRoZSB0d28gYXJlIHJlYWxseSBjbG9zZSBpbmRlZWQsIGJ1
-dCB0aGUgSW50ZWwgb25lIGNvbnRhaW5zICJFWFBPUlQgTEFXUyIgcGFydAphdCB0aGUgZW5kIHRo
-YXQgaXMgbWlzc2luZyBpbiB0aGUgaW50ZWwtc29jZnBnYS1od2xpYiBsaWNlbnNlIGZpbGUuCgpB
-bHNvLCB0aGUgSW50ZWwgdXNlIGJ1bGxldCBwb2ludCB3aGlsZSBCU0QgdXNlIGEgbnVtYmVyIChu
-b3Qgc3VyZSBpdCdzIHJlYWxseQpzaWduaWZpY2FudCkKCj4+Cj4+PiArSU5URUxfU09DRlBHQV9I
-V0xJQl9MSUNFTlNFX0ZJTEVTID0gTGljZW5zZS50eHQKPj4gSXQgbG9vayBsaWtlIGEgQlNELTMt
-Q2xhdXNlIGxpY2Vuc2UKPj4KPj4gaHR0cHM6Ly9zcGR4Lm9yZy9saWNlbnNlcy9CU0QtMy1DbGF1
-c2UuaHRtbAo+Pgo+Pj4gK0lOVEVMX1NPQ0ZQR0FfSFdMSUJfUkVESVNUUklCVVRFID0gWUVTCj4+
-PiArSU5URUxfU09DRlBHQV9IV0xJQl9JTlNUQUxMX1NUQUdJTkcgPSBZRVMKPj4+ICsKPj4+ICtk
-ZWZpbmUgSU5URUxfU09DRlBHQV9IV0xJQl9JTlNUQUxMX1NUQUdJTkdfQ01EUwo+Pj4gKyBsbiAt
-cyAkKEJVSUxEX0RJUikvaW50ZWwtc29jZnBnYS1od2xpYi0kKElOVEVMX1NPQ0ZQR0FfSFdMSUJf
-VkVSU0lPTikKPj4+ICQoU1RBR0lOR19ESVIpL2xpYi9pbnRlbC1zb2NmcGdhLWh3bGliCj4+PiAr
-ZW5kZWYKPj4gSSBkb24ndCB0aGluayB0aGlzIGlzIHdoYXQgeW91IHdhbnQgdG8gZG8uCj4gSSBk
-aWQgaXQgb24gcHVycG9zZS4gVGhpcyBwYWNrYWdlIGlzIGNhbGxlZCBhIGxpYnJhcnksIGJ1dCBp
-dCByZWFsbHkgaXMgYSBidW5jaAo+IG9mIEMgZmlsZXMuIFlvdSBvbmx5IHVzZSBhIHN1YnNldCwg
-ZGVwZW5kaW5nIG9uIHlvdXIgaGFyZHdhcmUuIFRoaXMgY29kZSB3YXMKPiBtYWRlIHRvIGJlIGNv
-bXBpbGVkIGluIHRoZSBhcHBsaWNhdGlvbiwgbm90IGFzIGEgY29udmVudGlvbmFsIGxpYnJhcnku
-Cj4gSSBjb3VsZCBjb3B5IHRoZSBmaWxlcyB0byBTVEFHSU5HLCBidXQgY2xlYW5pbmcgd291bGQg
-YmUgbW9yZSBjb21wbGljYXRlZCBhbmQgaXQKPiB3b3VsZCB3YXN0ZSBzb21lIGRpc2sgc3BhY2Uu
-CgpPaywgbWF5YmUgaXMgc2hvdWxkIG5vdCBiZSBwYWNrYWdlZCBpbiBCdWlsZHJvb3QgdGhlbi4K
-CldoZW4gYSBwYWNrYWdlIGlzIGJ1aWxkIGJ5IEJ1aWxkcm9vdCwgaXQgY2FuIGdlbmVyYXRlIGEg
-YmluYXJ5LCBhIGxpYnJhcnkgb3IKcHJvdmlkZSBzb21lIGhlYWRlciBmaWxlcy4KCklmIHlvdXIg
-YXBwbGljYXRpb24gZG9lc24ndCBidW5kbGUgaW50ZWwtc29jZnBnYS1od2xpYiBzb3VyY2VzIGJ1
-dCBpdCByZXF1aXJlcwppdCB0byBidWlsZCBpbiBCdWlsZHJvb3QsIHlvdSBjYW4gdXNlIExJQkZP
-T19FWFRSQV9ET1dOTE9BRFMgdG8gYWRkIGFuIGV4dHJhCmRvd25sb2FkIHN0ZXAuCgo+IAo+Pgo+
-Pj4gKwo+Pj4gKyMgZGVmaW5lIElOVEVMX1NPQ0ZQR0FfSFdMSUJfSU5TVEFMTF9JTUFHRVNfQ01E
-Uwo+Pj4gKyMgbWtkaXIgLXAgJChCSU5BUklFU19ESVIpL2ludGVsLXVjb2RlCj4+PiArIyAkKElO
-U1RBTEwpIC1tIDA2NDQgLXQgJChCSU5BUklFU19ESVIpL2ludGVsLXVjb2RlIFwKPj4+ICsjICQo
-QEQpL2ludGVsLXVjb2RlLyoKPj4+ICsjIGVuZGVmCj4+PiArIwo+Pj4gKyMgaWZlcSAoJChCUjJf
-UEFDS0FHRV9JTlRFTF9TT0NGUEdBX0hXTElCX0lOU1RBTExfVEFSR0VUKSx5KQo+Pj4gKyMgZGVm
-aW5lIElOVEVMX1NPQ0ZQR0FfSFdMSUJfSU5TVEFMTF9UQVJHRVRfQ01EUwo+Pj4gKyMgbWtkaXIg
-LXAgJChUQVJHRVRfRElSKS9saWIvZmlybXdhcmUvaW50ZWwtdWNvZGUKPj4+ICsjICQoSU5TVEFM
-TCkgLW0gMDY0NCAtdCAkKFRBUkdFVF9ESVIpL2xpYi9maXJtd2FyZS9pbnRlbC11Y29kZSBcCj4+
-PiArIyAkKEBEKS9pbnRlbC11Y29kZS8qCj4+PiArIyBlbmRlZgo+Pj4gKyMgZWxzZQo+Pj4gKyMg
-SU5URUxfU09DRlBHQV9IV0xJQl9JTlNUQUxMX1RBUkdFVCA9IE5PCj4+PiArIyBlbmRpZgo+Pj4g
-Kwo+Pj4gKyMgZGVmaW5lIElOVEVMX1NPQ0ZQR0FfSFdMSUJfTElOVVhfQ09ORklHX0ZJWFVQUwo+
-Pj4gKyMgJChjYWxsIEtDT05GSUdfRU5BQkxFX09QVCxDT05GSUdfTUlDUk9DT0RFKQo+Pj4gKyMg
-JChjYWxsIEtDT05GSUdfRU5BQkxFX09QVCxDT05GSUdfTUlDUk9DT0RFX0lOVEVMKQo+Pj4gKyMg
-ZW5kZWYKPj4gUGxlYXNlLCBkb24ndCBhZGQgY29tbWVuZGVkIGNvZGUuCj4gT2YgY291cnNlIG5v
-dC4gSSdsbCBjbGVhbiBpdC4KPiAKPiBUaGFua3MgZm9yIHJldmlld2luZywKPiBEYXZpZAoKQmVz
-dCByZWdhcmRzLApSb21haW4KCgo+Pgo+PiBCZXN0IHJlZ2FyZHMsCj4+IFJvbWFpbgo+Pgo+Pgo+
-Pj4gKwo+Pj4gKyQoZXZhbCAkKGdlbmVyaWMtcGFja2FnZSkpCj4+Pgo+IAoKX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlz
-dApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFp
-bG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Hi Dario,
+
+On Sat, Feb 17, 2024 at 05:02:43PM +0100, Dario Binacchi wrote:
+> Recent versions of U-Boot are capable of building tiboot3.bin using
+> Binman. In this case, let's copy it to the binaries directory.
+> 
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> 
+> ---
+> 
+> Added in v4
+> 
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> ---
+>  boot/ti-k3/ti-k3-r5-loader/ti-k3-r5-loader.mk | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/boot/ti-k3/ti-k3-r5-loader/ti-k3-r5-loader.mk b/boot/ti-k3/ti-k3-r5-loader/ti-k3-r5-loader.mk
+> index 2a10024aedaa..643298a1e70a 100644
+> --- a/boot/ti-k3/ti-k3-r5-loader/ti-k3-r5-loader.mk
+> +++ b/boot/ti-k3/ti-k3-r5-loader/ti-k3-r5-loader.mk
+> @@ -75,8 +75,11 @@ define TI_K3_R5_LOADER_BUILD_CMDS
+>  	$(TARGET_CONFIGURE_OPTS) $(TI_K3_R5_LOADER_MAKE) -C $(@D) $(TI_K3_R5_LOADER_MAKE_OPTS)
+>  endef
+>  
+> +TI_K3_R5_LOADER_SECTYPE = $(call qstrip,$(BR2_TARGET_TI_K3_SECTYPE))
+> +
+>  define TI_K3_R5_LOADER_INSTALL_IMAGES_CMDS
+>  	cp $(@D)/spl/u-boot-spl.bin $(BINARIES_DIR)/r5-u-boot-spl.bin
+> +	find $(@D) -name "tiboot3-*-$(TI_K3_R5_LOADER_SECTYPE)-*.bin" -type f -exec cp {} $(BINARIES_DIR)/tiboot3.bin \;
+>  endef
+
+I like how this picks/renames the tiboot3.bin corresponding to the
+device security type, this way allowing to generate a tailored and
+readily bootable image depending on GP, HS-FS, HS device type.
+
+However the find/copy approach may not always work as intended. Consider
+the build output of R5 U-Boot SPL for AM64x for example:
+
+$ ll tiboot3-*.bin
+-rw-rw-r-- 1 a0797059 a0797059 304431 Feb 20 15:34 tiboot3-am64x-gp-evm.bin
+-rw-rw-r-- 1 a0797059 a0797059 532270 Feb 20 15:34 tiboot3-am64x_sr2-hs-evm.bin
+-rw-rw-r-- 1 a0797059 a0797059 532270 Feb 20 15:34 tiboot3-am64x_sr2-hs-fs-evm.bin
+
+Note how there's a '_sr2' (Silicon Revision 2.0) in the filename of some
+of the boot binaries. I did look at the different K3 devices supported
+in U-Boot at the moment, and it looks like currently this will not be an
+issue that will manifest itself as the device security type happens to
+be unique enough to also pick the right silicon revision. But of course
+this doesn't mean it'll always stay like this....
+
+So it might be better to leverage BR2_TARGET_TI_K3_SOC to be more
+specific in that find/copy operation and use this to replace the
+asterisk in "tiboot3-*". So then somebody can use "am64x" or "am64x_sr2"
+for example as BR2_TARGET_TI_K3_SOC, and you would guarantee the right
+file gets used to populate the final tiboot3.bin.
+
+
+--
+Andreas Dannenberg
+Texas Instruments Inc
+
+
+
+
+
+
+>  
+>  $(eval $(kconfig-package))
+> -- 
+> 2.43.0
+> 
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
