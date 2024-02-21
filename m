@@ -4,72 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F6DBC48BEB
-	for <buildroot@archiver.kernel.org>; Wed, 21 Feb 2024 20:19:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0448CC48BEB
+	for <buildroot@archiver.kernel.org>; Wed, 21 Feb 2024 20:27:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EDF63418C4;
-	Wed, 21 Feb 2024 20:19:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A81554189D;
+	Wed, 21 Feb 2024 20:27:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JRANeFdzmN0C; Wed, 21 Feb 2024 20:19:26 +0000 (UTC)
+	with ESMTP id QrM0LYWkl7SH; Wed, 21 Feb 2024 20:27:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F08C7418C7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BDD5B4189F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F08C7418C7;
-	Wed, 21 Feb 2024 20:19:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BDD5B4189F;
+	Wed, 21 Feb 2024 20:27:38 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 60FED1BF947
- for <buildroot@lists.busybox.net>; Wed, 21 Feb 2024 20:19:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A90931BF41B
+ for <buildroot@lists.busybox.net>; Wed, 21 Feb 2024 20:27:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4A0AA60E91
- for <buildroot@lists.busybox.net>; Wed, 21 Feb 2024 20:19:24 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A32F8605D9
+ for <buildroot@lists.busybox.net>; Wed, 21 Feb 2024 20:27:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dgjkZDkCM0jB for <buildroot@lists.busybox.net>;
- Wed, 21 Feb 2024 20:19:23 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1B96560E40
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B96560E40
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1B96560E40
- for <buildroot@buildroot.org>; Wed, 21 Feb 2024 20:19:22 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 5699913F8A2;
- Wed, 21 Feb 2024 21:19:19 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Wed, 21 Feb 2024 21:19:19 +0100
-Date: Wed, 21 Feb 2024 21:19:19 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <ZdZax_GVXD6kZko1@landeda>
-References: <20240221181650.1115046-1-fontaine.fabrice@gmail.com>
+ with ESMTP id bNdzvH95_xbd for <buildroot@lists.busybox.net>;
+ Wed, 21 Feb 2024 20:27:36 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2001:868:100:600::216; helo=shout01.mail.de;
+ envelope-from=kilian.zinnecker@mail.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org AA34B605D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA34B605D5
+Received: from shout01.mail.de (shout01.mail.de [IPv6:2001:868:100:600::216])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id AA34B605D5
+ for <buildroot@buildroot.org>; Wed, 21 Feb 2024 20:27:36 +0000 (UTC)
+Received: from postfix03.mail.de (postfix03.bt.mail.de [10.0.121.127])
+ by shout01.mail.de (Postfix) with ESMTP id 8533C240F38;
+ Wed, 21 Feb 2024 21:27:34 +0100 (CET)
+Received: from smtp01.mail.de (smtp01.bt.mail.de [10.0.121.211])
+ by postfix03.mail.de (Postfix) with ESMTP id 6846680209;
+ Wed, 21 Feb 2024 21:27:34 +0100 (CET)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+ (No client certificate requested)
+ by smtp01.mail.de (Postfix) with ESMTPSA id CAC012417DA;
+ Wed, 21 Feb 2024 21:27:33 +0100 (CET)
+To: buildroot@buildroot.org
+Date: Wed, 21 Feb 2024 21:27:33 +0100
+Message-ID: <5755205.DvuYhMxLoT@laptop>
+In-Reply-To: <20240220225025.781466-2-romain.naour@smile.fr>
+References: <20240220225025.781466-1-romain.naour@smile.fr>
+ <20240220225025.781466-2-romain.naour@smile.fr>
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240221181650.1115046-1-fontaine.fabrice@gmail.com>
+X-purgate: clean
+X-purgate: This mail is considered clean (visit http://www.eleven.de for
+ further information)
+X-purgate-type: clean
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is considered clean (visit http://www.eleven.de for
+ further information)
+X-purgate: clean
+X-purgate-size: 412
+X-purgate-ID: 154282::1708547254-06DB8670-084EFDBF/0/0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1708546761;
- bh=iWbZLS2+1S62Y447VO8ExmtY+s5rCkalhHP5FRHImqE=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=dtjrXqufiVpaJJEy6fThXdRa2xFPitN6Z8dyf4KQQzHwstihlP4eHcQwnwcKVibWI
- 3WpVXjckGzgSz/kJRC9/ozt6BaTI9agxXUzFBiT29SHukP9qmGPsjYLlqNiPtGjxN0
- g+gE9APec7wFBbgw6jNEEdVMBRsAeJPi+xmo057GtHRzndZ4KOP/OrL08lbC4ztNTF
- z4LxRdQ/LWt8t9FTMo8IoQnCxyKVkWgvYOq2Ortkgwer4HnsvpKmV+lGv2cD45xyMj
- om40wegncpz0SELXz9WwHtyDiJD5PIcF3GitgdPknQdcsako8+q0YJ1qf3UQiIZmWI
- kHQ1sj0zCJlOQ==
+ d=mail.de; s=mailde202009; t=1708547254;
+ bh=8zRV1iMZwT45Xxf10znvNHZXH+yRy3L3k78qIcaalGQ=;
+ h=From:To:Cc:Subject:Date:Message-ID:From:To:CC:Subject:Reply-To;
+ b=tyre+oEOgHRLI1G9qZcGC30n4Ir3fpj+8FTp1CgoboqGUEIoc01UtCypRnMQBRF7R
+ qd68UJZTeN171miJnVqO/z2L039fk3JPA981wljaYgnvQHdNAMhVp25r+oLQTH35WJ
+ d4CH/vidvqdq+2erzo2BZuK/mqJYS95frz842vWPTumKwiAhJDfkd34NHfABIViaWX
+ B4DSlTflxWvH5xAQndxhUkFt5NWTgzIXAp6EAMy8qU3B42HKNdKc8mpIbGH4lin5mH
+ HRIWqoYavJR5Lp8OT2EXT3pc871ALYsDnry/WJ/uq/f/ENjUW7/RPSCUPSoxDgFFiH
+ NvTJPZzMTyjKQ==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mail.de
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=dtjrXquf
-Subject: Re: [Buildroot] [PATCH v2,1/1] package/zlib-ng: fix arm build
+ unprotected) header.d=mail.de header.i=@mail.de header.a=rsa-sha256
+ header.s=mailde202009 header.b=tyre+oEO
+Subject: Re: [Buildroot] [PATCH] configs/lepotato_defconfig: new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,97 +95,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+From: "kilian.zinnecker--- via buildroot" <buildroot@buildroot.org>
+Reply-To: kilian.zinnecker@mail.de
+Cc: Romain Naour <romain.naour@smile.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+Hi Romain,
 
-On 2024-02-21 19:16 +0100, Fabrice Fontaine spake thusly:
-> zlib-ng usage uses CMAKE_C_COMPILER_TARGET which is non-standard and
-> is not supposed to be used by the CMakeLists.txt machinery of a
-> particular package.
+Am Dienstag, 20. Februar 2024, 23:50:25 CET schrieb Romain Naour:
+> Add basic support for the Libre Computer "Le Potato" SBC.
 > 
-> Indeed, [1] specifies that:
+> https://libre.computer/products/aml-s905x-cc
 > 
->   Some compiler drivers are inherently cross-compilers, such as clang
->   and QNX qcc. These compiler drivers support a command-line argument
->   to specify the target to cross-compile for.
-> 
-> buildroot is not using clang nor QNX qcc.
-> [2] also refers to this variable only for clang [3] and QNX [4].
-> 
-> Therefore, zlib-ng's usage of this variable is a bit of a hack, and it's
-> actually why it works when passed as an argument, because they are in
-> fact not supposed to use this variable.
-> 
-> So set CMAKE_C_COMPILER_TARGET to BR2_ARCH to fix the following arm
-> build failure raised since bump to version 2.0.6 in commit
-> d2249821d3f30202ca2a35ad24918378d9a0a0e8:
-> 
-> -- Detecting C compile features - done
-> -- Arch not recognized, falling back to cmake arch: 'l'
-> -- Basearch 'l' not recognized, defaulting to 'x86'.
-> -- Basearch of 'l' has been detected as: 'x86'
-> 
-> [...]
-> 
-> /home/buildroot/autobuild/instance-0/output-1/build/zlib-ng-2.1.3/arch/x86/x86_features.c:17:12: fatal error: cpuid.h: No such file or directory
->    17 | #  include <cpuid.h>
->       |            ^~~~~~~~~
-> 
-> [1] https://cmake.org/cmake/help/latest/variable/CMAKE_LANG_COMPILER_TARGET.html
-> [2] https://cmake.org/cmake/help/latest/manual/cmake-toolchains.7.html
-> [3] https://cmake.org/cmake/help/latest/manual/cmake-toolchains.7.html#cross-compiling-using-clang
-> [4] https://cmake.org/cmake/help/latest/manual/cmake-toolchains.7.html#cross-compiling-for-qnx
-> 
-> Fixes: d2249821d3f30202ca2a35ad24918378d9a0a0e8
->  - http://autobuild.buildroot.org/results/1551aa69be19239a8d8e081f033e4027d679ab8f
->  - http://autobuild.buildroot.org/results/075d704c0f11710353bac43478e4501addcd747d
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Romain Naour <romain.naour@smile.fr>
 
-Applied to master, thanks.
+Tested-by: Kilian Zinnecker <kilian.zinnecker@mail.de>
 
-Regards,
-Yann E. MORIN.
+Build test only (as I don't have the board), with ./utils/docker-run
 
-> ---
-> Changes v1 -> v2 (after review of Thomas Petazzoni and Peter Korsgaard):
->  - Update commit message
-> 
->  package/zlib-ng/zlib-ng.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/zlib-ng/zlib-ng.mk b/package/zlib-ng/zlib-ng.mk
-> index fbb906503a..33e8754c9d 100644
-> --- a/package/zlib-ng/zlib-ng.mk
-> +++ b/package/zlib-ng/zlib-ng.mk
-> @@ -13,6 +13,7 @@ ZLIB_NG_PROVIDES = zlib
->  
->  # Build with zlib compatible API, gzFile support and optimizations on
->  ZLIB_NG_CONF_OPTS += \
-> +	-DCMAKE_C_COMPILER_TARGET=$(BR2_ARCH) \
->  	-DWITH_GZFILEOP=1 \
->  	-DWITH_OPTIM=1 \
->  	-DZLIB_COMPAT=1 \
-> -- 
-> 2.43.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+Best regards,
+Kilian
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
