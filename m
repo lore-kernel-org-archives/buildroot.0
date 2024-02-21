@@ -4,76 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 807ABC54788
-	for <buildroot@archiver.kernel.org>; Wed, 21 Feb 2024 21:40:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55A43C54788
+	for <buildroot@archiver.kernel.org>; Wed, 21 Feb 2024 21:40:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 444B8605EE;
-	Wed, 21 Feb 2024 21:40:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 055C460F75;
+	Wed, 21 Feb 2024 21:40:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id u1XAFIcpZqAQ; Wed, 21 Feb 2024 21:40:26 +0000 (UTC)
+	with ESMTP id KM7ZeMA54pCN; Wed, 21 Feb 2024 21:40:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F17260646
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6CAA060F8F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6F17260646;
-	Wed, 21 Feb 2024 21:40:26 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AD3861BF97F
- for <buildroot@lists.busybox.net>; Wed, 21 Feb 2024 21:40:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6CAA060F8F;
+	Wed, 21 Feb 2024 21:40:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6D8951BF36F
+ for <buildroot@lists.busybox.net>; Wed, 21 Feb 2024 21:40:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A17D5812E3
- for <buildroot@lists.busybox.net>; Wed, 21 Feb 2024 21:40:13 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5A81E40259
+ for <buildroot@lists.busybox.net>; Wed, 21 Feb 2024 21:40:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uzUKIH2ADi8q for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Zg7rLLAeKS1g for <buildroot@lists.busybox.net>;
  Wed, 21 Feb 2024 21:40:12 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.102;
  helo=smtpcmd02102.aruba.it;
  envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E25EA812D9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E25EA812D9
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E252940245
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E252940245
 Received: from smtpcmd02102.aruba.it (smtpcmd02102.aruba.it [62.149.158.102])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E25EA812D9
- for <buildroot@buildroot.org>; Wed, 21 Feb 2024 21:40:10 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E252940245
+ for <buildroot@buildroot.org>; Wed, 21 Feb 2024 21:40:11 +0000 (UTC)
 Received: from localhost.localdomain ([84.33.84.190])
  by Aruba Outgoing Smtp  with ESMTPSA
- id cuJyrqwWLMMFBcuK0rhA4y; Wed, 21 Feb 2024 22:40:08 +0100
+ id cuJyrqwWLMMFBcuK1rhA5i; Wed, 21 Feb 2024 22:40:09 +0100
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Wed, 21 Feb 2024 22:40:00 +0100
-Message-Id: <20240221214005.176433-5-giulio.benetti@benettiengineering.com>
+Date: Wed, 21 Feb 2024 22:40:03 +0100
+Message-Id: <20240221214005.176433-8-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240221214005.176433-1-giulio.benetti@benettiengineering.com>
 References: <20240218230524.639348e6@windsurf>
  <20240221214005.176433-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfA9nR1WS2EwIZmnbW1Nz4nHERlHukgHpHYgn4wyUcbSAi0tKr+mKCzLfB1Y8e9ZwA9e+7HgWdCO0QSizNnj/EZI+SaGw+BXpW9CQtkl404Pg4Jj417l9
- hXIKDmZqFOZw6s45bCV1hU7rDigZ2K4Pgcdy0uooMnJmnScyuFrrAjX7B+yxwYX5ynXvmYAh+rYUDcB1G3u1NJKPO+oKKxkt94s6cTlpvSG/O3cfYolhPJT3
- UNxu65U3HDT6tDPP1ni9Fn/LnVWbhC0FHOm1w954yCCjZMSiJlD5TeUAm7kiSu4BAUFcet5H0S4EeMqCgPkcergZueVFiEmK+lUP+1HHUL8tUN6+I0Evp3MY
- SBj/O31WkQZkNW948ZIhNXvmWpJg2qy7C0wM5T9Idd0lCaxV4rljVUGBA9KxH8SZk3EZMzvdr7Fw/fZIT7sYtx4WACj18t4TprxJE3AODMUmKtsUB45e0am6
- B2ENPUfv298CzOSevMo4k04UlFLLetsQyJJA6dSPfSttBetOPqP1CQiZo/X72KAOC/2E/X7oXCC86AV4HUd6W+79uuLMABsERAXpJhn5bmXdZXJ0ubneyKes
- y8gBZOre8iehIkNg8yRW/naJTWbTawnXtF9mYlgQvBt7M//CqNPv1vxAx/5yL7kL1bM=
+X-CMAE-Envelope: MS4xfMCYclXGzSc58kCMYLIuJWOAdsQhQlanLBZWT+YWb1+wAx8wC5ZeTvyAEb3BbuT8HkMvwZTEJ5SBD/d2OYgKiQKQQy1fM+ZmjGkvoYxmGnu7sfk/zKra
+ GoPL5GJMSjn6bGws3C9XFCPcg6PL1CQG0tCrpareLV0gySTW51vSY91YrA/jL5wFoKVJEikQdAe0PlRBTrCZ7RKoGT2zQuib2fzu+1DFIREZ4n6ltXYDHfXd
+ 8N/GJXOHO5Iou3ZG7nNyufj8/rmg1QeuXqA8WDveqSS/P2U3E23eLAZkK30O0zdioHAvc28ArJfMfMlW72jIz4PVZc/VSEXt5hnJQJPZDGZUIZg9KOvuieHP
+ KQxyiBy5liRwHoRzf/wgSJXq6Ei6WBtGUN0FjVXCxhE6Qn+/7A4evn0sYRvC/vJYE2/WSN1EnwRmm7yyM0L7rBSVfJNOTAwUgP89wCuFz71KvPXdhVJqvxkO
+ xpaXF15pS7LKHnpg90zDXJwmi7NlelUB3gGLEq2tZGQHFrD5WsipvTLyp4Q37/akztWRgUoZckIVlAkSJqgkqLCOMfXaynrvc46mHPbmB51oF26w/B3pzlTR
+ 1BbiNxjxHfs/eUP5VLaU8MTu2oCQzGh47E+Ny20ASAOHJH+XoLjeRU8EycvnUBK6FOg=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1708551608; bh=Y/vWCxi8r0NKShAva4ueJdRt4zM4eSwAggUlnkIXHSY=;
+ t=1708551610; bh=0dGDQMJ+5q6XdAZcrkMg4EHrcmjQEDpOO48yZPxP0Fs=;
  h=From:To:Subject:Date:MIME-Version;
- b=ThqWLQGNFiHgFO8DIWLkVcmk7KFdjMsaSQjSRsfJnF1jV1OMBbrehTmv8s8Nctf7c
- yutUfQVSV0uUey3Fh3NufmZwwTQv9GrqVcNvi/vI5iZftnyJr64S1qZK2K52Vn0gau
- GXU9yBD5I0Sgcn+bvNV5xraUbyavEDU+Wnw5Cf7t3LLETrmtJjCtOqzkomINLHTBJI
- A3dLDXSfatdGiU507MyXc9C1wLF1A2Z4TK49wB4UfaHeNMHt8KJdTtLm54JSDEkItw
- s0pPYqPLHqMnN9x6KDrX/GG88shJgwE8b5c3HJtUQKK2QYvdPTuNrKn7VMHMBQ5EtX
- a9mRpanREYnWQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=TWvj1rYxFY1ULjLScjiLwzRCgWu6CJdswaHlOR6esiRjYO+xYpVWyShpDsQnjPczT
+ Asvgc2QxArI4jlbaM6kPpkVHPakaMtVL9RhQ1sBxINSD7W5jDONT+V7gwbeD185Q4J
+ hBYBGRWyvniLgbFkL7DG3QqmLHViz2G19RDVIzrr/OnfLOwmVuOIC71ckqo6Ymmxy1
+ eVA/1qJRtbHHNkgFXMecF9FpzX2AQGTg2eB3kYyaTyMHRbg45y7myWmkm1H8ynZyGr
+ rILsfg8U6ywFyIWzxvxwbRxNyV9Bz9+1D+q56TQG9R1NURj4yhbHFoM6fyHc+pghqd
+ EhCYFOqc14YhQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=ThqWLQGN
-Subject: [Buildroot] [PATCH v2 4/9] package/kf5/kf5-kcoreaddons: drop nios2
- binutils bug 27597 dependency
+ header.s=a1 header.b=TWvj1rYx
+Subject: [Buildroot] [PATCH v2 7/9] package/pistache: drop nios2 binutils
+ bug 27597 dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,20 +105,33 @@ version we can drop nios2 binutils bug 27597 dependency.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/kf5/kf5-kcoreaddons/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ package/pistache/Config.in | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/package/kf5/kf5-kcoreaddons/Config.in b/package/kf5/kf5-kcoreaddons/Config.in
-index 02bd38e395..88fda03ee0 100644
---- a/package/kf5/kf5-kcoreaddons/Config.in
-+++ b/package/kf5/kf5-kcoreaddons/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_KF5_KCOREADDONS
- 	bool "kf5-kcoreaddons"
+diff --git a/package/pistache/Config.in b/package/pistache/Config.in
+index 3acf1f53f0..ca2d2833cd 100644
+--- a/package/pistache/Config.in
++++ b/package/pistache/Config.in
+@@ -4,7 +4,6 @@ config BR2_PACKAGE_PISTACHE
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_INSTALL_LIBSTDCPP
 -	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
- 	select BR2_PACKAGE_KF5_EXTRA_CMAKE_MODULES
- 	select BR2_PACKAGE_QT5TOOLS
- 	select BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS
+ 	select BR2_PACKAGE_RAPIDJSON
+ 	help
+ 	  Pistache is a modern and elegant HTTP and REST framework
+@@ -13,9 +12,8 @@ config BR2_PACKAGE_PISTACHE
+ 
+ 	  https://github.com/oktal/pistache
+ 
+-comment "pistache needs a toolchain w/ C++, gcc >= 7, threads, wchar, not binutils bug 27597"
++comment "pistache needs a toolchain w/ C++, gcc >= 7, threads, wchar"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+ 		   !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
+ 		   !BR2_TOOLCHAIN_HAS_THREADS || \
+-		   !BR2_USE_WCHAR || \
+-		   BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
++		   !BR2_USE_WCHAR
 -- 
 2.34.1
 
