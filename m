@@ -4,94 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C09DAC48BF8
-	for <buildroot@archiver.kernel.org>; Thu, 22 Feb 2024 13:07:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A391BC48BF8
+	for <buildroot@archiver.kernel.org>; Thu, 22 Feb 2024 13:07:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 71EBF4089C;
-	Thu, 22 Feb 2024 13:07:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5672741D61;
+	Thu, 22 Feb 2024 13:07:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id S8low-j5IeP7; Thu, 22 Feb 2024 13:07:29 +0000 (UTC)
+	with ESMTP id SLuLp8AvHk9W; Thu, 22 Feb 2024 13:07:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 60BF740A03
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4FA7E41D62
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 60BF740A03;
-	Thu, 22 Feb 2024 13:07:29 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 99B961BF40B
- for <buildroot@lists.busybox.net>; Thu, 22 Feb 2024 13:07:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4FA7E41D62;
+	Thu, 22 Feb 2024 13:07:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C696F1BF40B
+ for <buildroot@lists.busybox.net>; Thu, 22 Feb 2024 13:07:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8554C40441
- for <buildroot@lists.busybox.net>; Thu, 22 Feb 2024 13:07:28 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B44CA60F0E
+ for <buildroot@lists.busybox.net>; Thu, 22 Feb 2024 13:07:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Aof7srCNwCCw for <buildroot@lists.busybox.net>;
- Thu, 22 Feb 2024 13:07:27 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::12e; helo=mail-il1-x12e.google.com;
- envelope-from=fancp2007@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D21EA418CB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D21EA418CB
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com
- [IPv6:2607:f8b0:4864:20::12e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D21EA418CB
- for <buildroot@buildroot.org>; Thu, 22 Feb 2024 13:07:26 +0000 (UTC)
-Received: by mail-il1-x12e.google.com with SMTP id
- e9e14a558f8ab-364f794f237so33020505ab.1
- for <buildroot@buildroot.org>; Thu, 22 Feb 2024 05:07:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1708607245; x=1709212045;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=W/i1XUha5A2twaxrhHfZsiWRhfQJ2r/eRhd/d/VF9FU=;
- b=HTefq3fYuwvUsv0u4Fq50irjMOMe1jRspbXtmdz69rzckpaF6yMvr8U7fECIJ+EZXr
- 11IV5tVpbk4LiQ3Fdy1Z8djVezrftdo1zpFT/HE0bvgpICljqAlKu7U5g4EVRt1F7tzg
- +fuZ20TMGV4wPdMFfoh48CNk5tJOOvqWI4TD2imzmZKlT7LZZ27geqze73fC/Q6RnCmP
- RHA/rmH5xdwf9qk3Ao5d+D8C4AYmgIKNLaSqnG2UrxKnqbh3084hkgFg2/cQHN8KrPJI
- ILOcBDfVS9beCcK6MdOkEbY29ym9K39j6k+1GR6BI4rlkEeIbwuNZF5qwnYSq8uXjowP
- zLCg==
-X-Gm-Message-State: AOJu0YzzPZoCzZWJ8aQdFnehcWL03xAmTpZiNFeS5RGAUCMsmhm9x4PB
- UPZg6wRgfljAa55uYnixTtSG2w+dEa/KnsV7y6TXQWEWox98che6n/xivRME4Mg=
-X-Google-Smtp-Source: AGHT+IGgLP6i1xa4pyLkVdA3B7souG0BbENDn9KsRmZuHk4q1GMCc74xls93HjBwlX512r3Sv1m85A==
-X-Received: by 2002:a05:6e02:592:b0:363:d6be:c87e with SMTP id
- c18-20020a056e02059200b00363d6bec87emr19499149ils.27.1708607244465; 
- Thu, 22 Feb 2024 05:07:24 -0800 (PST)
-Received: from localhost ([142.171.12.18]) by smtp.gmail.com with ESMTPSA id
- e24-20020a656898000000b005ce998b9391sm8980556pgt.67.2024.02.22.05.07.23
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 22 Feb 2024 05:07:23 -0800 (PST)
-From: Scott Fan <fancp2007@gmail.com>
-To: buildroot@buildroot.org
-Date: Thu, 22 Feb 2024 21:07:15 +0800
-Message-Id: <20240222130716.1311432-1-fancp2007@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231208003746.9505-1-fancp2007@gmail.com>
-References: <20231208003746.9505-1-fancp2007@gmail.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ubEFVKMCxA9s for <buildroot@lists.busybox.net>;
+ Thu, 22 Feb 2024 13:07:28 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
+ helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 29AF460E6B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 29AF460E6B
+Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 29AF460E6B
+ for <buildroot@buildroot.org>; Thu, 22 Feb 2024 13:07:27 +0000 (UTC)
+Received: from [192.168.178.36] (unknown [212.37.174.96])
+ (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+ key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+ (No client certificate requested)
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id 4254C2C80CD4;
+ Thu, 22 Feb 2024 14:07:24 +0100 (CET)
+Message-ID: <2b8930e5-63af-452a-89f2-a19f28d21c99@bubu1.eu>
+Date: Thu, 22 Feb 2024 14:07:23 +0100
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1708607245; x=1709212045; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=W/i1XUha5A2twaxrhHfZsiWRhfQJ2r/eRhd/d/VF9FU=;
- b=kMVHN6AO0H9XEDqK+j1Tsjf5gFwFDmdgimLg3u/DpIF6hPaGTAzh/oP1DaGuKEenPw
- MlG9VZdVmnjoEQfqEqAoH6wCrnZd8aM2XvFPjyxE9XjKShYfIO7FIQUkhyQgQOgqY2w3
- siUyOV86E24BdwTOediCjh/Y5DCetsjdUtHW1fJia5hQH9ZDnXKKcwFQ4Y7blQ2ZFPFa
- bLDghupCjuzP+IJED9C4NBMz+HjGlC2QAuYX/waV+mUeHtwpxH+UICo3K3AfKxyyFKkE
- /Lt5Adsemj6uASYTb5ofur1/liT/nJVUFnyj3rRAOx9ZTISjDotZdt/cp3Id/8BwuqYs
- PSxA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+User-Agent: Mozilla Thunderbird
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20240221220343.1228278-1-fontaine.fabrice@gmail.com>
+Content-Language: en-US
+In-Reply-To: <20240221220343.1228278-1-fontaine.fabrice@gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=bubu1.eu; s=bubu; 
+ t=1708607244; bh=Z41jSJZ6nxohUzvUWnwsqqMUFvEXq+2b5Xndtiu87hQ=;
+ h=Date:Subject:To:Cc:References:From:In-Reply-To;
+ b=MdBQOr+W1o2/zJI8hL2UaaTYb6L1BmWwuUlz0mPkhpMnAYqC+DvC9Ti8bdrIO46/s
+ qY1w/DufGsPi2lYJG3nqNS6vkNh7Z2UMjnThKhAzDkSA++XyLWwHcG9fcp3SxmrIUP
+ fzbqwx673NR17CrVUOUPEQDbHfPaXAW08kXZOyM8V7djKQSGQ8R3BRxAqVSkANZ7zY
+ omEK5TPVGqnDIKBbNe6T1HBCtRvkwYdj/181CI9B16KWOr72KQfT/EW8nDOw7TeeWl
+ iTfKrUy0kOevCPuH4nwpv0SJYijhA151/E0c9+DAGsZuQHybYLZfNzVY+n2P3wMk3k
+ QdSPlzreUViOg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bubu1.eu
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=kMVHN6AO
-Subject: [Buildroot] [PATCH v6] configs/friendlyarm_nanopi_neo2_defconfig:
- new board
+ unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
+ header.s=bubu header.b=MdBQOr+W
+Subject: Re: [Buildroot] [PATCH 1/1] package/nodejs: security bump to
+ version 20.11.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,197 +80,93 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: giulio.benetti@benettiengineering.com, Scott Fan <fancp2007@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
+Cc: Martin Bark <martin@barkynet.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Daniel Price <daniel.price@gmail.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add support for the FriendlyARM NanoPi NEO2 with mainline components:
-  - U-Boot 2024.01
-  - Linux 6.6.17
 
-Board's wiki page:
-  - https://wiki.friendlyelec.com/wiki/index.php/NanoPi_NEO2
 
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
+On 21.02.24 23:03, Fabrice Fontaine wrote:
+> - Fix CVE-2024-21892, CVE-2024-22019, CVE-2024-21896, CVE-2024-22017,
+>    CVE-2023-46809, CVE-2024-21891, CVE-2024-21890 and CVE-2024-22025
+> 
+> - LICENSE hash changed due to two things:
+>    * c-ares vendored dependency license got updated [1]. This is unused
+>      by buildroot though anyway
+>    * base64 vendored library license updated copyright years and sorted
+>      contributor names [2], [3]
+> 
+> - This bump will fix the following build failure raised since bump of
+>    python to version 3.12.1 in commit 36e635d2d5c0166476858aa239ccbe78e8f2af14
+>    thanks to
+>    https://github.com/nodejs/node/commit/95534ad82f4e33f53fd50efe633d43f8da70cba6
+>    https://github.com/nodejs/node/commit/6557c1c9b1206a85bb7d8e7450e8c3a4cff7c84b:
+> 
+> Traceback (most recent call last):
+>    File "/home/autobuild/autobuild/instance-2/output-1/build/host-nodejs-src-20.9.0/configure.py", line 17, in <module>
+>      from distutils.version import StrictVersion
+> ModuleNotFoundError: No module named 'distutils'
+> 
+> https://github.com/nodejs/node/blob/v20.11.1/CHANGELOG.md
+> 
+> [1] https://github.com/c-ares/c-ares/pull/556
+> [2] https://github.com/aklomp/base64/commit/2e8ad2aec2065f258dc1aec9402aedd3604cfbcd
+> [3] https://github.com/aklomp/base64/commit/d7bca2bb2928de6c4fe496e6defe8b3affa35d1b
+> 
+> Fixes: 36e635d2d5c0166476858aa239ccbe78e8f2af14
+>   - http://autobuild.buildroot.org/results/8b38bc4b7879a0349c1305e2fcb458a0cfd04a93
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
----
-Changes v1 -> v2:
-  - Fix issues from 'utils/docker-run make check-package'
-  - Add atf custom version in the defconfig
-  - No need for sudo to run sync
+Thanks!
 
-Changes v2 -> v3:
-  - Update patch file, add the upstream tag
+Reviewed-By: Marcus Hoffmann <buildroot@bubu1.eu>
 
-Changes v3 -> v4:
-  - Use a single integrated image file (u-boot-sunxi-with-spl.bin)
-  - Remove patch file for uboot, switch to binman
-  - Merge boot partition into rootfs partition
-  - Bump kernel version to 6.1.61
 
-Changes v4 -> v5:
-  - Bump kernel version to 6.1.65
-
-Changes v5 -> v6:
-  - Bump kernel version to 6.6.17
-  - Bump uboot version to 2024.01
-  - Add option BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
----
- board/friendlyarm/nanopi-neo2/extlinux.conf |  4 ++
- board/friendlyarm/nanopi-neo2/genimage.cfg  | 16 +++++++
- board/friendlyarm/nanopi-neo2/post-build.sh |  5 +++
- board/friendlyarm/nanopi-neo2/readme.txt    | 34 ++++++++++++++
- configs/friendlyarm_nanopi_neo2_defconfig   | 49 +++++++++++++++++++++
- 5 files changed, 108 insertions(+)
- create mode 100644 board/friendlyarm/nanopi-neo2/extlinux.conf
- create mode 100644 board/friendlyarm/nanopi-neo2/genimage.cfg
- create mode 100755 board/friendlyarm/nanopi-neo2/post-build.sh
- create mode 100644 board/friendlyarm/nanopi-neo2/readme.txt
- create mode 100644 configs/friendlyarm_nanopi_neo2_defconfig
-
-diff --git a/board/friendlyarm/nanopi-neo2/extlinux.conf b/board/friendlyarm/nanopi-neo2/extlinux.conf
-new file mode 100644
-index 0000000000..482a069f74
---- /dev/null
-+++ b/board/friendlyarm/nanopi-neo2/extlinux.conf
-@@ -0,0 +1,4 @@
-+label friendlyarm-nanopi-buildroot
-+  kernel /boot/Image
-+  devicetree /boot/sun50i-h5-nanopi-neo2.dtb
-+  append console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p1 rootwait
-diff --git a/board/friendlyarm/nanopi-neo2/genimage.cfg b/board/friendlyarm/nanopi-neo2/genimage.cfg
-new file mode 100644
-index 0000000000..67e4e5efdb
---- /dev/null
-+++ b/board/friendlyarm/nanopi-neo2/genimage.cfg
-@@ -0,0 +1,16 @@
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition u-boot-tpl-spl-dtb {
-+		in-partition-table = "no"
-+		image = "u-boot-sunxi-with-spl.bin"
-+		offset = 8K
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+		offset = 1M
-+	}
-+}
-diff --git a/board/friendlyarm/nanopi-neo2/post-build.sh b/board/friendlyarm/nanopi-neo2/post-build.sh
-new file mode 100755
-index 0000000000..c7ec875068
---- /dev/null
-+++ b/board/friendlyarm/nanopi-neo2/post-build.sh
-@@ -0,0 +1,5 @@
-+#!/bin/sh
-+
-+BOARD_DIR="$(dirname "$0")"
-+
-+install -m 0644 -D "${BOARD_DIR}/extlinux.conf" "${TARGET_DIR}/boot/extlinux/extlinux.conf"
-diff --git a/board/friendlyarm/nanopi-neo2/readme.txt b/board/friendlyarm/nanopi-neo2/readme.txt
-new file mode 100644
-index 0000000000..c896a57525
---- /dev/null
-+++ b/board/friendlyarm/nanopi-neo2/readme.txt
-@@ -0,0 +1,34 @@
-+Intro
-+=====
-+
-+This default configuration will allow you to start experimenting with the
-+buildroot environment for the NanoPi NEO2. With the current configuration
-+it will bring-up the board, and allow access through the serial console.
-+
-+Wiki link:
-+https://wiki.friendlyelec.com/wiki/index.php/NanoPi_NEO2
-+
-+This configuration uses U-Boot mainline and kernel mainline.
-+
-+How to build
-+============
-+
-+    $ make friendlyarm_nanopi_neo2_defconfig
-+    $ make
-+
-+Note: you will need access to the internet to download the required
-+sources.
-+
-+How to write the SD card
-+========================
-+
-+Once the build process is finished you will have an image called "sdcard.img"
-+in the output/images/ directory.
-+
-+Copy the bootable "sdcard.img" onto an SD card with "dd":
-+
-+  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
-+  $ sync
-+
-+Insert the micro SDcard in your NanoPi NEO2 and power it up. The console
-+is on the serial line, 115200 8N1.
-diff --git a/configs/friendlyarm_nanopi_neo2_defconfig b/configs/friendlyarm_nanopi_neo2_defconfig
-new file mode 100644
-index 0000000000..a60aba06d9
---- /dev/null
-+++ b/configs/friendlyarm_nanopi_neo2_defconfig
-@@ -0,0 +1,49 @@
-+BR2_aarch64=y
-+BR2_cortex_a53=y
-+BR2_ARM_FPU_VFPV4=y
-+
-+# Linux headers same as kernel, a 6.6 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+
-+# Firmware
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.7"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50i_a64"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
-+
-+# Bootloader
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.01"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi_neo2"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
-+BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="SCP=/dev/null"
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.17"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-h5-nanopi-neo2"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+
-+# Filesystem
-+BR2_TARGET_GENERIC_ISSUE="Welcome to FriendlyARM NanoPi NEO2"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/friendlyarm/nanopi-neo2/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopi-neo2/genimage.cfg"
--- 
-2.34.1
-
+> ---
+>   package/nodejs/nodejs.hash | 14 +++++++-------
+>   package/nodejs/nodejs.mk   |  2 +-
+>   2 files changed, 8 insertions(+), 8 deletions(-)
+> 
+> diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+> index 2d60437a7c..ddab345e0a 100644
+> --- a/package/nodejs/nodejs.hash
+> +++ b/package/nodejs/nodejs.hash
+> @@ -1,8 +1,8 @@
+> -# From https://nodejs.org/dist/v20.9.0/SHASUMS256.txt.asc
+> -sha256  ced3ecece4b7c3a664bca3d9e34a0e3b9a31078525283a6fdb7ea2de8ca5683b  node-v20.9.0-linux-arm64.tar.xz
+> -sha256  64099d7e62bdbb8efd52c216a6759b3cdd77c38aa993096fdee9f875d95b2d8e  node-v20.9.0-linux-armv7l.tar.xz
+> -sha256  3c6cea5d614cfbb95d92de43fbc2f8ecd66e431502fe5efc4f3c02637897bd45  node-v20.9.0-linux-ppc64le.tar.xz
+> -sha256  9033989810bf86220ae46b1381bdcdc6c83a0294869ba2ad39e1061f1e69217a  node-v20.9.0-linux-x64.tar.xz
+> -sha256  a23d96810abf0455426b349d47ce5310f33095b7bc0571b9cc510f481c3a4519  node-v20.9.0.tar.xz
+> +# From https://nodejs.org/dist/v20.11.1/SHASUMS256.txt.asc
+> +sha256  c957f29eb4e341903520caf362534f0acd1db7be79c502ae8e283994eed07fe1  node-v20.11.1-linux-arm64.tar.xz
+> +sha256  28e0120d2d150a8f41717899d33167b8b32053778665583d49ff971bfd188d1b  node-v20.11.1-linux-armv7l.tar.xz
+> +sha256  51343cacf5cdf5c4b5e93e919d19dd373d6ef43d5f2c666eae299f26e31d08b5  node-v20.11.1-linux-ppc64le.tar.xz
+> +sha256  d8dab549b09672b03356aa2257699f3de3b58c96e74eb26a8b495fbdc9cf6fbe  node-v20.11.1-linux-x64.tar.xz
+> +sha256  77813edbf3f7f16d2d35d3353443dee4e61d5ee84d9e3138c7538a3c0ca5209e  node-v20.11.1.tar.xz
+>   # Locally calculated
+> -sha256  93ac846282ce6c5255e00fada2fd2e7e292255239fe58d5502b0a554859e6a3e  LICENSE
+> +sha256  7b0bbdca72f925bd78b764914651244a4432a753c7325d061a565cd7eac1193d  LICENSE
+> diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+> index 9806a64d38..858c6a86f5 100644
+> --- a/package/nodejs/nodejs.mk
+> +++ b/package/nodejs/nodejs.mk
+> @@ -5,7 +5,7 @@
+>   ################################################################################
+>   
+>   # _VERSION, _SOURCE and _SITE must be kept empty to avoid downloading anything
+> -NODEJS_COMMON_VERSION = 20.9.0
+> +NODEJS_COMMON_VERSION = 20.11.1
+>   NODEJS_COMMON_SOURCE = node-v$(NODEJS_COMMON_VERSION).tar.xz
+>   NODEJS_COMMON_SITE = http://nodejs.org/dist/v$(NODEJS_COMMON_VERSION)
+>   
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
