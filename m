@@ -1,96 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79FA7C48BF8
-	for <buildroot@archiver.kernel.org>; Thu, 22 Feb 2024 10:47:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E64CC48BF8
+	for <buildroot@archiver.kernel.org>; Thu, 22 Feb 2024 12:29:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0C137826C0;
-	Thu, 22 Feb 2024 10:47:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 13EA441B88;
+	Thu, 22 Feb 2024 12:29:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id J1PT0crSKH9k; Thu, 22 Feb 2024 10:47:30 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AVIZ-zBZafN8; Thu, 22 Feb 2024 12:29:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 00D37826DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D8C1441C2C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 00D37826DE;
-	Thu, 22 Feb 2024 10:47:29 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2818F1BF3FF
- for <buildroot@lists.busybox.net>; Thu, 22 Feb 2024 10:47:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D8C1441C2C;
+	Thu, 22 Feb 2024 12:29:07 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3B3A21BF3E5
+ for <buildroot@lists.busybox.net>; Thu, 22 Feb 2024 12:29:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1514141883
- for <buildroot@lists.busybox.net>; Thu, 22 Feb 2024 10:47:29 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 34D9A60867
+ for <buildroot@lists.busybox.net>; Thu, 22 Feb 2024 12:29:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id C5cLh8rFSdzZ for <buildroot@lists.busybox.net>;
- Thu, 22 Feb 2024 10:47:27 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::533; helo=mail-pg1-x533.google.com;
- envelope-from=fancp2007@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 892B44031D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 892B44031D
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com
- [IPv6:2607:f8b0:4864:20::533])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 892B44031D
- for <buildroot@buildroot.org>; Thu, 22 Feb 2024 10:47:27 +0000 (UTC)
-Received: by mail-pg1-x533.google.com with SMTP id
- 41be03b00d2f7-5d8b276979aso5893606a12.2
- for <buildroot@buildroot.org>; Thu, 22 Feb 2024 02:47:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1708598846; x=1709203646;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=9iqby6V/pi4fHZ2gxw78ddmu8yYJ+57MfFXn56GZ6o4=;
- b=pe5znX5RXAQ7x4oEIyUJQp5gomAVlEwdFLBY28t3cZSyshDuASHelRMDy5neQxvcSS
- acJOr0oAAhZmbuOoSTeK8Dag6EB1yQ+UyNQoUteLdzK9rOp3VbTgw3Q3posm4Fc5KDlV
- 1BRHPCp/373wty6haengorZBwiAe+ulF+cWfM/6EtTxB+m+zK3NRH+dgZH5QyD+B2hD4
- KwvGYeL75KMSR4hXht6IWOtat1xtJPgWs94JJKFa9tZRnJlRWLX3rZN1Jd6HZolbZsII
- O7c1nKq50nMCUxE9GTJrj2isLHVh2BP56MVWPWWhMulCZi+5dysFxeacrYza7pYDWxx2
- npiQ==
-X-Gm-Message-State: AOJu0YxC0eE9wZ7awp83k9vJc3zqv2JhvHfRTO5h+mv1zsStRM3t3JmL
- XaZv9z9A+4a4aVDwTuneApjwDqHp8CwxKaibwGqtq05NL7kDRKblxKgP2Tc+
-X-Google-Smtp-Source: AGHT+IE15tHt43xXvM1yvTRKyd5h9QvCHIWL07q9N5NvcyFxpzzhamY1xK964bQd4/vInEPJLofbqw==
-X-Received: by 2002:a05:6a20:d806:b0:1a0:94a8:400f with SMTP id
- iv6-20020a056a20d80600b001a094a8400fmr14824715pzb.18.1708598845791; 
- Thu, 22 Feb 2024 02:47:25 -0800 (PST)
-Received: from localhost ([142.171.12.18]) by smtp.gmail.com with ESMTPSA id
- u20-20020a056a00099400b006e47300e4edsm6355894pfg.183.2024.02.22.02.47.24
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 22 Feb 2024 02:47:25 -0800 (PST)
-From: Scott Fan <fancp2007@gmail.com>
-To: buildroot@buildroot.org
-Date: Thu, 22 Feb 2024 18:47:04 +0800
-Message-Id: <20240222104709.10503-1-fancp2007@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231208003746.9505-1-fancp2007@gmail.com>
-References: <20231208003746.9505-1-fancp2007@gmail.com>
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1708598846; x=1709203646; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=9iqby6V/pi4fHZ2gxw78ddmu8yYJ+57MfFXn56GZ6o4=;
- b=SvNkpya1Wt1gf3wdHfbzmqO56N05nqq1VOSDFMxvwOGddeSGqyyEOGxmxObUyw12jf
- NHRb/fBjBzNv4ii3HePD233b3t1Xr6MiS0kilo7B2NFtU5Mk6/fjdOf6xdtZW3QNl0qq
- BkyGX60aaefiayglJkIhegflhfoJegzlueGGWRZUe7EqVRzK7fiubzxNCPiOn59Na+ny
- up9u8RY3fRybeDULgtYx1rFbtUnu7NqVLepWt+FLAfjEXbT8Spw9SiNPAUqQUYtYjslg
- ejVXjWCKWG2p6gQbLK9QIcuuvP12I+HckKMzeM1tTuKvJgIoSLi6gjr4a/0Wg+BJgAOg
- i1fA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id L9dkJnMmYhPk for <buildroot@lists.busybox.net>;
+ Thu, 22 Feb 2024 12:29:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.155.165;
+ helo=smtpdh20-2.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 088FA606ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 088FA606ED
+Received: from smtpdh20-2.aruba.it (smtpdh20-2.aruba.it [62.149.155.165])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 088FA606ED
+ for <buildroot@buildroot.org>; Thu, 22 Feb 2024 12:29:01 +0000 (UTC)
+Received: from smtpclient.apple ([84.33.84.190])
+ by Aruba Outgoing Smtp  with ESMTPA
+ id d8C9riDVmNgOBd8C9rNdNG; Thu, 22 Feb 2024 13:28:57 +0100
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Mime-Version: 1.0 (1.0)
+Date: Thu, 22 Feb 2024 13:28:57 +0100
+Message-Id: <FD325D8A-0505-406C-AC1D-9D3C2C112F3C@benettiengineering.com>
+References: <20240222104709.10503-1-fancp2007@gmail.com>
+In-Reply-To: <20240222104709.10503-1-fancp2007@gmail.com>
+To: Scott Fan <fancp2007@gmail.com>
+X-Mailer: iPhone Mail (21D61)
+X-CMAE-Envelope: MS4xfA6zLUBvJM06VKAfJTheznpQfYCxMWKe3QG8TaIRog7hlCXTnNqicWpYULfmCB2U5SxxBZrfSgB93Kil4iQQ1B/+6fEbfY/fKsfFsDDQmzRYd7lZ+ffc
+ Wk1fDFm0nwBh9z+ZtgJxOl411Pb6/8RyCMOPbIpvLUNqTsbRYePAst0ZMMPsNdJCCjVGENqGZhJJSl0onPRVHX2pdPhHm0c2zdo/0T4LvM2kQ3ymrWGoBwwl
+ CWgc9yUzxx8n2+TPIEnTzQ==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1708604937; bh=xXwx65e/RA0SMvHwpT0nYAxCnU/5/2UgBffaWgjj9o0=;
+ h=Content-Type:From:Mime-Version:Subject:Date:To;
+ b=aDvLw6ULZuAJ0jIM5oqpkwRn0GOBfMCmuWpErjkI4TX27qQlcS4bQSHRY+w7aI9t7
+ lGiTYAopgCO7cQ+hJy1W0ooMK74e42X/hVXqvzHCBhQynNvUCXS1QNghnHviH6lfdQ
+ gtzCJPW6C7umwOvCp16oboX5fQfGmoDn8iEaYHDSzklPVc5CbwjGXJ/OP/P1Viluro
+ fEQIGwC3pW9HJfcDVMi997lHzeHwy6FfCZNRJ4JX/ZwOzIl1pWnC6rTA6Dy/Kh3xG7
+ 8rNAcBEFuJDOuxg1tfy/SD4qVZMJ2MZLYaHw5Ak+UhXNfM8lTAeo9t05hBGqQKPcMP
+ utoqur7j3QlvA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=SvNkpya1
-Subject: [Buildroot] [PATCH v6] configs/friendlyarm_nanopi_neo2_defconfig:
- new board
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=aDvLw6UL
+Subject: Re: [Buildroot] [PATCH v6]
+ configs/friendlyarm_nanopi_neo2_defconfig: new board
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,200 +81,130 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: giulio.benetti@benettiengineering.com, Scott Fan <fancp2007@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add support for the FriendlyARM NanoPi NEO2 with mainline components:
-  - U-Boot 2024.01
-  - Linux 6.6.17
-
-Board's wiki page:
-  - https://wiki.friendlyelec.com/wiki/index.php/NanoPi_NEO2
-
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
-
----
-Changes v1 -> v2:
-  - Fix issues from 'utils/docker-run make check-package'
-  - Add atf custom version in the defconfig
-  - No need for sudo to run sync
-
-Changes v2 -> v3:
-  - Update patch file, add the upstream tag
-
-Changes v3 -> v4:
-  - Use a single integrated image file (u-boot-sunxi-with-spl.bin)
-  - Remove patch file for uboot, switch to binman
-  - Merge boot partition into rootfs partition
-  - Bump kernel version to 6.1.61
-
-Changes v4 -> v5:
-  - Bump kernel version to 6.1.65
-
-Changes v5 -> v6:
-  - Bump kernel version to 6.6.17
-  - Bump uboot version to 2024.01
-  - Add option BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
----
- board/friendlyarm/nanopi-neo2/extlinux.conf |  4 ++
- board/friendlyarm/nanopi-neo2/genimage.cfg  | 16 +++++++
- board/friendlyarm/nanopi-neo2/post-build.sh |  5 +++
- board/friendlyarm/nanopi-neo2/readme.txt    | 34 ++++++++++++++
- configs/friendlyarm_nanopi_neo2_defconfig   | 49 +++++++++++++++++++++
- 5 files changed, 108 insertions(+)
- create mode 100644 board/friendlyarm/nanopi-neo2/extlinux.conf
- create mode 100644 board/friendlyarm/nanopi-neo2/genimage.cfg
- create mode 100755 board/friendlyarm/nanopi-neo2/post-build.sh
- create mode 100644 board/friendlyarm/nanopi-neo2/readme.txt
- create mode 100644 configs/friendlyarm_nanopi_neo2_defconfig
-
-diff --git a/board/friendlyarm/nanopi-neo2/extlinux.conf b/board/friendlyarm/nanopi-neo2/extlinux.conf
-new file mode 100644
-index 0000000000..482a069f74
---- /dev/null
-+++ b/board/friendlyarm/nanopi-neo2/extlinux.conf
-@@ -0,0 +1,4 @@
-+label friendlyarm-nanopi-buildroot
-+  kernel /boot/Image
-+  devicetree /boot/sun50i-h5-nanopi-neo2.dtb
-+  append console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p1 rootwait
-diff --git a/board/friendlyarm/nanopi-neo2/genimage.cfg b/board/friendlyarm/nanopi-neo2/genimage.cfg
-new file mode 100644
-index 0000000000..67e4e5efdb
---- /dev/null
-+++ b/board/friendlyarm/nanopi-neo2/genimage.cfg
-@@ -0,0 +1,16 @@
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition u-boot-tpl-spl-dtb {
-+		in-partition-table = "no"
-+		image = "u-boot-sunxi-with-spl.bin"
-+		offset = 8K
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+		offset = 1M
-+	}
-+}
-diff --git a/board/friendlyarm/nanopi-neo2/post-build.sh b/board/friendlyarm/nanopi-neo2/post-build.sh
-new file mode 100755
-index 0000000000..c7ec875068
---- /dev/null
-+++ b/board/friendlyarm/nanopi-neo2/post-build.sh
-@@ -0,0 +1,5 @@
-+#!/bin/sh
-+
-+BOARD_DIR="$(dirname "$0")"
-+
-+install -m 0644 -D "${BOARD_DIR}/extlinux.conf" "${TARGET_DIR}/boot/extlinux/extlinux.conf"
-diff --git a/board/friendlyarm/nanopi-neo2/readme.txt b/board/friendlyarm/nanopi-neo2/readme.txt
-new file mode 100644
-index 0000000000..c896a57525
---- /dev/null
-+++ b/board/friendlyarm/nanopi-neo2/readme.txt
-@@ -0,0 +1,34 @@
-+Intro
-+=====
-+
-+This default configuration will allow you to start experimenting with the
-+buildroot environment for the NanoPi NEO2. With the current configuration
-+it will bring-up the board, and allow access through the serial console.
-+
-+Wiki link:
-+https://wiki.friendlyelec.com/wiki/index.php/NanoPi_NEO2
-+
-+This configuration uses U-Boot mainline and kernel mainline.
-+
-+How to build
-+============
-+
-+    $ make friendlyarm_nanopi_neo2_defconfig
-+    $ make
-+
-+Note: you will need access to the internet to download the required
-+sources.
-+
-+How to write the SD card
-+========================
-+
-+Once the build process is finished you will have an image called "sdcard.img"
-+in the output/images/ directory.
-+
-+Copy the bootable "sdcard.img" onto an SD card with "dd":
-+
-+  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
-+  $ sync
-+
-+Insert the micro SDcard in your NanoPi NEO2 and power it up. The console
-+is on the serial line, 115200 8N1.
-diff --git a/configs/friendlyarm_nanopi_neo2_defconfig b/configs/friendlyarm_nanopi_neo2_defconfig
-new file mode 100644
-index 0000000000..a60aba06d9
---- /dev/null
-+++ b/configs/friendlyarm_nanopi_neo2_defconfig
-@@ -0,0 +1,49 @@
-+BR2_aarch64=y
-+BR2_cortex_a53=y
-+BR2_ARM_FPU_VFPV4=y
-+
-+# Linux headers same as kernel, a 6.6 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+
-+# Firmware
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.7"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50i_a64"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
-+
-+# Bootloader
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.01"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi_neo2"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
-+BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="SCP=/dev/null"
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.17"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-h5-nanopi-neo2"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+
-+# Filesystem
-+BR2_TARGET_GENERIC_ISSUE="Welcome to FriendlyARM NanoPi NEO2"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/friendlyarm/nanopi-neo2/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopi-neo2/genimage.cfg"
--- 
-2.34.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgU2NvdHQsCgo+IElsIGdpb3JubyAyMiBmZWIgMjAyNCwgYWxsZSBvcmUgMTE6NDcsIFNjb3R0
+IEZhbiA8ZmFuY3AyMDA3QGdtYWlsLmNvbT4gaGEgc2NyaXR0bzoKPiAKPiDvu79BZGQgc3VwcG9y
+dCBmb3IgdGhlIEZyaWVuZGx5QVJNIE5hbm9QaSBORU8yIHdpdGggbWFpbmxpbmUgY29tcG9uZW50
+czoKPiAgLSBVLUJvb3QgMjAyNC4wMQo+ICAtIExpbnV4IDYuNi4xNwo+IAo+IEJvYXJkJ3Mgd2lr
+aSBwYWdlOgo+ICAtIGh0dHBzOi8vd2lraS5mcmllbmRseWVsZWMuY29tL3dpa2kvaW5kZXgucGhw
+L05hbm9QaV9ORU8yCj4gCj4gU2lnbmVkLW9mZi1ieTogU2NvdHQgRmFuIDxmYW5jcDIwMDdAZ21h
+aWwuY29tPgoKUmV2aWV3ZWQtYnk6IEdpdWxpbyBCZW5ldHRpIDxnaXVsaW8uYmVuZXR0aUBiZW5l
+dHRpZW5naW5lZXJpbmcuY29tPgpbT25seSBidWlsZC10ZXN0ZWQgdXNpbmcgZG9ja2VyLXJ1bl0K
+VGVzdGVkLWJ5OiBHaXVsaW8gQmVuZXR0aSA8Z2l1bGlvLmJlbmV0dGlAYmVuZXR0aWVuZ2luZWVy
+aW5nLmNvbT4KCnNlZSBiZWxvdywKCj4gCj4gLS0tCj4gQ2hhbmdlcyB2MSAtPiB2MjoKPiAgLSBG
+aXggaXNzdWVzIGZyb20gJ3V0aWxzL2RvY2tlci1ydW4gbWFrZSBjaGVjay1wYWNrYWdlJwo+ICAt
+IEFkZCBhdGYgY3VzdG9tIHZlcnNpb24gaW4gdGhlIGRlZmNvbmZpZwo+ICAtIE5vIG5lZWQgZm9y
+IHN1ZG8gdG8gcnVuIHN5bmMKPiAKPiBDaGFuZ2VzIHYyIC0+IHYzOgo+ICAtIFVwZGF0ZSBwYXRj
+aCBmaWxlLCBhZGQgdGhlIHVwc3RyZWFtIHRhZwo+IAo+IENoYW5nZXMgdjMgLT4gdjQ6Cj4gIC0g
+VXNlIGEgc2luZ2xlIGludGVncmF0ZWQgaW1hZ2UgZmlsZSAodS1ib290LXN1bnhpLXdpdGgtc3Bs
+LmJpbikKPiAgLSBSZW1vdmUgcGF0Y2ggZmlsZSBmb3IgdWJvb3QsIHN3aXRjaCB0byBiaW5tYW4K
+PiAgLSBNZXJnZSBib290IHBhcnRpdGlvbiBpbnRvIHJvb3RmcyBwYXJ0aXRpb24KPiAgLSBCdW1w
+IGtlcm5lbCB2ZXJzaW9uIHRvIDYuMS42MQo+IAo+IENoYW5nZXMgdjQgLT4gdjU6Cj4gIC0gQnVt
+cCBrZXJuZWwgdmVyc2lvbiB0byA2LjEuNjUKPiAKPiBDaGFuZ2VzIHY1IC0+IHY2Ogo+ICAtIEJ1
+bXAga2VybmVsIHZlcnNpb24gdG8gNi42LjE3Cj4gIC0gQnVtcCB1Ym9vdCB2ZXJzaW9uIHRvIDIw
+MjQuMDEKPiAgLSBBZGQgb3B0aW9uIEJSMl9UQVJHRVRfVUJPT1RfTkVFRFNfT1BFTlNTTD15Cj4g
+Cj4gU2lnbmVkLW9mZi1ieTogU2NvdHQgRmFuIDxmYW5jcDIwMDdAZ21haWwuY29tPgoKTm8gbmVl
+ZCB5b3VyIFNvQiBoZXJlIHNpbmNlIGl0IHdvbuKAmXQgYmUgcGFydCBvZiBjb21taXQgbG9nLgoK
+QmVzdCByZWdhcmRzCkdpdWxpbwoKPiAtLS0KPiBib2FyZC9mcmllbmRseWFybS9uYW5vcGktbmVv
+Mi9leHRsaW51eC5jb25mIHwgIDQgKysKPiBib2FyZC9mcmllbmRseWFybS9uYW5vcGktbmVvMi9n
+ZW5pbWFnZS5jZmcgIHwgMTYgKysrKysrKwo+IGJvYXJkL2ZyaWVuZGx5YXJtL25hbm9waS1uZW8y
+L3Bvc3QtYnVpbGQuc2ggfCAgNSArKysKPiBib2FyZC9mcmllbmRseWFybS9uYW5vcGktbmVvMi9y
+ZWFkbWUudHh0ICAgIHwgMzQgKysrKysrKysrKysrKysKPiBjb25maWdzL2ZyaWVuZGx5YXJtX25h
+bm9waV9uZW8yX2RlZmNvbmZpZyAgIHwgNDkgKysrKysrKysrKysrKysrKysrKysrCj4gNSBmaWxl
+cyBjaGFuZ2VkLCAxMDggaW5zZXJ0aW9ucygrKQo+IGNyZWF0ZSBtb2RlIDEwMDY0NCBib2FyZC9m
+cmllbmRseWFybS9uYW5vcGktbmVvMi9leHRsaW51eC5jb25mCj4gY3JlYXRlIG1vZGUgMTAwNjQ0
+IGJvYXJkL2ZyaWVuZGx5YXJtL25hbm9waS1uZW8yL2dlbmltYWdlLmNmZwo+IGNyZWF0ZSBtb2Rl
+IDEwMDc1NSBib2FyZC9mcmllbmRseWFybS9uYW5vcGktbmVvMi9wb3N0LWJ1aWxkLnNoCj4gY3Jl
+YXRlIG1vZGUgMTAwNjQ0IGJvYXJkL2ZyaWVuZGx5YXJtL25hbm9waS1uZW8yL3JlYWRtZS50eHQK
+PiBjcmVhdGUgbW9kZSAxMDA2NDQgY29uZmlncy9mcmllbmRseWFybV9uYW5vcGlfbmVvMl9kZWZj
+b25maWcKPiAKPiBkaWZmIC0tZ2l0IGEvYm9hcmQvZnJpZW5kbHlhcm0vbmFub3BpLW5lbzIvZXh0
+bGludXguY29uZiBiL2JvYXJkL2ZyaWVuZGx5YXJtL25hbm9waS1uZW8yL2V4dGxpbnV4LmNvbmYK
+PiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAuLjQ4MmEwNjlmNzQKPiAt
+LS0gL2Rldi9udWxsCj4gKysrIGIvYm9hcmQvZnJpZW5kbHlhcm0vbmFub3BpLW5lbzIvZXh0bGlu
+dXguY29uZgo+IEBAIC0wLDAgKzEsNCBAQAo+ICtsYWJlbCBmcmllbmRseWFybS1uYW5vcGktYnVp
+bGRyb290Cj4gKyAga2VybmVsIC9ib290L0ltYWdlCj4gKyAgZGV2aWNldHJlZSAvYm9vdC9zdW41
+MGktaDUtbmFub3BpLW5lbzIuZHRiCj4gKyAgYXBwZW5kIGNvbnNvbGU9dHR5UzAsMTE1MjAwIGVh
+cmx5cHJpbnRrIHJvb3Q9L2Rldi9tbWNibGswcDEgcm9vdHdhaXQKPiBkaWZmIC0tZ2l0IGEvYm9h
+cmQvZnJpZW5kbHlhcm0vbmFub3BpLW5lbzIvZ2VuaW1hZ2UuY2ZnIGIvYm9hcmQvZnJpZW5kbHlh
+cm0vbmFub3BpLW5lbzIvZ2VuaW1hZ2UuY2ZnCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRl
+eCAwMDAwMDAwMDAwLi42N2U0ZTVlZmRiCj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL2JvYXJkL2Zy
+aWVuZGx5YXJtL25hbm9waS1uZW8yL2dlbmltYWdlLmNmZwo+IEBAIC0wLDAgKzEsMTYgQEAKPiAr
+aW1hZ2Ugc2RjYXJkLmltZyB7Cj4gKyAgICBoZGltYWdlIHsKPiArICAgIH0KPiArCj4gKyAgICBw
+YXJ0aXRpb24gdS1ib290LXRwbC1zcGwtZHRiIHsKPiArICAgICAgICBpbi1wYXJ0aXRpb24tdGFi
+bGUgPSAibm8iCj4gKyAgICAgICAgaW1hZ2UgPSAidS1ib290LXN1bnhpLXdpdGgtc3BsLmJpbiIK
+PiArICAgICAgICBvZmZzZXQgPSA4Swo+ICsgICAgfQo+ICsKPiArICAgIHBhcnRpdGlvbiByb290
+ZnMgewo+ICsgICAgICAgIHBhcnRpdGlvbi10eXBlID0gMHg4Mwo+ICsgICAgICAgIGltYWdlID0g
+InJvb3Rmcy5leHQ0Igo+ICsgICAgICAgIG9mZnNldCA9IDFNCj4gKyAgICB9Cj4gK30KPiBkaWZm
+IC0tZ2l0IGEvYm9hcmQvZnJpZW5kbHlhcm0vbmFub3BpLW5lbzIvcG9zdC1idWlsZC5zaCBiL2Jv
+YXJkL2ZyaWVuZGx5YXJtL25hbm9waS1uZW8yL3Bvc3QtYnVpbGQuc2gKPiBuZXcgZmlsZSBtb2Rl
+IDEwMDc1NQo+IGluZGV4IDAwMDAwMDAwMDAuLmM3ZWM4NzUwNjgKPiAtLS0gL2Rldi9udWxsCj4g
+KysrIGIvYm9hcmQvZnJpZW5kbHlhcm0vbmFub3BpLW5lbzIvcG9zdC1idWlsZC5zaAo+IEBAIC0w
+LDAgKzEsNSBAQAo+ICsjIS9iaW4vc2gKPiArCj4gK0JPQVJEX0RJUj0iJChkaXJuYW1lICIkMCIp
+Igo+ICsKPiAraW5zdGFsbCAtbSAwNjQ0IC1EICIke0JPQVJEX0RJUn0vZXh0bGludXguY29uZiIg
+IiR7VEFSR0VUX0RJUn0vYm9vdC9leHRsaW51eC9leHRsaW51eC5jb25mIgo+IGRpZmYgLS1naXQg
+YS9ib2FyZC9mcmllbmRseWFybS9uYW5vcGktbmVvMi9yZWFkbWUudHh0IGIvYm9hcmQvZnJpZW5k
+bHlhcm0vbmFub3BpLW5lbzIvcmVhZG1lLnR4dAo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5k
+ZXggMDAwMDAwMDAwMC4uYzg5NmE1NzUyNQo+IC0tLSAvZGV2L251bGwKPiArKysgYi9ib2FyZC9m
+cmllbmRseWFybS9uYW5vcGktbmVvMi9yZWFkbWUudHh0Cj4gQEAgLTAsMCArMSwzNCBAQAo+ICtJ
+bnRybwo+ICs9PT09PQo+ICsKPiArVGhpcyBkZWZhdWx0IGNvbmZpZ3VyYXRpb24gd2lsbCBhbGxv
+dyB5b3UgdG8gc3RhcnQgZXhwZXJpbWVudGluZyB3aXRoIHRoZQo+ICtidWlsZHJvb3QgZW52aXJv
+bm1lbnQgZm9yIHRoZSBOYW5vUGkgTkVPMi4gV2l0aCB0aGUgY3VycmVudCBjb25maWd1cmF0aW9u
+Cj4gK2l0IHdpbGwgYnJpbmctdXAgdGhlIGJvYXJkLCBhbmQgYWxsb3cgYWNjZXNzIHRocm91Z2gg
+dGhlIHNlcmlhbCBjb25zb2xlLgo+ICsKPiArV2lraSBsaW5rOgo+ICtodHRwczovL3dpa2kuZnJp
+ZW5kbHllbGVjLmNvbS93aWtpL2luZGV4LnBocC9OYW5vUGlfTkVPMgo+ICsKPiArVGhpcyBjb25m
+aWd1cmF0aW9uIHVzZXMgVS1Cb290IG1haW5saW5lIGFuZCBrZXJuZWwgbWFpbmxpbmUuCj4gKwo+
+ICtIb3cgdG8gYnVpbGQKPiArPT09PT09PT09PT09Cj4gKwo+ICsgICAgJCBtYWtlIGZyaWVuZGx5
+YXJtX25hbm9waV9uZW8yX2RlZmNvbmZpZwo+ICsgICAgJCBtYWtlCj4gKwo+ICtOb3RlOiB5b3Ug
+d2lsbCBuZWVkIGFjY2VzcyB0byB0aGUgaW50ZXJuZXQgdG8gZG93bmxvYWQgdGhlIHJlcXVpcmVk
+Cj4gK3NvdXJjZXMuCj4gKwo+ICtIb3cgdG8gd3JpdGUgdGhlIFNEIGNhcmQKPiArPT09PT09PT09
+PT09PT09PT09PT09PT09Cj4gKwo+ICtPbmNlIHRoZSBidWlsZCBwcm9jZXNzIGlzIGZpbmlzaGVk
+IHlvdSB3aWxsIGhhdmUgYW4gaW1hZ2UgY2FsbGVkICJzZGNhcmQuaW1nIgo+ICtpbiB0aGUgb3V0
+cHV0L2ltYWdlcy8gZGlyZWN0b3J5Lgo+ICsKPiArQ29weSB0aGUgYm9vdGFibGUgInNkY2FyZC5p
+bWciIG9udG8gYW4gU0QgY2FyZCB3aXRoICJkZCI6Cj4gKwo+ICsgICQgc3VkbyBkZCBpZj1vdXRw
+dXQvaW1hZ2VzL3NkY2FyZC5pbWcgb2Y9L2Rldi9zZFgKPiArICAkIHN5bmMKPiArCj4gK0luc2Vy
+dCB0aGUgbWljcm8gU0RjYXJkIGluIHlvdXIgTmFub1BpIE5FTzIgYW5kIHBvd2VyIGl0IHVwLiBU
+aGUgY29uc29sZQo+ICtpcyBvbiB0aGUgc2VyaWFsIGxpbmUsIDExNTIwMCA4TjEuCj4gZGlmZiAt
+LWdpdCBhL2NvbmZpZ3MvZnJpZW5kbHlhcm1fbmFub3BpX25lbzJfZGVmY29uZmlnIGIvY29uZmln
+cy9mcmllbmRseWFybV9uYW5vcGlfbmVvMl9kZWZjb25maWcKPiBuZXcgZmlsZSBtb2RlIDEwMDY0
+NAo+IGluZGV4IDAwMDAwMDAwMDAuLmE2MGFiYTA2ZDkKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIv
+Y29uZmlncy9mcmllbmRseWFybV9uYW5vcGlfbmVvMl9kZWZjb25maWcKPiBAQCAtMCwwICsxLDQ5
+IEBACj4gK0JSMl9hYXJjaDY0PXkKPiArQlIyX2NvcnRleF9hNTM9eQo+ICtCUjJfQVJNX0ZQVV9W
+RlBWND15Cj4gKwo+ICsjIExpbnV4IGhlYWRlcnMgc2FtZSBhcyBrZXJuZWwsIGEgNi42IHNlcmll
+cwo+ICtCUjJfUEFDS0FHRV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VTVE9NXzZfNj15Cj4gKwo+ICsj
+IEZpcm13YXJlCj4gK0JSMl9UQVJHRVRfQVJNX1RSVVNURURfRklSTVdBUkU9eQo+ICtCUjJfVEFS
+R0VUX0FSTV9UUlVTVEVEX0ZJUk1XQVJFX0NVU1RPTV9WRVJTSU9OPXkKPiArQlIyX1RBUkdFVF9B
+Uk1fVFJVU1RFRF9GSVJNV0FSRV9DVVNUT01fVkVSU0lPTl9WQUxVRT0idjIuNyIKPiArQlIyX1RB
+UkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9QTEFURk9STT0ic3VuNTBpX2E2NCIKPiArQlIyX1RB
+UkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9CTDMxPXkKPiArCj4gKyMgQm9vdGxvYWRlcgo+ICtC
+UjJfVEFSR0VUX1VCT09UPXkKPiArQlIyX1RBUkdFVF9VQk9PVF9CVUlMRF9TWVNURU1fS0NPTkZJ
+Rz15Cj4gK0JSMl9UQVJHRVRfVUJPT1RfQ1VTVE9NX1ZFUlNJT049eQo+ICtCUjJfVEFSR0VUX1VC
+T09UX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSIyMDI0LjAxIgo+ICtCUjJfVEFSR0VUX1VCT09UX0JP
+QVJEX0RFRkNPTkZJRz0ibmFub3BpX25lbzIiCj4gK0JSMl9UQVJHRVRfVUJPT1RfTkVFRFNfRFRD
+PXkKPiArQlIyX1RBUkdFVF9VQk9PVF9ORUVEU19QWUxJQkZEVD15Cj4gK0JSMl9UQVJHRVRfVUJP
+T1RfTkVFRFNfT1BFTlNTTD15Cj4gK0JSMl9UQVJHRVRfVUJPT1RfTkVFRFNfQVRGX0JMMzE9eQo+
+ICtCUjJfVEFSR0VUX1VCT09UX1NQTD15Cj4gK0JSMl9UQVJHRVRfVUJPT1RfU1BMX05BTUU9InUt
+Ym9vdC1zdW54aS13aXRoLXNwbC5iaW4iCj4gK0JSMl9UQVJHRVRfVUJPT1RfQ1VTVE9NX01BS0VP
+UFRTPSJTQ1A9L2Rldi9udWxsIgo+ICsKPiArIyBLZXJuZWwKPiArQlIyX0xJTlVYX0tFUk5FTD15
+Cj4gK0JSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT049eQo+ICtCUjJfTElOVVhfS0VSTkVM
+X0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI2LjYuMTciCj4gK0JSMl9MSU5VWF9LRVJORUxfVVNFX0FS
+Q0hfREVGQVVMVF9DT05GSUc9eQo+ICtCUjJfTElOVVhfS0VSTkVMX0RUU19TVVBQT1JUPXkKPiAr
+QlIyX0xJTlVYX0tFUk5FTF9JTlRSRUVfRFRTX05BTUU9ImFsbHdpbm5lci9zdW41MGktaDUtbmFu
+b3BpLW5lbzIiCj4gK0JSMl9MSU5VWF9LRVJORUxfSU5TVEFMTF9UQVJHRVQ9eQo+ICtCUjJfTElO
+VVhfS0VSTkVMX05FRURTX0hPU1RfT1BFTlNTTD15Cj4gKwo+ICsjIEZpbGVzeXN0ZW0KPiArQlIy
+X1RBUkdFVF9HRU5FUklDX0lTU1VFPSJXZWxjb21lIHRvIEZyaWVuZGx5QVJNIE5hbm9QaSBORU8y
+Igo+ICtCUjJfVEFSR0VUX1JPT1RGU19FWFQyPXkKPiArQlIyX1RBUkdFVF9ST09URlNfRVhUMl80
+PXkKPiArQlIyX1RBUkdFVF9ST09URlNfRVhUMl9TSVpFPSIxMjBNIgo+ICtCUjJfUEFDS0FHRV9I
+T1NUX0RPU0ZTVE9PTFM9eQo+ICtCUjJfUEFDS0FHRV9IT1NUX0dFTklNQUdFPXkKPiArQlIyX1BB
+Q0tBR0VfSE9TVF9NVE9PTFM9eQo+ICtCUjJfUk9PVEZTX1BPU1RfQlVJTERfU0NSSVBUPSJib2Fy
+ZC9mcmllbmRseWFybS9uYW5vcGktbmVvMi9wb3N0LWJ1aWxkLnNoIgo+ICtCUjJfUk9PVEZTX1BP
+U1RfSU1BR0VfU0NSSVBUPSJzdXBwb3J0L3NjcmlwdHMvZ2VuaW1hZ2Uuc2giCj4gK0JSMl9ST09U
+RlNfUE9TVF9TQ1JJUFRfQVJHUz0iLWMgYm9hcmQvZnJpZW5kbHlhcm0vbmFub3BpLW5lbzIvZ2Vu
+aW1hZ2UuY2ZnIgo+IC0tCj4gMi4zNC4xCj4gCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWls
+ZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1
+aWxkcm9vdAo=
