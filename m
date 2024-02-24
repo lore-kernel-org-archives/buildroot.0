@@ -1,74 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6A9DC48BF6
-	for <buildroot@archiver.kernel.org>; Sat, 24 Feb 2024 12:10:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59928C48BF6
+	for <buildroot@archiver.kernel.org>; Sat, 24 Feb 2024 13:57:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 815B26064C;
-	Sat, 24 Feb 2024 12:10:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DD3F940025;
+	Sat, 24 Feb 2024 13:57:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wa251Q7dvO0r; Sat, 24 Feb 2024 12:10:12 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FdjYcnC5hxdS; Sat, 24 Feb 2024 13:57:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8940B60888
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A7B72400D7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8940B60888;
-	Sat, 24 Feb 2024 12:10:12 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0EBC31BF27E
- for <buildroot@lists.busybox.net>; Sat, 24 Feb 2024 12:10:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A7B72400D7;
+	Sat, 24 Feb 2024 13:57:25 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8E03C1BF27C
+ for <buildroot@lists.busybox.net>; Sat, 24 Feb 2024 13:57:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F04F160888
- for <buildroot@lists.busybox.net>; Sat, 24 Feb 2024 12:10:10 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 86F94400D7
+ for <buildroot@lists.busybox.net>; Sat, 24 Feb 2024 13:57:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4bvHGLalg3jV for <buildroot@lists.busybox.net>;
- Sat, 24 Feb 2024 12:10:10 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 08F0F6064C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 08F0F6064C
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 08F0F6064C
- for <buildroot@buildroot.org>; Sat, 24 Feb 2024 12:10:09 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a0164.dip0.t-ipconnect.de [91.58.1.100])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 18966A4C0E8E
- for <buildroot@buildroot.org>; Sat, 24 Feb 2024 13:10:08 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:35636)
- by fli4l.lan.fli4l with esmtp (Exim 4.97.1)
- (envelope-from <bernd@kuhls.net>) id 1rdqr1-000000007FG-3F2q
- for buildroot@buildroot.org; Sat, 24 Feb 2024 13:10:07 +0100
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Jwx2_MGmGXiu for <buildroot@lists.busybox.net>;
+ Sat, 24 Feb 2024 13:57:22 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::42d; helo=mail-wr1-x42d.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0457F40025
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0457F40025
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0457F40025
+ for <buildroot@buildroot.org>; Sat, 24 Feb 2024 13:57:21 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id
+ ffacd0b85a97d-33d509ab80eso664408f8f.3
+ for <buildroot@buildroot.org>; Sat, 24 Feb 2024 05:57:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1708783039; x=1709387839;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=HgJKH2pGcABkrgrKaj9hMUa+EElfB4XB48zTlVZnlYc=;
+ b=w18CduAL8mdcr9FsUw5J2WD/HsCka1P10az6E2MhQDh2Z1J7+cBuvTIX6npNuH3UoV
+ /dwqmhlCoZfLJRk2NjDJfewt0SQf8Ah7UXIXw3K3BnPmpzlG4hWr1GCWbTKmXxeVHx6O
+ X//uymMC2h8MqWGDn5cb+4zS91irOP45rjrwu7jbiq0vt64gb4Qi/tADuMTuQCv0g5Nx
+ kKP37zY3b+yQf0lTewYaFlRdcQiComd0oQawegyDA4woLWZmOvLp+zZ2BMGsC0Qr2+lf
+ Qy8dYP/AEil8XDHDUVCA3v0zBG0CWzxqtp/quYlfM7v7KCA8fTSHk7ZV1t9tiMvhLEKp
+ x9KQ==
+X-Gm-Message-State: AOJu0Yx1aylcubPsoTO74EJKjyrtIE83bFgdomAzCeAzT8Z/2pJ96qke
+ TWq9sAs84cDyAi1EIHGWgjvF7B8s/EvftpCZnoSUXcDhvIfCCS+HU+n6yp4K
+X-Google-Smtp-Source: AGHT+IGd1g6TwyZs3O7wtsn097AwI0QUqMHOC7tVuDCB9lPkRG/3we/ZcNEzRCJQt8Kd4PSVX4GGyg==
+X-Received: by 2002:adf:ee83:0:b0:33d:3ee3:cc11 with SMTP id
+ b3-20020adfee83000000b0033d3ee3cc11mr1505701wro.47.1708783038552; 
+ Sat, 24 Feb 2024 05:57:18 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ co22-20020a0560000a1600b0033d96b4efbasm2287702wrb.21.2024.02.24.05.57.17
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 24 Feb 2024 05:57:18 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 24 Feb 2024 13:10:07 +0100
-Message-Id: <20240224121007.435474-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
+Date: Sat, 24 Feb 2024 14:57:17 +0100
+Message-ID: <20240224135717.635374-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202312101026; t=1708776608;
- bh=4thJzVGtaCBAJQiw1WM0833IBj69vNKUWaMb75n0RkM=;
- h=From:To:Subject:Date:From;
- b=dvTLt8u7w/MwktQQyHFAncjMpS2Vjj0nIoUdUVlSu4ix4nOEYmC1xtcwJTvQ/cTjc
- VVvVSWgiQwpXEy9ArHDNWsfJ8fVd00AoSYgS6ZyGOLKsv22BP/gZa8vxXSKTvO/GVY
- 8MVlwkaxbaNCKCsItZJwDByUL4ng7e2h2zguoqYd51taZBtDYvSkBMixzsXg/V+j6+
- sXQ1cwkRvO/fX6setgejVhQh1Yxm6gGwMlnfFyyx+EedHgRYAJ/T9siDygaPwdW/Vf
- zcT0mYhW+V1wUYK+iqDuKxawoiT1B0OA1CIxae/GCIHwPxKPhi5sUi8jNSH0v7ptes
- yAnWxvHMtJo+A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=gmail.com; s=20230601; t=1708783039; x=1709387839; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=HgJKH2pGcABkrgrKaj9hMUa+EElfB4XB48zTlVZnlYc=;
+ b=JlKU4we8oyr98hXxkTe+9zbDTig5einO3BCBObf7cQJOV0az3gDtUTdPMXt7JoIx7q
+ Q4iyM3cHdwl2nfdAwCeLio4B29l5Kd70GvRG6x7xN9D5D1FZBpPmMMqmhlnL+z8q4zFK
+ 8i3ykbhq7zOKwEHIjg5Cg/G6HzMIHqNTPqN0FVzlBzrvEUygnRwK69imYFEFg+VhyENv
+ Oe0Nf/QW17yoLbZMi6jj+21ubn0BdKRtxjcaC/9Gy0d6thSleh9799nxBhMQD1lQ4NLZ
+ vniaUNfulzj4TDEXGlTjaeuCXuIH05xVRXS9FZ8GsaKG4Mei1vMOf/Ia7isumu3NW5n9
+ Ufjw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202312101026 header.b=dvTLt8u7
-Subject: [Buildroot] [PATCH 1/1] package/ccache: bump version to 4.9.1
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=JlKU4we8
+Subject: [Buildroot] [PATCH 1/1] package/prboom: fix build with autoconf >=
+ 2.72
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,87 +100,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Removed patch which is included in this release.
+Set ac_cv_type_gid_t=yes to avoid the following build failure raised
+since bump of autoconf to version 2.72 in commit
+524f3536029dace3ce9aa154d3ca4685582e1955:
 
-Updated license hash due to various version and copyright year bumps:
-https://github.com/ccache/ccache/commits/master/LICENSE.adoc
+In file included from i_network.c:37:
+../../config.h:207:15: error: two or more data types in declaration specifiers
+  207 | #define gid_t int
+      |               ^~~
 
-Release notes: https://ccache.dev/releasenotes.html#_ccache_4_9_1
+Fixes: 524f3536029dace3ce9aa154d3ca4685582e1955
+ - http://autobuild.buildroot.org/results/0d74517129130e6f26dc8c8aacae175ed8bd4b54
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...-fix-Work-around-GCC-12.3-bug-109241.patch | 29 -------------------
- package/ccache/ccache.hash                    |  4 +--
- package/ccache/ccache.mk                      |  2 +-
- 3 files changed, 3 insertions(+), 32 deletions(-)
- delete mode 100644 package/ccache/0001-fix-Work-around-GCC-12.3-bug-109241.patch
+ package/prboom/prboom.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ccache/0001-fix-Work-around-GCC-12.3-bug-109241.patch b/package/ccache/0001-fix-Work-around-GCC-12.3-bug-109241.patch
-deleted file mode 100644
-index 42872597cd..0000000000
---- a/package/ccache/0001-fix-Work-around-GCC-12.3-bug-109241.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
--From 689168c292f1ed26c5f4a3070aeb649dad7facb5 Mon Sep 17 00:00:00 2001
--From: Joel Rosdahl <joel@rosdahl.net>
--Date: Tue, 1 Aug 2023 12:30:12 +0200
--Subject: [PATCH] fix: Work around GCC 12.3 bug 109241
--
--See also #1289.
--
--Upstream: https://github.com/ccache/ccache/commit/689168c292f1ed26c5f4a3070aeb649dad7facb5
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- src/storage/local/LocalStorage.cpp | 4 +++-
-- 1 file changed, 3 insertions(+), 1 deletion(-)
--
--diff --git a/src/storage/local/LocalStorage.cpp b/src/storage/local/LocalStorage.cpp
--index 3e5abe5074..d0a904e553 100644
----- a/src/storage/local/LocalStorage.cpp
--+++ b/src/storage/local/LocalStorage.cpp
--@@ -854,7 +854,9 @@ LocalStorage::recompress(const std::optional<int8_t> level,
--           auto l2_content_lock = get_level_2_content_lock(l1_index, l2_index);
--           l2_content_lock.make_long_lived(lock_manager);
--           if (!l2_content_lock.acquire()) {
---            LOG("Failed to acquire content lock for {}/{}", l1_index, l2_index);
--+            // LOG_RAW+fmt::format instead of LOG due to GCC 12.3 bug #109241
--+            LOG_RAW(fmt::format(
--+              "Failed to acquire content lock for {}/{}", l1_index, l2_index));
--             return;
--           }
-- 
-diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
-index 736122e0ab..a2537077b6 100644
---- a/package/ccache/ccache.hash
-+++ b/package/ccache/ccache.hash
-@@ -1,4 +1,4 @@
- # sha256 computed locally
--sha256  3d3fb3f888a5b16c4fa7ee5214cca76348afd6130e8443de5f6f2424f2076a49  ccache-4.8.2.tar.xz
-+sha256  4c03bc840699127d16c3f0e6112e3f40ce6a230d5873daa78c60a59c7ef59d25  ccache-4.9.1.tar.xz
- sha256  80b5112739a423dfac7bed1ca8a1df3cccda3d794425441997d4462b83db4dd5  GPL-3.0.txt
--sha256  55ce274f2b898dad70d3695ab13f82656fd455bd8fb6d1c85d6f7c453bef0b2e  LICENSE.adoc
-+sha256  a6aea7358a30ded3f8abbff979219bdbe7b7a9aa489a8c70030afd96a83caf84  LICENSE.adoc
-diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
-index ac4bc4aba5..1ac825439b 100644
---- a/package/ccache/ccache.mk
-+++ b/package/ccache/ccache.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/prboom/prboom.mk b/package/prboom/prboom.mk
+index 36692d29a3..c1ba05ff70 100644
+--- a/package/prboom/prboom.mk
++++ b/package/prboom/prboom.mk
+@@ -6,7 +6,7 @@
  
--CCACHE_VERSION = 4.8.2
-+CCACHE_VERSION = 4.9.1
- CCACHE_SITE = https://github.com/ccache/ccache/releases/download/v$(CCACHE_VERSION)
- CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
- CCACHE_LICENSE = GPL-3.0+, others
+ PRBOOM_VERSION = 2.5.0
+ PRBOOM_SITE = http://downloads.sourceforge.net/project/prboom/prboom%20stable/$(PRBOOM_VERSION)
+-PRBOOM_CONF_ENV = ac_cv_type_uid_t=yes
++PRBOOM_CONF_ENV = ac_cv_type_gid_t=yes ac_cv_type_uid_t=yes
+ PRBOOM_DEPENDENCIES = sdl sdl_net sdl_mixer
+ PRBOOM_LICENSE = GPL-2.0+
+ PRBOOM_LICENSE_FILES = COPYING
 -- 
-2.39.2
+2.43.0
 
 _______________________________________________
 buildroot mailing list
