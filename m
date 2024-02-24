@@ -4,91 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59928C48BF6
-	for <buildroot@archiver.kernel.org>; Sat, 24 Feb 2024 13:57:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E3BBC5478C
+	for <buildroot@archiver.kernel.org>; Sat, 24 Feb 2024 13:58:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DD3F940025;
-	Sat, 24 Feb 2024 13:57:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 26E4F404C2;
+	Sat, 24 Feb 2024 13:58:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FdjYcnC5hxdS; Sat, 24 Feb 2024 13:57:25 +0000 (UTC)
+	with ESMTP id bfNkvIwnkDf8; Sat, 24 Feb 2024 13:58:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A7B72400D7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DF1A640207
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A7B72400D7;
-	Sat, 24 Feb 2024 13:57:25 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8E03C1BF27C
- for <buildroot@lists.busybox.net>; Sat, 24 Feb 2024 13:57:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DF1A640207;
+	Sat, 24 Feb 2024 13:58:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9A4681BF27C
+ for <buildroot@lists.busybox.net>; Sat, 24 Feb 2024 13:58:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 86F94400D7
- for <buildroot@lists.busybox.net>; Sat, 24 Feb 2024 13:57:23 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 881B04079B
+ for <buildroot@lists.busybox.net>; Sat, 24 Feb 2024 13:58:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Jwx2_MGmGXiu for <buildroot@lists.busybox.net>;
- Sat, 24 Feb 2024 13:57:22 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42d; helo=mail-wr1-x42d.google.com;
- envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0457F40025
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0457F40025
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0457F40025
- for <buildroot@buildroot.org>; Sat, 24 Feb 2024 13:57:21 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id
- ffacd0b85a97d-33d509ab80eso664408f8f.3
- for <buildroot@buildroot.org>; Sat, 24 Feb 2024 05:57:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1708783039; x=1709387839;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=HgJKH2pGcABkrgrKaj9hMUa+EElfB4XB48zTlVZnlYc=;
- b=w18CduAL8mdcr9FsUw5J2WD/HsCka1P10az6E2MhQDh2Z1J7+cBuvTIX6npNuH3UoV
- /dwqmhlCoZfLJRk2NjDJfewt0SQf8Ah7UXIXw3K3BnPmpzlG4hWr1GCWbTKmXxeVHx6O
- X//uymMC2h8MqWGDn5cb+4zS91irOP45rjrwu7jbiq0vt64gb4Qi/tADuMTuQCv0g5Nx
- kKP37zY3b+yQf0lTewYaFlRdcQiComd0oQawegyDA4woLWZmOvLp+zZ2BMGsC0Qr2+lf
- Qy8dYP/AEil8XDHDUVCA3v0zBG0CWzxqtp/quYlfM7v7KCA8fTSHk7ZV1t9tiMvhLEKp
- x9KQ==
-X-Gm-Message-State: AOJu0Yx1aylcubPsoTO74EJKjyrtIE83bFgdomAzCeAzT8Z/2pJ96qke
- TWq9sAs84cDyAi1EIHGWgjvF7B8s/EvftpCZnoSUXcDhvIfCCS+HU+n6yp4K
-X-Google-Smtp-Source: AGHT+IGd1g6TwyZs3O7wtsn097AwI0QUqMHOC7tVuDCB9lPkRG/3we/ZcNEzRCJQt8Kd4PSVX4GGyg==
-X-Received: by 2002:adf:ee83:0:b0:33d:3ee3:cc11 with SMTP id
- b3-20020adfee83000000b0033d3ee3cc11mr1505701wro.47.1708783038552; 
- Sat, 24 Feb 2024 05:57:18 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- co22-20020a0560000a1600b0033d96b4efbasm2287702wrb.21.2024.02.24.05.57.17
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 24 Feb 2024 05:57:18 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sat, 24 Feb 2024 14:57:17 +0100
-Message-ID: <20240224135717.635374-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nrhUQHzKhzgi for <buildroot@lists.busybox.net>;
+ Sat, 24 Feb 2024 13:58:28 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
+ helo=relay3-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3566C40796
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3566C40796
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3566C40796
+ for <buildroot@buildroot.org>; Sat, 24 Feb 2024 13:58:27 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 0942F60005;
+ Sat, 24 Feb 2024 13:58:23 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1rdsXn-00DT9D-0n;
+ Sat, 24 Feb 2024 14:58:23 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+References: <20231218220457.1705749-1-adam.duskett@amarulasolutions.com>
+ <20231218220457.1705749-3-adam.duskett@amarulasolutions.com>
+ <20240206233318.593730bd@windsurf>
+Date: Sat, 24 Feb 2024 14:58:23 +0100
+In-Reply-To: <20240206233318.593730bd@windsurf> (Thomas Petazzoni via
+ buildroot's message of "Tue, 6 Feb 2024 23:33:18 +0100")
+Message-ID: <87wmqut14w.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1708783039; x=1709387839; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=HgJKH2pGcABkrgrKaj9hMUa+EElfB4XB48zTlVZnlYc=;
- b=JlKU4we8oyr98hXxkTe+9zbDTig5einO3BCBObf7cQJOV0az3gDtUTdPMXt7JoIx7q
- Q4iyM3cHdwl2nfdAwCeLio4B29l5Kd70GvRG6x7xN9D5D1FZBpPmMMqmhlnL+z8q4zFK
- 8i3ykbhq7zOKwEHIjg5Cg/G6HzMIHqNTPqN0FVzlBzrvEUygnRwK69imYFEFg+VhyENv
- Oe0Nf/QW17yoLbZMi6jj+21ubn0BdKRtxjcaC/9Gy0d6thSleh9799nxBhMQD1lQ4NLZ
- vniaUNfulzj4TDEXGlTjaeuCXuIH05xVRXS9FZ8GsaKG4Mei1vMOf/Ia7isumu3NW5n9
- Ufjw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=JlKU4we8
-Subject: [Buildroot] [PATCH 1/1] package/prboom: fix build with autoconf >=
- 2.72
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH v4 3/3] package/python3: bump version to
+ 3.12.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,45 +71,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Asaf Kahlon <asafka7@gmail.com>,
+ Adam Duskett <adam.duskett@amarulasolutions.com>,
+ James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Set ac_cv_type_gid_t=yes to avoid the following build failure raised
-since bump of autoconf to version 2.72 in commit
-524f3536029dace3ce9aa154d3ca4685582e1955:
+>>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
 
-In file included from i_network.c:37:
-../../config.h:207:15: error: two or more data types in declaration specifiers
-  207 | #define gid_t int
-      |               ^~~
+ > Hello Adam,
+ > On Mon, 18 Dec 2023 15:04:56 -0700
+ > Adam Duskett <adam.duskett@amarulasolutions.com> wrote:
 
-Fixes: 524f3536029dace3ce9aa154d3ca4685582e1955
- - http://autobuild.buildroot.org/results/0d74517129130e6f26dc8c8aacae175ed8bd4b54
+ >> Python 3.12.1 has removed distutils support. As such, we remove the distutils
+ >> option from pkg-python.mk as well.
+ >> 
+ >> Tested on Fedora 39, and Debian 11. All 68 package tests pass.
+ >> 
+ >> Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+ >> ---
+ >> v3 -> v4:
+ >> - Drop distutils in pkg-python.mk
+ >> - 3.12.0 -> 3.12.1
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/prboom/prboom.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > I applied, but after doing a number of changes. The most important one
+ > is that I had to reintroduce some of our --disable options: for
+ > ncurses, sqlite and expat. Indeed, without these, you ended up with the
+ > Python code installed, but not the correspond native library (the
+ > py_cv_module__<something>=n/a only disables building the native
+ > library).
 
-diff --git a/package/prboom/prboom.mk b/package/prboom/prboom.mk
-index 36692d29a3..c1ba05ff70 100644
---- a/package/prboom/prboom.mk
-+++ b/package/prboom/prboom.mk
-@@ -6,7 +6,7 @@
- 
- PRBOOM_VERSION = 2.5.0
- PRBOOM_SITE = http://downloads.sourceforge.net/project/prboom/prboom%20stable/$(PRBOOM_VERSION)
--PRBOOM_CONF_ENV = ac_cv_type_uid_t=yes
-+PRBOOM_CONF_ENV = ac_cv_type_gid_t=yes ac_cv_type_uid_t=yes
- PRBOOM_DEPENDENCIES = sdl sdl_net sdl_mixer
- PRBOOM_LICENSE = GPL-2.0+
- PRBOOM_LICENSE_FILES = COPYING
+ > I split up the pkg-python.mk change into a separate commit, which is
+ > made before the python 3.12 bump. Indeed, it's semantically separate.
+
+ > Finally, I updated the Buildroot manual to no longer mention distutils
+ > support. And I did a separate commit to update the Buildroot manual
+ > with other _SETUP_TYPE values that we support.
+
+We unfortunately are still having a number of build failures because of
+this, E.G. for target == host or packages using the imp module and we
+are very late for 2024.02.x, so I have reverted this again.
+
+We can apply it again 2024.05.x after the release and work on the
+remaining issues.
+
 -- 
-2.43.0
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
