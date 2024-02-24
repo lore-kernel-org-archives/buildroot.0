@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBD98C48BF6
-	for <buildroot@archiver.kernel.org>; Sat, 24 Feb 2024 10:18:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDD29C54E41
+	for <buildroot@archiver.kernel.org>; Sat, 24 Feb 2024 10:18:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AB59081490;
-	Sat, 24 Feb 2024 10:18:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B514882162;
+	Sat, 24 Feb 2024 10:18:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vDYV4pb4IUJ3; Sat, 24 Feb 2024 10:18:02 +0000 (UTC)
+	with ESMTP id JXKIYEda0uN2; Sat, 24 Feb 2024 10:18:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6132182135
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 27A258214F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6132182135;
-	Sat, 24 Feb 2024 10:18:02 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C6CC01BF283
- for <buildroot@lists.busybox.net>; Sat, 24 Feb 2024 10:17:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 27A258214F;
+	Sat, 24 Feb 2024 10:18:05 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 163B71BF283
+ for <buildroot@lists.busybox.net>; Sat, 24 Feb 2024 10:17:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4F9B6407AC
- for <buildroot@lists.busybox.net>; Sat, 24 Feb 2024 10:17:50 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 044B7820AB
+ for <buildroot@lists.busybox.net>; Sat, 24 Feb 2024 10:17:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rDttZ0UlTTxd for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0BUffB2lNm9J for <buildroot@lists.busybox.net>;
  Sat, 24 Feb 2024 10:17:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67584407A9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5085D81491
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 67584407A9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5085D81491
  for <buildroot@buildroot.org>; Sat, 24 Feb 2024 10:17:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 43FE187A15; Sat, 24 Feb 2024 10:17:49 +0000 (UTC)
+ id 3448487A0D; Sat, 24 Feb 2024 10:17:49 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 24 Feb 2024 11:15:51 +0100
+Date: Sat, 24 Feb 2024 11:15:20 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 66cfd29e97a00d5210da38fe45ea2effe23bea94
-X-Git-Newrev: 02ecb096ad874a1fecfc3a87ca7d547befb16d8f
+X-Git-Oldrev: fbedcfa221bc8826536a39b01eccf0626ab89bf1
+X-Git-Newrev: 66cfd29e97a00d5210da38fe45ea2effe23bea94
 X-Patchwork-Hint: ignore
-Message-Id: <20240224101749.43FE187A15@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/nodejs: security bump to version
- 20.11.1
+Message-Id: <20240224101749.3448487A0D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/c-ares: security bump to version
+ 1.27.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,79 +65,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=02ecb096ad874a1fecfc3a87ca7d547befb16d8f
+commit: https://git.buildroot.net/buildroot/commit/?id=66cfd29e97a00d5210da38fe45ea2effe23bea94
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Fix CVE-2024-21892, CVE-2024-22019, CVE-2024-21896, CVE-2024-22017,
-  CVE-2023-46809, CVE-2024-21891, CVE-2024-21890 and CVE-2024-22025
+Fix CVE-2024-25629: Reading malformatted /etc/resolv.conf,
+/etc/nsswitch.conf or the HOSTALIASES file could result in a crash.
 
-- LICENSE hash changed due to two things:
-  * c-ares vendored dependency license got updated [1]. This is unused
-    by buildroot though anyway
-  * base64 vendored library license updated copyright years and sorted
-    contributor names [2], [3]
-
-- This bump will fix the following build failure raised since bump of
-  python to version 3.12.1 in commit 36e635d2d5c0166476858aa239ccbe78e8f2af14
-  thanks to
-  https://github.com/nodejs/node/commit/95534ad82f4e33f53fd50efe633d43f8da70cba6
-  https://github.com/nodejs/node/commit/6557c1c9b1206a85bb7d8e7450e8c3a4cff7c84b:
-
-Traceback (most recent call last):
-  File "/home/autobuild/autobuild/instance-2/output-1/build/host-nodejs-src-20.9.0/configure.py", line 17, in <module>
-    from distutils.version import StrictVersion
-ModuleNotFoundError: No module named 'distutils'
-
-https://github.com/nodejs/node/blob/v20.11.1/CHANGELOG.md
-
-[1] https://github.com/c-ares/c-ares/pull/556
-[2] https://github.com/aklomp/base64/commit/2e8ad2aec2065f258dc1aec9402aedd3604cfbcd
-[3] https://github.com/aklomp/base64/commit/d7bca2bb2928de6c4fe496e6defe8b3affa35d1b
-
-Fixes: 36e635d2d5c0166476858aa239ccbe78e8f2af14
- - http://autobuild.buildroot.org/results/8b38bc4b7879a0349c1305e2fcb458a0cfd04a93
+https://github.com/c-ares/c-ares/security/advisories/GHSA-mg26-v6qh-x48q
+https://github.com/c-ares/c-ares/releases/tag/cares-1_27_0
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-By: Marcus Hoffmann <buildroot@bubu1.eu>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nodejs/nodejs.hash | 14 +++++++-------
- package/nodejs/nodejs.mk   |  2 +-
- 2 files changed, 8 insertions(+), 8 deletions(-)
+ package/c-ares/c-ares.hash | 2 +-
+ package/c-ares/c-ares.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index 2d60437a7c..ddab345e0a 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,8 +1,8 @@
--# From https://nodejs.org/dist/v20.9.0/SHASUMS256.txt.asc
--sha256  ced3ecece4b7c3a664bca3d9e34a0e3b9a31078525283a6fdb7ea2de8ca5683b  node-v20.9.0-linux-arm64.tar.xz
--sha256  64099d7e62bdbb8efd52c216a6759b3cdd77c38aa993096fdee9f875d95b2d8e  node-v20.9.0-linux-armv7l.tar.xz
--sha256  3c6cea5d614cfbb95d92de43fbc2f8ecd66e431502fe5efc4f3c02637897bd45  node-v20.9.0-linux-ppc64le.tar.xz
--sha256  9033989810bf86220ae46b1381bdcdc6c83a0294869ba2ad39e1061f1e69217a  node-v20.9.0-linux-x64.tar.xz
--sha256  a23d96810abf0455426b349d47ce5310f33095b7bc0571b9cc510f481c3a4519  node-v20.9.0.tar.xz
-+# From https://nodejs.org/dist/v20.11.1/SHASUMS256.txt.asc
-+sha256  c957f29eb4e341903520caf362534f0acd1db7be79c502ae8e283994eed07fe1  node-v20.11.1-linux-arm64.tar.xz
-+sha256  28e0120d2d150a8f41717899d33167b8b32053778665583d49ff971bfd188d1b  node-v20.11.1-linux-armv7l.tar.xz
-+sha256  51343cacf5cdf5c4b5e93e919d19dd373d6ef43d5f2c666eae299f26e31d08b5  node-v20.11.1-linux-ppc64le.tar.xz
-+sha256  d8dab549b09672b03356aa2257699f3de3b58c96e74eb26a8b495fbdc9cf6fbe  node-v20.11.1-linux-x64.tar.xz
-+sha256  77813edbf3f7f16d2d35d3353443dee4e61d5ee84d9e3138c7538a3c0ca5209e  node-v20.11.1.tar.xz
- # Locally calculated
--sha256  93ac846282ce6c5255e00fada2fd2e7e292255239fe58d5502b0a554859e6a3e  LICENSE
-+sha256  7b0bbdca72f925bd78b764914651244a4432a753c7325d061a565cd7eac1193d  LICENSE
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 9806a64d38..858c6a86f5 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/c-ares/c-ares.hash b/package/c-ares/c-ares.hash
+index ee097a53c9..9a2b69c731 100644
+--- a/package/c-ares/c-ares.hash
++++ b/package/c-ares/c-ares.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256  bed58c4f02b009080ebda6c2467ba469722ac6aebbf4497dc44a83d8c6194e50  c-ares-1.26.0.tar.gz
++sha256  0a72be66959955c43e2af2fbd03418e82a2bd5464604ec9a62147e37aceb420b  c-ares-1.27.0.tar.gz
+ 
+ # Hash for license file
+ sha256  80fff25340df53b0cf0c3cddbca9050b559b9cbed2ad71830327cfef54959aef  LICENSE.md
+diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
+index 29da6baa4b..c4441255a2 100644
+--- a/package/c-ares/c-ares.mk
++++ b/package/c-ares/c-ares.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- # _VERSION, _SOURCE and _SITE must be kept empty to avoid downloading anything
--NODEJS_COMMON_VERSION = 20.9.0
-+NODEJS_COMMON_VERSION = 20.11.1
- NODEJS_COMMON_SOURCE = node-v$(NODEJS_COMMON_VERSION).tar.xz
- NODEJS_COMMON_SITE = http://nodejs.org/dist/v$(NODEJS_COMMON_VERSION)
- 
+-C_ARES_VERSION = 1.26.0
++C_ARES_VERSION = 1.27.0
+ C_ARES_SITE = http://c-ares.haxx.se/download
+ C_ARES_INSTALL_STAGING = YES
+ C_ARES_CONF_OPTS = --with-random=/dev/urandom
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
