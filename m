@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCAB7C54E41
-	for <buildroot@archiver.kernel.org>; Sat, 24 Feb 2024 10:18:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBD98C48BF6
+	for <buildroot@archiver.kernel.org>; Sat, 24 Feb 2024 10:18:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B27B2820E4;
-	Sat, 24 Feb 2024 10:18:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AB59081490;
+	Sat, 24 Feb 2024 10:18:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id X7JtZCKfo2iH; Sat, 24 Feb 2024 10:17:59 +0000 (UTC)
+	with ESMTP id vDYV4pb4IUJ3; Sat, 24 Feb 2024 10:18:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 93FAD82124
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6132182135
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 93FAD82124;
-	Sat, 24 Feb 2024 10:17:59 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1650F1BF283
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6132182135;
+	Sat, 24 Feb 2024 10:18:02 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C6CC01BF283
  for <buildroot@lists.busybox.net>; Sat, 24 Feb 2024 10:17:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 463E181490
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4F9B6407AC
  for <buildroot@lists.busybox.net>; Sat, 24 Feb 2024 10:17:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id r-vBTq5-LsF7 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rDttZ0UlTTxd for <buildroot@lists.busybox.net>;
  Sat, 24 Feb 2024 10:17:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 87FB7820AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67584407A9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 87FB7820AB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 67584407A9
  for <buildroot@buildroot.org>; Sat, 24 Feb 2024 10:17:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 330A287A09; Sat, 24 Feb 2024 10:17:49 +0000 (UTC)
+ id 43FE187A15; Sat, 24 Feb 2024 10:17:49 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 24 Feb 2024 11:13:25 +0100
+Date: Sat, 24 Feb 2024 11:15:51 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bd2f99246c253739a3d44d8345f2fbb5362b3fb5
-X-Git-Newrev: fbedcfa221bc8826536a39b01eccf0626ab89bf1
+X-Git-Oldrev: 66cfd29e97a00d5210da38fe45ea2effe23bea94
+X-Git-Newrev: 02ecb096ad874a1fecfc3a87ca7d547befb16d8f
 X-Patchwork-Hint: ignore
-Message-Id: <20240224101749.330A287A09@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gcc: remove orphaned 10.4.0 patch
+Message-Id: <20240224101749.43FE187A15@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/nodejs: security bump to version
+ 20.11.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,76 +65,79 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fbedcfa221bc8826536a39b01eccf0626ab89bf1
+commit: https://git.buildroot.net/buildroot/commit/?id=02ecb096ad874a1fecfc3a87ca7d547befb16d8f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Shortly before GCC 10.4.0 was dropped in d37a8f3a2, commit 4ce0dacb6 was
-merged and introduced a patch to 10.4.0 that was not accounted for by
-the patch that dropped 10.4.0 support.
+- Fix CVE-2024-21892, CVE-2024-22019, CVE-2024-21896, CVE-2024-22017,
+  CVE-2023-46809, CVE-2024-21891, CVE-2024-21890 and CVE-2024-22025
 
-Fixes: d37a8f3a2 ("package/gcc: remove gcc 10.x")
-Signed-off-by: Vincent Fazio <vfazio@gmail.com>
-Reviewed-by: Romain Naour <romain.naour@smile.fr>
+- LICENSE hash changed due to two things:
+  * c-ares vendored dependency license got updated [1]. This is unused
+    by buildroot though anyway
+  * base64 vendored library license updated copyright years and sorted
+    contributor names [2], [3]
+
+- This bump will fix the following build failure raised since bump of
+  python to version 3.12.1 in commit 36e635d2d5c0166476858aa239ccbe78e8f2af14
+  thanks to
+  https://github.com/nodejs/node/commit/95534ad82f4e33f53fd50efe633d43f8da70cba6
+  https://github.com/nodejs/node/commit/6557c1c9b1206a85bb7d8e7450e8c3a4cff7c84b:
+
+Traceback (most recent call last):
+  File "/home/autobuild/autobuild/instance-2/output-1/build/host-nodejs-src-20.9.0/configure.py", line 17, in <module>
+    from distutils.version import StrictVersion
+ModuleNotFoundError: No module named 'distutils'
+
+https://github.com/nodejs/node/blob/v20.11.1/CHANGELOG.md
+
+[1] https://github.com/c-ares/c-ares/pull/556
+[2] https://github.com/aklomp/base64/commit/2e8ad2aec2065f258dc1aec9402aedd3604cfbcd
+[3] https://github.com/aklomp/base64/commit/d7bca2bb2928de6c4fe496e6defe8b3affa35d1b
+
+Fixes: 36e635d2d5c0166476858aa239ccbe78e8f2af14
+ - http://autobuild.buildroot.org/results/8b38bc4b7879a0349c1305e2fcb458a0cfd04a93
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-By: Marcus Hoffmann <buildroot@bubu1.eu>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...y-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch | 49 ----------------------
- 1 file changed, 49 deletions(-)
+ package/nodejs/nodejs.hash | 14 +++++++-------
+ package/nodejs/nodejs.mk   |  2 +-
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/gcc/10.4.0/0007-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch b/package/gcc/10.4.0/0007-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch
-deleted file mode 100644
-index 7e9714e9cb..0000000000
---- a/package/gcc/10.4.0/0007-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch
-+++ /dev/null
-@@ -1,49 +0,0 @@
--From ca01d2526917ec6e54b30472d3aedfd46d4ca585 Mon Sep 17 00:00:00 2001
--From: Stafford Horne <shorne@gmail.com>
--Date: Thu, 29 Sep 2022 15:32:39 +0100
--Subject: [PATCH] or1k: Only define TARGET_HAVE_TLS when HAVE_AS_TLS
--
--This was found when testing buildroot with linuxthreads enabled.  In
--this case, the build passes --disable-tls to the toolchain during
--configuration.  After building the OpenRISC toolchain it was still
--generating TLS code sequences and causing linker failures such as:
--
-- ..../or1k-buildroot-linux-uclibc-gcc -o gpsd-3.24/gpsctl .... -lusb-1.0 -lm -lrt -lnsl
-- ..../ld: ..../sysroot/usr/lib/libusb-1.0.so: undefined reference to `__tls_get_addr'
--
--This patch fixes this by disabling tls for the OpenRISC target when requested
--via --disable-tls.
--
--gcc/ChangeLog:
--
--	* config/or1k/or1k.c (TARGET_HAVE_TLS): Only define if
--	HAVE_AS_TLS is defined.
--
--Tested-by: Yann E. MORIN <yann.morin@orange.com>
--
--Upstream: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=ca01d2526917ec6e54b30472d3aedfd46d4ca585
--
--[Bernd: backported to 10.4.0]
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- gcc/config/or1k/or1k.c | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/gcc/config/or1k/or1k.c b/gcc/config/or1k/or1k.c
--index da2f59062ba..0ce7b234417 100644
----- a/gcc/config/or1k/or1k.c
--+++ b/gcc/config/or1k/or1k.c
--@@ -2175,8 +2175,10 @@ or1k_output_mi_thunk (FILE *file, tree thunk_fndecl,
-- #undef  TARGET_LEGITIMATE_ADDRESS_P
-- #define TARGET_LEGITIMATE_ADDRESS_P or1k_legitimate_address_p
-- 
--+#ifdef HAVE_AS_TLS
-- #undef  TARGET_HAVE_TLS
-- #define TARGET_HAVE_TLS true
--+#endif
-- 
-- #undef  TARGET_HAVE_SPECULATION_SAFE_VALUE
-- #define TARGET_HAVE_SPECULATION_SAFE_VALUE speculation_safe_value_not_needed
---- 
--2.39.3
--
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index 2d60437a7c..ddab345e0a 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,8 +1,8 @@
+-# From https://nodejs.org/dist/v20.9.0/SHASUMS256.txt.asc
+-sha256  ced3ecece4b7c3a664bca3d9e34a0e3b9a31078525283a6fdb7ea2de8ca5683b  node-v20.9.0-linux-arm64.tar.xz
+-sha256  64099d7e62bdbb8efd52c216a6759b3cdd77c38aa993096fdee9f875d95b2d8e  node-v20.9.0-linux-armv7l.tar.xz
+-sha256  3c6cea5d614cfbb95d92de43fbc2f8ecd66e431502fe5efc4f3c02637897bd45  node-v20.9.0-linux-ppc64le.tar.xz
+-sha256  9033989810bf86220ae46b1381bdcdc6c83a0294869ba2ad39e1061f1e69217a  node-v20.9.0-linux-x64.tar.xz
+-sha256  a23d96810abf0455426b349d47ce5310f33095b7bc0571b9cc510f481c3a4519  node-v20.9.0.tar.xz
++# From https://nodejs.org/dist/v20.11.1/SHASUMS256.txt.asc
++sha256  c957f29eb4e341903520caf362534f0acd1db7be79c502ae8e283994eed07fe1  node-v20.11.1-linux-arm64.tar.xz
++sha256  28e0120d2d150a8f41717899d33167b8b32053778665583d49ff971bfd188d1b  node-v20.11.1-linux-armv7l.tar.xz
++sha256  51343cacf5cdf5c4b5e93e919d19dd373d6ef43d5f2c666eae299f26e31d08b5  node-v20.11.1-linux-ppc64le.tar.xz
++sha256  d8dab549b09672b03356aa2257699f3de3b58c96e74eb26a8b495fbdc9cf6fbe  node-v20.11.1-linux-x64.tar.xz
++sha256  77813edbf3f7f16d2d35d3353443dee4e61d5ee84d9e3138c7538a3c0ca5209e  node-v20.11.1.tar.xz
+ # Locally calculated
+-sha256  93ac846282ce6c5255e00fada2fd2e7e292255239fe58d5502b0a554859e6a3e  LICENSE
++sha256  7b0bbdca72f925bd78b764914651244a4432a753c7325d061a565cd7eac1193d  LICENSE
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 9806a64d38..858c6a86f5 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # _VERSION, _SOURCE and _SITE must be kept empty to avoid downloading anything
+-NODEJS_COMMON_VERSION = 20.9.0
++NODEJS_COMMON_VERSION = 20.11.1
+ NODEJS_COMMON_SOURCE = node-v$(NODEJS_COMMON_VERSION).tar.xz
+ NODEJS_COMMON_SITE = http://nodejs.org/dist/v$(NODEJS_COMMON_VERSION)
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
