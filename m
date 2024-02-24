@@ -4,95 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E24E9C48BF6
-	for <buildroot@archiver.kernel.org>; Sat, 24 Feb 2024 20:58:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B47BC48BF6
+	for <buildroot@archiver.kernel.org>; Sat, 24 Feb 2024 21:30:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B424B400F1;
-	Sat, 24 Feb 2024 20:58:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2D81D400F1;
+	Sat, 24 Feb 2024 21:30:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dvw9frBHPRWo; Sat, 24 Feb 2024 20:58:18 +0000 (UTC)
+	with ESMTP id CvAJJBGxtiyC; Sat, 24 Feb 2024 21:30:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7BFE6409DB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DFFCD40204
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7BFE6409DB;
-	Sat, 24 Feb 2024 20:58:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B64411BF276
- for <buildroot@lists.busybox.net>; Sat, 24 Feb 2024 20:57:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DFFCD40204;
+	Sat, 24 Feb 2024 21:30:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DDD471BF471
+ for <buildroot@lists.busybox.net>; Sat, 24 Feb 2024 21:30:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A21FF40611
- for <buildroot@lists.busybox.net>; Sat, 24 Feb 2024 20:57:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CB4FE606D0
+ for <buildroot@lists.busybox.net>; Sat, 24 Feb 2024 21:30:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MS0fugI0Z04x for <buildroot@lists.busybox.net>;
- Sat, 24 Feb 2024 20:57:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id X17XzMW9p067 for <buildroot@lists.busybox.net>;
+ Sat, 24 Feb 2024 21:30:19 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::12d; helo=mail-lf1-x12d.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org AF4A140636
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF4A140636
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com
- [IPv6:2a00:1450:4864:20::12d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AF4A140636
- for <buildroot@buildroot.org>; Sat, 24 Feb 2024 20:57:51 +0000 (UTC)
-Received: by mail-lf1-x12d.google.com with SMTP id
- 2adb3069b0e04-5101cd91017so2857072e87.2
- for <buildroot@buildroot.org>; Sat, 24 Feb 2024 12:57:51 -0800 (PST)
+ client-ip=2a00:1450:4864:20::22d; helo=mail-lj1-x22d.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 90A4360621
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 90A4360621
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com
+ [IPv6:2a00:1450:4864:20::22d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 90A4360621
+ for <buildroot@buildroot.org>; Sat, 24 Feb 2024 21:30:18 +0000 (UTC)
+Received: by mail-lj1-x22d.google.com with SMTP id
+ 38308e7fff4ca-2d1094b5568so18643951fa.1
+ for <buildroot@buildroot.org>; Sat, 24 Feb 2024 13:30:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1708808269; x=1709413069;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=4Jr/8RGGPCdxAGUI3ykBHpG8pnUbOzq3dS9abXYRat4=;
- b=QaV2Qz2NczaCpWauC0X9VeNp8eaWdULdP+xpFpOSVP2K+wW8S3RBB4Nyw0DJYZT3uf
- iCsChTr1PAXVitgHs5bvpFNgQzG9rYr1fK490iPDB8mB+jDBeSOevk6bkXTkp7On3eFe
- JTZRPyBJkOTs6Z36J0UlAqpk5KRfl+qjL1Y2ZKdllCFgM3k0QO+vvrHWthHkFxRAqVWL
- 6QZM1pah+csmMDGX2hgTDR6e09D3KqUBEjpkeJ/+58UKW0IKPVhXEvwR2Yo82z8CjXEe
- px+ZB7Y1twg97cG5+f7PQhEeGGPXUXLM8+nHGcI/wbzADqmjg8tcZX8STZxy7YcBZ5lC
- eN2A==
-X-Gm-Message-State: AOJu0YxDAx/Af9ztJqQqQRdRJ+mJ+NuGLYHGAF9WOg1hZBaDbOb3AH98
- ml3bhPCVt8ykEIW2cVc7Hxc7tfz82A9ccdX+iAXFkR+OgPPk2ucLAPsDiVuyvCkFeNzwZT98Wdr
- fN3Y=
-X-Google-Smtp-Source: AGHT+IGJw1qS2el/QhOzRVuWn2/RCcx6KVaFHw7UDQWk2o7ml1wBE6e2ocZs05lBIVn2t2F2jLT/ig==
-X-Received: by 2002:a19:8c5c:0:b0:512:e051:ac2c with SMTP id
- i28-20020a198c5c000000b00512e051ac2cmr1999589lfj.3.1708808269082; 
- Sat, 24 Feb 2024 12:57:49 -0800 (PST)
-Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
- (host-87-5-96-195.retail.telecomitalia.it. [87.5.96.195])
- by smtp.gmail.com with ESMTPSA id
- tk6-20020a170907c28600b00a4306ac4c77sm425506ejc.197.2024.02.24.12.57.48
+ d=1e100.net; s=20230601; t=1708810215; x=1709415015;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=TNivIVNZMCuU713S0DlxfaJxAJ0GOZDULgtjqTUhf5E=;
+ b=wb8pBHKuEPD+aN5T6I94iOhtVyX0yzpTcLt5DcLcOymXHKH0DEBUeUtfrAKp/WFqDi
+ NAlCZmjAxjOaVMONY86mZbeGVRh7rq/RjSEc7EYepj1wv30j48LXeev0ul6sqewBWvOE
+ OsLpXkOaejUg9GGlhsNFjGnRxByIE3VOcumTp27A7C+Q88TN2Fz2LfmJZElo6COGRW0j
+ qtGj+jVXMXCcGQ6CYVrNkH81NbUa3RLZG7KW+mjNLXGQpdaswYuSTdVpla7Zv/8IoaAB
+ HNsYg8IjOVbeRKpTs4yal+RjX0UCLxa+s7Oyfq1fA+DdktOSIdaUFysm40+FhCMM8VZt
+ 3fYg==
+X-Gm-Message-State: AOJu0YydwmIkRNrnIi88Oix/pcFtwFUaKbJ7ehbf0t9o5kgBAUSbc2Cm
+ 9lJTFDJrY0/e7ePZSoymJipEfCCn0faH8SounKrjaXrX5Yeef9m6JsItAqS9
+X-Google-Smtp-Source: AGHT+IH2d6aZhcgystmuc1AgcEQri/WrpGBYYBVIAc8XYuU7gqjT0aoxIRl4vgQpBy9JL9jhOQY+Uw==
+X-Received: by 2002:a2e:9e4b:0:b0:2d2:642c:62d8 with SMTP id
+ g11-20020a2e9e4b000000b002d2642c62d8mr1658539ljk.5.1708810215342; 
+ Sat, 24 Feb 2024 13:30:15 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ l34-20020a05600c1d2200b00412988cbcd0sm3350177wms.36.2024.02.24.13.30.14
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 24 Feb 2024 12:57:48 -0800 (PST)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ Sat, 24 Feb 2024 13:30:14 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 24 Feb 2024 21:56:53 +0100
-Message-ID: <20240224205654.1546744-17-dario.binacchi@amarulasolutions.com>
+Date: Sat, 24 Feb 2024 22:30:08 +0100
+Message-ID: <20240224213008.670294-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240224205654.1546744-1-dario.binacchi@amarulasolutions.com>
-References: <20240224205654.1546744-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1708808269; x=1709413069;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=4Jr/8RGGPCdxAGUI3ykBHpG8pnUbOzq3dS9abXYRat4=;
- b=Dy1QWyKaSIOgas2zlOFj4Vrjq7OMsL2po9rZzUwvt9WO5D9e5Aon26KBrYmzCh4fWy
- lH7OY/YP30NcdWppd9IokuGmj8j2xaVazaW6FWbU3jQe82XPEmO9CdflyhabSLAdJKUl
- dDGNm1I/m7Sfx226plaLT6hfHID6fvkuEXawc=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=gmail.com; s=20230601; t=1708810215; x=1709415015; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=TNivIVNZMCuU713S0DlxfaJxAJ0GOZDULgtjqTUhf5E=;
+ b=ZXDxBUiEMvYU4Afzk6zSwbmuLpK/CxOgDDlLijgVKUzUkeDsd1hDfRMy1sleiiESnP
+ UJjYtTn2uvHfYcS/Zk78le3WHg4RMTmsSTiOB+i/naSrXRMAJYkUrnzQ8zHf5S2sVzOq
+ D6Ne2GEVG/GKss2IMBV96njKA2PNrhpTzT8t0IzbTFisOYAoZjrwqkERXdV0KIA7oaQK
+ ZtOkDFpQVI/JQetwirY/RdSGQ92mEc21hbZ1GT00t6uiBrFIE6T2uJE7eHLa83Hfc50J
+ GWJCZrvCez1dnABF9lw2bK9k6UYm8RU4T9cUcATMwo1xUgKjhKAdVMd1qqcebIz6beCZ
+ Gtjw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=Dy1QWyKa
-Subject: [Buildroot] [PATCH v6 16/16] configs/ti_am62x_sk_defconfig: bump
- Linux version to 6.6.17
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=ZXDxBUiE
+Subject: [Buildroot] [PATCH 1/1] package/openssh: fix linux-pam select
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,55 +100,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- michael@amarulasolutions.com, linux-amarula@amarulasolutions.com,
- Asaf Kahlon <asafka7@gmail.com>, Xuanhao Shi <X15000177@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Romain Naour <romain.naour@smile.fr>, Andreas Dannenberg <dannenberg@ti.com>,
- Alexander Sverdlin <alexander.sverdlin@gmail.com>, bryce@redpinelabs.com,
- Anand Gadiyar <gadiyar@ti.com>
+Cc: Adam Duskett <adam.duskett@amarulasolutions.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Tested on SK-AM62B-P1.
+Commit 2c5a82a29ceb382d53ccb08ffd34a92c142cadbb forgot to handle
+linux-pam dependencies resulting in the following build failure:
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+WARNING: unmet direct dependencies detected for BR2_PACKAGE_LINUX_PAM
+  Depends on [n]: BR2_ENABLE_LOCALE [=n] && BR2_USE_WCHAR [=n] && !BR2_STATIC_LIBS [=y] && BR2_USE_MMU [=y] && BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 [=y]
+  Selected by [y]:
+  - BR2_PACKAGE_OPENSSH [=y] && BR2_USE_MMU [=y] && BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION [=y]
 
+WARNING: unmet direct dependencies detected for BR2_PACKAGE_LINUX_PAM
+  Depends on [n]: BR2_ENABLE_LOCALE [=n] && BR2_USE_WCHAR [=n] && !BR2_STATIC_LIBS [=y] && BR2_USE_MMU [=y] && BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 [=y]
+  Selected by [y]:
+  - BR2_PACKAGE_OPENSSH [=y] && BR2_USE_MMU [=y] && BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION [=y]
+
+[...]
+
+configure: error: in `/home/autobuild/autobuild/instance-12/output-1/build/linux-pam-1.6.0':
+configure: error: failed to find dlopen
+
+Fixes: 2c5a82a29ceb382d53ccb08ffd34a92c142cadbb
+ - http://autobuild.buildroot.org/results/c0aac8bed08850e07cb94f501d754c3c64cdfe07
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+ package/openssh/Config.in | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Changes in v5:
-- Bump to 6.6.17 from 6.6.1
-- Update commit message
-
-Changes in v4:
-- Add BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6 to ti_am62x_sk_defconfig.
-
-no changes since v1
-
- configs/ti_am62x_sk_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/configs/ti_am62x_sk_defconfig b/configs/ti_am62x_sk_defconfig
-index 484f9feb8c61..8c962b4a9494 100644
---- a/configs/ti_am62x_sk_defconfig
-+++ b/configs/ti_am62x_sk_defconfig
-@@ -1,11 +1,11 @@
- BR2_aarch64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_4=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/ti/am62x-sk/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/ti/am62x-sk/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c ttyS2,115200n8 -r /dev/mmcblk1p2 -x earlycon=ns16550a,mmio32,0x02800000"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.4.16"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.17"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="ti/k3-am625-sk"
+diff --git a/package/openssh/Config.in b/package/openssh/Config.in
+index a3038ba01f..c108569547 100644
+--- a/package/openssh/Config.in
++++ b/package/openssh/Config.in
+@@ -1,7 +1,10 @@
+ config BR2_PACKAGE_OPENSSH
+ 	bool "openssh"
+ 	depends on BR2_USE_MMU # fork()
+-	select BR2_PACKAGE_LINUX_PAM if BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION
++	select BR2_PACKAGE_LINUX_PAM if \
++		BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION && \
++		BR2_ENABLE_LOCALE && BR2_USE_WCHAR && \
++		!BR2_STATIC_LIBS && BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_ZLIB
+ 	help
 -- 
 2.43.0
 
