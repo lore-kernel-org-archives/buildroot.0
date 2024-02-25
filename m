@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45B98C47DD9
-	for <buildroot@archiver.kernel.org>; Sun, 25 Feb 2024 07:55:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 391BFC47DD9
+	for <buildroot@archiver.kernel.org>; Sun, 25 Feb 2024 08:02:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 032C3403A8;
-	Sun, 25 Feb 2024 07:55:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D7936401C0;
+	Sun, 25 Feb 2024 08:02:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mie-YSfYAgYg; Sun, 25 Feb 2024 07:55:31 +0000 (UTC)
+	with ESMTP id 06XvIgJkWf3i; Sun, 25 Feb 2024 08:02:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F75A40471
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1534406B0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1F75A40471;
-	Sun, 25 Feb 2024 07:55:31 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 12CF41BF20D
- for <buildroot@lists.busybox.net>; Sun, 25 Feb 2024 07:55:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D1534406B0;
+	Sun, 25 Feb 2024 08:02:15 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 06BDE1BF232
+ for <buildroot@lists.busybox.net>; Sun, 25 Feb 2024 08:02:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0BA5681BC0
- for <buildroot@lists.busybox.net>; Sun, 25 Feb 2024 07:55:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0031F405F2
+ for <buildroot@lists.busybox.net>; Sun, 25 Feb 2024 08:02:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7fyWZQvkz_ca for <buildroot@lists.busybox.net>;
- Sun, 25 Feb 2024 07:55:29 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
- helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id elnWFL1YX9xv for <buildroot@lists.busybox.net>;
+ Sun, 25 Feb 2024 08:02:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
+ helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DCF8681BB2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DCF8681BB2
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DCF8681BB2
- for <buildroot@buildroot.org>; Sun, 25 Feb 2024 07:55:28 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E5414FF806;
- Sun, 25 Feb 2024 07:55:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7858F405CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7858F405CC
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7858F405CC
+ for <buildroot@buildroot.org>; Sun, 25 Feb 2024 08:02:13 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E3856E0007;
+ Sun, 25 Feb 2024 08:02:09 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1re9Lz-00E2PZ-2e;
- Sun, 25 Feb 2024 08:55:19 +0100
+ (envelope-from <peter@korsgaard.com>) id 1re9Sa-00E2f0-2z;
+ Sun, 25 Feb 2024 09:02:08 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20240224220636.742198-1-fontaine.fabrice@gmail.com>
-Date: Sun, 25 Feb 2024 08:55:19 +0100
-In-Reply-To: <20240224220636.742198-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 24 Feb 2024 23:06:36 +0100")
-Message-ID: <87sf1hrna0.fsf@48ers.dk>
+References: <20240224213008.670294-1-fontaine.fabrice@gmail.com>
+Date: Sun, 25 Feb 2024 09:02:08 +0100
+In-Reply-To: <20240224213008.670294-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 24 Feb 2024 22:30:08 +0100")
+Message-ID: <87o7c5rmyn.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/libcurl: fix libpsl static build
+Subject: Re: [Buildroot] [PATCH 1/1] package/openssh: fix linux-pam select
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,7 +68,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Adam Duskett <adam.duskett@amarulasolutions.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -76,36 +76,63 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fix the following static build failure with libpsl raised since bump to
- > version 8.6.0 in commit 5cee6b6be6524e443012d130e09b0e6983b0ff90:
+ > Commit 2c5a82a29ceb382d53ccb08ffd34a92c142cadbb forgot to handle
+ > linux-pam dependencies resulting in the following build failure:
 
- > configure:28830:
- > /home/autobuild/autobuild/instance-6/output-1/host/bin/aarch64_be-buildroot-linux-musl-gcc
- > -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
- > -D_FILE_OFFSET_BITS=64 -O3 -g0 -static
- > -Werror-implicit-function-declaration -Wno-system-headers
- > -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
- > -I/home/autobuild/autobuild/instance-6/output-1/host/aarch64_be-buildroot-linux-musl/sysroot/usr/include
- > -static
- > -L/home/autobuild/autobuild/instance-6/output-1/host/bin/../aarch64_be-buildroot-linux-musl/sysroot/usr/lib
- > -L/home/autobuild/autobuild/instance-6/output-1/host/aarch64_be-buildroot-linux-musl/sysroot/usr/lib
- > conftest.c -lpsl -lmbedtls -lmbedx509 -lmbedcrypto -lz -latomic >&5
- > /home/autobuild/autobuild/instance-6/output-1/host/lib/gcc/aarch64_be-buildroot-linux-musl/11.4.0/../../../../aarch64_be-buildroot-linux-musl/bin/ld:
- > /home/autobuild/autobuild/instance-6/output-1/host/bin/../aarch64_be-buildroot-linux-musl/sysroot/usr/lib/libpsl.a(psl.c.o):
- > in function `is_public_suffix':
- > psl.c:(.text+0x2a8): undefined reference to `idn2_lookup_u8'
+ > WARNING: unmet direct dependencies detected for BR2_PACKAGE_LINUX_PAM
+ >   Depends on [n]: BR2_ENABLE_LOCALE [=n] && BR2_USE_WCHAR [=n] && !BR2_STATIC_LIBS [=y] && BR2_USE_MMU [=y] && BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 [=y]
+ >   Selected by [y]:
+ >   - BR2_PACKAGE_OPENSSH [=y] && BR2_USE_MMU [=y] && BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION [=y]
+
+ > WARNING: unmet direct dependencies detected for BR2_PACKAGE_LINUX_PAM
+ >   Depends on [n]: BR2_ENABLE_LOCALE [=n] && BR2_USE_WCHAR [=n] && !BR2_STATIC_LIBS [=y] && BR2_USE_MMU [=y] && BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 [=y]
+ >   Selected by [y]:
+ >   - BR2_PACKAGE_OPENSSH [=y] && BR2_USE_MMU [=y] && BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION [=y]
 
  > [...]
 
- > checking for library containing psl_builtin... no
- > configure: error: libpsl was not found
+ > configure: error: in `/home/autobuild/autobuild/instance-12/output-1/build/linux-pam-1.6.0':
+ > configure: error: failed to find dlopen
 
- > Fixes: 5cee6b6be6524e443012d130e09b0e6983b0ff90
- >  - http://autobuild.buildroot.org/results/1fb15e1a99472c403d0d3b1a688902f32e78d002
+ > Fixes: 2c5a82a29ceb382d53ccb08ffd34a92c142cadbb
+ >  - http://autobuild.buildroot.org/results/c0aac8bed08850e07cb94f501d754c3c64cdfe07
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ >  package/openssh/Config.in | 5 ++++-
+ >  1 file changed, 4 insertions(+), 1 deletion(-)
 
-Committed, thanks.
+ > diff --git a/package/openssh/Config.in b/package/openssh/Config.in
+ > index a3038ba01f..c108569547 100644
+ > --- a/package/openssh/Config.in
+ > +++ b/package/openssh/Config.in
+ > @@ -1,7 +1,10 @@
+ >  config BR2_PACKAGE_OPENSSH
+ >  	bool "openssh"
+ >  	depends on BR2_USE_MMU # fork()
+ > -	select BR2_PACKAGE_LINUX_PAM if BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION
+ > +	select BR2_PACKAGE_LINUX_PAM if \
+ > +		BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION && \
+ > +		BR2_ENABLE_LOCALE && BR2_USE_WCHAR && \
+ > +		!BR2_STATIC_LIBS && BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+
+This stops kconfig from complaining, but does a openssh + refpolicy build
+without (E.G. ) locale support then actually work? Judging from:
+
+commit 2c5a82a29ceb382d53ccb08ffd34a92c142cadbb
+Author: Adam Duskett <adam.duskett@amarulasolutions.com>
+Date:   Mon Oct 9 16:34:40 2023 +0200
+
+    package/openssh: select linux-pam if refpolicy upstream is selected
+
+    linux-pam is required to login via OpenSSH if the upstream refpolicy for
+    SELinux is enaabled, as linux-pam handles changing user contexts. If a
+    user wants to make their own policy and use a refpolicy via git, we of course
+    should let them do so. As such, only select linux-pam if the upstream version
+    of refpolicy is selected.
+
+I am not sure what the proper solution is for situations where pam is
+not available? Adam?
 
 -- 
 Bye, Peter Korsgaard
