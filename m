@@ -4,110 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73922C54798
-	for <buildroot@archiver.kernel.org>; Sun, 25 Feb 2024 16:58:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2811CC47DD9
+	for <buildroot@archiver.kernel.org>; Sun, 25 Feb 2024 17:12:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2BD526075D;
-	Sun, 25 Feb 2024 16:58:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BD42560737;
+	Sun, 25 Feb 2024 17:12:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xjIjKpOOa0dY; Sun, 25 Feb 2024 16:58:17 +0000 (UTC)
+	with ESMTP id UohOfSQU6rDO; Sun, 25 Feb 2024 17:12:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 335E160765
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C989A6074A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 335E160765;
-	Sun, 25 Feb 2024 16:58:17 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 28E471BF36A
- for <buildroot@lists.busybox.net>; Sun, 25 Feb 2024 16:58:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C989A6074A;
+	Sun, 25 Feb 2024 17:12:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BAF3B1BF37C
+ for <buildroot@lists.busybox.net>; Sun, 25 Feb 2024 17:11:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 229B040112
- for <buildroot@lists.busybox.net>; Sun, 25 Feb 2024 16:58:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B4E91406D8
+ for <buildroot@lists.busybox.net>; Sun, 25 Feb 2024 17:11:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id K9Jlcs6-gTka for <buildroot@lists.busybox.net>;
- Sun, 25 Feb 2024 16:58:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vQB1Tk8yAxug for <buildroot@lists.busybox.net>;
+ Sun, 25 Feb 2024 17:11:57 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::229; helo=mail-lj1-x229.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D68A1400CB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D68A1400CB
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com
- [IPv6:2a00:1450:4864:20::229])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D68A1400CB
- for <buildroot@buildroot.org>; Sun, 25 Feb 2024 16:58:14 +0000 (UTC)
-Received: by mail-lj1-x229.google.com with SMTP id
- 38308e7fff4ca-2d2770e44d0so21556591fa.2
- for <buildroot@buildroot.org>; Sun, 25 Feb 2024 08:58:14 -0800 (PST)
+ client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5FC01406C8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5FC01406C8
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5FC01406C8
+ for <buildroot@buildroot.org>; Sun, 25 Feb 2024 17:11:56 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-412a4a932f4so1506635e9.0
+ for <buildroot@buildroot.org>; Sun, 25 Feb 2024 09:11:56 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1708880292; x=1709485092;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=kEhgE9V4ObTdNbJMJBuTi1ngtNBgGGA6s0lQKQY4MdM=;
- b=KJ02kBKZkoHO6atFPx4XRkOEKv+4MIKy7Pto2/zYlLRhtLUHQOCc1F/zxdUtHie863
- Vru+o2r2A/XY3rldad3khvF9rqAKA8CcIwTZmt7RIHkGCvwVRa/riMk4923/wTdtM/ad
- 0n/2+su5kVaezA+o8wuCNNV0dr7xUFC/Eou6axLj3gQu83lszC3ALKfYyUO0Eh4GLwkr
- wQH0B2vbs1yGx2nPx53Lp1nPUEF9B4gj7K6Ue2QsAq08+42vATqDo2zKRWgm0pxGABcB
- i4keMo7rCAJt/Vm5tOfE4wbDq2H+MDoux2Jo+PAd6hrFZnOSvyh/slzSOsnjL7+F/x88
- AAlw==
-X-Forwarded-Encrypted: i=1;
- AJvYcCW7M89IUglqwO9FAU39TgD2PdhEm5Pm1vAFEyJL2GkaP3LFyzRc3Cb3a0oFqry36F+q5U9AfTRQqXX0PCWz9J7zdsOVo5R+4g==
-X-Gm-Message-State: AOJu0YyBJdnjRKgrrml6epJlUnY0MQej5rkkrGDnjxEyvHjdpq5dFCb6
- OV17D48XoEansw36fZmCUA0A4woaREXZnlRfkZ1usY5eY6LZ/uhBnCOwdO+tclswltG8dooGnj2
- W
-X-Google-Smtp-Source: AGHT+IHEwwUpUCVSQ4pA8UczPQvOi4n+0DAtoGhqd9hq/x1650/DmG6OPPQXRNd//S4t4f5xt1NBHg==
-X-Received: by 2002:a05:6512:310f:b0:512:f71b:c4d0 with SMTP id
- n15-20020a056512310f00b00512f71bc4d0mr1280950lfb.48.1708880292406; 
- Sun, 25 Feb 2024 08:58:12 -0800 (PST)
-Received: from ?IPV6:2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31?
- (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
- [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
- by smtp.gmail.com with ESMTPSA id
- n17-20020a195511000000b00511a8269473sm563093lfe.82.2024.02.25.08.58.11
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 25 Feb 2024 08:58:12 -0800 (PST)
-Message-ID: <6de87cae-230d-4a3e-b854-0e327f651f0a@smile.fr>
-Date: Sun, 25 Feb 2024 17:58:10 +0100
+ d=1e100.net; s=20230601; t=1708881115; x=1709485915;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=kS0n8FT5KUcB5Tv349+Ac10nDCA5D/xAsBofp7yKwEU=;
+ b=myfuPPzjDc4BXYhkrtEOTgmVHW7jB4MgYiVFnPMZ4+d08EfavnzZjHHEbEAIQm6OPg
+ aUZDYsy5CCq8P4/RwuDOBkBP9+GmCJRln0UNOUilZdyI1/xI529GIiW4NrZKAFBRG6rn
+ Ci+1XobLSWHTj+QU6CJqEU3Z49ozga+DbnIr3FFXM7SCd5Lego55JhSma9IH0iXo4G52
+ QZ9RKYTGQahoxKheDwj3qt0Sh5Vas3iOo71Td6EO6kK6RIBcWrDSDA6DJN4looWHf6C0
+ 3FYKLRLW2Dj3qSKycdtgRrD1oXFaLXpodLdQlmHWD5GAtAwY1uugM7iwFal6KevbkOAi
+ qhAQ==
+X-Gm-Message-State: AOJu0Yx8BDu8Ark7KTt8IZk9ahUbw3I52rcSby54pKi8TlBHryofnF7S
+ FYtqFM7njdJbGaJbpxjfwYKONmXloZztxNm9qw8nK4JbeiF6yAzr9gvYkokU
+X-Google-Smtp-Source: AGHT+IEvDQp7lQuFpsV65c8DW6rAX+pByh82JM/hhdmQ3zIiCesS9l6s8Ylr5HFadVSJxSJdmDb5qg==
+X-Received: by 2002:a05:600c:4293:b0:412:10a1:25e5 with SMTP id
+ v19-20020a05600c429300b0041210a125e5mr3517841wmc.36.1708881114533; 
+ Sun, 25 Feb 2024 09:11:54 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ m20-20020a7bcb94000000b004129f28e2cdsm4471397wmi.3.2024.02.25.09.11.53
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 25 Feb 2024 09:11:53 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 25 Feb 2024 18:11:49 +0100
+Message-ID: <20240225171149.1447606-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: Andreas Dannenberg <dannenberg@ti.com>
-References: <20240217160244.1320482-1-dario.binacchi@amarulasolutions.com>
- <90dd167b-bceb-4e42-86c3-255caf825f41@smile.fr>
- <CAOf5uwka5w7DEAOox1pAfZ=mkpostmNATBJ_Ny1xuyYesXUwoQ@mail.gmail.com>
- <bf687add-2677-45fe-8eb1-cf04bd95bf57@smile.fr>
- <20240220004100.3yzqapeplx6olarz@dasso>
- <0b6dbe1f-2591-4290-b620-880d63eee7d0@smile.fr>
- <20240220200414.2bsvqvaeltqhsulc@dasso>
- <1a7ab8e6-bd43-4191-ad95-12e40f3a5c51@smile.fr>
- <20240223193136.sod3vx4t3pkqfcqd@dasso>
-From: Romain Naour <romain.naour@smile.fr>
-In-Reply-To: <20240223193136.sod3vx4t3pkqfcqd@dasso>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1708880292; x=1709485092;
- darn=buildroot.org; 
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=kEhgE9V4ObTdNbJMJBuTi1ngtNBgGGA6s0lQKQY4MdM=;
- b=hV7ctU07h6K6WgXWcXePvi38w4gk53cYXF6atmgawyNWocigpsOARaEUsSCcP8kAgt
- C2h2ql/rpLTU0muoziDb7Gl+JnB0IO2SWKwu3lzRuygctcMvoYEoObdjcbPvqxq9/FVN
- 2j9qmqvsYhx/2ymnXxiZQUHB72/AfwibRXvILBIVS5XzdoehpYnaShkXpDFV8Xcqh4tl
- heBEzj7E3YU5weZPCJs63zZHmV00QgNMiC4p/C0Cov+l/OfgM46+fpYqMr+SLSSDPFNy
- yaJFScTlfdbh5q/Or0QfSFCBUVRP/GSDC50MOqch7ukQwaQk0otUhxy+Q6Sr2cQQqxBK
- 95yA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=gmail.com; s=20230601; t=1708881115; x=1709485915; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=kS0n8FT5KUcB5Tv349+Ac10nDCA5D/xAsBofp7yKwEU=;
+ b=YIshmf6ySUBjIvY5utFE0qYRaCm7MFxGiMF9LdT3pSfQL8wLavyLx2T9nPdfPKO3b8
+ 0aIP5gqnlUUMIqZocVs6vovix4kZtQH75UBVpoAxRPW2pQIj6YbWCdEujNlAjtXmdmKR
+ HpIdMHU5VuPJw8TNxDCSCmhArWGcnEBSekaG4/AAzPoLpDv+lIdrVzeZAwLpBkDTO4gj
+ GzUOuRSz7Xo2pztXHz7UEC/6f8Y0X7dsAf6kRN/KSTHfsALCs/iureiRpbwFNVH6GwZO
+ yb1rb1/mQASVnBP8noNRFrOEFMqNColC/csf6LcGDraPKX1GWyBGOJItrnKswDpPvmMY
+ wb1g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=smile-fr.20230601.gappssmtp.com
- header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=hV7ctU07
-Subject: Re: [Buildroot] [PATCH v4 00/20] Add support for AM62x-SK HS-FS
- devices
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=YIshmf6y
+Subject: [Buildroot] [PATCH 1/1] package/libtracefs: disable utest
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -119,67 +100,96 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- linux-amarula@amarulasolutions.com, Asaf Kahlon <asafka7@gmail.com>,
- Xuanhao Shi <X15000177@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
- Michael Nazzareno Trimarchi <michael@amarulasolutions.com>,
- Alexander Sverdlin <alexander.sverdlin@gmail.com>, bryce@redpinelabs.com,
- Anand Gadiyar <gadiyar@ti.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Maxime Chevallier <maxime.chevallier@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgQW5kcmVhcywKCkxlIDIzLzAyLzIwMjQgw6AgMjA6MzEsIEFuZHJlYXMgRGFubmVuYmVyZyBh
-IMOpY3JpdMKgOgo+IEhpIFJvbWFpbiwKPiAKPiBPbiBUdWUsIEZlYiAyMCwgMjAyNCBhdCAxMDoz
-Njo1MVBNICswMTAwLCBSb21haW4gTmFvdXIgd3JvdGU6Cj4gCj4gPHNuaXA+Cj4gCj4+Pj4gQWJv
-dXQgZXhpc3RpbmcgYm9vdCBmbG93LCBJIGZvdW5kIHR3byByZWNlbnQgY29tbWl0IGluIHUtYm9v
-dCB0aGF0IHN0YXRlIHRoYXQKPj4+PiB0aGUgIlNwbGl0IGJpbmFyeSIgKHRoYXQgcmVxdWlyZXMg
-c3lzZncuaXRiKSBpcyBhbHJlYWR5IGEgbGVnYWN5IGJvb3QgZmxvdzoKPj4+Cj4+PiBJdCdzIGNh
-bGxlZCAibGVnYWN5IGJvb3QgZmxvdyIgYmVjYXVzZSBpdCB3YXMgdGhlIGJvb3QgZmxvdyB1c2Vk
-IG9uIHRoZQo+Pj4gZmlyc3QgSzMgZGV2aWNlcyB0aGF0IHdlcmUgcmVsZWFzZWQgKEFNNjV4LCBK
-NzIxRSkuIFRoaXMgYm9vdCBmbG93IHdhcwo+Pj4gbm90IHVzZWQgb24gZm9sbG93LW9uIGRldmlj
-ZXMuIFRoZSBjaGFyYWN0ZXJpc3RpY3Mgb2YgdGhpcyBib290IGZsb3cgaXMKPj4+IHRoYXQgdGhl
-IGluaXRpYWwgRlcgaW1hZ2UgdGhhdCBnZXRzIGxvYWRlZCAodGlib290My5iaW4pIGRvZXNuJ3Qg
-Y29udGFpbgo+Pj4gYW55IGRldmljZSBmaXJtd2FyZXMsIGJ1dCBvbmx5IGEgYm9vdGxvYWRlciAo
-c3VjaCBhcyBVLUJvb3QgU1BMKS4gVGhlbgo+Pj4gdGhpcyBib290IGxvYWRlciB3aWxsIGxvYWQg
-dGhlIFN5c3RlbSBGaXJtd2FyZSBmaXJtd2FyZSArIGNvbmZpZyBkYXRhCj4+PiBibG9iIChzeXNm
-dy5pdGIpIGludG8gdGhlIGRlZGljYXRlZCBjb3JlIChjYWxsZWQgIkRNU0MiID0gRGV2aWNlIE1h
-bmFnZXIKPj4+IGFuZCBTZWN1cml0eSBDb250cm9sbGVyKS4gQW5kIHRoZW4gYWRkaWl0b25hbCBi
-b290IHN0YWdlcyB3aWxsIGJlCj4+PiBsb2FkZWQuIFRoZXNlIGRldmljZXMgcmVxdWlyZSB0aGlz
-IGJvb3QgZmxvdywgYW5kIHdpdGggdGhpcyBpdCBpcwo+Pj4gcmVxdWlyZWQgdG8gYmUgc3VwcG9y
-dGVkIGJ5IFUtQm9vdCAoYW5kIGFueSBMaW51eCBkaXN0cmlidXRpb24gb3IgYnVpbGQKPj4+IHN5
-c3RlbXMgdGhhdCBidWlsZCBvbiB0aGF0KS4KPj4+Cj4+PiBUSSBpcyBzdGlsbCBtYWtpbmcvc2Vs
-bGluZyB0aG9zZSAibGVnYWN5IGJvb3QgZmxvdyIgZGV2aWNlcywgYW5kIHdpbGwKPj4+IGNvbnRp
-bnVlIHRvIGRvIHNvIGZvciBhIHZlcnkgbG9uZyB0aW1lLiBPbmUgcHJvbWltZW50IGNvbW11bml0
-eQo+Pj4gaW5jYXJuYXRpb24gdGhhdCB5b3UgYXJlIHByb2JhYmx5IGF3YXJlIG9mIGlzIHRoZSBC
-ZWFnbGVCb25lIEFJLTY0Lgo+Pgo+PiBUaGFuayB5b3UgZm9yIHRoZSBkZXRhaWxlZCBleHBsYW5h
-dGlvbiEKPj4KPj4gSSBwcmV2aW91bHkgd29ya2VkIG9uIGEgQU01N3h4IFNvQyB0aGF0IGlzIG5v
-d2FkYXkgbGVnYWN5IFNvQywgdGhlIGxhdGVzdAo+PiB0aS1rZXJuZWwgNi4xIGRvZXNuJ3Qgc3Vw
-cG9ydCBzb21lIG9mIHRoZSBkcml2ZXIgdGhhdCB3aGVyZSBhdmFpbGFibGUgaW4KPj4gdGkta2Vy
-bmVsIDUuMTAgKHBydWV0aCAxMDBNLCBSUE1zZyBTb2NrZXRzIG92ZXIgdmlydGlvLXJwbXNnIHRy
-YW5zcG9ydCAodXNlIGZvcgo+PiBBUk0tRFNQIElQQzMueCksIFRJLVJUT1MgKHRoZSBjc2wtY29t
-bW9uIHBhY2thZ2Ugd2FzIGFsc28gcmVtb3ZlZCBmcm9tIG1ldGEtdGkpKS4KPj4KPj4gQWxzbyB0
-aGUgVEkgU0RLIG9uIHRoaXMgcGxhdGVmb3JtIGRvZXNuJ3Qgc2VlbXMgdmVyeSBhY3RpdmUgWzFd
-Lgo+IAo+IHNpbmNlIHlvdSBicm91Z2h0IHRoaXMgdXAgSSB3YW50ZWQgdG8gYWRkIHNvbWUgYWRk
-aXRpb25hbCBjb250ZXh0IGhlcmUuCj4gT2xkZXIgZGV2aWNlcyBsaWtlIEFNNTd4eCAoQU0zMzV4
-IGFuZCBBTTQzN3ggZmFsbCBpbnRvIHRoZSBzYW1lIGJ1Y2tldCkKPiB3aWxsIGdldCB3aGF0IHdl
-IGNhbGwgIkxUUyByZWZyZXNoIFNES3MiIGV2ZXJ5IHllYXIsIHJhdGhlciB0aGFuCj4gbXVsdGlw
-bGUgZHJvcHMgcGVyIHllYXIgYXMgd2UgZG8gZm9yIHRoZSBtb3JlIHJlY2VudCBkZXZpY2VzLiBB
-cyBmb3IKPiBBTTU3eHggc3BlY2lmaWNhbGx5IHRoYXQgcmVmcmVzaCBpcyBjdXJyZW50bHkgdGFy
-Z2V0ZWQgZm9yIGUvbyBNYXJjaAo+IDIwMjQgYW5kIHdpbGwgYmUga25vd24gYXMgIlNESyA5LjIi
-LiBUaGVyZSBzaG91bGRuJ3QgYmUgYW55IGZlYXR1cmUKPiByZWdyZXNzaW9ucywgYW5kIHRoZSBv
-bmx5ICJuZXciIHRoaW5nIChpbiBhZGRpdGlvbiB0byBhbiBhbGwtcmVmcmVzaGVkCj4gU1cgYmFz
-ZWxpbmUgd2l0aCA2LjEga2VybmVsIGFuZCAyMDIzLjA0IFUtQm9vdCkgd2lsbCBiZSBzb21lIFky
-SzM4IGlzc3VlCj4gZml4IG9uIExpbnV4LiBUSSB3aWxsIGJlIG1ha2luZyBhbmQgc2VsbGluZyB0
-aG9zZSBkZXZpY2VzIGZvciBhIHZlcnkKPiBsb25nIHRpbWUgdG8gY29tZSwgYW5kIHRoZSBhbm51
-YWwgcmVmcmVzaCBpcyBzZWVuIGFzIGEgZ29vZCBjb21wcm9taXNlCj4gYmV0d2VlbiBrZWVwaW5n
-IHRoaW5ncyByZWZyZXNoZWQgcGVyaW9kaWNhbGx5IGFuZCB1cCB0byBkYXRlIHdoaWxlCj4gbGlt
-aXRpbmcgdGhlIGFtb3VudCBvZiByZXBlYXQgd29yay9lZmZvcnQuCgpPaywgdGhhbmtzIGZvciB0
-aGUgaW5mb3JtYXRpb24uCkknbSBsb29raW5nIGZvcndhcmQgdGhpcyBuZXcgU0RLIHJlbGVhc2Uu
-CgpCZXN0IHJlZ2FyZHMsClJvbWFpbgoKCj4gCj4gLS0KPiBBbmRyZWFzIERhbm5lbmJlcmcKPiBU
-ZXhhcyBJbnN0cnVtZW50cyBJbmMKPiAKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9v
-dC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRy
-b290Cg==
+Disable utest to avoid the following build failure raised since the
+addition of the package in commit
+b1dbd3f679e6660325472e3fdca72127d74e6929 if cunit is found:
+
+../utest/tracefs-utest.c: In function 'test_uprobes_instance':
+../utest/tracefs-utest.c:2492:19: error: 'PATH_MAX' undeclared (first use in this function)
+ 2492 |         char self[PATH_MAX] = { 0 };
+      |                   ^~~~~~~~
+
+Fixes: b1dbd3f679e6660325472e3fdca72127d74e6929
+ - http://autobuild.buildroot.org/results/1a01883231dbc8a7688de26db9a08751165fe8fe
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../0002-meson-add-utest-option.patch         | 40 +++++++++++++++++++
+ package/libtracefs/libtracefs.mk              |  3 +-
+ 2 files changed, 42 insertions(+), 1 deletion(-)
+ create mode 100644 package/libtracefs/0002-meson-add-utest-option.patch
+
+diff --git a/package/libtracefs/0002-meson-add-utest-option.patch b/package/libtracefs/0002-meson-add-utest-option.patch
+new file mode 100644
+index 0000000000..90f73a7ea0
+--- /dev/null
++++ b/package/libtracefs/0002-meson-add-utest-option.patch
+@@ -0,0 +1,40 @@
++From 7a09e2d414959075e2177c50ef1d4bf606b9ccdc Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 15 Feb 2024 21:20:29 +0100
++Subject: [PATCH] meson: add utest option
++
++Add utest option to allow the user to disable utest
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Upstream: https://github.com/rostedt/libtracefs/pull/2
++---
++ meson.build       | 2 +-
++ meson_options.txt | 2 ++
++ 2 files changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/meson.build b/meson.build
++index 3156f1c..d4cfd53 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -35,7 +35,7 @@ incdir = include_directories(['include'])
++ 
++ subdir('src')
++ subdir('include')
++-if cunit_dep.found()
+++if get_option('utest') and cunit_dep.found()
++     subdir('utest')
++ endif
++ if get_option('samples')
++diff --git a/meson_options.txt b/meson_options.txt
++index 8450992..a48efea 100644
++--- a/meson_options.txt
+++++ b/meson_options.txt
++@@ -18,3 +18,5 @@ option('doc', type : 'boolean', value: true,
++        description : 'produce documentation')
++ option('samples', type : 'boolean', value: true,
++        description : 'build samples')
+++option('utest', type : 'boolean', value: true,
+++       description : 'build utest')
++-- 
++2.43.0
++
+diff --git a/package/libtracefs/libtracefs.mk b/package/libtracefs/libtracefs.mk
+index ed45fcbc50..21cb8e84e3 100644
+--- a/package/libtracefs/libtracefs.mk
++++ b/package/libtracefs/libtracefs.mk
+@@ -14,6 +14,7 @@ LIBTRACEFS_DEPENDENCIES = host-bison host-flex host-pkgconf libtraceevent
+ 
+ LIBTRACEFS_CONF_OPTS = \
+ 	-Ddoc=false \
+-	-Dsamples=false
++	-Dsamples=false \
++	-Dutest=false
+ 
+ $(eval $(meson-package))
+-- 
+2.43.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
