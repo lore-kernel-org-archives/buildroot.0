@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDEB8C54798
-	for <buildroot@archiver.kernel.org>; Sun, 25 Feb 2024 08:02:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08B25C47DD9
+	for <buildroot@archiver.kernel.org>; Sun, 25 Feb 2024 08:02:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BAD7740725;
-	Sun, 25 Feb 2024 08:02:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BC6A74074B;
+	Sun, 25 Feb 2024 08:02:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id e56YigUDXWne; Sun, 25 Feb 2024 08:02:49 +0000 (UTC)
+	with ESMTP id bcIqO1QlG3f3; Sun, 25 Feb 2024 08:02:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 06D2A40734
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E675740734
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 06D2A40734;
-	Sun, 25 Feb 2024 08:02:49 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A1D1C1BF232
- for <buildroot@lists.busybox.net>; Sun, 25 Feb 2024 08:02:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E675740734;
+	Sun, 25 Feb 2024 08:02:52 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 54F2D1BF232
+ for <buildroot@lists.busybox.net>; Sun, 25 Feb 2024 08:02:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8FB5F6080F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5B5C340717
  for <buildroot@lists.busybox.net>; Sun, 25 Feb 2024 08:02:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id v22zJaNkGPg9 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gYxfp-_SN9Wk for <buildroot@lists.busybox.net>;
  Sun, 25 Feb 2024 08:02:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 938A36064A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7279740719
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 938A36064A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7279740719
  for <buildroot@buildroot.org>; Sun, 25 Feb 2024 08:02:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8061187A90; Sun, 25 Feb 2024 08:02:41 +0000 (UTC)
+ id 591B387A8C; Sun, 25 Feb 2024 08:02:41 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 25 Feb 2024 08:53:34 +0100
+Date: Sun, 25 Feb 2024 08:44:22 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 044752f5631a6fdb330ad57b8c8a5827c6b2bc86
-X-Git-Newrev: bedcd1cd39c7654d1243e2cb0f4a68870f67782c
+X-Git-Oldrev: 4350d485a441b31ebb1ccb5124f081fda9104132
+X-Git-Newrev: 9047058cd8addca8aedf274f2836f1f639c27eef
 X-Patchwork-Hint: ignore
-Message-Id: <20240225080241.8061187A90@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libcurl: fix libpsl static build
+Message-Id: <20240225080241.591B387A8C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: add sox runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,159 +64,108 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bedcd1cd39c7654d1243e2cb0f4a68870f67782c
+commit: https://git.buildroot.net/buildroot/commit/?id=9047058cd8addca8aedf274f2836f1f639c27eef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following static build failure with libpsl raised since bump to
-version 8.6.0 in commit 5cee6b6be6524e443012d130e09b0e6983b0ff90:
-
-configure:28830: /home/autobuild/autobuild/instance-6/output-1/host/bin/aarch64_be-buildroot-linux-musl-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -O3 -g0 -static -Werror-implicit-function-declaration -Wno-system-headers -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -I/home/autobuild/autobuild/instance-6/output-1/host/aarch64_be-buildroot-linux-musl/sysroot/usr/include  -static -L/home/autobuild/autobuild/instance-6/output-1/host/bin/../aarch64_be-buildroot-linux-musl/sysroot/usr/lib  -L/home/autobuild/autobuild/instance-6/output-1/host/aarch64_be-buildroot-linux-musl/sysroot/usr/lib conftest.c -lpsl  -lmbedtls -lmbedx509 -lmbedcrypto -lz  -latomic >&5
-/home/autobuild/autobuild/instance-6/output-1/host/lib/gcc/aarch64_be-buildroot-linux-musl/11.4.0/../../../../aarch64_be-buildroot-linux-musl/bin/ld: /home/autobuild/autobuild/instance-6/output-1/host/bin/../aarch64_be-buildroot-linux-musl/sysroot/usr/lib/libpsl.a(psl.c.o): in function `is_public_suffix':
-psl.c:(.text+0x2a8): undefined reference to `idn2_lookup_u8'
-
-[...]
-
-checking for library containing psl_builtin... no
-configure: error: libpsl was not found
-
-Fixes: 5cee6b6be6524e443012d130e09b0e6983b0ff90
- - http://autobuild.buildroot.org/results/1fb15e1a99472c403d0d3b1a688902f32e78d002
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-configure.ac-find-libpsl-with-pkg-config.patch | 109 +++++++++++++++++++++
- package/libcurl/libcurl.mk                         |   2 +
- 2 files changed, 111 insertions(+)
+ DEVELOPERS                                |  1 +
+ support/testing/tests/package/test_sox.py | 74 +++++++++++++++++++++++++++++++
+ 2 files changed, 75 insertions(+)
 
-diff --git a/package/libcurl/0001-configure.ac-find-libpsl-with-pkg-config.patch b/package/libcurl/0001-configure.ac-find-libpsl-with-pkg-config.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0f065bfafb..0bfe91f064 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1849,6 +1849,7 @@ F:	support/testing/tests/package/test_rdma_core.py
+ F:	support/testing/tests/package/test_rdma_core/
+ F:	support/testing/tests/package/test_screen.py
+ F:	support/testing/tests/package/test_sed.py
++F:	support/testing/tests/package/test_sox.py
+ F:	support/testing/tests/package/test_sqlite.py
+ F:	support/testing/tests/package/test_strace.py
+ F:	support/testing/tests/package/test_stress_ng.py
+diff --git a/support/testing/tests/package/test_sox.py b/support/testing/tests/package/test_sox.py
 new file mode 100644
-index 0000000000..46df1e36a2
+index 0000000000..74f784a36f
 --- /dev/null
-+++ b/package/libcurl/0001-configure.ac-find-libpsl-with-pkg-config.patch
-@@ -0,0 +1,109 @@
-+From 9b3f67e267d1fa8d7867655d133bdbf8830a0ab3 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 15 Feb 2024 20:59:25 +0100
-+Subject: [PATCH] configure.ac: find libpsl with pkg-config
++++ b/support/testing/tests/package/test_sox.py
+@@ -0,0 +1,74 @@
++import math
++import os
 +
-+Find libpsl with pkg-config to avoid static build failures.
++import infra.basetest
 +
-+Ref: http://autobuild.buildroot.org/results/1fb15e1a99472c403d0d3b1a688902f32e78d002
 +
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Closes #12947
++class TestSox(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_AUBIO=y
++        BR2_PACKAGE_SOX=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
 +
-+Upstream: https://github.com/curl/curl/commit/9b3f67e267d1fa8d7867655d133bdbf8830a0ab3
-+---
-+ configure.ac | 79 ++++++++++++++++++++++++++++++++++++++++++++--------
-+ docs/TODO    |  7 -----
-+ 2 files changed, 67 insertions(+), 19 deletions(-)
++    def note_from_freq(self, freq):
++        """Return a note number from the input frequency in Hertz."""
++        return round((12 * math.log(freq / 440) / math.log(2)) + 69)
 +
-+diff --git a/configure.ac b/configure.ac
-+index cd0e2d07d8d164..09d5364f4de575 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -2075,19 +2075,74 @@ dnl **********************************************************************
-+ dnl Check for libpsl
-+ dnl **********************************************************************
-+ 
-+-AC_ARG_WITH(libpsl,
-+-           AS_HELP_STRING([--without-libpsl],
-+-           [disable support for libpsl]),
-+-           with_libpsl=$withval,
-+-           with_libpsl=yes)
-+-curl_psl_msg="no      (libpsl disabled)"
-+-if test $with_libpsl != "no"; then
-+-  AC_SEARCH_LIBS(psl_builtin, psl,
-+-    [curl_psl_msg="enabled";
-+-     AC_DEFINE([USE_LIBPSL], [1], [PSL support enabled])
-+-     ],
-+-    [AC_MSG_ERROR([libpsl was not found]) ]
-++dnl Default to compiler & linker defaults for LIBPSL files & libraries.
-++OPT_LIBPSL=off
-++AC_ARG_WITH(libpsl,dnl
-++AS_HELP_STRING([--with-libpsl=PATH],[Where to look for libpsl, PATH points to the LIBPSL installation; when possible, set the PKG_CONFIG_PATH environment variable instead of using this option])
-++AS_HELP_STRING([--without-libpsl], [disable LIBPSL]),
-++  OPT_LIBPSL=$withval)
-++
-++if test X"$OPT_LIBPSL" != Xno; then
-++  dnl backup the pre-libpsl variables
-++  CLEANLDFLAGS="$LDFLAGS"
-++  CLEANCPPFLAGS="$CPPFLAGS"
-++  CLEANLIBS="$LIBS"
-++
-++  case "$OPT_LIBPSL" in
-++  yes)
-++    dnl --with-libpsl (without path) used
-++    CURL_CHECK_PKGCONFIG(libpsl)
-++
-++    if test "$PKGCONFIG" != "no" ; then
-++      LIB_PSL=`$PKGCONFIG --libs-only-l libpsl`
-++      LD_PSL=`$PKGCONFIG --libs-only-L libpsl`
-++      CPP_PSL=`$PKGCONFIG --cflags-only-I libpsl`
-++    else
-++      dnl no libpsl pkg-config found
-++      LIB_PSL="-lpsl"
-++    fi
-++
-++    ;;
-++  off)
-++    dnl no --with-libpsl option given, just check default places
-++    LIB_PSL="-lpsl"
-++    ;;
-++  *)
-++    dnl use the given --with-libpsl spot
-++    LIB_PSL="-lpsl"
-++    PREFIX_PSL=$OPT_LIBPSL
-++    ;;
-++  esac
-++
-++  dnl if given with a prefix, we set -L and -I based on that
-++  if test -n "$PREFIX_PSL"; then
-++    LD_PSL=-L${PREFIX_PSL}/lib$libsuff
-++    CPP_PSL=-I${PREFIX_PSL}/include
-++  fi
-++
-++  LDFLAGS="$LDFLAGS $LD_PSL"
-++  CPPFLAGS="$CPPFLAGS $CPP_PSL"
-++  LIBS="$LIB_PSL $LIBS"
-++
-++  AC_CHECK_LIB(psl, psl_builtin,
-++    [
-++     AC_CHECK_HEADERS(libpsl.h,
-++        curl_psl_msg="enabled"
-++        LIBPSL_ENABLED=1
-++        AC_DEFINE(USE_LIBPSL, 1, [if libpsl is in use])
-++        AC_SUBST(USE_LIBPSL, [1])
-++     )
-++    ],
-++      dnl not found, revert back to clean variables
-++      LDFLAGS=$CLEANLDFLAGS
-++      CPPFLAGS=$CLEANCPPFLAGS
-++      LIBS=$CLEANLIBS
-+   )
-++
-++  if test X"$OPT_LIBPSL" != Xoff &&
-++     test "$LIBPSL_ENABLED" != "1"; then
-++    AC_MSG_ERROR([libpsl libs and/or directories were not found where specified!])
-++  fi
-+ fi
-+ AM_CONDITIONAL([USE_LIBPSL], [test "$curl_psl_msg" = "enabled"])
-+ 
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 9dafe90c82..4281cfabb1 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -14,6 +14,8 @@ LIBCURL_LICENSE = curl
- LIBCURL_LICENSE_FILES = COPYING
- LIBCURL_CPE_ID_VENDOR = haxx
- LIBCURL_INSTALL_STAGING = YES
-+# 0001-configure.ac-find-libpsl-with-pkg-config.patch
-+LIBCURL_AUTORECONF = YES
- 
- # We disable NTLM delegation to winbinds ntlm_auth ('--disable-ntlm-wb')
- # support because it uses fork(), which doesn't work on non-MMU platforms.
++    def check_audio_note(self, input_file, expected_note):
++        """Check the input_file include the expected_note."""
++        out, ret = self.emulator.run(f"aubionotes {input_file}", timeout=20)
++        self.assertEqual(ret, 0)
++        note_found = False
++        for line in out:
++            values = line.split()
++            if len(values) == 3:
++                note = round(float(values[0]))
++                if note == expected_note:
++                    note_found = True
++        self.assertTrue(note_found, "The expected note was not found")
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        # Check the program can execute.
++        self.assertRunOk("sox --version")
++
++        freq = 440  # General Midi note A3
++        expected_note = self.note_from_freq(freq)
++        wav_file = "ref.wav"
++        tmpwav_file = "tmp.wav"
++
++        # Generate a sinusoidal tone.
++        cmd = "sox -V -r 48000 -n -b 16 -c 1"
++        cmd += f" {wav_file} synth 3 sin {freq} vol -10dB"
++        self.assertRunOk(cmd)
++
++        # Compute statistics on the generated file.
++        self.assertRunOk(f"sox {wav_file} -n stat")
++
++        # We check the generated wave file includes the expected note.
++        self.check_audio_note(wav_file, expected_note)
++
++        # We resample the reference file.
++        cmd = f"sox -V {wav_file} -r 22050 {tmpwav_file}"
++        self.assertRunOk(cmd)
++
++        # We should still detect our expected note.
++        self.check_audio_note(tmpwav_file, expected_note)
++
++        # We convert the file by changing the speed by a factor.
++        speed_factor = 2
++        cmd = f"sox -V {wav_file} {tmpwav_file} speed {speed_factor}"
++        self.assertRunOk(cmd)
++
++        # We compute the new expected note from this test controller
++        # side, and check we detect this new note in the audio file.
++        new_expected_note = self.note_from_freq(freq * speed_factor)
++        self.check_audio_note(tmpwav_file, new_expected_note)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
