@@ -4,60 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97713C54798
-	for <buildroot@archiver.kernel.org>; Sun, 25 Feb 2024 07:49:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05BFFC47DD9
+	for <buildroot@archiver.kernel.org>; Sun, 25 Feb 2024 07:53:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 12CC340688;
-	Sun, 25 Feb 2024 07:49:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B6D54406B0;
+	Sun, 25 Feb 2024 07:53:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FE8qh0gfC3Fx; Sun, 25 Feb 2024 07:49:17 +0000 (UTC)
+	with ESMTP id 5H5qECVQkFWh; Sun, 25 Feb 2024 07:53:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2545240699
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE33E406C8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2545240699;
-	Sun, 25 Feb 2024 07:49:17 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 316C91BF20D
- for <buildroot@lists.busybox.net>; Sun, 25 Feb 2024 07:49:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BE33E406C8;
+	Sun, 25 Feb 2024 07:53:07 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 191841BF20D
+ for <buildroot@lists.busybox.net>; Sun, 25 Feb 2024 07:53:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1E5E781F4D
- for <buildroot@lists.busybox.net>; Sun, 25 Feb 2024 07:49:16 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1115E405CC
+ for <buildroot@lists.busybox.net>; Sun, 25 Feb 2024 07:53:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GuWwxg0-G0Q4 for <buildroot@lists.busybox.net>;
- Sun, 25 Feb 2024 07:49:15 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
- helo=relay3-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vrcx6sfVqAHn for <buildroot@lists.busybox.net>;
+ Sun, 25 Feb 2024 07:53:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
+ helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3FB2081F47
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3FB2081F47
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3FB2081F47
- for <buildroot@buildroot.org>; Sun, 25 Feb 2024 07:49:14 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 20D5F60002;
- Sun, 25 Feb 2024 07:48:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A9518400A4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A9518400A4
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A9518400A4
+ for <buildroot@buildroot.org>; Sun, 25 Feb 2024 07:53:04 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DEDDF240002;
+ Sun, 25 Feb 2024 07:53:00 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1re9Fl-00E1zo-0q;
- Sun, 25 Feb 2024 08:48:53 +0100
+ (envelope-from <peter@korsgaard.com>) id 1re9Jk-00E29n-1W;
+ Sun, 25 Feb 2024 08:53:00 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Ahmad Fatoum <a.fatoum@pengutronix.de>
-References: <20240219210628.407423-1-a.fatoum@pengutronix.de>
-Date: Sun, 25 Feb 2024 08:48:53 +0100
-In-Reply-To: <20240219210628.407423-1-a.fatoum@pengutronix.de> (Ahmad Fatoum's
- message of "Mon, 19 Feb 2024 22:06:28 +0100")
-Message-ID: <871q91t256.fsf@48ers.dk>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20240224214601.680607-1-fontaine.fabrice@gmail.com>
+Date: Sun, 25 Feb 2024 08:53:00 +0100
+In-Reply-To: <20240224214601.680607-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 24 Feb 2024 22:46:01 +0100")
+Message-ID: <87wmqtrndv.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH] boot/barebox: install all barebox images if
- none were specified
+Subject: Re: [Buildroot] [PATCH 1/1] package/redis-plus-plus: needs threads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,39 +68,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: barebox@lists.infradead.org, buildroot@buildroot.org
+Cc: Prabhu Sannachi <prabhu.sannachi@collins.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Ahmad" == Ahmad Fatoum <a.fatoum@pengutronix.de> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > When selecting barebox in menuconfig, BR2_TARGET_BAREBOX_IMAGE_FILE will
- > be empty by default, which causes Buildroot to install whatever the
- > barebox-flash-image symlink points at for barebox versions >= v2012.10.0.
+ > redis-plus-plus unconditonally uses mutex and so needs threads since its
+ > addition in commit c46df9de21e718a9ed6a2df2bb945c386695d3bf and
+ > https://github.com/sewenew/redis-plus-plus/commit/1fa8f6bbfb24c8f328aa23ee1dd3c3f99c1b4caf:
 
- > This is an outdated fallback, because barebox-flash-image is only valid
- > when the barebox build produces a single binary. Virtually all new
- > defconfigs added in the last couple of years are multiconfig
- > (CONFIG_PBL_IMAGE=y) however, meaning that a single imx_v7_defconfig
- > or multi_v8_defconfig will produce many images that support different
- > boards or even platforms.
+ > In file included from /home/autobuild/autobuild/instance-5/output-1/build/redis-plus-plus-1.3.10/src/sw/redis++/connection_pool.h:27,
+ >                  from /home/autobuild/autobuild/instance-5/output-1/build/redis-plus-plus-1.3.10/src/sw/redis++/connection_pool.cpp:17:
+ > /home/autobuild/autobuild/instance-5/output-1/build/redis-plus-plus-1.3.10/src/sw/redis++/sentinel.h:95:10: error: 'mutex' in namespace 'std' does not name a type
+ >    95 |     std::mutex _mutex;
+ >       |          ^~~~~
 
- > As there is no single valid target for barebox-flash-image to point at
- > in this case, this symlink will point at a non-existing
- > 'multi-image-build' to alert the user to this fact.
+ > Fixes: c46df9de21e718a9ed6a2df2bb945c386695d3bf
+ >  - http://autobuild.buildroot.org/results/cc4c54134e8a522b4c028aab4266f47cf862e2a9
 
- > As replacement for barebox-flash-image, barebox commit 550cf79c216a
- > ("Make list of flash images and fix link all single image cases") first
- > released with v2015.12.0 creates a barebox-flash-images file with a list
- > of all images built by barebox.
-
- > Have buildroot use that file as a fallback before trying
- > barebox-flash-image to have a fallback that works for any recent barebox
- > defconfig as well.
-
- > Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
