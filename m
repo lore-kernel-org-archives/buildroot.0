@@ -4,91 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40F6AC54E4A
-	for <buildroot@archiver.kernel.org>; Mon, 26 Feb 2024 17:32:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CEFA2C48BF6
+	for <buildroot@archiver.kernel.org>; Mon, 26 Feb 2024 17:36:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BA50A60815;
-	Mon, 26 Feb 2024 17:32:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 87CC260AF9;
+	Mon, 26 Feb 2024 17:36:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 30_0Y_19bMwL; Mon, 26 Feb 2024 17:32:13 +0000 (UTC)
+	with ESMTP id QD5H6PAdP0DZ; Mon, 26 Feb 2024 17:36:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C465160AC5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3DCC60B1E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C465160AC5;
-	Mon, 26 Feb 2024 17:32:13 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2C5F91BF3E9
- for <buildroot@lists.busybox.net>; Mon, 26 Feb 2024 17:32:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A3DCC60B1E;
+	Mon, 26 Feb 2024 17:36:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B9BE51BF3E9
+ for <buildroot@lists.busybox.net>; Mon, 26 Feb 2024 17:36:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1A23C60AC5
- for <buildroot@lists.busybox.net>; Mon, 26 Feb 2024 17:32:12 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B425781A12
+ for <buildroot@lists.busybox.net>; Mon, 26 Feb 2024 17:36:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nzIA9vVb4llf for <buildroot@lists.busybox.net>;
- Mon, 26 Feb 2024 17:32:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id szosRtMxBNc3 for <buildroot@lists.busybox.net>;
+ Mon, 26 Feb 2024 17:36:52 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
+ client-ip=2a00:1450:4864:20::536; helo=mail-ed1-x536.google.com;
  envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1A7D260815
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A7D260815
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1A7D260815
- for <buildroot@buildroot.org>; Mon, 26 Feb 2024 17:32:10 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id
- 5b1f17b1804b1-412a4848f0dso8755375e9.1
- for <buildroot@buildroot.org>; Mon, 26 Feb 2024 09:32:10 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 96F3081B48
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96F3081B48
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
+ [IPv6:2a00:1450:4864:20::536])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 96F3081B48
+ for <buildroot@buildroot.org>; Mon, 26 Feb 2024 17:36:51 +0000 (UTC)
+Received: by mail-ed1-x536.google.com with SMTP id
+ 4fb4d7f45d1cf-5643eccad0bso5234226a12.1
+ for <buildroot@buildroot.org>; Mon, 26 Feb 2024 09:36:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1708968728; x=1709573528;
+ d=1e100.net; s=20230601; t=1708969008; x=1709573808;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=mPYTrZn30f+prNNJXmWIaCEiEJWb80EuNovEqLJLdow=;
- b=NnCKBi8GUvbN22vPdvvGpWfRO48RemrRu3KWxosQQUjn6GSK3HpzA5zrJyfwhm1tVH
- g3W3Qal2M7KCicvptNamPFc85oKBma7jfQXMNtAzpr4se0jMeHcbkTb30hmvzRxOs0ql
- vPtd520T32HcOcM8wgBLL6FIVql9/UBU5vxTiOMrPdm7NpCrW/uAnuC1wUQ9oCOH/Caz
- RSOmNV+80Cboj213+Lq8+GgdMhq5jSOTIFCLFRxctsKoE0rwaS+aG/Zdody4Ph0AE1tc
- 7gk3nUCReoTMEYvr3H34GXHivio55j8CZCTdMHteYgThaR0BzeMGC/o9U6PgPQORdlFg
- FmrA==
-X-Gm-Message-State: AOJu0YwAiksar8PF/OMEtjn9mhtVo0/baBhyLBP8Q7eYtyVMqE5izcaq
- K3udLs+/npdLcoA1eyvaJAYCk7DdgxOu+DNqS1Fk5U0b1z0bod8N9/V/aoZS
-X-Google-Smtp-Source: AGHT+IF5cyX5E0EtY0emJF5gRKxEQelwNOuwQIgMqDokF+n8me9swRPkcgCmTAjMlCycAmLnbW18Xg==
-X-Received: by 2002:a05:600c:3152:b0:412:9645:c4c7 with SMTP id
- h18-20020a05600c315200b004129645c4c7mr5452900wmo.19.1708968727935; 
- Mon, 26 Feb 2024 09:32:07 -0800 (PST)
+ bh=nBmQwQTYz9KmTXeubZxmfo1P6OPfnkAlaUWAuYesRZo=;
+ b=qHdrHGvkRngDS8ZkS7Sj8Xj5bXOagx3NBboj4amJP5G6fMiT4g8q3wLD+wciqhvhSU
+ mU6FWS1j+L88VAu8MjHUgWTQov66tHeBVwxGKQDsB2FjiP9jKMPRj4lYMlq4qny1RKVh
+ pIO5MV0WhohkGybDhaycRBIxBoY3m5UO0p9P0rjOudeMxiMXn7Zs2myHGODqvEGMXLzE
+ L1EGZQQgkMnG48pK6c+d74Bw1JgTJTwZB9ZDJauEEOrL/7owne/Clbirq7AJyAXY120G
+ IgisC3gzNBZK4qc3bdSgwaIu2lPEyUZArn/Z+6H+15oB5LwcxZtOfAwj6OUxPcyfTRGg
+ iAFg==
+X-Gm-Message-State: AOJu0YyHTIPunnkbu71jTA7L3cxe0uHo5J2QJtKBz7MYbp786FKbj8zM
+ z5EHm6M0KHFqu38cWydoL1o5VdsfZxuAvNJBfZP6y1fgDCh4RFh2BAflUruN
+X-Google-Smtp-Source: AGHT+IHsqBz1rS5PFPjDSpc4k6A7eiIfa4UOsTygqnz1Ikb4S3afhLemfUpWWTNDZMAClTgc2uf4Hg==
+X-Received: by 2002:a17:906:d96c:b0:a43:4ddb:a9cd with SMTP id
+ rp12-20020a170906d96c00b00a434ddba9cdmr2547894ejb.37.1708969008391; 
+ Mon, 26 Feb 2024 09:36:48 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- n37-20020a05600c3ba500b004126ca2a1cbsm13043094wms.48.2024.02.26.09.32.07
+ l9-20020a170906078900b00a3d99dc3f3asm2580119ejc.67.2024.02.26.09.36.47
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 26 Feb 2024 09:32:07 -0800 (PST)
+ Mon, 26 Feb 2024 09:36:47 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 26 Feb 2024 18:32:02 +0100
-Message-ID: <20240226173202.1032744-1-fontaine.fabrice@gmail.com>
+Date: Mon, 26 Feb 2024 18:36:44 +0100
+Message-ID: <20240226173644.1077579-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1708968728; x=1709573528; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1708969008; x=1709573808; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=mPYTrZn30f+prNNJXmWIaCEiEJWb80EuNovEqLJLdow=;
- b=kuHcqwoR+7w9ANYTwAhLxJ40YOqxKRjH5ebR4M/MdvTGUq0SqxtDGiMJOoC1khhE9+
- bAspVuvS4JO5mfacjv8skG4ylVaAmPdXm15nUneNBANxuHh8OHzhZ0l14LU5TlEDM7a+
- nf8f6kCiDTmR9ZxZLj+SkOqyVXD6CRRP9wZ/WpbrBBfE5swOahJRH1J3BLOMCB1E4cnL
- cCgqa1+CBljF1YxI3ocGM24ZsZiico+CvJiAIhyomdN74Lp+srHDYNX23nl4OrC+zRqk
- 37pu+fzrgZRalw9CGaUINhozlgQHOq0WvcsA5tLXhgJVFpEd2NXUdg01hbhO4BnRWCRg
- Liow==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=nBmQwQTYz9KmTXeubZxmfo1P6OPfnkAlaUWAuYesRZo=;
+ b=gTugzEaHmcSDvx/jfKdLgoK0m89g2DSDCWX97rNTuRnoLPCmmFphr0WJITxWywt/l2
+ 20eSYmmI9ufamauA7guOtKtIl5/85Sm8PtvKc3tjVlMwcfzfE7CLGgHaOWDKj/Z/lBoH
+ qeIKkUz67AZ3YcqNFwfJ4KtReKrz5vWK6mpqx0yVKEJssYtbKeWVObDEanqG1C5qYq8e
+ /HVHJ2Dnim0qJlWQPYvVk3JrpCvIBeGda8znpLivX6YiUqhtRN42fd97rv75F1qRcMvw
+ OjxLtMAB+PnSV8m0/WIwPnar34K6dYCCPj5qeETfMKr1PfRGMCLxIKaQX8H9N6EmrnuQ
+ xipw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=kuHcqwoR
-Subject: [Buildroot] [PATCH 1/1] package/poco: bump to version 1.13.2
+ header.s=20230601 header.b=gTugzEaH
+Subject: [Buildroot] [PATCH 1/1] package/erlang: fix build with autoconf 2.72
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,55 +100,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Will Newton <will.newton@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This bump will fix the following build failure raised since bump of
-expat to version 2.6.0 in commit
-9dad5e7d7f7bc03e648621b9be6974e7ae39a467 thanks to
-https://github.com/pocoproject/poco/commit/75f7042b70092e79c6b770b18d033a061c84e2c5:
+Use ERLANG_FIX_AUTOCONF_VERSION to fix the following build failure
+raised since bump of autoconf to version 2.72 in commit
+524f3536029dace3ce9aa154d3ca4685582e1955:
 
-src/ParserEngine.cpp: In member function 'void Poco::XML::ParserEngine::init()':
-src/ParserEngine.cpp:510:17: error: 'XML_SetBillionLaughsAttackProtectionMaximumAmplification' was not declared in this scope; did you mean 'setBillionLaughsAttackProtectionMaximumAmplification'?
-  510 |                 XML_SetBillionLaughsAttackProtectionMaximumAmplification(_parser, _maximumAmplificationFactor);
-      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ERROR: autoconf of version 2.72 found in path! You need to have autoconf of version 2.71 in path.
 
-https://github.com/pocoproject/poco/blob/poco-1.13.2-release/CHANGELOG
-
-Fixes: 9dad5e7d7f7bc03e648621b9be6974e7ae39a467
- - http://autobuild.buildroot.org/results/7fad881f85d3b89abdee35388088965f05ead277
+Fixes: 524f3536029dace3ce9aa154d3ca4685582e1955
+ - http://autobuild.buildroot.org/results/c9e8df3427fca9e8e75488e32bca18e81009238c
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/poco/poco.hash | 2 +-
- package/poco/poco.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/erlang/erlang.mk | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/package/poco/poco.hash b/package/poco/poco.hash
-index 9a7981171a..0a1e900b3f 100644
---- a/package/poco/poco.hash
-+++ b/package/poco/poco.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  71ef96c35fced367d6da74da294510ad2c912563f12cd716ab02b6ed10a733ef  poco-1.12.4.tar.gz
-+sha256  c01221870aa9bccedf1de39890279699207848fe61a0cfb6aeec7c5942c4627f  poco-1.13.2.tar.gz
- sha256  c4b1e1e5f36d8331737231fefcc30f5714326aec7c387ad59a8115eb0ba7d6b5  LICENSE
-diff --git a/package/poco/poco.mk b/package/poco/poco.mk
-index 2d0233a8ce..f8c2a658de 100644
---- a/package/poco/poco.mk
-+++ b/package/poco/poco.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
+index 1600b59381..84d2f4e898 100644
+--- a/package/erlang/erlang.mk
++++ b/package/erlang/erlang.mk
+@@ -17,14 +17,22 @@ ERLANG_CPE_ID_VENDOR = erlang
+ ERLANG_CPE_ID_PRODUCT = erlang\/otp
+ ERLANG_INSTALL_STAGING = YES
  
--POCO_VERSION = 1.12.4
-+POCO_VERSION = 1.13.2
- POCO_SITE = $(call github,pocoproject,poco,poco-$(POCO_VERSION)-release)
- POCO_LICENSE = BSL-1.0
- POCO_LICENSE_FILES = LICENSE
++define ERLANG_FIX_AUTOCONF_VERSION
++	$(SED) "s/USE_AUTOCONF_VERSION=.*/USE_AUTOCONF_VERSION=$(AUTOCONF_VERSION)/" $(@D)/otp_build
++endef
++
+ # Patched erts/aclocal.m4
+ define ERLANG_RUN_AUTOCONF
+ 	cd $(@D) && PATH=$(BR_PATH) ./otp_build update_configure --no-commit
+ endef
+ ERLANG_DEPENDENCIES += host-autoconf
+-ERLANG_PRE_CONFIGURE_HOOKS += ERLANG_RUN_AUTOCONF
++ERLANG_PRE_CONFIGURE_HOOKS += \
++	ERLANG_FIX_AUTOCONF_VERSION \
++	ERLANG_RUN_AUTOCONF
+ HOST_ERLANG_DEPENDENCIES += host-autoconf
+-HOST_ERLANG_PRE_CONFIGURE_HOOKS += ERLANG_RUN_AUTOCONF
++HOST_ERLANG_PRE_CONFIGURE_HOOKS += \
++	ERLANG_FIX_AUTOCONF_VERSION \
++	ERLANG_RUN_AUTOCONF
+ 
+ # Return the EIV (Erlang Interface Version, EI_VSN)
+ # $(1): base directory, i.e. either $(HOST_DIR) or $(STAGING_DIR)/usr
 -- 
 2.43.0
 
