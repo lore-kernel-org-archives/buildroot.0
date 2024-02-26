@@ -4,91 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CEFA2C48BF6
-	for <buildroot@archiver.kernel.org>; Mon, 26 Feb 2024 17:36:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BFEFC5478C
+	for <buildroot@archiver.kernel.org>; Mon, 26 Feb 2024 20:35:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 87CC260AF9;
-	Mon, 26 Feb 2024 17:36:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 321F460A8D;
+	Mon, 26 Feb 2024 20:35:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QD5H6PAdP0DZ; Mon, 26 Feb 2024 17:36:53 +0000 (UTC)
+	with ESMTP id vh5rp7wq6xnr; Mon, 26 Feb 2024 20:35:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3DCC60B1E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B029605E8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A3DCC60B1E;
-	Mon, 26 Feb 2024 17:36:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6B029605E8;
+	Mon, 26 Feb 2024 20:35:47 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B9BE51BF3E9
- for <buildroot@lists.busybox.net>; Mon, 26 Feb 2024 17:36:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6BECA1BF271
+ for <buildroot@lists.busybox.net>; Mon, 26 Feb 2024 20:35:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B425781A12
- for <buildroot@lists.busybox.net>; Mon, 26 Feb 2024 17:36:52 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5928E8151E
+ for <buildroot@lists.busybox.net>; Mon, 26 Feb 2024 20:35:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id szosRtMxBNc3 for <buildroot@lists.busybox.net>;
- Mon, 26 Feb 2024 17:36:52 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::536; helo=mail-ed1-x536.google.com;
- envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 96F3081B48
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96F3081B48
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
- [IPv6:2a00:1450:4864:20::536])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 96F3081B48
- for <buildroot@buildroot.org>; Mon, 26 Feb 2024 17:36:51 +0000 (UTC)
-Received: by mail-ed1-x536.google.com with SMTP id
- 4fb4d7f45d1cf-5643eccad0bso5234226a12.1
- for <buildroot@buildroot.org>; Mon, 26 Feb 2024 09:36:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1708969008; x=1709573808;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=nBmQwQTYz9KmTXeubZxmfo1P6OPfnkAlaUWAuYesRZo=;
- b=qHdrHGvkRngDS8ZkS7Sj8Xj5bXOagx3NBboj4amJP5G6fMiT4g8q3wLD+wciqhvhSU
- mU6FWS1j+L88VAu8MjHUgWTQov66tHeBVwxGKQDsB2FjiP9jKMPRj4lYMlq4qny1RKVh
- pIO5MV0WhohkGybDhaycRBIxBoY3m5UO0p9P0rjOudeMxiMXn7Zs2myHGODqvEGMXLzE
- L1EGZQQgkMnG48pK6c+d74Bw1JgTJTwZB9ZDJauEEOrL/7owne/Clbirq7AJyAXY120G
- IgisC3gzNBZK4qc3bdSgwaIu2lPEyUZArn/Z+6H+15oB5LwcxZtOfAwj6OUxPcyfTRGg
- iAFg==
-X-Gm-Message-State: AOJu0YyHTIPunnkbu71jTA7L3cxe0uHo5J2QJtKBz7MYbp786FKbj8zM
- z5EHm6M0KHFqu38cWydoL1o5VdsfZxuAvNJBfZP6y1fgDCh4RFh2BAflUruN
-X-Google-Smtp-Source: AGHT+IHsqBz1rS5PFPjDSpc4k6A7eiIfa4UOsTygqnz1Ikb4S3afhLemfUpWWTNDZMAClTgc2uf4Hg==
-X-Received: by 2002:a17:906:d96c:b0:a43:4ddb:a9cd with SMTP id
- rp12-20020a170906d96c00b00a434ddba9cdmr2547894ejb.37.1708969008391; 
- Mon, 26 Feb 2024 09:36:48 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- l9-20020a170906078900b00a3d99dc3f3asm2580119ejc.67.2024.02.26.09.36.47
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 26 Feb 2024 09:36:47 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ with ESMTP id 8uJ7LoA7sftr for <buildroot@lists.busybox.net>;
+ Mon, 26 Feb 2024 20:35:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2B90A81517
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B90A81517
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2B90A81517
+ for <buildroot@buildroot.org>; Mon, 26 Feb 2024 20:35:43 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:cb16:2077:13b7:ce5e:758a:d84c:e478])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 06CBC7804FD;
+ Mon, 26 Feb 2024 21:35:38 +0100 (CET)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 26 Feb 2024 18:36:44 +0100
-Message-ID: <20240226173644.1077579-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Date: Mon, 26 Feb 2024 21:35:32 +0100
+Message-ID: <20240226203532.12112-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.43.2
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1708969008; x=1709573808; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=nBmQwQTYz9KmTXeubZxmfo1P6OPfnkAlaUWAuYesRZo=;
- b=gTugzEaHmcSDvx/jfKdLgoK0m89g2DSDCWX97rNTuRnoLPCmmFphr0WJITxWywt/l2
- 20eSYmmI9ufamauA7guOtKtIl5/85Sm8PtvKc3tjVlMwcfzfE7CLGgHaOWDKj/Z/lBoH
- qeIKkUz67AZ3YcqNFwfJ4KtReKrz5vWK6mpqx0yVKEJssYtbKeWVObDEanqG1C5qYq8e
- /HVHJ2Dnim0qJlWQPYvVk3JrpCvIBeGda8znpLivX6YiUqhtRN42fd97rv75F1qRcMvw
- OjxLtMAB+PnSV8m0/WIwPnar34K6dYCCPj5qeETfMKr1PfRGMCLxIKaQX8H9N6EmrnuQ
- xipw==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1708979740;
+ bh=ssA7O/8L4aPzDwPHS6KIHJqdF2GDQMGOGgL0LbDH5co=;
+ h=From:To:Cc:Subject:Date:From;
+ b=hv7EQBnIl99PxmJa+PzYrdAXaWKIgrZMiXlFsnERYXMrajL+8k3LxAML7ltdCBCxk
+ IN0FbYJeY86UZh+bHSDIk0/ZFJbYsQFwI7XKaMRyYeSmus2FTMt4RdxFK6YA9w/6EE
+ yBzq2OY4vwsQCQ4jVgQXgeGRxrLU59ryOzjarRsKsf2W/kTj07x1pvymPjpudnz+8H
+ hKQ8fMop4zM+9CR87Z2mjd58BaWYVNVmMH90OmATDq8XbpKaYci4EAE3DbyLQLBMWg
+ nEJH5K/rTAUmJvc78sqlLK++ijiRPx39UVcInILkhIf54SecEE5IvXQYq23Y2ZskoO
+ mC1OFyxylY8pw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=gTugzEaH
-Subject: [Buildroot] [PATCH 1/1] package/erlang: fix build with autoconf 2.72
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=hv7EQBnI
+Subject: [Buildroot] [PATCH 1/1] package/mysql: change default
+ implementation to mariadb
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,58 +77,102 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Will Newton <will.newton@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Use ERLANG_FIX_AUTOCONF_VERSION to fix the following build failure
-raised since bump of autoconf to version 2.72 in commit
-524f3536029dace3ce9aa154d3ca4685582e1955:
+The mysql package is a virtual package with two implementations:
+oracle-mysql (the initial project), and mariadb (the fork of mysql).
+This virtual package was introduced in commit [1] (2016).
 
-ERROR: autoconf of version 2.72 found in path! You need to have autoconf of version 2.71 in path.
+The last version bump of oracle-mysql was in commit [2] (2014). This
+mysql version 5.1.73 dates from 2013 [3].
 
-Fixes: 524f3536029dace3ce9aa154d3ca4685582e1955
- - http://autobuild.buildroot.org/results/c9e8df3427fca9e8e75488e32bca18e81009238c
+Package statistics at [4] reports 177 CVEs on this oracle-mysql
+version (as of Buildroot tag 2024.02-rc1).
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Finally, oracle-mysql has 12 package patches accumulated over the time
+and there is nobody registered in the DEVELOPER file for it.
+
+On the other hand, the Buildroot mariadb package seems to be in a
+better shape: the package version is more recent, and received
+frequent updates, since its introduction.
+
+There is several packages selecting BR2_PACKAGE_MYSQL, which will use
+the old oracle-mysql without the user knowing it (other than
+generating the CVE list with "make pkg-stats").
+
+In the meantime oracle-mysql receive a major update, this commits
+changes the default implementation of the mysql virtual package from
+oracle-mysql to mariadb.
+
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/3d707d2b4fa6362cb37754f6c5fbb06240f5faf5
+[2] https://gitlab.com/buildroot.org/buildroot/-/commit/42c56751fc554503a03d4a914ce2e814eeaf5a41
+[3] https://github.com/mysql/mysql-server/releases/tag/mysql-5.1.73
+[4] http://autobuild.buildroot.org/stats/master.html
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/erlang/erlang.mk | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+Patch tested on branch master at commit 7a9ba7a with commands:
 
-diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
-index 1600b59381..84d2f4e898 100644
---- a/package/erlang/erlang.mk
-+++ b/package/erlang/erlang.mk
-@@ -17,14 +17,22 @@ ERLANG_CPE_ID_VENDOR = erlang
- ERLANG_CPE_ID_PRODUCT = erlang\/otp
- ERLANG_INSTALL_STAGING = YES
+    make check-package
+    ...
+    0 warnings generated
+
+    # Build packages using mysql
+    cat > .config <<EOF
+    BR2_aarch64=y
+    BR2_TOOLCHAIN_EXTERNAL=y
+    BR2_PER_PACKAGE_DIRECTORIES=y
+    BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
+    BR2_PACKAGE_MOTION=y
+    BR2_PACKAGE_PERL=y
+    BR2_PACKAGE_PERL_DBD_MYSQL=y
+    BR2_PACKAGE_TCL=y
+    BR2_PACKAGE_CPPDB=y
+    BR2_PACKAGE_LIBDBI_DRIVERS=y
+    BR2_PACKAGE_MARIADB_SERVER=y
+    BR2_PACKAGE_APR_UTIL=y
+    BR2_PACKAGE_POCO=y
+    BR2_PACKAGE_POCO_DATA_MYSQL=y
+    BR2_PACKAGE_DOVECOT=y
+    BR2_PACKAGE_DOVECOT_MYSQL=y
+    BR2_PACKAGE_COLLECTD=y
+    BR2_PACKAGE_COLLECTD_MYSQL=y
+    BR2_PACKAGE_FREERADIUS_SERVER=y
+    BR2_PACKAGE_GERBERA=y
+    BR2_PACKAGE_PURE_FTPD=y
+    BR2_PACKAGE_ZABBIX=y
+    BR2_PACKAGE_ZABBIX_SERVER=y
+    BR2_PACKAGE_RSYSLOG=y
+    BR2_TARGET_ROOTFS_EXT2=y
+    BR2_TARGET_ROOTFS_EXT2_4=y
+    BR2_TARGET_ROOTFS_EXT2_SIZE="500M"
+    # BR2_TARGET_ROOTFS_TAR is not set
+    EOF
+    make olddefconfig
+    make -j$(nproc)
+---
+ package/mysql/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/mysql/Config.in b/package/mysql/Config.in
+index 8942e55a455..dc9a899329f 100644
+--- a/package/mysql/Config.in
++++ b/package/mysql/Config.in
+@@ -10,7 +10,7 @@ if BR2_PACKAGE_MYSQL
  
-+define ERLANG_FIX_AUTOCONF_VERSION
-+	$(SED) "s/USE_AUTOCONF_VERSION=.*/USE_AUTOCONF_VERSION=$(AUTOCONF_VERSION)/" $(@D)/otp_build
-+endef
-+
- # Patched erts/aclocal.m4
- define ERLANG_RUN_AUTOCONF
- 	cd $(@D) && PATH=$(BR_PATH) ./otp_build update_configure --no-commit
- endef
- ERLANG_DEPENDENCIES += host-autoconf
--ERLANG_PRE_CONFIGURE_HOOKS += ERLANG_RUN_AUTOCONF
-+ERLANG_PRE_CONFIGURE_HOOKS += \
-+	ERLANG_FIX_AUTOCONF_VERSION \
-+	ERLANG_RUN_AUTOCONF
- HOST_ERLANG_DEPENDENCIES += host-autoconf
--HOST_ERLANG_PRE_CONFIGURE_HOOKS += ERLANG_RUN_AUTOCONF
-+HOST_ERLANG_PRE_CONFIGURE_HOOKS += \
-+	ERLANG_FIX_AUTOCONF_VERSION \
-+	ERLANG_RUN_AUTOCONF
+ choice
+ 	prompt "mysql variant"
+-	default BR2_PACKAGE_ORACLE_MYSQL
++	default BR2_PACKAGE_MARIADB
+ 	help
+ 	  Select either the oracle mysql server or the mariadb server
  
- # Return the EIV (Erlang Interface Version, EI_VSN)
- # $(1): base directory, i.e. either $(HOST_DIR) or $(STAGING_DIR)/usr
 -- 
-2.43.0
+2.43.2
 
 _______________________________________________
 buildroot mailing list
