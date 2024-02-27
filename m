@@ -1,103 +1,106 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F35EC54E4A
-	for <buildroot@archiver.kernel.org>; Mon, 26 Feb 2024 14:02:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34279C5478C
+	for <buildroot@archiver.kernel.org>; Tue, 27 Feb 2024 12:59:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B44F04080A;
-	Mon, 26 Feb 2024 14:02:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B596960B67;
+	Tue, 27 Feb 2024 12:59:12 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0vGKABd_uLrl; Tue, 27 Feb 2024 12:59:12 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC11060B71
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id CC11060B71;
+	Tue, 27 Feb 2024 12:59:11 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 72A8C1BF2BB
+ for <buildroot@lists.busybox.net>; Tue, 27 Feb 2024 12:59:10 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6017F408EE
+ for <buildroot@lists.busybox.net>; Tue, 27 Feb 2024 12:59:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fxctzdB_mUCR; Mon, 26 Feb 2024 14:02:30 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E9D240819
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8E9D240819;
-	Mon, 26 Feb 2024 14:02:30 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3C8CC1BF3E8
- for <buildroot@lists.busybox.net>; Mon, 26 Feb 2024 14:02:28 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 28DB840A80
- for <buildroot@lists.busybox.net>; Mon, 26 Feb 2024 14:02:28 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id udRNTy49dPLk for <buildroot@lists.busybox.net>;
- Mon, 26 Feb 2024 14:02:26 +0000 (UTC)
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AJBOBBl580uS for <buildroot@lists.busybox.net>;
+ Tue, 27 Feb 2024 12:59:09 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::632; helo=mail-ej1-x632.google.com;
- envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1F81340907
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1F81340907
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
- [IPv6:2a00:1450:4864:20::632])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1F81340907
- for <buildroot@uclibc.org>; Mon, 26 Feb 2024 14:02:25 +0000 (UTC)
-Received: by mail-ej1-x632.google.com with SMTP id
- a640c23a62f3a-a3f4464c48dso354741866b.3
- for <buildroot@uclibc.org>; Mon, 26 Feb 2024 06:02:25 -0800 (PST)
+ client-ip=2a00:1450:4864:20::129; helo=mail-lf1-x129.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C25A4408EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C25A4408EA
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com
+ [IPv6:2a00:1450:4864:20::129])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C25A4408EA
+ for <buildroot@uclibc.org>; Tue, 27 Feb 2024 12:59:08 +0000 (UTC)
+Received: by mail-lf1-x129.google.com with SMTP id
+ 2adb3069b0e04-512f89250d6so2560221e87.2
+ for <buildroot@uclibc.org>; Tue, 27 Feb 2024 04:59:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1708956143; x=1709560943;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
+ d=1e100.net; s=20230601; t=1709038746; x=1709643546;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:to:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=AY38KtjOW991VPkV/0CRG3MTSW/rAkqj58Y/htZe13o=;
- b=pL6/9770+C84P3/gN/EW7NeIbRwhZ2/gByCjZ/6aopICEKHgaFRQAsW11sPFK3E9uh
- rnMM9SN+SlVtKPMleph9MVmWA5wHWVbJfuy5+tYbFQB4+drbalMyFi+ycRCVbqdIv4jb
- KOGMeS78Tcrl/9a//hPwTvLnVCB9beT2EfvHe6C4wt5oWUN+AhNRo+2ys0ZF8ydgByM6
- EHW5cIjfMNlcuj9pqnkrYQIUaucRxWl5CHtvK71rdRZl15bwq1/7E4+I53chJXin75WT
- lGDgorc4lzigacLbmpWH3CK6MIV2pT/C9BN8SiAvW8ckd4yKNyVQXW0jUXBicnYA63HH
- JyPg==
-X-Gm-Message-State: AOJu0YzA4m12yq0C7MwREuTM57dTx4AV+kREyzhBEBLf5npNyVQ7qkL4
- ZTAvzrba+H8ljTDoOkAMzEV2QOpZSmoqAcvWXydv3MpW/rFPRA4l5zrmRfxKAio=
-X-Google-Smtp-Source: AGHT+IH6kdprTLysTDpgSojFYSTC1xHDTZibTQZqScT9g/kXANi55ORA513hOQopgeIEA85utcWxIA==
-X-Received: by 2002:a17:906:f9cc:b0:a3f:d2e2:4ce5 with SMTP id
- lj12-20020a170906f9cc00b00a3fd2e24ce5mr4599055ejb.29.1708956143316; 
- Mon, 26 Feb 2024 06:02:23 -0800 (PST)
-Received: from [10.1.0.191] (ip-188-118-3-185.reverse.destiny.be.
- [188.118.3.185]) by smtp.gmail.com with ESMTPSA id
- u6-20020a170906124600b00a43815bf5edsm322232eja.133.2024.02.26.06.02.21
+ bh=OfI9cOyolvUL9SpemorsZbrfNf+t2ipbVZSYu7l3CQE=;
+ b=NNPm3Bxnmf9Q4DbR1X5lds1V/fq1Hl2xChMxWkhP2kRBnhIJnVxfqGik8XkfR1YRak
+ EGL3EdLZkdXw9CA0aTUX1g2hRSZVa8rzFMdYQtUhQEonqIGnT692MGXe3s0RcKPlmuuB
+ neLrhB0cgDN7yvS1jKtLRpj0RASGBh9U3W2AXzXKLcZi+bkYiEpyOG+pbGPZRbQ/KuEb
+ fjsiRxdv9uf3tE7manw9dIECReLD/1/OSyT8Sab5nIug/t4s6SQEwTxYqsPvT5WRBHHq
+ +ggQRNSRzVQB/rvqVrwMh1woC2+CzItOaZiNn+jmJ2VUqybVfUy00Smc5eX+l5r9BJHa
+ LiCw==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCUWrUxkoKm1AuP7BOVQRhLuaSh6ELNRke0XU3CySOhtDma6NJfpd77XRtyNvJgKA5dwsIqfmeiVeNHtlTQ+fY9oiNBWOw==
+X-Gm-Message-State: AOJu0Yxz1d7vffVd7E6SOCMA0mhJwwFTOOBPy5c2oBJtAwrBWd00yVXB
+ Hs8SJ4T24Lyea2uUE/YjzRGdRdngQxcNzjhm0b6HSbRC9UTvdbGIjtR9YeDfjlY=
+X-Google-Smtp-Source: AGHT+IFWUDjCDA6/b8vhSmFx5vlHWg1n9TW2x+NfQ67Cc1Fyb+n4qj6dNLMTcXiPUj8F0UiLuF8n6Q==
+X-Received: by 2002:a05:6512:243:b0:512:9ece:e5a7 with SMTP id
+ b3-20020a056512024300b005129ecee5a7mr6092852lfo.18.1709038746029; 
+ Tue, 27 Feb 2024 04:59:06 -0800 (PST)
+Received: from ?IPV6:2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31?
+ (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
+ by smtp.gmail.com with ESMTPSA id
+ jr10-20020a05622a800a00b0042e22fa1b22sm3538496qtb.16.2024.02.27.04.59.03
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 26 Feb 2024 06:02:22 -0800 (PST)
-Message-ID: <a3b7ffc6-1421-4475-bd14-496d7e3fa07d@mind.be>
-Date: Mon, 26 Feb 2024 15:02:15 +0100
+ Tue, 27 Feb 2024 04:59:05 -0800 (PST)
+Message-ID: <d9e46b02-e299-46b7-9fd9-bbe43ecd9afe@smile.fr>
+Date: Tue, 27 Feb 2024 13:58:59 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Content-Language: en-GB
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>, Bernd Kuhls <bernd@kuhls.net>
-References: <20231218220457.1705749-1-adam.duskett@amarulasolutions.com>
- <20231218220457.1705749-3-adam.duskett@amarulasolutions.com>
- <20240206233318.593730bd@windsurf>
- <87wmqut14w.fsf__36507.8827760712$1708783134$gmane$org@48ers.dk>
- <pan$d961b$888d7a82$9cf22659$dea826e7@ID-313208.user.individual.net>
- <ZdsiyRbOWUfnRNDz@landeda>
-In-Reply-To: <ZdsiyRbOWUfnRNDz@landeda>
+To: Bernd Kuhls <bernd@kuhls.net>, buildroot@uclibc.org,
+ Julien Olivain <ju.o@free.fr>
+References: <20240211214935.1603160-1-ju.o__4871.99223586998$1707688208$gmane$org@free.fr>
+ <pan$8ffb8$216c5e07$61fb4f0$f3d6d79f@ID-313208.user.individual.net>
+Content-Language: en-US
+From: Romain Naour <romain.naour@smile.fr>
+In-Reply-To: <pan$8ffb8$216c5e07$61fb4f0$f3d6d79f@ID-313208.user.individual.net>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1708956143; x=1709560943; darn=uclibc.org;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=AY38KtjOW991VPkV/0CRG3MTSW/rAkqj58Y/htZe13o=;
- b=WJdxNfMBhZDex1/EFvk1XipejjeqpCyHE0sIjiz0BK+qo/Cqi+ZXk7Q9EQwQrYhpbH
- hbqVQNqIema2XCwVQ/1erVeYxrHlUCkCun1edKpuIa+Q0AP0kmhh9622DmHGSCWB7IaQ
- 2tY7SJ3e5wjEk5nblMaOUVUM4t8wGOI6a1hTJTrD6+HVpdu6cupyjoCN2hIPi766/+vG
- 9LZq0Dfhn84bFCdWDtNgwhEeuRPqg/FIcGUG+ToDbkql6gGH0jjLk8waPIhC0L1/GIO1
- vrWGANuCj8wORGNZ7xsnPpJMNRWuWPmAnjSgHqsRAOdObT15o8/FlkUwB0zAqAJlg5kk
- euvg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1709038746; x=1709643546;
+ darn=uclibc.org; 
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:to:subject:user-agent:mime-version:date:message-id:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=OfI9cOyolvUL9SpemorsZbrfNf+t2ipbVZSYu7l3CQE=;
+ b=dCw2xXZ2ig/on/GYQmY4igrPg+ZQ+/mSEDeQNSGgKqMKzU0wvoQN0Lu6vhutIFe7gu
+ N6p4Iz5lzZXLjXKlDvABViNSb0BBFQcmRWvvSuj/AW3wabLQrWCRgtocUJz4Vhr9Ob3s
+ CCxb6S9OLaSXBJgyr0s4fzbWROFM35GAEtTXH9zPvOgnL6aWxALLe+tXRQtOYzb1fSDQ
+ ZuesOLBgOTevS7isHJBPxa64CYiE0/pn17bmFJQucf1Z1TUNQKZ/sj9S0cH3RwLcAl73
+ BWzXgJUIWMJbAOTR0Q1JaxQTkESrKc8RbViHRI1+43ACAjhnV77YL6kNm8bFMpBGFQ53
+ fjQg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=WJdxNfMB
-Subject: Re: [Buildroot] [PATCH v4 3/3] package/python3: bump version to
- 3.12.1
+ unprotected) header.d=smile-fr.20230601.gappssmtp.com
+ header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=dCw2xXZ2
+Subject: Re: [Buildroot] [PATCH 1/1] package/gnu-efi: bump to version 3.0.17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -109,96 +112,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: Benoit Debled <benoit.debled@mind.be>, buildroot@uclibc.org
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-
-
-On 25/02/2024 12:21, Yann E. MORIN wrote:
-> Bernd, All,
-> 
-> On 2024-02-24 20:01 +0100, Bernd Kuhls spake thusly:
->> Am Sat, 24 Feb 2024 14:58:23 +0100 schrieb Peter Korsgaard:
->>
->>> We unfortunately are still having a number of build failures because of
->>> this, E.G. for target == host
->>
->> Hi,
->>
->> ftr, the host == target problem is solved by using a patch from here:
->> https://github.com/python/cpython/issues/115382#issuecomment-1952936367
-> 
-> The issue with that, is that none of the upstream maintainers have
-> chimed in to express their view on whether this is the correct approach,
-> or to suggest something else.
-> 
-> If we go and carry that patch without upstream feedback, we risk
-> carrying forever without the issue ever being fixed upstream.
-> 
-> What happens in other buildsystems, like OE or openWRT?
-
-  My colleague Benoit (not on the list, but added in Cc) ran into this Python 
-issue himself, so I asked him to investigate a little. Here are his conclusions.
-
-
-OpenWRT uses currently python 3.11.7 on the master branch as it can be seen here:
-https://github.com/openwrt/packages/blob/master/lang/python/python3-version.mk
-
-They updated from python 3.11.6 to 3.11.7 on dec 13 2023
-
-I see no issues, PR, nor commit regarding an update to python 3.12
-
-
-
-Regarding OpenEmbedded, here are the latest python version that are used:
-dunfell (3.1 LTS) 3.8.18
-kirkstone (4.0 LTS) 3.10.13
-nanbield (4.3) 3.11.5
-Scarthgap (5.0 - Release date : April 2024): 3.12.1
-
-python: update 3.11.5 -> 3.12.1:
-https://git.openembedded.org/openembedded-core/commit/?h=scarthgap&id=716d82352545d3667a658b69d65d6127678dd150
-
- From the moment they have updated from 3.10.6 
-(f10cdc155e47af5627ee999c57e1d083f9382a91), I don't see any new major patch...
-
-
-
-  I (Arnout) think that they don't have the problem because since 2019 they're 
-carrying the following patch.
-
- From 5b66463c10fec1440e977d5a21a0167862d6d79c Mon Sep 17 00:00:00 2001
-From: Ricardo Ribalda <ricardo@ribalda.com>
-Date: Tue, 18 Nov 2014 03:35:33 -0500
-Subject: [PATCH] configure.ac: add CROSSPYTHONPATH into PYTHONPATH for
-  PYTHON_FOR_BUILD
-
-When building x86->x86 the system will try to execute .so and related items
-from the default PYTHONPATH.  This will fail if the target CPU contains
-instructions that the host CPU does not have, add CROSSPYTHONPATH
-into PYTHONPATH so we can prepend the list to find correct libs.
-
-Upstream-Status: Inappropriate [OE-Core integration specific]
-
-Credits-to: Mark Hatle <mark.hatle@windriver.com>
-Credits-to: Jackie Huang <jackie.huang@windriver.com>
-Signed-off-by: Ricardo Ribalda <ricardo@ribalda.com>
-
-(CROSSPYTHONPATH points to the equivalent of our host/lib/python3.X).
-
-  Regards,
-  Arnout
-
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gSnVsaWVuLCBCZXJuZCwgQWxsLAoKTGUgMTkvMDIvMjAyNCDDoCAyMTowNCwgQmVybmQg
+S3VobHMgYSDDqWNyaXTCoDoKPiBBbSBTdW4sIDExIEZlYiAyMDI0IDIyOjQ5OjM1ICswMTAwIHNj
+aHJpZWIgSnVsaWVuIE9saXZhaW46Cj4gCj4+IEZvciBjb21taXQgbG9ncywgc2VlOgo+PiBodHRw
+czovL3NvdXJjZWZvcmdlLm5ldC9wL2dudS1lZmkvY29kZS9jaS8zLjAuMTcvbG9nLwo+IAo+IEhp
+IEp1bGllbiwKPiAKPiB0aGlzIGJ1bXAgYnJlYWtzIGJ1aWxkaW5nIHN5c2xpbnV4IChub3QgeWV0
+IGNhdWdodCBieSB0aGUgYXV0b2J1aWxkZXJzKToKPiBodHRwczovL2J1Z3MuZ2VudG9vLm9yZy85
+MjE1OTcKCk5vdCBieSBhdXRvYnVpbGRlcnMgYnV0IGJ5IHRoZSBnaXRsYWItY2k6CgpodHRwczov
+L2dpdGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJvb3QvLS9qb2JzLzYyNTY4ODA5MzcKaHR0
+cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vam9icy82MjU2ODgwOTQ5
+CgpUaGUgaXNzdWUgd2FzIGludHJvZHVjZWQgaW4gZ251LWVmaSAzLjAuMTYgWzFdIHRoYXQgc2Vl
+bXMgd3JvbmcvaW5jb21wbGV0ZSBpZiB3ZQpjb21wYXJlIHdpdGggaW50dHlwZXMuaCBoZWFkZXIg
+ZnJvbSBnbGliYyBbMl0uCgpKdWxpZW4sIGNhbiB5b3UgaGF2ZSBhIGxvb2s/ClRoYW5rcyEKClsx
+XQpodHRwczovL3NvdXJjZWZvcmdlLm5ldC9wL2dudS1lZmkvY29kZS9jaS8xODkyMDBkMGIwZjZm
+ZmY0NzNkMzAyODgwZDk1NjlmNDVkNGQ4YzRkClsyXQpodHRwczovL3NvdXJjZXdhcmUub3JnL2dp
+dC8/cD1nbGliYy5naXQ7YT1ibG9iO2Y9c3RkbGliL2ludHR5cGVzLmg7aD1jZmRhMTQ2YWE5Yjk1
+NmRjOWY0NjJiZDY1ZmI4MjhlNTkyOWJjOTBiO2hiPUhFQUQjbDI5CgpCZXN0IHJlZ2FyZHMsClJv
+bWFpbgoKCj4gCj4gUmVnYXJkcywgQmVybmQKPiAKPiBfX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fXwo+IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKPiBidWlsZHJv
+b3RAYnVpbGRyb290Lm9yZwo+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xp
+c3RpbmZvL2J1aWxkcm9vdAoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpo
+dHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
