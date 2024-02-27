@@ -4,68 +4,103 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 410EEC54798
-	for <buildroot@archiver.kernel.org>; Tue, 27 Feb 2024 21:35:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB702C5478C
+	for <buildroot@archiver.kernel.org>; Tue, 27 Feb 2024 22:17:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C842D40596;
-	Tue, 27 Feb 2024 21:35:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9954D4050E;
+	Tue, 27 Feb 2024 22:17:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dzYVhva-sXa8; Tue, 27 Feb 2024 21:35:30 +0000 (UTC)
+	with ESMTP id GzvuA6DxvCKY; Tue, 27 Feb 2024 22:17:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5DCF64038C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ACBD240526
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5DCF64038C;
-	Tue, 27 Feb 2024 21:35:30 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3D0BE1BF3DC
- for <buildroot@lists.busybox.net>; Tue, 27 Feb 2024 21:35:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ACBD240526;
+	Tue, 27 Feb 2024 22:17:34 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 992121BF842
+ for <buildroot@lists.busybox.net>; Tue, 27 Feb 2024 22:17:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 291FA40278
- for <buildroot@lists.busybox.net>; Tue, 27 Feb 2024 21:35:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 938858223F
+ for <buildroot@lists.busybox.net>; Tue, 27 Feb 2024 22:17:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kwIY5VdLG4Vs for <buildroot@lists.busybox.net>;
- Tue, 27 Feb 2024 21:35:27 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3411740103
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3411740103
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3411740103
- for <buildroot@buildroot.org>; Tue, 27 Feb 2024 21:35:26 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:48ec:5da2:e30:94b9])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 3B9A219F574;
- Tue, 27 Feb 2024 22:35:22 +0100 (CET)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Tue, 27 Feb 2024 22:35:17 +0100
-Message-ID: <20240227213517.241837-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.44.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ec1rfuR-9y8R for <buildroot@lists.busybox.net>;
+ Tue, 27 Feb 2024 22:17:31 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 493C28223E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 493C28223E
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 493C28223E
+ for <buildroot@buildroot.org>; Tue, 27 Feb 2024 22:17:30 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-412ae15b06fso8026495e9.1
+ for <buildroot@buildroot.org>; Tue, 27 Feb 2024 14:17:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1709072249; x=1709677049;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=qi5Gc5/pzLg1i0rvT/1t+OaUAmOyzqemEoiu5cSureE=;
+ b=DCC6OpluOjxdo88jP68h6bfQ7hhmXI1y9k+kMSfb8zyny89xw84hV3prtHubM1RhMN
+ 8hkZl1/AZTPrTzSjNLd+BTnO/M/8bWArxO+rdKAICvf69aNNkF0gIXbhNuVSvwpf8qiX
+ bcHywkhyZpdK6z9OX1Ydez8nm+t1pfXl5IOEGLRXsAkuM1nJcc23ejRflu6VZTRbVCEe
+ uuNotR6TpZGmbenyuwX4cCkYZ+SCGO2nsrc4MhSsThF3gNCNGZnPTISzhW8VyZuAxC84
+ bYax6yOhqPCmI57rpkOZyBex2nxfhIDlryYx+DCvA1Exp5w14FaJUdGanQG2bAX6qlZI
+ 3NRw==
+X-Gm-Message-State: AOJu0Ywr6ZNxANiC++/cpO5Q+jm7I6QQM8vk4WmS1tmdISLury0Mda8/
+ 8n/AlX1XjguI9AMEs7cRHZlymMEdRYDD6GQhvd/OcXV0bpiOp8dM9rS5qceXaog=
+X-Google-Smtp-Source: AGHT+IG+BTFtlWxqBntD9i3oPJyqbtKwuyIEKhdPntrLAjrg5mMnZwR+FK5k55elAztD52ywF4afSQ==
+X-Received: by 2002:a05:600c:5125:b0:412:529c:356f with SMTP id
+ o37-20020a05600c512500b00412529c356fmr8400563wms.28.1709072249133; 
+ Tue, 27 Feb 2024 14:17:29 -0800 (PST)
+Received: from ?IPV6:2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31?
+ (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
+ by smtp.gmail.com with ESMTPSA id
+ jn5-20020a05600c6b0500b0041228b2e179sm83770wmb.39.2024.02.27.14.17.28
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 27 Feb 2024 14:17:28 -0800 (PST)
+Message-ID: <422f5b14-1eb5-4c20-af28-b063f9957b28@smile.fr>
+Date: Tue, 27 Feb 2024 23:17:28 +0100
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1709069723;
- bh=y2p2ih2BwWYXtpKsFXkvFaa1UfRi4KsLPl7kGkrw71k=;
- h=From:To:Cc:Subject:Date:From;
- b=iI/1CPMcqLpAEBGmdBfC1vYzAPSCj445mrivc66tNM3VbtBkDDi7Fw4Y+4g9sawep
- 7QH4olTCIhtILvXvOkuBEdIRHAY5rDTriCSzc5CtrvXqfw5PAsqbqggGoXhmIRis8y
- +lLM4+Kz6tLFdZpU8jsaJtKVd36NXyEUCSYZ7ahWcQbVjO5ByYR3ZDvSS40NlDRthq
- 8zkJOJgPvvIny3/WM/UfPmL9pszKi5Eyf9reVAsGlWYfNThoecOyJ7Iw+jCSys3Fol
- l3s+XzpMeIEuuCtCcLAVgDlpUF8MFFzATmmr24LN1I/G9d+gVREmtGD2qI4C/8mxv7
- 7EF2GFbaABVZA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+User-Agent: Mozilla Thunderbird
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ Alexander Sverdlin <alexander.sverdlin@gmail.com>
+References: <20240224205654.1546744-1-dario.binacchi@amarulasolutions.com>
+ <f56ed1032d3006e56e14c57be4c077d3199ad8a8.camel@gmail.com>
+ <CABGWkvp2axJpgMFK+_OByKxG6nw0UwjCAHDgPqqVc7bip+z_oQ@mail.gmail.com>
+Content-Language: fr, en-US
+From: Romain Naour <romain.naour@smile.fr>
+In-Reply-To: <CABGWkvp2axJpgMFK+_OByKxG6nw0UwjCAHDgPqqVc7bip+z_oQ@mail.gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1709072249; x=1709677049;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=qi5Gc5/pzLg1i0rvT/1t+OaUAmOyzqemEoiu5cSureE=;
+ b=v8GtOYGkU5pkaHrzl0QgY5fUTbhtEYJVzmcoaDdGGSo4NmBPx4oKmtT4uvRj5Ycbjv
+ f/IAX9UlhWCdbdgGXW81BPzNz14s827UVcn3XNVTQucKACAPeSKo5tmCoCsgWz0LdRIr
+ PMkLN7+F4mJC0je9DhYfZDQF2EkpC95BuihzaiPbwLJBXlOkA6tmT1uEHA4dx9eCcNGq
+ coLzUMRLLqz/aGMXlljkIy41C6WFPQNk0wqwxQ9IAi+s9TkigEYYDMYNkjNrGEeDyP8A
+ 5wwYE/oIQKpNywsWaZeT2UC6slyK/99stcDJKqpw7iUp0KI6mjvC3yCsTjpXocQ4zVZm
+ XOrA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=iI/1CPMc
-Subject: [Buildroot] [PATCH 1/1] boot/syslinux: fix build with gnu-efi >=
- 3.0.16
+ unprotected) header.d=smile-fr.20230601.gappssmtp.com
+ header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=v8GtOYGk
+Subject: Re: [Buildroot] [PATCH v6 00/16] Add support for AM62x-SK HS-FS
+ devices
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,112 +112,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: michael@amarulasolutions.com, Asaf Kahlon <asafka7@gmail.com>,
+ Xuanhao Shi <X15000177@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
+ Andreas Dannenberg <dannenberg@ti.com>, linux-amarula@amarulasolutions.com,
+ bryce@redpinelabs.com, Anand Gadiyar <gadiyar@ti.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit fa9893ad8f "package/gnu-efi: bump to version 3.0.17" updated
-gnu-efi. This update introduced syslinux build failure, as reported
-in [1].
-
-This commit adds a package patch to fix this issue. For technical
-details of the issue, see the package patch commit log.
-
-Fixes:
-- https://gitlab.com/buildroot.org/buildroot/-/jobs/6256880937
-- https://gitlab.com/buildroot.org/buildroot/-/jobs/6256880949
-
-[1] https://lists.buildroot.org/pipermail/buildroot/2024-February/685971.html
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- .checkpackageignore                           |  1 +
- ...stddef.h-add-wchar_t-type-definition.patch | 58 +++++++++++++++++++
- 2 files changed, 59 insertions(+)
- create mode 100644 boot/syslinux/0019-stddef.h-add-wchar_t-type-definition.patch
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index a6cc58c448c..a98a53fbf36 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -118,6 +118,7 @@ boot/syslinux/0013-Fix-build-with-gnu-efi-version-3.0.9.patch Upstream
- boot/syslinux/0014-Fix-build-with-binutils-note-gnu-property-section.patch Upstream
- boot/syslinux/0016-Workaround-multiple-definition-of-symbol-errors.patch Upstream
- boot/syslinux/0017-Replace-builtin-strlen-that-appears-to-get-optimized.patch Upstream
-+boot/syslinux/0019-stddef.h-add-wchar_t-type-definition.patch
- linux/5.10.162-cip24-rt10/0001-arch-microblaze-mm-init.c-fix-build.patch Upstream
- package/18xx-ti-utils/0001-plt.h-fix-build-with-gcc-10.patch Upstream
- package/4th/0001-avoid-regen-during-install.patch Upstream
-diff --git a/boot/syslinux/0019-stddef.h-add-wchar_t-type-definition.patch b/boot/syslinux/0019-stddef.h-add-wchar_t-type-definition.patch
-new file mode 100644
-index 00000000000..ac98c47dfdc
---- /dev/null
-+++ b/boot/syslinux/0019-stddef.h-add-wchar_t-type-definition.patch
-@@ -0,0 +1,58 @@
-+From 063dac55c45d0264671c3463e824ab659e5cbb87 Mon Sep 17 00:00:00 2001
-+From: Julien Olivain <ju.o@free.fr>
-+Date: Tue, 27 Feb 2024 21:09:15 +0100
-+Subject: [PATCH] stddef.h: add wchar_t type definition
-+
-+Syslinux fail to build with gnu-efi >= 3.0.16 with error:
-+
-+    In file included from /host/i686-buildroot-linux-gnu/sysroot/usr/include/efi/efi.h:44,
-+                     from /build/syslinux-6.03/efi/efi.h:23,
-+                     from /build/syslinux-6.03/efi/adv.h:4,
-+                     from /build/syslinux-6.03/efi/adv.c:29:
-+    /host/i686-buildroot-linux-gnu/sysroot/usr/include/efi/ia32/efibind.h:90:9: error: unknown type name 'wchar_t'
-+     typedef wchar_t CHAR16;
-+             ^~~~~~~
-+
-+This is because gnu-efi started to use the "wchar_t" type from the
-+toolchain's <stddef.h> header, in commit [1]. Before this commit,
-+gnu-efi was defining the type as "short".
-+
-+Syslinux is including its own minimal stddef.h file, which masks the
-+one provided by the toolchain. See [2]. This file does not have a type
-+definition for "wchar_t".
-+
-+Finally, the POSIX <stddef.h> header is supposed to provide this
-+"wchar_t" type definition. See [3].
-+
-+This commit fixes the issue by adding the "wchar_t" type definition in
-+the com32/include/stddef.h header. Since Syslinux has "-fshort-wchar"
-+in its CFLAGS (see [4]), "wchar_t" is simply defined as "short". This
-+also follow the previous gnu-efi < 3.0.16 behavior.
-+
-+This issue was seen in Buildroot Linux, in [5].
-+
-+[1] https://sourceforge.net/p/gnu-efi/code/ci/189200d0b0f6fff473d302880d9569f45d4d8c4d
-+[2] https://repo.or.cz/syslinux.git/blob/refs/tags/syslinux-6.03:/com32/include/stddef.h
-+[3] https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/stddef.h.html
-+[4] https://repo.or.cz/syslinux.git/blob/refs/tags/syslinux-6.03:/mk/efi.mk#l27
-+[5] https://lists.buildroot.org/pipermail/buildroot/2024-February/685971.html
-+
-+Signed-off-by: Julien Olivain <ju.o@free.fr>
-+---
-+ com32/include/stddef.h | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/com32/include/stddef.h b/com32/include/stddef.h
-+index f52d62f3..437b11f2 100644
-+--- a/com32/include/stddef.h
-++++ b/com32/include/stddef.h
-+@@ -29,4 +29,6 @@
-+  */
-+ #define container_of(p, c, m) ((c *)((char *)(p) - offsetof(c,m)))
-+ 
-++typedef short wchar_t;
-++
-+ #endif /* _STDDEF_H */
-+-- 
-+2.44.0
-+
--- 
-2.44.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgQWxleGFuZGVyLCBEYXJpbywgQWxsLAoKTGUgMjcvMDIvMjAyNCDDoCAyMTo0MSwgRGFyaW8g
+QmluYWNjaGkgYSDDqWNyaXTCoDoKPiBIaSBBbGV4YW5kZXIsCj4gCj4gT24gVHVlLCBGZWIgMjcs
+IDIwMjQgYXQgODo0OeKAr1BNIEFsZXhhbmRlciBTdmVyZGxpbgo+IDxhbGV4YW5kZXIuc3ZlcmRs
+aW5AZ21haWwuY29tPiB3cm90ZToKPj4KPj4gSGVsbG8gRGFyaW8sCj4+Cj4+IE9uIFNhdCwgMjAy
+NC0wMi0yNCBhdCAyMTo1NiArMDEwMCwgRGFyaW8gQmluYWNjaGkgd3JvdGU6Cj4+PiBUaGUgU0st
+QU02MkItUDEgaXMgdGhlIG5ld2VzdCB2ZXJzaW9uIG9mIFNLLUFNNjIgd2hpY2ggaW5jbHVkZXMK
+Pj4+IGhpZ2gtc2VjdXJpdHkgZmllbGQtc2VjdXJhYmxlIChIUy1GUykgc2lsaWNvbiB0byBvcHRp
+b25hbGx5IGN1c3RvbWl6ZSBrZXlzCj4+PiBhbmQgZW5jcnlwdGlvbiBmb3Igc2VjdXJpdHkgYXBw
+bGljYXRpb25zLgo+Pj4gVGhpcyByZXF1aXJlcyBlbmFibGluZyB0aGUgQlIyX1RBUkdFVF9USV9L
+M19JTUFHRV9HRU5fU0VDVFlQRV9IU19GUyBvcHRpb24sCj4+PiB3aGljaCwgaG93ZXZlciwgd2Fz
+IGJ1Z2d5LiBUaGlzIHNlcmllcyBmaXhlcyB0aGUgZXJyb3JzIGFuZCBidW1wcyB0aGUgTGludXgK
+Pj4+IGtlcm5lbCBhbmQgVS1Cb290IHJlcXVpcmVkIGZvciBzdWNoIGEgbmV3IGRldmljZS4KPj4K
+Pj4gaW4gY29udHJhc3QgdG8geW91ciB0ZXN0cyBhbmQgbXkgbGFzdCB0ZXN0cyBvbiBTSy1BTTYy
+QiB0aGlzIHRpbWUgSSd2ZSB0cmllZAo+PiBvbiBHUCBib2FyZCAoU0stQU02MikgYW5kIHRoZSBi
+dWlsZCAoZm9yIEdQKSBkaWRuJ3QgYm9vdCBvdXQgb2YgdGhlIGJveC4KPj4KPj4gSSd2ZSBicmll
+Zmx5IGNoZWNrZWQgdGlib28zLmJpbiBhbmQgaXQncyB0aGUgc21hbGxlciBvbmUgb2YgYWxsLCBz
+byB0aGlzCj4+IHBhcnQgbG9va3MgY29ycmVjdC4gTWF5YmUgd2UgbmVlZCB0byBjaGVjayBpZiB0
+aGUgRmlybXdhcmUgYmxvYnMgYXJlIGNvcnJlY3QKPj4gaW4gR1AgY2FzZS4uLgoKSSBjaGVja2Vk
+IHRoZSB0aWJvb3QzLmJpbiBiZXR3ZWVuIHY3IGFuZCB2NSBvZiB0aGlzIHNlcmllczoKCnY3Ogot
+cnctci0tci0tLiAxIHJvbW5hbyByb21uYW8gICAgMjgyNTQ1IDI3IGbDqXZyLiAyMjoyMyB0aWJv
+b3QzLmJpbgoKdjUKLXJ3LXItLXItLS4gMSByb21uYW8gcm9tbmFvICAgIDI4MjU0NSAxMyBmw6l2
+ci4gMTU6NTcgdGlib290My1hbTYyeC1ncC1ldm0uYmluCi1ydy1yLS1yLS0uIDEgcm9tbmFvIHJv
+bW5hbyAgICAyODUxMzQgMTMgZsOpdnIuIDE1OjU3IHRpYm9vdDMtYW02MngtaHMtZXZtLmJpbgot
+cnctci0tci0tLiAxIHJvbW5hbyByb21uYW8gICAgMjg1MTM0IDEzIGbDqXZyLiAxNTo1NyB0aWJv
+b3QzLWFtNjJ4LWhzLWZzLWV2bS5iaW4KCk5vdGUsIHdlIGNvcHkgdGhlIHRpYm9vdDMgZmlybXdh
+cmUgdXNpbmcgdGhlIGNvbXBsZXRlIGZpbGUgbmFtZSwgd2UgZG9uJ3QgdXNlCnRoZSB0aWJvb3Qz
+LmJpbiBzeW1saW5rIGdlbmVyYXRlZCBieSBiaW5tYW4gdG9vbC4KCiAgY3AgJChARCkvdGlib290
+My0kKFRJX0szX1I1X0xPQURFUl9TT0MpLSQoVElfSzNfUjVfTE9BREVSX1NFQ1RZUEUpLSouYmlu
+CiQoQklOQVJJRVNfRElSKS90aWJvb3QzLmJpbgoKVmVyaWZ5IGlmIHlvdXIgQU02MiBkZXZpY2Ug
+aXMgcmVhbGx5IGEgR1Agb25lLgoKPiAKPiBJIGhhdmUgdGVzdGVkIGFsbCA3IHZlcnNpb25zIG9u
+IFNLLUFNNjJCIHN1Y2Nlc3NmdWxseSwgYnV0IEkgZG9uJ3QKPiBoYXZlIGEgR1AgYm9hcmQuCj4g
+Q291bGQgaXQgYmUgYW4gb3B0aW9uIGZvciB5b3UgdG8gZmluZCBvdXQgd2hpY2ggaXMgdGhlIGxh
+dGVzdCB2ZXJzaW9uCj4gdGhhdCBhbHNvIHdvcmtzIGZvciBHUD8KPiBBIHNvcnQgb2Ygc2VyaWVz
+IGJpc2VjdD8KCkkgZG9uJ3Qgc2VlIGFueSBvYnZpb3VzIGlzc3VlLgpQbGVhc2Ugc2hhcmUgeW91
+ciBib290IGxvZyBhbmQgeW91ciBkZWZjb25maWcuCgpCZXN0IHJlZ2FyZHMsClJvbWFpbgoKCj4g
+Cj4gVGhhbmtzIGFuZCByZWdhcmRzLAo+IERhcmlvCj4+Cj4+IC0tCj4+IEFsZXhhbmRlciBTdmVy
+ZGxpbi4KPj4KPiAKPiAKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0
+cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
