@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 320E9C5478C
-	for <buildroot@archiver.kernel.org>; Tue, 27 Feb 2024 22:24:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6034C54798
+	for <buildroot@archiver.kernel.org>; Tue, 27 Feb 2024 22:24:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 00DAF402F0;
-	Tue, 27 Feb 2024 22:24:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7ABB841579;
+	Tue, 27 Feb 2024 22:24:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uLbDKNOqimcw; Tue, 27 Feb 2024 22:24:49 +0000 (UTC)
+	with ESMTP id ksFlzcNy0jLn; Tue, 27 Feb 2024 22:24:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2544240309
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 09CB6415A1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2544240309;
-	Tue, 27 Feb 2024 22:24:49 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DEAEC1BF842
- for <buildroot@lists.busybox.net>; Tue, 27 Feb 2024 22:24:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 09CB6415A1;
+	Tue, 27 Feb 2024 22:24:51 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 02D901BF870
+ for <buildroot@lists.busybox.net>; Tue, 27 Feb 2024 22:24:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CBE3640309
+ by smtp3.osuosl.org (Postfix) with ESMTP id E4284605DE
  for <buildroot@lists.busybox.net>; Tue, 27 Feb 2024 22:24:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aNz4IX4IOyoa for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eMMUUTKUcKES for <buildroot@lists.busybox.net>;
  Tue, 27 Feb 2024 22:24:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 21F59402F0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2DCB8605D5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 21F59402F0
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2DCB8605D5
  for <buildroot@buildroot.org>; Tue, 27 Feb 2024 22:24:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1B7E687B3E; Tue, 27 Feb 2024 22:24:47 +0000 (UTC)
+ id 1014F87AB2; Tue, 27 Feb 2024 22:24:47 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 27 Feb 2024 23:24:05 +0100
+Date: Tue, 27 Feb 2024 23:23:31 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 433c4fd38b15efcf74b410e5068e2e51eeba6e46
-X-Git-Newrev: 13083cf8c0edb0ac1cae4895505720658e8dd75d
+X-Git-Oldrev: 67f6d1dad2d4dd2af64a9eae6935e75147cd7bd2
+X-Git-Newrev: 433c4fd38b15efcf74b410e5068e2e51eeba6e46
 X-Patchwork-Hint: ignore
-Message-Id: <20240227222447.1B7E687B3E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/erlang: fix build with autoconf
- 2.72
+Message-Id: <20240227222447.1014F87AB2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/poco: bump to version 1.13.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,53 +64,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=13083cf8c0edb0ac1cae4895505720658e8dd75d
+commit: https://git.buildroot.net/buildroot/commit/?id=433c4fd38b15efcf74b410e5068e2e51eeba6e46
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use ERLANG_FIX_AUTOCONF_VERSION to fix the following build failure
-raised since bump of autoconf to version 2.72 in commit
-524f3536029dace3ce9aa154d3ca4685582e1955:
+This bump will fix the following build failure raised since bump of
+expat to version 2.6.0 in commit
+9dad5e7d7f7bc03e648621b9be6974e7ae39a467 thanks to
+https://github.com/pocoproject/poco/commit/75f7042b70092e79c6b770b18d033a061c84e2c5:
 
-ERROR: autoconf of version 2.72 found in path! You need to have autoconf of version 2.71 in path.
+src/ParserEngine.cpp: In member function 'void Poco::XML::ParserEngine::init()':
+src/ParserEngine.cpp:510:17: error: 'XML_SetBillionLaughsAttackProtectionMaximumAmplification' was not declared in this scope; did you mean 'setBillionLaughsAttackProtectionMaximumAmplification'?
+  510 |                 XML_SetBillionLaughsAttackProtectionMaximumAmplification(_parser, _maximumAmplificationFactor);
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Fixes: 524f3536029dace3ce9aa154d3ca4685582e1955
- - http://autobuild.buildroot.org/results/c9e8df3427fca9e8e75488e32bca18e81009238c
+https://github.com/pocoproject/poco/blob/poco-1.13.2-release/CHANGELOG
+
+Fixes: 9dad5e7d7f7bc03e648621b9be6974e7ae39a467
+ - http://autobuild.buildroot.org/results/7fad881f85d3b89abdee35388088965f05ead277
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/erlang/erlang.mk | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ package/poco/poco.hash | 2 +-
+ package/poco/poco.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
-index 1600b59381..84d2f4e898 100644
---- a/package/erlang/erlang.mk
-+++ b/package/erlang/erlang.mk
-@@ -17,14 +17,22 @@ ERLANG_CPE_ID_VENDOR = erlang
- ERLANG_CPE_ID_PRODUCT = erlang\/otp
- ERLANG_INSTALL_STAGING = YES
+diff --git a/package/poco/poco.hash b/package/poco/poco.hash
+index 9a7981171a..0a1e900b3f 100644
+--- a/package/poco/poco.hash
++++ b/package/poco/poco.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  71ef96c35fced367d6da74da294510ad2c912563f12cd716ab02b6ed10a733ef  poco-1.12.4.tar.gz
++sha256  c01221870aa9bccedf1de39890279699207848fe61a0cfb6aeec7c5942c4627f  poco-1.13.2.tar.gz
+ sha256  c4b1e1e5f36d8331737231fefcc30f5714326aec7c387ad59a8115eb0ba7d6b5  LICENSE
+diff --git a/package/poco/poco.mk b/package/poco/poco.mk
+index 2d0233a8ce..f8c2a658de 100644
+--- a/package/poco/poco.mk
++++ b/package/poco/poco.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+define ERLANG_FIX_AUTOCONF_VERSION
-+	$(SED) "s/USE_AUTOCONF_VERSION=.*/USE_AUTOCONF_VERSION=$(AUTOCONF_VERSION)/" $(@D)/otp_build
-+endef
-+
- # Patched erts/aclocal.m4
- define ERLANG_RUN_AUTOCONF
- 	cd $(@D) && PATH=$(BR_PATH) ./otp_build update_configure --no-commit
- endef
- ERLANG_DEPENDENCIES += host-autoconf
--ERLANG_PRE_CONFIGURE_HOOKS += ERLANG_RUN_AUTOCONF
-+ERLANG_PRE_CONFIGURE_HOOKS += \
-+	ERLANG_FIX_AUTOCONF_VERSION \
-+	ERLANG_RUN_AUTOCONF
- HOST_ERLANG_DEPENDENCIES += host-autoconf
--HOST_ERLANG_PRE_CONFIGURE_HOOKS += ERLANG_RUN_AUTOCONF
-+HOST_ERLANG_PRE_CONFIGURE_HOOKS += \
-+	ERLANG_FIX_AUTOCONF_VERSION \
-+	ERLANG_RUN_AUTOCONF
- 
- # Return the EIV (Erlang Interface Version, EI_VSN)
- # $(1): base directory, i.e. either $(HOST_DIR) or $(STAGING_DIR)/usr
+-POCO_VERSION = 1.12.4
++POCO_VERSION = 1.13.2
+ POCO_SITE = $(call github,pocoproject,poco,poco-$(POCO_VERSION)-release)
+ POCO_LICENSE = BSL-1.0
+ POCO_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
