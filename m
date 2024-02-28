@@ -4,61 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AB94C5478C
-	for <buildroot@archiver.kernel.org>; Wed, 28 Feb 2024 21:02:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F912C47DD9
+	for <buildroot@archiver.kernel.org>; Wed, 28 Feb 2024 21:05:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 12D2A417CA;
-	Wed, 28 Feb 2024 21:02:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4DE9241752;
+	Wed, 28 Feb 2024 21:05:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jGI32iWNfyCs; Wed, 28 Feb 2024 21:02:57 +0000 (UTC)
+	with ESMTP id 12iz-XwBGaAl; Wed, 28 Feb 2024 21:05:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41B09417DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A70E41754
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 41B09417DA;
-	Wed, 28 Feb 2024 21:02:57 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6B5AE1BF27A
- for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 21:02:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5A70E41754;
+	Wed, 28 Feb 2024 21:05:53 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 117B21BF3D0
+ for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 21:05:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6542F417DA
- for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 21:02:55 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0A9A0402D0
+ for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 21:05:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0aiWpO0Qxsdp for <buildroot@lists.busybox.net>;
- Wed, 28 Feb 2024 21:02:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
- helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Q30Rbr101Nsp for <buildroot@lists.busybox.net>;
+ Wed, 28 Feb 2024 21:05:49 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
+ helo=relay6-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4C538417CA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C538417CA
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4C538417CA
- for <buildroot@buildroot.org>; Wed, 28 Feb 2024 21:02:54 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3D65DE0008;
- Wed, 28 Feb 2024 21:02:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3BFC640175
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3BFC640175
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3BFC640175
+ for <buildroot@buildroot.org>; Wed, 28 Feb 2024 21:05:48 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1BFFFC0003;
+ Wed, 28 Feb 2024 21:05:46 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rfR4k-002zke-1W;
- Wed, 28 Feb 2024 22:02:50 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rfR7a-002zun-1M;
+ Wed, 28 Feb 2024 22:05:46 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
 References: <20240131081254.175261-1-peter@korsgaard.com>
- <93dd1849-3725-4bf1-b411-55f175e40471@korsgaard.com>
-Date: Wed, 28 Feb 2024 22:02:50 +0100
-In-Reply-To: <93dd1849-3725-4bf1-b411-55f175e40471@korsgaard.com> (Peter
- Korsgaard's message of "Thu, 1 Feb 2024 12:02:36 +0100")
-Message-ID: <87il28mhdx.fsf@48ers.dk>
+ <20240131081254.175261-2-peter@korsgaard.com>
+ <9a26b0d0-120f-4ff9-b72f-7b99edbca93c@korsgaard.com>
+Date: Wed, 28 Feb 2024 22:05:46 +0100
+In-Reply-To: <9a26b0d0-120f-4ff9-b72f-7b99edbca93c@korsgaard.com> (Peter
+ Korsgaard's message of "Thu, 1 Feb 2024 12:02:53 +0100")
+Message-ID: <87edcwmh91.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/2] package/glibc: add CVE ignore for
- CVE-2023-4806
+Subject: Re: [Buildroot] [PATCH 2/2] package/{glibc,
+ localedef}: security bump to version
+ glibc-2.38-44-gd37c2b20a4787463d192b32041c3406c2bd91de0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,7 +72,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -79,10 +82,16 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
  > On 31/01/2024 09.12, Peter Korsgaard wrote:
- >> Commit 8519de517e22 (package/{glibc, localedef}: security bump to version
- >> glibc-2.38-27-g750a45a783906a19591fb8ff6b7841470f1f5701) correctly mentioned
- >> CVE-2023-4806 in the commit message, but forgot to add an ignore for it.
- >> Fix that.
+ >> Fixed the following security issues:
+ >> CVE-2023-6246: syslog: Fix heap buffer overflow in
+ >> __vsyslog_internal
+ >> https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=advisories/GLIBC-SA-2024-0001;hb=HEAD
+ >> CVE-2023-6779: syslog: Heap buffer overflow in __vsyslog_internal
+ >> https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=advisories/GLIBC-SA-2024-0002;hb=HEAD
+ >> CVE-2023-6780: syslog: Integer overflow in __vsyslog_internal
+ >> https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=advisories/GLIBC-SA-2024-0003;hb=HEAD
+ >> For details, see the Qualys advisory:
+ >> https://www.openwall.com/lists/oss-security/2024/01/30/6
  >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
  > Committed, thanks.
