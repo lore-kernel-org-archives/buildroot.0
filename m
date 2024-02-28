@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94B27C5478C
-	for <buildroot@archiver.kernel.org>; Wed, 28 Feb 2024 13:41:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0D1EC54E49
+	for <buildroot@archiver.kernel.org>; Wed, 28 Feb 2024 13:41:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 657C44152A;
-	Wed, 28 Feb 2024 13:41:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 91D634172A;
+	Wed, 28 Feb 2024 13:41:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hQoZwC-Aa5sz; Wed, 28 Feb 2024 13:41:10 +0000 (UTC)
+	with ESMTP id df6CvchFbV2K; Wed, 28 Feb 2024 13:41:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1EED241725
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E68241743
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1EED241725;
-	Wed, 28 Feb 2024 13:41:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7E68241743;
+	Wed, 28 Feb 2024 13:41:13 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AB5551BF955
- for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 13:41:03 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DFD1A1BF2C8
+ for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 13:41:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 98E60821F4
+ by smtp1.osuosl.org (Postfix) with ESMTP id CB98682033
  for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 13:41:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9A7M1W4uC4PS for <buildroot@lists.busybox.net>;
+ with ESMTP id giPUXyKQ8fAk for <buildroot@lists.busybox.net>;
  Wed, 28 Feb 2024 13:41:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EAB7082033
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0637A821D1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id EAB7082033
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0637A821D1
  for <buildroot@buildroot.org>; Wed, 28 Feb 2024 13:41:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D9AF187BA2; Wed, 28 Feb 2024 13:41:02 +0000 (UTC)
+ id BE4C587B5A; Wed, 28 Feb 2024 13:41:02 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 28 Feb 2024 14:38:54 +0100
+Date: Wed, 28 Feb 2024 14:35:17 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 9a46e9e1718f3e8ba764a6233f39bf2338609c93
-X-Git-Newrev: a07d1795ff504441b4df2b390e1b4e79051618b7
+X-Git-Oldrev: f2bc7c3e8a92607d02bca0089b3f529cc155dfdd
+X-Git-Newrev: 8667430da27b9c07ab0bb78a96dc0c3957041e64
 X-Patchwork-Hint: ignore
-Message-Id: <20240228134102.D9AF187BA2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/faad2: force arm
- mode instead of Thumb mode
+Message-Id: <20240228134102.BE4C587B5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x]
+ package/xserver_xorg-server: security bump to version 21.1.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,41 +65,72 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a07d1795ff504441b4df2b390e1b4e79051618b7
+commit: https://git.buildroot.net/buildroot/commit/?id=8667430da27b9c07ab0bb78a96dc0c3957041e64
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-Fix the following build failure in Thumb mode:
+Fixes the following security issues:
 
-/tmp/ccfzn6FH.s:36: Error: selected processor does not support `smull r2,r3,r1,r0' in Thumb mode
+1) CVE-2023-6816 can be triggered by passing an invalid array index to
+DeviceFocusEvent or ProcXIQueryPointer.
 
-Fixes:
- - http://autobuild.buildroot.org/results/838808b4751244ee01cde6b8261212b49e511a32
+2) CVE-2024-0229 can be triggered if a device has both a button and a
+key class and zero buttons.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[Peter: reword comment slightly]
+3) CVE-2024-21885 can be triggered if a device with a given ID was
+removed and a new device with the same ID added both in the same
+operation.
+
+4) CVE-2024-21886 can be triggered by disabling a master device with
+disabled slave devices.
+
+5) CVE-2024-0409 can be triggered by enabling SELinux
+xserver_object_manager and running a client.
+
+6) CVE-2024-0408 can be triggered by enabling SELinux
+xserver_object_manager and creating a GLX PBuffer.
+
+For details, see the advisory:
+https://lists.x.org/archives/xorg-announce/2024-January/003444.html
+
+Switch to .tar.gz as the announcement mail only contained hashes for that:
+https://lists.x.org/archives/xorg-announce/2024-January/003442.html
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit a33827760823b1455326e0fc8cf6089a3081e782)
+(cherry picked from commit 219178ef3eed5b3f4a5da0fe4af751e79d77e432)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/faad2/faad2.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 6 +++---
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/faad2/faad2.mk b/package/faad2/faad2.mk
-index 686e5045c0..0b249b3450 100644
---- a/package/faad2/faad2.mk
-+++ b/package/faad2/faad2.mk
-@@ -12,4 +12,11 @@ FAAD2_CPE_ID_VENDOR = audiocoding
- FAAD2_CPE_ID_PRODUCT = freeware_advanced_audio_decoder_2
- FAAD2_INSTALL_STAGING = YES
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+index de93b11927..be636936e2 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2023-December/003436.html
+-sha256  ceb0b3a2efc57ac3ccf388d3dc88b97615068639fb284d469689ae3d105611d0  xorg-server-21.1.10.tar.xz
+-sha512  8135d9b7c0c71f427ba0a3b80741fee4f6ae195779399b73261a00858882f3516e367a08e2da1403734b04eacabae9aa231e5375eff23b57a3ff764e9caf8926  xorg-server-21.1.10.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2024-January/003442.html
++sha256  1aa0ee1adad0b2db7f291f3823a4ab240c7f4aea710e89f5ef4aa232b6833403  xorg-server-21.1.11.tar.gz
++sha512  e41bf71955691e66084a67fc20643632087f0326d5eddc31e6edd118d05005b8ab536738c181f4c352f331ec8fc8f23ae1b45f237592fa5d7eddbffe43638b08  xorg-server-21.1.11.tar.gz
+ # Locally calculated
+ sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 4ac4283e4b..4a05582583 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
-+# faad2 contains assembly routines using ARM instructions not present in thumb1 mode:
-+# Error: selected processor does not support `smull r2,r3,r1,r0' in Thumb mode
-+# so force ARM mode
-+ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
-+FAAD2_CONF_OPTS += -DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -marm"
-+endif
-+
- $(eval $(cmake-package))
+-XSERVER_XORG_SERVER_VERSION = 21.1.10
+-XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.xz
++XSERVER_XORG_SERVER_VERSION = 21.1.11
++XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.gz
+ XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
+ XSERVER_XORG_SERVER_LICENSE = MIT
+ XSERVER_XORG_SERVER_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
