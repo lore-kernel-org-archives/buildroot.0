@@ -4,50 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20953C54E41
-	for <buildroot@archiver.kernel.org>; Wed, 28 Feb 2024 11:25:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 306F4C5478C
+	for <buildroot@archiver.kernel.org>; Wed, 28 Feb 2024 11:45:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DE47B60AA1;
-	Wed, 28 Feb 2024 11:25:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D2C0B6089C;
+	Wed, 28 Feb 2024 11:45:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oG3zVJUl8mp2; Wed, 28 Feb 2024 11:25:48 +0000 (UTC)
+	with ESMTP id J4WOPEIETctx; Wed, 28 Feb 2024 11:45:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DAF5160D5F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DBEA6608CB
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DAF5160D5F;
-	Wed, 28 Feb 2024 11:25:47 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1AECF1BF30B
- for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 11:25:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DBEA6608CB;
+	Wed, 28 Feb 2024 11:45:52 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2CA041BF337
+ for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 11:45:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 157E740995
- for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 11:25:46 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 26CEF4025D
+ for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 11:45:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HXIljxdoO5eX for <buildroot@lists.busybox.net>;
- Wed, 28 Feb 2024 11:25:44 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RI9Hs1MX7K5A for <buildroot@lists.busybox.net>;
+ Wed, 28 Feb 2024 11:45:50 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
+ helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A8E94017C
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1A8E94017C
- for <buildroot@buildroot.org>; Wed, 28 Feb 2024 11:25:44 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E82C887B49; Wed, 28 Feb 2024 11:25:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A9CEF4016F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A9CEF4016F
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A9CEF4016F
+ for <buildroot@buildroot.org>; Wed, 28 Feb 2024 11:45:49 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 81680FF80B;
+ Wed, 28 Feb 2024 11:45:47 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1rfINe-00HSbf-2s;
+ Wed, 28 Feb 2024 12:45:46 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 28 Feb 2024 12:23:57 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 13083cf8c0edb0ac1cae4895505720658e8dd75d
-X-Git-Newrev: c20b2ae4ece10e07eeb80fcdd706a474d3be1475
-X-Patchwork-Hint: ignore
-Message-Id: <20240228112543.E82C887B49@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/openssh: fix dependencies with
- refpolicy
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20240122221934.475430-1-fontaine.fabrice@gmail.com>
+Date: Wed, 28 Feb 2024 12:45:46 +0100
+In-Reply-To: <20240122221934.475430-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 22 Jan 2024 23:19:34 +0100")
+Message-ID: <87il28revp.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] package/xterm: bump to version 389
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,88 +68,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c20b2ae4ece10e07eeb80fcdd706a474d3be1475
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Commit 2c5a82a29ceb (package/openssh: select linux-pam if refpolicy
-upstream is selected) did not account for the linux-pam dependencies
-before selecting it, causing unmet dependencies warnings (unfortunately,
-not errors), such as:
+ > - Update hash of COPYING (update in year)
+ > - This bump will fix the following musl build failure raised since bump
+ >   to version 384 in commit 164d635f3782522c324c710b767ef21c598228c4:
 
-    $ KCONFIG_SEED=0xCF227CF4 make randconfig
-    WARNING: unmet direct dependencies detected for BR2_PACKAGE_LINUX_PAM
-      Depends on [n]: BR2_ENABLE_LOCALE [=n] && BR2_USE_WCHAR [=n] && !BR2_STATIC_LIBS [=n] && BR2_USE_MMU [=y] && BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 [=y]
-      Selected by [y]:
-      - BR2_PACKAGE_OPENSSH [=y] && BR2_USE_MMU [=y] && BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION [=y]
+ > ./main.c:802:34: error: 'TAB3' undeclared here (not in a function); did you mean 'TAB0'?
+ >   802 |     { -1,       XTTYMODE__tabs,  TAB3 },
+ >       |                                  ^~~~
+ >       |                                  TAB0
 
-2c5a82a29ceb made the choice of having openssl bear the responsibility
-to select linux-pam when the upstream refpolicy version was enabled.
-Semantically however, the responsibility really lies within refpolicy
-itself, since that's what imposes linux-pam to openssh.
+ > https://invisible-island.net/xterm/xterm.log.html#xterm_389
 
-Move the select to refpolicy and drop it from openssh. Then, ensure that
-linux-pam is only selected when it is available.
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/51f98577b851bdbb0a0ab93c9ef94977776c1b1b
 
-That means that one may get an openssh that is not linked against
-linux-pam, when the linux-pam dependencies are not met; refpolicy (by
-way of libsepol) also has a more stringent requirement on gcc version
-than linux-pam, so most probably the missing dependencies would be
-locale, wchar, or a static build. We consider that situation to be a
-corner case that we do not want to address.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-In the future, we may have more similar situations, whereby refpolicy
-would impose other packages be linked with otherwise optional
-dependencies. If (when) that were (will be) the case, then the proposed
-mechanism would quickly become ugly; we could then re-assess a nicer way
-to do that. Until then, this is good ebough.
+Committed to 2023.02.x and 2023.11.x, thanks.
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/openssh/Config.in   | 1 -
- package/refpolicy/Config.in | 8 ++++++++
- 2 files changed, 8 insertions(+), 1 deletion(-)
-
-diff --git a/package/openssh/Config.in b/package/openssh/Config.in
-index a3038ba01f..08d3c7d391 100644
---- a/package/openssh/Config.in
-+++ b/package/openssh/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_OPENSSH
- 	bool "openssh"
- 	depends on BR2_USE_MMU # fork()
--	select BR2_PACKAGE_LINUX_PAM if BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_ZLIB
- 	help
-diff --git a/package/refpolicy/Config.in b/package/refpolicy/Config.in
-index 0e72b895df..8ae8f0448d 100644
---- a/package/refpolicy/Config.in
-+++ b/package/refpolicy/Config.in
-@@ -36,6 +36,14 @@ choice
- 
- config BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION
- 	bool "Upstream version"
-+	# Consider reworking the following when adding new entries:
-+	# Upstream refpolicy for openssh expects linux-pam to be used
-+	select BR2_PACKAGE_LINUX_PAM if BR2_PACKAGE_OPENSSH \
-+		&& BR2_USE_MMU \
-+		&& BR2_ENABLE_LOCALE \
-+		&& BR2_USE_WCHAR \
-+		&& !BR2_STATIC_LIBS \
-+		&& BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	help
- 	  Use the refpolicy as provided by Buildroot.
- 
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
