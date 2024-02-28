@@ -4,67 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4B5AC47DD9
-	for <buildroot@archiver.kernel.org>; Wed, 28 Feb 2024 18:15:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 612FAC5478C
+	for <buildroot@archiver.kernel.org>; Wed, 28 Feb 2024 18:15:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6802D40727;
-	Wed, 28 Feb 2024 18:15:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1DE2D406CD;
+	Wed, 28 Feb 2024 18:15:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uM9vLKwDYfWY; Wed, 28 Feb 2024 18:15:29 +0000 (UTC)
+	with ESMTP id 1DRGAxXfCDnB; Wed, 28 Feb 2024 18:15:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B26940558
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C43B40558
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2B26940558;
-	Wed, 28 Feb 2024 18:15:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9C43B40558;
+	Wed, 28 Feb 2024 18:15:31 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 664FC1BF3D5
- for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 18:14:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E5E331BF3D5
+ for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 18:14:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 60A618264C
- for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 18:14:24 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E014A8264C
+ for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 18:14:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MUtmB9lDeN3v for <buildroot@lists.busybox.net>;
- Wed, 28 Feb 2024 18:14:23 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9134280BAB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9134280BAB
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9134280BAB
- for <buildroot@buildroot.org>; Wed, 28 Feb 2024 18:14:21 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:48ec:5da2:e30:94b9])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 59D9819F5B2;
- Wed, 28 Feb 2024 19:14:17 +0100 (CET)
-From: Julien Olivain <ju.o@free.fr>
+ with ESMTP id QlmkwWyVlOou for <buildroot@lists.busybox.net>;
+ Wed, 28 Feb 2024 18:14:49 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::52b; helo=mail-ed1-x52b.google.com;
+ envelope-from=sairon@sairon.cz; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DFB8280BAB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DFB8280BAB
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
+ [IPv6:2a00:1450:4864:20::52b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DFB8280BAB
+ for <buildroot@buildroot.org>; Wed, 28 Feb 2024 18:14:48 +0000 (UTC)
+Received: by mail-ed1-x52b.google.com with SMTP id
+ 4fb4d7f45d1cf-56454c695e6so88618a12.0
+ for <buildroot@buildroot.org>; Wed, 28 Feb 2024 10:14:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1709144087; x=1709748887;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=s1zFP8iNKX3+JXcAjV6Z36cYwHjLL/CuIL6yQ5a7Ez8=;
+ b=ZFqXiHwW+tkC6FdJudC/KezqKziNYW+dQG/YXFDdtKoEEqcN3pltCH1ZuLpPCD0rkx
+ GHlc6vnsWGBuDVjP5YY7uch7ReTXFUFYCrwFG8FGLYvohrlLd1aophrgIxYn15+TVj/G
+ FzQk8gOtif2OwOFtaJ4xUrVxu20QZsa47MHiOteNu6gF2UATbIRRp+y8Afn4kzWE2enj
+ VIyIfV13i8ktAacVmeT8wF3MJ/YaN6u7C19wkffMaTpt47xo1HxPf3JgEEoKiWCo3BN0
+ g7sVejbSRLIJPhmJPrtQ/HKSjCigJ7JzH3s9M2lfL5ADoPwTTTQsjS7AEw2L9lxh2FBF
+ 8/1A==
+X-Gm-Message-State: AOJu0YxJN63nrfp+0BBEG6d/zZcUDTgrAYRJjIETqZ+3BnqkLc/ybhZM
+ wzb0aS6TxaVu6u28o55pQ1cyFOtZlIovkXcMMvkoLUH2Jck8iRoQ6SQujJ98MTJ4WO0J06x7Xwm
+ dCGE=
+X-Google-Smtp-Source: AGHT+IGE0iqxgdVu4uou12BFUeauj44KcbWMU7Bv+od+9OpV86nTaXHn8l5uVKN/U99DN9L0NZEcrg==
+X-Received: by 2002:a05:6402:3901:b0:566:78ff:b24e with SMTP id
+ fe1-20020a056402390100b0056678ffb24emr181764edb.17.1709144086747; 
+ Wed, 28 Feb 2024 10:14:46 -0800 (PST)
+Received: from krabice.lan (ip-89-103-66-201.bb.vodafone.cz. [89.103.66.201])
+ by smtp.gmail.com with ESMTPSA id
+ m18-20020a50d7d2000000b00564e4debe29sm2105658edj.78.2024.02.28.10.14.46
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 28 Feb 2024 10:14:46 -0800 (PST)
+From: =?UTF-8?q?Jan=20=C4=8Cerm=C3=A1k?= <sairon@sairon.cz>
 To: buildroot@buildroot.org
-Date: Wed, 28 Feb 2024 19:14:11 +0100
-Message-ID: <20240228181411.10174-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.44.0
+Date: Wed, 28 Feb 2024 19:14:08 +0100
+Message-Id: <20240228181409.3756293-1-sairon@sairon.cz>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1709144058;
- bh=Rv/gasZ8oCNtfC4RMLFZf4ePa6fHKwybxOmjCqEYI2E=;
- h=From:To:Cc:Subject:Date:From;
- b=bzJHP3fSVnBL1yvrJwWVlXNZFET2pLCbXKAsi7ZwDva0HiaQ4Ty/E0pHU3ANyjmr6
- IhuXK+VidlIUzpa+TrKRC52kOXQWQYPkyy2ao+DRah3NskkpQBcMpQxlTdTpIfgdgD
- 0v4Rss202esmdFq2XOPt8MBIjyf66BlCSS1kHPBU5IUnVDR+SGfUFSKMCPq12dz/EK
- JLWarPgN+pH3pRx41QgiVPyayg+FS8GNW5V05SjskfLtF19bcOm/2ex59kA/2sIrS1
- E1yImS0zqZkCPf7f2nXJiPFQfoyW3vGa1xuC9lwEkDkKRT3CKHbRmCbNQCFLxZQNsg
- J5enjwitD602A==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sairon.cz; s=google; t=1709144087; x=1709748887; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=s1zFP8iNKX3+JXcAjV6Z36cYwHjLL/CuIL6yQ5a7Ez8=;
+ b=eeEVoyDwEwAVB5bGvh2cSaOrqjwc/INIJapMsuHYzvEyS3OVPlKkms0fNIodva38xO
+ POjgzM8olKQzFqOLAax5eZboUV9Xg3jIgw6L7TIQAgfaGVarAXLoK1+/YZVWlrvON1kb
+ b+MSd//mYzI1t8md+Hl4S+T9pIjc4TxjswlvZE+j2ZFgQ+fRjprrawZbVDwIhpjrLQBF
+ LWsnAAe7q1JNeTsRkYWDMNOUGDuTU8bxND3d0bmSAKBLxrfKmTBDYzD+gMh8JPEJFBlY
+ BAJ01/d7Nxmbau5zeh+qwp47Muxq9kLMduuoPFDqlCLJJ9Wc3prmMZVO48NH3zSv4vVE
+ cvRA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
+ header.from=sairon.cz
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=bzJHP3fS
-Subject: [Buildroot] [PATCH v2 1/1] boot/syslinux: fix build with gnu-efi >=
- 3.0.16
+ dkim=pass (2048-bit key,
+ unprotected) header.d=sairon.cz header.i=@sairon.cz header.a=rsa-sha256
+ header.s=google header.b=eeEVoyDw
+Subject: [Buildroot] [PATCH] package/nfs-utils: only install fsidd binary
+ and unit file with enabled nfsd
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,104 +102,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Petr Vorel <petr.vorel@gmail.com>,
+ =?UTF-8?q?Jan=20=C4=8Cerm=C3=A1k?= <sairon@sairon.cz>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit fa9893ad8f "package/gnu-efi: bump to version 3.0.17" updated
-gnu-efi. This update introduced syslinux build failure, as reported
-in [1].
-
-This commit adds a package patch to fix this issue. For technical
-details of the issue, see the package patch commit log.
-
-Fixes:
-- https://gitlab.com/buildroot.org/buildroot/-/jobs/6256880937
-- https://gitlab.com/buildroot.org/buildroot/-/jobs/6256880949
-
-[1] https://lists.buildroot.org/pipermail/buildroot/2024-February/685971.html
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
-Changes v1 -> v2:
-- Removed .checkpackageignore entry for the patch
-- Added Upstream: tag with upstream proposal URL in the patch
----
- ...stddef.h-add-wchar_t-type-definition.patch | 59 +++++++++++++++++++
- 1 file changed, 59 insertions(+)
- create mode 100644 boot/syslinux/0019-stddef.h-add-wchar_t-type-definition.patch
-
-diff --git a/boot/syslinux/0019-stddef.h-add-wchar_t-type-definition.patch b/boot/syslinux/0019-stddef.h-add-wchar_t-type-definition.patch
-new file mode 100644
-index 00000000000..65d9463a6f6
---- /dev/null
-+++ b/boot/syslinux/0019-stddef.h-add-wchar_t-type-definition.patch
-@@ -0,0 +1,59 @@
-+From 063dac55c45d0264671c3463e824ab659e5cbb87 Mon Sep 17 00:00:00 2001
-+From: Julien Olivain <ju.o@free.fr>
-+Date: Tue, 27 Feb 2024 21:09:15 +0100
-+Subject: [PATCH] stddef.h: add wchar_t type definition
-+
-+Syslinux fail to build with gnu-efi >= 3.0.16 with error:
-+
-+    In file included from /host/i686-buildroot-linux-gnu/sysroot/usr/include/efi/efi.h:44,
-+                     from /build/syslinux-6.03/efi/efi.h:23,
-+                     from /build/syslinux-6.03/efi/adv.h:4,
-+                     from /build/syslinux-6.03/efi/adv.c:29:
-+    /host/i686-buildroot-linux-gnu/sysroot/usr/include/efi/ia32/efibind.h:90:9: error: unknown type name 'wchar_t'
-+     typedef wchar_t CHAR16;
-+             ^~~~~~~
-+
-+This is because gnu-efi started to use the "wchar_t" type from the
-+toolchain's <stddef.h> header, in commit [1]. Before this commit,
-+gnu-efi was defining the type as "short".
-+
-+Syslinux is including its own minimal stddef.h file, which masks the
-+one provided by the toolchain. See [2]. This file does not have a type
-+definition for "wchar_t".
-+
-+Finally, the POSIX <stddef.h> header is supposed to provide this
-+"wchar_t" type definition. See [3].
-+
-+This commit fixes the issue by adding the "wchar_t" type definition in
-+the com32/include/stddef.h header. Since Syslinux has "-fshort-wchar"
-+in its CFLAGS (see [4]), "wchar_t" is simply defined as "short". This
-+also follow the previous gnu-efi < 3.0.16 behavior.
-+
-+This issue was seen in Buildroot Linux, in [5].
-+
-+[1] https://sourceforge.net/p/gnu-efi/code/ci/189200d0b0f6fff473d302880d9569f45d4d8c4d
-+[2] https://repo.or.cz/syslinux.git/blob/refs/tags/syslinux-6.03:/com32/include/stddef.h
-+[3] https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/stddef.h.html
-+[4] https://repo.or.cz/syslinux.git/blob/refs/tags/syslinux-6.03:/mk/efi.mk#l27
-+[5] https://lists.buildroot.org/pipermail/buildroot/2024-February/685971.html
-+
-+Upstream: Proposed: https://www.syslinux.org/archives/2024-February/026903.html
-+Signed-off-by: Julien Olivain <ju.o@free.fr>
-+---
-+ com32/include/stddef.h | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/com32/include/stddef.h b/com32/include/stddef.h
-+index f52d62f3..437b11f2 100644
-+--- a/com32/include/stddef.h
-++++ b/com32/include/stddef.h
-+@@ -29,4 +29,6 @@
-+  */
-+ #define container_of(p, c, m) ((c *)((char *)(p) - offsetof(c,m)))
-+ 
-++typedef short wchar_t;
-++
-+ #endif /* _STDDEF_H */
-+-- 
-+2.44.0
-+
--- 
-2.44.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+VW5pdCBmaWxlIGZvciB0aGUgRlNJRCBkYWVtb24gZGVwZW5kcyBvbiB0aGUgbmZzLXNlcnZlci5z
+ZXJ2aWNlLCB3aGljaCBpcwpyZW1vdmVkIHdpdGhvdXQgQlIyX1BBQ0tBR0VfTkZTX1VUSUxTX1JQ
+Q19ORlNEIGVuYWJsZWQuIEFsc28gZG9uJ3QgaW5zdGFsbAp0aGUgZnNpZGQgc2VydmljZSBiaW5h
+cnkgd2l0aG91dCBuZnNkIGVuYWJsZWQuCgpTaWduZWQtb2ZmLWJ5OiBKYW4gxIxlcm3DoWsgPHNh
+aXJvbkBzYWlyb24uY3o+Ci0tLQogcGFja2FnZS9uZnMtdXRpbHMvbmZzLXV0aWxzLm1rIHwgMyAr
+Ky0KIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKCmRpZmYg
+LS1naXQgYS9wYWNrYWdlL25mcy11dGlscy9uZnMtdXRpbHMubWsgYi9wYWNrYWdlL25mcy11dGls
+cy9uZnMtdXRpbHMubWsKaW5kZXggNGYyYjQxYzc4Mi4uYjc1N2UzZTUxZCAxMDA2NDQKLS0tIGEv
+cGFja2FnZS9uZnMtdXRpbHMvbmZzLXV0aWxzLm1rCisrKyBiL3BhY2thZ2UvbmZzLXV0aWxzL25m
+cy11dGlscy5tawpAQCAtNDIsNyArNDIsOCBAQCBORlNfVVRJTFNfVEFSR0VUU18kKEJSMl9QQUNL
+QUdFX05GU19VVElMU19SUENERUJVRykgKz0gdXNyL3NiaW4vcnBjZGVidWcKIE5GU19VVElMU19U
+QVJHRVRTXyQoQlIyX1BBQ0tBR0VfTkZTX1VUSUxTX1JQQ19MT0NLRCkgKz0gdXNyL3NiaW4vcnBj
+LmxvY2tkCiBORlNfVVRJTFNfVEFSR0VUU18kKEJSMl9QQUNLQUdFX05GU19VVElMU19SUENfUlFV
+T1RBRCkgKz0gdXNyL3NiaW4vcnBjLnJxdW90YWQKIE5GU19VVElMU19UQVJHRVRTXyQoQlIyX1BB
+Q0tBR0VfTkZTX1VUSUxTX1JQQ19ORlNEKSArPSB1c3Ivc2Jpbi9leHBvcnRmcyBcCi0JdXNyL3Ni
+aW4vcnBjLm1vdW50ZCB1c3Ivc2Jpbi9ycGMubmZzZCB1c3IvbGliL3N5c3RlbWQvc3lzdGVtL25m
+cy1zZXJ2ZXIuc2VydmljZQorCXVzci9zYmluL3JwYy5tb3VudGQgdXNyL3NiaW4vcnBjLm5mc2Qg
+dXNyL2xpYi9zeXN0ZW1kL3N5c3RlbS9uZnMtc2VydmVyLnNlcnZpY2UgXAorCXVzci9zYmluL2Zz
+aWRkIHVzci9saWIvc3lzdGVtZC9zeXN0ZW0vZnNpZGQuc2VydmljZQogCiBpZmVxICgkKEJSMl9Q
+QUNLQUdFX05GU19VVElMU19ORlNWNCkseSkKIE5GU19VVElMU19DT05GX09QVFMgKz0gLS1lbmFi
+bGUtbmZzdjQgLS1lbmFibGUtbmZzdjQxCi0tIAoyLjM0LjEKCl9fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRy
+b290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlz
+dGluZm8vYnVpbGRyb290Cg==
