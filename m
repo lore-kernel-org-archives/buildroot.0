@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 291F1C47DD9
-	for <buildroot@archiver.kernel.org>; Wed, 28 Feb 2024 21:26:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 675DFC54E41
+	for <buildroot@archiver.kernel.org>; Wed, 28 Feb 2024 21:26:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DBAA4417C0;
-	Wed, 28 Feb 2024 21:26:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3191B416EA;
+	Wed, 28 Feb 2024 21:26:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8gMgIL7iaQdX; Wed, 28 Feb 2024 21:26:52 +0000 (UTC)
+	with ESMTP id REjOdSZOI6fA; Wed, 28 Feb 2024 21:26:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A65F41799
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0422E417C1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1A65F41799;
-	Wed, 28 Feb 2024 21:26:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B81AE1BF5A9
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0422E417C1;
+	Wed, 28 Feb 2024 21:26:55 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DC3551BF955
  for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 21:25:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A23186088E
- for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 21:25:52 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2183741687
+ for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 21:25:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Q4JmtrSBEZu2 for <buildroot@lists.busybox.net>;
- Wed, 28 Feb 2024 21:25:51 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RJxwEdJ315Ep for <buildroot@lists.busybox.net>;
+ Wed, 28 Feb 2024 21:25:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D54B1600B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 43CD241722
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D54B1600B5
- for <buildroot@buildroot.org>; Wed, 28 Feb 2024 21:25:51 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 43CD241722
+ for <buildroot@buildroot.org>; Wed, 28 Feb 2024 21:25:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C486987CA0; Wed, 28 Feb 2024 21:25:51 +0000 (UTC)
+ id 3E18F87CA0; Wed, 28 Feb 2024 21:25:49 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 28 Feb 2024 21:52:49 +0100
-X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 096eec5b39e610a4ccbbbe544d34874db2efb976
-X-Git-Newrev: dcc89720bf1a643a88b04fb4f5dcb78e6c3fcfed
+Date: Wed, 28 Feb 2024 22:16:56 +0100
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: caf50ae7504a3bba9d90ed9aa6096d42f2737c6f
+X-Git-Newrev: 9d4262cf2a8fe5157a495e58e4098c3c57a6191a
 X-Patchwork-Hint: ignore
-Message-Id: <20240228212551.C486987CA0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/dhcpcd: bump to
- version 10.0.5
+Message-Id: <20240228212549.3E18F87CA0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/netatalk: update
+ NETATALK_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,47 +65,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dcc89720bf1a643a88b04fb4f5dcb78e6c3fcfed
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=9d4262cf2a8fe5157a495e58e4098c3c57a6191a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-This version contains a fix for aarch64 based systems.
-On such systems, dhcpcd would crash without setting any IP addresses.
-See https://github.com/NetworkConfiguration/dhcpcd/commit/6a36f96740f8fb9f9b615b157962505f1ad8a00c
-and https://github.com/NetworkConfiguration/dhcpcd/issues/260 for more
-details.
+cpe:2.3:a:netatalk_project:netatalk has been deprecated in favor of
+cpe:2.3:a:netatalk:netatalk in September 2023:
 
-Signed-off-by: David Barbion <davidb@230ruedubac.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 1dfa4c56fe5dd1b584791b3c0c61dcf0b623aad5)
+  <cpe-item name="cpe:/a:netatalk_project:netatalk:3.1.13" deprecated="true" deprecation_date="2023-09-29T11:15:00.340Z">
+      <reference href="https://sourceforge.net/projects/netatalk/files/netatalk/">Version</reference>
+    <cpe-23:cpe23-item name="cpe:2.3:a:netatalk_project:netatalk:3.1.13:*:*:*:*:*:*:*">
+        <cpe-23:deprecated-by name="cpe:2.3:a:netatalk:netatalk:3.1.13:*:*:*:*:*:*:*" type="NAME_CORRECTION"/>
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 5ae38ec621f4821dd3eaf7ad3b0174cad21116ff)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dhcpcd/dhcpcd.hash | 2 +-
- package/dhcpcd/dhcpcd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/netatalk/netatalk.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/dhcpcd/dhcpcd.hash b/package/dhcpcd/dhcpcd.hash
-index b015dce4ac..fb4f6064bc 100644
---- a/package/dhcpcd/dhcpcd.hash
-+++ b/package/dhcpcd/dhcpcd.hash
-@@ -1,4 +1,4 @@
- # sha256 from https://github.com/NetworkConfiguration/dhcpcd/releases/tag/v10.0.4
--sha256  ced5bbde8da3726eac77b9e77e4f31a89c9849d811ef8a2c749664fc5f55a718  dhcpcd-10.0.4.tar.xz
-+sha256  eb1f3cfef3069781ff8c896d7cea922639964afe22db28c069dc3f37f57eb428  dhcpcd-10.0.5.tar.xz
- # Locally calculated
- sha256  a7d6da3a202cdd38eaab0bcea4d25f60d002980f3785b3e896d9bf387f093ac8  LICENSE
-diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
-index ba1481e83d..ab3f98dd5a 100644
---- a/package/dhcpcd/dhcpcd.mk
-+++ b/package/dhcpcd/dhcpcd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/netatalk/netatalk.mk b/package/netatalk/netatalk.mk
+index a47bfa7e84..40e64dabeb 100644
+--- a/package/netatalk/netatalk.mk
++++ b/package/netatalk/netatalk.mk
+@@ -12,7 +12,7 @@ NETATALK_DEPENDENCIES = host-pkgconf openssl berkeleydb libgcrypt libgpg-error \
+ 	libevent
+ NETATALK_LICENSE = GPL-2.0+, LGPL-3.0+, MIT-like
+ NETATALK_LICENSE_FILES = COPYING COPYRIGHT
+-NETATALK_CPE_ID_VENDOR = netatalk_project
++NETATALK_CPE_ID_VENDOR = netatalk
  
--DHCPCD_VERSION = 10.0.4
-+DHCPCD_VERSION = 10.0.5
- DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.xz
- DHCPCD_SITE = https://github.com/NetworkConfiguration/dhcpcd/releases/download/v$(DHCPCD_VERSION)
- DHCPCD_DEPENDENCIES = host-pkgconf
+ # Don't run ldconfig!
+ NETATALK_CONF_ENV += CC="$(TARGET_CC) -std=gnu99" \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
