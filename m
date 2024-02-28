@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB5D1C5478C
-	for <buildroot@archiver.kernel.org>; Wed, 28 Feb 2024 21:27:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CEB10C47DD9
+	for <buildroot@archiver.kernel.org>; Wed, 28 Feb 2024 21:27:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AEAC641872;
-	Wed, 28 Feb 2024 21:27:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9F5654187E;
+	Wed, 28 Feb 2024 21:27:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Nja4dHli1k8A; Wed, 28 Feb 2024 21:27:50 +0000 (UTC)
+	with ESMTP id QfxC9uRkUEnH; Wed, 28 Feb 2024 21:27:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A0F7E41883
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D7134188C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A0F7E41883;
-	Wed, 28 Feb 2024 21:27:50 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 09C561BF97A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2D7134188C;
+	Wed, 28 Feb 2024 21:27:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4F2C11BF5A9
  for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 21:26:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9A63B4044D
- for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 21:25:54 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9244181973
+ for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 21:25:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id otvvrQ9AmTqI for <buildroot@lists.busybox.net>;
- Wed, 28 Feb 2024 21:25:53 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3XtqCf2SSoz9 for <buildroot@lists.busybox.net>;
+ Wed, 28 Feb 2024 21:25:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E659E41698
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AB4EE81A34
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E659E41698
+ by smtp1.osuosl.org (Postfix) with ESMTP id AB4EE81A34
  for <buildroot@buildroot.org>; Wed, 28 Feb 2024 21:25:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D6F9287CA0; Wed, 28 Feb 2024 21:25:52 +0000 (UTC)
+ id A896D87CDC; Wed, 28 Feb 2024 21:25:52 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 28 Feb 2024 22:17:15 +0100
+Date: Wed, 28 Feb 2024 22:15:19 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 3f0c6bf49fa1a415c64d59e8589cc8e5a3b86fd3
-X-Git-Newrev: 6cc9ab7d55c1b0b202f93d6c7d324fe353cf8d37
+X-Git-Oldrev: 8dedc1329fe28b59c6a8014cc81ed6e40d86b13b
+X-Git-Newrev: e480566f8069a3a08863e65f8a6200aff6bf7da8
 X-Patchwork-Hint: ignore
-Message-Id: <20240228212552.D6F9287CA0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x]
- package/x11r7/xlib_libXpm: update XLIB_LIBXPM_CPE_ID_VENDOR
+Message-Id: <20240228212552.A896D87CDC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/linux-firmware:
+ drop LINUX_FIRMWARE_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,39 +65,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6cc9ab7d55c1b0b202f93d6c7d324fe353cf8d37
+commit: https://git.buildroot.net/buildroot/commit/?id=e480566f8069a3a08863e65f8a6200aff6bf7da8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-cpe:2.3:a:libxpm_project:libxpm has been deprecated in favor of
-cpe:2.3:a:x.org:libxpm in October 2023:
+cpe:2.3:a:kernel:linux-firmware added by commit
+63332c33aa0771532807fd2684d4eee4eb952435 has never been a valid CPE ID
+for this package:
 
-  <cpe-item name="cpe:/a:libxpm_project:libxpm:3.5.15" deprecated="true" deprecation_date="2023-10-17T15:55:35.850Z">
-    <title xml:lang="en-US">Libxpm Project Libxpm 3.5.15</title>
-      <reference href="https://gitlab.freedesktop.org/xorg/lib/libxpm/-/tags">Version</reference>
-    <cpe-23:cpe23-item name="cpe:2.3:a:libxpm_project:libxpm:3.5.15:*:*:*:*:*:*:*">
-        <cpe-23:deprecated-by name="cpe:2.3:a:x.org:libxpm:3.5.15:*:*:*:*:*:*:*" type="NAME_CORRECTION"/>
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe:2.3:a:kernel:linux-firmware
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 03a9171cced41f2ee94850d6237bcc54fdda0b1a)
+(cherry picked from commit 380d4a75f5e3c2ae52ebc1afd409713fdb6ced37)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xlib_libXpm/xlib_libXpm.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/linux-firmware/linux-firmware.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXpm/xlib_libXpm.mk b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-index 0bba3ea946..1239ba0d4d 100644
---- a/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-+++ b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-@@ -9,7 +9,7 @@ XLIB_LIBXPM_SOURCE = libXpm-$(XLIB_LIBXPM_VERSION).tar.xz
- XLIB_LIBXPM_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBXPM_LICENSE = MIT
- XLIB_LIBXPM_LICENSE_FILES = COPYING COPYRIGHT
--XLIB_LIBXPM_CPE_ID_VENDOR = libxpm_project
-+XLIB_LIBXPM_CPE_ID_VENDOR = x.org
- XLIB_LIBXPM_CPE_ID_PRODUCT = libxpm
- XLIB_LIBXPM_INSTALL_STAGING = YES
- XLIB_LIBXPM_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXt xorgproto \
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index c2cf0fec19..cc3624e59e 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -9,8 +9,6 @@ LINUX_FIRMWARE_SOURCE = linux-firmware-$(LINUX_FIRMWARE_VERSION).tar.xz
+ LINUX_FIRMWARE_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/firmware
+ LINUX_FIRMWARE_INSTALL_IMAGES = YES
+ 
+-LINUX_FIRMWARE_CPE_ID_VENDOR = kernel
+-
+ # Intel SST DSP
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_INTEL_SST_DSP),y)
+ LINUX_FIRMWARE_FILES += intel/fw_sst_0f28.bin-48kHz_i2s_master
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
