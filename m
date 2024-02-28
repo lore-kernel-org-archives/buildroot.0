@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 542F1C47DD9
-	for <buildroot@archiver.kernel.org>; Wed, 28 Feb 2024 11:48:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27251C5478C
+	for <buildroot@archiver.kernel.org>; Wed, 28 Feb 2024 11:49:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 255D66089C;
-	Wed, 28 Feb 2024 11:48:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E445960E66;
+	Wed, 28 Feb 2024 11:49:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ytqNAY2sKMJa; Wed, 28 Feb 2024 11:48:57 +0000 (UTC)
+	with ESMTP id uqR6YxQdl0oJ; Wed, 28 Feb 2024 11:49:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3441660A4D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 25A4360E5E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3441660A4D;
-	Wed, 28 Feb 2024 11:48:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 348901BF8B4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 25A4360E5E;
+	Wed, 28 Feb 2024 11:48:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4DEFA1BF955
  for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 11:48:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 22BF160A4D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3BEDC82090
  for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 11:48:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SeMaXbGmdXre for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7Eabwe8oviQi for <buildroot@lists.busybox.net>;
  Wed, 28 Feb 2024 11:48:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B7306089C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7941E81CBA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6B7306089C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7941E81CBA
  for <buildroot@buildroot.org>; Wed, 28 Feb 2024 11:48:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 599CE87B71; Wed, 28 Feb 2024 11:48:55 +0000 (UTC)
+ id 6590087B73; Wed, 28 Feb 2024 11:48:55 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 28 Feb 2024 12:46:14 +0100
+Date: Wed, 28 Feb 2024 12:47:20 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 963d79affe3dda6243aef08119ac08a250f3728b
-X-Git-Newrev: b448305ae61ac2a447d1b1892b0c344c3b9deed7
+X-Git-Oldrev: b448305ae61ac2a447d1b1892b0c344c3b9deed7
+X-Git-Newrev: 0bb42e170d4247dc097df08b692a72b4410324c4
 X-Patchwork-Hint: ignore
-Message-Id: <20240228114855.599CE87B71@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/php: bump version
- to 8.2.15
+Message-Id: <20240228114855.6590087B73@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/refpolicy: move
+ patch to version subdir for custom git support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,45 +65,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b448305ae61ac2a447d1b1892b0c344c3b9deed7
+commit: https://git.buildroot.net/buildroot/commit/?id=0bb42e170d4247dc097df08b692a72b4410324c4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-Changelog: https://www.php.net/ChangeLog-8.php#8.2.15
-Release notes: https://www.php.net/releases/8_2_15.php
+Commit e88823d667cf0 (package/refpolicy: fix build with smartmontools) added
+a 0001-policy-modules-services-smartmon.te-make-fstools-opt.patch patch, but
+forgot to put it in the version specific sub directory - Breaking builds
+using BR2_PACKAGE_REFPOLICY_CUSTOM_GIT as shown by the TestSELinuxCustomGit
+test:
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+>>> refpolicy RELEASE_2_20200818 Extracting
+gzip -d -c /builds/buildroot.org/buildroot/test-dl/refpolicy/refpolicy-RELEASE_2_20200818-br1.tar.gz | tar --strip-components=1 -C /builds/buildroot.org/buildroot/test-output/TestSELinuxCustomGit/build/refpolicy-RELEASE_2_20200818   -xf -
+>>> refpolicy RELEASE_2_20200818 Patching
+
+Applying 0001-policy-modules-services-smartmon.te-make-fstools-opt.patch using patch:
+patching file policy/modules/services/smartmon.te
+Hunk #1 FAILED at 143.
+1 out of 1 hunk FAILED -- saving rejects to file policy/modules/services/smartmon.te.rej
+make[1]: *** [package/pkg-generic.mk:241: /builds/buildroot.org/buildroot/test-output/TestSELinuxCustomGit/build/refpolicy-RELEASE_2_20200818/.stamp_patched] Error 1
+
+https://gitlab.com/buildroot.org/buildroot/-/jobs/5929796183
+
+Fix it by moving the patch to a versioned sub directory.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ed7335d256f0327666168416b6278cfa4811faed)
+(cherry picked from commit bde468127c9d131de380d0dd2849527597ecf5e0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../0001-policy-modules-services-smartmon.te-make-fstools-opt.patch       | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 3759852a9b..7c8736e41c 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  763ecd39fcf51c3815af6ef6e43fa9aa0d0bd8e5a615009e5f4780c92705f583  php-8.2.14.tar.xz
-+sha256  eca5deac02d77d806838275f8a3024b38b35ac0a5d9853dcc71c6cbe3f1f8765  php-8.2.15.tar.xz
- 
- # License file
- sha256  080d0d0cca64181ef8bf1df9fba0c6f0c485f78f79540c479a45b593bb3b33b5  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 63fcfd8634..c69abd5f31 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 8.2.14
-+PHP_VERSION = 8.2.15
- PHP_SITE = https://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+diff --git a/package/refpolicy/0001-policy-modules-services-smartmon.te-make-fstools-opt.patch b/package/refpolicy/2.20231002/0001-policy-modules-services-smartmon.te-make-fstools-opt.patch
+similarity index 100%
+rename from package/refpolicy/0001-policy-modules-services-smartmon.te-make-fstools-opt.patch
+rename to package/refpolicy/2.20231002/0001-policy-modules-services-smartmon.te-make-fstools-opt.patch
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
