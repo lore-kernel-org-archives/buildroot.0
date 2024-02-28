@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C49FFC47DD9
-	for <buildroot@archiver.kernel.org>; Wed, 28 Feb 2024 21:26:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65EA7C5478C
+	for <buildroot@archiver.kernel.org>; Wed, 28 Feb 2024 21:26:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 905FB416E6;
-	Wed, 28 Feb 2024 21:26:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E9F0D416D1;
+	Wed, 28 Feb 2024 21:26:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2h1DqLSKtU23; Wed, 28 Feb 2024 21:26:37 +0000 (UTC)
+	with ESMTP id zgYqXClvh7S0; Wed, 28 Feb 2024 21:26:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C6884176C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F0534177A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6C6884176C;
-	Wed, 28 Feb 2024 21:26:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A7E451BF955
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6F0534177A;
+	Wed, 28 Feb 2024 21:26:40 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8EC011BF5A9
  for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 21:25:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2EAF5608CB
- for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 21:25:50 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 77229416AF
+ for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 21:25:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DiDXIAJXDkTh for <buildroot@lists.busybox.net>;
- Wed, 28 Feb 2024 21:25:49 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ErSsQ_P4lWkJ for <buildroot@lists.busybox.net>;
+ Wed, 28 Feb 2024 21:25:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C4BC60A36
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1DC004029B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6C4BC60A36
- for <buildroot@buildroot.org>; Wed, 28 Feb 2024 21:25:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1DC004029B
+ for <buildroot@buildroot.org>; Wed, 28 Feb 2024 21:25:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 69C9A87CDB; Wed, 28 Feb 2024 21:25:49 +0000 (UTC)
+ id 0C12087CDB; Wed, 28 Feb 2024 21:25:52 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 28 Feb 2024 22:20:56 +0100
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 51cf6919d02043d57970a5ebe084868547550756
-X-Git-Newrev: 5d991169988f58b2548383b8675bec07cc0ba9f4
+Date: Wed, 28 Feb 2024 22:01:53 +0100
+X-Git-Refname: refs/heads/2023.11.x
+X-Git-Oldrev: 47960afe4f47a759cb6a07a7f53e07a085890b51
+X-Git-Newrev: 1c93f28c12154478143e2c1757aa44e8f428c172
 X-Patchwork-Hint: ignore
-Message-Id: <20240228212549.69C9A87CDB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/dbus: fix CPE
- variables
+Message-Id: <20240228212552.0C12087CDB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/syslog-ng: needs
+ pcre2, not pcre
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,42 +65,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d991169988f58b2548383b8675bec07cc0ba9f4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1c93f28c12154478143e2c1757aa44e8f428c172
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-cpe:2.3:a:d-bus_project:d-bus has been deprecated in favor of
-cpe:2.3:a:freedesktop:dbus in December 2023:
+Syslog-ng-uses pcre2 instead of pcre since 4.3.0 with:
+https://github.com/syslog-ng/syslog-ng/commit/cb6de08dc9078644d48ca536b5660e406b1a50d6
 
-  <cpe-item name="cpe:/a:d-bus_project:d-bus:1.15.6" deprecated="true" deprecation_date="2023-12-27T16:36:56.510Z">
-    <title xml:lang="en-US">D-Bus Project D-Bus 1.15.6</title>
-      <reference href="https://gitlab.freedesktop.org/dbus/dbus/-/tags">Version</reference>
-      <reference href="https://gitlab.freedesktop.org/dbus/dbus/-/issues/457">Advisory</reference>
-    <cpe-23:cpe23-item name="cpe:2.3:a:d-bus_project:d-bus:1.15.6:*:*:*:*:*:*:*">
-        <cpe-23:deprecated-by name="cpe:2.3:a:freedesktop:dbus:1.15.6:*:*:*:*:*:*:*" type="NAME_CORRECTION"/>
+No autobuilder failures, as pcre2 is implicitly available through libglib2.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 363b4ebf1aaf4821c0c49713eba71937bd5639ca)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit d932f84d9fed1fca22c7bcd1eea382d7c9ea6735)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dbus/dbus.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/syslog-ng/Config.in    | 2 +-
+ package/syslog-ng/syslog-ng.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index 99d2c4301c..b4d1cdc6b6 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -10,8 +10,8 @@ DBUS_VERSION = 1.12.28
- DBUS_SITE = https://dbus.freedesktop.org/releases/dbus
- DBUS_LICENSE = AFL-2.1 or GPL-2.0+ (library, tools), GPL-2.0+ (tools)
- DBUS_LICENSE_FILES = COPYING
--DBUS_CPE_ID_VENDOR = d-bus_project
--DBUS_CPE_ID_PRODUCT = d-bus
-+DBUS_CPE_ID_VENDOR = freedesktop
-+DBUS_CPE_ID_PRODUCT = dbus
- DBUS_INSTALL_STAGING = YES
- 
- define DBUS_PERMISSIONS
+diff --git a/package/syslog-ng/Config.in b/package/syslog-ng/Config.in
+index 30ad54a4bf..aa1e71d225 100644
+--- a/package/syslog-ng/Config.in
++++ b/package/syslog-ng/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_SYSLOG_NG
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	select BR2_PACKAGE_LIBGLIB2
+-	select BR2_PACKAGE_PCRE
++	select BR2_PACKAGE_PCRE2
+ 	select BR2_PACKAGE_OPENSSL
+ 	help
+ 	  syslog-ng is an enhanced log daemon, supporting a wide range
+diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
+index ff5aaee429..dd02a6e3af 100644
+--- a/package/syslog-ng/syslog-ng.mk
++++ b/package/syslog-ng/syslog-ng.mk
+@@ -12,7 +12,7 @@ SYSLOG_NG_LICENSE = LGPL-2.1+ (syslog-ng core), GPL-2.0+ (modules)
+ SYSLOG_NG_LICENSE_FILES = COPYING GPL.txt LGPL.txt
+ SYSLOG_NG_CPE_ID_VENDOR = oneidentity
+ SYSLOG_NG_DEPENDENCIES = host-bison host-flex host-pkgconf \
+-	libglib2 openssl pcre
++	libglib2 openssl pcre2
+ # We're patching configure.ac
+ SYSLOG_NG_AUTORECONF = YES
+ SYSLOG_NG_CONF_OPTS = --disable-manpages --localstatedir=/var/run \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
