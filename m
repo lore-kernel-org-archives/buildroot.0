@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B5A6C5478C
-	for <buildroot@archiver.kernel.org>; Wed, 28 Feb 2024 16:45:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 940ABC47DD9
+	for <buildroot@archiver.kernel.org>; Wed, 28 Feb 2024 16:45:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4631860EAF;
-	Wed, 28 Feb 2024 16:45:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5FC4960EC4;
+	Wed, 28 Feb 2024 16:45:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nURb4w7X79nl; Wed, 28 Feb 2024 16:45:22 +0000 (UTC)
+	with ESMTP id rpzOpCf7BAaP; Wed, 28 Feb 2024 16:45:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 912D460EF8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 06BFC60F17
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 912D460EF8;
-	Wed, 28 Feb 2024 16:45:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 886611BF955
- for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 16:44:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 06BFC60F17;
+	Wed, 28 Feb 2024 16:45:25 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A39A71BF2B3
+ for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 16:45:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 80D2A41691
+ by smtp1.osuosl.org (Postfix) with ESMTP id 80FA480E67
  for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 16:44:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DJKbNo2XJvbg for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pnKuaj1HEt44 for <buildroot@lists.busybox.net>;
  Wed, 28 Feb 2024 16:44:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C320B416D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 99A0C80C80
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C320B416D9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 99A0C80C80
  for <buildroot@buildroot.org>; Wed, 28 Feb 2024 16:44:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BEDCB87BFD; Wed, 28 Feb 2024 16:44:57 +0000 (UTC)
+ id 87C4987BFD; Wed, 28 Feb 2024 16:44:57 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 28 Feb 2024 17:42:03 +0100
+Date: Wed, 28 Feb 2024 17:25:13 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 087993b9ae0a655b567e8ecbc41c4f8fafd94229
-X-Git-Newrev: 72a06fb11d906f74ff3bdd48b848454d2a12519d
+X-Git-Oldrev: bd202dde79987898f3deb7cd6fbdff1217659dda
+X-Git-Newrev: 1e7fb7c7a68781bb38dd09acf39eb25476e1d97a
 X-Patchwork-Hint: ignore
-Message-Id: <20240228164457.BEDCB87BFD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/mbedtls: security
- bump to version 2.28.7
+Message-Id: <20240228164457.87C4987BFD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/hiredis: do not
+ install nuget packaging file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,62 +65,98 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=72a06fb11d906f74ff3bdd48b848454d2a12519d
+commit: https://git.buildroot.net/buildroot/commit/?id=1e7fb7c7a68781bb38dd09acf39eb25476e1d97a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-- Fix CVE-2024-23170 and CVE-2024-23775
-- Mbed TLS is now released under a dual Apache-2.0 OR GPL-2.0-or-later
-  license. Users may choose which license they take the code under:
-  https://github.com/Mbed-TLS/mbedtls/commit/f429557c5900d3b90bd10a21b228f719e80f81a2
+The NuGet packaging description file is installed as:
+    $(DEST_DIR)/build/native/hiredis.targets
 
-https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2024-01-1/
-https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2024-01-2/
-https://github.com/Mbed-TLS/mbedtls/releases/tag/v2.28.6
-https://github.com/Mbed-TLS/mbedtls/releases/tag/v2.28.7
+This is a sprurious file that has nothing to do on a Linux system,
+whether that be in host/, staging/, or target/.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Backport an upstream patch to get rid of it.
+
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 52fd4753fe64208bfc25dc8a298f067da5c4c4b4)
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+(cherry picked from commit 52f3793d46e4185951ce0e7254a35fba23959346)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mbedtls/mbedtls.hash | 6 +++---
- package/mbedtls/mbedtls.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ ...add-option-to-not-install-NuGet-packaging.patch | 51 ++++++++++++++++++++++
+ package/hiredis/hiredis.mk                         |  4 +-
+ 2 files changed, 53 insertions(+), 2 deletions(-)
 
-diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
-index d0cd0b2105..3ec151a859 100644
---- a/package/mbedtls/mbedtls.hash
-+++ b/package/mbedtls/mbedtls.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.28.4:
--sha256  849e86b626e42ded6bf67197b64aa771daa54e2a7e2868dc67e1e4711959e5e3  mbedtls-2.28.5.tar.gz
-+# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.28.7:
-+sha256  1df6073f0cf6a4e1953890bf5e0de2a8c7e6be50d6d6c69fa9fefcb1d14e981a  mbedtls-2.28.7.tar.gz
- # Locally calculated
--sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-+sha256  9b405ef4c89342f5eae1dd828882f931747f71001cfba7d114801039b52ad09b  LICENSE
-diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-index 1b941e04f4..cdb4aef4f4 100644
---- a/package/mbedtls/mbedtls.mk
-+++ b/package/mbedtls/mbedtls.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/hiredis/0001-CMakeList-add-option-to-not-install-NuGet-packaging.patch b/package/hiredis/0001-CMakeList-add-option-to-not-install-NuGet-packaging.patch
+new file mode 100644
+index 0000000000..dbe8bc0ae6
+--- /dev/null
++++ b/package/hiredis/0001-CMakeList-add-option-to-not-install-NuGet-packaging.patch
+@@ -0,0 +1,51 @@
++From ff7a064490e0aacf718a5263b25b2ddaad0d245e Mon Sep 17 00:00:00 2001
++From: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Date: Sat, 20 Jan 2024 13:53:39 +0100
++Subject: [PATCH] CMakeList: add option to not install NuGet packaging
++
++The NuGet hiredis.target packaging description file is of no use on
++systems that are not using NuGet, like Linux systems, and the spurious
++presence of that file is not "clean".
++
++Add a cmake option to allow users to disable installation of that file.
++As some people may have relied on that file to be installed, continue to
++install it by default.
++
++Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
++Upstream: https://github.com/redis/hiredis/commit/ff7a064490e0aacf718a5263b25b2ddaad0d245e
++---
++ CMakeLists.txt | 11 ++++++++---
++ 1 file changed, 8 insertions(+), 3 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index b7d6ee8..0fcf29b 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -6,6 +6,9 @@ OPTION(DISABLE_TESTS "If tests should be compiled or not" OFF)
++ OPTION(ENABLE_SSL_TESTS "Should we test SSL connections" OFF)
++ OPTION(ENABLE_EXAMPLES "Enable building hiredis examples" OFF)
++ OPTION(ENABLE_ASYNC_TESTS "Should we run all asynchronous API tests" OFF)
+++# Historically, the NuGet file was always install; default
+++# to ON for those who rely on that historical behaviour.
+++OPTION(ENABLE_NUGET "Install NuGET packaging details" ON)
++
++ MACRO(getVersionBit name)
++   SET(VERSION_REGEX "^#define ${name} (.+)$")
++@@ -105,9 +108,11 @@ if (MSVC AND BUILD_SHARED_LIBS)
++         CONFIGURATIONS Debug RelWithDebInfo)
++ endif()
++
++-# For NuGet packages
++-INSTALL(FILES hiredis.targets
++-    DESTINATION build/native)
+++if (ENABLE_NUGET)
+++    # For NuGet packages
+++    INSTALL(FILES hiredis.targets
+++        DESTINATION build/native)
+++endif()
++
++ INSTALL(FILES hiredis.h read.h sds.h async.h alloc.h sockcompat.h
++     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/hiredis)
++--
++2.43.0
++
+diff --git a/package/hiredis/hiredis.mk b/package/hiredis/hiredis.mk
+index a7a6d639e6..476b079336 100644
+--- a/package/hiredis/hiredis.mk
++++ b/package/hiredis/hiredis.mk
+@@ -12,8 +12,8 @@ HIREDIS_LICENSE_FILES = COPYING
+ HIREDIS_CPE_ID_VENDOR = redislabs
+ HIREDIS_INSTALL_STAGING = YES
  
--MBEDTLS_VERSION = 2.28.5
-+MBEDTLS_VERSION = 2.28.7
- MBEDTLS_SITE = $(call github,ARMmbed,mbedtls,v$(MBEDTLS_VERSION))
- MBEDTLS_CONF_OPTS = \
- 	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -std=c99" \
-@@ -12,7 +12,7 @@ MBEDTLS_CONF_OPTS = \
- 	-DENABLE_TESTING=OFF \
- 	-DMBEDTLS_FATAL_WARNINGS=OFF
- MBEDTLS_INSTALL_STAGING = YES
--MBEDTLS_LICENSE = Apache-2.0
-+MBEDTLS_LICENSE = Apache-2.0 or GPL-2.0+
- MBEDTLS_LICENSE_FILES = LICENSE
- MBEDTLS_CPE_ID_VENDOR = arm
- MBEDTLS_CPE_ID_PRODUCT = mbed_tls
+-HIREDIS_CONF_OPTS = -DDISABLE_TESTS=ON
+-HOST_HIREDIS_CONF_OPTS = -DDISABLE_TESTS=ON -DENABLE_SSL=OFF
++HIREDIS_CONF_OPTS = -DENABLE_NUGET=OFF -DDISABLE_TESTS=ON
++HOST_HIREDIS_CONF_OPTS = -DENABLE_NUGET=OFF -DDISABLE_TESTS=ON -DENABLE_SSL=OFF
+ 
+ # Set CMAKE_BUILD_TYPE to Release or the libraries will be suffixed with "d"
+ # resulting in build failures when linking.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
