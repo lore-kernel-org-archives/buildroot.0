@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BAB58C5478C
-	for <buildroot@archiver.kernel.org>; Wed, 28 Feb 2024 17:31:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3D6DC5478C
+	for <buildroot@archiver.kernel.org>; Wed, 28 Feb 2024 17:31:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 82E9D417DE;
-	Wed, 28 Feb 2024 17:31:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9730F4175B;
+	Wed, 28 Feb 2024 17:31:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OVBG2DmLj4Rh; Wed, 28 Feb 2024 17:31:39 +0000 (UTC)
+	with ESMTP id 9RiCJaXEqk_o; Wed, 28 Feb 2024 17:31:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C53F417C7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A8B6417CA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5C53F417C7;
-	Wed, 28 Feb 2024 17:31:38 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 98A851BF841
- for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 17:31:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8A8B6417CA;
+	Wed, 28 Feb 2024 17:31:43 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 11F991BF841
+ for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 17:31:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6E99160A9B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8B4BB4175C
  for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 17:31:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id u88eXq65cAyu for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JSiuVNTlo9di for <buildroot@lists.busybox.net>;
  Wed, 28 Feb 2024 17:31:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9157C60E34
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A7A044175D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9157C60E34
+ by smtp4.osuosl.org (Postfix) with ESMTP id A7A044175D
  for <buildroot@buildroot.org>; Wed, 28 Feb 2024 17:31:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7FE3A87C3D; Wed, 28 Feb 2024 17:31:11 +0000 (UTC)
+ id A2E4587C3B; Wed, 28 Feb 2024 17:31:11 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 28 Feb 2024 18:28:20 +0100
+Date: Wed, 28 Feb 2024 18:28:22 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 5c40af09b5e1899066c5173d7596a0da1cd34a85
-X-Git-Newrev: 6cf19efa53d99f29c42035b96e96e5b0557cb05a
+X-Git-Oldrev: e7015c3cf72b57abadfc03bd628ca05478dbbf6a
+X-Git-Newrev: 1dbda0dc13e89faf27815651af5788fd233b63b7
 X-Patchwork-Hint: ignore
-Message-Id: <20240228173111.7FE3A87C3D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/gst1-libav: bump
+Message-Id: <20240228173111.A2E4587C3B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/gst1-vaapi: bump
  to version 1.22.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -65,41 +65,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6cf19efa53d99f29c42035b96e96e5b0557cb05a
+commit: https://git.buildroot.net/buildroot/commit/?id=1dbda0dc13e89faf27815651af5788fd233b63b7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit db9b4f3b0ca4524fcead56b46b53bff268ec1964)
+(cherry picked from commit 6f28c463cf06d929789dc4c4c37cd8bdbfa0d60a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-libav/gst1-libav.hash | 4 ++--
- package/gstreamer1/gst1-libav/gst1-libav.mk   | 2 +-
+ package/gstreamer1/gst1-vaapi/gst1-vaapi.hash | 4 ++--
+ package/gstreamer1/gst1-vaapi/gst1-vaapi.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.hash b/package/gstreamer1/gst1-libav/gst1-libav.hash
-index 7d27929cab..b5bc84d672 100644
---- a/package/gstreamer1/gst1-libav/gst1-libav.hash
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.hash
+diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash b/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
+index 9a7b7df520..ec23ae7c6b 100644
+--- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
++++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
 @@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.22.8.tar.xz.sha256sum
--sha256  be39349bc07ab4cdbd9a5fd6ea9848c601c7560ba5a0577ad5200b83bd424981  gst-libav-1.22.8.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.22.9.tar.xz.sha256sum
-+sha256  192f7d27d21c1e7c72c339a2647a9b0c247fedc62ea5029115f8c3e22ebb87d8  gst-libav-1.22.9.tar.xz
- sha256  ad2eec519ebd4b5df86ea84dff24ae3bfa2edea846a703b58902dd221ae375db  COPYING
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
-index 5017cda01a..1b872b7fa9 100644
---- a/package/gstreamer1/gst1-libav/gst1-libav.mk
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
+-# From https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.22.8.tar.xz.sha256sum
+-sha256  1298ba347a70c42b88cdebf91b659fea02b1bb7269eabf8e29e3c0bd58278928  gstreamer-vaapi-1.22.8.tar.xz
++# From https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.22.9.tar.xz.sha256sum
++sha256  8ba20da8c4cbf5b2953dba904672c4275d0053e1528f97fdf8e59942c7883ca8  gstreamer-vaapi-1.22.9.tar.xz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
+index 0a2f35c8ce..4b04d1bb72 100644
+--- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
++++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_LIBAV_VERSION = 1.22.8
-+GST1_LIBAV_VERSION = 1.22.9
- GST1_LIBAV_SOURCE = gst-libav-$(GST1_LIBAV_VERSION).tar.xz
- GST1_LIBAV_SITE = https://gstreamer.freedesktop.org/src/gst-libav
- GST1_LIBAV_LICENSE = LGPL-2.1+
+-GST1_VAAPI_VERSION = 1.22.8
++GST1_VAAPI_VERSION = 1.22.9
+ GST1_VAAPI_SITE = https://gstreamer.freedesktop.org/src/gstreamer-vaapi
+ GST1_VAAPI_SOURCE = gstreamer-vaapi-$(GST1_VAAPI_VERSION).tar.xz
+ GST1_VAAPI_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
