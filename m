@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7C9CC47DD9
-	for <buildroot@archiver.kernel.org>; Wed, 28 Feb 2024 17:31:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C272C47DD9
+	for <buildroot@archiver.kernel.org>; Wed, 28 Feb 2024 17:31:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 72BF7417A9;
-	Wed, 28 Feb 2024 17:31:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CDCDF41809;
+	Wed, 28 Feb 2024 17:31:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id J4bVZoFgJUkL; Wed, 28 Feb 2024 17:31:49 +0000 (UTC)
+	with ESMTP id RDqUdvb8OYNS; Wed, 28 Feb 2024 17:31:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D636417F2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 93C36417FC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4D636417F2;
-	Wed, 28 Feb 2024 17:31:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 93C36417FC;
+	Wed, 28 Feb 2024 17:31:52 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 18B3C1BF841
- for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 17:31:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 03E031BF841
+ for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 17:31:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F1C684175D
- for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 17:31:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3A6FE41763
+ for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 17:31:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id e5WZX2NLxgsF for <buildroot@lists.busybox.net>;
+ with ESMTP id Pqi1i6JhKFId for <buildroot@lists.busybox.net>;
  Wed, 28 Feb 2024 17:31:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EFDCF41764
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D274241761
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EFDCF41764
+ by smtp4.osuosl.org (Postfix) with ESMTP id D274241761
  for <buildroot@buildroot.org>; Wed, 28 Feb 2024 17:31:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8A5B287C3E; Wed, 28 Feb 2024 17:31:11 +0000 (UTC)
+ id CE4EA87C3B; Wed, 28 Feb 2024 17:31:11 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 28 Feb 2024 18:28:21 +0100
+Date: Wed, 28 Feb 2024 18:29:32 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 6cf19efa53d99f29c42035b96e96e5b0557cb05a
-X-Git-Newrev: 62909338f1941fc768580ab347c556d72f73513d
+X-Git-Oldrev: 377fac9f577de30d88b08579c5db0aae1e381362
+X-Git-Newrev: e149a7a994e10ec503e9401b077f099a8584b214
 X-Patchwork-Hint: ignore
-Message-Id: <20240228173111.8A5B287C3E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/gst1-python: bump
- to version 1.22.9
+Message-Id: <20240228173111.CE4EA87C3B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x]
+ package/x11r7/xserver_xorg-server: add CPE variables
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,41 +65,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=62909338f1941fc768580ab347c556d72f73513d
+commit: https://git.buildroot.net/buildroot/commit/?id=e149a7a994e10ec503e9401b077f099a8584b214
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+cpe:2.3:a:x.org:xorg-server is a valid CPE identifier for this package:
+
+  https://nvd.nist.gov/products/cpe/detail/79A86C02-31A5-4F25-8CA6-7C4A8CD92B7B
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit d948714037e78c54b676879aae487725988a092a)
+(cherry picked from commit b80705800a5a4f5dfd1a1edccca001a3a0a4ef3a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-python/gst1-python.hash | 4 ++--
- package/gstreamer1/gst1-python/gst1-python.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/gstreamer1/gst1-python/gst1-python.hash b/package/gstreamer1/gst1-python/gst1-python.hash
-index 5c42a0ca08..2f352df92e 100644
---- a/package/gstreamer1/gst1-python/gst1-python.hash
-+++ b/package/gstreamer1/gst1-python/gst1-python.hash
-@@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-python/gst-python-1.22.8.tar.xz.sha256sum
--sha256  d5cb8f144054a2a110e6672bd512e4b15d5b1b8d9879c192b9723535efb70b8f  gst-python-1.22.8.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-python/gst-python-1.22.9.tar.xz.sha256sum
-+sha256  3f9d5c6ffefda268703744b592a6b3983aa6723273b1220ecbcb62c2a5800009  gst-python-1.22.9.tar.xz
- sha256  ea3ad127610e5ded2210b3a86a46314f2b3b28e438eccffdae19a4d6fbcdb0c2  COPYING
-diff --git a/package/gstreamer1/gst1-python/gst1-python.mk b/package/gstreamer1/gst1-python/gst1-python.mk
-index df53efaa99..f843e37052 100644
---- a/package/gstreamer1/gst1-python/gst1-python.mk
-+++ b/package/gstreamer1/gst1-python/gst1-python.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 4a05582583..1d0807ffec 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -9,6 +9,8 @@ XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.gz
+ XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
+ XSERVER_XORG_SERVER_LICENSE = MIT
+ XSERVER_XORG_SERVER_LICENSE_FILES = COPYING
++XSERVER_XORG_SERVER_CPE_ID_VENDOR = x.org
++XSERVER_XORG_SERVER_CPE_ID_PRODUCT = xorg-server
+ XSERVER_XORG_SERVER_SELINUX_MODULES = xdg xserver
+ XSERVER_XORG_SERVER_INSTALL_STAGING = YES
  
--GST1_PYTHON_VERSION = 1.22.8
-+GST1_PYTHON_VERSION = 1.22.9
- GST1_PYTHON_SOURCE = gst-python-$(GST1_PYTHON_VERSION).tar.xz
- GST1_PYTHON_SITE = https://gstreamer.freedesktop.org/src/gst-python
- GST1_PYTHON_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
