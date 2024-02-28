@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A10EC5478C
-	for <buildroot@archiver.kernel.org>; Wed, 28 Feb 2024 16:45:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF865C47DD9
+	for <buildroot@archiver.kernel.org>; Wed, 28 Feb 2024 16:45:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6C2BC60F2F;
-	Wed, 28 Feb 2024 16:45:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7534260ED2;
+	Wed, 28 Feb 2024 16:45:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yGb1ybRyM5qg; Wed, 28 Feb 2024 16:45:36 +0000 (UTC)
+	with ESMTP id yz1PQlsqQmGa; Wed, 28 Feb 2024 16:45:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 76D8260EA1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4795360F3C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 76D8260EA1;
-	Wed, 28 Feb 2024 16:45:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4795360F3C;
+	Wed, 28 Feb 2024 16:45:39 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B33771BF2B3
- for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 16:45:03 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B6D561BF2B3
+ for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 16:45:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EFE4C80EAB
+ by smtp1.osuosl.org (Postfix) with ESMTP id EF9AC80EA2
  for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 16:44:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EfjHQWN8SVKZ for <buildroot@lists.busybox.net>;
+ with ESMTP id jMvL6UD14y8X for <buildroot@lists.busybox.net>;
  Wed, 28 Feb 2024 16:44:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B937B80D2A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CCB8980D33
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B937B80D2A
+ by smtp1.osuosl.org (Postfix) with ESMTP id CCB8980D33
  for <buildroot@buildroot.org>; Wed, 28 Feb 2024 16:44:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B3AB687BFC; Wed, 28 Feb 2024 16:44:57 +0000 (UTC)
+ id CA2E587BA0; Wed, 28 Feb 2024 16:44:57 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 28 Feb 2024 17:41:14 +0100
+Date: Wed, 28 Feb 2024 17:42:37 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 90c05d1abfef4f42e7e576601b3964b8b5d2b57f
-X-Git-Newrev: 087993b9ae0a655b567e8ecbc41c4f8fafd94229
+X-Git-Oldrev: 72a06fb11d906f74ff3bdd48b848454d2a12519d
+X-Git-Newrev: e6a17598588d040f84a4a7ee459f4d6f9eb1637d
 X-Patchwork-Hint: ignore
-Message-Id: <20240228164457.B3AB687BFC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x]
- package/environment-setup: do not export GIT_DIR
+Message-Id: <20240228164457.CA2E587BA0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/darkhttpd:
+ security bump to version 1.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,45 +65,64 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=087993b9ae0a655b567e8ecbc41c4f8fafd94229
+commit: https://git.buildroot.net/buildroot/commit/?id=e6a17598588d040f84a4a7ee459f4d6f9eb1637d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-Commit c07aafa08792 (package/Makefile.in: set GIT_DIR=.  in {HOST,
-TARGET}_MAKE_ENV) added GIT_DIR=.  to TARGET_MAKE_ENV (which is included in
-TARGET_CONFIGURE_OPTS) to work around issues with packages getting confused
-when building in a subdir of the Buildroot git repo.
+Fixes the following security issues:
 
-This unfortunately also causes git commands to fail when
-output/host/environment-setup is sourced:
+CVE-2024-23770: Local Leak of Authentication Parameter in Process List
 
-git status
-fatal: not a git repository: '.'
+CVE-2024-23771: Basic Auth Timing Attack
 
-So strip GIT_DIR= from TARGET_CONFIGURE_OPTS when generating
-environment-setup.
+https://security.opensuse.org/2024/01/22/darkhttpd-basic-auth-issues.html
 
-Reported-by: Mircea Gliga <gliga.mircea@gmail.com>
+Notice that CVE-2024-23770 is only documented as a known weakness, not
+fixed.
+
+Also change the license logic to use the dedicated COPYING file available
+since 1.14:
+
+https://github.com/emikulic/darkhttpd/commit/a8ae2b1de069588cad23d79a5392445ee9590fcd
+
+This license is ISC, not MIT - So adjust DARKHTTPD_LICENSE to match.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 48874afb9d03cb02b0207fd53bf2cdf0c37c8fa0)
+(cherry picked from commit 0c7fd35947d91f84cff994bfb5c85b31b956d006)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/environment-setup/environment-setup.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/darkhttpd/darkhttpd.hash | 4 ++--
+ package/darkhttpd/darkhttpd.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/environment-setup/environment-setup.mk b/package/environment-setup/environment-setup.mk
-index 29ec5a9a95..069ee25f9f 100644
---- a/package/environment-setup/environment-setup.mk
-+++ b/package/environment-setup/environment-setup.mk
-@@ -8,7 +8,7 @@ ENVIRONMENT_SETUP_FILE = $(HOST_DIR)/environment-setup
+diff --git a/package/darkhttpd/darkhttpd.hash b/package/darkhttpd/darkhttpd.hash
+index 188afff767..84a787eeba 100644
+--- a/package/darkhttpd/darkhttpd.hash
++++ b/package/darkhttpd/darkhttpd.hash
+@@ -1,3 +1,3 @@
+ # Locally generated
+-sha256  e063de9efa5635260c8def00a4d41ec6145226a492d53fa1dac436967670d195  darkhttpd-1.14.tar.gz
+-sha256  f002944c9a8516e3346002d39c3e13681306833358c0f3c7781dff1fdb639710  darkhttpd.c
++sha256  ea48cedafbf43186f4a8d1afc99b33b671adee99519658446022e6f63bd9eda9  darkhttpd-1.15.tar.gz
++sha256  1ecf63e8f84fd60ac7215e04195b9a61dcb47176ea65df26547582027f6c1dee  COPYING
+diff --git a/package/darkhttpd/darkhttpd.mk b/package/darkhttpd/darkhttpd.mk
+index bda08899b8..e13f8f7770 100644
+--- a/package/darkhttpd/darkhttpd.mk
++++ b/package/darkhttpd/darkhttpd.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
  
- define HOST_ENVIRONMENT_SETUP_INSTALL_CMDS
- 	cp package/environment-setup/environment-setup $(ENVIRONMENT_SETUP_FILE)
--	for var in $(TARGET_CONFIGURE_OPTS); do \
-+	for var in $(filter-out GIT_DIR=%,$(TARGET_CONFIGURE_OPTS)); do \
- 		printf "export \"$$var\"\n" >> $(ENVIRONMENT_SETUP_FILE); \
- 	done
- 	printf "export \"ARCH=$(NORMALIZED_ARCH)\"\n" >> $(ENVIRONMENT_SETUP_FILE)
+-DARKHTTPD_VERSION = 1.14
++DARKHTTPD_VERSION = 1.15
+ DARKHTTPD_SITE = $(call github,emikulic,darkhttpd,v$(DARKHTTPD_VERSION))
+-DARKHTTPD_LICENSE = MIT
+-DARKHTTPD_LICENSE_FILES = darkhttpd.c
++DARKHTTPD_LICENSE = ISC
++DARKHTTPD_LICENSE_FILES = COPYING
+ DARKHTTPD_CPE_ID_VENDOR = darkhttpd_project
+ 
+ define DARKHTTPD_BUILD_CMDS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
