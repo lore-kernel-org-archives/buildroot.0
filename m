@@ -4,60 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83962C5478C
-	for <buildroot@archiver.kernel.org>; Wed, 28 Feb 2024 13:39:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7A61C5478C
+	for <buildroot@archiver.kernel.org>; Wed, 28 Feb 2024 13:39:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 51699405F4;
-	Wed, 28 Feb 2024 13:39:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B13CE41720;
+	Wed, 28 Feb 2024 13:39:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id doU7s5qCUzUW; Wed, 28 Feb 2024 13:39:38 +0000 (UTC)
+	with ESMTP id 99cUI4Ssqbzz; Wed, 28 Feb 2024 13:39:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6107140815
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B432440936
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6107140815;
-	Wed, 28 Feb 2024 13:39:38 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EF5311BF2C8
- for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 13:39:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B432440936;
+	Wed, 28 Feb 2024 13:39:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id ACDC11BF2C8
+ for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 13:39:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DBE82415A3
- for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 13:39:36 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9A37760870
+ for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 13:39:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id F6_g93JLVORD for <buildroot@lists.busybox.net>;
- Wed, 28 Feb 2024 13:39:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
- helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Y8lYPFBkc-dG for <buildroot@lists.busybox.net>;
+ Wed, 28 Feb 2024 13:39:43 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A10DE404DD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A10DE404DD
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A10DE404DD
- for <buildroot@buildroot.org>; Wed, 28 Feb 2024 13:39:35 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8C0FCFF808;
- Wed, 28 Feb 2024 13:39:32 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rfK9j-00HWfS-2T;
- Wed, 28 Feb 2024 14:39:31 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C4C8360670
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id C4C8360670
+ for <buildroot@buildroot.org>; Wed, 28 Feb 2024 13:39:43 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B52CE87B84; Wed, 28 Feb 2024 13:39:43 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20240126173215.1630553-1-fontaine.fabrice@gmail.com>
-Date: Wed, 28 Feb 2024 14:39:31 +0100
-In-Reply-To: <20240126173215.1630553-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 26 Jan 2024 18:32:15 +0100")
-Message-ID: <871q8wr9m4.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/faad2: force arm mode instead
- of Thumb mode
+To: buildroot@buildroot.org
+Date: Wed, 28 Feb 2024 14:34:42 +0100
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: a3e0c97e51b2467fb803de11be9ce7ccdbb95adc
+X-Git-Newrev: 93385c55a7786eec975a04491033b2588babd1c5
+X-Patchwork-Hint: ignore
+Message-Id: <20240228133943.B52CE87B84@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/xwayland:
+ security bump to version 23.2.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,26 +59,74 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gilles Talis <gilles.talis@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=93385c55a7786eec975a04491033b2588babd1c5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
- > Fix the following build failure in Thumb mode:
- > /tmp/ccfzn6FH.s:36: Error: selected processor does not support `smull r2,r3,r1,r0' in Thumb mode
+Fixes the following security issues:
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/838808b4751244ee01cde6b8261212b49e511a32
+1) CVE-2023-6816 can be triggered by passing an invalid array index to
+DeviceFocusEvent or ProcXIQueryPointer.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+2) CVE-2024-0229 can be triggered if a device has both a button and a
+key class and zero buttons.
 
-Committed to 2023.02.x and 2023.11.x, thanks.
+3) CVE-2024-21885 can be triggered if a device with a given ID was
+removed and a new device with the same ID added both in the same
+operation.
 
--- 
-Bye, Peter Korsgaard
+4) CVE-2024-21886 can be triggered by disabling a master device with
+disabled slave devices.
+
+5) CVE-2024-0409 can be triggered by enabling SELinux
+xserver_object_manager and running a client.
+
+6) CVE-2024-0408 can be triggered by enabling SELinux
+xserver_object_manager and creating a GLX PBuffer.
+
+For details, see the advisory:
+https://lists.x.org/archives/xorg-announce/2024-January/003444.html
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit b8d9e75eb89898fac1a8200e78bca084635eefbc)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/x11r7/xwayland/xwayland.hash | 6 +++---
+ package/x11r7/xwayland/xwayland.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/x11r7/xwayland/xwayland.hash b/package/x11r7/xwayland/xwayland.hash
+index 533ef9de86..5bb26bf17e 100644
+--- a/package/x11r7/xwayland/xwayland.hash
++++ b/package/x11r7/xwayland/xwayland.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.x.org/archives/xorg-announce/2023-December/003437.html
+-sha256  eb9d9aa7232c47412c8835ec15a97c575f03563726c787754ff0c019bd07e302  xwayland-23.2.3.tar.xz
+-sha512  37198aa2f06313a0cb2add51cc78f81b26a42f2c9d55a0d3eecf958777107ea5560961c128f2d0af055f7460ba10fadb1b9050251c2c50f2251b40ab517e79cd  xwayland-23.2.3.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2024-January/003443.html
++sha256  a99e159b6d0d33098b3b6ab22a88bfcece23c8b9d0ca72c535c55dcb0681b46b  xwayland-23.2.4.tar.xz
++sha512  ac3ff208cbef5bbe4637c335cfda226489c93b0a3768f2f4fb0201c588485ede38262fbce77ef1425b3d2a0be61b6580df53341c7b95e6072c8b6371ad29d187  xwayland-23.2.4.tar.xz
+ 
+ # Locally calculated
+ sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
+diff --git a/package/x11r7/xwayland/xwayland.mk b/package/x11r7/xwayland/xwayland.mk
+index 8f4bcd8117..c66dd471ac 100644
+--- a/package/x11r7/xwayland/xwayland.mk
++++ b/package/x11r7/xwayland/xwayland.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XWAYLAND_VERSION = 23.2.3
++XWAYLAND_VERSION = 23.2.4
+ XWAYLAND_SOURCE = xwayland-$(XWAYLAND_VERSION).tar.xz
+ XWAYLAND_SITE = https://xorg.freedesktop.org/archive/individual/xserver
+ XWAYLAND_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
