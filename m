@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9688BC47DD9
-	for <buildroot@archiver.kernel.org>; Wed, 28 Feb 2024 21:27:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98B42C47DD9
+	for <buildroot@archiver.kernel.org>; Wed, 28 Feb 2024 21:27:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 61788417C1;
-	Wed, 28 Feb 2024 21:27:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 65191417D6;
+	Wed, 28 Feb 2024 21:27:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id l5QwVn3lJlAK; Wed, 28 Feb 2024 21:27:44 +0000 (UTC)
+	with ESMTP id j5VfQF6F2RLR; Wed, 28 Feb 2024 21:27:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D40541785
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2390C41869
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0D40541785;
-	Wed, 28 Feb 2024 21:27:44 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C99391BF5A9
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2390C41869;
+	Wed, 28 Feb 2024 21:27:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DE3951BF955
  for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 21:26:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 91AA882430
- for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 21:25:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D20EC4161C
+ for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 21:25:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id L9OYv7JYz6vl for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QHPytRof0-GF for <buildroot@lists.busybox.net>;
  Wed, 28 Feb 2024 21:25:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D44D81971
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E199B4174E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7D44D81971
- for <buildroot@buildroot.org>; Wed, 28 Feb 2024 21:25:52 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E199B4174E
+ for <buildroot@buildroot.org>; Wed, 28 Feb 2024 21:25:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7B11587CE2; Wed, 28 Feb 2024 21:25:52 +0000 (UTC)
+ id D0AFC87CDB; Wed, 28 Feb 2024 21:25:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 28 Feb 2024 22:13:32 +0100
+Date: Wed, 28 Feb 2024 21:53:34 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: a5f721dca6e9682f665a5fb94801b73f37daaf7d
-X-Git-Newrev: 783f8284705770e082b1094a2f1413c6b2b486c5
+X-Git-Oldrev: dcc89720bf1a643a88b04fb4f5dcb78e6c3fcfed
+X-Git-Newrev: 8ab2a93204968e939f3345f4c867b203afbf6a4d
 X-Patchwork-Hint: ignore
-Message-Id: <20240228212552.7B11587CE2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/lvm2: fix CPE
- variable
+Message-Id: <20240228212551.D0AFC87CDB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/joe: add
+ JOE_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,33 +65,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=783f8284705770e082b1094a2f1413c6b2b486c5
+commit: https://git.buildroot.net/buildroot/commit/?id=8ab2a93204968e939f3345f4c867b203afbf6a4d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-Commit d70da0be78779699a296e21532665ee149a2a3b8 wrongly set
-LVM2_CPE_ID_PRODUCT instead of LVM2_CPE_ID_VENDOR
+cpe:2.3:a:joseph_allen:joe is a valid CPE identifier for this package:
+
+  https://nvd.nist.gov/products/cpe/detail/5F530947-2060-4842-92B9-5BC61D9C5430
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8c0d9795a7a75a36574a7cc89107d71cb32fd20e)
+(cherry picked from commit 2953cd264489229adaef5f0a1f307900dcc3e425)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lvm2/lvm2.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/joe/joe.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 474ea30bdc..810d668ec2 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -10,7 +10,7 @@ LVM2_SITE = https://sourceware.org/ftp/lvm2
- LVM2_INSTALL_STAGING = YES
- LVM2_LICENSE = GPL-2.0, LGPL-2.1
- LVM2_LICENSE_FILES = COPYING COPYING.LIB
--LVM2_CPE_ID_PRODUCT = redhat
-+LVM2_CPE_ID_VENDOR = redhat
- # parallel build issues
- LVM2_MAKE = $(MAKE1)
+diff --git a/package/joe/joe.mk b/package/joe/joe.mk
+index f0cac402e1..9346ec1fd3 100644
+--- a/package/joe/joe.mk
++++ b/package/joe/joe.mk
+@@ -8,6 +8,7 @@ JOE_VERSION = 4.6
+ JOE_SITE = http://downloads.sourceforge.net/project/joe-editor/JOE%20sources/joe-$(JOE_VERSION)
+ JOE_LICENSE = GPL-2.0+
+ JOE_LICENSE_FILES = COPYING
++JOE_CPE_ID_VENDOR = joseph_allen
  
+ ifeq ($(BR2_PACKAGE_NCURSES),y)
+ JOE_DEPENDENCIES += ncurses
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
