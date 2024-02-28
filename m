@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7899C47DD9
-	for <buildroot@archiver.kernel.org>; Wed, 28 Feb 2024 21:26:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65194C5478C
+	for <buildroot@archiver.kernel.org>; Wed, 28 Feb 2024 21:26:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B42EA416A3;
-	Wed, 28 Feb 2024 21:26:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 32DC44171B;
+	Wed, 28 Feb 2024 21:26:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8wiaogzz-BIn; Wed, 28 Feb 2024 21:26:28 +0000 (UTC)
+	with ESMTP id ZPI1E_7GDFvq; Wed, 28 Feb 2024 21:26:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F26B4171B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E69F14173E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0F26B4171B;
-	Wed, 28 Feb 2024 21:26:28 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 120FE1BF5A9
+	by smtp2.osuosl.org (Postfix) with ESMTP id E69F14173E;
+	Wed, 28 Feb 2024 21:26:30 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A19411BF5A9
  for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 21:25:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3A678817A9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 21C35608B3
  for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 21:25:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Rz8fuvxVWsKI for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hFByHx0F3Fd6 for <buildroot@lists.busybox.net>;
  Wed, 28 Feb 2024 21:25:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 78671818D7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4BF55608CB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 78671818D7
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4BF55608CB
  for <buildroot@buildroot.org>; Wed, 28 Feb 2024 21:25:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7598F87CDC; Wed, 28 Feb 2024 21:25:49 +0000 (UTC)
+ id 4920987CDB; Wed, 28 Feb 2024 21:25:49 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 28 Feb 2024 22:21:29 +0100
+Date: Wed, 28 Feb 2024 22:17:19 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 5d991169988f58b2548383b8675bec07cc0ba9f4
-X-Git-Newrev: 801051154b62c21b3e8014cf2544ca51dcb14ee7
+X-Git-Oldrev: 9d4262cf2a8fe5157a495e58e4098c3c57a6191a
+X-Git-Newrev: 713753e81e7523be4bbcdec819d0327cbccde554
 X-Patchwork-Hint: ignore
-Message-Id: <20240228212549.7598F87CDC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/c-ares: update
- C_ARES_CPE_ID_VENDOR
+Message-Id: <20240228212549.4920987CDB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x]
+ package/x11r7/xlib_libXpm: update XLIB_LIBXPM_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,39 +65,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=801051154b62c21b3e8014cf2544ca51dcb14ee7
+commit: https://git.buildroot.net/buildroot/commit/?id=713753e81e7523be4bbcdec819d0327cbccde554
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-cpe:2.3:a:c-ares_project:c-ares has been deprecated in favor of
-cpe:2.3:a:c-ares:c-ares in September 2023:
+cpe:2.3:a:libxpm_project:libxpm has been deprecated in favor of
+cpe:2.3:a:x.org:libxpm in October 2023:
 
-  <cpe-item name="cpe:/a:c-ares_project:c-ares:1.17.1" deprecated="true" deprecation_date="2023-09-15T11:42:40.183Z">
-    <title xml:lang="en-US">C-ares Project C-ares 1.17.1</title>
-      <reference href="https://github.com/c-ares/c-ares/releases">Change Log</reference>
-    <cpe-23:cpe23-item name="cpe:2.3:a:c-ares_project:c-ares:1.17.1:*:*:*:*:*:*:*">
-        <cpe-23:deprecated-by name="cpe:2.3:a:c-ares:c-ares:1.17.1:*:*:*:*:*:*:*" type="NAME_CORRECTION"/>
+  <cpe-item name="cpe:/a:libxpm_project:libxpm:3.5.15" deprecated="true" deprecation_date="2023-10-17T15:55:35.850Z">
+    <title xml:lang="en-US">Libxpm Project Libxpm 3.5.15</title>
+      <reference href="https://gitlab.freedesktop.org/xorg/lib/libxpm/-/tags">Version</reference>
+    <cpe-23:cpe23-item name="cpe:2.3:a:libxpm_project:libxpm:3.5.15:*:*:*:*:*:*:*">
+        <cpe-23:deprecated-by name="cpe:2.3:a:x.org:libxpm:3.5.15:*:*:*:*:*:*:*" type="NAME_CORRECTION"/>
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit ae2baf1771cbbebae65e32397480deec6bf879e4)
+(cherry picked from commit 03a9171cced41f2ee94850d6237bcc54fdda0b1a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/c-ares/c-ares.mk | 2 +-
+ package/x11r7/xlib_libXpm/xlib_libXpm.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
-index 46b8acd673..d9bf583b9b 100644
---- a/package/c-ares/c-ares.mk
-+++ b/package/c-ares/c-ares.mk
-@@ -10,7 +10,7 @@ C_ARES_INSTALL_STAGING = YES
- C_ARES_CONF_OPTS = --with-random=/dev/urandom
- C_ARES_LICENSE = MIT
- C_ARES_LICENSE_FILES = LICENSE.md
--C_ARES_CPE_ID_VENDOR = c-ares_project
-+C_ARES_CPE_ID_VENDOR = c-ares
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+diff --git a/package/x11r7/xlib_libXpm/xlib_libXpm.mk b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
+index 0bba3ea946..1239ba0d4d 100644
+--- a/package/x11r7/xlib_libXpm/xlib_libXpm.mk
++++ b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
+@@ -9,7 +9,7 @@ XLIB_LIBXPM_SOURCE = libXpm-$(XLIB_LIBXPM_VERSION).tar.xz
+ XLIB_LIBXPM_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBXPM_LICENSE = MIT
+ XLIB_LIBXPM_LICENSE_FILES = COPYING COPYRIGHT
+-XLIB_LIBXPM_CPE_ID_VENDOR = libxpm_project
++XLIB_LIBXPM_CPE_ID_VENDOR = x.org
+ XLIB_LIBXPM_CPE_ID_PRODUCT = libxpm
+ XLIB_LIBXPM_INSTALL_STAGING = YES
+ XLIB_LIBXPM_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXt xorgproto \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
