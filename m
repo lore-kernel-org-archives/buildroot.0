@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8370C47DD9
-	for <buildroot@archiver.kernel.org>; Wed, 28 Feb 2024 21:28:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B9AFC47DD9
+	for <buildroot@archiver.kernel.org>; Wed, 28 Feb 2024 21:28:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A270E41906;
-	Wed, 28 Feb 2024 21:28:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2367941778;
+	Wed, 28 Feb 2024 21:28:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nbV7LdvSyP9Z; Wed, 28 Feb 2024 21:28:17 +0000 (UTC)
+	with ESMTP id t9pKewQ8dWaN; Wed, 28 Feb 2024 21:28:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C30C41793
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E86B41914
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0C30C41793;
-	Wed, 28 Feb 2024 21:28:17 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 137D81BF5A9
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8E86B41914;
+	Wed, 28 Feb 2024 21:28:20 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 921D61BF5A9
  for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 21:26:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D584341633
- for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 21:25:54 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id F2523817A9
+ for <buildroot@lists.busybox.net>; Wed, 28 Feb 2024 21:25:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YtVxYX_GwmHm for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9LPu_DMYF4NV for <buildroot@lists.busybox.net>;
  Wed, 28 Feb 2024 21:25:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CB95141697
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 24ABC8190B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CB95141697
- for <buildroot@buildroot.org>; Wed, 28 Feb 2024 21:25:52 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 24ABC8190B
+ for <buildroot@buildroot.org>; Wed, 28 Feb 2024 21:25:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BFC1C87CE2; Wed, 28 Feb 2024 21:25:52 +0000 (UTC)
+ id 1CC1787CDC; Wed, 28 Feb 2024 21:25:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 28 Feb 2024 22:16:20 +0100
+Date: Wed, 28 Feb 2024 22:21:54 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 9c4cb225d3c1a1535420cbc8adaa2f8858491986
-X-Git-Newrev: 038845825dc7798f5f6ec2111738ea6a3a5debb5
+X-Git-Oldrev: 164e1ecd9af059a0d579046d4e7730f40fe4ef1e
+X-Git-Newrev: 67c3c1894343323aea4f6ce6e65fcfb34cefb621
 X-Patchwork-Hint: ignore
-Message-Id: <20240228212552.BFC1C87CE2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/python-wheel: add
- CPE variables
+Message-Id: <20240228212553.1CC1787CDC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/python-aiohttp:
+ update PYTHON_AIOHTTP_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,34 +65,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=038845825dc7798f5f6ec2111738ea6a3a5debb5
+commit: https://git.buildroot.net/buildroot/commit/?id=67c3c1894343323aea4f6ce6e65fcfb34cefb621
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-cpe:2.3:a:wheel_project:wheel is a valid CPE identifier for this
-package:
+cpe:2.3:a:aiohttp_project:aiohttp has been deprecated in favor of
+cpe:2.3:a:aiohttp:aiohttp in November 2023:
 
-  https://nvd.nist.gov/products/cpe/detail/402C4B59-237A-4399-8189-CC9FC1B4BF39
+  <cpe-item name="cpe:/a:aiohttp_project:aiohttp:3.8.0:beta0" deprecated="true" deprecation_date="2023-11-22T17:09:16.157Z">
+    <title xml:lang="en-US">Aiohttp Project Aiohttp 3.8.0 Beta 0</title>
+      <reference href="https://github.com/aio-libs/aiohttp/releases">Change Log</reference>
+    <cpe-23:cpe23-item name="cpe:2.3:a:aiohttp_project:aiohttp:3.8.0:beta0:*:*:*:*:*:*">
+        <cpe-23:deprecated-by name="cpe:2.3:a:aiohttp:aiohttp:3.8.0:beta0:*:*:*:*:*:*" type="NAME_CORRECTION"/>
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 92f3f04146654f77add9fc14c18d054783006108)
+(cherry picked from commit a01deb6617ff38914f649f88c71e7c0c5ee71b01)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-wheel/python-wheel.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/python-aiohttp/python-aiohttp.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python-wheel/python-wheel.mk b/package/python-wheel/python-wheel.mk
-index 159598fd1e..320995521e 100644
---- a/package/python-wheel/python-wheel.mk
-+++ b/package/python-wheel/python-wheel.mk
-@@ -10,5 +10,7 @@ PYTHON_WHEEL_SITE = https://files.pythonhosted.org/packages/fc/ef/0335f7217dd1e8
- PYTHON_WHEEL_SETUP_TYPE = flit
- PYTHON_WHEEL_LICENSE = MIT
- PYTHON_WHEEL_LICENSE_FILES = LICENSE.txt
-+PYTHON_WHEEL_CPE_ID_VENDOR = wheel_project
-+PYTHON_WHEEL_CPE_ID_PRODUCT = wheel
+diff --git a/package/python-aiohttp/python-aiohttp.mk b/package/python-aiohttp/python-aiohttp.mk
+index e814fc9224..70c8fcdfe8 100644
+--- a/package/python-aiohttp/python-aiohttp.mk
++++ b/package/python-aiohttp/python-aiohttp.mk
+@@ -10,7 +10,7 @@ PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/fd/01/f180d3192375
+ PYTHON_AIOHTTP_SETUP_TYPE = setuptools
+ PYTHON_AIOHTTP_LICENSE = Apache-2.0
+ PYTHON_AIOHTTP_LICENSE_FILES = LICENSE.txt
+-PYTHON_AIOHTTP_CPE_ID_VENDOR = aiohttp_project
++PYTHON_AIOHTTP_CPE_ID_VENDOR = aiohttp
+ PYTHON_AIOHTTP_CPE_ID_PRODUCT = aiohttp
  
- $(eval $(host-python-package))
+ $(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
