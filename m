@@ -4,50 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBD80C48BF6
-	for <buildroot@archiver.kernel.org>; Thu, 29 Feb 2024 15:58:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D019C54E41
+	for <buildroot@archiver.kernel.org>; Thu, 29 Feb 2024 15:58:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AD5984194E;
-	Thu, 29 Feb 2024 15:58:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1852541B8C;
+	Thu, 29 Feb 2024 15:58:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qF3ILZxuQFJW; Thu, 29 Feb 2024 15:58:42 +0000 (UTC)
+	with ESMTP id SpAYJhed8Nlu; Thu, 29 Feb 2024 15:58:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A42041B2F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A255341B74
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1A42041B2F;
-	Thu, 29 Feb 2024 15:58:42 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 97F8C1BF980
- for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 15:33:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A255341B74;
+	Thu, 29 Feb 2024 15:58:45 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C9FC41BF25B
+ for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 15:46:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 81C5960F15
- for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 15:33:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B5EE940257
+ for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 15:46:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HlRoVvKzRxbI for <buildroot@lists.busybox.net>;
- Thu, 29 Feb 2024 15:33:04 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Bvq7eqpB7TjW for <buildroot@lists.busybox.net>;
+ Thu, 29 Feb 2024 15:46:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
+ helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5BB2605AF
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A5BB2605AF
- for <buildroot@buildroot.org>; Thu, 29 Feb 2024 15:33:04 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 93E5687D70; Thu, 29 Feb 2024 15:33:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D910240139
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D910240139
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D910240139
+ for <buildroot@buildroot.org>; Thu, 29 Feb 2024 15:46:56 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E3F4BE0007;
+ Thu, 29 Feb 2024 15:46:54 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1rficY-004oaD-10;
+ Thu, 29 Feb 2024 16:46:54 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu, 29 Feb 2024 16:15:23 +0100
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: d3657f363f662c028089c4aeaf6f78f13563c7df
-X-Git-Newrev: 5d06ac104a38c55426ed0a04a95d82c94cfc5a41
-X-Patchwork-Hint: ignore
-Message-Id: <20240229153304.93E5687D70@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/rdma-core: fix
- mips4 build
+To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+References: <e050e870b2afb35643036a87df540add584c95b4.1705594130.git.yann.morin@orange.com>
+ <20240206115300.0bd8b584@windsurf>
+Date: Thu, 29 Feb 2024 16:46:54 +0100
+In-Reply-To: <20240206115300.0bd8b584@windsurf> (Thomas Petazzoni via
+ buildroot's message of "Tue, 6 Feb 2024 11:53:00 +0100")
+Message-ID: <87msrje0i9.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH] docs/manual: extend makedev syntax section
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,101 +69,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: yann.morin@orange.com, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d06ac104a38c55426ed0a04a95d82c94cfc5a41
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+>>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
 
-The 'sync' instruction for MIPS was defined in MIPS-II as taking no
-operands. MIPS32 extended the define of 'sync' as taking an optional
-unsigned 5 bit immediate.
+ > On Thu, 18 Jan 2024 17:08:50 +0100
+ > <yann.morin@orange.com> wrote:
 
-As a result, replace "sync 0" by "sync" to fix the following build
-failure on mips4 raised since the addition of the package in commit
-ea47e177f093d7378e8e8e1f50d6f4e3fce0a088 and
-https://github.com/linux-rdma/rdma-core/commit/b7c428344ea96d446f6ffe31c620a238a7f25c9e:
+ >> From: "Yann E. MORIN" <yann.morin@orange.com>
+ >> 
+ >> The section of the manual describing the makedev syntax is not
+ >> up-to-date with the current features, and does not properly describe
+ >> existing ones.
+ >> 
+ >> - extend the list of types with the requirements on the existence of
+ >> the target file or directory; for 'c', 'b', and 'p', the existence
+ >> requirement is inherited from mknod(2):
+ >> 
+ >> ERRORS
+ >> ...
+ >> ENOENT A directory component in pathname does not exist or is a
+ >> dangling symbolic link.
+ >> 
+ >> for the other types, the existence requirements are extracted from
+ >> the source of makedev.c;
+ >> 
+ >> - format the types fags, so they are rendered in monospace;
+ >> 
+ >> - extend the 'mode' description, as it can be set to -1 for 'f', 'd',
+ >> or 'r', so that only the uid and gid are set. This is most useful
+ >> for 'r', where setting the same mode recursively for all the
+ >> sub-directories and files alike does not really make sense; indeed
+ >> in this case, the modes are usually set correctly when the package
+ >> (or rootfs overlay) installs the files, and only the uid and gid are
+ >> interesting to set;
+ >> 
+ >> - extend and update the examples to show-case the -1 mode use-case.
+ >> 
+ >> Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+ >> ---
+ >> docs/manual/makedev-syntax.adoc | 33 +++++++++++++++++++--------------
+ >> 1 file changed, 19 insertions(+), 14 deletions(-)
 
-/tmp/ccrBy9fV.s: Assembler messages:
-/tmp/ccrBy9fV.s:994: Error: invalid operands `sync 0'
+ > Applied to master (with the typo in the commit log fixed), thanks!
 
-Fixes:
- - http://autobuild.buildroot.org/results/2ab22a3ec4287fc15ff6a90d8715b4897b32a933
- - http://autobuild.buildroot.org/results/2df58f9b98aacf00960932f53510b29199393461
+Committed to 2023.02.x and 2023.11.x, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7e5a90f1b75e59aa5707394f3c707fbbf03204b7)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0001-util-udma_barrier.h-fix-mips4-build.patch | 56 ++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
-
-diff --git a/package/rdma-core/0001-util-udma_barrier.h-fix-mips4-build.patch b/package/rdma-core/0001-util-udma_barrier.h-fix-mips4-build.patch
-new file mode 100644
-index 0000000000..6dfb476faa
---- /dev/null
-+++ b/package/rdma-core/0001-util-udma_barrier.h-fix-mips4-build.patch
-@@ -0,0 +1,56 @@
-+From 1b1ca539f6e1f0b774e989f1022477686e4fc77f Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 21 Jan 2024 18:55:34 +0100
-+Subject: [PATCH] util/udma_barrier.h: fix mips4 build
-+
-+The 'sync' instruction for MIPS was defined in MIPS-II as taking no
-+operands. MIPS32 extended the define of 'sync' as taking an optional
-+unsigned 5 bit immediate.
-+
-+As a result, replace "sync 0" by "sync" to fix the following build
-+failure on mips4 raised since version 43.0 and
-+https://github.com/linux-rdma/rdma-core/commit/b7c428344ea96d446f6ffe31c620a238a7f25c9e:
-+
-+/tmp/ccrBy9fV.s: Assembler messages:
-+/tmp/ccrBy9fV.s:994: Error: invalid operands `sync 0'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/2ab22a3ec4287fc15ff6a90d8715b4897b32a933
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Upstream: https://github.com/linux-rdma/rdma-core/commit/f3f0c06014c6de845032e6fe9f152674919b3ec6
-+---
-+ util/udma_barrier.h | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/util/udma_barrier.h b/util/udma_barrier.h
-+index 0a1f8a45b..3793d2f18 100644
-+--- a/util/udma_barrier.h
-++++ b/util/udma_barrier.h
-+@@ -101,7 +101,7 @@
-+ #elif defined(__riscv)
-+ #define udma_to_device_barrier() asm volatile("fence ow,ow" ::: "memory")
-+ #elif defined(__mips__)
-+-#define udma_to_device_barrier() asm volatile("sync 0" ::: "memory")
-++#define udma_to_device_barrier() asm volatile("sync" ::: "memory")
-+ #else
-+ #error No architecture specific memory barrier defines found!
-+ #endif
-+@@ -139,7 +139,7 @@
-+ #elif defined(__riscv)
-+ #define udma_from_device_barrier() asm volatile("fence ir,ir" ::: "memory")
-+ #elif defined(__mips__)
-+-#define udma_from_device_barrier() asm volatile("sync 0" ::: "memory")
-++#define udma_from_device_barrier() asm volatile("sync" ::: "memory")
-+ #else
-+ #error No architecture specific memory barrier defines found!
-+ #endif
-+@@ -212,7 +212,7 @@
-+ #include "s390_mmio_insn.h"
-+ #define mmio_flush_writes() s390_pciwb()
-+ #elif defined(__mips__)
-+-#define mmio_flush_writes() asm volatile("sync 0" ::: "memory")
-++#define mmio_flush_writes() asm volatile("sync" ::: "memory")
-+ #else
-+ #error No architecture specific memory barrier defines found!
-+ #endif
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
