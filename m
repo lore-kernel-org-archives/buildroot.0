@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9823CC54E41
-	for <buildroot@archiver.kernel.org>; Thu, 29 Feb 2024 14:19:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D321C54E41
+	for <buildroot@archiver.kernel.org>; Thu, 29 Feb 2024 14:21:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2A1B341868;
-	Thu, 29 Feb 2024 14:19:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D1706417CA;
+	Thu, 29 Feb 2024 14:21:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3_6W_3OdI3E2; Thu, 29 Feb 2024 14:19:11 +0000 (UTC)
+	with ESMTP id jbdG_WZcIVY0; Thu, 29 Feb 2024 14:21:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 54B5541869
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7E8F41828
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 54B5541869;
-	Thu, 29 Feb 2024 14:19:11 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EEEF41BF3FB
- for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 14:19:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D7E8F41828;
+	Thu, 29 Feb 2024 14:21:47 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3D1C81BF3FB
+ for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 14:19:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DB66A417B0
- for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 14:19:08 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2AAE960A64
+ for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 14:19:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DiITPzkHVpCK for <buildroot@lists.busybox.net>;
- Thu, 29 Feb 2024 14:19:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id h0a6UcFSiuH3 for <buildroot@lists.busybox.net>;
+ Thu, 29 Feb 2024 14:19:17 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
  helo=relay3-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 608DF40BAB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 608DF40BAB
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1DF1D60848
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1DF1D60848
 Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
  [IPv6:2001:4b98:dc4:8::223])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 608DF40BAB
- for <buildroot@buildroot.org>; Thu, 29 Feb 2024 14:19:06 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B38EA60009;
- Thu, 29 Feb 2024 14:19:03 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1DF1D60848
+ for <buildroot@buildroot.org>; Thu, 29 Feb 2024 14:19:16 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id AE7CF60007;
+ Thu, 29 Feb 2024 14:19:14 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rfhFX-003XDE-0V;
- Thu, 29 Feb 2024 15:19:03 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rfhFi-003XE0-0B;
+ Thu, 29 Feb 2024 15:19:14 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20240204103204.1415592-1-fontaine.fabrice@gmail.com>
-Date: Thu, 29 Feb 2024 15:19:03 +0100
-In-Reply-To: <20240204103204.1415592-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 4 Feb 2024 11:32:04 +0100")
-Message-ID: <87r0gvica0.fsf@48ers.dk>
+References: <20240204182514.1663508-1-fontaine.fabrice@gmail.com>
+Date: Thu, 29 Feb 2024 15:19:14 +0100
+In-Reply-To: <20240204182514.1663508-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 4 Feb 2024 19:25:14 +0100")
+Message-ID: <87il27ic9p.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/dbus: drop DBUS_CPE_ID_PRODUCT
+Subject: Re: [Buildroot] [PATCH 1/1] package/yasm: add YASM_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,9 +76,8 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Commit 363b4ebf1aaf4821c0c49713eba71937bd5639ca set DBUS_CPE_ID_PRODUCT
- > to dbus but this is not needed as DBUS_CPE_ID_PRODUCT will be set to the
- > package name (i.e. dbus) by default
+ > cpe:2.3:a:tortall:yasm is a valid CPE identifier for this package:
+ >   https://nvd.nist.gov/products/cpe/detail/2E6C9C2F-A057-4083-BC90-095403EF138E
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
