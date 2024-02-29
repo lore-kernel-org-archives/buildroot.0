@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66DCEC54E41
-	for <buildroot@archiver.kernel.org>; Thu, 29 Feb 2024 15:58:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CED5EC54E41
+	for <buildroot@archiver.kernel.org>; Thu, 29 Feb 2024 15:59:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3562241BC0;
-	Thu, 29 Feb 2024 15:58:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9BC6D41BC5;
+	Thu, 29 Feb 2024 15:59:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FIRJ8Nn-sC0y; Thu, 29 Feb 2024 15:58:58 +0000 (UTC)
+	with ESMTP id aoRsIHHAt6Fp; Thu, 29 Feb 2024 15:59:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DDBAD41BD4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7EA0F41B88
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DDBAD41BD4;
-	Thu, 29 Feb 2024 15:58:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 487B11BF25B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7EA0F41B88;
+	Thu, 29 Feb 2024 15:59:01 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4F80C1BF980
  for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 15:50:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 26E8781FCA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 39BC341855
  for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 15:50:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id L5bWbIGv2G4o for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ji5h0G1CvfhM for <buildroot@lists.busybox.net>;
  Thu, 29 Feb 2024 15:50:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5397E81E1B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1117441837
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5397E81E1B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1117441837
  for <buildroot@buildroot.org>; Thu, 29 Feb 2024 15:50:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3EE8187DD0; Thu, 29 Feb 2024 15:50:11 +0000 (UTC)
+ id 05BD287DCE; Thu, 29 Feb 2024 15:50:10 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 29 Feb 2024 16:42:41 +0100
+Date: Thu, 29 Feb 2024 16:41:23 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 98b4832b4417dd3eb3e2d20625c19fba0b34ccf9
-X-Git-Newrev: 326b77d6dfb2f8dd771796a18ded886e22b40d6e
+X-Git-Oldrev: c4a0b4f3925ccf18fa93e3e2bbca7b0f38e221d4
+X-Git-Newrev: 34b7f3ab9acd18b94d9f830c785d710f728154c2
 X-Patchwork-Hint: ignore
-Message-Id: <20240229155011.3EE8187DD0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/libcurl: drop
- LIBCURL_CPE_ID_PRODUCT
+Message-Id: <20240229155011.05BD287DCE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/brltty: disable
+ emacs and lua bindings
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,35 +65,63 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=326b77d6dfb2f8dd771796a18ded886e22b40d6e
+commit: https://git.buildroot.net/buildroot/commit/?id=34b7f3ab9acd18b94d9f830c785d710f728154c2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Commit 4b6202f721f2f5ab36153ba44de65286f7811ef9 set
-LIBCURL_CPE_ID_PRODUCT to libcurl but this is not needed as
-LIBCURL_CPE_ID_PRODUCT will be set to the package name
-(i.e. libcurl) by default
+Disable lua bindings to avoid the following build failure if host-lua
+and lua are built before brltty raised since bump to version 6.5 in
+commit 82c6e87d5eaaf5b32aa340ab384f88539238cbe1 and
+https://github.com/brltty/brltty/commit/42bf48ca010d9163652cb0a014662fa243132736:
+
+configure: lua package: lua
+configure: lua includes:
+configure: lua libs: -L/home/autobuild/autobuild/instance-0/output-1/host/bin/../sparc64-buildroot-linux-gnu/sysroot/usr/lib -llua -lm -ldl
+checking for lua5.4... no
+checking for lua... /home/autobuild/autobuild/instance-0/output-1/host/bin/lua
+configure: Lua shell: /home/autobuild/autobuild/instance-0/output-1/host/bin/lua
+configure: Lua library directory: /home/autobuild/autobuild/instance-0/output-1/host/lib/lua/5.3
+
+[...]
+
+/usr/bin/install -c -d /home/autobuild/autobuild/instance-0/output-1/target/home/autobuild/autobuild/instance-0/output-1/host/lib/lua/5.3
+/usr/bin/install -c -s --strip-program /bin/true brlapi.so /home/autobuild/autobuild/instance-0/output-1/target/home/autobuild/autobuild/instance-0/output-1/host/lib/lua/5.3
+make[3]: Leaving directory '/home/autobuild/autobuild/instance-0/output-1/build/brltty-6.6/Bindings/Lua'
+
+[...]
+
+brltty: installs files in /home/autobuild/autobuild/instance-0/output-1/target//home/autobuild/autobuild/instance-0/output-1
+
+While at it, disable emacs bindings which have also been added in
+version 6.5 with
+https://github.com/brltty/brltty/commit/64a487e29941df54796645229a872ecbe2a06bfe
+
+Fixes:
+ - http://autobuild.buildroot.org/results/f424e6727bbe61ea4b7703e93aae6fcab7506898
+ - http://autobuild.buildroot.org/results/bf4a161fc66fb99a24f08bea3436b13738f2e383
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Reviewed-by: Antoine Coutant <antoine.coutant@smile.fr>
-(cherry picked from commit 61295f5ced0749db34095bfbe8b34ed86a692828)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 19f06441e8b616159d45a552beac6e1fe05bc42a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcurl/libcurl.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/brltty/brltty.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 9ef8586bb2..0bac8656b8 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -13,7 +13,6 @@ LIBCURL_DEPENDENCIES = host-pkgconf \
- LIBCURL_LICENSE = curl
- LIBCURL_LICENSE_FILES = COPYING
- LIBCURL_CPE_ID_VENDOR = haxx
--LIBCURL_CPE_ID_PRODUCT = libcurl
- LIBCURL_INSTALL_STAGING = YES
+diff --git a/package/brltty/brltty.mk b/package/brltty/brltty.mk
+index dc5a38cddb..4cab635b0c 100644
+--- a/package/brltty/brltty.mk
++++ b/package/brltty/brltty.mk
+@@ -23,8 +23,10 @@ BRLTTY_CONF_ENV = \
+ 	PKG_CONFIG_FOR_BUILD=$(HOST_DIR)/bin/pkgconf
  
- # We disable NTLM delegation to winbinds ntlm_auth ('--disable-ntlm-wb')
+ BRLTTY_CONF_OPTS = \
++	--disable-emacs-bindings \
+ 	--disable-java-bindings \
+ 	--disable-lisp-bindings \
++	--disable-lua-bindings \
+ 	--disable-ocaml-bindings \
+ 	--disable-python-bindings \
+ 	--disable-tcl-bindings \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
