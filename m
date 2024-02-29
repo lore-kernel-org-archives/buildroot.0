@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3A32C48BF6
-	for <buildroot@archiver.kernel.org>; Thu, 29 Feb 2024 15:59:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8196C54E49
+	for <buildroot@archiver.kernel.org>; Thu, 29 Feb 2024 15:59:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9F71D41BD9;
-	Thu, 29 Feb 2024 15:59:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A93A041B5D;
+	Thu, 29 Feb 2024 15:59:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Hs3wru9Qp2Jr; Thu, 29 Feb 2024 15:59:04 +0000 (UTC)
+	with ESMTP id FmQ-mCj5VClI; Thu, 29 Feb 2024 15:59:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EEB5141C0F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9841941C5F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EEB5141C0F;
-	Thu, 29 Feb 2024 15:59:03 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E38611BF25B
- for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 15:50:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9841941C5F;
+	Thu, 29 Feb 2024 15:59:07 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 123371BF980
+ for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 15:50:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BC0C360F40
+ by smtp1.osuosl.org (Postfix) with ESMTP id 45CA881E1B
  for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 15:50:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Q8tqFzgIEdD1 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ITri2vx-Fgd2 for <buildroot@lists.busybox.net>;
  Thu, 29 Feb 2024 15:50:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2DFAE60F35
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 646CA81E2D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2DFAE60F35
+ by smtp1.osuosl.org (Postfix) with ESMTP id 646CA81E2D
  for <buildroot@buildroot.org>; Thu, 29 Feb 2024 15:50:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1891A87DCF; Thu, 29 Feb 2024 15:50:11 +0000 (UTC)
+ id 516BF87DCF; Thu, 29 Feb 2024 15:50:11 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 29 Feb 2024 16:41:55 +0100
+Date: Thu, 29 Feb 2024 16:44:12 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 34b7f3ab9acd18b94d9f830c785d710f728154c2
-X-Git-Newrev: 62279f8592cfc4d67771e3df2b5e0c8e1a5b37f9
+X-Git-Oldrev: 326b77d6dfb2f8dd771796a18ded886e22b40d6e
+X-Git-Newrev: 7081e827b213db3db9ea39c1e6714a854d02920b
 X-Patchwork-Hint: ignore
-Message-Id: <20240229155011.1891A87DCF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/pkg-utils: add
- missing licensing data to show-info
+Message-Id: <20240229155011.516BF87DCF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/sqlite: use SPDX
+ identifier for license
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,35 +65,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=62279f8592cfc4d67771e3df2b5e0c8e1a5b37f9
+commit: https://git.buildroot.net/buildroot/commit/?id=7081e827b213db3db9ea39c1e6714a854d02920b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-While the list of licenses is present in the show-info output, the list
-of license files and the redistributable status were missing. Add them.
+The SPDX identifier for the sqlite license is "blessing":
+https://spdx.org/licenses/blessing.html
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 5647d5c1900bde13cedd36efd09404ea5763c0fb)
+Signed-off-by: Christian Hitz <christian.hitz@bbv.ch>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit ddd257ca23e6bcf60676bcd292035fe99e6cbf62)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-utils.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/sqlite/sqlite.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index 059e86ae0a..723bbe4e24 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -157,6 +157,10 @@ endef
- define _json-info-pkg-details
- 	"version": $(call mk-json-str,$($(1)_DL_VERSION)),
- 	"licenses": $(call mk-json-str,$($(1)_LICENSE)),
-+	"license_files": [
-+		$(foreach f, $($(1)_LICENSE_FILES),$(call mk-json-str,$(f))$(comma))
-+	],
-+	"redistributable": $(if $(filter NO,$($(1)_REDISTRIBUTE)),false,true),
- 	"dl_dir": $(call mk-json-str,$($(1)_DL_SUBDIR)),
- 	"downloads": [
- 	$(foreach dl,$(sort $($(1)_ALL_DOWNLOADS)),
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 789eddfa0a..3e35959120 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -8,7 +8,7 @@ SQLITE_VERSION = 3.40.1
+ SQLITE_TAR_VERSION = 3400100
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_TAR_VERSION).tar.gz
+ SQLITE_SITE = https://www.sqlite.org/2022
+-SQLITE_LICENSE = Public domain
++SQLITE_LICENSE = blessing
+ SQLITE_LICENSE_FILES = tea/license.terms
+ SQLITE_CPE_ID_VENDOR = sqlite
+ SQLITE_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
