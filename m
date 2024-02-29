@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A819DC54E41
-	for <buildroot@archiver.kernel.org>; Thu, 29 Feb 2024 15:53:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B984C48BF6
+	for <buildroot@archiver.kernel.org>; Thu, 29 Feb 2024 15:53:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5253641B13;
-	Thu, 29 Feb 2024 15:53:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5A45041C0F;
+	Thu, 29 Feb 2024 15:53:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AQDGGpeaEwIK; Thu, 29 Feb 2024 15:53:35 +0000 (UTC)
+	with ESMTP id rYebHBC6XjGZ; Thu, 29 Feb 2024 15:53:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64E2C41D67
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D8FE41D79
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 64E2C41D67;
-	Thu, 29 Feb 2024 15:53:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2D8FE41D79;
+	Thu, 29 Feb 2024 15:53:38 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F0E0C1BF2B4
- for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 15:32:04 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 197CC1BF980
+ for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 15:32:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D46A560EF6
+ by smtp3.osuosl.org (Postfix) with ESMTP id D36B060ED8
  for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 15:32:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wqUx0PdfMbCG for <buildroot@lists.busybox.net>;
+ with ESMTP id yFF_M4QwVEDk for <buildroot@lists.busybox.net>;
  Thu, 29 Feb 2024 15:32:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1097760F18
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1141A60F1D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1097760F18
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1141A60F1D
  for <buildroot@buildroot.org>; Thu, 29 Feb 2024 15:32:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0B7D787D42; Thu, 29 Feb 2024 15:32:00 +0000 (UTC)
+ id F2EDE87D11; Thu, 29 Feb 2024 15:31:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 29 Feb 2024 16:24:31 +0100
+Date: Thu, 29 Feb 2024 16:23:39 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 608bd4d0ccdac416d84927f1fb064c42b5b518f7
-X-Git-Newrev: 56075f2f3d9327f0d9c1530ae48ea1a4ba85dfdc
+X-Git-Oldrev: 8a8a5622720899c08be4d29dccefcb1e72988e45
+X-Git-Newrev: 608bd4d0ccdac416d84927f1fb064c42b5b518f7
 X-Patchwork-Hint: ignore
-Message-Id: <20240229153200.0B7D787D42@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/domoticz: drop
- fmt dependency
+Message-Id: <20240229153159.F2EDE87D11@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] configs/imx8mpevk: select
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,61 +60,54 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1457467349603041003=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=56075f2f3d9327f0d9c1530ae48ea1a4ba85dfdc
+--===============1457467349603041003==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=608bd4d0ccdac416d84927f1fb064c42b5b518f7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-fmt is not a dependency since bump to version 2022.1 in commit
-adca60540f4fd271dda48b9a121986492700e73a and
-https://github.com/domoticz/domoticz/commit/82043c4d5c79003792379be79b931eb85ab890c8
-https://github.com/domoticz/domoticz/commit/9e02d9a79c70c36db180d3242cbd03ff9b63e3cc
+Select BR2_TARGET_UBOOT_NEEDS_OPENSSL to fix the following build
+error:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit dc3609c53f927289a9681f30ab283d190cb34e09)
+include/image.h:1394:12: fatal error: openssl/evp.h: No such file or directory
+ 1394 | #  include <openssl/evp.h>
+
+Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/5858180070
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Tested-By: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit bce4fe6d1bc8a71918e3d862ebf85d342bf535b0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/domoticz/Config.in   | 1 -
- package/domoticz/domoticz.mk | 2 --
- 2 files changed, 3 deletions(-)
+ configs/freescale_imx8mpevk_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
-index 85361eecf0..a0e69a7601 100644
---- a/package/domoticz/Config.in
-+++ b/package/domoticz/Config.in
-@@ -16,7 +16,6 @@ config BR2_PACKAGE_DOMOTICZ
- 	select BR2_PACKAGE_BOOST_SYSTEM
- 	select BR2_PACKAGE_BOOST_THREAD
- 	select BR2_PACKAGE_CEREAL
--	select BR2_PACKAGE_FMT
- 	select BR2_PACKAGE_JSONCPP
- 	select BR2_PACKAGE_LIBCURL
- 	select BR2_PACKAGE_MINIZIP_ZLIB
-diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
-index 3fbff5f4d8..03776e3040 100644
---- a/package/domoticz/domoticz.mk
-+++ b/package/domoticz/domoticz.mk
-@@ -12,7 +12,6 @@ DOMOTICZ_CPE_ID_VENDOR = domoticz
- DOMOTICZ_DEPENDENCIES = \
- 	boost \
- 	cereal \
--	fmt \
- 	host-pkgconf \
- 	jsoncpp \
- 	libcurl \
-@@ -36,7 +35,6 @@ DOMOTICZ_CONF_OPTS += \
- # jsoncpp, fmt, minizip, sqlite and mqtt
- DOMOTICZ_CONF_OPTS += \
- 	-DUSE_BUILTIN_JSONCPP=OFF \
--	-DUSE_BUILTIN_LIBFMT=OFF \
- 	-DUSE_BUILTIN_MINIZIP=OFF \
- 	-DUSE_BUILTIN_SQLITE=OFF \
- 	-DUSE_BUILTIN_MQTT=OFF
+diff --git a/configs/freescale_imx8mpevk_defconfig b/configs/freescale_imx8mpevk_defconfig
+index 82ed68c5a9..2aed048482 100644
+--- a/configs/freescale_imx8mpevk_defconfig
++++ b/configs/freescale_imx8mpevk_defconfig
+@@ -29,6 +29,7 @@ BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-6.1
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mp_evk"
+ BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/freescale/imx8mpevk/uboot-fragment.config"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
+ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+
+--===============1457467349603041003==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1457467349603041003==--
