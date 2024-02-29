@@ -4,56 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CC4BC48BF6
-	for <buildroot@archiver.kernel.org>; Thu, 29 Feb 2024 16:28:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2B5CC54E41
+	for <buildroot@archiver.kernel.org>; Thu, 29 Feb 2024 16:32:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DC69441B49;
-	Thu, 29 Feb 2024 16:28:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7214E4195C;
+	Thu, 29 Feb 2024 16:32:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id chv2xSfVM0Dw; Thu, 29 Feb 2024 16:28:31 +0000 (UTC)
+	with ESMTP id GGfIXl7tcCeY; Thu, 29 Feb 2024 16:32:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B611F41B50
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E3AA41960
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B611F41B50;
-	Thu, 29 Feb 2024 16:28:30 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3DC651BF3D8
- for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 16:05:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8E3AA41960;
+	Thu, 29 Feb 2024 16:32:26 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 62F851BF3D8
+ for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 16:05:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 280D04183C
- for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 16:05:18 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4F6CB4076C
+ for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 16:05:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rg9L0y_2Lv4K for <buildroot@lists.busybox.net>;
- Thu, 29 Feb 2024 16:05:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
- helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id p_kyb-hSUFhe for <buildroot@lists.busybox.net>;
+ Thu, 29 Feb 2024 16:05:31 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
+ helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0161341836
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0161341836
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0161341836
- for <buildroot@buildroot.org>; Thu, 29 Feb 2024 16:05:16 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 480D524000B;
- Thu, 29 Feb 2024 16:05:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7572E4052C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7572E4052C
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7572E4052C
+ for <buildroot@buildroot.org>; Thu, 29 Feb 2024 16:05:31 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B14DBE0009;
+ Thu, 29 Feb 2024 16:05:29 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rfiuI-004pVZ-2E;
- Thu, 29 Feb 2024 17:05:14 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rfiuX-004pW1-0X;
+ Thu, 29 Feb 2024 17:05:29 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <20240228224459.2383336-1-yann.morin.1998@free.fr>
-Date: Thu, 29 Feb 2024 17:05:14 +0100
 In-Reply-To: <20240228224459.2383336-1-yann.morin.1998@free.fr> (Yann
  E. MORIN's message of "Wed, 28 Feb 2024 23:44:59 +0100")
-Message-ID: <87il27dznp.fsf@48ers.dk>
+References: <20240228224459.2383336-1-yann.morin.1998@free.fr>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+Date: Thu, 29 Feb 2024 17:05:29 +0100
+Message-ID: <87h6hrdzna.fsf@48ers.dk>
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
 Subject: Re: [Buildroot] [PATCH] support/scripts/pkg-stats: fix running on
@@ -93,33 +93,6 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
  > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
 Committed, thanks.
-
-> ---
- >  support/scripts/pkg-stats | 2 +-
- >  1 file changed, 1 insertion(+), 1 deletion(-)
-
- > diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
- > index 9a4a3ccad5..53898a36f2 100755
- > --- a/support/scripts/pkg-stats
- > +++ b/support/scripts/pkg-stats
- > @@ -1290,7 +1290,7 @@ def __main__():
- >          package_list = set([v["name"] for v in show_info_js.values() if 'name' in v])
- >      else:
- >          package_list = None
- > -    date = datetime.datetime.now(datetime.UTC)
- > +    date = datetime.datetime.now(datetime.timezone.utc)
- >      commit = subprocess.check_output(['git', '-C', brpath,
- >                                        'rev-parse',
- >                                        'HEAD']).splitlines()[0].decode()
- > -- 
-
- > 2.43.2
-
- > _______________________________________________
- > buildroot mailing list
- > buildroot@buildroot.org
- > https://lists.buildroot.org/mailman/listinfo/buildroot
-
 
 -- 
 Bye, Peter Korsgaard
