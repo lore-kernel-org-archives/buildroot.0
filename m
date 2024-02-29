@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 988C4C48BF6
-	for <buildroot@archiver.kernel.org>; Thu, 29 Feb 2024 15:58:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47120C54E41
+	for <buildroot@archiver.kernel.org>; Thu, 29 Feb 2024 15:58:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E84E741B31;
-	Thu, 29 Feb 2024 15:58:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1668141A78;
+	Thu, 29 Feb 2024 15:58:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lsABOAXkSncw; Thu, 29 Feb 2024 15:58:32 +0000 (UTC)
+	with ESMTP id OKPBScb6HkYp; Thu, 29 Feb 2024 15:58:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 237A34055A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B26D141B33
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 237A34055A;
-	Thu, 29 Feb 2024 15:58:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B26D141B33;
+	Thu, 29 Feb 2024 15:58:36 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0356D1BF2B4
- for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 15:32:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 035B11BF980
+ for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 15:32:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4AB6660F1D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4A19560F18
  for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 15:32:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zMWK22CpOn19 for <buildroot@lists.busybox.net>;
+ with ESMTP id 9WScqQLamdD6 for <buildroot@lists.busybox.net>;
  Thu, 29 Feb 2024 15:32:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C69D60625
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1CA5E60F1E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3C69D60625
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1CA5E60F1E
  for <buildroot@buildroot.org>; Thu, 29 Feb 2024 15:32:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 340B980162; Thu, 29 Feb 2024 15:32:00 +0000 (UTC)
+ id 16F7B87790; Thu, 29 Feb 2024 15:32:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 29 Feb 2024 16:30:44 +0100
+Date: Thu, 29 Feb 2024 16:26:47 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 63bf07c42614b085c95916d045f75a4623ad8f3e
-X-Git-Newrev: e5ad7256596a5459d0ce558144dff4792a06eb8e
+X-Git-Oldrev: 56075f2f3d9327f0d9c1530ae48ea1a4ba85dfdc
+X-Git-Newrev: 49df708cde6598602cc4a7828c2ccbbef78825f1
 X-Patchwork-Hint: ignore
-Message-Id: <20240229153200.340B980162@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/openssh: fix
- build error on powerpc
+Message-Id: <20240229153200.16F7B87790@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/leptonica:
+ affected by gcc bug 101737
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,121 +60,50 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4806312007308378481=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4806312007308378481==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=e5ad7256596a5459d0ce558144dff4792a06eb8e
+commit: https://git.buildroot.net/buildroot/commit/?id=49df708cde6598602cc4a7828c2ccbbef78825f1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-Fixes the following error message introducted by OpenSSH v9.6p1.
+leptonica is affected by gcc bug 101737 resulting in the following build
+failure since at least bump to version 1.82.0 in commit
+81a961c545cc9f240841b75d6c21f13b334bc274:
 
-  sshkey.c: In function 'sshkey_set_filename':
-  sshkey.c:3705:1: sorry, unimplemented: '-fzero-call-used-regs' not supported on this target
-   3705 | }
+sh4eb-buildroot-linux-gnu-gcc.br_real: internal compiler error: Segmentation fault signal terminated program cc1
+Please submit a full bug report, with preprocessed source (by using -freport-bug).
+See <http://bugs.buildroot.net/> for instructions.
 
 Fixes:
-http://autobuild.buildroot.org/results/ec7/ec780aed5b1c4fdf9b91f6e7be99e8d4c42efa58
+ - http://autobuild.buildroot.org/results/f18979454399d9c728f9e017e4cc3a1b27458f5b
+ - http://autobuild.buildroot.org/results/f3c803892175b3bb2ce68e3140c879b4a4d4b302
 
-Signed-off-by: Brandon Maier <brandon.maier@collins.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 325fe1aecfd20d2653cce6bc189824c6fdfcafec)
+(cherry picked from commit 31b488337921d57c14893c34766ac22c53e5382b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-detection-of-broken-fzero-call-used-regs.patch | 57 ++++++++++++++++++++++
- package/openssh/openssh.mk                         |  3 ++
- 2 files changed, 60 insertions(+)
+ package/leptonica/leptonica.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/openssh/0001-better-detection-of-broken-fzero-call-used-regs.patch b/package/openssh/0001-better-detection-of-broken-fzero-call-used-regs.patch
-new file mode 100644
-index 0000000000..5c056033a9
---- /dev/null
-+++ b/package/openssh/0001-better-detection-of-broken-fzero-call-used-regs.patch
-@@ -0,0 +1,57 @@
-+From 1036d77b34a5fa15e56f516b81b9928006848cbd Mon Sep 17 00:00:00 2001
-+From: Damien Miller <djm@mindrot.org>
-+Date: Fri, 22 Dec 2023 17:56:26 +1100
-+Subject: [PATCH] better detection of broken -fzero-call-used-regs
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+gcc 13.2.0 on ppc64le refuses to compile some function, including
-+cipher.c:compression_alg_list() with an error:
-+
-+> sorry, unimplemented: argument ‘used’ is not supportedcw
-+> for ‘-fzero-call-used-regs’ on this target
-+
-+This extends the autoconf will-it-work test with a similarly-
-+structured function that seems to catch this.
-+
-+Spotted/tested by Colin Watson; bz3645
-+
-+Upstream: https://github.com/openssh/openssh-portable/commit/1036d77b34a5fa15e56f516b81b9928006848cbd.patch
-+Signed-off-by: Brandon Maier <brandon.maier@collins.com>
-+---
-+ m4/openssh.m4 | 12 +++++++++---
-+ 1 file changed, 9 insertions(+), 3 deletions(-)
-+
-+diff --git a/m4/openssh.m4 b/m4/openssh.m4
-+index 5d4c56280fc..033df501c3d 100644
-+--- a/m4/openssh.m4
-++++ b/m4/openssh.m4
-+@@ -20,18 +20,24 @@ char *f2(char *s, ...) {
-+ 	va_end(args);
-+ 	return strdup(ret);
-+ }
-++const char *f3(int s) {
-++	return s ? "good" : "gooder";
-++}
-+ int main(int argc, char **argv) {
-+-	(void)argv;
-+ 	char b[256], *cp;
-++	const char *s;
-+ 	/* Some math to catch -ftrapv problems in the toolchain */
-+ 	int i = 123 * argc, j = 456 + argc, k = 789 - argc;
-+ 	float l = i * 2.1;
-+ 	double m = l / 0.5;
-+ 	long long int n = argc * 12345LL, o = 12345LL * (long long int)argc;
-++	(void)argv;
-+ 	f(1);
-+-	snprintf(b, sizeof b, "%d %d %d %f %f %lld %lld\n", i,j,k,l,m,n,o);
-++	s = f3(f(2));
-++	snprintf(b, sizeof b, "%d %d %d %f %f %lld %lld %s\n", i,j,k,l,m,n,o,s);
-+ 	if (write(1, b, 0) == -1) exit(0);
-+-	cp = f2("%d %d %d %f %f %lld %lld\n", i,j,k,l,m,n,o);
-++	cp = f2("%d %d %d %f %f %lld %lld %s\n", i,j,k,l,m,n,o,s);
-++	if (write(1, cp, 0) == -1) exit(0);
-+ 	free(cp);
-+ 	/*
-+ 	 * Test fallthrough behaviour.  clang 10's -Wimplicit-fallthrough does
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index ec9e6613b0..ef530cc850 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -13,6 +13,9 @@ OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
- OPENSSH_LICENSE = BSD-3-Clause, BSD-2-Clause, Public Domain
- OPENSSH_LICENSE_FILES = LICENCE
+diff --git a/package/leptonica/leptonica.mk b/package/leptonica/leptonica.mk
+index 8791b0c4c2..569d2829c3 100644
+--- a/package/leptonica/leptonica.mk
++++ b/package/leptonica/leptonica.mk
+@@ -14,6 +14,10 @@ LEPTONICA_DEPENDENCIES = host-pkgconf
  
-+# 0001-better-detection-of-broken-fzero-call-used-regs.patch
-+OPENSSH_AUTORECONF = YES
+ LEPTONICA_CONF_OPTS += --disable-programs
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_101737),y)
++LEPTONICA_CONF_OPTS += CFLAGS="$(TARGET_CFLAGS) -O0"
++endif
 +
- OPENSSH_CONF_ENV = \
- 	LD="$(TARGET_CC)" \
- 	LDFLAGS="$(TARGET_CFLAGS)" \
-
---===============4806312007308378481==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ ifeq ($(BR2_PACKAGE_GIFLIB),y)
+ LEPTONICA_DEPENDENCIES += giflib
+ LEPTONICA_CONF_OPTS += --with-giflib
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4806312007308378481==--
