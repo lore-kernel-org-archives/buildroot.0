@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6E80C48BF6
-	for <buildroot@archiver.kernel.org>; Thu, 29 Feb 2024 15:53:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27B04C54E41
+	for <buildroot@archiver.kernel.org>; Thu, 29 Feb 2024 15:53:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A982841934;
-	Thu, 29 Feb 2024 15:53:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8DE1041C60;
+	Thu, 29 Feb 2024 15:53:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Q1M3YlqVFYtZ; Thu, 29 Feb 2024 15:53:21 +0000 (UTC)
+	with ESMTP id a4gKeXrjdriL; Thu, 29 Feb 2024 15:53:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8FC5341C46
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA1AC41C51
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8FC5341C46;
-	Thu, 29 Feb 2024 15:53:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EA1AC41C51;
+	Thu, 29 Feb 2024 15:53:23 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5C7AE1BF98E
- for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 15:32:01 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2373B1BF2B4
+ for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 15:32:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9D4CF60A5E
+ by smtp3.osuosl.org (Postfix) with ESMTP id BBCE26085A
  for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 15:32:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bWVUDQmZoh4I for <buildroot@lists.busybox.net>;
- Thu, 29 Feb 2024 15:31:59 +0000 (UTC)
+ with ESMTP id IBqfrv0zJySL for <buildroot@lists.busybox.net>;
+ Thu, 29 Feb 2024 15:32:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C8CE76085A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC3A860EF6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C8CE76085A
+ by smtp3.osuosl.org (Postfix) with ESMTP id EC3A860EF6
  for <buildroot@buildroot.org>; Thu, 29 Feb 2024 15:31:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B57E787790; Thu, 29 Feb 2024 15:31:59 +0000 (UTC)
+ id E762987790; Thu, 29 Feb 2024 15:31:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 29 Feb 2024 16:17:07 +0100
+Date: Thu, 29 Feb 2024 16:21:57 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 68b48580592bd520ed218bdab196c8ce889bcdfa
-X-Git-Newrev: d69475afc96f8524d9a087437fbb09a0080a9bc0
+X-Git-Oldrev: 09898aeaab7276aa2317d8e416416eccc8c3080c
+X-Git-Newrev: 8a8a5622720899c08be4d29dccefcb1e72988e45
 X-Patchwork-Hint: ignore
-Message-Id: <20240229153159.B57E787790@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/frr: drop libnl
- dependency
+Message-Id: <20240229153159.E762987790@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x]
+ package/python-minimalmodbus: fix empty package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,49 +65,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d69475afc96f8524d9a087437fbb09a0080a9bc0
+commit: https://git.buildroot.net/buildroot/commit/?id=8a8a5622720899c08be4d29dccefcb1e72988e45
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-libnl is not needed to build frr since the addition of the package in
-commit 26d82d006ba15777d19892b327bde343d82a9ff5
+Calling `setup.py` build builds and installs  an empty package
+after upstream changed their packaging. Calling setuptools via
+`python -m build` builds the package correctly.
 
-No mention of libnl found in https://github.com/FRRouting/frr or
-https://docs.frrouting.org/projects/dev-guide/en/latest/building.html
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit efa955ac415e2b50f63710e4fc1de8fd3e0dc099)
+Signed-off-by: Marcus Hoffmann <bubu@bubu1.eu>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit d7e45215a4faaef8d6eb993b38d5a70ad7d309b1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/frr/Config.in | 1 -
- package/frr/frr.mk    | 2 +-
- 2 files changed, 1 insertion(+), 2 deletions(-)
+ package/python-minimalmodbus/python-minimalmodbus.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/frr/Config.in b/package/frr/Config.in
-index c2e9577a27..f6c058e6df 100644
---- a/package/frr/Config.in
-+++ b/package/frr/Config.in
-@@ -7,7 +7,6 @@ config BR2_PACKAGE_FRR
- 	select BR2_PACKAGE_BASH
- 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # bash
- 	select BR2_PACKAGE_LIBYANG
--	select BR2_PACKAGE_LIBNL
- 	select BR2_PACKAGE_READLINE
- 	select BR2_PACKAGE_JSON_C
- 	help
-diff --git a/package/frr/frr.mk b/package/frr/frr.mk
-index 19f346fd7b..a4b4bccaf9 100644
---- a/package/frr/frr.mk
-+++ b/package/frr/frr.mk
-@@ -12,7 +12,7 @@ FRR_CPE_ID_VENDOR = linuxfoundation
- FRR_CPE_ID_PRODUCT = free_range_routing
- FRR_AUTORECONF = YES
+diff --git a/package/python-minimalmodbus/python-minimalmodbus.mk b/package/python-minimalmodbus/python-minimalmodbus.mk
+index 5a6e7733be..cb8a0d8cc9 100644
+--- a/package/python-minimalmodbus/python-minimalmodbus.mk
++++ b/package/python-minimalmodbus/python-minimalmodbus.mk
+@@ -7,7 +7,8 @@
+ PYTHON_MINIMALMODBUS_VERSION = 2.1.1
+ PYTHON_MINIMALMODBUS_SOURCE = minimalmodbus-$(PYTHON_MINIMALMODBUS_VERSION).tar.gz
+ PYTHON_MINIMALMODBUS_SITE = https://files.pythonhosted.org/packages/37/fc/8a58f7bcdece751f16a4a9aac780acd1288aa8ac6adbffdd764c88fb71c6
+-PYTHON_MINIMALMODBUS_SETUP_TYPE = setuptools
++PYTHON_MINIMALMODBUS_DEPENDENCIES = host-python-setuptools
++PYTHON_MINIMALMODBUS_SETUP_TYPE = pep517
+ PYTHON_MINIMALMODBUS_LICENSE = Apache-2.0
+ PYTHON_MINIMALMODBUS_LICENSE_FILES = LICENSE
  
--FRR_DEPENDENCIES = host-frr readline json-c libyang libnl \
-+FRR_DEPENDENCIES = host-frr readline json-c libyang \
- 	$(if $(BR2_PACKAGE_C_ARES),c-ares)
- 
- HOST_FRR_DEPENDENCIES = host-flex host-bison host-elfutils host-python3
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
