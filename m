@@ -4,60 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D019C54E41
-	for <buildroot@archiver.kernel.org>; Thu, 29 Feb 2024 15:58:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 572FFC48BF6
+	for <buildroot@archiver.kernel.org>; Thu, 29 Feb 2024 15:58:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1852541B8C;
-	Thu, 29 Feb 2024 15:58:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 13FA641B4C;
+	Thu, 29 Feb 2024 15:58:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SpAYJhed8Nlu; Thu, 29 Feb 2024 15:58:46 +0000 (UTC)
+	with ESMTP id VHuDYvNo05yf; Thu, 29 Feb 2024 15:58:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A255341B74
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1ED6741B7E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A255341B74;
-	Thu, 29 Feb 2024 15:58:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C9FC41BF25B
- for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 15:46:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1ED6741B7E;
+	Thu, 29 Feb 2024 15:58:49 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 641311BF25B
+ for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 15:48:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B5EE940257
- for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 15:46:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 51D618293D
+ for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 15:48:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Bvq7eqpB7TjW for <buildroot@lists.busybox.net>;
- Thu, 29 Feb 2024 15:46:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
- helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8Tk-tKhDUsaz for <buildroot@lists.busybox.net>;
+ Thu, 29 Feb 2024 15:48:02 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D910240139
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D910240139
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D910240139
- for <buildroot@buildroot.org>; Thu, 29 Feb 2024 15:46:56 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E3F4BE0007;
- Thu, 29 Feb 2024 15:46:54 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rficY-004oaD-10;
- Thu, 29 Feb 2024 16:46:54 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A1D4D82925
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id A1D4D82925
+ for <buildroot@buildroot.org>; Thu, 29 Feb 2024 15:48:02 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9D63387DAE; Thu, 29 Feb 2024 15:48:02 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-References: <e050e870b2afb35643036a87df540add584c95b4.1705594130.git.yann.morin@orange.com>
- <20240206115300.0bd8b584@windsurf>
-Date: Thu, 29 Feb 2024 16:46:54 +0100
-In-Reply-To: <20240206115300.0bd8b584@windsurf> (Thomas Petazzoni via
- buildroot's message of "Tue, 6 Feb 2024 11:53:00 +0100")
-Message-ID: <87msrje0i9.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH] docs/manual: extend makedev syntax section
+To: buildroot@buildroot.org
+Date: Thu, 29 Feb 2024 16:42:49 +0100
+X-Git-Refname: refs/heads/2023.11.x
+X-Git-Oldrev: 0a908e31303703e9fb782b7f3cd241cf02728501
+X-Git-Newrev: e35929fd1e19692010c8fa80824c065a86cc6ac5
+X-Patchwork-Hint: ignore
+Message-Id: <20240229154802.9D63387DAE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/libcurl: drop
+ LIBCURL_CPE_ID_PRODUCT
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,58 +59,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: yann.morin@orange.com, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=e35929fd1e19692010c8fa80824c065a86cc6ac5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
- > On Thu, 18 Jan 2024 17:08:50 +0100
- > <yann.morin@orange.com> wrote:
+Commit 4b6202f721f2f5ab36153ba44de65286f7811ef9 set
+LIBCURL_CPE_ID_PRODUCT to libcurl but this is not needed as
+LIBCURL_CPE_ID_PRODUCT will be set to the package name
+(i.e. libcurl) by default
 
- >> From: "Yann E. MORIN" <yann.morin@orange.com>
- >> 
- >> The section of the manual describing the makedev syntax is not
- >> up-to-date with the current features, and does not properly describe
- >> existing ones.
- >> 
- >> - extend the list of types with the requirements on the existence of
- >> the target file or directory; for 'c', 'b', and 'p', the existence
- >> requirement is inherited from mknod(2):
- >> 
- >> ERRORS
- >> ...
- >> ENOENT A directory component in pathname does not exist or is a
- >> dangling symbolic link.
- >> 
- >> for the other types, the existence requirements are extracted from
- >> the source of makedev.c;
- >> 
- >> - format the types fags, so they are rendered in monospace;
- >> 
- >> - extend the 'mode' description, as it can be set to -1 for 'f', 'd',
- >> or 'r', so that only the uid and gid are set. This is most useful
- >> for 'r', where setting the same mode recursively for all the
- >> sub-directories and files alike does not really make sense; indeed
- >> in this case, the modes are usually set correctly when the package
- >> (or rootfs overlay) installs the files, and only the uid and gid are
- >> interesting to set;
- >> 
- >> - extend and update the examples to show-case the -1 mode use-case.
- >> 
- >> Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
- >> ---
- >> docs/manual/makedev-syntax.adoc | 33 +++++++++++++++++++--------------
- >> 1 file changed, 19 insertions(+), 14 deletions(-)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Reviewed-by: Antoine Coutant <antoine.coutant@smile.fr>
+(cherry picked from commit 61295f5ced0749db34095bfbe8b34ed86a692828)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libcurl/libcurl.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
- > Applied to master (with the typo in the commit log fixed), thanks!
-
-Committed to 2023.02.x and 2023.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 3ecc587a52..83845b8e87 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -13,7 +13,6 @@ LIBCURL_DEPENDENCIES = host-pkgconf \
+ LIBCURL_LICENSE = curl
+ LIBCURL_LICENSE_FILES = COPYING
+ LIBCURL_CPE_ID_VENDOR = haxx
+-LIBCURL_CPE_ID_PRODUCT = libcurl
+ LIBCURL_INSTALL_STAGING = YES
+ 
+ # We disable NTLM delegation to winbinds ntlm_auth ('--disable-ntlm-wb')
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
