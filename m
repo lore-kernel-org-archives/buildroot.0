@@ -4,50 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 949C9C48BF6
-	for <buildroot@archiver.kernel.org>; Thu, 29 Feb 2024 15:52:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2DF65C54E41
+	for <buildroot@archiver.kernel.org>; Thu, 29 Feb 2024 15:52:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6266B41A88;
-	Thu, 29 Feb 2024 15:52:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EE88541AEB;
+	Thu, 29 Feb 2024 15:52:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id H4jdy1GnM-Cv; Thu, 29 Feb 2024 15:52:21 +0000 (UTC)
+	with ESMTP id mx3cnqVb7ht8; Thu, 29 Feb 2024 15:52:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E69B41A32
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C36D41AE9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7E69B41A32;
-	Thu, 29 Feb 2024 15:52:20 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 468F91BF2B4
- for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 15:33:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8C36D41AE9;
+	Thu, 29 Feb 2024 15:52:24 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 884A41BF2B4
+ for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 15:38:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8D61141918
- for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 15:33:07 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 81DCF60F47
+ for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 15:38:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EVA5Vtw3JBmd for <buildroot@lists.busybox.net>;
- Thu, 29 Feb 2024 15:33:06 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XQ2GcRRXG01W for <buildroot@lists.busybox.net>;
+ Thu, 29 Feb 2024 15:38:09 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
+ helo=relay7-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7919441912
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7919441912
- for <buildroot@buildroot.org>; Thu, 29 Feb 2024 15:33:05 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 10E1C87D71; Thu, 29 Feb 2024 15:33:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 63CAF60F42
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63CAF60F42
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 63CAF60F42
+ for <buildroot@buildroot.org>; Thu, 29 Feb 2024 15:38:09 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3886D20002;
+ Thu, 29 Feb 2024 15:38:07 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1rfiU2-004no7-1w;
+ Thu, 29 Feb 2024 16:38:06 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu, 29 Feb 2024 16:30:57 +0100
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 891a18201a2189c38a6e1ee12fb03680414d24bd
-X-Git-Newrev: c4a0b4f3925ccf18fa93e3e2bbca7b0f38e221d4
-X-Patchwork-Hint: ignore
-Message-Id: <20240229153305.10E1C87D71@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/openssh: fix
- build error on powerpc
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20240129204032.1980414-1-gsmecher@threespeedlogic.com>
+ <ZcEjLpAWFjQuYCWc@landeda>
+Date: Thu, 29 Feb 2024 16:38:06 +0100
+In-Reply-To: <ZcEjLpAWFjQuYCWc@landeda> (Yann E. MORIN's message of "Mon, 5
+ Feb 2024 19:04:30 +0100")
+Message-ID: <87ttlrffhd.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH] host-python-numpy: correct implied
+ host-lapack/host-blas dependency.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,122 +70,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============9111948416386156861=="
+Cc: gsmecher@threespeedlogic.com, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============9111948416386156861==
-Content-Type: text/plain
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c4a0b4f3925ccf18fa93e3e2bbca7b0f38e221d4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+ > Graeme, All,
+ > On 2024-01-29 12:40 -0800, gsmecher@threespeedlogic.com spake thusly:
+ >> From: Graeme Smecher <gsmecher@threespeedlogic.com>
+ >> 
+ >> Before this patch, host-python-numpy attempted (and failed) to detect
+ >> OpenBLAS as follows:
+ >> 
+ >> buildroot$ make
+ >> >>> host-python-numpy 1.25.0 Configuring
+ >> [...]
+ >> Run-time dependency openblas found: NO (tried pkgconfig and cmake)
+ >> WARNING: CMake Toolchain: Failed to determine CMake compilers state
+ >> Run-time dependency openblas found: YES 0.3.21
+ >> Dependency openblas found: YES 0.3.21 (cached)
+ >> Program _build_utils/process_src_template.py found: YES
+ >> (/path/to/buildroot/output/host/bin/python3
+ >> /path/to/buildroot/output/build/host-python-numpy-1.25.0/numpy/_build_utils/process_src_template.py)
+ >> Program _build_utils/tempita.py found: YES
+ >> (/path/to/buildroot/output/build/host-python-numpy-1.25.0/numpy/_build_utils/tempita.py)
+ >> 
+ >> output/build/host-python-numpy-1.25.0/numpy/meson.build:201:44:
+ >> ERROR: Could not get cmake variable and no default provided for
+ >> <CMakeDependency OpenBLAS: True None>
+ >> [...]
 
-Fixes the following error message introducted by OpenSSH v9.6p1.
+ > So I dug in the Numpy git history, and before we bumped to 1.25, it was
+ > using distutils, which would only warn and disable BLAS support if not
+ > found, but the meson switch made the default to fail.
 
-  sshkey.c: In function 'sshkey_set_filename':
-  sshkey.c:3705:1: sorry, unimplemented: '-fzero-call-used-regs' not supported on this target
-   3705 | }
+ >> Two obvious ways to correct this:
+ >> 
+ >> - Add some kind of host-lapack / host-openblas dependency to
+ >> host-python-numpy, or
+ >> - Tell host-python-numpy not to look for (or rely on) external code.
+ >> 
+ >> Because the host numpy environment shouldn't be doing any numerical
+ >> heavy lifting, we opt for the latter here.
+ >> 
+ >> Signed-off-by: Graeme Smecher <gsmecher@threespeedlogic.com>
 
-Fixes:
-http://autobuild.buildroot.org/results/ec7/ec780aed5b1c4fdf9b91f6e7be99e8d4c42efa58
+ > Applied to master, with an extended commit log about the history,
+ > thanks.
 
-Signed-off-by: Brandon Maier <brandon.maier@collins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 325fe1aecfd20d2653cce6bc189824c6fdfcafec)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...-detection-of-broken-fzero-call-used-regs.patch | 57 ++++++++++++++++++++++
- package/openssh/openssh.mk                         |  3 ++
- 2 files changed, 60 insertions(+)
+Committed to 2023.11.x, thanks.
 
-diff --git a/package/openssh/0001-better-detection-of-broken-fzero-call-used-regs.patch b/package/openssh/0001-better-detection-of-broken-fzero-call-used-regs.patch
-new file mode 100644
-index 0000000000..5c056033a9
---- /dev/null
-+++ b/package/openssh/0001-better-detection-of-broken-fzero-call-used-regs.patch
-@@ -0,0 +1,57 @@
-+From 1036d77b34a5fa15e56f516b81b9928006848cbd Mon Sep 17 00:00:00 2001
-+From: Damien Miller <djm@mindrot.org>
-+Date: Fri, 22 Dec 2023 17:56:26 +1100
-+Subject: [PATCH] better detection of broken -fzero-call-used-regs
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+gcc 13.2.0 on ppc64le refuses to compile some function, including
-+cipher.c:compression_alg_list() with an error:
-+
-+> sorry, unimplemented: argument ‘used’ is not supportedcw
-+> for ‘-fzero-call-used-regs’ on this target
-+
-+This extends the autoconf will-it-work test with a similarly-
-+structured function that seems to catch this.
-+
-+Spotted/tested by Colin Watson; bz3645
-+
-+Upstream: https://github.com/openssh/openssh-portable/commit/1036d77b34a5fa15e56f516b81b9928006848cbd.patch
-+Signed-off-by: Brandon Maier <brandon.maier@collins.com>
-+---
-+ m4/openssh.m4 | 12 +++++++++---
-+ 1 file changed, 9 insertions(+), 3 deletions(-)
-+
-+diff --git a/m4/openssh.m4 b/m4/openssh.m4
-+index 5d4c56280fc..033df501c3d 100644
-+--- a/m4/openssh.m4
-++++ b/m4/openssh.m4
-+@@ -20,18 +20,24 @@ char *f2(char *s, ...) {
-+ 	va_end(args);
-+ 	return strdup(ret);
-+ }
-++const char *f3(int s) {
-++	return s ? "good" : "gooder";
-++}
-+ int main(int argc, char **argv) {
-+-	(void)argv;
-+ 	char b[256], *cp;
-++	const char *s;
-+ 	/* Some math to catch -ftrapv problems in the toolchain */
-+ 	int i = 123 * argc, j = 456 + argc, k = 789 - argc;
-+ 	float l = i * 2.1;
-+ 	double m = l / 0.5;
-+ 	long long int n = argc * 12345LL, o = 12345LL * (long long int)argc;
-++	(void)argv;
-+ 	f(1);
-+-	snprintf(b, sizeof b, "%d %d %d %f %f %lld %lld\n", i,j,k,l,m,n,o);
-++	s = f3(f(2));
-++	snprintf(b, sizeof b, "%d %d %d %f %f %lld %lld %s\n", i,j,k,l,m,n,o,s);
-+ 	if (write(1, b, 0) == -1) exit(0);
-+-	cp = f2("%d %d %d %f %f %lld %lld\n", i,j,k,l,m,n,o);
-++	cp = f2("%d %d %d %f %f %lld %lld %s\n", i,j,k,l,m,n,o,s);
-++	if (write(1, cp, 0) == -1) exit(0);
-+ 	free(cp);
-+ 	/*
-+ 	 * Test fallthrough behaviour.  clang 10's -Wimplicit-fallthrough does
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index ec9e6613b0..ef530cc850 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -13,6 +13,9 @@ OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
- OPENSSH_LICENSE = BSD-3-Clause, BSD-2-Clause, Public Domain
- OPENSSH_LICENSE_FILES = LICENCE
- 
-+# 0001-better-detection-of-broken-fzero-call-used-regs.patch
-+OPENSSH_AUTORECONF = YES
-+
- OPENSSH_CONF_ENV = \
- 	LD="$(TARGET_CC)" \
- 	LDFLAGS="$(TARGET_CFLAGS)" \
-
---===============9111948416386156861==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============9111948416386156861==--
