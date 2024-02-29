@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D91E3C54E41
-	for <buildroot@archiver.kernel.org>; Thu, 29 Feb 2024 14:24:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF2F0C54E49
+	for <buildroot@archiver.kernel.org>; Thu, 29 Feb 2024 14:24:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4C14E418A0;
-	Thu, 29 Feb 2024 14:24:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7CF4E418C7;
+	Thu, 29 Feb 2024 14:24:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 39gRhGig6e9J; Thu, 29 Feb 2024 14:24:34 +0000 (UTC)
+	with ESMTP id tLKBYMc_3cC6; Thu, 29 Feb 2024 14:24:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B3694418B6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B59B418CF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B3694418B6;
-	Thu, 29 Feb 2024 14:24:33 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3EEFF1BF3FB
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4B59B418CF;
+	Thu, 29 Feb 2024 14:24:37 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 578841BF980
  for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 14:22:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2C19782435
+ by smtp3.osuosl.org (Postfix) with ESMTP id 44D7160A99
  for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 14:22:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Fub4uRqA5lNl for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZPyziees8oXf for <buildroot@lists.busybox.net>;
  Thu, 29 Feb 2024 14:22:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 70E54823FB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 70E0760A6C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 70E54823FB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 70E0760A6C
  for <buildroot@buildroot.org>; Thu, 29 Feb 2024 14:22:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 55DD287CD6; Thu, 29 Feb 2024 14:22:28 +0000 (UTC)
+ id 459E687D07; Thu, 29 Feb 2024 14:22:28 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 29 Feb 2024 15:18:18 +0100
+Date: Thu, 29 Feb 2024 15:17:56 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: ec070357149fc4c53dd3ef46e48e01aa6f5f76df
-X-Git-Newrev: 158395a46d36c5ec948a223905e7b3399e30410b
+X-Git-Oldrev: 3f2145c0848e9114bbd5412285cd300d802d7a0f
+X-Git-Newrev: 8778f7b6b6ff6b9ac992d69f09ccfc074f7bb9b7
 X-Patchwork-Hint: ignore
-Message-Id: <20240229142228.55DD287CD6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/yasm: add
- YASM_CPE_ID_VENDOR
+Message-Id: <20240229142228.459E687D07@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/dbus: drop
+ DBUS_CPE_ID_PRODUCT
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,33 +65,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=158395a46d36c5ec948a223905e7b3399e30410b
+commit: https://git.buildroot.net/buildroot/commit/?id=8778f7b6b6ff6b9ac992d69f09ccfc074f7bb9b7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-cpe:2.3:a:tortall:yasm is a valid CPE identifier for this package:
-
-  https://nvd.nist.gov/products/cpe/detail/2E6C9C2F-A057-4083-BC90-095403EF138E
+Commit 363b4ebf1aaf4821c0c49713eba71937bd5639ca set DBUS_CPE_ID_PRODUCT
+to dbus but this is not needed as DBUS_CPE_ID_PRODUCT will be set to the
+package name (i.e. dbus) by default
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 17dac57e3ebfe8e2371100a632cca4fb11ed9bac)
+(cherry picked from commit b878e7bbbc7041c8fd0ce2e410cc7fc9428bb93d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/yasm/yasm.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/dbus/dbus.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/yasm/yasm.mk b/package/yasm/yasm.mk
-index b294bd3aee..cdb8e15bee 100644
---- a/package/yasm/yasm.mk
-+++ b/package/yasm/yasm.mk
-@@ -8,6 +8,7 @@ YASM_VERSION = 1.3.0
- YASM_SITE = http://www.tortall.net/projects/yasm/releases
- YASM_LICENSE = BSD-2-Clause, BSD-3-Clause, Artistic, GPL-2.0, LGPL-2.0
- YASM_LICENSE_FILES = COPYING BSD.txt Artistic.txt GNU_GPL-2.0 GNU_LGPL-2.0
-+YASM_CPE_ID_VENDOR = tortall
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index b4d1cdc6b6..7ddeb0e325 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -11,7 +11,6 @@ DBUS_SITE = https://dbus.freedesktop.org/releases/dbus
+ DBUS_LICENSE = AFL-2.1 or GPL-2.0+ (library, tools), GPL-2.0+ (tools)
+ DBUS_LICENSE_FILES = COPYING
+ DBUS_CPE_ID_VENDOR = freedesktop
+-DBUS_CPE_ID_PRODUCT = dbus
+ DBUS_INSTALL_STAGING = YES
  
- # This sed prevents it compiling 2 programs (vsyasm and ytasm)
- # that are only of use on Microsoft Windows.
+ define DBUS_PERMISSIONS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
