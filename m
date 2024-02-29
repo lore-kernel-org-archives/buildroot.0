@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93220C54E41
-	for <buildroot@archiver.kernel.org>; Thu, 29 Feb 2024 15:53:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC397C48BF6
+	for <buildroot@archiver.kernel.org>; Thu, 29 Feb 2024 15:53:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 60A5A41930;
-	Thu, 29 Feb 2024 15:53:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9CDA341A78;
+	Thu, 29 Feb 2024 15:53:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HYAGH56ZuqM2; Thu, 29 Feb 2024 15:53:15 +0000 (UTC)
+	with ESMTP id FJpj4VjTbq6s; Thu, 29 Feb 2024 15:53:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 970EF41B98
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A49E41C24
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 970EF41B98;
-	Thu, 29 Feb 2024 15:53:14 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 264181BF980
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1A49E41C24;
+	Thu, 29 Feb 2024 15:53:18 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 454391BF2B4
  for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 15:32:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A3CFF4182C
+ by smtp1.osuosl.org (Postfix) with ESMTP id A29EF8233D
  for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 15:32:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LqPye14FxYd3 for <buildroot@lists.busybox.net>;
- Thu, 29 Feb 2024 15:31:59 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gXssdTvSrj6m for <buildroot@lists.busybox.net>;
+ Thu, 29 Feb 2024 15:32:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BDA6D41821
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E22CA827A5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id BDA6D41821
+ by smtp1.osuosl.org (Postfix) with ESMTP id E22CA827A5
  for <buildroot@buildroot.org>; Thu, 29 Feb 2024 15:31:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A545D87D45; Thu, 29 Feb 2024 15:31:59 +0000 (UTC)
+ id CECC987D42; Thu, 29 Feb 2024 15:31:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 29 Feb 2024 16:14:56 +0100
+Date: Thu, 29 Feb 2024 16:19:58 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: d6fc939b85cd25dedec544edc050dce75815d4eb
-X-Git-Newrev: 68b48580592bd520ed218bdab196c8ce889bcdfa
+X-Git-Oldrev: 5249686eb772a3db506c7540d33e1a075abb9e10
+X-Git-Newrev: 610a82f7a079bfac19cc637166b05802e00c42d5
 X-Patchwork-Hint: ignore
-Message-Id: <20240229153159.A545D87D45@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/rdma-core: fix
- mips4 build
+Message-Id: <20240229153159.CECC987D42@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/libzenoh-pico:
+ disable on or1k
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,95 +65,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=68b48580592bd520ed218bdab196c8ce889bcdfa
+commit: https://git.buildroot.net/buildroot/commit/?id=610a82f7a079bfac19cc637166b05802e00c42d5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-The 'sync' instruction for MIPS was defined in MIPS-II as taking no
-operands. MIPS32 extended the define of 'sync' as taking an optional
-unsigned 5 bit immediate.
+The upstream libzenoh-pico code uses asm("nop"), which is completely
+bogus, and actually breaks build on or1k as the instruction does not
+exist.
 
-As a result, replace "sync 0" by "sync" to fix the following build
-failure on mips4 raised since the addition of the package in commit
-ea47e177f093d7378e8e8e1f50d6f4e3fce0a088 and
-https://github.com/linux-rdma/rdma-core/commit/b7c428344ea96d446f6ffe31c620a238a7f25c9e:
+In upstream commit
+https://github.com/eclipse-zenoh/zenoh-pico/commit/7d79a14addcea972e801709413f5c9a5226e3ad3
+they made the asm("nop") thing "configurable" with ZP_ASM_NOP, but
+still that requires some special handling for or1k. The whole thing is
+a complete mess, and upstream should have to use any of that. Rather
+than stacking piles of bogus stuff on more bogus stuff, let's simply
+disable this package for or1k for now.
 
-/tmp/ccrBy9fV.s: Assembler messages:
-/tmp/ccrBy9fV.s:994: Error: invalid operands `sync 0'
+Thanks a lot to Fabrice for all the investigation, and interaction
+with upstream. See
+https://patchwork.ozlabs.org/project/buildroot/patch/20240110215515.1263859-1-fontaine.fabrice@gmail.com/
+for example.
 
 Fixes:
- - http://autobuild.buildroot.org/results/2ab22a3ec4287fc15ff6a90d8715b4897b32a933
- - http://autobuild.buildroot.org/results/2df58f9b98aacf00960932f53510b29199393461
+ - http://autobuild.buildroot.org/results/fd0b2c666a1dc1537162d15b27743abd270243ed
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7e5a90f1b75e59aa5707394f3c707fbbf03204b7)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit ead797bef768a7f3da7a76dd8510eef48181bb6a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-util-udma_barrier.h-fix-mips4-build.patch | 56 ++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
+ package/libzenoh-pico/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/rdma-core/0001-util-udma_barrier.h-fix-mips4-build.patch b/package/rdma-core/0001-util-udma_barrier.h-fix-mips4-build.patch
-new file mode 100644
-index 0000000000..6dfb476faa
---- /dev/null
-+++ b/package/rdma-core/0001-util-udma_barrier.h-fix-mips4-build.patch
-@@ -0,0 +1,56 @@
-+From 1b1ca539f6e1f0b774e989f1022477686e4fc77f Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 21 Jan 2024 18:55:34 +0100
-+Subject: [PATCH] util/udma_barrier.h: fix mips4 build
-+
-+The 'sync' instruction for MIPS was defined in MIPS-II as taking no
-+operands. MIPS32 extended the define of 'sync' as taking an optional
-+unsigned 5 bit immediate.
-+
-+As a result, replace "sync 0" by "sync" to fix the following build
-+failure on mips4 raised since version 43.0 and
-+https://github.com/linux-rdma/rdma-core/commit/b7c428344ea96d446f6ffe31c620a238a7f25c9e:
-+
-+/tmp/ccrBy9fV.s: Assembler messages:
-+/tmp/ccrBy9fV.s:994: Error: invalid operands `sync 0'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/2ab22a3ec4287fc15ff6a90d8715b4897b32a933
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Upstream: https://github.com/linux-rdma/rdma-core/commit/f3f0c06014c6de845032e6fe9f152674919b3ec6
-+---
-+ util/udma_barrier.h | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/util/udma_barrier.h b/util/udma_barrier.h
-+index 0a1f8a45b..3793d2f18 100644
-+--- a/util/udma_barrier.h
-++++ b/util/udma_barrier.h
-+@@ -101,7 +101,7 @@
-+ #elif defined(__riscv)
-+ #define udma_to_device_barrier() asm volatile("fence ow,ow" ::: "memory")
-+ #elif defined(__mips__)
-+-#define udma_to_device_barrier() asm volatile("sync 0" ::: "memory")
-++#define udma_to_device_barrier() asm volatile("sync" ::: "memory")
-+ #else
-+ #error No architecture specific memory barrier defines found!
-+ #endif
-+@@ -139,7 +139,7 @@
-+ #elif defined(__riscv)
-+ #define udma_from_device_barrier() asm volatile("fence ir,ir" ::: "memory")
-+ #elif defined(__mips__)
-+-#define udma_from_device_barrier() asm volatile("sync 0" ::: "memory")
-++#define udma_from_device_barrier() asm volatile("sync" ::: "memory")
-+ #else
-+ #error No architecture specific memory barrier defines found!
-+ #endif
-+@@ -212,7 +212,7 @@
-+ #include "s390_mmio_insn.h"
-+ #define mmio_flush_writes() s390_pciwb()
-+ #elif defined(__mips__)
-+-#define mmio_flush_writes() asm volatile("sync 0" ::: "memory")
-++#define mmio_flush_writes() asm volatile("sync" ::: "memory")
-+ #else
-+ #error No architecture specific memory barrier defines found!
-+ #endif
+diff --git a/package/libzenoh-pico/Config.in b/package/libzenoh-pico/Config.in
+index 5f7e91c9f6..9dbb260c52 100644
+--- a/package/libzenoh-pico/Config.in
++++ b/package/libzenoh-pico/Config.in
+@@ -1,5 +1,8 @@
+ config BR2_PACKAGE_LIBZENOH_PICO
+ 	bool "libzenoh-pico"
++	# upstream hardcodes using asm("nop"), which is bogus and
++	# doesn't work on or1k
++	depends on !BR2_or1k
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  zenoh-pico is the Eclipse zenoh implementation that targets
+@@ -11,4 +14,5 @@ config BR2_PACKAGE_LIBZENOH_PICO
+ 	  https://github.com/eclipse-zenoh/zenoh-pico
+ 
+ comment "libzenoh-pico needs a toolchain w/ threads"
++	depends on !BR2_or1k
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
