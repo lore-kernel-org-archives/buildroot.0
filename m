@@ -4,61 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9ABA8C48BF6
-	for <buildroot@archiver.kernel.org>; Thu, 29 Feb 2024 14:24:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D91E3C54E41
+	for <buildroot@archiver.kernel.org>; Thu, 29 Feb 2024 14:24:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6872C41899;
-	Thu, 29 Feb 2024 14:24:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4C14E418A0;
+	Thu, 29 Feb 2024 14:24:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YySQXpIypQMw; Thu, 29 Feb 2024 14:24:31 +0000 (UTC)
+	with ESMTP id 39gRhGig6e9J; Thu, 29 Feb 2024 14:24:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C70A9418A0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B3694418B6
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C70A9418A0;
-	Thu, 29 Feb 2024 14:24:30 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A23501BF3FB
- for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 14:21:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B3694418B6;
+	Thu, 29 Feb 2024 14:24:33 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3EEFF1BF3FB
+ for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 14:22:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9BDCB417B4
- for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 14:21:39 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2C19782435
+ for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 14:22:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id k64N7Ocw7fYn for <buildroot@lists.busybox.net>;
- Thu, 29 Feb 2024 14:21:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
- helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Fub4uRqA5lNl for <buildroot@lists.busybox.net>;
+ Thu, 29 Feb 2024 14:22:28 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7336E417B0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7336E417B0
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7336E417B0
- for <buildroot@buildroot.org>; Thu, 29 Feb 2024 14:21:38 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 02112FF80E;
- Thu, 29 Feb 2024 14:21:34 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rfhHy-003XMs-1M;
- Thu, 29 Feb 2024 15:21:34 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 70E54823FB
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 70E54823FB
+ for <buildroot@buildroot.org>; Thu, 29 Feb 2024 14:22:28 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 55DD287CD6; Thu, 29 Feb 2024 14:22:28 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Aleksandr Makarov <aleksandr.o.makarov@gmail.com>
-References: <20240204201657.33079-1-aleksandr.o.makarov@gmail.com>
- <20240204201657.33079-2-aleksandr.o.makarov@gmail.com>
-Date: Thu, 29 Feb 2024 15:21:34 +0100
-In-Reply-To: <20240204201657.33079-2-aleksandr.o.makarov@gmail.com> (Aleksandr
- Makarov's message of "Sun, 4 Feb 2024 22:16:57 +0200")
-Message-ID: <87edcvic5t.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH v2] package/haproxy: fix runtime 'FATAL
- ERROR: invalid code detected -- cannot go further'
+To: buildroot@buildroot.org
+Date: Thu, 29 Feb 2024 15:18:18 +0100
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: ec070357149fc4c53dd3ef46e48e01aa6f5f76df
+X-Git-Newrev: 158395a46d36c5ec948a223905e7b3399e30410b
+X-Patchwork-Hint: ignore
+Message-Id: <20240229142228.55DD287CD6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/yasm: add
+ YASM_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,35 +59,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Aleksandr" == Aleksandr Makarov <aleksandr.o.makarov@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=158395a46d36c5ec948a223905e7b3399e30410b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
- > Setting HAPROXY_CFLAGS on the haproxy build command line overrides CFLAGS
- > which were internally set by the haproxy Makefile.
+cpe:2.3:a:tortall:yasm is a valid CPE identifier for this package:
 
- > Among those omitted CFLAGS is -fwrapv. Compiling haproxy without it and
- > and then running the program results in runtime error:
+  https://nvd.nist.gov/products/cpe/detail/2E6C9C2F-A057-4083-BC90-095403EF138E
 
- > $ haproxy
- > FATAL ERROR: invalid code detected -- cannot go further, please recompile!
- > ...
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 17dac57e3ebfe8e2371100a632cca4fb11ed9bac)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/yasm/yasm.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
- > To address this issue, include HAPROXY_CFLAGS in the DEFINE variable instead
- > of CFLAGS in haproxy.mk.
-
- > ---
- > Changes v1 -> v2
- >   - Drop patch for haproxy program Makefile, make changes to haproxy.mk instead
-
-Committed to 2023.02.x and 2023.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/yasm/yasm.mk b/package/yasm/yasm.mk
+index b294bd3aee..cdb8e15bee 100644
+--- a/package/yasm/yasm.mk
++++ b/package/yasm/yasm.mk
+@@ -8,6 +8,7 @@ YASM_VERSION = 1.3.0
+ YASM_SITE = http://www.tortall.net/projects/yasm/releases
+ YASM_LICENSE = BSD-2-Clause, BSD-3-Clause, Artistic, GPL-2.0, LGPL-2.0
+ YASM_LICENSE_FILES = COPYING BSD.txt Artistic.txt GNU_GPL-2.0 GNU_LGPL-2.0
++YASM_CPE_ID_VENDOR = tortall
+ 
+ # This sed prevents it compiling 2 programs (vsyasm and ytasm)
+ # that are only of use on Microsoft Windows.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
