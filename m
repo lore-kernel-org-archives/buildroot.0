@@ -1,85 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C360C5478C
-	for <buildroot@archiver.kernel.org>; Thu, 29 Feb 2024 03:28:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0FFBC48BF6
+	for <buildroot@archiver.kernel.org>; Thu, 29 Feb 2024 05:05:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BF8F6607D8;
-	Thu, 29 Feb 2024 03:28:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2F13440529;
+	Thu, 29 Feb 2024 05:05:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0s7j_11QA3B5; Thu, 29 Feb 2024 03:28:27 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kBPtXKOD2rUe; Thu, 29 Feb 2024 05:05:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB518607F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EF88640489
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CB518607F3;
-	Thu, 29 Feb 2024 03:28:26 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 889561BF35D
- for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 03:28:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EF88640489;
+	Thu, 29 Feb 2024 05:05:12 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 697501BF420
+ for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 05:05:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 75804416B7
- for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 03:28:25 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 56EF78136F
+ for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 05:05:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id U63Qo11FUcHP for <buildroot@lists.busybox.net>;
- Thu, 29 Feb 2024 03:28:24 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=198.47.23.248;
- helo=lelv0143.ext.ti.com; envelope-from=dannenberg@ti.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7AE81416B2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7AE81416B2
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7AE81416B2
- for <buildroot@buildroot.org>; Thu, 29 Feb 2024 03:28:23 +0000 (UTC)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
- by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 41T3SKaD124971;
- Wed, 28 Feb 2024 21:28:20 -0600
-Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
- by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 41T3SK4u011175
- (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
- Wed, 28 Feb 2024 21:28:20 -0600
-Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 28
- Feb 2024 21:28:20 -0600
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 28 Feb 2024 21:28:20 -0600
-Received: from dasso (dasso.dhcp.ti.com [128.247.79.182])
- by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 41T3SKs9003762;
- Wed, 28 Feb 2024 21:28:20 -0600
-Date: Wed, 28 Feb 2024 21:28:20 -0600
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Message-ID: <20240229032820.x275rawclrilgamn@dasso>
-References: <20240227163019.2876942-1-dario.binacchi@amarulasolutions.com>
- <066a576a350d384c6547dc27b55e75c8044ed9e8.camel@gmail.com>
- <CABGWkvpMckL866WfOGeE2B_nsEWyPrjtEacgbO_gKqX9BPuW2A@mail.gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 19Kz7-mgOxwE for <buildroot@lists.busybox.net>;
+ Thu, 29 Feb 2024 05:05:09 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::536; helo=mail-ed1-x536.google.com;
+ envelope-from=nisargjhaveri@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4D032812B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4D032812B5
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
+ [IPv6:2a00:1450:4864:20::536])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4D032812B5
+ for <buildroot@buildroot.org>; Thu, 29 Feb 2024 05:05:09 +0000 (UTC)
+Received: by mail-ed1-x536.google.com with SMTP id
+ 4fb4d7f45d1cf-5658082d2c4so711589a12.1
+ for <buildroot@buildroot.org>; Wed, 28 Feb 2024 21:05:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1709183107; x=1709787907;
+ h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=D6xBcIOxt9Cy6+p09MdTE6hJmVuiUlIrBD9JOJ13qoQ=;
+ b=uGHwL2foLROZ8aAcQAAR5QfITqbkvikvvqUEnHWE4KEJPst+4f1HhNDzA8NjU+H7v9
+ PkxKcDA3rFFq5tu0TWdw/dbqAbIooMDqmTO/rZPjtDmuB/gc0WqgSKny0jCdqUJZSrRt
+ dgAx1FMTbt4ZQB8pKg7oOvhs8qrJW9FZYF3JjX7tdHgFFHAytjT/GV5+wY0Uad7ZSSth
+ ROm5alwgu4oz1XjqWh6cZnAJVn8Ju2/zCvgw5zgXpFAoepH+ZwtJEvUP+Kux9Yqx3h0W
+ eBeQJpIiA5gWbx+etvvBFxO0G0Ne46hpDNAh5+QQzw44q7zCxNz0jPe5JDkt8zkiqR0W
+ 9HxQ==
+X-Gm-Message-State: AOJu0YwCzT3m57+IRfm0d+R/avQ0VtQ/42AmWnpl1k1tZFlMmXOgiFSD
+ 3FJ1CrfWsGkJB0Keq6JxdVebYyJdRQp0OYRj2Hza2sAOFYqoZF3k9jJvzqpASROGQ24HhXo/MU8
+ RSFqEy5h9d+1GLGFNm1j/4hdnRT8NDvH3gwQMyA==
+X-Google-Smtp-Source: AGHT+IF0jXv+FGhrYJtNYeCBIhpC4EZ3lSA75nQC5zN504pewdEFKbX84wt+Hy4xGThtQHt1mLM4j58fpOCNbAHFzgo=
+X-Received: by 2002:a17:906:4704:b0:a44:1893:437d with SMTP id
+ y4-20020a170906470400b00a441893437dmr532311ejq.7.1709183106663; Wed, 28 Feb
+ 2024 21:05:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <CABGWkvpMckL866WfOGeE2B_nsEWyPrjtEacgbO_gKqX9BPuW2A@mail.gmail.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+From: Nisarg Jhaveri <nisargjhaveri@gmail.com>
+Date: Thu, 29 Feb 2024 10:34:54 +0530
+Message-ID: <CANsE+We_rikALdEEK31FN3tZHSN_Z3YGCFxPA8fR4OCg12BB+w@mail.gmail.com>
+To: buildroot@buildroot.org
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=ti.com; s=ti-com-17Q1; t=1709177300;
- bh=d12BHZXFLjIdC4pc191jRA7lmG//GIuPqTWaHQRJXYs=;
- h=Date:From:To:CC:Subject:References:In-Reply-To;
- b=rBR7GCQSgPyKRMLsqdCTGBeVK4ZnQA4C85kmlxcleLAdfE2+hCEbR3WPoMIdZ2em/
- EMA9zSJRdsOm1Lb2kB06OBbpbmlESZG14SpK6L5sgQYfBnAZ+Gergf6249d0EBQLAJ
- 03FUWsANTf3PA6uV3toj9eIg+hkWyCiUeXKyJs8E=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=ti.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
- header.s=ti-com-17Q1 header.b=rBR7GCQS
-Subject: Re: [Buildroot] [PATCH v7 00/17] Add support for AM62x-SK HS-FS
- devices
+ d=gmail.com; s=20230601; t=1709183107; x=1709787907; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=D6xBcIOxt9Cy6+p09MdTE6hJmVuiUlIrBD9JOJ13qoQ=;
+ b=DEFYneNpCY3PrrRnBaYOj2WsoNTOa694agxoc3FBKn9gzF2ljj9eQlY8GB6w7QvfCn
+ xE+vXPfTTjutmwcYkCCTAy9knBpvkXofVDQ3qq5eqg09M4KI/ZpzgP3+PcVvoy7QSQkI
+ rE+IcKtcZVdtFREM05ZZWPu/Mr5ciJvF/OXZHv7xji4tC+RQoxXlR/IX1VQx0KETr8Kj
+ MYX1jXN3IxJ0dfcNX+87ubJAO995LIxXHku8fopZGXeimLp70B0UnF1uhZLc8SSOxlLV
+ 2u0XA0gxF49jowjoCfeRwhgguyQ/RdO33pnbALRNDRE8eCxDjv2GEVjwaps0UKafh8RX
+ gqJg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=DEFYneNp
+Subject: [Buildroot] [PATCH 1/1] package/brcmfmac_sdio-firmware-rpi: bump
+ version to 26ff205
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,73 +94,105 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Andreas Dannenberg via buildroot <buildroot@buildroot.org>
-Reply-To: Andreas Dannenberg <dannenberg@ti.com>
-Cc: linux-amarula@amarulasolutions.com, Asaf Kahlon <asafka7@gmail.com>,
- Xuanhao Shi <X15000177@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
- Romain Naour <romain.naour@smile.fr>, michael@amarulasolutions.com,
- Alexander Sverdlin <alexander.sverdlin@gmail.com>, bryce@redpinelabs.com,
- Anand Gadiyar <gadiyar@ti.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Martin Bark <martin@barkynet.com>, Nisarg Jhaveri <nisargjhaveri@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgRGFyaW8sCkkganVzdCB0ZXN0ZWQgeW91IHY3IHNlcmllcyBvbiB0b3Agb2YgQnVpbGRyb290
-IGNvbW1pdC4uLgoKNzVhMzU2MjMyNCAoInN1cHBvcnQvc2NyaXB0cy9wa2ctc3RhdHM6IHNvcnQg
-Q1ZFcyBpbiBIVE1MIG91dHB1dCIpCgouLi5vbiBib3RoIEdQIGFuZCBIUy1GUyB2YXJpYW50cyBv
-ZiB0aGUgU0stQU02MiBib2FyZCBkb2luZyBhbiBTRApDYXJkLWJhc2VkIGJvb3QuIEV2ZXJ5dGhp
-bmcgc2VlbXMgdG8gd29yayB3aXRob3V0IGlzc3VlcywgdGhlIGVudGlyZQpib290IGxvZyBsb29r
-cyBjbGVhbiBhcyBmYXIgYXMgSSBjYW4gdGVsbCwgYW5kIGV2ZW4gbmV0d29ya2luZyB3b3Jrcy4K
-CkFsc28gdGhhbmtzIGZvciBhbGwgeW91ciBlZmZvcnRzIHVwc3RyZWFtaW5nIHRoaXMsIEkga25v
-dyBpdCdzIGEgdG9uIG9mCndvcmsuCgpUZXN0ZWQtYnk6IEFuZHJlYXMgRGFubmVuYmVyZyA8ZGFu
-bmVuYmVyZ0B0aS5jb20+CgoKCk9uIFdlZCwgRmViIDI4LCAyMDI0IGF0IDA5OjA3OjQ0QU0gKzAx
-MDAsIERhcmlvIEJpbmFjY2hpIHdyb3RlOgo+IEhpIEFsZXhhbmRlciwKPiAKPiBPbiBXZWQsIEZl
-YiAyOCwgMjAyNCBhdCAxOjA24oCvQU0gQWxleGFuZGVyIFN2ZXJkbGluCj4gPGFsZXhhbmRlci5z
-dmVyZGxpbkBnbWFpbC5jb20+IHdyb3RlOgo+ID4KPiA+IEhlbGxvIERhcmlvLCBSb21haW4hCj4g
-Pgo+ID4gT24gVHVlLCAyMDI0LTAyLTI3IGF0IDE3OjMwICswMTAwLCBEYXJpbyBCaW5hY2NoaSB3
-cm90ZToKPiA+ID4gVGhlIFNLLUFNNjJCLVAxIGlzIHRoZSBuZXdlc3QgdmVyc2lvbiBvZiBTSy1B
-TTYyIHdoaWNoIGluY2x1ZGVzCj4gPiA+IGhpZ2gtc2VjdXJpdHkgZmllbGQtc2VjdXJhYmxlIChI
-Uy1GUykgc2lsaWNvbiB0byBvcHRpb25hbGx5IGN1c3RvbWl6ZSBrZXlzCj4gPiA+IGFuZCBlbmNy
-eXB0aW9uIGZvciBzZWN1cml0eSBhcHBsaWNhdGlvbnMuCj4gPiA+IFRoaXMgcmVxdWlyZXMgZW5h
-YmxpbmcgdGhlIEJSMl9UQVJHRVRfVElfSzNfSU1BR0VfR0VOX1NFQ1RZUEVfSFNfRlMgb3B0aW9u
-LAo+ID4gPiB3aGljaCwgaG93ZXZlciwgd2FzIGJ1Z2d5LiBUaGlzIHNlcmllcyBmaXhlcyB0aGUg
-ZXJyb3JzIGFuZCBidW1wcyB0aGUgTGludXgKPiA+ID4ga2VybmVsIGFuZCBVLUJvb3QgcmVxdWly
-ZWQgZm9yIHN1Y2ggYSBuZXcgZGV2aWNlLgo+ID4gPgo+ID4gPiBEYXJpbyBCaW5hY2NoaSAoMTcp
-Ogo+ID4gPiAgIGNvbmZpZ3MvdGlfYW02Mnhfc2tfZGVmY29uZmlnOiBmaXggQlIyX1RBUkdFVF9P
-UFRFRV9PU19QTEFURk9STQo+ID4gPiAgICAgc2V0dGluZwo+ID4gPiAgIGNvbmZpZ3MvdGlfYW02
-NHhfc2tfZGVmY29uZmlnOiBmaXggQlIyX1RBUkdFVF9PUFRFRV9PU19QTEFURk9STQo+ID4gPiAg
-ICAgc2V0dGluZwo+ID4gPiAgIGNvbmZpZ3MvdGlfYW02Mnhfc2tfZGVmY29uZmlnOiBleHBsaWNp
-dGx5IHNldCB0aGUgdGktazMtcjUtbG9hZGVyCj4gPiA+ICAgICB2ZXJzaW9uCj4gPiA+ICAgY29u
-Zmlncy90aV9hbTY0eF9za19kZWZjb25maWc6IGV4cGxpY2l0bHkgc2V0IHRoZSB0aS1rMy1yNS1s
-b2FkZXIKPiA+ID4gICAgIHZlcnNpb24KPiA+ID4gICBib290L3RpLWszLXI1LWxvYWRlcjogYnVt
-cCB0byB2ZXJzaW9uIDIwMjQuMDEKPiA+ID4gICBwYWNrYWdlL3B5dGhvbi1hdHRyczogYWRkIGhv
-c3QgdmFyaWFudAo+ID4gPiAgIHBhY2thZ2UvcHl0aG9uLXJwZHMtcHk6IGFkZCBob3N0IHZhcmlh
-bnQKPiA+ID4gICBwYWNrYWdlL3B5dGhvbi1yZWZlcmVuY2luZzogYWRkIGhvc3QgdmFyaWFudAo+
-ID4gPiAgIHBhY2thZ2UvcHl0aG9uLWpzb25zY2hlbWEtc3BlY2lmaWNhdGlvbnM6IGFkZCBob3N0
-IHZhcmlhbnQKPiA+ID4gICBwYWNrYWdlL3B5dGhvbi1qc29uc2NoZW1hOiBhZGQgaG9zdCB2YXJp
-YW50Cj4gPiA+ICAgYm9vdC90aS1rMy1yNS1sb2FkZXI6IHNldCBiaW5tYW4gZW52aXJvbm1lbnQK
-PiA+ID4gICBib290L3Vib290OiBhZGQgQlIyX1RBUkdFVF9VQk9PVF9VU0VfQklOTUFOIG9wdGlv
-bgo+ID4gPiAgIHBhY2thZ2UvdGktazM6IG1vdmUgVElfSzNfe1NFQ1RZUEUsU09DfSBvdXQgb2Yg
-dGhlIGltYWdlLWdlbiBzY29wZQo+ID4gPiAgIHBhY2thZ2UvdGktazM6IGRpc2FibGUgSFMtRlMg
-Zm9yIEFNNjUgU09DCj4gPiA+ICAgYm9vdC90aS1rMy90aS1rMy1yNS1sb2FkZXI6IGluc3RhbGwg
-dGlib290My5iaW4KPiA+ID4gICBjb25maWdzL3RpX2FtNjJ4X3NrX2RlZmNvbmZpZzogYnVtcCBV
-LUJvb3QgdmVyc2lvbiB0byAyMDI0LjAxCj4gPiA+ICAgY29uZmlncy90aV9hbTYyeF9za19kZWZj
-b25maWc6IGJ1bXAgTGludXggdmVyc2lvbiB0byA2LjYuMTcKPiA+Cj4gPiBJJ20gc29ycnkgZm9y
-IG1pc2xlYWRpbmcgeW91IHdpdGggdGhlIHJlc3VsdHMgd2l0aCB2Ni4KPiA+IEkndmUgYnVpbHQg
-djcgc2VyaWVzIGZvciBHUCBhbmQgaXQgcnVucyBmaW5lIG9uIFNLLUFNNjIgKEdQKS4KPiA+IFNl
-ZW1zIEkndmUgbWVzc2VkIHVwIGVpdGhlciBib290IGRpcCBzd2l0Y2hlcyBpbml0aWFsbHkgb3Ig
-dGhlIHNlcmlhbAo+ID4gY29uc29sZS4gVGhhbmtzIGZvciB5b3VyIGVmZm9ydHMhCj4gCj4gTmlj
-ZSEKPiBUaGFuayB5b3UgZm9yIHlvdXIgdGVzdHMuCj4gCj4gVGhhbmtzIGFuZCByZWdhcmRzLAo+
-IERhcmlvCj4gCj4gPgo+ID4gVGVzdGVkLWJ5OiBBbGV4YW5kZXIgU3ZlcmRsaW4gPGFsZXhhbmRl
-ci5zdmVyZGxpbkBnbWFpbC5jb20+Cj4gPgo+ID4gLS0KPiA+IEFsZXhhbmRlciBTdmVyZGxpbi4K
-PiA+Cj4gCj4gCj4gLS0gCj4gCj4gRGFyaW8gQmluYWNjaGkKPiAKPiBTZW5pb3IgRW1iZWRkZWQg
-TGludXggRGV2ZWxvcGVyCj4gCj4gZGFyaW8uYmluYWNjaGlAYW1hcnVsYXNvbHV0aW9ucy5jb20K
-PiAKPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gCj4gCj4gQW1hcnVsYSBT
-b2x1dGlvbnMgU1JMCj4gCj4gVmlhIExlIENhbmV2YXJlIDMwLCAzMTEwMCBUcmV2aXNvLCBWZW5l
-dG8sIElUCj4gCj4gVC4gKzM5IDA0MiAyNDMgNTMxMAo+IGluZm9AYW1hcnVsYXNvbHV0aW9ucy5j
-b20KPiAKPiB3d3cuYW1hcnVsYXNvbHV0aW9ucy5jb20KX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RA
-YnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5m
-by9idWlsZHJvb3QK
+The current version is more than 2 years old. Update to the latest.
+A lot of the files are symlinked. Instead of individually restoring
+the links, using `cp --remove-destination --no-dereference` and
+`chmod` instead of `install`.
+
+Signed-off-by: Nisarg Jhaveri <nisargjhaveri@gmail.com>
+---
+.../brcmfmac_sdio-firmware-rpi.hash | 4 +--
+.../brcmfmac_sdio-firmware-rpi.mk | 27 +++++++------------
+2 files changed, 12 insertions(+), 19 deletions(-)
+
+diff --git a/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.hash
+b/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.hash
+index a12e92cbac..aa1043518b 100644
+--- a/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.hash
++++ b/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.hash
+@@ -1,3 +1,3 @@
+# Locally calculated
+-sha256 e51b717c2a60ca29fcdd8e04e07c00996226cb48fa56a8ad1934b5f4ddee2e3d
+brcmfmac_sdio-firmware-rpi-ea9963f3f77b4bb6cd280577eb115152bdd67e8d.tar.gz
+-sha256 b16056fc91b82a0e3e8de8f86c2dac98201aa9dc3cbd33e8d38f1b087fcec30d
+LICENCE.broadcom_bcm43xx
++sha256 2f0917b104739455dd488dd8f5af2ee4430801a7ac8fe8d9866e74bfbb185356
+brcmfmac_sdio-firmware-rpi-26ff205b45dc109b498a70aaf182804ad9dbfea5.tar.gz
++sha256 ea8b7b7b6cfc6fd30587ed977100f6a542734ce53218b5b63de16180acddd599 LICENCE
+diff --git a/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.mk
+b/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.mk
+index 5332bf53d7..7860de3ef7 100644
+--- a/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.mk
++++ b/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.mk
+@@ -4,33 +4,26 @@
+#
+################################################################################
+-BRCMFMAC_SDIO_FIRMWARE_RPI_VERSION = ea9963f3f77b4bb6cd280577eb115152bdd67e8d
++BRCMFMAC_SDIO_FIRMWARE_RPI_VERSION = 26ff205b45dc109b498a70aaf182804ad9dbfea5
+BRCMFMAC_SDIO_FIRMWARE_RPI_SITE = $(call
+github,LibreELEC,brcmfmac_sdio-firmware-rpi,$(BRCMFMAC_SDIO_FIRMWARE_RPI_VERSION))
+BRCMFMAC_SDIO_FIRMWARE_RPI_LICENSE = PROPRIETARY
+-BRCMFMAC_SDIO_FIRMWARE_RPI_LICENSE_FILES = LICENCE.broadcom_bcm43xx
++BRCMFMAC_SDIO_FIRMWARE_RPI_LICENSE_FILES = LICENCE
+ifeq ($(BR2_PACKAGE_BRCMFMAC_SDIO_FIRMWARE_RPI_BT),y)
+define BRCMFMAC_SDIO_FIRMWARE_RPI_INSTALL_TARGET_BT
+- $(INSTALL) -d $(TARGET_DIR)/lib/firmware/brcm
+- $(INSTALL) -m 0644 $(@D)/firmware/brcm/*.hcd $(TARGET_DIR)/lib/firmware/brcm
++ $(INSTALL) -d $(TARGET_DIR)/lib/firmware/brcm
+$(TARGET_DIR)/lib/firmware/synaptics
++ cp --remove-destination --no-dereference $(@D)/firmware/brcm/*.hcd
+$(TARGET_DIR)/lib/firmware/brcm
++ cp --remove-destination --no-dereference
+$(@D)/firmware/synaptics/*.hcd $(TARGET_DIR)/lib/firmware/synaptics
++ chmod 644 $(TARGET_DIR)/lib/firmware/brcm/*.hcd
+$(TARGET_DIR)/lib/firmware/synaptics/*.hcd
+endef
+endif
+ifeq ($(BR2_PACKAGE_BRCMFMAC_SDIO_FIRMWARE_RPI_WIFI),y)
+define BRCMFMAC_SDIO_FIRMWARE_RPI_INSTALL_TARGET_WIFI
+- $(INSTALL) -d $(TARGET_DIR)/lib/firmware/brcm
+- $(INSTALL) -m 0644 $(@D)/firmware/brcm/brcmfmac*
+$(TARGET_DIR)/lib/firmware/brcm
+- ln -sf ../cypress/cyfmac43430-sdio.bin
+$(TARGET_DIR)/lib/firmware/brcm/brcmfmac43430-sdio.bin
+- ln -sf ../cypress/cyfmac43430-sdio.clm_blob
+$(TARGET_DIR)/lib/firmware/brcm/brcmfmac43430-sdio.clm_blob
+- ln -sf brcmfmac43430-sdio.txt
+$(TARGET_DIR)/lib/firmware/brcm/brcmfmac43430-sdio.raspberrypi,3-model-b.txt
+- ln -sf brcmfmac43430-sdio.txt
+$(TARGET_DIR)/lib/firmware/brcm/brcmfmac43430-sdio.raspberrypi,model-zero-w.txt
+- ln -sf ../cypress/cyfmac43455-sdio.bin
+$(TARGET_DIR)/lib/firmware/brcm/brcmfmac43455-sdio.bin
+- ln -sf ../cypress/cyfmac43455-sdio.clm_blob
+$(TARGET_DIR)/lib/firmware/brcm/brcmfmac43455-sdio.clm_blob
+- ln -sf brcmfmac43455-sdio.txt
+$(TARGET_DIR)/lib/firmware/brcm/brcmfmac43455-sdio.raspberrypi,3-model-a-plus.txt
+- ln -sf brcmfmac43455-sdio.txt
+$(TARGET_DIR)/lib/firmware/brcm/brcmfmac43455-sdio.raspberrypi,3-model-b-plus.txt
+- ln -sf brcmfmac43455-sdio.txt
+$(TARGET_DIR)/lib/firmware/brcm/brcmfmac43455-sdio.raspberrypi,4-model-b.txt
+- $(INSTALL) -d $(TARGET_DIR)/lib/firmware/cypress
+- $(INSTALL) -m 0644 $(@D)/firmware/cypress/cyfmac*
+$(TARGET_DIR)/lib/firmware/cypress
++ $(INSTALL) -d $(TARGET_DIR)/lib/firmware/brcm
+$(TARGET_DIR)/lib/firmware/cypress
++ cp --remove-destination --no-dereference
+$(@D)/firmware/brcm/brcmfmac* $(TARGET_DIR)/lib/firmware/brcm
++ cp --remove-destination --no-dereference
+$(@D)/firmware/cypress/cyfmac* $(TARGET_DIR)/lib/firmware/cypress
++ chmod 644 $(TARGET_DIR)/lib/firmware/brcm/brcmfmac*
+$(TARGET_DIR)/lib/firmware/cypress/cyfmac*
+endef
+endif
+-- 
+2.38.1.vfs.0.0
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
