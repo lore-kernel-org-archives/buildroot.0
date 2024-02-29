@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC397C48BF6
-	for <buildroot@archiver.kernel.org>; Thu, 29 Feb 2024 15:53:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6E80C48BF6
+	for <buildroot@archiver.kernel.org>; Thu, 29 Feb 2024 15:53:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9CDA341A78;
-	Thu, 29 Feb 2024 15:53:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A982841934;
+	Thu, 29 Feb 2024 15:53:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FJpj4VjTbq6s; Thu, 29 Feb 2024 15:53:18 +0000 (UTC)
+	with ESMTP id Q1M3YlqVFYtZ; Thu, 29 Feb 2024 15:53:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A49E41C24
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8FC5341C46
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1A49E41C24;
-	Thu, 29 Feb 2024 15:53:18 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 454391BF2B4
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8FC5341C46;
+	Thu, 29 Feb 2024 15:53:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5C7AE1BF98E
  for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 15:32:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A29EF8233D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9D4CF60A5E
  for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 15:32:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gXssdTvSrj6m for <buildroot@lists.busybox.net>;
- Thu, 29 Feb 2024 15:32:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bWVUDQmZoh4I for <buildroot@lists.busybox.net>;
+ Thu, 29 Feb 2024 15:31:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E22CA827A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C8CE76085A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E22CA827A5
+ by smtp3.osuosl.org (Postfix) with ESMTP id C8CE76085A
  for <buildroot@buildroot.org>; Thu, 29 Feb 2024 15:31:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CECC987D42; Thu, 29 Feb 2024 15:31:59 +0000 (UTC)
+ id B57E787790; Thu, 29 Feb 2024 15:31:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 29 Feb 2024 16:19:58 +0100
+Date: Thu, 29 Feb 2024 16:17:07 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 5249686eb772a3db506c7540d33e1a075abb9e10
-X-Git-Newrev: 610a82f7a079bfac19cc637166b05802e00c42d5
+X-Git-Oldrev: 68b48580592bd520ed218bdab196c8ce889bcdfa
+X-Git-Newrev: d69475afc96f8524d9a087437fbb09a0080a9bc0
 X-Patchwork-Hint: ignore
-Message-Id: <20240229153159.CECC987D42@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/libzenoh-pico:
- disable on or1k
+Message-Id: <20240229153159.B57E787790@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/frr: drop libnl
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,55 +65,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=610a82f7a079bfac19cc637166b05802e00c42d5
+commit: https://git.buildroot.net/buildroot/commit/?id=d69475afc96f8524d9a087437fbb09a0080a9bc0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-The upstream libzenoh-pico code uses asm("nop"), which is completely
-bogus, and actually breaks build on or1k as the instruction does not
-exist.
+libnl is not needed to build frr since the addition of the package in
+commit 26d82d006ba15777d19892b327bde343d82a9ff5
 
-In upstream commit
-https://github.com/eclipse-zenoh/zenoh-pico/commit/7d79a14addcea972e801709413f5c9a5226e3ad3
-they made the asm("nop") thing "configurable" with ZP_ASM_NOP, but
-still that requires some special handling for or1k. The whole thing is
-a complete mess, and upstream should have to use any of that. Rather
-than stacking piles of bogus stuff on more bogus stuff, let's simply
-disable this package for or1k for now.
+No mention of libnl found in https://github.com/FRRouting/frr or
+https://docs.frrouting.org/projects/dev-guide/en/latest/building.html
 
-Thanks a lot to Fabrice for all the investigation, and interaction
-with upstream. See
-https://patchwork.ozlabs.org/project/buildroot/patch/20240110215515.1263859-1-fontaine.fabrice@gmail.com/
-for example.
-
-Fixes:
- - http://autobuild.buildroot.org/results/fd0b2c666a1dc1537162d15b27743abd270243ed
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ead797bef768a7f3da7a76dd8510eef48181bb6a)
+(cherry picked from commit efa955ac415e2b50f63710e4fc1de8fd3e0dc099)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libzenoh-pico/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/frr/Config.in | 1 -
+ package/frr/frr.mk    | 2 +-
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/libzenoh-pico/Config.in b/package/libzenoh-pico/Config.in
-index 5f7e91c9f6..9dbb260c52 100644
---- a/package/libzenoh-pico/Config.in
-+++ b/package/libzenoh-pico/Config.in
-@@ -1,5 +1,8 @@
- config BR2_PACKAGE_LIBZENOH_PICO
- 	bool "libzenoh-pico"
-+	# upstream hardcodes using asm("nop"), which is bogus and
-+	# doesn't work on or1k
-+	depends on !BR2_or1k
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/frr/Config.in b/package/frr/Config.in
+index c2e9577a27..f6c058e6df 100644
+--- a/package/frr/Config.in
++++ b/package/frr/Config.in
+@@ -7,7 +7,6 @@ config BR2_PACKAGE_FRR
+ 	select BR2_PACKAGE_BASH
+ 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # bash
+ 	select BR2_PACKAGE_LIBYANG
+-	select BR2_PACKAGE_LIBNL
+ 	select BR2_PACKAGE_READLINE
+ 	select BR2_PACKAGE_JSON_C
  	help
- 	  zenoh-pico is the Eclipse zenoh implementation that targets
-@@ -11,4 +14,5 @@ config BR2_PACKAGE_LIBZENOH_PICO
- 	  https://github.com/eclipse-zenoh/zenoh-pico
+diff --git a/package/frr/frr.mk b/package/frr/frr.mk
+index 19f346fd7b..a4b4bccaf9 100644
+--- a/package/frr/frr.mk
++++ b/package/frr/frr.mk
+@@ -12,7 +12,7 @@ FRR_CPE_ID_VENDOR = linuxfoundation
+ FRR_CPE_ID_PRODUCT = free_range_routing
+ FRR_AUTORECONF = YES
  
- comment "libzenoh-pico needs a toolchain w/ threads"
-+	depends on !BR2_or1k
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+-FRR_DEPENDENCIES = host-frr readline json-c libyang libnl \
++FRR_DEPENDENCIES = host-frr readline json-c libyang \
+ 	$(if $(BR2_PACKAGE_C_ARES),c-ares)
+ 
+ HOST_FRR_DEPENDENCIES = host-flex host-bison host-elfutils host-python3
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
