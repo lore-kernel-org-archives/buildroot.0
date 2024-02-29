@@ -4,60 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2278BC54E49
-	for <buildroot@archiver.kernel.org>; Thu, 29 Feb 2024 15:52:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD2E9C54E41
+	for <buildroot@archiver.kernel.org>; Thu, 29 Feb 2024 15:52:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E786D41909;
-	Thu, 29 Feb 2024 15:52:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7A0D741999;
+	Thu, 29 Feb 2024 15:52:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s6BbuycXv9at; Thu, 29 Feb 2024 15:52:34 +0000 (UTC)
+	with ESMTP id E4-yAk6l5LbU; Thu, 29 Feb 2024 15:52:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B4E7841B41
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9306341B4C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B4E7841B41;
-	Thu, 29 Feb 2024 15:52:33 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4C7171BF2B4
- for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 15:41:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9306341B4C;
+	Thu, 29 Feb 2024 15:52:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 434C31BF2B4
+ for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 15:42:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3A1D041919
- for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 15:41:39 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3065F60EAC
+ for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 15:42:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id e3dcNqkah78j for <buildroot@lists.busybox.net>;
- Thu, 29 Feb 2024 15:41:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
- helo=relay7-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cuZhIAgsD9tr for <buildroot@lists.busybox.net>;
+ Thu, 29 Feb 2024 15:42:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
+ helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CBD1941915
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CBD1941915
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CBD1941915
- for <buildroot@buildroot.org>; Thu, 29 Feb 2024 15:41:37 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E9D1220003;
- Thu, 29 Feb 2024 15:41:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 57C6C60652
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 57C6C60652
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 57C6C60652
+ for <buildroot@buildroot.org>; Thu, 29 Feb 2024 15:42:18 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 90FD3FF80C;
+ Thu, 29 Feb 2024 15:42:16 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rfiXP-004o5j-0w;
- Thu, 29 Feb 2024 16:41:35 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rfiY3-004o9Y-2w;
+ Thu, 29 Feb 2024 16:42:15 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20240126172920.1628617-1-fontaine.fabrice@gmail.com>
-Date: Thu, 29 Feb 2024 16:41:35 +0100
-In-Reply-To: <20240126172920.1628617-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 26 Jan 2024 18:29:20 +0100")
-Message-ID: <87h6hrffbk.fsf@48ers.dk>
+To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+References: <20240127163807.233065-1-yann.morin.1998@free.fr>
+ <20240205223906.39e92f87@windsurf>
+Date: Thu, 29 Feb 2024 16:42:15 +0100
+In-Reply-To: <20240205223906.39e92f87@windsurf> (Thomas Petazzoni via
+ buildroot's message of "Mon, 5 Feb 2024 22:39:06 +0100")
+Message-ID: <87cysfffag.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/brltty: disable emacs and lua
- bindings
+Subject: Re: [Buildroot] [PATCH] package/pkg-utils: add missing licensing
+ data to show-info
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,50 +70,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Mario Lang <mlang@blind.guru>, buildroot@buildroot.org
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
 
- > Disable lua bindings to avoid the following build failure if host-lua
- > and lua are built before brltty raised since bump to version 6.5 in
- > commit 82c6e87d5eaaf5b32aa340ab384f88539238cbe1 and
- > https://github.com/brltty/brltty/commit/42bf48ca010d9163652cb0a014662fa243132736:
+ > On Sat, 27 Jan 2024 17:38:07 +0100
+ > "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
- > configure: lua package: lua
- > configure: lua includes:
- > configure: lua libs:
- > -L/home/autobuild/autobuild/instance-0/output-1/host/bin/../sparc64-buildroot-linux-gnu/sysroot/usr/lib
- > -llua -lm -ldl
- > checking for lua5.4... no
- > checking for lua... /home/autobuild/autobuild/instance-0/output-1/host/bin/lua
- > configure: Lua shell: /home/autobuild/autobuild/instance-0/output-1/host/bin/lua
- > configure: Lua library directory: /home/autobuild/autobuild/instance-0/output-1/host/lib/lua/5.3
+ >> While the list of licenses is present in the show-info output, the list
+ >> of license files and the redistributable status were missing. Add them.
+ >> 
+ >> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ >> ---
+ >> package/pkg-utils.mk | 4 ++++
+ >> 1 file changed, 4 insertions(+)
 
- > [...]
-
- > /usr/bin/install -c -d
- > /home/autobuild/autobuild/instance-0/output-1/target/home/autobuild/autobuild/instance-0/output-1/host/lib/lua/5.3
- > /usr/bin/install -c -s --strip-program /bin/true brlapi.so
- > /home/autobuild/autobuild/instance-0/output-1/target/home/autobuild/autobuild/instance-0/output-1/host/lib/lua/5.3
- > make[3]: Leaving directory '/home/autobuild/autobuild/instance-0/output-1/build/brltty-6.6/Bindings/Lua'
-
- > [...]
-
- > brltty: installs files in /home/autobuild/autobuild/instance-0/output-1/target//home/autobuild/autobuild/instance-0/output-1
-
- > While at it, disable emacs bindings which have also been added in
- > version 6.5 with
- > https://github.com/brltty/brltty/commit/64a487e29941df54796645229a872ecbe2a06bfe
-
- > Fixes:
- >  - http://autobuild.buildroot.org/results/f424e6727bbe61ea4b7703e93aae6fcab7506898
- >  - http://autobuild.buildroot.org/results/bf4a161fc66fb99a24f08bea3436b13738f2e383
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Applied to master, thanks.
 
 Committed to 2023.02.x and 2023.11.x, thanks.
 
