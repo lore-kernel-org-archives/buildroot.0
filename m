@@ -1,80 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12B02C54798
-	for <buildroot@archiver.kernel.org>; Thu, 29 Feb 2024 09:33:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA381C48BF6
+	for <buildroot@archiver.kernel.org>; Thu, 29 Feb 2024 10:51:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7DD6041714;
-	Thu, 29 Feb 2024 09:33:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2190A41608;
+	Thu, 29 Feb 2024 10:51:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0Gi6NW1919tU; Thu, 29 Feb 2024 09:33:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bnqFkupAl7NN; Thu, 29 Feb 2024 10:51:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 160FC41716
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0BD9415DC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 160FC41716;
-	Thu, 29 Feb 2024 09:33:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E0BD9415DC;
+	Thu, 29 Feb 2024 10:51:09 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6F7F01BF408
- for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 09:33:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 67EB71BF420
+ for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 10:51:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5AD7C41716
- for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 09:33:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5D83040275
+ for <buildroot@lists.busybox.net>; Thu, 29 Feb 2024 10:51:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BXmySVZmYnml for <buildroot@lists.busybox.net>;
- Thu, 29 Feb 2024 09:33:46 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.178.240;
- helo=mslow1.mail.gandi.net; envelope-from=luca.ceresoli@bootlin.com;
+ with ESMTP id Oz1-ZB3Mn6Hf for <buildroot@lists.busybox.net>;
+ Thu, 29 Feb 2024 10:51:04 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+ helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B56B241714
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B56B241714
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B56B241714
- for <buildroot@buildroot.org>; Thu, 29 Feb 2024 09:33:45 +0000 (UTC)
-Received: from relay4-d.mail.gandi.net (unknown [217.70.183.196])
- by mslow1.mail.gandi.net (Postfix) with ESMTP id B619AC075A
- for <buildroot@buildroot.org>; Thu, 29 Feb 2024 09:29:33 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id AE5A6E000B;
- Thu, 29 Feb 2024 09:29:27 +0000 (UTC)
-Date: Thu, 29 Feb 2024 10:29:25 +0100
-To: "Frager, Neal" <neal.frager@amd.com>
-Message-ID: <20240229102925.62a9ecbf@booty>
-In-Reply-To: <CH2PR12MB5004F29862E7DA6B163B2C97F0562@CH2PR12MB5004.namprd12.prod.outlook.com>
-References: <20240131112223.2175855-1-neal.frager@amd.com>
- <20240131112223.2175855-6-neal.frager@amd.com>
- <CH2PR12MB5004CB6FA7EA005C4F36C796F0452@CH2PR12MB5004.namprd12.prod.outlook.com>
- <CH2PR12MB5004F29862E7DA6B163B2C97F0562@CH2PR12MB5004.namprd12.prod.outlook.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3B0704012D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B0704012D
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3B0704012D
+ for <buildroot@buildroot.org>; Thu, 29 Feb 2024 10:51:02 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DDA59FF812;
+ Thu, 29 Feb 2024 10:50:59 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1rfe0B-003Nsu-08;
+ Thu, 29 Feb 2024 11:50:59 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20240228223736.2376826-1-yann.morin.1998@free.fr>
+Date: Thu, 29 Feb 2024 11:50:58 +0100
+In-Reply-To: <20240228223736.2376826-1-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Wed, 28 Feb 2024 23:37:36 +0100")
+Message-ID: <87v867ilwt.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-X-GND-Sasl: luca.ceresoli@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1709198968;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=owJab9M1fqA+B6N+DoLf7SdPiH1Z72KI/8KTYRR3lmw=;
- b=CJQ5pRXF5wiBj4ppx0JR4dvLtfE3S2OfoZATMKlkZ0pDzjH6WWFlyf4hOcn5IpFTzZu7Ue
- H8+wYek8oeo7eY36pC6ZDeTJEmQlIiS9JsJEpH2CScTeiefK0NE7mpBqIUfJifymITTdxC
- UvWw+fEKDgd3DQxVTRbczlG00vMY1Flhqrel+ivw5rbmpEdUff8CfHxwI0uHW90Y9SX3l8
- ZedXtYR/CxCrVDSfCRhs1OYcK6escMnG+KdfwTQ1kkla6jUi/LrC44h485LzPolA8fEKoZ
- RhSN1AwrGB3LOXq9NK+NmDI56OUwxkMf8jK5lA5N983uSlqhUP0jR07tvL9AkA==
+X-GND-Sasl: peter@korsgaard.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=CJQ5pRXF
-Subject: Re: [Buildroot] [PATCH v9 06/11] boot/zynqmp-firmware: new boot
- firmware
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH] support/scripts/cve: fix running on older
+ ijson versions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,65 +69,95 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
-Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: "Erkiaga Elorza, Ibai" <ibai.erkiaga-elorza@amd.com>, "Simek,
- Michal" <michal.simek@amd.com>,
- "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Neal,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-On Thu, 22 Feb 2024 16:35:21 +0000
-"Frager, Neal" <neal.frager@amd.com> wrote:
+ > Commit 22b69455526f (support/scripts/cve.py: switch from NVD to FKIE for
+ > the JSON files) had to change the decompressor from gz to xz, as the new
+ > location is using xz compression.
 
-> Hello everyone,
-> 
-> Just a friendly reminder.  Any updates?
-> 
-> > Now that the toolchain-bare-metal-buildroot has been applied, do you have any
-> > feedback regarding the remainder of the patch set?  
-> 
-> > One open question I have is regarding the patches for zynqmp-firmware and
-> > versal-firmware.  These patches are no longer neeeded since being applied to
-> > release version xilinx_v2023.2.  I kept them with the idea that users may
-> > still be using older versions of software, so the patches enable users to
-> > work with versions as old as 2022.2 for zynqmp and 2023.1 for versal.  
-> 
-> > Do you agree with keeping the patches or do you think it is better not to
-> > include them and to say that support begins starting with version
-> > xilinx_v2023.2?  
-> 
-> What are your thoughts?
-> 
-> > create mode 120000 boot/zynqmp-firmware/xilinx_v2022.2/0001-pmufw-misc-Makefile-specify-sequential-Makefiles.patch
-> > create mode 100644 boot/zynqmp-firmware/xilinx_v2023.1/0001-pmufw-misc-Makefile-specify-sequential-Makefiles.patch  
+ > That commit mentioned that it was spawning an external xz process to do
+ > the decompression, on the pretence that "there is no xz decompressor in
+ > Python stdlib."
 
-Apologies for the late reply...
+ > ijson started to accept bytes() (and str()) only with version 3.1, and
+ > using a subprocess means we are now passing bytes() to ijson, which it
+ > is not expecting as input on such older versions, casuing build failures
+ > such as:
 
-I think we should not put any effort in encouraging the practice of
-using old and perhaps not-maintained-anymore software that some
-proprietary tools tend to enforce.
+ >     [...]
+ >       File "/usr/lib/python3/dist-packages/ijson/backends/python.py", line 25, in Lexer
+ >         if type(f.read(0)) == bytetype:
+ >     AttributeError: 'bytes' object has no attribute 'read'
 
-We do have a mainline pmufw that works without needing any patches
-thank to your (very appreciated!) effort, so let's just support the
-latest and greatest pmufw version and be happy.
+ > Ubuntu 20.04, on which the pkg-stats run to generate the daily report,
+ > only has ijson 2.3. More recent distros have more recent versions of
+ > ijson, like Fedora 39 that has 3.2.3, recent enough to supoprt being fed
+ > bytes().
 
-Your patches are there in this series anyway, and will be, so whoever
-wants to use an old version can do some research and find them.
+ > However, the reasonining in 22b69455526f is wrong: there *is* the lzma
+ > module, at least since python 3.3, that is, aeons ago, which is able to
+ > read xz-compressed files; it also has an API similar to the gzip module,
+ > and can provide a file-like object that exposes the decompressed data.
 
-So, I vote to not have these patches in Buildroot.
+ > So, do just that: provide an lzma-wrapped file-like object to ijson, so
+ > that we can eventually recover our daily reports that everything is
+ > broken! :-]
 
-Luca
+ > Note that this construct still works on recent versions!
+
+ > Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > ---
+ >  support/scripts/cve.py | 5 ++---
+ >  1 file changed, 2 insertions(+), 3 deletions(-)
+
+ > diff --git a/support/scripts/cve.py b/support/scripts/cve.py
+ > index 1a3c307e12..7167ecbc6a 100755
+ > --- a/support/scripts/cve.py
+ > +++ b/support/scripts/cve.py
+ > @@ -21,8 +21,8 @@ import datetime
+ >  import os
+ >  import requests  # URL checking
+ >  import distutils.version
+ > +import lzma
+ >  import time
+ > -import subprocess
+ >  import sys
+ >  import operator
+ 
+ > @@ -134,8 +134,7 @@ class CVE:
+ >          for year in range(NVD_START_YEAR, datetime.datetime.now().year + 1):
+ >              filename = CVE.download_nvd_year(nvd_dir, year)
+ >              try:
+ > -                uncompressed = subprocess.check_output(["xz", "-d", "-c", filename])
+ > -                content = ijson.items(uncompressed, 'cve_items.item')
+ > +                content = ijson.items(lzma.LZMAFile(filename), 'cve_items.item')
+
+Are you sure this provides str()?
+
+xz GPL-2.0
+python3
+Python 3.11.2 (main, Mar 13 2023, 12:18:29) [GCC 12.2.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import lzma
+>>> lzma.LZMAFile('GPL-2.0.xz').read(100)
+b'Valid-License-Identifier: GPL-2.0\nValid-License-Identifier: GPL-2.0-only\nValid-License-Identifier: G'
+
+
+Whereas lzma.open() accepts a 'rt' mode:
+
+>>> lzma.open('GPL-2.0.xz', mode='rt').read(100)
+'Valid-License-Identifier: GPL-2.0\nValid-License-Identifier: GPL-2.0-only\nValid-License-Identifier: G'
 
 -- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
