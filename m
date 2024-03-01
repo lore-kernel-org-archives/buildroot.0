@@ -4,50 +4,100 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7F7FC5478C
-	for <buildroot@archiver.kernel.org>; Fri,  1 Mar 2024 08:42:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4CAEC5478C
+	for <buildroot@archiver.kernel.org>; Fri,  1 Mar 2024 09:16:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9C926606D0;
-	Fri,  1 Mar 2024 08:42:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 795D0606EC;
+	Fri,  1 Mar 2024 09:16:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id h1ba9T_P3Zii; Fri,  1 Mar 2024 08:42:22 +0000 (UTC)
+	with ESMTP id Cce-Nq9Lia9h; Fri,  1 Mar 2024 09:16:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80B4C606ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D81560708
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 80B4C606ED;
-	Fri,  1 Mar 2024 08:42:22 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 64F931BF377
- for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 08:42:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8D81560708;
+	Fri,  1 Mar 2024 09:16:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B46CC1BF83E
+ for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 09:16:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5F38682A7F
- for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 08:42:21 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9EF51405E3
+ for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 09:16:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XjYEefnZkZxs for <buildroot@lists.busybox.net>;
- Fri,  1 Mar 2024 08:42:20 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 36F508293D
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 36F508293D
- for <buildroot@buildroot.org>; Fri,  1 Mar 2024 08:42:20 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1F60F87E86; Fri,  1 Mar 2024 08:42:20 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 1 Mar 2024 09:37:13 +0100
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 6f9f12165beeef9a0b081468ebf6070740c228f8
-X-Git-Newrev: e4fd73526021a88d66b4a05d21ab92d45b93ec28
-X-Patchwork-Hint: ignore
-Message-Id: <20240301084220.1F60F87E86@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x]
- package/freeradius-server: fix python3 build with -Ofast
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zHZHSH08IlEP for <buildroot@lists.busybox.net>;
+ Fri,  1 Mar 2024 09:16:09 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::536; helo=mail-ed1-x536.google.com;
+ envelope-from=sairon@sairon.cz; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D3831400A4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3831400A4
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
+ [IPv6:2a00:1450:4864:20::536])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D3831400A4
+ for <buildroot@buildroot.org>; Fri,  1 Mar 2024 09:16:08 +0000 (UTC)
+Received: by mail-ed1-x536.google.com with SMTP id
+ 4fb4d7f45d1cf-566df43a1f8so260145a12.0
+ for <buildroot@buildroot.org>; Fri, 01 Mar 2024 01:16:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1709284566; x=1709889366;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=7AU2lvjGgvpt9KAspc6xiNowbfKEjI6Dhe3xg1bhDoo=;
+ b=vnwC7So0vTnrcLzBTxTqiUtNLbUCyCyFGQdjDFcgkbVhnYyuwlMSe93PSRBvew0tDA
+ TaFAsXYntu2wQRApTy/Njkg/p2n2XbUxzRz6nqIc4yGgbCQ6AC4gCMR0MoXCvhdmmP9p
+ wRCENmfhfLdrtqHS1mtfsd4CzXB3RHOB+5XnZj2mMKSMI+fZMwnl/q7ecTGMP7083vsG
+ Ivp2Kd5+/7Ucl+jVc5O82h7a9tVhxP+8DiOwXP3mPYOrwTAkVaU9ril/c3vcXhdKfkLL
+ 9wLT9qf2c5S0V8S8oracyS+g6XhTOEINzG0M24eH6bw6go5q8l/UUrfDuLtX8+3Dc2mF
+ QNnQ==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCUTc9qgdgJthgEn7soQrPMzoBPMqQiM6vpG+Z3fTTO/PNj6OA6LFfemYeN657vQKK+xL2jdllnTZPMnWU+HGOPhlzYxlCpHbw==
+X-Gm-Message-State: AOJu0Ywo6+m8rpoeMUIc2lgTxTcBhfMeWgnCsKboMWzFHY9IKE4c4OWa
+ FEGiPewb4cdK8d0nCU3CvW90/qDLvgaXl8YsYaFy/ITa17jZJ7zGG1qys1Z+33E=
+X-Google-Smtp-Source: AGHT+IHy0qDp7i3PATIv6swyqaVQV1BW6s7zuAkTBWDXvt55jmrAhbvoajN4FdzSDx0IITbeeMOdOA==
+X-Received: by 2002:a05:6402:1d21:b0:566:981d:aef5 with SMTP id
+ dh1-20020a0564021d2100b00566981daef5mr694406edb.24.1709284566475; 
+ Fri, 01 Mar 2024 01:16:06 -0800 (PST)
+Received: from [192.168.127.42] (ip-89-103-66-201.bb.vodafone.cz.
+ [89.103.66.201]) by smtp.gmail.com with ESMTPSA id
+ m18-20020aa7c492000000b005662d3418dfsm1370221edq.74.2024.03.01.01.16.05
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 01 Mar 2024 01:16:06 -0800 (PST)
+Message-ID: <333db2e4-b6ce-4288-bbd1-97a681e74ea3@sairon.cz>
+Date: Fri, 1 Mar 2024 10:16:05 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ buildroot@buildroot.org
+References: <20240228181409.3756293-1-sairon@sairon.cz>
+ <5d375ded-707c-4d56-a5af-f7f769083014@benettiengineering.com>
+From: =?UTF-8?B?SmFuIMSMZXJtw6Fr?= <sairon@sairon.cz>
+In-Reply-To: <5d375ded-707c-4d56-a5af-f7f769083014@benettiengineering.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sairon.cz; s=google; t=1709284566; x=1709889366; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=7AU2lvjGgvpt9KAspc6xiNowbfKEjI6Dhe3xg1bhDoo=;
+ b=ZgOQJsnOuzUS2Euv51JA9pcBHJZOpSYjOareMhPrIW17DfaGqzQa5zyeEIGNW713UF
+ Q3QWTdxZqnsQvGnLj3p8gHLcaIhiNQmzhlRvAovBpmDBquNnTpKdQkTa4Qr6B+KbE1JX
+ hOLRTq/KeijZNpxfq4VBh3zLRLoQTRwg33+x/4hSIk9YRL6EEQrpwmGA3NLqrwq1/SfY
+ k55hGzRvNSsUbCrIyzBgvq5nSSQl32qnW+a8W7Y39RYB6ifzGbSWejkBJ5cqEXgQB/p8
+ EdsLKu2LyNtLeP8q5A/XG/BxnX/bxLxJgZ35U6b6E/sHs/IxM/S865R60JWOVj6eeUhW
+ vonw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=sairon.cz
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=sairon.cz header.i=@sairon.cz header.a=rsa-sha256
+ header.s=google header.b=ZgOQJsnO
+Subject: Re: [Buildroot] [PATCH] package/nfs-utils: only install fsidd
+ binary and unit file with enabled nfsd
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,104 +109,25 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Cc: Petr Vorel <petr.vorel@gmail.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e4fd73526021a88d66b4a05d21ab92d45b93ec28
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+Hi Giulio,
 
-Fix the following python3 build failure with -Ofast raised since commit
-4513f5198a8f24af7bd24fdfc1ede143eb4e844a:
+On 29. 02. 24 22:31, Giulio Benetti wrote:
+> For the rest it looks good to me, I've build tested it and it works
+> as expected so:
+> Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> 
+> Can you please send a V2 with improved commit log?
 
-powerpc64-buildroot-linux-gnu-gcc.br_real: error: ast: linker input file not found: No such file or directory
+thanks for the review! I'll send the updated patch right away.
 
-Fixes:
- - http://autobuild.buildroot.org/results/904c43241b99a8d848c1891cb5af132a291311b4
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ef199d362985031d473754c42a64f7ab2e9e57d1)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...c-modules-rlm_python-fix-build-with-Ofast.patch | 49 ++++++++++++++++++++++
- package/freeradius-server/freeradius-server.mk     |  6 +++
- 2 files changed, 55 insertions(+)
-
-diff --git a/package/freeradius-server/0009-src-modules-rlm_python-fix-build-with-Ofast.patch b/package/freeradius-server/0009-src-modules-rlm_python-fix-build-with-Ofast.patch
-new file mode 100644
-index 0000000000..c92b4171d2
---- /dev/null
-+++ b/package/freeradius-server/0009-src-modules-rlm_python-fix-build-with-Ofast.patch
-@@ -0,0 +1,49 @@
-+From 963edf3f87d34e274885d9cc448651d8a1601a6f Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 11 Jan 2024 17:38:41 +0100
-+Subject: [PATCH] src/modules/rlm_python: fix build with -Ofast
-+
-+Stripping logic wrongly translates -Ofast into ast resulting in the
-+following build failure:
-+
-+configure: /home/fabrice/buildroot/output/host/powerpc64-buildroot-linux-gnu/sysroot/usr/bin/python3-config's cflags were "-I/home/fabrice/buildroot/output/host/powerpc64-buildroot-linux-gnu/sysroot/usr/include/python3.11 -I/home/fabrice/buildroot/output/host/powerpc64-buildroot-linux-gnu/sysroot/usr/include/python3.11  -Wsign-compare -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Ofast -g0 -D_FORTIFY_SOURCE=2 -DNDEBUG -g -fwrapv -O3 -Wall"
-+configure: Sanitized cflags were " -isystem/home/fabrice/buildroot/output/host/powerpc64-buildroot-linux-gnu/sysroot/usr/include/python3.11 -isystem/home/fabrice/buildroot/output/host/powerpc64-buildroot-linux-gnu/sysroot/usr/include/python3.11   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  ast  -D_FORTIFY_SOURCE=2 -fwrapv  "
-+
-+[...]
-+
-+powerpc64-buildroot-linux-gnu-gcc.br_real: error: ast: linker input file not found: No such file or directory
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/904c43241b99a8d848c1891cb5af132a291311b4
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Upstream: https://github.com/FreeRADIUS/freeradius-server/pull/5263
-+---
-+ src/modules/rlm_python/configure.ac | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/modules/rlm_python3/configure.ac b/src/modules/rlm_python3/configure.ac
-+index e2f74574fb..ee30b324d9 100644
-+--- a/src/modules/rlm_python3/configure.ac
-++++ b/src/modules/rlm_python3/configure.ac
-+@@ -59,7 +59,7 @@ else
-+ 
-+ 	dnl # Convert -I to -isystem to get rid of warnings about issues in Python headers
-+ 	dnl # Strip -systemroot
-+-	dnl # Strip optimisation flags (-O[0-9]?). We decide our optimisation level, not python.
-++	dnl # Strip optimisation flags (-O[0-9|fast]?). We decide our optimisation level, not python.
-+ 	dnl # -D_FORTIFY_SOURCE needs -O.
-+ 	dnl # Strip debug symbol flags (-g[0-9]?). We decide on debugging symbols, not python
-+ 	dnl # Strip -W*, we decide what warnings are important
-+@@ -73,7 +73,7 @@ else
-+ 	mod_cflags=`echo " $python_cflags" | sed -e '\
-+ 		s/ -I/ -isystem/g;\
-+ 		s/ -isysroot[[ =]]\{0,1\}[[^-]]*/ /g;\
-+-		s/ -O[[^[[:blank:]]]]*/ /g;\
-++		s/ -O[[^[[:blank:]]*]]*/ /g;\
-+ 		s/ -Wp,-D_FORTIFY_SOURCE=[[[:digit:]]]/ /g;\
-+ 		s/ -g[[^ ]]*/ /g;\
-+ 		s/ -W[[^ ]]*/ /g;\
-+-- 
-+2.43.0
-+
-diff --git a/package/freeradius-server/freeradius-server.mk b/package/freeradius-server/freeradius-server.mk
-index 16a817b680..1b5751d753 100644
---- a/package/freeradius-server/freeradius-server.mk
-+++ b/package/freeradius-server/freeradius-server.mk
-@@ -21,6 +21,12 @@ define FREERADIUS_SERVER_RUN_KRB5_AUTORECONF
- endef
- FREERADIUS_SERVER_PRE_CONFIGURE_HOOKS += FREERADIUS_SERVER_RUN_KRB5_AUTORECONF
- 
-+# We're patching src/modules/rlm_python3/configure.ac
-+define FREERADIUS_SERVER_RUN_PYTHON3_AUTORECONF
-+	cd $(@D)/src/modules/rlm_python3; $(AUTORECONF) -I$(@D)/m4
-+endef
-+FREERADIUS_SERVER_PRE_CONFIGURE_HOOKS += FREERADIUS_SERVER_RUN_PYTHON3_AUTORECONF
-+
- # some compiler checks are not supported while cross compiling.
- # instead of removing those checks, we cache the answers
- FREERADIUS_SERVER_CONF_OPTS += \
+Cheers,
+Jan
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
