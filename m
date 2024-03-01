@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0418BC5478C
-	for <buildroot@archiver.kernel.org>; Fri,  1 Mar 2024 18:09:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84B38C5478C
+	for <buildroot@archiver.kernel.org>; Fri,  1 Mar 2024 18:09:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 99B8A400D0;
-	Fri,  1 Mar 2024 18:09:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 515B041C8B;
+	Fri,  1 Mar 2024 18:09:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jcigJtS4Z5Jt; Fri,  1 Mar 2024 18:09:13 +0000 (UTC)
+	with ESMTP id 5vfu0qhewaEY; Fri,  1 Mar 2024 18:09:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4104941C68
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 178E241CB3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4104941C68;
-	Fri,  1 Mar 2024 18:09:13 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CE6241BF354
+	by smtp2.osuosl.org (Postfix) with ESMTP id 178E241CB3;
+	Fri,  1 Mar 2024 18:09:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E658F1BF990
  for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 18:09:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BAF8B617BC
+ by smtp1.osuosl.org (Postfix) with ESMTP id E076183B55
  for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 18:09:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tWI2BW1jCo3i for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id edWCK8BB18zN for <buildroot@lists.busybox.net>;
  Fri,  1 Mar 2024 18:09:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F6CE617A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 399F383B53
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0F6CE617A7
+ by smtp1.osuosl.org (Postfix) with ESMTP id 399F383B53
  for <buildroot@buildroot.org>; Fri,  1 Mar 2024 18:09:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EE02D87F1B; Fri,  1 Mar 2024 18:09:10 +0000 (UTC)
+ id 2376B87F1B; Fri,  1 Mar 2024 18:09:11 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 1 Mar 2024 19:05:28 +0100
+Date: Fri, 1 Mar 2024 19:08:34 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 382a157dc03015abaed953362a0790e31d1b2d3f
-X-Git-Newrev: 66a202325a98a48013bad70de29d88f733ce5903
+X-Git-Oldrev: 1e576592607705d397220b9a5907265f052dcb95
+X-Git-Newrev: 7fcb4469dbd2392c3210293d04d9776190280373
 X-Patchwork-Hint: ignore
-Message-Id: <20240301180910.EE02D87F1B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] boot/shim: force arm mode instead of Thumb
- mode
+Message-Id: <20240301180911.2376B87F1B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/newlib-bare-metal: fix build
+ without makeinfo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,59 +65,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=66a202325a98a48013bad70de29d88f733ce5903
+commit: https://git.buildroot.net/buildroot/commit/?id=7fcb4469dbd2392c3210293d04d9776190280373
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use OPTIMIZATIONS parameter to pass -marm to fix the following build
-failure in Thumb mode:
+Fix the following build failure without makeinfo raised since the
+addition of the package in commit
+3b95ff658bf4859eb5cffd28cbbedd1826fad9a6:
 
-/tmp/ccEjPM4h.s:941: Error: selected processor does not support `mrc p15,0,r2,c9,c13,0' in Thumb mode
+make[5]: Entering directory '/home/buildroot/autobuild/instance-2/output-1/build/newlib-bare-metal-4.4.0/microblazeel-xilinx-elf/libgloss'
+  MAKEINFO ../.././libgloss/doc/porting.info
+/home/buildroot/autobuild/instance-2/output-1/build/newlib-bare-metal-4.4.0/missing: line 81: makeinfo: command not found
 
-CFLAGS can't be overridden as it is defined as:
-CFLAGS		= $(FEATUREFLAGS) \
-		  $(OPTIMIZATIONS) \
-		  $(WARNFLAGS) \
-		  $(if $(findstring clang,$(CC)),$(CLANG_WARNINGS)) \
-		  $(ARCH_CFLAGS) \
-		  $(WERRFLAGS) \
-		  $(INCLUDES) \
-		  $(DEFINES)
-
-Fixes:
- - http://autobuild.buildroot.org/results/580156f89cfd72122fef07aa2fe37b4fdd4c316b
- - http://autobuild.buildroot.org/results/8980c0f422516c7263d8d0c9cc6123f30c4b7ee4
+Fixes: 3b95ff658bf4859eb5cffd28cbbedd1826fad9a6
+ - http://autobuild.buildroot.org/results/23e6641cbce62258310c300f8aed5d6a76973d72
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/shim/shim.mk | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ package/newlib-bare-metal/newlib-bare-metal.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/boot/shim/shim.mk b/boot/shim/shim.mk
-index 19b11f4086..ae57677320 100644
---- a/boot/shim/shim.mk
-+++ b/boot/shim/shim.mk
-@@ -13,10 +13,19 @@ SHIM_CPE_ID_VENDOR = redhat
- SHIM_INSTALL_TARGET = NO
- SHIM_INSTALL_IMAGES = YES
+diff --git a/package/newlib-bare-metal/newlib-bare-metal.mk b/package/newlib-bare-metal/newlib-bare-metal.mk
+index 452bc4da25..e1b46fbc88 100644
+--- a/package/newlib-bare-metal/newlib-bare-metal.mk
++++ b/package/newlib-bare-metal/newlib-bare-metal.mk
+@@ -18,6 +18,7 @@ NEWLIB_BARE_METAL_LICENSE_FILES = \
  
-+SHIM_CFLAGS = $(TARGET_CFLAGS)
- SHIM_MAKE_OPTS = \
- 	ARCH="$(GNU_EFI_PLATFORM)" \
- 	CROSS_COMPILE="$(TARGET_CROSS)" \
--	DASHJ="-j$(PARALLEL_JOBS)"
-+	DASHJ="-j$(PARALLEL_JOBS)" \
-+	OPTIMIZATIONS="$(SHIM_CFLAGS)"
-+
-+# shim has some assembly function that is not present in Thumb mode:
-+# Error: selected processor does not support `mrc p15,0,r2,c9,c13,0' in Thumb mode
-+# so, we desactivate Thumb mode
-+ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
-+SHIM_CFLAGS += -marm
-+endif
+ NEWLIB_BARE_METAL_INSTALL_STAGING = YES
+ NEWLIB_BARE_METAL_INSTALL_TARGET = NO
++NEWLIB_BARE_METAL_MAKE_OPTS = MAKEINFO=true
  
- define SHIM_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(SHIM_MAKE_OPTS)
+ define NEWLIB_BARE_METAL_CONFIGURE_CMDS
+ 	(cd $(@D) && \
+@@ -34,11 +35,12 @@ define NEWLIB_BARE_METAL_CONFIGURE_CMDS
+ endef
+ 
+ define NEWLIB_BARE_METAL_BUILD_CMDS
+-	PATH=$(BR_PATH) $(MAKE1) -C $(@D)
++	PATH=$(BR_PATH) $(MAKE1) $(NEWLIB_BARE_METAL_MAKE_OPTS) -C $(@D)
+ endef
+ 
+ define NEWLIB_BARE_METAL_INSTALL_STAGING_CMDS
+-	PATH=$(BR_PATH) $(MAKE1) -C $(@D) DESTDIR=$(TOOLCHAIN_BARE_METAL_BUILDROOT_SYSROOT) install
++	PATH=$(BR_PATH) $(MAKE1) -C $(@D) $(NEWLIB_BARE_METAL_MAKE_OPTS) \
++		DESTDIR=$(TOOLCHAIN_BARE_METAL_BUILDROOT_SYSROOT) install
+ endef
+ 
+ define NEWLIB_BARE_METAL_FIXUP
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
