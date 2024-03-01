@@ -4,90 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E86FC5478C
-	for <buildroot@archiver.kernel.org>; Fri,  1 Mar 2024 13:36:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2522C5475B
+	for <buildroot@archiver.kernel.org>; Fri,  1 Mar 2024 13:36:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 13E1382145;
-	Fri,  1 Mar 2024 13:36:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E5F4182363;
+	Fri,  1 Mar 2024 13:36:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LswnAmH0mnG2; Fri,  1 Mar 2024 13:36:32 +0000 (UTC)
+	with ESMTP id aDYKJTs_gr6r; Fri,  1 Mar 2024 13:36:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 050328218D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 288A382253
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 050328218D;
-	Fri,  1 Mar 2024 13:36:32 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5AC0E1BF2C1
+	by smtp1.osuosl.org (Postfix) with ESMTP id 288A382253;
+	Fri,  1 Mar 2024 13:36:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6F4DB1BF990
  for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 13:36:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 46E2140644
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5CC9B608A7
  for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 13:36:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Lu1QN-4phaaP for <buildroot@lists.busybox.net>;
- Fri,  1 Mar 2024 13:36:28 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Q-VTFg3GMI1l for <buildroot@lists.busybox.net>;
+ Fri,  1 Mar 2024 13:36:29 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::52f; helo=mail-ed1-x52f.google.com;
+ client-ip=2a00:1450:4864:20::532; helo=mail-ed1-x532.google.com;
  envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 790E24016D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 790E24016D
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
- [IPv6:2a00:1450:4864:20::52f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 790E24016D
- for <buildroot@buildroot.org>; Fri,  1 Mar 2024 13:36:28 +0000 (UTC)
-Received: by mail-ed1-x52f.google.com with SMTP id
- 4fb4d7f45d1cf-55a179f5fa1so3443632a12.0
- for <buildroot@buildroot.org>; Fri, 01 Mar 2024 05:36:28 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3C21E60F77
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C21E60F77
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
+ [IPv6:2a00:1450:4864:20::532])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3C21E60F77
+ for <buildroot@buildroot.org>; Fri,  1 Mar 2024 13:36:29 +0000 (UTC)
+Received: by mail-ed1-x532.google.com with SMTP id
+ 4fb4d7f45d1cf-564fc495d83so2796765a12.0
+ for <buildroot@buildroot.org>; Fri, 01 Mar 2024 05:36:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1709300186; x=1709904986;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=G6UxPbVvBOwoImhgswG6eCP9WfrrZdYN6MESVtmj/7w=;
- b=lpDgGJJfXimy7wYC37dDT2z6fnvdqY5ivvkvU7Z5tOMA9WLINEfSLw/XbQp8hf08ld
- 90qIfyO+pOBevtSYZ005oKFWXJ/VfyCma4mEJxOJp7/hNR+yrHOnz25NQqzqNUPQB2YU
- ufbyiBIDp8e2HBla7+0BxgOlZakxOAKT86lQkPVn9eVT2ZNiU2AqRTAe6kb/i+pLYskI
- w9UkgkFQaS+cW7XG7QFU3upSjoKK3PfaKjpxaB7UGJXICVHBDjV+r47tX0hd8txvWu+3
- AtTI1nTy4n/upoZQcgcWWFifJ6qGYr1P7Co1NNly+o5+OOnjMybIar08PrEyBtK7rDnV
- Y8Ww==
-X-Gm-Message-State: AOJu0YxvaVTQNpG0pqIKrzL7sqXfKMZBDRpg8LQeohO9sEWrbGsws34s
- UU1FcMFe0uuYQwdcAQo7cn2n1tI583Y59ZrmpZYJ62QqyWVFrVflisXX/turqPJebuljheNjZmT
- JPQM=
-X-Google-Smtp-Source: AGHT+IFrBIBh/tWi0uW8jJ44VdRbwomJzOESIVI2g9am1G1MKBOGVZeqA8Zx8uFlJJTsY3rD5FAmJQ==
-X-Received: by 2002:a05:6402:901:b0:565:9fa4:dd59 with SMTP id
- g1-20020a056402090100b005659fa4dd59mr1303189edz.5.1709300186017; 
- Fri, 01 Mar 2024 05:36:26 -0800 (PST)
+ d=1e100.net; s=20230601; t=1709300187; x=1709904987;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=w5wO3kvDsPQZ1zmi7i0HwT6AO+505YCfD727Xj8gGbE=;
+ b=EgjLtQV5rQdne7hwmI/gejaDBGVoDEJO5XnddPKm0+49nai19pEp0QLvo88iH9U+ur
+ /XUdJdAQDvE7llNS0aUFKln+hyiebv+7JpGIox3uI1415O8S9qFJQjzDs9C00bTiwds8
+ +pKSxDXuFnH2jTy95DIXjOgRsDC7oMrxV50t00hHrhPLxML9hjRCSEGdqf80Cy1mSBcl
+ twchc4ln8e7Jir6+6uhWOTmTLJRaxLAqbm+bKdAuThGveQpUJa3t0ez2f/byVaRnPKth
+ hbvaQYYQrMgQAfklaPl0BWBEF22bWu6bRO7iabAS83SVYGVQ/j4edU7h8xJyof7bJ8Qg
+ jGEA==
+X-Gm-Message-State: AOJu0YzcjBlLmD5h0eNB4c4AeNNe0qs2M77izImU2A05/ZLcJehJiPF1
+ tgQTDChmBwLbrBS/gmLDkVYbYpsaOTzNN5oh/WdL/tFXLaTvtnwjl7WtXyXNdHahH3993zIKqbz
+ dJBA=
+X-Google-Smtp-Source: AGHT+IGGbXs8e0ZCxrJTWLTS9r5nWUEWbPdY7ztegmPyfyXMO8lULTD8bWw4ycTlZmnLusy/R4Exeg==
+X-Received: by 2002:a50:c88c:0:b0:566:44ca:9f5c with SMTP id
+ d12-20020a50c88c000000b0056644ca9f5cmr1184469edh.8.1709300187104; 
+ Fri, 01 Mar 2024 05:36:27 -0800 (PST)
 Received: from localhost.localdomain ([2001:b07:6474:ebbf:5260:58bc:42cc:9d46])
  by smtp.gmail.com with ESMTPSA id
- q28-20020a056402033c00b005659ea1caf0sm1566608edw.6.2024.03.01.05.36.24
+ q28-20020a056402033c00b005659ea1caf0sm1566608edw.6.2024.03.01.05.36.26
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 01 Mar 2024 05:36:25 -0800 (PST)
+ Fri, 01 Mar 2024 05:36:26 -0800 (PST)
 From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Fri,  1 Mar 2024 14:35:57 +0100
-Message-ID: <20240301133620.3547430-1-dario.binacchi@amarulasolutions.com>
+Date: Fri,  1 Mar 2024 14:35:58 +0100
+Message-ID: <20240301133620.3547430-2-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240301133620.3547430-1-dario.binacchi@amarulasolutions.com>
+References: <20240301133620.3547430-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1709300186; x=1709904986;
+ d=amarulasolutions.com; s=google; t=1709300187; x=1709904987;
  darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=G6UxPbVvBOwoImhgswG6eCP9WfrrZdYN6MESVtmj/7w=;
- b=K19Y5E11NQldMYVKV2yDfZzKwjCoC+bE5yYN7DR/+P/DgtCioox+w5e3bPO3j5O5UY
- jjRynVabvRvub2xhOsJfIzE0Cg0CuttEnErS5qHnGiOYF7Bft5qnVX0tGtaPWM7ANVUR
- dVkokNcVxa9GimTNyukJcltQYSlbbuZOLtc7E=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=w5wO3kvDsPQZ1zmi7i0HwT6AO+505YCfD727Xj8gGbE=;
+ b=QDh28ZUy/qLegkJGfKVM/OGQVyruz/jLWxnko2SyZ08yDatl0NUJk2Avb8m2Jhia/4
+ C5SO8xzLzPgYcN15OuM2Z80icxXybkyU3eIwCTASE00cavGACeFA+CNwD04HiahA3rei
+ EAMo0iEmMWatKu2pCSu5f9vP6zJ7ARNMCXqvM=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=K19Y5E11
-Subject: [Buildroot] [PATCH v8 00/23] Add support for AM62x-SK HS-FS devices
+ header.a=rsa-sha256 header.s=google header.b=QDh28ZUy
+Subject: [Buildroot] [PATCH v8 01/23] configs/ti_am62x_sk_defconfig: fix
+ BR2_TARGET_OPTEE_OS_PLATFORM setting
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -112,88 +116,71 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The SK-AM62B-P1 is the newest version of SK-AM62 which includes
-high-security field-securable (HS-FS) silicon to optionally customize keys
-and encryption for security applications.
-This requires enabling the BR2_TARGET_TI_K3_IMAGE_GEN_SECTYPE_HS_FS option,
-which, however, was buggy. This series fixes the errors and bumps the Linux
-kernel and U-Boot required for such a new device.
+Using PLATFORM=k3 can leads to a runtime boot crash on some K3 SoC (e.g.
+j721e) because the optee flavor is missing.
 
-Furthermore, this version complete the series by updating the
-ti_am64x_sk_defconfig too and remove ti-k3-image-gen, as requested by
-Romain Naour:
-https://patchwork.ozlabs.org/project/buildroot/patch/20240224205654.1546744-17-dario.binacchi@amarulasolutions.com/
-I have successfully executed compilation tests for all possible combinations of platform and security type:
-am62x -> GP, HS, HS-FS
-am64x -> GP, HS, HS-FS
+We could use BR2_TARGET_OPTEE_OS_PLATFORM=k3 and
+BR2_TARGET_OPTEE_OS_PLATFORM_FLAVOR=am62x but we actually can use
+BR2_TARGET_OPTEE_OS_PLATFORM=k3-am62x as explained in the optee-os
+Makefile [1]:
 
-The AM62x HS-FS configuration has also been tested on the SK-AM62B-P1 board.
+  # If $(PLATFORM) is defined and contains a hyphen, parse it as
+  # $(PLATFORM)-$(PLATFORM_FLAVOR) for convenience
 
-Dario Binacchi (22):
-  configs/ti_am62x_sk_defconfig: fix BR2_TARGET_OPTEE_OS_PLATFORM
-    setting
-  configs/ti_am64x_sk_defconfig: fix BR2_TARGET_OPTEE_OS_PLATFORM
-    setting
-  configs/ti_am62x_sk_defconfig: explicitly set the ti-k3-r5-loader
-    version
-  configs/ti_am64x_sk_defconfig: explicitly set the ti-k3-r5-loader
-    version
-  boot/ti-k3-r5-loader: bump to version 2024.01
-  package/python-attrs: add host variant
-  package/python-rpds-py: add host variant
-  package/python-referencing: add host variant
-  package/python-jsonschema-specifications: add host variant
-  package/python-jsonschema: add host variant
-  boot/ti-k3-r5-loader: set binman environment
-  boot/uboot: add BR2_TARGET_UBOOT_USE_BINMAN option
-  package/ti-k3: move TI_K3_{SECTYPE,SOC} out of the image-gen scope
-  package/ti-k3: disable HS-FS for AM65 SOC
-  boot/ti-k3/ti-k3-r5-loader: install tiboot3.bin
-  configs/ti_am62x_sk_defconfig: bump U-Boot version to 2024.01
-  configs/ti_am62x_sk_defconfig: bump Linux version to 6.6.18
-  board/ti/am62x-sk: generalize post-build.sh
-  board/ti/am62x-sk: move post-{build,image}.sh to board/ti/common/am6xx
-  package/ti-k3: fix BR2_PACKAGE_TI_K3_SOC setting for am64x SOC
-  configs/ti_am64x_sk_defconfig: bump U-Boot version to 2024.01
-  configs/ti_am64x_sk_defconfig: bump Linux version to 6.6.18
+This is how meta-ti set the optee-os platform:
 
-Romain Naour (1):
-  boot/ti-k3-image-gen: remove package
+  meta-ti]$ git grep OPTEEMACHINE
+  meta-ti-bsp/conf/machine/am437x-hs-evm.conf:OPTEEMACHINE = "ti-am43xx"
+  meta-ti-bsp/conf/machine/am57xx-hs-evm.conf:OPTEEMACHINE = "ti-am57xx"
+  meta-ti-bsp/conf/machine/beagleplay.conf:OPTEEMACHINE = "k3-am62x"
+  meta-ti-bsp/conf/machine/dra7xx-hs-evm.conf:OPTEEMACHINE = "ti-dra7xx"
+  meta-ti-bsp/conf/machine/include/am62axx.inc:OPTEEMACHINE = "k3-am62x"
+  meta-ti-bsp/conf/machine/include/am62pxx.inc:OPTEEMACHINE = "k3-am62x"
+  meta-ti-bsp/conf/machine/include/am62xx.inc:OPTEEMACHINE = "k3-am62x"
+  meta-ti-bsp/conf/machine/include/am64xx.inc:OPTEEMACHINE = "k3-am64x"
+  meta-ti-bsp/conf/machine/include/am65xx.inc:OPTEEMACHINE = "k3-am65x"
+  meta-ti-bsp/conf/machine/include/j7200.inc:OPTEEMACHINE = "k3-j721e"
+  meta-ti-bsp/conf/machine/include/j721e.inc:OPTEEMACHINE = "k3-j721e"
+  meta-ti-bsp/conf/machine/include/j721s2.inc:OPTEEMACHINE = "k3-j784s4"
+  meta-ti-bsp/conf/machine/include/j722s.inc:OPTEEMACHINE = "k3-am62x"
+  meta-ti-bsp/conf/machine/include/j784s4.inc:OPTEEMACHINE = "k3-j784s4"
 
- Config.in.legacy                              |  7 ++
- DEVELOPERS                                    |  2 -
- board/ti/am62x-sk/genimage.cfg                |  7 +-
- board/ti/am64x-sk/genimage.cfg                |  7 +-
- board/ti/common/am6xx/post-build.sh           | 58 ++++++++++++++
- board/ti/common/am6xx/post-image.sh           | 11 +++
- boot/Config.in                                |  1 -
- boot/ti-k3-image-gen/Config.in                | 77 -------------------
- boot/ti-k3-image-gen/ti-k3-image-gen.hash     |  3 -
- boot/ti-k3-image-gen/ti-k3-image-gen.mk       | 54 -------------
- boot/ti-k3-r5-loader/Config.in                |  5 +-
- boot/ti-k3-r5-loader/ti-k3-r5-loader.hash     |  2 +-
- boot/ti-k3-r5-loader/ti-k3-r5-loader.mk       | 12 ++-
- boot/uboot/Config.in                          | 23 +++---
- boot/uboot/uboot.mk                           | 12 ++-
- configs/ti_am62x_sk_defconfig                 | 22 +++---
- configs/ti_am64x_sk_defconfig                 | 22 +++---
- package/Config.in                             |  1 +
- package/python-attrs/python-attrs.mk          |  6 ++
- .../python-jsonschema-specifications.mk       | 10 +++
- .../python-jsonschema/python-jsonschema.mk    | 14 ++++
- .../python-referencing/python-referencing.mk  | 11 +++
- package/python-rpds-py/python-rpds-py.mk      |  1 +
- package/ti-k3/Config.in                       | 61 +++++++++++++++
- package/ti-k3/ti-k3.mk                        |  7 ++
- 25 files changed, 263 insertions(+), 173 deletions(-)
- create mode 100755 board/ti/common/am6xx/post-build.sh
- create mode 100755 board/ti/common/am6xx/post-image.sh
- delete mode 100644 boot/ti-k3-image-gen/Config.in
- delete mode 100644 boot/ti-k3-image-gen/ti-k3-image-gen.hash
- delete mode 100644 boot/ti-k3-image-gen/ti-k3-image-gen.mk
- create mode 100644 package/ti-k3/Config.in
- create mode 100644 package/ti-k3/ti-k3.mk
+  meta-ti uses the OPTEEMACHINE to set optee-os platform [2].
 
+[1] https://github.com/OP-TEE/optee_os/blob/4.0.0/Makefile#L37
+[2] https://git.yoctoproject.org/meta-arm/tree/meta-arm/recipes-security/optee/optee-os.inc?h=4.0.3#n23
+
+Suggested-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+
+---
+
+Changes in v6:
+- Update commit message
+
+Changes in v5
+- Drop BR2_TARGET_OPTEE_OS_PLATFORM_FLAVOR option
+
+Added in v4
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+---
+ configs/ti_am62x_sk_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configs/ti_am62x_sk_defconfig b/configs/ti_am62x_sk_defconfig
+index f88252a89c68..c3ad555a8184 100644
+--- a/configs/ti_am62x_sk_defconfig
++++ b/configs/ti_am62x_sk_defconfig
+@@ -21,7 +21,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="k3"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_TARGET_BOARD="lite"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE=y
+ BR2_TARGET_OPTEE_OS=y
+-BR2_TARGET_OPTEE_OS_PLATFORM="k3"
++BR2_TARGET_OPTEE_OS_PLATFORM="k3-am62x"
+ BR2_TARGET_TI_K3_IMAGE_GEN=y
+ BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62X=y
+ BR2_TARGET_TI_K3_R5_LOADER=y
 -- 
 2.43.0
 
