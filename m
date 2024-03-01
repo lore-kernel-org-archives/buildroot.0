@@ -4,45 +4,45 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E0E0C5475B
-	for <buildroot@archiver.kernel.org>; Fri,  1 Mar 2024 14:16:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DECBC5478C
+	for <buildroot@archiver.kernel.org>; Fri,  1 Mar 2024 14:17:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 00F928294A;
-	Fri,  1 Mar 2024 14:16:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 00EBF83443;
+	Fri,  1 Mar 2024 14:17:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qWb3aoT-LgYQ; Fri,  1 Mar 2024 14:16:39 +0000 (UTC)
+	with ESMTP id q9MP2JxwXmnn; Fri,  1 Mar 2024 14:17:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 149C182D12
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D25383196
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 149C182D12;
-	Fri,  1 Mar 2024 14:16:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 60B5A1BF427
- for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 14:16:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2D25383196;
+	Fri,  1 Mar 2024 14:17:04 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DAEA31BF427
+ for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 14:17:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 492AD82D12
- for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 14:16:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D5AF441D67
+ for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 14:17:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6IAUcC2dc267 for <buildroot@lists.busybox.net>;
- Fri,  1 Mar 2024 14:16:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id m6w8KgqHXYi0 for <buildroot@lists.busybox.net>;
+ Fri,  1 Mar 2024 14:17:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=bugzilla@busybox.net;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B9348294A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 24E0641C59
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7B9348294A
- for <buildroot@uclibc.org>; Fri,  1 Mar 2024 14:16:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 24E0641C59
+ for <buildroot@uclibc.org>; Fri,  1 Mar 2024 14:17:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 626E387DE1; Fri,  1 Mar 2024 14:16:36 +0000 (UTC)
+ id 104C387DE1; Fri,  1 Mar 2024 14:17:02 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Fri, 01 Mar 2024 14:16:35 +0000
+Date: Fri, 01 Mar 2024 14:17:01 +0000
 X-Bugzilla-Reason: CC
-X-Bugzilla-Type: new
+X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Outdated package
@@ -56,14 +56,14 @@ X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter cc
- target_milestone attachments.created
-Message-ID: <bug-15964-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-15964-163-EwkVsd2iwo@https.bugs.busybox.net/>
+In-Reply-To: <bug-15964-163@https.bugs.busybox.net/>
+References: <bug-15964-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15964] New: Please add an option to use Grub 2.12,
+Subject: [Buildroot] [Bug 15964] Please add an option to use Grub 2.12,
  or update Grub to 2.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -83,32 +83,10 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=15964
 
-            Bug ID: 15964
-           Summary: Please add an option to use Grub 2.12, or update Grub
-                    to 2.12
-           Product: buildroot
-           Version: 2023.11.1
-          Hardware: PC
-                OS: Linux
-            Status: NEW
-          Severity: major
-          Priority: P5
-         Component: Outdated package
-          Assignee: unassigned@buildroot.uclibc.org
-          Reporter: ian_ormshaw@waters.com
-                CC: buildroot@uclibc.org
-  Target Milestone: ---
-
-Created attachment 9724
-  --> https://bugs.busybox.net/attachment.cgi?id=9724&action=edit
-Config.in
-
-Due to linitations in Grub 2.06 large rootfs files fail to load due to an out
-of memory error.  This error nolonger occurs in Grub 2.12 due to the changes in
-memory allocation in version 2.12.  I have tested grub 2.12 on x86_64 via an
-external package, see attached files.  There is an issue I have not resolved in
-booting a system containing a particulal Ethernet card.  This has been raied
-upstream.
+--- Comment #1 from Dr I J Ormshaw <ian_ormshaw@waters.com> ---
+Created attachment 9727
+  --> https://bugs.busybox.net/attachment.cgi?id=9727&action=edit
+makefile
 
 -- 
 You are receiving this mail because:
