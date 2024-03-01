@@ -1,53 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F094DC5478C
-	for <buildroot@archiver.kernel.org>; Fri,  1 Mar 2024 10:12:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8647C5478C
+	for <buildroot@archiver.kernel.org>; Fri,  1 Mar 2024 10:52:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B56B86101F;
-	Fri,  1 Mar 2024 10:12:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7C803830FB;
+	Fri,  1 Mar 2024 10:52:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SL1cdbwBuHHF; Fri,  1 Mar 2024 10:12:43 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5C_hOMKMVMJL; Fri,  1 Mar 2024 10:52:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3BBD16102F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 92734830C0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3BBD16102F;
-	Fri,  1 Mar 2024 10:12:43 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 065721BF853
- for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 10:12:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 92734830C0;
+	Fri,  1 Mar 2024 10:52:52 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 220DE1BF377
+ for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 10:52:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E86CE60F64
- for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 10:12:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 16C4241D9F
+ for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 10:52:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id li5ZfIpjKrsi for <buildroot@lists.busybox.net>;
- Fri,  1 Mar 2024 10:12:38 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xy4osymTiXNL for <buildroot@lists.busybox.net>;
+ Fri,  1 Mar 2024 10:52:50 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
+ helo=relay3-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 37ADE61005
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 37ADE61005
- for <buildroot@buildroot.org>; Fri,  1 Mar 2024 10:12:38 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 302FC87EAC; Fri,  1 Mar 2024 10:12:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CE2D141D9D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE2D141D9D
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CE2D141D9D
+ for <buildroot@buildroot.org>; Fri,  1 Mar 2024 10:52:49 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8E08C60005;
+ Fri,  1 Mar 2024 10:52:47 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1rg0VS-006igO-2f;
+ Fri, 01 Mar 2024 11:52:46 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 1 Mar 2024 11:05:49 +0100
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 1149275e7d178150df4e4135adaa9627defcbe18
-X-Git-Newrev: f69c10b4ce93612fbab9f1143f75b67036c6e076
-X-Patchwork-Hint: ignore
-Message-Id: <20240301101238.302FC87EAC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/opencv-contrib:
- propagate opencv4 dependencies
+To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+References: <CACXRmJj_RLgX7yHPCc6cv7tn4mHkcJvrhY9kzJ9fbdH6Y-pa8Q@mail.gmail.com>
+ <20240114184111.454187-1-thomas@devoogdt.com>
+ <20240207171034.535dd392@windsurf>
+Date: Fri, 01 Mar 2024 11:52:46 +0100
+In-Reply-To: <20240207171034.535dd392@windsurf> (Thomas Petazzoni via
+ buildroot's message of "Wed, 7 Feb 2024 17:10:34 +0100")
+Message-ID: <871q8u9qbl.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH v2] package/libglib2: fix libiconv (intl)
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,73 +71,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Thomas Devoogdt <thomas@devoogdt.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, yann.morin.1998@free.fr
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f69c10b4ce93612fbab9f1143f75b67036c6e076
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+>>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
 
-Commit a7736afacaef (package/opencv4-contrib: properly note dependencies
-between modules) forgot to propagate the dependencies of selected
-symbols, causing unmet dependencies warnings (unfortunately, not
-errors), such as:
+ > On Sun, 14 Jan 2024 19:41:11 +0100
+ > Thomas Devoogdt <thomas@devoogdt.com> wrote:
 
-    $ KCONFIG_SEED=0x9F66F854 make randconfig
-    WARNING: unmet direct dependencies detected for BR2_PACKAGE_OPENCV4_LIB_DNN
-      Depends on [n]: BR2_PACKAGE_OPENCV4 [=y] && !BR2_TOOLCHAIN_USES_UCLIBC [=y] && BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS [=y]
-      Selected by [y]:
-      - BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNN_OBJDETECT [=y] && BR2_PACKAGE_OPENCV4_CONTRIB [=y]
+ >> Libglib2 can compile without localization support,
+ >> but still depends on libiconv, which is selected in Config.in.
+ >> 
+ >> This fallback support was broken, and is fixed in this upstream commit:
+ >> https://gitlab.gnome.org/GNOME/glib/-/commit/a497d5be122f193dcf8679334308333bbbc14a71
+ >> 
+ >> The other patch is purely added to avoid merge conflicts while cherry-picking.
+ >> 
+ >> Fixes: http://autobuild.buildroot.org/results/04d/04d9a17e64503e0bece7bad33549ef3ad4b237c9/build-end.log.
+ >> 
+ >> Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+ >> ---
+ >> v2: dropped meson libintl wrap, problem was the libiconv detection
+ >> ---
+ >> ...ion-of-a-system-provided-proxy-libin.patch | 53 +++++++++++++++++++
+ >> ...05-meson-try-iconv-in-libintl-lookup.patch | 53 +++++++++++++++++++
+ >> 2 files changed, 106 insertions(+)
+ >> create mode 100644 package/libglib2/0004-meson-Fix-detection-of-a-system-provided-proxy-libin.patch
+ >> create mode 100644 package/libglib2/0005-meson-try-iconv-in-libintl-lookup.patch
 
-Propagate the dependencies and add associated comments.
+ > Applied to master after doing some research to explain when the problem
+ > was introduced, so that Peter can more easily decide if this should be
+ > backported, and to which branches.
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Woodrow Douglass <wdouglass@carnegierobotics.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a2e01b23fc441a4be4416e68d91e331e00db3bbd)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/opencv4-contrib/Config.in | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+Thanks for that, so from that description I take it that only 2023.11.x
+is affected?
 
-diff --git a/package/opencv4-contrib/Config.in b/package/opencv4-contrib/Config.in
-index 951d5f71ad..261d414869 100644
---- a/package/opencv4-contrib/Config.in
-+++ b/package/opencv4-contrib/Config.in
-@@ -74,19 +74,31 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DATASETS
- 
- config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNN_OBJDETECT
- 	bool "dnn_objdetect"
-+	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # opencv4 dnn
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # opencv4 dnn
- 	select BR2_PACKAGE_OPENCV4_LIB_DNN
- 	help
- 	  Object Detection using CNNs -- Implements compact CNN Model
- 	  for object detection. Trained using Caffe but uses
- 	  opencv_dnn module.
- 
-+comment "dnn_objdetect needs a glibc or musl toolchain"
-+	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC
-+
- config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNN_SUPERRES
- 	bool "dnn_superres"
-+	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # opencv4 dnn
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # opencv4 dnn
- 	select BR2_PACKAGE_OPENCV4_LIB_DNN
- 	help
- 	  Superresolution using CNNs -- Contains four trained
- 	  convolutional neural networks to upscale images.
- 
-+comment "dnn_superres needs a glibc or musl toolchain"
-+	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC
-+
- config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNNS_EASILY_FOOLED
- 	bool "dnns_easily_fooled"
- 	help
+Committed to 2023.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
