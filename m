@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0654EC5478C
-	for <buildroot@archiver.kernel.org>; Fri,  1 Mar 2024 08:40:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B62E4C5478C
+	for <buildroot@archiver.kernel.org>; Fri,  1 Mar 2024 08:40:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 45EDD6079A;
-	Fri,  1 Mar 2024 08:40:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 22C4C607D5;
+	Fri,  1 Mar 2024 08:40:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WWP8mdxgKFbh; Fri,  1 Mar 2024 08:40:06 +0000 (UTC)
+	with ESMTP id bWKKIHWy9HsF; Fri,  1 Mar 2024 08:40:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B099A607D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9DFF960FE3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B099A607D5;
-	Fri,  1 Mar 2024 08:40:05 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6D4071BF98E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9DFF960FE3;
+	Fri,  1 Mar 2024 08:40:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C8D201BF377
  for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 08:40:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5B14A606D0
+ by smtp2.osuosl.org (Postfix) with ESMTP id B48C5405D5
  for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 08:40:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9ATnlOyWQwL5 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eOYtycpfJLjs for <buildroot@lists.busybox.net>;
  Fri,  1 Mar 2024 08:40:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C3A9605AC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7B8EB400BF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6C3A9605AC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7B8EB400BF
  for <buildroot@buildroot.org>; Fri,  1 Mar 2024 08:40:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 531EC87E81; Fri,  1 Mar 2024 08:40:01 +0000 (UTC)
+ id 6DCF087E85; Fri,  1 Mar 2024 08:40:01 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 1 Mar 2024 09:36:05 +0100
+Date: Fri, 1 Mar 2024 09:39:11 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: b87863caa530021b798e3610243b832327a8300a
-X-Git-Newrev: a248e08917c24ec951eb31a33d98fe87b28a54bb
+X-Git-Oldrev: c4bfb4d799d25b523c2dfa7ac2f9e7fd8487f206
+X-Git-Newrev: cd6a1977c6f520321c9634c09300f9eda9db258d
 X-Patchwork-Hint: ignore
-Message-Id: <20240301084001.531EC87E81@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x]
- package/freeradius-server: fix python3 build with -Ofast
+Message-Id: <20240301084001.6DCF087E85@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/petitboot:
+ propagate dependencies from kexec/kexec-lite
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,98 +65,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a248e08917c24ec951eb31a33d98fe87b28a54bb
+commit: https://git.buildroot.net/buildroot/commit/?id=cd6a1977c6f520321c9634c09300f9eda9db258d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-Fix the following python3 build failure with -Ofast raised since commit
-4513f5198a8f24af7bd24fdfc1ede143eb4e844a:
+Commit 719921bebe17 (package/kexec: bump to version 2.0.27) forgot to
+propagate the new dependency on kernel headers to petitboot, which may
+select kexec, causing unmet dependencies warnings (unfortunately, not
+errors), such as:
 
-powerpc64-buildroot-linux-gnu-gcc.br_real: error: ast: linker input file not found: No such file or directory
+    $ KCONFIG_SEED=0x84462FFC make randconfig
+    WARNING: unmet direct dependencies detected for BR2_PACKAGE_KEXEC
+      Depends on [n]: BR2_PACKAGE_KEXEC_ARCH_SUPPORTS [=y] && BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 [=n]
+      Selected by [y]:
+      - BR2_PACKAGE_PETITBOOT [=y] && (BR2_PACKAGE_KEXEC_ARCH_SUPPORTS [=y] || BR2_PACKAGE_KEXEC_LITE_ARCH_SUPPORTS [=n]) && BR2_USE_MMU [=y] && BR2_USE_WCHAR [=y] && !BR2_STATIC_LIBS [=n] && BR2_TOOLCHAIN_HAS_THREADS [=y] && BR2_PACKAGE_HAS_UDEV [=y] && !BR2_PACKAGE_KEXEC_LITE_ARCH_SUPPORTS [=n]
 
-Fixes:
- - http://autobuild.buildroot.org/results/904c43241b99a8d848c1891cb5af132a291311b4
+Propagate the dependency from kexec, and add comments about dependencies
+also inherited from kexec-lite.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ef199d362985031d473754c42a64f7ab2e9e57d1)
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Laurent Vivier <laurent@vivier.eu>
+Cc: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit c721a583790ef9e35e2a974450bdcbc5662621c8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...c-modules-rlm_python-fix-build-with-Ofast.patch | 49 ++++++++++++++++++++++
- package/freeradius-server/freeradius-server.mk     |  6 +++
- 2 files changed, 55 insertions(+)
+ package/petitboot/Config.in | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/freeradius-server/0009-src-modules-rlm_python-fix-build-with-Ofast.patch b/package/freeradius-server/0009-src-modules-rlm_python-fix-build-with-Ofast.patch
-new file mode 100644
-index 0000000000..c92b4171d2
---- /dev/null
-+++ b/package/freeradius-server/0009-src-modules-rlm_python-fix-build-with-Ofast.patch
-@@ -0,0 +1,49 @@
-+From 963edf3f87d34e274885d9cc448651d8a1601a6f Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 11 Jan 2024 17:38:41 +0100
-+Subject: [PATCH] src/modules/rlm_python: fix build with -Ofast
+diff --git a/package/petitboot/Config.in b/package/petitboot/Config.in
+index f931ab91cd..6a3d476b11 100644
+--- a/package/petitboot/Config.in
++++ b/package/petitboot/Config.in
+@@ -2,10 +2,11 @@ config BR2_PACKAGE_PETITBOOT
+ 	bool "petitboot"
+ 	depends on BR2_PACKAGE_KEXEC_ARCH_SUPPORTS || BR2_PACKAGE_KEXEC_LITE_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU # lvm2
+-	depends on BR2_USE_WCHAR # elfutils
+-	depends on !BR2_STATIC_LIBS # elfutils, lvm2
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # elfutils, lvm2
++	depends on BR2_USE_WCHAR # elfutils, kexec-lite
++	depends on !BR2_STATIC_LIBS # elfutils, kexec-lite, lvm2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # elfutils, kexec-lite, lvm2
+ 	depends on BR2_PACKAGE_HAS_UDEV
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 || !BR2_PACKAGE_KEXEC_ARCH_SUPPORTS # kexec
+ 	select BR2_PACKAGE_ELFUTILS
+ 	select BR2_PACKAGE_LVM2 # devmapper
+ 	select BR2_PACKAGE_NCURSES
+@@ -36,3 +37,7 @@ comment "petitboot needs a toolchain w/ wchar, dynamic library, threads, udev /d
+ 	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_PACKAGE_HAS_UDEV
 +
-+Stripping logic wrongly translates -Ofast into ast resulting in the
-+following build failure:
-+
-+configure: /home/fabrice/buildroot/output/host/powerpc64-buildroot-linux-gnu/sysroot/usr/bin/python3-config's cflags were "-I/home/fabrice/buildroot/output/host/powerpc64-buildroot-linux-gnu/sysroot/usr/include/python3.11 -I/home/fabrice/buildroot/output/host/powerpc64-buildroot-linux-gnu/sysroot/usr/include/python3.11  -Wsign-compare -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Ofast -g0 -D_FORTIFY_SOURCE=2 -DNDEBUG -g -fwrapv -O3 -Wall"
-+configure: Sanitized cflags were " -isystem/home/fabrice/buildroot/output/host/powerpc64-buildroot-linux-gnu/sysroot/usr/include/python3.11 -isystem/home/fabrice/buildroot/output/host/powerpc64-buildroot-linux-gnu/sysroot/usr/include/python3.11   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  ast  -D_FORTIFY_SOURCE=2 -fwrapv  "
-+
-+[...]
-+
-+powerpc64-buildroot-linux-gnu-gcc.br_real: error: ast: linker input file not found: No such file or directory
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/904c43241b99a8d848c1891cb5af132a291311b4
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Upstream: https://github.com/FreeRADIUS/freeradius-server/pull/5263
-+---
-+ src/modules/rlm_python/configure.ac | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/modules/rlm_python3/configure.ac b/src/modules/rlm_python3/configure.ac
-+index e2f74574fb..ee30b324d9 100644
-+--- a/src/modules/rlm_python3/configure.ac
-++++ b/src/modules/rlm_python3/configure.ac
-+@@ -59,7 +59,7 @@ else
-+ 
-+ 	dnl # Convert -I to -isystem to get rid of warnings about issues in Python headers
-+ 	dnl # Strip -systemroot
-+-	dnl # Strip optimisation flags (-O[0-9]?). We decide our optimisation level, not python.
-++	dnl # Strip optimisation flags (-O[0-9|fast]?). We decide our optimisation level, not python.
-+ 	dnl # -D_FORTIFY_SOURCE needs -O.
-+ 	dnl # Strip debug symbol flags (-g[0-9]?). We decide on debugging symbols, not python
-+ 	dnl # Strip -W*, we decide what warnings are important
-+@@ -73,7 +73,7 @@ else
-+ 	mod_cflags=`echo " $python_cflags" | sed -e '\
-+ 		s/ -I/ -isystem/g;\
-+ 		s/ -isysroot[[ =]]\{0,1\}[[^-]]*/ /g;\
-+-		s/ -O[[^[[:blank:]]]]*/ /g;\
-++		s/ -O[[^[[:blank:]]*]]*/ /g;\
-+ 		s/ -Wp,-D_FORTIFY_SOURCE=[[[:digit:]]]/ /g;\
-+ 		s/ -g[[^ ]]*/ /g;\
-+ 		s/ -W[[^ ]]*/ /g;\
-+-- 
-+2.43.0
-+
-diff --git a/package/freeradius-server/freeradius-server.mk b/package/freeradius-server/freeradius-server.mk
-index 16a817b680..1b5751d753 100644
---- a/package/freeradius-server/freeradius-server.mk
-+++ b/package/freeradius-server/freeradius-server.mk
-@@ -21,6 +21,12 @@ define FREERADIUS_SERVER_RUN_KRB5_AUTORECONF
- endef
- FREERADIUS_SERVER_PRE_CONFIGURE_HOOKS += FREERADIUS_SERVER_RUN_KRB5_AUTORECONF
- 
-+# We're patching src/modules/rlm_python3/configure.ac
-+define FREERADIUS_SERVER_RUN_PYTHON3_AUTORECONF
-+	cd $(@D)/src/modules/rlm_python3; $(AUTORECONF) -I$(@D)/m4
-+endef
-+FREERADIUS_SERVER_PRE_CONFIGURE_HOOKS += FREERADIUS_SERVER_RUN_PYTHON3_AUTORECONF
-+
- # some compiler checks are not supported while cross compiling.
- # instead of removing those checks, we cache the answers
- FREERADIUS_SERVER_CONF_OPTS += \
++comment "petitboot w/ kexec needs a toolchain w/ headers >= 3.17"
++	depends on BR2_PACKAGE_KEXEC_ARCH_SUPPORTS && !BR2_PACKAGE_KEXEC_LITE_ARCH_SUPPORTS
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
