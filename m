@@ -4,91 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0EC9C5475B
-	for <buildroot@archiver.kernel.org>; Fri,  1 Mar 2024 17:47:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7F41C5478C
+	for <buildroot@archiver.kernel.org>; Fri,  1 Mar 2024 17:49:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 53D2F41C82;
-	Fri,  1 Mar 2024 17:47:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6548941C68;
+	Fri,  1 Mar 2024 17:49:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id udw5RprXqIAP; Fri,  1 Mar 2024 17:47:44 +0000 (UTC)
+	with ESMTP id igbXSeF5UTQG; Fri,  1 Mar 2024 17:49:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF2A041C6A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2311C41C6A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BF2A041C6A;
-	Fri,  1 Mar 2024 17:47:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6B4EE1BF2F7
- for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 17:47:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2311C41C6A;
+	Fri,  1 Mar 2024 17:49:45 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A4CF81BF2F7
+ for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 17:49:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6568183B42
- for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 17:47:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9DDCB41C6A
+ for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 17:49:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DKIhJNaEKhcz for <buildroot@lists.busybox.net>;
- Fri,  1 Mar 2024 17:47:41 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CRFVt4RHTszo for <buildroot@lists.busybox.net>;
+ Fri,  1 Mar 2024 17:49:42 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::234; helo=mail-lj1-x234.google.com;
+ client-ip=2a00:1450:4864:20::12f; helo=mail-lf1-x12f.google.com;
  envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 71B0783B3B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 71B0783B3B
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com
- [IPv6:2a00:1450:4864:20::234])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 71B0783B3B
- for <buildroot@buildroot.org>; Fri,  1 Mar 2024 17:47:41 +0000 (UTC)
-Received: by mail-lj1-x234.google.com with SMTP id
- 38308e7fff4ca-2d23114b19dso28311541fa.3
- for <buildroot@buildroot.org>; Fri, 01 Mar 2024 09:47:41 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2B48041C68
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B48041C68
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com
+ [IPv6:2a00:1450:4864:20::12f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2B48041C68
+ for <buildroot@buildroot.org>; Fri,  1 Mar 2024 17:49:41 +0000 (UTC)
+Received: by mail-lf1-x12f.google.com with SMTP id
+ 2adb3069b0e04-51321e71673so2729113e87.2
+ for <buildroot@buildroot.org>; Fri, 01 Mar 2024 09:49:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1709315258; x=1709920058;
+ d=1e100.net; s=20230601; t=1709315379; x=1709920179;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=OgXgq0sEKATv7t42FhbwRR4rJwk4mYiUA4HngGm9yrs=;
- b=KPrqAH2PqhcnHVQ0cGorNaqUzBZtJbgGVs7O3vAnlDdijBhuOO9yjQL7av7T1F4zVr
- mLoU+3iypTlgFo42BTYKh1x0ti7MhQHf1cFvk1Pou/5b8fc3kFf8O7kjA2xvkJNWtHtR
- rUiQzsVgQ/z+5yFxbWpTBmzABRPeWqhBNfAzIECEWItzbAe43ihP7/ULOC1oJd4T38jI
- aIB94dTY9KhU/T7ZKU5ULsA17RoTLMQ9Rw+rnUjrmC41rrUcYErU5+L19AJNjpRWFOVd
- GQg1SV5X4cPJzXDZuYXlGHgB2N7Au2dgW/KAbomZCZkeHDf74e5RYAKKirvOKxJZjpCn
- Pv9g==
-X-Gm-Message-State: AOJu0Yzt2jCsyEa0Q3NTK39yBNLovb11+Bv5QOWouKv+vWh/uEHIRWVD
- Iw+qZWIFXzrHcuhbYKVfxvIJMq7aEzCnKmLJMETNS3rJuykraz+FtzydqiU5
-X-Google-Smtp-Source: AGHT+IG+vaNRJAe4r+/skBo8pwlBJlOnCmZCQskr7RjZkkfDdU1OmBEXHj52pZ180gO/NQSaZPHDMw==
-X-Received: by 2002:a2e:3a08:0:b0:2d2:9b43:8d48 with SMTP id
- h8-20020a2e3a08000000b002d29b438d48mr1883712lja.39.1709315258176; 
- Fri, 01 Mar 2024 09:47:38 -0800 (PST)
+ bh=P5EM4wVPOwF4OFfPxBKUXLobFxJYv0V4RKVy2xHPTxY=;
+ b=EH5KBar9+hXNKahuytjWfOwWonWT6yOAkj2ktNSO0c8bzBV1EWqNXU6l6cBTYJL6iP
+ /PFSUCPmZKI9cCoV9kzzwcPU5Iq6YkpGNYyvwFnHefDDoyUtGIGWRXnbTGNB9QLSBnn0
+ Fla/uHGOmsdenM6ks0THApg9uC8D7nefFwINR+9Al2EO7ajyTSQ8sO86jgIQTBbA1JPJ
+ c0/pbSfNBMp01Z+1+H5BhF9nJfPFz61U7i6ro8jp0koWlZvGTV71lHL1JV8+A+3RBSE7
+ 7CySxtJIwpbLlcf8juTE6iA8JmT6jqPj0dHcpaMIGpWPr2k/hv4mOYX8Bgjtpp22dqK/
+ 9qLw==
+X-Gm-Message-State: AOJu0Yz4uw0dbZ0VEDskXsy6ooFFE598fkXbw8s43/m3juzwx7VqmMAD
+ eUNv5hPbFFBO+CcIfMnojYvbZQZCnn3cjI0/FBj49ivDbUSlxKgj16AmQDdn
+X-Google-Smtp-Source: AGHT+IFU/B05c9QCALIHa/mbQidLFC2oR+wHQOFLgN+ByYHWU1ZSAbrhweD/G1F7k1trKgG+kdT6cw==
+X-Received: by 2002:a05:6512:200b:b0:512:ee1f:b5af with SMTP id
+ a11-20020a056512200b00b00512ee1fb5afmr1591606lfb.41.1709315379289; 
+ Fri, 01 Mar 2024 09:49:39 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- l27-20020a05600c1d1b00b00412c7b91ef0sm2731348wms.37.2024.03.01.09.47.37
+ g3-20020adfe403000000b0033af3a43e91sm5127301wrm.46.2024.03.01.09.49.38
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 01 Mar 2024 09:47:37 -0800 (PST)
+ Fri, 01 Mar 2024 09:49:38 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri,  1 Mar 2024 18:47:35 +0100
-Message-ID: <20240301174735.783943-1-fontaine.fabrice@gmail.com>
+Date: Fri,  1 Mar 2024 18:49:34 +0100
+Message-ID: <20240301174934.785286-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1709315258; x=1709920058; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1709315379; x=1709920179; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=OgXgq0sEKATv7t42FhbwRR4rJwk4mYiUA4HngGm9yrs=;
- b=nISsCYTsFFxf6JSuvPTxIxzoOREFMv/ufC6XRG6lI99x071ioNP76QxcPidvflBUno
- Mikh2mhOjrB/isiZrjcc29wp8C+Nv1GSKSwxxUwD3HaHIJcyZxLgPsAIMB2WVzhcA5b7
- xCgomPpiE0XBNh6g89z1TKDSELKfyjQbGNp5g/MCff3jSfXrF1Pf4SJ7dwx4+n5u64dE
- bSByDQiEtoOQeNqfKie51dYFBrRQZu6LDMislpQX6l0oVANLFuaiXCNdVWTlJrxvxcG9
- fku+qHQBxe29rutgYYuiMzArfrhvKZn4s2a3PJGLyTR56VVz2DXDXI8XFudkZKECeUg0
- DtgQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=P5EM4wVPOwF4OFfPxBKUXLobFxJYv0V4RKVy2xHPTxY=;
+ b=c2io166RG6VwLN9GCPDb7pXebQozhrK+vJP/XOlIn9XuNrePNqdBnF0uBl8Ly8XdM+
+ 840WOPZDrBHlC7JYsKz64/4hKp6vSMFAc8gMhoY1znKX9kd0kg5R+zRXe5K1WvGvF0OU
+ 9bI0YXrYf66wqFrA0wY5pFU7s0LkWlWrPXlVZjMCj7ExzH4ZuW6JaMr/iwFCki8szrih
+ K9+gjmFP5yUBaM8URurMWhU5MEY9GVwouxtKB3A0PM3MZ18ZoFeckvsm1S6qjS7/gORh
+ a+FgIPzVXsFaYsoJgZb1AbDTmdqGMfuTY8eZb6xoRisH/U62QCi8uO/fOAIQ9Nfa2Rfv
+ tuqw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=nISsCYTs
-Subject: [Buildroot] [PATCH 1/1] package/squid: needs C++17
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=c2io166R
+Subject: [Buildroot] [PATCH 1/1] package/rhash: fix NLS build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,47 +105,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-C++17 is mandatory since bump to version 6.2 in commit
-2a7c6816f02f45946e896577d78e3470331b2d63 and
-https://github.com/squid-cache/squid/commit/09835feb258c3058d028918e36d959dccb3f7496
-resulting in the following build failure:
+Fix the following NLS build failure raised since bump to version 1.4.4
+in commit f9b465c66c42e936a80292f7854f605d4c88564e:
 
-configure: error: *** A compiler with support for C++17 language features is required.
+./configure: line 879: -lintl: command not found
 
-Fixes: 2a7c6816f02f45946e896577d78e3470331b2d63
- - http://autobuild.buildroot.org/results/06755c324f0bf37e52976fce48a5ad62915193da
+[...]
+
+/home/buildroot/autobuild/run/instance-0/output-1/host/bin/xtensa-linux-gcc calc_sums.o hash_print.o common_func.o hash_update.o file.o file_mask.o file_set.o find_file.o hash_check.o output.o parse_cmdline.o rhash_main.o win_utils.o librhash/librhash.so.1.4.4   -o rhash
+/home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/xtensa-buildroot-linux-uclibc/12.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: calc_sums.o:(.literal.rename_file_by_embeding_crc32+0x10): undefined reference to `libintl_gettext'
+
+Fixes: f9b465c66c42e936a80292f7854f605d4c88564e
+ - http://autobuild.buildroot.org/results/f8dd8ea6c0c9cd428355e3720e679a078b8e0f8f
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/squid/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ ...ct-assigment-in-the-configure-script.patch | 24 +++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+ create mode 100644 package/rhash/0001-Fix-243-Incorrect-assigment-in-the-configure-script.patch
 
-diff --git a/package/squid/Config.in b/package/squid/Config.in
-index 6272140768..89b5a377c7 100644
---- a/package/squid/Config.in
-+++ b/package/squid/Config.in
-@@ -1,10 +1,10 @@
--comment "squid needs a toolchain w/ C++, threads, gcc >= 4.8 not affected by bug 64735"
-+comment "squid needs a toolchain w/ C++, threads, gcc >= 7 not affected by bug 64735"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735 || \
- 		!BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_7
- 
- config BR2_PACKAGE_SQUID
- 	bool "squid"
-@@ -12,7 +12,7 @@ config BR2_PACKAGE_SQUID
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::current_exception
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
- 	# needs fork()
- 	depends on BR2_USE_MMU
- 	select BR2_PACKAGE_LIBCAP
+diff --git a/package/rhash/0001-Fix-243-Incorrect-assigment-in-the-configure-script.patch b/package/rhash/0001-Fix-243-Incorrect-assigment-in-the-configure-script.patch
+new file mode 100644
+index 0000000000..4a9a81dbf5
+--- /dev/null
++++ b/package/rhash/0001-Fix-243-Incorrect-assigment-in-the-configure-script.patch
+@@ -0,0 +1,24 @@
++From c804982d1b24c6533118b3068d2cfdca685076f3 Mon Sep 17 00:00:00 2001
++From: Aleksey Kravchenko <rhash.admin@gmail.com>
++Date: Mon, 7 Aug 2023 01:00:37 +0300
++Subject: [PATCH] Fix #243: Incorrect assigment in the configure script
++
++Upstream: https://github.com/rhash/RHash/commit/c804982d1b24c6533118b3068d2cfdca685076f3
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ configure | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure b/configure
++index 39ef8c1..63cbd8d 100755
++--- a/configure
+++++ b/configure
++@@ -877,7 +877,7 @@ if test "$OPT_STATIC" = "no"; then
++   RHASH_TEST_OPTIONS=--shared
++   test "$INSTALL_LIB_SHARED" = "auto" && INSTALL_LIB_SHARED=yes
++   test "$INSTALL_LIB_STATIC" = "yes"  && RHASH_BUILD_TARGETS="$RHASH_BUILD_TARGETS \$(LIBRHASH_STATIC)"
++-  RHASH_LDFLAGS=$RHASH_LDFLAGS $GETTEXT_LDFLAGS
+++  RHASH_LDFLAGS=$(join_params $RHASH_LDFLAGS $GETTEXT_LDFLAGS)
++ else
++   LIBRHASH_TYPE=static
++   LIBRHASH_PATH="\$(LIBRHASH_STATIC)"
 -- 
 2.43.0
 
