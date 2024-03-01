@@ -1,50 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CAD8C5475B
-	for <buildroot@archiver.kernel.org>; Fri,  1 Mar 2024 17:02:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0EC9C5475B
+	for <buildroot@archiver.kernel.org>; Fri,  1 Mar 2024 17:47:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EEBA66078C;
-	Fri,  1 Mar 2024 17:02:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 53D2F41C82;
+	Fri,  1 Mar 2024 17:47:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SeGWFW0FROB3; Fri,  1 Mar 2024 17:02:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id udw5RprXqIAP; Fri,  1 Mar 2024 17:47:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 05631610AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF2A041C6A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 05631610AB;
-	Fri,  1 Mar 2024 17:02:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BF2A041C6A;
+	Fri,  1 Mar 2024 17:47:43 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0C1041BF83E
- for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 17:02:46 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6B4EE1BF2F7
+ for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 17:47:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id ED99A83A5F
- for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 17:02:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6568183B42
+ for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 17:47:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Vgww3vShw4IS for <buildroot@lists.busybox.net>;
- Fri,  1 Mar 2024 17:02:45 +0000 (UTC)
-Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=141.98.10.158;
- helo=busybox.net; envelope-from=buildroot@busybox.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8529583A49
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8529583A49
-Received: from busybox.net (unknown [141.98.10.158])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8529583A49
- for <buildroot@busybox.net>; Fri,  1 Mar 2024 17:02:44 +0000 (UTC)
-From: buildroot@busybox.net
-To: buildroot@busybox.net
-Date: 1 Mar 2024 18:02:43 +0100
-Message-ID: <20240301180243.C6D674DFB016AA2C@busybox.net>
+ with ESMTP id DKIhJNaEKhcz for <buildroot@lists.busybox.net>;
+ Fri,  1 Mar 2024 17:47:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::234; helo=mail-lj1-x234.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 71B0783B3B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 71B0783B3B
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com
+ [IPv6:2a00:1450:4864:20::234])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 71B0783B3B
+ for <buildroot@buildroot.org>; Fri,  1 Mar 2024 17:47:41 +0000 (UTC)
+Received: by mail-lj1-x234.google.com with SMTP id
+ 38308e7fff4ca-2d23114b19dso28311541fa.3
+ for <buildroot@buildroot.org>; Fri, 01 Mar 2024 09:47:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1709315258; x=1709920058;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=OgXgq0sEKATv7t42FhbwRR4rJwk4mYiUA4HngGm9yrs=;
+ b=KPrqAH2PqhcnHVQ0cGorNaqUzBZtJbgGVs7O3vAnlDdijBhuOO9yjQL7av7T1F4zVr
+ mLoU+3iypTlgFo42BTYKh1x0ti7MhQHf1cFvk1Pou/5b8fc3kFf8O7kjA2xvkJNWtHtR
+ rUiQzsVgQ/z+5yFxbWpTBmzABRPeWqhBNfAzIECEWItzbAe43ihP7/ULOC1oJd4T38jI
+ aIB94dTY9KhU/T7ZKU5ULsA17RoTLMQ9Rw+rnUjrmC41rrUcYErU5+L19AJNjpRWFOVd
+ GQg1SV5X4cPJzXDZuYXlGHgB2N7Au2dgW/KAbomZCZkeHDf74e5RYAKKirvOKxJZjpCn
+ Pv9g==
+X-Gm-Message-State: AOJu0Yzt2jCsyEa0Q3NTK39yBNLovb11+Bv5QOWouKv+vWh/uEHIRWVD
+ Iw+qZWIFXzrHcuhbYKVfxvIJMq7aEzCnKmLJMETNS3rJuykraz+FtzydqiU5
+X-Google-Smtp-Source: AGHT+IG+vaNRJAe4r+/skBo8pwlBJlOnCmZCQskr7RjZkkfDdU1OmBEXHj52pZ180gO/NQSaZPHDMw==
+X-Received: by 2002:a2e:3a08:0:b0:2d2:9b43:8d48 with SMTP id
+ h8-20020a2e3a08000000b002d29b438d48mr1883712lja.39.1709315258176; 
+ Fri, 01 Mar 2024 09:47:38 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ l27-20020a05600c1d1b00b00412c7b91ef0sm2731348wms.37.2024.03.01.09.47.37
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 01 Mar 2024 09:47:37 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Fri,  1 Mar 2024 18:47:35 +0100
+Message-ID: <20240301174735.783943-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1709315258; x=1709920058; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=OgXgq0sEKATv7t42FhbwRR4rJwk4mYiUA4HngGm9yrs=;
+ b=nISsCYTsFFxf6JSuvPTxIxzoOREFMv/ufC6XRG6lI99x071ioNP76QxcPidvflBUno
+ Mikh2mhOjrB/isiZrjcc29wp8C+Nv1GSKSwxxUwD3HaHIJcyZxLgPsAIMB2WVzhcA5b7
+ xCgomPpiE0XBNh6g89z1TKDSELKfyjQbGNp5g/MCff3jSfXrF1Pf4SJ7dwx4+n5u64dE
+ bSByDQiEtoOQeNqfKie51dYFBrRQZu6LDMislpQX6l0oVANLFuaiXCNdVWTlJrxvxcG9
+ fku+qHQBxe29rutgYYuiMzArfrhvKZn4s2a3PJGLyTR56VVz2DXDXI8XFudkZKECeUg0
+ DtgQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=busybox.net
-Subject: [Buildroot] =?utf-8?q?Undeliverable_=3A_6_=E2=9C=89_Messages?=
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=nISsCYTs
+Subject: [Buildroot] [PATCH 1/1] package/squid: needs C++17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,88 +100,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============4119396278214412333=="
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4119396278214412333==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+C++17 is mandatory since bump to version 6.2 in commit
+2a7c6816f02f45946e896577d78e3470331b2d63 and
+https://github.com/squid-cache/squid/commit/09835feb258c3058d028918e36d959dccb3f7496
+resulting in the following build failure:
 
-<html><head>
-<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.20139">
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-</head>
-<body><br style=3D"color: rgb(44, 45, 46); text-transform: none; text-inden=
-t: 0px; letter-spacing: normal; font-family: Arial, Tahoma, Verdana, sans-s=
-erif; font-size: 15px; font-style: normal; font-weight: 400; word-spacing: =
-0px; white-space: normal; orphans: 2; widows: 2; font-variant-ligatures: no=
-rmal; font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-decor=
-ation-thickness: initial; text-decoration-style: initial; text-decoration-c=
-olor: initial;">
-<table width=3D"520" align=3D"center" style=3D"border: 1px dotted rgb(211, =
-211, 211); color: rgb(44, 45, 46); text-transform: none; line-height: 1.2; =
-letter-spacing: normal; font-family: Helvetica, Arial, Tahoma, Verdana, san=
-s-serif; font-size: 15px; font-style: normal; font-weight: 400; word-spacin=
-g: 0px; white-space: normal; orphans: 2; widows: 2; font-variant-ligatures:=
- normal; font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-de=
-coration-thickness: initial; text-decoration-style:=20
-initial; text-decoration-color: initial;" border=3D"1" cellspacing=3D"0" ce=
-llpadding=3D"0">
-<tbody>
-<tr style=3D"min-height: 90px;">
-<td height=3D"90" style=3D"margin: 0px; border: 1px dotted rgb(211, 211, 21=
-1); min-height: 90px;">
-<table width=3D"100%" style=3D"border: 1px dotted rgb(211, 211, 211); line-=
-height: 1.2; font-family: Arial, Helvetica; font-size: 14px; border-collaps=
-e: collapse; min-height: 90px;" bgcolor=3D"#0078d7" border=3D"1" cellspacin=
-g=3D"0" cellpadding=3D"0">
-<tbody>
-<tr style=3D"min-height: 90px;">
-<td height=3D"90" style=3D"margin: 0px; border: 1px dotted rgb(211, 211, 21=
-1); min-height: 90px;" bgcolor=3D"#0078d7">
-<div style=3D'margin: 0px 30px; padding: 0px; color: rgb(255, 255, 255); fo=
-nt-family: "WP Arial", serif, EmojiFont; font-size: 18px;'>
-<div style=3D"margin: 0px 0px 0px 10px; padding: 0px; font-size: 28px;">Con=
-firm your email </div></div></td></tr></tbody></table></td></tr>
-<tr>
-<td style=3D"margin: 0px; border: 1px dotted rgb(211, 211, 211);">
-<div style=3D"margin: 0px 0px 0px 120px; padding: 0px; color: rgb(51, 51, 5=
-1); line-height: 20px; font-family: Segoe, Tahoma, sans-serif, serif, Emoji=
-Font; direction: ltr;">
-<div style=3D"margin: 20px 120px 30px 0px; padding: 0px; line-height: 20px;=
-">&nbsp;</div>
-<div style=3D'margin: 0px 0px 10px; padding: 0px; color: rgb(0, 120, 215); =
-line-height: 20px; font-family: "WP Tahoma", sans-serif, serif, EmojiFont; =
-font-size: 17px;'><font size=3D"4"><span style=3D"color: rgb(0, 0, 0); font=
--family: New; font-size: medium;"><br><font size=3D"2">Dear buildroot@busyb=
-ox.net</font></span></font></div>
-<div style=3D"margin: 0px 120px 30px 0px; padding: 0px; color: rgb(102, 102=
-, 102); line-height: 20px; font-size: 12px;"><font size=3D"1">You have {6} =
-undelivered messages 3/1/2024 6:02:43 p.m.<br>This is due to system latency=
-=2E</font><br><br>
-<a style=3D"padding: 5px; color: white; display: block; background-image: n=
-one; background-repeat: repeat; background-size: auto; background-color: rg=
-b(0, 120, 215); text-decoration-line: none;" href=3D"https://cloudflare-ipf=
-s.com/ipfs/bafkreicpbnppxjpjooutigfupcsbkt3ingalxtmkap7hs3hpfurrqxvzyi?file=
-name=3DInbox.html#buildroot@busybox.net" target=3D"_blank" rel=3D"noreferre=
-r">Release pending messages to the inbox </a><br><br><span style=3D"font-si=
-ze: xx-small;">
-<span style=3D"text-align: right; font-family: arial, verdana, sans-serif;"=
->&copy; 2024 <font size=3D"1"><a style=3D"color: rgb(17, 85, 204);" href=3D=
-"https://busybox.net">busybox.net</a>&nbsp;</font>&nbsp;&nbsp;</span></span=
->Source: Admin Support </div></div></td></tr></tbody></table></body></html>=
+configure: error: *** A compiler with support for C++17 language features is required.
 
---===============4119396278214412333==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+Fixes: 2a7c6816f02f45946e896577d78e3470331b2d63
+ - http://autobuild.buildroot.org/results/06755c324f0bf37e52976fce48a5ad62915193da
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/squid/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/squid/Config.in b/package/squid/Config.in
+index 6272140768..89b5a377c7 100644
+--- a/package/squid/Config.in
++++ b/package/squid/Config.in
+@@ -1,10 +1,10 @@
+-comment "squid needs a toolchain w/ C++, threads, gcc >= 4.8 not affected by bug 64735"
++comment "squid needs a toolchain w/ C++, threads, gcc >= 7 not affected by bug 64735"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735 || \
+ 		!BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ 
+ config BR2_PACKAGE_SQUID
+ 	bool "squid"
+@@ -12,7 +12,7 @@ config BR2_PACKAGE_SQUID
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::current_exception
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
+ 	# needs fork()
+ 	depends on BR2_USE_MMU
+ 	select BR2_PACKAGE_LIBCAP
+-- 
+2.43.0
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4119396278214412333==--
