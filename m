@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35214C5478C
-	for <buildroot@archiver.kernel.org>; Fri,  1 Mar 2024 08:35:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EEDCDC5478C
+	for <buildroot@archiver.kernel.org>; Fri,  1 Mar 2024 08:35:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F3C72605FB;
-	Fri,  1 Mar 2024 08:35:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BFFEA607D5;
+	Fri,  1 Mar 2024 08:35:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cHhzl8bZy1y5; Fri,  1 Mar 2024 08:35:14 +0000 (UTC)
+	with ESMTP id QArre_zwwCw1; Fri,  1 Mar 2024 08:35:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A6E360730
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 53B726081D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1A6E360730;
-	Fri,  1 Mar 2024 08:35:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 53B726081D;
+	Fri,  1 Mar 2024 08:35:16 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E3B2D1BF377
- for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 08:35:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 258DF1BF98E
+ for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 08:35:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D190681756
+ by smtp1.osuosl.org (Postfix) with ESMTP id D15A48144E
  for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 08:35:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gFyamvoLTu2s for <buildroot@lists.busybox.net>;
+ with ESMTP id hS_e0ZNS7KPQ for <buildroot@lists.busybox.net>;
  Fri,  1 Mar 2024 08:35:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AEAC781499
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E7B6781452
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id AEAC781499
+ by smtp1.osuosl.org (Postfix) with ESMTP id E7B6781452
  for <buildroot@buildroot.org>; Fri,  1 Mar 2024 08:35:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AA77087E78; Fri,  1 Mar 2024 08:35:11 +0000 (UTC)
+ id 9DD7287E77; Fri,  1 Mar 2024 08:35:11 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 1 Mar 2024 09:29:10 +0100
+Date: Fri, 1 Mar 2024 09:26:54 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 83012c801369d7e0d6ae3aa15598d6fd22e83596
-X-Git-Newrev: c39750f52dcaa9bcc80871d6db62436bd07830d5
+X-Git-Oldrev: 12b031823452f965338f691a81ac28536f18e87c
+X-Git-Newrev: 83012c801369d7e0d6ae3aa15598d6fd22e83596
 X-Patchwork-Hint: ignore
-Message-Id: <20240301083511.AA77087E78@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/runc: security
- bump to version v1.1.12
+Message-Id: <20240301083511.9DD7287E77@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/python-lmdb: add
+ CPE variables
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,48 +65,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c39750f52dcaa9bcc80871d6db62436bd07830d5
+commit: https://git.buildroot.net/buildroot/commit/?id=83012c801369d7e0d6ae3aa15598d6fd22e83596
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-Fixes the following vulnerabilities:
+cpe:2.3:a:py-lmdb_project:py-lmdb is a valid CPE identifier for this
+package:
 
-- CVE-2024-21626: runc vulnerable to container breakout through process.cwd
-  trickery and leaked fds
-  https://github.com/advisories/GHSA-xr7r-f8xq-vfvv
+  https://nvd.nist.gov/products/cpe/detail/AFE6D0BA-D905-43F6-81FE-308D591A82B8
 
-https://github.com/opencontainers/runc/releases/tag/v1.1.12
-
-Signed-off-by: Christian Stewart <christian@aperture.us>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit c0b5beea44005a38ab563067fedbe27a0c015cd5)
+(cherry picked from commit 5d496d7a215af398e9708cfd8d1f458b8b92dbfe)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/runc/runc.hash | 2 +-
- package/runc/runc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-lmdb/python-lmdb.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/runc/runc.hash b/package/runc/runc.hash
-index 5ffd21a5dd..d6eb27d352 100644
---- a/package/runc/runc.hash
-+++ b/package/runc/runc.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  509993674481aad7e14aedfb280e0eb160f3a34c0b77e2e98c4b3c0b1df76894  runc-1.1.9.tar.gz
-+sha256  be31b07d6a54a8f234016501c300ad04b6c428c56588e7eca8c3b663308db208  runc-1.1.12.tar.gz
- sha256  552a739c3b25792263f731542238b92f6f8d07e9a488eae27e6c4690038a8243  LICENSE
-diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-index 62e117685a..273509b860 100644
---- a/package/runc/runc.mk
-+++ b/package/runc/runc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/python-lmdb/python-lmdb.mk b/package/python-lmdb/python-lmdb.mk
+index 52617b6ed0..7906d388ae 100644
+--- a/package/python-lmdb/python-lmdb.mk
++++ b/package/python-lmdb/python-lmdb.mk
+@@ -9,6 +9,8 @@ PYTHON_LMDB_SOURCE = lmdb-$(PYTHON_LMDB_VERSION).tar.gz
+ PYTHON_LMDB_SITE = https://files.pythonhosted.org/packages/de/13/dd9b0c1924f0becc93e0bacd123a4e7a347966e3e74753ace3b1e85acc39
+ PYTHON_LMDB_LICENSE = OLDAP-2.8
+ PYTHON_LMDB_LICENSE_FILES = LICENSE
++PYTHON_LMDB_CPE_ID_VENDOR = py-lmdb_project
++PYTHON_LMDB_CPE_ID_PRODUCT = py-lmdb
+ PYTHON_LMDB_SETUP_TYPE = setuptools
+ PYTHON_LMDB_DEPENDENCIES = host-python-cffi
  
--RUNC_VERSION = 1.1.9
-+RUNC_VERSION = 1.1.12
- RUNC_SITE = $(call github,opencontainers,runc,v$(RUNC_VERSION))
- RUNC_LICENSE = Apache-2.0, LGPL-2.1 (libseccomp)
- RUNC_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
