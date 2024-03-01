@@ -1,82 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03086C5478C
-	for <buildroot@archiver.kernel.org>; Fri,  1 Mar 2024 12:18:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BCA7C5478C
+	for <buildroot@archiver.kernel.org>; Fri,  1 Mar 2024 13:17:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 039CE41953;
-	Fri,  1 Mar 2024 12:18:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C6391607DB;
+	Fri,  1 Mar 2024 13:17:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3gDRX5YxmlPD; Fri,  1 Mar 2024 12:18:15 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id iLFpw0kNpTvW; Fri,  1 Mar 2024 13:17:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 548A341980
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C78BF60889
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 548A341980;
-	Fri,  1 Mar 2024 12:18:14 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CE2B81BF2EC
- for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 12:18:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C78BF60889;
+	Fri,  1 Mar 2024 13:17:03 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8B3EF1BF2C1
+ for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 13:17:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B7DF841954
- for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 12:18:11 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 78A4241B5B
+ for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 13:17:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 35e35vO90jYs for <buildroot@lists.busybox.net>;
- Fri,  1 Mar 2024 12:18:10 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.221.43;
- helo=mail-wr1-f43.google.com; envelope-from=thomas.devoogdt@gmail.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NOLIr8QV679t for <buildroot@lists.busybox.net>;
+ Fri,  1 Mar 2024 13:17:00 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 795F1404AE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 795F1404AE
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com
- [209.85.221.43])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 795F1404AE
- for <buildroot@buildroot.org>; Fri,  1 Mar 2024 12:18:09 +0000 (UTC)
-Received: by mail-wr1-f43.google.com with SMTP id
- ffacd0b85a97d-33e151a1434so512445f8f.2
- for <buildroot@buildroot.org>; Fri, 01 Mar 2024 04:18:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1709295487; x=1709900287;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=876JGuEiIgY114HCgeindGztamBSBGPz4VYKHzWaI2w=;
- b=ThJkkQH96T2dEIwXnz+qaDwlOqRBXr3pKxBqJMjABrK+7Yal8oLwR6RQTCbINwRLus
- 1g9ZrCD2/IrLYBtY3hd7W3LUdzl9u0b1U7Kj0IxlerrUDg37ffiS5hlaSrsRh5vJK1sG
- DKzDePfCL21aep9jQFLbm2Ka2OWC7EVvDt1DZ8Rg8s3Fui7Klxnh6jR+uqWQgKO/7c7V
- 5c8ndLyNqXkfgIx6doGhj50xbSBwC6jaCikfaiSicfl7rXDBAnaz/JVJMHJlelErh7cf
- K7MRoqCDVEYqik1yAsD52AWZH30RJ5zAGW2Ah6qZKdF3XjjIaKgumjt9n3sA1pv+2Vss
- hrNg==
-X-Gm-Message-State: AOJu0Yzq8LLuKrvvz8hseik6gXyztqbUJuRZdBpGjNN9AJZLx0IFaN89
- W/1DBtXaQ4PKSpG6J6rHX/rtOaCKro2IkLFWgkRVfdVPpONfotZh7dSwx9N/
-X-Google-Smtp-Source: AGHT+IFv0FvWDDc7zyvjnGhd39SlA/z3wgd0GBNsY5OfYM2inE6jJ5Fuj1HAWxwuRvXKs0ZXW1PcKg==
-X-Received: by 2002:adf:e0d1:0:b0:33d:8029:b136 with SMTP id
- m17-20020adfe0d1000000b0033d8029b136mr1087558wri.55.1709295486999; 
- Fri, 01 Mar 2024 04:18:06 -0800 (PST)
-Received: from thomas-Precision-7670.barco.com
- ([2a02:a03f:eb68:2f00:21b0:b5e5:77b3:1dae])
- by smtp.gmail.com with ESMTPSA id
- r18-20020adfca92000000b0033dcc0d1399sm4457802wrh.25.2024.03.01.04.18.05
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 01 Mar 2024 04:18:05 -0800 (PST)
-From: Thomas Devoogdt <thomas@devoogdt.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4EAAD41B48
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4EAAD41B48
+ for <buildroot@buildroot.org>; Fri,  1 Mar 2024 13:17:00 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 053BE87EBF; Fri,  1 Mar 2024 13:17:00 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri,  1 Mar 2024 13:17:57 +0100
-Message-Id: <20240301121757.52642-2-thomas@devoogdt.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240301121757.52642-1-thomas@devoogdt.com>
-References: <20240301121757.52642-1-thomas@devoogdt.com>
-MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=devoogdt.com
-Subject: [Buildroot] [PATCH v2 2/2] package/sdl2: bump to 2.30.0
+Date: Fri, 1 Mar 2024 14:16:42 +0100
+X-Git-Refname: refs/heads/2023.11.x
+X-Git-Oldrev: a1af858ee9d8d69cf1272a6a38cc3a0dd658dd4a
+X-Git-Newrev: f05246df4f864489451576a194e38a8679c7f5da
+X-Patchwork-Hint: ignore
+Message-Id: <20240301131700.053BE87EBF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] Update for 2023.11.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,50 +58,92 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Michael Fischer <mf@go-sys.de>, Thomas Devoogdt <thomas@devoogdt.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changes:
-https://github.com/libsdl-org/SDL/releases/tag/release-2.30.0
+commit: https://git.buildroot.net/buildroot/commit/?id=f05246df4f864489451576a194e38a8679c7f5da
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-v2: fix git message, accidentally took the message from a 2023.02.x branch
----
- package/sdl2/sdl2.hash | 4 ++--
- package/sdl2/sdl2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ CHANGES                  | 33 +++++++++++++++++++++++++++++++++
+ Makefile                 |  4 ++--
+ support/misc/Vagrantfile |  2 +-
+ 3 files changed, 36 insertions(+), 3 deletions(-)
 
-diff --git a/package/sdl2/sdl2.hash b/package/sdl2/sdl2.hash
-index 7a28d5efc8..95d2cf959f 100644
---- a/package/sdl2/sdl2.hash
-+++ b/package/sdl2/sdl2.hash
-@@ -1,4 +1,4 @@
--# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.28.5.tar.gz.sig
--sha256  332cb37d0be20cb9541739c61f79bae5a477427d79ae85e352089afdaf6666e4  SDL2-2.28.5.tar.gz
-+# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.30.0.tar.gz.sig
-+sha256  36e2e41557e0fa4a1519315c0f5958a87ccb27e25c51776beb6f1239526447b0  SDL2-2.30.0.tar.gz
- # Locally calculated
- sha256  9928507f684c1965d07f2b6ef4b4723d5efc2f6b4ab731f743a413c51c319927  LICENSE.txt
-diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-index eb5042e3cd..91f6585761 100644
---- a/package/sdl2/sdl2.mk
-+++ b/package/sdl2/sdl2.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/CHANGES b/CHANGES
+index 3c02b64064..0b9f027f3f 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,36 @@
++2023.11.2, released March 1st, 2024
++
++	Important / security related fixes.
++
++	Added CPE identifiers for a large number of packages.
++
++	Updated/fixed packages: bayer2rgb-neon, brltty, c-ares, cog,
++	containerd, cpio, crda, criu, darkhttpd, davinci-bootcount,
++	dbus, depot-tools, dhcpcd, domoticz, environment-setup, expat,
++	faad2, falcosecurity-libs, flex, flutter-engine,
++	flutter-gallery, flutter-pi, flutter-sdk-bin,
++	freeradius-server, freerdp, frr, gesftpserver, glibc, gnutls,
++	go, gst1-devtools, gst1-libav, gst1-python, gst1-vaapi,
++	gst-omx, gstreamer1, haproxy, hiredis, joe, json-c, leptonica,
++	libcurl, libp11, libuwsc, libvips, libzenoh-pico,
++	linux-firmware, linux-headers, localedef, lua-http, lvm2,
++	lynx, mbedtls, micropython, minizip, mpfr, netatalk, ngrep,
++	onevpl, opencv4, opencv4-contrib, openssh, opus, petitboot,
++	php, python-aiohttp, python-bitarray, python-bitstring,
++	python-esptool, python-gunicorn, python-hpack,
++	python-html5lib, python-lmdb, python-mako, python-numpy,
++	python-oauthlib, python-sqlparse, python-wheel, qt5base,
++	qt6base, redis, runc, sdl2, sqlite, syslog-ng, sysstat,
++	util-linux, vulkan-loader, webkitgtk, weston, wireless-regdb,
++	wlroots, wpewebkit, xlib_libXpm, xterm, xwayland, yasm
++
++	New packages: python-bitarray
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#10096: SH4 toolchain does not build Linux kernel magicpa..
++	#15952: Grub fails to load large rootfs files
++
+ 2023.11.1, released January 15th, 2024
+ 
+ 	Important / security related fixes.
+diff --git a/Makefile b/Makefile
+index 7d1fa0641f..89693a86c2 100644
+--- a/Makefile
++++ b/Makefile
+@@ -90,9 +90,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2023.11.1
++export BR2_VERSION := 2023.11.2
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1705314000
++BR2_VERSION_EPOCH = 1709299000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+index 64c479b693..ba06c5f5fd 100644
+--- a/support/misc/Vagrantfile
++++ b/support/misc/Vagrantfile
+@@ -5,7 +5,7 @@
  ################################################################################
  
--SDL2_VERSION = 2.28.5
-+SDL2_VERSION = 2.30.0
- SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
- SDL2_SITE = http://www.libsdl.org/release
- SDL2_LICENSE = Zlib
--- 
-2.34.1
-
+ # Buildroot version to use
+-RELEASE='2023.11.1'
++RELEASE='2023.11.2'
+ 
+ ### Change here for more memory/cores ###
+ VM_MEMORY=2048
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
