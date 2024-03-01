@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E960DC5478C
-	for <buildroot@archiver.kernel.org>; Fri,  1 Mar 2024 18:09:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 235ACC5475B
+	for <buildroot@archiver.kernel.org>; Fri,  1 Mar 2024 18:09:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A980A41C96;
-	Fri,  1 Mar 2024 18:09:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7B22A41CB0;
+	Fri,  1 Mar 2024 18:09:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fbNYWNl4VzAs; Fri,  1 Mar 2024 18:09:19 +0000 (UTC)
+	with ESMTP id BuhARTSZBBAX; Fri,  1 Mar 2024 18:09:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8804341CBC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D59EE41CBC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8804341CBC;
-	Fri,  1 Mar 2024 18:09:19 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1C4AE1BF354
- for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 18:09:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D59EE41CBC;
+	Fri,  1 Mar 2024 18:09:21 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0C9141BF354
+ for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 18:09:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1563A41C68
- for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 18:09:12 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id EC41483B53
+ for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 18:09:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id f2--FtmXXc-q for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xlzxTpjtKJJj for <buildroot@lists.busybox.net>;
  Fri,  1 Mar 2024 18:09:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 22FCE400D0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2CE0883B4F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 22FCE400D0
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2CE0883B4F
  for <buildroot@buildroot.org>; Fri,  1 Mar 2024 18:09:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 08C6487EF6; Fri,  1 Mar 2024 18:09:11 +0000 (UTC)
+ id 16FB387F1D; Fri,  1 Mar 2024 18:09:11 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 1 Mar 2024 19:06:24 +0100
+Date: Fri, 1 Mar 2024 19:08:04 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 66a202325a98a48013bad70de29d88f733ce5903
-X-Git-Newrev: d2c99d32bf4d0c4f77377d5a8fd4fb86f22e7caa
+X-Git-Oldrev: d2c99d32bf4d0c4f77377d5a8fd4fb86f22e7caa
+X-Git-Newrev: 1e576592607705d397220b9a5907265f052dcb95
 X-Patchwork-Hint: ignore
-Message-Id: <20240301180911.08C6487EF6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rhash: fix NLS build
+Message-Id: <20240301180911.16FB387F1D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/squid: needs C++17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,58 +64,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d2c99d32bf4d0c4f77377d5a8fd4fb86f22e7caa
+commit: https://git.buildroot.net/buildroot/commit/?id=1e576592607705d397220b9a5907265f052dcb95
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following NLS build failure raised since bump to version 1.4.4
-in commit f9b465c66c42e936a80292f7854f605d4c88564e:
+C++17 is mandatory since bump to version 6.2 in commit
+2a7c6816f02f45946e896577d78e3470331b2d63 and
+https://github.com/squid-cache/squid/commit/09835feb258c3058d028918e36d959dccb3f7496
+resulting in the following build failure:
 
-./configure: line 879: -lintl: command not found
+configure: error: *** A compiler with support for C++17 language features is required.
 
-[...]
-
-/home/buildroot/autobuild/run/instance-0/output-1/host/bin/xtensa-linux-gcc calc_sums.o hash_print.o common_func.o hash_update.o file.o file_mask.o file_set.o find_file.o hash_check.o output.o parse_cmdline.o rhash_main.o win_utils.o librhash/librhash.so.1.4.4   -o rhash
-/home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/xtensa-buildroot-linux-uclibc/12.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: calc_sums.o:(.literal.rename_file_by_embeding_crc32+0x10): undefined reference to `libintl_gettext'
-
-Fixes: f9b465c66c42e936a80292f7854f605d4c88564e
- - http://autobuild.buildroot.org/results/f8dd8ea6c0c9cd428355e3720e679a078b8e0f8f
+Fixes: 2a7c6816f02f45946e896577d78e3470331b2d63
+ - http://autobuild.buildroot.org/results/06755c324f0bf37e52976fce48a5ad62915193da
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...correct-assigment-in-the-configure-script.patch | 24 ++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ package/squid/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/rhash/0001-Fix-243-Incorrect-assigment-in-the-configure-script.patch b/package/rhash/0001-Fix-243-Incorrect-assigment-in-the-configure-script.patch
-new file mode 100644
-index 0000000000..4a9a81dbf5
---- /dev/null
-+++ b/package/rhash/0001-Fix-243-Incorrect-assigment-in-the-configure-script.patch
-@@ -0,0 +1,24 @@
-+From c804982d1b24c6533118b3068d2cfdca685076f3 Mon Sep 17 00:00:00 2001
-+From: Aleksey Kravchenko <rhash.admin@gmail.com>
-+Date: Mon, 7 Aug 2023 01:00:37 +0300
-+Subject: [PATCH] Fix #243: Incorrect assigment in the configure script
-+
-+Upstream: https://github.com/rhash/RHash/commit/c804982d1b24c6533118b3068d2cfdca685076f3
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ configure | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure b/configure
-+index 39ef8c1..63cbd8d 100755
-+--- a/configure
-++++ b/configure
-+@@ -877,7 +877,7 @@ if test "$OPT_STATIC" = "no"; then
-+   RHASH_TEST_OPTIONS=--shared
-+   test "$INSTALL_LIB_SHARED" = "auto" && INSTALL_LIB_SHARED=yes
-+   test "$INSTALL_LIB_STATIC" = "yes"  && RHASH_BUILD_TARGETS="$RHASH_BUILD_TARGETS \$(LIBRHASH_STATIC)"
-+-  RHASH_LDFLAGS=$RHASH_LDFLAGS $GETTEXT_LDFLAGS
-++  RHASH_LDFLAGS=$(join_params $RHASH_LDFLAGS $GETTEXT_LDFLAGS)
-+ else
-+   LIBRHASH_TYPE=static
-+   LIBRHASH_PATH="\$(LIBRHASH_STATIC)"
+diff --git a/package/squid/Config.in b/package/squid/Config.in
+index 6272140768..89b5a377c7 100644
+--- a/package/squid/Config.in
++++ b/package/squid/Config.in
+@@ -1,10 +1,10 @@
+-comment "squid needs a toolchain w/ C++, threads, gcc >= 4.8 not affected by bug 64735"
++comment "squid needs a toolchain w/ C++, threads, gcc >= 7 not affected by bug 64735"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735 || \
+ 		!BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ 
+ config BR2_PACKAGE_SQUID
+ 	bool "squid"
+@@ -12,7 +12,7 @@ config BR2_PACKAGE_SQUID
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::current_exception
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
+ 	# needs fork()
+ 	depends on BR2_USE_MMU
+ 	select BR2_PACKAGE_LIBCAP
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
