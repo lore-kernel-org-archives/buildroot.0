@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7952AC5475B
-	for <buildroot@archiver.kernel.org>; Fri,  1 Mar 2024 18:55:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8E31C5475B
+	for <buildroot@archiver.kernel.org>; Fri,  1 Mar 2024 18:55:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BAF55812A3;
-	Fri,  1 Mar 2024 18:55:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A9D4983AA1;
+	Fri,  1 Mar 2024 18:55:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cgkgAssNYExy; Fri,  1 Mar 2024 18:55:02 +0000 (UTC)
+	with ESMTP id tketjintpbP7; Fri,  1 Mar 2024 18:55:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D53CD812C1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D2E8C83AA3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D53CD812C1;
-	Fri,  1 Mar 2024 18:55:01 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6CF141BF354
- for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 18:55:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D2E8C83AA3;
+	Fri,  1 Mar 2024 18:55:05 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A9BAA1BF354
+ for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 18:55:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AA56140197
- for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 18:55:00 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E698081094
+ for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 18:55:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mTjRjkVNv3Xm for <buildroot@lists.busybox.net>;
- Fri,  1 Mar 2024 18:54:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
- helo=relay8-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DDWGhZy5AoJ1 for <buildroot@lists.busybox.net>;
+ Fri,  1 Mar 2024 18:55:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
+ helo=relay5-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1F09D40112
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1F09D40112
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1F09D40112
- for <buildroot@buildroot.org>; Fri,  1 Mar 2024 18:54:58 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 09DAA1BF203;
- Fri,  1 Mar 2024 18:54:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 07FDF812DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 07FDF812DE
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 07FDF812DE
+ for <buildroot@buildroot.org>; Fri,  1 Mar 2024 18:55:02 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 035BD1C0002;
+ Fri,  1 Mar 2024 18:55:00 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rg824-0072Yt-1C;
- Fri, 01 Mar 2024 19:54:56 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rg828-0072Z3-0p;
+ Fri, 01 Mar 2024 19:55:00 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20240301183629.810494-1-fontaine.fabrice@gmail.com>
-Date: Fri, 01 Mar 2024 19:54:56 +0100
-In-Reply-To: <20240301183629.810494-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 1 Mar 2024 19:36:29 +0100")
-Message-ID: <87cysd7pfj.fsf@48ers.dk>
+References: <20240301183756.811532-1-fontaine.fabrice@gmail.com>
+Date: Fri, 01 Mar 2024 19:55:00 +0100
+In-Reply-To: <20240301183756.811532-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 1 Mar 2024 19:37:56 +0100")
+Message-ID: <878r317pff.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/newlib-bare-metal: fix
- legal-info
+Subject: Re: [Buildroot] [PATCH 1/1] package/newlib-bare-metal: update
+ NEWLIB_BARE_METAL_VERSION
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,15 +78,8 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Hash of COPYING.NEWLIB is wrong since the addition of the package in
- > commit 3b95ff658bf4859eb5cffd28cbbedd1826fad9a6:
-
- > ERROR: COPYING.NEWLIB has wrong sha256 hash:
- > ERROR: expected: 422aa40293093fb54fc66e692a0d68fd0b24ed5602e5d1d33ad05ba3909057e9
- > ERROR: got     : 9a59b4ee3af067045fe0ea78786201c42d54756fe48cbccf44f3dfc398474717
-
- > Fixes: 3b95ff658bf4859eb5cffd28cbbedd1826fad9a6
- >  - No autobuilder failures (yet)
+ > Update NEWLIB_BARE_METAL_VERSION to match version retrieved on
+ > https://release-monitoring.org/project/13816
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
