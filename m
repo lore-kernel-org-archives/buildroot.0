@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B72DC5475B
-	for <buildroot@archiver.kernel.org>; Fri,  1 Mar 2024 08:34:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35214C5478C
+	for <buildroot@archiver.kernel.org>; Fri,  1 Mar 2024 08:35:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 58D806079A;
-	Fri,  1 Mar 2024 08:34:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F3C72605FB;
+	Fri,  1 Mar 2024 08:35:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dKh-3rK9WiLD; Fri,  1 Mar 2024 08:34:09 +0000 (UTC)
+	with ESMTP id cHhzl8bZy1y5; Fri,  1 Mar 2024 08:35:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1AFF760E16
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A6E360730
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1AFF760E16;
-	Fri,  1 Mar 2024 08:34:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4ECA61BF98E
- for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 08:34:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1A6E360730;
+	Fri,  1 Mar 2024 08:35:14 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E3B2D1BF377
+ for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 08:35:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E438C6079A
- for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 08:33:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D190681756
+ for <buildroot@lists.busybox.net>; Fri,  1 Mar 2024 08:35:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VCNmmbEuI5DO for <buildroot@lists.busybox.net>;
- Fri,  1 Mar 2024 08:33:59 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gFyamvoLTu2s for <buildroot@lists.busybox.net>;
+ Fri,  1 Mar 2024 08:35:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 373B46065F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AEAC781499
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 373B46065F
- for <buildroot@buildroot.org>; Fri,  1 Mar 2024 08:33:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AEAC781499
+ for <buildroot@buildroot.org>; Fri,  1 Mar 2024 08:35:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 17FCD87E3A; Fri,  1 Mar 2024 08:33:59 +0000 (UTC)
+ id AA77087E78; Fri,  1 Mar 2024 08:35:11 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 1 Mar 2024 09:29:41 +0100
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: ad34e35d545059656eda3e1b39b5bd3e8ccb125c
-X-Git-Newrev: 98a52c974cde19b2db4ac5ee00f354b5248848e7
+Date: Fri, 1 Mar 2024 09:29:10 +0100
+X-Git-Refname: refs/heads/2023.11.x
+X-Git-Oldrev: 83012c801369d7e0d6ae3aa15598d6fd22e83596
+X-Git-Newrev: c39750f52dcaa9bcc80871d6db62436bd07830d5
 X-Patchwork-Hint: ignore
-Message-Id: <20240301083359.17FCD87E3A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/runc: bump
- version to v1.1.9
+Message-Id: <20240301083511.AA77087E78@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/runc: security
+ bump to version v1.1.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,14 +65,20 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=98a52c974cde19b2db4ac5ee00f354b5248848e7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c39750f52dcaa9bcc80871d6db62436bd07830d5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-Bugfixes and riscv64 support.
+Fixes the following vulnerabilities:
+
+- CVE-2024-21626: runc vulnerable to container breakout through process.cwd
+  trickery and leaked fds
+  https://github.com/advisories/GHSA-xr7r-f8xq-vfvv
+
+https://github.com/opencontainers/runc/releases/tag/v1.1.12
 
 Signed-off-by: Christian Stewart <christian@aperture.us>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit a78bf295bc901f782df9dbffaf1ea03f1d6dbd29)
+(cherry picked from commit c0b5beea44005a38ab563067fedbe27a0c015cd5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  package/runc/runc.hash | 2 +-
@@ -80,24 +86,24 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/runc/runc.hash b/package/runc/runc.hash
-index 1a68b74ccb..5ffd21a5dd 100644
+index 5ffd21a5dd..d6eb27d352 100644
 --- a/package/runc/runc.hash
 +++ b/package/runc/runc.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  f1885d6dfa188f8112328ac2355e5d67346174a2e2e795ec514a972bcbfcc2fa  runc-1.1.7.tar.gz
-+sha256  509993674481aad7e14aedfb280e0eb160f3a34c0b77e2e98c4b3c0b1df76894  runc-1.1.9.tar.gz
+-sha256  509993674481aad7e14aedfb280e0eb160f3a34c0b77e2e98c4b3c0b1df76894  runc-1.1.9.tar.gz
++sha256  be31b07d6a54a8f234016501c300ad04b6c428c56588e7eca8c3b663308db208  runc-1.1.12.tar.gz
  sha256  552a739c3b25792263f731542238b92f6f8d07e9a488eae27e6c4690038a8243  LICENSE
 diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-index 805ff23964..62e117685a 100644
+index 62e117685a..273509b860 100644
 --- a/package/runc/runc.mk
 +++ b/package/runc/runc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RUNC_VERSION = 1.1.7
-+RUNC_VERSION = 1.1.9
+-RUNC_VERSION = 1.1.9
++RUNC_VERSION = 1.1.12
  RUNC_SITE = $(call github,opencontainers,runc,v$(RUNC_VERSION))
  RUNC_LICENSE = Apache-2.0, LGPL-2.1 (libseccomp)
  RUNC_LICENSE_FILES = LICENSE
