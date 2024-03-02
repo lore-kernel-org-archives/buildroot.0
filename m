@@ -4,72 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3798C54798
-	for <buildroot@archiver.kernel.org>; Sat,  2 Mar 2024 17:07:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93364C54798
+	for <buildroot@archiver.kernel.org>; Sat,  2 Mar 2024 17:10:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 924CD403C4;
-	Sat,  2 Mar 2024 17:07:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4B9FA40190;
+	Sat,  2 Mar 2024 17:10:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OUfwjmgZfdQK; Sat,  2 Mar 2024 17:07:23 +0000 (UTC)
+	with ESMTP id fQm3CsXpfSBR; Sat,  2 Mar 2024 17:10:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7292240629
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA1F4403C4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7292240629;
-	Sat,  2 Mar 2024 17:07:23 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BC9E31BF34C
- for <buildroot@lists.busybox.net>; Sat,  2 Mar 2024 17:07:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EA1F4403C4;
+	Sat,  2 Mar 2024 17:10:25 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C0D5F1BF34C
+ for <buildroot@lists.busybox.net>; Sat,  2 Mar 2024 17:10:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AA9A860A98
- for <buildroot@lists.busybox.net>; Sat,  2 Mar 2024 17:07:21 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AF2F941857
+ for <buildroot@lists.busybox.net>; Sat,  2 Mar 2024 17:10:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LVbZLZCGwKyK for <buildroot@lists.busybox.net>;
- Sat,  2 Mar 2024 17:07:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
- helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GPNbYEAZ4gg6 for <buildroot@lists.busybox.net>;
+ Sat,  2 Mar 2024 17:10:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
+ helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 20C95608C5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 20C95608C5
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 20C95608C5
- for <buildroot@buildroot.org>; Sat,  2 Mar 2024 17:07:19 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A7C1AE0003;
- Sat,  2 Mar 2024 17:07:16 +0000 (UTC)
-Date: Sat, 2 Mar 2024 18:07:15 +0100
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 90D5E417F2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 90D5E417F2
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 90D5E417F2
+ for <buildroot@buildroot.org>; Sat,  2 Mar 2024 17:10:23 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id CB1531BF204;
+ Sat,  2 Mar 2024 17:10:20 +0000 (UTC)
+Date: Sat, 2 Mar 2024 18:10:19 +0100
 To: Adam Duskett <adam.duskett@amarulasolutions.com>
-Message-ID: <20240302180715.39edcb20@windsurf>
-In-Reply-To: <20240226205446.842600-3-adam.duskett@amarulasolutions.com>
+Message-ID: <20240302181019.43115635@windsurf>
+In-Reply-To: <20240226205446.842600-4-adam.duskett@amarulasolutions.com>
 References: <20240226205446.842600-1-adam.duskett@amarulasolutions.com>
- <20240226205446.842600-3-adam.duskett@amarulasolutions.com>
+ <20240226205446.842600-4-adam.duskett@amarulasolutions.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1709399236;
+ d=bootlin.com; s=gm1; t=1709399420;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=utQ4ezPqzxnHgxNl2sgCbTu0Hwe9LU06gTpExX1W7GI=;
- b=Lh8cJBGD926V6zvJpFvf6f7vRnMpQOnQcwb0+YlVEkivxhtfQYQCGMlDKZ1aCKC0v3dQoT
- +X23JYvO694Ko8nxWbJumgBy9IiOJ2Bc6nN4jmzISl6fJWYBKIIF3fea6d5gfA2e0KRRqu
- L3iuOiBU9PCEJ10ECzxQhIhG4+g2aDRur8is60x//aS/VGsL6ypuu8Rq9oyBeB3NTzW6yX
- lcuC78EBEkD0Sh72j/GXVKFPa3PnIpHJwG1z4UORHNwwWVOVKS6gDMJpOZch5X6m0ARBto
- 2nFUYJgMl7rBB9Y86EZ/gB5M3HI38q4hx2xFFP7WAtoKv5uFF+fVogvJwbvPww==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=7X8JrdRJvGM0MNgX1xFCxNZgEvGwI40j5fC5AlVuhak=;
+ b=STfLNpibYyITFvmd+FoLx4JiwCYTwbvoPtkNh03e0+BOUVaMFsiBAqiHPtr5dmM3Mq2Bfr
+ r0gbGrqUwZp4/KnAKuSyNW1mA2lXIUmEedwWTlOWVoM7YLDhBbX4DGCeo1tnnEAMtg0QXr
+ W5wSfSw/zbAXLnc6T6hQkB8DBiVpy/kVMy+N1YBuE0c/clYSpnOp3SeycBGqtyobcQvJM7
+ mFl4MtvhEoe5lRq7gkcmuvYGDL3QxcClepfLO2J6ayJB3Qt1Q5PNLXfCEWa5OBnOtMz9Ei
+ DSN0VDuCO2F1yrZ6xybQoIRVpMqS5kEKWBGJ8YgXp1DTjFV56x5xCxd/FQhVIQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Lh8cJBGD
-Subject: Re: [Buildroot] [PATCH 3/9] package/libselinux: bump version to 3.6
+ header.s=gm1 header.b=STfLNpib
+Subject: Re: [Buildroot] [PATCH 4/9] package/policycoreutils: bump version
+ to 3.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,38 +92,39 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Hello Adam,
 
-On Mon, 26 Feb 2024 13:54:39 -0700
+On Mon, 26 Feb 2024 13:54:40 -0700
 Adam Duskett <adam.duskett@amarulasolutions.com> wrote:
 
-> Remove upstreamed patches
+> setsebool/Makefile now unconditionally links against libsepol.
+> As such, it is now a new dependency.
 > 
 > Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 
-Thanks for this update.
+Some minor nit I would have fixed myself when applying, but since a v2
+will be needed due to the PATCH 3/9 issue, here is a very minor comment.
 
-However, could you clarify where patch 0002 has been upstreamed? I've
-looked at the upstream code as of version 3.6, and it's still using
-PYCEXT.
+> ---
+>  package/policycoreutils/Config.in            | 1 +
+>  package/policycoreutils/policycoreutils.hash | 2 +-
+>  package/policycoreutils/policycoreutils.mk   | 4 ++--
+>  3 files changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/policycoreutils/Config.in b/package/policycoreutils/Config.in
+> index 3201c8fede..46a367129a 100644
+> --- a/package/policycoreutils/Config.in
+> +++ b/package/policycoreutils/Config.in
+> @@ -10,6 +10,7 @@ config BR2_PACKAGE_POLICYCOREUTILS
+>  	depends on !BR2_STATIC_LIBS # libsemanage
+>  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # libsemanage -> libselinux -> libsepol
+>  	select BR2_PACKAGE_LIBSEMANAGE
+> +	select BR2_PACKAGE_LIBSEPOL
 
-Also patch 0001 has not "really" been upstreamed, the issue has been
-fixed in a different way, so I added to the commit log:
+Would be nice to update the depends on comments:
 
-"""
-Patch 0001-fix-musl-build.patch is no longer needed as the issue has
-been fixed by upstream commit
-d88597798fdb1a2b344ca47e48f2f80ad433fd95, which resolves the same
-issue, in a different way.
-"""
+        depends on BR2_TOOLCHAIN_HAS_THREADS # libsemanage, libsepol
+        depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # libsemanage, libsepol
 
-But unfortunately, I need additional details about why patch 0002 is no
-longer needed.
-
-Also, you missed updating .checkpackageignore, so this patch causes two
-new "make check-package" warnings.
-
-Thanks in advance for your feedback!
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
