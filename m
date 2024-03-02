@@ -4,90 +4,104 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C5A8C5478C
-	for <buildroot@archiver.kernel.org>; Sat,  2 Mar 2024 10:58:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A57F7C5478C
+	for <buildroot@archiver.kernel.org>; Sat,  2 Mar 2024 11:06:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3B660834DB;
-	Sat,  2 Mar 2024 10:58:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5402D83443;
+	Sat,  2 Mar 2024 11:06:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id X6VDdzTe6xaF; Sat,  2 Mar 2024 10:58:13 +0000 (UTC)
+	with ESMTP id aJrukWHIK7rT; Sat,  2 Mar 2024 11:06:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3E14B83506
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5B38483640
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3E14B83506;
-	Sat,  2 Mar 2024 10:58:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5B38483640;
+	Sat,  2 Mar 2024 11:06:46 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 867EA1BF83A
- for <buildroot@lists.busybox.net>; Sat,  2 Mar 2024 10:58:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 51A141BF5B3
+ for <buildroot@lists.busybox.net>; Sat,  2 Mar 2024 11:06:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 711F2607D3
- for <buildroot@lists.busybox.net>; Sat,  2 Mar 2024 10:58:11 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3CBD460819
+ for <buildroot@lists.busybox.net>; Sat,  2 Mar 2024 11:06:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1q8MxoGFPXLo for <buildroot@lists.busybox.net>;
- Sat,  2 Mar 2024 10:58:10 +0000 (UTC)
+ with ESMTP id ZqxnekUxppjh for <buildroot@lists.busybox.net>;
+ Sat,  2 Mar 2024 11:06:44 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
- envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2601E60796
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2601E60796
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2601E60796
- for <buildroot@buildroot.org>; Sat,  2 Mar 2024 10:58:09 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id
- ffacd0b85a97d-33e2774bdc5so434068f8f.2
- for <buildroot@buildroot.org>; Sat, 02 Mar 2024 02:58:09 -0800 (PST)
+ client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0012A6080B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0012A6080B
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0012A6080B
+ for <buildroot@buildroot.org>; Sat,  2 Mar 2024 11:06:43 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ 5b1f17b1804b1-412cbf58fdeso6464065e9.3
+ for <buildroot@buildroot.org>; Sat, 02 Mar 2024 03:06:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1709377088; x=1709981888;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=1TQ5n2DBJvqfQnboaZnhm0PBG0wBw1pBNTrXJIbAVQg=;
- b=UWm5yoIPz30xGH2JjKpvETGZ9qeeHx4ICUL7E8ezWSwINwIno6soCmgYktibS1rtlM
- 8gTDRa8kUuT+zoefOUhHHO8nULb7MkXlxibrTELj8MW93Mj2AM06f/eDlE9t4NIYBO4/
- ANoywS4L1MKHe5/zVkq9wQ+JCZC0TJYXn/5uGMqNkUOaPpdhmRHG4TAwjtDMlqv+mUHz
- V/mCDvFLVkA0UJjPgO/fZqZMvMyoJ7oTWceg151PUMi/HB1Fg9OSjnGied3l2oiODt8A
- C2/kgHFwX8KnRPaBmMnqvzaMbiF+uP+Blj1v5YW5hHPe/7iuBgIKteHC4TwpGOtT4EUj
- yReg==
-X-Gm-Message-State: AOJu0YxIc/x1XrH7Nz3iTi+xjrlQPVrbORY92yid42nlh8U4txTVoJss
- 5P1MlajhnQRaj+wHkHw2x0nreMSNALit3eY/D7RycXJzIDaPWALYjAiO1jLB
-X-Google-Smtp-Source: AGHT+IHn+ghT0GI4HCD23NhMIHDEPJpxNL1F3sUWH3quhaA3LAu6ejGVnARZEG/jgxqV21+JTFymcQ==
-X-Received: by 2002:a5d:658a:0:b0:33d:6186:3ca0 with SMTP id
- q10-20020a5d658a000000b0033d61863ca0mr3553593wru.19.1709377087355; 
- Sat, 02 Mar 2024 02:58:07 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- m17-20020a056000009100b0033e17341ebesm5506829wrx.117.2024.03.02.02.58.06
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 02 Mar 2024 02:58:06 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sat,  2 Mar 2024 11:58:02 +0100
-Message-ID: <20240302105802.281681-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
+ d=1e100.net; s=20230601; t=1709377602; x=1709982402;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=RsFFcDBNPgFJEA8CHXrxDJBlnEe72jOzPRLBC/I0h7Q=;
+ b=IU3k2ENVA7AF/kg84pHMUezbn6RqpTa6c1PdDEpJToSZr01cf1jtI+G9KkdUmOTcSD
+ pk2zvOMgk2BNO+BwiEkO41mWxqx4EakcJPfilzzwf9kR8MqPPH8wHplmcriI9bceveVQ
+ 3C0K/99iTEAoIj1tTT/QEw3IuoeN+P6dmTp1+tTp7XPYeREQRNmhI1cl0LIh/Ji8S448
+ Z0fZkZ8CjM5aZHNsfvqXHPWARn2SwtGQvEfJjvcRaBJ/GUIihZBWlCjWLTAtHYrxRUnc
+ NK4iyHoa+pycJgNZNrlwfXYOsO715svgAk8RVxJd+s+50MVB0X6RlNqAVwirrylAE7Hl
+ iGsA==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCUaNMefCH7Pk76CcpDX9nlpPuryzjuXqDcohuWgTypuH8812Q5GEa9MwCeabjbS3P5+m3L6wurYTCFDuqMJlgSwMDj84lZPAA==
+X-Gm-Message-State: AOJu0YyHQJI3eBTP1VebrtBCUNjLswK2Uq9kC9Tok36n+5RQCa1ByosO
+ /bVxO+2zCUVSlqfeMnTQOZrIkkB4LBDLYVSxZQv+ABEb/0kr/v6GxU2EXp1V2jQ=
+X-Google-Smtp-Source: AGHT+IEvAc7lKwHFSjLG5NKFWM131YH70Na0QamhiF8D3yISwKwcufbZzhctT9UoDE2XR9Y8DVMdZg==
+X-Received: by 2002:a05:600c:3d8c:b0:412:dad4:a1ec with SMTP id
+ bi12-20020a05600c3d8c00b00412dad4a1ecmr282974wmb.28.1709377601637; 
+ Sat, 02 Mar 2024 03:06:41 -0800 (PST)
+Received: from ?IPV6:2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31?
+ (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
+ by smtp.gmail.com with ESMTPSA id
+ g8-20020a05600c310800b00412b0ef22basm8311672wmo.10.2024.03.02.03.06.39
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 02 Mar 2024 03:06:41 -0800 (PST)
+Message-ID: <056ae2bc-0380-4d86-b554-06a375a44bf5@smile.fr>
+Date: Sat, 2 Mar 2024 12:06:39 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ buildroot@buildroot.org
+References: <20240301133620.3547430-1-dario.binacchi@amarulasolutions.com>
+ <20240301133620.3547430-21-dario.binacchi@amarulasolutions.com>
+Content-Language: en-US
+From: Romain Naour <romain.naour@smile.fr>
+In-Reply-To: <20240301133620.3547430-21-dario.binacchi@amarulasolutions.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1709377088; x=1709981888; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=1TQ5n2DBJvqfQnboaZnhm0PBG0wBw1pBNTrXJIbAVQg=;
- b=eiI/4sy3dXQsNLoVpjaqpxL0CWcmAnVtw32uFxwtXKbY3DWn1PxzAa5inpLN7Gj9Zi
- vLzAJ/2wA/NyXEW3K4engqsjRMPnRpPgXav/yUwwwRsxecSk/6Le1x73Wlk0FocFqe2v
- YTHzCBrpiY9MfO1IEBXvKqyVnd3dbbUvy5bmtwHqLcY6ty7etDVBfgSjMErQNtC6Zsuc
- +wCRJe0o7N0nBtRKKLVvrfeVZ1DtoqEEYx2/jGgxLWci+8yTYM0wbfWidiZMCx56Tw60
- /zdMOOBCww5mqn9W9rYWpeCMmVrOP63CZvIpj92IVAp0q3huIf+B0zwTlwzEDrqvNHZ1
- TRBg==
+ d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1709377602; x=1709982402;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=RsFFcDBNPgFJEA8CHXrxDJBlnEe72jOzPRLBC/I0h7Q=;
+ b=NS9jD6FqvmyL+GnxvLMt91jgNfxCjAF6raMOmt9kofqxWqpzM/QXvz71TYVsDGsubZ
+ w9a6zyTxF1hvELbrl5oKBzqQY4pVbLxmSvt+8RjJZ3dRlJc7TPIlEz+bPO/XpNZqf0nq
+ YOEJoKHsOTHER/8yuEeN5ZHkst00sXkQ55lLaXQvuuZ6Bf5k4Gs47/Ise8j/z/5dVmy4
+ AbroG2v3GgCCkTx2g7Sm3MAalrjBl7aOgImdaWFAzBVlbPtyqOI47tL01eFtP7JC+BYM
+ 4zh1xgQtDhwa94UQcCk9QG+vrGApsasNif429Yawni3Hzop092YBbScDUiPOz0HrtASv
+ sZcg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ header.from=smile.fr
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=eiI/4sy3
-Subject: [Buildroot] [PATCH 1/1] package/openvmtools: needs dynamic library
+ dkim=pass (2048-bit key,
+ unprotected) header.d=smile-fr.20230601.gappssmtp.com
+ header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=NS9jD6Fq
+Subject: Re: [Buildroot] [PATCH v8 20/23] package/ti-k3: fix
+ BR2_PACKAGE_TI_K3_SOC setting for am64x SOC
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,78 +113,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Karoly Kasza <kaszak@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: michael@amarulasolutions.com, linux-amarula@amarulasolutions.com,
+ Asaf Kahlon <asafka7@gmail.com>, Xuanhao Shi <X15000177@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Andreas Dannenberg <dannenberg@ti.com>,
+ Alexander Sverdlin <alexander.sverdlin@gmail.com>, bryce@redpinelabs.com,
+ Anand Gadiyar <gadiyar@ti.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-openvmtools can't be built statically since at least bump to version
-10.3.5 in commit 5f0f0f7e4f3362a3695d5876d0f41125a2544285:
-
-libtool: link: /home/autobuild/autobuild/instance-9/output-1/per-package/openvmtools/host/bin/i586-buildroot-linux-musl-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Ofast -g0 -static -Wall -Wno-pointer-sign -Wno-unused-value -fno-strict-aliasing -Wno-unknown-pragmas -Wno-uninitialized -Wno-deprecated-declarations -Wno-unused-const-variable -Wno-unused-but-set-variable -static -o vmtoolsd vmtoolsd-cmdLine.o vmtoolsd-mainLoop.o vmtoolsd-mainPosix.o vmtoolsd-pluginMgr.o vmtoolsd-serviceObj.o vmtoolsd-threadPool.o vmtoolsd-toolsRpc.o vmtoolsd-svcSignals.o vmtoolsd-toolsHangDetector.o -pthread -Wl,--export-dynamic -pthread -pthread -pthread  /home/autobuild/autobuild/instance-9/output-1/build/openvmtools-11.3.5-18557794/libvmtools/.libs/libvmtools.a -L/home/autobuild/autobuild/instance-9/output-1/per-package/openvmtools/host/bin/../i586-buildroot-linux-musl/sysroot/usr/lib /home/autobuild/autobuild/instance-9/output-1/per-package/openvmtools/host/i586-buildroot-li
- nux-musl/sysroot/usr/lib/libdnet.a /home/autobuild/autobuild/instance-9/output-1/per-package/openvmtools/host/i586-buildroot-linux-musl/sysroot/usr/lib/libtirpc.a -lrt -lcrypt -lpthread -lgmodule-2.0 -lgobject-2.0 /home/autobuild/autobuild/instance-9/output-1/per-package/openvmtools/host/i586-buildroot-linux-musl/sysroot/usr/lib/libffi.a -lgthread-2.0 -lglib-2.0 -lm /home/autobuild/autobuild/instance-9/output-1/per-package/openvmtools/host/i586-buildroot-linux-musl/sysroot/usr/lib/libpcre.a ../../lib/globalConfig/.libs/libGlobalConfig.a -pthread
-/home/autobuild/autobuild/instance-9/output-1/per-package/openvmtools/host/bin/../lib/gcc/i586-buildroot-linux-musl/10.4.0/../../../../i586-buildroot-linux-musl/bin/ld: /home/autobuild/autobuild/instance-9/output-1/build/openvmtools-11.3.5-18557794/libvmtools/.libs/libvmtools.a(libvmtools_la-vmtools.o):(.modinfo+0x0): multiple definition of `vm_version'; vmtoolsd-mainPosix.o:(.modinfo+0x0): first defined here
-
-Fixes:
- - http://autobuild.buildroot.org/results/61b03301bc36247c75e797fb294ec7f96bce6e22
- - http://autobuild.buildroot.org/results/eea487eb0de911f4e4bce7a557d4c93d732181cf
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/openvmtools/Config.in | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/package/openvmtools/Config.in b/package/openvmtools/Config.in
-index 066a7a4736..b62e5d0361 100644
---- a/package/openvmtools/Config.in
-+++ b/package/openvmtools/Config.in
-@@ -11,6 +11,7 @@ config BR2_PACKAGE_OPENVMTOOLS
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
- 	depends on BR2_ENABLE_LOCALE
-+	depends on !BR2_STATIC_LIBS
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_LIBDNET
-@@ -30,16 +31,15 @@ if BR2_PACKAGE_OPENVMTOOLS
- 
- config BR2_PACKAGE_OPENVMTOOLS_PAM
- 	bool "PAM support"
--	# linux-pam needs locale and wchar, but we already have this
--	# dependency on the main symbol, above.
-+	# linux-pam needs locale, dynamic library and wchar, but we
-+	# already have these dependencies on the main symbol, above.
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # linux-pam
--	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_LINUX_PAM
- 	help
- 	  Support for PAM in openvmtools
- 
--comment "PAM support needs a toolchain w/ dynamic library, gcc >= 4.9"
--	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+comment "PAM support needs a toolchain w/ gcc >= 4.9"
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 
- config BR2_PACKAGE_OPENVMTOOLS_RESOLUTIONKMS
- 	bool "resolutionkms support"
-@@ -57,9 +57,9 @@ comment "resolutionkms needs udev, a toolchain w/ threads"
- 
- endif
- 
--comment "openvmtools needs a glibc or musl toolchain w/ wchar, threads, locale"
-+comment "openvmtools needs a glibc or musl toolchain w/ wchar, threads, locale, dynamic library"
- 	depends on BR2_PACKAGE_OPENVMTOOLS_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_ENABLE_LOCALE || \
-+		!BR2_ENABLE_LOCALE || BR2_STATIC_LIBS || \
- 		BR2_TOOLCHAIN_USES_UCLIBC
--- 
-2.43.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgRGFyaW8sCgpMZSAwMS8wMy8yMDI0IMOgIDE0OjM2LCBEYXJpbyBCaW5hY2NoaSBhIMOpY3Jp
+dMKgOgo+IEluIHRoZSBjYXNlIG9mIFNPQyBhbTY0eCwgdGktazMtcjUtbG9hZGVyIGNyZWF0ZXMg
+dGhlIGZvbGxvd2luZwo+IHRpYm9vdDMuYmluIGZpbGVzOgo+IC0gR1AgICAgLT4gdGlib290M19h
+bTY0eC1ncC1ldm0uYmluCj4gLSBIUyAgICAtPiB0aWJvb3QzX2FtNjR4X3NyMi1ocy1ldm0uYmlu
+Cj4gLSBIU19GUyAtPiB0aWJvb3QzX2FtNjR4X3NyMi1ocy1mcy1ldm0uYmluCj4gCj4gVGhlIHBh
+dGNoIGFsbG93cyB5b3UgdG8gaWRlbnRpZnkgdGhlIGNvcnJlY3QgZmlsZSBiYXNlZCBvbiB0aGUg
+U0VDX1RZUEUKPiBvcHRpb24uCgpJdCBzZWVtcyB0aGlzIHBhdGNoIHNob3VsZCBiZSBtZXJnZWQg
+d2l0aCB0aGUgQU02NHggdS1ib290IHZlcnNpb24gYnVtcCBzaW5jZQp0aS1rMy1yNSAoYWthIHUt
+Ym9vdCkgbm93IHByb3ZpZGUgdGlib290My5iaW4uCgpBbHNvIG90aGVyIFRJIEszIFNvQyB2YXJp
+YW50IGxpa2UgQU02NSBwcm92aWRlIGEgc3IyIGJpbmFyeToKCnRpYm9vdDMtYW02MmF4LWhzLWZz
+LWV2bS5iaW4KdGlib290My1hbTYyYXgtZ3AtZXZtLmJpbgp0aWJvb3QzLWFtNjJheC1ocy1ldm0u
+YmluCgp0aWJvb3QzLWFtNjJweC1ocy1mcy1ldm0uYmluCgp0aWJvb3QzLWFtNjJ4LWhzLWZzLWV2
+bS5iaW4KdGlib290My1hbTYyeC1ncC1ldm0uYmluCnRpYm9vdDMtYW02MngtaHMtZXZtLmJpbgoK
+dGlib290My1hbTY0eF9zcjItaHMtZnMtZXZtLmJpbgp0aWJvb3QzLWFtNjR4LWdwLWV2bS5iaW4K
+dGlib290My1hbTY0eF9zcjItaHMtZXZtLmJpbgoKdGlib290My1hbTY1eF9zcjItZ3AtZXZtLmJp
+bgp0aWJvb3QzLWFtNjV4X3NyMi1ocy1ldm0uYmluCgp0aWJvb3QzLWo3MjAwLWdwLWV2bS5iaW4K
+dGlib290My1qNzIwMF9zcjItaHMtZnMtZXZtLmJpbgp0aWJvb3QzLWo3MjAwX3NyMi1ocy1ldm0u
+YmluCgp0aWJvb3QzLWo3MjFlLWdwLWV2bS5iaW4KdGlib290My1qNzIxZV9zcjItaHMtZnMtZXZt
+LmJpbgp0aWJvb3QzLWo3MjFlX3NyMV8xLWhzLWV2bS5iaW4KCnRpYm9vdDMtajcyMXMyLWdwLWV2
+bS5iaW4KdGlib290My1qNzIxczItaHMtZnMtZXZtLmJpbgoKdGlib290My1qNzIycy1ocy1mcy1l
+dm0uYmluCgp0aWJvb3QzLWo3ODRzNC1ncC1ldm0uYmluCnRpYm9vdDMtajc4NHM0LWhzLWZzLWV2
+bS5iaW4KCk1heWJlIHdlIG5lZWQgdG8gaW50cm9kdWNlIFRJX0szX1I1X0xPQURFUl9TT0NfU1VG
+RklYIHRvIGhhbmRsZSBzcjIsIHNyMV8xIG9yICIiID8KCkJlc3QgcmVnYXJkcywKUm9tYWluCgoK
+PiAKPiBTaWduZWQtb2ZmLWJ5OiBEYXJpbyBCaW5hY2NoaSA8ZGFyaW8uYmluYWNjaGlAYW1hcnVs
+YXNvbHV0aW9ucy5jb20+Cj4gCj4gLS0tCj4gCj4gQWRkZWQgaW4gdjgKPiAKPiBTaWduZWQtb2Zm
+LWJ5OiBEYXJpbyBCaW5hY2NoaSA8ZGFyaW8uYmluYWNjaGlAYW1hcnVsYXNvbHV0aW9ucy5jb20+
+Cj4gLS0tCj4gIHBhY2thZ2UvdGktazMvQ29uZmlnLmluIHwgMyArKy0KPiAgMSBmaWxlIGNoYW5n
+ZWQsIDIgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQo+IAo+IGRpZmYgLS1naXQgYS9wYWNr
+YWdlL3RpLWszL0NvbmZpZy5pbiBiL3BhY2thZ2UvdGktazMvQ29uZmlnLmluCj4gaW5kZXggYjg1
+NDViN2JjYTYyLi45YzYxZjg4ODBhMTUgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS90aS1rMy9Db25m
+aWcuaW4KPiArKysgYi9wYWNrYWdlL3RpLWszL0NvbmZpZy5pbgo+IEBAIC00Myw3ICs0Myw4IEBA
+IGNvbmZpZyBCUjJfUEFDS0FHRV9USV9LM19TT0MKPiAgCXN0cmluZwo+ICAJZGVmYXVsdCAiYW02
+MmF4IiBpZiBCUjJfUEFDS0FHRV9USV9LM19TT0NfQU02MkFYCj4gIAlkZWZhdWx0ICJhbTYyeCIg
+IGlmIEJSMl9QQUNLQUdFX1RJX0szX1NPQ19BTTYyWAo+IC0JZGVmYXVsdCAiYW02NHgiICBpZiBC
+UjJfUEFDS0FHRV9USV9LM19TT0NfQU02NFgKPiArCWRlZmF1bHQgImFtNjR4IiAgaWYgQlIyX1BB
+Q0tBR0VfVElfSzNfU09DX0FNNjRYICYmIEJSMl9QQUNLQUdFX1RJX0szX1NFQ1RZUEVfR1AKPiAr
+CWRlZmF1bHQgImFtNjR4X3NyMiIgIGlmIEJSMl9QQUNLQUdFX1RJX0szX1NPQ19BTTY0WCAmJiAh
+QlIyX1BBQ0tBR0VfVElfSzNfU0VDVFlQRV9HUAo+ICAJZGVmYXVsdCAiYW02NXgiICBpZiBCUjJf
+UEFDS0FHRV9USV9LM19TT0NfQU02NVgKPiAgCj4gIGNvbmZpZyBCUjJfUEFDS0FHRV9USV9LM19T
+RUNUWVBFCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpi
+dWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlz
+dHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
