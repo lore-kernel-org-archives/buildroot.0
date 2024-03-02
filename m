@@ -4,49 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C170C54798
-	for <buildroot@archiver.kernel.org>; Sat,  2 Mar 2024 20:37:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7658BC54798
+	for <buildroot@archiver.kernel.org>; Sat,  2 Mar 2024 20:37:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0E38983051;
-	Sat,  2 Mar 2024 20:37:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2501A83051;
+	Sat,  2 Mar 2024 20:37:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OzKQHpbPs5V4; Sat,  2 Mar 2024 20:37:19 +0000 (UTC)
+	with ESMTP id RLpX_8m4GCnF; Sat,  2 Mar 2024 20:37:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3E4078308A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 442C5830DE
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3E4078308A;
-	Sat,  2 Mar 2024 20:37:19 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 24F461BF834
- for <buildroot@lists.busybox.net>; Sat,  2 Mar 2024 20:37:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 442C5830DE;
+	Sat,  2 Mar 2024 20:37:44 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 554411BF834
+ for <buildroot@lists.busybox.net>; Sat,  2 Mar 2024 20:37:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 12C0660A47
- for <buildroot@lists.busybox.net>; Sat,  2 Mar 2024 20:37:17 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4FEAD830DE
+ for <buildroot@lists.busybox.net>; Sat,  2 Mar 2024 20:37:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nb6rndpAcgCH for <buildroot@lists.busybox.net>;
- Sat,  2 Mar 2024 20:37:16 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7MO2SlghiJil for <buildroot@lists.busybox.net>;
+ Sat,  2 Mar 2024 20:37:42 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
+ helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 44B776076D
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 44B776076D
- for <buildroot@buildroot.org>; Sat,  2 Mar 2024 20:37:16 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2071987E81; Sat,  2 Mar 2024 20:37:15 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 2 Mar 2024 21:36:48 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3c73f6ed3e04eefdc6c224ad1bbd3730400e1e11
-X-Git-Newrev: 814f9f17d5c345f4c20ed3cca4873f7411db96d5
-X-Patchwork-Hint: ignore
-Message-Id: <20240302203716.2071987E81@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/quickjs: bump to
- version 2024-01-13
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2C74A83051
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2C74A83051
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2C74A83051
+ for <buildroot@busybox.net>; Sat,  2 Mar 2024 20:37:41 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7FCC360004;
+ Sat,  2 Mar 2024 20:37:36 +0000 (UTC)
+Date: Sat, 2 Mar 2024 21:37:35 +0100
+To: Francois Perrad <fperrad@gmail.com>
+Message-ID: <20240302213735.468fecfb@windsurf>
+In-Reply-To: <20240302111655.126267-1-francois.perrad@gadz.org>
+References: <20240302111655.126267-1-francois.perrad@gadz.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1709411856;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=uCm1oluElaMlBmGr1tIpzj2p5DkaV4VQKrd3tt0p39M=;
+ b=IDM59BTvRkSR727jUb5JEHyDas68i9KUNh5E+hHnT9+DYgnVq9yBixVmboN2h/hwWkBDSP
+ 4QhXbKLOM7G9BxHlDwpLYiF15BhGV1+PoS6BzaFs1+NcgaLDD9tp649EmKuHgfrBCn0RBN
+ v16izY/Hhbes3XsE3L1DBk3LcJHXcdA08O6DuMc9v4VRBYD9gpRKza0wFdXyZGzyWxJojr
+ 993BsSQHaX2b7NgoLwOajWyhRPWVZJb87/8ZIlByVgVgv/i59RLvPM2EnhwJiFL/juf1uc
+ V9nuTL5Dt4XrWF6pe1bB14ZKdV+PsPD12i3r51aD9p4AhahKBVB41/wjifM1tA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=IDM59BTv
+Subject: Re: [Buildroot] [PATCH] package/quickjs: bump to version 2024-01-13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,44 +82,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=814f9f17d5c345f4c20ed3cca4873f7411db96d5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Sat,  2 Mar 2024 12:16:55 +0100
+Francois Perrad <fperrad@gmail.com> wrote:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/quickjs/quickjs.hash | 2 +-
- package/quickjs/quickjs.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/quickjs/quickjs.hash | 2 +-
+>  package/quickjs/quickjs.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/quickjs/quickjs.hash b/package/quickjs/quickjs.hash
-index 916fb6e3a2..30613b982a 100644
---- a/package/quickjs/quickjs.hash
-+++ b/package/quickjs/quickjs.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  e8afe386f875d0e52310ea91aa48e2b0e04182e821f19147794e3e272f4c8d8c  quickjs-2023-12-09.tar.xz
-+sha256  3c4bf8f895bfa54beb486c8d1218112771ecfc5ac3be1036851ef41568212e03  quickjs-2024-01-13.tar.xz
- sha256  f41baf09eef895d468d18c23055d74f711e4b8b2641cef279b5d71285c07bfe8  LICENSE
-diff --git a/package/quickjs/quickjs.mk b/package/quickjs/quickjs.mk
-index 186397f9aa..e745923b87 100644
---- a/package/quickjs/quickjs.mk
-+++ b/package/quickjs/quickjs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--QUICKJS_VERSION = 2023-12-09
-+QUICKJS_VERSION = 2024-01-13
- QUICKJS_SOURCE = quickjs-$(QUICKJS_VERSION).tar.xz
- QUICKJS_SITE = https://bellard.org/quickjs
- QUICKJS_LICENSE = MIT
+Applied to next, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
