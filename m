@@ -4,71 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C0D6C54798
-	for <buildroot@archiver.kernel.org>; Sat,  2 Mar 2024 18:33:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24DBBC54798
+	for <buildroot@archiver.kernel.org>; Sat,  2 Mar 2024 19:12:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A0AA783443;
-	Sat,  2 Mar 2024 18:33:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C63BC822BE;
+	Sat,  2 Mar 2024 19:12:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id r-vXZGsfPXIr; Sat,  2 Mar 2024 18:33:40 +0000 (UTC)
+	with ESMTP id gUdNmQgHuDvE; Sat,  2 Mar 2024 19:12:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E22783065
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D2CC5822DB
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6E22783065;
-	Sat,  2 Mar 2024 18:33:40 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D9CD61BF38D
- for <buildroot@lists.busybox.net>; Sat,  2 Mar 2024 18:33:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D2CC5822DB;
+	Sat,  2 Mar 2024 19:12:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B79021BF313
+ for <buildroot@lists.busybox.net>; Sat,  2 Mar 2024 19:12:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C68D8606C9
- for <buildroot@lists.busybox.net>; Sat,  2 Mar 2024 18:33:38 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A54A9822DB
+ for <buildroot@lists.busybox.net>; Sat,  2 Mar 2024 19:12:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6uDg903FZ4BT for <buildroot@lists.busybox.net>;
- Sat,  2 Mar 2024 18:33:37 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 78E9B60669
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 78E9B60669
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 78E9B60669
- for <buildroot@buildroot.org>; Sat,  2 Mar 2024 18:33:37 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 2C0A413F8AD;
- Sat,  2 Mar 2024 19:33:30 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 02 Mar 2024 19:33:29 +0100
-Date: Sat, 2 Mar 2024 19:33:29 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <ZeNw-Zp8v5u47574@landeda>
-References: <20240302092733.24288-1-fontaine.fabrice@gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9i-_rWacYFqm for <buildroot@lists.busybox.net>;
+ Sat,  2 Mar 2024 19:12:23 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::635; helo=mail-ej1-x635.google.com;
+ envelope-from=kazemi.ms@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8F0A9822BE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F0A9822BE
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com
+ [IPv6:2a00:1450:4864:20::635])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8F0A9822BE
+ for <buildroot@buildroot.org>; Sat,  2 Mar 2024 19:12:22 +0000 (UTC)
+Received: by mail-ej1-x635.google.com with SMTP id
+ a640c23a62f3a-a43dba50bb7so460279766b.0
+ for <buildroot@buildroot.org>; Sat, 02 Mar 2024 11:12:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1709406740; x=1710011540;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=pRnWbz3rhFHUy9TNImo5lrPCUKlzm79SpImefdyUhk8=;
+ b=cBIXAvWhtfReDQIKzfIUCEGj6n4aCV8lCCPJy87rLJSUF6mLxibFeJJtEQOhqRkTW7
+ 2HV10c73GVOor4PsRaBoN9reBYUX4wj9phBXAjYDYGa5uawTGBdrZGC5DL92vJDt8ZFV
+ iw2ejeXtb783s+35FUFdsLfB9EOxlbtxpVOSViteKgnkgLWhYTs7obppEoZar+bC92yE
+ CrClXyrNEPHX/ZkUOIEfhVZvNN/37EnkGy8VEsNWRwz8Gnp8g/sG8Ql+F5x8p3loHjm6
+ nPuPcRxO1ancRYbKjK94qH16BObt3myXVKLYQiCkUklVn9xXrM1dscuKMpOwjvZNRxR/
+ ZZGA==
+X-Gm-Message-State: AOJu0YzpqDTWC6jEJfCAdLh62pO7LlEbBKM4nitJz08TG0jDujK2xZdK
+ 8mL01+aCi1QcB1obzHL9cV5IpLfxqqzFuKoaw+kfHxEiqiSI98QWfuo9Vnha
+X-Google-Smtp-Source: AGHT+IEMUAN97gnmFjbTXBHykhsVBuyHZHUAsvqcKaBtemSu/0Zi/ThMFmEv/cujWq78JaGDFNiCVA==
+X-Received: by 2002:a17:906:184e:b0:a44:b90a:8459 with SMTP id
+ w14-20020a170906184e00b00a44b90a8459mr2488778eje.53.1709406739777; 
+ Sat, 02 Mar 2024 11:12:19 -0800 (PST)
+Received: from saeedkazemi-ThinkPad.abbrnd.local
+ (2001-1c00-0b13-1d00-8bad-04cc-4d26-e259.cable.dynamic.v6.ziggo.nl.
+ [2001:1c00:b13:1d00:8bad:4cc:4d26:e259])
+ by smtp.gmail.com with ESMTPSA id
+ w25-20020a170906131900b00a44bd00ed4csm1281158ejb.0.2024.03.02.11.12.19
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 02 Mar 2024 11:12:19 -0800 (PST)
+From: Saeed Kazemi <kazemi.ms@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat,  2 Mar 2024 20:12:15 +0100
+Message-Id: <20240302191215.2743208-1-kazemi.ms@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240302092733.24288-1-fontaine.fabrice@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1709404415;
- bh=s+fMXzAA0+ahZLQbwS7uChlKFrXH90l1BPkQbCrxUYk=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=knRtq7nEP9yCgFoh6DpUPpwKx6djfeetI9EaBnBtjQoYc6IehruAmHA97g69MTNtF
- UJWKG59mx7fpw8FBqPLbJogs3IoGAaQcdEOPCYEcuq2G3FhW5D0VjoqpaRQo9Mu28N
- GQ17M8MCqBBxo/FsrAEGv/aePJtmJ2jnxQnBmSej6VTJMp1CpSb28V61HkhNCQiD3I
- M4sOmzbMSXy/g5Mr2RY5lD3I75GFtX8X1mxP1pdbm/YVjLGwW+D+/Br4oTAlNRCHHD
- VFq3sMZtsAhYcmPPIdUuYHFXSlZRjlZ8WTG5Te68zWZ70Nx37bjbeI8cuQu8cb9wBQ
- TnTfLXAgqxvSw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1709406740; x=1710011540; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=pRnWbz3rhFHUy9TNImo5lrPCUKlzm79SpImefdyUhk8=;
+ b=LYkFLCzlsUYaI6opglcsC92Xq7wVzfuSrReEPtgBaHkaRXt+kZZXccsuCRcul/zTl7
+ 03pKO2vcqW8VSl6BmlsYNhoGMgQGZBuN0h7dHNWfjzwK4X/PkuEXsu4Ayh0vZ0pN8iq+
+ T1Tk+pnqZ96n03blxMmOyNdlWvVJpqsOb8uxEC090ePZfj2CHk1O0luW8SvP/ooQ/Hqq
+ iPb0gchubNuQd2e35rc2R1t13bkleaF58KdaZs3g+i5RQ2V0J9126+tVmKzR4qe4B5nD
+ h04G7rt3zA2uOg4Yo/keb4jrA8bieMoGrdhj3BmMhlNucseiErqsCJ8qiIFXTFHP3+3M
+ sMOw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=knRtq7nE
-Subject: Re: [Buildroot] [PATCH v2,1/1] package/parted: needs gcc >= 5
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=LYkFLCzl
+Subject: [Buildroot] [PATCH 1/1] package/zoxide: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,156 +101,99 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Cc: Saeed Kazemi <kazemi.ms@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+A smarter cd command. Supports all major shells.
 
-On 2024-03-02 10:27 +0100, Fabrice Fontaine spake thusly:
-> Fix the following build failure raised since bump to version 3.5 in
-> commit 57817fe05a4250a260a08201812c6652b306a0e5 and
-> https://git.savannah.gnu.org/cgit/parted.git/commit/?id=15c49ec04f7eaff014d2e1eddd0aecf4150db63d:
-> 
-> gpt.c:181:5: error: initializer element is not constant
->      { PED_PARTITION_APPLE_TV_RECOVERY,  PARTITION_APPLE_TV_RECOVERY_GUID },
->      ^
-> gpt.c:181:5: error: (near initialization for 'flag_uuid_mapping[0].type_uuid')
-> 
-> Fixes: 57817fe05a4250a260a08201812c6652b306a0e5
->  - http://autobuild.buildroot.org/results/1f0af75ec55da9052fbfb195a0699f84619eac81
->  - http://autobuild.buildroot.org/results/438b5f40e8b393801f36c691d239e298998cb9d2
+https://github.com/ajeetdsouza/zoxide.git
 
-I also added a little note explainiung why the dependency is not
-propagated to udisks.
+Signed-off-by: Saeed Kazemi <kazemi.ms@gmail.com>
+---
+ DEVELOPERS                 |  1 +
+ package/Config.in          |  1 +
+ package/zoxide/Config.in   | 11 +++++++++++
+ package/zoxide/zoxide.hash |  3 +++
+ package/zoxide/zoxide.mk   | 12 ++++++++++++
+ 5 files changed, 28 insertions(+)
+ create mode 100644 package/zoxide/Config.in
+ create mode 100644 package/zoxide/zoxide.hash
+ create mode 100644 package/zoxide/zoxide.mk
 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
-> Changes v1 -> v2:
->  - Fix typo "| |" -> "||"
-> 
->  package/libblockdev/Config.in     | 15 +++++++++------
->  package/parted/Config.in          |  6 ++++--
->  package/python-pyparted/Config.in |  6 ++++--
->  3 files changed, 17 insertions(+), 10 deletions(-)
-> 
-> diff --git a/package/libblockdev/Config.in b/package/libblockdev/Config.in
-> index b1d088bf35..81b4819280 100644
-> --- a/package/libblockdev/Config.in
-> +++ b/package/libblockdev/Config.in
-> @@ -32,12 +32,13 @@ config BR2_PACKAGE_LIBBLOCKDEV_CRYPTO
->  config BR2_PACKAGE_LIBBLOCKDEV_FS
->  	bool "filesystem"
->  	depends on BR2_ENABLE_LOCALE # parted
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # parted
->  	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
->  	select BR2_PACKAGE_PARTED
->  	select BR2_PACKAGE_E2FSPROGS
->  
-> -comment "filesystem plugin needs a toolchain w/ locale"
-> -	depends on !BR2_ENABLE_LOCALE
-> +comment "filesystem plugin needs a toolchain w/ locale, gcc >= 5"
-> +	depends on !BR2_ENABLE_LOCALE || !BR2_TOOLCHAIN_GCC_AT_LEAST_5
->  
->  config BR2_PACKAGE_LIBBLOCKDEV_LOOP
->  	bool "loop"
-> @@ -45,11 +46,12 @@ config BR2_PACKAGE_LIBBLOCKDEV_LOOP
->  config BR2_PACKAGE_LIBBLOCKDEV_LVM2
->  	bool "lvm2"
->  	depends on BR2_ENABLE_LOCALE # parted
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # parted
->  	select BR2_PACKAGE_PARTED
->  	select BR2_PACKAGE_LVM2
->  
-> -comment "lvm2 support needs a toolchain w/ locale"
-> -	depends on !BR2_ENABLE_LOCALE
-> +comment "lvm2 support needs a toolchain w/ locale, gcc >= 5"
-> +	depends on !BR2_ENABLE_LOCALE || !BR2_TOOLCHAIN_GCC_AT_LEAST_5
->  
->  config BR2_PACKAGE_LIBBLOCKDEV_MDRAID
->  	bool "mdraid"
-> @@ -64,11 +66,12 @@ config BR2_PACKAGE_LIBBLOCKDEV_NVME
->  config BR2_PACKAGE_LIBBLOCKDEV_PART
->  	bool "part"
->  	depends on BR2_ENABLE_LOCALE # parted
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # parted
->  	select BR2_PACKAGE_PARTED
->  	select BR2_PACKAGE_UTIL_LINUX_LIBFDISK
->  
-> -comment "part plugin needs a toolchain w/ locale"
-> -	depends on !BR2_ENABLE_LOCALE
-> +comment "part plugin needs a toolchain w/ locale, gcc >= 5"
-> +	depends on !BR2_ENABLE_LOCALE || !BR2_TOOLCHAIN_GCC_AT_LEAST_5
->  
->  config BR2_PACKAGE_LIBBLOCKDEV_SWAP
->  	bool "swap"
-> diff --git a/package/parted/Config.in b/package/parted/Config.in
-> index f48b365a2d..ea6c3db2bf 100644
-> --- a/package/parted/Config.in
-> +++ b/package/parted/Config.in
-> @@ -2,6 +2,7 @@ config BR2_PACKAGE_PARTED
->  	bool "parted"
->  	depends on BR2_ENABLE_LOCALE
->  	depends on BR2_USE_WCHAR
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
->  	select BR2_PACKAGE_UTIL_LINUX
->  	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
->  	help
-> @@ -9,5 +10,6 @@ config BR2_PACKAGE_PARTED
->  
->  	  http://www.gnu.org/software/parted/
->  
-> -comment "parted needs a toolchain w/ locale, wchar"
-> -	depends on !BR2_ENABLE_LOCALE || !BR2_USE_WCHAR
-> +comment "parted needs a toolchain w/ locale, wchar, gcc >=5"
-> +	depends on !BR2_ENABLE_LOCALE || !BR2_USE_WCHAR || \
-> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
-> diff --git a/package/python-pyparted/Config.in b/package/python-pyparted/Config.in
-> index 60f54a5484..430bf204a1 100644
-> --- a/package/python-pyparted/Config.in
-> +++ b/package/python-pyparted/Config.in
-> @@ -1,6 +1,7 @@
->  config BR2_PACKAGE_PYTHON_PYPARTED
->  	bool "python-pyparted"
->  	depends on BR2_ENABLE_LOCALE # parted
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # parted
->  	depends on BR2_USE_WCHAR
->  	select BR2_PACKAGE_PARTED
->  	help
-> @@ -8,5 +9,6 @@ config BR2_PACKAGE_PYTHON_PYPARTED
->  
->  	  https://github.com/rhinstaller/pyparted
->  
-> -comment "pyparted needs a toolchain w/ locale, wchar"
-> -	depends on !BR2_ENABLE_LOCALE || !BR2_USE_WCHAR
-> +comment "pyparted needs a toolchain w/ locale, wchar, gcc >= 5"
-> +	depends on !BR2_ENABLE_LOCALE || !BR2_USE_WCHAR || \
-> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
-> -- 
-> 2.43.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0bfe91f064..60a2544ef5 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2733,6 +2733,7 @@ F:	package/biosdevname/
+ N:	Saeed Kazemi <kazemi.ms@gmail.com>
+ F:	package/eza/
+ F:	package/procs/
++F:	package/zoxide/
+ 
+ N:	Sam Lancia <sam@gpsm.co.uk>
+ F:	package/lrzip/
+diff --git a/package/Config.in b/package/Config.in
+index bf0fe078b9..d39d6ec1c2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2707,6 +2707,7 @@ comment "Utilities"
+ 	source "package/xmlstarlet/Config.in"
+ 	source "package/xxhash/Config.in"
+ 	source "package/ytree/Config.in"
++	source "package/zoxide/Config.in"
+ endmenu
+ 
+ menu "System tools"
+diff --git a/package/zoxide/Config.in b/package/zoxide/Config.in
+new file mode 100644
+index 0000000000..b2567dad0b
+--- /dev/null
++++ b/package/zoxide/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_ZOXIDE
++	bool "zoxide"
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
++	select BR2_PACKAGE_HOST_RUSTC
++	help
++	  zoxide is a smarter cd command, inspired by z and autojump.
++	  It remembers which directories you use most frequently, so
++	  you can "jump" to them in just a few keystrokes.
++	  zoxide works on all major shells.
++
++	  https://github.com/ajeetdsouza/zoxide.git
+diff --git a/package/zoxide/zoxide.hash b/package/zoxide/zoxide.hash
+new file mode 100644
+index 0000000000..d1a765e3bd
+--- /dev/null
++++ b/package/zoxide/zoxide.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  792e66d35bc770609e1dd3858a41f5ba66af24d9801c88a5d117e63d95ef6672  zoxide-0.9.4.tar.gz
++sha256  23aa3b08366e4ed6050f3d9950070201802aadbe5675fa1c19f24f4de91cf294  LICENSE
+diff --git a/package/zoxide/zoxide.mk b/package/zoxide/zoxide.mk
+new file mode 100644
+index 0000000000..92b4395a87
+--- /dev/null
++++ b/package/zoxide/zoxide.mk
+@@ -0,0 +1,12 @@
++################################################################################
++#
++# zoxide
++#
++################################################################################
++
++ZOXIDE_VERSION = 0.9.4
++ZOXIDE_SITE = $(call github,ajeetdsouza,zoxide,v$(ZOXIDE_VERSION))
++ZOXIDE_LICENSE = MIT
++ZOXIDE_LICENSE_FILES = LICENSE
++
++$(eval $(cargo-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
