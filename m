@@ -4,70 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAD24C54798
-	for <buildroot@archiver.kernel.org>; Sat,  2 Mar 2024 12:44:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EB98C54798
+	for <buildroot@archiver.kernel.org>; Sat,  2 Mar 2024 13:00:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 65C0783508;
-	Sat,  2 Mar 2024 12:44:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E290E80F6B;
+	Sat,  2 Mar 2024 13:00:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id x5nRh5gUzEle; Sat,  2 Mar 2024 12:44:08 +0000 (UTC)
+	with ESMTP id UAttQTCJOZxV; Sat,  2 Mar 2024 13:00:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 77ED2835C9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0371480F97
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 77ED2835C9;
-	Sat,  2 Mar 2024 12:44:08 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 413581BF28A
- for <buildroot@lists.busybox.net>; Sat,  2 Mar 2024 12:44:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0371480F97;
+	Sat,  2 Mar 2024 13:00:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 189E11BF28A
+ for <buildroot@lists.busybox.net>; Sat,  2 Mar 2024 13:00:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 37397835C9
- for <buildroot@lists.busybox.net>; Sat,  2 Mar 2024 12:44:06 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 05ACB40279
+ for <buildroot@lists.busybox.net>; Sat,  2 Mar 2024 13:00:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id t2w52LdhShmo for <buildroot@lists.busybox.net>;
- Sat,  2 Mar 2024 12:44:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
- helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 71B5B83508
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 71B5B83508
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 71B5B83508
- for <buildroot@buildroot.org>; Sat,  2 Mar 2024 12:44:03 +0000 (UTC)
-Received: from [192.168.178.20] (unknown [212.37.174.96])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id CEB352C83784;
- Sat,  2 Mar 2024 13:44:00 +0100 (CET)
-Message-ID: <37b21157-e171-483d-9a1a-e308a8f4c04d@bubu1.eu>
-Date: Sat, 2 Mar 2024 13:43:55 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KFt_OjAwnnJy for <buildroot@lists.busybox.net>;
+ Sat,  2 Mar 2024 13:00:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 661C6400D7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 661C6400D7
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 661C6400D7
+ for <buildroot@buildroot.org>; Sat,  2 Mar 2024 13:00:17 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-412cad778afso7446235e9.0
+ for <buildroot@buildroot.org>; Sat, 02 Mar 2024 05:00:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1709384415; x=1709989215;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=qG7IkMqWrUP51iqHu6ZZF5Q/QxuwCFttsc5uCuINVx0=;
+ b=GNFKS7YKU/1BjZzJofLBBhISY0rzxQntlEERJu0Y7KyeXm+42MFBzyZ3hxZx72RDJB
+ L58OD3XXwKVbc3aso+5OrcBHKNR3SDIgNxQLGU8Z329uQNyz8+gz4nt/fKuMSo1zZQvl
+ DNztlraZAiUDPrYdPaoaRx6NVF1qpySitMCz07tPCDJj/XQVqDD+fS38B5EbKHmxkeaj
+ RoN3uAaVedc52ASVc5FVrt1OQo4UKMYFszvXCNoi0B/lpih0qNDaHorESnMdwyFiZiLE
+ 6z0jNzbHSsxI7YCKNQVSf2C/xJ9LSraywzDsuUYiNPrah39vkxFUT5O5X3K23ByChYG+
+ Heug==
+X-Gm-Message-State: AOJu0YwrafelEujl19lA0GYCW2WDQd5n3j0bFI96DFbf+Q2cGExV/Y+y
+ IY94S4GQQxQ3rrat/PJRP+H7Eb9V600NyL4Neuyo8PJrzeFSuFszjUP+MZXp
+X-Google-Smtp-Source: AGHT+IEDJtyqXMR3PsetaMgwyVRJ6eHT1/iFm6li1KdSTXQUTdOsdsK8sUw2F/vrM8vJ0ewe3e21yA==
+X-Received: by 2002:a05:600c:458f:b0:412:bfa1:2139 with SMTP id
+ r15-20020a05600c458f00b00412bfa12139mr3322507wmo.37.1709384414621; 
+ Sat, 02 Mar 2024 05:00:14 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ hg14-20020a05600c538e00b0041228b2e179sm8504261wmb.39.2024.03.02.05.00.13
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 02 Mar 2024 05:00:14 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat,  2 Mar 2024 13:59:38 +0100
+Message-ID: <20240302125938.790570-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: buildroot@buildroot.org, Peter Korsgaard <peter@korsgaard.com>
-References: <20240213105841.2410425-1-buildroot@bubu1.eu>
-In-Reply-To: <20240213105841.2410425-1-buildroot@bubu1.eu>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=bubu1.eu; s=bubu; 
- t=1709383441; bh=WQjP+ETKOOoFGALP9U6xtIqALGPjdJ4GIIfb2JylrwU=;
- h=Date:Subject:To:Cc:References:From:In-Reply-To;
- b=MCqNQOm4PaxKn46oCFWQcSQh7moL02U8lXGfzAGykXlXipmqDnEDbJ3TjDNxVEzIK
- obRI1OLlQu80HLtWJNBZxWsCJ4gTKohI2gG/3P2PPFlruENOrFfud/v4BgihmculLD
- rBLeQHQPdGphRevoSs/0OU1a2FHdadKokVn+2J+wrWIIsM/Z5Y8dRvowqffSkKSBgz
- D6pRudthxdf8NvlH1IfcatkqZj6KgA0A5x8znuwwyPFmY2NLyFadUpBmlFtVbabRKa
- O6Texx3iDIxkiQa13RjsIqI3zOFJJ9P72torsNXKHWeP0zwh7F8aMz7Iklh0ww3J55
- 7id3+yjK368qg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1709384415; x=1709989215; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=qG7IkMqWrUP51iqHu6ZZF5Q/QxuwCFttsc5uCuINVx0=;
+ b=Jrlec7KjwoeAOdti/eCmj9+XLvQSygAckkcAhRBeUZbdb9FOYS5Yv1hGgVVEkT4aeO
+ 8TybRHaIms3uICcAfWCAWUoZ2NVXZ/3UaGRVDr8NmhGJdwOUCBjFqJf9lLv9PirqZZrr
+ Fc6drOo4KWvsR6hKJjWg9DUdBuUFjgkJuu7ctTcig/dmGFMtg+Ppv9Cq9NdRlB4mNnz2
+ Zi+jP+z5iddVMev+6Ly8SQStgY1DltGlw30ec9a4A2xKiDK6+GTrdXEWw0aUr+k1DEp+
+ hn7OR6B5mKUFTPSjCxhnu5HS9NK9MvxGWJ5BcMRkMy6Ir7LGXrIc8wzXZUivD7A5gxUA
+ eEOg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
- header.s=bubu header.b=MCqNQOm4
-Subject: Re: [Buildroot] [PATCH] package/rauc: bump to 1.11.1
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=Jrlec7Kj
+Subject: [Buildroot] [PATCH 1/1] package/strace: musl on aarch64 needs
+ headers >= 5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,57 +101,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
-Cc: Heiko Thiery <heiko.thiery@gmail.com>, Andrey Yurovsky <yurovsky@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Peter,
+strace needs headers >= 5.0 and
+https://github.com/torvalds/linux/commit/9966a05c7b80f075f2bc7e48dbb108d3f2927234
+to avoid the following build failure on musl and aarch64 due to headers
+conflict raised at least since bump to version 6.0 in commit
+544806bfd8052d05dee671c23c354e5f73f954f9:
 
-On 13.02.24 11:58, Marcus Hoffmann via buildroot wrote:
-> This fixes an incompatibility with openssl 3.2 when using codesign
-> certificate purpose [1].
+In file included from /home/autobuild/autobuild/instance-7/output-1/host/aarch64_be-buildroot-linux-musl/sysroot/usr/include/signal.h:48,
+                 from strace.c:17:
+/home/autobuild/autobuild/instance-7/output-1/host/aarch64_be-buildroot-linux-musl/sysroot/usr/include/bits/signal.h:18:16: error: redefinition of 'struct sigcontext'
+   18 | typedef struct sigcontext {
+      |                ^~~~~~~~~~
+In file included from /home/autobuild/autobuild/instance-7/output-1/host/aarch64_be-buildroot-linux-musl/sysroot/usr/include/asm/ptrace.h:26,
+                 from /home/autobuild/autobuild/instance-7/output-1/host/aarch64_be-buildroot-linux-musl/sysroot/usr/include/linux/ptrace.h:107,
+                 from ptrace.h:33,
+                 from strace.c:16:
+/home/autobuild/autobuild/instance-7/output-1/host/aarch64_be-buildroot-linux-musl/sysroot/usr/include/asm/sigcontext.h:28:8: note: originally defined here
+   28 | struct sigcontext {
+      |        ^~~~~~~~~~
 
-This fixes compatibility with openssl 3.2, so I was hoping that it can 
-still make it into the 2024.02 release?
+Fixes:
+ - http://autobuild.buildroot.org/results/74a480aa76970b36dcd890d9bd7a9df1d49e8e16
+ - http://autobuild.buildroot.org/results/79ee8ae5fb9712fd874b56e836eca1b997c50cd9
 
-Marcus
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/strace/Config.in | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-> 
-> [1] https://github.com/rauc/rauc/releases/tag/v1.11.1
-> 
-> Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-> ---
->   package/rauc/rauc.hash | 2 +-
->   package/rauc/rauc.mk   | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
-> index 8de309f8c7..63aa4715e0 100644
-> --- a/package/rauc/rauc.hash
-> +++ b/package/rauc/rauc.hash
-> @@ -1,3 +1,3 @@
->   # Locally calculated
-> -sha256  a28f415c580390dd9e65016a5d90a63ee1cfd7e1b3e864cbb13cb3ac3513391f  rauc-1.11.tar.xz
-> +sha256  391d13d709abb630c459e79e62e474e68224c5d07c816355784bba75a86a2507  rauc-1.11.1.tar.xz
->   sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-> diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
-> index aff5ead281..fbdea4e235 100644
-> --- a/package/rauc/rauc.mk
-> +++ b/package/rauc/rauc.mk
-> @@ -4,7 +4,7 @@
->   #
+diff --git a/package/strace/Config.in b/package/strace/Config.in
+index dc245c7297..cace7e129d 100644
+--- a/package/strace/Config.in
++++ b/package/strace/Config.in
+@@ -4,6 +4,10 @@ config BR2_PACKAGE_STRACE
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0 || !BR2_nios2
+ 	# needs at least kernel headers 5.0 on xtensa
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0 || !BR2_xtensa
++	# needs at least kernel headers 5.0 on musl aarch64
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0 || \
++		!BR2_aarch64 || !BR2_aarch64_be || \
++		!BR2_TOOLCHAIN_USES_MUSL
+ 	depends on !BR2_RISCV_32
+ 	help
+ 	  A useful diagnostic, instructional, and debugging tool.
+@@ -22,3 +26,8 @@ comment "strace needs a toolchain w/ headers >= 4.0 on nios2"
+ comment "strace needs a toolchain w/ headers >= 5.0 on xtensa"
+ 	depends on BR2_xtensa
+ 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
++
++comment "strace needs a musl toolchain w/ headers >= 5.0 on aarch64"
++	depends on BR2_aarch64 || BR2_aarch64_be
++	depends on BR2_TOOLCHAIN_USES_MUSL
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
+-- 
+2.43.0
 
->   ################################################################################
->   
-> -RAUC_VERSION = 1.11
-> +RAUC_VERSION = 1.11.1
->   RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
->   RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
->   RAUC_LICENSE = LGPL-2.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
