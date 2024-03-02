@@ -4,71 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7658BC54798
-	for <buildroot@archiver.kernel.org>; Sat,  2 Mar 2024 20:37:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4841EC54798
+	for <buildroot@archiver.kernel.org>; Sat,  2 Mar 2024 20:43:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2501A83051;
-	Sat,  2 Mar 2024 20:37:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DFFA98308A;
+	Sat,  2 Mar 2024 20:43:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RLpX_8m4GCnF; Sat,  2 Mar 2024 20:37:44 +0000 (UTC)
+	with ESMTP id oyH2FgoYMSJG; Sat,  2 Mar 2024 20:43:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 442C5830DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D95AA830B8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 442C5830DE;
-	Sat,  2 Mar 2024 20:37:44 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 554411BF834
- for <buildroot@lists.busybox.net>; Sat,  2 Mar 2024 20:37:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D95AA830B8;
+	Sat,  2 Mar 2024 20:43:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E14511BF834
+ for <buildroot@lists.busybox.net>; Sat,  2 Mar 2024 20:43:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4FEAD830DE
- for <buildroot@lists.busybox.net>; Sat,  2 Mar 2024 20:37:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CF364416FA
+ for <buildroot@lists.busybox.net>; Sat,  2 Mar 2024 20:43:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7MO2SlghiJil for <buildroot@lists.busybox.net>;
- Sat,  2 Mar 2024 20:37:42 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
- helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XaEoyo3r-jCG for <buildroot@lists.busybox.net>;
+ Sat,  2 Mar 2024 20:43:45 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2C74A83051
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2C74A83051
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2C74A83051
- for <buildroot@busybox.net>; Sat,  2 Mar 2024 20:37:41 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7FCC360004;
- Sat,  2 Mar 2024 20:37:36 +0000 (UTC)
-Date: Sat, 2 Mar 2024 21:37:35 +0100
-To: Francois Perrad <fperrad@gmail.com>
-Message-ID: <20240302213735.468fecfb@windsurf>
-In-Reply-To: <20240302111655.126267-1-francois.perrad@gadz.org>
-References: <20240302111655.126267-1-francois.perrad@gadz.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1709411856;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=uCm1oluElaMlBmGr1tIpzj2p5DkaV4VQKrd3tt0p39M=;
- b=IDM59BTvRkSR727jUb5JEHyDas68i9KUNh5E+hHnT9+DYgnVq9yBixVmboN2h/hwWkBDSP
- 4QhXbKLOM7G9BxHlDwpLYiF15BhGV1+PoS6BzaFs1+NcgaLDD9tp649EmKuHgfrBCn0RBN
- v16izY/Hhbes3XsE3L1DBk3LcJHXcdA08O6DuMc9v4VRBYD9gpRKza0wFdXyZGzyWxJojr
- 993BsSQHaX2b7NgoLwOajWyhRPWVZJb87/8ZIlByVgVgv/i59RLvPM2EnhwJiFL/juf1uc
- V9nuTL5Dt4XrWF6pe1bB14ZKdV+PsPD12i3r51aD9p4AhahKBVB41/wjifM1tA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=IDM59BTv
-Subject: Re: [Buildroot] [PATCH] package/quickjs: bump to version 2024-01-13
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15F22416E8
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 15F22416E8
+ for <buildroot@buildroot.org>; Sat,  2 Mar 2024 20:43:45 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 0DEF587E8B; Sat,  2 Mar 2024 20:43:45 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 2 Mar 2024 21:37:58 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 814f9f17d5c345f4c20ed3cca4873f7411db96d5
+X-Git-Newrev: fa9e575776ee3d3d47a31fee3c09a94753c77cc7
+X-Patchwork-Hint: ignore
+Message-Id: <20240302204345.0DEF587E8B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/pcre2: bump to version
+ 10.43
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,28 +60,50 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@busybox.net
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat,  2 Mar 2024 12:16:55 +0100
-Francois Perrad <fperrad@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=fa9e575776ee3d3d47a31fee3c09a94753c77cc7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/quickjs/quickjs.hash | 2 +-
->  package/quickjs/quickjs.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+diff LICENCE: update copyright dates
 
-Applied to next, thanks.
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/pcre2/pcre2.hash | 6 +++---
+ package/pcre2/pcre2.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/pcre2/pcre2.hash b/package/pcre2/pcre2.hash
+index f609bdaee2..f2e17df753 100644
+--- a/package/pcre2/pcre2.hash
++++ b/package/pcre2/pcre2.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature:
+-# https://github.com/PhilipHazel/pcre2/releases/download/pcre2-10.42/pcre2-10.42.tar.bz2.sig
+-sha256  8d36cd8cb6ea2a4c2bb358ff6411b0c788633a2a45dabbf1aeb4b701d1b5e840  pcre2-10.42.tar.bz2
++# https://github.com/PhilipHazel/pcre2/releases/download/pcre2-10.43/pcre2-10.43.tar.bz2.sig
++sha256  e2a53984ff0b07dfdb5ae4486bbb9b21cca8e7df2434096cc9bf1b728c350bcb  pcre2-10.43.tar.bz2
+ # Locally computed
+-sha256  87d884eceb7fc54611470ce9f74280d28612b0c877adfc767e9676892a638987  LICENCE
++sha256  030087e2e8dd7c1bdd26057d25d4ded8f45bbf01ad458d68665ad04b8b0fbedf  LICENCE
+diff --git a/package/pcre2/pcre2.mk b/package/pcre2/pcre2.mk
+index c35056f8a2..9641f22e81 100644
+--- a/package/pcre2/pcre2.mk
++++ b/package/pcre2/pcre2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PCRE2_VERSION = 10.42
++PCRE2_VERSION = 10.43
+ PCRE2_SITE = https://github.com/PCRE2Project/pcre2/releases/download/pcre2-$(PCRE2_VERSION)
+ PCRE2_SOURCE = pcre2-$(PCRE2_VERSION).tar.bz2
+ PCRE2_LICENSE = BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
