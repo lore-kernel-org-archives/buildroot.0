@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60BAFC48BF6
-	for <buildroot@archiver.kernel.org>; Sun,  3 Mar 2024 20:35:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CBA5C54E41
+	for <buildroot@archiver.kernel.org>; Sun,  3 Mar 2024 20:35:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 182B04075D;
-	Sun,  3 Mar 2024 20:35:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2B744407BB;
+	Sun,  3 Mar 2024 20:35:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zfqD0WLAMR7w; Sun,  3 Mar 2024 20:35:33 +0000 (UTC)
+	with ESMTP id dDJXkiSS1d-c; Sun,  3 Mar 2024 20:35:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3EBA440761
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FD82407C2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3EBA440761;
-	Sun,  3 Mar 2024 20:35:33 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C85001BF8C7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7FD82407C2;
+	Sun,  3 Mar 2024 20:35:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C3A291BF340
  for <buildroot@lists.busybox.net>; Sun,  3 Mar 2024 20:35:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B57C240761
+ by smtp3.osuosl.org (Postfix) with ESMTP id B15F160626
  for <buildroot@lists.busybox.net>; Sun,  3 Mar 2024 20:35:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MsBXjbQIp6jo for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kd51q_Rw-bce for <buildroot@lists.busybox.net>;
  Sun,  3 Mar 2024 20:35:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7BC64075D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ADD076061C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D7BC64075D
+ by smtp3.osuosl.org (Postfix) with ESMTP id ADD076061C
  for <buildroot@buildroot.org>; Sun,  3 Mar 2024 20:35:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C2B8088021; Sun,  3 Mar 2024 20:35:30 +0000 (UTC)
+ id 9B38388022; Sun,  3 Mar 2024 20:35:30 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 3 Mar 2024 21:32:29 +0100
+Date: Sun, 3 Mar 2024 21:32:27 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 47b6737e841baf8b666ea9f37edc5f169652e88d
-X-Git-Newrev: 4308c270a7ee4300e29e39d9d7f1de91179679ba
+X-Git-Oldrev: e8545ee43923242c74a5ebbb7ef1b8857ae90550
+X-Git-Newrev: bd172e52e7f4d1a0fab860478bd8aba47cf1befd
 X-Patchwork-Hint: ignore
-Message-Id: <20240303203530.C2B8088021@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/hwdata: bump version
- to 0.379
+Message-Id: <20240303203530.9B38388022@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/xz: bump version to
+ 5.4.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,39 +66,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4308c270a7ee4300e29e39d9d7f1de91179679ba
+commit: https://git.buildroot.net/buildroot/commit/?id=bd172e52e7f4d1a0fab860478bd8aba47cf1befd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Change Log - https://github.com/tukaani-project/xz/commit/0ef8192e8d5af4e6200d5d4aee22d1f177f7a2df
+
+COPYING is updated with the new URL (tukaani.org -> github).
 
 Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/hwdata/hwdata.hash | 2 +-
- package/hwdata/hwdata.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/xz/xz.hash | 6 +++---
+ package/xz/xz.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/hwdata/hwdata.hash b/package/hwdata/hwdata.hash
-index 6915e04e46..92b7eaab6d 100644
---- a/package/hwdata/hwdata.hash
-+++ b/package/hwdata/hwdata.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  0db28dc635d5059ad23d068d2e56ef5dc540f95bc813ea5a3c0f5d63b03d20d6  hwdata-0.373.tar.gz
-+sha256  b98ef646d530d5fd3afa3180efbf7c8e22d3da0088f5836f41ee25380d87b092  hwdata-0.379.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  21d0406f93e884a050426ebc21931839a45d56bfcbcbfdda7686d583f36f107f  LICENSE
-diff --git a/package/hwdata/hwdata.mk b/package/hwdata/hwdata.mk
-index 025f5b4969..555fb58f14 100644
---- a/package/hwdata/hwdata.mk
-+++ b/package/hwdata/hwdata.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/xz/xz.hash b/package/xz/xz.hash
+index 3d93ad6b5e..e8025a8065 100644
+--- a/package/xz/xz.hash
++++ b/package/xz/xz.hash
+@@ -1,9 +1,9 @@
+ # Locally calculated after checking pgp signature
+-# https://tukaani.org/xz/xz-5.4.5.tar.bz2.sig
+-sha256  8ccf5fff868c006f29522e386fb4c6a1b66463fbca65a4cfc3c4bd596e895e79  xz-5.4.5.tar.bz2
++# https://github.com/tukaani-project/xz/releases/download/v5.4.6/xz-5.4.6.tar.bz2.sig
++sha256  913851b274e8e1d31781ec949f1c23e8dbcf0ecf6e73a2436dc21769dd3e6f49  xz-5.4.6.tar.bz2
+ 
+ # Hash for license files
+-sha256  72d7ef9c98be319fd34ce88b45203b36d5936f9c49e82bf3198ffee5e0c7d87e  COPYING
++sha256  29a1e305b2e34eefe5d4602d00cde1d528b71c5d9f2eec5106972cf6ddb6f73f  COPYING
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING.GPLv3
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPLv2.1
+diff --git a/package/xz/xz.mk b/package/xz/xz.mk
+index 547959c743..40fa59ca7c 100644
+--- a/package/xz/xz.mk
++++ b/package/xz/xz.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--HWDATA_VERSION = 0.373
-+HWDATA_VERSION = 0.379
- HWDATA_SITE = $(call github,vcrhonek,hwdata,v$(HWDATA_VERSION))
- HWDATA_LICENSE = GPL-2.0+, BSD-3-Clause, XFree86 1.0
- HWDATA_LICENSE_FILES = COPYING LICENSE
+-XZ_VERSION = 5.4.5
++XZ_VERSION = 5.4.6
+ XZ_SOURCE = xz-$(XZ_VERSION).tar.bz2
+-XZ_SITE = https://tukaani.org/xz
++XZ_SITE = https://github.com/tukaani-project/xz/releases/download/v$(XZ_VERSION)
+ XZ_INSTALL_STAGING = YES
+ XZ_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+ XZ_LICENSE = Public Domain, GPL-2.0+, GPL-3.0+, LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
