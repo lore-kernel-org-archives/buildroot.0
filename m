@@ -4,49 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39115C48BF6
-	for <buildroot@archiver.kernel.org>; Sun,  3 Mar 2024 08:42:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 330E7C54E41
+	for <buildroot@archiver.kernel.org>; Sun,  3 Mar 2024 08:43:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0545E81F45;
-	Sun,  3 Mar 2024 08:42:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 02F8781F45;
+	Sun,  3 Mar 2024 08:43:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id geONzOjimZPi; Sun,  3 Mar 2024 08:42:51 +0000 (UTC)
+	with ESMTP id KJUUKER5coG3; Sun,  3 Mar 2024 08:43:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F67882361
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2EEC182383
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0F67882361;
-	Sun,  3 Mar 2024 08:42:51 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 548D01BF38B
- for <buildroot@lists.busybox.net>; Sun,  3 Mar 2024 08:42:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2EEC182383;
+	Sun,  3 Mar 2024 08:43:07 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 608541BF38B
+ for <buildroot@lists.busybox.net>; Sun,  3 Mar 2024 08:43:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 42925409FB
- for <buildroot@lists.busybox.net>; Sun,  3 Mar 2024 08:42:50 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4CB4382383
+ for <buildroot@lists.busybox.net>; Sun,  3 Mar 2024 08:43:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9_C9UQTb1izw for <buildroot@lists.busybox.net>;
- Sun,  3 Mar 2024 08:42:49 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1QldfU80cMVd for <buildroot@lists.busybox.net>;
+ Sun,  3 Mar 2024 08:43:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
+ helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D9FB410A2
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3D9FB410A2
- for <buildroot@buildroot.org>; Sun,  3 Mar 2024 08:42:49 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0A22687ECA; Sun,  3 Mar 2024 08:42:48 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 2 Mar 2024 21:44:00 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: fa9e575776ee3d3d47a31fee3c09a94753c77cc7
-X-Git-Newrev: 64b8cbc13cfd5f9d4863531ab768bf0afbc1f340
-X-Patchwork-Hint: ignore
-Message-Id: <20240303084249.0A22687ECA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/mc: bump to version
- 4.8.31
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4A20E81F45
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4A20E81F45
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4A20E81F45
+ for <buildroot@busybox.net>; Sun,  3 Mar 2024 08:43:05 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4425CE0002;
+ Sun,  3 Mar 2024 08:43:03 +0000 (UTC)
+Date: Sun, 3 Mar 2024 09:43:02 +0100
+To: Francois Perrad <fperrad@gmail.com>
+Message-ID: <20240303094302.1a920e6c@windsurf>
+In-Reply-To: <20240301220331.315093-1-francois.perrad@gadz.org>
+References: <20240301220331.315093-1-francois.perrad@gadz.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1709455383;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=B+8x8hw6AbssFNT/s/wQ5XOtGF+9n7ZKxG/b4O1JVAU=;
+ b=f/ZrfW9JtnuCzeDqhs0f/67+HiIWRQ8v5iF7COfYHzfb0PexdzCgbijqEs7KMjX1FJ9uLs
+ k72lspLMIEicizNfWcIGwRhxE+Wlf3w8BgtXIgEKqh1OresMyC1dMqKnKsmgEiTjUCBxjs
+ FA/cjN40uaXCyZ1t8vpcxQgQWorqswWXapmFxarpM5padkEcrNpRjjDTRf0eVnFbnDfGW5
+ 9XfjvOatrOgIsgymc9xMmzVyXNTjzEwpugl6d/y2EC7p9J/B2YFd2sqnj8AtzfKDLOY6JM
+ 4oWHj+7LV3EzbdVYRbUjMIxNDE65bGuSrPgifH2vzGByfFHkQWuYfMkyjfaJEQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=f/ZrfW9J
+Subject: Re: [Buildroot] [PATCH] package/mc: bump to version 4.8.31
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,46 +82,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=64b8cbc13cfd5f9d4863531ab768bf0afbc1f340
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Fri,  1 Mar 2024 23:03:31 +0100
+Francois Perrad <fperrad@gmail.com> wrote:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/mc/mc.hash | 4 ++--
- package/mc/mc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/mc/mc.hash | 4 ++--
+>  package/mc/mc.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mc/mc.hash b/package/mc/mc.hash
-index 93462afa60..84ea4b2ac7 100644
---- a/package/mc/mc.hash
-+++ b/package/mc/mc.hash
-@@ -1,4 +1,4 @@
--# Hash from http://ftp.midnight-commander.org/mc-4.8.30.sha256
--sha256  5ebc3cb2144b970c5149fda556c4ad50b78780494696cdf2d14a53204c95c7df  mc-4.8.30.tar.xz
-+# Hash from http://ftp.midnight-commander.org/mc-4.8.31.sha256
-+sha256  24191cf8667675b8e31fc4a9d18a0a65bdc0598c2c5c4ea092494cd13ab4ab1a  mc-4.8.31.tar.xz
- # sha256 locally computed:
- sha256  5576bbec76296e1c8e081f7037ebd01bdada388635f58d844a2f20d37bbe4284  COPYING
-diff --git a/package/mc/mc.mk b/package/mc/mc.mk
-index 2b4279c308..a6c3e0bc84 100644
---- a/package/mc/mc.mk
-+++ b/package/mc/mc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MC_VERSION = 4.8.30
-+MC_VERSION = 4.8.31
- MC_SOURCE = mc-$(MC_VERSION).tar.xz
- MC_SITE = http://ftp.midnight-commander.org
- MC_LICENSE = GPL-3.0+
+Applied to next, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
