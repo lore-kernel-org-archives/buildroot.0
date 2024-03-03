@@ -4,98 +4,99 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F1A0C54E49
-	for <buildroot@archiver.kernel.org>; Sun,  3 Mar 2024 16:17:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8956C54E49
+	for <buildroot@archiver.kernel.org>; Sun,  3 Mar 2024 16:18:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2CBD281FAB;
-	Sun,  3 Mar 2024 16:17:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8E55081FC2;
+	Sun,  3 Mar 2024 16:18:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lr5vU6Kbv5ps; Sun,  3 Mar 2024 16:17:33 +0000 (UTC)
+	with ESMTP id 9WFDBAptyr4e; Sun,  3 Mar 2024 16:18:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 379C081FB5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6DD1681FAB
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 379C081FB5;
-	Sun,  3 Mar 2024 16:17:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6DD1681FAB;
+	Sun,  3 Mar 2024 16:18:20 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C02BB1BF575
- for <buildroot@lists.busybox.net>; Sun,  3 Mar 2024 16:17:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B3A861BF575
+ for <buildroot@lists.busybox.net>; Sun,  3 Mar 2024 16:18:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ADAA460827
- for <buildroot@lists.busybox.net>; Sun,  3 Mar 2024 16:17:31 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id AEEF860827
+ for <buildroot@lists.busybox.net>; Sun,  3 Mar 2024 16:18:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1-UqaROoxabv for <buildroot@lists.busybox.net>;
- Sun,  3 Mar 2024 16:17:31 +0000 (UTC)
+ with ESMTP id 8yeWyHjUMNXu for <buildroot@lists.busybox.net>;
+ Sun,  3 Mar 2024 16:18:17 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62f; helo=mail-ej1-x62f.google.com;
+ client-ip=2a00:1450:4864:20::133; helo=mail-lf1-x133.google.com;
  envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A91BA60812
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A91BA60812
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
- [IPv6:2a00:1450:4864:20::62f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A91BA60812
- for <buildroot@buildroot.org>; Sun,  3 Mar 2024 16:17:30 +0000 (UTC)
-Received: by mail-ej1-x62f.google.com with SMTP id
- a640c23a62f3a-a4499ef8b5aso213066266b.0
- for <buildroot@buildroot.org>; Sun, 03 Mar 2024 08:17:30 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5F76160812
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F76160812
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com
+ [IPv6:2a00:1450:4864:20::133])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5F76160812
+ for <buildroot@buildroot.org>; Sun,  3 Mar 2024 16:18:17 +0000 (UTC)
+Received: by mail-lf1-x133.google.com with SMTP id
+ 2adb3069b0e04-5101cd91017so4992875e87.2
+ for <buildroot@buildroot.org>; Sun, 03 Mar 2024 08:18:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1709482649; x=1710087449;
+ d=1e100.net; s=20230601; t=1709482695; x=1710087495;
  h=content-transfer-encoding:in-reply-to:from:references:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=Z+IaelBbpoJkl+pILOkazMyi9wicFx5QW9j3LGauAP4=;
- b=fhHbl+WDv7nmsPT90y5qCJZdyv3Bby0sw1YhLhaq5JQThk2PxE2e73MGQ4+1Bdun3O
- A16/ghK0zpybgDmLr4hZRAB5H0hpFNYDaINc7C4nR9kt5FhElGlMS9sTCecXMIRwDDGs
- lXt/U6jRGTdURemN7GhUWcenmED+Xkuvkts62pll60rFPEEhfi7oO/J5KHpsdwua80GR
- O/nePcDN0TNEhGrm6llsuIP8ue50FKIBbxMW0BwiPqbRWwcNQfysM/MxCVRrcVLnagbl
- 7aVUI8G7lfxXw/6fGR/utpJzhX97KKDV17aAMHAgOW5AtGGtXfVruGEGDIqHrujZoFC2
- Yf6g==
+ bh=y6+EOgPDPJwDoXCvHNwFhHoZucNMidbU1U/kefEqcpM=;
+ b=Wm+uRlcu3L71+Ye27I3kVK13KSgf4B40J46LYTYqlblQmYJrZnyry5X/W+TROcAHKO
+ 7Rd4sdUZkCiTW0BCKFbC1uz7L3MUV5cN4NHXP2sMTOgne36UKCv3QkNokA07u9IBTPTw
+ xqaEnQAIIR5tfpEd/hWUpipsZcJ2QLColw1wKXaaqcl7rT2vtfBdLy0Tbr0zbelEy1q3
+ ahnB0CFVM8oE08rPqHMRgtb0btyARDjdlj1rssAevRxFf29dXB9XlHvt7wjYlI5VVPtp
+ ZbEqUyCcnuov0G5D+kMpFVB9SMlsT+4o64aNNIPaDwWjInDCX4GsTjoifb83dcFL4qQW
+ nAuQ==
 X-Forwarded-Encrypted: i=1;
- AJvYcCXxV2Qjnx6F6ngck4FAf657SSVDNstk0oCJtEVz1GwiN8O2L0y3QoF5O8dDUgq6Jxth9lZHZuQwkHk8bYPCJOKc/87+Zq+jGw==
-X-Gm-Message-State: AOJu0Yyc6uZl+GqvrDKCZ5GaUdY7b9+6PHjUjJNP9f9LXwz8xoWKtUX3
- 0q56QjuZhQlFWwGSfi3IdB1XY9Q+zGsYHZQA3Pw1w0bZKg9ZBU5wHfccs15b9Zo=
-X-Google-Smtp-Source: AGHT+IEvqRuZFameEgW27NXUfs8+YOQm8OLpMKU2T7cTaqvqZaw3Bl9sgn0T81kedx10oj9ZY5sTPg==
-X-Received: by 2002:a17:906:180a:b0:a44:d6bb:ede0 with SMTP id
- v10-20020a170906180a00b00a44d6bbede0mr2553052eje.55.1709482648665; 
- Sun, 03 Mar 2024 08:17:28 -0800 (PST)
+ AJvYcCVKozZdoMQZGFk/6pBzpKBbG/PvZk1bjdedJHFGYJ3QYyQ69n+42PJX0SR72O4OquNEDFhzUQsdSGp4fw9/+p9Dkhp/b6513Q==
+X-Gm-Message-State: AOJu0Yyq7LExvfi1b3u7Uwn6hFNkGPG/e7CHdS1ZzegaiQxwwKD08k9d
+ 8yBq8uy6aKVhGfv4F1Ehx/QBZvj4UpmNNwOc6DZYVYj5C9LuD1k/hA1iTqZx/7jOc6/D2gxzSy+
+ b
+X-Google-Smtp-Source: AGHT+IG0pSUljQw55x8VuTkWa/wlWy+pkEL2uY0CoQGdHPl61zDignU/e29Vj095bw08w9hYGh0OTQ==
+X-Received: by 2002:a05:6512:3114:b0:513:172d:5b46 with SMTP id
+ n20-20020a056512311400b00513172d5b46mr4389507lfb.39.1709482694953; 
+ Sun, 03 Mar 2024 08:18:14 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
  (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- gl7-20020a170906e0c700b00a44e65447f9sm1535534ejb.7.2024.03.03.08.17.27
+ gl7-20020a170906e0c700b00a44e65447f9sm1535534ejb.7.2024.03.03.08.18.14
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 03 Mar 2024 08:17:28 -0800 (PST)
-Message-ID: <a62e68fa-c940-44f5-b19d-902159def34f@mind.be>
-Date: Sun, 3 Mar 2024 17:17:26 +0100
+ Sun, 03 Mar 2024 08:18:14 -0800 (PST)
+Message-ID: <93236dca-7dbb-4b9a-abb8-962091693095@mind.be>
+Date: Sun, 3 Mar 2024 17:18:13 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Content-Language: en-GB
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20240214195858.1796266-1-fontaine.fabrice@gmail.com>
-In-Reply-To: <20240214195858.1796266-1-fontaine.fabrice@gmail.com>
+To: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
+References: <20240106131026.127457-1-ju.o@free.fr>
+In-Reply-To: <20240106131026.127457-1-ju.o@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1709482649; x=1710087449; darn=buildroot.org;
+ d=mind.be; s=google; t=1709482695; x=1710087495; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:from:references:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=Z+IaelBbpoJkl+pILOkazMyi9wicFx5QW9j3LGauAP4=;
- b=IwMZ79YTQlo6CLqnxQ8hikwu5Hz4uR30bLOAIljn7bOho+WFJKBSNwnETaShOrskRQ
- C+NoafA5sNvu3WLIBUJb89cxlyR0El5i78ScmQIbNa/fCrJPiCl+nC9WBrlo2FOL+SmK
- wQK/maAAhU1C0dNVIhEDJfHfE87rdxXU1ZpV8Crk2B4nkNwqwFmdqxvr5shW94HE562D
- SmJK0CjvJ1w/GNH6eCFqv5lSTZYriyZZUb3/LACiWI3vW8naddBpZY3iOIt5qYo3KqaO
- me5nPX874Eqtj5Xi3nOrMLYKL0rtwJ+aFk7DyBO8+qpd5Mcs1Fo3q16cHwPuATKJpGMZ
- Kc7Q==
+ bh=y6+EOgPDPJwDoXCvHNwFhHoZucNMidbU1U/kefEqcpM=;
+ b=fmGvL4TWD9jgcYsIMfaDrfEVYw0IoPoqU8t516Zg1c949J006cOCovM/6GS91gmRGY
+ w07iRdOIHsbZXDHYrzEMdPJcQE6leFowBxChg4O7nLCLWR+5+xhR4xJRCkgh78ESHnUs
+ VBdHpIjv/JCyC8mQ+dPg2PQeOb1z8ygaftqWJsrAAD1H7et3BTQ800tt+vJqTpqCMpbh
+ utnaBjSmuZCV36LnrR4tQVFOjiBkd6iOJZz8Goy5QKcodKBJgRboS6rdK23caStVbIPM
+ BZnuiRQS8fy61HFY0vNDqLoIk2rJ7s4Apty7BRHvFKVBnyb+DmvHHN6YWuOeSbkd+BkE
+ uqTA==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=IwMZ79YT
-Subject: Re: [Buildroot] [PATCH 1/1] package/gstreamer1/gst1-vaapi: fix
- wayland build
+ header.a=rsa-sha256 header.s=google header.b=fmGvL4TW
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/octave: add libreadline
+ search prefix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -116,56 +117,130 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 14/02/2024 20:58, Fabrice Fontaine wrote:
-> wayland-protocols is a mandatory dependency with wayland since
-> bump to version 1.22.0 in commit
-> 33d4c226e582f6c0086431c4d9154e462cb3cf34 and
-> https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/3c713cc16ee1d374213cb2b47a3127e14e5ff8a5:
+On 06/01/2024 14:10, Julien Olivain wrote:
+> GNU Octave changed its detection of readline library in [1]. This
+> commit was first included in version 8.1.0.
 > 
-> Run-time dependency wayland-protocols found: NO (tried pkgconfig and cmake)
+> GNU Octave was updated to 8.1.0 in Buildroot in commit b36e4b10f3
+> "package/octave: bump to version 8.1.0".
 > 
-> ../output-1/build/gst1-vaapi-1.22.0/meson.build:111:0: ERROR: Dependency "wayland-protocols" not found, tried pkgconfig and cmake
+> Since this commit, Octave can fail to find readline automatically in
+> some specific situations. For example, when host system is Fedora 39
+> and the host "readline-devel" package is installed (see detailed
+> explanation below).
 > 
-> Fixes: 33d4c226e582f6c0086431c4d9154e462cb3cf34
->   - http://autobuild.buildroot.org/results/b5e79d4e10fdf24c3fd43ab742d9d14a5d07824b
->   - http://autobuild.buildroot.org/results/ad624cd11d5a1b3346974000ae2b61f4261af02c
+> Octave is now using a m4 macro from gnulib to detect readline.
+> See [2].
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> This macro is calling AC_LIB_LINKFLAGS_BODY([readline]). Note that
+> this macro will look into $libdir and $includedir by default. See [3].
+> 
+> Buildroot is calling target autotools configure command with
+> --prefix=/usr and --exec-prefix=/usr arguments. See [4].
+> 
+> Autotools derives libdir='${exec_prefix}/lib' and
+> includedir='${prefix}/include'.
+> 
+> Finally, gnulib will also search automatically into alternate library
+> directories (i.e. lib32, lib64). See [5].
+> 
+> All of this will make the configure script searching the readline
+> library by default (i.e. if the library prefix is not provided) into
+> the host "/usr/lib", "/usr/lib32" and "/usr/lib64", when configuring
+> for target.
+> 
+> This issue is not happening on the Buildroot docker reference image,
+> because the package "libreadline-dev" is not present in this image.
+> 
+> Even if the package "libreadline-dev" is installed on a Debian based
+> host systems, the issue is still not happening because libraries are
+> installed in the path "/usr/lib/x86_64-linux-gnu", which is not
+> searched by gnulib macros.
+> 
+> On host systems which installs libraries into one of the
+> "/usr/lib{,32,64}" directories, the Octave configuration script will
+> fail, because it will detect the host library and try to link against
+> it with target architecture and compilation flags and will fail. Since
+> the --enable-readline configure option is present, the configuration
+> script will fail because it cannot find a working readline library.
+> 
+> This can be seen in the octave configuration log, in file:
+> output/build/octave-8.4.0/config.log
+> 
+>      configure:73671: checking for readline
+>      configure:73705: /buildroot/output/host/bin/aarch64-none-linux-gnu-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0 -D_FORTIFY_SOURCE=1 -pthread -fopenmp -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.c -lpthread -lm  /usr/lib64/libreadline.so >&5
+>      /buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-none-linux-gnu/13.2.1/../../../../aarch64-none-linux-gnu/bin/ld: /usr/lib64/libreadline.so: error adding symbols: file in wrong format
+>      collect2: error: ld returned 1 exit status
+> 
+> This situation can be reproduced on a Fedora 39 x86_64 host system,
+> with the "readline-devel" package installed. Note: uninstalling the
+> "readline-devel" will work around the issue.
+> 
+> The issue can be reproduced with a Buildroot configuration such as:
+> 
+>      cat > .config <<EOF
+>      BR2_aarch64=y
+>      BR2_TOOLCHAIN_EXTERNAL=y
+>      BR2_PACKAGE_OCTAVE=y
+>      BR2_PACKAGE_READLINE=y
+>      EOF
+>      make olddefconfig
+>      make
+> 
+> In order to avoid those host/target readline detection mix-ups, the
+> readline search prefix need to be explicitly passed during octave
+> configuration. This commit adds this search prefix to fix this build
+> issue.
+> 
+> Fixes:
+> 
+>      checking for readline... (cached) no
+>      checking for readline/readline.h... (cached) yes
+>      checking for readline/history.h... (cached) yes
+>      configure: WARNING: I need GNU Readline 4.2 or later
+>      configure: error: this is fatal unless you specify --disable-readline
+> 
+> [1] https://github.com/gnu-octave/octave/commit/3645c78658c4c66f2bc346fdbc5c7c77d8d8dd12
+> [2] https://git.savannah.gnu.org/cgit/gnulib.git/tree/m4/readline.m4?id=2cdc1bafb20b187ad067056e090fcb4396ed9099
+> [3] https://git.savannah.gnu.org/cgit/gnulib.git/tree/m4/lib-link.m4?id=2cdc1bafb20b187ad067056e090fcb4396ed9099#n190
+> [4] https://gitlab.com/buildroot.org/buildroot/-/blob/2023.11/package/pkg-autotools.mk#L175
+> [5] https://git.savannah.gnu.org/cgit/gnulib.git/tree/m4/lib-prefix.m4?id=2cdc1bafb20b187ad067056e090fcb4396ed9099#n276
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 
-  Applied to master, thanks.
+
+  Applied to master, thanks. And thank you for the _excellent_ commit message!
 
   Regards,
   Arnout
 
+
 > ---
->   package/gstreamer1/gst1-vaapi/Config.in     | 1 +
->   package/gstreamer1/gst1-vaapi/gst1-vaapi.mk | 1 +
->   2 files changed, 2 insertions(+)
+> Changes v1 -> v2:
+> - Rewrote the commit log to include the full analysis.
+>    The root cause was more complex that initially thought,
+>    and the issue was not reproduced in Buildroot reference
+>    docker image.
+>    The patch content is exactly the same as v1.
+> ---
+>   package/octave/octave.mk | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> diff --git a/package/gstreamer1/gst1-vaapi/Config.in b/package/gstreamer1/gst1-vaapi/Config.in
-> index a1062097ed..d6a1542ad3 100644
-> --- a/package/gstreamer1/gst1-vaapi/Config.in
-> +++ b/package/gstreamer1/gst1-vaapi/Config.in
-> @@ -8,6 +8,7 @@ config BR2_PACKAGE_GST1_VAAPI
->   	select BR2_PACKAGE_LIBDRM
->   	select BR2_PACKAGE_GST1_PLUGINS_BASE
->   	select BR2_PACKAGE_GST1_PLUGINS_BAD # gstreamer-codecparsers
-> +	select BR2_PACKAGE_WAYLAND_PROTOCOLS if BR2_PACKAGE_WAYLAND
->   	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
->   	select BR2_PACKAGE_XLIB_LIBXRANDR if BR2_PACKAGE_XORG7
->   	help
-> diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
-> index 4b04d1bb72..d934bab233 100644
-> --- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
-> +++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
-> @@ -39,6 +39,7 @@ endif
+> diff --git a/package/octave/octave.mk b/package/octave/octave.mk
+> index cae0de7620..f240a5057c 100644
+> --- a/package/octave/octave.mk
+> +++ b/package/octave/octave.mk
+> @@ -20,7 +20,9 @@ OCTAVE_DEPENDENCIES = \
+>   	pcre2
 >   
->   ifeq ($(BR2_PACKAGE_WAYLAND),y)
->   GST1_VAAPI_CONF_OPTS += -Dwayland=enabled
-> +GST1_VAAPI_DEPENDENCIES += wayland wayland-protocols
+>   ifeq ($(BR2_PACKAGE_READLINE),y)
+> -OCTAVE_CONF_OPTS += --enable-readline
+> +OCTAVE_CONF_OPTS += \
+> +	--enable-readline \
+> +	--with-libreadline-prefix=$(STAGING_DIR)/usr
+>   OCTAVE_DEPENDENCIES += readline
 >   else
->   GST1_VAAPI_CONF_OPTS += -Dwayland=disabled
->   endif
+>   OCTAVE_CONF_OPTS += --disable-readline
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
