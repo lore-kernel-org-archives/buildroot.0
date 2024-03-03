@@ -4,48 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99D29C54798
-	for <buildroot@archiver.kernel.org>; Tue,  5 Mar 2024 20:44:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99AA0C54798
+	for <buildroot@archiver.kernel.org>; Tue,  5 Mar 2024 20:45:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 66D9A4182F;
-	Tue,  5 Mar 2024 20:44:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5497B41840;
+	Tue,  5 Mar 2024 20:45:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LzF0LBzuRaH6; Tue,  5 Mar 2024 20:44:58 +0000 (UTC)
+	with ESMTP id aXfPK22gf0UP; Tue,  5 Mar 2024 20:45:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B1E2641837
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 93DE24184C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B1E2641837;
-	Tue,  5 Mar 2024 20:44:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5838A1BF95C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 93DE24184C;
+	Tue,  5 Mar 2024 20:45:01 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 64DF61BF97A
  for <buildroot@lists.busybox.net>; Tue,  5 Mar 2024 20:44:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7CB6260F46
+ by smtp1.osuosl.org (Postfix) with ESMTP id AF69281440
  for <buildroot@lists.busybox.net>; Tue,  5 Mar 2024 20:44:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FKCP2Xjjr8Sr for <buildroot@lists.busybox.net>;
- Tue,  5 Mar 2024 20:44:39 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jMz0hseen6K7 for <buildroot@lists.busybox.net>;
+ Tue,  5 Mar 2024 20:44:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA4B460600
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 02E408145F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BA4B460600
- for <buildroot@buildroot.org>; Tue,  5 Mar 2024 20:44:39 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 02E408145F
+ for <buildroot@buildroot.org>; Tue,  5 Mar 2024 20:44:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A26008812D; Tue,  5 Mar 2024 20:44:39 +0000 (UTC)
+ id E19E188130; Tue,  5 Mar 2024 20:44:39 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 2 Mar 2024 21:37:58 +0100
+Date: Sun, 3 Mar 2024 11:46:05 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 814f9f17d5c345f4c20ed3cca4873f7411db96d5
-X-Git-Newrev: fa9e575776ee3d3d47a31fee3c09a94753c77cc7
+X-Git-Oldrev: e88225ed8820881970ec33de7a15a1e0d50443da
+X-Git-Newrev: 3b33b26633833f506c009082b604dad36a42fae3
 X-Patchwork-Hint: ignore
-Message-Id: <20240305204439.A26008812D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pcre2: bump to version 10.43
+Message-Id: <20240305204439.E19E188130@busybox.osuosl.org>
+Subject: [Buildroot] [git commit]
+ support/config-fragments/autobuild/br-arm-internal-glibc: update to
+ bleeding edge components
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,52 +60,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fa9e575776ee3d3d47a31fee3c09a94753c77cc7
+commit: https://git.buildroot.net/buildroot/commit/?id=3b33b26633833f506c009082b604dad36a42fae3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff LICENCE: update copyright dates
+As Thomas stated in 3bb260cf3860:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+The br-arm-internal-glibc.config is generally used as a configuration
+to test the bleeding edge versions of components. However, it has been
+lagging behind somewhat, so let's bring it up-to-date:
+
+  - Binutils 2.42.x
+  - GCC 13.x
+
+Let the fun begin in the autobuilders!
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/pcre2/pcre2.hash | 6 +++---
- package/pcre2/pcre2.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ support/config-fragments/autobuild/br-arm-internal-glibc.config | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pcre2/pcre2.hash b/package/pcre2/pcre2.hash
-index f609bdaee2..f2e17df753 100644
---- a/package/pcre2/pcre2.hash
-+++ b/package/pcre2/pcre2.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature:
--# https://github.com/PhilipHazel/pcre2/releases/download/pcre2-10.42/pcre2-10.42.tar.bz2.sig
--sha256  8d36cd8cb6ea2a4c2bb358ff6411b0c788633a2a45dabbf1aeb4b701d1b5e840  pcre2-10.42.tar.bz2
-+# https://github.com/PhilipHazel/pcre2/releases/download/pcre2-10.43/pcre2-10.43.tar.bz2.sig
-+sha256  e2a53984ff0b07dfdb5ae4486bbb9b21cca8e7df2434096cc9bf1b728c350bcb  pcre2-10.43.tar.bz2
- # Locally computed
--sha256  87d884eceb7fc54611470ce9f74280d28612b0c877adfc767e9676892a638987  LICENCE
-+sha256  030087e2e8dd7c1bdd26057d25d4ded8f45bbf01ad458d68665ad04b8b0fbedf  LICENCE
-diff --git a/package/pcre2/pcre2.mk b/package/pcre2/pcre2.mk
-index c35056f8a2..9641f22e81 100644
---- a/package/pcre2/pcre2.mk
-+++ b/package/pcre2/pcre2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PCRE2_VERSION = 10.42
-+PCRE2_VERSION = 10.43
- PCRE2_SITE = https://github.com/PCRE2Project/pcre2/releases/download/pcre2-$(PCRE2_VERSION)
- PCRE2_SOURCE = pcre2-$(PCRE2_VERSION).tar.bz2
- PCRE2_LICENSE = BSD-3-Clause
+diff --git a/support/config-fragments/autobuild/br-arm-internal-glibc.config b/support/config-fragments/autobuild/br-arm-internal-glibc.config
+index cd148f32e6..4986d40912 100644
+--- a/support/config-fragments/autobuild/br-arm-internal-glibc.config
++++ b/support/config-fragments/autobuild/br-arm-internal-glibc.config
+@@ -1,6 +1,6 @@
+ BR2_arm=y
+ BR2_cortex_a8=y
+ BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+-BR2_BINUTILS_VERSION_2_39_X=y
+-BR2_GCC_VERSION_12_X=y
++BR2_BINUTILS_VERSION_2_42_X=y
++BR2_GCC_VERSION_13_X=y
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
