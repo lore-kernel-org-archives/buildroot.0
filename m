@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83179C48BF6
-	for <buildroot@archiver.kernel.org>; Sun,  3 Mar 2024 20:35:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9196C54E41
+	for <buildroot@archiver.kernel.org>; Sun,  3 Mar 2024 20:35:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 52156407E8;
-	Sun,  3 Mar 2024 20:35:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B62C6407EB;
+	Sun,  3 Mar 2024 20:35:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5_qRsJRVuHTp; Sun,  3 Mar 2024 20:35:42 +0000 (UTC)
+	with ESMTP id x7HKzwzDWewf; Sun,  3 Mar 2024 20:35:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 035DB407BC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77C12407EF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 035DB407BC;
-	Sun,  3 Mar 2024 20:35:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 77C12407EF;
+	Sun,  3 Mar 2024 20:35:45 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0101E1BF94D
- for <buildroot@lists.busybox.net>; Sun,  3 Mar 2024 20:35:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3246A1BF340
+ for <buildroot@lists.busybox.net>; Sun,  3 Mar 2024 20:35:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EDE1140B07
- for <buildroot@lists.busybox.net>; Sun,  3 Mar 2024 20:35:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 28C3840AFE
+ for <buildroot@lists.busybox.net>; Sun,  3 Mar 2024 20:35:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Nrn9Q1iZG0Mg for <buildroot@lists.busybox.net>;
- Sun,  3 Mar 2024 20:35:30 +0000 (UTC)
+ with ESMTP id tICCNsNebdzY for <buildroot@lists.busybox.net>;
+ Sun,  3 Mar 2024 20:35:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A5F1F40AFE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E860440B04
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A5F1F40AFE
+ by smtp2.osuosl.org (Postfix) with ESMTP id E860440B04
  for <buildroot@buildroot.org>; Sun,  3 Mar 2024 20:35:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8F24488021; Sun,  3 Mar 2024 20:35:30 +0000 (UTC)
+ id D1D5888022; Sun,  3 Mar 2024 20:35:30 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 3 Mar 2024 21:31:46 +0100
+Date: Sun, 3 Mar 2024 21:32:30 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 57008d384bc1f2e42d6add6cd73203e11a75d6c9
-X-Git-Newrev: e8545ee43923242c74a5ebbb7ef1b8857ae90550
+X-Git-Oldrev: 4308c270a7ee4300e29e39d9d7f1de91179679ba
+X-Git-Newrev: 2ce680b991d390a75990e7cb1a55acc9ace7ae81
 X-Patchwork-Hint: ignore
-Message-Id: <20240303203530.8F24488021@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-uvicorn: bump
- to 0.27.1
+Message-Id: <20240303203530.D1D5888022@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-jc: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,47 +65,128 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e8545ee43923242c74a5ebbb7ef1b8857ae90550
+commit: https://git.buildroot.net/buildroot/commit/?id=2ce680b991d390a75990e7cb1a55acc9ace7ae81
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Changelog:
-https://github.com/encode/uvicorn/blob/master/CHANGELOG.md#0271---2024-02-10
+All dependencies are optional, and thus only mentioned in the package
+help text.
 
 Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+[Arnout:
+ - add to DEVELOPERS;
+ - add BSD-3-Clause license for vendored pbPlist.
+]
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/python-uvicorn/python-uvicorn.hash | 4 ++--
- package/python-uvicorn/python-uvicorn.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ DEVELOPERS                                      |  1 +
+ package/Config.in                               |  1 +
+ package/python-jc/Config.in                     | 12 ++++++++++++
+ package/python-jc/python-jc.hash                |  5 +++++
+ package/python-jc/python-jc.mk                  | 14 ++++++++++++++
+ support/testing/tests/package/test_python_jc.py | 22 ++++++++++++++++++++++
+ 6 files changed, 55 insertions(+)
 
-diff --git a/package/python-uvicorn/python-uvicorn.hash b/package/python-uvicorn/python-uvicorn.hash
-index c7feaf3bfe..773995ab9d 100644
---- a/package/python-uvicorn/python-uvicorn.hash
-+++ b/package/python-uvicorn/python-uvicorn.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/uvicorn/json
--md5  a98f96c2578d9e6d454e271d0eae3ba3  uvicorn-0.27.0.post1.tar.gz
--sha256  54898fcd80c13ff1cd28bf77b04ec9dbd8ff60c5259b499b4b12bb0917f22907  uvicorn-0.27.0.post1.tar.gz
-+md5  98f40515e34fb49e9d2842b6a147acec  uvicorn-0.27.1.tar.gz
-+sha256  3d9a267296243532db80c83a959a3400502165ade2c1338dea4e67915fd4745a  uvicorn-0.27.1.tar.gz
- # Locally computed sha256 checksums
- sha256  efe1acf3e62fb99c288b0ec73e5a773b7268ef4320fe757ea994214e4b63c371  LICENSE.md
-diff --git a/package/python-uvicorn/python-uvicorn.mk b/package/python-uvicorn/python-uvicorn.mk
-index 502cc06ad8..899b9660f6 100644
---- a/package/python-uvicorn/python-uvicorn.mk
-+++ b/package/python-uvicorn/python-uvicorn.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0bfe91f064..a6364cdd44 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2092,6 +2092,7 @@ F:	utils/config
+ F:	utils/diffconfig
  
--PYTHON_UVICORN_VERSION = 0.27.0.post1
-+PYTHON_UVICORN_VERSION = 0.27.1
- PYTHON_UVICORN_SOURCE = uvicorn-$(PYTHON_UVICORN_VERSION).tar.gz
--PYTHON_UVICORN_SITE = https://files.pythonhosted.org/packages/38/56/7bc5cf1d693d0c8e5d9dd66c29808691c17260b31346e4ddfbee26ba9bc2
-+PYTHON_UVICORN_SITE = https://files.pythonhosted.org/packages/09/d8/8aa69c76585035ca81851d99c3b00fd6be050aefd478a5376ff9fc5feb69
- PYTHON_UVICORN_SETUP_TYPE = pep517
- PYTHON_UVICORN_LICENSE = BSD-3-Clause
- PYTHON_UVICORN_LICENSE_FILES = LICENSE.md
+ N:	Marcus Hoffmann <bubu@bubu1.eu>
++F:	package/python-jc/
+ F:	support/testing/tests/package/test_python_fastapi.py
+ F:	support/testing/tests/package/sample_python_fastapi.py
+ 
+diff --git a/package/Config.in b/package/Config.in
+index bf0fe078b9..bbcc5b5774 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1150,6 +1150,7 @@ menu "External python modules"
+ 	source "package/python-janus/Config.in"
+ 	source "package/python-jaraco-classes/Config.in"
+ 	source "package/python-jaraco-functools/Config.in"
++	source "package/python-jc/Config.in"
+ 	source "package/python-jedi/Config.in"
+ 	source "package/python-jeepney/Config.in"
+ 	source "package/python-jinja2/Config.in"
+diff --git a/package/python-jc/Config.in b/package/python-jc/Config.in
+new file mode 100644
+index 0000000000..b88150e069
+--- /dev/null
++++ b/package/python-jc/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_PYTHON_JC
++	bool "python-jc"
++	help
++	  Converts the output of popular command-line tools and file-
++	  types to JSON.
++
++	  Optionally requires python-pygments for syntax highlighting,
++	  python-ruamel-yaml for yaml parsing and output and
++	  python-xmltodict for xml parsing. PYTHON3_PYEXPAT is required
++	  for xml and plist parsers.
++
++	  https://github.com/kellyjonbrazil/jc
+diff --git a/package/python-jc/python-jc.hash b/package/python-jc/python-jc.hash
+new file mode 100644
+index 0000000000..f54e69eaeb
+--- /dev/null
++++ b/package/python-jc/python-jc.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/jc/json
++md5  80e4c7d46ec856255577c6b364e7f931  jc-1.25.1.tar.gz
++sha256  683352e903ece9a86eae0c3232188e40178139e710c740a466ef91ed87c4cc7e  jc-1.25.1.tar.gz
++# Locally computed sha256 checksums
++sha256  6493f2db400f4166ca0956cf192a41aa092bd1396ff463e7fdaf51f257c10497  LICENSE.md
+diff --git a/package/python-jc/python-jc.mk b/package/python-jc/python-jc.mk
+new file mode 100644
+index 0000000000..ec8826d1c2
+--- /dev/null
++++ b/package/python-jc/python-jc.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-jc
++#
++################################################################################
++
++PYTHON_JC_VERSION = 1.25.1
++PYTHON_JC_SOURCE = jc-$(PYTHON_JC_VERSION).tar.gz
++PYTHON_JC_SITE = https://files.pythonhosted.org/packages/53/a6/065f0796a0a21bc040bc88c8a33410c12729a2a6f4c269d0349f685796da
++PYTHON_JC_SETUP_TYPE = setuptools
++PYTHON_JC_LICENSE = MIT, BSD-3-Clause (bundled pbPlist)
++PYTHON_JC_LICENSE_FILES = LICENSE.md
++
++$(eval $(python-package))
+diff --git a/support/testing/tests/package/test_python_jc.py b/support/testing/tests/package/test_python_jc.py
+new file mode 100644
+index 0000000000..974ce0c4b0
+--- /dev/null
++++ b/support/testing/tests/package/test_python_jc.py
+@@ -0,0 +1,22 @@
++from tests.package.test_python import TestPythonPackageBase
++
++
++class TestPythonPy3Jc(TestPythonPackageBase):
++    __test__ = True
++    # We deliberately run the test without the optional dependencies,
++    # as this configuration is less tested upstream.
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_JC=y
++        """
++    timeout = 60
++
++    def test_run(self):
++        self.login()
++        cmd = "jc -h > /dev/null 2>&1"
++        self.assertRunOk(cmd, timeout=self.timeout)
++        cmd = "jc id | grep -q root"
++        self.assertRunOk(cmd, timeout=self.timeout)
++        cmd = "jc env | grep -q PATH"
++        self.assertRunOk(cmd, self.timeout)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
