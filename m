@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2C7FC48BF6
-	for <buildroot@archiver.kernel.org>; Sun,  3 Mar 2024 16:24:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FAE3C48BF6
+	for <buildroot@archiver.kernel.org>; Sun,  3 Mar 2024 16:46:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 73FBC8206D;
-	Sun,  3 Mar 2024 16:24:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0786E81E1D;
+	Sun,  3 Mar 2024 16:46:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id m7hdzc6g4snT; Sun,  3 Mar 2024 16:24:13 +0000 (UTC)
+	with ESMTP id thMwSizFw9Dx; Sun,  3 Mar 2024 16:46:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9022182011
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 16D9F81ED7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9022182011;
-	Sun,  3 Mar 2024 16:24:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5F1301BF575
- for <buildroot@lists.busybox.net>; Sun,  3 Mar 2024 16:24:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 16D9F81ED7;
+	Sun,  3 Mar 2024 16:46:17 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F1EE21BF575
+ for <buildroot@lists.busybox.net>; Sun,  3 Mar 2024 16:46:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AD4D740815
- for <buildroot@lists.busybox.net>; Sun,  3 Mar 2024 16:24:02 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id ED2AC6086A
+ for <buildroot@lists.busybox.net>; Sun,  3 Mar 2024 16:46:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vGXuzBoqxE5u for <buildroot@lists.busybox.net>;
- Sun,  3 Mar 2024 16:24:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uE4p4bPmFmIA for <buildroot@lists.busybox.net>;
+ Sun,  3 Mar 2024 16:46:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B7B524080F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 39DA5606B1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B7B524080F
- for <buildroot@buildroot.org>; Sun,  3 Mar 2024 16:24:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 39DA5606B1
+ for <buildroot@buildroot.org>; Sun,  3 Mar 2024 16:46:15 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A41E087FB4; Sun,  3 Mar 2024 16:24:01 +0000 (UTC)
+ id 31BC687FBA; Sun,  3 Mar 2024 16:46:15 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 3 Mar 2024 17:18:21 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 02df2834155aec4c74149b1aacc4d56babcc9325
-X-Git-Newrev: eaeba56aa2d21f1d264c7e361731808e3f072d9d
+Date: Sun, 3 Mar 2024 17:42:37 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: e1f9c988080097de02762e53ad57a9376e68066c
+X-Git-Newrev: 57008d384bc1f2e42d6add6cd73203e11a75d6c9
 X-Patchwork-Hint: ignore
-Message-Id: <20240303162401.A41E087FB4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] toolchain/Config.in: update ucontext
- handling
+Message-Id: <20240303164615.31BC687FBA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/iozone: bump to
+ version 3.506
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,59 +59,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eaeba56aa2d21f1d264c7e361731808e3f072d9d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=57008d384bc1f2e42d6add6cd73203e11a75d6c9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-As suggested by Thomas Petazzoni in [1], add a comment on
-BR2_TOOLCHAIN_HAS_UCONTEXT to specify that this boolean will be set to
-true only when a toolchain provides a full featured ucontext
-implementation with ucontext_t and {get,make,set}context. As a result,
-drop its selection from BR2_TOOLCHAIN_USES_MUSL to fix the following
-musl build failure on php:
+- Upstream archive moved back to tar from tgz
+- For change log, see end of file:
+https://www.iozone.org/src/current/Changes.txt
 
-/home/autobuild/autobuild/instance-8/output-1/host/lib/gcc/m68k-buildroot-linux-musl/12.3.0/../../../../m68k-buildroot-linux-musl/bin/ld: Zend/zend_fibers.o: in function `zend_fiber_init_context':
-zend_fibers.c:(.text+0x946): undefined reference to `getcontext'
-
-[1]: https://patchwork.ozlabs.org/project/buildroot/patch/20230516193307.1543455-1-bernd.kuhls@t-online.de/
-
-Fixes:
- - http://autobuild.buildroot.org/results/271f9fb8bfa5ba2f74feef81e6b375b54e21cece
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Reviewed-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- toolchain/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/iozone/iozone.hash | 3 ++-
+ package/iozone/iozone.mk   | 7 +++----
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 407a03c42e..3dd6e83d35 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -34,7 +34,6 @@ config BR2_TOOLCHAIN_USES_MUSL
- 	select BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
- 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
--	select BR2_TOOLCHAIN_HAS_UCONTEXT
- 	select BR2_TOOLCHAIN_SUPPORTS_PIE if !BR2_STATIC_LIBS
+diff --git a/package/iozone/iozone.hash b/package/iozone/iozone.hash
+index 9ecf1d1af8..936ab5a646 100644
+--- a/package/iozone/iozone.hash
++++ b/package/iozone/iozone.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256  5a52f5017e022e737f5b55f320cc6ada0f2a8c831a5f996cce2a44e03e91c038  iozone3_493.tgz
++sha256  114ce5c071873b9a2c7ba6e73d05d5ef7e66564392acbfcdc0b3261db10fcbe7  iozone3_506.tar
++sha256  bff7909fd698708d15613a4fb977a193cff98f44ef170c2dc1dd502974df75b2  docs/License.txt
+diff --git a/package/iozone/iozone.mk b/package/iozone/iozone.mk
+index 2df4a2aa84..b1b29d1098 100644
+--- a/package/iozone/iozone.mk
++++ b/package/iozone/iozone.mk
+@@ -4,12 +4,11 @@
+ #
+ ################################################################################
  
- choice
-@@ -302,6 +301,8 @@ config BR2_TOOLCHAIN_HAS_SSP_STRONG
- 	bool
- 	default y if BR2_TOOLCHAIN_HAS_SSP && BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+-IOZONE_VERSION = 3.493
+-IOZONE_SOURCE = iozone$(subst .,_,$(IOZONE_VERSION)).tgz
++IOZONE_VERSION = 3.506
++IOZONE_SOURCE = iozone$(subst .,_,$(IOZONE_VERSION)).tar
+ IOZONE_SITE = http://www.iozone.org/src/current
+ IOZONE_LICENSE = IOzone license (NO DERIVED WORKS ALLOWED)
+-# IOzone license details can be found at:
+-# http://www.iozone.org/docs/Iozone_License.txt
++IOZONE_LICENSE_FILES = docs/License.txt
  
-+# This boolean is true if the toolchain provides a full featured
-+# ucontext implementation with ucontext_t and {get,make,set}context
- config BR2_TOOLCHAIN_HAS_UCONTEXT
- 	bool
- 
+ # AIO support not available on uClibc, use the linux (non-aio) target.
+ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
