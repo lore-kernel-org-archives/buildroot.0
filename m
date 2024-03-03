@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40F58C48BF6
-	for <buildroot@archiver.kernel.org>; Sun,  3 Mar 2024 20:14:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3BFDC54E41
+	for <buildroot@archiver.kernel.org>; Sun,  3 Mar 2024 20:14:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DF57B4079A;
-	Sun,  3 Mar 2024 20:14:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4EAEA407BE;
+	Sun,  3 Mar 2024 20:14:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qE4JGBCu3AO1; Sun,  3 Mar 2024 20:14:17 +0000 (UTC)
+	with ESMTP id xyk-7lRSZ3Te; Sun,  3 Mar 2024 20:14:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11721407A9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E4AC407C5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 11721407A9;
-	Sun,  3 Mar 2024 20:14:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3E4AC407C5;
+	Sun,  3 Mar 2024 20:14:20 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7897A1BF340
- for <buildroot@lists.busybox.net>; Sun,  3 Mar 2024 20:14:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9A33B1BF340
+ for <buildroot@lists.busybox.net>; Sun,  3 Mar 2024 20:14:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 72BBB6069C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8650C60680
  for <buildroot@lists.busybox.net>; Sun,  3 Mar 2024 20:14:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Gxo6aFCUJ1sy for <buildroot@lists.busybox.net>;
+ with ESMTP id sDZWOKNvHEk2 for <buildroot@lists.busybox.net>;
  Sun,  3 Mar 2024 20:14:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7708460680
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE67360698
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7708460680
+ by smtp3.osuosl.org (Postfix) with ESMTP id BE67360698
  for <buildroot@buildroot.org>; Sun,  3 Mar 2024 20:14:14 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 607E187FF5; Sun,  3 Mar 2024 20:14:14 +0000 (UTC)
+ id 6C65B87FE5; Sun,  3 Mar 2024 20:14:14 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 3 Mar 2024 21:11:51 +0100
+Date: Sun, 3 Mar 2024 21:11:52 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ed2090717f657c1f19bb7bd62c97e17a7bf3ff50
-X-Git-Newrev: 8895cae09b7f364fdd8eb55ad487a9bad55e2faf
+X-Git-Oldrev: 8895cae09b7f364fdd8eb55ad487a9bad55e2faf
+X-Git-Newrev: c1fa9bc2f7a4e5481edf4fce5c03dd45862fe72c
 X-Patchwork-Hint: ignore
-Message-Id: <20240303201414.607E187FF5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tar: fix NLS build
+Message-Id: <20240303201414.6C65B87FE5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libselinux: fix build with
+ BR2_TIME_BITS_64
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,37 +66,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8895cae09b7f364fdd8eb55ad487a9bad55e2faf
+commit: https://git.buildroot.net/buildroot/commit/?id=c1fa9bc2f7a4e5481edf4fce5c03dd45862fe72c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following build failure raised since bump to version 1.35 in
-commit d4d483451f0a305781b94b96c15a6cf4b489cd84:
+Do not remove _FILE_OFFSET_BITS=64 from CFLAGS and CPPFLAGS to avoid the
+following build failure with BR2_TIME_BITS_64 raised since commit
+3c427c64726560ea1743282a3fdb78f5b28692eb:
 
-/home/thomas/autobuild/instance-1/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/12.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: buffer.o: in function `bufmap_reset':
-buffer.c:(.text+0xe8): undefined reference to `libintl_gettext'
+In file included from /home/autobuild/autobuild/instance-9/output-1/per-package/libselinux/host/mipsel-buildroot-linux-gnu/sysroot/usr/include/features.h:394,
+                 from /home/autobuild/autobuild/instance-9/output-1/per-package/libselinux/host/mipsel-buildroot-linux-gnu/sysroot/usr/include/bits/libc-header-start.h:33,
+                 from /home/autobuild/autobuild/instance-9/output-1/per-package/libselinux/host/mipsel-buildroot-linux-gnu/sysroot/usr/include/stdint.h:26,
+                 from /home/autobuild/autobuild/instance-9/output-1/per-package/libselinux/host/lib/gcc/mipsel-buildroot-linux-gnu/12.3.0/include/stdint.h:9,
+                 from ../include/selinux/avc.h:9,
+                 from avc.c:10:
+/home/autobuild/autobuild/instance-9/output-1/per-package/libselinux/host/mipsel-buildroot-linux-gnu/sysroot/usr/include/features-time64.h:26:5: error: #error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
+   26 | #   error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
+      |     ^~~~~
+
+This LFS workaround for glibc < 2.23 was added in 2016 by commit
+ebcca24c953d8df4b16bc52c5ba31feae4ed8ad0 and is probably not needed
+anymore as glibc 2.23 was released in February 2016:
+https://sourceware.org/glibc/wiki/Release/2.23
 
 Fixes:
- - http://autobuild.buildroot.org/results/99b05d4b495b6337c6a48ea5a551a3a84c6d2e6b
+ - http://autobuild.buildroot.org/results/d85c81f87adf3a5945fa369bcec233e6def2ed12
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/tar/tar.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/libselinux/libselinux.mk | 8 --------
+ 1 file changed, 8 deletions(-)
 
-diff --git a/package/tar/tar.mk b/package/tar/tar.mk
-index dc17647b2c..d57d63970d 100644
---- a/package/tar/tar.mk
-+++ b/package/tar/tar.mk
-@@ -13,6 +13,8 @@ TAR_CONF_OPTS = --exec-prefix=/
- TAR_LICENSE = GPL-3.0+
- TAR_LICENSE_FILES = COPYING
- TAR_CPE_ID_VENDOR = gnu
-+TAR_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
-+TAR_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
+diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
+index 601038e46f..734084ba50 100644
+--- a/package/libselinux/libselinux.mk
++++ b/package/libselinux/libselinux.mk
+@@ -52,14 +52,6 @@ define LIBSELINUX_BUILD_PYTHON_BINDINGS
+ endef
+ endif # python3
  
- # 0002-Fix-boundary-checking-in-base-256-decoder.patch
- TAR_IGNORE_CVES += CVE-2022-48303
+-# Filter out D_FILE_OFFSET_BITS=64. This fixes errors caused by glibc 2.22. We
+-# set CFLAGS, CPPFLAGS and LDFLAGS here because we want to win over the
+-# CFLAGS/CPPFLAGS/LDFLAGS definitions passed by $(PKG_PYTHON_SETUPTOOLS_ENV)
+-# when the python binding is enabled.
+-LIBSELINUX_MAKE_OPTS += \
+-	CFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))" \
+-	CPPFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))"
+-
+ define LIBSELINUX_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+ 		$(LIBSELINUX_MAKE_OPTS) all
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
