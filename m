@@ -4,97 +4,99 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3C88C54E49
-	for <buildroot@archiver.kernel.org>; Sun,  3 Mar 2024 16:47:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FB19C48BF6
+	for <buildroot@archiver.kernel.org>; Sun,  3 Mar 2024 16:47:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 797A681FAC;
-	Sun,  3 Mar 2024 16:47:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E56DF81FAC;
+	Sun,  3 Mar 2024 16:47:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PWq6TQnAP1yN; Sun,  3 Mar 2024 16:47:36 +0000 (UTC)
+	with ESMTP id BKzNATDoHbpX; Sun,  3 Mar 2024 16:47:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 903A881FBB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0803E81FC4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 903A881FBB;
-	Sun,  3 Mar 2024 16:47:36 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5F5A01BF575
- for <buildroot@lists.busybox.net>; Sun,  3 Mar 2024 16:47:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0803E81FC4;
+	Sun,  3 Mar 2024 16:47:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0989B1BF575
+ for <buildroot@lists.busybox.net>; Sun,  3 Mar 2024 16:47:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4CD7960A70
- for <buildroot@lists.busybox.net>; Sun,  3 Mar 2024 16:47:35 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id EB54581FC4
+ for <buildroot@lists.busybox.net>; Sun,  3 Mar 2024 16:47:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rTXgnj6GJ0un for <buildroot@lists.busybox.net>;
- Sun,  3 Mar 2024 16:47:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4Cz3BLH53Apm for <buildroot@lists.busybox.net>;
+ Sun,  3 Mar 2024 16:47:47 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
+ client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
  envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 667D96086A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 667D96086A
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 667D96086A
- for <buildroot@buildroot.org>; Sun,  3 Mar 2024 16:47:34 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-412d501fb96so8470495e9.0
- for <buildroot@buildroot.org>; Sun, 03 Mar 2024 08:47:34 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CF1EC81F6E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF1EC81F6E
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CF1EC81F6E
+ for <buildroot@buildroot.org>; Sun,  3 Mar 2024 16:47:46 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ 5b1f17b1804b1-412e2f03358so1648475e9.0
+ for <buildroot@buildroot.org>; Sun, 03 Mar 2024 08:47:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1709484452; x=1710089252;
+ d=1e100.net; s=20230601; t=1709484465; x=1710089265;
  h=content-transfer-encoding:in-reply-to:from:references:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=gmCBWtjNXoS2Kwc8OUiDz5/0Vzf6nLEb5aIFkwB1cuk=;
- b=Yrm133y7N8viyyOMNXfZlb/k1rZeZ5hD544+PsNemXnIkJd0qYGqEJUGB/hdk0PEbV
- CUZWWHCNRnK4xa6+KE0m/kNDqZu+58gny0hsdxC2l6lT3hY/HowTydlhDCbjhRKQhKyk
- GezYGDc0TZNKtNqH0V9JbtXlbYHQ3Unf7HkXLN8wiJtwjEQxJu3gKdyKm1gbMLSmT4g6
- eeFVnkU30Qpq61i2KQMQ/mNJJPizlAUJIGAdiVpUqg+RrxqNbnnPVHaUq9PuHwyn/sVD
- CCaj7OZ3YLHySkSRvFARyuEDCDEeXKc1CmhdFyDJWitkal0fIzMKHPBABHJko3S50M8o
- KKsQ==
+ bh=mARH26itU/g5WhwkgxUpX2dki9uOWUj8fv/tlvmPLNM=;
+ b=YChYTnNNZW68mUcNEcXirZeIgY5O3d8s67MOwSTWoP/ArhhGttx8/PC2QaaTN314Pt
+ DBAkXUUk29C/4tBZf4QPkH9p+w1VdcU3qxppvolAd1NBLwZe1dKMMCKMrsoeeqzrprl8
+ vKNGvORYmp6Sh939scFDh2xY83oPnqe5ShJMtL6u8NTB004LX+Zu9tIPUw2w6E+FmYYD
+ PtMUlcC2i/1P2/cMbvKI2jLhGEcs5hU44T1F1wkuGj1qSODYQynX4N0ZvwhqmHWxiuTD
+ EhDl7jizcM6vUw6T0QzPfmWvRa2qun3kPXM2bP9AYYlhGBNDuPQ4KkrU18BBQOfTUY35
+ uLGw==
 X-Forwarded-Encrypted: i=1;
- AJvYcCUrbAIIXTvhsPTiqP03bzuSN0iQgpKr/ebZBqIeCPREQSJuDL916URGrzBw+gcCokvVtMic53nbDYlPO/phqJOFQACZM4NANg==
-X-Gm-Message-State: AOJu0Yy5na5GKI7uJgXc+u64bH62khEd0Hnd5w6jCfEpW+dTgEyzWuwA
- i8Q+fbDMn3jgbKgXJhSPconcd6Z8uk0rQd28m6IL3aKQNofwykI3DxtNN06BINE=
-X-Google-Smtp-Source: AGHT+IFcho+O7kqNPQfpxvfT2NgcunlALfplFcGPNFrKhZwviD3SyXaIjr2+ywEVjbUjRxPqjuPMCg==
-X-Received: by 2002:a05:600c:1384:b0:412:c213:d0fc with SMTP id
- u4-20020a05600c138400b00412c213d0fcmr5887364wmf.15.1709484452414; 
- Sun, 03 Mar 2024 08:47:32 -0800 (PST)
+ AJvYcCXTZVvO+qZyGKguoSWBiv3aU9WMR5PH4VbQvbVA8efrxy3ZkNpXIrSlBQx/F+dPe+zJqPGHgSQxuKHHAZhNf1k8jMkGzxg1IA==
+X-Gm-Message-State: AOJu0YyGdSTRWioEr+Zl/Us1buI2aqSFBDWSOfKOLr+uVaxRE99GhceS
+ 0/rQaZWHYh4MfbmxJDwpUbToV9OXE9oKlvlzkodSD7+mhWVuD0ZDp6l64iy5vDgqbCv7DIh0aLC
+ 4
+X-Google-Smtp-Source: AGHT+IHUd44ItPUHyIWmrlHC1ORZeX4AHWJGuazNSWC1ZEwBpDF/5v0zp0uF55d/wfogbpBJtCBowA==
+X-Received: by 2002:a05:600c:46d0:b0:410:8071:6931 with SMTP id
+ q16-20020a05600c46d000b0041080716931mr5350174wmo.20.1709484464874; 
+ Sun, 03 Mar 2024 08:47:44 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
  (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- fc10-20020a05600c524a00b00412e38ad377sm425458wmb.15.2024.03.03.08.47.31
+ fc10-20020a05600c524a00b00412e38ad377sm425458wmb.15.2024.03.03.08.47.44
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 03 Mar 2024 08:47:32 -0800 (PST)
-Message-ID: <e8d591e8-1c00-42a4-98e2-88f80d4fa06c@mind.be>
-Date: Sun, 3 Mar 2024 17:47:30 +0100
+ Sun, 03 Mar 2024 08:47:44 -0800 (PST)
+Message-ID: <463396e3-1936-4b23-85dd-589aaf0deb51@mind.be>
+Date: Sun, 3 Mar 2024 17:47:43 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Content-Language: en-GB
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20240213210051.162913-1-fontaine.fabrice@gmail.com>
-In-Reply-To: <20240213210051.162913-1-fontaine.fabrice@gmail.com>
+To: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
+References: <20240211223046.1768519-1-ju.o@free.fr>
+In-Reply-To: <20240211223046.1768519-1-ju.o@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1709484452; x=1710089252; darn=buildroot.org;
+ d=mind.be; s=google; t=1709484465; x=1710089265; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:from:references:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=gmCBWtjNXoS2Kwc8OUiDz5/0Vzf6nLEb5aIFkwB1cuk=;
- b=b8ZZX2qrIWtZLl65/C+/yaEidEjkwj/98q4CScZ5gFPhtr9J6j7ZYkuurMHZrhKuD+
- jOrudq2nMtZvmhu6tt5GhPEoccCGWeCr13CljkEdxAGd/N0KAiN/VTDXhdiEIrBpjxqO
- Uf5ODAtzbT+FW3l37qLXjXwS3vaPBLwU1OXtUHfHy7Sf9uNQIWrPVp1wShow0VV5Cpg+
- AGk7ekrCCjTerGDXnmJmd2LZlZ8LWJLuO9xcqi+wzH586ME5wLjQe9ecwhDFqQf0AlS7
- t+lPCw16ExjxRBk/hbRtoDp7Ny59RX0CbtuuOHnBwdTK+En3g8q4PHtsA83CHXLBzGxL
- UXNg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=mARH26itU/g5WhwkgxUpX2dki9uOWUj8fv/tlvmPLNM=;
+ b=gvwGHa+tBv8iDC1YEdeuAeLD43vsrAcSYlnoW7OM61NCPQhfN4HaPUyZ9hD7v1RS5Q
+ dOlbvlB6hzSyS0AJwIXvbtzidpekidftPrFGCVm9F0ivfa4v4ntu6Wzbz2Rxb1YTiSkq
+ DCxo7sT1dgUzNojhFt0BC4kEHC2OoO3iUuwXD/jFf8+/z1V+03cNUf8P/ScP4k+pUBHe
+ i5Coun7IiK7d3CfLZzA0jd9cvua0mF1IRxw7dsr8rpxIYQ7qyrJznh5TMou042k6IXyp
+ CzH4yn3WbgncQfrdovNssaUzmQZeK6VgvVjcCPL3voES5WdvbV88nTaMjIm1CUV+mO+r
+ srqA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=b8ZZX2qr
-Subject: Re: [Buildroot] [PATCH 1/1] package/botan: fix uclibc build
+ header.a=rsa-sha256 header.s=google header.b=gvwGHa+t
+Subject: Re: [Buildroot] [PATCH 1/1] support/testing: mdadm: improve test
+ robustness on slow runners
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -115,23 +117,22 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 13/02/2024 22:00, Fabrice Fontaine wrote:
-> getentropy is enabled by default since version 3.0 and
-> https://github.com/randombit/botan/commit/8642f2a99deefc85cdb512ee50d9f62c5e0ae4b8
-> and explicit_bzero is also enabled since version 3.0 and
-> https://github.com/randombit/botan/commit/e6819a380fb67c1be546dc618248b62d93266423
-> resulting in the following build failure since bump to version 3.2.0 in
-> commit 2f8feb66204ff661e9fd5f508e2dfd1ebc0f2813:
+On 11/02/2024 23:30, Julien Olivain wrote:
+> As expected by Peter in [1], the hardcoded 3 seconds for waiting the
+> RAID array to rebuild are not enough on slow test host runners. This
+> test already failed at least once for that reason, in [2].
 > 
-> src/lib/entropy/getentropy/getentropy.cpp:26:9: error: '::getentropy' has not been declared; did you mean 'Getentropy'?
->     26 |    if(::getentropy(buf.data(), buf.size()) == 0) {
->        |         ^~~~~~~~~~
->        |         Getentropy
+> In order to fix those failures, this commit adds extra logic to allow
+> several attempts, before failing. The timeout is currently set at 10
+> attempts, waiting 3 seconds between each attempts. To help even more,
+> those 3 seconds are also scaled with the timeout_multiplier.
 > 
-> Fixes: 2f8feb66204ff661e9fd5f508e2dfd1ebc0f2813
->   - http://autobuild.buildroot.org/results/d58c4730c770467b42af426545dd917ecc5fed17
+> Fixes: [2]
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> [1] https://lists.buildroot.org/pipermail/buildroot/2024-February/685034.html
+> [2] https://gitlab.com/buildroot.org/buildroot/-/jobs/6137469690
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 
   Applied to master, thanks.
 
@@ -139,22 +140,42 @@ On 13/02/2024 22:00, Fabrice Fontaine wrote:
   Arnout
 
 > ---
->   package/botan/botan.mk | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>   support/testing/tests/package/test_mdadm.py | 22 ++++++++++++++-------
+>   1 file changed, 15 insertions(+), 7 deletions(-)
 > 
-> diff --git a/package/botan/botan.mk b/package/botan/botan.mk
-> index 7c290f04ad..88dbfa5807 100644
-> --- a/package/botan/botan.mk
-> +++ b/package/botan/botan.mk
-> @@ -49,7 +49,7 @@ BOTAN_CONF_OPTS += --without-stack-protector
->   endif
+> diff --git a/support/testing/tests/package/test_mdadm.py b/support/testing/tests/package/test_mdadm.py
+> index 75385309a6..d5abdb0706 100644
+> --- a/support/testing/tests/package/test_mdadm.py
+> +++ b/support/testing/tests/package/test_mdadm.py
+> @@ -122,13 +122,21 @@ class TestMdadm(infra.basetest.BRTest):
+>           # We add back this blank drive to the array.
+>           self.assertRunOk(f"mdadm {md_dev} --add {failing_dev}")
 >   
->   ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
-> -BOTAN_CONF_OPTS += --without-os-feature=getauxval
-> +BOTAN_CONF_OPTS += --without-os-feature=explicit_bzero,getauxval,getentropy
->   endif
+> -        # We wait few seconds to let the device rebuild.
+> -        time.sleep(3)
+> -
+> -        # The array should no longer be marked as degraded.
+> -        out, ret = self.emulator.run(monitor_cmd)
+> -        self.assertEqual(ret, 0)
+> -        self.assertNotIn("DegradedArray", "\n".join(out))
+> +        # Device rebuild can take a variable amount of time, depending
+> +        # on the load of the test controller host. So we will allow
+> +        # several attempts, before failing.
+> +        for attempt in range(10):
+> +            # We wait few seconds to let the device rebuild.
+> +            time.sleep(3 * self.timeout_multiplier)
+> +
+> +            # Once rebuilt, the array should no longer be marked as
+> +            # degraded.
+> +            out, ret = self.emulator.run(monitor_cmd)
+> +            self.assertEqual(ret, 0)
+> +            if "DegradedArray" not in "\n".join(out):
+> +                break
+> +        else:
+> +            self.fail("Timeout while waiting for the array to rebuild.")
 >   
->   ifeq ($(BR2_PACKAGE_BOOST_FILESYSTEM)$(BR2_PACKAGE_BOOST_SYSTEM),yy)
+>           # With all those array manipulations, the data file should not
+>           # be corrupted. We should be able to recompute the same hash
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
