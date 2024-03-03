@@ -1,66 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8B57C48BF6
-	for <buildroot@archiver.kernel.org>; Sun,  3 Mar 2024 17:55:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8732CC48BF6
+	for <buildroot@archiver.kernel.org>; Sun,  3 Mar 2024 18:07:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6BA9240012;
-	Sun,  3 Mar 2024 17:55:26 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Gt8sFv4e6dxx; Sun,  3 Mar 2024 17:55:25 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ECE6040A82
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ECE6040A82;
-	Sun,  3 Mar 2024 17:55:24 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9B2A71BF4D7
- for <buildroot@lists.busybox.net>; Sun,  3 Mar 2024 17:55:23 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8923240713
- for <buildroot@lists.busybox.net>; Sun,  3 Mar 2024 17:55:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2BAA4407A3;
+	Sun,  3 Mar 2024 18:07:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8pCOKPt54VV1 for <buildroot@lists.busybox.net>;
- Sun,  3 Mar 2024 17:55:22 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
- helo=relay6-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mkPTxRgeLIXL; Sun,  3 Mar 2024 18:07:32 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B340407A6
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3B340407A6;
+	Sun,  3 Mar 2024 18:07:32 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5D5A71BF5DD
+ for <buildroot@lists.busybox.net>; Sun,  3 Mar 2024 18:07:30 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5771F60A70
+ for <buildroot@lists.busybox.net>; Sun,  3 Mar 2024 18:07:30 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CXPuzuqaBqyr for <buildroot@lists.busybox.net>;
+ Sun,  3 Mar 2024 18:07:29 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A4F9E40682
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A4F9E40682
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A4F9E40682
- for <buildroot@buildroot.org>; Sun,  3 Mar 2024 17:55:20 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7BD93C0003;
- Sun,  3 Mar 2024 17:55:17 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rgq3Q-009y4V-29;
- Sun, 03 Mar 2024 18:55:16 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 698BE6086A
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 698BE6086A
+ for <buildroot@buildroot.org>; Sun,  3 Mar 2024 18:07:29 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5162787FE7; Sun,  3 Mar 2024 18:07:29 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-References: <20240226203532.12112-1-ju.o@free.fr> <87y1b2bbqu.fsf@48ers.dk>
- <6d71ebe7eaf04f68ec07509930728eeb@free.fr> <ZeM5rb57dMFPvyIL@landeda>
- <78c7696e-411b-4311-9af5-0f4862dc85cd@mind.be>
-Date: Sun, 03 Mar 2024 18:55:16 +0100
-In-Reply-To: <78c7696e-411b-4311-9af5-0f4862dc85cd@mind.be> (Arnout
- Vandecappelle via buildroot's message of "Sun, 3 Mar 2024 17:01:33
- +0100")
-Message-ID: <87bk7v42uz.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/mysql: change default
- implementation to mariadb
+To: buildroot@buildroot.org
+Date: Sun, 3 Mar 2024 19:07:01 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 607507dfa91102c42b6b531e8f3a1a133e46e33f
+X-Git-Newrev: ed2090717f657c1f19bb7bd62c97e17a7bf3ff50
+X-Patchwork-Hint: ignore
+Message-Id: <20240303180729.5162787FE7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/strongswan: drop
+ BR2_PACKAGE_STRONGSWAN_SCEP
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,54 +59,78 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>, "Yann E. MORIN" <yann.morin.1998@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Arnout" == Arnout Vandecappelle via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ed2090717f657c1f19bb7bd62c97e17a7bf3ff50
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > On 02/03/2024 15:37, Yann E. MORIN wrote:
- >> Julien, All,
- >> On 2024-03-01 22:45 +0100, Julien Olivain spake thusly:
- >>> On 01/03/2024 09:24, Peter Korsgaard wrote:
- >>>>>>>>> "Julien" == Julien Olivain <ju.o@free.fr> writes:
- >>>> > The mysql package is a virtual package with two implementations:
- >>>> > oracle-mysql (the initial project), and mariadb (the fork of mysql).
- >>>> > This virtual package was introduced in commit [1] (2016).
- >>>> > The last version bump of oracle-mysql was in commit [2] (2014). This
- >>>> > mysql version 5.1.73 dates from 2013 [3].
+scepclient is unrecognized since bump to version 5.9.8 in commit
+b79d735139282ecf052dc89d4c221bbd16447112 and
+https://github.com/strongswan/strongswan/commit/8716f7c03c6193b1cb53837243177f36280ff4f7:
 
- >  There's one reason to prefer oracle-mysql: mariadb (server) is almost
- >  twice as big.
+configure: WARNING: unrecognized options: --disable-gtk-doc, --disable-gtk-doc-html, --disable-doc, --disable-docs, --disable-documentation, --with-xmlto, --with-fop, --enable-ipv6, --disable-nls, --enable-scepclient
 
-OK, but are there a lot of use cases where you need a full blown SQL
-server but don't have a lot of space for the code or database?
+Fixes: b79d735139282ecf052dc89d4c221bbd16447112
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ Config.in.legacy                 | 10 ++++++++++
+ package/strongswan/Config.in     |  3 ---
+ package/strongswan/strongswan.mk |  1 -
+ 3 files changed, 10 insertions(+), 4 deletions(-)
 
- >>> My initial intent was to raise the attention on this decade old package,
- >>> with quite a few CVEs associated to it ;)
- >> "Quite a few" is probably the best understatement of the year (and
- >> it's
- >> only March!). ;-)
- >> So I'd side with Peter here: drop it, and then drop the virtual
- >> package.
-
- >  Agreed to that.
-
- >  Anyway, I think mysql and mariadb are less and less drop-in
- >  replacements, so the virtual package is
-
- >  If really needed, I think mariadb has a few large subparts that can
- >  (optionally) be dropped, so it should be possible to reduce the
- >  footprint. If someone bothers to work on that, of course :-)
-
-We are really close to 2024.02 release, but I'll try to cook up a patch
-for dropping oracle-mysql / the virtual package now.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 576148c4af..5956ffcca5 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,16 @@ endif
+ 
+ comment "Legacy options removed in 2024.02"
+ 
++config BR2_PACKAGE_STRONGSWAN_SCEP
++	bool "strongswan SCEP client tool removed"
++	select BR2_LEGACY
++	help
++	  "ipsec scepclient" tool has been removed and replaced by the
++	  pki subcommands "pki --scep" and "pki --scepca" which
++	  implement the new SCEP RFC 8894 standard that was released in
++	  September 2020 and which supports trusted "certificate
++	  renewal" based on the existing client certificate.
++
+ config BR2_PACKAGE_SHADOW_UTMPX
+ 	bool "shadow utmpx removed"
+ 	select BR2_LEGACY
+diff --git a/package/strongswan/Config.in b/package/strongswan/Config.in
+index f2e597e016..5231e69ca8 100644
+--- a/package/strongswan/Config.in
++++ b/package/strongswan/Config.in
+@@ -204,9 +204,6 @@ config BR2_PACKAGE_STRONGSWAN_PKI
+ 	bool "Enable pki certificate utility"
+ 	default y
+ 
+-config BR2_PACKAGE_STRONGSWAN_SCEP
+-	bool "Enable SCEP client tool"
+-
+ config BR2_PACKAGE_STRONGSWAN_SCRIPTS
+ 	bool "Enable additional utilities (found in scripts directory)"
+ 	default y
+diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
+index 36cb72f6be..5521fb7dd4 100644
+--- a/package/strongswan/strongswan.mk
++++ b/package/strongswan/strongswan.mk
+@@ -33,7 +33,6 @@ STRONGSWAN_CONF_OPTS += \
+ 	--enable-stroke=$(if $(BR2_PACKAGE_STRONGSWAN_STROKE),yes,no) \
+ 	--enable-sql=$(if $(BR2_PACKAGE_STRONGSWAN_SQL),yes,no) \
+ 	--enable-pki=$(if $(BR2_PACKAGE_STRONGSWAN_PKI),yes,no) \
+-	--enable-scepclient=$(if $(BR2_PACKAGE_STRONGSWAN_SCEP),yes,no) \
+ 	--enable-scripts=$(if $(BR2_PACKAGE_STRONGSWAN_SCRIPTS),yes,no) \
+ 	--enable-vici=$(if $(BR2_PACKAGE_STRONGSWAN_VICI),yes,no) \
+ 	--enable-swanctl=$(if $(BR2_PACKAGE_STRONGSWAN_VICI),yes,no) \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
