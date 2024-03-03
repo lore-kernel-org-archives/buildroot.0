@@ -1,51 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1E95C48BF6
-	for <buildroot@archiver.kernel.org>; Sun,  3 Mar 2024 16:55:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7653FC48BF6
+	for <buildroot@archiver.kernel.org>; Sun,  3 Mar 2024 17:08:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 517668121E;
-	Sun,  3 Mar 2024 16:55:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 278224020B;
+	Sun,  3 Mar 2024 17:08:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HfgKF_wozlYx; Sun,  3 Mar 2024 16:55:39 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qaV5YtyGchmZ; Sun,  3 Mar 2024 17:08:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 635448149A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B3A6E40424
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 635448149A;
-	Sun,  3 Mar 2024 16:55:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B3A6E40424;
+	Sun,  3 Mar 2024 17:08:05 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E8BD51BF575
- for <buildroot@lists.busybox.net>; Sun,  3 Mar 2024 16:55:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5B4B61BF8B4
+ for <buildroot@lists.busybox.net>; Sun,  3 Mar 2024 17:08:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D695260B03
- for <buildroot@lists.busybox.net>; Sun,  3 Mar 2024 16:55:37 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 499F960669
+ for <buildroot@lists.busybox.net>; Sun,  3 Mar 2024 17:08:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WSdEHD2a3LO8 for <buildroot@lists.busybox.net>;
- Sun,  3 Mar 2024 16:55:37 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 31A9460AF1
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 31A9460AF1
- for <buildroot@buildroot.org>; Sun,  3 Mar 2024 16:55:37 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1CA6087FDD; Sun,  3 Mar 2024 16:55:37 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 3 Mar 2024 17:48:21 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c9de634b082e9d5a8f52f7c983a481105696d347
-X-Git-Newrev: 607507dfa91102c42b6b531e8f3a1a133e46e33f
-X-Patchwork-Hint: ignore
-Message-Id: <20240303165537.1CA6087FDD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/liburing: fix uclibc build
+ with ESMTP id ry-f-2nx2OON for <buildroot@lists.busybox.net>;
+ Sun,  3 Mar 2024 17:08:02 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::22e; helo=mail-lj1-x22e.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0FCE260629
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FCE260629
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com
+ [IPv6:2a00:1450:4864:20::22e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0FCE260629
+ for <buildroot@buildroot.org>; Sun,  3 Mar 2024 17:08:00 +0000 (UTC)
+Received: by mail-lj1-x22e.google.com with SMTP id
+ 38308e7fff4ca-2d29111272eso57361571fa.0
+ for <buildroot@buildroot.org>; Sun, 03 Mar 2024 09:08:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1709485679; x=1710090479;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=bvtGU+ddVIofq28v5GRiPbHpa52yUH2jM+GRWljXfz0=;
+ b=GCU2rGo0b56ABz5RORsKPXG7M4nG4KGB1D4nQlukg7xQfKpp2B9J16CjHLWSDATDxJ
+ fFlyhUOJIp2ecx1U6N5LLYpbh3xuGGkeMtqek/scc2Pa+s08Rw8jQTIfnsZ1AiZcdfaE
+ KxZx31LmdGfTl8nqhJml4HbYrNJONgl5FeCsw8bEe4uIytmlnp6lD6alP2l0bDqvob7B
+ Air/+laTC6M8FSQRPEssw/1GNHaEr0neEo+mqJqp8GfrGHVdrBoOW6BSiREceql2WHxD
+ F8b1pta0i53dJdjRw5vYrjg5c6stIXjcJYtWOzg/sPAKqhRL3ZOdRS/UMO+ZvAoWdfQt
+ VZ0w==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCUdGxoYeDOrbTlvxlmYFed9JU8Z4lLjl1SKUI72FCtnqzmgcujZFA/b3HMEdNtGzqTdGqYXqAq3b5gXs6hvUD+wE12FsHZFmQ==
+X-Gm-Message-State: AOJu0YzQcpMaRUdXHLeNSObx+mVeRhfvtEuJ65exKmTMVTv0QV0WeWRb
+ 7u943W5F4CK7EHy8/c2imZSbLpLcUp/0bHC1At9JHQ4dRKqhOCpPBW7767atuhY=
+X-Google-Smtp-Source: AGHT+IEUX2bb8EF/Crk8Xe5CV4T12E4EBBVruVTde1ZHIaICxC4b4eQY448GDbHFEJjxYks7uqvbuA==
+X-Received: by 2002:a2e:8e93:0:b0:2d3:7e8e:de23 with SMTP id
+ z19-20020a2e8e93000000b002d37e8ede23mr1065826ljk.23.1709485678916; 
+ Sun, 03 Mar 2024 09:07:58 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
+ by smtp.gmail.com with ESMTPSA id
+ o14-20020a05600c510e00b00412aff7874esm12205510wms.48.2024.03.03.09.07.58
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 03 Mar 2024 09:07:58 -0800 (PST)
+Message-ID: <ce5a5a43-c09a-4870-a64c-603fc5fcdaae@mind.be>
+Date: Sun, 3 Mar 2024 18:07:56 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: en-GB
+To: Christian Hitz <christian@klarinett.li>, buildroot@buildroot.org
+References: <20240228145129.416828-1-christian@klarinett.li>
+In-Reply-To: <20240228145129.416828-1-christian@klarinett.li>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1709485679; x=1710090479; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=bvtGU+ddVIofq28v5GRiPbHpa52yUH2jM+GRWljXfz0=;
+ b=fSGLRv1m3tLAyTlCQ/ydZ5w7Q6XDLeBCJcJ3XMdPt4jLyKJlGVUaCzM8a7xN2+4O6F
+ nSVw/WieDY1ajqWfYETcNuWDhQjKRbIPPQNBigAjpUkRe1y/N0Wt0Jnkr5vTNXnpC6Ns
+ EFX9mIUchUhA4TO1vCxS4LDbG4ho43EJC9MzuQYboWtNBSEgGTTm8H3D5VuD60jZv/Wf
+ hgfVxdGw4Nu5CJpBDzTX2Ir3n14s6wBWPcAD0JZJpj+trGDM2aqlXE1y4kvhkzOf1ans
+ y9kjIHA/XjtUC7NsQJEtpsdrlr/+og6YNlsU8+LyE/k6tG2VdRgFvdMZwU4MQ4TbBR0U
+ glCQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=fSGLRv1m
+Subject: Re: [Buildroot] [PATCH] package/arm-trusted-firmware: add
+ ARM_TRUSTED_FIRMWARE_CPE_ID_*
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,79 +109,59 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Cc: Christian Hitz <christian.hitz@bbv.ch>,
+ Sergey Matyukevich <geomatsi@gmail.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=607507dfa91102c42b6b531e8f3a1a133e46e33f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following build failure with uclibc-ng raised since bump to
-version 2.4 in commit 3cc1b539e7e9fd49f571441e395e7daa8597dbec and
-https://github.com/axboe/liburing/commit/c6bc86e2125bcd6fa10ff2b128cd86486acadff6:
 
-In file included from lib.h:12,
-                 from setup.c:4:
-arch/aarch64/lib.h:7:10: fatal error: sys/auxv.h: No such file or directory
-    7 | #include <sys/auxv.h>
-      |          ^~~~~~~~~~~~
+On 28/02/2024 15:51, Christian Hitz via buildroot wrote:
+> From: Christian Hitz <christian.hitz@bbv.ch>
+> 
+> cpe:2.3:o:arm:arm-trusted-firmware:2.4:-:*:*:*:*:*:* is a valid CPE
+> identifier for this package:
+> 
+>    https://nvd.nist.gov/products/cpe/detail/78601535-610A-45A5-A5F0-AFC6A27A7F83
 
-Fixes: 3cc1b539e7e9fd49f571441e395e7daa8597dbec
- - http://autobuild.buildroot.org/results/cc44d714c9267dd7a98debeb8c81c4ee1efe4ebb
+  This entry is from 2021, and they haven't added any entries for later versions 
+(it's now at version 2.10).
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
----
- .../0001-src-arch-aarch64-fix-uclibc-build.patch   | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+  So I think this CPE entry is not relevant for any current version. If we add 
+the CPE ID now, we will not notice if later they in fact name it e.g. 
+trusted-firmware-arm. Note that the upstream repository is called 
+trustedfirmware-a, and that there is a CPE entry for trusted_firmware-m [1] 
+although that one also hasn't been updated for recent releases...
 
-diff --git a/package/liburing/0001-src-arch-aarch64-fix-uclibc-build.patch b/package/liburing/0001-src-arch-aarch64-fix-uclibc-build.patch
-new file mode 100644
-index 0000000000..4468105e4f
---- /dev/null
-+++ b/package/liburing/0001-src-arch-aarch64-fix-uclibc-build.patch
-@@ -0,0 +1,39 @@
-+From f03f8da34fe96ac35a916ca3058b0f41971eae3b Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 16 Feb 2024 18:59:42 +0100
-+Subject: [PATCH] src/arch/aarch64: fix uclibc build
-+
-+Fix the following build failure with uclibc-ng raised since version 2.3
-+and
-+https://github.com/axboe/liburing/commit/c6bc86e2125bcd6fa10ff2b128cd86486acadff6:
-+
-+In file included from lib.h:12,
-+                 from setup.c:4:
-+arch/aarch64/lib.h:7:10: fatal error: sys/auxv.h: No such file or directory
-+    7 | #include <sys/auxv.h>
-+      |          ^~~~~~~~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/cc44d714c9267dd7a98debeb8c81c4ee1efe4ebb
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Upstream: https://github.com/axboe/liburing/commit/32f9c27a76c43627f79bb77469d2da8583e4d3df
-+---
-+ src/arch/aarch64/lib.h | 1 -
-+ 1 file changed, 1 deletion(-)
-+
-+diff --git a/src/arch/aarch64/lib.h b/src/arch/aarch64/lib.h
-+index 3b701b1..41bcfc9 100644
-+--- a/src/arch/aarch64/lib.h
-++++ b/src/arch/aarch64/lib.h
-+@@ -4,7 +4,6 @@
-+ #define LIBURING_ARCH_AARCH64_LIB_H
-+ 
-+ #include <elf.h>
-+-#include <sys/auxv.h>
-+ #include "../../syscall.h"
-+ 
-+ static inline long __get_page_size(void)
-+-- 
-+2.43.0
-+
+  So I don't think we should merge this.
+
+  Regards,
+  Arnout
+
+[1] https://nvd.nist.gov/products/cpe/detail/2AF395D6-6367-4EFF-A0D0-C0CB6CA99E3E
+
+
+> 
+> Signed-off-by: Christian Hitz <christian.hitz@bbv.ch>
+> ---
+>   boot/arm-trusted-firmware/arm-trusted-firmware.mk | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+> index 2d554c1da8..ebb9b8e9f6 100644
+> --- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+> +++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+> @@ -24,6 +24,8 @@ ARM_TRUSTED_FIRMWARE_LICENSE = BSD-3-Clause
+>   ARM_TRUSTED_FIRMWARE_LICENSE_FILES = docs/license.rst
+>   endif
+>   endif
+> +ARM_TRUSTED_FIRMWARE_CPE_ID_VENDOR = arm
+> +ARM_TRUSTED_FIRMWARE_CPE_ID_PREFIX = cpe:2.3:o
+>   
+>   ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE):$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION)$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL)$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT),y:y)
+>   BR_NO_CHECK_HASH_FOR += $(ARM_TRUSTED_FIRMWARE_SOURCE)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
