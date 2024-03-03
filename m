@@ -4,90 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81571C48BF6
-	for <buildroot@archiver.kernel.org>; Sun,  3 Mar 2024 17:19:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 456D2C48BF6
+	for <buildroot@archiver.kernel.org>; Sun,  3 Mar 2024 17:26:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1A0844094F;
-	Sun,  3 Mar 2024 17:19:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6358D4020B;
+	Sun,  3 Mar 2024 17:26:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jGEChcmhx_kI; Sun,  3 Mar 2024 17:19:51 +0000 (UTC)
+	with ESMTP id fGDUZwcgcirW; Sun,  3 Mar 2024 17:26:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 733854020B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 146D440424
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 733854020B;
-	Sun,  3 Mar 2024 17:19:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 146D440424;
+	Sun,  3 Mar 2024 17:26:33 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 47CD41BF4D7
- for <buildroot@lists.busybox.net>; Sun,  3 Mar 2024 17:19:50 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E1D141BF4D7
+ for <buildroot@lists.busybox.net>; Sun,  3 Mar 2024 17:26:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 421B081EE8
- for <buildroot@lists.busybox.net>; Sun,  3 Mar 2024 17:19:50 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CFB2E81FB2
+ for <buildroot@lists.busybox.net>; Sun,  3 Mar 2024 17:26:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UMW5_vq97ALn for <buildroot@lists.busybox.net>;
- Sun,  3 Mar 2024 17:19:49 +0000 (UTC)
+ with ESMTP id Lyyz2FNGMxkH for <buildroot@lists.busybox.net>;
+ Sun,  3 Mar 2024 17:26:30 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
+ client-ip=2a00:1450:4864:20::42d; helo=mail-wr1-x42d.google.com;
  envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F02F081EE5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F02F081EE5
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F02F081EE5
- for <buildroot@buildroot.org>; Sun,  3 Mar 2024 17:19:48 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- 5b1f17b1804b1-412e17d60fcso1648505e9.1
- for <buildroot@buildroot.org>; Sun, 03 Mar 2024 09:19:48 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B00B881FB1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B00B881FB1
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B00B881FB1
+ for <buildroot@buildroot.org>; Sun,  3 Mar 2024 17:26:29 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id
+ ffacd0b85a97d-33e122c8598so2103560f8f.1
+ for <buildroot@buildroot.org>; Sun, 03 Mar 2024 09:26:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1709486386; x=1710091186;
+ d=1e100.net; s=20230601; t=1709486787; x=1710091587;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=OVXfMwZvGIUxEL0fYg41kjD7bE3o/2wxsiGPsc+YrBw=;
- b=KO7ZWSHMAMQnrE7h5aq9SLCgWmLr2joRmSuqStrsDY9JXvdwkwGwTcMKgCnQzuoiP6
- faxFX+bRRAfWQPEcMswqGBszCorOrFMvr3wSfGYspjamu9cv88dlb6GzWy2Hf5eRvgL5
- BivzY92HLp4xzFYoKtgGfABFF/w5ZRxAg6kERifKKvfYd8TvpW5D8rm9ugMEfxLQ3Ekz
- 9kdNVsNdRDD7OFnzGGEYtIhmPMdG2E9498bF2Sf3tU5gEo77AFllUTHM047KfDOnRbW8
- ZZ4fNFG7SCf393WxQd5Bs+nKl7rWzEkYClzN3osyJaLDUXJDVAzembCxEImJ8E99DDa4
- 49NA==
-X-Gm-Message-State: AOJu0Yx0E6DRUN0ZK3e6X3zwogFx5R/wd9IFfxUtOiy+uTHnPnK3cAKS
- YKQ4qggQGKJx0gkmpCKxrr0x9H+KoOHTuaPBGGhN29hXg4wVLaVPUHrGMUHj
-X-Google-Smtp-Source: AGHT+IGhtR0ZkR0a+yt2vI/eQf9CfBL8f8WxobFy6V4b2KNT3gv6hodUjwsd8hE7BZvcIIxWyPgZLA==
-X-Received: by 2002:adf:978a:0:b0:33e:175b:4af8 with SMTP id
- s10-20020adf978a000000b0033e175b4af8mr7146661wrb.28.1709486385950; 
- Sun, 03 Mar 2024 09:19:45 -0800 (PST)
+ bh=Q/KeRkr00MXazynYFUnzSHmpkcfpohfGUP4z7ZQhl7g=;
+ b=dML4NmoYZTrruU5cxAJe32UD4BSzH2/fXr9pWiuP47c1pwpWjmZor8tA1bK8GhlCoP
+ BfV9jUh77dssEzFgq5flsIMk8LR6Wt1lr5/IeYkNn3viUPkihPKk61ot2rXlf5VhlDgm
+ aaS17WkTiR3Q2kkuMA+oDY1n0DUKOrv+zGVXkqkaBfZzLVOrcseMNena/h3beM6f4qSN
+ +Nzz2sxUR1WZ3Fn7fZGPR3L02/nRpVbfPBFws3Oy7fYy4LqmlcYCLw+39TkjMow0LjAM
+ dv+kau4fp7c5MmMX6YF4BCWJ9STgG+WBH62TtqVpAaQMiatIOv/Q1uwgiDnzRrKV3bpw
+ EiGQ==
+X-Gm-Message-State: AOJu0YyPPBh6PkRg6KBZ7awJdDbFgHWdKUxeH3k+kfAUhQpGNqOe0+Vv
+ w78d6z2atIY1ATPexrob6hJ8TvWz+lhQPxIqRRjM6DjpfiJk3dwkFfwlJymS
+X-Google-Smtp-Source: AGHT+IH9zcO2wpHKWvWo0SpyPGKO34fidGiWxhZJrsxkALsS5BXcyNlJUb6zjeuAn+iCxhRKX0Xymw==
+X-Received: by 2002:a5d:6310:0:b0:33e:834:13d5 with SMTP id
+ i16-20020a5d6310000000b0033e083413d5mr4881289wru.69.1709486786486; 
+ Sun, 03 Mar 2024 09:26:26 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- bp22-20020a5d5a96000000b0033d8b1ace25sm10492455wrb.2.2024.03.03.09.19.45
+ u20-20020adfcb14000000b0033b7ce8b496sm10022914wrh.108.2024.03.03.09.26.26
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 03 Mar 2024 09:19:45 -0800 (PST)
+ Sun, 03 Mar 2024 09:26:26 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  3 Mar 2024 18:19:37 +0100
-Message-ID: <20240303171937.490553-1-fontaine.fabrice@gmail.com>
+Date: Sun,  3 Mar 2024 18:26:22 +0100
+Message-ID: <20240303172622.629998-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1709486386; x=1710091186; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1709486787; x=1710091587; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=OVXfMwZvGIUxEL0fYg41kjD7bE3o/2wxsiGPsc+YrBw=;
- b=ZhDfuSX5ueniah6AUkqc3eWvWTPcDXQvWmS4kyPnn8uaqRKkGAGj3e5iK8geITlcQa
- b6yEJPwtd/qpzxLIpCaLrrzkfo5rotWMf3OB/kvtyr08XK7EFLN9MxyGQ5xJTmPk+yEh
- f200GKUkxFf2DXh4DM2uPJevafzgAp3ISoXMk0XoeWfgpsnYtteh25kIyvGd1NzRLAev
- EdDQjc576T3upgPN1w8vKzH5qGK9wlu94NYTzuqppmnkvfQrO8KZJFooEb77Kje6uJdu
- 1ST6LJhqWb7Sy/jF73YM0P0QNLBl+4u7LVAVVQyEMRnnyoyas/UOc6+3RxL0pIWs3scs
- lsHw==
+ bh=Q/KeRkr00MXazynYFUnzSHmpkcfpohfGUP4z7ZQhl7g=;
+ b=Aeq1ikpcRQ9oPqq2kgk9uulf1dbPGgyIuS8RxiYNkxTypga1OHrqat/8ICDMD6DspS
+ anYoRnla+wT/QNyPD1EeVComgwc8OahE8CaqflXabxEO/Ve11S9X+GkcP3Z9VJtA7CYo
+ H0cvrLlipacTdtGmjLJpPIui5DVyHa66OEDha/YnLAtnVsAzLg/rIF6wfokRoivVDCvS
+ Noi1s2+tcAlGqqiHRvMlD3dacrhdzc90lMExB8XmPdEPJ+UtdcBee3CD1eYpr7gV5pep
+ XXmuSCmbjZA2/AmRypzEDqCdI6i7Ynqi/vdEKSrZoYg55avC4j+mKjQNBglGTo/ONSaV
+ yQbA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=ZhDfuSX5
-Subject: [Buildroot] [PATCH 1/1] package/uboot-tools: fix FIT build
+ header.a=rsa-sha256 header.s=20230601 header.b=Aeq1ikpc
+Subject: [Buildroot] [PATCH 1/1] package/strongswan: drop
+ BR2_PACKAGE_STRONGSWAN_SCEP
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,161 +100,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-FIT needs signature support as mkimage unconditionally calls
-image_get_{checksum,crypto,padding}_algo resulting in the following
-build failure since 2022:
+scepclient is unrecognized since bump to version 5.9.8 in commit
+b79d735139282ecf052dc89d4c221bbd16447112 and
+https://github.com/strongswan/strongswan/commit/8716f7c03c6193b1cb53837243177f36280ff4f7:
 
-/home/buildroot/autobuild/instance-1/output-1/host/lib/gcc/sh4-buildroot-linux-gnu/11.4.0/../../../../sh4-buildroot-linux-gnu/bin/ld: tools/image-host.o: in function `fit_image_setup_sig':
-image-host.c:(.text+0x738): undefined reference to `image_get_checksum_algo
+configure: WARNING: unrecognized options: --disable-gtk-doc, --disable-gtk-doc-html, --disable-doc, --disable-docs, --disable-documentation, --with-xmlto, --with-fop, --enable-ipv6, --disable-nls, --enable-scepclient
 
-Moreover, FIT also needs cipher as it unconditonally calls
-image_get_cipher_algo, fit_image_decrypt_data, etc.
-
-So merge BR2_PACKAGE_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT into
-BR2_PACKAGE_UBOOT_TOOLS_FIT. No legacy option is added to
-Config.in.legacy as the end user will get signature support as soon as
-FIT is selected.
-
-Fixes:
- - http://autobuild.buildroot.org/results/c2fc9ba770bfa5ebdd8421c1623f87de5474d79a
- - http://autobuild.buildroot.org/results/a5b0a8e5c549e366217280c8184f1259debb996d
+Fixes: b79d735139282ecf052dc89d4c221bbd16447112
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/uboot-tools/Config.in      | 17 ++++++-----------
- package/uboot-tools/Config.in.host | 10 +---------
- package/uboot-tools/uboot-tools.mk | 28 ++++++++++++++--------------
- 3 files changed, 21 insertions(+), 34 deletions(-)
+ Config.in.legacy                 | 10 ++++++++++
+ package/strongswan/Config.in     |  3 ---
+ package/strongswan/strongswan.mk |  1 -
+ 3 files changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/package/uboot-tools/Config.in b/package/uboot-tools/Config.in
-index e8bbf3a16e..d0e255615e 100644
---- a/package/uboot-tools/Config.in
-+++ b/package/uboot-tools/Config.in
-@@ -12,6 +12,7 @@ config BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_DTC
- 	select BR2_PACKAGE_DTC_PROGRAMS
-+	select BR2_PACKAGE_OPENSSL
- 	help
- 	  Enables support for Flattened Image Tree (FIT).
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 576148c4af..5956ffcca5 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,16 @@ endif
  
-@@ -21,17 +22,6 @@ config BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT
- 	  in a single blob. To boot this new uImage structure,
- 	  pass the address of the blob to the "bootm" command.
+ comment "Legacy options removed in 2024.02"
  
--comment "u-boot tools FIT support needs a toolchain w/ dynamic library"
--	depends on BR2_STATIC_LIBS
--
--if BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT
--
--config BR2_PACKAGE_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT
--	bool "FIT signature verification support"
--	select BR2_PACKAGE_OPENSSL
--	help
--	  Enables support for FIT Signature Verification.
--
- 	  Flat Image Trees (FIT) supports hashing of images so that
- 	  these hashes can be checked on loading. This protects
- 	  against corruption of the image. However it does not prevent
-@@ -47,6 +37,11 @@ config BR2_PACKAGE_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT
- 	  libcrypto, and possibly GPL/OpenSSL licensing
- 	  incompatibility issues.
- 
-+comment "u-boot tools FIT support needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
++config BR2_PACKAGE_STRONGSWAN_SCEP
++	bool "strongswan SCEP client tool removed"
++	select BR2_LEGACY
++	help
++	  "ipsec scepclient" tool has been removed and replaced by the
++	  pki subcommands "pki --scep" and "pki --scepca" which
++	  implement the new SCEP RFC 8894 standard that was released in
++	  September 2020 and which supports trusted "certificate
++	  renewal" based on the existing client certificate.
 +
-+if BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT
-+
- config BR2_PACKAGE_UBOOT_TOOLS_FIT_CHECK_SIGN
- 	bool "fit_check_sign"
- 	depends on BR2_PACKAGE_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT
-diff --git a/package/uboot-tools/Config.in.host b/package/uboot-tools/Config.in.host
-index 622070405d..3715be4d6e 100644
---- a/package/uboot-tools/Config.in.host
-+++ b/package/uboot-tools/Config.in.host
-@@ -10,6 +10,7 @@ if BR2_PACKAGE_HOST_UBOOT_TOOLS
- config BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT
- 	bool "Flattened Image Tree (FIT) support"
- 	select BR2_PACKAGE_HOST_DTC
-+	select BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT
- 	help
- 	  Enables support for Flattened Image Tree (FIT).
+ config BR2_PACKAGE_SHADOW_UTMPX
+ 	bool "shadow utmpx removed"
+ 	select BR2_LEGACY
+diff --git a/package/strongswan/Config.in b/package/strongswan/Config.in
+index f2e597e016..5231e69ca8 100644
+--- a/package/strongswan/Config.in
++++ b/package/strongswan/Config.in
+@@ -204,9 +204,6 @@ config BR2_PACKAGE_STRONGSWAN_PKI
+ 	bool "Enable pki certificate utility"
+ 	default y
  
-@@ -19,13 +20,6 @@ config BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT
- 	  in a single blob. To boot this new uImage structure,
- 	  pass the address of the blob to the "bootm" command.
- 
--if BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT
+-config BR2_PACKAGE_STRONGSWAN_SCEP
+-	bool "Enable SCEP client tool"
 -
--config BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT
--	bool "FIT signature verification support"
--	help
--	  Enables support for FIT Signature Verification.
--
- 	  Flat Image Trees (FIT) supports hashing of images so that
- 	  these hashes can be checked on loading. This protects
- 	  against corruption of the image. However it does not prevent
-@@ -37,8 +31,6 @@ config BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT
- 	  public key is stored in a non-volatile place, any image can
- 	  be verified in this way.
- 
--endif # BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT
--
- config BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE
- 	bool "Environment image"
- 	help
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index 12e10dea91..d2a85ab061 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -34,13 +34,13 @@ UBOOT_TOOLS_MAKE_OPTS = CROSS_COMPILE="$(TARGET_CROSS)" \
- 	STRIP=$(TARGET_STRIP)
- 
- ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT),y)
--UBOOT_TOOLS_MAKE_OPTS += CONFIG_FIT=y CONFIG_MKIMAGE_DTC_PATH=dtc
--UBOOT_TOOLS_DEPENDENCIES += dtc
--endif
--
--ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),y)
--UBOOT_TOOLS_MAKE_OPTS += CONFIG_FIT_SIGNATURE=y CONFIG_FIT_SIGNATURE_MAX_SIZE=0x10000000
--UBOOT_TOOLS_DEPENDENCIES += openssl host-pkgconf
-+UBOOT_TOOLS_MAKE_OPTS += \
-+	CONFIG_FIT=y \
-+	CONFIG_FIT_CIPHER=y \
-+	CONFIG_FIT_SIGNATURE=y \
-+	CONFIG_FIT_SIGNATURE_MAX_SIZE=0x10000000 \
-+	CONFIG_MKIMAGE_DTC_PATH=dtc
-+UBOOT_TOOLS_DEPENDENCIES += dtc openssl host-pkgconf
- endif
- 
- ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_MKEFICAPSULE),y)
-@@ -123,13 +123,13 @@ HOST_UBOOT_TOOLS_MAKE_OPTS = HOSTCC="$(HOSTCC)" \
- 	CONFIG_EFI_HAVE_CAPSULE_SUPPORT=y
- 
- ifeq ($(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT),y)
--HOST_UBOOT_TOOLS_MAKE_OPTS += CONFIG_FIT=y CONFIG_MKIMAGE_DTC_PATH=dtc
--HOST_UBOOT_TOOLS_DEPENDENCIES += host-dtc
--endif
--
--ifeq ($(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),y)
--HOST_UBOOT_TOOLS_MAKE_OPTS += CONFIG_FIT_SIGNATURE=y CONFIG_FIT_SIGNATURE_MAX_SIZE=0x10000000
--HOST_UBOOT_TOOLS_DEPENDENCIES += host-openssl
-+HOST_UBOOT_TOOLS_MAKE_OPTS += \
-+	CONFIG_FIT=y \
-+	CONFIG_FIT_CIPHER=y \
-+	CONFIG_FIT_SIGNATURE=y \
-+	CONFIG_FIT_SIGNATURE_MAX_SIZE=0x10000000 \
-+	CONFIG_MKIMAGE_DTC_PATH=dtc
-+HOST_UBOOT_TOOLS_DEPENDENCIES += host-dtc host-openssl
- define HOST_UBOOT_TOOLS_INSTALL_FIT_CHECK_SIGN
- 	$(INSTALL) -m 0755 -D $(@D)/tools/fit_check_sign $(HOST_DIR)/bin/fit_check_sign
- endef
+ config BR2_PACKAGE_STRONGSWAN_SCRIPTS
+ 	bool "Enable additional utilities (found in scripts directory)"
+ 	default y
+diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
+index 36cb72f6be..5521fb7dd4 100644
+--- a/package/strongswan/strongswan.mk
++++ b/package/strongswan/strongswan.mk
+@@ -33,7 +33,6 @@ STRONGSWAN_CONF_OPTS += \
+ 	--enable-stroke=$(if $(BR2_PACKAGE_STRONGSWAN_STROKE),yes,no) \
+ 	--enable-sql=$(if $(BR2_PACKAGE_STRONGSWAN_SQL),yes,no) \
+ 	--enable-pki=$(if $(BR2_PACKAGE_STRONGSWAN_PKI),yes,no) \
+-	--enable-scepclient=$(if $(BR2_PACKAGE_STRONGSWAN_SCEP),yes,no) \
+ 	--enable-scripts=$(if $(BR2_PACKAGE_STRONGSWAN_SCRIPTS),yes,no) \
+ 	--enable-vici=$(if $(BR2_PACKAGE_STRONGSWAN_VICI),yes,no) \
+ 	--enable-swanctl=$(if $(BR2_PACKAGE_STRONGSWAN_VICI),yes,no) \
 -- 
 2.43.0
 
