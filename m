@@ -4,94 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD830C5478C
-	for <buildroot@archiver.kernel.org>; Mon,  4 Mar 2024 15:34:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15D66C5478C
+	for <buildroot@archiver.kernel.org>; Mon,  4 Mar 2024 15:34:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9093D414B4;
-	Mon,  4 Mar 2024 15:34:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DA87440474;
+	Mon,  4 Mar 2024 15:34:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jyOMacK2wtBF; Mon,  4 Mar 2024 15:34:25 +0000 (UTC)
+	with ESMTP id 4lMA-7jaVp_N; Mon,  4 Mar 2024 15:34:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1DC8641511
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BA7034119C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1DC8641511;
-	Mon,  4 Mar 2024 15:34:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BE2D21BF3B0
- for <buildroot@lists.busybox.net>; Mon,  4 Mar 2024 15:34:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BA7034119C;
+	Mon,  4 Mar 2024 15:34:28 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D6BDE1BF3B0
+ for <buildroot@lists.busybox.net>; Mon,  4 Mar 2024 15:34:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AB27940939
- for <buildroot@lists.busybox.net>; Mon,  4 Mar 2024 15:34:14 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C47D160C1E
+ for <buildroot@lists.busybox.net>; Mon,  4 Mar 2024 15:34:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id W3FvrxInEDku for <buildroot@lists.busybox.net>;
- Mon,  4 Mar 2024 15:34:14 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sQNjem1YKHGu for <buildroot@lists.busybox.net>;
+ Mon,  4 Mar 2024 15:34:15 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
  client-ip=2a00:1450:4864:20::62e; helo=mail-ej1-x62e.google.com;
  envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CC95740955
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC95740955
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0EA4A60C18
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0EA4A60C18
 Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
  [IPv6:2a00:1450:4864:20::62e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CC95740955
- for <buildroot@buildroot.org>; Mon,  4 Mar 2024 15:34:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0EA4A60C18
+ for <buildroot@buildroot.org>; Mon,  4 Mar 2024 15:34:14 +0000 (UTC)
 Received: by mail-ej1-x62e.google.com with SMTP id
- a640c23a62f3a-a449c5411e1so399800666b.1
- for <buildroot@buildroot.org>; Mon, 04 Mar 2024 07:34:13 -0800 (PST)
+ a640c23a62f3a-a44628725e3so580257566b.0
+ for <buildroot@buildroot.org>; Mon, 04 Mar 2024 07:34:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1709566451; x=1710171251;
+ d=1e100.net; s=20230601; t=1709566453; x=1710171253;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=Js6re1cNZnkdKlpxuJ10eiMtCKJbntgPb35mWC0eE5c=;
- b=hFyt47hout9TW72MA2c2wpQc1t9ynLfOoNKGsxvi9/ULv2YrvMMdlo94Y5WzcIzDLU
- lB/68bXjcWZQSY+NCivsg6YSuDalHZEFwBnGe/t1rsDlNniXWv0iy7I730VzSBW6Dfwe
- M0L5S0w8/veUe+XyD4KDWO0AkKgxiFazejQOAdmWuX32J6/O4XMjES/XrjyK0fmgGrn3
- 56FBNROFD1AID+GpLaYWsDffoF3XwtCjvADI9KcjaWLvswj4q+caa6tJoMjpWErdUZii
- zFXAccjkPQj4mgwMzRZIGmruzyVbTNbJMSvTwFyFRt5ubdR2Gv16Frdol94M9OrBHjwY
- 7kHQ==
-X-Gm-Message-State: AOJu0Yx8mSY1NhBi8R56sJi1IVWVF6XFo+w84UeNmOsnMVjaGDKjl05S
- 0R+qCEWwlOhJ9vKKCVrsOdF74kC+53Pk4dEj2F9RSJUn75/WrJ3B2Zm1NH5q7qANKstfAP1jvsM
- 5C9M=
-X-Google-Smtp-Source: AGHT+IFHT7MAsL1ajGsohY2RGieXPYxKceIoa3UPpwbKESKd7mXgy2UeOMDPA2YKnBD3jUdn+UylLA==
-X-Received: by 2002:a17:906:2548:b0:a43:7ea2:a289 with SMTP id
- j8-20020a170906254800b00a437ea2a289mr5804681ejb.55.1709566451758; 
- Mon, 04 Mar 2024 07:34:11 -0800 (PST)
+ bh=Y0ukM1ysdi9ISjJrZMGotHcNyrgvpCD8kyvBew01Sr8=;
+ b=k/xONxddwT+yQOlUpCBPuNS7Lsl7wop02VAr9jqFsV/MD+7DwLTgzdRbxa/np+PJyA
+ CSbp/2aj+gl4XXYHaIW4R1HkODOtbAXTyvyeS+B69C/JNcGzGCLdpQXDpD+R9h7YfFZS
+ +wKXS2rwamndngN5uEKjbM4gHFNg5r8jo/gzifu2sKJ0QnMH+wM02a0WPSEJdSExi+ho
+ XF52ySj8VnOl4fPsudMlUKyO6NznHay24GuiKp8g2dHC5aPpr7P7uVggUFGfEjgSoPjr
+ Jt9t38j958b2/FVLneAyBs8nvwB+d0V+VjG1pS0mYqwVS/OO68CoSn/daM/IsiHfn6GF
+ 3ElQ==
+X-Gm-Message-State: AOJu0Yzf/b0RzAYNZpTB0YxMmKRiGMOq3J6oxgOVLfTGU2pCjQgZNd5K
+ r2fRn4gwl8Y/XDCtguwuNNq3GpQurGrDiLUyFnDNhiWI2J62stJGBoYio6ffmYnFtEhGCn1ftoy
+ O5aI=
+X-Google-Smtp-Source: AGHT+IG2na3zlWA/e7Zn5bqKL/tsCH+vAadvHu7y9H0BssIuRHRKWQ/fFJrsFb5RyyjUs9YnARRJzg==
+X-Received: by 2002:a17:906:714f:b0:a3f:20b9:2b68 with SMTP id
+ z15-20020a170906714f00b00a3f20b92b68mr6562371ejj.10.1709566452928; 
+ Mon, 04 Mar 2024 07:34:12 -0800 (PST)
 Received: from dario-ThinkPad-T14s-Gen-2i.amarulasolutions.com
  ([2001:b07:6474:ebbf:72fe:558f:d55e:d423])
  by smtp.gmail.com with ESMTPSA id
- sa20-20020a1709076d1400b00a4432543b21sm4936082ejc.198.2024.03.04.07.34.10
+ sa20-20020a1709076d1400b00a4432543b21sm4936082ejc.198.2024.03.04.07.34.11
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 04 Mar 2024 07:34:11 -0800 (PST)
+ Mon, 04 Mar 2024 07:34:12 -0800 (PST)
 From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Mon,  4 Mar 2024 16:32:34 +0100
-Message-ID: <20240304153253.732708-4-dario.binacchi@amarulasolutions.com>
+Date: Mon,  4 Mar 2024 16:32:35 +0100
+Message-ID: <20240304153253.732708-5-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240304153253.732708-1-dario.binacchi@amarulasolutions.com>
 References: <20240304153253.732708-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1709566451; x=1710171251;
+ d=amarulasolutions.com; s=google; t=1709566453; x=1710171253;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=Js6re1cNZnkdKlpxuJ10eiMtCKJbntgPb35mWC0eE5c=;
- b=AfH1pBrmpOh7frI9OrkEQTWqZhfDOk86PWRZwM5j8laOEDhGTvMcRArFxoBoRsuE4t
- qqnvb9uVb457yqLoGzTD5uWGMXw9lnWZnD3u7Me0tBbhw22J4/Sx9mwEb+5qnE5QjAJW
- N9yr2u5/bV+NBuztMH8hG67vRUALxHqh90waE=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=Y0ukM1ysdi9ISjJrZMGotHcNyrgvpCD8kyvBew01Sr8=;
+ b=oOEqI2QXwCWrVjJr3KwS45qBRGzjEm1YSoOuaZjIGsNfPo+AiKPqja6vARAkcjItEN
+ CTXelvrlkuKaehtttTAkO0txnGB/555kaJ1HnYh0g4VupTWNirgi1ua4FjBrIsSD0sBf
+ SRJytxDWcIeVhaL6WGz9LHwXAm2WoMrJihUBQ=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=AfH1pBrm
-Subject: [Buildroot] [PATCH v9 03/22] configs/ti_am62x_sk_defconfig:
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=oOEqI2QX
+Subject: [Buildroot] [PATCH v9 04/22] configs/ti_am64x_sk_defconfig:
  explicitly set the ti-k3-r5-loader version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -117,7 +117,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit 4b8fddb060fb ("configs/ti_am62x_sk: new defconfig") forgot to
+Commit 6b2329bb80 ("configs/ti_am64x_sk: new defconfig") forgot to
 specify the ti-k3-r5-loader, so do that now.
 
 When the defconfig was added, the default version was 2022.10, so use it.
@@ -131,20 +131,20 @@ no changes since v4
 
 Added in v4
 
- configs/ti_am62x_sk_defconfig | 2 ++
+ configs/ti_am64x_sk_defconfig | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/configs/ti_am62x_sk_defconfig b/configs/ti_am62x_sk_defconfig
-index c3ad555a8184..a129e216d25b 100644
---- a/configs/ti_am62x_sk_defconfig
-+++ b/configs/ti_am62x_sk_defconfig
-@@ -25,6 +25,8 @@ BR2_TARGET_OPTEE_OS_PLATFORM="k3-am62x"
+diff --git a/configs/ti_am64x_sk_defconfig b/configs/ti_am64x_sk_defconfig
+index 097175bd8f39..26195194c7d6 100644
+--- a/configs/ti_am64x_sk_defconfig
++++ b/configs/ti_am64x_sk_defconfig
+@@ -25,6 +25,8 @@ BR2_TARGET_OPTEE_OS_PLATFORM="k3-am64x"
  BR2_TARGET_TI_K3_IMAGE_GEN=y
- BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62X=y
+ BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM64X=y
  BR2_TARGET_TI_K3_R5_LOADER=y
 +BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION=y
 +BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION_VALUE="2022.10"
- BR2_TARGET_TI_K3_R5_LOADER_BOARD_DEFCONFIG="am62x_evm_r5"
+ BR2_TARGET_TI_K3_R5_LOADER_BOARD_DEFCONFIG="am64x_evm_r5"
  BR2_TARGET_UBOOT=y
  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
 -- 
