@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19C73C54E41
-	for <buildroot@archiver.kernel.org>; Mon,  4 Mar 2024 11:51:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E468DC48BF6
+	for <buildroot@archiver.kernel.org>; Mon,  4 Mar 2024 11:51:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DF7B58179D;
-	Mon,  4 Mar 2024 11:51:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A9AE2817A1;
+	Mon,  4 Mar 2024 11:51:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id m-AEoR3yg8CG; Mon,  4 Mar 2024 11:51:21 +0000 (UTC)
+	with ESMTP id 9DCYdqmZm83I; Mon,  4 Mar 2024 11:51:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 133B7817A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 42164820BC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 133B7817A1;
-	Mon,  4 Mar 2024 11:51:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 13D9B1BF2F3
+	by smtp1.osuosl.org (Postfix) with ESMTP id 42164820BC;
+	Mon,  4 Mar 2024 11:51:23 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5D4041BF2F3
  for <buildroot@lists.busybox.net>; Mon,  4 Mar 2024 11:51:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 00DFF817A1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4A0D540BD5
  for <buildroot@lists.busybox.net>; Mon,  4 Mar 2024 11:51:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rmlIGsrstwNw for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TtLuWDIHRQoP for <buildroot@lists.busybox.net>;
  Mon,  4 Mar 2024 11:51:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B79B8179D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 37CBA40BC7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2B79B8179D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 37CBA40BC7
  for <buildroot@buildroot.org>; Mon,  4 Mar 2024 11:51:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 165CA88052; Mon,  4 Mar 2024 11:51:18 +0000 (UTC)
+ id 23A3688053; Mon,  4 Mar 2024 11:51:18 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 4 Mar 2024 12:49:55 +0100
+Date: Mon, 4 Mar 2024 12:50:41 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f64f82f78ffd9c4b530a7a7f17e1a66feaa23c80
-X-Git-Newrev: 34d473b5cca2a0e01ba7a60ced275f94a0e40540
+X-Git-Oldrev: 34d473b5cca2a0e01ba7a60ced275f94a0e40540
+X-Git-Newrev: c39259aa35ff1376910e402e3b7f2449e1e133d3
 X-Patchwork-Hint: ignore
-Message-Id: <20240304115118.165CA88052@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/luvi: fix build with aarch64_be
+Message-Id: <20240304115118.23A3688053@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/spirv-tools: needs dynamic library
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,37 +64,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=34d473b5cca2a0e01ba7a60ced275f94a0e40540
+commit: https://git.buildroot.net/buildroot/commit/?id=c39259aa35ff1376910e402e3b7f2449e1e133d3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following build failure with aarch64_be raised since the
-addition of aarch64_be support to luajit in commit
-28e5c2f2bdd147dbb9aefbc040fc618f46ee0663:
+Fix the following static build failure raised since the addition of the
+package in commit 0a01085abeb7d8a097cb68b9f7f4faec7711543c:
 
-luajit: unknown architecture
+[ 26%] Linking CXX shared library libSPIRV-Tools-shared.so
+/home/autobuild/autobuild/instance-11/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/12.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: /home/autobuild/autobuild/instance-11/output-1/host/xtensa-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(__uClibc_main.os): in function `__uClibc_init':
+__uClibc_main.c:(.text+0x98): undefined reference to `__fini_array_start'
 
-Fixes: 28e5c2f2bdd147dbb9aefbc040fc618f46ee0663
- - http://autobuild.buildroot.org/results/9b89eff7d90173b8c74b8f676650709cc4418e65
+Fixes: 0a01085abeb7d8a097cb68b9f7f4faec7711543c
+ - http://autobuild.buildroot.org/results/f953d500830e8124c6e85c57887106f9352cb4c2
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/luvi/luvi.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/spirv-tools/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/luvi/luvi.mk b/package/luvi/luvi.mk
-index a8e645fab3..ebd1066c5c 100644
---- a/package/luvi/luvi.mk
-+++ b/package/luvi/luvi.mk
-@@ -22,6 +22,8 @@ else ifeq ($(BR2_arm)$(BR2_armeb),y)
- LUVI_TARGET_ARCH = arm
- else ifeq ($(BR2_aarch64),y)
- LUVI_TARGET_ARCH = arm64
-+else ifeq ($(BR2_aarch64_be),y)
-+LUVI_TARGET_ARCH = arm64be
- else ifeq ($(BR2_mips),y)
- LUVI_TARGET_ARCH = mips
- else ifeq ($(BR2_mipsel),y)
+diff --git a/package/spirv-tools/Config.in b/package/spirv-tools/Config.in
+index fa9b615c56..98b0c46525 100644
+--- a/package/spirv-tools/Config.in
++++ b/package/spirv-tools/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_SPIRV_TOOLS
+ 	bool "spirv-tools"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++17 filesystem
+ 	select BR2_PACKAGE_SPIRV_HEADERS
+ 	help
+@@ -9,6 +10,6 @@ config BR2_PACKAGE_SPIRV_TOOLS
+ 
+ 	  https://github.com/KhronosGroup/SPIRV-Tools
+ 
+-comment "spirv-tools needs a toolchain w/ C++, gcc >= 8"
+-	depends on !BR2_INSTALL_LIBSTDCPP || \
++comment "spirv-tools needs a toolchain w/ C++, dynamic library, gcc >= 8"
++	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
