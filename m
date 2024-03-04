@@ -4,60 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05B1BC48BF6
-	for <buildroot@archiver.kernel.org>; Mon,  4 Mar 2024 21:48:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5622C54E41
+	for <buildroot@archiver.kernel.org>; Mon,  4 Mar 2024 21:49:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BF7EE60A57;
-	Mon,  4 Mar 2024 21:48:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7EA6260D72;
+	Mon,  4 Mar 2024 21:49:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gWnBRPgrE-uu; Mon,  4 Mar 2024 21:48:48 +0000 (UTC)
+	with ESMTP id smwqP572-Sim; Mon,  4 Mar 2024 21:49:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EFA8260A5A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 96B3260D55
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EFA8260A5A;
-	Mon,  4 Mar 2024 21:48:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4B91B1BF94D
- for <buildroot@lists.busybox.net>; Mon,  4 Mar 2024 21:48:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 96B3260D55;
+	Mon,  4 Mar 2024 21:49:02 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BC1901BF280
+ for <buildroot@lists.busybox.net>; Mon,  4 Mar 2024 21:49:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 37EEF821CD
- for <buildroot@lists.busybox.net>; Mon,  4 Mar 2024 21:48:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A87AE4087A
+ for <buildroot@lists.busybox.net>; Mon,  4 Mar 2024 21:49:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mIzyN6oCYbAs for <buildroot@lists.busybox.net>;
- Mon,  4 Mar 2024 21:48:46 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
- helo=relay3-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lmHhDOdScH3r for <buildroot@lists.busybox.net>;
+ Mon,  4 Mar 2024 21:48:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+ helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DFF3A8214C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DFF3A8214C
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DFF3A8214C
- for <buildroot@buildroot.org>; Mon,  4 Mar 2024 21:48:45 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9B11560003;
- Mon,  4 Mar 2024 21:48:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5A5284086B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A5284086B
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5A5284086B
+ for <buildroot@buildroot.org>; Mon,  4 Mar 2024 21:48:59 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2E08FFF802;
+ Mon,  4 Mar 2024 21:48:55 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rhGAr-00GzCm-2n;
- Mon, 04 Mar 2024 22:48:41 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rhGB5-00GzEU-0w;
+ Mon, 04 Mar 2024 22:48:55 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20240304155009.3505542-1-fontaine.fabrice@gmail.com>
-Date: Mon, 04 Mar 2024 22:48:41 +0100
-In-Reply-To: <20240304155009.3505542-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 4 Mar 2024 16:50:09 +0100")
-Message-ID: <87msrd1xdy.fsf@48ers.dk>
+References: <20240304155426.3510178-1-fontaine.fabrice@gmail.com>
+Date: Mon, 04 Mar 2024 22:48:55 +0100
+In-Reply-To: <20240304155426.3510178-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 4 Mar 2024 16:54:26 +0100")
+Message-ID: <87il211xdk.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/rauc-hawkbit-updater: fix build
- with gcc 4.8
+Subject: Re: [Buildroot] [PATCH 1/1] package/tllist: fix build with gcc 4.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,7 +68,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Colin Foster <colin.foster@in-advantage.com>, buildroot@buildroot.org
+Cc: Adam Duskett <adam.duskett@amarulasolutions.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -78,15 +77,16 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
  > Fix the following build failure with gcc 4.8 raised since the addition
- > of the package in commit 928b7219cd7079864eadadc66dbff21c5cd72804:
+ > of the package in commit 996b786cfc03c3cf2ac631045650545c901e3075:
 
- > ../src/hawkbit-client.c:873:17: error: 'for' loop initial declarations are only allowed in C99 mode
- >                  for (const gint *code = &resumable_codes[0]; *code; code++)
+ > In file included from ../test.c:7:0:
+ > ../test.c: In function 'main':
+ > ../tllist.h:213:17: error: 'for' loop initial declarations are only allowed in C99 mode
+ >                  for (int _i = 0; _i < __insize; _i++) {                 \
  >                  ^
- > ../src/hawkbit-client.c:873:17: note: use option -std=c99 or -std=gnu99 to compile your code
 
- > Fixes: 928b7219cd7079864eadadc66dbff21c5cd72804
- >  - http://autobuild.buildroot.org/results/e275d0ec4fe1da418a6163b46666316034b83b19
+ > Fixes: 996b786cfc03c3cf2ac631045650545c901e3075
+ >  - http://autobuild.buildroot.org/results/e82fdf4f9ef199e1baa169d38a75872bddd4e6dd
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
