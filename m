@@ -4,95 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7BCCC48BF6
-	for <buildroot@archiver.kernel.org>; Mon,  4 Mar 2024 15:35:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DA0BC5478C
+	for <buildroot@archiver.kernel.org>; Mon,  4 Mar 2024 15:35:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B4FF641557;
-	Mon,  4 Mar 2024 15:35:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 006E2415B4;
+	Mon,  4 Mar 2024 15:35:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MQldodlAGDVG; Mon,  4 Mar 2024 15:35:12 +0000 (UTC)
+	with ESMTP id IC5g1r1Vjlw9; Mon,  4 Mar 2024 15:35:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 80384414EF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 86748417C0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 80384414EF;
-	Mon,  4 Mar 2024 15:35:12 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B256A1BF3B0
- for <buildroot@lists.busybox.net>; Mon,  4 Mar 2024 15:34:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 86748417C0;
+	Mon,  4 Mar 2024 15:35:15 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EE2001BF3B0
+ for <buildroot@lists.busybox.net>; Mon,  4 Mar 2024 15:34:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AD6E88169A
- for <buildroot@lists.busybox.net>; Mon,  4 Mar 2024 15:34:33 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DB5AB4152F
+ for <buildroot@lists.busybox.net>; Mon,  4 Mar 2024 15:34:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fvuekOtzdzvO for <buildroot@lists.busybox.net>;
- Mon,  4 Mar 2024 15:34:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OZKUhIepCvyu for <buildroot@lists.busybox.net>;
+ Mon,  4 Mar 2024 15:34:34 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::230; helo=mail-lj1-x230.google.com;
+ client-ip=2a00:1450:4864:20::233; helo=mail-lj1-x233.google.com;
  envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BC35281656
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC35281656
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com
- [IPv6:2a00:1450:4864:20::230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BC35281656
- for <buildroot@buildroot.org>; Mon,  4 Mar 2024 15:34:32 +0000 (UTC)
-Received: by mail-lj1-x230.google.com with SMTP id
- 38308e7fff4ca-2d2fad80eacso55128551fa.2
- for <buildroot@buildroot.org>; Mon, 04 Mar 2024 07:34:32 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 05AB54149E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 05AB54149E
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com
+ [IPv6:2a00:1450:4864:20::233])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 05AB54149E
+ for <buildroot@buildroot.org>; Mon,  4 Mar 2024 15:34:33 +0000 (UTC)
+Received: by mail-lj1-x233.google.com with SMTP id
+ 38308e7fff4ca-2d208be133bso61774651fa.2
+ for <buildroot@buildroot.org>; Mon, 04 Mar 2024 07:34:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1709566470; x=1710171270;
+ d=1e100.net; s=20230601; t=1709566471; x=1710171271;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=dPQagV28irN2Jmx/rxo3YHBgBHJo9qHRa8+cRY2hp+4=;
- b=D3/7aiLNu10g51moC1sDRnOmVXa1VmE08oPmAn3ui9ynQpnnRibtdaIarXySm5YFhh
- VBVaB8N4Gt50hRDyP6nFUQraITlt/zA76TWBONCF/3/O3xo2qZHhByB+MXtx0bIeVU9e
- YBQ7Ej7oow8ILAv1n8F64W57RunEf/Aer6laLXzBChEtlruzUTqRSfJYoxhwReJv3udb
- C4wpDOB9oY1IEwBHM9g5H61XhC7DUVudlHx/4zoNhNJqZvtidnxilGcfENuzrTQiHG08
- FwLzRQpghpVZYChPxXe9G1Ief+vVKGTXWlj98bFDsBBsUZ0I1HpAH93kp16zncXG8h0o
- Bn1A==
-X-Gm-Message-State: AOJu0YyCxeDQe9/NOPrulM9/SSIrq6XxYHzN6+SBRsir0odRlmW3TDii
- MX6LDsLn9qtuUQaVT7ASB0L3BrSa/dI4nHDUbTUNCSalMnCMXcDDoHrZ6iYaoFAV3CjsG+e+B52
- YjYc=
-X-Google-Smtp-Source: AGHT+IE2SiSg2MtwyAsF9IsP2e1g7LRUdlUb8vAWyux3fNkK79+oOk3Xi4uR1GFZH5DlQfYuokpxBg==
-X-Received: by 2002:a19:8c11:0:b0:512:fce4:327b with SMTP id
- o17-20020a198c11000000b00512fce4327bmr5553685lfd.39.1709566470133; 
- Mon, 04 Mar 2024 07:34:30 -0800 (PST)
+ bh=8FsuUnW0ZvZ+XZhTAOg/VpBNCVCV6RFCLKo+tBgu5TQ=;
+ b=wc1EnWSdu5bhwEi8esshs4OMgejg7zIqYKKdM/nay6u57k6xf9wvYj0q4v9XtNvNnT
+ pc+8rjFTkmDs70j0PSTTXWRktYPbXbilefnooq4FHSA1aJNfdL7Wx6XQJ0L0SPusGB7P
+ J5ZnJoT9GgIvM7vuCYmO8aDiQGfINjEhN/XNRScLCMVa6byGe2AbgU6GvMnFkSXINbuN
+ yQgs8Q1l5Z/9Q2al2jvZ3BtvN0GwTqjAtbyilI569am8BxwFIEOLJ9NzqpSjCWX8wCds
+ viXUSNBafw8iYHmpKw/E84jf9fiN8X6BPD8yTdp2w+KU6s8qt0OUUfun0pyhBbiUCx3d
+ PkOQ==
+X-Gm-Message-State: AOJu0YwJe+oT93c8ph0VL/bDmMgDsdI5zsuYH9ZQnNIYJLScCifhyXwF
+ 4sjEilVCqzJL2ew6SgytzjpifoKBhKDkk6dDM745iueEAsyYTYx4vuTlsoH58SmSw+yWtVT62Up
+ m9Yc=
+X-Google-Smtp-Source: AGHT+IGRo64RrZNlccVfWwnk8YJ4WJBTOd66fEWgv5B5JsRAZyFm4Mx1v4LQzV0Qw13RlRktol93JQ==
+X-Received: by 2002:ac2:4983:0:b0:513:2181:d412 with SMTP id
+ f3-20020ac24983000000b005132181d412mr6181050lfl.19.1709566471448; 
+ Mon, 04 Mar 2024 07:34:31 -0800 (PST)
 Received: from dario-ThinkPad-T14s-Gen-2i.amarulasolutions.com
  ([2001:b07:6474:ebbf:72fe:558f:d55e:d423])
  by smtp.gmail.com with ESMTPSA id
- sa20-20020a1709076d1400b00a4432543b21sm4936082ejc.198.2024.03.04.07.34.29
+ sa20-20020a1709076d1400b00a4432543b21sm4936082ejc.198.2024.03.04.07.34.30
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 04 Mar 2024 07:34:29 -0800 (PST)
+ Mon, 04 Mar 2024 07:34:31 -0800 (PST)
 From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Mon,  4 Mar 2024 16:32:49 +0100
-Message-ID: <20240304153253.732708-19-dario.binacchi@amarulasolutions.com>
+Date: Mon,  4 Mar 2024 16:32:50 +0100
+Message-ID: <20240304153253.732708-20-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240304153253.732708-1-dario.binacchi@amarulasolutions.com>
 References: <20240304153253.732708-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1709566470; x=1710171270;
+ d=amarulasolutions.com; s=google; t=1709566471; x=1710171271;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=dPQagV28irN2Jmx/rxo3YHBgBHJo9qHRa8+cRY2hp+4=;
- b=V0Tz9vjcVjupxL7vwzrpkDR1KEn14BgZyWFVKdXCo7x3JK/zWf56uXdKZjhVPAJcgR
- HlW72nUjIaW2oLG+me/rBPs+xaouNrWDJcqoxV+Kx6Pfo+4UZt1J931X5tBgmmOhvwlf
- HEj44vPiaojW+8zLs2dxU6dJiyzK2xMa/hnu4=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=8FsuUnW0ZvZ+XZhTAOg/VpBNCVCV6RFCLKo+tBgu5TQ=;
+ b=XITOHbaZCN0FY5WswxrqLm0ZUSespE7e+9M6KWq555I4UctLfOCS980okAivqsE3+f
+ oR/r6wu5SxERXlFrbDv+rI8yfgBsfrJY7RRaa5MKf1B9qe5f11qX9vCvFkc29HG5itCB
+ Wcz4k3O8sZH9xOEsegFqqh2UZKfHrYN7Jke9M=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=V0Tz9vjc
-Subject: [Buildroot] [PATCH v9 18/22] board/ti/am62x-sk: generalize
- post-build.sh
+ header.b=XITOHbaZ
+Subject: [Buildroot] [PATCH v9 19/22] board/ti/am62x-sk: move post-{build,
+ image}.sh to board/ti/common/am6xx
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -117,9 +117,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Removing any explicit reference to the ti_am62x_sk_defconfig
-configuration, the script can also be used by other configurations or at
-least by ti_am64x_sk_defconfig.
+The patch makes it clear that the moved scripts can be used by the
+am6{2,4}x platforms.
 
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
@@ -127,65 +126,61 @@ Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
 Added in v8
 
- board/ti/am62x-sk/post-build.sh | 10 +++++++---
- configs/ti_am62x_sk_defconfig   |  2 +-
- 2 files changed, 8 insertions(+), 4 deletions(-)
+ board/ti/am62x-sk/post-image.sh                   |  5 -----
+ board/ti/{am62x-sk => common/am6xx}/post-build.sh |  0
+ board/ti/common/am6xx/post-image.sh               | 11 +++++++++++
+ configs/ti_am62x_sk_defconfig                     |  4 ++--
+ 4 files changed, 13 insertions(+), 7 deletions(-)
+ delete mode 100755 board/ti/am62x-sk/post-image.sh
+ rename board/ti/{am62x-sk => common/am6xx}/post-build.sh (100%)
+ create mode 100755 board/ti/common/am6xx/post-image.sh
 
-diff --git a/board/ti/am62x-sk/post-build.sh b/board/ti/am62x-sk/post-build.sh
-index 4f19f4d6cf91..d066e28fd0d5 100755
---- a/board/ti/am62x-sk/post-build.sh
-+++ b/board/ti/am62x-sk/post-build.sh
-@@ -12,8 +12,8 @@ EOF
-   exit 1
- }
- 
--o='c:d:r:x:'
--O='console:,devicetree:,root:,extra-args:'
-+o='c:d:l:r:x:'
-+O='console:,devicetree:,label:,root:,extra-args:'
- opts="$(getopt -n "${0##*/}" -o "${o}" -l "${O}" -- "${@}")"
- eval set -- "${opts}"
- while [ ${#} -gt 0 ]; do
-@@ -24,6 +24,9 @@ while [ ${#} -gt 0 ]; do
-     (-d|--devicetree)
-         DEVICETREE="${2}"; shift 2
-         ;;
-+    (-l|--label)
-+        LABEL="${2}"; shift 2
-+        ;;
-     (-r|--root)
-         ROOT="${2}"; shift 2
-         ;;
-@@ -38,6 +41,7 @@ done
- 
- [ -n "${CONSOLE}" ] || die "Missing \`console' argument"
- [ -n "${DEVICETREE}" ] || die "Missing \`devicetree' argument"
-+[ -n "${LABEL}" ] || die "Missing \`label' argument"
- [ -n "${ROOT}" ] || die "Missing \`root' argument"
- append="console=${CONSOLE} root=${ROOT} rw rootfstype=ext4 rootwait"
- if [ -n "${EXTRA_ARGS}" ]; then
-@@ -46,7 +50,7 @@ fi
- 
- mkdir -p "${BINARIES_DIR}"
- cat <<-__HEADER_EOF > "${BINARIES_DIR}/extlinux.conf"
--	label am62x-sk-buildroot
-+	label ${LABEL}
- 	  kernel /Image
- 	  fdtdir /
- 	  devicetree /${DEVICETREE}
+diff --git a/board/ti/am62x-sk/post-image.sh b/board/ti/am62x-sk/post-image.sh
+deleted file mode 100755
+index 34f732c091ad..000000000000
+--- a/board/ti/am62x-sk/post-image.sh
++++ /dev/null
+@@ -1,5 +0,0 @@
+-#!/bin/sh -x
+-
+-BOARD_DIR="$(dirname "$0")"
+-
+-support/scripts/genimage.sh -c "${BOARD_DIR}/genimage.cfg"
+diff --git a/board/ti/am62x-sk/post-build.sh b/board/ti/common/am6xx/post-build.sh
+similarity index 100%
+rename from board/ti/am62x-sk/post-build.sh
+rename to board/ti/common/am6xx/post-build.sh
+diff --git a/board/ti/common/am6xx/post-image.sh b/board/ti/common/am6xx/post-image.sh
+new file mode 100755
+index 000000000000..917ca238aa78
+--- /dev/null
++++ b/board/ti/common/am6xx/post-image.sh
+@@ -0,0 +1,11 @@
++#!/bin/sh -x
++
++board_dir() {
++    if grep -Eq "^BR2_DEFCONFIG=.*/ti_am64x_sk_defconfig\"$" "${BR2_CONFIG}"; then
++        echo "am64x-sk"
++    else
++        echo "am62x-sk"
++    fi
++}
++
++support/scripts/genimage.sh -c "board/ti/$(board_dir)/genimage.cfg"
 diff --git a/configs/ti_am62x_sk_defconfig b/configs/ti_am62x_sk_defconfig
-index 877f88899af9..bd294bb712ee 100644
+index bd294bb712ee..310ba6fb6453 100644
 --- a/configs/ti_am62x_sk_defconfig
 +++ b/configs/ti_am62x_sk_defconfig
-@@ -2,7 +2,7 @@ BR2_aarch64=y
+@@ -1,7 +1,7 @@
+ BR2_aarch64=y
  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/ti/am62x-sk/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/ti/am62x-sk/post-image.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c ttyS2,115200n8 -d k3-am625-sk.dtb -r /dev/mmcblk1p2 -x earlycon=ns16550a,mmio32,0x02800000"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c ttyS2,115200n8 -d k3-am625-sk.dtb -l am62x-sk-buildroot -r /dev/mmcblk1p2 -x earlycon=ns16550a,mmio32,0x02800000"
+-BR2_ROOTFS_POST_BUILD_SCRIPT="board/ti/am62x-sk/post-build.sh"
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/ti/am62x-sk/post-image.sh"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/ti/common/am6xx/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/ti/common/am6xx/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c ttyS2,115200n8 -d k3-am625-sk.dtb -l am62x-sk-buildroot -r /dev/mmcblk1p2 -x earlycon=ns16550a,mmio32,0x02800000"
  BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.18"
 -- 
 2.43.0
 
