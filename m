@@ -4,95 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8375BC48BF6
-	for <buildroot@archiver.kernel.org>; Mon,  4 Mar 2024 15:35:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F394C5478C
+	for <buildroot@archiver.kernel.org>; Mon,  4 Mar 2024 15:35:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5577D414D0;
-	Mon,  4 Mar 2024 15:35:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4E651415BC;
+	Mon,  4 Mar 2024 15:35:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Mk63sjHDo8Fa; Mon,  4 Mar 2024 15:35:03 +0000 (UTC)
+	with ESMTP id CgxKVFpknpWm; Mon,  4 Mar 2024 15:35:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 11935415A6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CCC71415B5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 11935415A6;
-	Mon,  4 Mar 2024 15:35:03 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A90701BF94D
- for <buildroot@lists.busybox.net>; Mon,  4 Mar 2024 15:34:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CCC71415B5;
+	Mon,  4 Mar 2024 15:35:05 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0A5FE1BF94D
+ for <buildroot@lists.busybox.net>; Mon,  4 Mar 2024 15:34:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5AF2881656
- for <buildroot@lists.busybox.net>; Mon,  4 Mar 2024 15:34:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4D86341490
+ for <buildroot@lists.busybox.net>; Mon,  4 Mar 2024 15:34:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GP_fR3OUmqcp for <buildroot@lists.busybox.net>;
- Mon,  4 Mar 2024 15:34:28 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hIqv5vZNCR9h for <buildroot@lists.busybox.net>;
+ Mon,  4 Mar 2024 15:34:30 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62c; helo=mail-ej1-x62c.google.com;
+ client-ip=2a00:1450:4864:20::633; helo=mail-ej1-x633.google.com;
  envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 82DD581F63
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 82DD581F63
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
- [IPv6:2a00:1450:4864:20::62c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 82DD581F63
- for <buildroot@buildroot.org>; Mon,  4 Mar 2024 15:34:28 +0000 (UTC)
-Received: by mail-ej1-x62c.google.com with SMTP id
- a640c23a62f3a-a452877ddcaso163696866b.3
- for <buildroot@buildroot.org>; Mon, 04 Mar 2024 07:34:28 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DC6294149E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC6294149E
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com
+ [IPv6:2a00:1450:4864:20::633])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DC6294149E
+ for <buildroot@buildroot.org>; Mon,  4 Mar 2024 15:34:29 +0000 (UTC)
+Received: by mail-ej1-x633.google.com with SMTP id
+ a640c23a62f3a-a3fb8b0b7acso600909266b.2
+ for <buildroot@buildroot.org>; Mon, 04 Mar 2024 07:34:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1709566466; x=1710171266;
+ d=1e100.net; s=20230601; t=1709566467; x=1710171267;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=PTxw9v4vJWFWFxqGPEIz5b+ovpWbrurOUUDeiiATkds=;
- b=Gx80TGtqRtFDHY4mSEaVYR/9zLUcmSuGOddho05CJjhCy14d7aErSJu/jB5sMrsK2Q
- 6NEitxHlFMEFFNgkFqqktvGaXcAWlOINvQln9LdDDZ6HjrWEZCiUyVZ6+CgRpPRqBMtV
- UQCQDYMINaKPjGmdCl2l8U6XSLHb0m7iDeiF0MQQgNpyOmxlUb+RGe6dn/XX5FSlZjJx
- TrRoqoLWpf+Mf4mlBoYzE4SZBkXODdOlUiXWzQ2YU0bsYedeGWtCAbDlMkAT11jPb4fl
- Q2jIlpLyVa3A5H4JKLKIAjMFKL3T7X6JTwx0I53pDsatfMIFGxBAwUhJioilE4AzzjnS
- gswA==
-X-Gm-Message-State: AOJu0Yyfhyhq1Msy8SmVPRyHZGIku3nYuLTIHp8qObSuGnY/nMzmrgNL
- JF6iyHYloIxXMp0DmrrbGXumADx98X4SE1lUImgg58zSMyAYK5PFd7orCtNDRxMg2fiavyD4Cba
- Ht9k=
-X-Google-Smtp-Source: AGHT+IHEaCuI4KUJkd0J+yj+s6YB5UbkxZ/jaky945+NVoMeYSGYfNBKWuhKlPptGX6NvMH7v8TU8A==
-X-Received: by 2002:a17:906:1114:b0:a44:729f:5bac with SMTP id
- h20-20020a170906111400b00a44729f5bacmr6065947eja.53.1709566466482; 
- Mon, 04 Mar 2024 07:34:26 -0800 (PST)
+ bh=BOGhPRnmbpl1vVASgmS2jJ5Nlo6TpoJenWbLbZor/h8=;
+ b=BE1W/DwJp3OQSuUam688IBCjFQ0XljDFrQTD2xWrzsX0KrBgo3koeg1Omk5R3isj60
+ feug86R77gQvCUEs20No0tVkVJRJN8UNhQYzx353RB0JeJPXQrXaRs58vg3bR8/J0UOY
+ t8t0yfUQMcL6GGz1PADDi7DpKJJOvoeUUTZCeOClJKvXdNbrNsyHCsef5Ta8JwF9jvyH
+ 5iLQcGDZ4R1t7oO7kIx3T27IPADez1PlRwH7dlXHWYV6S/s92FkRq0kXPhU7J0u/bkLx
+ 3nPQWihA6lechpn6MY7jORMfrbQAZE3n/MdEmtqcaifwURAkTUPrjhJtvMSeaJq46+ZV
+ 9QFQ==
+X-Gm-Message-State: AOJu0YwnnOSEUw0m9LmslNReYQ3qUE0LflKVMcstFFhTHlrHSFZzEYHe
+ NwZLsf0m9FFcAk+ZcLHa0ahKxlcKDgxMjOzq6HsZqYQ11PZgDGn+hoQUrW71jy/PBFJ0lk4zynl
+ hFqU=
+X-Google-Smtp-Source: AGHT+IHUw8pm1MxR6M3eShrXKNhrUWCv0N921DZdouQFEretQDuS6kxmyFK1SjhEH/Mh6fnVKxwXww==
+X-Received: by 2002:a17:907:b9c8:b0:a44:dc56:e93f with SMTP id
+ xa8-20020a170907b9c800b00a44dc56e93fmr4054595ejc.46.1709566467691; 
+ Mon, 04 Mar 2024 07:34:27 -0800 (PST)
 Received: from dario-ThinkPad-T14s-Gen-2i.amarulasolutions.com
  ([2001:b07:6474:ebbf:72fe:558f:d55e:d423])
  by smtp.gmail.com with ESMTPSA id
- sa20-20020a1709076d1400b00a4432543b21sm4936082ejc.198.2024.03.04.07.34.25
+ sa20-20020a1709076d1400b00a4432543b21sm4936082ejc.198.2024.03.04.07.34.26
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 04 Mar 2024 07:34:26 -0800 (PST)
+ Mon, 04 Mar 2024 07:34:27 -0800 (PST)
 From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Mon,  4 Mar 2024 16:32:46 +0100
-Message-ID: <20240304153253.732708-16-dario.binacchi@amarulasolutions.com>
+Date: Mon,  4 Mar 2024 16:32:47 +0100
+Message-ID: <20240304153253.732708-17-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240304153253.732708-1-dario.binacchi@amarulasolutions.com>
 References: <20240304153253.732708-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1709566466; x=1710171266;
+ d=amarulasolutions.com; s=google; t=1709566467; x=1710171267;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=PTxw9v4vJWFWFxqGPEIz5b+ovpWbrurOUUDeiiATkds=;
- b=AtTrbx+sEghsa3uZp8Mm/jJKcFXvy+6FbMKNBVBFELrR4gBB964srIle1t2nDjZwnn
- T3Gj+rfwQHBSuhk61VvKA6lJa5UCVMlSefBv+dlhHO7cB5KcO77g7aYdu08/n2BOc8ZA
- 5nTju2UBhGM5VLngXB5fuM3F3j0eqtWb5MkOw=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=BOGhPRnmbpl1vVASgmS2jJ5Nlo6TpoJenWbLbZor/h8=;
+ b=eCrt8qnbqYhMMl/vOU+plN7MUKsP3Hqp5DHt55/AvUkcEyZiIC+ajFdWYUGC7IMu7l
+ LqPRWm6VXaAtdGrYEFfmW/DqWDkIo66Gg3saMRc6dLSah+JRSX6zVAjNsLUeow5ZY/JS
+ XmbA9dYzrgkptEAIIoaXyZANqEmNli25pd7kI=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=AtTrbx+s
-Subject: [Buildroot] [PATCH v9 15/22] boot/ti-k3/ti-k3-r5-loader: install
- tiboot3.bin
+ header.b=eCrt8qnb
+Subject: [Buildroot] [PATCH v9 16/22] configs/ti_am62x_sk_defconfig: bump
+ U-Boot version to 2024.01
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -117,49 +117,192 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Recent versions of U-Boot are capable of building tiboot3.bin using
-Binman. In this case, let's copy it to the binaries directory.
+The 2024.01 version of U-Boot for the am62x-sk board has introduced two
+major changes:
+- The device tree k3-am625-sk.dtb is no longer searched in /boot, but in
+  /boot/dtb/ti. Hence, the disabling of BR2_LINUX_KERNEL_INSTALL_TARGET
+  and the use of extlinux.conf for the proper loading of the device tree.
+  Furthermore, the parameter BR2_ROOTFS_POST_SCRIPT_ARGS was used to
+  auto-generate the extlinux.conf file so that developers can change the
+  kernel loading options by modifying the .config.
+- U-Boot is capable of building tiboot3.bin using Binman. So it's no longer
+  necessary to use custom tools like ti-k3-image-gen.
 
-The use of `find' command is justified by the need to use a regex
-expression to select the correct file. This is not possible with a
-simple `cp' command.
+Tested on SK-AM62B-P1.
 
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
 ---
 
-Changes in v8:
-- Use the `find' command in pipe with the `cp' command.
+Changes in v7:
+- Add devicetree k3-am625-sk.dtb to extlinux.conf
+- Improve error messages in post-build.sh script
 
 Changes in v6:
-- Replace `find' command with `cp' one.
+- Enable BR2_TARGET_UBOOT_USE_BINMAN option
 
 Changes in v5:
-- Replace tiboot3-*-$(TI_K3_R5_LOADER_SECTYPE)-*.bin with
-  tiboot3-$(TI_K3_R5_LOADER_SOC)-$(TI_K3_R5_LOADER_SECTYPE)-*.bin
+- Update commit message.
 
-Added in v4
+Changes in v4:
+- bump to 204.01 instead of 2023.10
+- Update the commit message
+- Replace 'PARTUUID=00000000-02' with '/dev/mmcblk1p2' where to get rootfs
+  in the BR2_ROOTFS_POST_SCRIPT_ARGS insided the ti_am62x_sk_defconfig.
 
- boot/ti-k3-r5-loader/ti-k3-r5-loader.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+Changes in v2:
+- Update the commit message
+- Drop Python options required by binman.
+- Enable BR2_TARGET_TI_K3_R5_LOADER_USE_BINMAN. This option automatically
+  selects the Python modules required by binman.
 
-diff --git a/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk b/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
-index fdb058f3b72a..9a05d005067a 100644
---- a/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
-+++ b/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
-@@ -70,8 +70,12 @@ define TI_K3_R5_LOADER_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) $(TI_K3_R5_LOADER_MAKE) -C $(@D) $(TI_K3_R5_LOADER_MAKE_OPTS)
- endef
+ board/ti/am62x-sk/genimage.cfg  |  7 ++++-
+ board/ti/am62x-sk/post-build.sh | 54 +++++++++++++++++++++++++++++++++
+ board/ti/am62x-sk/post-image.sh |  5 +++
+ configs/ti_am62x_sk_defconfig   | 13 ++++----
+ 4 files changed, 72 insertions(+), 7 deletions(-)
+ create mode 100755 board/ti/am62x-sk/post-build.sh
+ create mode 100755 board/ti/am62x-sk/post-image.sh
+
+diff --git a/board/ti/am62x-sk/genimage.cfg b/board/ti/am62x-sk/genimage.cfg
+index 26304fe98f99..398209f4d831 100644
+--- a/board/ti/am62x-sk/genimage.cfg
++++ b/board/ti/am62x-sk/genimage.cfg
+@@ -4,10 +4,15 @@ image boot.vfat {
+ 			"tiboot3.bin",
+ 			"tispl.bin",
+ 			"u-boot.img",
++			"k3-am625-sk.dtb",
++			"Image"
++		}
++		file extlinux/extlinux.conf {
++			image = extlinux.conf
+ 		}
+ 	}
  
-+TI_K3_R5_LOADER_SECTYPE = $(call qstrip,$(BR2_PACKAGE_TI_K3_SECTYPE))
-+TI_K3_R5_LOADER_SOC = $(call qstrip,$(BR2_PACKAGE_TI_K3_SOC))
+-	size = 16M
++	size = 64M
+ }
+ 
+ image sdcard.img {
+diff --git a/board/ti/am62x-sk/post-build.sh b/board/ti/am62x-sk/post-build.sh
+new file mode 100755
+index 000000000000..4f19f4d6cf91
+--- /dev/null
++++ b/board/ti/am62x-sk/post-build.sh
+@@ -0,0 +1,54 @@
++#!/bin/sh -x
 +
- define TI_K3_R5_LOADER_INSTALL_IMAGES_CMDS
- 	cp $(@D)/spl/u-boot-spl.bin $(BINARIES_DIR)/r5-u-boot-spl.bin
-+	cd $(@D); find ./ -type f -regex "\.\/tiboot3-$(TI_K3_R5_LOADER_SOC)-$(TI_K3_R5_LOADER_SECTYPE)-[^-]*..bin" -exec cp {} $(BINARIES_DIR)/tiboot3.bin \;
- endef
- 
- $(eval $(kconfig-package))
++# genimage will need to find the extlinux.conf
++# in the binaries directory
++
++die() {
++  cat <<EOF >&2
++Error: $@
++
++Usage: ${0} -c <console> -r <root> [-x <extra-args>]
++EOF
++  exit 1
++}
++
++o='c:d:r:x:'
++O='console:,devicetree:,root:,extra-args:'
++opts="$(getopt -n "${0##*/}" -o "${o}" -l "${O}" -- "${@}")"
++eval set -- "${opts}"
++while [ ${#} -gt 0 ]; do
++    case "${1}" in
++    (-c|--console)
++        CONSOLE="${2}"; shift 2
++        ;;
++    (-d|--devicetree)
++        DEVICETREE="${2}"; shift 2
++        ;;
++    (-r|--root)
++        ROOT="${2}"; shift 2
++        ;;
++    (-x|--extra-args)
++        EXTRA_ARGS="${2}"; shift 2
++        ;;
++    (--)
++        shift 1; break
++        ;;
++    esac
++done
++
++[ -n "${CONSOLE}" ] || die "Missing \`console' argument"
++[ -n "${DEVICETREE}" ] || die "Missing \`devicetree' argument"
++[ -n "${ROOT}" ] || die "Missing \`root' argument"
++append="console=${CONSOLE} root=${ROOT} rw rootfstype=ext4 rootwait"
++if [ -n "${EXTRA_ARGS}" ]; then
++    append="${append} ${EXTRA_ARGS}"
++fi
++
++mkdir -p "${BINARIES_DIR}"
++cat <<-__HEADER_EOF > "${BINARIES_DIR}/extlinux.conf"
++	label am62x-sk-buildroot
++	  kernel /Image
++	  fdtdir /
++	  devicetree /${DEVICETREE}
++	  append ${append}
++	__HEADER_EOF
+diff --git a/board/ti/am62x-sk/post-image.sh b/board/ti/am62x-sk/post-image.sh
+new file mode 100755
+index 000000000000..34f732c091ad
+--- /dev/null
++++ b/board/ti/am62x-sk/post-image.sh
+@@ -0,0 +1,5 @@
++#!/bin/sh -x
++
++BOARD_DIR="$(dirname "$0")"
++
++support/scripts/genimage.sh -c "${BOARD_DIR}/genimage.cfg"
+diff --git a/configs/ti_am62x_sk_defconfig b/configs/ti_am62x_sk_defconfig
+index 2835404a57df..7d9912024a16 100644
+--- a/configs/ti_am62x_sk_defconfig
++++ b/configs/ti_am62x_sk_defconfig
+@@ -1,14 +1,14 @@
+ BR2_aarch64=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_4=y
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/ti/am62x-sk/genimage.cfg"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/ti/am62x-sk/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/ti/am62x-sk/post-image.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c ttyS2,115200n8 -d k3-am625-sk.dtb -r /dev/mmcblk1p2 -x earlycon=ns16550a,mmio32,0x02800000"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.4.16"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="ti/k3-am625-sk"
+-BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_PACKAGE_LINUX_FIRMWARE=y
+ BR2_PACKAGE_LINUX_FIRMWARE_TI_WL18XX=y
+ BR2_PACKAGE_TI_K3=y
+@@ -24,20 +24,21 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_TARGET_BOARD="lite"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE=y
+ BR2_TARGET_OPTEE_OS=y
+ BR2_TARGET_OPTEE_OS_PLATFORM="k3-am62x"
+-BR2_TARGET_TI_K3_IMAGE_GEN=y
++BR2_TARGET_TI_K3_BOOT_FIRMWARE=y
+ BR2_TARGET_TI_K3_R5_LOADER=y
+ BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION=y
+-BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION_VALUE="2022.10"
++BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION_VALUE="2024.01"
+ BR2_TARGET_TI_K3_R5_LOADER_BOARD_DEFCONFIG="am62x_evm_r5"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.01"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am62x_evm_a53"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+ BR2_TARGET_UBOOT_NEEDS_TI_K3_DM=y
++BR2_TARGET_UBOOT_USE_BINMAN=y
+ # BR2_TARGET_UBOOT_FORMAT_BIN is not set
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
 -- 
 2.43.0
 
