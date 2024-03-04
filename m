@@ -4,63 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A967AC54E49
-	for <buildroot@archiver.kernel.org>; Mon,  4 Mar 2024 07:42:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0925EC54E49
+	for <buildroot@archiver.kernel.org>; Mon,  4 Mar 2024 07:42:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 626A74081D;
-	Mon,  4 Mar 2024 07:42:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B8427402FD;
+	Mon,  4 Mar 2024 07:42:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tfaMtrqNRDCQ; Mon,  4 Mar 2024 07:42:04 +0000 (UTC)
+	with ESMTP id 4eTTYOa_6gHd; Mon,  4 Mar 2024 07:42:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39E63402FD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A032840674
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 39E63402FD;
-	Mon,  4 Mar 2024 07:42:04 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5728B1BF280
- for <buildroot@lists.busybox.net>; Mon,  4 Mar 2024 07:42:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A032840674;
+	Mon,  4 Mar 2024 07:42:11 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 255121BF280
+ for <buildroot@lists.busybox.net>; Mon,  4 Mar 2024 07:42:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 44AB160B5E
- for <buildroot@lists.busybox.net>; Mon,  4 Mar 2024 07:42:00 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4E4DD81FB5
+ for <buildroot@lists.busybox.net>; Mon,  4 Mar 2024 07:42:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZODOdAjpjUwm for <buildroot@lists.busybox.net>;
- Mon,  4 Mar 2024 07:41:59 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0HXBdYoh5bCv for <buildroot@lists.busybox.net>;
+ Mon,  4 Mar 2024 07:42:07 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:2405::600;
- helo=nam02-dm3-obe.outbound.protection.outlook.com;
+ client-ip=2a01:111:f403:2412::601;
+ helo=nam10-mw2-obe.outbound.protection.outlook.com;
  envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 70A2160B5C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 70A2160B5C
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com
- (mail-dm3nam02on20600.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:2405::600])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 70A2160B5C
- for <buildroot@buildroot.org>; Mon,  4 Mar 2024 07:41:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F38CD81EF6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F38CD81EF6
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com
+ (mail-mw2nam10on20601.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:2412::601])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F38CD81EF6
+ for <buildroot@buildroot.org>; Mon,  4 Mar 2024 07:42:06 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=n2DwOVwj6z76FOA/cG5I1r9/pf9pKNUzhhQ9pedrB6693R5GQrhcQSSagRT6L68rGE6TMqoV2kv6WemQEktsRi0+qHKFWjbXOqg0ZT71+JFGJclkyOMRD60EIoUw8s7JNicJRG7IEsRk8ZYvEKJrFQHe2Lsx+YCCdQBSy+3g8/gZWxALgPSRCRk2LGauRuiPOUj3wCf8X4yHFS35wSn5MFGXeQaCSBoqSsj14IsCoMsFWW/J6yrAQX+qTo8xSLFkb52VR7pZBmjsLx0wwlXJmFaY6Vyw5pH8Q0uGGf1Zi7L8SQP+0sIReK4ieeVAdAhI8DPPGrAON7fQUy4erPvQIw==
+ b=RJ9okrXvIKk7PAQvJ7OJE8MosuhPYmZJ1mYg7abTYli6pToqpf9JxDdXmVhcfpNK0nWlBFWqzw8jxHrViuNDypDGVqpD/Vyb/cULOoyOcnsLDwr+46oYY/HZZ5LPWOo3oPYI3gn5hrxlTnXGTkAY7Btdnz5IU8aonFy2bJNL5QEzF034Q6hY/oQrsJFgMOJlWcr4UFHNyP6jclSu2KAdRso8kEnaVkzOesmUH2G2rsTZ8fdkiPPgFEmJCjfjAa0Fl2Ye4VuR+wsPj7yVw+2s7PbkUJgAgdSBVaKyHFu1DOKQSX6MJC9nWvpk+pCw0889EX/4B9ToLKeEvzGB+xgDLQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QjK259Zq147zLPcRHhpAU1b3bC0JbAAE8AhICt/ytyg=;
- b=Kj788sBdjDx2qYTslYKBPF9n9gkZCjPwB0JGyqhscflZ4dESzkjU15dgPeuUyg/oWwUDoO2oQo8lXbfJHVZRAJYj+UbWdzS3ZFzmJUrpwZqORFJya7sgY0fQdVyZ3yq+EGnwikmqtuD8xlPYCSAZ+QFCKwlDbIN2l/ZvmKHW2X4NGkBLtfYlvzn3y9VzdCMLkX3KUo0BHo1vZVUroCwsvOHV9y+jVcupgcloP5jd5NWylyVhXBsCiAW8bpca5mqWkcPvTsQkVVB0Q+8XT+Te7aQxcTdc966tohzAYwM0pAScysT4k6NTDfmAo4OVKXNoH5fe9kzlBci4ssjSp9zkSw==
+ bh=fVueuvzzF0X3LsAM1GgykUJLW0oNk2QMbtBR1ASV9SY=;
+ b=VT+BLch6f9KztbNjOV1ZirOXI2Jv3auyb++ZBsSGuhwtDeQVpKU/3AKEDiW/0eeLhRqOAjURS7UeqNzx6NvTcEJ904ORfqqPUyS/k3a2/96CQUziFWYVCSjOjYQi5HcKT/+syIHLZywEX0sF2EPaufcsEkjLgNWD41VsJDyOIW8LbNgl7oR0GksArNELOfn4gWSHCyBeSAct56MoRdXDSpjBwskyh95EiFFyt0cTQN/Rb9AqkFpJly9au3GKB5fmxi6DALS1SqbZQcK3P++4ZB3VdFBPT5KGmsuqigvXCy4HYITaFvIu9WnegNUMBE3dOODdfJCPNq28jQPBarYwiQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
-Received: from BN9PR03CA0841.namprd03.prod.outlook.com (2603:10b6:408:13d::6)
- by DS0PR12MB7745.namprd12.prod.outlook.com (2603:10b6:8:13c::8) with
- Microsoft SMTP Server (version=TLS1_2,
+Received: from CH5PR02CA0013.namprd02.prod.outlook.com (2603:10b6:610:1ed::27)
+ by MN2PR12MB4320.namprd12.prod.outlook.com (2603:10b6:208:15f::7)
+ with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7339.38; Mon, 4 Mar
- 2024 07:41:56 +0000
-Received: from BN1PEPF0000468A.namprd05.prod.outlook.com
- (2603:10b6:408:13d:cafe::ec) by BN9PR03CA0841.outlook.office365.com
- (2603:10b6:408:13d::6) with Microsoft SMTP Server (version=TLS1_2,
+ 2024 07:42:02 +0000
+Received: from CH1PEPF0000A346.namprd04.prod.outlook.com
+ (2603:10b6:610:1ed:cafe::b0) by CH5PR02CA0013.outlook.office365.com
+ (2603:10b6:610:1ed::27) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7339.38 via Frontend
- Transport; Mon, 4 Mar 2024 07:41:56 +0000
+ Transport; Mon, 4 Mar 2024 07:42:02 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -68,62 +68,59 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
 Received: from SATLEXMB03.amd.com (165.204.84.17) by
- BN1PEPF0000468A.mail.protection.outlook.com (10.167.243.135) with Microsoft
+ CH1PEPF0000A346.mail.protection.outlook.com (10.167.244.11) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7362.11 via Frontend Transport; Mon, 4 Mar 2024 07:41:55 +0000
-Received: from SATLEXMB08.amd.com (10.181.40.132) by SATLEXMB03.amd.com
+ 15.20.7362.11 via Frontend Transport; Mon, 4 Mar 2024 07:42:02 +0000
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB03.amd.com
  (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Mon, 4 Mar
- 2024 01:41:55 -0600
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB08.amd.com
- (10.181.40.132) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Sun, 3 Mar
- 2024 23:41:55 -0800
+ 2024 01:42:01 -0600
 Received: from xirengwts09.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
  (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.35 via Frontend
- Transport; Mon, 4 Mar 2024 01:41:54 -0600
+ Transport; Mon, 4 Mar 2024 01:42:00 -0600
 To: <buildroot@buildroot.org>
-Date: Mon, 4 Mar 2024 07:41:36 +0000
-Message-ID: <20240304074140.1537910-2-neal.frager@amd.com>
+Date: Mon, 4 Mar 2024 07:41:37 +0000
+Message-ID: <20240304074140.1537910-3-neal.frager@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20240304074140.1537910-1-neal.frager@amd.com>
 References: <20240304074140.1537910-1-neal.frager@amd.com>
 MIME-Version: 1.0
+Received-SPF: None (SATLEXMB03.amd.com: neal.frager@amd.com does not designate
+ permitted sender hosts)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN1PEPF0000468A:EE_|DS0PR12MB7745:EE_
-X-MS-Office365-Filtering-Correlation-Id: 79baa29a-9047-490a-ba43-08dc3c1e9104
+X-MS-TrafficTypeDiagnostic: CH1PEPF0000A346:EE_|MN2PR12MB4320:EE_
+X-MS-Office365-Filtering-Correlation-Id: 01fbb401-5445-483e-2531-08dc3c1e94b5
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sglrSN4LVUJdCjBGX7FYaH9YkmJnv1g4lKUN/GuQ9bs3kZM4hLo2B1Jh37YPU65n0e0Lt6iwVmmD8ndN3us5J6iNJs97OwX6o/briB8pJwjPXc4GVS8xirMwG0DXMC15gZyn6A2CEMDyG7zhaZ2miJJkjZFZkKZhqQLoImSqZWlqQ8oeEWPW8o8civz6qLGr4JKRJcA/CVdfBLzzFzhXF4msefDdYDUAD20sa0zKpLTgEMZUZ+nLe9mHgd/hUsGZi2BqE7Vg9N0TugGcZddgwu+c5wNsuzHC0Yorn3igs0R+MhbsGKjP5agbhnlXI6k9Rz7LQH2vnJyMETGEGc9+OnCmnXjw6mhtGy1SHuq1NPe/SQzl9mfIKMbxcb+VufJVbYepzNvrejLaCXQU8ZYtOzoDfDT9zhwUXTot/a9+6EY9OITyxV7G7so8G9vpUxFTAv5JmSjQGsocx5QX95A4BV6OCdVHtEbV6ZzlpU0a82pvDmqrqlW46Ua2K66sH8MpJIydrAjK+D7pzaX1viNRhruIwT4FH+ARICkEaYbwJ9C8NP5+m88/r6Ijpp4m6hfSgTHRpCXsRrK831S67i1NdFTfjkzzka3ChdSeSVaBqBITfFrzGqtKV82+mUBenfNfUf6JkYsjThqQXor2D6oWsJ44Hzf/zmU9RuJmv4IhnHtM2yxpqE8KUFZG7A55Y+AEwsORnl8I8pApm/escEoxd4pohAhi0aybBdqGLwd+booQTkxpk+r2WnAC7SU2L/Ln
+X-Microsoft-Antispam-Message-Info: 6Fi9iQP7/bsd8p3A3MK96VJ2uwlJvL4Y+UXf3amQzMSEzGqM1WzEqCCBfna3wwDeKVKDLe7Ed2LF1/6N78Wpt2390Sdy8LNQIeO490P97F7O1JxvPlHD1/XmPzLBlCXVQ//i1NqpG7pnEC3Q4yNwdY3RpdWRsi+EPcrFDGRHqH5YdL8h+v5pDs6z1WoMgXekJ6CBsBYNzo2nwHVtwR3f8SmTwPiCLnCHi33wBFjtoO+rzuuGiCAzBe/VF7jnw61O1bHl8Rq9K3tYcEH0cfZqUhFX5Ofpq+VSljc0e7B8W9uDtiFdI8ViTHt/xpXMy7ygT+3hNpHRhan3PLcM+VGVGzmLSUCMFGZy16fMcLf4JY6IbXC6QeNs4mISFRVyf8S/GQmN68+Zs/AIFi5U9DFvEtwneOvXXBqhgOBkmg+khdT4hCL9yhVzRg9Fq2zIRz9P9QZY0lQrWVCfp9M3/9/wCeO53RK5e7HEjp1aSjiquHZll/jQWiWrQimJukEZePnKUkWuqzyNc2sZcxudkhIPNQCA+kJ0wXaOP39avE+MislZHbzluk/ZKLHLg9WNGtgIN0QRwMzAeRM3eZHwvaaRAP9HUW39ZmeRv5JamWgtkvAmL8tvBRuiTheGcDWJE2NfB1OrnxYtRw4r5u/Wgfg1sX/j8RW2O/wQfMT5JvKmapJHirDLQ0ELmIDapqDDWWzrb11aUZEtBSfgqPW3oQZGBQ==
 X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
  IPV:CAL; SFV:NSPM; H:SATLEXMB03.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
- SFS:(13230031)(36860700004)(376005)(82310400014); DIR:OUT; SFP:1101; 
+ SFS:(13230031)(36860700004)(82310400014)(376005); DIR:OUT; SFP:1101; 
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2024 07:41:55.8990 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 79baa29a-9047-490a-ba43-08dc3c1e9104
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2024 07:42:02.0727 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 01fbb401-5445-483e-2531-08dc3c1e94b5
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
  Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN1PEPF0000468A.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: CH1PEPF0000A346.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7745
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4320
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amd.com; s=selector1; 
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QjK259Zq147zLPcRHhpAU1b3bC0JbAAE8AhICt/ytyg=;
- b=jAdzOSctF1xZAliUSjedICMW4/3rpont/weWTvh23bskcxUcjoWhgdhy7jZcICS8yjDCdNTU5x1pNqLHepprdBhnyfr1Nn/oKYay5/r52k+ygQhV3CLbCKjHk+JTFf2ppV6GVUT5l2rP4GNVowG/1S7NezreXTudNLaraskMc6A=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=fVueuvzzF0X3LsAM1GgykUJLW0oNk2QMbtBR1ASV9SY=;
+ b=WrZeR+U/KJNKM7VZIyUo0MPqdL8UtJe06JWeco1YLBlrWQS3rlpz1vKhQgjHFgfm6qXJ2t09UyexywNg3CAoVhvWAzpi2XNqD/kyMYfFXTZJ1RFyTXnyhtoIYSRcMV+SnKYOoDhA9mnr/9rJWAWxawe2QTuTydQZN47DxGi53Ns=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=amd.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=jAdzOSct
-Subject: [Buildroot] [PATCH v11 2/6] boot/uboot.mk: new zynqmp pmufw build
- option
+ header.s=selector1 header.b=WrZeR+U/
+Subject: [Buildroot] [PATCH v11 3/6] configs/zynqmp*: build pmufw source
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -145,81 +142,118 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The new BR2_TARGET_UBOOT_ZYNQMP_PMUFW_SOURCE option will enable u-boot to
-use the zynqmp-firmware package for building a pmufw.elf that gets included in
-the generated boot.bin.
-
-If the BR2_TARGET_UBOOT_ZYNQMP_PMUFW_SOURCE option is enabled, then the
-BR2_TARGET_UBOOT_ZYNQMP_PMUFW config for downloading a prebuilt pmufw will
-be ignored.
+This patch migrates the zynqmp config files to use the new
+zynqmp-firmware package for building the zynqmp pmufw from source.
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
 ---
-V1->V2:
- - patch is now backwards compatible for users already using the
-   BR2_TARGET_UBOOT_ZYNQMP_PMUFW config for downloading a prebuilt pmufw
-V2->V3:
+V4->V7:
  - no changes
-V3->V4:
- - BR2_TARGET_UBOOT_ZYNQMP_PMUFW removed when
-   BR2_TARGET_UBOOT_ZYNQMP_PMUFW_SOURCE selected
-V4->V11:
+V7->V8:
+ - bump to xilinx_v2023.2
+V8->V9:
+ - add the new zynqmp defconfigs
+ - add BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH definition
+V9->V10:
  - no changes
+V10->V11:
+ - BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH is set by zynqmp-firmware
 ---
- boot/uboot/Config.in | 19 +++++++++++++++++--
- boot/uboot/uboot.mk  |  5 +++++
- 2 files changed, 22 insertions(+), 2 deletions(-)
+ configs/zynqmp_kria_kd240_defconfig | 4 +++-
+ configs/zynqmp_kria_kr260_defconfig | 4 +++-
+ configs/zynqmp_kria_kv260_defconfig | 4 +++-
+ configs/zynqmp_zcu102_defconfig     | 3 ++-
+ configs/zynqmp_zcu104_defconfig     | 3 ++-
+ configs/zynqmp_zcu106_defconfig     | 3 ++-
+ 6 files changed, 15 insertions(+), 6 deletions(-)
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index beafb38930..c5e33944d5 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -514,11 +514,26 @@ config BR2_TARGET_UBOOT_ZYNQMP
- 
- if BR2_TARGET_UBOOT_ZYNQMP
- 
-+config BR2_TARGET_UBOOT_ZYNQMP_PMUFW_SOURCE
-+	bool "Build zynqmp PMU firmware from source"
-+	select BR2_TARGET_ZYNQMP_FIRMWARE
-+	depends on BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
-+	help
-+	  This option instructs u-boot to build the zynqmp pmufw using
-+	  the zynqmp-firmware package.  u-boot will then include this
-+	  pmufw.elf in the generated boot.bin.
-+
-+	  If this option is selected, the BR2_TARGET_UBOOT_ZYNQMP_PMUFW
-+	  prebuilt option will be ignored.
-+
-+	  This feature requires U-Boot >= 2018.07.
-+
- config BR2_TARGET_UBOOT_ZYNQMP_PMUFW
--	string "PMU firmware location"
-+	string "Pre-built zynqmp PMU firmware location"
- 	depends on BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
-+	depends on !BR2_TARGET_UBOOT_ZYNQMP_PMUFW_SOURCE
- 	help
--	  Location of a PMU firmware binary.
-+	  Location of a pre-built PMU firmware binary.
- 
- 	  If not empty, instructs the U-Boot build process to generate
- 	  a boot.bin (to be loaded by the ZynqMP boot ROM) containing
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index dda606a880..c11e3d89f7 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -416,7 +416,12 @@ endef
- 
- ifeq ($(BR2_TARGET_UBOOT_ZYNQMP),y)
- 
-+ifeq ($(BR2_TARGET_UBOOT_ZYNQMP_PMUFW_SOURCE),y)
-+UBOOT_DEPENDENCIES += zynqmp-firmware
-+UBOOT_ZYNQMP_PMUFW = $(BINARIES_DIR)/pmufw.elf
-+else
- UBOOT_ZYNQMP_PMUFW = $(call qstrip,$(BR2_TARGET_UBOOT_ZYNQMP_PMUFW))
-+endif #BR2_TARGET_UBOOT_ZYNQMP_PMUFW_SOURCE
- 
- ifneq ($(findstring ://,$(UBOOT_ZYNQMP_PMUFW)),)
- UBOOT_EXTRA_DOWNLOADS += $(UBOOT_ZYNQMP_PMUFW)
+diff --git a/configs/zynqmp_kria_kd240_defconfig b/configs/zynqmp_kria_kd240_defconfig
+index 78302a48c0..908ded1d97 100644
+--- a/configs/zynqmp_kria_kd240_defconfig
++++ b/configs/zynqmp_kria_kd240_defconfig
+@@ -32,7 +32,9 @@ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+ BR2_TARGET_UBOOT_ZYNQMP=y
+-BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/soc-prebuilt-firmware/raw/xilinx_v2023.2/kd240-kria/pmufw.elf"
++BR2_TARGET_UBOOT_ZYNQMP_PMUFW_SOURCE=y
++BR2_TARGET_ZYNQMP_FIRMWARE_VERSION="xilinx_v2023.2"
++BR2_TARGET_ZYNQMP_FIRMWARE_CUSTOM_CFLAGS="-DBOARD_SHUTDOWN_PIN=2 -DBOARD_SHUTDOWN_PIN_STATE=0 -DENABLE_EM -DENABLE_MOD_OVERTEMP -DENABLE_DYNAMIC_MIO_CONFIG -DENABLE_IOCTL -DCONNECT_PMU_GPO_2_VAL=0"
+ BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/kria/kd240/pm_cfg_obj.c"
+ BR2_TARGET_UBOOT_FORMAT_ITB=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+diff --git a/configs/zynqmp_kria_kr260_defconfig b/configs/zynqmp_kria_kr260_defconfig
+index 2089c3f355..73b0a641e0 100644
+--- a/configs/zynqmp_kria_kr260_defconfig
++++ b/configs/zynqmp_kria_kr260_defconfig
+@@ -32,7 +32,9 @@ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+ BR2_TARGET_UBOOT_ZYNQMP=y
+-BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/soc-prebuilt-firmware/raw/xilinx_v2023.2/kr260-kria/pmufw.elf"
++BR2_TARGET_UBOOT_ZYNQMP_PMUFW_SOURCE=y
++BR2_TARGET_ZYNQMP_FIRMWARE_VERSION="xilinx_v2023.2"
++BR2_TARGET_ZYNQMP_FIRMWARE_CUSTOM_CFLAGS="-DBOARD_SHUTDOWN_PIN=2 -DBOARD_SHUTDOWN_PIN_STATE=0 -DENABLE_EM -DENABLE_MOD_OVERTEMP -DENABLE_DYNAMIC_MIO_CONFIG -DENABLE_IOCTL -DCONNECT_PMU_GPO_2_VAL=0"
+ BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/kria/kr260/pm_cfg_obj.c"
+ BR2_TARGET_UBOOT_FORMAT_ITB=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+diff --git a/configs/zynqmp_kria_kv260_defconfig b/configs/zynqmp_kria_kv260_defconfig
+index a3a157267c..0151b364d6 100644
+--- a/configs/zynqmp_kria_kv260_defconfig
++++ b/configs/zynqmp_kria_kv260_defconfig
+@@ -32,7 +32,9 @@ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+ BR2_TARGET_UBOOT_ZYNQMP=y
+-BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/soc-prebuilt-firmware/raw/xilinx_v2023.2/kv260-kria/pmufw.elf"
++BR2_TARGET_UBOOT_ZYNQMP_PMUFW_SOURCE=y
++BR2_TARGET_ZYNQMP_FIRMWARE_VERSION="xilinx_v2023.2"
++BR2_TARGET_ZYNQMP_FIRMWARE_CUSTOM_CFLAGS="-DBOARD_SHUTDOWN_PIN=2 -DBOARD_SHUTDOWN_PIN_STATE=0 -DENABLE_EM -DENABLE_MOD_OVERTEMP -DENABLE_DYNAMIC_MIO_CONFIG -DENABLE_IOCTL -DCONNECT_PMU_GPO_2_VAL=0"
+ BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/kria/kv260/pm_cfg_obj.c"
+ BR2_TARGET_UBOOT_FORMAT_ITB=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+diff --git a/configs/zynqmp_zcu102_defconfig b/configs/zynqmp_zcu102_defconfig
+index c920093d8d..bdd85ab7d3 100644
+--- a/configs/zynqmp_zcu102_defconfig
++++ b/configs/zynqmp_zcu102_defconfig
+@@ -30,7 +30,8 @@ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+ BR2_TARGET_UBOOT_ZYNQMP=y
+-BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/soc-prebuilt-firmware/raw/xilinx_v2023.2/zcu102-zynqmp/pmufw.elf"
++BR2_TARGET_UBOOT_ZYNQMP_PMUFW_SOURCE=y
++BR2_TARGET_ZYNQMP_FIRMWARE_VERSION="xilinx_v2023.2"
+ BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/zcu102/pm_cfg_obj.c"
+ BR2_TARGET_UBOOT_FORMAT_ITB=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+diff --git a/configs/zynqmp_zcu104_defconfig b/configs/zynqmp_zcu104_defconfig
+index 452f2343c8..7e341c571b 100644
+--- a/configs/zynqmp_zcu104_defconfig
++++ b/configs/zynqmp_zcu104_defconfig
+@@ -30,7 +30,8 @@ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+ BR2_TARGET_UBOOT_ZYNQMP=y
+-BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/soc-prebuilt-firmware/raw/xilinx_v2023.2/zcu104-zynqmp/pmufw.elf"
++BR2_TARGET_UBOOT_ZYNQMP_PMUFW_SOURCE=y
++BR2_TARGET_ZYNQMP_FIRMWARE_VERSION="xilinx_v2023.2"
+ BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/zcu104/pm_cfg_obj.c"
+ BR2_TARGET_UBOOT_FORMAT_ITB=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+diff --git a/configs/zynqmp_zcu106_defconfig b/configs/zynqmp_zcu106_defconfig
+index 011c7f0fae..554e62fb05 100644
+--- a/configs/zynqmp_zcu106_defconfig
++++ b/configs/zynqmp_zcu106_defconfig
+@@ -30,7 +30,8 @@ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+ BR2_TARGET_UBOOT_ZYNQMP=y
+-BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/soc-prebuilt-firmware/raw/xilinx_v2023.2/zcu106-zynqmp/pmufw.elf"
++BR2_TARGET_UBOOT_ZYNQMP_PMUFW_SOURCE=y
++BR2_TARGET_ZYNQMP_FIRMWARE_VERSION="xilinx_v2023.2"
+ BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/zcu106/pm_cfg_obj.c"
+ BR2_TARGET_UBOOT_FORMAT_ITB=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
 -- 
 2.25.1
 
