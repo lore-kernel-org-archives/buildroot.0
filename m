@@ -4,95 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31B91C5478C
-	for <buildroot@archiver.kernel.org>; Mon,  4 Mar 2024 15:34:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67A7CC48BF6
+	for <buildroot@archiver.kernel.org>; Mon,  4 Mar 2024 15:34:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E7A314148D;
-	Mon,  4 Mar 2024 15:34:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 302DB414CE;
+	Mon,  4 Mar 2024 15:34:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xHsDuiTgeGpF; Mon,  4 Mar 2024 15:34:31 +0000 (UTC)
+	with ESMTP id O9uZ3vIAKyRO; Mon,  4 Mar 2024 15:34:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9422F414CA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E5AF2414EE
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9422F414CA;
-	Mon,  4 Mar 2024 15:34:31 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 264B71BF3B0
- for <buildroot@lists.busybox.net>; Mon,  4 Mar 2024 15:34:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E5AF2414EE;
+	Mon,  4 Mar 2024 15:34:34 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B9A481BF3B0
+ for <buildroot@lists.busybox.net>; Mon,  4 Mar 2024 15:34:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 13E0A821BF
- for <buildroot@lists.busybox.net>; Mon,  4 Mar 2024 15:34:17 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B4DCB40955
+ for <buildroot@lists.busybox.net>; Mon,  4 Mar 2024 15:34:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CgTwa4dswl1J for <buildroot@lists.busybox.net>;
- Mon,  4 Mar 2024 15:34:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hWw9QKHjY7F7 for <buildroot@lists.busybox.net>;
+ Mon,  4 Mar 2024 15:34:18 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::532; helo=mail-ed1-x532.google.com;
+ client-ip=2a00:1450:4864:20::12a; helo=mail-lf1-x12a.google.com;
  envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 47B9781FF9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 47B9781FF9
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
- [IPv6:2a00:1450:4864:20::532])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 47B9781FF9
- for <buildroot@buildroot.org>; Mon,  4 Mar 2024 15:34:16 +0000 (UTC)
-Received: by mail-ed1-x532.google.com with SMTP id
- 4fb4d7f45d1cf-55a5e7fa471so6474532a12.1
- for <buildroot@buildroot.org>; Mon, 04 Mar 2024 07:34:16 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C595640939
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C595640939
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com
+ [IPv6:2a00:1450:4864:20::12a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C595640939
+ for <buildroot@buildroot.org>; Mon,  4 Mar 2024 15:34:17 +0000 (UTC)
+Received: by mail-lf1-x12a.google.com with SMTP id
+ 2adb3069b0e04-512d19e2cb8so5448374e87.0
+ for <buildroot@buildroot.org>; Mon, 04 Mar 2024 07:34:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1709566454; x=1710171254;
+ d=1e100.net; s=20230601; t=1709566455; x=1710171255;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=kqwXj0Cwjbnuj3JXbq7I8NEydeF4lxxZvlM/8Q2Wx7Q=;
- b=n36/Y5D89JPeGpC92Evjerqry9Kv3b/ZdRP7cGP5WB8baqp7UdF2hjAyyzysicfCae
- 2X/AFV1taSgVBXwBdQMmXScQXGEi2okHHavzPTVlc3w3YNHTj7S68NFJ+4/PZ5P26r6d
- BMJuTwkxo2UWg129xd/YQgdjt/PwybBmuzALt19AKmQIIvRWj5NZ7DjAjOIZHNXISTgU
- b6lyC2o/5tetQx0cZk+H1zOslTr/u3BOL/7g2YFcB7QaSKwtE5ZRCWMhIsU6PYNvvQOs
- Wg/TwZYhgB3P+clhhRixX03ZS6zufNEcSYfLo4IjXERlISWH3CzvpLLY6ULq5ppL6hfG
- zD3A==
-X-Gm-Message-State: AOJu0YzjKyNuqvy1y++HLPKIXZ6226I4NYlXh525Hs7UV6ZD03kQmbLW
- iWNpx8smAnVDEsZPkH7rx1KLhiySAOIm9BGc1DCZ+v1hkpGQpZC5riEOo1PPqCTDoN1Bd/Ul9WM
- DaF8=
-X-Google-Smtp-Source: AGHT+IHhs6F6rG3AZOW8F/pze+PhCN8X/MD4ya2hXFouTuMnt50jkWlW5iUs25L6AfdBqitK5B6HzA==
-X-Received: by 2002:a17:906:abd0:b0:a45:293a:c94c with SMTP id
- kq16-20020a170906abd000b00a45293ac94cmr2488612ejb.60.1709566454053; 
- Mon, 04 Mar 2024 07:34:14 -0800 (PST)
+ bh=yI6EI4PLyOwb5Mbfb+U9aDSReebynjCbXzyzR7HAgKs=;
+ b=INQyngo2wfbcUu0ZpKbUG4OdHBx+0X1apZvb0HmqcenoWjW6dhPDmcSo6gZwFmOI3L
+ t5zKPftzla0FANIcgsMXVsjmQs9lmVvz8aevMYBeiD/UE8OMa01+5ECKSU0dwFs51ey3
+ FFfPkOHPq7dckYQCJTG6Ud7Pmq8Pvfc+iNPmIQ8SjY1RHiyVyY5Q0KoXKZHNLwCgLB2O
+ 5KRJEdR3YEzKf0PzWtyti1O7zMye1bfvWpczeOD4EIITjD8z5gflYFdPb7zG0amtU3cd
+ 76uXq0aBRoX90nJwnZKbOT6Q2+DwuwIKwKSElsUNc9aLQBBHpVxb5IlS6dlp/9mSxnYN
+ d3HA==
+X-Gm-Message-State: AOJu0YxbaBlyaI/G19+RHZ7pLC/YIdBKK07KUvGnGmCb/ls2VJiBLEd9
+ m/BUTiLkGDTjHGlQE0tj1o3/Ku6oqLXBcvO/7Ikq5+6kUjPte3uNp7UDHbvn5AD+Z5E46QCaOCd
+ 6Fog=
+X-Google-Smtp-Source: AGHT+IFJcx3VsK1PeNhKxqaOnWwUO4I3bqYd4j/5JIAUcKl6Xnfpt3d/KLSULEiLqXQhZhqM1Mp2Hw==
+X-Received: by 2002:ac2:4d93:0:b0:513:31c:212d with SMTP id
+ g19-20020ac24d93000000b00513031c212dmr6210052lfe.34.1709566455205; 
+ Mon, 04 Mar 2024 07:34:15 -0800 (PST)
 Received: from dario-ThinkPad-T14s-Gen-2i.amarulasolutions.com
  ([2001:b07:6474:ebbf:72fe:558f:d55e:d423])
  by smtp.gmail.com with ESMTPSA id
- sa20-20020a1709076d1400b00a4432543b21sm4936082ejc.198.2024.03.04.07.34.13
+ sa20-20020a1709076d1400b00a4432543b21sm4936082ejc.198.2024.03.04.07.34.14
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 04 Mar 2024 07:34:13 -0800 (PST)
+ Mon, 04 Mar 2024 07:34:14 -0800 (PST)
 From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Mon,  4 Mar 2024 16:32:36 +0100
-Message-ID: <20240304153253.732708-6-dario.binacchi@amarulasolutions.com>
+Date: Mon,  4 Mar 2024 16:32:37 +0100
+Message-ID: <20240304153253.732708-7-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240304153253.732708-1-dario.binacchi@amarulasolutions.com>
 References: <20240304153253.732708-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1709566454; x=1710171254;
+ d=amarulasolutions.com; s=google; t=1709566455; x=1710171255;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=kqwXj0Cwjbnuj3JXbq7I8NEydeF4lxxZvlM/8Q2Wx7Q=;
- b=pva6AVWWaJ0cDQZVzJR4M+yLcBtpk/g6qztVmZCxgPWBqzP00bZDDp3F85/CqzXxaL
- CYMEC18x5riVbb5zzBuVh2mR/tCO4kyWUh4AcaSDGKiNGtPnAhwtk2/+0t3GqkyBrrzq
- 7yhg+70REc7bY1eHz2+j9RUzPZJzPxlESE6jA=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=yI6EI4PLyOwb5Mbfb+U9aDSReebynjCbXzyzR7HAgKs=;
+ b=ApPtrrUt4mkIZbMNvN1na0RuhDUY9ma3LglWiDyxJ+uPKG67ZVwJcut3sxYokDJiKx
+ U3XOSBeE3f/dAc8UJc1XRVLp230z1wUIGfN4LSFU7jHxvv+9gE6loR7Tey6XJLBceF5p
+ kqQt61tqGXsOWqccMblQynOxEb2YpwCZ3Hk2Q=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=pva6AVWW
-Subject: [Buildroot] [PATCH v9 05/22] boot/ti-k3-r5-loader: bump to version
- 2024.01
+ header.b=ApPtrrUt
+Subject: [Buildroot] [PATCH v9 06/22] package/python-attrs: add host variant
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -117,53 +116,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-All in-tree configs with the ti-k3-r5 bootloader use a custom version,
-so this patch is mostly for the menuconfig default version
+Recent version of U-Boot use binman to provide a mechanism for building
+images, from simple SPL + U-Boot combinations, to more complex
+arrangements with many parts. This package is required by binman.
 
-Suggested-by: Romain Naour <romain.naour@smile.fr>
+Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
+Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
 ---
 
-no changes since v4
+no changes since v3
 
-Added in v4
+Changes in v3:
+- Drop Config.in.host
 
- boot/ti-k3-r5-loader/Config.in            | 4 ++--
- boot/ti-k3-r5-loader/ti-k3-r5-loader.hash | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-attrs/python-attrs.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/boot/ti-k3-r5-loader/Config.in b/boot/ti-k3-r5-loader/Config.in
-index 8c8368a1a5a8..5f86c045c99f 100644
---- a/boot/ti-k3-r5-loader/Config.in
-+++ b/boot/ti-k3-r5-loader/Config.in
-@@ -16,7 +16,7 @@ choice
- 	  here as it is used to build the main U-Boot package.
+diff --git a/package/python-attrs/python-attrs.mk b/package/python-attrs/python-attrs.mk
+index 8a1236cc4402..fb1729e62fa2 100644
+--- a/package/python-attrs/python-attrs.mk
++++ b/package/python-attrs/python-attrs.mk
+@@ -15,4 +15,10 @@ PYTHON_ATTRS_DEPENDENCIES = \
+ 	host-python-hatch-fancy-pypi-readme \
+ 	host-python-hatch-vcs
  
- config BR2_TARGET_TI_K3_R5_LOADER_LATEST_VERSION
--	bool "2022.10"
-+	bool "2024.01"
- 
- config BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -60,7 +60,7 @@ endif
- 
- config BR2_TARGET_TI_K3_R5_LOADER_VERSION
- 	string
--	default "2022.10"	if BR2_TARGET_TI_K3_R5_LOADER_LATEST_VERSION
-+	default "2024.01"	if BR2_TARGET_TI_K3_R5_LOADER_LATEST_VERSION
- 	default BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION_VALUE \
- 		if BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_TARBALL
-diff --git a/boot/ti-k3-r5-loader/ti-k3-r5-loader.hash b/boot/ti-k3-r5-loader/ti-k3-r5-loader.hash
-index c5d1cb8e09f0..fbe5d215409d 100644
---- a/boot/ti-k3-r5-loader/ti-k3-r5-loader.hash
-+++ b/boot/ti-k3-r5-loader/ti-k3-r5-loader.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  50b4482a505bc281ba8470c399a3c26e145e29b23500bc35c50debd7fa46bdf8  u-boot-2022.10.tar.bz2
-+sha256  b99611f1ed237bf3541bdc8434b68c96a6e05967061f992443cb30aabebef5b3  u-boot-2024.01.tar.bz2
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
++HOST_PYTHON_ATTRS_DEPENDENCIES = \
++	host-python-hatchling \
++	host-python-hatch-fancy-pypi-readme \
++	host-python-hatch-vcs
++
+ $(eval $(python-package))
++$(eval $(host-python-package))
 -- 
 2.43.0
 
