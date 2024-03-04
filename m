@@ -4,94 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A8B7C5478C
-	for <buildroot@archiver.kernel.org>; Mon,  4 Mar 2024 15:35:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93633C48BF6
+	for <buildroot@archiver.kernel.org>; Mon,  4 Mar 2024 15:35:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EB1314148D;
-	Mon,  4 Mar 2024 15:35:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3BDA1414B6;
+	Mon,  4 Mar 2024 15:35:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id U4CUgS8KtGhK; Mon,  4 Mar 2024 15:35:25 +0000 (UTC)
+	with ESMTP id f5rybInFxA0z; Mon,  4 Mar 2024 15:35:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5FFD4418FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C873414CA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5FFD4418FE;
-	Mon,  4 Mar 2024 15:35:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6C873414CA;
+	Mon,  4 Mar 2024 15:35:50 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CE72B1BF3B0
- for <buildroot@lists.busybox.net>; Mon,  4 Mar 2024 15:34:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 68F8F1BF3B0
+ for <buildroot@lists.busybox.net>; Mon,  4 Mar 2024 15:35:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0B67881FF9
- for <buildroot@lists.busybox.net>; Mon,  4 Mar 2024 15:34:39 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 630EC80F73
+ for <buildroot@lists.busybox.net>; Mon,  4 Mar 2024 15:35:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bBmVTis6tYdX for <buildroot@lists.busybox.net>;
- Mon,  4 Mar 2024 15:34:38 +0000 (UTC)
+ with ESMTP id 9o65wwWEUH49 for <buildroot@lists.busybox.net>;
+ Mon,  4 Mar 2024 15:35:47 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::134; helo=mail-lf1-x134.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AEFEE81656
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AEFEE81656
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com
- [IPv6:2a00:1450:4864:20::134])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AEFEE81656
- for <buildroot@buildroot.org>; Mon,  4 Mar 2024 15:34:37 +0000 (UTC)
-Received: by mail-lf1-x134.google.com with SMTP id
- 2adb3069b0e04-5132181d54bso5085568e87.3
- for <buildroot@buildroot.org>; Mon, 04 Mar 2024 07:34:37 -0800 (PST)
+ client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5BD8A80E43
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5BD8A80E43
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5BD8A80E43
+ for <buildroot@buildroot.org>; Mon,  4 Mar 2024 15:35:47 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id
+ ffacd0b85a97d-33d7b8f563eso3127013f8f.0
+ for <buildroot@buildroot.org>; Mon, 04 Mar 2024 07:35:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1709566475; x=1710171275;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=nWIWT5PixnLixKjh7FANy8dX0dXM/eplXXql3C6NhaY=;
- b=ItRjvV4yND/PxypdSInu2vC9b2QatIEUmS2ofHcYDJzKePh95MxgRob9XvCZQCjXRd
- H+9AahmWaaDBnTQkXlq4mbqT6M9dR3s8PLKYOLBMy3X+G3l6d0NT8Tyju2/NmtRS+UBv
- 89TlZLyDDkWhX9dDawGMPOUqSupuNBjw8mxguRxLOFGGH+rIb2+X3I4Bn/KmbHRo4m7U
- jdBnjn7MkzK1VXYZ4rc0vvQbUAE2KvhsnSrPz9xiGPZMbN1+gVnCVIziHvhNfSnsTsyL
- oSkmSJW+XBb1HCa7wDBM3vAl7FBzkJNg+yQGsAh/CBfX9zxlt4EyOy0CqzXB8V5kmDv2
- UgOQ==
-X-Gm-Message-State: AOJu0YwaeKR46zStuoH5gG7KsQ4p0woFwJYEbhHEBHWz5RGwn3pVTSUl
- 26qILM6hASPPHthdH2YHv8OS7vmMDsLET5JzkLq90LNC+5WMqHoaECV6vLJhl9GVDNW3Auvi4pZ
- v8uU=
-X-Google-Smtp-Source: AGHT+IGK3vtxNg5vlSSY1oqTNMJBb7b6i6CM/qh6Hnt408A6GFdrQuXLEY3ay/oSp6JQXWSvOqzF2w==
-X-Received: by 2002:ac2:58d5:0:b0:513:5d6:66dc with SMTP id
- u21-20020ac258d5000000b0051305d666dcmr4573123lfo.38.1709566475093; 
- Mon, 04 Mar 2024 07:34:35 -0800 (PST)
-Received: from dario-ThinkPad-T14s-Gen-2i.amarulasolutions.com
- ([2001:b07:6474:ebbf:72fe:558f:d55e:d423])
- by smtp.gmail.com with ESMTPSA id
- sa20-20020a1709076d1400b00a4432543b21sm4936082ejc.198.2024.03.04.07.34.34
+ d=1e100.net; s=20230601; t=1709566545; x=1710171345;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=K+VOzN6ldfSndLqWgFbKCQW0ZyhVme+wRahhuNzKCOE=;
+ b=cD9kgvRwz2u0Lw/FsNLqa+XWrdlbP2HWZ/GnKrLDogrrUKmOJRamNYHhVogA6MhcsG
+ 66NHfge+qhNL/LSQtlcLSP5QlG3hZJRn7+o7YJNxEsczb+6kawMmPE9HnEpphIx8VbKx
+ Onf1Dc/1Ce65NKLtZP1MWI3+guCc9/q9YDVYsH4nSRN9WrzrjcoR14V5GNcqlInWkSCi
+ vqQL9CRN3RBEH+h6pXzawo1DH6LMR5dhVTVxpzR2I7SvyM0b79peeWlZ5NV+ZARGdkja
+ KqsyW1S5M0dwlG6krlAtqmu3ihVStAT3Pkjp5j0yYPvwxmVYCP0wPCB5+Rq97/WylTNp
+ tRgg==
+X-Gm-Message-State: AOJu0Yz+tH9id+V+wWCwzK9qVFO/l5DXnYnpVIkd1pBRnoGMPx7isoBx
+ RP5KH9sVRhOLSQQAA51N1S9Vxq5igJYDqElfLi/Qb7DTSQX3ZThi0d5pUOaA
+X-Google-Smtp-Source: AGHT+IHc5gynfRwEGnkajKfIv4lWXX/9+8TxHw4BDKXBB5XlIne2Eo9Dvbd7Nqo5a8I1kqiR6wZ+SA==
+X-Received: by 2002:a05:6000:1e85:b0:33e:a6d:fca5 with SMTP id
+ dd5-20020a0560001e8500b0033e0a6dfca5mr6026502wrb.29.1709566544802; 
+ Mon, 04 Mar 2024 07:35:44 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ n3-20020adfe783000000b0033b79d385f6sm12366359wrm.47.2024.03.04.07.35.44
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 04 Mar 2024 07:34:34 -0800 (PST)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ Mon, 04 Mar 2024 07:35:44 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon,  4 Mar 2024 16:32:53 +0100
-Message-ID: <20240304153253.732708-23-dario.binacchi@amarulasolutions.com>
+Date: Mon,  4 Mar 2024 16:35:39 +0100
+Message-ID: <20240304153539.3372042-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240304153253.732708-1-dario.binacchi@amarulasolutions.com>
-References: <20240304153253.732708-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1709566475; x=1710171275;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=nWIWT5PixnLixKjh7FANy8dX0dXM/eplXXql3C6NhaY=;
- b=ovNB64Iebg3NLS7n4gebdLYiH0yH8G5n+tHUf3JyV9jxuBFhdn5h13+AQ3NRwiWHsG
- mCPQDlSaPbynjaAKfcfTN87iAYZD18VX58obI1KL8l82tkt5Tlcq6yjAQ2u2snjrcDBO
- KgX84RzDQ/aER+gyxfeAFdAAiNDSshtTXx1pg=
+ d=gmail.com; s=20230601; t=1709566545; x=1710171345; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=K+VOzN6ldfSndLqWgFbKCQW0ZyhVme+wRahhuNzKCOE=;
+ b=QJebxMKLTdr55GJgg9V1lS/dj/K7a4VZ8n86lNj/oJHOELP1nUX6d9WhQJUyW66Rpm
+ ceQhhVTii0WFst/QXeF+JisM2tF2ISi9lxcATXCdlgtoJI1mJdgDaCJNYjuhExSIT+uf
+ o/2Z5QRDEbKriseGy65FxvO32YYTiruqHSv28osDIh6NZUfuSTvxGnGtyysoqRNVrhkL
+ NbmgU1w8IH6EWmQheNBsaM40IpoRI2BuJ7Mgw7zDeF7pUGqcEnsplxc78jBkPy0Re8tV
+ 14dEUFBsZ1Q9BXD80Pw/doAY6gDbZHdMrNDAmxy47EBOtukFETvX8uKU5KeCSXRQQHir
+ sbkQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=ovNB64Ie
-Subject: [Buildroot] [PATCH v9 22/22] boot/ti-k3-image-gen: remove package
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=QJebxMKL
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/fluent-bit: fix build with BR2_TIME_BITS_64
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,203 +101,80 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- michael@amarulasolutions.com, linux-amarula@amarulasolutions.com,
- Asaf Kahlon <asafka7@gmail.com>, Xuanhao Shi <X15000177@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Romain Naour <romain.naour@smile.fr>, Andreas Dannenberg <dannenberg@ti.com>,
- Alexander Sverdlin <alexander.sverdlin@gmail.com>, bryce@redpinelabs.com,
- Anand Gadiyar <gadiyar@ti.com>
+Cc: Thomas Devoogdt <thomas@devoogdt.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Romain Naour <romain.naour@smile.fr>
+Do not remove _FILE_OFFSET_BITS=64 from CFLAGS to avoid the following
+build failure with BR2_TIME_BITS_64 raised since commit
+3c427c64726560ea1743282a3fdb78f5b28692eb:
 
-ti-k3-image-gen tool is deprecated an replaced by binman [1].
+In file included from /home/thomas/autobuild/instance-1/output-1/host/microblaze-buildroot-linux-gnu/sysroot/usr/include/features.h:394,
+                 from /home/thomas/autobuild/instance-1/output-1/host/microblaze-buildroot-linux-gnu/sysroot/usr/include/bits/libc-header-start.h:33,
+                 from /home/thomas/autobuild/instance-1/output-1/host/microblaze-buildroot-linux-gnu/sysroot/usr/include/stdio.h:27,
+                 from /home/thomas/autobuild/instance-1/output-1/build/fluent-bit-2.1.7/tools/xxd-c/xxd-c.c:27:
+/home/thomas/autobuild/instance-1/output-1/host/microblaze-buildroot-linux-gnu/sysroot/usr/include/features-time64.h:26:5: error: #error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
+   26 | #   error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
+      |     ^~~~~
 
-All defconfig that was using it have been updated to use U-boot
-binman tool instead.
+Indeed, this LFS workaround was present since the addition of the
+package in commit 6a0f7c39bcb48fc13aa2ce3fc4996baf1be66483 and is
+only needed to fix a build failure with the old codesourcery-arm
+toolchain from 2014 which uses glibc < 2.23. as glibc 2.23 was released
+in February 2016: https://sourceware.org/glibc/wiki/Release/2.23, drop
+this workaround as already done for libselinux in commit
+c1fa9bc2f7a4e5481edf4fce5c03dd45862fe72c. A follow-up patch will also
+drop codesourcery-arm toolchain.
 
-So, we can safely remove ti-k3-image-gen package.
+Fixes: 3c427c64726560ea1743282a3fdb78f5b28692eb
+ - http://autobuild.buildroot.org/results/ff5c60cd038550453ce138fe2a9383af2f5d6f2f
 
-[1] https://git.yoctoproject.org/meta-ti/commit/?id=835811cf8586926cf78a961d090f4e6150432235
-
-Cc: Anand Gadiyar <gadiyar@ti.com>
-Cc: Xuanhao Shi <X15000177@gmail.com>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Reviewed-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - Update commit message
 
-Changes in v9:
-- Fixed conflicts on rebasing on master (Config.in.legacy).
+ package/fluent-bit/fluent-bit.mk | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
 
-Added in v8
-
- Config.in.legacy                          |  7 +++
- DEVELOPERS                                |  2 -
- boot/Config.in                            |  1 -
- boot/ti-k3-image-gen/Config.in            | 24 ----------
- boot/ti-k3-image-gen/ti-k3-image-gen.hash |  3 --
- boot/ti-k3-image-gen/ti-k3-image-gen.mk   | 54 -----------------------
- 6 files changed, 7 insertions(+), 84 deletions(-)
- delete mode 100644 boot/ti-k3-image-gen/Config.in
- delete mode 100644 boot/ti-k3-image-gen/ti-k3-image-gen.hash
- delete mode 100644 boot/ti-k3-image-gen/ti-k3-image-gen.mk
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 1b15d25d6bf1..304f369da7b2 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
+diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/fluent-bit.mk
+index e51322aad6..00a8904c55 100644
+--- a/package/fluent-bit/fluent-bit.mk
++++ b/package/fluent-bit/fluent-bit.mk
+@@ -12,8 +12,6 @@ FLUENT_BIT_CPE_ID_VENDOR = treasuredata
+ FLUENT_BIT_CPE_ID_PRODUCT = fluent_bit
+ FLUENT_BIT_DEPENDENCIES = host-bison host-flex libyaml openssl
  
- comment "Legacy options removed in 2024.02"
+-FLUENT_BIT_CFLAGS = $(TARGET_CFLAGS)
+-
+ FLUENT_BIT_CONF_OPTS += \
+ 	-DFLB_DEBUG=No \
+ 	-DFLB_RELEASE=Yes \
+@@ -55,11 +53,6 @@ FLUENT_BIT_CONF_OPTS += \
+ FLUENT_BIT_CONF_OPTS += \
+ 	-DCMAKE_INSTALL_SYSCONFDIR="/etc/"
  
-+config BR2_TARGET_TI_K3_IMAGE_GEN
-+	bool "ti-k3-image-gen removed"
-+	select BR2_LEGACY
-+	help
-+	  ti-k3-image-gen tool  has been removed and replaced by
-+	  U-Boot binman tool (requires U-boot >= 2024.01).
-+
- config BR2_PACKAGE_MYSQL
- 	bool "mysql virtual package removed"
- 	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 0bfe91f064a9..fb9555915ec1 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -151,7 +151,6 @@ N:	Anand Gadiyar <gadiyar@ti.com>
- F:	board/ti/am62x-sk/
- F:	board/ti/am64x-sk/
- F:	boot/ti-k3-boot-firmware/
--F:	boot/ti-k3-image-gen/
- F:	boot/ti-k3-r5-loader/
- F:	configs/ti_am62x_sk_defconfig
- F:	configs/ti_am64x_sk_defconfig
-@@ -3219,7 +3218,6 @@ N:	Xuanhao Shi <X15000177@gmail.com>
- F:	board/ti/am62x-sk/
- F:	board/ti/am64x-sk/
- F:	boot/ti-k3-boot-firmware/
--F:	boot/ti-k3-image-gen/
- F:	boot/ti-k3-r5-loader/
- F:	configs/ti_am62x_sk_defconfig
- F:	configs/ti_am64x_sk_defconfig
-diff --git a/boot/Config.in b/boot/Config.in
-index e5fdf7ad439e..87e1b7c00e35 100644
---- a/boot/Config.in
-+++ b/boot/Config.in
-@@ -20,7 +20,6 @@ source "boot/s500-bootloader/Config.in"
- source "boot/shim/Config.in"
- source "boot/syslinux/Config.in"
- source "boot/ti-k3-boot-firmware/Config.in"
--source "boot/ti-k3-image-gen/Config.in"
- source "boot/ti-k3-r5-loader/Config.in"
- source "boot/uboot/Config.in"
- source "boot/vexpress-firmware/Config.in"
-diff --git a/boot/ti-k3-image-gen/Config.in b/boot/ti-k3-image-gen/Config.in
-deleted file mode 100644
-index a57319f4be6d..000000000000
---- a/boot/ti-k3-image-gen/Config.in
-+++ /dev/null
-@@ -1,24 +0,0 @@
--config BR2_TARGET_TI_K3_IMAGE_GEN
--	bool "ti-k3-image-gen"
--	depends on BR2_TARGET_TI_K3_R5_LOADER
--	select BR2_TARGET_TI_K3_BOOT_FIRMWARE
--	# We need FIT support in uboot-tools, which is why we select a
--	# host package
--	select BR2_PACKAGE_HOST_UBOOT_TOOLS
--	select BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT
--	help
--	  Use TI's k3-image-gen to build a separate bare metal boot
--	  binary from a separate SPL that is running on the R5 core.
+-# Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc fts.h
+-# large file support.
+-# https://bugzilla.redhat.com/show_bug.cgi?id=574992
+-FLUENT_BIT_CFLAGS += -U_FILE_OFFSET_BITS
 -
--	  https://git.ti.com/cgit/k3-image-gen/k3-image-gen/
--
--if BR2_TARGET_TI_K3_IMAGE_GEN
--
--config BR2_TARGET_TI_K3_IMAGE_GEN_FW_TYPE
--	string
--	default "ti-fs"  if BR2_PACKAGE_TI_K3_SOC_AM62AX
--	default "ti-fs"  if BR2_PACKAGE_TI_K3_SOC_AM62X
--	default "ti-sci" if BR2_PACKAGE_TI_K3_SOC_AM64X
--	default "ti-sci" if BR2_PACKAGE_TI_K3_SOC_AM65X
--
--endif
-diff --git a/boot/ti-k3-image-gen/ti-k3-image-gen.hash b/boot/ti-k3-image-gen/ti-k3-image-gen.hash
-deleted file mode 100644
-index c968c5648f71..000000000000
---- a/boot/ti-k3-image-gen/ti-k3-image-gen.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally calculated
--sha256  f89ea4b1f5c992455b1a682fde48359221b53f3294135df4bf20feea6aea90e4  k3-image-gen-08.06.00.007.tar.gz
--sha256  f012e8d000d711d0539e5b4c812fc1d3a59c10fc1e3d6ea155556f5b78286845  LICENSE
-diff --git a/boot/ti-k3-image-gen/ti-k3-image-gen.mk b/boot/ti-k3-image-gen/ti-k3-image-gen.mk
-deleted file mode 100644
-index aca29bcf1bd4..000000000000
---- a/boot/ti-k3-image-gen/ti-k3-image-gen.mk
-+++ /dev/null
-@@ -1,54 +0,0 @@
--################################################################################
--#
--# ti-k3-image-gen
--#
--################################################################################
--
--TI_K3_IMAGE_GEN_VERSION = 08.06.00.007
--TI_K3_IMAGE_GEN_SITE = https://git.ti.com/cgit/k3-image-gen/k3-image-gen/snapshot
--TI_K3_IMAGE_GEN_SOURCE = k3-image-gen-$(TI_K3_IMAGE_GEN_VERSION).tar.gz
--TI_K3_IMAGE_GEN_LICENSE = BSD-3-Clause
--TI_K3_IMAGE_GEN_LICENSE_FILES = LICENSE
--TI_K3_IMAGE_GEN_INSTALL_IMAGES = YES
--
--# - ti-k3-image-gen is used to build tiboot3.bin, using the
--#   r5-u-boot-spl.bin file from the ti-k3-r5-loader package. Hence the
--#   dependency on ti-k3-r5-loader.
--# - the ti-k3-image-gen makefiles seem to need some feature from Make
--#   v4.0, similar to u-boot.
--TI_K3_IMAGE_GEN_DEPENDENCIES = \
--	host-arm-gnu-toolchain \
--	host-python3 \
--	host-openssl \
--	host-uboot-tools \
--	ti-k3-r5-loader \
--	ti-k3-boot-firmware \
--	$(BR2_MAKE_HOST_DEPENDENCY)
--
--TI_K3_IMAGE_GEN_FW_TYPE = $(call qstrip,$(BR2_TARGET_TI_K3_IMAGE_GEN_FW_TYPE))
--TI_K3_IMAGE_GEN_SOC = $(call qstrip,$(BR2_PACKAGE_TI_K3_SOC))
--TI_K3_IMAGE_GEN_SECTYPE = $(call qstrip,$(BR2_PACKAGE_TI_K3_SECTYPE))
--
--TI_K3_IMAGE_GEN_SYSFW = $(TI_K3_IMAGE_GEN_FW_TYPE)-firmware-$(TI_K3_IMAGE_GEN_SOC)-$(TI_K3_IMAGE_GEN_SECTYPE).bin
--
--define TI_K3_IMAGE_GEN_CONFIGURE_CMDS
--	cp $(BINARIES_DIR)/ti-sysfw/$(TI_K3_IMAGE_GEN_SYSFW) $(@D)
--endef
--
--define TI_K3_IMAGE_GEN_BUILD_CMDS
--	$(TARGET_MAKE_ENV) \
--	$(BR2_MAKE) -C $(@D) \
--		SOC=$(TI_K3_IMAGE_GEN_SOC) \
--		SOC_TYPE=$(TI_K3_IMAGE_GEN_SECTYPE) \
--		CONFIG=evm \
--		CROSS_COMPILE=$(HOST_DIR)/bin/arm-none-eabi- \
--		SBL=$(BINARIES_DIR)/r5-u-boot-spl.bin \
--		O=$(@D)/tmp \
--		BIN_DIR=$(@D)
--endef
--
--define TI_K3_IMAGE_GEN_INSTALL_IMAGES_CMDS
--	cp $(@D)/tiboot3.bin $(BINARIES_DIR)
--endef
--
--$(eval $(generic-package))
+ ifeq ($(BR2_PACKAGE_LIBEXECINFO),y)
+ FLUENT_BIT_DEPENDENCIES += libexecinfo
+ FLUENT_BIT_LDFLAGS += -lexecinfo
+@@ -76,8 +69,7 @@ FLUENT_BIT_LDFLAGS += -latomic
+ endif
+ 
+ FLUENT_BIT_CONF_OPTS += \
+-	-DCMAKE_EXE_LINKER_FLAGS="$(FLUENT_BIT_LDFLAGS)" \
+-	-DCMAKE_C_FLAGS="$(FLUENT_BIT_CFLAGS)"
++	-DCMAKE_EXE_LINKER_FLAGS="$(FLUENT_BIT_LDFLAGS)"
+ 
+ define FLUENT_BIT_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 0755 package/fluent-bit/S99fluent-bit \
 -- 
 2.43.0
 
