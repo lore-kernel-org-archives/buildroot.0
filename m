@@ -4,105 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F22C1C5478C
-	for <buildroot@archiver.kernel.org>; Tue,  5 Mar 2024 07:12:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D81DC54E41
+	for <buildroot@archiver.kernel.org>; Tue,  5 Mar 2024 08:56:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A9E4B41561;
-	Tue,  5 Mar 2024 07:12:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 03F5740102;
+	Tue,  5 Mar 2024 08:56:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oOFYuo0KGY-m; Tue,  5 Mar 2024 07:12:46 +0000 (UTC)
+	with ESMTP id j9Sqiwyw3Sou; Tue,  5 Mar 2024 08:56:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C973A4155E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2230F41522
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C973A4155E;
-	Tue,  5 Mar 2024 07:12:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 423BE1BF287
- for <buildroot@lists.busybox.net>; Tue,  5 Mar 2024 07:12:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2230F41522;
+	Tue,  5 Mar 2024 08:56:25 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4CB3D1BF2E5
+ for <buildroot@lists.busybox.net>; Tue,  5 Mar 2024 08:56:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2F8534155E
- for <buildroot@lists.busybox.net>; Tue,  5 Mar 2024 07:12:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 39DBA608CC
+ for <buildroot@lists.busybox.net>; Tue,  5 Mar 2024 08:56:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MIXV-jvG3Cic for <buildroot@lists.busybox.net>;
- Tue,  5 Mar 2024 07:12:43 +0000 (UTC)
-X-Greylist: delayed 427 seconds by postgrey-1.37 at util1.osuosl.org;
- Tue, 05 Mar 2024 07:12:42 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 92E0E40137
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92E0E40137
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=35.89.44.33;
- helo=omta34.uswest2.a.cloudfilter.net; envelope-from=karthikeyan@linumiz.com;
- receiver=<UNKNOWN> 
-Received: from omta34.uswest2.a.cloudfilter.net
- (omta34.uswest2.a.cloudfilter.net [35.89.44.33])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 92E0E40137
- for <buildroot@buildroot.org>; Tue,  5 Mar 2024 07:12:42 +0000 (UTC)
-Received: from eig-obgw-6009a.ext.cloudfilter.net ([10.0.30.184])
- by cmsmtp with ESMTPS
- id hO4srdRCHHXmAhOrmrByeX; Tue, 05 Mar 2024 07:05:34 +0000
-Received: from md-in-79.webhostbox.net ([43.225.55.182]) by cmsmtp with ESMTPS
- id hOrhrvHWJOQFPhOrkrM4Jc; Tue, 05 Mar 2024 07:05:32 +0000
-X-Authority-Analysis: v=2.4 cv=CPwsXwrD c=1 sm=1 tr=0 ts=65e6c43c
- a=LfuyaZh/8e9VOkaVZk0aRw==:117 a=kofhyyBXuK/oEhdxNjf66Q==:17
- a=K6JAEmCyrfEA:10 a=oz0wMknONp8A:10 a=vU9dKmh3AAAA:8 a=4N7HVCEezjgQvitgCjMA:9
- a=rsP06fVo5MYu2ilr0aT5:22
-Received: from [122.165.245.213] (port=41896 helo=localhost.localdomain)
- by md-in-79.webhostbox.net with esmtpsa (TLS1.2) tls
- TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (Exim 4.96.2)
- (envelope-from <karthikeyan@linumiz.com>) id 1rhOrg-003V7W-0u;
- Tue, 05 Mar 2024 12:35:28 +0530
-From: Karthikeyan Krishnasamy <karthikeyan@linumiz.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id P3LJAzVrZGHO for <buildroot@lists.busybox.net>;
+ Tue,  5 Mar 2024 08:56:22 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0F374606A6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F374606A6
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0F374606A6
+ for <buildroot@buildroot.org>; Tue,  5 Mar 2024 08:56:21 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ 5b1f17b1804b1-412ebda8772so3464735e9.3
+ for <buildroot@buildroot.org>; Tue, 05 Mar 2024 00:56:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1709628979; x=1710233779;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=HBg0wCvlmf3CmqEnaVczEiFJUNKhEzcAEQhOkoA+qDY=;
+ b=LSsv0cPaSWxFpDPEeoK1pxkCYWj6bvxyoDhJOYLmvpM0pUA7ZvrYRYHk8YRgVF+k0u
+ OwGCYZzluYRQyM3s1rSZMA/tJpHYrGlSf9yh+m/0aCcRHgOdLVWkHchTFtoVHoaB3L9U
+ 16CJFQAXQle9wJya5qnw9YZvyVktGbYJ1d1x/KUbtyT6+pTL3ivMET9YmdMr5HZVM4A4
+ egcG0qDPSBcUmi+VlAEPrrXaV3YhIuUJW+kGPhww3unrVN6wo3KotFPIogpcVy2NpDar
+ GhMzSGg8UfMpNBu29gZEMNxGZe4WTgxLYIOoZXDHBPs0e6pYeNRoAUBHwxbVzaBHEyk6
+ CxwA==
+X-Gm-Message-State: AOJu0YyF0GCe4qV5yPqjbWi33uzdo6h7m1Ylws2MY0YtrIfbe2xed2Zj
+ 1yHe3MxsYmznlcUQLQjgJaG4UMBDvRw2PvC9+bIPGZ1eXPad/DG4HWmpD58c
+X-Google-Smtp-Source: AGHT+IGWWRmwgJ3NE2x/YaZjHitR3ZLRJV7/n8ikDP9MMPBmpXoMoZlf89E8CB/S5upTBNYVftnCJQ==
+X-Received: by 2002:a05:600c:a018:b0:412:dd51:19b0 with SMTP id
+ jg24-20020a05600ca01800b00412dd5119b0mr4472512wmb.16.1709628978901; 
+ Tue, 05 Mar 2024 00:56:18 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ l1-20020a05600c1d0100b00412ea52b102sm2170488wms.34.2024.03.05.00.56.18
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 05 Mar 2024 00:56:18 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue,  5 Mar 2024 12:34:52 +0530
-Message-Id: <20240305070452.183573-1-karthikeyan@linumiz.com>
-X-Mailer: git-send-email 2.39.2
+Date: Tue,  5 Mar 2024 09:56:16 +0100
+Message-ID: <20240305085616.7718-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-AntiAbuse: This header was added to track abuse,
- please include it with any abuse report
-X-AntiAbuse: Primary Hostname - md-in-79.webhostbox.net
-X-AntiAbuse: Original Domain - buildroot.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - linumiz.com
-X-BWhitelist: no
-X-Source-IP: 122.165.245.213
-X-Source-L: No
-X-Exim-ID: 1rhOrg-003V7W-0u
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: (localhost.localdomain) [122.165.245.213]:41896
-X-Source-Auth: karthikeyan@linumiz.com
-X-Email-Count: 4
-X-Org: HG=dishared_whb_net_legacy;ORG=directi;
-X-Source-Cap: bGludW1jbWM7aG9zdGdhdG9yO21kLWluLTc5LndlYmhvc3Rib3gubmV0
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfFm5VQ6tAqN3Hoxpzv6JbAotpY1bT3Vn8DqQ39DuvpyOVOQMWVWFI10YzlIJIed16VppPXnIv/6VnD6j4L8Dfjk4aHJ80gXeSIqzrYUwbKm1xoLGiBrM
- O5VH8EbeBMOMHepupW33Yrnl8FQussS0yI75DaD0ICU8hG3SWKmlKP3bv67wv6AI7WqSDkaPIlTB71sdlv8Tlt/VRxzxi9eTdUM=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=linumiz.com
- ; s=default; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject
- :Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
- Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
- In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
- List-Post:List-Owner:List-Archive;
- bh=dVuIWhMhyeiGewfMI/PS+W/RdOQsBEqvpKXFlGT/rZg=; b=EYumOBEt2CHOYR4JoyoUQDl1vD
- wK9Ua0aGLdaKErFr/RceZybbUh5h5TupTaXG2NJdqzfeZkUcIWvJk3zkLyA79E9Iw3k6JLQP9HEod
- bxY275nVyV+YAqRSIFEvW13paN45Y/kL/Kp/0uki+3eZMtkritghBdljGF3RSsSrJNSsSgIVS9fg6
- +WlkPOvSWRq1BHYa1F5aHAHMlYH+jxUWVqv+42LMtEWNCCQkEEXG6Eu4rH+1uocMm71aflBefYujl
- cdzw94BJuY225jBqC4eIwojy2JDu+J+1tddT41uLNhhQzSZ8JxtlafEf45OJYMp8d5PMsGdGuX1Nh
- EYYAB7iA==;
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=linumiz.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1709628979; x=1710233779; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=HBg0wCvlmf3CmqEnaVczEiFJUNKhEzcAEQhOkoA+qDY=;
+ b=BXjjDZzyNQ/9G7yZhU3gqrW+Hc9ZHSZ4dUY5TcxLW5Mb7rixxjY5kxAmW7BqcxOl3q
+ EnkTiGAfgLD50L0+Bf+9ip9WT8laLphumTey4c52PLq4Q6RRIHj0X27OcUZxRuwOiLke
+ pCq4Zo5QylDc0JB7z3p96P+iBnBwOtuQF/K2uP8vwSX01LcRfgeGWnbfTVkG/zdIYrRb
+ CBXFonr+L1ky0bT4KsBG9of4Al3Ca60Xg8uNrMnBf2BoBnDuTr9bamDvswWBTgTKTC0D
+ LrNJRvulKRU90opCLW/ZipzHEF0BO3UGlxlvO8cU9jDItKuYZCpvQ9b9LSAa3yEpMn+t
+ dxWw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=linumiz.com header.i=@linumiz.com header.a=rsa-sha256
- header.s=default header.b=EYumOBEt
-Subject: [Buildroot] [PATCH] package: linux-firmware: update linux fw
- bluetooth package for rtl88xx
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=BXjjDZzy
+Subject: [Buildroot] [PATCH 1/1] package/openblas: fix mips64 build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -114,47 +100,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: parthiban@linumiz.com, Karthikeyan Krishnasamy <karthikeyan@linumiz.com>,
- bernd@kuhls.net, saravanan@linumiz.com, yann.morin.1998@free.fr
+Cc: Julien Olivain <ju.o@free.fr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-add realtek 8821cs bluetooth firmware in linux firmware package,
-BR2_PACKAGE_LINUX_FIRMWARE_RTL_88XX_BT config for realtek 88xx family,
-not device specific config to enable, add fw's in realtek 88xx family
-in build instead of adding them separately.
+Use MIPS64_GENERIC instead of SICORTEX with mips64 to avoid the
+following build failure raised at least since bump to version 0.3.25 in
+commit 6a172ffe6b2aa5c59427696775cfa4c189f99c19:
 
-Signed-off-by: Karthikeyan Krishnasamy <karthikeyan@linumiz.com>
+../kernel/mips64/amax.S:76: Error: opcode not supported on this processor: mips64 (mips64) `mtc1 $0,$f0'
+
+MIPS64_GENERIC is available since version 0.3.22 and
+https://github.com/OpenMathLib/OpenBLAS/commit/a50b29c540c25baf8f788131cc905ebe0575f253
+
+Fixes:
+ - http://autobuild.buildroot.org/results/b8da10aeb16343540ce3672faabdaa4d3bffb020
+ - http://autobuild.buildroot.org/results/32702ccaa2384252058840960d8998abca294fad
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/linux-firmware/linux-firmware.mk | 11 +----------
- 1 file changed, 1 insertion(+), 10 deletions(-)
+ package/openblas/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 60e8861abe..7e1e5cf6f2 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -90,16 +90,7 @@ endif
- # Realtek 88xx Bluetooth
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RTL_88XX_BT),y)
- LINUX_FIRMWARE_FILES += \
--	rtl_bt/rtl8812ae_fw.bin rtl_bt/rtl8821a_fw.bin \
--	rtl_bt/rtl8821c_config.bin rtl_bt/rtl8821c_fw.bin \
--	rtl_bt/rtl8822b_config.bin rtl_bt/rtl8822b_fw.bin \
--	rtl_bt/rtl8822cs_config.bin rtl_bt/rtl8822cs_fw.bin \
--	rtl_bt/rtl8822cu_config.bin rtl_bt/rtl8822cu_fw.bin \
--	rtl_bt/rtl8851bu_fw.bin rtl_bt/rtl8851bu_config.bin \
--	rtl_bt/rtl8852au_fw.bin rtl_bt/rtl8852au_config.bin \
--	rtl_bt/rtl8852bu_fw.bin rtl_bt/rtl8852bu_config.bin \
--	rtl_bt/rtl8852cu_fw.bin rtl_bt/rtl8852cu_config.bin \
--	rtl_bt/rtl8852cu_fw_v2.bin
-+	rtl_bt/rtl88*_fw.bin rtl_bt/rtl88*_config.bin
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.rtlwifi_firmware.txt
- endif
- 
+diff --git a/package/openblas/Config.in b/package/openblas/Config.in
+index 26a76d29fb..74c4a3aa5c 100644
+--- a/package/openblas/Config.in
++++ b/package/openblas/Config.in
+@@ -28,7 +28,7 @@ config BR2_PACKAGE_OPENBLAS_DEFAULT_TARGET
+ 	default "PPC440FP2"       if BR2_powerpc_440fp
+ 	# P5600 is built with MSA support which is only available in Codescape toolchains
+ 	default "P5600"           if BR2_mips_p5600 && BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS
+-	default "SICORTEX"        if BR2_MIPS_CPU_MIPS64
++	default "MIPS64_GENERIC"  if BR2_MIPS_CPU_MIPS64
+ 	# I6400 is built with MSA support which is only available in Codescape toolchains
+ 	default "I6400"           if BR2_mips_i6400 && BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS
+ 	# OpenBLAS assumes SPARC=Sparc v9
 -- 
-2.39.2
+2.43.0
 
 _______________________________________________
 buildroot mailing list
