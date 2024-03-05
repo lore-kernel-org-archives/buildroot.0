@@ -4,91 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D81DC54E41
-	for <buildroot@archiver.kernel.org>; Tue,  5 Mar 2024 08:56:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E59CC54798
+	for <buildroot@archiver.kernel.org>; Tue,  5 Mar 2024 09:13:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 03F5740102;
-	Tue,  5 Mar 2024 08:56:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BC8304159C;
+	Tue,  5 Mar 2024 09:13:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id j9Sqiwyw3Sou; Tue,  5 Mar 2024 08:56:25 +0000 (UTC)
+	with ESMTP id AZt43q_nDamd; Tue,  5 Mar 2024 09:13:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2230F41522
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 84035415A3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2230F41522;
-	Tue,  5 Mar 2024 08:56:25 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4CB3D1BF2E5
- for <buildroot@lists.busybox.net>; Tue,  5 Mar 2024 08:56:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 84035415A3;
+	Tue,  5 Mar 2024 09:13:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C5DC71BF25F
+ for <buildroot@lists.busybox.net>; Tue,  5 Mar 2024 09:13:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 39DBA608CC
- for <buildroot@lists.busybox.net>; Tue,  5 Mar 2024 08:56:23 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BAC3240733
+ for <buildroot@lists.busybox.net>; Tue,  5 Mar 2024 09:13:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id P3LJAzVrZGHO for <buildroot@lists.busybox.net>;
- Tue,  5 Mar 2024 08:56:22 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sUGDY79LjEOw for <buildroot@lists.busybox.net>;
+ Tue,  5 Mar 2024 09:13:07 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
+ client-ip=2a00:1450:4864:20::433; helo=mail-wr1-x433.google.com;
  envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0F374606A6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F374606A6
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
- [IPv6:2a00:1450:4864:20::334])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0F374606A6
- for <buildroot@buildroot.org>; Tue,  5 Mar 2024 08:56:21 +0000 (UTC)
-Received: by mail-wm1-x334.google.com with SMTP id
- 5b1f17b1804b1-412ebda8772so3464735e9.3
- for <buildroot@buildroot.org>; Tue, 05 Mar 2024 00:56:21 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 17BB140709
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17BB140709
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 17BB140709
+ for <buildroot@buildroot.org>; Tue,  5 Mar 2024 09:13:06 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id
+ ffacd0b85a97d-33d509ab80eso206960f8f.3
+ for <buildroot@buildroot.org>; Tue, 05 Mar 2024 01:13:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1709628979; x=1710233779;
+ d=1e100.net; s=20230601; t=1709629984; x=1710234784;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=HBg0wCvlmf3CmqEnaVczEiFJUNKhEzcAEQhOkoA+qDY=;
- b=LSsv0cPaSWxFpDPEeoK1pxkCYWj6bvxyoDhJOYLmvpM0pUA7ZvrYRYHk8YRgVF+k0u
- OwGCYZzluYRQyM3s1rSZMA/tJpHYrGlSf9yh+m/0aCcRHgOdLVWkHchTFtoVHoaB3L9U
- 16CJFQAXQle9wJya5qnw9YZvyVktGbYJ1d1x/KUbtyT6+pTL3ivMET9YmdMr5HZVM4A4
- egcG0qDPSBcUmi+VlAEPrrXaV3YhIuUJW+kGPhww3unrVN6wo3KotFPIogpcVy2NpDar
- GhMzSGg8UfMpNBu29gZEMNxGZe4WTgxLYIOoZXDHBPs0e6pYeNRoAUBHwxbVzaBHEyk6
- CxwA==
-X-Gm-Message-State: AOJu0YyF0GCe4qV5yPqjbWi33uzdo6h7m1Ylws2MY0YtrIfbe2xed2Zj
- 1yHe3MxsYmznlcUQLQjgJaG4UMBDvRw2PvC9+bIPGZ1eXPad/DG4HWmpD58c
-X-Google-Smtp-Source: AGHT+IGWWRmwgJ3NE2x/YaZjHitR3ZLRJV7/n8ikDP9MMPBmpXoMoZlf89E8CB/S5upTBNYVftnCJQ==
-X-Received: by 2002:a05:600c:a018:b0:412:dd51:19b0 with SMTP id
- jg24-20020a05600ca01800b00412dd5119b0mr4472512wmb.16.1709628978901; 
- Tue, 05 Mar 2024 00:56:18 -0800 (PST)
+ bh=CnqzLQeS8YiQfdkWSk2Lvv7RJZgkHXT+oZJAEw4wS28=;
+ b=mld7xLVBSGS8Cf8ovPOZgcMKTkJDKePnjxNXr9UW+cenynezdT1XhGCb5UDSRb5BAb
+ szuk2EL6AHT8z8DVxCMjEtI5K1z4ZwXHGfR5R0Qm+vvjtAJIxloH8UxPfTkv0Jg31iA5
+ wIz5kibQU7k2sE+NS2fuUMNKnIX7l+5a4NVC6butCyqqeT+ZahoRVClgvI/f+ySxpF8v
+ m9DzDMRM0vhxpB+kZUC47m1LOA/wXMlyv9Od9iwxE8aaE112WAjq9YuoV3K36AnGB3xf
+ UhZTh+1OpiMXekzlNlSRrI5dP3B32XIg3yiL11+V3eW5LVPSph23AsbHUdnkfKbHCXSI
+ E8CQ==
+X-Gm-Message-State: AOJu0YyNj6OWuFYH+hVsTu48jVmmmkW9J2ouVdziOACvrnLRweh93Z/A
+ GfuZUh0hWbW6qu3VfJ3lHxhaWBi60QEqErjY+6cwJ0G/PhA0XvFoq514mwy1
+X-Google-Smtp-Source: AGHT+IFar6cBC8g6HAJ1tosQ2nYgd621l5rWPsjrt4dGrn2hKvX0i4D170qhnkoV05WA3PCdI8wD/A==
+X-Received: by 2002:a5d:48d1:0:b0:33d:f719:83c7 with SMTP id
+ p17-20020a5d48d1000000b0033df71983c7mr7373059wrs.71.1709629984381; 
+ Tue, 05 Mar 2024 01:13:04 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- l1-20020a05600c1d0100b00412ea52b102sm2170488wms.34.2024.03.05.00.56.18
+ r18-20020adfca92000000b0033dcc0d1399sm14419321wrh.25.2024.03.05.01.13.03
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 05 Mar 2024 00:56:18 -0800 (PST)
+ Tue, 05 Mar 2024 01:13:03 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue,  5 Mar 2024 09:56:16 +0100
-Message-ID: <20240305085616.7718-1-fontaine.fabrice@gmail.com>
+Date: Tue,  5 Mar 2024 10:13:02 +0100
+Message-ID: <20240305091302.7403-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1709628979; x=1710233779; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1709629984; x=1710234784; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=HBg0wCvlmf3CmqEnaVczEiFJUNKhEzcAEQhOkoA+qDY=;
- b=BXjjDZzyNQ/9G7yZhU3gqrW+Hc9ZHSZ4dUY5TcxLW5Mb7rixxjY5kxAmW7BqcxOl3q
- EnkTiGAfgLD50L0+Bf+9ip9WT8laLphumTey4c52PLq4Q6RRIHj0X27OcUZxRuwOiLke
- pCq4Zo5QylDc0JB7z3p96P+iBnBwOtuQF/K2uP8vwSX01LcRfgeGWnbfTVkG/zdIYrRb
- CBXFonr+L1ky0bT4KsBG9of4Al3Ca60Xg8uNrMnBf2BoBnDuTr9bamDvswWBTgTKTC0D
- LrNJRvulKRU90opCLW/ZipzHEF0BO3UGlxlvO8cU9jDItKuYZCpvQ9b9LSAa3yEpMn+t
- dxWw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=CnqzLQeS8YiQfdkWSk2Lvv7RJZgkHXT+oZJAEw4wS28=;
+ b=OshA+//dHmfGAaQbPCeDUdcUZhoWLd3qaPgdAhKHi0NgHh8/1wee/cs5Z1fA1f7ZR5
+ 5k+M8Uri/Esh/2y0GqqmAq33snwXHIahGEDrvpZr2tTRd+uJ5+iQuThWMU2V4LMW+qF7
+ PdYn5TQEMGjcXEObetJS/TQWdIqj8S3HI4MLQ/fpO8KM4i0r6MDszr8J7C/FE2HvrPMH
+ tiHHtsxeXDg+gj7YnKQUWUMuKDZz/oBgB0H2wx1eMeJszyOgYmj19G8utK2rxoGG9bw8
+ UEbvaI9eHeLwUCVMZy2wBrRC4RQdjmMXrEl2Fjjxc+pH+4SLcB8Qb3J9l/Uu4NuM6o0K
+ YwBw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=BXjjDZzy
-Subject: [Buildroot] [PATCH 1/1] package/openblas: fix mips64 build
+ header.s=20230601 header.b=OshA+//d
+Subject: [Buildroot] [PATCH 1/1] package/ltp-testsuite: fix build with
+ BR2_TIME_BITS_64
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,44 +101,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>,
+Cc: Petr Vorel <petr.vorel@gmail.com>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Use MIPS64_GENERIC instead of SICORTEX with mips64 to avoid the
-following build failure raised at least since bump to version 0.3.25 in
-commit 6a172ffe6b2aa5c59427696775cfa4c189f99c19:
+Do not remove _FILE_OFFSET_BITS=64 from CFLAGS and CPPFLAGS to avoid the
+following build failure with BR2_TIME_BITS_64 raised since commit
+3c427c64726560ea1743282a3fdb78f5b28692eb:
 
-../kernel/mips64/amax.S:76: Error: opcode not supported on this processor: mips64 (mips64) `mtc1 $0,$f0'
+configure:5239: /home/autobuild/autobuild/instance-1/output-1/host/bin/mips-buildroot-linux-gnu-gcc -c -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_TIME_BITS=64 -Os -g2 -I/home/autobuild/autobuild/instance-1/output-1/host/bin/../mips-buildroot-linux-gnu/sysroot/usr/include/tirpc  -fno-builtin -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_TIME_BITS=64 conftest.c >&5
+In file included from /home/autobuild/autobuild/instance-1/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/features.h:394,
+                 from /home/autobuild/autobuild/instance-1/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/bits/libc-header-start.h:33,
+                 from /home/autobuild/autobuild/instance-1/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/limits.h:26,
+                 from /home/autobuild/autobuild/instance-1/output-1/host/lib/gcc/mips-buildroot-linux-gnu/13.2.0/include/limits.h:205,
+                 from /home/autobuild/autobuild/instance-1/output-1/host/lib/gcc/mips-buildroot-linux-gnu/13.2.0/include/syslimits.h:7,
+                 from /home/autobuild/autobuild/instance-1/output-1/host/lib/gcc/mips-buildroot-linux-gnu/13.2.0/include/limits.h:34,
+                 from conftest.c:12:
+/home/autobuild/autobuild/instance-1/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/features-time64.h:26:5: error: #error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
+   26 | #   error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
+      |     ^~~~~
 
-MIPS64_GENERIC is available since version 0.3.22 and
-https://github.com/OpenMathLib/OpenBLAS/commit/a50b29c540c25baf8f788131cc905ebe0575f253
+[...]
+
+checking for /home/autobuild/autobuild/instance-1/output-1/host/bin/mips-buildroot-linux-gnu-gcc options needed to detect all undeclared functions... cannot detect
+configure: error: in `/home/autobuild/autobuild/instance-1/output-1/build/ltp-testsuite-20240129':
+configure: error: cannot make /home/autobuild/autobuild/instance-1/output-1/host/bin/mips-buildroot-linux-gnu-gcc report undeclared builtins
+
+Indeed, this LFS workaround was added by commit
+ca3524ba707126de7284210c00268a8e7ca6379a and is only needed to fix a
+build failure with the old codesourcery-arm toolchain from 2014 which
+uses glibc < 2.23. as glibc 2.23 was released in February 2016:
+https://sourceware.org/glibc/wiki/Release/2.23, drop this workaround as
+already done for libselinux in commit
+c1fa9bc2f7a4e5481edf4fce5c03dd45862fe72c. A follow-up patch will also
+drop codesourcery-arm toolchain.
 
 Fixes:
- - http://autobuild.buildroot.org/results/b8da10aeb16343540ce3672faabdaa4d3bffb020
- - http://autobuild.buildroot.org/results/32702ccaa2384252058840960d8998abca294fad
+ - http://autobuild.buildroot.org/results/d2e75a79bc42b6a9a2b407fd557aca5c7f207d84
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/openblas/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/ltp-testsuite/ltp-testsuite.mk | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/package/openblas/Config.in b/package/openblas/Config.in
-index 26a76d29fb..74c4a3aa5c 100644
---- a/package/openblas/Config.in
-+++ b/package/openblas/Config.in
-@@ -28,7 +28,7 @@ config BR2_PACKAGE_OPENBLAS_DEFAULT_TARGET
- 	default "PPC440FP2"       if BR2_powerpc_440fp
- 	# P5600 is built with MSA support which is only available in Codescape toolchains
- 	default "P5600"           if BR2_mips_p5600 && BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS
--	default "SICORTEX"        if BR2_MIPS_CPU_MIPS64
-+	default "MIPS64_GENERIC"  if BR2_MIPS_CPU_MIPS64
- 	# I6400 is built with MSA support which is only available in Codescape toolchains
- 	default "I6400"           if BR2_mips_i6400 && BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS
- 	# OpenBLAS assumes SPARC=Sparc v9
+diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+index ea57686a9c..0996b77e58 100644
+--- a/package/ltp-testsuite/ltp-testsuite.mk
++++ b/package/ltp-testsuite/ltp-testsuite.mk
+@@ -47,10 +47,7 @@ else
+ LTP_TESTSUITE_CONF_ENV += have_numa_headers=no
+ endif
+ 
+-# ltp-testsuite uses <fts.h>, which isn't compatible with largefile
+-# support.
+-LTP_TESTSUITE_CFLAGS = $(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))
+-LTP_TESTSUITE_CPPFLAGS = $(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))
++LTP_TESTSUITE_CFLAGS = $(TARGET_CFLAGS)
+ LTP_TESTSUITE_LIBS =
+ 
+ ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
+@@ -66,7 +63,6 @@ endif
+ 
+ LTP_TESTSUITE_CONF_ENV += \
+ 	CFLAGS="$(LTP_TESTSUITE_CFLAGS)" \
+-	CPPFLAGS="$(LTP_TESTSUITE_CPPFLAGS)" \
+ 	LIBS="$(LTP_TESTSUITE_LIBS)" \
+ 	SYSROOT="$(STAGING_DIR)"
+ 
 -- 
 2.43.0
 
