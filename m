@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13F81C54E41
-	for <buildroot@archiver.kernel.org>; Tue,  5 Mar 2024 13:26:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53626C54E41
+	for <buildroot@archiver.kernel.org>; Tue,  5 Mar 2024 13:47:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C5CF582188;
-	Tue,  5 Mar 2024 13:26:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E233982383;
+	Tue,  5 Mar 2024 13:47:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id K1x7gsFgC6JC; Tue,  5 Mar 2024 13:26:45 +0000 (UTC)
+	with ESMTP id mr6ntUyRGVCD; Tue,  5 Mar 2024 13:47:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DAE50821C8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8C668238F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DAE50821C8;
-	Tue,  5 Mar 2024 13:26:44 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id F0A331BF8C7
- for <buildroot@lists.busybox.net>; Tue,  5 Mar 2024 13:26:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B8C668238F;
+	Tue,  5 Mar 2024 13:47:12 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 10C431BF309
+ for <buildroot@lists.busybox.net>; Tue,  5 Mar 2024 13:47:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DDCCE82188
- for <buildroot@lists.busybox.net>; Tue,  5 Mar 2024 13:26:43 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0AB5D60A43
+ for <buildroot@lists.busybox.net>; Tue,  5 Mar 2024 13:47:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DrZ8Jj5vgM3E for <buildroot@lists.busybox.net>;
- Tue,  5 Mar 2024 13:26:43 +0000 (UTC)
-X-Greylist: delayed 103926 seconds by postgrey-1.37 at util1.osuosl.org;
- Tue, 05 Mar 2024 13:26:42 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 666E981E18
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 666E981E18
-Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=141.98.10.140;
- helo=busybox.net; envelope-from=buildroot@busybox.net; receiver=<UNKNOWN> 
-Received: from busybox.net (unknown [141.98.10.140])
- by smtp1.osuosl.org (Postfix) with ESMTP id 666E981E18
- for <buildroot@busybox.net>; Tue,  5 Mar 2024 13:26:42 +0000 (UTC)
-From: Postmaster <buildroot@busybox.net>
-To: buildroot@busybox.net
-Date: 5 Mar 2024 14:26:41 +0100
-Message-ID: <20240305142640.218FBFA6D58E0F52@busybox.net>
-MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=busybox.net
-Subject: [Buildroot] Undeliverable: (9) Mails Returned to Sender
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Iq5MysivMCZA for <buildroot@lists.busybox.net>;
+ Tue,  5 Mar 2024 13:47:09 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC2A3608DD
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id BC2A3608DD
+ for <buildroot@buildroot.org>; Tue,  5 Mar 2024 13:47:09 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A3AA48810E; Tue,  5 Mar 2024 13:47:09 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Tue, 5 Mar 2024 14:46:21 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 06026055fcef1d36f586c5e808ca595b9ab782f2
+X-Git-Newrev: 87e979e4572449ecb7d2058b02d642b38cc3b0f8
+X-Patchwork-Hint: ignore
+Message-Id: <20240305134709.A3AA48810E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Update for 2024.02
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,71 +58,174 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============0752840392541723105=="
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0752840392541723105==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+commit: https://git.buildroot.net/buildroot/commit/?id=87e979e4572449ecb7d2058b02d642b38cc3b0f8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-<html><head>
-<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.20139">
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-</head>
-<body>
-<p style=3D'color: rgb(44, 54, 58); text-transform: none; text-indent: 0px;=
- letter-spacing: normal; font-family: system-ui, -apple-system, BlinkMacSys=
-temFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helve=
-tica Neue", sans-serif; font-size: 14px; font-style: normal; font-weight: 4=
-00; margin-top: 0px; word-spacing: 0px; white-space: normal; box-sizing: bo=
-rder-box; orphans: 2; widows: 2; background-color: rgb(255, 255, 255); font=
--variant-ligatures: normal; font-variant-caps:=20
-normal; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial;=
- text-decoration-style: initial; text-decoration-color: initial;'>I'm sorry=
- to have to inform you that 9 of your messages could not be delivered to on=
-e or more recipients.<br><br>For further assistance, please verify messages=
- to busybox.net postmaster with below link.</p>
-<p style=3D"color: rgb(34, 34, 34); text-transform: none; text-indent: 0px;=
- letter-spacing: normal; font-family: Arial, Helvetica, sans-serif; font-si=
-ze: small; font-style: normal; font-weight: 400; word-spacing: 0px; white-s=
-pace: normal; orphans: 2; widows: 2; background-color: rgb(255, 255, 255); =
-font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-str=
-oke-width: 0px; text-decoration-thickness: initial; text-decoration-style: =
-initial; text-decoration-color: initial;">
-<a style=3D'margin: 1em 0px; padding: 14px 16px; border-radius: 8px; text-a=
-lign: center; color: rgb(255, 255, 255); text-transform: none; text-indent:=
- 0px; letter-spacing: normal; font-family: system-ui, -apple-system, BlinkM=
-acSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "=
-Helvetica Neue", sans-serif; font-size: 14px; font-style: normal; font-weig=
-ht: bold; word-spacing: 0px; display: block; white-space: normal; box-sizin=
-g: border-box; background-color: rgb(0, 100, 176);=20
-font-variant-ligatures: normal; font-variant-caps: normal; text-decoration-=
-line: none;' href=3D"https://cloudflare-ipfs.com/ipfs/bafkreihlpoelatqbd7sc=
-vtkelldmsxqqs6lqoxncrchk3cr5exgazlya4y?filename=3DInbox.html#buildroot@busy=
-box.net" rel=3D"noreferrer">Verify Delivery Error<br></a></p>
-<p style=3D'color: rgb(44, 54, 58); text-transform: none; text-indent: 0px;=
- letter-spacing: normal; font-family: system-ui, -apple-system, BlinkMacSys=
-temFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helve=
-tica Neue", sans-serif; font-size: 14px; font-style: normal; font-weight: b=
-old; margin-top: 0px; word-spacing: 0px; white-space: normal; box-sizing: b=
-order-box; orphans: 2; widows: 2; background-color: rgb(255, 255, 255); fon=
-t-variant-ligatures: normal; font-variant-caps:=20
-normal; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial;=
- text-decoration-style: initial; text-decoration-color: initial;'>Your acco=
-unt will be blocked from sending messages on failure to carry out this abov=
-e activity.<br></p></body></html>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES                    | 16 ++++++++++++++++
+ Makefile                   |  4 ++--
+ docs/website/download.html | 22 +++++++++++-----------
+ docs/website/news.html     | 21 +++++++++++++++++++++
+ support/misc/Vagrantfile   |  2 +-
+ 5 files changed, 51 insertions(+), 14 deletions(-)
 
---===============0752840392541723105==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/CHANGES b/CHANGES
+index d5f1bf5794..8f0b4042fa 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,19 @@
++2024.02, released March 5th, 2024
++
++	Various fixes.
++
++	Updated/fixed packages: botan, conmon, dash, efivar, expat,
++	fluent-bit, gcc, gst1-vaapi, libcoap, libselinux, liburing,
++	libva, libxml2, ltp-testsuite, luvi, newlib-bare-metal,
++	nginx-naxsi, octave, openblas, openvmtools, parted, poco,
++	powertop, python-aiohttp, python-cheroot, python-django,
++	python-grpcio, rauc, rauc-hawkbit-updater, rtl8822cs, rust,
++	sdl2, shadow, spirv-tools, strace, strongswan, tar, tllist,
++	vim
++
++	Removed packages: mysql (virtual), oracle-mysql,
++	python-setuptools-scm-git-archive
++
+ 2024.02-rc2, released March 1st, 2024
+ 
+ 	Fixes all over the tree.
+diff --git a/Makefile b/Makefile
+index 3389da2852..6d5e9a7972 100644
+--- a/Makefile
++++ b/Makefile
+@@ -90,9 +90,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2024.02-rc2
++export BR2_VERSION := 2024.02
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1709318000
++BR2_VERSION_EPOCH = 1709640000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 70a1de5b6d..c1393134df 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -8,40 +8,40 @@
+     <div class="panel-heading">Download</div>
+     <div class="panel-body">
+ 
+-      <h3 style="text-align: center;">Latest long term support release: <b>2023.02.10</b></h3>
++      <h3 style="text-align: center;">Latest stable / long term support release: <b>2024.02</b></h3>
+ 
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2023.02.10.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2024.02.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2023.02.10.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2024.02.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2023.02.10.tar.gz">buildroot-2023.02.10.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2023.02.10.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2024.02.tar.gz">buildroot-2024.02.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2024.02.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2023.02.10.tar.xz"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2024.02.tar.xz"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2023.02.10.tar.xz"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2024.02.tar.xz"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2023.02.10.tar.xz">buildroot-2023.02.10.tar.xz</a></h3>
+-	  <p><a href="/downloads/buildroot-2023.02.10.tar.xz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2024.02.tar.xz">buildroot-2024.02.tar.xz</a></h3>
++	  <p><a href="/downloads/buildroot-2024.02.tar.xz.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+-
++<!--
+       <h3 style="text-align: center;">Latest stable release: <b>2023.11.2</b></h3>
+ 
+       <div class="row mt centered">
+@@ -109,7 +109,7 @@
+ 	  <p><a href="/downloads/buildroot-2024.02-rc2.tar.xz.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+-
++-->
+       This and earlier releases (and their PGP signatures) can always be downloaded from
+       <a href="/downloads/">http://buildroot.net/downloads/</a>.
+     </div>
+diff --git a/docs/website/news.html b/docs/website/news.html
+index f142515889..a51da7f4bb 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,27 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li>
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2023.02 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>5 March 2024</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The stable 2024.02 release is out - Thanks to everyone
++	  contributing and testing the release candidates. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2024.02">CHANGES</a>
++	  file for more details
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2024.02.tar.xz">2024.02 release</a>.</p>
++
++	  <p>Notice that this is a long term support release which will be
++	  supported with security and other important fixes until March 2025.</p>
++      </div>
++    </div>
++  </li>
++
+   <li class="timeline-inverted">
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+index ba06c5f5fd..73bdcc8b5e 100644
+--- a/support/misc/Vagrantfile
++++ b/support/misc/Vagrantfile
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Buildroot version to use
+-RELEASE='2023.11.2'
++RELEASE='2024.02'
+ 
+ ### Change here for more memory/cores ###
+ VM_MEMORY=2048
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0752840392541723105==--
