@@ -1,95 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E59CC54798
-	for <buildroot@archiver.kernel.org>; Tue,  5 Mar 2024 09:13:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E027C54798
+	for <buildroot@archiver.kernel.org>; Tue,  5 Mar 2024 09:33:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BC8304159C;
-	Tue,  5 Mar 2024 09:13:11 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AZt43q_nDamd; Tue,  5 Mar 2024 09:13:10 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 84035415A3
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 84035415A3;
-	Tue,  5 Mar 2024 09:13:10 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C5DC71BF25F
- for <buildroot@lists.busybox.net>; Tue,  5 Mar 2024 09:13:08 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BAC3240733
- for <buildroot@lists.busybox.net>; Tue,  5 Mar 2024 09:13:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 63A2641572;
+	Tue,  5 Mar 2024 09:33:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sUGDY79LjEOw for <buildroot@lists.busybox.net>;
- Tue,  5 Mar 2024 09:13:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::433; helo=mail-wr1-x433.google.com;
- envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 17BB140709
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17BB140709
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 17BB140709
- for <buildroot@buildroot.org>; Tue,  5 Mar 2024 09:13:06 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id
- ffacd0b85a97d-33d509ab80eso206960f8f.3
- for <buildroot@buildroot.org>; Tue, 05 Mar 2024 01:13:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1709629984; x=1710234784;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=CnqzLQeS8YiQfdkWSk2Lvv7RJZgkHXT+oZJAEw4wS28=;
- b=mld7xLVBSGS8Cf8ovPOZgcMKTkJDKePnjxNXr9UW+cenynezdT1XhGCb5UDSRb5BAb
- szuk2EL6AHT8z8DVxCMjEtI5K1z4ZwXHGfR5R0Qm+vvjtAJIxloH8UxPfTkv0Jg31iA5
- wIz5kibQU7k2sE+NS2fuUMNKnIX7l+5a4NVC6butCyqqeT+ZahoRVClgvI/f+ySxpF8v
- m9DzDMRM0vhxpB+kZUC47m1LOA/wXMlyv9Od9iwxE8aaE112WAjq9YuoV3K36AnGB3xf
- UhZTh+1OpiMXekzlNlSRrI5dP3B32XIg3yiL11+V3eW5LVPSph23AsbHUdnkfKbHCXSI
- E8CQ==
-X-Gm-Message-State: AOJu0YyNj6OWuFYH+hVsTu48jVmmmkW9J2ouVdziOACvrnLRweh93Z/A
- GfuZUh0hWbW6qu3VfJ3lHxhaWBi60QEqErjY+6cwJ0G/PhA0XvFoq514mwy1
-X-Google-Smtp-Source: AGHT+IFar6cBC8g6HAJ1tosQ2nYgd621l5rWPsjrt4dGrn2hKvX0i4D170qhnkoV05WA3PCdI8wD/A==
-X-Received: by 2002:a5d:48d1:0:b0:33d:f719:83c7 with SMTP id
- p17-20020a5d48d1000000b0033df71983c7mr7373059wrs.71.1709629984381; 
- Tue, 05 Mar 2024 01:13:04 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- r18-20020adfca92000000b0033dcc0d1399sm14419321wrh.25.2024.03.05.01.13.03
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 05 Mar 2024 01:13:03 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0yO3c2_3dYEo; Tue,  5 Mar 2024 09:33:44 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 09F4841574
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 09F4841574;
+	Tue,  5 Mar 2024 09:33:44 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E2E911BF25F
+ for <buildroot@lists.busybox.net>; Tue,  5 Mar 2024 09:33:41 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id D038E41597
+ for <buildroot@lists.busybox.net>; Tue,  5 Mar 2024 09:33:41 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PceVJsIlCcpT for <buildroot@lists.busybox.net>;
+ Tue,  5 Mar 2024 09:33:41 +0000 (UTC)
+Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=64.142.111.80;
+ helo=c.mail.sonic.net; envelope-from=sen@hastings.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D590041595
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D590041595
+Received: from c.mail.sonic.net (c.mail.sonic.net [64.142.111.80])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D590041595
+ for <buildroot@buildroot.org>; Tue,  5 Mar 2024 09:33:40 +0000 (UTC)
+Received: from localhost.localdomain (141-126-093-001.res.spectrum.com
+ [141.126.93.1]) (authenticated bits=0)
+ by c.mail.sonic.net (8.16.1/8.16.1) with ESMTPSA id 4259XcxK017847
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+ Tue, 5 Mar 2024 01:33:38 -0800
+From: Sen Hastings <sen@hastings.org>
 To: buildroot@buildroot.org
-Date: Tue,  5 Mar 2024 10:13:02 +0100
-Message-ID: <20240305091302.7403-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Date: Tue,  5 Mar 2024 01:33:34 -0800
+Message-Id: <20240305093334.2233237-1-sen@hastings.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1709629984; x=1710234784; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=CnqzLQeS8YiQfdkWSk2Lvv7RJZgkHXT+oZJAEw4wS28=;
- b=OshA+//dHmfGAaQbPCeDUdcUZhoWLd3qaPgdAhKHi0NgHh8/1wee/cs5Z1fA1f7ZR5
- 5k+M8Uri/Esh/2y0GqqmAq33snwXHIahGEDrvpZr2tTRd+uJ5+iQuThWMU2V4LMW+qF7
- PdYn5TQEMGjcXEObetJS/TQWdIqj8S3HI4MLQ/fpO8KM4i0r6MDszr8J7C/FE2HvrPMH
- tiHHtsxeXDg+gj7YnKQUWUMuKDZz/oBgB0H2wx1eMeJszyOgYmj19G8utK2rxoGG9bw8
- UEbvaI9eHeLwUCVMZy2wBrRC4RQdjmMXrEl2Fjjxc+pH+4SLcB8Qb3J9l/Uu4NuM6o0K
- YwBw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=OshA+//d
-Subject: [Buildroot] [PATCH 1/1] package/ltp-testsuite: fix build with
- BR2_TIME_BITS_64
+X-Sonic-CAuth: UmFuZG9tSVbnfws2uCjhFfLbS6HhQnoOKyJwQ99qVgW9JbLsEQTslgbX2myH9bEfaGYZESvUbiirS4I/zeyMNNJ0KCts6ooL
+X-Sonic-ID: C;ivIDctPa7hGjV9bXR+6Zsg== M;kDA4ctPa7hGjV9bXR+6Zsg==
+X-Sonic-Spam-Details: -0.0/5.0 by cerberusd
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=hastings.org
+Subject: [Buildroot] [PATCH v2 1/1] support/scripts/pkg-stats: fix/improve
+ git hash sorting
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,79 +66,83 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Petr Vorel <petr.vorel@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Sen Hastings <sen@hastings.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Do not remove _FILE_OFFSET_BITS=64 from CFLAGS and CPPFLAGS to avoid the
-following build failure with BR2_TIME_BITS_64 raised since commit
-3c427c64726560ea1743282a3fdb78f5b28692eb:
+sortGrid()'s handling of git hashes and other large hex numbers
+has been inconsistent, they can be detected as strings or numbers
+depending on what type of character they start with.
+This patch fixes the behaviour by using a regex to capture everything
+that looks like a big hex number and treat it as a string.
+This means when you sort by current version ascending all the version
+strings with big hex numbers should show up first, sorted 0-9,a-f.
 
-configure:5239: /home/autobuild/autobuild/instance-1/output-1/host/bin/mips-buildroot-linux-gnu-gcc -c -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_TIME_BITS=64 -Os -g2 -I/home/autobuild/autobuild/instance-1/output-1/host/bin/../mips-buildroot-linux-gnu/sysroot/usr/include/tirpc  -fno-builtin -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_TIME_BITS=64 conftest.c >&5
-In file included from /home/autobuild/autobuild/instance-1/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/features.h:394,
-                 from /home/autobuild/autobuild/instance-1/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/bits/libc-header-start.h:33,
-                 from /home/autobuild/autobuild/instance-1/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/limits.h:26,
-                 from /home/autobuild/autobuild/instance-1/output-1/host/lib/gcc/mips-buildroot-linux-gnu/13.2.0/include/limits.h:205,
-                 from /home/autobuild/autobuild/instance-1/output-1/host/lib/gcc/mips-buildroot-linux-gnu/13.2.0/include/syslimits.h:7,
-                 from /home/autobuild/autobuild/instance-1/output-1/host/lib/gcc/mips-buildroot-linux-gnu/13.2.0/include/limits.h:34,
-                 from conftest.c:12:
-/home/autobuild/autobuild/instance-1/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/features-time64.h:26:5: error: #error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
-   26 | #   error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
-      |     ^~~~~
+First we check for a string length >= 39, and then apply a regex
+to return an array with every char from that string that matched
+the regex. If the length of this array is still >= 39 we can assume
+we are looking at something containing a git hash.
 
-[...]
+The reason why the length is defined as ">= 39" and not "40" or
+"39 or 40" is twofold:
 
-checking for /home/autobuild/autobuild/instance-1/output-1/host/bin/mips-buildroot-linux-gnu-gcc options needed to detect all undeclared functions... cannot detect
-configure: error: in `/home/autobuild/autobuild/instance-1/output-1/build/ltp-testsuite-20240129':
-configure: error: cannot make /home/autobuild/autobuild/instance-1/output-1/host/bin/mips-buildroot-linux-gnu-gcc report undeclared builtins
+Firstly, 39 was chosen as a minimum to match stuff with 39 char git
+hashes, like the rockchip-mali package.
 
-Indeed, this LFS workaround was added by commit
-ca3524ba707126de7284210c00268a8e7ca6379a and is only needed to fix a
-build failure with the old codesourcery-arm toolchain from 2014 which
-uses glibc < 2.23. as glibc 2.23 was released in February 2016:
-https://sourceware.org/glibc/wiki/Release/2.23, drop this workaround as
-already done for libselinux in commit
-c1fa9bc2f7a4e5481edf4fce5c03dd45862fe72c. A follow-up patch will also
-drop codesourcery-arm toolchain.
+Secondly, there is no max because we actually want to catch not
+just explicitly git hashes, but any verson string with big gnarly
+hex numbers in it.
+Stuff like: "1.4.2-168-ged3039cdbeeb28fc0011c3585d8f7dfb91038292"
 
-Fixes:
- - http://autobuild.buildroot.org/results/d2e75a79bc42b6a9a2b407fd557aca5c7f207d84
+Why? Well, the idea is less about git hashes and sorting
+and more about grouping similarly formatted version strings.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+It would be impossble (or at least annoyingly complicated) and of
+dubious utility to get a real sequential sort out of the
+current version column, so the attempt here is to at the very
+least collect all the similarly formatted things together.
+
+This isn't perfect, but it's a (arguably) more useful sorted
+output than before.
+
+A demo is available here:
+https://sen-h.codeberg.page/pkg-stats-demos/@pages/fix-improve-git-hash-sorting.html
+
+Signed-off-by: Sen Hastings <sen@hastings.org>
 ---
- package/ltp-testsuite/ltp-testsuite.mk | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+Changes v1 -> v2:
+  - more detailed commit log (requested by Yann E. MORIN)
+---
+ support/scripts/pkg-stats | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-index ea57686a9c..0996b77e58 100644
---- a/package/ltp-testsuite/ltp-testsuite.mk
-+++ b/package/ltp-testsuite/ltp-testsuite.mk
-@@ -47,10 +47,7 @@ else
- LTP_TESTSUITE_CONF_ENV += have_numa_headers=no
- endif
- 
--# ltp-testsuite uses <fts.h>, which isn't compatible with largefile
--# support.
--LTP_TESTSUITE_CFLAGS = $(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))
--LTP_TESTSUITE_CPPFLAGS = $(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))
-+LTP_TESTSUITE_CFLAGS = $(TARGET_CFLAGS)
- LTP_TESTSUITE_LIBS =
- 
- ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
-@@ -66,7 +63,6 @@ endif
- 
- LTP_TESTSUITE_CONF_ENV += \
- 	CFLAGS="$(LTP_TESTSUITE_CFLAGS)" \
--	CPPFLAGS="$(LTP_TESTSUITE_CPPFLAGS)" \
- 	LIBS="$(LTP_TESTSUITE_LIBS)" \
- 	SYSROOT="$(STAGING_DIR)"
- 
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 3295eb7a48..4dc1857a9e 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -741,6 +741,7 @@ addedCSSRules.forEach(rule => styleSheet.insertRule(rule));
+ function sortGrid(sortLabel){
+ 	let i = 0;
+ 	let pkgSortArray = [], sortedPkgArray = [], pkgStringSortArray = [], pkgNumSortArray = [];
++	const git_hash_regex = /[a-f,0-9]/gi;
+ 	const columnValues = Array.from(document.getElementsByClassName(sortLabel));
+ 	const columnName = document.getElementById(sortLabel);
+ 	let lastStyle = document.getElementById("sort-css");
+@@ -765,7 +766,9 @@ function sortGrid(sortLabel){
+                 pkgSortArray.push(sortArr);
+         });
+         pkgSortArray.forEach((listing) => {
+-                if ( isNaN(parseInt(listing[1], 10)) ){
++                if ( listing[1].length >= 39 && listing[1].match(git_hash_regex).length >= 39){
++                        pkgStringSortArray.push(listing);
++		} else if ( isNaN(parseInt(listing[1], 10)) ){
+                         pkgStringSortArray.push(listing);
+                 } else {
+                         listing[1] = parseFloat(listing[1]);
 -- 
-2.43.0
-
+2.25.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
