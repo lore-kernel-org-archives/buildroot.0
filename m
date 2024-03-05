@@ -4,57 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E027C54798
-	for <buildroot@archiver.kernel.org>; Tue,  5 Mar 2024 09:33:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1D1DC54E41
+	for <buildroot@archiver.kernel.org>; Tue,  5 Mar 2024 09:39:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 63A2641572;
-	Tue,  5 Mar 2024 09:33:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5C58A40844;
+	Tue,  5 Mar 2024 09:39:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0yO3c2_3dYEo; Tue,  5 Mar 2024 09:33:44 +0000 (UTC)
+	with ESMTP id fdtmHNNMzycD; Tue,  5 Mar 2024 09:39:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 09F4841574
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 213AB4085C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 09F4841574;
-	Tue,  5 Mar 2024 09:33:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 213AB4085C;
+	Tue,  5 Mar 2024 09:39:05 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E2E911BF25F
- for <buildroot@lists.busybox.net>; Tue,  5 Mar 2024 09:33:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id ADFB51BF25F
+ for <buildroot@lists.busybox.net>; Tue,  5 Mar 2024 09:39:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D038E41597
- for <buildroot@lists.busybox.net>; Tue,  5 Mar 2024 09:33:41 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A82DD40BD1
+ for <buildroot@lists.busybox.net>; Tue,  5 Mar 2024 09:39:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PceVJsIlCcpT for <buildroot@lists.busybox.net>;
- Tue,  5 Mar 2024 09:33:41 +0000 (UTC)
-Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=64.142.111.80;
- helo=c.mail.sonic.net; envelope-from=sen@hastings.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D590041595
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D590041595
-Received: from c.mail.sonic.net (c.mail.sonic.net [64.142.111.80])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D590041595
- for <buildroot@buildroot.org>; Tue,  5 Mar 2024 09:33:40 +0000 (UTC)
-Received: from localhost.localdomain (141-126-093-001.res.spectrum.com
- [141.126.93.1]) (authenticated bits=0)
- by c.mail.sonic.net (8.16.1/8.16.1) with ESMTPSA id 4259XcxK017847
- (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
- Tue, 5 Mar 2024 01:33:38 -0800
-From: Sen Hastings <sen@hastings.org>
+ with ESMTP id yd9l5Z84OFh6 for <buildroot@lists.busybox.net>;
+ Tue,  5 Mar 2024 09:39:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::12c; helo=mail-lf1-x12c.google.com;
+ envelope-from=jonhenrik@qbee.io; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9EC0140531
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9EC0140531
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com
+ [IPv6:2a00:1450:4864:20::12c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9EC0140531
+ for <buildroot@buildroot.org>; Tue,  5 Mar 2024 09:39:02 +0000 (UTC)
+Received: by mail-lf1-x12c.google.com with SMTP id
+ 2adb3069b0e04-51340e89df1so2705516e87.1
+ for <buildroot@buildroot.org>; Tue, 05 Mar 2024 01:39:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1709631540; x=1710236340;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=+6KECqF1GhT/D7yIW5H6Uph43ct1Fy4AfLJ5sRkd6c0=;
+ b=Phu+Oo+TE4pKpTUgQDbGBV6Ti2rNFK3t+ZuiepFuZWjZG3nKJYM387W6dJirBY2SN9
+ X4IEoxiVCq4QZAvTjWjLlPCzOO0bXzKRfZty3zu1jPZXp5okZ5jVXQmcYrC/O7DApwiK
+ 8LNjZrq6GowN50/85pQge0O/RMzy829UNZ9LdgY1QjcXIIAYsi2izLmwp1ICcFvDMtDQ
+ 566s2UmVZdXUKNBp2BLAig7ACaqztsuSDm9JLckJVpiSdEM/03nOxUbfz3fNNPyJXKR3
+ wObty7d6POW4bcUiOWD6dh2F86QPFBaziIwEhWAvLFqexmKt4yL/rOLOj5QlxnihaGNz
+ xDtQ==
+X-Gm-Message-State: AOJu0YxSAQHyppaDqCCU3uGpmaCxQfty/Ln8CwN1/nlfiScEOoC8CjNu
+ d7q3TTvzSqaO1QKl0Uhu1iM9V8Ekjlz2cChTzRQT8wmw3NF9zv7rKGlNU5p48AXzmJh2rWIpSlF
+ 4tgk=
+X-Google-Smtp-Source: AGHT+IHdNbpzlSNqnBzUqycDsQEq3kQsdolkNFGARdtx0WQyzvNGAeX4tvdADwPu/wGYVF/ERsENPg==
+X-Received: by 2002:ac2:4ac8:0:b0:513:55ed:918a with SMTP id
+ m8-20020ac24ac8000000b0051355ed918amr535012lfp.50.1709631539912; 
+ Tue, 05 Mar 2024 01:38:59 -0800 (PST)
+Received: from nola.getinternet.no ([84.209.57.13])
+ by smtp.gmail.com with ESMTPSA id
+ b25-20020a196459000000b00512b2ea0472sm2145161lfj.32.2024.03.05.01.38.58
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 05 Mar 2024 01:38:59 -0800 (PST)
 To: buildroot@buildroot.org
-Date: Tue,  5 Mar 2024 01:33:34 -0800
-Message-Id: <20240305093334.2233237-1-sen@hastings.org>
+Date: Tue,  5 Mar 2024 10:38:38 +0100
+Message-Id: <20240305093839.3152030-1-jonhenrik@qbee.io>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Sonic-CAuth: UmFuZG9tSVbnfws2uCjhFfLbS6HhQnoOKyJwQ99qVgW9JbLsEQTslgbX2myH9bEfaGYZESvUbiirS4I/zeyMNNJ0KCts6ooL
-X-Sonic-ID: C;ivIDctPa7hGjV9bXR+6Zsg== M;kDA4ctPa7hGjV9bXR+6Zsg==
-X-Sonic-Spam-Details: -0.0/5.0 by cerberusd
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=qbee.io; s=google; t=1709631540; x=1710236340; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=+6KECqF1GhT/D7yIW5H6Uph43ct1Fy4AfLJ5sRkd6c0=;
+ b=Z+Oi5ktRHo+P4B/F7XHtSwI3e9y4YJBqlWqzhSoDqKzDHQ4ZvCiun/wSXFYqzR5Q6a
+ v8iU/T+uCXwxo7XIXf2YaHd1mdZl6BtpO/r3YnlztcaAUvYCvFGkogaVvFtKhkdZ1QN2
+ kxlmDmXtiHWm4t7IEqQCmrX1zKtpGM18IgA04=
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=hastings.org
-Subject: [Buildroot] [PATCH v2 1/1] support/scripts/pkg-stats: fix/improve
- git hash sorting
+ dmarc=pass (p=quarantine dis=none)
+ header.from=qbee.io
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=qbee.io header.i=@qbee.io header.a=rsa-sha256
+ header.s=google header.b=Z+Oi5ktR
+Subject: [Buildroot] [PATCH 0/1] package/qbee-agent: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,84 +97,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sen Hastings <sen@hastings.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: =?utf-8?q?Jon_Henrik_Bj=C3=B8rnstad_via_buildroot?=
+ <buildroot@buildroot.org>
+Reply-To: =?UTF-8?q?Jon=20Henrik=20Bj=C3=B8rnstad?= <jonhenrik@qbee.io>
+Cc: =?UTF-8?q?Jon=20Henrik=20Bj=C3=B8rnstad?= <jonhenrik@qbee.io>,
+ Christian Stewart <christian@aperture.us>, Anisse Astier <anisse@astier.eu>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-sortGrid()'s handling of git hashes and other large hex numbers
-has been inconsistent, they can be detected as strings or numbers
-depending on what type of character they start with.
-This patch fixes the behaviour by using a regex to capture everything
-that looks like a big hex number and treat it as a string.
-This means when you sort by current version ascending all the version
-strings with big hex numbers should show up first, sorted 0-9,a-f.
-
-First we check for a string length >= 39, and then apply a regex
-to return an array with every char from that string that matched
-the regex. If the length of this array is still >= 39 we can assume
-we are looking at something containing a git hash.
-
-The reason why the length is defined as ">= 39" and not "40" or
-"39 or 40" is twofold:
-
-Firstly, 39 was chosen as a minimum to match stuff with 39 char git
-hashes, like the rockchip-mali package.
-
-Secondly, there is no max because we actually want to catch not
-just explicitly git hashes, but any verson string with big gnarly
-hex numbers in it.
-Stuff like: "1.4.2-168-ged3039cdbeeb28fc0011c3585d8f7dfb91038292"
-
-Why? Well, the idea is less about git hashes and sorting
-and more about grouping similarly formatted version strings.
-
-It would be impossble (or at least annoyingly complicated) and of
-dubious utility to get a real sequential sort out of the
-current version column, so the attempt here is to at the very
-least collect all the similarly formatted things together.
-
-This isn't perfect, but it's a (arguably) more useful sorted
-output than before.
-
-A demo is available here:
-https://sen-h.codeberg.page/pkg-stats-demos/@pages/fix-improve-git-hash-sorting.html
-
-Signed-off-by: Sen Hastings <sen@hastings.org>
----
-Changes v1 -> v2:
-  - more detailed commit log (requested by Yann E. MORIN)
----
- support/scripts/pkg-stats | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 3295eb7a48..4dc1857a9e 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -741,6 +741,7 @@ addedCSSRules.forEach(rule => styleSheet.insertRule(rule));
- function sortGrid(sortLabel){
- 	let i = 0;
- 	let pkgSortArray = [], sortedPkgArray = [], pkgStringSortArray = [], pkgNumSortArray = [];
-+	const git_hash_regex = /[a-f,0-9]/gi;
- 	const columnValues = Array.from(document.getElementsByClassName(sortLabel));
- 	const columnName = document.getElementById(sortLabel);
- 	let lastStyle = document.getElementById("sort-css");
-@@ -765,7 +766,9 @@ function sortGrid(sortLabel){
-                 pkgSortArray.push(sortArr);
-         });
-         pkgSortArray.forEach((listing) => {
--                if ( isNaN(parseInt(listing[1], 10)) ){
-+                if ( listing[1].length >= 39 && listing[1].match(git_hash_regex).length >= 39){
-+                        pkgStringSortArray.push(listing);
-+		} else if ( isNaN(parseInt(listing[1], 10)) ){
-                         pkgStringSortArray.push(listing);
-                 } else {
-                         listing[1] = parseFloat(listing[1]);
--- 
-2.25.1
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8sCgpUaGlzIHBhdGNoIGFkZHMgdGhlIG9wZW4gc291cmNlIHFiZWUtYWdlbnQgdXRpbGl0
+eSB0byBidWlsZHJvb3QuIEkndmUKc3VibWl0dGVkIHRoaXMgcGF0Y2ggYmVmb3JlLCBidXQgZGVj
+aWRlZCB0byBob2xkIGl0IG9mZiBiYXNlZCBvbgpmZWVkYmFjayBmcm9tIHRoZSBidWlsZHJvb3Qg
+Y29tbXVuaXR5LiBXaXRoIHRoZSBjb2RlIGNoYW5nZXMgaW4KcmVsZWFzZSAyMDI0LjA5IEkgYmVs
+aWV2ZSB0aGF0IHRoZSBxYmVlLWFnZW50IGluIGEgYmV0dGVyIHNoYXBlCndpdGggcmVnYXJkcyB0
+byBpbnRlZ3JhdGlvbiB3aXRoIGJ1aWxkcm9vdC4KCldpdGgga2luZCByZWdhcmRzLAoKSm9uIEhl
+bnJpayBCasO4cm5zdGFkCgpKb24gSGVucmlrIEJqw7hybnN0YWQgKDEpOgogIHBhY2thZ2UvcWJl
+ZS1hZ2VudDogbmV3IHBhY2thZ2UKCiBERVZFTE9QRVJTICAgICAgICAgICAgICAgICAgICAgICAg
+IHwgIDMgKysrCiBwYWNrYWdlL0NvbmZpZy5pbiAgICAgICAgICAgICAgICAgIHwgIDEgKwogcGFj
+a2FnZS9xYmVlLWFnZW50L0NvbmZpZy5pbiAgICAgICB8IDE3ICsrKysrKysrKysrKysrKwogcGFj
+a2FnZS9xYmVlLWFnZW50L3FiZWUtYWdlbnQuaGFzaCB8ICAzICsrKwogcGFja2FnZS9xYmVlLWFn
+ZW50L3FiZWUtYWdlbnQubWsgICB8IDM1ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKwog
+NSBmaWxlcyBjaGFuZ2VkLCA1OSBpbnNlcnRpb25zKCspCiBjcmVhdGUgbW9kZSAxMDA2NDQgcGFj
+a2FnZS9xYmVlLWFnZW50L0NvbmZpZy5pbgogY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvcWJl
+ZS1hZ2VudC9xYmVlLWFnZW50Lmhhc2gKIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3FiZWUt
+YWdlbnQvcWJlZS1hZ2VudC5tawoKLS0gCjIuMjUuMQoKX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RA
+YnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5m
+by9idWlsZHJvb3QK
