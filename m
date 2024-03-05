@@ -4,49 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53626C54E41
-	for <buildroot@archiver.kernel.org>; Tue,  5 Mar 2024 13:47:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27069C54798
+	for <buildroot@archiver.kernel.org>; Tue,  5 Mar 2024 13:47:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E233982383;
-	Tue,  5 Mar 2024 13:47:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C621F82383;
+	Tue,  5 Mar 2024 13:47:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mr6ntUyRGVCD; Tue,  5 Mar 2024 13:47:12 +0000 (UTC)
+	with ESMTP id F05XKPdx8Sye; Tue,  5 Mar 2024 13:47:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8C668238F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A894582389
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B8C668238F;
-	Tue,  5 Mar 2024 13:47:12 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 10C431BF309
- for <buildroot@lists.busybox.net>; Tue,  5 Mar 2024 13:47:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A894582389;
+	Tue,  5 Mar 2024 13:47:54 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B35DC1BF309
+ for <buildroot@lists.busybox.net>; Tue,  5 Mar 2024 13:47:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0AB5D60A43
- for <buildroot@lists.busybox.net>; Tue,  5 Mar 2024 13:47:11 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AD7EB82383
+ for <buildroot@lists.busybox.net>; Tue,  5 Mar 2024 13:47:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Iq5MysivMCZA for <buildroot@lists.busybox.net>;
- Tue,  5 Mar 2024 13:47:09 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC2A3608DD
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BC2A3608DD
- for <buildroot@buildroot.org>; Tue,  5 Mar 2024 13:47:09 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A3AA48810E; Tue,  5 Mar 2024 13:47:09 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vZtyD9T062Cq for <buildroot@lists.busybox.net>;
+ Tue,  5 Mar 2024 13:47:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7A4FF82216
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A4FF82216
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7A4FF82216
+ for <buildroot@buildroot.org>; Tue,  5 Mar 2024 13:47:51 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id
+ 5b1f17b1804b1-412ecc1064cso5479085e9.2
+ for <buildroot@buildroot.org>; Tue, 05 Mar 2024 05:47:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1709646468; x=1710251268;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=VqHJDSAguxNHS+ijISoXDYBqnA02wxT4TBdjfZ+8m9o=;
+ b=GmgaoQHI0m7oZQThSJmulvD1x3V3pWgA1d5iBW5vghIvLmVExVptos7qhcToeilm+L
+ zp9wMf4HO4Po4Q0tGwFn3LP5sF7IdPhwf9R/dddXU8wkGT4nZYzksC2l5uu+p+g6lCdj
+ 7CdYoyXgzaPooBEtyc3fFvwo7aOSORXaxzklz3E5/1ojwX3H12lmmC6sxdu51MJrIh/r
+ gYqQlrpLBAX0AaW7vZjSBi2l7wwMvVfpHk5V0iULufsijNKWqzrsIgwpXnQUoP9j6+Sf
+ L+kXtHhvA9fcyDl0VCqRHWCtyWXr2JSNTrFLhNQFqwC8WRISC8QzfXFPcynMwaJWljC/
+ UJww==
+X-Gm-Message-State: AOJu0YzpQeqlRXF8yWVbnORcg7QGj64Rw+IgP55Dl3ucClJcnONAnq3N
+ LMyhRp+g22ylDFnj50aCAYWx2rl3dwC9xDKCRFiBVAFApfOGQx8p1N5eCKTY
+X-Google-Smtp-Source: AGHT+IHZBjCPULurLRBZTOiUVf7b2IkuVi7uIoDFsdZGHhFojb9qGcp57ErLqGHplMLSCBmdcHdnIQ==
+X-Received: by 2002:a05:600c:1d16:b0:412:a6b:d572 with SMTP id
+ l22-20020a05600c1d1600b004120a6bd572mr8337247wms.34.1709646468277; 
+ Tue, 05 Mar 2024 05:47:48 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ bd9-20020a05600c1f0900b00412eeec84ffsm1315004wmb.36.2024.03.05.05.47.47
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 05 Mar 2024 05:47:47 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 5 Mar 2024 14:46:21 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 06026055fcef1d36f586c5e808ca595b9ab782f2
-X-Git-Newrev: 87e979e4572449ecb7d2058b02d642b38cc3b0f8
-X-Patchwork-Hint: ignore
-Message-Id: <20240305134709.A3AA48810E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Update for 2024.02
+Date: Tue,  5 Mar 2024 14:47:46 +0100
+Message-ID: <20240305134746.1124362-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1709646468; x=1710251268; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=VqHJDSAguxNHS+ijISoXDYBqnA02wxT4TBdjfZ+8m9o=;
+ b=A7s7NkYTPbkI4JJeg9rdAYB8OjoGaeAxDJcZBPoo8LvG/w5UC8z4nQ9m7spgz2AXlf
+ x/+FTjXTsoe1pBi1DMHVVjyOsyNcKXFMiBwEJqoMHLe7Av4RI6iEk7aBj+s2lAeXxAXe
+ 9MUyj0lebl5ro61ReVpvdapAouUJt0zoBk2nO4ttPllOghIGUjd/DWrLmwk9X+ZvHSSq
+ NCtswIf1xisZNnq6aWs8shEYKhzuRtd07f9arnNjxnpXCErZWWBSUzMqS3csW/8yZGse
+ gpSxI6+EgIyW+x+F+oLMWJmTSv8TcnGH5ISsjqGdQ1D23mOaJVlK2zh9wJVZROYMnRHr
+ 2I/Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=A7s7NkYT
+Subject: [Buildroot] [PATCH 1/1] package/restorecond: fix build with
+ BR2_TIME_BITS_64
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,173 +100,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=87e979e4572449ecb7d2058b02d642b38cc3b0f8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Do not remove _FILE_OFFSET_BITS=64 from CFLAGS and CPPFLAGS to avoid the
+following build failure with BR2_TIME_BITS_64 raised since commit
+3c427c64726560ea1743282a3fdb78f5b28692eb:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+In file included from /home/fabrice/buildroot/output/host/mips-buildroot-linux-gnu/sysroot/usr/include/features.h:394,
+                 from /home/fabrice/buildroot/output/host/mips-buildroot-linux-gnu/sysroot/usr/include/fts.h:53,
+                 from restore.h:6,
+                 from restore.c:1:
+/home/fabrice/buildroot/output/host/mips-buildroot-linux-gnu/sysroot/usr/include/features-time64.h:26:5: error: #error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
+   26 | #   error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
+      |     ^~~~~
+
+Indeed, this LFS workaround was there since the addititon of the package
+in commit 9d6da7a264a5b36ad641a0d26b3a3d27188d3624 and is only needed to
+fix a build failure with the old codesourcery-arm toolchain from 2014
+which uses glibc < 2.23. as glibc 2.23 was released in February 2016:
+https://sourceware.org/glibc/wiki/Release/2.23, drop this workaround as
+already done for libselinux in commit
+c1fa9bc2f7a4e5481edf4fce5c03dd45862fe72c. A follow-up patch will also
+drop codesourcery-arm toolchain.
+
+Fixes: 3c427c64726560ea1743282a3fdb78f5b28692eb
+ - No autobuilder failures (yet)
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- CHANGES                    | 16 ++++++++++++++++
- Makefile                   |  4 ++--
- docs/website/download.html | 22 +++++++++++-----------
- docs/website/news.html     | 21 +++++++++++++++++++++
- support/misc/Vagrantfile   |  2 +-
- 5 files changed, 51 insertions(+), 14 deletions(-)
+ package/restorecond/restorecond.mk | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index d5f1bf5794..8f0b4042fa 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,19 @@
-+2024.02, released March 5th, 2024
-+
-+	Various fixes.
-+
-+	Updated/fixed packages: botan, conmon, dash, efivar, expat,
-+	fluent-bit, gcc, gst1-vaapi, libcoap, libselinux, liburing,
-+	libva, libxml2, ltp-testsuite, luvi, newlib-bare-metal,
-+	nginx-naxsi, octave, openblas, openvmtools, parted, poco,
-+	powertop, python-aiohttp, python-cheroot, python-django,
-+	python-grpcio, rauc, rauc-hawkbit-updater, rtl8822cs, rust,
-+	sdl2, shadow, spirv-tools, strace, strongswan, tar, tllist,
-+	vim
-+
-+	Removed packages: mysql (virtual), oracle-mysql,
-+	python-setuptools-scm-git-archive
-+
- 2024.02-rc2, released March 1st, 2024
+diff --git a/package/restorecond/restorecond.mk b/package/restorecond/restorecond.mk
+index cd40905230..96ef8d2a50 100644
+--- a/package/restorecond/restorecond.mk
++++ b/package/restorecond/restorecond.mk
+@@ -11,13 +11,8 @@ RESTORECOND_LICENSE_FILES = LICENSE
  
- 	Fixes all over the tree.
-diff --git a/Makefile b/Makefile
-index 3389da2852..6d5e9a7972 100644
---- a/Makefile
-+++ b/Makefile
-@@ -90,9 +90,9 @@ all:
- .PHONY: all
+ RESTORECOND_DEPENDENCIES = libglib2 libsepol libselinux dbus-glib
  
- # Set and export the version string
--export BR2_VERSION := 2024.02-rc2
-+export BR2_VERSION := 2024.02
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1709318000
-+BR2_VERSION_EPOCH = 1709640000
+-# Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc fts.h
+-# large file support.
+-# See https://bugzilla.redhat.com/show_bug.cgi?id=574992 for more information
+ RESTORECOND_MAKE_OPTS += \
+ 	$(TARGET_CONFIGURE_OPTS) \
+-	CFLAGS="$(TARGET_CFLAGS) -U_FILE_OFFSET_BITS" \
+-	CPPFLAGS="$(TARGET_CPPFLAGS) -U_FILE_OFFSET_BITS" \
+ 	ARCH="$(BR2_ARCH)"
  
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 70a1de5b6d..c1393134df 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,40 +8,40 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
- 
--      <h3 style="text-align: center;">Latest long term support release: <b>2023.02.10</b></h3>
-+      <h3 style="text-align: center;">Latest stable / long term support release: <b>2024.02</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2023.02.10.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2024.02.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2023.02.10.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2024.02.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2023.02.10.tar.gz">buildroot-2023.02.10.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2023.02.10.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2024.02.tar.gz">buildroot-2024.02.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2024.02.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2023.02.10.tar.xz"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2024.02.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2023.02.10.tar.xz"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2024.02.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2023.02.10.tar.xz">buildroot-2023.02.10.tar.xz</a></h3>
--	  <p><a href="/downloads/buildroot-2023.02.10.tar.xz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2024.02.tar.xz">buildroot-2024.02.tar.xz</a></h3>
-+	  <p><a href="/downloads/buildroot-2024.02.tar.xz.sign">PGP signature</a></p>
- 	</div>
-       </div>
--
-+<!--
-       <h3 style="text-align: center;">Latest stable release: <b>2023.11.2</b></h3>
- 
-       <div class="row mt centered">
-@@ -109,7 +109,7 @@
- 	  <p><a href="/downloads/buildroot-2024.02-rc2.tar.xz.sign">PGP signature</a></p>
- 	</div>
-       </div>
--
-+-->
-       This and earlier releases (and their PGP signatures) can always be downloaded from
-       <a href="/downloads/">http://buildroot.net/downloads/</a>.
-     </div>
-diff --git a/docs/website/news.html b/docs/website/news.html
-index f142515889..a51da7f4bb 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,27 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2023.02 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>5 March 2024</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The stable 2024.02 release is out - Thanks to everyone
-+	  contributing and testing the release candidates. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2024.02">CHANGES</a>
-+	  file for more details
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2024.02.tar.xz">2024.02 release</a>.</p>
-+
-+	  <p>Notice that this is a long term support release which will be
-+	  supported with security and other important fixes until March 2025.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
-diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
-index ba06c5f5fd..73bdcc8b5e 100644
---- a/support/misc/Vagrantfile
-+++ b/support/misc/Vagrantfile
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # Buildroot version to use
--RELEASE='2023.11.2'
-+RELEASE='2024.02'
- 
- ### Change here for more memory/cores ###
- VM_MEMORY=2048
+ # We need to pass DESTDIR at build time because it's used by
+-- 
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
