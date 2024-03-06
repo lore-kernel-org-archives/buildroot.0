@@ -4,60 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A35AC5475B
-	for <buildroot@archiver.kernel.org>; Wed,  6 Mar 2024 07:30:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A0F2C5475B
+	for <buildroot@archiver.kernel.org>; Wed,  6 Mar 2024 07:30:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1A7DE81F5C;
-	Wed,  6 Mar 2024 07:30:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 466EF81F6A;
+	Wed,  6 Mar 2024 07:30:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1uzy23IbUyUQ; Wed,  6 Mar 2024 07:30:31 +0000 (UTC)
+	with ESMTP id saldEGfrf3aX; Wed,  6 Mar 2024 07:30:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ECC0681F6A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D0E881FDF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ECC0681F6A;
-	Wed,  6 Mar 2024 07:30:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B6F951BF97A
- for <buildroot@lists.busybox.net>; Wed,  6 Mar 2024 07:30:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3D0E881FDF;
+	Wed,  6 Mar 2024 07:30:39 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A5A281BF584
+ for <buildroot@lists.busybox.net>; Wed,  6 Mar 2024 07:30:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B1CE74154E
- for <buildroot@lists.busybox.net>; Wed,  6 Mar 2024 07:30:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 924408202E
+ for <buildroot@lists.busybox.net>; Wed,  6 Mar 2024 07:30:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Sw9X3qiG0yLd for <buildroot@lists.busybox.net>;
- Wed,  6 Mar 2024 07:30:28 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
- helo=relay8-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kpKnF-PXWbZS for <buildroot@lists.busybox.net>;
+ Wed,  6 Mar 2024 07:30:36 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0B2A1416C3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B2A1416C3
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0B2A1416C3
- for <buildroot@buildroot.org>; Wed,  6 Mar 2024 07:30:27 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0443B1BF209;
- Wed,  6 Mar 2024 07:30:25 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rhljN-0017iD-1J;
- Wed, 06 Mar 2024 08:30:25 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB45781FDF
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id DB45781FDF
+ for <buildroot@buildroot.org>; Wed,  6 Mar 2024 07:30:36 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C3F8F88160; Wed,  6 Mar 2024 07:30:36 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20240305135724.1146746-1-fontaine.fabrice@gmail.com>
-Date: Wed, 06 Mar 2024 08:30:25 +0100
-In-Reply-To: <20240305135724.1146746-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 5 Mar 2024 14:57:24 +0100")
-Message-ID: <87msrbyfzi.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH v2,
- 1/1] package/policycoreutils: fix build with BR2_TIME_BITS_64
+To: buildroot@buildroot.org
+Date: Wed, 6 Mar 2024 08:24:05 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a94f816e4595e651e78eebfa49fa695cfe44cd77
+X-Git-Newrev: 2695f48ead67e951668d20240dbb9ad122d20f1d
+X-Patchwork-Hint: ignore
+Message-Id: <20240306073036.C3F8F88160@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ell: bump to version 0.63
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,90 +58,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=2695f48ead67e951668d20240dbb9ad122d20f1d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Do not remove _FILE_OFFSET_BITS=64 from CFLAGS and CPPFLAGS to avoid the
- > following build failure with BR2_TIME_BITS_64 raised since commit
- > 3c427c64726560ea1743282a3fdb78f5b28692eb:
+https://git.kernel.org/pub/scm/libs/ell/ell.git/tree/ChangeLog?h=0.63
 
- > In file included from /home/fabrice/buildroot/output/host/mips-buildroot-linux-gnu/sysroot/usr/include/features.h:394,
- >                  from /home/fabrice/buildroot/output/host/mips-buildroot-linux-gnu/sysroot/usr/include/errno.h:25,
- >                  from pp.c:20:
- > /home/fabrice/buildroot/output/host/mips-buildroot-linux-gnu/sysroot/usr/include/features-time64.h:26:5: error: #error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
- >    26 | #   error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
- >       |     ^~~~~
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ell/ell.hash | 2 +-
+ package/ell/ell.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Indeed, this LFS workaround was there since the addition of the package
- > in commit cb328f77f8f07bfd89d6b69385c941a7b281732b  and is only needed
- > to fix a build failure with the old codesourcery-arm toolchain from 2014
- > which uses glibc < 2.23. as glibc 2.23 was released in February 2016:
- > https://sourceware.org/glibc/wiki/Release/2.23, drop this workaround as
- > already done for libselinux in commit
- > c1fa9bc2f7a4e5481edf4fce5c03dd45862fe72c. A follow-up patch will also
- > drop codesourcery-arm toolchain.
-
- > Fixes: 3c427c64726560ea1743282a3fdb78f5b28692eb
- >  - No autobuilder failures (yet)
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
- > Changes v1 -> v2:
- >  - Also fix host package
-
- >  package/policycoreutils/policycoreutils.mk | 17 ++---------------
- >  1 file changed, 2 insertions(+), 15 deletions(-)
-
- > diff --git a/package/policycoreutils/policycoreutils.mk b/package/policycoreutils/policycoreutils.mk
- > index 56889242e3..3ad7e9a5b3 100644
- > --- a/package/policycoreutils/policycoreutils.mk
- > +++ b/package/policycoreutils/policycoreutils.mk
- > @@ -11,7 +11,7 @@ POLICYCOREUTILS_LICENSE_FILES = LICENSE
- >  POLICYCOREUTILS_CPE_ID_VENDOR = selinuxproject
+diff --git a/package/ell/ell.hash b/package/ell/ell.hash
+index 8bc61ee293..f5ded676c3 100644
+--- a/package/ell/ell.hash
++++ b/package/ell/ell.hash
+@@ -1,5 +1,5 @@
+ # From https://mirrors.edge.kernel.org/pub/linux/libs/ell/sha256sums.asc
+-sha256  c21ba3530d530c736f9b3e6acc954d4404c1ce4abaf2a4694e46ecec17653fa0  ell-0.61.tar.xz
++sha256  7397c76996d7646b9917ebf016cd67586b10166295af2e0e18cdb5b8f6659965  ell-0.63.tar.xz
  
- >  POLICYCOREUTILS_DEPENDENCIES = libsemanage libcap-ng $(TARGET_NLS_DEPENDENCIES)
- > -POLICYCOREUTILS_MAKE_OPTS = LDLIBS=$(TARGET_NLS_LIBS)
- > +POLICYCOREUTILS_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) LDLIBS=$(TARGET_NLS_LIBS)
+ # License files
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
+diff --git a/package/ell/ell.mk b/package/ell/ell.mk
+index 300c1eee88..f43dbdb5f7 100644
+--- a/package/ell/ell.mk
++++ b/package/ell/ell.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- >  ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
- >  POLICYCOREUTILS_DEPENDENCIES += linux-pam
- > @@ -28,14 +28,6 @@ ifeq ($(BR2_PACKAGE_LINUX_PAM)$(BR2_PACKAGE_AUDIT),yy)
- >  POLICYCOREUTILS_MAKE_OPTS += LSPP_PRIV=y
- >  endif
- 
- > -# Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc fts.h
- > -# large file support.
- > -# See https://bugzilla.redhat.com/show_bug.cgi?id=574992 for more information
- > -POLICYCOREUTILS_MAKE_OPTS += \
- > -	$(TARGET_CONFIGURE_OPTS) \
- > -	CFLAGS="$(TARGET_CFLAGS) -U_FILE_OFFSET_BITS" \
- > -	CPPFLAGS="$(TARGET_CPPFLAGS) -U_FILE_OFFSET_BITS"
- > -
- >  POLICYCOREUTILS_MAKE_DIRS = \
- >  	hll load_policy newrole run_init \
- >  	secon semodule sestatus setfiles \
- > @@ -59,14 +51,9 @@ endef
- 
- >  HOST_POLICYCOREUTILS_DEPENDENCIES = host-libsemanage
- 
- > -# Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc fts.h
- > -# large file support.
- > -# See https://bugzilla.redhat.com/show_bug.cgi?id=574992 for more information
- > -# We also need to pass PREFIX because it defaults to $(DESTDIR)/usr
- > +# We need to pass PREFIX because it defaults to $(DESTDIR)/usr
-
-Hmm, this doesn't apply because we don't have that 'We also need to pass
-PREFIX because it defaults to $(DESTDIR)/usr' line - Where does that
-come from?
-
-
--- 
-Bye, Peter Korsgaard
+-ELL_VERSION = 0.61
++ELL_VERSION = 0.63
+ ELL_SOURCE = ell-$(ELL_VERSION).tar.xz
+ ELL_SITE = $(BR2_KERNEL_MIRROR)/linux/libs/ell
+ ELL_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
