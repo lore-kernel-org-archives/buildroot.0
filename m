@@ -4,59 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2976CC54E41
-	for <buildroot@archiver.kernel.org>; Wed,  6 Mar 2024 14:18:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69EA3C54E41
+	for <buildroot@archiver.kernel.org>; Wed,  6 Mar 2024 14:18:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C290160797;
-	Wed,  6 Mar 2024 14:18:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2BA3060F6B;
+	Wed,  6 Mar 2024 14:18:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gVmBNm0_qBKW; Wed,  6 Mar 2024 14:18:28 +0000 (UTC)
+	with ESMTP id DCF-HfNKdKgm; Wed,  6 Mar 2024 14:18:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E455060F2C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F1F360F62
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E455060F2C;
-	Wed,  6 Mar 2024 14:18:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1F1F360F62;
+	Wed,  6 Mar 2024 14:18:34 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B00151BF3DA
- for <buildroot@lists.busybox.net>; Wed,  6 Mar 2024 14:18:25 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E631F1BF3DA
+ for <buildroot@lists.busybox.net>; Wed,  6 Mar 2024 14:18:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9CBCB60F2C
- for <buildroot@lists.busybox.net>; Wed,  6 Mar 2024 14:18:25 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DD39C60F36
+ for <buildroot@lists.busybox.net>; Wed,  6 Mar 2024 14:18:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0DNsij5yQobc for <buildroot@lists.busybox.net>;
- Wed,  6 Mar 2024 14:18:24 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
- helo=relay6-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ with ESMTP id DGtNWJja9nJk for <buildroot@lists.busybox.net>;
+ Wed,  6 Mar 2024 14:18:31 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
+ helo=relay3-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2352A60797
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2352A60797
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2352A60797
- for <buildroot@buildroot.org>; Wed,  6 Mar 2024 14:18:23 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B3EFBC000C;
- Wed,  6 Mar 2024 14:18:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 100EB60F6E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 100EB60F6E
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 100EB60F6E
+ for <buildroot@buildroot.org>; Wed,  6 Mar 2024 14:18:30 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8B24D6000B;
+ Wed,  6 Mar 2024 14:18:27 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rhs68-001Nqv-0e;
- Wed, 06 Mar 2024 15:18:20 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rhs6E-001NrC-2N;
+ Wed, 06 Mar 2024 15:18:26 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20240305125256.480327-1-fontaine.fabrice@gmail.com>
-Date: Wed, 06 Mar 2024 15:18:20 +0100
-In-Reply-To: <20240305125256.480327-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 5 Mar 2024 13:52:56 +0100")
-Message-ID: <87edcnxx3n.fsf@48ers.dk>
+References: <20240305154003.1756299-1-fontaine.fabrice@gmail.com>
+Date: Wed, 06 Mar 2024 15:18:26 +0100
+In-Reply-To: <20240305154003.1756299-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 5 Mar 2024 16:40:03 +0100")
+Message-ID: <87a5nbxx3h.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/botan: fix build without NPTL
+Subject: Re: [Buildroot] [PATCH 1/1] package/php: add libucontext optional
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,7 +69,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -76,19 +77,8 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > botan unconditionally uses pthread_setname_np since bump to version
- > 3.2.0 in commit 2f8feb66204ff661e9fd5f508e2dfd1ebc0f2813 and
- > https://github.com/randombit/botan/commit/313e439c786d68bcf374b2cb0edfe3ffd891db94
- > resulting in the following build failure:
-
- > src/lib/utils/os_utils.cpp:625:22: error: 'pthread_setname_np' was not declared in this scope
- >   625 |    static_cast<void>(pthread_setname_np(thread.native_handle(), name.c_str()));
- >       |                      ^~~~~~~~~~~~~~~~~~
-
- > So only enable threads if NPTL is available
-
- > Fixes: 2f8feb66204ff661e9fd5f508e2dfd1ebc0f2813
- >  - http://autobuild.buildroot.org/results/03677de6270ff5de61fff2a76e5cd723aa34e64e
+ > Select libucontext if the toolchain doesn't support ucontext to allow
+ > building php on musl
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
