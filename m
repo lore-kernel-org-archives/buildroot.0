@@ -4,77 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54FCDC5475B
-	for <buildroot@archiver.kernel.org>; Wed,  6 Mar 2024 18:41:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41AADC5475B
+	for <buildroot@archiver.kernel.org>; Wed,  6 Mar 2024 19:26:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E4C17418C4;
-	Wed,  6 Mar 2024 18:41:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DA1D4418DC;
+	Wed,  6 Mar 2024 19:26:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tZxIpTpf1YSs; Wed,  6 Mar 2024 18:41:36 +0000 (UTC)
+	with ESMTP id CVc_HMXfRNEQ; Wed,  6 Mar 2024 19:26:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1AFFE41902
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E92334191B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1AFFE41902;
-	Wed,  6 Mar 2024 18:41:36 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 293421BF5A3
- for <buildroot@lists.busybox.net>; Wed,  6 Mar 2024 18:41:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E92334191B;
+	Wed,  6 Mar 2024 19:26:18 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7E6BF1BF3DD
+ for <buildroot@lists.busybox.net>; Wed,  6 Mar 2024 19:26:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 162B941902
- for <buildroot@lists.busybox.net>; Wed,  6 Mar 2024 18:41:34 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6A2FA405D2
+ for <buildroot@lists.busybox.net>; Wed,  6 Mar 2024 19:26:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JJeDAYGBjdBK for <buildroot@lists.busybox.net>;
- Wed,  6 Mar 2024 18:41:32 +0000 (UTC)
-X-Greylist: delayed 601 seconds by postgrey-1.37 at util1.osuosl.org;
- Wed, 06 Mar 2024 18:41:31 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 556BC418C4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 556BC418C4
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.241.56.172;
- helo=mout-p-202.mailbox.org; envelope-from=hypnotoad@lindra.de;
- receiver=<UNKNOWN> 
-Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 556BC418C4
- for <buildroot@buildroot.org>; Wed,  6 Mar 2024 18:41:30 +0000 (UTC)
-Received: from smtp2.mailbox.org (smtp2.mailbox.org
- [IPv6:2001:67c:2050:b231:465::2])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4TqgnN1M71z9t7F;
- Wed,  6 Mar 2024 19:24:24 +0100 (CET)
-Message-ID: <a1dde2bc-9c22-45ae-91f4-352eba887169@lindra.de>
-Date: Wed, 6 Mar 2024 19:24:22 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id booPlJQUErhd for <buildroot@lists.busybox.net>;
+ Wed,  6 Mar 2024 19:26:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7C638403C7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C638403C7
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7C638403C7
+ for <buildroot@buildroot.org>; Wed,  6 Mar 2024 19:26:13 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id
+ ffacd0b85a97d-33d18931a94so4323582f8f.1
+ for <buildroot@buildroot.org>; Wed, 06 Mar 2024 11:26:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1709753170; x=1710357970;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=X+4jN4JuZzosY9K0XV5mOz+J9rLNJrskTXmjKD+bMcw=;
+ b=ZheiMKE5cJkTUTSwTszT8bjSmMPUwNyRGZ4eEsMoL8VmTvbcxATXnRjib6hn31n2IO
+ wIR3AvdhbbH3fmoxMsfEz81VkhH+MVYpRHgG/cpkAyslgd6It6nxRgNRo/i6SHp8ZGg5
+ dQ152oDI0M26SODew8xQv4JVPaH59iMGKiN/HvB08zWPqjd60vfgmOAykRYNlBma0PnN
+ KAZu1HZYathYmUVAERZnJ5ILubXiAMdlyD1Sfcxx3/RvpPdIh1fU6verap5vWQa9RZgP
+ +c0flKN82D77S08bUXFAfV0+do5A40aSrozdSQnmKp1sHiVBz1B/piiEclRnGVUARxI+
+ SStw==
+X-Gm-Message-State: AOJu0YwSqv2cRsCHgyPuEOmBB7voowpTeQDhDcQv8Ns384Bu8G8le4QB
+ hllHdwqgtuVUDXmuf16SJzM7gTpMUDS37tOM0jWUqxSGnx32i5HrQjl4tfOb
+X-Google-Smtp-Source: AGHT+IF7RL1TOITqkwD7+hyL6SBLdig8T7AkQ7VjBKO9zrb2FXX3cuMiz0Kyooo7hqQD0GHSgupH7w==
+X-Received: by 2002:adf:e6cf:0:b0:33e:151a:39e1 with SMTP id
+ y15-20020adfe6cf000000b0033e151a39e1mr11486730wrm.33.1709753170288; 
+ Wed, 06 Mar 2024 11:26:10 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ bt17-20020a056000081100b0033e3cb02cefsm9316350wrb.86.2024.03.06.11.26.09
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 06 Mar 2024 11:26:09 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed,  6 Mar 2024 20:26:04 +0100
+Message-ID: <20240306192604.381763-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-To: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
-References: <20240110202319.139004-1-ju.o@free.fr>
-Content-Language: en-US
-From: Ralf Dragon <hypnotoad@lindra.de>
-In-Reply-To: <20240110202319.139004-1-ju.o@free.fr>
-X-Rspamd-Queue-Id: 4TqgnN1M71z9t7F
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=lindra.de; s=MBO0001; t=1709749464;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- in-reply-to:in-reply-to:references:references;
- bh=JBuLzMNj6ZSw404AHEA8/2fIdvC/BJI6p0XR7tzq3i0=;
- b=lg3zfOMwg7lXd5X0aW+7o2/0LZZ0miJZ5AYbFihz0s5suk546zDBev55dNrLGbpLKixtMq
- CFiNngzT0xCOv4vnMA9Dt6aii/OzJc1pYmyVR/eQd6Il++lTwcZZ0NR3sc0j5UCJBgQs+C
- 0lihdpcyOjwiTe/tA9VKkZVLTZ7AdDnHogl436hf8WYkKilmnaDNrB2ig4AejyYvgYrxw4
- 7eEGgZ6XjM9V/ZF9FcG02kmuNoHX7JJq+q18dCv0waoINJpvuYtx6KAdRw4V4a51yWV0WH
- zlzXzT5fvKDjcbvByn9wDxlV0/8sWTmIy6CXKXpKvnJ3lfWaNxApNkrt4HvjSw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=gmail.com; s=20230601; t=1709753170; x=1710357970; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=X+4jN4JuZzosY9K0XV5mOz+J9rLNJrskTXmjKD+bMcw=;
+ b=kVN5YfdMfgNwAvoJn/2Mq7AvtCHt+ac+vj1EwsfQIGZuFB+HsO0JmGI3qlf6JFmqV5
+ 1DX/7lwN9vSmQTuVm6ucVmA/FncLGan8X4i8a68bFq5l/5sf9xkTXYM5ZAuBW6ywlJ53
+ HbD9v7LNzaobZn0SBZ7FmbbzdqnijealwOrpgwj3cpnyGq5HS/rejzVEUtv3dQZmRqfs
+ UbqnoOhXtFRr+FvZufi2SBlxVpCNtTrO4nTHc0aA8yztymBRrZX4bb/KLvcVbL23+kQt
+ YASloZ1TSs1fongMUfmbAFUarC0G3l1lCqh3e0fU6A1MY4np0geei/5Bj1W6lnbo1oWn
+ 9pRw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=lindra.de
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=lindra.de header.i=@lindra.de header.a=rsa-sha256
- header.s=MBO0001 header.b=lg3zfOMw
-Subject: Re: [Buildroot] [PATCH RFC 1/1] support/testing: add python-pyqt5
- test
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=kVN5YfdM
+Subject: [Buildroot] [PATCH v2,1/1] linux: disable -Werror
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,495 +99,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: multipart/mixed; boundary="===============5081993782983209601=="
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This is a multi-part message in MIME format.
---===============5081993782983209601==
-Content-Type: multipart/alternative;
- boundary="------------lUb5RkXv3fxGzAcXYti4hxhL"
-Content-Language: en-US
-
-This is a multi-part message in MIME format.
---------------lUb5RkXv3fxGzAcXYti4hxhL
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-
-Hi all,
-
-I think this thread got forgotten and nothing has been merged yet.
-
-To summarize
-
-- there is a nice test now which confirms that my patch 
-https://patchwork.ozlabs.org/project/buildroot/patch/20231212160112.94272-2-hypnotoad@lindra.de/ 
-seems to be needed for the runtime
-
-- the test uncovered 2 problems, one direct dependency and another 
-runtime dependency (fonts)
-
-What would be the next step to get this integrated?
-
-Best,
-
-Ralf
-
-
-
-Am 10.01.24 um 21:23 schrieb Julien Olivain:
-> Signed-off-by: Julien Olivain<ju.o@free.fr>
-> ---
-> Few notes:
->
-> This runtime test was suggested by Thomas in:
-> https://lists.buildroot.org/pipermail/buildroot/2023-December/681113.html
->
-> In order to work, the patch
-> https://patchwork.ozlabs.org/project/buildroot/patch/20231212160112.94272-2-hypnotoad@lindra.de/
-> needs to be also applied.
->
-> I tested this patch on branch master at commit 22393c9 with commands:
->
->      make check-package
->      ...
->      0 warnings generated
->
->      support/testing/run-tests \
->          -d dl -o output_folder \
->          tests.package.test_python_pyqt5
->      ...
->      OK
->
-> Doing this test, I've spotted few issues:
->
-> The test needs to select BR2_PACKAGE_QT5BASE_WIDGETS=y
-> otherwise, the build fails. I believe this is a missing build
-> dependency in python-pyqt5 (to be confirmed).
->
-> Also, Qt5 no longer ships fonts. So the test application runs
-> without any text. It shows a warning on the console:
->
->      QFontDatabase: Cannot find font directory /usr/lib/fonts.
->      Note that Qt no longer ships fonts. Deploy some (fromhttps://dejavu-fonts.github.io/  for example) or switch to fontconfig.
->
-> It's not a real problem for the test. But using
-> (Py)Qt5 with EGLFS directly on KMS/DRM (i.e. without X11 nor Weston)
-> seems a valid use-case. I was not able to install fonts without X11.
-> ---
->   DEVELOPERS                                    |  2 +
->   .../tests/package/test_python_pyqt5.py        | 61 +++++++++++++++++++
->   .../test_python_pyqt5/linux-vkms.fragment     |  1 +
->   .../rootfs-overlay/root/pyqt5test.py          | 60 ++++++++++++++++++
->   4 files changed, 124 insertions(+)
->   create mode 100644 support/testing/tests/package/test_python_pyqt5.py
->   create mode 100644 support/testing/tests/package/test_python_pyqt5/linux-vkms.fragment
->   create mode 100755 support/testing/tests/package/test_python_pyqt5/rootfs-overlay/root/pyqt5test.py
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index d7543247f2..7aecb828e4 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1806,6 +1806,8 @@ F:	support/testing/tests/package/test_python_magic_wormhole.py
->   F:	support/testing/tests/package/test_python_midiutil.py
->   F:	support/testing/tests/package/test_python_ml_dtypes.py
->   F:	support/testing/tests/package/test_python_pyalsa.py
-> +F:	support/testing/tests/package/test_python_pyqt5.py
-> +F:	support/testing/tests/package/test_python_pyqt5/
->   F:	support/testing/tests/package/test_python_spake2.py
->   F:	support/testing/tests/package/test_rdma_core.py
->   F:	support/testing/tests/package/test_rdma_core/
-> diff --git a/support/testing/tests/package/test_python_pyqt5.py b/support/testing/tests/package/test_python_pyqt5.py
-> new file mode 100644
-> index 0000000000..6ef0577878
-> --- /dev/null
-> +++ b/support/testing/tests/package/test_python_pyqt5.py
-> @@ -0,0 +1,61 @@
-> +import os
-> +
-> +import infra.basetest
-> +
-> +
-> +class TestPythonPyQt5(infra.basetest.BRTest):
-> +    # We use a specific configuration for:
-> +    # - using Aarch64, to have more than 256MB memory,
-> +    # - using a kernel config fragment, to enable VKMS,
-> +    # - to have an ext4 rootfs image exposed as a virtio storage
-> +    #   (rather than cpio initrd). This will save some memory, as the
-> +    #   rootfs image is big.
-> +    config = \
-> +        f"""
-> +        BR2_aarch64=y
-> +        BR2_TOOLCHAIN_EXTERNAL=y
-> +        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-> +        BR2_LINUX_KERNEL=y
-> +        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> +        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.72"
-> +        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-> +        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-> +        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{infra.filepath("tests/package/test_python_pyqt5/linux-vkms.fragment")}"
-> +        BR2_PACKAGE_LIBDRM=y
-> +        BR2_PACKAGE_MESA3D=y
-> +        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
-> +        BR2_PACKAGE_MESA3D_LLVM=y
-> +        BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-> +        BR2_PACKAGE_MESA3D_OPENGL_ES=y
-> +        BR2_PACKAGE_PYTHON3=y
-> +        BR2_PACKAGE_PYTHON_PYQT5=y
-> +        BR2_PACKAGE_QT5=y
-> +        BR2_PACKAGE_QT5BASE_EGLFS=y
-> +        BR2_PACKAGE_QT5BASE_WIDGETS=y
-> +        BR2_ROOTFS_OVERLAY="{infra.filepath("tests/package/test_python_pyqt5/rootfs-overlay")}"
-> +        BR2_TARGET_ROOTFS_EXT2=y
-> +        BR2_TARGET_ROOTFS_EXT2_4=y
-> +        BR2_TARGET_ROOTFS_EXT2_SIZE="256M"
-> +        # BR2_TARGET_ROOTFS_TAR is not set
-> +        """.format(
-> +            )
-> +
-> +    def test_run(self):
-> +        drive = os.path.join(self.builddir, "images", "rootfs.ext4")
-> +        kern = os.path.join(self.builddir, "images", "Image")
-> +        self.emulator.boot(arch="aarch64",
-> +                           kernel=kern,
-> +                           kernel_cmdline=["root=/dev/vda console=ttyAMA0"],
-> +                           options=["-M", "virt", "-cpu", "cortex-a57", "-m", "512M",
-> +                                    "-drive", f"file={drive},if=virtio,format=raw"])
-> +        self.emulator.login()
-> +
-> +        # We run the test application with a customized message.
-> +        msg = "Hello Buildroot."
-> +        cmd = f'/root/pyqt5test.py "{msg}"'
-> +        self.assertRunOk(cmd, timeout=30)
-> +
-> +        # We check the test message is present in the file created by
-> +        # the previous application execution.
-> +        cmd = f'grep -F "{msg}" /root/message.txt'
-> +        self.assertRunOk(cmd)
-> diff --git a/support/testing/tests/package/test_python_pyqt5/linux-vkms.fragment b/support/testing/tests/package/test_python_pyqt5/linux-vkms.fragment
-> new file mode 100644
-> index 0000000000..ec2ed4460c
-> --- /dev/null
-> +++ b/support/testing/tests/package/test_python_pyqt5/linux-vkms.fragment
-> @@ -0,0 +1 @@
-> +CONFIG_DRM_VKMS=y
-> diff --git a/support/testing/tests/package/test_python_pyqt5/rootfs-overlay/root/pyqt5test.py b/support/testing/tests/package/test_python_pyqt5/rootfs-overlay/root/pyqt5test.py
-> new file mode 100755
-> index 0000000000..3efeed7687
-> --- /dev/null
-> +++ b/support/testing/tests/package/test_python_pyqt5/rootfs-overlay/root/pyqt5test.py
-> @@ -0,0 +1,60 @@
-> +#! /usr/bin/env python3
-> +#
-> +# This is a test application for PyQt5. It is showing a text label and
-> +# a "quit" button. The text of the label can be set with the first
-> +# (non-Qt) command line argument. A timer will send a click signal to
-> +# the quit button after 3 seconds. When quitting, the text of the
-> +# label is saved in a "message.txt" file in the current working
-> +# directory.
-> +
-> +import sys
-> +
-> +from PyQt5.QtCore import PYQT_VERSION_STR, QFile, QIODevice, QT_VERSION_STR, QTextStream, QTimer, Qt
-> +from PyQt5.QtWidgets import QApplication, QLabel, QPushButton, QVBoxLayout, QWidget
-> +
-> +
-> +class TestApp(QWidget):
-> +
-> +    def __init__(self, message, parent=None):
-> +        super(TestApp, self).__init__(parent)
-> +
-> +        self.label = QLabel(message)
-> +        self.label.setAlignment(Qt.AlignCenter)
-> +
-> +        self.button = QPushButton("Quit")
-> +        self.button.clicked.connect(self.on_button_clicked)
-> +
-> +        self.layout = QVBoxLayout()
-> +        self.layout.addWidget(self.label)
-> +        self.layout.addWidget(self.button)
-> +
-> +        self.setLayout(self.layout)
-> +
-> +        self.timer = QTimer()
-> +        self.timer.timeout.connect(self.button.click)
-> +
-> +    def on_button_clicked(self):
-> +        self.save_message()
-> +        app.quit()
-> +
-> +    def save_message(self):
-> +        f = QFile("message.txt")
-> +        if f.open(QIODevice.WriteOnly):
-> +            QTextStream(f) << (self.label.text() + '\n')
-> +        f.close()
-> +
-> +
-> +if __name__ == "__main__":
-> +    print("PyQt5 test for Buildroot")
-> +    print(f"Qt version {QT_VERSION_STR}")
-> +    print(f"PyQt version {PYQT_VERSION_STR}")
-> +
-> +    msg = "Hello World"
-> +    app = QApplication(sys.argv)
-> +    args = app.arguments()
-> +    if len(args) > 1:
-> +        msg = args[1]
-> +    testApp = TestApp(message=msg)
-> +    testApp.show()
-> +    testApp.timer.start(3000)
-> +    sys.exit(app.exec())
---------------lUb5RkXv3fxGzAcXYti4hxhL
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  </head>
-  <body>
-    <p>Hi all,</p>
-    <p>I think this thread got forgotten and nothing has been merged
-      yet.<br>
-    </p>
-    <p>To summarize</p>
-    <p>- there is a nice test now which confirms that my patch <span
-      style="white-space: pre-wrap"><a class="moz-txt-link-freetext" href="https://patchwork.ozlabs.org/project/buildroot/patch/20231212160112.94272-2-hypnotoad@lindra.de/">https://patchwork.ozlabs.org/project/buildroot/patch/20231212160112.94272-2-hypnotoad@lindra.de/</a> seems to be needed for the runtime</span></p>
-    <p><span style="white-space: pre-wrap">- the test uncovered 2 problems, one direct dependency and another runtime dependency (fonts)
-</span></p>
-    <p>What would be the next step to get this integrated?<br>
-    </p>
-    <p>Best,</p>
-    <p>Ralf<br>
-    </p>
-    <p><br>
-    </p>
-    <p><br>
-    </p>
-    <div class="moz-cite-prefix">Am 10.01.24 um 21:23 schrieb Julien
-      Olivain:<br>
-    </div>
-    <blockquote type="cite"
-      cite="mid:20240110202319.139004-1-ju.o@free.fr">
-      <pre class="moz-quote-pre" wrap="">Signed-off-by: Julien Olivain <a class="moz-txt-link-rfc2396E" href="mailto:ju.o@free.fr">&lt;ju.o@free.fr&gt;</a>
----
-Few notes:
-
-This runtime test was suggested by Thomas in:
-<a class="moz-txt-link-freetext" href="https://lists.buildroot.org/pipermail/buildroot/2023-December/681113.html">https://lists.buildroot.org/pipermail/buildroot/2023-December/681113.html</a>
-
-In order to work, the patch
-<a class="moz-txt-link-freetext" href="https://patchwork.ozlabs.org/project/buildroot/patch/20231212160112.94272-2-hypnotoad@lindra.de/">https://patchwork.ozlabs.org/project/buildroot/patch/20231212160112.94272-2-hypnotoad@lindra.de/</a>
-needs to be also applied.
-
-I tested this patch on branch master at commit 22393c9 with commands:
-
-    make check-package
-    ...
-    0 warnings generated
-
-    support/testing/run-tests \
-        -d dl -o output_folder \
-        tests.package.test_python_pyqt5
-    ...
-    OK
-
-Doing this test, I've spotted few issues:
-
-The test needs to select BR2_PACKAGE_QT5BASE_WIDGETS=y
-otherwise, the build fails. I believe this is a missing build
-dependency in python-pyqt5 (to be confirmed).
-
-Also, Qt5 no longer ships fonts. So the test application runs
-without any text. It shows a warning on the console:
-
-    QFontDatabase: Cannot find font directory /usr/lib/fonts.
-    Note that Qt no longer ships fonts. Deploy some (from <a class="moz-txt-link-freetext" href="https://dejavu-fonts.github.io/">https://dejavu-fonts.github.io/</a> for example) or switch to fontconfig.
-
-It's not a real problem for the test. But using
-(Py)Qt5 with EGLFS directly on KMS/DRM (i.e. without X11 nor Weston)
-seems a valid use-case. I was not able to install fonts without X11.
----
- DEVELOPERS                                    |  2 +
- .../tests/package/test_python_pyqt5.py        | 61 +++++++++++++++++++
- .../test_python_pyqt5/linux-vkms.fragment     |  1 +
- .../rootfs-overlay/root/pyqt5test.py          | 60 ++++++++++++++++++
- 4 files changed, 124 insertions(+)
- create mode 100644 support/testing/tests/package/test_python_pyqt5.py
- create mode 100644 support/testing/tests/package/test_python_pyqt5/linux-vkms.fragment
- create mode 100755 support/testing/tests/package/test_python_pyqt5/rootfs-overlay/root/pyqt5test.py
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d7543247f2..7aecb828e4 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1806,6 +1806,8 @@ F:	support/testing/tests/package/test_python_magic_wormhole.py
- F:	support/testing/tests/package/test_python_midiutil.py
- F:	support/testing/tests/package/test_python_ml_dtypes.py
- F:	support/testing/tests/package/test_python_pyalsa.py
-+F:	support/testing/tests/package/test_python_pyqt5.py
-+F:	support/testing/tests/package/test_python_pyqt5/
- F:	support/testing/tests/package/test_python_spake2.py
- F:	support/testing/tests/package/test_rdma_core.py
- F:	support/testing/tests/package/test_rdma_core/
-diff --git a/support/testing/tests/package/test_python_pyqt5.py b/support/testing/tests/package/test_python_pyqt5.py
-new file mode 100644
-index 0000000000..6ef0577878
---- /dev/null
-+++ b/support/testing/tests/package/test_python_pyqt5.py
-@@ -0,0 +1,61 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestPythonPyQt5(infra.basetest.BRTest):
-+    # We use a specific configuration for:
-+    # - using Aarch64, to have more than 256MB memory,
-+    # - using a kernel config fragment, to enable VKMS,
-+    # - to have an ext4 rootfs image exposed as a virtio storage
-+    #   (rather than cpio initrd). This will save some memory, as the
-+    #   rootfs image is big.
-+    config = \
-+        f"""
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.72"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-+        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{infra.filepath("tests/package/test_python_pyqt5/linux-vkms.fragment")}"
-+        BR2_PACKAGE_LIBDRM=y
-+        BR2_PACKAGE_MESA3D=y
-+        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
-+        BR2_PACKAGE_MESA3D_LLVM=y
-+        BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-+        BR2_PACKAGE_MESA3D_OPENGL_ES=y
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_PYQT5=y
-+        BR2_PACKAGE_QT5=y
-+        BR2_PACKAGE_QT5BASE_EGLFS=y
-+        BR2_PACKAGE_QT5BASE_WIDGETS=y
-+        BR2_ROOTFS_OVERLAY="{infra.filepath("tests/package/test_python_pyqt5/rootfs-overlay")}"
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        BR2_TARGET_ROOTFS_EXT2_4=y
-+        BR2_TARGET_ROOTFS_EXT2_SIZE="256M"
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """.format(
-+            )
-+
-+    def test_run(self):
-+        drive = os.path.join(self.builddir, "images", "rootfs.ext4")
-+        kern = os.path.join(self.builddir, "images", "Image")
-+        self.emulator.boot(arch="aarch64",
-+                           kernel=kern,
-+                           kernel_cmdline=["root=/dev/vda console=ttyAMA0"],
-+                           options=["-M", "virt", "-cpu", "cortex-a57", "-m", "512M",
-+                                    "-drive", f"file={drive},if=virtio,format=raw"])
-+        self.emulator.login()
-+
-+        # We run the test application with a customized message.
-+        msg = "Hello Buildroot."
-+        cmd = f'/root/pyqt5test.py "{msg}"'
-+        self.assertRunOk(cmd, timeout=30)
-+
-+        # We check the test message is present in the file created by
-+        # the previous application execution.
-+        cmd = f'grep -F "{msg}" /root/message.txt'
-+        self.assertRunOk(cmd)
-diff --git a/support/testing/tests/package/test_python_pyqt5/linux-vkms.fragment b/support/testing/tests/package/test_python_pyqt5/linux-vkms.fragment
-new file mode 100644
-index 0000000000..ec2ed4460c
---- /dev/null
-+++ b/support/testing/tests/package/test_python_pyqt5/linux-vkms.fragment
-@@ -0,0 +1 @@
-+CONFIG_DRM_VKMS=y
-diff --git a/support/testing/tests/package/test_python_pyqt5/rootfs-overlay/root/pyqt5test.py b/support/testing/tests/package/test_python_pyqt5/rootfs-overlay/root/pyqt5test.py
-new file mode 100755
-index 0000000000..3efeed7687
---- /dev/null
-+++ b/support/testing/tests/package/test_python_pyqt5/rootfs-overlay/root/pyqt5test.py
-@@ -0,0 +1,60 @@
-+#! /usr/bin/env python3
-+#
-+# This is a test application for PyQt5. It is showing a text label and
-+# a "quit" button. The text of the label can be set with the first
-+# (non-Qt) command line argument. A timer will send a click signal to
-+# the quit button after 3 seconds. When quitting, the text of the
-+# label is saved in a "message.txt" file in the current working
-+# directory.
-+
-+import sys
-+
-+from PyQt5.QtCore import PYQT_VERSION_STR, QFile, QIODevice, QT_VERSION_STR, QTextStream, QTimer, Qt
-+from PyQt5.QtWidgets import QApplication, QLabel, QPushButton, QVBoxLayout, QWidget
-+
-+
-+class TestApp(QWidget):
-+
-+    def __init__(self, message, parent=None):
-+        super(TestApp, self).__init__(parent)
-+
-+        self.label = QLabel(message)
-+        self.label.setAlignment(Qt.AlignCenter)
-+
-+        self.button = QPushButton("Quit")
-+        self.button.clicked.connect(self.on_button_clicked)
-+
-+        self.layout = QVBoxLayout()
-+        self.layout.addWidget(self.label)
-+        self.layout.addWidget(self.button)
-+
-+        self.setLayout(self.layout)
-+
-+        self.timer = QTimer()
-+        self.timer.timeout.connect(self.button.click)
-+
-+    def on_button_clicked(self):
-+        self.save_message()
-+        app.quit()
-+
-+    def save_message(self):
-+        f = QFile("message.txt")
-+        if f.open(QIODevice.WriteOnly):
-+            QTextStream(f) &lt;&lt; (self.label.text() + '\n')
-+        f.close()
-+
-+
-+if __name__ == "__main__":
-+    print("PyQt5 test for Buildroot")
-+    print(f"Qt version {QT_VERSION_STR}")
-+    print(f"PyQt version {PYQT_VERSION_STR}")
-+
-+    msg = "Hello World"
-+    app = QApplication(sys.argv)
-+    args = app.arguments()
-+    if len(args) &gt; 1:
-+        msg = args[1]
-+    testApp = TestApp(message=msg)
-+    testApp.show()
-+    testApp.timer.start(3000)
-+    sys.exit(app.exec())
-</pre>
-    </blockquote>
-  </body>
-</html>
-
---------------lUb5RkXv3fxGzAcXYti4hxhL--
-
---===============5081993782983209601==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5081993782983209601==--
+RGlzYWJsZSAtV2Vycm9yIHRvIGZpeCB0aGUgZm9sbG93aW5nIGJ1aWxkIGZhaWx1cmUgd2l0aCBl
+c3AtaG9zdGVkCnJhaXNlZCBhdCBsZWFzdCBzaW5jZSBjb21taXQgYTM4MmE3ZDU1NDMyOTE4ZDJh
+MWU0N2FlNGNiZTdlZDUwZmExN2EwODoKCkluIGZ1bmN0aW9uIOKAmGRlc3Ryb3lfY21kX3dx4oCZ
+LAogICAgaW5saW5lZCBmcm9tIOKAmGVzcF9jb21tYW5kc190ZWFyZG93buKAmSBhdCAvaG9tZS9h
+dXRvYnVpbGQvYXV0b2J1aWxkL2luc3RhbmNlLTQvb3V0cHV0LTEvYnVpbGQvZXNwLWhvc3RlZC1j
+ZTNjNTBhMzNmYTRiYzU2MmExYjZjYmNlZTI5MmMxYWUwYjBhNDA0L2VzcF9ob3N0ZWRfbmcvaG9z
+dC9lc3BfY21kLmM6MTQ2NzoyOgouL2luY2x1ZGUvbGludXgvd29ya3F1ZXVlLmg6NjM5Ojk6IGVy
+cm9yOiBjYWxsIHRvIOKAmF9fd2Fybl9mbHVzaGluZ19zeXN0ZW13aWRlX3dx4oCZIGRlY2xhcmVk
+IHdpdGggYXR0cmlidXRlIHdhcm5pbmc6IFBsZWFzZSBhdm9pZCBmbHVzaGluZyBzeXN0ZW0td2lk
+ZSB3b3JrcXVldWVzLiBbLVdlcnJvcj1hdHRyaWJ1dGUtd2FybmluZ10KICA2MzkgfCAgICAgICAg
+IF9fd2Fybl9mbHVzaGluZ19zeXN0ZW13aWRlX3dxKCk7ICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICBcCiAgICAgIHwgICAgICAgICBefn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+
+Ci9ob21lL2F1dG9idWlsZC9hdXRvYnVpbGQvaW5zdGFuY2UtNC9vdXRwdXQtMS9idWlsZC9lc3At
+aG9zdGVkLWNlM2M1MGEzM2ZhNGJjNTYyYTFiNmNiY2VlMjkyYzFhZTBiMGE0MDQvZXNwX2hvc3Rl
+ZF9uZy9ob3N0L2VzcF9jbWQuYzo0MDg6MTc6IG5vdGU6IGluIGV4cGFuc2lvbiBvZiBtYWNybyDi
+gJhmbHVzaF9zY2hlZHVsZWRfd29ya+KAmQogIDQwOCB8ICAgICAgICAgICAgICAgICBmbHVzaF9z
+Y2hlZHVsZWRfd29yaygpOwogICAgICB8ICAgICAgICAgICAgICAgICBefn5+fn5+fn5+fn5+fn5+
+fn5+fgoKRml4ZXM6CiAtIGh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9yZy9yZXN1bHRzLzZh
+YzdhNDYwMTkzOGQzMjk2ZWQxNjU3YzA2ZjhjZGY0MzM3NTdkNzMKIC0gaHR0cDovL2F1dG9idWls
+ZC5idWlsZHJvb3Qub3JnL3Jlc3VsdHMvNzk5N2NjOGE2NzY0NWE2ZTFjZjRlMjRkMTcyYzZmZWFl
+NDU5ZGNmYgoKU2lnbmVkLW9mZi1ieTogRmFicmljZSBGb250YWluZSA8Zm9udGFpbmUuZmFicmlj
+ZUBnbWFpbC5jb20+Ci0tLQpDaGFuZ2VzIHYxIC0+IHYyIChhZnRlciByZXZpZXcgb2YgUGV0ZXIg
+S29yc2dhYXJkKToKIC0gTW92ZSBkaXNhYmxpbmcgb2YgLVdlcnJvciBmcm9tIGVzcC1ob3N0ZWQg
+dG8gbGludXgubWsKCiBsaW51eC9saW51eC5tayB8IDEgKwogMSBmaWxlIGNoYW5nZWQsIDEgaW5z
+ZXJ0aW9uKCspCgpkaWZmIC0tZ2l0IGEvbGludXgvbGludXgubWsgYi9saW51eC9saW51eC5tawpp
+bmRleCA1M2UyYWQ2ZDQ4Li40ZTEyYjM2YzFmIDEwMDY0NAotLS0gYS9saW51eC9saW51eC5tawor
+KysgYi9saW51eC9saW51eC5tawpAQCAtNDM2LDYgKzQzNiw3IEBAIGRlZmluZSBMSU5VWF9LQ09O
+RklHX0ZJWFVQX0NNRFMKIAkJJChjYWxsIEtDT05GSUdfRU5BQkxFX09QVCxDT05GSUdfTE9HTykK
+IAkJJChjYWxsIEtDT05GSUdfRU5BQkxFX09QVCxDT05GSUdfTE9HT19MSU5VWF9DTFVUMjI0KSkK
+IAkkKGNhbGwgS0NPTkZJR19ESVNBQkxFX09QVCxDT05GSUdfR0NDX1BMVUdJTlMpCisJJChjYWxs
+IEtDT05GSUdfRElTQUJMRV9PUFQsQ09ORklHX1dFUlJPUikKIAkkKFBBQ0tBR0VTX0xJTlVYX0NP
+TkZJR19GSVhVUFMpCiBlbmRlZgogCi0tIAoyLjQzLjAKCl9fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290
+QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGlu
+Zm8vYnVpbGRyb290Cg==
