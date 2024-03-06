@@ -4,74 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FDBDC5475B
-	for <buildroot@archiver.kernel.org>; Wed,  6 Mar 2024 21:36:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F467C54E41
+	for <buildroot@archiver.kernel.org>; Wed,  6 Mar 2024 21:36:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 61A8D40701;
-	Wed,  6 Mar 2024 21:36:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D682D41898;
+	Wed,  6 Mar 2024 21:36:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Yd-mIgPJbF62; Wed,  6 Mar 2024 21:36:14 +0000 (UTC)
+	with ESMTP id AA8hJv2nMyZv; Wed,  6 Mar 2024 21:36:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C865740775
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2BFC44189D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C865740775;
-	Wed,  6 Mar 2024 21:36:13 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DF82C1BF5E6
- for <buildroot@lists.busybox.net>; Wed,  6 Mar 2024 21:36:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2BFC44189D;
+	Wed,  6 Mar 2024 21:36:17 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0E01E1BF95F
+ for <buildroot@lists.busybox.net>; Wed,  6 Mar 2024 21:36:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CCAE0606ED
+ by smtp4.osuosl.org (Postfix) with ESMTP id EE73E4183D
  for <buildroot@lists.busybox.net>; Wed,  6 Mar 2024 21:36:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id V3HxrQvT6QbG for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QzbwWKEHCncZ for <buildroot@lists.busybox.net>;
  Wed,  6 Mar 2024 21:36:10 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.155.100;
  helo=smtpdh16-1.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6533D606D5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6533D606D5
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3D9CD40701
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D9CD40701
 Received: from smtpdh16-1.aruba.it (smtpdh16-1.aruba.it [62.149.155.100])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6533D606D5
- for <buildroot@buildroot.org>; Wed,  6 Mar 2024 21:36:10 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3D9CD40701
+ for <buildroot@buildroot.org>; Wed,  6 Mar 2024 21:36:09 +0000 (UTC)
 Received: from localhost.localdomain ([84.33.84.190])
  by Aruba Outgoing Smtp  with ESMTPSA
- id hyvnrMrp4EG7Lhyvnr90RF; Wed, 06 Mar 2024 22:36:08 +0100
+ id hyvnrMrp4EG7Lhyvnr90Qv; Wed, 06 Mar 2024 22:36:07 +0100
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Wed,  6 Mar 2024 22:35:58 +0100
-Message-Id: <20240306213606.2149683-2-giulio.benetti@benettiengineering.com>
+Date: Wed,  6 Mar 2024 22:35:57 +0100
+Message-Id: <20240306213606.2149683-1-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240306213606.2149683-1-giulio.benetti@benettiengineering.com>
-References: <20240306213606.2149683-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfI8iPsfuUPb8XObtzfkFMbAGHNhaEKUfjsn+iPFST2kCxJvuJyf7Pd+7aZCuzuI6RWszdZX94cO5Qi8DjftE8D3UNGy620ZoIZ8e2j2cVfRXAyI3I5i3
- bG0c07xYQtgoS+s014i9XmorybQKEDj33yByhKhtPcHY5xZXejKvT5FDRBBSzxN2jU3+9ILsc5bjbzvB4qNV4rw/ZDbheydjE95cyxyvSqrOjBr6cPGL/KJU
- XKHDOYVbN8/88dCYEFNPOaV3WMFsVqQjkMstsCW94Gx23WjTdnD+QQzZl5y/F1bozNZO/VhDqNNbsWBaXV1CkEkhQyBTqK59Spkonj6DE5dV2t+tslhyYWGG
- Kc3uglese84Kf8zSHzN7iWz+Y2/hb7KSltdeVNs9yLTDV0misq0DTp0a1gVNsZv+B5csg9qE/s/qcjRjC0J0FJcHLeukVAJecFsrzLmP+vRPUvp/W9DL30F+
- 6KGWZx3m5uMbJpkMF9FppY3fzgwjia9XhgKlEihrxLm+5bzTF4NVJ7Jwx2b3rr32Ulw3COVMQTdXfLRIuQSPuVrR4nUH0JC0BUUewxCp4DX0Nq6jdQuDagqw
- sC0=
+X-CMAE-Envelope: MS4xfM9nQ5JT/KPaVpM3kBeY9SuPsn+gSy30bzF1nQ2f5YgQfaFGU21FpVx5JXskcq4uI/NPMdVWkIwiK1cFXq42dBTZed1a2E0/QQO6JaSmz2LhFUbFnzwh
+ pUbyIooBSgrMuC4OgnFhjfAvUYglfg9eYXeENvlIsEkXBFT+gBS7KRkkBhgvpd/nAHsKW00LPmKd16KlS5PILBgMSRaK78mhsvuUlgzWj6ict/ASXgM7uW4D
+ nd51RawseWTfrumnZ1QnFzdzYkHixpDiSedKfVGExm5HUWGxUzrImoth4xbhjPM65dPo1OGhP2LzWE5q4vWxjBwW3lLmMvsCE2hOpTv+b1bPPLuvc9uB8gaH
+ LjwFbtgm+yekN4aEJPaC52FgEsZPbFkvyO1UbOzijdJFlK5YtnGDO8VdYzlpR//oK6fCyztxtRhApsEpJNb51T81YgkvlmxrfozQmPn+xeSu5NMAF91viZG5
+ FMajSBayPNZL9bvcyou2aRoBYHJUFEjToSgyL+WDcQz1nBjeQD6P+sisOKrrBMNd6uQpqh9zsAs5YMtaKn6HgV2qpvJaXxU3xZWp1/rTYAXVckaec9vO+fQD
+ t1Y=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1709760968; bh=Wwch1hFRAmyWBWpAYwNuP4B3hJXCkd41KDo3LuF2bro=;
+ t=1709760967; bh=p1FKKXR7iV1zZl0Ix5jVqmitfeFP5QCMfvtmxXfiSzA=;
  h=From:To:Subject:Date:MIME-Version;
- b=P0D2MRopipVKdHsdEhhmSE3M4GaUrfJ5Ho6ncjk44/F6cjMpeLOceNxlszsKkzMni
- kdC7imKxqAgxAgUuXq4kaWrfyLoDHkQ2Aow2QRopR2BLP2UFSE5BNEIVg0Hp18PbhD
- pOAwpou8PECmYGpSqfJs4g6Jz5KPicEgX0/q8p7PSS29iIPDPVM0ruXcPUMp7JQNZC
- c8f6IuDz2W3WA9iDi+fp7n5U1lD/ARy/5qal5WnCdU72/3McavwFIom6DNpINQnnZ3
- hbs3aei75yXp01omjxq0jAtW3Wd6w9gD1jLSvJKsftLhzKQrgq9PYk5fWwCPVGEED+
- DKADRWweJHM5A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=UjlSgxI9i7fGkd7oo7GksyrrbSDpFIDAL/807zWsOHLb5bmPOcAo51s43L2+Dp8RW
+ HjegJ6lf5+iD3YIUNNY6hcg0VDrhhangcf8sMS1itxoRFLlZjV2X0vQqbaWp2iD/xq
+ QV7XPry1KdzEUVcoiY0OdUsNljfnqW7v2Cleeb0vJTSGTF4iCN+PyP79/SMNK4Hf6F
+ plkbyG2AHTotmGOTVowF3X+yoJB6loH3au2gV3kGcPqSGBgXpM72doOCy5vkXDBXqz
+ noS6d9qSguUfpu/g2X3QckylWjXIsvFosyrg3D53lwP4YumxyHtzCnxNa9fNvr56dT
+ IksM9Rfvp+Ivg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=P0D2MRop
-Subject: [Buildroot] [PATCH v3 1/9] toolchain/toolchain-external: drop
- external codesourcery niosII toolchain
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=UjlSgxI9
+Subject: [Buildroot] [PATCH v3 0/9] Patch and remove Nios2 binutils bug 27597
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,128 +94,69 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This toolchain is pretty old and unlikely used. It's also affected by
-binutils bug 27597, so let's remove it.
+This patchset:
+* add backported patches for Buildroot Nios2 binutils bug 27597
+* remove Codesourcery Nios2 external toolchain that is affected from bug above
+  (I've tried to update to latest 2023.09-5 just for testing and yes, it's still
+   affected by that bug, maybe once they will release toolchain based on latest
+   binutils 2.42 that has patch applied to fix bug 27597 we can add it back)
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+* HERE patch [0] for Bootlin External Toolchain must be applied
+
+* drop all bug 27597 bug depencies
+* drop the bug 27597 itself
+
+[0]: https://patchwork.ozlabs.org/project/buildroot/patch/20240303151239.185686-1-thomas.petazzoni@bootlin.com/
+
+Best regards
+Giulio
+
 ---
- toolchain/toolchain-external/Config.in           |  6 ------
- .../toolchain-external/pkg-toolchain-external.mk |  2 +-
- .../Config.in                                    | 16 ----------------
- .../Config.in.options                            |  9 ---------
- .../toolchain-external-codesourcery-niosII.hash  |  6 ------
- .../toolchain-external-codesourcery-niosII.mk    | 13 -------------
- 6 files changed, 1 insertion(+), 51 deletions(-)
+V1->V2:
+* add patch to drop external Sourcery CodeBench Nios-II 2018.05
+V2->V3:
+* rebase binutils patch against 216e99e9b4fd4c015443bfe15c7be3f06b21fe86
+  since binutils version 2.39 has been dropped while version 2.42 has been
+  added
+---
+
+Giulio Benetti (9):
+  toolchain/toolchain-external: drop external codesourcery niosII
+    toolchain
+  package/binutils: add local patches to fix Nios2 bug 27597
+  package/gdal: drop nios2 binutils bug 27597 dependency
+  package/kf5/kf5-kcoreaddons: drop nios2 binutils bug 27597 dependency
+  package/libcamera: drop nios2 binutils bug 27597 dependency
+  package/libgeos: drop nios2 binutils bug 27597 dependency
+  package/pistache: drop nios2 binutils bug 27597 dependency
+  package/postgis: drop nios2 binutils bug 27597 dependency
+  toolchain: remove binutils bug 27597
+
+ ...ertion-fail-in-nios2_elf32_install_i.patch | 125 ++++++++++++++++++
+ ...ertion-fail-in-nios2_elf32_install_i.patch | 125 ++++++++++++++++++
+ ...ertion-fail-in-nios2_elf32_install_i.patch | 125 ++++++++++++++++++
+ package/gdal/Config.in                        |   4 +-
+ package/kf5/kf5-kcoreaddons/Config.in         |   1 -
+ package/libcamera/Config.in                   |   1 -
+ package/libgeos/Config.in                     |   6 +-
+ package/pistache/Config.in                    |   6 +-
+ package/postgis/Config.in                     |   6 +-
+ toolchain/Config.in                           |   6 -
+ toolchain/toolchain-external/Config.in        |   6 -
+ .../pkg-toolchain-external.mk                 |   2 +-
+ .../Config.in                                 |  16 ---
+ .../Config.in.options                         |   9 --
+ ...oolchain-external-codesourcery-niosII.hash |   6 -
+ .../toolchain-external-codesourcery-niosII.mk |  13 --
+ 16 files changed, 383 insertions(+), 74 deletions(-)
+ create mode 100644 package/binutils/2.40/0003-PR27597-nios-assertion-fail-in-nios2_elf32_install_i.patch
+ create mode 100644 package/binutils/2.41/0003-PR27597-nios-assertion-fail-in-nios2_elf32_install_i.patch
+ create mode 100644 package/binutils/2.42/0003-PR27597-nios-assertion-fail-in-nios2_elf32_install_i.patch
  delete mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in
  delete mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in.options
  delete mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-niosII/toolchain-external-codesourcery-niosII.hash
  delete mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-niosII/toolchain-external-codesourcery-niosII.mk
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index c1c159cb8e..cb678b7886 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -33,9 +33,6 @@ source "toolchain/toolchain-external/toolchain-external-codesourcery-mips/Config
- source "toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in"
- source "toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in"
- 
--# NIOSII
--source "toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in"
--
- # Bootlin toolchains, available for virtually all architectures
- source "toolchain/toolchain-external/toolchain-external-bootlin/Config.in"
- 
-@@ -137,9 +134,6 @@ source "toolchain/toolchain-external/toolchain-external-codesourcery-mips/Config
- source "toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in.options"
- source "toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in.options"
- 
--# NIOSII
--source "toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in.options"
--
- # Bootlin toolchains
- source "toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options"
- 
-diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index ddf1d70ab4..aa5365b5bd 100644
---- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-+++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -13,7 +13,7 @@
- #  * Toolchains provided by Linaro for the ARM and AArch64
- #    architectures
- #  * Sourcery CodeBench toolchains (from Mentor Graphics) for the ARM,
--#    MIPS, PowerPC, x86_64 and NIOS 2 architectures. For the MIPS
-+#    MIPS, PowerPC, and x86_64 architectures. For the MIPS
- #    toolchain, the -muclibc variant isn't supported yet, only the
- #    default glibc-based variant is.
- #  * Synopsys DesignWare toolchains for ARC cores
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in b/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in
-deleted file mode 100644
-index cf3ce69a68..0000000000
---- a/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in
-+++ /dev/null
-@@ -1,16 +0,0 @@
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
--	bool "Sourcery CodeBench Nios-II 2018.05"
--	depends on BR2_nios2
--	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_8
--	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
--	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
--	select BR2_TOOLCHAIN_HAS_SSP
--	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
--	select BR2_INSTALL_LIBSTDCPP
--	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
--	select BR2_TOOLCHAIN_GCC_AT_LEAST_7
--	help
--	  Sourcery CodeBench toolchain for the Nios-II architecture,
--	  from Mentor Graphics. It uses gcc 7.3, binutils 2.28,
--	  glibc 2.27, gdb 8.0.1 and kernel headers 4.15.5.
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in.options b/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in.options
-deleted file mode 100644
-index 07cc5ede94..0000000000
---- a/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in.options
-+++ /dev/null
-@@ -1,9 +0,0 @@
--if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
--
--config BR2_TOOLCHAIN_EXTERNAL_PREFIX
--	default "nios2-linux-gnu"
--
--config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
--	default "toolchain-external-codesourcery-niosII"
--
--endif
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/toolchain-external-codesourcery-niosII.hash b/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/toolchain-external-codesourcery-niosII.hash
-deleted file mode 100644
-index 47893ab7e2..0000000000
---- a/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/toolchain-external-codesourcery-niosII.hash
-+++ /dev/null
-@@ -1,6 +0,0 @@
--# From https://sourcery.mentor.com/GNUToolchain/release3374
--md5  4f536b3b9b4e00f483e82e304c0a27ae  sourceryg++-2018.05-5-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
--md5  be42ab83da2e8db7b73dc890c2549570  sourceryg++-2018.05-5-nios2-linux-gnu.src.tar.bz2
--# Locally calculated
--sha256  c19afb432b5b23f8d5d639831d3a423a3ea3c9cc62e0015020d20ea2eb36dd1b  sourceryg++-2018.05-5-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
--sha256  d73a6364106dd62352711f932d3be8e97fdaaa548995678b5d38d9f21e22437a  sourceryg++-2018.05-5-nios2-linux-gnu.src.tar.bz2
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/toolchain-external-codesourcery-niosII.mk b/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/toolchain-external-codesourcery-niosII.mk
-deleted file mode 100644
-index cb0fe760ff..0000000000
---- a/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/toolchain-external-codesourcery-niosII.mk
-+++ /dev/null
-@@ -1,13 +0,0 @@
--################################################################################
--#
--# toolchain-external-codesourcery-niosII
--#
--################################################################################
--
--TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII_VERSION = 2018.05-5
--
--TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII_SITE = https://sourcery.mentor.com/public/gnu_toolchain/$(TOOLCHAIN_EXTERNAL_PREFIX)
--TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII_SOURCE = sourceryg++-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX)-i686-pc-linux-gnu.tar.bz2
--TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII_ACTUAL_SOURCE_TARBALL = sourceryg++-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX).src.tar.bz2
--
--$(eval $(toolchain-external-package))
 -- 
 2.34.1
 
