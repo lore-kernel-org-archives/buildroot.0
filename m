@@ -4,69 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CD75C54798
-	for <buildroot@archiver.kernel.org>; Thu,  7 Mar 2024 20:10:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8299C54798
+	for <buildroot@archiver.kernel.org>; Thu,  7 Mar 2024 20:38:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EE98981FDF;
-	Thu,  7 Mar 2024 20:10:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 83F0282C3E;
+	Thu,  7 Mar 2024 20:38:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rbQxy3UhEEeh; Thu,  7 Mar 2024 20:10:50 +0000 (UTC)
+	with ESMTP id E2lnM86BRX1Z; Thu,  7 Mar 2024 20:38:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EFDAA82031
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AFDC582C5E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EFDAA82031;
-	Thu,  7 Mar 2024 20:10:49 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4F3AF1BF4E5
- for <buildroot@lists.busybox.net>; Thu,  7 Mar 2024 20:10:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AFDC582C5E;
+	Thu,  7 Mar 2024 20:38:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 566521BF4E5
+ for <buildroot@lists.busybox.net>; Thu,  7 Mar 2024 20:38:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4808E41A04
- for <buildroot@lists.busybox.net>; Thu,  7 Mar 2024 20:10:48 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5077F82C5E
+ for <buildroot@lists.busybox.net>; Thu,  7 Mar 2024 20:38:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hH1BUdU7X5d6 for <buildroot@lists.busybox.net>;
- Thu,  7 Mar 2024 20:10:47 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.217;
- helo=smtpcmd01-g.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 49ADB41999
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 49ADB41999
-Received: from smtpcmd01-g.aruba.it (smtpcmd01-g.aruba.it [62.149.158.217])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 49ADB41999
- for <buildroot@buildroot.org>; Thu,  7 Mar 2024 20:10:45 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba Outgoing Smtp  with ESMTPSA
- id iK4grKjekHsqHiK4hr6NHf; Thu, 07 Mar 2024 21:10:43 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Date: Thu,  7 Mar 2024 21:10:42 +0100
-Message-Id: <20240307201042.2415494-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id w94HbMMuyqH1 for <buildroot@lists.busybox.net>;
+ Thu,  7 Mar 2024 20:38:20 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::52c; helo=mail-pg1-x52c.google.com;
+ envelope-from=festevam@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7FCA182C3E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7FCA182C3E
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com
+ [IPv6:2607:f8b0:4864:20::52c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7FCA182C3E
+ for <buildroot@buildroot.org>; Thu,  7 Mar 2024 20:38:20 +0000 (UTC)
+Received: by mail-pg1-x52c.google.com with SMTP id
+ 41be03b00d2f7-58962bf3f89so374495a12.0
+ for <buildroot@buildroot.org>; Thu, 07 Mar 2024 12:38:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1709843899; x=1710448699;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=4BGvayl5YE4omms+Y1PNGGzt4DpITvYnGxWK67q0a7c=;
+ b=nO2yQSq3RmI01lU9JrHPT8R8ZDMoC8BkQ+0IsI3EPb00xdXH4uvqYD4pOY9UtGAvHQ
+ 9Ps+mlA9JHNOgqe8o7RvmYbuY9Uuy9E4kAM2vZuKw1NvLYp7kGZjFVUIYU/32eTL/BqA
+ 5q5Qv0qiYYrLwXTZaMCnRm/GL2z6ruDJY43BjQzgiSlEFPfpJetQYBZtBB8BnkfDxQAg
+ D6WAs0ZSzFtCu40iRUeg2NMl8ZzzFA8SIMQEfKjToyMd/cZYaHgnxExIRgvvCYKIEKZO
+ FAEjVybKc+KFmrboInFTB91T34wimvopRtn9zJPdkuW6omuChEpcUEsQk1oX/J/neytJ
+ tifA==
+X-Gm-Message-State: AOJu0Yzv7Lz6TqVmuucD7p+RfR6rWWYPkaQrt6jECJGrZ3JiOiP7a6tK
+ 7Xo8B5fIXz5ezROnSdHIbf6dtmPZju8U5WY4ldA4AZIJi3bLFrIajX93P35LJJ8JwQrXchbKjUj
+ V9x/uTxK3wvrp9e1B77HwEin03tQ=
+X-Google-Smtp-Source: AGHT+IFLom1hqTxE8WID+faPVcMrO8KcZ40I2BNFbKKgLk6AcI/PBGVSWf0FHNQqA7CqwjtTJ4Wq3fRm6a4yM3Nx84E=
+X-Received: by 2002:a17:90b:4ac3:b0:29b:af63:71aa with SMTP id
+ mh3-20020a17090b4ac300b0029baf6371aamr47995pjb.2.1709843899483; Thu, 07 Mar
+ 2024 12:38:19 -0800 (PST)
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfOQlVPZPEEivgoYGhgwQhwN74DG+8rC3mnEVQzryzpU49mhc1t9WTUJ/N0NfcfTu+W6lcP6NRjnuH6GrgZTRKUz8RzgP+gktpEcbpLde72Qayl8EuBqA
- HoFhj3rzalSOUaFhZUipVJb4VTxN44gWKYhqvwjz1QgQx+KGyPByOtPjGzdmlvrRCao6GmGgk6lkPRKK9+KgPXzEHD8OZFGrAaAlqp6YDflYXtkiIhh081v2
- m7ho6W4AY5zir7nwNLaexOSKg6vnanHoo1yQMVLUUCo=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1709842243; bh=mqksLsDeoh7WcEpMZCnFf1op1wGh9kjYxdDVjQ4ycTk=;
- h=From:To:Subject:Date:MIME-Version;
- b=IfPTdYh1ToFA7rhSWxfS4Db0DzkbyNJlr0qzKMsDRwaJL48gvSZ/aopVivKuXEdac
- yfQOH9HK36C1LxMdpJB0nLOJwEyGAI0rlWcSqVe4v33NbWPIu4wYeILTD4dTShIxUP
- P003+BgmdSOIYd4MVtmXOQ+iiffw3A65YqhxEeOm/EHkMSDyo/JyLdf8KODCBF/g+e
- 2jxJYschlDCgqqWHLTRAs3arSnWAca4//6xyGY7MMbZ+bkCk7/Vv7mqGAKSUkOmnK9
- oP2epypAZenwEamQHYzWAIomoDWapjUe8TyYVFe9/Vn5/ZyNEtCj6biFp0lPVIPxaL
- RvICopgW0nudQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+References: <20240307171610.47962-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <20240307171610.47962-1-fontaine.fabrice@gmail.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Thu, 7 Mar 2024 17:38:07 -0300
+Message-ID: <CAOMZO5D5HzcW3zREX9+yhOUnDQWT+B0pf1JUD1Aq6xzNf1hP=Q@mail.gmail.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1709843899; x=1710448699; darn=buildroot.org;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=4BGvayl5YE4omms+Y1PNGGzt4DpITvYnGxWK67q0a7c=;
+ b=fylq3Bdat/lXjsSFuRz8vmthQkYF29/dXhp1IVlpcCuQCNjdLJP3KPH0KDlLOVUUAj
+ Jyt/FmV+uCkF+pjo1kWv5NVTL3F6Rz24+FQ9j1SLF6e3TFVCzxF2TDi9iqTNGxo/P+ib
+ ntVcihUSPAW0Z6buST0xE9edKDbAjjRnbd9g5LNkZUlqdlhzQL+TmXf4JTlbvHvwhAW3
+ Vb4GcI4M0C62g6dUfvb198ePnjv2tsFlSeDG3+TnlJKNheaRiqQ2Al8avE9qvhL03/R9
+ 254Fjy4wv80hBnla2tNq+OwXsP9U/E7Pt/oUImwtD3HF4/LnEVi2XhoEAsmlgFLmE3uN
+ A7MA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=IfPTdYh1
-Subject: [Buildroot] [PATCH] package/cryptsetup: bump version to 2.7.1
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=fylq3Bda
+Subject: Re: [Buildroot] [PATCH 1/1] package/crucible: fix license
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,45 +97,22 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/cryptsetup/cryptsetup.hash | 2 +-
- package/cryptsetup/cryptsetup.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
-index df92ff36b8..531432aaaf 100644
---- a/package/cryptsetup/cryptsetup.hash
-+++ b/package/cryptsetup/cryptsetup.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.7/sha256sums.asc
--sha256  94003a00cd5a81944f45e8dc529e0cfd2a6ff629bd2cd21cf5e574e465daf795  cryptsetup-2.7.0.tar.xz
-+sha256  da5d1419e2a86e01aa32fd79582cd54d208857cb541bca2fd426a5ff1aaabbc3  cryptsetup-2.7.1.tar.xz
- sha256  45670cce8b6a0ddd66c8016cd8ccef6cd71f35717cbacc7f1e895b3855207b33  COPYING
- sha256  8c33cc37871654ec7ed87e6fbb896c8cf33ef5ef05b1611a5aed857596ffafa5  COPYING.LGPL
-diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-index d17de96143..b15f458576 100644
---- a/package/cryptsetup/cryptsetup.mk
-+++ b/package/cryptsetup/cryptsetup.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- CRYPTSETUP_VERSION_MAJOR = 2.7
--CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).0
-+CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).1
- CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
- CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
- CRYPTSETUP_DEPENDENCIES = \
--- 
-2.34.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gVGh1LCBNYXIgNywgMjAyNCBhdCAyOjE24oCvUE0gRmFicmljZSBGb250YWluZQo8Zm9udGFp
+bmUuZmFicmljZUBnbWFpbC5jb20+IHdyb3RlOgo+Cj4gY3J1Y2libGUgaXMgbGljZW5zZWQgdW5k
+ZXIgQlNELTMtQ2xhdXNlIHNpbmNlIGJ1bXAgdG8gdmVyc2lvbiAyMDIzLjExLjAyCj4gaW4gY29t
+bWl0IGJlM2Y5NWVkMTQ1NTlmOGE5NzM5YTEyY2ZmNjA0YWRkNjIyYjA0MTYgYW5kCj4gaHR0cHM6
+Ly9naXRodWIuY29tL3VzYmFybW9yeS9jcnVjaWJsZS9jb21taXQvN2ZlMGJiOTZkYTY1NWI0ZTgz
+MDMxYTk5MTE1ZDM3Zjg4YTE3MWU5Zgo+Cj4gRml4ZXM6IGJlM2Y5NWVkMTQ1NTlmOGE5NzM5YTEy
+Y2ZmNjA0YWRkNjIyYjA0MTYKPiAgLSBodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5vcmcvcmVz
+dWx0cy82MTgzYjExZjE1NjRiYzA3YWRmZmYyYjAyY2IwNjA3ZDBiMWRlNTRlCj4KPiBTaWduZWQt
+b2ZmLWJ5OiBGYWJyaWNlIEZvbnRhaW5lIDxmb250YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4KClJl
+dmlld2VkLWJ5OiBGYWJpbyBFc3RldmFtIDxmZXN0ZXZhbUBnbWFpbC5jb20+Cl9fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxp
+c3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21h
+aWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
