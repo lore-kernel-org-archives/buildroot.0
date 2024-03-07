@@ -4,92 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11C63C54E41
-	for <buildroot@archiver.kernel.org>; Thu,  7 Mar 2024 01:45:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4452C54E41
+	for <buildroot@archiver.kernel.org>; Thu,  7 Mar 2024 01:46:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BD31260880;
-	Thu,  7 Mar 2024 01:45:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5121F6063E;
+	Thu,  7 Mar 2024 01:45:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3NNRgWWLVAdM; Thu,  7 Mar 2024 01:45:54 +0000 (UTC)
+	with ESMTP id E1dAdwYJgrmB; Thu,  7 Mar 2024 01:45:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 79F076063E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5277E608D3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 79F076063E;
-	Thu,  7 Mar 2024 01:45:54 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E98E41BF5B5
- for <buildroot@lists.busybox.net>; Thu,  7 Mar 2024 01:45:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5277E608D3;
+	Thu,  7 Mar 2024 01:45:58 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D066C1BF5B5
+ for <buildroot@lists.busybox.net>; Thu,  7 Mar 2024 01:45:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E2AAF4183F
- for <buildroot@lists.busybox.net>; Thu,  7 Mar 2024 01:45:52 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BD23A4043E
+ for <buildroot@lists.busybox.net>; Thu,  7 Mar 2024 01:45:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZFHpejJEtF2h for <buildroot@lists.busybox.net>;
- Thu,  7 Mar 2024 01:45:51 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id N_p7nSR7e2uj for <buildroot@lists.busybox.net>;
+ Thu,  7 Mar 2024 01:45:54 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::62b; helo=mail-pl1-x62b.google.com;
+ client-ip=2607:f8b0:4864:20::62e; helo=mail-pl1-x62e.google.com;
  envelope-from=christian@aperture.us; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8716E4183D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8716E4183D
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com
- [IPv6:2607:f8b0:4864:20::62b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8716E4183D
- for <buildroot@buildroot.org>; Thu,  7 Mar 2024 01:45:51 +0000 (UTC)
-Received: by mail-pl1-x62b.google.com with SMTP id
- d9443c01a7336-1dc49afb495so3082355ad.2
- for <buildroot@buildroot.org>; Wed, 06 Mar 2024 17:45:51 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C4896401F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C4896401F3
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com
+ [IPv6:2607:f8b0:4864:20::62e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C4896401F3
+ for <buildroot@buildroot.org>; Thu,  7 Mar 2024 01:45:53 +0000 (UTC)
+Received: by mail-pl1-x62e.google.com with SMTP id
+ d9443c01a7336-1dcc7f4717fso3519645ad.0
+ for <buildroot@buildroot.org>; Wed, 06 Mar 2024 17:45:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1709775950; x=1710380750;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=zLh+asQ0vuftrvcBWlUtysHDTr4HiUo8aCsQPv26NnA=;
- b=QC6BMti63cuVGW0zDtBAb3xIHTZcIlrneV7ZtKHqjb7c9ZoHoRqUM/FLseR6IkMpZv
- J8nhE9ozecUivm5LPPalLrxxMp5RhOz7XkrGNiQsqydQEK9vg6U0rWiWAAjc/5ro7JyN
- QrK8CO0wMS/kjG0v9lR5HrZ2Uhoa4yMwosqqX0uOLmA+OoM3JotO6jy0e070FFw3WMxq
- MLEmhXuE4VRlyiF5gUsUrOKhROKfKJMBqN6a1VzvbzAKgsbobZLvnWUOnN6XaPdSua1J
- p2SYa+utQnXCcl2aJfOVbeRpfEFefEyCVOtHiO8EXFGoY4KrHsQgOrMYj8H2v0jUIypz
- mn2g==
-X-Gm-Message-State: AOJu0YyqLGLwaZAvjGYaLZrORqBGa/QQbvL+y8RkbtjbxZZ5HcjB3zjX
- r0EKRGHh8i6he4v68vlusiNDuGYiUUH9z3zeJ6PVLQbh/a34YHEcf7kymCkixlCLTY+l0dorWHl
- iozc=
-X-Google-Smtp-Source: AGHT+IEwfLnmGYQLh8V9MJsSL+7lcndMWsMlutbvkBzc9nA+fQQkKVGpSSU0jZk1xn23lPgSkejt5A==
-X-Received: by 2002:a17:902:c085:b0:1db:b36c:715f with SMTP id
- j5-20020a170902c08500b001dbb36c715fmr5726573pld.24.1709775950459; 
- Wed, 06 Mar 2024 17:45:50 -0800 (PST)
+ d=1e100.net; s=20230601; t=1709775953; x=1710380753;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=Wm2lSFUVUUo2WJA1TyBFNtFTYwmNMc46hMoKku6+40A=;
+ b=LaA4k64TIwAi2yd3mRJ3LTBKwl1ILaPn4b1wGfRZ+vp0lKklJp7rpdalNlB+GoKeLC
+ +EsK3x1mYtv4NysT69q58CAOsoE1kgYA1sxQTKnO+4eTRbV0UDy/EJJeWTNxFgFydmEc
+ 19vhbxIuElzUwrC5XtBdLVyZNsAuyZZud+XrL0IWDl/ZDd/lBsvCnTrH8ojN8oDanesn
+ rjlLNOF+SZEKOIXeOxAkUBye1xyq+BDRDRz0VvPaSqMHQRgMePE++N8tX943+1svOMPx
+ INf5s3kxR/BZvmHlM2+FpxmfbvQIGa/iI3Cv97at2r7zk0wGKU0UMPoQqfHYxeIrlTnH
+ WkhA==
+X-Gm-Message-State: AOJu0YxhnVc4RUo1YWTXfj8yzBTB8PQJvdiWl+P89w6ynVOT8u5egTAu
+ 8t3sK4VTDmYAImaqqoFA8AbHGIDg93Q4QMb3A6piRghirw4J4UDRveQ/vQbUsNn/Ve6V9YGTLFz
+ LylA=
+X-Google-Smtp-Source: AGHT+IFkRt+ucWFy3i3AwxcA8/Nl8akAXQ87suJdMiswOCEvs/jVN6/fewPVM2MDJ1JtoeQ0pLTe8Q==
+X-Received: by 2002:a17:903:1245:b0:1dc:abeb:22fe with SMTP id
+ u5-20020a170903124500b001dcabeb22femr7959438plh.65.1709775952671; 
+ Wed, 06 Mar 2024 17:45:52 -0800 (PST)
 Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
  [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
- l13-20020a170903244d00b001dcc28544dbsm13269621pls.78.2024.03.06.17.45.46
+ l13-20020a170903244d00b001dcc28544dbsm13269621pls.78.2024.03.06.17.45.51
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 06 Mar 2024 17:45:49 -0800 (PST)
+ Wed, 06 Mar 2024 17:45:52 -0800 (PST)
 To: buildroot@buildroot.org
-Date: Wed,  6 Mar 2024 17:45:40 -0800
-Message-ID: <20240307014541.2900022-1-christian@aperture.us>
+Date: Wed,  6 Mar 2024 17:45:41 -0800
+Message-ID: <20240307014541.2900022-2-christian@aperture.us>
 X-Mailer: git-send-email 2.44.0
+In-Reply-To: <20240307014541.2900022-1-christian@aperture.us>
+References: <20240307014541.2900022-1-christian@aperture.us>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=aperture.us; s=google; t=1709775950; x=1710380750; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=zLh+asQ0vuftrvcBWlUtysHDTr4HiUo8aCsQPv26NnA=;
- b=pYiOFymoy/dN3BMx7+ZCjV05q3/ClZRpMn35ueTDNwB0D3oEN/ZFMZAJ3Dpef4JRsJ
- n/CO57q45VLRhVl5lTDqjvuo3MQC5F9N76P+Rgua/HE43NIb2NgY5KEhSQ/6Ngci8kU3
- Y543+1dBwrEyBVtTiHoVRDQNsDO+LLbT4y8lcQmTs8pNtBJP14gs3SSZy53VTV4Rs31c
- 9VIECuhmDMRPBqgYT/jaxIeRwQ/fof9g0kc7PTaCo0ZP9kjqVc7cEblATWTbI9J3uz7F
- NH81nrBDmKvAHikGlWLr7avCRI5HvYfTPoV6fRRMYtvoNY5oMJ7u58PSCT/xOP/2GU1b
- Inyg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=aperture.us; s=google; t=1709775953; x=1710380753; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=Wm2lSFUVUUo2WJA1TyBFNtFTYwmNMc46hMoKku6+40A=;
+ b=HQ2c+8yZMi1n7xZ/PyPlbag3YFTpOLjKj9V+zfls3q6HbYjTqPUdBnZqJaPfxQIck+
+ 88w+NoMK7MAEHuhaljC/J+6mUF/Po3lY2rvleafur8Y66oDSTQpgoNK0tPhtMKwOTObk
+ bgCr8oQHm33tV4OyIZ5RKi9m21oA2sKopNxANgZKIFiOaHxw/vB9mGWxAoyF+8j3DYyJ
+ tAwO2EGRFiRQI0WFhVVUDKuFSDOBEv6ZaPRvizwl6Wn2M1NYlFr54H4Pcq1dP/Kt5F2I
+ 9kep3XodWgnIj1AW6XF/vUxcBD3EGpR9EZrZaIDBloxdZAQ01z2qjmSWYr5q0qs3WQj3
+ nKCw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=aperture.us
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=aperture.us header.i=@aperture.us header.a=rsa-sha256
- header.s=google header.b=pYiOFymo
-Subject: [Buildroot] [PATCH v1 1/1] package/docker-compose: bump version to
- 2.24.7
+ header.s=google header.b=HQ2c+8yZ
+Subject: [Buildroot] [PATCH v1 1/1] package/nerdctl: bump version to v1.7.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -111,38 +113,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/docker/compose/releases/tag/v2.24.7
+https://github.com/containerd/nerdctl/releases/tag/v1.7.3
 
 Signed-off-by: Christian Stewart <christian@aperture.us>
 ---
- package/docker-compose/docker-compose.hash | 2 +-
- package/docker-compose/docker-compose.mk   | 2 +-
+ package/nerdctl/nerdctl.hash | 2 +-
+ package/nerdctl/nerdctl.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/docker-compose/docker-compose.hash b/package/docker-compose/docker-compose.hash
-index 92f7b227d3..ca3d08cf63 100644
---- a/package/docker-compose/docker-compose.hash
-+++ b/package/docker-compose/docker-compose.hash
+diff --git a/package/nerdctl/nerdctl.hash b/package/nerdctl/nerdctl.hash
+index 1fb0649fb2..52e249824f 100644
+--- a/package/nerdctl/nerdctl.hash
++++ b/package/nerdctl/nerdctl.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  ed132bcc226261a595469f5ca6d4ea20b02965867216b56d4e7a5962efb46570  docker-compose-2.24.5.tar.gz
-+sha256  931bfcc34eb43106be07787372bb853d4cd82830a5785f3049c5192ab0e4ac35  docker-compose-2.24.7.tar.gz
- sha256  58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd  LICENSE
-diff --git a/package/docker-compose/docker-compose.mk b/package/docker-compose/docker-compose.mk
-index 947f09d0b3..5417ba2d4f 100644
---- a/package/docker-compose/docker-compose.mk
-+++ b/package/docker-compose/docker-compose.mk
+ # Computed locally
+-sha256  574438dd7c88e6a607c6f82932f8ada174b1133a66ee0fa0f7510e7c3bebacb4  nerdctl-1.3.1.tar.gz
++sha256  fff8c348efa4ff6753e1aacded0dedddcb255c50b00d8b3a37a660b1fb1dd31a  nerdctl-1.7.3.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/nerdctl/nerdctl.mk b/package/nerdctl/nerdctl.mk
+index 43e862f7f9..66b22df646 100644
+--- a/package/nerdctl/nerdctl.mk
++++ b/package/nerdctl/nerdctl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOCKER_COMPOSE_VERSION = 2.24.5
-+DOCKER_COMPOSE_VERSION = 2.24.7
- DOCKER_COMPOSE_SITE = $(call github,docker,compose,v$(DOCKER_COMPOSE_VERSION))
- DOCKER_COMPOSE_LICENSE = Apache-2.0
- DOCKER_COMPOSE_LICENSE_FILES = LICENSE
+-NERDCTL_VERSION = 1.3.1
++NERDCTL_VERSION = 1.7.3
+ NERDCTL_SITE = $(call github,containerd,nerdctl,v$(NERDCTL_VERSION))
+ 
+ NERDCTL_LICENSE = Apache-2.0
 -- 
-2.44.0
+2.43.0
 
 _______________________________________________
 buildroot mailing list
