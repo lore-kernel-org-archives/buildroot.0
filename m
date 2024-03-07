@@ -4,62 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52EB0C54798
-	for <buildroot@archiver.kernel.org>; Thu,  7 Mar 2024 13:11:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 591EBC48BF6
+	for <buildroot@archiver.kernel.org>; Thu,  7 Mar 2024 13:11:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 05C5880D1D;
-	Thu,  7 Mar 2024 13:11:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 221848216D;
+	Thu,  7 Mar 2024 13:11:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yEFNuOA9nqwN; Thu,  7 Mar 2024 13:11:33 +0000 (UTC)
+	with ESMTP id AwgR9ZtqtQCC; Thu,  7 Mar 2024 13:11:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 13E3181F51
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 30987821AE
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 13E3181F51;
-	Thu,  7 Mar 2024 13:11:33 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 09DD71BF5A4
- for <buildroot@lists.busybox.net>; Thu,  7 Mar 2024 13:11:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 30987821AE;
+	Thu,  7 Mar 2024 13:11:54 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C121C1BF5A4
+ for <buildroot@lists.busybox.net>; Thu,  7 Mar 2024 13:11:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EB16A8216D
- for <buildroot@lists.busybox.net>; Thu,  7 Mar 2024 13:11:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BB6C241981
+ for <buildroot@lists.busybox.net>; Thu,  7 Mar 2024 13:11:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id J9I3cFbJwvGu for <buildroot@lists.busybox.net>;
- Thu,  7 Mar 2024 13:11:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
- helo=relay6-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0TSMUSSzIZ7O for <buildroot@lists.busybox.net>;
+ Thu,  7 Mar 2024 13:11:52 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C297B81F51
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C297B81F51
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C297B81F51
- for <buildroot@buildroot.org>; Thu,  7 Mar 2024 13:11:29 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B2B5FC000E;
- Thu,  7 Mar 2024 13:11:26 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1riDWv-003RMH-3D;
- Thu, 07 Mar 2024 14:11:26 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 00BFC40BB2
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 00BFC40BB2
+ for <buildroot@buildroot.org>; Thu,  7 Mar 2024 13:11:52 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id DDC5F881BB; Thu,  7 Mar 2024 13:11:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Christian Stewart <christian@aperture.us>
-References: <20240307014541.2900022-1-christian@aperture.us>
- <20240307014541.2900022-2-christian@aperture.us>
- <87o7bqw5pu.fsf@48ers.dk>
-Date: Thu, 07 Mar 2024 14:11:25 +0100
-In-Reply-To: <87o7bqw5pu.fsf@48ers.dk> (Peter Korsgaard's message of "Thu, 07
- Mar 2024 14:07:25 +0100")
-Message-ID: <87h6hiw5j6.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH v1 1/1] package/nerdctl: bump version to
- v1.7.3
+To: buildroot@buildroot.org
+Date: Thu, 7 Mar 2024 14:05:07 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b8db5c466046dc2f3d9c411e6c9924667dd1a40c
+X-Git-Newrev: 6b56e0b4f09b36140e2cb9e41072d5ac6074f375
+X-Patchwork-Hint: ignore
+Message-Id: <20240307131151.DDC5F881BB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] linux: disable -Werror
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,26 +58,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============1841190870630993377=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+--===============1841190870630993377==
+Content-Type: text/plain
 
->>>>> "Christian" == Christian Stewart <christian@aperture.us> writes:
- >> https://github.com/containerd/nerdctl/releases/tag/v1.7.3
- >> Signed-off-by: Christian Stewart <christian@aperture.us>
+commit: https://git.buildroot.net/buildroot/commit/?id=6b56e0b4f09b36140e2cb9e41072d5ac6074f375
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Committed, thanks.
+Disable -Werror to fix the following build failure with esp-hosted
+raised at least since commit a382a7d55432918d2a1e47ae4cbe7ed50fa17a08:
 
-Ehh, no - We already have nerdctl 1.7.3.
+In function ‘destroy_cmd_wq’,
+    inlined from ‘esp_commands_teardown’ at /home/autobuild/autobuild/instance-4/output-1/build/esp-hosted-ce3c50a33fa4bc562a1b6cbcee292c1ae0b0a404/esp_hosted_ng/host/esp_cmd.c:1467:2:
+./include/linux/workqueue.h:639:9: error: call to ‘__warn_flushing_systemwide_wq’ declared with attribute warning: Please avoid flushing system-wide workqueues. [-Werror=attribute-warning]
+  639 |         __warn_flushing_systemwide_wq();                                \
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/autobuild/autobuild/instance-4/output-1/build/esp-hosted-ce3c50a33fa4bc562a1b6cbcee292c1ae0b0a404/esp_hosted_ng/host/esp_cmd.c:408:17: note: in expansion of macro ‘flush_scheduled_work’
+  408 |                 flush_scheduled_work();
+      |                 ^~~~~~~~~~~~~~~~~~~~
 
--- 
-Bye, Peter Korsgaard
+Fixes:
+ - http://autobuild.buildroot.org/results/6ac7a4601938d3296ed1657c06f8cdf433757d73
+ - http://autobuild.buildroot.org/results/7997cc8a67645a6e1cf4e24d172c6feae459dcfb
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ linux/linux.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 53e2ad6d48..4e12b36c1f 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -436,6 +436,7 @@ define LINUX_KCONFIG_FIXUP_CMDS
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_LOGO)
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_LOGO_LINUX_CLUT224))
+ 	$(call KCONFIG_DISABLE_OPT,CONFIG_GCC_PLUGINS)
++	$(call KCONFIG_DISABLE_OPT,CONFIG_WERROR)
+ 	$(PACKAGES_LINUX_CONFIG_FIXUPS)
+ endef
+ 
+
+--===============1841190870630993377==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1841190870630993377==--
