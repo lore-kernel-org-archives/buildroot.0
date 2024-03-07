@@ -1,93 +1,141 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 630A1C54798
-	for <buildroot@archiver.kernel.org>; Thu,  7 Mar 2024 14:32:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC8AEC48BF6
+	for <buildroot@archiver.kernel.org>; Thu,  7 Mar 2024 15:38:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 081B061025;
-	Thu,  7 Mar 2024 14:32:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 482C04194E;
+	Thu,  7 Mar 2024 15:38:35 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id eYQBs15_hTNP; Thu,  7 Mar 2024 15:38:34 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E67504190E
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id E67504190E;
+	Thu,  7 Mar 2024 15:38:33 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id ACBEB1BF59A
+ for <buildroot@lists.busybox.net>; Thu,  7 Mar 2024 15:38:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id A57D760844
+ for <buildroot@lists.busybox.net>; Thu,  7 Mar 2024 15:38:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KEGXcrY_FAUH; Thu,  7 Mar 2024 14:32:38 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 126D56103A
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 126D56103A;
-	Thu,  7 Mar 2024 14:32:38 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 01AC81BF2AB
- for <buildroot@lists.busybox.net>; Thu,  7 Mar 2024 14:32:37 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F00D182AA9
- for <buildroot@lists.busybox.net>; Thu,  7 Mar 2024 14:32:36 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WQSJ9SSKybig for <buildroot@lists.busybox.net>;
- Thu,  7 Mar 2024 14:32:33 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wkNVJm75bQGq for <buildroot@lists.busybox.net>;
+ Thu,  7 Mar 2024 15:38:30 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::22d; helo=mail-lj1-x22d.google.com;
- envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D51D882A26
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D51D882A26
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com
- [IPv6:2a00:1450:4864:20::22d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D51D882A26
- for <buildroot@buildroot.org>; Thu,  7 Mar 2024 14:32:32 +0000 (UTC)
-Received: by mail-lj1-x22d.google.com with SMTP id
- 38308e7fff4ca-2d311081954so10286721fa.2
- for <buildroot@buildroot.org>; Thu, 07 Mar 2024 06:32:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1709821950; x=1710426750;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=eHwSm9Exf3bS8whxZVeGVHNnOnHOWbK4uGLPo2ogL/M=;
- b=tMRDTe7VrU2d6w8DuICS+Ub0dFHGZiQIWtsESpeUXyVEv0YifpSy133QDQOWNWgeB+
- EAT8nSXAx08XZcdwLYI73wO5wsR2LfYl4LfnzaGzVoPow7HAYN5QwU7EE5itIrurPJuD
- DPik3MYC/ON5wUoGK+LQWxuBMWB9OtmyRGT+BLR1ks8OGFSHoqIKgFkBCksYpmI6IGrN
- 1HvmaidNtGHjcOavv96H2+yfAbbdiBHoI8s5CcOIrqkYtzhAAbBiJbkG8eLcA3Ooj3qP
- 3SB6wdy/DRqhRsT2XkRqtSKOfKubJ0TdNw0s6+BBzGAnKcxBoYemnJk55vsXrfVq/GRS
- WJIw==
-X-Gm-Message-State: AOJu0YyMNVb0lMJSZkZCf2dlPZBhms6IsOEqMIORZmO0FS7/CV7s4M/A
- efeqAAF35rS2d04RU0XrqTOPcxXD7BlEcjAPAJazetM4dml+RYJtkPtruZ55
-X-Google-Smtp-Source: AGHT+IHqVRMiyHARDFnc0d0zHelbYN6w5wfVHfUdsxW1U1ohhyY/lwHGbyX9ytrJBPJoZODOlX2Yng==
-X-Received: by 2002:a2e:7214:0:b0:2d3:8656:3cd4 with SMTP id
- n20-20020a2e7214000000b002d386563cd4mr1514240ljc.9.1709821949929; 
- Thu, 07 Mar 2024 06:32:29 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- l37-20020a05600c1d2500b0041315f221c7sm168730wms.16.2024.03.07.06.32.29
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 07 Mar 2024 06:32:29 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Thu,  7 Mar 2024 15:32:27 +0100
-Message-ID: <20240307143227.548555-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
+ client-ip=2a01:111:f403:2407::601;
+ helo=nam02-bn1-obe.outbound.protection.outlook.com;
+ envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2E94660819
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E94660819
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com
+ (mail-bn1nam02on20601.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:2407::601])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2E94660819
+ for <buildroot@buildroot.org>; Thu,  7 Mar 2024 15:38:29 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GgqhqL3AoeXhQCI61+aNEOTVn8J/yqL70BsV/wN0uNUv7A8rPT58v/SfpoLtrGy50tbaC07VhdSQzbPEBBav3d8bRWhTOaUyHvLSbDZhaf9z3v6/WWBIr9RJ4GegODhv0Loh1zSS9m5r27z/DGEA5lJOY/iqn3T9c3mJFESsXr3rnJsV2M9d/fWK4F99wJzoWrtqSnOsPS0dMtRHnSYxHLvqM8C/WBHMEGEgPAZWEiAjvjKoc723U3kMeTUhKac1tAkNqDK6rkOKJUnX4165jGUIt1KbexMren3DU4a/J95QstILMurQ8z0qAWAsJYJui5iPJYO3vPV9879MMOeHjg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=N2aTLu6AgaRv2qsClJ1yrYPO37106QOijPJKim0SXaE=;
+ b=ZfcRMWFcMX/N6x/qenh2oPlzmoQ7eRZwa/9BXQtPIwWRPQqCoCtwsUZ7Z9GSr25wwbrrhFWtDcC4HOD6laj+0H3oa1xJ5r3w/bKR+N4Sv11o7vBfaBo2UtzYpk6LXJedJ3H1FfedDWr6FkUvgf/CaBPxgf7FgJpn7MJD92sAZTQ8NN0DHN/EMDyqV1x1In85HQcn5ywOst1J6c/97+tqEgv7nM+pAl3tpY5PbfVHAkOm9bukaqfU/aC0NMeYy3NlpQma4GozLIddHl656Vhn6YHSF04k8qvWF6ttMbe26PXpTRWOSDHeY82P5igtlj2yXwwgDtFXjWB2GV8b9FEK8Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+Received: from CH2PR12MB5004.namprd12.prod.outlook.com (2603:10b6:610:62::16)
+ by DM4PR12MB6615.namprd12.prod.outlook.com (2603:10b6:8:8d::9) with
+ Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7362.27; Thu, 7 Mar 2024 15:38:26 +0000
+Received: from CH2PR12MB5004.namprd12.prod.outlook.com
+ ([fe80::af8d:96ea:45d4:310f]) by CH2PR12MB5004.namprd12.prod.outlook.com
+ ([fe80::af8d:96ea:45d4:310f%5]) with mapi id 15.20.7362.024; Thu, 7 Mar 2024
+ 15:38:25 +0000
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, "buildroot@buildroot.org"
+ <buildroot@buildroot.org>
+Thread-Topic: [PATCH 1/1] package/gcc-bare-metal: add CPE variables
+Thread-Index: AQHacHvWk/l4uD8T6E6hzMx3Xp4fP7EsaZVQ
+Date: Thu, 7 Mar 2024 15:38:25 +0000
+Message-ID: <CH2PR12MB5004A3DDD6C4F49F101B9E53F0202@CH2PR12MB5004.namprd12.prod.outlook.com>
+References: <20240307104008.28932-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <20240307104008.28932-1-fontaine.fabrice@gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CH2PR12MB5004:EE_|DM4PR12MB6615:EE_
+x-ms-office365-filtering-correlation-id: 81d9a541-9890-4db3-023d-08dc3ebca134
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: AY3uVZAazzd+VPkcpdHxILWbknMRHRjUErfz0PMYMPykqKD6BI6tuRrrq8Pz6n0SwEVRNgpf+WPwnQKtxqNNivLpBOHwFsfpOnGMQJmMfvxe3jfQYPWa2AN2C2Y/Vq9IIkj/s0QAxqEjPbyEX+3WZhkpDPdQKS+63JC0k8NP/bM9AwRDIw87kzvsqY/TPvYUAq37j7De0vd+VGLe8cR9tB+fUZKhbHtkrDprH3ACTPkRzibXAmzczZ7bLtNB8pidk/oCtY0bTDuvUsJG3k2Vhj18se/EclZqYVVg/iqUywMpjlolfze1hDHBgYboEalq+aV7LGEQ5JqgjxJ5EAvOBzI9e18m2072pMSceHWLl7NSgxjT6/B3EIKX9gnDkMtcmthV5/ecbJ2nVrO036HPW/LpAkytvRhq2FEHvRu3Ol5FZ+zd5HeSnoFhAICFr5gH52u1KIOV4u3ZE9eb97+AFuPGvX6U73KSODXVL/W+kplDteuDFljP9LYXnp/MZ8IS8/SbynifbuQGr4JZwG3TnTTIKCPk/iu6OzOGEg5Bj267eTCjbzE817FoRF+RayBEHC6y1xg27yTm+OE0uHKrTdnUMPMaBhtyOcuOLIt72dKrNBrvHHvH7MRRgliObbLSrvRPShbBw/Jhcy30QGsLJ2SQaX8g7th7d8F27DbWGUE=
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:CH2PR12MB5004.namprd12.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230031)(376005)(38070700009); DIR:OUT; SFP:1101; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?3TPEqix90EE1RU0eJfZuIj7Ael/IiJVTGCgNaa/E0YVUia1IQMMVINQrK0Ou?=
+ =?us-ascii?Q?h7KdfJ161H0wkUG2QkrdvMp4Df9Q2iZYgRw+fc0hMA7AvwD7lFDAxYWc7uPy?=
+ =?us-ascii?Q?ORg3XIpRzeHojHl1o6jaUp8ib9lzQ3hiPNWvcR7Ujh5V8A95cwrdenWPZg54?=
+ =?us-ascii?Q?LaqvU5nUEEqWFfKxZsF4JZZPNRB1L+pXdyayZMucLIsxY30Ufjj1Zt4llz0F?=
+ =?us-ascii?Q?oivGIN3+zeg7VO0HDyjRGy6biQHj1HCeolGfS5W/IvHA7jg3CNjNThkWpa01?=
+ =?us-ascii?Q?9XMXKvZW7aOl4GdP0mxVleAIgjK3ojgbSzYdXZTBYQAptbvmEHTjdmhu+FJl?=
+ =?us-ascii?Q?T+WMMzmafpUp4L81JhW4oepehBdBlSOp98cKjZyh3GQMtSSrlMhFyFapH2lU?=
+ =?us-ascii?Q?O46ZTjy/eKD8/thEBv2+RqSy6dHPgSlJSUIwQxuyzth02yCwQWvFQG99sbpa?=
+ =?us-ascii?Q?F2No978usO6NVY1VAkHDfwEbQSg1V8TEP269Vx1++wv4OROqyr7lCMsD6o8L?=
+ =?us-ascii?Q?X7tUQJ/ABghZ0Pr9YF7gSA3nkT+sf+wpECcdCs/OEEDn8UALPHDIUwIEYPx0?=
+ =?us-ascii?Q?+wOr0iiM6W4NYEduuRe7x3QS2Ahc7xcUIG4tGXW+ufGLAwINhBQDgG0KSCjZ?=
+ =?us-ascii?Q?KbTvVITE8KZRdjuCGVYrsD7dPZw4NjjQwN+WKALNmrSeoBgLqFFTwpIFUlA1?=
+ =?us-ascii?Q?t5/789KN40bPo4LxnqrojJMPsXN9fr01uiOdQSEa7q9VJfOcN/k1u7i2cdJs?=
+ =?us-ascii?Q?hviEP/n6V8f8daOVg5TYBxqcmDTDIuP+bAvK2OUNuRINigPvckhcFsTIpjLz?=
+ =?us-ascii?Q?EznEJQBgk6myLssYiIK2Wzv8pcXjb5aw4ZNgmGiJf4lUvgeLWE7Esdf9+EJu?=
+ =?us-ascii?Q?XXjLvrbl5BwKbk9NmXPlgYckeqY134YVgxvylvh+KnjOAK/392Kl/HIw76FR?=
+ =?us-ascii?Q?HpymMtA+H4JnytQ8amX+PTFEq2DzcOhMhLXCQPnS/JcIR3lp2lw+IE+DPii8?=
+ =?us-ascii?Q?mJosW04+UfCiqa/LpF7QgdX9fxxXcBYkUMVjKByDDusAIKNorOACViDNaAkA?=
+ =?us-ascii?Q?WXSsYAUN5o9dYPh5qJDZzkq20B4D5FIazuRYauMHoQJLgVCuxR1oDr5qF4pN?=
+ =?us-ascii?Q?A8HJnnK2gX3QzM/2T+BatqMb/8B0S3bdTIkSkSlJy3avaXHHUEBjz6dJ6La/?=
+ =?us-ascii?Q?1ExTZ4N11ENxb6tZAK0yEo4S6qiEXM3LQXjC9jeITd8g0ebUaaV/seuS9/P0?=
+ =?us-ascii?Q?5+sjCwNNsHIbTEHsgLfqR0YM6O0tGeK5MCWu73vJPr3ptCOeLO5t43B27dVm?=
+ =?us-ascii?Q?I4Wm+CERtbtH9/MV17IB+sd0zsCIDeINzjPvHP5ro/rae2Q/ER7sxhKVladJ?=
+ =?us-ascii?Q?QsB6YsGho7/IMt7pzdOTmk24TV9LTWFfMSEtM1SOdeNnYcfHuEjB/42+//bf?=
+ =?us-ascii?Q?A7qrNDS762hU7iyB2EGvXav5yirv6a4pHIbJ3TcxLURBsu2ArtLzWFnV5Kgd?=
+ =?us-ascii?Q?OG6S5OmeP6epSXU/FwcuFOa72sFDAZw0psZGh33E4m6V9Ez9HUmkbVxWvVV5?=
+ =?us-ascii?Q?0dh4s0ueOFANfsIw9C0=3D?=
 MIME-Version: 1.0
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB5004.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 81d9a541-9890-4db3-023d-08dc3ebca134
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Mar 2024 15:38:25.8727 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: NslELXvX+SVFpFmPQTfSv4g9mYYVD7w6NBqbG6vvJS29Z5P3LtOQ/5+HofbCUoes
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6615
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1709821950; x=1710426750; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=eHwSm9Exf3bS8whxZVeGVHNnOnHOWbK4uGLPo2ogL/M=;
- b=mjJ02Wn1OP63fxQ5loCJNQv2+hei/sNLGQ5MQqWjoi1YGgiWopvHBmikG6p4IftMEr
- mA1d51su76GAEcyT5ehYI0iSDRBuS+khiQmes0i583/o3vTrH9+wXJcZnNwGFxMOSy/v
- S6/lztnMgFcyWhpzHfb0G5fjejEjJnRI8Oatz8qMvFvq9nZ9gwJxQlILTrdJ55rl0yhN
- 6PMNJ2EyBdZTMjVW7I0+LU2up7n66RruEWk+3RtfLcdlTQFQ/FODrUg4dutE2W702KHP
- 6Kmmq08EecsGWCCQozVyW4KVzCIPQ5y1MVIHvh0bv2XyL/kDVujz3A3cDq5ODm2Gx5j8
- JoCA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=mjJ02Wn1
-Subject: [Buildroot] [PATCH 1/1] package/rtl8189fs: bump to latest git commit
+ d=amd.com; s=selector1; 
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=N2aTLu6AgaRv2qsClJ1yrYPO37106QOijPJKim0SXaE=;
+ b=Kkx7YKU3wwYhcoBHaShrclLEPe14a9tTCyxFxhhkAQDPBZFZkqSdJY8QFMDumYefRB36vtQF00+iRKxEMEdJvOwB+VSz2BtxbFiGSa+0B6Ts+qk6b39rORlRa8y+eFKAcpFOGIBmxMT1G2RcI0WSGXO+Ed/k+n3bwJUU42iVj2k=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=amd.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
+ header.s=selector1 header.b=Kkx7YKU3
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Subject: Re: [Buildroot] [PATCH 1/1] package/gcc-bare-metal: add CPE
+ variables
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,57 +147,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Sergey Matyukevich <geomatsi@gmail.com>
+From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
+Reply-To: "Frager, Neal" <neal.frager@amd.com>
+Cc: "Erkiaga Elorza, Ibai" <ibai.erkiaga-elorza@amd.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bump to latest git commit to fix the following powerpc64 build failure
-raised at least since commit 25956b29e4d63f599b9baf7298f69538ba2f22fa
-thanks to
-https://github.com/jwrdegoede/rtl8189ES_linux/commit/c7bf7590bc0d7252005fd0496898ad420a85e1ae:
+Reviewed-by: Neal Frager <neal.frager@amd.com>
 
-In file included from /home/autobuild/autobuild/instance-7/output-1/build/rtl8189fs-5d523593f41c0b8d723c6aa86b217ee1d0965786/./include/drv_types.h:30,
-                 from /home/autobuild/autobuild/instance-7/output-1/build/rtl8189fs-5d523593f41c0b8d723c6aa86b217ee1d0965786/./core/rtw_cmd.c:17:
-/home/autobuild/autobuild/instance-7/output-1/build/rtl8189fs-5d523593f41c0b8d723c6aa86b217ee1d0965786/./include/wifi.h:459:32: error: conflicting types for 'get_ra'; have 'unsigned char *(unsigned char *)'
-  459 | __inline static unsigned char *get_ra(unsigned char *pframe)
-      |                                ^~~~~~
+> cpe:2.3:a:gnu:gcc is a valid CPE identifier for this package:
 
-Fixes: 25956b29e4d63f599b9baf7298f69538ba2f22fa
- - http://autobuild.buildroot.org/results/83153ed38a583ce2712df9b142ac3fc55a8413e3
- - http://autobuild.buildroot.org/results/63186c7adb5ecc8b8a16a6ae641ecfb9c03478bd
+>  https://nvd.nist.gov/products/cpe/detail/A30F1DE7-139B-4296-AA87-A516462A1A81
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/rtl8189fs/rtl8189fs.hash | 2 +-
- package/rtl8189fs/rtl8189fs.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+> package/gcc-bare-metal/gcc-bare-metal.mk | 2 ++
+> 1 file changed, 2 insertions(+)
 
-diff --git a/package/rtl8189fs/rtl8189fs.hash b/package/rtl8189fs/rtl8189fs.hash
-index e3d63ac4b0..2746194f43 100644
---- a/package/rtl8189fs/rtl8189fs.hash
-+++ b/package/rtl8189fs/rtl8189fs.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  c92e1d800258665835922c1e927708f7a0477a1cbb281dc98ba5d33d5e3271ee  rtl8189fs-5d523593f41c0b8d723c6aa86b217ee1d0965786.tar.gz
-+sha256  b28c15f4631f4151ea6fca96d59aec931766af49ccb7a0d5e1080fc41a323713  rtl8189fs-eb51e021b0e1b6f94a4b49da3f4ee5c5fb20b715.tar.gz
-diff --git a/package/rtl8189fs/rtl8189fs.mk b/package/rtl8189fs/rtl8189fs.mk
-index 86a2ac734b..174bb346ca 100644
---- a/package/rtl8189fs/rtl8189fs.mk
-+++ b/package/rtl8189fs/rtl8189fs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+> diff --git a/package/gcc-bare-metal/gcc-bare-metal.mk b/package/gcc-bare-metal/gcc-bare-metal.mk
+> index f391f094fe..0dfc8d7a5c 100644
+> --- a/package/gcc-bare-metal/gcc-bare-metal.mk
+> +++ b/package/gcc-bare-metal/gcc-bare-metal.mk
+> @@ -11,6 +11,8 @@ HOST_GCC_BARE_METAL_SOURCE = gcc-$(HOST_GCC_BARE_METAL_VERSION).tar.xz
  
--RTL8189FS_VERSION = 5d523593f41c0b8d723c6aa86b217ee1d0965786
-+RTL8189FS_VERSION = eb51e021b0e1b6f94a4b49da3f4ee5c5fb20b715
- RTL8189FS_SITE = $(call github,jwrdegoede,rtl8189ES_linux,$(RTL8189FS_VERSION))
- RTL8189FS_LICENSE = GPL-2.0
+> HOST_GCC_BARE_METAL_LICENSE = GPL-2.0, GPL-3.0, LGPL-2.1, LGPL-3.0
+> HOST_GCC_BARE_METAL_LICENSE_FILES = COPYING COPYING3 COPYING.LIB COPYING3.LIB
+> +HOST_GCC_BARE_METAL_CPE_ID_VENDOR = gnu
+> +HOST_GCC_BARE_METAL_CPE_ID_PRODUCT = gcc
  
--- 
-2.43.0
+> HOST_GCC_BARE_METAL_DEPENDENCIES = \
+> 	host-binutils-bare-metal \
+> -- 
+> 2.43.0
 
 _______________________________________________
 buildroot mailing list
