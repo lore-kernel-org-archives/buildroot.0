@@ -4,83 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6B57C54798
-	for <buildroot@archiver.kernel.org>; Thu,  7 Mar 2024 16:52:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DF8DC54E49
+	for <buildroot@archiver.kernel.org>; Thu,  7 Mar 2024 17:16:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5BBAE41BBD;
-	Thu,  7 Mar 2024 16:52:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CFF13418D7;
+	Thu,  7 Mar 2024 17:16:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id k4QdgVpsNDgA; Thu,  7 Mar 2024 16:52:36 +0000 (UTC)
+	with ESMTP id v7BnfBwvzAJV; Thu,  7 Mar 2024 17:16:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3137F41BB6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B4A09418DE
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3137F41BB6;
-	Thu,  7 Mar 2024 16:52:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 775251BF5AA
- for <buildroot@lists.busybox.net>; Thu,  7 Mar 2024 16:52:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B4A09418DE;
+	Thu,  7 Mar 2024 17:16:16 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B716F1BF396
+ for <buildroot@lists.busybox.net>; Thu,  7 Mar 2024 17:16:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 43CB482998
- for <buildroot@lists.busybox.net>; Thu,  7 Mar 2024 16:52:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A57F04090F
+ for <buildroot@lists.busybox.net>; Thu,  7 Mar 2024 17:16:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yi6w93DzOdLK for <buildroot@lists.busybox.net>;
- Thu,  7 Mar 2024 16:52:25 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.18;
- helo=mout.gmx.net; envelope-from=ps.report@gmx.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B739882983
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B739882983
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B739882983
- for <buildroot@busybox.net>; Thu,  7 Mar 2024 16:52:22 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost.fritz.box ([62.216.208.100]) by mail.gmx.net
- (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1MQMuR-1rUiJ82BPd-00MLgn; Thu, 07 Mar 2024 17:52:19 +0100
-To: buildroot@busybox.net
-Date: Thu,  7 Mar 2024 17:52:15 +0100
-Message-ID: <20240307165218.10027-1-ps.report@gmx.net>
-X-Mailer: git-send-email 2.44.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id omSAOylxYiTE for <buildroot@lists.busybox.net>;
+ Thu,  7 Mar 2024 17:16:15 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org BD24440360
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD24440360
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BD24440360
+ for <buildroot@buildroot.org>; Thu,  7 Mar 2024 17:16:14 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-4130e293686so8383755e9.3
+ for <buildroot@buildroot.org>; Thu, 07 Mar 2024 09:16:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1709831772; x=1710436572;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=gk+9paFs2jXU7+66HvJtL+DXSs0ZyHz+J2ZXRfV8/68=;
+ b=A9H2/peJn+dXAR/Dd6hhQ6GVaPw7lKE4TF3hVyBkVyhiQXGwoVONf0ornbyIq4gZgc
+ CWouBuRzlZ7NaalXK2+xGTK/iuXT+HggCR64EXYiC0Yq2nr4O406v9ROMky0DBIhTuD5
+ IVU56iJAvgENlS+GSLPfrU33yN97lDegbQ687R5bs8q5cCjc1Str2swnhC52Y/FPL4wy
+ l9BBxnCPb3WPnjO3XZ87fk9LGz1ZN1uqa++uo3rsEhH7ZPRTvuMG3k6hWMdO4z6iPgiR
+ zuZf5rxJjrsUU7NJNfLdgb8Jiri99OHekpTY1BrYaHsuMEfW6SmblYaYUY7Uk/FcY7JB
+ ACSA==
+X-Gm-Message-State: AOJu0YxVEQFP4ECD58OVRrduCyGcWMkFpliHhNj2DNArbej3Hedfp7Sa
+ qIAEOH2QyIATM+zGV6cW1TV74jmGqUq8duWQBz8G0NOnLweKI+9Oej2iSku+
+X-Google-Smtp-Source: AGHT+IHusLoy2SaGqdz6c5+NuruXKxzHLpUBzCo2FItHJXAgY26IPC01cka3nst3Y8jFxdQ0NbeTEw==
+X-Received: by 2002:a05:600c:a019:b0:413:15c9:43e5 with SMTP id
+ jg25-20020a05600ca01900b0041315c943e5mr544607wmb.13.1709831772179; 
+ Thu, 07 Mar 2024 09:16:12 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ gw6-20020a05600c850600b0041273fc463csm3295442wmb.17.2024.03.07.09.16.11
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 07 Mar 2024 09:16:11 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Thu,  7 Mar 2024 18:16:10 +0100
+Message-ID: <20240307171610.47962-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:Njp9oWnRaWzAgbZWtw0M7vlRqj3sU3XfQMDWBNEQFYWD/jsnS1B
- SeV//rBwJBa1SOnDt/lY4LFz6aMCJLbC5Lza+RgFU0221a2wWrB06BgK/I44r2CpV0yR2MU
- eEmxu1TQ/AlVbx+vUpXzW0NWGSfa8Gb5tKD4D3VgXiESCVauKVsKUHYoKH4fd4S6ToSbTrH
- kndI8/idbbSstA9f/Z7hA==
-UI-OutboundReport: notjunk:1;M01:P0:CrdsbzDE+U8=;jxUjcwtfUABEUfGpJd/zlfDWmLn
- OdVAvRFQenfnfaWQx6ik0D3Cxs/OgUqlCKLNxgZQNlh5C1zFyPv/5+wvrtlbQxS5dE0GDcWn6
- cKe/jLrXpKh/kwSCxR8Sa0Ner4rS66rxQ/QC0qCa5ac+EbhNjt0SDiYcQVss9iK6XCDvEDkLn
- c/O1xvRbQ/hMqOz4yu55ndpUrRcbcK6LLCUPWGMy1VeFccc4jclR/uPz1lIqvOjXkAboAPI07
- Lr/c+Vl6C9ksQ2DQTaCJMiqwSx1V6NEX/muZOu022AgknK1S0idk0GW1PczgUqORDJvpc6NCC
- NYflmw+aFvsjP2ASq6CMAyuPvbixYQ8dtfMXK4NSJCo+/H9GDejISMLI9acqGWpMbF8aY4xf4
- JEzHcYpVzvQfNZR0abyYYLOtCfssMh1sfuJy5Ig+5AYpaqgPlxgT66fljOKL+4ujev0BRegFC
- Uo78wJZPu6DoMwvQHQNFt/HLNGowjYoArcrthiyhAMi1NoWOsIjRof4ATtZFAmEsIrdEyiVEj
- LaTE/zzYkhxOck6nACl/6I4jxY2Adfx/f3TSpg2qOJbKU9iYD79ORdA3VwB/AxYRx3EKpB9Ho
- BUqIP+/c/lYxFHxkDXfkHHgvFK3lpFKzYlH0ZkIgCHnENHOptw3yg0AuOG2T6jqNdq4v/CnPj
- +juNqOADfDveZrzhEsCv+AfcW5jXUHUozFANG6iCUARENsWGmAR0M+gIGhHp6Nx16Y+MXom67
- HnbnNLUsmMCQJOvjUGbeDOsAQNzmqEZAO4LjQAdgX7ZYvtxXqfcQgF20a6i30r1XdyRi18oof
- yjkPBKvqp1aG1xnycP+fWLB5KIr7pNMOlt/05xKsGM9Vc=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=gmx.net; 
- s=s31663417; t=1709830339; x=1710435139; i=ps.report@gmx.net;
- bh=aWThDUvoveAEQKg85YK6Qp0GHChqymWz4Q2eu9hx7Rs=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
- b=U5EcKPo3GYeym9SKkaZp0OcK8k+V68y/06Kk14MivuHC6EG0Tev+L3NyzjswHYQp
- AGSJJgg14zfRmCF3s/3o0qWqzyPG6/ds+Uee/oqMLw1liwyhAqBddqHtGCW6KSHjK
- J+ERRp9OOPj2mSECe+AJOMKJbQaC6LxAVXR70C39WKJzfCG1MuqX+i6cFz4R4/VZV
- kpKw1oQHcyCcqxWbqQwxt52+0NHx6Z1coqUrfs1p9fqNnk2cYg7E3RU/UUYJZzBJ4
- lKqodoKl3zlFA6JqKU64EGe8a1KtmwJvs/ti1qEuBWn1Sbsvw14R3tE2oUFPEz9EF
- Wvc+DJYZJPTROH3cWw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=gmx.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmx.net header.i=ps.report@gmx.net header.a=rsa-sha256
- header.s=s31663417 header.b=U5EcKPo3
-Subject: [Buildroot] [PATCH v1 1/4] package/xz: bump version to 5.6.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1709831772; x=1710436572; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=gk+9paFs2jXU7+66HvJtL+DXSs0ZyHz+J2ZXRfV8/68=;
+ b=Zjh7zBEe/cJDs0gUMkoxX5BmW5wQcMsWC9ODNuabKAy3QjvJeKj/Pxsp2wcpBIbdWE
+ hs6G8EtxS3J4kDz8hkm3NKkOsAYefBUU23kSe4hRBApqHYkcSQEj8tYwl3w6uHho18zJ
+ 0aNq9BH8WfvXWDNjD0Tl1urgt+22fnf7N8/go2WKXtbFdoAy8zUnPa5tH4EW1J2dBDpb
+ LxdK2BT1NmNkX3zpX0Xb5WCQcO2279yQI7T7v7BSDNSMo+DiiexCuarHqAdTc5ugun7e
+ +bBXwNhZpvX5PI3eOwt4EZifs8EuPI3xkldKJKm+7N3iedhgq5she5cLqpEDFGO907By
+ JmhQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=Zjh7zBEe
+Subject: [Buildroot] [PATCH 1/1] package/crucible: fix license
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,84 +99,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Peter Seiderer via buildroot <buildroot@buildroot.org>
-Reply-To: Peter Seiderer <ps.report@gmx.net>
-Cc: Samuel Martin <s.martin49@gmail.com>
+Cc: Fabio Estevam <festevam@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- bump version to 5.6.0
-- change homepage URL to https://xz.tukaani.org/xz-utils/
-- add BSD-0-Clause and update license file hash accordingly (see [1], [2],
-  and [3])
+crucible is licensed under BSD-3-Clause since bump to version 2023.11.02
+in commit be3f95ed14559f8a9739a12cff604add622b0416 and
+https://github.com/usbarmory/crucible/commit/7fe0bb96da655b4e83031a99115d37f88a171e9f
 
-For details see [4].
+Fixes: be3f95ed14559f8a9739a12cff604add622b0416
+ - http://autobuild.buildroot.org/results/6183b11f1564bc07adfff2b02cb0607d0b1de54e
 
-[1] https://github.com/tukaani-project/xz/commit/b1ee6cf259bb49ce91abe9f622294524e37edf4c
-[2] https://github.com/tukaani-project/xz/commit/689e0228baeb95232430e90d628379db89583d71
-[3] https://github.com/tukaani-project/xz/commit/28ce45e38fbed4b5f54f2013e38dab47d22bf699
-[4] https://github.com/tukaani-project/xz/blob/master/NEWS
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/xz/Config.in | 2 +-
- package/xz/xz.hash   | 7 ++++---
- package/xz/xz.mk     | 6 +++---
- 3 files changed, 8 insertions(+), 7 deletions(-)
+ package/crucible/crucible.hash | 2 +-
+ package/crucible/crucible.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/xz/Config.in b/package/xz/Config.in
-index 687bd55482..7130fa5e8e 100644
---- a/package/xz/Config.in
-+++ b/package/xz/Config.in
-@@ -12,4 +12,4 @@ config BR2_PACKAGE_XZ
- 	  invoked via appropriate symlinks will emulate the behavior
- 	  of the commands in the lzma package.
+diff --git a/package/crucible/crucible.hash b/package/crucible/crucible.hash
+index d5fee0068d..3a9a716732 100644
+--- a/package/crucible/crucible.hash
++++ b/package/crucible/crucible.hash
+@@ -1,2 +1,2 @@
+ sha256  d21842f050163765269290d72fe79d3f95005038e865138d94e247cb455098da  crucible-2023.11.02.tar.gz
+-sha256  d88514630470aec9fa7abdc990a1e0a8751a752321bffa868188c49009d64d59  LICENSE
++sha256  a89c50d83be30fe7ec75be69a07f6c1b5dfaae0a6b94a678d2394fff34acb69c  LICENSE
+diff --git a/package/crucible/crucible.mk b/package/crucible/crucible.mk
+index 2206663e24..5eedbca8ee 100644
+--- a/package/crucible/crucible.mk
++++ b/package/crucible/crucible.mk
+@@ -6,7 +6,7 @@
  
--	  https://tukaani.org/xz/
-+	  https://xz.tukaani.org/xz-utils/
-diff --git a/package/xz/xz.hash b/package/xz/xz.hash
-index e8025a8065..71c2c65a3e 100644
---- a/package/xz/xz.hash
-+++ b/package/xz/xz.hash
-@@ -1,9 +1,10 @@
- # Locally calculated after checking pgp signature
--# https://github.com/tukaani-project/xz/releases/download/v5.4.6/xz-5.4.6.tar.bz2.sig
--sha256  913851b274e8e1d31781ec949f1c23e8dbcf0ecf6e73a2436dc21769dd3e6f49  xz-5.4.6.tar.bz2
-+# https://github.com/tukaani-project/xz/releases/download/v5.6.0/xz-5.6.0.tar.bz2.sig
-+sha256  88c8631cefba91664fdc47b14bb753e1876f4964a07db650821d203992b1e1ea  xz-5.6.0.tar.bz2
+ CRUCIBLE_VERSION = 2023.11.02
+ CRUCIBLE_SITE = $(call github,usbarmory,crucible,v$(CRUCIBLE_VERSION))
+-CRUCIBLE_LICENSE = GPL-3.0
++CRUCIBLE_LICENSE = BSD-3-Clause
+ CRUCIBLE_LICENSE_FILES = LICENSE
+ CRUCIBLE_GOMOD = ./cmd/crucible
  
- # Hash for license files
--sha256  29a1e305b2e34eefe5d4602d00cde1d528b71c5d9f2eec5106972cf6ddb6f73f  COPYING
-+sha256  0864e508475f20b43a2393957fdb5a966558099ffa8fed1e3e73fe2b3eebb145  COPYING
-+sha256  0b01625d853911cd0e2e088dcfb743261034a091bb379246cb25a14cc4c74bf1  COPYING.0BSD
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
- sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING.GPLv3
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPLv2.1
-diff --git a/package/xz/xz.mk b/package/xz/xz.mk
-index 40fa59ca7c..e35fbc0268 100644
---- a/package/xz/xz.mk
-+++ b/package/xz/xz.mk
-@@ -4,13 +4,13 @@
- #
- ################################################################################
- 
--XZ_VERSION = 5.4.6
-+XZ_VERSION = 5.6.0
- XZ_SOURCE = xz-$(XZ_VERSION).tar.bz2
- XZ_SITE = https://github.com/tukaani-project/xz/releases/download/v$(XZ_VERSION)
- XZ_INSTALL_STAGING = YES
- XZ_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
--XZ_LICENSE = Public Domain, GPL-2.0+, GPL-3.0+, LGPL-2.1+
--XZ_LICENSE_FILES = COPYING COPYING.GPLv2 COPYING.GPLv3 COPYING.LGPLv2.1
-+XZ_LICENSE = Public Domain, BSD-0-Clause, GPL-2.0+, GPL-3.0+, LGPL-2.1+
-+XZ_LICENSE_FILES = COPYING COPYING.0BSD COPYING.GPLv2 COPYING.GPLv3 COPYING.LGPLv2.1
- XZ_CPE_ID_VENDOR = tukaani
- 
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
 -- 
-2.44.0
+2.43.0
 
 _______________________________________________
 buildroot mailing list
