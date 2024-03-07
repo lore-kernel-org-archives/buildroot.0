@@ -4,90 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DF8DC54E49
-	for <buildroot@archiver.kernel.org>; Thu,  7 Mar 2024 17:16:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9807EC54798
+	for <buildroot@archiver.kernel.org>; Thu,  7 Mar 2024 17:18:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CFF13418D7;
-	Thu,  7 Mar 2024 17:16:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1F2DB40717;
+	Thu,  7 Mar 2024 17:18:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id v7BnfBwvzAJV; Thu,  7 Mar 2024 17:16:16 +0000 (UTC)
+	with ESMTP id 6vCJCgGMiEDt; Thu,  7 Mar 2024 17:18:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B4A09418DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C7D8B418E7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B4A09418DE;
-	Thu,  7 Mar 2024 17:16:16 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B716F1BF396
- for <buildroot@lists.busybox.net>; Thu,  7 Mar 2024 17:16:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C7D8B418E7;
+	Thu,  7 Mar 2024 17:18:41 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D56341BF396
+ for <buildroot@lists.busybox.net>; Thu,  7 Mar 2024 17:18:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A57F04090F
- for <buildroot@lists.busybox.net>; Thu,  7 Mar 2024 17:16:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C1691418E7
+ for <buildroot@lists.busybox.net>; Thu,  7 Mar 2024 17:18:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id omSAOylxYiTE for <buildroot@lists.busybox.net>;
- Thu,  7 Mar 2024 17:16:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Q0wIAjlEI_pZ for <buildroot@lists.busybox.net>;
+ Thu,  7 Mar 2024 17:18:38 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
+ client-ip=2a00:1450:4864:20::232; helo=mail-lj1-x232.google.com;
  envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org BD24440360
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD24440360
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BD24440360
- for <buildroot@buildroot.org>; Thu,  7 Mar 2024 17:16:14 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- 5b1f17b1804b1-4130e293686so8383755e9.3
- for <buildroot@buildroot.org>; Thu, 07 Mar 2024 09:16:14 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 86F3740717
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 86F3740717
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com
+ [IPv6:2a00:1450:4864:20::232])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 86F3740717
+ for <buildroot@buildroot.org>; Thu,  7 Mar 2024 17:18:38 +0000 (UTC)
+Received: by mail-lj1-x232.google.com with SMTP id
+ 38308e7fff4ca-2d228a132acso14834381fa.0
+ for <buildroot@buildroot.org>; Thu, 07 Mar 2024 09:18:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1709831772; x=1710436572;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=gk+9paFs2jXU7+66HvJtL+DXSs0ZyHz+J2ZXRfV8/68=;
- b=A9H2/peJn+dXAR/Dd6hhQ6GVaPw7lKE4TF3hVyBkVyhiQXGwoVONf0ornbyIq4gZgc
- CWouBuRzlZ7NaalXK2+xGTK/iuXT+HggCR64EXYiC0Yq2nr4O406v9ROMky0DBIhTuD5
- IVU56iJAvgENlS+GSLPfrU33yN97lDegbQ687R5bs8q5cCjc1Str2swnhC52Y/FPL4wy
- l9BBxnCPb3WPnjO3XZ87fk9LGz1ZN1uqa++uo3rsEhH7ZPRTvuMG3k6hWMdO4z6iPgiR
- zuZf5rxJjrsUU7NJNfLdgb8Jiri99OHekpTY1BrYaHsuMEfW6SmblYaYUY7Uk/FcY7JB
- ACSA==
-X-Gm-Message-State: AOJu0YxVEQFP4ECD58OVRrduCyGcWMkFpliHhNj2DNArbej3Hedfp7Sa
- qIAEOH2QyIATM+zGV6cW1TV74jmGqUq8duWQBz8G0NOnLweKI+9Oej2iSku+
-X-Google-Smtp-Source: AGHT+IHusLoy2SaGqdz6c5+NuruXKxzHLpUBzCo2FItHJXAgY26IPC01cka3nst3Y8jFxdQ0NbeTEw==
-X-Received: by 2002:a05:600c:a019:b0:413:15c9:43e5 with SMTP id
- jg25-20020a05600ca01900b0041315c943e5mr544607wmb.13.1709831772179; 
- Thu, 07 Mar 2024 09:16:12 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- gw6-20020a05600c850600b0041273fc463csm3295442wmb.17.2024.03.07.09.16.11
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 07 Mar 2024 09:16:11 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Thu,  7 Mar 2024 18:16:10 +0100
-Message-ID: <20240307171610.47962-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
+ d=1e100.net; s=20230601; t=1709831916; x=1710436716;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=NJUQLY8sYjd1iJM87Z6nqKmWdJe2OYke59nOApqI7YU=;
+ b=CPcfpagLgMyMbRL0hGxMvb8bGLemd2O4Jl56YTJxlJUW5bEDyH92WD9j3tr8xnXgrx
+ 3HvVNUwnY2uW+Vf4nxSLqqXET1R4x7mwmpEv+B2a3mTA6Gu3XSENliEId3Bl2dSAnl4v
+ qJN3oeUn2pQICUCGmbjwuLnOlfzz3evmOP+Txb1fjl9d8OfPX40HUXSeuWM6Ol13O3pP
+ XBehLN0x3PpfeswV9o/DnPIcj9FIE80oaw3OcY/LwaDWp21Ruv9KpETySLUGJkJQ1wls
+ Gmlt7i20uvGexE3kF+X2KbHQNTc3/Ga9wYLz5mQXK9ShmnhP5bgzEvD1qZCFTraSvqR4
+ QsPA==
+X-Gm-Message-State: AOJu0YxMZrWrC9chvKAGrOdfsa+oGLI1qFLDHdk2cUqfz9Dno+HEDBxV
+ qXJ+c6o+o2gXHnvc3U5ih93AYYeOMZJ/RgDprf9q55EvuW9d6770OHjLgjiynAmqTCSob1ixXBI
+ OnWXMIMTXMhMNl2umDsFGgnJpl4c=
+X-Google-Smtp-Source: AGHT+IFtR9f7q0Xmw5aA0bzJXxbxsgslSULUbMXomq+DLSzY72cbaySzBHuJelSIMNqxGa54NN/gP0RxHO85T3XTBwE=
+X-Received: by 2002:a2e:8756:0:b0:2d3:ffec:7836 with SMTP id
+ q22-20020a2e8756000000b002d3ffec7836mr2337103ljj.10.1709831915858; Thu, 07
+ Mar 2024 09:18:35 -0800 (PST)
 MIME-Version: 1.0
+References: <20240307122806.102726-1-fontaine.fabrice@gmail.com>
+ <20240307134916.32738b5e@windsurf>
+In-Reply-To: <20240307134916.32738b5e@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 7 Mar 2024 18:18:24 +0100
+Message-ID: <CAPi7W803mjZL9-rRu2wdcG=5t=D1wtDJET2S_SHfjCc_uvViVA@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1709831772; x=1710436572; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=gk+9paFs2jXU7+66HvJtL+DXSs0ZyHz+J2ZXRfV8/68=;
- b=Zjh7zBEe/cJDs0gUMkoxX5BmW5wQcMsWC9ODNuabKAy3QjvJeKj/Pxsp2wcpBIbdWE
- hs6G8EtxS3J4kDz8hkm3NKkOsAYefBUU23kSe4hRBApqHYkcSQEj8tYwl3w6uHho18zJ
- 0aNq9BH8WfvXWDNjD0Tl1urgt+22fnf7N8/go2WKXtbFdoAy8zUnPa5tH4EW1J2dBDpb
- LxdK2BT1NmNkX3zpX0Xb5WCQcO2279yQI7T7v7BSDNSMo+DiiexCuarHqAdTc5ugun7e
- +bBXwNhZpvX5PI3eOwt4EZifs8EuPI3xkldKJKm+7N3iedhgq5she5cLqpEDFGO907By
- JmhQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=gmail.com; s=20230601; t=1709831916; x=1710436716; darn=buildroot.org;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=NJUQLY8sYjd1iJM87Z6nqKmWdJe2OYke59nOApqI7YU=;
+ b=ONcrdDpQ03Qy0g0G1a7cu3WBbjBChP3aXGmN5kNUYwoXTnMdqVcNVNZ5hxd9jnTAVv
+ JwokjiI38Z0jRjDYR4/AhRr/2I8f0fQ+zYTFDp3uxDLxYRk0iFXHvauprmckfF8pioqB
+ uVVaVnfmmSvPTvp5lK9lhOL9VcCqBnY8dM5kM5RYyQLuzkwsIElfTrkXfGDbPbJF7t6O
+ Td8/faIbN/YRyQwFpk79t09+8KlEw4Im36Fam+qKIfznHZ1JCYbPAAO7Fan38Pvfe7if
+ pDpqcOncDJyxf9wZX1Z2yarzlQI54P4O1ip3IYCIER0Z598v4ideF1QgriSjRXApZHMK
+ FhwQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Zjh7zBEe
-Subject: [Buildroot] [PATCH 1/1] package/crucible: fix license
+ header.a=rsa-sha256 header.s=20230601 header.b=ONcrdDpQ
+Subject: Re: [Buildroot] [PATCH 1/1] toolchain/Config.in: enable libatomic
+ with BR2_BINFMT_FLAT
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,51 +99,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabio Estevam <festevam@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
+ buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-crucible is licensed under BSD-3-Clause since bump to version 2023.11.02
-in commit be3f95ed14559f8a9739a12cff604add622b0416 and
-https://github.com/usbarmory/crucible/commit/7fe0bb96da655b4e83031a99115d37f88a171e9f
-
-Fixes: be3f95ed14559f8a9739a12cff604add622b0416
- - http://autobuild.buildroot.org/results/6183b11f1564bc07adfff2b02cb0607d0b1de54e
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/crucible/crucible.hash | 2 +-
- package/crucible/crucible.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/crucible/crucible.hash b/package/crucible/crucible.hash
-index d5fee0068d..3a9a716732 100644
---- a/package/crucible/crucible.hash
-+++ b/package/crucible/crucible.hash
-@@ -1,2 +1,2 @@
- sha256  d21842f050163765269290d72fe79d3f95005038e865138d94e247cb455098da  crucible-2023.11.02.tar.gz
--sha256  d88514630470aec9fa7abdc990a1e0a8751a752321bffa868188c49009d64d59  LICENSE
-+sha256  a89c50d83be30fe7ec75be69a07f6c1b5dfaae0a6b94a678d2394fff34acb69c  LICENSE
-diff --git a/package/crucible/crucible.mk b/package/crucible/crucible.mk
-index 2206663e24..5eedbca8ee 100644
---- a/package/crucible/crucible.mk
-+++ b/package/crucible/crucible.mk
-@@ -6,7 +6,7 @@
- 
- CRUCIBLE_VERSION = 2023.11.02
- CRUCIBLE_SITE = $(call github,usbarmory,crucible,v$(CRUCIBLE_VERSION))
--CRUCIBLE_LICENSE = GPL-3.0
-+CRUCIBLE_LICENSE = BSD-3-Clause
- CRUCIBLE_LICENSE_FILES = LICENSE
- CRUCIBLE_GOMOD = ./cmd/crucible
- 
--- 
-2.43.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8sCgpMZSBqZXUuIDcgbWFycyAyMDI0IMOgIDEzOjQ5LCBUaG9tYXMgUGV0YXp6b25pCjx0
+aG9tYXMucGV0YXp6b25pQGJvb3RsaW4uY29tPiBhIMOpY3JpdCA6Cj4KPiBIZWxsbyBGYWJyaWNl
+LAo+Cj4gT24gVGh1LCAgNyBNYXIgMjAyNCAxMzoyODowNiArMDEwMAo+IEZhYnJpY2UgRm9udGFp
+bmUgPGZvbnRhaW5lLmZhYnJpY2VAZ21haWwuY29tPiB3cm90ZToKPgo+ID4gRW5hYmxlIGxpYmF0
+b21pYyB3aXRoIEJSMl9CSU5GTVRfRkxBVCB0byBhdm9pZCB0aGUgZm9sbG93aW5nIGJ1aWxkCj4g
+PiBmYWlsdXJlIHdpdGggbGlib3BlbnNzbCBhbmQKPiA+IEJSMl9UT09MQ0hBSU5fRVhURVJOQUxf
+Qk9PVExJTl9BUk1WN01fVUNMSUJDX1NUQUJMRToKPiA+Cj4gPiAvaG9tZS9idWlsZHJvb3QvYXV0
+b2J1aWxkL3J1bi9pbnN0YW5jZS0yL291dHB1dC0xL2hvc3Qvb3B0L2V4dC10b29sY2hhaW4vYXJt
+LWJ1aWxkcm9vdC11Y2xpbnV4LXVjbGliY2dudWVhYmkvYmluL2xkLnJlYWw6IC4vbGliY3J5cHRv
+LmEobGliY3J5cHRvLWxpYi10aHJlYWRzX3B0aHJlYWQubyk6IGluIGZ1bmN0aW9uIGBDUllQVE9f
+YXRvbWljX29yJzoKPiA+IHRocmVhZHNfcHRocmVhZC5jOigudGV4dCsweGZhKTogdW5kZWZpbmVk
+IHJlZmVyZW5jZSB0byBgX19hdG9taWNfaXNfbG9ja19mcmVlJwo+ID4KPiA+IEluZGVlZCwgYm9v
+dGxpbiBhcm12N20gaXMgYW4gdWNsaWJjIHRvb2xjaGFpbiBjb21waWxlZCB3aXRoIGF0b21pYwo+
+ID4gc3VwcG9ydCB0aHJvdWdoIGxpYmF0b21pYwo+ID4KPiA+IFRoaXMgYnVpbGQgZmFpbHVyZSBp
+cyBwcm9iYWJseSByYWlzZWQgc2luY2UgYWN0aXZhdGlvbiBvZiB0aHJlYWRzIGluCj4gPiBzdGF0
+aWMgYnVpbGRzIGJ5IGNvbW1pdCBlYTNlNjAyMjliYzU2NDdlNTg3Njg1MDIzZGU0NzUyNzZlMjg1
+ODRkCj4gPgo+ID4gRml4ZXM6Cj4gPiAgLSBodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5vcmcv
+cmVzdWx0cy9kMjVlODk4Zjk3MTViZjZhMjEyODQ4MDczNjFhNTc3MzVhN2EyZTFkCj4gPiAgLSBo
+dHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5vcmcvcmVzdWx0cy9lMzdlZDVhZDZiYTQxZDYxMGJm
+ZmU5YzIzNGY2OTllMjAzZWY1MDY5Cj4gPgo+ID4gU2lnbmVkLW9mZi1ieTogRmFicmljZSBGb250
+YWluZSA8Zm9udGFpbmUuZmFicmljZUBnbWFpbC5jb20+Cj4KPiBUaGFua3MgZm9yIHRoZSBwYXRj
+aC4gRG8gd2Uga25vdyBzaW5jZSB3aGVuIHRoZXJlIGlzIHN1cHBvcnQgZm9yCj4gbGliYXRvbWlj
+IGZvciBwbGF0Zm9ybXMgdGhhdCB1c2UgdGhlIEZMQVQgYmluYXJ5IGZvcm1hdD8gSXMgdGhpcwo+
+IHNwZWNpZmljIHRvIEFSTS9GTEFULCBvciBhcHBsaWNhYmxlIHRvIGFsbCBjb25maWd1cmF0aW9u
+cyB0aGF0IHVzZSB0aGUKPiBGTEFUIGJpbmFyeSBmb3JtYXQ/CgpOb3BlLCBJIGRvbid0IGtub3cu
+IEkgZGlkbid0IGZpbmQgYW55IGNsdWUgaW4gdWNsaWJjLW5nIGdpdGh1YiBoaXN0b3J5LgoKPgo+
+IFRob21hcwo+IC0tCj4gVGhvbWFzIFBldGF6em9uaSwgY28tb3duZXIgYW5kIENFTywgQm9vdGxp
+bgo+IEVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcgYW5kIHRyYWluaW5nCj4g
+aHR0cHM6Ly9ib290bGluLmNvbQoKQmVzdCBSZWdhcmRzLAoKRmFicmljZQpfX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0
+CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWls
+bWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
