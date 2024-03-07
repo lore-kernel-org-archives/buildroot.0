@@ -1,76 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01BD2C54E41
-	for <buildroot@archiver.kernel.org>; Wed,  6 Mar 2024 21:36:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11C63C54E41
+	for <buildroot@archiver.kernel.org>; Thu,  7 Mar 2024 01:45:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 736D8418FB;
-	Wed,  6 Mar 2024 21:36:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BD31260880;
+	Thu,  7 Mar 2024 01:45:56 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3NNRgWWLVAdM; Thu,  7 Mar 2024 01:45:54 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 79F076063E
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 79F076063E;
+	Thu,  7 Mar 2024 01:45:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E98E41BF5B5
+ for <buildroot@lists.busybox.net>; Thu,  7 Mar 2024 01:45:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E2AAF4183F
+ for <buildroot@lists.busybox.net>; Thu,  7 Mar 2024 01:45:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fA350mVcxzUY; Wed,  6 Mar 2024 21:36:42 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8F81D41923
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8F81D41923;
-	Wed,  6 Mar 2024 21:36:40 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 206F61BF5E6
- for <buildroot@lists.busybox.net>; Wed,  6 Mar 2024 21:36:16 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8B3C580FA8
- for <buildroot@lists.busybox.net>; Wed,  6 Mar 2024 21:36:15 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hrL28t8PjnwK for <buildroot@lists.busybox.net>;
- Wed,  6 Mar 2024 21:36:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.155.105;
- helo=smtpdh16-b1.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1B5AD80EE0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B5AD80EE0
-Received: from smtpdh16-b1.aruba.it (smtpdh16-b1.aruba.it [62.149.155.105])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1B5AD80EE0
- for <buildroot@buildroot.org>; Wed,  6 Mar 2024 21:36:12 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba Outgoing Smtp  with ESMTPSA
- id hyvnrMrp4EG7Lhyvqr90TE; Wed, 06 Mar 2024 22:36:10 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZFHpejJEtF2h for <buildroot@lists.busybox.net>;
+ Thu,  7 Mar 2024 01:45:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::62b; helo=mail-pl1-x62b.google.com;
+ envelope-from=christian@aperture.us; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8716E4183D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8716E4183D
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com
+ [IPv6:2607:f8b0:4864:20::62b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8716E4183D
+ for <buildroot@buildroot.org>; Thu,  7 Mar 2024 01:45:51 +0000 (UTC)
+Received: by mail-pl1-x62b.google.com with SMTP id
+ d9443c01a7336-1dc49afb495so3082355ad.2
+ for <buildroot@buildroot.org>; Wed, 06 Mar 2024 17:45:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1709775950; x=1710380750;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=zLh+asQ0vuftrvcBWlUtysHDTr4HiUo8aCsQPv26NnA=;
+ b=QC6BMti63cuVGW0zDtBAb3xIHTZcIlrneV7ZtKHqjb7c9ZoHoRqUM/FLseR6IkMpZv
+ J8nhE9ozecUivm5LPPalLrxxMp5RhOz7XkrGNiQsqydQEK9vg6U0rWiWAAjc/5ro7JyN
+ QrK8CO0wMS/kjG0v9lR5HrZ2Uhoa4yMwosqqX0uOLmA+OoM3JotO6jy0e070FFw3WMxq
+ MLEmhXuE4VRlyiF5gUsUrOKhROKfKJMBqN6a1VzvbzAKgsbobZLvnWUOnN6XaPdSua1J
+ p2SYa+utQnXCcl2aJfOVbeRpfEFefEyCVOtHiO8EXFGoY4KrHsQgOrMYj8H2v0jUIypz
+ mn2g==
+X-Gm-Message-State: AOJu0YyqLGLwaZAvjGYaLZrORqBGa/QQbvL+y8RkbtjbxZZ5HcjB3zjX
+ r0EKRGHh8i6he4v68vlusiNDuGYiUUH9z3zeJ6PVLQbh/a34YHEcf7kymCkixlCLTY+l0dorWHl
+ iozc=
+X-Google-Smtp-Source: AGHT+IEwfLnmGYQLh8V9MJsSL+7lcndMWsMlutbvkBzc9nA+fQQkKVGpSSU0jZk1xn23lPgSkejt5A==
+X-Received: by 2002:a17:902:c085:b0:1db:b36c:715f with SMTP id
+ j5-20020a170902c08500b001dbb36c715fmr5726573pld.24.1709775950459; 
+ Wed, 06 Mar 2024 17:45:50 -0800 (PST)
+Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
+ [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
+ l13-20020a170903244d00b001dcc28544dbsm13269621pls.78.2024.03.06.17.45.46
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 06 Mar 2024 17:45:49 -0800 (PST)
 To: buildroot@buildroot.org
-Date: Wed,  6 Mar 2024 22:36:06 +0100
-Message-Id: <20240306213606.2149683-10-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240306213606.2149683-1-giulio.benetti@benettiengineering.com>
-References: <20240306213606.2149683-1-giulio.benetti@benettiengineering.com>
+Date: Wed,  6 Mar 2024 17:45:40 -0800
+Message-ID: <20240307014541.2900022-1-christian@aperture.us>
+X-Mailer: git-send-email 2.44.0
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfKeX8HOmXHZo8lOrd7EONARBGx2ODX/MOPa1mfH2bm8CqcVAczmH3EYvfgqP0neAoQxADVmMpcUXCod3fltGslCXxlLp4s4H3BQS/e5P/+UADszoYhjz
- Rgtaznbf8uGO+j9LOL1BvOjn6Cavz6vyuOAuxwdj3v4etczv2ZdL4Ky0t7VlijkQ0KTR+RCHrZK8kdeINvt5stWP1weTkUaXDvLKU5ukdaChDFutDAOXYdzZ
- j1og0pp9GlTy6+KYE98p+YxKJxNkN0jLxWf5cuoA28dTxKISlSnqBDrkp125LwTJkoJm8ZbEzi8AuXIm9TCgwyEBqSsVdAeZC59BG3VYeUDhT6NsV7BYJt0Z
- +lBYfpXUDEhV3rHYQMuzgCp2jNMDs4jVz95r+hZb3h0IFtQ2xlNK9psFe3V71FZD+G8ujdZ4QmyptxQdmHaEP+KEawwSkGJbFzqNNhskGmxTPFZbWTae66gx
- 2R7CQTI90eN+d8efEFAEJDqgdGSFNShODnG2MkgTtRImRgxYq1MEYpKBrT4FjLuJf5yYa/siRCHjxqcX3zlmtzaTdHxPdO6Z1r8MsIIQHkwm0IXUooMDJ+ep
- WqU=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1709760970; bh=Qzyxw2Ek+4QFR3gWh459XJTcO8GHLzMFbCSuHoRKvMU=;
- h=From:To:Subject:Date:MIME-Version;
- b=CHrkXZhtwakGRb2K/IFj0i/Ci8pLI6K4cGfUndD+R4mbc8asydD7lN8EmnqgYwDoq
- O+VZF0Q4W5Qkjy83BfeTT+3D5WL3r7amVvKA437IcRPVBdGQ5kol7JsNDXxj46xFeo
- h8FevadoevqCRXjVIDRE+Z3n2LY2SidnV66K7eXxiRcTk+IwVeYE3sc8bIr4F0GNZO
- URiSPyHSJaJX2ZQR1rXq3fz+k2NSFprrBkqjvjfyLFdIhyEoWgzunW4JP7uDROAN+a
- jlL6wllA6wNT7ZfIvPLK/Ck5396OrwZwSUMOi9TeoxLHNDfKpVhNtwyyrFTMOd4Xm7
- IwVz/87UMssyA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=CHrkXZht
-Subject: [Buildroot] [PATCH v3 9/9] toolchain: remove binutils bug 27597
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=aperture.us; s=google; t=1709775950; x=1710380750; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=zLh+asQ0vuftrvcBWlUtysHDTr4HiUo8aCsQPv26NnA=;
+ b=pYiOFymoy/dN3BMx7+ZCjV05q3/ClZRpMn35ueTDNwB0D3oEN/ZFMZAJ3Dpef4JRsJ
+ n/CO57q45VLRhVl5lTDqjvuo3MQC5F9N76P+Rgua/HE43NIb2NgY5KEhSQ/6Ngci8kU3
+ Y543+1dBwrEyBVtTiHoVRDQNsDO+LLbT4y8lcQmTs8pNtBJP14gs3SSZy53VTV4Rs31c
+ 9VIECuhmDMRPBqgYT/jaxIeRwQ/fof9g0kc7PTaCo0ZP9kjqVc7cEblATWTbI9J3uz7F
+ NH81nrBDmKvAHikGlWLr7avCRI5HvYfTPoV6fRRMYtvoNY5oMJ7u58PSCT/xOP/2GU1b
+ Inyg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=aperture.us
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aperture.us header.i=@aperture.us header.a=rsa-sha256
+ header.s=google header.b=pYiOFymo
+Subject: [Buildroot] [PATCH v1 1/1] package/docker-compose: bump version to
+ 2.24.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,45 +101,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Marcus Folkesson <marcus.folkesson@gmail.com>,
- Pierre Ducroquet <pinaraf@pinaraf.info>,
- Kieran Bingham <kieran.bingham@ideasonboard.com>,
- Dominik Michael Rauh <dmrauh@posteo.de>, Maxim Kochetkov <fido_max@inbox.ru>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Romain Naour <romain.naour@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@aperture.us>
+Cc: Christian Stewart <christian@aperture.us>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Binutils bug 27597 is not present anymore in Buildroot so let's remove it.
+https://github.com/docker/compose/releases/tag/v2.24.7
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Christian Stewart <christian@aperture.us>
 ---
- toolchain/Config.in | 6 ------
- 1 file changed, 6 deletions(-)
+ package/docker-compose/docker-compose.hash | 2 +-
+ package/docker-compose/docker-compose.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 3dd6e83d35..79a9cb7bb7 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -70,12 +70,6 @@ source "package/gdb/Config.in.host"
+diff --git a/package/docker-compose/docker-compose.hash b/package/docker-compose/docker-compose.hash
+index 92f7b227d3..ca3d08cf63 100644
+--- a/package/docker-compose/docker-compose.hash
++++ b/package/docker-compose/docker-compose.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  ed132bcc226261a595469f5ca6d4ea20b02965867216b56d4e7a5962efb46570  docker-compose-2.24.5.tar.gz
++sha256  931bfcc34eb43106be07787372bb853d4cd82830a5785f3049c5192ab0e4ac35  docker-compose-2.24.7.tar.gz
+ sha256  58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd  LICENSE
+diff --git a/package/docker-compose/docker-compose.mk b/package/docker-compose/docker-compose.mk
+index 947f09d0b3..5417ba2d4f 100644
+--- a/package/docker-compose/docker-compose.mk
++++ b/package/docker-compose/docker-compose.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- comment "Toolchain Generic Options"
- 
--# https://sourceware.org/bugzilla/show_bug.cgi?id=27597
--# Affect toolchains built with binutils 2.36.1, still not fixed.
--config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
--	bool
--	default y if BR2_nios2
--
- # https://sourceware.org/bugzilla/show_bug.cgi?id=30730
- # Affect toolchains built with binutils 2.40, still not fixed.
- config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_30730
+-DOCKER_COMPOSE_VERSION = 2.24.5
++DOCKER_COMPOSE_VERSION = 2.24.7
+ DOCKER_COMPOSE_SITE = $(call github,docker,compose,v$(DOCKER_COMPOSE_VERSION))
+ DOCKER_COMPOSE_LICENSE = Apache-2.0
+ DOCKER_COMPOSE_LICENSE_FILES = LICENSE
 -- 
-2.34.1
+2.44.0
 
 _______________________________________________
 buildroot mailing list
