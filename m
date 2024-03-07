@@ -1,106 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A998C54E4A
-	for <buildroot@archiver.kernel.org>; Thu,  7 Mar 2024 18:00:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B857CC54E4A
+	for <buildroot@archiver.kernel.org>; Thu,  7 Mar 2024 19:52:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 01720418A9;
-	Thu,  7 Mar 2024 18:00:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2AA1182D2F;
+	Thu,  7 Mar 2024 19:52:45 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bLsUmwQC7PQh; Thu,  7 Mar 2024 19:52:44 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2EB0882D49
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2EB0882D49;
+	Thu,  7 Mar 2024 19:52:44 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 624DB1BF399
+ for <buildroot@lists.busybox.net>; Thu,  7 Mar 2024 19:52:42 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4A3FD41B84
+ for <buildroot@lists.busybox.net>; Thu,  7 Mar 2024 19:52:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HtB3EmuvTCHQ; Thu,  7 Mar 2024 18:00:05 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C1A904167F
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C1A904167F;
-	Thu,  7 Mar 2024 18:00:04 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 13B6A1BF396
- for <buildroot@lists.busybox.net>; Thu,  7 Mar 2024 18:00:04 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0279C409E6
- for <buildroot@lists.busybox.net>; Thu,  7 Mar 2024 18:00:04 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Lhp5qzNiDW3A for <buildroot@lists.busybox.net>;
- Thu,  7 Mar 2024 18:00:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::632; helo=mail-ej1-x632.google.com;
- envelope-from=christian@aperture.us; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9327E401F1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9327E401F1
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
- [IPv6:2a00:1450:4864:20::632])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9327E401F1
- for <buildroot@buildroot.org>; Thu,  7 Mar 2024 18:00:02 +0000 (UTC)
-Received: by mail-ej1-x632.google.com with SMTP id
- a640c23a62f3a-a44cdb2d3a6so183487066b.2
- for <buildroot@buildroot.org>; Thu, 07 Mar 2024 10:00:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1709834400; x=1710439200;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=+GHtefACP/It00QSXtiluO4sHf9b2EnDthwgLdTu1E8=;
- b=fzBcqnSPFr3GFK8RVJq1++vGgFR4Hkml713Ig4IINZb1GBolnXYpo8CicUC8SHS8Tv
- NEP4dyggvHyCvqvbL8L+mHmZEwEszqUUlz0GEjABQCm/AdspcrRUhDUFV3CWQ6T2BSeA
- 1SJjVn6n/C9LEhw99liyR/Wqfz960qRPab4GvnCOzoLbC8Yuwkn2QYiPueP2i5VlSw78
- WFB1Ie3Tr00BdlbCAKavkMp2xbJp9dA02ODy2yQyym8BFPBKa4Rm+I8QvykOjZ/enH9q
- S/X0m6LcxMPXf5/FJdIUdugyWrmgfiAWBP91W+sQ26pcm6z8T0MFyIwJUMrBJCyYPdLx
- g+Yw==
-X-Gm-Message-State: AOJu0YysYBszxoUt7WUCnPi37hi/b69mKz3M47xJuhZKzBahOByoqU6C
- IrCphzg1mHphCjTwH3/gtcts/wd8Odk3P8Fxa2BXD5sstfBi7Z+KciWO2oiIC0p3ewTctSrF4tX
- FldM=
-X-Google-Smtp-Source: AGHT+IFaPaXOAH1EQIO591iY/Tg+VkNy6FSzezzZPKZTlQGwVHU4koe33eky/TH6pqA/f5RULy9f/Q==
-X-Received: by 2002:a17:906:6845:b0:a45:b9b5:e13a with SMTP id
- a5-20020a170906684500b00a45b9b5e13amr4441869ejs.75.1709834399745; 
- Thu, 07 Mar 2024 09:59:59 -0800 (PST)
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com.
- [209.85.218.43]) by smtp.gmail.com with ESMTPSA id
- lc12-20020a170906f90c00b00a45b944681dsm2037496ejb.217.2024.03.07.09.59.59
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 07 Mar 2024 09:59:59 -0800 (PST)
-Received: by mail-ej1-f43.google.com with SMTP id
- a640c23a62f3a-a44cdb2d3a6so183477366b.2
- for <buildroot@buildroot.org>; Thu, 07 Mar 2024 09:59:59 -0800 (PST)
-X-Received: by 2002:a17:906:5a9a:b0:a43:bf25:989 with SMTP id
- l26-20020a1709065a9a00b00a43bf250989mr13313758ejq.9.1709834398665; Thu, 07
- Mar 2024 09:59:58 -0800 (PST)
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cOqrqpsOVp_6 for <buildroot@lists.busybox.net>;
+ Thu,  7 Mar 2024 19:52:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.217;
+ helo=smtpcmd01-g.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A9B4E41B83
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A9B4E41B83
+Received: from smtpcmd01-g.aruba.it (smtpcmd01-g.aruba.it [62.149.158.217])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A9B4E41B83
+ for <buildroot@buildroot.org>; Thu,  7 Mar 2024 19:52:37 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id iJn8rKWhJHsqHiJn8r6JUg; Thu, 07 Mar 2024 20:52:35 +0100
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Date: Thu,  7 Mar 2024 20:52:33 +0100
+Message-Id: <20240307195233.2186701-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20240307014541.2900022-1-christian@aperture.us>
- <20240307014541.2900022-2-christian@aperture.us> <87o7bqw5pu.fsf@48ers.dk>
- <87h6hiw5j6.fsf@48ers.dk>
-In-Reply-To: <87h6hiw5j6.fsf@48ers.dk>
-Date: Thu, 7 Mar 2024 09:59:46 -0800
-X-Gmail-Original-Message-ID: <CA+h8R2pcg4zLGE0JMrctvS9HdYHPfJvuuf-S1YYjdpcsKvUXew@mail.gmail.com>
-Message-ID: <CA+h8R2pcg4zLGE0JMrctvS9HdYHPfJvuuf-S1YYjdpcsKvUXew@mail.gmail.com>
-To: Peter Korsgaard <peter@korsgaard.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=aperture.us; s=google; t=1709834400; x=1710439200; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=+GHtefACP/It00QSXtiluO4sHf9b2EnDthwgLdTu1E8=;
- b=zPM0CLyvqRsi7cimE2Q4uvGxeecZaEnPrmMjPVa1KjtwKchAY5/+mkcU+Db/W7cD/g
- u/TYHAVHu8+at4HSeOIhH/g/LO9TljZggJm3QZe+P/tm++Jx/gYPUPL9xJPsIAu/70S/
- 9pzVWiKQHrs9MRc1N+HpbXYK5/ifxfyS76T1v0qKEfnXFecAYmJZ3Kc+Tiy2U5ABoe1j
- 59Jh1Hq/qeiFtppY+G7v/naZ2F1CWOg+rNbyBBDDdSVx9CXodjj7Y9cYOYSLYwYZX2F0
- bteadGWrhs3kta0zjmU9if9EWbvqei+hQMt0iaY3wOiy3CL8m1mT1cIr36Sk+V85pNP4
- Hegw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=aperture.us
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-CMAE-Envelope: MS4xfPqYrBcfokbCs3P4M8PksNUXxT/udKm0uuj2Yp0tVTNJDovvzDFvKixKiGO4NGPDAtTxF+1jvkksxO6ZymBjT5qpZ63TLcCD8e8QqS0Vg70upeGTRQGd
+ e/KTB8ZhZNyXNEraWLswjCUwP4lbt66ThtSMdeXyKEh2jISek5aBGFFr0vsIO46+CL0TZ6ACIFIucvMfjqoUXOLevv+INEMRQUgYwhieet1tFttqpxE+4JsC
+ +r6ONlemkN1qnQok4sIanrmXjT0Srur44diLbzX/iIFMhJ9cluk5tGVifc6QEfpJLGSEKwpjBMNLnY9ux//NagOF+8NltNkmh8k+vSw9Alo=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1709841155; bh=+tpWKF8D7g96h08qLf0FnOfuaGVqGYm1QcP8KbDlnks=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=AxtImN03irE0XNHynK10Ij9WlNiH/hkLo8dMwmRW8uHEW+cFUWpvurEsVDbe2a9LC
+ R2I26smKaiPiimp02CboYXsh/vALQ1AdvfzQPGcUcdd+3gb7ThFrjhVFbOZgRwuWnN
+ CcSDLbNM0Ozz9Zb7TGRcwAG37/StYpuP4KBliahYp6+TAer5VMJOeJqgrw8z0gbr/G
+ tc15BhQwxr/2n40tEgUMh7YN4BSj67GGrjnesrdn/T5DibwVNlv/igSLi1IdE5XA7e
+ bAWQ0j9DCDL4K046q0fmX6cgUyIncqs3SzqqDHOIL6w4MGDfh03AfnxyY5dYuUAbAe
+ eMJ3JjsB9vjLA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=aperture.us header.i=@aperture.us header.a=rsa-sha256
- header.s=google header.b=zPM0CLyv
-Subject: Re: [Buildroot] [PATCH v1 1/1] package/nerdctl: bump version to
- v1.7.3
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=AxtImN03
+Subject: [Buildroot] [PATCH] package/mmc-utils: bump version to 2024-03-05
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -112,80 +78,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@aperture.us>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Buildroot Mailing List <buildroot@buildroot.org>
-Content-Type: multipart/mixed; boundary="===============3360232483225347344=="
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3360232483225347344==
-Content-Type: multipart/alternative; boundary="000000000000f51c20061315d7d8"
+Fixes:
+http://autobuild.buildroot.net/results/06f972f95f4f2e0e7504b1fa069b89695b7377ef
 
---000000000000f51c20061315d7d8
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/mmc-utils/mmc-utils.hash | 2 +-
+ package/mmc-utils/mmc-utils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Thu, Mar 7, 2024, 5:11=E2=80=AFAM Peter Korsgaard <peter@korsgaard.com> =
-wrote:
-
-> >>>>> "Peter" =3D=3D Peter Korsgaard <peter@korsgaard.com> writes:
->
-> >>>>> "Christian" =3D=3D Christian Stewart <christian@aperture.us> writes=
-:
->  >> https://github.com/containerd/nerdctl/releases/tag/v1.7.3
->  >> Signed-off-by: Christian Stewart <christian@aperture.us>
->
->  > Committed, thanks.
->
-> Ehh, no - We already have nerdctl 1.7.3.
->
-
-Apologies for the confusion, this was a duplicate send I had in my
-outgoing/ directory. No action needed
-
---000000000000f51c20061315d7d8
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"auto"><div><br><br><div class=3D"gmail_quote"><div dir=3D"ltr" =
-class=3D"gmail_attr">On Thu, Mar 7, 2024, 5:11=E2=80=AFAM Peter Korsgaard &=
-lt;<a href=3D"mailto:peter@korsgaard.com">peter@korsgaard.com</a>&gt; wrote=
-:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;bor=
-der-left:1px #ccc solid;padding-left:1ex">&gt;&gt;&gt;&gt;&gt; &quot;Peter&=
-quot; =3D=3D Peter Korsgaard &lt;<a href=3D"mailto:peter@korsgaard.com" tar=
-get=3D"_blank" rel=3D"noreferrer">peter@korsgaard.com</a>&gt; writes:<br>
-<br>
-&gt;&gt;&gt;&gt;&gt; &quot;Christian&quot; =3D=3D Christian Stewart &lt;<a =
-href=3D"mailto:christian@aperture.us" target=3D"_blank" rel=3D"noreferrer">=
-christian@aperture.us</a>&gt; writes:<br>
-=C2=A0&gt;&gt; <a href=3D"https://github.com/containerd/nerdctl/releases/ta=
-g/v1.7.3" rel=3D"noreferrer noreferrer" target=3D"_blank">https://github.co=
-m/containerd/nerdctl/releases/tag/v1.7.3</a><br>
-=C2=A0&gt;&gt; Signed-off-by: Christian Stewart &lt;<a href=3D"mailto:chris=
-tian@aperture.us" target=3D"_blank" rel=3D"noreferrer">christian@aperture.u=
-s</a>&gt;<br>
-<br>
-=C2=A0&gt; Committed, thanks.<br>
-<br>
-Ehh, no - We already have nerdctl 1.7.3.<br></blockquote></div></div><div d=
-ir=3D"auto"><br></div><div dir=3D"auto">Apologies for the confusion, this w=
-as a duplicate send I had in my outgoing/ directory. No action needed</div>=
-</div>
-
---000000000000f51c20061315d7d8--
-
---===============3360232483225347344==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/mmc-utils/mmc-utils.hash b/package/mmc-utils/mmc-utils.hash
+index cd9d13324f..2c1bb86066 100644
+--- a/package/mmc-utils/mmc-utils.hash
++++ b/package/mmc-utils/mmc-utils.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  84be5003ae83b4fdb0279a693f320fd472aebd14908a1ac16bda4f675e92ad40  mmc-utils-80271e9a6fd0db9cb3a85d024664da886e94315c-br1.tar.gz
++sha256  83b1bd7602b0c8d05a8ff2f842d80fa7c9a0b084b7159bb9eed796b0075b94d1  mmc-utils-e1281d4de9166b7254ba30bb58f9191fc2c9e7fb-br1.tar.gz
+ sha256  4207d81122a02555f78c5a11b61c83a331ee03dc933e1ef9dd932ef9b434d12d  README
+diff --git a/package/mmc-utils/mmc-utils.mk b/package/mmc-utils/mmc-utils.mk
+index ef4d97c1ca..48c347d846 100644
+--- a/package/mmc-utils/mmc-utils.mk
++++ b/package/mmc-utils/mmc-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MMC_UTILS_VERSION = 80271e9a6fd0db9cb3a85d024664da886e94315c
++MMC_UTILS_VERSION = e1281d4de9166b7254ba30bb58f9191fc2c9e7fb
+ MMC_UTILS_SITE = https://git.kernel.org/pub/scm/utils/mmc/mmc-utils.git
+ MMC_UTILS_SITE_METHOD = git
+ MMC_UTILS_LICENSE = GPL-2.0
+-- 
+2.34.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3360232483225347344==--
