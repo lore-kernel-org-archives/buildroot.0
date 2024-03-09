@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC128C54798
-	for <buildroot@archiver.kernel.org>; Sat,  9 Mar 2024 13:34:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D389C54798
+	for <buildroot@archiver.kernel.org>; Sat,  9 Mar 2024 13:34:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ECB7F82003;
-	Sat,  9 Mar 2024 13:34:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4EFCC81FC6;
+	Sat,  9 Mar 2024 13:34:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5mqjxVVTURBz; Sat,  9 Mar 2024 13:34:06 +0000 (UTC)
+	with ESMTP id WIgLrq6k4NJx; Sat,  9 Mar 2024 13:34:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E1DFE81FF0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4322B81FE4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E1DFE81FF0;
-	Sat,  9 Mar 2024 13:34:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1845C1BF300
- for <buildroot@lists.busybox.net>; Sat,  9 Mar 2024 13:34:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4322B81FE4;
+	Sat,  9 Mar 2024 13:34:33 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2BB921BF300
+ for <buildroot@lists.busybox.net>; Sat,  9 Mar 2024 13:34:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1226381FC6
- for <buildroot@lists.busybox.net>; Sat,  9 Mar 2024 13:34:05 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 192DF401E1
+ for <buildroot@lists.busybox.net>; Sat,  9 Mar 2024 13:34:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Bff99iuS1KIq for <buildroot@lists.busybox.net>;
- Sat,  9 Mar 2024 13:34:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
- helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5u-N4x43GbSu for <buildroot@lists.busybox.net>;
+ Sat,  9 Mar 2024 13:34:31 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
+ helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 46D2881FE4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 46D2881FE4
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 46D2881FE4
- for <buildroot@buildroot.org>; Sat,  9 Mar 2024 13:34:02 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E23FBFF803;
- Sat,  9 Mar 2024 13:33:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F042040103
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F042040103
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F042040103
+ for <buildroot@buildroot.org>; Sat,  9 Mar 2024 13:34:30 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 69E93240002;
+ Sat,  9 Mar 2024 13:34:27 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1riwpr-005P96-0j;
- Sat, 09 Mar 2024 14:33:59 +0100
+ (envelope-from <peter@korsgaard.com>) id 1riwqI-005P9N-1n;
+ Sat, 09 Mar 2024 14:34:26 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd@kuhls.net>
-References: <20240211145446.270865-1-bernd@kuhls.net>
-Date: Sat, 09 Mar 2024 14:33:59 +0100
-In-Reply-To: <20240211145446.270865-1-bernd@kuhls.net> (Bernd Kuhls's message
- of "Sun, 11 Feb 2024 15:54:46 +0100")
-Message-ID: <87cys3v8ag.fsf@48ers.dk>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20240224220636.742198-1-fontaine.fabrice@gmail.com>
+Date: Sat, 09 Mar 2024 14:34:26 +0100
+In-Reply-To: <20240224220636.742198-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 24 Feb 2024 23:06:36 +0100")
+Message-ID: <878r2rv89p.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/libcurl: bump version to 8.6.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/libcurl: fix libpsl static build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,24 +74,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Changelog: https://curl.se/changes.html#8_6_0
- > Removed patch which was included in upstream release.
+ > Fix the following static build failure with libpsl raised since bump to
+ > version 8.6.0 in commit 5cee6b6be6524e443012d130e09b0e6983b0ff90:
 
- > Updated license hash due to copyright year bump:
- > https://github.com/curl/curl/commit/57cc70e559aa065426021e22e2af8166af6084f6
+ > configure:28830:
+ > /home/autobuild/autobuild/instance-6/output-1/host/bin/aarch64_be-buildroot-linux-musl-gcc
+ > -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+ > -D_FILE_OFFSET_BITS=64 -O3 -g0 -static
+ > -Werror-implicit-function-declaration -Wno-system-headers
+ > -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+ > -I/home/autobuild/autobuild/instance-6/output-1/host/aarch64_be-buildroot-linux-musl/sysroot/usr/include
+ > -static
+ > -L/home/autobuild/autobuild/instance-6/output-1/host/bin/../aarch64_be-buildroot-linux-musl/sysroot/usr/lib
+ > -L/home/autobuild/autobuild/instance-6/output-1/host/aarch64_be-buildroot-linux-musl/sysroot/usr/lib
+ > conftest.c -lpsl -lmbedtls -lmbedx509 -lmbedcrypto -lz -latomic >&5
+ > /home/autobuild/autobuild/instance-6/output-1/host/lib/gcc/aarch64_be-buildroot-linux-musl/11.4.0/../../../../aarch64_be-buildroot-linux-musl/bin/ld:
+ > /home/autobuild/autobuild/instance-6/output-1/host/bin/../aarch64_be-buildroot-linux-musl/sysroot/usr/lib/libpsl.a(psl.c.o):
+ > in function `is_public_suffix':
+ > psl.c:(.text+0x2a8): undefined reference to `idn2_lookup_u8'
 
- > Added configure options for optional libpsl support due to upstream
- > commit which throws an error during configure when libpsl is missing and
- > --without-libpsl was not used:
- > https://github.com/curl/curl/commit/2998874bb61ac6ef3b72d6a61467cd2aaf6e53ea
+ > [...]
 
- > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ > checking for library containing psl_builtin... no
+ > configure: error: libpsl was not found
 
+ > Fixes: 5cee6b6be6524e443012d130e09b0e6983b0ff90
+ >  - http://autobuild.buildroot.org/results/1fb15e1a99472c403d0d3b1a688902f32e78d002
 
-Committed to 2023.02.x and 2023.11.x because of the security fix it
-contains, please mention such info in the future - thanks.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2023.02.x and 2023.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
