@@ -4,92 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52F73C54798
-	for <buildroot@archiver.kernel.org>; Sat,  9 Mar 2024 16:50:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EAD55C54798
+	for <buildroot@archiver.kernel.org>; Sat,  9 Mar 2024 16:53:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E6F534035D;
-	Sat,  9 Mar 2024 16:50:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8F152407FC;
+	Sat,  9 Mar 2024 16:53:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rjKH-tWholay; Sat,  9 Mar 2024 16:50:01 +0000 (UTC)
+	with ESMTP id djgkf7m4KpJf; Sat,  9 Mar 2024 16:52:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9FBF0404A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 13A5940605
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9FBF0404A5;
-	Sat,  9 Mar 2024 16:50:01 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 086BE1BF484
- for <buildroot@lists.busybox.net>; Sat,  9 Mar 2024 16:50:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 13A5940605;
+	Sat,  9 Mar 2024 16:52:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5A2A41BF484
+ for <buildroot@lists.busybox.net>; Sat,  9 Mar 2024 16:52:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E83174035D
- for <buildroot@lists.busybox.net>; Sat,  9 Mar 2024 16:49:59 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 47C13401FE
+ for <buildroot@lists.busybox.net>; Sat,  9 Mar 2024 16:52:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5z_5EwFkuCeI for <buildroot@lists.busybox.net>;
- Sat,  9 Mar 2024 16:49:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
- envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 661AE40342
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 661AE40342
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 661AE40342
- for <buildroot@buildroot.org>; Sat,  9 Mar 2024 16:49:57 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-4131bbb7fbcso9166045e9.2
- for <buildroot@buildroot.org>; Sat, 09 Mar 2024 08:49:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1710002994; x=1710607794;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=Jdkz5nFFxBiW79DfZOVEGnjJtRr5Mz8ZlwPoozvKDIc=;
- b=EqEbJbzNyyJsU+GZc1K+pFbxhIF51wgGwTgwyLT6H9YbWQ5dYKVeXWOCzME4FVUK9W
- qmha3OwJNhxeGFOWCGCYuLed1BitBOQJV0oXs83w5eey3VDWFQ87+5GIepXDkkVxL2MJ
- hrJI1m6xdsczsPu2rzqE/Jivn+StlJubYTxUzltgpnJBthvH+0DsY1EQ4317ZNW8+Pwt
- WPo4OGAKq+V7o9csl+vtPXtRFxgMoZCohii2ytGjVAeDp+bKeJX/Qn+aM3nePqiJ3F23
- CtW/WIsPct1JMWRFHn/LGSti7KP3Y+snVUDgeTESd7pl1IrYvqRDYQyiNbfZ6uleJelr
- wSlg==
-X-Gm-Message-State: AOJu0Yz9DLDKj2CMp4n5++3RXCJyatEwKj6zckTDcMimE/Fm/FA0NevG
- oejuLmCGrR4mkG9qWZ97ri8T1brfo/28G2wmUsDOS7irB6vRpQXwSvTQW0tY
-X-Google-Smtp-Source: AGHT+IFJ8Hg8bc9amFGtYgHRGEE5mqjkeCUhC5cJW5HMAyC0ckbb8eUAsma5a7v6J1l+URgAASAVwQ==
-X-Received: by 2002:a05:600c:4f4a:b0:412:c7b2:5636 with SMTP id
- m10-20020a05600c4f4a00b00412c7b25636mr1715161wmq.23.1710002994246; 
- Sat, 09 Mar 2024 08:49:54 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- d21-20020a05600c34d500b004131bbbd9bfsm4604353wmq.40.2024.03.09.08.49.53
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 09 Mar 2024 08:49:53 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id y6CE1X0WVVEO for <buildroot@lists.busybox.net>;
+ Sat,  9 Mar 2024 16:52:55 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D95DB4010C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D95DB4010C
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D95DB4010C
+ for <buildroot@buildroot.org>; Sat,  9 Mar 2024 16:52:54 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 7846BB00539;
+ Sat,  9 Mar 2024 17:52:45 +0100 (CET)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat,  9 Mar 2024 17:49:46 +0100
-Message-ID: <20240309164946.166802-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Date: Sat,  9 Mar 2024 17:52:37 +0100
+Message-ID: <20240309165237.16125-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.44.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1710002994; x=1710607794; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Jdkz5nFFxBiW79DfZOVEGnjJtRr5Mz8ZlwPoozvKDIc=;
- b=SY2jCUb36AXG1nzLuRrK0NuhAAbodravB0uDvIQ4Lf8RhTAg0a9ef+xnYRhCcQHKL9
- owQwnPkTMowwn/qURtJ7HW/oWD3E2P6KiyJbrfaQBsZqJtWAzcWwh0+IBaRUl/kwtMaV
- FLVOyG1LRqZbqFOcn4ZaNlpgyOQsfXN6ULBWyosP9pwhozNQERPihg6nISgqmlnv5uJg
- w4YQOIL/WByC5LIZbEAYcWyRSQYs4V7jTmMXiNJb3pbyMQ9YlrEylb5UBz/pW0ZXy1rd
- iVLHhRw9lYVgkyYi9fjZlRcuGv/E4cj+YCHxigL6nyewaQdyIDN5ENGWbdQEE1XiNK8d
- 9NOw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1710003171;
+ bh=PZyIxWFIc/5xxz5yQ1iq2q9vLwnHIQ7ldStv5SAbVss=;
+ h=From:To:Cc:Subject:Date:From;
+ b=IHazHyjTwLt5yyjGgMQdVeSQC7GuwgNWPYepZ6vQ23ufLusTymnytEqY8pY8iLlas
+ 4bgSekdgxTDb9gYny/VL5Xch56y2H4HKdcYGnnqkaTCm775wGIGGvsVE5ymB15xWhf
+ tbZ4uuql3slXILkLQ7qhmJlnHiL9fsDzCAFvML9EpTwcGzW3WCY98Yu8jZunhUEXsg
+ 4TTMHoYz23v+440nFR7TRNK0y2Q9xnutxRKZcJkCbUWb82EEYj8mLvjEOxNEjugBtQ
+ 472iemVoRcNTXoZiNuLFLUDznQoTns78lzjJKnskzzqEn1WtybZschxZfKTKsJegYM
+ Gd29sDvTexDUQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=SY2jCUb3
-Subject: [Buildroot] [PATCH 1/1] toolchain: drop codesourcery arm/aarch64
- toolchains
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=IHazHyjT
+Subject: [Buildroot] [PATCH 1/1] package/bitcoin: security bump to version
+ 26.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,479 +77,305 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd@kuhls.net>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- Pedro Aguilar <paguilar@paguilar.org>
+Cc: Fabio Urquiza <fabiorush@gmail.com>, Bernd Kuhls <bernd@kuhls.net>,
+ Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-codesourcery arm/aarch64 toolchains are old (2014) and use glibc
-2.18/2.20 which are not compatible with 64-bit time_t raising the
-following build failure with libcgroup since commit
-1c2dbcdcf0bb589d325c379246acaa39bb07b7be:
+For all release notes since 0.21.2, see [1].
 
-In file included from ./libcgroup-internal.h:25:0,
-                 from parse.y:21:
-/home/buildroot/autobuild/run/instance-3/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/fts.h:41:3: error: #error "<fts.h> cannot be used with -D_FILE_OFFSET_BITS==64"
- # error "<fts.h> cannot be used with -D_FILE_OFFSET_BITS==64"
-   ^
+This commit also:
+- removes the package patches, all included in this release,
+- removes the patch entry in ".checkpackageignore",
+- adds a comment about pgp signature check in the hash file,
+- updates the license hash, due to year update,
+- adds the requirement on gcc >= 9, see [2],
+- removes the dependency on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 which
+  is no longer needed, due to the gcc version requirement.
 
-Fixes: 1c2dbcdcf0bb589d325c379246acaa39bb07b7be
- - http://autobuild.buildroot.org/results/e28f955f2b360f6e7bb231a5a3800cfbd17a23d7
+Fixes:
+- [3]
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Note: this CVE-2023-33297 is not explicitly mentioned in the Bitcoin
+core release notes. It is not either appearing in CVE list at [4].
+The change corresponding to this vulnerability is "#27610 Improve
+performance of p2p inv to send queues" in the version 24.1 release
+note. See [5] and [6].
+
+[1] https://github.com/bitcoin/bitcoin/tree/v26.0/doc/release-notes
+[2] https://github.com/bitcoin/bitcoin/blob/v26.0/doc/dependencies.md
+[3] https://nvd.nist.gov/vuln/detail/CVE-2023-33297
+[4] https://en.bitcoin.it/wiki/Common_Vulnerabilities_and_Exposures
+[5] https://github.com/bitcoin/bitcoin/blob/v26.0/doc/release-notes/release-notes-24.1.md?plain=1#L45
+[6] https://github.com/bitcoin/bitcoin/pull/27610
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/guile/guile.mk                        |  5 -
- package/mesa3d/mesa3d.mk                      |  6 --
- package/tpm2-totp/Config.in                   |  2 -
- .../autobuild/sourcery-arm-armv4t.config      |  4 -
- .../autobuild/sourcery-arm-thumb2.config      |  7 --
- .../autobuild/sourcery-arm.config             |  3 -
- .../autobuild/toolchain-configs.csv           |  5 -
- .../testing/tests/toolchain/test_external.py  | 97 -------------------
- toolchain/Config.in                           |  1 -
- toolchain/toolchain-external/Config.in        |  4 -
- .../Config.in                                 | 19 ----
- .../Config.in.options                         |  9 --
- ...olchain-external-codesourcery-aarch64.hash |  3 -
- ...toolchain-external-codesourcery-aarch64.mk | 12 ---
- .../Config.in                                 | 35 -------
- .../Config.in.options                         |  9 --
- .../toolchain-external-codesourcery-arm.hash  |  3 -
- .../toolchain-external-codesourcery-arm.mk    | 13 ---
- 18 files changed, 237 deletions(-)
- delete mode 100644 support/config-fragments/autobuild/sourcery-arm-armv4t.config
- delete mode 100644 support/config-fragments/autobuild/sourcery-arm-thumb2.config
- delete mode 100644 support/config-fragments/autobuild/sourcery-arm.config
- delete mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in
- delete mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in.options
- delete mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.hash
- delete mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.mk
- delete mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in
- delete mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in.options
- delete mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-arm/toolchain-external-codesourcery-arm.hash
- delete mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-arm/toolchain-external-codesourcery-arm.mk
+ .checkpackageignore                           |  1 -
+ ...rc-randomenv.cpp-fix-build-on-uclibc.patch | 48 -------------------
+ ...includes-to-fix-gcc-13-compile-error.patch | 48 -------------------
+ ...efactor-add-most-of-src-util-to-iwyu.patch | 34 -------------
+ .../0004-src-util-string-h-fix-gcc13.patch    | 23 ---------
+ package/bitcoin/Config.in                     | 11 ++---
+ package/bitcoin/bitcoin.hash                  |  8 ++--
+ package/bitcoin/bitcoin.mk                    |  2 +-
+ 8 files changed, 10 insertions(+), 165 deletions(-)
+ delete mode 100644 package/bitcoin/0001-src-randomenv.cpp-fix-build-on-uclibc.patch
+ delete mode 100644 package/bitcoin/0002-Add-missing-includes-to-fix-gcc-13-compile-error.patch
+ delete mode 100644 package/bitcoin/0003-refactor-add-most-of-src-util-to-iwyu.patch
+ delete mode 100644 package/bitcoin/0004-src-util-string-h-fix-gcc13.patch
 
-diff --git a/package/guile/guile.mk b/package/guile/guile.mk
-index 1d2e8038f0..82daaf5ad4 100644
---- a/package/guile/guile.mk
-+++ b/package/guile/guile.mk
-@@ -44,11 +44,6 @@ ifeq ($(BR2_STATIC_LIBS),y)
- GUILE_CFLAGS += -DGC_NO_DLOPEN
- endif
- 
--# Triggers assembler error with -Os
--ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM)$(BR2_OPTIMIZE_S),yy)
--GUILE_CFLAGS += -O2
--endif
--
- # jit triggers build failures with gcc < 5
- ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_5),)
- GUILE_CONF_OPTS += --disable-jit
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 8e3cd7245d..df0079bf80 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -29,12 +29,6 @@ MESA3D_CONF_OPTS = \
- 	-Dgallium-omx=disabled \
- 	-Dpower8=disabled
- 
--# Codesourcery ARM 2014.05 fail to link libmesa_dri_drivers.so with --as-needed linker
--# flag due to a linker bug between binutils 2.24 and 2.25 (2.24.51.20140217).
--ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM),y)
--MESA3D_CONF_OPTS += -Db_asneeded=false
--endif
--
- ifeq ($(BR2_PACKAGE_MESA3D_DRI3),y)
- MESA3D_CONF_OPTS += -Ddri3=enabled
- ifeq ($(BR2_PACKAGE_XLIB_LIBXSHMFENCE),y)
-diff --git a/package/tpm2-totp/Config.in b/package/tpm2-totp/Config.in
-index dcadf5a5f2..a26604abb8 100644
---- a/package/tpm2-totp/Config.in
-+++ b/package/tpm2-totp/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_TPM2_TOTP
- 	bool "tpm2-totp"
- 	depends on !BR2_STATIC_LIBS # tpm2-tss
--	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM # glibc < 2.20
- 	select BR2_PACKAGE_LIBQRENCODE
- 	select BR2_PACKAGE_TPM2_TSS
- 	help
-@@ -20,4 +19,3 @@ config BR2_PACKAGE_TPM2_TOTP
- 
- comment "tpm2-totp needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
--	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
-diff --git a/support/config-fragments/autobuild/sourcery-arm-armv4t.config b/support/config-fragments/autobuild/sourcery-arm-armv4t.config
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 5f4928b6487..f413e5a4971 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -194,7 +194,6 @@ package/berkeleydb/0002-atomic_compare_exchange.patch Upstream
+ package/bind/0001-cross.patch Upstream
+ package/bind/S81named Indent Shellcheck Variables
+ package/bird/0001-configure.ac-fix-build-with-autoconf-2.70.patch Upstream
+-package/bitcoin/0001-src-randomenv.cpp-fix-build-on-uclibc.patch Upstream
+ package/bmx7/0001-Fix-schedule.c-378-36-error-SIOCGSTAMP-undeclared.patch Upstream
+ package/bmx7/0002-Fix-linking-error.patch Upstream
+ package/bmx7/0003-Reorder-includes-to-avoid-ethhdr-collision.patch Upstream
+diff --git a/package/bitcoin/0001-src-randomenv.cpp-fix-build-on-uclibc.patch b/package/bitcoin/0001-src-randomenv.cpp-fix-build-on-uclibc.patch
 deleted file mode 100644
-index 4c0e01fecb..0000000000
---- a/support/config-fragments/autobuild/sourcery-arm-armv4t.config
+index 8038a311d36..00000000000
+--- a/package/bitcoin/0001-src-randomenv.cpp-fix-build-on-uclibc.patch
 +++ /dev/null
-@@ -1,4 +0,0 @@
--BR2_arm=y
--BR2_arm920t=y
--BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM=y
-diff --git a/support/config-fragments/autobuild/sourcery-arm-thumb2.config b/support/config-fragments/autobuild/sourcery-arm-thumb2.config
+@@ -1,48 +0,0 @@
+-From 330cb33985d0ce97c20f4a0f0bbda0fbffe098d4 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Mon, 9 Nov 2020 21:18:40 +0100
+-Subject: [PATCH] src/randomenv.cpp: fix build on uclibc
+-
+-Check for HAVE_STRONG_GETAUXVAL or HAVE_WEAK_GETAUXVAL before using
+-getauxval to avoid a build failure on uclibc
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/bitcoin/bitcoin/pull/20358]
+----
+- src/randomenv.cpp | 6 +++---
+- 1 file changed, 3 insertions(+), 3 deletions(-)
+-
+-diff --git a/src/randomenv.cpp b/src/randomenv.cpp
+-index 07122b7f6..5e07c3db4 100644
+---- a/src/randomenv.cpp
+-+++ b/src/randomenv.cpp
+-@@ -53,7 +53,7 @@
+- #include <sys/vmmeter.h>
+- #endif
+- #endif
+--#ifdef __linux__
+-+#if defined(HAVE_STRONG_GETAUXVAL) || defined(HAVE_WEAK_GETAUXVAL)
+- #include <sys/auxv.h>
+- #endif
+- 
+-@@ -326,7 +326,7 @@ void RandAddStaticEnv(CSHA512& hasher)
+-     // Bitcoin client version
+-     hasher << CLIENT_VERSION;
+- 
+--#ifdef __linux__
+-+#if defined(HAVE_STRONG_GETAUXVAL) || defined(HAVE_WEAK_GETAUXVAL)
+-     // Information available through getauxval()
+- #  ifdef AT_HWCAP
+-     hasher << getauxval(AT_HWCAP);
+-@@ -346,7 +346,7 @@ void RandAddStaticEnv(CSHA512& hasher)
+-     const char* exec_str = (const char*)getauxval(AT_EXECFN);
+-     if (exec_str) hasher.Write((const unsigned char*)exec_str, strlen(exec_str) + 1);
+- #  endif
+--#endif // __linux__
+-+#endif // HAVE_STRONG_GETAUXVAL || HAVE_WEAK_GETAUXVAL
+- 
+- #ifdef HAVE_GETCPUID
+-     AddAllCPUID(hasher);
+--- 
+-2.28.0
+-
+diff --git a/package/bitcoin/0002-Add-missing-includes-to-fix-gcc-13-compile-error.patch b/package/bitcoin/0002-Add-missing-includes-to-fix-gcc-13-compile-error.patch
 deleted file mode 100644
-index e726757a16..0000000000
---- a/support/config-fragments/autobuild/sourcery-arm-thumb2.config
+index 22c0ca2adf6..00000000000
+--- a/package/bitcoin/0002-Add-missing-includes-to-fix-gcc-13-compile-error.patch
 +++ /dev/null
-@@ -1,7 +0,0 @@
--BR2_arm=y
--BR2_cortex_a8=y
--BR2_ARM_EABI=y
--BR2_ARM_INSTRUCTIONS_THUMB2=y
--BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM=y
--BR2_TARGET_OPTIMIZATION=""
-diff --git a/support/config-fragments/autobuild/sourcery-arm.config b/support/config-fragments/autobuild/sourcery-arm.config
+@@ -1,48 +0,0 @@
+-From 339a95b7537b47e5d6b732c0633a00afd96e3ca0 Mon Sep 17 00:00:00 2001
+-From: MarcoFalke <*~=`'#}+{/-|&$^_@721217.xyz>
+-Date: Thu, 19 Jan 2023 19:35:43 +0100
+-Subject: [PATCH] Add missing includes to fix gcc-13 compile error
+-
+-Upstream: https://github.com/bitcoin/bitcoin/commit/fadeb6b103cb441e0e91ef506ef29febabb10715
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- src/support/lockedpool.cpp | 3 +++
+- src/support/lockedpool.h   | 4 ++--
+- 2 files changed, 5 insertions(+), 2 deletions(-)
+-
+-diff --git a/src/support/lockedpool.cpp b/src/support/lockedpool.cpp
+-index 26de780f2..11131d551 100644
+---- a/src/support/lockedpool.cpp
+-+++ b/src/support/lockedpool.cpp
+-@@ -22,6 +22,9 @@
+- #endif
+- 
+- #include <algorithm>
+-+#include <limits>
+-+#include <stdexcept>
+-+#include <utility>
+- #ifdef ARENA_DEBUG
+- #include <iomanip>
+- #include <iostream>
+-diff --git a/src/support/lockedpool.h b/src/support/lockedpool.h
+-index b9e2e99d1..25b4c0f36 100644
+---- a/src/support/lockedpool.h
+-+++ b/src/support/lockedpool.h
+-@@ -5,11 +5,11 @@
+- #ifndef BITCOIN_SUPPORT_LOCKEDPOOL_H
+- #define BITCOIN_SUPPORT_LOCKEDPOOL_H
+- 
+--#include <stdint.h>
+-+#include <cstddef>
+- #include <list>
+- #include <map>
+--#include <mutex>
+- #include <memory>
+-+#include <mutex>
+- #include <unordered_map>
+- 
+- /**
+--- 
+-2.39.2
+-
+diff --git a/package/bitcoin/0003-refactor-add-most-of-src-util-to-iwyu.patch b/package/bitcoin/0003-refactor-add-most-of-src-util-to-iwyu.patch
 deleted file mode 100644
-index 8ade4647f2..0000000000
---- a/support/config-fragments/autobuild/sourcery-arm.config
+index 095fa648dd3..00000000000
+--- a/package/bitcoin/0003-refactor-add-most-of-src-util-to-iwyu.patch
 +++ /dev/null
-@@ -1,3 +0,0 @@
--BR2_arm=y
--BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM=y
-diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
-index a65e9bacc3..2c4fa45fe7 100644
---- a/support/config-fragments/autobuild/toolchain-configs.csv
-+++ b/support/config-fragments/autobuild/toolchain-configs.csv
-@@ -18,9 +18,6 @@ support/config-fragments/autobuild/bootlin-x86-64-musl.config,x86_64
- # Test a MMU toolchain without dynamic library support
- support/config-fragments/autobuild/br-arm-full-static.config,x86_64
+@@ -1,34 +0,0 @@
+-From c187efa907fd64ea2c7b7d699c5c97f9d5b79960 Mon Sep 17 00:00:00 2001
+-From: fanquake <fanquake@gmail.com>
+-Date: Thu, 9 Jun 2022 16:26:55 +0100
+-Subject: [PATCH] refactor: add most of src/util to iwyu
+-
+-These files change infrequently, and not much header shuffling is required.
+-
+-We don't add everything in src/util/ yet, because IWYU makes some
+-dubious suggestions, which I'm going to follow up with upstream.
+-
+-Upstream: https://github.com/bitcoin/bitcoin/commit/07f2c25d04c39a0074e1d9ee1b24b3e359c8153f
+-
+-[Bernd: backported relevant part from upstream commit to version 0.21.2
+-        to fix build error with gcc 13.x]
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- src/util/bip32.h | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/src/util/bip32.h b/src/util/bip32.h
+-index 347e83db9..6ef051c48 100644
+---- a/src/util/bip32.h
+-+++ b/src/util/bip32.h
+-@@ -6,6 +6,7 @@
+- #define BITCOIN_UTIL_BIP32_H
+- 
+- #include <attributes.h>
+-+#include <cstdint>
+- #include <string>
+- #include <vector>
+- 
+--- 
+-2.39.2
+-
+diff --git a/package/bitcoin/0004-src-util-string-h-fix-gcc13.patch b/package/bitcoin/0004-src-util-string-h-fix-gcc13.patch
+deleted file mode 100644
+index 00a9ef2b971..00000000000
+--- a/package/bitcoin/0004-src-util-string-h-fix-gcc13.patch
++++ /dev/null
+@@ -1,23 +0,0 @@
+-From fa2deae2a86417d7e0d4cd33fb933b1000d20313 Mon Sep 17 00:00:00 2001
+-From: MacroFake <falke.marco@gmail.com>
+-Date: Thu, 5 May 2022 08:28:29 +0200
+-Subject: [PATCH] Wrap boost::replace_all
+-
+-Upstream: https://github.com/bitcoin/bitcoin/commit/fa2deae2a86417d7e0d4cd33fb933b1000d20313
+-
+-[Bernd: backported relevant part from upstream commit to version 0.21.2
+-        to fix build error with gcc 13.x]
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+-diff --git a/src/util/string.h b/src/util/string.h
+-index 2e91347b27a10..df20e34ae9aaa 100644
+---- a/src/util/string.h
+-+++ b/src/util/string.h
+-@@ -9,6 +9,7 @@
+- 
+- #include <algorithm>
+- #include <array>
+-+#include <cstdint>
+- #include <cstring>
+- #include <locale>
+- #include <sstream>
+diff --git a/package/bitcoin/Config.in b/package/bitcoin/Config.in
+index a344811d6b4..c4a2447fc95 100644
+--- a/package/bitcoin/Config.in
++++ b/package/bitcoin/Config.in
+@@ -11,8 +11,8 @@ config BR2_PACKAGE_BITCOIN
+ 	bool "bitcoin"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-thread, boost-filesystem
+-	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::future
+ 	depends on BR2_PACKAGE_BITCOIN_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
+ 	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_BOOST
+@@ -36,12 +36,9 @@ config BR2_PACKAGE_BITCOIN
  
--# Test a toolchain with an old gcc version (gcc 4.8)
--support/config-fragments/autobuild/sourcery-arm.config,x86
--
- # Toolchains used by test-pkg only when the '-a' option is passed:
- support/config-fragments/autobuild/arm-aarch64.config,x86_64
- support/config-fragments/autobuild/bootlin-aarch64-glibc.config,x86_64
-@@ -66,8 +63,6 @@ support/config-fragments/autobuild/br-xtensa-full-internal.config,any
- support/config-fragments/autobuild/linaro-aarch64.config,x86
- support/config-fragments/autobuild/linaro-aarch64-be.config,x86
- support/config-fragments/autobuild/linaro-arm.config,x86
--support/config-fragments/autobuild/sourcery-arm-armv4t.config,x86
--support/config-fragments/autobuild/sourcery-arm-thumb2.config,x86
- support/config-fragments/autobuild/sourcery-mips64.config,x86
- support/config-fragments/autobuild/sourcery-mips.config,x86
- support/config-fragments/autobuild/sourcery-nios2.config,x86
-diff --git a/support/testing/tests/toolchain/test_external.py b/support/testing/tests/toolchain/test_external.py
-index d22f38cedc..27dfd68500 100644
---- a/support/testing/tests/toolchain/test_external.py
-+++ b/support/testing/tests/toolchain/test_external.py
-@@ -37,103 +37,6 @@ class TestExternalToolchain(infra.basetest.BRTest):
-             self.assertTrue(os.path.exists(interp_path))
+ 	  https://bitcoincore.org
  
+-comment "bitcoin needs a toolchain w/ C++, threads, wchar"
++comment "bitcoin needs a toolchain w/ C++, threads, wchar, gcc >= 9"
+ 	depends on BR2_PACKAGE_BITCOIN_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+-
+-comment "bitcoin needs a toolchain not affected by GCC bug 64735"
+-	depends on BR2_PACKAGE_BITCOIN_ARCH_SUPPORTS
+-	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
++		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_9
+diff --git a/package/bitcoin/bitcoin.hash b/package/bitcoin/bitcoin.hash
+index 643fcbc1419..6b3008af863 100644
+--- a/package/bitcoin/bitcoin.hash
++++ b/package/bitcoin/bitcoin.hash
+@@ -1,5 +1,7 @@
+-# From https://bitcoincore.org/bin/bitcoin-core-0.21.2/SHA256SUMS.asc
+-sha256  4146f751fc5691bdcf911cbdb8d32d8d25c297d29d58173227ae1ae6438edb9e  bitcoin-0.21.2.tar.gz
++# Hash from: https://bitcoincore.org/bin/bitcoin-core-26.0/SHA256SUMS
++# After checking pgp signature from:
++# https://bitcoincore.org/bin/bitcoin-core-26.0/SHA256SUMS.asc
++sha256  ab1d99276e28db62d1d9f3901e85ac358d7f1ebcb942d348a9c4e46f0fcdc0a1  bitcoin-26.0.tar.gz
  
--class TestExternalToolchainSourceryArmv4(TestExternalToolchain):
--    config = BASIC_CONFIG + \
--        """
--        BR2_arm=y
--        BR2_arm920t=y
--        BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM=y
--        """
--    toolchain_prefix = "arm-none-linux-gnueabi"
--
--    def test_run(self):
--        TestExternalToolchain.common_check(self)
--
--        # Check the architecture variant
--        arch = infra.get_file_arch(self.builddir,
--                                   self.toolchain_prefix,
--                                   "lib/libc.so.6")
--        self.assertEqual(arch, "v4T")
--
--        # Check the sysroot symlink
--        symlink = os.path.join(self.builddir, "staging", "armv4t")
--        self.assertTrue(os.path.exists(symlink))
--        self.assertEqual(os.readlink(symlink), "./")
--
--        # Boot the system
--        img = os.path.join(self.builddir, "images", "rootfs.cpio")
--        self.emulator.boot(arch="armv5",
--                           kernel="builtin",
--                           options=["-initrd", img])
--        self.emulator.login()
--
--
--class TestExternalToolchainSourceryArmv5(TestExternalToolchain):
--    config = BASIC_CONFIG + \
--        """
--        BR2_arm=y
--        BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM=y
--        """
--    toolchain_prefix = "arm-none-linux-gnueabi"
--
--    def test_run(self):
--        TestExternalToolchain.common_check(self)
--
--        # Check the architecture variant
--        arch = infra.get_file_arch(self.builddir,
--                                   self.toolchain_prefix,
--                                   "lib/libc.so.6")
--        self.assertEqual(arch, "v5TE")
--
--        # Boot the system
--        img = os.path.join(self.builddir, "images", "rootfs.cpio")
--        self.emulator.boot(arch="armv5",
--                           kernel="builtin",
--                           options=["-initrd", img])
--        self.emulator.login()
--
--
--class TestExternalToolchainSourceryArmv7(TestExternalToolchain):
--    config = BASIC_CONFIG + \
--        """
--        BR2_arm=y
--        BR2_cortex_a8=y
--        BR2_ARM_EABI=y
--        BR2_ARM_INSTRUCTIONS_THUMB2=y
--        BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM=y
--        """
--    toolchain_prefix = "arm-none-linux-gnueabi"
--
--    def test_run(self):
--        TestExternalToolchain.common_check(self)
--
--        # Check the architecture variant
--        arch = infra.get_file_arch(self.builddir,
--                                   self.toolchain_prefix,
--                                   "lib/libc.so.6")
--        self.assertEqual(arch, "v7")
--        isa = infra.get_elf_arch_tag(self.builddir,
--                                     self.toolchain_prefix,
--                                     "lib/libc.so.6",
--                                     "Tag_THUMB_ISA_use")
--        self.assertEqual(isa, "Thumb-2")
--
--        # Check we have the sysroot symlink
--        symlink = os.path.join(self.builddir, "staging", "thumb2")
--        self.assertTrue(os.path.exists(symlink))
--        self.assertEqual(os.readlink(symlink), "./")
--
--        # Boot the system
--        img = os.path.join(self.builddir, "images", "rootfs.cpio")
--        self.emulator.boot(arch="armv7",
--                           kernel="builtin",
--                           options=["-initrd", img])
--        self.emulator.login()
--
--
- class TestExternalToolchainLinaroArm(TestExternalToolchain):
-     config = BASIC_CONFIG + \
-         """
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 1a06178608..acd1eb3f1e 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -893,7 +893,6 @@ config BR2_TOOLCHAIN_HAS_SYNC_8
- config BR2_TOOLCHAIN_HAS_LIBATOMIC
- 	bool
- 	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 && \
--		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64 && \
- 		BR2_TOOLCHAIN_HAS_THREADS
+ # Hash for license file
+-sha256  96fe807030b21f88305adc32af62f9aa19915f2783509fd6f52aea02cf83f644  COPYING
++sha256  a6331cd1f889397adfc0c3b0535682a20950c6cf8e5c712e9997a15ce98324e1  COPYING
+diff --git a/package/bitcoin/bitcoin.mk b/package/bitcoin/bitcoin.mk
+index 10ae32202cf..493c569336a 100644
+--- a/package/bitcoin/bitcoin.mk
++++ b/package/bitcoin/bitcoin.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # __atomic intrinsics are available:
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index c1c159cb8e..b5432b71d7 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -11,7 +11,6 @@ choice
- # Aarch64 (use ARM toolchain by default)
- source "toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in"
- source "toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in"
--source "toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in"
- 
- # Aarch64 big-endian
- source "toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in"
-@@ -23,7 +22,6 @@ source "toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in"
- # ARM (use ARM toolchain by default)
- source "toolchain/toolchain-external/toolchain-external-arm-arm/Config.in"
- source "toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in"
--source "toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in"
- 
- # ARM big-endian
- source "toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in"
-@@ -115,7 +113,6 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- # Aarch64
- source "toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in.options"
- source "toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in.options"
--source "toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in.options"
- 
- # Aarch64 big-endian
- source "toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in.options"
-@@ -127,7 +124,6 @@ source "toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in.o
- # ARM
- source "toolchain/toolchain-external/toolchain-external-arm-arm/Config.in.options"
- source "toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in.options"
--source "toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in.options"
- 
- # ARM big-endian
- source "toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in.options"
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in b/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in
-deleted file mode 100644
-index 8c0f985c5b..0000000000
---- a/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in
-+++ /dev/null
-@@ -1,19 +0,0 @@
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64
--	bool "CodeSourcery AArch64 2014.11"
--	depends on BR2_aarch64
--	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_5
--	# a57/a53 and a72/a53 appeared in gcc-6 or were broken before
--	depends on !BR2_cortex_a57_a53 && !BR2_cortex_a72_a53
--	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
--	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
--	select BR2_TOOLCHAIN_HAS_SSP
--	select BR2_INSTALL_LIBSTDCPP
--	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16
--	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
--	help
--	  Sourcery CodeBench toolchain for the AArch64 architecture,
--	  from Mentor Graphics. It uses gcc 4.9.1, binutils
--	  2.24.51.20140217, glibc 2.20, gdb 7.7.50 and kernel headers
--	  3.16.2.
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in.options b/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in.options
-deleted file mode 100644
-index 1eab839216..0000000000
---- a/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in.options
-+++ /dev/null
-@@ -1,9 +0,0 @@
--if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64
--
--config BR2_TOOLCHAIN_EXTERNAL_PREFIX
--	default "aarch64-amd-linux-gnu"
--
--config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
--	default "toolchain-external-codesourcery-aarch64"
--
--endif
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.hash b/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.hash
-deleted file mode 100644
-index 8f8fca0d0c..0000000000
---- a/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally calculated
--sha256  405aada821146755c5f2df566375c2a682456d6b8451ee47b88cf1a52b093676  aarch64-amd-2014.11-95-aarch64-amd-linux-gnu-i686-pc-linux-gnu.tar.bz2
--sha256  3f50dd6ee433eb5b6992a1071b988e50379a738f54f58722bc60081613764716  aarch64-amd-2014.11-95-aarch64-amd-linux-gnu.src.tar.bz2
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.mk b/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.mk
-deleted file mode 100644
-index 192763a0e0..0000000000
---- a/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.mk
-+++ /dev/null
-@@ -1,12 +0,0 @@
--################################################################################
--#
--# toolchain-external-codesourcery-aarch64
--#
--################################################################################
--
--TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_SITE = https://sourcery.mentor.com/public/gnu_toolchain/$(TOOLCHAIN_EXTERNAL_PREFIX)
--TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_VERSION = 2014.11-95
--TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_SOURCE = aarch64-amd-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX)-i686-pc-linux-gnu.tar.bz2
--TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_ACTUAL_SOURCE_TARBALL = aarch64-amd-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX).src.tar.bz2
--
--$(eval $(toolchain-external-package))
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in b/toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in
-deleted file mode 100644
-index aea2ba34f2..0000000000
---- a/toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in
-+++ /dev/null
-@@ -1,35 +0,0 @@
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
--	bool "Sourcery CodeBench ARM 2014.05"
--	depends on BR2_arm
--	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9
--	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
--	depends on BR2_ARM_EABI
--	# Unsupported ARM cores
--	depends on !BR2_cortex_a12 && !BR2_cortex_a17 && !BR2_ARM_CPU_ARMV8A
--	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
--	select BR2_TOOLCHAIN_HAS_SSP
--	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
--	select BR2_INSTALL_LIBSTDCPP
--	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
--	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
--	help
--	  Sourcery CodeBench toolchain for the ARM architecture, from
--	  Mentor Graphics. It uses gcc 4.8.3, binutils 2.24.51, glibc
--	  2.18 and gdb 7.7.50, kernel headers 3.13. It has support
--	  for the following variants:
--	    - ARMv5TE, little endian, soft-float, glibc
--	      Select ARM926T, ARM10T, XScale or another ARMv5 core
--	      Select BR2_SOFT_FLOAT
--	    - ARMv4T, little endian, soft-float, glibc
--	      Select ARM720T, ARM920T, ARM922T or another ARMv4 core
--	      Select BR2_SOFT_FLOAT
--	    - ARMv7-A, Thumb 2, little endian, soft-float, glibc
--	      Select Cortex-A8, Cortex-A9 or another ARMv7-A core
--	      Select BR2_SOFT_FLOAT
--	      Set BR2_TARGET_OPTIMIZATION to -mthumb
--
--comment "Sourcery CodeBench toolchains available for the EABI ABI"
--	depends on BR2_arm
--	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9
--	depends on !BR2_ARM_EABI
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in.options b/toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in.options
-deleted file mode 100644
-index 7f3654dc70..0000000000
---- a/toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in.options
-+++ /dev/null
-@@ -1,9 +0,0 @@
--if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
--
--config BR2_TOOLCHAIN_EXTERNAL_PREFIX
--	default "arm-none-linux-gnueabi"
--
--config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
--	default "toolchain-external-codesourcery-arm"
--
--endif
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-arm/toolchain-external-codesourcery-arm.hash b/toolchain/toolchain-external/toolchain-external-codesourcery-arm/toolchain-external-codesourcery-arm.hash
-deleted file mode 100644
-index c01a7b17c5..0000000000
---- a/toolchain/toolchain-external/toolchain-external-codesourcery-arm/toolchain-external-codesourcery-arm.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally calculated
--sha256  39ee0e789034334ecc89af94e838e3a4815400ac5ff980f808f466b04778532e  arm-2014.05-29-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
--sha256  e16a5b1e41d7ff1e74161f9405182001bc8d1360d89564e73911032e6966cc0d  arm-2014.05-29-arm-none-linux-gnueabi.src.tar.bz2
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-arm/toolchain-external-codesourcery-arm.mk b/toolchain/toolchain-external/toolchain-external-codesourcery-arm/toolchain-external-codesourcery-arm.mk
-deleted file mode 100644
-index f15a50c43e..0000000000
---- a/toolchain/toolchain-external/toolchain-external-codesourcery-arm/toolchain-external-codesourcery-arm.mk
-+++ /dev/null
-@@ -1,13 +0,0 @@
--################################################################################
--#
--# toolchain-external-codesourcery-arm
--#
--################################################################################
--
--TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM_VERSION = 2014.05-29
--
--TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM_SITE = https://sourcery.mentor.com/public/gnu_toolchain/$(TOOLCHAIN_EXTERNAL_PREFIX)
--TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM_SOURCE = arm-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX)-i686-pc-linux-gnu.tar.bz2
--TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM_ACTUAL_SOURCE_TARBALL = arm-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX).src.tar.bz2
--
--$(eval $(toolchain-external-package))
+-BITCOIN_VERSION = 0.21.2
++BITCOIN_VERSION = 26.0
+ BITCOIN_SITE = https://bitcoincore.org/bin/bitcoin-core-$(BITCOIN_VERSION)
+ BITCOIN_AUTORECONF = YES
+ BITCOIN_LICENSE = MIT
 -- 
-2.43.0
+2.44.0
 
 _______________________________________________
 buildroot mailing list
