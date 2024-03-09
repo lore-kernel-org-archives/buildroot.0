@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF48FC54E41
-	for <buildroot@archiver.kernel.org>; Sat,  9 Mar 2024 13:39:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 436D5C54E41
+	for <buildroot@archiver.kernel.org>; Sat,  9 Mar 2024 13:39:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 549C9815AD;
-	Sat,  9 Mar 2024 13:39:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 125398200D;
+	Sat,  9 Mar 2024 13:39:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lQ0ZSZAu5UqU; Sat,  9 Mar 2024 13:39:38 +0000 (UTC)
+	with ESMTP id QbebRMxb37MX; Sat,  9 Mar 2024 13:39:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6EA6A81FCB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8A6F82037
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6EA6A81FCB;
-	Sat,  9 Mar 2024 13:39:38 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 775891BF300
+	by smtp1.osuosl.org (Postfix) with ESMTP id B8A6F82037;
+	Sat,  9 Mar 2024 13:39:40 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 85C211BF853
  for <buildroot@lists.busybox.net>; Sat,  9 Mar 2024 13:39:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 65205401E1
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7289F81FCB
  for <buildroot@lists.busybox.net>; Sat,  9 Mar 2024 13:39:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id D3cK1xqMrPOj for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2-f2rrasXEaz for <buildroot@lists.busybox.net>;
  Sat,  9 Mar 2024 13:39:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A203840103
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B6530815AD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A203840103
+ by smtp1.osuosl.org (Postfix) with ESMTP id B6530815AD
  for <buildroot@buildroot.org>; Sat,  9 Mar 2024 13:39:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9C19D88165; Sat,  9 Mar 2024 13:39:35 +0000 (UTC)
+ id B144288167; Sat,  9 Mar 2024 13:39:35 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 9 Mar 2024 14:35:29 +0100
+Date: Sat, 9 Mar 2024 14:37:30 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: e1eb85c3ce03046e0eb40b303e70c91d25894fe3
-X-Git-Newrev: b913cfc2b5a4fd28d4f33b367dd6a2fe63b20949
+X-Git-Oldrev: f742dc5474ec9a426cbc301129e1af1ebaca5e71
+X-Git-Newrev: b7e0a3db0f4d6533daed12a9c48404c2a2ba453b
 X-Patchwork-Hint: ignore
-Message-Id: <20240309133935.9C19D88165@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] utils/check-package: use
- https for the manual URL
+Message-Id: <20240309133935.B144288167@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] doc/manual: indent the
+ CVE example the same as the CVE list item
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,30 +65,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b913cfc2b5a4fd28d4f33b367dd6a2fe63b20949
+commit: https://git.buildroot.net/buildroot/commit/?id=b7e0a3db0f4d6533daed12a9c48404c2a2ba453b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit dfed5acb5610c90115235a78433e798a6a692b29)
+(cherry picked from commit 949c1a51b7f31982b66efe2d4adc55095a4c7811)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- utils/check-package | 2 +-
+ docs/manual/adding-packages-generic.adoc | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/utils/check-package b/utils/check-package
-index 105902303e..de41891b56 100755
---- a/utils/check-package
-+++ b/utils/check-package
-@@ -69,7 +69,7 @@ def parse_args():
-                         help='override the default list of ignored warnings')
- 
-     parser.add_argument("--manual-url", action="store",
--                        default="http://nightly.buildroot.org/",
-+                        default="https://nightly.buildroot.org/",
-                         help="default: %(default)s")
-     parser.add_argument("--verbose", "-v", action="count", default=0)
-     parser.add_argument("--quiet", "-q", action="count", default=0)
+diff --git a/docs/manual/adding-packages-generic.adoc b/docs/manual/adding-packages-generic.adoc
+index 76b037f436..935270a19c 100644
+--- a/docs/manual/adding-packages-generic.adoc
++++ b/docs/manual/adding-packages-generic.adoc
+@@ -503,7 +503,7 @@ not and can not work as people would expect it should:
+   the package, or when the CVE for some reason does not affect the
+   Buildroot package. A Makefile comment must always precede the
+   addition of a CVE to this variable. Example:
+-
+++
+ ----------------------
+ # 0001-fix-cve-2020-12345.patch
+ LIBFOO_IGNORE_CVES += CVE-2020-12345
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
