@@ -4,50 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC7F0C54E41
-	for <buildroot@archiver.kernel.org>; Sat,  9 Mar 2024 13:35:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53C82C54798
+	for <buildroot@archiver.kernel.org>; Sat,  9 Mar 2024 13:36:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7658F8200F;
-	Sat,  9 Mar 2024 13:35:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 203CD814B5;
+	Sat,  9 Mar 2024 13:36:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HjedxTtvjEKZ; Sat,  9 Mar 2024 13:35:55 +0000 (UTC)
+	with ESMTP id bABFLeOBxmOL; Sat,  9 Mar 2024 13:36:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C73C181AAC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 48FB9816F5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C73C181AAC;
-	Sat,  9 Mar 2024 13:35:54 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9A0571BF300
- for <buildroot@lists.busybox.net>; Sat,  9 Mar 2024 13:35:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 48FB9816F5;
+	Sat,  9 Mar 2024 13:36:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 46CEF1BF300
+ for <buildroot@lists.busybox.net>; Sat,  9 Mar 2024 13:36:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 82322407F3
- for <buildroot@lists.busybox.net>; Sat,  9 Mar 2024 13:35:50 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 339A060744
+ for <buildroot@lists.busybox.net>; Sat,  9 Mar 2024 13:36:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UVfiCXNfHoxX for <buildroot@lists.busybox.net>;
- Sat,  9 Mar 2024 13:35:49 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FFBAjMNQ-_cp for <buildroot@lists.busybox.net>;
+ Sat,  9 Mar 2024 13:36:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
+ helo=relay6-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 417D2407F6
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 417D2407F6
- for <buildroot@buildroot.org>; Sat,  9 Mar 2024 13:35:49 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2E2018811A; Sat,  9 Mar 2024 13:35:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 52A0A6065C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 52A0A6065C
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 52A0A6065C
+ for <buildroot@buildroot.org>; Sat,  9 Mar 2024 13:36:11 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5F06DC0005;
+ Sat,  9 Mar 2024 13:36:08 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1riwrv-005PEv-2h;
+ Sat, 09 Mar 2024 14:36:07 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 8 Mar 2024 18:53:46 +0100
-X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: e576409550cdaab4f3a6a1b4d5095591a8543779
-X-Git-Newrev: e1eb85c3ce03046e0eb40b303e70c91d25894fe3
-X-Patchwork-Hint: ignore
-Message-Id: <20240309133549.2E2018811A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/libcurl: fix
- libpsl static build
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <cover.1707600292.git.yann.morin.1998@free.fr>
+ <d4690e555ad7f84c9340bc66d7bc0a75edcbbf46.1707600292.git.yann.morin.1998@free.fr>
+Date: Sat, 09 Mar 2024 14:36:07 +0100
+In-Reply-To: <d4690e555ad7f84c9340bc66d7bc0a75edcbbf46.1707600292.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Sat, 10 Feb 2024 22:24:54 +0100")
+Message-ID: <874jdfv86w.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/6 v2] utils/check-package: use https for
+ the manual URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,167 +70,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e1eb85c3ce03046e0eb40b303e70c91d25894fe3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Fix the following static build failure with libpsl raised since bump to
-version 8.6.0 in commit 5cee6b6be6524e443012d130e09b0e6983b0ff90:
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
-configure:28830: /home/autobuild/autobuild/instance-6/output-1/host/bin/aarch64_be-buildroot-linux-musl-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -O3 -g0 -static -Werror-implicit-function-declaration -Wno-system-headers -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -I/home/autobuild/autobuild/instance-6/output-1/host/aarch64_be-buildroot-linux-musl/sysroot/usr/include  -static -L/home/autobuild/autobuild/instance-6/output-1/host/bin/../aarch64_be-buildroot-linux-musl/sysroot/usr/lib  -L/home/autobuild/autobuild/instance-6/output-1/host/aarch64_be-buildroot-linux-musl/sysroot/usr/lib conftest.c -lpsl  -lmbedtls -lmbedx509 -lmbedcrypto -lz  -latomic >&5
-/home/autobuild/autobuild/instance-6/output-1/host/lib/gcc/aarch64_be-buildroot-linux-musl/11.4.0/../../../../aarch64_be-buildroot-linux-musl/bin/ld: /home/autobuild/autobuild/instance-6/output-1/host/bin/../aarch64_be-buildroot-linux-musl/sysroot/usr/lib/libpsl.a(psl.c.o): in function `is_public_suffix':
-psl.c:(.text+0x2a8): undefined reference to `idn2_lookup_u8'
+Committed to 2023.02.x and 2023.11.x, thanks.
 
-[...]
-
-checking for library containing psl_builtin... no
-configure: error: libpsl was not found
-
-Fixes: 5cee6b6be6524e443012d130e09b0e6983b0ff90
- - http://autobuild.buildroot.org/results/1fb15e1a99472c403d0d3b1a688902f32e78d002
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit bedcd1cd39c7654d1243e2cb0f4a68870f67782c)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...-configure.ac-find-libpsl-with-pkg-config.patch | 109 +++++++++++++++++++++
- package/libcurl/libcurl.mk                         |   2 +
- 2 files changed, 111 insertions(+)
-
-diff --git a/package/libcurl/0001-configure.ac-find-libpsl-with-pkg-config.patch b/package/libcurl/0001-configure.ac-find-libpsl-with-pkg-config.patch
-new file mode 100644
-index 0000000000..46df1e36a2
---- /dev/null
-+++ b/package/libcurl/0001-configure.ac-find-libpsl-with-pkg-config.patch
-@@ -0,0 +1,109 @@
-+From 9b3f67e267d1fa8d7867655d133bdbf8830a0ab3 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 15 Feb 2024 20:59:25 +0100
-+Subject: [PATCH] configure.ac: find libpsl with pkg-config
-+
-+Find libpsl with pkg-config to avoid static build failures.
-+
-+Ref: http://autobuild.buildroot.org/results/1fb15e1a99472c403d0d3b1a688902f32e78d002
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Closes #12947
-+
-+Upstream: https://github.com/curl/curl/commit/9b3f67e267d1fa8d7867655d133bdbf8830a0ab3
-+---
-+ configure.ac | 79 ++++++++++++++++++++++++++++++++++++++++++++--------
-+ docs/TODO    |  7 -----
-+ 2 files changed, 67 insertions(+), 19 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index cd0e2d07d8d164..09d5364f4de575 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -2075,19 +2075,74 @@ dnl **********************************************************************
-+ dnl Check for libpsl
-+ dnl **********************************************************************
-+ 
-+-AC_ARG_WITH(libpsl,
-+-           AS_HELP_STRING([--without-libpsl],
-+-           [disable support for libpsl]),
-+-           with_libpsl=$withval,
-+-           with_libpsl=yes)
-+-curl_psl_msg="no      (libpsl disabled)"
-+-if test $with_libpsl != "no"; then
-+-  AC_SEARCH_LIBS(psl_builtin, psl,
-+-    [curl_psl_msg="enabled";
-+-     AC_DEFINE([USE_LIBPSL], [1], [PSL support enabled])
-+-     ],
-+-    [AC_MSG_ERROR([libpsl was not found]) ]
-++dnl Default to compiler & linker defaults for LIBPSL files & libraries.
-++OPT_LIBPSL=off
-++AC_ARG_WITH(libpsl,dnl
-++AS_HELP_STRING([--with-libpsl=PATH],[Where to look for libpsl, PATH points to the LIBPSL installation; when possible, set the PKG_CONFIG_PATH environment variable instead of using this option])
-++AS_HELP_STRING([--without-libpsl], [disable LIBPSL]),
-++  OPT_LIBPSL=$withval)
-++
-++if test X"$OPT_LIBPSL" != Xno; then
-++  dnl backup the pre-libpsl variables
-++  CLEANLDFLAGS="$LDFLAGS"
-++  CLEANCPPFLAGS="$CPPFLAGS"
-++  CLEANLIBS="$LIBS"
-++
-++  case "$OPT_LIBPSL" in
-++  yes)
-++    dnl --with-libpsl (without path) used
-++    CURL_CHECK_PKGCONFIG(libpsl)
-++
-++    if test "$PKGCONFIG" != "no" ; then
-++      LIB_PSL=`$PKGCONFIG --libs-only-l libpsl`
-++      LD_PSL=`$PKGCONFIG --libs-only-L libpsl`
-++      CPP_PSL=`$PKGCONFIG --cflags-only-I libpsl`
-++    else
-++      dnl no libpsl pkg-config found
-++      LIB_PSL="-lpsl"
-++    fi
-++
-++    ;;
-++  off)
-++    dnl no --with-libpsl option given, just check default places
-++    LIB_PSL="-lpsl"
-++    ;;
-++  *)
-++    dnl use the given --with-libpsl spot
-++    LIB_PSL="-lpsl"
-++    PREFIX_PSL=$OPT_LIBPSL
-++    ;;
-++  esac
-++
-++  dnl if given with a prefix, we set -L and -I based on that
-++  if test -n "$PREFIX_PSL"; then
-++    LD_PSL=-L${PREFIX_PSL}/lib$libsuff
-++    CPP_PSL=-I${PREFIX_PSL}/include
-++  fi
-++
-++  LDFLAGS="$LDFLAGS $LD_PSL"
-++  CPPFLAGS="$CPPFLAGS $CPP_PSL"
-++  LIBS="$LIB_PSL $LIBS"
-++
-++  AC_CHECK_LIB(psl, psl_builtin,
-++    [
-++     AC_CHECK_HEADERS(libpsl.h,
-++        curl_psl_msg="enabled"
-++        LIBPSL_ENABLED=1
-++        AC_DEFINE(USE_LIBPSL, 1, [if libpsl is in use])
-++        AC_SUBST(USE_LIBPSL, [1])
-++     )
-++    ],
-++      dnl not found, revert back to clean variables
-++      LDFLAGS=$CLEANLDFLAGS
-++      CPPFLAGS=$CLEANCPPFLAGS
-++      LIBS=$CLEANLIBS
-+   )
-++
-++  if test X"$OPT_LIBPSL" != Xoff &&
-++     test "$LIBPSL_ENABLED" != "1"; then
-++    AC_MSG_ERROR([libpsl libs and/or directories were not found where specified!])
-++  fi
-+ fi
-+ AM_CONDITIONAL([USE_LIBPSL], [test "$curl_psl_msg" = "enabled"])
-+ 
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 9dafe90c82..4281cfabb1 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -14,6 +14,8 @@ LIBCURL_LICENSE = curl
- LIBCURL_LICENSE_FILES = COPYING
- LIBCURL_CPE_ID_VENDOR = haxx
- LIBCURL_INSTALL_STAGING = YES
-+# 0001-configure.ac-find-libpsl-with-pkg-config.patch
-+LIBCURL_AUTORECONF = YES
- 
- # We disable NTLM delegation to winbinds ntlm_auth ('--disable-ntlm-wb')
- # support because it uses fork(), which doesn't work on non-MMU platforms.
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
