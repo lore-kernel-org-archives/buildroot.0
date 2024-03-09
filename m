@@ -1,53 +1,93 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96878C54E41
-	for <buildroot@archiver.kernel.org>; Sat,  9 Mar 2024 13:39:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3EB7C54798
+	for <buildroot@archiver.kernel.org>; Sat,  9 Mar 2024 15:22:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 634578202C;
-	Sat,  9 Mar 2024 13:39:45 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id B8B5rMg0zSUh; Sat,  9 Mar 2024 13:39:44 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E0CE182065
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E0CE182065;
-	Sat,  9 Mar 2024 13:39:43 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3600E1BF300
- for <buildroot@lists.busybox.net>; Sat,  9 Mar 2024 13:39:37 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 22012405CD
- for <buildroot@lists.busybox.net>; Sat,  9 Mar 2024 13:39:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 26086407DA;
+	Sat,  9 Mar 2024 15:22:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BDBGa0l5kCRZ for <buildroot@lists.busybox.net>;
- Sat,  9 Mar 2024 13:39:35 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA6E4405C2
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BA6E4405C2
- for <buildroot@buildroot.org>; Sat,  9 Mar 2024 13:39:35 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A70FC88166; Sat,  9 Mar 2024 13:39:35 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DIVYLEnpdPln; Sat,  9 Mar 2024 15:22:14 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB77C4079B
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id DB77C4079B;
+	Sat,  9 Mar 2024 15:22:13 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 561AF1BF4D8
+ for <buildroot@lists.busybox.net>; Sat,  9 Mar 2024 15:22:12 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4335981F3E
+ for <buildroot@lists.busybox.net>; Sat,  9 Mar 2024 15:22:12 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yU6iO6Eg_LnU for <buildroot@lists.busybox.net>;
+ Sat,  9 Mar 2024 15:22:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2006E81F3B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2006E81F3B
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2006E81F3B
+ for <buildroot@buildroot.org>; Sat,  9 Mar 2024 15:22:10 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ 5b1f17b1804b1-412e6ba32easo11387855e9.0
+ for <buildroot@buildroot.org>; Sat, 09 Mar 2024 07:22:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1709997728; x=1710602528;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=J47WUJsZESwKuuotQ+p8WVotc4NEOBfwSNfD0n9f79s=;
+ b=DfqOonk1bT8DuPVWLQrvkG5c+oWaOx90ps3/TAzk78VB2y7VBmg0KNIS/GJ+uHkt/v
+ fW7UAeXSSkWNv6S2aa4IUPiNrcLE2UKm7mJy6KggHDG+U1NVumsI8jmLngtAxnjGZz+H
+ bKAmTJrK4TyEGN+xSH62oWH4UBddZQ+g/UVaimCqn96qC2CBn5vjMODX/Y6yvOWw0999
+ dTXRrjUKeJO0OQa7lzsewbDPAKJMgI+E9/i/NyLqE7KBOUPEjC9V+mR2uyhknWFag0Ji
+ q7S5ppca1sYABa0mTNcTkdmTuDJyWBTJSVzslKl+b8TFNDoOB4IwxCwDad3eAeoVncaE
+ bUWw==
+X-Gm-Message-State: AOJu0YxWBGXOLflGPU5R2HT+z3/Bjf4XavJFiMi7oHMVdAfBWofDimJq
+ 3s2QgH4K4b/w1mUqmLT48Y9sPzCX0nRZwHXvdoiTtCNyua8QnGS9i0Ha65iR
+X-Google-Smtp-Source: AGHT+IHCouGhYkZGKDtKYbLhfZabvMHEj7JmnuL6V15hhOUEMffN36oo3xc7R2Wb8cuuUwpknAAl1A==
+X-Received: by 2002:a05:600c:1c08:b0:413:1375:871b with SMTP id
+ j8-20020a05600c1c0800b004131375871bmr1677116wms.26.1709997727906; 
+ Sat, 09 Mar 2024 07:22:07 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ hg6-20020a05600c538600b00412c8117a34sm2778382wmb.47.2024.03.09.07.22.06
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 09 Mar 2024 07:22:07 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 9 Mar 2024 14:37:06 +0100
-X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: b913cfc2b5a4fd28d4f33b367dd6a2fe63b20949
-X-Git-Newrev: f742dc5474ec9a426cbc301129e1af1ebaca5e71
-X-Patchwork-Hint: ignore
-Message-Id: <20240309133935.A70FC88166@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] doc/manual: fixup ordered
- lists
+Date: Sat,  9 Mar 2024 16:22:05 +0100
+Message-ID: <20240309152205.28587-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1709997728; x=1710602528; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=J47WUJsZESwKuuotQ+p8WVotc4NEOBfwSNfD0n9f79s=;
+ b=ibBfjpmsUXQ3ihy7V+4vYdnt3lyvcSBP79IgcQJDKt63orFJVSVkRbNgZY1fdpngkj
+ E2yxgRrfs3mfI49+HOm3BB5+KroNT1SFP0lL5UB0znLCsd5r00Qq59QZDv1D8mwUiaHE
+ fT4T0gDYKABLR00SXGqEVw/G2Hnql6uaAGrHQ6+hgGJzxTP3ynxMGKT+5TdjUJ85kP0c
+ yCvfmkzhGb3CV34t1s9DPmglaFUeMpvzAcECumS3X53SEX4+iMCDVDgEltH3ruosvFh2
+ YWDdY3DSMSR6yZJwdT4EM2tvZHfCubqkM7xtp3161zYw2hrdz2NA/5/wtIruDWFlyrF2
+ QJ/w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=ibBfjpms
+Subject: [Buildroot] [PATCH 1/1] package/axel: needs gcc >= 4.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,189 +99,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Ismael Luceno <ismael@iodev.co.uk>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f742dc5474ec9a426cbc301129e1af1ebaca5e71
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
+Fix the following build failure raised since bump to version 2.17.12 in
+commit 50ba0b0a40187b695740a2fce2d2f3ed7cbf58c5 and
+https://github.com/axel-download-accelerator/axel/commit/517d3ea036c2837b779a15b410331cd0df4fb066:
 
-With recent asiidoc versions (at least 10.2.0 is known to report that),
-rendering the manual yields a few warnings related to ordered lists:
+src/random.c:1:23: fatal error: stdatomic.h: No such file or directory
+ #include <stdatomic.h>
+                       ^
 
-    asciidoc: WARNING: customize-quick-guide.adoc: line 13: list item index: expected 2 got 1
-    asciidoc: WARNING: customize-quick-guide.adoc: line 15: list item index: expected 3 got 1
-    [...]
-    asciidoc: WARNING: customize-quick-guide.adoc: line 65: list item index: expected 13 got 1
-    asciidoc: WARNING: customize-quick-guide.adoc: line 66: list item index: expected 14 got 1
-    asciidoc: WARNING: adding-packages-gettext.adoc: line 30: list item index: expected 2 got 1
-    asciidoc: WARNING: adding-packages-gettext.adoc: line 41: list item index: expected 3 got 1
+Fixes:
+ - http://autobuild.buildroot.org/results/ca62edddd42252bf21caa8243f8aaba38992fc68
 
-The reason is that we use the same index to tell asciidoc to
-automatically number items.
-
-However, the official way to provide an automatic index is to write no
-index:
-
-    https://docs.asciidoctor.org/asciidoc/latest/lists/ordered/
-
-    [...] since the numbering is obvious, the AsciiDoc processor will
-    insert the numbers for you if you omit them:
-    [...]
-    If you number the ordered list explicitly, you have to manually keep
-    the list numerals sequential. Otherwise, you will get a warning.
-
-So, abide by the documentation, and drop the repeating indices to
-ordered lists where we want automatic numbering.
-
-Note that there is another ordered list, in adding-packages-directory.adoc,
-but it does use explicit, sequential numbering. For consistency within
-the whole document, we also convert it.
-
-To avoid extra useless churn, the indentation of the items is not
-changed to match the elided indices.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1c24d83cc80c25f60fe7974495a43b5cc34b72f5)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- docs/manual/adding-packages-directory.adoc | 14 +++++++-------
- docs/manual/adding-packages-gettext.adoc   |  6 +++---
- docs/manual/customize-quick-guide.adoc     | 28 ++++++++++++++--------------
- 3 files changed, 24 insertions(+), 24 deletions(-)
+ package/axel/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/docs/manual/adding-packages-directory.adoc b/docs/manual/adding-packages-directory.adoc
-index 5a0f298eb1..b7519cc01a 100644
---- a/docs/manual/adding-packages-directory.adoc
-+++ b/docs/manual/adding-packages-directory.adoc
-@@ -44,13 +44,13 @@ project after an empty line.
- As a convention specific to Buildroot, the ordering of the attributes
- is as follows:
+diff --git a/package/axel/Config.in b/package/axel/Config.in
+index 4507855ff8..740095a505 100644
+--- a/package/axel/Config.in
++++ b/package/axel/Config.in
+@@ -1,10 +1,12 @@
+ config BR2_PACKAGE_AXEL
+ 	bool "axel"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C11/stdatomic.h
+ 	help
+ 	  HTTP/FTP download accelerator.
  
--1. The type of option: +bool+, +string+... with the prompt
--2. If needed, the +default+ value(s)
--3. Any dependencies on the target in +depends on+ form
--4. Any dependencies on the toolchain in +depends on+ form
--5. Any dependencies on other packages in +depends on+ form
--6. Any dependency of the +select+ form
--7. The help keyword and help text.
-+. The type of option: +bool+, +string+... with the prompt
-+. If needed, the +default+ value(s)
-+. Any dependencies on the target in +depends on+ form
-+. Any dependencies on the toolchain in +depends on+ form
-+. Any dependencies on other packages in +depends on+ form
-+. Any dependency of the +select+ form
-+. The help keyword and help text.
+ 	  https://github.com/axel-download-accelerator/axel/
  
- You can add other sub-options into a +if BR2_PACKAGE_LIBFOO...endif+
- statement to configure particular things in your software. You can look at
-diff --git a/docs/manual/adding-packages-gettext.adoc b/docs/manual/adding-packages-gettext.adoc
-index e9c6968e79..739bed25d5 100644
---- a/docs/manual/adding-packages-gettext.adoc
-+++ b/docs/manual/adding-packages-gettext.adoc
-@@ -23,11 +23,11 @@ Due to this, and in order to make sure that Native Language Support is
- properly handled, packages in Buildroot that can use NLS support
- should:
- 
--1. Ensure NLS support is enabled when +BR2_SYSTEM_ENABLE_NLS=y+. This
-+. Ensure NLS support is enabled when +BR2_SYSTEM_ENABLE_NLS=y+. This
-    is done automatically for 'autotools' packages and therefore should
-    only be done for packages using other package infrastructures.
- 
--1. Add +$(TARGET_NLS_DEPENDENCIES)+ to the package
-+. Add +$(TARGET_NLS_DEPENDENCIES)+ to the package
-    +<pkg>_DEPENDENCIES+ variable. This addition should be done
-    unconditionally: the value of this variable is automatically
-    adjusted by the core infrastructure to contain the relevant list of
-@@ -38,7 +38,7 @@ should:
-    also contains +gettext+ in order to get the full-blown 'gettext'
-    implementation.
- 
--1. If needed, add +$(TARGET_NLS_LIBS)+ to the linker flags, so that
-+. If needed, add +$(TARGET_NLS_LIBS)+ to the linker flags, so that
-    the package gets linked with +libintl+. This is generally not
-    needed with 'autotools' packages as they usually detect
-    automatically that they should link with +libintl+. However,
-diff --git a/docs/manual/customize-quick-guide.adoc b/docs/manual/customize-quick-guide.adoc
-index 627ecbacb1..315027c590 100644
---- a/docs/manual/customize-quick-guide.adoc
-+++ b/docs/manual/customize-quick-guide.adoc
-@@ -9,11 +9,11 @@ now summarize all this by providing step-by-step instructions to storing your
- project-specific customizations. Clearly, the steps that are not relevant to
- your project can be skipped.
- 
--1. +make menuconfig+ to configure toolchain, packages and kernel.
--1. +make linux-menuconfig+ to update the kernel config, similar for
-+. +make menuconfig+ to configure toolchain, packages and kernel.
-+. +make linux-menuconfig+ to update the kernel config, similar for
-    other configuration like busybox, uclibc, ...
--1. +mkdir -p board/<manufacturer>/<boardname>+
--1. Set the following options to +board/<manufacturer>/<boardname>/<package>.config+
-+. +mkdir -p board/<manufacturer>/<boardname>+
-+. Set the following options to +board/<manufacturer>/<boardname>/<package>.config+
-    (as far as they are relevant):
-    * +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE+
-    * +BR2_PACKAGE_BUSYBOX_CONFIG+
-@@ -21,7 +21,7 @@ your project can be skipped.
-    * +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE+
-    * +BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE+
-    * +BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE+
--1. Write the configuration files:
-+. Write the configuration files:
-    * +make linux-update-defconfig+
-    * +make busybox-update-config+
-    * +make uclibc-update-config+
-@@ -29,38 +29,38 @@ your project can be skipped.
-      board/<manufacturer>/<boardname>/at91bootstrap3.config+
-    * +make barebox-update-defconfig+
-    * +make uboot-update-defconfig+
--1. Create +board/<manufacturer>/<boardname>/rootfs-overlay/+ and fill it
-+. Create +board/<manufacturer>/<boardname>/rootfs-overlay/+ and fill it
-    with additional files you need on your rootfs, e.g.
-    +board/<manufacturer>/<boardname>/rootfs-overlay/etc/inittab+.
-    Set +BR2_ROOTFS_OVERLAY+
-    to +board/<manufacturer>/<boardname>/rootfs-overlay+.
--1. Create a post-build script
-+. Create a post-build script
-    +board/<manufacturer>/<boardname>/post_build.sh+. Set
-    +BR2_ROOTFS_POST_BUILD_SCRIPT+ to
-    +board/<manufacturer>/<boardname>/post_build.sh+
--1. If additional setuid permissions have to be set or device nodes have
-+. If additional setuid permissions have to be set or device nodes have
-    to be created, create +board/<manufacturer>/<boardname>/device_table.txt+
-    and add that path to +BR2_ROOTFS_DEVICE_TABLE+.
--1. If additional user accounts have to be created, create
-+. If additional user accounts have to be created, create
-    +board/<manufacturer>/<boardname>/users_table.txt+ and add that path
-    to +BR2_ROOTFS_USERS_TABLES+.
--1. To add custom patches to certain packages, set +BR2_GLOBAL_PATCH_DIR+
-+. To add custom patches to certain packages, set +BR2_GLOBAL_PATCH_DIR+
-    to +board/<manufacturer>/<boardname>/patches/+ and add your patches
-    for each package in a subdirectory named after the package. Each
-    patch should be called +<packagename>-<num>-<description>.patch+.
--1. Specifically for the Linux kernel, there also exists the option
-+. Specifically for the Linux kernel, there also exists the option
-    +BR2_LINUX_KERNEL_PATCH+ with as main advantage that it can also
-    download patches from a URL. If you do not need this,
-    +BR2_GLOBAL_PATCH_DIR+ is preferred. U-Boot, Barebox, at91bootstrap
-    and at91bootstrap3 also have separate options, but these do not
-    provide any advantage over +BR2_GLOBAL_PATCH_DIR+ and will likely be
-    removed in the future.
--1. If you need to add project-specific packages, create
-+. If you need to add project-specific packages, create
-    +package/<manufacturer>/+ and place your packages in that
-    directory. Create an overall +<manufacturer>.mk+ file that
-    includes the +.mk+ files of all your packages. Create an overall
-    +Config.in+ file that sources the +Config.in+ files of all your
-    packages. Include this +Config.in+ file from Buildroot's
-    +package/Config.in+ file.
--1. +make savedefconfig+ to save the buildroot configuration.
--1. +cp defconfig configs/<boardname>_defconfig+
-+. +make savedefconfig+ to save the buildroot configuration.
-+. +cp defconfig configs/<boardname>_defconfig+
+-comment "axel needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++comment "axel needs a toolchain w/ threads, gcc >= 4.9"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+-- 
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
