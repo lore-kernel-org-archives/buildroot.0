@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1325AC54E49
-	for <buildroot@archiver.kernel.org>; Sun, 10 Mar 2024 22:18:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB9A7C54791
+	for <buildroot@archiver.kernel.org>; Sun, 10 Mar 2024 22:18:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AF66B818C2;
-	Sun, 10 Mar 2024 22:18:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9FC5B819F3;
+	Sun, 10 Mar 2024 22:18:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jKnjw9Gfxjxa; Sun, 10 Mar 2024 22:18:39 +0000 (UTC)
+	with ESMTP id 1B_B-OqcQw1C; Sun, 10 Mar 2024 22:18:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C3848194A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9546C819B8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4C3848194A;
-	Sun, 10 Mar 2024 22:18:38 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0C6881BF28B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9546C819B8;
+	Sun, 10 Mar 2024 22:18:41 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2276F1BF85D
  for <buildroot@lists.busybox.net>; Sun, 10 Mar 2024 22:18:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D723A81492
- for <buildroot@lists.busybox.net>; Sun, 10 Mar 2024 22:18:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 019F5405DD
+ for <buildroot@lists.busybox.net>; Sun, 10 Mar 2024 22:18:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xwhzNpc7yYf4 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 72jKNQ9MVwEp for <buildroot@lists.busybox.net>;
  Sun, 10 Mar 2024 22:18:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 131D681779
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1AF87405CF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 131D681779
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1AF87405CF
  for <buildroot@buildroot.org>; Sun, 10 Mar 2024 22:18:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0095D8822B; Sun, 10 Mar 2024 22:18:27 +0000 (UTC)
+ id 162488822A; Sun, 10 Mar 2024 22:18:28 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 10 Mar 2024 22:53:35 +0100
+Date: Sun, 10 Mar 2024 23:16:06 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 8cab81872d34d479b45e43e3671341878d9e30fd
-X-Git-Newrev: 1f674415ca663eb47b4da034ddf230d4f7e0754f
+X-Git-Oldrev: 1f674415ca663eb47b4da034ddf230d4f7e0754f
+X-Git-Newrev: 1c603c41178109a7f1571353ec8c030595097b5d
 X-Patchwork-Hint: ignore
-Message-Id: <20240310221828.0095D8822B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/clamav: security
- bump version to 1.0.5
+Message-Id: <20240310221828.162488822A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/libselinux: drop
+ remnant of PKG_PYTHON_DISTUTILS_ENV
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,47 +65,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1f674415ca663eb47b4da034ddf230d4f7e0754f
+commit: https://git.buildroot.net/buildroot/commit/?id=1c603c41178109a7f1571353ec8c030595097b5d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-Release notes:
-https://blog.clamav.net/2023/11/clamav-130-122-105-released.html
+Commit c10349bf67c1 (package:libselinux: replace PKG_PYTHON_DISTUTILS_ENV)
+forgot to update a comment that refered to PKG_PYTHON_DISTUTILS_ENV.
 
-Fixes CVE-2024-20290 & CVE-2024-20328.
+Replace that now.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit e6e54416adb3146972e29ba1ac0991bb77088c29)
+(cherry picked from commit 2d381b8823b29534932b23ac800ef71eeb954ec7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/clamav/clamav.hash | 2 +-
- package/clamav/clamav.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libselinux/libselinux.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
-index cb4f67156c..cd03a11840 100644
---- a/package/clamav/clamav.hash
-+++ b/package/clamav/clamav.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  3d6b99644874558b7de5faf9b340737a9bbc1083878fcd95a49f989c7c980146  clamav-1.0.4.tar.gz
-+sha256  aa67ee9679f747af3c492353d768464c27d614b3fed62eb7f988b6776d4aedbb  clamav-1.0.5.tar.gz
- sha256  0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING.txt
- sha256  d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING/COPYING.bzip2
- sha256  dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING/COPYING.file
-diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index c9012261fa..7c6dfce6f2 100644
---- a/package/clamav/clamav.mk
-+++ b/package/clamav/clamav.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
+index 4a8d71050d..601038e46f 100644
+--- a/package/libselinux/libselinux.mk
++++ b/package/libselinux/libselinux.mk
+@@ -54,7 +54,7 @@ endif # python3
  
--CLAMAV_VERSION = 1.0.4
-+CLAMAV_VERSION = 1.0.5
- CLAMAV_SITE = https://www.clamav.net/downloads/production
- CLAMAV_LICENSE = GPL-2.0
- CLAMAV_LICENSE_FILES = \
+ # Filter out D_FILE_OFFSET_BITS=64. This fixes errors caused by glibc 2.22. We
+ # set CFLAGS, CPPFLAGS and LDFLAGS here because we want to win over the
+-# CFLAGS/CPPFLAGS/LDFLAGS definitions passed by $(PKG_PYTHON_DISTUTILS_ENV)
++# CFLAGS/CPPFLAGS/LDFLAGS definitions passed by $(PKG_PYTHON_SETUPTOOLS_ENV)
+ # when the python binding is enabled.
+ LIBSELINUX_MAKE_OPTS += \
+ 	CFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))" \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
