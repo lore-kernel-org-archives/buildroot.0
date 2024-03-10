@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB9A7C54791
-	for <buildroot@archiver.kernel.org>; Sun, 10 Mar 2024 22:18:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10F24C54791
+	for <buildroot@archiver.kernel.org>; Sun, 10 Mar 2024 22:26:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9FC5B819F3;
-	Sun, 10 Mar 2024 22:18:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C9E7881518;
+	Sun, 10 Mar 2024 22:26:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1B_B-OqcQw1C; Sun, 10 Mar 2024 22:18:41 +0000 (UTC)
+	with ESMTP id HqDv6Mex2ZGs; Sun, 10 Mar 2024 22:26:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9546C819B8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF27181446
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9546C819B8;
-	Sun, 10 Mar 2024 22:18:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2276F1BF85D
- for <buildroot@lists.busybox.net>; Sun, 10 Mar 2024 22:18:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CF27181446;
+	Sun, 10 Mar 2024 22:26:35 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8FA361BF28B
+ for <buildroot@lists.busybox.net>; Sun, 10 Mar 2024 22:26:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 019F5405DD
- for <buildroot@lists.busybox.net>; Sun, 10 Mar 2024 22:18:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7CE4C81446
+ for <buildroot@lists.busybox.net>; Sun, 10 Mar 2024 22:26:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 72jKNQ9MVwEp for <buildroot@lists.busybox.net>;
- Sun, 10 Mar 2024 22:18:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MYKsoKnrHCum for <buildroot@lists.busybox.net>;
+ Sun, 10 Mar 2024 22:26:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1AF87405CF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8280E81442
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1AF87405CF
- for <buildroot@buildroot.org>; Sun, 10 Mar 2024 22:18:28 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8280E81442
+ for <buildroot@buildroot.org>; Sun, 10 Mar 2024 22:26:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 162488822A; Sun, 10 Mar 2024 22:18:28 +0000 (UTC)
+ id 6E2B28820D; Sun, 10 Mar 2024 22:26:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 10 Mar 2024 23:16:06 +0100
-X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 1f674415ca663eb47b4da034ddf230d4f7e0754f
-X-Git-Newrev: 1c603c41178109a7f1571353ec8c030595097b5d
+Date: Sun, 10 Mar 2024 23:26:03 +0100
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: 7eb3a961acdf352090120f10834d0f842bf50196
+X-Git-Newrev: 7048ad326631e0d66831576a91bcbf27039ac4de
 X-Patchwork-Hint: ignore
-Message-Id: <20240310221828.162488822A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/libselinux: drop
- remnant of PKG_PYTHON_DISTUTILS_ENV
+Message-Id: <20240310222633.6E2B28820D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] {linux,
+ linux-headers}: bump 6.{1, 6}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,34 +65,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1c603c41178109a7f1571353ec8c030595097b5d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7048ad326631e0d66831576a91bcbf27039ac4de
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Commit c10349bf67c1 (package:libselinux: replace PKG_PYTHON_DISTUTILS_ENV)
-forgot to update a comment that refered to PKG_PYTHON_DISTUTILS_ENV.
-
-Replace that now.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 2d381b8823b29534932b23ac800ef71eeb954ec7)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 6e5229c252abbf4b86476cfafbc26753f803cfd0)
+[Peter: drop 6.6.x bump]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libselinux/libselinux.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ linux/Config.in                      | 2 +-
+ linux/linux.hash                     | 2 +-
+ package/linux-headers/Config.in.host | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
-index 4a8d71050d..601038e46f 100644
---- a/package/libselinux/libselinux.mk
-+++ b/package/libselinux/libselinux.mk
-@@ -54,7 +54,7 @@ endif # python3
+diff --git a/linux/Config.in b/linux/Config.in
+index 52ca6bc808..f5d27c4b06 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -128,7 +128,7 @@ endif
  
- # Filter out D_FILE_OFFSET_BITS=64. This fixes errors caused by glibc 2.22. We
- # set CFLAGS, CPPFLAGS and LDFLAGS here because we want to win over the
--# CFLAGS/CPPFLAGS/LDFLAGS definitions passed by $(PKG_PYTHON_DISTUTILS_ENV)
-+# CFLAGS/CPPFLAGS/LDFLAGS definitions passed by $(PKG_PYTHON_SETUPTOOLS_ENV)
- # when the python binding is enabled.
- LIBSELINUX_MAKE_OPTS += \
- 	CFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))" \
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.1.76" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.1.77" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 5bf9b9401c..0907cfe1ce 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  0580cc0e81ff9aee245f79531d8c1c5c7d711eee227cd4cf52d1ff335727b1fd  linux-6.1.76.tar.xz
++sha256  3b54ec567716cdfb3618caf38c58a8aab1372cc41c16430633febe9ccdb3f91d  linux-6.1.77.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+ sha256  c48575c97fd9f4767cbe50a13b1b2b40ee42830aba3182fabd35a03259a6e5d8  linux-5.15.148.tar.xz
+ sha256  44e22fad647c638726a8eae23703c4263bead612d17c89ca7ad7ab32b5ce88d5  linux-5.10.209.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 71ba85b289..11e31f02b5 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -389,7 +389,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "5.4.268"	if BR2_KERNEL_HEADERS_5_4
+ 	default "5.10.209"	if BR2_KERNEL_HEADERS_5_10
+ 	default "5.15.148"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.1.76"	if BR2_KERNEL_HEADERS_6_1
++	default "6.1.77"	if BR2_KERNEL_HEADERS_6_1
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
