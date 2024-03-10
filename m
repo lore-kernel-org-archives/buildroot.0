@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 182F0C54791
-	for <buildroot@archiver.kernel.org>; Sun, 10 Mar 2024 22:13:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1A18C54791
+	for <buildroot@archiver.kernel.org>; Sun, 10 Mar 2024 22:16:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A998E81431;
-	Sun, 10 Mar 2024 22:13:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 724A68144C;
+	Sun, 10 Mar 2024 22:16:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id e1fdBtqgcw21; Sun, 10 Mar 2024 22:13:46 +0000 (UTC)
+	with ESMTP id AA2ZmkluQ_Zv; Sun, 10 Mar 2024 22:16:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B961A8144B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8014E81465
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B961A8144B;
-	Sun, 10 Mar 2024 22:13:46 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 19F7C1BF28B
- for <buildroot@lists.busybox.net>; Sun, 10 Mar 2024 22:13:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8014E81465;
+	Sun, 10 Mar 2024 22:16:37 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 546951BF28B
+ for <buildroot@lists.busybox.net>; Sun, 10 Mar 2024 22:16:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0691D81431
- for <buildroot@lists.busybox.net>; Sun, 10 Mar 2024 22:13:45 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 41FAD40106
+ for <buildroot@lists.busybox.net>; Sun, 10 Mar 2024 22:16:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LStxANX61s4w for <buildroot@lists.busybox.net>;
- Sun, 10 Mar 2024 22:13:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
- helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9Dsrbu-v_biL for <buildroot@lists.busybox.net>;
+ Sun, 10 Mar 2024 22:16:34 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
+ helo=relay3-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8E4298144B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E4298144B
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8E4298144B
- for <buildroot@buildroot.org>; Sun, 10 Mar 2024 22:13:42 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 81920240002;
- Sun, 10 Mar 2024 22:13:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2596440105
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2596440105
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2596440105
+ for <buildroot@buildroot.org>; Sun, 10 Mar 2024 22:16:33 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 08D5360002;
+ Sun, 10 Mar 2024 22:16:30 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rjRQI-008XoX-2N;
- Sun, 10 Mar 2024 23:13:38 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rjRT4-008Y4o-1G;
+ Sun, 10 Mar 2024 23:16:30 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd@kuhls.net>
-References: <20240211151418.1615015-1-bernd@kuhls.net>
-Date: Sun, 10 Mar 2024 23:13:38 +0100
-In-Reply-To: <20240211151418.1615015-1-bernd@kuhls.net> (Bernd Kuhls's message
- of "Sun, 11 Feb 2024 16:14:18 +0100")
-Message-ID: <87edchu44t.fsf@48ers.dk>
+To: Yann E. MORIN <yann.morin.1998@free.fr>
+References: <20240211193527.0DFF98775F@busybox.osuosl.org>
+Date: Sun, 10 Mar 2024 23:16:30 +0100
+In-Reply-To: <20240211193527.0DFF98775F@busybox.osuosl.org> (Yann E. MORIN's
+ message of "Sun, 11 Feb 2024 20:33:45 +0100")
+Message-ID: <87a5n5u401.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/clamav: security bump version
- to 1.0.5
+Subject: Re: [Buildroot] [git commit] package/libselinux: drop remnant of
+ PKG_PYTHON_DISTUTILS_ENV
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,18 +75,19 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Release notes:
- > https://blog.clamav.net/2023/11/clamav-130-122-105-released.html
+ > commit: https://git.buildroot.net/buildroot/commit/?id=2d381b8823b29534932b23ac800ef71eeb954ec7
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes CVE-2024-20290 & CVE-2024-20328.
+ > Commit c10349bf67c1 (package:libselinux: replace PKG_PYTHON_DISTUTILS_ENV)
+ > forgot to update a comment that refered to PKG_PYTHON_DISTUTILS_ENV.
 
- > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ > Replace that now.
 
-Committed to 2023.02.x and 2023.11.x, thanks.
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
-The 0.1* version we were using on 2023.02.x seems to have gotten EOL.
+Committed to 2023.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
