@@ -1,97 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28A52C54791
-	for <buildroot@archiver.kernel.org>; Sat,  9 Mar 2024 23:44:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0ABB8C54791
+	for <buildroot@archiver.kernel.org>; Sun, 10 Mar 2024 05:58:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E74C360AF8;
-	Sat,  9 Mar 2024 23:44:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3FAC640571;
+	Sun, 10 Mar 2024 05:58:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id g4w_stiPuQsu; Sat,  9 Mar 2024 23:44:52 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MlNNyOjQTzFV; Sun, 10 Mar 2024 05:58:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A1B8760B15
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED4C940789
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A1B8760B15;
-	Sat,  9 Mar 2024 23:44:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ED4C940789;
+	Sun, 10 Mar 2024 05:58:19 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 19A8F1BF2A2
- for <buildroot@lists.busybox.net>; Sat,  9 Mar 2024 23:44:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3398D1BF407
+ for <buildroot@lists.busybox.net>; Sun, 10 Mar 2024 05:58:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E0D05404C6
- for <buildroot@lists.busybox.net>; Sat,  9 Mar 2024 23:44:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2B4B640789
+ for <buildroot@lists.busybox.net>; Sun, 10 Mar 2024 05:58:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WYqt3HKCIK8m for <buildroot@lists.busybox.net>;
- Sat,  9 Mar 2024 23:44:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
- envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8049E40135
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8049E40135
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8049E40135
- for <buildroot@buildroot.org>; Sat,  9 Mar 2024 23:44:34 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id
- 5b1f17b1804b1-412f1961101so26183935e9.0
- for <buildroot@buildroot.org>; Sat, 09 Mar 2024 15:44:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1710027872; x=1710632672;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=Oid9jc3+40qbeYjYjoUCNTnbyXFDEL1yQJdj8kMX3Is=;
- b=DN3p4X5wOJna3WspA/OfVQmQW/m6NKNl76+Sa/yi+8r1cVmPIYWq9pJCUiJYLHz9GE
- fmBJnUQem8F7GlmMAEGCAVIgNNAaru0TCWqeui4N6nHxnbOjvmpN7BCzdNl6UdeOzcJ9
- 71eHIzG0a32UQi/M/csEdOm5BLG1XS2MGmKVh8F/DEPyKqyASH3VYLRzN253DV4cMLyx
- iQuFT1Ou9pMbr+bOBwX7K39gkw8/M2yapPMdibYzSz9OOtIqkjcpm+AlV//Vb8SjJwOF
- pi1MGLnh0e7FJxlENNHtyOZMVVwOeTeUH2kZj1zisXKgX5d4K0/RoTK4nOCxpzaxoRg8
- Uq/w==
-X-Gm-Message-State: AOJu0YwFqymm9xM1yxjOmVru01GEq2vkJDiiqZkmgBpz3zam+lODVZDE
- KAw5xTcckxExmHVmj2oRaVSxmbCnbns2yTeFarJPBMkpS7ZsaGmezcq8fm57
-X-Google-Smtp-Source: AGHT+IHzvMTe7QEi5KBCls54r2CVU9N65/qiZ80RDmBOchMjST6fWb3OmkrJav8OE9XXUQZVbyJK+Q==
-X-Received: by 2002:a05:600c:4591:b0:413:1e07:9dad with SMTP id
- r17-20020a05600c459100b004131e079dadmr2503830wmo.1.1710027872487; 
- Sat, 09 Mar 2024 15:44:32 -0800 (PST)
-Received: from landeda.home ([2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- by smtp.gmail.com with ESMTPSA id
- fc19-20020a05600c525300b0041312855081sm4005123wmb.5.2024.03.09.15.44.31
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 09 Mar 2024 15:44:32 -0800 (PST)
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ with ESMTP id pyMWL9DzWFwG for <buildroot@lists.busybox.net>;
+ Sun, 10 Mar 2024 05:58:17 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=95.163.41.75;
+ helo=smtp34.i.mail.ru; envelope-from=fido_max@inbox.ru; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4F8E640571
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F8E640571
+Received: from smtp34.i.mail.ru (smtp34.i.mail.ru [95.163.41.75])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4F8E640571
+ for <buildroot@buildroot.org>; Sun, 10 Mar 2024 05:58:14 +0000 (UTC)
+Received: by smtp34.i.mail.ru with esmtpa (envelope-from <fido_max@inbox.ru>)
+ id 1rjCCJ-0000000B326-2Zpm; Sun, 10 Mar 2024 08:58:12 +0300
+From: Maxim Kochetkov <fido_max@inbox.ru>
 To: buildroot@buildroot.org
-Date: Sun, 10 Mar 2024 00:44:29 +0100
-Message-ID: <7c4ef882367896d7d522301f04c742bc26df47aa.1710027863.git.yann.morin.1998@free.fr>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <cover.1710027863.git.yann.morin.1998@free.fr>
-References: <cover.1710027863.git.yann.morin.1998@free.fr>
+Date: Sun, 10 Mar 2024 08:58:06 +0300
+Message-ID: <20240310055807.442035-1-fido_max@inbox.ru>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1710027872; x=1710632672; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
- :message-id:reply-to;
- bh=Oid9jc3+40qbeYjYjoUCNTnbyXFDEL1yQJdj8kMX3Is=;
- b=TmQCtQVQoYQqYAkI69amGsal3WAWOCtAglaXk99ZWZzMV5Wh9BXpQNPBQL1c31lfqr
- 61YSzL/y9y86jAnkucOfIM55YW4/mAcj1moDOHKtK+uPs9N34/MJpb1vIZjop0t2THe+
- pLNDUnx2UH4xOHQypXbySti8+7EYHgWWweMtpTxr2lIsQbdAAC9aYYTFfSSocZrZNbP2
- LhOzCWsXLkPzISPJL1AX80PlWPyWhgY8iDN7Z4xyBSkpPeHkAvFR/FNflBnhgWfq8q+C
- USPFPoEIJFTR5iyL3g8kTEkSEuKbGq4/TH1k67Cx6MoD6BtAYublBxJFZzGUmnEdasew
- O+1Q==
+X-Mailru-Src: smtp
+X-7564579A: 646B95376F6C166E
+X-77F55803: 4F1203BC0FB41BD987C0EE6E7F0A597DDF776407DD463AED7AC1984F64828CE8182A05F5380850402AB8CB3C89354F9133594132A326AF8BBBDD663ACFE70C655B12244B3E127E666837A08AC964547F
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7AED985C8E545F588EA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F7900637457C2806CBF873EDEA1F7E6F0F101C6723150C8DA25C47586E58E00D9D99D84E1BDDB23E98D2D38B73AB1701401CD871E7012A315A1BDD7417A6A2DD7487549F581D362593D9AD821DF9E95F17B0083B26EA987F6312C9EC9ECD01F8117BC8BEA471835C12D1D9774AD6D5ED66289B5278DA827A17800CE7C01153734DE5588D9FA2833FD35BB23D2EF20D2F80756B5F868A13BD56FB6657A471835C12D1D977725E5C173C3A84C32423FB45EA749E71117882F4460429728AD0CFFFB425014E868A13BD56FB6657E2021AF6380DFAD1A18204E546F3947C2FFDA4F57982C5F42E808ACE2090B5E1725E5C173C3A84C3C5EA940A35A165FF2DBA43225CD8A89F83C798A30B85E16B156CCFE7AF13BCA4B5C8C57E37DE458BEDA766A37F9254B7
+X-C1DE0DAB: 0D63561A33F958A54B5F8FBA1FAAF5405002B1117B3ED696E1808F588DC260FE33EE06AFCD964888823CB91A9FED034534781492E4B8EEAD303003AC7AA20DD0C79554A2A72441328621D336A7BC284946AD531847A6065AED8438A78DFE0A9EBDAD6C7F3747799A
+X-C8649E89: 1C3962B70DF3F0ADE00A9FD3E00BEEDF77DD89D51EBB7742D3581295AF09D3DF87807E0823442EA2ED31085941D9CD0AF7F820E7B07EA4CF7B6132BBEC938FABAD7E88E6AE7C27604AAD6EC88520FF58D35195578EC35998A54F0D539447C58B748ED927723DE83F9ADC12241D990AA4EB2C9F104A2434CB2FD0AEA910546310111DC66A97D0BFE2913E6812662D5F2A17D6C1CDD2003EB8E03787203701020945C72C348FB7EED3
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojuV2YtZBbGDwLPPyZWORnsA==
+X-Mailru-Sender: 689FA8AB762F7393590D8C940224AE334113DC76DD7A972E37AEFD1039BFFCD468BD3D1E9FE4E74A90DE4A6105A3658D481B2AED7BCCC0A49AE3A01A4DD0D55C6C99E19F044156F45FEEDEB644C299C0ED14614B50AE0675
+X-Mras: Ok
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=inbox.ru; 
+ s=mail4; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:Cc:
+ To:From:From:Sender:Reply-To:To:Cc:Content-Type:Content-Transfer-Encoding:
+ Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+ Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+ List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive:
+ X-Cloud-Ids:Disposition-Notification-To;
+ bh=5Vxf0i5dOBTEOBBAzX3/Nrw/VgSzuGhN0CJ6xNbWAfY=; t=1710050296; x=1710140296; 
+ b=q8GPZ6g+exCzD0SK5tkaY+h5cSYkoq2/cUjTPNqv8R8wJZ2r1cozpCXvyQrhivnhc65K522hX5N
+ oQeMtBkARWKfAUlvZIg1Hom5h2hmrudYauR1gle6WhYXutzzJMG/mbqEhoJaSLHayH1cOo8Uz/8tC
+ TAeopyFA5KLHVJsKy9abbDg+UMzVYVsP45DEuZ1Xup73t0efpbTa3NOob+Yty32d11neVvassovC3
+ ttSb2AUhMOkLtDeAi6liaVhK+Kela2HXVSbswVCnGdgwjZPxf7KbjzO3QMofpUOksjXxJJ8x/QrHj
+ j8d0L5PKL4neLW7Ri4U+YNsSIs7Rq4XNG8yQ==;
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=fail (p=none dis=none)
- header.from=free.fr
+ dmarc=pass (p=reject dis=none)
+ header.from=inbox.ru
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=TmQCtQVQ
-Subject: [Buildroot] [PATCH 5/5] support/download/check-hash: accept hash
- files without terminating \n
+ dkim=pass (2048-bit key,
+ unprotected) header.d=inbox.ru header.i=@inbox.ru header.a=rsa-sha256
+ header.s=mail4 header.b=q8GPZ6g+
+X-Mailman-Original-Authentication-Results: smtp34.i.mail.ru; auth=pass
+ smtp.auth=fido_max@inbox.ru smtp.mailfrom=fido_max@inbox.ru
+Subject: [Buildroot] [PATCH 1/1] package/postgresql: bump version to 16.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,82 +88,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>, masonwardle@gmail.com
+Cc: Maxim Kochetkov <fido_max@inbox.ru>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Lots of people are using broken text editors that 1. do not naturally
-terminate text files with a final \n as is customary in UNIX text files,
-and 2. do not respect our .editorconfig settings, which explicitly
-require adding that final newline. See this nice summary of what a text
-file is (with references to applicable standards):
+Release notes: https://www.postgresql.org/docs/release/16.2/
 
-    https://stackoverflow.com/questions/12916352/shell-script-read-missing-last-line/12916758#12916758
-
-So, it is not surprising that read does not read the last "line" of a
-file, when said "line" does not end with a newline, because it is thus
-not really a line.
-
-Even though we do mandate actual text files, let's be a little bit lax
-in this respect, because people may write packages, and their hash
-files, in a br2-external tree, and they may not have our .editorconfig
-in the directory heierarchy (e.g. if buildroot is a submodule of their
-br2-external tree, or whatever).
-
-mapfile does not suffer from this limitation, though, and correctly
-reads all lines from a file, even the final line-that-is-not-a-line.
-
-mapfile was introduced in bash 4.0, released on 2009-01-20, more than
-15 years ago. Debian squeeze, released in 2011 already had bash 4.1.
-Those are really ancient. So, it means we can indeed expect bash
-version 4.0 or later; which means mapfile is available.
-
-"It should be fine!"
-
-Fixes: #15976
-
-Reported-by: masonwardle@gmail.com
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 ---
- support/download/check-hash | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ package/postgresql/postgresql.hash | 4 ++--
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/support/download/check-hash b/support/download/check-hash
-index 9db647885a..d18ec8b134 100755
---- a/support/download/check-hash
-+++ b/support/download/check-hash
-@@ -78,8 +78,10 @@ nb_checks=0
- for h_file in "${h_files[@]}"; do
-     [ -f "${h_file}" ] || continue
-     : $((nb_h_files++))
--    # shellcheck disable=SC2094  # we're really reading it only once
--    while read -r t h f; do
-+    # mapfile reads all lines, even the last one if it is missing a \n
-+    mapfile -t hash_lines <"${h_file}"
-+    for hash_line in "${hash_lines[@]}"; do
-+        read -r t h f <<<"${hash_line}"
-         case "${t}" in
-             ''|'#'*)
-                 # Skip comments and empty lines
-@@ -87,13 +89,12 @@ for h_file in "${h_files[@]}"; do
-                 ;;
-             *)
-                 if [ "${f}" = "${base}" ]; then
--                    # shellcheck disable=SC2094  # we're only printing the h_file filename
-                     check_one_hash "${t}" "${h}" "${file}" "${h_file}"
-                     : $((nb_checks++))
-                 fi
-                 ;;
-         esac
--    done <"${h_file}"
-+    done
- done
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index cf859e3505..976b3e6ff9 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.postgresql.org/pub/source/v16.1/postgresql-16.1.tar.bz2.sha256
+-sha256  ce3c4d85d19b0121fe0d3f8ef1fa601f71989e86f8a66f7dc3ad546dd5564fec  postgresql-16.1.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v16.2/postgresql-16.2.tar.bz2.sha256
++sha256  446e88294dbc2c9085ab4b7061a646fa604b4bec03521d5ea671c2e5ad9b2952  postgresql-16.2.tar.bz2
+ # License file, Locally calculated
+ sha256  1a7d13c3ab31961b91ba256f77d6e82e0b54bf992253060fe93bdb5466df416a  COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 644f93d88a..0448e71892 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # shellcheck disable=SC2086  # nb_h_files is a non-empty int
+-POSTGRESQL_VERSION = 16.1
++POSTGRESQL_VERSION = 16.2
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
 -- 
-2.44.0
+2.43.0
 
 _______________________________________________
 buildroot mailing list
