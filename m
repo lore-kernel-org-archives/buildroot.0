@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F314AC54791
-	for <buildroot@archiver.kernel.org>; Sun, 10 Mar 2024 22:18:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37FDFC54E49
+	for <buildroot@archiver.kernel.org>; Sun, 10 Mar 2024 22:18:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AAAA5817A4;
-	Sun, 10 Mar 2024 22:18:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DBE2B81799;
+	Sun, 10 Mar 2024 22:18:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CiaEdW2Etrpt; Sun, 10 Mar 2024 22:18:30 +0000 (UTC)
+	with ESMTP id dh55dR6jrBDv; Sun, 10 Mar 2024 22:18:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1A35C81492
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5B8BE817AA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1A35C81492;
-	Sun, 10 Mar 2024 22:18:30 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9CFBA1BF28B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5B8BE817AA;
+	Sun, 10 Mar 2024 22:18:32 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B69F01BF85D
  for <buildroot@lists.busybox.net>; Sun, 10 Mar 2024 22:18:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8A30681799
+ by smtp2.osuosl.org (Postfix) with ESMTP id A353940106
  for <buildroot@lists.busybox.net>; Sun, 10 Mar 2024 22:18:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tCra5gGZ26Al for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kRy-_w028Tmv for <buildroot@lists.busybox.net>;
  Sun, 10 Mar 2024 22:18:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6152814A9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D4C9340105
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C6152814A9
+ by smtp2.osuosl.org (Postfix) with ESMTP id D4C9340105
  for <buildroot@buildroot.org>; Sun, 10 Mar 2024 22:18:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BF5948822A; Sun, 10 Mar 2024 22:18:27 +0000 (UTC)
+ id CEE928822B; Sun, 10 Mar 2024 22:18:27 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 10 Mar 2024 22:38:04 +0100
+Date: Sun, 10 Mar 2024 22:41:10 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: b7e0a3db0f4d6533daed12a9c48404c2a2ba453b
-X-Git-Newrev: 6d77f9954c17a66791b092ed7264b97e783eeb94
+X-Git-Oldrev: 6d77f9954c17a66791b092ed7264b97e783eeb94
+X-Git-Newrev: 1b5403d7c1371499eb25e28a0b58010f71391d1f
 X-Patchwork-Hint: ignore
-Message-Id: <20240310221827.BF5948822A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/gst1-python:
- disable tests
+Message-Id: <20240310221827.CEE928822B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/libselinux:
+ replace PKG_PYTHON_DISTUTILS_ENV
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,32 +65,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6d77f9954c17a66791b092ed7264b97e783eeb94
+commit: https://git.buildroot.net/buildroot/commit/?id=1b5403d7c1371499eb25e28a0b58010f71391d1f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-We don't need tests enabled which can also cause build issues.
+Replace PKG_PYTHON_DISTUTILS_ENV by PKG_PYTHON_SETUPTOOLS_ENV as
+libselinux uses setuptools instead of distutils since version 3.5 and
+https://github.com/SELinuxProject/selinux/commit/2b5d5585754eb731a68158b613c7676fc3195ed9
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ae8cb9b2bfa95a3107ad312748316a11801d8472)
+This will avoid the following build failure raised since commit
+09de823cbc7bd50a40e25f4166b4e42be94b0c7b:
+
+In file included from /home/buildroot/autobuild/instance-0/output-1/per-package/libselinux/host/include/python3.12/Python.h:38,
+                 from selinuxswig_python_wrap.c:168:
+/home/buildroot/autobuild/instance-0/output-1/per-package/libselinux/host/include/python3.12/pyport.h:586:2: error: #error "LONG_BIT definition appears wrong for platform (bad gcc/glibc config?)."
+  586 | #error "LONG_BIT definition appears wrong for platform (bad gcc/glibc config?)."
+      |  ^~~~~
+
+Fixes: 09de823cbc7bd50a40e25f4166b4e42be94b0c7b
+Fixes: http://autobuild.buildroot.org/results/3fbbb741de33310c8cacab753a32e79c5e531036
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit c10349bf67c113444c9f9081b18cf15457f78d04)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-python/gst1-python.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/libselinux/libselinux.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-python/gst1-python.mk b/package/gstreamer1/gst1-python/gst1-python.mk
-index f843e37052..501ca5e02b 100644
---- a/package/gstreamer1/gst1-python/gst1-python.mk
-+++ b/package/gstreamer1/gst1-python/gst1-python.mk
-@@ -34,6 +34,7 @@ GST1_PYTHON_CONF_ENV += \
- # the correct .so file, and the resulting compiled library has the appropriate
- # path of /usr/lib/python3.$(PYTHON3_VERSION_MAJOR).so
- GST1_PYTHON_CONF_OPTS += \
--	-Dlibpython-dir=/usr/lib/
-+	-Dlibpython-dir=/usr/lib/ \
-+	-Dtests=disabled
+diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
+index b8de21edaa..4a8d71050d 100644
+--- a/package/libselinux/libselinux.mk
++++ b/package/libselinux/libselinux.mk
+@@ -38,7 +38,7 @@ LIBSELINUX_DEPENDENCIES += \
+ 	host-swig
  
- $(eval $(meson-package))
+ LIBSELINUX_MAKE_OPTS += \
+-	$(PKG_PYTHON_DISTUTILS_ENV) \
++	$(PKG_PYTHON_SETUPTOOLS_ENV) \
+ 	PYTHON=python$(PYTHON3_VERSION_MAJOR)
+ 
+ LIBSELINUX_MAKE_INSTALL_TARGETS += install-pywrap
+@@ -93,7 +93,7 @@ HOST_LIBSELINUX_MAKE_OPTS = \
+ 	$(HOST_CONFIGURE_OPTS) \
+ 	PREFIX=$(HOST_DIR) \
+ 	SHLIBDIR=$(HOST_DIR)/lib \
+-	$(HOST_PKG_PYTHON_DISTUTILS_ENV) \
++	$(HOST_PKG_PYTHON_SETUPTOOLS_ENV) \
+ 	PYTHON=python$(PYTHON3_VERSION_MAJOR) \
+ 	USE_PCRE2=y
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
