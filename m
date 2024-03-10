@@ -4,54 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6548BC54791
-	for <buildroot@archiver.kernel.org>; Sun, 10 Mar 2024 06:17:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E92ACC54791
+	for <buildroot@archiver.kernel.org>; Sun, 10 Mar 2024 06:23:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E74654078D;
-	Sun, 10 Mar 2024 06:17:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7DF08406E9;
+	Sun, 10 Mar 2024 06:23:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LuKNI3r_S8hd; Sun, 10 Mar 2024 06:17:23 +0000 (UTC)
+	with ESMTP id xsL_WRtu2-5p; Sun, 10 Mar 2024 06:23:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B522D404EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 51E04406D9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B522D404EB;
-	Sun, 10 Mar 2024 06:17:22 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7E9EA1BF384
- for <buildroot@lists.busybox.net>; Sun, 10 Mar 2024 06:17:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 51E04406D9;
+	Sun, 10 Mar 2024 06:23:41 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D08731BF384
+ for <buildroot@lists.busybox.net>; Sun, 10 Mar 2024 06:23:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 78CCE404EB
- for <buildroot@lists.busybox.net>; Sun, 10 Mar 2024 06:17:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CA7816066A
+ for <buildroot@lists.busybox.net>; Sun, 10 Mar 2024 06:23:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Eva-FSsWpbKv for <buildroot@lists.busybox.net>;
- Sun, 10 Mar 2024 06:17:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=95.163.41.68;
- helo=smtp29.i.mail.ru; envelope-from=fido_max@inbox.ru; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E9B9F404CE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E9B9F404CE
-Received: from smtp29.i.mail.ru (smtp29.i.mail.ru [95.163.41.68])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E9B9F404CE
- for <buildroot@buildroot.org>; Sun, 10 Mar 2024 06:17:19 +0000 (UTC)
-Received: by smtp29.i.mail.ru with esmtpa (envelope-from <fido_max@inbox.ru>)
- id 1rjCUm-0000000CzEf-0aqK; Sun, 10 Mar 2024 09:17:16 +0300
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id E0ynmKqFnLiv for <buildroot@lists.busybox.net>;
+ Sun, 10 Mar 2024 06:23:39 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=95.163.41.78;
+ helo=smtp37.i.mail.ru; envelope-from=fido_max@inbox.ru; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C9B0C6065C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C9B0C6065C
+Received: from smtp37.i.mail.ru (smtp37.i.mail.ru [95.163.41.78])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C9B0C6065C
+ for <buildroot@buildroot.org>; Sun, 10 Mar 2024 06:23:38 +0000 (UTC)
+Received: by smtp37.i.mail.ru with esmtpa (envelope-from <fido_max@inbox.ru>)
+ id 1rjCat-0000000AWZL-0Rqt; Sun, 10 Mar 2024 09:23:35 +0300
 From: Maxim Kochetkov <fido_max@inbox.ru>
 To: buildroot@buildroot.org
-Date: Sun, 10 Mar 2024 09:17:14 +0300
-Message-ID: <20240310061714.506324-1-fido_max@inbox.ru>
+Date: Sun, 10 Mar 2024 09:23:33 +0300
+Message-ID: <20240310062333.642265-1-fido_max@inbox.ru>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailru-Src: smtp
-X-7564579A: B8F34718100C35BD
-X-77F55803: 4F1203BC0FB41BD987C0EE6E7F0A597D77DAD88DB19A0E871D0E83388B9166C4182A05F53808504054B358A6074B1DFC0578E6996F383413DB90531C9C7F6EAB8A0AA202076E9429CE4EC1BF0D3C05BC
-X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE74162CA13069782AFEA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F7900637040380BD28C1B15C8638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D8DC542995B61903D29DBF329CD9EC48101BCB97090218EB6D20879F7C8C5043D14489FFFB0AA5F4BF176DF2183F8FC7C091DAD9F922AA71188941B15DA834481FA18204E546F3947C2A336C6518635091F6B57BC7E64490618DEB871D839B7333395957E7521B51C2DFABB839C843B9C08941B15DA834481F8AA50765F790063706586D6E6283AEAE389733CBF5DBD5E9B5C8C57E37DE458B9E9CE733340B9D5F3BBE47FD9DD3FB595F5C1EE8F4F765FCF1175FABE1C0F9B6E2021AF6380DFAD18AA50765F790063735872C767BF85DA227C277FBC8AE2E8BDCE939D40DBB93CA75ECD9A6C639B01B4E70A05D1297E1BBCB5012B2E24CD356
-X-C1DE0DAB: 0D63561A33F958A58C97AFEE3DB738CE5002B1117B3ED6963B5D638281467E46AD0703CEB2EF9A27823CB91A9FED034534781492E4B8EEAD5B606B10FC07407CC79554A2A72441328621D336A7BC284946AD531847A6065AE478A468B35FE767BDAD6C7F3747799A
-X-C8649E89: 1C3962B70DF3F0ADE00A9FD3E00BEEDF77DD89D51EBB7742D3581295AF09D3DF87807E0823442EA2ED31085941D9CD0AF7F820E7B07EA4CF442D40CDF14CDF774ED11C4611197FD93B3D587416EA58DB7E56FFF7CB2371467D7FE2FA29F57787748ED927723DE83F0BF9EA720DA508FE154681D89BB3A7C29B440DD4D963090A111DC66A97D0BFE2913E6812662D5F2A17D6C1CDD2003EB8E03787203701020945C72C348FB7EED3
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojuV2YtZBbGDzRE61DkpeUHQ==
-X-Mailru-Sender: 689FA8AB762F7393590D8C940224AE33557BB366E2CE79512A6DD138F4D91D5061DFB942B2BDC4E790DE4A6105A3658D481B2AED7BCCC0A49AE3A01A4DD0D55C6C99E19F044156F45FEEDEB644C299C0ED14614B50AE0675
+X-7564579A: EEAE043A70213CC8
+X-77F55803: 4F1203BC0FB41BD93B4404EFBC5FECACE5C610B1725ED3C661FD8B55A48E2EE5182A05F5380850404C228DA9ACA6FE270031DE4784117D2EC591814E25D11F9F59E0EFBEB616CCFF8A0AA202076E9429A24CDA786A8AA87E
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7ACA11F7F2395C8CCEA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F7900637770CCD3A0ADFB7EEEA1F7E6F0F101C6723150C8DA25C47586E58E00D9D99D84E1BDDB23E98D2D38B73AB1701401CD87148F47B334FFC2DA040F7C857BBB9AFF544CEDE9BDDC699E51DF9E95F17B0083B26EA987F6312C9EC33AC447995A7AD186FD1C55BDD38FC3FD2E47CDBA5A96583C09775C1D3CA48CF2B25D9E4C92BC8AC117882F4460429724CE54428C33FAD30A8DF7F3B2552694AC26CFBAC0749D213D2E47CDBA5A9658378DA827A17800CE7DE18F277BA63F6BF9FA2833FD35BB23DF004C906525384302BEBFE083D3B9BA71A620F70A64A45A98AA50765F7900637F9425D8FA97DB4396D1867E19FE1407959CC434672EE6371089D37D7C0E48F6C8AA50765F7900637B8F435DEDE9E76EBEFF80C71ABB335746BA297DBC24807EABDAD6C7F3747799A
+X-C1DE0DAB: 0D63561A33F958A548C37D4A416476455002B1117B3ED6966CC417AC0865F44B19AC5B239BAD4335823CB91A9FED034534781492E4B8EEAD2F8D89FC5850081EC79554A2A72441328621D336A7BC284946AD531847A6065A535571D14F44ED41
+X-C8649E89: 1C3962B70DF3F0ADE00A9FD3E00BEEDF77DD89D51EBB7742D3581295AF09D3DF87807E0823442EA2ED31085941D9CD0AF7F820E7B07EA4CF946D8EFD73096035A6F8E139B0E09386FF468A8046616B1304DB7219430BACC0D753EA1A396000B0748ED927723DE83FAD4279009AE481F4A631A17EBFF408319AF0DB1C54B5C6FC111DC66A97D0BFE2913E6812662D5F2A17D6C1CDD2003EB8E03787203701020945C72C348FB7EED3
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojuV2YtZBbGDzK+pyoQjDsmA==
+X-Mailru-Sender: 689FA8AB762F7393590D8C940224AE33FB961BCDE45BA22250E1C12B53D35892A2F5B6C30BC20E9090DE4A6105A3658D481B2AED7BCCC0A49AE3A01A4DD0D55C6C99E19F044156F45FEEDEB644C299C0ED14614B50AE0675
 X-Mras: Ok
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
  c=relaxed/relaxed; d=inbox.ru; 
@@ -61,21 +61,22 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
  Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
  List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive:
  X-Cloud-Ids:Disposition-Notification-To;
- bh=ifr5dv1wGBKGPJPZPO5N/7Iq5hGraEOkvWnxcE7NUFA=; t=1710051440; x=1710141440; 
- b=u1d6SezOTve9YWHzGtQaio0hCtndWeIvdOA5UXVBmx2rzIVC4/r1oSDVpqZAusB+/NX55xtKM5p
- gFYbg9q4ZwldWAHAdpOuEvhHQYCwlRKgkfdWEdHIUxL8mcvYZthXTSQyySrw8Saf0aQu0e2OdEUpu
- kzyQkiOdrgjsYbuhKVoqSWU+Br2nK0Jk/ZZCn1DJAYtz/8b8xrLHj3W7Mbod53I6ppRvLBwxll4u4
- ViEYAgXnMTUAQgUH0QyD/7YUtwFzke2DV66ah70QG4yCdMyn7eh0GpzdVg3BF6VWfnyrwwUoDcxJ3
- Au4cynDbD+s9F6VxUbmU1XkxuElQWPxYaktQ==;
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=fvCCtfzSN+fDldpxoW43qtHhu/J6ZHia4VW/EdfejZ8=; t=1710051818; x=1710141818; 
+ b=ZNUHOgLPls9no8i1R9au+frgfkx+VXurWiperGKz/JuiFm7iyXDQ40CX8JE96WIEvOrrofiB6St
+ zr5JnX0mzcCEhr3E8J/9Hsc9WKTGv1HN3GTOae8yXBo2ICXATpP+RBSzKnFzZTA2eP0LO4KEy5tLl
+ 0Re2X3vmKA6ZZiss1GWUlSgsTp4Ri8GrY9lRupBX7Jb/tSp7aGuLjGwMz6zhqu+qgg0w/MtyCu6Sy
+ jPyGkoxv941TfQf4hMWaYHtQPDHjsiXhgqBTFPJt6MLaBpIquMCD7vhSnNFvplcRQYFmlcDCGyNhN
+ XfRdzLbErKobGro+PrRgxY3RqvzRbiTLpY0Q==;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=inbox.ru
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=inbox.ru header.i=@inbox.ru
- header.a=rsa-sha256 header.s=mail4 header.b=u1d6SezO
-X-Mailman-Original-Authentication-Results: smtp29.i.mail.ru; auth=pass
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=inbox.ru header.i=@inbox.ru header.a=rsa-sha256
+ header.s=mail4 header.b=ZNUHOgLP
+X-Mailman-Original-Authentication-Results: smtp37.i.mail.ru; auth=pass
  smtp.auth=fido_max@inbox.ru smtp.mailfrom=fido_max@inbox.ru
-Subject: [Buildroot] [PATCH 1/1] package/timescaledb: bump version to 2.14.2
+Subject: [Buildroot] [PATCH 1/1] package/osm2pgsql: bump version to 1.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,36 +94,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes: https://github.com/timescale/timescaledb/blob/2.14.2/CHANGELOG.md
+Release-notes: https://github.com/openstreetmap/osm2pgsql/releases/tag/1.11.0
 
 Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 ---
- package/timescaledb/timescaledb.hash | 2 +-
- package/timescaledb/timescaledb.mk   | 2 +-
+ package/osm2pgsql/osm2pgsql.hash | 2 +-
+ package/osm2pgsql/osm2pgsql.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/timescaledb/timescaledb.hash b/package/timescaledb/timescaledb.hash
-index 8d0fc125d6..f98098bdb8 100644
---- a/package/timescaledb/timescaledb.hash
-+++ b/package/timescaledb/timescaledb.hash
+diff --git a/package/osm2pgsql/osm2pgsql.hash b/package/osm2pgsql/osm2pgsql.hash
+index a93ceb6a7f..df3302b2c7 100644
+--- a/package/osm2pgsql/osm2pgsql.hash
++++ b/package/osm2pgsql/osm2pgsql.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  ca4f48147cb1bf3bf22af9f643822a5931e12a89909cc73c4a89ddae3c828ac1  timescaledb-2.13.1.tar.gz
-+sha256  c7768b267ea67914d0491b28da102faecd317060e429b2da7530517fbc94e73b  timescaledb-2.14.2.tar.gz
- sha256  0378e0948feefd85f579319c74d6e2b671194037f550c7176ef26649d94c895b  LICENSE
-diff --git a/package/timescaledb/timescaledb.mk b/package/timescaledb/timescaledb.mk
-index a5d77eda80..59731270c5 100644
---- a/package/timescaledb/timescaledb.mk
-+++ b/package/timescaledb/timescaledb.mk
+-sha256  33849d8edacbca5ab5492fed32ac954de14f92ab6b3028c03ef88bb7ab596d20  osm2pgsql-1.10.0.tar.gz
++sha256  6b46313813b816f15ce906c04cd4108bbb05362740e0a1a8889055f4e25977d2  osm2pgsql-1.11.0.tar.gz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/osm2pgsql/osm2pgsql.mk b/package/osm2pgsql/osm2pgsql.mk
+index 1565c2142c..846a4ea242 100644
+--- a/package/osm2pgsql/osm2pgsql.mk
++++ b/package/osm2pgsql/osm2pgsql.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TIMESCALEDB_VERSION = 2.13.1
-+TIMESCALEDB_VERSION = 2.14.2
- TIMESCALEDB_SITE = $(call github,timescale,timescaledb,$(TIMESCALEDB_VERSION))
- TIMESCALEDB_LICENSE = Apache-2.0
- TIMESCALEDB_LICENSE_FILES = LICENSE
+-OSM2PGSQL_VERSION = 1.10.0
++OSM2PGSQL_VERSION = 1.11.0
+ OSM2PGSQL_SITE = $(call github,openstreetmap,osm2pgsql,$(OSM2PGSQL_VERSION))
+ OSM2PGSQL_LICENSE = GPL-2.0+
+ OSM2PGSQL_LICENSE_FILES = COPYING
 -- 
 2.43.0
 
