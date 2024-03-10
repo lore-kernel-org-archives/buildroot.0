@@ -1,76 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5740AC54791
-	for <buildroot@archiver.kernel.org>; Sun, 10 Mar 2024 13:25:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED940C54791
+	for <buildroot@archiver.kernel.org>; Sun, 10 Mar 2024 15:10:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3757360629;
-	Sun, 10 Mar 2024 13:25:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 542E0400F8;
+	Sun, 10 Mar 2024 15:10:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gZiJlv5Bs_9J; Sun, 10 Mar 2024 13:25:27 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XA-6Rq3AH26s; Sun, 10 Mar 2024 15:10:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D8A9B60637
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4D3E6403B8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D8A9B60637;
-	Sun, 10 Mar 2024 13:25:26 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 340361BF300
- for <buildroot@lists.busybox.net>; Sun, 10 Mar 2024 13:25:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4D3E6403B8;
+	Sun, 10 Mar 2024 15:10:54 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5BD4F1BF40B
+ for <buildroot@lists.busybox.net>; Sun, 10 Mar 2024 15:10:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 20A4D60637
- for <buildroot@lists.busybox.net>; Sun, 10 Mar 2024 13:25:24 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5649081352
+ for <buildroot@lists.busybox.net>; Sun, 10 Mar 2024 15:10:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EbU0A2ZxvE_r for <buildroot@lists.busybox.net>;
- Sun, 10 Mar 2024 13:25:23 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zKE3YZHHCSzI for <buildroot@lists.busybox.net>;
+ Sun, 10 Mar 2024 15:10:52 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
  helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B9DA660629
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B9DA660629
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B9DA660629
- for <buildroot@buildroot.org>; Sun, 10 Mar 2024 13:25:22 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C734F8134A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C734F8134A
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C734F8134A
+ for <buildroot@buildroot.org>; Sun, 10 Mar 2024 15:10:51 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
  (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id 7D017B0059B;
- Sun, 10 Mar 2024 14:25:14 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:41984])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 10 Mar 2024 14:25:14 +0100
-MIME-Version: 1.0
-Date: Sun, 10 Mar 2024 14:25:14 +0100
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 299ECB0055A;
+ Sun, 10 Mar 2024 16:10:45 +0100 (CET)
 From: Julien Olivain <ju.o@free.fr>
-To: Ralf Dragon <hypnotoad@lindra.de>
-In-Reply-To: <20231212160112.94272-2-hypnotoad@lindra.de>
-References: <20231212160112.94272-1-hypnotoad@lindra.de>
- <20231212160112.94272-2-hypnotoad@lindra.de>
-User-Agent: Webmail Free/1.6.5
-Message-ID: <e74314eb89591838527daf1e9fbb5278@free.fr>
-X-Sender: ju.o@free.fr
+To: buildroot@buildroot.org
+Date: Sun, 10 Mar 2024 16:10:36 +0100
+Message-ID: <20240310151036.1392876-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.44.0
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1710077119;
- bh=KrzhULzrVVatemxh+8DgfUNzi57a8QWutRtZrcPhWJo=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=jLpFUSnDBFzPVKBrddyY76lHT2eKDpBkMU0tsFbUwPF0JRGU3qkCMocsvvnWbP3Pt
- BguElVQBlm/bUgnYERP9JiapnsYpyPz82N/SnwIrhRuO6Gj2fqbWM9UeAn+6UA6rh5
- z8fFop71PQUvKoDbgiqSi3o/QTa0yt8ewSD1QQBopllAtX6g2H1TLzzZbBav2h+vtp
- o72VyjC2J70So/r0dqPF2co1e1iuXmE+rb0qEnwVAhRv+D1uhA1hv4lPs2dbrLeMmb
- tktr/Yf098633BHsC1hXQ9KIYHQKKO//dsdWfR79HY0WKOW+/BrJGfjq6b8nG1PmUR
- 7JRW/OsfQaIEQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1710083448;
+ bh=uPmm1a16pXEfRntCZcy0T0J549BfzmhhoImja4W8Ock=;
+ h=From:To:Cc:Subject:Date:From;
+ b=lAXbgHzff+XGPC5hBuQlSBV9OAQ80YAqL1G2YQHh+8Oj3auhbarEAjVbr8w2xlP59
+ bIpbvL6lF+a7ArIW2ft0rbGCyOl1fY1Tufu7Up4LDooD/wosXj5/LFZTu+kdead8xX
+ 9hXB92mcOg1CbFRw7o0ZqnO7z8CEgJtUaNTTimpG5K93iTANQZj+1PGfWEaJKl5V6y
+ vyJ2MdmTc2psgBp3SZzRRI3p5sMQJMf9Sq/cP3TwKSaiTbDVvdJJz8bro6o9m3VPis
+ 0f2tZGyk54qa2XqHUgFhd3v4lIiUn5Cov4YI+OiCxvFRzkBWNTx0G1vL4i7yvsDYni
+ p9O4WSVT/3DAg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=jLpFUSnD
-Subject: Re: [Buildroot] [PATCH 2/2] python-qt5: add PyQt5.sip module
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=lAXbgHzf
+Subject: [Buildroot] [PATCH 1/1] package/mokutil: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,207 +76,152 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: gwenhael.goavec-merou@trabucayre.com, yann.morin.1998@free.fr,
- asafka7@gmail.com, buildroot@buildroot.org
+Cc: Julien Olivain <ju.o@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Ralf, All,
+mokutil is a tool to import or delete the machines owner
+keys (MOK) stored in the database of shim.
 
-Thanks for this patch.  I have few comments on it.
+"shim" is the first stage bootloader to support UEFI Secure
+Boot. See also the "shim" package in the bootloaders
+section.
 
-There was an improved version of this patch, sent as an
-attachment here:
-https://lists.buildroot.org/pipermail/buildroot/2023-December/681200.html
-This may be the reason why this series got forgotten. For sending
-updated patches, see:
-https://nightly.buildroot.org/manual.html#_patch_revision_changelog
+https://github.com/lcp/mokutil
 
-I am commenting this earlier patch revision. I believe my comments also
-applies to the other version.
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+Patch tested on branch master at commit 31abe2f with commands:
 
-First, I think this patch could be split in two, in the same series:
-1. the introduction of the new package python-pyqt5-sip (alone)
-    The commit log should describe what the package is and why it is 
-needed.
-2. The runtime fix for python-pyqt5
-    The commit log should describe what is broken, when the problem was 
-introduced.
-    (see examples later)
+    make check-package
+    ...
+    0 warnings generated
 
-In order to follow the Buildroot convention, the first patch one-line
-title could be changed to:
-"package/python-pyqt5-sip: new package"
+    utils/test-pkg -a -p mokutil
+    ...
+        br-i386-pentium-mmx-musl [32/45]: FAILED
+    ...
+    45 builds, 32 skipped, 1 build failed, 0 legal-info failed, 0 show-info failed
 
-On 12/12/2023 17:01, Ralf Dragon wrote:
-> This fixes the following runtime error when importing PyQt5 in python:
-> 
-> from PyQt5.QtCore import *
-> ModuleNotFoundError: No module named 'PyQt5.sip'
+Note: the br-i386-pentium-mmx-musl build failure is due to an old
+musl libc not containing the qsort_r() function.
 
-You could also add a quick package description and the reason you would 
-like
-to add the package in the commit log, for example:
-"""
-The sip extension module provides support for the PyQt5 package.
+Thomas mentioned in [1] that this kind of failure should be addressed
+by updating the toolchain in test-pkg, instead.
 
-This package is needed at runtime by python-pyqt5 version >= 5.11.
-"""
+[1] https://lists.buildroot.org/pipermail/buildroot/2024-March/686962.html
+---
+ DEVELOPERS                   |  1 +
+ package/Config.in            |  1 +
+ package/mokutil/Config.in    | 31 +++++++++++++++++++++++++++++++
+ package/mokutil/mokutil.hash |  3 +++
+ package/mokutil/mokutil.mk   | 19 +++++++++++++++++++
+ 5 files changed, 55 insertions(+)
+ create mode 100644 package/mokutil/Config.in
+ create mode 100644 package/mokutil/mokutil.hash
+ create mode 100644 package/mokutil/mokutil.mk
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index a6364cdd441..087f3bc0b66 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1733,6 +1733,7 @@ F:	package/gnupg2/
+ F:	package/highway/
+ F:	package/kexec/
+ F:	package/libjxl/
++F:	package/mokutil/
+ F:	package/octave/
+ F:	package/ola/
+ F:	package/openblas/
+diff --git a/package/Config.in b/package/Config.in
+index c677c3ff4a9..a39022cef8c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2763,6 +2763,7 @@ menu "System tools"
+ 	source "package/mender-grubenv/Config.in"
+ 	source "package/mfoc/Config.in"
+ 	source "package/moby-buildkit/Config.in"
++	source "package/mokutil/Config.in"
+ 	source "package/monit/Config.in"
+ 	source "package/multipath-tools/Config.in"
+ 	source "package/ncdu/Config.in"
+diff --git a/package/mokutil/Config.in b/package/mokutil/Config.in
+new file mode 100644
+index 00000000000..e6164087b86
+--- /dev/null
++++ b/package/mokutil/Config.in
+@@ -0,0 +1,31 @@
++config BR2_PACKAGE_MOKUTIL
++	bool "mokutil"
++	depends on BR2_PACKAGE_EFIVAR_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_SHIM_ARCH_SUPPORTS
++	depends on BR2_USE_MMU # keyutils
++	depends on !BR2_STATIC_LIBS # efivar, keyutils
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS # efivar
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # efivar
++	depends on BR2_TOOLCHAIN_HAS_THREADS # efivar
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 # efivar
++	select BR2_PACKAGE_EFIVAR
++	select BR2_PACKAGE_KEYUTILS
++	select BR2_PACKAGE_OPENSSL
++	help
++	  mokutil is a tool to import or delete the machines owner
++	  keys (MOK) stored in the database of shim.
++
++	  "shim" is the first stage bootloader to support UEFI Secure
++	  Boot. See also the "shim" package in the bootloaders
++	  section.
++
++	  https://github.com/lcp/mokutil
++
++comment "mokutil needs a toolchain w/ dynamic library, threads, gcc >= 4.9, headers >= 3.12"
++	depends on BR2_PACKAGE_EFIVAR_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_SHIM_ARCH_SUPPORTS
++	depends on BR2_USE_MMU
++	depends on BR2_STATIC_LIBS || \
++		BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
++		!BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
+diff --git a/package/mokutil/mokutil.hash b/package/mokutil/mokutil.hash
+new file mode 100644
+index 00000000000..86555e6f4db
+--- /dev/null
++++ b/package/mokutil/mokutil.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  1c0bcba3d2f4ab98235b1edb5eb71b40508f79d93d3e28b1a04b7fbd4a2c1457  mokutil-0.7.1.tar.gz
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/mokutil/mokutil.mk b/package/mokutil/mokutil.mk
+new file mode 100644
+index 00000000000..6e83d9f1383
+--- /dev/null
++++ b/package/mokutil/mokutil.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# mokutil
++#
++################################################################################
++
++MOKUTIL_VERSION = 0.7.1
++MOKUTIL_SITE = $(call github,lcp,mokutil,$(MOKUTIL_VERSION))
++MOKUTIL_LICENSE = GPL-3.0+
++MOKUTIL_LICENSE_FILES = COPYING
++MOKUTIL_AUTORECONF = YES
++
++MOKUTIL_DEPENDENCIES = \
++	efivar \
++	host-pkgconf \
++	keyutils \
++	openssl
++
++$(eval $(autotools-package))
+-- 
+2.44.0
 
-> Signed-off-by: Ralf Dragon <hypnotoad@lindra.de>
-> ---
-> Backport to: 2023.02.x
-> 
->  package/Config.in                              |  1 +
->  package/python-pyqt5-sip/Config.in             |  6 ++++++
->  package/python-pyqt5-sip/python-pyqt5-sip.hash |  4 ++++
->  package/python-pyqt5-sip/python-pyqt5-sip.mk   | 15 +++++++++++++++
->  package/python-pyqt5/Config.in                 |  1 +
->  5 files changed, 27 insertions(+)
->  create mode 100644 package/python-pyqt5-sip/Config.in
->  create mode 100644 package/python-pyqt5-sip/python-pyqt5-sip.hash
->  create mode 100644 package/python-pyqt5-sip/python-pyqt5-sip.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index fcc09b07c4..2d6a077d16 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1253,6 +1253,7 @@ menu "External python modules"
->  	source "package/python-pyphen/Config.in"
->  	source "package/python-pyqrcode/Config.in"
->  	source "package/python-pyqt5/Config.in"
-> +	source "package/python-pyqt5-sip/Config.in"
->  	source "package/python-pyratemp/Config.in"
->  	source "package/python-pyroute2/Config.in"
->  	source "package/python-pyrsistent/Config.in"
-> diff --git a/package/python-pyqt5-sip/Config.in 
-> b/package/python-pyqt5-sip/Config.in
-> new file mode 100644
-> index 0000000000..6f26271f70
-> --- /dev/null
-> +++ b/package/python-pyqt5-sip/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_PYTHON_PYQT5_SIP
-> +	bool "python-pyqt5-sip"
-> +	depends on BR2_PACKAGE_PYTHON_PYQT5
-> +	depends on BR2_PACKAGE_PYTHON_SIP
-> +	help
-> +	  This is the PyQt5.sip module which is needed to run PyQt5.
-> diff --git a/package/python-pyqt5-sip/python-pyqt5-sip.hash 
-> b/package/python-pyqt5-sip/python-pyqt5-sip.hash
-> new file mode 100644
-> index 0000000000..8039cdafd9
-> --- /dev/null
-> +++ b/package/python-pyqt5-sip/python-pyqt5-sip.hash
-> @@ -0,0 +1,4 @@
-> +# from https://pypi.org/project/PyQt5-sip/12.12.1
-> +
-> +sha256  
-> 8fdc6e0148abd12d977a1d3828e7b79aae958e83c6cb5adae614916d888a6b10  
-> PyQt5_sip-12.12.1.tar.gz
-> +md5  c2117da3b4c0e081c1c5a9088b8a4d55  PyQt5_sip-12.12.1.tar.gz
-
-Can you add here hashes for the 3 license files?
-See also comment in the .mk file. You can then check with a
-"make python-pyqt5-sip-legal-info" or "make legal-info".
-
-> diff --git a/package/python-pyqt5-sip/python-pyqt5-sip.mk 
-> b/package/python-pyqt5-sip/python-pyqt5-sip.mk
-> new file mode 100644
-> index 0000000000..3f689b9d47
-> --- /dev/null
-> +++ b/package/python-pyqt5-sip/python-pyqt5-sip.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# python-SIP-QT5
-> +#
-> +################################################################################
-> +
-> +PYTHON_PYQT5_SIP_VERSION = 12.12.1
-
-There is now a v12.13.0 available. See:
-https://pypi.org/project/PyQt5-sip/
-
-Since this patch will likely need a v2, could you see if you can 
-updating to
-this new version?
-
-> +PYTHON_PYQT5_SIP_SITE = 
-> https://files.pythonhosted.org/packages/c1/61/4055e7a0f36339964956ff415e36f4abf82561904cc49c021da32949fc55
-> +PYTHON_PYQT5_SIP_SOURCE = PyQt5_sip-$(PYTHON_PYQT5_SIP_VERSION).tar.gz
-> +PYTHON_PYQT5_SIP_LICENSE = MIT
-
-License seems to be:
-"SIP or GPL-2.0 or GPL-3.0"
-Where is the source of this MIT license? (I grep'ed "MIT" in the
-sources and was not able to any occurrence of it).
-
-> +PYTHON_PYQT5_SIP_LICENSE_FILES = LICENSE
-
-The package also contains the license files:
-LICENSE-GPL2 and LICENSE-GPL3.
-Can you add those here? (see also comment in the .hash file).
-
-> +PYTHON_PYQT5_SIP_SETUP_TYPE = setuptools
-> +PYTHON_PYQT5_SIP_DEPENDENCIES += python-sip
-> +
-> +$(eval $(python-package))
-> diff --git a/package/python-pyqt5/Config.in 
-> b/package/python-pyqt5/Config.in
-> index 9fa7676f98..c2a1976950 100644
-> --- a/package/python-pyqt5/Config.in
-> +++ b/package/python-pyqt5/Config.in
-> @@ -5,6 +5,7 @@ config BR2_PACKAGE_PYTHON_PYQT5
->  	bool "python-pyqt5"
->  	depends on BR2_PACKAGE_QT5
->  	select BR2_PACKAGE_PYTHON_SIP
-> +	select BR2_PACKAGE_PYTHON_PYQT5_SIP
-
-This line could go in a separate "python-pyqt5 fix" patch. Could you
-also flag this dependency as "runtime"?
-
-	select BR2_PACKAGE_PYTHON_PYQT5_SIP # runtime
-
-The commit log of this second patch should describe issue, for example:
-"""
-Commit b36ce7eda0 "package/python-pyqt5: bump to version 5.15.6"
-updated PyQt5 from version 5.7 to 5.15.6. This commit forgot to
-take into account an upstream incompatible change about a PyQt5
-SIP module. See [1]. Without this pyqt5-sip module, pyqt5 is failing
-to load at runtime.
-
-The issue can be reproduced with the command:
-
-     python3 -c 'from PyQt5.QtCore import *'
-
-This commit fixes the issue by adding this missing runtime dependency.
-
-Fixes:
-
-     ModuleNotFoundError: No module named 'PyQt5.sip'
-
-[1] 
-https://www.riverbankcomputing.com/static/Docs/PyQt5/incompatibilities.html#pyqt-v5-11
-"""
-
->  	select BR2_PACKAGE_QT5BASE_GUI
->  	help
->  	  Python bindings for Qt 5
-> --
-> 2.39.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
-Best regards,
-
-Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
