@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7783C54791
-	for <buildroot@archiver.kernel.org>; Sun, 10 Mar 2024 22:17:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B16A8C54E49
+	for <buildroot@archiver.kernel.org>; Sun, 10 Mar 2024 22:17:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B2EDC81492;
-	Sun, 10 Mar 2024 22:17:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 797BD817F2;
+	Sun, 10 Mar 2024 22:17:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id a7wil6-7h28h; Sun, 10 Mar 2024 22:17:24 +0000 (UTC)
+	with ESMTP id 33aH4d_zfstv; Sun, 10 Mar 2024 22:17:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D2651814A9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 12CF1817AA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D2651814A9;
-	Sun, 10 Mar 2024 22:17:23 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D9CC01BF28B
- for <buildroot@lists.busybox.net>; Sun, 10 Mar 2024 22:17:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 12CF1817AA;
+	Sun, 10 Mar 2024 22:17:26 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 161F31BF85D
+ for <buildroot@lists.busybox.net>; Sun, 10 Mar 2024 22:17:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C64A360841
- for <buildroot@lists.busybox.net>; Sun, 10 Mar 2024 22:17:21 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0304E40298
+ for <buildroot@lists.busybox.net>; Sun, 10 Mar 2024 22:17:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0rLIzw2jnOZu for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VT8oaNNLTpjc for <buildroot@lists.busybox.net>;
  Sun, 10 Mar 2024 22:17:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B393605C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3F6EB40106
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1B393605C2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3F6EB40106
  for <buildroot@buildroot.org>; Sun, 10 Mar 2024 22:17:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 06E8B8758E; Sun, 10 Mar 2024 22:17:21 +0000 (UTC)
+ id D480088134; Sun, 10 Mar 2024 22:17:20 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 10 Mar 2024 22:58:28 +0100
+Date: Sun, 10 Mar 2024 22:38:09 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: b28d522e4e09f2d3f8dc98b7a78e8882296af0ac
-X-Git-Newrev: ff1371f64318e4d265154ed69b9cfd23e90111fd
+X-Git-Oldrev: 7fd91f10abce998b1e82f18e55d6187663780374
+X-Git-Newrev: 5d99b844a1b2484cd10585e16b13dac6c7d8e05d
 X-Patchwork-Hint: ignore
-Message-Id: <20240310221721.06E8B8758E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/clamav: fix build
- on mips64el
+Message-Id: <20240310221720.D480088134@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/gst1-python:
+ disable tests
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,39 +65,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ff1371f64318e4d265154ed69b9cfd23e90111fd
+commit: https://git.buildroot.net/buildroot/commit/?id=5d99b844a1b2484cd10585e16b13dac6c7d8e05d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Fixes:
-http://autobuild.buildroot.net/results/b64/b640937f35b11ddb9f1e29f0e44040eda8850f26/
-'Could not find specification for target "mips64el-unknown-linux-gnu".'
+We don't need tests enabled which can also cause build issues.
 
-This patch changes
-    -DRUST_COMPILER_TARGET=mips64el-unknown-linux-gnu
-to
-    -DRUST_COMPILER_TARGET=mips64el-unknown-linux-gnuabi64
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 9a560d6affaff0923e829ec0c608e7d1fdacaf70)
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit ae8cb9b2bfa95a3107ad312748316a11801d8472)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/clamav/clamav.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/gstreamer1/gst1-python/gst1-python.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index 977b6010b3..68a1799bfc 100644
---- a/package/clamav/clamav.mk
-+++ b/package/clamav/clamav.mk
-@@ -54,7 +54,7 @@ CLAMAV_CONF_OPTS = \
- 	-DENABLE_MILTER=OFF \
- 	-DENABLE_TESTS=OFF \
- 	-DHAVE_SYSTEM_LFS_FTS=ON \
--	-DRUST_COMPILER_TARGET=$(ARCH)-unknown-$(TARGET_OS)-$(LIBC)$(ABI) \
-+	-DRUST_COMPILER_TARGET=$(RUSTC_TARGET_NAME) \
- 	-Dtest_run_result=ON \
- 	-Dtest_run_result__TRYRUN_OUTPUT=ON
+diff --git a/package/gstreamer1/gst1-python/gst1-python.mk b/package/gstreamer1/gst1-python/gst1-python.mk
+index f843e37052..501ca5e02b 100644
+--- a/package/gstreamer1/gst1-python/gst1-python.mk
++++ b/package/gstreamer1/gst1-python/gst1-python.mk
+@@ -34,6 +34,7 @@ GST1_PYTHON_CONF_ENV += \
+ # the correct .so file, and the resulting compiled library has the appropriate
+ # path of /usr/lib/python3.$(PYTHON3_VERSION_MAJOR).so
+ GST1_PYTHON_CONF_OPTS += \
+-	-Dlibpython-dir=/usr/lib/
++	-Dlibpython-dir=/usr/lib/ \
++	-Dtests=disabled
  
+ $(eval $(meson-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
