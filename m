@@ -1,53 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74CD5C54791
-	for <buildroot@archiver.kernel.org>; Sun, 10 Mar 2024 22:27:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 379C7C54E58
+	for <buildroot@archiver.kernel.org>; Mon, 11 Mar 2024 11:35:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 35C8D81446;
-	Sun, 10 Mar 2024 22:27:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E77FA6085A;
+	Mon, 11 Mar 2024 11:35:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CjxjJwrlt_3S; Sun, 10 Mar 2024 22:27:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FAOBV5Q5rz_X; Mon, 11 Mar 2024 11:35:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3EFD081467
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1175B60822
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3EFD081467;
-	Sun, 10 Mar 2024 22:27:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1175B60822;
+	Mon, 11 Mar 2024 11:35:24 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 124521BF28B
- for <buildroot@lists.busybox.net>; Sun, 10 Mar 2024 22:27:44 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 717691BF2F2
+ for <buildroot@lists.busybox.net>; Mon, 11 Mar 2024 11:35:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F359481467
- for <buildroot@lists.busybox.net>; Sun, 10 Mar 2024 22:27:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5AB0280B51
+ for <buildroot@lists.busybox.net>; Mon, 11 Mar 2024 11:35:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Vco5th-2eafd for <buildroot@lists.busybox.net>;
- Sun, 10 Mar 2024 22:27:43 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ with ESMTP id OpO5R-Yv46wK for <buildroot@lists.busybox.net>;
+ Mon, 11 Mar 2024 11:35:21 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
+ helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 32AD381446
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 32AD381446
- for <buildroot@buildroot.org>; Sun, 10 Mar 2024 22:27:43 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 208568823D; Sun, 10 Mar 2024 22:27:43 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 10 Mar 2024 23:23:39 +0100
-X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 1c603c41178109a7f1571353ec8c030595097b5d
-X-Git-Newrev: 3d69e35e9ab92388f84dcb07401ef4f632d5195f
-X-Patchwork-Hint: ignore
-Message-Id: <20240310222743.208568823D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] {linux,
- linux-headers}: bump 6.{1, 6}.x series
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1552580C97
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1552580C97
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1552580C97
+ for <buildroot@buildroot.org>; Mon, 11 Mar 2024 11:35:20 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B9A90C0010;
+ Mon, 11 Mar 2024 11:35:16 +0000 (UTC)
+Date: Mon, 11 Mar 2024 12:35:12 +0100
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20240311123512.09c1c77d@windsurf>
+In-Reply-To: <CAPi7W803mjZL9-rRu2wdcG=5t=D1wtDJET2S_SHfjCc_uvViVA@mail.gmail.com>
+References: <20240307122806.102726-1-fontaine.fabrice@gmail.com>
+ <20240307134916.32738b5e@windsurf>
+ <CAPi7W803mjZL9-rRu2wdcG=5t=D1wtDJET2S_SHfjCc_uvViVA@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1710156918;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=3g/dunLtEEFu3uZ+io3sjfYN/dulZzifRgBnn/Kb+M4=;
+ b=f3BEZPVuR/zc0i10FaF8n+TyTcR4kouxY4tA8vqywnzSTpCsURu9M12yjjQZDn4chJieaa
+ QlXUXHMwSM4lRKFQI3L0ysGwPdU0Ea62FaxO22DaBDp480iBm1JyNUOSPzZiklL4v9xolV
+ 3n87Pwp/OVM5mYHGMJ+uBVT4VTnLIri8SqjgMWdjnx3G6d7xAxNrtJp+qX1+KCwFn/nHDf
+ 8FbXYKxKcRN0oIx0axxdNKhOVmfyqCmyyDDa1Hqlivi5EGKUuaueOn1HQACjb83a6rfRN9
+ 2xfWKCuyZA2AdRaxecPG4CyJDgGKc+OGfrQwC8R42rHBqAHO2ZpaF6IPdCjT8g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=f3BEZPVu
+Subject: Re: [Buildroot] [PATCH 1/1] toolchain/Config.in: enable libatomic
+ with BR2_BINFMT_FLAT
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,68 +83,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3d69e35e9ab92388f84dcb07401ef4f632d5195f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
+On Thu, 7 Mar 2024 18:18:24 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6e5229c252abbf4b86476cfafbc26753f803cfd0)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 4 ++--
- package/linux-headers/Config.in.host | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+> > Thanks for the patch. Do we know since when there is support for
+> > libatomic for platforms that use the FLAT binary format? Is this
+> > specific to ARM/FLAT, or applicable to all configurations that use the
+> > FLAT binary format?  
+> 
+> Nope, I don't know. I didn't find any clue in uclibc-ng github history.
 
-diff --git a/linux/Config.in b/linux/Config.in
-index da22b439e3..773cb4fbb5 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.6.15" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.6.16" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 416e34bc27..35e04a38b5 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,7 +1,7 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  ab290c7f8687f2f8af96e14abd0700ba8b282426151873690f51621d8d5f5faa  linux-6.6.15.tar.xz
-+sha256  b21d5795a3bead4f112916423222faa8a0f519e4201df343e3eb88dc9e4aaa30  linux-6.6.16.tar.xz
- sha256  78fbd43822f4c56bc16e89e8874767f592532e1a0ffcd1af4dd279559b5fcbb5  linux-6.5.13.tar.xz
--sha256  0580cc0e81ff9aee245f79531d8c1c5c7d711eee227cd4cf52d1ff335727b1fd  linux-6.1.76.tar.xz
-+sha256  3b54ec567716cdfb3618caf38c58a8aab1372cc41c16430633febe9ccdb3f91d  linux-6.1.77.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
- sha256  c48575c97fd9f4767cbe50a13b1b2b40ee42830aba3182fabd35a03259a6e5d8  linux-5.15.148.tar.xz
- sha256  44e22fad647c638726a8eae23703c4263bead612d17c89ca7ad7ab32b5ce88d5  linux-5.10.209.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 5bd4ad8a61..1447c4aa30 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -417,9 +417,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "5.4.268"	if BR2_KERNEL_HEADERS_5_4
- 	default "5.10.209"	if BR2_KERNEL_HEADERS_5_10
- 	default "5.15.148"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.76"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.1.77"	if BR2_KERNEL_HEADERS_6_1
- 	default "6.5.13"	if BR2_KERNEL_HEADERS_6_5
--	default "6.6.15"	if BR2_KERNEL_HEADERS_6_6
-+	default "6.6.16"	if BR2_KERNEL_HEADERS_6_6
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+That's because libatomic has nothing to do with the C library.
+libatomic is provided by gcc. So if you want to find out why it is now
+available for FLAT platforms, you should check the gcc Git history :-)
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
