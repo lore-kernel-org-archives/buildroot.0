@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4027BC54E58
-	for <buildroot@archiver.kernel.org>; Mon, 11 Mar 2024 19:09:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B197C5475B
+	for <buildroot@archiver.kernel.org>; Mon, 11 Mar 2024 19:09:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 116A140B66;
-	Mon, 11 Mar 2024 19:09:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0884D40B45;
+	Mon, 11 Mar 2024 19:09:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id N0PNVBFM3wxy; Mon, 11 Mar 2024 19:09:18 +0000 (UTC)
+	with ESMTP id KnjXx9iVkIty; Mon, 11 Mar 2024 19:09:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AC89840B96
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 768A140B8E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AC89840B96;
-	Mon, 11 Mar 2024 19:09:17 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1C7F41BF86B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 768A140B8E;
+	Mon, 11 Mar 2024 19:09:20 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 21B0D1BF951
  for <buildroot@lists.busybox.net>; Mon, 11 Mar 2024 19:09:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 56092600CD
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3BFCE814AB
  for <buildroot@lists.busybox.net>; Mon, 11 Mar 2024 19:09:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xOzF1-SDn_Sk for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HPm507drF6Wr for <buildroot@lists.busybox.net>;
  Mon, 11 Mar 2024 19:09:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A920606C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 65FCF815E7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9A920606C6
+ by smtp1.osuosl.org (Postfix) with ESMTP id 65FCF815E7
  for <buildroot@buildroot.org>; Mon, 11 Mar 2024 19:09:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 88E4F882A8; Mon, 11 Mar 2024 19:09:05 +0000 (UTC)
+ id 4FFFF882A5; Mon, 11 Mar 2024 19:09:05 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 11 Mar 2024 20:07:59 +0100
+Date: Mon, 11 Mar 2024 20:07:08 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 150a1722a78c51dd7996c5aaa3b42476f60451d1
-X-Git-Newrev: 45f964d8dde03161fdfbe69013d19e9a13fb005f
+X-Git-Oldrev: 36ed69f0bf6415243741e8d5b5357ab7c91a57b4
+X-Git-Newrev: aebe2b1dae2dd5c1e7952d00ad124064821be718
 X-Patchwork-Hint: ignore
-Message-Id: <20240311190905.88E4F882A8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libvpl: bump version to 2.10.2
+Message-Id: <20240311190905.4FFFF882A5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-pvr-hts: bump version to
+ 20.7.2-Nexus
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,38 +65,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=45f964d8dde03161fdfbe69013d19e9a13fb005f
+commit: https://git.buildroot.net/buildroot/commit/?id=aebe2b1dae2dd5c1e7952d00ad124064821be718
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libvpl/libvpl.hash | 2 +-
- package/libvpl/libvpl.mk   | 2 +-
+ package/kodi-pvr-hts/kodi-pvr-hts.hash | 2 +-
+ package/kodi-pvr-hts/kodi-pvr-hts.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libvpl/libvpl.hash b/package/libvpl/libvpl.hash
-index df1914e4a4..19407e01ba 100644
---- a/package/libvpl/libvpl.hash
-+++ b/package/libvpl/libvpl.hash
+diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.hash b/package/kodi-pvr-hts/kodi-pvr-hts.hash
+index a268940b0e..2a59b7bbe5 100644
+--- a/package/kodi-pvr-hts/kodi-pvr-hts.hash
++++ b/package/kodi-pvr-hts/kodi-pvr-hts.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  524299a7b920ac0de1f6913ca90515858ea3a8ea2daaea60f8e0be62f22c8041  libvpl-2.10.1.tar.gz
-+sha256  ad956ea7ecf14614325f59dfb44cc5ba08e2fcac373342d61c7db152ac651253  libvpl-2.10.2.tar.gz
- sha256  bf1cfac2e2792b6e1e995ce103d70796aecaf2ec7e4c5fe5474f7acec7b4a677  LICENSE
-diff --git a/package/libvpl/libvpl.mk b/package/libvpl/libvpl.mk
-index 0c5d354874..645fda14de 100644
---- a/package/libvpl/libvpl.mk
-+++ b/package/libvpl/libvpl.mk
+-sha256  15d68d928e0794fb42fd0f3483403fb0290c5c94aa3d3b648a8a2f8e8316dfff  kodi-pvr-hts-20.7.0-Nexus.tar.gz
++sha256  244cfc1488aa0c51465af411f3df8884b4a571a08acfa20ac9defdb8ef49022e  kodi-pvr-hts-20.7.2-Nexus.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.mk b/package/kodi-pvr-hts/kodi-pvr-hts.mk
+index c56d0e0546..ebc31ddbdf 100644
+--- a/package/kodi-pvr-hts/kodi-pvr-hts.mk
++++ b/package/kodi-pvr-hts/kodi-pvr-hts.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBVPL_VERSION = 2.10.1
-+LIBVPL_VERSION = 2.10.2
- LIBVPL_SITE = $(call github,intel,libvpl,v$(LIBVPL_VERSION))
- LIBVPL_LICENSE = MIT
- LIBVPL_LICENSE_FILES = LICENSE
+-KODI_PVR_HTS_VERSION = 20.7.0-Nexus
++KODI_PVR_HTS_VERSION = 20.7.2-Nexus
+ KODI_PVR_HTS_SITE = $(call github,kodi-pvr,pvr.hts,$(KODI_PVR_HTS_VERSION))
+ KODI_PVR_HTS_LICENSE = GPL-2.0+
+ KODI_PVR_HTS_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
