@@ -1,73 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9224DC54E58
-	for <buildroot@archiver.kernel.org>; Mon, 11 Mar 2024 18:38:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A2D5C5475B
+	for <buildroot@archiver.kernel.org>; Mon, 11 Mar 2024 19:06:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4239F405A0;
-	Mon, 11 Mar 2024 18:38:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6F41640141;
+	Mon, 11 Mar 2024 19:06:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KzJp-67S0MHW; Mon, 11 Mar 2024 18:38:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wKCBXjDiyrEi; Mon, 11 Mar 2024 19:06:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 015594059E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E176C408C3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 015594059E;
-	Mon, 11 Mar 2024 18:38:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DC3CB1BF865
- for <buildroot@lists.busybox.net>; Mon, 11 Mar 2024 18:38:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E176C408C3;
+	Mon, 11 Mar 2024 19:06:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 52B9E1BF86B
+ for <buildroot@lists.busybox.net>; Mon, 11 Mar 2024 19:06:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D4CA58176B
- for <buildroot@lists.busybox.net>; Mon, 11 Mar 2024 18:38:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3F45E40141
+ for <buildroot@lists.busybox.net>; Mon, 11 Mar 2024 19:06:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Wb5CQhXWhduV for <buildroot@lists.busybox.net>;
- Mon, 11 Mar 2024 18:38:29 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
- helo=smtp2-g21.free.fr; envelope-from=friedtj@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6E019814B6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E019814B6
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6E019814B6
- for <buildroot@buildroot.org>; Mon, 11 Mar 2024 18:38:27 +0000 (UTC)
-Received: from zimbra-e1-03.priv.proxad.net (unknown [172.20.243.151])
- by smtp2-g21.free.fr (Postfix) with ESMTP id E365920041C
- for <buildroot@buildroot.org>; Mon, 11 Mar 2024 19:38:24 +0100 (CET)
-Date: Mon, 11 Mar 2024 19:38:24 +0100 (CET)
-From: friedtj@free.fr
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wliwOVb4dVCC for <buildroot@lists.busybox.net>;
+ Mon, 11 Mar 2024 19:06:05 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B523140B40
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B523140B40
+ for <buildroot@buildroot.org>; Mon, 11 Mar 2024 19:06:05 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 239B38826E; Mon, 11 Mar 2024 19:06:05 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Message-ID: <2121496549.940679677.1710182304835.JavaMail.zimbra@free.fr>
-MIME-Version: 1.0
-X-Originating-IP: [194.167.45.227]
-X-Mailer: Zimbra 9.0.0_GA_1337 (ZimbraWebClient - FF123 (Linux)/9.0.0_GA_1337)
-Thread-Index: n3s5AHA5FgKktL3jwhEdNlhWmSCjqA==
-Thread-Topic: host-python-numpy: correct implied host-lapack/host-blas
- dependency.
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1710182304;
- bh=5zks6s8Ylcacm5HbqhQ/FFwUnMsRhJ9e1hAFJqorngM=;
- h=Date:From:To:Subject:From;
- b=O4QH9Op4Gm1zUmTqDmu74T6mXIYYT5jTdi7yupE/E9SI3R2rjcUetIdhNjT6SR6gB
- JGmngYv30ZepSv9o6ovtEWpWtpUIpP0uL8dyBxy3IVa3etcLbw4yzGbkiLFC3IxII9
- 6jg82tzhLVtQZlYwDvFZwCI5aEYQXG/PUPBnEKJNlqJRTFyvouE7pLFPaOxJruySyU
- TavTvtcRtYLIeuuLRg96kncY+Gon/x5RXOFhwJqmPfIhLIo1kMiocJ79LKlEKsUimA
- G5++VR/Qys00tkITTIZ5fP/hkuYOhbLj1JC7JcAF6dl+m5zqvy57eESI11LgH8JX1D
- y5Moj1V0WoCCw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=O4QH9Op4
-Subject: Re: [Buildroot] [git commit branch/2023.11.x] host-python-numpy:
- correct implied host-lapack/host-blas dependency.
+Date: Mon, 11 Mar 2024 20:04:05 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 45a3a8bd5a26953d4f5419fda7079fa0608dd43f
+X-Git-Newrev: a3a88ff1c85ba0067af1028bc232f8f61b628979
+X-Patchwork-Hint: ignore
+Message-Id: <20240311190605.239B38826E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/bitcoin: security bump to version
+ 26.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,25 +59,302 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The package python-numpy is failing with the latest buildroot-2024.02 with 
+commit: https://git.buildroot.net/buildroot/commit/?id=a3a88ff1c85ba0067af1028bc232f8f61b628979
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Run-time dependency openblas found: YES 0.3.26 
-Run-time dependency lapack found: YES 3.10.1 
-Program _build_utils/process_src_template.py found: YES (.../buildroot-2024.02/output/host/bin/python3 .../buildroot-2024.02/output/build/python-numpy-1.25.0/numpy/_build_utils/process_src_template.py) 
-Program _build_utils/tempita.py found: YES (.../buildroot-2024.02/output/build/python-numpy-1.25.0/numpy/_build_utils/tempita.py) 
+For all release notes since 0.21.2, see [1].
 
-output/build/python-numpy-1.25.0/numpy/meson.build:203:49: ERROR: Could not get pkg-config variable and no default provided for <PkgConfigDependency lapack: True None>
+This commit also:
+- removes the package patches, all included in this release,
+- removes the patch entry in ".checkpackageignore",
+- adds a comment about pgp signature check in the hash file,
+- updates the license hash, due to year update,
+- adds the requirement on gcc >= 9, see [2],
+- removes the dependency on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 which
+  is no longer needed, due to the gcc version requirement.
 
-which seems related but not similar to https://lists.buildroot.org/pipermail/buildroot/2024-February/686592.html
+Fixes:
+- [3]
 
-Unrelated: gr-osmosdr needed host-python-six to complete compilation.
+Note: this CVE-2023-33297 is not explicitly mentioned in the Bitcoin
+core release notes. It is not either appearing in CVE list at [4].
+The change corresponding to this vulnerability is "#27610 Improve
+performance of p2p inv to send queues" in the version 24.1 release
+note. See [5] and [6].
 
-Thanks, Jean-Michel
+[1] https://github.com/bitcoin/bitcoin/tree/v26.0/doc/release-notes
+[2] https://github.com/bitcoin/bitcoin/blob/v26.0/doc/dependencies.md
+[3] https://nvd.nist.gov/vuln/detail/CVE-2023-33297
+[4] https://en.bitcoin.it/wiki/Common_Vulnerabilities_and_Exposures
+[5] https://github.com/bitcoin/bitcoin/blob/v26.0/doc/release-notes/release-notes-24.1.md?plain=1#L45
+[6] https://github.com/bitcoin/bitcoin/pull/27610
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .checkpackageignore                                |  1 -
+ ...001-src-randomenv.cpp-fix-build-on-uclibc.patch | 48 ----------------------
+ ...sing-includes-to-fix-gcc-13-compile-error.patch | 48 ----------------------
+ ...003-refactor-add-most-of-src-util-to-iwyu.patch | 34 ---------------
+ .../bitcoin/0004-src-util-string-h-fix-gcc13.patch | 23 -----------
+ package/bitcoin/Config.in                          | 11 ++---
+ package/bitcoin/bitcoin.hash                       |  8 ++--
+ package/bitcoin/bitcoin.mk                         |  2 +-
+ 8 files changed, 10 insertions(+), 165 deletions(-)
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 5f4928b648..f413e5a497 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -194,7 +194,6 @@ package/berkeleydb/0002-atomic_compare_exchange.patch Upstream
+ package/bind/0001-cross.patch Upstream
+ package/bind/S81named Indent Shellcheck Variables
+ package/bird/0001-configure.ac-fix-build-with-autoconf-2.70.patch Upstream
+-package/bitcoin/0001-src-randomenv.cpp-fix-build-on-uclibc.patch Upstream
+ package/bmx7/0001-Fix-schedule.c-378-36-error-SIOCGSTAMP-undeclared.patch Upstream
+ package/bmx7/0002-Fix-linking-error.patch Upstream
+ package/bmx7/0003-Reorder-includes-to-avoid-ethhdr-collision.patch Upstream
+diff --git a/package/bitcoin/0001-src-randomenv.cpp-fix-build-on-uclibc.patch b/package/bitcoin/0001-src-randomenv.cpp-fix-build-on-uclibc.patch
+deleted file mode 100644
+index 8038a311d3..0000000000
+--- a/package/bitcoin/0001-src-randomenv.cpp-fix-build-on-uclibc.patch
++++ /dev/null
+@@ -1,48 +0,0 @@
+-From 330cb33985d0ce97c20f4a0f0bbda0fbffe098d4 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Mon, 9 Nov 2020 21:18:40 +0100
+-Subject: [PATCH] src/randomenv.cpp: fix build on uclibc
+-
+-Check for HAVE_STRONG_GETAUXVAL or HAVE_WEAK_GETAUXVAL before using
+-getauxval to avoid a build failure on uclibc
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/bitcoin/bitcoin/pull/20358]
+----
+- src/randomenv.cpp | 6 +++---
+- 1 file changed, 3 insertions(+), 3 deletions(-)
+-
+-diff --git a/src/randomenv.cpp b/src/randomenv.cpp
+-index 07122b7f6..5e07c3db4 100644
+---- a/src/randomenv.cpp
+-+++ b/src/randomenv.cpp
+-@@ -53,7 +53,7 @@
+- #include <sys/vmmeter.h>
+- #endif
+- #endif
+--#ifdef __linux__
+-+#if defined(HAVE_STRONG_GETAUXVAL) || defined(HAVE_WEAK_GETAUXVAL)
+- #include <sys/auxv.h>
+- #endif
+- 
+-@@ -326,7 +326,7 @@ void RandAddStaticEnv(CSHA512& hasher)
+-     // Bitcoin client version
+-     hasher << CLIENT_VERSION;
+- 
+--#ifdef __linux__
+-+#if defined(HAVE_STRONG_GETAUXVAL) || defined(HAVE_WEAK_GETAUXVAL)
+-     // Information available through getauxval()
+- #  ifdef AT_HWCAP
+-     hasher << getauxval(AT_HWCAP);
+-@@ -346,7 +346,7 @@ void RandAddStaticEnv(CSHA512& hasher)
+-     const char* exec_str = (const char*)getauxval(AT_EXECFN);
+-     if (exec_str) hasher.Write((const unsigned char*)exec_str, strlen(exec_str) + 1);
+- #  endif
+--#endif // __linux__
+-+#endif // HAVE_STRONG_GETAUXVAL || HAVE_WEAK_GETAUXVAL
+- 
+- #ifdef HAVE_GETCPUID
+-     AddAllCPUID(hasher);
+--- 
+-2.28.0
+-
+diff --git a/package/bitcoin/0002-Add-missing-includes-to-fix-gcc-13-compile-error.patch b/package/bitcoin/0002-Add-missing-includes-to-fix-gcc-13-compile-error.patch
+deleted file mode 100644
+index 22c0ca2adf..0000000000
+--- a/package/bitcoin/0002-Add-missing-includes-to-fix-gcc-13-compile-error.patch
++++ /dev/null
+@@ -1,48 +0,0 @@
+-From 339a95b7537b47e5d6b732c0633a00afd96e3ca0 Mon Sep 17 00:00:00 2001
+-From: MarcoFalke <*~=`'#}+{/-|&$^_@721217.xyz>
+-Date: Thu, 19 Jan 2023 19:35:43 +0100
+-Subject: [PATCH] Add missing includes to fix gcc-13 compile error
+-
+-Upstream: https://github.com/bitcoin/bitcoin/commit/fadeb6b103cb441e0e91ef506ef29febabb10715
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- src/support/lockedpool.cpp | 3 +++
+- src/support/lockedpool.h   | 4 ++--
+- 2 files changed, 5 insertions(+), 2 deletions(-)
+-
+-diff --git a/src/support/lockedpool.cpp b/src/support/lockedpool.cpp
+-index 26de780f2..11131d551 100644
+---- a/src/support/lockedpool.cpp
+-+++ b/src/support/lockedpool.cpp
+-@@ -22,6 +22,9 @@
+- #endif
+- 
+- #include <algorithm>
+-+#include <limits>
+-+#include <stdexcept>
+-+#include <utility>
+- #ifdef ARENA_DEBUG
+- #include <iomanip>
+- #include <iostream>
+-diff --git a/src/support/lockedpool.h b/src/support/lockedpool.h
+-index b9e2e99d1..25b4c0f36 100644
+---- a/src/support/lockedpool.h
+-+++ b/src/support/lockedpool.h
+-@@ -5,11 +5,11 @@
+- #ifndef BITCOIN_SUPPORT_LOCKEDPOOL_H
+- #define BITCOIN_SUPPORT_LOCKEDPOOL_H
+- 
+--#include <stdint.h>
+-+#include <cstddef>
+- #include <list>
+- #include <map>
+--#include <mutex>
+- #include <memory>
+-+#include <mutex>
+- #include <unordered_map>
+- 
+- /**
+--- 
+-2.39.2
+-
+diff --git a/package/bitcoin/0003-refactor-add-most-of-src-util-to-iwyu.patch b/package/bitcoin/0003-refactor-add-most-of-src-util-to-iwyu.patch
+deleted file mode 100644
+index 095fa648dd..0000000000
+--- a/package/bitcoin/0003-refactor-add-most-of-src-util-to-iwyu.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From c187efa907fd64ea2c7b7d699c5c97f9d5b79960 Mon Sep 17 00:00:00 2001
+-From: fanquake <fanquake@gmail.com>
+-Date: Thu, 9 Jun 2022 16:26:55 +0100
+-Subject: [PATCH] refactor: add most of src/util to iwyu
+-
+-These files change infrequently, and not much header shuffling is required.
+-
+-We don't add everything in src/util/ yet, because IWYU makes some
+-dubious suggestions, which I'm going to follow up with upstream.
+-
+-Upstream: https://github.com/bitcoin/bitcoin/commit/07f2c25d04c39a0074e1d9ee1b24b3e359c8153f
+-
+-[Bernd: backported relevant part from upstream commit to version 0.21.2
+-        to fix build error with gcc 13.x]
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- src/util/bip32.h | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/src/util/bip32.h b/src/util/bip32.h
+-index 347e83db9..6ef051c48 100644
+---- a/src/util/bip32.h
+-+++ b/src/util/bip32.h
+-@@ -6,6 +6,7 @@
+- #define BITCOIN_UTIL_BIP32_H
+- 
+- #include <attributes.h>
+-+#include <cstdint>
+- #include <string>
+- #include <vector>
+- 
+--- 
+-2.39.2
+-
+diff --git a/package/bitcoin/0004-src-util-string-h-fix-gcc13.patch b/package/bitcoin/0004-src-util-string-h-fix-gcc13.patch
+deleted file mode 100644
+index 00a9ef2b97..0000000000
+--- a/package/bitcoin/0004-src-util-string-h-fix-gcc13.patch
++++ /dev/null
+@@ -1,23 +0,0 @@
+-From fa2deae2a86417d7e0d4cd33fb933b1000d20313 Mon Sep 17 00:00:00 2001
+-From: MacroFake <falke.marco@gmail.com>
+-Date: Thu, 5 May 2022 08:28:29 +0200
+-Subject: [PATCH] Wrap boost::replace_all
+-
+-Upstream: https://github.com/bitcoin/bitcoin/commit/fa2deae2a86417d7e0d4cd33fb933b1000d20313
+-
+-[Bernd: backported relevant part from upstream commit to version 0.21.2
+-        to fix build error with gcc 13.x]
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+-diff --git a/src/util/string.h b/src/util/string.h
+-index 2e91347b27a10..df20e34ae9aaa 100644
+---- a/src/util/string.h
+-+++ b/src/util/string.h
+-@@ -9,6 +9,7 @@
+- 
+- #include <algorithm>
+- #include <array>
+-+#include <cstdint>
+- #include <cstring>
+- #include <locale>
+- #include <sstream>
+diff --git a/package/bitcoin/Config.in b/package/bitcoin/Config.in
+index a344811d6b..c4a2447fc9 100644
+--- a/package/bitcoin/Config.in
++++ b/package/bitcoin/Config.in
+@@ -11,8 +11,8 @@ config BR2_PACKAGE_BITCOIN
+ 	bool "bitcoin"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-thread, boost-filesystem
+-	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::future
+ 	depends on BR2_PACKAGE_BITCOIN_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
+ 	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_BOOST
+@@ -36,12 +36,9 @@ config BR2_PACKAGE_BITCOIN
+ 
+ 	  https://bitcoincore.org
+ 
+-comment "bitcoin needs a toolchain w/ C++, threads, wchar"
++comment "bitcoin needs a toolchain w/ C++, threads, wchar, gcc >= 9"
+ 	depends on BR2_PACKAGE_BITCOIN_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+-
+-comment "bitcoin needs a toolchain not affected by GCC bug 64735"
+-	depends on BR2_PACKAGE_BITCOIN_ARCH_SUPPORTS
+-	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
++		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_9
+diff --git a/package/bitcoin/bitcoin.hash b/package/bitcoin/bitcoin.hash
+index 643fcbc141..6b3008af86 100644
+--- a/package/bitcoin/bitcoin.hash
++++ b/package/bitcoin/bitcoin.hash
+@@ -1,5 +1,7 @@
+-# From https://bitcoincore.org/bin/bitcoin-core-0.21.2/SHA256SUMS.asc
+-sha256  4146f751fc5691bdcf911cbdb8d32d8d25c297d29d58173227ae1ae6438edb9e  bitcoin-0.21.2.tar.gz
++# Hash from: https://bitcoincore.org/bin/bitcoin-core-26.0/SHA256SUMS
++# After checking pgp signature from:
++# https://bitcoincore.org/bin/bitcoin-core-26.0/SHA256SUMS.asc
++sha256  ab1d99276e28db62d1d9f3901e85ac358d7f1ebcb942d348a9c4e46f0fcdc0a1  bitcoin-26.0.tar.gz
+ 
+ # Hash for license file
+-sha256  96fe807030b21f88305adc32af62f9aa19915f2783509fd6f52aea02cf83f644  COPYING
++sha256  a6331cd1f889397adfc0c3b0535682a20950c6cf8e5c712e9997a15ce98324e1  COPYING
+diff --git a/package/bitcoin/bitcoin.mk b/package/bitcoin/bitcoin.mk
+index 10ae32202c..493c569336 100644
+--- a/package/bitcoin/bitcoin.mk
++++ b/package/bitcoin/bitcoin.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BITCOIN_VERSION = 0.21.2
++BITCOIN_VERSION = 26.0
+ BITCOIN_SITE = https://bitcoincore.org/bin/bitcoin-core-$(BITCOIN_VERSION)
+ BITCOIN_AUTORECONF = YES
+ BITCOIN_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
