@@ -4,90 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90BCCC5475B
-	for <buildroot@archiver.kernel.org>; Mon, 11 Mar 2024 23:12:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DFD2C5475B
+	for <buildroot@archiver.kernel.org>; Mon, 11 Mar 2024 23:12:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 24BA540B7B;
-	Mon, 11 Mar 2024 23:12:41 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2A04340439;
+	Mon, 11 Mar 2024 23:12:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jU3qihAdQLnB; Mon, 11 Mar 2024 23:12:40 +0000 (UTC)
+	with ESMTP id deat-KrKBHYf; Mon, 11 Mar 2024 23:12:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1FB1F40471
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 58BF140B82
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1FB1F40471;
-	Mon, 11 Mar 2024 23:12:40 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BA2B81BF346
- for <buildroot@lists.busybox.net>; Mon, 11 Mar 2024 23:12:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 58BF140B82;
+	Mon, 11 Mar 2024 23:12:42 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3EC491BF346
+ for <buildroot@lists.busybox.net>; Mon, 11 Mar 2024 23:12:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A83F960680
- for <buildroot@lists.busybox.net>; Mon, 11 Mar 2024 23:12:38 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3917A8197D
+ for <buildroot@lists.busybox.net>; Mon, 11 Mar 2024 23:12:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tVrpDASKdOa0 for <buildroot@lists.busybox.net>;
- Mon, 11 Mar 2024 23:12:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zuoNFgs76Vgu for <buildroot@lists.busybox.net>;
+ Mon, 11 Mar 2024 23:12:38 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d2f; helo=mail-io1-xd2f.google.com;
+ client-ip=2607:f8b0:4864:20::134; helo=mail-il1-x134.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org AB8AD605F9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AB8AD605F9
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com
- [IPv6:2607:f8b0:4864:20::d2f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id AB8AD605F9
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 35E41818AC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 35E41818AC
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com
+ [IPv6:2607:f8b0:4864:20::134])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 35E41818AC
  for <buildroot@buildroot.org>; Mon, 11 Mar 2024 23:12:37 +0000 (UTC)
-Received: by mail-io1-xd2f.google.com with SMTP id
- ca18e2360f4ac-7c8c9f02eadso15171639f.0
+Received: by mail-il1-x134.google.com with SMTP id
+ e9e14a558f8ab-3663080b6a4so19360105ab.0
  for <buildroot@buildroot.org>; Mon, 11 Mar 2024 16:12:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20230601; t=1710198756; x=1710803556;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=BaAS5TAnloyHypJu0d8Imfxt/UZe8UhXq+X6/Ka/boo=;
- b=HOYhobMUQRPVB41NYexSEec9uMGP0ZZaCID0F9UDsYEEVK0XyeODwsv6Euih3tebdS
- +aSq6De26E8Nlab2asHApLWjTxGrgyVJG8pOf1jKaK//Ld0F8FS/xICnUTxbOFeIdrWv
- 1RQgEBTGgkapgTRymPRY3TxctHiNjQ4YaQt57r5CktGDBlZWqew20mhZ5GQy7+930LYm
- T3eIjQsS8w3O+T/8onlHZh/tet+gwIrDbOC6I/PqBlRbK/nsK83RFPFHsv7o5hMCEPpv
- ln1HsJwTpgaxtT4ODPGx52F89tO8D6x1kFlARwTfaohscBN5QgAtpagizFeWA9acV+PT
- jdxA==
-X-Gm-Message-State: AOJu0YwNbxGZguAjb/fRS5YuEistVq5VMPd+0hTrdT6aAUT2g1s8oZQl
- kpYcxX+AU/59RXqwM8NX3a9rfy1Sqwv+9+lwI1JGr7tIgl0a5vP1J9wJXy9mifU=
-X-Google-Smtp-Source: AGHT+IEbfPDKLjiEqdGoHff9OaUTOLiEk4z9PKDy5RqxA2HNEZIB6oMCibJSTfPMSRY8NTGbnkb1cw==
-X-Received: by 2002:a05:6602:2153:b0:7c8:a789:7a75 with SMTP id
- y19-20020a056602215300b007c8a7897a75mr5259383ioy.5.1710198755615; 
- Mon, 11 Mar 2024 16:12:35 -0700 (PDT)
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=U3ZYfdn8CRTOC9hnxqOtXCCOI471L6PBJ/y/9aJno1U=;
+ b=DLl7xdkz486jcgPBcvx1rkaqjyQIbxe064BDuksg4LiuHHmny6ZYsieT+p7H/wU+19
+ Lm7QX60u95rKggbNvufyi9KdXnMbMQsM/BZkEDyYfldPFQLxeZssUmSYkGYzPLmUZGg+
+ 6fpBIIOaCA4AfW6n9on60ILAlqYbXgj/2rouIRcbHf7NevcE7cOVZJxf6W2QoSH/a6TH
+ ocGCvONXAzvDswc+H92G8R6sefhKWvPyk6usTyFNXsxDby7TipS2ioiE4a4XwA3NfGVZ
+ B6e53KXpqnwZyE56CaNRPp9pjo862OUDPKAM8/WFswrT4HgNW7Kbv1u2nVvQqtSfg6z6
+ vdTQ==
+X-Gm-Message-State: AOJu0YyAMVhF+krPc3bLOpEdrV7RRYFYdfHuW0pl4kyt4bqX3ll+CabO
+ c1tI8d6Ap8pwC/I+o/DGmX9IZ/J8Fcr6R6Te4bKUK+K6xsV8SxhKq3GW5rQHJ70=
+X-Google-Smtp-Source: AGHT+IF0eB9YIZKmfAkrOzF868Mox8FKxOfkVo1+jHoi5E4iuCAROIYsS4Xd35ifZD2S5X8ninHUZg==
+X-Received: by 2002:a92:ca0a:0:b0:363:d96f:6850 with SMTP id
+ j10-20020a92ca0a000000b00363d96f6850mr10806048ils.12.1710198756255; 
+ Mon, 11 Mar 2024 16:12:36 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-232-75.hlrn.qwest.net.
  [97.118.232.75]) by smtp.gmail.com with ESMTPSA id
- m5-20020a056638260500b00474874acfe1sm1924225jat.172.2024.03.11.16.12.34
+ m5-20020a056638260500b00474874acfe1sm1924225jat.172.2024.03.11.16.12.35
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
  Mon, 11 Mar 2024 16:12:35 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 11 Mar 2024 17:12:30 -0600
-Message-Id: <20240311231231.3188175-1-james.hilliard1@gmail.com>
+Date: Mon, 11 Mar 2024 17:12:31 -0600
+Message-Id: <20240311231231.3188175-2-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240311231231.3188175-1-james.hilliard1@gmail.com>
+References: <20240311231231.3188175-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20230601; t=1710198756; x=1710803556; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=BaAS5TAnloyHypJu0d8Imfxt/UZe8UhXq+X6/Ka/boo=;
- b=eDZ9ca8eNjXxNVrMOb5PThDEYpXyo2ghhy2Mm5qkq3c49T0NP03HazBaWPHJ/hVFOc
- MBcZeYCqYJy7XFaESCAUSY8kc51ROM1qljJdY5swlAhgXoaZItxSqkQ/yqNwOpFtohTg
- evKN48A/9UUGmY19ufbJqLzMFZZDYVNwnnxVx87cCsoHxpQutYzVJ744G9gI1owNi0FH
- KWrDR1PCGLgiwzT1pSC+GbsuAX3FbkvnSHc+BekKY1ao3DBUP6zcrjoRzhpDQsJmqFv/
- DeqiNpOlu4O0VlH+edQkVgr/5X+sSwyLkOgZ1hP9jmU/kmBrAVYGiKMnDhtAokzRL6oC
- Cb3Q==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=U3ZYfdn8CRTOC9hnxqOtXCCOI471L6PBJ/y/9aJno1U=;
+ b=kxqPqEANd55SXGokIahdQ/vaLjJwTeB+RWYtOuQ+gMrZISTmT1O1bgVHAALNf2rfQb
+ haSN4Hn8lJVM3xF9lBbUH19gicZFNVNvsmCo6o/DawdfUtsYflnLxh33kBXeF4zmCZhO
+ jSeXB4DHmz6i0Ue6U/NFtdx5nRXRNyNqc2MVwW4GFvyyKkwxzJDpLSURSz0lSmGtUFvn
+ n6D/9zb8yT6hOKqczzvpjTM4x4HnAnBmRh5WlmjoUtKt+n1ZWNB8emx3fniPtaezx5gD
+ 6ETmir7nPe1MgMH6Vk+4H67iLb3YDsdJjI8yEp3o41QD6GdmemQ2Jp4c3Jt3UAzmyXBp
+ p32g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=eDZ9ca8e
-Subject: [Buildroot] [PATCH 1/2] package/python-email-validator: new package
+ header.a=rsa-sha256 header.s=20230601 header.b=kxqPqEAN
+Subject: [Buildroot] [PATCH 2/2] package/python-fastui: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -109,71 +112,72 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/Config.in                                  |  1 +
- package/python-email-validator/Config.in           |  9 +++++++++
- .../python-email-validator.hash                    |  5 +++++
- .../python-email-validator.mk                      | 14 ++++++++++++++
- 4 files changed, 29 insertions(+)
- create mode 100644 package/python-email-validator/Config.in
- create mode 100644 package/python-email-validator/python-email-validator.hash
- create mode 100644 package/python-email-validator/python-email-validator.mk
+ package/Config.in                        |  1 +
+ package/python-fastui/Config.in          |  9 +++++++++
+ package/python-fastui/python-fastui.hash |  5 +++++
+ package/python-fastui/python-fastui.mk   | 15 +++++++++++++++
+ 4 files changed, 30 insertions(+)
+ create mode 100644 package/python-fastui/Config.in
+ create mode 100644 package/python-fastui/python-fastui.hash
+ create mode 100644 package/python-fastui/python-fastui.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index c677c3ff4a..36a375e696 100644
+index 36a375e696..e9ce8a8f2f 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1078,6 +1078,7 @@ menu "External python modules"
- 	source "package/python-dpkt/Config.in"
- 	source "package/python-dtschema/Config.in"
- 	source "package/python-ecdsa/Config.in"
-+	source "package/python-email-validator/Config.in"
- 	source "package/python-engineio/Config.in"
- 	source "package/python-entrypoints/Config.in"
- 	source "package/python-esptool/Config.in"
-diff --git a/package/python-email-validator/Config.in b/package/python-email-validator/Config.in
+@@ -1087,6 +1087,7 @@ menu "External python modules"
+ 	source "package/python-falcon/Config.in"
+ 	source "package/python-fastapi/Config.in"
+ 	source "package/python-fastapi-sessions/Config.in"
++	source "package/python-fastui/Config.in"
+ 	source "package/python-filelock/Config.in"
+ 	source "package/python-fire/Config.in"
+ 	source "package/python-flask/Config.in"
+diff --git a/package/python-fastui/Config.in b/package/python-fastui/Config.in
 new file mode 100644
-index 0000000000..3b1ffc905c
+index 0000000000..9b73544dab
 --- /dev/null
-+++ b/package/python-email-validator/Config.in
++++ b/package/python-fastui/Config.in
 @@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_EMAIL_VALIDATOR
-+	bool "python-email-validator"
-+	select BR2_PACKAGE_PYTHON_DNSPYTHON # runtime
-+	select BR2_PACKAGE_PYTHON_IDNA # runtime
++config BR2_PACKAGE_PYTHON_FASTUI
++	bool "python-fastui"
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-pydantic -> python-pydantic-core
++	select BR2_PACKAGE_PYTHON_EMAIL_VALIDATOR # runtime
++	select BR2_PACKAGE_PYTHON_PYDANTIC # runtime
 +	help
-+	  A robust email address syntax and deliverability validation
-+	  library.
++	  Build better UIs faster.
 +
-+	  https://github.com/JoshData/python-email-validator
-diff --git a/package/python-email-validator/python-email-validator.hash b/package/python-email-validator/python-email-validator.hash
++	  https://github.com/pydantic/FastUI
+diff --git a/package/python-fastui/python-fastui.hash b/package/python-fastui/python-fastui.hash
 new file mode 100644
-index 0000000000..4342f8d91b
+index 0000000000..50f49824e0
 --- /dev/null
-+++ b/package/python-email-validator/python-email-validator.hash
++++ b/package/python-fastui/python-fastui.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/email-validator/json
-+md5  a836759afeb7efdc5d493fbdf8a1bae6  email_validator-2.1.1.tar.gz
-+sha256  200a70680ba08904be6d1eef729205cc0d687634399a5924d842533efb824b84  email_validator-2.1.1.tar.gz
++# md5, sha256 from https://pypi.org/pypi/fastui/json
++md5  c8e7d060c0ad3a7ad1237dac3555b83e  fastui-0.5.2.tar.gz
++sha256  854a7a7fce4c08efd9caff1a331d222007b3708b133d996528e3f40996c96091  fastui-0.5.2.tar.gz
 +# Locally computed sha256 checksums
-+sha256  672179752e109134a3fb2bdd0780b29fdb7a03974f0f586a13aead5129562d4c  LICENSE
-diff --git a/package/python-email-validator/python-email-validator.mk b/package/python-email-validator/python-email-validator.mk
++sha256  1c39900853b2c98a5c98e1acc10e54ef06ba2693cdf85e8b28e3ede658888d79  LICENSE
+diff --git a/package/python-fastui/python-fastui.mk b/package/python-fastui/python-fastui.mk
 new file mode 100644
-index 0000000000..8d82eb092f
+index 0000000000..e143c9978c
 --- /dev/null
-+++ b/package/python-email-validator/python-email-validator.mk
-@@ -0,0 +1,14 @@
++++ b/package/python-fastui/python-fastui.mk
+@@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# python-email-validator
++# python-fastui
 +#
 +################################################################################
 +
-+PYTHON_EMAIL_VALIDATOR_VERSION = 2.1.1
-+PYTHON_EMAIL_VALIDATOR_SOURCE = email_validator-$(PYTHON_EMAIL_VALIDATOR_VERSION).tar.gz
-+PYTHON_EMAIL_VALIDATOR_SITE = https://files.pythonhosted.org/packages/63/82/2914bff80ebee8c027802a664ad4b4caad502cd594e358f76aff395b5e56
-+PYTHON_EMAIL_VALIDATOR_SETUP_TYPE = setuptools
-+PYTHON_EMAIL_VALIDATOR_LICENSE = Unlicense
-+PYTHON_EMAIL_VALIDATOR_LICENSE_FILES = LICENSE
++PYTHON_FASTUI_VERSION = 0.5.2
++PYTHON_FASTUI_SOURCE = fastui-$(PYTHON_FASTUI_VERSION).tar.gz
++PYTHON_FASTUI_SITE = https://files.pythonhosted.org/packages/64/11/515c9b5cb6e885f4ba8c325f75b95a754d99b8296bdc9f134dc90a79019f
++PYTHON_FASTUI_SETUP_TYPE = pep517
++PYTHON_FASTUI_LICENSE = MIT
++PYTHON_FASTUI_LICENSE_FILES = LICENSE
++PYTHON_FASTUI_DEPENDENCIES = host-python-hatchling
 +
 +$(eval $(python-package))
 -- 
