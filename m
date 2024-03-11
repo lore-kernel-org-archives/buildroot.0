@@ -1,70 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 161ACC54E58
-	for <buildroot@archiver.kernel.org>; Mon, 11 Mar 2024 08:16:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F4BCC54E58
+	for <buildroot@archiver.kernel.org>; Mon, 11 Mar 2024 10:59:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7724D405D4;
-	Mon, 11 Mar 2024 08:16:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A4B7F60611;
+	Mon, 11 Mar 2024 10:59:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VimtirnHZVLT; Mon, 11 Mar 2024 08:16:15 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id I2b2Bv0rse_k; Mon, 11 Mar 2024 10:59:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 036E7405E0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AB38560726
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 036E7405E0;
-	Mon, 11 Mar 2024 08:16:15 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0EAA41BF2F6
- for <buildroot@lists.busybox.net>; Mon, 11 Mar 2024 08:16:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AB38560726;
+	Mon, 11 Mar 2024 10:59:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 467181BF284
+ for <buildroot@lists.busybox.net>; Mon, 11 Mar 2024 10:59:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 07E0E405D4
- for <buildroot@lists.busybox.net>; Mon, 11 Mar 2024 08:16:13 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 31EB881D24
+ for <buildroot@lists.busybox.net>; Mon, 11 Mar 2024 10:59:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ATk28wvKnS3I for <buildroot@lists.busybox.net>;
- Mon, 11 Mar 2024 08:16:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id O7HWHLMyta3F for <buildroot@lists.busybox.net>;
+ Mon, 11 Mar 2024 10:59:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=bugzilla@busybox.net;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A8A5E40620
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6BA7E81D18
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A8A5E40620
- for <buildroot@uclibc.org>; Mon, 11 Mar 2024 08:16:11 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6BA7E81D18
+ for <buildroot@uclibc.org>; Mon, 11 Mar 2024 10:59:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 9FB2D87F7E; Mon, 11 Mar 2024 08:16:11 +0000 (UTC)
+ id 5766C8811A; Mon, 11 Mar 2024 10:59:17 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Mon, 11 Mar 2024 08:16:11 +0000
+Date: Mon, 11 Mar 2024 10:59:17 +0000
 X-Bugzilla-Reason: CC
-X-Bugzilla-Type: new
+X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
 X-Bugzilla-Version: 2024.02
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: buildroot@heine.tech
+X-Bugzilla-Who: ps.report@gmx.net
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter cc
- target_milestone
-Message-ID: <bug-15979-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-15979-163-jexUABLZJF@https.bugs.busybox.net/>
+In-Reply-To: <bug-15979-163@https.bugs.busybox.net/>
+References: <bug-15979-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15979] New: wpewebkit build failing (for ARM
- A15/NEON)
+Subject: [Buildroot] [Bug 15979] wpewebkit build failing (for ARM A15/NEON)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,114 +75,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-aHR0cHM6Ly9idWdzLmJ1c3lib3gubmV0L3Nob3dfYnVnLmNnaT9pZD0xNTk3OQoKICAgICAgICAg
-ICAgQnVnIElEOiAxNTk3OQogICAgICAgICAgIFN1bW1hcnk6IHdwZXdlYmtpdCBidWlsZCBmYWls
-aW5nIChmb3IgQVJNIEExNS9ORU9OKQogICAgICAgICAgIFByb2R1Y3Q6IGJ1aWxkcm9vdAogICAg
-ICAgICAgIFZlcnNpb246IDIwMjQuMDIKICAgICAgICAgIEhhcmR3YXJlOiBBbGwKICAgICAgICAg
-ICAgICAgIE9TOiBMaW51eAogICAgICAgICAgICBTdGF0dXM6IE5FVwogICAgICAgICAgU2V2ZXJp
-dHk6IG5vcm1hbAogICAgICAgICAgUHJpb3JpdHk6IFA1CiAgICAgICAgIENvbXBvbmVudDogT3Ro
-ZXIKICAgICAgICAgIEFzc2lnbmVlOiB1bmFzc2lnbmVkQGJ1aWxkcm9vdC51Y2xpYmMub3JnCiAg
-ICAgICAgICBSZXBvcnRlcjogYnVpbGRyb290QGhlaW5lLnRlY2gKICAgICAgICAgICAgICAgIEND
-OiBidWlsZHJvb3RAdWNsaWJjLm9yZwogIFRhcmdldCBNaWxlc3RvbmU6IC0tLQoKU2luY2UgYnVt
-cGluZyB0byAyMDI0LjAyIHRoZSBidWlsZCBmb3Igd3Bld2Via2l0IGlzIGZhaWxpbmcuIExhc3Qg
-QlIgdmVyc2lvbiBJCndvcmtlZCB3aXRoIHdhcyAyMDIzLjA4LjMgKHdoZXJlIGl0IHdvcmtlZCkg
-c28gSSBjYW4ndCB0ZWxsIGFib3V0IHRoZSBvbmVzIGluCmJldHdlZW4uCgoKWzQvNTk5NF0gQnVp
-bGRpbmcgQ1hYIG9iamVjdCBTb3VyY2UvV1RGL3d0Zi9DTWFrZUZpbGVzL1dURi5kaXIvRmFzdE1h
-bGxvYy5jcHAubwovaG9tZS9idWlsZC9idWlsZHJvb3QtdXBzdHJlYW0vb3V0cHV0L2J1aWxkL3dw
-ZXdlYmtpdC0yLjQyLjUvU291cmNlL1dURi93dGYvRmFzdE1hbGxvYy5jcHA6CkluIGZ1bmN0aW9u
-IOKAmHZvaWQqIFdURjo6ZmFzdEFsaWduZWRNYWxsb2Moc2l6ZV90LCBzaXplX3Qp4oCZOgovaG9t
-ZS9idWlsZC9idWlsZHJvb3QtdXBzdHJlYW0vb3V0cHV0L2J1aWxkL3dwZXdlYmtpdC0yLjQyLjUv
-U291cmNlL1dURi93dGYvRmFzdE1hbGxvYy5jcHA6MTkyOjE5Ogp3YXJuaW5nOiBpZ25vcmluZyBy
-ZXR1cm4gdmFsdWUgb2Yg4oCYaW50IHBvc2l4X21lbWFsaWduKHZvaWQqKiwgc2l6ZV90LCBzaXpl
-X3Qp4oCZCmRlY2xhcmVkIHdpdGggYXR0cmlidXRlIOKAmHdhcm5fdW51c2VkX3Jlc3VsdOKAmSBb
-LVd1bnVzZWQtcmVzdWx0XQogIDE5MiB8ICAgICBwb3NpeF9tZW1hbGlnbigmcCwgYWxpZ25tZW50
-LCBzaXplKTsKICAgICAgfCAgICAgfn5+fn5+fn5+fn5+fn5efn5+fn5+fn5+fn5+fn5+fn5+fn4K
-L2hvbWUvYnVpbGQvYnVpbGRyb290LXVwc3RyZWFtL291dHB1dC9idWlsZC93cGV3ZWJraXQtMi40
-Mi41L1NvdXJjZS9XVEYvd3RmL0Zhc3RNYWxsb2MuY3BwOgpJbiBmdW5jdGlvbiDigJh2b2lkKiBX
-VEY6OnRyeUZhc3RBbGlnbmVkTWFsbG9jKHNpemVfdCwgc2l6ZV90KeKAmToKL2hvbWUvYnVpbGQv
-YnVpbGRyb290LXVwc3RyZWFtL291dHB1dC9idWlsZC93cGV3ZWJraXQtMi40Mi41L1NvdXJjZS9X
-VEYvd3RmL0Zhc3RNYWxsb2MuY3BwOjIwMjoxOToKd2FybmluZzogaWdub3JpbmcgcmV0dXJuIHZh
-bHVlIG9mIOKAmGludCBwb3NpeF9tZW1hbGlnbih2b2lkKiosIHNpemVfdCwgc2l6ZV90KeKAmQpk
-ZWNsYXJlZCB3aXRoIGF0dHJpYnV0ZSDigJh3YXJuX3VudXNlZF9yZXN1bHTigJkgWy1XdW51c2Vk
-LXJlc3VsdF0KICAyMDIgfCAgICAgcG9zaXhfbWVtYWxpZ24oJnAsIGFsaWdubWVudCwgc2l6ZSk7
-CiAgICAgIHwgICAgIH5+fn5+fn5+fn5+fn5+Xn5+fn5+fn5+fn5+fn5+fn5+fn5+Cls5NjMvNTk5
-NF0gR2VuZXJhdGluZyAuLi8uLi9XZWJDb3JlL0Rlcml2ZWRTb3VyY2VzL1NldHRpbmdzLmgsCi4u
-Ly4uL1dlYkNvcmUvRGVyaXZlZFNvdXJjZXMvU2V0dGluZ3MuY3BwLAouLi8uLi9XZWJDb3JlL0Rl
-cml2ZWRTb3VyY2UuLi5nc0dlbmVyYXRlZC5oLAouLi8uLi9XZWJDb3JlL0Rlcml2ZWRTb3VyY2Vz
-L0ludGVybmFsU2V0dGluZ3NHZW5lcmF0ZWQuY3BwLAouLi8uLi9XZWJDb3JlL0Rlcml2ZWRTb3Vy
-Y2VzL0ludGVybmFsU2V0dGluZ3NHZW5lcmF0ZWQuaWRsCkZBSUxFRDogV2ViQ29yZS9EZXJpdmVk
-U291cmNlcy9TZXR0aW5ncy5oIFdlYkNvcmUvRGVyaXZlZFNvdXJjZXMvU2V0dGluZ3MuY3BwCldl
-YkNvcmUvRGVyaXZlZFNvdXJjZXMvSW50ZXJuYWxTZXR0aW5nc0dlbmVyYXRlZC5oCldlYkNvcmUv
-RGVyaXZlZFNvdXJjZXMvSW50ZXJuYWxTZXR0aW5nc0dlbmVyYXRlZC5jcHAKV2ViQ29yZS9EZXJp
-dmVkU291cmNlcy9JbnRlcm5hbFNldHRpbmdzR2VuZXJhdGVkLmlkbAovaG9tZS9idWlsZC9idWls
-ZHJvb3QtdXBzdHJlYW0vb3V0cHV0L2J1aWxkL3dwZXdlYmtpdC0yLjQyLjUvV2ViQ29yZS9EZXJp
-dmVkU291cmNlcy9TZXR0aW5ncy5oCi9ob21lL2J1aWxkL2J1aWxkcm9vdC11cHN0cmVhbS9vdXRw
-dXQvYnVpbGQvd3Bld2Via2l0LTIuNDIuNS9XZWJDb3JlL0Rlcml2ZWRTb3VyY2VzL1NldHRpbmdz
-LmNwcAovaG9tZS9idWlsZC9idWlsZHJvb3QtdXBzdHJlYW0vb3V0cHV0L2J1aWxkL3dwZXdlYmtp
-dC0yLjQyLjUvV2ViQ29yZS9EZXJpdmVkU291cmNlcy9JbnRlcm5hbFNldHRpbmdzR2VuZXJhdGVk
-LmgKL2hvbWUvYnVpbGQvYnVpbGRyb290LXVwc3RyZWFtL291dHB1dC9idWlsZC93cGV3ZWJraXQt
-Mi40Mi41L1dlYkNvcmUvRGVyaXZlZFNvdXJjZXMvSW50ZXJuYWxTZXR0aW5nc0dlbmVyYXRlZC5j
-cHAKL2hvbWUvYnVpbGQvYnVpbGRyb290LXVwc3RyZWFtL291dHB1dC9idWlsZC93cGV3ZWJraXQt
-Mi40Mi41L1dlYkNvcmUvRGVyaXZlZFNvdXJjZXMvSW50ZXJuYWxTZXR0aW5nc0dlbmVyYXRlZC5p
-ZGwKY2QgL2hvbWUvYnVpbGQvYnVpbGRyb290LXVwc3RyZWFtL291dHB1dC9idWlsZC93cGV3ZWJr
-aXQtMi40Mi41L1NvdXJjZS9XZWJDb3JlCiYmIC9ob21lL2J1aWxkL2J1aWxkcm9vdC11cHN0cmVh
-bS9vdXRwdXQvaG9zdC9iaW4vcnVieQovaG9tZS9idWlsZC9idWlsZHJvb3QtdXBzdHJlYW0vb3V0
-cHV0L2J1aWxkL3dwZXdlYmtpdC0yLjQyLjUvU291cmNlL1dlYkNvcmUvU2NyaXB0cy9HZW5lcmF0
-ZVNldHRpbmdzLnJiCi0tb3V0cHV0RGlyCi9ob21lL2J1aWxkL2J1aWxkcm9vdC11cHN0cmVhbS9v
-dXRwdXQvYnVpbGQvd3Bld2Via2l0LTIuNDIuNS9XZWJDb3JlL0Rlcml2ZWRTb3VyY2VzCi0tdGVt
-cGxhdGUKL2hvbWUvYnVpbGQvYnVpbGRyb290LXVwc3RyZWFtL291dHB1dC9idWlsZC93cGV3ZWJr
-aXQtMi40Mi41L1NvdXJjZS9XZWJDb3JlL1NjcmlwdHMvU2V0dGluZ3NUZW1wbGF0ZXMvSW50ZXJu
-YWxTZXR0aW5nc0dlbmVyYXRlZC5jcHAuZXJiCi0tdGVtcGxhdGUKL2hvbWUvYnVpbGQvYnVpbGRy
-b290LXVwc3RyZWFtL291dHB1dC9idWlsZC93cGV3ZWJraXQtMi40Mi41L1NvdXJjZS9XZWJDb3Jl
-L1NjcmlwdHMvU2V0dGluZ3NUZW1wbGF0ZXMvSW50ZXJuYWxTZXR0aW5nc0dlbmVyYXRlZC5pZGwu
-ZXJiCi0tdGVtcGxhdGUKL2hvbWUvYnVpbGQvYnVpbGRyb290LXVwc3RyZWFtL291dHB1dC9idWls
-ZC93cGV3ZWJraXQtMi40Mi41L1NvdXJjZS9XZWJDb3JlL1NjcmlwdHMvU2V0dGluZ3NUZW1wbGF0
-ZXMvSW50ZXJuYWxTZXR0aW5nc0dlbmVyYXRlZC5oLmVyYgotLXRlbXBsYXRlCi9ob21lL2J1aWxk
-L2J1aWxkcm9vdC11cHN0cmVhbS9vdXRwdXQvYnVpbGQvd3Bld2Via2l0LTIuNDIuNS9Tb3VyY2Uv
-V2ViQ29yZS9TY3JpcHRzL1NldHRpbmdzVGVtcGxhdGVzL1NldHRpbmdzLmNwcC5lcmIKLS10ZW1w
-bGF0ZQovaG9tZS9idWlsZC9idWlsZHJvb3QtdXBzdHJlYW0vb3V0cHV0L2J1aWxkL3dwZXdlYmtp
-dC0yLjQyLjUvU291cmNlL1dlYkNvcmUvU2NyaXB0cy9TZXR0aW5nc1RlbXBsYXRlcy9TZXR0aW5n
-cy5oLmVyYgovaG9tZS9idWlsZC9idWlsZHJvb3QtdXBzdHJlYW0vb3V0cHV0L2J1aWxkL3dwZXdl
-YmtpdC0yLjQyLjUvV1RGL1NjcmlwdHMvUHJlZmVyZW5jZXMvVW5pZmllZFdlYlByZWZlcmVuY2Vz
-LnlhbWwKL2hvbWUvYnVpbGQvYnVpbGRyb290LXVwc3RyZWFtL291dHB1dC9idWlsZC93cGV3ZWJr
-aXQtMi40Mi41L1NvdXJjZS9XZWJDb3JlL3BhZ2UvU2V0dGluZ3MueWFtbAovaG9tZS9idWlsZC9i
-dWlsZHJvb3QtdXBzdHJlYW0vb3V0cHV0L2hvc3QvbGliL3J1YnkvMy4zLjAveWFtbC5yYjozOiB3
-YXJuaW5nOgpJdCBzZWVtcyB5b3VyIHJ1YnkgaW5zdGFsbGF0aW9uIGlzIG1pc3NpbmcgcHN5Y2gg
-KGZvciBZQU1MIG91dHB1dCkuClRvIGVsaW1pbmF0ZSB0aGlzIHdhcm5pbmcsIHBsZWFzZSBpbnN0
-YWxsIGxpYnlhbWwgYW5kIHJlaW5zdGFsbCB5b3VyIHJ1YnkuCjxpbnRlcm5hbDovaG9tZS9idWls
-ZC9idWlsZHJvb3QtdXBzdHJlYW0vb3V0cHV0L2hvc3QvbGliL3J1YnkvMy4zLjAvcnVieWdlbXMv
-Y29yZV9leHQva2VybmVsX3JlcXVpcmUucmI+OjEyNzppbgpgcmVxdWlyZSc6IGNhbm5vdCBsb2Fk
-IHN1Y2ggZmlsZSAtLSBwc3ljaCAoTG9hZEVycm9yKQogICAgICAgIGZyb20KPGludGVybmFsOi9o
-b21lL2J1aWxkL2J1aWxkcm9vdC11cHN0cmVhbS9vdXRwdXQvaG9zdC9saWIvcnVieS8zLjMuMC9y
-dWJ5Z2Vtcy9jb3JlX2V4dC9rZXJuZWxfcmVxdWlyZS5yYj46MTI3OmluCmByZXF1aXJlJwogICAg
-ICAgIGZyb20KL2hvbWUvYnVpbGQvYnVpbGRyb290LXVwc3RyZWFtL291dHB1dC9ob3N0L2xpYi9y
-dWJ5LzMuMy4wL3lhbWwucmI6NDppbiBgPHRvcAoocmVxdWlyZWQpPicKICAgICAgICBmcm9tCjxp
-bnRlcm5hbDovaG9tZS9idWlsZC9idWlsZHJvb3QtdXBzdHJlYW0vb3V0cHV0L2hvc3QvbGliL3J1
-YnkvMy4zLjAvcnVieWdlbXMvY29yZV9leHQva2VybmVsX3JlcXVpcmUucmI+OjEyNzppbgpgcmVx
-dWlyZScKICAgICAgICBmcm9tCjxpbnRlcm5hbDovaG9tZS9idWlsZC9idWlsZHJvb3QtdXBzdHJl
-YW0vb3V0cHV0L2hvc3QvbGliL3J1YnkvMy4zLjAvcnVieWdlbXMvY29yZV9leHQva2VybmVsX3Jl
-cXVpcmUucmI+OjEyNzppbgpgcmVxdWlyZScKICAgICAgICBmcm9tCi9ob21lL2J1aWxkL2J1aWxk
-cm9vdC11cHN0cmVhbS9vdXRwdXQvYnVpbGQvd3Bld2Via2l0LTIuNDIuNS9Tb3VyY2UvV2ViQ29y
-ZS9TY3JpcHRzL0dlbmVyYXRlU2V0dGluZ3MucmI6Mjk6aW4KYDxtYWluPicKWzk4Ny81OTk0XSBH
-ZW5lcmF0aW5nIC4uLy4uL0phdmFTY3JpcHRDb3JlL0Rlcml2ZWRTb3VyY2VzL0xMSW50RGVzaXJl
-ZE9mZnNldHMuaApuaW5qYTogYnVpbGQgc3RvcHBlZDogc3ViY29tbWFuZCBmYWlsZWQuCm1ha2U6
-ICoqKiBbcGFja2FnZS9wa2ctZ2VuZXJpYy5tazoyODM6Ci9ob21lL2J1aWxkL2J1aWxkcm9vdC11
-cHN0cmVhbS9vdXRwdXQvYnVpbGQvd3Bld2Via2l0LTIuNDIuNS8uc3RhbXBfYnVpbHRdCkVycm9y
-IDEKClRvIG1lIHRoaXMgbG9va3MgbGlrZSBhIG1pc3NpbmcgZGVwZW5kZW5jeS4gSSB0cmllZCBh
-ZGRpbmcgYSBkZXBlbmRlbmN5IG9uCmhvc3QtbGlieWFtbCBmb3Igd3Bld2Via2l0IGJ1dCBpdCBk
-aWRuJ3QgaGVscC4gQW55IElkZWFzPwoKRGVmY29uZmlnIHRvIHJlcHJvZHVjZToKCkJSMl9hcm09
-eQpCUjJfY29ydGV4X2ExNV9hNz15CkJSMl9BUk1fRlBVX05FT05fVkZQVjQ9eQpCUjJfVE9PTENI
-QUlOX0VYVEVSTkFMPXkKQlIyX0lOSVRfU1lTVEVNRD15CkJSMl9MSU5VWF9LRVJORUw9eQpCUjJf
-TElOVVhfS0VSTkVMX0RFRkNPTkZJRz0ibXVsdGlfdjdfZGVmY29uZmlnIgpCUjJfUEFDS0FHRV9N
-RVNBM0Q9eQpCUjJfUEFDS0FHRV9NRVNBM0RfR0FMTElVTV9EUklWRVJfTk9VVkVBVT15CkJSMl9Q
-QUNLQUdFX01FU0EzRF9PUEVOR0xfRUdMPXkKQlIyX1BBQ0tBR0VfTUVTQTNEX09QRU5HTF9FUz15
-CkJSMl9QQUNLQUdFX1dQRVdFQktJVD15CgotLSAKWW91IGFyZSByZWNlaXZpbmcgdGhpcyBtYWls
-IGJlY2F1c2U6CllvdSBhcmUgb24gdGhlIENDIGxpc3QgZm9yIHRoZSBidWcuCl9fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxp
-c3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21h
-aWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+https://bugs.busybox.net/show_bug.cgi?id=15979
+
+--- Comment #1 from Peter Seiderer <ps.report@gmx.net> ---
+You need to add the host-libyaml dependency to host-ruby (instead of wpewebkit)
+and re-build host-ruby:
+
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -20,7 +20,7 @@ RUBY_LICENSE_FILES = LEGAL COPYING BSDL
+ RUBY_CPE_ID_VENDOR = ruby-lang
+
+ RUBY_DEPENDENCIES = host-pkgconf host-ruby
+-HOST_RUBY_DEPENDENCIES = host-pkgconf host-openssl
++HOST_RUBY_DEPENDENCIES = host-pkgconf host-openssl host-libyaml
+ RUBY_MAKE_ENV = $(TARGET_MAKE_ENV)
+ RUBY_CONF_OPTS = \
+        --disable-install-doc \
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
