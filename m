@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F4BCC54E58
-	for <buildroot@archiver.kernel.org>; Mon, 11 Mar 2024 10:59:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D55AC54E58
+	for <buildroot@archiver.kernel.org>; Tue, 12 Mar 2024 08:55:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A4B7F60611;
-	Mon, 11 Mar 2024 10:59:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 183EA605B5;
+	Tue, 12 Mar 2024 08:55:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id I2b2Bv0rse_k; Mon, 11 Mar 2024 10:59:19 +0000 (UTC)
+	with ESMTP id 4CWZjCdFKIaE; Tue, 12 Mar 2024 08:55:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AB38560726
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 464E460603
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AB38560726;
-	Mon, 11 Mar 2024 10:59:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 464E460603;
+	Tue, 12 Mar 2024 08:55:21 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 467181BF284
- for <buildroot@lists.busybox.net>; Mon, 11 Mar 2024 10:59:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A830A1BF39E
+ for <buildroot@lists.busybox.net>; Tue, 12 Mar 2024 08:55:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 31EB881D24
- for <buildroot@lists.busybox.net>; Mon, 11 Mar 2024 10:59:18 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A250C80D18
+ for <buildroot@lists.busybox.net>; Tue, 12 Mar 2024 08:55:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id O7HWHLMyta3F for <buildroot@lists.busybox.net>;
- Mon, 11 Mar 2024 10:59:17 +0000 (UTC)
+ with ESMTP id FX-07FLCq5S2 for <buildroot@lists.busybox.net>;
+ Tue, 12 Mar 2024 08:55:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=bugzilla@busybox.net;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6BA7E81D18
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD9C480CC8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6BA7E81D18
- for <buildroot@uclibc.org>; Mon, 11 Mar 2024 10:59:17 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id DD9C480CC8
+ for <buildroot@uclibc.org>; Tue, 12 Mar 2024 08:55:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 5766C8811A; Mon, 11 Mar 2024 10:59:17 +0000 (UTC)
+ id D323D880AA; Tue, 12 Mar 2024 08:55:18 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Mon, 11 Mar 2024 10:59:17 +0000
+Date: Tue, 12 Mar 2024 08:55:18 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -49,7 +49,7 @@ X-Bugzilla-Component: Other
 X-Bugzilla-Version: 2024.02
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: ps.report@gmx.net
+X-Bugzilla-Who: buildroot@heine.tech
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
@@ -57,7 +57,7 @@ X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-15979-163-jexUABLZJF@https.bugs.busybox.net/>
+Message-ID: <bug-15979-163-6XTDPvvcG3@https.bugs.busybox.net/>
 In-Reply-To: <bug-15979-163@https.bugs.busybox.net/>
 References: <bug-15979-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -82,21 +82,16 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=15979
 
---- Comment #1 from Peter Seiderer <ps.report@gmx.net> ---
-You need to add the host-libyaml dependency to host-ruby (instead of wpewebkit)
-and re-build host-ruby:
+--- Comment #2 from Michael Nosthoff <buildroot@heine.tech> ---
+Thanks Peter! That fixes the build for me.
 
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -20,7 +20,7 @@ RUBY_LICENSE_FILES = LEGAL COPYING BSDL
- RUBY_CPE_ID_VENDOR = ruby-lang
+But would this approach be feasible to fix this? Or should we do something like 
 
- RUBY_DEPENDENCIES = host-pkgconf host-ruby
--HOST_RUBY_DEPENDENCIES = host-pkgconf host-openssl
-+HOST_RUBY_DEPENDENCIES = host-pkgconf host-openssl host-libyaml
- RUBY_MAKE_ENV = $(TARGET_MAKE_ENV)
- RUBY_CONF_OPTS = \
-        --disable-install-doc \
+ifeq ($(BR2_PACKAGE_HOST_LIBYAML),y)
+HOST_RUBY_DEPENDENCIES += host-libyaml
+endif
+
+in the ruby.mk and then depend on host-libyaml in the wpewebkit.mk?
 
 -- 
 You are receiving this mail because:
