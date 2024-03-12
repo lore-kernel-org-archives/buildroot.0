@@ -4,97 +4,96 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FB4EC54E5D
-	for <buildroot@archiver.kernel.org>; Tue, 12 Mar 2024 19:32:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55891C54E5D
+	for <buildroot@archiver.kernel.org>; Tue, 12 Mar 2024 19:35:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A7FA560748;
-	Tue, 12 Mar 2024 19:32:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EDB2B605CB;
+	Tue, 12 Mar 2024 19:35:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gEUUGTX4i-pq; Tue, 12 Mar 2024 19:32:10 +0000 (UTC)
+	with ESMTP id gSLP9_u9EWWd; Tue, 12 Mar 2024 19:35:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BDFBC608F0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1810C60748
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BDFBC608F0;
-	Tue, 12 Mar 2024 19:32:10 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3359E1BF32D
- for <buildroot@lists.busybox.net>; Tue, 12 Mar 2024 19:32:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1810C60748;
+	Tue, 12 Mar 2024 19:35:45 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7DFCB1BF32D
+ for <buildroot@lists.busybox.net>; Tue, 12 Mar 2024 19:35:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2D89381E52
- for <buildroot@lists.busybox.net>; Tue, 12 Mar 2024 19:32:09 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6A4B640654
+ for <buildroot@lists.busybox.net>; Tue, 12 Mar 2024 19:35:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LPvsOR_Akogc for <buildroot@lists.busybox.net>;
- Tue, 12 Mar 2024 19:32:08 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id idCOd61IA6uc for <buildroot@lists.busybox.net>;
+ Tue, 12 Mar 2024 19:35:42 +0000 (UTC)
 Received-SPF: None (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d30; helo=mail-io1-xd30.google.com;
+ client-ip=2607:f8b0:4864:20::12b; helo=mail-il1-x12b.google.com;
  envelope-from=jeremy@jeremypeper.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4344E81E50
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4344E81E50
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com
- [IPv6:2607:f8b0:4864:20::d30])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4344E81E50
- for <buildroot@buildroot.org>; Tue, 12 Mar 2024 19:32:07 +0000 (UTC)
-Received: by mail-io1-xd30.google.com with SMTP id
- ca18e2360f4ac-7c8b8618457so8597639f.3
- for <buildroot@buildroot.org>; Tue, 12 Mar 2024 12:32:07 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6F7D140562
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F7D140562
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com
+ [IPv6:2607:f8b0:4864:20::12b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6F7D140562
+ for <buildroot@buildroot.org>; Tue, 12 Mar 2024 19:35:42 +0000 (UTC)
+Received: by mail-il1-x12b.google.com with SMTP id
+ e9e14a558f8ab-3663080b6a4so24435915ab.0
+ for <buildroot@buildroot.org>; Tue, 12 Mar 2024 12:35:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1710271926; x=1710876726;
+ d=1e100.net; s=20230601; t=1710272141; x=1710876941;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=7zO+/T6QsbEgGknGu44kcR9HoofMf3ULRPIExXFBDmg=;
- b=a1Wuf2azgye+QFNpqNnyI/4cnWlBTl3CSNyWt9c9FWQiA5VCHTNN0AhbUgRxmprDPi
- kSMwwbbVlzGmEaZmKSvsDaP0wrPT2hjtS+8MJSH0fN6e4dsSRbnZQLP4MoSIAfu4f7ah
- WoBCzEn33CjKwqgHQr5F2eOEDZkEffH4pK/cWHfLoMEBc9VwbK90H3mIGLUGFBmsIdxD
- ScmnuG+hy6SakRVIsGfVh7AoDRocg8XFRGX+t+Z5WrEgdx+Q5oXvPMnONALvtd2IHUpV
- u280BT4Vj+E0thQNxt9lUYP/skAsQ5kLyDznTj3ILDJy1XIeRTo4TAZwMut/OGyH/Mzb
- Sxug==
-X-Gm-Message-State: AOJu0YyQbP/3pehYfviY7HFg1Seqp5Kt9KBcBQziZFIF4Uk9IxqU5i9C
- F8hBC5eo8vKQTSbM8JB2/qP/4sqpP/gYx7Vm8Cd/DZ9q0iH3YL028xCHmxTVkN7leE92NxgwhO1
- c1A==
-X-Google-Smtp-Source: AGHT+IEFro944aFGLwdOL+QnnJw4cvP6PxAVt00RCIrTkJufU2Przer7rex+MtYkH4yq+G1MbyTZgQ==
-X-Received: by 2002:a05:6602:f12:b0:7c8:41c7:6ac5 with SMTP id
- hl18-20020a0566020f1200b007c841c76ac5mr1523195iob.6.1710271926490; 
- Tue, 12 Mar 2024 12:32:06 -0700 (PDT)
+ bh=WXmv57iFH/u143pvGIvo7Bx5TFunxm9/2QHjzCb7nZg=;
+ b=Fbu0kmOsWYvx1ix3c3hj0sk5NnFBv4NJr5Z2CUGh8taCF22R/DvGHi7O4J/SACCywQ
+ MCNEYaIFbjBmi3A5c84zpli/3tHT7ixALKhIdlm2Tcy6VGeIBX44v/W8gxXlS/yMWIJv
+ VIATPTdy9F8W2bPLYJ8Mrg+kTE6bHety+qjuvmjSo+C08DIRt7ZfVxq/TGdjkPRL2yUs
+ 3ZTM+JnJ9jKrIWqZA+CJMAJKSJtberZqmaawWvYZTYgEb/81hx6eRNgHLTWGsqsCzkhB
+ qoTsFBG10zOp66Q/bFm9g+xtU9acVMAO/ot+mbo3JglHRaw7Q5C7C6nta/WAcAK2KW3s
+ UJdw==
+X-Gm-Message-State: AOJu0YzMremepnoztmXA+gvPuB/ZtJPz9MRyDXj1hj0awu5RrZZUehFl
+ KuknlUW5BdB39EFaHWY35wKdBkPo37d3dzQaGW61LEd6W1dl8f3K4K6SsqDuDeirK6IGVnlnccS
+ RdA==
+X-Google-Smtp-Source: AGHT+IF0RBlkLFG6GxImnWKk8eA5HOJGLz7c41v4gJcHX/XXhfTCnlsyg15nOik8t5A0lptnlxPxqg==
+X-Received: by 2002:a05:6e02:1a8c:b0:365:21f4:701f with SMTP id
+ k12-20020a056e021a8c00b0036521f4701fmr13673847ilv.21.1710272140879; 
+ Tue, 12 Mar 2024 12:35:40 -0700 (PDT)
 Received: from earth (97-127-36-49.mpls.qwest.net. [97.127.36.49])
  by smtp.gmail.com with ESMTPSA id
- fx22-20020a0566381e1600b00474895385c0sm2502031jab.109.2024.03.12.12.32.05
+ dj6-20020a0566384b8600b00474eb87162dsm2356862jab.39.2024.03.12.12.35.40
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 12 Mar 2024 12:32:06 -0700 (PDT)
+ Tue, 12 Mar 2024 12:35:40 -0700 (PDT)
 Received: by earth (Postfix, from userid 1000)
- id 3F4071060DED; Tue, 12 Mar 2024 14:32:05 -0500 (CDT)
+ id C7EEA1060DED; Tue, 12 Mar 2024 14:35:39 -0500 (CDT)
 From: "Jeremy J. Peper" <jeremy@jeremypeper.com>
 To: buildroot@buildroot.org
-Date: Tue, 12 Mar 2024 14:31:37 -0500
-Message-Id: <20240312193140.663261-1-jeremy@jeremypeper.com>
+Date: Tue, 12 Mar 2024 14:35:25 -0500
+Message-Id: <20240312193528.664465-1-jeremy@jeremypeper.com>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=jeremypeper-com.20230601.gappssmtp.com; s=20230601; t=1710271926;
- x=1710876726; darn=buildroot.org; 
+ d=jeremypeper-com.20230601.gappssmtp.com; s=20230601; t=1710272141;
+ x=1710876941; darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=7zO+/T6QsbEgGknGu44kcR9HoofMf3ULRPIExXFBDmg=;
- b=WFkOgteX1yL+aNT1nj7B4wexOIJM9aEvQVwmo+oMgKP/zE1lNTCCkNUOzkfuSWjprN
- ToEXDVvoWUxS1wMhsGfy6tE8clyl/inF2AEDtNoWRC80iml4/E3tgYZ4ER+xZbnxRyI+
- jrYGFXsmFztvFoCZLmHEHk9F3twCcXX1AuKjGLBmRoNgtcAHAG24o4egiRcIZ1Igx4Hl
- shxbIWHSNV/JZzjd6Efq+WU2e1+pdmg7YWV4EqxUS0hXGjCskBrcpRlKXFiJ3WOeNzxZ
- tLTeHOnao1ZJlMv/Sc204Wund5keCSlvyVp3Tug/SDyuLvuFNGjTKVGQK/xLZnyv65SE
- jpJA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=WXmv57iFH/u143pvGIvo7Bx5TFunxm9/2QHjzCb7nZg=;
+ b=kdJe4h1ZGHNKnRIkLX5bSTVywNEfIVRzL2DJxFp860FBmVodNaOY0TeQmipUgibWwm
+ ynTHuKJti2hsdVYUgKSA/VTZ11WnemiNWzxaIfz47ofRF2HQpVhJzOsrh4kNMp0lZzHj
+ njhcv9GfdfgRxp3d6iJjdsYn3QI8LKPyuogoMbdr5ql51pDKf0KHdqSIZwgG6IXicilr
+ Z70WZ/IyA8vuVkmv9cpp2HAHRLwl38Y7WPuZXwUTsqZIcHMH44n7O8jV/YEqYW+NDeYF
+ 2AH8p3R60XFQZlh6btWLU0y9/JTuBbBTfcikSm7MQOgBuadfG6XN4WEFEVM5EpucE020
+ SxYA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=jeremypeper.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=jeremypeper-com.20230601.gappssmtp.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=jeremypeper-com.20230601.gappssmtp.com
  header.i=@jeremypeper-com.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=WFkOgteX
-Subject: [Buildroot] [PATCH v2 1/3] package/targetcli-fb: needs
- python-gobject
+ header.s=20230601 header.b=kdJe4h1Z
+Subject: [Buildroot] [PATCH v2 1/3] package/targetcli-fb: bump version to
+ 2.1.58
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -107,46 +106,44 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: "Jeremy J. Peper" <jeremy@jeremypeper.com>,
- Christophe Vu-Brugier <cvubrugier@fastmail.fm>
+ Christophe Vu-Brugier <cvubrugier@fastmail.fm>,
+ James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-add python-gobject to resolve "ModuleNotFoundError: No module named 'gi'" error encountered if built without it.
-add python-gobject's dependencies as well
+bump to latest version because previous version did not work with python 3.11
+corrected version mismatch with my first submission
 
 Signed-off-by: Jeremy J. Peper <jeremy@jeremypeper.com>
 ---
- package/targetcli-fb/Config.in       | 1 +
- package/targetcli-fb/targetcli-fb.mk | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ package/targetcli-fb/targetcli-fb.hash | 2 +-
+ package/targetcli-fb/targetcli-fb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/targetcli-fb/Config.in b/package/targetcli-fb/Config.in
-index 04c6a1ac..722b9400 100644
---- a/package/targetcli-fb/Config.in
-+++ b/package/targetcli-fb/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_TARGETCLI_FB
- 	select BR2_PACKAGE_PYTHON_CONFIGSHELL_FB
- 	select BR2_PACKAGE_PYTHON_RTSLIB_FB
- 	select BR2_PACKAGE_PYTHON_SIX
-+	select BR2_PACKAGE_PYTHON_GOBJECT
- 	help
- 	  targetcli-fb is a command-line interface for configuring the
- 	  LIO generic SCSI target, present in 3.x Linux kernel
+diff --git a/package/targetcli-fb/targetcli-fb.hash b/package/targetcli-fb/targetcli-fb.hash
+index 64f68a66..1732fa99 100644
+--- a/package/targetcli-fb/targetcli-fb.hash
++++ b/package/targetcli-fb/targetcli-fb.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256  7ae4120a54f24b13263b4b85c43952a03546f8b9fc9bd15fe87678f68245a33f  targetcli-fb-2.1.54.tar.gz
++sha256  605f4e4e4e7189d6a03f11a4f55e7ddb4671002d542c2f684f87dd68391dcdc2  targetcli-fb-2.1.58.tar.gz
+ sha256  5df2a0d87d6c562f0ea11c688ac52532aa28d744cabc7994ff0537f64b3b3320  COPYING
 diff --git a/package/targetcli-fb/targetcli-fb.mk b/package/targetcli-fb/targetcli-fb.mk
-index d2cbf79e..2d375417 100644
+index 2d375417..8cdcc6f6 100644
 --- a/package/targetcli-fb/targetcli-fb.mk
 +++ b/package/targetcli-fb/targetcli-fb.mk
-@@ -12,7 +12,7 @@ TARGETCLI_FB_LICENSE = Apache-2.0
- TARGETCLI_FB_LICENSE_FILES = COPYING
- TARGETCLI_FB_CPE_ID_VALID = YES
- TARGETCLI_FB_SETUP_TYPE = setuptools
--TARGETCLI_FB_DEPENDENCIES = python-configshell-fb python-rtslib-fb python-six
-+TARGETCLI_FB_DEPENDENCIES = python-configshell-fb python-rtslib-fb python-six python-gobject $(PYTHON_GOBJECT_DEPENDENCIES)
+@@ -6,7 +6,7 @@
  
- define TARGETCLI_FB_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 0755 -D package/targetcli-fb/S50target \
+ # When upgrading the version, be sure to also upgrade python-rtslib-fb
+ # and python-configshell-fb at the same time.
+-TARGETCLI_FB_VERSION = 2.1.54
++TARGETCLI_FB_VERSION = 2.1.58
+ TARGETCLI_FB_SITE = $(call github,open-iscsi,targetcli-fb,v$(TARGETCLI_FB_VERSION))
+ TARGETCLI_FB_LICENSE = Apache-2.0
+ TARGETCLI_FB_LICENSE_FILES = COPYING
 -- 
 2.39.2
 
