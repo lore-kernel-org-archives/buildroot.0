@@ -4,99 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32FA2C54E5D
-	for <buildroot@archiver.kernel.org>; Tue, 12 Mar 2024 19:35:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C615C54E5D
+	for <buildroot@archiver.kernel.org>; Tue, 12 Mar 2024 19:35:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4926460A8B;
-	Tue, 12 Mar 2024 19:35:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 063F860A56;
+	Tue, 12 Mar 2024 19:35:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hoHrvc3mGyhb; Tue, 12 Mar 2024 19:35:48 +0000 (UTC)
+	with ESMTP id yY2c5juY_on7; Tue, 12 Mar 2024 19:35:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4768D60A94
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E76060B98
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4768D60A94;
-	Tue, 12 Mar 2024 19:35:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8E76060B98;
+	Tue, 12 Mar 2024 19:35:51 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4434D1BF95F
- for <buildroot@lists.busybox.net>; Tue, 12 Mar 2024 19:35:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C25D31BF32D
+ for <buildroot@lists.busybox.net>; Tue, 12 Mar 2024 19:35:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 308B340654
- for <buildroot@lists.busybox.net>; Tue, 12 Mar 2024 19:35:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BC4AB40654
+ for <buildroot@lists.busybox.net>; Tue, 12 Mar 2024 19:35:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cibPTqmj33lS for <buildroot@lists.busybox.net>;
- Tue, 12 Mar 2024 19:35:46 +0000 (UTC)
+ with ESMTP id jw0mBwa3hr4f for <buildroot@lists.busybox.net>;
+ Tue, 12 Mar 2024 19:35:48 +0000 (UTC)
 Received-SPF: None (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::131; helo=mail-il1-x131.google.com;
+ client-ip=2607:f8b0:4864:20::12d; helo=mail-il1-x12d.google.com;
  envelope-from=jeremy@jeremypeper.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2476040562
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2476040562
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com
- [IPv6:2607:f8b0:4864:20::131])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2476040562
- for <buildroot@buildroot.org>; Tue, 12 Mar 2024 19:35:45 +0000 (UTC)
-Received: by mail-il1-x131.google.com with SMTP id
- e9e14a558f8ab-36576b35951so32915915ab.3
- for <buildroot@buildroot.org>; Tue, 12 Mar 2024 12:35:45 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C1ED340562
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C1ED340562
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com
+ [IPv6:2607:f8b0:4864:20::12d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C1ED340562
+ for <buildroot@buildroot.org>; Tue, 12 Mar 2024 19:35:47 +0000 (UTC)
+Received: by mail-il1-x12d.google.com with SMTP id
+ e9e14a558f8ab-3663080b6a4so24436645ab.0
+ for <buildroot@buildroot.org>; Tue, 12 Mar 2024 12:35:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1710272144; x=1710876944;
+ d=1e100.net; s=20230601; t=1710272146; x=1710876946;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=5ohqyQQX79zFxl+v75fIZljtDV5T+yuwV8JcCutkslk=;
- b=SN86C7qksUZ42GY84iblA6zVJQc7Am+hHdspiLSW/MbWtxmbxGa41BiCPYC2WGvPNt
- Yc9cWpcXepWB1kKaEz3I1lcitpe1Wkh4jBzb+h8NTcH495dQC6lJTf9FMYYgulgIUM4u
- zpoC5WzY/DyoAec93HUu/6usPgkBQ3sKjANn/2N5lOgpVWozChVv+wk7HfY55Bzii+Z7
- WU7IwKWrhKIa9aIK8K1/2HB0Kw+K6DNaBMO8KsATvRH1MoYhkMMKoFtASk/nGDeQbuqL
- ftwpDqMdRoZ2NP2HBu9UD0pm7X/R0Ntbmxbe0jShfYn1RMXZHMunR0tra0T5AVdxl9et
- CR7Q==
-X-Gm-Message-State: AOJu0YxaGoaYU1Zm2jeCm11TNaOM0FK2xfVQD/nKI9RCML8yoaJ0bZfc
- Qd247Qnt+PjKABcOQzUpvVf5E6QIo2saG+8VX24WQ5Cd+ynqVA+2QLYj8TdGTDFLw7D6XYG+Ll9
- qWg==
-X-Google-Smtp-Source: AGHT+IFqjAcBx0JtRy5cmHUJCq5ISfWNzMOxKiXqPsaeCBN4y4uK920/9a4vZ+jYGRYbZnFJnvKIsQ==
-X-Received: by 2002:a05:6e02:1986:b0:365:fe9f:6b24 with SMTP id
- g6-20020a056e02198600b00365fe9f6b24mr3139709ilf.13.1710272144580; 
- Tue, 12 Mar 2024 12:35:44 -0700 (PDT)
+ bh=We+Hy0PT7JOeHqbB4DGGMY0jDGpv2KSPw+4iooWFQKU=;
+ b=UfgX2ibMgf4ODg/Px8RRgeOwT52A828rZQGlzDqWGlgOrTR8seUDefgGGZ/z96S9Qf
+ UgNo+OFpTYwf6VO+Qs5T/q9siJJN2kKIYK4RsC72ILIWdCaA/Na/qTJ562ucS6besNbh
+ FE7Cop2gwAQzOfsZ0hNdh8AF0xvejbfoOTLech0OpFOuwdxEG591rbPa5WJEinQLPs8z
+ CQ7283SEUoHNIszpF2NlvOuqSiSW6SjJoSrL0+JnTkvDxDKspwmrEhyReEk6d614NWF7
+ cZNwjloAFgm7HXMeADHwvBVv93NJQEzS0wSgvarOYN/a7kkbtSjLovJj8yufWl8a/Els
+ 6qsw==
+X-Gm-Message-State: AOJu0Yw0fHFdU8Y3xMvVYWK+v/UHXJgx3Ut+wrKZ6WKT++o7vdwFy7ky
+ sQP90R6PckTxCACg5MCXnhckq9DNsdH2ofpmuPS74pyzhXPycFe9XhgFkaqepf8L49+vOwHypXj
+ lhA==
+X-Google-Smtp-Source: AGHT+IFdWWrtyFrqPH9FkleuAUFIE2sVZzRDlbICtW1mA57PtYaVZuZ3/aO77nqXhM+S8zfan79SJg==
+X-Received: by 2002:a05:6e02:2149:b0:364:279c:4a08 with SMTP id
+ d9-20020a056e02214900b00364279c4a08mr13114911ilv.23.1710272146205; 
+ Tue, 12 Mar 2024 12:35:46 -0700 (PDT)
 Received: from earth (97-127-36-49.mpls.qwest.net. [97.127.36.49])
  by smtp.gmail.com with ESMTPSA id
- h5-20020a056e021d8500b00365c96b8afesm2483467ila.46.2024.03.12.12.35.44
+ t6-20020a92ca86000000b00366655e956esm669667ilo.37.2024.03.12.12.35.45
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 12 Mar 2024 12:35:44 -0700 (PDT)
+ Tue, 12 Mar 2024 12:35:45 -0700 (PDT)
 Received: by earth (Postfix, from userid 1000)
- id 9561C1060DED; Tue, 12 Mar 2024 14:35:43 -0500 (CDT)
+ id 382D31060DED; Tue, 12 Mar 2024 14:35:45 -0500 (CDT)
 From: "Jeremy J. Peper" <jeremy@jeremypeper.com>
 To: buildroot@buildroot.org
-Date: Tue, 12 Mar 2024 14:35:26 -0500
-Message-Id: <20240312193528.664465-2-jeremy@jeremypeper.com>
+Date: Tue, 12 Mar 2024 14:35:27 -0500
+Message-Id: <20240312193528.664465-3-jeremy@jeremypeper.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240312193528.664465-1-jeremy@jeremypeper.com>
 References: <20240312193528.664465-1-jeremy@jeremypeper.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=jeremypeper-com.20230601.gappssmtp.com; s=20230601; t=1710272144;
- x=1710876944; darn=buildroot.org; 
+ d=jeremypeper-com.20230601.gappssmtp.com; s=20230601; t=1710272146;
+ x=1710876946; darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=5ohqyQQX79zFxl+v75fIZljtDV5T+yuwV8JcCutkslk=;
- b=ubkk57/4rFsvrScc9neqwbgwibm3OvK5iK5GbqyADhepORrMnI425SF2pFkx3H9ugs
- /0/oUegPjJNJW6ciXszyMK6tqxCaEwAyHtndbDpffxM4tAskwwO59hFLzzAVpbgxeABU
- 0ZW7kuOK8jTGjp3ShupHc/LUDtsGPjng6HetiHYWv7Tj5qi4FfSSP0Dybrxi+8E9DsE0
- 5PqSbmEpKzJ2gHSk6SNsk1m2VQGOHYxyN0vNT0K9IoJpDHDmJg3geJgnN7Sump67IGdn
- Xl/yphLZ1gAWMpbJ7RqJsMDkObogNh6OoK/GGzYhtih4roJc9lBMb5OwA/YTvQg0APhi
- zQqw==
+ bh=We+Hy0PT7JOeHqbB4DGGMY0jDGpv2KSPw+4iooWFQKU=;
+ b=Yb364bF47f1trnuOiN5UdcycGsBzwLck+1WKQ337PVHuwu3Bpu6p+sEFwEBhAUeri+
+ gZ6gLIvu0C/w0s90XmE9FuwDmWtWS0cAYz6i9DgCS2WJ0YWprODs7Wboo9Cw0/c8yNIp
+ 6wtYndVT5x/qWJ/Bg/fKQsbNQyNDCJ/cFqK6ZcaLSy36i93sQJ8gDyteogC5kcXN11nB
+ m4YhAKg27XD/+u1iDNuauix8ZhRnrDGJ7BLghuhVGyYeTAQSnvYr3sOsH8R2LacxEC0N
+ eYTVsgU7D/gKJ+ZLvmD8RPYC2ZpQpfN8g2BR4yAnoovy7hqGP1kbkCONwFoeX27gZ9Ma
+ /osw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=jeremypeper.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=jeremypeper-com.20230601.gappssmtp.com
  header.i=@jeremypeper-com.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=ubkk57/4
-Subject: [Buildroot] [PATCH v2 2/3] package/python-configshell-fb: bump
- version to 1.1.30
+ header.s=20230601 header.b=Yb364bF4
+Subject: [Buildroot] [PATCH v2 3/3] package/python-rtslib-fb: 2.1.76
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -120,32 +119,32 @@ bump to latest version because previous version did not work with python 3.11
 
 Signed-off-by: Jeremy J. Peper <jeremy@jeremypeper.com>
 ---
- package/python-configshell-fb/python-configshell-fb.hash | 2 +-
- package/python-configshell-fb/python-configshell-fb.mk   | 2 +-
+ package/python-rtslib-fb/python-rtslib-fb.hash | 2 +-
+ package/python-rtslib-fb/python-rtslib-fb.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-configshell-fb/python-configshell-fb.hash b/package/python-configshell-fb/python-configshell-fb.hash
-index 8fc38f61..e0905010 100644
---- a/package/python-configshell-fb/python-configshell-fb.hash
-+++ b/package/python-configshell-fb/python-configshell-fb.hash
+diff --git a/package/python-rtslib-fb/python-rtslib-fb.hash b/package/python-rtslib-fb/python-rtslib-fb.hash
+index 3c2e39ff..39c390ed 100644
+--- a/package/python-rtslib-fb/python-rtslib-fb.hash
++++ b/package/python-rtslib-fb/python-rtslib-fb.hash
 @@ -1,3 +1,3 @@
  # locally computed
--sha256  24b47284b463dcfb9ee0c1558827e13442127e62fa279b6e0253f136cf49058c  python-configshell-fb-1.1.29.tar.gz
-+sha256  44696b92bea2b44c1d0bf2828477dddeb3b4dfb312ad82ce06d7b704c0985e27  python-configshell-fb-1.1.30.tar.gz
+-sha256  9f581c4bcffebc60be236af8a6ebdeccdb66d0435eeb04ab1b743c170b95d046  python-rtslib-fb-2.1.74.tar.gz
++sha256  ac15c113d09209c7b0d14d94a12ed88205a7c2feadd1096f573049fd737f7e74  python-rtslib-fb-2.1.76.tar.gz
  sha256  5df2a0d87d6c562f0ea11c688ac52532aa28d744cabc7994ff0537f64b3b3320  COPYING
-diff --git a/package/python-configshell-fb/python-configshell-fb.mk b/package/python-configshell-fb/python-configshell-fb.mk
-index d0dd421e..3446a86e 100644
---- a/package/python-configshell-fb/python-configshell-fb.mk
-+++ b/package/python-configshell-fb/python-configshell-fb.mk
+diff --git a/package/python-rtslib-fb/python-rtslib-fb.mk b/package/python-rtslib-fb/python-rtslib-fb.mk
+index 09bde874..6396d26a 100644
+--- a/package/python-rtslib-fb/python-rtslib-fb.mk
++++ b/package/python-rtslib-fb/python-rtslib-fb.mk
 @@ -6,7 +6,7 @@
  
- # When upgrading the version, be sure to also upgrade python-rtslib-fb
- # and targetcli-fb at the same time.
--PYTHON_CONFIGSHELL_FB_VERSION = 1.1.29
-+PYTHON_CONFIGSHELL_FB_VERSION = 1.1.30
- PYTHON_CONFIGSHELL_FB_SITE = $(call github,open-iscsi,configshell-fb,v$(PYTHON_CONFIGSHELL_FB_VERSION))
- PYTHON_CONFIGSHELL_FB_LICENSE = Apache-2.0
- PYTHON_CONFIGSHELL_FB_LICENSE_FILES = COPYING
+ # When upgrading the version, be sure to also upgrade
+ # python-configshell-fb and targetcli-fb at the same time.
+-PYTHON_RTSLIB_FB_VERSION = 2.1.74
++PYTHON_RTSLIB_FB_VERSION = 2.1.76
+ # Do not switch site to PyPI: it does not contain the latest version.
+ PYTHON_RTSLIB_FB_SITE = $(call github,open-iscsi,rtslib-fb,v$(PYTHON_RTSLIB_FB_VERSION))
+ PYTHON_RTSLIB_FB_LICENSE = Apache-2.0
 -- 
 2.39.2
 
