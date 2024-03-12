@@ -1,83 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35309C54E49
-	for <buildroot@archiver.kernel.org>; Tue, 12 Mar 2024 06:42:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06742C54E66
+	for <buildroot@archiver.kernel.org>; Tue, 12 Mar 2024 07:18:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C22F38145D;
-	Tue, 12 Mar 2024 06:42:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6F73A40147;
+	Tue, 12 Mar 2024 07:18:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vMKx68p9UVNy; Tue, 12 Mar 2024 06:42:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MZLpWR0tfxn1; Tue, 12 Mar 2024 07:18:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 97A7D8145E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6DA8C40472
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 97A7D8145E;
-	Tue, 12 Mar 2024 06:42:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6DA8C40472;
+	Tue, 12 Mar 2024 07:18:52 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 95ED21BF2C6
- for <buildroot@lists.busybox.net>; Tue, 12 Mar 2024 06:42:23 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 95DBD1BF2B5
+ for <buildroot@lists.busybox.net>; Tue, 12 Mar 2024 07:18:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 901418145E
- for <buildroot@lists.busybox.net>; Tue, 12 Mar 2024 06:42:23 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 903C4814B6
+ for <buildroot@lists.busybox.net>; Tue, 12 Mar 2024 07:18:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vIpvXoC-w9Rn for <buildroot@lists.busybox.net>;
- Tue, 12 Mar 2024 06:42:22 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=198.47.23.249;
- helo=lelv0142.ext.ti.com; envelope-from=dannenberg@ti.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 30B958145D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 30B958145D
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 30B958145D
- for <buildroot@buildroot.org>; Tue, 12 Mar 2024 06:42:21 +0000 (UTC)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
- by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 42C6gHpi026140;
- Tue, 12 Mar 2024 01:42:17 -0500
-Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
- by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 42C6gHZU001907
- (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
- Tue, 12 Mar 2024 01:42:17 -0500
-Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 12
- Mar 2024 01:42:17 -0500
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 12 Mar 2024 01:42:17 -0500
-Received: from dasso (dasso.dhcp.ti.com [128.247.79.182])
- by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 42C6gHZC085166;
- Tue, 12 Mar 2024 01:42:17 -0500
-Date: Tue, 12 Mar 2024 01:42:17 -0500
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Message-ID: <20240312064217.kwbf2zo7qeiz2krg@dasso>
-References: <20240304153253.732708-1-dario.binacchi@amarulasolutions.com>
+ with ESMTP id CcA-_TOxKIJX for <buildroot@lists.busybox.net>;
+ Tue, 12 Mar 2024 07:18:49 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::130; helo=mail-lf1-x130.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 79057814AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 79057814AB
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com
+ [IPv6:2a00:1450:4864:20::130])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 79057814AB
+ for <buildroot@buildroot.org>; Tue, 12 Mar 2024 07:18:49 +0000 (UTC)
+Received: by mail-lf1-x130.google.com with SMTP id
+ 2adb3069b0e04-5131a9b3d5bso4876143e87.0
+ for <buildroot@buildroot.org>; Tue, 12 Mar 2024 00:18:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1710227927; x=1710832727;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=5EskLOaSemKwsMVmrXNmls6POpXuBIIomkQi3/Lpri0=;
+ b=urUM3TLPnElBu5DU5+JYhEphzCm/jEruBN1i/A8zsFs+AzBrQQ3mDJ3FbuW/iPJFEa
+ 08fuc2jmNPc3RUkSaxN82BwEPPJOp/chUn4Yy2CAwgZsfPDi8YdSnbMvFWk4YFI5WhAr
+ y4seS7hpwIAxQkBJmTqcaw2oJY7wshNkSrJNL9kzGYsanRIROfXsH30ltnRlH5ALOBNR
+ qVYpvT60F7R1cWncskyRtzzS38NaBafOiYkfJGYVXk692bkQSzQBSXY5takCs/jOb4Ft
+ eOfgKSbQYzje9RVKhCwgAd6dFrE+AkMvdk8DBSewmTsPi6rfmgO+6zRyZ+ohD2JbS4my
+ asOg==
+X-Gm-Message-State: AOJu0YxFCI3pCNKAQZmWgkpZJcL/DoYD78eMBR1yGPIbGEwcPsCu0wTB
+ O7Ft+HnX4y/hNIaZjDrT8hDSGw1yBjkbYhBk2yhq+qEtUkT3KCKblOUaLotwo/nIAIdY1+cFFuR
+ vU66lMH5spWCyn6OMIMHSCGTz87s=
+X-Google-Smtp-Source: AGHT+IHvE12EnxkLUejuvMA6nvuXGGkp5l6S/QwPTLsA5kJVLKYuClLwTjx3MkEiK3gIvmyZUi12XL6Nt3OINpTUOxE=
+X-Received: by 2002:ac2:4311:0:b0:513:b8c7:7ecc with SMTP id
+ l17-20020ac24311000000b00513b8c77eccmr802547lfh.60.1710227926789; Tue, 12 Mar
+ 2024 00:18:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240304153253.732708-1-dario.binacchi@amarulasolutions.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <20240307122806.102726-1-fontaine.fabrice@gmail.com>
+ <20240307134916.32738b5e@windsurf>
+ <CAPi7W803mjZL9-rRu2wdcG=5t=D1wtDJET2S_SHfjCc_uvViVA@mail.gmail.com>
+ <20240311123512.09c1c77d@windsurf>
+In-Reply-To: <20240311123512.09c1c77d@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 12 Mar 2024 08:18:35 +0100
+Message-ID: <CAPi7W808FakSM3CDpHEDrVh4HgHgfbZjd0SzK0W-pav1ub=3ww@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=ti.com; s=ti-com-17Q1; t=1710225737;
- bh=RB8XoDCK32VTOfkJWcwDJZ+iaM0ubtJq8O+H8HKygXE=;
- h=Date:From:To:CC:Subject:References:In-Reply-To;
- b=un8LUqxIpo49onoWGv3bf4vfd29zIdCwrmVmKj+h2K8l/efQh7F/LFn+yC4yyswMg
- yDKJb8kcESUXOPkTEyFESisDUOLxOMuFs/y9MjRz7dYJvVr79OIUhetKXn0kixCycm
- X8tBBmfwP24+JVFSYetcwPLbocLQETmU6jV2xC8M=
+ d=gmail.com; s=20230601; t=1710227927; x=1710832727; darn=buildroot.org;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=5EskLOaSemKwsMVmrXNmls6POpXuBIIomkQi3/Lpri0=;
+ b=YdQd92PSfvFuwXWjXAl73ztMqk7cyjSJiV7b1xsNPsFvboFzvGP1CZrwr3advVW+Bs
+ VV/dyAyCDTS/fJQvLFPHvzFAPxIb9ptskaOlGALzofPMCdYI8t90mnVykbgcwNn1sicm
+ B2Qs2h7NrUBFDgYkeNlLGJeqdP5uYWwuBbBTuswp1I+NzKXSC6LQ4fS/aKHHBQxrHbl8
+ QFCsT4MNOWtuXEq0We3kd39KjCAwAzoQR8Ak/YOP/EJfj7t2TlkeJOAKxRUI3Sg19XBc
+ 8wG7DrCq9gPHMM3zOk8EG49Fr4Z4lftotPS/9/s5ALhTr2UjjBTV767md+jF3KJH2xIA
+ Ehhw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=ti.com
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
- header.s=ti-com-17Q1 header.b=un8LUqxI
-Subject: Re: [Buildroot] [PATCH v9 00/22] Add support for AM62x-SK HS-FS
- devices
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=YdQd92PS
+Subject: Re: [Buildroot] [PATCH 1/1] toolchain/Config.in: enable libatomic
+ with BR2_BINFMT_FLAT
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,129 +101,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Andreas Dannenberg via buildroot <buildroot@buildroot.org>
-Reply-To: Andreas Dannenberg <dannenberg@ti.com>
-Cc: linux-amarula@amarulasolutions.com, Asaf Kahlon <asafka7@gmail.com>,
- Xuanhao Shi <X15000177@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
- Romain Naour <romain.naour@smile.fr>, michael@amarulasolutions.com,
- Alexander Sverdlin <alexander.sverdlin@gmail.com>, bryce@redpinelabs.com,
- Anand Gadiyar <gadiyar@ti.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
+ buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Dario, All,
-
-On Mon, Mar 04, 2024 at 04:32:31PM +0100, Dario Binacchi wrote:
-> The SK-AM62B-P1 is the newest version of SK-AM62 which includes
-> high-security field-securable (HS-FS) silicon to optionally customize keys
-> and encryption for security applications.
-> This requires enabling the BR2_TARGET_TI_K3_IMAGE_GEN_SECTYPE_HS_FS option,
-> which, however, was buggy. This series fixes the errors and bumps the Linux
-> kernel and U-Boot required for such a new device.
-> 
-> Furthermore, this version complete the series by updating the
-> ti_am64x_sk_defconfig too and remove ti-k3-image-gen, as requested by
-> Romain Naour:
-> https://patchwork.ozlabs.org/project/buildroot/patch/20240224205654.1546744-17-dario.binacchi@amarulasolutions.com/
-> I have successfully executed compilation tests for all possible combinations of platform and security type:
-> am62x -> GP, HS, HS-FS
-> am64x -> GP, HS, HS-FS
-
-I just applied your v9 series on top of today's master...
-bb8766cc54 ("{linux, linux-headers}: bump 4.19.x / 5.{4, 10, 15}.x / 6.{1, 6}.x series")
-...without any issues, and successfully built SD card mages for the following
-platforms:
-
-1) AM62 GP
-2) AM62 HS-FS
-3) AM64 GP
-4) AM64 HS-FS
-
-Then, I burned 4 individual SD cards and also boot-tested on those 4
-distinct platforms (all TI SK boards). They all booted without issues,
-and in all cases the entire boot log looked clean with no apparent
-anomalies.  Systems all seemed to operate as expected.
-
-So for the series:
-
-Tested-by: Andreas Dannenberg <dannenberg@ti.com>
-
-
-
-> 
-> The AM62x HS-FS configuration has also been tested on the SK-AM62B-P1 board.
-> 
-> Dario Binacchi (21):
->   configs/ti_am62x_sk_defconfig: fix BR2_TARGET_OPTEE_OS_PLATFORM
->     setting
->   configs/ti_am64x_sk_defconfig: fix BR2_TARGET_OPTEE_OS_PLATFORM
->     setting
->   configs/ti_am62x_sk_defconfig: explicitly set the ti-k3-r5-loader
->     version
->   configs/ti_am64x_sk_defconfig: explicitly set the ti-k3-r5-loader
->     version
->   boot/ti-k3-r5-loader: bump to version 2024.01
->   package/python-attrs: add host variant
->   package/python-rpds-py: add host variant
->   package/python-referencing: add host variant
->   package/python-jsonschema-specifications: add host variant
->   package/python-jsonschema: add host variant
->   boot/ti-k3-r5-loader: set binman environment
->   boot/uboot: add BR2_TARGET_UBOOT_USE_BINMAN option
->   package/ti-k3: move TI_K3_{SECTYPE,SOC} out of the image-gen scope
->   package/ti-k3: disable HS-FS for AM65 SOC
->   boot/ti-k3/ti-k3-r5-loader: install tiboot3.bin
->   configs/ti_am62x_sk_defconfig: bump U-Boot version to 2024.01
->   configs/ti_am62x_sk_defconfig: bump Linux version to 6.6.18
->   board/ti/am62x-sk: generalize post-build.sh
->   board/ti/am62x-sk: move post-{build,image}.sh to board/ti/common/am6xx
->   configs/ti_am64x_sk_defconfig: bump U-Boot version to 2024.01
->   configs/ti_am64x_sk_defconfig: bump Linux version to 6.6.18
-> 
-> Romain Naour (1):
->   boot/ti-k3-image-gen: remove package
-> 
->  Config.in.legacy                              |  7 ++
->  DEVELOPERS                                    |  2 -
->  board/ti/am62x-sk/genimage.cfg                |  7 +-
->  board/ti/am64x-sk/genimage.cfg                |  7 +-
->  board/ti/common/am6xx/post-build.sh           | 58 ++++++++++++++
->  board/ti/common/am6xx/post-image.sh           | 11 +++
->  boot/Config.in                                |  1 -
->  boot/ti-k3-image-gen/Config.in                | 77 -------------------
->  boot/ti-k3-image-gen/ti-k3-image-gen.hash     |  3 -
->  boot/ti-k3-image-gen/ti-k3-image-gen.mk       | 54 -------------
->  boot/ti-k3-r5-loader/Config.in                |  5 +-
->  boot/ti-k3-r5-loader/ti-k3-r5-loader.hash     |  2 +-
->  boot/ti-k3-r5-loader/ti-k3-r5-loader.mk       | 12 ++-
->  boot/uboot/Config.in                          | 23 +++---
->  boot/uboot/uboot.mk                           | 12 ++-
->  configs/ti_am62x_sk_defconfig                 | 22 +++---
->  configs/ti_am64x_sk_defconfig                 | 22 +++---
->  package/Config.in                             |  1 +
->  package/python-attrs/python-attrs.mk          |  6 ++
->  .../python-jsonschema-specifications.mk       | 10 +++
->  .../python-jsonschema/python-jsonschema.mk    | 14 ++++
->  .../python-referencing/python-referencing.mk  | 11 +++
->  package/python-rpds-py/python-rpds-py.mk      |  1 +
->  package/ti-k3/Config.in                       | 61 +++++++++++++++
->  package/ti-k3/ti-k3.mk                        |  7 ++
->  25 files changed, 263 insertions(+), 173 deletions(-)
->  create mode 100755 board/ti/common/am6xx/post-build.sh
->  create mode 100755 board/ti/common/am6xx/post-image.sh
->  delete mode 100644 boot/ti-k3-image-gen/Config.in
->  delete mode 100644 boot/ti-k3-image-gen/ti-k3-image-gen.hash
->  delete mode 100644 boot/ti-k3-image-gen/ti-k3-image-gen.mk
->  create mode 100644 package/ti-k3/Config.in
->  create mode 100644 package/ti-k3/ti-k3.mk
-> 
-> -- 
-> 2.43.0
-> 
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gVGhvbWFzLAoKTGUgbHVuLiAxMSBtYXJzIDIwMjQgw6AgMTI6MzUsIFRob21hcyBQZXRh
+enpvbmkKPHRob21hcy5wZXRhenpvbmlAYm9vdGxpbi5jb20+IGEgw6ljcml0IDoKPgo+IE9uIFRo
+dSwgNyBNYXIgMjAyNCAxODoxODoyNCArMDEwMAo+IEZhYnJpY2UgRm9udGFpbmUgPGZvbnRhaW5l
+LmZhYnJpY2VAZ21haWwuY29tPiB3cm90ZToKPgo+ID4gPiBUaGFua3MgZm9yIHRoZSBwYXRjaC4g
+RG8gd2Uga25vdyBzaW5jZSB3aGVuIHRoZXJlIGlzIHN1cHBvcnQgZm9yCj4gPiA+IGxpYmF0b21p
+YyBmb3IgcGxhdGZvcm1zIHRoYXQgdXNlIHRoZSBGTEFUIGJpbmFyeSBmb3JtYXQ/IElzIHRoaXMK
+PiA+ID4gc3BlY2lmaWMgdG8gQVJNL0ZMQVQsIG9yIGFwcGxpY2FibGUgdG8gYWxsIGNvbmZpZ3Vy
+YXRpb25zIHRoYXQgdXNlIHRoZQo+ID4gPiBGTEFUIGJpbmFyeSBmb3JtYXQ/Cj4gPgo+ID4gTm9w
+ZSwgSSBkb24ndCBrbm93LiBJIGRpZG4ndCBmaW5kIGFueSBjbHVlIGluIHVjbGliYy1uZyBnaXRo
+dWIgaGlzdG9yeS4KPgo+IFRoYXQncyBiZWNhdXNlIGxpYmF0b21pYyBoYXMgbm90aGluZyB0byBk
+byB3aXRoIHRoZSBDIGxpYnJhcnkuCj4gbGliYXRvbWljIGlzIHByb3ZpZGVkIGJ5IGdjYy4gU28g
+aWYgeW91IHdhbnQgdG8gZmluZCBvdXQgd2h5IGl0IGlzIG5vdwo+IGF2YWlsYWJsZSBmb3IgRkxB
+VCBwbGF0Zm9ybXMsIHlvdSBzaG91bGQgY2hlY2sgdGhlIGdjYyBHaXQgaGlzdG9yeSA6LSkKCkFm
+dGVyIHJlYWRpbmcgZ2NjIGdpdCBoaXN0b3J5LCBJIGRpZG4ndCBmaW5kIGFueXRoaW5nIGVpdGhl
+ci4KSG93ZXZlciwgSSBmb3VuZCBvdXQgc29tZSBpbmZvcm1hdGlvbiBpbiBidWlsZHJvb3QgZ2l0
+IGhpc3RvcnkgWzFdOgoKIlRoZSBjYWlybyBwYWNrYWdlIGZhaWxzIHRvIGJ1aWxkIG9uIHNvbWUg
+YXJjaGl0ZWN0dXJlczoKQlIyX1RPT0xDSEFJTl9IQVNfTElCQVRPTUlDIGlzIGVuYWJsZWQsIGJ1
+dCBsaWJhdG9taWMgaXMgaW4gZmFjdCBub3QKYXZhaWxhYmxlLgpUaGlzIGhhcHBlbnMgYmVjYXVz
+ZSB0aGUgZ2NjIGxvZ2ljIGluIGxpYmF0b21pYy9jb25maWd1cmUudGd0IGRvZXMgbm90CnJlY29n
+bml6ZSAidWNsaW51eCIgYXMgYSB2YWxpZCBPUyBwYXJ0IG9mIHRoZSB0YXJnZXQgdHVwbGUsIGFu
+ZAp0aGVyZWZvcmUgaXQgZG9lcyBub3QgYnVpbGQgbGliYXRvbWljLgpUaGUgInVjbGludXgiIHBh
+cnQgb2YgdGhlIHR1cGxlIGlzIHVzZWQgYnkgQnVpbGRyb290IHdoZW4KQlIyX0JJTkZNVF9GTEFU
+PXksIHNvIHdlIG1ha2UgQlIyX1RPT0xDSEFJTl9IQVNfTElCQVRPTUlDIGVuYWJsZWQgb25seQpp
+ZiAhQlIyX0JJTkZNVF9GTEFULiIKClNvIGZpbmFsbHkgdGhpcyBsaWJhdG9taWMgd29ya2Fyb3Vu
+ZCBoYXMgbm90aGluZyB0byBkbyB3aXRoIEZMQVQgYnkgaXRzZWxmLgpUaGUgdWNsaW51eCBoYW5k
+bGluZyBoYXMgYmVlbiBmaXhlZCBidXQgb25seSBmb3IgYXJtIHNpbmNlIGdjYyAxMC4xLjAgd2l0
+aCBbMl0uClNvIGRyb3BwaW5nIEJSMl9CSU5GTVRfRkxBVCB3aWxsIHByb2JhYmx5IHJhaXNlIGJ1
+aWxkIGZhaWx1cmUgb24gb3RoZXIKYXJjaGl0ZWN0dXJlcy4KCkhvdyBzaG91bGQgSSBwcm9jZWVk
+IGZvciBteSB2Mj8KU2hvdWxkIEkgcmVwbGFjZSAhQlIyX0JJTkZNVF9GTEFUIGJ5ICghQlIyX0JJ
+TkZNVF9GTEFUPXkgfHwKKEJSMl9UT09MQ0hBSU5fR0NDX0FUX0xFQVNUXzEwICYmIEJSMl9hcm0p
+KT8KQW4gb3RoZXIgb3B0aW9uIHdvdWxkIGJlIHRvIGFkZCBkZWZhdWx0IHkgaWYKQlIyX1RPT0xD
+SEFJTl9FWFRFUk5BTF9CT09UTElOX0FSTVY3TV9VQ0xJQkNfU1RBQkxFIChtb3JlIHNpbXBsZSBi
+dXQKdWdseSkuCgpbMV0gaHR0cHM6Ly9naXQuYnVpbGRyb290Lm5ldC9idWlsZHJvb3QvY29tbWl0
+Lz9pZD1iM2QxZmIyNmRjYWRkOGM1NzBlMmM0MTVjZTA1Mzk4ZWNjODEwYjMyClsyXSBodHRwczov
+L2djYy5nbnUub3JnL2dpdC8/cD1nY2MuZ2l0O2E9Y29tbWl0O2g9YjFlMjFlNWE1ZDE5YjQzNmY5
+NDg3MTBlMDkxNTdjNWIzMjQ0ZjU0MQoKPgo+IEJlc3QgcmVnYXJkcywKPgo+IFRob21hcwo+IC0t
+Cj4gVGhvbWFzIFBldGF6em9uaSwgY28tb3duZXIgYW5kIENFTywgQm9vdGxpbgo+IEVtYmVkZGVk
+IExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcgYW5kIHRyYWluaW5nCj4gaHR0cHM6Ly9ib290
+bGluLmNvbQoKQmVzdCBSZWdhcmRzLAoKRmFicmljZQpfX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBi
+dWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZv
+L2J1aWxkcm9vdAo=
