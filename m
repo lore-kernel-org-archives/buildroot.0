@@ -4,70 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BCE9C54791
-	for <buildroot@archiver.kernel.org>; Wed, 13 Mar 2024 09:14:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59C9FC54E58
+	for <buildroot@archiver.kernel.org>; Wed, 13 Mar 2024 09:14:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3266641525;
-	Wed, 13 Mar 2024 09:14:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 22E90414F7;
+	Wed, 13 Mar 2024 09:14:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pN_D5cTWm2df; Wed, 13 Mar 2024 09:14:38 +0000 (UTC)
+	with ESMTP id MwA7N9S9P7jN; Wed, 13 Mar 2024 09:14:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BAA5441504
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 11F894152A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BAA5441504;
-	Wed, 13 Mar 2024 09:14:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 11F894152A;
+	Wed, 13 Mar 2024 09:14:41 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3214D1BF3DF
- for <buildroot@lists.busybox.net>; Wed, 13 Mar 2024 09:14:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3240E1BF3DF
+ for <buildroot@lists.busybox.net>; Wed, 13 Mar 2024 09:14:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B54488137E
- for <buildroot@lists.busybox.net>; Wed, 13 Mar 2024 09:14:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0FF928133B
+ for <buildroot@lists.busybox.net>; Wed, 13 Mar 2024 09:14:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id F2r_uJj0v6ci for <buildroot@lists.busybox.net>;
+ with ESMTP id boLRkU1Mf102 for <buildroot@lists.busybox.net>;
  Wed, 13 Mar 2024 09:14:26 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
  envelope-from=fperrad@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 12E658133B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 12E658133B
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
- [IPv6:2a00:1450:4864:20::334])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 12E658133B
- for <buildroot@busybox.net>; Wed, 13 Mar 2024 09:14:25 +0000 (UTC)
-Received: by mail-wm1-x334.google.com with SMTP id
- 5b1f17b1804b1-413eab9580dso1765025e9.1
- for <buildroot@busybox.net>; Wed, 13 Mar 2024 02:14:25 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 622CA81375
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 622CA81375
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 622CA81375
+ for <buildroot@busybox.net>; Wed, 13 Mar 2024 09:14:26 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-41312232c7aso3910535e9.0
+ for <buildroot@busybox.net>; Wed, 13 Mar 2024 02:14:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20230601; t=1710321264; x=1710926064;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=gZhyuZBorRnhlZNImDXvN+chvZrsFeGJ1MXWISvcZk8=;
- b=AaK9DfoZwvywYOdHqaiZ2Nmx/48/FoSaIoZjKcEDACPg2mQAAeZ4Bj6BLiyxNA0bOh
- PKDpXZVQ6o2GBo6PIZP4lYGD0TaO5hu7EyVzbIxCfoadHPfcroIzMm2e72XTA7nelO6g
- BGIkAX1PQqhFP9o0kjqrEpQpzkbrcab2KIPwVsA53mpbdze5MK1y2+TUnrJO6xtG2JIz
- Oo1S+bX0RsMW1lT2MxODGqXu7H5v0+UQGuERMpoFfltepWkT5kf/k9wYfrvd2EioknVv
- fqMyBBP2dn4pAgM+0Pf8V4hlzsjyqYPGbGAWO2MExublnOnPt7grE20v/1861S52JzB4
- YXaA==
-X-Gm-Message-State: AOJu0YzdJQqiZbOFXQUP3xNsieRp+QthVkQmK1aCBtnoRtGzRZS7DnJY
- xZ5gkRUp4aplxa6rKy1vEdsjoyhA3/iQV7K9o8sT7t1vWUc4bAaogU8oYNLYp5k=
-X-Google-Smtp-Source: AGHT+IFWmu+QJvzAVe05d8iPg5F2nUn2ozXsLq91i5zPZ17ix48HTP1NK0IT++d4V0bNfi6cCz5TKQ==
-X-Received: by 2002:a05:600c:1e19:b0:413:3326:9eef with SMTP id
- ay25-20020a05600c1e1900b0041333269eefmr3543641wmb.20.1710321263912; 
- Wed, 13 Mar 2024 02:14:23 -0700 (PDT)
+ bh=IVAnZ8AtjFd2afYVnZAmzUWFE9+gaXweRrxBFLVFGhU=;
+ b=JisIqb/kTamP0Q6bwcO/20TSoWdhw9pCJYJHl9KC9fsHAqVju0VvkRaDPSmLACrW4E
+ 59nb38tzt3haeTwr1kzFXltFdjPfv9RSXfQG6CFLL1Sq5P4OC7MG+STIWhVCDkIYv017
+ PSK08zRcqYMqPgvScLyGfdBp/pFFYa/Jv1o1rV7dTtwgdVsu2IV/HlgQdEa/vD1oYf/Z
+ ZBdskcSo8mLo931M0rcybVlSsWTIWa1Kt3zBNrfEbQEOfQuBL5YoEN/QoCYWpxmXmoAs
+ HCyrtRGHgEEEVYHBPyYbIfR1QWZuyaqMtug8bP1MpEYVCPNWz60wYZ47u2jgVwMtxJNv
+ H+6w==
+X-Gm-Message-State: AOJu0YwURBNWt8AbYAF+ZkRJpPxcJd+D9QS1U7Eby3kFzRWzqZcIzp6+
+ P8J4T31k4+RVHo0s5mndxB8ReGN72so4b9mhQaH/nxSESzt+cLXXiBvVvY9LNgE=
+X-Google-Smtp-Source: AGHT+IEc00IyGYAE2TwoSXNjjMyxacsS+uGs4E6+YBev6mfx0OxCqRAnTd9QyQzQU0qBHJw0r1ityg==
+X-Received: by 2002:a05:600c:3146:b0:413:1ee4:692e with SMTP id
+ h6-20020a05600c314600b004131ee4692emr1791281wmo.9.1710321264481; 
+ Wed, 13 Mar 2024 02:14:24 -0700 (PDT)
 Received: from xubuntu-23.. ([37.65.6.92]) by smtp.gmail.com with ESMTPSA id
- u1-20020a05600c138100b00412e5f32591sm1699799wmf.28.2024.03.13.02.14.23
+ u1-20020a05600c138100b00412e5f32591sm1699799wmf.28.2024.03.13.02.14.24
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 13 Mar 2024 02:14:23 -0700 (PDT)
+ Wed, 13 Mar 2024 02:14:24 -0700 (PDT)
 From: Francois Perrad <fperrad@gmail.com>
 X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Wed, 13 Mar 2024 10:13:46 +0100
-Message-Id: <20240313091412.20865-5-francois.perrad@gadz.org>
+Date: Wed, 13 Mar 2024 10:13:47 +0100
+Message-Id: <20240313091412.20865-6-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20240313091412.20865-1-francois.perrad@gadz.org>
 References: <20240313091412.20865-1-francois.perrad@gadz.org>
@@ -77,21 +77,20 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=gZhyuZBorRnhlZNImDXvN+chvZrsFeGJ1MXWISvcZk8=;
- b=Ii+CLMgC002RDO1C++Uzu+QLHRVUqQRLQMi1FUF3L777YuXA7eC1dHrzvDo35xAJFl
- R7+oJ/lb1Mw3GfKUOujAaHW8iUSZrD/bNXUS8VxP/Fu6ET6VDNXZ6XQrVhtIk808u2m5
- /EQBSGGl0wqVIZCI6X6a3LRCePTvVGo8bC5cdd4Zdfaz2sUqvHNdJq7QJJoLmNqmvQes
- NfIHZy6ivzopVr+5JMw578JWZRMtVaaxKNvD6ozv8L6NrlurAS2VLoXNEyKRp7k4mdAq
- nxbWj3vm20Cx6d87QtJfx3lLMeJPZEqVTxpWUokI0RcGJx+3ZZC/c7CV9wwV6MzRf+EY
- CCIg==
+ bh=IVAnZ8AtjFd2afYVnZAmzUWFE9+gaXweRrxBFLVFGhU=;
+ b=P2UD9jOx5d1Nkd5YUZFyL0G/pKmD7xEWtdKRzcAfLTZyJZXLDooIWPCL6w6aqNbrIo
+ YbapXYqMmy9GBz78Zcqkm3HGkB8TmuCfSJFX5eLYRjbLXDiQCJcGKFswV8LgpI3oNlqm
+ B2IGyDvW1o3zZnrLONajhFcYbs9XK4xVCP45KN3W2WPMs9t1/GRSAY8g9au4Rcn39K8S
+ jwXR3bmuXJjTBFYWFe6R0s69KluR7ku/9Hkj4n+F/2qbVVozUCw0mLzPw496pMuA/By6
+ iE6ydBrG6SGAL6Rc2ZRclXPgOYXioDpumgbcbPu5saFOkiV/7i5FnQ0ZnDpDm/rYdhhr
+ 6Zmg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Ii+CLMgC
-Subject: [Buildroot] [PATCH 05/31] package/dos2unix: disable busybox
- dos2unix & unix2dos
+ header.a=rsa-sha256 header.s=20230601 header.b=P2UD9jOx
+Subject: [Buildroot] [PATCH 06/31] package/fbset: disable busybox fbset
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -110,25 +109,22 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/dos2unix/dos2unix.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/fbset/fbset.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/dos2unix/dos2unix.mk b/package/dos2unix/dos2unix.mk
-index e30fc999d..6ed9c58b2 100644
---- a/package/dos2unix/dos2unix.mk
-+++ b/package/dos2unix/dos2unix.mk
-@@ -35,6 +35,11 @@ define DOS2UNIX_INSTALL_TARGET_CMDS
- 		$(DOS2UNIX_MAKE_OPTS) install
+diff --git a/package/fbset/fbset.mk b/package/fbset/fbset.mk
+index 8d2a477f8..5a5cf3a0e 100644
+--- a/package/fbset/fbset.mk
++++ b/package/fbset/fbset.mk
+@@ -18,4 +18,8 @@ define FBSET_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 755 $(@D)/fbset $(TARGET_DIR)/usr/sbin/fbset
  endef
  
-+define DOS2UNIX_BUSYBOX_CONFIG_FIXUPS
-+	$(call KCONFIG_DISABLE_OPT,CONFIG_DOS2UNIX)
-+	$(call KCONFIG_DISABLE_OPT,CONFIG_UNIX2DOS)
++define FBSET_BUSYBOX_CONFIG_FIXUPS
++	$(call KCONFIG_DISABLE_OPT,CONFIG_FBSET)
 +endef
 +
- define HOST_DOS2UNIX_BUILD_CMDS
- 	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) ENABLE_NLS=
- endef
+ $(eval $(generic-package))
 -- 
 2.40.1
 
