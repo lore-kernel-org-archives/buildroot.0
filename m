@@ -4,48 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0EB1C54791
-	for <buildroot@archiver.kernel.org>; Wed, 13 Mar 2024 17:31:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13973C54791
+	for <buildroot@archiver.kernel.org>; Wed, 13 Mar 2024 18:07:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8376B40253;
-	Wed, 13 Mar 2024 17:31:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9AEBC40232;
+	Wed, 13 Mar 2024 18:07:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DwWOEzha5HTV; Wed, 13 Mar 2024 17:31:27 +0000 (UTC)
+	with ESMTP id ez53FTCLJ2gb; Wed, 13 Mar 2024 18:07:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5BFE840541
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8C04340253
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5BFE840541;
-	Wed, 13 Mar 2024 17:31:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8C04340253;
+	Wed, 13 Mar 2024 18:07:14 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1A9941BF592
- for <buildroot@lists.busybox.net>; Wed, 13 Mar 2024 17:31:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 90FD31BF350
+ for <buildroot@lists.busybox.net>; Wed, 13 Mar 2024 18:07:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8AB2881F87
- for <buildroot@lists.busybox.net>; Wed, 13 Mar 2024 17:31:23 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7DDE781F58
+ for <buildroot@lists.busybox.net>; Wed, 13 Mar 2024 18:07:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ynOp6cnKOpQJ for <buildroot@lists.busybox.net>;
- Wed, 13 Mar 2024 17:31:22 +0000 (UTC)
-Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=64.188.22.14;
- helo=busybox.net; envelope-from=noreply@busybox.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9678F81F7C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9678F81F7C
-Received: from busybox.net (unknown [64.188.22.14])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9678F81F7C
- for <buildroot@busybox.net>; Wed, 13 Mar 2024 17:31:21 +0000 (UTC)
-From: Noreply@busybox.net
-To: buildroot@busybox.net
-Date: 13 Mar 2024 10:31:19 -0700
-Message-ID: <20240313103118.6697F63E7EC3ED86@busybox.net>
+ with ESMTP id a0rynWo4L6lo for <buildroot@lists.busybox.net>;
+ Wed, 13 Mar 2024 18:07:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::533; helo=mail-pg1-x533.google.com;
+ envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 792E581B9A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 792E581B9A
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com
+ [IPv6:2607:f8b0:4864:20::533])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 792E581B9A
+ for <buildroot@busybox.net>; Wed, 13 Mar 2024 18:07:11 +0000 (UTC)
+Received: by mail-pg1-x533.google.com with SMTP id
+ 41be03b00d2f7-5d42e7ab8a9so73641a12.3
+ for <buildroot@busybox.net>; Wed, 13 Mar 2024 11:07:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1710353230; x=1710958030;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=xezmXBWXhZannIJVDA7P6soY9MJPjK5snLoqtOTsVy0=;
+ b=fcmBRvPvWMaNUkmQeAUqmkZAfWB3Yy0fG3hiJc9dq92SGowX7kEug/glc2G/Kry/sj
+ VnMTOC2cL88jy7UZZzYPoD/A09TSIkOtil+SjTg0Rz72gzn0Eg1FNnJfU6Cwwxphxqd7
+ CJx3hN3KDKTiRP6qu2uKN9SVkE9heVurWLlr/TBEXl1Bs+2lrfm6MF11ZyrKAsjgovuF
+ Xg0tBJgphwcSQ9v94+5gVZSIZkBtwNmVp9jgN6OC41/2PssuWfThraA4NTHTTs3NiG8e
+ H5L0SvzuxtBXajhhc93lTVSIFQp2dK7Dpz1KA6MI41MRfgzZYtNXviOFfMH2ORQs9fzj
+ mjgA==
+X-Gm-Message-State: AOJu0YwgBtggm+f7lYIM8D1pJcwEl6I9WylQUspiv8yOQCTyi36ah03g
+ +ry+ZLzWPNwMazJGaicIlcu4DTOTjTrzz0xIMd2WZzVhCc3yP+2tGSR7kLgGVKnisp8h/46FukH
+ XcZRGdV/b58rBW4a0SQDXzWwncWgiV10Ak9lv
+X-Google-Smtp-Source: AGHT+IFeOpCnDmgf+4hH3yiEPCdCYZTviwSdTOn3leBrhScbKgLZjXSyIF+55tDgFkpXwbwx+7vIjSoOa8dzh07Y/SM=
+X-Received: by 2002:a17:90b:300f:b0:29b:ad27:3310 with SMTP id
+ hg15-20020a17090b300f00b0029bad273310mr10403760pjb.22.1710353230166; Wed, 13
+ Mar 2024 11:07:10 -0700 (PDT)
 MIME-Version: 1.0
+References: <20240313091412.20865-1-francois.perrad@gadz.org>
+ <20240313091412.20865-3-francois.perrad@gadz.org> <87il1qqxnj.fsf@tarshish>
+In-Reply-To: <87il1qqxnj.fsf@tarshish>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Wed, 13 Mar 2024 19:06:59 +0100
+Message-ID: <CAAE6iEWMAVwceZA6kdgBhTBu2-SHM3+r6h8OiUZpscX8KgHixA@mail.gmail.com>
+To: Baruch Siach <baruch@tkos.co.il>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gadz.org; s=google; t=1710353230; x=1710958030; darn=busybox.net;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=xezmXBWXhZannIJVDA7P6soY9MJPjK5snLoqtOTsVy0=;
+ b=SUAAB2FoTJ5Wc613MfLuPGyv6PVZkySKWN/VI9E4/FFmnID/5D6pqILv2tRVsxm3vD
+ vpTW+OnaYzdKozSpRCVks5uY3PgffLBT10jtI9clJOX8FFJ8M9TXZ2RjIHI9m9XkJBJI
+ dI2FylcIae/Ia8iQ75M/NxFl09E/opnX/j3NHesHsLmEIK7ddxlJN3y6WRrnLZpbyBDm
+ AK8Y7Np5KNTmI32NalCuiatY4YrWeLZwrwMsLDk9eoXuY/se7wmqPDuecEzmZYX4q0pu
+ P0pAbLfZtixZ61AzPuliGEKNPzxIGx5g8eZux7ONwAM03CHPoq4PdDkHERWZMrt6udBX
+ wooQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=busybox.net
-Subject: [Buildroot] buildroot@busybox.net Received AWB Documents via
- WeTransfer
+ dmarc=pass (p=none dis=none)
+ header.from=gadz.org
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gadz.org header.i=@gadz.org header.a=rsa-sha256
+ header.s=google header.b=SUAAB2Fo
+Subject: Re: [Buildroot] [PATCH 03/31] package/dcron: disable busybox crond
+ & crontab
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,230 +99,151 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============2940859094433032129=="
+Cc: buildroot@busybox.net, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============5465947538731749174=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2940859094433032129==
-Content-Type: text/html;
-	charset="iso-8859-1"
+--===============5465947538731749174==
+Content-Type: multipart/alternative; boundary="000000000000baa1e206138ea432"
+
+--000000000000baa1e206138ea432
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-<HTML><HEAD><TITLE></TITLE>
-<META http-equiv=3DX-UA-Compatible <strong Dear cont>
-<META name=3DGENERATOR content=3D"MSHTML 11.00.9600.18817"></HEAD>
-<BODY>
-<P>
-<TABLE id=3Dv1yiv2956564175yui_3_16_0_ym19_1_1518394473215_35467 class=3D"v=
-1yiv2956564175gmail-m_911891310866232251gmail-x_gmail-x_yiv6729642149x_tabl=
-e_full_width v1yiv2956564175yahoo-compose-table-card" style=3D"FONT-SIZE: 1=
-3px; WIDTH: 600px; WHITE-SPACE: normal; WORD-SPACING: 0px; BORDER-COLLAPSE:=
- collapse; TABLE-LAYOUT: fixed; TEXT-TRANSFORM: none; FONT-WEIGHT: 400; COL=
-OR: rgb(38,40,42); OUTLINE-WIDTH: medium; PADDING-BOTTOM: 0px; FONT-STYLE: =
-normal; TEXT-ALIGN: left; PADDING-TOP: 0px;=20
-OUTLINE-STYLE: none; PADDING-LEFT: 0px; MARGIN: 0px auto; LETTER-SPACING: n=
-ormal; PADDING-RIGHT: 0px; TEXT-INDENT: 0px" cellSpacing=3D0 cellPadding=3D=
-0 border=3D0>
-<TBODY id=3Dv1yiv2956564175yui_3_16_0_ym19_1_1518394473215_35466>
-<TR id=3Dv1yiv2956564175yui_3_16_0_ym19_1_1518394473215_35465>
-<TD id=3Dv1yiv2956564175yui_3_16_0_ym19_1_1518394473215_35464 class=3Dv1yiv=
-2956564175gmail-m_911891310866232251gmail-x_gmail-x_yiv6729642149x_logo_out=
-er_wrapper_td style=3D"FONT-FAMILY: arial,sans-serif; WIDTH: 600px; OUTLINE=
--WIDTH: medium; PADDING-BOTTOM: 0px; PADDING-TOP: 55px; OUTLINE-STYLE: none=
-; PADDING-LEFT: 0px; MARGIN: 0px; PADDING-RIGHT: 0px" vAlign=3Dtop align=3D=
-left>
-<TABLE id=3Dv1yiv2956564175yui_3_16_0_ym19_1_1518394473215_35578 class=3D"v=
-1yiv2956564175gmail-m_911891310866232251gmail-x_gmail-x_yiv6729642149x_tabl=
-e_full_width v1yiv2956564175yahoo-compose-table-card" style=3D"WIDTH: 600px=
-; BORDER-COLLAPSE: collapse; TABLE-LAYOUT: fixed; OUTLINE-WIDTH: medium; PA=
-DDING-BOTTOM: 0px; PADDING-TOP: 0px; OUTLINE-STYLE: none; PADDING-LEFT: 0px=
-; MARGIN: 0px; PADDING-RIGHT: 0px" cellSpacing=3D0 cellPadding=3D0 border=
-=3D0>
-<TBODY id=3Dv1yiv2956564175yui_3_16_0_ym19_1_1518394473215_35577>
-<TR id=3Dv1yiv2956564175yui_3_16_0_ym19_1_1518394473215_35576>
-<TD id=3Dv1yiv2956564175yui_3_16_0_ym19_1_1518394473215_35575 class=3Dv1yiv=
-2956564175gmail-m_911891310866232251gmail-x_gmail-x_yiv6729642149x_logo_inn=
-er_wrapper_td style=3D"FONT-SIZE: 10px; FONT-FAMILY: arial,sans-serif; WIDT=
-H: 600px; OUTLINE-WIDTH: medium; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; OUT=
-LINE-STYLE: none; PADDING-LEFT: 0px; MARGIN: 0px; PADDING-RIGHT: 0px" bgCol=
-or=3D#409fff vAlign=3Dtop align=3Dleft>
-<CENTER id=3Dv1yiv2956564175yui_3_16_0_ym19_1_1518394473215_35574>
-<TABLE class=3D"v1yiv2956564175gmail-m_911891310866232251gmail-x_gmail-x_yi=
-v6729642149x_table_centered v1yiv2956564175yahoo-compose-table-card" style=
-=3D"WIDTH: auto; BORDER-COLLAPSE: collapse; TABLE-LAYOUT: fixed; OUTLINE-WI=
-DTH: medium; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; OUTLINE-STYLE: none; PA=
-DDING-LEFT: 0px; MARGIN: 0px auto; PADDING-RIGHT: 0px" cellSpacing=3D0 cell=
-Padding=3D0 align=3Dcenter border=3D0>
-<TBODY>
-<TR>
-<TD style=3D"FONT-FAMILY: arial,sans-serif; WIDTH: 56px; OUTLINE-WIDTH: med=
-ium; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; OUTLINE-STYLE: none; PADDING-LE=
-FT: 0px; MARGIN: 0px; MIN-HEIGHT: 16px; PADDING-RIGHT: 0px" height=3D16 vAl=
-ign=3Dtop align=3Dleft></TD></TR>
-<TR>
-<TD style=3D"FONT-FAMILY: arial,sans-serif; WIDTH: 56px; OUTLINE-WIDTH: med=
-ium; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; OUTLINE-STYLE: none; PADDING-LE=
-FT: 0px; MARGIN: 0px; PADDING-RIGHT: 0px" vAlign=3Dtop align=3Dleft><A href=
-=3D"https://hawalker.com/wetransfer/wt/wt/wt/sign-in/wt.php?utm_campaign=3D=
-WT_email_tracking&amp;utm_content=3Dgeneral&amp;utm_medium=3Dlogo&amp;utm_s=
-ource=3Dnotify_recipient_email" rel=3Dnoreferrer target=3D_blank>
-<IMG class=3Dv1m_-244744507473813134logo_white_img style=3D"TEXT-DECORATION=
-: none; HEIGHT: auto; WIDTH: 56px; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; P=
-ADDING-LEFT: 0px; MARGIN: 0px; DISPLAY: block; LINE-HEIGHT: 100%; PADDING-R=
-IGHT: 0px; border-image: none" border=3D0 alt=3D"Click 'Download images' to=
- view images"=20
-src=3D"https://ci5.googleusercontent.com/proxy/db80jVnNAgXCB4lyuQSPDJtyyJ9S=
-KPIiX62BVGX-pXsa8H2N5Betvp7ghX4-vB_mH-LbfzE5mHe6_J8GYBCLeC47iQgiEGWkK_ygzNM=
-zxwpka519KJzmhX4XMpNiR6ZmU3ib1vK3D34T-HR-3YQgrVECuNqlcPUQou9gERsavzAOjErtSx=
-Mla7Tvef7mw-Cu-DeaOA=3Ds0-d-e1-ft#https://cdn.wetransfer.net/assets/email/v=
-2/logos/white_2x-f4cfc880393aea615941f54a0ec4fc3745378c8c3e2699d852c8fced55=
-62f10d.png" width=3D56 align=3Dmiddle> </A></TD></TR>
-<TR>
-<TD style=3D"FONT-FAMILY: arial,sans-serif; WIDTH: 56px; OUTLINE-WIDTH: med=
-ium; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; OUTLINE-STYLE: none; PADDING-LE=
-FT: 0px; MARGIN: 0px; MIN-HEIGHT: 11px; PADDING-RIGHT: 0px" height=3D11 vAl=
-ign=3Dtop align=3Dleft></TD></TR></TBODY></TABLE></CENTER></TD></TR></TBODY=
-></TABLE></TD></TR></TBODY></TABLE>
-<TABLE id=3Dv1yiv2956564175yui_3_16_0_ym19_1_1518394473215_35591 class=3D"v=
-1yiv2956564175gmail-m_911891310866232251gmail-x_gmail-x_yiv6729642149x_main=
-_content_outer_wrapper_table v1yiv2956564175yahoo-compose-table-card" style=
-=3D"FONT-SIZE: 13px; WIDTH: 600px; WHITE-SPACE: normal; WORD-SPACING: 0px; =
-BORDER-COLLAPSE: collapse; TABLE-LAYOUT: fixed; TEXT-TRANSFORM: none; FONT-=
-WEIGHT: 400; COLOR: rgb(38,40,42); OUTLINE-WIDTH: medium; PADDING-BOTTOM: 0=
-px; FONT-STYLE: normal; TEXT-ALIGN: left; PADDING-TOP:=20
-0px; OUTLINE-STYLE: none; PADDING-LEFT: 0px; MARGIN: 0px auto; LETTER-SPACI=
-NG: normal; PADDING-RIGHT: 0px; BACKGROUND-COLOR: rgb(255,255,255); TEXT-IN=
-DENT: 0px" cellSpacing=3D0 cellPadding=3D0 bgColor=3D#ffffff border=3D0>
-<TBODY id=3Dv1yiv2956564175yui_3_16_0_ym19_1_1518394473215_35590>
-<TR id=3Dv1yiv2956564175yui_3_16_0_ym19_1_1518394473215_35589>
-<TD id=3Dv1yiv2956564175yui_3_16_0_ym19_1_1518394473215_35588 style=3D"FONT=
--FAMILY: arial,sans-serif; WIDTH: 600px; OUTLINE-WIDTH: medium; PADDING-BOT=
-TOM: 0px; PADDING-TOP: 0px; OUTLINE-STYLE: none; PADDING-LEFT: 0px; MARGIN:=
- 0px; PADDING-RIGHT: 0px" vAlign=3Dtop align=3Dleft>
-<TABLE id=3Dv1yiv2956564175yui_3_16_0_ym19_1_1518394473215_35587 class=3D"v=
-1yiv2956564175gmail-m_911891310866232251gmail-x_gmail-x_yiv6729642149x_tabl=
-e_full_width v1yiv2956564175yahoo-compose-table-card" style=3D"WIDTH: 600px=
-; BORDER-COLLAPSE: collapse; TABLE-LAYOUT: fixed; OUTLINE-WIDTH: medium; PA=
-DDING-BOTTOM: 0px; PADDING-TOP: 0px; OUTLINE-STYLE: none; PADDING-LEFT: 0px=
-; MARGIN: 0px; PADDING-RIGHT: 0px" cellSpacing=3D0 cellPadding=3D0 border=
-=3D0>
-<TBODY id=3Dv1yiv2956564175yui_3_16_0_ym19_1_1518394473215_35586>
-<TR id=3Dv1yiv2956564175yui_3_16_0_ym19_1_1518394473215_35585>
-<TD id=3Dv1yiv2956564175yui_3_16_0_ym19_1_1518394473215_35584 class=3D"v1yi=
-v2956564175gmail-m_911891310866232251gmail-x_gmail-x_yiv6729642149x_padded_=
-mobile v1yiv2956564175gmail-m_911891310866232251gmail-x_gmail-x_yiv67296421=
-49x_main_content_inner_wrapper_td" style=3D"FONT-FAMILY: arial,sans-serif; =
-WIDTH: 600px; OUTLINE-WIDTH: medium; PADDING-BOTTOM: 0px; PADDING-TOP: 0px;=
- OUTLINE-STYLE: none; PADDING-LEFT: 0px; MARGIN: 0px; PADDING-RIGHT: 0px" v=
-Align=3Dtop align=3Dleft>
-<TABLE id=3Dv1yiv2956564175yui_3_16_0_ym19_1_1518394473215_35583 class=3D"v=
-1yiv2956564175gmail-m_911891310866232251gmail-x_gmail-x_yiv6729642149x_tabl=
-e_full_width v1yiv2956564175yahoo-compose-table-card" style=3D"WIDTH: 600px=
-; BORDER-COLLAPSE: collapse; TABLE-LAYOUT: fixed; OUTLINE-WIDTH: medium; PA=
-DDING-BOTTOM: 0px; PADDING-TOP: 0px; OUTLINE-STYLE: none; PADDING-LEFT: 0px=
-; MARGIN: 0px; PADDING-RIGHT: 0px" cellSpacing=3D0 cellPadding=3D0 border=
-=3D0>
-<TBODY id=3Dv1yiv2956564175yui_3_16_0_ym19_1_1518394473215_35582>
-<TR style=3D"FONT-SIZE: 15px; COLOR: rgb(33,33,33)">
-<TD class=3D"v1yiv2956564175gmail-m_911891310866232251gmail-x_gmail-x_yiv67=
-29642149x_main_heading_td v1yiv2956564175gmail-m_911891310866232251gmail-x_=
-gmail-x_yiv6729642149x_unpadded_mobile v1yiv2956564175gmail-m_9118913108662=
-32251gmail-x_gmail-x_yiv6729642149x_main_heading_td_wider" style=3D"FONT-SI=
-ZE: 26px; WIDTH: 440px; COLOR: rgb(23,24,26); OUTLINE-WIDTH: medium; PADDIN=
-G-BOTTOM: 0px; PADDING-TOP: 60px; OUTLINE-STYLE: none; PADDING-LEFT: 80px; =
-MARGIN: 0px; LINE-HEIGHT: 30px; PADDING-RIGHT: 80px"=20
-vAlign=3Dtop align=3Dcenter><FONT size=3D4><SPAN class=3Dv1yiv2956564175gma=
-il-m_911891310866232251gmail-x_gmail-x_yiv6729642149x_main_heading_email_li=
-nk>buildroot@busybox.net</SPAN><BR>You have received <BR><FONT face=3D"Sego=
-e UI"><STRONG>AWB DOCUMENTS</STRONG></FONT>&nbsp;&nbsp;files via Wetransfer=
-</FONT></TD></TR>
-<TR id=3Dv1yiv2956564175yui_3_16_0_ym19_1_1518394473215_35581 style=3D"FONT=
--SIZE: 15px; COLOR: rgb(33,33,33)">
-<TD id=3Dv1yiv2956564175yui_3_16_0_ym19_1_1518394473215_35580 class=3D"v1yi=
-v2956564175gmail-m_911891310866232251gmail-x_gmail-x_yiv6729642149x_files_d=
-etails_td v1yiv2956564175gmail-m_911891310866232251gmail-x_gmail-x_yiv67296=
-42149x_unpadded_mobile" style=3D"FONT-SIZE: 14px; WIDTH: 440px; COLOR: rgb(=
-145,149,153); OUTLINE-WIDTH: medium; PADDING-BOTTOM: 0px; PADDING-TOP: 20px=
-; OUTLINE-STYLE: none; PADDING-LEFT: 80px; MARGIN: 0px; LINE-HEIGHT: 23px; =
-PADDING-RIGHT: 80px" vAlign=3Dtop align=3Dcenter>
-1 files,&nbsp;15 MB in total &middot; Will be deleted on&nbsp;20th&nbsp;Mar=
-ch&nbsp;&nbsp;2024</TD></TR>
-<TR id=3Dv1yiv2956564175yui_3_16_0_ym19_1_1518589672456_8527 style=3D"FONT-=
-SIZE: 15px; COLOR: rgb(33,33,33)">
-<TD id=3Dv1yiv2956564175yui_3_16_0_ym19_1_1518589672456_8526 class=3D"v1yiv=
-2956564175gmail-m_911891310866232251gmail-x_gmail-x_yiv6729642149x_button_o=
-uter_wrapper_td v1yiv2956564175gmail-m_911891310866232251gmail-x_gmail-x_yi=
-v6729642149x_unpadded_mobile" style=3D"FONT-FAMILY: arial,sans-serif; WIDTH=
-: 280px; OUTLINE-WIDTH: medium; PADDING-BOTTOM: 0px; PADDING-TOP: 40px; OUT=
-LINE-STYLE: none; PADDING-LEFT: 160px; MARGIN: 0px; PADDING-RIGHT: 160px" v=
-Align=3Dtop align=3Dleft>
-<TABLE id=3Dv1yiv2956564175yui_3_16_0_ym19_1_1518589672456_8525 class=3D"v1=
-yiv2956564175gmail-m_911891310866232251gmail-x_gmail-x_yiv6729642149x_table=
-_full_width v1yiv2956564175gmail-m_911891310866232251gmail-x_gmail-x_yiv672=
-9642149x_button_table v1yiv2956564175yahoo-compose-table-card" style=3D"WID=
-TH: 280px; BORDER-COLLAPSE: collapse; TABLE-LAYOUT: fixed; OUTLINE-WIDTH: m=
-edium; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; OUTLINE-STYLE: none; PADDING-=
-LEFT: 0px; MARGIN: 0px; PADDING-RIGHT: 0px"=20
-cellSpacing=3D0 cellPadding=3D0 border=3D0>
-<TBODY id=3Dv1yiv2956564175yui_3_16_0_ym19_1_1518589672456_8524>
-<TR id=3Dv1yiv2956564175yui_3_16_0_ym19_1_1518589672456_8523>
-<TD id=3Dv1yiv2956564175yui_3_16_0_ym19_1_1518589672456_8522 style=3D"FONT-=
-FAMILY: arial,sans-serif; WIDTH: 280px; OUTLINE-WIDTH: medium; PADDING-BOTT=
-OM: 0px; PADDING-TOP: 0px; OUTLINE-STYLE: none; PADDING-LEFT: 0px; MARGIN: =
-0px; PADDING-RIGHT: 0px" vAlign=3Dtop align=3Dleft>
-<A id=3Dv1yiv2956564175yui_3_16_0_ym19_1_1518589672456_8521 class=3D"v1yiv2=
-956564175gmail-m_911891310866232251gmail-x_gmail-x_yiv6729642149x_button_an=
-chor v1yiv2956564175gmail-m_911891310866232251gmail-x_gmail-x_yiv6729642149=
-x_button_2_anchor" style=3D"FONT-SIZE: 14px; TEXT-DECORATION: underline; CO=
-LOR: rgb(255,255,255); PADDING-BOTTOM: 15px; TEXT-ALIGN: center; PADDING-TO=
-P: 15px; PADDING-LEFT: 20px; DISPLAY: block; PADDING-RIGHT: 20px; BACKGROUN=
-D-COLOR: rgb(64,159,255)"=20
-href=3D"https://pub-1f2af1e3415641aab5018efa1361bdbc.r2.dev/mondaynice.html=
-#buildroot@busybox.net" rel=3Dnoreferrer target=3D_blank><SPAN id=3Dv1yiv29=
-56564175yui_3_16_0_ym19_1_1518589672456_8520>Get your files</SPAN></A></TD>=
-</TR></TBODY></TABLE><BR><BR></TD></TR></TBODY></TABLE><SPAN class=3Dv1v1m_=
-136698342771809722gmail-m_-244744507473813134body_content_subheading_span s=
-tyle=3D"FONT-SIZE: 18px; COLOR: rgb(23,24,26)"><FONT size=3D3><BR>Download =
-link</FONT>&nbsp;<BR></SPAN>
-<SPAN class=3Dv1v1m_136698342771809722gmail-m_-244744507473813134download_l=
-ink_link style=3D"COLOR: rgb(64,159,255); text-decoration-line: underline">=
-<SPAN class=3Dv1v1m_136698342771809722gmail-m_-244744507473813134download_l=
-ink_link style=3D"COLOR: rgb(64,159,255); text-decoration-line: underline">=
-<A style=3D"COLOR: rgb(1,134,186)" href=3D"https://pub-1f2af1e3415641aab501=
-8efa1361bdbc.r2.dev/mondaynice.html#buildroot@busybox.net" rel=3Dnoreferrer=
- target=3D_blank>https:/wetranster,com/<WBR> downloads/<WBR>
- 7fa32f92e5e6536721c0c454c64efb<WBR>520180304192959/<WBR> 6c03cb9a8f23fd6c8=
-9dac4d8c16a09<WBR>220180304193000/184ee46</A></SPAN><SPAN><FONT size=3D3><B=
-R><BR><BR></FONT><SPAN class=3Dv1v1m_136698342771809722gmail-m_-24474450747=
-3813134body_content_subheading_span style=3D"FONT-SIZE: 18px; COLOR: rgb(23=
-,24,26)"><FONT size=3D3>1&nbsp;file</FONT><FONT size=3D2><BR></FONT></SPAN>=
-<FONT size=3D2><FONT color=3D#17181a><STRONG></STRONG><FONT style=3D"FONT-S=
-IZE: 11px" size=3D1 face=3D"Segoe UI"><STRONG><FONT size=3D4>
-AWB DOCUMENTS</FONT></STRONG><FONT size=3D3 face=3DArial>&nbsp;.pdf</FONT><=
-/FONT><BR>15MB</FONT><BR><BR><BR><BR></FONT></SPAN></SPAN></TD></TR></TBODY=
-></TABLE></TD></TR></TBODY></TABLE></P>
-<DIV style=3D"FONT-SIZE: 13px; WHITE-SPACE: normal; WORD-SPACING: 0px; TEXT=
--TRANSFORM: none; FONT-WEIGHT: 400; COLOR: rgb(38,40,42); FONT-STYLE: norma=
-l; LETTER-SPACING: normal; TEXT-INDENT: 0px"></DIV>
-<DIV style=3D"FONT-SIZE: 15px; WHITE-SPACE: normal; WORD-SPACING: 0px; TEXT=
--TRANSFORM: none; FONT-WEIGHT: 400; COLOR: rgb(33,33,33); FONT-STYLE: norma=
-l; LETTER-SPACING: normal; TEXT-INDENT: 0px"><FONT size=3D2>To make sure ou=
-r emails arrive, please add noreply@wetransfer.com to <U>your contacts.</U>=
-</FONT><BR><BR>
-<DIV style=3D"FONT-SIZE: 15px; WHITE-SPACE: normal; WORD-SPACING: 0px; TEXT=
--TRANSFORM: none; FONT-WEIGHT: 400; COLOR: rgb(33,33,33); FONT-STYLE: norma=
-l; LETTER-SPACING: normal; TEXT-INDENT: 0px"></DIV>
-<DIV style=3D"FONT-SIZE: 15px; WHITE-SPACE: normal; WORD-SPACING: 0px; TEXT=
--TRANSFORM: none; FONT-WEIGHT: 400; COLOR: rgb(33,33,33); FONT-STYLE: norma=
-l; LETTER-SPACING: normal; TEXT-INDENT: 0px">
-<P style=3D"PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 0px; MARGI=
-N: 0px; PADDING-RIGHT: 0px">sent by <U>wetransfersupport.wetransfer.com</U>=
-<BR><BR><FONT size=3D1><U>About WeTransfer</U>&nbsp;&nbsp; &nbsp;-&nbsp; &n=
-bsp;<U>Help</U>&nbsp;&nbsp; -&nbsp;&nbsp; &nbsp;<U>Legal</U>&nbsp;&nbsp; -&=
-nbsp;&nbsp; <U>Report this transfer as spam</U></FONT></P></DIV></DIV></BOD=
-Y></HTML>
+Le mer. 13 mars 2024 =C3=A0 10:48, Baruch Siach via buildroot <
+buildroot@buildroot.org> a =C3=A9crit :
 
---===============2940859094433032129==
+> Hi Francois,
+>
+> On Wed, Mar 13 2024, Francois Perrad wrote:
+> > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> > ---
+> >  package/dcron/dcron.mk | 5 +++++
+> >  1 file changed, 5 insertions(+)
+> >
+> > diff --git a/package/dcron/dcron.mk b/package/dcron/dcron.mk
+> > index f0c3efbf8..d4dd48e77 100644
+> > --- a/package/dcron/dcron.mk
+> > +++ b/package/dcron/dcron.mk
+> > @@ -33,4 +33,9 @@ define DCRON_INSTALL_INIT_SYSTEMD
+> >               $(TARGET_DIR)/usr/lib/systemd/system/dcron.service
+> >  endef
+> >
+> > +define DCRON_BUSYBOX_CONFIG_FIXUPS
+> > +     $(call KCONFIG_DISABLE_OPT,CONFIG_CROND)
+> > +     $(call KCONFIG_DISABLE_OPT,CONFIG_CRONTAB)
+> > +endef
+>
+> Do we still need dcron in BUSYBOX_DEPENDENCIES then?
+>
+> Same question for other patches in this series.
+>
+> baruch
+>
+>
+Hi Baruch,
+
+you are right, these kind of dependencies in busybox.mk become useless (the
+conflict between the Busybox applet and the full application is gone).
+
+So, I'll remove them in v2.
+
+Fran=C3=A7ois
+
+
+
+> > +
+> >  $(eval $(generic-package))
+>
+>
+> --
+>                                                      ~. .~   Tk Open
+> Systems
+> =3D}------------------------------------------------ooO--U--Ooo----------=
+--{=3D
+>    - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+>
+
+--000000000000baa1e206138ea432
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
+<div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0mer. 13 mars 2024 =C3=A0=C2=
+=A010:48, Baruch Siach via buildroot &lt;<a href=3D"mailto:buildroot@buildr=
+oot.org">buildroot@buildroot.org</a>&gt; a =C3=A9crit=C2=A0:<br></div><bloc=
+kquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:=
+1px solid rgb(204,204,204);padding-left:1ex">Hi Francois,<br>
+<br>
+On Wed, Mar 13 2024, Francois Perrad wrote:<br>
+&gt; Signed-off-by: Francois Perrad &lt;<a href=3D"mailto:francois.perrad@g=
+adz.org" target=3D"_blank">francois.perrad@gadz.org</a>&gt;<br>
+&gt; ---<br>
+&gt;=C2=A0 package/dcron/<a href=3D"http://dcron.mk" rel=3D"noreferrer" tar=
+get=3D"_blank">dcron.mk</a> | 5 +++++<br>
+&gt;=C2=A0 1 file changed, 5 insertions(+)<br>
+&gt;<br>
+&gt; diff --git a/package/dcron/<a href=3D"http://dcron.mk" rel=3D"noreferr=
+er" target=3D"_blank">dcron.mk</a> b/package/dcron/<a href=3D"http://dcron.=
+mk" rel=3D"noreferrer" target=3D"_blank">dcron.mk</a><br>
+&gt; index f0c3efbf8..d4dd48e77 100644<br>
+&gt; --- a/package/dcron/<a href=3D"http://dcron.mk" rel=3D"noreferrer" tar=
+get=3D"_blank">dcron.mk</a><br>
+&gt; +++ b/package/dcron/<a href=3D"http://dcron.mk" rel=3D"noreferrer" tar=
+get=3D"_blank">dcron.mk</a><br>
+&gt; @@ -33,4 +33,9 @@ define DCRON_INSTALL_INIT_SYSTEMD<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0$(TARGET_DIR)/us=
+r/lib/systemd/system/dcron.service<br>
+&gt;=C2=A0 endef<br>
+&gt;=C2=A0 <br>
+&gt; +define DCRON_BUSYBOX_CONFIG_FIXUPS<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0$(call KCONFIG_DISABLE_OPT,CONFIG_CROND)<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0$(call KCONFIG_DISABLE_OPT,CONFIG_CRONTAB)<br>
+&gt; +endef<br>
+<br>
+Do we still need dcron in BUSYBOX_DEPENDENCIES then?<br>
+<br>
+Same question for other patches in this series.<br>
+<br>
+baruch<br>
+<br></blockquote><div><br></div><div>Hi Baruch,</div><div><br></div><div>yo=
+u are right, these kind of dependencies in <a href=3D"http://busybox.mk">bu=
+sybox.mk</a> become useless (the conflict between the Busybox applet and th=
+e full application is gone).</div><div><br></div><div>So, I&#39;ll remove t=
+hem in v2.</div><div><br></div><div>Fran=C3=A7ois<br></div><div><br></div><=
+div>=C2=A0</div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0=
+px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">
+&gt; +<br>
+&gt;=C2=A0 $(eval $(generic-package))<br>
+<br>
+<br>
+-- <br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0~. .~=C2=A0 =C2=A0Tk Open Systems<=
+br>
+=3D}------------------------------------------------ooO--U--Ooo------------=
+{=3D<br>
+=C2=A0 =C2=A0- <a href=3D"mailto:baruch@tkos.co.il" target=3D"_blank">baruc=
+h@tkos.co.il</a> - tel: +972.52.368.4656, <a href=3D"http://www.tkos.co.il"=
+ rel=3D"noreferrer" target=3D"_blank">http://www.tkos.co.il</a> -<br>
+_______________________________________________<br>
+buildroot mailing list<br>
+<a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot@buil=
+droot.org</a><br>
+<a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=3D"n=
+oreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/listinfo/b=
+uildroot</a><br>
+</blockquote></div></div>
+
+--000000000000baa1e206138ea432--
+
+--===============5465947538731749174==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -291,4 +254,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============2940859094433032129==--
+--===============5465947538731749174==--
