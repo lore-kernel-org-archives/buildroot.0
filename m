@@ -4,81 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3A75C54E60
-	for <buildroot@archiver.kernel.org>; Thu, 14 Mar 2024 21:45:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE950C54E60
+	for <buildroot@archiver.kernel.org>; Thu, 14 Mar 2024 21:52:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A00DE402D7;
-	Thu, 14 Mar 2024 21:45:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 98408400FF;
+	Thu, 14 Mar 2024 21:52:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MJUGyGzjSIg4; Thu, 14 Mar 2024 21:45:03 +0000 (UTC)
+	with ESMTP id ivHAJBC7Z5ny; Thu, 14 Mar 2024 21:52:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D8C340359
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 912CB402D7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6D8C340359;
-	Thu, 14 Mar 2024 21:45:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 912CB402D7;
+	Thu, 14 Mar 2024 21:52:00 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5FAB31BF3E9
- for <buildroot@lists.busybox.net>; Thu, 14 Mar 2024 21:45:01 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0CB251BF3E9
+ for <buildroot@lists.busybox.net>; Thu, 14 Mar 2024 21:51:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4CE2C60895
- for <buildroot@lists.busybox.net>; Thu, 14 Mar 2024 21:45:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EE7B9606A3
+ for <buildroot@lists.busybox.net>; Thu, 14 Mar 2024 21:51:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id x3hVqceCD07i for <buildroot@lists.busybox.net>;
- Thu, 14 Mar 2024 21:44:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=68.232.141.245;
- helo=esa1.hgst.iphmx.com; envelope-from=prvs=7968e6bc0=wilfred.mallawa@wdc.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 872CB60884
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 872CB60884
-Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 872CB60884
- for <buildroot@buildroot.org>; Thu, 14 Mar 2024 21:44:59 +0000 (UTC)
-X-CSE-ConnectionGUID: cBZcOvtpTGqqDPWnuC3DhA==
-X-CSE-MsgGUID: 6dcbwk9lT3W/cSdtUu5UgQ==
-X-IronPort-AV: E=Sophos;i="6.07,126,1708358400"; d="scan'208";a="11886116"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com)
- ([199.255.45.15])
- by ob1.hgst.iphmx.com with ESMTP; 15 Mar 2024 05:44:58 +0800
-IronPort-SDR: +Z11n3mCyfdqD2b5LyiSCs1I7+ffmkzL8dCv+/oiqOpxSwI5gZy4gFn46Eka1NlXQQYCf6RoT9
- txgxwU2u4ZVg==
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
- by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256;
- 14 Mar 2024 13:48:16 -0700
-IronPort-SDR: tVWrGnPabIK/gDJKbIxF5oumunDIMVXP+ZjuUG6jnXe8XdH12hW6NbwsnNe2u9CevxhY62ThmA
- tVYOLisogapA==
-WDCIronportException: Internal
-Received: from unknown (HELO fedora.wdc.com) ([10.225.165.69])
- by uls-op-cesaip01.wdc.com with ESMTP; 14 Mar 2024 14:44:56 -0700
+ with ESMTP id jQBugt0f8H8Q for <buildroot@lists.busybox.net>;
+ Thu, 14 Mar 2024 21:51:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 82C7B605F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 82C7B605F6
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 82C7B605F6
+ for <buildroot@buildroot.org>; Thu, 14 Mar 2024 21:51:57 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id
+ 5b1f17b1804b1-413f2366ef5so7222065e9.3
+ for <buildroot@buildroot.org>; Thu, 14 Mar 2024 14:51:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1710453115; x=1711057915;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=F95iovcH+h4r0hjb2dph6ZTTxEecRX3sX1eCtdXu4h4=;
+ b=Zi2Bv3iU4N2rtVT0LDNePx9nDBrpndnQMqYgGV9H1VchYo/2ic/7Inp4DETZ7wV7z3
+ PXpKOCa7ik8gRSTGs58fWyX1/mouvVO7AMe0vjhDRD0plPioZp1qJd/ItBE/VtsYkYqt
+ Czw2kMWp1lxfOWBT3B7rFatjq/HzTr/rA3cWlcuIwiOx4qUeG2ulMycW2ZMawupM/LDP
+ QmuZLiuyTDHBV9XHIcbCiG6ZvPW4A8eR9pblya3Z9WhhCOdYoSXfQr8Sy6hpRQSTfBvM
+ srpPyeSHbMFmPNvi6IOVj/Y80a4fMOa3vhbaaw19PhGiyPKZB4PyKU3D6A2ZF/KHR8Eo
+ vC7w==
+X-Gm-Message-State: AOJu0Yx8LTcYlT0e8UNH16WIlP8XrctT2VgV8iVbX2SWJ4q40F1C1xEu
+ lImnNrz/vaY+AlGnsplD5KEIsRRJUGWwIfHJXUr5fZCimpDkkXoecIjUMNWR
+X-Google-Smtp-Source: AGHT+IEWwM9xR6ym0fvhG9cP/Gn00z9sVcvnu3y0G8cAycD78eta82XI3KjyQXRihuRX9lHLOJkVqg==
+X-Received: by 2002:a05:600c:a007:b0:413:f5d1:b278 with SMTP id
+ jg7-20020a05600ca00700b00413f5d1b278mr1832389wmb.33.1710453114614; 
+ Thu, 14 Mar 2024 14:51:54 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ je20-20020a05600c1f9400b00413e6af1bd5sm3510762wmb.47.2024.03.14.14.51.54
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 14 Mar 2024 14:51:54 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 15 Mar 2024 07:44:23 +1000
-Message-ID: <20240314214422.676788-2-wilfred.mallawa@wdc.com>
-X-Mailer: git-send-email 2.44.0
+Date: Thu, 14 Mar 2024 22:51:52 +0100
+Message-ID: <20240314215152.428462-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
- d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
- t=1710452699; x=1741988699;
- h=from:to:cc:subject:date:message-id:mime-version:
- content-transfer-encoding;
- bh=SGDrCQx1FoWvscytCjLO/i2GsdviN6JH2vz7TVjKNo8=;
- b=hqEUhtPS6fLIB76jHptdLZNRFQgFWFmkOlE5n8lEXGo5pcT/mQ91xjpm
- ZnwkI0vv9RbNNJcoUuBQg67NqWjyGwAYZ09BVfVEiWPg/Oa/KVPdBzlH8
- 8n+LGi6BbQr1FgFB7uWMPx1BQG2xDgTevJxyZpk19//ATG9Uj8tpLYwyZ
- RTP/ohqG9E5t5Nuj7FDD5g0dvwCNiR0F6kXUrJlhrCdk4KTvKmFB9MK32
- rgpldSIe0R4nN5yieg6KKyCkqgbjsLD2maf7zWfd1ScRJ+wjJcFlaSYsy
- w+3pczpaSfIHZSRXmDB0Gg4ra6CQYS+5VALsh8yrEU730s6DJdAMo46Mt
- Q==;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1710453115; x=1711057915; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=F95iovcH+h4r0hjb2dph6ZTTxEecRX3sX1eCtdXu4h4=;
+ b=E9wgtlnlpez61n0Jp73nc8/1H5ko8/6hynjXYXov8Y+I+FPmNNE+qeUq8Sxpc3VUZQ
+ J5tN6VUZTHp9JobAOE58ersMnvDUNad5Yx0SNyS82Ws+wYzhzysXwkonViGRDgxTQlA4
+ HWM7NiQZV7ax5bkNsL71tHkIaHcDoXPM+IJWzCmNUtm7DTaMadiQV5sMtDwM05XG9Zjb
+ ERvWmJWA8RR0q9a+xof9zcpHDi69n4LQJR+uCJC27lsKaLbafj0jN4Gt5tNv5hJRl30P
+ 3SoLZ2HM/0fgZQKXKL7vY6ymZit0xdJj4Gq66BgpQyp04cyY8S96pcOVHfSKQtxJmV6B
+ 2wLg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=wdc.com
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=wdc.com header.i=@wdc.com header.a=rsa-sha256
- header.s=dkim.wdc.com header.b=hqEUhtPS
-Subject: [Buildroot] [PATCH 1/1] package/libspdm: bump version to 3.2.0
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=E9wgtlnl
+Subject: [Buildroot] [PATCH 1/1] package/libpciaccess: bump to version 0.18
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,110 +100,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Wilfred Mallawa via buildroot <buildroot@buildroot.org>
-Reply-To: Wilfred Mallawa <wilfred.mallawa@wdc.com>
-Cc: Wilfred Mallawa <wilfred.mallawa@wdc.com>,
- Alistair Francis <alistair.francis@wdc.com>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>, Bernd Kuhls <bernd@kuhls.net>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Additionally, add an upstream patch that fixes the configuration for
-"NONE" toolchain variant in libspdm. That is, where the build
-environment provides compile/link options.
+- Update hash of COPYING (update in year with:
+  https://gitlab.freedesktop.org/xorg/lib/libpciaccess/-/commit/cde74b51014053175497ac75cbaea10d6184ab57)
+- Switch to meson-package
 
-Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
-Signed-off-by: Wilfred Mallawa <wilfred.mallawa@wdc.com>
+https://lists.x.org/archives/xorg-announce/2024-February/003453.html
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...eLists-remove-fixed-options-for-NONE.patch | 52 +++++++++++++++++++
- package/libspdm/libspdm.hash                  |  2 +-
- package/libspdm/libspdm.mk                    |  2 +-
- 3 files changed, 54 insertions(+), 2 deletions(-)
- create mode 100644 package/libspdm/0001-CMakeLists-remove-fixed-options-for-NONE.patch
+ package/libpciaccess/libpciaccess.hash | 6 +++---
+ package/libpciaccess/libpciaccess.mk   | 8 ++++----
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/libspdm/0001-CMakeLists-remove-fixed-options-for-NONE.patch b/package/libspdm/0001-CMakeLists-remove-fixed-options-for-NONE.patch
-new file mode 100644
-index 0000000000..0de0ad0079
---- /dev/null
-+++ b/package/libspdm/0001-CMakeLists-remove-fixed-options-for-NONE.patch
-@@ -0,0 +1,52 @@
-+From d4d6b138d727e484fa9d0fef476ca181681d0695 Mon Sep 17 00:00:00 2001
-+From: Wilfred Mallawa <wilfred.mallawa@wdc.com>
-+Date: Mon, 19 Feb 2024 09:56:14 +1000
-+Subject: [PATCH] CMakeLists: remove fixed options for NONE
-+
-+The use of the NONE toolchain option is such that we can provide at the
-+build project level (buildroot etc...). However, the changes introduced
-+in 811f2b596def04b3a36368cf2098546d7907767f set certain compiler/linker
-+option that does not comply with the definition of the options as
-+specified in [1]. This change removes those options.
-+
-+[1] https://github.com/DMTF/libspdm/blob/main/doc/build.md#linux-builds-inside-build-environments
-+
-+Upstream: https://github.com/DMTF/libspdm/commit/d4d6b138d727e484fa9d0fef476ca181681d0695
-+Signed-off-by: Wilfred Mallawa <wilfred.mallawa@wdc.com>
-+---
-+ CMakeLists.txt | 19 -------------------
-+ 1 file changed, 19 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 9c300cc817..f6cf17d269 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -618,25 +618,6 @@ if(CMAKE_SYSTEM_NAME MATCHES "Linux")
-+         SET(CMAKE_EXE_LINKER_FLAGS "")
-+ 
-+         SET(CMAKE_C_LINK_EXECUTABLE "")
-+-
-+-    elseif(TOOLCHAIN STREQUAL "NONE")
-+-        ADD_COMPILE_OPTIONS(-fshort-wchar -fno-strict-aliasing -Wall -Werror -Wno-array-bounds -ffunction-sections -fdata-sections -fno-common -Wno-address -fpie -fno-asynchronous-unwind-tables -flto -DUSING_LTO  -Wno-maybe-uninitialized -Wno-uninitialized  -Wno-builtin-declaration-mismatch -Wno-nonnull-compare -Werror-implicit-function-declaration)
-+-        if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-+-            ADD_COMPILE_OPTIONS(-g)
-+-        endif()
-+-        if(GCOV STREQUAL "ON")
-+-        ADD_COMPILE_OPTIONS(--coverage -fprofile-arcs -ftest-coverage)
-+-        endif()
-+-        SET(OPENSSL_FLAGS -include base.h -Wno-error=maybe-uninitialized -Wno-error=format -Wno-format -Wno-error=unused-but-set-variable -Wno-cast-qual -Wno-error=implicit-function-declaration)
-+-        SET(CMOCKA_FLAGS -std=gnu99 -Wpedantic -Wall -Wshadow -Wmissing-prototypes -Wcast-align -Werror=address -Wstrict-prototypes -Werror=strict-prototypes -Wwrite-strings -Werror=write-strings -Werror-implicit-function-declaration -Wpointer-arith -Werror=pointer-arith -Wdeclaration-after-statement -Werror=declaration-after-statement -Wreturn-type -Werror=return-type -Wuninitialized -Werror=uninitialized -Werror=strict-overflow -Wstrict-overflow=2 -Wno-format-zero-length -Wmissing-field-initializers -Wformat-security -Werror=format-security -fno-common -Wformat -fno-common -fstack-protector-strong -Wno-cast-qual)
-+-
-+-        SET(CMAKE_LINKER ${CMAKE_C_COMPILER})
-+-        SET(CMAKE_EXE_LINKER_FLAGS "-flto -Wno-error -no-pie" )
-+-        if(GCOV STREQUAL "ON")
-+-        SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}  --coverage -lgcov -fprofile-arcs -ftest-coverage")
-+-        endif()
-+-        SET(CMAKE_C_LINK_EXECUTABLE "<CMAKE_LINKER> <CMAKE_C_LINK_FLAGS> <LINK_FLAGS> <OBJECTS> -o <TARGET> -Wl,--start-group <LINK_LIBRARIES> -Wl,--end-group")
-+-
-+     endif()
-+ 
-+     if(NOT TOOLCHAIN STREQUAL "NIOS2_GCC")
-+-- 
-+2.43.2
-+
-diff --git a/package/libspdm/libspdm.hash b/package/libspdm/libspdm.hash
-index 23faba1c4b..32415bcfce 100644
---- a/package/libspdm/libspdm.hash
-+++ b/package/libspdm/libspdm.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  84d4a755f57b17775c63b5c8be646d518ce34d5d1b85994b6150ebce9d31b183  libspdm-3.1.1.tar.gz
-+sha256  0ee460c0ce5c4d126ca65f9c4bdabd5725b87cec7160b2d06721169df58f3a95  libspdm-3.2.0.tar.gz
- sha256  7dc072bff163df39209bbb63e0916f4667c2a84cf3c36ccc84ec7425bc3e4779  LICENSE.md
-diff --git a/package/libspdm/libspdm.mk b/package/libspdm/libspdm.mk
-index 34dbb457c4..2ec35be0ac 100644
---- a/package/libspdm/libspdm.mk
-+++ b/package/libspdm/libspdm.mk
+diff --git a/package/libpciaccess/libpciaccess.hash b/package/libpciaccess/libpciaccess.hash
+index 27ec59a452..4662314509 100644
+--- a/package/libpciaccess/libpciaccess.hash
++++ b/package/libpciaccess/libpciaccess.hash
+@@ -1,4 +1,4 @@
+-# From https://lists.x.org/archives/xorg-announce/2022-October/003226.html
+-sha512  8484605c66ef18c8d8a3e029a6d33e26fcaa450c1263790d89ac8b0a160ffb2dfceaa6140ac9ad7d8087283ecbec8ac801f757e44890d547c3cbecd2c922ca47  libpciaccess-0.17.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2024-February/003453.html
++sha512  54dff9a493344586d072edf8c8eb8f7960c7dfd64aa5c51a8ec8d4e341f703fd39eb606ee41c4fdd9d5aad3372b7efe6e0fe96eadc575ea91de276320ebc3fbd  libpciaccess-0.18.tar.xz
+ # Hash for license file:
+-sha256  47012fd746980d1712ac4f3841ab6164bda1d2b84880760e45dbe1e1dc07f608  COPYING
++sha256  f33f360f8905940dac01aa21597fe8a6727ca6f4ffa43b380e2116fd0666aa8a  COPYING
+diff --git a/package/libpciaccess/libpciaccess.mk b/package/libpciaccess/libpciaccess.mk
+index 525a3bcd02..04f3e2083b 100644
+--- a/package/libpciaccess/libpciaccess.mk
++++ b/package/libpciaccess/libpciaccess.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBSPDM_VERSION = 3.1.1
-+LIBSPDM_VERSION = 3.2.0
- LIBSPDM_SITE = $(call github,DMTF,libspdm,$(LIBSPDM_VERSION))
- LIBSPDM_LICENSE = BSD-3-Clause
- LIBSPDM_LICENSE_FILES = LICENSE.md
+-LIBPCIACCESS_VERSION = 0.17
++LIBPCIACCESS_VERSION = 0.18
+ LIBPCIACCESS_SOURCE = libpciaccess-$(LIBPCIACCESS_VERSION).tar.xz
+ LIBPCIACCESS_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ LIBPCIACCESS_LICENSE = MIT
+@@ -13,10 +13,10 @@ LIBPCIACCESS_INSTALL_STAGING = YES
+ LIBPCIACCESS_DEPENDENCIES = host-pkgconf
+ 
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+-LIBPCIACCESS_CONF_OPTS += --with-zlib
++LIBPCIACCESS_CONF_OPTS += -Dzlib=enabled
+ LIBPCIACCESS_DEPENDENCIES += zlib
+ else
+-LIBPCIACCESS_CONF_OPTS += --without-zlib
++LIBPCIACCESS_CONF_OPTS += -Dzlib=disabled
+ endif
+ 
+-$(eval $(autotools-package))
++$(eval $(meson-package))
 -- 
-2.44.0
+2.43.0
 
 _______________________________________________
 buildroot mailing list
