@@ -4,81 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A881C54E60
-	for <buildroot@archiver.kernel.org>; Thu, 14 Mar 2024 21:39:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B81BAC54E5D
+	for <buildroot@archiver.kernel.org>; Thu, 14 Mar 2024 21:41:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E041F402D7;
-	Thu, 14 Mar 2024 21:39:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7A5BF402D7;
+	Thu, 14 Mar 2024 21:41:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2tHl1DK1UNNg; Thu, 14 Mar 2024 21:39:46 +0000 (UTC)
+	with ESMTP id s5nl7qNKhX_p; Thu, 14 Mar 2024 21:41:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D2A164032A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8C59B4032A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D2A164032A;
-	Thu, 14 Mar 2024 21:39:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8C59B4032A;
+	Thu, 14 Mar 2024 21:41:34 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3B30F1BF3E9
- for <buildroot@lists.busybox.net>; Thu, 14 Mar 2024 21:39:44 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6E61D1BF3E9
+ for <buildroot@lists.busybox.net>; Thu, 14 Mar 2024 21:41:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 25B65408C9
- for <buildroot@lists.busybox.net>; Thu, 14 Mar 2024 21:39:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5B35F414C5
+ for <buildroot@lists.busybox.net>; Thu, 14 Mar 2024 21:41:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2X4tl92f5-oD for <buildroot@lists.busybox.net>;
- Thu, 14 Mar 2024 21:39:43 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=216.71.154.42;
- helo=esa4.hgst.iphmx.com; envelope-from=prvs=7968e6bc0=wilfred.mallawa@wdc.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B6CD9407AC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B6CD9407AC
-Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B6CD9407AC
- for <buildroot@buildroot.org>; Thu, 14 Mar 2024 21:39:42 +0000 (UTC)
-X-CSE-ConnectionGUID: sRNEA3dIRfuN2CXHIG2/1Q==
-X-CSE-MsgGUID: SZc7/cJxTT6258TNEfGWhA==
-X-IronPort-AV: E=Sophos;i="6.07,126,1708358400"; d="scan'208";a="11153600"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com)
- ([199.255.45.14])
- by ob1.hgst.iphmx.com with ESMTP; 15 Mar 2024 05:39:41 +0800
-IronPort-SDR: +73GMX+VvihpL5KKBbGod7bTelHZHIOhWvReKsUlfGw4YgMoWVnNsnHtBD1cVTAzO4irGhBO7B
- AEVwrayhEdZA==
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
- by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256;
- 14 Mar 2024 13:48:40 -0700
-IronPort-SDR: 2lUn2oU29qe/ABnsRIEiIyIGk7tChvZX7YHe/LtNY/1qf56iya9ucg8M80STHUYt9gm+Z0wc5I
- SqUQYiy9t7Bg==
-WDCIronportException: Internal
-Received: from unknown (HELO fedora.wdc.com) ([10.225.165.69])
- by uls-op-cesaip01.wdc.com with ESMTP; 14 Mar 2024 14:39:40 -0700
+ with ESMTP id c9e3hisJ-iKw for <buildroot@lists.busybox.net>;
+ Thu, 14 Mar 2024 21:41:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::42d; helo=mail-wr1-x42d.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5D83A414B9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5D83A414B9
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5D83A414B9
+ for <buildroot@buildroot.org>; Thu, 14 Mar 2024 21:41:32 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id
+ ffacd0b85a97d-33e8b957a89so982388f8f.0
+ for <buildroot@buildroot.org>; Thu, 14 Mar 2024 14:41:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1710452489; x=1711057289;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=iMT+Q/ALI2CAf+idYaSlQFuwApUfISgEkqnsroiA19o=;
+ b=YbW6rrznJOIL25sHn/7u37SU16BBdZ9UVVY0hziu5hy3ePy2NFvy1QxE5xqhWcUng3
+ y+kDO0iK3C7olPB+NXYEYTmBoYTRyMDbJRnByNOJBlMdrF5OxRfrvV//teADJ2ZnFVZg
+ PMWCgdG27oMYZ40JhuYdi3zE7t6Iah68zBqQGynvMQo2g2/hfs9ADATtsMaZ8wEsaAao
+ ETjdIANwFFlJm/5Rv8TWHW3k3ZavNF9tdXcbqUuflXKyxfLKVC5hOL5wBP578o75IWw0
+ iZgLsrUJxkynu7pusDVoMBokyJnDidq2DIVTI2cHRfUx7+fvsWG6lH/Sr7XcP7Iu4j8q
+ xv1A==
+X-Gm-Message-State: AOJu0YxM0NoN4uHF7+q0pwW/SSslwHfUg8ojtjcREA2Sq/ZSzVgO3vXm
+ vQmPkjzKbeI9AfBmdJ1mzEm56SOOq6EmalD9I835pVl20iHK556HVeYClt5J
+X-Google-Smtp-Source: AGHT+IGCmL6GJX5qfEyf9oABb0xx84oTXq4P5m+1b2+R8Z7sYH9bmz4fh30aeOICHs5wPy/bdElO7g==
+X-Received: by 2002:a5d:5384:0:b0:33d:8029:b136 with SMTP id
+ d4-20020a5d5384000000b0033d8029b136mr951917wrv.55.1710452489323; 
+ Thu, 14 Mar 2024 14:41:29 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ f16-20020adfdb50000000b0033ec8f3ca9bsm1593637wrj.49.2024.03.14.14.41.28
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 14 Mar 2024 14:41:29 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 15 Mar 2024 07:39:14 +1000
-Message-ID: <20240314213913.535911-2-wilfred.mallawa@wdc.com>
-X-Mailer: git-send-email 2.44.0
+Date: Thu, 14 Mar 2024 22:41:25 +0100
+Message-ID: <20240314214125.397970-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
- d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
- t=1710452382; x=1741988382;
- h=from:to:cc:subject:date:message-id:mime-version:
- content-transfer-encoding;
- bh=pIlvzraepwmYBRBbhU9MYQ0eCMoW+0nWmJ9UXoDJh7I=;
- b=ZTKDsTXNPfWo5jrO/e6kjQinzjRdbEc5DldBD/WmFb66f/UIdsWd4Wvd
- v06++a51q7X+MTPp6hFmEKPhHpIl85X8yxuFxxyj5qEtcwRoC920Kuir8
- ncB6PDYObNGkutlsb0lOhyfUARtA0mcB1Q7RPwr9UKiGGKd/jVEe04fnF
- 4Hxp0G/Gjny5u61/+wxUcFdShTFCXtZxZz6BZPxH/Em2IanY/EwCGzNQ+
- FuYLSxDXA+G2SGjuADtUq6ayr+dd2tSCsdz1+WZbvQKjkvl5zRkN+xuPe
- TFYYjfpJNwpXvTlcUwXlI84SF/hI4qLl47ZM8X1D7grKeul4oW1ibKl76
- g==;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1710452489; x=1711057289; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=iMT+Q/ALI2CAf+idYaSlQFuwApUfISgEkqnsroiA19o=;
+ b=N6aSrSxpjmcSHaeE3QN18HyIKsTPh2QWsXeUCkUxXUmpaCWJQ3o5ko8JwVIBfClkiG
+ FIKVbACVAWTsNjngxuHh8IqdVuXEtFdA/ZeYIr4Ml2PdMHSHmrtQwhnf7RwXaXjcCQ7g
+ cxnsv4a0+01DyaAQHFH3iKyHiJRqgcFeYEs7GE5FtrXJPi8ucElGKkbS10C/zS6LDgSF
+ KGKAFPQKnlyf9wMP8y/BKcNe1ZMhz3HuXaep4gS57LRBtGRLMa/95dOf8GUw3qVFDSdL
+ pg4whLblCaT25PmkL/1jcI0oQtha1eienati4aPvbsJVp5i0VK/6BkSvetU08ZS8jpSO
+ lcxA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=wdc.com
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=wdc.com header.i=@wdc.com header.a=rsa-sha256
- header.s=dkim.wdc.com header.b=ZTKDsTXN
-Subject: [Buildroot] [PATCH 1/1] package/spdm-utils: new package
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=N6aSrSxp
+Subject: [Buildroot] [PATCH 1/1] package/libnfs: fix pthread option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,124 +99,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Wilfred Mallawa via buildroot <buildroot@buildroot.org>
-Reply-To: Wilfred Mallawa <wilfred.mallawa@wdc.com>
-Cc: Wilfred Mallawa <wilfred.mallawa@wdc.com>,
- Alistair Francis <alistair.francis@wdc.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
-Signed-off-by: Wilfred Mallawa <wilfred.mallawa@wdc.com>
----
- package/Config.in                  |  1 +
- package/spdm-utils/Config.in       | 20 ++++++++++++++
- package/spdm-utils/spdm-utils.hash |  2 ++
- package/spdm-utils/spdm-utils.mk   | 43 ++++++++++++++++++++++++++++++
- 4 files changed, 66 insertions(+)
- create mode 100644 package/spdm-utils/Config.in
- create mode 100644 package/spdm-utils/spdm-utils.hash
- create mode 100644 package/spdm-utils/spdm-utils.mk
+Fix typo added by commit f9f5b3a6cbc4e62beefdd0448842ef0c8c3eb6f6
 
-diff --git a/package/Config.in b/package/Config.in
-index c677c3ff4a..1a31d40a0c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2697,6 +2697,7 @@ comment "Utilities"
- 	source "package/screen/Config.in"
- 	source "package/screenfetch/Config.in"
- 	source "package/sexpect/Config.in"
-+	source "package/spdm-utils/Config.in"
- 	source "package/sudo/Config.in"
- 	source "package/terminology/Config.in"
- 	source "package/time/Config.in"
-diff --git a/package/spdm-utils/Config.in b/package/spdm-utils/Config.in
-new file mode 100644
-index 0000000000..97dbc51c6d
---- /dev/null
-+++ b/package/spdm-utils/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_SPDM_UTILS
-+	bool "spdm-utils"
-+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
-+	depends on BR2_USE_WCHAR # eudev
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_USE_MMU # eudev
-+	select BR2_PACKAGE_HOST_RUSTC
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_PCIUTILS
-+	select BR2_PACKAGE_EUDEV
-+	select BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_LIBSPDM
-+	help
-+	  SPDM-Utils is a Linux application designed to support,
-+	  test and develop SPDM requesters and responders.
-+	  SPDM-Utils uses libspdm as the backend to perform SPDM
-+	  communication. SPDM-Utils currently supports the
-+	  PCIe Data Object Exchange (DOE) Capability.
-+
-+	  https://github.com/westerndigitalcorporation/spdm-utils
-diff --git a/package/spdm-utils/spdm-utils.hash b/package/spdm-utils/spdm-utils.hash
-new file mode 100644
-index 0000000000..aaa243315e
---- /dev/null
-+++ b/package/spdm-utils/spdm-utils.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  3f06f087220b126262a2becf68c9e06a59d8d613816f82a168c81093de087d1a  spdm-utils-0.3.0.tar.gz
-diff --git a/package/spdm-utils/spdm-utils.mk b/package/spdm-utils/spdm-utils.mk
-new file mode 100644
-index 0000000000..5129635b06
---- /dev/null
-+++ b/package/spdm-utils/spdm-utils.mk
-@@ -0,0 +1,43 @@
-+################################################################################
-+#
-+# spdm-utils
-+#
-+################################################################################
-+
-+SPDM_UTILS_VERSION = 0.3.0
-+SPDM_UTILS_SITE = $(call github,westerndigitalcorporation,spdm-utils,v$(SPDM_UTILS_VERSION))
-+SPDM_UTILS_LICENSE = Apache-2.0 or MIT
-+SPDM_UTILS_POST_PATCH_HOOKS += SPDM_UTILS_FETCH_CRATES
-+SPDM_UTILS_POST_INSTALL_TARGET_HOOKS += SPDM_UTILS_INSTALL_CERTS
-+SPDM_UTILS_DEPENDENCIES += pciutils libspdm openssl
-+
-+# We want to run the cargo-post-process script which is
-+# manually run in dl-wrapper after downloading the tarball.
-+# This will re-vendor in the crates, which needs to be done
-+# after we patch in our extra dependencies.
-+define SPDM_UTILS_FETCH_CRATES
-+	cd $(SPDM_UTILS_SRCDIR) && \
-+	cargo vendor \
-+	    --manifest-path Cargo.toml \
-+		--locked VENDOR
-+endef
-+
-+define SPDM_UTILS_INSTALL_CERTS
-+	$(INSTALL) -d -m 0755 $(TARGET_DIR)/root/certs
-+	cp -r $(@D)/certs/generate_certs.sh $(TARGET_DIR)/root/certs/
-+	cp -r $(@D)/certs/openssl.cnf $(TARGET_DIR)/root/certs/
-+	cp -r $(@D)/certs/setup_certs.sh $(TARGET_DIR)/root/certs/
-+
-+	$(INSTALL) -d -m 0755 $(TARGET_DIR)/root/certs/slot0
-+	cp $(@D)/certs/slot0/immutable.der $(TARGET_DIR)/root/certs/slot0
-+	cp $(@D)/certs/slot0/device.cert.der $(TARGET_DIR)/root/certs/slot0
-+	cp $(@D)/certs/slot0/device.der $(TARGET_DIR)/root/certs/slot0
-+	cp $(@D)/certs/slot0/device.key $(TARGET_DIR)/root/certs/slot0
-+	cp $(@D)/certs/slot0/param.pem $(TARGET_DIR)/root/certs/slot0
-+	cp $(@D)/certs/slot0/bundle_responder.certchain.der $(TARGET_DIR)/root/certs/slot0
-+
-+	$(INSTALL) -d -m 0755 $(TARGET_DIR)/root/manifest
-+	cp $(@D)/manifest/manifest.out.cbor $(TARGET_DIR)/root/manifest
-+endef
-+
-+$(eval $(cargo-package))
+Fixes: f9f5b3a6cbc4e62beefdd0448842ef0c8c3eb6f6
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libnfs/libnfs.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libnfs/libnfs.mk b/package/libnfs/libnfs.mk
+index b013decfc7..19044527e0 100644
+--- a/package/libnfs/libnfs.mk
++++ b/package/libnfs/libnfs.mk
+@@ -17,9 +17,9 @@ LIBNFS_DEPENDENCIES += libtirpc
+ endif
+ 
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+-LIBNFS_CONF_OPTS += --enable-threads
++LIBNFS_CONF_OPTS += --enable-pthread
+ else
+-LIBNFS_CONF_OPTS += --disable-threads
++LIBNFS_CONF_OPTS += --disable-pthread
+ endif
+ 
+ $(eval $(autotools-package))
 -- 
-2.44.0
+2.43.0
 
 _______________________________________________
 buildroot mailing list
