@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B3B0C54E58
-	for <buildroot@archiver.kernel.org>; Fri, 15 Mar 2024 19:23:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 709E6C54E58
+	for <buildroot@archiver.kernel.org>; Fri, 15 Mar 2024 19:24:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CE96B60F80;
-	Fri, 15 Mar 2024 19:23:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3114060F8B;
+	Fri, 15 Mar 2024 19:24:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YPokB8e_JgLq; Fri, 15 Mar 2024 19:23:52 +0000 (UTC)
+	with ESMTP id NF18EsFDt-SR; Fri, 15 Mar 2024 19:23:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2744160F86
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3117160F8E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2744160F86;
-	Fri, 15 Mar 2024 19:23:49 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 06A8F1BF990
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3117160F8E;
+	Fri, 15 Mar 2024 19:23:51 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 54E761BF307
  for <buildroot@lists.busybox.net>; Fri, 15 Mar 2024 19:23:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 003DC8237A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 41132417C4
  for <buildroot@lists.busybox.net>; Fri, 15 Mar 2024 19:23:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7QBW62ioEPGx for <buildroot@lists.busybox.net>;
- Fri, 15 Mar 2024 19:23:42 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2wDn5Ehs-HK3 for <buildroot@lists.busybox.net>;
+ Fri, 15 Mar 2024 19:23:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0391682404
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D85D417BF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0391682404
- for <buildroot@buildroot.org>; Fri, 15 Mar 2024 19:23:42 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9D85D417BF
+ for <buildroot@buildroot.org>; Fri, 15 Mar 2024 19:23:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F3DAD88383; Fri, 15 Mar 2024 19:23:41 +0000 (UTC)
+ id 8B04388380; Fri, 15 Mar 2024 19:23:41 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 15 Mar 2024 20:20:22 +0100
+Date: Fri, 15 Mar 2024 20:16:27 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 355ceb893078b4e1d458a3367fc2c989911fefe1
-X-Git-Newrev: 773ef1fdbafc461be787f9ac69f64de62a6f55e0
+X-Git-Oldrev: 53a8c5150e5eeeb6dbbead0275dbf9141f507511
+X-Git-Newrev: 665086ba5ddff7653dd283074d67e74f5dc25c0f
 X-Patchwork-Hint: ignore
-Message-Id: <20240315192341.F3DAD88383@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/{mesa3d,
- mesa3d-headers}: bump version to 24.0.3
+Message-Id: <20240315192341.8B04388380@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rt-tests: bump version to 2.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,67 +60,56 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1057406650880637714=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=773ef1fdbafc461be787f9ac69f64de62a6f55e0
+--===============1057406650880637714==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=665086ba5ddff7653dd283074d67e74f5dc25c0f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://lists.freedesktop.org/archives/mesa-announce/2024-February/000749.html
-https://lists.freedesktop.org/archives/mesa-announce/2024-February/000751.html
-https://lists.freedesktop.org/archives/mesa-announce/2024-March/000752.html
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 6 +++---
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/rt-tests/rt-tests.hash | 2 +-
+ package/rt-tests/rt-tests.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 1d006dbc91..7f39fefaf5 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
+diff --git a/package/rt-tests/rt-tests.hash b/package/rt-tests/rt-tests.hash
+index eb28f4d441..017447bce6 100644
+--- a/package/rt-tests/rt-tests.hash
++++ b/package/rt-tests/rt-tests.hash
+@@ -1,4 +1,4 @@
+ # From https://mirrors.edge.kernel.org/pub/linux/utils/rt-tests/sha256sums.asc
+-sha256  2ed2e4c965c7f336a15d3354dec090e27a0b1e9ada91ae0b9ef18bbcb993874e  rt-tests-2.5.tar.xz
++sha256  761d10c4b7f5b28400f0c301fe0171eaa74f347df64cb359210254b8e6aff19f  rt-tests-2.6.tar.xz
+ # locally computed hash
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/rt-tests/rt-tests.mk b/package/rt-tests/rt-tests.mk
+index 8ad4215ee1..4b1aa31796 100644
+--- a/package/rt-tests/rt-tests.mk
++++ b/package/rt-tests/rt-tests.mk
+@@ -6,7 +6,7 @@
  
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 24.0.0
-+MESA3D_HEADERS_VERSION = 24.0.3
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://archive.mesa3d.org
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 49b42e2132..1e94c2c612 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2024-February/000747.html
--sha256  dc7e8c077bc5884df95478263b34bdebb7e88e600689cb56fb07be2b8c304c36  mesa-24.0.0.tar.xz
--sha512  9dfdea7cebb37b9c020335e24194b39b399f48b5af6eec30c3455108276ac4e29e7b06df942cb2abc7afa667784968c0c43d19b9afe30ef03021b9cb6a789f15  mesa-24.0.0.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2024-March/000752.html
-+sha256  77aec9a2a37b7d3596ea1640b3cc53d0b5d9b3b52abed89de07e3717e91bfdbe  mesa-24.0.3.tar.xz
-+sha512  76b3b479877c40f729d7f530af4e3577fa74363edcd3d9474350d498a51dbb761fc034b39bee8547e97c30fd3a520cbc50c742d5a187746e83ddab1df44f37e9  mesa-24.0.3.tar.xz
- # License
- sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index df0079bf80..29c67b77b9 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+ RT_TESTS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/rt-tests
+ RT_TESTS_SOURCE = rt-tests-$(RT_TESTS_VERSION).tar.xz
+-RT_TESTS_VERSION = 2.5
++RT_TESTS_VERSION = 2.6
+ RT_TESTS_LICENSE = GPL-2.0+
+ RT_TESTS_LICENSE_FILES = COPYING
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 24.0.0
-+MESA3D_VERSION = 24.0.3
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://archive.mesa3d.org
- MESA3D_LICENSE = MIT, SGI, Khronos
+
+--===============1057406650880637714==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1057406650880637714==--
