@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC155C54E58
-	for <buildroot@archiver.kernel.org>; Fri, 15 Mar 2024 19:23:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B3B0C54E58
+	for <buildroot@archiver.kernel.org>; Fri, 15 Mar 2024 19:23:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9187260903;
-	Fri, 15 Mar 2024 19:23:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CE96B60F80;
+	Fri, 15 Mar 2024 19:23:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CdFdKoS4o5ot; Fri, 15 Mar 2024 19:23:47 +0000 (UTC)
+	with ESMTP id YPokB8e_JgLq; Fri, 15 Mar 2024 19:23:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4BC2E60F83
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2744160F86
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4BC2E60F83;
-	Fri, 15 Mar 2024 19:23:47 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E47991BF307
- for <buildroot@lists.busybox.net>; Fri, 15 Mar 2024 19:23:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2744160F86;
+	Fri, 15 Mar 2024 19:23:49 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 06A8F1BF990
+ for <buildroot@lists.busybox.net>; Fri, 15 Mar 2024 19:23:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D0D6A4193B
- for <buildroot@lists.busybox.net>; Fri, 15 Mar 2024 19:23:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 003DC8237A
+ for <buildroot@lists.busybox.net>; Fri, 15 Mar 2024 19:23:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EDwZy_g51XeC for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7QBW62ioEPGx for <buildroot@lists.busybox.net>;
  Fri, 15 Mar 2024 19:23:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EF65F41945
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0391682404
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EF65F41945
- for <buildroot@buildroot.org>; Fri, 15 Mar 2024 19:23:41 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0391682404
+ for <buildroot@buildroot.org>; Fri, 15 Mar 2024 19:23:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D793C88381; Fri, 15 Mar 2024 19:23:41 +0000 (UTC)
+ id F3DAD88383; Fri, 15 Mar 2024 19:23:41 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 15 Mar 2024 20:19:46 +0100
+Date: Fri, 15 Mar 2024 20:20:22 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: dbc6398f1d4c68fa32c5f9d6329dfff7cb109a4b
-X-Git-Newrev: 0a0b522b23fdadeafbca904a56047b8cf35760df
+X-Git-Oldrev: 355ceb893078b4e1d458a3367fc2c989911fefe1
+X-Git-Newrev: 773ef1fdbafc461be787f9ac69f64de62a6f55e0
 X-Patchwork-Hint: ignore
-Message-Id: <20240315192341.D793C88381@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libnfs: bump to version 5.0.3
+Message-Id: <20240315192341.F3DAD88383@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/{mesa3d,
+ mesa3d-headers}: bump version to 24.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,42 +66,61 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a0b522b23fdadeafbca904a56047b8cf35760df
+commit: https://git.buildroot.net/buildroot/commit/?id=773ef1fdbafc461be787f9ac69f64de62a6f55e0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/sahlberg/libnfs/blob/libnfs-5.0.3/CHANGELOG
+Release notes:
+https://lists.freedesktop.org/archives/mesa-announce/2024-February/000749.html
+https://lists.freedesktop.org/archives/mesa-announce/2024-February/000751.html
+https://lists.freedesktop.org/archives/mesa-announce/2024-March/000752.html
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/libnfs/libnfs.hash | 2 +-
- package/libnfs/libnfs.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libnfs/libnfs.hash b/package/libnfs/libnfs.hash
-index b67a5d2eda..c5e5197c13 100644
---- a/package/libnfs/libnfs.hash
-+++ b/package/libnfs/libnfs.hash
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 1d006dbc91..7f39fefaf5 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 24.0.0
++MESA3D_HEADERS_VERSION = 24.0.3
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 49b42e2132..1e94c2c612 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
 @@ -1,5 +1,5 @@
- # Locally calculated
--sha256  637e56643b19da9fba98f06847788c4dad308b723156a64748041035dcdf9bd3  libnfs-5.0.2.tar.gz
-+sha256  d945cb4f4c8f82ee1f3640893a168810f794a28e1010bb007ec5add345e9df3e  libnfs-5.0.3.tar.gz
- sha256  edd960c0142b8ada98b43b6396b78f4e557b0bc70ac601a51e397ad04070e2c5  COPYING
- sha256  d9406ced95457941032aa11d04623b8ab71f2827a3395ebef137aec475be35b1  LICENCE-BSD.txt
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENCE-LGPL-2.1.txt
-diff --git a/package/libnfs/libnfs.mk b/package/libnfs/libnfs.mk
-index b013decfc7..eb919406f3 100644
---- a/package/libnfs/libnfs.mk
-+++ b/package/libnfs/libnfs.mk
-@@ -4,7 +4,7 @@
- #
+-# From https://lists.freedesktop.org/archives/mesa-announce/2024-February/000747.html
+-sha256  dc7e8c077bc5884df95478263b34bdebb7e88e600689cb56fb07be2b8c304c36  mesa-24.0.0.tar.xz
+-sha512  9dfdea7cebb37b9c020335e24194b39b399f48b5af6eec30c3455108276ac4e29e7b06df942cb2abc7afa667784968c0c43d19b9afe30ef03021b9cb6a789f15  mesa-24.0.0.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2024-March/000752.html
++sha256  77aec9a2a37b7d3596ea1640b3cc53d0b5d9b3b52abed89de07e3717e91bfdbe  mesa-24.0.3.tar.xz
++sha512  76b3b479877c40f729d7f530af4e3577fa74363edcd3d9474350d498a51dbb761fc034b39bee8547e97c30fd3a520cbc50c742d5a187746e83ddab1df44f37e9  mesa-24.0.3.tar.xz
+ # License
+ sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index df0079bf80..29c67b77b9 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBNFS_VERSION = 5.0.2
-+LIBNFS_VERSION = 5.0.3
- LIBNFS_SITE = $(call github,sahlberg,libnfs,libnfs-$(LIBNFS_VERSION))
- LIBNFS_INSTALL_STAGING = YES
- LIBNFS_AUTORECONF = YES
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 24.0.0
++MESA3D_VERSION = 24.0.3
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://archive.mesa3d.org
+ MESA3D_LICENSE = MIT, SGI, Khronos
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
