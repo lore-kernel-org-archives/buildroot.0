@@ -4,90 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0E98C54E58
-	for <buildroot@archiver.kernel.org>; Fri, 15 Mar 2024 22:10:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3DB5C54E67
+	for <buildroot@archiver.kernel.org>; Fri, 15 Mar 2024 22:21:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3C0BF40142;
-	Fri, 15 Mar 2024 22:10:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6B55240163;
+	Fri, 15 Mar 2024 22:21:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id P9rLkkOWBxd9; Fri, 15 Mar 2024 22:10:46 +0000 (UTC)
+	with ESMTP id exwtKHD6gOFr; Fri, 15 Mar 2024 22:21:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F6BA40289
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E95DE402E4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4F6BA40289;
-	Fri, 15 Mar 2024 22:10:46 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4CAE11BF2BB
- for <buildroot@lists.busybox.net>; Fri, 15 Mar 2024 22:10:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E95DE402E4;
+	Fri, 15 Mar 2024 22:21:54 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1DA0D1BF2BB
+ for <buildroot@lists.busybox.net>; Fri, 15 Mar 2024 22:21:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4667440142
- for <buildroot@lists.busybox.net>; Fri, 15 Mar 2024 22:10:44 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 185A7822FD
+ for <buildroot@lists.busybox.net>; Fri, 15 Mar 2024 22:21:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id viORB3nuyEgm for <buildroot@lists.busybox.net>;
- Fri, 15 Mar 2024 22:10:39 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id O4nIDfPPjWq6 for <buildroot@lists.busybox.net>;
+ Fri, 15 Mar 2024 22:21:49 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
- envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5B62640025
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5B62640025
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5B62640025
- for <buildroot@buildroot.org>; Fri, 15 Mar 2024 22:10:38 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- 5b1f17b1804b1-413ef770149so16725325e9.1
- for <buildroot@buildroot.org>; Fri, 15 Mar 2024 15:10:38 -0700 (PDT)
+ client-ip=2607:f8b0:4864:20::d2a; helo=mail-io1-xd2a.google.com;
+ envelope-from=jeremypeper@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 96F67822E9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96F67822E9
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com
+ [IPv6:2607:f8b0:4864:20::d2a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 96F67822E9
+ for <buildroot@buildroot.org>; Fri, 15 Mar 2024 22:21:48 +0000 (UTC)
+Received: by mail-io1-xd2a.google.com with SMTP id
+ ca18e2360f4ac-7c8ccffacbcso40873539f.2
+ for <buildroot@buildroot.org>; Fri, 15 Mar 2024 15:21:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1710540636; x=1711145436;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=wcegl9VfHbQei+pmnhuV2PSAOB2sm6wQc/i99kr5uHI=;
- b=MIi8JaqSAV702nOiCpXEL8PD5kFWsondyrsx/5gK/RXT6TtHErekGv0XY2/124/kCs
- pJ8T8UaWIOHTRU1bfnWWIf8nuYK6Nzut7d/fVBqgde2Bo+dQJJDkStRA0sdwhrdrG0UA
- 3M/RGonHhLyVu8aqY/UsOYeed0zhmLMDnkV+FDf70rncad/Akf+Bs3QrVGb/zzPEebyI
- 5c7WOn6d06iZR7/l9zg5nT33Ei6SKasfZIW/vMf/9gRN+wxQXFoewbXcoa/Gr3WIeJKN
- TvvTS5a9E40boxTW1qP6X0TWE9AU/IPYP6O6tLHXQAFWnMwXWozuKzkrRh0hruc3JrpF
- Glgw==
-X-Gm-Message-State: AOJu0YwaWhEPgaWgBq+pErrQNQR5HJNcCClMEs7NGLkI9Ip8wttdRQfu
- tdPqrv027KnNTkDXBVll4NDWIlIWusEkscMv0ziDVJSccf0HN5wPgNenZuDn
-X-Google-Smtp-Source: AGHT+IHkTadEQ7NJnzCtDkVSWRQanhxCYc8OFBc/W+IoX9V4qc4aE/7tZsG2WtdKH94QvIfFgs7bxQ==
-X-Received: by 2002:a5d:6583:0:b0:33e:7f5c:a75d with SMTP id
- q3-20020a5d6583000000b0033e7f5ca75dmr3580075wru.57.1710540635920; 
- Fri, 15 Mar 2024 15:10:35 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- t4-20020a0560001a4400b0033e756ed840sm4033165wry.47.2024.03.15.15.10.34
+ d=1e100.net; s=20230601; t=1710541307; x=1711146107;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=tFwcDa6wH6iI5MrJ1LegZvPxGV4DS+/JmaPPfCWks1k=;
+ b=PO7RDDdEcE1wprLhWL5vpN5ub+vwsDaJ3L31njmRwQcD5e4aoPqydqnJ8X1iTuuLuC
+ fVeG5t6IGEQr/PKfaECtOLZfexCnj+I7z6lWzDy7m0K70W7BwS2zkb2jdiiZd4aKicT6
+ TGR3dgLnvxWIiU+28vivKFBSdK+oyWaU1h83IFuDY29QMdIbxaAxIHJwaiuEO6/nR3uN
+ dt7ZG9+3ppelkRSW7UYwfKNH8I95DZeKotrDyNbYdpu+vZPEkt7jaCJlQScDzYW6CLux
+ 87+1ZC+cWnm3VK31aL5Ez6mha95X4ll/yH5AdXKc1/uzj4Xw6tBkkikKLi7TAgnsZxfA
+ 32Nw==
+X-Gm-Message-State: AOJu0Yzht9hApH4ejoYdzBp/dVw/lkndpgRARmvR1Q/woMhKIA4a+cqC
+ WsJe2MX1g5Ok70uSqV/jenMTdUskvbdvtIT/x+p0UkNnd5H/5H2J5HmUwzk9zSQ=
+X-Google-Smtp-Source: AGHT+IESswdReUZFqMBNk9WJWMsx1DkzEkYkL0Vv0y1uNy8nI0oP6LNX2bXWsK42aDrwFwTQO80+vg==
+X-Received: by 2002:a6b:751a:0:b0:7cb:d3f0:a98d with SMTP id
+ l26-20020a6b751a000000b007cbd3f0a98dmr3879208ioh.7.1710541306671; 
+ Fri, 15 Mar 2024 15:21:46 -0700 (PDT)
+Received: from earth.localnet (97-127-36-49.mpls.qwest.net. [97.127.36.49])
+ by smtp.gmail.com with ESMTPSA id
+ b20-20020a02a594000000b00474f42be9f7sm962806jam.91.2024.03.15.15.21.45
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 15 Mar 2024 15:10:35 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri, 15 Mar 2024 23:10:29 +0100
-Message-ID: <20240315221029.88170-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
+ Fri, 15 Mar 2024 15:21:46 -0700 (PDT)
+From: "Jeremy J. Peper" <jeremy@jeremypeper.com>
+To: buildroot@buildroot.org, Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 15 Mar 2024 17:21:45 -0500
+Message-ID: <4976560.e9J7NaK4W3@earth>
+In-Reply-To: <5f96ce54-27f0-4657-9e20-3dd6606d7fe2@mind.be>
+References: <20240312193528.664465-1-jeremy@jeremypeper.com>
+ <5f96ce54-27f0-4657-9e20-3dd6606d7fe2@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1710540636; x=1711145436; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=wcegl9VfHbQei+pmnhuV2PSAOB2sm6wQc/i99kr5uHI=;
- b=i1GzOv9K5YmlCU3WkVHHRuy4Vi+Tx7Po7eRAAoVZ12mJajVaY/HOdrlCPm9EnhaMjT
- 2zQriedD4vl5KdNrl4j1NG5bbV1QLpJUHOVzd3UmSscX4U68h8D5dZWOc1zf0e/P/iEx
- N9FOuyVMfdK8OeHSa8jf/3W/HixuLzktK+OO2iMvN7XA1wrY8gTwmD7KH74rm4oidjoK
- vYViKmnNOJDK5XMtuDo7wvd5nBc1YdRPkRekQrSEVh+MzDJwyxSZFCIhptNugf/BLGNI
- 1twO8LDqVTLaPxL3yHDC4gQRkk2EgsIuFt4KLek+PAmCaCfhsXA7s1lvEa+7JGTCvcED
- BEIQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=i1GzOv9K
-Subject: [Buildroot] [PATCH 1/1] package/cvs: fix build without editor
+ d=gmail.com; s=20230601; t=1710541307; x=1711146107; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=tFwcDa6wH6iI5MrJ1LegZvPxGV4DS+/JmaPPfCWks1k=;
+ b=FMwozzoWqv2aoPUWz/6Sh1fYc5opm9A/wiSXGoPQFbh+2c1HbI3hthAhDx8O0U/sTJ
+ KvoA0merrCCye+ksT/2zH4vhnbnrNcePv2nVyRlQ5Zgv6MgQ0c3+f5zBCCRJfrtFGBmo
+ GLhMhrjQG1x9YTPHgf5dPIN2t+Y9K3FTiRT1C9hbLS1NCehXhofTG4TgXeUS0V5rdDX+
+ ZSaESpbyTDi3Qh57o3s9uXNbG340GpDuP8Fl/fgmz7vDCj2F7VVin2NK2s3wibkj5bll
+ St+0RLcZMf4ZetGZyx/NWHNtA3ZUW9X1MY9nIvm1ffS8e1WT+F5kcT87ZTVzS+Q06WQO
+ 4gmA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=jeremypeper.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=FMwozzoW
+Subject: Re: [Buildroot] [PATCH v2 1/3] package/targetcli-fb: bump version
+ to 2.1.58
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,73 +104,96 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Christophe Vu-Brugier <cvubrugier@fastmail.fm>,
+ James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Set default editor to /bin/vi to fix the following build failure when no
-editor is found on host:
+On Friday, March 15, 2024 3:31:09 PM CDT Arnout Vandecappelle wrote:
+>   Hi Jeremy,
+> 
+> On 12/03/2024 20:35, Jeremy J. Peper wrote:
+> > bump to latest version because previous version did not work with python
+> > 3.11 corrected version mismatch with my first submission
+> 
+>   I unfortunately already pushed before I noticed: you shouldn't include
+> "personal comments" or references to the patch history in the commit message
+> itself - that belongs under the --- line. So it should have been:
+> 
+> package/targetcli-fb: bump version to 2.1.58
+> 
+> Bump to latest version because previous version did not work with python
+> 3.11
+> 
+> Signed-off-by: ...
+> ---
+> v2: correct version mismatch
 
-configure:40833: checking for vim
-configure:40862: result: no
-configure:40833: checking for vi
-configure:40862: result: no
-configure:40833: checking for emacs
-configure:40862: result: no
-configure:40833: checking for nano
-configure:40862: result: no
-configure:40833: checking for pico
-configure:40862: result: no
-configure:40833: checking for edit
-configure:40862: result: no
-configure:40874: error:
-    Failed to find a text file editor.  CVS cannot be compiled
-    without a default log message editor.  Searched for
-    `vim vi emacs nano pico edit'.  Try `configure --with-editor'.
+Sorry about that, I will endeavour to do that properly in the future. 
 
-While at it, drop CVS_CONFIGURE_ARGS variable for simplicity
+> 
+>   And another thing: we've had Python 3.11 for more than a year, so this has
+> been broken for quite some time. To make sure we notice in the future, it
+> would be good to have a runtime test that detects the situation.
+> 
+>   Regards,
+>   Arnout
 
-Fixes:
- - http://autobuild.buildroot.org/results/5b8a747698bc2e64eb1f001e87577e86e4cb8d14
+I believe you are correct, it appears to have been broken for at least the 
+past few stable releases. 
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/cvs/cvs.mk | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+Adding the test sounds like a good idea and I'd be interested in setting that 
+up at some point but I'm not sure when I'll get a chance to work through that 
+learning curve. 
 
-diff --git a/package/cvs/cvs.mk b/package/cvs/cvs.mk
-index bd1e04eee0..64c15f16fe 100644
---- a/package/cvs/cvs.mk
-+++ b/package/cvs/cvs.mk
-@@ -18,18 +18,18 @@ CVS_CONF_ENV = \
- 	ac_cv_func_working_mktime=yes \
- 	cvs_cv_func_printf_ptr=yes
- 
--CVS_CONFIGURE_ARGS = --disable-old-info-format-support
-+CVS_CONF_OPTS = \
-+	--disable-old-info-format-support \
-+	--with-editor=/bin/vi
- ifeq ($(BR2_PACKAGE_CVS_SERVER),y)
--CVS_CONFIGURE_ARGS += --enable-server
-+CVS_CONF_OPTS += --enable-server
- else
--CVS_CONFIGURE_ARGS += --disable-server
-+CVS_CONF_OPTS += --disable-server
- endif
- ifeq ($(BR2_PACKAGE_ZLIB),y)
--CVS_CONFIGURE_ARGS += --with-external-zlib
-+CVS_CONF_OPTS += --with-external-zlib
- endif
- 
--CVS_CONF_OPTS = $(CVS_CONFIGURE_ARGS)
--
- define CVS_BZIP_UNPACK
- 	$(BZCAT) $(@D)/cvs-$(CVS_VERSION).tar.bz2 | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
- 	rm -f $(@D)/cvs-$(CVS_VERSION).tar.bz2
--- 
-2.43.0
+> > Signed-off-by: Jeremy J. Peper <jeremy@jeremypeper.com>
+> > ---
+> > 
+> >   package/targetcli-fb/targetcli-fb.hash | 2 +-
+> >   package/targetcli-fb/targetcli-fb.mk   | 2 +-
+> >   2 files changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/package/targetcli-fb/targetcli-fb.hash
+> > b/package/targetcli-fb/targetcli-fb.hash index 64f68a66..1732fa99 100644
+> > --- a/package/targetcli-fb/targetcli-fb.hash
+> > +++ b/package/targetcli-fb/targetcli-fb.hash
+> > @@ -1,3 +1,3 @@
+> > 
+> >   # locally computed
+> > 
+> > -sha256  7ae4120a54f24b13263b4b85c43952a03546f8b9fc9bd15fe87678f68245a33f 
+> > targetcli-fb-2.1.54.tar.gz +sha256 
+> > 605f4e4e4e7189d6a03f11a4f55e7ddb4671002d542c2f684f87dd68391dcdc2 
+> > targetcli-fb-2.1.58.tar.gz> 
+> >   sha256  5df2a0d87d6c562f0ea11c688ac52532aa28d744cabc7994ff0537f64b3b3320
+> >    COPYING> 
+> > diff --git a/package/targetcli-fb/targetcli-fb.mk
+> > b/package/targetcli-fb/targetcli-fb.mk index 2d375417..8cdcc6f6 100644
+> > --- a/package/targetcli-fb/targetcli-fb.mk
+> > +++ b/package/targetcli-fb/targetcli-fb.mk
+> > @@ -6,7 +6,7 @@
+> > 
+> >   # When upgrading the version, be sure to also upgrade python-rtslib-fb
+> >   # and python-configshell-fb at the same time.
+> > 
+> > -TARGETCLI_FB_VERSION = 2.1.54
+> > +TARGETCLI_FB_VERSION = 2.1.58
+> > 
+> >   TARGETCLI_FB_SITE = $(call
+> >   github,open-iscsi,targetcli-fb,v$(TARGETCLI_FB_VERSION))
+> >   TARGETCLI_FB_LICENSE = Apache-2.0
+> >   TARGETCLI_FB_LICENSE_FILES = COPYING
+
+Are there any other changes that I need to make before this is suitable to be 
+committed? 
+
+Thanks again for all your feedback and guidance.
+-Jeremy
+
+
+
 
 _______________________________________________
 buildroot mailing list
