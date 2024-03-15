@@ -4,100 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8524FC54E58
-	for <buildroot@archiver.kernel.org>; Fri, 15 Mar 2024 19:22:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63EDCC54E58
+	for <buildroot@archiver.kernel.org>; Fri, 15 Mar 2024 19:22:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 090D660F93;
-	Fri, 15 Mar 2024 19:22:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2B92B60F7E;
+	Fri, 15 Mar 2024 19:22:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ijqac93w3wfE; Fri, 15 Mar 2024 19:22:00 +0000 (UTC)
+	with ESMTP id hjfwZruY335Y; Fri, 15 Mar 2024 19:22:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C53760F86
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4FAA560F85
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1C53760F86;
-	Fri, 15 Mar 2024 19:22:00 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D230E1BF307
- for <buildroot@lists.busybox.net>; Fri, 15 Mar 2024 19:21:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4FAA560F85;
+	Fri, 15 Mar 2024 19:22:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 875BA1BF307
+ for <buildroot@lists.busybox.net>; Fri, 15 Mar 2024 19:22:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BF3E382404
- for <buildroot@lists.busybox.net>; Fri, 15 Mar 2024 19:21:58 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1E7744192F
+ for <buildroot@lists.busybox.net>; Fri, 15 Mar 2024 19:22:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XSqldteP2gz9 for <buildroot@lists.busybox.net>;
- Fri, 15 Mar 2024 19:21:54 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YFTcVgazh69R for <buildroot@lists.busybox.net>;
+ Fri, 15 Mar 2024 19:22:01 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
+ client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
  envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1631D81757
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1631D81757
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1631D81757
- for <buildroot@buildroot.org>; Fri, 15 Mar 2024 19:21:53 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id
- ffacd0b85a97d-33e6aca1ca9so1843866f8f.2
- for <buildroot@buildroot.org>; Fri, 15 Mar 2024 12:21:53 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E672340399
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E672340399
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E672340399
+ for <buildroot@buildroot.org>; Fri, 15 Mar 2024 19:22:00 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 5b1f17b1804b1-413fea12b50so12874535e9.0
+ for <buildroot@buildroot.org>; Fri, 15 Mar 2024 12:22:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1710530512; x=1711135312;
+ d=1e100.net; s=20230601; t=1710530518; x=1711135318;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=fW9oipACYrb/hZdq1m2KkBhu4DP6tpJ9f0iVjLEPIXA=;
- b=iLiTe+QcReTGxB7UIFB57R22y9pyeC0EqdoJoDWUvSBUJUUKs5LBvIC3yADakMuD2P
- ji6EO2S2rFsePXH/siFwCi5Lz6pQRoqIOywoWyecRG5ZGa2xbS68FamqRtroLT1fx7RS
- S7kWs1kpmSKvI1bO+T5llepQEcm51ZBGLVCrgS+VvE0/qWrGdyd+WW8rcKWYsIvNfnGf
- b9/iur0xjRQBsPbXNMFYRfrEvlI0c0j0fX7Mr67nroi9hc9npDtAjWaxMZRUzdcRJ1wq
- 76SvlTWLajJADRdy80KjeDlzXYI17OWKZFvmHNZpmgJFdqEiXRPcnbYLBp+xu0nzqvuT
- sdhA==
+ bh=FY5owr0yUz3+wJptqZmOiVS41iKkwolGVz3OoOl+EY8=;
+ b=bxwdNa2qvNU4rGPmV/bR77B3eHGUgm8cfwOC0FtD2cpjv7Qa3Fp/HOKnzveUp/H0jA
+ +lvhTadduBsJ/VKQoTMbvsfcyBk+6bjklJJs7WsxZwr2LELnv0mYN48/SiiYlu7x/2WF
+ Fw2L67pQ72S/A32/zBSQlpBeYGR8aT5GKAxjwEcIDE1zaSNKNKTK2vUS9HRRj+1GH8HE
+ XlqP5F2gP5YiSUWSiGrnGxuv/VUirSLx9AS/Gr8TfViCqOcE4W3o/HaS0lQ3eElg1uBQ
+ GppsXurfBpZ0oB26wOA52PWIZnzp7PEK9lSawA9EMHqYcgZqNavYqjSNwp60hGI623AI
+ QJUg==
 X-Forwarded-Encrypted: i=1;
- AJvYcCVB51hNFRxKrx4YecplsizEDkbkCpVUhbLH701f/dPVq52rkR6dReQFjZBdCIUkI1r8ib0vwQt+Q7/L0ukDJGpE6eZrT3C7IA==
-X-Gm-Message-State: AOJu0Yw78ni+HGrDKxw4b4afQrYwt0PP5CL4weOVopR2fYNJG1NhHCVD
- VXqXJShF7ejmKf3pkHs67Bjhs616uChNm7rEztnetHBwSfG997mapwxg9ERnzWB22iugW2ktuxq
- P
-X-Google-Smtp-Source: AGHT+IFzOzVXaesnDj4C47HqxlhI7wP5B4Xo44wjoWVR2+hnCE/K/K4/6BruMZ40jbF7UDL245VaAQ==
-X-Received: by 2002:a5d:6191:0:b0:33e:6f9b:7abc with SMTP id
- j17-20020a5d6191000000b0033e6f9b7abcmr4168633wru.65.1710530511700; 
- Fri, 15 Mar 2024 12:21:51 -0700 (PDT)
+ AJvYcCXTjbiyX4FLVUP5cEUAybRfIuCxhaECcoObvafWRbx6xlrW48bwerjQLNMpynUCIsH8fq3Jl/HNsfpOCdLWAGbejqVKx7KtWQ==
+X-Gm-Message-State: AOJu0YyLHHfSWviUtNkh9ufNXQJ2llU2q1FrSx/O3sZ7F9c0bAB6J2rO
+ 55FgvkwhJZlumiP0KBpsXqs0XTltmhSlkRZeYljNo6Ra1OE1zNP86H2aYpN4pbg=
+X-Google-Smtp-Source: AGHT+IFg/K0vI+c8iltsmeaZOJzmN8VMJBtLFp5MECI9nekV/1mlm3wZ+IIWIKMs5M/5C6B+z2BkTQ==
+X-Received: by 2002:adf:f3c2:0:b0:33e:bb67:9596 with SMTP id
+ g2-20020adff3c2000000b0033ebb679596mr26126wrp.64.1710530518404; 
+ Fri, 15 Mar 2024 12:21:58 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
  (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- bq22-20020a5d5a16000000b0033ebf702e17sm1863302wrb.21.2024.03.15.12.21.50
+ bq22-20020a5d5a16000000b0033ebf702e17sm1863302wrb.21.2024.03.15.12.21.57
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 15 Mar 2024 12:21:51 -0700 (PDT)
-Message-ID: <62a315b6-f0c1-4387-b89e-d64ba3358e50@mind.be>
-Date: Fri, 15 Mar 2024 20:21:49 +0100
+ Fri, 15 Mar 2024 12:21:57 -0700 (PDT)
+Message-ID: <7305a589-deb5-4823-935b-1d1862f00989@mind.be>
+Date: Fri, 15 Mar 2024 20:21:56 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Content-Language: en-GB
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20240314213252.346954-1-fontaine.fabrice@gmail.com>
-In-Reply-To: <20240314213252.346954-1-fontaine.fabrice@gmail.com>
+To: Peter Korsgaard <peter@korsgaard.com>, buildroot@buildroot.org
+References: <20240315150803.22545-1-peter@korsgaard.com>
+In-Reply-To: <20240315150803.22545-1-peter@korsgaard.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1710530512; x=1711135312; darn=buildroot.org;
+ d=mind.be; s=google; t=1710530518; x=1711135318; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=fW9oipACYrb/hZdq1m2KkBhu4DP6tpJ9f0iVjLEPIXA=;
- b=CK4PX1tBazLCUjW4BWrEUfDg+rKC0GAyGSt+9YHJJcu+YalUa9CY4AvQDKSOrvjqiD
- MAP1fxIFLoyJszeLmiWypdJwAk1YwbB9LSWwYzUgTWTIQCgxVi6YAfvVnMuy82JttBVp
- Hp5ciNqQeL/q/td0uPSHoEOQWu8f8E7DtdUw8Slm7HQR4tJHgGyYoaLwrJ+ixWpYPviT
- K7GNOHi+HZGjy+JjeUj+L9IUdNreAkJbpwJQX8E0GT3g36qdBkxlGP0pdKDH+3Osk1/S
- RFXiaG1c+quOmtOeqdYth6Ui5Dwm8GEtITzJwUCMYptKWwTLlJX7DEaSsOMrFgbW8IoB
- hWNA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=FY5owr0yUz3+wJptqZmOiVS41iKkwolGVz3OoOl+EY8=;
+ b=OLHKT+ebQOiBFRzWtgFLbx2+Lkc33JcaI/P1osvcoLZX2JamL2PFIojoC9eowQ9U9T
+ XfTDfLXIBEPjq1zrfA9PLFvoZU0pDJAWvm3GR41EZUnuw0tOT3YzrY72uvnCJHU9aKe0
+ /2R3FQ6mGWJhla0gHL1fAniky64rXVNm1Wm+0jKOhrx6VlOuqTgfu2rASp8NUxBkDxmv
+ 748lJi81HSi1LM587EXhx90CKVKXmsEQUeesRclUV7RR5D7RKDckiT6HtxIsLddGNA0r
+ CeE45Z9jE7G5+A/vm6nDXKCKjt0PqtubE5KckhIy7dPeuDz9Fww1peQuxquVGK2NjeXn
+ +oQQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=CK4PX1tB
-Subject: Re: [Buildroot] [PATCH 1/1] package/libkrb5: force arm mode instead
- of Thumb mode
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=OLHKT+eb
+Subject: Re: [Buildroot] [PATCH] package/rauc: bump version to 1.11.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -111,7 +108,7 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: =?UTF-8?Q?Andr=C3=A9_Zwing?= <nerv@dawncrow.de>
+Cc: Heiko Thiery <heiko.thiery@gmail.com>, Andrey Yurovsky <yurovsky@gmail.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -119,15 +116,12 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 14/03/2024 22:32, Fabrice Fontaine wrote:
-> Fix the following build failure in Thumb mode:
+On 15/03/2024 16:08, Peter Korsgaard wrote:
+> Contains a single fix for a regression since 1.11.0.
 > 
-> /tmp/ccdzbA2E.s:845: Error: selected processor does not support `mcr p15,0,r2,c7,c10,5' in Thumb mode
+> https://github.com/rauc/rauc/releases/tag/v1.11.3
 > 
-> Fixes:
->   - http://autobuild.buildroot.org/results/08be1fa0fee0f05818cd78d4718caa3476c570ae
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
   Applied to master, thanks.
 
@@ -135,27 +129,32 @@ On 14/03/2024 22:32, Fabrice Fontaine wrote:
   Arnout
 
 > ---
->   package/libkrb5/libkrb5.mk | 7 +++++++
->   1 file changed, 7 insertions(+)
+>   package/rauc/rauc.hash | 2 +-
+>   package/rauc/rauc.mk   | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/libkrb5/libkrb5.mk b/package/libkrb5/libkrb5.mk
-> index 62a34b2379..c58763eddd 100644
-> --- a/package/libkrb5/libkrb5.mk
-> +++ b/package/libkrb5/libkrb5.mk
-> @@ -33,6 +33,13 @@ LIBKRB5_CONF_OPTS = \
->   	--without-tcl \
->   	--disable-rpath
+> diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
+> index 6899ca94fe..391d89a8f6 100644
+> --- a/package/rauc/rauc.hash
+> +++ b/package/rauc/rauc.hash
+> @@ -1,3 +1,3 @@
+>   # Locally calculated after checking pgp signature
+> -sha256  e47070e97f89136ca8d0b2b044c40e68ac0f44432046176d08d66717320df4a7  rauc-1.11.2.tar.xz
+> +sha256  ef82ee452939c03a24fd40649afa96497f3cec965994e6c9c0d94239b640bc10  rauc-1.11.3.tar.xz
+>   sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+> diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
+> index 7bb374259f..7239d84cc7 100644
+> --- a/package/rauc/rauc.mk
+> +++ b/package/rauc/rauc.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
 >   
-> +# libkrb5 has some assembly function that is not present in Thumb mode:
-> +# Error: selected processor does not support `mcr p15,0,r2,c7,c10,5' in Thumb mode
-> +# so, we desactivate Thumb mode
-> +ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
-> +LIBKRB5_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -marm"
-> +endif
-> +
->   # Enabling static and shared at the same time is not supported
->   ifeq ($(BR2_SHARED_STATIC_LIBS),y)
->   LIBKRB5_CONF_OPTS += --disable-static
+> -RAUC_VERSION = 1.11.2
+> +RAUC_VERSION = 1.11.3
+>   RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
+>   RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
+>   RAUC_LICENSE = LGPL-2.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
