@@ -4,92 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CD2AC54E58
-	for <buildroot@archiver.kernel.org>; Fri, 15 Mar 2024 21:47:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0E98C54E58
+	for <buildroot@archiver.kernel.org>; Fri, 15 Mar 2024 22:10:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5FE4840025;
-	Fri, 15 Mar 2024 21:47:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3C0BF40142;
+	Fri, 15 Mar 2024 22:10:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id psJxKL8ma_Ri; Fri, 15 Mar 2024 21:47:29 +0000 (UTC)
+	with ESMTP id P9rLkkOWBxd9; Fri, 15 Mar 2024 22:10:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9651C40142
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F6BA40289
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9651C40142;
-	Fri, 15 Mar 2024 21:47:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4F6BA40289;
+	Fri, 15 Mar 2024 22:10:46 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D78971BF3BC
- for <buildroot@lists.busybox.net>; Fri, 15 Mar 2024 21:47:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4CAE11BF2BB
+ for <buildroot@lists.busybox.net>; Fri, 15 Mar 2024 22:10:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C3DA040142
- for <buildroot@lists.busybox.net>; Fri, 15 Mar 2024 21:47:27 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4667440142
+ for <buildroot@lists.busybox.net>; Fri, 15 Mar 2024 22:10:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EpCK-lrojjlM for <buildroot@lists.busybox.net>;
- Fri, 15 Mar 2024 21:47:23 +0000 (UTC)
+ with ESMTP id viORB3nuyEgm for <buildroot@lists.busybox.net>;
+ Fri, 15 Mar 2024 22:10:39 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::432; helo=mail-wr1-x432.google.com;
+ client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
  envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org CBB7D40025
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CBB7D40025
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp2.osuosl.org (Postfix) with ESMTPS id CBB7D40025
- for <buildroot@buildroot.org>; Fri, 15 Mar 2024 21:47:22 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id
- ffacd0b85a97d-33ed5b6bf59so536407f8f.0
- for <buildroot@buildroot.org>; Fri, 15 Mar 2024 14:47:22 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5B62640025
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5B62640025
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5B62640025
+ for <buildroot@buildroot.org>; Fri, 15 Mar 2024 22:10:38 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-413ef770149so16725325e9.1
+ for <buildroot@buildroot.org>; Fri, 15 Mar 2024 15:10:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1710539240; x=1711144040;
+ d=1e100.net; s=20230601; t=1710540636; x=1711145436;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=l5JaJGBBr61AOgxgm3hC6P2OmVq3iPTkVh9He2h4K3s=;
- b=PqXEwSviozptyZKOZX/lFOQPwIa7Ywr1QWcE8r0GIL/ZJ+nQ+z167vnpRMwICXxpaT
- vyTIv96bAxnkbsbSrsXO9TsQA0IfXV4teb0dzs2FHFzAdsI27tgOpsTtSXUSfum7LScB
- DCt02la2mhFpjYGzaMHaFph0J8Sl5ytocs29GPgdJyj248dcdKEo07xYgG++R9AlIkn4
- hrTEaPBU97jpPfZMLstNR583ABFwko0KmUVkM/LFxfgyi1YPJrZF32IYi5hQn/OTEB8b
- kdARcogwXJdpfd9cU1zRCg304Rfy2p3cTQiEnf/zuzAleeqT12YdZGfYBDAZ5BymdXBa
- 9SQg==
-X-Gm-Message-State: AOJu0YzDGo/a+JB8uXWwQ3BrMXsjIC7Xrfk09duGYcG+uHyWoBIPMAFa
- HcmpzsaB8qYcE4CrdXdE1zxfzGlOW2/UAspNOGGQQapiCm8c1JuWZqzoI42g
-X-Google-Smtp-Source: AGHT+IFwpv/qW+crBozwQHF3/rGiZdwHafqgPfLsZXbIbZmnCduNYWN5kRoRDkX7xxTfXHR0xt6/GQ==
-X-Received: by 2002:adf:a4d2:0:b0:33e:c5c8:d04d with SMTP id
- h18-20020adfa4d2000000b0033ec5c8d04dmr4138097wrb.25.1710539240300; 
- Fri, 15 Mar 2024 14:47:20 -0700 (PDT)
+ bh=wcegl9VfHbQei+pmnhuV2PSAOB2sm6wQc/i99kr5uHI=;
+ b=MIi8JaqSAV702nOiCpXEL8PD5kFWsondyrsx/5gK/RXT6TtHErekGv0XY2/124/kCs
+ pJ8T8UaWIOHTRU1bfnWWIf8nuYK6Nzut7d/fVBqgde2Bo+dQJJDkStRA0sdwhrdrG0UA
+ 3M/RGonHhLyVu8aqY/UsOYeed0zhmLMDnkV+FDf70rncad/Akf+Bs3QrVGb/zzPEebyI
+ 5c7WOn6d06iZR7/l9zg5nT33Ei6SKasfZIW/vMf/9gRN+wxQXFoewbXcoa/Gr3WIeJKN
+ TvvTS5a9E40boxTW1qP6X0TWE9AU/IPYP6O6tLHXQAFWnMwXWozuKzkrRh0hruc3JrpF
+ Glgw==
+X-Gm-Message-State: AOJu0YwaWhEPgaWgBq+pErrQNQR5HJNcCClMEs7NGLkI9Ip8wttdRQfu
+ tdPqrv027KnNTkDXBVll4NDWIlIWusEkscMv0ziDVJSccf0HN5wPgNenZuDn
+X-Google-Smtp-Source: AGHT+IHkTadEQ7NJnzCtDkVSWRQanhxCYc8OFBc/W+IoX9V4qc4aE/7tZsG2WtdKH94QvIfFgs7bxQ==
+X-Received: by 2002:a5d:6583:0:b0:33e:7f5c:a75d with SMTP id
+ q3-20020a5d6583000000b0033e7f5ca75dmr3580075wru.57.1710540635920; 
+ Fri, 15 Mar 2024 15:10:35 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- az1-20020adfe181000000b0033ed7181fd1sm1054874wrb.62.2024.03.15.14.47.19
+ t4-20020a0560001a4400b0033e756ed840sm4033165wry.47.2024.03.15.15.10.34
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 15 Mar 2024 14:47:19 -0700 (PDT)
+ Fri, 15 Mar 2024 15:10:35 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 15 Mar 2024 22:47:12 +0100
-Message-ID: <20240315214712.4897-1-fontaine.fabrice@gmail.com>
+Date: Fri, 15 Mar 2024 23:10:29 +0100
+Message-ID: <20240315221029.88170-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1710539240; x=1711144040; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1710540636; x=1711145436; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=l5JaJGBBr61AOgxgm3hC6P2OmVq3iPTkVh9He2h4K3s=;
- b=AzQkTMVb65SkW3LKqX36vLGyGFYedmRFHfLC+apuulrNwBXbI82ps1DR+DZTDNbAoI
- H89h4LqpNMEHRo+f0i/ws+Fsqx0UQhqCjt1mJwuoy5OwQPfkMKUMnyX24qfQqZP6RvzM
- E/3GU9Q0WLk2m7Appwrx8BcmKLUwrw4Bg3u2FbOkiHw/ZCKtPzLaR79nv3wOGaSCZXfI
- E75K91je4FwoNu5W/6CV17ndsyvGoZQUVkoG5UC1lEXmvwfCfrtpDadPgREdeaI4d7nZ
- imFNKRtc8aG1NCOYDh2K3Koo6T+J9YT3dWtmHgyQFlY7SC+yz9fO6f5rL37YfUOGJ2WH
- Ej1Q==
+ bh=wcegl9VfHbQei+pmnhuV2PSAOB2sm6wQc/i99kr5uHI=;
+ b=i1GzOv9K5YmlCU3WkVHHRuy4Vi+Tx7Po7eRAAoVZ12mJajVaY/HOdrlCPm9EnhaMjT
+ 2zQriedD4vl5KdNrl4j1NG5bbV1QLpJUHOVzd3UmSscX4U68h8D5dZWOc1zf0e/P/iEx
+ N9FOuyVMfdK8OeHSa8jf/3W/HixuLzktK+OO2iMvN7XA1wrY8gTwmD7KH74rm4oidjoK
+ vYViKmnNOJDK5XMtuDo7wvd5nBc1YdRPkRekQrSEVh+MzDJwyxSZFCIhptNugf/BLGNI
+ 1twO8LDqVTLaPxL3yHDC4gQRkk2EgsIuFt4KLek+PAmCaCfhsXA7s1lvEa+7JGTCvcED
+ BEIQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=AzQkTMVb
-Subject: [Buildroot] [PATCH 1/1] package/multipath-tools: drop README.md
- from license files
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=i1GzOv9K
+Subject: [Buildroot] [PATCH 1/1] package/cvs: fix build without editor
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,45 +99,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Alexander Egorenkov <egorenar-dev@posteo.net>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop README.md from license files as advocated by Arnout Vandecappelle:
-https://patchwork.ozlabs.org/project/buildroot/patch/20240314211117.9103-1-fontaine.fabrice@gmail.com
+Set default editor to /bin/vi to fix the following build failure when no
+editor is found on host:
+
+configure:40833: checking for vim
+configure:40862: result: no
+configure:40833: checking for vi
+configure:40862: result: no
+configure:40833: checking for emacs
+configure:40862: result: no
+configure:40833: checking for nano
+configure:40862: result: no
+configure:40833: checking for pico
+configure:40862: result: no
+configure:40833: checking for edit
+configure:40862: result: no
+configure:40874: error:
+    Failed to find a text file editor.  CVS cannot be compiled
+    without a default log message editor.  Searched for
+    `vim vi emacs nano pico edit'.  Try `configure --with-editor'.
+
+While at it, drop CVS_CONFIGURE_ARGS variable for simplicity
+
+Fixes:
+ - http://autobuild.buildroot.org/results/5b8a747698bc2e64eb1f001e87577e86e4cb8d14
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/multipath-tools/multipath-tools.hash | 1 -
- package/multipath-tools/multipath-tools.mk   | 3 +--
- 2 files changed, 1 insertion(+), 3 deletions(-)
+ package/cvs/cvs.mk | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/multipath-tools/multipath-tools.hash b/package/multipath-tools/multipath-tools.hash
-index c1f32e7a3b..03a2867144 100644
---- a/package/multipath-tools/multipath-tools.hash
-+++ b/package/multipath-tools/multipath-tools.hash
-@@ -4,4 +4,3 @@ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENS
- sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSES/GPL-3.0
- sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  LICENSES/LGPL-2.0
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSES/LGPL-2.1
--sha256  9c69bb0089aa0b82b10a25095c04a7c4aec6b5bbf0776b7129123c8459fe7725  README.md
-diff --git a/package/multipath-tools/multipath-tools.mk b/package/multipath-tools/multipath-tools.mk
-index e62e85e14d..164d850600 100644
---- a/package/multipath-tools/multipath-tools.mk
-+++ b/package/multipath-tools/multipath-tools.mk
-@@ -16,8 +16,7 @@ MULTIPATH_TOOLS_LICENSE_FILES = \
- 	LICENSES/GPL-2.0 \
- 	LICENSES/GPL-3.0 \
- 	LICENSES/LGPL-2.0 \
--	LICENSES/LGPL-2.1 \
--	README.md
-+	LICENSES/LGPL-2.1
- MULTIPATH_TOOLS_CPE_ID_VENDOR = opensvc
+diff --git a/package/cvs/cvs.mk b/package/cvs/cvs.mk
+index bd1e04eee0..64c15f16fe 100644
+--- a/package/cvs/cvs.mk
++++ b/package/cvs/cvs.mk
+@@ -18,18 +18,18 @@ CVS_CONF_ENV = \
+ 	ac_cv_func_working_mktime=yes \
+ 	cvs_cv_func_printf_ptr=yes
  
- MULTIPATH_TOOLS_DEPENDENCIES = \
+-CVS_CONFIGURE_ARGS = --disable-old-info-format-support
++CVS_CONF_OPTS = \
++	--disable-old-info-format-support \
++	--with-editor=/bin/vi
+ ifeq ($(BR2_PACKAGE_CVS_SERVER),y)
+-CVS_CONFIGURE_ARGS += --enable-server
++CVS_CONF_OPTS += --enable-server
+ else
+-CVS_CONFIGURE_ARGS += --disable-server
++CVS_CONF_OPTS += --disable-server
+ endif
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+-CVS_CONFIGURE_ARGS += --with-external-zlib
++CVS_CONF_OPTS += --with-external-zlib
+ endif
+ 
+-CVS_CONF_OPTS = $(CVS_CONFIGURE_ARGS)
+-
+ define CVS_BZIP_UNPACK
+ 	$(BZCAT) $(@D)/cvs-$(CVS_VERSION).tar.bz2 | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+ 	rm -f $(@D)/cvs-$(CVS_VERSION).tar.bz2
 -- 
 2.43.0
 
