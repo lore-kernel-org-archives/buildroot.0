@@ -4,97 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EECC9C54E58
-	for <buildroot@archiver.kernel.org>; Fri, 15 Mar 2024 19:22:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D8A5C54E58
+	for <buildroot@archiver.kernel.org>; Fri, 15 Mar 2024 19:23:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B978060632;
-	Fri, 15 Mar 2024 19:22:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CD9C860F8B;
+	Fri, 15 Mar 2024 19:23:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rCsT6e6C-bYe; Fri, 15 Mar 2024 19:22:41 +0000 (UTC)
+	with ESMTP id g0WTytZEcF2J; Fri, 15 Mar 2024 19:23:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C4B2F60F8F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1BD33608B1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C4B2F60F8F;
-	Fri, 15 Mar 2024 19:22:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1BD33608B1;
+	Fri, 15 Mar 2024 19:23:07 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3A7691BF307
- for <buildroot@lists.busybox.net>; Fri, 15 Mar 2024 19:22:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F16411BF307
+ for <buildroot@lists.busybox.net>; Fri, 15 Mar 2024 19:23:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 345DB4192F
- for <buildroot@lists.busybox.net>; Fri, 15 Mar 2024 19:22:39 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EA17440399
+ for <buildroot@lists.busybox.net>; Fri, 15 Mar 2024 19:23:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id U22yvZ9ADPdr for <buildroot@lists.busybox.net>;
- Fri, 15 Mar 2024 19:22:35 +0000 (UTC)
+ with ESMTP id WkiwdBEZUvDX for <buildroot@lists.busybox.net>;
+ Fri, 15 Mar 2024 19:23:00 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
+ client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
  envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0984340399
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0984340399
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0984340399
- for <buildroot@buildroot.org>; Fri, 15 Mar 2024 19:22:34 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id
- ffacd0b85a97d-33ed7ba1a42so206917f8f.2
- for <buildroot@buildroot.org>; Fri, 15 Mar 2024 12:22:34 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org EFA094042B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EFA094042B
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EFA094042B
+ for <buildroot@buildroot.org>; Fri, 15 Mar 2024 19:22:59 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ 5b1f17b1804b1-413f1853bf3so14697055e9.0
+ for <buildroot@buildroot.org>; Fri, 15 Mar 2024 12:22:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1710530552; x=1711135352;
- h=content-transfer-encoding:in-reply-to:from:references:to
+ d=1e100.net; s=20230601; t=1710530578; x=1711135378;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=E/X35k9DajAnR389tPk7owbraXIwNiKVZ2oIQpo0xB0=;
- b=n0euAs0RAtEaE3m8LQEHCJkLpT8jpYL0XukBuEZsO8OnZbbH8H7gU78Z6Y+ow3Rhj3
- OwN8GlNdN7khTipi2CQ6RPzmOZKi+7PRl9SA/OVHzQ6CY83Vxv5BaG4S3IqylpPsnpni
- NpCRZy3kBFYpzhCT6GjeOZTwMrE0hIZEQHeu6FTr5/ab4FllMQBygN5OefhbqaoixVg5
- C+WzEoDWLPqahOXbEFgHL6rtGx4UHZImVLP2uU5xoIDi0/v4McmsRRopBLw6ZayHnPsM
- lvRO9i/R8KO+I5pSL9Ec83dcaKpnxcpTq7eQrgMZhE/C7CgDGtImAvxH6aaq1+I0B805
- pGjw==
+ bh=EXqT/X+pAFpaL63eatF+h7tSEoZOFdUtwrKh4JQUWxI=;
+ b=huEkP8UnLTrZdqgGIRhe9k+Kpp2Db9s3g73zMZIvLcUJDcNpgrtYj1vyBFmXyB9GLQ
+ bIP3hbGfOhknnBA6BGDG5bvdJ6DB4UsYZCZjWQXJqZQv/XuYZQKE2atSJpCNduI/Ckax
+ 0s2VOptg35VLi6oqB3O3LER/InCYhVx8+nv0oT6I/tL6Qo61ppc1s3/vGXd5E9KKc+nP
+ LogSx6NrPixta4o1ml6idLZtY41JDG61+6hia8S0Q7SA+zklwWNkYkLeIdknPsk2Addi
+ KT5mK+r8DUru/IrmCHtcvN9vCX81dgxSIRo3U1UUCREwXEO5cKzvFuAzMNe39ziY/rQS
+ ZlJw==
 X-Forwarded-Encrypted: i=1;
- AJvYcCX4IGkbTQpWpzMzIlFo7+PuO9KXL3yUujfr9WsJCc/qLr2feZd/Jl7nVuvv9D0PnC5t6zC8+IBW2kEAGSGwin/JexCVQBvQWA==
-X-Gm-Message-State: AOJu0YwtiE7/FWqfkGg8WR+dEhfkGFBZpTj99KdwFzjL045euyJrYNWk
- NV31HqgwNlS1OPn+GRnj2hQ+h4na/WMgA1OUXND1QRwCFpDnqNRcXTR0V+2Vr94=
-X-Google-Smtp-Source: AGHT+IG7thzsuZM5bNp7D9+TTdZiGBvczryteHncR723h1wyjAmz7OcRZqby9RNcTrZLs2vH6C5fyA==
-X-Received: by 2002:a05:6000:110:b0:33d:82a1:626d with SMTP id
- o16-20020a056000011000b0033d82a1626dmr3743233wrx.38.1710530552337; 
- Fri, 15 Mar 2024 12:22:32 -0700 (PDT)
+ AJvYcCWNCRE62xFWMt0RxKweZDgCZPgwoVy5dph+SukZnbBS3OVwP/9E8ezr8ZV2caQMglyEwIKY0Wx6fvmSSoOpvb+888XUeIA2+A==
+X-Gm-Message-State: AOJu0YwuaXiMgOb2cJXQnIAUNGphBi4rngMoNhF7S3x+ZDtzojuEXKvm
+ 4AbObwRAY1B04lR4N/UmcbJ5xzoD8PmNMUjO75T1+H2RxeD8I9PdlJekIHfgiIM=
+X-Google-Smtp-Source: AGHT+IGECDCm6ReI0EdSVgc2rhHEEhf8lhCFx291/op6UgwpwzUMAjlnGeb1/DOJVUJnTulBXlTZ/w==
+X-Received: by 2002:a05:6000:1:b0:33d:873a:616 with SMTP id
+ h1-20020a056000000100b0033d873a0616mr4046440wrx.64.1710530577907; 
+ Fri, 15 Mar 2024 12:22:57 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
  (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- bq22-20020a5d5a16000000b0033ebf702e17sm1863302wrb.21.2024.03.15.12.22.31
+ bq22-20020a5d5a16000000b0033ebf702e17sm1863302wrb.21.2024.03.15.12.22.56
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 15 Mar 2024 12:22:31 -0700 (PDT)
-Message-ID: <64441d32-2de2-45f1-ab32-4050cb4255f0@mind.be>
-Date: Fri, 15 Mar 2024 20:22:30 +0100
+ Fri, 15 Mar 2024 12:22:57 -0700 (PDT)
+Message-ID: <dfc85aa9-da2c-46c5-b0b9-d7e7ab02cf16@mind.be>
+Date: Fri, 15 Mar 2024 20:22:55 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Content-Language: en-GB
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20240314214225.398600-1-fontaine.fabrice@gmail.com>
-In-Reply-To: <20240314214225.398600-1-fontaine.fabrice@gmail.com>
+To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
+References: <20240314212043.23332-1-bernd@kuhls.net>
+In-Reply-To: <20240314212043.23332-1-bernd@kuhls.net>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1710530552; x=1711135352; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:references:to
+ d=mind.be; s=google; t=1710530578; x=1711135378; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=E/X35k9DajAnR389tPk7owbraXIwNiKVZ2oIQpo0xB0=;
- b=hRT8ZHxwxN15PmqChOZz4xI8ehJpOHnSykipYO4wE38Jrto7j7Wb15XMzmBc25EMFN
- CADLaSG15t6A1TZ0bgXnSU+8FezrnutRruJXV/cWF8UQuZh1nUwUUgIVBM0NVzn9m8XC
- WoqMfvhJU/k1mU5hWz82kxCp+qLOZcEHWta+jj/xEv+QSKKLx9RxehUDn7cJZA6Mt9Sf
- SeFf9qUKI8V6EvXKnTeAlNuVdjTzDgf/79ZhQmNYr2oTeT8/5YNGI6qe5f1YRfQXtB6c
- 5YNv6XtfRGofjac7VdPvD+ZFq/sD8/v7EVckrwXUl8JuS/dRp5xz9et8XTNSFcRBWEK5
- gWrg==
+ bh=EXqT/X+pAFpaL63eatF+h7tSEoZOFdUtwrKh4JQUWxI=;
+ b=GyspLhgIzTS1WK8ONllQPAQF4kBDN42kNxqzFfwnOl9CGENXhOfg1ebOOYoKDjVwpZ
+ ODOmHQ8PtH/ZLR9TrEjzhbgGwaPGxphcwfayRVPd95lFsTlAV4UeddYMPCzF7Uun4RGq
+ GgIfI+3bfmCs7rozYdd/L+XuffnsqeLuMWCMVo9Wpuph6OX1VLAiTg2corw2PKIk3W+Z
+ N+tdlG/P8F6qveW8i9rICvELhf288EzOxelkJX3kcpc1nkDLjUZkWVM0CLDEDCFvcl6H
+ LRsF5Z13AyOPNnHbllrLTlPnIpuf+DOdRdi7GH4sSHZT17uFVZHxKBQLj+Cd4ZaAwzu0
+ zxrQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=hRT8ZHxw
-Subject: Re: [Buildroot] [PATCH 1/1] package/libnfs: bump to version 5.0.3
+ header.a=rsa-sha256 header.s=google header.b=GyspLhgI
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 24.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,6 +109,8 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -115,10 +118,13 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 14/03/2024 22:42, Fabrice Fontaine wrote:
-> https://github.com/sahlberg/libnfs/blob/libnfs-5.0.3/CHANGELOG
+On 14/03/2024 22:20, Bernd Kuhls wrote:
+> Release notes:
+> https://lists.freedesktop.org/archives/mesa-announce/2024-February/000749.html
+> https://lists.freedesktop.org/archives/mesa-announce/2024-February/000751.html
+> https://lists.freedesktop.org/archives/mesa-announce/2024-March/000752.html
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
   Applied to master, thanks.
 
@@ -126,34 +132,52 @@ On 14/03/2024 22:42, Fabrice Fontaine wrote:
   Arnout
 
 > ---
->   package/libnfs/libnfs.hash | 2 +-
->   package/libnfs/libnfs.mk   | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
+> v2: squashed with uncommitted patch
 > 
-> diff --git a/package/libnfs/libnfs.hash b/package/libnfs/libnfs.hash
-> index b67a5d2eda..c5e5197c13 100644
-> --- a/package/libnfs/libnfs.hash
-> +++ b/package/libnfs/libnfs.hash
+>   package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+>   package/mesa3d/mesa3d.hash               | 6 +++---
+>   package/mesa3d/mesa3d.mk                 | 2 +-
+>   3 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+> index 1d006dbc91..7f39fefaf5 100644
+> --- a/package/mesa3d-headers/mesa3d-headers.mk
+> +++ b/package/mesa3d-headers/mesa3d-headers.mk
+> @@ -12,7 +12,7 @@ endif
+>   
+>   # Not possible to directly refer to mesa3d variables, because of
+>   # first/second expansion trickery...
+> -MESA3D_HEADERS_VERSION = 24.0.0
+> +MESA3D_HEADERS_VERSION = 24.0.3
+>   MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+>   MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+>   MESA3D_HEADERS_DL_SUBDIR = mesa3d
+> diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+> index 49b42e2132..1e94c2c612 100644
+> --- a/package/mesa3d/mesa3d.hash
+> +++ b/package/mesa3d/mesa3d.hash
 > @@ -1,5 +1,5 @@
->   # Locally calculated
-> -sha256  637e56643b19da9fba98f06847788c4dad308b723156a64748041035dcdf9bd3  libnfs-5.0.2.tar.gz
-> +sha256  d945cb4f4c8f82ee1f3640893a168810f794a28e1010bb007ec5add345e9df3e  libnfs-5.0.3.tar.gz
->   sha256  edd960c0142b8ada98b43b6396b78f4e557b0bc70ac601a51e397ad04070e2c5  COPYING
->   sha256  d9406ced95457941032aa11d04623b8ab71f2827a3395ebef137aec475be35b1  LICENCE-BSD.txt
->   sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENCE-LGPL-2.1.txt
-> diff --git a/package/libnfs/libnfs.mk b/package/libnfs/libnfs.mk
-> index 19044527e0..e5e302a4f8 100644
-> --- a/package/libnfs/libnfs.mk
-> +++ b/package/libnfs/libnfs.mk
-> @@ -4,7 +4,7 @@
->   #
+> -# From https://lists.freedesktop.org/archives/mesa-announce/2024-February/000747.html
+> -sha256  dc7e8c077bc5884df95478263b34bdebb7e88e600689cb56fb07be2b8c304c36  mesa-24.0.0.tar.xz
+> -sha512  9dfdea7cebb37b9c020335e24194b39b399f48b5af6eec30c3455108276ac4e29e7b06df942cb2abc7afa667784968c0c43d19b9afe30ef03021b9cb6a789f15  mesa-24.0.0.tar.xz
+> +# From https://lists.freedesktop.org/archives/mesa-announce/2024-March/000752.html
+> +sha256  77aec9a2a37b7d3596ea1640b3cc53d0b5d9b3b52abed89de07e3717e91bfdbe  mesa-24.0.3.tar.xz
+> +sha512  76b3b479877c40f729d7f530af4e3577fa74363edcd3d9474350d498a51dbb761fc034b39bee8547e97c30fd3a520cbc50c742d5a187746e83ddab1df44f37e9  mesa-24.0.3.tar.xz
+>   # License
+>   sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
+> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+> index 71929014c8..bdb7ea9a6c 100644
+> --- a/package/mesa3d/mesa3d.mk
+> +++ b/package/mesa3d/mesa3d.mk
+> @@ -5,7 +5,7 @@
 >   ################################################################################
 >   
-> -LIBNFS_VERSION = 5.0.2
-> +LIBNFS_VERSION = 5.0.3
->   LIBNFS_SITE = $(call github,sahlberg,libnfs,libnfs-$(LIBNFS_VERSION))
->   LIBNFS_INSTALL_STAGING = YES
->   LIBNFS_AUTORECONF = YES
+>   # When updating the version, please also update mesa3d-headers
+> -MESA3D_VERSION = 24.0.0
+> +MESA3D_VERSION = 24.0.3
+>   MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+>   MESA3D_SITE = https://archive.mesa3d.org
+>   MESA3D_LICENSE = MIT, SGI, Khronos
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
