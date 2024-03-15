@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F9AFC54E58
-	for <buildroot@archiver.kernel.org>; Fri, 15 Mar 2024 19:24:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8296C54E58
+	for <buildroot@archiver.kernel.org>; Fri, 15 Mar 2024 19:24:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DAD8760F90;
-	Fri, 15 Mar 2024 19:24:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AE881606FF;
+	Fri, 15 Mar 2024 19:24:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KfGbSva1-g9R; Fri, 15 Mar 2024 19:24:00 +0000 (UTC)
+	with ESMTP id t50yfxRcwbRA; Fri, 15 Mar 2024 19:24:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F33F60F94
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3309560FB1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9F33F60F94;
-	Fri, 15 Mar 2024 19:23:53 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9DCE81BF307
- for <buildroot@lists.busybox.net>; Fri, 15 Mar 2024 19:23:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3309560FB1;
+	Fri, 15 Mar 2024 19:23:56 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 86ADB1BF307
+ for <buildroot@lists.busybox.net>; Fri, 15 Mar 2024 19:23:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8A7EE4193B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 715DF8237A
  for <buildroot@lists.busybox.net>; Fri, 15 Mar 2024 19:23:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id V-QF3LlIF_ew for <buildroot@lists.busybox.net>;
- Fri, 15 Mar 2024 19:23:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QOI8912eGbjU for <buildroot@lists.busybox.net>;
+ Fri, 15 Mar 2024 19:23:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F08FA4194E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD31C81757
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id F08FA4194E
+ by smtp1.osuosl.org (Postfix) with ESMTP id CD31C81757
  for <buildroot@buildroot.org>; Fri, 15 Mar 2024 19:23:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9BD6288338; Fri, 15 Mar 2024 19:23:41 +0000 (UTC)
+ id C7E76846F5; Fri, 15 Mar 2024 19:23:41 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 15 Mar 2024 20:16:56 +0100
+Date: Fri, 15 Mar 2024 20:18:03 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 665086ba5ddff7653dd283074d67e74f5dc25c0f
-X-Git-Newrev: 44f3c736a800d2afd154e5e476cdc60ae30a0108
+X-Git-Oldrev: 136d4dfbe6126b5ed20237c571f599dfc163d110
+X-Git-Newrev: dbc6398f1d4c68fa32c5f9d6329dfff7cb109a4b
 X-Patchwork-Hint: ignore
-Message-Id: <20240315192341.9BD6288338@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rauc: bump version to 1.11.3
+Message-Id: <20240315192341.C7E76846F5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libspdm: bump version to 3.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,42 +65,102 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=44f3c736a800d2afd154e5e476cdc60ae30a0108
+commit: https://git.buildroot.net/buildroot/commit/?id=dbc6398f1d4c68fa32c5f9d6329dfff7cb109a4b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Contains a single fix for a regression since 1.11.0.
+Additionally, add an upstream patch that fixes the configuration for
+"NONE" toolchain variant in libspdm. That is, where the build
+environment provides compile/link options.
 
-https://github.com/rauc/rauc/releases/tag/v1.11.3
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
+Signed-off-by: Wilfred Mallawa <wilfred.mallawa@wdc.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/rauc/rauc.hash | 2 +-
- package/rauc/rauc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...-CMakeLists-remove-fixed-options-for-NONE.patch | 52 ++++++++++++++++++++++
+ package/libspdm/libspdm.hash                       |  2 +-
+ package/libspdm/libspdm.mk                         |  2 +-
+ 3 files changed, 54 insertions(+), 2 deletions(-)
 
-diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
-index 6899ca94fe..391d89a8f6 100644
---- a/package/rauc/rauc.hash
-+++ b/package/rauc/rauc.hash
+diff --git a/package/libspdm/0001-CMakeLists-remove-fixed-options-for-NONE.patch b/package/libspdm/0001-CMakeLists-remove-fixed-options-for-NONE.patch
+new file mode 100644
+index 0000000000..0de0ad0079
+--- /dev/null
++++ b/package/libspdm/0001-CMakeLists-remove-fixed-options-for-NONE.patch
+@@ -0,0 +1,52 @@
++From d4d6b138d727e484fa9d0fef476ca181681d0695 Mon Sep 17 00:00:00 2001
++From: Wilfred Mallawa <wilfred.mallawa@wdc.com>
++Date: Mon, 19 Feb 2024 09:56:14 +1000
++Subject: [PATCH] CMakeLists: remove fixed options for NONE
++
++The use of the NONE toolchain option is such that we can provide at the
++build project level (buildroot etc...). However, the changes introduced
++in 811f2b596def04b3a36368cf2098546d7907767f set certain compiler/linker
++option that does not comply with the definition of the options as
++specified in [1]. This change removes those options.
++
++[1] https://github.com/DMTF/libspdm/blob/main/doc/build.md#linux-builds-inside-build-environments
++
++Upstream: https://github.com/DMTF/libspdm/commit/d4d6b138d727e484fa9d0fef476ca181681d0695
++Signed-off-by: Wilfred Mallawa <wilfred.mallawa@wdc.com>
++---
++ CMakeLists.txt | 19 -------------------
++ 1 file changed, 19 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 9c300cc817..f6cf17d269 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -618,25 +618,6 @@ if(CMAKE_SYSTEM_NAME MATCHES "Linux")
++         SET(CMAKE_EXE_LINKER_FLAGS "")
++ 
++         SET(CMAKE_C_LINK_EXECUTABLE "")
++-
++-    elseif(TOOLCHAIN STREQUAL "NONE")
++-        ADD_COMPILE_OPTIONS(-fshort-wchar -fno-strict-aliasing -Wall -Werror -Wno-array-bounds -ffunction-sections -fdata-sections -fno-common -Wno-address -fpie -fno-asynchronous-unwind-tables -flto -DUSING_LTO  -Wno-maybe-uninitialized -Wno-uninitialized  -Wno-builtin-declaration-mismatch -Wno-nonnull-compare -Werror-implicit-function-declaration)
++-        if(CMAKE_BUILD_TYPE STREQUAL "Debug")
++-            ADD_COMPILE_OPTIONS(-g)
++-        endif()
++-        if(GCOV STREQUAL "ON")
++-        ADD_COMPILE_OPTIONS(--coverage -fprofile-arcs -ftest-coverage)
++-        endif()
++-        SET(OPENSSL_FLAGS -include base.h -Wno-error=maybe-uninitialized -Wno-error=format -Wno-format -Wno-error=unused-but-set-variable -Wno-cast-qual -Wno-error=implicit-function-declaration)
++-        SET(CMOCKA_FLAGS -std=gnu99 -Wpedantic -Wall -Wshadow -Wmissing-prototypes -Wcast-align -Werror=address -Wstrict-prototypes -Werror=strict-prototypes -Wwrite-strings -Werror=write-strings -Werror-implicit-function-declaration -Wpointer-arith -Werror=pointer-arith -Wdeclaration-after-statement -Werror=declaration-after-statement -Wreturn-type -Werror=return-type -Wuninitialized -Werror=uninitialized -Werror=strict-overflow -Wstrict-overflow=2 -Wno-format-zero-length -Wmissing-field-initializers -Wformat-security -Werror=format-security -fno-common -Wformat -fno-common -fstack-protector-strong -Wno-cast-qual)
++-
++-        SET(CMAKE_LINKER ${CMAKE_C_COMPILER})
++-        SET(CMAKE_EXE_LINKER_FLAGS "-flto -Wno-error -no-pie" )
++-        if(GCOV STREQUAL "ON")
++-        SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}  --coverage -lgcov -fprofile-arcs -ftest-coverage")
++-        endif()
++-        SET(CMAKE_C_LINK_EXECUTABLE "<CMAKE_LINKER> <CMAKE_C_LINK_FLAGS> <LINK_FLAGS> <OBJECTS> -o <TARGET> -Wl,--start-group <LINK_LIBRARIES> -Wl,--end-group")
++-
++     endif()
++ 
++     if(NOT TOOLCHAIN STREQUAL "NIOS2_GCC")
++-- 
++2.43.2
++
+diff --git a/package/libspdm/libspdm.hash b/package/libspdm/libspdm.hash
+index 23faba1c4b..32415bcfce 100644
+--- a/package/libspdm/libspdm.hash
++++ b/package/libspdm/libspdm.hash
 @@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  e47070e97f89136ca8d0b2b044c40e68ac0f44432046176d08d66717320df4a7  rauc-1.11.2.tar.xz
-+sha256  ef82ee452939c03a24fd40649afa96497f3cec965994e6c9c0d94239b640bc10  rauc-1.11.3.tar.xz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
-index 7bb374259f..7239d84cc7 100644
---- a/package/rauc/rauc.mk
-+++ b/package/rauc/rauc.mk
+ # Locally calculated
+-sha256  84d4a755f57b17775c63b5c8be646d518ce34d5d1b85994b6150ebce9d31b183  libspdm-3.1.1.tar.gz
++sha256  0ee460c0ce5c4d126ca65f9c4bdabd5725b87cec7160b2d06721169df58f3a95  libspdm-3.2.0.tar.gz
+ sha256  7dc072bff163df39209bbb63e0916f4667c2a84cf3c36ccc84ec7425bc3e4779  LICENSE.md
+diff --git a/package/libspdm/libspdm.mk b/package/libspdm/libspdm.mk
+index 34dbb457c4..2ec35be0ac 100644
+--- a/package/libspdm/libspdm.mk
++++ b/package/libspdm/libspdm.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RAUC_VERSION = 1.11.2
-+RAUC_VERSION = 1.11.3
- RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
- RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
- RAUC_LICENSE = LGPL-2.1
+-LIBSPDM_VERSION = 3.1.1
++LIBSPDM_VERSION = 3.2.0
+ LIBSPDM_SITE = $(call github,DMTF,libspdm,$(LIBSPDM_VERSION))
+ LIBSPDM_LICENSE = BSD-3-Clause
+ LIBSPDM_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
