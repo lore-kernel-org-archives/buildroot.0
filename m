@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0752C54E60
-	for <buildroot@archiver.kernel.org>; Sat, 16 Mar 2024 20:47:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30707C54E60
+	for <buildroot@archiver.kernel.org>; Sat, 16 Mar 2024 20:47:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7B603608BC;
-	Sat, 16 Mar 2024 20:47:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EBB526078C;
+	Sat, 16 Mar 2024 20:47:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qolPt_ZhkphR; Sat, 16 Mar 2024 20:47:14 +0000 (UTC)
+	with ESMTP id zBe4xsuyChuL; Sat, 16 Mar 2024 20:47:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5AA32608B3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B316A608E7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5AA32608B3;
-	Sat, 16 Mar 2024 20:47:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B316A608E7;
+	Sat, 16 Mar 2024 20:47:17 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7162C1BF861
- for <buildroot@lists.busybox.net>; Sat, 16 Mar 2024 20:47:07 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 126071BF85D
+ for <buildroot@lists.busybox.net>; Sat, 16 Mar 2024 20:47:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5D30C60842
+ by smtp3.osuosl.org (Postfix) with ESMTP id E685D6077D
  for <buildroot@lists.busybox.net>; Sat, 16 Mar 2024 20:47:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9jpw4BYGScI9 for <buildroot@lists.busybox.net>;
- Sat, 16 Mar 2024 20:47:04 +0000 (UTC)
+ with ESMTP id 3HRVayNIVWJs for <buildroot@lists.busybox.net>;
+ Sat, 16 Mar 2024 20:47:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D092F607C5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B32360769
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D092F607C5
- for <buildroot@buildroot.org>; Sat, 16 Mar 2024 20:47:04 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6B32360769
+ for <buildroot@buildroot.org>; Sat, 16 Mar 2024 20:47:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4ECCD87B53; Sat, 16 Mar 2024 20:47:04 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 4AE5A87790; Sat, 16 Mar 2024 20:47:05 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 16 Mar 2024 21:33:10 +0100
-X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: d9373bed8a184ddd11d7a6a70b3cc467e16acc1d
-X-Git-Newrev: a50be2501af419fe52f8a049f010c51bd0ce7544
+Date: Fri, 15 Mar 2024 21:25:18 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 945b9f8d8e9704fd3d2dbd2579ebf9178ed49d89
+X-Git-Newrev: 242781bb61bdad2690b089cc5eaf7705d2632e5d
 X-Patchwork-Hint: ignore
-Message-Id: <20240316204704.4ECCD87B53@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/libopenssl:
- security bump to version 3.1.5
+Message-Id: <20240316204705.4AE5A87790@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/targetcli-fb: bump version to
+ 2.1.58
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,58 +58,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a50be2501af419fe52f8a049f010c51bd0ce7544
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=242781bb61bdad2690b089cc5eaf7705d2632e5d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following (low severity) issues:
+bump to latest version because previous version did not work with python 3.11
+corrected version mismatch with my first submission
 
-- CVE-2023-6129 POLY1305 MAC implementation corrupts vector registers on
-  PowerPC
-  https://www.openssl.org/news/secadv/20240109.txt
-
-- CVE-2023-6237 Excessive time spent checking invalid RSA public keys
-  https://www.openssl.org/news/secadv/20240115.txt
-
-- CVE-2024-0727 PKCS12 Decoding crashes
-  https://www.openssl.org/news/secadv/20240125.txt
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Jeremy J. Peper <jeremy@jeremypeper.com>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/libopenssl/libopenssl.hash | 4 ++--
- package/libopenssl/libopenssl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/targetcli-fb/targetcli-fb.hash | 2 +-
+ package/targetcli-fb/targetcli-fb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
-index 29ced7cddd..913004f8a1 100644
---- a/package/libopenssl/libopenssl.hash
-+++ b/package/libopenssl/libopenssl.hash
-@@ -1,5 +1,5 @@
--# From https://www.openssl.org/source/openssl-3.1.4.tar.gz.sha256
--sha256  840af5366ab9b522bde525826be3ef0fb0af81c6a9ebd84caa600fea1731eee3  openssl-3.1.4.tar.gz
-+# From https://www.openssl.org/source/openssl-3.1.5.tar.gz.sha256
-+sha256  6ae015467dabf0469b139ada93319327be24b98251ffaeceda0221848dc09262  openssl-3.1.5.tar.gz
+diff --git a/package/targetcli-fb/targetcli-fb.hash b/package/targetcli-fb/targetcli-fb.hash
+index 64f68a6675..1732fa99e5 100644
+--- a/package/targetcli-fb/targetcli-fb.hash
++++ b/package/targetcli-fb/targetcli-fb.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256  7ae4120a54f24b13263b4b85c43952a03546f8b9fc9bd15fe87678f68245a33f  targetcli-fb-2.1.54.tar.gz
++sha256  605f4e4e4e7189d6a03f11a4f55e7ddb4671002d542c2f684f87dd68391dcdc2  targetcli-fb-2.1.58.tar.gz
+ sha256  5df2a0d87d6c562f0ea11c688ac52532aa28d744cabc7994ff0537f64b3b3320  COPYING
+diff --git a/package/targetcli-fb/targetcli-fb.mk b/package/targetcli-fb/targetcli-fb.mk
+index 56ed7c6174..503b9224d0 100644
+--- a/package/targetcli-fb/targetcli-fb.mk
++++ b/package/targetcli-fb/targetcli-fb.mk
+@@ -6,7 +6,7 @@
  
- # License files
- sha256  7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a  LICENSE.txt
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index b8b6ec6bff..a405b5a0e8 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBOPENSSL_VERSION = 3.1.4
-+LIBOPENSSL_VERSION = 3.1.5
- LIBOPENSSL_SITE = https://www.openssl.org/source
- LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
- LIBOPENSSL_LICENSE = Apache-2.0
+ # When upgrading the version, be sure to also upgrade python-rtslib-fb
+ # and python-configshell-fb at the same time.
+-TARGETCLI_FB_VERSION = 2.1.54
++TARGETCLI_FB_VERSION = 2.1.58
+ TARGETCLI_FB_SITE = $(call github,open-iscsi,targetcli-fb,v$(TARGETCLI_FB_VERSION))
+ TARGETCLI_FB_LICENSE = Apache-2.0
+ TARGETCLI_FB_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
