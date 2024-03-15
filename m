@@ -4,101 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 097D0C54E67
-	for <buildroot@archiver.kernel.org>; Fri, 15 Mar 2024 19:41:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9944DC54E67
+	for <buildroot@archiver.kernel.org>; Fri, 15 Mar 2024 19:45:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C0A9460F84;
-	Fri, 15 Mar 2024 19:41:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 50A4460631;
+	Fri, 15 Mar 2024 19:45:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aDnt73Jbkr3b; Fri, 15 Mar 2024 19:41:05 +0000 (UTC)
+	with ESMTP id Kn9jl3K0_wje; Fri, 15 Mar 2024 19:44:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 11FD360677
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B239D60677
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 11FD360677;
-	Fri, 15 Mar 2024 19:41:05 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 30E811BF307
- for <buildroot@lists.busybox.net>; Fri, 15 Mar 2024 19:41:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B239D60677;
+	Fri, 15 Mar 2024 19:44:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 95B741BF307
+ for <buildroot@lists.busybox.net>; Fri, 15 Mar 2024 19:44:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1E15241692
- for <buildroot@lists.busybox.net>; Fri, 15 Mar 2024 19:41:03 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 831B480BFA
+ for <buildroot@lists.busybox.net>; Fri, 15 Mar 2024 19:44:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tHuiBqcF9GqR for <buildroot@lists.busybox.net>;
- Fri, 15 Mar 2024 19:40:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HmyIfr0abi_b for <buildroot@lists.busybox.net>;
+ Fri, 15 Mar 2024 19:44:54 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
  client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
  envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DA5064168F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA5064168F
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9C10682433
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C10682433
 Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
  [IPv6:2a00:1450:4864:20::435])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DA5064168F
- for <buildroot@buildroot.org>; Fri, 15 Mar 2024 19:40:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9C10682433
+ for <buildroot@busybox.net>; Fri, 15 Mar 2024 19:44:53 +0000 (UTC)
 Received: by mail-wr1-x435.google.com with SMTP id
- ffacd0b85a97d-33e76d653b5so2220526f8f.3
- for <buildroot@buildroot.org>; Fri, 15 Mar 2024 12:40:57 -0700 (PDT)
+ ffacd0b85a97d-33e672e10cfso1305354f8f.0
+ for <buildroot@busybox.net>; Fri, 15 Mar 2024 12:44:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1710531656; x=1711136456;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ d=1e100.net; s=20230601; t=1710531891; x=1711136691;
+ h=content-transfer-encoding:in-reply-to:from:references:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=MzKKWjSwXEriVn+bPZtOtODb3p7mRqDpX0G8sMpg+OI=;
- b=wND6gOBspGzSJlKRAtXbShqWWI0FWJIACPaga6/R1Gi82MA8pkphPh8FV/kY51QsoM
- mNoemYv5g7nxctp9rt8TSpky27Gxdw57dGS/d3CyhKVY7CyqfAMndfkEmsfUp6cSVl7b
- AU0jWlpxL5DrTKNAJ/68umJfajx/pG/pMosCs6dg+GgVK6v6jOJ8PFBQBUPvddPWT56s
- pRMsPhMIS33Cze+UvdBSlwM6K6E6o9EeBKOr6LxKqwyFSA3BQ22N1nm7wMpc7QYLPnLj
- QBWfbmLZVGfG10jVRAdFirfNKJM7TUh9acBjERBUyMlGKyy3U9UKGv/rsuqirSOewrbW
- BUHA==
+ bh=EIot1BObt2m12MAjt+7nQr1hcs/gcCz5H859nB5seTI=;
+ b=sCq0/vjpZs9qwqOAL6Uvnlp6T64Pc3QK6cm7RMJR3OoWaSi9/3ZHeYDdHb+3jZZf5T
+ KlV1CIBg+bU6MxmYpO38fMuMpbHLG10SYMXfjTrRHrP4C4pZg8n6o7xaVOcbI7Zkf3px
+ pfnK7I0OsbSOT9mR7Nbl2U26hsLnKCNVVE50NzQzs1k/sXrMBmVm9bNw2uvmzL/KsJQj
+ ChQECajgj6uvXWQgJa8VsiJ2bq+lgejAVzcKSKvw2jFCS1CVLt5st8yIdQ83+Rs0Y2cN
+ lb7JqauuSbsZy1RJbWXzGPUj90mgqKr5mcEJxWTbQZYGaK+jre+cXuuKh9JC38GXYgzV
+ KeJQ==
 X-Forwarded-Encrypted: i=1;
- AJvYcCWQJ6mOHpHvv6CO6LWEdb4NcrjMUXtg08J+Uex5M16UJeRdfFtlLkBU1WT2K/wjW1sAR872UIfXvoPNgu+AJmjOGkgpsA4pJQ==
-X-Gm-Message-State: AOJu0YxskBaiQD38cD1mHiNPJ84GdShMV1sxDQIHS0HDI94OCkfKPZP7
- Un0WXg2IasFpfSaYB3D/09duTrva1J2zIX2V+/LAp6mDBoyKXTp4OJzxllsv19PxU6aMCyuyJ9U
- f
-X-Google-Smtp-Source: AGHT+IFJT3cSEJN8b5eAhJ126cYDDLg8HyHwkmL/4VwAGI9c3Hmm+fKCSkIzzG9+Px0U68H6VKyEDg==
-X-Received: by 2002:a5d:5005:0:b0:33d:679d:a033 with SMTP id
- e5-20020a5d5005000000b0033d679da033mr3899536wrt.36.1710531655878; 
- Fri, 15 Mar 2024 12:40:55 -0700 (PDT)
+ AJvYcCV/pAtXNbRjfDrJH2y8OP23Ti/VUuOGQ6TIPlTebx5TWS+Iq9GKo8G/KP1csUM9SewX4y9okPGDYKhlw0RrTVpZdF7vKuo=
+X-Gm-Message-State: AOJu0YyTlFLmLdh8FexNOyuHq/s7P1YVXeDUAiYmpdvDnskFCDt98YCZ
+ f/MslXtXSl2ckSNczAkVph4iVmitXUiyumZO+l7jsuPyFshLtIuDFMWXnm2GsM0=
+X-Google-Smtp-Source: AGHT+IFOpwNPaDvO7gDyh2dfXFY8TYtwXLAwRbOgT23EiwByXDh1rNm5s+xEi53K106YV/qHIVbA2Q==
+X-Received: by 2002:adf:f04a:0:b0:33e:c389:66a7 with SMTP id
+ t10-20020adff04a000000b0033ec38966a7mr4344997wro.16.1710531891325; 
+ Fri, 15 Mar 2024 12:44:51 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
  (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- s6-20020a5d69c6000000b0033e9f6997c7sm3815063wrw.66.2024.03.15.12.40.55
+ fj14-20020a05600c0c8e00b00413385ec7e6sm9915039wmb.47.2024.03.15.12.44.50
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 15 Mar 2024 12:40:55 -0700 (PDT)
-Message-ID: <1e47509a-7416-4d4c-b813-335d1f7310a6@mind.be>
-Date: Fri, 15 Mar 2024 20:40:54 +0100
+ Fri, 15 Mar 2024 12:44:50 -0700 (PDT)
+Message-ID: <721c22fd-00eb-407b-adaf-d5eed3cf0e5e@mind.be>
+Date: Fri, 15 Mar 2024 20:44:48 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Content-Language: en-GB
-To: Peter Korsgaard <peter@korsgaard.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20240309164946.166802-1-fontaine.fabrice@gmail.com>
- <87wmq4myyc.fsf@48ers.dk>
-In-Reply-To: <87wmq4myyc.fsf@48ers.dk>
+To: Francois Perrad <fperrad@gmail.com>, buildroot@busybox.net
+References: <20240314173130.16321-1-francois.perrad@gadz.org>
+In-Reply-To: <20240314173130.16321-1-francois.perrad@gadz.org>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1710531656; x=1711136456; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ d=mind.be; s=google; t=1710531891; x=1711136691; darn=busybox.net;
+ h=content-transfer-encoding:in-reply-to:from:references:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=MzKKWjSwXEriVn+bPZtOtODb3p7mRqDpX0G8sMpg+OI=;
- b=evnzzSBx+/YXVwd0H9kXLlQyQO5freARn29Bkas9SvDdfhPXsDTHT4ypSZLvFVSEpp
- H+zJ4PPUYN2goOy6W/CrrUveQ+0r4mDVA1/3R6v1rA34GSYT5PkYtk3LSoJrai8vPvvG
- lRzRIQhVMrYq9vuZn5HlON1szudDnywOp3UZidLilRp1lwuW8fvaTsVULkGc8Vo+19gn
- dWGAIzsGQ69pJVwrLYdLlORuDkTTti6xqhLFL5HbjQ0gR+/B+ymUXoHic+NPVKnL6Gpg
- LwVK18wG2zZ4r7zFuw2mDuR1pUYWCELL80rHKeogNH22LeyixZ10J3Wzr/dS84ALhrXE
- +tZw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=EIot1BObt2m12MAjt+7nQr1hcs/gcCz5H859nB5seTI=;
+ b=Ik7eiYPoOmW1ivtj0euynuglKUA6gZNnUgEOCK+HACn5KQqEEkQ3rjvhM4PgljEKtX
+ c76N5tbpoup++7sGMX/mdCxNKlGLOb5n9D1eX+kSs2I1rwFUKo80cNoXtPekrY0GFxi8
+ 1dCWHOWPGy4K5xTeYRT5/ViZPrlVukJtQVkoKXht2A1SJvbRl4bjf2b9BJL0YDNKfPhZ
+ abllcE0sPTtRpPubwzlVXH50z4zF841qaWnt2G4jyGTZzmfxI1ivuG1oNGCRjExyfskp
+ dQAVdFn9XRBaopIz4La7ghUBub6u0hOsKDTOSOJiDO+MYXgpavTbNXgONKsN0HsVn9v5
+ tz3Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=evnzzSBx
-Subject: Re: [Buildroot] [PATCH 1/1] toolchain: drop codesourcery
- arm/aarch64 toolchains
+ header.a=rsa-sha256 header.s=google header.b=Ik7eiYPo
+Subject: Re: [Buildroot] [PATCH] package/luarocks: bump to version 3.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -112,12 +108,6 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: Bernd Kuhls <bernd@kuhls.net>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- Pedro Aguilar <paguilar@paguilar.org>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -125,48 +115,63 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 14/03/2024 19:48, Peter Korsgaard wrote:
->>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+On 14/03/2024 18:31, Francois Perrad wrote:
+> COPYING: update copyright notice
+> see https://github.com/luarocks/luarocks/commit/a0bc05dcc7f44b94fb4585c560928ba9be6d8bdc
 > 
->   > codesourcery arm/aarch64 toolchains are old (2014) and use glibc
->   > 2.18/2.20 which are not compatible with 64-bit time_t raising the
->   > following build failure with libcgroup since commit
->   > 1c2dbcdcf0bb589d325c379246acaa39bb07b7be:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>   package/luarocks/buildroot.lua | 3 +++
+>   package/luarocks/luarocks.hash | 4 ++--
+>   package/luarocks/luarocks.mk   | 2 +-
+>   3 files changed, 6 insertions(+), 3 deletions(-)
 > 
->   > In file included from ./libcgroup-internal.h:25:0,
->   >                  from parse.y:21:
->   > /home/buildroot/autobuild/run/instance-3/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/fts.h:41:3: error: #error "<fts.h> cannot be used with -D_FILE_OFFSET_BITS==64"
->   >  # error "<fts.h> cannot be used with -D_FILE_OFFSET_BITS==64"
->   >    ^
-> 
->   > Fixes: 1c2dbcdcf0bb589d325c379246acaa39bb07b7be
->   >  - http://autobuild.buildroot.org/results/e28f955f2b360f6e7bb231a5a3800cfbd17a23d7
-> 
->   > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->   > ---
->   >  package/guile/guile.mk                        |  5 -
->   >  package/mesa3d/mesa3d.mk                      |  6 --
->   >  package/tpm2-totp/Config.in                   |  2 -
->   >  .../autobuild/sourcery-arm-armv4t.config      |  4 -
->   >  .../autobuild/sourcery-arm-thumb2.config      |  7 --
->   >  .../autobuild/sourcery-arm.config             |  3 -
->   >  .../autobuild/toolchain-configs.csv           |  5 -
->   >  .../testing/tests/toolchain/test_external.py  | 97 -------------------
->   >  toolchain/Config.in                           |  1 -
-> 
-> I get a conflict here, so this was presumably not generated against
-> master?
-> 
-> Committed after fixing that up and adding Config.in.legacy entries,
+> diff --git a/package/luarocks/buildroot.lua b/package/luarocks/buildroot.lua
+> index 3c044d89b..2b5235866 100644
+> --- a/package/luarocks/buildroot.lua
+> +++ b/package/luarocks/buildroot.lua
+> @@ -350,8 +350,11 @@ function buildroot.command(args)
+>         return nil, "Error loading rockspec: " .. err
+>      end
+>      if rockspec.source.file then
+> +      rockspec.source.dir = rockspec.source.dir or dir.deduce_base_dir(rockspec.source.file)
+>         ok, err = fs.unpack_archive(rockspec.source.file)
+>         if not ok then return nil, err end
+> +   else
+> +      rockspec.source.dir = rockspec.source.dir or '.'
 
-  You used spaces instead of tabs in there... Something wrong with your editor 
-config? Anyway, fixed in 2b59ee9f19.
+  This change should have been explained in the commit message... Anyway, 
+applied to master, thanks.
 
   Regards,
   Arnout
 
-> thanks.
-> 
+>      end
+>   
+>      if rockspec.source.dir ~= '.' then
+> diff --git a/package/luarocks/luarocks.hash b/package/luarocks/luarocks.hash
+> index 713645692..fbf527021 100644
+> --- a/package/luarocks/luarocks.hash
+> +++ b/package/luarocks/luarocks.hash
+> @@ -1,3 +1,3 @@
+>   # Locally calculated
+> -sha256  ffafd83b1c42aa38042166a59ac3b618c838ce4e63f4ace9d961a5679ef58253  luarocks-3.9.1.tar.gz
+> -sha256  542ad0ee9b8ba582437ca7b4d0959c9b9432f25d2067f144d017188a7a84dd2f  COPYING
+> +sha256  25f56b3c7272fb35b869049371d649a1bbe668a56d24df0a66e3712e35dd44a6  luarocks-3.11.0.tar.gz
+> +sha256  660773f53ed17cd0d8be7d67168c25e8cc664a506788c7b5971192bdd2994a9d  COPYING
+> diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
+> index 2bec2fca2..4c9922914 100644
+> --- a/package/luarocks/luarocks.mk
+> +++ b/package/luarocks/luarocks.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -LUAROCKS_VERSION = 3.9.1
+> +LUAROCKS_VERSION = 3.11.0
+>   LUAROCKS_SITE = https://luarocks.org/releases
+>   LUAROCKS_LICENSE = MIT
+>   LUAROCKS_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
