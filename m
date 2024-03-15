@@ -4,90 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B0EEC54E67
-	for <buildroot@archiver.kernel.org>; Fri, 15 Mar 2024 19:37:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46178C54E58
+	for <buildroot@archiver.kernel.org>; Fri, 15 Mar 2024 19:38:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 204ED60631;
-	Fri, 15 Mar 2024 19:37:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0BDD360631;
+	Fri, 15 Mar 2024 19:38:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sf1_ET4eIOhW; Fri, 15 Mar 2024 19:37:40 +0000 (UTC)
+	with ESMTP id gir-e8kMY9ij; Fri, 15 Mar 2024 19:38:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 34FE560F03
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 371F460F03
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 34FE560F03;
-	Fri, 15 Mar 2024 19:37:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 371F460F03;
+	Fri, 15 Mar 2024 19:38:35 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id F2EAD1BF307
- for <buildroot@lists.busybox.net>; Fri, 15 Mar 2024 19:37:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 73C231BF307
+ for <buildroot@lists.busybox.net>; Fri, 15 Mar 2024 19:38:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DED984179A
- for <buildroot@lists.busybox.net>; Fri, 15 Mar 2024 19:37:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6D14F4179A
+ for <buildroot@lists.busybox.net>; Fri, 15 Mar 2024 19:38:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id knAvhp0juPq2 for <buildroot@lists.busybox.net>;
- Fri, 15 Mar 2024 19:37:32 +0000 (UTC)
+ with ESMTP id AhmqQFe6s8xB for <buildroot@lists.busybox.net>;
+ Fri, 15 Mar 2024 19:38:29 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::82d; helo=mail-qt1-x82d.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9BDF14171C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9BDF14171C
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com
- [IPv6:2607:f8b0:4864:20::82d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9BDF14171C
- for <buildroot@buildroot.org>; Fri, 15 Mar 2024 19:37:32 +0000 (UTC)
-Received: by mail-qt1-x82d.google.com with SMTP id
- d75a77b69052e-430b83bab7eso3326441cf.1
- for <buildroot@buildroot.org>; Fri, 15 Mar 2024 12:37:32 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org F313E41795
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F313E41795
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id F313E41795
+ for <buildroot@buildroot.org>; Fri, 15 Mar 2024 19:38:28 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id
+ ffacd0b85a97d-33ec8f13c62so1499215f8f.0
+ for <buildroot@buildroot.org>; Fri, 15 Mar 2024 12:38:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1710531451; x=1711136251;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=UOtmzF2Mpf2OxeICcfrtrCQFm6I+n2BBsLnEvKVWdKo=;
- b=DIn17sILv7xMHhYgsjvUAvu3seV9qukGzGdWQQRgzW7RQET3ljrAaJ0ZPGJiqwo03C
- 1q36uu1VEaXLsbSYn/kv3v9k1UkARK3Ws7VBMroHMQW1SzWCJLrPOxOuIyy17arv3Eoh
- bg6kjHBXO4QWEsklCiB3E5QKOEr34LEOjOS+GMwdqblLrKB2DBSmqEwyjzImjsxSnGmx
- llTWyPB1dV4iFYHr5nKs/CyYPGFOf7+chRFjdF7f2W89lqZgym9oqf/lA8c603VlD8E0
- Xua/12CDL4L6AEhbCIBIveS65AoGpRdWpciwhX0SQy88KnkVfeYHeqEzhXWdyqBVrb0b
- T0uA==
-X-Gm-Message-State: AOJu0YypQm3duyY4y9D0FqhQvgA87v4DSuT2YdsbG74RAXkX0GFUgmfP
- NXXiANMXP+Ec1a5oMexGyM5k6qVh1I3N+lkXPAPuISo7lPlr8cxGoiJBAOc2RAmwe9TYW6GS7S8
- 6rnui38z3TbXF6PK9SRGnZSJMTWhetzW+TK9slA==
-X-Google-Smtp-Source: AGHT+IG2B3AIYOLQnQ5Fa+EzJU7lXdQryYW8DK/shzdNsXwYIu+Ci6lTIeQhtNAQLPycwsik+Qyk4VhTd8r6aVpdMvw=
-X-Received: by 2002:ac8:5942:0:b0:42e:efe1:ebda with SMTP id
- 2-20020ac85942000000b0042eefe1ebdamr5468430qtz.53.1710531451232; Fri, 15 Mar
- 2024 12:37:31 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1710531507; x=1711136307;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=IyOepC4/OuiyAFvjhvxCLpKaAft0evb1zTMEY+rfwdI=;
+ b=DhGAMXCVL8ygWw4PqLL7HzznJazeL+uMlZ5o3Jb7+jRNRk8cqjQnh9od6NAa2O9X6K
+ XcMa8MXctSjIs+QAjF+TR1Tquk5CnZbM1urpQRytzWtBR60yALcv57B7C5E2ivdyNMco
+ pYEaaJkCGmL2mO4y/j4RjTZgVG2McW+xWd4Px5807nBahDZtypwljwqvfGbT0spoiGcE
+ aBW4m/YCFH0How2nXpBCokU18dKv7xVhthxgTEDSp1nxEtBiU8uFtIhyK1VQfFF+YWxD
+ jgmYT8gg2jeHm60ohtulB/9WLPJjc6dJADOcOqNp7Tx7JecvhkmMA06KTwa04rD8Lgzc
+ QCHQ==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCVKQ5EuZLYjo10eNL8k+DPFoesaVj6DUYa849x6GdG8bc1esSyhTQEs7ap+UcYp7ApDt/sHGTnEpoJtH0Dtqn764ceuR1y8yQ==
+X-Gm-Message-State: AOJu0YwCDt4G4lZvCgb3q6xKyU6LJrhMaI9BvmS6OQIHQMZcY7AKoBG3
+ HMIisGts4k//svY2LE3bAELYlM2mFkRRryX3VbNorHpviTdfPj/S4nyuYh90Mns=
+X-Google-Smtp-Source: AGHT+IEQ+XBWoi9cwYYur2ayeuYGIrtG3qidl5UhfbWQiqCU3f6SjAtVY6NjQ54eTrBqzRFTWzB7Zg==
+X-Received: by 2002:a05:6000:1c6:b0:33d:f60e:5c6c with SMTP id
+ t6-20020a05600001c600b0033df60e5c6cmr2930159wrx.53.1710531506801; 
+ Fri, 15 Mar 2024 12:38:26 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
+ by smtp.gmail.com with ESMTPSA id
+ c18-20020a5d4f12000000b0033d56aa4f45sm3771084wru.112.2024.03.15.12.38.25
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 15 Mar 2024 12:38:26 -0700 (PDT)
+Message-ID: <e6c54c01-a3ca-4eba-805b-dc5e90a3b920@mind.be>
+Date: Fri, 15 Mar 2024 20:38:24 +0100
 MIME-Version: 1.0
-References: <20230911061940.2392419-1-james.hilliard1@gmail.com>
- <089b0e6e-0050-4e8f-b7fb-249209bd33a3@andin.de>
-In-Reply-To: <089b0e6e-0050-4e8f-b7fb-249209bd33a3@andin.de>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Fri, 15 Mar 2024 13:37:19 -0600
-Message-ID: <CADvTj4pjPgKKOdfj3iDzgjHRHmHKdE6Dau01T+x0fOpkRcJ2Vw@mail.gmail.com>
-To: Andreas Naumann <dev@andin.de>
+User-Agent: Mozilla Thunderbird
+Content-Language: en-GB
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20240314211117.9103-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <20240314211117.9103-1-fontaine.fabrice@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1710531451; x=1711136251; darn=buildroot.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=UOtmzF2Mpf2OxeICcfrtrCQFm6I+n2BBsLnEvKVWdKo=;
- b=Z253fgvs70gzTfH/jGYs//dXt2W/lVqBz6gBujYyiTUSz1TinBEe7AsQOKEQ1Yw2sy
- vzs6ERwXn1EEL2bkD7Ng0PnW1e0W8Y+89mn3drV6ym87Jg6a+R9J5naWtr/MVACIvTCm
- 7UZ8lyd5Nza7UiATs88lMTwvLzncRqFi8E6EBoxKdRO+ZqQK4GqCxB8/1dUtYLbaP+Z4
- ISprSgLCR4HuSlnoCky17N/zn8EFb7mxMDZX+i/b/cI3AIUV4ucqdLg/72iNPkptD77A
- 30yTxH5h3L7fR5qy/BguoZgPKxudkZopyA6IVkjrYTOp7kMwfTs2uHRoiOe4Rp3vNUJa
- boRQ==
+ d=mind.be; s=google; t=1710531507; x=1711136307; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=IyOepC4/OuiyAFvjhvxCLpKaAft0evb1zTMEY+rfwdI=;
+ b=Y3xQrH30zqeflMXvTEE7iBnepm96GCrdXPi9zJKN9POFT35nH/SxxG64aSWfIkViEq
+ SpO4QBnPcbVyUYybn4BVzPff+RRZmXjEIBToj9sLROGeA/PPAMZ2zhqBYz91ATkJUO0Q
+ y9cJ4ccKbcbsm5dOyzRef1idwRPQNVkQAtBgEEsR3PvISAQe3HDe91tNW8MwZiEg6jru
+ HGPfW9drgGOkzcHSx+YiKtlxPcqcChlYONW6JYphqeMXMGiPZvWmVOWQwDJlhLEcXBZr
+ frLHw8/NChzte93vwy5Z1wRoNuDEtVagR/7PzLB9nN/SaS+9phISg7izzBaQfo0/FDs+
+ bHBw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Z253fgvs
-Subject: Re: [Buildroot] [PATCH 1/1] boot/uboot: add support for
- u-boot-initial-env install
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=Y3xQrH30
+Subject: Re: [Buildroot] [PATCH 1/1] package/multipath-tools: fix legal info
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,56 +106,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: Alexander Egorenkov <egorenar-dev@posteo.net>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gRnJpLCBNYXIgMTUsIDIwMjQgYXQgNDozOOKAr0FNIEFuZHJlYXMgTmF1bWFubiA8ZGV2QGFu
-ZGluLmRlPiB3cm90ZToKPgo+IEhpIEphbWVzLCBhbGwsCj4KPgo+IEFtIDExLjA5LjIzIHVtIDA4
-OjE5IHNjaHJpZWIgSmFtZXMgSGlsbGlhcmQ6Cj4gPiBUaGlzIGZpbGUgaXMgbmVlZGVkIGJ5IGxp
-YnVib290ZW52IGZvciBmd19wcmludGVudi9md19zZXRlbnYgYW5kCj4gPiBsaWJyYXJ5IEFQSSdz
-IHRvIGZ1bmN0aW9uIHdoZW4gdGhlIGVudmlyb25tZW50IGlzIGVtcHR5Lgo+ID4KPiA+IFNlZSBk
-ZXRhaWxzOgo+ID4gaHR0cHM6Ly9naXRodWIuY29tL3NiYWJpYy9saWJ1Ym9vdGVudi90cmVlL3Yw
-LjMuNCNyZXBsYWNlbWVudC1vbGQtdG9vbHMKPiA+Cj4gPiBTaWduZWQtb2ZmLWJ5OiBKYW1lcyBI
-aWxsaWFyZCA8amFtZXMuaGlsbGlhcmQxQGdtYWlsLmNvbT4KPiA+IC0tLQo+ID4gICBib290L3Vi
-b290L0NvbmZpZy5pbiB8IDcgKysrKysrKwo+ID4gICBib290L3Vib290L3Vib290Lm1rICB8IDgg
-KysrKysrKysKPiA+ICAgMiBmaWxlcyBjaGFuZ2VkLCAxNSBpbnNlcnRpb25zKCspCj4KPiBBbm90
-aGVyIHNvbHV0aW9uIGNvdWxkIGJlIHRvIGF1dG9tYXRpY2FsbHkgaW5zdGFsbCBpdCBpZiBsaWJ1
-Ym9vdGVudiBpcwo+IHNlbGVjdGVkLiBCdXQgdGhhdCBtaWdodCBiZSBhIGJpdCB1bmZvcmVzZWFi
-bGUgbWFnaWMuIE5vdCBzdXJlIGlmIHRoaXMKPiBpcyB3YW50ZWQuCj4gVG8gbWUgaXQncyBnb29k
-IGFzIGlzLgoKWWVhaCwgSSBmaWd1cmVkIGl0IHdhcyBhIGJldHRlciBpZGVhIHRvIGp1c3Qga2Vl
-cCBpdCBzZXBhcmF0ZSBmb3Igbm93IGluIGNhc2UKc29tZW9uZSBpcyBnZW5lcmF0aW5nIHUtYm9v
-dC1pbml0aWFsLWVudiBvdXQgb2YgdHJlZSBvciBzb21lIG90aGVyIHdheS4KCj4KPiBSZXZpZXdl
-ZC1ieTogQW5kcmVhcyBOYXVtYW5uIDxhbmF1bWFubkB1bHRyYXRyb25pay5kZT4KPiBUZXN0ZWQt
-Ynk6IEFuZHJlYXMgTmF1bWFubiA8YW5hdW1hbm5AdWx0cmF0cm9uaWsuZGU+Cj4gW2NvbXBpbGUt
-dGltZSB0ZXN0ZWQgd2l0aCB3YW5kYm9hcmRfZGVmY29uZmlnXQo+Cj4KPiA+Cj4gPiBkaWZmIC0t
-Z2l0IGEvYm9vdC91Ym9vdC9Db25maWcuaW4gYi9ib290L3Vib290L0NvbmZpZy5pbgo+ID4gaW5k
-ZXggMjFmMTlkYjg5MC4uZDdmMjkxMmViYyAxMDA2NDQKPiA+IC0tLSBhL2Jvb3QvdWJvb3QvQ29u
-ZmlnLmluCj4gPiArKysgYi9ib290L3Vib290L0NvbmZpZy5pbgo+ID4gQEAgLTUwNiw2ICs1MDYs
-MTMgQEAgY29uZmlnIEJSMl9UQVJHRVRfVUJPT1RfU1BMX05BTUUKPiA+ICAgICAgICAgYW5kIFRQ
-TCBuYW1lIGlzIHRwbC91LWJvb3QtdHBsLmJpbiBidXQgbm90IGFsd2F5cy4gU1BMIG5hbWUgaXMK
-PiA+ICAgICAgICAgTUxPIG9uIE9NQVAgYW5kIFNQTCBvbiBpLk1YNiBmb3IgZXhhbXBsZS4KPiA+
-Cj4gPiArY29uZmlnIEJSMl9UQVJHRVRfVUJPT1RfSU5JVElBTF9FTlYKPiA+ICsgICAgIGJvb2wg
-Ikluc3RhbGwgdS1ib290LWluaXRpYWwtZW52Igo+ID4gKyAgICAgaGVscAo+ID4gKyAgICAgICBJ
-bnN0YWxsIHRoZSBVLUJvb3QgdS1ib290LWluaXRpYWwtZW52IG9uIHRoZSB0YXJnZXQuCj4gPiAr
-Cj4gPiArICAgICAgIFRoaXMgZmlsZSBpcyB0eXBpY2FsbHkgcmVxdWlyZWQgYnkgbGlidWJvb3Rl
-bnYuCj4gPiArCj4gPiAgIGNvbmZpZyBCUjJfVEFSR0VUX1VCT09UX1pZTlFNUAo+ID4gICAgICAg
-Ym9vbCAiQm9vdCBvbiB0aGUgWGlsaW54IFp5bnFNUCBTb0NzIgo+ID4gICAgICAgZGVwZW5kcyBv
-biBCUjJfYWFyY2g2NAo+ID4gZGlmZiAtLWdpdCBhL2Jvb3QvdWJvb3QvdWJvb3QubWsgYi9ib290
-L3Vib290L3Vib290Lm1rCj4gPiBpbmRleCBkZGE2MDZhODgwLi40OTFmNjU0Y2VjIDEwMDY0NAo+
-ID4gLS0tIGEvYm9vdC91Ym9vdC91Ym9vdC5tawo+ID4gKysrIGIvYm9vdC91Ym9vdC91Ym9vdC5t
-awo+ID4gQEAgLTEzOCw2ICsxMzgsMTQgQEAgVUJPT1RfTUFLRV9UQVJHRVQgKz0gdS1ib290LnN0
-bTMyCj4gPiAgIGVuZGlmCj4gPiAgIGVuZGlmCj4gPgo+ID4gK2lmZXEgKCQoQlIyX1RBUkdFVF9V
-Qk9PVF9JTklUSUFMX0VOVikseSkKPiA+ICtVQk9PVF9NQUtFX1RBUkdFVCArPSB1LWJvb3QtaW5p
-dGlhbC1lbnYKPiA+ICtkZWZpbmUgVUJPT1RfSU5TVEFMTF9VQk9PVF9JTklUSUFMX0VOVgo+ID4g
-KyAgICAgJChJTlNUQUxMKSAtRCAtbSAwNjQ0ICQoQEQpL3UtYm9vdC1pbml0aWFsLWVudiAkKFRB
-UkdFVF9ESVIpL2V0Yy91LWJvb3QtaW5pdGlhbC1lbnYKPiA+ICtlbmRlZgo+ID4gK1VCT09UX1BP
-U1RfSU5TVEFMTF9UQVJHRVRfSE9PS1MgKz0gVUJPT1RfSU5TVEFMTF9VQk9PVF9JTklUSUFMX0VO
-Vgo+ID4gK2VuZGlmCj4gPiArCj4gPiAgIGlmZXEgKCQoQlIyX1RBUkdFVF9VQk9PVF9GT1JNQVRf
-Q1VTVE9NKSx5KQo+ID4gICBVQk9PVF9CSU5TICs9ICQoY2FsbCBxc3RyaXAsJChCUjJfVEFSR0VU
-X1VCT09UX0ZPUk1BVF9DVVNUT01fTkFNRSkpCj4gPiAgIGVuZGlmCl9fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVp
-bGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
-bGlzdGluZm8vYnVpbGRyb290Cg==
+
+
+On 14/03/2024 22:11, Fabrice Fontaine wrote:
+> Commit cc363e9a93484e734313b17962b931b3df6eedaa forgot to update hash of
+> README.md (changes not related to license)
+
+  This is likely going to happen pretty often.
+
+  I anyway don't see the point of including README.md in the LICENSE_FILES. It 
+just explains that the default license is LGPL-2.0.
+
+  So I suggest removing it from the license files.
+
+  For now, I've applied this patch to master, thanks.
+
+  Regards,
+  Arnout
+> 
+> Fixes: cc363e9a93484e734313b17962b931b3df6eedaa
+>   - http://autobuild.buildroot.org/results/d41b3eedb337ac7559afceed459c3e28a9bf15a2
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>   package/multipath-tools/multipath-tools.hash | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/multipath-tools/multipath-tools.hash b/package/multipath-tools/multipath-tools.hash
+> index 0f51c38846..c1f32e7a3b 100644
+> --- a/package/multipath-tools/multipath-tools.hash
+> +++ b/package/multipath-tools/multipath-tools.hash
+> @@ -4,4 +4,4 @@ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENS
+>   sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSES/GPL-3.0
+>   sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  LICENSES/LGPL-2.0
+>   sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSES/LGPL-2.1
+> -sha256  5887418b2e0e595da5aca08b2dff25298f20618f9894d5e26ce852d9d1ae90c4  README.md
+> +sha256  9c69bb0089aa0b82b10a25095c04a7c4aec6b5bbf0776b7129123c8459fe7725  README.md
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
