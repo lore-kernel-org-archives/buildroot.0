@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2C72C54E60
-	for <buildroot@archiver.kernel.org>; Sat, 16 Mar 2024 22:34:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F428C54E60
+	for <buildroot@archiver.kernel.org>; Sat, 16 Mar 2024 22:34:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 95FB2415A2;
-	Sat, 16 Mar 2024 22:34:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D052E407FB;
+	Sat, 16 Mar 2024 22:34:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id n_JUNJ0shfFh; Sat, 16 Mar 2024 22:34:48 +0000 (UTC)
+	with ESMTP id YB226lgkjUM4; Sat, 16 Mar 2024 22:34:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80A8C415D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA74C41695
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 80A8C415D5;
-	Sat, 16 Mar 2024 22:34:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 297781BF861
+	by smtp4.osuosl.org (Postfix) with ESMTP id DA74C41695;
+	Sat, 16 Mar 2024 22:34:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7E4931BF3D5
  for <buildroot@lists.busybox.net>; Sat, 16 Mar 2024 22:34:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2246860769
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6B42081EF3
  for <buildroot@lists.busybox.net>; Sat, 16 Mar 2024 22:34:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 243il7MYFToS for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yAqggrIAEKto for <buildroot@lists.busybox.net>;
  Sat, 16 Mar 2024 22:34:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4749E60674
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8214A81F0A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4749E60674
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8214A81F0A
  for <buildroot@buildroot.org>; Sat, 16 Mar 2024 22:34:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 35126825BA; Sat, 16 Mar 2024 22:34:40 +0000 (UTC)
+ id 70B5E825C5; Sat, 16 Mar 2024 22:34:40 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 16 Mar 2024 23:26:15 +0100
+Date: Sat, 16 Mar 2024 23:30:49 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 2b04b6a5b3b6bfe7fe76818fb2f651b988072b50
-X-Git-Newrev: c2e76bae82e8d1dbd0aae891a7d4369e43679a07
+X-Git-Oldrev: 4bad2fb2aa03cd7b0f77f10dfbbf223c55efb76d
+X-Git-Newrev: 62920789299707132b5ceabeebffa58da04fe79c
 X-Patchwork-Hint: ignore
-Message-Id: <20240316223440.35126825BA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] support/testing:
- TestCheckPackage: update expected strings
+Message-Id: <20240316223440.70B5E825C5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] boot/shim: security bump
+ to version 15.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,47 +65,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c2e76bae82e8d1dbd0aae891a7d4369e43679a07
+commit: https://git.buildroot.net/buildroot/commit/?id=62920789299707132b5ceabeebffa58da04fe79c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-Commit dfed5acb56 ("utils/check-package: use https for the manual URL")
-replaced the default url to the Buildroot manual while it was used
-by TestCheckPackage test.
+Fixes the following security issues:
 
-Update TestCheckPackage with https url.
+CVE-2023-40546 mok: fix LogError() invocation
+CVE-2023-40547 - avoid incorrectly trusting HTTP headers
+CVE-2023-40548 Fix integer overflow on SBAT section size on 32-bit system
+CVE-2023-40549 Authenticode: verify that the signature header is in bounds.
+CVE-2023-40550 pe: Fix an out-of-bound read in verify_buffer_sbat()
+CVE-2023-40551: pe-relocate: Fix bounds check for MZ binaries
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/6224243484
+https://github.com/rhboot/shim/tree/15.8
 
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit a9990552eb8b88647104bbec82555b2c407aa6be)
+(cherry picked from commit f42004a046313cf73ae707d43632109c36398dc0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/tests/utils/test_check_package.py | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ boot/shim/shim.hash | 2 +-
+ boot/shim/shim.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/testing/tests/utils/test_check_package.py b/support/testing/tests/utils/test_check_package.py
-index 9aa117d211..2125b34170 100644
---- a/support/testing/tests/utils/test_check_package.py
-+++ b/support/testing/tests/utils/test_check_package.py
-@@ -200,13 +200,13 @@ class TestCheckPackage(unittest.TestCase):
-                            self.WITH_UTILS_IN_PATH, abs_path)
-         self.assert_file_was_processed(m)
-         self.assert_warnings_generated_for_file(m)
--        self.assertIn("{}:1: should be 80 hashes (http://nightly.buildroot.org/#writing-rules-mk)".format(rel_file), w)
-+        self.assertIn("{}:1: should be 80 hashes (https://nightly.buildroot.org/#writing-rules-mk)".format(rel_file), w)
+diff --git a/boot/shim/shim.hash b/boot/shim/shim.hash
+index c9c489fd2f..5aa4ca06e8 100644
+--- a/boot/shim/shim.hash
++++ b/boot/shim/shim.hash
+@@ -1,3 +1,3 @@
+ # locally computed hash
+-sha256  eab91644a3efe91a666399f5d8eb3eed0e04d04f79d4b6c0b278ef7747a239a5  shim-15.6.tar.bz2
++sha256  a79f0a9b89f3681ab384865b1a46ab3f79d88b11b4ca59aa040ab03fffae80a9  shim-15.8.tar.bz2
+ sha256  15edf527919ddcb2f514ab9d16ad07ef219e4bb490e0b79560be510f0c159cc2  COPYRIGHT
+diff --git a/boot/shim/shim.mk b/boot/shim/shim.mk
+index bbef81cfc4..19b11f4086 100644
+--- a/boot/shim/shim.mk
++++ b/boot/shim/shim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-         w, m = call_script(["check-package", "-b", abs_file],
-                            self.WITH_UTILS_IN_PATH, infra.basepath())
-         self.assert_file_was_processed(m)
-         self.assert_warnings_generated_for_file(m)
--        self.assertIn("{}:1: should be 80 hashes (http://nightly.buildroot.org/#writing-rules-mk)".format(abs_file), w)
-+        self.assertIn("{}:1: should be 80 hashes (https://nightly.buildroot.org/#writing-rules-mk)".format(abs_file), w)
- 
-         # br2-external with ignore list
-         topdir_path = infra.filepath("tests/utils/br2-external")
+-SHIM_VERSION = 15.6
++SHIM_VERSION = 15.8
+ SHIM_SITE = https://github.com/rhboot/shim/releases/download/$(SHIM_VERSION)
+ SHIM_SOURCE = shim-$(SHIM_VERSION).tar.bz2
+ SHIM_LICENSE = BSD-2-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
