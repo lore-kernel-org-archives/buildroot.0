@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 007D8C54E68
-	for <buildroot@archiver.kernel.org>; Sat, 16 Mar 2024 22:29:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B17CFC54E68
+	for <buildroot@archiver.kernel.org>; Sat, 16 Mar 2024 22:30:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B32F34157E;
-	Sat, 16 Mar 2024 22:29:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 75F27408FF;
+	Sat, 16 Mar 2024 22:30:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gEDrJP4aCaTl; Sat, 16 Mar 2024 22:29:15 +0000 (UTC)
+	with ESMTP id o3YrEWAGj6OV; Sat, 16 Mar 2024 22:30:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8DE934159C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 59D6E40784
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8DE934159C;
-	Sat, 16 Mar 2024 22:29:15 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8A9951BF3D5
- for <buildroot@lists.busybox.net>; Sat, 16 Mar 2024 22:29:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 59D6E40784;
+	Sat, 16 Mar 2024 22:30:05 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6654A1BF3D5
+ for <buildroot@lists.busybox.net>; Sat, 16 Mar 2024 22:30:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7808860769
- for <buildroot@lists.busybox.net>; Sat, 16 Mar 2024 22:29:13 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4511040784
+ for <buildroot@lists.busybox.net>; Sat, 16 Mar 2024 22:30:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gvGZS_UeuZ1D for <buildroot@lists.busybox.net>;
- Sat, 16 Mar 2024 22:29:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
- helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id R77CcbJ_54Bu for <buildroot@lists.busybox.net>;
+ Sat, 16 Mar 2024 22:30:02 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
+ helo=relay2-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1D512605E6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D512605E6
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1D512605E6
- for <buildroot@buildroot.org>; Sat, 16 Mar 2024 22:29:11 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6660CFF803;
- Sat, 16 Mar 2024 22:29:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3EB0F40722
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3EB0F40722
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3EB0F40722
+ for <buildroot@buildroot.org>; Sat, 16 Mar 2024 22:30:01 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6298D40003;
+ Sat, 16 Mar 2024 22:29:59 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rlcWb-001Xad-06;
- Sat, 16 Mar 2024 23:29:09 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rlcXP-001XfK-05;
+ Sat, 16 Mar 2024 23:29:59 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Adrian Perez de Castro <aperez@igalia.com>
 References: <20240212143222.1555220-1-aperez@igalia.com>
- <20240212143222.1555220-2-aperez@igalia.com>
-Date: Sat, 16 Mar 2024 23:29:09 +0100
-In-Reply-To: <20240212143222.1555220-2-aperez@igalia.com> (Adrian Perez de
- Castro's message of "Mon, 12 Feb 2024 16:32:18 +0200")
-Message-ID: <87il1lkdze.fsf@48ers.dk>
+ <20240212143222.1555220-3-aperez@igalia.com>
+Date: Sat, 16 Mar 2024 23:29:58 +0100
+In-Reply-To: <20240212143222.1555220-3-aperez@igalia.com> (Adrian Perez de
+ Castro's message of "Mon, 12 Feb 2024 16:32:19 +0200")
+Message-ID: <87edc9kdy1.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/2] package/wpewebkit: security bump to
- version 2.42.5
+Subject: Re: [Buildroot] [PATCH 2/2] package/wpewebkit: update ARM NEON
+ patch for 2.42.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,28 +78,12 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
 
- > Fixes the following security issues:
- > https://wpewebkit.org/security/WSA-2024-0001.html
-
- > - CVE-2024-23222: Processing maliciously crafted web content may lead to
- >   arbitrary code execution. Apple is aware of a report that this issue
- >   may have been exploited. Description: A type confusion issue was
- >   addressed with improved checks.
-
- > - CVE-2024-23206: A maliciously crafted webpage may be able to
- >   fingerprint the user. Description: An access issue was addressed with
- >   improved access restrictions.
-
- > - CVE-2024-23213: Processing web content may lead to arbitrary code
- >   execution. Description: The issue was addressed with improved memory
- >   handling.
-
- > Add an upstream post-2.42.5 patch to fix an issue with an invalid
- > backport causing a build issue.
+ > Update patch to compile correctly with newer versions of GCC, which
+ > has gotten stricter about the placement of the alignas() attribute.
 
  > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 
-Committed to 2023.02.x and 2023.11.x, thanks.
+Committed to 2023.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
