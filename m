@@ -4,45 +4,45 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 642B4C54E5D
-	for <buildroot@archiver.kernel.org>; Sat, 16 Mar 2024 16:16:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A2CCC54E60
+	for <buildroot@archiver.kernel.org>; Sat, 16 Mar 2024 16:31:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DF28B41557;
-	Sat, 16 Mar 2024 16:16:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D182D41571;
+	Sat, 16 Mar 2024 16:31:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 94wc14i-2_Mj; Sat, 16 Mar 2024 16:16:48 +0000 (UTC)
+	with ESMTP id VqXq7FWp5f42; Sat, 16 Mar 2024 16:31:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 917854152D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB0B3415A5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 917854152D;
-	Sat, 16 Mar 2024 16:16:48 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A99B81BF83B
- for <buildroot@lists.busybox.net>; Sat, 16 Mar 2024 16:16:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AB0B3415A5;
+	Sat, 16 Mar 2024 16:31:45 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F29121BF83B
+ for <buildroot@lists.busybox.net>; Sat, 16 Mar 2024 16:31:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A31B982078
- for <buildroot@lists.busybox.net>; Sat, 16 Mar 2024 16:16:46 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DF8C460698
+ for <buildroot@lists.busybox.net>; Sat, 16 Mar 2024 16:31:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qSj8KMJ6Ogrj for <buildroot@lists.busybox.net>;
- Sat, 16 Mar 2024 16:16:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id o3w4TDt4Rp0u for <buildroot@lists.busybox.net>;
+ Sat, 16 Mar 2024 16:31:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=bugzilla@busybox.net;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E6FFC82023
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5723F60684
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E6FFC82023
- for <buildroot@uclibc.org>; Sat, 16 Mar 2024 16:16:45 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5723F60684
+ for <buildroot@uclibc.org>; Sat, 16 Mar 2024 16:31:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 9C0EE87FB3; Sat, 16 Mar 2024 16:16:45 +0000 (UTC)
+ id 400E0800D2; Sat, 16 Mar 2024 16:31:42 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Sat, 16 Mar 2024 16:16:45 +0000
+Date: Sat, 16 Mar 2024 16:31:41 +0000
 X-Bugzilla-Reason: CC
-X-Bugzilla-Type: changed
+X-Bugzilla-Type: new
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
@@ -56,15 +56,14 @@ X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-15997-163-CGPp9IYG0P@https.bugs.busybox.net/>
-In-Reply-To: <bug-15997-163@https.bugs.busybox.net/>
-References: <bug-15997-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter cc
+ target_milestone
+Message-ID: <bug-16000-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15997] Build Squid with GCC12.3 in Buildroot
- 2024.02 will fail
+Subject: [Buildroot] [Bug 16000] New: GDB will not build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,19 +80,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=15997
+https://bugs.busybox.net/show_bug.cgi?id=16000
 
---- Comment #4 from Roland Franke <fli4l@franke-prem.de> ---
-I will work with host debian 11 (bullseye).
-gcc and g++ in version 10.2.1-6 (Standard-version)
-Please accept, that with buildroot-2023.08.3 this fault was not come
-on the same computer (Hyper-V VM on a windows-host).
+            Bug ID: 16000
+           Summary: GDB will not build
+           Product: buildroot
+           Version: 2024.02
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned@buildroot.uclibc.org
+          Reporter: fli4l@franke-prem.de
+                CC: buildroot@uclibc.org
+  Target Milestone: ---
 
-Build tested with the:
-BUILDCXXFLAGS="$(HOST_CXXFLAGS) -std=c++17"
-will work for me also.
+On my system (Debian 11 System gcc 10.2.1-6) with gcc-12.3 active in buildroot
+will the package gdb not be build.
 
-Thank you for your support.
+Only when i install the (old) patch
+0004-libgcc-Exclude-UCLIBC-from-GLIBC-thread-check.patch
+the gdb-package (13.2) will be build fine.
+
+I have not found any hint, why this patch was deleted between Buildroot
+2023.08.3 and the actual version 2024.02.
+I will also not know or have tested, if the patch will be need by some other
+versions of gcc.
+
+So this Bug-Report is more as information to you
 
 -- 
 You are receiving this mail because:
