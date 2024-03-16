@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7310AC54E60
-	for <buildroot@archiver.kernel.org>; Sat, 16 Mar 2024 22:33:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5384CC54E68
+	for <buildroot@archiver.kernel.org>; Sat, 16 Mar 2024 22:33:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3BABD41774;
-	Sat, 16 Mar 2024 22:33:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1E76B415E2;
+	Sat, 16 Mar 2024 22:33:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id i0yHivr_bArx; Sat, 16 Mar 2024 22:33:48 +0000 (UTC)
+	with ESMTP id i4i-PnVgZegV; Sat, 16 Mar 2024 22:33:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C1E2541769
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 18D2741772
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C1E2541769;
-	Sat, 16 Mar 2024 22:33:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CFD971BF3D5
- for <buildroot@lists.busybox.net>; Sat, 16 Mar 2024 22:33:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 18D2741772;
+	Sat, 16 Mar 2024 22:33:51 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A0FDD1BF3D5
+ for <buildroot@lists.busybox.net>; Sat, 16 Mar 2024 22:33:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BD61460790
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2DBA3410D4
  for <buildroot@lists.busybox.net>; Sat, 16 Mar 2024 22:33:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LfKXK19OfTbc for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ti4i8K4IpEMY for <buildroot@lists.busybox.net>;
  Sat, 16 Mar 2024 22:33:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E320F607AD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 071F34146F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E320F607AD
- for <buildroot@buildroot.org>; Sat, 16 Mar 2024 22:33:32 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 071F34146F
+ for <buildroot@buildroot.org>; Sat, 16 Mar 2024 22:33:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DAFD182567; Sat, 16 Mar 2024 22:33:32 +0000 (UTC)
+ id E838582568; Sat, 16 Mar 2024 22:33:32 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 16 Mar 2024 23:31:03 +0100
+Date: Sat, 16 Mar 2024 23:32:43 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 34b8419717da287850e15a3e8b18ecdf5cd5543a
-X-Git-Newrev: ab991fac766fc84451736954b886e937ea2db8af
+X-Git-Oldrev: ab991fac766fc84451736954b886e937ea2db8af
+X-Git-Newrev: b0c04a4c0d6410d978da44e06473def8a9c6812f
 X-Patchwork-Hint: ignore
-Message-Id: <20240316223332.DAFD182567@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] boot/shim: security bump
- to version 15.8
+Message-Id: <20240316223332.E838582568@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/sudo: drop legacy, useless,
+ and broken post-configure hook
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,51 +65,95 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ab991fac766fc84451736954b886e937ea2db8af
+commit: https://git.buildroot.net/buildroot/commit/?id=b0c04a4c0d6410d978da44e06473def8a9c6812f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Fixes the following security issues:
+Commit b9e89b340e27 (sudo: bump version) introduced the explicit build
+of mksigname and mksiglist as host tools, as they were required to run
+on the build machine, to generate C code then used to build the target
+program.
 
-CVE-2023-40546 mok: fix LogError() invocation
-CVE-2023-40547 - avoid incorrectly trusting HTTP headers
-CVE-2023-40548 Fix integer overflow on SBAT section size on 32-bit system
-CVE-2023-40549 Authenticode: verify that the signature header is in bounds.
-CVE-2023-40550 pe: Fix an out-of-bound read in verify_buffer_sbat()
-CVE-2023-40551: pe-relocate: Fix bounds check for MZ binaries
+This is now failing to build since the bump to sudo 1.9.15p5 in commit
+c87746afefe7 (package/sudo: security bump to version 1.9.15p5)
+(lines manually wrapped and slightly elided for ease of reviewing):
 
-https://github.com/rhboot/shim/tree/15.8
+    /usr/bin/cpp \
+        -I/home/ymorin/dev/buildroot/O/master/per-package/sudo/host/include \
+        -I../../include \
+        -I../.. \
+        ./sys_signame.h \
+    | /usr/bin/sed -e '1,/^int sudo_end_of_headers;/d' -e '/^#/d' > mksigname.h
+    In file included from /usr/include/features.h:394,
+                     from /usr/include/sys/types.h:25,
+                     from ./sys_signame.h:4:
+    /usr/include/features-time64.h:26:5: error: #error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
+       26 | #   error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
+          |     ^~~~~
+    /usr/bin/gcc -I../../include -I../.. -I. -I. \
+        -D_PATH_SUDO_CONF=\"/etc/sudo.conf\"
+        -I/home/ymorin/dev/buildroot/O/master/per-package/sudo/host/include \
+        -DDEFAULT_TEXT_DOMAIN=\"sudo\" \
+        -O2 \
+        -I/home/ymorin/dev/buildroot/O/master/per-package/sudo/host/include \
+        ./mksigname.c -o mksigname
+    In file included from /usr/include/features.h:394,
+                     from /usr/include/bits/libc-header-start.h:33,
+                     from /usr/include/stdlib.h:26,
+                     from ./mksigname.c:27:
+    /usr/include/features-time64.h:26:5: error: #error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
+       26 | #   error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
+          |     ^~~~~
+    make[2]: *** [Makefile:263: mksigname] Error 1
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+The core of the issue has not been really identified, but it turns out
+that neither mksiglist nor mksignames is used during the build. This has
+been tested with a minimal sudo with no option, and with a sudo with all
+options enabled (linux-pam, zlib, opensldap, and openssl), with the
+three types of C libraries (glibc, musl, and uClibc-ng).
+
+Digging in the sudo buildsystem did not reveal an obvious reason when
+those would be needed either.
+
+Drop the hook now it seems it is no longer used and is atually breaking
+the build.
+
+Fixes: http://autobuild.buildroot.org/results/72f/72ff18fb9b41394a29006f881ee1fbea67a66a09/
+
+Note that there is a second issue in there: the call to the host cpp
+fails, but since it is on the LHS of a pipe, the error is lost, as the
+RHS of the pipe (the sed call) succeeds; a fix for that will be sent
+in a separate patch.
+
+Reported-by: Christian Stewart <christian@aperture.us>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit f42004a046313cf73ae707d43632109c36398dc0)
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Reviewed-by: Christian Stewart <christian@aperture.us>
+(cherry picked from commit 5aade5ced5edc40a4ad848cd276813d273d2d04e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/shim/shim.hash | 2 +-
- boot/shim/shim.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/sudo/sudo.mk | 9 ---------
+ 1 file changed, 9 deletions(-)
 
-diff --git a/boot/shim/shim.hash b/boot/shim/shim.hash
-index c9c489fd2f..5aa4ca06e8 100644
---- a/boot/shim/shim.hash
-+++ b/boot/shim/shim.hash
-@@ -1,3 +1,3 @@
- # locally computed hash
--sha256  eab91644a3efe91a666399f5d8eb3eed0e04d04f79d4b6c0b278ef7747a239a5  shim-15.6.tar.bz2
-+sha256  a79f0a9b89f3681ab384865b1a46ab3f79d88b11b4ca59aa040ab03fffae80a9  shim-15.8.tar.bz2
- sha256  15edf527919ddcb2f514ab9d16ad07ef219e4bb490e0b79560be510f0c159cc2  COPYRIGHT
-diff --git a/boot/shim/shim.mk b/boot/shim/shim.mk
-index bbef81cfc4..19b11f4086 100644
---- a/boot/shim/shim.mk
-+++ b/boot/shim/shim.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index a4e838dd94..7961a99002 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -58,15 +58,6 @@ else
+ SUDO_CONF_OPTS += --disable-openssl
+ endif
  
--SHIM_VERSION = 15.6
-+SHIM_VERSION = 15.8
- SHIM_SITE = https://github.com/rhboot/shim/releases/download/$(SHIM_VERSION)
- SHIM_SOURCE = shim-$(SHIM_VERSION).tar.bz2
- SHIM_LICENSE = BSD-2-Clause
+-# mksigname/mksiglist needs to run on build host to generate source files
+-define SUDO_BUILD_MKSIGNAME_MKSIGLIST_HOST
+-	$(MAKE) $(HOST_CONFIGURE_OPTS) \
+-		CPPFLAGS="$(HOST_CPPFLAGS) -I../../include -I../.." \
+-		-C $(@D)/lib/util mksigname mksiglist
+-endef
+-
+-SUDO_POST_CONFIGURE_HOOKS += SUDO_BUILD_MKSIGNAME_MKSIGLIST_HOST
+-
+ define SUDO_PERMISSIONS
+ 	/usr/bin/sudo f 4755 0 0 - - - - -
+ endef
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
