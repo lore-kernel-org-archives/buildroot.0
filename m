@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E0C0C54E68
-	for <buildroot@archiver.kernel.org>; Sat, 16 Mar 2024 22:22:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3A6AC54E60
+	for <buildroot@archiver.kernel.org>; Sat, 16 Mar 2024 22:22:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2B2254091F;
-	Sat, 16 Mar 2024 22:22:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 748F6415F5;
+	Sat, 16 Mar 2024 22:22:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KyL2KdLl52pL; Sat, 16 Mar 2024 22:22:01 +0000 (UTC)
+	with ESMTP id h9L7jxKyjmaT; Sat, 16 Mar 2024 22:22:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D62AD4136C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 13B1841591
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D62AD4136C;
-	Sat, 16 Mar 2024 22:22:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 06B0D1BF85D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 13B1841591;
+	Sat, 16 Mar 2024 22:22:04 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id F17621BF3D5
  for <buildroot@lists.busybox.net>; Sat, 16 Mar 2024 22:21:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E81656077D
+ by smtp4.osuosl.org (Postfix) with ESMTP id DA789408FF
  for <buildroot@lists.busybox.net>; Sat, 16 Mar 2024 22:21:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LqcL3MVdBO41 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QeM00npOhqYa for <buildroot@lists.busybox.net>;
  Sat, 16 Mar 2024 22:21:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D67DA60769
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C28054090D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D67DA60769
+ by smtp4.osuosl.org (Postfix) with ESMTP id C28054090D
  for <buildroot@buildroot.org>; Sat, 16 Mar 2024 22:21:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 92F9E82241; Sat, 16 Mar 2024 22:21:52 +0000 (UTC)
+ id ADDC582248; Sat, 16 Mar 2024 22:21:52 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 16 Mar 2024 23:19:27 +0100
+Date: Sat, 16 Mar 2024 23:20:26 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: ef58952a07c748bc394a3428cea03c09ab17baa4
-X-Git-Newrev: 112b3d4df21ff6dbb6c5739bf46929beb99d5c78
+X-Git-Oldrev: c91e3dac71c03616d4513bb471868cef57c7131f
+X-Git-Newrev: 6e5fd94c63ac7129215f030658243108edc97517
 X-Patchwork-Hint: ignore
-Message-Id: <20240316222152.92F9E82241@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/dnsmasq: security
- bump version to 2.90
+Message-Id: <20240316222152.ADDC582248@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/unbound: security
+ bump version to 1.19.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,128 +65,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=112b3d4df21ff6dbb6c5739bf46929beb99d5c78
+commit: https://git.buildroot.net/buildroot/commit/?id=6e5fd94c63ac7129215f030658243108edc97517
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Changelog: https://thekelleys.org.uk/dnsmasq/CHANGELOG
-
 Release notes:
-https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2024q1/017430.html
+https://nlnetlabs.nl/news/2024/Feb/13/unbound-1.19.1-released/
 
-Fixes CVE 2023-50387 and CVE 2023-50868.
-
-Removed patch which is included in this release.
-Switched _SITE to https.
+Fixes CVE-2023-50387 & CVE-2023-50868.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 213cfb34358d86a65deecdb9f5b11a20ad0895d1)
+(cherry picked from commit 9175bf264909cefa942d26deea9035553246ecad)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-set-default-maximum-dns-udp-package-size.patch | 64 ----------------------
- package/dnsmasq/dnsmasq.hash                       |  4 +-
- package/dnsmasq/dnsmasq.mk                         |  4 +-
- 3 files changed, 4 insertions(+), 68 deletions(-)
+ package/unbound/unbound.hash | 4 ++--
+ package/unbound/unbound.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/dnsmasq/0001-set-default-maximum-dns-udp-package-size.patch b/package/dnsmasq/0001-set-default-maximum-dns-udp-package-size.patch
-deleted file mode 100644
-index 4dd17ec069..0000000000
---- a/package/dnsmasq/0001-set-default-maximum-dns-udp-package-size.patch
-+++ /dev/null
-@@ -1,64 +0,0 @@
--From eb92fb32b746f2104b0f370b5b295bb8dd4bd5e5 Mon Sep 17 00:00:00 2001
--From: Simon Kelley <simon@thekelleys.org.uk>
--Date: Tue, 7 Mar 2023 22:07:46 +0000
--Subject: [PATCH] Set the default maximum DNS UDP packet size to 1232.
--Upstream: https://thekelleys.org.uk/gitweb/?p=dnsmasq.git;a=commit;h=eb92fb32b746f2104b0f370b5b295bb8dd4bd5e5
--
--http://www.dnsflagday.net/2020/ refers.
--
--Thanks to Xiang Li for the prompt.
--
--[dalang@gmx.at: backport from upstream]
--Signed-off-by: Daniel Lang <dalang@gmx.at>
-----
-- CHANGELOG     | 9 ++++++++
-- man/dnsmasq.8 | 3 ++-
-- src/config.h  | 2 +-
-- 3 files changed, 12 insertions(+), 2 deletions(-)
--
--diff --git a/CHANGELOG b/CHANGELOG
--index 3af20cf..52d8678 100644
----- a/CHANGELOG
--+++ b/CHANGELOG
--@@ -1,3 +1,12 @@ version 2.90
--+version 2.90
--+	Set the default maximum DNS UDP packet sice to 1232. This
--+	has been the recommended value since 2020 because it's the
--+	largest value that avoid fragmentation, and fragmentation
--+	is just not reliable on the modern internet, especially
--+	for IPv6. It's still possible to override this with
--+	--edns-packet-max for special circumstances.
--+
--+
-- version 2.89
--         Fix bug introduced in 2.88 (commit fe91134b) which can result
-- 	in corruption of the DNS cache internal data structures and
--diff --git a/man/dnsmasq.8 b/man/dnsmasq.8
--index 41e2e04..5acb935 100644
----- a/man/dnsmasq.8
--+++ b/man/dnsmasq.8
--@@ -183,7 +183,8 @@ to zero completely disables DNS function, leaving only DHCP and/or TFTP.
-- .TP
-- .B \-P, --edns-packet-max=<size>
-- Specify the largest EDNS.0 UDP packet which is supported by the DNS
---forwarder. Defaults to 4096, which is the RFC5625-recommended size.
--+forwarder. Defaults to 1232, which is the recommended size following the
--+DNS flag day in 2020. Only increase if you know what you are doing.
-- .TP
-- .B \-Q, --query-port=<query_port>
-- Send outbound DNS queries from, and listen for their replies on, the
--diff --git a/src/config.h b/src/config.h
--index 1e7b30f..37b374e 100644
----- a/src/config.h
--+++ b/src/config.h
--@@ -19,7 +19,7 @@
-- #define CHILD_LIFETIME 150 /* secs 'till terminated (RFC1035 suggests > 120s) */
-- #define TCP_MAX_QUERIES 100 /* Maximum number of queries per incoming TCP connection */
-- #define TCP_BACKLOG 32  /* kernel backlog limit for TCP connections */
---#define EDNS_PKTSZ 4096 /* default max EDNS.0 UDP packet from RFC5625 */
--+#define EDNS_PKTSZ 1232 /* default max EDNS.0 UDP packet from from  /dnsflagday.net/2020 */
-- #define SAFE_PKTSZ 1232 /* "go anywhere" UDP packet size, see https://dnsflagday.net/2020/ */
-- #define KEYBLOCK_LEN 40 /* choose to minimise fragmentation when storing DNSSEC keys */
-- #define DNSSEC_WORK 50 /* Max number of queries to validate one question */
----
--2.20.1
-diff --git a/package/dnsmasq/dnsmasq.hash b/package/dnsmasq/dnsmasq.hash
-index 02ffb2656b..d11e8af590 100644
---- a/package/dnsmasq/dnsmasq.hash
-+++ b/package/dnsmasq/dnsmasq.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.89.tar.xz.asc
--sha256  02bd230346cf0b9d5909f5e151df168b2707103785eb616b56685855adebb609  dnsmasq-2.89.tar.xz
-+# https://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.90.tar.xz.asc
-+sha256  8e50309bd837bfec9649a812e066c09b6988b73d749b7d293c06c57d46a109e4  dnsmasq-2.90.tar.xz
+diff --git a/package/unbound/unbound.hash b/package/unbound/unbound.hash
+index 91e1d82dd2..843026abc7 100644
+--- a/package/unbound/unbound.hash
++++ b/package/unbound/unbound.hash
+@@ -1,5 +1,5 @@
+-# From https://nlnetlabs.nl/downloads/unbound/unbound-1.17.1.tar.gz.sha256
+-sha256  ee4085cecce12584e600f3d814a28fa822dfaacec1f94c84bfd67f8a5571a5f4  unbound-1.17.1.tar.gz
++# From https://nlnetlabs.nl/downloads/unbound/unbound-1.19.1.tar.gz.sha256
++sha256  bc1d576f3dd846a0739adc41ffaa702404c6767d2b6082deb9f2f97cbb24a3a9  unbound-1.19.1.tar.gz
+ 
  # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING-v3
-diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
-index 9c05857f22..9f342cb049 100644
---- a/package/dnsmasq/dnsmasq.mk
-+++ b/package/dnsmasq/dnsmasq.mk
-@@ -4,9 +4,9 @@
+ sha256  8eb9a16cbfb8703090bbfa3a2028fd46bb351509a2f90dc1001e51fbe6fd45db  LICENSE
+diff --git a/package/unbound/unbound.mk b/package/unbound/unbound.mk
+index fa7884e937..5128d0e420 100644
+--- a/package/unbound/unbound.mk
++++ b/package/unbound/unbound.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DNSMASQ_VERSION = 2.89
-+DNSMASQ_VERSION = 2.90
- DNSMASQ_SOURCE = dnsmasq-$(DNSMASQ_VERSION).tar.xz
--DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
-+DNSMASQ_SITE = https://thekelleys.org.uk/dnsmasq
- DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
- DNSMASQ_MAKE_OPTS = COPTS="$(DNSMASQ_COPTS)" PREFIX=/usr CFLAGS="$(TARGET_CFLAGS)"
- DNSMASQ_MAKE_OPTS += DESTDIR=$(TARGET_DIR) LDFLAGS="$(TARGET_LDFLAGS)" \
+-UNBOUND_VERSION = 1.17.1
++UNBOUND_VERSION = 1.19.1
+ UNBOUND_SITE = https://www.unbound.net/downloads
+ UNBOUND_INSTALL_STAGING = YES
+ UNBOUND_DEPENDENCIES = host-pkgconf expat libevent openssl
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
