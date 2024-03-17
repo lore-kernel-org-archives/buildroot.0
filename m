@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71C79C54E60
-	for <buildroot@archiver.kernel.org>; Sun, 17 Mar 2024 19:40:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31CB8C54E60
+	for <buildroot@archiver.kernel.org>; Sun, 17 Mar 2024 19:44:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1D74A6061F;
-	Sun, 17 Mar 2024 19:40:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DAFCC6061F;
+	Sun, 17 Mar 2024 19:44:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YeUTi6cMM5Eb; Sun, 17 Mar 2024 19:40:38 +0000 (UTC)
+	with ESMTP id xhQozI_UrhN3; Sun, 17 Mar 2024 19:44:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3FFD860628
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF91360628
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3FFD860628;
-	Sun, 17 Mar 2024 19:40:38 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1F0551BF3DC
- for <buildroot@lists.busybox.net>; Sun, 17 Mar 2024 19:40:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EF91360628;
+	Sun, 17 Mar 2024 19:44:13 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 088E71BF3DC
+ for <buildroot@lists.busybox.net>; Sun, 17 Mar 2024 19:44:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 193A3813F3
- for <buildroot@lists.busybox.net>; Sun, 17 Mar 2024 19:40:37 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E9C7960628
+ for <buildroot@lists.busybox.net>; Sun, 17 Mar 2024 19:44:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ynccBILtqH1L for <buildroot@lists.busybox.net>;
- Sun, 17 Mar 2024 19:40:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
- helo=relay8-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EA0hCpO73eYH for <buildroot@lists.busybox.net>;
+ Sun, 17 Mar 2024 19:44:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
+ helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 11069813D7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 11069813D7
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 11069813D7
- for <buildroot@buildroot.org>; Sun, 17 Mar 2024 19:40:35 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E88831BF204;
- Sun, 17 Mar 2024 19:40:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org CB9706061F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB9706061F
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CB9706061F
+ for <buildroot@buildroot.org>; Sun, 17 Mar 2024 19:44:10 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 78864240002;
+ Sun, 17 Mar 2024 19:44:06 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rlwMy-002QN6-0j;
- Sun, 17 Mar 2024 20:40:32 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rlwQP-002QTO-1f;
+ Sun, 17 Mar 2024 20:44:05 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd@kuhls.net>
-References: <20240216055343.24326-1-bernd@kuhls.net>
-Date: Sun, 17 Mar 2024 20:40:32 +0100
-In-Reply-To: <20240216055343.24326-1-bernd@kuhls.net> (Bernd Kuhls's message
- of "Fri, 16 Feb 2024 06:53:43 +0100")
-Message-ID: <87bk7cir4f.fsf@48ers.dk>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20240224214601.680607-1-fontaine.fabrice@gmail.com>
+Date: Sun, 17 Mar 2024 20:44:05 +0100
+In-Reply-To: <20240224214601.680607-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 24 Feb 2024 22:46:01 +0100")
+Message-ID: <877ci0iqyi.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/php: bump version to 8.2.16
+Subject: Re: [Buildroot] [PATCH 1/1] package/redis-plus-plus: needs threads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,23 +68,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Prabhu Sannachi <prabhu.sannachi@collins.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Changelog: https://www.php.net/ChangeLog-8.php#8.2.16
- > Release notes: https://www.php.net/releases/8_2_16.php
+ > redis-plus-plus unconditonally uses mutex and so needs threads since its
+ > addition in commit c46df9de21e718a9ed6a2df2bb945c386695d3bf and
+ > https://github.com/sewenew/redis-plus-plus/commit/1fa8f6bbfb24c8f328aa23ee1dd3c3f99c1b4caf:
 
- > Updated license hash due to copyright year bump:
- > https://github.com/php/php-src/commit/2575e6b88c3d3bbd53383fb65057c9b7b029e264
+ > In file included from /home/autobuild/autobuild/instance-5/output-1/build/redis-plus-plus-1.3.10/src/sw/redis++/connection_pool.h:27,
+ >                  from /home/autobuild/autobuild/instance-5/output-1/build/redis-plus-plus-1.3.10/src/sw/redis++/connection_pool.cpp:17:
+ > /home/autobuild/autobuild/instance-5/output-1/build/redis-plus-plus-1.3.10/src/sw/redis++/sentinel.h:95:10: error: 'mutex' in namespace 'std' does not name a type
+ >    95 |     std::mutex _mutex;
+ >       |          ^~~~~
 
- > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ > Fixes: c46df9de21e718a9ed6a2df2bb945c386695d3bf
+ >  - http://autobuild.buildroot.org/results/cc4c54134e8a522b4c028aab4266f47cf862e2a9
 
-Committed to 2023.02.x and 2023.11.x, thanks.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2023.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
