@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33572C54E67
-	for <buildroot@archiver.kernel.org>; Sun, 17 Mar 2024 11:23:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D78E8C54E67
+	for <buildroot@archiver.kernel.org>; Sun, 17 Mar 2024 11:24:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 008F84016D;
-	Sun, 17 Mar 2024 11:23:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8633B4016D;
+	Sun, 17 Mar 2024 11:24:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vlfieo5MEwdn; Sun, 17 Mar 2024 11:23:12 +0000 (UTC)
+	with ESMTP id w6pF4r992iQV; Sun, 17 Mar 2024 11:24:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 00EDB40275
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 738D44035D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 00EDB40275;
-	Sun, 17 Mar 2024 11:23:12 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D74D61BF420
- for <buildroot@lists.busybox.net>; Sun, 17 Mar 2024 11:23:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 738D44035D;
+	Sun, 17 Mar 2024 11:24:22 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 759251BF420
+ for <buildroot@lists.busybox.net>; Sun, 17 Mar 2024 11:24:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C4152606A9
- for <buildroot@lists.busybox.net>; Sun, 17 Mar 2024 11:23:10 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5F7B64064C
+ for <buildroot@lists.busybox.net>; Sun, 17 Mar 2024 11:24:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WVA_Dq15fCBo for <buildroot@lists.busybox.net>;
- Sun, 17 Mar 2024 11:23:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yQNsFsa1BIuo for <buildroot@lists.busybox.net>;
+ Sun, 17 Mar 2024 11:24:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E27E9606D3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B5CF40642
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E27E9606D3
- for <buildroot@buildroot.org>; Sun, 17 Mar 2024 11:23:09 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4B5CF40642
+ for <buildroot@buildroot.org>; Sun, 17 Mar 2024 11:24:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CAAF2826A0; Sun, 17 Mar 2024 11:23:09 +0000 (UTC)
+ id 381B0826AC; Sun, 17 Mar 2024 11:24:19 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 16 Mar 2024 23:35:05 +0100
-X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 13eae12be87f1bf5363c1165244454cc204915bd
-X-Git-Newrev: 55f1c453b2f68f8a27c7f2fb5cf669473dde8d4d
+Date: Sun, 17 Mar 2024 12:20:16 +0100
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: b0c04a4c0d6410d978da44e06473def8a9c6812f
+X-Git-Newrev: 95a00b1fd02484fc3f9768e25c8263acf7539549
 X-Patchwork-Hint: ignore
-Message-Id: <20240317112309.CAAF2826A0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/zlib-ng: fix arm
+Message-Id: <20240317112419.381B0826AC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/zlib-ng: fix arm
  build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -65,8 +65,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=55f1c453b2f68f8a27c7f2fb5cf669473dde8d4d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=95a00b1fd02484fc3f9768e25c8263acf7539549
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
 zlib-ng usage uses CMAKE_C_COMPILER_TARGET which is non-standard and
 is not supposed to be used by the CMakeLists.txt machinery of a
@@ -118,7 +118,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+)
 
 diff --git a/package/zlib-ng/zlib-ng.mk b/package/zlib-ng/zlib-ng.mk
-index fbb906503a..33e8754c9d 100644
+index aa65d8437d..a85913224a 100644
 --- a/package/zlib-ng/zlib-ng.mk
 +++ b/package/zlib-ng/zlib-ng.mk
 @@ -13,6 +13,7 @@ ZLIB_NG_PROVIDES = zlib
