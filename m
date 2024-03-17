@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65D7AC54E67
-	for <buildroot@archiver.kernel.org>; Sun, 17 Mar 2024 14:37:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0597C54E60
+	for <buildroot@archiver.kernel.org>; Sun, 17 Mar 2024 14:37:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 36D3881767;
-	Sun, 17 Mar 2024 14:37:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A69D0817AD;
+	Sun, 17 Mar 2024 14:37:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id F96FcnGHUxBB; Sun, 17 Mar 2024 14:37:38 +0000 (UTC)
+	with ESMTP id Zslg0514GX0v; Sun, 17 Mar 2024 14:37:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D46F817D3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1422D81C67
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5D46F817D3;
-	Sun, 17 Mar 2024 14:37:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 39E721BF303
- for <buildroot@lists.busybox.net>; Sun, 17 Mar 2024 14:37:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1422D81C67;
+	Sun, 17 Mar 2024 14:37:41 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1FECF1BF303
+ for <buildroot@lists.busybox.net>; Sun, 17 Mar 2024 14:37:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 323A960606
+ by smtp2.osuosl.org (Postfix) with ESMTP id 18A6640350
  for <buildroot@lists.busybox.net>; Sun, 17 Mar 2024 14:37:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XO9EeGXlRzsX for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KAzI_wwM8T6g for <buildroot@lists.busybox.net>;
  Sun, 17 Mar 2024 14:37:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 667AD60635
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 54E5B404DB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 667AD60635
+ by smtp2.osuosl.org (Postfix) with ESMTP id 54E5B404DB
  for <buildroot@buildroot.org>; Sun, 17 Mar 2024 14:37:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5462382792; Sun, 17 Mar 2024 14:37:33 +0000 (UTC)
+ id 421E7827B3; Sun, 17 Mar 2024 14:37:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 17 Mar 2024 13:58:10 +0100
+Date: Sun, 17 Mar 2024 13:54:04 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 4fa03debb02cac30c3b6e985ffa4bc0fbd9b3c4c
-X-Git-Newrev: 83fc87b66f4ca32a5f8fd6e99b25712785ebf6c9
+X-Git-Oldrev: ec409c8221f3e58b19768cab746ad4236bdfe950
+X-Git-Newrev: 4fa03debb02cac30c3b6e985ffa4bc0fbd9b3c4c
 X-Patchwork-Hint: ignore
-Message-Id: <20240317143733.5462382792@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/gcc: remove
- orphaned 10.4.0 patch
+Message-Id: <20240317143733.421E7827B3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/libuv: security
+ bump to version 1.48
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,78 +65,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=83fc87b66f4ca32a5f8fd6e99b25712785ebf6c9
+commit: https://git.buildroot.net/buildroot/commit/?id=4fa03debb02cac30c3b6e985ffa4bc0fbd9b3c4c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-Shortly before GCC 10.4.0 was dropped in d37a8f3a2, commit 4ce0dacb6 was
-merged and introduced a patch to 10.4.0 that was not accounted for by
-the patch that dropped 10.4.0 support.
+Fixes: CVE-2024-24806 / GHSA-f74f-cvh7-c6q6 [1]
 
-Fixes: d37a8f3a2 ("package/gcc: remove gcc 10.x")
-Signed-off-by: Vincent Fazio <vfazio@gmail.com>
-Reviewed-by: Romain Naour <romain.naour@smile.fr>
+Release Notes: https://github.com/libuv/libuv/releases/tag/v1.48.0
+Full Changelog: https://github.com/libuv/libuv/blob/v1.48.0/ChangeLog
+
+[1]: https://github.com/libuv/libuv/security/advisories/GHSA-f74f-cvh7-c6q6
+
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit fbedcfa221bc8826536a39b01eccf0626ab89bf1)
+(cherry picked from commit bd2f99246c253739a3d44d8345f2fbb5362b3fb5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...y-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch | 49 ----------------------
- 1 file changed, 49 deletions(-)
+ package/libuv/libuv.hash | 2 +-
+ package/libuv/libuv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gcc/10.4.0/0007-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch b/package/gcc/10.4.0/0007-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch
-deleted file mode 100644
-index 7e9714e9cb..0000000000
---- a/package/gcc/10.4.0/0007-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch
-+++ /dev/null
-@@ -1,49 +0,0 @@
--From ca01d2526917ec6e54b30472d3aedfd46d4ca585 Mon Sep 17 00:00:00 2001
--From: Stafford Horne <shorne@gmail.com>
--Date: Thu, 29 Sep 2022 15:32:39 +0100
--Subject: [PATCH] or1k: Only define TARGET_HAVE_TLS when HAVE_AS_TLS
--
--This was found when testing buildroot with linuxthreads enabled.  In
--this case, the build passes --disable-tls to the toolchain during
--configuration.  After building the OpenRISC toolchain it was still
--generating TLS code sequences and causing linker failures such as:
--
-- ..../or1k-buildroot-linux-uclibc-gcc -o gpsd-3.24/gpsctl .... -lusb-1.0 -lm -lrt -lnsl
-- ..../ld: ..../sysroot/usr/lib/libusb-1.0.so: undefined reference to `__tls_get_addr'
--
--This patch fixes this by disabling tls for the OpenRISC target when requested
--via --disable-tls.
--
--gcc/ChangeLog:
--
--	* config/or1k/or1k.c (TARGET_HAVE_TLS): Only define if
--	HAVE_AS_TLS is defined.
--
--Tested-by: Yann E. MORIN <yann.morin@orange.com>
--
--Upstream: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=ca01d2526917ec6e54b30472d3aedfd46d4ca585
--
--[Bernd: backported to 10.4.0]
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- gcc/config/or1k/or1k.c | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/gcc/config/or1k/or1k.c b/gcc/config/or1k/or1k.c
--index da2f59062ba..0ce7b234417 100644
----- a/gcc/config/or1k/or1k.c
--+++ b/gcc/config/or1k/or1k.c
--@@ -2175,8 +2175,10 @@ or1k_output_mi_thunk (FILE *file, tree thunk_fndecl,
-- #undef  TARGET_LEGITIMATE_ADDRESS_P
-- #define TARGET_LEGITIMATE_ADDRESS_P or1k_legitimate_address_p
-- 
--+#ifdef HAVE_AS_TLS
-- #undef  TARGET_HAVE_TLS
-- #define TARGET_HAVE_TLS true
--+#endif
-- 
-- #undef  TARGET_HAVE_SPECULATION_SAFE_VALUE
-- #define TARGET_HAVE_SPECULATION_SAFE_VALUE speculation_safe_value_not_needed
---- 
--2.39.3
--
+diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
+index 1fd286d9e9..2ca8f64a80 100644
+--- a/package/libuv/libuv.hash
++++ b/package/libuv/libuv.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  94f101111ef3209340d7f09c2aa150ddb4feabd2f9d87d47d9f5bded835b8094  libuv-v1.46.0-dist.tar.gz
++sha256  c593139feb9061699fdd2f7fde47bb6c1ca77761ae9ec04f052083f1ef46c13b  libuv-v1.48.0-dist.tar.gz
+ sha256  16de0c32b265cb7d46a6d3bd614f259dd4d693a5e26b3407b04aae8d73041f0c  LICENSE
+ sha256  262c44bd2cdba037e6d2a82fba15f5800d292bc993a6f5d6b6ea487744d02836  LICENSE-extra
+diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
+index 76316484e4..5f96e98a98 100644
+--- a/package/libuv/libuv.mk
++++ b/package/libuv/libuv.mk
+@@ -6,7 +6,7 @@
+ 
+ # When bumping libuv, check if a new version of uvw is available
+ # and bump it too.
+-LIBUV_VERSION = 1.46.0
++LIBUV_VERSION = 1.48.0
+ LIBUV_SOURCE = libuv-v$(LIBUV_VERSION)-dist.tar.gz
+ LIBUV_SITE = https://dist.libuv.org/dist/v$(LIBUV_VERSION)
+ LIBUV_DEPENDENCIES = host-pkgconf
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
