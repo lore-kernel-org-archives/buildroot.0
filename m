@@ -4,91 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87D04C54E60
-	for <buildroot@archiver.kernel.org>; Sun, 17 Mar 2024 09:58:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C07CC54E60
+	for <buildroot@archiver.kernel.org>; Sun, 17 Mar 2024 10:14:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1D73940181;
-	Sun, 17 Mar 2024 09:58:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 392E7400CB;
+	Sun, 17 Mar 2024 10:14:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BRxjRKeWrn9D; Sun, 17 Mar 2024 09:58:30 +0000 (UTC)
+	with ESMTP id 1p7uAVwFbHgr; Sun, 17 Mar 2024 10:14:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA142402F2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3079A40181
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EA142402F2;
-	Sun, 17 Mar 2024 09:58:29 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 891251BF5DA
- for <buildroot@lists.busybox.net>; Sun, 17 Mar 2024 09:58:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3079A40181;
+	Sun, 17 Mar 2024 10:14:32 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id F30481BF424
+ for <buildroot@lists.busybox.net>; Sun, 17 Mar 2024 10:14:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 75D2460760
- for <buildroot@lists.busybox.net>; Sun, 17 Mar 2024 09:58:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DF8B540584
+ for <buildroot@lists.busybox.net>; Sun, 17 Mar 2024 10:14:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OqUF1EI3i5XX for <buildroot@lists.busybox.net>;
- Sun, 17 Mar 2024 09:58:27 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JZTN7-ImwvPD for <buildroot@lists.busybox.net>;
+ Sun, 17 Mar 2024 10:14:29 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
+ client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
  envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 22D8E60622
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 22D8E60622
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 22D8E60622
- for <buildroot@buildroot.org>; Sun, 17 Mar 2024 09:58:26 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-4140a259a54so4097495e9.0
- for <buildroot@buildroot.org>; Sun, 17 Mar 2024 02:58:26 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7356B4033C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7356B4033C
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7356B4033C
+ for <buildroot@buildroot.org>; Sun, 17 Mar 2024 10:14:29 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-4140fedd38fso113755e9.0
+ for <buildroot@buildroot.org>; Sun, 17 Mar 2024 03:14:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1710669504; x=1711274304;
+ d=1e100.net; s=20230601; t=1710670466; x=1711275266;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=qdmhotbeeGfC2CDGAnye0ujQNTIv8EpEWqZFszpSFkE=;
- b=uCoeL/a3pgqLCOq+V+t4HyjfkdRlGO22Zkxy9Mysi7Im/166i2SbHHqMEDdL5N/ITy
- n4HedQ9bXV4Pu8j2TmWAmOIn+MQCjk9fg8pTrfHfzeZ+gaECe1fIAe8avrSkDmq9reju
- x/dPSPhPdscpNV9OPDlJ3EOUxd+kz8GoFHiIhKmq4CW34RVFJdpNmsBZOSNb9V4WrhKb
- JetGTOheHUvCAP3u4QXuBru6iU5ylO5yZDnzDklRUau22WHnHkvyaahsvVi9StzW56Wb
- oRgWRCqP+QC0Aw23FCj3j6Jq9FmXLfR7/Bbf4JR7E4lmymDY8m6EUstUmkPkgk1EPuN0
- DvSA==
-X-Gm-Message-State: AOJu0Yxm/h+r+ogM3OlLLSs88q5iIPLQUjkcb1MvQGiNU0EfnbSgmeMF
- o2v3e928J9R+oPW0LotVgseFsO2Gpyf0LPRLccEIXfdk8/crd9VVSqGNhnGY
-X-Google-Smtp-Source: AGHT+IES2LQl73UMeyECUi+QdfOKi1L3aWLwx02PKL3BWgFEnvy9b0hIEuGggKrCteBSQ9XvG/dLeg==
-X-Received: by 2002:a05:600c:1c14:b0:412:e50f:acaf with SMTP id
- j20-20020a05600c1c1400b00412e50facafmr5837813wms.24.1710669504039; 
- Sun, 17 Mar 2024 02:58:24 -0700 (PDT)
+ bh=4efP6xvTw0G9Fso/rRW/luLjoTs2NxRc1n4I+kWDSUk=;
+ b=GPi/tS1nUSmP00Z4HPtHhCbmJSpCZYWLi4SS1hSmSEK9p6bOwsiqkud+K5cZ+EkWwg
+ 95JRZ/qUYVQucBn52ZAFmaEIne3RSiyJxdJelGlUgRQXsG2Evqx+njAH5ywaoJhGf2+P
+ xMzBfvywLZa2V+Hq7aK2a5supFec/r72XqY3sczqquddbJ9XJX2FMwmAOJxDqn6knfXC
+ 3rd/xL70rrN1+eAo5WRVV8eveO8rgrT4LFEauaWRW7UK94aqaQ+tE8iW+yP932lOjgx8
+ QgFsP0a6PgGLXrcoohDltkuhzP/ART9gZusGM9WyzkNakckn7F2HByqPotbogJRWzPcw
+ 6RkQ==
+X-Gm-Message-State: AOJu0YwSEVvJzRrksEHM69GT5mikB0ZmBycx7WzstlgZgMUfcjeiz8Fy
+ lq0uIPjrtGrorBO1YnJCr6UaYwmqnJ2cDzHbpd+x/8YesbZP8/nSiMP2Ihrp
+X-Google-Smtp-Source: AGHT+IGSrjtD+sVoqkozGMhIGjP4lrkmIrVOOq/m4UzFebDmpYvs5vSqgBl1uGyvO7ORGS2+B7Ia7Q==
+X-Received: by 2002:a05:600c:548c:b0:413:49a:c3b0 with SMTP id
+ iv12-20020a05600c548c00b00413049ac3b0mr7838244wmb.2.1710670466345; 
+ Sun, 17 Mar 2024 03:14:26 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- n13-20020a05600c500d00b004140e634d25sm750462wmr.11.2024.03.17.02.58.23
+ o38-20020a05600c512600b00412cbe4f41bsm14671449wms.4.2024.03.17.03.14.25
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 17 Mar 2024 02:58:23 -0700 (PDT)
+ Sun, 17 Mar 2024 03:14:25 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 17 Mar 2024 10:58:11 +0100
-Message-ID: <20240317095811.52758-1-fontaine.fabrice@gmail.com>
+Date: Sun, 17 Mar 2024 11:14:20 +0100
+Message-ID: <20240317101420.62065-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1710669504; x=1711274304; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1710670466; x=1711275266; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=qdmhotbeeGfC2CDGAnye0ujQNTIv8EpEWqZFszpSFkE=;
- b=Y12CpIiNeWHuA3ykLnhln3qpVdguoGkYwHSe8f1jaNXU8aPTrY+LaLY29E7g9+qCHc
- GSdn7vErfNi2G9JmJ5HwFu0lbVVTd6xCKJN5XpncYaI7XSng+3FFd6EWNgRgWis/clZR
- sLNPVOhV3Fw5bYARGfbbxshfKuqeLUqDv/cU874jwyoaDKgm71Tpy1PaSeC8uHHVxYB5
- bIwCWjrexfvPE5gpmVPQxGxOgmgBUMt5FQCi+uJ251XuBr3KaJSNJhFR2wBpfInunMdf
- 8uqSOCQf6J+7NzugS2tk1umK0mY1mr17fKF+1isu9x7ZP+hUWLJoHuKuV3Qm8i3NKyVC
- lpKA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=4efP6xvTw0G9Fso/rRW/luLjoTs2NxRc1n4I+kWDSUk=;
+ b=Ijr4/VGKdBiP6OK/VMIooCJ5I0LRSZs5Y4ZuYmfGOERMMN4RFf2TCrj2a1utbKTefu
+ M8fNxV16nu1jopZEVTzvcJBurhQxb5ZQtslBTnHjMSd9iPko7xMO0BvRWnSNKN7010Nu
+ 0o2vypLYGB+vfTDMW96BPEomu7tDM6Z+f9SsEUQpHdJ3CK1BhVIanMgIlB0+iuIAgL+e
+ NXGTlQAqP8YuyDa7XC6Wjk3BGE7GK/yo7F+aYpQjVN2fEFyrtPQ2vtuz1Ip5EnJiu2Ym
+ jkXuc9e6OZTu8GOYHXtKeuHA8tr6UzHlGr/6GoHWgZjUPXZJnIGJ3DJQEixc8bbQTi9b
+ TVCw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Y12CpIiN
-Subject: [Buildroot] [PATCH 1/1] package/xvisor: fix build without python
- interpreter
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=Ijr4/VGK
+Subject: [Buildroot] [PATCH 1/1] package/osm2pgsql: only supports 64 bits
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,91 +100,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+Cc: Maxim Kochetkov <fido_max@inbox.ru>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failures on a system not providing the "python"
-interpreter binary raised at least since bump to version 0.3.1 in commit
-c4f8b8968770ecbf6444a5921c6472f126717626 and more probably
-since the addition of the package in commit
-e23ddf0c13e6d3b054782b86188396a0c2add1a5 and
-https://github.com/xvisor/xvisor/commit/ba904b4066f4b375cb1ad76ca41570741dbec62e:
+osm2pgsql only supports 64 bits architectures since bump to version
+1.10.0 in commit e056aeeca9cf8c00c6da62c39979ce6c55c92791 and
+https://github.com/osm2pgsql-dev/osm2pgsql/commit/389904269a1b1f246641d203abadfcd5cebb97cc
+resulting in the following build failure with arm:
 
-/bin/sh: line 1: /home/buildroot/autobuild/instance-2/output-1/build/xvisor-0.3.1/tools/scripts/d2c.py: cannot execute: required file not found
+CMake Error at CMakeLists.txt:20 (message):
+  osm2pgsql needs a 64 bit architecture
 
-or
-
-/bin/sh: /home/buildroot/instance-0/output-1/build/xvisor-0.3.2/tools/scripts/d2c.py: /usr/bin/python: bad interpreter: No such file or directory
-
-Fixes:
- - http://autobuild.buildroot.org/results/2e100bacc9e9face8351287e4c979c1729709d7b
- - http://autobuild.buildroot.org/results/5d8a08512db1b3095158753e3a7843b0fd6c9749
+Fixes: e056aeeca9cf8c00c6da62c39979ce6c55c92791
+ - http://autobuild.buildroot.org/results/30c2675a732fd810c68dffbb6483f9cf8e4fcbf3
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...plicitly-use-the-python3-interpreter.patch | 35 +++++++++++++++++++
- package/xvisor/xvisor.mk                      |  2 +-
- 2 files changed, 36 insertions(+), 1 deletion(-)
- create mode 100644 package/xvisor/0001-TOOLS-d2c-py-explicitly-use-the-python3-interpreter.patch
+ package/osm2pgsql/Config.in | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/package/xvisor/0001-TOOLS-d2c-py-explicitly-use-the-python3-interpreter.patch b/package/xvisor/0001-TOOLS-d2c-py-explicitly-use-the-python3-interpreter.patch
-new file mode 100644
-index 0000000000..349d4415e2
---- /dev/null
-+++ b/package/xvisor/0001-TOOLS-d2c-py-explicitly-use-the-python3-interpreter.patch
-@@ -0,0 +1,35 @@
-+From 888c94e7a121d96aa88f84c58fe7e2bd771fc5ac Mon Sep 17 00:00:00 2001
-+From: Julien Olivain <ju.o@free.fr>
-+Date: Fri, 25 Aug 2023 21:56:37 +0200
-+Subject: [PATCH] TOOLS: d2c.py: explicitly use the python3 interpreter
+diff --git a/package/osm2pgsql/Config.in b/package/osm2pgsql/Config.in
+index c6a38f3180..b97b258c59 100644
+--- a/package/osm2pgsql/Config.in
++++ b/package/osm2pgsql/Config.in
+@@ -1,5 +1,16 @@
++config BR2_PACKAGE_OSM2PGSQL_ARCH_SUPPORTS
++	bool
++	default y if BR2_aarch64 || BR2_aarch64_be
++	default y if BR2_x86_64
++	default y if BR2_mips64 || BR2_mips64el
++	default y if BR2_powerpc64 || BR2_powerpc64le
++	default y if BR2_RISCV_64
++	default y if BR2_sparc64
++	default y if BR2_s390x
 +
-+When compiling Xvisor on a system not providing the "python"
-+interpreter binary, compilation fails with output:
-+
-+    (d2c)       core/vio/keymaps/modifiers.c
-+    /bin/sh: 1: /build/xvisor-0.3.2/tools/scripts/d2c.py: not found
-+
-+This commit fixes the issue following the PEP 394 recommendation:
-+https://peps.python.org/pep-0394/
-+
-+It sets the "shebang" to `#! /usr/bin/env python3` to allow using other
-+interpreters in the PATH, or virtual environment.
-+
-+Signed-off-by: Julien Olivain <ju.o@free.fr>
-+
-+Upstream: https://github.com/xvisor/xvisor/commit/888c94e7a121d96aa88f84c58fe7e2bd771fc5ac
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ tools/scripts/d2c.py | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/tools/scripts/d2c.py b/tools/scripts/d2c.py
-+index b46a7bc468..daac4a5450 100755
-+--- a/tools/scripts/d2c.py
-++++ b/tools/scripts/d2c.py
-+@@ -1,4 +1,4 @@
-+-#!/usr/bin/python
-++#! /usr/bin/env python3
-+ #/**
-+ # Copyright (c) 2013 Anup Patel.
-+ # All rights reserved.
-diff --git a/package/xvisor/xvisor.mk b/package/xvisor/xvisor.mk
-index eba37be9b7..2a51706b55 100644
---- a/package/xvisor/xvisor.mk
-+++ b/package/xvisor/xvisor.mk
-@@ -11,7 +11,7 @@ XVISOR_LICENSE = GPL-2.0+
- XVISOR_LICENSE_FILES = COPYING
- XVISOR_INSTALL_IMAGES = YES
- XVISOR_INSTALL_TARGET = NO
--XVISOR_DEPENDENCIES = host-bison host-dtc host-flex
-+XVISOR_DEPENDENCIES = host-bison host-dtc host-flex host-python3
+ config BR2_PACKAGE_OSM2PGSQL
+ 	bool "osm2pgsql"
++	depends on BR2_PACKAGE_OSM2PGSQL_ARCH_SUPPORTS
+ 	depends on BR2_INSTALL_LIBSTDCPP # boost, libosmium, protozero
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # boost, libosmium
+@@ -24,9 +35,11 @@ config BR2_PACKAGE_OSM2PGSQL
+ 	  https://osm2pgsql.org
  
- XVISOR_MAKE_TARGETS = all
+ comment "osm2pgsql needs a toolchain w/ C++, wchar, threads, gcc >= 4.9"
++	depends on BR2_PACKAGE_OSM2PGSQL_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || !BR2_TOOLCHAIN_HAS_THREADS
  
+ comment "osm2pgsql needs a toolchain not affected by GCC bug 64735"
++	depends on BR2_PACKAGE_OSM2PGSQL_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
 -- 
 2.43.0
 
