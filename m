@@ -1,94 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51B9FC54E60
-	for <buildroot@archiver.kernel.org>; Sun, 17 Mar 2024 09:41:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87D04C54E60
+	for <buildroot@archiver.kernel.org>; Sun, 17 Mar 2024 09:58:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B4F1860705;
-	Sun, 17 Mar 2024 09:41:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1D73940181;
+	Sun, 17 Mar 2024 09:58:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IoX5D2OeYDHA; Sun, 17 Mar 2024 09:41:01 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BRxjRKeWrn9D; Sun, 17 Mar 2024 09:58:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B08D060731
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA142402F2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B08D060731;
-	Sun, 17 Mar 2024 09:41:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EA142402F2;
+	Sun, 17 Mar 2024 09:58:29 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 57FE71BF5DA
- for <buildroot@lists.busybox.net>; Sun, 17 Mar 2024 09:40:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 891251BF5DA
+ for <buildroot@lists.busybox.net>; Sun, 17 Mar 2024 09:58:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 444FF60731
- for <buildroot@lists.busybox.net>; Sun, 17 Mar 2024 09:40:59 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 75D2460760
+ for <buildroot@lists.busybox.net>; Sun, 17 Mar 2024 09:58:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Sv_ttB3eJeFC for <buildroot@lists.busybox.net>;
- Sun, 17 Mar 2024 09:40:58 +0000 (UTC)
+ with ESMTP id OqUF1EI3i5XX for <buildroot@lists.busybox.net>;
+ Sun, 17 Mar 2024 09:58:27 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
+ client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
  envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DAD4160705
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DAD4160705
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DAD4160705
- for <buildroot@buildroot.org>; Sun, 17 Mar 2024 09:40:57 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- 5b1f17b1804b1-41409fd8b6eso7084225e9.2
- for <buildroot@buildroot.org>; Sun, 17 Mar 2024 02:40:57 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 22D8E60622
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 22D8E60622
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 22D8E60622
+ for <buildroot@buildroot.org>; Sun, 17 Mar 2024 09:58:26 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ 5b1f17b1804b1-4140a259a54so4097495e9.0
+ for <buildroot@buildroot.org>; Sun, 17 Mar 2024 02:58:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1710668455; x=1711273255;
+ d=1e100.net; s=20230601; t=1710669504; x=1711274304;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=OQi8nvf3RaAxhorOv/5DU5UmvFmx+VHSMIyFpgg+93E=;
- b=M6ktku9dMrkMJcYKSK0Ukm8EuIYrNSfFpiwOB/a5Xi460OwS3oS2ZUYHisF6ZJxqjI
- cUJZQizRKaVYejmQxs/dfvcHo5y0WiTKyNtGDLlpxY89xt9NdGMq8Jb0HERlcPVW9T/e
- dmcwSQRcw+95sjxgygYDhvsy0HZ7FosmCa42oDpgafCOiUuF+G5pRIWhR84a3Xf5FOku
- neKjpau7HwJKqi1X7/yXS2If5Mrrk+wJaVAkWsmXq5B5SDnXCyPEb6HwMMWn/CWJ69xv
- fwK3kZKOMju2YaJoJ8mifVXV21ZIXsb8bk3wDRmYkVMbk2taxaoKSkeGcHfVwtVKvg1f
- 4p1w==
-X-Gm-Message-State: AOJu0YxQE2XnrBDvcwNYvXTVMmFctU2Or3qIkacEGFNWJS7TI2I/9mrH
- y3etlorNzTX6vBUDkB07Mv0n6rptdmasm1BSYYiepMsEzG5dWLeB2imPhOsB
-X-Google-Smtp-Source: AGHT+IH/JeJnKePuALNt/VB+n1CCL40i2pFWTbjkoXoFOuml0Eu0hOQNZ/2wWsKvGbghi3cq3Ohqkg==
-X-Received: by 2002:a05:600c:4e8e:b0:414:286:fd21 with SMTP id
- f14-20020a05600c4e8e00b004140286fd21mr3194902wmq.28.1710668454664; 
- Sun, 17 Mar 2024 02:40:54 -0700 (PDT)
+ bh=qdmhotbeeGfC2CDGAnye0ujQNTIv8EpEWqZFszpSFkE=;
+ b=uCoeL/a3pgqLCOq+V+t4HyjfkdRlGO22Zkxy9Mysi7Im/166i2SbHHqMEDdL5N/ITy
+ n4HedQ9bXV4Pu8j2TmWAmOIn+MQCjk9fg8pTrfHfzeZ+gaECe1fIAe8avrSkDmq9reju
+ x/dPSPhPdscpNV9OPDlJ3EOUxd+kz8GoFHiIhKmq4CW34RVFJdpNmsBZOSNb9V4WrhKb
+ JetGTOheHUvCAP3u4QXuBru6iU5ylO5yZDnzDklRUau22WHnHkvyaahsvVi9StzW56Wb
+ oRgWRCqP+QC0Aw23FCj3j6Jq9FmXLfR7/Bbf4JR7E4lmymDY8m6EUstUmkPkgk1EPuN0
+ DvSA==
+X-Gm-Message-State: AOJu0Yxm/h+r+ogM3OlLLSs88q5iIPLQUjkcb1MvQGiNU0EfnbSgmeMF
+ o2v3e928J9R+oPW0LotVgseFsO2Gpyf0LPRLccEIXfdk8/crd9VVSqGNhnGY
+X-Google-Smtp-Source: AGHT+IES2LQl73UMeyECUi+QdfOKi1L3aWLwx02PKL3BWgFEnvy9b0hIEuGggKrCteBSQ9XvG/dLeg==
+X-Received: by 2002:a05:600c:1c14:b0:412:e50f:acaf with SMTP id
+ j20-20020a05600c1c1400b00412e50facafmr5837813wms.24.1710669504039; 
+ Sun, 17 Mar 2024 02:58:24 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- m9-20020a05600c4f4900b004140e701884sm691588wmq.22.2024.03.17.02.40.53
+ n13-20020a05600c500d00b004140e634d25sm750462wmr.11.2024.03.17.02.58.23
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 17 Mar 2024 02:40:53 -0700 (PDT)
+ Sun, 17 Mar 2024 02:58:23 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 17 Mar 2024 10:40:37 +0100
-Message-ID: <20240317094037.41936-1-fontaine.fabrice@gmail.com>
+Date: Sun, 17 Mar 2024 10:58:11 +0100
+Message-ID: <20240317095811.52758-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1710668455; x=1711273255; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1710669504; x=1711274304; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=OQi8nvf3RaAxhorOv/5DU5UmvFmx+VHSMIyFpgg+93E=;
- b=E5vYmmGy0LVtFVsxXbJXW1famxH3kEJGYf8kc66dieyYx7PfvP0BtVoe/QyNvmE4E8
- HH9RXeV8s/7dTxy+dK4F+ZpLmxgBXeEM7//C7a8QMCihHo2B/WjTvtbFyCUAIID7zGIr
- SjPuwrryRTeFoiAsuhWMyKtTk+8iY5DH0dXAzewTLRQI6/LGlIpeX0zADIjMrv4iRBSa
- Kc8xkfogrxny38m0mjvQjyp07T0Wjs1SvesxLJqz2jJ3lrD+/RCDBVhd08vHa8J4CXTb
- g70R4y56df3egNNTms35kGWVAJyqMp27UE3GHfmJvQJOQw+3JfVeyHar3eNoYtpl3AVB
- Wcow==
+ bh=qdmhotbeeGfC2CDGAnye0ujQNTIv8EpEWqZFszpSFkE=;
+ b=Y12CpIiNeWHuA3ykLnhln3qpVdguoGkYwHSe8f1jaNXU8aPTrY+LaLY29E7g9+qCHc
+ GSdn7vErfNi2G9JmJ5HwFu0lbVVTd6xCKJN5XpncYaI7XSng+3FFd6EWNgRgWis/clZR
+ sLNPVOhV3Fw5bYARGfbbxshfKuqeLUqDv/cU874jwyoaDKgm71Tpy1PaSeC8uHHVxYB5
+ bIwCWjrexfvPE5gpmVPQxGxOgmgBUMt5FQCi+uJ251XuBr3KaJSNJhFR2wBpfInunMdf
+ 8uqSOCQf6J+7NzugS2tk1umK0mY1mr17fKF+1isu9x7ZP+hUWLJoHuKuV3Qm8i3NKyVC
+ lpKA==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=E5vYmmGy
-Subject: [Buildroot] [PATCH 1/1] package/poco: needs C++17
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=Y12CpIiN
+Subject: [Buildroot] [PATCH 1/1] package/xvisor: fix build without python
+ interpreter
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,69 +100,91 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-poco needs C++17 and gcc >=8 since bump to version 1.13.2 in commit
-433c4fd38b15efcf74b410e5068e2e51eeba6e46 and
-https://github.com/pocoproject/poco/commit/78234857bf416b718455496800d1b7be3a0d0a53
-https://github.com/pocoproject/poco/commit/10f41c06d9416a6ae0884c4827ea2a91bf5d2cf8
-resulting in the following build failure with gcc 7:
+Fix the following build failures on a system not providing the "python"
+interpreter binary raised at least since bump to version 0.3.1 in commit
+c4f8b8968770ecbf6444a5921c6472f126717626 and more probably
+since the addition of the package in commit
+e23ddf0c13e6d3b054782b86188396a0c2add1a5 and
+https://github.com/xvisor/xvisor/commit/ba904b4066f4b375cb1ad76ca41570741dbec62e:
 
-In file included from src/Thread.cpp:28:0:
-src/Thread_POSIX.cpp: In member function 'void Poco::ThreadImpl::setNameImpl(const string&)':
-src/Thread_POSIX.cpp:162:56: error: no matching function for call to 'std::__cxx11::basic_string<char>::append(const string&, std::__cxx11::basic_string<char>::size_type)'
-   truncName.append(threadName, threadName.size() - half);
-                                                        ^
+/bin/sh: line 1: /home/buildroot/autobuild/instance-2/output-1/build/xvisor-0.3.1/tools/scripts/d2c.py: cannot execute: required file not found
 
-Fixes: 433c4fd38b15efcf74b410e5068e2e51eeba6e46
- - http://autobuild.buildroot.org/results/7b1c144f39a8be4ce8f964aa13a52d0bf62dd0aa
+or
+
+/bin/sh: /home/buildroot/instance-0/output-1/build/xvisor-0.3.2/tools/scripts/d2c.py: /usr/bin/python: bad interpreter: No such file or directory
+
+Fixes:
+ - http://autobuild.buildroot.org/results/2e100bacc9e9face8351287e4c979c1729709d7b
+ - http://autobuild.buildroot.org/results/5d8a08512db1b3095158753e3a7843b0fd6c9749
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/poco/Config.in | 6 +++---
- package/poco/poco.mk   | 1 -
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ ...plicitly-use-the-python3-interpreter.patch | 35 +++++++++++++++++++
+ package/xvisor/xvisor.mk                      |  2 +-
+ 2 files changed, 36 insertions(+), 1 deletion(-)
+ create mode 100644 package/xvisor/0001-TOOLS-d2c-py-explicitly-use-the-python3-interpreter.patch
 
-diff --git a/package/poco/Config.in b/package/poco/Config.in
-index 7cb9987ec7..9bdef125ad 100644
---- a/package/poco/Config.in
-+++ b/package/poco/Config.in
-@@ -12,7 +12,7 @@ config BR2_PACKAGE_POCO
- 	bool "poco"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # C++14
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++17
- 	# pthread_condattr_setclock
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on !BR2_STATIC_LIBS # dlopen()
-@@ -116,8 +116,8 @@ config BR2_PACKAGE_POCO_ZIP
+diff --git a/package/xvisor/0001-TOOLS-d2c-py-explicitly-use-the-python3-interpreter.patch b/package/xvisor/0001-TOOLS-d2c-py-explicitly-use-the-python3-interpreter.patch
+new file mode 100644
+index 0000000000..349d4415e2
+--- /dev/null
++++ b/package/xvisor/0001-TOOLS-d2c-py-explicitly-use-the-python3-interpreter.patch
+@@ -0,0 +1,35 @@
++From 888c94e7a121d96aa88f84c58fe7e2bd771fc5ac Mon Sep 17 00:00:00 2001
++From: Julien Olivain <ju.o@free.fr>
++Date: Fri, 25 Aug 2023 21:56:37 +0200
++Subject: [PATCH] TOOLS: d2c.py: explicitly use the python3 interpreter
++
++When compiling Xvisor on a system not providing the "python"
++interpreter binary, compilation fails with output:
++
++    (d2c)       core/vio/keymaps/modifiers.c
++    /bin/sh: 1: /build/xvisor-0.3.2/tools/scripts/d2c.py: not found
++
++This commit fixes the issue following the PEP 394 recommendation:
++https://peps.python.org/pep-0394/
++
++It sets the "shebang" to `#! /usr/bin/env python3` to allow using other
++interpreters in the PATH, or virtual environment.
++
++Signed-off-by: Julien Olivain <ju.o@free.fr>
++
++Upstream: https://github.com/xvisor/xvisor/commit/888c94e7a121d96aa88f84c58fe7e2bd771fc5ac
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ tools/scripts/d2c.py | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/tools/scripts/d2c.py b/tools/scripts/d2c.py
++index b46a7bc468..daac4a5450 100755
++--- a/tools/scripts/d2c.py
+++++ b/tools/scripts/d2c.py
++@@ -1,4 +1,4 @@
++-#!/usr/bin/python
+++#! /usr/bin/env python3
++ #/**
++ # Copyright (c) 2013 Anup Patel.
++ # All rights reserved.
+diff --git a/package/xvisor/xvisor.mk b/package/xvisor/xvisor.mk
+index eba37be9b7..2a51706b55 100644
+--- a/package/xvisor/xvisor.mk
++++ b/package/xvisor/xvisor.mk
+@@ -11,7 +11,7 @@ XVISOR_LICENSE = GPL-2.0+
+ XVISOR_LICENSE_FILES = COPYING
+ XVISOR_INSTALL_IMAGES = YES
+ XVISOR_INSTALL_TARGET = NO
+-XVISOR_DEPENDENCIES = host-bison host-dtc host-flex
++XVISOR_DEPENDENCIES = host-bison host-dtc host-flex host-python3
  
- endif # BR2_PACKAGE_POCO
+ XVISOR_MAKE_TARGETS = all
  
--comment "poco needs a toolchain w/ wchar, NPTL, C++, dynamic library, gcc >= 5 w/ C++14"
-+comment "poco needs a toolchain w/ wchar, NPTL, C++, dynamic library, gcc >= 8"
- 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
--		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_5
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 	depends on BR2_PACKAGE_POCO_ARCH_SUPPORTS
-diff --git a/package/poco/poco.mk b/package/poco/poco.mk
-index cc8a22fc2a..233252c67b 100644
---- a/package/poco/poco.mk
-+++ b/package/poco/poco.mk
-@@ -68,7 +68,6 @@ define POCO_CONFIGURE_CMDS
- 	(cd $(@D); $(TARGET_MAKE_ENV) ./configure \
- 		--config=Linux \
- 		--prefix=/usr \
--		--cflags=-std=c++14 \
- 		--ldflags="$(POCO_LDFLAGS)" \
- 		--omit="$(POCO_OMIT)" \
- 		$(POCO_CONF_OPTS) \
 -- 
 2.43.0
 
