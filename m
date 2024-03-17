@@ -4,91 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94E17C54E60
-	for <buildroot@archiver.kernel.org>; Sun, 17 Mar 2024 10:55:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8EC0AC54E60
+	for <buildroot@archiver.kernel.org>; Sun, 17 Mar 2024 10:59:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 305164016D;
-	Sun, 17 Mar 2024 10:55:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 44BB3403B9;
+	Sun, 17 Mar 2024 10:59:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3ihU3sVOG313; Sun, 17 Mar 2024 10:55:41 +0000 (UTC)
+	with ESMTP id 3YNXG3q2tnMm; Sun, 17 Mar 2024 10:59:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3D2004035D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5B49A403EA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3D2004035D;
-	Sun, 17 Mar 2024 10:55:41 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5B49A403EA;
+	Sun, 17 Mar 2024 10:59:09 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3E5A51BF424
- for <buildroot@lists.busybox.net>; Sun, 17 Mar 2024 10:55:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1A3E91BF21A
+ for <buildroot@lists.busybox.net>; Sun, 17 Mar 2024 10:59:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2AEF74035D
- for <buildroot@lists.busybox.net>; Sun, 17 Mar 2024 10:55:39 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 125F9403AC
+ for <buildroot@lists.busybox.net>; Sun, 17 Mar 2024 10:59:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pBiB4fnjndYQ for <buildroot@lists.busybox.net>;
- Sun, 17 Mar 2024 10:55:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
- envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 132E34016D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 132E34016D
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 132E34016D
- for <buildroot@buildroot.org>; Sun, 17 Mar 2024 10:55:37 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-4140727912cso7730525e9.3
- for <buildroot@buildroot.org>; Sun, 17 Mar 2024 03:55:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1710672936; x=1711277736;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=eqRfEHoZ2DbnwScwLV79JZvH+1bgcXp3DehLiraJP0M=;
- b=N+PdIZGVxks13WGgJOyRFsAK3NfBkVH+jWhYwUiBP43j3uECFrwomORuzRIPcmOCl/
- 4yyOePbu/KuO3DAQiTgeI4ceRBNSUGTNoQfCoC0oy2TUKm8bN7vI3DmfI/OlSZCvhCzw
- HC50IoM4E27KlRqK4/mgeRmPwNl+JN4doE7jR/YNKbohAGxoUlKPZSQU6667F0181k6B
- PP4w7Q4xbQm/183azzw7gqXQZP1qOwRjHEvwbMMvA7Ck7bzzkSuLVJ4WnPVPKW8ZbI45
- gcXqA+MgYQPwsy5MUjeVljlQ5w2dRBYgvlfSCME/c3qbF84B18OD8ot+D4R6p3zUmL6r
- Uing==
-X-Gm-Message-State: AOJu0YzEG3Co30LHbEJFSZ/7gJUAqeucKgQ5wqsf3g2o9ncyFU3XlcsS
- PPLI2FWaxNBGDtMUI2W+wfAwLrSlVMhtvgSWuM0LMHyYBiEGgUZtMPZNuJj+
-X-Google-Smtp-Source: AGHT+IEMi6XD0KSbTV4Duhz+ayXwHqG0ibZ9EUZy4X/Ah70KWnowsCG7EsYFGX/4+KHwOm9SukkNfg==
-X-Received: by 2002:adf:e444:0:b0:33e:726d:e963 with SMTP id
- t4-20020adfe444000000b0033e726de963mr5617261wrm.17.1710672935546; 
- Sun, 17 Mar 2024 03:55:35 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- k4-20020adfe3c4000000b0033e48db23bdsm7275794wrm.100.2024.03.17.03.55.35
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 17 Mar 2024 03:55:35 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ with ESMTP id I5UGrjkt08Cb for <buildroot@lists.busybox.net>;
+ Sun, 17 Mar 2024 10:59:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.155.100;
+ helo=smtpdh16-1.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7033E4016D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7033E4016D
+Received: from smtpdh16-1.aruba.it (smtpdh16-1.aruba.it [62.149.155.100])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7033E4016D
+ for <buildroot@buildroot.org>; Sun, 17 Mar 2024 10:59:04 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id loEIrowheEG7LloEIrBpPK; Sun, 17 Mar 2024 11:59:02 +0100
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Sun, 17 Mar 2024 11:55:29 +0100
-Message-ID: <20240317105529.253562-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Date: Sun, 17 Mar 2024 11:59:01 +0100
+Message-Id: <20240317105901.157006-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1710672936; x=1711277736; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=eqRfEHoZ2DbnwScwLV79JZvH+1bgcXp3DehLiraJP0M=;
- b=M7Et6w4krEVKkqiG9wlWsHk4CWEosrBrVmKaYJ0+ZMJhKBDt+XIq6VWSWtr1NUhuP2
- ILXzp3Rv/3ucX2bst8SC4vKpahmu3sY146cZAVBtOrWudhS+i8WBKP0ydxxqxg11msmI
- NkNzpaFy94qcAggceFIL59j0lEkWf1FFK3b6d9kg8Zwteona5A2kKqtSxOAUK+7WlqSI
- fsGId0iIYjljj9HB8Pwcaq7tv1sWU5fpsthUPw+Z4FfE3fOshqJOHuheJPj5PVZ+uC0+
- nX20vA+pNPN1X+9frf9LdSLiwWcyC9eD6L5D1o5m+YdS7DnRt+A+zvkf2mKhXklfv2uW
- aYXw==
+X-CMAE-Envelope: MS4xfADpWXHLfdsn/nlzGM9uGh+nDBmLIEwJukXsjUEii4IT07ltTqRpJ7q4bMbYBRBo6dAYlxqEndImaDNo6gciWVFo0jyF78tCWany3uW8rtr1xutjyBhR
+ vR3dJct7uW8/ng82D3RMFH/PbAEj3xa1lxCoq+Z/IZ2FjjyKaBJSsXuxCx6o4mc+YEpOLBWiKQMj7rQTBAmnaczkzdB4l53sjYvC4nQGjeq5dcbFOiWJyH12
+ +Yqh/07bLQKQBIeJZz5nNfgEIA0CehD93A+U3qDDyJ00EZo9ZLd7TiW12CUBdJdzP/v+0GoXHJWuQNP0vAI4Hg==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1710673142; bh=FMmT0RV9FZ1GTzN92W19PSV3AWgnNSulYegsG/0t72Q=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=WdjQClRZDJNNJRYrr9AhnRs4n88f8GTqFRQCIA/MbTqdffwU2n/Cq9ulwWdr7aRrJ
+ PFMQHlPMRq8CkbfIpwvDMm1YdnztswbiTqUfksq5tZMVtveHJEpkD9W/sflE93Fydt
+ 0o3tOT1WtylFRO22e7g5XF7L5YlFp+pCM3g8fxdpxW0Wpnas86qNtmEBRc3D52dmJn
+ nwrdrmaJdvdyq7HDUtBhZMkTzDg8RlrniNLzqSxH94nlzoKDv/q3uaSy1peMgRzLO4
+ 988KSrPfJoJEMUe8oRJfYBFyTjLBetDt9wAhY3hy1zarl4YUaMZ29T3TL59cNCH3yl
+ pV02RbWFxlKew==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ header.from=benettiengineering.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=M7Et6w4k
-Subject: [Buildroot] [PATCH 1/1] package/libunwind: fix libucontext handling
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=WdjQClRZ
+Subject: [Buildroot] [PATCH] package/libnss: bump version to 3.99
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,39 +78,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Joseph Kogut <joseph.kogut@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit 6ea2a27f9047696ce1c463ad55fb4a78df136954 forgot to add -lucontext
-to LIBS resulting in the following build failure with zeromq:
-
-/home/buildroot/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/i586-buildroot-linux-musl/9.3.0/../../../../i586-buildroot-linux-musl/bin/ld: /home/buildroot/instance-0/output-1/host/i586-buildroot-linux-musl/sysroot/usr/lib32/libunwind.so.8: undefined reference to `setcontext'
-
-Fixes: 6ea2a27f9047696ce1c463ad55fb4a78df136954
- - http://autobuild.buildroot.org/results/893defe1588b2ca03c115b59b47be3f4aed438fb
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/libunwind/libunwind.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libunwind/libunwind.mk b/package/libunwind/libunwind.mk
-index 15c4e4863f..94e9bbd1b8 100644
---- a/package/libunwind/libunwind.mk
-+++ b/package/libunwind/libunwind.mk
-@@ -17,6 +17,7 @@ LIBUNWIND_CONF_OPTS = \
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 51701724ed..8c7c807f79 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_98_RTM/src/SHA256SUMS
+-sha256  f549cc33d35c0601674bfacf7c6ad683c187595eb4125b423238d3e9aa4209ce  nss-3.98.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_99_RTM/src/SHA256SUMS
++sha256  5cd5c2c8406a376686e6fa4b9c2de38aa280bea07bf927c0d521ba07c88b09bd  nss-3.99.tar.gz
+ # Locally calculated
+ sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 21b1f17b25..0d8b4dc592 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_LIBUCONTEXT),y)
- LIBUNWIND_DEPENDENCIES += libucontext
-+LIBUNWIND_CONF_OPTS += LIBS=-lucontext
- endif
- 
- $(eval $(autotools-package))
+-LIBNSS_VERSION = 3.98
++LIBNSS_VERSION = 3.99
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
 -- 
-2.43.0
+2.34.1
 
 _______________________________________________
 buildroot mailing list
