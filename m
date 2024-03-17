@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E855C54E60
-	for <buildroot@archiver.kernel.org>; Sun, 17 Mar 2024 12:58:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55484C54E67
+	for <buildroot@archiver.kernel.org>; Sun, 17 Mar 2024 12:58:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F3CB6600B6;
-	Sun, 17 Mar 2024 12:58:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 26718600B6;
+	Sun, 17 Mar 2024 12:58:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WYRdD6wqXQUr; Sun, 17 Mar 2024 12:58:25 +0000 (UTC)
+	with ESMTP id uPObH5ggf6sY; Sun, 17 Mar 2024 12:58:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1389A605DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 35154605DE
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1389A605DE;
-	Sun, 17 Mar 2024 12:58:25 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A10E31BF301
- for <buildroot@lists.busybox.net>; Sun, 17 Mar 2024 12:58:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 35154605DE;
+	Sun, 17 Mar 2024 12:58:43 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 77E3E1BF301
+ for <buildroot@lists.busybox.net>; Sun, 17 Mar 2024 12:58:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 99D30605DE
- for <buildroot@lists.busybox.net>; Sun, 17 Mar 2024 12:58:23 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7128C403A8
+ for <buildroot@lists.busybox.net>; Sun, 17 Mar 2024 12:58:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GXVmmb_512ix for <buildroot@lists.busybox.net>;
- Sun, 17 Mar 2024 12:58:23 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
- helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MySJrnNJlQi5 for <buildroot@lists.busybox.net>;
+ Sun, 17 Mar 2024 12:58:40 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
+ helo=relay7-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B0AB2600B6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B0AB2600B6
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B0AB2600B6
- for <buildroot@buildroot.org>; Sun, 17 Mar 2024 12:58:22 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 055B3240002;
- Sun, 17 Mar 2024 12:58:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 657BE40026
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 657BE40026
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 657BE40026
+ for <buildroot@buildroot.org>; Sun, 17 Mar 2024 12:58:40 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 939A020004;
+ Sun, 17 Mar 2024 12:58:37 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rlq5i-001gTl-0j;
- Sun, 17 Mar 2024 13:58:18 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rlq60-001gWK-39;
+ Sun, 17 Mar 2024 13:58:36 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Vincent Fazio <vfazio@gmail.com>
-References: <20240222135550.3428952-1-vfazio@gmail.com>
-Date: Sun, 17 Mar 2024 13:58:18 +0100
-In-Reply-To: <20240222135550.3428952-1-vfazio@gmail.com> (Vincent Fazio's
- message of "Thu, 22 Feb 2024 07:55:50 -0600")
-Message-ID: <87sf0phv6d.fsf@48ers.dk>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20240223172850.559363-1-fontaine.fabrice@gmail.com>
+Date: Sun, 17 Mar 2024 13:58:36 +0100
+In-Reply-To: <20240223172850.559363-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 23 Feb 2024 18:28:50 +0100")
+Message-ID: <87o7bdhv5v.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/gcc: remove orphaned 10.4.0
- patch
+Subject: Re: [Buildroot] [PATCH 1/1] package/c-ares: security bump to
+ version 1.27.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,24 +69,23 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Vincent" == Vincent Fazio <vfazio@gmail.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Shortly before GCC 10.4.0 was dropped in d37a8f3a2, commit 4ce0dacb6 was
- > merged and introduced a patch to 10.4.0 that was not accounted for by
- > the patch that dropped 10.4.0 support.
+ > Fix CVE-2024-25629: Reading malformatted /etc/resolv.conf,
+ > /etc/nsswitch.conf or the HOSTALIASES file could result in a crash.
 
- > Fixes: d37a8f3a2 ("package/gcc: remove gcc 10.x")
- > Signed-off-by: Vincent Fazio <vfazio@gmail.com>
+ > https://github.com/c-ares/c-ares/security/advisories/GHSA-mg26-v6qh-x48q
+ > https://github.com/c-ares/c-ares/releases/tag/cares-1_27_0
 
-Committed to 2023.11.x, thanks.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2023.02.x and 2023.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
