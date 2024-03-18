@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93CA1C54E58
-	for <buildroot@archiver.kernel.org>; Mon, 18 Mar 2024 11:45:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DC2BC54E69
+	for <buildroot@archiver.kernel.org>; Mon, 18 Mar 2024 11:45:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 576E8408A5;
-	Mon, 18 Mar 2024 11:45:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5D2EC408B1;
+	Mon, 18 Mar 2024 11:45:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Zq8t-wCawxbr; Mon, 18 Mar 2024 11:45:09 +0000 (UTC)
+	with ESMTP id QHMFaPZJUHuB; Mon, 18 Mar 2024 11:45:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A6988408EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AF71740929
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A6988408EA;
-	Mon, 18 Mar 2024 11:45:08 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8DB5A1BF366
- for <buildroot@lists.busybox.net>; Mon, 18 Mar 2024 11:45:05 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AF71740929;
+	Mon, 18 Mar 2024 11:45:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 13AD61BF366
+ for <buildroot@lists.busybox.net>; Mon, 18 Mar 2024 11:45:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 882C340508
- for <buildroot@lists.busybox.net>; Mon, 18 Mar 2024 11:45:05 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 078E8408B1
+ for <buildroot@lists.busybox.net>; Mon, 18 Mar 2024 11:45:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LlU9Di4wufFY for <buildroot@lists.busybox.net>;
- Mon, 18 Mar 2024 11:45:04 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wHRoGDJGwULy for <buildroot@lists.busybox.net>;
+ Mon, 18 Mar 2024 11:45:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C7CC4014D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA1E040646
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7C7CC4014D
+ by smtp2.osuosl.org (Postfix) with ESMTP id EA1E040646
  for <buildroot@buildroot.org>; Mon, 18 Mar 2024 11:45:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 746CC82941; Mon, 18 Mar 2024 11:45:04 +0000 (UTC)
+ id 5CC4A8050F; Mon, 18 Mar 2024 11:45:04 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 18 Mar 2024 12:42:36 +0100
+Date: Mon, 18 Mar 2024 12:38:06 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 3c376e54341169770aafe875d849a0fd328d7e3a
-X-Git-Newrev: 30ee53d5e2f3dfc0008070824924e40b09688b03
+X-Git-Oldrev: be4b55ea525854272bc7eacdacf4a36a82304cac
+X-Git-Newrev: 85dba7acde679e1820f3ca3f2f9cf1117383f8a2
 X-Patchwork-Hint: ignore
-Message-Id: <20240318114504.746CC82941@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/openssh: fix
- dependencies with refpolicy
+Message-Id: <20240318114504.5CC4A8050F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/poco: bump
+ version to 1.12.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,84 +65,115 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=30ee53d5e2f3dfc0008070824924e40b09688b03
+commit: https://git.buildroot.net/buildroot/commit/?id=85dba7acde679e1820f3ca3f2f9cf1117383f8a2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Commit 2c5a82a29ceb (package/openssh: select linux-pam if refpolicy
-upstream is selected) did not account for the linux-pam dependencies
-before selecting it, causing unmet dependencies warnings (unfortunately,
-not errors), such as:
+For change log, see:
+https://github.com/pocoproject/poco/blob/poco-1.12.4-release/CHANGELOG
 
-    $ KCONFIG_SEED=0xCF227CF4 make randconfig
-    WARNING: unmet direct dependencies detected for BR2_PACKAGE_LINUX_PAM
-      Depends on [n]: BR2_ENABLE_LOCALE [=n] && BR2_USE_WCHAR [=n] && !BR2_STATIC_LIBS [=n] && BR2_USE_MMU [=y] && BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 [=y]
-      Selected by [y]:
-      - BR2_PACKAGE_OPENSSH [=y] && BR2_USE_MMU [=y] && BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION [=y]
+This commit also drop the package patch, which was included upstream in
+version 1.12.3:
+https://github.com/pocoproject/poco/commit/3884c734c261231c34f59e56cde7ae02945b4dae
 
-2c5a82a29ceb made the choice of having openssl bear the responsibility
-to select linux-pam when the upstream refpolicy version was enabled.
-Semantically however, the responsibility really lies within refpolicy
-itself, since that's what imposes linux-pam to openssh.
+The file .checkpackageignore is also updated to reflect this patch
+removal.
 
-Move the select to refpolicy and drop it from openssh. Then, ensure that
-linux-pam is only selected when it is available.
-
-That means that one may get an openssh that is not linked against
-linux-pam, when the linux-pam dependencies are not met; refpolicy (by
-way of libsepol) also has a more stringent requirement on gcc version
-than linux-pam, so most probably the missing dependencies would be
-locale, wchar, or a static build. We consider that situation to be a
-corner case that we do not want to address.
-
-In the future, we may have more similar situations, whereby refpolicy
-would impose other packages be linked with otherwise optional
-dependencies. If (when) that were (will be) the case, then the proposed
-mechanism would quickly become ugly; we could then re-assess a nicer way
-to do that. Until then, this is good ebough.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit c20b2ae4ece10e07eeb80fcdd706a474d3be1475)
-[Peter: drop gcc >= 4.9 dependency]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 50ef6a6f592a5f9e8eb562aee0fc308ba911836a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openssh/Config.in   | 1 -
- package/refpolicy/Config.in | 7 +++++++
- 2 files changed, 7 insertions(+), 1 deletion(-)
+ .checkpackageignore                                |  1 -
+ ...-Fix-optional-JSON-support-for-MySQL-3753.patch | 45 ----------------------
+ package/poco/poco.hash                             |  2 +-
+ package/poco/poco.mk                               |  2 +-
+ 4 files changed, 2 insertions(+), 48 deletions(-)
 
-diff --git a/package/openssh/Config.in b/package/openssh/Config.in
-index a3038ba01f..08d3c7d391 100644
---- a/package/openssh/Config.in
-+++ b/package/openssh/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_OPENSSH
- 	bool "openssh"
- 	depends on BR2_USE_MMU # fork()
--	select BR2_PACKAGE_LINUX_PAM if BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_ZLIB
- 	help
-diff --git a/package/refpolicy/Config.in b/package/refpolicy/Config.in
-index 0e72b895df..523a154640 100644
---- a/package/refpolicy/Config.in
-+++ b/package/refpolicy/Config.in
-@@ -36,6 +36,13 @@ choice
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 1daee0b26c..093422b83b 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -139,7 +139,6 @@ package/owfs/S55owserver Shellcheck Variables
+ package/owfs/S60owfs Shellcheck Variables
+ package/pigpio/S50pigpio Shellcheck Variables
+ package/pkgconf/pkg-config.in Shellcheck
+-package/poco/0001-Fix-optional-JSON-support-for-MySQL-3753.patch Sob
+ package/postgresql/S50postgresql Variables
+ package/procps-ng/S02sysctl Variables
+ package/proftpd/S50proftpd Indent Shellcheck Variables
+diff --git a/package/poco/0001-Fix-optional-JSON-support-for-MySQL-3753.patch b/package/poco/0001-Fix-optional-JSON-support-for-MySQL-3753.patch
+deleted file mode 100644
+index ba2f073a59..0000000000
+--- a/package/poco/0001-Fix-optional-JSON-support-for-MySQL-3753.patch
++++ /dev/null
+@@ -1,45 +0,0 @@
+-From 3884c734c261231c34f59e56cde7ae02945b4dae Mon Sep 17 00:00:00 2001
+-From: Hernan Martinez <hernan.c.martinez@gmail.com>
+-Date: Tue, 16 Aug 2022 23:07:25 -0500
+-Subject: [PATCH] Fix optional JSON support for MySQL (#3753)
+-
+-* Fix optional JSON support for MySQL
+-
+-* Fix optional JSON support for MySQLTest
+----
+- Data/MySQL/src/ResultMetadata.cpp      | 2 ++
+- Data/MySQL/testsuite/src/MySQLTest.cpp | 2 ++
+- 2 files changed, 4 insertions(+)
+-
+-diff --git a/Data/MySQL/src/ResultMetadata.cpp b/Data/MySQL/src/ResultMetadata.cpp
+-index 61b49dd54..adb5dae84 100644
+---- a/Data/MySQL/src/ResultMetadata.cpp
+-+++ b/Data/MySQL/src/ResultMetadata.cpp
+-@@ -133,8 +133,10 @@ namespace
+- 		case MYSQL_TYPE_LONG_BLOB:
+- 		case MYSQL_TYPE_BLOB:
+- 			return Poco::Data::MetaColumn::FDT_BLOB;
+-+#ifdef POCO_MYSQL_JSON
+- 		case MYSQL_TYPE_JSON:
+- 			return Poco::Data::MetaColumn::FDT_JSON;
+-+#endif
+- 		default:
+- 			return Poco::Data::MetaColumn::FDT_UNKNOWN;
+- 		}
+-diff --git a/Data/MySQL/testsuite/src/MySQLTest.cpp b/Data/MySQL/testsuite/src/MySQLTest.cpp
+-index 80a3683b1..2a286d35e 100644
+---- a/Data/MySQL/testsuite/src/MySQLTest.cpp
+-+++ b/Data/MySQL/testsuite/src/MySQLTest.cpp
+-@@ -976,7 +976,9 @@ CppUnit::Test* MySQLTest::suite()
+- 	CppUnit_addTest(pSuite, MySQLTest, testBLOBStmt);
+- 	CppUnit_addTest(pSuite, MySQLTest, testLongBLOB);
+- 	CppUnit_addTest(pSuite, MySQLTest, testLongTEXT);
+-+#ifdef POCO_MYSQL_JSON
+- 	CppUnit_addTest(pSuite, MySQLTest, testJSON);
+-+#endif
+- 	CppUnit_addTest(pSuite, MySQLTest, testUnsignedInts);
+- 	CppUnit_addTest(pSuite, MySQLTest, testFloat);
+- 	CppUnit_addTest(pSuite, MySQLTest, testDouble);
+--- 
+-2.37.2
+-
+diff --git a/package/poco/poco.hash b/package/poco/poco.hash
+index eea3e2494a..9a7981171a 100644
+--- a/package/poco/poco.hash
++++ b/package/poco/poco.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  30442ccb097a0074133f699213a59d6f8c77db5b2c98a7c1ad9c5eeb3a2b06f3  poco-1.12.2.tar.gz
++sha256  71ef96c35fced367d6da74da294510ad2c912563f12cd716ab02b6ed10a733ef  poco-1.12.4.tar.gz
+ sha256  c4b1e1e5f36d8331737231fefcc30f5714326aec7c387ad59a8115eb0ba7d6b5  LICENSE
+diff --git a/package/poco/poco.mk b/package/poco/poco.mk
+index d078faa8e5..2d0233a8ce 100644
+--- a/package/poco/poco.mk
++++ b/package/poco/poco.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION
- 	bool "Upstream version"
-+	# Consider reworking the following when adding new entries:
-+	# Upstream refpolicy for openssh expects linux-pam to be used
-+	select BR2_PACKAGE_LINUX_PAM if BR2_PACKAGE_OPENSSH \
-+		&& BR2_USE_MMU \
-+		&& BR2_ENABLE_LOCALE \
-+		&& BR2_USE_WCHAR \
-+		&& !BR2_STATIC_LIBS
- 	help
- 	  Use the refpolicy as provided by Buildroot.
- 
+-POCO_VERSION = 1.12.2
++POCO_VERSION = 1.12.4
+ POCO_SITE = $(call github,pocoproject,poco,poco-$(POCO_VERSION)-release)
+ POCO_LICENSE = BSL-1.0
+ POCO_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
