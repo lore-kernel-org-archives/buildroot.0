@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BA53C54E5D
-	for <buildroot@archiver.kernel.org>; Mon, 18 Mar 2024 13:32:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7391FC54E5D
+	for <buildroot@archiver.kernel.org>; Mon, 18 Mar 2024 13:32:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F1D5E40A65;
-	Mon, 18 Mar 2024 13:32:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 39D0740A06;
+	Mon, 18 Mar 2024 13:32:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Vdn2BF685guq; Mon, 18 Mar 2024 13:32:55 +0000 (UTC)
+	with ESMTP id lUx7aGzhYJp8; Mon, 18 Mar 2024 13:32:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BA739409EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4CAA940A66
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BA739409EB;
-	Mon, 18 Mar 2024 13:32:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4CAA940A66;
+	Mon, 18 Mar 2024 13:32:57 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 925151BF95D
- for <buildroot@lists.busybox.net>; Mon, 18 Mar 2024 13:32:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 727A21BF363
+ for <buildroot@lists.busybox.net>; Mon, 18 Mar 2024 13:32:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7F586409F3
+ by smtp2.osuosl.org (Postfix) with ESMTP id 804CE40A07
  for <buildroot@lists.busybox.net>; Mon, 18 Mar 2024 13:32:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0YZRdrZ0zDNY for <buildroot@lists.busybox.net>;
+ with ESMTP id l4SEJWHgtCQM for <buildroot@lists.busybox.net>;
  Mon, 18 Mar 2024 13:32:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BC04540948
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9631440608
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id BC04540948
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9631440608
  for <buildroot@buildroot.org>; Mon, 18 Mar 2024 13:32:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A875482AE0; Mon, 18 Mar 2024 13:32:46 +0000 (UTC)
+ id 9147882A14; Mon, 18 Mar 2024 13:32:46 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 18 Mar 2024 14:28:28 +0100
+Date: Mon, 18 Mar 2024 14:26:03 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 4eea7c30ba3ae74e358af0412d3acec39f151c22
-X-Git-Newrev: 34005948ef1b1cc9937e060a0b310efb88983a99
+X-Git-Oldrev: 19fadb7db083752afb3b8dfee6480c4433539450
+X-Git-Newrev: 1f80b009be9444033d9fef2be7acff158dd22401
 X-Patchwork-Hint: ignore
-Message-Id: <20240318133246.A875482AE0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/freetype: use
- correct license format for dual licensed package
+Message-Id: <20240318133246.9147882A14@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] boot/shim: force arm mode
+ instead of Thumb mode
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,30 +65,61 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=34005948ef1b1cc9937e060a0b310efb88983a99
+commit: https://git.buildroot.net/buildroot/commit/?id=1f80b009be9444033d9fef2be7acff158dd22401
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-Signed-off-by: Christian Hitz <christian.hitz@bbv.ch>
+Use OPTIMIZATIONS parameter to pass -marm to fix the following build
+failure in Thumb mode:
+
+/tmp/ccEjPM4h.s:941: Error: selected processor does not support `mrc p15,0,r2,c9,c13,0' in Thumb mode
+
+CFLAGS can't be overridden as it is defined as:
+CFLAGS		= $(FEATUREFLAGS) \
+		  $(OPTIMIZATIONS) \
+		  $(WARNFLAGS) \
+		  $(if $(findstring clang,$(CC)),$(CLANG_WARNINGS)) \
+		  $(ARCH_CFLAGS) \
+		  $(WERRFLAGS) \
+		  $(INCLUDES) \
+		  $(DEFINES)
+
+Fixes:
+ - http://autobuild.buildroot.org/results/580156f89cfd72122fef07aa2fe37b4fdd4c316b
+ - http://autobuild.buildroot.org/results/8980c0f422516c7263d8d0c9cc6123f30c4b7ee4
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit def3b9d9a8f17398f280950b35eae0cf22d67bd8)
+(cherry picked from commit 66a202325a98a48013bad70de29d88f733ce5903)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/freetype/freetype.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ boot/shim/shim.mk | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index 1f4bcaf341..5032414d63 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
-@@ -9,7 +9,7 @@ FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.xz
- FREETYPE_SITE = http://download.savannah.gnu.org/releases/freetype
- FREETYPE_INSTALL_STAGING = YES
- FREETYPE_MAKE_OPTS = CCexe="$(HOSTCC)"
--FREETYPE_LICENSE = Dual FTL/GPL-2.0+
-+FREETYPE_LICENSE = FTL or GPL-2.0+
- FREETYPE_LICENSE_FILES = LICENSE.TXT docs/FTL.TXT docs/GPLv2.TXT
- FREETYPE_CPE_ID_VENDOR = freetype
- FREETYPE_DEPENDENCIES = host-pkgconf
+diff --git a/boot/shim/shim.mk b/boot/shim/shim.mk
+index 19b11f4086..ae57677320 100644
+--- a/boot/shim/shim.mk
++++ b/boot/shim/shim.mk
+@@ -13,10 +13,19 @@ SHIM_CPE_ID_VENDOR = redhat
+ SHIM_INSTALL_TARGET = NO
+ SHIM_INSTALL_IMAGES = YES
+ 
++SHIM_CFLAGS = $(TARGET_CFLAGS)
+ SHIM_MAKE_OPTS = \
+ 	ARCH="$(GNU_EFI_PLATFORM)" \
+ 	CROSS_COMPILE="$(TARGET_CROSS)" \
+-	DASHJ="-j$(PARALLEL_JOBS)"
++	DASHJ="-j$(PARALLEL_JOBS)" \
++	OPTIMIZATIONS="$(SHIM_CFLAGS)"
++
++# shim has some assembly function that is not present in Thumb mode:
++# Error: selected processor does not support `mrc p15,0,r2,c9,c13,0' in Thumb mode
++# so, we desactivate Thumb mode
++ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
++SHIM_CFLAGS += -marm
++endif
+ 
+ define SHIM_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(SHIM_MAKE_OPTS)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
