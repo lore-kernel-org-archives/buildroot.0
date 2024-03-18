@@ -1,94 +1,93 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A320C54E5D
-	for <buildroot@archiver.kernel.org>; Mon, 18 Mar 2024 22:04:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7FB4C54E5D
+	for <buildroot@archiver.kernel.org>; Mon, 18 Mar 2024 22:24:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0C45F608AB;
-	Mon, 18 Mar 2024 22:04:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C1C8940173;
+	Mon, 18 Mar 2024 22:24:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bXfHe7wHZ5jY; Mon, 18 Mar 2024 22:04:27 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gCnyB9mS_GKO; Mon, 18 Mar 2024 22:24:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C2E92608CE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 11E8740AF8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C2E92608CE;
-	Mon, 18 Mar 2024 22:04:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 11E8740AF8;
+	Mon, 18 Mar 2024 22:24:23 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1DC671BF3AA
- for <buildroot@lists.busybox.net>; Mon, 18 Mar 2024 22:04:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B59431BF3AA
+ for <buildroot@lists.busybox.net>; Mon, 18 Mar 2024 22:24:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 16A6640607
- for <buildroot@lists.busybox.net>; Mon, 18 Mar 2024 22:04:26 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AEECD40308
+ for <buildroot@lists.busybox.net>; Mon, 18 Mar 2024 22:24:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gtwPgiq2nANM for <buildroot@lists.busybox.net>;
- Mon, 18 Mar 2024 22:04:24 +0000 (UTC)
+ with ESMTP id TKDj7spp2ZkD for <buildroot@lists.busybox.net>;
+ Mon, 18 Mar 2024 22:24:19 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42d; helo=mail-wr1-x42d.google.com;
- envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E2EAB40510
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E2EAB40510
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E2EAB40510
- for <buildroot@buildroot.org>; Mon, 18 Mar 2024 22:04:23 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id
- ffacd0b85a97d-33d38c9ca5bso2440979f8f.2
- for <buildroot@buildroot.org>; Mon, 18 Mar 2024 15:04:23 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::434; helo=mail-wr1-x434.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8FF5D40304
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8FF5D40304
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8FF5D40304
+ for <buildroot@buildroot.org>; Mon, 18 Mar 2024 22:24:18 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id
+ ffacd0b85a97d-33ed4d8e9edso2035519f8f.2
+ for <buildroot@buildroot.org>; Mon, 18 Mar 2024 15:24:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1710799462; x=1711404262;
+ d=1e100.net; s=20230601; t=1710800656; x=1711405456;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=CqXo7xKEX3rQOmnk+v+AJkcW1tmlrWJzaDX5uMOIUL0=;
- b=CIWvFI4K7pV+YRYziASxpSBR4nd0CexbELJYEwQwJ+Nuyco2lblvnRDL0LAlugWalp
- Rs+5EppmzQCgnkvfxf4wt5E+04XXfJ1ZgquIO+getMMZdR1MtkU4bgG5YY30HfP8h0e2
- ppZfkwbcCvpIM1AclRQqNM0l97cbrxEcjGhAKr/KkC/COu2MV5Mc+omilpWjjNvx9lYU
- xVf+ByDOi2suLcRleVRRRSDR9IxDXsAz/9GXJ4mI0Ttzi1wYn9X8fvUcEmHG9Kmdbnln
- D6wV/ELfvdKAqkLG4l3fPcb7Oi/s3yKlxS6QZfw3ZgjE0san8s7mGolBV7D/3/1Aq9HC
- m0ow==
-X-Gm-Message-State: AOJu0Yy+BK8AQb1MXiMKoeddGJO03JstU/6cxK/DbJuuyo1lPngskjM3
- X343ghGnlRQzHLOybnIIp7IDSIIZPS6eHSn4AwEjMqlS2278atxJWMMurgQW
-X-Google-Smtp-Source: AGHT+IHYAFfrM4Tpg+/O13k85+k0xLsKhBLJgoTuc7Mi/RtWYYYh2Qu5+VeH/+HTd/wLrYiLVvgGHQ==
-X-Received: by 2002:a5d:47cc:0:b0:33e:1ee1:ef92 with SMTP id
- o12-20020a5d47cc000000b0033e1ee1ef92mr706400wrc.67.1710799461442; 
- Mon, 18 Mar 2024 15:04:21 -0700 (PDT)
-Received: from landeda.home ([2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- by smtp.gmail.com with ESMTPSA id
- j3-20020a05600c1c0300b004131310a29fsm16170871wms.15.2024.03.18.15.04.20
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=PHbHQM0NXdd4jV/ZLsibNzur10CV8/2Hr5lw/6p7s7E=;
+ b=XyrP1B+QeUxiYxuAqSctyChuoriVmUMOulhDV2bC2hnxG6mJbMjVHv3b0+trcj/JRY
+ 6r06TEJv4q7CnGTAJ4u/5Fp+mb100oTkNVi6EaqfG5LxITGeMDyvaih4s2WUK2Yp92uP
+ 6ItycKWuWhH7UBx/fOM6ISS8vn3GC16sAUnVUG9LZQee0XfCNXg5gS7TLprYxZDBWWJZ
+ Ij+bb+J7E/RMdLH0On88prtbuqN4B1i6LT2gbcR0Shq7yocxrITzAq/bpy2fRUjXo5F9
+ q6d/ZHro8CefZFPcCN+1R4n4O+5Hz7f4abUzglQEAtYe3bZhEfG9tq/bK/Dm4Fb0XNVD
+ WeOA==
+X-Gm-Message-State: AOJu0Yz8xxCLjJftWLqUbr/8EHrVcioxTQoeXd8Z4GYgsozDJJlBlQTI
+ 8RG4z6XfHlb5XLJy4gm6TEfP8bCL22qI6vxlD0eB9B/C1AFtYMBRKkFJmnIv
+X-Google-Smtp-Source: AGHT+IH35i16dsUicRWBfHk24xW6jRt1G/ZfHNMc/snG5z7b5L4DYcDSL3+RWfhRj2Od0bPWgv+qSA==
+X-Received: by 2002:adf:cd0c:0:b0:33e:c522:e3b9 with SMTP id
+ w12-20020adfcd0c000000b0033ec522e3b9mr9896558wrm.36.1710800655407; 
+ Mon, 18 Mar 2024 15:24:15 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ fb4-20020a05600c520400b004132901d73asm15961028wmb.46.2024.03.18.15.24.14
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 18 Mar 2024 15:04:21 -0700 (PDT)
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Mon, 18 Mar 2024 15:24:14 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 18 Mar 2024 23:04:20 +0100
-Message-ID: <20240318220420.356343-1-yann.morin.1998@free.fr>
-X-Mailer: git-send-email 2.44.0
+Date: Mon, 18 Mar 2024 23:24:08 +0100
+Message-ID: <20240318222408.287597-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1710799462; x=1711404262; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1710800656; x=1711405456; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
- bh=CqXo7xKEX3rQOmnk+v+AJkcW1tmlrWJzaDX5uMOIUL0=;
- b=IFwI2Uq2LfR3iV9u3ofPFdj5LeDiccH51kaz5YU37NVBI8QJWFetI2lqeQAt1acZvE
- omk5z0yBXGO3KbDQer1DZlXlAZ4d30T0ZAszC324iEyF+jNZqvC1G3m7HJo0nXCB7hpu
- pZ9JjMiy1F7s+qn7my8JNHUJRMOEKASiUUpDYI3HUufQCn2QoXqR3hk8rO7D9oIpickO
- pAa979CLN8P7z9j9CAHTChBfiVI7CnBCB8upE6eLx3wzBKLrQ51oYnlQR95ibYo+osZW
- HSeJpsEOLEL/1assiEVRXbdIXHfgAK7cknCx1xgBh6nkkyeuoyu3YSdqURWia8Lcs5JT
- +LLA==
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=PHbHQM0NXdd4jV/ZLsibNzur10CV8/2Hr5lw/6p7s7E=;
+ b=RIF7uKtZ+97w+nEmthW1zUKf5b5q+XcdA6zsdjUaPE3moKbj28Gww7jZqUxc3sn9AZ
+ T5Uy9+DFUAtPEbAIeenKBTT+M1Ecljh5MOi0iPFAzEGqJVyGkT57KW8u3YQRBj6av2DC
+ 7KIYFV2YAqTSrWjtwGTvz3d0gPxC9DYKcvtacxwfugmZxXaqbWhp/mZgGZjzT7exBrCp
+ mI7RsVaCayg6Kg9ZvWbn849HMw289WsF6a8n2XB1H7hNwGyq8b8tahCpeVGD60XTmqzk
+ GaogybHWG07D3vYrNDtED5WwJBxEl4Hp+AT+MNWJ0PEhvF1dCrBTtbDXNtgYMqMMFIgi
+ iYMw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=fail (p=none dis=none)
- header.from=free.fr
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=IFwI2Uq2
-Subject: [Buildroot] [PATCH] support/scripts: use FKIE git tree
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=RIF7uKtZ
+Subject: [Buildroot] [PATCH 1/1] package/pulseaudio: bump to version 17.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,177 +99,340 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Currently, we grab the per-year CVE feeds, in two passes: first, we grab
-the meta files, and check whether something has changed since last we
-downloaded it; second, we download the feed proper, unless the meta file
-has not changed, in which case we use the locally cached feed.
+- Drop three upstreamed patches
+- This bump will fix the following build failure raised since bump of
+  webrtc-audio-processsing to version 1.3 in commit
+  ef0fa986eb7ff25c0a5db70ec0b62032e2d71538:
 
-However, it has appeared that the FKIE releases no longer provide the
-meta files, which means that (once again), our daily reports are broken.
+  ../output-1/build/pulseaudio-16.1/meson.build:723:15: ERROR: Dependency "webrtc-audio-processing" not found, tried pkgconfig and cmake
 
-The obvious fix would be to drop the use of the meta file, and always
-and unconditionally download the feeds. That's relatively trivial to do,
-but he feds are relatively big (even as xz-xompressed).
+https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/blob/v17.0/NEWS
 
-However, the CVE database from FKIE is available as a git tree. Git is
-pretty good as only sending delta when updating a local copy. The git
-tree, however, contains each CVE as individual files, so it is
-relatively easier to scan and parse.
+Fixes: ef0fa986eb7ff25c0a5db70ec0b62032e2d71538
+ - http://autobuild.buildroot.org/results/528717c7481adbb5333d77758ef94830f46bc3f1
 
-Switch to using a local git clone.
-
-Slightly surprisingly (but not so much either), parsing the CVE files is
-much faster when using the git working copy, than it is when parsing the
-per-year feeds: indeed, the per-year feeds are xz-compressed, and even
-if python is slow-ish to scan a directory and opening files therein, it
-is still much faster than to decompress xz files. The timing delta [0]
-is ~100s before and ~10s now, about a ten time improvement, over the
-whole package set.
-
-The drawback, however, is that the git tree is much bigger on-disk, from
-~55MiB for the per-year compressed feeds, to 2.1GiB for the git tree
-(~366MiB) and a working copy (~1.8GiB)... Given very few people are
-going to use that, that's considered acceptable...
-
-Eventually, with a bit of hacking [1], the two pkg-stats, before and
-after this change, yield the same data (except for the date and commit
-hash).
-
-[0] hacking support/scripts/pkg-stats to display the time before/after
-the CVE scan, and hacking support/scripts/cve.py to do no download so
-that only the CVE scan happens (and also because the meta files are no
-longer available).
-
-[1] sorting the CVE lists in json, sorting the json keys, and using the
-commit from the FKIE git tree that was used for the current per-year
-feeds.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- support/scripts/cve.py | 76 ++++++++++++++++--------------------------
- 1 file changed, 29 insertions(+), 47 deletions(-)
+ .checkpackageignore                           |   3 -
+ ...ild-sys-Fix-atomic-support-detection.patch |  59 --------
+ ...d-missing-libatomic_ops-dependencies.patch | 129 ------------------
+ ...0004-meson.build-fix-build-without-C.patch |  56 --------
+ package/pulseaudio/pulseaudio.hash            |   4 +-
+ package/pulseaudio/pulseaudio.mk              |   2 +-
+ 6 files changed, 3 insertions(+), 250 deletions(-)
+ delete mode 100644 package/pulseaudio/0002-build-sys-Fix-atomic-support-detection.patch
+ delete mode 100644 package/pulseaudio/0003-build-sys-Add-missing-libatomic_ops-dependencies.patch
+ delete mode 100644 package/pulseaudio/0004-meson.build-fix-build-without-C.patch
 
-diff --git a/support/scripts/cve.py b/support/scripts/cve.py
-index 7167ecbc6a..88c7fde577 100755
---- a/support/scripts/cve.py
-+++ b/support/scripts/cve.py
-@@ -19,10 +19,9 @@
- 
- import datetime
- import os
--import requests  # URL checking
- import distutils.version
--import lzma
--import time
-+import json
-+import subprocess
- import sys
- import operator
- 
-@@ -41,7 +40,7 @@ except ImportError:
- sys.path.append('utils/')
- 
- NVD_START_YEAR = 1999
--NVD_BASE_URL = "https://github.com/fkie-cad/nvd-json-data-feeds/releases/latest/download"
-+NVD_BASE_URL = "https://github.com/fkie-cad/nvd-json-data-feeds/"
- 
- ops = {
-     '>=': operator.ge,
-@@ -81,41 +80,24 @@ class CVE:
-         self.nvd_cve = nvd_cve
- 
-     @staticmethod
--    def download_nvd_year(nvd_path, year):
--        metaf = "CVE-%s.meta" % year
--        path_metaf = os.path.join(nvd_path, metaf)
--        jsonf_xz = "CVE-%s.json.xz" % year
--        path_jsonf_xz = os.path.join(nvd_path, jsonf_xz)
+diff --git a/.checkpackageignore b/.checkpackageignore
+index e4bcb63468..73b76bbd46 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1021,9 +1021,6 @@ package/ptpd2/0002-ntp_isc_md5-rename-EVP_MD_CTX-into-PTPD_EVP_MD_CTX.patch Upst
+ package/ptpd2/0003-Solve-issue-25-Removing-type-U64-from-net-snmp-relat.patch Upstream
+ package/ptpd2/S65ptpd2 Indent Shellcheck Variables
+ package/pulseaudio/0001-shm.c-use-_Static_assert-instead-of-static_assert-fo.patch Upstream
+-package/pulseaudio/0002-build-sys-Fix-atomic-support-detection.patch Upstream
+-package/pulseaudio/0003-build-sys-Add-missing-libatomic_ops-dependencies.patch Upstream
+-package/pulseaudio/0004-meson.build-fix-build-without-C.patch Upstream
+ package/pulseaudio/S50pulseaudio ConsecutiveEmptyLines EmptyLastLine Indent Variables
+ package/pulseview/0001-Replace-obsolete-deprecated-Qt-methods.patch Upstream
+ package/pulseview/0002-Fix-broken-build-due-to-C-template-behind-C-linkage.patch Upstream
+diff --git a/package/pulseaudio/0002-build-sys-Fix-atomic-support-detection.patch b/package/pulseaudio/0002-build-sys-Fix-atomic-support-detection.patch
+deleted file mode 100644
+index 631cb7f016..0000000000
+--- a/package/pulseaudio/0002-build-sys-Fix-atomic-support-detection.patch
++++ /dev/null
+@@ -1,59 +0,0 @@
+-From a5392576ceba92d04706cefc1929ddd5ace5537a Mon Sep 17 00:00:00 2001
+-From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+-Date: Fri, 1 Jul 2022 14:03:44 +0200
+-Subject: [PATCH] build-sys: Fix atomic support detection
 -
--        # If the database file is less than a day old, we assume the NVD data
--        # locally available is recent enough.
--        if os.path.exists(path_jsonf_xz) and os.stat(path_jsonf_xz).st_mtime >= time.time() - 86400:
--            return path_jsonf_xz
+-Attempting to use atomics operations on an architecture that does not
+-support them generally results in a link error:
 -
--        # If not, we download the meta file
--        url = "%s/%s" % (NVD_BASE_URL, metaf)
--        print("Getting %s" % url)
--        page_meta = requests.get(url)
--        page_meta.raise_for_status()
+-ld: /tmp/ccjYcMPP.o: in function `func':
+-testfile.c:(.text+0x1c): undefined reference to `__sync_bool_compare_and_swap_4'
 -
--        # If the meta file already existed, we compare the existing
--        # one with the data newly downloaded. If they are different,
--        # we need to re-download the database.
--        # If the database does not exist locally, we need to redownload it in
--        # any case.
--        if os.path.exists(path_metaf) and os.path.exists(path_jsonf_xz):
--            meta_known = open(path_metaf, "r").read()
--            if page_meta.text == meta_known:
--                return path_jsonf_xz
+-The current build system uses cc.compiles() to check if atomic ops are
+-supported, but cc.compiles() does not attempt to link, so the test fails
+-to enable libatomics_opts.
 -
--        # Grab the compressed JSON NVD, and write files to disk
--        url = "%s/%s" % (NVD_BASE_URL, jsonf_xz)
--        print("Getting %s" % url)
--        page_json = requests.get(url)
--        page_json.raise_for_status()
--        open(path_jsonf_xz, "wb").write(page_json.content)
--        open(path_metaf, "w").write(page_meta.text)
--        return path_jsonf_xz
-+    def download_nvd(nvd_git_dir):
-+        print(f"Updating from {NVD_BASE_URL}")
-+        if os.path.exists(nvd_git_dir):
-+            subprocess.check_call(
-+                ["git", "pull"],
-+                cwd=nvd_git_dir,
-+                stdout=subprocess.DEVNULL,
-+                stderr=subprocess.DEVNULL,
-+            )
-+        else:
-+            # Create the directory and its parents; git
-+            # happily clones into an empty directory.
-+            os.makedirs(nvd_git_dir)
-+            subprocess.check_call(
-+                ["git", "clone", NVD_BASE_URL, nvd_git_dir],
-+                stdout=subprocess.DEVNULL,
-+                stderr=subprocess.DEVNULL,
-+            )
+-Fix this by using cc.links() instead of cc.compiles().
+-
+-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+-Upstream-status: Submitted [https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/merge_requests/732]
+----
+- meson.build | 10 ++++++----
+- 1 file changed, 6 insertions(+), 4 deletions(-)
+-
+-diff --git a/meson.build b/meson.build
+-index c6db7e670..c5135330f 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -498,22 +498,24 @@ endif
+- 
+- need_libatomic_ops = false
+- 
+--atomictest = '''void func() {
+-+atomictest = '''int main() {
+-   volatile int atomic = 2;
+-   __sync_bool_compare_and_swap (&atomic, 2, 3);
+-+  return 0;
+- }
+- '''
+- 
+--if cc.compiles(atomictest)
+-+if cc.links(atomictest)
+-   cdata.set('HAVE_ATOMIC_BUILTINS', 1)
+- 
+--  newatomictest = '''void func() {
+-+  newatomictest = '''int main() {
+-     int c = 0;
+-     __atomic_store_n(&c, 4, __ATOMIC_SEQ_CST);
+-+    return 0;
+-   }
+-   '''
+- 
+--  if(cc.compiles(newatomictest))
+-+  if(cc.links(newatomictest))
+-     cdata.set('HAVE_ATOMIC_BUILTINS_MEMORY_MODEL', 1)
+-   endif
+- 
+--- 
+-2.36.1
+-
+diff --git a/package/pulseaudio/0003-build-sys-Add-missing-libatomic_ops-dependencies.patch b/package/pulseaudio/0003-build-sys-Add-missing-libatomic_ops-dependencies.patch
+deleted file mode 100644
+index fac441e7dd..0000000000
+--- a/package/pulseaudio/0003-build-sys-Add-missing-libatomic_ops-dependencies.patch
++++ /dev/null
+@@ -1,129 +0,0 @@
+-From 96361ff2a8f37dd3ce7ea188ce4e7b038bb6a5aa Mon Sep 17 00:00:00 2001
+-From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+-Date: Mon, 4 Jul 2022 13:49:34 +0200
+-Subject: [PATCH] build-sys: Add missing libatomic_ops dependencies
+-
+-Add libatomic_ops dependencies to libraries/modules that showed a
+-failure on an arch that does not have native atomic operations support.
+-
+-Not all optional dependencies were tested, so it is possible that
+-some optional modules are still missing libatomic_ops dependencies.
+-
+-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+-Upstream-status: Submitted [https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/merge_requests/732]
+----
+- src/meson.build           |  2 +-
+- src/modules/meson.build   |  6 +++---
+- src/pulse/meson.build     |  2 +-
+- src/pulsecore/meson.build | 10 +++++-----
+- 4 files changed, 10 insertions(+), 10 deletions(-)
+-
+-diff --git a/src/meson.build b/src/meson.build
+-index 96dcec354..9efb561d8 100644
+---- a/src/meson.build
+-+++ b/src/meson.build
+-@@ -205,7 +205,7 @@ else
+-       libm_dep, thread_dep, dl_dep, shm_dep, iconv_dep, sndfile_dep, dbus_dep,
+-       x11_dep, libsystemd_dep, glib_dep.partial_dependency(compile_args: true),
+-       gtk_dep.partial_dependency(compile_args: true), asyncns_dep, libintl_dep,
+--      platform_dep, platform_socket_dep, execinfo_dep,
+-+      platform_dep, platform_socket_dep, execinfo_dep, libatomic_ops_dep,
+-     ],
+-     implicit_include_directories : false)
+- 
+-diff --git a/src/modules/meson.build b/src/modules/meson.build
+-index 1d8004300..1e12569dc 100644
+---- a/src/modules/meson.build
+-+++ b/src/modules/meson.build
+-@@ -14,7 +14,7 @@ all_modules = [
+-   [ 'module-cli-protocol-tcp', 'module-protocol-stub.c', [], ['-DUSE_PROTOCOL_CLI', '-DUSE_TCP_SOCKETS'], [], libprotocol_cli ],
+-   [ 'module-cli-protocol-unix', 'module-protocol-stub.c', [], ['-DUSE_PROTOCOL_CLI', '-DUSE_UNIX_SOCKETS'], [], libprotocol_cli ],
+-   [ 'module-combine', 'module-combine.c' ],
+--  [ 'module-combine-sink', 'module-combine-sink.c' ],
+-+  [ 'module-combine-sink', 'module-combine-sink.c', [], [], [libatomic_ops_dep] ],
+- #  [ 'module-coreaudio-detect', 'macosx/module-coreaudio-detect.c' ],
+- #  [ 'module-coreaudio-device', 'macosx/module-coreaudio-device.c' ],
+-   [ 'module-default-device-restore', 'module-default-device-restore.c', [], [], [], libprotocol_native ],
+-@@ -73,7 +73,7 @@ endif
+- 
+- if host_machine.system() != 'windows'
+-   all_modules += [
+--    [ 'module-rtp-recv', 'rtp/module-rtp-recv.c', [], [], [], librtp ],
+-+    [ 'module-rtp-recv', 'rtp/module-rtp-recv.c', [], [], [libatomic_ops_dep], librtp ],
+-     [ 'module-rtp-send', 'rtp/module-rtp-send.c' , [], [], [], librtp ],
+-   ]
+- endif
+-@@ -243,7 +243,7 @@ module_echo_cancel_sources = [
+- ]
+- module_echo_cancel_orc_sources = []
+- module_echo_cancel_flags = []
+--module_echo_cancel_deps = []
+-+module_echo_cancel_deps = [libatomic_ops_dep]
+- module_echo_cancel_libs = []
+- 
+- if get_option('adrian-aec')
+-diff --git a/src/pulse/meson.build b/src/pulse/meson.build
+-index c2128e087..1b82c807c 100644
+---- a/src/pulse/meson.build
+-+++ b/src/pulse/meson.build
+-@@ -85,7 +85,7 @@ libpulse = shared_library('pulse',
+-   link_args : [nodelete_link_args, versioning_link_args],
+-   install : true,
+-   install_rpath : privlibdir,
+--  dependencies : [libm_dep, thread_dep, libpulsecommon_dep, dbus_dep, dl_dep, iconv_dep, libintl_dep, platform_dep, platform_socket_dep],
+-+  dependencies : [libm_dep, thread_dep, libpulsecommon_dep, dbus_dep, dl_dep, iconv_dep, libintl_dep, platform_dep, platform_socket_dep, libatomic_ops_dep],
+-   implicit_include_directories : false)
+- 
+- libpulse_dep = declare_dependency(link_with: libpulse)
+-diff --git a/src/pulsecore/meson.build b/src/pulsecore/meson.build
+-index b30264b3a..b37fec499 100644
+---- a/src/pulsecore/meson.build
+-+++ b/src/pulsecore/meson.build
+-@@ -251,7 +251,7 @@ libcli = shared_library('cli',
+-   c_args : [pa_c_args, server_c_args, database_c_args],
+-   link_args : [nodelete_link_args],
+-   include_directories : [configinc, topinc],
+--  dependencies : [libpulse_dep, libpulsecommon_dep, libpulsecore_dep],
+-+  dependencies : [libpulse_dep, libpulsecommon_dep, libpulsecore_dep, libatomic_ops_dep],
+-   install : true,
+-   install_rpath : privlibdir,
+-   install_dir : modlibexecdir,
+-@@ -268,7 +268,7 @@ libprotocol_cli = shared_library('protocol-cli',
+-   c_args : [pa_c_args, server_c_args, database_c_args],
+-   link_args : [nodelete_link_args],
+-   include_directories : [configinc, topinc],
+--  dependencies : [libpulse_dep, libpulsecommon_dep, libpulsecore_dep, libcli_dep],
+-+  dependencies : [libpulse_dep, libpulsecommon_dep, libpulsecore_dep, libcli_dep, libatomic_ops_dep],
+-   install : true,
+-   install_rpath : rpath_dirs,
+-   install_dir : modlibexecdir,
+-@@ -280,7 +280,7 @@ libprotocol_http = shared_library('protocol-http',
+-   c_args : [pa_c_args, server_c_args, database_c_args],
+-   link_args : [nodelete_link_args],
+-   include_directories : [configinc, topinc],
+--  dependencies : [libpulse_dep, libpulsecommon_dep, libpulsecore_dep],
+-+  dependencies : [libpulse_dep, libpulsecommon_dep, libpulsecore_dep, libatomic_ops_dep],
+-   install : true,
+-   install_rpath : privlibdir,
+-   install_dir : modlibexecdir,
+-@@ -292,7 +292,7 @@ libprotocol_native = shared_library('protocol-native',
+-   c_args : [pa_c_args, server_c_args, database_c_args],
+-   link_args : [nodelete_link_args],
+-   include_directories : [configinc, topinc],
+--  dependencies : [libpulse_dep, libpulsecommon_dep, libpulsecore_dep, dbus_dep],
+-+  dependencies : [libpulse_dep, libpulsecommon_dep, libpulsecore_dep, dbus_dep, libatomic_ops_dep],
+-   install : true,
+-   install_rpath : privlibdir,
+-   install_dir : modlibexecdir,
+-@@ -304,7 +304,7 @@ libprotocol_simple = shared_library('protocol-simple',
+-   c_args : [pa_c_args, server_c_args, database_c_args],
+-   link_args : [nodelete_link_args],
+-   include_directories : [configinc, topinc],
+--  dependencies : [libpulse_dep, libpulsecommon_dep, libpulsecore_dep],
+-+  dependencies : [libpulse_dep, libpulsecommon_dep, libpulsecore_dep, libatomic_ops_dep],
+-   install : true,
+-   install_rpath : privlibdir,
+-   install_dir : modlibexecdir,
+--- 
+-2.36.1
+-
+diff --git a/package/pulseaudio/0004-meson.build-fix-build-without-C.patch b/package/pulseaudio/0004-meson.build-fix-build-without-C.patch
+deleted file mode 100644
+index e770927f54..0000000000
+--- a/package/pulseaudio/0004-meson.build-fix-build-without-C.patch
++++ /dev/null
+@@ -1,56 +0,0 @@
+-From ac88536d7c3fde3c22933368296c9029bb67b9fc Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Mon, 25 Jul 2022 21:49:25 +0200
+-Subject: [PATCH] meson.build: fix build without C++
+-
+-Fix the following build failure without C++:
+-
+-../output-1/build/pulseaudio-16.1/meson.build:1:0: ERROR: Unknown compiler(s): [['/home/autobuild/autobuild/instance-1/output-1/per-package/pulseaudio/host/bin/powerpc64-buildroot-linux-gnu-g++']]
+-The following exception(s) were encountered:
+-Running "/home/autobuild/autobuild/instance-1/output-1/per-package/pulseaudio/host/bin/powerpc64-buildroot-linux-gnu-g++ --version" gave "[Errno 2] No such file or directory: '/home/autobuild/autobuild/instance-1/output-1/per-package/pulseaudio/host/bin/powerpc64-buildroot-linux-gnu-g++'"
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/6526a21bd4da3b8458188f27c1ec04c381e4b673
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status:
+-https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/merge_requests/737]
+----
+- meson.build                         | 3 ++-
+- src/modules/echo-cancel/meson.build | 2 ++
+- 2 files changed, 4 insertions(+), 1 deletion(-)
+-
+-diff --git a/meson.build b/meson.build
+-index c5135330f..8248f263b 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -1,4 +1,4 @@
+--project('pulseaudio', 'c', 'cpp',
+-+project('pulseaudio', 'c',
+-         version : run_command(find_program('git-version-gen'), join_paths(meson.current_source_dir(), '.tarball-version')).stdout().strip(),
+-         meson_version : '>= 0.50.0',
+-         default_options : [ 'c_std=gnu11', 'cpp_std=c++11' ]
+-@@ -433,6 +433,7 @@ endif
+- # Code coverage
+- 
+- if get_option('gcov')
+-+  add_languages('cpp')
+-   add_project_arguments('--coverage', language: ['c', 'cpp'])
+-   add_project_link_arguments('--coverage', language: ['c', 'cpp'])
+- endif
+-diff --git a/src/modules/echo-cancel/meson.build b/src/modules/echo-cancel/meson.build
+-index 641cd35e7..3b998364e 100644
+---- a/src/modules/echo-cancel/meson.build
+-+++ b/src/modules/echo-cancel/meson.build
+-@@ -6,6 +6,8 @@
+- # '-Wl,--unresolved-symbols=ignore-in-object-files' otherwise it fails
+- # at link time.
+- 
+-+add_languages('cpp')
+-+
+- libwebrtc_util_sources = [
+-   'webrtc.cc'
+- ]
+--- 
+-GitLab
+-
+diff --git a/package/pulseaudio/pulseaudio.hash b/package/pulseaudio/pulseaudio.hash
+index acbb56a07d..67f6cc6ef2 100644
+--- a/package/pulseaudio/pulseaudio.hash
++++ b/package/pulseaudio/pulseaudio.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/pulseaudio-discuss/2022-June/032287.html
+-sha256  8eef32ce91d47979f95fd9a935e738cd7eb7463430dabc72863251751e504ae4  pulseaudio-16.1.tar.xz
++# From https://lists.freedesktop.org/archives/pulseaudio-discuss/2024-January/032426.html
++sha256  053794d6671a3e397d849e478a80b82a63cb9d8ca296bd35b73317bb5ceb87b5  pulseaudio-17.0.tar.xz
+ # Locally computed
+ sha256  c38aee9e3c8c4d5d594ff548a1be05453023016d6286931f6512db215ec1fd42  GPL
+ sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  LGPL
+diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
+index 89191db541..254e05348d 100644
+--- a/package/pulseaudio/pulseaudio.mk
++++ b/package/pulseaudio/pulseaudio.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-     @staticmethod
-     def sort_id(cve_ids):
-@@ -131,15 +113,15 @@ class CVE:
-         feeds since NVD_START_YEAR. If the files are missing or outdated in
-         nvd_dir, a fresh copy will be downloaded, and kept in .json.gz
-         """
-+        nvd_git_dir = os.path.join(nvd_dir, "git")
-+        CVE.download_nvd(nvd_git_dir)
-         for year in range(NVD_START_YEAR, datetime.datetime.now().year + 1):
--            filename = CVE.download_nvd_year(nvd_dir, year)
--            try:
--                content = ijson.items(lzma.LZMAFile(filename), 'cve_items.item')
--            except:  # noqa: E722
--                print("ERROR: cannot read %s. Please remove the file then rerun this script" % filename)
--                raise
--            for cve in content:
--                yield cls(cve)
-+            for dirpath, _, filenames in os.walk(os.path.join(nvd_git_dir, f"CVE-{year}")):
-+                for filename in filenames:
-+                    if filename[-5:] != ".json":
-+                        continue
-+                    with open(os.path.join(dirpath, filename), "rb") as f:
-+                        yield cls(json.load(f))
- 
-     def each_product(self):
-         """Iterate over each product section of this cve"""
+-PULSEAUDIO_VERSION = 16.1
++PULSEAUDIO_VERSION = 17.0
+ PULSEAUDIO_SOURCE = pulseaudio-$(PULSEAUDIO_VERSION).tar.xz
+ PULSEAUDIO_SITE = https://freedesktop.org/software/pulseaudio/releases
+ PULSEAUDIO_INSTALL_STAGING = YES
 -- 
-2.44.0
+2.43.0
 
 _______________________________________________
 buildroot mailing list
