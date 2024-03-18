@@ -4,60 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 290D5C54E58
-	for <buildroot@archiver.kernel.org>; Mon, 18 Mar 2024 13:28:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D249C54E58
+	for <buildroot@archiver.kernel.org>; Mon, 18 Mar 2024 13:30:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E455240608;
-	Mon, 18 Mar 2024 13:28:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DE8E140608;
+	Mon, 18 Mar 2024 13:30:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SQbZX5PFkCpA; Mon, 18 Mar 2024 13:28:51 +0000 (UTC)
+	with ESMTP id QOfvnktprRlA; Mon, 18 Mar 2024 13:30:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C5EC408A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E6A72408A5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0C5EC408A5;
-	Mon, 18 Mar 2024 13:28:51 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BB0161BF363
- for <buildroot@lists.busybox.net>; Mon, 18 Mar 2024 13:28:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E6A72408A5;
+	Mon, 18 Mar 2024 13:30:06 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A02A61BF363
+ for <buildroot@lists.busybox.net>; Mon, 18 Mar 2024 13:30:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A8A1360750
- for <buildroot@lists.busybox.net>; Mon, 18 Mar 2024 13:28:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8DF6B80AE0
+ for <buildroot@lists.busybox.net>; Mon, 18 Mar 2024 13:30:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PNMWpg_HH9FJ for <buildroot@lists.busybox.net>;
- Mon, 18 Mar 2024 13:28:49 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
- helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8NXyzGqFiELA for <buildroot@lists.busybox.net>;
+ Mon, 18 Mar 2024 13:30:04 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+ helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org CEEDC6061F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CEEDC6061F
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CEEDC6061F
- for <buildroot@buildroot.org>; Mon, 18 Mar 2024 13:28:48 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 908E2240008;
- Mon, 18 Mar 2024 13:28:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 61B9180ACD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 61B9180ACD
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 61B9180ACD
+ for <buildroot@buildroot.org>; Mon, 18 Mar 2024 13:30:04 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 77E7EFF80F;
+ Mon, 18 Mar 2024 13:30:02 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rmD2k-002eUI-0i;
- Mon, 18 Mar 2024 14:28:46 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rmD3y-002eYi-0I;
+ Mon, 18 Mar 2024 14:30:02 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Christian Hitz via buildroot <buildroot@buildroot.org>
-References: <20240228150146.455494-1-christian@klarinett.li>
-Date: Mon, 18 Mar 2024 14:28:46 +0100
-In-Reply-To: <20240228150146.455494-1-christian@klarinett.li> (Christian Hitz
- via buildroot's message of "Wed, 28 Feb 2024 16:01:46 +0100")
-Message-ID: <87le6ffz3l.fsf@48ers.dk>
+To: Romain Naour <romain.naour@smile.fr>
+References: <20240225225728.2949216-1-romain.naour@smile.fr>
+Date: Mon, 18 Mar 2024 14:30:02 +0100
+In-Reply-To: <20240225225728.2949216-1-romain.naour@smile.fr> (Romain Naour's
+ message of "Sun, 25 Feb 2024 23:57:28 +0100")
+Message-ID: <87h6h3fz1h.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/freetype: use correct license
- format for dual licensed package
+Subject: Re: [Buildroot] [PATCH] package/dracut: fix dracut_wrapper
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,19 +68,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Christian Hitz <christian@klarinett.li>,
- Christian Hitz <christian.hitz@bbv.ch>, Bernd Kuhls <bernd@kuhls.net>
+Cc: Thierry Bultel <thierry.bultel@linatsea.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Christian" == Christian Hitz via buildroot <buildroot@buildroot.org> writes:
+>>>>> "Romain" == Romain Naour <romain.naour@smile.fr> writes:
 
- > From: Christian Hitz <christian.hitz@bbv.ch>
- > Signed-off-by: Christian Hitz <christian.hitz@bbv.ch>
+ > As reported by Thierry Bultel [1], dracut doesn't work since the
+ > version bump to version 059.
 
-Committed to 2023.02.x and 2023.11.x, thanks.
+ > Further investigation by Andreas Naumann [2] reported that the issue
+ > come from this commit d010fa0 refactor(dracut-install): fork() instead
+ > of popen(), sanitise line reading [3].
+
+ > The issue come from our dracut_wrapper and how DRACUT_LDD is defined.
+ > Indeed dracut expect DRACUT_LDD=ldd or a single binary (without
+ > arguments) but we are using "prelink-rtld --root='${sysroot}'".
+
+ > With the change introduced by [3], our DRACUT_LDD is used
+ > directly by execlp() leading to an error:
+
+ >   execlp(ldd, ldd, fullsrcpath, (char *)NULL);
+
+ > Use mktemp to generate a temporary dracut-ldd script using
+ > prelink-rtld --root='${sysroot}' ${1}
+
+ > execute dracut.real in a subshell to cleanup the temporary file
+ > at the end of the dracut wrapper script.
+
+ > Fixes:
+ > https://gitlab.com/buildroot.org/buildroot/-/jobs/6224243423 [tests.fs.test_cpio.TestCpioDracutGlibcMergedUsr]
+ > https://gitlab.com/buildroot.org/buildroot/-/jobs/6224243434 [tests.fs.test_cpio.TestCpioDracutMuslMergedUsr]
+ > https://gitlab.com/buildroot.org/buildroot/-/jobs/6224243567 [tests.fs.test_cpio.TestCpioDracutUclibcMergedUsr]
+ > https://gitlab.com/buildroot.org/buildroot/-/jobs/6224243559 [tests.fs.test_cpio.TestCpioDracutGlibc]
+ > https://gitlab.com/buildroot.org/buildroot/-/jobs/6224243504 [tests.fs.test_cpio.TestCpioDracutUclibc]
+ > https://gitlab.com/buildroot.org/buildroot/-/jobs/6224243498 [tests.fs.test_cpio.TestCpioDracutMusl]
+
+ > [1] http://lists.busybox.net/pipermail/buildroot/2024-February/684145.html
+ > [2] http://lists.busybox.net/pipermail/buildroot/2024-February/684503.html
+ > [3] https://github.com/dracutdevs/dracut/commit/d010fa0d7f8ef42ad31729d027d2e4be6dd6e588
+
+ > Fixes: 145f01ded5 ("package/dracut: bump to version 059")
+ > Reported-by: Thierry Bultel <thierry.bultel@linatsea.fr>
+ > Signed-off-by: Romain Naour <romain.naour@smile.fr>
+
+Committed to 2023.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
