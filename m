@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CEAE3C54E58
-	for <buildroot@archiver.kernel.org>; Mon, 18 Mar 2024 11:46:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5789C54E58
+	for <buildroot@archiver.kernel.org>; Mon, 18 Mar 2024 11:46:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9C1F140606;
-	Mon, 18 Mar 2024 11:46:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9FE3840734;
+	Mon, 18 Mar 2024 11:46:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mCb7-c9ryW2U; Mon, 18 Mar 2024 11:46:16 +0000 (UTC)
+	with ESMTP id eToTFNFx1VCT; Mon, 18 Mar 2024 11:46:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8A3B040734
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9345D40917
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8A3B040734;
-	Mon, 18 Mar 2024 11:46:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3DE491BF366
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9345D40917;
+	Mon, 18 Mar 2024 11:46:18 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 58B8A1BF366
  for <buildroot@lists.busybox.net>; Mon, 18 Mar 2024 11:46:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 390DD8144E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4664440520
  for <buildroot@lists.busybox.net>; Mon, 18 Mar 2024 11:46:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DsvrdMOWB2qD for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id t43OPnAJhw8E for <buildroot@lists.busybox.net>;
  Mon, 18 Mar 2024 11:46:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C6DE81442
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5BFEE40513
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6C6DE81442
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5BFEE40513
  for <buildroot@buildroot.org>; Mon, 18 Mar 2024 11:46:14 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 591D282A1D; Mon, 18 Mar 2024 11:46:14 +0000 (UTC)
+ id 48D9882A17; Mon, 18 Mar 2024 11:46:14 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 18 Mar 2024 12:36:45 +0100
+Date: Mon, 18 Mar 2024 12:24:49 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 5f09acc370806b23c2f4467b0d4bd0fa06ec2670
-X-Git-Newrev: f12d8f2eaae0b97136f80d57582b39cd3f7d65f9
+X-Git-Oldrev: af51fd9617a9f139bd8ca85175d4eeecad920522
+X-Git-Newrev: 5f09acc370806b23c2f4467b0d4bd0fa06ec2670
 X-Patchwork-Hint: ignore
-Message-Id: <20240318114614.591D282A1D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/poco: bump to
- version 1.13.2
+Message-Id: <20240318114614.48D9882A17@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x]
+ support/scripts/pkg-stats: make current version cell scrollable
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,55 +65,66 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f12d8f2eaae0b97136f80d57582b39cd3f7d65f9
+commit: https://git.buildroot.net/buildroot/commit/?id=5f09acc370806b23c2f4467b0d4bd0fa06ec2670
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-This bump will fix the following build failure raised since bump of
-expat to version 2.6.0 in commit
-9dad5e7d7f7bc03e648621b9be6974e7ae39a467 thanks to
-https://github.com/pocoproject/poco/commit/75f7042b70092e79c6b770b18d033a061c84e2c5:
+Currently, when the version string is "too long", it is arbitrarily
+truncated.
 
-src/ParserEngine.cpp: In member function 'void Poco::XML::ParserEngine::init()':
-src/ParserEngine.cpp:510:17: error: 'XML_SetBillionLaughsAttackProtectionMaximumAmplification' was not declared in this scope; did you mean 'setBillionLaughsAttackProtectionMaximumAmplification'?
-  510 |                 XML_SetBillionLaughsAttackProtectionMaximumAmplification(_parser, _maximumAmplificationFactor);
-      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+This works well for commit hashes, because usually the truncation is
+long enough to provide a short hash that is still unique in the
+upstream VCS.
 
-https://github.com/pocoproject/poco/blob/poco-1.13.2-release/CHANGELOG
+However, there are non-hash-like versions strings that get truncated
+and wihch the discriminant part is toward the end.
 
-Fixes: 9dad5e7d7f7bc03e648621b9be6974e7ae39a467
- - http://autobuild.buildroot.org/results/7fad881f85d3b89abdee35388088965f05ead277
+Yet, adapting the version cell to the widest versions string (most
+probably a git hash) is not very interesting; the table is already very
+large.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 433c4fd38b15efcf74b410e5068e2e51eeba6e46)
+Make the cell with the version string scrollable: we get to keep the
+best of both worlds: a narrow version cell, and a full-length version
+string that can be copy-pasted if needed.
+
+Signed-off-by: Sen Hastings <sen@hastings.org>
+[yann.morin.1998@free.fr: reword commit log]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 4533e42622e46f2b8e0ce4d1936c6534393d3aa1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/poco/poco.hash | 2 +-
- package/poco/poco.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ support/scripts/pkg-stats | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/package/poco/poco.hash b/package/poco/poco.hash
-index 9a7981171a..0a1e900b3f 100644
---- a/package/poco/poco.hash
-+++ b/package/poco/poco.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  71ef96c35fced367d6da74da294510ad2c912563f12cd716ab02b6ed10a733ef  poco-1.12.4.tar.gz
-+sha256  c01221870aa9bccedf1de39890279699207848fe61a0cfb6aeec7c5942c4627f  poco-1.13.2.tar.gz
- sha256  c4b1e1e5f36d8331737231fefcc30f5714326aec7c387ad59a8115eb0ba7d6b5  LICENSE
-diff --git a/package/poco/poco.mk b/package/poco/poco.mk
-index 2d0233a8ce..f8c2a658de 100644
---- a/package/poco/poco.mk
-+++ b/package/poco/poco.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 9349a0df57..f6f4c44b9c 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -869,6 +869,13 @@ function expandField(fieldId){
+ .centered {
+   text-align: center;
+ }
++
++ .current_version {
++   overflow: scroll;
++   width: 21ch;
++   padding: 10px 2px 10px 2px;
++ }
++
+  .correct, .nopatches, .good_url, .version-good, .cpe-ok, .cve-ok {
+    background: #d2ffc4;
+  }
+@@ -986,10 +993,7 @@ def dump_html_pkg(f, pkg):
  
--POCO_VERSION = 1.12.4
-+POCO_VERSION = 1.13.2
- POCO_SITE = $(call github,pocoproject,poco,poco-$(POCO_VERSION)-release)
- POCO_LICENSE = BSL-1.0
- POCO_LICENSE_FILES = LICENSE
+     # Current version
+     data_field_id = f'current_version__{pkg_css_class}'
+-    if len(pkg.current_version) > 20:
+-        current_version = pkg.current_version[:20] + "..."
+-    else:
+-        current_version = pkg.current_version
++    current_version = pkg.current_version
+     f.write(f'  <div id="{data_field_id}" \
+         class="centered current_version data _{pkg_css_class}">{current_version}</div>\n')
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
