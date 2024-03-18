@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23C10C54E5D
-	for <buildroot@archiver.kernel.org>; Mon, 18 Mar 2024 16:49:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 961FBC54E5D
+	for <buildroot@archiver.kernel.org>; Mon, 18 Mar 2024 16:49:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E6BC960869;
-	Mon, 18 Mar 2024 16:49:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5F6A36086F;
+	Mon, 18 Mar 2024 16:49:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9hPtN9_xx_-E; Mon, 18 Mar 2024 16:49:29 +0000 (UTC)
+	with ESMTP id GMOiVSXbcvZ9; Mon, 18 Mar 2024 16:49:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 89BAA608BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A466608CB
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 89BAA608BA;
-	Mon, 18 Mar 2024 16:49:28 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 390A51BF95F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0A466608CB;
+	Mon, 18 Mar 2024 16:49:32 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 827121BF954
  for <buildroot@lists.busybox.net>; Mon, 18 Mar 2024 16:49:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2E2D060883
- for <buildroot@lists.busybox.net>; Mon, 18 Mar 2024 16:49:17 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6DE984052F
+ for <buildroot@lists.busybox.net>; Mon, 18 Mar 2024 16:49:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id s2Aq2XeGnc9v for <buildroot@lists.busybox.net>;
- Mon, 18 Mar 2024 16:49:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id c61haypLdnNO for <buildroot@lists.busybox.net>;
+ Mon, 18 Mar 2024 16:49:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 549856085E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C12A40515
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 549856085E
- for <buildroot@buildroot.org>; Mon, 18 Mar 2024 16:49:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3C12A40515
+ for <buildroot@buildroot.org>; Mon, 18 Mar 2024 16:49:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4E59582BCF; Mon, 18 Mar 2024 16:49:16 +0000 (UTC)
+ id 2967982BC8; Mon, 18 Mar 2024 16:49:17 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 18 Mar 2024 17:43:46 +0100
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 8873d98abe2016ee77eb1bd6877749f19ee9d649
-X-Git-Newrev: ea9992b99e7ec22a20b33acaf8b2ed9480084ad5
+Date: Mon, 18 Mar 2024 17:42:56 +0100
+X-Git-Refname: refs/heads/2023.11.x
+X-Git-Oldrev: b00169c60c396d034fcda7a0afe5674d72e3992e
+X-Git-Newrev: 7cacc39b3b2c9a7877a7002d62dd0f04440f5008
 X-Patchwork-Hint: ignore
-Message-Id: <20240318164916.4E59582BCF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/libcoap: fix
+Message-Id: <20240318164917.2967982BC8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/libcoap: fix
  CVE-2024-0962
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -65,8 +65,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea9992b99e7ec22a20b33acaf8b2ed9480084ad5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7cacc39b3b2c9a7877a7002d62dd0f04440f5008
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
 A vulnerability was found in obgm libcoap 4.3.4. It has been rated as
 critical. Affected by this issue is the function get_split_entry of the
