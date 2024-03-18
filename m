@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31E20C54E58
-	for <buildroot@archiver.kernel.org>; Mon, 18 Mar 2024 11:46:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1E25C54E58
+	for <buildroot@archiver.kernel.org>; Mon, 18 Mar 2024 11:46:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EBD9240A08;
-	Mon, 18 Mar 2024 11:46:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B8DE64090E;
+	Mon, 18 Mar 2024 11:46:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pRghZ8LqV5JP; Mon, 18 Mar 2024 11:46:22 +0000 (UTC)
+	with ESMTP id 2o6aQiEhIPA8; Mon, 18 Mar 2024 11:46:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A8A0D40A15
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 695D640A3E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A8A0D40A15;
-	Mon, 18 Mar 2024 11:46:22 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5A2481BF366
+	by smtp2.osuosl.org (Postfix) with ESMTP id 695D640A3E;
+	Mon, 18 Mar 2024 11:46:25 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8F90F1BF954
  for <buildroot@lists.busybox.net>; Mon, 18 Mar 2024 11:46:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 435C181442
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7A45140513
  for <buildroot@lists.busybox.net>; Mon, 18 Mar 2024 11:46:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YOPocFEZXthn for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0ixhm-ojVgxQ for <buildroot@lists.busybox.net>;
  Mon, 18 Mar 2024 11:46:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7AE9781446
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B1434051E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7AE9781446
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7B1434051E
  for <buildroot@buildroot.org>; Mon, 18 Mar 2024 11:46:14 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6854A8128E; Mon, 18 Mar 2024 11:46:14 +0000 (UTC)
+ id 7429F82A17; Mon, 18 Mar 2024 11:46:14 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 18 Mar 2024 12:43:05 +0100
+Date: Mon, 18 Mar 2024 12:44:07 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: f12d8f2eaae0b97136f80d57582b39cd3f7d65f9
-X-Git-Newrev: cfbc7c5c8daa548bc317de0ff605b20861163a1d
+X-Git-Oldrev: cfbc7c5c8daa548bc317de0ff605b20861163a1d
+X-Git-Newrev: 0ca62a8e843de3e5bd1adfdf1c622ad224a0d22b
 X-Patchwork-Hint: ignore
-Message-Id: <20240318114614.6854A8128E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/openssh: fix
- dependencies with refpolicy
+Message-Id: <20240318114614.7429F82A17@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/python3: security
+ bump to version 3.11.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,84 +65,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cfbc7c5c8daa548bc317de0ff605b20861163a1d
+commit: https://git.buildroot.net/buildroot/commit/?id=0ca62a8e843de3e5bd1adfdf1c622ad224a0d22b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-Commit 2c5a82a29ceb (package/openssh: select linux-pam if refpolicy
-upstream is selected) did not account for the linux-pam dependencies
-before selecting it, causing unmet dependencies warnings (unfortunately,
-not errors), such as:
+Fixes the following security issue:
 
-    $ KCONFIG_SEED=0xCF227CF4 make randconfig
-    WARNING: unmet direct dependencies detected for BR2_PACKAGE_LINUX_PAM
-      Depends on [n]: BR2_ENABLE_LOCALE [=n] && BR2_USE_WCHAR [=n] && !BR2_STATIC_LIBS [=n] && BR2_USE_MMU [=y] && BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 [=y]
-      Selected by [y]:
-      - BR2_PACKAGE_OPENSSH [=y] && BR2_USE_MMU [=y] && BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION [=y]
+gh-113659: Skip .pth files with names starting with a dot or hidden file
+attribute
+https://github.com/python/cpython/issues/113659
 
-2c5a82a29ceb made the choice of having openssl bear the responsibility
-to select linux-pam when the upstream refpolicy version was enabled.
-Semantically however, the responsibility really lies within refpolicy
-itself, since that's what imposes linux-pam to openssh.
-
-Move the select to refpolicy and drop it from openssh. Then, ensure that
-linux-pam is only selected when it is available.
-
-That means that one may get an openssh that is not linked against
-linux-pam, when the linux-pam dependencies are not met; refpolicy (by
-way of libsepol) also has a more stringent requirement on gcc version
-than linux-pam, so most probably the missing dependencies would be
-locale, wchar, or a static build. We consider that situation to be a
-corner case that we do not want to address.
-
-In the future, we may have more similar situations, whereby refpolicy
-would impose other packages be linked with otherwise optional
-dependencies. If (when) that were (will be) the case, then the proposed
-mechanism would quickly become ugly; we could then re-assess a nicer way
-to do that. Until then, this is good ebough.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit c20b2ae4ece10e07eeb80fcdd706a474d3be1475)
+(cherry picked from commit c7b52c3ccf4828cd848b6a98206dbe712f84e49b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openssh/Config.in   | 1 -
- package/refpolicy/Config.in | 8 ++++++++
- 2 files changed, 8 insertions(+), 1 deletion(-)
+ package/python3/python3.hash | 6 +++---
+ package/python3/python3.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/openssh/Config.in b/package/openssh/Config.in
-index a3038ba01f..08d3c7d391 100644
---- a/package/openssh/Config.in
-+++ b/package/openssh/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_OPENSSH
- 	bool "openssh"
- 	depends on BR2_USE_MMU # fork()
--	select BR2_PACKAGE_LINUX_PAM if BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_ZLIB
- 	help
-diff --git a/package/refpolicy/Config.in b/package/refpolicy/Config.in
-index 0e72b895df..8ae8f0448d 100644
---- a/package/refpolicy/Config.in
-+++ b/package/refpolicy/Config.in
-@@ -36,6 +36,14 @@ choice
+diff --git a/package/python3/python3.hash b/package/python3/python3.hash
+index 39a16c1f71..962d32b5d9 100644
+--- a/package/python3/python3.hash
++++ b/package/python3/python3.hash
+@@ -1,5 +1,5 @@
+-# From https://www.python.org/downloads/release/python-3116/
+-md5  d0c5a1a31efe879723e51addf56dd206  Python-3.11.6.tar.xz
++# From https://www.python.org/downloads/release/python-3118/
++md5  b353b8433e560e1af2b130f56dfbd973  Python-3.11.8.tar.xz
+ # Locally computed
+-sha256  0fab78fa7f133f4f38210c6260d90d7c0d5c7198446419ce057ec7ac2e6f5f38  Python-3.11.6.tar.xz
++sha256  9e06008c8901924395bc1da303eac567a729ae012baa182ab39269f650383bb3  Python-3.11.8.tar.xz
+ sha256  3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf  LICENSE
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index b9c5054a21..1fa49cf9dd 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- config BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION
- 	bool "Upstream version"
-+	# Consider reworking the following when adding new entries:
-+	# Upstream refpolicy for openssh expects linux-pam to be used
-+	select BR2_PACKAGE_LINUX_PAM if BR2_PACKAGE_OPENSSH \
-+		&& BR2_USE_MMU \
-+		&& BR2_ENABLE_LOCALE \
-+		&& BR2_USE_WCHAR \
-+		&& !BR2_STATIC_LIBS \
-+		&& BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	help
- 	  Use the refpolicy as provided by Buildroot.
- 
+ PYTHON3_VERSION_MAJOR = 3.11
+-PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).6
++PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).8
+ PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
+ PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
+ PYTHON3_LICENSE = Python-2.0, others
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
