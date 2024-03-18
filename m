@@ -4,50 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1E25C54E58
-	for <buildroot@archiver.kernel.org>; Mon, 18 Mar 2024 11:46:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78C47C54E5D
+	for <buildroot@archiver.kernel.org>; Mon, 18 Mar 2024 13:24:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B8DE64090E;
-	Mon, 18 Mar 2024 11:46:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 07A1440608;
+	Mon, 18 Mar 2024 13:24:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2o6aQiEhIPA8; Mon, 18 Mar 2024 11:46:26 +0000 (UTC)
+	with ESMTP id aY2nWNhW5tio; Mon, 18 Mar 2024 13:24:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 695D640A3E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E0ED40639
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 695D640A3E;
-	Mon, 18 Mar 2024 11:46:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8F90F1BF954
- for <buildroot@lists.busybox.net>; Mon, 18 Mar 2024 11:46:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2E0ED40639;
+	Mon, 18 Mar 2024 13:24:40 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 630D41BF363
+ for <buildroot@lists.busybox.net>; Mon, 18 Mar 2024 13:24:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7A45140513
- for <buildroot@lists.busybox.net>; Mon, 18 Mar 2024 11:46:15 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 50E6F8148E
+ for <buildroot@lists.busybox.net>; Mon, 18 Mar 2024 13:24:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0ixhm-ojVgxQ for <buildroot@lists.busybox.net>;
- Mon, 18 Mar 2024 11:46:14 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2eirBZjkQhCY for <buildroot@lists.busybox.net>;
+ Mon, 18 Mar 2024 13:24:38 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
+ helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B1434051E
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7B1434051E
- for <buildroot@buildroot.org>; Mon, 18 Mar 2024 11:46:14 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7429F82A17; Mon, 18 Mar 2024 11:46:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1684E81463
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1684E81463
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1684E81463
+ for <buildroot@buildroot.org>; Mon, 18 Mar 2024 13:24:37 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 04F0B240011;
+ Mon, 18 Mar 2024 13:24:33 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1rmCyf-002eCO-1e;
+ Mon, 18 Mar 2024 14:24:33 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 18 Mar 2024 12:44:07 +0100
-X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: cfbc7c5c8daa548bc317de0ff605b20861163a1d
-X-Git-Newrev: 0ca62a8e843de3e5bd1adfdf1c622ad224a0d22b
-X-Patchwork-Hint: ignore
-Message-Id: <20240318114614.7429F82A17@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/python3: security
- bump to version 3.11.8
+To: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+References: <20240228200216.715455-1-buildroot@bubu1.eu>
+Date: Mon, 18 Mar 2024 14:24:33 +0100
+In-Reply-To: <20240228200216.715455-1-buildroot@bubu1.eu> (Marcus Hoffmann via
+ buildroot's message of "Wed, 28 Feb 2024 21:02:16 +0100")
+Message-ID: <8734snhdv2.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH] package/ccache: disable building tests
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,55 +68,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Marcus Hoffmann <buildroot@bubu1.eu>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0ca62a8e843de3e5bd1adfdf1c622ad224a0d22b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
+>>>>> "Marcus" == Marcus Hoffmann via buildroot <buildroot@buildroot.org> writes:
 
-Fixes the following security issue:
+ > Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 
-gh-113659: Skip .pth files with names starting with a dot or hidden file
-attribute
-https://github.com/python/cpython/issues/113659
+Committed to 2023.11.x, thanks.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit c7b52c3ccf4828cd848b6a98206dbe712f84e49b)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python3/python3.hash | 6 +++---
- package/python3/python3.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/python3/python3.hash b/package/python3/python3.hash
-index 39a16c1f71..962d32b5d9 100644
---- a/package/python3/python3.hash
-+++ b/package/python3/python3.hash
-@@ -1,5 +1,5 @@
--# From https://www.python.org/downloads/release/python-3116/
--md5  d0c5a1a31efe879723e51addf56dd206  Python-3.11.6.tar.xz
-+# From https://www.python.org/downloads/release/python-3118/
-+md5  b353b8433e560e1af2b130f56dfbd973  Python-3.11.8.tar.xz
- # Locally computed
--sha256  0fab78fa7f133f4f38210c6260d90d7c0d5c7198446419ce057ec7ac2e6f5f38  Python-3.11.6.tar.xz
-+sha256  9e06008c8901924395bc1da303eac567a729ae012baa182ab39269f650383bb3  Python-3.11.8.tar.xz
- sha256  3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf  LICENSE
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index b9c5054a21..1fa49cf9dd 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- PYTHON3_VERSION_MAJOR = 3.11
--PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).6
-+PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).8
- PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
- PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
- PYTHON3_LICENSE = Python-2.0, others
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
