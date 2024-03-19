@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1632AC54E60
-	for <buildroot@archiver.kernel.org>; Tue, 19 Mar 2024 11:21:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65E40C54E60
+	for <buildroot@archiver.kernel.org>; Tue, 19 Mar 2024 11:22:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DE0C781E22;
-	Tue, 19 Mar 2024 11:21:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 24D9C81E26;
+	Tue, 19 Mar 2024 11:22:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9DdOgkBfnNtL; Tue, 19 Mar 2024 11:21:54 +0000 (UTC)
+	with ESMTP id bloHsIG3dzPo; Tue, 19 Mar 2024 11:22:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE15E81E26
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2746C81E29
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CE15E81E26;
-	Tue, 19 Mar 2024 11:21:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2746C81E29;
+	Tue, 19 Mar 2024 11:22:02 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B81241BF2CC
- for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 11:21:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6A5621BF95F
+ for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 11:22:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A4E8081E2B
- for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 11:21:52 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5711081E29
+ for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 11:22:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HKTtrCJi3D3F for <buildroot@lists.busybox.net>;
- Tue, 19 Mar 2024 11:21:52 +0000 (UTC)
+ with ESMTP id 1q-jc9EF9EUO for <buildroot@lists.busybox.net>;
+ Tue, 19 Mar 2024 11:21:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DF0F281E22
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6938481E26
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id DF0F281E22
- for <buildroot@buildroot.org>; Tue, 19 Mar 2024 11:21:51 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6938481E26
+ for <buildroot@buildroot.org>; Tue, 19 Mar 2024 11:21:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C44F983459; Tue, 19 Mar 2024 11:21:51 +0000 (UTC)
+ id 631D983459; Tue, 19 Mar 2024 11:21:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 19 Mar 2024 12:16:28 +0100
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: ec16e3ee7a014b721f99fb920e1017638b215ffb
-X-Git-Newrev: 11eadeee2c53438727d708f8cce701c559ec8454
+Date: Tue, 19 Mar 2024 12:15:24 +0100
+X-Git-Refname: refs/heads/2023.11.x
+X-Git-Oldrev: e2c773d8ea9eb163d46660aa3e883a2b2e7dae0b
+X-Git-Newrev: e68e6a336e009bcb97c20b7a18ee30d809e47370
 X-Patchwork-Hint: ignore
-Message-Id: <20240319112151.C44F983459@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/parted: needs gcc
+Message-Id: <20240319112159.631D983459@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/parted: needs gcc
  >= 5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -65,8 +65,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=11eadeee2c53438727d708f8cce701c559ec8454
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e68e6a336e009bcb97c20b7a18ee30d809e47370
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
 Fix the following build failure raised since bump to version 3.5 in
 commit 57817fe05a4250a260a08201812c6652b306a0e5 and
@@ -95,10 +95,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  3 files changed, 17 insertions(+), 10 deletions(-)
 
 diff --git a/package/libblockdev/Config.in b/package/libblockdev/Config.in
-index 4f98621bd8..8e9caf623b 100644
+index 527ba79e4e..da986feedc 100644
 --- a/package/libblockdev/Config.in
 +++ b/package/libblockdev/Config.in
-@@ -29,12 +29,13 @@ config BR2_PACKAGE_LIBBLOCKDEV_CRYPTO
+@@ -30,13 +30,14 @@ config BR2_PACKAGE_LIBBLOCKDEV_CRYPTO
  config BR2_PACKAGE_LIBBLOCKDEV_FS
  	bool "filesystem"
  	depends on BR2_ENABLE_LOCALE # parted
@@ -106,6 +106,7 @@ index 4f98621bd8..8e9caf623b 100644
  	select BR2_PACKAGE_UTIL_LINUX
  	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
  	select BR2_PACKAGE_PARTED
+ 	select BR2_PACKAGE_E2FSPROGS
  
 -comment "filesystem plugin needs a toolchain w/ locale"
 -	depends on !BR2_ENABLE_LOCALE
@@ -114,7 +115,7 @@ index 4f98621bd8..8e9caf623b 100644
  
  config BR2_PACKAGE_LIBBLOCKDEV_LOOP
  	bool "loop"
-@@ -42,11 +43,12 @@ config BR2_PACKAGE_LIBBLOCKDEV_LOOP
+@@ -44,11 +45,12 @@ config BR2_PACKAGE_LIBBLOCKDEV_LOOP
  config BR2_PACKAGE_LIBBLOCKDEV_LVM2
  	bool "lvm2"
  	depends on BR2_ENABLE_LOCALE # parted
@@ -129,12 +130,14 @@ index 4f98621bd8..8e9caf623b 100644
  
  config BR2_PACKAGE_LIBBLOCKDEV_MDRAID
  	bool "mdraid"
-@@ -55,10 +57,11 @@ config BR2_PACKAGE_LIBBLOCKDEV_MDRAID
+@@ -61,12 +63,13 @@ config BR2_PACKAGE_LIBBLOCKDEV_NVME
  config BR2_PACKAGE_LIBBLOCKDEV_PART
  	bool "part"
  	depends on BR2_ENABLE_LOCALE # parted
 +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # parted
  	select BR2_PACKAGE_PARTED
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBFDISK
  
 -comment "part plugin needs a toolchain w/ locale"
 -	depends on !BR2_ENABLE_LOCALE
