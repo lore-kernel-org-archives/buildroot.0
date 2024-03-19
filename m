@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FFDBC54E60
-	for <buildroot@archiver.kernel.org>; Tue, 19 Mar 2024 12:22:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECBFFC54E60
+	for <buildroot@archiver.kernel.org>; Tue, 19 Mar 2024 12:22:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 41EB8406E7;
-	Tue, 19 Mar 2024 12:22:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BAE14406FD;
+	Tue, 19 Mar 2024 12:22:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4P16KdOIaAsO; Tue, 19 Mar 2024 12:22:35 +0000 (UTC)
+	with ESMTP id 8x0Bw5Mf96yl; Tue, 19 Mar 2024 12:22:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B687740705
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B22A4070D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B687740705;
-	Tue, 19 Mar 2024 12:22:34 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B722A1BF406
- for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 12:22:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7B22A4070D;
+	Tue, 19 Mar 2024 12:22:38 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 050D41BF406
+ for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 12:22:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A2E72406DE
+ by smtp2.osuosl.org (Postfix) with ESMTP id AED4940192
  for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 12:22:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DgyGQ1tMw2xb for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oozlQXMQ2lz8 for <buildroot@lists.busybox.net>;
  Tue, 19 Mar 2024 12:22:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6673A40605
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7947D40B9B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6673A40605
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7947D40B9B
  for <buildroot@buildroot.org>; Tue, 19 Mar 2024 12:22:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 58BE783550; Tue, 19 Mar 2024 12:22:22 +0000 (UTC)
+ id 632E982BDB; Tue, 19 Mar 2024 12:22:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 19 Mar 2024 13:15:03 +0100
+Date: Tue, 19 Mar 2024 13:16:56 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 257c3d0e0f1ed958b00f65b95fa33e9c4c599aff
-X-Git-Newrev: ed23895ac852063e562e7888bff9c320bd15257b
+X-Git-Oldrev: ed23895ac852063e562e7888bff9c320bd15257b
+X-Git-Newrev: 2828004f2514f45bb9a9c39135ac57beea81837f
 X-Patchwork-Hint: ignore
-Message-Id: <20240319122222.58BE783550@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/octave: add
- libreadline search prefix
+Message-Id: <20240319122222.632E982BDB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/dash: fix static
+ build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,120 +65,101 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ed23895ac852063e562e7888bff9c320bd15257b
+commit: https://git.buildroot.net/buildroot/commit/?id=2828004f2514f45bb9a9c39135ac57beea81837f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-GNU Octave changed its detection of readline library in [1]. This
-commit was first included in version 8.1.0.
+Drop -Wl,--fatal-warnings with --enable-static to avoid the following
+static build failure:
 
-GNU Octave was updated to 8.1.0 in Buildroot in commit b36e4b10f3
-"package/octave: bump to version 8.1.0".
+configure:4778: checking for strtod
+configure:4778: /home/autobuild/autobuild/instance-8/output-1/host/bin/powerpc-buildroot-linux-uclibcspe-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mabi=spe -mfloat-gprs=single -Wa,-me500 -Os -g0  -static -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -static -Wl,--fatal-warnings conftest.c  >&5
+/home/autobuild/autobuild/instance-8/output-1/host/lib/gcc/powerpc-buildroot-linux-uclibcspe/8.4.0/../../../../powerpc-buildroot-linux-uclibcspe/bin/ld: warning: conftest has a LOAD segment with RWX permissions
+collect2: error: ld returned 1 exit status
 
-Since this commit, Octave can fail to find readline automatically in
-some specific situations. For example, when host system is Fedora 39
-and the host "readline-devel" package is installed (see detailed
-explanation below).
+[...]
 
-Octave is now using a m4 macro from gnulib to detect readline.
-See [2].
-
-This macro is calling AC_LIB_LINKFLAGS_BODY([readline]). Note that
-this macro will look into $libdir and $includedir by default. See [3].
-
-Buildroot is calling target autotools configure command with
---prefix=/usr and --exec-prefix=/usr arguments. See [4].
-
-Autotools derives libdir='${exec_prefix}/lib' and
-includedir='${prefix}/include'.
-
-Finally, gnulib will also search automatically into alternate library
-directories (i.e. lib32, lib64). See [5].
-
-All of this will make the configure script searching the readline
-library by default (i.e. if the library prefix is not provided) into
-the host "/usr/lib", "/usr/lib32" and "/usr/lib64", when configuring
-for target.
-
-This issue is not happening on the Buildroot docker reference image,
-because the package "libreadline-dev" is not present in this image.
-
-Even if the package "libreadline-dev" is installed on a Debian based
-host systems, the issue is still not happening because libraries are
-installed in the path "/usr/lib/x86_64-linux-gnu", which is not
-searched by gnulib macros.
-
-On host systems which installs libraries into one of the
-"/usr/lib{,32,64}" directories, the Octave configuration script will
-fail, because it will detect the host library and try to link against
-it with target architecture and compilation flags and will fail. Since
-the --enable-readline configure option is present, the configuration
-script will fail because it cannot find a working readline library.
-
-This can be seen in the octave configuration log, in file:
-output/build/octave-8.4.0/config.log
-
-    configure:73671: checking for readline
-    configure:73705: /buildroot/output/host/bin/aarch64-none-linux-gnu-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0 -D_FORTIFY_SOURCE=1 -pthread -fopenmp -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.c -lpthread -lm  /usr/lib64/libreadline.so >&5
-    /buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-none-linux-gnu/13.2.1/../../../../aarch64-none-linux-gnu/bin/ld: /usr/lib64/libreadline.so: error adding symbols: file in wrong format
-    collect2: error: ld returned 1 exit status
-
-This situation can be reproduced on a Fedora 39 x86_64 host system,
-with the "readline-devel" package installed. Note: uninstalling the
-"readline-devel" will work around the issue.
-
-The issue can be reproduced with a Buildroot configuration such as:
-
-    cat > .config <<EOF
-    BR2_aarch64=y
-    BR2_TOOLCHAIN_EXTERNAL=y
-    BR2_PACKAGE_OCTAVE=y
-    BR2_PACKAGE_READLINE=y
-    EOF
-    make olddefconfig
-    make
-
-In order to avoid those host/target readline detection mix-ups, the
-readline search prefix need to be explicitly passed during octave
-configuration. This commit adds this search prefix to fix this build
-issue.
+In file included from arith_yylex.c:44:
+system.h:74:22: error: static declaration of 'strtod' follows non-static declaration
+ static inline double strtod(const char *nptr, char **endptr)
+                      ^~~~~~
 
 Fixes:
+ - http://autobuild.buildroot.org/results/a54fdc7d1b94beb47203373ae35b08d9cea8d42c
+ - http://autobuild.buildroot.org/results/a4287b86186bf0a1d5370cf53123b324ae65c1da
 
-    checking for readline... (cached) no
-    checking for readline/readline.h... (cached) yes
-    checking for readline/history.h... (cached) yes
-    configure: WARNING: I need GNU Readline 4.2 or later
-    configure: error: this is fatal unless you specify --disable-readline
-
-[1] https://github.com/gnu-octave/octave/commit/3645c78658c4c66f2bc346fdbc5c7c77d8d8dd12
-[2] https://git.savannah.gnu.org/cgit/gnulib.git/tree/m4/readline.m4?id=2cdc1bafb20b187ad067056e090fcb4396ed9099
-[3] https://git.savannah.gnu.org/cgit/gnulib.git/tree/m4/lib-link.m4?id=2cdc1bafb20b187ad067056e090fcb4396ed9099#n190
-[4] https://gitlab.com/buildroot.org/buildroot/-/blob/2023.11/package/pkg-autotools.mk#L175
-[5] https://git.savannah.gnu.org/cgit/gnulib.git/tree/m4/lib-prefix.m4?id=2cdc1bafb20b187ad067056e090fcb4396ed9099#n276
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 02df2834155aec4c74149b1aacc4d56babcc9325)
+(cherry picked from commit c9de634b082e9d5a8f52f7c983a481105696d347)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/octave/octave.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ .../0001-configure.ac-drop-Wl-fatal-warnings.patch | 45 ++++++++++++++++++++++
+ package/dash/dash.mk                               |  2 +
+ 2 files changed, 47 insertions(+)
 
-diff --git a/package/octave/octave.mk b/package/octave/octave.mk
-index 86f5564c02..bb7e44b2c5 100644
---- a/package/octave/octave.mk
-+++ b/package/octave/octave.mk
-@@ -20,7 +20,9 @@ OCTAVE_DEPENDENCIES = \
- 	pcre2
+diff --git a/package/dash/0001-configure.ac-drop-Wl-fatal-warnings.patch b/package/dash/0001-configure.ac-drop-Wl-fatal-warnings.patch
+new file mode 100644
+index 0000000000..eaa5d6cc60
+--- /dev/null
++++ b/package/dash/0001-configure.ac-drop-Wl-fatal-warnings.patch
+@@ -0,0 +1,45 @@
++From 7d07f683b83ef9fbdf258ce61b022b32f06f253a Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 16 Feb 2024 17:26:28 +0100
++Subject: [PATCH] configure.ac: drop -Wl,--fatal-warnings
++
++Drop -Wl,--fatal-warnings with --enable-static to avoid the following
++static build failure:
++
++configure:4778: checking for strtod
++configure:4778: /home/autobuild/autobuild/instance-8/output-1/host/bin/powerpc-buildroot-linux-uclibcspe-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mabi=spe -mfloat-gprs=single -Wa,-me500 -Os -g0  -static -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -static -Wl,--fatal-warnings conftest.c  >&5
++/home/autobuild/autobuild/instance-8/output-1/host/lib/gcc/powerpc-buildroot-linux-uclibcspe/8.4.0/../../../../powerpc-buildroot-linux-uclibcspe/bin/ld: warning: conftest has a LOAD segment with RWX permissions
++collect2: error: ld returned 1 exit status
++
++[...]
++
++In file included from arith_yylex.c:44:
++system.h:74:22: error: static declaration of 'strtod' follows non-static declaration
++ static inline double strtod(const char *nptr, char **endptr)
++                      ^~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/a54fdc7d1b94beb47203373ae35b08d9cea8d42c
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Upstream: https://lore.kernel.org/dash/20240216163319.860768-1-fontaine.fabrice@gmail.com
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 5524650..6993364 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -34,7 +34,7 @@ fi
++ AC_ARG_ENABLE(static, AS_HELP_STRING(--enable-static, \
++ 				     [Build statical linked program]))
++ if test "$enable_static" = "yes"; then
++-	export LDFLAGS="-static -Wl,--fatal-warnings"
+++	export LDFLAGS="-static"
++ fi
++ 
++ AC_ARG_ENABLE(fnmatch, AS_HELP_STRING(--disable-fnmatch, \
++-- 
++2.43.0
++
+diff --git a/package/dash/dash.mk b/package/dash/dash.mk
+index 6efc71e568..aebfd28be8 100644
+--- a/package/dash/dash.mk
++++ b/package/dash/dash.mk
+@@ -8,6 +8,8 @@ DASH_VERSION = 0.5.11.5
+ DASH_SITE = http://gondor.apana.org.au/~herbert/dash/files
+ DASH_LICENSE = BSD-3-Clause, GPL-2.0+ (mksignames.c)
+ DASH_LICENSE_FILES = COPYING
++# We're patching configure.ac
++DASH_AUTORECONF = YES
  
- ifeq ($(BR2_PACKAGE_READLINE),y)
--OCTAVE_CONF_OPTS += --enable-readline
-+OCTAVE_CONF_OPTS += \
-+	--enable-readline \
-+	--with-libreadline-prefix=$(STAGING_DIR)/usr
- OCTAVE_DEPENDENCIES += readline
- else
- OCTAVE_CONF_OPTS += --disable-readline
+ # dash does not build in parallel
+ DASH_MAKE = $(MAKE1)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
