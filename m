@@ -4,59 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89B97C54E71
-	for <buildroot@archiver.kernel.org>; Tue, 19 Mar 2024 16:34:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDA48C54E71
+	for <buildroot@archiver.kernel.org>; Tue, 19 Mar 2024 16:35:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0B08181959;
-	Tue, 19 Mar 2024 16:34:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AD54581EA4;
+	Tue, 19 Mar 2024 16:35:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TJEEdYIXIoNz; Tue, 19 Mar 2024 16:34:35 +0000 (UTC)
+	with ESMTP id 3UQGccQuKNB5; Tue, 19 Mar 2024 16:35:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 351E181E32
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A6F5481EB7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 351E181E32;
-	Tue, 19 Mar 2024 16:34:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 399241BF836
- for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 16:34:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A6F5481EB7;
+	Tue, 19 Mar 2024 16:35:51 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id AEA751BF836
+ for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 16:35:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2614E40707
- for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 16:34:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9B6CF81EB7
+ for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 16:35:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FHoWaiS4c5YF for <buildroot@lists.busybox.net>;
- Tue, 19 Mar 2024 16:34:32 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
- helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lalKIiNp3_Ie for <buildroot@lists.busybox.net>;
+ Tue, 19 Mar 2024 16:35:49 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
+ helo=relay5-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E446D404B6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E446D404B6
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E446D404B6
- for <buildroot@buildroot.org>; Tue, 19 Mar 2024 16:34:31 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 06A90FF809;
- Tue, 19 Mar 2024 16:34:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8C5C281EA4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C5C281EA4
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8C5C281EA4
+ for <buildroot@buildroot.org>; Tue, 19 Mar 2024 16:35:48 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 916C21C0008;
+ Tue, 19 Mar 2024 16:35:45 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rmcQ1-00438R-1D;
- Tue, 19 Mar 2024 17:34:29 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rmcRE-0043Dv-2M;
+ Tue, 19 Mar 2024 17:35:44 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20240304161953.3529614-1-fontaine.fabrice@gmail.com>
-Date: Tue, 19 Mar 2024 17:34:29 +0100
-In-Reply-To: <20240304161953.3529614-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 4 Mar 2024 17:19:53 +0100")
-Message-ID: <87h6h29o4q.fsf@48ers.dk>
+References: <20240304170723.3908730-1-fontaine.fabrice@gmail.com>
+Date: Tue, 19 Mar 2024 17:35:44 +0100
+In-Reply-To: <20240304170723.3908730-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 4 Mar 2024 18:07:23 +0100")
+Message-ID: <87cyrq9o2n.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/libva: fix build with gcc 4.8
+Subject: Re: [Buildroot] [PATCH 1/1] package/poco: fix
+ BR2_SHARED_STATIC_LIBS build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,7 +69,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -76,22 +77,25 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fix the following build failure with gcc 4.8 raised since bump to
- > version 2.20.0 in commit e926c83928e08c0ecd6cd4383e1cca151a8a4d2c and
- > https://github.com/intel/libva/commit/4f5a4345fc9f92565763ca22026891475e3cf835:
+ > poco can't be built statically since commit
+ > 073a89196a22f995c142cd11640d3cfb7cef691d. However, commit
+ > add7c433d250e153d9e58fe7da3bd52171ba2652 enabled static (and shared)
+ > build with BR2_SHARED_STATIC_LIBS resulting in the following build
+ > failure since at least version 1.11.1:
 
- > ../va/va.c: In function 'va_new_opendriver':
- > ../va/va.c:695:9: error: 'for' loop initial declarations are only allowed in C99 mode
- >          for (unsigned int i = 0; i < num_drivers; i++)
- >          ^
- > ../va/va.c:695:9: note: use option -std=c99 or -std=gnu99 to compile your code
+ > /home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mips-buildroot-linux-gnu/11.2.0/../../../../mips-buildroot-linux-gnu/bin/ld:
+ > /home/buildroot/autobuild/instance-1/output-1/build/poco-1.11.1/lib/Linux/mips/libPocoXML.a(ParserEngine.o):
+ > in function `Poco::XML::ParserEngine::handleStartElement(void*, char
+ > const*, char const**)':
+ > ParserEngine.cpp:(.text+0x2f8): undefined reference to `XML_GetSpecifiedAttributeCount'
 
- > Fixes: e926c83928e08c0ecd6cd4383e1cca151a8a4d2c
- >  - http://autobuild.buildroot.org/results/b9dbd104fa05c59883d87f74e6522c55620a4252
+ > Fixes: add7c433d250e153d9e58fe7da3bd52171ba2652
+ >  - http://autobuild.buildroot.org/results/afc434a13d5e7a8affa4abb4058d7bebc81aca29
+ >  - http://autobuild.buildroot.org/results/860b70a8c9c4a6a53247ac4bdb4fd0851b28c61a
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Committed to 2023.11.x, thanks.
+Committed to 2023.02.x and 2023.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
