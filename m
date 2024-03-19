@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A450C6FD1F
-	for <buildroot@archiver.kernel.org>; Tue, 19 Mar 2024 16:36:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A0C3C6FD1F
+	for <buildroot@archiver.kernel.org>; Tue, 19 Mar 2024 16:37:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 68F4881F26;
-	Tue, 19 Mar 2024 16:36:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2486681EC8;
+	Tue, 19 Mar 2024 16:37:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DpV6Z_xB3j4z; Tue, 19 Mar 2024 16:36:42 +0000 (UTC)
+	with ESMTP id zr80RxURS3yO; Tue, 19 Mar 2024 16:37:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B4AB181F1C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 37B1C81ECF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B4AB181F1C;
-	Tue, 19 Mar 2024 16:36:41 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 27A821BF836
- for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 16:36:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 37B1C81ECF;
+	Tue, 19 Mar 2024 16:37:30 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 180AB1BF836
+ for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 16:37:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EA87140CA1
- for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 16:36:22 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 04DF181ED0
+ for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 16:37:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ckbenxj3jXsU for <buildroot@lists.busybox.net>;
- Tue, 19 Mar 2024 16:36:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id v3BcCeROjZRf for <buildroot@lists.busybox.net>;
+ Tue, 19 Mar 2024 16:37:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1CE540C28
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5381D81EB7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E1CE540C28
- for <buildroot@buildroot.org>; Tue, 19 Mar 2024 16:36:21 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5381D81EB7
+ for <buildroot@buildroot.org>; Tue, 19 Mar 2024 16:37:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DCFCD82D13; Tue, 19 Mar 2024 16:36:21 +0000 (UTC)
+ id 417D782DD8; Tue, 19 Mar 2024 16:37:28 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 19 Mar 2024 17:34:05 +0100
-X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: a9c9fe8d4ade2c2906d1c2f0b28968808050e96f
-X-Git-Newrev: 3a3d7886485fc3128d928beb4960219caef2ad0f
+Date: Tue, 19 Mar 2024 16:37:09 +0100
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: 4160f33807287df7ffaf73f908d6d019542fd798
+X-Git-Newrev: de816dd6deaf4c6c989864aded3385b8bc4b7a09
 X-Patchwork-Hint: ignore
-Message-Id: <20240319163621.DCFCD82D13@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/libva: fix build
- with gcc 4.8
+Message-Id: <20240319163728.417D782DD8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/luvi: fix build
+ with aarch64_be
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,42 +65,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3a3d7886485fc3128d928beb4960219caef2ad0f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=de816dd6deaf4c6c989864aded3385b8bc4b7a09
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Fix the following build failure with gcc 4.8 raised since bump to
-version 2.20.0 in commit e926c83928e08c0ecd6cd4383e1cca151a8a4d2c and
-https://github.com/intel/libva/commit/4f5a4345fc9f92565763ca22026891475e3cf835:
+Fix the following build failure with aarch64_be raised since the
+addition of aarch64_be support to luajit in commit
+28e5c2f2bdd147dbb9aefbc040fc618f46ee0663:
 
-../va/va.c: In function 'va_new_opendriver':
-../va/va.c:695:9: error: 'for' loop initial declarations are only allowed in C99 mode
-         for (unsigned int i = 0; i < num_drivers; i++)
-         ^
-../va/va.c:695:9: note: use option -std=c99 or -std=gnu99 to compile your code
+luajit: unknown architecture
 
-Fixes: e926c83928e08c0ecd6cd4383e1cca151a8a4d2c
- - http://autobuild.buildroot.org/results/b9dbd104fa05c59883d87f74e6522c55620a4252
+Fixes: 28e5c2f2bdd147dbb9aefbc040fc618f46ee0663
+ - http://autobuild.buildroot.org/results/9b89eff7d90173b8c74b8f676650709cc4418e65
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d4fdd78a7207935c24427bbe736c443f0ad2a745)
+(cherry picked from commit 34d473b5cca2a0e01ba7a60ced275f94a0e40540)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libva/libva.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/luvi/luvi.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/libva/libva.mk b/package/libva/libva.mk
-index 9e9d5d698c..4481be9e7b 100644
---- a/package/libva/libva.mk
-+++ b/package/libva/libva.mk
-@@ -10,6 +10,7 @@ LIBVA_LICENSE = MIT
- LIBVA_LICENSE_FILES = COPYING
- LIBVA_INSTALL_STAGING = YES
- LIBVA_DEPENDENCIES = host-pkgconf libdrm
-+LIBVA_CFLAGS = $(TARGET_CFLAGS) -std=gnu99
- 
- # libdrm is a hard-dependency
- LIBVA_CONF_OPTS = \
+diff --git a/package/luvi/luvi.mk b/package/luvi/luvi.mk
+index 5266281ffc..f77961fb00 100644
+--- a/package/luvi/luvi.mk
++++ b/package/luvi/luvi.mk
+@@ -22,6 +22,8 @@ else ifeq ($(BR2_arm)$(BR2_armeb),y)
+ LUVI_TARGET_ARCH = arm
+ else ifeq ($(BR2_aarch64),y)
+ LUVI_TARGET_ARCH = arm64
++else ifeq ($(BR2_aarch64_be),y)
++LUVI_TARGET_ARCH = arm64be
+ else ifeq ($(BR2_mips),y)
+ LUVI_TARGET_ARCH = mips
+ else ifeq ($(BR2_mipsel),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
