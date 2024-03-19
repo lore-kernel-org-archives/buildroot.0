@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AF50C6FD1F
-	for <buildroot@archiver.kernel.org>; Tue, 19 Mar 2024 16:36:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 816A9C6FD1F
+	for <buildroot@archiver.kernel.org>; Tue, 19 Mar 2024 16:36:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4EB8C81ECF;
-	Tue, 19 Mar 2024 16:36:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 514F781EDA;
+	Tue, 19 Mar 2024 16:36:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pBf7_cAcEtFF; Tue, 19 Mar 2024 16:36:27 +0000 (UTC)
+	with ESMTP id sX54JwBiCGfP; Tue, 19 Mar 2024 16:36:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3CE0181EDA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4399781EEC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3CE0181EDA;
-	Tue, 19 Mar 2024 16:36:26 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CBA281BF976
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4399781EEC;
+	Tue, 19 Mar 2024 16:36:29 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id ECED71BF977
  for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 16:36:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B80B940730
+ by smtp3.osuosl.org (Postfix) with ESMTP id D94D460B2A
  for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 16:36:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iDQ9JpRfSWYp for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id w9oydi4xIMjP for <buildroot@lists.busybox.net>;
  Tue, 19 Mar 2024 16:36:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5D114070D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D100860807
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A5D114070D
+ by smtp3.osuosl.org (Postfix) with ESMTP id D100860807
  for <buildroot@buildroot.org>; Tue, 19 Mar 2024 16:36:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7BD9F82CE5; Tue, 19 Mar 2024 16:36:21 +0000 (UTC)
+ id CAF5182CFA; Tue, 19 Mar 2024 16:36:21 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 19 Mar 2024 16:35:53 +0100
+Date: Tue, 19 Mar 2024 17:33:18 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 9e976c46a656b059ebc102fbab03dfd0a46878cc
-X-Git-Newrev: 6f11832fb1531084298c19fded17d6436e9931a0
+X-Git-Oldrev: 56de003fa31dc3e30e915c0d97d5af5becbdbc01
+X-Git-Newrev: a9c9fe8d4ade2c2906d1c2f0b28968808050e96f
 X-Patchwork-Hint: ignore
-Message-Id: <20240319163621.7BD9F82CE5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/fluent-bit: force
- libopenssl
+Message-Id: <20240319163621.CAF5182CFA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x]
+ package/rauc-hawkbit-updater: fix build with gcc 4.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,41 +65,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6f11832fb1531084298c19fded17d6436e9931a0
+commit: https://git.buildroot.net/buildroot/commit/?id=a9c9fe8d4ade2c2906d1c2f0b28968808050e96f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-libressl dropped engine support since version 3.8.1 resulting in the
-following build failure since bump of libressl to version 3.8.2 in
-commit 21eca49ed5110872407b76ab9337d2877c4cda24:
+Fix the following build failure with gcc 4.8 raised since the addition
+of the package in commit 928b7219cd7079864eadadc66dbff21c5cd72804:
 
-/home/autobuild/autobuild/instance-0/output-1/host/lib/gcc/armeb-buildroot-linux-gnueabi/12.3.0/../../../../armeb-buildroot-linux-gnueabi/bin/ld: ../library/librdkafka.a(rdkafka_admin.c.o): in function `rd_kafka_UserScramCredentialUpsertion_new':
-/home/autobuild/autobuild/instance-0/output-1/build/fluent-bit-2.2.2/lib/librdkafka-2.3.0/src/rdkafka_admin.c:5909: undefined reference to `RAND_priv_bytes'
-/home/autobuild/autobuild/instance-0/output-1/host/lib/gcc/armeb-buildroot-linux-gnueabi/12.3.0/../../../../armeb-buildroot-linux-gnueabi/bin/ld: ../library/librdkafka.a(rdkafka_ssl.c.o): in function `rd_kafka_ssl_set_certs':
-/home/autobuild/autobuild/instance-0/output-1/build/fluent-bit-2.2.2/lib/librdkafka-2.3.0/src/rdkafka_ssl.c:1384: undefined reference to `ENGINE_load_ssl_client_cert'
+../src/hawkbit-client.c:873:17: error: 'for' loop initial declarations are only allowed in C99 mode
+                 for (const gint *code = &resumable_codes[0]; *code; code++)
+                 ^
+../src/hawkbit-client.c:873:17: note: use option -std=c99 or -std=gnu99 to compile your code
 
-Fixes:
- - http://autobuild.buildroot.org/results/dd74eb4e31e0e4d23e7638cff47c6876fda59952
+Fixes: 928b7219cd7079864eadadc66dbff21c5cd72804
+ - http://autobuild.buildroot.org/results/e275d0ec4fe1da418a6163b46666316034b83b19
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit f64f82f78ffd9c4b530a7a7f17e1a66feaa23c80)
+(cherry picked from commit b146a0b944dedf45153348761ac313ca9062a7c0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fluent-bit/Config.in | 1 +
+ package/rauc-hawkbit-updater/rauc-hawkbit-updater.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/fluent-bit/Config.in b/package/fluent-bit/Config.in
-index dec40c4371..53284ee17d 100644
---- a/package/fluent-bit/Config.in
-+++ b/package/fluent-bit/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_FLUENT_BIT
- 	depends on !BR2_STATIC_LIBS # dlfcn.h
- 	select BR2_PACKAGE_MUSL_FTS if !BR2_TOOLCHAIN_USES_GLIBC
- 	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
- 	select BR2_PACKAGE_LIBYAML
- 	help
- 	  Fast and Lightweight Logs and Metrics processor.
+diff --git a/package/rauc-hawkbit-updater/rauc-hawkbit-updater.mk b/package/rauc-hawkbit-updater/rauc-hawkbit-updater.mk
+index a453f75a28..3836d3c84e 100644
+--- a/package/rauc-hawkbit-updater/rauc-hawkbit-updater.mk
++++ b/package/rauc-hawkbit-updater/rauc-hawkbit-updater.mk
+@@ -10,5 +10,6 @@ RAUC_HAWKBIT_UPDATER_SOURCE = rauc-hawkbit-updater-$(RAUC_HAWKBIT_UPDATER_VERSIO
+ RAUC_HAWKBIT_UPDATER_LICENSE = LGPL-2.1
+ RAUC_HAWKBIT_UPDATER_LICENSE_FILES = LICENSE
+ RAUC_HAWKBIT_UPDATER_DEPENDENCIES = json-glib libcurl
++RAUC_HAWKBIT_UPDATER_CFLAGS = $(TARGET_CFLAGS) -std=c99
+ 
+ $(eval $(meson-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
