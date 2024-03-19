@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DC4BC54E60
-	for <buildroot@archiver.kernel.org>; Tue, 19 Mar 2024 12:22:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D1F9C54E5D
+	for <buildroot@archiver.kernel.org>; Tue, 19 Mar 2024 12:22:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 63C7040727;
-	Tue, 19 Mar 2024 12:22:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DC88D406E8;
+	Tue, 19 Mar 2024 12:22:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id a_TCaY8o2LxJ; Tue, 19 Mar 2024 12:22:45 +0000 (UTC)
+	with ESMTP id BelPHztxrPvB; Tue, 19 Mar 2024 12:22:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E003A4071F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 549E24072F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E003A4071F;
-	Tue, 19 Mar 2024 12:22:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 549E24072F;
+	Tue, 19 Mar 2024 12:22:48 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 796131BF406
- for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 12:22:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7CB921BF406
+ for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 12:22:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0415F81E67
+ by smtp1.osuosl.org (Postfix) with ESMTP id 18A0481E57
  for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 12:22:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XO7DHoyx41Uf for <buildroot@lists.busybox.net>;
+ with ESMTP id qElL2ysfVIoD for <buildroot@lists.busybox.net>;
  Tue, 19 Mar 2024 12:22:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 26B9C81E57
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 54AA881E6B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 26B9C81E57
+ by smtp1.osuosl.org (Postfix) with ESMTP id 54AA881E6B
  for <buildroot@buildroot.org>; Tue, 19 Mar 2024 12:22:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1D5E78354C; Tue, 19 Mar 2024 12:22:22 +0000 (UTC)
+ id 41F7F8354C; Tue, 19 Mar 2024 12:22:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 19 Mar 2024 13:03:31 +0100
+Date: Tue, 19 Mar 2024 13:07:49 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: bb9dd5564745d8ec878c42193b3d1d20ff4a09af
-X-Git-Newrev: 3414b568f6e060cc7baea44b6e661bcec9d490d3
+X-Git-Oldrev: 0f15942e9094ca4d200ba8a7e1e799a566282dcb
+X-Git-Newrev: c9e929651d4f4db1d5e59db7da89a7410b049279
 X-Patchwork-Hint: ignore
-Message-Id: <20240319122222.1D5E78354C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/python-cheroot:
- drop host-python-setuptools-scm-git-archive
+Message-Id: <20240319122222.41F7F8354C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/conmon: fix build
+ with gcc 4.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,139 +65,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3414b568f6e060cc7baea44b6e661bcec9d490d3
+commit: https://git.buildroot.net/buildroot/commit/?id=c9e929651d4f4db1d5e59db7da89a7410b049279
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-Drop host-python-setuptools-scm-git-archive dependency
+Fix the following build failure with gcc 4.8 raised since the addition
+of the package in commit 06f50ff1bf066feb6cf6ed512113773f87c884fb:
+
+src/conmon.c:5:2: error: #error conmon.c requires C99 or later
+ #error conmon.c requires C99 or later
+  ^
+
+Fixes: 06f50ff1bf066feb6cf6ed512113773f87c884fb
+ - http://autobuild.buildroot.org/results/b573aceefde04435ea13dfd2a48f9c2372bde4d7
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit b8707cee5e7e4af8fc2addd317b294e081db994f)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 8077efb83769d43f976f7159f2c861e20163c96e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-setuptools-scm-v7-for-building-the-dists.patch | 101 +++++++++++++++++++++
- package/python-cheroot/python-cheroot.mk           |   2 +-
- 2 files changed, 102 insertions(+), 1 deletion(-)
+ package/conmon/conmon.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/python-cheroot/0001-Use-setuptools-scm-v7-for-building-the-dists.patch b/package/python-cheroot/0001-Use-setuptools-scm-v7-for-building-the-dists.patch
-new file mode 100644
-index 0000000000..837f2804d2
---- /dev/null
-+++ b/package/python-cheroot/0001-Use-setuptools-scm-v7-for-building-the-dists.patch
-@@ -0,0 +1,101 @@
-+From f0c51af263e20f332c6f675aa90ec6705ae4f5d1 Mon Sep 17 00:00:00 2001
-+From: Serhii Abarovskyi <aserhii@protonmail.com>
-+Date: Tue, 9 May 2023 18:33:54 +0300
-+Subject: [PATCH] Use setuptools-scm v7+ for building the dists
-+
-+Since version 7, setuptools-scm has native support for git archive,
-+so the setuptools-scm-git-archive project is obsolete
-+and this patch removes it from the build dependencies.
-+Close #515
-+
-+Upstream: https://github.com/cherrypy/cheroot/commit/f0c51af263e20f332c6f675aa90ec6705ae4f5d1
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ .git_archival.txt                       |  3 +++
-+ pyproject.toml                          |  3 +--
-+ requirements/dist-build-constraints.in  |  3 +--
-+ requirements/dist-build-constraints.txt | 16 +++++++---------
-+ setup.cfg                               |  3 +--
-+ 5 files changed, 13 insertions(+), 15 deletions(-)
-+
-+diff --git a/.git_archival.txt b/.git_archival.txt
-+index 95cb3eea4e..3994ec0a83 100644
-+--- a/.git_archival.txt
-++++ b/.git_archival.txt
-+@@ -1 +1,4 @@
-++node: $Format:%H$
-++node-date: $Format:%cI$
-++describe-name: $Format:%(describe:tags=true)$
-+ ref-names: $Format:%D$
-+diff --git a/pyproject.toml b/pyproject.toml
-+index b1e5f60a80..88df57dcc1 100644
-+--- a/pyproject.toml
-++++ b/pyproject.toml
-+@@ -6,8 +6,7 @@ requires = [
-+     "setuptools>=34.4",
-+ 
-+     # Plugins
-+-    "setuptools_scm[toml]>=3.5",
-+-    "setuptools_scm_git_archive>=1.1",
-++    "setuptools-scm >= 7.0.0",
-+ ]
-+ build-backend = "setuptools.build_meta"
-+ 
-+diff --git a/requirements/dist-build-constraints.in b/requirements/dist-build-constraints.in
-+index 26b57228a9..a37baef1a9 100644
-+--- a/requirements/dist-build-constraints.in
-++++ b/requirements/dist-build-constraints.in
-+@@ -5,8 +5,7 @@
-+ setuptools >= 34.4
-+ 
-+ # Plugins
-+-setuptools_scm[toml] >= 3.5
-+-setuptools_scm_git_archive >= 1.1
-++setuptools-scm[toml] >= 7.0.0
-+ 
-+ # Dynamic (coming from setuptools' PEP 517 build backend)
-+ wheel
-+diff --git a/requirements/dist-build-constraints.txt b/requirements/dist-build-constraints.txt
-+index 525f2be30f..8bd4343ff6 100644
-+--- a/requirements/dist-build-constraints.txt
-++++ b/requirements/dist-build-constraints.txt
-+@@ -1,18 +1,16 @@
-+ #
-+-# This file is autogenerated by pip-compile with python 3.10
-+-# To update, run:
-++# This file is autogenerated by pip-compile with Python 3.10
-++# by the following command:
-+ #
-+ #    pip-compile --allow-unsafe --output-file=requirements/dist-build-constraints.txt --strip-extras requirements/dist-build-constraints.in
-+ #
-+-packaging==21.3
-++packaging==23.1
-+     # via setuptools-scm
-+-pyparsing==3.0.6
-+-    # via packaging
-+-setuptools-scm==6.3.2
-++setuptools-scm==7.1.0
-+     # via -r requirements/dist-build-constraints.in
-+-setuptools-scm-git-archive==1.1
-+-    # via -r requirements/dist-build-constraints.in
-+-tomli==2.0.0
-++tomli==2.0.1
-++    # via setuptools-scm
-++typing-extensions==4.6.3
-+     # via setuptools-scm
-+ wheel==0.37.1
-+     # via -r requirements/dist-build-constraints.in
-+diff --git a/setup.cfg b/setup.cfg
-+index 1f2b08f4c3..900c7b4feb 100644
-+--- a/setup.cfg
-++++ b/setup.cfg
-+@@ -64,8 +64,7 @@ include_package_data = True
-+ packages = find:
-+ include_package_data = True
-+ setup_requires = 
-+-	setuptools_scm>=1.15.0
-+-	setuptools_scm_git_archive>=1.0
-++	setuptools_scm >= 7.0.0
-+ install_requires = 
-+ 	importlib_metadata; python_version < '3.8'
-+ 	more_itertools >= 2.6
-diff --git a/package/python-cheroot/python-cheroot.mk b/package/python-cheroot/python-cheroot.mk
-index 86e16f7db2..19aa7ae193 100644
---- a/package/python-cheroot/python-cheroot.mk
-+++ b/package/python-cheroot/python-cheroot.mk
-@@ -10,6 +10,6 @@ PYTHON_CHEROOT_SITE = https://files.pythonhosted.org/packages/08/7c/95c154177b16
- PYTHON_CHEROOT_LICENSE = BSD-3-Clause
- PYTHON_CHEROOT_LICENSE_FILES = LICENSE.md
- PYTHON_CHEROOT_SETUP_TYPE = setuptools
--PYTHON_CHEROOT_DEPENDENCIES = host-python-setuptools-scm host-python-setuptools-scm-git-archive
-+PYTHON_CHEROOT_DEPENDENCIES = host-python-setuptools-scm
+diff --git a/package/conmon/conmon.mk b/package/conmon/conmon.mk
+index 214cb460a5..1e57786686 100644
+--- a/package/conmon/conmon.mk
++++ b/package/conmon/conmon.mk
+@@ -25,7 +25,8 @@ define CONMON_CONFIGURE_CMDS
+ endef
  
- $(eval $(python-package))
+ define CONMON_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
++	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" \
++		CFLAGS="$(TARGET_CFLAGS) -std=c99" \
+ 		LDFLAGS="$(TARGET_LDFLAGS)" -C $(@D) bin/conmon
+ endef
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
