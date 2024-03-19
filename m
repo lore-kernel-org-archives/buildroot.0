@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4DDDCD11BF
-	for <buildroot@archiver.kernel.org>; Tue, 19 Mar 2024 15:36:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7D16CD11C2
+	for <buildroot@archiver.kernel.org>; Tue, 19 Mar 2024 15:37:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 477DC4026A;
-	Tue, 19 Mar 2024 15:36:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 799054026A;
+	Tue, 19 Mar 2024 15:37:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QbHZfZXqWLqX; Tue, 19 Mar 2024 15:36:29 +0000 (UTC)
+	with ESMTP id 8L5lJrzUZQpy; Tue, 19 Mar 2024 15:37:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 519F940BD6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8D2A240BD6
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 519F940BD6;
-	Tue, 19 Mar 2024 15:36:29 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A37101BF47E
- for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 15:36:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8D2A240BD6;
+	Tue, 19 Mar 2024 15:37:26 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 342101BF47E
+ for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 15:37:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9CFA940738
- for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 15:36:27 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2E0BF40BD6
+ for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 15:37:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5mMMAzh9lngh for <buildroot@lists.busybox.net>;
- Tue, 19 Mar 2024 15:36:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
- helo=relay6-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eNXmuFnOEB-A for <buildroot@lists.busybox.net>;
+ Tue, 19 Mar 2024 15:37:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
+ helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E8DF040737
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E8DF040737
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E8DF040737
- for <buildroot@buildroot.org>; Tue, 19 Mar 2024 15:36:25 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6AD13C0003;
- Tue, 19 Mar 2024 15:36:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org EAA7D4026A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EAA7D4026A
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EAA7D4026A
+ for <buildroot@buildroot.org>; Tue, 19 Mar 2024 15:37:23 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3DB4F24000D;
+ Tue, 19 Mar 2024 15:37:21 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rmbVl-003W66-2O;
- Tue, 19 Mar 2024 16:36:21 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rmbWi-003WAP-1p;
+ Tue, 19 Mar 2024 16:37:20 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20240303215832.6236-1-fontaine.fabrice@gmail.com>
-Date: Tue, 19 Mar 2024 16:36:21 +0100
-In-Reply-To: <20240303215832.6236-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 3 Mar 2024 22:58:32 +0100")
-Message-ID: <8734smb5e2.fsf@48ers.dk>
+References: <20240303103000.454697-1-fontaine.fabrice@gmail.com>
+Date: Tue, 19 Mar 2024 16:37:20 +0100
+In-Reply-To: <20240303103000.454697-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 3 Mar 2024 11:30:00 +0100")
+Message-ID: <87y1ae9qrz.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/fluent-bit: force libopenssl
+Subject: Re: [Buildroot] [PATCH 1/1] package/luvi: fix build with aarch64_be
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,7 +68,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Devoogdt <thomas@devoogdt.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -76,27 +76,18 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > libressl dropped engine support since version 3.8.1 resulting in the
- > following build failure since bump of libressl to version 3.8.2 in
- > commit 21eca49ed5110872407b76ab9337d2877c4cda24:
+ > Fix the following build failure with aarch64_be raised since the
+ > addition of aarch64_be support to luajit in commit
+ > 28e5c2f2bdd147dbb9aefbc040fc618f46ee0663:
 
- > /home/autobuild/autobuild/instance-0/output-1/host/lib/gcc/armeb-buildroot-linux-gnueabi/12.3.0/../../../../armeb-buildroot-linux-gnueabi/bin/ld:
- > ../library/librdkafka.a(rdkafka_admin.c.o): in function
- > `rd_kafka_UserScramCredentialUpsertion_new':
- > /home/autobuild/autobuild/instance-0/output-1/build/fluent-bit-2.2.2/lib/librdkafka-2.3.0/src/rdkafka_admin.c:5909:
- > undefined reference to `RAND_priv_bytes'
- > /home/autobuild/autobuild/instance-0/output-1/host/lib/gcc/armeb-buildroot-linux-gnueabi/12.3.0/../../../../armeb-buildroot-linux-gnueabi/bin/ld:
- > ../library/librdkafka.a(rdkafka_ssl.c.o): in function
- > `rd_kafka_ssl_set_certs':
- > /home/autobuild/autobuild/instance-0/output-1/build/fluent-bit-2.2.2/lib/librdkafka-2.3.0/src/rdkafka_ssl.c:1384:
- > undefined reference to `ENGINE_load_ssl_client_cert'
+ > luajit: unknown architecture
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/dd74eb4e31e0e4d23e7638cff47c6876fda59952
+ > Fixes: 28e5c2f2bdd147dbb9aefbc040fc618f46ee0663
+ >  - http://autobuild.buildroot.org/results/9b89eff7d90173b8c74b8f676650709cc4418e65
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Committed to 2023.11.x, thanks.
+Committed to 2023.02.x and 2023.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
