@@ -4,50 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62B99C54E60
-	for <buildroot@archiver.kernel.org>; Tue, 19 Mar 2024 11:22:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C513C54E5D
+	for <buildroot@archiver.kernel.org>; Tue, 19 Mar 2024 12:04:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2E86881E53;
-	Tue, 19 Mar 2024 11:22:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DA8E2813E7;
+	Tue, 19 Mar 2024 12:04:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gR8ZvmQYGZYu; Tue, 19 Mar 2024 11:22:08 +0000 (UTC)
+	with ESMTP id JNl7y34vtF2H; Tue, 19 Mar 2024 12:04:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 25BDE81E42
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 232E1813EC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 25BDE81E42;
-	Tue, 19 Mar 2024 11:22:08 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 120231BF95F
- for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 11:22:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 232E1813EC;
+	Tue, 19 Mar 2024 12:04:14 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D9E5D1BF427
+ for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 12:04:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F1F0640308
- for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 11:22:00 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C6AD7813EC
+ for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 12:04:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rmSE-YkSo4C4 for <buildroot@lists.busybox.net>;
- Tue, 19 Mar 2024 11:22:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yW3VbWuijBZG for <buildroot@lists.busybox.net>;
+ Tue, 19 Mar 2024 12:04:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
+ helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 20EF2406AB
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 20EF2406AB
- for <buildroot@buildroot.org>; Tue, 19 Mar 2024 11:21:59 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6FCFF8345D; Tue, 19 Mar 2024 11:21:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 78C22813E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 78C22813E7
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 78C22813E7
+ for <buildroot@buildroot.org>; Tue, 19 Mar 2024 12:04:09 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 14F40240003;
+ Tue, 19 Mar 2024 12:04:06 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1rmYCM-003Qy0-1X;
+ Tue, 19 Mar 2024 13:04:06 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 19 Mar 2024 12:18:13 +0100
-X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: e68e6a336e009bcb97c20b7a18ee30d809e47370
-X-Git-Newrev: a0353ef806f34f5c47d89ed470c84902398ef1fd
-X-Patchwork-Hint: ignore
-Message-Id: <20240319112159.6FCFF8345D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/powertop: fix
- gettext build
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20240302163138.152368-1-fontaine.fabrice@gmail.com>
+Date: Tue, 19 Mar 2024 13:04:06 +0100
+In-Reply-To: <20240302163138.152368-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 2 Mar 2024 17:31:37 +0100")
+Message-ID: <875xxicts9.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/2] package/python-cheroot: drop
+ host-python-setuptools-scm-git-archive
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,43 +69,22 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0353ef806f34f5c47d89ed470c84902398ef1fd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Fix gettext build raised since bump to version 2.15 in commit
-d65b960859046be486ced6c490d3671bd1392661:
+ > Drop host-python-setuptools-scm-git-archive dependency
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-*** error: gettext infrastructure mismatch: using a Makefile.in.in from gettext version 0.18 but the autoconf macros are from gettext version 0.20
+Committed to 2023.02.x and 2023.11.x, thanks.
 
-Fixes: d65b960859046be486ced6c490d3671bd1392661
- - http://autobuild.buildroot.org/results/bb80a7842d18651e5069f3a91f06a9c23218d260
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 6849d17cf4d65f3c8dcc986a7a68ce51619f8508)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/powertop/powertop.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/powertop/powertop.mk b/package/powertop/powertop.mk
-index 0481caee07..a7a57939e0 100644
---- a/package/powertop/powertop.mk
-+++ b/package/powertop/powertop.mk
-@@ -20,6 +20,7 @@ POWERTOP_DEPENDENCIES = \
- POWERTOP_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
- # 0001-add-disable-stack-protector-option.patch
- POWERTOP_AUTORECONF = YES
-+POWERTOP_AUTOPOINT = YES
- POWERTOP_AUTORECONF_OPTS = --include=$(HOST_DIR)/share/autoconf-archive
- POWERTOP_CONF_OPTS = --disable-stack-protector
- 
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
