@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADD84C54E5D
-	for <buildroot@archiver.kernel.org>; Tue, 19 Mar 2024 12:23:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E36CAC54E60
+	for <buildroot@archiver.kernel.org>; Tue, 19 Mar 2024 12:23:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7ABE9406F3;
-	Tue, 19 Mar 2024 12:23:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8C381406EF;
+	Tue, 19 Mar 2024 12:23:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WymOR1tS8mvI; Tue, 19 Mar 2024 12:23:38 +0000 (UTC)
+	with ESMTP id TsELZTfHOksq; Tue, 19 Mar 2024 12:23:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 28A15406EE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 830F2406F7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 28A15406EE;
-	Tue, 19 Mar 2024 12:23:38 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 944AF1BF406
+	by smtp4.osuosl.org (Postfix) with ESMTP id 830F2406F7;
+	Tue, 19 Mar 2024 12:23:41 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A66DE1BF95F
  for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 12:23:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8214140B9B
+ by smtp4.osuosl.org (Postfix) with ESMTP id A038140322
  for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 12:23:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yeIclYTG6OcZ for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PG84wyLAxq3X for <buildroot@lists.busybox.net>;
  Tue, 19 Mar 2024 12:23:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AAADF40192
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 88BCB40309
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id AAADF40192
+ by smtp4.osuosl.org (Postfix) with ESMTP id 88BCB40309
  for <buildroot@buildroot.org>; Tue, 19 Mar 2024 12:23:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 98D19835A4; Tue, 19 Mar 2024 12:23:32 +0000 (UTC)
+ id 800F583456; Tue, 19 Mar 2024 12:23:32 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 19 Mar 2024 13:20:47 +0100
+Date: Tue, 19 Mar 2024 13:09:04 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 5ea4551d5311d5a1e7c5ceaf3c5ad59e37dab07b
-X-Git-Newrev: 4160f33807287df7ffaf73f908d6d019542fd798
+X-Git-Oldrev: b726ccc0c9ab479ec1b889e6b6e304e9c2539655
+X-Git-Newrev: b01b157029f5108d7e7661818a2b5d4e9effcc16
 X-Patchwork-Hint: ignore
-Message-Id: <20240319122332.98D19835A4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/strongswan: drop
- BR2_PACKAGE_STRONGSWAN_SCEP
+Message-Id: <20240319122332.800F583456@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x]
+ package/gstreamer1/gst1-vaapi: fix wayland build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,74 +65,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4160f33807287df7ffaf73f908d6d019542fd798
+commit: https://git.buildroot.net/buildroot/commit/?id=b01b157029f5108d7e7661818a2b5d4e9effcc16
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-scepclient is unrecognized since bump to version 5.9.8 in commit
-b79d735139282ecf052dc89d4c221bbd16447112 and
-https://github.com/strongswan/strongswan/commit/8716f7c03c6193b1cb53837243177f36280ff4f7:
+wayland-protocols is a mandatory dependency with wayland since
+bump to version 1.22.0 in commit
+33d4c226e582f6c0086431c4d9154e462cb3cf34 and
+https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/3c713cc16ee1d374213cb2b47a3127e14e5ff8a5:
 
-configure: WARNING: unrecognized options: --disable-gtk-doc, --disable-gtk-doc-html, --disable-doc, --disable-docs, --disable-documentation, --with-xmlto, --with-fop, --enable-ipv6, --disable-nls, --enable-scepclient
+Run-time dependency wayland-protocols found: NO (tried pkgconfig and cmake)
 
-Fixes: b79d735139282ecf052dc89d4c221bbd16447112
+../output-1/build/gst1-vaapi-1.22.0/meson.build:111:0: ERROR: Dependency "wayland-protocols" not found, tried pkgconfig and cmake
+
+Fixes: 33d4c226e582f6c0086431c4d9154e462cb3cf34
+ - http://autobuild.buildroot.org/results/b5e79d4e10fdf24c3fd43ab742d9d14a5d07824b
+ - http://autobuild.buildroot.org/results/ad624cd11d5a1b3346974000ae2b61f4261af02c
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ed2090717f657c1f19bb7bd62c97e17a7bf3ff50)
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+(cherry picked from commit 9d74e5af7189a50d891b5ffc3acc55ff795abdf1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy                 | 10 ++++++++++
- package/strongswan/Config.in     |  3 ---
- package/strongswan/strongswan.mk |  1 -
- 3 files changed, 10 insertions(+), 4 deletions(-)
+ package/gstreamer1/gst1-vaapi/Config.in     | 1 +
+ package/gstreamer1/gst1-vaapi/gst1-vaapi.mk | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 64419a2615..10101d97b0 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,16 @@ endif
+diff --git a/package/gstreamer1/gst1-vaapi/Config.in b/package/gstreamer1/gst1-vaapi/Config.in
+index a1062097ed..d6a1542ad3 100644
+--- a/package/gstreamer1/gst1-vaapi/Config.in
++++ b/package/gstreamer1/gst1-vaapi/Config.in
+@@ -8,6 +8,7 @@ config BR2_PACKAGE_GST1_VAAPI
+ 	select BR2_PACKAGE_LIBDRM
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE
+ 	select BR2_PACKAGE_GST1_PLUGINS_BAD # gstreamer-codecparsers
++	select BR2_PACKAGE_WAYLAND_PROTOCOLS if BR2_PACKAGE_WAYLAND
+ 	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBXRANDR if BR2_PACKAGE_XORG7
+ 	help
+diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
+index 4b04d1bb72..d934bab233 100644
+--- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
++++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
+@@ -39,6 +39,7 @@ endif
  
- comment "Legacy options removed in 2023.02"
- 
-+config BR2_PACKAGE_STRONGSWAN_SCEP
-+	bool "strongswan SCEP client tool removed"
-+	select BR2_LEGACY
-+	help
-+	  "ipsec scepclient" tool has been removed and replaced by the
-+	  pki subcommands "pki --scep" and "pki --scepca" which
-+	  implement the new SCEP RFC 8894 standard that was released in
-+	  September 2020 and which supports trusted "certificate
-+	  renewal" based on the existing client certificate.
-+
- config BR2_PACKAGE_PUGIXML_HEADER_ONLY
- 	bool "pugixml header-only removed"
- 	select BR2_LEGACY
-diff --git a/package/strongswan/Config.in b/package/strongswan/Config.in
-index f2e597e016..5231e69ca8 100644
---- a/package/strongswan/Config.in
-+++ b/package/strongswan/Config.in
-@@ -204,9 +204,6 @@ config BR2_PACKAGE_STRONGSWAN_PKI
- 	bool "Enable pki certificate utility"
- 	default y
- 
--config BR2_PACKAGE_STRONGSWAN_SCEP
--	bool "Enable SCEP client tool"
--
- config BR2_PACKAGE_STRONGSWAN_SCRIPTS
- 	bool "Enable additional utilities (found in scripts directory)"
- 	default y
-diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
-index 36cb72f6be..5521fb7dd4 100644
---- a/package/strongswan/strongswan.mk
-+++ b/package/strongswan/strongswan.mk
-@@ -33,7 +33,6 @@ STRONGSWAN_CONF_OPTS += \
- 	--enable-stroke=$(if $(BR2_PACKAGE_STRONGSWAN_STROKE),yes,no) \
- 	--enable-sql=$(if $(BR2_PACKAGE_STRONGSWAN_SQL),yes,no) \
- 	--enable-pki=$(if $(BR2_PACKAGE_STRONGSWAN_PKI),yes,no) \
--	--enable-scepclient=$(if $(BR2_PACKAGE_STRONGSWAN_SCEP),yes,no) \
- 	--enable-scripts=$(if $(BR2_PACKAGE_STRONGSWAN_SCRIPTS),yes,no) \
- 	--enable-vici=$(if $(BR2_PACKAGE_STRONGSWAN_VICI),yes,no) \
- 	--enable-swanctl=$(if $(BR2_PACKAGE_STRONGSWAN_VICI),yes,no) \
+ ifeq ($(BR2_PACKAGE_WAYLAND),y)
+ GST1_VAAPI_CONF_OPTS += -Dwayland=enabled
++GST1_VAAPI_DEPENDENCIES += wayland wayland-protocols
+ else
+ GST1_VAAPI_CONF_OPTS += -Dwayland=disabled
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
