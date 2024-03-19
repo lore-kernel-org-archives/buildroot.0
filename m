@@ -4,102 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 050E9C54E68
-	for <buildroot@archiver.kernel.org>; Tue, 19 Mar 2024 21:52:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 904C1C54E68
+	for <buildroot@archiver.kernel.org>; Tue, 19 Mar 2024 22:09:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9E8E540438;
-	Tue, 19 Mar 2024 21:52:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 57A3640B80;
+	Tue, 19 Mar 2024 22:09:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7aRaVtmFytVY; Tue, 19 Mar 2024 21:52:44 +0000 (UTC)
+	with ESMTP id 6DXDRZsQfs_v; Tue, 19 Mar 2024 22:09:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A3F08405CB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 418704144E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A3F08405CB;
-	Tue, 19 Mar 2024 21:52:44 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8BA861BF360
- for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 21:52:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 418704144E;
+	Tue, 19 Mar 2024 22:09:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 70ABA1BF28F
+ for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 22:09:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 76FA3407C6
- for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 21:52:42 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6AE4681F60
+ for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 22:09:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 98P60oqPkyQr for <buildroot@lists.busybox.net>;
- Tue, 19 Mar 2024 21:52:41 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::232; helo=mail-lj1-x232.google.com;
- envelope-from=christian@aperture.us; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3F011407BE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F011407BE
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com
- [IPv6:2a00:1450:4864:20::232])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3F011407BE
- for <buildroot@buildroot.org>; Tue, 19 Mar 2024 21:52:41 +0000 (UTC)
-Received: by mail-lj1-x232.google.com with SMTP id
- 38308e7fff4ca-2d4541bf57eso82301761fa.2
- for <buildroot@buildroot.org>; Tue, 19 Mar 2024 14:52:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1710885158; x=1711489958;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=3caBEdkRUarWLMGJc4e8e/240lF/SB0/e/XL1hR9i/k=;
- b=U8LI3gMRiLTjLWHl7cnNYXGf4NkMf1Y25EpfcXliQUk5l9ejqNILEeI+LVzVp5VzHj
- D2frcBJu+QdeRbKdVT6a46eoYooColqRKtulRZcvCFjMox07dxp2TnjZxBBmhg2M2BSu
- z+vmj5ufEdSe+ALJ36Rc45Z1hq/VQGVISFoqI5/tLO7xqdJ5wFf1HTT2rs8slxr8RPx8
- YCwU+cXX87DQL+5Wrg6Uhgak0787kZzTt2nNVbUN7q+MUYW/Rid21kCb1DZhh8fQa0zi
- rMrqKvcHV1SOCpr13dBuGzrcyVtNh480WlBhQD9zmB+GcH/zpXOqsFENM8NGRfF9f4DT
- klQg==
-X-Gm-Message-State: AOJu0Yyrf9hjAP7SHGBHtCfenv3G2EVBx2dA9G0S3jhsA5Uo8oiu9Jc5
- grP1BUK2efdoWJG7HBQv9F1EazVJDwCeAmjhqLphMLZNTEzLPALC3kWyDBNo9hSzKsiccGQCIXr
- A
-X-Google-Smtp-Source: AGHT+IH+72NduBd6UW/rgb00ZhcC0gflf+Fobz4zqe2TZykW+XNHjohzMSEor7V3Tyzn8fq7lAiZtA==
-X-Received: by 2002:a2e:95c8:0:b0:2d4:7285:b997 with SMTP id
- y8-20020a2e95c8000000b002d47285b997mr9270026ljh.27.1710885158258; 
- Tue, 19 Mar 2024 14:52:38 -0700 (PDT)
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com.
- [209.85.167.49]) by smtp.gmail.com with ESMTPSA id
- b10-20020a05651c032a00b002d4a00a1318sm1161219ljp.53.2024.03.19.14.52.37
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 19 Mar 2024 14:52:37 -0700 (PDT)
-Received: by mail-lf1-f49.google.com with SMTP id
- 2adb3069b0e04-513da1c1f26so7134990e87.3
- for <buildroot@buildroot.org>; Tue, 19 Mar 2024 14:52:37 -0700 (PDT)
-X-Received: by 2002:a19:6403:0:b0:513:df00:8ab5 with SMTP id
- y3-20020a196403000000b00513df008ab5mr8000888lfb.27.1710885156875; Tue, 19 Mar
- 2024 14:52:36 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fyCamngEVCYo for <buildroot@lists.busybox.net>;
+ Tue, 19 Mar 2024 22:09:50 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 221FE81F59
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 221FE81F59
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 221FE81F59
+ for <buildroot@buildroot.org>; Tue, 19 Mar 2024 22:09:49 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id AB2B713F8A2;
+ Tue, 19 Mar 2024 23:09:32 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Tue, 19 Mar 2024 23:09:32 +0100
+Date: Tue, 19 Mar 2024 23:09:32 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Message-ID: <ZfoNHD-DlqkkYCRh@landeda>
+References: <20240304153253.732708-1-dario.binacchi@amarulasolutions.com>
+ <20240304153253.732708-6-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
-References: <893660729815cb737418892a77d27ba089a6cbde.1677568448.git.stefan@agner.ch>
- <20240319215037.8766-1-christian@aperture.us>
-In-Reply-To: <20240319215037.8766-1-christian@aperture.us>
-Date: Tue, 19 Mar 2024 14:52:25 -0700
-X-Gmail-Original-Message-ID: <CA+h8R2p6raJ3KpOU0mP-dTgj=nKxk62o8xutd3HPdf7K+Jpc=Q@mail.gmail.com>
-Message-ID: <CA+h8R2p6raJ3KpOU0mP-dTgj=nKxk62o8xutd3HPdf7K+Jpc=Q@mail.gmail.com>
-To: stefan@agner.ch
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=aperture.us; s=google; t=1710885158; x=1711489958; darn=buildroot.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=3caBEdkRUarWLMGJc4e8e/240lF/SB0/e/XL1hR9i/k=;
- b=nvnm76HG6VpMxLmAAPQp52mbfzEc5cO9bPsBV2vId6EaMWafDLvwk4mIGGbkRdoFFe
- qsaQRs6hzSZZYPpyp7D7C1yVFYvNaPutTwM4ZpuLuWUxRfP6ipnjx/kGWOzjrBQw8Jzx
- VuhIlzskziQ+Z1Qxck44ZqSAmm8pD98DbkTTNqQOxPPQHFkD/sWlzW+noEjUWOuufxCT
- Y5eDPt7NJsjUYA62GwY8xf9oNPQZYZ6PUxqbFIR7+22CW94yB48t6blyWiealD0Vy0r8
- czqoCwUDSUq3DHmhnRB7TZst8QI+ksOHEvGxJmg0hOKWBWs/FOMiCMp8g8R+3QRa7UXA
- gA0g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=aperture.us
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=aperture.us header.i=@aperture.us
- header.a=rsa-sha256 header.s=google header.b=nvnm76HG
-Subject: Re: [Buildroot] [PATCH] package/rtl8812au-aircrack-ng: bump to
- version 2024-03-16 on branch v5.6.4.2
+Content-Disposition: inline
+In-Reply-To: <20240304153253.732708-6-dario.binacchi@amarulasolutions.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1710886186;
+ bh=bUsq26E85d95wTENmIc7eECWskDk/4pZhLczfXKIgFs=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=JQ+RtgyBSOe0mGGoPfiYeTNl6DOuPkXqjaiWr0+e+NGV/kKfx2EHO+MdDNu3yN2FY
+ aBENFnKz7IApU/u+vBwttVCME2o44pigqwc6k/A4Pff/sId1RE5JpclJCEqk/FeVRq
+ ZiklUb8m87hu6KV9fsugMUqNEMdmjEqTClYyYfxyJMP9BW3pMIq5f8jjwm2751Nb0O
+ RNkce4c7B1rD4WHD3JMgL+nPEq3gVh7XxOxEQ9aZdLMs0LG5GZbyeB1FXPe4ilI1+G
+ iJrGrWraJrIwarTOigKS1U4rJEzsTJum5cGSI/LQk5TS2oXJNWsEbqSr9M0kfgBmRt
+ 718yG2oIyKL7Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=JQ+RtgyB
+Subject: Re: [Buildroot] [PATCH v9 05/22] boot/ti-k3-r5-loader: bump to
+ version 2024.01
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -111,37 +82,88 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@aperture.us>
-Cc: giulio.benetti@benettiengineering.com, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+ Anand Gadiyar <gadiyar@ti.com>, Asaf Kahlon <asafka7@gmail.com>,
+ Xuanhao Shi <X15000177@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
+ Romain Naour <romain.naour@smile.fr>, michael@amarulasolutions.com,
+ linux-amarula@amarulasolutions.com, bryce@redpinelabs.com,
+ Andreas Dannenberg <dannenberg@ti.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QWxsLAoKT24gVHVlLCBNYXIgMTksIDIwMjQgYXQgMjo1MOKAr1BNIENocmlzdGlhbiBTdGV3YXJ0
-IDxjaHJpc3RpYW5AYXBlcnR1cmUudXM+IHdyb3RlOgo+Cj4gPiBUaGlzIHZlcnNpb24gYWRkcyBz
-dXBwb3J0IHVwIHRvIExpbnV4IHZlcnNpb24gNi44Lgo+ID4KPiA+IFNpZ25lZC1vZmYtYnk6IEdp
-dWxpbyBCZW5ldHRpIDxnaXVsaW8uYmVuZXR0aUBiZW5ldHRpZW5naW5lZXJpbmcuY29tPgo+ID4t
-LS0KPiA+IHBhY2thZ2UvcnRsODgxMmF1LWFpcmNyYWNrLW5nL3J0bDg4MTJhdS1haXJjcmFjay1u
-Zy5oYXNoIHwgMiArLQo+ID4gcGFja2FnZS9ydGw4ODEyYXUtYWlyY3JhY2stbmcvcnRsODgxMmF1
-LWFpcmNyYWNrLW5nLm1rICAgfCAyICstCj4gPiAyIGZpbGVzIGNoYW5nZWQsIDIgaW5zZXJ0aW9u
-cygrKSwgMiBkZWxldGlvbnMoLSkKPiA+Cj4gPiBbc25pcF0KPiA+Cj4gPiAtc2hhMjU2ICA5Njlm
-YTk2YzkwZTE2ZmNhZjhmNmIzMGQ0NTc2YTg0NDZjNzA0MTkzMmJlYTM0YmJmZWE3ZTljOTEwMzhi
-ZmU1ICBydGw4ODEyYXUtYWlyY3JhY2stbmctNGE5ODNlNDdkYWZjMDQ4MDE5NDEyMzUwZDM2Mjcw
-ODY0ZjZiNWYyZC50YXIuZ3oKPiA+ICtzaGEyNTYgIDc1MmQ5YWU2NzE0MDk2NmVkZGM0NjMyMzhm
-ZGUxZjZiODY0NTdkYjIyYTQ1ZjYxYzEzODg2YzMyNDRlYWZmZTEgIHJ0bDg4MTJhdS1haXJjcmFj
-ay1uZy1mMjM5NzlmMGQyMGFhZmI1NjNhYzcxYjU2ZmNiYzc0MjY4Yzc5OGMyLnRhci5nego+ID4K
-PiA+IFtzbmlwXQo+ID4KPiA+IC1SVEw4ODEyQVVfQUlSQ1JBQ0tfTkdfVkVSU0lPTiA9IDRhOTgz
-ZTQ3ZGFmYzA0ODAxOTQxMjM1MGQzNjI3MDg2NGY2YjVmMmQKPiA+ICtSVEw4ODEyQVVfQUlSQ1JB
-Q0tfTkdfVkVSU0lPTiA9IGYyMzk3OWYwZDIwYWFmYjU2M2FjNzFiNTZmY2JjNzQyNjhjNzk4YzIK
-Pgo+IFRoYW5rcywgZml4ZXMgYnVpbGQgb24gNi44LnguCj4KPiBSZXZpZXdlZC1ieTogQ2hyaXN0
-aWFuIFN0ZXdhcnQgPGNocmlzdGlhbkBhcGVydHVyZS51cz4KCgpJIHdhcyB0cnlpbmcgdG8gcmVw
-bHkgdG8gYW4gYWxyZWFkeSBzZW50IHBhdGNoOgoKaHR0cHM6Ly9wYXRjaHdvcmsub3psYWJzLm9y
-Zy9wcm9qZWN0L2J1aWxkcm9vdC9wYXRjaC8yMDI0MDMxODIwMzUzNy4zNDE1MjMtMS1naXVsaW8u
-YmVuZXR0aUBiZW5ldHRpZW5naW5lZXJpbmcuY29tLwoKTm90IHN1cmUgaWYgdGhlIHJlcGx5IHdl
-bnQgdG8gdGhlIGNvcnJlY3QgbWVzc2FnZSB0aHJlYWQuCgpUcnlpbmcgdG8gaW1wb3J0IGFuZCBz
-ZW5kIHJlcGxpZXMgdG8gbWJveCB3aXRoIGdtYWlsIGlzIG5vdCBzbyBlYXN5IQoKVGhhbmtzLApD
-aHJpc3RpYW4KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
-YnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xp
-c3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Dario, All,
+
+On 2024-03-04 16:32 +0100, Dario Binacchi spake thusly:
+> All in-tree configs with the ti-k3-r5 bootloader use a custom version,
+> so this patch is mostly for the menuconfig default version
+> 
+> Suggested-by: Romain Naour <romain.naour@smile.fr>
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+[--SNIP--]
+> diff --git a/boot/ti-k3-r5-loader/ti-k3-r5-loader.hash b/boot/ti-k3-r5-loader/ti-k3-r5-loader.hash
+> index c5d1cb8e09f0..fbe5d215409d 100644
+> --- a/boot/ti-k3-r5-loader/ti-k3-r5-loader.hash
+> +++ b/boot/ti-k3-r5-loader/ti-k3-r5-loader.hash
+> @@ -1,3 +1,3 @@
+>  # Locally computed:
+> -sha256  50b4482a505bc281ba8470c399a3c26e145e29b23500bc35c50debd7fa46bdf8  u-boot-2022.10.tar.bz2
+
+Removing this hash means that defconfigs that still reference the
+2022.10 version, no longer have a hash to validate the download against,
+which make it susceptible to CVE-2023-43608 [0] [1].
+
+That was already the case for the two ti-am6?x defconfig in the the two
+previous patches, as they already used a custom kernel, a custm ATF, a
+custom u-boot: the hashes can't be checked for those versions, so the
+two ti am?x defconfigs already hit CVE-2023-43608.
+
+We already fixed another defconfig for a similar issue, see commit
+9ebbfeff387 (configs/rock5b: add hash for custom kernel).
+
+Could you look into doing the same for those to TI am6?x defconfig,
+please?
+
+In the meantime, I kept the hash for 2022.10 for ti-k3-r5-loader
+(really, for uboot), to abvoid the issue at least for ti-k3-r5-loader.
+
+Speaking of that, by the way, ti-k3-r5-loader really is uboot, so I
+think that it should share:
+
+ 1. the same DL_DIR:   TI_K3_R5_LOADER_DL_SUBDIR = uboot
+
+ 2. the same hash file:  have ti-k3-r5-loader.hash be a symlink to
+    uboot.hash  (and have a xomment at the top of that hash file that it
+    is shared and that old hashes should/can be kept)
+
+Do you think that makes sense? If so, would you like to look into it?
+
+[0] https://cve.mitre.org/cgi-bin/cvename.cgi?name=2023-43608
+[1] https://talosintelligence.com/vulnerability_reports/TALOS-2023-1844
+
+Regards,
+Yann E. MORIN.
+
+> +sha256  b99611f1ed237bf3541bdc8434b68c96a6e05967061f992443cb30aabebef5b3  u-boot-2024.01.tar.bz2
+>  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
+> -- 
+> 2.43.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
