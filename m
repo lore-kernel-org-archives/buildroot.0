@@ -1,69 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F066C54E58
-	for <buildroot@archiver.kernel.org>; Mon, 18 Mar 2024 18:46:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57A3CC54E60
+	for <buildroot@archiver.kernel.org>; Tue, 19 Mar 2024 07:55:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9727440AC3;
-	Mon, 18 Mar 2024 18:46:47 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JQgwZO-SW1wD; Mon, 18 Mar 2024 18:46:46 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 86D5F40AC7
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 86D5F40AC7;
-	Mon, 18 Mar 2024 18:46:46 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B87E11BF2EC
- for <buildroot@lists.busybox.net>; Mon, 18 Mar 2024 18:46:44 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A4F9B405EB
- for <buildroot@lists.busybox.net>; Mon, 18 Mar 2024 18:46:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E99E9405EA;
+	Tue, 19 Mar 2024 07:55:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7lWv0oyaRmYu for <buildroot@lists.busybox.net>;
- Mon, 18 Mar 2024 18:46:43 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yYjoYM_oZR4S; Tue, 19 Mar 2024 07:55:07 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A544A405ED
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id A544A405ED;
+	Tue, 19 Mar 2024 07:55:07 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 31D321BF310
+ for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 07:55:06 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1E541817EB
+ for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 07:55:06 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AHRRsflH11Pj for <buildroot@lists.busybox.net>;
+ Tue, 19 Mar 2024 07:55:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=bugzilla@busybox.net;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7AD34405EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0271A81799
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7AD34405EA
- for <buildroot@uclibc.org>; Mon, 18 Mar 2024 18:46:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0271A81799
+ for <buildroot@uclibc.org>; Tue, 19 Mar 2024 07:55:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id DBCE5826AD; Mon, 18 Mar 2024 18:46:42 +0000 (UTC)
+ id 7174182DD2; Tue, 19 Mar 2024 07:55:04 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Mon, 18 Mar 2024 18:46:42 +0000
+Date: Tue, 19 Mar 2024 07:55:04 +0000
 X-Bugzilla-Reason: CC
-X-Bugzilla-Type: new
+X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2024.02
+X-Bugzilla-Version: 2023.11.1
 X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: fli4l@franke-prem.de
+X-Bugzilla-Severity: major
+X-Bugzilla-Who: ian_ormshaw@waters.com
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter cc
- target_milestone
-Message-ID: <bug-16003-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-15916-163-bO1YqSrRSH@https.bugs.busybox.net/>
+In-Reply-To: <bug-15916-163@https.bugs.busybox.net/>
+References: <bug-15916-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 16003] New: samba4 will not build for x86
+Subject: [Buildroot] [Bug 15916] mesa3d fails to build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,71 +80,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=16003
+https://bugs.busybox.net/show_bug.cgi?id=15916
 
-            Bug ID: 16003
-           Summary: samba4 will not build for x86
-           Product: buildroot
-           Version: 2024.02
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned@buildroot.uclibc.org
-          Reporter: fli4l@franke-prem.de
-                CC: buildroot@uclibc.org
-  Target Milestone: ---
+--- Comment #1 from Dr I J Ormshaw <ian_ormshaw@waters.com> ---
+Adding spirv tools on my build system
 
-On my system (Debian 11 X86_64) i will try to build as cross-compile 
-the samba4 package.
-Setup is near similar to the setup as x86_64 system what is build samba4
-without problems.
-So when i try to build samba4 i run in the error:
-[1659/4058] Compiling source4/lib/socket/connect_multi.c
-/home/roland/.fbr/fbr-4.0-test_1_2024-x86/buildroot/output/per-package/samba4/host/bin/../lib/gcc/i586-buildroot-linux-uclibc/12.3.0/../../../../i586-buildroot-linux-uclibc/bin/ld:
-/home/roland/.fbr/fbr-4.0-test_1_2024-x86/buildroot/output/per-package/samba4/host/i586-buildroot-linux-uclibc/sysroot/usr/lib/uclibc_nonshared.a(ssp-local.os):
-in function `__stack_chk_fail_local':
-buildroot/build/uclibc-1.0.45/libc/sysdeps/linux/common/ssp-local.c:35:
-undefined reference to `__stack_chk_fail'
-collect2: error: ld returned 1 exit status
+$ dnf5 list --installed *spirv*
+Installed packages
+spirv-headers-devel.noarch   1.5.5-20.fc39 updates
+spirv-llvm-translator.x86_64 17.0.0-1.fc39 fedora
+spirv-tools.x86_64           2023.3-3.fc39 updates
+spirv-tools-devel.x86_64     2023.3-3.fc39 updates
+spirv-tools-libs.x86_64      2023.3-3.fc39 updates
 
-../../lib/krb5_wrap/krb5_samba.c: In function 'smb_krb5_salt_principal_str':
-../../lib/krb5_wrap/krb5_samba.c:712:9: warning: 'krb5_free_unparsed_name' is
-deprecated [-Wdeprecated-declarations]
-  712 |         krb5_free_unparsed_name(krb5_ctx, salt_principal_malloc);
-      |         ^~~~~~~~~~~~~~~~~~~~~~~
-In file included from ../../third_party/heimdal/lib/krb5/krb5.h:1019,
-                 from ../../lib/replace/system/kerberos.h:33,
-                 from ../../lib/krb5_wrap/krb5_samba.h:41,
-                 from ../../lib/krb5_wrap/krb5_samba.c:25:
-third_party/heimdal/lib/krb5/krb5-protos.h:3774:1: note: declared here
- 3774 | krb5_free_unparsed_name (
-      | ^~~~~~~~~~~~~~~~~~~~~~~
-../../lib/krb5_wrap/krb5_samba.c: In function 'smb_krb5_unparse_name':
-../../lib/krb5_wrap/krb5_samba.c:892:17: warning: 'krb5_free_unparsed_name' is
-deprecated [-Wdeprecated-declarations]
-  892 |                 krb5_free_unparsed_name(context, utf8_name);
-      |                 ^~~~~~~~~~~~~~~~~~~~~~~
-third_party/heimdal/lib/krb5/krb5-protos.h:3774:1: note: declared here
- 3774 | krb5_free_unparsed_name (
-      | ^~~~~~~~~~~~~~~~~~~~~~~
-../../lib/krb5_wrap/krb5_samba.c:895:9: warning: 'krb5_free_unparsed_name' is
-deprecated [-Wdeprecated-declarations]
-  895 |         krb5_free_unparsed_name(context, utf8_name);
-      |         ^~~~~~~~~~~~~~~~~~~~~~~
-third_party/heimdal/lib/krb5/krb5-protos.h:3774:1: note: declared here
- 3774 | krb5_free_unparsed_name (
-      | ^~~~~~~~~~~~~~~~~~~~~~~
+And setting
 
-Waf: Leaving directory
-`/home/roland/.fbr/fbr-4.0-test_1_2024-x86/buildroot/output/build/samba4-4.19.5/bin/default'
-Build failed
- -> task in 'cluster' failed with exit status 1 (run with -v to display more
-information)
+Symbol: BR2_PACKAGE_SPIRV_HEADERS [=y]
+Symbol: BR2_PACKAGE_SPIRV_TOOLS [=y]
 
-Any suggestion what will not work here?
+gives the followinf error:
+
+Found CMake: /usr/bin/cmake (3.27.7)
+Run-time dependency spirv-tools found: NO (tried pkgconfig and cmake)
+
+../../../../../build/x86_64-WatersAMST-linux-gnu_24-support-mesa3d-gallium-amdgpu-opencl-e791e9b4/build/mesa3d-24.0.0/meson.build:1843:20:
+ERROR: Dependency "SPIRV-Tools" not found, tried pkgconfig and cmake
+
+A full log can be found at
+/home/ian/build/x86_64-WatersAMST-linux-gnu_24-support-mesa3d-gallium-amdgpu-opencl-e791e9b4/build/mesa3d-24.0.0/build/meson-logs/meson-log.txt
 
 -- 
 You are receiving this mail because:
