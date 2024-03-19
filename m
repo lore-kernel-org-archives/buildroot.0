@@ -4,59 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50301C54E60
-	for <buildroot@archiver.kernel.org>; Tue, 19 Mar 2024 12:18:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C15EEC54E5D
+	for <buildroot@archiver.kernel.org>; Tue, 19 Mar 2024 12:21:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 132A8400E9;
-	Tue, 19 Mar 2024 12:18:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 80702406EE;
+	Tue, 19 Mar 2024 12:21:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QC273j5i3Ya4; Tue, 19 Mar 2024 12:18:23 +0000 (UTC)
+	with ESMTP id VnZGM4-UIrfK; Tue, 19 Mar 2024 12:21:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA59D400F0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 284FB406EA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EA59D400F0;
-	Tue, 19 Mar 2024 12:18:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 284FB406EA;
+	Tue, 19 Mar 2024 12:21:09 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 864041BF406
- for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 12:18:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5A3411BF406
+ for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 12:21:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 73C7340BAE
- for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 12:18:21 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D341040BB2
+ for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 12:21:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uXfKETe-9Yn7 for <buildroot@lists.busybox.net>;
- Tue, 19 Mar 2024 12:18:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
- helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ with ESMTP id Eq-UQiSD9Szh for <buildroot@lists.busybox.net>;
+ Tue, 19 Mar 2024 12:21:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
+ helo=relay3-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6675D40BAC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6675D40BAC
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6675D40BAC
- for <buildroot@buildroot.org>; Tue, 19 Mar 2024 12:18:20 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 828DAE0003;
- Tue, 19 Mar 2024 12:18:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org AD50740BAC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AD50740BAC
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id AD50740BAC
+ for <buildroot@buildroot.org>; Tue, 19 Mar 2024 12:21:05 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id F064E60006;
+ Tue, 19 Mar 2024 12:21:03 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rmYQ4-003Rlr-2w;
- Tue, 19 Mar 2024 13:18:16 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rmYSl-003Ryu-1B;
+ Tue, 19 Mar 2024 13:21:03 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20240216211813.1846842-1-fontaine.fabrice@gmail.com>
-Date: Tue, 19 Mar 2024 13:18:16 +0100
-In-Reply-To: <20240216211813.1846842-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 16 Feb 2024 22:18:13 +0100")
-Message-ID: <87bk7abek7.fsf@48ers.dk>
+References: <20240303172622.629998-1-fontaine.fabrice@gmail.com>
+Date: Tue, 19 Mar 2024 13:21:03 +0100
+In-Reply-To: <20240303172622.629998-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 3 Mar 2024 18:26:22 +0100")
+Message-ID: <877chybefk.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/liburing: fix uclibc build
+Subject: Re: [Buildroot] [PATCH 1/1] package/strongswan: drop
+ BR2_PACKAGE_STRONGSWAN_SCEP
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,7 +69,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: =?utf-8?B?SsOpcsO0bWU=?= Pouiller <jezz@sysmic.org>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -76,22 +78,20 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fix the following build failure with uclibc-ng raised since bump to
- > version 2.4 in commit 3cc1b539e7e9fd49f571441e395e7daa8597dbec and
- > https://github.com/axboe/liburing/commit/c6bc86e2125bcd6fa10ff2b128cd86486acadff6:
+ > scepclient is unrecognized since bump to version 5.9.8 in commit
+ > b79d735139282ecf052dc89d4c221bbd16447112 and
+ > https://github.com/strongswan/strongswan/commit/8716f7c03c6193b1cb53837243177f36280ff4f7:
 
- > In file included from lib.h:12,
- >                  from setup.c:4:
- > arch/aarch64/lib.h:7:10: fatal error: sys/auxv.h: No such file or directory
- >     7 | #include <sys/auxv.h>
- >       |          ^~~~~~~~~~~~
+ > configure: WARNING: unrecognized options: --disable-gtk-doc,
+ > --disable-gtk-doc-html, --disable-doc, --disable-docs,
+ > --disable-documentation, --with-xmlto, --with-fop, --enable-ipv6,
+ > --disable-nls, --enable-scepclient
 
- > Fixes: 3cc1b539e7e9fd49f571441e395e7daa8597dbec
- >  - http://autobuild.buildroot.org/results/cc44d714c9267dd7a98debeb8c81c4ee1efe4ebb
+ > Fixes: b79d735139282ecf052dc89d4c221bbd16447112
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Committed to 2023.11.x, thanks.
+Committed to 2023.02.x and 2023.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
