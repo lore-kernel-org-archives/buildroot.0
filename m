@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FCE3C54E60
-	for <buildroot@archiver.kernel.org>; Tue, 19 Mar 2024 12:22:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DC4BC54E60
+	for <buildroot@archiver.kernel.org>; Tue, 19 Mar 2024 12:22:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EF828406FF;
-	Tue, 19 Mar 2024 12:22:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 63C7040727;
+	Tue, 19 Mar 2024 12:22:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id M32srexjt2z7; Tue, 19 Mar 2024 12:22:41 +0000 (UTC)
+	with ESMTP id a_TCaY8o2LxJ; Tue, 19 Mar 2024 12:22:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4320A406F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E003A4071F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4320A406F3;
-	Tue, 19 Mar 2024 12:22:41 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 470041BF406
+	by smtp4.osuosl.org (Postfix) with ESMTP id E003A4071F;
+	Tue, 19 Mar 2024 12:22:44 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 796131BF406
  for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 12:22:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 326FB60AA8
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0415F81E67
  for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 12:22:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YioVLXRUmvBD for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XO7DHoyx41Uf for <buildroot@lists.busybox.net>;
  Tue, 19 Mar 2024 12:22:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7314860AC3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 26B9C81E57
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7314860AC3
+ by smtp1.osuosl.org (Postfix) with ESMTP id 26B9C81E57
  for <buildroot@buildroot.org>; Tue, 19 Mar 2024 12:22:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6EAF88354C; Tue, 19 Mar 2024 12:22:22 +0000 (UTC)
+ id 1D5E78354C; Tue, 19 Mar 2024 12:22:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 19 Mar 2024 13:17:50 +0100
+Date: Tue, 19 Mar 2024 13:03:31 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 2828004f2514f45bb9a9c39135ac57beea81837f
-X-Git-Newrev: 7d54815f236396c689a7aad0aff413a6f05d05d1
+X-Git-Oldrev: bb9dd5564745d8ec878c42193b3d1d20ff4a09af
+X-Git-Newrev: 3414b568f6e060cc7baea44b6e661bcec9d490d3
 X-Patchwork-Hint: ignore
-Message-Id: <20240319122222.6EAF88354C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/liburing: fix
- uclibc build
+Message-Id: <20240319122222.1D5E78354C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/python-cheroot:
+ drop host-python-setuptools-scm-git-archive
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,75 +65,139 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7d54815f236396c689a7aad0aff413a6f05d05d1
+commit: https://git.buildroot.net/buildroot/commit/?id=3414b568f6e060cc7baea44b6e661bcec9d490d3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-Fix the following build failure with uclibc-ng raised since bump to
-version 2.4 in commit 3cc1b539e7e9fd49f571441e395e7daa8597dbec and
-https://github.com/axboe/liburing/commit/c6bc86e2125bcd6fa10ff2b128cd86486acadff6:
-
-In file included from lib.h:12,
-                 from setup.c:4:
-arch/aarch64/lib.h:7:10: fatal error: sys/auxv.h: No such file or directory
-    7 | #include <sys/auxv.h>
-      |          ^~~~~~~~~~~~
-
-Fixes: 3cc1b539e7e9fd49f571441e395e7daa8597dbec
- - http://autobuild.buildroot.org/results/cc44d714c9267dd7a98debeb8c81c4ee1efe4ebb
+Drop host-python-setuptools-scm-git-archive dependency
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 607507dfa91102c42b6b531e8f3a1a133e46e33f)
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit b8707cee5e7e4af8fc2addd317b294e081db994f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-src-arch-aarch64-fix-uclibc-build.patch   | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+ ...-setuptools-scm-v7-for-building-the-dists.patch | 101 +++++++++++++++++++++
+ package/python-cheroot/python-cheroot.mk           |   2 +-
+ 2 files changed, 102 insertions(+), 1 deletion(-)
 
-diff --git a/package/liburing/0001-src-arch-aarch64-fix-uclibc-build.patch b/package/liburing/0001-src-arch-aarch64-fix-uclibc-build.patch
+diff --git a/package/python-cheroot/0001-Use-setuptools-scm-v7-for-building-the-dists.patch b/package/python-cheroot/0001-Use-setuptools-scm-v7-for-building-the-dists.patch
 new file mode 100644
-index 0000000000..4468105e4f
+index 0000000000..837f2804d2
 --- /dev/null
-+++ b/package/liburing/0001-src-arch-aarch64-fix-uclibc-build.patch
-@@ -0,0 +1,39 @@
-+From f03f8da34fe96ac35a916ca3058b0f41971eae3b Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 16 Feb 2024 18:59:42 +0100
-+Subject: [PATCH] src/arch/aarch64: fix uclibc build
++++ b/package/python-cheroot/0001-Use-setuptools-scm-v7-for-building-the-dists.patch
+@@ -0,0 +1,101 @@
++From f0c51af263e20f332c6f675aa90ec6705ae4f5d1 Mon Sep 17 00:00:00 2001
++From: Serhii Abarovskyi <aserhii@protonmail.com>
++Date: Tue, 9 May 2023 18:33:54 +0300
++Subject: [PATCH] Use setuptools-scm v7+ for building the dists
 +
-+Fix the following build failure with uclibc-ng raised since version 2.3
-+and
-+https://github.com/axboe/liburing/commit/c6bc86e2125bcd6fa10ff2b128cd86486acadff6:
++Since version 7, setuptools-scm has native support for git archive,
++so the setuptools-scm-git-archive project is obsolete
++and this patch removes it from the build dependencies.
++Close #515
 +
-+In file included from lib.h:12,
-+                 from setup.c:4:
-+arch/aarch64/lib.h:7:10: fatal error: sys/auxv.h: No such file or directory
-+    7 | #include <sys/auxv.h>
-+      |          ^~~~~~~~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/cc44d714c9267dd7a98debeb8c81c4ee1efe4ebb
-+
++Upstream: https://github.com/cherrypy/cheroot/commit/f0c51af263e20f332c6f675aa90ec6705ae4f5d1
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Upstream: https://github.com/axboe/liburing/commit/32f9c27a76c43627f79bb77469d2da8583e4d3df
 +---
-+ src/arch/aarch64/lib.h | 1 -
-+ 1 file changed, 1 deletion(-)
++ .git_archival.txt                       |  3 +++
++ pyproject.toml                          |  3 +--
++ requirements/dist-build-constraints.in  |  3 +--
++ requirements/dist-build-constraints.txt | 16 +++++++---------
++ setup.cfg                               |  3 +--
++ 5 files changed, 13 insertions(+), 15 deletions(-)
 +
-+diff --git a/src/arch/aarch64/lib.h b/src/arch/aarch64/lib.h
-+index 3b701b1..41bcfc9 100644
-+--- a/src/arch/aarch64/lib.h
-++++ b/src/arch/aarch64/lib.h
-+@@ -4,7 +4,6 @@
-+ #define LIBURING_ARCH_AARCH64_LIB_H
++diff --git a/.git_archival.txt b/.git_archival.txt
++index 95cb3eea4e..3994ec0a83 100644
++--- a/.git_archival.txt
+++++ b/.git_archival.txt
++@@ -1 +1,4 @@
+++node: $Format:%H$
+++node-date: $Format:%cI$
+++describe-name: $Format:%(describe:tags=true)$
++ ref-names: $Format:%D$
++diff --git a/pyproject.toml b/pyproject.toml
++index b1e5f60a80..88df57dcc1 100644
++--- a/pyproject.toml
+++++ b/pyproject.toml
++@@ -6,8 +6,7 @@ requires = [
++     "setuptools>=34.4",
 + 
-+ #include <elf.h>
-+-#include <sys/auxv.h>
-+ #include "../../syscall.h"
++     # Plugins
++-    "setuptools_scm[toml]>=3.5",
++-    "setuptools_scm_git_archive>=1.1",
+++    "setuptools-scm >= 7.0.0",
++ ]
++ build-backend = "setuptools.build_meta"
 + 
-+ static inline long __get_page_size(void)
-+-- 
-+2.43.0
-+
++diff --git a/requirements/dist-build-constraints.in b/requirements/dist-build-constraints.in
++index 26b57228a9..a37baef1a9 100644
++--- a/requirements/dist-build-constraints.in
+++++ b/requirements/dist-build-constraints.in
++@@ -5,8 +5,7 @@
++ setuptools >= 34.4
++ 
++ # Plugins
++-setuptools_scm[toml] >= 3.5
++-setuptools_scm_git_archive >= 1.1
+++setuptools-scm[toml] >= 7.0.0
++ 
++ # Dynamic (coming from setuptools' PEP 517 build backend)
++ wheel
++diff --git a/requirements/dist-build-constraints.txt b/requirements/dist-build-constraints.txt
++index 525f2be30f..8bd4343ff6 100644
++--- a/requirements/dist-build-constraints.txt
+++++ b/requirements/dist-build-constraints.txt
++@@ -1,18 +1,16 @@
++ #
++-# This file is autogenerated by pip-compile with python 3.10
++-# To update, run:
+++# This file is autogenerated by pip-compile with Python 3.10
+++# by the following command:
++ #
++ #    pip-compile --allow-unsafe --output-file=requirements/dist-build-constraints.txt --strip-extras requirements/dist-build-constraints.in
++ #
++-packaging==21.3
+++packaging==23.1
++     # via setuptools-scm
++-pyparsing==3.0.6
++-    # via packaging
++-setuptools-scm==6.3.2
+++setuptools-scm==7.1.0
++     # via -r requirements/dist-build-constraints.in
++-setuptools-scm-git-archive==1.1
++-    # via -r requirements/dist-build-constraints.in
++-tomli==2.0.0
+++tomli==2.0.1
+++    # via setuptools-scm
+++typing-extensions==4.6.3
++     # via setuptools-scm
++ wheel==0.37.1
++     # via -r requirements/dist-build-constraints.in
++diff --git a/setup.cfg b/setup.cfg
++index 1f2b08f4c3..900c7b4feb 100644
++--- a/setup.cfg
+++++ b/setup.cfg
++@@ -64,8 +64,7 @@ include_package_data = True
++ packages = find:
++ include_package_data = True
++ setup_requires = 
++-	setuptools_scm>=1.15.0
++-	setuptools_scm_git_archive>=1.0
+++	setuptools_scm >= 7.0.0
++ install_requires = 
++ 	importlib_metadata; python_version < '3.8'
++ 	more_itertools >= 2.6
+diff --git a/package/python-cheroot/python-cheroot.mk b/package/python-cheroot/python-cheroot.mk
+index 86e16f7db2..19aa7ae193 100644
+--- a/package/python-cheroot/python-cheroot.mk
++++ b/package/python-cheroot/python-cheroot.mk
+@@ -10,6 +10,6 @@ PYTHON_CHEROOT_SITE = https://files.pythonhosted.org/packages/08/7c/95c154177b16
+ PYTHON_CHEROOT_LICENSE = BSD-3-Clause
+ PYTHON_CHEROOT_LICENSE_FILES = LICENSE.md
+ PYTHON_CHEROOT_SETUP_TYPE = setuptools
+-PYTHON_CHEROOT_DEPENDENCIES = host-python-setuptools-scm host-python-setuptools-scm-git-archive
++PYTHON_CHEROOT_DEPENDENCIES = host-python-setuptools-scm
+ 
+ $(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
