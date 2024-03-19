@@ -4,96 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44059C54E5D
-	for <buildroot@archiver.kernel.org>; Tue, 19 Mar 2024 07:06:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AC14C54E60
+	for <buildroot@archiver.kernel.org>; Tue, 19 Mar 2024 07:06:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 191C640AF9;
-	Tue, 19 Mar 2024 07:06:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0EEAF40AF8;
+	Tue, 19 Mar 2024 07:06:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jQiEPb2SlCj8; Tue, 19 Mar 2024 07:06:18 +0000 (UTC)
+	with ESMTP id wf4Tz_RXRilb; Tue, 19 Mar 2024 07:06:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 015D340B0D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E4EE940A5E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 015D340B0D;
-	Tue, 19 Mar 2024 07:06:17 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 259A71BF310
- for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 07:06:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E4EE940A5E;
+	Tue, 19 Mar 2024 07:06:20 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B3C651BF310
+ for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 07:06:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1313460A38
- for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 07:06:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A5F5A40B26
+ for <buildroot@lists.busybox.net>; Tue, 19 Mar 2024 07:06:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RvsQQr8X_hOa for <buildroot@lists.busybox.net>;
- Tue, 19 Mar 2024 07:06:13 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DQe4P56jRKeR for <buildroot@lists.busybox.net>;
+ Tue, 19 Mar 2024 07:06:17 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
+ client-ip=2a00:1450:4864:20::430; helo=mail-wr1-x430.google.com;
  envelope-from=javad.rahimipetroudi@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 29CD36088C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 29CD36088C
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 29CD36088C
- for <buildroot@buildroot.org>; Tue, 19 Mar 2024 07:06:12 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- 5b1f17b1804b1-41462295004so4808265e9.0
- for <buildroot@buildroot.org>; Tue, 19 Mar 2024 00:06:12 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D850C40A45
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D850C40A45
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D850C40A45
+ for <buildroot@buildroot.org>; Tue, 19 Mar 2024 07:06:16 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id
+ ffacd0b85a97d-33ed6078884so1947613f8f.1
+ for <buildroot@buildroot.org>; Tue, 19 Mar 2024 00:06:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1710831971; x=1711436771;
+ d=1e100.net; s=20230601; t=1710831974; x=1711436774;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=WIcaxdPJt25XMO1ZBRE44ugloipRTvipSMze9jistQ0=;
- b=C7QC6+HsjzHILWpEomKrgfnK2TW+Zo0xnMzQ2g5WikY4uQzYZDQymct7f4rQ4RPlNE
- ZpJqbnsIPNTai6b4cBjsYdvpMNVbrzLQ2yRiUiVGGl4BCxdxRnPpHxEdknBQgduI1JZ+
- O11y2iOXUoQcurxeeKT6rd59sdgBKjwi5Pv81zASJvBL6e4tnZw8DvF7cp9cizFRY7cS
- fdzXd+oGqhClq4uhUGaOnzIFp3dAHkaMHxfZrannF07DKTXRxb1YLW899DAN2RPnxso1
- 6w1k99jJjz2xHxAx2HJlJg92tWUuJojGGRFtisL2+N0HiY5VO2fnRO8GosM6eneYvEWy
- GcOw==
-X-Gm-Message-State: AOJu0YwzC1lIUjoBDNiOlAUwwzGhsytDSrhZ5rtmc0q8YWpxO0BNj684
- Lsd7+7B0E/EEodLEDZoT7AkVG5fWhoH/UYTmio+6YknZhDWdw/+8yzR1L1o+/iB37lEwnOPeFks
- 9iME=
-X-Google-Smtp-Source: AGHT+IHT0g+TB/7gLY7jMQK2zlBq8Gn7pzW+JfoVRVmDpm9lzVFJMI4AJkGjTZf2+4h8tDhcgwD2Ew==
-X-Received: by 2002:a05:6000:ecd:b0:33e:c521:7c33 with SMTP id
- ea13-20020a0560000ecd00b0033ec5217c33mr9889457wrb.49.1710831970737; 
- Tue, 19 Mar 2024 00:06:10 -0700 (PDT)
+ bh=hL0f0So4JBgzQgWzS+8UTUad9CdknSAo8Z5fyKGpDaM=;
+ b=XHy2B+Z1uEsAEH9xZ+1l+ean2p+7C9tUUFkWuMc/NXinlqW7jKiQ/62Aq7Z9BCFtum
+ kyBouefT2xoZvQHJbIhuqAo/36+nMpUsiLNNjLkrjXo79/bY5stBSxfnv1Y26SVsSuk4
+ JnBO+iIGFNzAUurN6ngVJMKOw6zBIcL5jJpU6Ht1jAp5sX4McG87g/Hv9V67hO6dKoHF
+ vwpk3EIplmQ6IXVMQ/SKs9bYy+UVvXi7y1BTc7NJcpbW18xi9PX9xrwdeW2F4HLXevuQ
+ Wt2WpYAQE4TYTKUPFLoX4v0SKvy/eJnSeRd6K5b158R/CV/SwRxGCVoLJetCCgjO+KGj
+ st8A==
+X-Gm-Message-State: AOJu0YyZ/FzLR4UJrPU8hJlCHhqSoZP/y5ImH5MB1CSSxcN8tajIf0U7
+ Wc1W3T9E79d8HWLARo59PD352z4TeR4i52NF0M3aDta3LM+jnYcRuxw+YlE7u6dqOwjg6XFAc38
+ Epo4=
+X-Google-Smtp-Source: AGHT+IE0D9d6TtYFfZdR7o+jnjfwxpaifmWqODTcW8WNeiaJ/h9OqZ3wfJuxdrJsBmQePSihOVltCw==
+X-Received: by 2002:adf:e589:0:b0:33e:9f3d:6910 with SMTP id
+ l9-20020adfe589000000b0033e9f3d6910mr1416460wrm.31.1710831974258; 
+ Tue, 19 Mar 2024 00:06:14 -0700 (PDT)
 Received: from localhost.localdomain (59.178-181-91.adsl-dyn.isp.belgacom.be.
  [91.181.178.59]) by smtp.gmail.com with ESMTPSA id
- q15-20020adff78f000000b0033e192a5852sm11583865wrp.30.2024.03.19.00.06.09
+ q15-20020adff78f000000b0033e192a5852sm11583865wrp.30.2024.03.19.00.06.13
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 19 Mar 2024 00:06:10 -0700 (PDT)
+ Tue, 19 Mar 2024 00:06:13 -0700 (PDT)
 X-Google-Original-From: Javad Rahimipetroudi <javad.rahimipetroudi@mind.be>
 To: buildroot@buildroot.org
-Date: Tue, 19 Mar 2024 08:05:53 +0100
-Message-ID: <20240319070554.1323606-2-javad.rahimipetroudi@mind.be>
+Date: Tue, 19 Mar 2024 08:05:54 +0100
+Message-ID: <20240319070554.1323606-3-javad.rahimipetroudi@mind.be>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <20240319070554.1323606-1-javad.rahimipetroudi@mind.be>
 References: <20240319070554.1323606-1-javad.rahimipetroudi@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=essensium.com; s=google; t=1710831971; x=1711436771; darn=buildroot.org;
+ d=essensium.com; s=google; t=1710831974; x=1711436774; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=WIcaxdPJt25XMO1ZBRE44ugloipRTvipSMze9jistQ0=;
- b=YKztnrd4UoZP9MGZXdk09NMUwdpTMh6tyVC62raocQ5DlxPIJXQeHGtH+Oo9ktp7+9
- WJtZ5aNmcUmUC19+XeM/Us99uze5B0e5fdJ0TaxeDnbwZAl9ENruBx8yZXTpIQWLQX8N
- a1OOhDW93V0fTpOy0Wwk0HW7BhirFBCr4OAOCPoj+RwyPcTdPJ7rXzsUOLb5abvX2Gik
- NC5iup5iJ1xmi7y/NQDEvW+kRMSFNU8wr414AMoidWa20yYMj3sxJhGemBVK0FegnkIQ
- zBBKQgtNhqnRoeriFOefgQm9lqkitL0GWtUyKo+Hkrfleog91EPgzsBHEDYpkGoclgRf
- 8HLA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=hL0f0So4JBgzQgWzS+8UTUad9CdknSAo8Z5fyKGpDaM=;
+ b=OIgZLPaDHBS5YRr5PZXbpA4K9gPfsgO5Dvnup4T7iqA7Wtha7CeIDSRGaEtqQhicdr
+ 4Hbm4u2gF/J0WSg7tfQ1e8TOWvz04GRW9Fu6uWWpi2taJajB9Tks9XGhMYmYBu/jwfaL
+ lsaL+SQdaSsWZFkH3Mq3iULVuexJNAy6Fq+jBFXQV1r7HFq2Nx70MVd9ICQ1588ABmBj
+ VDe/Mm19Evhvsk/ObYPT+zeGHAQWolShalJqwxmu0mXC8shAO35j9sEh3vlENCx5sops
+ T9fbtddSwYkdW04qF7wz/J75pHh7wi8s7zsOiyYBTSMzXKfttVHcRhOlTJsdyHaISYFn
+ l8Tg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=essensium.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=essensium.com header.i=@essensium.com
- header.a=rsa-sha256 header.s=google header.b=YKztnrd4
-Subject: [Buildroot] [PATCH v3 2/3] configs/avenger96: bump Linux version to
- 6.6.21LTS
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=essensium.com header.i=@essensium.com
+ header.a=rsa-sha256 header.s=google header.b=OIgZLPaD
+Subject: [Buildroot] [PATCH v3 3/3] configs/avenger96: bump ATF version to
+ v2.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -114,68 +113,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch upgrades Kernel version to 6.6.21 LTS on avenger96 board.
-Beside that, In accorcance with the kernel 6.5rc1 commit
-724ba6751532 ("ARM: dts: Move .dts filesto vendor sub-directories")
-the device tree path also has been modified to point the device tree in
-the proper location.
-As another change, to be compatible with the changes in the commit
-3108eb2e8aa7 ("mmc: mmci: Set PROBE_PREFER_ASYNCHRONOUS") with the
-default root append (mmcblk1p4) in 'extlinux.conf' file in the
-overlay directory of the board, the rootfs was not possible to be
-detected. This file also modified to point to the proper mmc block.
+This patch upgrades the ATF version to v2.8. Please note that
+due to DTS chages from commit 51e223058fe70b311542178f1865514745fa7874
+("feat(stm32mp15-fdts): add Avenger96 board with STM32MP157A DHCOR SoM")
+The ATF additional build variable also modified to use the new DTS file.
 
 Signed-off-by: Javad Rahimipetroudi <javad.rahimipetroudi@mind.be>
-
 ---
-Changes v2 -> v3:
-  - Update the commit to document the reason of changes (suggested by
-    Peter)
-Changes v1 -> v2:
-  - Remove uboot changes from Linux patch to Uboot (suggested by Peter)
-  - Fix the kernel header version for the toolchain.(suggested by Peter)
+ configs/avenger96_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
----
- board/arrow/avenger96/overlay/boot/extlinux/extlinux.conf | 2 +-
- configs/avenger96_defconfig                               | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/board/arrow/avenger96/overlay/boot/extlinux/extlinux.conf b/board/arrow/avenger96/overlay/boot/extlinux/extlinux.conf
-index 5d506b3dae..7d6d7f8a44 100644
---- a/board/arrow/avenger96/overlay/boot/extlinux/extlinux.conf
-+++ b/board/arrow/avenger96/overlay/boot/extlinux/extlinux.conf
-@@ -1,4 +1,4 @@
- label stm32mp157c-dk2-buildroot
-   kernel /boot/zImage
-   devicetree /boot/stm32mp157a-dhcor-avenger96.dtb
--  append root=/dev/mmcblk1p4 rootwait
-+  append root=/dev/mmcblk0p4 rootwait
 diff --git a/configs/avenger96_defconfig b/configs/avenger96_defconfig
-index 82702bcfc7..98a71a0f25 100644
+index 98a71a0f25..67b6d16749 100644
 --- a/configs/avenger96_defconfig
 +++ b/configs/avenger96_defconfig
-@@ -3,7 +3,7 @@ BR2_arm=y
- BR2_cortex_a7=y
- 
- # Linux headers same as kernel, a 5.8 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
- 
- # System configuration
- BR2_GLOBAL_PATCH_DIR="board/arrow/avenger96/patches"
-@@ -13,10 +13,10 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp157/post-im
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.13"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.21"
- BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="stm32mp157a-dhcor-avenger96"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="st/stm32mp157a-dhcor-avenger96"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- 
+@@ -29,13 +29,13 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # Bootloaders
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.6"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.8"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="stm32mp1"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE="u-boot-nodtb.bin"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="STM32MP_SDMMC=1 AARCH32_SP=sp_min DTB_FILE_NAME=stm32mp157a-avenger96.dtb E=0 BL33_CFG=$(BINARIES_DIR)/u-boot.dtb"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="STM32MP_SDMMC=1 AARCH32_SP=sp_min DTB_FILE_NAME=stm32mp157a-dhcor-avenger96.dtb BL33_CFG=$(BINARIES_DIR)/u-boot.dtb"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="fip.bin *.stm32"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
+ BR2_TARGET_UBOOT=y
 -- 
 2.44.0
 
