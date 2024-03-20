@@ -4,60 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42AA2C54E58
-	for <buildroot@archiver.kernel.org>; Wed, 20 Mar 2024 20:36:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1CEFC54E67
+	for <buildroot@archiver.kernel.org>; Wed, 20 Mar 2024 20:37:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1384C81E4B;
-	Wed, 20 Mar 2024 20:36:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 745BE81E1D;
+	Wed, 20 Mar 2024 20:37:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Vra8I_olXUfY; Wed, 20 Mar 2024 20:36:49 +0000 (UTC)
+	with ESMTP id hqZ7Z0cdnA5H; Wed, 20 Mar 2024 20:37:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F9ED81F89
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9506A81E4B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2F9ED81F89;
-	Wed, 20 Mar 2024 20:36:49 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7E2661BF5AE
- for <buildroot@lists.busybox.net>; Wed, 20 Mar 2024 20:36:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9506A81E4B;
+	Wed, 20 Mar 2024 20:37:49 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B9E311BF5AE
+ for <buildroot@lists.busybox.net>; Wed, 20 Mar 2024 20:37:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6B1FE81F89
- for <buildroot@lists.busybox.net>; Wed, 20 Mar 2024 20:36:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B405B60629
+ for <buildroot@lists.busybox.net>; Wed, 20 Mar 2024 20:37:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rB0CXFUn3ooO for <buildroot@lists.busybox.net>;
- Wed, 20 Mar 2024 20:36:46 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
- helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8_ndga9zZ1oA for <buildroot@lists.busybox.net>;
+ Wed, 20 Mar 2024 20:37:47 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
+ helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 44FFF81E4B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 44FFF81E4B
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 44FFF81E4B
- for <buildroot@buildroot.org>; Wed, 20 Mar 2024 20:36:46 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 74025FF802;
- Wed, 20 Mar 2024 20:36:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9A2CA6061E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A2CA6061E
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9A2CA6061E
+ for <buildroot@buildroot.org>; Wed, 20 Mar 2024 20:37:45 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5911DE0002;
+ Wed, 20 Mar 2024 20:37:44 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rn2fz-004xle-2r;
- Wed, 20 Mar 2024 21:36:43 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rn2gx-004xpE-29;
+ Wed, 20 Mar 2024 21:37:43 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20240305135724.1146746-1-fontaine.fabrice@gmail.com>
-Date: Wed, 20 Mar 2024 21:36:43 +0100
-In-Reply-To: <20240305135724.1146746-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 5 Mar 2024 14:57:24 +0100")
-Message-ID: <87msqs8wtg.fsf@48ers.dk>
+References: <20240305125256.480327-1-fontaine.fabrice@gmail.com>
+Date: Wed, 20 Mar 2024 21:37:43 +0100
+In-Reply-To: <20240305125256.480327-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 5 Mar 2024 13:52:56 +0100")
+Message-ID: <87il1g8wrs.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH v2,
- 1/1] package/policycoreutils: fix build with BR2_TIME_BITS_64
+Subject: Re: [Buildroot] [PATCH 1/1] package/botan: fix build without NPTL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,33 +76,21 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Do not remove _FILE_OFFSET_BITS=64 from CFLAGS and CPPFLAGS to avoid the
- > following build failure with BR2_TIME_BITS_64 raised since commit
- > 3c427c64726560ea1743282a3fdb78f5b28692eb:
+ > botan unconditionally uses pthread_setname_np since bump to version
+ > 3.2.0 in commit 2f8feb66204ff661e9fd5f508e2dfd1ebc0f2813 and
+ > https://github.com/randombit/botan/commit/313e439c786d68bcf374b2cb0edfe3ffd891db94
+ > resulting in the following build failure:
 
- > In file included from /home/fabrice/buildroot/output/host/mips-buildroot-linux-gnu/sysroot/usr/include/features.h:394,
- >                  from /home/fabrice/buildroot/output/host/mips-buildroot-linux-gnu/sysroot/usr/include/errno.h:25,
- >                  from pp.c:20:
- > /home/fabrice/buildroot/output/host/mips-buildroot-linux-gnu/sysroot/usr/include/features-time64.h:26:5: error: #error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
- >    26 | #   error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
- >       |     ^~~~~
+ > src/lib/utils/os_utils.cpp:625:22: error: 'pthread_setname_np' was not declared in this scope
+ >   625 |    static_cast<void>(pthread_setname_np(thread.native_handle(), name.c_str()));
+ >       |                      ^~~~~~~~~~~~~~~~~~
 
- > Indeed, this LFS workaround was there since the addition of the package
- > in commit cb328f77f8f07bfd89d6b69385c941a7b281732b  and is only needed
- > to fix a build failure with the old codesourcery-arm toolchain from 2014
- > which uses glibc < 2.23. as glibc 2.23 was released in February 2016:
- > https://sourceware.org/glibc/wiki/Release/2.23, drop this workaround as
- > already done for libselinux in commit
- > c1fa9bc2f7a4e5481edf4fce5c03dd45862fe72c. A follow-up patch will also
- > drop codesourcery-arm toolchain.
+ > So only enable threads if NPTL is available
 
- > Fixes: 3c427c64726560ea1743282a3fdb78f5b28692eb
- >  - No autobuilder failures (yet)
+ > Fixes: 2f8feb66204ff661e9fd5f508e2dfd1ebc0f2813
+ >  - http://autobuild.buildroot.org/results/03677de6270ff5de61fff2a76e5cd723aa34e64e
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
- > Changes v1 -> v2:
- >  - Also fix host package
 
 Committed to 2024.02.x, thanks.
 
