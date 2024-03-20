@@ -4,48 +4,99 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BB45C54E67
-	for <buildroot@archiver.kernel.org>; Wed, 20 Mar 2024 20:24:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABD4CC54E58
+	for <buildroot@archiver.kernel.org>; Wed, 20 Mar 2024 20:28:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BA2A681425;
-	Wed, 20 Mar 2024 20:24:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6CE6381452;
+	Wed, 20 Mar 2024 20:28:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IAgbKbN6WV3w; Wed, 20 Mar 2024 20:24:23 +0000 (UTC)
+	with ESMTP id WMpCgBvuJZ_v; Wed, 20 Mar 2024 20:28:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 964B381E2F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 74EB481E2F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 964B381E2F;
-	Wed, 20 Mar 2024 20:24:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D6ED01BF5AE
- for <buildroot@lists.busybox.net>; Wed, 20 Mar 2024 20:24:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 74EB481E2F;
+	Wed, 20 Mar 2024 20:28:11 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DDBC91BF5AE
+ for <buildroot@lists.busybox.net>; Wed, 20 Mar 2024 20:28:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C4417415B3
- for <buildroot@lists.busybox.net>; Wed, 20 Mar 2024 20:24:21 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CAA3A81E2F
+ for <buildroot@lists.busybox.net>; Wed, 20 Mar 2024 20:28:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CLJtMlStYQIy for <buildroot@lists.busybox.net>;
- Wed, 20 Mar 2024 20:24:20 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A955F40446
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A955F40446
- for <buildroot@buildroot.org>; Wed, 20 Mar 2024 20:24:20 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 90A9D836C6; Wed, 20 Mar 2024 20:24:20 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 20 Mar 2024 21:06:42 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 87504a1b7948dbfa3648ad02c3c034a3c36dcd92
-X-Git-Newrev: fee7efafd05872282e24a6923e40c1505e041196
-X-Patchwork-Hint: ignore
-Message-Id: <20240320202420.90A9D836C6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/scripts: use FKIE git tree
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uhH1pH5lrzlL for <buildroot@lists.busybox.net>;
+ Wed, 20 Mar 2024 20:28:09 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A266281452
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A266281452
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A266281452
+ for <buildroot@buildroot.org>; Wed, 20 Mar 2024 20:28:08 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id
+ ffacd0b85a97d-33ececeb19eso122852f8f.3
+ for <buildroot@buildroot.org>; Wed, 20 Mar 2024 13:28:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1710966486; x=1711571286;
+ h=content-transfer-encoding:in-reply-to:from:references:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=B2HcAfyku7ng5t0DlehxzCRo/oK++FQtDWTD2KnzTLE=;
+ b=vg0mqSYxmr692Mn1YdWTxPPiVsjveEu4QyETD0a8TE9/oX0Wpac+WPiQVZqW5eJDhK
+ s0EGy5rqkJnnAJuij46oqlPiXyEMRlfN2N9zcuxs28CTuxRPfFbbFAnw0prGedK8DWzV
+ BsEJLoImNWnJj/XhwQIUAdA0O1ur00+u+5469oqOowBgKeNKW+a3+AfNDFs+I5HwlFsd
+ Gk0Kas8bnnCPdjJSwPTSLq2/FSpjb39XPql9ljoa/21yagLEe4XBwEhUBKP/EWP5Ogu1
+ csJmoxrV83MeMn+3BFi2INqcUH9N9hF9fxNhgOkxCmoUM/1T3RcG0VchDnzXYGwWbmWu
+ fl6A==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCW2lPGtdQfAyYk73maU7vjrZdN3yZ8neUnONIrpKWiLEZDsiuBDBD9w4psRxQpNXWN6xpIdX+SddtcAO9Bn5n5jWksZzK8pAQ==
+X-Gm-Message-State: AOJu0YzLYIFTbmYpIGynGHZikXmBpcfBswaMcBfqcot5H1E6egMzy16L
+ ZSyT6VWdh5yTc/v3xcNm9qMfyhfSWYeACR2yQgZltdfvokp1Kx4Zsjq8qUVwKDSl9BSRPyqqlkn
+ v
+X-Google-Smtp-Source: AGHT+IEiOcEVyTSHGOO0rAxBD+FeO+aQzdMUiyzcTGq+hxJptBVSr70NF9DJsVN0cWu+/LIu2PB0SQ==
+X-Received: by 2002:adf:ab08:0:b0:33e:720e:4a4e with SMTP id
+ q8-20020adfab08000000b0033e720e4a4emr88134wrc.19.1710966486343; 
+ Wed, 20 Mar 2024 13:28:06 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
+ by smtp.gmail.com with ESMTPSA id
+ n2-20020a5d4002000000b0033e93e00f68sm15436661wrp.61.2024.03.20.13.28.05
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 20 Mar 2024 13:28:05 -0700 (PDT)
+Message-ID: <77de926a-de52-437c-840c-02da0e39476a@mind.be>
+Date: Wed, 20 Mar 2024 21:28:04 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: en-GB
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ buildroot@buildroot.org
+References: <20240318203855.404507-1-giulio.benetti@benettiengineering.com>
+In-Reply-To: <20240318203855.404507-1-giulio.benetti@benettiengineering.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1710966486; x=1711571286; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:references:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=B2HcAfyku7ng5t0DlehxzCRo/oK++FQtDWTD2KnzTLE=;
+ b=iFA7hWjDwyx92l8z+cdH3gwrQWZz3TC7xdoh+RUZ0LI370s5LVzREGBLU1cgSyBw0a
+ 7uTgrEuLJjbb4FJzrvJk5XD0KJDy8YkhgFCJgrTsTjK5JkCwE4JbPWi7Ba9E7Rt5M0/v
+ Md8lVfverogrv0rRCbYgZw3VR7lnGtIfcuaohnooGt9V3+wKTg/IaZfyh3TFJ7g8n7kI
+ sVCZOCSAPX4RHf0iAFqaZxcNrFc0kxQbz71p3Xfi+io8kNbVHRX/6QE//jNLWQgzA5OU
+ gXUw5AlHFzMGLSDzoZo5qtcPF4VgxfZV8tFFxm8Lfo5WzZcVjWIgc2mbGYFDfv8Jms/L
+ pkZQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=iFA7hWjD
+Subject: Re: [Buildroot] [PATCH] package/harfbuzz: bump to version 8.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,189 +110,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fee7efafd05872282e24a6923e40c1505e041196
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, we grab the per-year CVE feeds, in two passes: first, we grab
-the meta files, and check whether something has changed since last we
-downloaded it; second, we download the feed proper, unless the meta file
-has not changed, in which case we use the locally cached feed.
 
-However, it has appeared that the FKIE releases no longer provide the
-meta files, which means that (once again), our daily reports are broken.
+On 18/03/2024 21:38, Giulio Benetti wrote:
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-The obvious fix would be to drop the use of the meta file, and always
-and unconditionally download the feeds. That's relatively trivial to do,
-but the feeds are relatively big (even as xz-xompressed).
+  Applied to master, thanks.
 
-However, the CVE database from FKIE is available as a git tree. Git is
-pretty good at only sending delta when updating a local copy. In
-addition, the git tree, contains each CVE as an individual file, so it
-is relatively easier to scan and parse.
+  Regards,
+  Arnout
 
-Switch to using a local git clone.
-
-Slightly surprisingly (but not so much either), parsing the CVE files is
-much faster when using the git working copy, than it is when parsing the
-per-year feeds: indeed, the per-year feeds are xz-compressed, and even
-if python is slow-ish to scan a directory and opening files therein, it
-is still much faster than to decompress xz files. The timing delta [0]
-is ~100s before and ~10s now, about a ten time improvement, over the
-whole package set.
-
-The drawback, however, is that the git tree is much bigger on-disk, from
-~55MiB for the per-year compressed feeds, to 2.1GiB for the git tree
-(~366MiB) and a working copy (~1.8GiB)... Given very few people are
-going to use that, that's considered acceptable...
-
-Eventually, with a bit of hacking [1], the two pkg-stats, before and
-after this change, yield the same data (except for the date and commit
-hash).
-
-[0] hacking support/scripts/pkg-stats to display the time before/after
-the CVE scan, and hacking support/scripts/cve.py to do no download so
-that only the CVE scan happens (and also because the meta files are no
-longer available).
-
-[1] sorting the CVE lists in json, sorting the json keys, and using the
-commit from the FKIE git tree that was used for the current per-year
-feeds.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
----
- support/scripts/cve.py | 88 +++++++++++++++++---------------------------------
- 1 file changed, 29 insertions(+), 59 deletions(-)
-
-diff --git a/support/scripts/cve.py b/support/scripts/cve.py
-index 7167ecbc6a..e25825581e 100755
---- a/support/scripts/cve.py
-+++ b/support/scripts/cve.py
-@@ -19,29 +19,16 @@
- 
- import datetime
- import os
--import requests  # URL checking
- import distutils.version
--import lzma
--import time
-+import json
-+import subprocess
- import sys
- import operator
- 
--try:
--    import ijson
--    # backend is a module in < 2.5, a string in >= 2.5
--    if 'python' in getattr(ijson.backend, '__name__', ijson.backend):
--        try:
--            import ijson.backends.yajl2_cffi as ijson
--        except ImportError:
--            sys.stderr.write('Warning: Using slow ijson python backend\n')
--except ImportError:
--    sys.stderr.write("You need ijson to parse NVD for CVE check\n")
--    exit(1)
--
- sys.path.append('utils/')
- 
- NVD_START_YEAR = 1999
--NVD_BASE_URL = "https://github.com/fkie-cad/nvd-json-data-feeds/releases/latest/download"
-+NVD_BASE_URL = "https://github.com/fkie-cad/nvd-json-data-feeds/"
- 
- ops = {
-     '>=': operator.ge,
-@@ -81,41 +68,24 @@ class CVE:
-         self.nvd_cve = nvd_cve
- 
-     @staticmethod
--    def download_nvd_year(nvd_path, year):
--        metaf = "CVE-%s.meta" % year
--        path_metaf = os.path.join(nvd_path, metaf)
--        jsonf_xz = "CVE-%s.json.xz" % year
--        path_jsonf_xz = os.path.join(nvd_path, jsonf_xz)
--
--        # If the database file is less than a day old, we assume the NVD data
--        # locally available is recent enough.
--        if os.path.exists(path_jsonf_xz) and os.stat(path_jsonf_xz).st_mtime >= time.time() - 86400:
--            return path_jsonf_xz
--
--        # If not, we download the meta file
--        url = "%s/%s" % (NVD_BASE_URL, metaf)
--        print("Getting %s" % url)
--        page_meta = requests.get(url)
--        page_meta.raise_for_status()
--
--        # If the meta file already existed, we compare the existing
--        # one with the data newly downloaded. If they are different,
--        # we need to re-download the database.
--        # If the database does not exist locally, we need to redownload it in
--        # any case.
--        if os.path.exists(path_metaf) and os.path.exists(path_jsonf_xz):
--            meta_known = open(path_metaf, "r").read()
--            if page_meta.text == meta_known:
--                return path_jsonf_xz
--
--        # Grab the compressed JSON NVD, and write files to disk
--        url = "%s/%s" % (NVD_BASE_URL, jsonf_xz)
--        print("Getting %s" % url)
--        page_json = requests.get(url)
--        page_json.raise_for_status()
--        open(path_jsonf_xz, "wb").write(page_json.content)
--        open(path_metaf, "w").write(page_meta.text)
--        return path_jsonf_xz
-+    def download_nvd(nvd_git_dir):
-+        print(f"Updating from {NVD_BASE_URL}")
-+        if os.path.exists(nvd_git_dir):
-+            subprocess.check_call(
-+                ["git", "pull"],
-+                cwd=nvd_git_dir,
-+                stdout=subprocess.DEVNULL,
-+                stderr=subprocess.DEVNULL,
-+            )
-+        else:
-+            # Create the directory and its parents; git
-+            # happily clones into an empty directory.
-+            os.makedirs(nvd_git_dir)
-+            subprocess.check_call(
-+                ["git", "clone", NVD_BASE_URL, nvd_git_dir],
-+                stdout=subprocess.DEVNULL,
-+                stderr=subprocess.DEVNULL,
-+            )
- 
-     @staticmethod
-     def sort_id(cve_ids):
-@@ -131,15 +101,15 @@ class CVE:
-         feeds since NVD_START_YEAR. If the files are missing or outdated in
-         nvd_dir, a fresh copy will be downloaded, and kept in .json.gz
-         """
-+        nvd_git_dir = os.path.join(nvd_dir, "git")
-+        CVE.download_nvd(nvd_git_dir)
-         for year in range(NVD_START_YEAR, datetime.datetime.now().year + 1):
--            filename = CVE.download_nvd_year(nvd_dir, year)
--            try:
--                content = ijson.items(lzma.LZMAFile(filename), 'cve_items.item')
--            except:  # noqa: E722
--                print("ERROR: cannot read %s. Please remove the file then rerun this script" % filename)
--                raise
--            for cve in content:
--                yield cls(cve)
-+            for dirpath, _, filenames in os.walk(os.path.join(nvd_git_dir, f"CVE-{year}")):
-+                for filename in filenames:
-+                    if filename[-5:] != ".json":
-+                        continue
-+                    with open(os.path.join(dirpath, filename), "rb") as f:
-+                        yield cls(json.load(f))
- 
-     def each_product(self):
-         """Iterate over each product section of this cve"""
+> ---
+>   package/harfbuzz/harfbuzz.hash | 2 +-
+>   package/harfbuzz/harfbuzz.mk   | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+> index fbe890910a..f107aee8c2 100644
+> --- a/package/harfbuzz/harfbuzz.hash
+> +++ b/package/harfbuzz/harfbuzz.hash
+> @@ -1,3 +1,3 @@
+>   # Locally computed
+> -sha256  109501eaeb8bde3eadb25fab4164e993fbace29c3d775bcaa1c1e58e2f15f847  harfbuzz-8.3.0.tar.xz
+> +sha256  f73e1eacd7e2ffae687bc3f056bb0c705b7a05aee86337686e09da8fc1c2030c  harfbuzz-8.3.1.tar.xz
+>   sha256  ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64  COPYING
+> diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+> index 599ea548d0..e3da4add43 100644
+> --- a/package/harfbuzz/harfbuzz.mk
+> +++ b/package/harfbuzz/harfbuzz.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -HARFBUZZ_VERSION = 8.3.0
+> +HARFBUZZ_VERSION = 8.3.1
+>   HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
+>   HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
+>   HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
