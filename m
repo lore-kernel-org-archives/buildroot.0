@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E676C6FD1F
-	for <buildroot@archiver.kernel.org>; Thu, 21 Mar 2024 20:43:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52794C6FD1F
+	for <buildroot@archiver.kernel.org>; Thu, 21 Mar 2024 20:44:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D997F81425;
-	Thu, 21 Mar 2024 20:43:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0DEDF81EC0;
+	Thu, 21 Mar 2024 20:44:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7OkKskSmo3ii; Thu, 21 Mar 2024 20:43:52 +0000 (UTC)
+	with ESMTP id x_q9_srak8bw; Thu, 21 Mar 2024 20:44:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 078008144C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 376D882237
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 078008144C;
-	Thu, 21 Mar 2024 20:43:52 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C29111BF2BD
- for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 20:43:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 376D882237;
+	Thu, 21 Mar 2024 20:44:38 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E42AE1BF2BD
+ for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 20:44:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BBEAE404C5
- for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 20:43:50 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DE9C04054B
+ for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 20:44:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id shgV7qNSMVTL for <buildroot@lists.busybox.net>;
- Thu, 21 Mar 2024 20:43:49 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oQyLfMifp_3x for <buildroot@lists.busybox.net>;
+ Thu, 21 Mar 2024 20:44:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=bugzilla@busybox.net;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D788F402DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B1ED400C1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D788F402DA
- for <buildroot@uclibc.org>; Thu, 21 Mar 2024 20:43:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3B1ED400C1
+ for <buildroot@uclibc.org>; Thu, 21 Mar 2024 20:44:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id C05CC836A0; Thu, 21 Mar 2024 20:43:49 +0000 (UTC)
+ id 3537283656; Thu, 21 Mar 2024 20:44:36 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Thu, 21 Mar 2024 20:43:49 +0000
+Date: Thu, 21 Mar 2024 20:44:36 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -56,8 +56,8 @@ X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-16003-163-g6gQlY06V7@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-16003-163-rdX967D9qP@https.bugs.busybox.net/>
 In-Reply-To: <bug-16003-163@https.bugs.busybox.net/>
 References: <bug-16003-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -82,12 +82,9 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=16003
 
---- Comment #4 from Roland Franke <fli4l@franke-prem.de> ---
-Created attachment 9730
-  --> https://bugs.busybox.net/attachment.cgi?id=9730&action=edit
-used uclibc.config-x86
-
-Used uclibc.config-x86 of my system
+--- Comment #5 from Roland Franke <fli4l@franke-prem.de> ---
+(In reply to Roland Franke from comment #4)
+I hav add as attachemend the used uclibc.config-x86 from my system
 
 -- 
 You are receiving this mail because:
