@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5DFCC6FD1F
-	for <buildroot@archiver.kernel.org>; Thu, 21 Mar 2024 21:03:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BF79C54E58
+	for <buildroot@archiver.kernel.org>; Thu, 21 Mar 2024 21:03:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 83F1D82244;
-	Thu, 21 Mar 2024 21:03:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 34DF88231A;
+	Thu, 21 Mar 2024 21:03:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LCUMBWSk3H0w; Thu, 21 Mar 2024 21:03:08 +0000 (UTC)
+	with ESMTP id ac1IJw7qq7us; Thu, 21 Mar 2024 21:03:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 660698234A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DC44082245
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 660698234A;
-	Thu, 21 Mar 2024 21:03:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 287461BF980
+	by smtp1.osuosl.org (Postfix) with ESMTP id DC44082245;
+	Thu, 21 Mar 2024 21:03:11 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 280E21BF2BD
  for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 21:02:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C621A409C4
- for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 21:02:22 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0FF07415F6
+ for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 21:02:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5APePpSDG7X3 for <buildroot@lists.busybox.net>;
- Thu, 21 Mar 2024 21:02:22 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id m1PE3k1_jLrV for <buildroot@lists.busybox.net>;
+ Thu, 21 Mar 2024 21:02:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1FEC0405D6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EEABE415B3
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1FEC0405D6
- for <buildroot@buildroot.org>; Thu, 21 Mar 2024 21:02:21 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EEABE415B3
+ for <buildroot@buildroot.org>; Thu, 21 Mar 2024 21:02:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B5A9F83751; Thu, 21 Mar 2024 21:02:21 +0000 (UTC)
+ id DB18583749; Thu, 21 Mar 2024 21:02:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 21 Mar 2024 21:58:28 +0100
-X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: c94dfd5940eec7e8ce2d9cd4a099c33a1d65172e
-X-Git-Newrev: 4df20268fe2bd0514e9a78a948c16cae87a11587
+Date: Thu, 21 Mar 2024 21:12:25 +0100
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: 9b85ad4ace4181578f549ef665e966d6a14f9c5d
+X-Git-Newrev: de6446f56dcf6ed1e6ac0084b471b3ead6c1d4c0
 X-Patchwork-Hint: ignore
-Message-Id: <20240321210221.B5A9F83751@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/targetcli-fb:
- bump version to 2.1.58
+Message-Id: <20240321210225.DB18583749@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] linux: disable -Werror
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,49 +59,62 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8226520822144974617=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4df20268fe2bd0514e9a78a948c16cae87a11587
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
+--===============8226520822144974617==
+Content-Type: text/plain
 
-bump to latest version because previous version did not work with python 3.11
-corrected version mismatch with my first submission
+commit: https://git.buildroot.net/buildroot/commit/?id=de6446f56dcf6ed1e6ac0084b471b3ead6c1d4c0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Signed-off-by: Jeremy J. Peper <jeremy@jeremypeper.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 242781bb61bdad2690b089cc5eaf7705d2632e5d)
+Disable -Werror to fix the following build failure with esp-hosted
+raised at least since commit a382a7d55432918d2a1e47ae4cbe7ed50fa17a08:
+
+In function ‘destroy_cmd_wq’,
+    inlined from ‘esp_commands_teardown’ at /home/autobuild/autobuild/instance-4/output-1/build/esp-hosted-ce3c50a33fa4bc562a1b6cbcee292c1ae0b0a404/esp_hosted_ng/host/esp_cmd.c:1467:2:
+./include/linux/workqueue.h:639:9: error: call to ‘__warn_flushing_systemwide_wq’ declared with attribute warning: Please avoid flushing system-wide workqueues. [-Werror=attribute-warning]
+  639 |         __warn_flushing_systemwide_wq();                                \
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/autobuild/autobuild/instance-4/output-1/build/esp-hosted-ce3c50a33fa4bc562a1b6cbcee292c1ae0b0a404/esp_hosted_ng/host/esp_cmd.c:408:17: note: in expansion of macro ‘flush_scheduled_work’
+  408 |                 flush_scheduled_work();
+      |                 ^~~~~~~~~~~~~~~~~~~~
+
+Fixes:
+ - http://autobuild.buildroot.org/results/6ac7a4601938d3296ed1657c06f8cdf433757d73
+ - http://autobuild.buildroot.org/results/7997cc8a67645a6e1cf4e24d172c6feae459dcfb
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 6b56e0b4f09b36140e2cb9e41072d5ac6074f375)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/targetcli-fb/targetcli-fb.hash | 2 +-
- package/targetcli-fb/targetcli-fb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ linux/linux.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/targetcli-fb/targetcli-fb.hash b/package/targetcli-fb/targetcli-fb.hash
-index 64f68a6675..1732fa99e5 100644
---- a/package/targetcli-fb/targetcli-fb.hash
-+++ b/package/targetcli-fb/targetcli-fb.hash
-@@ -1,3 +1,3 @@
- # locally computed
--sha256  7ae4120a54f24b13263b4b85c43952a03546f8b9fc9bd15fe87678f68245a33f  targetcli-fb-2.1.54.tar.gz
-+sha256  605f4e4e4e7189d6a03f11a4f55e7ddb4671002d542c2f684f87dd68391dcdc2  targetcli-fb-2.1.58.tar.gz
- sha256  5df2a0d87d6c562f0ea11c688ac52532aa28d744cabc7994ff0537f64b3b3320  COPYING
-diff --git a/package/targetcli-fb/targetcli-fb.mk b/package/targetcli-fb/targetcli-fb.mk
-index 444e54f8c7..e3f384810b 100644
---- a/package/targetcli-fb/targetcli-fb.mk
-+++ b/package/targetcli-fb/targetcli-fb.mk
-@@ -6,7 +6,7 @@
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 53e2ad6d48..4e12b36c1f 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -436,6 +436,7 @@ define LINUX_KCONFIG_FIXUP_CMDS
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_LOGO)
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_LOGO_LINUX_CLUT224))
+ 	$(call KCONFIG_DISABLE_OPT,CONFIG_GCC_PLUGINS)
++	$(call KCONFIG_DISABLE_OPT,CONFIG_WERROR)
+ 	$(PACKAGES_LINUX_CONFIG_FIXUPS)
+ endef
  
- # When upgrading the version, be sure to also upgrade python-rtslib-fb
- # and python-configshell-fb at the same time.
--TARGETCLI_FB_VERSION = 2.1.54
-+TARGETCLI_FB_VERSION = 2.1.58
- TARGETCLI_FB_SITE = $(call github,open-iscsi,targetcli-fb,v$(TARGETCLI_FB_VERSION))
- TARGETCLI_FB_LICENSE = Apache-2.0
- TARGETCLI_FB_LICENSE_FILES = COPYING
+
+--===============8226520822144974617==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8226520822144974617==--
