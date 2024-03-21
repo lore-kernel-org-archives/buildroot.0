@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E33FAC54E58
-	for <buildroot@archiver.kernel.org>; Thu, 21 Mar 2024 21:04:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EED2AC6FD1F
+	for <buildroot@archiver.kernel.org>; Thu, 21 Mar 2024 21:04:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B0F4C826AA;
-	Thu, 21 Mar 2024 21:04:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 839068232D;
+	Thu, 21 Mar 2024 21:04:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id t9c3xUdk0WbM; Thu, 21 Mar 2024 21:04:22 +0000 (UTC)
+	with ESMTP id wfDYj_HVy7o7; Thu, 21 Mar 2024 21:04:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5E3AE82684
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 52668826B0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5E3AE82684;
-	Thu, 21 Mar 2024 21:04:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 52668826B0;
+	Thu, 21 Mar 2024 21:04:25 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 673481BF980
- for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 21:02:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 774A61BF2BD
+ for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 21:02:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 891B1415DF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9E9FC415E2
  for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 21:02:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id e_u2B0oNUhyS for <buildroot@lists.busybox.net>;
+ with ESMTP id lIftrTWwk3Il for <buildroot@lists.busybox.net>;
  Thu, 21 Mar 2024 21:02:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 01264415F2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1E04415F1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 01264415F2
+ by smtp4.osuosl.org (Postfix) with ESMTP id E1E04415F1
  for <buildroot@buildroot.org>; Thu, 21 Mar 2024 21:02:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E4B9783751; Thu, 21 Mar 2024 21:02:26 +0000 (UTC)
+ id D5A4783749; Thu, 21 Mar 2024 21:02:26 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 21 Mar 2024 21:40:53 +0100
+Date: Thu, 21 Mar 2024 21:40:16 +0100
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 9ec0cfb5e997a8f4fdc6978bf6c555648628d00e
-X-Git-Newrev: 6ca2dcf2b9a09fb657da17261e1f02d56c1997c4
+X-Git-Oldrev: a9d2eb834e871bd91f1f15fa9d5cffb6ac585712
+X-Git-Newrev: 9ec0cfb5e997a8f4fdc6978bf6c555648628d00e
 X-Patchwork-Hint: ignore
-Message-Id: <20240321210226.E4B9783751@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/xmrig: bump
- version to 6.21.1
+Message-Id: <20240321210226.D5A4783749@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/cryptsetup: bump
+ version to 2.7.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,40 +65,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6ca2dcf2b9a09fb657da17261e1f02d56c1997c4
+commit: https://git.buildroot.net/buildroot/commit/?id=9ec0cfb5e997a8f4fdc6978bf6c555648628d00e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d566d6a3692df6859a2b62c994bddd0ec8768a24)
+(cherry picked from commit 387bf13c6292837c6847d9c0f79a7872f0f2176e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xmrig/xmrig.hash | 2 +-
- package/xmrig/xmrig.mk   | 2 +-
+ package/cryptsetup/cryptsetup.hash | 2 +-
+ package/cryptsetup/cryptsetup.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/xmrig/xmrig.hash b/package/xmrig/xmrig.hash
-index 3a54d66ce4..9d84ab7957 100644
---- a/package/xmrig/xmrig.hash
-+++ b/package/xmrig/xmrig.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  4b197c71fa06030216b641b4ea57f7a3d977a17df1b55bd13759d4705dbf5941  xmrig-6.21.0.tar.gz
-+sha256  c45baea5a210143b647349b5234a2192164d3473a39d2b1cab7fb35b1a2a8ba9  xmrig-6.21.1.tar.gz
- sha256  589ed823e9a84c56feb95ac58e7cf384626b9cbf4fda2a907bc36e103de1bad2  LICENSE
-diff --git a/package/xmrig/xmrig.mk b/package/xmrig/xmrig.mk
-index 35cd1d8d82..37a613820d 100644
---- a/package/xmrig/xmrig.mk
-+++ b/package/xmrig/xmrig.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
+index df92ff36b8..531432aaaf 100644
+--- a/package/cryptsetup/cryptsetup.hash
++++ b/package/cryptsetup/cryptsetup.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.7/sha256sums.asc
+-sha256  94003a00cd5a81944f45e8dc529e0cfd2a6ff629bd2cd21cf5e574e465daf795  cryptsetup-2.7.0.tar.xz
++sha256  da5d1419e2a86e01aa32fd79582cd54d208857cb541bca2fd426a5ff1aaabbc3  cryptsetup-2.7.1.tar.xz
+ sha256  45670cce8b6a0ddd66c8016cd8ccef6cd71f35717cbacc7f1e895b3855207b33  COPYING
+ sha256  8c33cc37871654ec7ed87e6fbb896c8cf33ef5ef05b1611a5aed857596ffafa5  COPYING.LGPL
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index d17de96143..b15f458576 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--XMRIG_VERSION = 6.21.0
-+XMRIG_VERSION = 6.21.1
- XMRIG_SITE = $(call github,xmrig,xmrig,v$(XMRIG_VERSION))
- XMRIG_LICENSE = GPL-3.0+
- XMRIG_LICENSE_FILES = LICENSE
+ CRYPTSETUP_VERSION_MAJOR = 2.7
+-CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).0
++CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).1
+ CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
+ CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
+ CRYPTSETUP_DEPENDENCIES = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
