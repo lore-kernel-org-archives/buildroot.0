@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BFA0C6FD1F
-	for <buildroot@archiver.kernel.org>; Thu, 21 Mar 2024 21:05:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D850CD11BF
+	for <buildroot@archiver.kernel.org>; Thu, 21 Mar 2024 21:05:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1E1C182813;
-	Thu, 21 Mar 2024 21:05:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F0BD782907;
+	Thu, 21 Mar 2024 21:05:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xdfpGxyK9mFd; Thu, 21 Mar 2024 21:04:58 +0000 (UTC)
+	with ESMTP id 2kNHQhYc70G2; Thu, 21 Mar 2024 21:05:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 24E9E828DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 91DE082890
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 24E9E828DA;
-	Thu, 21 Mar 2024 21:04:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 91DE082890;
+	Thu, 21 Mar 2024 21:05:01 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 253B81BF98E
- for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 21:02:48 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 268C01BF980
+ for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 21:02:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 510CB415C2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 57B1841601
  for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 21:02:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RQGMzAOLFVPX for <buildroot@lists.busybox.net>;
+ with ESMTP id yCTKlhlVSr08 for <buildroot@lists.busybox.net>;
  Thu, 21 Mar 2024 21:02:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 384F0415F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6500A415C5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 384F0415F6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6500A415C5
  for <buildroot@buildroot.org>; Thu, 21 Mar 2024 21:02:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2B34883751; Thu, 21 Mar 2024 21:02:27 +0000 (UTC)
+ id 5D2338374C; Thu, 21 Mar 2024 21:02:27 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 21 Mar 2024 21:46:08 +0100
+Date: Thu, 21 Mar 2024 21:49:39 +0100
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: f7b293752bf6ad5b3f8d71626b9199e5e2475bc5
-X-Git-Newrev: 9a997fcf3b2097284e80c4a9f1a013b165574baa
+X-Git-Oldrev: 78307c660af61ec59010f4fd8a648f941a7af388
+X-Git-Newrev: 6a9e4be7f01935259f4221fa0a58187ec5d095f3
 X-Patchwork-Hint: ignore
-Message-Id: <20240321210227.2B34883751@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/libnfs: bump to
- version 5.0.3
+Message-Id: <20240321210227.5D2338374C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/mesa3d: rework
+ dri3 handling
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,44 +65,162 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9a997fcf3b2097284e80c4a9f1a013b165574baa
+commit: https://git.buildroot.net/buildroot/commit/?id=6a9e4be7f01935259f4221fa0a58187ec5d095f3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-https://github.com/sahlberg/libnfs/blob/libnfs-5.0.3/CHANGELOG
+While fixing a build error
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+../src/egl/drivers/dri2/platform_x11.c: In function 'dri2_x11_get_msc_rate':
+../src/egl/drivers/dri2/platform_x11.c:1229:44:
+ error: 'struct dri2_egl_display' has no member named 'screen_resources'
+
+with this defconfig:
+
+BR2_x86_64=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS=y
+BR2_PACKAGE_MESA3D_OPENGL_GLX=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_MESA3D_OPENGL_ES=y
+BR2_PACKAGE_XORG7=y
+
+(crocus and i915 drivers are also affected) it turns out that we can
+assume the need for dri3 support when X.org is enabled as a hard depen-
+dency even if mesa3d's configure does not throw errors when missing,
+like for the Intel drivers.
+
+Before this patch these Config.in options were used:
+
+config BR2_PACKAGE_MESA3D_DRI3
+  select BR2_PACKAGE_XLIB_LIBXSHMFENCE
+select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
+
+which can be translated into:
+
+select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_PACKAGE_XORG7
+
+and used at option BR2_PACKAGE_MESA3D_DRIVER.
+
+Configure option -Ddri3=enabled is passed to mesa3d when at least one
+driver is enabled along with X.org:
+ifeq ($(BR2_PACKAGE_MESA3D_DRIVER)$(BR2_PACKAGE_XORG7),yy)
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 0a0b522b23fdadeafbca904a56047b8cf35760df)
+(cherry picked from commit e2f87b3c15c100a411d277589ba8de1de564efd4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libnfs/libnfs.hash | 2 +-
- package/libnfs/libnfs.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/mesa3d/Config.in | 15 ++-------------
+ package/mesa3d/mesa3d.mk |  4 +---
+ 2 files changed, 3 insertions(+), 16 deletions(-)
 
-diff --git a/package/libnfs/libnfs.hash b/package/libnfs/libnfs.hash
-index b67a5d2eda..c5e5197c13 100644
---- a/package/libnfs/libnfs.hash
-+++ b/package/libnfs/libnfs.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  637e56643b19da9fba98f06847788c4dad308b723156a64748041035dcdf9bd3  libnfs-5.0.2.tar.gz
-+sha256  d945cb4f4c8f82ee1f3640893a168810f794a28e1010bb007ec5add345e9df3e  libnfs-5.0.3.tar.gz
- sha256  edd960c0142b8ada98b43b6396b78f4e557b0bc70ac601a51e397ad04070e2c5  COPYING
- sha256  d9406ced95457941032aa11d04623b8ab71f2827a3395ebef137aec475be35b1  LICENCE-BSD.txt
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENCE-LGPL-2.1.txt
-diff --git a/package/libnfs/libnfs.mk b/package/libnfs/libnfs.mk
-index b013decfc7..eb919406f3 100644
---- a/package/libnfs/libnfs.mk
-+++ b/package/libnfs/libnfs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 39a4f706e2..459051b2db 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -56,11 +56,7 @@ config BR2_PACKAGE_MESA3D_OPENCL
+ 	select BR2_PACKAGE_LIBCLC
+ 	select BR2_PACKAGE_HAS_LIBOPENCL
  
--LIBNFS_VERSION = 5.0.2
-+LIBNFS_VERSION = 5.0.3
- LIBNFS_SITE = $(call github,sahlberg,libnfs,libnfs-$(LIBNFS_VERSION))
- LIBNFS_INSTALL_STAGING = YES
- LIBNFS_AUTORECONF = YES
+-# inform the .mk file of gallium, dri, dri3 or vulkan driver selection
+-config BR2_PACKAGE_MESA3D_DRI3
+-	bool
+-	select BR2_PACKAGE_XLIB_LIBXSHMFENCE
+-
++# inform the .mk file of gallium or vulkan driver selection
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	bool
+ 	select BR2_PACKAGE_MESA3D_DRIVER
+@@ -71,6 +67,7 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER
+ 
+ config BR2_PACKAGE_MESA3D_DRIVER
+ 	bool
++	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_PACKAGE_XORG7
+ 
+ # Gallium xa state tracker.
+ # Quote from mesa3d meson.build: "XA state tracker requires at least
+@@ -103,7 +100,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_CROCUS
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV
+ 	bool "Gallium Etnaviv driver"
+ 	depends on (BR2_TOOLCHAIN_HAS_SYNC_4 && !BR2_RISCV_32) || !BR2_PACKAGE_XORG7 # libxshmfence
+-	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	select BR2_PACKAGE_LIBDRM_ETNAVIV
+ 	help
+@@ -117,7 +113,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO
+ 	# can't see is just spurious. However, that dependency is about
+ 	# the toolchain having sync4 primitives, which is always a given
+ 	# for arm/aarch64.
+-	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	select BR2_PACKAGE_LIBDRM_FREEDRENO
+ 	help
+@@ -141,7 +136,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA
+ 	bool "Gallium lima driver"
+ 	depends on (BR2_TOOLCHAIN_HAS_SYNC_4 && !BR2_RISCV_32) || !BR2_PACKAGE_XORG7 # libxshmfence
+-	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	help
+ 	  Mesa driver for ARM Mali Utgard GPUs.
+@@ -158,7 +152,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST
+ 	bool "Gallium panfrost driver"
+ 	depends on (BR2_TOOLCHAIN_HAS_SYNC_4 && !BR2_RISCV_32) || !BR2_PACKAGE_XORG7 # libxshmfence
+-	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	help
+ 	  Mesa driver for ARM Mali Midgard and Bifrost GPUs.
+@@ -239,7 +232,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D
+ 	bool "Gallium v3d driver"
+ 	depends on (BR2_arm && BR2_ARM_CPU_HAS_NEON) || BR2_aarch64
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
+-	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4 # runtime
+ 	select BR2_PACKAGE_MESA3D_OPENGL_EGL
+@@ -255,7 +247,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
+ 	bool "Gallium vc4 driver"
+ 	depends on (BR2_arm && BR2_ARM_CPU_HAS_NEON) || BR2_aarch64
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
+-	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	select BR2_PACKAGE_LIBDRM_VC4
+ 	select BR2_PACKAGE_MESA3D_OPENGL_EGL
+@@ -295,7 +286,6 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_BROADCOM
+ 	bool "Vulkan broadcom driver"
+ 	depends on BR2_arm || BR2_aarch64
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # dri3/libxshmfence
+-	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
+ 	help
+ 	  Vulkan broadcom driver.
+@@ -306,7 +296,6 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # memfd.h
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # ifunc, static_assert
+-	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
+ 	help
+ 	  Vulkan driver for Intel hardware from Ivy Bridge onward.
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 29c67b77b9..bdb7ea9a6c 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -29,11 +29,9 @@ MESA3D_CONF_OPTS = \
+ 	-Dgallium-omx=disabled \
+ 	-Dpower8=disabled
+ 
+-ifeq ($(BR2_PACKAGE_MESA3D_DRI3),y)
++ifeq ($(BR2_PACKAGE_MESA3D_DRIVER)$(BR2_PACKAGE_XORG7),yy)
+ MESA3D_CONF_OPTS += -Ddri3=enabled
+-ifeq ($(BR2_PACKAGE_XLIB_LIBXSHMFENCE),y)
+ MESA3D_DEPENDENCIES += xlib_libxshmfence
+-endif
+ else
+ MESA3D_CONF_OPTS += -Ddri3=disabled
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
