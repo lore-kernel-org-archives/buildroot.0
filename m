@@ -4,59 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F3F7C6FD1F
-	for <buildroot@archiver.kernel.org>; Thu, 21 Mar 2024 20:19:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5D61C6FD1F
+	for <buildroot@archiver.kernel.org>; Thu, 21 Mar 2024 20:19:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 443E98227C;
-	Thu, 21 Mar 2024 20:19:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7177B8227D;
+	Thu, 21 Mar 2024 20:19:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3GIfwpf0hirw; Thu, 21 Mar 2024 20:19:31 +0000 (UTC)
+	with ESMTP id AklWhniu6REi; Thu, 21 Mar 2024 20:19:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 66FC982266
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8863B8229A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 66FC982266;
-	Thu, 21 Mar 2024 20:19:31 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6806D1BF2BD
- for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 20:19:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8863B8229A;
+	Thu, 21 Mar 2024 20:19:43 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 350B41BF2BD
+ for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 20:19:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5EECE4054B
- for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 20:19:29 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2186F414C0
+ for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 20:19:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hUogZPMzpFFI for <buildroot@lists.busybox.net>;
- Thu, 21 Mar 2024 20:19:28 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
- helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WKvMv3B5loVg for <buildroot@lists.busybox.net>;
+ Thu, 21 Mar 2024 20:19:38 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
+ helo=relay7-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4F706400C1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F706400C1
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4F706400C1
- for <buildroot@buildroot.org>; Thu, 21 Mar 2024 20:19:28 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6FA6B240004;
- Thu, 21 Mar 2024 20:19:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0874A409FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0874A409FA
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0874A409FA
+ for <buildroot@buildroot.org>; Thu, 21 Mar 2024 20:19:37 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 20CC120002;
+ Thu, 21 Mar 2024 20:19:35 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rnOsn-005WiH-2v;
- Thu, 21 Mar 2024 21:19:25 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rnOsx-005Wia-1g;
+ Thu, 21 Mar 2024 21:19:35 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Bernd Kuhls <bernd@kuhls.net>
-References: <20240307174218.36576-1-bernd@kuhls.net>
-Date: Thu, 21 Mar 2024 21:19:25 +0100
-In-Reply-To: <20240307174218.36576-1-bernd@kuhls.net> (Bernd Kuhls's message
- of "Thu, 7 Mar 2024 18:42:18 +0100")
-Message-ID: <87r0g372ya.fsf@48ers.dk>
+References: <20240307174153.36557-1-bernd@kuhls.net>
+Date: Thu, 21 Mar 2024 21:19:35 +0100
+In-Reply-To: <20240307174153.36557-1-bernd@kuhls.net> (Bernd Kuhls's message
+ of "Thu, 7 Mar 2024 18:41:52 +0100")
+Message-ID: <87msqr72y0.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/kodi: bump version to 20.5-Nexus
+Subject: Re: [Buildroot] [PATCH 1/2] package/kodi-pvr-hts: bump version to
+ 20.7.2-Nexus
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,7 +77,6 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
 
- > Release notes: https://github.com/xbmc/xbmc/releases/tag/20.5-Nexus
  > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Committed to 2024.02.x, thanks.
