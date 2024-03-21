@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C5C8C6FD1F
-	for <buildroot@archiver.kernel.org>; Thu, 21 Mar 2024 21:03:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23DE3C54E58
+	for <buildroot@archiver.kernel.org>; Thu, 21 Mar 2024 21:03:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 516B5822E9;
-	Thu, 21 Mar 2024 21:03:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 746FD80AAA;
+	Thu, 21 Mar 2024 21:03:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 89lufRAsMeJF; Thu, 21 Mar 2024 21:03:31 +0000 (UTC)
+	with ESMTP id 4I7oWhjHJ4Hk; Thu, 21 Mar 2024 21:03:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5C5A82377
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F01E8237F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B5C5A82377;
-	Thu, 21 Mar 2024 21:03:30 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3A9CA1BF98E
- for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 21:02:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1F01E8237F;
+	Thu, 21 Mar 2024 21:03:34 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2C2CF1BF2BD
+ for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 21:02:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5ABC6608BC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5A2DD41604
  for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 21:02:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id o4zcvIzSFUem for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id B4csY9OBXvE9 for <buildroot@lists.busybox.net>;
  Thu, 21 Mar 2024 21:02:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5228C6081D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 462E7415C5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5228C6081D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 462E7415C5
  for <buildroot@buildroot.org>; Thu, 21 Mar 2024 21:02:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4DC2983760; Thu, 21 Mar 2024 21:02:26 +0000 (UTC)
+ id 4035383749; Thu, 21 Mar 2024 21:02:26 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 21 Mar 2024 21:20:14 +0100
+Date: Thu, 21 Mar 2024 21:19:03 +0100
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 3a906ddf0693d26ae6afad04e5ab7678dc6afbdf
-X-Git-Newrev: 57b4f2212d4be9fef0ee91b06338dcc119265542
+X-Git-Oldrev: 3e89511377b3829dfe0e3a38fa5fc97df6decc0b
+X-Git-Newrev: 3a906ddf0693d26ae6afad04e5ab7678dc6afbdf
 X-Patchwork-Hint: ignore
-Message-Id: <20240321210226.4DC2983760@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x]
- package/intel-mediadriver: bump version to 24.1.4
+Message-Id: <20240321210226.4035383749@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/kodi-pvr-hts:
+ bump version to 20.7.2-Nexus
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,40 +65,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=57b4f2212d4be9fef0ee91b06338dcc119265542
+commit: https://git.buildroot.net/buildroot/commit/?id=3a906ddf0693d26ae6afad04e5ab7678dc6afbdf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 150a1722a78c51dd7996c5aaa3b42476f60451d1)
+(cherry picked from commit aebe2b1dae2dd5c1e7952d00ad124064821be718)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/intel-mediadriver/intel-mediadriver.hash | 2 +-
- package/intel-mediadriver/intel-mediadriver.mk   | 2 +-
+ package/kodi-pvr-hts/kodi-pvr-hts.hash | 2 +-
+ package/kodi-pvr-hts/kodi-pvr-hts.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
-index a1b098094b..4b410fb961 100644
---- a/package/intel-mediadriver/intel-mediadriver.hash
-+++ b/package/intel-mediadriver/intel-mediadriver.hash
+diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.hash b/package/kodi-pvr-hts/kodi-pvr-hts.hash
+index a268940b0e..2a59b7bbe5 100644
+--- a/package/kodi-pvr-hts/kodi-pvr-hts.hash
++++ b/package/kodi-pvr-hts/kodi-pvr-hts.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  a024e96abd662193e4295f427a76c5894087503df46bd82c0e5bea103e44b171  intel-media-24.1.3.tar.gz
-+sha256  7ea727b3e2890cf8f50307a3910664209bcbae1ce0d3d8f81bb9f522b0f66d59  intel-media-24.1.4.tar.gz
- sha256  74979d5aaee78b8da82e3aafd415a216b6131dfff6d95d6930927c8a4e3bded3  LICENSE.md
-diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
-index 72a22fe5c9..9fdbef93bb 100644
---- a/package/intel-mediadriver/intel-mediadriver.mk
-+++ b/package/intel-mediadriver/intel-mediadriver.mk
-@@ -6,7 +6,7 @@
+-sha256  15d68d928e0794fb42fd0f3483403fb0290c5c94aa3d3b648a8a2f8e8316dfff  kodi-pvr-hts-20.7.0-Nexus.tar.gz
++sha256  244cfc1488aa0c51465af411f3df8884b4a571a08acfa20ac9defdb8ef49022e  kodi-pvr-hts-20.7.2-Nexus.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.mk b/package/kodi-pvr-hts/kodi-pvr-hts.mk
+index c56d0e0546..ebc31ddbdf 100644
+--- a/package/kodi-pvr-hts/kodi-pvr-hts.mk
++++ b/package/kodi-pvr-hts/kodi-pvr-hts.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
- 
--INTEL_MEDIADRIVER_VERSION = 24.1.3
-+INTEL_MEDIADRIVER_VERSION = 24.1.4
- INTEL_MEDIADRIVER_SITE = https://github.com/intel/media-driver/archive
- INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
- INTEL_MEDIADRIVER_LICENSE = MIT, BSD-3-Clause
+-KODI_PVR_HTS_VERSION = 20.7.0-Nexus
++KODI_PVR_HTS_VERSION = 20.7.2-Nexus
+ KODI_PVR_HTS_SITE = $(call github,kodi-pvr,pvr.hts,$(KODI_PVR_HTS_VERSION))
+ KODI_PVR_HTS_LICENSE = GPL-2.0+
+ KODI_PVR_HTS_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
