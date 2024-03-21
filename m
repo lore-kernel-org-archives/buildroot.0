@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD675C6FD1F
-	for <buildroot@archiver.kernel.org>; Thu, 21 Mar 2024 21:02:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC50FC54E58
+	for <buildroot@archiver.kernel.org>; Thu, 21 Mar 2024 21:02:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7EAB9821E5;
-	Thu, 21 Mar 2024 21:02:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 72F68822EA;
+	Thu, 21 Mar 2024 21:02:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Lve69YD43Py6; Thu, 21 Mar 2024 21:02:23 +0000 (UTC)
+	with ESMTP id Pt8GxqAhBv8h; Thu, 21 Mar 2024 21:02:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7DFAD821FD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9906382245
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7DFAD821FD;
-	Thu, 21 Mar 2024 21:02:23 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B335E1BF2BD
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9906382245;
+	Thu, 21 Mar 2024 21:02:25 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D0F291BF980
  for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 21:02:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9E223415C5
+ by smtp2.osuosl.org (Postfix) with ESMTP id CB5B6409C8
  for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 21:02:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id L4ixL3PW2crM for <buildroot@lists.busybox.net>;
- Thu, 21 Mar 2024 21:02:20 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2WUOzEJumPCV for <buildroot@lists.busybox.net>;
+ Thu, 21 Mar 2024 21:02:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B880C415B3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 13B86405C2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B880C415B3
- for <buildroot@buildroot.org>; Thu, 21 Mar 2024 21:02:20 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 13B86405C2
+ for <buildroot@buildroot.org>; Thu, 21 Mar 2024 21:02:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id ADFEE83734; Thu, 21 Mar 2024 21:02:20 +0000 (UTC)
+ id 01DEC83751; Thu, 21 Mar 2024 21:02:21 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 21 Mar 2024 21:08:38 +0100
+Date: Thu, 21 Mar 2024 21:26:38 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: a2e70dc8d02ccecfbea79d90b54cec43cc32174e
-X-Git-Newrev: 0d8265d8fe889ac3f522b910ac2f5a1e0c47bfa5
+X-Git-Oldrev: acf013b600aa860794bd20d09881453fa6a80d6b
+X-Git-Newrev: 9c9796d8778791fa4e3f8d0f15cafd91cad3251c
 X-Patchwork-Hint: ignore
-Message-Id: <20240321210220.ADFEE83734@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/php: add
- libucontext optional dependency
+Message-Id: <20240321210221.01DEC83751@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/expat: security
+ bump to version 2.6.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,64 +60,72 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1729678390449888388=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d8265d8fe889ac3f522b910ac2f5a1e0c47bfa5
+--===============1729678390449888388==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=9c9796d8778791fa4e3f8d0f15cafd91cad3251c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-Select libucontext if the toolchain doesn't support ucontext to allow
-building php on musl
+Security fixes:
+	- CVE-2024-28757 -- Prevent billion laughs attacks with isolated
+	  use of external parsers.  Please see the commit message of
+	  commit 1d50b80cf31de87750103656f6eb693746854aa8 for details.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+https://blog.hartwork.org/posts/expat-2-6-2-released/
+https://github.com/libexpat/libexpat/blob/R_2_6_2/expat/Changes
+
+Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 2824aa8a23a765b660219c129d4980f1b7c7691c)
+(cherry picked from commit 1dfe980b19b83ee695e51e92aecb0c8cdf202a3d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/Config.in | 3 +++
- package/php/php.mk    | 5 +++++
- 2 files changed, 8 insertions(+)
+ package/expat/expat.hash | 8 ++++----
+ package/expat/expat.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/php/Config.in b/package/php/Config.in
-index 69b4268c1d..af8574ac75 100644
---- a/package/php/Config.in
-+++ b/package/php/Config.in
-@@ -9,6 +9,7 @@ config BR2_PACKAGE_PHP_ARCH_SUPPORTS
- 	default y if BR2_RISCV_64
- 	default y if BR2_s390x
- 	default y if BR2_TOOLCHAIN_HAS_UCONTEXT
-+	default y if BR2_PACKAGE_LIBUCONTEXT_ARCH_SUPPORTS
+diff --git a/package/expat/expat.hash b/package/expat/expat.hash
+index 980a9ab6a7..63890b54df 100644
+--- a/package/expat/expat.hash
++++ b/package/expat/expat.hash
+@@ -1,7 +1,7 @@
+-# From https://sourceforge.net/projects/expat/files/expat/2.6.1/
+-md5  84d0ee1c554212dc8f068e538de5b823  expat-2.6.1.tar.xz
+-sha1  1a1804b7c565a8b21abbd3433ef67ed8a4476960  expat-2.6.1.tar.xz
++# From https://sourceforge.net/projects/expat/files/expat/2.6.2/
++md5  0cb75c8feb842c0794ba89666b762a2d  expat-2.6.1.tar.xz
++sha1  d9e5f953dcacda3c9e69b4886382c3d8847b81bd  expat-2.6.1.tar.xz
  
- config BR2_PACKAGE_PHP
- 	bool "php"
-@@ -25,6 +26,8 @@ config BR2_PACKAGE_PHP
- 	       BR2_USE_MMU
- 	select BR2_PACKAGE_PHP_SAPI_CLI if !BR2_USE_MMU
- 	select BR2_PACKAGE_PCRE2
-+	select BR2_PACKAGE_LIBUCONTEXT if \
-+		BR2_PACKAGE_LIBUCONTEXT_ARCH_SUPPORTS
- 	help
- 	  PHP  is a widely-used general-purpose scripting
- 	  language that is especially suited for Web development
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 4daf7f633d..28893be4c6 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -40,6 +40,11 @@ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- PHP_EXTRA_LIBS += -latomic
- endif
+ # Locally calculated
+-sha256  cb5f5a8ea211e1cabd59be0a933a52e3c02cc326e86a4d387d8d218e7ee47a3e  expat-2.6.0.tar.xz
++sha256  ee14b4c5d8908b1bec37ad937607eab183d4d9806a08adee472c3c3121d27364  expat-2.6.2.tar.xz
+ sha256  122f2c27000472a201d337b9b31f7eb2b52d091b02857061a8880371612d9534  COPYING
+diff --git a/package/expat/expat.mk b/package/expat/expat.mk
+index e09fcc673f..c6b7fc8b44 100644
+--- a/package/expat/expat.mk
++++ b/package/expat/expat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_LIBUCONTEXT),y)
-+PHP_DEPENDENCIES += libucontext
-+PHP_EXTRA_LIBS += -lucontext
-+endif
-+
- ifeq ($(call qstrip,$(BR2_TARGET_LOCALTIME)),)
- PHP_LOCALTIME = UTC
- else
+-EXPAT_VERSION = 2.6.1
++EXPAT_VERSION = 2.6.2
+ EXPAT_SITE = http://downloads.sourceforge.net/project/expat/expat/$(EXPAT_VERSION)
+ EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.xz
+ EXPAT_INSTALL_STAGING = YES
+
+--===============1729678390449888388==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1729678390449888388==--
