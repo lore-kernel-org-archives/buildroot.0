@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54E90C54E58
-	for <buildroot@archiver.kernel.org>; Thu, 21 Mar 2024 21:02:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3A69CD11BF
+	for <buildroot@archiver.kernel.org>; Thu, 21 Mar 2024 21:02:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 145208232D;
-	Thu, 21 Mar 2024 21:02:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 96C4C82302;
+	Thu, 21 Mar 2024 21:02:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PR1GdGo-uHII; Thu, 21 Mar 2024 21:02:52 +0000 (UTC)
+	with ESMTP id qBosnK5ZSkLI; Thu, 21 Mar 2024 21:02:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B9C528230A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 76DFE822FF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B9C528230A;
-	Thu, 21 Mar 2024 21:02:51 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 012091BF2BD
+	by smtp1.osuosl.org (Postfix) with ESMTP id 76DFE822FF;
+	Thu, 21 Mar 2024 21:02:56 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 135661BF980
  for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 21:02:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EA16260712
- for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 21:02:24 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2CB7A409C9
+ for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 21:02:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id l5acBKSBjH2V for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nSc34lEZSDPL for <buildroot@lists.busybox.net>;
  Thu, 21 Mar 2024 21:02:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3133960686
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC654400C1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3133960686
+ by smtp2.osuosl.org (Postfix) with ESMTP id DC654400C1
  for <buildroot@buildroot.org>; Thu, 21 Mar 2024 21:02:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D63C583734; Thu, 21 Mar 2024 21:02:20 +0000 (UTC)
+ id C82C783751; Thu, 21 Mar 2024 21:02:20 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 21 Mar 2024 21:16:06 +0100
+Date: Thu, 21 Mar 2024 21:14:29 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: d51b3b015ddf5ef64fe5b016ca71a53669ec24be
-X-Git-Newrev: d4169b9dbf77890d5a223f462566d2dbf4e5da46
+X-Git-Oldrev: 8f01f310663233b5dfa1014abe7c84548e6b3ae4
+X-Git-Newrev: d51b3b015ddf5ef64fe5b016ca71a53669ec24be
 X-Patchwork-Hint: ignore
-Message-Id: <20240321210220.D63C583734@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/bitcoin: security
- bump to version 26.0
+Message-Id: <20240321210220.C82C783751@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/util-linux: bump
+ to version 2.39.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,298 +65,224 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d4169b9dbf77890d5a223f462566d2dbf4e5da46
+commit: https://git.buildroot.net/buildroot/commit/?id=d51b3b015ddf5ef64fe5b016ca71a53669ec24be
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-For all release notes since 0.21.2, see [1].
-
-This commit also:
-- removes the package patches, all included in this release,
-- removes the patch entry in ".checkpackageignore",
-- adds a comment about pgp signature check in the hash file,
-- updates the license hash, due to year update,
-- adds the requirement on gcc >= 9, see [2],
-- removes the dependency on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 which
-  is no longer needed, due to the gcc version requirement.
-
 Fixes:
-- [3]
+http://autobuild.buildroot.net/results/623/623b21e29693e1de8945cb25e258488f06e6040e/
 
-Note: this CVE-2023-33297 is not explicitly mentioned in the Bitcoin
-core release notes. It is not either appearing in CVE list at [4].
-The change corresponding to this vulnerability is "#27610 Improve
-performance of p2p inv to send queues" in the version 24.1 release
-note. See [5] and [6].
+Changes between 2.39.2 and 2.39.3:
 
-[1] https://github.com/bitcoin/bitcoin/tree/v26.0/doc/release-notes
-[2] https://github.com/bitcoin/bitcoin/blob/v26.0/doc/dependencies.md
-[3] https://nvd.nist.gov/vuln/detail/CVE-2023-33297
-[4] https://en.bitcoin.it/wiki/Common_Vulnerabilities_and_Exposures
-[5] https://github.com/bitcoin/bitcoin/blob/v26.0/doc/release-notes/release-notes-24.1.md?plain=1#L45
-[6] https://github.com/bitcoin/bitcoin/pull/27610
+2da5c904e18fdcffd2b252d641e6f76374c7b406 build-sys: release++ (v2.39.3)
+03c939edda81c5a4d6e5f5c1cb896e79c1e82e16 docs: update v2.39.3-ReleaseNotes
+dafb120ef79c878cfd1b65c1d1c46497f17a7f7e docs: update AUTHORS file
+bfc9691ce5d964b87f6c02cc236361b4772456d0 po-man: merge changes
+d2232b60963a6e4e43fd359d1a4b552c4291b327 po: merge changes
+4ab356c1c02c34cd3935e1bb0aa47ed6e27cfe3c po: add ro.po (from translationproject.org)
+7e147d16c06f14b3f760b620d4f359cef12fe4ad po: update es.po (from translationproject.org)
+e8cb61f07430d5f1d624245a219c2e21694c5f52 lsfd: fix memory leak in append_filter_expr()
+192d8aaa07e088e44fcb78736a53baae1ead7ccd lsfd: avoid undefined behavior
+756588f8c8b2ed93c124ca15cfb3f0efc4a0f9f6 lsfd: (man) fix the form for the optional argument of --inet option
+8d78c1306d1a9d5ebf9ec058344685da0360b87b Add Phytium FTC310 & FTC664 support
+b75322cdb13c6c0b3789ff8fc19dcd017c069784 Add Phytium FTC862 cpu model. fix:#2486
+ec1b0eb36bd6c5a5079293ab03241163f61a8bf4 libmount: accept '\' as escape for options separator
+2e5f5c8d85338811595d321a77647a40e12321c9 tests: add ts_skip_docker
+0b3254cac3a275bbe32af57c6037cd29c21324d7 Merge branch 'stable-2.39/bcachefs-fixes' of https://github.com/t-8ch/util-linux into PR/stable-v2.39.3
+6498439340a16e6acee54987df016c6b7928b17a tests: skip broken tests on docker
+fa9b5365861934faab9ba73bd405095f56f02e45 libblkid: (bcachefs) add support for sub-device labels
+3c5d991b0323b33816e661e52da5d6f5402f47b5 libblkid: (bcachefs) adapt to major.minor version
+ece194082fb318d0fa3fec31193ce6f61b97c67a libuuid: avoid truncate clocks.txt to improve performance
+84a62c1a5a614bde2530544bf2558c73f0179d42 libuuid/src/gen_uuid.c: fix cs_min declaration
+93239aa7869ddd236db8e5a28b4e6873ce6e0f22 libmount: fix possible NULL dereference [coverity scan]
+a6def815e21d50db7a99ec74080c3fd7eb64e934 meson: install wall executable with group 'tty'
+c6c1c69c3e83606eced938d841af03c1acef03a0 meson: install write executable with group 'tty'
+bf2cd1d5a6eb273fbb11931b86ae165e7da5a397 libmount: improve mnt_table_next_child_fs()
+c14f5bf37adf681c378fc004f0996e0bcfd30ce0 docs: add SPDX to boilerplate.c
+fdd9f11f5e38b044617d3bc5f6c00789096b233f disk-utils: add SPDX and Copyright notices
+e7dbe9c788da98b86f8cf87bc20ec74e32206451 include/audit-arch: add missing SPDX
+5ec7b14a72d9893d2a8d8c7f40cd45b44c9575c9 setterm: avoid restoring flags from uninitialized memory
+64d2300e6443c311219f187433046751a86ed18e Fix man page for col to correct documentation error
+7cc2c962567fe40daa9b12481224e5a0e6f96c47 Update col.c to fix option mistake
+122d7e7afb44d8a823e362673b0d2d1e31f7d478 umount: handle bindmounts during --recursive
+da18b31ff1cb504e3d288f77d1f1d1179c39e4d8 lscpu: fix caches separator for --parse=<list>
+3a5c9c1dd6935fb16f15f210b80ce9c5228e6a19 Use empty libuser config file.
+7058d793def09c3d4645e9efd1d8a5d212e839b0 libblkid: exfat: fix fail to find volume label
+d065ff00a36b7244842f743372099837bc61328b blkpr: store return value of getopt_long in int
+9ca6f1712a5803e32e26e065e32e99837ba8b5d2 lib/path: Set errno in case of fgets failure
+e2f0aa5c25c0295ef6187d3c53c2801fe17385e5 autotools: fix AC_DEFINE_UNQUOTED() use
+cefd05c479e5456af8db2a86fabad165d247176b autotools: fix librtas check
+f27fbafb24bdcefaa2463d47abc18491c3497451 lib/path: fix typos
+f8ab70477e2ca7ac050fd4e2337b76a1972c8aa3 lib/path: set errno in case of error
+5ec30a362a5dd91c018c04a64fd1a481029dc4c6 lib/path: fix possible out of boundary access
+edc723cd3341ff3d3e660051525dca40a2af6b3b libblkid: reset errno before calling probefuncs
+8de89778b945d552796f09576925310810ce798b setpriv: fix group argument completion
+41599054c7248f12c8a54d02f7161d0aff4275a9 libfdisk: reset errno before calling read()
+cce4e44059405f3170b166fbf1774bf4b89c11c4 blkid: fix call to err_exclusive_options
+b718f985cb6cc3bc65618649e9f231ecafcf81fb docs: use HTTPS for GitHub clone URLs
+2bddfa6928af328675b2ffbfc9b6546e9ee81722 libblkid: (probe) handle probe without chain gracefully
+3d31216787d6725fed361d27f0f01aff6ef46981 lib/idcache: always gracefully handle null cache
+368521e45e1c9cb44145fc72c04d1cc903a883e8 script-playutils: close filestream in case ignore_line() fails
+087b0d2383b8ab1ee4564d692d5f797ac781896f libblkid: (vxfs) report endianness
+7e5056f33bdfd867ce6f1a642f560fdf0b402c1e libblkid: (ntfs) validate that sector_size is a power of two
+f368ccc759f9684338da723a93449764d0a8e312 libsmartcols: handle nameless tables in export format
+f5cace8da07291c94b76b5cf80da1f921be67419 ldattach: don't call exit() from signal handler
+03c12a34c58d2550c6c718275950866d387d33f5 lslogins: fix realloc() loop allocation size
+83ba179b12d3c6c5f400bf78f2f742b1cc7ce256 lib/env: avoid underflow of read_all_alloc() return value
+813851fba28cb3ecde6a7f0c90a7e343920cd8c7 libblkid: avoid memory leak of cachefile path
+4459623cde42a5d021a6d71e38fcdfd4fff3e171 libmount: gracefully handle NULL path in mnt_resolve_target()
+dbde7a537f27b23d64a8d3f583af472357de7192 more: avoid out-of-bound access
+c26badd5d4295d52e987c75e69113edfb407fb27 libfdisk: handle allocation failure in fdisk_new_partition
+5c250aa6425fc3e35c07bce019eb4b7fa34bf722 login: Use pid_t for child_pid
+be3f1712ee2e1e43d9b82b7cf4987c8a609a81ef login: move comment
+98be90b5bafa66d98655f8639efb3ffa984fc530 build-sys: fix libmount/src/hooks.c use
+a711af02d32c0a0a31f1bbb943ffff2e94203e86 lscpu: Use 4K buffer size instead of BUFSIZ
+45c6136cba5f7607cca08c5aaab8e9b22ef87c25 autotools: fix typos
+aa98c4ecc938a3459ffb759a444a8a585a9d0a3a libmount: make.stx_mnt_id use more robust
+c697c2bb69f55aa24b6c0e2e752548f823c53796 libmount: report statx in features list
+13711f3ab79dfa92e8815eb9b752ec2bf4832d80 libmount: fix statx() includes
+e9ed5a2b80bf8a76924caf8cd93b4cfff4d210a7 libblkid: (vfat) avoid modifying shared buffer
+d2cadf0992cce589bfffeb603325c3c2fe54a991 libblkid: (jmicron_raid) use checksum APIs
+c54c99efd0c3fc7f1e8db8b7191a6e1e3b295f1f libblkid: (jmicron_raid) avoid modifying shared buffer
+64418c52bc594abf01fc4ae8148e7aa93e4b3f22 libblkid: (zonefs) avoid modifying shared buffer
+b66da7ce4a04d6c960817a56fe82498c4e7dea44 losetup: fix JSON MAJ:MIN
+44d7bf2c8d1c6d34a40416807d16db6c07ac4916 lslogins: (man) fix -y option formatting
+7d6c71e51ed3c5f8505c67962b6d03490738a879 include: add DragonFlyBSD GPT partition types
+6b9fda87c4e5d0c6f945d7565197f157b9fa3d5f libblkid: (bcachefs) fix size validation
+acbf17ae8f8ee0f941fe98ed12f115f2b349bba8 libblkid: (bcachefs) fix compiler warning [-Werror=sign-compare]
+1ec71634aa4ef5ddca23d65c8a296f3614231e8a libblkid: (bcachefs) fix not detecting large superblocks
+68564ebb50f8afab5a9527c534417e247cca0b27 libmount: Fix regression when mounting with atime
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+We can drop 0001-libuuid-src-gen_uuid.c-fix-cs_min-declaration.patch
+as it was backported by upstream to the 2.39.x branch, and included in
+2.39.3.
+
+Update the hash for README.licensing after upstream clarified the licensing
+situation with
+https://github.com/util-linux/util-linux/commit/fdd9f11f5e38b044617d3bc5f6c00789096b233f
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit a3a88ff1c85ba0067af1028bc232f8f61b628979)
+(cherry picked from commit 45a3a8bd5a26953d4f5419fda7079fa0608dd43f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .checkpackageignore                                |  1 -
- ...001-src-randomenv.cpp-fix-build-on-uclibc.patch | 48 ----------------------
- ...sing-includes-to-fix-gcc-13-compile-error.patch | 48 ----------------------
- ...003-refactor-add-most-of-src-util-to-iwyu.patch | 34 ---------------
- .../bitcoin/0004-src-util-string-h-fix-gcc13.patch | 23 -----------
- package/bitcoin/Config.in                          | 11 ++---
- package/bitcoin/bitcoin.hash                       |  8 ++--
- package/bitcoin/bitcoin.mk                         |  2 +-
- 8 files changed, 10 insertions(+), 165 deletions(-)
+ ...uid-src-gen_uuid.c-fix-cs_min-declaration.patch | 80 ----------------------
+ package/util-linux/util-linux.hash                 |  4 +-
+ package/util-linux/util-linux.mk                   |  2 +-
+ 3 files changed, 3 insertions(+), 83 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 5e36db5950..7bf49808c1 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -207,7 +207,6 @@ package/binutils/2.39/0002-poison-system-directories.patch Upstream
- package/binutils/2.39/0003-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch Upstream
- package/binutils/arc-2020.09-release/0001-poison-system-directories.patch Upstream
- package/bird/0001-configure.ac-fix-build-with-autoconf-2.70.patch Upstream
--package/bitcoin/0001-src-randomenv.cpp-fix-build-on-uclibc.patch Upstream
- package/bmx7/0001-Fix-schedule.c-378-36-error-SIOCGSTAMP-undeclared.patch Upstream
- package/bmx7/0002-Fix-linking-error.patch Upstream
- package/bmx7/0003-Reorder-includes-to-avoid-ethhdr-collision.patch Upstream
-diff --git a/package/bitcoin/0001-src-randomenv.cpp-fix-build-on-uclibc.patch b/package/bitcoin/0001-src-randomenv.cpp-fix-build-on-uclibc.patch
+diff --git a/package/util-linux/0001-libuuid-src-gen_uuid.c-fix-cs_min-declaration.patch b/package/util-linux/0001-libuuid-src-gen_uuid.c-fix-cs_min-declaration.patch
 deleted file mode 100644
-index 8038a311d3..0000000000
---- a/package/bitcoin/0001-src-randomenv.cpp-fix-build-on-uclibc.patch
+index bba4d54619..0000000000
+--- a/package/util-linux/0001-libuuid-src-gen_uuid.c-fix-cs_min-declaration.patch
 +++ /dev/null
-@@ -1,48 +0,0 @@
--From 330cb33985d0ce97c20f4a0f0bbda0fbffe098d4 Mon Sep 17 00:00:00 2001
+@@ -1,80 +0,0 @@
+-From bcd11dece7d278bb0b76b138d08dedea80fa8262 Mon Sep 17 00:00:00 2001
 -From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Mon, 9 Nov 2020 21:18:40 +0100
--Subject: [PATCH] src/randomenv.cpp: fix build on uclibc
+-Date: Tue, 7 Nov 2023 18:43:57 +0100
+-Subject: [PATCH] libuuid/src/gen_uuid.c: fix cs_min declaration
 -
--Check for HAVE_STRONG_GETAUXVAL or HAVE_WEAK_GETAUXVAL before using
--getauxval to avoid a build failure on uclibc
+-Define cs_min through a define and not a const int to avoid the
+-following build failure with -O0 raised since version 2.39 and
+-https://github.com/util-linux/util-linux/commit/2fa4168c8bc9d5438bc1dfadda293c7c21b6fa59:
+-
+-libuuid/src/gen_uuid.c: In function 'uuid_generate_time_generic':
+-libuuid/src/gen_uuid.c:536:33: error: initializer element is not constant
+-  THREAD_LOCAL int  cache_size = cs_min;
+-                                 ^~~~~~
+-
+-For consistency, also use define for cs_max and cs_factor
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/2f80a5cdb523cc3c8c0f3693607a1be036b2ae98
 -
 -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/bitcoin/bitcoin/pull/20358]
+-Upstream: https://github.com/util-linux/util-linux/commit/07e5c29d501c19e7af84fecb5915e0f9f94cb49f
 ----
-- src/randomenv.cpp | 6 +++---
-- 1 file changed, 3 insertions(+), 3 deletions(-)
+- libuuid/src/gen_uuid.c | 19 ++++++++++---------
+- 1 file changed, 10 insertions(+), 9 deletions(-)
 -
--diff --git a/src/randomenv.cpp b/src/randomenv.cpp
--index 07122b7f6..5e07c3db4 100644
----- a/src/randomenv.cpp
--+++ b/src/randomenv.cpp
--@@ -53,7 +53,7 @@
-- #include <sys/vmmeter.h>
-- #endif
-- #endif
---#ifdef __linux__
--+#if defined(HAVE_STRONG_GETAUXVAL) || defined(HAVE_WEAK_GETAUXVAL)
-- #include <sys/auxv.h>
-- #endif
+-diff --git a/libuuid/src/gen_uuid.c b/libuuid/src/gen_uuid.c
+-index 619ef0131..db793c374 100644
+---- a/libuuid/src/gen_uuid.c
+-+++ b/libuuid/src/gen_uuid.c
+-@@ -518,6 +518,10 @@ int __uuid_generate_time_cont(uuid_t out, int *num, uint32_t cont_offset)
+- 	return __uuid_generate_time_internal(out, num, cont_offset);
+- }
 - 
--@@ -326,7 +326,7 @@ void RandAddStaticEnv(CSHA512& hasher)
--     // Bitcoin client version
--     hasher << CLIENT_VERSION;
+-+#define CS_MIN		(1<<6)
+-+#define CS_MAX		(1<<18)
+-+#define CS_FACTOR	2
+-+
+- /*
+-  * Generate time-based UUID and store it to @out
+-  *
+-@@ -529,11 +533,8 @@ int __uuid_generate_time_cont(uuid_t out, int *num, uint32_t cont_offset)
+- static int uuid_generate_time_generic(uuid_t out) {
+- #ifdef HAVE_TLS
+- 	/* thread local cache for uuidd based requests */
+--	const int			cs_min = (1<<6);
+--	const int			cs_max = (1<<18);
+--	const int			cs_factor = 2;
+- 	THREAD_LOCAL int		num = 0;
+--	THREAD_LOCAL int		cache_size = cs_min;
+-+	THREAD_LOCAL int		cache_size = CS_MIN;
+- 	THREAD_LOCAL int		last_used = 0;
+- 	THREAD_LOCAL struct uuid	uu;
+- 	THREAD_LOCAL time_t		last_time = 0;
+-@@ -552,10 +553,10 @@ static int uuid_generate_time_generic(uuid_t out) {
+- 		 * Start with a small cache size to cover short running applications
+- 		 * and adjust the cache size over the runntime.
+- 		 */
+--		if ((last_used == cache_size) && (cache_size < cs_max))
+--			cache_size *= cs_factor;
+--		else if ((last_used < (cache_size / cs_factor)) && (cache_size > cs_min))
+--			cache_size /= cs_factor;
+-+		if ((last_used == cache_size) && (cache_size < CS_MAX))
+-+			cache_size *= CS_FACTOR;
+-+		else if ((last_used < (cache_size / CS_FACTOR)) && (cache_size > CS_MIN))
+-+			cache_size /= CS_FACTOR;
 - 
---#ifdef __linux__
--+#if defined(HAVE_STRONG_GETAUXVAL) || defined(HAVE_WEAK_GETAUXVAL)
--     // Information available through getauxval()
-- #  ifdef AT_HWCAP
--     hasher << getauxval(AT_HWCAP);
--@@ -346,7 +346,7 @@ void RandAddStaticEnv(CSHA512& hasher)
--     const char* exec_str = (const char*)getauxval(AT_EXECFN);
--     if (exec_str) hasher.Write((const unsigned char*)exec_str, strlen(exec_str) + 1);
-- #  endif
---#endif // __linux__
--+#endif // HAVE_STRONG_GETAUXVAL || HAVE_WEAK_GETAUXVAL
+- 		num = cache_size;
 - 
-- #ifdef HAVE_GETCPUID
--     AddAllCPUID(hasher);
+-@@ -568,7 +569,7 @@ static int uuid_generate_time_generic(uuid_t out) {
+- 		}
+- 		/* request to daemon failed, reset cache */
+- 		num = 0;
+--		cache_size = cs_min;
+-+		cache_size = CS_MIN;
+- 	}
+- 	if (num > 0) { /* serve uuid from cache */
+- 		uu.time_low++;
 --- 
--2.28.0
+-2.43.0
 -
-diff --git a/package/bitcoin/0002-Add-missing-includes-to-fix-gcc-13-compile-error.patch b/package/bitcoin/0002-Add-missing-includes-to-fix-gcc-13-compile-error.patch
-deleted file mode 100644
-index 22c0ca2adf..0000000000
---- a/package/bitcoin/0002-Add-missing-includes-to-fix-gcc-13-compile-error.patch
-+++ /dev/null
-@@ -1,48 +0,0 @@
--From 339a95b7537b47e5d6b732c0633a00afd96e3ca0 Mon Sep 17 00:00:00 2001
--From: MarcoFalke <*~=`'#}+{/-|&$^_@721217.xyz>
--Date: Thu, 19 Jan 2023 19:35:43 +0100
--Subject: [PATCH] Add missing includes to fix gcc-13 compile error
--
--Upstream: https://github.com/bitcoin/bitcoin/commit/fadeb6b103cb441e0e91ef506ef29febabb10715
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- src/support/lockedpool.cpp | 3 +++
-- src/support/lockedpool.h   | 4 ++--
-- 2 files changed, 5 insertions(+), 2 deletions(-)
--
--diff --git a/src/support/lockedpool.cpp b/src/support/lockedpool.cpp
--index 26de780f2..11131d551 100644
----- a/src/support/lockedpool.cpp
--+++ b/src/support/lockedpool.cpp
--@@ -22,6 +22,9 @@
-- #endif
-- 
-- #include <algorithm>
--+#include <limits>
--+#include <stdexcept>
--+#include <utility>
-- #ifdef ARENA_DEBUG
-- #include <iomanip>
-- #include <iostream>
--diff --git a/src/support/lockedpool.h b/src/support/lockedpool.h
--index b9e2e99d1..25b4c0f36 100644
----- a/src/support/lockedpool.h
--+++ b/src/support/lockedpool.h
--@@ -5,11 +5,11 @@
-- #ifndef BITCOIN_SUPPORT_LOCKEDPOOL_H
-- #define BITCOIN_SUPPORT_LOCKEDPOOL_H
-- 
---#include <stdint.h>
--+#include <cstddef>
-- #include <list>
-- #include <map>
---#include <mutex>
-- #include <memory>
--+#include <mutex>
-- #include <unordered_map>
-- 
-- /**
---- 
--2.39.2
--
-diff --git a/package/bitcoin/0003-refactor-add-most-of-src-util-to-iwyu.patch b/package/bitcoin/0003-refactor-add-most-of-src-util-to-iwyu.patch
-deleted file mode 100644
-index 095fa648dd..0000000000
---- a/package/bitcoin/0003-refactor-add-most-of-src-util-to-iwyu.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From c187efa907fd64ea2c7b7d699c5c97f9d5b79960 Mon Sep 17 00:00:00 2001
--From: fanquake <fanquake@gmail.com>
--Date: Thu, 9 Jun 2022 16:26:55 +0100
--Subject: [PATCH] refactor: add most of src/util to iwyu
--
--These files change infrequently, and not much header shuffling is required.
--
--We don't add everything in src/util/ yet, because IWYU makes some
--dubious suggestions, which I'm going to follow up with upstream.
--
--Upstream: https://github.com/bitcoin/bitcoin/commit/07f2c25d04c39a0074e1d9ee1b24b3e359c8153f
--
--[Bernd: backported relevant part from upstream commit to version 0.21.2
--        to fix build error with gcc 13.x]
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- src/util/bip32.h | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/util/bip32.h b/src/util/bip32.h
--index 347e83db9..6ef051c48 100644
----- a/src/util/bip32.h
--+++ b/src/util/bip32.h
--@@ -6,6 +6,7 @@
-- #define BITCOIN_UTIL_BIP32_H
-- 
-- #include <attributes.h>
--+#include <cstdint>
-- #include <string>
-- #include <vector>
-- 
---- 
--2.39.2
--
-diff --git a/package/bitcoin/0004-src-util-string-h-fix-gcc13.patch b/package/bitcoin/0004-src-util-string-h-fix-gcc13.patch
-deleted file mode 100644
-index 00a9ef2b97..0000000000
---- a/package/bitcoin/0004-src-util-string-h-fix-gcc13.patch
-+++ /dev/null
-@@ -1,23 +0,0 @@
--From fa2deae2a86417d7e0d4cd33fb933b1000d20313 Mon Sep 17 00:00:00 2001
--From: MacroFake <falke.marco@gmail.com>
--Date: Thu, 5 May 2022 08:28:29 +0200
--Subject: [PATCH] Wrap boost::replace_all
--
--Upstream: https://github.com/bitcoin/bitcoin/commit/fa2deae2a86417d7e0d4cd33fb933b1000d20313
--
--[Bernd: backported relevant part from upstream commit to version 0.21.2
--        to fix build error with gcc 13.x]
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
--diff --git a/src/util/string.h b/src/util/string.h
--index 2e91347b27a10..df20e34ae9aaa 100644
----- a/src/util/string.h
--+++ b/src/util/string.h
--@@ -9,6 +9,7 @@
-- 
-- #include <algorithm>
-- #include <array>
--+#include <cstdint>
-- #include <cstring>
-- #include <locale>
-- #include <sstream>
-diff --git a/package/bitcoin/Config.in b/package/bitcoin/Config.in
-index a344811d6b..c4a2447fc9 100644
---- a/package/bitcoin/Config.in
-+++ b/package/bitcoin/Config.in
-@@ -11,8 +11,8 @@ config BR2_PACKAGE_BITCOIN
- 	bool "bitcoin"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-thread, boost-filesystem
--	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::future
- 	depends on BR2_PACKAGE_BITCOIN_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
- 	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_BOOST
-@@ -36,12 +36,9 @@ config BR2_PACKAGE_BITCOIN
+diff --git a/package/util-linux/util-linux.hash b/package/util-linux/util-linux.hash
+index 1638cd9967..d47f47fdba 100644
+--- a/package/util-linux/util-linux.hash
++++ b/package/util-linux/util-linux.hash
+@@ -1,7 +1,7 @@
+ # From https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.39/sha256sums.asc
+-sha256  87abdfaa8e490f8be6dde976f7c80b9b5ff9f301e1b67e3899e1f05a59a1531f  util-linux-2.39.2.tar.xz
++sha256  7b6605e48d1a49f43cc4b4cfc59f313d0dd5402fa40b96810bd572e167dfed0f  util-linux-2.39.3.tar.xz
+ # License files, locally calculated
+-sha256  64dfeae1519bf0e27563d905a71264310fb6a8fa74e5cf99bb36e4d30d7ef455  README.licensing
++sha256  13f0ea46d12d798c095a6ad39d7ddc988e2e4d274c6494115f6b463f7bc4f702  README.licensing
+ sha256  9b718a9460fed5952466421235bc79eb49d4e9eacc920d7a9dd6285ab8fd6c6d  Documentation/licenses/COPYING.BSD-3-Clause
+ sha256  ba7640f00d93e72e92b94b9d71f25ec53bac2f1682f5c4adcccb0018359f60f8  Documentation/licenses/COPYING.BSD-4-Clause-UC
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Documentation/licenses/COPYING.GPL-2.0-or-later
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 72126adb00..a9e5b0bf68 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -8,7 +8,7 @@
+ # util-linux-libs/util-linux-libs.mk needs to be updated accordingly as well.
  
- 	  https://bitcoincore.org
+ UTIL_LINUX_VERSION_MAJOR = 2.39
+-UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).2
++UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).3
+ UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.xz
+ UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
  
--comment "bitcoin needs a toolchain w/ C++, threads, wchar"
-+comment "bitcoin needs a toolchain w/ C++, threads, wchar, gcc >= 9"
- 	depends on BR2_PACKAGE_BITCOIN_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
--
--comment "bitcoin needs a toolchain not affected by GCC bug 64735"
--	depends on BR2_PACKAGE_BITCOIN_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-+		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_9
-diff --git a/package/bitcoin/bitcoin.hash b/package/bitcoin/bitcoin.hash
-index 643fcbc141..6b3008af86 100644
---- a/package/bitcoin/bitcoin.hash
-+++ b/package/bitcoin/bitcoin.hash
-@@ -1,5 +1,7 @@
--# From https://bitcoincore.org/bin/bitcoin-core-0.21.2/SHA256SUMS.asc
--sha256  4146f751fc5691bdcf911cbdb8d32d8d25c297d29d58173227ae1ae6438edb9e  bitcoin-0.21.2.tar.gz
-+# Hash from: https://bitcoincore.org/bin/bitcoin-core-26.0/SHA256SUMS
-+# After checking pgp signature from:
-+# https://bitcoincore.org/bin/bitcoin-core-26.0/SHA256SUMS.asc
-+sha256  ab1d99276e28db62d1d9f3901e85ac358d7f1ebcb942d348a9c4e46f0fcdc0a1  bitcoin-26.0.tar.gz
- 
- # Hash for license file
--sha256  96fe807030b21f88305adc32af62f9aa19915f2783509fd6f52aea02cf83f644  COPYING
-+sha256  a6331cd1f889397adfc0c3b0535682a20950c6cf8e5c712e9997a15ce98324e1  COPYING
-diff --git a/package/bitcoin/bitcoin.mk b/package/bitcoin/bitcoin.mk
-index 10ae32202c..493c569336 100644
---- a/package/bitcoin/bitcoin.mk
-+++ b/package/bitcoin/bitcoin.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BITCOIN_VERSION = 0.21.2
-+BITCOIN_VERSION = 26.0
- BITCOIN_SITE = https://bitcoincore.org/bin/bitcoin-core-$(BITCOIN_VERSION)
- BITCOIN_AUTORECONF = YES
- BITCOIN_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
