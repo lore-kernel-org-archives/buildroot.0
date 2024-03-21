@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9EC7C6FD1F
-	for <buildroot@archiver.kernel.org>; Thu, 21 Mar 2024 21:04:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BFA0C6FD1F
+	for <buildroot@archiver.kernel.org>; Thu, 21 Mar 2024 21:05:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 248F68283D;
-	Thu, 21 Mar 2024 21:04:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1E1C182813;
+	Thu, 21 Mar 2024 21:05:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JJ7Xlwe9aVr3; Thu, 21 Mar 2024 21:04:49 +0000 (UTC)
+	with ESMTP id xdfpGxyK9mFd; Thu, 21 Mar 2024 21:04:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE86982893
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 24E9E828DA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CE86982893;
-	Thu, 21 Mar 2024 21:04:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 24E9E828DA;
+	Thu, 21 Mar 2024 21:04:57 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 19C311BF98E
- for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 21:02:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 253B81BF98E
+ for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 21:02:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3ED8B415B3
+ by smtp4.osuosl.org (Postfix) with ESMTP id 510CB415C2
  for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 21:02:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UqWXJQ2pTben for <buildroot@lists.busybox.net>;
+ with ESMTP id RQGMzAOLFVPX for <buildroot@lists.busybox.net>;
  Thu, 21 Mar 2024 21:02:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9361741601
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 384F0415F6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9361741601
+ by smtp4.osuosl.org (Postfix) with ESMTP id 384F0415F6
  for <buildroot@buildroot.org>; Thu, 21 Mar 2024 21:02:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8EB4783749; Thu, 21 Mar 2024 21:02:27 +0000 (UTC)
+ id 2B34883751; Thu, 21 Mar 2024 21:02:27 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 21 Mar 2024 21:54:44 +0100
+Date: Thu, 21 Mar 2024 21:46:08 +0100
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 841ddc38f13b531e355574bb2a83f933af5c5435
-X-Git-Newrev: 16585b87f225f2409987d822e8846ffffbc9b59f
+X-Git-Oldrev: f7b293752bf6ad5b3f8d71626b9199e5e2475bc5
+X-Git-Newrev: 9a997fcf3b2097284e80c4a9f1a013b165574baa
 X-Patchwork-Hint: ignore
-Message-Id: <20240321210227.8EB4783749@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/targetcli-fb:
- needs python-gobject
+Message-Id: <20240321210227.2B34883751@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/libnfs: bump to
+ version 5.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,76 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=16585b87f225f2409987d822e8846ffffbc9b59f
+commit: https://git.buildroot.net/buildroot/commit/?id=9a997fcf3b2097284e80c4a9f1a013b165574baa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Without python-gobject, we get the following runtime error:
+https://github.com/sahlberg/libnfs/blob/libnfs-5.0.3/CHANGELOG
 
-   ModuleNotFoundError: No module named 'gi'
-
-Add python-gobject and propagate its dependencies.
-
-While we're at it, split the DEPENDENCIES over several line and sort
-them alphabetically.
-
-Signed-off-by: Jeremy J. Peper <jeremy@jeremypeper.com>
-Reviewed-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-[Arnout: reorder everything alphabeticall, split DEPENDENCIES over
-several lines.]
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 945b9f8d8e9704fd3d2dbd2579ebf9178ed49d89)
+(cherry picked from commit 0a0b522b23fdadeafbca904a56047b8cf35760df)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/targetcli-fb/Config.in       | 13 ++++++++++++-
- package/targetcli-fb/targetcli-fb.mk |  6 +++++-
- 2 files changed, 17 insertions(+), 2 deletions(-)
+ package/libnfs/libnfs.hash | 2 +-
+ package/libnfs/libnfs.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/targetcli-fb/Config.in b/package/targetcli-fb/Config.in
-index 04c6a1ac09..eb7528fbea 100644
---- a/package/targetcli-fb/Config.in
-+++ b/package/targetcli-fb/Config.in
-@@ -1,12 +1,23 @@
--comment "targetcli-fb depends on Python"
-+comment "targetcli-fb needs Python, a glibc toolchain, gcc >= 4.9, host gcc >= 8"
- 	depends on !BR2_PACKAGE_PYTHON3
-+	depends on BR2_USE_MMU
-+	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS
-+	depends on !BR2_HOST_GCC_AT_LEAST_8 || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
-+		!BR2_TOOLCHAIN_USES_GLIBC
+diff --git a/package/libnfs/libnfs.hash b/package/libnfs/libnfs.hash
+index b67a5d2eda..c5e5197c13 100644
+--- a/package/libnfs/libnfs.hash
++++ b/package/libnfs/libnfs.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  637e56643b19da9fba98f06847788c4dad308b723156a64748041035dcdf9bd3  libnfs-5.0.2.tar.gz
++sha256  d945cb4f4c8f82ee1f3640893a168810f794a28e1010bb007ec5add345e9df3e  libnfs-5.0.3.tar.gz
+ sha256  edd960c0142b8ada98b43b6396b78f4e557b0bc70ac601a51e397ad04070e2c5  COPYING
+ sha256  d9406ced95457941032aa11d04623b8ab71f2827a3395ebef137aec475be35b1  LICENCE-BSD.txt
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENCE-LGPL-2.1.txt
+diff --git a/package/libnfs/libnfs.mk b/package/libnfs/libnfs.mk
+index b013decfc7..eb919406f3 100644
+--- a/package/libnfs/libnfs.mk
++++ b/package/libnfs/libnfs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_TARGETCLI_FB
- 	bool "targetcli-fb"
- 	depends on BR2_PACKAGE_PYTHON3 # python-configshell-fb
-+	depends on BR2_USE_MMU # python-gobject -> gobject-introspection
-+	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS # python-gobject -> gobject-introspection
-+	depends on BR2_HOST_GCC_AT_LEAST_8 # python-gobject -> gobject-introspection
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # python-gobject -> gobject-introspection
-+	depends on BR2_TOOLCHAIN_USES_GLIBC # python-gobject -> gobject-introspection
- 	select BR2_PACKAGE_PYTHON_CONFIGSHELL_FB
- 	select BR2_PACKAGE_PYTHON_RTSLIB_FB
- 	select BR2_PACKAGE_PYTHON_SIX
-+	select BR2_PACKAGE_PYTHON_GOBJECT
- 	help
- 	  targetcli-fb is a command-line interface for configuring the
- 	  LIO generic SCSI target, present in 3.x Linux kernel
-diff --git a/package/targetcli-fb/targetcli-fb.mk b/package/targetcli-fb/targetcli-fb.mk
-index d2cbf79e26..56ed7c6174 100644
---- a/package/targetcli-fb/targetcli-fb.mk
-+++ b/package/targetcli-fb/targetcli-fb.mk
-@@ -12,7 +12,11 @@ TARGETCLI_FB_LICENSE = Apache-2.0
- TARGETCLI_FB_LICENSE_FILES = COPYING
- TARGETCLI_FB_CPE_ID_VALID = YES
- TARGETCLI_FB_SETUP_TYPE = setuptools
--TARGETCLI_FB_DEPENDENCIES = python-configshell-fb python-rtslib-fb python-six
-+TARGETCLI_FB_DEPENDENCIES = \
-+	python-configshell-fb \
-+	python-gobject \
-+	python-rtslib-fb \
-+	python-six
- 
- define TARGETCLI_FB_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 0755 -D package/targetcli-fb/S50target \
+-LIBNFS_VERSION = 5.0.2
++LIBNFS_VERSION = 5.0.3
+ LIBNFS_SITE = $(call github,sahlberg,libnfs,libnfs-$(LIBNFS_VERSION))
+ LIBNFS_INSTALL_STAGING = YES
+ LIBNFS_AUTORECONF = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
