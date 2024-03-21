@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04E0FC54E58
-	for <buildroot@archiver.kernel.org>; Thu, 21 Mar 2024 21:03:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BB19C54E58
+	for <buildroot@archiver.kernel.org>; Thu, 21 Mar 2024 21:03:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C1C1582346;
-	Thu, 21 Mar 2024 21:03:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6C072823E0;
+	Thu, 21 Mar 2024 21:03:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pqtlc-y_8DCb; Thu, 21 Mar 2024 21:03:52 +0000 (UTC)
+	with ESMTP id yptH6Jc8K3rA; Thu, 21 Mar 2024 21:03:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8AC228237F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D3B59823FB
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8AC228237F;
-	Thu, 21 Mar 2024 21:03:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9352C1BF2BD
- for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 21:02:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D3B59823FB;
+	Thu, 21 Mar 2024 21:03:55 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0CF441BF2BD
+ for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 21:02:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4885B6084E
- for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 21:02:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D8F9B415CE
+ for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 21:02:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OsKx_cSznCCZ for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wkG83F90gb6F for <buildroot@lists.busybox.net>;
  Thu, 21 Mar 2024 21:02:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80F6D60712
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77D78415DE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 80F6D60712
- for <buildroot@buildroot.org>; Thu, 21 Mar 2024 21:02:27 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 77D78415DE
+ for <buildroot@buildroot.org>; Thu, 21 Mar 2024 21:02:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7CA1883760; Thu, 21 Mar 2024 21:02:27 +0000 (UTC)
+ id 6F36683749; Thu, 21 Mar 2024 21:02:26 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 21 Mar 2024 21:53:17 +0100
+Date: Thu, 21 Mar 2024 21:21:12 +0100
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 41e7eaeb6133724929134e2269aaf58480c383d0
-X-Git-Newrev: 841ddc38f13b531e355574bb2a83f933af5c5435
+X-Git-Oldrev: f646e4728dd38c6c0f8cd550216ba8249ff20973
+X-Git-Newrev: 43fd684dd5876862cae6e970954fbe31b4e7fddb
 X-Patchwork-Hint: ignore
-Message-Id: <20240321210227.7CA1883760@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/multipath-tools:
- fix legal info
+Message-Id: <20240321210226.6F36683749@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/onevpl-intel-gpu:
+ bump version to 24.1.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,33 +65,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=841ddc38f13b531e355574bb2a83f933af5c5435
+commit: https://git.buildroot.net/buildroot/commit/?id=43fd684dd5876862cae6e970954fbe31b4e7fddb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Commit cc363e9a93484e734313b17962b931b3df6eedaa forgot to update hash of
-README.md (changes not related to license)
-
-Fixes: cc363e9a93484e734313b17962b931b3df6eedaa
- - http://autobuild.buildroot.org/results/d41b3eedb337ac7559afceed459c3e28a9bf15a2
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 89bc66d08e17bca0c1ca40346c0c248f550b6013)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 1d69b083e8c724a82d7e0cfbf5989147b3c2f5e7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/multipath-tools/multipath-tools.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/onevpl-intel-gpu/onevpl-intel-gpu.hash | 2 +-
+ package/onevpl-intel-gpu/onevpl-intel-gpu.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/multipath-tools/multipath-tools.hash b/package/multipath-tools/multipath-tools.hash
-index 0f51c38846..c1f32e7a3b 100644
---- a/package/multipath-tools/multipath-tools.hash
-+++ b/package/multipath-tools/multipath-tools.hash
-@@ -4,4 +4,4 @@ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENS
- sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSES/GPL-3.0
- sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  LICENSES/LGPL-2.0
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSES/LGPL-2.1
--sha256  5887418b2e0e595da5aca08b2dff25298f20618f9894d5e26ce852d9d1ae90c4  README.md
-+sha256  9c69bb0089aa0b82b10a25095c04a7c4aec6b5bbf0776b7129123c8459fe7725  README.md
+diff --git a/package/onevpl-intel-gpu/onevpl-intel-gpu.hash b/package/onevpl-intel-gpu/onevpl-intel-gpu.hash
+index a45758a2c3..8dd42c4713 100644
+--- a/package/onevpl-intel-gpu/onevpl-intel-gpu.hash
++++ b/package/onevpl-intel-gpu/onevpl-intel-gpu.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  15d34e4304d7aeb5ea5e529b6f51171109cef42525113321f675bc14e56c697e  onevpl-intel-gpu-24.1.3.tar.gz
++sha256  879a232351ce0647522a0981edded3760104aec9f2bdc2ad31f70df03c95a6a9  onevpl-intel-gpu-24.1.4.tar.gz
+ sha256  c31c3cc5fd66d1250dbca1c3d9011a9f874537442ac71c8de80f2f0fed13f297  LICENSE
+diff --git a/package/onevpl-intel-gpu/onevpl-intel-gpu.mk b/package/onevpl-intel-gpu/onevpl-intel-gpu.mk
+index 509698ce26..ca2c866735 100644
+--- a/package/onevpl-intel-gpu/onevpl-intel-gpu.mk
++++ b/package/onevpl-intel-gpu/onevpl-intel-gpu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ONEVPL_INTEL_GPU_VERSION = 24.1.3
++ONEVPL_INTEL_GPU_VERSION = 24.1.4
+ ONEVPL_INTEL_GPU_SITE = $(call github,oneapi-src,oneVPL-intel-gpu,intel-onevpl-$(ONEVPL_INTEL_GPU_VERSION))
+ ONEVPL_INTEL_GPU_LICENSE = MIT
+ ONEVPL_INTEL_GPU_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
