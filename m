@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3AC34C6FD1F
-	for <buildroot@archiver.kernel.org>; Thu, 21 Mar 2024 21:04:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C2B2C54E58
+	for <buildroot@archiver.kernel.org>; Thu, 21 Mar 2024 21:04:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EDA358258A;
-	Thu, 21 Mar 2024 21:04:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3D64E82371;
+	Thu, 21 Mar 2024 21:04:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0DF8n7WO2CaC; Thu, 21 Mar 2024 21:04:36 +0000 (UTC)
+	with ESMTP id 3_DqwDriXUiM; Thu, 21 Mar 2024 21:04:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2500B82371
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3227F82733
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2500B82371;
-	Thu, 21 Mar 2024 21:04:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3227F82733;
+	Thu, 21 Mar 2024 21:04:39 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A87AE1BF2BD
- for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 21:02:43 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EA46F1BF2BD
+ for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 21:02:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 21DFE415F1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2292C415F2
  for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 21:02:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PqSN78GF0A5x for <buildroot@lists.busybox.net>;
+ with ESMTP id y8L-YILT7hx1 for <buildroot@lists.busybox.net>;
  Thu, 21 Mar 2024 21:02:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB18641608
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 47CAE415C2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BB18641608
+ by smtp4.osuosl.org (Postfix) with ESMTP id 47CAE415C2
  for <buildroot@buildroot.org>; Thu, 21 Mar 2024 21:02:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B775E83760; Thu, 21 Mar 2024 21:02:27 +0000 (UTC)
+ id 3B67983761; Thu, 21 Mar 2024 21:02:27 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 21 Mar 2024 22:01:09 +0100
+Date: Thu, 21 Mar 2024 21:46:46 +0100
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 5cd3c8a4b4c9e3f4dd16c0efdd75ea054a2cbddc
-X-Git-Newrev: 962a6709fe8b002d938692b94ecf7dbcf5a47287
+X-Git-Oldrev: 9a997fcf3b2097284e80c4a9f1a013b165574baa
+X-Git-Newrev: cc089b98d5b8726b94d1a8fdcdb96cb863d45049
 X-Patchwork-Hint: ignore
-Message-Id: <20240321210227.B775E83760@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/python-rtslib-fb:
- 2.1.76
+Message-Id: <20240321210227.3B67983761@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/libkrb5: force
+ arm mode instead of Thumb mode
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,48 +60,60 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7514008243198415870=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=962a6709fe8b002d938692b94ecf7dbcf5a47287
+--===============7514008243198415870==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=cc089b98d5b8726b94d1a8fdcdb96cb863d45049
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-bump to latest version because previous version did not work with python 3.11
+Fix the following build failure in Thumb mode:
 
-Signed-off-by: Jeremy J. Peper <jeremy@jeremypeper.com>
+/tmp/ccdzbA2E.s:845: Error: selected processor does not support `mcr p15,0,r2,c7,c10,5' in Thumb mode
+
+Fixes:
+ - http://autobuild.buildroot.org/results/08be1fa0fee0f05818cd78d4718caa3476c570ae
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: André Zwing <nerv@dawncrow.de>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 8a69af5fa4b545767ab292d1ad01266b87d45e92)
+(cherry picked from commit 355ceb893078b4e1d458a3367fc2c989911fefe1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-rtslib-fb/python-rtslib-fb.hash | 2 +-
- package/python-rtslib-fb/python-rtslib-fb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libkrb5/libkrb5.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/python-rtslib-fb/python-rtslib-fb.hash b/package/python-rtslib-fb/python-rtslib-fb.hash
-index 3c2e39fffd..39c390edb2 100644
---- a/package/python-rtslib-fb/python-rtslib-fb.hash
-+++ b/package/python-rtslib-fb/python-rtslib-fb.hash
-@@ -1,3 +1,3 @@
- # locally computed
--sha256  9f581c4bcffebc60be236af8a6ebdeccdb66d0435eeb04ab1b743c170b95d046  python-rtslib-fb-2.1.74.tar.gz
-+sha256  ac15c113d09209c7b0d14d94a12ed88205a7c2feadd1096f573049fd737f7e74  python-rtslib-fb-2.1.76.tar.gz
- sha256  5df2a0d87d6c562f0ea11c688ac52532aa28d744cabc7994ff0537f64b3b3320  COPYING
-diff --git a/package/python-rtslib-fb/python-rtslib-fb.mk b/package/python-rtslib-fb/python-rtslib-fb.mk
-index 09bde874f0..6396d26a3f 100644
---- a/package/python-rtslib-fb/python-rtslib-fb.mk
-+++ b/package/python-rtslib-fb/python-rtslib-fb.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/libkrb5/libkrb5.mk b/package/libkrb5/libkrb5.mk
+index 62a34b2379..c58763eddd 100644
+--- a/package/libkrb5/libkrb5.mk
++++ b/package/libkrb5/libkrb5.mk
+@@ -33,6 +33,13 @@ LIBKRB5_CONF_OPTS = \
+ 	--without-tcl \
+ 	--disable-rpath
  
- # When upgrading the version, be sure to also upgrade
- # python-configshell-fb and targetcli-fb at the same time.
--PYTHON_RTSLIB_FB_VERSION = 2.1.74
-+PYTHON_RTSLIB_FB_VERSION = 2.1.76
- # Do not switch site to PyPI: it does not contain the latest version.
- PYTHON_RTSLIB_FB_SITE = $(call github,open-iscsi,rtslib-fb,v$(PYTHON_RTSLIB_FB_VERSION))
- PYTHON_RTSLIB_FB_LICENSE = Apache-2.0
++# libkrb5 has some assembly function that is not present in Thumb mode:
++# Error: selected processor does not support `mcr p15,0,r2,c7,c10,5' in Thumb mode
++# so, we desactivate Thumb mode
++ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
++LIBKRB5_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -marm"
++endif
++
+ # Enabling static and shared at the same time is not supported
+ ifeq ($(BR2_SHARED_STATIC_LIBS),y)
+ LIBKRB5_CONF_OPTS += --disable-static
+
+--===============7514008243198415870==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7514008243198415870==--
