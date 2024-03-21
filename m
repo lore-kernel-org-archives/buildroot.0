@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B478C6FD1F
-	for <buildroot@archiver.kernel.org>; Thu, 21 Mar 2024 21:04:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDD04C6FD1F
+	for <buildroot@archiver.kernel.org>; Thu, 21 Mar 2024 21:04:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ED229821E5;
-	Thu, 21 Mar 2024 21:04:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A2077826E5;
+	Thu, 21 Mar 2024 21:04:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id L_s9R42spweh; Thu, 21 Mar 2024 21:04:30 +0000 (UTC)
+	with ESMTP id XSERQ_MOTLjh; Thu, 21 Mar 2024 21:04:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BED988271D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F9F98272D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BED988271D;
-	Thu, 21 Mar 2024 21:04:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8F9F98272D;
+	Thu, 21 Mar 2024 21:04:32 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 875BC1BF980
- for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 21:02:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 97BF81BF980
+ for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 21:02:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E413F415EC
+ by smtp4.osuosl.org (Postfix) with ESMTP id E3576415EB
  for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 21:02:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZLJppv1A14PF for <buildroot@lists.busybox.net>;
+ with ESMTP id AYg6lxlIKDUq for <buildroot@lists.busybox.net>;
  Thu, 21 Mar 2024 21:02:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 71553415FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3A4441602
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 71553415FE
+ by smtp4.osuosl.org (Postfix) with ESMTP id A3A4441602
  for <buildroot@buildroot.org>; Thu, 21 Mar 2024 21:02:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6D67083749; Thu, 21 Mar 2024 21:02:27 +0000 (UTC)
+ id 9ADD48374C; Thu, 21 Mar 2024 21:02:27 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 21 Mar 2024 21:50:21 +0100
+Date: Thu, 21 Mar 2024 21:58:33 +0100
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 6a9e4be7f01935259f4221fa0a58187ec5d095f3
-X-Git-Newrev: 41e7eaeb6133724929134e2269aaf58480c383d0
+X-Git-Oldrev: 16585b87f225f2409987d822e8846ffffbc9b59f
+X-Git-Newrev: c41de33e45f3c44016b9eb1b14a8616fc3a7db41
 X-Patchwork-Hint: ignore
-Message-Id: <20240321210227.6D67083749@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/libnfs: fix
- pthread option
+Message-Id: <20240321210227.9ADD48374C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/targetcli-fb:
+ bump version to 2.1.58
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,37 +65,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=41e7eaeb6133724929134e2269aaf58480c383d0
+commit: https://git.buildroot.net/buildroot/commit/?id=c41de33e45f3c44016b9eb1b14a8616fc3a7db41
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Fix typo added by commit f9f5b3a6cbc4e62beefdd0448842ef0c8c3eb6f6
+bump to latest version because previous version did not work with python 3.11
+corrected version mismatch with my first submission
 
-Fixes: f9f5b3a6cbc4e62beefdd0448842ef0c8c3eb6f6
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Jeremy J. Peper <jeremy@jeremypeper.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 9a5160ed5abded9d2b843a2422a48d4964cff42e)
+(cherry picked from commit 242781bb61bdad2690b089cc5eaf7705d2632e5d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libnfs/libnfs.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/targetcli-fb/targetcli-fb.hash | 2 +-
+ package/targetcli-fb/targetcli-fb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libnfs/libnfs.mk b/package/libnfs/libnfs.mk
-index eb919406f3..e5e302a4f8 100644
---- a/package/libnfs/libnfs.mk
-+++ b/package/libnfs/libnfs.mk
-@@ -17,9 +17,9 @@ LIBNFS_DEPENDENCIES += libtirpc
- endif
+diff --git a/package/targetcli-fb/targetcli-fb.hash b/package/targetcli-fb/targetcli-fb.hash
+index 64f68a6675..1732fa99e5 100644
+--- a/package/targetcli-fb/targetcli-fb.hash
++++ b/package/targetcli-fb/targetcli-fb.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256  7ae4120a54f24b13263b4b85c43952a03546f8b9fc9bd15fe87678f68245a33f  targetcli-fb-2.1.54.tar.gz
++sha256  605f4e4e4e7189d6a03f11a4f55e7ddb4671002d542c2f684f87dd68391dcdc2  targetcli-fb-2.1.58.tar.gz
+ sha256  5df2a0d87d6c562f0ea11c688ac52532aa28d744cabc7994ff0537f64b3b3320  COPYING
+diff --git a/package/targetcli-fb/targetcli-fb.mk b/package/targetcli-fb/targetcli-fb.mk
+index 56ed7c6174..503b9224d0 100644
+--- a/package/targetcli-fb/targetcli-fb.mk
++++ b/package/targetcli-fb/targetcli-fb.mk
+@@ -6,7 +6,7 @@
  
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
--LIBNFS_CONF_OPTS += --enable-threads
-+LIBNFS_CONF_OPTS += --enable-pthread
- else
--LIBNFS_CONF_OPTS += --disable-threads
-+LIBNFS_CONF_OPTS += --disable-pthread
- endif
- 
- $(eval $(autotools-package))
+ # When upgrading the version, be sure to also upgrade python-rtslib-fb
+ # and python-configshell-fb at the same time.
+-TARGETCLI_FB_VERSION = 2.1.54
++TARGETCLI_FB_VERSION = 2.1.58
+ TARGETCLI_FB_SITE = $(call github,open-iscsi,targetcli-fb,v$(TARGETCLI_FB_VERSION))
+ TARGETCLI_FB_LICENSE = Apache-2.0
+ TARGETCLI_FB_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
