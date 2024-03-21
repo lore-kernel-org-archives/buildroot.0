@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D850CD11BF
-	for <buildroot@archiver.kernel.org>; Thu, 21 Mar 2024 21:05:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 014D3C6FD1F
+	for <buildroot@archiver.kernel.org>; Thu, 21 Mar 2024 21:05:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F0BD782907;
-	Thu, 21 Mar 2024 21:05:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A4D4582925;
+	Thu, 21 Mar 2024 21:05:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2kNHQhYc70G2; Thu, 21 Mar 2024 21:05:01 +0000 (UTC)
+	with ESMTP id gU9xMweJ9hdV; Thu, 21 Mar 2024 21:05:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 91DE082890
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9CACB828E3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 91DE082890;
-	Thu, 21 Mar 2024 21:05:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9CACB828E3;
+	Thu, 21 Mar 2024 21:05:04 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 268C01BF980
- for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 21:02:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 462521BF2BD
+ for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 21:02:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 57B1841601
+ by smtp4.osuosl.org (Postfix) with ESMTP id D7A70415C5
  for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 21:02:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yCTKlhlVSr08 for <buildroot@lists.busybox.net>;
- Thu, 21 Mar 2024 21:02:28 +0000 (UTC)
+ with ESMTP id 8O7GkdtkEeP7 for <buildroot@lists.busybox.net>;
+ Thu, 21 Mar 2024 21:02:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6500A415C5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0BDFC415F5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6500A415C5
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0BDFC415F5
  for <buildroot@buildroot.org>; Thu, 21 Mar 2024 21:02:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5D2338374C; Thu, 21 Mar 2024 21:02:27 +0000 (UTC)
+ id 07ECE83760; Thu, 21 Mar 2024 21:02:27 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 21 Mar 2024 21:49:39 +0100
+Date: Thu, 21 Mar 2024 21:43:14 +0100
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 78307c660af61ec59010f4fd8a648f941a7af388
-X-Git-Newrev: 6a9e4be7f01935259f4221fa0a58187ec5d095f3
+X-Git-Oldrev: 6ca2dcf2b9a09fb657da17261e1f02d56c1997c4
+X-Git-Newrev: 86d7922952e59354b4ba998d214d32417b9e3219
 X-Patchwork-Hint: ignore
-Message-Id: <20240321210227.5D2338374C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/mesa3d: rework
- dri3 handling
+Message-Id: <20240321210227.07ECE83760@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] toolchain: drop
+ codesourcery arm/aarch64 toolchains
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,162 +65,487 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6a9e4be7f01935259f4221fa0a58187ec5d095f3
+commit: https://git.buildroot.net/buildroot/commit/?id=86d7922952e59354b4ba998d214d32417b9e3219
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-While fixing a build error
+codesourcery arm/aarch64 toolchains are old (2014) and use glibc
+2.18/2.20 which are not compatible with 64-bit time_t raising the
+following build failure with libcgroup since commit
+1c2dbcdcf0bb589d325c379246acaa39bb07b7be:
 
-../src/egl/drivers/dri2/platform_x11.c: In function 'dri2_x11_get_msc_rate':
-../src/egl/drivers/dri2/platform_x11.c:1229:44:
- error: 'struct dri2_egl_display' has no member named 'screen_resources'
+In file included from ./libcgroup-internal.h:25:0,
+                 from parse.y:21:
+/home/buildroot/autobuild/run/instance-3/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/fts.h:41:3: error: #error "<fts.h> cannot be used with -D_FILE_OFFSET_BITS==64"
+ # error "<fts.h> cannot be used with -D_FILE_OFFSET_BITS==64"
+   ^
 
-with this defconfig:
+Fixes: 1c2dbcdcf0bb589d325c379246acaa39bb07b7be
+ - http://autobuild.buildroot.org/results/e28f955f2b360f6e7bb231a5a3800cfbd17a23d7
 
-BR2_x86_64=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS=y
-BR2_PACKAGE_MESA3D_OPENGL_GLX=y
-BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-BR2_PACKAGE_MESA3D_OPENGL_ES=y
-BR2_PACKAGE_XORG7=y
-
-(crocus and i915 drivers are also affected) it turns out that we can
-assume the need for dri3 support when X.org is enabled as a hard depen-
-dency even if mesa3d's configure does not throw errors when missing,
-like for the Intel drivers.
-
-Before this patch these Config.in options were used:
-
-config BR2_PACKAGE_MESA3D_DRI3
-  select BR2_PACKAGE_XLIB_LIBXSHMFENCE
-select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
-
-which can be translated into:
-
-select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_PACKAGE_XORG7
-
-and used at option BR2_PACKAGE_MESA3D_DRIVER.
-
-Configure option -Ddri3=enabled is passed to mesa3d when at least one
-driver is enabled along with X.org:
-ifeq ($(BR2_PACKAGE_MESA3D_DRIVER)$(BR2_PACKAGE_XORG7),yy)
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit e2f87b3c15c100a411d277589ba8de1de564efd4)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[Peter: add Config.in.legacy entries]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 53a8c5150e5eeeb6dbbead0275dbf9141f507511)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mesa3d/Config.in | 15 ++-------------
- package/mesa3d/mesa3d.mk |  4 +---
- 2 files changed, 3 insertions(+), 16 deletions(-)
+ Config.in.legacy                                   | 14 ++++
+ package/guile/guile.mk                             |  5 --
+ package/mesa3d/mesa3d.mk                           |  6 --
+ package/tpm2-totp/Config.in                        |  2 -
+ .../autobuild/sourcery-arm-armv4t.config           |  4 -
+ .../autobuild/sourcery-arm-thumb2.config           |  7 --
+ .../config-fragments/autobuild/sourcery-arm.config |  3 -
+ .../autobuild/toolchain-configs.csv                |  5 --
+ support/testing/tests/toolchain/test_external.py   | 97 ----------------------
+ toolchain/Config.in                                |  1 -
+ toolchain/toolchain-external/Config.in             |  4 -
+ .../Config.in                                      | 19 -----
+ .../Config.in.options                              |  9 --
+ .../toolchain-external-codesourcery-aarch64.hash   |  3 -
+ .../toolchain-external-codesourcery-aarch64.mk     | 12 ---
+ .../toolchain-external-codesourcery-arm/Config.in  | 35 --------
+ .../Config.in.options                              |  9 --
+ .../toolchain-external-codesourcery-arm.hash       |  3 -
+ .../toolchain-external-codesourcery-arm.mk         | 13 ---
+ 19 files changed, 14 insertions(+), 237 deletions(-)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 39a4f706e2..459051b2db 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -56,11 +56,7 @@ config BR2_PACKAGE_MESA3D_OPENCL
- 	select BR2_PACKAGE_LIBCLC
- 	select BR2_PACKAGE_HAS_LIBOPENCL
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 1b15d25d6b..c2124d26cb 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,20 @@ endif
  
--# inform the .mk file of gallium, dri, dri3 or vulkan driver selection
--config BR2_PACKAGE_MESA3D_DRI3
--	bool
--	select BR2_PACKAGE_XLIB_LIBXSHMFENCE
+ comment "Legacy options removed in 2024.02"
+ 
++config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64
++	bool "CodeSourcery AArch64 2014.11"
++	select BR2_LEGACY
++	help
++	  The Sourcery CodeBench AArch64 toolchain has been removed,
++	  use an ARM/Bootlin/Linaro toolchain instead.
++
++config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
++	bool "Sourcery CodeBench ARM 2014.05 has been removed"
++	select BR2_LEGACY
++	help
++	  The Sourcery CodeBench ARM toolchain has been removed, use
++	  an ARM/Bootlin/Linaro toolchain instead.
++
+ config BR2_PACKAGE_MYSQL
+ 	bool "mysql virtual package removed"
+ 	select BR2_LEGACY
+diff --git a/package/guile/guile.mk b/package/guile/guile.mk
+index 1d2e8038f0..82daaf5ad4 100644
+--- a/package/guile/guile.mk
++++ b/package/guile/guile.mk
+@@ -44,11 +44,6 @@ ifeq ($(BR2_STATIC_LIBS),y)
+ GUILE_CFLAGS += -DGC_NO_DLOPEN
+ endif
+ 
+-# Triggers assembler error with -Os
+-ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM)$(BR2_OPTIMIZE_S),yy)
+-GUILE_CFLAGS += -O2
+-endif
 -
-+# inform the .mk file of gallium or vulkan driver selection
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	bool
- 	select BR2_PACKAGE_MESA3D_DRIVER
-@@ -71,6 +67,7 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER
- 
- config BR2_PACKAGE_MESA3D_DRIVER
- 	bool
-+	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_PACKAGE_XORG7
- 
- # Gallium xa state tracker.
- # Quote from mesa3d meson.build: "XA state tracker requires at least
-@@ -103,7 +100,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_CROCUS
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV
- 	bool "Gallium Etnaviv driver"
- 	depends on (BR2_TOOLCHAIN_HAS_SYNC_4 && !BR2_RISCV_32) || !BR2_PACKAGE_XORG7 # libxshmfence
--	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_LIBDRM_ETNAVIV
- 	help
-@@ -117,7 +113,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO
- 	# can't see is just spurious. However, that dependency is about
- 	# the toolchain having sync4 primitives, which is always a given
- 	# for arm/aarch64.
--	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_LIBDRM_FREEDRENO
- 	help
-@@ -141,7 +136,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA
- 	bool "Gallium lima driver"
- 	depends on (BR2_TOOLCHAIN_HAS_SYNC_4 && !BR2_RISCV_32) || !BR2_PACKAGE_XORG7 # libxshmfence
--	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	help
- 	  Mesa driver for ARM Mali Utgard GPUs.
-@@ -158,7 +152,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST
- 	bool "Gallium panfrost driver"
- 	depends on (BR2_TOOLCHAIN_HAS_SYNC_4 && !BR2_RISCV_32) || !BR2_PACKAGE_XORG7 # libxshmfence
--	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	help
- 	  Mesa driver for ARM Mali Midgard and Bifrost GPUs.
-@@ -239,7 +232,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D
- 	bool "Gallium v3d driver"
- 	depends on (BR2_arm && BR2_ARM_CPU_HAS_NEON) || BR2_aarch64
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
--	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4 # runtime
- 	select BR2_PACKAGE_MESA3D_OPENGL_EGL
-@@ -255,7 +247,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
- 	bool "Gallium vc4 driver"
- 	depends on (BR2_arm && BR2_ARM_CPU_HAS_NEON) || BR2_aarch64
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
--	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_LIBDRM_VC4
- 	select BR2_PACKAGE_MESA3D_OPENGL_EGL
-@@ -295,7 +286,6 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_BROADCOM
- 	bool "Vulkan broadcom driver"
- 	depends on BR2_arm || BR2_aarch64
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # dri3/libxshmfence
--	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
- 	help
- 	  Vulkan broadcom driver.
-@@ -306,7 +296,6 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # memfd.h
- 	depends on BR2_TOOLCHAIN_USES_GLIBC # ifunc, static_assert
--	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
- 	help
- 	  Vulkan driver for Intel hardware from Ivy Bridge onward.
+ # jit triggers build failures with gcc < 5
+ ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_5),)
+ GUILE_CONF_OPTS += --disable-jit
 diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 29c67b77b9..bdb7ea9a6c 100644
+index 8e3cd7245d..df0079bf80 100644
 --- a/package/mesa3d/mesa3d.mk
 +++ b/package/mesa3d/mesa3d.mk
-@@ -29,11 +29,9 @@ MESA3D_CONF_OPTS = \
+@@ -29,12 +29,6 @@ MESA3D_CONF_OPTS = \
  	-Dgallium-omx=disabled \
  	-Dpower8=disabled
  
--ifeq ($(BR2_PACKAGE_MESA3D_DRI3),y)
-+ifeq ($(BR2_PACKAGE_MESA3D_DRIVER)$(BR2_PACKAGE_XORG7),yy)
- MESA3D_CONF_OPTS += -Ddri3=enabled
--ifeq ($(BR2_PACKAGE_XLIB_LIBXSHMFENCE),y)
- MESA3D_DEPENDENCIES += xlib_libxshmfence
+-# Codesourcery ARM 2014.05 fail to link libmesa_dri_drivers.so with --as-needed linker
+-# flag due to a linker bug between binutils 2.24 and 2.25 (2.24.51.20140217).
+-ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM),y)
+-MESA3D_CONF_OPTS += -Db_asneeded=false
 -endif
- else
- MESA3D_CONF_OPTS += -Ddri3=disabled
- endif
+-
+ ifeq ($(BR2_PACKAGE_MESA3D_DRI3),y)
+ MESA3D_CONF_OPTS += -Ddri3=enabled
+ ifeq ($(BR2_PACKAGE_XLIB_LIBXSHMFENCE),y)
+diff --git a/package/tpm2-totp/Config.in b/package/tpm2-totp/Config.in
+index dcadf5a5f2..a26604abb8 100644
+--- a/package/tpm2-totp/Config.in
++++ b/package/tpm2-totp/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_TPM2_TOTP
+ 	bool "tpm2-totp"
+ 	depends on !BR2_STATIC_LIBS # tpm2-tss
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM # glibc < 2.20
+ 	select BR2_PACKAGE_LIBQRENCODE
+ 	select BR2_PACKAGE_TPM2_TSS
+ 	help
+@@ -20,4 +19,3 @@ config BR2_PACKAGE_TPM2_TOTP
+ 
+ comment "tpm2-totp needs a toolchain w/ dynamic library"
+ 	depends on BR2_STATIC_LIBS
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
+diff --git a/support/config-fragments/autobuild/sourcery-arm-armv4t.config b/support/config-fragments/autobuild/sourcery-arm-armv4t.config
+deleted file mode 100644
+index 4c0e01fecb..0000000000
+--- a/support/config-fragments/autobuild/sourcery-arm-armv4t.config
++++ /dev/null
+@@ -1,4 +0,0 @@
+-BR2_arm=y
+-BR2_arm920t=y
+-BR2_TOOLCHAIN_EXTERNAL=y
+-BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM=y
+diff --git a/support/config-fragments/autobuild/sourcery-arm-thumb2.config b/support/config-fragments/autobuild/sourcery-arm-thumb2.config
+deleted file mode 100644
+index e726757a16..0000000000
+--- a/support/config-fragments/autobuild/sourcery-arm-thumb2.config
++++ /dev/null
+@@ -1,7 +0,0 @@
+-BR2_arm=y
+-BR2_cortex_a8=y
+-BR2_ARM_EABI=y
+-BR2_ARM_INSTRUCTIONS_THUMB2=y
+-BR2_TOOLCHAIN_EXTERNAL=y
+-BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM=y
+-BR2_TARGET_OPTIMIZATION=""
+diff --git a/support/config-fragments/autobuild/sourcery-arm.config b/support/config-fragments/autobuild/sourcery-arm.config
+deleted file mode 100644
+index 8ade4647f2..0000000000
+--- a/support/config-fragments/autobuild/sourcery-arm.config
++++ /dev/null
+@@ -1,3 +0,0 @@
+-BR2_arm=y
+-BR2_TOOLCHAIN_EXTERNAL=y
+-BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM=y
+diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
+index a65e9bacc3..2c4fa45fe7 100644
+--- a/support/config-fragments/autobuild/toolchain-configs.csv
++++ b/support/config-fragments/autobuild/toolchain-configs.csv
+@@ -18,9 +18,6 @@ support/config-fragments/autobuild/bootlin-x86-64-musl.config,x86_64
+ # Test a MMU toolchain without dynamic library support
+ support/config-fragments/autobuild/br-arm-full-static.config,x86_64
+ 
+-# Test a toolchain with an old gcc version (gcc 4.8)
+-support/config-fragments/autobuild/sourcery-arm.config,x86
+-
+ # Toolchains used by test-pkg only when the '-a' option is passed:
+ support/config-fragments/autobuild/arm-aarch64.config,x86_64
+ support/config-fragments/autobuild/bootlin-aarch64-glibc.config,x86_64
+@@ -66,8 +63,6 @@ support/config-fragments/autobuild/br-xtensa-full-internal.config,any
+ support/config-fragments/autobuild/linaro-aarch64.config,x86
+ support/config-fragments/autobuild/linaro-aarch64-be.config,x86
+ support/config-fragments/autobuild/linaro-arm.config,x86
+-support/config-fragments/autobuild/sourcery-arm-armv4t.config,x86
+-support/config-fragments/autobuild/sourcery-arm-thumb2.config,x86
+ support/config-fragments/autobuild/sourcery-mips64.config,x86
+ support/config-fragments/autobuild/sourcery-mips.config,x86
+ support/config-fragments/autobuild/sourcery-nios2.config,x86
+diff --git a/support/testing/tests/toolchain/test_external.py b/support/testing/tests/toolchain/test_external.py
+index d22f38cedc..27dfd68500 100644
+--- a/support/testing/tests/toolchain/test_external.py
++++ b/support/testing/tests/toolchain/test_external.py
+@@ -37,103 +37,6 @@ class TestExternalToolchain(infra.basetest.BRTest):
+             self.assertTrue(os.path.exists(interp_path))
+ 
+ 
+-class TestExternalToolchainSourceryArmv4(TestExternalToolchain):
+-    config = BASIC_CONFIG + \
+-        """
+-        BR2_arm=y
+-        BR2_arm920t=y
+-        BR2_TOOLCHAIN_EXTERNAL=y
+-        BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM=y
+-        """
+-    toolchain_prefix = "arm-none-linux-gnueabi"
+-
+-    def test_run(self):
+-        TestExternalToolchain.common_check(self)
+-
+-        # Check the architecture variant
+-        arch = infra.get_file_arch(self.builddir,
+-                                   self.toolchain_prefix,
+-                                   "lib/libc.so.6")
+-        self.assertEqual(arch, "v4T")
+-
+-        # Check the sysroot symlink
+-        symlink = os.path.join(self.builddir, "staging", "armv4t")
+-        self.assertTrue(os.path.exists(symlink))
+-        self.assertEqual(os.readlink(symlink), "./")
+-
+-        # Boot the system
+-        img = os.path.join(self.builddir, "images", "rootfs.cpio")
+-        self.emulator.boot(arch="armv5",
+-                           kernel="builtin",
+-                           options=["-initrd", img])
+-        self.emulator.login()
+-
+-
+-class TestExternalToolchainSourceryArmv5(TestExternalToolchain):
+-    config = BASIC_CONFIG + \
+-        """
+-        BR2_arm=y
+-        BR2_TOOLCHAIN_EXTERNAL=y
+-        BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM=y
+-        """
+-    toolchain_prefix = "arm-none-linux-gnueabi"
+-
+-    def test_run(self):
+-        TestExternalToolchain.common_check(self)
+-
+-        # Check the architecture variant
+-        arch = infra.get_file_arch(self.builddir,
+-                                   self.toolchain_prefix,
+-                                   "lib/libc.so.6")
+-        self.assertEqual(arch, "v5TE")
+-
+-        # Boot the system
+-        img = os.path.join(self.builddir, "images", "rootfs.cpio")
+-        self.emulator.boot(arch="armv5",
+-                           kernel="builtin",
+-                           options=["-initrd", img])
+-        self.emulator.login()
+-
+-
+-class TestExternalToolchainSourceryArmv7(TestExternalToolchain):
+-    config = BASIC_CONFIG + \
+-        """
+-        BR2_arm=y
+-        BR2_cortex_a8=y
+-        BR2_ARM_EABI=y
+-        BR2_ARM_INSTRUCTIONS_THUMB2=y
+-        BR2_TOOLCHAIN_EXTERNAL=y
+-        BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM=y
+-        """
+-    toolchain_prefix = "arm-none-linux-gnueabi"
+-
+-    def test_run(self):
+-        TestExternalToolchain.common_check(self)
+-
+-        # Check the architecture variant
+-        arch = infra.get_file_arch(self.builddir,
+-                                   self.toolchain_prefix,
+-                                   "lib/libc.so.6")
+-        self.assertEqual(arch, "v7")
+-        isa = infra.get_elf_arch_tag(self.builddir,
+-                                     self.toolchain_prefix,
+-                                     "lib/libc.so.6",
+-                                     "Tag_THUMB_ISA_use")
+-        self.assertEqual(isa, "Thumb-2")
+-
+-        # Check we have the sysroot symlink
+-        symlink = os.path.join(self.builddir, "staging", "thumb2")
+-        self.assertTrue(os.path.exists(symlink))
+-        self.assertEqual(os.readlink(symlink), "./")
+-
+-        # Boot the system
+-        img = os.path.join(self.builddir, "images", "rootfs.cpio")
+-        self.emulator.boot(arch="armv7",
+-                           kernel="builtin",
+-                           options=["-initrd", img])
+-        self.emulator.login()
+-
+-
+ class TestExternalToolchainLinaroArm(TestExternalToolchain):
+     config = BASIC_CONFIG + \
+         """
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 3dd6e83d35..1641dbae06 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -886,7 +886,6 @@ config BR2_TOOLCHAIN_HAS_SYNC_8
+ config BR2_TOOLCHAIN_HAS_LIBATOMIC
+ 	bool
+ 	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 && \
+-		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64 && \
+ 		BR2_TOOLCHAIN_HAS_THREADS && \
+ 		!BR2_BINFMT_FLAT
+ 
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index c1c159cb8e..b5432b71d7 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -11,7 +11,6 @@ choice
+ # Aarch64 (use ARM toolchain by default)
+ source "toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in"
+ source "toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in"
+-source "toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in"
+ 
+ # Aarch64 big-endian
+ source "toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in"
+@@ -23,7 +22,6 @@ source "toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in"
+ # ARM (use ARM toolchain by default)
+ source "toolchain/toolchain-external/toolchain-external-arm-arm/Config.in"
+ source "toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in"
+-source "toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in"
+ 
+ # ARM big-endian
+ source "toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in"
+@@ -115,7 +113,6 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ # Aarch64
+ source "toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in.options"
+ source "toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in.options"
+-source "toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in.options"
+ 
+ # Aarch64 big-endian
+ source "toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in.options"
+@@ -127,7 +124,6 @@ source "toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in.o
+ # ARM
+ source "toolchain/toolchain-external/toolchain-external-arm-arm/Config.in.options"
+ source "toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in.options"
+-source "toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in.options"
+ 
+ # ARM big-endian
+ source "toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in.options"
+diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in b/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in
+deleted file mode 100644
+index 8c0f985c5b..0000000000
+--- a/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in
++++ /dev/null
+@@ -1,19 +0,0 @@
+-config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64
+-	bool "CodeSourcery AArch64 2014.11"
+-	depends on BR2_aarch64
+-	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_5
+-	# a57/a53 and a72/a53 appeared in gcc-6 or were broken before
+-	depends on !BR2_cortex_a57_a53 && !BR2_cortex_a72_a53
+-	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+-	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+-	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_INSTALL_LIBSTDCPP
+-	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+-	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16
+-	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+-	help
+-	  Sourcery CodeBench toolchain for the AArch64 architecture,
+-	  from Mentor Graphics. It uses gcc 4.9.1, binutils
+-	  2.24.51.20140217, glibc 2.20, gdb 7.7.50 and kernel headers
+-	  3.16.2.
+diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in.options b/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in.options
+deleted file mode 100644
+index 1eab839216..0000000000
+--- a/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in.options
++++ /dev/null
+@@ -1,9 +0,0 @@
+-if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64
+-
+-config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+-	default "aarch64-amd-linux-gnu"
+-
+-config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
+-	default "toolchain-external-codesourcery-aarch64"
+-
+-endif
+diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.hash b/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.hash
+deleted file mode 100644
+index 8f8fca0d0c..0000000000
+--- a/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally calculated
+-sha256  405aada821146755c5f2df566375c2a682456d6b8451ee47b88cf1a52b093676  aarch64-amd-2014.11-95-aarch64-amd-linux-gnu-i686-pc-linux-gnu.tar.bz2
+-sha256  3f50dd6ee433eb5b6992a1071b988e50379a738f54f58722bc60081613764716  aarch64-amd-2014.11-95-aarch64-amd-linux-gnu.src.tar.bz2
+diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.mk b/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.mk
+deleted file mode 100644
+index 192763a0e0..0000000000
+--- a/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.mk
++++ /dev/null
+@@ -1,12 +0,0 @@
+-################################################################################
+-#
+-# toolchain-external-codesourcery-aarch64
+-#
+-################################################################################
+-
+-TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_SITE = https://sourcery.mentor.com/public/gnu_toolchain/$(TOOLCHAIN_EXTERNAL_PREFIX)
+-TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_VERSION = 2014.11-95
+-TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_SOURCE = aarch64-amd-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX)-i686-pc-linux-gnu.tar.bz2
+-TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_ACTUAL_SOURCE_TARBALL = aarch64-amd-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX).src.tar.bz2
+-
+-$(eval $(toolchain-external-package))
+diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in b/toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in
+deleted file mode 100644
+index aea2ba34f2..0000000000
+--- a/toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in
++++ /dev/null
+@@ -1,35 +0,0 @@
+-config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
+-	bool "Sourcery CodeBench ARM 2014.05"
+-	depends on BR2_arm
+-	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9
+-	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+-	depends on BR2_ARM_EABI
+-	# Unsupported ARM cores
+-	depends on !BR2_cortex_a12 && !BR2_cortex_a17 && !BR2_ARM_CPU_ARMV8A
+-	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+-	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+-	select BR2_INSTALL_LIBSTDCPP
+-	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
+-	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+-	help
+-	  Sourcery CodeBench toolchain for the ARM architecture, from
+-	  Mentor Graphics. It uses gcc 4.8.3, binutils 2.24.51, glibc
+-	  2.18 and gdb 7.7.50, kernel headers 3.13. It has support
+-	  for the following variants:
+-	    - ARMv5TE, little endian, soft-float, glibc
+-	      Select ARM926T, ARM10T, XScale or another ARMv5 core
+-	      Select BR2_SOFT_FLOAT
+-	    - ARMv4T, little endian, soft-float, glibc
+-	      Select ARM720T, ARM920T, ARM922T or another ARMv4 core
+-	      Select BR2_SOFT_FLOAT
+-	    - ARMv7-A, Thumb 2, little endian, soft-float, glibc
+-	      Select Cortex-A8, Cortex-A9 or another ARMv7-A core
+-	      Select BR2_SOFT_FLOAT
+-	      Set BR2_TARGET_OPTIMIZATION to -mthumb
+-
+-comment "Sourcery CodeBench toolchains available for the EABI ABI"
+-	depends on BR2_arm
+-	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9
+-	depends on !BR2_ARM_EABI
+diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in.options b/toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in.options
+deleted file mode 100644
+index 7f3654dc70..0000000000
+--- a/toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in.options
++++ /dev/null
+@@ -1,9 +0,0 @@
+-if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
+-
+-config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+-	default "arm-none-linux-gnueabi"
+-
+-config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
+-	default "toolchain-external-codesourcery-arm"
+-
+-endif
+diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-arm/toolchain-external-codesourcery-arm.hash b/toolchain/toolchain-external/toolchain-external-codesourcery-arm/toolchain-external-codesourcery-arm.hash
+deleted file mode 100644
+index c01a7b17c5..0000000000
+--- a/toolchain/toolchain-external/toolchain-external-codesourcery-arm/toolchain-external-codesourcery-arm.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally calculated
+-sha256  39ee0e789034334ecc89af94e838e3a4815400ac5ff980f808f466b04778532e  arm-2014.05-29-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
+-sha256  e16a5b1e41d7ff1e74161f9405182001bc8d1360d89564e73911032e6966cc0d  arm-2014.05-29-arm-none-linux-gnueabi.src.tar.bz2
+diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-arm/toolchain-external-codesourcery-arm.mk b/toolchain/toolchain-external/toolchain-external-codesourcery-arm/toolchain-external-codesourcery-arm.mk
+deleted file mode 100644
+index f15a50c43e..0000000000
+--- a/toolchain/toolchain-external/toolchain-external-codesourcery-arm/toolchain-external-codesourcery-arm.mk
++++ /dev/null
+@@ -1,13 +0,0 @@
+-################################################################################
+-#
+-# toolchain-external-codesourcery-arm
+-#
+-################################################################################
+-
+-TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM_VERSION = 2014.05-29
+-
+-TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM_SITE = https://sourcery.mentor.com/public/gnu_toolchain/$(TOOLCHAIN_EXTERNAL_PREFIX)
+-TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM_SOURCE = arm-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX)-i686-pc-linux-gnu.tar.bz2
+-TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM_ACTUAL_SOURCE_TARBALL = arm-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX).src.tar.bz2
+-
+-$(eval $(toolchain-external-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
