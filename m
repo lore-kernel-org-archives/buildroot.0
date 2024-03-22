@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16D79C54E71
-	for <buildroot@archiver.kernel.org>; Fri, 22 Mar 2024 20:08:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE893C54E71
+	for <buildroot@archiver.kernel.org>; Fri, 22 Mar 2024 20:08:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D6D30408EA;
-	Fri, 22 Mar 2024 20:08:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A69D1410B9;
+	Fri, 22 Mar 2024 20:08:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NkPBmjC4wN2D; Fri, 22 Mar 2024 20:08:45 +0000 (UTC)
+	with ESMTP id XwAh1z6d4L0r; Fri, 22 Mar 2024 20:08:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9110240974
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C7E2410D1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9110240974;
-	Fri, 22 Mar 2024 20:08:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 66F231BF20F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2C7E2410D1;
+	Fri, 22 Mar 2024 20:08:48 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 79D351BF98E
  for <buildroot@lists.busybox.net>; Fri, 22 Mar 2024 20:08:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 615B2820E3
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7367540974
  for <buildroot@lists.busybox.net>; Fri, 22 Mar 2024 20:08:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nQ8g7ardnQmo for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id F9uapQGF93Uo for <buildroot@lists.busybox.net>;
  Fri, 22 Mar 2024 20:08:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 83F7981E1D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 76F554088E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 83F7981E1D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 76F554088E
  for <buildroot@buildroot.org>; Fri, 22 Mar 2024 20:08:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6D9A9838A5; Fri, 22 Mar 2024 20:08:43 +0000 (UTC)
+ id 610B881270; Fri, 22 Mar 2024 20:08:43 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 22 Mar 2024 20:56:36 +0100
+Date: Fri, 22 Mar 2024 20:53:58 +0100
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 98ecfc6c0e618beb1a204d52742df93bc67a81d6
-X-Git-Newrev: 043a342d793e162dac052e8c87a57d2c59c9fe96
+X-Git-Oldrev: a08970e4438ef24e665fb233d64797affae79aea
+X-Git-Newrev: 98ecfc6c0e618beb1a204d52742df93bc67a81d6
 X-Patchwork-Hint: ignore
-Message-Id: <20240322200843.6D9A9838A5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/poco: needs C++17
+Message-Id: <20240322200843.610B881270@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/squid: fix build
+ with host gcc 10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,69 +65,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=043a342d793e162dac052e8c87a57d2c59c9fe96
+commit: https://git.buildroot.net/buildroot/commit/?id=98ecfc6c0e618beb1a204d52742df93bc67a81d6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-poco needs C++17 and gcc >=8 since bump to version 1.13.2 in commit
-433c4fd38b15efcf74b410e5068e2e51eeba6e46 and
-https://github.com/pocoproject/poco/commit/78234857bf416b718455496800d1b7be3a0d0a53
-https://github.com/pocoproject/poco/commit/10f41c06d9416a6ae0884c4827ea2a91bf5d2cf8
-resulting in the following build failure with gcc 7:
+Pass -std=c++17 to fix the following build failure with host gcc 10
+raised since bump to version 6.6 in commit
+c13199c9326fa2daa574f08ec8fc063a48d0eb06:
 
-In file included from src/Thread.cpp:28:0:
-src/Thread_POSIX.cpp: In member function 'void Poco::ThreadImpl::setNameImpl(const string&)':
-src/Thread_POSIX.cpp:162:56: error: no matching function for call to 'std::__cxx11::basic_string<char>::append(const string&, std::__cxx11::basic_string<char>::size_type)'
-   truncName.append(threadName, threadName.size() - half);
-                                                        ^
+/usr/bin/g++ -O2 -I/home/buildroot/instance-0/output-1/host/include -o cf_gen ./cf_gen.cc -I. -I../include/ -I../src
+./cf_gen.cc: In function 'int main(int, char**)':
+./cf_gen.cc:268:63: error: forming reference to void
+  268 |                     auto &newEntry = entries.emplace_back(name);
+      |                                                               ^
 
-Fixes: 433c4fd38b15efcf74b410e5068e2e51eeba6e46
- - http://autobuild.buildroot.org/results/7b1c144f39a8be4ce8f964aa13a52d0bf62dd0aa
+Fixes:
+ - http://autobuild.buildroot.org/results/613fee008c77f8dbbe04df9a4ce4347e43de9ef9
+ - https://bugs.buildroot.org/show_bug.cgi?id=15997
 
+Reported-by: Roland Franke
+Suggested-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 54dbd8e2c5c0b2f40cb53066b265535266eaf8d6)
+(cherry picked from commit 9347905b95dfe045ee40ae69d9d3f00a2c1b7168)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/poco/Config.in | 6 +++---
- package/poco/poco.mk   | 1 -
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ package/squid/squid.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/poco/Config.in b/package/poco/Config.in
-index 7cb9987ec7..9bdef125ad 100644
---- a/package/poco/Config.in
-+++ b/package/poco/Config.in
-@@ -12,7 +12,7 @@ config BR2_PACKAGE_POCO
- 	bool "poco"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # C++14
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++17
- 	# pthread_condattr_setclock
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on !BR2_STATIC_LIBS # dlopen()
-@@ -116,8 +116,8 @@ config BR2_PACKAGE_POCO_ZIP
- 
- endif # BR2_PACKAGE_POCO
- 
--comment "poco needs a toolchain w/ wchar, NPTL, C++, dynamic library, gcc >= 5 w/ C++14"
-+comment "poco needs a toolchain w/ wchar, NPTL, C++, dynamic library, gcc >= 8"
- 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
--		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_5
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 	depends on BR2_PACKAGE_POCO_ARCH_SUPPORTS
-diff --git a/package/poco/poco.mk b/package/poco/poco.mk
-index cc8a22fc2a..233252c67b 100644
---- a/package/poco/poco.mk
-+++ b/package/poco/poco.mk
-@@ -68,7 +68,6 @@ define POCO_CONFIGURE_CMDS
- 	(cd $(@D); $(TARGET_MAKE_ENV) ./configure \
- 		--config=Linux \
- 		--prefix=/usr \
--		--cflags=-std=c++14 \
- 		--ldflags="$(POCO_LDFLAGS)" \
- 		--omit="$(POCO_OMIT)" \
- 		$(POCO_CONF_OPTS) \
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 3a9edac71e..6a2b522336 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -21,7 +21,7 @@ SQUID_CONF_ENV = \
+ 	ac_cv_func_strnstr=no \
+ 	ac_cv_have_squid=yes \
+ 	BUILDCXX="$(HOSTCXX)" \
+-	BUILDCXXFLAGS="$(HOST_CXXFLAGS)"
++	BUILDCXXFLAGS="$(HOST_CXXFLAGS) -std=c++17"
+ SQUID_CONF_OPTS = \
+ 	--enable-async-io=8 \
+ 	--enable-linux-netfilter \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
