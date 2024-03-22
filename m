@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2DFDDC54E71
-	for <buildroot@archiver.kernel.org>; Fri, 22 Mar 2024 20:09:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AC0DC47DD9
+	for <buildroot@archiver.kernel.org>; Fri, 22 Mar 2024 20:09:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E4D5F4193A;
-	Fri, 22 Mar 2024 20:09:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E94D8408EA;
+	Fri, 22 Mar 2024 20:09:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id w7iasSHo-Ifh; Fri, 22 Mar 2024 20:09:07 +0000 (UTC)
+	with ESMTP id 0NjhwKZtCyrt; Fri, 22 Mar 2024 20:09:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E76AB4193B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E0A9410D1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E76AB4193B;
-	Fri, 22 Mar 2024 20:09:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C0B8D1BF98E
- for <buildroot@lists.busybox.net>; Fri, 22 Mar 2024 20:08:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9E0A9410D1;
+	Fri, 22 Mar 2024 20:09:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0A8871BF20F
+ for <buildroot@lists.busybox.net>; Fri, 22 Mar 2024 20:09:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A9F9781E1D
- for <buildroot@lists.busybox.net>; Fri, 22 Mar 2024 20:08:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 049F860FFA
+ for <buildroot@lists.busybox.net>; Fri, 22 Mar 2024 20:09:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ESnoWfAa_q3a for <buildroot@lists.busybox.net>;
- Fri, 22 Mar 2024 20:08:44 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XFRk0ggvgvrb for <buildroot@lists.busybox.net>;
+ Fri, 22 Mar 2024 20:09:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E935681E4A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 273EC60FF6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E935681E4A
- for <buildroot@buildroot.org>; Fri, 22 Mar 2024 20:08:43 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 273EC60FF6
+ for <buildroot@buildroot.org>; Fri, 22 Mar 2024 20:09:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9BE6C803CB; Fri, 22 Mar 2024 20:08:43 +0000 (UTC)
+ id 093E5838BA; Fri, 22 Mar 2024 20:09:52 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 22 Mar 2024 21:05:26 +0100
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 0cc73a1fc50d41a459da98ae0b88ca98462e3c52
-X-Git-Newrev: a6c0eae2b304def2341f3f5ff50ed608094e81ca
+Date: Fri, 22 Mar 2024 20:56:30 +0100
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: 98958c49b9bc55043a45e608d0e31a05dfa10e67
+X-Git-Newrev: d0e6a85aba312661ebc848b2044006b03409eca9
 X-Patchwork-Hint: ignore
-Message-Id: <20240322200843.9BE6C803CB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x]
- configs/ti_am62x_sk_defconfig: explicitly set the ti-k3-r5-loader version
+Message-Id: <20240322200952.093E5838BA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/poco: needs C++17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,36 +64,69 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a6c0eae2b304def2341f3f5ff50ed608094e81ca
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d0e6a85aba312661ebc848b2044006b03409eca9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Commit 4b8fddb060fb ("configs/ti_am62x_sk: new defconfig") forgot to
-specify the ti-k3-r5-loader, so do that now.
+poco needs C++17 and gcc >=8 since bump to version 1.13.2 in commit
+433c4fd38b15efcf74b410e5068e2e51eeba6e46 and
+https://github.com/pocoproject/poco/commit/78234857bf416b718455496800d1b7be3a0d0a53
+https://github.com/pocoproject/poco/commit/10f41c06d9416a6ae0884c4827ea2a91bf5d2cf8
+resulting in the following build failure with gcc 7:
 
-When the defconfig was added, the default version was 2022.10, so use it.
+In file included from src/Thread.cpp:28:0:
+src/Thread_POSIX.cpp: In member function 'void Poco::ThreadImpl::setNameImpl(const string&)':
+src/Thread_POSIX.cpp:162:56: error: no matching function for call to 'std::__cxx11::basic_string<char>::append(const string&, std::__cxx11::basic_string<char>::size_type)'
+   truncName.append(threadName, threadName.size() - half);
+                                                        ^
 
-Suggested-by: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit a01997fd393cdbc9b7912afa0f1aaaba0684fb56)
+Fixes: 433c4fd38b15efcf74b410e5068e2e51eeba6e46
+ - http://autobuild.buildroot.org/results/7b1c144f39a8be4ce8f964aa13a52d0bf62dd0aa
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+(cherry picked from commit 54dbd8e2c5c0b2f40cb53066b265535266eaf8d6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/ti_am62x_sk_defconfig | 2 ++
- 1 file changed, 2 insertions(+)
+ package/poco/Config.in | 6 +++---
+ package/poco/poco.mk   | 1 -
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/configs/ti_am62x_sk_defconfig b/configs/ti_am62x_sk_defconfig
-index c3ad555a81..a129e216d2 100644
---- a/configs/ti_am62x_sk_defconfig
-+++ b/configs/ti_am62x_sk_defconfig
-@@ -25,6 +25,8 @@ BR2_TARGET_OPTEE_OS_PLATFORM="k3-am62x"
- BR2_TARGET_TI_K3_IMAGE_GEN=y
- BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62X=y
- BR2_TARGET_TI_K3_R5_LOADER=y
-+BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION=y
-+BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION_VALUE="2022.10"
- BR2_TARGET_TI_K3_R5_LOADER_BOARD_DEFCONFIG="am62x_evm_r5"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+diff --git a/package/poco/Config.in b/package/poco/Config.in
+index 820e631966..1ba513f227 100644
+--- a/package/poco/Config.in
++++ b/package/poco/Config.in
+@@ -12,7 +12,7 @@ config BR2_PACKAGE_POCO
+ 	bool "poco"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # C++14
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++17
+ 	# pthread_condattr_setclock
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on !BR2_STATIC_LIBS # dlopen()
+@@ -116,8 +116,8 @@ config BR2_PACKAGE_POCO_ZIP
+ 
+ endif # BR2_PACKAGE_POCO
+ 
+-comment "poco needs a toolchain w/ wchar, NPTL, C++, dynamic library, gcc >= 5 w/ C++14"
++comment "poco needs a toolchain w/ wchar, NPTL, C++, dynamic library, gcc >= 8"
+ 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP \
+ 		|| !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
+-		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_5
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 	depends on BR2_PACKAGE_POCO_ARCH_SUPPORTS
+diff --git a/package/poco/poco.mk b/package/poco/poco.mk
+index 96ab28fb01..7b4e7afaa9 100644
+--- a/package/poco/poco.mk
++++ b/package/poco/poco.mk
+@@ -68,7 +68,6 @@ define POCO_CONFIGURE_CMDS
+ 	(cd $(@D); $(TARGET_MAKE_ENV) ./configure \
+ 		--config=Linux \
+ 		--prefix=/usr \
+-		--cflags=-std=c++14 \
+ 		--ldflags="$(POCO_LDFLAGS)" \
+ 		--omit="$(POCO_OMIT)" \
+ 		$(POCO_CONF_OPTS) \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
