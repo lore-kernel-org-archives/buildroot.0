@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF405C54E71
-	for <buildroot@archiver.kernel.org>; Fri, 22 Mar 2024 20:09:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5CB44C54E71
+	for <buildroot@archiver.kernel.org>; Fri, 22 Mar 2024 20:10:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 62AC641908;
-	Fri, 22 Mar 2024 20:09:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 02A9E410D1;
+	Fri, 22 Mar 2024 20:10:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id v2KVcmRFgjO1; Fri, 22 Mar 2024 20:09:58 +0000 (UTC)
+	with ESMTP id 8rE-YigQBJeZ; Fri, 22 Mar 2024 20:10:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4385F415A4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B13F04190B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4385F415A4;
-	Fri, 22 Mar 2024 20:09:57 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 223591BF98E
- for <buildroot@lists.busybox.net>; Fri, 22 Mar 2024 20:09:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B13F04190B;
+	Fri, 22 Mar 2024 20:10:03 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3A6391BF20F
+ for <buildroot@lists.busybox.net>; Fri, 22 Mar 2024 20:10:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0E291410D1
- for <buildroot@lists.busybox.net>; Fri, 22 Mar 2024 20:09:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 25CDC40609
+ for <buildroot@lists.busybox.net>; Fri, 22 Mar 2024 20:10:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vCq8xrAAw7Wf for <buildroot@lists.busybox.net>;
- Fri, 22 Mar 2024 20:09:52 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AGJ7CS9veKHv for <buildroot@lists.busybox.net>;
+ Fri, 22 Mar 2024 20:10:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 106AB408EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6280540323
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 106AB408EA
- for <buildroot@buildroot.org>; Fri, 22 Mar 2024 20:09:52 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6280540323
+ for <buildroot@buildroot.org>; Fri, 22 Mar 2024 20:10:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F1EA6838B8; Fri, 22 Mar 2024 20:09:51 +0000 (UTC)
+ id 5DB58838BA; Fri, 22 Mar 2024 20:10:01 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 22 Mar 2024 20:54:13 +0100
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 218b5454ea2e266719fc81c1cb7203fbabae3a08
-X-Git-Newrev: 98958c49b9bc55043a45e608d0e31a05dfa10e67
+Date: Fri, 22 Mar 2024 20:54:08 +0100
+X-Git-Refname: refs/heads/2023.11.x
+X-Git-Oldrev: a879dda8e4f6494ca91c3dd9b83e70837343229a
+X-Git-Newrev: b0ab415b04a774c8df64b4d541a8e876e1b3eeba
 X-Patchwork-Hint: ignore
-Message-Id: <20240322200951.F1EA6838B8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/squid: fix build
+Message-Id: <20240322201001.5DB58838BA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/squid: fix build
  with host gcc 10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -65,8 +65,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=98958c49b9bc55043a45e608d0e31a05dfa10e67
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b0ab415b04a774c8df64b4d541a8e876e1b3eeba
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
 Pass -std=c++17 to fix the following build failure with host gcc 10
 raised since bump to version 6.6 in commit
