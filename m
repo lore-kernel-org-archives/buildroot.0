@@ -4,59 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3CC3C47DD9
-	for <buildroot@archiver.kernel.org>; Fri, 22 Mar 2024 19:57:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7839C54E71
+	for <buildroot@archiver.kernel.org>; Fri, 22 Mar 2024 20:04:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7D08D418F6;
-	Fri, 22 Mar 2024 19:57:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8A349418F5;
+	Fri, 22 Mar 2024 20:04:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ksTKW2LZBSZI; Fri, 22 Mar 2024 19:57:51 +0000 (UTC)
+	with ESMTP id T5dH1YzajLYD; Fri, 22 Mar 2024 20:04:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46703418F7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C3EEA418DD
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 46703418F7;
-	Fri, 22 Mar 2024 19:57:51 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 33FE91BF977
- for <buildroot@lists.busybox.net>; Fri, 22 Mar 2024 19:57:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C3EEA418DD;
+	Fri, 22 Mar 2024 20:04:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 683551BF20F
+ for <buildroot@lists.busybox.net>; Fri, 22 Mar 2024 20:04:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2176140609
- for <buildroot@lists.busybox.net>; Fri, 22 Mar 2024 19:57:49 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 53ADD60FFA
+ for <buildroot@lists.busybox.net>; Fri, 22 Mar 2024 20:04:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xcENXf4HHTJk for <buildroot@lists.busybox.net>;
- Fri, 22 Mar 2024 19:57:48 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
- helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id olhip4WtMorC for <buildroot@lists.busybox.net>;
+ Fri, 22 Mar 2024 20:04:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
+ helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org CDB83405FD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CDB83405FD
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp2.osuosl.org (Postfix) with ESMTPS id CDB83405FD
- for <buildroot@buildroot.org>; Fri, 22 Mar 2024 19:57:47 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E0CC7240005;
- Fri, 22 Mar 2024 19:57:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 663C660751
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 663C660751
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 663C660751
+ for <buildroot@buildroot.org>; Fri, 22 Mar 2024 20:04:42 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3C33DE0004;
+ Fri, 22 Mar 2024 20:04:40 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rnl1M-006ElN-0P;
- Fri, 22 Mar 2024 20:57:44 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rnl83-006F2Z-1x;
+ Fri, 22 Mar 2024 21:04:39 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20240317094037.41936-1-fontaine.fabrice@gmail.com>
-Date: Fri, 22 Mar 2024 20:57:44 +0100
-In-Reply-To: <20240317094037.41936-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 17 Mar 2024 10:40:37 +0100")
-Message-ID: <87a5mq2g5j.fsf@48ers.dk>
+To: Yann E. MORIN <yann.morin.1998@free.fr>
+References: <20240319213722.5078482859@busybox.osuosl.org>
+Date: Fri, 22 Mar 2024 21:04:39 +0100
+In-Reply-To: <20240319213722.5078482859@busybox.osuosl.org> (Yann E. MORIN's
+ message of "Tue, 19 Mar 2024 22:14:57 +0100")
+Message-ID: <875xxe2fu0.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/poco: needs C++17
+Subject: Re: [Buildroot] [git commit] configs/ti_am62x_sk_defconfig: fix
+ BR2_TARGET_OPTEE_OS_PLATFORM setting
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,26 +75,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > poco needs C++17 and gcc >=8 since bump to version 1.13.2 in commit
- > 433c4fd38b15efcf74b410e5068e2e51eeba6e46 and
- > https://github.com/pocoproject/poco/commit/78234857bf416b718455496800d1b7be3a0d0a53
- > https://github.com/pocoproject/poco/commit/10f41c06d9416a6ae0884c4827ea2a91bf5d2cf8
- > resulting in the following build failure with gcc 7:
+ > commit: https://git.buildroot.net/buildroot/commit/?id=f68c45f73334b9c83c44e5bbb3d505050f8b720e
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > In file included from src/Thread.cpp:28:0:
- > src/Thread_POSIX.cpp: In member function 'void Poco::ThreadImpl::setNameImpl(const string&)':
- > src/Thread_POSIX.cpp:162:56: error: no matching function for call to 'std::__cxx11::basic_string<char>::append(const string&, std::__cxx11::basic_string<char>::size_type)'
- >    truncName.append(threadName, threadName.size() - half);
- >                                                         ^
+ > Using PLATFORM=k3 can leads to a runtime boot crash on some K3 SoC (e.g.
+ > j721e) because the optee flavor is missing.
 
- > Fixes: 433c4fd38b15efcf74b410e5068e2e51eeba6e46
- >  - http://autobuild.buildroot.org/results/7b1c144f39a8be4ce8f964aa13a52d0bf62dd0aa
+ > We could use BR2_TARGET_OPTEE_OS_PLATFORM=k3 and
+ > BR2_TARGET_OPTEE_OS_PLATFORM_FLAVOR=am62x but we actually can use
+ > BR2_TARGET_OPTEE_OS_PLATFORM=k3-am62x as explained in the optee-os
+ > Makefile [1]:
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ >   # If $(PLATFORM) is defined and contains a hyphen, parse it as
+ >   # $(PLATFORM)-$(PLATFORM_FLAVOR) for convenience
 
-Committed to 2024.02.x, 2023.02.x and 2023.11.x, thanks.
+ > This is how meta-ti set the optee-os platform:
+
+ >   meta-ti]$ git grep OPTEEMACHINE
+ >   meta-ti-bsp/conf/machine/am437x-hs-evm.conf:OPTEEMACHINE = "ti-am43xx"
+ >   meta-ti-bsp/conf/machine/am57xx-hs-evm.conf:OPTEEMACHINE = "ti-am57xx"
+ >   meta-ti-bsp/conf/machine/beagleplay.conf:OPTEEMACHINE = "k3-am62x"
+ >   meta-ti-bsp/conf/machine/dra7xx-hs-evm.conf:OPTEEMACHINE = "ti-dra7xx"
+ >   meta-ti-bsp/conf/machine/include/am62axx.inc:OPTEEMACHINE = "k3-am62x"
+ >   meta-ti-bsp/conf/machine/include/am62pxx.inc:OPTEEMACHINE = "k3-am62x"
+ >   meta-ti-bsp/conf/machine/include/am62xx.inc:OPTEEMACHINE = "k3-am62x"
+ >   meta-ti-bsp/conf/machine/include/am64xx.inc:OPTEEMACHINE = "k3-am64x"
+ >   meta-ti-bsp/conf/machine/include/am65xx.inc:OPTEEMACHINE = "k3-am65x"
+ >   meta-ti-bsp/conf/machine/include/j7200.inc:OPTEEMACHINE = "k3-j721e"
+ >   meta-ti-bsp/conf/machine/include/j721e.inc:OPTEEMACHINE = "k3-j721e"
+ >   meta-ti-bsp/conf/machine/include/j721s2.inc:OPTEEMACHINE = "k3-j784s4"
+ >   meta-ti-bsp/conf/machine/include/j722s.inc:OPTEEMACHINE = "k3-am62x"
+ >   meta-ti-bsp/conf/machine/include/j784s4.inc:OPTEEMACHINE = "k3-j784s4"
+
+ >   meta-ti uses the OPTEEMACHINE to set optee-os platform [2].
+
+ > [1] https://github.com/OP-TEE/optee_os/blob/4.0.0/Makefile#L37
+ > [2] https://git.yoctoproject.org/meta-arm/tree/meta-arm/recipes-security/optee/optee-os.inc?h=4.0.3#n23
+
+ > Suggested-by: Romain Naour <romain.naour@smile.fr>
+ > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+
+Committed to 2024.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
