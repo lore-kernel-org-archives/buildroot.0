@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06707C54E58
-	for <buildroot@archiver.kernel.org>; Thu, 21 Mar 2024 21:57:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99FB3CD11BF
+	for <buildroot@archiver.kernel.org>; Fri, 22 Mar 2024 18:26:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8E9B5821DF;
-	Thu, 21 Mar 2024 21:57:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3E48F60FF6;
+	Fri, 22 Mar 2024 18:26:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id asdpLx-FxaRa; Thu, 21 Mar 2024 21:57:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5xqOQ86SgeLg; Fri, 22 Mar 2024 18:26:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 996F0821E1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5216D60FF9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 996F0821E1;
-	Thu, 21 Mar 2024 21:57:12 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 03B601BF39F
- for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 21:57:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5216D60FF9;
+	Fri, 22 Mar 2024 18:26:41 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4BFDC1BF489
+ for <buildroot@lists.busybox.net>; Fri, 22 Mar 2024 18:26:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E53E9821E1
- for <buildroot@lists.busybox.net>; Thu, 21 Mar 2024 21:57:10 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 391954191B
+ for <buildroot@lists.busybox.net>; Fri, 22 Mar 2024 18:26:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zJ5bzTohdlf8 for <buildroot@lists.busybox.net>;
- Thu, 21 Mar 2024 21:57:10 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rlie1uKN95FY for <buildroot@lists.busybox.net>;
+ Fri, 22 Mar 2024 18:26:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=bugzilla@busybox.net;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A2AB821DF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F953402E7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3A2AB821DF
- for <buildroot@uclibc.org>; Thu, 21 Mar 2024 21:57:10 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6F953402E7
+ for <buildroot@uclibc.org>; Fri, 22 Mar 2024 18:26:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 335CC835FF; Thu, 21 Mar 2024 21:57:10 +0000 (UTC)
+ id 582D582EAE; Fri, 22 Mar 2024 18:26:39 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Thu, 21 Mar 2024 21:57:10 +0000
+Date: Fri, 22 Mar 2024 18:26:38 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -49,7 +49,7 @@ X-Bugzilla-Component: Other
 X-Bugzilla-Version: 2024.02
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: ps.report@gmx.net
+X-Bugzilla-Who: fli4l@franke-prem.de
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
@@ -57,7 +57,7 @@ X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-16003-163-cxGED0C9mj@https.bugs.busybox.net/>
+Message-ID: <bug-16003-163-ZS9GcOX8SA@https.bugs.busybox.net/>
 In-Reply-To: <bug-16003-163@https.bugs.busybox.net/>
 References: <bug-16003-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -82,8 +82,11 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=16003
 
---- Comment #7 from Peter Seiderer <ps.report@gmx.net> ---
-Can confirm the extra '-lc' fixes the linking problem...
+--- Comment #8 from Roland Franke <fli4l@franke-prem.de> ---
+I will also confirm that the build from samba4 with the additional -lc fix the
+build.
+
+Thank you.
 
 -- 
 You are receiving this mail because:
