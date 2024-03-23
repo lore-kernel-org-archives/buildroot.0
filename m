@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C72AC54E58
-	for <buildroot@archiver.kernel.org>; Sat, 23 Mar 2024 13:50:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E2CDCD11BF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Mar 2024 13:50:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7075F418F8;
-	Sat, 23 Mar 2024 13:50:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6DF0F41938;
+	Sat, 23 Mar 2024 13:50:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UTsDPgcbjhuO; Sat, 23 Mar 2024 13:50:11 +0000 (UTC)
+ id 8nmX7dNViyYW; Sat, 23 Mar 2024 13:50:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7352B4191B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 727B3418B3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7352B4191B;
-	Sat, 23 Mar 2024 13:50:11 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C21081BF84C
- for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 13:49:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 727B3418B3;
+	Sat, 23 Mar 2024 13:50:14 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 81B411BF584
+ for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 13:49:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 74AB5827AA
- for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 13:49:48 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E116941513
+ for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 13:49:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OooBXf7_Nupa for <buildroot@lists.busybox.net>;
- Sat, 23 Mar 2024 13:49:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8NMXwik9TGeQ for <buildroot@lists.busybox.net>;
+ Sat, 23 Mar 2024 13:49:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD3E08235B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E93AC41518
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id AD3E08235B
- for <buildroot@buildroot.org>; Sat, 23 Mar 2024 13:49:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E93AC41518
+ for <buildroot@buildroot.org>; Sat, 23 Mar 2024 13:49:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9B62B83698; Sat, 23 Mar 2024 13:49:47 +0000 (UTC)
+ id D6B7480D9C; Sat, 23 Mar 2024 13:49:48 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 23 Mar 2024 14:34:03 +0100
+Date: Sat, 23 Mar 2024 14:46:28 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9f94b3b35423a3d7b93e7fdd67e97dea6e33de60
-X-Git-Newrev: 38a20a0998117f3debb4de06e209ba5d82bb7a9d
+X-Git-Oldrev: f1759be118de16950063e3c27396fd69b8f2df23
+X-Git-Newrev: f805e05a20d61409645f6a611ea3e24d211de7b3
 X-Patchwork-Hint: ignore
-Message-Id: <20240323134947.9B62B83698@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/fdk-aac: bump to version 2.0.3
+Message-Id: <20240323134948.D6B7480D9C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libusb: bump version to 1.0.27
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,44 +64,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=38a20a0998117f3debb4de06e209ba5d82bb7a9d
+commit: https://git.buildroot.net/buildroot/commit/?id=f805e05a20d61409645f6a611ea3e24d211de7b3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Change log: https://github.com/mstorsjo/fdk-aac/blob/master/ChangeLog
+Change Log : https://github.com/libusb/libusb/blob/d52e355daa09f17ce64819122cb067b8a2ee0d4b/ChangeLog#L4
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Build test results:
+ libusb.config
+   BR2_PACKAGE_LIBUSB=y
+   BR2_PACKAGE_LIBUSB_EXAMPLES=y
+   BR2_PACKAGE_LIBUSB_COMPAT=y
+
+$./utils/test-pkg -k -c libusb.config  -p libusb
+                    bootlin-armv5-uclibc [1/6]: OK
+                     bootlin-armv7-glibc [2/6]: OK
+                   bootlin-armv7m-uclibc [3/6]: OK
+                     bootlin-x86-64-musl [4/6]: OK
+                      br-arm-full-static [5/6]: OK
+                            sourcery-arm [6/6]: SKIPPED
+6 builds, 1 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+
+Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fdk-aac/fdk-aac.hash | 5 ++---
- package/fdk-aac/fdk-aac.mk   | 2 +-
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ package/libusb/libusb.hash | 2 +-
+ package/libusb/libusb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/fdk-aac/fdk-aac.hash b/package/fdk-aac/fdk-aac.hash
-index b10d5f92b1..ae5c81b30f 100644
---- a/package/fdk-aac/fdk-aac.hash
-+++ b/package/fdk-aac/fdk-aac.hash
-@@ -1,6 +1,5 @@
- # From https://sourceforge.net/projects/opencore-amr/files/fdk-aac/
--sha1  579b34e8174b4feb21a9c598695f5ff4a7ceef8c  fdk-aac-2.0.2.tar.gz
--md5  b41222194b31f570b3132bd622a9aef6  fdk-aac-2.0.2.tar.gz
-+sha1  29f5485a6ec718335243440600ff78418cd4765b  fdk-aac-2.0.3.tar.gz
+diff --git a/package/libusb/libusb.hash b/package/libusb/libusb.hash
+index bbb0ccf5b9..8ca68f03ba 100644
+--- a/package/libusb/libusb.hash
++++ b/package/libusb/libusb.hash
+@@ -1,3 +1,3 @@
  # Locally computed:
--sha256  c9e8630cf9d433f3cead74906a1520d2223f89bcd3fa9254861017440b8eb22f  fdk-aac-2.0.2.tar.gz
-+sha256  829b6b89eef382409cda6857fd82af84fabb63417b08ede9ea7a553f811cb79e  fdk-aac-2.0.3.tar.gz
- sha256  95ec80da40b4af12ad4c4f3158c9cfb80f2479f3246e4260cb600827cc8c7836  NOTICE
-diff --git a/package/fdk-aac/fdk-aac.mk b/package/fdk-aac/fdk-aac.mk
-index c66f6df797..01a100fa94 100644
---- a/package/fdk-aac/fdk-aac.mk
-+++ b/package/fdk-aac/fdk-aac.mk
-@@ -4,7 +4,7 @@
- #
+-sha256  12ce7a61fc9854d1d2a1ffe095f7b5fac19ddba095c259e6067a46500381b5a5  libusb-1.0.26.tar.bz2
++sha256  ffaa41d741a8a3bee244ac8e54a72ea05bf2879663c098c82fc5757853441575  libusb-1.0.27.tar.bz2
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
+diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
+index 98a4a578b2..15649a2ab1 100644
+--- a/package/libusb/libusb.mk
++++ b/package/libusb/libusb.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--FDK_AAC_VERSION = 2.0.2
-+FDK_AAC_VERSION = 2.0.3
- FDK_AAC_SITE = http://downloads.sourceforge.net/project/opencore-amr/fdk-aac
- FDK_AAC_LICENSE = fdk-aac license
- FDK_AAC_LICENSE_FILES = NOTICE
+ LIBUSB_VERSION_MAJOR = 1.0
+-LIBUSB_VERSION = $(LIBUSB_VERSION_MAJOR).26
++LIBUSB_VERSION = $(LIBUSB_VERSION_MAJOR).27
+ LIBUSB_SOURCE = libusb-$(LIBUSB_VERSION).tar.bz2
+ LIBUSB_SITE = https://github.com/libusb/libusb/releases/download/v$(LIBUSB_VERSION)
+ LIBUSB_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
