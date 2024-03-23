@@ -4,93 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F5E8C6FD1F
-	for <buildroot@archiver.kernel.org>; Sat, 23 Mar 2024 16:01:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00D35C6FD1F
+	for <buildroot@archiver.kernel.org>; Sat, 23 Mar 2024 16:37:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2BF2B82B94;
-	Sat, 23 Mar 2024 16:01:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 96EB68293D;
+	Sat, 23 Mar 2024 16:37:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lhja3xyVo9bD; Sat, 23 Mar 2024 16:01:48 +0000 (UTC)
+ id 2b4y0dMdrPsS; Sat, 23 Mar 2024 16:37:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 928C1828E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B12EE82974
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 928C1828E3;
-	Sat, 23 Mar 2024 16:01:47 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 527971BF3A4
- for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 16:01:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B12EE82974;
+	Sat, 23 Mar 2024 16:37:06 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E86471BF299
+ for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 16:37:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3FA5840640
- for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 16:01:45 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EKsC6mNbA-mX for <buildroot@lists.busybox.net>;
- Sat, 23 Mar 2024 16:01:44 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E275882974
+ for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 16:37:04 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8Dv1vYo8oqRN for <buildroot@lists.busybox.net>;
+ Sat, 23 Mar 2024 16:37:03 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::632; helo=mail-pl1-x632.google.com;
+ client-ip=2607:f8b0:4864:20::634; helo=mail-pl1-x634.google.com;
  envelope-from=fancp2007@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A27FD405D3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A27FD405D3
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com
- [IPv6:2607:f8b0:4864:20::632])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A27FD405D3
- for <buildroot@buildroot.org>; Sat, 23 Mar 2024 16:01:44 +0000 (UTC)
-Received: by mail-pl1-x632.google.com with SMTP id
- d9443c01a7336-1dfff641d10so20795935ad.2
- for <buildroot@buildroot.org>; Sat, 23 Mar 2024 09:01:44 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C479E8293D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C479E8293D
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com
+ [IPv6:2607:f8b0:4864:20::634])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C479E8293D
+ for <buildroot@buildroot.org>; Sat, 23 Mar 2024 16:37:02 +0000 (UTC)
+Received: by mail-pl1-x634.google.com with SMTP id
+ d9443c01a7336-1e0000cdf99so23073795ad.0
+ for <buildroot@buildroot.org>; Sat, 23 Mar 2024 09:37:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1711209703; x=1711814503;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=CXd/S+AXBXC/1WLI64R/rxtE+EKMbpwGppSavDzBB3s=;
- b=DdlGpvV4VjXp/CY7RcTPlw6FrQ6lQzBQMtp5qJ+CI/ZejUu4dFTc2Enzj4KWnCS110
- YvgSqKPOiLSBgcWhAu1EA5PCWYsSdoBoADS2CiPTM7QR+QpOe2dVetuEwkHXSEIZO3Hn
- niRYBwWa0+GUFJtSpOnbl2psZdwk75UnvVaUBLS6HYDTwztqCBCrucB9Ub3J2EX406S4
- SyxS7q6xdp2PbllKlGgu59MIWUETvrjsbtnSspA1+5Sjg3mshoz3X+vGq5G96e/bSWYV
- xgrLHCkDqS1KCTIcv7Xx45hOXXOh8xaIIWIhK8q9jK7tFKv2+Uddun/IpbFc1n4NfxBy
- T+cA==
-X-Gm-Message-State: AOJu0Yz3AL1Djwo6bpdzhQOj9IF1IrcuV5AUrRVS/ula++YVKfydGmtb
- mY2TJUTRJs0VV2FhB1jFov3Rk69OnVQwrzENbXFrZ/q0lxfMgLrxfnNPSQbM
-X-Google-Smtp-Source: AGHT+IGlQmCtBRRQfBZAJb5AJEVKlVhzRG7q8qXt9tYfyQF4Hm5K7JBgbNE9jWUpc9ZXJU+cWuiKgw==
-X-Received: by 2002:a17:902:d2cf:b0:1de:fe74:af6b with SMTP id
- n15-20020a170902d2cf00b001defe74af6bmr3158183plc.46.1711209702788; 
- Sat, 23 Mar 2024 09:01:42 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1711211821; x=1711816621;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=CqBOZ6Yp+G3MGmpgEoVpF0JHPsxQg+K5+F3muSDxDuA=;
+ b=J5dAb3n7RyNmCouq8Ip9dYnc7W+gDcqRE917bwyOdwGf/xkH9sJdjH1yVYENQSScN2
+ 0dM5hMjvzH0ubPd5K+LHKRtTJQ0VlQBohe4sFWoOGOA/rH/+5Ew/xU5jOxB4aIphC1EH
+ C1d3WNwGFDd1mnQZeHikT29ZBoKfZDlyUCVRi5atAhxN33gFHXZDwWM24WV0FIdD6lyg
+ 385We2dUDneWxSKfUX1uBY2D8v3HVwlowxcgwNedkxd+427BLFEdXDYe7qMHgMuikDFJ
+ DDWdDbPyTeD2NM+k8aK3WdUQwm1wyglBhm7cJdMwUGEZTiCqkMIWi5xoofn8fkKNz8lL
+ 8UiQ==
+X-Gm-Message-State: AOJu0Ywd7KOuOjP1aKTI1mKjAYd1NwdP9y36WrH67L7Ilfy9YmCUpu8P
+ g2lZQwAZIf32K+8SZ8ZiB8N8KKCrHd4iDuVd+QIgWlEuPY+WRyEGV6sderOY
+X-Google-Smtp-Source: AGHT+IHxSmGekIrp6RuBZoM0t6m2OluLiHJQbx9MDOvK9htS/0EVKuXB80x71B7+bbhKH1ubREEUIQ==
+X-Received: by 2002:a17:902:7447:b0:1dd:7485:b4c9 with SMTP id
+ e7-20020a170902744700b001dd7485b4c9mr2521964plt.22.1711211821185; 
+ Sat, 23 Mar 2024 09:37:01 -0700 (PDT)
 Received: from localhost ([142.171.12.18]) by smtp.gmail.com with ESMTPSA id
- n1-20020a170902e54100b001dcfc68e7desm1718551plf.75.2024.03.23.09.01.41
+ y11-20020a170902700b00b001def18c0cfdsm1741055plk.300.2024.03.23.09.37.00
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 23 Mar 2024 09:01:42 -0700 (PDT)
+ Sat, 23 Mar 2024 09:37:00 -0700 (PDT)
 From: Scott Fan <fancp2007@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 24 Mar 2024 00:01:19 +0800
-Message-Id: <20240323160120.1276293-2-fancp2007@gmail.com>
+Date: Sun, 24 Mar 2024 00:36:52 +0800
+Message-Id: <20240323163653.1299442-1-fancp2007@gmail.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240323160120.1276293-1-fancp2007@gmail.com>
-References: <20240323160120.1276293-1-fancp2007@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1711209703; x=1711814503; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=CXd/S+AXBXC/1WLI64R/rxtE+EKMbpwGppSavDzBB3s=;
- b=cr5bIU0LgYB3PPoiQ5ybeE4j2gGk7oqwPcxDOzPA5jhwH+Y5RBO3VsiJwKB1umktWm
- kMYXlzTDg1ghigHv6cwkVM43sZsOqkqLk8/kHkAJHMdp19Euh6cPz6YAAEyHKtZJdpGv
- n+gBhLS8QXlQ2kOaAWBJJ7lk6Z4e6RL5YE+REcZMeXhfb5826Pkp035z6GPx230S69q2
- okFtzruI5kKGNWxS6UxXXCq+bAKO6r442MAlPZyfHfu8ga9Dab3odVHlWgQphccjgKJu
- rEghF/F7ozAZaNv4OkK31zUdDgNg/EqMqWoNGyue+EcFw70cfnbMssRkpJhciA3OOD+X
- VBQg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=gmail.com; s=20230601; t=1711211821; x=1711816621; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=CqBOZ6Yp+G3MGmpgEoVpF0JHPsxQg+K5+F3muSDxDuA=;
+ b=WbpTOoEqxiT/7wyIK6TgQzlOO9z7PaIresEksyM65nE14FAB0LIKzekc910hBuiAFH
+ XYDPyrRi31FeUGB7wF6Jak+yweisx2vgDJwLtiKXAhjqovNddXcmCnammwEyLpr1fny0
+ d4HHHNeERxGkxjPNzchuFLSBPfTzRKt4wVoHpVFgMkO4SPLVX0h8zc3K6pbEar+zw27j
+ +Q4CyWuVRIBn1d28LANd4P24CPmOHILIyIjvImC5cEYB3tjDkk9wRw3ByRdfpFs2eiG5
+ h/HeWVQ2bOdX/y4QZeCZ7CxtoeahmZG8WlUlgzLf5TLV+RP57yVUQvhBWd9HcVefSrIr
+ Ix7g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=cr5bIU0L
-Subject: [Buildroot] [PATCH 2/2] package/owfs: add missing slash after the
- OWFS_PKGDIR variable
+ header.a=rsa-sha256 header.s=20230601 header.b=WbpTOoEq
+Subject: [Buildroot] [PATCH] configs/beaglebone_defconfig: bump Linux to
+ 6.1.80-ti-r34 and U-Boot to 2024.01
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,39 +99,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Scott Fan <fancp2007@gmail.com>
+Cc: Lothar Felten <lothar.felten@gmail.com>, Scott Fan <fancp2007@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Tested on beaglebone black.
+
+[1] https://github.com/beagleboard/linux/releases/tag/6.1.80-ti-r34
+
 Signed-off-by: Scott Fan <fancp2007@gmail.com>
 ---
- package/owfs/owfs.mk | 4 ++--
+ configs/beaglebone_defconfig | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/owfs/owfs.mk b/package/owfs/owfs.mk
-index 986dca921a..6b22282486 100644
---- a/package/owfs/owfs.mk
-+++ b/package/owfs/owfs.mk
-@@ -28,7 +28,7 @@ OWFS_CONF_OPTS += \
- 	--with-fuseinclude=$(STAGING_DIR)/usr/include \
- 	--with-fuselib=$(STAGING_DIR)/usr/lib
- define OWFS_INSTALL_FUSE_INIT_SYSV
--	$(INSTALL) -D -m 0755 $(OWFS_PKGDIR)S60owfs \
-+	$(INSTALL) -D -m 0755 $(OWFS_PKGDIR)/S60owfs \
- 		$(TARGET_DIR)/etc/init.d/S60owfs
- endef
- define OWFS_CREATE_MOUNTPOINT
-@@ -78,7 +78,7 @@ endif
- OWFS_MAKE = $(MAKE) $(OWFS_EXTRA_MAKE_OPTS)
- 
- define OWFS_INSTALL_INIT_SYSV
--	$(INSTALL) -D -m 0755 $(OWFS_PKGDIR)S55owserver \
-+	$(INSTALL) -D -m 0755 $(OWFS_PKGDIR)/S55owserver \
- 		$(TARGET_DIR)/etc/init.d/S55owserver
- 	$(OWFS_INSTALL_FUSE_INIT_SYSV)
- endef
+diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+index e2d67019b1..064f283489 100644
+--- a/configs/beaglebone_defconfig
++++ b/configs/beaglebone_defconfig
+@@ -17,7 +17,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beaglebone/genimage.cfg"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,6.1.46-ti-r13)/linux-6.1.46-ti-r13.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,6.1.80-ti-r34)/linux-6.1.80-ti-r34.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bb.org"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk am335x-boneblue am335x-boneblack-wireless am335x-bonegreen-wireless"
+@@ -31,7 +31,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.01"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am335x_evm"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
 -- 
 2.34.1
 
