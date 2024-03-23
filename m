@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9253C54E58
-	for <buildroot@archiver.kernel.org>; Sat, 23 Mar 2024 13:35:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 084A8C54E58
+	for <buildroot@archiver.kernel.org>; Sat, 23 Mar 2024 13:36:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7DC20400F3;
-	Sat, 23 Mar 2024 13:35:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CD891400F3;
+	Sat, 23 Mar 2024 13:36:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VjYVU8vbduzo; Sat, 23 Mar 2024 13:35:41 +0000 (UTC)
+	with ESMTP id wblxZn9hMEB0; Sat, 23 Mar 2024 13:36:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A2F304015F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F06264015F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A2F304015F;
-	Sat, 23 Mar 2024 13:35:41 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 694171BF584
- for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 13:35:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F06264015F;
+	Sat, 23 Mar 2024 13:36:03 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E19221BF584
+ for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 13:36:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5654F82B94
- for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 13:35:39 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F6R4Ro7zOmIg for <buildroot@lists.busybox.net>;
- Sat, 23 Mar 2024 13:35:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
- helo=relay6-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ by smtp2.osuosl.org (Postfix) with ESMTP id DBE944015F
+ for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 13:36:02 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zSnipEugRg1O for <buildroot@lists.busybox.net>;
+ Sat, 23 Mar 2024 13:36:02 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
+ helo=relay7-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4998E82BA1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4998E82BA1
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4998E82BA1
- for <buildroot@buildroot.org>; Sat, 23 Mar 2024 13:35:37 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E76F5C0002;
- Sat, 23 Mar 2024 13:35:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org CCBF0400F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CCBF0400F3
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CCBF0400F3
+ for <buildroot@buildroot.org>; Sat, 23 Mar 2024 13:36:01 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B684E20003;
+ Sat, 23 Mar 2024 13:35:58 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1ro1X4-006vrW-0u;
- Sat, 23 Mar 2024 14:35:34 +0100
+ (envelope-from <peter@korsgaard.com>) id 1ro1XR-006vzH-18;
+ Sat, 23 Mar 2024 14:35:57 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Gilles Talis <gilles.talis@gmail.com>
 References: <20240215142413.451505-1-gilles.talis@gmail.com>
- <20240215142413.451505-3-gilles.talis@gmail.com>
-Date: Sat, 23 Mar 2024 14:35:34 +0100
-In-Reply-To: <20240215142413.451505-3-gilles.talis@gmail.com> (Gilles Talis's
- message of "Thu, 15 Feb 2024 10:24:08 -0400")
-Message-ID: <87ttkxxe8p.fsf@48ers.dk>
+ <20240215142413.451505-4-gilles.talis@gmail.com>
+Date: Sat, 23 Mar 2024 14:35:57 +0100
+In-Reply-To: <20240215142413.451505-4-gilles.talis@gmail.com> (Gilles Talis's
+ message of "Thu, 15 Feb 2024 10:24:09 -0400")
+Message-ID: <87plvlxe82.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/leptonica: bump to version 1.84.1
+Subject: Re: [Buildroot] [PATCH] package/libolm: bump to version 3.2.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,7 +78,7 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 >>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
 
  > Change log:
- > http://www.leptonica.org/source/version-notes.html
+ > https://gitlab.matrix.org/matrix-org/olm/-/blob/master/CHANGELOG.rst
 
  > Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 
