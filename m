@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75960CD11BF
-	for <buildroot@archiver.kernel.org>; Sat, 23 Mar 2024 12:38:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A72A5CD11BF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Mar 2024 12:39:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 415A74010F;
-	Sat, 23 Mar 2024 12:38:53 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6FA7C4010F;
+	Sat, 23 Mar 2024 12:39:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5N127kidsFqD; Sat, 23 Mar 2024 12:38:52 +0000 (UTC)
+	with ESMTP id Re_br0y2WkL7; Sat, 23 Mar 2024 12:39:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4273E404D7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D6F0403FF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4273E404D7;
-	Sat, 23 Mar 2024 12:38:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6D6F0403FF;
+	Sat, 23 Mar 2024 12:39:52 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 89F4C1BF3E1
- for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 12:38:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8798B1BF3E1
+ for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 12:39:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 77331404D7
- for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 12:38:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7301B403FF
+ for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 12:39:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mGJnYkV6MtYV for <buildroot@lists.busybox.net>;
- Sat, 23 Mar 2024 12:38:33 +0000 (UTC)
+ with ESMTP id wVFFHYQVu5bC for <buildroot@lists.busybox.net>;
+ Sat, 23 Mar 2024 12:39:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A34194010F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 99BB64010F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A34194010F
- for <buildroot@buildroot.org>; Sat, 23 Mar 2024 12:38:33 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 99BB64010F
+ for <buildroot@buildroot.org>; Sat, 23 Mar 2024 12:39:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8B7E9838A3; Sat, 23 Mar 2024 12:38:33 +0000 (UTC)
+ id 8576F814B7; Sat, 23 Mar 2024 12:39:49 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 23 Mar 2024 13:33:39 +0100
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 8878a7f47968bc5b2ec5b374e4406203257b7194
-X-Git-Newrev: f47b3d591893674873bd8f0b7c4a23ce628c8d8d
+Date: Sat, 23 Mar 2024 13:31:53 +0100
+X-Git-Refname: refs/heads/2023.11.x
+X-Git-Oldrev: 31d75c07fd5f64224434abe66229c10dfc4d75ee
+X-Git-Newrev: cf527f28d8693ab3df7baeb3628adfe5cf15ae9a
 X-Patchwork-Hint: ignore
-Message-Id: <20240323123833.8B7E9838A3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/postgresql:
+Message-Id: <20240323123949.8576F814B7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/postgresql:
  security bump version to 15.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -65,8 +65,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f47b3d591893674873bd8f0b7c4a23ce628c8d8d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=cf527f28d8693ab3df7baeb3628adfe5cf15ae9a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
 Release notes: https://www.postgresql.org/docs/release/15.6/
 
