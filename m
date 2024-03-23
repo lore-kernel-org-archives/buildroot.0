@@ -4,59 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9974C54E58
-	for <buildroot@archiver.kernel.org>; Sat, 23 Mar 2024 13:49:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E304DC54E58
+	for <buildroot@archiver.kernel.org>; Sat, 23 Mar 2024 13:49:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A1719410E4;
-	Sat, 23 Mar 2024 13:49:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A836541518;
+	Sat, 23 Mar 2024 13:49:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id K1OFpQvjzIMH; Sat, 23 Mar 2024 13:49:09 +0000 (UTC)
+ id IuZ3RYo0mKYa; Sat, 23 Mar 2024 13:49:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 78389410E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7351E4151A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 78389410E7;
-	Sat, 23 Mar 2024 13:49:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 70C021BF584
- for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 13:49:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7351E4151A;
+	Sat, 23 Mar 2024 13:49:50 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 556CE1BF84C
+ for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 13:49:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5E2F282324
- for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 13:49:07 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 43061606EB
+ for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 13:49:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cBroSCHUrM3a for <buildroot@lists.busybox.net>;
- Sat, 23 Mar 2024 13:49:06 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
- helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id M_5vu2D9soGD for <buildroot@lists.busybox.net>;
+ Sat, 23 Mar 2024 13:49:47 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6090C822FA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6090C822FA
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6090C822FA
- for <buildroot@buildroot.org>; Sat, 23 Mar 2024 13:49:06 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9682FFF803;
- Sat, 23 Mar 2024 13:49:04 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1ro1k7-006zpS-3C;
- Sat, 23 Mar 2024 14:49:04 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 64655605CD
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 64655605CD
+ for <buildroot@buildroot.org>; Sat, 23 Mar 2024 13:49:47 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4EB358285C; Sat, 23 Mar 2024 13:49:47 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Kadambini Nema <kadambini.nema@gmail.com>
-References: <20240215203121.2948032-1-kadambini.nema@gmail.com>
-Date: Sat, 23 Mar 2024 14:49:03 +0100
-In-Reply-To: <20240215203121.2948032-1-kadambini.nema@gmail.com> (Kadambini
- Nema's message of "Thu, 15 Feb 2024 12:31:21 -0800")
-Message-ID: <875xxdvz1s.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/libusb: bump version to 1.0.27
+To: buildroot@buildroot.org
+Date: Sat, 23 Mar 2024 14:28:35 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c09830644466022de14a350d569e06041b394c53
+X-Git-Newrev: f84b73bfa25ac388e3edd3df85ac642f063055c9
+X-Patchwork-Hint: ignore
+Message-Id: <20240323134947.4EB358285C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ttyd: bump version to 1.7.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,36 +58,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Zoltan Gyarmati <zgyarmati@zgyarmati.de>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Kadambini" == Kadambini Nema <kadambini.nema@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=f84b73bfa25ac388e3edd3df85ac642f063055c9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Change Log : https://github.com/libusb/libusb/blob/d52e355daa09f17ce64819122cb067b8a2ee0d4b/ChangeLog#L4
- > Build test results:
- >  libusb.config
- >    BR2_PACKAGE_LIBUSB=y
- >    BR2_PACKAGE_LIBUSB_EXAMPLES=y
- >    BR2_PACKAGE_LIBUSB_COMPAT=y
+change log - https://github.com/tsl0922/ttyd/releases/tag/1.7.4
 
- > $./utils/test-pkg -k -c libusb.config  -p libusb
- >                     bootlin-armv5-uclibc [1/6]: OK
- >                      bootlin-armv7-glibc [2/6]: OK
- >                    bootlin-armv7m-uclibc [3/6]: OK
- >                      bootlin-x86-64-musl [4/6]: OK
- >                       br-arm-full-static [5/6]: OK
- >                             sourcery-arm [6/6]: SKIPPED
- > 6 builds, 1 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ttyd/ttyd.hash | 2 +-
+ package/ttyd/ttyd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/ttyd/ttyd.hash b/package/ttyd/ttyd.hash
+index 85bd71ba2d..b11327c465 100644
+--- a/package/ttyd/ttyd.hash
++++ b/package/ttyd/ttyd.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  c9cf5eece52d27c5d728000f11315d36cb400c6948d1964a34a7eae74b454099  ttyd-1.7.3.tar.gz
++sha256  300d8cef4b0b32b0ec30d7bf4d3721a5d180e22607f9467a95ab7b6d9652ca9b  ttyd-1.7.4.tar.gz
+ sha256  8b7e100f8311cb428c57609164d93099bada2599f948359045d1ac876a7a625b  LICENSE
+diff --git a/package/ttyd/ttyd.mk b/package/ttyd/ttyd.mk
+index d17e21d60b..d0e144b252 100644
+--- a/package/ttyd/ttyd.mk
++++ b/package/ttyd/ttyd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TTYD_VERSION = 1.7.3
++TTYD_VERSION = 1.7.4
+ TTYD_SITE = $(call github,tsl0922,ttyd,$(TTYD_VERSION))
+ TTYD_LICENSE = MIT
+ TTYD_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
