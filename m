@@ -1,93 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00D35C6FD1F
-	for <buildroot@archiver.kernel.org>; Sat, 23 Mar 2024 16:37:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F70AC54E58
+	for <buildroot@archiver.kernel.org>; Sat, 23 Mar 2024 18:52:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 96EB68293D;
-	Sat, 23 Mar 2024 16:37:07 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2b4y0dMdrPsS; Sat, 23 Mar 2024 16:37:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 641AA408A6;
+	Sat, 23 Mar 2024 18:52:27 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UIUeDcMCaRYe; Sat, 23 Mar 2024 18:52:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B12EE82974
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8D3D140527
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B12EE82974;
-	Sat, 23 Mar 2024 16:37:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E86471BF299
- for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 16:37:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8D3D140527;
+	Sat, 23 Mar 2024 18:52:24 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A66081BF2A5
+ for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 18:52:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E275882974
- for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 16:37:04 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8Dv1vYo8oqRN for <buildroot@lists.busybox.net>;
- Sat, 23 Mar 2024 16:37:03 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9A71E4028D
+ for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 18:52:22 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wrwsNDo0QMzY for <buildroot@lists.busybox.net>;
+ Sat, 23 Mar 2024 18:52:21 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::634; helo=mail-pl1-x634.google.com;
- envelope-from=fancp2007@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C479E8293D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C479E8293D
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com
- [IPv6:2607:f8b0:4864:20::634])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C479E8293D
- for <buildroot@buildroot.org>; Sat, 23 Mar 2024 16:37:02 +0000 (UTC)
-Received: by mail-pl1-x634.google.com with SMTP id
- d9443c01a7336-1e0000cdf99so23073795ad.0
- for <buildroot@buildroot.org>; Sat, 23 Mar 2024 09:37:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1711211821; x=1711816621;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=CqBOZ6Yp+G3MGmpgEoVpF0JHPsxQg+K5+F3muSDxDuA=;
- b=J5dAb3n7RyNmCouq8Ip9dYnc7W+gDcqRE917bwyOdwGf/xkH9sJdjH1yVYENQSScN2
- 0dM5hMjvzH0ubPd5K+LHKRtTJQ0VlQBohe4sFWoOGOA/rH/+5Ew/xU5jOxB4aIphC1EH
- C1d3WNwGFDd1mnQZeHikT29ZBoKfZDlyUCVRi5atAhxN33gFHXZDwWM24WV0FIdD6lyg
- 385We2dUDneWxSKfUX1uBY2D8v3HVwlowxcgwNedkxd+427BLFEdXDYe7qMHgMuikDFJ
- DDWdDbPyTeD2NM+k8aK3WdUQwm1wyglBhm7cJdMwUGEZTiCqkMIWi5xoofn8fkKNz8lL
- 8UiQ==
-X-Gm-Message-State: AOJu0Ywd7KOuOjP1aKTI1mKjAYd1NwdP9y36WrH67L7Ilfy9YmCUpu8P
- g2lZQwAZIf32K+8SZ8ZiB8N8KKCrHd4iDuVd+QIgWlEuPY+WRyEGV6sderOY
-X-Google-Smtp-Source: AGHT+IHxSmGekIrp6RuBZoM0t6m2OluLiHJQbx9MDOvK9htS/0EVKuXB80x71B7+bbhKH1ubREEUIQ==
-X-Received: by 2002:a17:902:7447:b0:1dd:7485:b4c9 with SMTP id
- e7-20020a170902744700b001dd7485b4c9mr2521964plt.22.1711211821185; 
- Sat, 23 Mar 2024 09:37:01 -0700 (PDT)
-Received: from localhost ([142.171.12.18]) by smtp.gmail.com with ESMTPSA id
- y11-20020a170902700b00b001def18c0cfdsm1741055plk.300.2024.03.23.09.37.00
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 23 Mar 2024 09:37:00 -0700 (PDT)
-From: Scott Fan <fancp2007@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun, 24 Mar 2024 00:36:52 +0800
-Message-Id: <20240323163653.1299442-1-fancp2007@gmail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1711211821; x=1711816621; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=CqBOZ6Yp+G3MGmpgEoVpF0JHPsxQg+K5+F3muSDxDuA=;
- b=WbpTOoEqxiT/7wyIK6TgQzlOO9z7PaIresEksyM65nE14FAB0LIKzekc910hBuiAFH
- XYDPyrRi31FeUGB7wF6Jak+yweisx2vgDJwLtiKXAhjqovNddXcmCnammwEyLpr1fny0
- d4HHHNeERxGkxjPNzchuFLSBPfTzRKt4wVoHpVFgMkO4SPLVX0h8zc3K6pbEar+zw27j
- +Q4CyWuVRIBn1d28LANd4P24CPmOHILIyIjvImC5cEYB3tjDkk9wRw3ByRdfpFs2eiG5
- h/HeWVQ2bOdX/y4QZeCZ7CxtoeahmZG8WlUlgzLf5TLV+RP57yVUQvhBWd9HcVefSrIr
- Ix7g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ client-ip=2604:1380:40e1:4800::1; helo=sin.source.kernel.org;
+ envelope-from=jarkko@kernel.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org BA710400B8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BA710400B8
+Received: from sin.source.kernel.org (sin.source.kernel.org
+ [IPv6:2604:1380:40e1:4800::1])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BA710400B8
+ for <buildroot@buildroot.org>; Sat, 23 Mar 2024 18:52:20 +0000 (UTC)
+Received: from smtp.kernel.org (transwarp.subspace.kernel.org [100.75.92.58])
+ by sin.source.kernel.org (Postfix) with ESMTP id A53A7CE0934;
+ Sat, 23 Mar 2024 18:52:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23DB8C433C7;
+ Sat, 23 Mar 2024 18:52:14 +0000 (UTC)
+Mime-Version: 1.0
+Date: Sat, 23 Mar 2024 20:52:13 +0200
+Message-Id: <D01CU8Q4DIO9.1PINW90AAMZU4@kernel.org>
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Arnout Vandecappelle" <arnout@mind.be>, <buildroot@buildroot.org>
+X-Mailer: aerc 0.17.0
+References: <20240321182126.24115-1-jarkko@kernel.org>
+ <20240321182126.24115-3-jarkko@kernel.org>
+ <a5a18fd5-6c05-4231-a7b1-a6c1965919c8@mind.be>
+In-Reply-To: <a5a18fd5-6c05-4231-a7b1-a6c1965919c8@mind.be>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=kernel.org; s=k20201202; t=1711219935;
+ bh=4t2vQumSFlDcZAlFqjBuObZpuB5hP8HFr0MRD6eRFRU=;
+ h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+ b=Q7IklFAiS+7sL0oF+x7C8ndKzsum7mTag0u+Wl0TdW91cIc2HQ1rU3qhNFH0NHe21
+ 49TuLouepnfcU77VY3auOvc+28us+ce5eOVcZDcBNo3Bcr0qJqb8NcTF8YpziQeZhS
+ O3HBqOoiTzlfuhLez+Icyt72oIgRrJ5m2OcTmevKqWDOKj18XhauT5Ry7Zi5vG+8Nn
+ sHZgDNt/QKCor89K8pPHMWmoddv1djS+AqhZp7Iy/4nRed9RVbJ/wGAeR6u4DfSbyu
+ mGMIMmAy5XvXD9a7qSkxB+4E8Z54LVhFe+6MMpQr7POJtNoCIgpdICjDhKj5SM4LMc
+ MUfQ6OEwWU/tw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=WbpTOoEq
-Subject: [Buildroot] [PATCH] configs/beaglebone_defconfig: bump Linux to
- 6.1.80-ti-r34 and U-Boot to 2024.01
+ header.from=kernel.org
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256
+ header.s=k20201202 header.b=Q7IklFAi
+Subject: Re: [Buildroot] [PATCH RFC 2/2] package/swtpm: add host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,46 +82,328 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Lothar Felten <lothar.felten@gmail.com>, Scott Fan <fancp2007@gmail.com>
+Cc: Stefan Berger <stefanb@linux.ibm.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Tested on beaglebone black.
+On Fri Mar 22, 2024 at 10:47 PM EET, Arnout Vandecappelle wrote:
+>   Hi Jarkko.
+>
+> On 21/03/2024 19:21, Jarkko Sakkinen wrote:
+> > Add swtpm and its dependency libtpms to host packages. These are useful
+> > for emulating TPM in QEMU environment.
+>
+>   I don't understand... Does it mean that you run host-swtpm next to host-qemu 
+> and you somehow connect them so it gets exposed as a TPM2 device inside the qemu VM?
 
-[1] https://github.com/beagleboard/linux/releases/tag/6.1.80-ti-r34
+Yes:
 
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
----
- configs/beaglebone_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+https://gitlab.com/jarkkojs/linux-tpmdd-test/-/blob/main/board/qemu/run-qemu.sh.in?ref_type=heads
 
-diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
-index e2d67019b1..064f283489 100644
---- a/configs/beaglebone_defconfig
-+++ b/configs/beaglebone_defconfig
-@@ -17,7 +17,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beaglebone/genimage.cfg"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,6.1.46-ti-r13)/linux-6.1.46-ti-r13.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,6.1.80-ti-r34)/linux-6.1.80-ti-r34.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bb.org"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk am335x-boneblue am335x-boneblack-wireless am335x-bonegreen-wireless"
-@@ -31,7 +31,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am335x_evm"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
--- 
-2.34.1
+>
+> > 
+> > Link: https://gitlab.com/jarkkojs/linux-tpmdd-test
+> > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > ---
+> >   package/libtpms/Config.in                     |  9 ++++
+> >   package/libtpms/libtpms.hash                  |  1 +
+> >   package/libtpms/libtpms.mk                    | 15 ++++++
+>
+>   Please split this in a separate patch for libtpms (so 3 patches in the series).
+>
+>   You also need package/Config.in to source package/libtpms/Config.in
+>
+>   Also, please run `make check-package`. There will undoubtedly be some coding 
+> style issues.
+>
+>   Finally, please add yourself to the DEVELOPERS file for this package. This 
+> way, you'll get an e-mail if the package fails in the autobuilders, or when a 
+> new version is released if the package is registered on release-monitoring.org. 
+> See https://nightly.buildroot.org/#DEVELOPERS
 
+OK, got it. I'll follow the steps.
+
+Yeah, these used to be lying in BR2_EXTERNAL and I was not exactly sure
+how to proceed so I thought that better not to over-engineer.
+
+>
+> >   .../0001-comment-out-expect-and-socat.patch   | 46 +++++++++++++++++++
+> >   package/swtpm/Config.host.in                  |  8 ++++
+>
+>   You also need to add this to package/Config.in.host
+
++1
+
+> >   package/swtpm/swtpm.hash                      |  1 +
+> >   package/swtpm/swtpm.mk                        | 17 +++++++
+> >   7 files changed, 97 insertions(+)
+> >   create mode 100644 package/libtpms/Config.in
+> >   create mode 100644 package/libtpms/libtpms.hash
+> >   create mode 100644 package/libtpms/libtpms.mk
+> >   create mode 100644 package/swtpm/0001-comment-out-expect-and-socat.patch
+> >   create mode 100644 package/swtpm/Config.host.in
+> >   create mode 100644 package/swtpm/swtpm.hash
+> >   create mode 100644 package/swtpm/swtpm.mk
+> > 
+> > diff --git a/package/libtpms/Config.in b/package/libtpms/Config.in
+> > new file mode 100644
+> > index 0000000000..7ef61cf53c
+> > --- /dev/null
+> > +++ b/package/libtpms/Config.in
+> > @@ -0,0 +1,9 @@
+> > +config BR2_PACKAGE_LIBTPMS
+> > +	bool "libtpms"
+> > +        depends on BR2_USE_WCHAR # glib2
+> > +        depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+> > +        depends on BR2_USE_MMU # glib2
+>
+>   If you have those dependencies, I'd expect a corresponding `select 
+> BR2_PACKAGE_GLIB2`. However, there isn't any dependency at all in the .mk file, 
+> so I guess this is in fact not needed.
+
++1
+
+>
+> > +	help
+> > +	  TPM emulation library
+> > +
+> > +	  https://github.com/stefanberger/libtpms
+> > diff --git a/package/libtpms/libtpms.hash b/package/libtpms/libtpms.hash
+> > new file mode 100644
+> > index 0000000000..c31d824af6
+> > --- /dev/null
+> > +++ b/package/libtpms/libtpms.hash
+> > @@ -0,0 +1 @@
+> > +sha256  2807466f1563ebe45fdd12dd26e501e8a0c4fbb99c7c428fbb508789efd221c0  v0.9.6.tar.gz
+>
+>   Please make sure that the license file is also in the .hash file. You can 
+> check this with `make legal-info`.
+
++1
+
+>
+> > diff --git a/package/libtpms/libtpms.mk b/package/libtpms/libtpms.mk
+> > new file mode 100644
+> > index 0000000000..5b1151baff
+> > --- /dev/null
+> > +++ b/package/libtpms/libtpms.mk
+> > @@ -0,0 +1,15 @@
+> > +################################################################################
+> > +#
+> > +# libtpms
+> > +#
+> > +################################################################################
+> > +
+> > +LIBTPMS_VERSION = v0.9.6
+>
+>   Drop the v from the version, otherwise release-monitoring and CPE/CVE checks 
+> don't work. You can add the v below.
+
++1
+
+>
+> > +LIBTPMS_SOURCE = $(LIBTPMS_VERSION).tar.gz
+>
+>   Don't override LIBTPMS_SOURCE, there's no need for that, the default 
+> (libtpms-0.9.6.tar.gz) is better. The github URL will still work. Note that the 
+> hash will change if you change the filename.
+
++1
+
+>
+> > +LIBTPMS_SITE = $(call github,stefanberger,libtpms,$(LIBTPMS_VERSION))
+>
+>   This is where the v should be added:
+>
+> LIBTPMS_SITE = $(call github,stefanberger,libtpms,v$(LIBTPMS_VERSION))
+
++1
+
+>
+> > +LIBTPMS_LICENSE = BSD-3-Clause
+>
+>   It's actually BSD-4-Clause. And unfortunately, it also contains file which 
+> seem to be covered with a modified BSD-2-Clause instead, but let's ignore that :-)
+>
+>   Please add the license file as well:
+>
+> LIBTPMS_LICENSE_FILES = LICENSE
+
++1
+
+>
+> > +LIBTPMS_INSTALL_STAGING = YES
+> > +LIBTPMS_AUTORECONF = YES
+>
+>   You should add a comment explaining why autoreconf is needed - in this case, 
+> because we get the source from git. It's also good to mention in the commit 
+> message that upstream doesn't create release tarballs that include the configure 
+> script.
+
++1
+
+>
+> > +
+> > +$(eval $(autotools-package))
+> > +$(eval $(host-autotools-package))
+> > diff --git a/package/swtpm/0001-comment-out-expect-and-socat.patch b/package/swtpm/0001-comment-out-expect-and-socat.patch
+> > new file mode 100644
+> > index 0000000000..09dcc49a7b
+> > --- /dev/null
+> > +++ b/package/swtpm/0001-comment-out-expect-and-socat.patch
+> > @@ -0,0 +1,46 @@
+> > +From 067c32ba93774b273de9af872b5587798dcabb15 Mon Sep 17 00:00:00 2001
+> > +From: Jarkko Sakkinen <jarkko@kernel.org>
+> > +Date: Tue, 19 Dec 2023 05:21:20 +0200
+> > +Subject: [PATCH] configure.ac: comment out "expect" and "socat"
+>
+>   Please replace this with the patch from PR 844 (and add --disable-tests). Or 
+> wait until Stefan releases v0.8.2 (probably very soon).
+
+Yeah, this happened after I sent this (had a short discussion and I
+tested and ack'd the fix).
+
+Anyway:
+
++1
+
+>
+> > +
+> > +Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > +---
+> > + configure.ac | 16 ++++++++--------
+> > + 1 file changed, 8 insertions(+), 8 deletions(-)
+> > +
+> > +diff --git a/configure.ac b/configure.ac
+> > +index 49caf96..4acc763 100644
+> > +--- a/configure.ac
+> > ++++ b/configure.ac
+> > +@@ -394,20 +394,20 @@ AS_IF([test "x$enable_default_pcr_banks" != "x"],[
+> > + pcr_bank_checks
+> > + AC_SUBST([DEFAULT_PCR_BANKS])
+> > +
+> > +-AC_PATH_PROG([EXPECT], expect)
+> > +-if test "x$EXPECT" = "x"; then
+> > +-	AC_MSG_ERROR([expect is required: expect package])
+> > +-fi
+> > ++# AC_PATH_PROG([EXPECT], expect)
+> > ++# if test "x$EXPECT" = "x"; then
+> > ++# 	AC_MSG_ERROR([expect is required: expect package])
+> > ++# fi
+> > +
+> > + AC_PATH_PROG([GAWK], gawk)
+> > + if test "x$GAWK" = "x"; then
+> > + 	AC_MSG_ERROR([gawk is required: gawk package])
+> > + fi
+> > +
+> > +-AC_PATH_PROG([SOCAT], socat)
+> > +-if test "x$SOCAT" = "x"; then
+> > +-	AC_MSG_ERROR([socat is required: socat package])
+> > +-fi
+> > ++# AC_PATH_PROG([SOCAT], socat)
+> > ++# if test "x$SOCAT" = "x"; then
+> > ++# 	AC_MSG_ERROR([socat is required: socat package])
+> > ++# fi
+> > +
+> > + AC_PATH_PROG([BASE64], base64)
+> > + if test "x$BASE64" = "x"; then
+> > +--
+> > +2.40.1
+> > +
+> > diff --git a/package/swtpm/Config.host.in b/package/swtpm/Config.host.in
+> > new file mode 100644
+> > index 0000000000..e77eea2aa5
+> > --- /dev/null
+> > +++ b/package/swtpm/Config.host.in
+> > @@ -0,0 +1,8 @@
+> > +config BR2_PACKAGE_HOST_SWTPM
+> > +	bool "swtpm-host"
+>
+>   Should be "host swtpm"
+
++1
+
+>
+> > +	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS # gobject-introspection
+> > +	select BR2_PACKAGE_GOBJECT_INTROSPECTION
+>
+>   This is selecting the _target_ gobject-introspection, which makes no sense for 
+> a host package.
+
+Hmm... do not want to say anything just yet because tbh cannot recall
+why it is there but I'll look into this.
+
+>
+> > +	help
+> > +	  Compiles SWTPM software TPM emulator for the host.
+> > +
+> > +	  https://github.com/stefanberger/swtpm
+>
+>   We want to point to something like documentation, which in this case is the 
+> wiki: https://github.com/stefanberger/swtpm/wiki
+
++1
+
+>
+> > diff --git a/package/swtpm/swtpm.hash b/package/swtpm/swtpm.hash
+> > new file mode 100644
+> > index 0000000000..882f06d7a5
+> > --- /dev/null
+> > +++ b/package/swtpm/swtpm.hash
+> > @@ -0,0 +1 @@
+> > +sha256 7bba52aa41090f75087034fac5fe8daed10c3e7e7234df7c9558849318927f41  v0.8.1.tar.gz
+> > diff --git a/package/swtpm/swtpm.mk b/package/swtpm/swtpm.mk
+> > new file mode 100644
+> > index 0000000000..79fbf1f420
+> > --- /dev/null
+> > +++ b/package/swtpm/swtpm.mk
+> > @@ -0,0 +1,17 @@
+> > +################################################################################
+> > +#
+> > +# swtpm
+> > +#
+> > +################################################################################
+> > +
+> > +SWTPM_VERSION = v0.8.1
+> > +SWTPM_SOURCE = $(SWTPM_VERSION).tar.gz
+> > +SWTPM_SITE = $(call github,stefanberger,swtpm,$(SWTPM_VERSION))
+> > +SWTPM_LICENSE = BSD-3-Clause
+> > +SWTPM_AUTORECONF = YES
+>
+>   Same comments as for libtpms for the above 5 lines.
+
++1
+
+>
+> > +
+> > +HOST_SWTPM_DEPENDENCIES = host-libtasn1 host-openssl host-pkgconf host-json-glib host-libtpms
+>
+>   Can you try inside a container (e.g. using utils/docker-run) if this is really 
+> sufficient?
+
+Does it work with podman?
+
+>
+> > +HOST_SWTPM_CONF_ENV = PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)"
+>
+>   This should already be part of the default configure environment, are you sure 
+> it is needed?
+
+Tbh, no I'm not sure :-) I'll try to remove it and see what happens!
+
+>
+>   Regards,
+>   Arnout
+>
+> > +HOST_SWTPM_CONF_OPTS = --without-seccomp
+> > +
+> > +$(eval $(host-autotools-package))
+
+OK, thanks for the throughout and sane remarks!
+
+BR, Jarkko
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
