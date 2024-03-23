@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87125C54E58
-	for <buildroot@archiver.kernel.org>; Sat, 23 Mar 2024 20:39:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D5A2C54E67
+	for <buildroot@archiver.kernel.org>; Sat, 23 Mar 2024 20:39:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5002D6061A;
-	Sat, 23 Mar 2024 20:39:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2C2A66073E;
+	Sat, 23 Mar 2024 20:39:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AhxA5_dGXPyn; Sat, 23 Mar 2024 20:39:02 +0000 (UTC)
+ id gy79XQ2R_WYv; Sat, 23 Mar 2024 20:39:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7729D6063C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B5F596077A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7729D6063C;
-	Sat, 23 Mar 2024 20:39:02 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C512D1BF37E
+	by smtp3.osuosl.org (Postfix) with ESMTP id B5F596077A;
+	Sat, 23 Mar 2024 20:39:04 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id DDB8F1BF84C
  for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 20:39:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BCD5B81768
+ by smtp2.osuosl.org (Postfix) with ESMTP id CBA5540544
  for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 20:39:00 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ToK67tlDWyXk for <buildroot@lists.busybox.net>;
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AVU9P04N_i0n for <buildroot@lists.busybox.net>;
  Sat, 23 Mar 2024 20:39:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1FC1481766
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D183400B8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1FC1481766
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0D183400B8
  for <buildroot@buildroot.org>; Sat, 23 Mar 2024 20:39:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0B431839C9; Sat, 23 Mar 2024 20:39:00 +0000 (UTC)
+ id E92BB8043E; Sat, 23 Mar 2024 20:38:59 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 23 Mar 2024 21:36:48 +0100
+Date: Sat, 23 Mar 2024 21:36:21 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2fd5876a7bedd9051865e73f831a6c05bf62179e
-X-Git-Newrev: 566001a61368f99e66dbdf0200806dc3c4cfd73c
+X-Git-Oldrev: 1f418a6d1412911a3853307752f774ebae888309
+X-Git-Newrev: 2fd5876a7bedd9051865e73f831a6c05bf62179e
 X-Patchwork-Hint: ignore
-Message-Id: <20240323203900.0B431839C9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/zynq_zc706_defconfig: bump to
+Message-Id: <20240323203859.E92BB8043E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/zynq_zc702_defconfig: bump to
  6.1.70
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -66,22 +66,22 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=566001a61368f99e66dbdf0200806dc3c4cfd73c
+commit: https://git.buildroot.net/buildroot/commit/?id=2fd5876a7bedd9051865e73f831a6c05bf62179e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch bumps the zynq_zc706_defconfig to Linux kernel 6.1.70.
+This patch bumps the zynq_zc702_defconfig to Linux kernel 6.1.70.
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
 Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- configs/zynq_zc706_defconfig | 2 +-
+ configs/zynq_zc702_defconfig | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/configs/zynq_zc706_defconfig b/configs/zynq_zc706_defconfig
-index 3489f864e1..ffa734348a 100644
---- a/configs/zynq_zc706_defconfig
-+++ b/configs/zynq_zc706_defconfig
+diff --git a/configs/zynq_zc702_defconfig b/configs/zynq_zc702_defconfig
+index e85285a832..7f762abc58 100644
+--- a/configs/zynq_zc702_defconfig
++++ b/configs/zynq_zc702_defconfig
 @@ -7,7 +7,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynq/post-build.sh"
  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
  BR2_LINUX_KERNEL=y
