@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F2BCCD11BF
-	for <buildroot@archiver.kernel.org>; Sat, 23 Mar 2024 13:50:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38436CD11BF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Mar 2024 13:50:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 302F041526;
-	Sat, 23 Mar 2024 13:50:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E08F241518;
+	Sat, 23 Mar 2024 13:50:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HgsfSF2kHbJN; Sat, 23 Mar 2024 13:50:00 +0000 (UTC)
+ id KvTyOmE3bB3q; Sat, 23 Mar 2024 13:50:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC5D8418A3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 225F341560
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BC5D8418A3;
-	Sat, 23 Mar 2024 13:49:59 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 187CE1BF584
+	by smtp4.osuosl.org (Postfix) with ESMTP id 225F341560;
+	Sat, 23 Mar 2024 13:50:04 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1CAD21BF84C
  for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 13:49:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 931AD408C0
+ by smtp4.osuosl.org (Postfix) with ESMTP id AF05741513
  for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 13:49:48 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ofqcxhx-sGRB for <buildroot@lists.busybox.net>;
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ItpFWOQTmcGe for <buildroot@lists.busybox.net>;
  Sat, 23 Mar 2024 13:49:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C6A3A405F0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A0A441518
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C6A3A405F0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7A0A441518
  for <buildroot@buildroot.org>; Sat, 23 Mar 2024 13:49:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BF6DC8374F; Sat, 23 Mar 2024 13:49:47 +0000 (UTC)
+ id 6237883698; Sat, 23 Mar 2024 13:49:47 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 23 Mar 2024 14:35:43 +0100
+Date: Sat, 23 Mar 2024 14:29:07 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d0d443dd9f17e660b9120770d48721a4f1d5f253
-X-Git-Newrev: e9d97cf81dce303cbe104c310ca7631d1cf94806
+X-Git-Oldrev: f84b73bfa25ac388e3edd3df85ac642f063055c9
+X-Git-Newrev: 66d11f8942fd48887bc19a1c07d036ab7eca2007
 X-Patchwork-Hint: ignore
-Message-Id: <20240323134947.BF6DC8374F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libolm: bump to version 3.2.16
+Message-Id: <20240323134947.6237883698@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/{tzdata,
+ zic}: bump version to 2024a
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,41 +65,68 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e9d97cf81dce303cbe104c310ca7631d1cf94806
+commit: https://git.buildroot.net/buildroot/commit/?id=66d11f8942fd48887bc19a1c07d036ab7eca2007
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Change log:
-https://gitlab.matrix.org/matrix-org/olm/-/blob/master/CHANGELOG.rst
+Release notes - https://mm.icann.org/pipermail/tz-announce/2024-February/000081.html
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libolm/libolm.hash | 2 +-
- package/libolm/libolm.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/tzdata/tzdata.hash | 4 ++--
+ package/tzdata/tzdata.mk   | 2 +-
+ package/zic/zic.hash       | 4 ++--
+ package/zic/zic.mk         | 2 +-
+ 4 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/libolm/libolm.hash b/package/libolm/libolm.hash
-index 044bb24f06..a95115d2fe 100644
---- a/package/libolm/libolm.hash
-+++ b/package/libolm/libolm.hash
-@@ -1,3 +1,3 @@
- # locally computed
--sha256  614c0e4dc4721f57e56c3385bd8def2f71c6631f928a480efd0b4bd8e5435df9  olm-3.2.9.tar.gz
-+sha256  1e90f9891009965fd064be747616da46b232086fe270b77605ec9bda34272a68  olm-3.2.16.tar.gz
- sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
-diff --git a/package/libolm/libolm.mk b/package/libolm/libolm.mk
-index 6f06686555..5c8bcd1f59 100644
---- a/package/libolm/libolm.mk
-+++ b/package/libolm/libolm.mk
+diff --git a/package/tzdata/tzdata.hash b/package/tzdata/tzdata.hash
+index 5488625ddd..d353bc4410 100644
+--- a/package/tzdata/tzdata.hash
++++ b/package/tzdata/tzdata.hash
+@@ -1,4 +1,4 @@
+-# From https://mm.icann.org/pipermail/tz-announce/2023-March/000079.html
+-sha512  608bd286ebcbd0004cfdc1da183273f08aff61f90c8867661154453d77a05d421e4c46ad6d066a1fe2e87d5c82ec0f1c0224667a3b35f3180a3eb7f6ff84cbf5  tzdata2023c.tar.gz
++# From https://mm.icann.org/pipermail/tz-announce/2024-February/000081.html
++sha512  1f09f1b2327cc9e1afc7e9045e83ee3377918dafe1bee2f282b6991828d03b3c70a4d3a17f9207dfb1361bb25bc214a8922a756e84fa114e9ba476226db57236  tzdata2024a.tar.gz
+ # Locally computed:
+ sha256  0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf  LICENSE
+diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+index 33e296d7d7..e367205277 100644
+--- a/package/tzdata/tzdata.mk
++++ b/package/tzdata/tzdata.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBOLM_VERSION = 3.2.9
-+LIBOLM_VERSION = 3.2.16
- LIBOLM_SOURCE = olm-$(LIBOLM_VERSION).tar.gz
- LIBOLM_SITE = https://gitlab.matrix.org/matrix-org/olm/-/archive/$(LIBOLM_VERSION)
- LIBOLM_LICENSE = Apache-2.0
+-TZDATA_VERSION = 2023c
++TZDATA_VERSION = 2024a
+ TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
+ TZDATA_SITE = https://www.iana.org/time-zones/repository/releases
+ TZDATA_SELINUX_MODULES = tzdata
+diff --git a/package/zic/zic.hash b/package/zic/zic.hash
+index a2720a27ba..80c96ed793 100644
+--- a/package/zic/zic.hash
++++ b/package/zic/zic.hash
+@@ -1,4 +1,4 @@
+-# From https://mm.icann.org/pipermail/tz-announce/2023-March/000079.html
+-sha512  fa18bae9c0e7c061bc9d5f5f2eb9967f0e4ddb2baafdee9887fa30cd0c60f4aa6f21eacffb17df0d59d26ff54d08c5dcefa98159309eba497e86443624913a82  tzcode2023c.tar.gz
++# From https://mm.icann.org/pipermail/tz-announce/2024-February/000081.html
++sha512  46da8bfa762c7d109db93e5c060789097fc0e1e38bdad5bb8fec886ef47f138bd03b913a743cd5f7e23dc359a72bfd63e7ffc0de199d2b51e6a174361dbdc43c  tzcode2024a.tar.gz
+ # Locally computed:
+ sha256  0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf  LICENSE
+diff --git a/package/zic/zic.mk b/package/zic/zic.mk
+index a915f6d256..95fa1eaa96 100644
+--- a/package/zic/zic.mk
++++ b/package/zic/zic.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ZIC_VERSION = 2023c
++ZIC_VERSION = 2024a
+ ZIC_SOURCE = tzcode$(ZIC_VERSION).tar.gz
+ ZIC_SITE = https://www.iana.org/time-zones/repository/releases
+ ZIC_STRIP_COMPONENTS = 0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
