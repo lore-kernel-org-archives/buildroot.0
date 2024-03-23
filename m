@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC7EBCD11BF
-	for <buildroot@archiver.kernel.org>; Sat, 23 Mar 2024 13:50:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C72AC54E58
+	for <buildroot@archiver.kernel.org>; Sat, 23 Mar 2024 13:50:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 94976418E9;
-	Sat, 23 Mar 2024 13:50:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7075F418F8;
+	Sat, 23 Mar 2024 13:50:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Tt8XTY33uWhZ; Sat, 23 Mar 2024 13:50:08 +0000 (UTC)
+ id UTsDPgcbjhuO; Sat, 23 Mar 2024 13:50:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 48EB3418F8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7352B4191B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 48EB3418F8;
-	Sat, 23 Mar 2024 13:50:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 89F8B1BF584
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7352B4191B;
+	Sat, 23 Mar 2024 13:50:11 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C21081BF84C
  for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 13:49:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7549D605CD
+ by smtp1.osuosl.org (Postfix) with ESMTP id 74AB5827AA
  for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 13:49:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Vk2Cj8NWXdiT for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OooBXf7_Nupa for <buildroot@lists.busybox.net>;
  Sat, 23 Mar 2024 13:49:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C025E606B4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD3E08235B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C025E606B4
+ by smtp1.osuosl.org (Postfix) with ESMTP id AD3E08235B
  for <buildroot@buildroot.org>; Sat, 23 Mar 2024 13:49:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AADE2836DE; Sat, 23 Mar 2024 13:49:47 +0000 (UTC)
+ id 9B62B83698; Sat, 23 Mar 2024 13:49:47 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 23 Mar 2024 14:35:15 +0100
+Date: Sat, 23 Mar 2024 14:34:03 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 38a20a0998117f3debb4de06e209ba5d82bb7a9d
-X-Git-Newrev: d0d443dd9f17e660b9120770d48721a4f1d5f253
+X-Git-Oldrev: 9f94b3b35423a3d7b93e7fdd67e97dea6e33de60
+X-Git-Newrev: 38a20a0998117f3debb4de06e209ba5d82bb7a9d
 X-Patchwork-Hint: ignore
-Message-Id: <20240323134947.AADE2836DE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/leptonica: bump to version 1.84.1
+Message-Id: <20240323134947.9B62B83698@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/fdk-aac: bump to version 2.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,41 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d0d443dd9f17e660b9120770d48721a4f1d5f253
+commit: https://git.buildroot.net/buildroot/commit/?id=38a20a0998117f3debb4de06e209ba5d82bb7a9d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Change log:
-http://www.leptonica.org/source/version-notes.html
+Change log: https://github.com/mstorsjo/fdk-aac/blob/master/ChangeLog
 
 Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/leptonica/leptonica.hash | 2 +-
- package/leptonica/leptonica.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/fdk-aac/fdk-aac.hash | 5 ++---
+ package/fdk-aac/fdk-aac.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/leptonica/leptonica.hash b/package/leptonica/leptonica.hash
-index 6511d6b410..3416cfeb39 100644
---- a/package/leptonica/leptonica.hash
-+++ b/package/leptonica/leptonica.hash
-@@ -1,3 +1,3 @@
- # locally computed hash
--sha256  8f18615e0743af7df7f50985c730dfcf0c93548073d1f56621e4156a8b54d3dd  leptonica-1.83.1.tar.gz
-+sha256  2b3e1254b1cca381e77c819b59ca99774ff43530209b9aeb511e1d46588a64f6  leptonica-1.84.1.tar.gz
- sha256  87829abb5bbb00b55a107365da89e9a33f86c4250169e5a1e5588505be7d5806  leptonica-license.txt
-diff --git a/package/leptonica/leptonica.mk b/package/leptonica/leptonica.mk
-index 4cb73296e8..0e902c6488 100644
---- a/package/leptonica/leptonica.mk
-+++ b/package/leptonica/leptonica.mk
+diff --git a/package/fdk-aac/fdk-aac.hash b/package/fdk-aac/fdk-aac.hash
+index b10d5f92b1..ae5c81b30f 100644
+--- a/package/fdk-aac/fdk-aac.hash
++++ b/package/fdk-aac/fdk-aac.hash
+@@ -1,6 +1,5 @@
+ # From https://sourceforge.net/projects/opencore-amr/files/fdk-aac/
+-sha1  579b34e8174b4feb21a9c598695f5ff4a7ceef8c  fdk-aac-2.0.2.tar.gz
+-md5  b41222194b31f570b3132bd622a9aef6  fdk-aac-2.0.2.tar.gz
++sha1  29f5485a6ec718335243440600ff78418cd4765b  fdk-aac-2.0.3.tar.gz
+ # Locally computed:
+-sha256  c9e8630cf9d433f3cead74906a1520d2223f89bcd3fa9254861017440b8eb22f  fdk-aac-2.0.2.tar.gz
++sha256  829b6b89eef382409cda6857fd82af84fabb63417b08ede9ea7a553f811cb79e  fdk-aac-2.0.3.tar.gz
+ sha256  95ec80da40b4af12ad4c4f3158c9cfb80f2479f3246e4260cb600827cc8c7836  NOTICE
+diff --git a/package/fdk-aac/fdk-aac.mk b/package/fdk-aac/fdk-aac.mk
+index c66f6df797..01a100fa94 100644
+--- a/package/fdk-aac/fdk-aac.mk
++++ b/package/fdk-aac/fdk-aac.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LEPTONICA_VERSION = 1.83.1
-+LEPTONICA_VERSION = 1.84.1
- LEPTONICA_SITE = https://github.com/DanBloomberg/leptonica/releases/download/$(LEPTONICA_VERSION)
- LEPTONICA_LICENSE = BSD-2-Clause
- LEPTONICA_LICENSE_FILES = leptonica-license.txt
+-FDK_AAC_VERSION = 2.0.2
++FDK_AAC_VERSION = 2.0.3
+ FDK_AAC_SITE = http://downloads.sourceforge.net/project/opencore-amr/fdk-aac
+ FDK_AAC_LICENSE = fdk-aac license
+ FDK_AAC_LICENSE_FILES = NOTICE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
