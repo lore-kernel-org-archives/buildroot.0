@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38436CD11BF
-	for <buildroot@archiver.kernel.org>; Sat, 23 Mar 2024 13:50:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC7EBCD11BF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Mar 2024 13:50:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E08F241518;
-	Sat, 23 Mar 2024 13:50:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 94976418E9;
+	Sat, 23 Mar 2024 13:50:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KvTyOmE3bB3q; Sat, 23 Mar 2024 13:50:04 +0000 (UTC)
+ id Tt8XTY33uWhZ; Sat, 23 Mar 2024 13:50:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 225F341560
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 48EB3418F8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 225F341560;
-	Sat, 23 Mar 2024 13:50:04 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1CAD21BF84C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 48EB3418F8;
+	Sat, 23 Mar 2024 13:50:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 89F8B1BF584
  for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 13:49:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AF05741513
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7549D605CD
  for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 13:49:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ItpFWOQTmcGe for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Vk2Cj8NWXdiT for <buildroot@lists.busybox.net>;
  Sat, 23 Mar 2024 13:49:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A0A441518
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C025E606B4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7A0A441518
+ by smtp3.osuosl.org (Postfix) with ESMTP id C025E606B4
  for <buildroot@buildroot.org>; Sat, 23 Mar 2024 13:49:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6237883698; Sat, 23 Mar 2024 13:49:47 +0000 (UTC)
+ id AADE2836DE; Sat, 23 Mar 2024 13:49:47 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 23 Mar 2024 14:29:07 +0100
+Date: Sat, 23 Mar 2024 14:35:15 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f84b73bfa25ac388e3edd3df85ac642f063055c9
-X-Git-Newrev: 66d11f8942fd48887bc19a1c07d036ab7eca2007
+X-Git-Oldrev: 38a20a0998117f3debb4de06e209ba5d82bb7a9d
+X-Git-Newrev: d0d443dd9f17e660b9120770d48721a4f1d5f253
 X-Patchwork-Hint: ignore
-Message-Id: <20240323134947.6237883698@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/{tzdata,
- zic}: bump version to 2024a
+Message-Id: <20240323134947.AADE2836DE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/leptonica: bump to version 1.84.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,68 +64,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=66d11f8942fd48887bc19a1c07d036ab7eca2007
+commit: https://git.buildroot.net/buildroot/commit/?id=d0d443dd9f17e660b9120770d48721a4f1d5f253
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes - https://mm.icann.org/pipermail/tz-announce/2024-February/000081.html
+Change log:
+http://www.leptonica.org/source/version-notes.html
 
-Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tzdata/tzdata.hash | 4 ++--
- package/tzdata/tzdata.mk   | 2 +-
- package/zic/zic.hash       | 4 ++--
- package/zic/zic.mk         | 2 +-
- 4 files changed, 6 insertions(+), 6 deletions(-)
+ package/leptonica/leptonica.hash | 2 +-
+ package/leptonica/leptonica.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tzdata/tzdata.hash b/package/tzdata/tzdata.hash
-index 5488625ddd..d353bc4410 100644
---- a/package/tzdata/tzdata.hash
-+++ b/package/tzdata/tzdata.hash
-@@ -1,4 +1,4 @@
--# From https://mm.icann.org/pipermail/tz-announce/2023-March/000079.html
--sha512  608bd286ebcbd0004cfdc1da183273f08aff61f90c8867661154453d77a05d421e4c46ad6d066a1fe2e87d5c82ec0f1c0224667a3b35f3180a3eb7f6ff84cbf5  tzdata2023c.tar.gz
-+# From https://mm.icann.org/pipermail/tz-announce/2024-February/000081.html
-+sha512  1f09f1b2327cc9e1afc7e9045e83ee3377918dafe1bee2f282b6991828d03b3c70a4d3a17f9207dfb1361bb25bc214a8922a756e84fa114e9ba476226db57236  tzdata2024a.tar.gz
- # Locally computed:
- sha256  0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf  LICENSE
-diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
-index 33e296d7d7..e367205277 100644
---- a/package/tzdata/tzdata.mk
-+++ b/package/tzdata/tzdata.mk
+diff --git a/package/leptonica/leptonica.hash b/package/leptonica/leptonica.hash
+index 6511d6b410..3416cfeb39 100644
+--- a/package/leptonica/leptonica.hash
++++ b/package/leptonica/leptonica.hash
+@@ -1,3 +1,3 @@
+ # locally computed hash
+-sha256  8f18615e0743af7df7f50985c730dfcf0c93548073d1f56621e4156a8b54d3dd  leptonica-1.83.1.tar.gz
++sha256  2b3e1254b1cca381e77c819b59ca99774ff43530209b9aeb511e1d46588a64f6  leptonica-1.84.1.tar.gz
+ sha256  87829abb5bbb00b55a107365da89e9a33f86c4250169e5a1e5588505be7d5806  leptonica-license.txt
+diff --git a/package/leptonica/leptonica.mk b/package/leptonica/leptonica.mk
+index 4cb73296e8..0e902c6488 100644
+--- a/package/leptonica/leptonica.mk
++++ b/package/leptonica/leptonica.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TZDATA_VERSION = 2023c
-+TZDATA_VERSION = 2024a
- TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
- TZDATA_SITE = https://www.iana.org/time-zones/repository/releases
- TZDATA_SELINUX_MODULES = tzdata
-diff --git a/package/zic/zic.hash b/package/zic/zic.hash
-index a2720a27ba..80c96ed793 100644
---- a/package/zic/zic.hash
-+++ b/package/zic/zic.hash
-@@ -1,4 +1,4 @@
--# From https://mm.icann.org/pipermail/tz-announce/2023-March/000079.html
--sha512  fa18bae9c0e7c061bc9d5f5f2eb9967f0e4ddb2baafdee9887fa30cd0c60f4aa6f21eacffb17df0d59d26ff54d08c5dcefa98159309eba497e86443624913a82  tzcode2023c.tar.gz
-+# From https://mm.icann.org/pipermail/tz-announce/2024-February/000081.html
-+sha512  46da8bfa762c7d109db93e5c060789097fc0e1e38bdad5bb8fec886ef47f138bd03b913a743cd5f7e23dc359a72bfd63e7ffc0de199d2b51e6a174361dbdc43c  tzcode2024a.tar.gz
- # Locally computed:
- sha256  0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf  LICENSE
-diff --git a/package/zic/zic.mk b/package/zic/zic.mk
-index a915f6d256..95fa1eaa96 100644
---- a/package/zic/zic.mk
-+++ b/package/zic/zic.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ZIC_VERSION = 2023c
-+ZIC_VERSION = 2024a
- ZIC_SOURCE = tzcode$(ZIC_VERSION).tar.gz
- ZIC_SITE = https://www.iana.org/time-zones/repository/releases
- ZIC_STRIP_COMPONENTS = 0
+-LEPTONICA_VERSION = 1.83.1
++LEPTONICA_VERSION = 1.84.1
+ LEPTONICA_SITE = https://github.com/DanBloomberg/leptonica/releases/download/$(LEPTONICA_VERSION)
+ LEPTONICA_LICENSE = BSD-2-Clause
+ LEPTONICA_LICENSE_FILES = leptonica-license.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
