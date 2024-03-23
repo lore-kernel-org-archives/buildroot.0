@@ -4,59 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B265C54E58
-	for <buildroot@archiver.kernel.org>; Sat, 23 Mar 2024 12:55:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1CB9C54E58
+	for <buildroot@archiver.kernel.org>; Sat, 23 Mar 2024 12:58:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 43C9E400D8;
-	Sat, 23 Mar 2024 12:55:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 85763400D8;
+	Sat, 23 Mar 2024 12:58:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iBwuG0uF8eRb; Sat, 23 Mar 2024 12:55:17 +0000 (UTC)
+	with ESMTP id lumZ014v9qFW; Sat, 23 Mar 2024 12:58:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5AF08403FF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8CD904010F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5AF08403FF;
-	Sat, 23 Mar 2024 12:55:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8CD904010F;
+	Sat, 23 Mar 2024 12:58:29 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1BBDA1BF3E1
- for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 12:55:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 04A7D1BF3E1
+ for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 12:58:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 07F3D416BF
- for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 12:55:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id F29364017C
+ for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 12:58:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zyRqkdEStR6A for <buildroot@lists.busybox.net>;
- Sat, 23 Mar 2024 12:55:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
- helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id O2G58_sBa5cr for <buildroot@lists.busybox.net>;
+ Sat, 23 Mar 2024 12:58:26 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B2FC8405D4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B2FC8405D4
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B2FC8405D4
- for <buildroot@buildroot.org>; Sat, 23 Mar 2024 12:55:13 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id F3424240003;
- Sat, 23 Mar 2024 12:55:11 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1ro0tz-006suH-0j;
- Sat, 23 Mar 2024 13:55:11 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB1A740143
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id CB1A740143
+ for <buildroot@buildroot.org>; Sat, 23 Mar 2024 12:58:26 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B1C5683907; Sat, 23 Mar 2024 12:58:26 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20240317131446.535633-1-fontaine.fabrice@gmail.com>
-Date: Sat, 23 Mar 2024 13:55:11 +0100
-In-Reply-To: <20240317131446.535633-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 17 Mar 2024 14:14:46 +0100")
-Message-ID: <87jzltyuog.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/spice: fix libressl build
+To: buildroot@buildroot.org
+Date: Sat, 23 Mar 2024 13:50:54 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e30b38f1c5bcc62d387f4b96d20a7a9f4715c7a5
+X-Git-Newrev: 8b3497f3ab19ec828a94eaf19923a07603b5e916
+X-Patchwork-Hint: ignore
+Message-Id: <20240323125826.B1C5683907@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mariadb: requires DES in openssl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,37 +58,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=8b3497f3ab19ec828a94eaf19923a07603b5e916
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fix the following build failure raised since bump of libressl to version
- > 3.5.2 in commit 8b216927db080b38fdbf1f8b025b6f90a89d4bc2:
+Enable DES in openssl to avoid the following build failure raised since
+commit a83d41867c8d69a77d5cd0a665aa216af5340359:
 
- > red-stream.cpp: In function 'RedStreamSslStatus red_stream_ssl_accept(RedStream*)':
- > red-stream.cpp:526:22: error: invalid use of incomplete type 'SSL' {aka 'struct ssl_st'}
- >   526 |     stream->priv->ssl->s3->flags |= SSL3_FLAGS_NO_RENEGOTIATE_CIPHERS;
- >       |                      ^~
- > In file included from /home/buildroot/autobuild/instance-1/output-1/host/i686-buildroot-linux-gnu/sysroot/usr/include/openssl/err.h:120,
- >                  from red-stream.cpp:33:
- > /home/buildroot/autobuild/instance-1/output-1/host/i686-buildroot-linux-gnu/sysroot/usr/include/openssl/ossl_typ.h:173:16: note: forward declaration of 'SSL' {aka 'struct ssl_st'}
- >   173 | typedef struct ssl_st SSL;
- >       |                ^~~~~~
+In file included from /home/buildroot/autobuild/run/instance-2/output-1/build/mariadb-10.11.6/libmysqld/../sql/mysqld.cc:50,
+                 from /home/buildroot/autobuild/run/instance-2/output-1/build/mariadb-10.11.6/libmysqld/lib_sql.cc:34:
+/home/buildroot/autobuild/run/instance-2/output-1/build/mariadb-10.11.6/libmysqld/../sql/des_key_file.h:26:3: error: 'DES_cblock' does not name a type
+   26 |   DES_cblock key1, key2, key3;
+      |   ^~~~~~~~~~
+/home/buildroot/autobuild/run/instance-2/output-1/build/mariadb-10.11.6/libmysqld/../sql/des_key_file.h:31:3: error: 'DES_key_schedule' does not name a type; did you mean 'st_des_keyschedule'?
+   31 |   DES_key_schedule ks1, ks2, ks3;
+      |   ^~~~~~~~~~~~~~~~
+      |   st_des_keyschedule
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/273eadf9e49af55e0932a8293ca65762fb43114f
- >  - http://autobuild.buildroot.org/results/97601f321efc532de0c2ea6aa618ce11fad9e851
+Fixes: a83d41867c8d69a77d5cd0a665aa216af5340359
+ - http://autobuild.buildroot.org/results/bd067de9c2699dc9628c00b929a01890b14d53c1
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mariadb/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/mariadb/Config.in b/package/mariadb/Config.in
+index d88dda3cda..acedd1da9d 100644
+--- a/package/mariadb/Config.in
++++ b/package/mariadb/Config.in
+@@ -11,6 +11,7 @@ config BR2_PACKAGE_MARIADB
+ 	select BR2_PACKAGE_FMT
+ 	select BR2_PACKAGE_NCURSES
+ 	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
+ 	select BR2_PACKAGE_PCRE2
+ 	help
+ 	  MariaDB is one of the most popular database servers in the
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
