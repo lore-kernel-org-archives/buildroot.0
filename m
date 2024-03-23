@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37612C54E58
-	for <buildroot@archiver.kernel.org>; Sat, 23 Mar 2024 13:50:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01F6DCD11BF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Mar 2024 13:50:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 06B5E4184D;
-	Sat, 23 Mar 2024 13:50:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C61BC41B1B;
+	Sat, 23 Mar 2024 13:50:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eNqbPF9MNEaY; Sat, 23 Mar 2024 13:50:37 +0000 (UTC)
+ id JGhbER7vW6Qx; Sat, 23 Mar 2024 13:50:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C7A9841AEB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B731541B0E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C7A9841AEB;
-	Sat, 23 Mar 2024 13:50:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B731541B0E;
+	Sat, 23 Mar 2024 13:50:39 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 316ED1BF584
- for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 13:49:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 63AD71BF584
+ for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 13:50:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A085840648
+ by smtp2.osuosl.org (Postfix) with ESMTP id AD2874064D
  for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 13:49:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VAmToWyPHAwS for <buildroot@lists.busybox.net>;
- Sat, 23 Mar 2024 13:49:48 +0000 (UTC)
+ with ESMTP id 2iE7rMJIvRoO for <buildroot@lists.busybox.net>;
+ Sat, 23 Mar 2024 13:49:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 469814064D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 79239408AA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 469814064D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 79239408AA
  for <buildroot@buildroot.org>; Sat, 23 Mar 2024 13:49:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 425FC810D9; Sat, 23 Mar 2024 13:49:48 +0000 (UTC)
+ id 7588581EDF; Sat, 23 Mar 2024 13:49:48 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 23 Mar 2024 14:38:53 +0100
+Date: Sat, 23 Mar 2024 14:40:36 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 756fdeb76dc4479c9bad42e33c58c60c7150379c
-X-Git-Newrev: 52fc3452ec9d41abc18a69f05b6bd2d18409697f
+X-Git-Oldrev: 354855c4bbdaea82fe8cce5829161ff3363e2292
+X-Git-Newrev: b253f76cd26920c5f036a45ee45b8f7bb9b66910
 X-Patchwork-Hint: ignore
-Message-Id: <20240323134948.425FC810D9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libmbim: bump to 1.30.0
+Message-Id: <20240323134948.7588581EDF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-hatchling: bump to 1.21.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,53 +64,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=52fc3452ec9d41abc18a69f05b6bd2d18409697f
+commit: https://git.buildroot.net/buildroot/commit/?id=b253f76cd26920c5f036a45ee45b8f7bb9b66910
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Explicitly disable newly introduced fuzzer build option.
-
 Changelog:
-https://gitlab.freedesktop.org/mobile-broadband/libmbim/-/blob/mbim-1-30/NEWS
-
+https://hatch.pypa.io/dev/history/hatchling/#hatchling-v1.21.1
 Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libmbim/libmbim.hash | 2 +-
- package/libmbim/libmbim.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-hatchling/python-hatchling.hash | 4 ++--
+ package/python-hatchling/python-hatchling.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libmbim/libmbim.hash b/package/libmbim/libmbim.hash
-index 8e7633cb94..ebc37504c5 100644
---- a/package/libmbim/libmbim.hash
-+++ b/package/libmbim/libmbim.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  cf74682c56f4c34ca4aee86de3b8c425a89fc2c0782052815295faf6a8e0a9fb  libmbim-1.28.2.tar.gz
-+sha256  cfc729d23b9bf699b23a7ef2f5d732d6eff96234e31fed36b778771a6e3d3ee5  libmbim-1.30.0.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0-or-later.txt
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSES/LGPL-2.1-or-later.txt
-diff --git a/package/libmbim/libmbim.mk b/package/libmbim/libmbim.mk
-index 59f55a57bc..717c2396f7 100644
---- a/package/libmbim/libmbim.mk
-+++ b/package/libmbim/libmbim.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-hatchling/python-hatchling.hash b/package/python-hatchling/python-hatchling.hash
+index e1798e882c..df703088e4 100644
+--- a/package/python-hatchling/python-hatchling.hash
++++ b/package/python-hatchling/python-hatchling.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/hatchling/json
+-md5  21e5e7ed5fa6dd0618c5b66eb847f370  hatchling-1.21.0.tar.gz
+-sha256  5c086772357a50723b825fd5da5278ac7e3697cdf7797d07541a6c90b6ff754c  hatchling-1.21.0.tar.gz
++md5  d40aaea58a04a36a2b641f6efe99e362  hatchling-1.21.1.tar.gz
++sha256  bba440453a224e7d4478457fa2e8d8c3633765bafa02975a6b53b9bf917980bc  hatchling-1.21.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  7f143a8127ad4873862d70854b5bd2abd0085aa73e64fd2b08704a3b9f5c07fc  LICENSE.txt
+diff --git a/package/python-hatchling/python-hatchling.mk b/package/python-hatchling/python-hatchling.mk
+index d1ed4d23c2..550dbf0beb 100644
+--- a/package/python-hatchling/python-hatchling.mk
++++ b/package/python-hatchling/python-hatchling.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBMBIM_VERSION = 1.28.2
-+LIBMBIM_VERSION = 1.30.0
- LIBMBIM_SITE = https://gitlab.freedesktop.org/mobile-broadband/libmbim/-/archive/$(LIBMBIM_VERSION)
- LIBMBIM_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (programs)
- LIBMBIM_LICENSE_FILES = \
-@@ -13,7 +13,7 @@ LIBMBIM_CPE_ID_VENDOR = freedesktop
- LIBMBIM_INSTALL_STAGING = YES
- 
- LIBMBIM_DEPENDENCIES = libglib2
--LIBMBIM_CONF_OPTS = -Dman=false
-+LIBMBIM_CONF_OPTS = -Dman=false -Dfuzzer=false
- 
- ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
- LIBMBIM_DEPENDENCIES += gobject-introspection
+-PYTHON_HATCHLING_VERSION = 1.21.0
++PYTHON_HATCHLING_VERSION = 1.21.1
+ PYTHON_HATCHLING_SOURCE = hatchling-$(PYTHON_HATCHLING_VERSION).tar.gz
+-PYTHON_HATCHLING_SITE = https://files.pythonhosted.org/packages/fd/4a/8196e79c0d6e5eb10436dd2fcccc889a76af6ecf9bc35f87408159497d4d
++PYTHON_HATCHLING_SITE = https://files.pythonhosted.org/packages/d8/a1/7dd1caa87c0b15c04c6291e25112e5d082cce02ee87f221a8be1d594f857
+ PYTHON_HATCHLING_LICENSE = MIT
+ PYTHON_HATCHLING_LICENSE_FILES = LICENSE.txt
+ PYTHON_HATCHLING_SETUP_TYPE = pep517
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
