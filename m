@@ -4,98 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D44EC6FD1F
-	for <buildroot@archiver.kernel.org>; Sun, 24 Mar 2024 15:10:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74E81C47DD9
+	for <buildroot@archiver.kernel.org>; Sun, 24 Mar 2024 15:10:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F02854064E;
-	Sun, 24 Mar 2024 15:10:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4638C40650;
+	Sun, 24 Mar 2024 15:10:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mUDQ6_4qutga; Sun, 24 Mar 2024 15:10:22 +0000 (UTC)
+ id jB5rECMsyvVN; Sun, 24 Mar 2024 15:10:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 774FE40633
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C66E40620
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 774FE40633;
-	Sun, 24 Mar 2024 15:10:22 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 865B41BF4DD
- for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 15:10:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1C66E40620;
+	Sun, 24 Mar 2024 15:10:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7994A1BF4DD
+ for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 15:10:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7021A4064E
- for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 15:10:20 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 67B438197D
+ for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 15:10:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id L_dnwtXHAjRu for <buildroot@lists.busybox.net>;
- Sun, 24 Mar 2024 15:10:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aEOwStEu8lf1 for <buildroot@lists.busybox.net>;
+ Sun, 24 Mar 2024 15:10:26 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42c; helo=mail-wr1-x42c.google.com;
+ client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
  envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org F023640620
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F023640620
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F023640620
- for <buildroot@buildroot.org>; Sun, 24 Mar 2024 15:10:18 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id
- ffacd0b85a97d-3416a975840so2711707f8f.0
- for <buildroot@buildroot.org>; Sun, 24 Mar 2024 08:10:18 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8B82A818AC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B82A818AC
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8B82A818AC
+ for <buildroot@buildroot.org>; Sun, 24 Mar 2024 15:10:26 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id
+ ffacd0b85a97d-341b9f6fb2eso1365132f8f.2
+ for <buildroot@buildroot.org>; Sun, 24 Mar 2024 08:10:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1711293017; x=1711897817;
- h=content-transfer-encoding:in-reply-to:from:references:to
+ d=1e100.net; s=20230601; t=1711293025; x=1711897825;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=wSDO/mR/sPl+rnFqYtQBtLJu28vBC8zs9aXJUjIHQQ8=;
- b=tONHVgjQMNvdzpklMQaKBj4dUvEUQUxtB9kPTwAG5zXg2IfcjJwyxxEmfJB1pN0MZR
- yx3ONHi3f8MHMUecNZTSw8aUL+a0YQa1isu1j+GPuAWvryNsEJsxxv0+xf1KMQYYr16l
- l7GHw+2LFsreZwCt18E5PdaDJQCNcgp8b1s+KquauK/6vuAmuAzziKGGCISHVrQNUmL4
- r95KKIK5svT876PgaZ0I/+OMBDJgVJn/tJZ/HnRU2v1xSNCkQG05PhfLj49B1Fut8LWf
- hHAt0TuWSr4dAEBy9nA22u1XjU5fRR7inEtBv8KE0SPbZxN4T1Tm5wWCZS94vGlnK2FK
- 3zqg==
+ bh=d23FYIGRQwIdTbER/1/UYbgqonFRtFTCWgWGch6seAE=;
+ b=cjJsyNgxtzzRKmd+kYMuIXaw481UOeYRxy/nNQL4Wc9yLnfekHIgP5/MQd2PYu8Zau
+ 7Xr7ZEqPRiTFZyUJSwdJ+SCcgqh4gwNc1LA/1iLnV1mfS4d+D5kYt5VVbGvZaD9cCOeD
+ gcMltR6yYc4bwbedHHcID5A1ZHwaqAMOuxxYD/g4r8ePlztrKkw+2R1Pbh0lioHkrCp3
+ eRND8i/R5IWptsfDaEIDfb0wAccpzWijEazM6rXBrWfwBbAz9RqdlnryDQAViS88mhF5
+ x0yE/OFYbwP8mF1h2BT8w6/VGL9VXeCwM7GD4EQk9tJmZZgkUm3z8TM//a7eEgz0uHpE
+ 9Dfw==
 X-Forwarded-Encrypted: i=1;
- AJvYcCX6dpptPRjcadYxHX6hNq+x8+EwG5XyO7Op+zujDloOKbO7GA8hnWQZzEDJsH6ZrdwrGJHAi5j+JPajzL0N2xgFfOcEMnuYgA==
-X-Gm-Message-State: AOJu0Yy3DfuX1dnx2j4HUdUO7W6IlNXqycJAV/Q+SjLUwEUwj7ZaPGGZ
- GTgD22dEhvFB/2LU72L6Hjbyakfj8hszJCNz1j6Ya+Hys1ErxK4P2InJrr8+7RUfWljni/isFU8
- u
-X-Google-Smtp-Source: AGHT+IF/TXfgU1FYveN1JXPnl67NydxF7uPHQWSL/LG0N8j8e2NroMsREhcDjKDQPJztbhSKSmnPhg==
-X-Received: by 2002:a5d:526f:0:b0:33e:4969:f05a with SMTP id
- l15-20020a5d526f000000b0033e4969f05amr2863947wrc.37.1711293016898; 
- Sun, 24 Mar 2024 08:10:16 -0700 (PDT)
+ AJvYcCWHsHkaOUDlNpcHMjQLXdZF8XxQ8WQXXXy2D7o14+68L1wqi0cStbFPwtrdCYc2xc7gWfNgHV3aMW2cOVgER3okvJIIFL103A==
+X-Gm-Message-State: AOJu0Ywf2E4WNtyrPl4xQuGca+cflw+8iMGcPLVdapNcVTJcjz4545Ke
+ xKedUFt9CnW9ZmjpKZv0OJJ6YOo1v7kkNFklTKAF7ZgC045Mjpy1SwxZslbwnH0=
+X-Google-Smtp-Source: AGHT+IE/2A8SuHIE4rO3YPz5pOsLEKExpDHSxrDQIVqHuWgS5XONt0DmmRHcrppqFDxwGisx0wCsFQ==
+X-Received: by 2002:adf:ea0a:0:b0:33e:89ad:efbe with SMTP id
+ q10-20020adfea0a000000b0033e89adefbemr3483699wrm.45.1711293024633; 
+ Sun, 24 Mar 2024 08:10:24 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
  (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- x18-20020adfffd2000000b0034181bea3b0sm7035705wrs.3.2024.03.24.08.10.15
+ x18-20020adfffd2000000b0034181bea3b0sm7035705wrs.3.2024.03.24.08.10.23
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 24 Mar 2024 08:10:16 -0700 (PDT)
-Message-ID: <248edb02-2cb3-42a5-9907-892d521a21aa@mind.be>
-Date: Sun, 24 Mar 2024 16:10:14 +0100
+ Sun, 24 Mar 2024 08:10:24 -0700 (PDT)
+Message-ID: <0621f0f7-95f5-4025-9c2f-47c47d4f150a@mind.be>
+Date: Sun, 24 Mar 2024 16:10:22 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Content-Language: en-GB
-To: Thomas Devoogdt <thomas@devoogdt.com>, buildroot@buildroot.org
-References: <20240323232116.3071446-1-thomas@devoogdt.com>
-In-Reply-To: <20240323232116.3071446-1-thomas@devoogdt.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20240323214951.6628-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <20240323214951.6628-1-fontaine.fabrice@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1711293017; x=1711897817; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:references:to
+ d=mind.be; s=google; t=1711293025; x=1711897825; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=wSDO/mR/sPl+rnFqYtQBtLJu28vBC8zs9aXJUjIHQQ8=;
- b=YtSloTPtPQwTWaXLVq7aqCYXVKqTTr7YpzVs/uPnNhuZomGc5YkMzKFYWOBQHmomWx
- e5Ll/bw38A50pc/b6ma+Nw0vtLy63Nfcpn0d4F63UcbjhLkGn8f3wJHP1sa/2PZLUSNn
- MUlcUrlMt1oi+0adc5zGb9FeV7aLQ4VfHH+0tGPGiOxDoZi3ztBBpSqWtKSM5p5OqCXD
- TRIVaAsJSMTur0neKqeG5Oa5607iVY2uSl5z/3rBpKmlrKNGJqSoBoHJ+eFuvYCKFgWI
- kid5Qqoh3a4B9ZCGR4Z+4PnSozYLtY1V6lYrfwVv/c3AKTtcgQ5sQpd14yPseuusgPZ3
- JjuQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=d23FYIGRQwIdTbER/1/UYbgqonFRtFTCWgWGch6seAE=;
+ b=Ff14rM02akmtlX/bsq9C+MFzyqdI4/9NSiPaaBx2IVdwB8Y3hhfiKFbRta//P+GQYc
+ nT7+M97tpzxvdG637KH/dWxEcyG65J3QgCQucgeW+bS9dReHL7pKzjKu4B/VWzBppWqK
+ i8qM+7NgkOlOPBsH2Si4pzvsohXfS5VJLEx58X3PDsoWLp6CMWFDMFZr4IWp2A3GoWeC
+ 83FqivaiaEnQWeSNXR7GAgvZkh1+VZtYIz+B20tYmW7bD0D8gNYsn+Zj9ZSzZSY0dzy5
+ lyfAV1+kijUThZzStD6vfcDPkh9/6z/TW6I90CDy8PVwc8WMYYGG/DQWqrmQh72y4aHi
+ ixrQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=YtSloTPt
-Subject: Re: [Buildroot] [PATCH v1] package/fluent-bit: bump to v3.0.0
+ header.a=rsa-sha256 header.s=google header.b=Ff14rM02
+Subject: Re: [Buildroot] [PATCH 1/1] package/fdk-aac: enable on s390x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -109,6 +108,7 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: Gilles Talis <gilles.talis@gmail.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -116,15 +116,12 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 24/03/2024 00:21, Thomas Devoogdt wrote:
-> Release Notes:
-> - https://fluentbit.io/announcements/v3.0.0/
+On 23/03/2024 22:49, Fabrice Fontaine wrote:
+> s390x is supported since bump to version 2.0.3 in commit
+> 38a20a0998117f3debb4de06e209ba5d82bb7a9d and
+> https://github.com/mstorsjo/fdk-aac/commit/c16d5d72c99a77c8bcb788a922323b0b59035803
 > 
-> Also drop 0004-wasm-restore-support-for-some-targets-8401.patch,
-> which was accepted upstream.
-> (See: https://github.com/fluent/fluent-bit/commit/40bb0fbe17efa6b4b1a96940e9ff7374b1a0c3eb)
-> 
-> Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
   Applied to master, thanks.
 
@@ -132,83 +129,21 @@ On 24/03/2024 00:21, Thomas Devoogdt wrote:
   Arnout
 
 > ---
->   ...estore-support-for-some-targets-8401.patch | 43 -------------------
->   package/fluent-bit/fluent-bit.hash            |  2 +-
->   package/fluent-bit/fluent-bit.mk              |  2 +-
->   3 files changed, 2 insertions(+), 45 deletions(-)
->   delete mode 100644 package/fluent-bit/0004-wasm-restore-support-for-some-targets-8401.patch
+>   package/fdk-aac/Config.in | 1 +
+>   1 file changed, 1 insertion(+)
 > 
-> diff --git a/package/fluent-bit/0004-wasm-restore-support-for-some-targets-8401.patch b/package/fluent-bit/0004-wasm-restore-support-for-some-targets-8401.patch
-> deleted file mode 100644
-> index ed6206268f..0000000000
-> --- a/package/fluent-bit/0004-wasm-restore-support-for-some-targets-8401.patch
-> +++ /dev/null
-> @@ -1,43 +0,0 @@
-> -From 4a6c5f56cd1a979b91c168fb8e245587c2927aca Mon Sep 17 00:00:00 2001
-> -From: Thomas Devoogdt <thomas@devoogdt.com>
-> -Date: Mon, 22 Jan 2024 19:27:56 +0100
-> -Subject: [PATCH] wasm: restore support for some targets (#8401)
-> -
-> -Somehow, support for ARC, MIPS, and XTENSA got dropped by bumping to v1.3.0,
-> -so restore it now. Remark that those targets are mentioned in the section above.
-> -
-> -See commit fa6a248746f9f481b5f6aef49716141fa0222650.
-> -
-> -Upstream: https://github.com/fluent/fluent-bit/pull/8401
-> -Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-> ----
-> - src/wasm/CMakeLists.txt | 6 ++++++
-> - 1 file changed, 6 insertions(+)
-> -
-> -diff --git a/src/wasm/CMakeLists.txt b/src/wasm/CMakeLists.txt
-> -index a258dc063..4ea7eba65 100644
-> ---- a/src/wasm/CMakeLists.txt
-> -+++ b/src/wasm/CMakeLists.txt
-> -@@ -51,6 +51,10 @@ elseif (WAMR_BUILD_TARGET MATCHES "AARCH64.*")
-> - elseif (WAMR_BUILD_TARGET MATCHES "ARM.*")
-> -   add_definitions(-DBUILD_TARGET_ARM)
-> -   add_definitions(-DBUILD_TARGET="${WAMR_BUILD_TARGET}")
-> -+elseif (WAMR_BUILD_TARGET STREQUAL "MIPS")
-> -+  add_definitions(-DBUILD_TARGET_MIPS)
-> -+elseif (WAMR_BUILD_TARGET STREQUAL "XTENSA")
-> -+  add_definitions(-DBUILD_TARGET_XTENSA)
-> - elseif (WAMR_BUILD_TARGET STREQUAL "RISCV64" OR WAMR_BUILD_TARGET STREQUAL "RISCV64_LP64D")
-> -   add_definitions(-DBUILD_TARGET_RISCV64_LP64D)
-> - elseif (WAMR_BUILD_TARGET STREQUAL "RISCV64_LP64")
-> -@@ -59,6 +63,8 @@ elseif (WAMR_BUILD_TARGET STREQUAL "RISCV32" OR WAMR_BUILD_TARGET STREQUAL "RISC
-> -   add_definitions(-DBUILD_TARGET_RISCV32_ILP32D)
-> - elseif (WAMR_BUILD_TARGET STREQUAL "RISCV32_ILP32")
-> -   add_definitions(-DBUILD_TARGET_RISCV32_ILP32)
-> -+elseif (WAMR_BUILD_TARGET STREQUAL "ARC")
-> -+  add_definitions(-DBUILD_TARGET_ARC)
-> - else ()
-> -   message (FATAL_ERROR "-- Build target isn't set")
-> - endif ()
-> ---
-> -2.34.1
-> -
-> diff --git a/package/fluent-bit/fluent-bit.hash b/package/fluent-bit/fluent-bit.hash
-> index 2c34583f7a..cc9c976d60 100644
-> --- a/package/fluent-bit/fluent-bit.hash
-> +++ b/package/fluent-bit/fluent-bit.hash
-> @@ -1,3 +1,3 @@
->   # Locally computed
-> -sha256  8e7e951b2907e9d29508699c71c8949a4a22d750d54ffa5ee5b96537e59371dd  fluent-bit-2.2.2.tar.gz
-> +sha256  e70ae5be2f0ca1cb842a1c8d2762437907c522765f79b5c0c391eaa1b57c9f4c  fluent-bit-3.0.0.tar.gz
->   sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
-> diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/fluent-bit.mk
-> index 00a8904c55..33054bea66 100644
-> --- a/package/fluent-bit/fluent-bit.mk
-> +++ b/package/fluent-bit/fluent-bit.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
+> diff --git a/package/fdk-aac/Config.in b/package/fdk-aac/Config.in
+> index 26e060b93d..831db13b21 100644
+> --- a/package/fdk-aac/Config.in
+> +++ b/package/fdk-aac/Config.in
+> @@ -7,6 +7,7 @@ config BR2_PACKAGE_FDK_AAC_ARCH_SUPPORTS
+>   	default y if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+>   	default y if BR2_powerpc
+>   	default y if BR2_sh
+> +	default y if BR2_s390x
 >   
-> -FLUENT_BIT_VERSION = 2.2.2
-> +FLUENT_BIT_VERSION = 3.0.0
->   FLUENT_BIT_SITE = $(call github,fluent,fluent-bit,v$(FLUENT_BIT_VERSION))
->   FLUENT_BIT_LICENSE = Apache-2.0
->   FLUENT_BIT_LICENSE_FILES = LICENSE
+>   config BR2_PACKAGE_FDK_AAC
+>   	bool "fdk-aac"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
