@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58BE6C6FD1F
-	for <buildroot@archiver.kernel.org>; Sun, 24 Mar 2024 15:11:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34CB3C6FD1F
+	for <buildroot@archiver.kernel.org>; Sun, 24 Mar 2024 15:11:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1D866400E4;
-	Sun, 24 Mar 2024 15:11:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ED96F40639;
+	Sun, 24 Mar 2024 15:11:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vYwXTvol6dJN; Sun, 24 Mar 2024 15:11:28 +0000 (UTC)
+ id 8bQxNLVa3ENW; Sun, 24 Mar 2024 15:11:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DCF3240608
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F76940673
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DCF3240608;
-	Sun, 24 Mar 2024 15:11:27 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6A78D1BF4DD
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7F76940673;
+	Sun, 24 Mar 2024 15:11:30 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6CF081BF861
  for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 15:11:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 63F146075B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 65F8640469
  for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 15:11:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pAS26XY6TOMS for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dpMSKDC4mWUs for <buildroot@lists.busybox.net>;
  Sun, 24 Mar 2024 15:11:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7FE40605BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7D85240004
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7FE40605BB
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7D85240004
  for <buildroot@buildroot.org>; Sun, 24 Mar 2024 15:11:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 695D583AE9; Sun, 24 Mar 2024 15:11:25 +0000 (UTC)
+ id 6008C83B5F; Sun, 24 Mar 2024 15:11:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 24 Mar 2024 15:59:09 +0100
+Date: Sun, 24 Mar 2024 15:58:43 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e248a312b04a86881b5a243433a213bfd8eea057
-X-Git-Newrev: 49384a0a01ad8b73ea1dc10043c3605d035933f8
+X-Git-Oldrev: 5e545cd269e0a3bbd6f859f885c887f14d3bd2d9
+X-Git-Newrev: e248a312b04a86881b5a243433a213bfd8eea057
 X-Patchwork-Hint: ignore
-Message-Id: <20240324151125.695D583AE9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libtorrent-rasterbar: bump to
- version 1.2.19
+Message-Id: <20240324151125.6008C83B5F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/i2pd: bump to version 2.50.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,43 +65,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=49384a0a01ad8b73ea1dc10043c3605d035933f8
+commit: https://git.buildroot.net/buildroot/commit/?id=e248a312b04a86881b5a243433a213bfd8eea057
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/arvidn/libtorrent/releases/tag/v1.2.19
-https://github.com/arvidn/libtorrent/releases/tag/v1.2.18
-https://github.com/arvidn/libtorrent/releases/tag/v1.2.17
-https://github.com/arvidn/libtorrent/releases/tag/v1.2.16
+Update hash of license file (date updated with
+https://github.com/PurpleI2P/i2pd/commit/d5ee1f602fdc7a47ccc9a4e239ea720dd63f123a)
+
+https://github.com/PurpleI2P/i2pd/blob/2.50.2/ChangeLog
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/libtorrent-rasterbar/libtorrent-rasterbar.hash | 2 +-
- package/libtorrent-rasterbar/libtorrent-rasterbar.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/i2pd/i2pd.hash | 6 +++---
+ package/i2pd/i2pd.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.hash b/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
-index 3f59642b72..b1abe85d84 100644
---- a/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
-+++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  c8ad8638684c0a903ebabc30490079e31b1a6a638da2adec5a8bef6a0e62214b  libtorrent-rasterbar-1.2.15.tar.gz
-+sha256  eee8e99548dc5eb5e643e49db9202f4f97112c032dba883dfdc8144af5b6e40e  libtorrent-rasterbar-1.2.19.tar.gz
- sha256  f3a5dd1558cce616b12edad521427ec8976ce2bb0af33f7f359cfa648bf55ad8  COPYING
-diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
-index 085b38343c..6b497bbe58 100644
---- a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
-+++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
+diff --git a/package/i2pd/i2pd.hash b/package/i2pd/i2pd.hash
+index 98c0db243d..cc099a94ff 100644
+--- a/package/i2pd/i2pd.hash
++++ b/package/i2pd/i2pd.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/PurpleI2P/i2pd/releases/download/2.43.0/SHA512SUMS
+-sha512  7247850cd47cccc540346b4a1becc6dba5f40bcb333cd722e9fc59fd8b0beddee700376829d29add05cea6b84bb34303ed37e01914a1a41cf8cd94fe5c826e4a  i2pd-2.43.0.tar.gz
++# From https://github.com/PurpleI2P/i2pd/releases/download/2.50.2/SHA512SUMS
++sha512  7df7a578711a959feee4326060829cf87c0d1669e473934549cb59d868a7aef7300ecd2d7a6b92a2295aa7e97964cc16d0e44a334db917e22b0b59573a9052de  i2pd-2.50.2.tar.gz
+ # Locally computed:
+-sha256  9c87aff490b272254d716475e3c4973f5f64af1d18f9f6962c1e61e252e1ad9a  LICENSE
++sha256  e32cc0171ce3301afa67d83f61598f29af7efdf8218dfb66cc1a72224474ec2c  LICENSE
+diff --git a/package/i2pd/i2pd.mk b/package/i2pd/i2pd.mk
+index ad268a235c..402931c655 100644
+--- a/package/i2pd/i2pd.mk
++++ b/package/i2pd/i2pd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBTORRENT_RASTERBAR_VERSION = 1.2.15
-+LIBTORRENT_RASTERBAR_VERSION = 1.2.19
- LIBTORRENT_RASTERBAR_SITE = \
- 	https://github.com/arvidn/libtorrent/releases/download/v$(LIBTORRENT_RASTERBAR_VERSION)
- LIBTORRENT_RASTERBAR_LICENSE = BSD-3-Clause
+-I2PD_VERSION = 2.43.0
++I2PD_VERSION = 2.50.2
+ I2PD_SITE = $(call github,PurpleI2P,i2pd,$(I2PD_VERSION))
+ I2PD_LICENSE = BSD-3-Clause
+ I2PD_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
