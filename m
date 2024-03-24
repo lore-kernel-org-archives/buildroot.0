@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4ADAFC6FD1F
-	for <buildroot@archiver.kernel.org>; Sun, 24 Mar 2024 15:11:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4950DC6FD1F
+	for <buildroot@archiver.kernel.org>; Sun, 24 Mar 2024 15:11:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1A075406AF;
-	Sun, 24 Mar 2024 15:11:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 167A4406DB;
+	Sun, 24 Mar 2024 15:11:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dDnxWDVgCdXM; Sun, 24 Mar 2024 15:11:45 +0000 (UTC)
+ id BBwynSdbNkYm; Sun, 24 Mar 2024 15:11:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0918D4064E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 570F140718
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0918D4064E;
-	Sun, 24 Mar 2024 15:11:45 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3DD211BF4DD
+	by smtp4.osuosl.org (Postfix) with ESMTP id 570F140718;
+	Sun, 24 Mar 2024 15:11:47 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id ACE1B1BF4DD
  for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 15:11:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 85E2F60709
+ by smtp1.osuosl.org (Postfix) with ESMTP id 95D2481E21
  for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 15:11:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Mtus0oB6UUP9 for <buildroot@lists.busybox.net>;
- Sun, 24 Mar 2024 15:11:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TaQsChJtp_C0 for <buildroot@lists.busybox.net>;
+ Sun, 24 Mar 2024 15:11:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 88D14606EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E041181E23
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 88D14606EA
+ by smtp1.osuosl.org (Postfix) with ESMTP id E041181E23
  for <buildroot@buildroot.org>; Sun, 24 Mar 2024 15:11:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 74EAD83B61; Sun, 24 Mar 2024 15:11:25 +0000 (UTC)
+ id CE4CF83AE9; Sun, 24 Mar 2024 15:11:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 24 Mar 2024 15:59:28 +0100
+Date: Sun, 24 Mar 2024 16:03:59 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 49384a0a01ad8b73ea1dc10043c3605d035933f8
-X-Git-Newrev: c1c096f91da5bfc45f1842b6dd12f1f0e016dbc4
+X-Git-Oldrev: eda991ab095a1adc95d25bd85ed88669ed364e1e
+X-Git-Newrev: 9efeb7e91440c20aea6cb0e07027081dbba4604d
 X-Patchwork-Hint: ignore
-Message-Id: <20240324151125.74EAD83B61@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/msmtp: bump version to 1.8.25
+Message-Id: <20240324151125.CE4CF83AE9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gnu-efi: bump to version 3.0.18
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,45 +65,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c1c096f91da5bfc45f1842b6dd12f1f0e016dbc4
+commit: https://git.buildroot.net/buildroot/commit/?id=9efeb7e91440c20aea6cb0e07027081dbba4604d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes - https://marlam.de/msmtp/news/msmtp-1-8-25/
+For commit logs, see:
+https://sourceforge.net/p/gnu-efi/code/ci/3.0.18/log/
 
-Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
+This bump is motivated by riscv64 improvements.
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/msmtp/msmtp.hash | 4 ++--
- package/msmtp/msmtp.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/gnu-efi/gnu-efi.hash | 6 +++---
+ package/gnu-efi/gnu-efi.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/msmtp/msmtp.hash b/package/msmtp/msmtp.hash
-index c5fe9d9176..ba4ef02746 100644
---- a/package/msmtp/msmtp.hash
-+++ b/package/msmtp/msmtp.hash
-@@ -1,7 +1,7 @@
- # Locally calculated after checking signature
--# https://marlam.de/msmtp/releases/msmtp-1.8.24.tar.xz.sig
-+# https://marlam.de/msmtp/releases/msmtp-1.8.25.tar.xz.sig
- # with key 2F61B4828BBA779AECB3F32703A2A4AB1E32FD34
--sha256  bd6644b1aaab17d61b86647993e3efad860b23c54283b00ddc579c1f5110aa59  msmtp-1.8.24.tar.xz
-+sha256  2dfe1dbbb397d26fe0b0b6b2e9cd2efdf9d72dd42d18e70d7f363ada2652d738  msmtp-1.8.25.tar.xz
- 
- # Hash for license file:
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/msmtp/msmtp.mk b/package/msmtp/msmtp.mk
-index 93c923a123..b964970bfa 100644
---- a/package/msmtp/msmtp.mk
-+++ b/package/msmtp/msmtp.mk
+diff --git a/package/gnu-efi/gnu-efi.hash b/package/gnu-efi/gnu-efi.hash
+index 7d98650991..e059da867e 100644
+--- a/package/gnu-efi/gnu-efi.hash
++++ b/package/gnu-efi/gnu-efi.hash
+@@ -1,6 +1,6 @@
+ # From http://sourceforge.net/projects/gnu-efi/files
+-md5  832496719182e7d6a4b12bc7c0b534d2  gnu-efi-3.0.17.tar.bz2
+-sha1  9715285022124b231520d58b26709f5ab338e981  gnu-efi-3.0.17.tar.bz2
++md5  0b93ad70dff96991dd87978fc4275bd1  gnu-efi-3.0.18.tar.bz2
++sha1  4f12dc4ab3e7940070c87affea17bf8a6209957a  gnu-efi-3.0.18.tar.bz2
+ # Locally computed
+-sha256  7807e903349343a7a142ebb934703a2872235e89688cf586c032b0a1087bcaf4  gnu-efi-3.0.17.tar.bz2
++sha256  7f212c96ee66547eeefb531267b641e5473d7d8529f0bd8ccdefd33cf7413f5c  gnu-efi-3.0.18.tar.bz2
+ sha256  42d352e9c28dd446fd0209cd6f75588c8e41f0934540bb382bbd61c752360265  README.efilib
+diff --git a/package/gnu-efi/gnu-efi.mk b/package/gnu-efi/gnu-efi.mk
+index 8b9a6aa4c6..96caaeb933 100644
+--- a/package/gnu-efi/gnu-efi.mk
++++ b/package/gnu-efi/gnu-efi.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MSMTP_VERSION = 1.8.24
-+MSMTP_VERSION = 1.8.25
- MSMTP_SITE = https://marlam.de/msmtp/releases
- MSMTP_SOURCE = msmtp-$(MSMTP_VERSION).tar.xz
- MSMTP_DEPENDENCIES = host-pkgconf
+-GNU_EFI_VERSION = 3.0.17
++GNU_EFI_VERSION = 3.0.18
+ GNU_EFI_SOURCE = gnu-efi-$(GNU_EFI_VERSION).tar.bz2
+ GNU_EFI_SITE = http://downloads.sourceforge.net/project/gnu-efi
+ GNU_EFI_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
