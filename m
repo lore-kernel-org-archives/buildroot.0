@@ -1,94 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F228C54E58
-	for <buildroot@archiver.kernel.org>; Sun, 24 Mar 2024 02:51:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2BD1C54E58
+	for <buildroot@archiver.kernel.org>; Sun, 24 Mar 2024 03:29:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D10266062F;
-	Sun, 24 Mar 2024 02:51:11 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PQ7RuRA4b7OG; Sun, 24 Mar 2024 02:51:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2DFAC40127;
+	Sun, 24 Mar 2024 03:29:10 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ScDqCHisoFDR; Sun, 24 Mar 2024 03:29:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E1C7160650
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2910F40201
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E1C7160650;
-	Sun, 24 Mar 2024 02:51:10 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9CC521BF3DD
- for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 02:51:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2910F40201;
+	Sun, 24 Mar 2024 03:29:09 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 79D431BF3AF
+ for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 03:29:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 96B4860650
- for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 02:51:08 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xuK4VCsVIeU6 for <buildroot@lists.busybox.net>;
- Sun, 24 Mar 2024 02:51:05 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 72D2340201
+ for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 03:29:07 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KLElOzoraN9q for <buildroot@lists.busybox.net>;
+ Sun, 24 Mar 2024 03:29:06 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::c36; helo=mail-oo1-xc36.google.com;
+ client-ip=2607:f8b0:4864:20::236; helo=mail-oi1-x236.google.com;
  envelope-from=nemaakhilesh@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 73DB56062F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 73DB56062F
-Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com
- [IPv6:2607:f8b0:4864:20::c36])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 73DB56062F
- for <buildroot@buildroot.org>; Sun, 24 Mar 2024 02:51:05 +0000 (UTC)
-Received: by mail-oo1-xc36.google.com with SMTP id
- 006d021491bc7-5a485724ddaso2055384eaf.1
- for <buildroot@buildroot.org>; Sat, 23 Mar 2024 19:51:05 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F1DEE40127
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F1DEE40127
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com
+ [IPv6:2607:f8b0:4864:20::236])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F1DEE40127
+ for <buildroot@buildroot.org>; Sun, 24 Mar 2024 03:29:05 +0000 (UTC)
+Received: by mail-oi1-x236.google.com with SMTP id
+ 5614622812f47-3c37d50adecso2323809b6e.0
+ for <buildroot@buildroot.org>; Sat, 23 Mar 2024 20:29:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1711248664; x=1711853464;
+ d=1e100.net; s=20230601; t=1711250944; x=1711855744;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=CXLLPSjvlnJabLXxgeFTuBCH88XKQnqsITebXcOQ/Yc=;
- b=GLJDNvSSquOFQJPIEXQ193EeFtbCxzCRmK0tLvUbRLhE9DbnWJay0NFCs4G1GYagMN
- /hhxFDIiYW8sGa1jGY0c0cO4PmEqtEUY0uGCaISB+3GJMwtjvoynim55DR+nbzHimeWZ
- FMwj5/3WOPcHcy9apKLyJES/l0HV2L/qViDapsB+/JpJeZOZo+bR4NdWxEu/h8DLwuD5
- d3gwemX8NPUOPCQrCu5qBKq5ko4otKtCHEijf0Krm9SBBOmcbSSWlvPvsbRfOzR+A5g/
- wvI73GFtxWa9YcW43TX2gL2i5v16CUz66bT65k8W9zFCrBTplZ0phgJMrKlf90xTrK/p
- fMzA==
-X-Gm-Message-State: AOJu0YwWyE3Tzp4KwFCD0OdCu9mF3cU8oMZHfKYhPh2xexcCFtPLGdrv
- m5Xr5J2E19HRPecOsh69Idaan/Vev33OUnqnvzS2Soc3KYOxPndt5EdkfEDb
-X-Google-Smtp-Source: AGHT+IGJW84Im7NBvfPrF8L753AK1KHMamYenZx3BpdkDi8o3udjQFD2LDfkG8EVXRaBV++VmwLbNg==
-X-Received: by 2002:a05:6359:3206:b0:17f:72c9:99fe with SMTP id
- rj6-20020a056359320600b0017f72c999femr1843524rwb.9.1711248663431; 
- Sat, 23 Mar 2024 19:51:03 -0700 (PDT)
+ bh=440+Acupjx1O+f0LSklbH4LfvVnGL3pwd3ZjbYKgy10=;
+ b=F2ENOS2KBK8Ov3mmQJSp9/XZHNsHYUy+gpdEd7r3DAvwLZJko/WUj3RjvfkRX17K8p
+ fuXZmFgeR6lTCedYnQtpw4RoPoESYgI2aHKNRxuguGBtsgUQ7hbsTOFSruYcHWvUm0oB
+ IbCEV+yTN6E94Bk8/G2u2cTX/hj3IWSu+gXSAVZPSIxbzWx15qQqIv+aKjojAIAmvq1P
+ i1RTTT8c4LI4Yw/9C0ec60/xe4A0MDI6CUCSCP+9x7aE7C+9vykb6AJxtvyH9ko0ptum
+ w7+/tqKH1QibRLX0ezcijXTJdllXbEomMOBloVfVec2/QB9/xKN6ZHOCAfLjNXSHKWgB
+ jLcA==
+X-Gm-Message-State: AOJu0Yw5pSrp9QuBY2LUlM3HEm5bBv7KSXDfj6uz7dBz2FZQ2fYpE8eM
+ EEIMg5ttTvkJQZwFZKEPR7uLgD2Q2HYQDNvkuwsCYH4uL8PqPQEzhN6+gs/O
+X-Google-Smtp-Source: AGHT+IFDo/IixmjIDe33UnKGMNpJ/KtfnsuPzZCi8tsFtKE6nlKC331JLMge0mGwwhqhfy311t8lpg==
+X-Received: by 2002:a05:6808:2107:b0:3c3:86a7:75a5 with SMTP id
+ r7-20020a056808210700b003c386a775a5mr4924841oiw.7.1711250943741; 
+ Sat, 23 Mar 2024 20:29:03 -0700 (PDT)
 Received: from localhost.localdomain ([2600:8802:2a05:9000:5be:8083:7ea:b94e])
  by smtp.gmail.com with ESMTPSA id
- fa4-20020a056a002d0400b006e53cc789c3sm1984921pfb.107.2024.03.23.19.51.02
+ kt1-20020a056a004ba100b006ea98271e43sm1853456pfb.144.2024.03.23.20.29.03
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 23 Mar 2024 19:51:03 -0700 (PDT)
+ Sat, 23 Mar 2024 20:29:03 -0700 (PDT)
 From: Akhilesh Nema <nemaakhilesh@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 23 Mar 2024 19:50:59 -0700
-Message-Id: <20240324025059.1253709-1-nemaakhilesh@gmail.com>
+Date: Sat, 23 Mar 2024 20:28:57 -0700
+Message-Id: <20240324032857.1286232-1-nemaakhilesh@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1711248664; x=1711853464; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1711250944; x=1711855744; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=CXLLPSjvlnJabLXxgeFTuBCH88XKQnqsITebXcOQ/Yc=;
- b=PeUtVv2gbF6Q0onOnFgemydgzsX+aGsgF7ZZffBQ4pzwLpKtncrzQR/aKX5tr8tSKp
- ZUemiuMMyXcuk72/HDGpKT01DXthpXRxgAHTx0ruRHYTMNpcK5tVS53w18IGFtxsCMsx
- Oxe9pQ9b2cRuAxIkNKz2kp2oL9SOU19GrcHvuV3Jk6OivQW5rn5x81sVfdK5Ahkt9Zfd
- QvrVQjMO9pN961IC97rqg1BV4utJU9VIWT9MRPYo3mMgp8hs5w0XJknNNg5konaoxVr/
- 57ROtkm/sJ7BZzItd0uf+OXggr+z6o5o4M7mBtgOFdEcfAjnBc5qmsv9ObgZ0+/g6plE
- 2buA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=440+Acupjx1O+f0LSklbH4LfvVnGL3pwd3ZjbYKgy10=;
+ b=Xy3g6QurmV1/YuzQjMhbTrUDzpMDJiHeRJdpTIZMWY7z+tGfa6yq8nEm6yMzbH23dK
+ lMfscuMLXY/RpOctTlM2CvzaGOUiEUeD+59JNvBUqBacSfysLwNMrtTHlNSqEno/QKY8
+ jN8ZFrcgsRhirc5C2HBZGvLu4X6hkE9Mi1SlFmBlHU/lknFOBXy/1JIuAQJ5lVkoFcZ7
+ vmX/67qD03hBnc4eNrLUOfFWR5CwH+JhAD0qnhI6PP538heH8PXTozXzhZXuMJcTAGzf
+ HCVqzwyb2wzSO9Ak+iqoAX/PS4uEKqfO1U2U3Nt/tfp1bBv5H98S4s2baP0PVQmkyGXN
+ cczQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=PeUtVv2g
-Subject: [Buildroot] [PATCH 1/1] package/strace: bump to version 6.8
+ header.s=20230601 header.b=Xy3g6Qur
+Subject: [Buildroot] [PATCH 1/1] package/ethtool: bump to version 6.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,18 +100,22 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Akhilesh Nema <nemaakhilesh@gmail.com>
+Cc: Bernd Kuhls <bernd@kuhls.net>, Akhilesh Nema <nemaakhilesh@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog - https://github.com/strace/strace/releases/tag/v6.8
+Changelog - https://git.kernel.org/pub/scm/network/ethtool/ethtool.git/tree/NEWS?id=0aadd41eab7ea76501e557ccba705a08c07ce088
 
 Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
 ---
 
-./utils/test-pkg -k -c strace.config -p strace
+ethtool.config
+BR2_PACKAGE_ETHTOOL=y
+BR2_PACKAGE_ETHTOOL_PRETTY_PRINT=y
+
+$ ./utils/test-pkg -k -c ethtool.config  -p ethtool
                     bootlin-armv5-uclibc [1/6]: OK
                      bootlin-armv7-glibc [2/6]: OK
                    bootlin-armv7m-uclibc [3/6]: OK
@@ -124,48 +128,39 @@ $ utils/docker-run make check-package
 398423 lines processed
 0 warnings generated
 
-$ ./support/testing/run-tests -k -d dl/ -o testsuite tests.package.test_strace.TestStrace
-17:35:09 TestStrace                               Starting
-17:35:09 TestStrace                               Building
-17:36:36 TestStrace                               Building done
-17:36:41 TestStrace                               Cleaning up
-.
-----------------------------------------------------------------------
-Ran 1 test in 92.282s
-
-OK
+$ ethtool --version
+ethtool version 6.7
 
 Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
 ---
- package/strace/strace.hash | 4 ++--
- package/strace/strace.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/ethtool/ethtool.hash | 2 +-
+ package/ethtool/ethtool.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/strace/strace.hash b/package/strace/strace.hash
-index a35d2b0be6..68b9cc5f93 100644
---- a/package/strace/strace.hash
-+++ b/package/strace/strace.hash
+diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
+index a37c800015..b9bc768e8f 100644
+--- a/package/ethtool/ethtool.hash
++++ b/package/ethtool/ethtool.hash
 @@ -1,5 +1,5 @@
- # Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
--# https://strace.io/files/6.7/strace-6.7.tar.xz.asc
--sha256  2090201e1a3ff32846f4fe421c1163b15f440bb38e31355d09f82d3949922af7  strace-6.7.tar.xz
-+# https://strace.io/files/6.8/strace-6.8.tar.xz.asc
-+sha256  ba6950a96824cdf93a584fa04f0a733896d2a6bc5f0ad9ffe505d9b41e970149  strace-6.8.tar.xz
- sha256  1988d0e1aa101d68855e8c4f940aacf2531051b82f6b608eb026c5fad1f33df1  COPYING
- sha256  7c379436436a562834aa7d2f5dcae1f80a25230fa74201046ca1fba4367d39aa  LGPL-2.1-or-later
-diff --git a/package/strace/strace.mk b/package/strace/strace.mk
-index ddcdfabb29..908aed6653 100644
---- a/package/strace/strace.mk
-+++ b/package/strace/strace.mk
+ # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
+-sha256  833a8493cb9cd5809ab59743092d9a38742c282290800e9626407511bbcebf9e  ethtool-6.6.tar.xz
++sha256  c3ae526b01ce4d8df6c794ab170de4a4104d111ea8d8db3f1fd7c25fcb905619  ethtool-6.7.tar.xz
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  5d632934396f90c82dfebe3c9512648bbb6333b406113d0cd331b0e0aa2d34a1  LICENSE
+diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
+index c9c2856612..77a7e16937 100644
+--- a/package/ethtool/ethtool.mk
++++ b/package/ethtool/ethtool.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--STRACE_VERSION = 6.7
-+STRACE_VERSION = 6.8
- STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
- STRACE_SITE = https://github.com/strace/strace/releases/download/v$(STRACE_VERSION)
- STRACE_LICENSE = LGPL-2.1+
+-ETHTOOL_VERSION = 6.6
++ETHTOOL_VERSION = 6.7
+ ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
+ ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
+ ETHTOOL_LICENSE = GPL-2.0
 -- 
 2.25.1
 
