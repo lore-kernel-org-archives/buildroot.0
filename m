@@ -4,99 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF203C47DD9
-	for <buildroot@archiver.kernel.org>; Sun, 24 Mar 2024 15:47:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9BFBC47DD9
+	for <buildroot@archiver.kernel.org>; Sun, 24 Mar 2024 15:50:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B66AF4034A;
-	Sun, 24 Mar 2024 15:47:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8D0D640004;
+	Sun, 24 Mar 2024 15:50:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Z1c-NtVbd4o8; Sun, 24 Mar 2024 15:47:01 +0000 (UTC)
+ id WzkVcmNHo3R3; Sun, 24 Mar 2024 15:50:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A529240490
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C4184023B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A529240490;
-	Sun, 24 Mar 2024 15:47:01 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4D2F81BF4DD
- for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 15:47:00 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7C4184023B;
+	Sun, 24 Mar 2024 15:50:23 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 852031BF4DD
+ for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 15:50:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3829240490
- for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 15:47:00 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 71ABD60725
+ for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 15:50:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VpRs_vTseuNK for <buildroot@lists.busybox.net>;
- Sun, 24 Mar 2024 15:46:59 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8h1pDZV_ioVl for <buildroot@lists.busybox.net>;
+ Sun, 24 Mar 2024 15:50:20 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
+ client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
  envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 370F540469
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 370F540469
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 370F540469
- for <buildroot@buildroot.org>; Sun, 24 Mar 2024 15:46:59 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-41488f9708fso1507515e9.3
- for <buildroot@buildroot.org>; Sun, 24 Mar 2024 08:46:59 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 538E4606D4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 538E4606D4
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 538E4606D4
+ for <buildroot@buildroot.org>; Sun, 24 Mar 2024 15:50:20 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 5b1f17b1804b1-41400a9844aso26338835e9.0
+ for <buildroot@buildroot.org>; Sun, 24 Mar 2024 08:50:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1711295217; x=1711900017;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ d=1e100.net; s=20230601; t=1711295418; x=1711900218;
+ h=content-transfer-encoding:in-reply-to:from:references:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=P37Hz6CWnlwo37+xtM7BSnIRLHYADM5cziZ+433vLmg=;
- b=LFDlisgzMWqqinl8M+3wEhQmm4Rtaeo4w8HK4OuvgCGeVXk884eI/r+90ORRAqVcaD
- 60d9TLVdvzH7m8zMr+lgkDz4EMxdCnPsuNc4kDGl2twZS2s0H1RuHMmD60Lk457vU3nh
- 4jKjHQ5+Ue+kVSc5eCAj7q11ln6wudDjBtZCRtiS/r7RLYT2RXn27f/f+O2eNZHKgZkT
- dOVlHb/X7zfabEuzhM8lg5QUP90OmtNhSnglkDH/qFCKTd1ll8rzfv3H6AqQUXfLXV29
- M1p07YwxFqLPBcmla2Gv2FGS03bad7m5sKSHWez5b/rIKB6KEfp0z/MFKgiwzfY0YXqV
- 5wPA==
+ bh=k/VcDQHZQlcQ33hKtpIn6KR4Ll/QOn8MtAefC7h6GUo=;
+ b=ITK/Pz1U7l0LdlQp8xoKmihjM6USB8iyty0zqPXj6KhymcfJLZY63hq/Er/3iw9vYk
+ pzMyysvUIyUG1uNNAXqbs2+sOJBe604IKPyXZQmL3aJdPgWvCOFCOm6KWvJVxphGZVjx
+ vvFZQI/m4btrc6QwGHLXlVut7wPlea5jdg1TmNryY0j7Fjd4vl9QuO81LXQL8qMoviTU
+ 9Cw1cUTD3hqsPoqQwtS0PbBfvWB6jQIrI4KDShlkfbiugqfBPWJ7h7ezylbgW5tPP+CJ
+ 1Z5U6OtYdThPzQ6Io37egbhHg4b9mfMpFR05q2F0o1ht6qcprq4JojbAGA5KVLCVxF2W
+ X8bA==
 X-Forwarded-Encrypted: i=1;
- AJvYcCUmAK3gQqOo1WLLBxK09IWFXva5V7VfmPtFzLD4RMbSHx1gyb8Ut8YOMIwxb6uZyqLXxSWGnmK5LAPt05w+g3v3hnl7nAk20g==
-X-Gm-Message-State: AOJu0YzW5Bk++asHeI/939ISR+7M++yusCiGSrl1PHxTym5OuI+I+1es
- VSC7/mNd44kny3pdUVgJ0MWcNixBw12tRPUN4jY8hzyLtZfdjz6nYZYv9G5sL+44OBks2TrF1NT
- 2
-X-Google-Smtp-Source: AGHT+IE4K10WSHkaqZQkquT1kjf2wh0Ld2aL6Cy70ck8Hm9iaBCS+RSuNmh9/fFYU6jE8+HxS+IaPw==
-X-Received: by 2002:a05:600c:214:b0:414:9d1:d67b with SMTP id
- 20-20020a05600c021400b0041409d1d67bmr2774128wmi.36.1711295217231; 
- Sun, 24 Mar 2024 08:46:57 -0700 (PDT)
+ AJvYcCXxaKSDtu3BaqYY3rcWolUCzps8DYVq6XBwU1lZjxYCkzhYFjaqrqtc29asfibmF91prajY91WvVo6Fp1vk6zFguS/Igz8RMQ==
+X-Gm-Message-State: AOJu0YxCEMgOxdmOJVNGY9bxKgefAZSlwIjLBYissvd9jsNI9YyQDojG
+ cgFiLzc6md1Iq1LqF9xXbiA6JelW9x6n1OgcMXo+3YG3b5vErLJf9smmhBD0AxA=
+X-Google-Smtp-Source: AGHT+IExnFvnplo87KwU1c8aXSWb/3RhCxCASKP6vKGJQEiyPZ/CD/A3k6KW1mjpSV3Nqd/BJ+NW3A==
+X-Received: by 2002:adf:fb4a:0:b0:33e:6760:5298 with SMTP id
+ c10-20020adffb4a000000b0033e67605298mr3652080wrs.29.1711295418225; 
+ Sun, 24 Mar 2024 08:50:18 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
  (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- fl15-20020a05600c0b8f00b00414881b2ecbsm1926026wmb.3.2024.03.24.08.46.56
+ h2-20020a5d5042000000b00341c162a6d4sm3966357wrt.107.2024.03.24.08.50.17
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 24 Mar 2024 08:46:56 -0700 (PDT)
-Message-ID: <76f1fad4-c120-4d07-b825-3f8283031262@mind.be>
-Date: Sun, 24 Mar 2024 16:46:54 +0100
+ Sun, 24 Mar 2024 08:50:17 -0700 (PDT)
+Message-ID: <757b85e4-3f1c-47c2-9149-0e64c83e0f3d@mind.be>
+Date: Sun, 24 Mar 2024 16:50:15 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Content-Language: en-GB
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20240315214712.4897-1-fontaine.fabrice@gmail.com>
-In-Reply-To: <20240315214712.4897-1-fontaine.fabrice@gmail.com>
+References: <20240315221029.88170-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <20240315221029.88170-1-fontaine.fabrice@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1711295217; x=1711900017; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ d=mind.be; s=google; t=1711295418; x=1711900218; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:references:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=P37Hz6CWnlwo37+xtM7BSnIRLHYADM5cziZ+433vLmg=;
- b=YOqTo4kLSqPWEieyX5LawjwUMwbIp4u3dqdK9WBoo/YmH52A8d/sfYtBO6MatVPAck
- HPt4IYncUPG7yRJsQG3ktcu3STWUhcV8nHTt2wudZCJk+7qd5oEiuN1iXhAgRzLe3m7T
- LFoBsXu8csxGYFhO97m2vPJPe6N/J6dXZYWSYs38FXkM3WS1lMoizjvI3skNmH5QokB6
- BJLTSwXGVtKq6aggG1amG92WmmMOScfYvWYkStbke+qqeWqSqCFeDq7A+t7b+932f+XG
- G+MSrBOqFm/srBL/52NAorg4qCyrtr2bO5PAmgj2/YDi7252WeAAVJ2c8Q+4RV8GwkYA
- 0wZA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=k/VcDQHZQlcQ33hKtpIn6KR4Ll/QOn8MtAefC7h6GUo=;
+ b=hgfKmb/Jc4x68DWoBk5t/52jduI7eMzcWDytI1QYfsh0f117P0zo4Ufu4vJw/FUHuX
+ HDaSHppFksMtqPda1sML+bFLwJaFjdY7JmoGg1Jpt1G6Z8kUUTN6DvuluWWXoAMDzCu7
+ URF9fTkMG+z43MW5tDjU76aDPKq+As7A2rAsrFhiSo9act7pH9W5iDqW9Clh2vHIMf82
+ cAN5dY9Jw4FN3HU3xGnES4cCIbtGDQRPWrMpWPEmACMIUtpTRQPywemFsxzx+foTgje4
+ zm7774kfzPVvV3Aw592z7pOB8CEdN2h9kGTZmTMWsdHm9/vfKlUoprmJSScG2ke4ZSPS
+ RSWg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=YOqTo4kL
-Subject: Re: [Buildroot] [PATCH 1/1] package/multipath-tools: drop README.md
- from license files
+ header.a=rsa-sha256 header.s=google header.b=hgfKmb/J
+Subject: Re: [Buildroot] [PATCH 1/1] package/cvs: fix build without editor
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -110,7 +108,6 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: Alexander Egorenkov <egorenar-dev@posteo.net>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -118,46 +115,74 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 15/03/2024 22:47, Fabrice Fontaine wrote:
-> Drop README.md from license files as advocated by Arnout Vandecappelle:
-> https://patchwork.ozlabs.org/project/buildroot/patch/20240314211117.9103-1-fontaine.fabrice@gmail.com
+On 15/03/2024 23:10, Fabrice Fontaine wrote:
+> Set default editor to /bin/vi to fix the following build failure when no
+> editor is found on host:
+> 
+> configure:40833: checking for vim
+> configure:40862: result: no
+> configure:40833: checking for vi
+> configure:40862: result: no
+> configure:40833: checking for emacs
+> configure:40862: result: no
+> configure:40833: checking for nano
+> configure:40862: result: no
+> configure:40833: checking for pico
+> configure:40862: result: no
+> configure:40833: checking for edit
+> configure:40862: result: no
+> configure:40874: error:
+>      Failed to find a text file editor.  CVS cannot be compiled
+>      without a default log message editor.  Searched for
+>      `vim vi emacs nano pico edit'.  Try `configure --with-editor'.
+> 
+> While at it, drop CVS_CONFIGURE_ARGS variable for simplicity
 
-  I've added a little of my explanation from that mail to the commit message, 
-and applied to master, thanks.
+  Nice!
+
+  Applied to master, thanks.
 
   Regards,
   Arnout
 
 > 
+> Fixes:
+>   - http://autobuild.buildroot.org/results/5b8a747698bc2e64eb1f001e87577e86e4cb8d14
+> 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->   package/multipath-tools/multipath-tools.hash | 1 -
->   package/multipath-tools/multipath-tools.mk   | 3 +--
->   2 files changed, 1 insertion(+), 3 deletions(-)
+>   package/cvs/cvs.mk | 12 ++++++------
+>   1 file changed, 6 insertions(+), 6 deletions(-)
 > 
-> diff --git a/package/multipath-tools/multipath-tools.hash b/package/multipath-tools/multipath-tools.hash
-> index c1f32e7a3b..03a2867144 100644
-> --- a/package/multipath-tools/multipath-tools.hash
-> +++ b/package/multipath-tools/multipath-tools.hash
-> @@ -4,4 +4,3 @@ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENS
->   sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSES/GPL-3.0
->   sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  LICENSES/LGPL-2.0
->   sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSES/LGPL-2.1
-> -sha256  9c69bb0089aa0b82b10a25095c04a7c4aec6b5bbf0776b7129123c8459fe7725  README.md
-> diff --git a/package/multipath-tools/multipath-tools.mk b/package/multipath-tools/multipath-tools.mk
-> index e62e85e14d..164d850600 100644
-> --- a/package/multipath-tools/multipath-tools.mk
-> +++ b/package/multipath-tools/multipath-tools.mk
-> @@ -16,8 +16,7 @@ MULTIPATH_TOOLS_LICENSE_FILES = \
->   	LICENSES/GPL-2.0 \
->   	LICENSES/GPL-3.0 \
->   	LICENSES/LGPL-2.0 \
-> -	LICENSES/LGPL-2.1 \
-> -	README.md
-> +	LICENSES/LGPL-2.1
->   MULTIPATH_TOOLS_CPE_ID_VENDOR = opensvc
+> diff --git a/package/cvs/cvs.mk b/package/cvs/cvs.mk
+> index bd1e04eee0..64c15f16fe 100644
+> --- a/package/cvs/cvs.mk
+> +++ b/package/cvs/cvs.mk
+> @@ -18,18 +18,18 @@ CVS_CONF_ENV = \
+>   	ac_cv_func_working_mktime=yes \
+>   	cvs_cv_func_printf_ptr=yes
 >   
->   MULTIPATH_TOOLS_DEPENDENCIES = \
+> -CVS_CONFIGURE_ARGS = --disable-old-info-format-support
+> +CVS_CONF_OPTS = \
+> +	--disable-old-info-format-support \
+> +	--with-editor=/bin/vi
+>   ifeq ($(BR2_PACKAGE_CVS_SERVER),y)
+> -CVS_CONFIGURE_ARGS += --enable-server
+> +CVS_CONF_OPTS += --enable-server
+>   else
+> -CVS_CONFIGURE_ARGS += --disable-server
+> +CVS_CONF_OPTS += --disable-server
+>   endif
+>   ifeq ($(BR2_PACKAGE_ZLIB),y)
+> -CVS_CONFIGURE_ARGS += --with-external-zlib
+> +CVS_CONF_OPTS += --with-external-zlib
+>   endif
+>   
+> -CVS_CONF_OPTS = $(CVS_CONFIGURE_ARGS)
+> -
+>   define CVS_BZIP_UNPACK
+>   	$(BZCAT) $(@D)/cvs-$(CVS_VERSION).tar.bz2 | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+>   	rm -f $(@D)/cvs-$(CVS_VERSION).tar.bz2
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
