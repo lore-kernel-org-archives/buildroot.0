@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2F7AC6FD1F
-	for <buildroot@archiver.kernel.org>; Sun, 24 Mar 2024 15:11:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA6CDC47DD9
+	for <buildroot@archiver.kernel.org>; Sun, 24 Mar 2024 15:11:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A493D406F4;
-	Sun, 24 Mar 2024 15:11:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9246A40608;
+	Sun, 24 Mar 2024 15:11:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CUh1dOwwseLN; Sun, 24 Mar 2024 15:11:50 +0000 (UTC)
+ id jwVpgVLyhI4e; Sun, 24 Mar 2024 15:11:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A870D4064E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EBF1540740
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A870D4064E;
-	Sun, 24 Mar 2024 15:11:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EBF1540740;
+	Sun, 24 Mar 2024 15:11:52 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5105F1BF4DD
- for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 15:11:29 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6135B1BF4DD
+ for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 15:11:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 965DB606EA
+ by smtp3.osuosl.org (Postfix) with ESMTP id B014F60754
  for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 15:11:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BqLDmdMnNjFQ for <buildroot@lists.busybox.net>;
+ id Ab86M5FOZa7G for <buildroot@lists.busybox.net>;
  Sun, 24 Mar 2024 15:11:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C913460754
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C120960725
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C913460754
+ by smtp3.osuosl.org (Postfix) with ESMTP id C120960725
  for <buildroot@buildroot.org>; Sun, 24 Mar 2024 15:11:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 80ECF83B62; Sun, 24 Mar 2024 15:11:25 +0000 (UTC)
+ id AD5C783B61; Sun, 24 Mar 2024 15:11:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 24 Mar 2024 16:00:26 +0100
+Date: Sun, 24 Mar 2024 16:02:14 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c1c096f91da5bfc45f1842b6dd12f1f0e016dbc4
-X-Git-Newrev: 33139ca6ac738861d3b8783202d04a77e38f09bf
+X-Git-Oldrev: 9496ff57e54c136d6961294aa2c5f8d560673ebf
+X-Git-Newrev: 94e072849e6c86a8c75402b1e600642673ebfb57
 X-Patchwork-Hint: ignore
-Message-Id: <20240324151125.80ECF83B62@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/iproute2: bump to version 6.8.0
+Message-Id: <20240324151125.AD5C783B61@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/fluent-bit: bump to v3.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,96 +65,95 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=33139ca6ac738861d3b8783202d04a77e38f09bf
+commit: https://git.buildroot.net/buildroot/commit/?id=94e072849e6c86a8c75402b1e600642673ebfb57
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog - https://github.com/iproute2/iproute2/compare/v6.7.0...v6.8.0
+Release Notes:
+- https://fluentbit.io/announcements/v3.0.0/
 
-Drop 0001-Revert-ss-prevent-Process-column-from-being-printed-.patch.
-See the upstream fix
-https://github.com/iproute2/iproute2/commit/87d804ca0854b09c07872e9fd6036bf5d3e0cc85
+Also drop 0004-wasm-restore-support-for-some-targets-8401.patch,
+which was accepted upstream.
+(See: https://github.com/fluent/fluent-bit/commit/40bb0fbe17efa6b4b1a96940e9ff7374b1a0c3eb)
 
-Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- ...revent-Process-column-from-being-printed-.patch | 45 ----------------------
- package/iproute2/iproute2.hash                     |  2 +-
- package/iproute2/iproute2.mk                       |  2 +-
- 3 files changed, 2 insertions(+), 47 deletions(-)
+ ...asm-restore-support-for-some-targets-8401.patch | 43 ----------------------
+ package/fluent-bit/fluent-bit.hash                 |  2 +-
+ package/fluent-bit/fluent-bit.mk                   |  2 +-
+ 3 files changed, 2 insertions(+), 45 deletions(-)
 
-diff --git a/package/iproute2/0001-Revert-ss-prevent-Process-column-from-being-printed-.patch b/package/iproute2/0001-Revert-ss-prevent-Process-column-from-being-printed-.patch
+diff --git a/package/fluent-bit/0004-wasm-restore-support-for-some-targets-8401.patch b/package/fluent-bit/0004-wasm-restore-support-for-some-targets-8401.patch
 deleted file mode 100644
-index 10fa472d64..0000000000
---- a/package/iproute2/0001-Revert-ss-prevent-Process-column-from-being-printed-.patch
+index ed6206268f..0000000000
+--- a/package/fluent-bit/0004-wasm-restore-support-for-some-targets-8401.patch
 +++ /dev/null
-@@ -1,45 +0,0 @@
--From f22c49730c3691c25a1147081363eb35aa9d1048 Mon Sep 17 00:00:00 2001
--From: Stephen Hemminger <stephen@networkplumber.org>
--Date: Sat, 13 Jan 2024 08:51:55 -0800
--Subject: [PATCH] Revert "ss: prevent "Process" column from being printed
-- unless requested"
+@@ -1,43 +0,0 @@
+-From 4a6c5f56cd1a979b91c168fb8e245587c2927aca Mon Sep 17 00:00:00 2001
+-From: Thomas Devoogdt <thomas@devoogdt.com>
+-Date: Mon, 22 Jan 2024 19:27:56 +0100
+-Subject: [PATCH] wasm: restore support for some targets (#8401)
 -
--This reverts commit 1607bf531fd2f984438d227ea97312df80e7cf56.
+-Somehow, support for ARC, MIPS, and XTENSA got dropped by bumping to v1.3.0,
+-so restore it now. Remark that those targets are mentioned in the section above.
 -
--This commit is being reverted because it breaks output of tcp info.
--The order of the columns enum is order sensistive.
+-See commit fa6a248746f9f481b5f6aef49716141fa0222650.
 -
--Bug: https://bugzilla.kernel.org/show_bug.cgi?id=218372
--Signed-off-by: Stephen Hemminger <stephen@networkplumber.org>
--Upstream: https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/commit/?id=f22c49730c3691c25a1147081363eb35aa9d1048
+-Upstream: https://github.com/fluent/fluent-bit/pull/8401
+-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
 ----
-- misc/ss.c | 5 +----
-- 1 file changed, 1 insertion(+), 4 deletions(-)
+- src/wasm/CMakeLists.txt | 6 ++++++
+- 1 file changed, 6 insertions(+)
 -
--diff --git a/misc/ss.c b/misc/ss.c
--index 09dc1f37..9438382b 100644
----- a/misc/ss.c
--+++ b/misc/ss.c
--@@ -100,8 +100,8 @@ enum col_id {
-- 	COL_SERV,
-- 	COL_RADDR,
-- 	COL_RSERV,
---	COL_PROC,
-- 	COL_EXT,
--+	COL_PROC,
-- 	COL_MAX
-- };
+-diff --git a/src/wasm/CMakeLists.txt b/src/wasm/CMakeLists.txt
+-index a258dc063..4ea7eba65 100644
+---- a/src/wasm/CMakeLists.txt
+-+++ b/src/wasm/CMakeLists.txt
+-@@ -51,6 +51,10 @@ elseif (WAMR_BUILD_TARGET MATCHES "AARCH64.*")
+- elseif (WAMR_BUILD_TARGET MATCHES "ARM.*")
+-   add_definitions(-DBUILD_TARGET_ARM)
+-   add_definitions(-DBUILD_TARGET="${WAMR_BUILD_TARGET}")
+-+elseif (WAMR_BUILD_TARGET STREQUAL "MIPS")
+-+  add_definitions(-DBUILD_TARGET_MIPS)
+-+elseif (WAMR_BUILD_TARGET STREQUAL "XTENSA")
+-+  add_definitions(-DBUILD_TARGET_XTENSA)
+- elseif (WAMR_BUILD_TARGET STREQUAL "RISCV64" OR WAMR_BUILD_TARGET STREQUAL "RISCV64_LP64D")
+-   add_definitions(-DBUILD_TARGET_RISCV64_LP64D)
+- elseif (WAMR_BUILD_TARGET STREQUAL "RISCV64_LP64")
+-@@ -59,6 +63,8 @@ elseif (WAMR_BUILD_TARGET STREQUAL "RISCV32" OR WAMR_BUILD_TARGET STREQUAL "RISC
+-   add_definitions(-DBUILD_TARGET_RISCV32_ILP32D)
+- elseif (WAMR_BUILD_TARGET STREQUAL "RISCV32_ILP32")
+-   add_definitions(-DBUILD_TARGET_RISCV32_ILP32)
+-+elseif (WAMR_BUILD_TARGET STREQUAL "ARC")
+-+  add_definitions(-DBUILD_TARGET_ARC)
+- else ()
+-   message (FATAL_ERROR "-- Build target isn't set")
+- endif ()
+--- 
+-2.34.1
 -
--@@ -5795,9 +5795,6 @@ int main(int argc, char *argv[])
-- 	if (ssfilter_parse(&current_filter.f, argc, argv, filter_fp))
-- 		usage();
--
---	if (!show_processes)
---		columns[COL_PROC].disabled = 1;
---
-- 	if (!(current_filter.dbs & (current_filter.dbs - 1)))
-- 		columns[COL_NETID].disabled = 1;
--
----
--2.43.0
--
-diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
-index 0be058e64b..d57a93de7d 100644
---- a/package/iproute2/iproute2.hash
-+++ b/package/iproute2/iproute2.hash
+diff --git a/package/fluent-bit/fluent-bit.hash b/package/fluent-bit/fluent-bit.hash
+index 2c34583f7a..cc9c976d60 100644
+--- a/package/fluent-bit/fluent-bit.hash
++++ b/package/fluent-bit/fluent-bit.hash
 @@ -1,3 +1,3 @@
- # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
--sha256  ff942dd9828d7d1f867f61fe72ce433078c31e5d8e4a78e20f02cb5892e8841d  iproute2-6.7.0.tar.xz
-+sha256  03a6cca3d71a908d1f15f7b495be2b8fe851f941458dc4664900d7f45fcf68ce  iproute2-6.8.0.tar.xz
- sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index 4adb4e3356..3db2ab925d 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
+ # Locally computed
+-sha256  8e7e951b2907e9d29508699c71c8949a4a22d750d54ffa5ee5b96537e59371dd  fluent-bit-2.2.2.tar.gz
++sha256  e70ae5be2f0ca1cb842a1c8d2762437907c522765f79b5c0c391eaa1b57c9f4c  fluent-bit-3.0.0.tar.gz
+ sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
+diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/fluent-bit.mk
+index 00a8904c55..33054bea66 100644
+--- a/package/fluent-bit/fluent-bit.mk
++++ b/package/fluent-bit/fluent-bit.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IPROUTE2_VERSION = 6.7.0
-+IPROUTE2_VERSION = 6.8.0
- IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
- IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
- IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
+-FLUENT_BIT_VERSION = 2.2.2
++FLUENT_BIT_VERSION = 3.0.0
+ FLUENT_BIT_SITE = $(call github,fluent,fluent-bit,v$(FLUENT_BIT_VERSION))
+ FLUENT_BIT_LICENSE = Apache-2.0
+ FLUENT_BIT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
