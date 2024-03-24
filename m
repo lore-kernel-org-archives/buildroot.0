@@ -4,91 +4,101 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B29F7C6FD1F
-	for <buildroot@archiver.kernel.org>; Sun, 24 Mar 2024 18:07:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12BF9C6FD1F
+	for <buildroot@archiver.kernel.org>; Sun, 24 Mar 2024 18:15:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E94E2405A6;
-	Sun, 24 Mar 2024 18:07:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B4B46405C6;
+	Sun, 24 Mar 2024 18:15:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hm5ql5exUjHP; Sun, 24 Mar 2024 18:07:00 +0000 (UTC)
+ id fQOI3bRpZyE6; Sun, 24 Mar 2024 18:15:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B9F8405C1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8BD13405C7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6B9F8405C1;
-	Sun, 24 Mar 2024 18:07:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0C3BE1BF364
- for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 18:06:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8BD13405C7;
+	Sun, 24 Mar 2024 18:15:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 10B381BF364
+ for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 18:15:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0011D605FD
- for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 18:06:58 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0B1C681B69
+ for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 18:15:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WGyMsSlibsFp for <buildroot@lists.busybox.net>;
- Sun, 24 Mar 2024 18:06:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WT32wI2P79ia for <buildroot@lists.busybox.net>;
+ Sun, 24 Mar 2024 18:15:13 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
- envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A9AF5605F8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A9AF5605F8
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A9AF5605F8
- for <buildroot@buildroot.org>; Sun, 24 Mar 2024 18:06:54 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-414898f1c45so962365e9.1
- for <buildroot@buildroot.org>; Sun, 24 Mar 2024 11:06:54 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::42f; helo=mail-wr1-x42f.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0E19081B26
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0E19081B26
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0E19081B26
+ for <buildroot@buildroot.org>; Sun, 24 Mar 2024 18:15:12 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id
+ ffacd0b85a97d-341c7c8adf3so621812f8f.0
+ for <buildroot@buildroot.org>; Sun, 24 Mar 2024 11:15:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1711303611; x=1711908411;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=Sntr4yMs1FqlIV1FBLdjU8bR9PAMAGNRrSmundLqKSE=;
- b=h55LqG53oh02TXvXcpm1HxUkgOE90xhcJzEF1Kv9qtt0+GzgV4t5JEznboazU9IWoD
- xwvT1ZfNMdw16kwNPtBqtsHdwDKeedEa8rA6KqsDJRra2c28ZDzdo9mGli/dvQIC9uYN
- Cbekyza3BAuKLlp5w9Briko2DqhaEe9Mahx062DEZJyqe/VVJ27b1qOBTyAkJDzeoCmJ
- GgF5lYyn7f3Oj3FS6MOJjdT/tmC/9SPduB68upDS2rr/PFnsL8Icl4EV0LUYAPIyxyqn
- w35dvwGDFsmJ0EPXIGwy2ECdn/t10NA9ccP2sS0V0CjGtGvq9pPNazHGWx+9L0LP+jEo
- txJw==
-X-Gm-Message-State: AOJu0YxvgRM552BLQN0CU6k3h0ktb+Y6isq4QU8MwzIS8OYuw64pemGT
- z0ylgWSqgJ6oNeCQPtMmStWfz61jNQ2JS1aZozsVGVOoVbDvhqYorMgMBgD6
-X-Google-Smtp-Source: AGHT+IE0YmcIY7NbQkR+op8JqHeT6xy+By1+Bb//SPVnI0JwmH/ATYztpvXTfo3Z8OL9Haw50KnItg==
-X-Received: by 2002:a05:600c:3b1b:b0:414:7db3:5757 with SMTP id
- m27-20020a05600c3b1b00b004147db35757mr3507820wms.30.1711303611326; 
- Sun, 24 Mar 2024 11:06:51 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- ay22-20020a05600c1e1600b00414866e57afsm2665961wmb.11.2024.03.24.11.06.50
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 24 Mar 2024 11:06:50 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun, 24 Mar 2024 19:06:45 +0100
-Message-ID: <20240324180645.519798-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
+ d=1e100.net; s=20230601; t=1711304111; x=1711908911;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=659V9nedt4E0uiauju4KgP9ZVXWZxcKjocRh2HMcDo4=;
+ b=oaDtNilqcL9OnQSZF8gfkyhxVIKnCao3a1yFpn3NfatMyFvkxSEdBOqQ0/4801JvJs
+ Wgb1EZ8GwVyoWeZbn144T/YPF+vVFLwlwJQGPtrnDKJMSHxSMJr818ScdzVqxgEbIOHe
+ ZbrFIZ4IkQU/nkHcF471a/Xpt29Ws0fSa5WdeMKbfmCHLUVkINhTDpZNDOX9xaRbV1bN
+ v6A+EOhUHL8TKhP05LVEIZoll7kN6856U5oxaeJ78rYvBJyQb9RgoiDygEGQqyQRjVOo
+ S79+WPudcve0CpQcYoq+L8ltM0yj5EQF9ts7Ocv5tiUS+vsBI5ihDUhU7/Tply4joKSd
+ yYHw==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCXRAiUtEOLBiYnp7W97ScIB8kaKD82J9kZbE7wkbdTqwqBeOe8Pzf7Hy2GIocyLIaZ512eb44YDgsMsJZUx3s1ipkH0Ebv1Dw==
+X-Gm-Message-State: AOJu0YwcYc7vJ9PWYqEtd8idu6eeot0HT8sCHC508m8WwRxCnWujZvzg
+ ZQeE4M+Qe/fwDY9a/zQ05dIK1FosCLEclBfGbn+7Y0wRI3xu5CinAYUr/FvON8Q=
+X-Google-Smtp-Source: AGHT+IFI/vaRNeVjd4Qt1DipTVYQ3XVOTGDOoB+FNbewYfcVawaTv7JzcbK+EDU/epefnNt/GO7DXQ==
+X-Received: by 2002:a05:6000:232:b0:341:b9d2:82e0 with SMTP id
+ l18-20020a056000023200b00341b9d282e0mr3137359wrz.20.1711304110764; 
+ Sun, 24 Mar 2024 11:15:10 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
+ by smtp.gmail.com with ESMTPSA id
+ bo4-20020a056000068400b00341b749ab8bsm4921239wrb.69.2024.03.24.11.15.09
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 24 Mar 2024 11:15:10 -0700 (PDT)
+Message-ID: <9e900cc9-83cb-48d6-a305-06543f1b41e7@mind.be>
+Date: Sun, 24 Mar 2024 19:15:08 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: en-GB
+To: Peter Korsgaard <peter@korsgaard.com>
+References: <20240316084335.20839-1-bernd@kuhls.net>
+ <20240316084335.20839-2-bernd@kuhls.net>
+ <113740e8-230d-4ab3-bb9f-12e1bb66cd85@mind.be>
+ <0c44fe3f-e87e-42fe-bbab-743fee1306a3@mind.be> <87v85bh6ax.fsf@48ers.dk>
+In-Reply-To: <87v85bh6ax.fsf@48ers.dk>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1711303611; x=1711908411; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Sntr4yMs1FqlIV1FBLdjU8bR9PAMAGNRrSmundLqKSE=;
- b=QRImuCR7VPuxq56ZgSyBgvQgB+EJ3k8GlCorh1169olwXRl+JLtlv6bPa/2BXVcPho
- ZIVOZPlEDRxrQl0i3C3uqL09Nli+PKmwuyhkipHBvZRc87sCCma1LWXaLsyjJEEwmV5B
- kso4SaOncLR4XE9nwthLlTogZ1mt7LWxYJyMy8Y9JG8VNKthNmZOZxcahvhxpYCCXdSl
- BgHLSLOO4bCXZCNUUacVZUHRmmo24jrT3kJ1zo+8WIrIb+LmKCrcvvDg+6cgzf4eE2KT
- xlypzi9p+p5FenJoCniZBUpokiJ1cjlx87CnhenaB3toFG30dCzHskCfIM8pQzLgM3KF
- PoaA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=QRImuCR7
-Subject: [Buildroot] [PATCH 1/1] package/log4cxx: bump to version 1.1.0
+ d=mind.be; s=google; t=1711304111; x=1711908911; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=659V9nedt4E0uiauju4KgP9ZVXWZxcKjocRh2HMcDo4=;
+ b=NA3ZzswC59lo2JEpgOk2sjLAzSrTmX7n7j+06EnOF6R8VA78R4w3xbj3sXPebBAqmu
+ 8CN+Ed3ZL0FMj9eFGLG8jK+yapklBBVlfXgBx9WoaU+Mtx7V4lTU644Ei7cIxomkcJGo
+ vf3/qY5+4ddCyLoWMaEYNivcoO9+ePeML5CmIG6Jf4wjXAqF4kQqu1XMyPvlrqRAjtxD
+ wUtSrQsucCmtluS2eXY6pjiLukQGJRJ0JL4QEVrwtwzySqfRgO4GmvoS9nlMVTfk8jek
+ 32boOHOQuMwr2RYrUSPeuhPbhTbuVs+r1RC4GukBwPN2c5uWicSgkOIJlGqzbojYhuMl
+ 25+w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=NA3ZzswC
+Subject: Re: [Buildroot] [PATCH 2/5] package/busybox: disable tc to fix
+ build with kernel >= 6.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,163 +110,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: Bernd Kuhls <bernd@kuhls.net>, "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
+ Romain Naour <romain.naour@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Drop patch (already in version)
-- Drop LOG4CXX_IGNORE_CVES as CVE-2023-31038 has been fixed in 1.1.0
-- Add unixodbc optional dependency
-
-https://logging.apache.org/log4cxx/latest_stable/changelog.html#1.1.0
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../0001-Make-ODBC-and-SMTP-opt-in-191.patch  | 73 -------------------
- package/log4cxx/log4cxx.hash                  |  4 +-
- package/log4cxx/log4cxx.mk                    | 15 ++--
- 3 files changed, 11 insertions(+), 81 deletions(-)
- delete mode 100644 package/log4cxx/0001-Make-ODBC-and-SMTP-opt-in-191.patch
-
-diff --git a/package/log4cxx/0001-Make-ODBC-and-SMTP-opt-in-191.patch b/package/log4cxx/0001-Make-ODBC-and-SMTP-opt-in-191.patch
-deleted file mode 100644
-index a116fcc491..0000000000
---- a/package/log4cxx/0001-Make-ODBC-and-SMTP-opt-in-191.patch
-+++ /dev/null
-@@ -1,73 +0,0 @@
--From 4900c27cc284ba2f671ae92e6ffb4ab391f9507a Mon Sep 17 00:00:00 2001
--From: Robert Middleton <rm5248@users.noreply.github.com>
--Date: Mon, 6 Feb 2023 20:39:02 -0500
--Subject: [PATCH] Make ODBC and SMTP opt-in (#191)
--
--See #189
--
--Upstream: afeaab6d0f0107c77dfadcbe3708f170c48d5ed9
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- src/main/include/CMakeLists.txt | 40 ++++++++++++++++++++++++---------
-- 1 file changed, 30 insertions(+), 10 deletions(-)
--
--diff --git a/src/main/include/CMakeLists.txt b/src/main/include/CMakeLists.txt
--index e31443fb..d6835293 100644
----- a/src/main/include/CMakeLists.txt
--+++ b/src/main/include/CMakeLists.txt
--@@ -85,22 +85,42 @@ include(CheckIncludeFiles)
-- include(CheckIncludeFileCXX)
-- include(CheckLibraryExists)
-- 
---if(WIN32)
---	CHECK_INCLUDE_FILES(sqlext.h HAS_ODBC)
--+option(LOG4CXX_ENABLE_ODBC "Support logging via ODBC" OFF)
--+if(LOG4CXX_ENABLE_ODBC)
--+    if(WIN32)
--+            CHECK_INCLUDE_FILES(sqlext.h HAS_ODBC)
--+    else()
--+            include(FindPkgConfig)
--+
--+            pkg_check_modules( odbc odbc )
--+            if(${odbc_FOUND})
--+                    set(HAS_ODBC 1)
--+            else()
--+                    set(HAS_ODBC 0)
--+            endif(${odbc_FOUND})
--+    endif(WIN32)
--+
--+    if(NOT ${HAS_ODBC})
--+        message(SEND_ERROR "ODBC not found but requested")
--+    endif()
-- else()
---	include(FindPkgConfig)
---
---	pkg_check_modules( odbc QUIET odbc )
---	if(${odbc_FOUND})
---		set(HAS_ODBC 1)
---	endif(${odbc_FOUND})
---endif(WIN32)
--+    set(HAS_ODBC 0)
--+endif(LOG4CXX_ENABLE_ODBC)
--+
--+option(LOG4CXX_ENABLE_ESMTP "Support logging via libesmtp" OFF)
--+if(LOG4CXX_ENABLE_ESMTP)
--+    CHECK_LIBRARY_EXISTS(esmtp smtp_create_session "" HAS_LIBESMTP)
--+    if(NOT HAS_LIBESMTP)
--+        message(SEND_ERROR "SMTP support with libesmtp not found but requested")
--+    endif()
--+else()
--+    set(HAS_LIBESMTP 0)
--+endif(LOG4CXX_ENABLE_ESMTP)
-- 
-- CHECK_INCLUDE_FILE_CXX(locale HAS_STD_LOCALE)
-- CHECK_FUNCTION_EXISTS(mbsrtowcs HAS_MBSRTOWCS)
-- CHECK_FUNCTION_EXISTS(wcstombs HAS_WCSTOMBS)
-- CHECK_FUNCTION_EXISTS(fwide HAS_FWIDE)
---CHECK_LIBRARY_EXISTS(esmtp smtp_create_session "" HAS_LIBESMTP)
-- CHECK_FUNCTION_EXISTS(syslog HAS_SYSLOG)
-- if(UNIX)
--     set(CMAKE_REQUIRED_LIBRARIES "pthread")
---- 
--2.41.0
--
-diff --git a/package/log4cxx/log4cxx.hash b/package/log4cxx/log4cxx.hash
-index 8190f94aa3..728d49ee38 100644
---- a/package/log4cxx/log4cxx.hash
-+++ b/package/log4cxx/log4cxx.hash
-@@ -1,4 +1,4 @@
--# From https://www.apache.org/dist/logging/log4cxx/0.13.0/apache-log4cxx-0.13.0.tar.gz.sha512
--sha512  2a5f4fecc0415d942658c588774f0666082c497b6fd49bf64ab3328a997775206788c9b10a8c89208896c57da52fcc12c18d5d11ca1d3bf699e4633b8fcea6e5  apache-log4cxx-0.13.0.tar.gz
-+# From https://www.apache.org/dist/logging/log4cxx/1.1.0/apache-log4cxx-1.1.0.tar.gz.sha512
-+sha512  66a66eab933a6afd0779e3f73f65afa4fb82481208b591fd7c7c86ded805f50abcd9cdf954bdb49e1e7f5198e6c1c4fff8a7e180ff5fff9491f1946e9ba6fe2b  apache-log4cxx-1.1.0.tar.gz
- # Locally computed
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/log4cxx/log4cxx.mk b/package/log4cxx/log4cxx.mk
-index aee682529c..8024c96d46 100644
---- a/package/log4cxx/log4cxx.mk
-+++ b/package/log4cxx/log4cxx.mk
-@@ -4,21 +4,17 @@
- #
- ################################################################################
- 
--LOG4CXX_VERSION = 0.13.0
-+LOG4CXX_VERSION = 1.1.0
- LOG4CXX_SITE = https://archive.apache.org/dist/logging/log4cxx/$(LOG4CXX_VERSION)
- LOG4CXX_SOURCE = apache-log4cxx-$(LOG4CXX_VERSION).tar.gz
- LOG4CXX_INSTALL_STAGING = YES
- LOG4CXX_LICENSE = Apache-2.0
- LOG4CXX_LICENSE_FILES = LICENSE
- LOG4CXX_CPE_ID_VENDOR = apache
--# We do not support ODBC functionality
--LOG4CXX_IGNORE_CVES = CVE-2023-31038
- 
--# Note: if you want to support odbc, make sure CVE-2023-31038 is fixed
- LOG4CXX_CONF_OPTS = \
- 	-DAPR_CONFIG_EXECUTABLE=$(STAGING_DIR)/usr/bin/apr-1-config \
--	-DAPR_UTIL_CONFIG_EXECUTABLE=$(STAGING_DIR)/usr/bin/apu-1-config \
--	-DLOG4CXX_ENABLE_ODBC=OFF
-+	-DAPR_UTIL_CONFIG_EXECUTABLE=$(STAGING_DIR)/usr/bin/apu-1-config
- 
- LOG4CXX_DEPENDENCIES = apr apr-util
- 
-@@ -33,6 +29,13 @@ else
- LOG4CXX_CONF_OPTS += -DLOG4CXX_ENABLE_LIBESMTP=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_UNIXODBC),y)
-+LOG4CXX_CONF_OPTS += -DLOG4CXX_ENABLE_ODBC=ON
-+LOG4CXX_DEPENDENCIES += unixodbc
-+else
-+LOG4CXX_CONF_OPTS += -DLOG4CXX_ENABLE_ODBC=OFF
-+endif
-+
- ifeq ($(BR2_USE_WCHAR),y)
- LOG4CXX_CONF_OPTS += -DLOG4CXX_WCHAR_T=ON
- else
--- 
-2.43.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+CgpPbiAyNC8wMy8yMDI0IDE4OjQ1LCBQZXRlciBLb3JzZ2FhcmQgd3JvdGU6Cj4+Pj4+PiAiQXJu
+b3V0IiA9PSBBcm5vdXQgVmFuZGVjYXBwZWxsZSA8YXJub3V0QG1pbmQuYmU+IHdyaXRlczoKPiAK
+PiAgID4gT24gMTYvMDMvMjAyNCAyMDoyNSwgQXJub3V0IFZhbmRlY2FwcGVsbGUgd3JvdGU6Cj4g
+ICA+Pgo+ICAgPj4KPiAgID4+IE9uIDE2LzAzLzIwMjQgMDk6NDMsIEJlcm5kIEt1aGxzIHdyb3Rl
+Ogo+ICAgPj4+IEZvciBkZXRhaWxzIHNlZSBodHRwczovL2J1Z3MuYnVzeWJveC5uZXQvc2hvd19i
+dWcuY2dpP2lkPTE1OTM0Cj4gICA+Pgo+ICAgPj4gwqBJJ20gYSBiaXQgYWZyYWlkIHRvIGFwcGx5
+IHRoaXMuIEhvcGVmdWxseSB0aGUgaXNzdWUgd2lsbCBiZSBmaXhlZAo+ICAgPj4gYXQgc29tZSBw
+b2ludCBpbiBidXN5Ym94OyB0aGVuLCB3ZSBzaG91bGQgcHJvYmFibHkgcmV2ZXJ0IHRoaXMgcGF0
+Y2gKPiAgID4+ICh0aG91Z2ggaG9uZXN0bHkgSSBkb24ndCBrbm93IHdoYXQgdGMgaXMgZG9pbmcg
+aW4gdGhlIG1pbmltYWwKPiAgID4+IGNvbmZpZy4uLikuCj4gCj4gCj4gICA+IMKgSSBkaWRuJ3Qg
+YXBwbHkgdGhpcyBvbmUgbm9yIHRoZSBmb2xsb3dpbmcgdHdvLiBJJ20gaG9waW5nIHRoZSBvdGhl
+cgo+ICAgPiBtYWludGFpbmVycyBjYW4gcGlwZSB1cCB3aXRoIGlkZWFzIG9mIGhvdyB0byBiZXN0
+IGRlYWwgd2l0aCB0aGlzPwo+IAo+IEkgYWxzbyBkb24ndCB0aGluayBoYXZpbmcgdGMgZW5hYmxl
+ZCBieSBkZWZhdWx0IG1ha2VzIGEgbG90IG9mCgogIEdvb2QgcG9pbnQhIEknbGwgYXBwbHkgdGhp
+cyBhZnRlciBhbGwgdGhlbiwgd2l0aCBhbiB1cGRhdGVkIGNvbW1pdCBsb2cuCgogIFJlZ2FyZHMs
+CiAgQXJub3V0Cgo+IHNlbnNlLiBOb3RpY2UgdGhhdCBVd2UgcmVjZW50bHkgcG9zdGVkIGEgcGF0
+Y2ggdXBzdHJlYW0gdG8gZml4IHRoZSBidWlsZAo+IGlzc3VlOgo+IAo+IGh0dHA6Ly9saXN0cy5i
+dXN5Ym94Lm5ldC9waXBlcm1haWwvYnVzeWJveC8yMDI0LU1hcmNoLzA5MDY3OC5odG1sCj4gCl9f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBt
+YWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJv
+b3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
