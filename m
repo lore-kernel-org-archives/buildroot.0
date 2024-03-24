@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98294C6FD1F
-	for <buildroot@archiver.kernel.org>; Sun, 24 Mar 2024 17:11:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE870C6FD1F
+	for <buildroot@archiver.kernel.org>; Sun, 24 Mar 2024 17:11:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5EEDB40469;
-	Sun, 24 Mar 2024 17:11:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5B3AF40B69;
+	Sun, 24 Mar 2024 17:11:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id A62xYszfPuTO; Sun, 24 Mar 2024 17:11:35 +0000 (UTC)
+ id sppnZYJaukf7; Sun, 24 Mar 2024 17:11:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C08D240A78
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5A54A40B2C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C08D240A78;
-	Sun, 24 Mar 2024 17:11:34 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 035B21BF40A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5A54A40B2C;
+	Sun, 24 Mar 2024 17:11:38 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1D2A91BF4D6
  for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 17:11:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E26E4606D4
+ by smtp2.osuosl.org (Postfix) with ESMTP id CA1FA4026A
  for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 17:11:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NZwAX-0X-k3Y for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hGyL8Tp_1JNf for <buildroot@lists.busybox.net>;
  Sun, 24 Mar 2024 17:11:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 099A2606EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F38E940469
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 099A2606EA
- for <buildroot@buildroot.org>; Sun, 24 Mar 2024 17:11:17 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id F38E940469
+ for <buildroot@buildroot.org>; Sun, 24 Mar 2024 17:11:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EBE9A83C5E; Sun, 24 Mar 2024 17:11:16 +0000 (UTC)
+ id E21DF83BB4; Sun, 24 Mar 2024 17:11:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 24 Mar 2024 17:18:35 +0100
+Date: Sun, 24 Mar 2024 17:06:47 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 21629634adee2e0c5541ff1d74b8bd297676815f
-X-Git-Newrev: b9b40901d1bd27aef9de13391956c959899581c6
+X-Git-Oldrev: 0b96e29723029c0a856cd558a21218fbbede7234
+X-Git-Newrev: 21629634adee2e0c5541ff1d74b8bd297676815f
 X-Patchwork-Hint: ignore
-Message-Id: <20240324171116.EBE9A83C5E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/avenger96_defconfig: bump ATF
- version to v2.8 LTS
+Message-Id: <20240324171116.E21DF83BB4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/avenger96_defconfig: bump Linux
+ version to 6.6.22 LTS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,123 +66,65 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9b40901d1bd27aef9de13391956c959899581c6
+commit: https://git.buildroot.net/buildroot/commit/?id=21629634adee2e0c5541ff1d74b8bd297676815f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch upgrades the ATF version to the v2.8 LTS version. Please note
-that due to DTS changes from upstream commit
-51e223058fe70b311542178f1865514745fa7874 ("feat(stm32mp15-fdts): add
-Avenger96 board with STM32MP157A DHCOR SoM") The ATF additional build
-variable is also modified to use the new DTS file. Note that the old DTS
-file still exists, but no longer works.
+This patch upgrades Kernel version to 6.6.22 LTS on avenger96 board.
+Beside that, In accordance with the kernel 6.5rc1 commit
+724ba6751532 ("ARM: dts: Move .dts files to vendor sub-directories")
+the device tree path also has been modified to point the device tree in
+the proper location.
 
-Furthermore, the 'E=0' flag is removed from ATF additional build
-variable. It was added by commit
-deb8d71c9285eb60bc3d28e8abcf7208f78980a7 to avoid TFA build
-failure because of '-Werror' flag. However, from version v2.6 or later,
-it is not required anymore, the compiler warning was fixed.
-
-The ATF patch
-"board/arrow/avenger96/patches/arm-trusted-firmware/
-0001-stm32mp157a-avenger96.dts-enable-hash-device-to-unbr.patch" also
-has been removed. As it was not required due to using the new dhcore DTS
-file for the ATF build.
+As another change, due to commit 3108eb2e8aa7
+("mmc: mmci: Set PROBE_PREFER_ASYNCHRONOUS"), the order of SD card and
+eMMC probing has swapped. The SD card is now mmcblk0 instead of
+mmcblk1. Thus, the default root append (mmcblk1p4) in 'extlinux.conf'
+file in the overlay directory of the board is changed, otherwise the
+rootfs was not possible to be detected.
 
 Signed-off-by: Javad Rahimipetroudi <javad.rahimipetroudi@mind.be>
-[Arnout: switch to
-BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_LTS_2_8_VERSION instead of custom
-lts-v2.8.16]
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- ...-avenger96.dts-enable-hash-device-to-unbr.patch | 51 ----------------------
- configs/avenger96_defconfig                        |  5 +--
- 2 files changed, 2 insertions(+), 54 deletions(-)
+ board/arrow/avenger96/overlay/boot/extlinux/extlinux.conf | 2 +-
+ configs/avenger96_defconfig                               | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/board/arrow/avenger96/patches/arm-trusted-firmware/0001-stm32mp157a-avenger96.dts-enable-hash-device-to-unbr.patch b/board/arrow/avenger96/patches/arm-trusted-firmware/0001-stm32mp157a-avenger96.dts-enable-hash-device-to-unbr.patch
-deleted file mode 100644
-index 8cec0af3b1..0000000000
---- a/board/arrow/avenger96/patches/arm-trusted-firmware/0001-stm32mp157a-avenger96.dts-enable-hash-device-to-unbr.patch
-+++ /dev/null
-@@ -1,51 +0,0 @@
--From 336dc301e02d64507447f82020ce7a349797bef3 Mon Sep 17 00:00:00 2001
--From: Peter Korsgaard <peter@korsgaard.com>
--Date: Sun, 5 Nov 2023 14:59:16 +0100
--Subject: [PATCH] stm32mp157a-avenger96.dts: enable hash device to unbreak boot
-- issue
--
--The avenger96 board was forgotten when authentication support was added with
--commit 4bdb1a7a6a1325343 (stm32mp1: add authentication support for
--stm32image), causing a panic when stm32mp_init_auth() is called, so fix it
--similar to how it was done for the STM32MP157C-ED1 board with:
--
--commit b37b52ef8bc05bfd8dcca992d4ba84cd7c5d23bb
--Author: Yann Gautier <yann.gautier@st.com>
--Date:   Tue Oct 13 18:05:06 2020 +0200
--
--    fdts: add missing hash node in STM32MP157C-ED1 board DT
--
--    Without this node, the board fails to boot and panics in the function
--    stm32mp_init_auth().
--
--    Change-Id: Ia54924410dac2a8c94dd6e45d7e93977fe7d87e2
--    Signed-off-by: Yann Gautier <yann.gautier@st.com>
--
--Upstream: N/A - Upstream reworked authentication to skip it for MP157A
-- variant since v2.7, see "feat(st): disable authentication based on
-- part_number"
-- (https://github.com/ARM-software/arm-trusted-firmware/commit/49abdfd8cececb91a4bc7e7b29a30c09dce461c7)
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- fdts/stm32mp157a-avenger96.dts | 4 ++++
-- 1 file changed, 4 insertions(+)
--
--diff --git a/fdts/stm32mp157a-avenger96.dts b/fdts/stm32mp157a-avenger96.dts
--index b967736e4..76edecb83 100644
----- a/fdts/stm32mp157a-avenger96.dts
--+++ b/fdts/stm32mp157a-avenger96.dts
--@@ -271,6 +271,10 @@
-- 	};
-- };
-- 
--+&hash1 {
--+	status = "okay";
--+};
--+
-- &rng1 {
-- 	status = "okay";
-- };
---- 
--2.39.2
--
+diff --git a/board/arrow/avenger96/overlay/boot/extlinux/extlinux.conf b/board/arrow/avenger96/overlay/boot/extlinux/extlinux.conf
+index 5d506b3dae..7d6d7f8a44 100644
+--- a/board/arrow/avenger96/overlay/boot/extlinux/extlinux.conf
++++ b/board/arrow/avenger96/overlay/boot/extlinux/extlinux.conf
+@@ -1,4 +1,4 @@
+ label stm32mp157c-dk2-buildroot
+   kernel /boot/zImage
+   devicetree /boot/stm32mp157a-dhcor-avenger96.dtb
+-  append root=/dev/mmcblk1p4 rootwait
++  append root=/dev/mmcblk0p4 rootwait
 diff --git a/configs/avenger96_defconfig b/configs/avenger96_defconfig
-index 218955fc02..f73b654dc8 100644
+index 82702bcfc7..218955fc02 100644
 --- a/configs/avenger96_defconfig
 +++ b/configs/avenger96_defconfig
-@@ -6,7 +6,6 @@ BR2_cortex_a7=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
+@@ -3,7 +3,7 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ 
+ # Linux headers same as kernel, a 5.8 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
  
  # System configuration
--BR2_GLOBAL_PATCH_DIR="board/arrow/avenger96/patches"
- BR2_ROOTFS_OVERLAY="board/arrow/avenger96/overlay/"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp157/post-image.sh"
+ BR2_GLOBAL_PATCH_DIR="board/arrow/avenger96/patches"
+@@ -13,10 +13,10 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp157/post-im
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.13"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.22"
+ BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="stm32mp157a-dhcor-avenger96"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="st/stm32mp157a-dhcor-avenger96"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
  
-@@ -29,13 +28,13 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- # Bootloaders
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.6"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="lts-v2.8.16"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="stm32mp1"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE="u-boot-nodtb.bin"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="STM32MP_SDMMC=1 AARCH32_SP=sp_min DTB_FILE_NAME=stm32mp157a-avenger96.dtb E=0 BL33_CFG=$(BINARIES_DIR)/u-boot.dtb"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="STM32MP_SDMMC=1 AARCH32_SP=sp_min DTB_FILE_NAME=stm32mp157a-dhcor-avenger96.dtb BL33_CFG=$(BINARIES_DIR)/u-boot.dtb"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="fip.bin *.stm32"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
- BR2_TARGET_UBOOT=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
