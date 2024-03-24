@@ -4,97 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 425E4C6FD1F
-	for <buildroot@archiver.kernel.org>; Sun, 24 Mar 2024 16:29:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5424EC6FD1F
+	for <buildroot@archiver.kernel.org>; Sun, 24 Mar 2024 16:33:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 01655400C4;
-	Sun, 24 Mar 2024 16:29:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 15AFE40568;
+	Sun, 24 Mar 2024 16:33:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Dc7gvmpmh_z4; Sun, 24 Mar 2024 16:29:14 +0000 (UTC)
+ id rYrO4N_cqufW; Sun, 24 Mar 2024 16:33:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C0A32403A2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 59AF4403A2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C0A32403A2;
-	Sun, 24 Mar 2024 16:29:13 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3C0B31BF4D6
- for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 16:29:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 59AF4403A2;
+	Sun, 24 Mar 2024 16:33:15 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A47311BF4D6
+ for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 16:33:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2836140557
- for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 16:29:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8DDCC403A2
+ for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 16:33:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id b86BUWoHMCPx for <buildroot@lists.busybox.net>;
- Sun, 24 Mar 2024 16:29:11 +0000 (UTC)
-Received-SPF: None (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::429; helo=mail-pf1-x429.google.com;
- envelope-from=flavio.tapajos@newtesc.com.br; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0465B40550
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0465B40550
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com
- [IPv6:2607:f8b0:4864:20::429])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0465B40550
- for <buildroot@buildroot.org>; Sun, 24 Mar 2024 16:29:10 +0000 (UTC)
-Received: by mail-pf1-x429.google.com with SMTP id
- d2e1a72fcca58-6e6b22af648so3053165b3a.0
- for <buildroot@buildroot.org>; Sun, 24 Mar 2024 09:29:10 -0700 (PDT)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iFogkSVHsKnv for <buildroot@lists.busybox.net>;
+ Sun, 24 Mar 2024 16:33:10 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::42c; helo=mail-wr1-x42c.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 576A0400C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 576A0400C4
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
+ [IPv6:2a00:1450:4864:20::42c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 576A0400C4
+ for <buildroot@buildroot.org>; Sun, 24 Mar 2024 16:33:10 +0000 (UTC)
+Received: by mail-wr1-x42c.google.com with SMTP id
+ ffacd0b85a97d-33ed4dd8659so2876024f8f.0
+ for <buildroot@buildroot.org>; Sun, 24 Mar 2024 09:33:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1711297750; x=1711902550;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=556GRsuacCR6sf/a97cWdQj3x0ogtvSckfqqGeP3PcA=;
- b=ANViKuKeDM+jsQMRLSWSYVJ3GiwYMFn4qrmvCLlqsGVPAGcsb02LjTllieSJLTHOC2
- jeE0CDHPMpCbk9yjM/SZqhv9Vbq801sLksG0aFsyWaWqpkKmTquCj4J3y+qk4bvR/Xzg
- lEZanYPyJlcDgbRvJrs5qpbbka0nJoOitC0exHMh4shgo19VFCtcJ2Rm4nVC1MTEbquQ
- XgrnqrzKsluTYP8QrHppEVwh4SVEt8qKJO0sdvl9Se6ndn/ZjVipiX3P0UpZp5O1bTtp
- RCYIWTHfqcX///UAUHfJVqW7NxREA1PBygjEgnAJih1qo1ODcIGHXY3DnEe+QzKc8qcr
- zbRQ==
-X-Gm-Message-State: AOJu0YySd8/02L2+33Wohln8o4vSV5KB1aur9FP6A8Ura51ydGmrYhjH
- kXW1caJh+BulkHJIRIL0VoQ/c36TROt59ho9WZHgjnQh4Trzic1oZTSWYjEFDAvTyR9HT8d31Uj
- vXWk=
-X-Google-Smtp-Source: AGHT+IE+/I7QkkauzCFNWseOLyTy+UW4CqPt6U8wg8VOOiO6JsQY1tCWuOxjiXL/2hyl5dKltMYTpA==
-X-Received: by 2002:a05:6a21:3982:b0:1a3:afdc:ff5 with SMTP id
- ad2-20020a056a21398200b001a3afdc0ff5mr6964475pzc.10.1711297749906; 
- Sun, 24 Mar 2024 09:29:09 -0700 (PDT)
-Received: from localhost.localdomain ([2804:7f0:b402:265:5f08:1698:f1a5:8997])
+ d=1e100.net; s=20230601; t=1711297988; x=1711902788;
+ h=content-transfer-encoding:in-reply-to:from:references:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=ihQHpT6aXidsNubY+3rb7thKb85djW86VaTbtbHy5z4=;
+ b=mwvDBXwvBVMnRKYFeik/5dufLqkUkFol9zreuhMTOqyQd7PxWK8nxmlk0pnNUTbbLo
+ eAeFFvoX0CA7a8uedklg5dLBdH/UZ0tYRY5CcQz6Ybj1iMANkHnEK+u0bJumYp1m5nFI
+ aUFzt2M7YjuYHX+AuJyh+tJ/yvGPKn1hqM5u6S4mFQNgXKSx+kVCmtVG8wbBif+/fxZJ
+ 9L5J4XJOzSTDdIVfH46JKhK6oAOSLN3rCqokT7iUKVZUpdTZSJnd+OKL+8GsrOImCoP0
+ K+dcpwM1qNJ1i9VD934WLao3++eri0BnJKwIE54rfYf2LtV3wTcc5tDm2Fzx8pDqv5fQ
+ 3UIg==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCVAtx8cNzRJ9UOS1GvtE/FrP4BnvWPnRBOHhMexzPX1WTC0ny2YHp34/9HZW3p0SgHJ1SROvjShZg7z/fNRJmVmX44QF6pXBQ==
+X-Gm-Message-State: AOJu0YwV1Pq5cJzUNfTAUaucQznD+1QyieNdY5pyy/sg8w1zuSSSexAG
+ iyjbJVmIUK4xd9hggonaVAxVpHEj0jaLkTlT22IQf2zSArlJJV/0wcv9wT1kNOo=
+X-Google-Smtp-Source: AGHT+IGkQPy3TtQSWLdKvvwB2NKd1kK1OlsnmcH3D4dDsCJ8zs27ttvUxMWEHh5EOXz08JzcH1x4aA==
+X-Received: by 2002:adf:ea42:0:b0:33e:621e:35b2 with SMTP id
+ j2-20020adfea42000000b0033e621e35b2mr2836321wrn.6.1711297988382; 
+ Sun, 24 Mar 2024 09:33:08 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- g10-20020a636b0a000000b005d880b41598sm4594385pgc.94.2024.03.24.09.29.07
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 24 Mar 2024 09:29:09 -0700 (PDT)
-From: =?UTF-8?q?Fl=C3=A1vio=20Tapaj=C3=B3s?= <flavio.tapajos@newtesc.com.br>
-To: buildroot@buildroot.org
-Date: Sun, 24 Mar 2024 13:28:48 -0300
-Message-ID: <20240324162848.17338-2-flavio.tapajos@newtesc.com.br>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240324162848.17338-1-flavio.tapajos@newtesc.com.br>
-References: <20240324162848.17338-1-flavio.tapajos@newtesc.com.br>
+ ay9-20020a5d6f09000000b0033b87c2725csm7249308wrb.104.2024.03.24.09.33.07
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 24 Mar 2024 09:33:08 -0700 (PDT)
+Message-ID: <7b0c2b66-38d2-4853-8438-2671006a91a1@mind.be>
+Date: Sun, 24 Mar 2024 17:33:04 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: en-GB
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Peter Korsgaard <peter@korsgaard.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Romain Naour <romain.naour@gmail.com>
+References: <20240320221352.13766-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <20240320221352.13766-1-fontaine.fabrice@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=newtesc-com-br.20230601.gappssmtp.com; s=20230601; t=1711297750; x=1711902550;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=556GRsuacCR6sf/a97cWdQj3x0ogtvSckfqqGeP3PcA=;
- b=u9hL1LiBO2tsFbey3Vlpgtz2tc9fPczcP6gcApkWeyIO+bIVL62Qr9LvyXKYiKggmb
- 59epMeUBpe+kHaT+cWelyPnLtwXhOik01D3urCBN6mbEKRlI3uznnWAhYcw9M78HCkc8
- owNM6qnpdw2g3ftMoY4tcXWWUnzbqyywOI6o5zfjaIyd5qEjhqCY5umUBaUcPpX1P2bC
- V2Utin/I31BmCKFIz91xkFHHsSnTh2LgJ4yIl0WN1gsODCqFOj+3DGWYJ7w7UrlzFvGM
- dfZtR5ye9p/NPzDTKY+9cWqLhEBmEKgAHJ+rWBBCAOAJ+6eJbL/EQOVSXFpSc0UFmPin
- pg5w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=newtesc.com.br
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=newtesc-com-br.20230601.gappssmtp.com
- header.i=@newtesc-com-br.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=u9hL1LiB
-Subject: [Buildroot] [PATCH 2/2] package/python-sqlalchemy: bump version to
- 2.0.29
+ d=mind.be; s=google; t=1711297988; x=1711902788; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:references:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=ihQHpT6aXidsNubY+3rb7thKb85djW86VaTbtbHy5z4=;
+ b=CKQ3+SagFXrICBVsFbYlHLHjBn90gcdUwH2Sy5yY0aB/oNezooenC+SuDyT/w8+pXm
+ s5huAffE1vUiBv4ApuNVr44hCrNm+nEAmHW/Oh4Hh7I0v6CR6oGd0aKJriLPtXAC3Kba
+ YnMyN4NrAddbsVS/JAPekgZ12zH/bsViOn5xCwp77i1vXi/znD6CHqVp93T/aR1m63Kx
+ LZRwPEXsbK6G+g0H70gEVyrMxE7mOjdMapfKcmW3Kadi2NkT5HSaqgtvY3iE03TemkY+
+ K4r9Frapm2GMxNs7aBn4T0i1p3S1v+UsdzHdq+Kt7UHZXIIqaE6wCOoxesE7AO/VGYid
+ ZWHQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=CKQ3+Sag
+Subject: Re: [Buildroot] [PATCH 1/1] package/zlib-ng: disable riscv with
+ uclibc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,47 +111,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?Fl=C3=A1vio=20Tapaj=C3=B3s?= <flavio.tapajos@newtesc.com.br>,
- James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-U2lnbmVkLW9mZi1ieTogRmzDoXZpbyBUYXBhasOzcyA8ZmxhdmlvLnRhcGFqb3NAbmV3dGVzYy5j
-b20uYnI+Ci0tLQogcGFja2FnZS9weXRob24tc3FsYWxjaGVteS9weXRob24tc3FsYWxjaGVteS5o
-YXNoIHwgNCArKy0tCiBwYWNrYWdlL3B5dGhvbi1zcWxhbGNoZW15L3B5dGhvbi1zcWxhbGNoZW15
-Lm1rICAgfCA0ICsrLS0KIDIgZmlsZXMgY2hhbmdlZCwgNCBpbnNlcnRpb25zKCspLCA0IGRlbGV0
-aW9ucygtKQoKZGlmZiAtLWdpdCBhL3BhY2thZ2UvcHl0aG9uLXNxbGFsY2hlbXkvcHl0aG9uLXNx
-bGFsY2hlbXkuaGFzaCBiL3BhY2thZ2UvcHl0aG9uLXNxbGFsY2hlbXkvcHl0aG9uLXNxbGFsY2hl
-bXkuaGFzaAppbmRleCA3OTUxYTMyOTc4Li5mMDY2ZmQxOGMyIDEwMDY0NAotLS0gYS9wYWNrYWdl
-L3B5dGhvbi1zcWxhbGNoZW15L3B5dGhvbi1zcWxhbGNoZW15Lmhhc2gKKysrIGIvcGFja2FnZS9w
-eXRob24tc3FsYWxjaGVteS9weXRob24tc3FsYWxjaGVteS5oYXNoCkBAIC0xLDUgKzEsNSBAQAog
-IyBtZDUsIHNoYTI1NiBmcm9tIGh0dHBzOi8vcHlwaS5vcmcvcHlwaS9zcWxhbGNoZW15L2pzb24K
-LW1kNSAgN2FiZmMyOTcyZDdlMTYzMTVjOGI3NDkyZWEwZTBmZGIgIFNRTEFsY2hlbXktMi4wLjI1
-LnRhci5negotc2hhMjU2ICBhMmM2OWE3NjY0ZmIyZDU0Yjg2ODJkZDc3NGMzYjU0ZjY3Zjg0ZmEx
-MjNjZjg0ZGRhMmE1ZjQwZGNhYTA0ZTA4ICBTUUxBbGNoZW15LTIuMC4yNS50YXIuZ3oKK21kNSBl
-YTc0NmU2OWUwNzAyY2M4ZDJjOTFjNTE0MGNlMzVjYyAgU1FMQWxjaGVteS0yLjAuMjgudGFyLmd6
-CitzaGEyNTYgYmQ5NTY2YjhlNThjYWJkNzAwYmMzNjdiNjBlOTBkOTM0OWNkMTZmMDk4NDk3M2Y5
-OGE5YTA5ZjljNjRlODZmMCAgU1FMQWxjaGVteS0yLjAuMjkudGFyLmd6CiAjIExvY2FsbHkgY29t
-cHV0ZWQgc2hhMjU2IGNoZWNrc3Vtcwogc2hhMjU2ICAzYzBmNTlhYjg4N2QwNDFkZTZhNGU1MmZm
-ZTNlOWVkYjVkOTUyMmRlOTA5ZmFlOWE2Y2Q3YWRiNmU3YmUzMjkzICBMSUNFTlNFCmRpZmYgLS1n
-aXQgYS9wYWNrYWdlL3B5dGhvbi1zcWxhbGNoZW15L3B5dGhvbi1zcWxhbGNoZW15Lm1rIGIvcGFj
-a2FnZS9weXRob24tc3FsYWxjaGVteS9weXRob24tc3FsYWxjaGVteS5tawppbmRleCAxNjdjM2E0
-NDk4Li5iN2RhYzkyYTk5IDEwMDY0NAotLS0gYS9wYWNrYWdlL3B5dGhvbi1zcWxhbGNoZW15L3B5
-dGhvbi1zcWxhbGNoZW15Lm1rCisrKyBiL3BhY2thZ2UvcHl0aG9uLXNxbGFsY2hlbXkvcHl0aG9u
-LXNxbGFsY2hlbXkubWsKQEAgLTQsOSArNCw5IEBACiAjCiAjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IwogCi1QWVRIT05fU1FMQUxDSEVNWV9WRVJTSU9OID0gMi4wLjI1CitQWVRIT05fU1FMQUxDSEVN
-WV9WRVJTSU9OID0gMi4wLjI5CiBQWVRIT05fU1FMQUxDSEVNWV9TT1VSQ0UgPSBTUUxBbGNoZW15
-LSQoUFlUSE9OX1NRTEFMQ0hFTVlfVkVSU0lPTikudGFyLmd6Ci1QWVRIT05fU1FMQUxDSEVNWV9T
-SVRFID0gaHR0cHM6Ly9maWxlcy5weXRob25ob3N0ZWQub3JnL3BhY2thZ2VzLzdiL2JiLzg1YmQ4
-ZTIxMWY1NDk4M2U5MjdjN2NkOWIyYWQ2Njc3M2ZiZWY1MDc5NTcxNTZmYzcyZTQ4MWE2MjY4MQor
-UFlUSE9OX1NRTEFMQ0hFTVlfU0lURSA9IGh0dHBzOi8vZmlsZXMucHl0aG9uaG9zdGVkLm9yZy9w
-YWNrYWdlcy85OS8wNC81OTk3MWJmYzJmMTkyZTNiNTIzNzZjYThkMWUxMzRjNzhkMDRiYzA0NGVm
-N2UwNGNmMTBjNDJkMmNlMTcKIFBZVEhPTl9TUUxBTENIRU1ZX1NFVFVQX1RZUEUgPSBzZXR1cHRv
-b2xzCiBQWVRIT05fU1FMQUxDSEVNWV9MSUNFTlNFID0gTUlUCiBQWVRIT05fU1FMQUxDSEVNWV9M
-SUNFTlNFX0ZJTEVTID0gTElDRU5TRQotLSAKMi40NC4wCgpfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9v
-dEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3Rp
-bmZvL2J1aWxkcm9vdAo=
+
+
+On 20/03/2024 23:13, Fabrice Fontaine wrote:
+> Disable riscv with uclibc to avoid the following build failure with
+> uclibc-ng < 1.0.43 raised since bump to version 2.1.6 in commit
+
+  I believe we generally don't fix issues in packages if the issue is actually 
+in the libc itself. This does mean we will have build failures for older 
+prebuilt external toolchains, but those we should fix using the exclusions in 
+genrandconfig.
+
+  I'm putting the other maintainers in Cc to check if they agree with my assessment.
+
+  For now, marked as Changes Requested.
+
+  Regards,
+  Arnout
+
+
+> 47b6737e841baf8b666ea9f37edc5f169652e88d and
+> https://github.com/zlib-ng/zlib-ng/commit/6ff8b52cefe56a824fae1d53fdd687bcde2e53c9:
+> 
+> /home/autobuild/autobuild/instance-2/output-1/build/zlib-ng-2.1.6/arch/riscv/riscv_features.c:4:10: fatal error: sys/auxv.h: No such file or directory
+>      4 | #include <sys/auxv.h>
+>        |          ^~~~~~~~~~~~
+> 
+> Indeed, upstream is reluctant to avoid calling getauxval if is not
+> available: https://github.com/zlib-ng/zlib-ng/pull/1700
+> 
+> Fixes: 47b6737e841baf8b666ea9f37edc5f169652e88d
+>   - http://autobuild.buildroot.org/results/06a7d8e59ec4de7c711d3f4a4624f67b97d78afe
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>   package/zlib/Config.in | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/zlib/Config.in b/package/zlib/Config.in
+> index 3a486376ac..346202c8bf 100644
+> --- a/package/zlib/Config.in
+> +++ b/package/zlib/Config.in
+> @@ -7,7 +7,7 @@ config BR2_PACKAGE_ZLIB_NG_ARCH_SUPPORTS
+>   	default y if BR2_aarch64
+>   	default y if BR2_i386
+>   	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
+> -	default y if BR2_riscv
+> +	default y if BR2_riscv && !BR2_TOOLCHAIN_USES_UCLIBC
+>   	default y if BR2_s390x
+>   	default y if BR2_x86_64
+>   
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
