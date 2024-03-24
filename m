@@ -4,91 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2ACD1C47DD9
-	for <buildroot@archiver.kernel.org>; Sun, 24 Mar 2024 08:20:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B86BCD11BF
+	for <buildroot@archiver.kernel.org>; Sun, 24 Mar 2024 08:58:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B8E6660606;
-	Sun, 24 Mar 2024 08:20:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 00428605BD;
+	Sun, 24 Mar 2024 08:58:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 16WlYYP-gLAv; Sun, 24 Mar 2024 08:20:09 +0000 (UTC)
+ id ZO9gIytswxEb; Sun, 24 Mar 2024 08:58:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF0506060E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 11C7B605CC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DF0506060E;
-	Sun, 24 Mar 2024 08:20:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id ECD471BF5A4
- for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 08:20:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 11C7B605CC;
+	Sun, 24 Mar 2024 08:58:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2E59E1BF5A4
+ for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 08:58:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E6A14400BF
- for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 08:20:06 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 27EFA403C5
+ for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 08:58:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dtrVDu5IsQRb for <buildroot@lists.busybox.net>;
- Sun, 24 Mar 2024 08:20:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AEteJeFqTgRy for <buildroot@lists.busybox.net>;
+ Sun, 24 Mar 2024 08:58:47 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::12f; helo=mail-il1-x12f.google.com;
- envelope-from=tekieli.lukasz@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E512E400C4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E512E400C4
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com
- [IPv6:2607:f8b0:4864:20::12f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E512E400C4
- for <buildroot@buildroot.org>; Sun, 24 Mar 2024 08:20:05 +0000 (UTC)
-Received: by mail-il1-x12f.google.com with SMTP id
- e9e14a558f8ab-3666affcb59so16058125ab.2
- for <buildroot@buildroot.org>; Sun, 24 Mar 2024 01:20:05 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D525240372
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D525240372
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D525240372
+ for <buildroot@buildroot.org>; Sun, 24 Mar 2024 08:58:46 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id
+ ffacd0b85a97d-33ed4d8e9edso2486476f8f.2
+ for <buildroot@buildroot.org>; Sun, 24 Mar 2024 01:58:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1711268404; x=1711873204;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=Xi/lrmw0HGHdiMF/y/kuc4U1vMkzRoCXhsCIkFPFYi8=;
- b=rY8itY+Rf/OJWhgE+HKSKKrOmuxlUcCXORDVFz1zDzJstq5TfaWhpymfOMBfyGUUZH
- d9gnCFeF8e5RpprvjupsofMQSv5EMm5/9aFYx80t0vrKYNJPbLGXhuopEXyWYzsoyaju
- ynBYrQgvRYhd4Lzo/0el+4ThtapnaP7VI1y9WCkC+va67TN5gTOrNG+Hf2Lh0+iRzqzp
- ng26m2OQhvYlyHjzNt/DZONlDC0vk1Ds58bDm+7oEhQK1g6KI8HoM7SF3XAgTjLdo9kh
- sqKpWk+DUUaaEmzw9Q6MDQoub9lk5w9okJI6nz2VGylL0IwLTM+7rs5YLYt6QYj3U1uL
- FIBg==
-X-Gm-Message-State: AOJu0YwSowfMD6L8LT6R891KzDwtejLQpH13qvTN8yZQPhZdGQg3KKUU
- 4IPct3llF4cUa+iA1h5npcNad6K0sNXAQkZRVj3/stSrOMuldil5pcf/G0OWg/qBZTUoae7LPL4
- dASNE6o+pertyjOPx2ls3oYC08Gr9lV/s9DE=
-X-Google-Smtp-Source: AGHT+IFBQpVkNBKuUOkt25KUl/74Hh9OJQ84cEFFjaGrAAJhThjx8OL9ea1EGcfwA19V3ry7KGI/GGw6h2vAQv4vRB4=
-X-Received: by 2002:a92:c7c3:0:b0:366:ab6f:f6a with SMTP id
- g3-20020a92c7c3000000b00366ab6f0f6amr3995412ilk.24.1711268404419; Sun, 24 Mar
- 2024 01:20:04 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1711270723; x=1711875523;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=lKHGCo/IBRwaClgmg/HsQvyuGearP6DShC3dA/p1rvk=;
+ b=JRQIATfq5Y8suoNYSG1bjaEVoLrX7Sg7yjC4ur4BJgu2cxC7q4Bb6OU5kgTdUtx0HC
+ cxIreB0XKLKKN++e43s2WULxvsMVa20e4dkpkSYXcEgvOJPq3CEpD3usldl7YvKhCXI/
+ 9GGCZvUqT0cbqCB+KDzYWleSZTP3HMkSiCJA27jOPUVAMILYoDv5wjaEFMiNXrDLTaJa
+ ZSyXNlnSuhLaC2REPyQlaJ8IXF13FWspEijwLd1NYa/6OqiAp4dLjeerVNDrA6FwYjhg
+ m7ifJeONgFqDasPcy5L+BRKhYxo4HFpfe7cpwNB5/g9SWW39Xmi1G+VubPZx/RjpVSrI
+ nsKQ==
+X-Gm-Message-State: AOJu0Yw1wUTgvqsI4i75E3jyXoHGuBlwnxiwcRzjTcv7lHgCZeqxt3F6
+ FRZif7SDyVN6/6+m2RM/t1/+pmIffAORpNzpRjx9qXmYhS6THHfUb/PHTO3y
+X-Google-Smtp-Source: AGHT+IFjxpRBzmv1111lw0aQLs6+OGjwbXX7S838LCPcAleoOue+N3yXIva9MzI4alvR4zg3PnI6kg==
+X-Received: by 2002:a05:600c:358d:b0:414:729:1189 with SMTP id
+ p13-20020a05600c358d00b0041407291189mr2877113wmq.21.1711270723124; 
+ Sun, 24 Mar 2024 01:58:43 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ l6-20020a05600c4f0600b0041488af9f47sm596591wmq.41.2024.03.24.01.58.42
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 24 Mar 2024 01:58:42 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 24 Mar 2024 09:58:36 +0100
+Message-ID: <20240324085836.240068-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-References: <20240208211517.9234-1-tekieli.lukasz@gmail.com>
- <20240208211517.9234-3-tekieli.lukasz@gmail.com> <874jcwitlk.fsf@48ers.dk>
- <CAFfxiozPcc5QisMEsKadCX2wb0F-oQ1GqQ2fXmJDK_+7xk=qXA@mail.gmail.com>
- <87zfuogixm.fsf@48ers.dk>
-In-Reply-To: <87zfuogixm.fsf@48ers.dk>
-From: =?UTF-8?Q?=C5=81ukasz_Tekieli?= <tekieli.lukasz@gmail.com>
-Date: Sun, 24 Mar 2024 09:19:53 +0100
-Message-ID: <CAFfxioyCv1F6+_BkJ8pGAq-f+mqyQw+nWkXhkp0ZdVrB2LF5OA@mail.gmail.com>
-To: Peter Korsgaard <peter@korsgaard.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1711268404; x=1711873204; darn=buildroot.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=Xi/lrmw0HGHdiMF/y/kuc4U1vMkzRoCXhsCIkFPFYi8=;
- b=RSvWcoCCKNXXjw5omovBcS2rvWYyXXyMZNzwVQ5eg5DTzTE7KpS2w0acjr+nLd4Ir0
- rv7UY6ve3baCQ4L44Rmv2hGwcZ97Eexm9Pl9RLxm5UQD5CmCkghIPSiRqf3vDcoa49RV
- bPEmCts2TwGqyYUx45gEdRxMMNZn2aCk2sPiD0W0hdi1xTmEXWSs8y6fCWWafF6z6VQV
- iu4BlrEuN+PSDFXj8TFrpW68Kp2nWLx3Wg1l+8NUY/Hryj4EaqoxDxRKWbwEfSUDxMP2
- HLd4aFpQVdoNSBrIl9dXgUubLxXIDvCxyFo69Pe0mw4iTyNg94d9xMtFEwlevmfa/gxR
- cTMg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=gmail.com; s=20230601; t=1711270723; x=1711875523; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=lKHGCo/IBRwaClgmg/HsQvyuGearP6DShC3dA/p1rvk=;
+ b=Cit65Kqo1G/20i5ns0JQVNLo6tdxEKKeFh6J/j7PZFhsNGudFn08q2X7PvlnxkmFlC
+ YihOwn1jYRmr7hubv7wup8j57S92ZbRClyFfZNWS+jGysojtYejDZXO6GTN/GUmxhwcw
+ 8lNbpANtiJH3CwFfYtJxDFAjMl+tDAgh9trAdz71U7i97OxyYQhY/LvsnVo8JmEA0oVQ
+ imUU9gR/KyXRmP/GJjhS88nbS3Zgs/1xjVDVnRuX856I9Gw2meTAu/NmQ+mHPdLcjFi0
+ MRHa2VcSVJYgdmYA+aTXyF9UqexiqkS7OLQP0QHeqkLjxOSB7wmsr918CPNYr7Dvx8w6
+ W0UQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=RSvWcoCC
-Subject: Re: [Buildroot] [PATCH v2 2/2] board/visionfive2: enable u-boot
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=Cit65Kqo
+Subject: [Buildroot] [PATCH 1/1] package/libtorrent-rasterbar: bump to
+ version 1.2.19
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,28 +101,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Francois Dugast <francois.dugast.foss@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Philipp Richter <richterphilipp.pops@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8sCgpPbiBTdW4sIE1hciAyNCwgMjAyNCBhdCA4OjU44oCvQU0gUGV0ZXIgS29yc2dhYXJk
-IDxwZXRlckBrb3JzZ2FhcmQuY29tPiB3cm90ZToKCj4gUG9zc2libHkgd2UgbmVlZCB0byBidW1w
-IHRoZSBMaW51eCBrZXJuZWwuIEhvdyBpcyB0aGUgbWFpbmxpbmUgc3VwcG9ydAo+IHNpdHVhdGlv
-biBieSBub3c/IElkZWFsbHkgd2Ugd291bGQgdXNlIG1haW5saW5lIExpbnV4IGFzIHdlbGwuCgpJ
-IGhhZCBzb21lIHN1Y2Nlc3Mgd2l0aCB0aGUgbWFpbmxpbmUga2VybmVsLCBidXQgSSBoYWQgdG8g
-YXBwbHkgdGhlCmRlZmNvbmZpZyBmcm9tIHRoZSBTdGFyRml2ZSBmb3JrLCBvdGhlcndpc2UgSSBo
-YWQgdHJvdWJsZXMgd2l0aCB0aGUKYm9vdC4gSXQncyBzdGlsbCBXSVAuCgo+IEkgZmluYWxseSBl
-bmRlZCB1cCBhcHBseWluZyB0aGlzIHBhdGNoIGFmdGVyIGFsbCwgYXMgaXQgbW92ZXMgdXMgaW4g
-dGhlCj4gcmlnaHQgZGlyZWN0aW9uLiBJIGRpZCB0aGUgZm9sbG93aW5nIGNoYW5nZXM6Cj4KPiAt
-IEFkZGVkIG5vdGUgYWJvdXQgY2hhbmdpbmcgdGhlIGJvb3QgbW9kZSBwaW5zIGluIHRoZSBib2Fy
-ZCByZWFkbWUgYW5kCj4gICBsaW5rZWQgdG8KPiAgIGh0dHBzOi8vZG9jLWVuLnJ2c3BhY2Uub3Jn
-L1Zpc2lvbkZpdmUyL1F1aWNrX1N0YXJ0X0d1aWRlL1Zpc2lvbkZpdmUyX1NES19RU0cvYm9vdF9t
-b2RlX3NldHRpbmdzLmh0bWwKPgo+IC0gQWRkZWQgYSBsaW5rIHRvIHRoZSBVLUJvb3QgZG9jdW1l
-bnRhdGlvbiB3aGljaCBkZXNjcmliZXMgdGhlIGJvb3QKPiAgIGZsb3cgaW4gdGhlIGNvbW1pdCBt
-ZXNzYWdlCgpUaGFuayB5b3UhCgoKCi0tIArFgXVrYXN6IFRla2llbGkKX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApi
-dWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
-bi9saXN0aW5mby9idWlsZHJvb3QK
+https://github.com/arvidn/libtorrent/releases/tag/v1.2.19
+https://github.com/arvidn/libtorrent/releases/tag/v1.2.18
+https://github.com/arvidn/libtorrent/releases/tag/v1.2.17
+https://github.com/arvidn/libtorrent/releases/tag/v1.2.16
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libtorrent-rasterbar/libtorrent-rasterbar.hash | 2 +-
+ package/libtorrent-rasterbar/libtorrent-rasterbar.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.hash b/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
+index 3f59642b72..b1abe85d84 100644
+--- a/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
++++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  c8ad8638684c0a903ebabc30490079e31b1a6a638da2adec5a8bef6a0e62214b  libtorrent-rasterbar-1.2.15.tar.gz
++sha256  eee8e99548dc5eb5e643e49db9202f4f97112c032dba883dfdc8144af5b6e40e  libtorrent-rasterbar-1.2.19.tar.gz
+ sha256  f3a5dd1558cce616b12edad521427ec8976ce2bb0af33f7f359cfa648bf55ad8  COPYING
+diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
+index 5eb80f0bd1..81247c63db 100644
+--- a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
++++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBTORRENT_RASTERBAR_VERSION = 1.2.15
++LIBTORRENT_RASTERBAR_VERSION = 1.2.19
+ LIBTORRENT_RASTERBAR_SITE = \
+ 	https://github.com/arvidn/libtorrent/releases/download/v$(LIBTORRENT_RASTERBAR_VERSION)
+ LIBTORRENT_RASTERBAR_LICENSE = BSD-3-Clause
+-- 
+2.43.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
