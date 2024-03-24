@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE870C6FD1F
-	for <buildroot@archiver.kernel.org>; Sun, 24 Mar 2024 17:11:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2995DC6FD1F
+	for <buildroot@archiver.kernel.org>; Sun, 24 Mar 2024 17:11:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5B3AF40B69;
-	Sun, 24 Mar 2024 17:11:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E94E340A78;
+	Sun, 24 Mar 2024 17:11:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sppnZYJaukf7; Sun, 24 Mar 2024 17:11:39 +0000 (UTC)
+ id fEaFrg1K6yXX; Sun, 24 Mar 2024 17:11:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5A54A40B2C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A310C40B6B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5A54A40B2C;
-	Sun, 24 Mar 2024 17:11:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A310C40B6B;
+	Sun, 24 Mar 2024 17:11:42 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1D2A91BF4D6
- for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 17:11:19 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 072F61BF40A
+ for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 17:11:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CA1FA4026A
+ by smtp2.osuosl.org (Postfix) with ESMTP id E3B8B403E5
  for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 17:11:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hGyL8Tp_1JNf for <buildroot@lists.busybox.net>;
+ id oOA2OH4hOq6n for <buildroot@lists.busybox.net>;
  Sun, 24 Mar 2024 17:11:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F38E940469
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E57B8403A2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id F38E940469
+ by smtp2.osuosl.org (Postfix) with ESMTP id E57B8403A2
  for <buildroot@buildroot.org>; Sun, 24 Mar 2024 17:11:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E21DF83BB4; Sun, 24 Mar 2024 17:11:16 +0000 (UTC)
+ id CFA9383C5D; Sun, 24 Mar 2024 17:11:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 24 Mar 2024 17:06:47 +0100
+Date: Sun, 24 Mar 2024 17:04:21 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0b96e29723029c0a856cd558a21218fbbede7234
-X-Git-Newrev: 21629634adee2e0c5541ff1d74b8bd297676815f
+X-Git-Oldrev: 766c1613aed2fe10bee96b8b515f88bb6ee7a310
+X-Git-Newrev: b6816034ebddd522a8fef9daa454c28fa1230dd6
 X-Patchwork-Hint: ignore
-Message-Id: <20240324171116.E21DF83BB4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/avenger96_defconfig: bump Linux
- version to 6.6.22 LTS
+Message-Id: <20240324171116.CFA9383C5D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/privoxy: fix build with root
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,65 +65,70 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=21629634adee2e0c5541ff1d74b8bd297676815f
+commit: https://git.buildroot.net/buildroot/commit/?id=b6816034ebddd522a8fef9daa454c28fa1230dd6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch upgrades Kernel version to 6.6.22 LTS on avenger96 board.
-Beside that, In accordance with the kernel 6.5rc1 commit
-724ba6751532 ("ARM: dts: Move .dts files to vendor sub-directories")
-the device tree path also has been modified to point the device tree in
-the proper location.
+Fix the following build failure when the configuration files are
+installed as root:
 
-As another change, due to commit 3108eb2e8aa7
-("mmc: mmci: Set PROBE_PREFER_ASYNCHRONOUS"), the order of SD card and
-eMMC probing has swapped. The SD card is now mmcblk0 instead of
-mmcblk1. Thus, the default root append (mmcblk1p4) in 'extlinux.conf'
-file in the overlay directory of the board is changed, otherwise the
-rootfs was not possible to be detected.
+id: 'privoxy': no such user
+******************************************************************
+ WARNING! WARNING! installing config files as root!
+ It is strongly recommended to run privoxy as a non-root user,
+ and to install the config files as that user and/or group!
+ Please read INSTALL, and create a privoxy user and group!
+*******************************************************************
+make[1]: *** [GNUmakefile:861: install] Error 1
 
-Signed-off-by: Javad Rahimipetroudi <javad.rahimipetroudi@mind.be>
+This failure is probably raised since the addition of the package in
+commit f8a263fe361ab37ec6765b9ff6478c3b15e3d139 and
+https://www.privoxy.org/gitweb/?p=privoxy.git;a=commit;h=26baf6bcc0b5db47b8cf5c55eece0614712b5180
+
+Fixes:
+ - http://autobuild.buildroot.org/results/28d8ca6f0e2d81d62196a0958c9274ad2c8c9871
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- board/arrow/avenger96/overlay/boot/extlinux/extlinux.conf | 2 +-
- configs/avenger96_defconfig                               | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...-in-Don-t-exit-if-configuration-files-are.patch | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/board/arrow/avenger96/overlay/boot/extlinux/extlinux.conf b/board/arrow/avenger96/overlay/boot/extlinux/extlinux.conf
-index 5d506b3dae..7d6d7f8a44 100644
---- a/board/arrow/avenger96/overlay/boot/extlinux/extlinux.conf
-+++ b/board/arrow/avenger96/overlay/boot/extlinux/extlinux.conf
-@@ -1,4 +1,4 @@
- label stm32mp157c-dk2-buildroot
-   kernel /boot/zImage
-   devicetree /boot/stm32mp157a-dhcor-avenger96.dtb
--  append root=/dev/mmcblk1p4 rootwait
-+  append root=/dev/mmcblk0p4 rootwait
-diff --git a/configs/avenger96_defconfig b/configs/avenger96_defconfig
-index 82702bcfc7..218955fc02 100644
---- a/configs/avenger96_defconfig
-+++ b/configs/avenger96_defconfig
-@@ -3,7 +3,7 @@ BR2_arm=y
- BR2_cortex_a7=y
- 
- # Linux headers same as kernel, a 5.8 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
- 
- # System configuration
- BR2_GLOBAL_PATCH_DIR="board/arrow/avenger96/patches"
-@@ -13,10 +13,10 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp157/post-im
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.13"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.22"
- BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="stm32mp157a-dhcor-avenger96"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="st/stm32mp157a-dhcor-avenger96"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- 
+diff --git a/package/privoxy/0001-GNUmakefile-in-Don-t-exit-if-configuration-files-are.patch b/package/privoxy/0001-GNUmakefile-in-Don-t-exit-if-configuration-files-are.patch
+new file mode 100644
+index 0000000000..e04d191ce0
+--- /dev/null
++++ b/package/privoxy/0001-GNUmakefile-in-Don-t-exit-if-configuration-files-are.patch
+@@ -0,0 +1,30 @@
++From 4b3b267db159dc23314de3062859481b7c397e32 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 17 Mar 2024 12:36:31 +0100
++Subject: [PATCH] GNUmakefile.in: Don't exit if configuration files are
++ installed as root
++
++... as this can be considered acceptable when cross-compiling
++Privoxy inside an autobuilder with only a root user.
++
++Upstream: https://www.privoxy.org/gitweb/?p=privoxy.git;a=commit;h=4b3b267db159dc23314de3062859481b7c397e32
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ GNUmakefile.in | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/GNUmakefile.in b/GNUmakefile.in
++index 04cceb15..cf79aae1 100644
++--- a/GNUmakefile.in
+++++ b/GNUmakefile.in
++@@ -927,7 +927,6 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
++ 					$(ECHO)  " and to install the config files as that user and/or group!" ;\
++ 					$(ECHO)  " Please read INSTALL, and create a privoxy user and group!" ;\
++ 					$(ECHO)  "*******************************************************************" ;\
++-					exit 1 ;\
++ 				fi ;\
++ 			else \
++ 				GROUP_T=$(GROUP) ;\
++-- 
++2.39.2
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
