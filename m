@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA6CDC47DD9
-	for <buildroot@archiver.kernel.org>; Sun, 24 Mar 2024 15:11:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 811BEC47DD9
+	for <buildroot@archiver.kernel.org>; Sun, 24 Mar 2024 15:11:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9246A40608;
-	Sun, 24 Mar 2024 15:11:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3BAE84066A;
+	Sun, 24 Mar 2024 15:11:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jwVpgVLyhI4e; Sun, 24 Mar 2024 15:11:53 +0000 (UTC)
+ id 9BqTaip8DeBM; Sun, 24 Mar 2024 15:11:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EBF1540740
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D69D740774
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EBF1540740;
-	Sun, 24 Mar 2024 15:11:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D69D740774;
+	Sun, 24 Mar 2024 15:11:56 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6135B1BF4DD
- for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 15:11:30 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 63CE01BF4DD
+ for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 15:11:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B014F60754
- for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 15:11:26 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2789460725
+ for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 15:11:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ab86M5FOZa7G for <buildroot@lists.busybox.net>;
- Sun, 24 Mar 2024 15:11:25 +0000 (UTC)
+ id uqS_FjteeIsS for <buildroot@lists.busybox.net>;
+ Sun, 24 Mar 2024 15:11:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C120960725
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DFBC560759
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C120960725
+ by smtp3.osuosl.org (Postfix) with ESMTP id DFBC560759
  for <buildroot@buildroot.org>; Sun, 24 Mar 2024 15:11:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AD5C783B61; Sun, 24 Mar 2024 15:11:25 +0000 (UTC)
+ id DBF3783B5F; Sun, 24 Mar 2024 15:11:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 24 Mar 2024 16:02:14 +0100
+Date: Sun, 24 Mar 2024 16:05:47 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9496ff57e54c136d6961294aa2c5f8d560673ebf
-X-Git-Newrev: 94e072849e6c86a8c75402b1e600642673ebfb57
+X-Git-Oldrev: 9efeb7e91440c20aea6cb0e07027081dbba4604d
+X-Git-Newrev: 2bf3dc5b84cf9586406d1ff6aa87860eb28d037a
 X-Patchwork-Hint: ignore
-Message-Id: <20240324151125.AD5C783B61@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/fluent-bit: bump to v3.0.0
+Message-Id: <20240324151125.DBF3783B5F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: add iptables runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,95 +65,112 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=94e072849e6c86a8c75402b1e600642673ebfb57
+commit: https://git.buildroot.net/buildroot/commit/?id=2bf3dc5b84cf9586406d1ff6aa87860eb28d037a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release Notes:
-- https://fluentbit.io/announcements/v3.0.0/
-
-Also drop 0004-wasm-restore-support-for-some-targets-8401.patch,
-which was accepted upstream.
-(See: https://github.com/fluent/fluent-bit/commit/40bb0fbe17efa6b4b1a96940e9ff7374b1a0c3eb)
-
-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- ...asm-restore-support-for-some-targets-8401.patch | 43 ----------------------
- package/fluent-bit/fluent-bit.hash                 |  2 +-
- package/fluent-bit/fluent-bit.mk                   |  2 +-
- 3 files changed, 2 insertions(+), 45 deletions(-)
+ DEVELOPERS                                     |  1 +
+ support/testing/tests/package/test_iptables.py | 78 ++++++++++++++++++++++++++
+ 2 files changed, 79 insertions(+)
 
-diff --git a/package/fluent-bit/0004-wasm-restore-support-for-some-targets-8401.patch b/package/fluent-bit/0004-wasm-restore-support-for-some-targets-8401.patch
-deleted file mode 100644
-index ed6206268f..0000000000
---- a/package/fluent-bit/0004-wasm-restore-support-for-some-targets-8401.patch
-+++ /dev/null
-@@ -1,43 +0,0 @@
--From 4a6c5f56cd1a979b91c168fb8e245587c2927aca Mon Sep 17 00:00:00 2001
--From: Thomas Devoogdt <thomas@devoogdt.com>
--Date: Mon, 22 Jan 2024 19:27:56 +0100
--Subject: [PATCH] wasm: restore support for some targets (#8401)
--
--Somehow, support for ARC, MIPS, and XTENSA got dropped by bumping to v1.3.0,
--so restore it now. Remark that those targets are mentioned in the section above.
--
--See commit fa6a248746f9f481b5f6aef49716141fa0222650.
--
--Upstream: https://github.com/fluent/fluent-bit/pull/8401
--Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-----
-- src/wasm/CMakeLists.txt | 6 ++++++
-- 1 file changed, 6 insertions(+)
--
--diff --git a/src/wasm/CMakeLists.txt b/src/wasm/CMakeLists.txt
--index a258dc063..4ea7eba65 100644
----- a/src/wasm/CMakeLists.txt
--+++ b/src/wasm/CMakeLists.txt
--@@ -51,6 +51,10 @@ elseif (WAMR_BUILD_TARGET MATCHES "AARCH64.*")
-- elseif (WAMR_BUILD_TARGET MATCHES "ARM.*")
--   add_definitions(-DBUILD_TARGET_ARM)
--   add_definitions(-DBUILD_TARGET="${WAMR_BUILD_TARGET}")
--+elseif (WAMR_BUILD_TARGET STREQUAL "MIPS")
--+  add_definitions(-DBUILD_TARGET_MIPS)
--+elseif (WAMR_BUILD_TARGET STREQUAL "XTENSA")
--+  add_definitions(-DBUILD_TARGET_XTENSA)
-- elseif (WAMR_BUILD_TARGET STREQUAL "RISCV64" OR WAMR_BUILD_TARGET STREQUAL "RISCV64_LP64D")
--   add_definitions(-DBUILD_TARGET_RISCV64_LP64D)
-- elseif (WAMR_BUILD_TARGET STREQUAL "RISCV64_LP64")
--@@ -59,6 +63,8 @@ elseif (WAMR_BUILD_TARGET STREQUAL "RISCV32" OR WAMR_BUILD_TARGET STREQUAL "RISC
--   add_definitions(-DBUILD_TARGET_RISCV32_ILP32D)
-- elseif (WAMR_BUILD_TARGET STREQUAL "RISCV32_ILP32")
--   add_definitions(-DBUILD_TARGET_RISCV32_ILP32)
--+elseif (WAMR_BUILD_TARGET STREQUAL "ARC")
--+  add_definitions(-DBUILD_TARGET_ARC)
-- else ()
--   message (FATAL_ERROR "-- Build target isn't set")
-- endif ()
---- 
--2.34.1
--
-diff --git a/package/fluent-bit/fluent-bit.hash b/package/fluent-bit/fluent-bit.hash
-index 2c34583f7a..cc9c976d60 100644
---- a/package/fluent-bit/fluent-bit.hash
-+++ b/package/fluent-bit/fluent-bit.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  8e7e951b2907e9d29508699c71c8949a4a22d750d54ffa5ee5b96537e59371dd  fluent-bit-2.2.2.tar.gz
-+sha256  e70ae5be2f0ca1cb842a1c8d2762437907c522765f79b5c0c391eaa1b57c9f4c  fluent-bit-3.0.0.tar.gz
- sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
-diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/fluent-bit.mk
-index 00a8904c55..33054bea66 100644
---- a/package/fluent-bit/fluent-bit.mk
-+++ b/package/fluent-bit/fluent-bit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FLUENT_BIT_VERSION = 2.2.2
-+FLUENT_BIT_VERSION = 3.0.0
- FLUENT_BIT_SITE = $(call github,fluent,fluent-bit,v$(FLUENT_BIT_VERSION))
- FLUENT_BIT_LICENSE = Apache-2.0
- FLUENT_BIT_LICENSE_FILES = LICENSE
+diff --git a/DEVELOPERS b/DEVELOPERS
+index a6364cdd44..328c654fae 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1797,6 +1797,7 @@ F:	support/testing/tests/package/test_highway.py
+ F:	support/testing/tests/package/test_hwloc.py
+ F:	support/testing/tests/package/test_iozone.py
+ F:	support/testing/tests/package/test_iperf3.py
++F:	support/testing/tests/package/test_iptables.py
+ F:	support/testing/tests/package/test_jailhouse.py
+ F:	support/testing/tests/package/test_jq.py
+ F:	support/testing/tests/package/test_jq/
+diff --git a/support/testing/tests/package/test_iptables.py b/support/testing/tests/package/test_iptables.py
+new file mode 100644
+index 0000000000..ee57b31558
+--- /dev/null
++++ b/support/testing/tests/package/test_iptables.py
+@@ -0,0 +1,78 @@
++import os
++
++import infra.basetest
++
++
++class TestIptables(infra.basetest.BRTest):
++    # The iptables package has _LINUX_CONFIG_FIXUPS, so we cannot use
++    # the runtime test pre-built Kernel. We need to compile a Kernel
++    # to make sure it will include the required configuration.
++    config = \
++        """
++        BR2_aarch64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.82"
++        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
++        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++        BR2_PACKAGE_IPTABLES=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        BR2_TARGET_ROOTFS_CPIO_GZIP=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
++        kern = os.path.join(self.builddir, "images", "Image")
++        self.emulator.boot(arch="aarch64",
++                           kernel=kern,
++                           kernel_cmdline=["console=ttyAMA0"],
++                           options=["-M", "virt",
++                                    "-cpu", "cortex-a57",
++                                    "-m", "256M",
++                                    "-initrd", img])
++        self.emulator.login()
++
++        # We check the program can execute.
++        self.assertRunOk("iptables --version")
++
++        # We delete all rules in all chains. We also set default
++        # policies to ACCEPT for INPUT and OUPUT chains. This should
++        # already be the case (default Kernel config). This makes sure
++        # this test starts from a known state and also those common
++        # command invocations works.
++        self.assertRunOk("iptables --flush")
++        self.assertRunOk("iptables --policy INPUT ACCEPT")
++        self.assertRunOk("iptables --policy OUTPUT ACCEPT")
++
++        # We add a filter rule to drop all the ICMP protocol to the
++        # IPv4 destination 127.0.0.2, in the INPUT chain. This should
++        # block all pings (icmp echo-requests).
++        cmd = "iptables --append INPUT"
++        cmd += " --protocol icmp --destination 127.0.0.2 --jump DROP"
++        self.assertRunOk(cmd)
++
++        # We check we can list rules.
++        self.assertRunOk("iptables --list")
++
++        # A ping to 127.0.0.1 is expected to work, because it's not
++        # matching our rule. We expect 3 replies (-c), with 0.5s
++        # internal (-i), and set a maximum timeout of 2s.
++        ping_cmd_prefix = "ping -c 3 -i 0.5 -W 2 "
++        self.assertRunOk(ping_cmd_prefix + "127.0.0.1")
++
++        # A ping to 127.0.0.2 is expected to fail, because our rule is
++        # supposed to drop it.
++        ping_test_cmd = ping_cmd_prefix + "127.0.0.2"
++        _, exit_code = self.emulator.run(ping_test_cmd)
++        self.assertNotEqual(exit_code, 0)
++
++        # We delete our only rule #1 in the INPUT chain.
++        self.assertRunOk("iptables --delete INPUT 1")
++
++        # Since we deleted the rule, the ping test command which was
++        # supposed to fail earlier is now supposed to succeed.
++        self.assertRunOk(ping_test_cmd)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
