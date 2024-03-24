@@ -4,48 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C021C6FD1F
-	for <buildroot@archiver.kernel.org>; Sun, 24 Mar 2024 17:11:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 078BCC6FD1F
+	for <buildroot@archiver.kernel.org>; Sun, 24 Mar 2024 17:20:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6B18D40568;
-	Sun, 24 Mar 2024 17:11:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7C3B640104;
+	Sun, 24 Mar 2024 17:20:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Png1tw1kOtda; Sun, 24 Mar 2024 17:11:54 +0000 (UTC)
+ id rcOaZqhXEUMq; Sun, 24 Mar 2024 17:20:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BBACC40B88
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 060AE402E6
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BBACC40B88;
-	Sun, 24 Mar 2024 17:11:53 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1149D1BF40A
- for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 17:11:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 060AE402E6;
+	Sun, 24 Mar 2024 17:20:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3DD701BF40A
+ for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 17:20:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9E1AB4056A
- for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 17:11:18 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 23D7A81357
+ for <buildroot@lists.busybox.net>; Sun, 24 Mar 2024 17:20:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dDR13RL78hAQ for <buildroot@lists.busybox.net>;
- Sun, 24 Mar 2024 17:11:17 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 229CF405FC
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 229CF405FC
- for <buildroot@buildroot.org>; Sun, 24 Mar 2024 17:11:17 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1B8D583C52; Sun, 24 Mar 2024 17:11:17 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 24 Mar 2024 17:56:35 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 958085d5f6a90c46f812c64bbe4ac2963f83bca1
-X-Git-Newrev: bc76d786a40548333be5cb9c0833e458498c06dd
-X-Patchwork-Hint: ignore
-Message-Id: <20240324171117.1B8D583C52@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: add bitcoin runtime test
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pweo3m7m4yJo for <buildroot@lists.busybox.net>;
+ Sun, 24 Mar 2024 17:20:21 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::112f; helo=mail-yw1-x112f.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C0EE28134C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C0EE28134C
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com
+ [IPv6:2607:f8b0:4864:20::112f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C0EE28134C
+ for <buildroot@buildroot.org>; Sun, 24 Mar 2024 17:20:20 +0000 (UTC)
+Received: by mail-yw1-x112f.google.com with SMTP id
+ 00721157ae682-61130dd21c1so14383107b3.2
+ for <buildroot@buildroot.org>; Sun, 24 Mar 2024 10:20:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1711300819; x=1711905619;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=pucmglcKSN7bO+pw/nVfViwqz0UUqZUI2YGElnbY+yM=;
+ b=vDmOGV7e7AFxe2994MIOk/bIbJwUrPUWn0AoBzrx7PW/qOMyyTYNETTBS53fXEYaL8
+ vFI+87AjzRMJiBrCMydfFPifdl8lY9KaBGIQDJp+sVjgl0m4XK1eCV5ul/Lj5vl5fqV8
+ ijR64uKdFjLHR4TS+dMAStCdoeYHnJZGnuOjMuj4KkXFz6lLeVKys1I1ITa87lT6UenN
+ 8tYFr+V489SFmnnlxK3KMD3E0j5AkK76GjqfrLZzkpaVfRi12aBFuTmgEpzJNnmMpSUd
+ n87V+5ZzOvITKL9lTlTsOOp4CU6xzI9HDakSWTVz198mjiKfvBj5CiS4YAURldZCQWMN
+ pRwA==
+X-Gm-Message-State: AOJu0YwBxYESJI1U7BrRak4s/NjgQPqOwqSnVrV/tFYSYdjndfWUjyPl
+ sV+FiEejSHa8mJum8aDQRiRvda6zGDLPzehxDzDxJTQTIu4pBzB5ctOUR8ebT6lKzzOrAkgjEfe
+ DMnN/HkIlxMjSKVnuCIe7973zdVEdRXIouwEG4Q==
+X-Google-Smtp-Source: AGHT+IGiHAnUFk6TJvE0m0RoIPx7HmQiZh2memipB49yb7Jxmdb+o4LEO3vFbWxZToQF/LNa52bdzKF+sJaMKNbzolk=
+X-Received: by 2002:a05:690c:fc9:b0:611:3823:1585 with SMTP id
+ dg9-20020a05690c0fc900b0061138231585mr3552254ywb.4.1711300819607; Sun, 24 Mar
+ 2024 10:20:19 -0700 (PDT)
+MIME-Version: 1.0
+References: <20240304153253.732708-1-dario.binacchi@amarulasolutions.com>
+ <20240304153253.732708-23-dario.binacchi@amarulasolutions.com>
+ <ec46a0be-e9cc-489a-95c2-fc2332d90fa6@smile.fr>
+In-Reply-To: <ec46a0be-e9cc-489a-95c2-fc2332d90fa6@smile.fr>
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date: Sun, 24 Mar 2024 18:20:08 +0100
+Message-ID: <CABGWkvqk+HetGhA_FGL0Pw0a1Z2uyx7EH95wVKOd9KOtU6kC9A@mail.gmail.com>
+To: Romain Naour <romain.naour@smile.fr>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google; t=1711300819; x=1711905619;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=pucmglcKSN7bO+pw/nVfViwqz0UUqZUI2YGElnbY+yM=;
+ b=FxvJiAI8RU3LJyWNbXfTYAFVSze2+Trzg6LtmNzbcFd1bjoyn7ZskjWV6bGPzNtAHT
+ rfGLGjMWkCKpAzKoEbQQSZQaKF5/d3+rZnNadDJRxYm6oBKyd2OEadGDaZWr/VqqQMDH
+ xRF6JgikPWhl2l8XWuxv35HXcTeuEbO9A+ias=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=amarulasolutions.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=FxvJiAI8
+Subject: Re: [Buildroot] [PATCH v9 22/22] boot/ti-k3-image-gen: remove
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,227 +99,186 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: michael@amarulasolutions.com, linux-amarula@amarulasolutions.com,
+ Asaf Kahlon <asafka7@gmail.com>, Xuanhao Shi <X15000177@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
+ Andreas Dannenberg <dannenberg@ti.com>,
+ Alexander Sverdlin <alexander.sverdlin@gmail.com>, bryce@redpinelabs.com,
+ Anand Gadiyar <gadiyar@ti.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bc76d786a40548333be5cb9c0833e458498c06dd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
----
- DEVELOPERS                                    |   1 +
- support/testing/tests/package/test_bitcoin.py | 184 ++++++++++++++++++++++++++
- 2 files changed, 185 insertions(+)
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c045a8cd7c..cb2132e67a 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1771,6 +1771,7 @@ F:	support/testing/tests/package/test_acpica.py
- F:	support/testing/tests/package/test_acpica/
- F:	support/testing/tests/package/test_apache.py
- F:	support/testing/tests/package/test_bc.py
-+F:	support/testing/tests/package/test_bitcoin.py
- F:	support/testing/tests/package/test_brotli.py
- F:	support/testing/tests/package/test_bzip2.py
- F:	support/testing/tests/package/test_compressor_base.py
-diff --git a/support/testing/tests/package/test_bitcoin.py b/support/testing/tests/package/test_bitcoin.py
-new file mode 100644
-index 0000000000..93aa9383ab
---- /dev/null
-+++ b/support/testing/tests/package/test_bitcoin.py
-@@ -0,0 +1,184 @@
-+import os
-+import time
-+
-+import infra.basetest
-+
-+
-+class TestBitcoin(infra.basetest.BRTest):
-+    # infra.basetest.BASIC_TOOLCHAIN_CONFIG cannot be used as it does
-+    # not include BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
-+    # needed by bitcoin. This config also uses an ext4 rootfs as
-+    # bitcoind needs some free disk space to start (so we avoid having
-+    # a larger initrd in RAM).
-+    config = \
-+        """
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.81"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-+        BR2_PACKAGE_BITCOIN=y
-+        BR2_PACKAGE_BITCOIN_WALLET=y
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        BR2_TARGET_ROOTFS_EXT2_4=y
-+        BR2_TARGET_ROOTFS_EXT2_SIZE="256M"
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+    # Command prefix for the bitcoin command line interface.
-+    cli_cmd = "bitcoin-cli -regtest"
-+
-+    def create_btc_wallet(self, wallet_name):
-+        """Create an empty wallet."""
-+        cmd = f"{self.cli_cmd} -named createwallet wallet_name={wallet_name}"
-+        self.assertRunOk(cmd)
-+
-+    def gen_btc_address(self, wallet_name):
-+        """Generate an address in a wallet."""
-+        cmd = f"{self.cli_cmd} -rpcwallet={wallet_name} getnewaddress"
-+        out, ret = self.emulator.run(cmd)
-+        self.assertEqual(ret, 0)
-+        return out[0]
-+
-+    def init_wallet(self, wallet_name):
-+        """Create a wallet and generate an address in it."""
-+        self.create_btc_wallet(wallet_name)
-+        return self.gen_btc_address(wallet_name)
-+
-+    def get_wallet_balance(self, wallet):
-+        """Return the (confirmed) balance of a wallet."""
-+        cmd = f"{self.cli_cmd} -rpcwallet={wallet} getbalance"
-+        out, ret = self.emulator.run(cmd)
-+        self.assertEqual(ret, 0)
-+        return float(out[0])
-+
-+    def get_wallet_unconfirmed_balance(self, wallet):
-+        """Return the unconfirmed balance of a wallet."""
-+        cmd = f"{self.cli_cmd} -rpcwallet={wallet} getunconfirmedbalance"
-+        out, ret = self.emulator.run(cmd)
-+        self.assertEqual(ret, 0)
-+        return float(out[0])
-+
-+    def get_block_count(self):
-+        """Returns the height of the most-work fully-validated chain."""
-+        cmd = f"{self.cli_cmd} getblockcount"
-+        out, ret = self.emulator.run(cmd)
-+        self.assertEqual(ret, 0)
-+        return int(out[0])
-+
-+    def test_run(self):
-+        drive = os.path.join(self.builddir, "images", "rootfs.ext4")
-+        kern = os.path.join(self.builddir, "images", "Image")
-+        self.emulator.boot(arch="aarch64",
-+                           kernel=kern,
-+                           kernel_cmdline=["root=/dev/vda console=ttyAMA0"],
-+                           options=["-M", "virt",
-+                                    "-cpu", "cortex-a53",
-+                                    "-m", "256M",
-+                                    "-drive", f"file={drive},if=virtio,format=raw"])
-+        self.emulator.login()
-+
-+        # Values for the test.
-+        wallet1 = "AliceWallet"
-+        wallet2 = "BobWallet"
-+        btc_test_amount = 10
-+        btc_fee = 0.00001
-+        req_blk_count = 101
-+
-+        # Check the binary can execute.
-+        self.assertRunOk("bitcoind --version")
-+
-+        # This cleanup is useful when run-test -k is used. It makes
-+        # this test idempotent. Since the drive storage is preserved
-+        # between reboots, this cleanup will make sure the test always
-+        # starts from a clean state.
-+        cmd = "rm -rf ~/.bitcoin"
-+        self.assertRunOk(cmd)
-+
-+        # The bitcoin daemon is not started. A client ping is expected
-+        # to fail.
-+        ping_cmd = f"{self.cli_cmd} ping"
-+        _, ret = self.emulator.run(ping_cmd)
-+        self.assertNotEqual(ret, 0)
-+
-+        # Start the daemon.
-+        cmd = f"bitcoind -regtest -daemonwait -fallbackfee={btc_fee:f}"
-+        self.assertRunOk(cmd)
-+
-+        time.sleep(2 * self.timeout_multiplier)
-+
-+        # Now the daemon is started, the ping is expected to succeed.
-+        self.assertRunOk(ping_cmd)
-+
-+        # We create two wallets and addresses.
-+        btc_addr1 = self.init_wallet(wallet1)
-+        btc_addr2 = self.init_wallet(wallet2)
-+
-+        # Since the regression test block chain is at its genesis
-+        # block, we expect a height of zero.
-+        cur_blk_cnt = self.get_block_count()
-+        self.assertEqual(cur_blk_cnt, 0)
-+
-+        # We also expect our wallets to be empty.
-+        for wallet in [wallet1, wallet2]:
-+            balance = self.get_wallet_balance(wallet)
-+            self.assertAlmostEqual(balance, 0.0)
-+
-+        # We request the generation of several blocks for address
-+        # #1. We should receive the 50 BTC reward at this address.
-+        cmd = self.cli_cmd
-+        cmd += f" generatetoaddress {req_blk_count} {btc_addr1}"
-+        self.assertRunOk(cmd)
-+
-+        # We should now see the previously created blocks.
-+        cur_blk_cnt = self.get_block_count()
-+        self.assertEqual(cur_blk_cnt, req_blk_count)
-+
-+        # We should also see the 50 BTC reward in the wallet #1.
-+        balance = self.get_wallet_balance(wallet1)
-+        self.assertAlmostEqual(balance, 50.0)
-+
-+        # The wallet #2 should still be empty.
-+        balance = self.get_wallet_balance(wallet2)
-+        self.assertAlmostEqual(balance, 0.0)
-+
-+        # We send an amount from wallet #1 to #2.
-+        cmd = f"{self.cli_cmd} -rpcwallet={wallet1}"
-+        cmd += f" sendtoaddress {btc_addr2} {btc_test_amount}"
-+        self.assertRunOk(cmd)
-+
-+        # The wallet #1 balance is expected to be subtracted by the
-+        # spent amount and the transaction fees.
-+        expected_balance = 50 - btc_test_amount - btc_fee
-+        balance = self.get_wallet_balance(wallet1)
-+        self.assertAlmostEqual(balance, expected_balance, places=4)
-+
-+        # The transaction is sent, but not confirmed yet. So we should
-+        # still see a (confirmed) balance of zero.
-+        balance = self.get_wallet_balance(wallet2)
-+        self.assertAlmostEqual(balance, 0.0)
-+
-+        # We should see the transferred amount in the unconfirmed
-+        # balance.
-+        balance = self.get_wallet_unconfirmed_balance(wallet2)
-+        self.assertAlmostEqual(balance, btc_test_amount)
-+
-+        # We generate 1 block to address #2. This action will confirm
-+        # the previous transaction (but this will not give the 50 BTC
-+        # reward).
-+        cmd = f"{self.cli_cmd} generatetoaddress 1 {btc_addr2}"
-+        self.assertRunOk(cmd)
-+
-+        # We should see one more block.
-+        cur_blk_cnt = self.get_block_count()
-+        self.assertEqual(cur_blk_cnt, req_blk_count + 1)
-+
-+        # We should now see the amount in the confirmed balance.
-+        balance = self.get_wallet_balance(wallet2)
-+        self.assertAlmostEqual(balance, btc_test_amount)
-+
-+        # The unconfirmed balance should now be zero.
-+        balance = self.get_wallet_unconfirmed_balance(wallet2)
-+        self.assertAlmostEqual(balance, 0.0)
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgUm9tYWluLAoKT24gV2VkLCBNYXIgMTMsIDIwMjQgYXQgMTI6MDDigK9QTSBSb21haW4gTmFv
+dXIgPHJvbWFpbi5uYW91ckBzbWlsZS5mcj4gd3JvdGU6Cj4KPiBIZWxsbyBEYXJpbywKPgo+IExl
+IDA0LzAzLzIwMjQgw6AgMTY6MzIsIERhcmlvIEJpbmFjY2hpIGEgw6ljcml0IDoKPiA+IEZyb206
+IFJvbWFpbiBOYW91ciA8cm9tYWluLm5hb3VyQHNtaWxlLmZyPgo+ID4KPiA+IHRpLWszLWltYWdl
+LWdlbiB0b29sIGlzIGRlcHJlY2F0ZWQgYW4gcmVwbGFjZWQgYnkgYmlubWFuIFsxXS4KPiA+Cj4g
+PiBBbGwgZGVmY29uZmlnIHRoYXQgd2FzIHVzaW5nIGl0IGhhdmUgYmVlbiB1cGRhdGVkIHRvIHVz
+ZSBVLWJvb3QKPiA+IGJpbm1hbiB0b29sIGluc3RlYWQuCj4gPgo+ID4gU28sIHdlIGNhbiBzYWZl
+bHkgcmVtb3ZlIHRpLWszLWltYWdlLWdlbiBwYWNrYWdlLgo+Cj4gVGhlIEFNNjUgc3VwcG9ydCBp
+cyBzdGlsbCBicm9rZW4gc2luY2Ugd2UgbmVlZCB0byBjb3B5IHN5c2Z3Ki5pdGIgYmluYXJ5IHRo
+YXQKPiB3YXMgcHJvdmlkZWQgYnkgdGktazMtaW1hZ2UtZ2VuLgoKQ291bGQgeW91IGtpbmRseSBp
+bmRpY2F0ZSB0aGUgQnVpbGRyb290IGNvbmZpZ3VyYXRpb24gZm9yIGFtNjUgdGhhdAp5b3UgYXJl
+IHJlZmVycmluZyB0byByZWdhcmRpbmcgdGhlIGlzc3VlIHlvdSBhcmUgaW5kaWNhdGluZz8KSXQg
+c2VlbXMgdG8gbWUgdGhhdCB0aGUgY29uZmlndXJhdGlvbnMgb2YgaW50ZXJlc3QsIGFuZCB0aGVy
+ZWZvcmUKdGhvc2UgdGhhdCBoYXZlIGJlZW4gdGVzdGVkLCBhcmUgdGlfYW02Mnhfc2tfZGVmY29u
+ZmlnIGFuZAp0aV9hbTY0eF9za19kZWZjb25maWcuCgpIZXJlIGh0dHBzOi8vbG9yZS5rZXJuZWwu
+b3JnL2FsbC85NmE3MTcwNS1kY2ViLTQ0MTctOWVkZC0xZjk2MmVkZDY2ZjRAc21pbGUuZnIvLAp5
+b3UgYWxzbyBtZW50aW9uIEJlYWdsZVBsYXkuCklzIHRoZXJlIGEgQmVhZ2xlUGxheSBjb25maWd1
+cmF0aW9uIGluIEJ1aWxkcm9vdD8KCkluIHZlcnNpb24gNiB5b3Ugd3JvdGUgdG8gbWUgdGhhdCBl
+eGNlcHQgZm9yICJtaW5vciBpbXByb3ZlbWVudCwgdGhpcwpzZXJpZXMgaXMgb2sgZm9yIG1lIiBh
+bmQgdGhhdCAiSSdtIHBsYW5uaW5nIG9uIHRlc3RpbmcKdGhlIGVudGlyZSBzZXJpZXMgaGVyZSBw
+cmV0dHkgc29vbiBhbmQgd2lsbCBwcm92aWRlIGZlZWRiYWNrIjoKCmh0dHBzOi8vbG9yZS5rZXJu
+ZWwub3JnL2FsbC8zODNhMjQxOC1mYTk5LTQ0ZjYtOTM1Yy04NDIzY2Y5YzIyYjNAc21pbGUuZnIv
+Cmh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2FsbC8yODA0MGY4YS1jNjhlLTQ5NjYtOWU4MS04MDRm
+NzIzZjIxMDBAc21pbGUuZnIvI3QKCkkgYW0gY3VycmVudGx5IHJ1bm5pbmcgdGVzdHMgZm9yIHZl
+cnNpb24gMTAgc2luY2UgWWFubiBFLiBNb3JpbiBoYXMKaGlnaGxpZ2h0ZWQgYW4gYXNwZWN0IHRo
+YXQgSSBiZWxpZXZlIHNob3VsZCBiZSBhZGRyZXNzZWQKYnkgdGhpcyBzZXJpZXM6Cmh0dHBzOi8v
+bG9yZS5rZXJuZWwub3JnL2FsbC9aZm9OSEQtRGxxa2tZQ1JoQGxhbmRlZGEvCgpBcyBhbHJlYWR5
+IHdyaXR0ZW4gb24gc2V2ZXJhbCBvY2Nhc2lvbnMgYW5kIGFsc28gc2hhcmVkIGJ5IEFuZHJlYXMK
+RGFubmVuYmVyZyBhbmQgTWljaGFlbCBUcmltYXJjaGksIGl0IGlzIG5lY2Vzc2FyeSB0bwpjb25j
+bHVkZSBhbmQgbWVyZ2UgdGhpcyBzZXJpZXMgYXMgc29vbiBhcyBwb3NzaWJsZSB0byBmaXggdGhl
+CmNvbXBpbGF0aW9uIGVycm9yIGZvciB0aGUgSFNfRlMgZGV2aWNlIG9mIHRoZSB0aV9hbTYyeF9z
+a19kZWZjb25maWcKY29uZmlndXJhdGlvbiwgYW4gZXJyb3IgcmVwb3J0ZWQgc2luY2UgTm92ZW1i
+ZXIgMjAyMywgYW5kIGZyb20gdGhlcmUsCnByb2NlZWQgd2l0aCB0aGUgbWFueSBkZXZlbG9wbWVu
+dHMgdGhhdCB0aGUgbmV3IHBsYXRmb3JtCnJlcXVpcmVzLiBNeSB0ZXN0cywgbGlrZSB0aG9zZSBv
+ZiBBbmRyZWFzIERhbm5lbmJlcmcsIEFsZXhhbmRlcgpTdmVyZGxpbiBhbmQgTWljaGFlbCBUcmlt
+YXJjaGksIGhhdmUgYWxsIHlpZWxkZWQgcG9zaXRpdmUgcmVzdWx0cy4KSGF2ZSB5b3VyIHRlc3Rz
+IHBlcmhhcHMgcmV2ZWFsZWQgYW55IHJlZ3Jlc3Npb25zPwoKUGxlYXNlIGxldCBtZSBrbm93IGFu
+ZCBoZWxwIG1lIHVuZGVyc3RhbmQgd2hhdCBzdGlsbCBpc24ndCB3b3JraW5nIGluCnRoaXMgc2Vy
+aWVzLgoKVGhhbmtzIGFuZCByZWdhcmRzLApEYXJpbwoKPgo+IEJlc3QgcmVnYXJkcywKPiBSb21h
+aW4KPgo+Cj4gPgo+ID4gWzFdIGh0dHBzOi8vZ2l0LnlvY3RvcHJvamVjdC5vcmcvbWV0YS10aS9j
+b21taXQvP2lkPTgzNTgxMWNmODU4NjkyNmNmNzhhOTYxZDA5MGY0ZTYxNTA0MzIyMzUKPiA+Cj4g
+PiBDYzogQW5hbmQgR2FkaXlhciA8Z2FkaXlhckB0aS5jb20+Cj4gPiBDYzogWHVhbmhhbyBTaGkg
+PFgxNTAwMDE3N0BnbWFpbC5jb20+Cj4gPiBTaWduZWQtb2ZmLWJ5OiBSb21haW4gTmFvdXIgPHJv
+bWFpbi5uYW91ckBzbWlsZS5mcj4KPiA+IFJldmlld2VkLWJ5OiBBbGV4YW5kZXIgU3ZlcmRsaW4g
+PGFsZXhhbmRlci5zdmVyZGxpbkBnbWFpbC5jb20+Cj4gPiBTaWduZWQtb2ZmLWJ5OiBEYXJpbyBC
+aW5hY2NoaSA8ZGFyaW8uYmluYWNjaGlAYW1hcnVsYXNvbHV0aW9ucy5jb20+Cj4gPgo+ID4gLS0t
+Cj4gPgo+ID4gQ2hhbmdlcyBpbiB2OToKPiA+IC0gRml4ZWQgY29uZmxpY3RzIG9uIHJlYmFzaW5n
+IG9uIG1hc3RlciAoQ29uZmlnLmluLmxlZ2FjeSkuCj4gPgo+ID4gQWRkZWQgaW4gdjgKPiA+Cj4g
+PiAgQ29uZmlnLmluLmxlZ2FjeSAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgNyArKysKPiA+
+ICBERVZFTE9QRVJTICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAyIC0KPiA+ICBi
+b290L0NvbmZpZy5pbiAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAxIC0KPiA+ICBib290
+L3RpLWszLWltYWdlLWdlbi9Db25maWcuaW4gICAgICAgICAgICB8IDI0IC0tLS0tLS0tLS0KPiA+
+ICBib290L3RpLWszLWltYWdlLWdlbi90aS1rMy1pbWFnZS1nZW4uaGFzaCB8ICAzIC0tCj4gPiAg
+Ym9vdC90aS1rMy1pbWFnZS1nZW4vdGktazMtaW1hZ2UtZ2VuLm1rICAgfCA1NCAtLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLQo+ID4gIDYgZmlsZXMgY2hhbmdlZCwgNyBpbnNlcnRpb25zKCspLCA4NCBk
+ZWxldGlvbnMoLSkKPiA+ICBkZWxldGUgbW9kZSAxMDA2NDQgYm9vdC90aS1rMy1pbWFnZS1nZW4v
+Q29uZmlnLmluCj4gPiAgZGVsZXRlIG1vZGUgMTAwNjQ0IGJvb3QvdGktazMtaW1hZ2UtZ2VuL3Rp
+LWszLWltYWdlLWdlbi5oYXNoCj4gPiAgZGVsZXRlIG1vZGUgMTAwNjQ0IGJvb3QvdGktazMtaW1h
+Z2UtZ2VuL3RpLWszLWltYWdlLWdlbi5tawo+ID4KPiA+IGRpZmYgLS1naXQgYS9Db25maWcuaW4u
+bGVnYWN5IGIvQ29uZmlnLmluLmxlZ2FjeQo+ID4gaW5kZXggMWIxNWQyNWQ2YmYxLi4zMDRmMzY5
+ZGE3YjIgMTAwNjQ0Cj4gPiAtLS0gYS9Db25maWcuaW4ubGVnYWN5Cj4gPiArKysgYi9Db25maWcu
+aW4ubGVnYWN5Cj4gPiBAQCAtMTQ2LDYgKzE0NiwxMyBAQCBlbmRpZgo+ID4KPiA+ICBjb21tZW50
+ICJMZWdhY3kgb3B0aW9ucyByZW1vdmVkIGluIDIwMjQuMDIiCj4gPgo+ID4gK2NvbmZpZyBCUjJf
+VEFSR0VUX1RJX0szX0lNQUdFX0dFTgo+ID4gKyAgICAgYm9vbCAidGktazMtaW1hZ2UtZ2VuIHJl
+bW92ZWQiCj4gPiArICAgICBzZWxlY3QgQlIyX0xFR0FDWQo+ID4gKyAgICAgaGVscAo+ID4gKyAg
+ICAgICB0aS1rMy1pbWFnZS1nZW4gdG9vbCAgaGFzIGJlZW4gcmVtb3ZlZCBhbmQgcmVwbGFjZWQg
+YnkKPiA+ICsgICAgICAgVS1Cb290IGJpbm1hbiB0b29sIChyZXF1aXJlcyBVLWJvb3QgPj0gMjAy
+NC4wMSkuCj4gPiArCj4gPiAgY29uZmlnIEJSMl9QQUNLQUdFX01ZU1FMCj4gPiAgICAgICBib29s
+ICJteXNxbCB2aXJ0dWFsIHBhY2thZ2UgcmVtb3ZlZCIKPiA+ICAgICAgIHNlbGVjdCBCUjJfTEVH
+QUNZCj4gPiBkaWZmIC0tZ2l0IGEvREVWRUxPUEVSUyBiL0RFVkVMT1BFUlMKPiA+IGluZGV4IDBi
+ZmU5MWYwNjRhOS4uZmI5NTU1OTE1ZWMxIDEwMDY0NAo+ID4gLS0tIGEvREVWRUxPUEVSUwo+ID4g
+KysrIGIvREVWRUxPUEVSUwo+ID4gQEAgLTE1MSw3ICsxNTEsNiBAQCBOOiAgICAgICAgQW5hbmQg
+R2FkaXlhciA8Z2FkaXlhckB0aS5jb20+Cj4gPiAgRjogICBib2FyZC90aS9hbTYyeC1zay8KPiA+
+ICBGOiAgIGJvYXJkL3RpL2FtNjR4LXNrLwo+ID4gIEY6ICAgYm9vdC90aS1rMy1ib290LWZpcm13
+YXJlLwo+ID4gLUY6ICAgYm9vdC90aS1rMy1pbWFnZS1nZW4vCj4gPiAgRjogICBib290L3RpLWsz
+LXI1LWxvYWRlci8KPiA+ICBGOiAgIGNvbmZpZ3MvdGlfYW02Mnhfc2tfZGVmY29uZmlnCj4gPiAg
+RjogICBjb25maWdzL3RpX2FtNjR4X3NrX2RlZmNvbmZpZwo+ID4gQEAgLTMyMTksNyArMzIxOCw2
+IEBAIE46ICAgICAgWHVhbmhhbyBTaGkgPFgxNTAwMDE3N0BnbWFpbC5jb20+Cj4gPiAgRjogICBi
+b2FyZC90aS9hbTYyeC1zay8KPiA+ICBGOiAgIGJvYXJkL3RpL2FtNjR4LXNrLwo+ID4gIEY6ICAg
+Ym9vdC90aS1rMy1ib290LWZpcm13YXJlLwo+ID4gLUY6ICAgYm9vdC90aS1rMy1pbWFnZS1nZW4v
+Cj4gPiAgRjogICBib290L3RpLWszLXI1LWxvYWRlci8KPiA+ICBGOiAgIGNvbmZpZ3MvdGlfYW02
+Mnhfc2tfZGVmY29uZmlnCj4gPiAgRjogICBjb25maWdzL3RpX2FtNjR4X3NrX2RlZmNvbmZpZwo+
+ID4gZGlmZiAtLWdpdCBhL2Jvb3QvQ29uZmlnLmluIGIvYm9vdC9Db25maWcuaW4KPiA+IGluZGV4
+IGU1ZmRmN2FkNDM5ZS4uODdlMWI3YzAwZTM1IDEwMDY0NAo+ID4gLS0tIGEvYm9vdC9Db25maWcu
+aW4KPiA+ICsrKyBiL2Jvb3QvQ29uZmlnLmluCj4gPiBAQCAtMjAsNyArMjAsNiBAQCBzb3VyY2Ug
+ImJvb3QvczUwMC1ib290bG9hZGVyL0NvbmZpZy5pbiIKPiA+ICBzb3VyY2UgImJvb3Qvc2hpbS9D
+b25maWcuaW4iCj4gPiAgc291cmNlICJib290L3N5c2xpbnV4L0NvbmZpZy5pbiIKPiA+ICBzb3Vy
+Y2UgImJvb3QvdGktazMtYm9vdC1maXJtd2FyZS9Db25maWcuaW4iCj4gPiAtc291cmNlICJib290
+L3RpLWszLWltYWdlLWdlbi9Db25maWcuaW4iCj4gPiAgc291cmNlICJib290L3RpLWszLXI1LWxv
+YWRlci9Db25maWcuaW4iCj4gPiAgc291cmNlICJib290L3Vib290L0NvbmZpZy5pbiIKPiA+ICBz
+b3VyY2UgImJvb3QvdmV4cHJlc3MtZmlybXdhcmUvQ29uZmlnLmluIgo+ID4gZGlmZiAtLWdpdCBh
+L2Jvb3QvdGktazMtaW1hZ2UtZ2VuL0NvbmZpZy5pbiBiL2Jvb3QvdGktazMtaW1hZ2UtZ2VuL0Nv
+bmZpZy5pbgo+ID4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gPiBpbmRleCBhNTczMTlmNGJl
+NmQuLjAwMDAwMDAwMDAwMAo+ID4gLS0tIGEvYm9vdC90aS1rMy1pbWFnZS1nZW4vQ29uZmlnLmlu
+Cj4gPiArKysgL2Rldi9udWxsCj4gPiBAQCAtMSwyNCArMCwwIEBACj4gPiAtY29uZmlnIEJSMl9U
+QVJHRVRfVElfSzNfSU1BR0VfR0VOCj4gPiAtICAgICBib29sICJ0aS1rMy1pbWFnZS1nZW4iCj4g
+PiAtICAgICBkZXBlbmRzIG9uIEJSMl9UQVJHRVRfVElfSzNfUjVfTE9BREVSCj4gPiAtICAgICBz
+ZWxlY3QgQlIyX1RBUkdFVF9USV9LM19CT09UX0ZJUk1XQVJFCj4gPiAtICAgICAjIFdlIG5lZWQg
+RklUIHN1cHBvcnQgaW4gdWJvb3QtdG9vbHMsIHdoaWNoIGlzIHdoeSB3ZSBzZWxlY3QgYQo+ID4g
+LSAgICAgIyBob3N0IHBhY2thZ2UKPiA+IC0gICAgIHNlbGVjdCBCUjJfUEFDS0FHRV9IT1NUX1VC
+T09UX1RPT0xTCj4gPiAtICAgICBzZWxlY3QgQlIyX1BBQ0tBR0VfSE9TVF9VQk9PVF9UT09MU19G
+SVRfU1VQUE9SVAo+ID4gLSAgICAgaGVscAo+ID4gLSAgICAgICBVc2UgVEkncyBrMy1pbWFnZS1n
+ZW4gdG8gYnVpbGQgYSBzZXBhcmF0ZSBiYXJlIG1ldGFsIGJvb3QKPiA+IC0gICAgICAgYmluYXJ5
+IGZyb20gYSBzZXBhcmF0ZSBTUEwgdGhhdCBpcyBydW5uaW5nIG9uIHRoZSBSNSBjb3JlLgo+ID4g
+LQo+ID4gLSAgICAgICBodHRwczovL2dpdC50aS5jb20vY2dpdC9rMy1pbWFnZS1nZW4vazMtaW1h
+Z2UtZ2VuLwo+ID4gLQo+ID4gLWlmIEJSMl9UQVJHRVRfVElfSzNfSU1BR0VfR0VOCj4gPiAtCj4g
+PiAtY29uZmlnIEJSMl9UQVJHRVRfVElfSzNfSU1BR0VfR0VOX0ZXX1RZUEUKPiA+IC0gICAgIHN0
+cmluZwo+ID4gLSAgICAgZGVmYXVsdCAidGktZnMiICBpZiBCUjJfUEFDS0FHRV9USV9LM19TT0Nf
+QU02MkFYCj4gPiAtICAgICBkZWZhdWx0ICJ0aS1mcyIgIGlmIEJSMl9QQUNLQUdFX1RJX0szX1NP
+Q19BTTYyWAo+ID4gLSAgICAgZGVmYXVsdCAidGktc2NpIiBpZiBCUjJfUEFDS0FHRV9USV9LM19T
+T0NfQU02NFgKPiA+IC0gICAgIGRlZmF1bHQgInRpLXNjaSIgaWYgQlIyX1BBQ0tBR0VfVElfSzNf
+U09DX0FNNjVYCj4gPiAtCj4gPiAtZW5kaWYKPiA+IGRpZmYgLS1naXQgYS9ib290L3RpLWszLWlt
+YWdlLWdlbi90aS1rMy1pbWFnZS1nZW4uaGFzaCBiL2Jvb3QvdGktazMtaW1hZ2UtZ2VuL3RpLWsz
+LWltYWdlLWdlbi5oYXNoCj4gPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKPiA+IGluZGV4IGM5
+NjhjNTY0OGY3MS4uMDAwMDAwMDAwMDAwCj4gPiAtLS0gYS9ib290L3RpLWszLWltYWdlLWdlbi90
+aS1rMy1pbWFnZS1nZW4uaGFzaAo+ID4gKysrIC9kZXYvbnVsbAo+ID4gQEAgLTEsMyArMCwwIEBA
+Cj4gPiAtIyBMb2NhbGx5IGNhbGN1bGF0ZWQKPiA+IC1zaGEyNTYgIGY4OWVhNGIxZjVjOTkyNDU1
+YjFhNjgyZmRlNDgzNTkyMjFiNTNmMzI5NDEzNWRmNGJmMjBmZWVhNmFlYTkwZTQgIGszLWltYWdl
+LWdlbi0wOC4wNi4wMC4wMDcudGFyLmd6Cj4gPiAtc2hhMjU2ICBmMDEyZThkMDAwZDcxMWQwNTM5
+ZTViNGM4MTJmYzFkM2E1OWMxMGZjMWUzZDZlYTE1NTU1NmY1Yjc4Mjg2ODQ1ICBMSUNFTlNFCj4g
+PiBkaWZmIC0tZ2l0IGEvYm9vdC90aS1rMy1pbWFnZS1nZW4vdGktazMtaW1hZ2UtZ2VuLm1rIGIv
+Ym9vdC90aS1rMy1pbWFnZS1nZW4vdGktazMtaW1hZ2UtZ2VuLm1rCj4gPiBkZWxldGVkIGZpbGUg
+bW9kZSAxMDA2NDQKPiA+IGluZGV4IGFjYTI5YmNmMWJkNC4uMDAwMDAwMDAwMDAwCj4gPiAtLS0g
+YS9ib290L3RpLWszLWltYWdlLWdlbi90aS1rMy1pbWFnZS1nZW4ubWsKPiA+ICsrKyAvZGV2L251
+bGwKPiA+IEBAIC0xLDU0ICswLDAgQEAKPiA+IC0jIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+ID4g
+LSMKPiA+IC0jIHRpLWszLWltYWdlLWdlbgo+ID4gLSMKPiA+IC0jIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIwo+ID4gLQo+ID4gLVRJX0szX0lNQUdFX0dFTl9WRVJTSU9OID0gMDguMDYuMDAuMDA3Cj4g
+PiAtVElfSzNfSU1BR0VfR0VOX1NJVEUgPSBodHRwczovL2dpdC50aS5jb20vY2dpdC9rMy1pbWFn
+ZS1nZW4vazMtaW1hZ2UtZ2VuL3NuYXBzaG90Cj4gPiAtVElfSzNfSU1BR0VfR0VOX1NPVVJDRSA9
+IGszLWltYWdlLWdlbi0kKFRJX0szX0lNQUdFX0dFTl9WRVJTSU9OKS50YXIuZ3oKPiA+IC1USV9L
+M19JTUFHRV9HRU5fTElDRU5TRSA9IEJTRC0zLUNsYXVzZQo+ID4gLVRJX0szX0lNQUdFX0dFTl9M
+SUNFTlNFX0ZJTEVTID0gTElDRU5TRQo+ID4gLVRJX0szX0lNQUdFX0dFTl9JTlNUQUxMX0lNQUdF
+UyA9IFlFUwo+ID4gLQo+ID4gLSMgLSB0aS1rMy1pbWFnZS1nZW4gaXMgdXNlZCB0byBidWlsZCB0
+aWJvb3QzLmJpbiwgdXNpbmcgdGhlCj4gPiAtIyAgIHI1LXUtYm9vdC1zcGwuYmluIGZpbGUgZnJv
+bSB0aGUgdGktazMtcjUtbG9hZGVyIHBhY2thZ2UuIEhlbmNlIHRoZQo+ID4gLSMgICBkZXBlbmRl
+bmN5IG9uIHRpLWszLXI1LWxvYWRlci4KPiA+IC0jIC0gdGhlIHRpLWszLWltYWdlLWdlbiBtYWtl
+ZmlsZXMgc2VlbSB0byBuZWVkIHNvbWUgZmVhdHVyZSBmcm9tIE1ha2UKPiA+IC0jICAgdjQuMCwg
+c2ltaWxhciB0byB1LWJvb3QuCj4gPiAtVElfSzNfSU1BR0VfR0VOX0RFUEVOREVOQ0lFUyA9IFwK
+PiA+IC0gICAgIGhvc3QtYXJtLWdudS10b29sY2hhaW4gXAo+ID4gLSAgICAgaG9zdC1weXRob24z
+IFwKPiA+IC0gICAgIGhvc3Qtb3BlbnNzbCBcCj4gPiAtICAgICBob3N0LXVib290LXRvb2xzIFwK
+PiA+IC0gICAgIHRpLWszLXI1LWxvYWRlciBcCj4gPiAtICAgICB0aS1rMy1ib290LWZpcm13YXJl
+IFwKPiA+IC0gICAgICQoQlIyX01BS0VfSE9TVF9ERVBFTkRFTkNZKQo+ID4gLQo+ID4gLVRJX0sz
+X0lNQUdFX0dFTl9GV19UWVBFID0gJChjYWxsIHFzdHJpcCwkKEJSMl9UQVJHRVRfVElfSzNfSU1B
+R0VfR0VOX0ZXX1RZUEUpKQo+ID4gLVRJX0szX0lNQUdFX0dFTl9TT0MgPSAkKGNhbGwgcXN0cmlw
+LCQoQlIyX1BBQ0tBR0VfVElfSzNfU09DKSkKPiA+IC1USV9LM19JTUFHRV9HRU5fU0VDVFlQRSA9
+ICQoY2FsbCBxc3RyaXAsJChCUjJfUEFDS0FHRV9USV9LM19TRUNUWVBFKSkKPiA+IC0KPiA+IC1U
+SV9LM19JTUFHRV9HRU5fU1lTRlcgPSAkKFRJX0szX0lNQUdFX0dFTl9GV19UWVBFKS1maXJtd2Fy
+ZS0kKFRJX0szX0lNQUdFX0dFTl9TT0MpLSQoVElfSzNfSU1BR0VfR0VOX1NFQ1RZUEUpLmJpbgo+
+ID4gLQo+ID4gLWRlZmluZSBUSV9LM19JTUFHRV9HRU5fQ09ORklHVVJFX0NNRFMKPiA+IC0gICAg
+IGNwICQoQklOQVJJRVNfRElSKS90aS1zeXNmdy8kKFRJX0szX0lNQUdFX0dFTl9TWVNGVykgJChA
+RCkKPiA+IC1lbmRlZgo+ID4gLQo+ID4gLWRlZmluZSBUSV9LM19JTUFHRV9HRU5fQlVJTERfQ01E
+Uwo+ID4gLSAgICAgJChUQVJHRVRfTUFLRV9FTlYpIFwKPiA+IC0gICAgICQoQlIyX01BS0UpIC1D
+ICQoQEQpIFwKPiA+IC0gICAgICAgICAgICAgU09DPSQoVElfSzNfSU1BR0VfR0VOX1NPQykgXAo+
+ID4gLSAgICAgICAgICAgICBTT0NfVFlQRT0kKFRJX0szX0lNQUdFX0dFTl9TRUNUWVBFKSBcCj4g
+PiAtICAgICAgICAgICAgIENPTkZJRz1ldm0gXAo+ID4gLSAgICAgICAgICAgICBDUk9TU19DT01Q
+SUxFPSQoSE9TVF9ESVIpL2Jpbi9hcm0tbm9uZS1lYWJpLSBcCj4gPiAtICAgICAgICAgICAgIFNC
+TD0kKEJJTkFSSUVTX0RJUikvcjUtdS1ib290LXNwbC5iaW4gXAo+ID4gLSAgICAgICAgICAgICBP
+PSQoQEQpL3RtcCBcCj4gPiAtICAgICAgICAgICAgIEJJTl9ESVI9JChARCkKPiA+IC1lbmRlZgo+
+ID4gLQo+ID4gLWRlZmluZSBUSV9LM19JTUFHRV9HRU5fSU5TVEFMTF9JTUFHRVNfQ01EUwo+ID4g
+LSAgICAgY3AgJChARCkvdGlib290My5iaW4gJChCSU5BUklFU19ESVIpCj4gPiAtZW5kZWYKPiA+
+IC0KPiA+IC0kKGV2YWwgJChnZW5lcmljLXBhY2thZ2UpKQo+CgoKLS0gCgpEYXJpbyBCaW5hY2No
+aQoKU2VuaW9yIEVtYmVkZGVkIExpbnV4IERldmVsb3BlcgoKZGFyaW8uYmluYWNjaGlAYW1hcnVs
+YXNvbHV0aW9ucy5jb20KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KCgpBbWFy
+dWxhIFNvbHV0aW9ucyBTUkwKClZpYSBMZSBDYW5ldmFyZSAzMCwgMzExMDAgVHJldmlzbywgVmVu
+ZXRvLCBJVAoKVC4gKzM5IDA0MiAyNDMgNTMxMAppbmZvQGFtYXJ1bGFzb2x1dGlvbnMuY29tCgp3
+d3cuYW1hcnVsYXNvbHV0aW9ucy5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290
+Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJv
+b3QK
