@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8026DC54E58
-	for <buildroot@archiver.kernel.org>; Mon, 25 Mar 2024 18:16:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 420EAC54E58
+	for <buildroot@archiver.kernel.org>; Mon, 25 Mar 2024 18:17:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4C04B406E3;
-	Mon, 25 Mar 2024 18:16:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0B81F4074C;
+	Mon, 25 Mar 2024 18:17:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0dCaPVt4iLUU; Mon, 25 Mar 2024 18:16:56 +0000 (UTC)
+ id iEgB7f0BGBIr; Mon, 25 Mar 2024 18:17:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 181FC406E5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10F024074E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 181FC406E5;
-	Mon, 25 Mar 2024 18:16:56 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3F7A91BF263
- for <buildroot@lists.busybox.net>; Mon, 25 Mar 2024 18:16:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 10F024074E;
+	Mon, 25 Mar 2024 18:17:00 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7D4351BF955
+ for <buildroot@lists.busybox.net>; Mon, 25 Mar 2024 18:16:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2C785606D9
- for <buildroot@lists.busybox.net>; Mon, 25 Mar 2024 18:16:55 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 784B740BDA
+ for <buildroot@lists.busybox.net>; Mon, 25 Mar 2024 18:16:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FlNfNt7eyOCn for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sBSlNlAzfJcU for <buildroot@lists.busybox.net>;
  Mon, 25 Mar 2024 18:16:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 693AD605BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9E3D140476
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 693AD605BB
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9E3D140476
  for <buildroot@buildroot.org>; Mon, 25 Mar 2024 18:16:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5D2FF8078F; Mon, 25 Mar 2024 18:16:54 +0000 (UTC)
+ id 8ACD983F9C; Mon, 25 Mar 2024 18:16:54 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 25 Mar 2024 11:30:49 +0100
+Date: Mon, 25 Mar 2024 19:06:03 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: 57a21764857e6856aaff66e05aca07a850f45431
-X-Git-Newrev: 192047fca2b40c383e7a78745acac22d0e5e5a63
+X-Git-Oldrev: d088d1621ed0f89c6e9cd5565a35a921930e4b9b
+X-Git-Newrev: 60e2aff1a853fb1e065489de049c40d886e9c14a
 X-Patchwork-Hint: ignore
-Message-Id: <20240325181654.5D2FF8078F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/pure-ftpd: remove
- optional dependency to libiconv
+Message-Id: <20240325181654.8ACD983F9C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/libunwind: drop
+ autoreconf
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,37 +65,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=192047fca2b40c383e7a78745acac22d0e5e5a63
+commit: https://git.buildroot.net/buildroot/commit/?id=60e2aff1a853fb1e065489de049c40d886e9c14a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-Buildroot commit 26d5d1c0a20719876220b429a43f8b1bcc29138b removed the
-configure option --with-rfc2640 due to upstream commit:
-https://github.com/jedisct1/pure-ftpd/commit/33eda763bfca8dfcf736275272b84602dcd18549
+Commit 67d87bf7d255cd05f84fab3e3625e073b5bfccf8 forgot to drop autoreconf
 
-In the same upstream commit the iconv support was also removed because
-it was only needed for rfc2640 support, this removal was forgotten in
-the forementioned buildroot commit.
+Fixes: 67d87bf7d255cd05f84fab3e3625e073b5bfccf8
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit f30f5e4f61e72a507df96bea1960a9388c780a82)
+(cherry picked from commit 4eba5e002c1e71b1d8decba101f9b8f945a9cd3a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pure-ftpd/pure-ftpd.mk | 1 -
+ package/libunwind/libunwind.mk | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
-index 138b05ebb4..b2be59fff4 100644
---- a/package/pure-ftpd/pure-ftpd.mk
-+++ b/package/pure-ftpd/pure-ftpd.mk
-@@ -10,7 +10,6 @@ PURE_FTPD_SOURCE = pure-ftpd-$(PURE_FTPD_VERSION).tar.bz2
- PURE_FTPD_LICENSE = ISC
- PURE_FTPD_LICENSE_FILES = COPYING
- PURE_FTPD_CPE_ID_VENDOR = pureftpd
--PURE_FTPD_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+diff --git a/package/libunwind/libunwind.mk b/package/libunwind/libunwind.mk
+index afc17f7b25..c82a148fa3 100644
+--- a/package/libunwind/libunwind.mk
++++ b/package/libunwind/libunwind.mk
+@@ -10,7 +10,6 @@ LIBUNWIND_INSTALL_STAGING = YES
+ LIBUNWIND_LICENSE_FILES = COPYING
+ LIBUNWIND_LICENSE = MIT
+ LIBUNWIND_CPE_ID_VENDOR = libunwind_project
+-LIBUNWIND_AUTORECONF = YES
  
- PURE_FTPD_CONF_OPTS = \
- 	--with-altlog \
+ LIBUNWIND_CONF_OPTS = \
+ 	--disable-tests \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
