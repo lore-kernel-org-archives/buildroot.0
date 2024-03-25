@@ -1,105 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A58ADC54E58
-	for <buildroot@archiver.kernel.org>; Mon, 25 Mar 2024 19:33:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE26FC54E64
+	for <buildroot@archiver.kernel.org>; Mon, 25 Mar 2024 20:04:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 29B2D4012D;
-	Mon, 25 Mar 2024 19:33:17 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pmyOt_lRhllV; Mon, 25 Mar 2024 19:33:16 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C85440137
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3C85440137;
-	Mon, 25 Mar 2024 19:33:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CC9611BF3DE
- for <buildroot@lists.busybox.net>; Mon, 25 Mar 2024 19:33:13 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C62B481448
- for <buildroot@lists.busybox.net>; Mon, 25 Mar 2024 19:33:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 80CC4816E9;
+	Mon, 25 Mar 2024 20:04:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sZHevleO-jff for <buildroot@lists.busybox.net>;
- Mon, 25 Mar 2024 19:33:13 +0000 (UTC)
-Received-SPF: Pass (sender SPF authorized) identity=helo;
- client-ip=85.215.255.23; helo=mo4-p00-ob.smtp.rzone.de;
- envelope-from=nerv@dawncrow.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8812480BD0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8812480BD0
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de
- [85.215.255.23])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8812480BD0
- for <buildroot@buildroot.org>; Mon, 25 Mar 2024 19:33:12 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; t=1711394827; cv=none;
- d=strato.com; s=strato-dkim-0002;
- b=si3NcZQMydh4Qpb6JJKkegAqynJtXk3/VBbXbGbQ6rNbzdlcXOSO0kLp0K19/8ej8M
- ChjDeSHFSG69aR2H3XPirReqayT0tsKlnZIx/OH8Zl6GadcpMdq3QT2Cbdmo4OlZRZnM
- LYJvEpzJYcpNiLuarQT9dRyol9JD6I7sKZewmtifDhsOhQ9zjaA4ufLdG38yDIgMuXkq
- QWRzHkqJXdWqy0rrurGIZkMpTMKuxaJWxIZnSvOPSBXUk8cMbWHI68q9VllrYTX5ScZG
- YFJJ8JTV3YP5x436nwRfUxI5KCpqTyjngta3qdRxZT/6zA0CF30Xm+oAEgrcH9/pbsdZ
- OBiA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1711394827;
- s=strato-dkim-0002; d=strato.com;
- h=Message-Id:Date:Subject:To:From:Cc:Date:From:Subject:Sender;
- bh=vZK9c0HZJFXzoeuBYgPPS0kuyVuqj9FkAKS8SxoYzGU=;
- b=PzwHfYvhkWGelHoVB9RLYYSt1b6/7TUvmMvxaEMCMUenBl4hnzHTsXPj/ISJC66myz
- rG2H5UrgZdSbtYLBPhPmmtgcWADtJht4JVZjBP/zE0V7H1zcawmPJx0xkM+8Pvg+nClE
- GEya8Wtw8VsmF/seQFDUFd8kavrv4I3zCZOrBzLEQDP1JjI4J6wOXv5hhNhijLf19UJS
- Die+rAcS/Yp3HOxKgk4LFDEWliTyY+CiJOelrDgjk0a65mNulr2fewq5yk+JVUHVlsew
- kpkDcrKO9JlmGPIdqta3ceFe8E0+RBhVObzAX8JNPCsoSwPMmcfozx+ZfY+WAsWFqLBS
- liAQ==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo00
-X-RZG-AUTH: ":ImkWY2CseuihIZy6ZWWciR6unPhpN+aXzZGGjY6ptdusOK7nWzzuvt/yikxm+CmU"
-Received: from tesla.fritz.box by smtp.strato.de (RZmta 50.3.2 DYNA|AUTH)
- with ESMTPSA id j8711202PJR7C1N
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
- (Client did not present a certificate) for <buildroot@buildroot.org>;
- Mon, 25 Mar 2024 20:27:07 +0100 (CET)
-From: =?UTF-8?q?Andr=C3=A9=20Zwing?= <nerv@dawncrow.de>
-To: buildroot@buildroot.org
-Date: Mon, 25 Mar 2024 20:27:04 +0100
-Message-Id: <20240325192704.1597001-1-nerv@dawncrow.de>
-X-Mailer: git-send-email 2.34.1
+ id rPZGVqZIG_FV; Mon, 25 Mar 2024 20:04:28 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B27A181746
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id B27A181746;
+	Mon, 25 Mar 2024 20:04:28 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2DF261BF3E3
+ for <buildroot@lists.busybox.net>; Mon, 25 Mar 2024 20:04:27 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 282A060625
+ for <buildroot@lists.busybox.net>; Mon, 25 Mar 2024 20:04:27 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QG2nZVTHtiNV for <buildroot@lists.busybox.net>;
+ Mon, 25 Mar 2024 20:04:25 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::533; helo=mail-pg1-x533.google.com;
+ envelope-from=bleemayer@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A465D605DF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A465D605DF
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com
+ [IPv6:2607:f8b0:4864:20::533])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A465D605DF
+ for <buildroot@buildroot.org>; Mon, 25 Mar 2024 20:04:25 +0000 (UTC)
+Received: by mail-pg1-x533.google.com with SMTP id
+ 41be03b00d2f7-5cddfe0cb64so2007240a12.0
+ for <buildroot@buildroot.org>; Mon, 25 Mar 2024 13:04:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1711397064; x=1712001864;
+ h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=uSdaOswq0ch2aEfsIMuszkt6Ts4yuqYGICsbr/d+VZ8=;
+ b=vMDIzkPymoeJG9AIn8LAp5r+9yYpgMDul13PlNPcUIrrLFFVSmk3HUQoceLXVOCPOA
+ O2uY4S9ketdPM4uSSOeIhQoNsPjncUIBE1ZFaNyFrXb7SyjjMNkwmTnoQonNR2C1P3/x
+ 2X0nineksojE6+E8acL3SUlswdWy7j17EpO83Yh6EGGm+U1JlsV5zvKo5BZSd3emyE74
+ CtuN7NRotPT18o50rV6QH/ZAOdb0bzZosNj78AZt/oY71O55guPKd6Zt4Wp8zEqATUh3
+ D98h/h1XjcQx9s1y8We5X/IUOXsNaLkpUZi0QgYshogqDa+7l+7dspsxr77zsrmCKrHV
+ stcQ==
+X-Gm-Message-State: AOJu0YxiOKkhYcUN0wZtlS28xBtYachK+s+9rgSTDz+J1tpvwToxahmP
+ 7cNVS5OjzRdHURXpFRyPpZVjpzgodMS3Gr6OPODDQIgF7zOx8sQXBZMHlZKDj16zalsMLyTuiAG
+ FZy5BdmWEbaYTwpCBl5mOVKi9zG8c103SA6k=
+X-Google-Smtp-Source: AGHT+IFFPjJyCo9dzNbWd0TUnhnbaLX9v3CF/D1SOD8sLvfvGjxuf6NYSU1CfdIbeVod4mMC7u4ZmuHCWJt7Al23Y/E=
+X-Received: by 2002:a17:90a:a083:b0:29c:5b18:2983 with SMTP id
+ r3-20020a17090aa08300b0029c5b182983mr5680676pjp.16.1711397064392; Mon, 25 Mar
+ 2024 13:04:24 -0700 (PDT)
 MIME-Version: 1.0
+References: <CAB3eKoAK26-HuqGE+ewedW9-o6izS754ybr_KdanQwERZebapA@mail.gmail.com>
+In-Reply-To: <CAB3eKoAK26-HuqGE+ewedW9-o6izS754ybr_KdanQwERZebapA@mail.gmail.com>
+From: Brian Mayer <bleemayer@gmail.com>
+Date: Mon, 25 Mar 2024 17:04:12 -0300
+Message-ID: <CAB3eKoAXBR9MSf1od3mqBnaBV1+xD8BYegFkRQo31UDSx0JQZw@mail.gmail.com>
+To: buildroot@buildroot.org
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- t=1711394827; 
- s=strato-dkim-0002; d=dawncrow.de;
- h=Message-Id:Date:Subject:To:From:Cc:Date:From:Subject:Sender;
- bh=vZK9c0HZJFXzoeuBYgPPS0kuyVuqj9FkAKS8SxoYzGU=;
- b=cQfTk8CwCxbvKRD0wL7uxOiMvw4zGhjJtTiEYTKjqI4KeF35Y4vRTnQef309y+cDAL
- E6b2geHW4xGtJUciQ9OXufhYCo9E/JW986gPmrlPHt3CKTPDkhGCgx2/wMXMOs1G6uEy
- +dkvlVbpcGaRxuNQ7QTFyf8FTZKxFB9aaGjJAAwxTiWS4TfrUmiSJbn+k0vGR2mWh/R6
- vzrI2u0DZayN2F2XCDPqP5xLWcLE/aOnjW9+ZbwxI9OXR4TdVszlisA3YYFW6+T5Kd7N
- MWjRJ1vg0XjYjcMDC1NE8J8gXDerz/n5ud5LT6EP77UISCR07YMJHx4k9D0lg/j76RCl
- WPbg==
-X-Mailman-Original-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
- t=1711394827; 
- s=strato-dkim-0003; d=dawncrow.de;
- h=Message-Id:Date:Subject:To:From:Cc:Date:From:Subject:Sender;
- bh=vZK9c0HZJFXzoeuBYgPPS0kuyVuqj9FkAKS8SxoYzGU=;
- b=u8EkDOLGyzdQiD+/aUb4jj4R0JqH71+JYcp/7MDrbyeK95O8Hu5NPQSGX/aCBoogxR
- JhUr2kVu6MZtlHPqrwAg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=dawncrow.de
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key, unprotected) header.d=dawncrow.de
- header.i=@dawncrow.de header.a=rsa-sha256 header.s=strato-dkim-0002
- header.b=cQfTk8Cw; 
- dkim=pass header.d=dawncrow.de header.i=@dawncrow.de header.a=ed25519-sha256
- header.s=strato-dkim-0003 header.b=u8EkDOLG
-Subject: [Buildroot] [PATCH] package/p7zip: bump to version v17.05
+ d=gmail.com; s=20230601; t=1711397064; x=1712001864; darn=buildroot.org;
+ h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=uSdaOswq0ch2aEfsIMuszkt6Ts4yuqYGICsbr/d+VZ8=;
+ b=gvBlVKGrLAAGIargkdfgtgwIOy75D+GHXbFF49zoei/IlAp7QIQFUu7N93bWeFH2JN
+ 9hPwjI5dYpGCjhed4yJDPhXMrTuPUo8brMmw5hwRKY2SQySP2jZrJn6U5fzBlbEIWkUZ
+ mZmUF0UJcry/htHfbhQ2/TZ5BSWr1GBZQmXaDu07/KnII9Y48wCQJpx4o1RGSGen1U32
+ vsdRP5vEXrlJ7ZRJZVIcisJLfM7awBOS//1JnxTaemU/XQufmS1mcF8IpNcFT/urTZjK
+ 0HdarPaseQmlBthey6ClbfMWKAAm0wrTyymdM09RaJJBDzFDr3vpsIblvrTgP5uvARAP
+ /WSQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=gvBlVKGr
+Subject: [Buildroot] [PATCH] package/sbase: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -111,32 +95,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-U2lnbmVkLW9mZi1ieTogQW5kcsOpIFp3aW5nIDxuZXJ2QGRhd25jcm93LmRlPgotLS0KIHBhY2th
-Z2UvcDd6aXAvcDd6aXAuaGFzaCB8IDIgKy0KIHBhY2thZ2UvcDd6aXAvcDd6aXAubWsgICB8IDQg
-KystLQogMiBmaWxlcyBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pCgpk
-aWZmIC0tZ2l0IGEvcGFja2FnZS9wN3ppcC9wN3ppcC5oYXNoIGIvcGFja2FnZS9wN3ppcC9wN3pp
-cC5oYXNoCmluZGV4IDAwNDg3NzdkODkuLmYwYjljMjcxMTMgMTAwNjQ0Ci0tLSBhL3BhY2thZ2Uv
-cDd6aXAvcDd6aXAuaGFzaAorKysgYi9wYWNrYWdlL3A3emlwL3A3emlwLmhhc2gKQEAgLTEsMyAr
-MSwzIEBACiAjIExvY2FsbHkgY2FsY3VsYXRlZAotc2hhMjU2ICBlYTAyOWEyZTIxZDJkNmFkMGEx
-NTZmNjY3OWJkNjY4MzYyMDRhYTc4MTQ4YTRjNWU0OThmZTY4MmU3NzEyN2VmICBwN3ppcC0xNy4w
-NC50YXIuZ3oKK3NoYTI1NiAgZDI3ODhmODkyNTcxMDU4YzA4ZDI3MDk1YzIyMTU0NTc5ZGZlZmI4
-MDdlYmUzNTdkMTQ1YWIyZGRkZGVmYjFhNiAgcDd6aXAtMTcuMDUudGFyLmd6CiBzaGEyNTYgIDU1
-NTgwNjY1N2RjZjBmMWU3MjBiNTgxYzUyNjQzYzE5NWVjODZhZTNmMDBiZDE4Y2M2NmQyZTBmODhm
-ZmEyMTAgIERPQy9MaWNlbnNlLnR4dApkaWZmIC0tZ2l0IGEvcGFja2FnZS9wN3ppcC9wN3ppcC5t
-ayBiL3BhY2thZ2UvcDd6aXAvcDd6aXAubWsKaW5kZXggYjZjNWFkYWUyNi4uODAzZmQzOGI3ZiAx
-MDA2NDQKLS0tIGEvcGFja2FnZS9wN3ppcC9wN3ppcC5taworKysgYi9wYWNrYWdlL3A3emlwL3A3
-emlwLm1rCkBAIC00LDggKzQsOCBAQAogIwogIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKIAotUDda
-SVBfVkVSU0lPTiA9IDE3LjA0Ci1QN1pJUF9TSVRFID0gJChjYWxsIGdpdGh1YixqaW5mZWloYW41
-NyxwN3ppcCx2JChQN1pJUF9WRVJTSU9OKSkKK1A3WklQX1ZFUlNJT04gPSAxNy4wNQorUDdaSVBf
-U0lURSA9ICQoY2FsbCBnaXRodWIscDd6aXAtcHJvamVjdCxwN3ppcCx2JChQN1pJUF9WRVJTSU9O
-KSkKIFA3WklQX0xJQ0VOU0UgPSBMR1BMLTIuMSsgd2l0aCB1blJBUiByZXN0cmljdGlvbgogUDda
-SVBfTElDRU5TRV9GSUxFUyA9IERPQy9MaWNlbnNlLnR4dAogUDdaSVBfQ1BFX0lEX1ZFTkRPUiA9
-IDctemlwCi0tIAoyLjM0LjEKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcK
-aHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+sbase is a collection of unix tools that are inherently portable across
+UNIX and UNIX-like systems.
+
+Signed-off-by: brian <git@myr.sh>
+---
+ package/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/Config.in b/package/Config.in
+index 1a62bfb1be..177b8a89ff 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2549,6 +2549,7 @@ endif
+        source "package/s6-dns/Config.in"
+        source "package/s6-networking/Config.in"
+        source "package/samba4/Config.in"
++       source "package/sbase/Config.in"
+        source "package/sconeserver/Config.in"
+        source "package/ser2net/Config.in"
+        source "package/shadowsocks-libev/Config.in"
+--
+2.44.0
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
