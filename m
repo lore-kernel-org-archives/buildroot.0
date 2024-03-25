@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC7A4C54E58
-	for <buildroot@archiver.kernel.org>; Mon, 25 Mar 2024 18:17:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4ABB4C54E58
+	for <buildroot@archiver.kernel.org>; Mon, 25 Mar 2024 18:17:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B23E7407DA;
-	Mon, 25 Mar 2024 18:17:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0E4CF407CB;
+	Mon, 25 Mar 2024 18:17:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PrmxCvp5Kcg2; Mon, 25 Mar 2024 18:17:31 +0000 (UTC)
+ id ZX8fKP1SbWRT; Mon, 25 Mar 2024 18:17:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F9E0407D7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F3907407DE
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5F9E0407D7;
-	Mon, 25 Mar 2024 18:17:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F3907407DE;
+	Mon, 25 Mar 2024 18:17:34 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A161E1BF263
- for <buildroot@lists.busybox.net>; Mon, 25 Mar 2024 18:17:01 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A495D1BF263
+ for <buildroot@lists.busybox.net>; Mon, 25 Mar 2024 18:17:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A9403819D1
- for <buildroot@lists.busybox.net>; Mon, 25 Mar 2024 18:16:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 69EA3819FC
+ for <buildroot@lists.busybox.net>; Mon, 25 Mar 2024 18:16:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id L_cvnX8wNKzY for <buildroot@lists.busybox.net>;
- Mon, 25 Mar 2024 18:16:56 +0000 (UTC)
+ id 4Q0FToiOoJ3R for <buildroot@lists.busybox.net>;
+ Mon, 25 Mar 2024 18:16:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C3B6819FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BBE3881E5F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9C3B6819FC
+ by smtp1.osuosl.org (Postfix) with ESMTP id BBE3881E5F
  for <buildroot@buildroot.org>; Mon, 25 Mar 2024 18:16:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 98DCD83F9C; Mon, 25 Mar 2024 18:16:56 +0000 (UTC)
+ id B735483922; Mon, 25 Mar 2024 18:16:56 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 25 Mar 2024 19:14:03 +0100
+Date: Mon, 25 Mar 2024 19:16:17 +0100
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 77c86888f41bc6e15de8e24736b7b153f1fbab5a
-X-Git-Newrev: 456b9b3fd7f7c17fe76133a06f8724da3ec891de
+X-Git-Oldrev: d6b70f009a87ca539de0bfa1ce42f0da122bc06b
+X-Git-Newrev: 2c465da71f599281a076fc29a591561b4b100f56
 X-Patchwork-Hint: ignore
-Message-Id: <20240325181656.98DCD83F9C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] support/testing: add
- bitcoin runtime test
+Message-Id: <20240325181656.B735483922@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/giflib: bump to
+ version 5.2.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,220 +65,378 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=456b9b3fd7f7c17fe76133a06f8724da3ec891de
+commit: https://git.buildroot.net/buildroot/commit/?id=2c465da71f599281a076fc29a591561b4b100f56
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+- Refresh first and fourth patches
+- Drop second nad third patches (already in version)
+
+https://sourceforge.net/p/giflib/code/ci/5.2.2/tree/NEWS
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit bc76d786a40548333be5cb9c0833e458498c06dd)
+(cherry picked from commit f98239dada59270efe19de9d9fae50ec9ab9d28c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS                                    |   1 +
- support/testing/tests/package/test_bitcoin.py | 184 ++++++++++++++++++++++++++
- 2 files changed, 185 insertions(+)
+ .checkpackageignore                                |  1 -
+ ...ile-add-targets-to-manage-static-building.patch | 44 ++++++++--------
+ package/giflib/0002-Fix-CVE-2022-28506.patch       | 34 ------------
+ ...ix-several-defects-found-by-Coverity-scan.patch | 59 +++++++++++++++++++++
+ package/giflib/0003-Fix-CVE-2023-39742.patch       | 36 -------------
+ ...ix-several-defects-found-by-Coverity-scan.patch | 61 ----------------------
+ package/giflib/giflib.hash                         |  5 +-
+ package/giflib/giflib.mk                           |  7 +--
+ 8 files changed, 86 insertions(+), 161 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f01874ab10..f6fc301373 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1770,6 +1770,7 @@ F:	support/testing/tests/package/test_acpica.py
- F:	support/testing/tests/package/test_acpica/
- F:	support/testing/tests/package/test_apache.py
- F:	support/testing/tests/package/test_bc.py
-+F:	support/testing/tests/package/test_bitcoin.py
- F:	support/testing/tests/package/test_brotli.py
- F:	support/testing/tests/package/test_bzip2.py
- F:	support/testing/tests/package/test_compressor_base.py
-diff --git a/support/testing/tests/package/test_bitcoin.py b/support/testing/tests/package/test_bitcoin.py
+diff --git a/.checkpackageignore b/.checkpackageignore
+index aa1679f509..e678d64498 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -462,7 +462,6 @@ package/genromfs/0001-build-system.patch Sob Upstream
+ package/gensio/0001-Fix-missing-EVP_PKEY_ED25519-build-error-on-libressl.patch Upstream
+ package/gerbera/S99gerbera Indent
+ package/giblib/0001-fix-imlib2-detection.patch Upstream
+-package/giflib/0001-Makefile-add-targets-to-manage-static-building.patch Upstream
+ package/git-crypt/0001-fix-build-with-libressl-3.5.0.patch Upstream
+ package/glog/0001-added-emscripten-support.patch Upstream
+ package/glorytun/0001-Add-support-for-Apple-silicon.patch Upstream
+diff --git a/package/giflib/0001-Makefile-add-targets-to-manage-static-building.patch b/package/giflib/0001-Makefile-add-targets-to-manage-static-building.patch
+index 384457d0bd..ba8d426bea 100644
+--- a/package/giflib/0001-Makefile-add-targets-to-manage-static-building.patch
++++ b/package/giflib/0001-Makefile-add-targets-to-manage-static-building.patch
+@@ -8,8 +8,7 @@ targets to allow the user to build giflib when dynamic library support
+ is not available or enable on the toolchain
+ 
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status:
+-https://sourceforge.net/p/giflib/code/merge-requests/7]
++Upstream: https://sourceforge.net/p/giflib/code/merge-requests/7
+ ---
+  Makefile | 18 ++++++++++++++----
+  1 file changed, 14 insertions(+), 4 deletions(-)
+@@ -18,16 +17,19 @@ diff --git a/Makefile b/Makefile
+ index b2bf6de..111f52f 100644
+ --- a/Makefile
+ +++ b/Makefile
+-@@ -61,10 +61,17 @@ UTILS = $(INSTALLABLE) \
++@@ -91,13 +91,20 @@ LIBUTILSO	= libutil.$(SOEXTENSION)
++ LIBUTILSOMAJOR	= libutil.$(LIBMAJOR).$(SOEXTENSION)
++ endif
+  
+- LDLIBS=libgif.a -lm
+- 
+--all: libgif.so libgif.a libutil.so libutil.a $(UTILS)
+-+SHARED_LIBS = libgif.so libutil.so
++-all: $(LIBGIFSO) libgif.a $(LIBUTILSO) libutil.a $(UTILS)
+++SHARED_LIBS = $(LIBGIFSO) $(LIBUTILSO)
+ +STATIC_LIBS = libgif.a libutil.a
+ +
+ +all: shared-lib static-lib $(UTILS)
++ ifeq ($(UNAME), Darwin)
++ else
+  	$(MAKE) -C doc
++ endif
+  
+ -$(UTILS):: libgif.a libutil.a
+ +$(UTILS):: $(STATIC_LIBS)
+@@ -36,18 +38,18 @@ index b2bf6de..111f52f 100644
+ +
+ +static-lib: $(STATIC_LIBS)
+  
+- libgif.so: $(OBJECTS) $(HEADERS)
+- 	$(CC) $(CFLAGS) -shared $(LDFLAGS) -Wl,-soname -Wl,libgif.so.$(LIBMAJOR) -o libgif.so $(OBJECTS)
+-@@ -79,7 +86,7 @@ libutil.a: $(UOBJECTS) $(UHEADERS)
++ $(LIBGIFSO): $(OBJECTS) $(HEADERS)
++ ifeq ($(UNAME), Darwin)
++@@ -120,7 +127,7 @@ libutil.a: $(UOBJECTS) $(UHEADERS)
+  	$(AR) rcs libutil.a $(UOBJECTS)
+  
+  clean:
+--	rm -f $(UTILS) $(TARGET) libgetarg.a libgif.a libgif.so libutil.a libutil.so *.o
++-	rm -f $(UTILS) $(TARGET) libgetarg.a libgif.a $(LIBGIFSO) libutil.a $(LIBUTILSO) *.o
+ +	rm -f $(UTILS) $(TARGET) libgetarg.a $(SHARED_LIBS) $(STATIC_LIBS) *.o
+- 	rm -f libgif.so.$(LIBMAJOR).$(LIBMINOR).$(LIBPOINT)
+- 	rm -f libgif.so.$(LIBMAJOR)
+- 	rm -fr doc/*.1 *.html doc/staging
+-@@ -96,12 +103,15 @@ install-bin: $(INSTALLABLE)
++ 	rm -f $(LIBGIFSOVER)
++ 	rm -f $(LIBGIFSOMAJOR)
++ 	rm -fr doc/*.[17] *.html doc/staging
++@@ -145,12 +152,15 @@ install-bin: $(INSTALLABLE)
+  install-include:
+  	$(INSTALL) -d "$(DESTDIR)$(INCDIR)"
+  	$(INSTALL) -m 644 gif_lib.h "$(DESTDIR)$(INCDIR)"
+@@ -57,13 +59,13 @@ index b2bf6de..111f52f 100644
+  	$(INSTALL) -m 644 libgif.a "$(DESTDIR)$(LIBDIR)/libgif.a"
+ +install-shared-lib:
+ +	$(INSTALL) -d "$(DESTDIR)$(LIBDIR)"
+- 	$(INSTALL) -m 755 libgif.so "$(DESTDIR)$(LIBDIR)/libgif.so.$(LIBVER)"
+- 	ln -sf libgif.so.$(LIBVER) "$(DESTDIR)$(LIBDIR)/libgif.so.$(LIBMAJOR)"
+- 	ln -sf libgif.so.$(LIBMAJOR) "$(DESTDIR)$(LIBDIR)/libgif.so"
++ 	$(INSTALL) -m 755 $(LIBGIFSO) "$(DESTDIR)$(LIBDIR)/$(LIBGIFSOVER)"
++ 	ln -sf $(LIBGIFSOVER) "$(DESTDIR)$(LIBDIR)/$(LIBGIFSOMAJOR)"
++ 	ln -sf $(LIBGIFSOMAJOR) "$(DESTDIR)$(LIBDIR)/$(LIBGIFSO)"
+ +install-lib: install-static-lib install-shared-lib
+  install-man:
+- 	$(INSTALL) -d "$(DESTDIR)$(MANDIR)/man1"
+- 	$(INSTALL) -m 644 doc/*.1 "$(DESTDIR)$(MANDIR)/man1"
++ 	$(INSTALL) -d "$(DESTDIR)$(MANDIR)/man1" "$(DESTDIR)$(MANDIR)/man7"
++ 	$(INSTALL) -m 644 $(MANUAL_PAGES_1:xml=1) "$(DESTDIR)$(MANDIR)/man1"
+ -- 
+-2.20.1
++2.43.0
+ 
+diff --git a/package/giflib/0002-Fix-CVE-2022-28506.patch b/package/giflib/0002-Fix-CVE-2022-28506.patch
+deleted file mode 100644
+index 35d5f60a95..0000000000
+--- a/package/giflib/0002-Fix-CVE-2022-28506.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From c0cca041fc4fb6748d8dff3675fe7a839253d668 Mon Sep 17 00:00:00 2001
+-From: Sandro Mani <manisandro@gmail.com>
+-Date: Tue, 5 Dec 2023 16:24:32 -0700
+-Subject: [PATCH] Fix CVE-2022-28506
+-
+-From: giflib-5.2.1-17.fc39.src.rpm
+-Fixes https://nvd.nist.gov/vuln/detail/CVE-2022-28506
+-Upstream: https://sourceforge.net/p/giflib/bugs/159/
+-
+-Signed-off-by: Sandro Mani <manisandro@gmail.com>
+-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+----
+- gif2rgb.c | 5 +++++
+- 1 file changed, 5 insertions(+)
+-
+-diff --git a/gif2rgb.c b/gif2rgb.c
+-index 8d7c0ff..d9a469f 100644
+---- a/gif2rgb.c
+-+++ b/gif2rgb.c
+-@@ -294,6 +294,11 @@ static void DumpScreen2RGB(char *FileName, int OneFileFlag,
+-             GifRow = ScreenBuffer[i];
+-             GifQprintf("\b\b\b\b%-4d", ScreenHeight - i);
+-             for (j = 0, BufferP = Buffer; j < ScreenWidth; j++) {
+-+                /* Check if color is within color palete */
+-+                if (GifRow[j] >= ColorMap->ColorCount)
+-+                {
+-+                   GIF_EXIT(GifErrorString(D_GIF_ERR_IMAGE_DEFECT));
+-+                }
+-                 ColorMapEntry = &ColorMap->Colors[GifRow[j]];
+-                 *BufferP++ = ColorMapEntry->Red;
+-                 *BufferP++ = ColorMapEntry->Green;
+--- 
+-2.43.0
+-
+diff --git a/package/giflib/0002-Fix-several-defects-found-by-Coverity-scan.patch b/package/giflib/0002-Fix-several-defects-found-by-Coverity-scan.patch
 new file mode 100644
-index 0000000000..93aa9383ab
+index 0000000000..f6816d0753
 --- /dev/null
-+++ b/support/testing/tests/package/test_bitcoin.py
-@@ -0,0 +1,184 @@
-+import os
-+import time
++++ b/package/giflib/0002-Fix-several-defects-found-by-Coverity-scan.patch
+@@ -0,0 +1,59 @@
++From a1c48b91cd1cf1e9bf7077709b69f4bfd4c4abc7 Mon Sep 17 00:00:00 2001
++From: Sandro Mani <manisandro@gmail.com>
++Date: Tue, 5 Dec 2023 16:38:48 -0700
++Subject: [PATCH] Fix several defects found by Coverity scan
 +
-+import infra.basetest
++From: giflib-5.2.1-17.fc39.src.rpm
++Upstream: Not submitted
 +
++Signed-off-by: Sandro Mani <manisandro@gmail.com>
++Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
++[Fabrice: updated for 5.2.2]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ gif2rgb.c | 11 ++++++++++-
++ 1 file changed, 10 insertions(+), 1 deletion(-)
 +
-+class TestBitcoin(infra.basetest.BRTest):
-+    # infra.basetest.BASIC_TOOLCHAIN_CONFIG cannot be used as it does
-+    # not include BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
-+    # needed by bitcoin. This config also uses an ext4 rootfs as
-+    # bitcoind needs some free disk space to start (so we avoid having
-+    # a larger initrd in RAM).
-+    config = \
-+        """
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.81"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-+        BR2_PACKAGE_BITCOIN=y
-+        BR2_PACKAGE_BITCOIN_WALLET=y
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        BR2_TARGET_ROOTFS_EXT2_4=y
-+        BR2_TARGET_ROOTFS_EXT2_SIZE="256M"
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+    # Command prefix for the bitcoin command line interface.
-+    cli_cmd = "bitcoin-cli -regtest"
++diff --git a/gif2rgb.c b/gif2rgb.c
++index d9a469f..02cea41 100644
++--- a/gif2rgb.c
+++++ b/gif2rgb.c
++@@ -170,6 +170,8 @@ static void SaveGif(GifByteType *OutputBuffer,
++ 	/* Open stdout for the output file: */
++ 	if ((GifFile = EGifOpenFileHandle(1, &Error)) == NULL) {
++ 		PrintGifError(Error);
+++		free(OutputBuffer);
+++		GifFreeMapObject(OutputColorMap);
++ 		exit(EXIT_FAILURE);
++ 	}
++ 
++@@ -179,6 +181,8 @@ static void SaveGif(GifByteType *OutputBuffer,
++ 	     EGifPutImageDesc(GifFile, 0, 0, Width, Height, false, NULL) ==
++ 	        GIF_ERROR) {
++ 		PrintGifError(Error);
+++		free(OutputBuffer);
+++		GifFreeMapObject(OutputColorMap);
++ 		exit(EXIT_FAILURE);
++ 	}
++ 
++@@ -187,6 +191,8 @@ static void SaveGif(GifByteType *OutputBuffer,
++ 
++ 	for (i = 0; i < Height; i++) {
++ 		if (EGifPutLine(GifFile, Ptr, Width) == GIF_ERROR) {
+++			free(OutputBuffer);
+++			GifFreeMapObject(OutputColorMap);
++ 			exit(EXIT_FAILURE);
++ 		}
++ 		GifQprintf("\b\b\b\b%-4d", Height - i - 1);
++@@ -196,6 +203,8 @@ static void SaveGif(GifByteType *OutputBuffer,
++ 
++ 	if (EGifCloseFile(GifFile, &Error) == GIF_ERROR) {
++ 		PrintGifError(Error);
+++		free(OutputBuffer);
+++		GifFreeMapObject(OutputColorMap);
++ 		exit(EXIT_FAILURE);
++ 	}
++ }
++-- 
++2.43.0
 +
-+    def create_btc_wallet(self, wallet_name):
-+        """Create an empty wallet."""
-+        cmd = f"{self.cli_cmd} -named createwallet wallet_name={wallet_name}"
-+        self.assertRunOk(cmd)
-+
-+    def gen_btc_address(self, wallet_name):
-+        """Generate an address in a wallet."""
-+        cmd = f"{self.cli_cmd} -rpcwallet={wallet_name} getnewaddress"
-+        out, ret = self.emulator.run(cmd)
-+        self.assertEqual(ret, 0)
-+        return out[0]
-+
-+    def init_wallet(self, wallet_name):
-+        """Create a wallet and generate an address in it."""
-+        self.create_btc_wallet(wallet_name)
-+        return self.gen_btc_address(wallet_name)
-+
-+    def get_wallet_balance(self, wallet):
-+        """Return the (confirmed) balance of a wallet."""
-+        cmd = f"{self.cli_cmd} -rpcwallet={wallet} getbalance"
-+        out, ret = self.emulator.run(cmd)
-+        self.assertEqual(ret, 0)
-+        return float(out[0])
-+
-+    def get_wallet_unconfirmed_balance(self, wallet):
-+        """Return the unconfirmed balance of a wallet."""
-+        cmd = f"{self.cli_cmd} -rpcwallet={wallet} getunconfirmedbalance"
-+        out, ret = self.emulator.run(cmd)
-+        self.assertEqual(ret, 0)
-+        return float(out[0])
-+
-+    def get_block_count(self):
-+        """Returns the height of the most-work fully-validated chain."""
-+        cmd = f"{self.cli_cmd} getblockcount"
-+        out, ret = self.emulator.run(cmd)
-+        self.assertEqual(ret, 0)
-+        return int(out[0])
-+
-+    def test_run(self):
-+        drive = os.path.join(self.builddir, "images", "rootfs.ext4")
-+        kern = os.path.join(self.builddir, "images", "Image")
-+        self.emulator.boot(arch="aarch64",
-+                           kernel=kern,
-+                           kernel_cmdline=["root=/dev/vda console=ttyAMA0"],
-+                           options=["-M", "virt",
-+                                    "-cpu", "cortex-a53",
-+                                    "-m", "256M",
-+                                    "-drive", f"file={drive},if=virtio,format=raw"])
-+        self.emulator.login()
-+
-+        # Values for the test.
-+        wallet1 = "AliceWallet"
-+        wallet2 = "BobWallet"
-+        btc_test_amount = 10
-+        btc_fee = 0.00001
-+        req_blk_count = 101
-+
-+        # Check the binary can execute.
-+        self.assertRunOk("bitcoind --version")
-+
-+        # This cleanup is useful when run-test -k is used. It makes
-+        # this test idempotent. Since the drive storage is preserved
-+        # between reboots, this cleanup will make sure the test always
-+        # starts from a clean state.
-+        cmd = "rm -rf ~/.bitcoin"
-+        self.assertRunOk(cmd)
-+
-+        # The bitcoin daemon is not started. A client ping is expected
-+        # to fail.
-+        ping_cmd = f"{self.cli_cmd} ping"
-+        _, ret = self.emulator.run(ping_cmd)
-+        self.assertNotEqual(ret, 0)
-+
-+        # Start the daemon.
-+        cmd = f"bitcoind -regtest -daemonwait -fallbackfee={btc_fee:f}"
-+        self.assertRunOk(cmd)
-+
-+        time.sleep(2 * self.timeout_multiplier)
-+
-+        # Now the daemon is started, the ping is expected to succeed.
-+        self.assertRunOk(ping_cmd)
-+
-+        # We create two wallets and addresses.
-+        btc_addr1 = self.init_wallet(wallet1)
-+        btc_addr2 = self.init_wallet(wallet2)
-+
-+        # Since the regression test block chain is at its genesis
-+        # block, we expect a height of zero.
-+        cur_blk_cnt = self.get_block_count()
-+        self.assertEqual(cur_blk_cnt, 0)
-+
-+        # We also expect our wallets to be empty.
-+        for wallet in [wallet1, wallet2]:
-+            balance = self.get_wallet_balance(wallet)
-+            self.assertAlmostEqual(balance, 0.0)
-+
-+        # We request the generation of several blocks for address
-+        # #1. We should receive the 50 BTC reward at this address.
-+        cmd = self.cli_cmd
-+        cmd += f" generatetoaddress {req_blk_count} {btc_addr1}"
-+        self.assertRunOk(cmd)
-+
-+        # We should now see the previously created blocks.
-+        cur_blk_cnt = self.get_block_count()
-+        self.assertEqual(cur_blk_cnt, req_blk_count)
-+
-+        # We should also see the 50 BTC reward in the wallet #1.
-+        balance = self.get_wallet_balance(wallet1)
-+        self.assertAlmostEqual(balance, 50.0)
-+
-+        # The wallet #2 should still be empty.
-+        balance = self.get_wallet_balance(wallet2)
-+        self.assertAlmostEqual(balance, 0.0)
-+
-+        # We send an amount from wallet #1 to #2.
-+        cmd = f"{self.cli_cmd} -rpcwallet={wallet1}"
-+        cmd += f" sendtoaddress {btc_addr2} {btc_test_amount}"
-+        self.assertRunOk(cmd)
-+
-+        # The wallet #1 balance is expected to be subtracted by the
-+        # spent amount and the transaction fees.
-+        expected_balance = 50 - btc_test_amount - btc_fee
-+        balance = self.get_wallet_balance(wallet1)
-+        self.assertAlmostEqual(balance, expected_balance, places=4)
-+
-+        # The transaction is sent, but not confirmed yet. So we should
-+        # still see a (confirmed) balance of zero.
-+        balance = self.get_wallet_balance(wallet2)
-+        self.assertAlmostEqual(balance, 0.0)
-+
-+        # We should see the transferred amount in the unconfirmed
-+        # balance.
-+        balance = self.get_wallet_unconfirmed_balance(wallet2)
-+        self.assertAlmostEqual(balance, btc_test_amount)
-+
-+        # We generate 1 block to address #2. This action will confirm
-+        # the previous transaction (but this will not give the 50 BTC
-+        # reward).
-+        cmd = f"{self.cli_cmd} generatetoaddress 1 {btc_addr2}"
-+        self.assertRunOk(cmd)
-+
-+        # We should see one more block.
-+        cur_blk_cnt = self.get_block_count()
-+        self.assertEqual(cur_blk_cnt, req_blk_count + 1)
-+
-+        # We should now see the amount in the confirmed balance.
-+        balance = self.get_wallet_balance(wallet2)
-+        self.assertAlmostEqual(balance, btc_test_amount)
-+
-+        # The unconfirmed balance should now be zero.
-+        balance = self.get_wallet_unconfirmed_balance(wallet2)
-+        self.assertAlmostEqual(balance, 0.0)
+diff --git a/package/giflib/0003-Fix-CVE-2023-39742.patch b/package/giflib/0003-Fix-CVE-2023-39742.patch
+deleted file mode 100644
+index 2ba01ac8a4..0000000000
+--- a/package/giflib/0003-Fix-CVE-2023-39742.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From 4288b993ee9df6550a367fe06ede3c003dc7bbc6 Mon Sep 17 00:00:00 2001
+-From: Sandro Mani <manisandro@gmail.com>
+-Date: Tue, 5 Dec 2023 16:35:40 -0700
+-Subject: [PATCH] Fix CVE-2023-39742
+-
+-From: giflib-5.2.1-17.fc39.src.rpm
+-Fix segmentation faults due to non correct checking for args
+-Fixes: https://nvd.nist.gov/vuln/detail/CVE-2023-39742
+-Upstream: https://sourceforge.net/p/giflib/bugs/166/
+-
+-Signed-off-by: Sandro Mani <manisandro@gmail.com>
+-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+----
+- getarg.c | 6 ++++++
+- 1 file changed, 6 insertions(+)
+-
+-diff --git a/getarg.c b/getarg.c
+-index d569f6c..51fbe0b 100644
+---- a/getarg.c
+-+++ b/getarg.c
+-@@ -307,6 +307,12 @@ GAGetParmeters(void *Parameters[],
+-     int i = 0, ScanRes;
+- 
+-     while (!(ISSPACE(CtrlStrCopy[i]))) {
+-+
+-+        if ((*argv) == argv_end) {
+-+            GAErrorToken = Option;
+-+            return CMD_ERR_NumRead;
+-+        }
+-+
+-         switch (CtrlStrCopy[i + 1]) {
+-           case 'd':    /* Get signed integers. */
+-               ScanRes = sscanf(*((*argv)++), "%d",
+--- 
+-2.43.0
+-
+diff --git a/package/giflib/0004-Fix-several-defects-found-by-Coverity-scan.patch b/package/giflib/0004-Fix-several-defects-found-by-Coverity-scan.patch
+deleted file mode 100644
+index 1719769872..0000000000
+--- a/package/giflib/0004-Fix-several-defects-found-by-Coverity-scan.patch
++++ /dev/null
+@@ -1,61 +0,0 @@
+-From a1c48b91cd1cf1e9bf7077709b69f4bfd4c4abc7 Mon Sep 17 00:00:00 2001
+-From: Sandro Mani <manisandro@gmail.com>
+-Date: Tue, 5 Dec 2023 16:38:48 -0700
+-Subject: [PATCH] Fix several defects found by Coverity scan
+-
+-From: giflib-5.2.1-17.fc39.src.rpm
+-Upstream: Not submitted
+-
+-Signed-off-by: Sandro Mani <manisandro@gmail.com>
+-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+----
+- gif2rgb.c | 11 ++++++++++-
+- 1 file changed, 10 insertions(+), 1 deletion(-)
+-
+-diff --git a/gif2rgb.c b/gif2rgb.c
+-index d9a469f..02cea41 100644
+---- a/gif2rgb.c
+-+++ b/gif2rgb.c
+-@@ -170,6 +170,8 @@ static void SaveGif(GifByteType *OutputBuffer,
+-     /* Open stdout for the output file: */
+-     if ((GifFile = EGifOpenFileHandle(1, &Error)) == NULL) {
+- 	PrintGifError(Error);
+-+	free(OutputBuffer);
+-+	GifFreeMapObject(OutputColorMap);
+- 	exit(EXIT_FAILURE);
+-     }
+- 
+-@@ -179,6 +181,8 @@ static void SaveGif(GifByteType *OutputBuffer,
+- 	EGifPutImageDesc(GifFile,
+- 			 0, 0, Width, Height, false, NULL) == GIF_ERROR) {
+- 	PrintGifError(Error);
+-+	free(OutputBuffer);
+-+	GifFreeMapObject(OutputColorMap);
+- 	exit(EXIT_FAILURE);
+-     }
+- 
+-@@ -187,8 +191,11 @@ static void SaveGif(GifByteType *OutputBuffer,
+- 	       GifFile->Image.Width, GifFile->Image.Height);
+- 
+-     for (i = 0; i < Height; i++) {
+--	if (EGifPutLine(GifFile, Ptr, Width) == GIF_ERROR)
+-+	if (EGifPutLine(GifFile, Ptr, Width) == GIF_ERROR) {
+-+	    free(OutputBuffer);
+-+	    GifFreeMapObject(OutputColorMap);
+- 	    exit(EXIT_FAILURE);
+-+        }
+- 	GifQprintf("\b\b\b\b%-4d", Height - i - 1);
+- 
+- 	Ptr += Width;
+-@@ -196,6 +203,8 @@ static void SaveGif(GifByteType *OutputBuffer,
+- 
+-     if (EGifCloseFile(GifFile, &Error) == GIF_ERROR) {
+- 	PrintGifError(Error);
+-+	free(OutputBuffer);
+-+	GifFreeMapObject(OutputColorMap);
+- 	exit(EXIT_FAILURE);
+-     }
+- }
+--- 
+-2.43.0
+-
+diff --git a/package/giflib/giflib.hash b/package/giflib/giflib.hash
+index 445e9c4b3d..f11d4f1505 100644
+--- a/package/giflib/giflib.hash
++++ b/package/giflib/giflib.hash
+@@ -1,5 +1,6 @@
+ # From http://sourceforge.net/projects/giflib/files
+-md5  6f03aee4ebe54ac2cc1ab3e4b0a049e5  giflib-5.2.1.tar.gz
+-sha1  c3f774dcbdf26afded7788979c8081d33c6426dc  giflib-5.2.1.tar.gz
++md5  913dd251492134e235ee3c9a91987a4d  giflib-5.2.2.tar.gz
++sha1  608ba98d2dd8d03dfa7476f434d57de50a33e10b  giflib-5.2.2.tar.gz
+ # Locally computed
++sha256  be7ffbd057cadebe2aa144542fd90c6838c6a083b5e8a9048b8ee3b66b29d5fb  giflib-5.2.2.tar.gz
+ sha256  0c9b7990ecdca88b676db232c226548ac408b279f550d424d996f0d83591dd8e  COPYING
+diff --git a/package/giflib/giflib.mk b/package/giflib/giflib.mk
+index 3ac74f9244..770338507b 100644
+--- a/package/giflib/giflib.mk
++++ b/package/giflib/giflib.mk
+@@ -4,18 +4,13 @@
+ #
+ ################################################################################
+ 
+-GIFLIB_VERSION = 5.2.1
++GIFLIB_VERSION = 5.2.2
+ GIFLIB_SITE = http://downloads.sourceforge.net/project/giflib
+ GIFLIB_INSTALL_STAGING = YES
+ GIFLIB_LICENSE = MIT
+ GIFLIB_LICENSE_FILES = COPYING
+ GIFLIB_CPE_ID_VALID = YES
+ 
+-# 0002-Fix-CVE-2022-28506.patch
+-GIFLIB_IGNORE_CVES = CVE-2022-28506
+-# 0003-Fix-CVE-2023-39742.patch
+-GIFLIB_IGNORE_CVES += CVE-2023-39742
+-
+ ifeq ($(BR2_STATIC_LIBS),y)
+ GIFLIB_BUILD_LIBS = static-lib
+ GIFLIB_INSTALL_LIBS = install-static-lib
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
