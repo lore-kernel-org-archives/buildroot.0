@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EFF4C54E64
-	for <buildroot@archiver.kernel.org>; Mon, 25 Mar 2024 18:17:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34642CD11DC
+	for <buildroot@archiver.kernel.org>; Mon, 25 Mar 2024 18:17:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 64D3240767;
-	Mon, 25 Mar 2024 18:17:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EF17E4079A;
+	Mon, 25 Mar 2024 18:17:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y4zuMhe-dPTP; Mon, 25 Mar 2024 18:17:17 +0000 (UTC)
+ id wORoaXaxlHoc; Mon, 25 Mar 2024 18:17:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D33240785
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C00E94079B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2D33240785;
-	Mon, 25 Mar 2024 18:17:17 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3DA311BF955
+	by smtp4.osuosl.org (Postfix) with ESMTP id C00E94079B;
+	Mon, 25 Mar 2024 18:17:19 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2E28C1BF263
  for <buildroot@lists.busybox.net>; Mon, 25 Mar 2024 18:16:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 29CA840476
- for <buildroot@lists.busybox.net>; Mon, 25 Mar 2024 18:16:57 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 288D460659
+ for <buildroot@lists.busybox.net>; Mon, 25 Mar 2024 18:16:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M70RnIeNvw9n for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ph3RirPusNcG for <buildroot@lists.busybox.net>;
  Mon, 25 Mar 2024 18:16:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5E7C940BCE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9DEF3605BB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5E7C940BCE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9DEF3605BB
  for <buildroot@buildroot.org>; Mon, 25 Mar 2024 18:16:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4D75383742; Mon, 25 Mar 2024 18:16:56 +0000 (UTC)
+ id 8CBCC83922; Mon, 25 Mar 2024 18:16:56 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 25 Mar 2024 11:30:38 +0100
+Date: Mon, 25 Mar 2024 19:13:57 +0100
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 135b1eeb3f5a3373bb8df1d0a77251ce124083cf
-X-Git-Newrev: 2f54f4753f00962a540315641cc0286afb72898e
+X-Git-Oldrev: e382d74ce7fcc543e7059b2e8ff59e4390cd135e
+X-Git-Newrev: 77c86888f41bc6e15de8e24736b7b153f1fbab5a
 X-Patchwork-Hint: ignore
-Message-Id: <20240325181656.4D75383742@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/pure-ftpd: remove
- optional dependency to libiconv
+Message-Id: <20240325181656.8CBCC83922@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/bitcoin: add the
+ wallet support option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,37 +65,78 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2f54f4753f00962a540315641cc0286afb72898e
+commit: https://git.buildroot.net/buildroot/commit/?id=77c86888f41bc6e15de8e24736b7b153f1fbab5a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Buildroot commit 26d5d1c0a20719876220b429a43f8b1bcc29138b removed the
-configure option --with-rfc2640 due to upstream commit:
-https://github.com/jedisct1/pure-ftpd/commit/33eda763bfca8dfcf736275272b84602dcd18549
+The bitcoin Buildroot package has always disabled the wallet support.
 
-In the same upstream commit the iconv support was also removed because
-it was only needed for rfc2640 support, this removal was forgotten in
-the forementioned buildroot commit.
+This commit adds a config option to enable this support. This allows the
+bitcoin-cli command to create wallets, generate addresses and send an
+amount to a given address.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit f30f5e4f61e72a507df96bea1960a9388c780a82)
+(cherry picked from commit 958085d5f6a90c46f812c64bbe4ac2963f83bca1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pure-ftpd/pure-ftpd.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/bitcoin/Config.in  | 10 ++++++++++
+ package/bitcoin/bitcoin.mk | 15 ++++++++++++++-
+ 2 files changed, 24 insertions(+), 1 deletion(-)
 
-diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
-index ffd27d7b99..b918c70930 100644
---- a/package/pure-ftpd/pure-ftpd.mk
-+++ b/package/pure-ftpd/pure-ftpd.mk
-@@ -10,7 +10,6 @@ PURE_FTPD_SOURCE = pure-ftpd-$(PURE_FTPD_VERSION).tar.bz2
- PURE_FTPD_LICENSE = ISC
- PURE_FTPD_LICENSE_FILES = COPYING
- PURE_FTPD_CPE_ID_VENDOR = pureftpd
--PURE_FTPD_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+diff --git a/package/bitcoin/Config.in b/package/bitcoin/Config.in
+index c4a2447fc9..060cae24f5 100644
+--- a/package/bitcoin/Config.in
++++ b/package/bitcoin/Config.in
+@@ -36,6 +36,16 @@ config BR2_PACKAGE_BITCOIN
  
- PURE_FTPD_CONF_OPTS = \
- 	--with-altlog \
+ 	  https://bitcoincore.org
+ 
++if BR2_PACKAGE_BITCOIN
++
++config BR2_PACKAGE_BITCOIN_WALLET
++	bool "wallet support"
++	select BR2_PACKAGE_SQLITE
++	help
++	  Enable bitcoin wallet support.
++
++endif
++
+ comment "bitcoin needs a toolchain w/ C++, threads, wchar, gcc >= 9"
+ 	depends on BR2_PACKAGE_BITCOIN_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+diff --git a/package/bitcoin/bitcoin.mk b/package/bitcoin/bitcoin.mk
+index 493c569336..2f8a1777a2 100644
+--- a/package/bitcoin/bitcoin.mk
++++ b/package/bitcoin/bitcoin.mk
+@@ -13,14 +13,27 @@ BITCOIN_CPE_ID_VENDOR = bitcoin
+ BITCOIN_CPE_ID_PRODUCT = bitcoin_core
+ BITCOIN_DEPENDENCIES = host-pkgconf boost libevent
+ BITCOIN_MAKE_ENV = BITCOIN_GENBUILD_NO_GIT=1
++# Berkeley Database (bdb) support is always disabled. It is only
++# needed for legacy wallet format. New wallets are using SQLite.
+ BITCOIN_CONF_OPTS = \
+ 	--disable-bench \
+-	--disable-wallet \
+ 	--disable-tests \
+ 	--with-boost-libdir=$(STAGING_DIR)/usr/lib/ \
+ 	--disable-hardening \
++	--without-bdb \
+ 	--without-gui
+ 
++ifeq ($(BR2_PACKAGE_BITCOIN_WALLET),y)
++BITCOIN_DEPENDENCIES += sqlite
++BITCOIN_CONF_OPTS += \
++	--enable-wallet \
++	--with-sqlite
++else
++BITCOIN_CONF_OPTS += \
++	--disable-wallet \
++	--without-sqlite
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBMINIUPNPC),y)
+ BITCOIN_DEPENDENCIES += libminiupnpc
+ BITCOIN_CONF_OPTS += --with-miniupnpc
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
