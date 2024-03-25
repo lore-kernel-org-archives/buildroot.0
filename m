@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD2F4C54E64
-	for <buildroot@archiver.kernel.org>; Mon, 25 Mar 2024 18:17:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC7A4C54E58
+	for <buildroot@archiver.kernel.org>; Mon, 25 Mar 2024 18:17:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8D317407D6;
-	Mon, 25 Mar 2024 18:17:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B23E7407DA;
+	Mon, 25 Mar 2024 18:17:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tUo0mOAa67yt; Mon, 25 Mar 2024 18:17:28 +0000 (UTC)
+ id PrmxCvp5Kcg2; Mon, 25 Mar 2024 18:17:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E79A1407CB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F9E0407D7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E79A1407CB;
-	Mon, 25 Mar 2024 18:17:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5F9E0407D7;
+	Mon, 25 Mar 2024 18:17:31 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 903F51BF263
- for <buildroot@lists.busybox.net>; Mon, 25 Mar 2024 18:17:00 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A161E1BF263
+ for <buildroot@lists.busybox.net>; Mon, 25 Mar 2024 18:17:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9101281975
+ by smtp1.osuosl.org (Postfix) with ESMTP id A9403819D1
  for <buildroot@lists.busybox.net>; Mon, 25 Mar 2024 18:16:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NlnMT74AbjQN for <buildroot@lists.busybox.net>;
+ id L_cvnX8wNKzY for <buildroot@lists.busybox.net>;
  Mon, 25 Mar 2024 18:16:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ADBCB81A16
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C3B6819FC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id ADBCB81A16
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9C3B6819FC
  for <buildroot@buildroot.org>; Mon, 25 Mar 2024 18:16:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A8301837AA; Mon, 25 Mar 2024 18:16:56 +0000 (UTC)
+ id 98DCD83F9C; Mon, 25 Mar 2024 18:16:56 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 25 Mar 2024 19:14:53 +0100
+Date: Mon, 25 Mar 2024 19:14:03 +0100
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 456b9b3fd7f7c17fe76133a06f8724da3ec891de
-X-Git-Newrev: d6b70f009a87ca539de0bfa1ce42f0da122bc06b
+X-Git-Oldrev: 77c86888f41bc6e15de8e24736b7b153f1fbab5a
+X-Git-Newrev: 456b9b3fd7f7c17fe76133a06f8724da3ec891de
 X-Patchwork-Hint: ignore
-Message-Id: <20240325181656.A8301837AA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/busybox: remove
- tc from default config
+Message-Id: <20240325181656.98DCD83F9C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] support/testing: add
+ bitcoin runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,54 +65,220 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d6b70f009a87ca539de0bfa1ce42f0da122bc06b
+commit: https://git.buildroot.net/buildroot/commit/?id=456b9b3fd7f7c17fe76133a06f8724da3ec891de
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Busybox tc fails to build with kernel >= 6.8
-For details see https://bugs.busybox.net/show_bug.cgi?id=15934
-
-In addition, tc is a very rarely used tool, so not something that you
-expect to be available in busybox by default.
-
-Therefore, remove it from the default config.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 44c221c856a473179daeb9e49bcb89af2b1b1405)
+(cherry picked from commit bc76d786a40548333be5cb9c0833e458498c06dd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/busybox/busybox-minimal.config | 3 +--
- package/busybox/busybox.config         | 3 +--
- 2 files changed, 2 insertions(+), 4 deletions(-)
+ DEVELOPERS                                    |   1 +
+ support/testing/tests/package/test_bitcoin.py | 184 ++++++++++++++++++++++++++
+ 2 files changed, 185 insertions(+)
 
-diff --git a/package/busybox/busybox-minimal.config b/package/busybox/busybox-minimal.config
-index 1e7ad1d357..5d2a30806a 100644
---- a/package/busybox/busybox-minimal.config
-+++ b/package/busybox/busybox-minimal.config
-@@ -955,8 +955,7 @@ CONFIG_PING=y
- CONFIG_ROUTE=y
- # CONFIG_SLATTACH is not set
- # CONFIG_SSL_CLIENT is not set
--CONFIG_TC=y
--CONFIG_FEATURE_TC_INGRESS=y
-+# CONFIG_TC is not set
- # CONFIG_TCPSVD is not set
- # CONFIG_UDPSVD is not set
- CONFIG_TELNET=y
-diff --git a/package/busybox/busybox.config b/package/busybox/busybox.config
-index 6e8bd2799d..cfd16172fa 100644
---- a/package/busybox/busybox.config
-+++ b/package/busybox/busybox.config
-@@ -968,8 +968,7 @@ CONFIG_FEATURE_FANCY_PING=y
- CONFIG_ROUTE=y
- # CONFIG_SLATTACH is not set
- # CONFIG_SSL_CLIENT is not set
--CONFIG_TC=y
--CONFIG_FEATURE_TC_INGRESS=y
-+# CONFIG_TC is not set
- # CONFIG_TCPSVD is not set
- # CONFIG_UDPSVD is not set
- CONFIG_TELNET=y
+diff --git a/DEVELOPERS b/DEVELOPERS
+index f01874ab10..f6fc301373 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1770,6 +1770,7 @@ F:	support/testing/tests/package/test_acpica.py
+ F:	support/testing/tests/package/test_acpica/
+ F:	support/testing/tests/package/test_apache.py
+ F:	support/testing/tests/package/test_bc.py
++F:	support/testing/tests/package/test_bitcoin.py
+ F:	support/testing/tests/package/test_brotli.py
+ F:	support/testing/tests/package/test_bzip2.py
+ F:	support/testing/tests/package/test_compressor_base.py
+diff --git a/support/testing/tests/package/test_bitcoin.py b/support/testing/tests/package/test_bitcoin.py
+new file mode 100644
+index 0000000000..93aa9383ab
+--- /dev/null
++++ b/support/testing/tests/package/test_bitcoin.py
+@@ -0,0 +1,184 @@
++import os
++import time
++
++import infra.basetest
++
++
++class TestBitcoin(infra.basetest.BRTest):
++    # infra.basetest.BASIC_TOOLCHAIN_CONFIG cannot be used as it does
++    # not include BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
++    # needed by bitcoin. This config also uses an ext4 rootfs as
++    # bitcoind needs some free disk space to start (so we avoid having
++    # a larger initrd in RAM).
++    config = \
++        """
++        BR2_aarch64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.81"
++        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
++        BR2_PACKAGE_BITCOIN=y
++        BR2_PACKAGE_BITCOIN_WALLET=y
++        BR2_TARGET_ROOTFS_EXT2=y
++        BR2_TARGET_ROOTFS_EXT2_4=y
++        BR2_TARGET_ROOTFS_EXT2_SIZE="256M"
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++    # Command prefix for the bitcoin command line interface.
++    cli_cmd = "bitcoin-cli -regtest"
++
++    def create_btc_wallet(self, wallet_name):
++        """Create an empty wallet."""
++        cmd = f"{self.cli_cmd} -named createwallet wallet_name={wallet_name}"
++        self.assertRunOk(cmd)
++
++    def gen_btc_address(self, wallet_name):
++        """Generate an address in a wallet."""
++        cmd = f"{self.cli_cmd} -rpcwallet={wallet_name} getnewaddress"
++        out, ret = self.emulator.run(cmd)
++        self.assertEqual(ret, 0)
++        return out[0]
++
++    def init_wallet(self, wallet_name):
++        """Create a wallet and generate an address in it."""
++        self.create_btc_wallet(wallet_name)
++        return self.gen_btc_address(wallet_name)
++
++    def get_wallet_balance(self, wallet):
++        """Return the (confirmed) balance of a wallet."""
++        cmd = f"{self.cli_cmd} -rpcwallet={wallet} getbalance"
++        out, ret = self.emulator.run(cmd)
++        self.assertEqual(ret, 0)
++        return float(out[0])
++
++    def get_wallet_unconfirmed_balance(self, wallet):
++        """Return the unconfirmed balance of a wallet."""
++        cmd = f"{self.cli_cmd} -rpcwallet={wallet} getunconfirmedbalance"
++        out, ret = self.emulator.run(cmd)
++        self.assertEqual(ret, 0)
++        return float(out[0])
++
++    def get_block_count(self):
++        """Returns the height of the most-work fully-validated chain."""
++        cmd = f"{self.cli_cmd} getblockcount"
++        out, ret = self.emulator.run(cmd)
++        self.assertEqual(ret, 0)
++        return int(out[0])
++
++    def test_run(self):
++        drive = os.path.join(self.builddir, "images", "rootfs.ext4")
++        kern = os.path.join(self.builddir, "images", "Image")
++        self.emulator.boot(arch="aarch64",
++                           kernel=kern,
++                           kernel_cmdline=["root=/dev/vda console=ttyAMA0"],
++                           options=["-M", "virt",
++                                    "-cpu", "cortex-a53",
++                                    "-m", "256M",
++                                    "-drive", f"file={drive},if=virtio,format=raw"])
++        self.emulator.login()
++
++        # Values for the test.
++        wallet1 = "AliceWallet"
++        wallet2 = "BobWallet"
++        btc_test_amount = 10
++        btc_fee = 0.00001
++        req_blk_count = 101
++
++        # Check the binary can execute.
++        self.assertRunOk("bitcoind --version")
++
++        # This cleanup is useful when run-test -k is used. It makes
++        # this test idempotent. Since the drive storage is preserved
++        # between reboots, this cleanup will make sure the test always
++        # starts from a clean state.
++        cmd = "rm -rf ~/.bitcoin"
++        self.assertRunOk(cmd)
++
++        # The bitcoin daemon is not started. A client ping is expected
++        # to fail.
++        ping_cmd = f"{self.cli_cmd} ping"
++        _, ret = self.emulator.run(ping_cmd)
++        self.assertNotEqual(ret, 0)
++
++        # Start the daemon.
++        cmd = f"bitcoind -regtest -daemonwait -fallbackfee={btc_fee:f}"
++        self.assertRunOk(cmd)
++
++        time.sleep(2 * self.timeout_multiplier)
++
++        # Now the daemon is started, the ping is expected to succeed.
++        self.assertRunOk(ping_cmd)
++
++        # We create two wallets and addresses.
++        btc_addr1 = self.init_wallet(wallet1)
++        btc_addr2 = self.init_wallet(wallet2)
++
++        # Since the regression test block chain is at its genesis
++        # block, we expect a height of zero.
++        cur_blk_cnt = self.get_block_count()
++        self.assertEqual(cur_blk_cnt, 0)
++
++        # We also expect our wallets to be empty.
++        for wallet in [wallet1, wallet2]:
++            balance = self.get_wallet_balance(wallet)
++            self.assertAlmostEqual(balance, 0.0)
++
++        # We request the generation of several blocks for address
++        # #1. We should receive the 50 BTC reward at this address.
++        cmd = self.cli_cmd
++        cmd += f" generatetoaddress {req_blk_count} {btc_addr1}"
++        self.assertRunOk(cmd)
++
++        # We should now see the previously created blocks.
++        cur_blk_cnt = self.get_block_count()
++        self.assertEqual(cur_blk_cnt, req_blk_count)
++
++        # We should also see the 50 BTC reward in the wallet #1.
++        balance = self.get_wallet_balance(wallet1)
++        self.assertAlmostEqual(balance, 50.0)
++
++        # The wallet #2 should still be empty.
++        balance = self.get_wallet_balance(wallet2)
++        self.assertAlmostEqual(balance, 0.0)
++
++        # We send an amount from wallet #1 to #2.
++        cmd = f"{self.cli_cmd} -rpcwallet={wallet1}"
++        cmd += f" sendtoaddress {btc_addr2} {btc_test_amount}"
++        self.assertRunOk(cmd)
++
++        # The wallet #1 balance is expected to be subtracted by the
++        # spent amount and the transaction fees.
++        expected_balance = 50 - btc_test_amount - btc_fee
++        balance = self.get_wallet_balance(wallet1)
++        self.assertAlmostEqual(balance, expected_balance, places=4)
++
++        # The transaction is sent, but not confirmed yet. So we should
++        # still see a (confirmed) balance of zero.
++        balance = self.get_wallet_balance(wallet2)
++        self.assertAlmostEqual(balance, 0.0)
++
++        # We should see the transferred amount in the unconfirmed
++        # balance.
++        balance = self.get_wallet_unconfirmed_balance(wallet2)
++        self.assertAlmostEqual(balance, btc_test_amount)
++
++        # We generate 1 block to address #2. This action will confirm
++        # the previous transaction (but this will not give the 50 BTC
++        # reward).
++        cmd = f"{self.cli_cmd} generatetoaddress 1 {btc_addr2}"
++        self.assertRunOk(cmd)
++
++        # We should see one more block.
++        cur_blk_cnt = self.get_block_count()
++        self.assertEqual(cur_blk_cnt, req_blk_count + 1)
++
++        # We should now see the amount in the confirmed balance.
++        balance = self.get_wallet_balance(wallet2)
++        self.assertAlmostEqual(balance, btc_test_amount)
++
++        # The unconfirmed balance should now be zero.
++        balance = self.get_wallet_unconfirmed_balance(wallet2)
++        self.assertAlmostEqual(balance, 0.0)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
