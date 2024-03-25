@@ -4,59 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AA64C54E64
-	for <buildroot@archiver.kernel.org>; Mon, 25 Mar 2024 09:10:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39462C54E64
+	for <buildroot@archiver.kernel.org>; Mon, 25 Mar 2024 09:22:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DE84981E57;
-	Mon, 25 Mar 2024 09:10:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 40D5A81E6C;
+	Mon, 25 Mar 2024 09:22:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id L504YvBLe00I; Mon, 25 Mar 2024 09:10:56 +0000 (UTC)
+ id giXumpX6uvJH; Mon, 25 Mar 2024 09:22:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D97C381E70
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E6E2181E4B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D97C381E70;
-	Mon, 25 Mar 2024 09:10:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 677591BF370
- for <buildroot@lists.busybox.net>; Mon, 25 Mar 2024 09:10:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E6E2181E4B;
+	Mon, 25 Mar 2024 09:21:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9C5CB1BF370
+ for <buildroot@lists.busybox.net>; Mon, 25 Mar 2024 09:21:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 60A964068C
- for <buildroot@lists.busybox.net>; Mon, 25 Mar 2024 09:10:54 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8933940179
+ for <buildroot@lists.busybox.net>; Mon, 25 Mar 2024 09:21:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F2ruwHUT7htm for <buildroot@lists.busybox.net>;
- Mon, 25 Mar 2024 09:10:53 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
- helo=relay8-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SibhkiB-K05A for <buildroot@lists.busybox.net>;
+ Mon, 25 Mar 2024 09:21:56 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3F58B40681
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F58B40681
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3F58B40681
- for <buildroot@buildroot.org>; Mon, 25 Mar 2024 09:10:52 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 37CAB1BF210;
- Mon, 25 Mar 2024 09:10:49 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rogLw-008dFx-0Y;
- Mon, 25 Mar 2024 10:10:48 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Edgar Bonet <bonet@grenoble.cnrs.fr>
-References: <3a03670a-7a1b-4fd9-a44a-b5ffff19dc94@grenoble.cnrs.fr>
-Date: Mon, 25 Mar 2024 10:10:48 +0100
-In-Reply-To: <3a03670a-7a1b-4fd9-a44a-b5ffff19dc94@grenoble.cnrs.fr> (Edgar
- Bonet's message of "Mon, 25 Mar 2024 09:32:10 +0100")
-Message-ID: <87msqmd6cn.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] Being kicked-off the mailing list
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8C34540146
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8C34540146
+ for <buildroot@buildroot.org>; Mon, 25 Mar 2024 09:21:56 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3E75B83DB1; Mon, 25 Mar 2024 09:21:56 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 25 Mar 2024 10:11:35 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f98239dada59270efe19de9d9fae50ec9ab9d28c
+X-Git-Newrev: bb4371d0863a2714e81b81bb2d5bafe18b4b3110
+X-Patchwork-Hint: ignore
+Message-Id: <20240325092156.3E75B83DB1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/doc-asciidoc.mk: unbreak docs
+ logic after pkgdir change
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,48 +58,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pj4+Pj4gIkVkZ2FyIiA9PSBFZGdhciBCb25ldCA8Ym9uZXRAZ3Jlbm9ibGUuY25ycy5mcj4gd3Jp
-dGVzOgoKID4gSGVsbG8gZXZlcnlib2R5IQogPiBUaGlzIG11c3QgYmUgdGhlIHRoaXJkIHRpbWUg
-aXQgaGFwcGVucywgYW5kIEkgZmluZCBpdCBzb21ld2hhdAogPiBhbm5veWluZy4uLiBUaGlzIG1v
-cm5pbmcgSSByZWNlaXZlZCBhbiBlLW1haWwgZnJvbSBidWlsZHJvb3QtcmVxdWVzdAogPiBpbmZv
-cm1pbmcgbWUgdGhhdCBteSBtZW1iZXJzaGlwIHRvIHRoaXMgbWFpbGluZyBsaXN0IGhhcyBiZWVu
-IGRpc2FibGVkCiA+IGR1ZSB0byDigJxleGNlc3NpdmUgYm91bmNlc+KAnS4KCiA+IEkgdHJpZWQg
-dG8gaW52ZXN0aWdhdGUgYW5kIGl0IHR1cm5zIG91dCB0aGF0IOKAnGV4Y2Vzc2l2ZSBib3VuY2Vz
-4oCdCiA+IGFjdHVhbGx5IG1lYW5zIHRoYXQgZXhhY3RseSBvbmUgbWVzc2FnZSBib3VuY2VkLCBu
-YW1lbHkgdGhlIG1lc3NhZ2UKID4gdGl0bGVkIOKAnFlvdXIgbWFpbGJveCBpcyBmdWxs4oCdIGZy
-b20gU3RvcmFnZSBBY2NvdW50c1sxXS4gSSBkaXNjdXNzZWQgdGhlCiA+IGlzc3VlIHdpdGggbXkg
-ZS1tYWlsIHByb3ZpZGVyIGFuZCB0aGV5IHNheSB0aGF0IGJvdW5jaW5nIG1lc3NhZ2VzIHRoYXQK
-ID4gYXJlIDEwMCUtY2VydGFpbiBwaGlzaGluZyBhdHRlbXB0cyBpcyB0aGUgZGVzaXJlZCBiZWhh
-dmlvciwgYW5kIHRoZXkKID4gd2lsbCBub3QgZGlzYWJsZSB0aGUganVuay1tYWlsIGZpbHRlciwg
-d2hpY2ggaXMgYWxyZWFkeSB2ZXJ5IGxheC4KCiA+IFdvdWxkIGl0IGJlIHBvc3NpYmxlIHRvIGNv
-bmZpZ3VyZSBCdWlsZHJvb3QncyBtYWlsIHNlcnZlciB0byBiZSBhIGJpdAogPiBtb3JlIHRvbGVy
-YW50IHRvIGJvdW5jZXM/IEkgdW5kZXJzdGFuZCB0aGUgbmVlZCB0byB1bnN1YnNjcmliZSBhZGRy
-ZXNzZXMKID4gdGhhdCBnZW5lcmF0ZSB0b28gbWFueSBlcnJvcnMsIGJ1dCBJIGZpbmQgdGhpcyDi
-gJxraWNrLW91dCBvbiBmaXJzdAogPiBib3VuY2XigJ0gcG9saWN5IGEgYml0IGV4dHJlbWUuCgpT
-b3JyeSBhYm91dCB0aGF0LiBJIGhhdmUgYnVtcGVkIHRoZSBtYWlsbWFuIGJvdW5jZV9zY29yZV90
-aHJlc2hvbGQgZnJvbQo1IHRvIDEwLCBob3BlZnVsbHkgdGhhdCBmaXhlcyBpdC4KClRoZSBkb2N1
-bWVudGF0aW9uIGZvciB0aGF0IHNldHRpbmcgaXM6CgpFYWNoIHN1YnNjcmliZXIgaXMgYXNzaWdu
-ZWQgYSBib3VuY2Ugc2NvcmUsIGFzIGEgZmxvYXRpbmcgcG9pbnQKbnVtYmVyLiBXaGVuZXZlciBN
-YWlsbWFuIHJlY2VpdmVzIGEgYm91bmNlIGZyb20gYSBsaXN0IG1lbWJlciwgdGhhdAptZW1iZXIn
-cyBzY29yZSBpcyBpbmNyZW1lbnRlZC4gSGFyZCBib3VuY2VzIChmYXRhbCBlcnJvcnMpIGluY3Jl
-YXNlIHRoZQpzY29yZSBieSAxLCB3aGlsZSBzb2Z0IGJvdW5jZXMgKHRlbXBvcmFyeSBlcnJvcnMp
-IGluY3JlYXNlIHRoZSBzY29yZSBieQowLjUuIE9ubHkgb25lIGJvdW5jZSBwZXIgZGF5IGNvdW50
-cyBhZ2FpbnN0IGEgbWVtYmVyJ3Mgc2NvcmUsIHNvIGV2ZW4gaWYKMTAgYm91bmNlcyBhcmUgcmVj
-ZWl2ZWQgZm9yIGEgbWVtYmVyIG9uIHRoZSBzYW1lIGRheSwgdGhlaXIgc2NvcmUgd2lsbAppbmNy
-ZWFzZSBieSBqdXN0IDEuIFRoaXMgdmFyaWFibGUgZGVzY3JpYmVzIHRoZSB1cHBlciBsaW1pdCBm
-b3IgYQptZW1iZXIncyBib3VuY2Ugc2NvcmUsIGFib3ZlIHdoaWNoIHRoZXkgYXJlIGF1dG9tYXRp
-Y2FsbHkgZGlzYWJsZWQsIGJ1dApub3QgcmVtb3ZlZCBmcm9tIHRoZSBtYWlsaW5nIGxpc3QuCgpJ
-IGhhdmUgYWxzbyBsb3dlcmVkIGJvdW5jZV9pbmZvX3N0YWxlX2FmdGVyIGZyb20gMyB0byAxLiBU
-aGUKZG9jdW1lbnRhdGlvbiBmb3IgdGhhdCBzZXR0aW5nIGlzOgoKVGhlIG51bWJlciBvZiBkYXlz
-IGFmdGVyIHdoaWNoIGEgbWVtYmVyJ3MgYm91bmNlIGluZm9ybWF0aW9uIGlzCmRpc2NhcmRlZCwg
-aWYgbm8gbmV3IGJvdW5jZXMgaGF2ZSBiZWVuIHJlY2VpdmVkIGluIHRoZSBpbnRlcmltLiBUaGlz
-CnZhbHVlIG11c3QgYmUgYW4gaW50ZWdlci4KCi0tIApCeWUsIFBldGVyIEtvcnNnYWFyZApfX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFp
-bGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290
-Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+commit: https://git.buildroot.net/buildroot/commit/?id=bb4371d0863a2714e81b81bb2d5bafe18b4b3110
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Commit 748fc4be21e (package/pkg-utils.mk: remove trailing slash in pkgdir
+definition) broke the docs generation logic:
+
+make manual-html
+>>>   Preparing the manual sources...
+>>>   Generating HTML manual...
+a2x: ERROR: missing ASCIIDOC_FILE: /home/peko/source/buildroot/output/build/docs/manual/manual.adoc
+
+make: *** [docs/manual/manual.mk:12: /home/peko/source/buildroot/output/docs/manual/manual.html] Error 1
+
+As it now ends up with the .adoc file one level below
+(../docs/manual/manual/manual.adoc).  The reason is that the pkgdir macro is
+used to define $(2)_DOCDIR, which is passed to rsync:
+
+rsync -a docs/manual /home/peko/source/buildroot/output/build/docs/manual
+
+Fix it by appending a / to the rsync arguments like we do elsewhere.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+---
+ package/doc-asciidoc.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/doc-asciidoc.mk b/package/doc-asciidoc.mk
+index 40c9a725d1..d6ecd1e30e 100644
+--- a/package/doc-asciidoc.mk
++++ b/package/doc-asciidoc.mk
+@@ -155,7 +155,7 @@ $(1)-check-dependencies: asciidoc-check-dependencies $$($(2)_DEPENDENCIES)
+ $$(BUILD_DIR)/docs/$(1)/.stamp_doc_rsynced:
+ 	$$(Q)$$(call MESSAGE,"Preparing the $(1) sources...")
+ 	$$(Q)mkdir -p $$(@D)
+-	$$(Q)rsync -a $$($(2)_DOCDIR) $$(@D)
++	$$(Q)rsync -a $$($(2)_DOCDIR)/ $$(@D)/
+ 	$$(Q)$$(foreach hook,$$($(2)_POST_RSYNC_HOOKS),$$(call $$(hook))$$(sep))
+ 
+ .PHONY: $(1)-prepare-sources
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
