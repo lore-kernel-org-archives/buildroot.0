@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4ABB4C54E58
-	for <buildroot@archiver.kernel.org>; Mon, 25 Mar 2024 18:17:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B71FCC54E64
+	for <buildroot@archiver.kernel.org>; Mon, 25 Mar 2024 18:17:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0E4CF407CB;
-	Mon, 25 Mar 2024 18:17:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6E51A406E3;
+	Mon, 25 Mar 2024 18:17:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZX8fKP1SbWRT; Mon, 25 Mar 2024 18:17:35 +0000 (UTC)
+ id 79hTAWXPvd3b; Mon, 25 Mar 2024 18:17:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F3907407DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 57EA140748
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F3907407DE;
-	Mon, 25 Mar 2024 18:17:34 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A495D1BF263
- for <buildroot@lists.busybox.net>; Mon, 25 Mar 2024 18:17:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 57EA140748;
+	Mon, 25 Mar 2024 18:17:58 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id EF44A1BF263
+ for <buildroot@lists.busybox.net>; Mon, 25 Mar 2024 18:17:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 69EA3819FC
- for <buildroot@lists.busybox.net>; Mon, 25 Mar 2024 18:16:58 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DC86960659
+ for <buildroot@lists.busybox.net>; Mon, 25 Mar 2024 18:17:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4Q0FToiOoJ3R for <buildroot@lists.busybox.net>;
- Mon, 25 Mar 2024 18:16:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ioaeCYsjKhgI for <buildroot@lists.busybox.net>;
+ Mon, 25 Mar 2024 18:17:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BBE3881E5F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 314BE605BB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id BBE3881E5F
- for <buildroot@buildroot.org>; Mon, 25 Mar 2024 18:16:56 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 314BE605BB
+ for <buildroot@buildroot.org>; Mon, 25 Mar 2024 18:17:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B735483922; Mon, 25 Mar 2024 18:16:56 +0000 (UTC)
+ id 2BE0483FDF; Mon, 25 Mar 2024 18:17:56 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 25 Mar 2024 19:16:17 +0100
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: d6b70f009a87ca539de0bfa1ce42f0da122bc06b
-X-Git-Newrev: 2c465da71f599281a076fc29a591561b4b100f56
+Date: Mon, 25 Mar 2024 11:30:55 +0100
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: 26c53a47bc29ae832d7cdc9b5e6d1693ddb733a9
+X-Git-Newrev: 02aa5bd419ce140356fc5b8515b7307d1fdc6687
 X-Patchwork-Hint: ignore
-Message-Id: <20240325181656.B735483922@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/giflib: bump to
- version 5.2.2
+Message-Id: <20240325181756.2BE0483FDF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/pure-ftpd: remove
+ optional dependency to libiconv
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,378 +65,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2c465da71f599281a076fc29a591561b4b100f56
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=02aa5bd419ce140356fc5b8515b7307d1fdc6687
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-- Refresh first and fourth patches
-- Drop second nad third patches (already in version)
+Buildroot commit 26d5d1c0a20719876220b429a43f8b1bcc29138b removed the
+configure option --with-rfc2640 due to upstream commit:
+https://github.com/jedisct1/pure-ftpd/commit/33eda763bfca8dfcf736275272b84602dcd18549
 
-https://sourceforge.net/p/giflib/code/ci/5.2.2/tree/NEWS
+In the same upstream commit the iconv support was also removed because
+it was only needed for rfc2640 support, this removal was forgotten in
+the forementioned buildroot commit.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit f98239dada59270efe19de9d9fae50ec9ab9d28c)
+(cherry picked from commit f30f5e4f61e72a507df96bea1960a9388c780a82)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .checkpackageignore                                |  1 -
- ...ile-add-targets-to-manage-static-building.patch | 44 ++++++++--------
- package/giflib/0002-Fix-CVE-2022-28506.patch       | 34 ------------
- ...ix-several-defects-found-by-Coverity-scan.patch | 59 +++++++++++++++++++++
- package/giflib/0003-Fix-CVE-2023-39742.patch       | 36 -------------
- ...ix-several-defects-found-by-Coverity-scan.patch | 61 ----------------------
- package/giflib/giflib.hash                         |  5 +-
- package/giflib/giflib.mk                           |  7 +--
- 8 files changed, 86 insertions(+), 161 deletions(-)
+ package/pure-ftpd/pure-ftpd.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index aa1679f509..e678d64498 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -462,7 +462,6 @@ package/genromfs/0001-build-system.patch Sob Upstream
- package/gensio/0001-Fix-missing-EVP_PKEY_ED25519-build-error-on-libressl.patch Upstream
- package/gerbera/S99gerbera Indent
- package/giblib/0001-fix-imlib2-detection.patch Upstream
--package/giflib/0001-Makefile-add-targets-to-manage-static-building.patch Upstream
- package/git-crypt/0001-fix-build-with-libressl-3.5.0.patch Upstream
- package/glog/0001-added-emscripten-support.patch Upstream
- package/glorytun/0001-Add-support-for-Apple-silicon.patch Upstream
-diff --git a/package/giflib/0001-Makefile-add-targets-to-manage-static-building.patch b/package/giflib/0001-Makefile-add-targets-to-manage-static-building.patch
-index 384457d0bd..ba8d426bea 100644
---- a/package/giflib/0001-Makefile-add-targets-to-manage-static-building.patch
-+++ b/package/giflib/0001-Makefile-add-targets-to-manage-static-building.patch
-@@ -8,8 +8,7 @@ targets to allow the user to build giflib when dynamic library support
- is not available or enable on the toolchain
+diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
+index 138b05ebb4..b2be59fff4 100644
+--- a/package/pure-ftpd/pure-ftpd.mk
++++ b/package/pure-ftpd/pure-ftpd.mk
+@@ -10,7 +10,6 @@ PURE_FTPD_SOURCE = pure-ftpd-$(PURE_FTPD_VERSION).tar.bz2
+ PURE_FTPD_LICENSE = ISC
+ PURE_FTPD_LICENSE_FILES = COPYING
+ PURE_FTPD_CPE_ID_VENDOR = pureftpd
+-PURE_FTPD_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
  
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status:
--https://sourceforge.net/p/giflib/code/merge-requests/7]
-+Upstream: https://sourceforge.net/p/giflib/code/merge-requests/7
- ---
-  Makefile | 18 ++++++++++++++----
-  1 file changed, 14 insertions(+), 4 deletions(-)
-@@ -18,16 +17,19 @@ diff --git a/Makefile b/Makefile
- index b2bf6de..111f52f 100644
- --- a/Makefile
- +++ b/Makefile
--@@ -61,10 +61,17 @@ UTILS = $(INSTALLABLE) \
-+@@ -91,13 +91,20 @@ LIBUTILSO	= libutil.$(SOEXTENSION)
-+ LIBUTILSOMAJOR	= libutil.$(LIBMAJOR).$(SOEXTENSION)
-+ endif
-  
-- LDLIBS=libgif.a -lm
-- 
---all: libgif.so libgif.a libutil.so libutil.a $(UTILS)
--+SHARED_LIBS = libgif.so libutil.so
-+-all: $(LIBGIFSO) libgif.a $(LIBUTILSO) libutil.a $(UTILS)
-++SHARED_LIBS = $(LIBGIFSO) $(LIBUTILSO)
- +STATIC_LIBS = libgif.a libutil.a
- +
- +all: shared-lib static-lib $(UTILS)
-+ ifeq ($(UNAME), Darwin)
-+ else
-  	$(MAKE) -C doc
-+ endif
-  
- -$(UTILS):: libgif.a libutil.a
- +$(UTILS):: $(STATIC_LIBS)
-@@ -36,18 +38,18 @@ index b2bf6de..111f52f 100644
- +
- +static-lib: $(STATIC_LIBS)
-  
-- libgif.so: $(OBJECTS) $(HEADERS)
-- 	$(CC) $(CFLAGS) -shared $(LDFLAGS) -Wl,-soname -Wl,libgif.so.$(LIBMAJOR) -o libgif.so $(OBJECTS)
--@@ -79,7 +86,7 @@ libutil.a: $(UOBJECTS) $(UHEADERS)
-+ $(LIBGIFSO): $(OBJECTS) $(HEADERS)
-+ ifeq ($(UNAME), Darwin)
-+@@ -120,7 +127,7 @@ libutil.a: $(UOBJECTS) $(UHEADERS)
-  	$(AR) rcs libutil.a $(UOBJECTS)
-  
-  clean:
---	rm -f $(UTILS) $(TARGET) libgetarg.a libgif.a libgif.so libutil.a libutil.so *.o
-+-	rm -f $(UTILS) $(TARGET) libgetarg.a libgif.a $(LIBGIFSO) libutil.a $(LIBUTILSO) *.o
- +	rm -f $(UTILS) $(TARGET) libgetarg.a $(SHARED_LIBS) $(STATIC_LIBS) *.o
-- 	rm -f libgif.so.$(LIBMAJOR).$(LIBMINOR).$(LIBPOINT)
-- 	rm -f libgif.so.$(LIBMAJOR)
-- 	rm -fr doc/*.1 *.html doc/staging
--@@ -96,12 +103,15 @@ install-bin: $(INSTALLABLE)
-+ 	rm -f $(LIBGIFSOVER)
-+ 	rm -f $(LIBGIFSOMAJOR)
-+ 	rm -fr doc/*.[17] *.html doc/staging
-+@@ -145,12 +152,15 @@ install-bin: $(INSTALLABLE)
-  install-include:
-  	$(INSTALL) -d "$(DESTDIR)$(INCDIR)"
-  	$(INSTALL) -m 644 gif_lib.h "$(DESTDIR)$(INCDIR)"
-@@ -57,13 +59,13 @@ index b2bf6de..111f52f 100644
-  	$(INSTALL) -m 644 libgif.a "$(DESTDIR)$(LIBDIR)/libgif.a"
- +install-shared-lib:
- +	$(INSTALL) -d "$(DESTDIR)$(LIBDIR)"
-- 	$(INSTALL) -m 755 libgif.so "$(DESTDIR)$(LIBDIR)/libgif.so.$(LIBVER)"
-- 	ln -sf libgif.so.$(LIBVER) "$(DESTDIR)$(LIBDIR)/libgif.so.$(LIBMAJOR)"
-- 	ln -sf libgif.so.$(LIBMAJOR) "$(DESTDIR)$(LIBDIR)/libgif.so"
-+ 	$(INSTALL) -m 755 $(LIBGIFSO) "$(DESTDIR)$(LIBDIR)/$(LIBGIFSOVER)"
-+ 	ln -sf $(LIBGIFSOVER) "$(DESTDIR)$(LIBDIR)/$(LIBGIFSOMAJOR)"
-+ 	ln -sf $(LIBGIFSOMAJOR) "$(DESTDIR)$(LIBDIR)/$(LIBGIFSO)"
- +install-lib: install-static-lib install-shared-lib
-  install-man:
-- 	$(INSTALL) -d "$(DESTDIR)$(MANDIR)/man1"
-- 	$(INSTALL) -m 644 doc/*.1 "$(DESTDIR)$(MANDIR)/man1"
-+ 	$(INSTALL) -d "$(DESTDIR)$(MANDIR)/man1" "$(DESTDIR)$(MANDIR)/man7"
-+ 	$(INSTALL) -m 644 $(MANUAL_PAGES_1:xml=1) "$(DESTDIR)$(MANDIR)/man1"
- -- 
--2.20.1
-+2.43.0
- 
-diff --git a/package/giflib/0002-Fix-CVE-2022-28506.patch b/package/giflib/0002-Fix-CVE-2022-28506.patch
-deleted file mode 100644
-index 35d5f60a95..0000000000
---- a/package/giflib/0002-Fix-CVE-2022-28506.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From c0cca041fc4fb6748d8dff3675fe7a839253d668 Mon Sep 17 00:00:00 2001
--From: Sandro Mani <manisandro@gmail.com>
--Date: Tue, 5 Dec 2023 16:24:32 -0700
--Subject: [PATCH] Fix CVE-2022-28506
--
--From: giflib-5.2.1-17.fc39.src.rpm
--Fixes https://nvd.nist.gov/vuln/detail/CVE-2022-28506
--Upstream: https://sourceforge.net/p/giflib/bugs/159/
--
--Signed-off-by: Sandro Mani <manisandro@gmail.com>
--Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-----
-- gif2rgb.c | 5 +++++
-- 1 file changed, 5 insertions(+)
--
--diff --git a/gif2rgb.c b/gif2rgb.c
--index 8d7c0ff..d9a469f 100644
----- a/gif2rgb.c
--+++ b/gif2rgb.c
--@@ -294,6 +294,11 @@ static void DumpScreen2RGB(char *FileName, int OneFileFlag,
--             GifRow = ScreenBuffer[i];
--             GifQprintf("\b\b\b\b%-4d", ScreenHeight - i);
--             for (j = 0, BufferP = Buffer; j < ScreenWidth; j++) {
--+                /* Check if color is within color palete */
--+                if (GifRow[j] >= ColorMap->ColorCount)
--+                {
--+                   GIF_EXIT(GifErrorString(D_GIF_ERR_IMAGE_DEFECT));
--+                }
--                 ColorMapEntry = &ColorMap->Colors[GifRow[j]];
--                 *BufferP++ = ColorMapEntry->Red;
--                 *BufferP++ = ColorMapEntry->Green;
---- 
--2.43.0
--
-diff --git a/package/giflib/0002-Fix-several-defects-found-by-Coverity-scan.patch b/package/giflib/0002-Fix-several-defects-found-by-Coverity-scan.patch
-new file mode 100644
-index 0000000000..f6816d0753
---- /dev/null
-+++ b/package/giflib/0002-Fix-several-defects-found-by-Coverity-scan.patch
-@@ -0,0 +1,59 @@
-+From a1c48b91cd1cf1e9bf7077709b69f4bfd4c4abc7 Mon Sep 17 00:00:00 2001
-+From: Sandro Mani <manisandro@gmail.com>
-+Date: Tue, 5 Dec 2023 16:38:48 -0700
-+Subject: [PATCH] Fix several defects found by Coverity scan
-+
-+From: giflib-5.2.1-17.fc39.src.rpm
-+Upstream: Not submitted
-+
-+Signed-off-by: Sandro Mani <manisandro@gmail.com>
-+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-+[Fabrice: updated for 5.2.2]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ gif2rgb.c | 11 ++++++++++-
-+ 1 file changed, 10 insertions(+), 1 deletion(-)
-+
-+diff --git a/gif2rgb.c b/gif2rgb.c
-+index d9a469f..02cea41 100644
-+--- a/gif2rgb.c
-++++ b/gif2rgb.c
-+@@ -170,6 +170,8 @@ static void SaveGif(GifByteType *OutputBuffer,
-+ 	/* Open stdout for the output file: */
-+ 	if ((GifFile = EGifOpenFileHandle(1, &Error)) == NULL) {
-+ 		PrintGifError(Error);
-++		free(OutputBuffer);
-++		GifFreeMapObject(OutputColorMap);
-+ 		exit(EXIT_FAILURE);
-+ 	}
-+ 
-+@@ -179,6 +181,8 @@ static void SaveGif(GifByteType *OutputBuffer,
-+ 	     EGifPutImageDesc(GifFile, 0, 0, Width, Height, false, NULL) ==
-+ 	        GIF_ERROR) {
-+ 		PrintGifError(Error);
-++		free(OutputBuffer);
-++		GifFreeMapObject(OutputColorMap);
-+ 		exit(EXIT_FAILURE);
-+ 	}
-+ 
-+@@ -187,6 +191,8 @@ static void SaveGif(GifByteType *OutputBuffer,
-+ 
-+ 	for (i = 0; i < Height; i++) {
-+ 		if (EGifPutLine(GifFile, Ptr, Width) == GIF_ERROR) {
-++			free(OutputBuffer);
-++			GifFreeMapObject(OutputColorMap);
-+ 			exit(EXIT_FAILURE);
-+ 		}
-+ 		GifQprintf("\b\b\b\b%-4d", Height - i - 1);
-+@@ -196,6 +203,8 @@ static void SaveGif(GifByteType *OutputBuffer,
-+ 
-+ 	if (EGifCloseFile(GifFile, &Error) == GIF_ERROR) {
-+ 		PrintGifError(Error);
-++		free(OutputBuffer);
-++		GifFreeMapObject(OutputColorMap);
-+ 		exit(EXIT_FAILURE);
-+ 	}
-+ }
-+-- 
-+2.43.0
-+
-diff --git a/package/giflib/0003-Fix-CVE-2023-39742.patch b/package/giflib/0003-Fix-CVE-2023-39742.patch
-deleted file mode 100644
-index 2ba01ac8a4..0000000000
---- a/package/giflib/0003-Fix-CVE-2023-39742.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From 4288b993ee9df6550a367fe06ede3c003dc7bbc6 Mon Sep 17 00:00:00 2001
--From: Sandro Mani <manisandro@gmail.com>
--Date: Tue, 5 Dec 2023 16:35:40 -0700
--Subject: [PATCH] Fix CVE-2023-39742
--
--From: giflib-5.2.1-17.fc39.src.rpm
--Fix segmentation faults due to non correct checking for args
--Fixes: https://nvd.nist.gov/vuln/detail/CVE-2023-39742
--Upstream: https://sourceforge.net/p/giflib/bugs/166/
--
--Signed-off-by: Sandro Mani <manisandro@gmail.com>
--Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-----
-- getarg.c | 6 ++++++
-- 1 file changed, 6 insertions(+)
--
--diff --git a/getarg.c b/getarg.c
--index d569f6c..51fbe0b 100644
----- a/getarg.c
--+++ b/getarg.c
--@@ -307,6 +307,12 @@ GAGetParmeters(void *Parameters[],
--     int i = 0, ScanRes;
-- 
--     while (!(ISSPACE(CtrlStrCopy[i]))) {
--+
--+        if ((*argv) == argv_end) {
--+            GAErrorToken = Option;
--+            return CMD_ERR_NumRead;
--+        }
--+
--         switch (CtrlStrCopy[i + 1]) {
--           case 'd':    /* Get signed integers. */
--               ScanRes = sscanf(*((*argv)++), "%d",
---- 
--2.43.0
--
-diff --git a/package/giflib/0004-Fix-several-defects-found-by-Coverity-scan.patch b/package/giflib/0004-Fix-several-defects-found-by-Coverity-scan.patch
-deleted file mode 100644
-index 1719769872..0000000000
---- a/package/giflib/0004-Fix-several-defects-found-by-Coverity-scan.patch
-+++ /dev/null
-@@ -1,61 +0,0 @@
--From a1c48b91cd1cf1e9bf7077709b69f4bfd4c4abc7 Mon Sep 17 00:00:00 2001
--From: Sandro Mani <manisandro@gmail.com>
--Date: Tue, 5 Dec 2023 16:38:48 -0700
--Subject: [PATCH] Fix several defects found by Coverity scan
--
--From: giflib-5.2.1-17.fc39.src.rpm
--Upstream: Not submitted
--
--Signed-off-by: Sandro Mani <manisandro@gmail.com>
--Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-----
-- gif2rgb.c | 11 ++++++++++-
-- 1 file changed, 10 insertions(+), 1 deletion(-)
--
--diff --git a/gif2rgb.c b/gif2rgb.c
--index d9a469f..02cea41 100644
----- a/gif2rgb.c
--+++ b/gif2rgb.c
--@@ -170,6 +170,8 @@ static void SaveGif(GifByteType *OutputBuffer,
--     /* Open stdout for the output file: */
--     if ((GifFile = EGifOpenFileHandle(1, &Error)) == NULL) {
-- 	PrintGifError(Error);
--+	free(OutputBuffer);
--+	GifFreeMapObject(OutputColorMap);
-- 	exit(EXIT_FAILURE);
--     }
-- 
--@@ -179,6 +181,8 @@ static void SaveGif(GifByteType *OutputBuffer,
-- 	EGifPutImageDesc(GifFile,
-- 			 0, 0, Width, Height, false, NULL) == GIF_ERROR) {
-- 	PrintGifError(Error);
--+	free(OutputBuffer);
--+	GifFreeMapObject(OutputColorMap);
-- 	exit(EXIT_FAILURE);
--     }
-- 
--@@ -187,8 +191,11 @@ static void SaveGif(GifByteType *OutputBuffer,
-- 	       GifFile->Image.Width, GifFile->Image.Height);
-- 
--     for (i = 0; i < Height; i++) {
---	if (EGifPutLine(GifFile, Ptr, Width) == GIF_ERROR)
--+	if (EGifPutLine(GifFile, Ptr, Width) == GIF_ERROR) {
--+	    free(OutputBuffer);
--+	    GifFreeMapObject(OutputColorMap);
-- 	    exit(EXIT_FAILURE);
--+        }
-- 	GifQprintf("\b\b\b\b%-4d", Height - i - 1);
-- 
-- 	Ptr += Width;
--@@ -196,6 +203,8 @@ static void SaveGif(GifByteType *OutputBuffer,
-- 
--     if (EGifCloseFile(GifFile, &Error) == GIF_ERROR) {
-- 	PrintGifError(Error);
--+	free(OutputBuffer);
--+	GifFreeMapObject(OutputColorMap);
-- 	exit(EXIT_FAILURE);
--     }
-- }
---- 
--2.43.0
--
-diff --git a/package/giflib/giflib.hash b/package/giflib/giflib.hash
-index 445e9c4b3d..f11d4f1505 100644
---- a/package/giflib/giflib.hash
-+++ b/package/giflib/giflib.hash
-@@ -1,5 +1,6 @@
- # From http://sourceforge.net/projects/giflib/files
--md5  6f03aee4ebe54ac2cc1ab3e4b0a049e5  giflib-5.2.1.tar.gz
--sha1  c3f774dcbdf26afded7788979c8081d33c6426dc  giflib-5.2.1.tar.gz
-+md5  913dd251492134e235ee3c9a91987a4d  giflib-5.2.2.tar.gz
-+sha1  608ba98d2dd8d03dfa7476f434d57de50a33e10b  giflib-5.2.2.tar.gz
- # Locally computed
-+sha256  be7ffbd057cadebe2aa144542fd90c6838c6a083b5e8a9048b8ee3b66b29d5fb  giflib-5.2.2.tar.gz
- sha256  0c9b7990ecdca88b676db232c226548ac408b279f550d424d996f0d83591dd8e  COPYING
-diff --git a/package/giflib/giflib.mk b/package/giflib/giflib.mk
-index 3ac74f9244..770338507b 100644
---- a/package/giflib/giflib.mk
-+++ b/package/giflib/giflib.mk
-@@ -4,18 +4,13 @@
- #
- ################################################################################
- 
--GIFLIB_VERSION = 5.2.1
-+GIFLIB_VERSION = 5.2.2
- GIFLIB_SITE = http://downloads.sourceforge.net/project/giflib
- GIFLIB_INSTALL_STAGING = YES
- GIFLIB_LICENSE = MIT
- GIFLIB_LICENSE_FILES = COPYING
- GIFLIB_CPE_ID_VALID = YES
- 
--# 0002-Fix-CVE-2022-28506.patch
--GIFLIB_IGNORE_CVES = CVE-2022-28506
--# 0003-Fix-CVE-2023-39742.patch
--GIFLIB_IGNORE_CVES += CVE-2023-39742
--
- ifeq ($(BR2_STATIC_LIBS),y)
- GIFLIB_BUILD_LIBS = static-lib
- GIFLIB_INSTALL_LIBS = install-static-lib
+ PURE_FTPD_CONF_OPTS = \
+ 	--with-altlog \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
