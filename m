@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 498E5C54E64
-	for <buildroot@archiver.kernel.org>; Mon, 25 Mar 2024 23:45:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76F74C54E58
+	for <buildroot@archiver.kernel.org>; Mon, 25 Mar 2024 23:45:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 14E88608BF;
-	Mon, 25 Mar 2024 23:45:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2119660A7E;
+	Mon, 25 Mar 2024 23:45:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X3hap7vchuOQ; Mon, 25 Mar 2024 23:45:05 +0000 (UTC)
+ id Zfdk4ZOv7bU0; Mon, 25 Mar 2024 23:45:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D6B4C60A6F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 43AFA60A69
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D6B4C60A6F;
-	Mon, 25 Mar 2024 23:45:04 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 438841BF417
+	by smtp3.osuosl.org (Postfix) with ESMTP id 43AFA60A69;
+	Mon, 25 Mar 2024 23:45:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BCF7F1BF417
  for <buildroot@lists.busybox.net>; Mon, 25 Mar 2024 23:44:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EF656608EF
- for <buildroot@lists.busybox.net>; Mon, 25 Mar 2024 23:44:48 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 08BE34044F
+ for <buildroot@lists.busybox.net>; Mon, 25 Mar 2024 23:44:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TC0v6K609SBN for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HWshT1LB9IWl for <buildroot@lists.busybox.net>;
  Mon, 25 Mar 2024 23:44:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 05F29608F8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0158740C1F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 05F29608F8
- for <buildroot@buildroot.org>; Mon, 25 Mar 2024 23:44:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0158740C1F
+ for <buildroot@buildroot.org>; Mon, 25 Mar 2024 23:44:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id ACA1A84142; Mon, 25 Mar 2024 23:44:47 +0000 (UTC)
+ id F217184117; Mon, 25 Mar 2024 23:44:47 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 25 Mar 2024 23:57:46 +0100
+Date: Tue, 26 Mar 2024 00:05:37 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 88a300753a8c729714570fd1ac20eda9db074555
-X-Git-Newrev: a3239d18257fa4e5cd8268959d553693fd141ebf
+X-Git-Oldrev: c51e0f4aec80ea71d812ff9956dc8214e7efdb7e
+X-Git-Newrev: a92e7c3cec351ed2d79192c08abb341130b34c81
 X-Patchwork-Hint: ignore
-Message-Id: <20240325234447.ACA1A84142@busybox.osuosl.org>
+Message-Id: <20240325234447.F217184117@busybox.osuosl.org>
 Subject: [Buildroot] [git commit]
- package/flutter-packages/flutter-animations-example: new package
+ support/testing/tests/package/test_flutter.py: use flutter-markdown-example
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,131 +66,114 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a3239d18257fa4e5cd8268959d553693fd141ebf
+commit: https://git.buildroot.net/buildroot/commit/?id=a92e7c3cec351ed2d79192c08abb341130b34c81
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This package provides examples of the following animations:
-  - OpenContainer
-  - SharedAxisTransition
-  - FadeThroughTransisiton
-  - FadeScaleTransition
+The maintainers of the flutter-gallery package archived the project as of
+February 16, 2024. In addition, the flutter-gallery package is incompatible
+with Flutter 3.19.x. Because of these problems, using the flutter-gallery
+package as the testing application for Flutter is no longer reasonable nor
+maintainable.
 
-The package also provides a toggle that slows all the animations.
+However, it is reasonable to use the flutter-markdown-example package from
+flutter-packages, as it is a first-party application updated regularly and
+often automatically, ensuring compatibility with the latest versions of
+Flutter.
+
+  - Switch the package used for Flutter testing from flutter-gallery to
+    flutter-markdown-example
+
+  - Rename flutter-gallery.service to flutter-markdown-example.service
+
+  - Change /usr/share/flutter/gallery/release/ to
+    /usr/share/flutter/flutter_markdown_example/release/
+
+  - Run `systemctl is-active flutter-markdown-example` instead of
+   `systemctl is-active flutter-gallery`
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- DEVELOPERS                                         |  1 +
- package/flutter-packages/Config.in                 |  1 +
- .../flutter-animations-example/Config.in           |  6 +++
- .../flutter-animations-example.hash                |  1 +
- .../flutter-animations-example.mk                  | 54 ++++++++++++++++++++++
- 5 files changed, 63 insertions(+)
+ support/testing/tests/package/test_flutter.py                 |  5 +++--
+ .../system/multi-user.target.wants/flutter-gallery.service    |  1 -
+ .../multi-user.target.wants/flutter-markdown-example.service  |  1 +
+ .../overlay/usr/lib/systemd/system/flutter-gallery.service    | 11 -----------
+ .../usr/lib/systemd/system/flutter-markdown-example.service   | 11 +++++++++++
+ 5 files changed, 15 insertions(+), 14 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 7a909f947f..774f374857 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -35,6 +35,7 @@ F:	package/flutter-engine/
- F:	package/flutter-gallery/
- F:	package/flutter-packages/
- F:	package/flutter-packages/flutter-adaptive-scaffold-example/
-+F:	package/flutter-packages/flutter-animations-example/
- F:	package/flutter-packages/flutter-markdown-example/
- F:	package/flutter-pi/
- F:	package/flutter-sdk-bin/
-diff --git a/package/flutter-packages/Config.in b/package/flutter-packages/Config.in
-index 9c4b42b74c..365e91cd99 100644
---- a/package/flutter-packages/Config.in
-+++ b/package/flutter-packages/Config.in
-@@ -8,6 +8,7 @@ menuconfig BR2_PACKAGE_FLUTTER_PACKAGES
- 
- if BR2_PACKAGE_FLUTTER_PACKAGES
- source "package/flutter-packages/flutter-adaptive-scaffold-example/Config.in"
-+source "package/flutter-packages/flutter-animations-example/Config.in"
- source "package/flutter-packages/flutter-markdown-example/Config.in"
- endif
- 
-diff --git a/package/flutter-packages/flutter-animations-example/Config.in b/package/flutter-packages/flutter-animations-example/Config.in
-new file mode 100644
-index 0000000000..c7801dccf1
---- /dev/null
-+++ b/package/flutter-packages/flutter-animations-example/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_FLUTTER_ANIMATIONS_EXAMPLE
-+	bool "flutter animations example"
-+	help
-+	  High quality pre-built Animations for Flutter
-+
-+	  https://github.com/flutter/packages/tree/main/packages/animations/example
-diff --git a/package/flutter-packages/flutter-animations-example/flutter-animations-example.hash b/package/flutter-packages/flutter-animations-example/flutter-animations-example.hash
-new file mode 120000
-index 0000000000..879f2adb39
---- /dev/null
-+++ b/package/flutter-packages/flutter-animations-example/flutter-animations-example.hash
-@@ -0,0 +1 @@
-+../flutter-packages.hash
+diff --git a/support/testing/tests/package/test_flutter.py b/support/testing/tests/package/test_flutter.py
+index a3e98a43e5..3a150a69e1 100644
+--- a/support/testing/tests/package/test_flutter.py
++++ b/support/testing/tests/package/test_flutter.py
+@@ -25,7 +25,8 @@ class TestFlutter(infra.basetest.BRTest):
+         BR2_PACKAGE_FLUTTER_PI=y
+         BR2_PACKAGE_FLUTTER_PI_RAW_KEYBOARD_PLUGIN=y
+         BR2_PACKAGE_FLUTTER_PI_TEXT_INPUT_PLUGIN=y
+-        BR2_PACKAGE_FLUTTER_GALLERY=y
++        BR2_PACKAGE_FLUTTER_PACKAGES=y
++        BR2_PACKAGE_FLUTTER_MARKDOWN_EXAMPLE=y
+         BR2_PACKAGE_FLUTTER_ENGINE=y
+         BR2_TARGET_ROOTFS_EXT2=y
+         BR2_TARGET_ROOTFS_EXT2_4=y
+@@ -48,7 +49,7 @@ class TestFlutter(infra.basetest.BRTest):
+                      "-vnc", "none",
+                      "-drive", f"file={img},if=virtio,format=raw"])
+         self.emulator.login()
+-        cmd = "systemctl is-active flutter-gallery"
++        cmd = "systemctl is-active flutter-markdown-example"
+         output, exit_code = self.emulator.run(cmd, 10)
+         self.assertEqual(exit_code, 0)
+         self.assertEqual(output[0], "active")
+diff --git a/support/testing/tests/package/test_flutter/overlay/etc/systemd/system/multi-user.target.wants/flutter-gallery.service b/support/testing/tests/package/test_flutter/overlay/etc/systemd/system/multi-user.target.wants/flutter-gallery.service
+deleted file mode 120000
+index 40993fb16c..0000000000
+--- a/support/testing/tests/package/test_flutter/overlay/etc/systemd/system/multi-user.target.wants/flutter-gallery.service
++++ /dev/null
+@@ -1 +0,0 @@
+-../../../../usr/lib/systemd/system/flutter-gallery.service
 \ No newline at end of file
-diff --git a/package/flutter-packages/flutter-animations-example/flutter-animations-example.mk b/package/flutter-packages/flutter-animations-example/flutter-animations-example.mk
-new file mode 100644
-index 0000000000..2b5c896736
+diff --git a/support/testing/tests/package/test_flutter/overlay/etc/systemd/system/multi-user.target.wants/flutter-markdown-example.service b/support/testing/tests/package/test_flutter/overlay/etc/systemd/system/multi-user.target.wants/flutter-markdown-example.service
+new file mode 120000
+index 0000000000..83e731ba2d
 --- /dev/null
-+++ b/package/flutter-packages/flutter-animations-example/flutter-animations-example.mk
-@@ -0,0 +1,54 @@
-+################################################################################
-+#
-+# flutter-animations-example
-+#
-+################################################################################
++++ b/support/testing/tests/package/test_flutter/overlay/etc/systemd/system/multi-user.target.wants/flutter-markdown-example.service
+@@ -0,0 +1 @@
++../../../../usr/lib/systemd/system/flutter-markdown-example.service
+\ No newline at end of file
+diff --git a/support/testing/tests/package/test_flutter/overlay/usr/lib/systemd/system/flutter-gallery.service b/support/testing/tests/package/test_flutter/overlay/usr/lib/systemd/system/flutter-gallery.service
+deleted file mode 100644
+index 88a2bcbf0b..0000000000
+--- a/support/testing/tests/package/test_flutter/overlay/usr/lib/systemd/system/flutter-gallery.service
++++ /dev/null
+@@ -1,11 +0,0 @@
+-[Unit]
+-Description=flutter-gallery daemon
+-After=dbus.service systemd-udevd.service
+-
+-[Service]
+-ExecStart=/usr/bin/flutter-pi --release /usr/share/flutter/gallery/release/
+-Restart=always
+-KillMode=process
+-
+-[Install]
+-WantedBy=multi-user.target
+diff --git a/support/testing/tests/package/test_flutter/overlay/usr/lib/systemd/system/flutter-markdown-example.service b/support/testing/tests/package/test_flutter/overlay/usr/lib/systemd/system/flutter-markdown-example.service
+new file mode 100644
+index 0000000000..2a64b88c2d
+--- /dev/null
++++ b/support/testing/tests/package/test_flutter/overlay/usr/lib/systemd/system/flutter-markdown-example.service
+@@ -0,0 +1,11 @@
++[Unit]
++Description=flutter-markdown-example daemon
++After=dbus.service systemd-udevd.service
 +
-+FLUTTER_ANIMATIONS_EXAMPLE_VERSION = $(FLUTTER_PACKAGES_VERSION)
-+FLUTTER_ANIMATIONS_EXAMPLE_SITE = $(FLUTTER_PACKAGES_SITE)
-+FLUTTER_ANIMATIONS_EXAMPLE_SITE_METHOD = $(FLUTTER_PACKAGES_SITE_METHOD)
-+FLUTTER_ANIMATIONS_EXAMPLE_SOURCE = $(FLUTTER_PACKAGES_SOURCE)
-+FLUTTER_ANIMATIONS_EXAMPLE_LICENSE = $(FLUTTER_PACKAGES_LICENSE)
-+FLUTTER_ANIMATIONS_EXAMPLE_LICENSE_FILES = $(FLUTTER_PACKAGES_LICENSE_FILES)
-+FLUTTER_ANIMATIONS_EXAMPLE_DL_SUBDIR = $(FLUTTER_PACKAGES_DL_SUBDIR)
-+FLUTTER_ANIMATIONS_EXAMPLE_DEPENDENCIES = $(FLUTTER_PACKAGES_DEPENDENCIES)
-+FLUTTER_ANIMATIONS_EXAMPLE_PKG_NAME = animations_example
-+FLUTTER_ANIMATIONS_EXAMPLE_INSTALL_DIR = $(TARGET_DIR)/usr/share/flutter/$(FLUTTER_ANIMATIONS_EXAMPLE_PKG_NAME)/$(FLUTTER_ENGINE_RUNTIME_MODE)
-+FLUTTER_ANIMATIONS_EXAMPLE_SUBDIR = packages/animations/example
++[Service]
++ExecStart=/usr/bin/flutter-pi --release /usr/share/flutter/flutter_markdown_example/release/
++Restart=always
++KillMode=process
 +
-+define FLUTTER_ANIMATIONS_EXAMPLE_CONFIGURE_CMDS
-+	cd $(FLUTTER_ANIMATIONS_EXAMPLE_BUILDDIR) && \
-+		$(HOST_FLUTTER_SDK_BIN_FLUTTER) clean && \
-+		$(HOST_FLUTTER_SDK_BIN_FLUTTER) pub get && \
-+		$(HOST_FLUTTER_SDK_BIN_FLUTTER) build bundle
-+endef
-+
-+define FLUTTER_ANIMATIONS_EXAMPLE_BUILD_CMDS
-+	cd $(FLUTTER_ANIMATIONS_EXAMPLE_BUILDDIR) && \
-+		$(HOST_FLUTTER_SDK_BIN_DART_BIN) \
-+			--native-assets $(FLUTTER_ANIMATIONS_EXAMPLE_BUILDDIR)/.dart_tool/flutter_build/*/native_assets.yaml \
-+			package:$(FLUTTER_ANIMATIONS_EXAMPLE_PKG_NAME)/main.dart && \
-+		$(HOST_FLUTTER_SDK_BIN_ENV) $(FLUTTER_ENGINE_GEN_SNAPSHOT) \
-+			--deterministic \
-+			--obfuscate \
-+			--snapshot_kind=app-aot-elf \
-+			--elf=libapp.so \
-+			.dart_tool/flutter_build/*/app.dill
-+endef
-+
-+define FLUTTER_ANIMATIONS_EXAMPLE_INSTALL_TARGET_CMDS
-+	mkdir -p $(FLUTTER_ANIMATIONS_EXAMPLE_INSTALL_DIR)/{data,lib}
-+	cp -dprf $(FLUTTER_ANIMATIONS_EXAMPLE_BUILDDIR)/build/flutter_assets $(FLUTTER_ANIMATIONS_EXAMPLE_INSTALL_DIR)/data/
-+
-+	$(INSTALL) -D -m 0755 $(FLUTTER_ANIMATIONS_EXAMPLE_BUILDDIR)/libapp.so \
-+		$(FLUTTER_ANIMATIONS_EXAMPLE_INSTALL_DIR)/lib/libapp.so
-+
-+	ln -sf /usr/share/flutter/$(FLUTTER_ENGINE_RUNTIME_MODE)/data/icudtl.dat \
-+	$(FLUTTER_ANIMATIONS_EXAMPLE_INSTALL_DIR)/data/
-+
-+	ln -sf /usr/lib/libflutter_engine.so $(FLUTTER_ANIMATIONS_EXAMPLE_INSTALL_DIR)/lib/
-+	$(RM) $(FLUTTER_ANIMATIONS_EXAMPLE_INSTALL_DIR)/data/flutter_assets/kernel_blob.bin
-+	touch $(FLUTTER_ANIMATIONS_EXAMPLE_INSTALL_DIR)/data/flutter_assets/kernel_blob.bin
-+endef
-+
-+$(eval $(generic-package))
++[Install]
++WantedBy=multi-user.target
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
