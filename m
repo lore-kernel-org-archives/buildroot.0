@@ -4,60 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9627C54E58
-	for <buildroot@archiver.kernel.org>; Mon, 25 Mar 2024 10:07:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99FA2CD11DB
+	for <buildroot@archiver.kernel.org>; Mon, 25 Mar 2024 10:13:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3B2326068F;
-	Mon, 25 Mar 2024 10:07:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4612A60666;
+	Mon, 25 Mar 2024 10:13:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ev2jhOX1XC3i; Mon, 25 Mar 2024 10:07:06 +0000 (UTC)
+ id cKbMQgnTAed5; Mon, 25 Mar 2024 10:13:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 61FB3606CA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 48A2F6068F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 61FB3606CA;
-	Mon, 25 Mar 2024 10:07:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 48A2F6068F;
+	Mon, 25 Mar 2024 10:13:08 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 37E8B1BF2E4
- for <buildroot@lists.busybox.net>; Mon, 25 Mar 2024 10:07:04 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 972441BF2E4
+ for <buildroot@lists.busybox.net>; Mon, 25 Mar 2024 10:13:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3217F40628
- for <buildroot@lists.busybox.net>; Mon, 25 Mar 2024 10:07:04 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 832FF4063B
+ for <buildroot@lists.busybox.net>; Mon, 25 Mar 2024 10:13:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xenx-XlnUxrh for <buildroot@lists.busybox.net>;
- Mon, 25 Mar 2024 10:07:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
- helo=relay6-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id dKeRrOxbXSUH for <buildroot@lists.busybox.net>;
+ Mon, 25 Mar 2024 10:13:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
+ helo=relay8-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 08A64405A1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 08A64405A1
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 08A64405A1
- for <buildroot@buildroot.org>; Mon, 25 Mar 2024 10:07:02 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 00CFCC000F;
- Mon, 25 Mar 2024 10:07:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 88C3340637
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 88C3340637
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 88C3340637
+ for <buildroot@buildroot.org>; Mon, 25 Mar 2024 10:13:04 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5EBE11BF204;
+ Mon, 25 Mar 2024 10:13:01 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rohEK-008eJi-13;
- Mon, 25 Mar 2024 11:07:00 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rohK8-008eh9-1g;
+ Mon, 25 Mar 2024 11:13:00 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Bernd Kuhls <bernd@kuhls.net>
 References: <20240316084335.20839-1-bernd@kuhls.net>
- <20240316084335.20839-4-bernd@kuhls.net>
-Date: Mon, 25 Mar 2024 11:07:00 +0100
-In-Reply-To: <20240316084335.20839-4-bernd@kuhls.net> (Bernd Kuhls's message
- of "Sat, 16 Mar 2024 09:43:34 +0100")
-Message-ID: <87edbyd3qz.fsf@48ers.dk>
+ <20240316084335.20839-5-bernd@kuhls.net>
+Date: Mon, 25 Mar 2024 11:13:00 +0100
+In-Reply-To: <20240316084335.20839-5-bernd@kuhls.net> (Bernd Kuhls's message
+ of "Sat, 16 Mar 2024 09:43:35 +0100")
+Message-ID: <87a5mmd3gz.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 4/5] linux: bump latest version to 6.8
+Subject: Re: [Buildroot] [PATCH 5/5] {linux,
+ linux-headers}: bump 4.19.x / 5.{4, 10, 15}.x / 6.{1, 6}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,32 +83,12 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
  > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
  > ---
- >  linux/Config.in | 6 +++---
- >  1 file changed, 3 insertions(+), 3 deletions(-)
+ >  linux/linux.hash                     | 12 ++++++------
+ >  package/linux-headers/Config.in.host | 12 ++++++------
+ >  2 files changed, 12 insertions(+), 12 deletions(-)
 
- > diff --git a/linux/Config.in b/linux/Config.in
- > index df84cce539..2767b709d4 100644
- > --- a/linux/Config.in
- > +++ b/linux/Config.in
- > @@ -28,8 +28,8 @@ choice
- >  	prompt "Kernel version"
- 
- >  config BR2_LINUX_KERNEL_LATEST_VERSION
- > -	bool "Latest version (6.6)"
- > -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_6 if BR2_KERNEL_HEADERS_AS_KERNEL
- > +	bool "Latest version (6.8)"
- > +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_8 if BR2_KERNEL_HEADERS_AS_KERNEL
- 
- >  config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- >  	bool "Latest CIP SLTS version (5.10.162-cip24)"
- > @@ -128,7 +128,7 @@ endif
- 
- >  config BR2_LINUX_KERNEL_VERSION
- >  	string
- > -	default "6.6.21" if BR2_LINUX_KERNEL_LATEST_VERSION
- > +	default "6.8.1" if BR2_LINUX_KERNEL_LATEST_VERSION
-
-Ahh, it is implicitly fixed by this on master.
+Committed to 2024.02.x 2023.02.x and 2023.11.x after fixing
+BR2_LINUX_KERNEL_LATEST_VERSION, thanks.
 
 -- 
 Bye, Peter Korsgaard
