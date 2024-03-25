@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9501FC54E58
-	for <buildroot@archiver.kernel.org>; Mon, 25 Mar 2024 07:35:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EFD9C54E58
+	for <buildroot@archiver.kernel.org>; Mon, 25 Mar 2024 07:35:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5D88081836;
-	Mon, 25 Mar 2024 07:35:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 477138130B;
+	Mon, 25 Mar 2024 07:35:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1xNjbgKMH8IZ; Mon, 25 Mar 2024 07:35:22 +0000 (UTC)
+ id nTKw_xSL8PtV; Mon, 25 Mar 2024 07:35:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B81C81947
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6165817B5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1B81C81947;
-	Mon, 25 Mar 2024 07:35:22 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 53F021BF909
+	by smtp1.osuosl.org (Postfix) with ESMTP id C6165817B5;
+	Mon, 25 Mar 2024 07:35:24 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D46D01BF3A3
  for <buildroot@lists.busybox.net>; Mon, 25 Mar 2024 07:35:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 418EA60845
+ by smtp4.osuosl.org (Postfix) with ESMTP id BEFF440683
  for <buildroot@lists.busybox.net>; Mon, 25 Mar 2024 07:35:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id btPd5UQLvhs1 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XDSegFZfviRi for <buildroot@lists.busybox.net>;
  Mon, 25 Mar 2024 07:35:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 75339606F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC14540659
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 75339606F3
+ by smtp4.osuosl.org (Postfix) with ESMTP id AC14540659
  for <buildroot@buildroot.org>; Mon, 25 Mar 2024 07:35:14 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3976583CFD; Mon, 25 Mar 2024 07:35:14 +0000 (UTC)
+ id 217A383CF8; Mon, 25 Mar 2024 07:35:14 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 25 Mar 2024 08:31:57 +0100
+Date: Mon, 25 Mar 2024 08:28:35 +0100
 X-Git-Refname: refs/heads/2023.11.x
-X-Git-Oldrev: e0da22119723beae41ea6697b22112c112f917c2
-X-Git-Newrev: 3b4efbd59de6de1a9941583dd5c0bdd6d0dc06bc
+X-Git-Oldrev: cf527f28d8693ab3df7baeb3628adfe5cf15ae9a
+X-Git-Newrev: 8ed494477780c8bf30aac65de4fe1aeaad77bc16
 X-Patchwork-Hint: ignore
-Message-Id: <20240325073514.3976583CFD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.11.x] package/spice: fix
- libressl build
+Message-Id: <20240325073514.217A383CF8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.11.x] package/containerd: fix
+ btrfs handling
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,83 +65,72 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3b4efbd59de6de1a9941583dd5c0bdd6d0dc06bc
+commit: https://git.buildroot.net/buildroot/commit/?id=8ed494477780c8bf30aac65de4fe1aeaad77bc16
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.11.x
 
-Fix the following build failure raised since bump of libressl to version
-3.5.2 in commit 8b216927db080b38fdbf1f8b025b6f90a89d4bc2:
+btrfs handling doesn't depend on btrfs-progs but on kernel >= 4.12 since
+bump to version 1.7.7 in commit 79e01ef9506a6cdc4836912607dc594ae7b1999d
+and
+https://github.com/containerd/containerd/commit/024a748c092cbddde0918f2e93a646ce50116e11
+resulting in the following build failure:
 
-red-stream.cpp: In function 'RedStreamSslStatus red_stream_ssl_accept(RedStream*)':
-red-stream.cpp:526:22: error: invalid use of incomplete type 'SSL' {aka 'struct ssl_st'}
-  526 |     stream->priv->ssl->s3->flags |= SSL3_FLAGS_NO_RENEGOTIATE_CIPHERS;
-      |                      ^~
-In file included from /home/buildroot/autobuild/instance-1/output-1/host/i686-buildroot-linux-gnu/sysroot/usr/include/openssl/err.h:120,
-                 from red-stream.cpp:33:
-/home/buildroot/autobuild/instance-1/output-1/host/i686-buildroot-linux-gnu/sysroot/usr/include/openssl/ossl_typ.h:173:16: note: forward declaration of 'SSL' {aka 'struct ssl_st'}
-  173 | typedef struct ssl_st SSL;
-      |                ^~~~~~
+In file included from vendor/github.com/containerd/btrfs/v2/btrfs.go:21:0:
+./btrfs.h:19:2: error: #error "Headers from kernel >= 4.12 are required on compilation time (not on run time)"
+ #error "Headers from kernel >= 4.12 are required on compilation time (not on run time)"
+  ^~~~~
+In file included from vendor/github.com/containerd/btrfs/v2/btrfs.go:21:0:
+./btrfs.h:22:10: fatal error: linux/btrfs_tree.h: No such file or directory
+ #include <linux/btrfs_tree.h>
+          ^~~~~~~~~~~~~~~~~~~~
 
-Fixes:
- - http://autobuild.buildroot.org/results/273eadf9e49af55e0932a8293ca65762fb43114f
- - http://autobuild.buildroot.org/results/97601f321efc532de0c2ea6aa618ce11fad9e851
+Fixes: 79e01ef9506a6cdc4836912607dc594ae7b1999d
+ - http://autobuild.buildroot.org/results/d6afeef47daae1783dcce3e2b6a0a16e3e5d5fbd
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4e5ea3163094e4c8cf185959b983ce95c97944e4)
+(cherry picked from commit 43ca417c0c883f245dde9be82d49c49adaceea2c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...add-SSL_OP_NO_RENEGOTIATION-fallback-path.patch | 43 ++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
+ package/containerd/Config.in     | 7 ++++---
+ package/containerd/containerd.mk | 4 +---
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/spice/0001-server-add-SSL_OP_NO_RENEGOTIATION-fallback-path.patch b/package/spice/0001-server-add-SSL_OP_NO_RENEGOTIATION-fallback-path.patch
-new file mode 100644
-index 0000000000..edb8b2ed17
---- /dev/null
-+++ b/package/spice/0001-server-add-SSL_OP_NO_RENEGOTIATION-fallback-path.patch
-@@ -0,0 +1,43 @@
-+From 5e580eefac44d0c709afcf93eb5fca2fb353166a Mon Sep 17 00:00:00 2001
-+From: orbea <orbea@riseup.net>
-+Date: Fri, 26 May 2023 13:38:34 -0700
-+Subject: [PATCH] server: add SSL_OP_NO_RENEGOTIATION fallback path
+diff --git a/package/containerd/Config.in b/package/containerd/Config.in
+index 12a53bc111..2dd04b109c 100644
+--- a/package/containerd/Config.in
++++ b/package/containerd/Config.in
+@@ -20,12 +20,13 @@ if BR2_PACKAGE_CONTAINERD
+ 
+ config BR2_PACKAGE_CONTAINERD_DRIVER_BTRFS
+ 	bool "btrfs snapshot driver"
+-	depends on BR2_USE_MMU # btrfs-progs
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # btrfs-progs
+-	select BR2_PACKAGE_BTRFS_PROGS
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
+ 	help
+ 	  Build the btrfs snapshot driver for containerd.
+ 
++comment "brtfs snapshot driver needs headers >= 4.12"
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
 +
-+With LibreSSL SSL_OP_NO_CLIENT_RENEGOTIATION is opaque which is not
-+compatible with the OpenSSL 1.0.2 and earlier code path in
-+red-stream.cpp while SSL_OP_NO_RENEGOTIATION is not yet defined for the
-+newer OpenSSL code path in reds.cpp.
-+
-+So with OpenSSL 1.1.0 and later if SSL_OP_NO_RENEGOTIATION is undefined
-+and SSL_OP_NO_CLIENT_RENEGOTIATION is defined then define the former as
-+the latter. This will allow the build to succeed with LibreSSL 3.7.2 and
-+in the future when newer LibreSSL versions add SSL_OP_NO_RENEGOTIATION
-+that code path will then be used automatically.
-+
-+Signed-off-by: orbea <orbea@riseup.net>
-+Acked-by: Frediano Ziglio <freddy77@gmail.com>
-+
-+Upstream: https://gitlab.freedesktop.org/spice/spice/-/commit/5e580eefac44d0c709afcf93eb5fca2fb353166a
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ server/red-stream.h | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/server/red-stream.h b/server/red-stream.h
-+index 716e93317..8e57c5e5e 100644
-+--- a/server/red-stream.h
-++++ b/server/red-stream.h
-+@@ -25,6 +25,10 @@
-+ 
-+ SPICE_BEGIN_DECLS
-+ 
-++#if OPENSSL_VERSION_NUMBER >= 0x10100000L && !defined(SSL_OP_NO_RENEGOTIATION) && defined(SSL_OP_NO_CLIENT_RENEGOTIATION)
-++#define SSL_OP_NO_RENEGOTIATION SSL_OP_NO_CLIENT_RENEGOTIATION
-++#endif
-++
-+ typedef void (*AsyncReadDone)(void *opaque);
-+ typedef void (*AsyncReadError)(void *opaque, int err);
-+ 
-+-- 
-+GitLab
-+
+ config BR2_PACKAGE_CONTAINERD_DRIVER_DEVMAPPER
+ 	bool "devmapper snapshot driver"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # lvm2
+diff --git a/package/containerd/containerd.mk b/package/containerd/containerd.mk
+index d3ca102797..e24992c352 100644
+--- a/package/containerd/containerd.mk
++++ b/package/containerd/containerd.mk
+@@ -35,9 +35,7 @@ CONTAINERD_DEPENDENCIES += libseccomp host-pkgconf
+ CONTAINERD_TAGS += seccomp
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_CONTAINERD_DRIVER_BTRFS),y)
+-CONTAINERD_DEPENDENCIES += btrfs-progs
+-else
++ifneq ($(BR2_PACKAGE_CONTAINERD_DRIVER_BTRFS),y)
+ CONTAINERD_TAGS += no_btrfs
+ endif
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
