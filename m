@@ -1,94 +1,96 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17D71C54E67
-	for <buildroot@archiver.kernel.org>; Tue, 26 Mar 2024 17:41:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03855C6FD1F
+	for <buildroot@archiver.kernel.org>; Tue, 26 Mar 2024 18:57:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C0C968200A;
-	Tue, 26 Mar 2024 17:41:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AAE8D60655;
+	Tue, 26 Mar 2024 18:57:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vgwRVJe6mVdf; Tue, 26 Mar 2024 17:41:10 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id a9o--qU-V-pG; Tue, 26 Mar 2024 18:57:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E233F8201D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7EF760B1C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E233F8201D;
-	Tue, 26 Mar 2024 17:41:09 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 444891BF37B
- for <buildroot@lists.busybox.net>; Tue, 26 Mar 2024 17:41:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C7EF760B1C;
+	Tue, 26 Mar 2024 18:57:05 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3F06C1BF2B9
+ for <buildroot@lists.busybox.net>; Tue, 26 Mar 2024 18:57:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3C216401C9
- for <buildroot@lists.busybox.net>; Tue, 26 Mar 2024 17:41:08 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A3D8860A6E
+ for <buildroot@lists.busybox.net>; Tue, 26 Mar 2024 18:57:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rmSHhoA73yDx for <buildroot@lists.busybox.net>;
- Tue, 26 Mar 2024 17:41:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UcMXdyqFh0E2 for <buildroot@lists.busybox.net>;
+ Tue, 26 Mar 2024 18:57:01 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::1029; helo=mail-pj1-x1029.google.com;
- envelope-from=adam.duskett@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6F50940187
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F50940187
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com
- [IPv6:2607:f8b0:4864:20::1029])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6F50940187
- for <buildroot@buildroot.org>; Tue, 26 Mar 2024 17:41:03 +0000 (UTC)
-Received: by mail-pj1-x1029.google.com with SMTP id
- 98e67ed59e1d1-29ddfada0d0so3188938a91.3
- for <buildroot@buildroot.org>; Tue, 26 Mar 2024 10:41:03 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::631; helo=mail-ej1-x631.google.com;
+ envelope-from=kazemi.ms@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org F408E608CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F408E608CC
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com
+ [IPv6:2a00:1450:4864:20::631])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id F408E608CC
+ for <buildroot@buildroot.org>; Tue, 26 Mar 2024 18:57:00 +0000 (UTC)
+Received: by mail-ej1-x631.google.com with SMTP id
+ a640c23a62f3a-a46ea03c2a5so21880366b.1
+ for <buildroot@buildroot.org>; Tue, 26 Mar 2024 11:57:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1711474862; x=1712079662;
+ d=1e100.net; s=20230601; t=1711479418; x=1712084218;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=SKQlBLTy5T4YV8y3GaWDZP4EAjfsIUoRv4LbbxP1m9w=;
- b=Ts2SkOoBKKkF0os7kKIjJOjurciA6Pd+Lj2vFGL3LPDHbUULzZCWWkbq7gkg/XjvBq
- VsLub0cPCWmNsrCW1iM1yx466upK+O0VUVAWB+0+rwLwFa2MXOL/U0pPSpAmwcU3kyU4
- +vzdJLP537rs+JKZgEGzmwHxC4BYIsJaQSxh+Zx2xj9phvlaGwqOpFhV9Dy+3LI5hGPp
- M/xwLd1owwU3PuE/IG0JxFeeW+78ojoBSxSdXNDgBDT+wlbNvCWRTW3zOkZ0kfDl9gYI
- 1Ca6/ftdOre1uXxqzqO1gqO66ReLUNpOcDhqKA8DDa+DHQMyCNIw0Gv3c9kMPIxrG0bq
- 4yWA==
-X-Gm-Message-State: AOJu0YyLJ1uzaeaZpv6NvC7xm7JjUjols0CxRW/AtLcrk3clmPG8hPrQ
- EAnnXJrU2q3WXrLQHUtiFPIFX9C4MB2mUP0vlQBkj71Yid/qKUAHxPwjmG3B5Yf1yGp2/Ca5AYK
- L
-X-Google-Smtp-Source: AGHT+IFcNDd8odqd9DpaRAYPx0uk/zzFfqOFSHRdJ65DnJz2rk1TOsuHz9ucK3UH5Hj8RDxw+LaGKg==
-X-Received: by 2002:a17:90a:ab03:b0:2a0:97f0:955e with SMTP id
- m3-20020a17090aab0300b002a097f0955emr15134pjq.37.1711474861653; 
- Tue, 26 Mar 2024 10:41:01 -0700 (PDT)
-Received: from fedora.amarulasolutions.com ([204.229.2.167])
+ bh=qinNzwMdv+mcjeLuGIqBiYeSULcGgesElEpGKQVBdlQ=;
+ b=TjPANKqQmuThpQGRQLbbrttsmmC7MaQIcr2l3sgWx2SuoxO3oFeHEQfeuwsyoswFPr
+ tFi8uXy5qaBoo0O1TjpxgpGcBJDlxU0FsWrYIp5GOxZm6wgErG6nJra5sStUxY2scAWh
+ h65P2DJ3ApcbSwOwfTosQQJBfmfFap5xfSYQgVMAUbLbzU4mma/59DOcLs1a1Q4Q6kCR
+ EKhpDQchAqoU1v1NjIE52hRn1t+QrULryd6WlyS1WbLgjJejaCUpxp2vvDYu8j9+SDCO
+ qL8FYdaxqLZ9QRI7pyDtiQemSuTW3YzajY1qQkvIeScWFcaGQuBA5050TDJxyBB1wbnB
+ WGgQ==
+X-Gm-Message-State: AOJu0YzDT88Hb7Hl02qxn1iFkNhAb4it1hOpFm79/iX0Qy4TBQQqUZeU
+ s/f/RYdLv+O8xH6QIqhOENrBHpjFzgdVIbqaMcnRQPbRvagscT8N0T6mRc4umpc=
+X-Google-Smtp-Source: AGHT+IFiWAN054Q1dfirJA1nokZtElcMH4GNnB9gQrocucqGkpEBbdRK61yckUmL1nYAxLslbELirA==
+X-Received: by 2002:a17:906:b305:b0:a47:61ca:575 with SMTP id
+ n5-20020a170906b30500b00a4761ca0575mr1930899ejz.25.1711479417922; 
+ Tue, 26 Mar 2024 11:56:57 -0700 (PDT)
+Received: from saeedkazemi-ThinkPad.abbrnd.local
+ (2001-1c00-0b13-1d00-0b5d-5c92-af34-2bc1.cable.dynamic.v6.ziggo.nl.
+ [2001:1c00:b13:1d00:b5d:5c92:af34:2bc1])
  by smtp.gmail.com with ESMTPSA id
- d12-20020a17090b004c00b002a076b6cc69sm3219748pjt.23.2024.03.26.10.41.01
+ cb20-20020a170906a45400b00a4731c8f8c9sm4506103ejb.210.2024.03.26.11.56.57
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 26 Mar 2024 10:41:01 -0700 (PDT)
-From: Adam Duskett <adam.duskett@amarulasolutions.com>
+ Tue, 26 Mar 2024 11:56:57 -0700 (PDT)
+From: Saeed Kazemi <kazemi.ms@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 26 Mar 2024 11:40:59 -0600
-Message-ID: <20240326174059.499034-1-adam.duskett@amarulasolutions.com>
-X-Mailer: git-send-email 2.44.0
+Date: Tue, 26 Mar 2024 19:56:53 +0100
+Message-Id: <20240326185653.3656142-1-kazemi.ms@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1711474862; x=1712079662;
- darn=buildroot.org; 
+ d=gmail.com; s=20230601; t=1711479418; x=1712084218; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=SKQlBLTy5T4YV8y3GaWDZP4EAjfsIUoRv4LbbxP1m9w=;
- b=kh5bnetu9bKIyhNWWbme822JeDWtyojDKCH/tCvg9muAo/5NdvTOe5hrGHYJI3kpFP
- zD+vz/DStEMZL/Ga/5kLXZLbFzSVDxP7wghT/WX/L7m+Q0GFVrLV4F7zeoHu2+oBuCtw
- eyRR11rC1Qasrn62RVh2i9YQHb2pIsooDC8SI=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=qinNzwMdv+mcjeLuGIqBiYeSULcGgesElEpGKQVBdlQ=;
+ b=A8891GKNVr6+q/Hp0fGxvLqPJILl9y6/x5Wk4TBVSgE/zplEEv6MZvQvdD0Jcjr5L+
+ lhhOGa0Ti3mBVa8oDNf5mQ57J5ez46RTvv+GrkOykZbx1TdZMP7qqww8gznTDYTXFl7P
+ Px7fK0ckTuD+JC/3kZNR2funoz9Bkby/cTvKRc5OVeJBST5lXx85W4f09tIUQufqx5yX
+ pfmxiAIV0JhZmV1/yF/Sey0bUfT1T9MWFahqOdMekZoBQsTZWwQH0Wkf5tBdgSsjCDUo
+ YL+tRx8h+/TkAzK0VArMLm2otHLYfys/iYzQKbFgMZpQKVaSqSlZgMki0wQckrgEoONf
+ FBFQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=kh5bnetu
-Subject: [Buildroot] [PATCH] package/flutter-packages: bump version to
- ab1630b9b9bd1130b4d5d1ac18a588b690fd0fa3
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=A8891GKN
+Subject: [Buildroot] [PATCH 1/1] package/eza: bump to version 0.18.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,42 +102,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
+Cc: Saeed Kazemi <kazemi.ms@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+Release notes:
+https://github.com/eza-community/eza/releases/tag/v0.18.8
+
+Signed-off-by: Saeed Kazemi <kazemi.ms@gmail.com>
 ---
- package/flutter-packages/flutter-packages.hash | 2 +-
- package/flutter-packages/flutter-packages.mk   | 2 +-
+ package/eza/eza.hash | 2 +-
+ package/eza/eza.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/flutter-packages/flutter-packages.hash b/package/flutter-packages/flutter-packages.hash
-index 994434e25c..f124302a02 100644
---- a/package/flutter-packages/flutter-packages.hash
-+++ b/package/flutter-packages/flutter-packages.hash
+diff --git a/package/eza/eza.hash b/package/eza/eza.hash
+index 48c2fa8ffe..d8d55e42ca 100644
+--- a/package/eza/eza.hash
++++ b/package/eza/eza.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  8276276e050c1ea45787f74b0f8c915b8cf2162b6af8537ffa9886bd423f2828  flutter-packages-947e34ce9fedcdd6750b54eb1cc74b854b49ab48-br1.tar.gz
-+sha256  2e1e19713ac74b6e00a6f5ec516e8ccda5e5ba1fc8b249d40abcfe4cb50dff87  flutter-packages-ab1630b9b9bd1130b4d5d1ac18a588b690fd0fa3-br1.tar.gz
- sha256  89519eca6f7b9529b35bdddd623a58c3af06a88c458dbd6531ddb4675acf75a9  LICENSE
-diff --git a/package/flutter-packages/flutter-packages.mk b/package/flutter-packages/flutter-packages.mk
-index 4beaa39325..c1e7a14f85 100644
---- a/package/flutter-packages/flutter-packages.mk
-+++ b/package/flutter-packages/flutter-packages.mk
+ # Locally computed
+-sha256  995a77848e75737a267b64613acaa6096ba8943f048676d5722c3ff238fb29f9  eza-0.18.3.tar.gz
++sha256  32621dea52695b75fe6f6d24ebd19812b0491a852cb2a970382838dd798cc46c  eza-0.18.8.tar.gz
+ sha256  2762990c7fbba9d550802a2593c1d857dcd52596bb0f9f192a97e9a7ac5f4f9e  LICENCE
+diff --git a/package/eza/eza.mk b/package/eza/eza.mk
+index 7ec3f127b4..506e515566 100644
+--- a/package/eza/eza.mk
++++ b/package/eza/eza.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FLUTTER_PACKAGES_VERSION = 947e34ce9fedcdd6750b54eb1cc74b854b49ab48
-+FLUTTER_PACKAGES_VERSION = ab1630b9b9bd1130b4d5d1ac18a588b690fd0fa3
- FLUTTER_PACKAGES_SITE = $(call github,flutter,packages,$(FLUTTER_PACKAGES_VERSION))
- FLUTTER_PACKAGES_LICENSE = BSD-3-Clause
- FLUTTER_PACKAGES_LICENSE_FILES = LICENSE
+-EZA_VERSION = 0.18.3
++EZA_VERSION = 0.18.8
+ EZA_SITE = $(call github,eza-community,eza,v$(EZA_VERSION))
+ EZA_LICENSE = MIT
+ EZA_LICENSE_FILES = LICENCE
 -- 
-2.44.0
+2.34.1
 
 _______________________________________________
 buildroot mailing list
