@@ -4,93 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03855C6FD1F
-	for <buildroot@archiver.kernel.org>; Tue, 26 Mar 2024 18:57:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B030C6FD1F
+	for <buildroot@archiver.kernel.org>; Tue, 26 Mar 2024 19:05:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AAE8D60655;
-	Tue, 26 Mar 2024 18:57:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CCD96608CC;
+	Tue, 26 Mar 2024 19:05:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a9o--qU-V-pG; Tue, 26 Mar 2024 18:57:06 +0000 (UTC)
+ id KvVHBat1QPKq; Tue, 26 Mar 2024 19:05:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7EF760B1C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D016960AB9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C7EF760B1C;
-	Tue, 26 Mar 2024 18:57:05 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3F06C1BF2B9
- for <buildroot@lists.busybox.net>; Tue, 26 Mar 2024 18:57:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D016960AB9;
+	Tue, 26 Mar 2024 19:05:48 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DCA131BF36B
+ for <buildroot@lists.busybox.net>; Tue, 26 Mar 2024 19:05:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A3D8860A6E
- for <buildroot@lists.busybox.net>; Tue, 26 Mar 2024 18:57:02 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CA29B8200E
+ for <buildroot@lists.busybox.net>; Tue, 26 Mar 2024 19:05:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UcMXdyqFh0E2 for <buildroot@lists.busybox.net>;
- Tue, 26 Mar 2024 18:57:01 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id U30MEXXCKLFZ for <buildroot@lists.busybox.net>;
+ Tue, 26 Mar 2024 19:05:44 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::631; helo=mail-ej1-x631.google.com;
+ client-ip=2a00:1450:4864:20::62f; helo=mail-ej1-x62f.google.com;
  envelope-from=kazemi.ms@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org F408E608CC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F408E608CC
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com
- [IPv6:2a00:1450:4864:20::631])
- by smtp3.osuosl.org (Postfix) with ESMTPS id F408E608CC
- for <buildroot@buildroot.org>; Tue, 26 Mar 2024 18:57:00 +0000 (UTC)
-Received: by mail-ej1-x631.google.com with SMTP id
- a640c23a62f3a-a46ea03c2a5so21880366b.1
- for <buildroot@buildroot.org>; Tue, 26 Mar 2024 11:57:00 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8B2178200C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B2178200C
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
+ [IPv6:2a00:1450:4864:20::62f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8B2178200C
+ for <buildroot@buildroot.org>; Tue, 26 Mar 2024 19:05:44 +0000 (UTC)
+Received: by mail-ej1-x62f.google.com with SMTP id
+ a640c23a62f3a-a45f257b81fso689035866b.0
+ for <buildroot@buildroot.org>; Tue, 26 Mar 2024 12:05:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1711479418; x=1712084218;
+ d=1e100.net; s=20230601; t=1711479942; x=1712084742;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=qinNzwMdv+mcjeLuGIqBiYeSULcGgesElEpGKQVBdlQ=;
- b=TjPANKqQmuThpQGRQLbbrttsmmC7MaQIcr2l3sgWx2SuoxO3oFeHEQfeuwsyoswFPr
- tFi8uXy5qaBoo0O1TjpxgpGcBJDlxU0FsWrYIp5GOxZm6wgErG6nJra5sStUxY2scAWh
- h65P2DJ3ApcbSwOwfTosQQJBfmfFap5xfSYQgVMAUbLbzU4mma/59DOcLs1a1Q4Q6kCR
- EKhpDQchAqoU1v1NjIE52hRn1t+QrULryd6WlyS1WbLgjJejaCUpxp2vvDYu8j9+SDCO
- qL8FYdaxqLZ9QRI7pyDtiQemSuTW3YzajY1qQkvIeScWFcaGQuBA5050TDJxyBB1wbnB
- WGgQ==
-X-Gm-Message-State: AOJu0YzDT88Hb7Hl02qxn1iFkNhAb4it1hOpFm79/iX0Qy4TBQQqUZeU
- s/f/RYdLv+O8xH6QIqhOENrBHpjFzgdVIbqaMcnRQPbRvagscT8N0T6mRc4umpc=
-X-Google-Smtp-Source: AGHT+IFiWAN054Q1dfirJA1nokZtElcMH4GNnB9gQrocucqGkpEBbdRK61yckUmL1nYAxLslbELirA==
-X-Received: by 2002:a17:906:b305:b0:a47:61ca:575 with SMTP id
- n5-20020a170906b30500b00a4761ca0575mr1930899ejz.25.1711479417922; 
- Tue, 26 Mar 2024 11:56:57 -0700 (PDT)
+ bh=48P/efEFlstB9JE/uvlwksodDWujhyPaNUCWiQ6eXIQ=;
+ b=wJPfLotsqsYXGA2VzXUQ1I5BzUiN2kTqsdMOs5j5hStj1Qs1pqPSc+PjE9gmBS+se8
+ uXWsOFYhNfQKl1ZJ2IlOG+ELuMuwpd7W0T2ljB/Fm9sY5V+Qwani9cC8Er97D2ufkT7Z
+ sbxFLcN7HEL2Rt+gtfJrrW4Fvs3WS5pd7yPb7WKPoL1Ox8KTqypHfxNqvTqGYsEXgei/
+ 6rJLmUUtoMTR22wNRPhmvCxO4m+ZdZRQl6N9Ai7Tx469BHKopjoNTXEKB1kpo1qN6QNx
+ 5uCDO06MXCgtpltQPez7AutMCDHv2rqCvMPxYrRvtzPPq2IJy5PSVtJiM7z0/l6oSYV3
+ Q7YA==
+X-Gm-Message-State: AOJu0Yw3Wdy3TV7G8ibCxYB8UgLvTw/1s0fdKoXmxqziG+4/IiKEezf3
+ 7l4pVVWekj07ESci+STDLsNz/JP24EatReRFpQnMrKVH8OcrORcOYY5N1p8GIbs=
+X-Google-Smtp-Source: AGHT+IGFyhC7koZLvv3ixR+HX+bDqKgaiNQgFhqJji4Y65f+90KIzNdSsJCVcbPyoIDYxjvz0gg0aA==
+X-Received: by 2002:a17:906:5288:b0:a46:13d5:46fe with SMTP id
+ c8-20020a170906528800b00a4613d546femr8076447ejm.11.1711479941588; 
+ Tue, 26 Mar 2024 12:05:41 -0700 (PDT)
 Received: from saeedkazemi-ThinkPad.abbrnd.local
  (2001-1c00-0b13-1d00-0b5d-5c92-af34-2bc1.cable.dynamic.v6.ziggo.nl.
  [2001:1c00:b13:1d00:b5d:5c92:af34:2bc1])
  by smtp.gmail.com with ESMTPSA id
- cb20-20020a170906a45400b00a4731c8f8c9sm4506103ejb.210.2024.03.26.11.56.57
+ z2-20020a1709060be200b00a45f2dc6795sm4521707ejg.137.2024.03.26.12.05.40
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 26 Mar 2024 11:56:57 -0700 (PDT)
+ Tue, 26 Mar 2024 12:05:41 -0700 (PDT)
 From: Saeed Kazemi <kazemi.ms@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 26 Mar 2024 19:56:53 +0100
-Message-Id: <20240326185653.3656142-1-kazemi.ms@gmail.com>
+Date: Tue, 26 Mar 2024 20:05:38 +0100
+Message-Id: <20240326190538.3708590-1-kazemi.ms@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1711479418; x=1712084218; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1711479942; x=1712084742; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=qinNzwMdv+mcjeLuGIqBiYeSULcGgesElEpGKQVBdlQ=;
- b=A8891GKNVr6+q/Hp0fGxvLqPJILl9y6/x5Wk4TBVSgE/zplEEv6MZvQvdD0Jcjr5L+
- lhhOGa0Ti3mBVa8oDNf5mQ57J5ez46RTvv+GrkOykZbx1TdZMP7qqww8gznTDYTXFl7P
- Px7fK0ckTuD+JC/3kZNR2funoz9Bkby/cTvKRc5OVeJBST5lXx85W4f09tIUQufqx5yX
- pfmxiAIV0JhZmV1/yF/Sey0bUfT1T9MWFahqOdMekZoBQsTZWwQH0Wkf5tBdgSsjCDUo
- YL+tRx8h+/TkAzK0VArMLm2otHLYfys/iYzQKbFgMZpQKVaSqSlZgMki0wQckrgEoONf
- FBFQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=48P/efEFlstB9JE/uvlwksodDWujhyPaNUCWiQ6eXIQ=;
+ b=nZNJ9EvxO86pZi4ezqyMNuHyL+etxwO/e36/PCHdCBQ25LDCE2trCs88LqcPAYe1gs
+ y8AmzUGZBMPGf5tSiMljohGTwl35G5cs1hiPldTb25wLIG9W9gLI1MtCZpaILHFnYNT6
+ C4EeUcWGednhVxbnevPHkeNXoBaBk8jep7rpaisQY+VSM5QbCg6lO3A4ti3bylXOqY3X
+ KaRTsxUokfZmcgTufUHB8FS/x/QL8RK5fhXVKaZdhA2Jl+bFewQho1rxoFOBdgI6pJyf
+ EIR9QwEi3bTzoEyRyX9K/Xnr3/0Fk1TKdSv8eYeGcF0aRwd7W7GJtYs7zML83KxE961b
+ 115A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=A8891GKN
-Subject: [Buildroot] [PATCH 1/1] package/eza: bump to version 0.18.8
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=nZNJ9Evx
+Subject: [Buildroot] [PATCH 1/1] package/procs: bump to version 0.14.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -109,36 +108,36 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Release notes:
-https://github.com/eza-community/eza/releases/tag/v0.18.8
+https://github.com/dalance/procs/releases/tag/v0.14.5
 
 Signed-off-by: Saeed Kazemi <kazemi.ms@gmail.com>
 ---
- package/eza/eza.hash | 2 +-
- package/eza/eza.mk   | 2 +-
+ package/procs/procs.hash | 2 +-
+ package/procs/procs.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/eza/eza.hash b/package/eza/eza.hash
-index 48c2fa8ffe..d8d55e42ca 100644
---- a/package/eza/eza.hash
-+++ b/package/eza/eza.hash
+diff --git a/package/procs/procs.hash b/package/procs/procs.hash
+index a3ec5d2b75..93be601c6d 100644
+--- a/package/procs/procs.hash
++++ b/package/procs/procs.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  995a77848e75737a267b64613acaa6096ba8943f048676d5722c3ff238fb29f9  eza-0.18.3.tar.gz
-+sha256  32621dea52695b75fe6f6d24ebd19812b0491a852cb2a970382838dd798cc46c  eza-0.18.8.tar.gz
- sha256  2762990c7fbba9d550802a2593c1d857dcd52596bb0f9f192a97e9a7ac5f4f9e  LICENCE
-diff --git a/package/eza/eza.mk b/package/eza/eza.mk
-index 7ec3f127b4..506e515566 100644
---- a/package/eza/eza.mk
-+++ b/package/eza/eza.mk
+-sha256  22d9ef44bf06bbd6d0d463a40678a1560a9125fdc6e6fbb5db294e05a174ea01  procs-0.14.4.tar.gz
++sha256  d90d350ebac64b6a5b2c89881421c27d266653ec1f4a6ed10e32892fe38d3c60  procs-0.14.5.tar.gz
+ sha256  feb87a2e0c305de3464cc44077da5393c52d8ca6362d37427157d04ec6f4510d  LICENSE
+diff --git a/package/procs/procs.mk b/package/procs/procs.mk
+index 34e874a4f2..019e69a1de 100644
+--- a/package/procs/procs.mk
++++ b/package/procs/procs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EZA_VERSION = 0.18.3
-+EZA_VERSION = 0.18.8
- EZA_SITE = $(call github,eza-community,eza,v$(EZA_VERSION))
- EZA_LICENSE = MIT
- EZA_LICENSE_FILES = LICENCE
+-PROCS_VERSION = 0.14.4
++PROCS_VERSION = 0.14.5
+ PROCS_SITE = $(call github,dalance,procs,v$(PROCS_VERSION))
+ PROCS_LICENSE = MIT
+ PROCS_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
