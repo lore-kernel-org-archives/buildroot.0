@@ -1,63 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E2BBC6FD1F
-	for <buildroot@archiver.kernel.org>; Tue, 26 Mar 2024 15:01:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EAE0C6FD1F
+	for <buildroot@archiver.kernel.org>; Tue, 26 Mar 2024 15:09:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C6E2B4059B;
-	Tue, 26 Mar 2024 15:01:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CEE91404CF;
+	Tue, 26 Mar 2024 15:09:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tYMnNbf6AvBR; Tue, 26 Mar 2024 15:01:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JsM7Mo4uopNP; Tue, 26 Mar 2024 15:09:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 91C7F40600
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DD78140AC4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 91C7F40600;
-	Tue, 26 Mar 2024 15:01:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 529041BF4E2
- for <buildroot@lists.busybox.net>; Tue, 26 Mar 2024 15:01:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DD78140AC4;
+	Tue, 26 Mar 2024 15:09:02 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D3B6D1BF306
+ for <buildroot@lists.busybox.net>; Tue, 26 Mar 2024 15:09:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4063360AEA
- for <buildroot@lists.busybox.net>; Tue, 26 Mar 2024 15:01:47 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C0CA0812BB
+ for <buildroot@lists.busybox.net>; Tue, 26 Mar 2024 15:09:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ft7KZeeEvn_E for <buildroot@lists.busybox.net>;
- Tue, 26 Mar 2024 15:01:46 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
- helo=relay7-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id k6J6vqJqPyT9 for <buildroot@lists.busybox.net>;
+ Tue, 26 Mar 2024 15:09:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
+ helo=relay2-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7BA1860AE8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7BA1860AE8
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7BA1860AE8
- for <buildroot@buildroot.org>; Tue, 26 Mar 2024 15:01:44 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E1C8820014;
- Tue, 26 Mar 2024 15:01:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B13A5812A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B13A5812A7
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B13A5812A7
+ for <buildroot@buildroot.org>; Tue, 26 Mar 2024 15:08:59 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A3BFF4000F;
+ Tue, 26 Mar 2024 15:08:56 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rp8J2-009EoZ-3C;
- Tue, 26 Mar 2024 16:01:41 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rp8Q3-009Ew0-29;
+ Tue, 26 Mar 2024 16:08:55 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, arnout@mind.be
-References: <20240322174941.475669-1-fontaine.fabrice@gmail.com>
- <87sf0eg2xp.fsf@48ers.dk>
-Date: Tue, 26 Mar 2024 16:01:40 +0100
-In-Reply-To: <87sf0eg2xp.fsf@48ers.dk> (Peter Korsgaard's message of "Mon, 25
- Mar 2024 08:56:18 +0100")
-Message-ID: <87frwd9gvf.fsf@48ers.dk>
+To: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+References: <20240321182126.24115-1-jarkko@kernel.org>
+ <20240321182126.24115-3-jarkko@kernel.org>
+ <a5a18fd5-6c05-4231-a7b1-a6c1965919c8@mind.be>
+Date: Tue, 26 Mar 2024 16:08:55 +0100
+In-Reply-To: <a5a18fd5-6c05-4231-a7b1-a6c1965919c8@mind.be> (Arnout
+ Vandecappelle via buildroot's message of "Fri, 22 Mar 2024 21:47:10
+ +0100")
+Message-ID: <87bk719gjc.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/libdrm: disable tests
+Subject: Re: [Buildroot] [PATCH RFC 2/2] package/swtpm: add host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,40 +71,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
+Cc: Jarkko Sakkinen <jarkko@kernel.org>, Stefan Berger <stefanb@linux.ibm.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle via buildroot <buildroot@buildroot.org> writes:
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
- >> Disable tests to avoid the following build failure with amdgpu and gcc 5
- >> if cunit is built before libdrm:
+ >  Hi Jarkko.
+ > On 21/03/2024 19:21, Jarkko Sakkinen wrote:
+ >> Add swtpm and its dependency libtpms to host packages. These are useful
+ >> for emulating TPM in QEMU environment.
 
- >> In file included from ../tests/amdgpu/shader_test_util.c:10:0:
- >> ../tests/amdgpu/shader_code.h:113:2: error: initializer element is not constant
- >> ps_##_ps##_shader_patchinfo_code_size_gfx##_n, \
- >> ^
+ >  I don't understand... Does it mean that you run host-swtpm next to
+ >  host-qemu and you somehow connect them so it gets exposed as a TPM2
+ > device inside the qemu VM?
 
- >> tests can be disabled since
- >> https://gitlab.freedesktop.org/mesa/drm/-/commit/46d1e99a5d291b22d86ac52710b079491beedff8
+yes, swtpm listens on a unix socket and you can configure qemu to expose
+that to the VM with the tpm-tis driver:
 
- >> Fixes:
- >> - http://autobuild.buildroot.org/results/612aad1fa642993da36bbec6c16c9020ac283e34
+https://www.qemu.org/docs/master/specs/tpm.html
 
- >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
- > Committed to 2024.02.x, 2023.02.x and 2023.11.x, thanks.
-
-Hmm, I think I was too fast here. The libdrm tests also include the
-handy utilities like modetest and modeprint, so it is not great to
-unconditionally disable them.
-
-Maybe we should add a suboption for it? It is too late for 2024.02.1,
-but I will revert the change for 2023.02.x and 2023.11.x so I can get
-those released (and EOL'ed).
+Quite handy for doing TPM stuff (E.G. CI) without having to mess with
+real HW.
 
 -- 
 Bye, Peter Korsgaard
