@@ -4,70 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7A45C6FD1F
-	for <buildroot@archiver.kernel.org>; Tue, 26 Mar 2024 10:18:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D816FC6FD1F
+	for <buildroot@archiver.kernel.org>; Tue, 26 Mar 2024 10:26:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 594CA40160;
-	Tue, 26 Mar 2024 10:18:43 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 727B0404ED;
+	Tue, 26 Mar 2024 10:26:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RBvOl_yYMZBX; Tue, 26 Mar 2024 10:18:42 +0000 (UTC)
+ id OzKLZYlfFZzp; Tue, 26 Mar 2024 10:26:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 598AB40ADF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5F2E540578
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 598AB40ADF;
-	Tue, 26 Mar 2024 10:18:42 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 69DE81BF383
- for <buildroot@lists.busybox.net>; Tue, 26 Mar 2024 10:18:41 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5F2E540578;
+	Tue, 26 Mar 2024 10:26:48 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 618061BF383
+ for <buildroot@lists.busybox.net>; Tue, 26 Mar 2024 10:26:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 56B4780F3D
- for <buildroot@lists.busybox.net>; Tue, 26 Mar 2024 10:18:41 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5C8D840578
+ for <buildroot@lists.busybox.net>; Tue, 26 Mar 2024 10:26:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1HxVhqjGFSpn for <buildroot@lists.busybox.net>;
- Tue, 26 Mar 2024 10:18:40 +0000 (UTC)
-X-Greylist: delayed 304 seconds by postgrey-1.37 at util1.osuosl.org;
- Tue, 26 Mar 2024 10:18:39 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E0C6180DD5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E0C6180DD5
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id phtDcZu9d0yS for <buildroot@lists.busybox.net>;
+ Tue, 26 Mar 2024 10:26:46 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.126.187;
  helo=mout.kundenserver.de;
  envelope-from=thomas.claveirole@green-communications.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D3A86404ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3A86404ED
 Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E0C6180DD5
- for <buildroot@buildroot.org>; Tue, 26 Mar 2024 10:18:39 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D3A86404ED
+ for <buildroot@buildroot.org>; Tue, 26 Mar 2024 10:26:45 +0000 (UTC)
 Received: from houde.tangerine ([185.213.154.234]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.168]) with ESMTPSA (Nemesis) id
- 1My2lr-1snB923yjX-00zULS; Tue, 26 Mar 2024 11:13:32 +0100
+ (mreue010 [212.227.15.168]) with ESMTPSA (Nemesis) id
+ 1MRmwM-1sH9Vh0QCQ-00TEZp; Tue, 26 Mar 2024 11:26:43 +0100
 From: Thomas Claveirole <thomas.claveirole@green-communications.fr>
 To: buildroot@buildroot.org
-Date: Tue, 26 Mar 2024 11:13:07 +0100
-Message-ID: <20240326101307.271392-1-thomas.claveirole@green-communications.fr>
+Date: Tue, 26 Mar 2024 11:26:34 +0100
+Message-ID: <20240326102635.273072-1-thomas.claveirole@green-communications.fr>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:N4ZBr+rw/WQQ3Xwk1hsFpv0C0ey87ymiYRAQJAvvA84QINtP1WY
- Q2pgklSpqMwblN+0Oxp7BC5Aoj4aD2qFcGNPM5p8rVpWmB+UINgTIap1wK/GjC7P0AeIdN/
- XXqTYRzeF7c844wUvPhV4ZKeLIIMiLM0D1m+xwtalxGzRrGtIlty0bTPXXSM7aknAvyoBdl
- zRVtwbAWy0nCoN4riqyzw==
-UI-OutboundReport: notjunk:1;M01:P0:q2e2VGGo1D8=;OM+A5A4qZMUntTDNgETOwvUlGP7
- qtzoQ+rJhmsneP3c3t/+nMB7nrt2uao+5lmMJlikwKSKmtoPbdAjC7gKwoNKx+UbnuUKoOexP
- jRDyVPN60ln1StdbAG6Yg6IhqrXqdEwQd6sKWFCLK4Ww2c2u1CszW4ee5WRI0wIoldClp8CQV
- 89ozSMoUwEik4foune6Vz8a58dNS/usuitB4Qtr1AqfqIl7SyASNQ3kNcGUbNF2IcetcmtxcQ
- oUkdTV0MXSO4kxWs9AGHfX7q8oVWgrg/8KofSQgYLM/WPOAV+DdWtUannE79lGixwySUSie+n
- ZB3VK9rtOI6C5DCw8lf7d7Afub6xcJUGdBOrMLRS4ee4cLjctqaG9uOHvJAwyJL6rrr6H9vbA
- 0/YHPe/ZCuQDANg2UMEuQQCS0ODyOuJsCEUGmb3Mdd0qQFFl1k0dN7zja5zfGWGAtEmfCkIPh
- B2GNcKgksAZvy6sif9Y+wxJo/AW8c2SOdYxBYoBeryoAO/1pyFIc+ThZSAsvW0IZsxaYiL93X
- nF/47ORYb/s8vGcOz+XVIDKfIxI82kgDKjUkFOKR85IQOZD/7DhG+NKmZPif9j5zxmLRPsieo
- z86lkJZ49vqNxns9NXNsGTFPADYgCjsaluI0EpdfLq6JJ/Na6/QKbw0UpPFqpJTbXefoEfCOM
- +6bt3Glp2Ji7cYUbe5UFTA3i0lq/pCdvtJACJDhDRWjV7o8yjgQ4ezsfCEAxI/K4HqEIs6sXF
- ENKtHaax492FBbJeeiBozvSY6y/XK41o44A+cGDVOsaAC5neoXkN4E=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Provags-ID: V03:K1:YlkAlpn8TrMJ1rCpZAm/UWdiZnjCuXPonuzVD1UsEku4VcHWFOJ
+ S4kpstKtXRpxaba/i/OTUrLlpPFD/vKMDdlRKyQNlPdFOET7jUsT7e05BhMTEKbMZkSfjmO
+ sMJgGSlQagE98/qGAXq1h5nXgTF1mPJJVjL8NATzHj+P5HiQD52lkgS/Y6j9rwT0GuZeB4r
+ bDStGn81aSmG8qAzlfCdA==
+UI-OutboundReport: notjunk:1;M01:P0:ZFn7bAWW2CA=;3BYWPZb2lXt4d8UvpOSdM1hX6u0
+ RGuNsuGKyBaP9kl46mWtrUQTEC5MF1DX2pa562m2JpxcZvTOXs8CDeIh4Rwcw8lh40GAD0dZU
+ t2UB6NQyUlnjdEZyT2xCcZZ3PYroILU3m+AWh13W+ZRrLcNNJAqMigOKzLs+lDYhSfsbnw5S1
+ mGwbkG8dfSKnflFpVO9j08/CGs15PEaK1hNY/cftj9h17uhBWM9pAUEXzst/p18TzkY2aVK21
+ bsS2sBdbV/4wi5AK/HzkuA8aPN6ASevrChkohXA1sL4LgT5vMHukIonuBB+5RE2rauabDV3Ek
+ pArWCFHdmyMriLzs8GC5ULmIoGmRnqSdPNmt7ZqlW5XEAdDwas8epeGHWJxPSYheOaFfFPxoi
+ w7W8jlhfRfMuDNBhmIt5YGBfzYQxUDNYLMcFH6oQxqz7OY+T3Ssb2Ub388RgyA0EEvZ8ZsL5s
+ LvJNAErmFNsVgYFnMklFR0+HquynXpexEB89QYDPAXE+4CKa1imEMb8zM9i0+Z07YxnTjf2PE
+ HLJnm/dC4qlP27Pm1nX13lhNKxVz4FG+JeL4lkYK2++NTDhcRInm3wCkOczEYxdbCYZGgfpoo
+ ktwCoV+sxfWerAl+tTI08UOcuVkM6doPZRgKELXskMlGfSnQCatB+jKXSS1FaOcwYgC8q9xLd
+ vPNmCjFbVQgxta30iDyERHiipUjqLk4UuTuc2bozqHwOWEGMpWu3iZOms4VwmnimPylga/aTk
+ ld+wjx+3l4TRdizAVopITbTdX0J+RAbDGM1EqXxp2aCqoPmGndZH40=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=green-communications.fr
-Subject: [Buildroot] [PATCH 1/1] package/openlayers: bump version to 9.1.0
+Subject: [Buildroot] [PATCH 1/2] package/vuejs: bump to version 3.4.21
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,7 +77,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+Cc: Thomas Claveirole <thomas.claveirole@green-communications.fr>,
+ Johan Oudinet <johan.oudinet@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -87,32 +86,32 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
 ---
- package/openlayers/openlayers.hash | 2 +-
- package/openlayers/openlayers.mk   | 2 +-
+ package/vuejs/vuejs.hash | 2 +-
+ package/vuejs/vuejs.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/openlayers/openlayers.hash b/package/openlayers/openlayers.hash
-index af9087ede2..31496bbfca 100644
---- a/package/openlayers/openlayers.hash
-+++ b/package/openlayers/openlayers.hash
+diff --git a/package/vuejs/vuejs.hash b/package/vuejs/vuejs.hash
+index d3bca46803..2785a24eca 100644
+--- a/package/vuejs/vuejs.hash
++++ b/package/vuejs/vuejs.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256  867778afdd66cd29fe0f14ac4ed316a0ab393f5dccfd2219450848cd0347f1d6  v8.1.0-package.zip
-+sha256  73acb923c0ef53c6b6bb34b6dba782e03e1d24279f5aadbec5e787269456a6d8  v9.1.0-package.zip
- sha256  6c4347b83a8c9feef18d57b18e3b6c44cf901b3c344a4a1fbd837e421555ab8e  LICENSE.md
-diff --git a/package/openlayers/openlayers.mk b/package/openlayers/openlayers.mk
-index fde83d6e84..df29e04e65 100644
---- a/package/openlayers/openlayers.mk
-+++ b/package/openlayers/openlayers.mk
+ # Locally computed
+-sha256  5d3ab0144d5b8eaf28ccfbf27500669a91463226c4767041c7293ce76065171a  vue-3.3.4.tgz
++sha256  5772054f07ee4d86b831b963a889b9b3e60764f4fe909c1ccddd00fd628bc6c7  vue-3.4.21.tgz
+ sha256  1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175  LICENSE
+diff --git a/package/vuejs/vuejs.mk b/package/vuejs/vuejs.mk
+index 29bf3bc66b..3ab7182083 100644
+--- a/package/vuejs/vuejs.mk
++++ b/package/vuejs/vuejs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENLAYERS_VERSION = 8.1.0
-+OPENLAYERS_VERSION = 9.1.0
- OPENLAYERS_SOURCE = v$(OPENLAYERS_VERSION)-package.zip
- OPENLAYERS_SITE = https://github.com/openlayers/openlayers/releases/download/v$(OPENLAYERS_VERSION)
- OPENLAYERS_LICENSE = BSD-2-Clause
+-VUEJS_VERSION = 3.3.4
++VUEJS_VERSION = 3.4.21
+ VUEJS_SOURCE = vue-$(VUEJS_VERSION).tgz
+ VUEJS_SITE = https://registry.npmjs.org/vue/-
+ VUEJS_LICENSE = MIT
 -- 
 2.43.0
 
