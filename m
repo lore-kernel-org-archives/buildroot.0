@@ -4,47 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3ABF7C54E67
-	for <buildroot@archiver.kernel.org>; Tue, 26 Mar 2024 22:50:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFE2ACD11DF
+	for <buildroot@archiver.kernel.org>; Tue, 26 Mar 2024 22:50:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A42D540139;
-	Tue, 26 Mar 2024 22:50:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D1FE6408D3;
+	Tue, 26 Mar 2024 22:50:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZnwT8-aZ8cFM; Tue, 26 Mar 2024 22:50:39 +0000 (UTC)
+ id 0MCuUCw7ySSW; Tue, 26 Mar 2024 22:50:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 790BA408A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 686F3408C4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 790BA408A1;
-	Tue, 26 Mar 2024 22:50:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3934C1BF2AF
+	by smtp4.osuosl.org (Postfix) with ESMTP id 686F3408C4;
+	Tue, 26 Mar 2024 22:50:42 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3F4401BF95D
  for <buildroot@lists.busybox.net>; Tue, 26 Mar 2024 22:50:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 263ED81EB5
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2C75C4056F
  for <buildroot@lists.busybox.net>; Tue, 26 Mar 2024 22:50:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zaQ9gCorueE7 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OaYPpyKkqq2y for <buildroot@lists.busybox.net>;
  Tue, 26 Mar 2024 22:50:37 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.146;
  helo=smtpcmd13146.aruba.it;
  envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 56DE581E8A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 56DE581E8A
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 56E54400FD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 56E54400FD
 Received: from smtpcmd13146.aruba.it (smtpcmd13146.aruba.it [62.149.156.146])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 56DE581E8A
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 56E54400FD
  for <buildroot@buildroot.org>; Tue, 26 Mar 2024 22:50:35 +0000 (UTC)
 Received: from localhost.localdomain ([79.54.175.3])
  by Aruba Outgoing Smtp  with ESMTPSA
- id pFclr9KIiJAuQpFclrBn6b; Tue, 26 Mar 2024 23:50:32 +0100
+ id pFclr9KIiJAuQpFcmrBn6j; Tue, 26 Mar 2024 23:50:32 +0100
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Tue, 26 Mar 2024 23:50:29 +0100
-Message-Id: <20240326225031.224022-1-giulio.benetti@benettiengineering.com>
+Date: Tue, 26 Mar 2024 23:50:31 +0100
+Message-Id: <20240326225031.224022-3-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240326225031.224022-1-giulio.benetti@benettiengineering.com>
+References: <20240326225031.224022-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
 X-CMAE-Envelope: MS4xfIvAxgoedLNsciNceAscyJSUuJ1QIicUGclQ7QHck6dwgr0PQAcMYoNLKGrsoEGCQ38ie30lIHF50BhUofwgWKNftf0WkmWq45LNU+q4SduIHbNMxEXg
  Me+cxUqqvhY8Bm7X1IfuwJ/22Ee58BrsPU4nlrs0CPgAobH8TBG+W8B3QhFjHZffP1dvIPQCVItbYTQCIK9BsgsB90YR383CXF41sqqjN2wvL7mO74a71Vjb
@@ -52,22 +54,22 @@ X-CMAE-Envelope: MS4xfIvAxgoedLNsciNceAscyJSUuJ1QIicUGclQ7QHck6dwgr0PQAcMYoNLKGr
  iGKnztXp
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1711493432; bh=v0RdBEAiEUDXZ7gJFpVxSmKJ7on02XPSnwLELIb3zIw=;
+ t=1711493432; bh=zX5/Z8kMSwQbs46IMfCR8MagZDTsCtRWgWUn1B1YH7Y=;
  h=From:To:Subject:Date:MIME-Version;
- b=nzONQyKtRq/PIQnvvjLJZrXWwoW7vf89m8glrMgBswijh+4lVIZWw4ZnAiyz9lvtD
- eXDPKMeOinvl5GF7fIknHV+cf7TcbKuxKwI9nK+WM8xf9vyArXAbcZHbJR1GRYFH8o
- ORtfOO/2eoQz3sFZEx07OaAq+RF1F/BkahnN0WW4PGD13S0yQtI4xaL/SutQ7q5coG
- t6BcOfAOWPjsDc27esSRXGI4vjGzqShF8rip9YGOLJ+fhgW4h9/ltkPhC9ZFiLtqP8
- e6y3BBJUDsQ2iJAhzAu9OxN7MiSSh+gmLzwhnvaCrMPeM8ru20jGTdeE+J45Linqfc
- 2INrAHHmX2nig==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=OuMKg90FT9Zs93hG+2K8WJov4zYFxXmDjbiVHOsj/XKzOBmwjCpIxKiTOhQBbHdh5
+ Qp6l0w2979HcltOnTZF5YmnwzbWDxERXLRZD0oIOd7YwYQZju9aEek3zKQFQNnr2ON
+ rTr/mbrkFSWEzWwX7XN63jcfaEe3gMcA5A90q9RH4YHvfpWJFppGqxfuVEzF2TPjQQ
+ HEZWdMLBxRMGIU8x7FGPIWQ66AKIKzhP4lssaHLU9vQXMCQOeBxTOJJL2q9il8iYKC
+ h03xZLvMewhvzB1bmod2RLjdwvxpdcxoYPuLOx5zG3qdvwS2AF9RAYZNjIxirTulF7
+ lsirPYoiwsAfQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=nzONQyKt
-Subject: [Buildroot] [PATCH] package/rtl8821cu: bump to version 2024-03-25
+ header.s=a1 header.b=OuMKg90F
+Subject: [Buildroot] [PATCH] package/libblockdev: bump to version 3.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,36 +89,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-With this version we can build with Linux 6.9.
-
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/rtl8821cu/rtl8821cu.hash | 2 +-
- package/rtl8821cu/rtl8821cu.mk   | 2 +-
+ package/libblockdev/libblockdev.hash | 2 +-
+ package/libblockdev/libblockdev.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rtl8821cu/rtl8821cu.hash b/package/rtl8821cu/rtl8821cu.hash
-index b3d6d2c569..fba2f7a109 100644
---- a/package/rtl8821cu/rtl8821cu.hash
-+++ b/package/rtl8821cu/rtl8821cu.hash
+diff --git a/package/libblockdev/libblockdev.hash b/package/libblockdev/libblockdev.hash
+index 79700a4996..1438fad741 100644
+--- a/package/libblockdev/libblockdev.hash
++++ b/package/libblockdev/libblockdev.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  3ccec54462a8668142a9c2b2ddfffe4e0434feebe6caf6a7de6812dc8713c37f  rtl8821cu-5b39398e2de146edeb76716420f3288f508bea61.tar.gz
-+sha256  c04741129e815c30c51e509012d1a21e4f6d568c211921e6bc46e1adc3d4d4e1  rtl8821cu-0b505f382ea67bd8bdc9288ba5dbe7f4c9de33c0.tar.gz
- sha256  22cdb0a9cf492dbf05c5b27381a5c0e73ae0d4622427b522b0ba92b7495e5fb0  LICENSE
-diff --git a/package/rtl8821cu/rtl8821cu.mk b/package/rtl8821cu/rtl8821cu.mk
-index 8cb8ea710b..39aea1d7a4 100644
---- a/package/rtl8821cu/rtl8821cu.mk
-+++ b/package/rtl8821cu/rtl8821cu.mk
+-sha256  41e4af66c9d78e795302d37825dfd88a4970f82da7b4ebe6487feba2afae44fb  libblockdev-3.1.0.tar.gz
++sha256  a5cb33a53ff5969067982704f45399d02555fdb2313ed0c56eac9555397dc2db  libblockdev-3.1.1.tar.gz
+ sha256  97bdc721d875501b6243a456333fdfdb1ab64d31c4da2554de845caf4674b946  LICENSE
+diff --git a/package/libblockdev/libblockdev.mk b/package/libblockdev/libblockdev.mk
+index ebf01acfb5..9ffa15a7a9 100644
+--- a/package/libblockdev/libblockdev.mk
++++ b/package/libblockdev/libblockdev.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RTL8821CU_VERSION = 5b39398e2de146edeb76716420f3288f508bea61
-+RTL8821CU_VERSION = 0b505f382ea67bd8bdc9288ba5dbe7f4c9de33c0
- RTL8821CU_SITE = $(call github,morrownr,8821cu-20210916,$(RTL8821CU_VERSION))
- RTL8821CU_LICENSE = GPL-2.0
- RTL8821CU_LICENSE_FILES = LICENSE
+-LIBBLOCKDEV_VERSION = 3.1.0
++LIBBLOCKDEV_VERSION = 3.1.1
+ LIBBLOCKDEV_SITE = https://github.com/storaged-project/libblockdev/releases/download/$(LIBBLOCKDEV_VERSION)-1
+ LIBBLOCKDEV_LICENSE = LGPL-2.1
+ LIBBLOCKDEV_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
