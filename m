@@ -4,99 +4,101 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFE47C47DD9
-	for <buildroot@archiver.kernel.org>; Wed, 27 Mar 2024 22:00:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 555F4C47DD9
+	for <buildroot@archiver.kernel.org>; Wed, 27 Mar 2024 22:01:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BEAE480FBA;
-	Wed, 27 Mar 2024 22:00:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 14D31811AA;
+	Wed, 27 Mar 2024 22:01:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hfASfP3p7QF2; Wed, 27 Mar 2024 22:00:49 +0000 (UTC)
+ id x7A8ZO4GP3B5; Wed, 27 Mar 2024 22:01:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C3AC0811AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 33C1F820B2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C3AC0811AA;
-	Wed, 27 Mar 2024 22:00:49 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3D7FD1BF300
- for <buildroot@lists.busybox.net>; Wed, 27 Mar 2024 22:00:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 33C1F820B2;
+	Wed, 27 Mar 2024 22:01:10 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9EAF71BF300
+ for <buildroot@lists.busybox.net>; Wed, 27 Mar 2024 22:01:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 32864820CB
- for <buildroot@lists.busybox.net>; Wed, 27 Mar 2024 22:00:48 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 98A4D60BD4
+ for <buildroot@lists.busybox.net>; Wed, 27 Mar 2024 22:01:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mrF2XZCTpYIE for <buildroot@lists.busybox.net>;
- Wed, 27 Mar 2024 22:00:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6qItUhY-WPJH for <buildroot@lists.busybox.net>;
+ Wed, 27 Mar 2024 22:01:06 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
  envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5850D820D0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5850D820D0
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5850D820D0
- for <buildroot@buildroot.org>; Wed, 27 Mar 2024 22:00:45 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-41488f9708fso2167685e9.3
- for <buildroot@buildroot.org>; Wed, 27 Mar 2024 15:00:45 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8CB6360BD7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8CB6360BD7
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8CB6360BD7
+ for <buildroot@buildroot.org>; Wed, 27 Mar 2024 22:01:06 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-415446af364so81415e9.0
+ for <buildroot@buildroot.org>; Wed, 27 Mar 2024 15:01:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1711576843; x=1712181643;
+ d=1e100.net; s=20230601; t=1711576864; x=1712181664;
  h=content-transfer-encoding:in-reply-to:content-language:from
  :references:cc:to:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=4Y/9PRAHexYXijRIhMSlRMO3e6Gx/LzToKSqUtgWPDA=;
- b=RTsryp3k/hap8loNhEiYDfMnONt02/AwcquNmwga4zWpuWVSgiuJxma14fqShbx4ee
- CdWUU+Enj2VWeE2C9OsbUAyzYF6H+VTDSEWPDCZZCFlAr8JDVOqpvdCFD1pQvbqsZve0
- 0BMHFur9dahonJGgm8I7+uAqxCyD39Kf8BFtgxvZlTinG9jnJKejVXVKuvBGkG90TCWb
- ISKAR81XdZdm/g1xrLE6LlXZVkdxyRXFb/TNfdiMfwm3Mw4pBvpxk7PCnYhVNkD6kRaw
- 8oROsgn6EvdUTlgm5RvaTqfK4BWUX2fQIwF6DAj372DAoH2SPiD6W752lg/Jn/Kz37eD
- EdDg==
+ bh=IoGkAcsV825RbecKV1736jr/AF4ML/+eDMPkBq8jepk=;
+ b=bVeob4Rr5NiCnF99xDckLnq+/JddUZDReNwjpfDIB8t8YlommTFIJJutKOe0wLAALb
+ Aix7L4iheYrRhgt1NxJ1LbtyY/enXf8BEnImEPUERzN5uKwUZCpoZEs0sscvgoBtDCqp
+ VMElGzI63xOV3fCeEwpiMfTcZ4UEOi1y1wbq0X4TlN2FPWIYY0PYgE3x0+z9hp24DYYX
+ wOVxGOohsqcc1upoIgjnVHIvjfQ2eFj4E0jE3ejfhlYxZqoCqZ3xubikoBppBD+0ig0E
+ E0WXgNPQaohXxp/NqvD97xwvuhmGNS/pECyrVwugfZGYOJ53kzrRj4oitEHZMr5/6a69
+ sTTw==
 X-Forwarded-Encrypted: i=1;
- AJvYcCXLUaBUfZRvsQK5A3zezQ4oLxLsLPZ+kfFOKtAWXXPu29u0MyidOEm9+kGvWuCIpVc4Fm993mx4YwzNXHEqtnvki+EI6C5s5g==
-X-Gm-Message-State: AOJu0YzLpi0CtR4T/u51GNEmnGPdYrRjOXgdDpmLuuwXAFpAD3vEI/Db
- F10Cz7oUpjxh2hT/Hj4sg/OV9liENJRzlt/Cftpy0gSntZ+CXtix/bbQui4T8WM=
-X-Google-Smtp-Source: AGHT+IEkvXTStZemhVTCfUs+jcntByW0dGC8dUkswQHXDLLnaz6sLmZfIKqGultFE5vY8/Pvw2jPdA==
-X-Received: by 2002:a05:600c:3585:b0:414:759a:71d5 with SMTP id
- p5-20020a05600c358500b00414759a71d5mr861741wmq.34.1711576843313; 
- Wed, 27 Mar 2024 15:00:43 -0700 (PDT)
+ AJvYcCXDwmVJG0+V+aw2SMgU21LEG2d1LbFJ+wgurXBr6dhnjVtMovjz0M5jHpckHONu4GA8R0kElVwhDzA18ci3KYvucZFU3N0CQQ==
+X-Gm-Message-State: AOJu0YwuYrBCNDEhXgjLl/k299J0fHJUTyY4TJO/K/tNw0jL7PQCZHlC
+ mCXF+4s9tPiIU9mmY8KwayXfBOAuCw532bDYwXzhgMGcgdvQOZ2w0K3w79wbaMrKK/rvaxF5RdL
+ f
+X-Google-Smtp-Source: AGHT+IEcvTNatAKTwnu0Tf06Gd06Ujj9XZAfQcHbCI1OdslaWvYd3jqkrj6dz8iluEI86RNwEpNwFQ==
+X-Received: by 2002:a5d:6905:0:b0:33e:ce08:79b5 with SMTP id
+ t5-20020a5d6905000000b0033ece0879b5mr349527wru.9.1711576864447; 
+ Wed, 27 Mar 2024 15:01:04 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
  (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- c21-20020a05600c0a5500b004140c161e8dsm3360267wmq.43.2024.03.27.15.00.41
+ dn13-20020a0560000c0d00b00341b7d5054bsm75710wrb.72.2024.03.27.15.01.03
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 27 Mar 2024 15:00:42 -0700 (PDT)
-Message-ID: <7df67d9f-9078-4edb-9017-f99e26b0c39c@mind.be>
-Date: Wed, 27 Mar 2024 23:00:39 +0100
+ Wed, 27 Mar 2024 15:01:04 -0700 (PDT)
+Message-ID: <a6ae99b9-c377-425f-9699-b87dc9355784@mind.be>
+Date: Wed, 27 Mar 2024 23:01:01 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
 References: <20240213211512.3918044-1-james.hilliard1@gmail.com>
- <20240213211512.3918044-7-james.hilliard1@gmail.com>
+ <20240213211512.3918044-8-james.hilliard1@gmail.com>
 Content-Language: en-GB
-In-Reply-To: <20240213211512.3918044-7-james.hilliard1@gmail.com>
+In-Reply-To: <20240213211512.3918044-8-james.hilliard1@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1711576843; x=1712181643; darn=buildroot.org;
+ d=mind.be; s=google; t=1711576864; x=1712181664; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:content-language:from
  :references:cc:to:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=4Y/9PRAHexYXijRIhMSlRMO3e6Gx/LzToKSqUtgWPDA=;
- b=gal5baqcjsrBuOEPXdcGd6LcQVmOzqgaf2fgjnmGrMoreRZt6f4vsQNZ5uCQGqKFiI
- ZTS+ATBbv8R+66ZON42QmwSG3yFzeTHxelcGLMBnOXgUxo2PaKaXfCecNbd0x53HMn/u
- aLRBsGvjPs1NZI1o8N/7Zk3vr/uM5Hfv5gusfkIMsjeF7ohJxKETbNgJeh2yX1nwom/U
- JVv8rn6ZjHfzYtPJQj+LYKtHQjLnBl3Yz7QmHyvaVR7Vy4LG6YCDmzjH2DQaLocYQZ+2
- dGsxZ7ky4HyxmxSRlpWro0cXiyVv7h4QrUvjFBeU3iAZ4O/klgE9BdoNYhGoKAJwOuMB
- FNWg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=IoGkAcsV825RbecKV1736jr/AF4ML/+eDMPkBq8jepk=;
+ b=CIgKqysRjDvRVC9ETpojV9P8HKt5etAf15YHubCgRmDNLlYAADYXjqJJVuiQHlElHI
+ RPIZVQyOR+n5tyVjd0G5fNj/hfYmbf68qAVUDRWSYpjioYc5jJkL6BBmTNu7+WBNvSUv
+ Yt4etRq5k0CesehK3fJU6h1i5388pFl2kvKvK2MkX2EfI1xlx2EasUVFyh4ennYsy/tq
+ v1xFXEWHMzNgFS9PI5WhQqM9XD4B70YVMJxKNeunjL2amuS5BAo9UAm1mON/aI1vRvnX
+ mTW9UjHyvGm5SzuXzT/PckK9m7yZtZ0WAGwrKbS2XrDkD3YobeNg6+ODq0Ly9JxTNyju
+ s8zA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=gal5baqc
-Subject: Re: [Buildroot] [PATCH v8 07/26] package/python-aiologstash:
- migrate to flit build backend
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=CIgKqysR
+Subject: Re: [Buildroot] [PATCH v8 08/26] package/python-bleak: use correct
+ pep517 build backend
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -134,13 +136,15 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 On 13/02/2024 22:14, James Hilliard wrote:
-> We need to add a patch which selects the correct flit build
-> backend.
+> We need to migrate python-bleak to the pep517 poetry-core backend
+> as setuptools is not supported when building with a pep517 frontend.
 > 
-> As flit is configured as the pep517 build backend for aiologstash
-> we need to migrate from setuptools to flit prior to migrating
-> setuptools to pep517 as the frontend will not fall back to using
-> setuptools once migrated.
+> This package currently builds using setuptools as we do not yet
+> use setuptools with a pep517 build frontend. The package contains
+> a setuptools fallback which only can be used when using setuptools
+> without a pep517 frontend as the pep517 frontend will only use the
+> build backend specified in the package pyproject.toml which is
+> poetry-core and not setuptools.
 > 
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
@@ -150,61 +154,24 @@ On 13/02/2024 22:14, James Hilliard wrote:
   Arnout
 
 > ---
->   ...Fix-flit_core-build-requires-backend.patch | 31 +++++++++++++++++++
->   .../python-aiologstash/python-aiologstash.mk  |  2 +-
->   2 files changed, 32 insertions(+), 1 deletion(-)
->   create mode 100644 package/python-aiologstash/0001-Fix-flit_core-build-requires-backend.patch
+>   package/python-bleak/python-bleak.mk | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/package/python-aiologstash/0001-Fix-flit_core-build-requires-backend.patch b/package/python-aiologstash/0001-Fix-flit_core-build-requires-backend.patch
-> new file mode 100644
-> index 0000000000..99a150a344
-> --- /dev/null
-> +++ b/package/python-aiologstash/0001-Fix-flit_core-build-requires-backend.patch
-> @@ -0,0 +1,31 @@
-> +From 3c4d1203eb9ee3dbe79b096d587c9baaf8b802ed Mon Sep 17 00:00:00 2001
-> +From: James Hilliard <james.hilliard1@gmail.com>
-> +Date: Fri, 11 Mar 2022 13:26:31 -0700
-> +Subject: [PATCH] Fix flit_core build requires/backend.
-> +
-> +Only flit_core should be required by pyproject.toml, the regular flit
-> +package is the pep517 frontend which is not what should be set for the
-> +build system.
-> +
-> +Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> +Upstream: https://github.com/aio-libs/aiologstash/pull/258
-> +---
-> + pyproject.toml | 4 ++--
-> + 1 file changed, 2 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/pyproject.toml b/pyproject.toml
-> +index 7bdaebb..252a660 100644
-> +--- a/pyproject.toml
-> ++++ b/pyproject.toml
-> +@@ -1,6 +1,6 @@
-> + [build-system]
-> +-requires = ["flit"]
-> +-build-backend = "flit.buildapi"
-> ++requires = ["flit_core"]
-> ++build-backend = "flit_core.buildapi"
-> +
-> + [tool.flit.metadata]
-> + module = "aiologstash"
-> +--
-> +2.34.1
-> +
-> diff --git a/package/python-aiologstash/python-aiologstash.mk b/package/python-aiologstash/python-aiologstash.mk
-> index de0ed820a0..bcf60a72e9 100644
-> --- a/package/python-aiologstash/python-aiologstash.mk
-> +++ b/package/python-aiologstash/python-aiologstash.mk
-> @@ -7,7 +7,7 @@
->   PYTHON_AIOLOGSTASH_VERSION = 2.0.0
->   PYTHON_AIOLOGSTASH_SOURCE = aiologstash-$(PYTHON_AIOLOGSTASH_VERSION).tar.gz
->   PYTHON_AIOLOGSTASH_SITE = https://files.pythonhosted.org/packages/1c/dc/382861d5d25ccc976d02118922598fc4547f74f3287793e270ed614d8176
-> -PYTHON_AIOLOGSTASH_SETUP_TYPE = setuptools
-> +PYTHON_AIOLOGSTASH_SETUP_TYPE = flit
->   PYTHON_AIOLOGSTASH_LICENSE = MIT
->   PYTHON_AIOLOGSTASH_LICENSE_FILES = LICENSE
+> diff --git a/package/python-bleak/python-bleak.mk b/package/python-bleak/python-bleak.mk
+> index ed3c3f2f93..716b6327ed 100644
+> --- a/package/python-bleak/python-bleak.mk
+> +++ b/package/python-bleak/python-bleak.mk
+> @@ -7,8 +7,9 @@
+>   PYTHON_BLEAK_VERSION = 0.21.1
+>   PYTHON_BLEAK_SOURCE = bleak-$(PYTHON_BLEAK_VERSION).tar.gz
+>   PYTHON_BLEAK_SITE = https://files.pythonhosted.org/packages/6a/c0/3aca655fa43b8ff5340d99fac4e67061f53f42f092fc847bdd0559d67846
+> -PYTHON_BLEAK_SETUP_TYPE = setuptools
+> +PYTHON_BLEAK_SETUP_TYPE = pep517
+>   PYTHON_BLEAK_LICENSE = MIT
+>   PYTHON_BLEAK_LICENSE_FILES = LICENSE
+> +PYTHON_BLEAK_DEPENDENCIES = host-python-poetry-core
 >   
+>   $(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
