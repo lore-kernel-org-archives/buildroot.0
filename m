@@ -4,98 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C05CC47DD9
-	for <buildroot@archiver.kernel.org>; Wed, 27 Mar 2024 22:06:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C694C54E67
+	for <buildroot@archiver.kernel.org>; Wed, 27 Mar 2024 22:06:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1B02B819D1;
-	Wed, 27 Mar 2024 22:06:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4E7E581F2B;
+	Wed, 27 Mar 2024 22:06:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y9Hg7qS4UipZ; Wed, 27 Mar 2024 22:06:27 +0000 (UTC)
+ id 7_wskKqZP-_D; Wed, 27 Mar 2024 22:06:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 26AA781F2B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5C38581F31
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 26AA781F2B;
-	Wed, 27 Mar 2024 22:06:27 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7222B1BF33B
- for <buildroot@lists.busybox.net>; Wed, 27 Mar 2024 22:06:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5C38581F31;
+	Wed, 27 Mar 2024 22:06:40 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 455EE1BF33B
+ for <buildroot@lists.busybox.net>; Wed, 27 Mar 2024 22:06:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6C36660BD2
- for <buildroot@lists.busybox.net>; Wed, 27 Mar 2024 22:06:25 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 31AC740913
+ for <buildroot@lists.busybox.net>; Wed, 27 Mar 2024 22:06:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LHEMPWcHj0mh for <buildroot@lists.busybox.net>;
- Wed, 27 Mar 2024 22:06:24 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7jbleII_Yj8y for <buildroot@lists.busybox.net>;
+ Wed, 27 Mar 2024 22:06:37 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
+ client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
  envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5CBFA6065F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5CBFA6065F
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5CBFA6065F
- for <buildroot@buildroot.org>; Wed, 27 Mar 2024 22:06:24 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-41488e17e1cso2188025e9.0
- for <buildroot@buildroot.org>; Wed, 27 Mar 2024 15:06:24 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CAB9D4090B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CAB9D4090B
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CAB9D4090B
+ for <buildroot@buildroot.org>; Wed, 27 Mar 2024 22:06:36 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id
+ ffacd0b85a97d-33ecb04e018so168945f8f.1
+ for <buildroot@buildroot.org>; Wed, 27 Mar 2024 15:06:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1711577182; x=1712181982;
+ d=1e100.net; s=20230601; t=1711577195; x=1712181995;
  h=content-transfer-encoding:in-reply-to:content-language:from
- :references:to:subject:user-agent:mime-version:date:message-id
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=uqLHz81uFAUvm7whSdHjtCfUSySboCNybsER6Cv1K6I=;
- b=tknQwqUiJ1Fo5Z6cUypAayBzC2D6HiokLd4PGTT+fgCVq0d1T0ILNpsE6pC9jttNU7
- jZfkeK9aJW/RpHegH2C48+YO8MudDz5Z/trp2oHNtnOGsx+VAhSOkYs9IQZLKsUD0Xc7
- VFFd781Q65Ewf2gStKjN7mlgnJW6zVBtfUxcmB1JXibbVW+z7sZZUi2lyM9+z2Hg4f7O
- lRFBf7B7EXnuKB/vT3zTiSo1iHrOMsZ+fFgL0eGCwNBtOnug32SIGzHdz+kbvpXMXE0+
- JJ8a/fNf4QEegdfT5aFbfYIkHNwMMkT3jywtiCSPFIIiMqOKN/vwOnW/GD6/OqUob1Qp
- ZBPQ==
+ bh=BCk/sEpiPP4/RgU5ic+9o9hMV7eO1b8Iz7ZLaCuWMjM=;
+ b=pApN98e6L47FAP01WTreovdErWyQmHaBK6D6qDDBRO5tLAzbzhMr9M46M97MhiB+az
+ b8qdd1AQ73NXNhX4RIyTqOUmuKVFv4vM1972/Ufle0HZwpai7JMC+20uJfNYcZnWhbHa
+ 7/n9wsV4YSEWdQRozmUH0AziEr2/qeVZPrxQzjmShXoh2zLYLPFRhaktbQkuj3Y0Hk2i
+ LlGB1Qfxt44x17eSCwsSZEBHFcXVfkAHBZsfLgr7apeyDaaO396pqcFD2kMXkvaEoGXx
+ ZHPMMGGJmav6fcOVfVHCDS7DSx2qRn6fMKpghbKwyioNA4k8gZx1b605qtYV+iKyNt81
+ xigA==
 X-Forwarded-Encrypted: i=1;
- AJvYcCVfsN2jytf/01K70U7zi3E1VwG8t2+4caZ41jj9isVvwSNfks7mY9mS1T8f8rrOhtSoZXCWJUplhyF/M5R3wVdA8Y409nKdMw==
-X-Gm-Message-State: AOJu0Yw7S8WiRoCe4cC+ZZm8KG46C5RpsjDAedZ1oiAiUxXSsk3SdhQq
- ibFKCyq3KTX46ePA2DK1hX4FWd3UAMUK8JlJnrFMCiqHn9nBURd4SPAzw7AQq3ywAvq3CQOT3AN
- n
-X-Google-Smtp-Source: AGHT+IHq4o74oBrpCr5JdJf/wLpM7YK03B0GO5RweCuG1gs30nfeTIWsbW66eTWr4SgerGJGFD4W/Q==
-X-Received: by 2002:a1c:7903:0:b0:414:86a3:8e8d with SMTP id
- l3-20020a1c7903000000b0041486a38e8dmr415159wme.22.1711577182246; 
- Wed, 27 Mar 2024 15:06:22 -0700 (PDT)
+ AJvYcCVncllHs5x3/rEHm5wbesM9g9Hc1EAXnwkkwY8eSF1/BoOf1PmTmfquOUn75FN8Ps+t2Zf9wX4O1GZrEiQa03Py0pW000AXNQ==
+X-Gm-Message-State: AOJu0YwIEQKTPSLIY1h5a44dmBTUCduW8b2yURCFO4Hp13Rty+1rPTHF
+ RqqkdgjebZXKiV48vtT+GlAKnIfQHZIujHDLQ8+E83+GOx8nYgXwcj8O/zTbJghRWQrohflszki
+ E
+X-Google-Smtp-Source: AGHT+IG/I/k7bDh07FzMrIxabahpJU8IKfkCT0NN0Zr3NzPtqiIOhbCQTpac1HRyVOhlTczSaNhakw==
+X-Received: by 2002:a5d:5343:0:b0:341:a7dd:9e78 with SMTP id
+ t3-20020a5d5343000000b00341a7dd9e78mr932001wrv.36.1711577194852; 
+ Wed, 27 Mar 2024 15:06:34 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
  (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- m4-20020a05600c4f4400b004146bcdde06sm214888wmq.6.2024.03.27.15.06.21
+ bh8-20020a05600c3d0800b004132ae838absm193819wmb.43.2024.03.27.15.06.34
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 27 Mar 2024 15:06:21 -0700 (PDT)
-Message-ID: <7bf81dac-f8ff-4d0d-9f78-9a2b0ea2a134@mind.be>
-Date: Wed, 27 Mar 2024 23:06:20 +0100
+ Wed, 27 Mar 2024 15:06:34 -0700 (PDT)
+Message-ID: <05b65c69-2515-434e-8bc6-c3ad316e7f2d@mind.be>
+Date: Wed, 27 Mar 2024 23:06:32 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20240324211700.729359-1-fontaine.fabrice@gmail.com>
+References: <20240324205324.491751-1-fontaine.fabrice@gmail.com>
 Content-Language: en-GB
-In-Reply-To: <20240324211700.729359-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <20240324205324.491751-1-fontaine.fabrice@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1711577182; x=1712181982; darn=buildroot.org;
+ d=mind.be; s=google; t=1711577195; x=1712181995; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:content-language:from
- :references:to:subject:user-agent:mime-version:date:message-id:from
- :to:cc:subject:date:message-id:reply-to;
- bh=uqLHz81uFAUvm7whSdHjtCfUSySboCNybsER6Cv1K6I=;
- b=VXSIf3LrsziUvAdnTAcPiCEDePffimlkAOzyiIvANVv0BekdTDkQ1tiL9Db4H6hROq
- zdwbAOKNaQwQu1g3ID5hblXT02/iGEYVM8yRJQsJPr0YB9JbFhpeeVJ8cYUHG7Riceny
- jYXjkJm7ItXPSp7QP6+8RfLPKUfgi/sIqY5ts7pJAwE9nOcaKbLMtu6sGK5zZGrxoc53
- dlQBC2ZbiQYKdWQwpE+VpDP5YRlAiFMW/OUSoL5O0RKKD69iDPnTMEu6dMgyeOtyie8E
- b2WbJMhagQ2O4bdLUWG2Wq/JH2X4/vxUwQ52LV6U7AkFSlZ8bnnqOhQhwmsVaJAvTNtX
- UevQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=BCk/sEpiPP4/RgU5ic+9o9hMV7eO1b8Iz7ZLaCuWMjM=;
+ b=G9pjkX6RGrsqM0Q+yY07DoebUxe2iRDWpuSMe2i7CAx6d0Ziyixwvkl9XMS48coq1o
+ d2lGxkmIGg3HC5mEswK6ysF3rNPnUOGT51BMRCvSqtLpX5pmQRatgHhS/Qtzm1/SbdQC
+ W3lh9qFtctonxZuFn0+u5cUNug3KYYqNgF2HT+bbkKsQ4+dQWeefcHU2VriAmX94ppf4
+ 6xXLUsWXS8JrIzQ9EGgsFZj4cS7QyeRPdT6siWWxwUc1Qg7CEK7P//dxo7zrz+hJoZSF
+ PJe6kZp6ViXYiih42iB8IjSGpnJUUYVIRKMZYMeoGQv836yqxeGvrFrVmnpJ/mXujFvV
+ LEQg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=VXSIf3Lr
-Subject: Re: [Buildroot] [PATCH 1/1] package/domoticz: bump to version 2024.4
+ header.a=rsa-sha256 header.s=google header.b=G9pjkX6R
+Subject: Re: [Buildroot] [PATCH 1/1] package/thermald: bump to version 2.5.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -109,6 +109,7 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -116,11 +117,8 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 24/03/2024 22:17, Fabrice Fontaine wrote:
-> openzwave dependency is back since
-> https://github.com/domoticz/domoticz/commit/b0eadaa2ec6d6340df7eeba0e6e373b71ba393fc
-> 
-> https://github.com/domoticz/domoticz/blob/2024.4/History.txt
+On 24/03/2024 21:53, Fabrice Fontaine wrote:
+> https://github.com/intel/thermal_daemon/blob/v2.5.6/README.txt
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -130,49 +128,32 @@ On 24/03/2024 22:17, Fabrice Fontaine wrote:
   Arnout
 
 > ---
->   package/domoticz/domoticz.hash |  2 +-
->   package/domoticz/domoticz.mk   | 12 +++++++++++-
->   2 files changed, 12 insertions(+), 2 deletions(-)
+>   package/thermald/thermald.hash | 2 +-
+>   package/thermald/thermald.mk   | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/domoticz/domoticz.hash b/package/domoticz/domoticz.hash
-> index 546177332e..ae86a67b79 100644
-> --- a/package/domoticz/domoticz.hash
-> +++ b/package/domoticz/domoticz.hash
+> diff --git a/package/thermald/thermald.hash b/package/thermald/thermald.hash
+> index 9693813ca9..fff5ae6284 100644
+> --- a/package/thermald/thermald.hash
+> +++ b/package/thermald/thermald.hash
 > @@ -1,3 +1,3 @@
 >   # Locally computed:
-> -sha256  9effa792f856d8d9036c53b9ae500ee3bffa1488addf9d6f1fe4bf960f73f740  domoticz-2024.1.tar.gz
-> +sha256  d87113d7cacd0b52b9126fcc1ef24e140a4f7042d5bc6262e86e4b4752f5cf38  domoticz-2024.4.tar.gz
->   sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  License.txt
-> diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
-> index 88bad15427..95d3335adb 100644
-> --- a/package/domoticz/domoticz.mk
-> +++ b/package/domoticz/domoticz.mk
+> -sha256  75c165df45b3d09c904d314c8c19789158e9538f46e3d2b606457dc631eb3af5  thermald-2.5.1.tar.gz
+> +sha256  e5a452624f133d71f4aff0bd0c8f8258399a5ae1a7d5aea177fa6a6e33dad1fd  thermald-2.5.6.tar.gz
+>   sha256  e98be8bc482e038a14bfbc01caf800bbd0024fff275ef14cd999db6560254a8d  COPYING
+> diff --git a/package/thermald/thermald.mk b/package/thermald/thermald.mk
+> index fd0246745f..9faa47683b 100644
+> --- a/package/thermald/thermald.mk
+> +++ b/package/thermald/thermald.mk
 > @@ -4,7 +4,7 @@
 >   #
 >   ################################################################################
 >   
-> -DOMOTICZ_VERSION = 2024.1
-> +DOMOTICZ_VERSION = 2024.4
->   DOMOTICZ_SITE = $(call github,domoticz,domoticz,$(DOMOTICZ_VERSION))
->   DOMOTICZ_LICENSE = GPL-3.0
->   DOMOTICZ_LICENSE_FILES = License.txt
-> @@ -51,6 +51,16 @@ else
->   DOMOTICZ_CONF_OPTS += -DWITH_LIBUSB=OFF
->   endif
->   
-> +ifeq ($(BR2_PACKAGE_OPENZWAVE),y)
-> +DOMOTICZ_DEPENDENCIES += openzwave
-> +
-> +# Due to the dependency on mosquitto, domoticz depends on
-> +# !BR2_STATIC_LIBS so set USE_STATIC_OPENZWAVE to OFF otherwise
-> +# domoticz will not find the openzwave library as it searches by
-> +# default a static library.
-> +DOMOTICZ_CONF_OPTS += -DUSE_STATIC_OPENZWAVE=OFF
-> +endif
-> +
->   ifeq ($(BR2_PACKAGE_PYTHON3),y)
->   DOMOTICZ_DEPENDENCIES += python3
->   DOMOTICZ_CONF_OPTS += -DUSE_PYTHON=ON
+> -THERMALD_VERSION = 2.5.1
+> +THERMALD_VERSION = 2.5.6
+>   THERMALD_SITE = $(call github,intel,thermal_daemon,v$(THERMALD_VERSION))
+>   # fetched from Github, with no configure script
+>   THERMALD_AUTORECONF = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
