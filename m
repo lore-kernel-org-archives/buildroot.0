@@ -4,99 +4,100 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40BD3C47DD9
-	for <buildroot@archiver.kernel.org>; Wed, 27 Mar 2024 21:59:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1D3FC47DD9
+	for <buildroot@archiver.kernel.org>; Wed, 27 Mar 2024 22:00:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EA182811AA;
-	Wed, 27 Mar 2024 21:59:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 734A4811AA;
+	Wed, 27 Mar 2024 22:00:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id igUitRtq-tAZ; Wed, 27 Mar 2024 21:59:54 +0000 (UTC)
+ id ZwiSR4ZmIlxL; Wed, 27 Mar 2024 22:00:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0CAF8208F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7094C820A1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F0CAF8208F;
-	Wed, 27 Mar 2024 21:59:53 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6DEDE1BF279
- for <buildroot@lists.busybox.net>; Wed, 27 Mar 2024 21:59:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7094C820A1;
+	Wed, 27 Mar 2024 22:00:24 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 18CA21BF300
+ for <buildroot@lists.busybox.net>; Wed, 27 Mar 2024 22:00:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5A83140903
- for <buildroot@lists.busybox.net>; Wed, 27 Mar 2024 21:59:52 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 05D18415B1
+ for <buildroot@lists.busybox.net>; Wed, 27 Mar 2024 22:00:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GX6xHI5LKFQl for <buildroot@lists.busybox.net>;
- Wed, 27 Mar 2024 21:59:51 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eNNqnNSbfpwP for <buildroot@lists.busybox.net>;
+ Wed, 27 Mar 2024 22:00:22 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42c; helo=mail-wr1-x42c.google.com;
+ client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
  envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CE7FA408FF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE7FA408FF
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CE7FA408FF
- for <buildroot@buildroot.org>; Wed, 27 Mar 2024 21:59:50 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id
- ffacd0b85a97d-341b01dbebbso193043f8f.0
- for <buildroot@buildroot.org>; Wed, 27 Mar 2024 14:59:50 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 272E540199
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 272E540199
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 272E540199
+ for <buildroot@buildroot.org>; Wed, 27 Mar 2024 22:00:21 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 5b1f17b1804b1-4153939db9fso2062665e9.0
+ for <buildroot@buildroot.org>; Wed, 27 Mar 2024 15:00:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1711576788; x=1712181588;
+ d=1e100.net; s=20230601; t=1711576820; x=1712181620;
  h=content-transfer-encoding:in-reply-to:content-language:from
  :references:cc:to:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=gO/w69yNofijvtnWnjuJkUMGo1MfwPjmz7izm3rJ2lM=;
- b=nBqp1fsTr6AAHtWSsZql31OWHT5YABf7UrKLtlywVGW3CHmCWyCPE2KJLpQyMFkMmf
- gf9JiDXSwvyd0StOn78TuFi6GL75GcQLV+uiF+KSobRbu/InAkPlhLyMKX8pWQko6nKU
- Vqv5vLS/kk8rvD8RoYw7Dbl4O7gyjYHp8IOKPypkoKrOXgJHqdqn2G64sb0PZGGDRfyN
- u2DNGkNufTSncro4JWtpp+T5/H8G6jOKr7qNeSPbWCq8/jzTlsSDtuV6pfxCKRslGoZ+
- vpdl8I8/VD6aMhRk3vyXi6RlZLRLxr0gBbhUXjFlgKmLxmfEBC7wkKrb3svmR8Ee1P1s
- r0YQ==
+ bh=1EzVdLyU5jzziErKUA9jyGfv+A7dCT5hd1pq4FBfD2c=;
+ b=vzWS8OfOVdSOjdpHoiPaBaBxu15gxnbTXPhAxI2+hO19TbYbwnHzbV1clLh7o4aiY7
+ bcXpIiu4o8zqBKYYb9lkQdpBmiGX61MPXL+FJMQRkJapKvnEocq/QFpiSf+9TD4F2gRa
+ yS7Gmj8kjtJdGvnTUKua+InN8IEfTlS38jo3+Y5fCAJRK3SD46tZXO3O22ZgJMGi3wJu
+ jzyg/c3F7ZhYLCxQIkupjzYdc2UHEWHZPTJ3xKDwjs+2j9FDYnPrYsRdR/aFqW7wGrU8
+ 1nia2M99umV2MLxlwj9BRPFgpoUmqSo0G0QWMc0BNBauASYF8O9Y8DdgTYLrG9alpIg0
+ XxGw==
 X-Forwarded-Encrypted: i=1;
- AJvYcCWAf3/GLfRV65xaKKLm3Pmhm4ZA3x/jyj0zuNu/hdqEA6+OSB229KElL8+fCm2u5ysHlg9GrCsdXKbcynS9p2Z+/QUcLaSRmg==
-X-Gm-Message-State: AOJu0Yz7ZQJloven+PpbQsJ4qSOw3UwoJ9XFmF/Yq5o0k0cNRSC2ZtFB
- einIgpNsYS32emL+BtK/gGvVmmGp+DbSqbIjxq2EYOe3rUBEGH4ekuBtPb/kTl4=
-X-Google-Smtp-Source: AGHT+IEUNYkOZq0ye+UnBFoHkBCqj9pqiJIsb1O1KPsC/s6zf6gSQx5eqUTkHpt4uqAuhQhmutNEag==
-X-Received: by 2002:a05:6000:1ca:b0:33e:c264:8ad2 with SMTP id
- t10-20020a05600001ca00b0033ec2648ad2mr1072773wrx.59.1711576788386; 
- Wed, 27 Mar 2024 14:59:48 -0700 (PDT)
+ AJvYcCUUaa0XaKzHAaN789hvuapGyqBa7rbpQylP4V9ezF1hn3X95qSPaF2hpIfBzgJqrwwZA41oC95Ca3Sq6klrc+Mjuhuxs4w7EA==
+X-Gm-Message-State: AOJu0YyOoNzYKalpFzCAnfQfsPklq5/mnFaBbcfOR+i85pZ6zxnF9IQ3
+ Qew9WW4U3bx7jnbci1mejcr8ck2/RxHxBapeZXiDFetKR+jDsEuDrrnE0/3fDxhmhkcrKoRt2k0
+ K
+X-Google-Smtp-Source: AGHT+IFEcVknUyHQZjbe1t/s0Q5n2OI/Ze5Bju22QA8QzcAqKavolYlZExYQWxRjG17R1aLP/TXYNw==
+X-Received: by 2002:a05:600c:19c6:b0:414:854a:8167 with SMTP id
+ u6-20020a05600c19c600b00414854a8167mr1304236wmq.18.1711576820088; 
+ Wed, 27 Mar 2024 15:00:20 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
  (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- y13-20020a5d4acd000000b00341e5f487casm84168wrs.46.2024.03.27.14.59.46
+ b15-20020a05600c4e0f00b0041494665db1sm3182440wmq.15.2024.03.27.15.00.18
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 27 Mar 2024 14:59:47 -0700 (PDT)
-Message-ID: <746c9f33-197b-4004-a02f-4c95fdacab85@mind.be>
-Date: Wed, 27 Mar 2024 22:59:44 +0100
+ Wed, 27 Mar 2024 15:00:19 -0700 (PDT)
+Message-ID: <654a4d07-ec34-442d-8c59-fac07411a328@mind.be>
+Date: Wed, 27 Mar 2024 23:00:16 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
 References: <20240213211512.3918044-1-james.hilliard1@gmail.com>
- <20240213211512.3918044-3-james.hilliard1@gmail.com>
+ <20240213211512.3918044-5-james.hilliard1@gmail.com>
 Content-Language: en-GB
-In-Reply-To: <20240213211512.3918044-3-james.hilliard1@gmail.com>
+In-Reply-To: <20240213211512.3918044-5-james.hilliard1@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1711576788; x=1712181588; darn=buildroot.org;
+ d=mind.be; s=google; t=1711576820; x=1712181620; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:content-language:from
  :references:cc:to:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=gO/w69yNofijvtnWnjuJkUMGo1MfwPjmz7izm3rJ2lM=;
- b=EsHiaJ3Ukhs/IHy2O5e8Pec9CD59yL5XNR9sodoEApNiRelYPUMDBEnn9j0trohlwz
- MvLxgxmWUbKiF9vg3/Xtbh30i8a8LrPlfgoURKoZbKSByH5Jx7uKmA1jDS+G3UJtRbeA
- QLFiAcWp+TMMQju6qlN9WPjlb4+N3BcoMVlfcfd3cn1SxTsGJuTVuJX2CEoLZY+mUEgJ
- w5rAV2eIvlhZhbhHkadYSIbjbOjoXnZAqmIsyST2kdYVZPkG8b7fJxw+lFT7OxDkZzy3
- hKUEHHAUGyTreos05hjTtQnIBEu5xBQ90uZgy6yWrW8IVpictV8MQAPNDhBQ43shjr3v
- 0lPg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=1EzVdLyU5jzziErKUA9jyGfv+A7dCT5hd1pq4FBfD2c=;
+ b=aJUGQMWyhobv7GJ/wSsGcdFcZpd5cmv7A/tLwiUBe+6qQgvbB7vXPgSEkf9vdVYKli
+ UTijS9/qvVmCp0/Q14966oxtyxipkv6O7P1xby1MfFtbCjyJ3V0dr7ImG5WMSU6AoNDA
+ pHoxSxKM8EHjEeJfebaISnNpLuX2F5QrEOAvM+T8NRaQkO6mBJdBqGqtcMcIo7pPCdNE
+ 8o0fB05t+cnlVV5jeROKgUeNPVlyWykOHaW5CIYHOxiZtTdEYE77Vt9smy0mcaAN0X0X
+ ha+5zbY5pQnIeff9w3Jg3RnkHtt/IEJm590BrDAFsqE4VrAgeMlyooCwUsk1wPFYb9mI
+ Y+hw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=EsHiaJ3U
-Subject: Re: [Buildroot] [PATCH v8 03/26] package/python-setuptools-rust:
- add host setuptools-scm dependency
+ header.a=rsa-sha256 header.s=google header.b=aJUGQMWy
+Subject: Re: [Buildroot] [PATCH v8 05/26] package/python-pyyaml: add cython
+ for host-python-pyyaml
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -134,52 +135,35 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 On 13/02/2024 22:14, James Hilliard wrote:
-> We need host-python-setuptools-scm for python-setuptools-rust to build
-> correctly when using a pep517 frontend.
-> 
-> Fixes:
-> * Getting build dependencies for wheel...
-> running egg_info
-> writing setuptools_rust.egg-info/PKG-INFO
-> writing dependency_links to setuptools_rust.egg-info/dependency_links.txt
-> writing entry points to setuptools_rust.egg-info/entry_points.txt
-> writing requirements to setuptools_rust.egg-info/requires.txt
-> writing top-level names to setuptools_rust.egg-info/top_level.txt
-> reading manifest file 'setuptools_rust.egg-info/SOURCES.txt'
-> reading manifest template 'MANIFEST.in'
-> adding license file 'LICENSE'
-> writing manifest file 'setuptools_rust.egg-info/SOURCES.txt'
-> 
-> ERROR Missing dependencies:
-> 	setuptools_scm
+> When migrating to setuptools with pep517 support we need to add
+> host-python-cython which is a pep517 build dependency for pyyaml.
 > 
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->   package/python-setuptools-rust/python-setuptools-rust.mk | 5 ++++-
->   1 file changed, 4 insertions(+), 1 deletion(-)
+>   package/python-pyyaml/python-pyyaml.mk | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/package/python-setuptools-rust/python-setuptools-rust.mk b/package/python-setuptools-rust/python-setuptools-rust.mk
-> index f07263becf..e664a5604f 100644
-> --- a/package/python-setuptools-rust/python-setuptools-rust.mk
-> +++ b/package/python-setuptools-rust/python-setuptools-rust.mk
-> @@ -10,6 +10,9 @@ PYTHON_SETUPTOOLS_RUST_SITE = https://files.pythonhosted.org/packages/f2/40/f1e9
->   PYTHON_SETUPTOOLS_RUST_SETUP_TYPE = setuptools
->   PYTHON_SETUPTOOLS_RUST_LICENSE = MIT
->   PYTHON_SETUPTOOLS_RUST_LICENSE_FILES = LICENSE
-> -HOST_PYTHON_SETUPTOOLS_RUST_DEPENDENCIES = host-rustc host-python-semantic-version
-> +HOST_PYTHON_SETUPTOOLS_RUST_DEPENDENCIES = \
-> +	host-rustc \
-> +	host-python-semantic-version \
-> +	host-python-setuptools-scm
+> diff --git a/package/python-pyyaml/python-pyyaml.mk b/package/python-pyyaml/python-pyyaml.mk
+> index 846c57df4f..4ab91ca5f6 100644
+> --- a/package/python-pyyaml/python-pyyaml.mk
+> +++ b/package/python-pyyaml/python-pyyaml.mk
+> @@ -14,7 +14,8 @@ PYTHON_PYYAML_CPE_ID_VENDOR = pyyaml
+>   PYTHON_PYYAML_CPE_ID_PRODUCT = pyyaml
+>   PYTHON_PYYAML_DEPENDENCIES = host-python-cython libyaml
+>   PYTHON_PYYAML_ENV = PYYAML_FORCE_CYTHON=1
+> -HOST_PYTHON_PYYAML_DEPENDENCIES = host-libyaml
+> +HOST_PYTHON_PYYAML_DEPENDENCIES = host-python-cython host-libyaml
 
-  I've taken the occasion to also order the dependencies alphabetically.
+  Again, I ordered the dependencies alphabetically.
 
   Applied to master, thanks.
 
   Regards,
   Arnout
 
+> +HOST_PYTHON_PYYAML_ENV = PYYAML_FORCE_CYTHON=1
 >   
+>   $(eval $(python-package))
 >   $(eval $(host-python-package))
 _______________________________________________
 buildroot mailing list
