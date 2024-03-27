@@ -1,98 +1,104 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9C58C47DD9
-	for <buildroot@archiver.kernel.org>; Wed, 27 Mar 2024 17:24:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA623C54E67
+	for <buildroot@archiver.kernel.org>; Wed, 27 Mar 2024 21:17:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 75C108124A;
-	Wed, 27 Mar 2024 17:24:01 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DCKGPmlyzvKW; Wed, 27 Mar 2024 17:24:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8DA6C81272
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8DA6C81272;
-	Wed, 27 Mar 2024 17:24:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id ED3811BF29D
- for <buildroot@lists.busybox.net>; Wed, 27 Mar 2024 17:23:58 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E68416069A
- for <buildroot@lists.busybox.net>; Wed, 27 Mar 2024 17:23:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 741D1600BB;
+	Wed, 27 Mar 2024 21:17:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y-LmEly0xHTx for <buildroot@lists.busybox.net>;
- Wed, 27 Mar 2024 17:23:58 +0000 (UTC)
+ id m4-PZbr2zkny; Wed, 27 Mar 2024 21:17:00 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 73B0860603
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 73B0860603;
+	Wed, 27 Mar 2024 21:17:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B50831BF300
+ for <buildroot@lists.busybox.net>; Wed, 27 Mar 2024 21:16:58 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id A0F6C4052F
+ for <buildroot@lists.busybox.net>; Wed, 27 Mar 2024 21:16:58 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YXH34hNl4n5M for <buildroot@lists.busybox.net>;
+ Wed, 27 Mar 2024 21:16:57 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::133; helo=mail-lf1-x133.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5091C605C1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5091C605C1
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com
- [IPv6:2a00:1450:4864:20::133])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5091C605C1
- for <buildroot@buildroot.org>; Wed, 27 Mar 2024 17:23:56 +0000 (UTC)
-Received: by mail-lf1-x133.google.com with SMTP id
- 2adb3069b0e04-513d3746950so8730548e87.1
- for <buildroot@buildroot.org>; Wed, 27 Mar 2024 10:23:56 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 56B1F40525
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56B1F40525
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 56B1F40525
+ for <buildroot@buildroot.org>; Wed, 27 Mar 2024 21:16:56 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ 5b1f17b1804b1-4149521d76aso1860395e9.3
+ for <buildroot@buildroot.org>; Wed, 27 Mar 2024 14:16:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1711560234; x=1712165034;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=A++sbe1WWlcg/XQIQf3DPpqAe3SFV40oSrvnwFtsaUQ=;
- b=RwO4xDomfdfaZSQ5x01b7L9D2hkJ/hGkQs0LnDMykA38VLiUlXWe0eGAI9pBX3C7LO
- 1hjNctK8t9iryanDDIv/yjxSMluaqBHNu1t9GbEI8XKOsP3a2jOWUPUbiEKbILweumVL
- BIyZ3DyzcBfIEFtTrwAIOPL87L5JrLMfPBiuDkHeUf4pa+lyeh4FQpjBElbZbpuym7M7
- uByBFPsm/MHbKOKeMQwjSSlJvG6+JgHzBFXLnPSNoKyVT0fwBdVhjR90h1WKg2dyDA4P
- Pi6xwyGJxldCZCEnU6gwHG6PbbAtPpDIGLG7ZcvjEfoHY8O7Rm4kJNgUqBWNxlJOk3G8
- TSAg==
-X-Gm-Message-State: AOJu0YxDtr/DoIJ59UV9iLu9AcyqGnmcRIPRu4j5Y1rv/VOjUBo2WLKT
- A5C5oXROlkIxHZvfej7mK1/+ZsHGEogqvoCe/tNZLSFmmLx9HGzo8mV0Ej6JNimnAiUClqNmVyJ
- n
-X-Google-Smtp-Source: AGHT+IE10BtXH9vYZJ2EIdGUQXeJU54aSMuUMRIokOOyXhRfPqCgKjHqsqJH5SFUlkMC9WCVVGCh3Q==
-X-Received: by 2002:ac2:4648:0:b0:513:e909:f234 with SMTP id
- s8-20020ac24648000000b00513e909f234mr60819lfo.57.1711560234487; 
- Wed, 27 Mar 2024 10:23:54 -0700 (PDT)
-Received: from P-NTS-Evian.. ([2a04:cec0:1036:e822:923a:5222:7523:f9f7])
+ d=1e100.net; s=20230601; t=1711574215; x=1712179015;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=4naS0BAHV4vLZSXOxS1tQlD+Vmt4a0ByVFpdBHa78FQ=;
+ b=ApAyscFVCsBfpGyeQ4dT7yEPRmyZaeQGIzJFTFA5aKTlt4uHn/4MIo2DcQ0SfwrYMz
+ JvrmhUGSFKlZtXIT73idrWkF5ccdlyQYvuz14If5qDCkdWKoRtsFnppVZTvlTQxGBIuK
+ acbgef55RZl0AkIOU07nghYDRM3AF54IyZr5MS4Xkgr9/uCybJJyvte2eyRFo5XkZuMj
+ xHenD67OqKkS98Zgk9z2tAf2IQQfXYxNAkqyCSMAy0pRrgWnHgDUOPQ4AAuT8uNjZkP7
+ KejtpGaRyDoK38oaM/n85H739d1jh2nmG9mY3Yt6W/73ZAizgUl7PkaduigtwQJjYTkW
+ 3Gvg==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCVpBAUPbPSlm5sl+T4ZuGxsC/Ft4Kyk5eY67Wk+OmhFegd8Wv3UzEcKfs3s9hTOyceDePp/4yXo1D6BSPeyWWrZaw0zcTr1ew==
+X-Gm-Message-State: AOJu0YyOffQ0Ar8yQlSovfvlTvWnreLXNoiTG1nvRxYKfPqQe8FGsAQO
+ Ht2sVdfrsGO5eWWHAPkv4hzg5DdHTuFL699saHvQQJCoJaPRXCHrsB50oa5i1WL9k0E0h7Hn/FU
+ o
+X-Google-Smtp-Source: AGHT+IF6/W8I2Eve1B2ej2C1AzXexX85f3cVRanLI+K4ldC84ZtyJiVD6+YtxYS3yfBWiRJDfZ4wEg==
+X-Received: by 2002:adf:e58a:0:b0:33e:7133:ee31 with SMTP id
+ l10-20020adfe58a000000b0033e7133ee31mr358096wrm.40.1711574214461; 
+ Wed, 27 Mar 2024 14:16:54 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- t13-20020a5d42cd000000b0033ec312cd8asm15428595wrr.33.2024.03.27.10.23.54
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 27 Mar 2024 10:23:54 -0700 (PDT)
-From: Romain Naour <romain.naour@smile.fr>
-To: buildroot@buildroot.org
-Date: Wed, 27 Mar 2024 18:23:51 +0100
-Message-ID: <20240327172351.411598-1-romain.naour@smile.fr>
-X-Mailer: git-send-email 2.44.0
+ i9-20020a0560001ac900b0033e41e1ad93sm24082wry.57.2024.03.27.14.16.53
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 27 Mar 2024 14:16:54 -0700 (PDT)
+Message-ID: <9da7a354-13d5-4294-af8e-b6155688bdcc@mind.be>
+Date: Wed, 27 Mar 2024 22:16:51 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: =?UTF-8?Q?Fl=C3=A1vio_Tapaj=C3=B3s?= <flavio.tapajos@newtesc.com.br>,
+ buildroot@buildroot.org
+References: <20240324162848.17338-1-flavio.tapajos@newtesc.com.br>
+Content-Language: en-GB
+In-Reply-To: <20240324162848.17338-1-flavio.tapajos@newtesc.com.br>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1711560234; x=1712165034;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=A++sbe1WWlcg/XQIQf3DPpqAe3SFV40oSrvnwFtsaUQ=;
- b=OEb2J6gOxuHkKnfYkC17rwn0bmoTDGjZ4RnUu/giQ6NxHjA1i19kItEnvqdyobebSG
- ZgduopH6xyvqkUiYk0OYwnGUJdbefBVrMNMJGYU8QK7k8zAAO10lvsHSKXC7MzMB1JF+
- z3hXEL0KJ5eu94+HGd2rdum24WVqNd6+TISOTtUt2QDlFzYvuJLeDKqgynQOHnfuqvu/
- rKZVaYy2rrNVPmYXZOb3mFwCochxdUtJe/7BpkQaAuYkMT9zQI/zywe8qbaFHoWkrYjh
- mzt4UXvcs29C4kDtWuNrjavChFG+8QTcGyFCB9JLDpHwd3rkpMzyigGNUjsYpVERyErw
- 0FtQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=mind.be; s=google; t=1711574215; x=1712179015; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=4naS0BAHV4vLZSXOxS1tQlD+Vmt4a0ByVFpdBHa78FQ=;
+ b=B4mjUCZ3o5RZlc50wLug8j0SxTayBT3lTkemPG97hztVUfGEIeLgsW+/Iy27fFHdAm
+ xcNpphkvnlKVUddk7DVFYPLiAVN1nt5CGO59b/faJnsdWrkVN19N/F/zeUWKp3Cx7ODw
+ 3pd27CNBR1OlAGbcfVMmOttT3cn64pT7YK7ViPfx7afv6oOUOAdDFDi2K7x7r/WmtICO
+ UW0aHiEmC3wmjXnInuwqjMLOIT20n/TDTVSeqMfC3Isp9C//WNf27OaWh0MYDD4++2Sy
+ UUnC3pL/O/fz8wfV/KziRfe8GGjg0AvtjDNo/eLdSVpc0EJnGV429BSxofWBhPC7ePVD
+ 9OMg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=smile-fr.20230601.gappssmtp.com
- header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=OEb2J6gO
-Subject: [Buildroot] [PATCH] package/python-segno: add missing
- python3-{pyexpat, zlib} dependencies
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=B4mjUCZ3
+Subject: Re: [Buildroot] [PATCH 1/2] package/python-sqlalchemy: add cython
+ for python-sqlalchemy
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,45 +110,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@smile.fr>,
- James Hilliard <james.hilliard1@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The last version bump removed python-setuptools runtime dependency
-but doing so also removed the python3-pyexpat and python3-zlib
-runtime depdencies [1] that are actually direct runtime
-dependencies.
-
-[1] 081162580f99d1a68133f7f513bf2cd6d1b8b6b6
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/6477656982 (TestPythonPy3Segno)
-
-Cc: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
- package/python-segno/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/package/python-segno/Config.in b/package/python-segno/Config.in
-index 7107e67443..e6080fd417 100644
---- a/package/python-segno/Config.in
-+++ b/package/python-segno/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_PYTHON_SEGNO
- 	bool "python-segno"
-+	select BR2_PACKAGE_PYTHON3_PYEXPAT # runtime
-+	select BR2_PACKAGE_PYTHON3_ZLIB # runtime
- 	help
- 	  QR Code and Micro QR Code generator for Python.
- 
--- 
-2.44.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+CgpPbiAyNC8wMy8yMDI0IDE3OjI4LCBGbMOhdmlvIFRhcGFqw7NzIHdyb3RlOgo+IEZyb206IEph
+bWVzIEhpbGxpYXJkIDxqYW1lcy5oaWxsaWFyZDFAZ21haWwuY29tPgo+IAo+IFdoZW4gbWlncmF0
+aW5nIHRvIHNldHVwdG9vbHMgd2l0aCBwZXA1MTcgc3VwcG9ydCB3ZSBuZWVkIHRvIGFkZAo+IGhv
+c3QtcHl0aG9uLWN5dGhvbiB3aGljaCBpcyBhIHBlcDUxNyBidWlsZCBkZXBlbmRlbmN5IGZvcgo+
+IHB5dGhvbi1zcWxhbGNoZW15Lgo+IAo+IFNpZ25lZC1vZmYtYnk6IEphbWVzIEhpbGxpYXJkIDxq
+YW1lcy5oaWxsaWFyZDFAZ21haWwuY29tPgo+IFRlc3RlZC1CeTogRmzDoXZpbyBUYXBhasOzcyA8
+ZmxhdmlvLnRhcGFqb3NAbmV3dGVzYy5jb20uYnI+Cj4gU2lnbmVkLW9mZi1ieTogRmzDoXZpbyBU
+YXBhasOzcyA8ZmxhdmlvLnRhcGFqb3NAbmV3dGVzYy5jb20uYnI+CgogIEkgZG9uJ3QgdW5kZXJz
+dGFuZCB3aHkgeW91IGNoZXJyeS1waWNrZWQgdGhhdCBwYXRjaCBmcm9tIHRoZSBwZXA1MTctc2V0
+dXB0b29scyAKc2VyaWVzIC0gQUZBSUNTIGl0IHNob3VsZG4ndCBiZSBuZWVkZWQgZm9yIHRoZSB2
+ZXJzaW9uIGJ1bXAuIEJ1dCBzaW5jZSBpdCBuZWVkcyAKdG8gYmUgYXBwbGllZCBhdCBzb21lIHBv
+aW50IGFueXdheSwgSSBhcHBsaWVkIGJvdGggdG8gbWFzdGVyLCB0aGFua3MuCgogIFJlZ2FyZHMs
+CiAgQXJub3V0Cgo+IC0tLQo+ICAgcGFja2FnZS9weXRob24tc3FsYWxjaGVteS9weXRob24tc3Fs
+YWxjaGVteS5tayB8IDEgKwo+ICAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspCj4gCj4g
+ZGlmZiAtLWdpdCBhL3BhY2thZ2UvcHl0aG9uLXNxbGFsY2hlbXkvcHl0aG9uLXNxbGFsY2hlbXku
+bWsgYi9wYWNrYWdlL3B5dGhvbi1zcWxhbGNoZW15L3B5dGhvbi1zcWxhbGNoZW15Lm1rCj4gaW5k
+ZXggNDAwYWQ5MmY2My4uMTY3YzNhNDQ5OCAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL3B5dGhvbi1z
+cWxhbGNoZW15L3B5dGhvbi1zcWxhbGNoZW15Lm1rCj4gKysrIGIvcGFja2FnZS9weXRob24tc3Fs
+YWxjaGVteS9weXRob24tc3FsYWxjaGVteS5tawo+IEBAIC0xMiw1ICsxMiw2IEBAIFBZVEhPTl9T
+UUxBTENIRU1ZX0xJQ0VOU0UgPSBNSVQKPiAgIFBZVEhPTl9TUUxBTENIRU1ZX0xJQ0VOU0VfRklM
+RVMgPSBMSUNFTlNFCj4gICBQWVRIT05fU1FMQUxDSEVNWV9DUEVfSURfVkVORE9SID0gc3FsYWxj
+aGVteQo+ICAgUFlUSE9OX1NRTEFMQ0hFTVlfQ1BFX0lEX1BST0RVQ1QgPSBzcWxhbGNoZW15Cj4g
+K1BZVEhPTl9TUUxBTENIRU1ZX0RFUEVOREVOQ0lFUyA9IGhvc3QtcHl0aG9uLWN5dGhvbgo+ICAg
+Cj4gICAkKGV2YWwgJChweXRob24tcGFja2FnZSkpCl9fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1
+aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8v
+YnVpbGRyb290Cg==
