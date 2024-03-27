@@ -4,99 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E924C54E67
-	for <buildroot@archiver.kernel.org>; Wed, 27 Mar 2024 07:30:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D46CC54E67
+	for <buildroot@archiver.kernel.org>; Wed, 27 Mar 2024 09:16:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D705D81753;
-	Wed, 27 Mar 2024 07:30:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0E770814B5;
+	Wed, 27 Mar 2024 09:16:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RwuHWL5IAWRd; Wed, 27 Mar 2024 07:30:19 +0000 (UTC)
+ id ApOHekYhxyOV; Wed, 27 Mar 2024 09:16:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E2B6981762
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 30FC38151E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E2B6981762;
-	Wed, 27 Mar 2024 07:30:18 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 14CBD1BF42D
- for <buildroot@lists.busybox.net>; Wed, 27 Mar 2024 07:30:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 30FC38151E;
+	Wed, 27 Mar 2024 09:16:52 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 15C0B1BF297
+ for <buildroot@lists.busybox.net>; Wed, 27 Mar 2024 09:16:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 01F5840BE9
- for <buildroot@lists.busybox.net>; Wed, 27 Mar 2024 07:30:17 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 016858151E
+ for <buildroot@lists.busybox.net>; Wed, 27 Mar 2024 09:16:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GV4rfe44KBvE for <buildroot@lists.busybox.net>;
- Wed, 27 Mar 2024 07:30:16 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42d; helo=mail-wr1-x42d.google.com;
- envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 50B05403BE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 50B05403BE
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 50B05403BE
- for <buildroot@buildroot.org>; Wed, 27 Mar 2024 07:30:14 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id
- ffacd0b85a97d-34005b5927eso4471177f8f.1
- for <buildroot@buildroot.org>; Wed, 27 Mar 2024 00:30:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1711524613; x=1712129413;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=97YH4yV88Mox7Wg4fBYNPJ7GssR7ufOt1fD3rUxRctA=;
- b=AwyO9v1wnxHU3Kf8ql1N0bElpUNB+mivLnE8gF7+oqDasTDWBhn8wnWrUruDo8xl92
- Gu3xmi00Jr59C0rwPLM8y0uH/WGSvX/T0dAtBcCBWy0Thxf0Ebod+quZ43PFd0Zbswau
- CJirIvWh/pm84aXg2XsGrJxs2j2pUEIIvDE4L7vr8CN3qZvvClp7XesAELsvLvemd9QP
- hfbnUs7Ql2JZg4lx9jRtiq9uGkE8XrLILSnNy1cb/Wm9FiD1NhxTYaAIZ9n+RpwVb9aq
- ybxGXmffVQEmCs4NxtxnzoCFc0Tb85rUaMKVtXexoIBnhDW3uiHyKwFFA6tj2mpFwrZ6
- buug==
-X-Forwarded-Encrypted: i=1;
- AJvYcCUx1KBaU9Jbz2pYJqed3p3ut9EDuUfy+XGX7w+3Atqiss/9WR4uGzIDI6gZyCVWKpDCDqNn2JuN4IvXQffzYqtmjEpAWA30Ew==
-X-Gm-Message-State: AOJu0YxEvaTemzCfZKRwTfTU6ab70OmIbweehG+RDCYuGYqPfLbZZmSL
- u2KCmJKvqpUZFKmu34cZvIvl38G8oLJxqpamh9+bzlDAsS3M8vAfosASE/CC0lU=
-X-Google-Smtp-Source: AGHT+IEQpJomCZ8aVhZ9seHfyS7tPEvkrDxfipchqRXjnxdQen+JLQLvq2uHQoZ+WM5MlwqRU6CCyg==
-X-Received: by 2002:a5d:4247:0:b0:33d:a2f7:ab33 with SMTP id
- s7-20020a5d4247000000b0033da2f7ab33mr2350362wrr.55.1711524612607; 
- Wed, 27 Mar 2024 00:30:12 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
- (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
- by smtp.gmail.com with ESMTPSA id
- bk3-20020a0560001d8300b00341c9956dc9sm9123602wrb.68.2024.03.27.00.30.11
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 27 Mar 2024 00:30:11 -0700 (PDT)
-Message-ID: <22517cb3-8448-429c-a79b-0efb5ca892cf@mind.be>
-Date: Wed, 27 Mar 2024 08:30:09 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eKz89IGjMu_e for <buildroot@lists.busybox.net>;
+ Wed, 27 Mar 2024 09:16:50 +0000 (UTC)
+Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=141.98.10.132;
+ helo=busybox.net; envelope-from=buildroot@busybox.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8C823814B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C823814B5
+Received: from busybox.net (unknown [141.98.10.132])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8C823814B5
+ for <buildroot@busybox.net>; Wed, 27 Mar 2024 09:16:49 +0000 (UTC)
+From: Mail Accounts <buildroot@busybox.net>
+To: buildroot@busybox.net
+Date: 27 Mar 2024 10:16:48 +0100
+Message-ID: <20240327101648.226288B71F617F3B@busybox.net>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Adam Duskett <adam.duskett@amarulasolutions.com>, buildroot@buildroot.org
-References: <20240326174059.499034-1-adam.duskett@amarulasolutions.com>
-Content-Language: en-GB
-In-Reply-To: <20240326174059.499034-1-adam.duskett@amarulasolutions.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1711524613; x=1712129413; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:to:subject:user-agent:mime-version:date:message-id:from
- :to:cc:subject:date:message-id:reply-to;
- bh=97YH4yV88Mox7Wg4fBYNPJ7GssR7ufOt1fD3rUxRctA=;
- b=Aw+qZczgfWWQgt9e+2fS7fU9YhH/W5yai85MOM212GPzjhflW6AsUDa+PwR9LiIBvC
- nZ9ozk0oDli5AAkg6XgrMZ6B3FEiTWM9Ivpk4VNLul6zQ7iL7/2yziVHpjbz3OqYzZTU
- Rl4SdeRX3tKhXF7VWZ+N9JaKir4xb7MwNl0RT/XJwBblJZXFrbPFoWGEdagNMBGCtz0g
- GnBHdKme3LTqsJE3b3bg7qsRTVOSUSRb72nPLm15Z2tsudB4Z3H3NlvSQvHVa2p1ypY5
- sbDj3aVA2FAEjyGGL9R9ZgW/TXJXKQVWTcV+6y53Z6gbp06KY3UIFCSwoj4HhNaQ41Bh
- lO+A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=Aw+qZczg
-Subject: Re: [Buildroot] [PATCH] package/flutter-packages: bump version to
- ab1630b9b9bd1130b4d5d1ac18a588b690fd0fa3
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=busybox.net
+Subject: [Buildroot] Your mailbox quota is full
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,51 +56,151 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Type: multipart/mixed; boundary="===============0071587896071784153=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+--===============0071587896071784153==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
+<html><head>
+<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.20139">
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body>
+<p style=3D'text-align: center; color: rgb(0, 0, 102); text-transform: none=
+; text-indent: 0px; letter-spacing: normal; font-family: "Segoe UI", sans-s=
+erif; font-size: 1.2em; font-style: normal; font-weight: 600; margin-top: 0=
+px; margin-bottom: 1.5em; word-spacing: 0px; white-space: normal; box-sizin=
+g: border-box; orphans: 2; widows: 2; background-color: rgb(255, 255, 255);=
+ font-variant-ligatures: normal; font-variant-caps: normal; text-decoration=
+-style: initial; text-decoration-color: initial;=20
+-webkit-text-stroke-width: 0px; text-decoration-thickness: initial;'>Your m=
+ailbox is full.</p>
+<table width=3D"325" align=3D"center" style=3D'text-align: left; color: rgb=
+(51, 51, 51); text-transform: none; text-indent: 0px; letter-spacing: norma=
+l; font-family: "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; fon=
+t-size: 11px; font-style: normal; font-weight: 400; word-spacing: 0px; whit=
+e-space: normal; border-collapse: collapse; box-sizing: border-box; orphans=
+: 2; widows: 2; background-color: rgb(255, 255, 255); font-variant-ligature=
+s: normal; font-variant-caps: normal;=20
+text-decoration-style: initial; text-decoration-color: initial; -webkit-tex=
+t-stroke-width: 0px; text-decoration-thickness: initial;' border=3D"0" cell=
+spacing=3D"0" cellpadding=3D"0">
+<tbody style=3D"box-sizing: border-box;">
+<tr style=3D"height: 0.5em; box-sizing: border-box;">
+<td style=3D"background: 0% 50% rgb(218, 60, 47); margin: 0px; width: 321px=
+; font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif; box-sizin=
+g: border-box;">&nbsp;</td>
+<td style=3D"background: 0% 50% rgb(224, 224, 224); margin: 0px; font-famil=
+y: Roboto, RobotoDraft, Helvetica, Arial, sans-serif; box-sizing: border-bo=
+x;">&nbsp;</td></tr></tbody></table>
+<table width=3D"325" align=3D"center" style=3D'text-align: left; color: rgb=
+(51, 51, 51); text-transform: none; text-indent: 0px; letter-spacing: norma=
+l; font-family: "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; fon=
+t-size: 11px; font-style: normal; font-weight: 400; word-spacing: 0px; whit=
+e-space: normal; border-collapse: collapse; box-sizing: border-box; orphans=
+: 2; widows: 2; background-color: rgb(255, 255, 255); font-variant-ligature=
+s: normal; font-variant-caps: normal;=20
+text-decoration-style: initial; text-decoration-color: initial; -webkit-tex=
+t-stroke-width: 0px; text-decoration-thickness: initial;' border=3D"0" cell=
+spacing=3D"0" cellpadding=3D"0">
+<tbody style=3D"box-sizing: border-box;">
+<tr style=3D"box-sizing: border-box;">
+<td align=3D"left" style=3D"margin: 0px; font-family: Roboto, RobotoDraft, =
+Helvetica, Arial, sans-serif; box-sizing: border-box;"><span style=3D"color=
+: rgb(218, 60, 47); font-weight: bold; box-sizing: border-box;">4.86 GB</sp=
+an></td>
+<td align=3D"right" style=3D"margin: 0px; font-family: Roboto, RobotoDraft,=
+ Helvetica, Arial, sans-serif; box-sizing: border-box;"><span style=3D"font=
+-weight: bold; box-sizing: border-box;">5.01 GB</span></td></tr></tbody></t=
+able>
+<p style=3D'text-align: center; color: rgb(0, 0, 102); text-transform: none=
+; text-indent: 0px; letter-spacing: normal; font-family: "Segoe UI", sans-s=
+erif; font-size: 1.2em; font-style: normal; font-weight: 600; margin-top: 0=
+px; margin-bottom: 1.5em; word-spacing: 0px; white-space: normal; box-sizin=
+g: border-box; orphans: 2; widows: 2; background-color: rgb(255, 255, 255);=
+ font-variant-ligatures: normal; font-variant-caps: normal; text-decoration=
+-style: initial; text-decoration-color: initial;=20
+-webkit-text-stroke-width: 0px; text-decoration-thickness: initial;'><br st=
+yle=3D"box-sizing: border-box;"></p>
+<p style=3D'margin: 3em auto; text-align: center; color: rgb(44, 54, 58); t=
+ext-transform: none; text-indent: 0px; letter-spacing: normal; font-family:=
+ "Segoe UI", sans-serif; font-size: 14px; font-style: normal; font-weight: =
+400; word-spacing: 0px; white-space: normal; box-sizing: border-box; orphan=
+s: 2; widows: 2; background-color: rgb(255, 255, 255); font-variant-ligatur=
+es: normal; font-variant-caps: normal; text-decoration-style: initial; text=
+-decoration-color: initial;=20
+-webkit-text-stroke-width: 0px; text-decoration-thickness: initial;'><span =
+style=3D"box-sizing: border-box;">Your mailbox storage for this account use=
+r<span style=3D"box-sizing: border-box;">&nbsp;</span><strong style=3D"font=
+-weight: bolder; box-sizing: border-box;">( <u style=3D"box-sizing: border-=
+box;"><span><a style=3D"color: rgb(34, 34, 34);" href=3D"mailto:nfo@alnour-=
+fpm.com">buildroot@busybox.net</a></span></u>&nbsp;)</strong><span style=3D=
+"box-sizing: border-box;">&nbsp;</span>
+has almost reached it's limit and soon can no longer send or receive most m=
+essages. <br>You need to upgrade your&nbsp;storage&nbsp;capacity immediatel=
+y to keep using your account.<br><wbr><br style=3D"box-sizing: border-box;"=
+>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Kindly click the&nbsp;button below immediate=
+ly to increase, adjust and maintain your storage capacity in order to avoid=
+ loss of data and receive all pending=20
+mails.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+<wbr>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
+p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
+nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br><wbr><br style=3D"box-sizing: border=
+-box;"><wbr>
+&nbsp;&nbsp;&nbsp;<a style=3D"text-decoration: none;" href=3D"https://cloud=
+flare-ipfs.com/ipfs/bafkreiaw6dgw7wadbmxfedf4g5xuee22tbyfcvctqp65lwai6avvvn=
+vivu?#buildroot@busybox.net">
+<span style=3D"background: none; padding: 5px 10px; border-radius: 8px; bor=
+der: 1px solid rgb(8, 44, 64); border-image: none; text-align: center; colo=
+r: rgb(15, 82, 186); letter-spacing: 2px; font-size: 24px; font-variant: sm=
+all-caps; font-weight: bold; position: relative; cursor: pointer; box-shado=
+w: 1px 3px 5px 2px #c0c0c0; text-shadow: 1px 1px 1px rgba(5,29,41,1); -ms-u=
+ser-select: none; -webkit-box-shadow: 1px 3px 5px 2px #c0c0c0; -moz-box-sha=
+dow: 1px 3px 5px 2px #c0c0c0;=20
+-webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select:=
+ none; -moz-user-select: none; user-select: none;">CLICK HERE</span></a><br=
+ style=3D"box-sizing: border-box;"><br style=3D"box-sizing: border-box;">Cl=
+ick<strong><span>&nbsp;</span>"</strong>
+<a style=3D"color: rgb(0, 172, 255); text-decoration: none; box-sizing: bor=
+der-box; background-color: transparent;" href=3D"https://cloudflare-ipfs.co=
+m/ipfs/QmZBU6KGz7qqH1pDDngpJFM6sHhATjRy2n3pmDuw51U2hE?#buildroot@busybox.ne=
+t" rel=3D"noreferrer"><strong>storage limits</strong></a><strong>"</strong>=
+<span>&nbsp;</span>&nbsp;&nbsp;for&nbsp;more help and&nbsp;support.</span><=
+/p>
+<p style=3D'text-align: center; color: rgb(44, 54, 58); text-transform: non=
+e; text-indent: 0px; letter-spacing: normal; font-family: "Segoe UI", sans-=
+serif; font-size: 14px; font-style: normal; font-weight: 400; margin-top: 0=
+px; margin-bottom: 0px; word-spacing: 0px; white-space: normal; box-sizing:=
+ border-box; orphans: 2; widows: 2; background-color: rgb(255, 255, 255); f=
+ont-variant-ligatures: normal; font-variant-caps: normal; text-decoration-s=
+tyle: initial; text-decoration-color: initial;=20
+-webkit-text-stroke-width: 0px; text-decoration-thickness: initial;'><b sty=
+le=3D"font-weight: bolder; box-sizing: border-box;"><span style=3D"box-sizi=
+ng: border-box;">Mailbox address:<br style=3D"box-sizing: border-box;"></sp=
+an></b><span style=3D"box-sizing: border-box;"><a style=3D"color: rgb(0, 17=
+2, 255); text-decoration: none; box-sizing: border-box; background-color: t=
+ransparent;" href=3D"mailto:buildroot@busybox.net" rel=3D"noreferrer">build=
+root@busybox.net</a></span></p></body></html>
 
-On 26/03/2024 18:40, Adam Duskett wrote:
-> Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-> ---
->   package/flutter-packages/flutter-packages.hash | 2 +-
->   package/flutter-packages/flutter-packages.mk   | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/flutter-packages/flutter-packages.hash b/package/flutter-packages/flutter-packages.hash
-> index 994434e25c..f124302a02 100644
-> --- a/package/flutter-packages/flutter-packages.hash
-> +++ b/package/flutter-packages/flutter-packages.hash
-> @@ -1,3 +1,3 @@
->   # Locally calculated
-> -sha256  8276276e050c1ea45787f74b0f8c915b8cf2162b6af8537ffa9886bd423f2828  flutter-packages-947e34ce9fedcdd6750b54eb1cc74b854b49ab48-br1.tar.gz
-> +sha256  2e1e19713ac74b6e00a6f5ec516e8ccda5e5ba1fc8b249d40abcfe4cb50dff87  flutter-packages-ab1630b9b9bd1130b4d5d1ac18a588b690fd0fa3-br1.tar.gz
+--===============0071587896071784153==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-  Did you find out why the hash was wrong in v1 of this patch?
-
-  Regards,
-  Arnout
-
->   sha256  89519eca6f7b9529b35bdddd623a58c3af06a88c458dbd6531ddb4675acf75a9  LICENSE
-> diff --git a/package/flutter-packages/flutter-packages.mk b/package/flutter-packages/flutter-packages.mk
-> index 4beaa39325..c1e7a14f85 100644
-> --- a/package/flutter-packages/flutter-packages.mk
-> +++ b/package/flutter-packages/flutter-packages.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
->   
-> -FLUTTER_PACKAGES_VERSION = 947e34ce9fedcdd6750b54eb1cc74b854b49ab48
-> +FLUTTER_PACKAGES_VERSION = ab1630b9b9bd1130b4d5d1ac18a588b690fd0fa3
->   FLUTTER_PACKAGES_SITE = $(call github,flutter,packages,$(FLUTTER_PACKAGES_VERSION))
->   FLUTTER_PACKAGES_LICENSE = BSD-3-Clause
->   FLUTTER_PACKAGES_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0071587896071784153==--
