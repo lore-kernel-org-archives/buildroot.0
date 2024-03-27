@@ -4,56 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9135C54E67
-	for <buildroot@archiver.kernel.org>; Tue, 26 Mar 2024 18:37:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32B4DC54E67
+	for <buildroot@archiver.kernel.org>; Wed, 27 Mar 2024 15:55:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5469260613;
-	Tue, 26 Mar 2024 18:37:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B4F356067A;
+	Wed, 27 Mar 2024 15:55:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DQqFKy6yU6UU; Tue, 26 Mar 2024 18:37:19 +0000 (UTC)
+ id V4Q7Ha3vtZfz; Wed, 27 Mar 2024 15:55:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B12360B16
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE84B606CC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5B12360B16;
-	Tue, 26 Mar 2024 18:37:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CE84B606CC;
+	Wed, 27 Mar 2024 15:55:33 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4CB1C1BF2B9
- for <buildroot@lists.busybox.net>; Tue, 26 Mar 2024 18:37:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0204C1BF418
+ for <buildroot@lists.busybox.net>; Wed, 27 Mar 2024 15:55:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3CDE040801
- for <buildroot@lists.busybox.net>; Tue, 26 Mar 2024 18:37:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DE840406E3
+ for <buildroot@lists.busybox.net>; Wed, 27 Mar 2024 15:55:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9qTFQ7yfKA-B for <buildroot@lists.busybox.net>;
- Tue, 26 Mar 2024 18:37:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=116.202.254.214;
- helo=ciao.gmane.io; envelope-from=gclub-buildroot@m.gmane-mx.org;
+ id 02-j69NvM2cV for <buildroot@lists.busybox.net>;
+ Wed, 27 Mar 2024 15:55:31 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=bugzilla@busybox.net;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A253740844
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A253740844
-Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A253740844
- for <buildroot@uclibc.org>; Tue, 26 Mar 2024 18:37:13 +0000 (UTC)
-Received: from list by ciao.gmane.io with local (Exim 4.92)
- (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1rpBfa-0007jn-KH
- for buildroot@uclibc.org; Tue, 26 Mar 2024 19:37:10 +0100
-X-Injected-Via-Gmane: http://gmane.org/
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E232140659
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E232140659
+ for <buildroot@uclibc.org>; Wed, 27 Mar 2024 15:55:30 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 81)
+ id CAD3C839CB; Wed, 27 Mar 2024 15:55:30 +0000 (UTC)
+From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-From: Bernd Kuhls <bernd@kuhls.net>
-Date: Tue, 26 Mar 2024 19:37:00 +0100
-Message-ID: <pan$1fb2$b859a1ce$592d29c5$903e7dfe@ID-313208.user.individual.net>
-References: <20240322174941.475669-1-fontaine.fabrice@gmail.com>
- <87sf0eg2xp.fsf@48ers.dk>
- <87frwd9gvf.fsf__26724.073598028$1711465329$gmane$org@48ers.dk>
-Mime-Version: 1.0
-User-Agent: Pan/0.154 (Izium; 517acf4)
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=fail (p=none dis=none)
- header.from=kuhls.net
-Subject: Re: [Buildroot] [PATCH 1/1] package/libdrm: disable tests
+Date: Wed, 27 Mar 2024 15:55:30 +0000
+X-Bugzilla-Reason: CC
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: buildroot
+X-Bugzilla-Component: Other
+X-Bugzilla-Version: 2024.02.1
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: achpile@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter cc
+ target_milestone
+Message-ID: <bug-16009-163@https.bugs.busybox.net/>
+X-Bugzilla-URL: https://bugs.busybox.net/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
+Subject: [Buildroot] [Bug 16009] New: 'select' does not work with 'choice'
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,22 +80,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am Tue, 26 Mar 2024 16:01:40 +0100 schrieb Peter Korsgaard:
+https://bugs.busybox.net/show_bug.cgi?id=16009
 
-> Maybe we should add a suboption for it?
+            Bug ID: 16009
+           Summary: 'select' does not work with 'choice'
+           Product: buildroot
+           Version: 2024.02.1
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned@buildroot.uclibc.org
+          Reporter: achpile@gmail.com
+                CC: buildroot@uclibc.org
+  Target Milestone: ---
 
-Hi Peter,
+If we have something like this in Config.in
 
-such an option already exists:
-$ grep TESTS package/libdrm/Config.in 
-config BR2_PACKAGE_LIBDRM_INSTALL_TESTS
+choice
+        prompt "TEST"
+        config BR2_TEST_1
+                bool "1"
+        config BR2_TEST_2
+                bool "2"
+endchoice
 
-To fix the problem with missing utils I sent this patch:
-https://patchwork.ozlabs.org/project/buildroot/patch/
-20240324174523.1770994-1-bernd@kuhls.net/
+config BR2_TEST_BOOL_D1
+        bool "Depends on 1"
+        depends on BR2_TEST_1
 
-Regards, Bernd
+config BR2_TEST_BOOL_S1
+        bool "Selects 1"
+        select BR2_TEST_1
 
+config BR2_TEST_BOOL_D2
+        bool "Depends on 2"
+        depends on BR2_TEST_2
+
+config BR2_TEST_BOOL_S2
+        bool "Selects 2"
+        select BR2_TEST_2
+
+
+Then selecting BR2_TEST_BOOL_S1 or BR2_TEST_BOOL_S2 does not select BR2_TEST_1
+or BR2_TEST_2. I am not sure if it is expected behavior but seems like a bug to
+me.
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
