@@ -1,70 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B759C47DD9
-	for <buildroot@archiver.kernel.org>; Wed, 27 Mar 2024 13:17:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BED4C47DD9
+	for <buildroot@archiver.kernel.org>; Wed, 27 Mar 2024 14:01:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A4D2A60B91;
-	Wed, 27 Mar 2024 13:17:21 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JEcqy2XDcWNt; Wed, 27 Mar 2024 13:17:20 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DAEEE60B73
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DAEEE60B73;
-	Wed, 27 Mar 2024 13:17:19 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 03E001BF41D
- for <buildroot@lists.busybox.net>; Wed, 27 Mar 2024 13:17:18 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E491440569
- for <buildroot@lists.busybox.net>; Wed, 27 Mar 2024 13:17:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 38D1840016;
+	Wed, 27 Mar 2024 14:01:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iP59RWi7QFSB for <buildroot@lists.busybox.net>;
- Wed, 27 Mar 2024 13:17:15 +0000 (UTC)
+ id SW63T6yQ7iRZ; Wed, 27 Mar 2024 14:01:33 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BAFC9403C1
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id BAFC9403C1;
+	Wed, 27 Mar 2024 14:01:32 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DBDCC1BF41D
+ for <buildroot@lists.busybox.net>; Wed, 27 Mar 2024 14:01:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id D570160672
+ for <buildroot@lists.busybox.net>; Wed, 27 Mar 2024 14:01:31 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Teri05reaNA2 for <buildroot@lists.busybox.net>;
+ Wed, 27 Mar 2024 14:01:31 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
- envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 80B7E404EB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80B7E404EB
-Received: from helium.openadk.org (helium.openadk.org
- [IPv6:2a00:1828:2000:679::23])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 80B7E404EB
- for <buildroot@buildroot.org>; Wed, 27 Mar 2024 13:17:13 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id 5D23E3528243; Wed, 27 Mar 2024 14:17:09 +0100 (CET)
-Date: Wed, 27 Mar 2024 14:17:09 +0100
-From: Waldemar Brodkorb <wbx@openadk.org>
+ client-ip=2a00:1450:4864:20::630; helo=mail-ej1-x630.google.com;
+ envelope-from=andreas.hilse@googlemail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8D24B605E0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D24B605E0
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
+ [IPv6:2a00:1450:4864:20::630])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8D24B605E0
+ for <buildroot@buildroot.org>; Wed, 27 Mar 2024 14:01:30 +0000 (UTC)
+Received: by mail-ej1-x630.google.com with SMTP id
+ a640c23a62f3a-a4a39ab1a10so458219166b.1
+ for <buildroot@buildroot.org>; Wed, 27 Mar 2024 07:01:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1711548088; x=1712152888;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=/bqvFbmbZnD8nH5Y1IfXhQiNo1A44Zg7lkEMNcLAQyE=;
+ b=E8Y5BT0kECaQ0+YeX0Z10YUIOmKbhJERhPyvqnbHys86bQR7cX7eH9gS5jgoDH/G0L
+ tUOmBlhVdiGcjiujwna+wOBxn5etJxC+cnS9rk6ea0n3J9pFnv4TH295s3jdM/VZHtDL
+ YaUCmndMwyg0kDTycDxgQcyTDsdNHzn6Mf3rQ/H8ceXuC0e52qHs4ZTjl9YkhBuLfmA7
+ tP14q8pcyanoyGepzUfmeqhC+0R0/NspiytbIiaL9W7LZ5I3ilz+DZaoBXjywUE4qvkX
+ ha1gt/kiOT4HtEe7i29im4lSrpm5H1Ysq4PrHUIMhD2Ko3Kt5vOKcLKYIvpL33r0uOJj
+ YntQ==
+X-Gm-Message-State: AOJu0Yx3sWnQWi1kvmgHikp+KwXjoQgDe8LMzQERy43ormD3UTMmc8KC
+ QbZyftBruPiSpIhqBAAjd+1CdlhtwJ835jPK3R85vK6177I7qTZ7yWBfL/A2U9k=
+X-Google-Smtp-Source: AGHT+IGPJ0ne9sfCUJB40NVj8eczssVl9MdZU6JMYd1TNBHd5B8X4GKdoIGLJ9SHIFezkTORwqd1Dw==
+X-Received: by 2002:a17:906:614:b0:a47:3437:7fe7 with SMTP id
+ s20-20020a170906061400b00a4734377fe7mr1801620ejb.56.1711548088215; 
+ Wed, 27 Mar 2024 07:01:28 -0700 (PDT)
+Received: from ubuntu.localdomain (p5b321c64.dip0.t-ipconnect.de.
+ [91.50.28.100]) by smtp.gmail.com with ESMTPSA id
+ h7-20020a170906398700b00a473a28fa91sm5448756eje.0.2024.03.27.07.01.27
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 27 Mar 2024 07:01:27 -0700 (PDT)
+X-Google-Original-From: Andreas Hilse <andreas.hilse@gmail.com>
 To: buildroot@buildroot.org
-Message-ID: <ZgQcVayV4juxXnnZ@waldemar-brodkorb.de>
+Date: Wed, 27 Mar 2024 15:01:25 +0100
+Message-Id: <20240327140125.154985-1-andreas.hilse@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 5.10.0-27-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1711545430; bh=KV7EX1deHVAKOGjS4ZjLR+jk7UhWHd8o77jDtfraHTQ=;
- h=Date:From:To:Subject:From;
- b=QLfeBslYEsQCt4HULNtsxzB/o51GVcoq/vtBmGrh+iS2IHrKcVm74ZhKox39tkSfo
- R68yNjXk9Pv9N+jkLVZBhi4eIClj5U5vUW0J2B+w8Rw2HD8fQFODwSxsQ9dAW0LTut
- tZlk7EDt2aYdoG254wb1r5KzepTazXBH+KAHF2jdUepPuxtbs58xL0izeViakj5yth
- +cqntN31B8UExSACCEhq8//oXLaLolcmaij4FkOHdbqEBKo6NFMe0hoIp7PfYgLA1X
- LQ4HibUpOdZe8n9wp5MgHIikdfXoZM409JZoVdaq5uf7Xaw0fpjs3bd7nluqsGUpqg
- vyVdmNn1vXwQg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=openadk.org
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
- header.s=2022 header.b=QLfeBslY
-Subject: [Buildroot] [PATCH] package/uclibc: bump to 1.0.47
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=googlemail.com; s=20230601; t=1711548088; x=1712152888; darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=/bqvFbmbZnD8nH5Y1IfXhQiNo1A44Zg7lkEMNcLAQyE=;
+ b=j4prBH+99p9P0TfY/FWzHW+2f8/+RqAr7i0pwxlwSk2OsOtSdBVdOrGMrIK4PnZtzY
+ Y/6kWTa+So5U5Qn1VIa0ZT7HN+4xFMIQgbeWESrgphZmD3ADNplH39HtsaPnqddMbSnA
+ zzTnFv2R7VVrW+hKW343zc/l98bfMpvObjoRc/x9filxkZzQ5w8KQATAi2jnhvqLrh3R
+ Ev/8A66aJvRi8FQqzS1yI1vdGUjWHlvZtXyEoRZ/0Ev+Xq2Ra29U9tU93uT5vof7mQBs
+ Mg9Cn77bEfH5imCnMG68xOR7Y5pNdQOdvo+/aJfWZbU4yAKUO8nqdxEZjPx/9LSDulaB
+ Hb9g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=googlemail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=j4prBH+9
+Subject: [Buildroot] [PATCH] linux-pam: add patch for spurious password
+ expires in 0 days warning
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,46 +100,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Andreas Hilse via buildroot <buildroot@buildroot.org>
+Reply-To: Andreas Hilse <andreas.hilse@googlemail.com>
+Cc: Andreas Hilse <andreas.hilse@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes riscv port. NPTL/TLS fixed. C++ applications now working.
-Added explicit_bzero and reallocarray.
+Buildroot 2024.02 brings updated linux-pam 1.6.0 package which has a
+regression, that warns users about their password expiring in 0 days
+when logging in, even with password expiration not being active.
+There is no newer version released yet.
+Patch is working as intended, tested by me.
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Patch taken from linux-pam PR: https://github.com/linux-pam/linux-pam/pull/744
+
+Signed-off-by: Andreas Hilse <andreas.hilse@gmail.com>
 ---
- package/uclibc/uclibc.hash | 4 ++--
- package/uclibc/uclibc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../0002-do-not-warn-if-password-aging.patch  | 27 +++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+ create mode 100644 package/linux-pam/0002-do-not-warn-if-password-aging.patch
 
-diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
-index ae1f3178d9..a10ceab54c 100644
---- a/package/uclibc/uclibc.hash
-+++ b/package/uclibc/uclibc.hash
-@@ -1,4 +1,4 @@
--# From https://downloads.uclibc-ng.org/releases/1.0.44/uClibc-ng-1.0.45.tar.xz.sha256
--sha256  c2f4c6b6e19d7c9c226992a3746efd7ab932040463c15ee0bc8f4132b5777ac4  uClibc-ng-1.0.45.tar.xz
-+# From https://downloads.uclibc-ng.org/releases/1.0.47/uClibc-ng-1.0.47.tar.xz.sha256
-+sha256  29a4d684a06da344ee3ee09acc2ca7649d592ae3ff848f698145c46def05efcb  uClibc-ng-1.0.47.tar.xz
- # Locally calculated
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING.LIB
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 88623840bf..a7b18133ff 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UCLIBC_VERSION = 1.0.45
-+UCLIBC_VERSION = 1.0.47
- UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
- UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
- UCLIBC_LICENSE = LGPL-2.1+
+diff --git a/package/linux-pam/0002-do-not-warn-if-password-aging.patch b/package/linux-pam/0002-do-not-warn-if-password-aging.patch
+new file mode 100644
+index 0000000000..7df83bf058
+--- /dev/null
++++ b/package/linux-pam/0002-do-not-warn-if-password-aging.patch
+@@ -0,0 +1,27 @@
++From 470b5bdd8fd29d6b35e3a80f9a57bdd4b2438200 Mon Sep 17 00:00:00 2001
++From: Tobias Stoeckmann <tobias@stoeckmann.org>
++Date: Fri, 19 Jan 2024 10:09:00 +0100
++Subject: [PATCH] pam_unix: do not warn if password aging is disabled
++
++Later checks will print a warning if daysleft is 0. If password
++aging is disabled, leave daysleft at -1.
++
++Resolves: https://github.com/linux-pam/linux-pam/issues/743
++Fixes: 9ebc14085a3b ("pam_unix: allow disabled password aging")
++Signed-off-by: Tobias Stoeckmann <tobias@stoeckmann.org>
++---
++ modules/pam_unix/passverify.c | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/modules/pam_unix/passverify.c b/modules/pam_unix/passverify.c
++index 5c4f862e7..1bc98fa25 100644
++--- a/modules/pam_unix/passverify.c
+++++ b/modules/pam_unix/passverify.c
++@@ -314,7 +314,6 @@ PAMH_ARG_DECL(int check_shadow_expiry,
++ 	}
++ 	if (spent->sp_lstchg < 0) {
++ 		D(("password aging disabled"));
++-		*daysleft = 0;
++ 		return PAM_SUCCESS;
++ 	}
++ 	if (curdays < spent->sp_lstchg) {
 -- 
-2.30.2
+2.34.1
 
 _______________________________________________
 buildroot mailing list
