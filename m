@@ -4,49 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47194C54E67
-	for <buildroot@archiver.kernel.org>; Wed, 27 Mar 2024 09:40:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B759C47DD9
+	for <buildroot@archiver.kernel.org>; Wed, 27 Mar 2024 13:17:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 282C260B6C;
-	Wed, 27 Mar 2024 09:40:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A4D2A60B91;
+	Wed, 27 Mar 2024 13:17:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Hh-m3dYyz7d3; Wed, 27 Mar 2024 09:40:54 +0000 (UTC)
+ id JEcqy2XDcWNt; Wed, 27 Mar 2024 13:17:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2287760B7C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DAEEE60B73
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2287760B7C;
-	Wed, 27 Mar 2024 09:40:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E40BF1BF297
- for <buildroot@lists.busybox.net>; Wed, 27 Mar 2024 09:40:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DAEEE60B73;
+	Wed, 27 Mar 2024 13:17:19 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 03E001BF41D
+ for <buildroot@lists.busybox.net>; Wed, 27 Mar 2024 13:17:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CF28081D73
- for <buildroot@lists.busybox.net>; Wed, 27 Mar 2024 09:40:48 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E491440569
+ for <buildroot@lists.busybox.net>; Wed, 27 Mar 2024 13:17:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id V4mEi7Hdq2H4 for <buildroot@lists.busybox.net>;
- Wed, 27 Mar 2024 09:40:48 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1FB3681D7D
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1FB3681D7D
- for <buildroot@buildroot.org>; Wed, 27 Mar 2024 09:40:47 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C2134842E1; Wed, 27 Mar 2024 09:40:47 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iP59RWi7QFSB for <buildroot@lists.busybox.net>;
+ Wed, 27 Mar 2024 13:17:15 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
+ envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 80B7E404EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80B7E404EB
+Received: from helium.openadk.org (helium.openadk.org
+ [IPv6:2a00:1828:2000:679::23])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 80B7E404EB
+ for <buildroot@buildroot.org>; Wed, 27 Mar 2024 13:17:13 +0000 (UTC)
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id 5D23E3528243; Wed, 27 Mar 2024 14:17:09 +0100 (CET)
+Date: Wed, 27 Mar 2024 14:17:09 +0100
+From: Waldemar Brodkorb <wbx@openadk.org>
 To: buildroot@buildroot.org
-Date: Wed, 27 Mar 2024 10:40:18 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f578744ad43fe59e5639ce0c766877622117a84f
-X-Git-Newrev: cd44a480e154693c5352bf9119cbb02c0f7a6f25
-X-Patchwork-Hint: ignore
-Message-Id: <20240327094047.C2134842E1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] docs/website: Update for 2023.02.11
+Message-ID: <ZgQcVayV4juxXnnZ@waldemar-brodkorb.de>
+MIME-Version: 1.0
+Content-Disposition: inline
+X-Operating-System: Linux 5.10.0-27-amd64 x86_64
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=openadk.org; s=2022; 
+ t=1711545430; bh=KV7EX1deHVAKOGjS4ZjLR+jk7UhWHd8o77jDtfraHTQ=;
+ h=Date:From:To:Subject:From;
+ b=QLfeBslYEsQCt4HULNtsxzB/o51GVcoq/vtBmGrh+iS2IHrKcVm74ZhKox39tkSfo
+ R68yNjXk9Pv9N+jkLVZBhi4eIClj5U5vUW0J2B+w8Rw2HD8fQFODwSxsQ9dAW0LTut
+ tZlk7EDt2aYdoG254wb1r5KzepTazXBH+KAHF2jdUepPuxtbs58xL0izeViakj5yth
+ +cqntN31B8UExSACCEhq8//oXLaLolcmaij4FkOHdbqEBKo6NFMe0hoIp7PfYgLA1X
+ LQ4HibUpOdZe8n9wp5MgHIikdfXoZM409JZoVdaq5uf7Xaw0fpjs3bd7nluqsGUpqg
+ vyVdmNn1vXwQg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=openadk.org
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
+ header.s=2022 header.b=QLfeBslY
+Subject: [Buildroot] [PATCH] package/uclibc: bump to 1.0.47
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,53 +76,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd44a480e154693c5352bf9119cbb02c0f7a6f25
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes riscv port. NPTL/TLS fixed. C++ applications now working.
+Added explicit_bzero and reallocarray.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- docs/website/news.html | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ package/uclibc/uclibc.hash | 4 ++--
+ package/uclibc/uclibc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 457a2eaead..a5211fdbba 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,28 @@
- <h2>News</h2>
- <ul class="timeline">
+diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
+index ae1f3178d9..a10ceab54c 100644
+--- a/package/uclibc/uclibc.hash
++++ b/package/uclibc/uclibc.hash
+@@ -1,4 +1,4 @@
+-# From https://downloads.uclibc-ng.org/releases/1.0.44/uClibc-ng-1.0.45.tar.xz.sha256
+-sha256  c2f4c6b6e19d7c9c226992a3746efd7ab932040463c15ee0bc8f4132b5777ac4  uClibc-ng-1.0.45.tar.xz
++# From https://downloads.uclibc-ng.org/releases/1.0.47/uClibc-ng-1.0.47.tar.xz.sha256
++sha256  29a4d684a06da344ee3ee09acc2ca7649d592ae3ff848f698145c46def05efcb  uClibc-ng-1.0.47.tar.xz
+ # Locally calculated
+ sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING.LIB
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 88623840bf..a7b18133ff 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2023.02.11 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>27 March 2024</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2023.02.11 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2023.02.10 release. See the
-+	  <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2023.02.11/CHANGES">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="https://lore.kernel.org/buildroot/871q7w9gnv.fsf@48ers.dk/T/#u">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2023.02.11.tar.xz">2023.02.11 release</a>.</p>
-+
-+	  <p>Notice that the 2023.02.x series is now end of life. Please migrate to
-+	  the 2024.02.x series instead.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+-UCLIBC_VERSION = 1.0.45
++UCLIBC_VERSION = 1.0.47
+ UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
+ UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
+ UCLIBC_LICENSE = LGPL-2.1+
+-- 
+2.30.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
