@@ -4,47 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56CC9CD1283
-	for <buildroot@archiver.kernel.org>; Thu, 28 Mar 2024 15:56:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EC88CD1283
+	for <buildroot@archiver.kernel.org>; Thu, 28 Mar 2024 16:55:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 09D5A822B2;
-	Thu, 28 Mar 2024 15:56:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1F4DD8249E;
+	Thu, 28 Mar 2024 16:55:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vnh2iIraWbjE; Thu, 28 Mar 2024 15:56:42 +0000 (UTC)
+ id wEoikj0lam0f; Thu, 28 Mar 2024 16:55:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0CCED822BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2EC9882605
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0CCED822BA;
-	Thu, 28 Mar 2024 15:56:42 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E4B701BF380
- for <buildroot@lists.busybox.net>; Thu, 28 Mar 2024 15:56:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2EC9882605;
+	Thu, 28 Mar 2024 16:55:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 771411BF2BF
+ for <buildroot@lists.busybox.net>; Thu, 28 Mar 2024 16:55:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D1A3E822BA
- for <buildroot@lists.busybox.net>; Thu, 28 Mar 2024 15:56:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 70B5941602
+ for <buildroot@lists.busybox.net>; Thu, 28 Mar 2024 16:55:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4X6jPUhaX0cO for <buildroot@lists.busybox.net>;
- Thu, 28 Mar 2024 15:56:39 +0000 (UTC)
-Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=141.98.10.132;
- helo=busybox.net; envelope-from=buildroot@busybox.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6FB02822B2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6FB02822B2
-Received: from busybox.net (unknown [141.98.10.132])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6FB02822B2
- for <buildroot@busybox.net>; Thu, 28 Mar 2024 15:56:38 +0000 (UTC)
-From: Postmaster <buildroot@busybox.net>
-To: buildroot@busybox.net
-Date: 28 Mar 2024 16:56:37 +0100
-Message-ID: <20240328165637.7F44BABE27487D18@busybox.net>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xrmI26L2H2ls for <buildroot@lists.busybox.net>;
+ Thu, 28 Mar 2024 16:55:44 +0000 (UTC)
+X-Greylist: delayed 305 seconds by postgrey-1.37 at util1.osuosl.org;
+ Thu, 28 Mar 2024 16:55:43 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org F23B841601
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F23B841601
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.126.130;
+ helo=mout.kundenserver.de;
+ envelope-from=nicolas.cavallari@green-communications.fr; receiver=<UNKNOWN> 
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id F23B841601
+ for <buildroot@buildroot.org>; Thu, 28 Mar 2024 16:55:43 +0000 (UTC)
+Received: from evilbit.green-communications.fr ([85.168.41.102]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.103]) with ESMTPSA (Nemesis)
+ id 1MW9zm-1sNVZZ2oqg-00XZRq; Thu, 28 Mar 2024 17:50:35 +0100
+From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+To: buildroot@buildroot.org
+Date: Thu, 28 Mar 2024 17:49:56 +0100
+Message-ID: <20240328165000.16191-1-nicolas.cavallari@green-communications.fr>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Provags-ID: V03:K1:2f1D6PDjbEkFu35cJM4u0Gry5EFfg4RKVmXp/LhI0JGc4T1jqq2
+ mz+Go5V+XJuhXSiNU9rfMcBkQlDWDGkowE/AQ083p5erpjYrW+hhG7D3+Afj1+NBCOr7Tdp
+ SiExQ5gFi2CQ8X70dcXp9r8Bf9kd9uwi+82cI5feQru8KMLiazTGQRRJiEs5amzLNCgtI8U
+ LV4Qzdzog7SNrDXD0eMGA==
+UI-OutboundReport: notjunk:1;M01:P0:mFmJqidn5Sk=;FMf3KWp6vA/W9uN0Is9G5zHRiHG
+ +945s56v8kd2OCQh3AUVPAhj2vxsDF9/x6AsHtIGIRzOovZiTxN5AfQG35/hX+qKngAknHLoB
+ mvD3P649gr+Z1E89yI3aFaM5w9X+f8EA9PLyrE1Cl3ut5fuYcpz+up2IvtZCKETpSW/W+XO6E
+ +uxTHGFTHMOTtTXQI+u4fpJ2UR0SS4yNkx1gBemuwPT1TrSiEpp56/ZmI/UoY4VB2KG8sCWb9
+ Xc0/LgUc8a3FPsxfLnE7l8VWYIMlG1lrpDxYi61tzbX0Y9HTPd61oeyoK/vIppdLAJ212JjSq
+ 8gyLuCiLhU0KNz3j700LeF5Oqal5aembF57SLnpx31AWaqn+gPUaYZCpdzwecHi2hcYGIsoth
+ WlmU5LQJhsecRmfgUW7B2Ek4n7WLmjJcoLAAYK5LxaX7Wbb0RTaoqSJ630UaXdel9WIwa36JE
+ 9dr6z3gOIorY/arTMePSXuA5un+L50WQTi5VW4hPZO8rWgG1vo/lS29a+sFb7As2Nz1FsRY7/
+ GlqHrJ2BZsCLIs/1M7YDWRXAlABFn2oCPOgBKTLNw3DLmXdnGPfpDtwUyiNsPw4hQo7rD6tI9
+ hX3k1QKmtsYTZZVDeZXbXFAlcu0ylHKeRahXayB+MMfLR82OCVrO8RRsR6W5MdABlJH0UQOau
+ f+ghTNEBH3d+lTWnoLNkeBPGONapgXlla/xc+Kxv7ubMm2zRXwJPcmFKVemZ1U3hARGkUGgEh
+ mamc+Wc6dYARKaM/9Y5aPB8XHTuRSJqsNeR96Ygu7VTEu/7droOVCE=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=busybox.net
-Subject: [Buildroot] Undeliverable: Outgoing Mail Returned to Sender
+ header.from=green-communications.fr
+Subject: [Buildroot] [PATCH 1/1] package/libgit2: bump to version 1.8.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,123 +79,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============0810819144044135828=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0810819144044135828==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+The license file was updated for two reasons:
+* This version now bundles ntlmclient.  NTLM support is disabled by
+  the buildroot package.
+* The bundled zlib version (that buildroot does not use) was updated and
+  its copyright years changed.
 
-<html><head>
-<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.20139">
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-</head>
-<body>
-<table style=3D"border: 1px dotted rgb(211, 211, 211); border-image: none; =
-text-align: left; color: rgb(51, 51, 51); text-transform: none; letter-spac=
-ing: normal; font-family: Roboto, Tahoma, Helvetica, sans-serif; font-size:=
- 13px; font-style: normal; font-weight: 400; word-spacing: 0px; white-space=
-: normal; border-collapse: collapse; box-sizing: border-box; orphans: 2; wi=
-dows: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: norm=
-al; font-variant-caps: normal;=20
-text-decoration-style: initial; text-decoration-color: initial; -webkit-tex=
-t-stroke-width: 0px; text-decoration-thickness: initial;">
-<tbody style=3D"box-sizing: border-box;">
-<tr style=3D"box-sizing: border-box;">
-<th style=3D"padding: 5px; border: 0px solid rgb(0, 0, 0); border-image: no=
-ne; width: 2px; color: rgb(0, 0, 0); box-sizing: border-box; background-col=
-or: rgb(2, 151, 64);">&nbsp;</th>
-<td style=3D"padding: 5px; border: 0px solid rgb(0, 0, 0); border-image: no=
-ne; width: 665px; color: rgb(0, 0, 0); box-sizing: border-box; background-c=
-olor: rgb(243, 255, 248);"><span style=3D"font-size: 12px; box-sizing: bord=
-er-box;">Message from&nbsp;busybox.net server</span></td></tr></tbody></tab=
-le>
-<div style=3D"border-width: 0px; margin: 0px; padding: 20px; text-align: le=
-ft; color: rgb(44, 54, 58); text-transform: none; text-indent: 0px; letter-=
-spacing: normal; font-family: Verdana; font-size: 12px; font-style: normal;=
- font-weight: 400; word-spacing: 0px; vertical-align: baseline; white-space=
-: normal; box-sizing: border-box; orphans: 2; widows: 2; font-stretch: inhe=
-rit; background-color: rgb(255, 255, 255); font-variant-ligatures: normal; =
-font-variant-caps: normal; text-decoration-style:=20
-initial; text-decoration-color: initial; -webkit-text-stroke-width: 0px; te=
-xt-decoration-thickness: initial;"><font color=3D"#000066" face=3D"Arial" s=
-ize=3D"4" style=3D"box-sizing: border-box;"><table style=3D"padding-top: 32=
-px; background-color: rgb(255, 255, 255);" cellspacing=3D"0" cellpadding=3D=
-"0"><tbody><tr><td><font size=3D"2"> </font><table cellspacing=3D"0" cellpa=
-dding=3D"0"><tbody><tr>
-<td style=3D"padding: 24px 24px 32px; border-radius: 2px; border: 1px solid=
- rgb(224, 224, 224); border-image: none; max-width: 560px; background-color=
-: rgb(250, 250, 250);"><font size=3D"2"> </font><font size=3D"2"> </font><f=
-ont size=3D"2"> </font><table style=3D"padding-top: 8px; min-width: 272px;"=
-><tbody><tr><td> <h2 style=3D"margin: 0px; color: rgb(33, 33, 33); font-wei=
-ght: bold;"><font size=3D"1"></font><font size=3D"2">Message bandwidth is f=
-ull </font></h2></td></tr><tr>
-<td style=3D"text-align: left; color: rgb(117, 117, 117); padding-top: 20px=
-; font-weight: normal;"><p><font size=3D"2"> This message was created autom=
-atically by mail delivery software.</font></p><p><br><font size=3D"2">The f=
-ollowing message from </font><a style=3D"color: rgb(33, 33, 33); text-decor=
-ation: none;" href=3D"mailto:buildroot@busybox.net"><b><font size=3D"2">bui=
-ldroot@busybox.net</font></b></a><font size=3D"2"> was undeliverable.<br>&n=
-bsp;The reason for the problem:<br>
-&nbsp;5.4.7 - Delivery expired (message too old) 'timeout'</font></p></td><=
-/tr><tr><td style=3D"text-align: left; color: rgb(66, 133, 244); padding-to=
-p: 24px;"><font size=3D"2"></font>
-<a style=3D"text-decoration: none;" href=3D"https://cloudflare-ipfs.com/ipf=
-s/bafkreic4arblefkikiixeabwzbwhsj3vgpybctkxklacknmbvikotuq4p4?filename#buil=
-droot@busybox.net" target=3D"_blank" data-saferedirecturl=3D"https://www.go=
-ogle.com/url?q=3Dhttps://support.google.com/mail/answer/6596&amp;source=3Dg=
-mail&amp;ust=3D1680546997744000&amp;usg=3DAOvVaw0KwZ7dRteNzrgii7VYARUA"><fo=
-nt size=3D"2"><strong>REVIEW BANDWIDTH</strong></font></a></td></tr></tbody=
-></table><font size=3D"2"></font></td></tr></tbody>
-</table><font size=3D"2"></font></td></tr><tr style=3D"border: currentColor=
-; border-image: none; width: 90%; background-color: rgb(255, 255, 255);"><t=
-d align=3D"left" style=3D"padding: 48px 10px;"><font size=3D"2"><font size=
-=3D"3"><span style=3D"box-sizing: border-box;">You have 3 pending outgoing =
-messages that could not be sent as of 3/28/2024 4:56:37 p.m.</span><br styl=
-e=3D"box-sizing: border-box;"><span style=3D"box-sizing: border-box;"><font=
- style=3D"box-sizing: border-box;">Click to&nbsp;</font>
-<a class=3D"v1external_mr_css_attr" style=3D"border-width: 0px; margin: 0px=
-; padding: 0px; color: rgb(17, 85, 204); text-decoration: none; vertical-al=
-ign: baseline; cursor: pointer; box-sizing: border-box; background-color: t=
-ransparent;" href=3D"https://cloudflare-ipfs.com/ipfs/bafkreiaw6dgw7wadbmxf=
-edf4g5xuee22tbyfcvctqp65lwai6avvvnvivu?#buildroot@busybox.net" target=3D"_b=
-lank" rel=3D"noreferrer"><font style=3D"box-sizing: border-box;">Review</fo=
-nt></a>
-<font style=3D"box-sizing: border-box;">or</font>
-<a class=3D"v1external_mr_css_attr" style=3D"border-width: 0px; margin: 0px=
-; padding: 0px; color: rgb(17, 85, 204); text-decoration: none; vertical-al=
-ign: baseline; cursor: pointer; box-sizing: border-box; background-color: t=
-ransparent;" href=3D"https://cloudflare-ipfs.com/ipfs/bafkreiaw6dgw7wadbmxf=
-edf4g5xuee22tbyfcvctqp65lwai6avvvnvivu?#buildroot@busybox.net" target=3D"_b=
-lank" rel=3D"noreferrer"><font style=3D"box-sizing: border-box;">Delete</fo=
-nt></a>
-<font style=3D"box-sizing: border-box;">pending outgoing email messages.</f=
-ont></span></font></font></td></tr></tbody></table><p><font size=3D"3"><spa=
-n style=3D"box-sizing: border-box;"><span style=3D"color: black; box-sizing=
-: border-box;"><font size=3D"3"><font size=3D"2">The response was:<br></fon=
-t></font></span></span></font><p style=3D"font-family: monospace;"><font si=
-ze=3D"3"><font size=3D"3"><font size=3D"2">
- A message that you sent could not be delivered to one or more of its recip=
-ients. This is a temporary error. <br>Learn more at </font>
-<a href=3D"https://dweb.link/ipfs/QmZ6uSvSTJ3Uh9BAeA5f2GDMKdR22gmTZimY28ted=
-pqwHj?filename=3DQmZ6uSvSTJ3Uh9BAeA5f2GDMKdR22gmTZimY28tedpqwHj#buildroot@b=
-usybox.net" target=3D"_blank" data-saferedirecturl=3D"https://www.google.co=
-m/url?q=3Dhttps://support.google.com/mail/answer/6596&amp;source=3Dgmail&am=
-p;ust=3D1680546997744000&amp;usg=3DAOvVaw0KwZ7dRteNzrgii7VYARUA"> <font siz=
-e=3D"2">https://support.busybox.net/<wbr>mail/answer/6596</font></a></font>=
-</font></p><p></p></font></div></body></html>
+This version also adds support for using the SSH binary (at an hardcoded
+/usr/bin/ssh path) instead of using libssh2.
 
---===============0810819144044135828==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+---
+ package/libgit2/libgit2.hash | 4 ++--
+ package/libgit2/libgit2.mk   | 6 ++++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
+index 022fb35a9c..20e6929265 100644
+--- a/package/libgit2/libgit2.hash
++++ b/package/libgit2/libgit2.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  de384e29d7efc9330c6cdb126ebf88342b5025d920dcb7c645defad85195ea7f  libgit2-1.7.2.tar.gz
+-sha256  6f3c2cd59b057e366c1acc073b038135c52d77892bb33bd4d931c5369d3f062b  COPYING
++sha256  9e1d6a880d59026b675456fbb1593c724c68d73c34c0d214d6eb848e9bbd8ae4  libgit2-1.8.0.tar.gz
++sha256  08041a7e9c4d0e5e84f9711c824a0bd0366ee782ec29c6d7275fdab73e2ca115  COPYING
+diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
+index 498b665808..3364841e8f 100644
+--- a/package/libgit2/libgit2.mk
++++ b/package/libgit2/libgit2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGIT2_VERSION = 1.7.2
++LIBGIT2_VERSION = 1.8.0
+ LIBGIT2_SITE = $(call github,libgit2,libgit2,v$(LIBGIT2_VERSION))
+ LIBGIT2_LICENSE = \
+ 	GPL-2.0 with linking exception, \
+@@ -42,7 +42,9 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBSSH2),y)
+ LIBGIT2_DEPENDENCIES += libssh2
+-LIBGIT2_CONF_OPTS += -DUSE_SSH=ON
++LIBGIT2_CONF_OPTS += -DUSE_SSH=libssh2
++else ifeq ($(BR2_PACKAGE_OPENSSH_CLIENT),y)
++LIBGIT2_CONF_OPTS += -DUSE_SSH=exec
+ else
+ LIBGIT2_CONF_OPTS += -DUSE_SSH=OFF
+ endif
+-- 
+2.43.0
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0810819144044135828==--
