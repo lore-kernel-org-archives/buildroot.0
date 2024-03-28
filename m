@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41EBECD11DF
-	for <buildroot@archiver.kernel.org>; Thu, 28 Mar 2024 19:35:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04B36CD11DF
+	for <buildroot@archiver.kernel.org>; Thu, 28 Mar 2024 19:41:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3044D416E3;
-	Thu, 28 Mar 2024 19:35:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EE755416F4;
+	Thu, 28 Mar 2024 19:41:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yx6Tqfz0FnJR; Thu, 28 Mar 2024 19:35:29 +0000 (UTC)
+ id h1qYnvI6hTuQ; Thu, 28 Mar 2024 19:41:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6BE924160A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30FC9416CC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6BE924160A;
-	Thu, 28 Mar 2024 19:35:29 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BB47C1BF83E
- for <buildroot@lists.busybox.net>; Thu, 28 Mar 2024 19:35:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 30FC9416CC;
+	Thu, 28 Mar 2024 19:41:29 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DB3ED1BF83E
+ for <buildroot@lists.busybox.net>; Thu, 28 Mar 2024 19:41:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A88914064D
- for <buildroot@lists.busybox.net>; Thu, 28 Mar 2024 19:35:27 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C83AC60E97
+ for <buildroot@lists.busybox.net>; Thu, 28 Mar 2024 19:41:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id frUnbG65e91u for <buildroot@lists.busybox.net>;
- Thu, 28 Mar 2024 19:35:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id upUUbWwfOwnB for <buildroot@lists.busybox.net>;
+ Thu, 28 Mar 2024 19:41:26 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DCFE340644
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DCFE340644
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DCFE340644
- for <buildroot@buildroot.org>; Thu, 28 Mar 2024 19:35:25 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id D250513F8B8;
- Thu, 28 Mar 2024 20:35:18 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Thu, 28 Mar 2024 20:35:18 +0100
-Date: Thu, 28 Mar 2024 20:35:18 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <ZgXGdpC4WwxKR42m@landeda>
-References: <20240221195520.1762497-1-bernd@kuhls.net>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240221195520.1762497-1-bernd@kuhls.net>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1711654522;
- bh=SBwwadninz30GU0B3z9Q1398G4OBlmYWDjOkWqLd2tY=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=d8W93SUUITI9nyxn+4YzG4uPw0IVOGsHzpKE+ms+8VFyJcRLUrKS4nPVd30l+0NTp
- PbPNEPinzJcskWBy8qZ6mT0ZE1gbMKxsLdUxxh2UrWzPKujvIu453xwlCUqGUXg8Em
- HcFiV0zpFgOyDpJGCI8Ohu+rTtG12h8ZZ1THdVCkKGGb7pVwkdUw5bpW41CvLb8MI3
- KQ90pMA7htSBzPuYJfwVgOAave4e8IFiT5Uo7PFEHOeiaW58B9GWof5u7Z8nra7tm4
- 0AZNOKCiNqQjyDyexQCNnLVtKYuB2QI2CID4kJN56fVpa2FXyNeaUTQ1iRquZg/N3A
- E4wyiRYaq5nKw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=d8W93SUU
-Subject: Re: [Buildroot] [PATCH 1/1] package/libffi: bump version to 3.4.6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B2DF660E96
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id B2DF660E96
+ for <buildroot@buildroot.org>; Thu, 28 Mar 2024 19:41:26 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A90C4843E4; Thu, 28 Mar 2024 19:41:26 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Thu, 28 Mar 2024 20:34:20 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c4878d530e8bbcf29173b62a725c66ac51849c65
+X-Git-Newrev: f382de2b0f8a528a09bb975cc088a4342b663134
+X-Patchwork-Hint: ignore
+Message-Id: <20240328194126.A90C4843E4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libffi: bump version to 3.4.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,126 +58,244 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============8839234549212578053=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QmVybmQsIEFsbCwKCk9uIDIwMjQtMDItMjEgMjA6NTUgKzAxMDAsIEJlcm5kIEt1aGxzIHNwYWtl
-IHRodXNseToKPiBSZW1vdmVkIHBhdGNoIDAwMDEgYW5kIGluc3RlYWQgYWRkZWQgbmV3IGNvbmZp
-Z3VyZSBvcHRpb24KPiAtLWRpc2FibGUtbXVsdGktb3MtZGlyZWN0b3J5IHdoaWNoIHdhcyBhZGRl
-ZCB1cHN0cmVhbToKPiBodHRwczovL2dpdGh1Yi5jb20vbGliZmZpL2xpYmZmaS9jb21taXQvODc3
-ZWE5YmY5YWMyYzk4Y2I4NThjMTJmNWE2YWVlZWMxM2NmOTc4Zgo+IAo+IFJlbW92ZWQgcGF0Y2gg
-MDAwMyBkdWUgdG8gdmFyaW91cyB1cHN0cmVhbSBmaXhlcyBmb3IgbWlwcyBzb2Z0LWZsb2F0Cj4g
-c3VwcG9ydCBzaW5jZSBpdHMgYWRkaXRpb24gaW4gMjAxNjoKPiBodHRwczovL2dpdGh1Yi5jb20v
-bGliZmZpL2xpYmZmaS9jb21taXRzL21hc3Rlci9zcmMvbWlwcwo+IAo+IFJlbnVtYmVyZWQgcmVt
-YWluaW5nIHBhdGNoLgo+IAo+IFVwZGF0ZWQgbGljZW5zZSBoYXNoIGR1ZSB0byBjb3B5cmlnaHQg
-eWVhciBidW1wOgo+IGh0dHBzOi8vZ2l0aHViLmNvbS9saWJmZmkvbGliZmZpL2NvbW1pdC85MTcz
-OWExYTkxMjQ3NmFkYmYxZTBlNGRjYjA5MWI5YTJjNTAwN2Q5Cj4gCj4gU2lnbmVkLW9mZi1ieTog
-QmVybmQgS3VobHMgPGJlcm5kQGt1aGxzLm5ldD4KWy0tU05JUC0tXQo+IGRpZmYgLS1naXQgYS9w
-YWNrYWdlL2xpYmZmaS8wMDAyLUZpeC11c2Utb2YtY29tcGFjdC1laC1mcmFtZXMtb24tTUlQUy5w
-YXRjaCBiL3BhY2thZ2UvbGliZmZpLzAwMDEtRml4LXVzZS1vZi1jb21wYWN0LWVoLWZyYW1lcy1v
-bi1NSVBTLnBhdGNoCj4gc2ltaWxhcml0eSBpbmRleCA5NCUKPiByZW5hbWUgZnJvbSBwYWNrYWdl
-L2xpYmZmaS8wMDAyLUZpeC11c2Utb2YtY29tcGFjdC1laC1mcmFtZXMtb24tTUlQUy5wYXRjaAo+
-IHJlbmFtZSB0byBwYWNrYWdlL2xpYmZmaS8wMDAxLUZpeC11c2Utb2YtY29tcGFjdC1laC1mcmFt
-ZXMtb24tTUlQUy5wYXRjaAo+IGluZGV4IGMxOWUzOTVmOTAuLjc3ODZiOTg0YTIgMTAwNjQ0Cj4g
-LS0tIGEvcGFja2FnZS9saWJmZmkvMDAwMi1GaXgtdXNlLW9mLWNvbXBhY3QtZWgtZnJhbWVzLW9u
-LU1JUFMucGF0Y2gKPiArKysgYi9wYWNrYWdlL2xpYmZmaS8wMDAxLUZpeC11c2Utb2YtY29tcGFj
-dC1laC1mcmFtZXMtb24tTUlQUy5wYXRjaAo+IEBAIC0xNSw2ICsxNSw4IEBAIE1pcHMgYW5kIGNv
-bXBpbGVyIHN1cHBvcnQgaXQuCj4gIFNpZ25lZC1vZmYtYnk6IErDqXLDtG1lIFBvdWlsbGVyIDxq
-ZXp6QHN5c21pYy5vcmc+Cj4gIFt1bmZ1enogZm9yIDMuMi4xXQo+ICBTaWduZWQtb2ZmLWJ5OiBK
-w7ZyZyBLcmF1c2UgPGpvZXJnLmtyYXVzZUBlbWJlZGRlZC5yb2Nrcz4KPiArW3JlYmFzZWQgZm9y
-IDMuNC42XQo+ICtTaWduZWQtb2ZmLWJ5OiBCZXJuZCBLdWhscyA8YmVybmRAa3VobHMubmV0PgoK
-ICAgICQgLi91dGlscy9kb2NrZXItcnVuIG1ha2UgY2hlY2stcGFja2FnZQogICAgcGFja2FnZS9s
-aWJmZmkvMDAwMS1GaXgtdXNlLW9mLWNvbXBhY3QtZWgtZnJhbWVzLW9uLU1JUFMucGF0Y2g6MDog
-bWlzc2luZyBVcHN0cmVhbSBpbiB0aGUgaGVhZGVyIChodHRwczovL25pZ2h0bHkuYnVpbGRyb290
-Lm9yZy8jX2FkZGl0aW9uYWxfcGF0Y2hfZG9jdW1lbnRhdGlvbikKICAgIC5jaGVja3BhY2thZ2Vp
-Z25vcmU6NTk3OiBpZ25vcmVkIGZpbGUgcGFja2FnZS9saWJmZmkvMDAwMS1GaXgtaW5zdGFsbGF0
-aW9uLWxvY2F0aW9uLW9mLWxpYmZmaS5wYXRjaCBpcyBtaXNzaW5nCiAgICAuY2hlY2twYWNrYWdl
-aWdub3JlOjU5ODogaWdub3JlZCBmaWxlIHBhY2thZ2UvbGliZmZpLzAwMDItRml4LXVzZS1vZi1j
-b21wYWN0LWVoLWZyYW1lcy1vbi1NSVBTLnBhdGNoIGlzIG1pc3NpbmcKICAgIC5jaGVja3BhY2th
-Z2VpZ25vcmU6NTk5OiBpZ25vcmVkIGZpbGUgcGFja2FnZS9saWJmZmkvMDAwMy1saWJmZmktZW5h
-YmxlLWhhcmRmbG9hdC1pbi10aGUtTUlQUy1hc3NlbWJseS1jb2RlLnBhdGNoIGlzIG1pc3NpbmcK
-ClRoZSBmaXJzdCB0d28gYXJlIGR1ZSB0byB0aGUgcmVuYW1pbmcsIHNvIEkgZml4ZWQgLmNoZWNr
-cGFja2FnZSB0byByZWZlcgp0byB0aGUgbmV3IGZpbGVuYW1lIGZvciB0aGF0IHBhdGNoLiBUaGUg
-b3RoZXJzIHR3bywgSSByZW1vdmVkLgoKQXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcy4KClJlZ2Fy
-ZHMsCllhbm4gRS4gTU9SSU4uCgo+ICAtLS0KPiAgIGNvbmZpZ3VyZS5hYyB8IDEwICsrKysrKysr
-KysKPiAgIDEgZmlsZSBjaGFuZ2VkLCAxMCBpbnNlcnRpb25zKCspCj4gQEAgLTIzLDcgKzI1LDcg
-QEAgZGlmZiAtLWdpdCBhL2NvbmZpZ3VyZS5hYyBiL2NvbmZpZ3VyZS5hYwo+ICBpbmRleCBhN2Jm
-NWVlLi4zNmNkMGQ0IDEwMDY0NAo+ICAtLS0gYS9jb25maWd1cmUuYWMKPiAgKysrIGIvY29uZmln
-dXJlLmFjCj4gLUBAIC00NjksNiArNDY5LDE2IEBAIGVzYWMKPiArQEAgLTIzOCw2ICsyMzgsMTYg
-QEAgZXNhYwo+ICAgQU1fQ09ORElUSU9OQUwoRkZJX0VYRUNfVFJBTVBPTElORV9UQUJMRSwgdGVz
-dCB4JEZGSV9FWEVDX1RSQU1QT0xJTkVfVEFCTEUgPSB4MSkKPiAgIEFDX1NVQlNUKEZGSV9FWEVD
-X1RSQU1QT0xJTkVfVEFCTEUpCj4gICAKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9saWJmZmkvMDAw
-My1saWJmZmktZW5hYmxlLWhhcmRmbG9hdC1pbi10aGUtTUlQUy1hc3NlbWJseS1jb2RlLnBhdGNo
-IGIvcGFja2FnZS9saWJmZmkvMDAwMy1saWJmZmktZW5hYmxlLWhhcmRmbG9hdC1pbi10aGUtTUlQ
-Uy1hc3NlbWJseS1jb2RlLnBhdGNoCj4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXgg
-MTY4OTcyYTg3MS4uMDAwMDAwMDAwMAo+IC0tLSBhL3BhY2thZ2UvbGliZmZpLzAwMDMtbGliZmZp
-LWVuYWJsZS1oYXJkZmxvYXQtaW4tdGhlLU1JUFMtYXNzZW1ibHktY29kZS5wYXRjaAo+ICsrKyAv
-ZGV2L251bGwKPiBAQCAtMSw0NCArMCwwIEBACj4gLUZyb20gNDhiYzM3ZmFiYmM2ODViMWUzMjkz
-MDU1YmQzM2NhNjZjNjE5MzA1ZSBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKPiAtRnJvbTogVmlj
-ZW50ZSBPbGl2ZXJ0IFJpZXJhIDxWaW5jZW50LlJpZXJhQGltZ3RlYy5jb20+Cj4gLURhdGU6IFdl
-ZCwgMTMgSmFuIDIwMTYgMTQ6NDk6NTkgKzAwMDAKPiAtU3ViamVjdDogW1BBVENIXSBsaWJmZmk6
-IGVuYWJsZSBoYXJkZmxvYXQgaW4gdGhlIE1JUFMgYXNzZW1ibHkgY29kZQo+IC0KPiAtVGhpcyB3
-YXkgaXQgd2lsbCBiZSBwb3NzaWJsZSB0byBidWlsZCBpdCBmb3Igc29mdC1mbG9hdC4gVGhpcyBp
-cyBvbmx5IGEKPiAtdGVtcG9yYXJ5IGZpeC4gVGhlIHBhY2thZ2UgbmVlZHMgdG8gYmUgZml4ZWQg
-cHJvcGVybHkuCj4gLQo+IC1TaWduZWQtb2ZmLWJ5OiBWaWNlbnRlIE9saXZlcnQgUmllcmEgPFZp
-bmNlbnQuUmllcmFAaW1ndGVjLmNvbT4KPiAtW1VwZGF0ZSBmb3IgMy4zLXJjMF0KPiAtU2lnbmVk
-LW9mZi1ieTogRmFicmljZSBGb250YWluZSA8Zm9udGFpbmUuZmFicmljZUBnbWFpbC5jb20+Cj4g
-LS0tLQo+IC0gc3JjL21pcHMvbjMyLlMgfCAxICsKPiAtIHNyYy9taXBzL28zMi5TIHwgMSArCj4g
-LSAyIGZpbGVzIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKQo+IC0KPiAtZGlmZiAtLWdpdCBhL3Ny
-Yy9taXBzL24zMi5TIGIvc3JjL21pcHMvbjMyLlMKPiAtaW5kZXggYzY5ODVkMy4uZGM4NDJkNSAx
-MDA2NDQKPiAtLS0tIGEvc3JjL21pcHMvbjMyLlMKPiAtKysrIGIvc3JjL21pcHMvbjMyLlMKPiAt
-QEAgLTQ0LDYgKzQ0LDcgQEAKPiAtICNlbmRpZgo+IC0gI2lmICFkZWZpbmVkKF9fbWlwc19pc2Ff
-cmV2KSB8fCAoX19taXBzX2lzYV9yZXY8NikKPiAtIAkuc2V0IG1pcHM0Cj4gLSAjZW5kaWYKPiAt
-Kwkuc2V0IGhhcmRmbG9hdAo+IC0gCS50ZXh0Cj4gLSAJLmFsaWduCTIKPiAtIAkuZ2xvYmwJZmZp
-X2NhbGxfTjMyCj4gLWRpZmYgLS1naXQgYS9zcmMvbWlwcy9vMzIuUyBiL3NyYy9taXBzL28zMi5T
-Cj4gLWluZGV4IGViMjc5ODEuLmI2NTNkYWYgMTAwNjQ0Cj4gLS0tLSBhL3NyYy9taXBzL28zMi5T
-Cj4gLSsrKyBiL3NyYy9taXBzL28zMi5TCj4gLUBAIC00Miw2ICs0Miw3IEBACj4gLSAjZGVmaW5l
-IFJBX09GRgkJKFNJWkVPRl9GUkFNRSAtIDEgKiBGRklfU0laRU9GX0FSRykKPiAtIAo+IC0gCS5h
-YmljYWxscwo+IC0rCS5zZXQgaGFyZGZsb2F0Cj4gLSAJLnRleHQKPiAtIAkuYWxpZ24JMgo+IC0g
-CS5nbG9ibAlmZmlfY2FsbF9PMzIKPiAtLS0gCj4gLTIuNC4xMAo+IC0KPiBkaWZmIC0tZ2l0IGEv
-cGFja2FnZS9saWJmZmkvbGliZmZpLmhhc2ggYi9wYWNrYWdlL2xpYmZmaS9saWJmZmkuaGFzaAo+
-IGluZGV4IDhkMjM0OWVjMjEuLmMyZWY1ODhmNmIgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9saWJm
-ZmkvbGliZmZpLmhhc2gKPiArKysgYi9wYWNrYWdlL2xpYmZmaS9saWJmZmkuaGFzaAo+IEBAIC0x
-LDQgKzEsNCBAQAo+ICAjIExvY2FsbHkgY2FsY3VsYXRlZAo+IC1zaGEyNTYgIGQ2NmM1NmFkMjU5
-YTgyY2YyYTlkZmM0MDhiMzJiZjVkYTUyMzcxNTAwYjg0NzQ1ZjdmYjhiNjQ1NzEyZGY2NzYgIGxp
-YmZmaS0zLjQuNC50YXIuZ3oKPiArc2hhMjU2ICBiMGRlYTlkZjIzYzg2M2E3YTUwZTgyNTQ0MGYz
-ZWJmZmFiZDY1ZGYxNDk3MTA4ZTVkNDM3NzQ3ODQzODk1YTRlICBsaWJmZmktMy40LjYudGFyLmd6
-Cj4gICMgTGljZW5zZSBmaWxlcywgbG9jYWxseSBjYWxjdWxhdGVkCj4gLXNoYTI1NiAgMmM5YzJh
-Y2I5NzQzZTZiMDA3YjkxMzUwNDc1MzA4YWVlNDQ2OTFkOTZhYTIwZWFjZWY4ZTE5OTk4OGM4YzM4
-OCAgTElDRU5TRQo+ICtzaGEyNTYgIDY3ODk0MDg5ODExZjkzZmNhNDdhNzZmODVlMDE3ZGE2Zjg1
-ODJkNGJhMDkwNTk2M2M2ZTBmMWFkNmRmN2ExOTUgIExJQ0VOU0UKPiBkaWZmIC0tZ2l0IGEvcGFj
-a2FnZS9saWJmZmkvbGliZmZpLm1rIGIvcGFja2FnZS9saWJmZmkvbGliZmZpLm1rCj4gaW5kZXgg
-NjI0OTAyM2VhZS4uOWM0N2NmMzk3MyAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL2xpYmZmaS9saWJm
-ZmkubWsKPiArKysgYi9wYWNrYWdlL2xpYmZmaS9saWJmZmkubWsKPiBAQCAtNCwxOSArNCwyMCBA
-QAo+ICAjCj4gICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4gIAo+IC1MSUJGRklfVkVSU0lPTiA9
-IDMuNC40Cj4gK0xJQkZGSV9WRVJTSU9OID0gMy40LjYKPiAgTElCRkZJX1NJVEUgPSBcCj4gIAlo
-dHRwczovL2dpdGh1Yi5jb20vbGliZmZpL2xpYmZmaS9yZWxlYXNlcy9kb3dubG9hZC92JChMSUJG
-RklfVkVSU0lPTikKPiAgTElCRkZJX0xJQ0VOU0UgPSBNSVQKPiAgTElCRkZJX0xJQ0VOU0VfRklM
-RVMgPSBMSUNFTlNFCj4gIExJQkZGSV9DUEVfSURfVkFMSUQgPSBZRVMKPiAgTElCRkZJX0lOU1RB
-TExfU1RBR0lORyA9IFlFUwo+IC0jIFdlJ3JlIHBhdGNoaW5nIE1ha2VmaWxlLmFtCj4gKyMgV2Un
-cmUgcGF0Y2hpbmcgY29uZmlndXJlLmFjCj4gIExJQkZGSV9BVVRPUkVDT05GID0gWUVTCj4gK0xJ
-QkZGSV9DT05GX09QVFMgPSAtLWRpc2FibGUtbXVsdGktb3MtZGlyZWN0b3J5Cj4gIAo+ICAjIFRo
-ZSBzdGF0aWMgZXhlYyB0cmFtcG9saW5lcyBpcyBlbmFibGVkIGJ5IGRlZmF1bHQgc2luY2UKPiAg
-IyBsaWJmZmkgMy40LjIuIEhvd2V2ZXIgaXQgZG9lc24ndCB3b3JrIHdpdGggZ29iamVjdC1pbnRy
-b3NwZWN0aW9uLgo+IC1MSUJGRklfQ09ORl9PUFRTID0gLS1kaXNhYmxlLWV4ZWMtc3RhdGljLXRy
-YW1wCj4gK0xJQkZGSV9DT05GX09QVFMgKz0gLS1kaXNhYmxlLWV4ZWMtc3RhdGljLXRyYW1wCj4g
-IAo+ICAkKGV2YWwgJChhdXRvdG9vbHMtcGFja2FnZSkpCj4gICQoZXZhbCAkKGhvc3QtYXV0b3Rv
-b2xzLXBhY2thZ2UpKQo+IC0tIAo+IDIuMzkuMgo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fCj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxk
-cm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
-bGlzdGluZm8vYnVpbGRyb290CgotLSAKLi0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0t
-LS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4KfCAgWWFubiBF
-LiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9OIHwgRXJpY3Mn
-IGNvbnNwaXJhY3k6IHwKfCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWduZXIgfCBc
-IC8gQ0FNUEFJR04gICAgIHwgIF9fXyAgICAgICAgICAgICAgIHwKfCArMzMgNTYxIDA5OSA0Mjcg
-YC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAgQUdBSU5TVCAgICAgIHwgIFxlLyAgVGhlcmUgaXMg
-bm8gIHwKfCBodHRwOi8veW1vcmluLmlzLWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAvIFwgSFRNTCBN
-QUlMICAgIHwgICB2ICAgY29uc3BpcmFjeS4gIHwKJy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0tLScKX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1h
-aWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9v
-dC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+--===============8839234549212578053==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=f382de2b0f8a528a09bb975cc088a4342b663134
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Removed patch 0001 and instead added new configure option
+--disable-multi-os-directory which was added upstream:
+https://github.com/libffi/libffi/commit/877ea9bf9ac2c98cb858c12f5a6aeeec13cf978f
+
+Removed patch 0003 due to various upstream fixes for mips soft-float
+support since its addition in 2016:
+https://github.com/libffi/libffi/commits/master/src/mips
+
+Renumbered remaining patch.
+
+Updated license hash due to copyright year bump:
+https://github.com/libffi/libffi/commit/91739a1a912476adbf1e0e4dcb091b9a2c5007d9
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Reviewed-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+Tested-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+[yann.morin.1998@free.fr: fix check-package]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ .checkpackageignore                                |  4 +-
+ .../0001-Fix-installation-location-of-libffi.patch | 55 ----------------------
+ ...001-Fix-use-of-compact-eh-frames-on-MIPS.patch} |  4 +-
+ ...nable-hardfloat-in-the-MIPS-assembly-code.patch | 44 -----------------
+ package/libffi/libffi.hash                         |  4 +-
+ package/libffi/libffi.mk                           |  7 +--
+ 6 files changed, 10 insertions(+), 108 deletions(-)
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 0735b0c5da..b7d45df2a2 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -594,9 +594,7 @@ package/libedit/0001-check-bsd-functions-in-libbsd.patch Upstream
+ package/libevent/0001-Don-t-define-BIO_get_init-for-LibreSSL-3-5.patch Upstream
+ package/libfcgi/0001-link-against-math.patch Upstream
+ package/libfcgi/0002-disable-examples.patch Sob Upstream
+-package/libffi/0001-Fix-installation-location-of-libffi.patch Upstream
+-package/libffi/0002-Fix-use-of-compact-eh-frames-on-MIPS.patch Upstream
+-package/libffi/0003-libffi-enable-hardfloat-in-the-MIPS-assembly-code.patch Upstream
++package/libffi/0001-Fix-use-of-compact-eh-frames-on-MIPS.patch Upstream
+ package/libfm/0001-modules-fix-cross-compilation.patch Upstream
+ package/libfreeimage/0001-no-root-install.patch Upstream
+ package/libfreeimage/0002-fix-cpuid-x86.patch Upstream
+diff --git a/package/libffi/0001-Fix-installation-location-of-libffi.patch b/package/libffi/0001-Fix-installation-location-of-libffi.patch
+deleted file mode 100644
+index 6ac9123730..0000000000
+--- a/package/libffi/0001-Fix-installation-location-of-libffi.patch
++++ /dev/null
+@@ -1,55 +0,0 @@
+-From 580f46a7bc6e9fea3a2227b5268cc3aed1d60e3b Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Thu, 7 Feb 2013 22:26:56 +0100
+-Subject: [PATCH] Fix installation location of libffi
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-The libffi is currently declared as toolexeclib_LTLIBRARIES. In many
+-cases, toolexeclib libraries will be installed in /usr/lib, so it
+-doesn't make any difference.
+-
+-However, with multilib toolchains, they get installed in a
+-subdirectory of /usr/lib/. For example, with a Sourcery CodeBench
+-PowerPC toolchain, if the e500mc multilib variant is used, the libffi
+-library gets installed in /usr/lib/te500mc/. This is due to the
+-following code in the configure script:
+-
+-  multi_os_directory=`$CC -print-multi-os-directory`
+-  case $multi_os_directory in
+-    .) ;; # Avoid trailing /.
+-    *) toolexeclibdir=$toolexeclibdir/$multi_os_directory ;;
+-  esac
+-
+-Once the library is installed in /usr/lib/te500mc/, nothing works
+-because this installation location is inconsistent with the
+-installation location declared in libffi.pc.
+-
+-So, instead of using this bizarre toolexeclib_LTLIBRARIES, simply use
+-the more standard lib_LTLIBRARIES, which ensures that the libffi
+-library is always installed in /usr/lib.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-[unfuzz for 3.2.1]
+-Signed-off-by: Jörg Krause <joerg.krause@embedded.rocks>
+----
+- Makefile.am | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/Makefile.am b/Makefile.am
+-index 0e40451..309474c 100644
+---- a/Makefile.am
+-+++ b/Makefile.am
+-@@ -104,7 +104,7 @@ FLAGS_TO_PASS = $(AM_MAKEFLAGS)
+- 
+- MAKEOVERRIDES=
+- 
+--toolexeclib_LTLIBRARIES = libffi.la
+-+lib_LTLIBRARIES = libffi.la
+- noinst_LTLIBRARIES = libffi_convenience.la
+- 
+- libffi_la_SOURCES = src/prep_cif.c src/types.c \
+--- 
+-2.5.3
+-
+diff --git a/package/libffi/0002-Fix-use-of-compact-eh-frames-on-MIPS.patch b/package/libffi/0001-Fix-use-of-compact-eh-frames-on-MIPS.patch
+similarity index 94%
+rename from package/libffi/0002-Fix-use-of-compact-eh-frames-on-MIPS.patch
+rename to package/libffi/0001-Fix-use-of-compact-eh-frames-on-MIPS.patch
+index c19e395f90..7786b984a2 100644
+--- a/package/libffi/0002-Fix-use-of-compact-eh-frames-on-MIPS.patch
++++ b/package/libffi/0001-Fix-use-of-compact-eh-frames-on-MIPS.patch
+@@ -15,6 +15,8 @@ Mips and compiler support it.
+ Signed-off-by: Jérôme Pouiller <jezz@sysmic.org>
+ [unfuzz for 3.2.1]
+ Signed-off-by: Jörg Krause <joerg.krause@embedded.rocks>
++[rebased for 3.4.6]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ ---
+  configure.ac | 10 ++++++++++
+  1 file changed, 10 insertions(+)
+@@ -23,7 +25,7 @@ diff --git a/configure.ac b/configure.ac
+ index a7bf5ee..36cd0d4 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -469,6 +469,16 @@ esac
++@@ -238,6 +238,16 @@ esac
+  AM_CONDITIONAL(FFI_EXEC_TRAMPOLINE_TABLE, test x$FFI_EXEC_TRAMPOLINE_TABLE = x1)
+  AC_SUBST(FFI_EXEC_TRAMPOLINE_TABLE)
+  
+diff --git a/package/libffi/0003-libffi-enable-hardfloat-in-the-MIPS-assembly-code.patch b/package/libffi/0003-libffi-enable-hardfloat-in-the-MIPS-assembly-code.patch
+deleted file mode 100644
+index 168972a871..0000000000
+--- a/package/libffi/0003-libffi-enable-hardfloat-in-the-MIPS-assembly-code.patch
++++ /dev/null
+@@ -1,44 +0,0 @@
+-From 48bc37fabbc685b1e3293055bd33ca66c619305e Mon Sep 17 00:00:00 2001
+-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+-Date: Wed, 13 Jan 2016 14:49:59 +0000
+-Subject: [PATCH] libffi: enable hardfloat in the MIPS assembly code
+-
+-This way it will be possible to build it for soft-float. This is only a
+-temporary fix. The package needs to be fixed properly.
+-
+-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+-[Update for 3.3-rc0]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/mips/n32.S | 1 +
+- src/mips/o32.S | 1 +
+- 2 files changed, 2 insertions(+)
+-
+-diff --git a/src/mips/n32.S b/src/mips/n32.S
+-index c6985d3..dc842d5 100644
+---- a/src/mips/n32.S
+-+++ b/src/mips/n32.S
+-@@ -44,6 +44,7 @@
+- #endif
+- #if !defined(__mips_isa_rev) || (__mips_isa_rev<6)
+- 	.set mips4
+- #endif
+-+	.set hardfloat
+- 	.text
+- 	.align	2
+- 	.globl	ffi_call_N32
+-diff --git a/src/mips/o32.S b/src/mips/o32.S
+-index eb27981..b653daf 100644
+---- a/src/mips/o32.S
+-+++ b/src/mips/o32.S
+-@@ -42,6 +42,7 @@
+- #define RA_OFF		(SIZEOF_FRAME - 1 * FFI_SIZEOF_ARG)
+- 
+- 	.abicalls
+-+	.set hardfloat
+- 	.text
+- 	.align	2
+- 	.globl	ffi_call_O32
+--- 
+-2.4.10
+-
+diff --git a/package/libffi/libffi.hash b/package/libffi/libffi.hash
+index 8d2349ec21..c2ef588f6b 100644
+--- a/package/libffi/libffi.hash
++++ b/package/libffi/libffi.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  d66c56ad259a82cf2a9dfc408b32bf5da52371500b84745f7fb8b645712df676  libffi-3.4.4.tar.gz
++sha256  b0dea9df23c863a7a50e825440f3ebffabd65df1497108e5d437747843895a4e  libffi-3.4.6.tar.gz
+ # License files, locally calculated
+-sha256  2c9c2acb9743e6b007b91350475308aee44691d96aa20eacef8e199988c8c388  LICENSE
++sha256  67894089811f93fca47a76f85e017da6f8582d4ba0905963c6e0f1ad6df7a195  LICENSE
+diff --git a/package/libffi/libffi.mk b/package/libffi/libffi.mk
+index 6249023eae..9c47cf3973 100644
+--- a/package/libffi/libffi.mk
++++ b/package/libffi/libffi.mk
+@@ -4,19 +4,20 @@
+ #
+ ################################################################################
+ 
+-LIBFFI_VERSION = 3.4.4
++LIBFFI_VERSION = 3.4.6
+ LIBFFI_SITE = \
+ 	https://github.com/libffi/libffi/releases/download/v$(LIBFFI_VERSION)
+ LIBFFI_LICENSE = MIT
+ LIBFFI_LICENSE_FILES = LICENSE
+ LIBFFI_CPE_ID_VALID = YES
+ LIBFFI_INSTALL_STAGING = YES
+-# We're patching Makefile.am
++# We're patching configure.ac
+ LIBFFI_AUTORECONF = YES
++LIBFFI_CONF_OPTS = --disable-multi-os-directory
+ 
+ # The static exec trampolines is enabled by default since
+ # libffi 3.4.2. However it doesn't work with gobject-introspection.
+-LIBFFI_CONF_OPTS = --disable-exec-static-tramp
++LIBFFI_CONF_OPTS += --disable-exec-static-tramp
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+
+--===============8839234549212578053==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8839234549212578053==--
