@@ -4,71 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49FA2C54E64
-	for <buildroot@archiver.kernel.org>; Thu, 28 Mar 2024 13:14:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB699C54E67
+	for <buildroot@archiver.kernel.org>; Thu, 28 Mar 2024 13:24:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BEF834176C;
-	Thu, 28 Mar 2024 13:14:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7AE88401AE;
+	Thu, 28 Mar 2024 13:24:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1wF-iIJwVaLW; Thu, 28 Mar 2024 13:14:28 +0000 (UTC)
+ id U9cD7U-pRivb; Thu, 28 Mar 2024 13:24:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 390A841722
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7B6DC4061C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 390A841722;
-	Thu, 28 Mar 2024 13:14:28 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7ADB71BF405
- for <buildroot@lists.busybox.net>; Thu, 28 Mar 2024 13:14:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7B6DC4061C;
+	Thu, 28 Mar 2024 13:24:51 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EF9921BF405
+ for <buildroot@lists.busybox.net>; Thu, 28 Mar 2024 13:24:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 643C560D66
- for <buildroot@lists.busybox.net>; Thu, 28 Mar 2024 13:14:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DC7174061C
+ for <buildroot@lists.busybox.net>; Thu, 28 Mar 2024 13:24:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VpaJiex00mjd for <buildroot@lists.busybox.net>;
- Thu, 28 Mar 2024 13:14:25 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9D05160D5E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D05160D5E
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9D05160D5E
- for <buildroot@buildroot.org>; Thu, 28 Mar 2024 13:14:24 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 858FF13F8B9;
- Thu, 28 Mar 2024 14:14:15 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Thu, 28 Mar 2024 14:14:15 +0100
-Date: Thu, 28 Mar 2024 14:14:15 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Heiko Thiery <heiko.thiery@gmail.com>
-Message-ID: <ZgVtJzC7VLCxua0H@landeda>
-References: <20240328122818.139194-1-heiko.thiery@gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id h7w6afZ-tqZH for <buildroot@lists.busybox.net>;
+ Thu, 28 Mar 2024 13:24:49 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::229; helo=mail-lj1-x229.google.com;
+ envelope-from=heiko.thiery@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C8D98401AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C8D98401AE
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com
+ [IPv6:2a00:1450:4864:20::229])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C8D98401AE
+ for <buildroot@buildroot.org>; Thu, 28 Mar 2024 13:24:48 +0000 (UTC)
+Received: by mail-lj1-x229.google.com with SMTP id
+ 38308e7fff4ca-2d094bc2244so9851431fa.1
+ for <buildroot@buildroot.org>; Thu, 28 Mar 2024 06:24:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1711632286; x=1712237086;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=dB+tTpW10ax4clgbpLEpvMqt46Aj7JDKTtdyorCvHKw=;
+ b=ByqLEBMfqN7od8M24aB1vDhjPzHSNcATrx1PnSqrADAhKBgpHb5l/8y1DODAYIe2LN
+ 8fHOoFXQQRrGaTTKaxF3jVIxacEbQR1FNZHzLa6+3lwvetAiCpx78NLWjmWGkCgnSsPy
+ P24FhAN20pgPXlOoNIxUgQrVyesQM7VJjiQfNcTAlTfXzxNUVu/GhlQVP4NhulPoXmaG
+ 9tjkKzMtmAvZ7qHoUQyVJ4t7A5CDfp77XRD3CxBepTttEbnAM3hw1bkTJPGNz/BbxcmR
+ Bwd9HZ9iz4WPpzP1E4ZYMQiL6qnKp7MM5VffWM26Jxapvq8utI6WJRDRAD9wqjo0G2Xx
+ Ne5Q==
+X-Gm-Message-State: AOJu0YwKjL9UUL/yAgT1Km+FRxpH1qEJ/xqhS9G+B7915H3Giq1iyzCs
+ HYLCbPcEY+ruvAPDRA0HOrYtBSGEtBGSssPAYJPknD0WB4dSAoyKFV0bBkqjq3FfijiqW+6abJz
+ lCVGGRuArhjV5ohF9iTPO7XSqYg0=
+X-Google-Smtp-Source: AGHT+IE/WnMB4mJUH2TavUxS3//dKNPGYp2qes7BhmVB4VYX1pKmrMQwBkwbYOo0e++YLcU50/aohmIUJtMRBTwFuaI=
+X-Received: by 2002:a05:651c:1a24:b0:2d7:e61:caea with SMTP id
+ by36-20020a05651c1a2400b002d70e61caeamr771054ljb.21.1711632286162; Thu, 28
+ Mar 2024 06:24:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240328122818.139194-1-heiko.thiery@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1711631660;
- bh=rDdf4r8bBZQEvaI8C9guQJw9GECDjr4/xGMz6xNc8mE=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=A4ANxwLg9L0Cn/h4dlyb4Jt/6jD+KGTYLvbP+JTliYRZbmjEXM/iRTwlL93erT+MH
- 4YeWQuJ/+bAlSmPp8C8PFwYROMV0O5iY67Ohc5k+1zaioNRlSMJqFkSw59nRAx8jIk
- e0beEgIJVA5IKPjOJNfxA7I4F10t1a9a1qLxCl4l4wT8J9lacvg8WBp9/6Yn9wuiu8
- bzsc9TguMB09RqvqAVCecIGUrQWFU97XsDcbF71YVk8H8TBCDEobMPSdsx5LrIRWLF
- 6x4ttqI+vuDbAOhPPjxuTZ4LksckMJ/qQIOMYA/Gm5JseS/uTL+iKifhDUG/o51l7q
- 8A7aNXW+qzUNg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+References: <20240328122818.139194-1-heiko.thiery@gmail.com>
+ <ZgVtJzC7VLCxua0H@landeda>
+In-Reply-To: <ZgVtJzC7VLCxua0H@landeda>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Thu, 28 Mar 2024 14:24:34 +0100
+Message-ID: <CAEyMn7bE3sXSQwHPSovj0qWjcQTxSSNtVNShW2weJhFoxK3Sfg@mail.gmail.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1711632286; x=1712237086; darn=buildroot.org;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=dB+tTpW10ax4clgbpLEpvMqt46Aj7JDKTtdyorCvHKw=;
+ b=iKtXtEh7m6CwLEcgca0ILG051/BFl0M1T53m8mtrDeJv7Toer2jgo/iEGXEgIFnx7I
+ 1FHJ3HCfSvkLedW+DNXDM0lz88wak0FG/6mGFaHWowxn0MnF83ngHfxYECUM4ja5vmX+
+ YYJCIFh24uVwOq3KnaaNlovl+icvCq/abl4KpS539U68ES3XrsYx5W8sIDFL5c+pzZGW
+ 1GWPcIy4vOqBXkEHytKvBAPUYPBmr1MI2M7ZF7gYWz81Nb4UW4zqkMGr+tw1ThKK68yI
+ jg5mw5G8HSz3HIPXhnapZoet3Uk4gGAvKUpC0J0my93618krtKm5ZcxOh4RQa88JiWkx
+ 7ZBg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=A4ANxwLg
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=iKtXtEh7
 Subject: Re: [Buildroot] [PATCH] Add
  BR2_ROOTFS_POST_{PRE_BUILD|POST_BUILD|FAKEROOT|IMAGE}_SCRIPT_ARGS
 X-BeenThere: buildroot@buildroot.org
@@ -86,262 +103,86 @@ Cc: Michael Walle <michael@walle.cc>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
  buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Heiko, All,
-
-On 2024-03-28 13:28 +0100, Heiko Thiery spake thusly:
-> You only can specify one list of arguments that are passed to several
-> scripts (BR2_ROOTFS_PRE_BUILD_SCRIPT, BR2_ROOTFS_POST_BUILD_SCRIPT,
-> BR2_ROOTFS_POST_FAKEROOT_SCRIPT and BR2_ROOTFS_POST_IMAGE_SCRIPT_ARGS).
-> 
-> So you have to be careful that the arguments for these scripts do not collide.
-> 
-> To allow specifiying dedicated arguments to each of the script the new
-> config options are introduced. For backward compatibility the value of
-> BR2_ROOTFS_POST_SCRIPT_ARGS is passed to the scripts in case the
-> specific argument values are not present.
-> 
-> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> ---
->  Makefile                              |  9 ++--
->  docs/manual/customize-post-image.adoc |  5 +++
->  docs/manual/customize-rootfs.adoc     |  6 +++
->  fs/common.mk                          |  2 +-
->  system/Config.in                      | 64 ++++++++++++++++++++++++---
->  5 files changed, 76 insertions(+), 10 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 91973cca60..b2fd3e881b 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -584,7 +584,8 @@ $(BUILD_DIR)/buildroot-config/auto.conf: $(BR2_CONFIG)
->  prepare: $(BUILD_DIR)/buildroot-config/auto.conf
->  	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_PRE_BUILD_SCRIPT)), \
->  		$(call MESSAGE,"Executing pre-build script $(s)"); \
-> -		$(EXTRA_ENV) $(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
-> +		$(EXTRA_ENV) $(s) $(TARGET_DIR) \
-> +		$(if $(call qstrip,$(BR2_ROOTFS_PRE_BUILD_SCRIPT_ARGS)),$(call qstrip,$(BR2_ROOTFS_PRE_BUILD_SCRIPT_ARGS)),$(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS)))$(sep))
-
-I think I would just have gone with a much simpler solution:
-
-    $(EXTRA_ENV) $(s) $(TARGET_DIR) \
-        $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS) \
-        -- \
-        $(call qstrip,$(BR2_ROOTFS_PRE_BUILD_SCRIPT_ARGS))
-
-I.e. always pass the generic arguments as they are passed today, add a
-separating marker (the usual --), and then the new arguments.
-
-The advantge is that it still allows to easily pass common arguments to
-all scripts, adds the possibility to pass custom args to the different
-types of scripts (post build, fakeroot, and post image).
-
-The drawback is that it could break existing scripts that do iterate
-over their arguments, in they are not prepared to cope with --. I have
-no idea how prevalent that usage is; I would think that scripts mostly
-expects a fixed number of arguments, and refer to them with explicit
-positional args (${1}, ${2}...), or that they are expecting standard
-getopt args, like our generic support/scripts/genimage.sh, which would
-then stop processing stuff when encountering '--'.
-
-Or even simpler yet, just pass both:
-
-    $(EXTRA_ENV) $(s) \
-        $(TARGET_DIR) \
-        $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS) \
-        $(call qstrip,$(BR2_ROOTFS_PRE_BUILD_SCRIPT_ARGS))
-
-The reasoning here is even simpler:
-
- 1. if people provide scripts that have a scommon set of args, and each
-    type of scripts have special args, that just works:
-    - if args are only positional, scripts have to hardcode that
-      knowledge, so they know how to interpret the positionl args,
-    - if scripts use option parsing, like with getopt, then that also
-      automagically works
-    In both cases, they can decide to pass the common args with the
-    existing BR2_ROOTFS_POST_SCRIPT_ARGS, and the specific args with the
-    new BR2_ROOTFS_PRE_BUILD_SCRIPT_ARGS, or they can decide to ignore
-    he former  and ionly use the latter;
-
- 2. if people provide scripts that have no common args, then they're
-    back to the situation above, where the set of common args is just
-    empty.
-
-So, I think this last, simpler option is the best soltuion.
-
-Thoughts?
-
-Regards,
-Yann E. MORIN.
-
->  .PHONY: world
->  world: target-post-image
-> @@ -801,7 +802,8 @@ endif # merged /usr
->  
->  	$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
->  		@$(call MESSAGE,"Executing post-build script $(s)")$(sep) \
-> -		$(Q)$(EXTRA_ENV) $(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
-> +		$(Q)$(EXTRA_ENV) $(s) $(TARGET_DIR) \
-> +		$(if $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT_ARGS)),$(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT_ARGS)),$(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS)))$(sep))
->  
->  	touch $(TARGET_DIR)/usr
->  
-> @@ -819,7 +821,8 @@ target-post-image: $(TARGETS_ROOTFS) target-finalize staging-finalize
->  	$(Q)mkdir -p $(BINARIES_DIR)
->  	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
->  		$(call MESSAGE,"Executing post-image script $(s)"); \
-> -		$(EXTRA_ENV) $(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
-> +		$(EXTRA_ENV) $(s) $(BINARIES_DIR) \
-> +		$(if $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT_ARGS)),$(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT_ARGS)),$(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS)))$(sep))
->  
->  .PHONY: source
->  source: $(foreach p,$(PACKAGES),$(p)-all-source)
-> diff --git a/docs/manual/customize-post-image.adoc b/docs/manual/customize-post-image.adoc
-> index 5308093d06..1f11cf915f 100644
-> --- a/docs/manual/customize-post-image.adoc
-> +++ b/docs/manual/customize-post-image.adoc
-> @@ -26,6 +26,11 @@ arguments will be passed to the script too. All the scripts will be
->  passed the exact same set of arguments, it is not possible to pass
->  different sets of arguments to each script.
->  
-> +Note that the arguments from +BR2_ROOTFS_POST_SCRIPT_ARGS+ will also be
-> +passed to post-build and post-fakeroot scripts. If you want to use
-> +arguments that are only used for the post-image scripts you can use
-> ++BR2_ROOTFS_POST_IMAGE_SCRIPT_ARGS+.
-> +
->  Again just like for the post-build scripts, the scripts have access to
->  the environment variables +BR2_CONFIG+, +HOST_DIR+, +STAGING_DIR+,
->  +TARGET_DIR+, +BUILD_DIR+, +BINARIES_DIR+, +CONFIG_DIR+ and
-> diff --git a/docs/manual/customize-rootfs.adoc b/docs/manual/customize-rootfs.adoc
-> index d5d8b9288f..1384c1d2d3 100644
-> --- a/docs/manual/customize-rootfs.adoc
-> +++ b/docs/manual/customize-rootfs.adoc
-> @@ -56,6 +56,12 @@ The post-build scripts are run with the main Buildroot tree as current
->    passed to the script too. All the scripts will be passed the exact
->    same set of arguments, it is not possible to pass different sets of
->    arguments to each script.
-> +
-> +  Note that the arguments from +BR2_ROOTFS_POST_SCRIPT_ARGS+ will also be
-> +  passed to post-image and post-fakeroot scripts. If you want to use
-> +  arguments that are only used for the post-build scripts you can use
-> +  +BR2_ROOTFS_POST_BUILD_SCRIPT_ARGS+.
-> +
->  +
->  In addition, you may also use these environment variables:
->  
-> diff --git a/fs/common.mk b/fs/common.mk
-> index 37eafac4f7..b3fdc28f1d 100644
-> --- a/fs/common.mk
-> +++ b/fs/common.mk
-> @@ -182,7 +182,7 @@ $$(BINARIES_DIR)/$$(ROOTFS_$(2)_FINAL_IMAGE_NAME): $$(ROOTFS_$(2)_DEPENDENCIES)
->  		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
->  	$$(foreach s,$$(call qstrip,$$(BR2_ROOTFS_POST_FAKEROOT_SCRIPT)),\
->  		echo "echo '$$(TERM_BOLD)>>>   Executing fakeroot script $$(s)$$(TERM_RESET)'" >> $$(FAKEROOT_SCRIPT); \
-> -		echo $$(EXTRA_ENV) $$(s) $$(TARGET_DIR) $$(BR2_ROOTFS_POST_SCRIPT_ARGS) >> $$(FAKEROOT_SCRIPT)$$(sep))
-> +		echo $$(EXTRA_ENV) $$(s) $$(TARGET_DIR) $$(if $$(call qstrip,$$(BR2_ROOTFS_POST_FAKEROOT_SCRIPT_ARGS)),$$(BR2_ROOTFS_POST_FAKEROOT_SCRIPT_ARGS),$$(BR2_ROOTFS_POST_SCRIPT_ARGS)) >> $$(FAKEROOT_SCRIPT)$$(sep))
->  
->  	$$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),\
->  		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
-> diff --git a/system/Config.in b/system/Config.in
-> index 33ca69b933..1a0b904a4b 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -695,20 +695,72 @@ config BR2_ROOTFS_POST_IMAGE_SCRIPT
->  
->  config BR2_ROOTFS_POST_SCRIPT_ARGS
->  	string "Extra arguments passed to custom scripts"
-> -	depends on BR2_ROOTFS_POST_BUILD_SCRIPT != "" \
-> +	depends on BR2_ROOTFS_PRE_BUILD_SCRIPT != "" \
-> +	        || BR2_ROOTFS_POST_BUILD_SCRIPT != "" \
->  		|| BR2_ROOTFS_POST_FAKEROOT_SCRIPT != "" \
->  		|| BR2_ROOTFS_POST_IMAGE_SCRIPT != ""
->  	help
-> -	  Pass these additional arguments to each post-build or
-> -	  post-image scripts.
-> +	  Pass these additional arguments to each pre-build, post-build,
-> +	  post-fakeroot and post-image scripts.
->  
->  	  Note that all the post-build and post-image scripts will be
->  	  passed the same set of arguments, you can not pass different
->  	  arguments to each script.
->  
->  	  Note also, as stated in their respective help text, that the
-> -	  first argument to each post-build or post-image script is the
-> -	  target directory / images directory. The arguments in this
-> -	  option will be passed *after* those.
-> +	  first argument to each script is the target directory / images
-> +	  directory. The arguments in this option will be passed *after* those.
-> +
-> +config BR2_ROOTFS_PRE_BUILD_SCRIPT_ARGS
-> +	string "Extra arguments passed to BR2_ROOTFS_PRE_BUILD_SCRIPT"
-> +	depends on BR2_ROOTFS_PRE_BUILD_SCRIPT != ""
-> +	help
-> +	  Pass these additional arguments to the pre-build script.
-> +
-> +	  Note that BR2_ROOTFS_POST_SCRIPT_ARGS is ignored for pre-build
-> +	  scripts if this option is set.
-> +
-> +	  Note also, as stated in the respective help text, that the
-> +	  first argument to each script is the target directory.
-> +	  The arguments in this option will be passed *after* those.
-> +
-> +config BR2_ROOTFS_POST_BUILD_SCRIPT_ARGS
-> +	string "Extra arguments passed to BR2_ROOTFS_POST_BUILD_SCRIPT"
-> +	depends on BR2_ROOTFS_POST_BUILD_SCRIPT != ""
-> +	help
-> +	  Pass these additional arguments to the post-build script.
-> +
-> +	  Note that BR2_ROOTFS_POST_SCRIPT_ARGS is ignored for post-build
-> +	  scripts if this option is set.
-> +
-> +	  Note also, as stated in the respective help text, that the
-> +	  first argument to each script is the target directory.
-> +	  The arguments in this option will be passed *after* those.
-> +
-> +config BR2_ROOTFS_POST_FAKEROOT_SCRIPT_ARGS
-> +	string "Extra arguments passed to BR2_ROOTFS_POST_FAKEROOT_SCRIPT"
-> +	depends on BR2_ROOTFS_POST_FAKEROOT_SCRIPT != ""
-> +	help
-> +	  Pass these additional arguments to the post-fakeroot script.
-> +
-> +	  Note that BR2_ROOTFS_POST_SCRIPT_ARGS is ignored for post-fakeroot
-> +	  scripts if this option is set.
-> +
-> +	  Note also, as stated in the respective help text, that the
-> +	  first argument to each script is the target directory.
-> +	  The arguments in this option will be passed *after* those.
-> +
-> +config BR2_ROOTFS_POST_IMAGE_SCRIPT_ARGS
-> +	string "Extra arguments passed to POST_IMAGE_SCRIPT"
-> +	depends on BR2_ROOTFS_POST_IMAGE_SCRIPT != ""
-> +	help
-> +	  Pass these additional arguments to the post-image script.
-> +
-> +	  Note that BR2_ROOTFS_POST_SCRIPT_ARGS is ignored for post-image
-> +	  scripts if this option is set.
-> +
-> +	  Note also, as stated in the respective help text, that the
-> +	  first argument to each script is the images directory.
-> +	  The arguments in this option will be passed *after* those.
->  
->  endmenu
-> -- 
-> 2.39.2
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgWWFubiwKCkFtIERvLiwgMjguIE3DpHJ6IDIwMjQgdW0gMTQ6MTQgVWhyIHNjaHJpZWIgWWFu
+biBFLiBNT1JJTgo8eWFubi5tb3Jpbi4xOTk4QGZyZWUuZnI+Ogo+Cj4gSGVpa28sIEFsbCwKPgo+
+IE9uIDIwMjQtMDMtMjggMTM6MjggKzAxMDAsIEhlaWtvIFRoaWVyeSBzcGFrZSB0aHVzbHk6Cj4g
+PiBZb3Ugb25seSBjYW4gc3BlY2lmeSBvbmUgbGlzdCBvZiBhcmd1bWVudHMgdGhhdCBhcmUgcGFz
+c2VkIHRvIHNldmVyYWwKPiA+IHNjcmlwdHMgKEJSMl9ST09URlNfUFJFX0JVSUxEX1NDUklQVCwg
+QlIyX1JPT1RGU19QT1NUX0JVSUxEX1NDUklQVCwKPiA+IEJSMl9ST09URlNfUE9TVF9GQUtFUk9P
+VF9TQ1JJUFQgYW5kIEJSMl9ST09URlNfUE9TVF9JTUFHRV9TQ1JJUFRfQVJHUykuCj4gPgo+ID4g
+U28geW91IGhhdmUgdG8gYmUgY2FyZWZ1bCB0aGF0IHRoZSBhcmd1bWVudHMgZm9yIHRoZXNlIHNj
+cmlwdHMgZG8gbm90IGNvbGxpZGUuCj4gPgo+ID4gVG8gYWxsb3cgc3BlY2lmaXlpbmcgZGVkaWNh
+dGVkIGFyZ3VtZW50cyB0byBlYWNoIG9mIHRoZSBzY3JpcHQgdGhlIG5ldwo+ID4gY29uZmlnIG9w
+dGlvbnMgYXJlIGludHJvZHVjZWQuIEZvciBiYWNrd2FyZCBjb21wYXRpYmlsaXR5IHRoZSB2YWx1
+ZSBvZgo+ID4gQlIyX1JPT1RGU19QT1NUX1NDUklQVF9BUkdTIGlzIHBhc3NlZCB0byB0aGUgc2Ny
+aXB0cyBpbiBjYXNlIHRoZQo+ID4gc3BlY2lmaWMgYXJndW1lbnQgdmFsdWVzIGFyZSBub3QgcHJl
+c2VudC4KPiA+Cj4gPiBTaWduZWQtb2ZmLWJ5OiBIZWlrbyBUaGllcnkgPGhlaWtvLnRoaWVyeUBn
+bWFpbC5jb20+Cj4gPiAtLS0KPiA+ICBNYWtlZmlsZSAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgIHwgIDkgKystLQo+ID4gIGRvY3MvbWFudWFsL2N1c3RvbWl6ZS1wb3N0LWltYWdlLmFkb2Mg
+fCAgNSArKysKPiA+ICBkb2NzL21hbnVhbC9jdXN0b21pemUtcm9vdGZzLmFkb2MgICAgIHwgIDYg
+KysrCj4gPiAgZnMvY29tbW9uLm1rICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAyICstCj4g
+PiAgc3lzdGVtL0NvbmZpZy5pbiAgICAgICAgICAgICAgICAgICAgICB8IDY0ICsrKysrKysrKysr
+KysrKysrKysrKysrKy0tLQo+ID4gIDUgZmlsZXMgY2hhbmdlZCwgNzYgaW5zZXJ0aW9ucygrKSwg
+MTAgZGVsZXRpb25zKC0pCj4gPgo+ID4gZGlmZiAtLWdpdCBhL01ha2VmaWxlIGIvTWFrZWZpbGUK
+PiA+IGluZGV4IDkxOTczY2NhNjAuLmIyZmQzZTg4MWIgMTAwNjQ0Cj4gPiAtLS0gYS9NYWtlZmls
+ZQo+ID4gKysrIGIvTWFrZWZpbGUKPiA+IEBAIC01ODQsNyArNTg0LDggQEAgJChCVUlMRF9ESVIp
+L2J1aWxkcm9vdC1jb25maWcvYXV0by5jb25mOiAkKEJSMl9DT05GSUcpCj4gPiAgcHJlcGFyZTog
+JChCVUlMRF9ESVIpL2J1aWxkcm9vdC1jb25maWcvYXV0by5jb25mCj4gPiAgICAgICBAJChmb3Jl
+YWNoIHMsICQoY2FsbCBxc3RyaXAsJChCUjJfUk9PVEZTX1BSRV9CVUlMRF9TQ1JJUFQpKSwgXAo+
+ID4gICAgICAgICAgICAgICAkKGNhbGwgTUVTU0FHRSwiRXhlY3V0aW5nIHByZS1idWlsZCBzY3Jp
+cHQgJChzKSIpOyBcCj4gPiAtICAgICAgICAgICAgICQoRVhUUkFfRU5WKSAkKHMpICQoVEFSR0VU
+X0RJUikgJChjYWxsIHFzdHJpcCwkKEJSMl9ST09URlNfUE9TVF9TQ1JJUFRfQVJHUykpJChzZXAp
+KQo+ID4gKyAgICAgICAgICAgICAkKEVYVFJBX0VOVikgJChzKSAkKFRBUkdFVF9ESVIpIFwKPiA+
+ICsgICAgICAgICAgICAgJChpZiAkKGNhbGwgcXN0cmlwLCQoQlIyX1JPT1RGU19QUkVfQlVJTERf
+U0NSSVBUX0FSR1MpKSwkKGNhbGwgcXN0cmlwLCQoQlIyX1JPT1RGU19QUkVfQlVJTERfU0NSSVBU
+X0FSR1MpKSwkKGNhbGwgcXN0cmlwLCQoQlIyX1JPT1RGU19QT1NUX1NDUklQVF9BUkdTKSkpJChz
+ZXApKQo+Cj4gSSB0aGluayBJIHdvdWxkIGp1c3QgaGF2ZSBnb25lIHdpdGggYSBtdWNoIHNpbXBs
+ZXIgc29sdXRpb246Cj4KPiAgICAgJChFWFRSQV9FTlYpICQocykgJChUQVJHRVRfRElSKSBcCj4g
+ICAgICAgICAkKGNhbGwgcXN0cmlwLCQoQlIyX1JPT1RGU19QT1NUX1NDUklQVF9BUkdTKSBcCj4g
+ICAgICAgICAtLSBcCj4gICAgICAgICAkKGNhbGwgcXN0cmlwLCQoQlIyX1JPT1RGU19QUkVfQlVJ
+TERfU0NSSVBUX0FSR1MpKQo+Cj4gSS5lLiBhbHdheXMgcGFzcyB0aGUgZ2VuZXJpYyBhcmd1bWVu
+dHMgYXMgdGhleSBhcmUgcGFzc2VkIHRvZGF5LCBhZGQgYQo+IHNlcGFyYXRpbmcgbWFya2VyICh0
+aGUgdXN1YWwgLS0pLCBhbmQgdGhlbiB0aGUgbmV3IGFyZ3VtZW50cy4KPgo+IFRoZSBhZHZhbnRn
+ZSBpcyB0aGF0IGl0IHN0aWxsIGFsbG93cyB0byBlYXNpbHkgcGFzcyBjb21tb24gYXJndW1lbnRz
+IHRvCj4gYWxsIHNjcmlwdHMsIGFkZHMgdGhlIHBvc3NpYmlsaXR5IHRvIHBhc3MgY3VzdG9tIGFy
+Z3MgdG8gdGhlIGRpZmZlcmVudAo+IHR5cGVzIG9mIHNjcmlwdHMgKHBvc3QgYnVpbGQsIGZha2Vy
+b290LCBhbmQgcG9zdCBpbWFnZSkuCj4KPiBUaGUgZHJhd2JhY2sgaXMgdGhhdCBpdCBjb3VsZCBi
+cmVhayBleGlzdGluZyBzY3JpcHRzIHRoYXQgZG8gaXRlcmF0ZQo+IG92ZXIgdGhlaXIgYXJndW1l
+bnRzLCBpbiB0aGV5IGFyZSBub3QgcHJlcGFyZWQgdG8gY29wZSB3aXRoIC0tLiBJIGhhdmUKPiBu
+byBpZGVhIGhvdyBwcmV2YWxlbnQgdGhhdCB1c2FnZSBpczsgSSB3b3VsZCB0aGluayB0aGF0IHNj
+cmlwdHMgbW9zdGx5Cj4gZXhwZWN0cyBhIGZpeGVkIG51bWJlciBvZiBhcmd1bWVudHMsIGFuZCBy
+ZWZlciB0byB0aGVtIHdpdGggZXhwbGljaXQKPiBwb3NpdGlvbmFsIGFyZ3MgKCR7MX0sICR7Mn0u
+Li4pLCBvciB0aGF0IHRoZXkgYXJlIGV4cGVjdGluZyBzdGFuZGFyZAo+IGdldG9wdCBhcmdzLCBs
+aWtlIG91ciBnZW5lcmljIHN1cHBvcnQvc2NyaXB0cy9nZW5pbWFnZS5zaCwgd2hpY2ggd291bGQK
+PiB0aGVuIHN0b3AgcHJvY2Vzc2luZyBzdHVmZiB3aGVuIGVuY291bnRlcmluZyAnLS0nLgo+Cj4g
+T3IgZXZlbiBzaW1wbGVyIHlldCwganVzdCBwYXNzIGJvdGg6Cj4KPiAgICAgJChFWFRSQV9FTlYp
+ICQocykgXAo+ICAgICAgICAgJChUQVJHRVRfRElSKSBcCj4gICAgICAgICAkKGNhbGwgcXN0cmlw
+LCQoQlIyX1JPT1RGU19QT1NUX1NDUklQVF9BUkdTKSBcCj4gICAgICAgICAkKGNhbGwgcXN0cmlw
+LCQoQlIyX1JPT1RGU19QUkVfQlVJTERfU0NSSVBUX0FSR1MpKQoKSSB0aGluayB0aGlzIGlzIHJl
+YWxseSBhIGVhc2llciBzb2x1dGlvbiB3aXRoIHRoZSBhZHZhbnRhZ2Ugb2YgaGF2aW5nCmNvbW1v
+biBhcmdzIGFjcm9vcyBhbGwgc2NyaXB0IHR5cGVzLgoKPiBUaGUgcmVhc29uaW5nIGhlcmUgaXMg
+ZXZlbiBzaW1wbGVyOgo+Cj4gIDEuIGlmIHBlb3BsZSBwcm92aWRlIHNjcmlwdHMgdGhhdCBoYXZl
+IGEgc2NvbW1vbiBzZXQgb2YgYXJncywgYW5kIGVhY2gKPiAgICAgdHlwZSBvZiBzY3JpcHRzIGhh
+dmUgc3BlY2lhbCBhcmdzLCB0aGF0IGp1c3Qgd29ya3M6Cj4gICAgIC0gaWYgYXJncyBhcmUgb25s
+eSBwb3NpdGlvbmFsLCBzY3JpcHRzIGhhdmUgdG8gaGFyZGNvZGUgdGhhdAo+ICAgICAgIGtub3ds
+ZWRnZSwgc28gdGhleSBrbm93IGhvdyB0byBpbnRlcnByZXQgdGhlIHBvc2l0aW9ubCBhcmdzLAo+
+ICAgICAtIGlmIHNjcmlwdHMgdXNlIG9wdGlvbiBwYXJzaW5nLCBsaWtlIHdpdGggZ2V0b3B0LCB0
+aGVuIHRoYXQgYWxzbwo+ICAgICAgIGF1dG9tYWdpY2FsbHkgd29ya3MKPiAgICAgSW4gYm90aCBj
+YXNlcywgdGhleSBjYW4gZGVjaWRlIHRvIHBhc3MgdGhlIGNvbW1vbiBhcmdzIHdpdGggdGhlCj4g
+ICAgIGV4aXN0aW5nIEJSMl9ST09URlNfUE9TVF9TQ1JJUFRfQVJHUywgYW5kIHRoZSBzcGVjaWZp
+YyBhcmdzIHdpdGggdGhlCj4gICAgIG5ldyBCUjJfUk9PVEZTX1BSRV9CVUlMRF9TQ1JJUFRfQVJH
+Uywgb3IgdGhleSBjYW4gZGVjaWRlIHRvIGlnbm9yZQo+ICAgICBoZSBmb3JtZXIgIGFuZCBpb25s
+eSB1c2UgdGhlIGxhdHRlcjsKPgo+ICAyLiBpZiBwZW9wbGUgcHJvdmlkZSBzY3JpcHRzIHRoYXQg
+aGF2ZSBubyBjb21tb24gYXJncywgdGhlbiB0aGV5J3JlCj4gICAgIGJhY2sgdG8gdGhlIHNpdHVh
+dGlvbiBhYm92ZSwgd2hlcmUgdGhlIHNldCBvZiBjb21tb24gYXJncyBpcyBqdXN0Cj4gICAgIGVt
+cHR5Lgo+Cj4gU28sIEkgdGhpbmsgdGhpcyBsYXN0LCBzaW1wbGVyIG9wdGlvbiBpcyB0aGUgYmVz
+dCBzb2x0dWlvbi4KPgo+IFRob3VnaHRzPwoKSSB3aWxsIHJld29yayB0aGUgcGF0Y2ggYW5kIHBy
+b3ZpZGUgYW4gdXBkYXRlZCBvbmUuCgotLSAKSGVpa28KX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RA
+YnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5m
+by9idWlsZHJvb3QK
