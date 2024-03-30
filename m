@@ -4,90 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41687C6FD1F
-	for <buildroot@archiver.kernel.org>; Sat, 30 Mar 2024 18:00:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF4BBCD1288
+	for <buildroot@archiver.kernel.org>; Sat, 30 Mar 2024 18:39:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D7BD7405D5;
-	Sat, 30 Mar 2024 18:00:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9280840649;
+	Sat, 30 Mar 2024 18:39:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tLqycpsi0gQs; Sat, 30 Mar 2024 18:00:33 +0000 (UTC)
+ id kQLzGa2GLPR6; Sat, 30 Mar 2024 18:39:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 92016405E1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4AC264064B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 92016405E1;
-	Sat, 30 Mar 2024 18:00:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AF8DF1BF27E
- for <buildroot@lists.busybox.net>; Sat, 30 Mar 2024 18:00:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4AC264064B;
+	Sat, 30 Mar 2024 18:39:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C86BB1BF2F2
+ for <buildroot@lists.busybox.net>; Sat, 30 Mar 2024 18:39:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9D95C4011B
- for <buildroot@lists.busybox.net>; Sat, 30 Mar 2024 18:00:32 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B54FD606CE
+ for <buildroot@lists.busybox.net>; Sat, 30 Mar 2024 18:39:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TgGTQ0vLFt-Q for <buildroot@lists.busybox.net>;
- Sat, 30 Mar 2024 18:00:31 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Z6G1t5hRjX5n for <buildroot@lists.busybox.net>;
+ Sat, 30 Mar 2024 18:39:44 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::433; helo=mail-wr1-x433.google.com;
+ client-ip=2a00:1450:4864:20::430; helo=mail-wr1-x430.google.com;
  envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5E1FA40201
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5E1FA40201
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5E1FA40201
- for <buildroot@buildroot.org>; Sat, 30 Mar 2024 18:00:30 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id
- ffacd0b85a97d-34175878e3cso2184815f8f.0
- for <buildroot@buildroot.org>; Sat, 30 Mar 2024 11:00:30 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8887D60621
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8887D60621
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8887D60621
+ for <buildroot@buildroot.org>; Sat, 30 Mar 2024 18:39:43 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id
+ ffacd0b85a97d-34175878e3cso2200478f8f.0
+ for <buildroot@buildroot.org>; Sat, 30 Mar 2024 11:39:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1711821628; x=1712426428;
+ d=1e100.net; s=20230601; t=1711823981; x=1712428781;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=qaVcLjRAIT0dIDHPlb5bwJ+0+OXMXTppkt3dLRgbTwE=;
- b=F4na3n+WWMIL+1XkCbueA47uCO8LiZmzJE7cL5L+YsVauvsuaYe3/93Xcba5anHijq
- g8/vCuflqziBHEMxEXYTIwtnJIhoC9nNj5qlLaa0tIj0tETrupGAz5CNuqwMJNrVVI5g
- Oq+m4w9Zd+fyhoyfSxrItZcikuBbiSvp4e6WiSYhtm7GuzvdyUEKHoekgXCF/Y4bEc1B
- 6EuBXP8/Ji9is5eOjiwSa+z3jBEK30lwdnIIVSdZy5ZpnyBAJCegyFobLpzZC9oYECGw
- nj7O65aPQEj9buMuOv9uD9d5jLSUb9DJSSLAo3pbWwjivgzywVRQx+XOTs9ta1LQvcIX
- A/wQ==
-X-Gm-Message-State: AOJu0Yx8JI9DSEBqi5zNtjM4/xytpvS1ruKTBLug/Gn3ma4fjBGhQGc7
- +SOSZqMzR3S36K6QKK7YHluk3TRQEafmLyJFku+HB0E+fK9qugUyTdLVujui
-X-Google-Smtp-Source: AGHT+IEGVjtvy1SHara2SpFshXONOz9+0/hxfVMZpiUJdRVwqLNs4niWxtkkkYOHvi7FXPFb0cwxDA==
-X-Received: by 2002:a05:6000:4014:b0:33e:7333:d459 with SMTP id
- cp20-20020a056000401400b0033e7333d459mr4871123wrb.49.1711821627794; 
- Sat, 30 Mar 2024 11:00:27 -0700 (PDT)
+ bh=X6kbZr4JHn8P1o4AKXuQXCxN78iPISQdLENCcXW+kDk=;
+ b=WLjSfrHzLUZ1jJZP/oRrmdJcvgf52wgfoW7QF6y/BxLuKdHiELPEOsGlXfrX6GzuCQ
+ 5ONftKvnbmEHWych+dporTNiaelwPaGnRsrr2zcCGDZlV3F1hCdYoNKiIxOmByP4Tl6q
+ R2hm/xy40YM3AjQOejjBVME+uHYiwPHejF0lPny0ltCDFbI09fn9ILQY7mn0O2MHUZpU
+ CGBKP1ZXRkY2Mok4WeL1hJ3CzaBkq4KWg5V2YvWi06jRzzVlYDIy9x51QRb8jXsRqPUG
+ 3mEx7S9/UQV7+kyhUqz99NES2eaJqtYRWaJOzV3NM+MzUo3k8QbNH08ng5ywZdEn3vj6
+ 6jWA==
+X-Gm-Message-State: AOJu0Yy9/DOEYRhl1WCnqcwR6z15YqjUxAnMXCHH5COL1qaWyvKajFFq
+ fInEzb1FYDXuSOAx9hKxBJfMxG+u4j2Ox6R2cuieoUGcH+V7nQ0Sz6u4IKDo
+X-Google-Smtp-Source: AGHT+IH/3WrK05z5ivhtvIUI1XVHzGbiZkskJ7mOoCqd9LJmfSfq9Y1Y48V/UH4ZedAszB2oGpINig==
+X-Received: by 2002:a5d:4843:0:b0:343:3425:c06b with SMTP id
+ n3-20020a5d4843000000b003433425c06bmr3772409wrs.20.1711823980877; 
+ Sat, 30 Mar 2024 11:39:40 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- t1-20020adfe441000000b0033e756ed840sm6946013wrm.47.2024.03.30.11.00.27
+ o17-20020a5d6851000000b0033ec9936909sm7002838wrw.39.2024.03.30.11.39.40
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 30 Mar 2024 11:00:27 -0700 (PDT)
+ Sat, 30 Mar 2024 11:39:40 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 30 Mar 2024 19:00:23 +0100
-Message-ID: <20240330180023.787791-1-fontaine.fabrice@gmail.com>
+Date: Sat, 30 Mar 2024 19:39:38 +0100
+Message-ID: <20240330183938.882905-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1711821628; x=1712426428; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1711823981; x=1712428781; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=qaVcLjRAIT0dIDHPlb5bwJ+0+OXMXTppkt3dLRgbTwE=;
- b=atesUYbx3o2TEqnidrjzD2ZoevP/HdAmqvKzkezc3VQ2FtwT8159IZE2btS4As1ifZ
- OGHUN9oynY0qnvczwKj7J77bxWqJ1Ip5qrpOEeSYRlJVe5DejV+12z5rmgz1RgIyHJxj
- cT6r7V7i2hdRsQeStBfRVAZ2P39RkHp1m39pIzUq+jFiaAH5bVOcYOqZTKO+yHa2gV3s
- 5fdQ19giKi4ZlZ46IbRT1wFnILS2R7OuJz4ssdjTGxOO5MNt/B425BLKP7KY+K/ug2/4
- wfsBu/U52lNLcL4sf6dS83a+vTYjLnDcfmwIgQpbappoveJWX4/X3iFDAHFx90/UhK7s
- ehuw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=X6kbZr4JHn8P1o4AKXuQXCxN78iPISQdLENCcXW+kDk=;
+ b=GQvZ3YPMkKhcs2qX5NnX0PTNoqPZoSvWOu4aWcEhIEDDeruIYenMNe/0EVa61xuUmj
+ H0MRoKoz/h27A8oBC0AtX0gZUVALGxtSl40FnC9oHXfECbAMkVGsE/hpwjR8+KqXWMPI
+ 4bZc1qWGpMx/vBfQnFAPW3cS25kSXp+Ulg+QeK0VQbCy6yrSVp2TE5/S8ZZ0Wfy/8qiO
+ vsTHyvq4BUJBaAcOnqGsPyluG+iI39az1eIPWlWldNBibJhItkjTD5Qbb3Hgdbfx10Mq
+ SHNcx2OsYLs+D48ke9Ao/XUlAa1cXMNFkaOU80mcAQZ7wjOFZGSABGkAlg/NJK70QoUR
+ VPhQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=atesUYbx
-Subject: [Buildroot] [PATCH 1/1] package/php: fix build without threads
+ header.a=rsa-sha256 header.s=20230601 header.b=GQvZ3YPM
+Subject: [Buildroot] [PATCH 1/1] package/dav1d: fix riscv32 build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,68 +106,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure without threads raised since bump to
-version 8.3.4 in commit e50460f9f12a8c5f82f2166733afe9cca3c8cd19 and
-https://github.com/php/php-src/commit/a11c8a30399e90c17c287b9656c0077bc5131c9c:
+Fix the following riscv32 build failure raised since bump to version
+1.4.1 in commit d8c440936d51b7f76472b43002780f5490b7a3bf and
+https://github.com/videolan/dav1d/commit/43ee02a99cce1f221bdb574c9ee484180d71013f:
 
-/home/buildroot/instance-0/output-1/build/php-8.3.4/Zend/zend_call_stack.c:39:11: fatal error: pthread.h: No such file or directory
-   39 | # include <pthread.h>
-      |           ^~~~~~~~~~~
+/home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/riscv32-buildroot-linux-gnu/13.2.0/../../../../riscv32-buildroot-linux-gnu/bin/ld: src/libdav1d_bitdepth_8.a.p/itx_tmpl.c.o: in function `.L0 ':
+itx_tmpl.c:(.text.unlikely+0x76c): undefined reference to `dav1d_inv_txfm_add_dct_dct_4x4_8bpc_rvv'
 
-Fixes: e50460f9f12a8c5f82f2166733afe9cca3c8cd19
- - http://autobuild.buildroot.org/results/a4ef648a9da50b26ed56d5d490e4cf5a1bfff970
+Fixes: d8c440936d51b7f76472b43002780f5490b7a3bf
+ - http://autobuild.buildroot.org/results/28192c494c7a2f88cc90205b6a08afd11782df40
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...ll_stack.c-fix-build-without-pthread.patch | 39 +++++++++++++++++++
- 1 file changed, 39 insertions(+)
- create mode 100644 package/php/0006-Zend-zend_call_stack.c-fix-build-without-pthread.patch
+ package/dav1d/dav1d.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/php/0006-Zend-zend_call_stack.c-fix-build-without-pthread.patch b/package/php/0006-Zend-zend_call_stack.c-fix-build-without-pthread.patch
-new file mode 100644
-index 0000000000..10b0083655
---- /dev/null
-+++ b/package/php/0006-Zend-zend_call_stack.c-fix-build-without-pthread.patch
-@@ -0,0 +1,39 @@
-+From c3e37c438a11d59d858fcc7b46eac00a8074972b Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 30 Mar 2024 17:51:55 +0100
-+Subject: [PATCH] Zend/zend_call_stack.c: fix build without pthread
+diff --git a/package/dav1d/dav1d.mk b/package/dav1d/dav1d.mk
+index 74c68d1660..36a94da6e4 100644
+--- a/package/dav1d/dav1d.mk
++++ b/package/dav1d/dav1d.mk
+@@ -24,6 +24,11 @@ ifeq ($(BR2_ARM_CPU_ARMV4)$(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV7M),y)
+ DAV1D_CONF_OPTS += -Denable_asm=false
+ endif
+ 
++# riscv assembly requires riscv64
++ifeq ($(BR2_RISCV_64),)
++DAV1D_CONF_OPTS += -Denable_asm=false
++endif
 +
-+Fix the following build failure without pthread raised since version
-+8.3.0 and
-+https://github.com/php/php-src/commit/a11c8a30399e90c17c287b9656c0077bc5131c9c:
-+
-+/home/buildroot/instance-0/output-1/build/php-8.3.4/Zend/zend_call_stack.c:39:11: fatal error: pthread.h: No such file or directory
-+   39 | # include <pthread.h>
-+      |           ^~~~~~~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/a4ef648a9da50b26ed56d5d490e4cf5a1bfff970
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Upstream: https://github.com/php/php-src/pull/13843
-+---
-+ Zend/zend_call_stack.c | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/Zend/zend_call_stack.c b/Zend/zend_call_stack.c
-+index 97cbed9041..97de938a0f 100644
-+--- a/Zend/zend_call_stack.c
-++++ b/Zend/zend_call_stack.c
-+@@ -35,7 +35,8 @@
-+ #  include <sys/types.h>
-+ # endif
-+ #endif /* ZEND_WIN32 */
-+-#if defined(__linux__) || defined(__FreeBSD__) || defined(__APPLE__) || defined(__OpenBSD__)
-++#if (defined(HAVE_PTHREAD_GETATTR_NP) && defined(HAVE_PTHREAD_ATTR_GETSTACK)) || \
-++    defined(__FreeBSD__) || defined(__APPLE__) || defined(__OpenBSD__)
-+ # include <pthread.h>
-+ #endif
-+ #ifdef __FreeBSD__
-+-- 
-+2.43.0
-+
+ # Uses __atomic_fetch_add_4
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ DAV1D_LDFLAGS += $(TARGET_LDFLAGS) -latomic
 -- 
 2.43.0
 
