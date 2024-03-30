@@ -4,92 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26F1BC6FD1F
-	for <buildroot@archiver.kernel.org>; Sat, 30 Mar 2024 21:22:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB965CD1288
+	for <buildroot@archiver.kernel.org>; Sat, 30 Mar 2024 21:39:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8D6F781DF8;
-	Sat, 30 Mar 2024 21:22:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 77A7B81D02;
+	Sat, 30 Mar 2024 21:39:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id b2Xt-m-NADFv; Sat, 30 Mar 2024 21:22:18 +0000 (UTC)
+ id YpfrnFuivm3Q; Sat, 30 Mar 2024 21:39:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 990FE81DFB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5444981D19
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 990FE81DFB;
-	Sat, 30 Mar 2024 21:22:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3B9821BF4E6
- for <buildroot@lists.busybox.net>; Sat, 30 Mar 2024 21:22:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5444981D19;
+	Sat, 30 Mar 2024 21:39:21 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 14DAA1BF283
+ for <buildroot@lists.busybox.net>; Sat, 30 Mar 2024 21:39:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 283EB60616
- for <buildroot@lists.busybox.net>; Sat, 30 Mar 2024 21:22:17 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0A12E81D02
+ for <buildroot@lists.busybox.net>; Sat, 30 Mar 2024 21:39:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mptoS0KHwhHD for <buildroot@lists.busybox.net>;
- Sat, 30 Mar 2024 21:22:16 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IcnAvG4RMiCS for <buildroot@lists.busybox.net>;
+ Sat, 30 Mar 2024 21:39:16 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::232; helo=mail-lj1-x232.google.com;
+ client-ip=2607:f8b0:4864:20::22d; helo=mail-oi1-x22d.google.com;
  envelope-from=aladyshev22@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4C30E60613
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C30E60613
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com
- [IPv6:2a00:1450:4864:20::232])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4C30E60613
- for <buildroot@buildroot.org>; Sat, 30 Mar 2024 21:22:16 +0000 (UTC)
-Received: by mail-lj1-x232.google.com with SMTP id
- 38308e7fff4ca-2d094bc2244so32864551fa.1
- for <buildroot@buildroot.org>; Sat, 30 Mar 2024 14:22:16 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B9B5881CE7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B9B5881CE7
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com
+ [IPv6:2607:f8b0:4864:20::22d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B9B5881CE7
+ for <buildroot@buildroot.org>; Sat, 30 Mar 2024 21:39:15 +0000 (UTC)
+Received: by mail-oi1-x22d.google.com with SMTP id
+ 5614622812f47-3c36ecdb8cdso1432634b6e.1
+ for <buildroot@buildroot.org>; Sat, 30 Mar 2024 14:39:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1711833734; x=1712438534;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=SDwtxc4CfCQROUtX9+b/ZEchrgSuA9ysH5ojJRF8Zpw=;
- b=vV0X1JHNne0q5/JiZvmGmS21fymvaq+Dm1VsKE7dB66VZjeSKyiOp5UfSnLfWdcv5b
- UQtqb1Xdjg9hcUH/R477pv57cL2f/y7/zK00FaFSxcjN4A1rkNgs7j4gHR+7VKrf0rqn
- WZrofXynUau6WPlLRCinrwBiZMfrwhLYVl7JdwURhPl7asdia8aBToHUleHEAnmgxtWK
- NIVXsMtnY8Go0kEs++WkmSqYxqZIDrdmjdxgCW9MSFWrUYF/NV2j2PkH6vtiz6ys/Px9
- mCfVgP25eRTHnQCh0dVzIbxdVn5WX57/8/aAz1U/4Uz4ZTkPXgsWQcsAOjcn/YU+wulN
- VYUg==
-X-Gm-Message-State: AOJu0YwthM3ViLt2opXh+aGqYHVpxSV1e5YYt+/QuPM1Gt9tXpvUHz8B
- YyMmFnQKWYYGt0a4HVxC/Im2v8YW5YFzKaWF+F1ENYXzVL18Jz9S9U2aWWh9
-X-Google-Smtp-Source: AGHT+IFg38oayNwAZ1eaR25vyADiWSB7TUWC6xsWR97CWe54h8oIEcXOdPwe60GYY8c/3gkJPwDeQw==
-X-Received: by 2002:ac2:4da1:0:b0:515:d1c8:e486 with SMTP id
- h1-20020ac24da1000000b00515d1c8e486mr2936138lfe.35.1711833733440; 
- Sat, 30 Mar 2024 14:22:13 -0700 (PDT)
-Received: from localhost.localdomain (broadband-46-242-12-48.ip.moscow.rt.ru.
- [46.242.12.48]) by smtp.googlemail.com with ESMTPSA id
- y22-20020a0565123f1600b00515cf8e12b3sm666529lfa.91.2024.03.30.14.22.12
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 30 Mar 2024 14:22:13 -0700 (PDT)
-From: Konstantin Aladyshev <aladyshev22@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun, 31 Mar 2024 00:22:00 +0300
-Message-Id: <20240330212200.794927-1-aladyshev22@gmail.com>
-X-Mailer: git-send-email 2.34.1
+ d=1e100.net; s=20230601; t=1711834754; x=1712439554;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=NeNlXjEPfC5/ThBKQDWJSNBi+zgV6occ/Ium3zYtqWc=;
+ b=LSAMg0lM+uTLfCxt64GBFCvp5en+ndtKOxCKNVziPFL/5DVjunge+aUXRL/FuqShaL
+ Po9zMOQjSfNKwmetmbJ48RzKLDER7y9uVI9Lkp90OU7Bo2+BD0/H/+VXwV8C18F47QV8
+ Gme++ljQZGtUtMxylyXzZXqC8gAz4Qk+8PlguhgRP7p+mWaG8e1pyqVH+18oaR4rgLEP
+ rCzoIgij7GM5wHmH1iWcjK/iFDT3GUAfB4BDcV8oFfRvllCVFMtWAXKAAyf5Pj/71AIo
+ DHV6Li3za6OJkdO+Vfu3iML1M/BXOBCeEFgoAPwm8qkD/116TtP76BZCB8wDhBtDJpqq
+ 1ckg==
+X-Gm-Message-State: AOJu0Yzwb4ISlOunJEHKEpK5znUOcBt5mzx+7xuEnChWdVY0Qiduy4ip
+ RF2rYrxRVr+1fYx1NjJEzX/5SrxWQ1Ve20oTz1d5BnKEue+I8zp5D89ahhSwaeYxDysi951yEhP
+ cQHuMSb6s7w740fSqD1yZOjAYVL0mTrJkiYM=
+X-Google-Smtp-Source: AGHT+IEMY/NB76w1WoZDCyXqFZ1cToM/5yg8ur1kFr1SIAWDhMX1h+AV7JZ9Jau4+gX1Ly4kr5m3u+aauW95d89G2fQ=
+X-Received: by 2002:a05:6808:2e43:b0:3c3:c090:5b6f with SMTP id
+ gp3-20020a0568082e4300b003c3c0905b6fmr8248472oib.0.1711834754590; Sat, 30 Mar
+ 2024 14:39:14 -0700 (PDT)
 MIME-Version: 1.0
+References: <20240311193526.32797-1-aladyshev22@gmail.com>
+ <0ddef86d-1b89-4bf3-9fe7-6c7edfcc2975@inbox.ru>
+In-Reply-To: <0ddef86d-1b89-4bf3-9fe7-6c7edfcc2975@inbox.ru>
+From: Konstantin Aladyshev <aladyshev22@gmail.com>
+Date: Sun, 31 Mar 2024 00:39:04 +0300
+Message-ID: <CACSj6VVEo05T7su=VhGxTgraU3YRx-bNRa-APr630stg=0Ew2A@mail.gmail.com>
+To: Maxim Kochetkov <fido_max@inbox.ru>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1711833733; x=1712438533; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=SDwtxc4CfCQROUtX9+b/ZEchrgSuA9ysH5ojJRF8Zpw=;
- b=REDcdE9Drw0edO0ZmVWEXuXI7Q2Vn4zLIKFKak5GhQwImq+AwkLCCwOP8m2d0pkYj9
- Hxr6taN8M/XyWZ1TdlFy1iNN7QBSzAknLstUN9yIAvceNYtGDeoArgcrf/6+8cLAIYHo
- VUwM5TbreYbPSQA71MjEF/pplLfA83cFa1gRveX15x7axBaSt1OYekxnjfrRoN0hTwhN
- /WroCxlXrXClDSkK+uE5J9NkFx2iz0yk/rTKNHR9n/Z5o/f1adPStZcIeL8ssBe4XYIa
- 6KL2Dwthul02JLBndwtHeE7cZ/dbtxIDdFndNCt8q4nGSXgk02otijOE17k86HBfWW12
- RLKg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=gmail.com; s=20230601; t=1711834754; x=1712439554; darn=buildroot.org;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=NeNlXjEPfC5/ThBKQDWJSNBi+zgV6occ/Ium3zYtqWc=;
+ b=Ygjs1YWccI1+WfJociYmsQ8U9spvbIhaYseMYU9tFl0GV3VYh0XliVufqGw8geQgGJ
+ tcScG+94wfofffoMJrdeHvzD2fLgGvuAaqN4vytOrrn6n2bWtnuzd4vgwVb/k7IcdzNN
+ IDTi3dx9fK7KECNwt6Zai1a7NOuBIK2VJOBBTggxTpjw++QRzqjnKDwDRC4Cz6fqeOuE
+ BEYIyCEZgETbehptjXz0fzsdVSgA5xxKfv1NQ1O9oBIoxf2o1PE6KXuj9ObWqkFngljJ
+ tTxtCJfo1+K/o9Q5vPOG/frgYeES3MVkXq5CrPJpaoLQ55cCejWClDEnZJR8vV/0zG0e
+ NGsQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=REDcdE9D
-Subject: [Buildroot] [PATCH] configs/pc_x86_64_{bios,
- efi}_defconfig: add wireless regdb
+ header.s=20230601 header.b=Ygjs1YWc
+Subject: Re: [Buildroot] [PATCH] configs/pc_x86_64_{bios,
+ efi}_defconfig: add CRDA package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,52 +100,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Konstantin Aladyshev <aladyshev22@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Wireless regulatory database lists the allowed radio frequencies for
-each local jurisdiction. Since linux-4.15 the kernel supports loading
-the files regulatory.db/regulatory.db.p7s directly from the
-/lib/firmware directory. Currently this package is not enabled and
-kernel complains with the following message on every boot:
-"""
-platform regulatory.0: Direct firmware load for regulatory.db failed
-with error -2
-cfg80211: failed to load regulatory.db
-"""
-Add wireless regulatory database package to fix the issue.
-
-Signed-off-by: Konstantin Aladyshev <aladyshev22@gmail.com>
----
- configs/pc_x86_64_bios_defconfig | 1 +
- configs/pc_x86_64_efi_defconfig  | 1 +
- 2 files changed, 2 insertions(+)
-
-diff --git a/configs/pc_x86_64_bios_defconfig b/configs/pc_x86_64_bios_defconfig
-index 6032544d2d..cba92ad93d 100644
---- a/configs/pc_x86_64_bios_defconfig
-+++ b/configs/pc_x86_64_bios_defconfig
-@@ -62,3 +62,4 @@ BR2_PACKAGE_ACPID=y
- BR2_PACKAGE_CONNMAN=y
- BR2_PACKAGE_CONNMAN_CLIENT=y
- BR2_PACKAGE_CONNMAN_WIFI=y
-+BR2_PACKAGE_WIRELESS_REGDB=y
-diff --git a/configs/pc_x86_64_efi_defconfig b/configs/pc_x86_64_efi_defconfig
-index afb652f3fc..fe6686b4a2 100644
---- a/configs/pc_x86_64_efi_defconfig
-+++ b/configs/pc_x86_64_efi_defconfig
-@@ -63,3 +63,4 @@ BR2_PACKAGE_ACPID=y
- BR2_PACKAGE_CONNMAN=y
- BR2_PACKAGE_CONNMAN_CLIENT=y
- BR2_PACKAGE_CONNMAN_WIFI=y
-+BR2_PACKAGE_WIRELESS_REGDB=y
--- 
-2.34.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+VGhhbmtzIGZvciB0aGUgaGludCEKClNvcnJ5LCB0aGF0IGl0IHRvb2sgbWUgc28gbG9uZyB0byB0
+ZXN0IGl0IGFuZCByZXBseS4KUGxlYXNlIHNlZSB0aGUgbmV3IHBhdGNoc2V0Cmh0dHBzOi8vbGlz
+dHMuYnVpbGRyb290Lm9yZy9waXBlcm1haWwvYnVpbGRyb290LzIwMjQtTWFyY2gvNjg4NjExLmh0
+bWwKCkJUVywgd2h5IGFyZSB0aGVyZSBXaUZpIGRyaXZlcnMgaW4gdGhlIGZpcnN0IHBsYWNlPyBU
+aGUgcmVhZG1lIGZvciB0aGUKYm9hcmQgcmVmZXJzIG9ubHkgdG8gdGhlICJuaWMsbW9kZWw9dmly
+dGlvIgooaHR0cHM6Ly9naXRodWIuY29tL2J1aWxkcm9vdC9idWlsZHJvb3QvYmxvYi9tYXN0ZXIv
+Ym9hcmQvcGMvcmVhZG1lLnR4dCkKU28gYWRkaW5nIGEgYnVuY2ggb2YgbmV0d29yayBmaXJtd2Fy
+ZSBzZWVtcyBwcmV0dHkgYXJiaXRyYXJ5IHRvIG1lLiBJcwp0aGVyZSBhbnkgcGFydGljdWxhciBy
+ZWFzb24gZm9yIHRoaXM/IE9yIG1heWJlIGFsbCB0aGlzIGNhbiBiZQpjb25zaWRlcmVkIGFzIGxl
+Z2FjeSBhbmQgcmVtb3ZlZD8KCgpCZXN0IHJlZ2FyZHMsCktvbnN0YW50aW4gQWxhZHlzaGV2CgpP
+biBUdWUsIE1hciAxMiwgMjAyNCBhdCA4OjQw4oCvQU0gTWF4aW0gS29jaGV0a292IDxmaWRvX21h
+eEBpbmJveC5ydT4gd3JvdGU6Cj4KPiAxMS4wMy4yMDI0IDIyOjM1LCBLb25zdGFudGluIEFsYWR5
+c2hldiB3cm90ZToKPiA+IENlbnRyYWwgUmVndWxhdG9yeSBEb21haW4gQWdlbnQgaXMgdXNlZCBi
+eSB0aGUgTGludXgga2VybmVsIGNmODAyMTEKPiA+IHdpcmVsZXNzIHN1YnN5c3RlbS4gQ3VycmVu
+dGx5IHRoaXMgcGFja2FnZSBpcyBub3QgZW5hYmxlZCBhbmQga2VybmVsCj4gPiBjb21wbGFpbnMg
+d2l0aCB0aGUgZm9sbG93aW5nIG1lc3NhZ2Ugb24gZXZlcnkgYm9vdDoKPiA+ICIiIgo+ID4gcGxh
+dGZvcm0gcmVndWxhdG9yeS4wOiBEaXJlY3QgZmlybXdhcmUgbG9hZCBmb3IgcmVndWxhdG9yeS5k
+YiBmYWlsZWQKPiA+IHdpdGggZXJyb3IgLTIKPiA+IGNmZzgwMjExOiBmYWlsZWQgdG8gbG9hZCBy
+ZWd1bGF0b3J5LmRiCj4KPiB3aXJlbGVzcy1yZWdkYiBpcyByZWd1bGF0b3J5IGRhdGFiYXNlIHVz
+ZWQgYnkgTGludXguCj4KPiA+ICIiIgo+ID4gQWRkIENSREEgcGFja2FnZSB0byBmaXggdGhlIGlz
+c3VlLgo+Cj4gQ1JEQSBpcyBhIHVkZXYgaGVscGVyIGZvciBjb21tdW5pY2F0aW9uIGJldHdlZW4g
+dGhlIGtlcm5lbCBhbmQgLQo+IHVzZXJzcGFjZS4gQ1JEQSBpcyBubyBsb25nZXIgbmVlZGVkIGFz
+IG9mIGtlcm5lbCB2NC4xNSBzaW5jZSBjb21taXQKPiAwMDdmNmM1ZTZlYjQ1ICjCq2NmZzgwMjEx
+OiBzdXBwb3J0IGxvYWRpbmcgcmVndWxhdG9yeSBkYXRhYmFzZSBhcwo+IGZpcm13YXJlIGZpbGXC
+uykgYWRkZWQgc3VwcG9ydCB0byB1c2UgdGhlIGtlcm5lbOKAmXMgZmlybXdhcmUgcmVxdWVzdCBB
+UEkKPiB3aGljaCBsb29rcyBmb3IgdGhlIGZpcm13YXJlIG9uIC9saWIvZmlybXdhcmUuIEJlY2F1
+c2Ugb2YgdGhpcyBDUkRBIGlzCj4gbGVnYWN5IHNvZnR3YXJlIGZvciBvbGRlciBrZXJuZWxzLgo+
+Cj4gU28gaXQgbG9va3MgbGlrZSB5b3UgbmVlZCB0byBpbnN0YWxsIHBhY2thZ2Uvd2lyZWxlc3Mt
+cmVnZGIgaW5zdGVhZCBvZiBDUkRBLgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qu
+b3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9v
+dAo=
