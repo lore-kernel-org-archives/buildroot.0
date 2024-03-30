@@ -4,90 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF4BBCD1288
-	for <buildroot@archiver.kernel.org>; Sat, 30 Mar 2024 18:39:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5308C6FD1F
+	for <buildroot@archiver.kernel.org>; Sat, 30 Mar 2024 18:56:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9280840649;
-	Sat, 30 Mar 2024 18:39:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 49F6340644;
+	Sat, 30 Mar 2024 18:56:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kQLzGa2GLPR6; Sat, 30 Mar 2024 18:39:46 +0000 (UTC)
+ id qNhA8fvTqhTA; Sat, 30 Mar 2024 18:56:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4AC264064B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0FC6F40648
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4AC264064B;
-	Sat, 30 Mar 2024 18:39:46 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C86BB1BF2F2
- for <buildroot@lists.busybox.net>; Sat, 30 Mar 2024 18:39:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0FC6F40648;
+	Sat, 30 Mar 2024 18:56:31 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E76411BF2F2
+ for <buildroot@lists.busybox.net>; Sat, 30 Mar 2024 18:56:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B54FD606CE
- for <buildroot@lists.busybox.net>; Sat, 30 Mar 2024 18:39:44 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D4DA8802EE
+ for <buildroot@lists.busybox.net>; Sat, 30 Mar 2024 18:56:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Z6G1t5hRjX5n for <buildroot@lists.busybox.net>;
- Sat, 30 Mar 2024 18:39:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OSDzRYwy6XrY for <buildroot@lists.busybox.net>;
+ Sat, 30 Mar 2024 18:56:27 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::430; helo=mail-wr1-x430.google.com;
+ client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
  envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8887D60621
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8887D60621
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8887D60621
- for <buildroot@buildroot.org>; Sat, 30 Mar 2024 18:39:43 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id
- ffacd0b85a97d-34175878e3cso2200478f8f.0
- for <buildroot@buildroot.org>; Sat, 30 Mar 2024 11:39:43 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2E8D2802CE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E8D2802CE
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2E8D2802CE
+ for <buildroot@buildroot.org>; Sat, 30 Mar 2024 18:56:26 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id
+ ffacd0b85a97d-34339f01cd2so1268442f8f.2
+ for <buildroot@buildroot.org>; Sat, 30 Mar 2024 11:56:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1711823981; x=1712428781;
+ d=1e100.net; s=20230601; t=1711824985; x=1712429785;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=X6kbZr4JHn8P1o4AKXuQXCxN78iPISQdLENCcXW+kDk=;
- b=WLjSfrHzLUZ1jJZP/oRrmdJcvgf52wgfoW7QF6y/BxLuKdHiELPEOsGlXfrX6GzuCQ
- 5ONftKvnbmEHWych+dporTNiaelwPaGnRsrr2zcCGDZlV3F1hCdYoNKiIxOmByP4Tl6q
- R2hm/xy40YM3AjQOejjBVME+uHYiwPHejF0lPny0ltCDFbI09fn9ILQY7mn0O2MHUZpU
- CGBKP1ZXRkY2Mok4WeL1hJ3CzaBkq4KWg5V2YvWi06jRzzVlYDIy9x51QRb8jXsRqPUG
- 3mEx7S9/UQV7+kyhUqz99NES2eaJqtYRWaJOzV3NM+MzUo3k8QbNH08ng5ywZdEn3vj6
- 6jWA==
-X-Gm-Message-State: AOJu0Yy9/DOEYRhl1WCnqcwR6z15YqjUxAnMXCHH5COL1qaWyvKajFFq
- fInEzb1FYDXuSOAx9hKxBJfMxG+u4j2Ox6R2cuieoUGcH+V7nQ0Sz6u4IKDo
-X-Google-Smtp-Source: AGHT+IH/3WrK05z5ivhtvIUI1XVHzGbiZkskJ7mOoCqd9LJmfSfq9Y1Y48V/UH4ZedAszB2oGpINig==
-X-Received: by 2002:a5d:4843:0:b0:343:3425:c06b with SMTP id
- n3-20020a5d4843000000b003433425c06bmr3772409wrs.20.1711823980877; 
- Sat, 30 Mar 2024 11:39:40 -0700 (PDT)
+ bh=uiEmx/wP9XinBp+YaVZt34cVslCfOZW+58Jrcrn35Gc=;
+ b=AgmKT5nKFKwrGbu6TfTdR/kRO0HwpGW7UCPw9AxGDNjrKkwfLrG3vS0VWYEUp1phG1
+ BegySjaQT7BP6tJ63+xdCpZP9u2fKc9sONpX0dFkSuC7VaA8MaGARxWMIVvGwGYFeEVS
+ ahMcY75CcgmMQQsynordIQCkSFCwIUyKuus1CTGZoodP63frl+Jle6aEtRpk4L1A/6Q9
+ Ys1DzxYZIHJK+pJHIJq06GZcngJcmaCyt174CeFRE2NHjJb/6FcnjlenbU/L7T0mql00
+ X2bXtXaC4h9El1n2r+9pe1TOvgEHIm8dngbRn7jPWcO2Ph8UKJMEIVmeLUZFf4D6xwtL
+ 1sJg==
+X-Gm-Message-State: AOJu0YwIpNwjZdpiOpS56ZezQNU9VUtWveJVltujgS+qzPLLwRRxD7+b
+ l3EJ43/ltkFCPhoko5Z5Uaga0mstrK8ZzjcuW7VkOvdlJ9w+Ty1ZdJQ+rDsE
+X-Google-Smtp-Source: AGHT+IGS8c5o3wnap0hvkP4H/BJcb2WuVKC6r7jUL7eGI0BEM1fpPvQPsC8oIbXjlCh53xpqKPh0FA==
+X-Received: by 2002:adf:f809:0:b0:343:41a6:a024 with SMTP id
+ s9-20020adff809000000b0034341a6a024mr1199121wrp.59.1711824984434; 
+ Sat, 30 Mar 2024 11:56:24 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- o17-20020a5d6851000000b0033ec9936909sm7002838wrw.39.2024.03.30.11.39.40
+ u14-20020a056000038e00b003433e5cab4bsm3376713wrf.103.2024.03.30.11.56.23
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 30 Mar 2024 11:39:40 -0700 (PDT)
+ Sat, 30 Mar 2024 11:56:24 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 30 Mar 2024 19:39:38 +0100
-Message-ID: <20240330183938.882905-1-fontaine.fabrice@gmail.com>
+Date: Sat, 30 Mar 2024 19:56:20 +0100
+Message-ID: <20240330185620.995961-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1711823981; x=1712428781; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1711824985; x=1712429785; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=X6kbZr4JHn8P1o4AKXuQXCxN78iPISQdLENCcXW+kDk=;
- b=GQvZ3YPMkKhcs2qX5NnX0PTNoqPZoSvWOu4aWcEhIEDDeruIYenMNe/0EVa61xuUmj
- H0MRoKoz/h27A8oBC0AtX0gZUVALGxtSl40FnC9oHXfECbAMkVGsE/hpwjR8+KqXWMPI
- 4bZc1qWGpMx/vBfQnFAPW3cS25kSXp+Ulg+QeK0VQbCy6yrSVp2TE5/S8ZZ0Wfy/8qiO
- vsTHyvq4BUJBaAcOnqGsPyluG+iI39az1eIPWlWldNBibJhItkjTD5Qbb3Hgdbfx10Mq
- SHNcx2OsYLs+D48ke9Ao/XUlAa1cXMNFkaOU80mcAQZ7wjOFZGSABGkAlg/NJK70QoUR
- VPhQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=uiEmx/wP9XinBp+YaVZt34cVslCfOZW+58Jrcrn35Gc=;
+ b=kOkxfcMwqeD4ZKrDbJVT0yyUyR4hqNdE07N16ZEkM3h8VIrWicxV0+CBK7RzIBB5rx
+ BdaoY64OanWsWfVcXOJ3lnJ3adxJSFJMbDbfCGX3C1IoYgtuO2r5v8UZcrYEiAzpy1Nr
+ oCf56eqRz6b+guHLtlHlyFTwytuwB35J+2x6J8d13r36Ur2PLzC4zcwmGnscJrI/bMCn
+ SZEW6h3rAQECrdC5a9rL3H+wKxpernI9rmCf5FS8BQCEbUSQnakGXQRLxPutOgmJpTIF
+ v7LYa86T36rEHPFfp3+t/jUd/QJHl18qjpRSNDcZm1sHsG8Cwv4ljGXQdP99XsfTMwEN
+ 6NUQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=GQvZ3YPM
-Subject: [Buildroot] [PATCH 1/1] package/dav1d: fix riscv32 build
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=kOkxfcMw
+Subject: [Buildroot] [PATCH 1/1] package/coreutils: drop gmp optional
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,44 +101,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd@kuhls.net>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following riscv32 build failure raised since bump to version
-1.4.1 in commit d8c440936d51b7f76472b43002780f5490b7a3bf and
-https://github.com/videolan/dav1d/commit/43ee02a99cce1f221bdb574c9ee484180d71013f:
+libgmp is included in coreutils (through bootstrap.conf) since bump to
+version 9.0 in commit 2ee43bad85693d1c96e14f5b39ccb13a8982f50a and
+https://git.savannah.gnu.org/cgit/coreutils.git/commit/?id=13046444888a7e96f48d28fdd5a6ffe03d4ab036:
 
-/home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/riscv32-buildroot-linux-gnu/13.2.0/../../../../riscv32-buildroot-linux-gnu/bin/ld: src/libdav1d_bitdepth_8.a.p/itx_tmpl.c.o: in function `.L0 ':
-itx_tmpl.c:(.text.unlikely+0x76c): undefined reference to `dav1d_inv_txfm_add_dct_dct_4x4_8bpc_rvv'
+configure: WARNING: unrecognized options: --disable-gtk-doc, --disable-gtk-doc-html, --disable-doc, --disable-docs, --disable-documentation, --with-xmlto, --with-fop, --enable-ipv6, --enable-static, --enable-shared, --without-gmp
 
-Fixes: d8c440936d51b7f76472b43002780f5490b7a3bf
- - http://autobuild.buildroot.org/results/28192c494c7a2f88cc90205b6a08afd11782df40
+Fixes: 2ee43bad85693d1c96e14f5b39ccb13a8982f50a
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/dav1d/dav1d.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/coreutils/coreutils.mk | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/package/dav1d/dav1d.mk b/package/dav1d/dav1d.mk
-index 74c68d1660..36a94da6e4 100644
---- a/package/dav1d/dav1d.mk
-+++ b/package/dav1d/dav1d.mk
-@@ -24,6 +24,11 @@ ifeq ($(BR2_ARM_CPU_ARMV4)$(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV7M),y)
- DAV1D_CONF_OPTS += -Denable_asm=false
+diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
+index e9cb7b67cb..846d4fa567 100644
+--- a/package/coreutils/coreutils.mk
++++ b/package/coreutils/coreutils.mk
+@@ -75,12 +75,6 @@ ifeq ($(BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL),y)
+ COREUTILS_CONF_OPTS += --with-libintl-prefix=$(STAGING_DIR)/usr
  endif
  
-+# riscv assembly requires riscv64
-+ifeq ($(BR2_RISCV_64),)
-+DAV1D_CONF_OPTS += -Denable_asm=false
-+endif
-+
- # Uses __atomic_fetch_add_4
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- DAV1D_LDFLAGS += $(TARGET_LDFLAGS) -latomic
+-ifeq ($(BR2_PACKAGE_GMP),y)
+-COREUTILS_DEPENDENCIES += gmp
+-else
+-COREUTILS_CONF_OPTS += --without-gmp
+-endif
+-
+ ifeq ($(BR2_PACKAGE_LIBCAP),y)
+ COREUTILS_DEPENDENCIES += libcap
+ else
 -- 
 2.43.0
 
