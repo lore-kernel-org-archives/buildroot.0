@@ -1,72 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92AEACD1288
-	for <buildroot@archiver.kernel.org>; Sat, 30 Mar 2024 14:30:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 354EDCD1288
+	for <buildroot@archiver.kernel.org>; Sat, 30 Mar 2024 16:02:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 56DC6606CE;
-	Sat, 30 Mar 2024 14:30:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9E41E821FC;
+	Sat, 30 Mar 2024 16:02:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0_4tf3i_5S8C; Sat, 30 Mar 2024 14:30:13 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lM80wxF_S4kP; Sat, 30 Mar 2024 16:02:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 66C546075B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 81AAA8226D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 66C546075B;
-	Sat, 30 Mar 2024 14:30:13 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B4D1D1BF29F
- for <buildroot@lists.busybox.net>; Sat, 30 Mar 2024 14:30:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 81AAA8226D;
+	Sat, 30 Mar 2024 16:02:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2EA221BF3DF
+ for <buildroot@lists.busybox.net>; Sat, 30 Mar 2024 16:02:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A1FD06075B
- for <buildroot@lists.busybox.net>; Sat, 30 Mar 2024 14:30:11 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 17F44406CB
+ for <buildroot@lists.busybox.net>; Sat, 30 Mar 2024 16:02:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ldL_K3h8Ogal for <buildroot@lists.busybox.net>;
- Sat, 30 Mar 2024 14:30:10 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.116;
- helo=smtpcmd03116.aruba.it;
- envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 22F4E606CE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 22F4E606CE
-Received: from smtpcmd03116.aruba.it (smtpcmd03116.aruba.it [62.149.158.116])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 22F4E606CE
- for <buildroot@buildroot.org>; Sat, 30 Mar 2024 14:30:08 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba Outgoing Smtp  with ESMTPSA
- id qZigr6Ylv4yJYqZigrs6qV; Sat, 30 Mar 2024 15:30:07 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3TH478yeCP5b for <buildroot@lists.busybox.net>;
+ Sat, 30 Mar 2024 16:02:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::52b; helo=mail-ed1-x52b.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7CE76406C9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7CE76406C9
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
+ [IPv6:2a00:1450:4864:20::52b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7CE76406C9
+ for <buildroot@buildroot.org>; Sat, 30 Mar 2024 16:02:51 +0000 (UTC)
+Received: by mail-ed1-x52b.google.com with SMTP id
+ 4fb4d7f45d1cf-56bdf81706aso3495219a12.2
+ for <buildroot@buildroot.org>; Sat, 30 Mar 2024 09:02:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1711814569; x=1712419369;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=Y1hxhYSG6Wz6phcIuxyzpYIMbkYW3jcihJy37QUvGYY=;
+ b=HQ+zwA9J9eFx6fyFRh+BTWoBw1WtINsNRenGFfGV+0duj+SgzooY/1aJyXSMKAubQh
+ r9P+1SDjMsyrjifyqkoY3yV3h4cwK0kmvu0YUGY07zFtEsOW2ejlghfwURC6tS8wvzk6
+ CYMyaZLJzOrjgF/QOst7tibFOdywL65SDBP0ie8ZQiaYYW1CLZTG9mM3nQ/BHEGiUvqn
+ Xw0z4X2os3gkzrVS1T4tAIsqT+ZrQuhAZFW8YlTou6uaPQvDxxVNf7FgVxwkY820Tfrg
+ qE8GWV9Y+uYJw5CW2MqfeUEfAsZp3DvJPbsllEgPfXX4N1gxb+pm9m6lu1QbhpRWhjBy
+ QeMQ==
+X-Gm-Message-State: AOJu0YwdBdxnjOo5zRbnN/HKHQdPcQUhVwbEbYKEC036QN8HQoqZWCcY
+ WFGaTNZZHrcMt/g/Rgir2AwxsaNdJHubTMHQuWC8ql+8OQmjbaYMvM/BYc0gPm8HOlzWFDlHoEP
+ uI4w=
+X-Google-Smtp-Source: AGHT+IG+NtFSohr3SAR5DwMGGv4FlmDygPijuNwgcwRXv4NJyeRT3yqNAvjlpt6H1gaNwUC2vgPuQQ==
+X-Received: by 2002:a05:6402:5114:b0:568:8e22:4eff with SMTP id
+ m20-20020a056402511400b005688e224effmr3448528edd.37.1711814569026; 
+ Sat, 30 Mar 2024 09:02:49 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
+ (host-87-8-99-67.retail.telecomitalia.it. [87.8.99.67])
+ by smtp.gmail.com with ESMTPSA id
+ f13-20020a056402004d00b0056c633354c6sm2127107edu.45.2024.03.30.09.02.47
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 30 Mar 2024 09:02:48 -0700 (PDT)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Sat, 30 Mar 2024 15:30:05 +0100
-Message-Id: <20240330143005.1621629-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
+Date: Sat, 30 Mar 2024 17:02:32 +0100
+Message-ID: <20240330160244.3214733-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfHnVQ5m2E2d82TC4JVfZmc3ixT8k4VwFcYDxv4nreo0e7KjKuD6SGxmnUyHkzYkG1B/9qPsIm+l9Rxj9ELFJIM1zOMYwMgNPx1rSHZPK7c7OVc04BHCb
- YHbdMXEty/Dhl3lJ0p+LzgYKgM29prXGqIwZ3owq6p7BRNXU5iyMMlb7vwRfWB2EvqdZAxVT7Esq5kl0dcZj7SvqR6lHnUnwNbFU8/64DmMW2O1F1b3iVYPf
- 79ApyBd6pLjJE7UwfVwXGx4WebLCx+/Fg1qVQgqnTrs=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1711809007; bh=RYC9Wu4G0t6D/o9xGgLVwZU+tcdb8VSHGDH6Oq7dZDQ=;
- h=From:To:Subject:Date:MIME-Version;
- b=OPbYqiw2amadTmlwUnF/bnq0R1g/Rgnhic4OfrLLk/S9UWt/F81VQXqQEekKD6g7o
- nByE8420OfHu59u46U7kw0Yi0JEIc1VVEAcZzBJ1sPsK1PlUuh7H3Gxyru1F3o3EgE
- w0GPOSRiLd3SosbR+8IJ/YCVV3uzipn9iPlLd0wr9pjSe+QCdsIkcJZY0C2bBE8MRT
- uTMxvMposIb+1qpClYRbedLtAP60Hy7eDmPhCNy03Ji5j0db8AvedOtMV8hbaKF+kQ
- rGe6/fFErZJQNkM8gwEaDShjzAci238Tp1yazJCqKuVpaEXNBfYGL/DoyoySwkXHMU
- b2r9ogY40ndZA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google; t=1711814569; x=1712419369;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=Y1hxhYSG6Wz6phcIuxyzpYIMbkYW3jcihJy37QUvGYY=;
+ b=EFIQ+XEqEDq0I1SOJcnysza5fMZ3A0CyyBKuekM07+Lr2WcKRTAa20bbKA1FhhOWva
+ 74zhXBmjnBQfAuoV4B5c230KZWrVs7Rp0+I8anyYGK60pLrDIS/beT4egGbzyyxDuFSU
+ CU53nY+Pu2smYrQrAzyZWBLxb2DCinLyTgMP8=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=OPbYqiw2
-Subject: [Buildroot] [PATCH] package/swugenerator: bump to version 0.3
+ header.from=amarulasolutions.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=EFIQ+XEq
+Subject: [Buildroot] [PATCH v10 00/12] Add support for AM62x-SK HS-FS devices
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,48 +100,83 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ michael@amarulasolutions.com, linux-amarula@amarulasolutions.com,
+ Asaf Kahlon <asafka7@gmail.com>, Xuanhao Shi <X15000177@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Romain Naour <romain.naour@smile.fr>, Andreas Dannenberg <dannenberg@ti.com>,
+ Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+ "Yann E . Morin" <yann.morin.1998@free.fr>, bryce@redpinelabs.com,
+ Anand Gadiyar <gadiyar@ti.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Upstream github tarball dropped prefix "v" while releasing version 0.3
-so let's drop it in swugenerator.mk as well.
+The SK-AM62B-P1 is the newest version of SK-AM62 which includes
+high-security field-securable (HS-FS) silicon to optionally customize keys
+and encryption for security applications.
+This requires enabling the BR2_TARGET_TI_K3_IMAGE_GEN_SECTYPE_HS_FS option,
+which, however, was buggy. This series fixes the errors and bumps the Linux
+kernel and U-Boot required for such a new device.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/swugenerator/swugenerator.hash | 2 +-
- package/swugenerator/swugenerator.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Furthermore, this version complete the series by updating the
+ti_am64x_sk_defconfig as requested by Romain Naour:
+https://patchwork.ozlabs.org/project/buildroot/patch/20240224205654.1546744-17-dario.binacchi@amarulasolutions.com/
+I have successfully executed compilation tests for all possible combinations of platform and security type:
+am62x -> GP, HS, HS-FS
+am64x -> GP, HS, HS-FS
 
-diff --git a/package/swugenerator/swugenerator.hash b/package/swugenerator/swugenerator.hash
-index 2125be3d1c..301f168681 100644
---- a/package/swugenerator/swugenerator.hash
-+++ b/package/swugenerator/swugenerator.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  b5c47c47be0df4df476d2bf596f58a7296a4b0cebe6c8de42251605475b37d25  swugenerator-0.2.tar.gz
-+sha256  3f4885242bce9523d26567578793c828e2f07122c6b7e44cce8ede33e5618a01  swugenerator-0.3.tar.gz
- # Locally computed sha256 checksums
- sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSE
-diff --git a/package/swugenerator/swugenerator.mk b/package/swugenerator/swugenerator.mk
-index 466fe1f046..22ed799e99 100644
---- a/package/swugenerator/swugenerator.mk
-+++ b/package/swugenerator/swugenerator.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--SWUGENERATOR_VERSION = 0.2
--SWUGENERATOR_SITE = $(call github,sbabic,swugenerator,v$(SWUGENERATOR_VERSION))
-+SWUGENERATOR_VERSION = 0.3
-+SWUGENERATOR_SITE = $(call github,sbabic,swugenerator,$(SWUGENERATOR_VERSION))
- SWUGENERATOR_LICENSE = GPL-3.0
- SWUGENERATOR_LICENSE_FILES = LICENSE
- HOST_SWUGENERATOR_SETUP_TYPE = setuptools
+The AM62x HS-FS configuration has also been tested on the SK-AM62B-P1 board.
+
+Version 9 has merged the first 10 patches into the mainline. This version
+therefore contains the remaining patches to which the patch suggested by
+Yann E. Morin has been added ("boot/ti-k3-r5-loader: drop hash for version
+2022.10" [1]), and has removed the patch "boot/ti-k3-image-gen: remove
+package", which is not strictly required by the series and does not cause
+regressions.
+
+[1] https://patchwork.ozlabs.org/project/buildroot/patch/20240304153253.732708-6-dario.binacchi@amarulasolutions.com
+
+Dario Binacchi (12):
+  boot/ti-k3-r5-loader: drop hash for version 2022.10
+  boot/ti-k3-r5-loader: set binman environment
+  boot/uboot: add BR2_TARGET_UBOOT_USE_BINMAN option
+  package/ti-k3: move TI_K3_{SECTYPE,SOC} out of the image-gen scope
+  package/ti-k3: disable HS-FS for AM65 SOC
+  boot/ti-k3/ti-k3-r5-loader: install tiboot3.bin
+  configs/ti_am62x_sk_defconfig: bump U-Boot version to 2024.01
+  configs/ti_am62x_sk_defconfig: bump Linux version to 6.6.18
+  board/ti/am62x-sk: generalize post-build.sh
+  board/ti/am62x-sk: move post-{build,image}.sh to board/ti/common/am6xx
+  configs/ti_am64x_sk_defconfig: bump U-Boot version to 2024.01
+  configs/ti_am64x_sk_defconfig: bump Linux version to 6.6.18
+
+ board/ti/am62x-sk/genimage.cfg            |  7 ++-
+ board/ti/am64x-sk/genimage.cfg            |  7 ++-
+ board/ti/common/am6xx/post-build.sh       | 58 +++++++++++++++++++++
+ board/ti/common/am6xx/post-image.sh       | 11 ++++
+ boot/ti-k3-image-gen/Config.in            | 61 ++---------------------
+ boot/ti-k3-image-gen/ti-k3-image-gen.mk   |  4 +-
+ boot/ti-k3-r5-loader/Config.in            |  1 +
+ boot/ti-k3-r5-loader/ti-k3-r5-loader.hash |  1 -
+ boot/ti-k3-r5-loader/ti-k3-r5-loader.mk   | 12 ++++-
+ boot/uboot/Config.in                      | 23 +++++----
+ boot/uboot/uboot.mk                       | 12 ++++-
+ configs/ti_am62x_sk_defconfig             | 20 ++++----
+ configs/ti_am64x_sk_defconfig             | 20 ++++----
+ package/Config.in                         |  1 +
+ package/ti-k3/Config.in                   | 61 +++++++++++++++++++++++
+ package/ti-k3/ti-k3.mk                    |  7 +++
+ 16 files changed, 213 insertions(+), 93 deletions(-)
+ create mode 100755 board/ti/common/am6xx/post-build.sh
+ create mode 100755 board/ti/common/am6xx/post-image.sh
+ create mode 100644 package/ti-k3/Config.in
+ create mode 100644 package/ti-k3/ti-k3.mk
+
 -- 
-2.34.1
+2.43.0
 
 _______________________________________________
 buildroot mailing list
