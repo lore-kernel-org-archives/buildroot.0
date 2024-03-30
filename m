@@ -4,70 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65958CD1288
-	for <buildroot@archiver.kernel.org>; Sat, 30 Mar 2024 09:29:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4FFECD128E
+	for <buildroot@archiver.kernel.org>; Sat, 30 Mar 2024 09:59:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 153CE40204;
-	Sat, 30 Mar 2024 09:29:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 963C040B83;
+	Sat, 30 Mar 2024 09:59:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HiWBrgHNLRzW; Sat, 30 Mar 2024 09:29:33 +0000 (UTC)
+ id sKNNCEVSFNfh; Sat, 30 Mar 2024 09:59:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2116940B66
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 86CAA40B8C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2116940B66;
-	Sat, 30 Mar 2024 09:29:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 843611BF27C
- for <buildroot@lists.busybox.net>; Sat, 30 Mar 2024 09:29:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 86CAA40B8C;
+	Sat, 30 Mar 2024 09:59:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6AD5E1BF27C
+ for <buildroot@lists.busybox.net>; Sat, 30 Mar 2024 09:59:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7CC0C40B6B
- for <buildroot@lists.busybox.net>; Sat, 30 Mar 2024 09:29:30 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4DEDB81DE0
+ for <buildroot@lists.busybox.net>; Sat, 30 Mar 2024 09:59:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pczqN8Ocg-we for <buildroot@lists.busybox.net>;
- Sat, 30 Mar 2024 09:29:29 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.102;
- helo=smtpcmd02102.aruba.it;
- envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A33A240204
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A33A240204
-Received: from smtpcmd02102.aruba.it (smtpcmd02102.aruba.it [62.149.158.102])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A33A240204
- for <buildroot@buildroot.org>; Sat, 30 Mar 2024 09:29:27 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba Outgoing Smtp  with ESMTPSA
- id qV1grQhVDEmGUqV1grElEH; Sat, 30 Mar 2024 10:29:24 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id X64IITsXuDk1 for <buildroot@lists.busybox.net>;
+ Sat, 30 Mar 2024 09:59:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2A49481DBF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A49481DBF
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2A49481DBF
+ for <buildroot@buildroot.org>; Sat, 30 Mar 2024 09:59:43 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ 5b1f17b1804b1-4155bdc0bf5so642125e9.1
+ for <buildroot@buildroot.org>; Sat, 30 Mar 2024 02:59:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1711792780; x=1712397580;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=Sj7LtJziDmGukt16DDiaB10qjOyZfmZIPNYyJ7OEoeg=;
+ b=cWWLTEj1KYyQ6kj7wQ+gTTi3KKNV3gtqOsSNCXq2OcBFIeboFGC3fGQupvyNgYXMYg
+ xu3VIYvlUUrU+l5K7qLElTFujaucupKDmuchtSLPoeK2qW64Mq0zTbiRAiUv2DBmaS/X
+ rpWlkvk+/lNUvYOY+dU/UtHmY+IQmMr1U+JNfha0N00QvPBQ9d0ypP6mqeiJFPpagw8m
+ mP5iMkU1SAje5AxYM1W58S84zisaIWjqAIRzIun0CXWAEsgBAHeoP/LnVkkkMq9gBAP4
+ 9YIxKg7wZRqG5CzGe0q1cZpTwXrTdWMwXzfQavEV1KRvImbOFL+bst7T8KiInagOWoDH
+ 1D+Q==
+X-Gm-Message-State: AOJu0YzR1/J5e6cJ8R9Q27WLxIRe4kd0tpHa0qgn+6oWaPbVbYw9VAE5
+ wyZPRdLKUp8Y+Fbk4KcmEXiirg5CUqrk+2QjM3iJmE2XtNjY4L/SBbGY5u7C
+X-Google-Smtp-Source: AGHT+IFt666vPHXvypZCLedLU8iEHWwwP42sp9B2M40rfMrUzz//jPcO4UOdGYJCt3K4tVLb5i3U9A==
+X-Received: by 2002:a05:600c:4f0c:b0:414:85f:1f72 with SMTP id
+ l12-20020a05600c4f0c00b00414085f1f72mr2769012wmq.6.1711792780140; 
+ Sat, 30 Mar 2024 02:59:40 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ fs11-20020a05600c3f8b00b004146dd6bfe2sm7927042wmb.47.2024.03.30.02.59.39
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 30 Mar 2024 02:59:39 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 30 Mar 2024 10:29:02 +0100
-Message-Id: <20240330092902.834778-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
+Date: Sat, 30 Mar 2024 10:59:33 +0100
+Message-ID: <20240330095933.601540-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfBp+LJlu7MTSTLT9lCKY9FIht85NUehYr/FSzrrRPQfcUtVvz7LXOlxnBKNAVtnn5ZNXTWPrI6m97XrtpVFSF0cM78lfX24k3FotQksV+9Ov7J9Zm2As
- c9nB2IbPxcXrheoAPi2uod8SfMr8levM98cqxFYiSTqP2f9wiDTofqwxUxtjUd5W+l5JIDNoRsBSWn6d5t5egWn3njZJyz2R40z6GSZ99ZBCmSpCngrjLvej
- iP1uR3aQJA5MuCKCaNH4d9gV0+cY8VyC9m+F64NxEq8=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1711790964; bh=GFq3uO8faIYpnbr9io3dD0fR+oV6ynVTyiBbVHMg61Y=;
- h=From:To:Subject:Date:MIME-Version;
- b=YUf2rMob36sGdzy/EgBg3zODzn9c7E2zmgS+tKsUMhxgnPl0YE8xxIQmnhIhnaVW/
- Oq6k3v1zZooQ0S3KDy4/RfyH69wZSnfc1sox8MZufjfjEvR8q7vZajUyIbpy+Prqxs
- Y38NclsGsJ4uEydwI+EYzU0AJGRcnAd37XkROoqaTErsJEz6E3RkqPx464yRIWh53X
- SNCVPdsa9Xd9L/N0v4F68u6B/lhxiI4PgGcKicb3qxpTq1lO2Pnx/8OtMv39/2huw6
- 5jUdJRhRVQE0lvqzGzo5E/Zc5+5PbQea+67hF63jOmIvZqOJY1OS/xFOhJMX068ljC
- eOuZZiS4s6Gag==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1711792780; x=1712397580; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=Sj7LtJziDmGukt16DDiaB10qjOyZfmZIPNYyJ7OEoeg=;
+ b=Kp1/PfkO+/NJvT/tuFF6CbtXStG1afgsED398ViydMTveiQ4xGYKT6aOLfTGJONWdH
+ cDO3Cpm9uAzSMZNPd2N1CW1xMclOvBKPqEHCrthEiOBB+81RIuVN9aKbImTePyCCLcgS
+ mxj0ZnL8vSAii9OKkOeCUSLBBt0We9Tl8KtX4NEMEe+6JqN0oj6TTuRjOsMgfod0Yvc6
+ n62mZf+NlEL5wmDuLU0FCP9qhiH80kkttmcbQFgBfgO7H7IPD+F3EkaWluiL38deB/BE
+ WuMzKOLN4FYuSy009HYdLUYpphr5aIZZKBSj2376/rCIXE6J8E6nnx43/826Nd8jPEF0
+ x9Aw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=YUf2rMob
-Subject: [Buildroot] [PATCH] configs/mangopi_mq1rdw1_defconfig: fix build
- failure due to undefined linux headers
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=Kp1/PfkO
+Subject: [Buildroot] [PATCH 1/1] package/mdadm: bump to version 4.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,37 +99,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6 to prevent error:
-Incorrect selection of kernel headers: expected 6.8.x, got 6.6.x
+https://lore.kernel.org/all/20240215183844.00003735@linux.intel.com
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/6498278078
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- configs/mangopi_mq1rdw2_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ ...not-require-libudev-h-if-DNO_LIBUDEV.patch | 34 +++++++++++++++++++
+ package/mdadm/mdadm.hash                      |  2 +-
+ package/mdadm/mdadm.mk                        |  2 +-
+ 3 files changed, 36 insertions(+), 2 deletions(-)
+ create mode 100644 package/mdadm/0001-udev-c-Do-not-require-libudev-h-if-DNO_LIBUDEV.patch
 
-diff --git a/configs/mangopi_mq1rdw2_defconfig b/configs/mangopi_mq1rdw2_defconfig
-index a2f8a1299b..2249fa4be5 100644
---- a/configs/mangopi_mq1rdw2_defconfig
-+++ b/configs/mangopi_mq1rdw2_defconfig
-@@ -1,6 +1,7 @@
- BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_VFPV4=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
- BR2_TARGET_GENERIC_HOSTNAME="mangopi-mq1rdw2"
- BR2_TARGET_GENERIC_ISSUE="Welcome to MangoPI MQ1RDW2"
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+diff --git a/package/mdadm/0001-udev-c-Do-not-require-libudev-h-if-DNO_LIBUDEV.patch b/package/mdadm/0001-udev-c-Do-not-require-libudev-h-if-DNO_LIBUDEV.patch
+new file mode 100644
+index 0000000000..5c3d6e03b4
+--- /dev/null
++++ b/package/mdadm/0001-udev-c-Do-not-require-libudev-h-if-DNO_LIBUDEV.patch
+@@ -0,0 +1,34 @@
++From 1750758c7ff526e3560433f6235e5cfa35cf646a Mon Sep 17 00:00:00 2001
++From: Mariusz Tkaczyk <mariusz.tkaczyk@linux.intel.com>
++Date: Wed, 6 Mar 2024 15:50:55 +0100
++Subject: udev.c: Do not require libudev.h if DNO_LIBUDEV
++
++libudev may not be presented at all, do not require it.
++
++Reported-by: Boian Bonev <bbonev@ipacct.com>
++Signed-off-by: Mariusz Tkaczyk <mariusz.tkaczyk@linux.intel.com>
++
++Upstream: https://git.kernel.org/pub/scm/utils/mdadm/mdadm.git/commit/?id=1750758c7ff526e3560433f6235e5cfa35cf646a
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ udev.c | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/udev.c b/udev.c
++index bc4722b0..066e6ab1 100644
++--- a/udev.c
+++++ b/udev.c
++@@ -26,7 +26,10 @@
++ #include	<signal.h>
++ #include	<limits.h>
++ #include	<syslog.h>
+++
+++#ifndef NO_LIBUDEV
++ #include	<libudev.h>
+++#endif
++ 
++ static char *unblock_path;
++ 
++-- 
++cgit 1.2.3-korg
++
+diff --git a/package/mdadm/mdadm.hash b/package/mdadm/mdadm.hash
+index b9631a2aaa..84bae1aebf 100644
+--- a/package/mdadm/mdadm.hash
++++ b/package/mdadm/mdadm.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/linux/utils/raid/mdadm/sha256sums.asc
+-sha256  461c215670864bb74a4d1a3620684aa2b2f8296dffa06743f26dda5557acf01d  mdadm-4.2.tar.xz
++sha256  416727ae1f1080ea6e3090cea36dd076826fc369151e36ab736557ba92196f9f  mdadm-4.3.tar.xz
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/mdadm/mdadm.mk b/package/mdadm/mdadm.mk
+index b54e34b230..c6178700ef 100644
+--- a/package/mdadm/mdadm.mk
++++ b/package/mdadm/mdadm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MDADM_VERSION = 4.2
++MDADM_VERSION = 4.3
+ MDADM_SOURCE = mdadm-$(MDADM_VERSION).tar.xz
+ MDADM_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/raid/mdadm
+ MDADM_LICENSE = GPL-2.0+
 -- 
-2.34.1
+2.43.0
 
 _______________________________________________
 buildroot mailing list
