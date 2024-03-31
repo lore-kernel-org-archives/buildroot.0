@@ -4,92 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44552CD1288
-	for <buildroot@archiver.kernel.org>; Sun, 31 Mar 2024 07:47:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7096FCD1284
+	for <buildroot@archiver.kernel.org>; Sun, 31 Mar 2024 07:47:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2D404607F3;
-	Sun, 31 Mar 2024 07:47:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3A69D60689;
+	Sun, 31 Mar 2024 07:47:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bqZHprGHpF7p; Sun, 31 Mar 2024 07:47:35 +0000 (UTC)
+ id yzd5ijwcDTB7; Sun, 31 Mar 2024 07:47:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE2806069B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 433CF6070E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AE2806069B;
-	Sun, 31 Mar 2024 07:47:35 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B71B51BF28D
- for <buildroot@lists.busybox.net>; Sun, 31 Mar 2024 07:47:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 433CF6070E;
+	Sun, 31 Mar 2024 07:47:44 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C36531BF28D
+ for <buildroot@lists.busybox.net>; Sun, 31 Mar 2024 07:47:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A354481D4F
- for <buildroot@lists.busybox.net>; Sun, 31 Mar 2024 07:47:33 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AFA8640585
+ for <buildroot@lists.busybox.net>; Sun, 31 Mar 2024 07:47:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ER-JdVw5Nk7K for <buildroot@lists.busybox.net>;
- Sun, 31 Mar 2024 07:47:32 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tItDaQRtWn8Z for <buildroot@lists.busybox.net>;
+ Sun, 31 Mar 2024 07:47:33 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::632; helo=mail-pl1-x632.google.com;
+ client-ip=2607:f8b0:4864:20::630; helo=mail-pl1-x630.google.com;
  envelope-from=christian@aperture.us; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BCEEE81D46
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BCEEE81D46
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com
- [IPv6:2607:f8b0:4864:20::632])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BCEEE81D46
- for <buildroot@buildroot.org>; Sun, 31 Mar 2024 07:47:32 +0000 (UTC)
-Received: by mail-pl1-x632.google.com with SMTP id
- d9443c01a7336-1e0d82c529fso27094305ad.2
- for <buildroot@buildroot.org>; Sun, 31 Mar 2024 00:47:32 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 882E94057C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 882E94057C
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com
+ [IPv6:2607:f8b0:4864:20::630])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 882E94057C
+ for <buildroot@buildroot.org>; Sun, 31 Mar 2024 07:47:33 +0000 (UTC)
+Received: by mail-pl1-x630.google.com with SMTP id
+ d9443c01a7336-1def3340682so27718335ad.1
+ for <buildroot@buildroot.org>; Sun, 31 Mar 2024 00:47:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1711871251; x=1712476051;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=7ktgvAn7Em6+ADI/bPAnVkY2fc3LopUgrLCXN58LvsA=;
- b=U0KaMJojcsriBJPrjpY0sJa0iupIH+K8L2j8U002DY5QNjWp9rJn+wZw+nYj3WROIP
- 0ok7aLkth71nHNo6eNS30FzBpz9mIbiCXnHFVVd8jtyAaQ8V7SuJ3DkGO1T5KCiJqpF8
- uYWT1qmmDeABDbUZwCUksJwnR3j71zVasSRUa4dIap2H9DqnZxxoDdCXJaGbxfZGa1LT
- 93aCmgpXx3j1mCSm/hH7BO/tBLln6OypUAPU4id28X/SZ4AbGJI+hF9wuI2bnx5la3+j
- 3s8rOMGM6kSDpq1rKY+CvnWbW1AlxwB2mWG1W2z5Hc5yOFr+LCGDQ5wU6r3Tz9ukRMPL
- BhtQ==
-X-Gm-Message-State: AOJu0Ywu40jj42hqHPmcSHL0ZRXnD8RTQERWztHPxE55548rv2t+BcBv
- 8j736EbWbL9dI4hpTAOMfIfb4hrwntdYDbOEwP3g1GvMpW5POMoNPas9U0/JkiCKLsBZJRtCzaD
- XBzE=
-X-Google-Smtp-Source: AGHT+IGz1m/+WWa0SEUztgBNRowfQMvJti4elPkY58BeUoT/MML9H/LikkANpBEBzs0hFNIiOOwgSg==
-X-Received: by 2002:a05:6a20:b714:b0:1a3:3260:754f with SMTP id
- fg20-20020a056a20b71400b001a33260754fmr4800984pzb.28.1711871251419; 
- Sun, 31 Mar 2024 00:47:31 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1711871252; x=1712476052;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=56D7zEvpOoOd1yIL2FX3+R7oqrHAzir8B8bdrU4nCYU=;
+ b=gIUcSoNhvqyT/GOwPjuuzk+LSQsBl2YL8Kge+FoYOnJGPRYjSKs6ZV+GUptfxl8Khy
+ 1vO7GWyqPK8mNJr6t8EFL6VbqiSD3nBQ4O4c/NVBbrfn4Moqe849RKG13qRhHcDcbbTC
+ pfnWRxmWEudrzWK9rqatXOPggcOzrQJfobUmkC8z0BxtdHxBtu28wnUeVMMT/ubGBVwn
+ 1mEoibWnX2d/ikn7wyhEbbK96WOpViAWcYjFURrpaczHS1XrZkqltOp0Q1ZjLNlDTC3V
+ zbaufQb1cSAAfx7m99Fi31a2LbBDUUk68gqTWrGW1OD3kpKgt0pQJID1UT2qlxQ7RPrX
+ yKog==
+X-Gm-Message-State: AOJu0Yx9ReMnIGWs2d64VClYEJAtQwKUS1AhhV5O2KP10eGij2qKkiVb
+ oa5iKXf3NI4gbh6Zz+subjTSDCvdMyJouDX7oW1t3pkK1ITEdMypvbzOUZggYS/xrQfg4KvaOJ3
+ PPRw=
+X-Google-Smtp-Source: AGHT+IG0rDk8vTrHWhIwNDr7AjZU2DASwh3v4HlsJ4WS52fmshYWf4QWrTEojjxPbyfRtTfmvUscaA==
+X-Received: by 2002:a17:903:2408:b0:1e0:e6b0:b770 with SMTP id
+ e8-20020a170903240800b001e0e6b0b770mr9632117plo.69.1711871252550; 
+ Sun, 31 Mar 2024 00:47:32 -0700 (PDT)
 Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
  [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
- j9-20020a170903024900b001e22e8a859asm4402961plh.108.2024.03.31.00.47.30
+ j9-20020a170903024900b001e22e8a859asm4402961plh.108.2024.03.31.00.47.31
  (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
- Sun, 31 Mar 2024 00:47:30 -0700 (PDT)
+ Sun, 31 Mar 2024 00:47:32 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Sun, 31 Mar 2024 00:46:13 -0700
-Message-ID: <20240331074614.17359-1-christian@aperture.us>
+Date: Sun, 31 Mar 2024 00:46:14 -0700
+Message-ID: <20240331074614.17359-2-christian@aperture.us>
 X-Mailer: git-send-email 2.44.0
+In-Reply-To: <20240331074614.17359-1-christian@aperture.us>
+References: <20240331074614.17359-1-christian@aperture.us>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=aperture.us; s=google; t=1711871251; x=1712476051; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=7ktgvAn7Em6+ADI/bPAnVkY2fc3LopUgrLCXN58LvsA=;
- b=C1PIbS1EGK5W/RFuhnDElT3lx5fAIo2KPJsEsKnXdF87W+Zo8zt31PpVmXO6CFCgNY
- ftlq8YOGo+OQ4SZmIk/r8FHDs8GrQRCI1anfYPcsEeXKhOWSptJwPU8dKVWYcFL94G2+
- 6BPuSgoUw3BBqxoGs51z+mhO+ET4Uk4PUnh+RebpTP/TEt9EaBZXmnR4MrZ88XdIqcW/
- Ml0zG5TuRf9V6H2BD48/Q5d09oqGEF7mFrNTtriQJNuuOTjOUUNzVURNLtmIlgIEjsEh
- sWvW8G8Bv6LfQHXYgnnlXfR0QPoZJBGl/o1iUXibewV/GI+FMS+G5wZH1921eyajoS+T
- lGjw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=aperture.us; s=google; t=1711871252; x=1712476052; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=56D7zEvpOoOd1yIL2FX3+R7oqrHAzir8B8bdrU4nCYU=;
+ b=lphVbzwonMo60Wqf2hwhfGuXF1F+y/FFnVAmON3yWHuFWR7qxyiF8s+FcERStxbgC3
+ Zq0gdAuVX/rZi0O4/WfBmg1gVe92EAWugt3/aPwGLMSpMf8ybFzOg3EA7UDGPSg9/WtW
+ EoGsLeEjbMHWaZaCwXWlR+Wlkn57Iw849MIKQj09L9YCD+8hywILg6Alyd0COBlb73s5
+ Xgh8iZb0cb5lSBwMUAoqY+hPkAj/T6uNKifH9WJKsedszTX4O0lIXdzlpx4vqV/dK1Pe
+ jy+WhXyhhKe8+OwJfZ/27UieE2NSkTXpdxk1XHoaQw/2H+8CdAEMqjRRdFD7d2S5ltjH
+ CGcA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=aperture.us
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=aperture.us header.i=@aperture.us header.a=rsa-sha256
- header.s=google header.b=C1PIbS1E
-Subject: [Buildroot] [PATCH v1 1/2] package/docker-engine: security bump to
- version v26.0.0
+ header.s=google header.b=lphVbzwo
+Subject: [Buildroot] [PATCH v1 2/2] package/docker-cli: bump version to
+ v26.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -111,41 +114,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Update to the latest major release of docker-engine.
-
-Fixes CVE-2024-29018: potential data exfiltration from 'internal' networks via authoritative DNS servers.
-Do not forward requests to external DNS servers for a container that is only connected to an 'internal' network.
+Update to the latest major release of docker-cli.
 
 https://github.com/moby/moby/releases/tag/v26.0.0
 
 Signed-off-by: Christian Stewart <christian@aperture.us>
 ---
- package/docker-engine/docker-engine.hash | 2 +-
- package/docker-engine/docker-engine.mk   | 2 +-
+ package/docker-cli/docker-cli.hash | 2 +-
+ package/docker-cli/docker-cli.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-index 931d6529e1..5c76b99af3 100644
---- a/package/docker-engine/docker-engine.hash
-+++ b/package/docker-engine/docker-engine.hash
+diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
+index 9c8d08bba5..26558814c1 100644
+--- a/package/docker-cli/docker-cli.hash
++++ b/package/docker-cli/docker-cli.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  16a2cb4cf4d314a070085e0df06e3a6bd9ec678d28715b64060af694fc9051d5  docker-engine-24.0.7.tar.gz
-+sha256  fae1aabb63ed5cf6d302a5f4266ed092716b1cea9a974a9d61154ef31b03c302  docker-engine-26.0.0.tar.gz
- sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index 05bf23ad3d..86106d3ccb 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
+-sha256  72a54d131c28938221c81bd08364459fed9c71c093d4d615d324aaf31de6db1d  docker-cli-24.0.7.tar.gz
++sha256  96ed5d7c33a12f505d13fa03fa48f94cb41cf871178df0df84aa0b76839ad321  docker-cli-26.0.0.tar.gz
+ sha256  2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
+diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
+index 95fce27ffb..5f9242329a 100644
+--- a/package/docker-cli/docker-cli.mk
++++ b/package/docker-cli/docker-cli.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOCKER_ENGINE_VERSION = 24.0.7
-+DOCKER_ENGINE_VERSION = 26.0.0
- DOCKER_ENGINE_SITE = $(call github,moby,moby,v$(DOCKER_ENGINE_VERSION))
+-DOCKER_CLI_VERSION = 24.0.7
++DOCKER_CLI_VERSION = 26.0.0
+ DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
  
- DOCKER_ENGINE_LICENSE = Apache-2.0
+ DOCKER_CLI_LICENSE = Apache-2.0
 -- 
 2.43.0
 
