@@ -4,94 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42BA9C6FD1F
-	for <buildroot@archiver.kernel.org>; Sun, 31 Mar 2024 00:42:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFF0ACD1288
+	for <buildroot@archiver.kernel.org>; Sun, 31 Mar 2024 00:48:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E2FED82309;
-	Sun, 31 Mar 2024 00:42:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AC595817A5;
+	Sun, 31 Mar 2024 00:48:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Dme-4zIApvUF; Sun, 31 Mar 2024 00:42:54 +0000 (UTC)
+ id GPWYoPw41h_F; Sun, 31 Mar 2024 00:48:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB8C4821D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 98A2081858
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DB8C4821D9;
-	Sun, 31 Mar 2024 00:42:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 51E231BF947
- for <buildroot@lists.busybox.net>; Sun, 31 Mar 2024 00:42:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 98A2081858;
+	Sun, 31 Mar 2024 00:48:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 40C011BF947
+ for <buildroot@lists.busybox.net>; Sun, 31 Mar 2024 00:48:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0083960611
- for <buildroot@lists.busybox.net>; Sun, 31 Mar 2024 00:42:17 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2E38881858
+ for <buildroot@lists.busybox.net>; Sun, 31 Mar 2024 00:48:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5miAnvDKtroI for <buildroot@lists.busybox.net>;
- Sun, 31 Mar 2024 00:42:15 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 61fro7q0Iadd for <buildroot@lists.busybox.net>;
+ Sun, 31 Mar 2024 00:48:48 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d2b; helo=mail-io1-xd2b.google.com;
+ client-ip=2607:f8b0:4864:20::f31; helo=mail-qv1-xf31.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2904660627
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2904660627
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com
- [IPv6:2607:f8b0:4864:20::d2b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2904660627
- for <buildroot@buildroot.org>; Sun, 31 Mar 2024 00:42:14 +0000 (UTC)
-Received: by mail-io1-xd2b.google.com with SMTP id
- ca18e2360f4ac-7d0c0e3d675so3686939f.2
- for <buildroot@buildroot.org>; Sat, 30 Mar 2024 17:42:14 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BBA52817A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BBA52817A5
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com
+ [IPv6:2607:f8b0:4864:20::f31])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BBA52817A5
+ for <buildroot@buildroot.org>; Sun, 31 Mar 2024 00:48:47 +0000 (UTC)
+Received: by mail-qv1-xf31.google.com with SMTP id
+ 6a1803df08f44-6990014a57bso3173806d6.2
+ for <buildroot@buildroot.org>; Sat, 30 Mar 2024 17:48:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1711845734; x=1712450534;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ d=1e100.net; s=20230601; t=1711846126; x=1712450926;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=ZDyLsR9SWredvpMnlj9xNwO1Fw0heCHnTt5vwPV92WM=;
- b=W3JEx4H6gKWmR4A3nKWkTA+GdzBi8CpGu1UbqrrNtoYQ2Gsu2FrRSkfZMdo5XMOH+0
- xOAJ7SkGzDxJ2L1YXQnjkMfQbJPGX5KIbTLtsCVnhCK50de4hMuget6YGEAO0lIF5mpA
- ThxgyTBN5s5tjLfmhADKNX4JsIPxJuHF5nqT8Q4UKDntekVVRdzJfxgkEFHhwCd3SgwZ
- taX8BfnT9KzJlsYQdKkYfCsWHj+za1YwpcMYNw2rTAmpjGUHFMEWDyJRDvmgmcxS2iM0
- HEItZBxkbZUsP2pFqtU33y7nHgdfPino0bODQF1CNSeggFD41jA3PEmaQr8zcuaXe3eM
- eJCA==
-X-Gm-Message-State: AOJu0Yyp6r+77NyYBX4okRJmPCcpuAYMwo3tKpIVtnADioJhLzvu6jv6
- ko9Ud34X79L40SQuUo/KrF5gJlPSxmPZ9RNy7inC+t1QpjvzPy3xqF8+N0VRWKDxmw==
-X-Google-Smtp-Source: AGHT+IHRdcBhiNPQi36w1DZZDwJCJ7fjk8FoLmYYDO+p4xlt3Tbax4Gi+7VE46vfxjH8D5J5p4yi5A==
-X-Received: by 2002:a05:6602:1dc1:b0:7c8:55c2:63dc with SMTP id
- hk1-20020a0566021dc100b007c855c263dcmr6838350iob.9.1711845733695; 
- Sat, 30 Mar 2024 17:42:13 -0700 (PDT)
-Received: from james-x399.localdomain (71-218-245-145.hlrn.qwest.net.
- [71.218.245.145]) by smtp.gmail.com with ESMTPSA id
- q1-20020a5ea601000000b007d05927cb31sm1851053ioi.45.2024.03.30.17.42.12
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 30 Mar 2024 17:42:13 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Sat, 30 Mar 2024 18:41:33 -0600
-Message-Id: <20240331004133.636618-18-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240331004133.636618-1-james.hilliard1@gmail.com>
-References: <20240331004133.636618-1-james.hilliard1@gmail.com>
+ bh=ZkTBflxkG6QQupDq+eBfnElb1NXEhuIigdBNzDFGv+I=;
+ b=CQBDtYHCltF9M6SoIk7uH0tWNNnVqjJU42KygmbpKu7jL1PK6bGsqTGRKFLFA+Kq+d
+ BDWh03Rht/3OdINXOpy69FcfNB+LDiOlQUclViYfBZwx0+jB1gN4vE9G1G9lAvl5VV+y
+ mHU41ZFX1k0Y6SSmooPcLr79C8ybkwT6SDN4QaXQ1JydPjxdS9axvDt5MR/3SVah7K0z
+ eTO4WIaG5D3wJxI+GBO9EZmoxUaC0+mneBepIrSgypH35INAh9ge4I9G1okpm1rmWHns
+ ZJsvUhj2IBJ9Y7rqS+NG+sMwZagx7QFZX0UjNUf+XVA7cnPZi8KwxXit9f/NViPiLh2d
+ 1b0g==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCX6hDmYRvU2/KSxqfm69WB82LV99uwctoekYKRwXUQSgWzhxzxyRhlIvcFmu/3c23GpYgje4nEJW6qO+Ybt4btWVed27vs30Q==
+X-Gm-Message-State: AOJu0YxMH70A134d88Y6kkHa5cCe4O3eNW+7Z2ATD6wEHxny+bPn+WGL
+ R56iQaWH0BeHzzRFHoq/G1Gx+MIaiCSO3p1lSsJKynzu96Eo/V9AnYO7lm2n35V9BbEZtgcBNZZ
+ cSYklxu9U9GIYUIw/BvyAJAtPa+BXJorirXfK+w==
+X-Google-Smtp-Source: AGHT+IHgix10fdGIWjKFzLvr4HI1QfB8rpbw+0CW/F3sRzFlePoSsZrWkDp/UYibh73XT5bMI2TfpmLUo1cztm6lxkg=
+X-Received: by 2002:a05:622a:13d2:b0:431:4d28:cca7 with SMTP id
+ p18-20020a05622a13d200b004314d28cca7mr8731872qtk.53.1711846126156; Sat, 30
+ Mar 2024 17:48:46 -0700 (PDT)
 MIME-Version: 1.0
+References: <20240213211512.3918044-1-james.hilliard1@gmail.com>
+ <20240213211512.3918044-4-james.hilliard1@gmail.com>
+ <7384cb6e-1b5b-4fca-ba0c-2c4d0fcd05a3@bubu1.eu>
+ <CADvTj4qvJzBr4jBwj4htyAa=hKm67yo06Gn+kmAizbyGnZ=b3Q@mail.gmail.com>
+ <840d4fee-8266-4115-817c-89d6d7ff0d24@mind.be>
+In-Reply-To: <840d4fee-8266-4115-817c-89d6d7ff0d24@mind.be>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sat, 30 Mar 2024 18:48:34 -0600
+Message-ID: <CADvTj4oUJ1JazCQL1J10QT8Qje0bACWJQPtzsX78+bGYGyeSBQ@mail.gmail.com>
+To: Arnout Vandecappelle <arnout@mind.be>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1711845734; x=1712450534; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ d=gmail.com; s=20230601; t=1711846126; x=1712450926; darn=buildroot.org;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
  :message-id:reply-to;
- bh=ZDyLsR9SWredvpMnlj9xNwO1Fw0heCHnTt5vwPV92WM=;
- b=bpZ8sJLWrO8HwPXAsGMuexAOFmcAXeK7fQ1zUCb3/wB30ZRIgmQhEi7OzpMPReapJQ
- upadln9L52JgE2nCugSjLrAmQl1RhuuRxe8OPwaG+O4DqkEnk8Gh2q7Sx1MuWqudDZlk
- UGX6lz23VR2mNtjiic09HaF/r8o3U+JIuPrO32C8nkjWssueoRQMQPdMT0zjtkxBxtBo
- lkaan0p5h9CqDjItPSEL9N9hDUWvh+2XUDHQWXP1FRAgaXWZy6zFuZvADznNVHvXdj97
- fU/oYGdO3L3CNFLKzdV2B+a/P/3RdNF8/SbgwkKcRUqAbkNMAp3CW6oFbpWQ/SHZN6iQ
- rvIQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=ZkTBflxkG6QQupDq+eBfnElb1NXEhuIigdBNzDFGv+I=;
+ b=fn2mAeKoUp3IPdZm1KW/2gTteR7ZoRiq5D67Qxvw6YjzRYT9i2TsQGJ+hsrIoMH/Ck
+ RyUnT0cmta1qWFN/yB4QVfaBfVbIR/yeUrDbzen/O5zvtefBYQG69cQtGKkcELwHPmxw
+ LAFUK+gNjYiV5T3B7vrVshIPdalPiqJG/0kYHIcREPw6AlgHlmRyhCG5+BtVqKo2mIXj
+ Ehbar2vmn9s1xZXzo8AQpG4L80ocmxI3qAytB7S7c77TUJrNK63su7l+GTDkHrazW8Vr
+ Vn73jE2ynjwVFcQIrn+MlkQ70GLqM2+U4OkReUgt4kIaj6Gjj0eqTHrIxYt0hlmsoSK1
+ Ki2A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=bpZ8sJLW
-Subject: [Buildroot] [PATCH v9 18/18] package/pkg-python.mk: migrate
- setuptools to pep517
+ header.a=rsa-sha256 header.s=20230601 header.b=fn2mAeKo
+Subject: Re: [Buildroot] [PATCH v8 04/26] package/python-setuptools: revert
+ to last version with functional --build-option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,560 +104,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>,
- Gustavo Heinz <gustavo@gsthnz.com>,
- =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>,
- Attila Wagner <attila.wagner@onyxinsight.com>,
- Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>,
- Louis Aussedat <aussedat.louis@gmail.com>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Asaf Kahlon <asafka7@gmail.com>, "Wojciech M . Zabolotny" <wzab01@gmail.com>,
- Joris Offouga <offougajoris@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>,
- Marcin Niestroj <m.niestroj@grinn-global.com>,
- Christian Kellermann <christian.kellermann@solectrix.de>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Mauro Condarelli <mc5686@mclink.it>, Lionel Flandrin <lionel@svkt.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Marcus Hoffmann <buildroot@bubu1.eu>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Now that setuptools and its dependencies are using pep517 we can
-migrate the setuptools infrastructure itself to use the pep517
-build frontend.
-
-As part of this we need to migrate the all python packages using
-_BUILD_OPTS to the new config settings format used by the pep517
-build frontend.
-
-We need to use a setup.cfg file to pass the pg_config path when
-building python-psycopg2 as this package needs the pg_config
-path for all internal build stages while -C--build-option= only
-passes the flag to the internal bdist_wheel stage.
-
-Use new setup type variables to define setup type specific
-dependencies instead of using the conditional block.
-
-We also need to set --skip-dependency-check for the following
-packages which specify build dependencies that are not actually
-required:
- - python-lxml
- - python-matplotlib
- - python-msgpack
- - python-pymupdf
- - python-uvloop
- - python-wsaccel
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
----
-Changes v8 -> v9:
-  - use setup.cfg for python-psycopg2 to pass pg_config path
-Changes v7 -> v8:
-  - disable dependency enforcement for more packages
-Changes v6 -> v7:
-  - just disable dependency enforcement for msgpack
-  - rebase
-Changes v5 -> v6:
-  - use setup type variables for dependencies
-Changes v4 -> v5:
-  - rebase on next
-Changes v1 -> v3:
-  - rebase on master
-  - combine setuptools-rust and maturin env variables
-  - drop patch which is now upstream
----
- package/pkg-python.mk                         | 160 +++++++++---------
- package/python-evdev/python-evdev.mk          |   4 +-
- package/python-lxml/python-lxml.mk            |  10 +-
- package/python-m2crypto/python-m2crypto.mk    |   4 +-
- .../python-matplotlib/python-matplotlib.mk    |   1 +
- package/python-msgpack/python-msgpack.mk      |   1 +
- package/python-pillow/python-pillow.mk        |  35 ++--
- package/python-psycopg2/python-psycopg2.mk    |   7 +-
- package/python-pymupdf/python-pymupdf.mk      |   1 +
- package/python-pyzmq/python-pyzmq.mk          |   4 +-
- package/python-uvloop/python-uvloop.mk        |   7 +-
- package/python-wsaccel/python-wsaccel.mk      |   1 +
- 12 files changed, 122 insertions(+), 113 deletions(-)
-
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index 94f28ff841..839f728e2f 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -52,15 +52,62 @@ HOST_PKG_PYTHON_ENV = \
- 	PYTHONNOUSERSITE=1 \
- 	$(HOST_CONFIGURE_OPTS)
- 
--# Target setuptools-based packages
--PKG_PYTHON_SETUPTOOLS_ENV = \
-+# Target pep517-based packages
-+PKG_PYTHON_PEP517_ENV = \
- 	$(PKG_PYTHON_ENV)
- 
--PKG_PYTHON_SETUPTOOLS_CMD = \
--	$(if $(wildcard $($(PKG)_BUILDDIR)/setup.py),setup.py,-c 'from setuptools import setup;setup()')
-+PKG_PYTHON_PEP517_BUILD_CMD = \
-+	-m build -n -w
-+
-+PKG_PYTHON_PEP517_INSTALL_OPTS = \
-+	--interpreter=/usr/bin/python \
-+	--script-kind=posix
-+
-+PKG_PYTHON_PEP517_INSTALL_TARGET_CMD = \
-+	$(TOPDIR)/support/scripts/pyinstaller.py \
-+	dist/* \
-+	$(PKG_PYTHON_PEP517_INSTALL_OPTS) \
-+	--purelib=$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
-+	--headers=$(TARGET_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR) \
-+	--scripts=$(TARGET_DIR)/usr/bin \
-+	--data=$(TARGET_DIR)/usr
-+
-+PKG_PYTHON_PEP517_INSTALL_STAGING_CMD = \
-+	$(TOPDIR)/support/scripts/pyinstaller.py \
-+	dist/* \
-+	$(PKG_PYTHON_PEP517_INSTALL_OPTS) \
-+	--purelib=$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
-+	--headers=$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR) \
-+	--scripts=$(STAGING_DIR)/usr/bin \
-+	--data=$(STAGING_DIR)/usr
-+
-+PKG_PYTHON_PEP517_DEPENDENCIES = \
-+	host-python-pypa-build \
-+	host-python-installer
-+
-+# Host pep517-based packages
-+HOST_PKG_PYTHON_PEP517_ENV = \
-+	$(HOST_PKG_PYTHON_ENV)
-+
-+HOST_PKG_PYTHON_PEP517_BUILD_CMD = \
-+	-m build -n -w
-+
-+HOST_PKG_PYTHON_PEP517_INSTALL_CMD = \
-+	$(TOPDIR)/support/scripts/pyinstaller.py \
-+	dist/* \
-+	--interpreter=$(HOST_DIR)/bin/python \
-+	--script-kind=posix \
-+	--purelib=$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
-+	--headers=$(HOST_DIR)/include/python$(PYTHON3_VERSION_MAJOR) \
-+	--scripts=$(HOST_DIR)/bin \
-+	--data=$(HOST_DIR)
-+
-+# Target setuptools-based packages
-+PKG_PYTHON_SETUPTOOLS_ENV = \
-+	$(PKG_PYTHON_PEP517_ENV)
- 
- PKG_PYTHON_SETUPTOOLS_BUILD_CMD = \
--	$(PKG_PYTHON_SETUPTOOLS_CMD) build
-+	$(PKG_PYTHON_PEP517_BUILD_CMD)
- 
- PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
- 	--install-headers=/usr/include/python$(PYTHON3_VERSION_MAJOR) \
-@@ -69,30 +116,24 @@ PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
- 	--single-version-externally-managed
- 
- PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_CMD = \
--	$(PKG_PYTHON_SETUPTOOLS_CMD) \
--	install --no-compile \
--	$(PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS) \
--	--root=$(TARGET_DIR)
-+	$(PKG_PYTHON_PEP517_INSTALL_TARGET_CMD)
- 
- PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_CMD = \
--	$(PKG_PYTHON_SETUPTOOLS_CMD) \
--	install \
--	$(PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS) \
--	--root=$(STAGING_DIR)
-+	$(PKG_PYTHON_PEP517_INSTALL_STAGING_CMD)
-+
-+PKG_PYTHON_SETUPTOOLS_DEPENDENCIES = \
-+	$(PKG_PYTHON_PEP517_DEPENDENCIES) \
-+	host-python-setuptools
- 
- # Host setuptools-based packages
- HOST_PKG_PYTHON_SETUPTOOLS_ENV = \
--	$(HOST_PKG_PYTHON_ENV)
-+	$(HOST_PKG_PYTHON_PEP517_ENV)
- 
- HOST_PKG_PYTHON_SETUPTOOLS_BUILD_CMD = \
--	$(PKG_PYTHON_SETUPTOOLS_CMD) build
-+	$(HOST_PKG_PYTHON_PEP517_BUILD_CMD)
- 
- HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_CMD = \
--	$(PKG_PYTHON_SETUPTOOLS_CMD) \
--	install \
--	--prefix=$(HOST_DIR) \
--	--root=/ \
--	--single-version-externally-managed
-+	$(HOST_PKG_PYTHON_PEP517_INSTALL_CMD)
- 
- # Target setuptools-rust-based packages
- PKG_PYTHON_SETUPTOOLS_RUST_ENV = \
-@@ -109,6 +150,10 @@ PKG_PYTHON_SETUPTOOLS_RUST_INSTALL_TARGET_CMD = \
- PKG_PYTHON_SETUPTOOLS_RUST_INSTALL_STAGING_CMD = \
- 	$(PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_CMD)
- 
-+PKG_PYTHON_SETUPTOOLS_RUST_DEPENDENCIES = \
-+	$(PKG_PYTHON_SETUPTOOLS_DEPENDENCIES) \
-+	host-python-setuptools-rust
-+
- # Host setuptools-rust-based packages
- HOST_PKG_PYTHON_SETUPTOOLS_RUST_ENV = \
- 	$(HOST_PKG_PYTHON_SETUPTOOLS_ENV) \
-@@ -121,52 +166,6 @@ HOST_PKG_PYTHON_SETUPTOOLS_RUST_BUILD_CMD = \
- HOST_PKG_PYTHON_SETUPTOOLS_RUST_INSTALL_CMD = \
- 	$(HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_CMD)
- 
--# Target pep517-based packages
--PKG_PYTHON_PEP517_ENV = \
--	$(PKG_PYTHON_ENV)
--
--PKG_PYTHON_PEP517_BUILD_CMD = \
--	-m build -n -w
--
--PKG_PYTHON_PEP517_INSTALL_OPTS = \
--	--interpreter=/usr/bin/python \
--	--script-kind=posix
--
--PKG_PYTHON_PEP517_INSTALL_TARGET_CMD = \
--	$(TOPDIR)/support/scripts/pyinstaller.py \
--	dist/* \
--	$(PKG_PYTHON_PEP517_INSTALL_OPTS) \
--	--purelib=$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
--	--headers=$(TARGET_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR) \
--	--scripts=$(TARGET_DIR)/usr/bin \
--	--data=$(TARGET_DIR)/usr
--
--PKG_PYTHON_PEP517_INSTALL_STAGING_CMD = \
--	$(TOPDIR)/support/scripts/pyinstaller.py \
--	dist/* \
--	$(PKG_PYTHON_PEP517_INSTALL_OPTS) \
--	--purelib=$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
--	--headers=$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR) \
--	--scripts=$(STAGING_DIR)/usr/bin \
--	--data=$(STAGING_DIR)/usr
--
--# Host pep517-based packages
--HOST_PKG_PYTHON_PEP517_ENV = \
--	$(HOST_PKG_PYTHON_ENV)
--
--HOST_PKG_PYTHON_PEP517_BUILD_CMD = \
--	-m build -n -w
--
--HOST_PKG_PYTHON_PEP517_INSTALL_CMD = \
--	$(TOPDIR)/support/scripts/pyinstaller.py \
--	dist/* \
--	--interpreter=$(HOST_DIR)/bin/python \
--	--script-kind=posix \
--	--purelib=$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
--	--headers=$(HOST_DIR)/include/python$(PYTHON3_VERSION_MAJOR) \
--	--scripts=$(HOST_DIR)/bin \
--	--data=$(HOST_DIR)
--
- # Target flit packages
- PKG_PYTHON_FLIT_ENV = \
- 	$(PKG_PYTHON_PEP517_ENV)
-@@ -180,6 +179,10 @@ PKG_PYTHON_FLIT_INSTALL_TARGET_CMD = \
- PKG_PYTHON_FLIT_INSTALL_STAGING_CMD = \
- 	$(PKG_PYTHON_PEP517_INSTALL_STAGING_CMD)
- 
-+PKG_PYTHON_FLIT_DEPENDENCIES = \
-+	$(PKG_PYTHON_PEP517_DEPENDENCIES) \
-+	host-python-flit-core
-+
- # Host flit packages
- HOST_PKG_PYTHON_FLIT_ENV = \
- 	$(HOST_PKG_PYTHON_PEP517_ENV)
-@@ -215,6 +218,10 @@ PKG_PYTHON_MATURIN_INSTALL_TARGET_CMD = \
- PKG_PYTHON_MATURIN_INSTALL_STAGING_CMD = \
- 	$(PKG_PYTHON_PEP517_INSTALL_STAGING_CMD)
- 
-+PKG_PYTHON_MATURIN_DEPENDENCIES = \
-+	$(PKG_PYTHON_PEP517_DEPENDENCIES) \
-+	host-python-maturin
-+
- # Host maturin packages
- HOST_PKG_PYTHON_MATURIN_ENV = \
- 	$(HOST_PKG_PYTHON_PEP517_ENV) \
-@@ -293,28 +300,17 @@ else
- $(2)_DEPENDENCIES += host-python3
- endif # ($(4),target)
- 
--# Setuptools based packages will need setuptools for the host Python
--# interpreter (both host and target).
-+# Setup type specific dependencies are the same whether we are
-+# building for the host or the target.
- #
--ifneq ($$(filter setuptools setuptools-rust,$$($(2)_SETUP_TYPE)),)
--$(2)_DEPENDENCIES += host-python-setuptools
--ifeq ($$($(2)_SETUP_TYPE),setuptools-rust)
--$(2)_DEPENDENCIES += host-python-setuptools-rust
--endif
--else ifneq ($$(filter flit maturin pep517,$$($(2)_SETUP_TYPE)),)
--$(2)_DEPENDENCIES += host-python-pypa-build host-python-installer
--ifeq ($$($(2)_SETUP_TYPE),flit)
--$(2)_DEPENDENCIES += host-python-flit-core
--endif
--ifeq ($$($(2)_SETUP_TYPE),maturin)
--$(2)_DEPENDENCIES += host-python-maturin
--endif
--else ifeq ($$($(2)_SETUP_TYPE),flit-bootstrap)
-+ifeq ($$($(2)_SETUP_TYPE),flit-bootstrap)
- # Don't add dependency on host-python-installer for
- # host-python-installer itself, and its dependencies.
- ifeq ($$(filter host-python-flit-core host-python-installer,$(1)),)
- $(2)_DEPENDENCIES += host-python-installer
- endif
-+else
-+$(2)_DEPENDENCIES += $$(PKG_PYTHON_$$($(2)_SETUP_TYPE_UPPER)_DEPENDENCIES)
- endif
- 
- # Pyo3 based packages(setuptools-rust and maturin) will need rust
-diff --git a/package/python-evdev/python-evdev.mk b/package/python-evdev/python-evdev.mk
-index 5cf62b5160..b509b43e8a 100644
---- a/package/python-evdev/python-evdev.mk
-+++ b/package/python-evdev/python-evdev.mk
-@@ -12,7 +12,7 @@ PYTHON_EVDEV_LICENSE = Revised BSD License
- PYTHON_EVDEV_LICENSE_FILES = LICENSE
- 
- PYTHON_EVDEV_BUILD_OPTS = \
--	build_ecodes \
--	--evdev-headers $(STAGING_DIR)/usr/include/linux/input.h:$(STAGING_DIR)/usr/include/linux/input-event-codes.h:$(STAGING_DIR)/usr/include/linux/uinput.h
-+	-C--build-option=build_ecodes \
-+	-C--build-option=--evdev-headers=$(STAGING_DIR)/usr/include/linux/input.h:$(STAGING_DIR)/usr/include/linux/input-event-codes.h:$(STAGING_DIR)/usr/include/linux/uinput.h
- 
- $(eval $(python-package))
-diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
-index 519a9a77ac..336f954775 100644
---- a/package/python-lxml/python-lxml.mk
-+++ b/package/python-lxml/python-lxml.mk
-@@ -28,11 +28,13 @@ HOST_PYTHON_LXML_DEPENDENCIES = host-libxml2 host-libxslt host-zlib
- # python-lxml needs these scripts in order to properly detect libxml2 and
- # libxslt compiler and linker flags
- PYTHON_LXML_BUILD_OPTS = \
--	--xslt-config=$(STAGING_DIR)/usr/bin/xslt-config \
--	--xml2-config=$(STAGING_DIR)/usr/bin/xml2-config
-+	--skip-dependency-check
-+	-C--build-option=--xslt-config=$(STAGING_DIR)/usr/bin/xslt-config \
-+	-C--build-option=--xml2-config=$(STAGING_DIR)/usr/bin/xml2-config
- HOST_PYTHON_LXML_BUILD_OPTS = \
--	--xslt-config=$(HOST_DIR)/bin/xslt-config \
--	--xml2-config=$(HOST_DIR)/bin/xml2-config
-+	--skip-dependency-check
-+	-C--build-option=--xslt-config=$(HOST_DIR)/bin/xslt-config \
-+	-C--build-option=--xml2-config=$(HOST_DIR)/bin/xml2-config
- 
- $(eval $(python-package))
- $(eval $(host-python-package))
-diff --git a/package/python-m2crypto/python-m2crypto.mk b/package/python-m2crypto/python-m2crypto.mk
-index 69a0c28df5..6c07f42d06 100644
---- a/package/python-m2crypto/python-m2crypto.mk
-+++ b/package/python-m2crypto/python-m2crypto.mk
-@@ -13,6 +13,8 @@ PYTHON_M2CRYPTO_LICENSE_FILES = LICENCE
- PYTHON_M2CRYPTO_CPE_ID_VENDOR = m2crypto_project
- PYTHON_M2CRYPTO_CPE_ID_PRODUCT = m2crypto
- PYTHON_M2CRYPTO_DEPENDENCIES = openssl host-swig
--PYTHON_M2CRYPTO_BUILD_OPTS = --openssl=$(STAGING_DIR)/usr
-+PYTHON_M2CRYPTO_BUILD_OPTS = \
-+	-C--build-option=build_ext \
-+	-C--build-option=--openssl=$(STAGING_DIR)/usr
- 
- $(eval $(python-package))
-diff --git a/package/python-matplotlib/python-matplotlib.mk b/package/python-matplotlib/python-matplotlib.mk
-index 4fd2b5f432..5f5d53172e 100644
---- a/package/python-matplotlib/python-matplotlib.mk
-+++ b/package/python-matplotlib/python-matplotlib.mk
-@@ -20,6 +20,7 @@ PYTHON_MATPLOTLIB_DEPENDENCIES = \
- 	python-pybind \
- 	qhull
- PYTHON_MATPLOTLIB_SETUP_TYPE = setuptools
-+PYTHON_MATPLOTLIB_BUILD_OPTS = --skip-dependency-check
- 
- ifeq ($(BR2_PACKAGE_PYTHON_MATPLOTLIB_QT),y)
- PYTHON_MATPLOTLIB_DEPENDENCIES += python-pyqt5
-diff --git a/package/python-msgpack/python-msgpack.mk b/package/python-msgpack/python-msgpack.mk
-index 3ee7c54ce1..9cdf5263de 100644
---- a/package/python-msgpack/python-msgpack.mk
-+++ b/package/python-msgpack/python-msgpack.mk
-@@ -10,6 +10,7 @@ PYTHON_MSGPACK_SITE = https://files.pythonhosted.org/packages/c2/d5/5662032db157
- PYTHON_MSGPACK_LICENSE = Apache-2.0
- PYTHON_MSGPACK_LICENSE_FILES = COPYING
- PYTHON_MSGPACK_SETUP_TYPE = setuptools
-+PYTHON_MSGPACK_BUILD_OPTS = --skip-dependency-check
- 
- # When set in the environment, whatever the value, MSGPACK_PUREPYTHON drives
- # using the pure python implementation rather than rely on the C++ native code.
-diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
-index 10939d8467..7f5b4dd0f9 100644
---- a/package/python-pillow/python-pillow.mk
-+++ b/package/python-pillow/python-pillow.mk
-@@ -14,61 +14,60 @@ PYTHON_PILLOW_CPE_ID_PRODUCT = pillow
- PYTHON_PILLOW_SETUP_TYPE = setuptools
- 
- PYTHON_PILLOW_DEPENDENCIES = host-pkgconf
--PYTHON_PILLOW_BUILD_OPTS = build_ext --disable-platform-guessing
--PYTHON_PILLOW_INSTALL_TARGET_OPTS = $(PYTHON_PILLOW_BUILD_OPTS)
-+PYTHON_PILLOW_BUILD_OPTS = -C--build-option=build_ext -C--build-option=--disable-platform-guessing
- 
- ifeq ($(BR2_PACKAGE_FREETYPE),y)
- PYTHON_PILLOW_DEPENDENCIES += freetype
--PYTHON_PILLOW_BUILD_OPTS += --enable-freetype
-+PYTHON_PILLOW_BUILD_OPTS += -C--build-option=--enable-freetype
- else
--PYTHON_PILLOW_BUILD_OPTS += --disable-freetype
-+PYTHON_PILLOW_BUILD_OPTS += -C--build-option=--disable-freetype
- endif
- 
- ifeq ($(BR2_PACKAGE_JPEG),y)
- PYTHON_PILLOW_DEPENDENCIES += jpeg
--PYTHON_PILLOW_BUILD_OPTS += --enable-jpeg
-+PYTHON_PILLOW_BUILD_OPTS += -C--build-option=--enable-jpeg
- else
--PYTHON_PILLOW_BUILD_OPTS += --disable-jpeg
-+PYTHON_PILLOW_BUILD_OPTS += -C--build-option=--disable-jpeg
- endif
- 
- ifeq ($(BR2_PACKAGE_LCMS2),y)
- PYTHON_PILLOW_DEPENDENCIES += lcms2
--PYTHON_PILLOW_BUILD_OPTS += --enable-lcms
-+PYTHON_PILLOW_BUILD_OPTS += -C--build-option=--enable-lcms
- else
--PYTHON_PILLOW_BUILD_OPTS += --disable-lcms
-+PYTHON_PILLOW_BUILD_OPTS += -C--build-option=--disable-lcms
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBXCB),y)
- PYTHON_PILLOW_DEPENDENCIES += libxcb
--PYTHON_PILLOW_BUILD_OPTS += --enable-xcb
-+PYTHON_PILLOW_BUILD_OPTS += -C--build-option=--enable-xcb
- else
--PYTHON_PILLOW_BUILD_OPTS += --disable-xcb
-+PYTHON_PILLOW_BUILD_OPTS += -C--build-option=--disable-xcb
- endif
- 
- ifeq ($(BR2_PACKAGE_OPENJPEG),y)
- PYTHON_PILLOW_DEPENDENCIES += openjpeg
--PYTHON_PILLOW_BUILD_OPTS += --enable-jpeg2000
-+PYTHON_PILLOW_BUILD_OPTS += -C--build-option=--enable-jpeg2000
- else
--PYTHON_PILLOW_BUILD_OPTS += --disable-jpeg2000
-+PYTHON_PILLOW_BUILD_OPTS += -C--build-option=--disable-jpeg2000
- endif
- 
- ifeq ($(BR2_PACKAGE_TIFF),y)
- PYTHON_PILLOW_DEPENDENCIES += tiff
--PYTHON_PILLOW_BUILD_OPTS += --enable-tiff
-+PYTHON_PILLOW_BUILD_OPTS += -C--build-option=--enable-tiff
- else
--PYTHON_PILLOW_BUILD_OPTS += --disable-tiff
-+PYTHON_PILLOW_BUILD_OPTS += -C--build-option=--disable-tiff
- endif
- 
- ifeq ($(BR2_PACKAGE_WEBP),y)
- PYTHON_PILLOW_DEPENDENCIES += webp
--PYTHON_PILLOW_BUILD_OPTS += --enable-webp
-+PYTHON_PILLOW_BUILD_OPTS += -C--build-option=--enable-webp
- ifeq ($(BR2_PACKAGE_WEBP_DEMUX)$(BR2_PACKAGE_WEBP_MUX),yy)
--PYTHON_PILLOW_BUILD_OPTS += --enable-webpmux
-+PYTHON_PILLOW_BUILD_OPTS += -C--build-option=--enable-webpmux
- else
--PYTHON_PILLOW_BUILD_OPTS += --disable-webpmux
-+PYTHON_PILLOW_BUILD_OPTS += -C--build-option=--disable-webpmux
- endif
- else
--PYTHON_PILLOW_BUILD_OPTS += --disable-webp --disable-webpmux
-+PYTHON_PILLOW_BUILD_OPTS += -C--build-option=--disable-webp -C--build-option=--disable-webpmux
- endif
- 
- $(eval $(python-package))
-diff --git a/package/python-psycopg2/python-psycopg2.mk b/package/python-psycopg2/python-psycopg2.mk
-index 0149b8d185..59a3190ae1 100644
---- a/package/python-psycopg2/python-psycopg2.mk
-+++ b/package/python-psycopg2/python-psycopg2.mk
-@@ -11,9 +11,12 @@ PYTHON_PSYCOPG2_SETUP_TYPE = setuptools
- PYTHON_PSYCOPG2_LICENSE = LGPL-3.0+
- PYTHON_PSYCOPG2_LICENSE_FILES = LICENSE
- PYTHON_PSYCOPG2_DEPENDENCIES = postgresql
-+
- # Force psycopg2 to use the Buildroot provided postgresql version
- # instead of the one from the host machine
--PYTHON_PSYCOPG2_BUILD_OPTS = build_ext --pg-config=$(STAGING_DIR)/usr/bin/pg_config
--PYTHON_PSYCOPG2_INSTALL_TARGET_OPTS = build_ext --pg-config=$(STAGING_DIR)/usr/bin/pg_config
-+define PYTHON_PSYCOPG2_CREATE_SETUP_CFG
-+	printf "[build_ext]\ndefine=\npg_config=$(STAGING_DIR)/usr/bin/pg_config\n" > $(@D)/setup.cfg
-+endef
-+PYTHON_PSYCOPG2_PRE_CONFIGURE_HOOKS += PYTHON_PSYCOPG2_CREATE_SETUP_CFG
- 
- $(eval $(python-package))
-diff --git a/package/python-pymupdf/python-pymupdf.mk b/package/python-pymupdf/python-pymupdf.mk
-index 639ce0e00e..8825868fb5 100644
---- a/package/python-pymupdf/python-pymupdf.mk
-+++ b/package/python-pymupdf/python-pymupdf.mk
-@@ -13,6 +13,7 @@ PYTHON_PYMUPDF_LICENSE = AGPL-3.0+
- PYTHON_PYMUPDF_LICENSE_FILES = COPYING
- # No license file included in pip, but it's present on github
- PYTHON_PYMUPDF_DEPENDENCIES = freetype host-swig mupdf zlib
-+PYTHON_PYMUPDF_BUILD_OPTS = --skip-dependency-check
- 
- PYTHON_PYMUPDF_ENV = CFLAGS="-I$(STAGING_DIR)/usr/include/mupdf -I$(STAGING_DIR)/usr/include/freetype2"
- 
-diff --git a/package/python-pyzmq/python-pyzmq.mk b/package/python-pyzmq/python-pyzmq.mk
-index f1444b9124..48a298b221 100644
---- a/package/python-pyzmq/python-pyzmq.mk
-+++ b/package/python-pyzmq/python-pyzmq.mk
-@@ -11,7 +11,7 @@ PYTHON_PYZMQ_LICENSE = LGPL-3.0+, BSD-3-Clause, Apache-2.0
- # Apache license only online: http://www.apache.org/licenses/LICENSE-2.0
- PYTHON_PYZMQ_LICENSE_FILES = LICENSE.LESSER LICENSE.BSD
- PYTHON_PYZMQ_SETUP_TYPE = setuptools
--PYTHON_PYZMQ_BUILD_OPTS = --zmq=$(STAGING_DIR)/usr
-+PYTHON_PYZMQ_BUILD_OPTS = -C--build-option=--zmq=$(STAGING_DIR)/usr
- PYTHON_PYZMQ_DEPENDENCIES = \
- 	host-python-cython \
- 	host-python-packaging \
-@@ -27,7 +27,7 @@ endef
- PYTHON_PYZMQ_POST_PATCH_HOOKS += PYTHON_PYZMQ_PATCH_ZEROMQ_VERSION
- 
- ifeq ($(BR2_PACKAGE_ZEROMQ_DRAFTS),y)
--PYTHON_PYZMQ_BUILD_OPTS += --enable-drafts
-+PYTHON_PYZMQ_BUILD_OPTS += -C--build-option=--enable-drafts
- endif
- 
- $(eval $(python-package))
-diff --git a/package/python-uvloop/python-uvloop.mk b/package/python-uvloop/python-uvloop.mk
-index 285884a2bb..aaeab2805f 100644
---- a/package/python-uvloop/python-uvloop.mk
-+++ b/package/python-uvloop/python-uvloop.mk
-@@ -10,8 +10,11 @@ PYTHON_UVLOOP_SITE = https://files.pythonhosted.org/packages/9c/16/728cc5dde368e
- PYTHON_UVLOOP_SETUP_TYPE = setuptools
- PYTHON_UVLOOP_LICENSE = Apache-2.0, MIT
- PYTHON_UVLOOP_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
--PYTHON_UVLOOP_BUILD_OPTS = build_ext --inplace --use-system-libuv
--PYTHON_UVLOOP_INSTALL_TARGET_OPTS = build_ext --inplace --use-system-libuv
- PYTHON_UVLOOP_DEPENDENCIES = libuv
-+PYTHON_UVLOOP_BUILD_OPTS = \
-+	--skip-dependency-check \
-+	-C--build-option=build_ext \
-+	-C--build-option=--inplace \
-+	-C--build-option=--use-system-libuv
- 
- $(eval $(python-package))
-diff --git a/package/python-wsaccel/python-wsaccel.mk b/package/python-wsaccel/python-wsaccel.mk
-index 1f63aa5c40..7ccb033256 100644
---- a/package/python-wsaccel/python-wsaccel.mk
-+++ b/package/python-wsaccel/python-wsaccel.mk
-@@ -10,5 +10,6 @@ PYTHON_WSACCEL_SITE = https://files.pythonhosted.org/packages/94/28/41c0e711b538
- PYTHON_WSACCEL_LICENSE = Apache-2.0
- PYTHON_WSACCEL_LICENSE_FILES = LICENSE
- PYTHON_WSACCEL_SETUP_TYPE = setuptools
-+PYTHON_WSACCEL_BUILD_OPTS = --skip-dependency-check
- 
- $(eval $(python-package))
--- 
-2.34.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gV2VkLCBNYXIgMjcsIDIwMjQgYXQgMzo1MeKAr1BNIEFybm91dCBWYW5kZWNhcHBlbGxlIDxh
+cm5vdXRAbWluZC5iZT4gd3JvdGU6Cj4KPgo+Cj4gT24gMTQvMDIvMjAyNCAwMDo0MywgSmFtZXMg
+SGlsbGlhcmQgd3JvdGU6Cj4gPiBPbiBUdWUsIEZlYiAxMywgMjAyNCBhdCA0OjE04oCvUE0gTWFy
+Y3VzIEhvZmZtYW5uIDxidWlsZHJvb3RAYnVidTEuZXU+IHdyb3RlOgo+ID4+Cj4gPj4gSGkgSmFt
+ZXMsCj4gPj4KPiA+PiBPbiAxMy4wMi4yNCAyMjoxNCwgSmFtZXMgSGlsbGlhcmQgd3JvdGU6Cj4g
+Pj4+IEEgcmVjZW50IGNoYW5nZSBpbiBzZXR1cHRvb2xzIGFjY2lkZW50aWFsbHkgYnJva2UgdGhl
+IGFiaWxpdHkgdG8KPiA+Pj4gcGFzcyBidWlsZF9leHQgYXJncyB2aWEgdGhlIC0tYnVpbGQtb3B0
+aW9uIGNvbmZpZyBzZXR0aW5nLgo+ID4+Pgo+ID4+PiBMZXRzIGRvd25ncmFkZSB0byB0aGUgbGFz
+dCB3b3JraW5nIHZlcnNpb24gZm9yIG5vdy4KPiA+Pgo+ID4+IERvIHlvdSBoYXZlIGEgbGluayB0
+byBhIGlzc3VlIGhlcmU/IElzIHRoaW5nIGFja25vd2xlZGdlZCBieSB1cHN0cmVhbSwKPiA+PiBp
+cyB0aGlzIHBsYW5uZWQgdG8gYmUgZml4ZWQ/Cj4gPgo+ID4gWWVhaCwgSSBoYXZlIGEgcHVsbCBy
+ZXF1ZXN0IHJldmVydGluZyB0aGUgY2hhbmdlIHRoYXQgY2F1c2VkIHRoaXMgdG8gYnJlYWs6Cj4g
+PiBodHRwczovL2dpdGh1Yi5jb20vcHlwYS9zZXR1cHRvb2xzL3B1bGwvNDIxOAo+ID4KPiA+IFRo
+ZXJlJ3Mgc29tZSBsaW5rcy90aHJlYWRzIHRoZXJlIHdpdGggbW9yZSBpbmZvLgo+Cj4gICBJSVVD
+IHRoZSBzaXR1YXRpb24gZXZvbHZlZCBhbmQgd2Ugc2hvdWxkIGFwcGx5Cj4gaHR0cHM6Ly9naXRo
+dWIuY29tL3B5cGEvc2V0dXB0b29scy9wdWxsLzQyMTcgaW5zdGVhZCBvZiBkb2luZyB0aGlzIHJl
+dmVydD8KClllYWgsIEkndmUgdXBkYXRlZCBzZXR1cHRvb2xzIGluIG15IHY5LCBhbHRob3VnaCBJ
+IGRpZCBoYXZlIHRvIHR3ZWFrIGhvdwpweXRob24tcHN5Y29wZzIgZ2V0cyBwYXNzZWQgdGhlIHBn
+X2NvbmZpZyBwYXRoIGR1ZSB0byAtQy0tYnVpbGQtb3B0aW9uPQpub3cgb25seSBwYXNzaW5nIGNv
+bmZpZyB2YXJpYWJsZXMgdG8gdGhlIGJkaXN0X3doZWVsIGJ1aWxkIHN0YWdlIHdoaWNoCmFwcGVh
+cnMgdG8gYmUgc3VmZmljaWVudCBmb3IgYWxsIG90aGVyIHBhY2thZ2VzIGJ1dCBub3QgcHl0aG9u
+LXBzeWNvcGcyLgoKaHR0cHM6Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9wcm9qZWN0L2J1aWxkcm9v
+dC9wYXRjaC8yMDI0MDMzMTAwNDEzMy42MzY2MTgtMTgtamFtZXMuaGlsbGlhcmQxQGdtYWlsLmNv
+bS8KCj4KPgo+ICAgUmVnYXJkcywKPiAgIEFybm91dAo+Cj4gPgo+ID4+Cj4gPj4+Cj4gPj4+IFNp
+Z25lZC1vZmYtYnk6IEphbWVzIEhpbGxpYXJkIDxqYW1lcy5oaWxsaWFyZDFAZ21haWwuY29tPgo+
+ID4+PiAtLS0KPiA+Pj4gICAgcGFja2FnZS9weXRob24tc2V0dXB0b29scy9weXRob24tc2V0dXB0
+b29scy5oYXNoIHwgNCArKy0tCj4gPj4+ICAgIHBhY2thZ2UvcHl0aG9uLXNldHVwdG9vbHMvcHl0
+aG9uLXNldHVwdG9vbHMubWsgICB8IDQgKystLQo+ID4+PiAgICAyIGZpbGVzIGNoYW5nZWQsIDQg
+aW5zZXJ0aW9ucygrKSwgNCBkZWxldGlvbnMoLSkKPiA+Pj4KPiA+Pj4gZGlmZiAtLWdpdCBhL3Bh
+Y2thZ2UvcHl0aG9uLXNldHVwdG9vbHMvcHl0aG9uLXNldHVwdG9vbHMuaGFzaCBiL3BhY2thZ2Uv
+cHl0aG9uLXNldHVwdG9vbHMvcHl0aG9uLXNldHVwdG9vbHMuaGFzaAo+ID4+PiBpbmRleCA3ZjEz
+YWMzODk2Li45Yzk3MWVlYzExIDEwMDY0NAo+ID4+PiAtLS0gYS9wYWNrYWdlL3B5dGhvbi1zZXR1
+cHRvb2xzL3B5dGhvbi1zZXR1cHRvb2xzLmhhc2gKPiA+Pj4gKysrIGIvcGFja2FnZS9weXRob24t
+c2V0dXB0b29scy9weXRob24tc2V0dXB0b29scy5oYXNoCj4gPj4+IEBAIC0xLDUgKzEsNSBAQAo+
+ID4+PiAgICAjIG1kNSwgc2hhMjU2IGZyb20gaHR0cHM6Ly9weXBpLm9yZy9weXBpL3NldHVwdG9v
+bHMvanNvbgo+ID4+PiAtbWQ1ICBiODJkZTQ1YWFhNmI5YmI5MTEyMjY2NjAyMTJlYmI4MyAgc2V0
+dXB0b29scy02OS4wLjMudGFyLmd6Cj4gPj4+IC1zaGEyNTYgIGJlMWFmNTdmYzQwOWY5MzY0N2Yy
+ZThlNDU3M2ExNDJlZDM4NzI0YjhjZGQzODk3MDZhODY3YmI0ZWZjZjFlNzggIHNldHVwdG9vbHMt
+NjkuMC4zLnRhci5nego+ID4+PiArbWQ1ICBkOTY3Y2EyYmE3ZjQ2ZGI4ODdkYWVlMmQ1YzliZDZh
+MiAgc2V0dXB0b29scy02OC4yLjIudGFyLmd6Cj4gPj4+ICtzaGEyNTYgIDRhYzE0NzUyNzZkMmYx
+YzQ4Njg0ODc0MDg5ZmVmY2Q4M2JkNzE2MmRkYWFmYjgxZmFjODY2YmEwZGIyODJhODcgIHNldHVw
+dG9vbHMtNjguMi4yLnRhci5nego+ID4+PiAgICAjIExvY2FsbHkgY29tcHV0ZWQgc2hhMjU2IGNo
+ZWNrc3Vtcwo+ID4+PiAgICBzaGEyNTYgIDg2ZGEwZjAxYWVhZTQ2MzQ4YTNjM2Q0NjUxOTVkYzFj
+ZWNjZGU3OWY3OWU4Nzc2OWE2NGI4ZGEwNGIyYTQ3NDEgIExJQ0VOU0UKPiA+Pj4gZGlmZiAtLWdp
+dCBhL3BhY2thZ2UvcHl0aG9uLXNldHVwdG9vbHMvcHl0aG9uLXNldHVwdG9vbHMubWsgYi9wYWNr
+YWdlL3B5dGhvbi1zZXR1cHRvb2xzL3B5dGhvbi1zZXR1cHRvb2xzLm1rCj4gPj4+IGluZGV4IDBh
+ZWEzYzZjZmEuLmYyNmY0MjdjY2MgMTAwNjQ0Cj4gPj4+IC0tLSBhL3BhY2thZ2UvcHl0aG9uLXNl
+dHVwdG9vbHMvcHl0aG9uLXNldHVwdG9vbHMubWsKPiA+Pj4gKysrIGIvcGFja2FnZS9weXRob24t
+c2V0dXB0b29scy9weXRob24tc2V0dXB0b29scy5tawo+ID4+PiBAQCAtNCw5ICs0LDkgQEAKPiA+
+Pj4gICAgIwo+ID4+PiAgICAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+ID4+Pgo+ID4+PiAtUFlU
+SE9OX1NFVFVQVE9PTFNfVkVSU0lPTiA9IDY5LjAuMwo+ID4+PiArUFlUSE9OX1NFVFVQVE9PTFNf
+VkVSU0lPTiA9IDY4LjIuMgo+ID4+PiAgICBQWVRIT05fU0VUVVBUT09MU19TT1VSQ0UgPSBzZXR1
+cHRvb2xzLSQoUFlUSE9OX1NFVFVQVE9PTFNfVkVSU0lPTikudGFyLmd6Cj4gPj4+IC1QWVRIT05f
+U0VUVVBUT09MU19TSVRFID0gaHR0cHM6Ly9maWxlcy5weXRob25ob3N0ZWQub3JnL3BhY2thZ2Vz
+L2ZjL2M5L2IxNDZjYTE5NTQwM2UwMTgyYTM3NGUwZWE0ZGJjNjkxMzZiYWQzY2Q1NWJjMjkzZGY0
+OTZkNjI1ZDBmNwo+ID4+PiArUFlUSE9OX1NFVFVQVE9PTFNfU0lURSA9IGh0dHBzOi8vZmlsZXMu
+cHl0aG9uaG9zdGVkLm9yZy9wYWNrYWdlcy9lZi9jYy85M2Y3MjEzYjJhYjVlZDM4M2Y5OGNlODAy
+MGU2MzJlZjI1NmI0MDZiODU2OTYwNmMzZjE2MGVkOGUxYzkKPiA+Pj4gICAgUFlUSE9OX1NFVFVQ
+VE9PTFNfTElDRU5TRSA9IE1JVAo+ID4+PiAgICBQWVRIT05fU0VUVVBUT09MU19MSUNFTlNFX0ZJ
+TEVTID0gTElDRU5TRQo+ID4+PiAgICBQWVRIT05fU0VUVVBUT09MU19DUEVfSURfVkVORE9SID0g
+cHl0aG9uCj4gPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+Xwo+ID4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+ID4gYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcK
+PiA+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9v
+dApfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJv
+b3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVp
+bGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
