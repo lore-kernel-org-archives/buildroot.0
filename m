@@ -4,91 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DB84CD1288
-	for <buildroot@archiver.kernel.org>; Sun, 31 Mar 2024 08:49:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CE13CD1284
+	for <buildroot@archiver.kernel.org>; Sun, 31 Mar 2024 08:53:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 62FF54016D;
-	Sun, 31 Mar 2024 08:49:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 56829403BF;
+	Sun, 31 Mar 2024 08:53:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D6W0ArypG50D; Sun, 31 Mar 2024 08:49:33 +0000 (UTC)
+ id S7Un1B04TLJy; Sun, 31 Mar 2024 08:53:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A1D9401C9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8CC45400AB
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6A1D9401C9;
-	Sun, 31 Mar 2024 08:49:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 29CDE1BF576
- for <buildroot@lists.busybox.net>; Sun, 31 Mar 2024 08:49:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8CC45400AB;
+	Sun, 31 Mar 2024 08:53:32 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4C0591BF576
+ for <buildroot@lists.busybox.net>; Sun, 31 Mar 2024 08:53:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2436A40236
- for <buildroot@lists.busybox.net>; Sun, 31 Mar 2024 08:49:32 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3832681A6D
+ for <buildroot@lists.busybox.net>; Sun, 31 Mar 2024 08:53:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5kQT7PNQ6vCj for <buildroot@lists.busybox.net>;
- Sun, 31 Mar 2024 08:49:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6vu9Os2R8qjj for <buildroot@lists.busybox.net>;
+ Sun, 31 Mar 2024 08:53:30 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::430; helo=mail-wr1-x430.google.com;
+ client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
  envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 76E0E400AB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 76E0E400AB
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 76E0E400AB
- for <buildroot@buildroot.org>; Sun, 31 Mar 2024 08:49:30 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id
- ffacd0b85a97d-341b9f6fb2eso2308315f8f.2
- for <buildroot@buildroot.org>; Sun, 31 Mar 2024 01:49:30 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B7CBA81A3B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B7CBA81A3B
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B7CBA81A3B
+ for <buildroot@buildroot.org>; Sun, 31 Mar 2024 08:53:29 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-4155baa696eso4111015e9.2
+ for <buildroot@buildroot.org>; Sun, 31 Mar 2024 01:53:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1711874967; x=1712479767;
+ d=1e100.net; s=20230601; t=1711875207; x=1712480007;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=ZPrADgowo2aG+mXp07WCTcOo3Z+PE5RmD6cbGzyXA2o=;
- b=UXFDucy6Pxue65ES4OGLJvIFB3cpvXTBqddr+OT72VrcA4ntThrmdJ1OXDIrS3mOZQ
- w7AE+OVafnvc1rcI60lfhBb0PzmwU6zc0h0hs9/9YmndSKqUzmA0TCedQgCVXa65VGV5
- O0ssRInpwNj52ETvyA/hWvUP8xpdV5G2gThfyYNxWGlMAIGH0E1UxIkJtn2qqpj6ZR6q
- FnORyKveTnxEJMAo33LstAhwo5tOglLJHJqQkq+uGm+kOBhrVVEOczI+wMHC6c0DyXNX
- bNUlYTj47GBsX9AA6GI9MZwySm+2XRvj7nDBQfswP5fQK2+Y3yAZMy5eKy+l8+yAHrWI
- UhxQ==
-X-Gm-Message-State: AOJu0YzQOg64kx57yPZFAfO7bOUcMEbV9V3rhXptq1OEiKIjb16qkRDQ
- RNsyyCCbSL85RepiZDNI8OLMxp92WT1AO8l4z3swsrFHXdm64k1JA/+G+hMt
-X-Google-Smtp-Source: AGHT+IH1bt2EDHtcST5tfNwRWYKhylbMF5YitDORY8i5jwvBY7431C/RvmZqwsyIBovmszA7MFEAMg==
-X-Received: by 2002:a5d:420a:0:b0:341:cfba:e045 with SMTP id
- n10-20020a5d420a000000b00341cfbae045mr4884337wrq.49.1711874967216; 
- Sun, 31 Mar 2024 01:49:27 -0700 (PDT)
+ bh=1xmQt8CqvKjHwB7SOrrr1az08ctxfIAo43jxNwUZzc0=;
+ b=fVYDRbHVCHggEG6XIln4JT4sYexmCFtb8595EXwd8HDjukXqRfQLhauOGdht7yjRRm
+ kxrBw5iRt7gXOCO4uSFGSDInosG2pZEmrAiXII0B7T42jPpk3+GjXA6M2Nuz38SNaMkm
+ bXl3oubee/kvsJQAIYyduN5vnzgoLrlyYmnj9wi38Bows8S7aX8AlYsItzhZuz4bVaM0
+ XUhbfEbYbQSiCl3FlhOechXC+C7aiKrrWwMnknxluONEK8ALot3FTNMovxauJymxr07Y
+ 5VInwSS2PNF46EYu9FCt4yN9lpUQRuLsWYGQKqlk+zZheuIPvP51aWySEH93rLgE8MBa
+ AmfA==
+X-Gm-Message-State: AOJu0Yyx19z1wqzVHIwy0+eShlGS4obfQkAyTT/LNodXUd72ieHlRqPk
+ dq0CeN8AedILY8hccdAg/hVfgKBEDti83idYgs0S/06Q1CoYJB+0jIgyLX6t
+X-Google-Smtp-Source: AGHT+IGvKOHGZ9ufTRIvPLXs1omwo9TVE8zj6zoJVwlhdFJ3wiIixxdFQ0SJ9fCAslHn7gLi14/Qnw==
+X-Received: by 2002:a05:600c:4f0d:b0:414:9012:8553 with SMTP id
+ l13-20020a05600c4f0d00b0041490128553mr4309318wmq.3.1711875206817; 
+ Sun, 31 Mar 2024 01:53:26 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- cp32-20020a056000402000b00341c88ab493sm8501435wrb.10.2024.03.31.01.49.26
+ o10-20020a05600c510a00b004148a5e3188sm14112404wms.25.2024.03.31.01.53.26
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 31 Mar 2024 01:49:26 -0700 (PDT)
+ Sun, 31 Mar 2024 01:53:26 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 31 Mar 2024 10:49:24 +0200
-Message-ID: <20240331084924.6075-1-fontaine.fabrice@gmail.com>
+Date: Sun, 31 Mar 2024 10:53:19 +0200
+Message-ID: <20240331085319.8585-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1711874967; x=1712479767; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1711875207; x=1712480007; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=ZPrADgowo2aG+mXp07WCTcOo3Z+PE5RmD6cbGzyXA2o=;
- b=BqabPlnB8IvIA0dYww2xhWZKPrvb6riUDcFp/vapbTUz6ZCtgQcqNvndy3+XZlJ+fn
- hbwhRDMGH+DeTqWxglx0/QZd8GKFirZl1CSomw68ru6vWXjgolxW7vPpQn/xeVxdx8cZ
- pvWgu9FZnzL1YzM9KzqKCAemiYIzZset26e1LZxjq/A2KPBx2U+TFZGi7dW0YkpncKZz
- fQlomrYP/A40iPa6gVaxiWzNEHjjhRb4FHiWx0YLHy7R3VKHpiTHZDL+KWqqIE9/zIQm
- dIVhFPFb1jF8543KNh37Cya32spAH7azvGnD+uqEZb247zDQj7nclv2+UkOzIpsocD1D
- DmoA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=1xmQt8CqvKjHwB7SOrrr1az08ctxfIAo43jxNwUZzc0=;
+ b=cu5Hym6U6nr1hk7aWE5avMtn3BQvgN1rnPcrjmqQcqIqn79zdbmNcXsz4LTE0a2DVU
+ BTPfx4s2k5sHGRZKoCKA8MZ5GNcjHSvLBiWMmCC3nqRBs+nziLbXlWM5S+Gn02wRvrh+
+ 39fUZje6KIELTvyXTo2jHGaLhEFA9JkTYAx0LAS8zKyy+lkNwTN/4rz3SqVIUaWP3ch5
+ b8ig3enr8J1P+WMvY7PD2v+tldkP+wKJrR7iuRg3kAara7uDk4YVsqBZz3vGg/kkyxOo
+ zz7dJOQSYLSPsgHieCR/Nzr0vFqV1po/DGxLcTBd0FvXJvM2mJa2ItrYaK0aRW3q7c56
+ oaqw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=BqabPlnB
-Subject: [Buildroot] [PATCH v2,1/1] package/dav1d: fix riscv32 build
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=cu5Hym6U
+Subject: [Buildroot] [PATCH 1/1] package/lxc: fix m68k build with gcc 12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,47 +99,172 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd@kuhls.net>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following riscv32 build failure raised since bump to version
-1.4.1 in commit d8c440936d51b7f76472b43002780f5490b7a3bf and
-https://github.com/videolan/dav1d/commit/43ee02a99cce1f221bdb574c9ee484180d71013f:
+Fix the following m68k build failure with gcc 12:
 
-/home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/riscv32-buildroot-linux-gnu/13.2.0/../../../../riscv32-buildroot-linux-gnu/bin/ld: src/libdav1d_bitdepth_8.a.p/itx_tmpl.c.o: in function `.L0 ':
-itx_tmpl.c:(.text.unlikely+0x76c): undefined reference to `dav1d_inv_txfm_add_dct_dct_4x4_8bpc_rvv'
+In file included from ../src/lxc/syscall_wrappers.h:19,
+                 from ../src/lxc/mount_utils.h:15,
+                 from ../src/lxc/conf.h:24,
+                 from ../src/lxc/log.h:19,
+                 from ../src/lxc/storage/btrfs.c:20:
+../src/lxc/syscall_numbers.h:423:25: error: macro names must be identifiers
+  423 |                 #define -1
+      |                         ^
 
-Fixes: d8c440936d51b7f76472b43002780f5490b7a3bf
- - http://autobuild.buildroot.org/results/28192c494c7a2f88cc90205b6a08afd11782df40
+Fixes:
+ - http://autobuild.buildroot.org/results/f40a517eba86838b11b4b1d6a8a05b8233a3394d
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2 (after review of Bernd Kuhls):
- - Fix condition
+ ...-lxc-syscall_numbers.h-drop-define-1.patch | 133 ++++++++++++++++++
+ 1 file changed, 133 insertions(+)
+ create mode 100644 package/lxc/0001-src-lxc-syscall_numbers.h-drop-define-1.patch
 
- package/dav1d/dav1d.mk | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/package/dav1d/dav1d.mk b/package/dav1d/dav1d.mk
-index 74c68d1660..18cb81868a 100644
---- a/package/dav1d/dav1d.mk
-+++ b/package/dav1d/dav1d.mk
-@@ -24,6 +24,11 @@ ifeq ($(BR2_ARM_CPU_ARMV4)$(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV7M),y)
- DAV1D_CONF_OPTS += -Denable_asm=false
- endif
- 
-+# riscv assembly requires riscv64
-+ifeq ($(BR2_riscv):$(BR2_RISCV_64),y:)
-+DAV1D_CONF_OPTS += -Denable_asm=false
-+endif
+diff --git a/package/lxc/0001-src-lxc-syscall_numbers.h-drop-define-1.patch b/package/lxc/0001-src-lxc-syscall_numbers.h-drop-define-1.patch
+new file mode 100644
+index 0000000000..4a944e35b1
+--- /dev/null
++++ b/package/lxc/0001-src-lxc-syscall_numbers.h-drop-define-1.patch
+@@ -0,0 +1,133 @@
++From 82fe01821cd5cb8548598d7d93b07d6ef3f6b604 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 30 Mar 2024 16:50:46 +0100
++Subject: [PATCH] src/lxc/syscall_numbers.h: drop define -1
 +
- # Uses __atomic_fetch_add_4
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- DAV1D_LDFLAGS += $(TARGET_LDFLAGS) -latomic
++Drop "#define -1" to avoid the following m68k build failure with gcc 12:
++
++In file included from ../src/lxc/syscall_wrappers.h:19,
++                 from ../src/lxc/mount_utils.h:15,
++                 from ../src/lxc/conf.h:24,
++                 from ../src/lxc/log.h:19,
++                 from ../src/lxc/storage/btrfs.c:20:
++../src/lxc/syscall_numbers.h:423:25: error: macro names must be identifiers
++  423 |                 #define -1
++      |                         ^
++
++Fixes:
++ - http://autobuild.buildroot.org/results/f40a517eba86838b11b4b1d6a8a05b8233a3394d
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Upstream: https://github.com/lxc/lxc/commit/82fe01821cd5cb8548598d7d93b07d6ef3f6b604
++---
++ src/lxc/syscall_numbers.h | 13 -------------
++ 1 file changed, 13 deletions(-)
++
++diff --git a/src/lxc/syscall_numbers.h b/src/lxc/syscall_numbers.h
++index 58840a5981..5e659d1b81 100644
++--- a/src/lxc/syscall_numbers.h
+++++ b/src/lxc/syscall_numbers.h
++@@ -53,7 +53,6 @@
++ 	#elif defined __loongarch64
++ 		#define __NR_keyctl 219
++ 	#else
++-		#define -1
++ 		#warning "__NR_keyctl not defined for your architecture"
++ 	#endif
++ #endif
++@@ -92,7 +91,6 @@
++ 	#elif defined __loongarch64
++ 		#define __NR_memfd_create 279
++ 	#else
++-		#define -1
++ 		#warning "__NR_memfd_create not defined for your architecture"
++ 	#endif
++ #endif
++@@ -129,7 +127,6 @@
++ 	#elif defined __loongarch64
++ 		#define __NR_pivot_root 41
++ 	#else
++-		#define -1
++ 		#warning "__NR_pivot_root not defined for your architecture"
++ 	#endif
++ #endif
++@@ -166,7 +163,6 @@
++ 	#elif defined __loongarch64
++ 		#define __NR_setns 268
++ 	#else
++-		#define -1
++ 		#warning "__NR_setns not defined for your architecture"
++ 	#endif
++ #endif
++@@ -203,7 +199,6 @@
++ 	#elif defined __loongarch64
++ 		#define __NR_sethostname 161
++ 	#else
++-		#define -1
++ 		#warning "__NR_sethostname not defined for your architecture"
++ 	#endif
++ #endif
++@@ -272,7 +267,6 @@
++ 	#elif defined __loongarch64
++ 		#define __NR_signalfd4 74
++ 	#else
++-		#define -1
++ 		#warning "__NR_signalfd4 not defined for your architecture"
++ 	#endif
++ #endif
++@@ -309,7 +303,6 @@
++ 	#elif defined __loongarch64
++ 		#define __NR_unshare 97
++ 	#else
++-		#define -1
++ 		#warning "__NR_unshare not defined for your architecture"
++ 	#endif
++ #endif
++@@ -346,7 +339,6 @@
++ 	#elif defined __loongarch64
++ 		#define __NR_bpf 280
++ 	#else
++-		#define -1
++ 		#warning "__NR_bpf not defined for your architecture"
++ 	#endif
++ #endif
++@@ -383,7 +375,6 @@
++ 	#elif defined __loongarch64
++ 		#define __NR_faccessat 48
++ 	#else
++-		#define -1
++ 		#warning "__NR_faccessat not defined for your architecture"
++ 	#endif
++ #endif
++@@ -440,7 +431,6 @@
++ 	#elif defined __loongarch64
++ 		#define __NR_seccomp 277
++ 	#else
++-		#define -1
++ 		#warning "__NR_seccomp not defined for your architecture"
++ 	#endif
++ #endif
++@@ -477,7 +467,6 @@
++ 	#elif defined __loongarch64
++ 		#define __NR_gettid 178
++ 	#else
++-		#define -1
++ 		#warning "__NR_gettid not defined for your architecture"
++ 	#endif
++ #endif
++@@ -518,7 +507,6 @@
++ 	#elif defined __loongarch64
++ 		#define __NR_execveat 281
++ 	#else
++-		#define -1
++ 		#warning "__NR_execveat not defined for your architecture"
++ 	#endif
++ #endif
++@@ -759,7 +747,6 @@
++ 	#elif defined __loongarch64
++ 		#define __NR_personality 92
++ 	#else
++-		#define -1
++ 		#warning "__NR_personality not defined for your architecture"
++ 	#endif
++ #endif
 -- 
 2.43.0
 
