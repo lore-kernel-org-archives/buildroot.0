@@ -4,94 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E896CD1288
-	for <buildroot@archiver.kernel.org>; Sun, 31 Mar 2024 00:42:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED806CD1288
+	for <buildroot@archiver.kernel.org>; Sun, 31 Mar 2024 00:42:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D09CC82124;
-	Sun, 31 Mar 2024 00:42:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B8E5582183;
+	Sun, 31 Mar 2024 00:42:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sVoYlnNcwtcB; Sun, 31 Mar 2024 00:42:12 +0000 (UTC)
+ id YsKL74G9J0RY; Sun, 31 Mar 2024 00:42:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AB69382173
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 40EB58219C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AB69382173;
-	Sun, 31 Mar 2024 00:42:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9CEFD1BF947
- for <buildroot@lists.busybox.net>; Sun, 31 Mar 2024 00:41:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 40EB58219C;
+	Sun, 31 Mar 2024 00:42:15 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F35071BF947
+ for <buildroot@lists.busybox.net>; Sun, 31 Mar 2024 00:42:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 843A44064C
- for <buildroot@lists.busybox.net>; Sun, 31 Mar 2024 00:41:59 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E01E360622
+ for <buildroot@lists.busybox.net>; Sun, 31 Mar 2024 00:42:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RTCtzEMsA8-w for <buildroot@lists.busybox.net>;
- Sun, 31 Mar 2024 00:41:58 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HCVsB_CBboaW for <buildroot@lists.busybox.net>;
+ Sun, 31 Mar 2024 00:42:00 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d36; helo=mail-io1-xd36.google.com;
+ client-ip=2607:f8b0:4864:20::d2d; helo=mail-io1-xd2d.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4ACB440643
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4ACB440643
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com
- [IPv6:2607:f8b0:4864:20::d36])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4ACB440643
- for <buildroot@buildroot.org>; Sun, 31 Mar 2024 00:41:58 +0000 (UTC)
-Received: by mail-io1-xd36.google.com with SMTP id
- ca18e2360f4ac-7c8b95f7f73so71166939f.1
- for <buildroot@buildroot.org>; Sat, 30 Mar 2024 17:41:58 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org CE93660611
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE93660611
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com
+ [IPv6:2607:f8b0:4864:20::d2d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CE93660611
+ for <buildroot@buildroot.org>; Sun, 31 Mar 2024 00:41:59 +0000 (UTC)
+Received: by mail-io1-xd2d.google.com with SMTP id
+ ca18e2360f4ac-7c8b777ff8bso97951939f.0
+ for <buildroot@buildroot.org>; Sat, 30 Mar 2024 17:41:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1711845717; x=1712450517;
+ d=1e100.net; s=20230601; t=1711845718; x=1712450518;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=KnbhPrY13WjsvxSNbDdvbSpvZVXn2QZQERjvF9bT180=;
- b=YI8Kxb/ii3lXLNKTMSbuew2b51ENI2/OVHJ+qyq9IPPgVP6w68xn2YiD3O/sslkvO1
- nAC94+/ZBvXHXCtRmAdHAJ7ECCDvA51wvospckqBnLDybYWZo2LEccNU4zP2Jsk9Bv18
- JymvKm44067yS/3AYdLyTX7v8Cl8ioCSgvtWBqOQw5zh1UjTvDeD9Cb620E0nvw8qbdW
- KINFC0DdhUXotH47UM7vA/XGLQetqrfLc1plThvA0MBdRLMrgMKw++Jl9tjuhuX/JJ7f
- P6jm3CwGRoDNOdNAzW1kTTE8kHsUKiHKpvlzFUc/puL3eVnt0BwpohmecXOvlnkKHFKA
- oWtQ==
-X-Gm-Message-State: AOJu0YzPnAiU+Iu8V4TNmwIh5rOMRfFRM/D1Vy2KAOHmS8uYHqe5wqpS
- qIcjwNzyN7cY6Dr2faPfqXzVshglrHJWOPO6TBPvbxDYd2G0msZZtkn0m2tSRPNTFQ==
-X-Google-Smtp-Source: AGHT+IEP1XFKqGEt+2tlVCvX4FFn8g47UTxf4ceaE6jFuW4FPrCnr22cwan4sY/WVVAnDIaBTyqF3A==
-X-Received: by 2002:a6b:4e18:0:b0:7d0:9c2b:e6fd with SMTP id
- c24-20020a6b4e18000000b007d09c2be6fdmr4011477iob.7.1711845716840; 
- Sat, 30 Mar 2024 17:41:56 -0700 (PDT)
+ bh=yAQovp2pP9uWY1RKgs/JXJhJZs6eU+yRrbQmJYY1xY4=;
+ b=JjJw61ZcvxEkiE/IqbiRaW0N59he9X5RyUOzWSALBNAfZNf06sKTJfiO5WJGBDmY+v
+ 1mIn4FHo5MMWAF3J24iIGZEXYBc3LTylbfSFB19LGiSPm0cKJrmjBc7qUzD5nuVAsvWJ
+ oHciaRPKx5kv+ARfkJCpzDVVfQruX9iV07k08JwEXW/ep7Bdn6A48Il2uLHogp67fyr+
+ be9A6Xu7ckPA1hEUcqWisbvBzfA59SaXXe1G0OuOnOeNaVxjdFaXZcqXMVyrECY1+w7z
+ LeaRiXXJLjGpghPNoHh0zA2qvJ1Mz6nR15A2uEmmvJ0j1xxNYvb6Sgjy5OuahGB8yM1w
+ mFMA==
+X-Gm-Message-State: AOJu0YxcAuPKn23+XYdV2/832MGUEpxXMaE10jz+AHNQugEz4oWHxYMi
+ uTrhvS/T4ntYnRCJ5uJM+6MDPTb4WiIlZ25v9zLFLwcCDdZHwd2P5IpJYFuJkbpPtA==
+X-Google-Smtp-Source: AGHT+IFDQ6qWvQftRhTHnmKXZcY9iIgkqmGvg7+UP3oJSqbV5A2VCqZyJXchsWgYbyERmuNFOAJ4xA==
+X-Received: by 2002:a5d:8786:0:b0:7cc:fbd:270f with SMTP id
+ f6-20020a5d8786000000b007cc0fbd270fmr5564810ion.6.1711845718329; 
+ Sat, 30 Mar 2024 17:41:58 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-245-145.hlrn.qwest.net.
  [71.218.245.145]) by smtp.gmail.com with ESMTPSA id
- q1-20020a5ea601000000b007d05927cb31sm1851053ioi.45.2024.03.30.17.41.55
+ q1-20020a5ea601000000b007d05927cb31sm1851053ioi.45.2024.03.30.17.41.56
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 30 Mar 2024 17:41:55 -0700 (PDT)
+ Sat, 30 Mar 2024 17:41:57 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 30 Mar 2024 18:41:21 -0600
-Message-Id: <20240331004133.636618-6-james.hilliard1@gmail.com>
+Date: Sat, 30 Mar 2024 18:41:22 -0600
+Message-Id: <20240331004133.636618-7-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240331004133.636618-1-james.hilliard1@gmail.com>
 References: <20240331004133.636618-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1711845717; x=1712450517; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1711845718; x=1712450518; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=KnbhPrY13WjsvxSNbDdvbSpvZVXn2QZQERjvF9bT180=;
- b=kTDCYL3EXVJhZjgY+JHEfoa5oub+cGtNRQ6pPE+2PWKn/OBcTE+FNrUyJy8bhX0RpQ
- r+v6SnWADH9+h1SAQbEGbV9nk9h3WZe2IYydlpSXQdFU1tbBZR3TCqDdeGR26cMzuKvi
- JZNGTcCawCIun0x4OlFdOAM6N8Z/LSokqaJk58BbR3e3IPrmTuycESx+5GDJCA9Q+3Gb
- QOLZs1zTHV5EH2TY1mIfsC7ScuFC95HQIlXubQo6+DBOPcKEJmDm6MP7d8kTNWJJM+Qv
- TFcrmBk8xWAAqPMWLEW/3iIQZnohoMDP76Mu8XaApu2+eEX46iJW1MaqUqfIaQrLJI+W
- 3KJQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=yAQovp2pP9uWY1RKgs/JXJhJZs6eU+yRrbQmJYY1xY4=;
+ b=asA8Qy93OzH2bcvmf4GHZ7FqFmx4j2Si7bneSOSX1kt/mooTKFcYtUowTzhPFnGurn
+ kRKGdRWdR12dXnmq93/s9J0jpvMtHUEgGx927m6Dynfi+R+8DvZ5mlHNPhR90372qAjT
+ H0Advq9qmy2o/33iCfPZdTEiFu8U91He739TVzX+0gL6kenwTSR8mlXUfaCp+fNR+SYo
+ F2SL36Gxqx2W7oo5fLnjx37Qfl+ndAmKIqi76nc4+3WdhpglJnvc/cT21206qUqRtYsa
+ taW06IgtVgnLKFSepFqtZSyPLAfCNi50T3mRIIZLCS/dIkU9RLMCwCsqSTfW7DMp3hsY
+ 55HA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=kTDCYL3E
-Subject: [Buildroot] [PATCH v9 06/18] package/python-expandvars: new host
- package
+ header.a=rsa-sha256 header.s=20230601 header.b=asA8Qy93
+Subject: [Buildroot] [PATCH v9 07/18] package/python-frozenlist: migrate to
+ in-tree pep517 build backend
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -123,46 +123,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+When building with a pep517 frontend we need to use the specified
+build backend as opposed to the fallback setuptools build which
+only works when not building with a pep517 frontend.
+
+This package currently builds using setuptools as we do not yet
+use setuptools with a pep517 build frontend. The package contains
+a setuptools fallback which only can be used when using setuptools
+without a pep517 frontend as the pep517 frontend will only use the
+build backend specified in the package pyproject.toml which is
+hatchling and not setuptools.
+
+The custom in tree backend depends on setuptools and expandvars,
+additionally it depends on cython 3 unless disabled.
+
+As we do not currently support cython 3 lets use the pure python
+build instead.
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-expandvars/python-expandvars.hash |  5 +++++
- package/python-expandvars/python-expandvars.mk   | 15 +++++++++++++++
- 2 files changed, 20 insertions(+)
- create mode 100644 package/python-expandvars/python-expandvars.hash
- create mode 100644 package/python-expandvars/python-expandvars.mk
+ package/python-frozenlist/python-frozenlist.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/python-expandvars/python-expandvars.hash b/package/python-expandvars/python-expandvars.hash
-new file mode 100644
-index 0000000000..0123ed5420
---- /dev/null
-+++ b/package/python-expandvars/python-expandvars.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/expandvars/json
-+md5  8091f578a547e2b4b9df59100a179266  expandvars-0.12.0.tar.gz
-+sha256  7d1adfa55728cf4b5d812ece3d087703faea953e0c0a1a78415de9df5024d844  expandvars-0.12.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256  b8a43c35080fc5855e4f8171e4d0d002f6ff1633d8cfc0b5dee0ac4ced2deac7  LICENSE
-diff --git a/package/python-expandvars/python-expandvars.mk b/package/python-expandvars/python-expandvars.mk
-new file mode 100644
-index 0000000000..5c9a7249b3
---- /dev/null
-+++ b/package/python-expandvars/python-expandvars.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-expandvars
-+#
-+################################################################################
-+
-+PYTHON_EXPANDVARS_VERSION = 0.12.0
-+PYTHON_EXPANDVARS_SOURCE = expandvars-$(PYTHON_EXPANDVARS_VERSION).tar.gz
-+PYTHON_EXPANDVARS_SITE = https://files.pythonhosted.org/packages/2b/a5/46d1f58edcae1d632fafdfee313e378240e002ae45d26502bac938bd8751
-+PYTHON_EXPANDVARS_SETUP_TYPE = pep517
-+PYTHON_EXPANDVARS_LICENSE = MIT
-+PYTHON_EXPANDVARS_LICENSE_FILES = LICENSE
-+HOST_PYTHON_EXPANDVARS_DEPENDENCIES = host-python-hatchling
-+
-+$(eval $(host-python-package))
+diff --git a/package/python-frozenlist/python-frozenlist.mk b/package/python-frozenlist/python-frozenlist.mk
+index 9333598808..92670b3cbd 100644
+--- a/package/python-frozenlist/python-frozenlist.mk
++++ b/package/python-frozenlist/python-frozenlist.mk
+@@ -7,8 +7,12 @@
+ PYTHON_FROZENLIST_VERSION = 1.4.1
+ PYTHON_FROZENLIST_SOURCE = frozenlist-$(PYTHON_FROZENLIST_VERSION).tar.gz
+ PYTHON_FROZENLIST_SITE = https://files.pythonhosted.org/packages/cf/3d/2102257e7acad73efc4a0c306ad3953f68c504c16982bbdfee3ad75d8085
+-PYTHON_FROZENLIST_SETUP_TYPE = setuptools
++PYTHON_FROZENLIST_SETUP_TYPE = pep517
+ PYTHON_FROZENLIST_LICENSE = Apache-2.0
+ PYTHON_FROZENLIST_LICENSE_FILES = LICENSE
++PYTHON_FROZENLIST_DEPENDENCIES = \
++	host-python-expandvars \
++	host-python-setuptools
++PYTHON_FROZENLIST_BUILD_OPTS = -C=pure-python=true
+ 
+ $(eval $(python-package))
 -- 
 2.34.1
 
