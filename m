@@ -1,94 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8798ECD128A
-	for <buildroot@archiver.kernel.org>; Mon,  1 Apr 2024 21:10:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C40A7CD1288
+	for <buildroot@archiver.kernel.org>; Mon,  1 Apr 2024 21:23:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 16C67817AC;
-	Mon,  1 Apr 2024 21:10:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6639140530;
+	Mon,  1 Apr 2024 21:23:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ly4UHqjovHHi; Mon,  1 Apr 2024 21:10:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CQP5qC8tZbyh; Mon,  1 Apr 2024 21:23:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DF0E2817AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 150694053B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DF0E2817AE;
-	Mon,  1 Apr 2024 21:10:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4425E1BF338
- for <buildroot@lists.busybox.net>; Mon,  1 Apr 2024 21:10:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 150694053B;
+	Mon,  1 Apr 2024 21:23:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B05FD1BF338
+ for <buildroot@lists.busybox.net>; Mon,  1 Apr 2024 21:23:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 309FE608B8
- for <buildroot@lists.busybox.net>; Mon,  1 Apr 2024 21:10:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9CB6A4053B
+ for <buildroot@lists.busybox.net>; Mon,  1 Apr 2024 21:23:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OthyDyvMRLl1 for <buildroot@lists.busybox.net>;
- Mon,  1 Apr 2024 21:10:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4AuSdtRo_ZRn for <buildroot@lists.busybox.net>;
+ Mon,  1 Apr 2024 21:23:55 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::52b; helo=mail-pg1-x52b.google.com;
- envelope-from=pholden@nklabs.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A7C7C6077D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A7C7C6077D
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com
- [IPv6:2607:f8b0:4864:20::52b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A7C7C6077D
- for <buildroot@buildroot.org>; Mon,  1 Apr 2024 21:10:05 +0000 (UTC)
-Received: by mail-pg1-x52b.google.com with SMTP id
- 41be03b00d2f7-5ce2aada130so2845581a12.1
- for <buildroot@buildroot.org>; Mon, 01 Apr 2024 14:10:05 -0700 (PDT)
+ client-ip=2607:f8b0:4864:20::d34; helo=mail-io1-xd34.google.com;
+ envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6F5F340530
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F5F340530
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com
+ [IPv6:2607:f8b0:4864:20::d34])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6F5F340530
+ for <buildroot@buildroot.org>; Mon,  1 Apr 2024 21:23:55 +0000 (UTC)
+Received: by mail-io1-xd34.google.com with SMTP id
+ ca18e2360f4ac-7cc0b35b75bso151596039f.3
+ for <buildroot@buildroot.org>; Mon, 01 Apr 2024 14:23:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1712005805; x=1712610605;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ d=1e100.net; s=20230601; t=1712006633; x=1712611433;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=qHPzi4eHBQCQ8DI6qju/iaj0yHsRwAp+qwBIwJqO8ro=;
- b=u7RzKN4QQvvjf79Rt8IgRnGpy0bCbf3oGgkgnXnWtRtNRpjTSOwP3XTFzoDBOhwbwb
- 83SpUT7T2B+zXP51/MPELmQoDPfQQ3SGcIXSc+TklYQzEoGd0ULl2yWm3RsM2DVWFsfa
- ou5aPlnEkCgTIJywL/5JBzWhCecm81rSuvBlPnCYHvG92ek1WKsXsse+/hnfI/oDruyT
- BFUFGgaGScyzNZTi2e/TMqqrZCIY+cney2FYVXTSOS+f+HTpps+LI3tc+8xLfFsr4cHl
- VvcTG6zHv2xbYIiLnBk2wIWMQix1oEjydv4bgxYHOuC3t0ASl+noG4yvQKNRd4pqdHPW
- lFdQ==
-X-Gm-Message-State: AOJu0YxOL+MFqNYTDW0pHkvv0gsLESfQDTpZGgAtXTiaTjUGH+q9IC++
- yvZyjLv7rdwJxuQ3F7Zrs1ulfE3rF+EkxHKgvgSkuvLHd8K3Q43U18Tv0CCxUL26LuSTNcDGpHC
- IeFnciLwMLF3q7IuNn6+6QNXpFjdnDXEDh8jeVW08VSN358XAXffSvA==
-X-Google-Smtp-Source: AGHT+IFvNt+WJl2UY+b6B03LwytQvVkazFryFGvbHOqLErL8xR247bk15qCVLOsYvQEH7zm8aZ3NuaQgfBNqDhXbHp4=
-X-Received: by 2002:a17:903:258a:b0:1e0:a1c7:572c with SMTP id
- jb10-20020a170903258a00b001e0a1c7572cmr7834018plb.18.1712005804730; Mon, 01
- Apr 2024 14:10:04 -0700 (PDT)
+ bh=7I0kmLRN1A6HE1PoeeG//nu/0fT+pd7FFX7dFHHZjZI=;
+ b=IjXBcVbTIHk/0jGF9y4uFycTCjMKTnEsxs4DFtfpMh32FIE3uiHBR3ltb0x7Bh5H5U
+ DDjOC0H8d38DWXZt+Di+hQxcfOtNC+j3IXSrZ+iw34kfJkp0BrzHemH3gHFOPpLER62C
+ l1zkYFOfCV+C7trzF89BBAGOz/F5so08FQdDmYtSLRCvtidoMhIhFmm0FRVyFiEVN5f+
+ lKKG0tTNSZsUHP5tjUdRq0GGu7L78bE5egnkw+3t24slMvWXVqYPbL9SArpRg2r2Yqt9
+ PkaeHHjOejEzmxDJiPu2AXXyOtnNyHlc7hXR/O9tyh3Yk60XhrS1L6BfTFmarMziXUti
+ jhyg==
+X-Gm-Message-State: AOJu0YwH4S7IdH2NHsFi8Nj5qisv86OLk59WhDkQTJVt6zFXiHIl3kWU
+ Lwm6j+hLYJkfyaPOeGYLPscIC1sKu0Y28LMYBFsidpmoVZ+E8EjxgcrkrJBliBJznw==
+X-Google-Smtp-Source: AGHT+IHkYpyExIOA2nyEvlZEOGkJ0NOMM5RjqZSimDKhl93vM8p/wW8vT+prFB9/m/za24Ut25gesA==
+X-Received: by 2002:a6b:7b08:0:b0:7d0:bdf7:bb7e with SMTP id
+ l8-20020a6b7b08000000b007d0bdf7bb7emr6904814iop.19.1712006633537; 
+ Mon, 01 Apr 2024 14:23:53 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-245-145.hlrn.qwest.net.
+ [71.218.245.145]) by smtp.gmail.com with ESMTPSA id
+ d23-20020a02a497000000b0047708160be9sm2813844jam.147.2024.04.01.14.23.52
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 01 Apr 2024 14:23:53 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon,  1 Apr 2024 15:23:40 -0600
+Message-Id: <20240401212344.1345395-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <CAJ6EmCfd_TZwz3=RKequ=1t1-2Q5FbHENkcrPTu0ebwMEWq_HA@mail.gmail.com>
- <03d6dfc8-3a39-45eb-bdca-7f1654fab9a3@mind.be>
- <CAJ6EmCcEAuv8i_RC5FbVLueXaCLYm1T-GsuEtmo1wNCPOsRmCw@mail.gmail.com>
- <b5434307-aaf8-4ee1-a41a-00d9730f332c@mind.be>
-In-Reply-To: <b5434307-aaf8-4ee1-a41a-00d9730f332c@mind.be>
-From: Patricia Holden <pholden@nklabs.com>
-Date: Mon, 1 Apr 2024 17:09:53 -0400
-Message-ID: <CAJ6EmCdiSJk0Mora4P401KPv3vhXOpSGEthujBh37Lg_kAc52w@mail.gmail.com>
-To: Arnout Vandecappelle <arnout@mind.be>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=nklabs.com; s=google; t=1712005805; x=1712610605; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=qHPzi4eHBQCQ8DI6qju/iaj0yHsRwAp+qwBIwJqO8ro=;
- b=N+TmlN9pHEEtB0TDNtn+IOQgiFvMZAgUx0o4zfbinHq10Os170KPA/o6Sd85tMDauf
- Tw8jjc30N5I/yjtgny+E/Pb2r5aGQ/qI1kIzHnzCF9ctctm7lN/hkL044FPhcFXBn4BU
- lW5hG7gfU2pwqnfR5sLZn06MsmQUDPW67dO/PQDNb5AiHbQwyvrGYk05OJhnk31kXAtk
- LS7K4jQWqzFNvx9PcUIswAU0avvqsR7d37gbyE5Nnx3vUTHVIwbaXWYsTYUpEGl92ltI
- yybr++p4L2gUghLaTPLhS7IQYNY3RjRjTALOz8s427Q8ZaOcfLMz57xDrEgTxKD9cTk4
- Oj+A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=nklabs.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=nklabs.com header.i=@nklabs.com header.a=rsa-sha256
- header.s=google header.b=N+TmlN9p
-Subject: Re: [Buildroot] Is there an official browser patch for Buildroot?
+ d=gmail.com; s=20230601; t=1712006633; x=1712611433; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=7I0kmLRN1A6HE1PoeeG//nu/0fT+pd7FFX7dFHHZjZI=;
+ b=OpJsf6QH/ohzbNGVjdaPVx+LBVmVWBdzsXqJuUTeFUFV+QSwzqf8qgdQD1jwfAPku9
+ nPlytunt1ZZfagLqhy0tQT9NhchFB/l276FSbNo+rWQ6+ArawA64sMWoFq1saPuAefAJ
+ 1xxbqQdTZybe+AS2v2t5YRwV70mifl3hW6NAiiIdzxP9jvpvFc86cbcvmKYeWKiYceWd
+ r82kQ8CDfUT2GdfAniL6MJvJnZJLgibf909z8G8VW3VTwR19YqZBYaRuvWC73XtcQxSF
+ 2dmGol5Td1vAxPDXiTTXInf9WuBRwGgdviTRAM1fqi+UCXkQ3pGvoEDLYyi2/8MdUpGc
+ 8tvA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=OpJsf6QH
+Subject: [Buildroot] [PATCH v4 1/5] package/python-pypika-tortoise: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,224 +100,84 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adrian Perez de Castro <aperez@igalia.com>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============3944100682344790420=="
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3944100682344790420==
-Content-Type: multipart/alternative; boundary="000000000000d84da406150f69c7"
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/Config.in                                 |  1 +
+ package/python-pypika-tortoise/Config.in          |  6 ++++++
+ .../python-pypika-tortoise.hash                   |  5 +++++
+ .../python-pypika-tortoise.mk                     | 15 +++++++++++++++
+ 4 files changed, 27 insertions(+)
+ create mode 100644 package/python-pypika-tortoise/Config.in
+ create mode 100644 package/python-pypika-tortoise/python-pypika-tortoise.hash
+ create mode 100644 package/python-pypika-tortoise/python-pypika-tortoise.mk
 
---000000000000d84da406150f69c7
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Unfortunately I cannot use WPEWebKit with Beagleplay dev board I'm using.
-It requires OpenGL which has no Beagleplay support at the moment.  What
-about matchbox-window-manager?
-
-On Mon, Apr 1, 2024 at 3:53=E2=80=AFPM Arnout Vandecappelle <arnout@mind.be=
-> wrote:
-
->
->
-> On 01/04/2024 20:56, Patricia Holden wrote:
-> > I just need a simple web page I can run a react app on.  If you know of
-> any
-> > examples of this, please share!  I have tried using matchbox, but not
-> sure I'm
-> > configuring it correctly.
->
->   That's exactly what qt-webkit-kiosk is meant for. Oh, and I forgot cog
-> earlier: that's the same kind of tool but without pulling in Qt. Note: yo=
-u
-> need
-> to enable WPEWebKit to be able to enable cog in Buildroot.
->
->   cog is much better maintained - I added Adrian in Cc who works on
-> WPEWebKit
-> and cog in Buildroot.
->
->   Regards,
->   Arnout
->
-> >
-> > On Mon, Apr 1, 2024 at 2:38=E2=80=AFPM Arnout Vandecappelle <arnout@min=
-d.be
-> > <mailto:arnout@mind.be>> wrote:
-> >
-> >
-> >
-> >     On 01/04/2024 20:00, Patricia Holden wrote:
-> >      > I found a few topics online about a patch for chromium, but they
-> are
-> >     dated 2018
-> >      > or older.  Is there an official patch to add the chromium-browse=
-r
-> as a
-> >     package
-> >      > for Buildroot?  Or how about "minibrowser", which I have also
-> seen topics
-> >     in an
-> >      > online search?
-> >
-> >        I don't think there has ever been an attempt to attempt chromium
-> itself, but
-> >     there was an attempt at patches for Chromium Embedded Framework
-> (CEF). That's
-> >     not a browser, however, just a browser engine. And anyway it turned
-> out that
-> >     Chromium (and firefox) are way too complicated with too many vendor=
-ed
-> >     dependencies and crazy buildsystems.
-> >
-> >        There are a bunch of alternative browser engines: qt5webengine,
-> qt5webkit,
-> >     webkitgtk, wpewebkit.
-> >
-> >        There are also a few simple "frontends" for these, that basicall=
-y
-> render a
-> >     single webpage and then allow you to browse (so no things like
-> history,
-> >     bookmarks, plugins, etc.): qt-webkit-kiosk, qt5webview; and a more
-> complete
-> >     browser: midori.
-> >
-> >        Finally, there's also the text-mode browser links, but I don't
-> suppose that
-> >     that is what you're looking for.
-> >
-> >
-> >        Regards,
-> >        Arnout
-> >
-> >      >
-> >      > Thanks!
-> >      > Pat Holden, NK Labs
-> >      >
-> >      > _______________________________________________
-> >      > buildroot mailing list
-> >      > buildroot@buildroot.org <mailto:buildroot@buildroot.org>
-> >      > https://lists.buildroot.org/mailman/listinfo/buildroot
-> >     <https://lists.buildroot.org/mailman/listinfo/buildroot>
-> >
->
-
---000000000000d84da406150f69c7
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Unfortunately I cannot use WPEWebKit with Beagleplay=C2=A0=
-dev board I&#39;m using.=C2=A0 It requires OpenGL which has no Beagleplay s=
-upport at the moment.=C2=A0 What about matchbox-window-manager?</div><br><d=
-iv class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Mon, Apr =
-1, 2024 at 3:53=E2=80=AFPM Arnout Vandecappelle &lt;<a href=3D"mailto:arnou=
-t@mind.be">arnout@mind.be</a>&gt; wrote:<br></div><blockquote class=3D"gmai=
-l_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,20=
-4,204);padding-left:1ex"><br>
-<br>
-On 01/04/2024 20:56, Patricia Holden wrote:<br>
-&gt; I just need a simple web page I can run a react app on.=C2=A0 If you k=
-now of any <br>
-&gt; examples of this, please share!=C2=A0 I have tried using matchbox, but=
- not sure I&#39;m <br>
-&gt; configuring it correctly.<br>
-<br>
-=C2=A0 That&#39;s exactly what qt-webkit-kiosk is meant for. Oh, and I forg=
-ot cog <br>
-earlier: that&#39;s the same kind of tool but without pulling in Qt. Note: =
-you need <br>
-to enable WPEWebKit to be able to enable cog in Buildroot.<br>
-<br>
-=C2=A0 cog is much better maintained - I added Adrian in Cc who works on WP=
-EWebKit <br>
-and cog in Buildroot.<br>
-<br>
-=C2=A0 Regards,<br>
-=C2=A0 Arnout<br>
-<br>
-&gt; <br>
-&gt; On Mon, Apr 1, 2024 at 2:38=E2=80=AFPM Arnout Vandecappelle &lt;<a hre=
-f=3D"mailto:arnout@mind.be" target=3D"_blank">arnout@mind.be</a> <br>
-&gt; &lt;mailto:<a href=3D"mailto:arnout@mind.be" target=3D"_blank">arnout@=
-mind.be</a>&gt;&gt; wrote:<br>
-&gt; <br>
-&gt; <br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0On 01/04/2024 20:00, Patricia Holden wrote:<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt; I found a few topics online about a patch for=
- chromium, but they are<br>
-&gt;=C2=A0 =C2=A0 =C2=A0dated 2018<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt; or older.=C2=A0 Is there an official patch to=
- add the chromium-browser as a<br>
-&gt;=C2=A0 =C2=A0 =C2=A0package<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt; for Buildroot?=C2=A0 Or how about &quot;minib=
-rowser&quot;, which I have also seen topics<br>
-&gt;=C2=A0 =C2=A0 =C2=A0in an<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt; online search?<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 I don&#39;t think there has ever been an at=
-tempt to attempt chromium itself, but<br>
-&gt;=C2=A0 =C2=A0 =C2=A0there was an attempt at patches for Chromium Embedd=
-ed Framework (CEF). That&#39;s<br>
-&gt;=C2=A0 =C2=A0 =C2=A0not a browser, however, just a browser engine. And =
-anyway it turned out that<br>
-&gt;=C2=A0 =C2=A0 =C2=A0Chromium (and firefox) are way too complicated with=
- too many vendored<br>
-&gt;=C2=A0 =C2=A0 =C2=A0dependencies and crazy buildsystems.<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 There are a bunch of alternative browser en=
-gines: qt5webengine, qt5webkit,<br>
-&gt;=C2=A0 =C2=A0 =C2=A0webkitgtk, wpewebkit.<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 There are also a few simple &quot;frontends=
-&quot; for these, that basically render a<br>
-&gt;=C2=A0 =C2=A0 =C2=A0single webpage and then allow you to browse (so no =
-things like history,<br>
-&gt;=C2=A0 =C2=A0 =C2=A0bookmarks, plugins, etc.): qt-webkit-kiosk, qt5webv=
-iew; and a more complete<br>
-&gt;=C2=A0 =C2=A0 =C2=A0browser: midori.<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 Finally, there&#39;s also the text-mode bro=
-wser links, but I don&#39;t suppose that<br>
-&gt;=C2=A0 =C2=A0 =C2=A0that is what you&#39;re looking for.<br>
-&gt; <br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 Regards,<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 Arnout<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt; Thanks!<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt; Pat Holden, NK Labs<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt; _____________________________________________=
-__<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt; buildroot mailing list<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt; <a href=3D"mailto:buildroot@buildroot.org" ta=
-rget=3D"_blank">buildroot@buildroot.org</a> &lt;mailto:<a href=3D"mailto:bu=
-ildroot@buildroot.org" target=3D"_blank">buildroot@buildroot.org</a>&gt;<br=
->
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt; <a href=3D"https://lists.buildroot.org/mailma=
-n/listinfo/buildroot" rel=3D"noreferrer" target=3D"_blank">https://lists.bu=
-ildroot.org/mailman/listinfo/buildroot</a><br>
-&gt;=C2=A0 =C2=A0 =C2=A0&lt;<a href=3D"https://lists.buildroot.org/mailman/=
-listinfo/buildroot" rel=3D"noreferrer" target=3D"_blank">https://lists.buil=
-droot.org/mailman/listinfo/buildroot</a>&gt;<br>
-&gt; <br>
-</blockquote></div>
-
---000000000000d84da406150f69c7--
-
---===============3944100682344790420==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/Config.in b/package/Config.in
+index 410fe0f493..af9f1e38a9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1277,6 +1277,7 @@ menu "External python modules"
+ 	source "package/python-pyparsing/Config.in"
+ 	source "package/python-pyparted/Config.in"
+ 	source "package/python-pyphen/Config.in"
++	source "package/python-pypika-tortoise/Config.in"
+ 	source "package/python-pypng/Config.in"
+ 	source "package/python-pyqrcode/Config.in"
+ 	source "package/python-pyqt5/Config.in"
+diff --git a/package/python-pypika-tortoise/Config.in b/package/python-pypika-tortoise/Config.in
+new file mode 100644
+index 0000000000..62e14c6d50
+--- /dev/null
++++ b/package/python-pypika-tortoise/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_PYPIKA_TORTOISE
++	bool "python-pypika-tortoise"
++	help
++	  Forked from pypika and streamline just for tortoise-orm.
++
++	  https://github.com/tortoise/pypika-tortoise
+diff --git a/package/python-pypika-tortoise/python-pypika-tortoise.hash b/package/python-pypika-tortoise/python-pypika-tortoise.hash
+new file mode 100644
+index 0000000000..629762f4f7
+--- /dev/null
++++ b/package/python-pypika-tortoise/python-pypika-tortoise.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/pypika-tortoise/json
++md5  98c9677516f06f61f211f834d51949a6  pypika-tortoise-0.1.6.tar.gz
++sha256  d802868f479a708e3263724c7b5719a26ad79399b2a70cea065f4a4cadbebf36  pypika-tortoise-0.1.6.tar.gz
++# Locally computed sha256 checksums
++sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
+diff --git a/package/python-pypika-tortoise/python-pypika-tortoise.mk b/package/python-pypika-tortoise/python-pypika-tortoise.mk
+new file mode 100644
+index 0000000000..84aa19cfbb
+--- /dev/null
++++ b/package/python-pypika-tortoise/python-pypika-tortoise.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# python-pypika-tortoise
++#
++################################################################################
++
++PYTHON_PYPIKA_TORTOISE_VERSION = 0.1.6
++PYTHON_PYPIKA_TORTOISE_SOURCE = pypika-tortoise-$(PYTHON_PYPIKA_TORTOISE_VERSION).tar.gz
++PYTHON_PYPIKA_TORTOISE_SITE = https://files.pythonhosted.org/packages/86/55/1bfd4150f664d2e07b36c8f442178cc1f717bb9ae6cae20f21e851c208c6
++PYTHON_PYPIKA_TORTOISE_SETUP_TYPE = pep517
++PYTHON_PYPIKA_TORTOISE_LICENSE = Apache-2.0
++PYTHON_PYPIKA_TORTOISE_LICENSE_FILES = LICENSE
++PYTHON_PYPIKA_TORTOISE_DEPENDENCIES = host-python-poetry-core
++
++$(eval $(python-package))
+-- 
+2.34.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3944100682344790420==--
