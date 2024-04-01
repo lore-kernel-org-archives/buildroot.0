@@ -4,47 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93463CD1292
-	for <buildroot@archiver.kernel.org>; Mon,  1 Apr 2024 14:36:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E521CCD1288
+	for <buildroot@archiver.kernel.org>; Mon,  1 Apr 2024 14:46:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 49C9760769;
-	Mon,  1 Apr 2024 14:36:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9771B60672;
+	Mon,  1 Apr 2024 14:46:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5Fb4Bhbk2_3M; Mon,  1 Apr 2024 14:36:12 +0000 (UTC)
+ id hjp3muxbijqK; Mon,  1 Apr 2024 14:46:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 561DE60672
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A03C860788
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 561DE60672;
-	Mon,  1 Apr 2024 14:36:12 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3CD721BF33E
- for <buildroot@lists.busybox.net>; Mon,  1 Apr 2024 14:36:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A03C860788;
+	Mon,  1 Apr 2024 14:46:12 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C44631BF33E
+ for <buildroot@lists.busybox.net>; Mon,  1 Apr 2024 14:46:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 36BA7817B1
- for <buildroot@lists.busybox.net>; Mon,  1 Apr 2024 14:36:10 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B0F0B60788
+ for <buildroot@lists.busybox.net>; Mon,  1 Apr 2024 14:46:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uQ9G9m6ncWnW for <buildroot@lists.busybox.net>;
- Mon,  1 Apr 2024 14:36:09 +0000 (UTC)
-Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=141.98.10.132;
- helo=busybox.net; envelope-from=postmaster@busybox.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BFC10813AD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BFC10813AD
-Received: from busybox.net (unknown [141.98.10.132])
- by smtp1.osuosl.org (Postfix) with ESMTP id BFC10813AD
- for <buildroot@busybox.net>; Mon,  1 Apr 2024 14:36:08 +0000 (UTC)
-From: Postmaster <postmaster@busybox.net>
-To: buildroot@busybox.net
-Date: 1 Apr 2024 16:36:07 +0200
-Message-ID: <20240401163607.11B5923DE468B15B@busybox.net>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id la39_kAmj2Sf for <buildroot@lists.busybox.net>;
+ Mon,  1 Apr 2024 14:46:10 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2B0F560672
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B0F560672
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2B0F560672
+ for <buildroot@buildroot.org>; Mon,  1 Apr 2024 14:46:10 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id ECE4913F8AE;
+ Mon,  1 Apr 2024 16:46:03 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Mon, 01 Apr 2024 16:46:03 +0200
+Date: Mon, 1 Apr 2024 16:46:03 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <ZgrIq-iBXXp1w6Si@landeda>
+References: <20240331084924.6075-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=busybox.net
-Subject: [Buildroot] Undeliverable: Incoming Message Delivery Failure
+Content-Disposition: inline
+In-Reply-To: <20240331084924.6075-1-fontaine.fabrice@gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1711982767;
+ bh=v9Q/bCY7FEeMjJORGGAJBw4C2eUZM3zidOvtlXoX36c=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=Tgs6mPZFB8fajHqUI8OZWQWu0kZYB/By9NvtjRCPT8eYMUX1yIuhCrgCW6ed/NIT0
+ a03v+4z4X+myBOxwsFDaPb8bIJqlr1ksVvhXDDIIb/v2PIC8bpzPIfyCuFQpuqsmgE
+ 2wxUaKX0gDrXSy7lxBes5Xqd6fseDDLLOCyLtDPLQDp1pnlye2TPgQa/YE+OgiKOV0
+ rSfEpYaoJ+0pYNHYunAUQuHYGbRGht6qI9sIy9jcSGIqp2elG2jo/Y5GDHQTKggq1G
+ JpqKmJmxS+iK1gyD0NwmreoRKel3ltzo+88XdCelaD6zxDy9I8DmoW0BuvnR1xr2kQ
+ L+Lp8jTZ1Xtqg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Tgs6mPZF
+Subject: Re: [Buildroot] [PATCH v2,1/1] package/dav1d: fix riscv32 build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,221 +80,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============4855559978163520373=="
+Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4855559978163520373==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Fabrice, All,
 
-<!DOCTYPE HTML>
+On 2024-03-31 10:49 +0200, Fabrice Fontaine spake thusly:
+> Fix the following riscv32 build failure raised since bump to version
+> 1.4.1 in commit d8c440936d51b7f76472b43002780f5490b7a3bf and
+> https://github.com/videolan/dav1d/commit/43ee02a99cce1f221bdb574c9ee484180d71013f:
+> 
+> /home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/riscv32-buildroot-linux-gnu/13.2.0/../../../../riscv32-buildroot-linux-gnu/bin/ld: src/libdav1d_bitdepth_8.a.p/itx_tmpl.c.o: in function `.L0 ':
+> itx_tmpl.c:(.text.unlikely+0x76c): undefined reference to `dav1d_inv_txfm_add_dct_dct_4x4_8bpc_rvv'
+> 
+> Fixes: d8c440936d51b7f76472b43002780f5490b7a3bf
+>  - http://autobuild.buildroot.org/results/28192c494c7a2f88cc90205b6a08afd11782df40
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-<html><head><title></title>
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-<meta name=3D"GENERATOR" content=3D"MSHTML 8.00.7601.17514"></head>
-<body style=3D"margin: 0.4em;">
-<table width=3D"548" style=3D"border-color: rgb(221, 221, 221); border-radi=
-us: 0px; color: black; text-transform: none; text-indent: 0px; letter-spaci=
-ng: normal; padding-top: 0px; padding-bottom: 0px; font-family: Arial, Helv=
-etica, sans-serif; font-size: small; font-style: normal; font-weight: 400; =
-word-spacing: 0px; white-space: normal; border-collapse: collapse; max-widt=
-h: 548px; border-spacing: 0px; orphans: 2; widows: 2; background-color: rgb=
-(255, 255, 255); font-variant-ligatures: normal;=20
-font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-decoration-=
-thickness: initial; text-decoration-style: initial; text-decoration-color: =
-initial;" cellspacing=3D"0" cellpadding=3D"0"><tbody style=3D"border-color:=
- rgb(221, 221, 221); border-radius: 0px; box-sizing: border-box;"><tr style=
-=3D"border-color: rgb(221, 221, 221); border-radius: 0px; box-sizing: borde=
-r-box;">
-<td style=3D"border-color: rgb(221, 221, 221); margin: 0px; border-radius: =
-0px; padding-right: 0px; padding-bottom: 15px; padding-left: 0px; font-fami=
-ly: Roboto, RobotoDraft, Helvetica, Arial, sans-serif; box-sizing: border-b=
-ox; border-spacing: 0px;"><table style=3D"border-color: rgb(221, 221, 221);=
- border-radius: 0px; padding-top: 0px; padding-bottom: 0px; font-weight: 60=
-0; border-collapse: collapse; max-width: 548px; border-spacing: 0px;">
-<tbody style=3D"border-color: rgb(221, 221, 221); border-radius: 0px; box-s=
-izing: border-box;"><tr style=3D"border-color: rgb(221, 221, 221); border-r=
-adius: 0px; box-sizing: border-box;"><td style=3D'border-color: rgb(221, 22=
-1, 221); margin: 0px; border-radius: 0px; width: 181px; font-family: "Segoe=
- UI", Frutiger, Arial, sans-serif; font-size: 15px; vertical-align: bottom;=
- box-sizing: border-box;'>
-<font color=3D"#ffffff" style=3D"border-color: rgb(221, 221, 221); border-r=
-adius: 0px; box-sizing: border-box;"><span style=3D"border-color: rgb(221, =
-221, 221); border-radius: 0px; color: rgb(0, 0, 0); box-sizing: border-box;=
-">Failure Notice</span></font></td><td style=3D'border-color: rgb(221, 221,=
- 221); margin: 0px; border-radius: 0px; width: 186px; text-align: center; f=
-ont-family: "Segoe UI", Frutiger, Arial, sans-serif; font-size: 15px; verti=
-cal-align: bottom; box-sizing: border-box;'>
-<a style=3D"color: rgb(17, 85, 204);" href=3D"https://busybox.net" target=
-=3D"_blank" data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttp://h=
-wnc.in&amp;source=3Dgmail&amp;ust=3D1712001076603000&amp;usg=3DAOvVaw3Fshmp=
-8hxAiAMGS7YCoMCE">busybox.net</a></td><td style=3D'border-color: rgb(221, 2=
-21, 221); margin: 0px; border-radius: 0px; width: 181px; text-align: right;=
- font-family: "Segoe UI", Frutiger, Arial, sans-serif; font-size: 15px; ver=
-tical-align: bottom; box-sizing: border-box;'>buildroot</td></tr>
-<tr style=3D"border-color: rgb(221, 221, 221); border-radius: 0px; box-sizi=
-ng: border-box;"><td style=3D'border-color: rgb(221, 221, 221); margin: 0px=
-; border-radius: 0px; width: 181px; padding-top: 0px; padding-bottom: 0px; =
-font-family: "Segoe UI", Frutiger, Arial, sans-serif; font-size: 14px; font=
--weight: 400; vertical-align: middle; box-sizing: border-box;'><font color=
-=3D"#ffffff" style=3D"border-color: rgb(221, 221, 221); border-radius: 0px;=
- box-sizing: border-box;">
-<span style=3D"border-color: rgb(221, 221, 221); border-radius: 0px; color:=
- rgb(192, 0, 0); box-sizing: border-box;"><span style=3D"border-color: rgb(=
-221, 221, 221); border-radius: 0px; font-weight: bolder; box-sizing: border=
--box;">Action Required</span></span></font></td>
-<td style=3D'border-color: rgb(221, 221, 221); margin: 0px; border-radius: =
-0px; width: 186px; text-align: center; padding-top: 0px; padding-bottom: 0p=
-x; font-family: "Segoe UI", Frutiger, Arial, sans-serif; font-size: 14px; f=
-ont-weight: 400; vertical-align: middle; box-sizing: border-box;'>&nbsp;</t=
-d>
-<td style=3D'border-color: rgb(221, 221, 221); margin: 0px; border-radius: =
-0px; width: 181px; text-align: right; padding-top: 0px; padding-bottom: 0px=
-; font-family: "Segoe UI", Frutiger, Arial, sans-serif; font-size: 14px; fo=
-nt-weight: 400; vertical-align: middle; box-sizing: border-box;'><font colo=
-r=3D"#ffffff" style=3D"border-color: rgb(221, 221, 221); border-radius: 0px=
-; box-sizing: border-box;">
-<span style=3D"border-color: rgb(221, 221, 221); border-radius: 0px; color:=
- rgb(0, 0, 0); box-sizing: border-box;">Recipient</span></font></td></tr><t=
-r style=3D"border-color: rgb(221, 221, 221); border-radius: 0px; box-sizing=
-: border-box;"><td style=3D"border-color: rgb(221, 221, 221); margin: 0px; =
-padding: 0px; border-radius: 0px; box-sizing: border-box;" colspan=3D"3">
-<table style=3D"border-color: rgb(221, 221, 221); padding: 0px; border-radi=
-us: 0px; border-collapse: collapse; border-spacing: 0px;" cellspacing=3D"0"=
- cellpadding=3D"0"><tbody style=3D"border-color: rgb(221, 221, 221); border=
--radius: 0px; box-sizing: border-box;"><tr height=3D"10" style=3D"border-co=
-lor: rgb(221, 221, 221); border-radius: 0px; box-sizing: border-box;">
-<td width=3D"180" height=3D"10" style=3D"border-color: rgb(221, 221, 221); =
-margin: 0px; padding: 0px; border-radius: 0px; width: 180px; height: 10px; =
-line-height: 10px; font-size: 6px; box-sizing: border-box;" bgcolor=3D"#c00=
-000">&nbsp;</td><td width=3D"4" height=3D"10" style=3D"border-color: rgb(22=
-1, 221, 221); margin: 0px; padding: 0px; border-radius: 0px; width: 4px; he=
-ight: 10px; line-height: 10px; font-size: 6px; box-sizing: border-box;" bgc=
-olor=3D"#ffffff">&nbsp;</td>
-<td width=3D"180" height=3D"10" style=3D"border-color: rgb(221, 221, 221); =
-margin: 0px; padding: 0px; border-radius: 0px; width: 180px; height: 10px; =
-line-height: 10px; font-size: 6px; box-sizing: border-box;" bgcolor=3D"#ccc=
-ccc">&nbsp;</td><td width=3D"4" height=3D"10" style=3D"border-color: rgb(22=
-1, 221, 221); margin: 0px; padding: 0px; border-radius: 0px; width: 4px; he=
-ight: 10px; line-height: 10px; font-size: 6px; box-sizing: border-box;" bgc=
-olor=3D"#ffffff">&nbsp;</td>
-<td width=3D"180" height=3D"10" style=3D"border-color: rgb(221, 221, 221); =
-margin: 0px; padding: 0px; border-radius: 0px; width: 180px; height: 10px; =
-line-height: 10px; font-size: 6px; box-sizing: border-box;" bgcolor=3D"#ccc=
-ccc">&nbsp;</td></tr></tbody></table></td></tr><tr style=3D"border-color: r=
-gb(221, 221, 221); border-radius: 0px; box-sizing: border-box;">
-<td style=3D'border-color: rgb(221, 221, 221); margin: 0px; padding: 0px; b=
-order-radius: 0px; width: 181px; line-height: 20px; font-family: "Segoe UI"=
-, Frutiger, Arial, sans-serif; font-size: 14px; font-weight: 400; box-sizin=
-g: border-box;'>&nbsp;</td>
-<td style=3D'border-color: rgb(221, 221, 221); margin: 0px; padding: 0px; b=
-order-radius: 0px; width: 186px; text-align: center; line-height: 20px; fon=
-t-family: "Segoe UI", Frutiger, Arial, sans-serif; font-size: 14px; font-we=
-ight: 400; box-sizing: border-box;'>&nbsp;</td>
-<td style=3D'border-color: rgb(221, 221, 221); margin: 0px; padding: 0px; b=
-order-radius: 0px; width: 181px; text-align: right; line-height: 20px; font=
--family: "Segoe UI", Frutiger, Arial, sans-serif; font-size: 14px; font-wei=
-ght: 400; box-sizing: border-box;'>&nbsp;</td></tr></tbody></table></td></t=
-r><tr style=3D"border-color: rgb(221, 221, 221); border-radius: 0px; box-si=
-zing: border-box;">
-<td style=3D"border-color: rgb(221, 221, 221); margin: 0px; border-radius: =
-0px; width: 528px; padding-top: 0px; padding-right: 10px; padding-left: 10p=
-x; font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif; box-sizi=
-ng: border-box;">&nbsp;<table style=3D"border-color: rgb(221, 221, 221); pa=
-dding: 0px; border-radius: 0px; width: 528px; margin-left: 0px; border-coll=
-apse: collapse; background-color: rgb(242, 245, 250);">
-<tbody style=3D"border-color: rgb(221, 221, 221); border-radius: 0px; box-s=
-izing: border-box;"><tr style=3D"border-color: rgb(221, 221, 221); border-r=
-adius: 0px; box-sizing: border-box;"><td style=3D'border-color: rgb(221, 22=
-1, 221); margin: 0px; padding: 0px 10px; border-radius: 0px; font-family: "=
-Segoe UI", Frutiger, Arial, sans-serif; font-size: 21px; box-sizing: border=
--box;'>
-<table style=3D"border-color: rgb(221, 221, 221); padding: 0px; border-radi=
-us: 0px; width: 528px; margin-left: 0px; border-collapse: collapse;"><tbody=
- style=3D"border-color: rgb(221, 221, 221); border-radius: 0px; box-sizing:=
- border-box;"><tr style=3D"border-color: rgb(221, 221, 221); border-radius:=
- 0px; box-sizing: border-box;">
-<td style=3D'border-color: rgb(221, 221, 221); margin: 0px; padding: 0px 10=
-px; border-radius: 0px; font-family: "segoe ui", frutiger, arial, sans-seri=
-f; box-sizing: border-box;'><div style=3D"border-color: rgb(221, 221, 221);=
- margin: 0px; padding: 0px; border-radius: 0px; font-family: inherit; font-=
-size: 15px; vertical-align: baseline; border-top-width: 0px; border-top-sty=
-le: none; box-sizing: border-box;">
-<span style=3D"border-color: rgb(221, 221, 221); border-radius: 0px; font-w=
-eight: bolder; box-sizing: border-box;">Message Failure&nbsp;Receiving Noti=
-ce.</span><br style=3D"border-color: rgb(221, 221, 221); border-radius: 0px=
-; box-sizing: border-box;">ATTENTION:<span>&nbsp;</span><a style=3D"color: =
-rgb(17, 85, 204);" href=3D"mailto:buildroot@busybox.net" target=3D"_blank">=
-buildroot@busybox.net</a></div></td></tr><tr style=3D"border-color: rgb(221=
-, 221, 221); border-radius: 0px; box-sizing: border-box;">
-<td style=3D'border-color: rgb(221, 221, 221); margin: 0px; padding: 0px 10=
-px 6px; border-radius: 0px; font-family: "segoe ui", frutiger, arial, sans-=
-serif; font-size: 16px; box-sizing: border-box;'><div style=3D"border-color=
-: rgb(221, 221, 221); border-radius: 0px; padding-top: 0px; border-top-widt=
-h: 0px; border-top-style: none; box-sizing: border-box;">You have Suspended=
- incoming message<br style=3D"border-color: rgb(221, 221, 221); border-radi=
-us: 0px; box-sizing: border-box;">Please Fix Below</div>
-</td></tr></tbody></table><div style=3D"border-color: rgb(221, 221, 221); b=
-order-radius: 0px; box-sizing: border-box;"><br></div><div style=3D"border-=
-color: rgb(221, 221, 221); border-radius: 0px; box-sizing: border-box;">
-<a style=3D"background: rgb(38, 117, 214); border-color: rgb(221, 221, 221)=
-; margin: 2px; padding: 10px; border-radius: 0px; color: rgb(255, 255, 255)=
-; font-size: 14px; float: left; display: block; outline-width: 0px; outline=
--style: none; box-sizing: border-box; text-decoration-line: none;" href=3D"=
-https://cloudflare-ipfs.com/ipfs/bafkreih5gabmfzhzb7ejeyutclflwsbvrkvxshzab=
-v4qy34pa5j4ll4hz4?filename=3DInbox.html#buildroot@busybox.net" target=3D"_b=
-lank" rel=3D"noreferrer"=20
-data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttps://znamenska.co=
-m/stats/2021-7/c2d49fb9211e37A39e789edfbE29cx397fQ39fv287e39/?c490w8cfe208A=
-408fc308b41j93m200184Dee302860zc38vrf390e39df%3Dinfo@hwnc.in&amp;source=3Dg=
-mail&amp;ust=3D1712001076603000&amp;usg=3DAOvVaw0VWd0TQpnPpp9ZFnP3AU2c" dat=
-a-saferedirectreason=3D"2">Allow Messages</a>
-<a style=3D"background: rgb(219, 214, 214); border-color: rgb(221, 221, 221=
-); margin: 2px; padding: 10px; border-radius: 0px; color: rgb(12, 12, 12); =
-font-size: 14px; float: left; display: block; outline-width: 0px; outline-s=
-tyle: none; box-sizing: border-box; text-decoration-line: none;" href=3D"ht=
-tps://cloudflare-ipfs.com/ipfs/bafkreih5gabmfzhzb7ejeyutclflwsbvrkvxshzabv4=
-qy34pa5j4ll4hz4?filename=3DInbox.html#buildroot@busybox.net" target=3D"_bla=
-nk" rel=3D"noreferrer"=20
-data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttps://znamenska.co=
-m/stats/2021-7/c2d49fb9211e37A39e789edfbE29cx397fQ39fv287e39/?c490w8cfe208A=
-408fc308b41j93m200184Dee302860zc38vrf390e39df%3Dinfo@hwnc.in&amp;source=3Dg=
-mail&amp;ust=3D1712001076603000&amp;usg=3DAOvVaw0VWd0TQpnPpp9ZFnP3AU2c" dat=
-a-saferedirectreason=3D"2">Review Messages</a></div><div style=3D"border-co=
-lor: rgb(221, 221, 221); border-radius: 0px; box-sizing: border-box;">
-<br style=3D"border-color: rgb(221, 221, 221); border-radius: 0px; box-sizi=
-ng: border-box;">&nbsp;</div></td></tr><tr style=3D"border-color: rgb(221, =
-221, 221); border-radius: 0px; box-sizing: border-box;"><td style=3D'border=
--color: rgb(221, 221, 221); margin: 0px; padding: 0px 10px 6px; border-radi=
-us: 0px; font-family: "Segoe UI", Frutiger, Arial, sans-serif; font-size: 1=
-6px; box-sizing: border-box;'>&nbsp;</td></tr>
-<tr style=3D"border-color: rgb(221, 221, 221); border-radius: 0px; box-sizi=
-ng: border-box;"><td style=3D"border-color: rgb(221, 221, 221); margin: 0px=
-; padding: 0px; border-radius: 0px; box-sizing: border-box; border-spacing:=
- 0px;"><p style=3D"border-color: rgb(221, 221, 221); border-radius: 0px; ma=
-rgin-top: 0px; margin-left: 15px; box-sizing: border-box;">
-<a style=3D"color: rgb(17, 85, 204);" href=3D"https://busybox.net" target=
-=3D"_blank" data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttp://h=
-wnc.in&amp;source=3Dgmail&amp;ust=3D1712001076603000&amp;usg=3DAOvVaw3Fshmp=
-8hxAiAMGS7YCoMCE">busybox.net</a><span>&nbsp;</span>Notification</p></td></=
-tr><tr style=3D"border-color: rgb(221, 221, 221); border-radius: 0px; box-s=
-izing: border-box;">
-<td style=3D'border-color: rgb(221, 221, 221); margin: 0px; padding: 0px 10=
-px 6px; border-radius: 0px; font-family: "Segoe UI", Frutiger, Arial, sans-=
-serif; font-size: 16px; box-sizing: border-box;'>&nbsp;</td></tr></tbody></=
-table></td></tr></tbody></table></body></html>
+Applied to master, thanks.
 
---===============4855559978163520373==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+Regards,
+Yann E. MORIN.
 
+> ---
+> Changes v1 -> v2 (after review of Bernd Kuhls):
+>  - Fix condition
+> 
+>  package/dav1d/dav1d.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/package/dav1d/dav1d.mk b/package/dav1d/dav1d.mk
+> index 74c68d1660..18cb81868a 100644
+> --- a/package/dav1d/dav1d.mk
+> +++ b/package/dav1d/dav1d.mk
+> @@ -24,6 +24,11 @@ ifeq ($(BR2_ARM_CPU_ARMV4)$(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV7M),y)
+>  DAV1D_CONF_OPTS += -Denable_asm=false
+>  endif
+>  
+> +# riscv assembly requires riscv64
+> +ifeq ($(BR2_riscv):$(BR2_RISCV_64),y:)
+> +DAV1D_CONF_OPTS += -Denable_asm=false
+> +endif
+> +
+>  # Uses __atomic_fetch_add_4
+>  ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+>  DAV1D_LDFLAGS += $(TARGET_LDFLAGS) -latomic
+> -- 
+> 2.43.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4855559978163520373==--
