@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8699ECD1288
-	for <buildroot@archiver.kernel.org>; Mon,  1 Apr 2024 20:19:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFE16CD128A
+	for <buildroot@archiver.kernel.org>; Mon,  1 Apr 2024 20:19:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4067281F34;
-	Mon,  1 Apr 2024 20:19:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B8FDE81F48;
+	Mon,  1 Apr 2024 20:19:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Z18TrOeD51KX; Mon,  1 Apr 2024 20:19:09 +0000 (UTC)
+ id l3ZvpIzbw5Mi; Mon,  1 Apr 2024 20:19:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9710681F36
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 68EBE81F51
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9710681F36;
-	Mon,  1 Apr 2024 20:19:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 68EBE81F51;
+	Mon,  1 Apr 2024 20:19:12 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 03EFD1BF966
- for <buildroot@lists.busybox.net>; Mon,  1 Apr 2024 20:18:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 15E161BF966
+ for <buildroot@lists.busybox.net>; Mon,  1 Apr 2024 20:18:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2143181E49
+ by smtp1.osuosl.org (Postfix) with ESMTP id 221E981E7D
  for <buildroot@lists.busybox.net>; Mon,  1 Apr 2024 20:18:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iBeKFziRejTB for <buildroot@lists.busybox.net>;
+ id sd2N3j9W_V57 for <buildroot@lists.busybox.net>;
  Mon,  1 Apr 2024 20:18:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1550D81E82
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E62C881E7F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1550D81E82
- for <buildroot@buildroot.org>; Mon,  1 Apr 2024 20:18:23 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E62C881E7F
+ for <buildroot@buildroot.org>; Mon,  1 Apr 2024 20:18:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 12351845A9; Mon,  1 Apr 2024 20:18:23 +0000 (UTC)
+ id E2B2B845A9; Mon,  1 Apr 2024 20:18:22 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 1 Apr 2024 22:12:54 +0200
+Date: Mon, 1 Apr 2024 22:12:52 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 96c6f20de65b0cad79a53cae2b2df297ba65db12
-X-Git-Newrev: f30f84dd93bcbbb5af4ded17e56e41d4d8d68426
+X-Git-Oldrev: 9502fe2bb59afbe9950ab5d0c673275b2c3eea32
+X-Git-Newrev: d02877f044b5132b6173f4d7b2b0a036b7d83d9f
 X-Patchwork-Hint: ignore
-Message-Id: <20240401201823.12351845A9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pyzmq: add cython for
- python-pyzmq
+Message-Id: <20240401201822.E2B2B845A9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-sh: migrate to poetry core
+ pep517 build backend
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,31 +66,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f30f84dd93bcbbb5af4ded17e56e41d4d8d68426
+commit: https://git.buildroot.net/buildroot/commit/?id=d02877f044b5132b6173f4d7b2b0a036b7d83d9f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When migrating to setuptools with pep517 support we need to add
-host-python-cython which is a pep517 build dependency for
-python-pyzmq.
+We need to migrate python-sh to the pep517 poetry-core
+backend as setuptools is not supported when building with a pep517
+frontend.
+
+This package currently builds using setuptools as we do not yet
+use setuptools with a pep517 build frontend. The package contains
+a setuptools fallback which only can be used when using setuptools
+without a pep517 frontend as the pep517 frontend will only use the
+build backend specified in the package pyproject.toml which is
+poetry-core and not setuptools.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/python-pyzmq/python-pyzmq.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/python-sh/python-sh.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/python-pyzmq/python-pyzmq.mk b/package/python-pyzmq/python-pyzmq.mk
-index 1d9a7d01cb..f1444b9124 100644
---- a/package/python-pyzmq/python-pyzmq.mk
-+++ b/package/python-pyzmq/python-pyzmq.mk
-@@ -13,6 +13,7 @@ PYTHON_PYZMQ_LICENSE_FILES = LICENSE.LESSER LICENSE.BSD
- PYTHON_PYZMQ_SETUP_TYPE = setuptools
- PYTHON_PYZMQ_BUILD_OPTS = --zmq=$(STAGING_DIR)/usr
- PYTHON_PYZMQ_DEPENDENCIES = \
-+	host-python-cython \
- 	host-python-packaging \
- 	host-python-setuptools-scm \
- 	zeromq
+diff --git a/package/python-sh/python-sh.mk b/package/python-sh/python-sh.mk
+index af4da3f6c9..29843d645b 100644
+--- a/package/python-sh/python-sh.mk
++++ b/package/python-sh/python-sh.mk
+@@ -7,8 +7,9 @@
+ PYTHON_SH_VERSION = 2.0.6
+ PYTHON_SH_SOURCE = sh-$(PYTHON_SH_VERSION).tar.gz
+ PYTHON_SH_SITE = https://files.pythonhosted.org/packages/cd/51/7355831d8e1cee8348157d769ccda8a31ca9fa0548e7f93d87837d83866d
+-PYTHON_SH_SETUP_TYPE = setuptools
++PYTHON_SH_SETUP_TYPE = pep517
+ PYTHON_SH_LICENSE = MIT
+ PYTHON_SH_LICENSE_FILES = LICENSE.txt
++PYTHON_SH_DEPENDENCIES = host-python-poetry-core
+ 
+ $(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
