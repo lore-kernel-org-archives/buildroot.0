@@ -4,90 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 918DCCD1288
-	for <buildroot@archiver.kernel.org>; Mon,  1 Apr 2024 13:12:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B5A7CD1292
+	for <buildroot@archiver.kernel.org>; Mon,  1 Apr 2024 13:13:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6100A404C4;
-	Mon,  1 Apr 2024 13:12:56 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 46F23405A1;
+	Mon,  1 Apr 2024 13:13:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YoIrXPMQ4WEV; Mon,  1 Apr 2024 13:12:55 +0000 (UTC)
+ id 7K4453Q_Xmpa; Mon,  1 Apr 2024 13:13:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E8FC404EC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E59D7409B9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7E8FC404EC;
-	Mon,  1 Apr 2024 13:12:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E59D7409B9;
+	Mon,  1 Apr 2024 13:13:01 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 882B91BF232
- for <buildroot@lists.busybox.net>; Mon,  1 Apr 2024 13:12:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EBD561BF232
+ for <buildroot@lists.busybox.net>; Mon,  1 Apr 2024 13:12:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8196081C44
- for <buildroot@lists.busybox.net>; Mon,  1 Apr 2024 13:12:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D856581C44
+ for <buildroot@lists.busybox.net>; Mon,  1 Apr 2024 13:12:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id u9y1ZqIMtatg for <buildroot@lists.busybox.net>;
- Mon,  1 Apr 2024 13:12:50 +0000 (UTC)
+ id ffwdf2nkwA7w for <buildroot@lists.busybox.net>;
+ Mon,  1 Apr 2024 13:12:57 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::236; helo=mail-lj1-x236.google.com;
+ client-ip=2a00:1450:4864:20::52a; helo=mail-ed1-x52a.google.com;
  envelope-from=fperrad@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1F01D81815
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F01D81815
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com
- [IPv6:2a00:1450:4864:20::236])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1F01D81815
- for <buildroot@busybox.net>; Mon,  1 Apr 2024 13:12:49 +0000 (UTC)
-Received: by mail-lj1-x236.google.com with SMTP id
- 38308e7fff4ca-2d71765d3e1so37007081fa.0
- for <buildroot@busybox.net>; Mon, 01 Apr 2024 06:12:49 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7339C81815
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7339C81815
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
+ [IPv6:2a00:1450:4864:20::52a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7339C81815
+ for <buildroot@busybox.net>; Mon,  1 Apr 2024 13:12:57 +0000 (UTC)
+Received: by mail-ed1-x52a.google.com with SMTP id
+ 4fb4d7f45d1cf-56bf6591865so5814702a12.0
+ for <buildroot@busybox.net>; Mon, 01 Apr 2024 06:12:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1711977168; x=1712581968;
+ d=1e100.net; s=20230601; t=1711977175; x=1712581975;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=UTKGby57RP1yOeVoT0lp0EZ3ukjKMUmneWo8F2GCWB0=;
- b=pWE5aGX/SE8yV/IAxbr+urSAtxjNjNQpC8+XVu+F4g6j0DmqUGr9l9XGyGN0sMChxO
- 8i9PJgETHDZ/aBcguSjgY4g9qnc8I9MbdOFoeGa0plg+MvFga8J1yXOsQ4SlolInYals
- r9qKLIdtX4HtIEHHiU2OCRT/4aa9craE9NPYEgNV0oN0D4SefZvy5ZoHRCP9m9jXwEcf
- dN4hkT31RSunD3FQOdunT9cGfdaP4YSLWoSW76kFSFV+DqnehxBY4QkyGf5sygKdsn92
- EHiQqVCfcwfumjB2Z9c8BPp5I1TjgzWSxpXAe2HxX7enk2eULwH3Bs/iiU67k6KHGe9b
- Aj6A==
-X-Gm-Message-State: AOJu0Yx54jE6ddXaQ3DPN2b62jNItk0XiVfK7a2J9NEFOzujeJwSVakg
- jSTxhzs5ZU6oCvjmsmjPaUW5BzylnRq9olGU3O7oSlEwF80XGhmQgFDauNBP
-X-Google-Smtp-Source: AGHT+IEPZxEi6TpaHlLh8oJEDvsC2h4fbrd7D7edQ8sDObV0sC1cFAa0VZmZ1f8B7HNNYBNUzqqNsA==
-X-Received: by 2002:a2e:a789:0:b0:2d6:c001:d87 with SMTP id
- c9-20020a2ea789000000b002d6c0010d87mr8066280ljf.8.1711977167349; 
- Mon, 01 Apr 2024 06:12:47 -0700 (PDT)
+ bh=MSO/wzUslcv62V4oVoaG6VLY9LrIp0Tt3yliqdxexUg=;
+ b=GIroZINPewTU2KI7AkAoW5vwegN1tHAc2H1nGaTQPjU8oSA8ZAl1stxyhakUGaAkSd
+ EgE1I4V/YiWpiJA9T8lfUFMISOTxBamSWM43oQK5FnGvgTIvOPucofvgQIe1LUB0LjDe
+ 91wA/4HR2P60Vkff7lCjh3043/3SxYuGSiYj245EtMbET5YewPls3lrbkS/+4ZTUaUym
+ IBGvGQ6lLdr1JE/W/rL5F+yvIHZ7Bv/RyEOGVKHAQrsINq0II1JOsq6lUWjoe3cOyzS9
+ K7rBf1kBJH/vsSEWwBBO0jctfxxZ8F0thEItS3Bq+4/PzgQypS2MPrYO9s7lEcwG45kR
+ niXw==
+X-Gm-Message-State: AOJu0Yx/DscoWg50BXuLBZzW6DjbWJ52MUrfQMD6+1DHAmpud6NIVamd
+ dx/+WDI7XF+IKIIbCUFMM5ohKdF6NVljIakfG8codRMy/AWCOCQTBDgxNtQX
+X-Google-Smtp-Source: AGHT+IEbNV9fNtal8KwXumOdmZE7+ZG4QdIwA12644go4ueQm+Lg3nWkhJX+mIfvZm+ShTRgelaIBg==
+X-Received: by 2002:a50:9b01:0:b0:56b:d9b0:f1c3 with SMTP id
+ o1-20020a509b01000000b0056bd9b0f1c3mr6113397edi.39.1711977175075; 
+ Mon, 01 Apr 2024 06:12:55 -0700 (PDT)
 Received: from xubuntu-23.. ([37.65.6.74]) by smtp.gmail.com with ESMTPSA id
- fd6-20020a056402388600b0056c53ea5affsm5224054edb.77.2024.04.01.06.12.46
+ e12-20020a50d4cc000000b0056bf6287f32sm5613485edj.26.2024.04.01.06.12.54
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 01 Apr 2024 06:12:47 -0700 (PDT)
+ Mon, 01 Apr 2024 06:12:54 -0700 (PDT)
 From: Francois Perrad <fperrad@gmail.com>
 X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Mon,  1 Apr 2024 15:12:42 +0200
-Message-Id: <20240401131242.511203-1-francois.perrad@gadz.org>
+Date: Mon,  1 Apr 2024 15:12:52 +0200
+Message-Id: <20240401131252.511224-1-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1711977168; x=1712581968; darn=busybox.net;
+ d=gmail.com; s=20230601; t=1711977175; x=1712581975; darn=busybox.net;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=UTKGby57RP1yOeVoT0lp0EZ3ukjKMUmneWo8F2GCWB0=;
- b=nkCbX6QQGuMxj93enDn9R6oG1Pn9sZ/MBNOUix6Dvm8YNmos8LHhAZ22qFepgK7Fgu
- 6HhB5FEJAqqlzeZDe892G/02P1lNdB0unBJh4+CWr6iDHk1Vka3HxOQJZ1b/GPZIevgv
- usOAnUg+XPEPp2Nc+eiNQWIeT6u5Us8JJKnNsBYLWecL5zEKn0iqlp6s4g1uRF74HoKk
- FZykeQZzN9n53z+bKLjFXE/kr0QA9c7/qOCuvyw3crFCJ0i7IXqspMK9EPJ3Gdtf5yzp
- fbfd5zBnS7oR74lIrrmNpWdRzDZijTeNL5jnzD+Ex4WRryQ9LI8Sqd7z+wuF5RzEjuWS
- ucQg==
+ bh=MSO/wzUslcv62V4oVoaG6VLY9LrIp0Tt3yliqdxexUg=;
+ b=go0ldhJcarHIPV8DrATuqKG6dkdahZinZqrcq7QJhdG8BCCELRPyMOgC4A3ubtYJWQ
+ nQuh/heDbol9vMK8mbU+MFXGsCzmwb37WXuVuiAySCgbfc+FAh03I+p2pmqumbU903ao
+ dGEmmh6Fq+Uy8HUgVhtGikKY3/Wg4ZaqKs4vyMLOEKJG6E5q47rkt2ijvlgyb3Yk6Grq
+ 9ZX/IJtu7N31xK28nPQtV5nqHD4cEbWDFSr5gQ2Fy8gpuKp75rES7KCUs7DLG5t/MDiz
+ 4fS4ZaKYFFRzVLn0J7703F9+XvZOP3Mc/VLKI0nMGCxPR6MkoGh8FZfFFPAYewf2cNDU
+ nXyA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=nkCbX6QQ
-Subject: [Buildroot] [PATCH] package/fakeroot: bump to version 1.34
+ header.a=rsa-sha256 header.s=20230601 header.b=go0ldhJc
+Subject: [Buildroot] [PATCH] package/pango: bump to version 1.52.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,40 +104,89 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+remove merged patch
+
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/fakeroot/fakeroot.hash | 5 +++--
- package/fakeroot/fakeroot.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ .../pango/0001-Drop-Werror-array-bounds.patch | 40 -------------------
+ package/pango/pango.hash                      |  4 +-
+ package/pango/pango.mk                        |  4 +-
+ 3 files changed, 4 insertions(+), 44 deletions(-)
+ delete mode 100644 package/pango/0001-Drop-Werror-array-bounds.patch
 
-diff --git a/package/fakeroot/fakeroot.hash b/package/fakeroot/fakeroot.hash
-index 5e7b6af94..a148de676 100644
---- a/package/fakeroot/fakeroot.hash
-+++ b/package/fakeroot/fakeroot.hash
-@@ -1,4 +1,5 @@
--# From https://deb.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.32.1-1.dsc
--sha256  c072b0f65bafc4cc5b6112f7c61185f5170ce4cb0c410d1681c1af4a183e94e6  fakeroot_1.32.1.orig.tar.gz
-+# From https://deb.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.34-1.dsc
-+sha1  aaa6bf0158d886e0093effc0e9422717d5c60eee  fakeroot_1.34.orig.tar.gz
-+sha256  5727f16d8903792588efa7a9f8ef8ce71f8756e746b62e45162e7735662e56bb  fakeroot_1.34.orig.tar.gz
- # License files, locally calculated
- sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-diff --git a/package/fakeroot/fakeroot.mk b/package/fakeroot/fakeroot.mk
-index 1a0ad70c1..1a0996ca1 100644
---- a/package/fakeroot/fakeroot.mk
-+++ b/package/fakeroot/fakeroot.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/pango/0001-Drop-Werror-array-bounds.patch b/package/pango/0001-Drop-Werror-array-bounds.patch
+deleted file mode 100644
+index 45821e853..000000000
+--- a/package/pango/0001-Drop-Werror-array-bounds.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From e93dbd66973040f1e0afcba0dc7c712c27d75d59 Mon Sep 17 00:00:00 2001
+-From: Matthias Clasen <mclasen@redhat.com>
+-Date: Mon, 1 May 2023 23:27:52 -0400
+-Subject: [PATCH] Drop -Werror=array-bounds
+-
+-gcc has strange issues with this and produces false
+-positives that recently started breaking the build of
+-pango as a subproject in gtk.
+-
+-See e.g. https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105523
+-
+-Upstream: https://gitlab.gnome.org/GNOME/pango/-/commit/e93dbd66973040f1e0afcba0dc7c712c27d75d59
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- meson.build | 2 --
+- 1 file changed, 2 deletions(-)
+-
+-diff --git a/meson.build b/meson.build
+-index 930f41082..2d30c0141 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -89,7 +89,6 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
+-     '-Wuninitialized',
+-     '-Wunused',
+-     '-Werror=address',
+--    '-Werror=array-bounds',
+-     '-Werror=empty-body',
+-     '-Werror=implicit',
+-     '-Werror=implicit-fallthrough',
+-@@ -132,7 +131,6 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
+-     '-Werror=sequence-point',
+-     '-Werror=return-type',
+-     '-Werror=trigraphs',
+--    '-Werror=array-bounds',
+-     '-Werror=write-strings',
+-     '-Werror=address',
+-     '-Werror=int-to-pointer-cast',
+--- 
+-GitLab
+-
+diff --git a/package/pango/pango.hash b/package/pango/pango.hash
+index 3e609e6e0..69b6b0adf 100644
+--- a/package/pango/pango.hash
++++ b/package/pango/pango.hash
+@@ -1,5 +1,5 @@
+-# From https://download.gnome.org/sources/pango/1.50/pango-1.50.14.sha256sum
+-sha256  1d67f205bfc318c27a29cfdfb6828568df566795df0cb51d2189cde7f2d581e8  pango-1.50.14.tar.xz
++# From https://download.gnome.org/sources/pango/1.52/pango-1.52.2.sha256sum
++sha256  d0076afe01082814b853deec99f9349ece5f2ce83908b8e58ff736b41f78a96b  pango-1.52.2.tar.xz
+ 
+ # Locally computed
+ sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
+diff --git a/package/pango/pango.mk b/package/pango/pango.mk
+index 723e6d228..ec0f5127e 100644
+--- a/package/pango/pango.mk
++++ b/package/pango/pango.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--FAKEROOT_VERSION = 1.32.1
-+FAKEROOT_VERSION = 1.34
- FAKEROOT_SOURCE = fakeroot_$(FAKEROOT_VERSION).orig.tar.gz
--FAKEROOT_SITE = https://snapshot.debian.org/archive/debian/20230724T160429Z/pool/main/f/fakeroot
-+FAKEROOT_SITE = https://snapshot.debian.org/archive/debian/20240401T084438Z/pool/main/f/fakeroot
- 
- HOST_FAKEROOT_DEPENDENCIES = host-acl
- # Force capabilities detection off
+-PANGO_VERSION_MAJOR = 1.50
+-PANGO_VERSION = $(PANGO_VERSION_MAJOR).14
++PANGO_VERSION_MAJOR = 1.52
++PANGO_VERSION = $(PANGO_VERSION_MAJOR).2
+ PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
+ PANGO_SITE = https://download.gnome.org/sources/pango/$(PANGO_VERSION_MAJOR)
+ PANGO_INSTALL_STAGING = YES
 -- 
 2.40.1
 
