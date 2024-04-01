@@ -1,76 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5129FCD1288
-	for <buildroot@archiver.kernel.org>; Mon,  1 Apr 2024 15:27:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07AF4CD1288
+	for <buildroot@archiver.kernel.org>; Mon,  1 Apr 2024 17:16:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 06DF1406CD;
-	Mon,  1 Apr 2024 15:27:20 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s0IQqwHur5DN; Mon,  1 Apr 2024 15:27:17 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 85811406BF
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 85811406BF;
-	Mon,  1 Apr 2024 15:27:17 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2528A1BF276
- for <buildroot@lists.busybox.net>; Mon,  1 Apr 2024 15:27:16 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1F5C381380
- for <buildroot@lists.busybox.net>; Mon,  1 Apr 2024 15:27:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AA7B881BF5;
+	Mon,  1 Apr 2024 17:16:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZX-X1TEaT2SA for <buildroot@lists.busybox.net>;
- Mon,  1 Apr 2024 15:27:15 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BB4E081370
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BB4E081370
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BB4E081370
- for <buildroot@busybox.net>; Mon,  1 Apr 2024 15:27:14 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 03E0A13F861;
- Mon,  1 Apr 2024 17:27:07 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 01 Apr 2024 17:27:07 +0200
-Date: Mon, 1 Apr 2024 17:27:07 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: =?utf-8?B?RnJhbsOnb2lz?= Perrad <francois.perrad@gadz.org>
-Message-ID: <ZgrSS-71Un9n_B_b@landeda>
-References: <20240328174052.8677-1-francois.perrad@gadz.org>
- <ZgrB_CpdJbJOmv3T@landeda>
- <CAAE6iEVy2gvT4wH3Ow3OKzDDpFcR8+CuPtHo-Zz-7S2um_z67A@mail.gmail.com>
+ id RFvG7Nw6v0rw; Mon,  1 Apr 2024 17:16:39 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A1B5C81DCA
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id A1B5C81DCA;
+	Mon,  1 Apr 2024 17:16:39 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8F9501BF3A6
+ for <buildroot@lists.busybox.net>; Mon,  1 Apr 2024 17:16:38 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7C24460678
+ for <buildroot@lists.busybox.net>; Mon,  1 Apr 2024 17:16:38 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xDICB5pToXco for <buildroot@lists.busybox.net>;
+ Mon,  1 Apr 2024 17:16:36 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1F0D060669
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F0D060669
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1F0D060669
+ for <buildroot@buildroot.org>; Mon,  1 Apr 2024 17:16:35 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 7420BB0051B;
+ Mon,  1 Apr 2024 19:16:31 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Mon,  1 Apr 2024 19:16:22 +0200
+Message-ID: <20240401171622.66777-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.44.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <CAAE6iEVy2gvT4wH3Ow3OKzDDpFcR8+CuPtHo-Zz-7S2um_z67A@mail.gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1711985231;
- bh=iOfDKz4FczeAn17Jdek8Hm6mmz+usZgBoj49NFISALw=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=UAYue1UvkvTWPZosYNNMk4tsrni9/WsCDyH/ZsI7xAjLv/M45KSlP0UBxivjcjr/n
- VRYRbb2xJcWpIsSnN1rPjzmgFPzTAguZQs2UfQpFpS0MJ4onAlBxNt1NnAqxL8yrzT
- BZdFAsSRNPadwYCEzlXQSv7nwraEvUbWo0FfG0ArZbKEa0LsM/1E1PB+RxVpB2F+Ho
- 9vE+xGY0W50+rkp8IvtAXidCoFYvbDMz7QP2cKK4OBCn2a11qntXUgP4bwv0jSYqI5
- fuig9Bjr80M/PWRLZTnk9ecad/ChH1ZZ1DK/1YGDxHhfi3DLNxTxL9vPFvuRTnihXm
- o70LCWpBOKu/w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1711991792;
+ bh=0tTmOeSpsFI72jMFWiXSjEj3LxqAbiXWYQv9zLOGPj4=;
+ h=From:To:Cc:Subject:Date:From;
+ b=uKeZqTp0Tn4uAgb+oEbdc/4TiOTL8dJfXXgAylGPGGGwG5cDV3i+oHISvVF3uqyWN
+ ZshC4T/Irbx4Wq5zeWnCDeMnZ6BwE4ebRQpAksFXn88/NCNQZr0LJkZir1WZR8TFxH
+ M2ITOy9lcZDW7MeBTknN4/FnWV9Fas4gn2iQvbD7+vNzlbuUraylgsaf7o05+6hyaU
+ z6V4HrzoFsDg+JppCMhUzUqpWJT4/db5WnY63Y/tvSpvOg+hS7mxK44Yo/gW4/si79
+ tvu0+5CnnJBtiTHdj6gZBo05Ufiwk4V5ruMVIXujqxvLqlxeCqchkflSN1RYtfBeHH
+ jisiufvjG4NOQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=UAYue1Uv
-Subject: Re: [Buildroot] [PATCH] package/libressl: bump to version 3.8.4
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=uKeZqTp0
+Subject: [Buildroot] [PATCH 1/1] package/iperf3: fix build with libatomic
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,39 +75,129 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@busybox.net, Francois Perrad <fperrad@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-RnJhbsOnb2lzLCBBbGwsCgpPbiAyMDI0LTA0LTAxIDE3OjExICswMjAwLCBGcmFuw6dvaXMgUGVy
-cmFkIHNwYWtlIHRodXNseToKPiBMZcKgbHVuLiAxIGF2ci4gMjAyNCDDoMKgMTY6MTcsIFlhbm4g
-RS4gTU9SSU4gPFsxXXlhbm4ubW9yaW4uMTk5OEBmcmVlLmZyPiBhCj4gw6ljcml0wqA6Cj4gICAg
-IEFnYWluLCB5aW91ciBGcm9tIGFuZCBTb0IgZG8gbm90IG1hdGNoOiBbM11mcGVycmFkQGdtYWls
-LmNvbSB2cy4KPiAgICAgWzRdZnJhbmNvaXMucGVycmFkQGdhZHoub3JnLgo+IHRoZW0gaGFkIG5l
-dmVyIG1hdGNoIHNpbmNlIEkgY29udHJpYnV0ZS4KPiBJcyBpdCBhIG5ldyBydWxlID8KCk5vIGl0
-IGlzIG5vdCBhIG5ldyBydWxlLCBpdCBqdXN0IGhhZCBuZXZlciBiZWVuIHdyaXR0ZW4sIGNoZWNr
-ZWQsIG5vcgplbmZvcmNlZC4KCldoYXQgd291bGQgdGhlIHBvaW50IG9mIHRoZSBTb2IgbGluZSBp
-ZiBpdCBkaWQgbm90IG1hdGNoIHRoZSBhdXRob3I/IFRoZQpTb0IgbGluZSBpcyB0aGVyZSBzbyB0
-aGF0IHRoZSBhdXRob3IgYXNzZXNzZXMgdGhhdCB0aGV5IGhhdmUgdGhlIHJpZ2h0CnRvIGNvbnRy
-aWJ1dGUgdGhlaXIgY2hhbmdlOgoKICAgIGh0dHBzOi8vZGV2ZWxvcGVyY2VydGlmaWNhdGUub3Jn
-LwoKU28sIGlmIHRoZSBpZGVudGl0eSBvZiB0aGUgYXV0aG9yIG9mIGEgY2hhbmdlIGRvZXMgbm90
-IG1hdGNoIHRoZSBTb0IKbGluZSwgdGhlIFNvQiBsaW5lIGRvZXMgbm90IG1lYW4gbXVjaC4uLgoK
-SSBqdXN0IGhhcHBlbiB0byBoYXZlIHJlY2VudGx5IGFkZGVkIHN1Y2ggYSBjaGVjayBpbiBteSBw
-b3N0LWFwcGx5cGF0Y2gKaG9vayBub3csIHNvIEkgbm93IG5vdGljZSBzdWNoIGRpc2NyZXBhbmN5
-LCBhbmQgYXQgbGVhc3QgUGV0ZXIgaXMgdXNpbmcKaXQgKFJvbWFpbiBhcyB3ZWxsIEkgdGhpbmsp
-OgoKICAgIGh0dHBzOi8vZ2l0bGFiLmNvbS9idWlsZHJvb3Qub3JnL2dpdC1ob29rcy8tL2NvbW1p
-dC9jOWE4ZWI2YzQ3N2RjZmUyZjJiMzEwYjkyNTA3NWMwZWIxZGNkMDE5CgpSZWdhcmRzLApZYW5u
-IEUuIE1PUklOLgoKLS0gCi4tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4t
-LS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uCnwgIFlhbm4gRS4gTU9SSU4g
-IHwgUmVhbC1UaW1lIEVtYmVkZGVkIHwgLyJcIEFTQ0lJIFJJQkJPTiB8IEVyaWNzJyBjb25zcGly
-YWN5OiB8CnwgKzMzIDY2MiAzNzYgMDU2IHwgU29mdHdhcmUgIERlc2lnbmVyIHwgXCAvIENBTVBB
-SUdOICAgICB8ICBfX18gICAgICAgICAgICAgICB8CnwgKzMzIDU2MSAwOTkgNDI3IGAtLS0tLS0t
-LS0tLS0uLS0tLS0tLTogIFggIEFHQUlOU1QgICAgICB8ICBcZS8gIFRoZXJlIGlzIG5vICB8Cnwg
-aHR0cDovL3ltb3Jpbi5pcy1hLWdlZWsub3JnLyB8IF8vKlxfIHwgLyBcIEhUTUwgTUFJTCAgICB8
-ICAgdiAgIGNvbnNwaXJhY3kuICB8CictLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1eLS0t
-LS0tLV4tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0tLS0nCl9fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxp
-c3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21h
-aWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Commit 9f94b3b354 "package/iperf3: bump to version 3.16" updated
+the package but forgot to reflect a breaking change mentioned in
+the release note [1], "iperf3 now requires pthreads and C atomic
+variables to compile and run".
+
+When the toolchain has no atomic support, or the libatomic is not
+added in the linker flags, the compilation now fail with output:
+
+    arm-buildroot-linux-gnueabi/bin/ld: ./.libs/libiperf.so: undefined reference to '__atomic_load_8'
+
+This issue can be seen when running the iperf3 runtime test, with
+command:
+
+    support/testing/run-tests \
+        -d dl -o output_test \
+        tests.package.test_iperf3
+
+This commit fixes the issue by adding a dependency on
+BR2_TOOLCHAIN_HAS_ATOMIC and by adding an upstream patch to detect
+if linking to libatomic is needed.
+
+Fixes: [2]
+
+[1] https://github.com/esnet/iperf/releases/tag/3.16
+[2] https://gitlab.com/buildroot.org/buildroot/-/jobs/6466933622
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ ...1-Check-and-link-libatomic-if-needed.patch | 42 +++++++++++++++++++
+ package/iperf3/Config.in                      |  2 +
+ package/iperf3/iperf3.mk                      |  3 ++
+ 3 files changed, 47 insertions(+)
+ create mode 100644 package/iperf3/0001-Check-and-link-libatomic-if-needed.patch
+
+diff --git a/package/iperf3/0001-Check-and-link-libatomic-if-needed.patch b/package/iperf3/0001-Check-and-link-libatomic-if-needed.patch
+new file mode 100644
+index 00000000000..ddb50c46949
+--- /dev/null
++++ b/package/iperf3/0001-Check-and-link-libatomic-if-needed.patch
+@@ -0,0 +1,42 @@
++From bbf710e77e4a0438a2d995fd69b472e5ff054c69 Mon Sep 17 00:00:00 2001
++From: Jan Palus <jpalus@fastmail.com>
++Date: Sun, 3 Dec 2023 12:14:05 +0100
++Subject: [PATCH] Check and link libatomic if needed
++
++Some architectures without native support for 64-bit atomics need
++linking with libatomic.
++
++Signed-off-by: Julien Olivain <ju.o@free.fr>
++Upstream: https://github.com/esnet/iperf/commit/1511e9f85b548891ea53d4e378903344df1fd31e
++---
++ configure.ac | 14 +++++++++++++-
++ 1 file changed, 13 insertions(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 2594b39..ad7eaf1 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -92,7 +92,19 @@ CXX="$PTHREAD_CXX"
++ ])
++ 
++ # Atomics
++-AC_CHECK_HEADERS([stdatomic.h])
+++AC_CHECK_HEADERS([stdatomic.h],
+++    [AC_MSG_CHECKING([whether libatomic is required])
+++    AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <stdatomic.h>]], [[atomic_uint_fast64_t i; i++;]])],
+++        [AC_MSG_RESULT([no])],
+++        [save_LIBS="$LIBS"
+++        LIBS="$LIBS -latomic"
+++        AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <stdatomic.h>]], [[atomic_uint_fast64_t i; i++;]])],
+++            [AC_MSG_RESULT([yes])],
+++            [AC_MSG_ERROR([failed to find working configuration with atomics])]
+++        )]
+++    )],
+++    []
+++)
++ 
++ # Check for poll.h (it's in POSIX so everyone should have it?)
++ AC_CHECK_HEADERS([poll.h])
++-- 
++2.44.0
++
+diff --git a/package/iperf3/Config.in b/package/iperf3/Config.in
+index 5b2204c5e01..0c6946f55d9 100644
+--- a/package/iperf3/Config.in
++++ b/package/iperf3/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_IPERF3
+ 	bool "iperf3"
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  iperf is a tool for active measurements of the maximum
+@@ -13,4 +14,5 @@ config BR2_PACKAGE_IPERF3
+ 	  http://software.es.net/iperf/index.html
+ 
+ comment "iperf3 needs a toolchain w/ threads"
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
+index 6d902c3b13b..3ab68bd13b5 100644
+--- a/package/iperf3/iperf3.mk
++++ b/package/iperf3/iperf3.mk
+@@ -11,6 +11,9 @@ IPERF3_LICENSE = BSD-3-Clause, BSD-2-Clause, MIT
+ IPERF3_LICENSE_FILES = LICENSE
+ IPERF3_CPE_ID_VENDOR = es
+ 
++# 0001-Check-and-link-libatomic-if-needed.patch
++IPERF3_AUTORECONF = YES
++
+ IPERF3_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-- 
+2.44.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
