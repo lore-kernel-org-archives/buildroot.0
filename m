@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C288ACD1288
-	for <buildroot@archiver.kernel.org>; Mon,  1 Apr 2024 09:31:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC90DCD1288
+	for <buildroot@archiver.kernel.org>; Mon,  1 Apr 2024 09:31:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5714E81E22;
-	Mon,  1 Apr 2024 09:31:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7CA0181E19;
+	Mon,  1 Apr 2024 09:31:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oMLkmZKKHWdZ; Mon,  1 Apr 2024 09:31:17 +0000 (UTC)
+ id jVNtJve-Z0GQ; Mon,  1 Apr 2024 09:31:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E60881E24
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C622181E33
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8E60881E24;
-	Mon,  1 Apr 2024 09:31:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C622181E33;
+	Mon,  1 Apr 2024 09:31:19 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 93D271BF38A
- for <buildroot@lists.busybox.net>; Mon,  1 Apr 2024 09:31:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 622F61BF38A
+ for <buildroot@lists.busybox.net>; Mon,  1 Apr 2024 09:31:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8BFC64059B
- for <buildroot@lists.busybox.net>; Mon,  1 Apr 2024 09:31:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4EFE540337
+ for <buildroot@lists.busybox.net>; Mon,  1 Apr 2024 09:31:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sSJxm0aEbKyC for <buildroot@lists.busybox.net>;
+ id 7t-RTs9tGtFJ for <buildroot@lists.busybox.net>;
  Mon,  1 Apr 2024 09:31:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA9F740337
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CFDEF4057A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id AA9F740337
+ by smtp4.osuosl.org (Postfix) with ESMTP id CFDEF4057A
  for <buildroot@buildroot.org>; Mon,  1 Apr 2024 09:31:14 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 926FC844B7; Mon,  1 Apr 2024 09:31:14 +0000 (UTC)
+ id C9F8C844B7; Mon,  1 Apr 2024 09:31:14 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 1 Apr 2024 10:47:41 +0200
+Date: Mon, 1 Apr 2024 11:25:54 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0cd8fea7cfbfb692e3b0938dce8c41d59147ccf0
-X-Git-Newrev: d8910b71bc81b47a074f316e3e83735184ff371c
+X-Git-Oldrev: d8910b71bc81b47a074f316e3e83735184ff371c
+X-Git-Newrev: b5680f53d60acf8ff6010082f873438a39bd5d97
 X-Patchwork-Hint: ignore
-Message-Id: <20240401093114.926FC844B7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gcc: add patches to remove
- crypt()/crypt_r() libsanitizer interceptors
+Message-Id: <20240401093114.C9F8C844B7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/glibc: bump to 2.39
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,472 +64,430 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d8910b71bc81b47a074f316e3e83735184ff371c
+commit: https://git.buildroot.net/buildroot/commit/?id=b5680f53d60acf8ff6010082f873438a39bd5d97
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In preparation for the upgrade of glibc to version 2.39, we need to
-backport some gcc patches. Indeed glibc 2.39 drops libcrypt, causing a
-build failure of libsanitizer (part of gcc) as it has code to
-intercept crypt() and crypt_r() calls. This has been fixed in gcc
-master, but we need to backport the fix for gcc 11.x, 12.x and 13.x.
+The 3 patches we had have all been merged upstream as of 2.39, so they
+can be dropped.
 
-gcc 8.x doesn't need to be fixed because (1) its libsanitizer does not
-have an interceptor for crypt()/crypt_r() and (2) we only allow gcc
-8.x for PowerPC SPE, for which we only support uClibc-ng, so this
-issue with crypt/crypt_r going away from glibc is not relevant.
+The libcrypt library is gone from glibc, and therefore the
+--enable-crypt option is also gone.
+
+The LICENSES file has changed with the addition of a copyright notice
+from IBM (some files contributed by IBM have been relicensed), and the
+license is MIT, which is already listed in GLIBC_LICENSES, so no
+changes are needed on our side.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[yann.morin.1998@free.fr:
+  - also update localedef
+  - rebase localedef patches
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...008-Remove-crypt-and-crypt_r-interceptors.patch | 140 ++++++++++++++++++++
- ...004-Remove-crypt-and-crypt_r-interceptors.patch | 140 ++++++++++++++++++++
- ...003-Remove-crypt-and-crypt_r-interceptors.patch | 146 +++++++++++++++++++++
- 3 files changed, 426 insertions(+)
+ ...-build-with-mcpu-68040-or-higher-BZ-30740.patch | 57 -------------
+ ...mpn_lshift-and-__mpn_rshift-for-non-68020.patch | 47 -----------
+ ...8K_SCALE_AVAILABLE-on-__mpn_lshift-and-__.patch | 93 ----------------------
+ package/glibc/glibc.hash                           |  4 +-
+ package/glibc/glibc.mk                             |  5 +-
+ ...001-HACK-only-build-and-install-localedef.patch | 47 ++++++-----
+ ...ndency-on-GCC-to-4.8-and-binutils-to-2.24.patch | 12 +--
+ package/localedef/localedef.mk                     |  2 +-
+ 8 files changed, 39 insertions(+), 228 deletions(-)
 
-diff --git a/package/gcc/11.4.0/0008-Remove-crypt-and-crypt_r-interceptors.patch b/package/gcc/11.4.0/0008-Remove-crypt-and-crypt_r-interceptors.patch
-new file mode 100644
-index 0000000000..36db9681cd
---- /dev/null
-+++ b/package/gcc/11.4.0/0008-Remove-crypt-and-crypt_r-interceptors.patch
-@@ -0,0 +1,140 @@
-+From 0ef972d11dda9051941656e5797889b8fbf2dca6 Mon Sep 17 00:00:00 2001
-+From: Fangrui Song <i@maskray.me>
-+Date: Fri, 28 Apr 2023 09:59:17 -0700
-+Subject: [PATCH] Remove crypt and crypt_r interceptors
+diff --git a/package/glibc/0001-m68k-Fix-build-with-mcpu-68040-or-higher-BZ-30740.patch b/package/glibc/0001-m68k-Fix-build-with-mcpu-68040-or-higher-BZ-30740.patch
+deleted file mode 100644
+index 61f48e5893..0000000000
+--- a/package/glibc/0001-m68k-Fix-build-with-mcpu-68040-or-higher-BZ-30740.patch
++++ /dev/null
+@@ -1,57 +0,0 @@
+-From b85880633f69b737050c22eede858f8c13bb2248 Mon Sep 17 00:00:00 2001
+-From: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+-Date: Fri, 18 Aug 2023 14:59:51 -0300
+-Subject: [PATCH] m68k: Fix build with -mcpu=68040 or higher (BZ 30740)
+-
+-GCC currently does not define __mc68020__ for -mcpu=68040 or higher,
+-which memcpy/memmove assumptions.  Since this memory copy optimization
+-seems only intended for m68020, disable for other m680X0 variants.
+-
+-Checked on a build for m68k-linux-gnu target mc68020 and mc68040.
+-
+-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+-Upstream: https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=b85880633f69b737050c22eede858f8c13bb2248
+----
+- sysdeps/m68k/m680x0/m68020/wordcopy.S |  1 -
+- sysdeps/m68k/wordcopy.c               | 21 +++++++++++++++++++++
+- 2 files changed, 21 insertions(+), 1 deletion(-)
+- delete mode 100644 sysdeps/m68k/m680x0/m68020/wordcopy.S
+- create mode 100644 sysdeps/m68k/wordcopy.c
+-
+-diff --git a/sysdeps/m68k/m680x0/m68020/wordcopy.S b/sysdeps/m68k/m680x0/m68020/wordcopy.S
+-deleted file mode 100644
+-index 4fb1a4518f..0000000000
+---- a/sysdeps/m68k/m680x0/m68020/wordcopy.S
+-+++ /dev/null
+-@@ -1 +0,0 @@
+--/* Empty, not needed.  */
+-diff --git a/sysdeps/m68k/wordcopy.c b/sysdeps/m68k/wordcopy.c
+-new file mode 100644
+-index 0000000000..f12d5b7803
+---- /dev/null
+-+++ b/sysdeps/m68k/wordcopy.c
+-@@ -0,0 +1,21 @@
+-+/* Definitions for memory copy functions.  Motorola 680X0 version
+-+   Copyright (C) 2023 Free Software Foundation, Inc.
+-+   This file is part of the GNU C Library.
+-+
+-+   The GNU C Library is free software; you can redistribute it and/or
+-+   modify it under the terms of the GNU Lesser General Public
+-+   License as published by the Free Software Foundation; either
+-+   version 2.1 of the License, or (at your option) any later version.
+-+
+-+   The GNU C Library is distributed in the hope that it will be useful,
+-+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+-+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+-+   Lesser General Public License for more details.
+-+
+-+   You should have received a copy of the GNU Lesser General Public
+-+   License along with the GNU C Library.  If not, see
+-+   <https://www.gnu.org/licenses/>.  */
+-+
+-+#ifndef __mc68020__
+-+# include <string/wordcopy.c>
+-+#endif
+--- 
+-2.39.2
+-
+diff --git a/package/glibc/0002-m68k-fix-__mpn_lshift-and-__mpn_rshift-for-non-68020.patch b/package/glibc/0002-m68k-fix-__mpn_lshift-and-__mpn_rshift-for-non-68020.patch
+deleted file mode 100644
+index 256da58d66..0000000000
+--- a/package/glibc/0002-m68k-fix-__mpn_lshift-and-__mpn_rshift-for-non-68020.patch
++++ /dev/null
+@@ -1,47 +0,0 @@
+-From 464fd8249e8b791248cab7b0e0cd91757435fa9e Mon Sep 17 00:00:00 2001
+-From: Andreas Schwab <schwab@linux-m68k.org>
+-Date: Thu, 17 Aug 2023 17:15:34 +0200
+-Subject: [PATCH] m68k: fix __mpn_lshift and __mpn_rshift for non-68020
+-
+-From revision 03f3d275d0d6 in the gmp repository.
+-
+-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+-Upstream: https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=464fd8249e8b791248cab7b0e0cd91757435fa9e
+----
+- sysdeps/m68k/m680x0/lshift.S | 4 ++--
+- sysdeps/m68k/m680x0/rshift.S | 4 ++--
+- 2 files changed, 4 insertions(+), 4 deletions(-)
+-
+-diff --git a/sysdeps/m68k/m680x0/lshift.S b/sysdeps/m68k/m680x0/lshift.S
+-index 2aee10348e..4240738959 100644
+---- a/sysdeps/m68k/m680x0/lshift.S
+-+++ b/sysdeps/m68k/m680x0/lshift.S
+-@@ -77,8 +77,8 @@ L(Lnormal:)
+- #else /* not mc68000 */
+- 	movel	R(s_size),R(d0)
+- 	asll	#2,R(d0)
+--	addl	R(s_size),R(s_ptr)
+--	addl	R(s_size),R(res_ptr)
+-+	addl	R(d0),R(s_ptr)
+-+	addl	R(d0),R(res_ptr)
+- #endif
+- 	movel	MEM_PREDEC(s_ptr),R(d2)
+- 	movel	R(d2),R(d0)
+-diff --git a/sysdeps/m68k/m680x0/rshift.S b/sysdeps/m68k/m680x0/rshift.S
+-index d16bca9307..d56a2b4a44 100644
+---- a/sysdeps/m68k/m680x0/rshift.S
+-+++ b/sysdeps/m68k/m680x0/rshift.S
+-@@ -127,8 +127,8 @@ L(Lspecial:)
+- #else /* not mc68000 */
+- 	movel	R(s_size),R(d0)
+- 	asll	#2,R(d0)
+--	addl	R(s_size),R(s_ptr)
+--	addl	R(s_size),R(res_ptr)
+-+	addl	R(d0),R(s_ptr)
+-+	addl	R(d0),R(res_ptr)
+- #endif
+- 
+- 	clrl	R(d0)			/* initialize carry */
+--- 
+-2.39.2
+-
+diff --git a/package/glibc/0003-m68k-Use-M68K_SCALE_AVAILABLE-on-__mpn_lshift-and-__.patch b/package/glibc/0003-m68k-Use-M68K_SCALE_AVAILABLE-on-__mpn_lshift-and-__.patch
+deleted file mode 100644
+index 2ea190eb5a..0000000000
+--- a/package/glibc/0003-m68k-Use-M68K_SCALE_AVAILABLE-on-__mpn_lshift-and-__.patch
++++ /dev/null
+@@ -1,93 +0,0 @@
+-From 87ced255bdf2681f5bf6c89d7121e59f6f342161 Mon Sep 17 00:00:00 2001
+-From: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+-Date: Fri, 18 Aug 2023 14:49:31 -0300
+-Subject: [PATCH] m68k: Use M68K_SCALE_AVAILABLE on __mpn_lshift and
+- __mpn_rshift
+-
+-This patch adds a new macro, M68K_SCALE_AVAILABLE, similar to gmp
+-scale_available_p (mpn/m68k/m68k-defs.m4) that expand to 1 if a
+-scale factor can be used in addressing modes.  This is used
+-instead of __mc68020__ for some optimization decisions.
+-
+-Checked on a build for m68k-linux-gnu target mc68020 and mc68040.
+-
+-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+-Upstream: https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=87ced255bdf2681f5bf6c89d7121e59f6f342161
+----
+- sysdeps/m68k/m680x0/lshift.S | 6 +++---
+- sysdeps/m68k/m680x0/rshift.S | 8 ++++----
+- sysdeps/m68k/m680x0/sysdep.h | 7 +++++++
+- 3 files changed, 14 insertions(+), 7 deletions(-)
+-
+-diff --git a/sysdeps/m68k/m680x0/lshift.S b/sysdeps/m68k/m680x0/lshift.S
+-index 4240738959..74de90380b 100644
+---- a/sysdeps/m68k/m680x0/lshift.S
+-+++ b/sysdeps/m68k/m680x0/lshift.S
+-@@ -57,9 +57,9 @@ ENTRY(__mpn_lshift)
+- 	bne	L(Lnormal)
+- 	cmpl	R(s_ptr),R(res_ptr)
+- 	bls	L(Lspecial)		/* jump if s_ptr >= res_ptr */
+--#if (defined (__mc68020__) || defined (__NeXT__) || defined(mc68020))
+-+#if M68K_SCALE_AVAILABLE
+- 	lea	MEM_INDX1(s_ptr,s_size,l,4),R(a2)
+--#else /* not mc68020 */
+-+#else
+- 	movel	R(s_size),R(d0)
+- 	asll	#2,R(d0)
+- 	lea	MEM_INDX(s_ptr,d0,l),R(a2)
+-@@ -71,7 +71,7 @@ L(Lnormal:)
+- 	moveql	#32,R(d5)
+- 	subl	R(cnt),R(d5)
+- 
+--#if (defined (__mc68020__) || defined (__NeXT__) || defined(mc68020))
+-+#if M68K_SCALE_AVAILABLE
+- 	lea	MEM_INDX1(s_ptr,s_size,l,4),R(s_ptr)
+- 	lea	MEM_INDX1(res_ptr,s_size,l,4),R(res_ptr)
+- #else /* not mc68000 */
+-diff --git a/sysdeps/m68k/m680x0/rshift.S b/sysdeps/m68k/m680x0/rshift.S
+-index d56a2b4a44..d398d0287e 100644
+---- a/sysdeps/m68k/m680x0/rshift.S
+-+++ b/sysdeps/m68k/m680x0/rshift.S
+-@@ -56,9 +56,9 @@ ENTRY(__mpn_rshift)
+- 	bne	L(Lnormal)
+- 	cmpl	R(res_ptr),R(s_ptr)
+- 	bls	L(Lspecial)		/* jump if res_ptr >= s_ptr */
+--#if (defined (__mc68020__) || defined (__NeXT__) || defined(mc68020))
+-+#if M68K_SCALE_AVAILABLE
+- 	lea	MEM_INDX1(res_ptr,s_size,l,4),R(a2)
+--#else /* not mc68020 */
+-+#else
+- 	movel	R(s_size),R(d0)
+- 	asll	#2,R(d0)
+- 	lea	MEM_INDX(res_ptr,d0,l),R(a2)
+-@@ -121,10 +121,10 @@ L(Lend:)
+- 
+- 	cfi_restore_state
+- L(Lspecial:)
+--#if (defined (__mc68020__) || defined (__NeXT__) || defined(mc68020))
+-+#if M68K_SCALE_AVAILABLE
+- 	lea	MEM_INDX1(s_ptr,s_size,l,4),R(s_ptr)
+- 	lea	MEM_INDX1(res_ptr,s_size,l,4),R(res_ptr)
+--#else /* not mc68000 */
+-+#else
+- 	movel	R(s_size),R(d0)
+- 	asll	#2,R(d0)
+- 	addl	R(d0),R(s_ptr)
+-diff --git a/sysdeps/m68k/m680x0/sysdep.h b/sysdeps/m68k/m680x0/sysdep.h
+-index b31e101273..bee5b3391c 100644
+---- a/sysdeps/m68k/m680x0/sysdep.h
+-+++ b/sysdeps/m68k/m680x0/sysdep.h
+-@@ -37,3 +37,10 @@
+-   OP " " SRC "(" PC "), " DST
+- 
+- #endif	/* __ASSEMBLER__ */
+-+
+-+# if defined __mc68020__ || defined __mc68030__ || defined __mc68040__	      \
+-+     || defined __mc68060__
+-+#  define M68K_SCALE_AVAILABLE 1
+-+# else
+-+#  define M68K_SCALE_AVAILABLE 0
+-+# endif
+--- 
+-2.39.2
+-
+diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
+index 15ae55b9e6..94b7819a30 100644
+--- a/package/glibc/glibc.hash
++++ b/package/glibc/glibc.hash
+@@ -1,7 +1,7 @@
+ # Locally calculated (fetched from Github)
+-sha256  e38f4284d6909c6b5db7d79c6e450daeaf136a67e547290eec0b063a55eaaa42  glibc-2.38-44-gd37c2b20a4787463d192b32041c3406c2bd91de0.tar.gz
++sha256  2ba018b344e0e8330dcadd6130f4174f0fc2502b2e032210345e0e5a2f7ed12e  glibc-2.39-5-ge0910f1d3278f05439fb434ee528fc9be1b6bd5e.tar.gz
+ 
+ # Hashes for license files
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+-sha256  b33d0bd9f685b46853548814893a6135e74430d12f6d94ab3eba42fc591f83bc  LICENSES
++sha256  bba29819a3e938fae92674d6a88533e10605e389da8b51cdcba0a94f6221c5bc  LICENSES
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index d198d6f04c..96a850516f 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -7,7 +7,7 @@
+ # Generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+ # When updating the version, please also update localedef
+-GLIBC_VERSION = 2.38-44-gd37c2b20a4787463d192b32041c3406c2bd91de0
++GLIBC_VERSION = 2.39-5-ge0910f1d3278f05439fb434ee528fc9be1b6bd5e
+ # Upstream doesn't officially provide an https download link.
+ # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
+ # sometimes the connection times out. So use an unofficial github mirror.
+@@ -195,7 +195,6 @@ define GLIBC_CONFIGURE_CMDS
+ 		--without-gd \
+ 		--with-headers=$(STAGING_DIR)/usr/include \
+ 		$(if $(BR2_aarch64)$(BR2_aarch64_be),--enable-mathvec) \
+-		--enable-crypt \
+ 		$(GLIBC_CONF_OPTS))
+ 	$(GLIBC_ADD_MISSING_STUB_H)
+ endef
+@@ -206,7 +205,7 @@ endef
+ #
+ 
+ GLIBC_LIBS_LIB = \
+-	ld*.so.* libanl.so.* libc.so.* libcrypt.so.* libdl.so.* libgcc_s.so.* \
++	ld*.so.* libanl.so.* libc.so.* libdl.so.* libgcc_s.so.* \
+ 	libm.so.* libpthread.so.* libresolv.so.* librt.so.* \
+ 	libutil.so.* libnss_files.so.* libnss_dns.so.* libmvec.so.*
+ 
+diff --git a/package/localedef/0001-HACK-only-build-and-install-localedef.patch b/package/localedef/0001-HACK-only-build-and-install-localedef.patch
+index 49bbfd227c..a65c896eb7 100644
+--- a/package/localedef/0001-HACK-only-build-and-install-localedef.patch
++++ b/package/localedef/0001-HACK-only-build-and-install-localedef.patch
+@@ -9,6 +9,8 @@ Upstream: https://git.pengutronix.de/cgit/ptxdist/plain/patches/localedef-glibc-
+ Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ [Romain: rebase on 2.38]
+ Signed-off-by: Romain Naour <romain.naour@gmail.com>
++[yann.morin.1998@free.fr: rebase for 2.39]
++Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ ---
+  Rules           | 14 ++++++++++----
+  locale/Makefile |  6 +++---
+@@ -20,7 +22,7 @@ index 279ae490ac..1321956be6 100644
+ +++ b/Rules
+ @@ -221,10 +221,16 @@ binaries-shared-notests = $(filter-out $(binaries-pie) $(binaries-static), \
+  				       $(binaries-all-notests))
+- 
 +
-+From Florian Weimer's D144073
+  ifneq "$(strip $(binaries-shared-notests))" ""
+ -$(addprefix $(objpfx),$(binaries-shared-notests)): %: %.o \
+ -  $(sort $(filter $(common-objpfx)lib%,$(link-libc))) \
+@@ -37,31 +39,36 @@ index 279ae490ac..1321956be6 100644
+ +			   $(common-objpfx)libc% $(+postinit),$^) \
+ +	      $(link-extra-libs)
+  endif
+- 
 +
-+> On GNU/Linux (glibc), the crypt and crypt_r functions are not part of the main shared object (libc.so.6), but libcrypt (with multiple possible sonames). The sanitizer libraries do not depend on libcrypt, so it can happen that during sanitizer library initialization, no real implementation will be found because the crypt, crypt_r functions are not present in the process image (yet). If its interceptors are called nevertheless, this results in a call through a null pointer when the sanitizer library attempts to forward the call to the real implementation.
-+>
-+> Many distributions have already switched to libxcrypt, a library that is separate from glibc and that can be build with sanitizers directly (avoiding the need for interceptors). This patch disables building the interceptor for glibc targets.
+  ifneq "$(strip $(binaries-shared-tests))" ""
+ diff --git a/locale/Makefile b/locale/Makefile
+ index d7036b0855..68afdddc7f 100644
+ --- a/locale/Makefile
+ +++ b/locale/Makefile
+-@@ -33,15 +33,15 @@ categories	= ctype messages monetary numeric time paper name \
+- 		  address telephone measurement identification collate
+- aux		= $(categories:%=lc-%) $(categories:%=C-%) SYS_libc C_name \
+- 		  xlocale localename global-locale coll-lookup
+--others		= localedef locale
+-+others		= localedef
+- #others-static	= localedef locale
+--install-bin	= localedef locale
+-+install-bin	= localedef
+- extra-objs	= $(localedef-modules:=.o) $(localedef-aux:=.o) \
+- 		  $(locale-modules:=.o) $(lib-modules:=.o)
+- generated 	+= C-translit.h
+- before-compile	+= $(objpfx)C-translit.h
+- 
+--extra-libs	= libBrokenLocale
+-+#extra-libs	= libBrokenLocale
++@@ -76,7 +76,6 @@
++   xlocale \
++   # aux
++ others = \
++-  locale \
++   localedef \
++   # others
++ #others-static = \
++@@ -84,7 +83,6 @@
++ # locale \
++ # # others-static
++ install-bin = \
++-  locale \
++   localedef \
++   # install-bin
++ extra-objs = \
++@@ -96,7 +94,6 @@
++ generated += C-translit.h
++ before-compile += $(objpfx)C-translit.h
 +
-+Let's remove crypt and crypt_r interceptors (D68431) to fix issues with
-+newer glibc.
++-extra-libs = libBrokenLocale
+  extra-libs-others = $(extra-libs)
+- 
 +
-+For older glibc, msan will not know that an uninstrumented crypt_r call
-+initializes `data`, so there is a risk for false positives. However, with some
-+codebase survey, I think crypt_r uses are very few and the call sites typically
-+have a `memset(&data, 0, sizeof(data));` anyway.
+  libBrokenLocale-routines = broken_cur_max
+--- 
++--
+ 2.41.0
+ 
+diff --git a/package/localedef/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch b/package/localedef/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
+index 70d2b34bc1..1aecc24405 100644
+--- a/package/localedef/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
++++ b/package/localedef/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
+@@ -28,6 +28,8 @@ Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+ Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ [Romain: rebase on 2.38]
+ Signed-off-by: Romain Naour <romain.naour@gmail.com>
++[yann.morin.1998@free.fr: rebase for 2.39]
++Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ ---
+  configure | 4 ++--
+  1 file changed, 2 insertions(+), 2 deletions(-)
+@@ -36,7 +38,7 @@ diff --git a/configure b/configure
+ index 4ef387146d..4c6f91117d 100755
+ --- a/configure
+ +++ b/configure
+-@@ -5293,7 +5293,7 @@ printf %s "checking version of $LD... " >&6; }
++@@ -5157,7 +5157,7 @@ printf %s "checking version of $LD... " >&6; }
+    ac_prog_version=`$LD --version 2>&1 | sed -n 's/^.*GNU ld.* \([0-9][0-9]*\.[0-9.]*\).*$/\1/p'`
+    case $ac_prog_version in
+      '') ac_prog_version="v. ?.??, bad"; ac_verc_fail=yes;;
+@@ -44,16 +46,16 @@ index 4ef387146d..4c6f91117d 100755
+ +    2.1[0-9][0-9]*|2.2[4-9]*|2.[3-9][0-9]*|[3-9].*|[1-9][0-9]*)
+         ac_prog_version="$ac_prog_version, ok"; ac_verc_fail=no;;
+      *) ac_prog_version="$ac_prog_version, bad"; ac_verc_fail=yes;;
+- 
+-@@ -5735,7 +5735,7 @@ int
 +
-+Fix https://github.com/google/sanitizers/issues/1365
-+Related: https://bugzilla.redhat.com/show_bug.cgi?id=2169432
++@@ -5599,7 +5599,7 @@ int
+  main (void)
+  {
+- 
 +
-+Reviewed By: #sanitizers, fweimer, thesamesam, vitalybuka
-+
-+Differential Revision: https://reviews.llvm.org/D149403
-+
-+[Thomas: taken from Crosstool-NG]
-+Upstream: (llvm) https://github.com/llvm/llvm-project/commit/d7bead833631486e337e541e692d9b4a1ca14edd
-+Upstream: (gcc)  https://github.com/gcc-mirror/gcc/commit/d96e14ceb9475f9bccbbc0325d5b11419fad9246
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ .../sanitizer_common_interceptors.inc         | 37 -------------------
-+ .../sanitizer_platform_interceptors.h         |  2 -
-+ .../sanitizer_platform_limits_posix.cpp       |  2 -
-+ .../sanitizer_platform_limits_posix.h         |  1 -
-+ 4 files changed, 42 deletions(-)
-+
-+diff --git a/libsanitizer/sanitizer_common/sanitizer_common_interceptors.inc b/libsanitizer/sanitizer_common/sanitizer_common_interceptors.inc
-+index ff2acfc7c010..6d802bc7159f 100644
-+--- a/libsanitizer/sanitizer_common/sanitizer_common_interceptors.inc
-++++ b/libsanitizer/sanitizer_common/sanitizer_common_interceptors.inc
-+@@ -9814,41 +9814,6 @@ INTERCEPTOR(SSIZE_T, getrandom, void *buf, SIZE_T buflen, unsigned int flags) {
-+ #define INIT_GETRANDOM
-+ #endif
-+ 
-+-#if SANITIZER_INTERCEPT_CRYPT
-+-INTERCEPTOR(char *, crypt, char *key, char *salt) {
-+-  void *ctx;
-+-  COMMON_INTERCEPTOR_ENTER(ctx, crypt, key, salt);
-+-  COMMON_INTERCEPTOR_READ_RANGE(ctx, key, internal_strlen(key) + 1);
-+-  COMMON_INTERCEPTOR_READ_RANGE(ctx, salt, internal_strlen(salt) + 1);
-+-  char *res = REAL(crypt)(key, salt);
-+-  if (res != nullptr)
-+-    COMMON_INTERCEPTOR_INITIALIZE_RANGE(res, internal_strlen(res) + 1);
-+-  return res;
-+-}
-+-#define INIT_CRYPT COMMON_INTERCEPT_FUNCTION(crypt);
-+-#else
-+-#define INIT_CRYPT
-+-#endif
-+-
-+-#if SANITIZER_INTERCEPT_CRYPT_R
-+-INTERCEPTOR(char *, crypt_r, char *key, char *salt, void *data) {
-+-  void *ctx;
-+-  COMMON_INTERCEPTOR_ENTER(ctx, crypt_r, key, salt, data);
-+-  COMMON_INTERCEPTOR_READ_RANGE(ctx, key, internal_strlen(key) + 1);
-+-  COMMON_INTERCEPTOR_READ_RANGE(ctx, salt, internal_strlen(salt) + 1);
-+-  char *res = REAL(crypt_r)(key, salt, data);
-+-  if (res != nullptr) {
-+-    COMMON_INTERCEPTOR_WRITE_RANGE(ctx, data,
-+-                                   __sanitizer::struct_crypt_data_sz);
-+-    COMMON_INTERCEPTOR_INITIALIZE_RANGE(res, internal_strlen(res) + 1);
-+-  }
-+-  return res;
-+-}
-+-#define INIT_CRYPT_R COMMON_INTERCEPT_FUNCTION(crypt_r);
-+-#else
-+-#define INIT_CRYPT_R
-+-#endif
-+-
-+ #if SANITIZER_INTERCEPT_GETENTROPY
-+ INTERCEPTOR(int, getentropy, void *buf, SIZE_T buflen) {
-+   void *ctx;
-+@@ -10337,8 +10302,6 @@ static void InitializeCommonInterceptors() {
-+   INIT_GETUSERSHELL;
-+   INIT_SL_INIT;
-+   INIT_GETRANDOM;
-+-  INIT_CRYPT;
-+-  INIT_CRYPT_R;
-+   INIT_GETENTROPY;
-+   INIT_QSORT;
-+   INIT_QSORT_R;
-+diff --git a/libsanitizer/sanitizer_common/sanitizer_platform_interceptors.h b/libsanitizer/sanitizer_common/sanitizer_platform_interceptors.h
-+index 18bab346ce6e..cf329b76836e 100644
-+--- a/libsanitizer/sanitizer_common/sanitizer_platform_interceptors.h
-++++ b/libsanitizer/sanitizer_common/sanitizer_platform_interceptors.h
-+@@ -572,8 +572,6 @@
-+ #define SANITIZER_INTERCEPT_FDEVNAME SI_FREEBSD
-+ #define SANITIZER_INTERCEPT_GETUSERSHELL (SI_POSIX && !SI_ANDROID)
-+ #define SANITIZER_INTERCEPT_SL_INIT (SI_FREEBSD || SI_NETBSD)
-+-#define SANITIZER_INTERCEPT_CRYPT (SI_POSIX && !SI_ANDROID)
-+-#define SANITIZER_INTERCEPT_CRYPT_R (SI_LINUX && !SI_ANDROID)
-+ 
-+ #define SANITIZER_INTERCEPT_GETRANDOM \
-+   ((SI_LINUX && __GLIBC_PREREQ(2, 25)) || SI_FREEBSD)
-+diff --git a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
-+index 5743516c0460..980776fc7d78 100644
-+--- a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
-++++ b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
-+@@ -142,7 +142,6 @@ typedef struct user_fpregs elf_fpregset_t;
-+ #include <linux/serial.h>
-+ #include <sys/msg.h>
-+ #include <sys/ipc.h>
-+-#include <crypt.h>
-+ #endif // SANITIZER_LINUX && !SANITIZER_ANDROID
-+ 
-+ #if SANITIZER_ANDROID
-+@@ -244,7 +243,6 @@ namespace __sanitizer {
-+   unsigned struct_ustat_sz = SIZEOF_STRUCT_USTAT;
-+   unsigned struct_rlimit64_sz = sizeof(struct rlimit64);
-+   unsigned struct_statvfs64_sz = sizeof(struct statvfs64);
-+-  unsigned struct_crypt_data_sz = sizeof(struct crypt_data);
-+ #endif // SANITIZER_LINUX && !SANITIZER_ANDROID
-+ 
-+ #if SANITIZER_LINUX && !SANITIZER_ANDROID
-+diff --git a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
-+index 83861105a509..7ad11b943157 100644
-+--- a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
-++++ b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
-+@@ -295,7 +295,6 @@ extern unsigned struct_msqid_ds_sz;
-+ extern unsigned struct_mq_attr_sz;
-+ extern unsigned struct_timex_sz;
-+ extern unsigned struct_statvfs_sz;
-+-extern unsigned struct_crypt_data_sz;
-+ #endif  // SANITIZER_LINUX && !SANITIZER_ANDROID
-+ 
-+ struct __sanitizer_iovec {
-+-- 
-+2.43.0
-+
-diff --git a/package/gcc/12.3.0/0004-Remove-crypt-and-crypt_r-interceptors.patch b/package/gcc/12.3.0/0004-Remove-crypt-and-crypt_r-interceptors.patch
-new file mode 100644
-index 0000000000..de3c27c8c7
---- /dev/null
-+++ b/package/gcc/12.3.0/0004-Remove-crypt-and-crypt_r-interceptors.patch
-@@ -0,0 +1,140 @@
-+From bf61483b6a5e32cb397f97a1cd4af2a41d46ade3 Mon Sep 17 00:00:00 2001
-+From: Fangrui Song <i@maskray.me>
-+Date: Fri, 28 Apr 2023 09:59:17 -0700
-+Subject: [PATCH] Remove crypt and crypt_r interceptors
-+
-+From Florian Weimer's D144073
-+
-+> On GNU/Linux (glibc), the crypt and crypt_r functions are not part of the main shared object (libc.so.6), but libcrypt (with multiple possible sonames). The sanitizer libraries do not depend on libcrypt, so it can happen that during sanitizer library initialization, no real implementation will be found because the crypt, crypt_r functions are not present in the process image (yet). If its interceptors are called nevertheless, this results in a call through a null pointer when the sanitizer library attempts to forward the call to the real implementation.
-+>
-+> Many distributions have already switched to libxcrypt, a library that is separate from glibc and that can be build with sanitizers directly (avoiding the need for interceptors). This patch disables building the interceptor for glibc targets.
-+
-+Let's remove crypt and crypt_r interceptors (D68431) to fix issues with
-+newer glibc.
-+
-+For older glibc, msan will not know that an uninstrumented crypt_r call
-+initializes `data`, so there is a risk for false positives. However, with some
-+codebase survey, I think crypt_r uses are very few and the call sites typically
-+have a `memset(&data, 0, sizeof(data));` anyway.
-+
-+Fix https://github.com/google/sanitizers/issues/1365
-+Related: https://bugzilla.redhat.com/show_bug.cgi?id=2169432
-+
-+Reviewed By: #sanitizers, fweimer, thesamesam, vitalybuka
-+
-+Differential Revision: https://reviews.llvm.org/D149403
-+
-+[Thomas: taken from Crosstool-NG]
-+Upstream: (llvm) https://github.com/llvm/llvm-project/commit/d7bead833631486e337e541e692d9b4a1ca14edd
-+Upstream: (gcc)  https://github.com/gcc-mirror/gcc/commit/d96e14ceb9475f9bccbbc0325d5b11419fad9246
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ .../sanitizer_common_interceptors.inc         | 37 -------------------
-+ .../sanitizer_platform_interceptors.h         |  2 -
-+ .../sanitizer_platform_limits_posix.cpp       |  2 -
-+ .../sanitizer_platform_limits_posix.h         |  1 -
-+ 4 files changed, 42 deletions(-)
-+
-+diff --git a/libsanitizer/sanitizer_common/sanitizer_common_interceptors.inc b/libsanitizer/sanitizer_common/sanitizer_common_interceptors.inc
-+index abb38ccfa15d..61250226aa56 100644
-+--- a/libsanitizer/sanitizer_common/sanitizer_common_interceptors.inc
-++++ b/libsanitizer/sanitizer_common/sanitizer_common_interceptors.inc
-+@@ -9977,41 +9977,6 @@ INTERCEPTOR(SSIZE_T, getrandom, void *buf, SIZE_T buflen, unsigned int flags) {
-+ #define INIT_GETRANDOM
-+ #endif
-+ 
-+-#if SANITIZER_INTERCEPT_CRYPT
-+-INTERCEPTOR(char *, crypt, char *key, char *salt) {
-+-  void *ctx;
-+-  COMMON_INTERCEPTOR_ENTER(ctx, crypt, key, salt);
-+-  COMMON_INTERCEPTOR_READ_RANGE(ctx, key, internal_strlen(key) + 1);
-+-  COMMON_INTERCEPTOR_READ_RANGE(ctx, salt, internal_strlen(salt) + 1);
-+-  char *res = REAL(crypt)(key, salt);
-+-  if (res != nullptr)
-+-    COMMON_INTERCEPTOR_INITIALIZE_RANGE(res, internal_strlen(res) + 1);
-+-  return res;
-+-}
-+-#define INIT_CRYPT COMMON_INTERCEPT_FUNCTION(crypt);
-+-#else
-+-#define INIT_CRYPT
-+-#endif
-+-
-+-#if SANITIZER_INTERCEPT_CRYPT_R
-+-INTERCEPTOR(char *, crypt_r, char *key, char *salt, void *data) {
-+-  void *ctx;
-+-  COMMON_INTERCEPTOR_ENTER(ctx, crypt_r, key, salt, data);
-+-  COMMON_INTERCEPTOR_READ_RANGE(ctx, key, internal_strlen(key) + 1);
-+-  COMMON_INTERCEPTOR_READ_RANGE(ctx, salt, internal_strlen(salt) + 1);
-+-  char *res = REAL(crypt_r)(key, salt, data);
-+-  if (res != nullptr) {
-+-    COMMON_INTERCEPTOR_WRITE_RANGE(ctx, data,
-+-                                   __sanitizer::struct_crypt_data_sz);
-+-    COMMON_INTERCEPTOR_INITIALIZE_RANGE(res, internal_strlen(res) + 1);
-+-  }
-+-  return res;
-+-}
-+-#define INIT_CRYPT_R COMMON_INTERCEPT_FUNCTION(crypt_r);
-+-#else
-+-#define INIT_CRYPT_R
-+-#endif
-+-
-+ #if SANITIZER_INTERCEPT_GETENTROPY
-+ INTERCEPTOR(int, getentropy, void *buf, SIZE_T buflen) {
-+   void *ctx;
-+@@ -10521,8 +10486,6 @@ static void InitializeCommonInterceptors() {
-+   INIT_GETUSERSHELL;
-+   INIT_SL_INIT;
-+   INIT_GETRANDOM;
-+-  INIT_CRYPT;
-+-  INIT_CRYPT_R;
-+   INIT_GETENTROPY;
-+   INIT_QSORT;
-+   INIT_QSORT_R;
-+diff --git a/libsanitizer/sanitizer_common/sanitizer_platform_interceptors.h b/libsanitizer/sanitizer_common/sanitizer_platform_interceptors.h
-+index 14610f2df78d..787db66ae2b7 100644
-+--- a/libsanitizer/sanitizer_common/sanitizer_platform_interceptors.h
-++++ b/libsanitizer/sanitizer_common/sanitizer_platform_interceptors.h
-+@@ -568,8 +568,6 @@
-+ #define SANITIZER_INTERCEPT_FDEVNAME SI_FREEBSD
-+ #define SANITIZER_INTERCEPT_GETUSERSHELL (SI_POSIX && !SI_ANDROID)
-+ #define SANITIZER_INTERCEPT_SL_INIT (SI_FREEBSD || SI_NETBSD)
-+-#define SANITIZER_INTERCEPT_CRYPT (SI_POSIX && !SI_ANDROID)
-+-#define SANITIZER_INTERCEPT_CRYPT_R (SI_LINUX && !SI_ANDROID)
-+ 
-+ #define SANITIZER_INTERCEPT_GETRANDOM \
-+   ((SI_LINUX && __GLIBC_PREREQ(2, 25)) || SI_FREEBSD)
-+diff --git a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
-+index c335f33dda58..bfdccd5df078 100644
-+--- a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
-++++ b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
-+@@ -154,7 +154,6 @@ typedef struct user_fpregs elf_fpregset_t;
-+ #include <linux/serial.h>
-+ #include <sys/msg.h>
-+ #include <sys/ipc.h>
-+-#include <crypt.h>
-+ #endif  // SANITIZER_ANDROID
-+ 
-+ #include <link.h>
-+@@ -254,7 +253,6 @@ namespace __sanitizer {
-+   unsigned struct_ustat_sz = SIZEOF_STRUCT_USTAT;
-+   unsigned struct_rlimit64_sz = sizeof(struct rlimit64);
-+   unsigned struct_statvfs64_sz = sizeof(struct statvfs64);
-+-  unsigned struct_crypt_data_sz = sizeof(struct crypt_data);
-+ #endif // SANITIZER_LINUX && !SANITIZER_ANDROID
-+ 
-+ #if SANITIZER_LINUX && !SANITIZER_ANDROID
-+diff --git a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
-+index da53b5abef27..2605bb849a78 100644
-+--- a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
-++++ b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
-+@@ -298,7 +298,6 @@ extern unsigned struct_msqid_ds_sz;
-+ extern unsigned struct_mq_attr_sz;
-+ extern unsigned struct_timex_sz;
-+ extern unsigned struct_statvfs_sz;
-+-extern unsigned struct_crypt_data_sz;
-+ #endif  // SANITIZER_LINUX && !SANITIZER_ANDROID
-+ 
-+ struct __sanitizer_iovec {
-+-- 
-+2.43.0
-+
-diff --git a/package/gcc/13.2.0/0003-Remove-crypt-and-crypt_r-interceptors.patch b/package/gcc/13.2.0/0003-Remove-crypt-and-crypt_r-interceptors.patch
-new file mode 100644
-index 0000000000..98bfed5949
---- /dev/null
-+++ b/package/gcc/13.2.0/0003-Remove-crypt-and-crypt_r-interceptors.patch
-@@ -0,0 +1,146 @@
-+From 3521d93c552a11640a959ee61d551c225981c448 Mon Sep 17 00:00:00 2001
-+From: Fangrui Song <i@maskray.me>
-+Date: Fri, 28 Apr 2023 09:59:17 -0700
-+Subject: [PATCH] Remove crypt and crypt_r interceptors
-+
-+From Florian Weimer's D144073
-+
-+> On GNU/Linux (glibc), the crypt and crypt_r functions are not part of the main shared object (libc.so.6), but libcrypt (with multiple possible sonames). The sanitizer libraries do not depend on libcrypt, so it can happen that during sanitizer library initialization, no real implementation will be found because the crypt, crypt_r functions are not present in the process image (yet). If its interceptors are called nevertheless, this results in a call through a null pointer when the sanitizer library attempts to forward the call to the real implementation.
-+>
-+> Many distributions have already switched to libxcrypt, a library that is separate from glibc and that can be build with sanitizers directly (avoiding the need for interceptors). This patch disables building the interceptor for glibc targets.
-+
-+Let's remove crypt and crypt_r interceptors (D68431) to fix issues with
-+newer glibc.
-+
-+For older glibc, msan will not know that an uninstrumented crypt_r call
-+initializes `data`, so there is a risk for false positives. However, with some
-+codebase survey, I think crypt_r uses are very few and the call sites typically
-+have a `memset(&data, 0, sizeof(data));` anyway.
-+
-+Fix https://github.com/google/sanitizers/issues/1365
-+Related: https://bugzilla.redhat.com/show_bug.cgi?id=2169432
-+
-+Reviewed By: #sanitizers, fweimer, thesamesam, vitalybuka
-+
-+Differential Revision: https://reviews.llvm.org/D149403
-+
-+[Thomas: taken from Crosstool-NG]
-+Upstream: (llvm) https://github.com/llvm/llvm-project/commit/d7bead833631486e337e541e692d9b4a1ca14edd
-+Upstream: (gcc)  https://github.com/gcc-mirror/gcc/commit/d96e14ceb9475f9bccbbc0325d5b11419fad9246
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ .../sanitizer_common_interceptors.inc         | 37 -------------------
-+ .../sanitizer_platform_interceptors.h         |  2 -
-+ .../sanitizer_platform_limits_posix.cpp       |  8 ----
-+ .../sanitizer_platform_limits_posix.h         |  1 -
-+ 4 files changed, 48 deletions(-)
-+
-+diff --git a/libsanitizer/sanitizer_common/sanitizer_common_interceptors.inc b/libsanitizer/sanitizer_common/sanitizer_common_interceptors.inc
-+index ba4b80081f0..662c4199742 100644
-+--- a/libsanitizer/sanitizer_common/sanitizer_common_interceptors.inc
-++++ b/libsanitizer/sanitizer_common/sanitizer_common_interceptors.inc
-+@@ -10187,41 +10187,6 @@ INTERCEPTOR(SSIZE_T, getrandom, void *buf, SIZE_T buflen, unsigned int flags) {
-+ #define INIT_GETRANDOM
-+ #endif
-+ 
-+-#if SANITIZER_INTERCEPT_CRYPT
-+-INTERCEPTOR(char *, crypt, char *key, char *salt) {
-+-  void *ctx;
-+-  COMMON_INTERCEPTOR_ENTER(ctx, crypt, key, salt);
-+-  COMMON_INTERCEPTOR_READ_RANGE(ctx, key, internal_strlen(key) + 1);
-+-  COMMON_INTERCEPTOR_READ_RANGE(ctx, salt, internal_strlen(salt) + 1);
-+-  char *res = REAL(crypt)(key, salt);
-+-  if (res != nullptr)
-+-    COMMON_INTERCEPTOR_INITIALIZE_RANGE(res, internal_strlen(res) + 1);
-+-  return res;
-+-}
-+-#define INIT_CRYPT COMMON_INTERCEPT_FUNCTION(crypt);
-+-#else
-+-#define INIT_CRYPT
-+-#endif
-+-
-+-#if SANITIZER_INTERCEPT_CRYPT_R
-+-INTERCEPTOR(char *, crypt_r, char *key, char *salt, void *data) {
-+-  void *ctx;
-+-  COMMON_INTERCEPTOR_ENTER(ctx, crypt_r, key, salt, data);
-+-  COMMON_INTERCEPTOR_READ_RANGE(ctx, key, internal_strlen(key) + 1);
-+-  COMMON_INTERCEPTOR_READ_RANGE(ctx, salt, internal_strlen(salt) + 1);
-+-  char *res = REAL(crypt_r)(key, salt, data);
-+-  if (res != nullptr) {
-+-    COMMON_INTERCEPTOR_WRITE_RANGE(ctx, data,
-+-                                   __sanitizer::struct_crypt_data_sz);
-+-    COMMON_INTERCEPTOR_INITIALIZE_RANGE(res, internal_strlen(res) + 1);
-+-  }
-+-  return res;
-+-}
-+-#define INIT_CRYPT_R COMMON_INTERCEPT_FUNCTION(crypt_r);
-+-#else
-+-#define INIT_CRYPT_R
-+-#endif
-+-
-+ #if SANITIZER_INTERCEPT_GETENTROPY
-+ INTERCEPTOR(int, getentropy, void *buf, SIZE_T buflen) {
-+   void *ctx;
-+@@ -10772,8 +10737,6 @@ static void InitializeCommonInterceptors() {
-+   INIT_GETUSERSHELL;
-+   INIT_SL_INIT;
-+   INIT_GETRANDOM;
-+-  INIT_CRYPT;
-+-  INIT_CRYPT_R;
-+   INIT_GETENTROPY;
-+   INIT_QSORT;
-+   INIT_QSORT_R;
-+diff --git a/libsanitizer/sanitizer_common/sanitizer_platform_interceptors.h b/libsanitizer/sanitizer_common/sanitizer_platform_interceptors.h
-+index 8307b1ec28b..d50166ee6ce 100644
-+--- a/libsanitizer/sanitizer_common/sanitizer_platform_interceptors.h
-++++ b/libsanitizer/sanitizer_common/sanitizer_platform_interceptors.h
-+@@ -571,8 +571,6 @@
-+ #define SANITIZER_INTERCEPT_FDEVNAME SI_FREEBSD
-+ #define SANITIZER_INTERCEPT_GETUSERSHELL (SI_POSIX && !SI_ANDROID)
-+ #define SANITIZER_INTERCEPT_SL_INIT (SI_FREEBSD || SI_NETBSD)
-+-#define SANITIZER_INTERCEPT_CRYPT (SI_POSIX && !SI_ANDROID)
-+-#define SANITIZER_INTERCEPT_CRYPT_R (SI_LINUX && !SI_ANDROID)
-+ 
-+ #define SANITIZER_INTERCEPT_GETRANDOM \
-+   ((SI_LINUX && __GLIBC_PREREQ(2, 25)) || SI_FREEBSD)
-+diff --git a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
-+index c85cf1626a7..bcbd143d19d 100644
-+--- a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
-++++ b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
-+@@ -176,10 +176,6 @@ typedef struct user_fpregs elf_fpregset_t;
-+ #  include "sanitizer_platform_interceptors.h"
-+ #  include "sanitizer_platform_limits_posix.h"
-+ 
-+-#if SANITIZER_INTERCEPT_CRYPT_R
-+-#include <crypt.h>
-+-#endif
-+-
-+ namespace __sanitizer {
-+   unsigned struct_utsname_sz = sizeof(struct utsname);
-+   unsigned struct_stat_sz = sizeof(struct stat);
-+@@ -283,10 +279,6 @@ namespace __sanitizer {
-+   unsigned struct_statvfs64_sz = sizeof(struct statvfs64);
-+ #endif // SANITIZER_LINUX && !SANITIZER_ANDROID
-+ 
-+-#if SANITIZER_INTERCEPT_CRYPT_R
-+-  unsigned struct_crypt_data_sz = sizeof(struct crypt_data);
-+-#endif
-+-
-+ #if SANITIZER_LINUX && !SANITIZER_ANDROID
-+   unsigned struct_timex_sz = sizeof(struct timex);
-+   unsigned struct_msqid_ds_sz = sizeof(struct msqid_ds);
-+diff --git a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
-+index 44dd3d9e22d..29ebb304a9b 100644
-+--- a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
-++++ b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
-+@@ -319,7 +319,6 @@ extern unsigned struct_msqid_ds_sz;
-+ extern unsigned struct_mq_attr_sz;
-+ extern unsigned struct_timex_sz;
-+ extern unsigned struct_statvfs_sz;
-+-extern unsigned struct_crypt_data_sz;
-+ #endif  // SANITIZER_LINUX && !SANITIZER_ANDROID
-+ 
-+ struct __sanitizer_iovec {
-+-- 
-+2.43.0
-+
+ -#if !defined __GNUC__ || __GNUC__ < 6 || (__GNUC__ == 6 && __GNUC_MINOR__ < 2)
+ +#if !defined __GNUC__ || __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 8)
+  #error insufficient compiler
+  #endif
+    ;
+--- 
++--
+ 2.41.0
+ 
+diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
+index c017c0e00e..f304ba8021 100644
+--- a/package/localedef/localedef.mk
++++ b/package/localedef/localedef.mk
+@@ -7,7 +7,7 @@
+ # Use the same VERSION and SITE as target glibc
+ # As in glibc.mk, generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+-LOCALEDEF_VERSION = 2.38-44-gd37c2b20a4787463d192b32041c3406c2bd91de0
++LOCALEDEF_VERSION = 2.39-5-ge0910f1d3278f05439fb434ee528fc9be1b6bd5e
+ LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION).tar.gz
+ LOCALEDEF_SITE = $(call github,bminor,glibc,$(LOCALEDEF_VERSION))
+ HOST_LOCALEDEF_DL_SUBDIR = glibc
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
