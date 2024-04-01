@@ -4,49 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0E35CD1292
-	for <buildroot@archiver.kernel.org>; Mon,  1 Apr 2024 12:28:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4C7DCD1288
+	for <buildroot@archiver.kernel.org>; Mon,  1 Apr 2024 12:42:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6BED681EC4;
-	Mon,  1 Apr 2024 12:28:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5882881EDC;
+	Mon,  1 Apr 2024 12:42:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oFjm3hvb5E7M; Mon,  1 Apr 2024 12:28:25 +0000 (UTC)
+ id 2j7v-wA5Y3wG; Mon,  1 Apr 2024 12:42:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C23E581EE0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7119A81ECA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C23E581EE0;
-	Mon,  1 Apr 2024 12:28:24 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8169A1BF2CD
- for <buildroot@lists.busybox.net>; Mon,  1 Apr 2024 12:28:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7119A81ECA;
+	Mon,  1 Apr 2024 12:42:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 573E21BF2CD
+ for <buildroot@lists.busybox.net>; Mon,  1 Apr 2024 12:42:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6E543608B3
- for <buildroot@lists.busybox.net>; Mon,  1 Apr 2024 12:28:21 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 43A50406B9
+ for <buildroot@lists.busybox.net>; Mon,  1 Apr 2024 12:42:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oss9_JAhIgc0 for <buildroot@lists.busybox.net>;
- Mon,  1 Apr 2024 12:28:20 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oTMS33VWyvce for <buildroot@lists.busybox.net>;
+ Mon,  1 Apr 2024 12:42:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 898156089F
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 898156089F
- for <buildroot@buildroot.org>; Mon,  1 Apr 2024 12:28:20 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 37893844E4; Mon,  1 Apr 2024 12:28:20 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Mon, 1 Apr 2024 14:27:08 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ea8f0d72b305913d3349c6ab6899f653d68d1820
-X-Git-Newrev: fbeec56312e1d2a5ec7c2803c0d2aa3f0e673c5f
-X-Patchwork-Hint: ignore
-Message-Id: <20240401122820.37893844E4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libcurl: security bump to 8.7.1
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9C602406B7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C602406B7
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9C602406B7
+ for <buildroot@buildroot.org>; Mon,  1 Apr 2024 12:42:06 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id DB4C713F838;
+ Mon,  1 Apr 2024 14:42:01 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Mon, 01 Apr 2024 14:42:01 +0200
+Date: Mon, 1 Apr 2024 14:42:01 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <ZgqrmSR1rXd6sGat@landeda>
+References: <20240331085319.8585-1-fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20240331085319.8585-1-fontaine.fabrice@gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1711975325;
+ bh=Jwf9iG+9mesYrHbbcq6HpubWBjodDxCaF3AmYG4Q8u4=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=OoIYPzh0lk2kL2egkJVCcgZ6tIsTF0MguiNHLzjz/L7o7U4HnEJ9vVqiPNdLLpHP0
+ JjYMbUPyAHdz0fbzKKk79S/kYe4AhZWWNXZZhTy5NxrfNHiumck/Q9lu3xqdvXRiuS
+ iqL3ZEThtk+yXFmUE7jxSiGA01h5t/mKP69jomByp8kHcD08EhRy2dCdSstdH3tOIr
+ jZwFNUJEyUFXAeYCHfPkfq2mq+DZZm8fsq82A6XcaPs4YJHnxJYTusVBdEivShURLv
+ PeJFTvzgG6QC9gE2xAYKdxJBvh7wv/U5kfrcF2qlhdXWmNqK2xFOub52hCaoajhcXm
+ OsabDxwRRVJ9w==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=OoIYPzh0
+Subject: Re: [Buildroot] [PATCH 1/1] package/lxc: fix m68k build with gcc 12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,182 +80,196 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: =?utf-8?B?SsOpcsO0bWU=?= Pouiller <jezz@sysmic.org>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fbeec56312e1d2a5ec7c2803c0d2aa3f0e673c5f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fabrice, All,
 
-Drop patch that is included in this release. Drop autoreconf that was
-introduced for this patch.
+On 2024-03-31 10:53 +0200, Fabrice Fontaine spake thusly:
+> Fix the following m68k build failure with gcc 12:
+> 
+> In file included from ../src/lxc/syscall_wrappers.h:19,
+>                  from ../src/lxc/mount_utils.h:15,
+>                  from ../src/lxc/conf.h:24,
+>                  from ../src/lxc/log.h:19,
+>                  from ../src/lxc/storage/btrfs.c:20:
+> ../src/lxc/syscall_numbers.h:423:25: error: macro names must be identifiers
+>   423 |                 #define -1
+>       |                         ^
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/f40a517eba86838b11b4b1d6a8a05b8233a3394d
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Fixes the following security issues:
+Applied to master, thanks.
 
-* CVE-2024-2004
-* CVE-2024-2379
-* CVE-2024-2398
-* CVE-2024-2466
+Regards,
+Yann E. MORIN.
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- ...-configure.ac-find-libpsl-with-pkg-config.patch | 109 ---------------------
- package/libcurl/libcurl.hash                       |   4 +-
- package/libcurl/libcurl.mk                         |   4 +-
- 3 files changed, 3 insertions(+), 114 deletions(-)
+> ---
+>  ...-lxc-syscall_numbers.h-drop-define-1.patch | 133 ++++++++++++++++++
+>  1 file changed, 133 insertions(+)
+>  create mode 100644 package/lxc/0001-src-lxc-syscall_numbers.h-drop-define-1.patch
+> 
+> diff --git a/package/lxc/0001-src-lxc-syscall_numbers.h-drop-define-1.patch b/package/lxc/0001-src-lxc-syscall_numbers.h-drop-define-1.patch
+> new file mode 100644
+> index 0000000000..4a944e35b1
+> --- /dev/null
+> +++ b/package/lxc/0001-src-lxc-syscall_numbers.h-drop-define-1.patch
+> @@ -0,0 +1,133 @@
+> +From 82fe01821cd5cb8548598d7d93b07d6ef3f6b604 Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Sat, 30 Mar 2024 16:50:46 +0100
+> +Subject: [PATCH] src/lxc/syscall_numbers.h: drop define -1
+> +
+> +Drop "#define -1" to avoid the following m68k build failure with gcc 12:
+> +
+> +In file included from ../src/lxc/syscall_wrappers.h:19,
+> +                 from ../src/lxc/mount_utils.h:15,
+> +                 from ../src/lxc/conf.h:24,
+> +                 from ../src/lxc/log.h:19,
+> +                 from ../src/lxc/storage/btrfs.c:20:
+> +../src/lxc/syscall_numbers.h:423:25: error: macro names must be identifiers
+> +  423 |                 #define -1
+> +      |                         ^
+> +
+> +Fixes:
+> + - http://autobuild.buildroot.org/results/f40a517eba86838b11b4b1d6a8a05b8233a3394d
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Upstream: https://github.com/lxc/lxc/commit/82fe01821cd5cb8548598d7d93b07d6ef3f6b604
+> +---
+> + src/lxc/syscall_numbers.h | 13 -------------
+> + 1 file changed, 13 deletions(-)
+> +
+> +diff --git a/src/lxc/syscall_numbers.h b/src/lxc/syscall_numbers.h
+> +index 58840a5981..5e659d1b81 100644
+> +--- a/src/lxc/syscall_numbers.h
+> ++++ b/src/lxc/syscall_numbers.h
+> +@@ -53,7 +53,6 @@
+> + 	#elif defined __loongarch64
+> + 		#define __NR_keyctl 219
+> + 	#else
+> +-		#define -1
+> + 		#warning "__NR_keyctl not defined for your architecture"
+> + 	#endif
+> + #endif
+> +@@ -92,7 +91,6 @@
+> + 	#elif defined __loongarch64
+> + 		#define __NR_memfd_create 279
+> + 	#else
+> +-		#define -1
+> + 		#warning "__NR_memfd_create not defined for your architecture"
+> + 	#endif
+> + #endif
+> +@@ -129,7 +127,6 @@
+> + 	#elif defined __loongarch64
+> + 		#define __NR_pivot_root 41
+> + 	#else
+> +-		#define -1
+> + 		#warning "__NR_pivot_root not defined for your architecture"
+> + 	#endif
+> + #endif
+> +@@ -166,7 +163,6 @@
+> + 	#elif defined __loongarch64
+> + 		#define __NR_setns 268
+> + 	#else
+> +-		#define -1
+> + 		#warning "__NR_setns not defined for your architecture"
+> + 	#endif
+> + #endif
+> +@@ -203,7 +199,6 @@
+> + 	#elif defined __loongarch64
+> + 		#define __NR_sethostname 161
+> + 	#else
+> +-		#define -1
+> + 		#warning "__NR_sethostname not defined for your architecture"
+> + 	#endif
+> + #endif
+> +@@ -272,7 +267,6 @@
+> + 	#elif defined __loongarch64
+> + 		#define __NR_signalfd4 74
+> + 	#else
+> +-		#define -1
+> + 		#warning "__NR_signalfd4 not defined for your architecture"
+> + 	#endif
+> + #endif
+> +@@ -309,7 +303,6 @@
+> + 	#elif defined __loongarch64
+> + 		#define __NR_unshare 97
+> + 	#else
+> +-		#define -1
+> + 		#warning "__NR_unshare not defined for your architecture"
+> + 	#endif
+> + #endif
+> +@@ -346,7 +339,6 @@
+> + 	#elif defined __loongarch64
+> + 		#define __NR_bpf 280
+> + 	#else
+> +-		#define -1
+> + 		#warning "__NR_bpf not defined for your architecture"
+> + 	#endif
+> + #endif
+> +@@ -383,7 +375,6 @@
+> + 	#elif defined __loongarch64
+> + 		#define __NR_faccessat 48
+> + 	#else
+> +-		#define -1
+> + 		#warning "__NR_faccessat not defined for your architecture"
+> + 	#endif
+> + #endif
+> +@@ -440,7 +431,6 @@
+> + 	#elif defined __loongarch64
+> + 		#define __NR_seccomp 277
+> + 	#else
+> +-		#define -1
+> + 		#warning "__NR_seccomp not defined for your architecture"
+> + 	#endif
+> + #endif
+> +@@ -477,7 +467,6 @@
+> + 	#elif defined __loongarch64
+> + 		#define __NR_gettid 178
+> + 	#else
+> +-		#define -1
+> + 		#warning "__NR_gettid not defined for your architecture"
+> + 	#endif
+> + #endif
+> +@@ -518,7 +507,6 @@
+> + 	#elif defined __loongarch64
+> + 		#define __NR_execveat 281
+> + 	#else
+> +-		#define -1
+> + 		#warning "__NR_execveat not defined for your architecture"
+> + 	#endif
+> + #endif
+> +@@ -759,7 +747,6 @@
+> + 	#elif defined __loongarch64
+> + 		#define __NR_personality 92
+> + 	#else
+> +-		#define -1
+> + 		#warning "__NR_personality not defined for your architecture"
+> + 	#endif
+> + #endif
+> -- 
+> 2.43.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
-diff --git a/package/libcurl/0001-configure.ac-find-libpsl-with-pkg-config.patch b/package/libcurl/0001-configure.ac-find-libpsl-with-pkg-config.patch
-deleted file mode 100644
-index 46df1e36a2..0000000000
---- a/package/libcurl/0001-configure.ac-find-libpsl-with-pkg-config.patch
-+++ /dev/null
-@@ -1,109 +0,0 @@
--From 9b3f67e267d1fa8d7867655d133bdbf8830a0ab3 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Thu, 15 Feb 2024 20:59:25 +0100
--Subject: [PATCH] configure.ac: find libpsl with pkg-config
--
--Find libpsl with pkg-config to avoid static build failures.
--
--Ref: http://autobuild.buildroot.org/results/1fb15e1a99472c403d0d3b1a688902f32e78d002
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Closes #12947
--
--Upstream: https://github.com/curl/curl/commit/9b3f67e267d1fa8d7867655d133bdbf8830a0ab3
-----
-- configure.ac | 79 ++++++++++++++++++++++++++++++++++++++++++++--------
-- docs/TODO    |  7 -----
-- 2 files changed, 67 insertions(+), 19 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index cd0e2d07d8d164..09d5364f4de575 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -2075,19 +2075,74 @@ dnl **********************************************************************
-- dnl Check for libpsl
-- dnl **********************************************************************
-- 
---AC_ARG_WITH(libpsl,
---           AS_HELP_STRING([--without-libpsl],
---           [disable support for libpsl]),
---           with_libpsl=$withval,
---           with_libpsl=yes)
---curl_psl_msg="no      (libpsl disabled)"
---if test $with_libpsl != "no"; then
---  AC_SEARCH_LIBS(psl_builtin, psl,
---    [curl_psl_msg="enabled";
---     AC_DEFINE([USE_LIBPSL], [1], [PSL support enabled])
---     ],
---    [AC_MSG_ERROR([libpsl was not found]) ]
--+dnl Default to compiler & linker defaults for LIBPSL files & libraries.
--+OPT_LIBPSL=off
--+AC_ARG_WITH(libpsl,dnl
--+AS_HELP_STRING([--with-libpsl=PATH],[Where to look for libpsl, PATH points to the LIBPSL installation; when possible, set the PKG_CONFIG_PATH environment variable instead of using this option])
--+AS_HELP_STRING([--without-libpsl], [disable LIBPSL]),
--+  OPT_LIBPSL=$withval)
--+
--+if test X"$OPT_LIBPSL" != Xno; then
--+  dnl backup the pre-libpsl variables
--+  CLEANLDFLAGS="$LDFLAGS"
--+  CLEANCPPFLAGS="$CPPFLAGS"
--+  CLEANLIBS="$LIBS"
--+
--+  case "$OPT_LIBPSL" in
--+  yes)
--+    dnl --with-libpsl (without path) used
--+    CURL_CHECK_PKGCONFIG(libpsl)
--+
--+    if test "$PKGCONFIG" != "no" ; then
--+      LIB_PSL=`$PKGCONFIG --libs-only-l libpsl`
--+      LD_PSL=`$PKGCONFIG --libs-only-L libpsl`
--+      CPP_PSL=`$PKGCONFIG --cflags-only-I libpsl`
--+    else
--+      dnl no libpsl pkg-config found
--+      LIB_PSL="-lpsl"
--+    fi
--+
--+    ;;
--+  off)
--+    dnl no --with-libpsl option given, just check default places
--+    LIB_PSL="-lpsl"
--+    ;;
--+  *)
--+    dnl use the given --with-libpsl spot
--+    LIB_PSL="-lpsl"
--+    PREFIX_PSL=$OPT_LIBPSL
--+    ;;
--+  esac
--+
--+  dnl if given with a prefix, we set -L and -I based on that
--+  if test -n "$PREFIX_PSL"; then
--+    LD_PSL=-L${PREFIX_PSL}/lib$libsuff
--+    CPP_PSL=-I${PREFIX_PSL}/include
--+  fi
--+
--+  LDFLAGS="$LDFLAGS $LD_PSL"
--+  CPPFLAGS="$CPPFLAGS $CPP_PSL"
--+  LIBS="$LIB_PSL $LIBS"
--+
--+  AC_CHECK_LIB(psl, psl_builtin,
--+    [
--+     AC_CHECK_HEADERS(libpsl.h,
--+        curl_psl_msg="enabled"
--+        LIBPSL_ENABLED=1
--+        AC_DEFINE(USE_LIBPSL, 1, [if libpsl is in use])
--+        AC_SUBST(USE_LIBPSL, [1])
--+     )
--+    ],
--+      dnl not found, revert back to clean variables
--+      LDFLAGS=$CLEANLDFLAGS
--+      CPPFLAGS=$CLEANCPPFLAGS
--+      LIBS=$CLEANLIBS
--   )
--+
--+  if test X"$OPT_LIBPSL" != Xoff &&
--+     test "$LIBPSL_ENABLED" != "1"; then
--+    AC_MSG_ERROR([libpsl libs and/or directories were not found where specified!])
--+  fi
-- fi
-- AM_CONDITIONAL([USE_LIBPSL], [test "$curl_psl_msg" = "enabled"])
-- 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 1f3dce0fd5..7fcad973c3 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://curl.se/download/curl-8.6.0.tar.xz.asc
-+# https://curl.se/download/curl-8.7.1.tar.xz.asc
- # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
--sha256  3ccd55d91af9516539df80625f818c734dc6f2ecf9bada33c76765e99121db15  curl-8.6.0.tar.xz
-+sha256  6fea2aac6a4610fbd0400afb0bcddbe7258a64c63f1f68e5855ebc0c659710cd  curl-8.7.1.tar.xz
- sha256  adb1fc06547fd136244179809f7b7c2d2ae6c4534f160aa513af9b6a12866a32  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 4281cfabb1..99320c1315 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCURL_VERSION = 8.6.0
-+LIBCURL_VERSION = 8.7.1
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
-@@ -14,8 +14,6 @@ LIBCURL_LICENSE = curl
- LIBCURL_LICENSE_FILES = COPYING
- LIBCURL_CPE_ID_VENDOR = haxx
- LIBCURL_INSTALL_STAGING = YES
--# 0001-configure.ac-find-libpsl-with-pkg-config.patch
--LIBCURL_AUTORECONF = YES
- 
- # We disable NTLM delegation to winbinds ntlm_auth ('--disable-ntlm-wb')
- # support because it uses fork(), which doesn't work on non-MMU platforms.
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
