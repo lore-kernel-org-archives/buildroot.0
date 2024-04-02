@@ -4,73 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F31C4C6FD1F
-	for <buildroot@archiver.kernel.org>; Tue,  2 Apr 2024 21:28:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6283FCD1284
+	for <buildroot@archiver.kernel.org>; Tue,  2 Apr 2024 21:28:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C38F16066D;
-	Tue,  2 Apr 2024 21:28:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 342F96058F;
+	Tue,  2 Apr 2024 21:28:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VYP8_A5x3xj9; Tue,  2 Apr 2024 21:28:16 +0000 (UTC)
+ id haDeKM1Oiygc; Tue,  2 Apr 2024 21:28:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC72260BDE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 34D02607A8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CC72260BDE;
-	Tue,  2 Apr 2024 21:28:15 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A1A151BF295
- for <buildroot@lists.busybox.net>; Tue,  2 Apr 2024 21:28:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 34D02607A8;
+	Tue,  2 Apr 2024 21:28:38 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 53A7A1BF295
+ for <buildroot@lists.busybox.net>; Tue,  2 Apr 2024 21:28:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8F3C9408C7
- for <buildroot@lists.busybox.net>; Tue,  2 Apr 2024 21:28:14 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4D6E640570
+ for <buildroot@lists.busybox.net>; Tue,  2 Apr 2024 21:28:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yVXWhUgbRzDy for <buildroot@lists.busybox.net>;
- Tue,  2 Apr 2024 21:28:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2b3pbTIhBehz for <buildroot@lists.busybox.net>;
+ Tue,  2 Apr 2024 21:28:35 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
  helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8F41C40289
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8F41C40289
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8F41C40289
- for <buildroot@buildroot.org>; Tue,  2 Apr 2024 21:28:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E9DD940544
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E9DD940544
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E9DD940544
+ for <buildroot@buildroot.org>; Tue,  2 Apr 2024 21:28:34 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 5566B13F86E;
- Tue,  2 Apr 2024 23:28:05 +0200 (CEST)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 11B8513F81D;
+ Tue,  2 Apr 2024 23:28:27 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 02 Apr 2024 23:28:05 +0200
-Date: Tue, 2 Apr 2024 23:28:05 +0200
+ Tue, 02 Apr 2024 23:28:26 +0200
+Date: Tue, 2 Apr 2024 23:28:26 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <Zgx4ZaqmPl8Vbv9r@landeda>
+Message-ID: <Zgx4emXI7NgZPSBI@landeda>
 References: <20240401234013.3570820-1-james.hilliard1@gmail.com>
+ <20240401234013.3570820-2-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20240401234013.3570820-1-james.hilliard1@gmail.com>
+In-Reply-To: <20240401234013.3570820-2-james.hilliard1@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1712093291;
- bh=YC8Qkntb/TBZcEuL8J6jLIljTS0w6UijNxJpIWLA8uc=;
+ d=free.fr; s=smtp-20201208; t=1712093313;
+ bh=M6A3V8/zUvbDgCCLjXc6ZEGmJ7iytGA+m93Fzpcv5sU=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=qF//y24fvj13y2LAjwC+UYJ0quRmW4Dbfx2LEndI4WnyU50o6lNfciZopcSOtuPSc
- WP/nhOcU7J8DmvtnG1lj9pJ4ANreXXg0nSuvtD/KOLijMkULIGuN+j91TN/PIJ6k6O
- PA6eiFsi3Z4pyXVW4hcNfO044fnhlyLdkkw3FsA3S40dLBUrL66uw63uK6MA+Q4hUn
- qc4MmX1g/g3pe/8kjgxAPf5d7m/jELuvUAhHffhYBrSIDBkJ6IBo++SThLXBv2Jqj0
- gA1S6EkOKKfhV3g+5XmgpFqYkPRXH2Njot4aIrCgjzllncK2Pzi8iVA2ECeecAFeg0
- BTCd7ivFuN58g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=N90VVA/GZhmVYdGxFvjMmGFuR/Z2pZveJBDZkcJW+H6WOSo+BvlD95AoMUdX89XnC
+ AEbxbV1xMDkRUW8WgVl1Cp3ezzlnziOjUzdgWXJOPZZrTgu0KNPdOB05G/x4+uPfH8
+ GVXDwtivPdg9jaGYREfMhC+IF7WA61Lvu0z2XhcTryuAUAks+J4Jd6NMA5pcVMTH9e
+ 4gZVf0Tkq3EECz9rrR8eQjV2DPpLrmxcTinlfUdPfujQES1pRxoJwy69eSDlbhpy2n
+ OA8OfWy/WYQZVl7y18V+6/r++Q/cv2DGfSAbs7mCUud0Lkmza7xQ4ms0i3l5vi9B33
+ WnXQqUJLpI1OA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=qF//y24f
-Subject: Re: [Buildroot] [PATCH 1/2] package/libxcrypt: support host package
- build
+ header.s=smtp-20201208 header.b=N90VVA/G
+Subject: Re: [Buildroot] [PATCH 2/2] package/systemd: fix build with glibc
+ 2.39
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,30 +94,67 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 James, All,
 
 On 2024-04-01 17:40 -0600, James Hilliard spake thusly:
-> This is needed by host-systemd.
+> When glibc was bumped to version 2.39 in commit
+> b5680f53d60acf8ff6010082f873438a39bd5d97 it removed the deprecated
+> libcrypt support.
+> 
+> As glibc's libcrypt was providing systemd's libcrypt dependency this
+> broke any systemd build using glibc version 2.39.
+> 
+> To fix this add the libxcrypt dependency to systemd which is the
+> preferred way of providing libcrypt support in systemd as the glibc
+> variant is only used as a fallback due to being deprecated.
+> 
+> We should also have host-systemd depend on host-libxcrypt in case
+> the host system does not provide glibc with libcrypt support.
+> 
+> Fixes:
+>  - http://autobuild.buildroot.net/results/36e/36efcfc76c015c9b4c955c13afa0f81a98b529f4
 > 
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/libxcrypt/libxcrypt.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/libxcrypt/libxcrypt.mk b/package/libxcrypt/libxcrypt.mk
-> index 9ad030fbd2..e24bc2e847 100644
-> --- a/package/libxcrypt/libxcrypt.mk
-> +++ b/package/libxcrypt/libxcrypt.mk
-> @@ -18,3 +18,4 @@ LIBXCRYPT_CONF_OPTS = --disable-werror
->  LIBXCRYPT_CONF_OPTS += --disable-obsolete_api
-
-You had forgotten to use the same set of _CONF_OPTS for the host
-variant, so I added those.
 
 Applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
->  $(eval $(autotools-package))
-> +$(eval $(host-autotools-package))
+> ---
+>  package/systemd/Config.in  | 1 +
+>  package/systemd/systemd.mk | 2 ++
+>  2 files changed, 3 insertions(+)
+> 
+> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+> index aa5143d484..a94e9b73b8 100644
+> --- a/package/systemd/Config.in
+> +++ b/package/systemd/Config.in
+> @@ -28,6 +28,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
+>  	select BR2_PACKAGE_HAS_UDEV
+>  	select BR2_PACKAGE_DBUS if !BR2_PACKAGE_DBUS_BROKER # runtime
+>  	select BR2_PACKAGE_LIBCAP
+> +	select BR2_PACKAGE_LIBXCRYPT
+>  	select BR2_PACKAGE_UTIL_LINUX
+>  	select BR2_PACKAGE_UTIL_LINUX_LIBS
+>  	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
+> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> index c6b006d1fb..8987dc19a6 100644
+> --- a/package/systemd/systemd.mk
+> +++ b/package/systemd/systemd.mk
+> @@ -55,6 +55,7 @@ SYSTEMD_DEPENDENCIES = \
+>  	host-python-jinja2 \
+>  	kmod \
+>  	libcap \
+> +	libxcrypt \
+>  	util-linux-libs \
+>  	$(TARGET_NLS_DEPENDENCIES)
+>  
+> @@ -882,6 +883,7 @@ HOST_SYSTEMD_DEPENDENCIES = \
+>  	host-util-linux \
+>  	host-patchelf \
+>  	host-libcap \
+> +	host-libxcrypt \
+>  	host-gperf \
+>  	host-python-jinja2
+>  
 > -- 
 > 2.34.1
 > 
