@@ -1,101 +1,100 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B6BBC6FD1F
-	for <buildroot@archiver.kernel.org>; Tue,  2 Apr 2024 19:45:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5B51C6FD1F
+	for <buildroot@archiver.kernel.org>; Tue,  2 Apr 2024 19:54:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B8FDD400C1;
-	Tue,  2 Apr 2024 19:45:32 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YiuhCeQFiVx2; Tue,  2 Apr 2024 19:45:32 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C8C204012F
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C8C204012F;
-	Tue,  2 Apr 2024 19:45:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B770E1BF369
- for <buildroot@lists.busybox.net>; Tue,  2 Apr 2024 19:45:30 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B0486407DD
- for <buildroot@lists.busybox.net>; Tue,  2 Apr 2024 19:45:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 575CC40360;
+	Tue,  2 Apr 2024 19:54:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cTvAbvAO6bXk for <buildroot@lists.busybox.net>;
- Tue,  2 Apr 2024 19:45:29 +0000 (UTC)
+ id 5adj8yJVStdt; Tue,  2 Apr 2024 19:53:59 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D14F404A5
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1D14F404A5;
+	Tue,  2 Apr 2024 19:53:59 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 929DC1BF369
+ for <buildroot@lists.busybox.net>; Tue,  2 Apr 2024 19:53:57 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8AD16404A5
+ for <buildroot@lists.busybox.net>; Tue,  2 Apr 2024 19:53:57 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oXZo-6nvQeoJ for <buildroot@lists.busybox.net>;
+ Tue,  2 Apr 2024 19:53:56 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
+ client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
  envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1FDF340772
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1FDF340772
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1FDF340772
- for <buildroot@buildroot.org>; Tue,  2 Apr 2024 19:45:28 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-415446af364so1319725e9.0
- for <buildroot@buildroot.org>; Tue, 02 Apr 2024 12:45:28 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6AEE140360
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6AEE140360
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6AEE140360
+ for <buildroot@buildroot.org>; Tue,  2 Apr 2024 19:53:55 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id
+ ffacd0b85a97d-341c7c8adf3so3886768f8f.0
+ for <buildroot@buildroot.org>; Tue, 02 Apr 2024 12:53:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1712087126; x=1712691926;
+ d=1e100.net; s=20230601; t=1712087634; x=1712692434;
  h=content-transfer-encoding:in-reply-to:content-language:from
  :references:to:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=edl3jS936fvatMhq5ItkXpQ3cAvCuMYlJX4yLSvqPBs=;
- b=Gwexwicy4yd11V4vYGaQoInnEhQ2RDGed3I3ovNggh1kPFyRcORq63tDzswoybF7jE
- sjtrSC/3/BmJG9wDBooKcrX43f2QQHpUBHTtT7ae3YReK+SidJyJKcDi83qs2vwn0Eg0
- KqUVC8sEWTjgkCRqLJ/sZ5KHy5zi96IA0ncqsK4ZbU/fZIlG0qF4JDPrcYB0FZxf2nDW
- nGR1QKyezsCAsIoJ3lyvh9sO0Bzotu+e6Cs0mhQxpRgpGHtnnMDueY4EIkGKwYW1bxZV
- Z2Npcgtsec3nJOF4qv7S8iMnmrV3iIifUvN1M4LSBT/1a8ZTPnYxCPVKdl3CI0lZgrE/
- dbzg==
+ bh=gJYUTOq20lTZobbIiDbttZl8OR7Fw+AnDMW/L72oyoA=;
+ b=oDY7s4BfG2STJRLGAUcpX5FDaxYRCqO5LgJHC4zQmWaanoPVGOPoLUr3fxo+YuNHrW
+ yzMyimlP3UFxhRkQbTsmKTpW5jcPhu5FDFwPc1+aaHib02ydKzU1vNCiALJB6dnkqyjS
+ DUEBPXaWl5mwGSMJva0Y08PcU909OZt+fmFEaxqE0hWKuYbGBWHoQQ3zfe1vxcP968tu
+ RTQhH1TL8vEss8T2BDNmrgZ2QOEIRYR1PKfDVR4rrO/kecazV5ddtz1V1bIZ6h3AhCnu
+ eUu4kfEArPvX6h7PRbp4OyOhwfK4BlZOWv25E+ctD3Qu/4aKcirOyEKA0xkNrgp3vFlP
+ 9l0g==
 X-Forwarded-Encrypted: i=1;
- AJvYcCX0cAWtPSZiXY9GkXo9dTF2hWgA8HomTvB7aQnEVIgGs1lXBLWi6fevzAnTOhELOFBqFzGhoC2m4za8B/dMOVMA9M/MG66JqA==
-X-Gm-Message-State: AOJu0Yy5GplZCfLwbhNHWGbf1eLoJSroCU4mqepVv9hoHbV/zAqV+sPc
- Cs1p6t/6mtVetVJEfD1kRStaOjrI4xZke7BnVoljvWhIgCOd6cB6S9L3WFlNooTSc42PLrhvKxF
- a
-X-Google-Smtp-Source: AGHT+IFljLGrwmsRXXFjoD5XOp5rHuZ0ZS3NIjvNwmb7BpqRpnhp+kIstiYNSx/nQRkorYIe5QEMnw==
-X-Received: by 2002:a5d:44d0:0:b0:343:49a7:3b03 with SMTP id
- z16-20020a5d44d0000000b0034349a73b03mr386022wrr.32.1712087126441; 
- Tue, 02 Apr 2024 12:45:26 -0700 (PDT)
+ AJvYcCWzjOIhDE1jlzxJDzLbhMyZzFujEswC5gCkkdGBG/Wj8a4ir/DDwDamv2C5X667rnVsvQHGQWlIjOPy4VczdsDv+HYoBJ+UJQ==
+X-Gm-Message-State: AOJu0Yy4lKPt39ECGHW9hDzy7PKYwtSD75KnqCnGLpO5lITL8W0qAl73
+ J+W1YsqWOVxBfJbWOQ+rRY/RaVFqegfTlHQX6mrZrVMfEKSqVDu9Ndz4/twCjHo=
+X-Google-Smtp-Source: AGHT+IFk6S0WqwwivdCazg52wXJdmDRTXrttr7UHKpb0Y1Eox++ZyCyYW7L4HgIUmK7Wg0OdJ/bh+g==
+X-Received: by 2002:a5d:6e02:0:b0:343:526f:29cf with SMTP id
+ h2-20020a5d6e02000000b00343526f29cfmr4179553wrz.32.1712087633912; 
+ Tue, 02 Apr 2024 12:53:53 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
  (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- u22-20020a05600c139600b004148d7b889asm22201370wmf.8.2024.04.02.12.45.25
+ j6-20020a05600c190600b004161eba16b3sm1549773wmq.29.2024.04.02.12.53.53
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 02 Apr 2024 12:45:25 -0700 (PDT)
-Message-ID: <a65e0f54-9de6-44c5-b8aa-4bf366b3273d@mind.be>
-Date: Tue, 2 Apr 2024 21:45:23 +0200
+ Tue, 02 Apr 2024 12:53:53 -0700 (PDT)
+Message-ID: <6fc81e18-165f-4b52-b79c-322ad8682687@mind.be>
+Date: Tue, 2 Apr 2024 21:53:51 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Thomas Devoogdt <thomas@devoogdt.com>, buildroot@buildroot.org
-References: <20240213204240.105047-1-thomas@devoogdt.com>
+To: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
+References: <20240213204915.27898-1-ju.o@free.fr>
 Content-Language: en-GB
-In-Reply-To: <20240213204240.105047-1-thomas@devoogdt.com>
+In-Reply-To: <20240213204915.27898-1-ju.o@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1712087126; x=1712691926; darn=buildroot.org;
+ d=mind.be; s=google; t=1712087634; x=1712692434; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:content-language:from
  :references:to:subject:user-agent:mime-version:date:message-id:from
  :to:cc:subject:date:message-id:reply-to;
- bh=edl3jS936fvatMhq5ItkXpQ3cAvCuMYlJX4yLSvqPBs=;
- b=eB/9G05X0T1XsRpMgS6+Z/BU5k6DPT1aIMZrizZz2Kp9UNbpQzOXXhSWz4dv3LogPX
- G/5tvHR9p54oN62y8wXvKFyiVcGgGfGYoDIhbMiC3q7ehX3GliFRoX0T8SYhCHobKsQt
- 9jDkclYJmvgW9sCC7wqkSsO8njyhI8fZ5bRCVKt6EgoZ8iOpQz5SbpZcR3nOCQWdqTIx
- BOEke0xbq8y8bsv6hDsz6prVCH06XPHHyYWgj5lPr23aV84bMeaYlpbNB3Vu9MeY9WMz
- t1EqoUXFairFQXrGFT3bprxu1WXsmVfAD5+EOhkIvTjoAH0XMLk8S/Lxso9J8zlnG4rq
- bGgg==
+ bh=gJYUTOq20lTZobbIiDbttZl8OR7Fw+AnDMW/L72oyoA=;
+ b=J4cpG0a2PwiWYWF2u0paYYex5shCd0kpeaIGI9+cL9KM3orCzmk51qsYf7/nx7NUKG
+ mkFdgP1bvhk8o6/XlMCYLb5F62AhgQl25NCXMbGEDntoUCHcaprqlgJyX+XnJgkpR51o
+ JvrZB3vh5A9DHOH15Lav4UjILlptsQRZq9qT9vo+NAbn3KLwxc/cqgi8FnwYDuQ+Vxdz
+ V2kOJLwUf4SibGlXsVuAZi4vTx8RQ956pC2nz6T+R4GSyamjjipi4VzvvO5qtd9F7nFV
+ Ex/7JXG1v2RNWZloQMEljEik6+qW27QEtHjHHwZaS3bh4UpDsqHzeGFFYVRzREsiYcj2
+ RKdQ==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=eB/9G05X
-Subject: Re: [Buildroot] [PATCH v2] package/wayland-protocols: bump to 1.33
+ header.a=rsa-sha256 header.s=google header.b=J4cpG0a2
+Subject: Re: [Buildroot] [PATCH 1/1] support/testing: add lvm2 runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -116,49 +115,25 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 13/02/2024 21:42, Thomas Devoogdt wrote:
-> Announce:
->    https://lists.freedesktop.org/archives/wayland-devel/2024-January/043400.html
-> 
-> Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+On 13/02/2024 21:49, Julien Olivain wrote:
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 
   Applied to master, thanks.
 
+[snip]
+> diff --git a/support/testing/tests/package/test_lvm2/linux-lvm2.fragment b/support/testing/tests/package/test_lvm2/linux-lvm2.fragment
+> new file mode 100644
+> index 0000000000..0fade167a3
+> --- /dev/null
+> +++ b/support/testing/tests/package/test_lvm2/linux-lvm2.fragment
+> @@ -0,0 +1,2 @@
+> +CONFIG_MD=y
+> +CONFIG_BLK_DEV_DM=y
+
+  Perhaps these should be enabled by lvm2 itself (using LVM2_LINUX_CONFIG_FIXUPS)?
+
   Regards,
   Arnout
-
-> ---
-> v2: fix wrong announce version in git message
-> ---
->   package/wayland-protocols/wayland-protocols.hash | 6 +++---
->   package/wayland-protocols/wayland-protocols.mk   | 2 +-
->   2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/wayland-protocols/wayland-protocols.hash b/package/wayland-protocols/wayland-protocols.hash
-> index d039cd6fba..58c432e365 100644
-> --- a/package/wayland-protocols/wayland-protocols.hash
-> +++ b/package/wayland-protocols/wayland-protocols.hash
-> @@ -1,4 +1,4 @@
-> -# From https://lists.freedesktop.org/archives/wayland-devel/2023-July/042836.html
-> -sha256  7459799d340c8296b695ef857c07ddef24c5a09b09ab6a74f7b92640d2b1ba11  wayland-protocols-1.32.tar.xz
-> -sha512  90bbd52daf342b98823ddeed04e349ae242d2eaf925ab8d603cceb36c980c83b5681bb890961e0d49584cb5c2e60a33abf8821770c6ab87956383630bd5b7966  wayland-protocols-1.32.tar.xz
-> +# From https://lists.freedesktop.org/archives/wayland-devel/2024-January/043400.html
-> +sha256  94f0c50b090d6e61a03f62048467b19abbe851be4e11ae7b36f65f8b98c3963a  wayland-protocols-1.33.tar.xz
-> +sha512  4584f6ac86367655f9db5d0c0ed0681efa31e73f984e4b620fbe5317df21790927f4f5317ecbbc194ac31eaf88caebc431bcc52c23d9dc0098c71de3cb4a9fef  wayland-protocols-1.33.tar.xz
->   sha256  f1a2b233e8a9a71c40f4aa885be08a0842ac85bb8588703c1dd7e6e6502e3124  COPYING
-> diff --git a/package/wayland-protocols/wayland-protocols.mk b/package/wayland-protocols/wayland-protocols.mk
-> index 2cfaa830e5..50a08d1988 100644
-> --- a/package/wayland-protocols/wayland-protocols.mk
-> +++ b/package/wayland-protocols/wayland-protocols.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
->   
-> -WAYLAND_PROTOCOLS_VERSION = 1.32
-> +WAYLAND_PROTOCOLS_VERSION = 1.33
->   WAYLAND_PROTOCOLS_SITE = https://gitlab.freedesktop.org/wayland/wayland-protocols/-/releases/$(WAYLAND_PROTOCOLS_VERSION)/downloads
->   WAYLAND_PROTOCOLS_SOURCE = wayland-protocols-$(WAYLAND_PROTOCOLS_VERSION).tar.xz
->   WAYLAND_PROTOCOLS_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
