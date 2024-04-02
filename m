@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F1DAC6FD1F
-	for <buildroot@archiver.kernel.org>; Tue,  2 Apr 2024 20:02:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF4A1C6FD1F
+	for <buildroot@archiver.kernel.org>; Tue,  2 Apr 2024 20:02:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CE83C40873;
-	Tue,  2 Apr 2024 20:02:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4FCDD409C6;
+	Tue,  2 Apr 2024 20:02:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ce28x0IWqYvd; Tue,  2 Apr 2024 20:02:30 +0000 (UTC)
+ id ZI1ejk7Mg5mK; Tue,  2 Apr 2024 20:02:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5246640890
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A10B3409B3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5246640890;
-	Tue,  2 Apr 2024 20:02:30 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 03EE31BF369
- for <buildroot@lists.busybox.net>; Tue,  2 Apr 2024 20:02:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A10B3409B3;
+	Tue,  2 Apr 2024 20:02:34 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3A3901BF369
+ for <buildroot@lists.busybox.net>; Tue,  2 Apr 2024 20:02:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F26A840648
+ by smtp1.osuosl.org (Postfix) with ESMTP id C13C281F57
  for <buildroot@lists.busybox.net>; Tue,  2 Apr 2024 20:02:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RazM05On6him for <buildroot@lists.busybox.net>;
- Tue,  2 Apr 2024 20:02:27 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0MfNDFiKf3OP for <buildroot@lists.busybox.net>;
+ Tue,  2 Apr 2024 20:02:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F1F34400C1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7D0481F49
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id F1F34400C1
+ by smtp1.osuosl.org (Postfix) with ESMTP id D7D0481F49
  for <buildroot@buildroot.org>; Tue,  2 Apr 2024 20:02:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EA8778462D; Tue,  2 Apr 2024 20:02:26 +0000 (UTC)
+ id D0BC78462B; Tue,  2 Apr 2024 20:02:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 2 Apr 2024 21:46:07 +0200
+Date: Tue, 2 Apr 2024 21:44:06 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e3ff479443d93a287fc718cf466545e5967173fe
-X-Git-Newrev: 79f7d71640061f65aedfa4f8845a6757e8b0f3fc
+X-Git-Oldrev: 6a518322b3dc70e1d589d20b87c44f5fdafa25c6
+X-Git-Newrev: 9689b075773edc837af9c33355f3ac34b35d5419
 X-Patchwork-Hint: ignore
-Message-Id: <20240402200226.EA8778462D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: add lvm2 runtime test
+Message-Id: <20240402200226.D0BC78462B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/tinycompress: bump to version
+ 1.2.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,207 +66,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=79f7d71640061f65aedfa4f8845a6757e8b0f3fc
+commit: https://git.buildroot.net/buildroot/commit/?id=9689b075773edc837af9c33355f3ac34b35d5419
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+For commit log, see:
+https://github.com/alsa-project/tinycompress/commits/v1.2.11/
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- DEVELOPERS                                         |   2 +
- support/testing/tests/package/test_lvm2.py         | 163 +++++++++++++++++++++
- .../tests/package/test_lvm2/linux-lvm2.fragment    |   2 +
- 3 files changed, 167 insertions(+)
+ package/tinycompress/tinycompress.hash | 2 +-
+ package/tinycompress/tinycompress.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 288a3ce0e6..6b38db0857 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1814,6 +1814,8 @@ F:	support/testing/tests/package/test_libgpgme.py
- F:	support/testing/tests/package/test_libjxl.py
- F:	support/testing/tests/package/test_lrzip.py
- F:	support/testing/tests/package/test_ltrace.py
-+F:	support/testing/tests/package/test_lvm2.py
-+F:	support/testing/tests/package/test_lvm2/
- F:	support/testing/tests/package/test_lzip.py
- F:	support/testing/tests/package/test_lsof.py
- F:	support/testing/tests/package/test_lz4.py
-diff --git a/support/testing/tests/package/test_lvm2.py b/support/testing/tests/package/test_lvm2.py
-new file mode 100644
-index 0000000000..bdbae7a4ec
---- /dev/null
-+++ b/support/testing/tests/package/test_lvm2.py
-@@ -0,0 +1,163 @@
-+import os
-+import subprocess
-+
-+import infra.basetest
-+
-+
-+class TestLvm2(infra.basetest.BRTest):
-+    # This test creates a lvm2 volume. A specific Kernel need to be
-+    # built with a config fragment enabling this support. This test
-+    # also uses resize2fs from e2fsprogs.
-+    kernel_fragment = \
-+        infra.filepath("tests/package/test_lvm2/linux-lvm2.fragment")
-+    config = \
-+        f"""
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.77"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-+        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{kernel_fragment}"
-+        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+        BR2_PACKAGE_E2FSPROGS=y
-+        BR2_PACKAGE_E2FSPROGS_RESIZE2FS=y
-+        BR2_PACKAGE_LVM2=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        BR2_TARGET_ROOTFS_CPIO_GZIP=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def get_free_disk_space(self, path):
-+        out, ret = self.emulator.run(f"df -k {path}")
-+        self.assertEqual(ret, 0)
-+        return int(out[1].split()[3])
-+
-+    def test_run(self):
-+        # Test configuration:
-+        storage_devs = ["/dev/vda", "/dev/vdb", "/dev/vdc"]
-+        storage_size = 16                       # Mega Bytes
-+        lvm_vg = "br_vg"                        # Volume Group name
-+        lvm_lv = "br_lv"                        # Logical Volume name
-+        lv_dev = f"/dev/{lvm_vg}/{lvm_lv}"      # Logical Volume dev name
-+        mnt_pt = "/mnt/lvm2-storage"
-+        data_file = f"{mnt_pt}/data.bin"
-+
-+        qemu_storage_opts = []
-+        for i in range(len(storage_devs)):
-+            disk_file = os.path.join(self.builddir, "images", f"disk{i}.img")
-+            self.emulator.logfile.write(f"Creating disk image: {disk_file}\n")
-+            self.emulator.logfile.flush()
-+            subprocess.check_call(
-+                ["dd", "if=/dev/zero", f"of={disk_file}",
-+                 "bs=1M", f"count={storage_size}"],
-+                stdout=self.emulator.logfile,
-+                stderr=self.emulator.logfile)
-+            opts = ["-drive", f"file={disk_file},if=virtio,format=raw"]
-+            qemu_storage_opts += opts
-+
-+        img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
-+        kern = os.path.join(self.builddir, "images", "Image")
-+        self.emulator.boot(arch="aarch64",
-+                           kernel=kern,
-+                           kernel_cmdline=["console=ttyAMA0"],
-+                           options=["-M", "virt", "-cpu", "cortex-a57", "-m", "256M",
-+                                    "-initrd", img] + qemu_storage_opts)
-+        self.emulator.login()
-+
-+        # Test the program can execute.
-+        self.assertRunOk("lvm version")
-+
-+        # We did not created any Physical Volume yet. We should NOT
-+        # see any of our storage devices in a pvscan.
-+        out, ret = self.emulator.run("pvscan")
-+        self.assertEqual(ret, 0)
-+        for dev in storage_devs:
-+            self.assertNotIn(dev, "\n".join(out))
-+
-+        # We initialize our Physical Volumes (PVs).
-+        pv_devs = " ".join(storage_devs)
-+        self.assertRunOk(f"pvcreate {pv_devs}")
-+
-+        # We run few diagnostic commands related to PVs.
-+        self.assertRunOk(f"pvck {pv_devs}")
-+        self.assertRunOk(f"pvdisplay {pv_devs}")
-+        self.assertRunOk("pvs")
-+
-+        # Now we initialized the PVs, we should see them in a pvscan.
-+        out, ret = self.emulator.run("pvscan")
-+        self.assertEqual(ret, 0)
-+        for dev in storage_devs:
-+            self.assertIn(dev, "\n".join(out))
-+
-+        # We create a Volume Group (VG) including two of our three
-+        # PVs.
-+        cmd = f"vgcreate {lvm_vg} {storage_devs[0]} {storage_devs[1]}"
-+        self.assertRunOk(cmd)
-+
-+        # We run few diagnostic commands related to VGs.
-+        self.assertRunOk(f"vgck {lvm_vg}")
-+        self.assertRunOk(f"vgdisplay {lvm_vg}")
-+        self.assertRunOk("vgscan")
-+        self.assertRunOk("vgs")
-+
-+        # We create a Logical Volume (LV) in our VG.
-+        self.assertRunOk(f"lvcreate -l 100%FREE -n {lvm_lv} {lvm_vg}")
-+
-+        # We check LVM created the LV device.
-+        self.assertRunOk(f"ls -al {lv_dev}")
-+
-+        # We run few diagnostic commands related to LVs.
-+        self.assertRunOk("lvscan")
-+        self.assertRunOk("lvs")
-+
-+        # We create a ext4 filesystem on our LV.
-+        self.assertRunOk(f"mkfs.ext4 {lv_dev}")
-+
-+        # We create a mount point directory and mount the device.
-+        self.assertRunOk(f"mkdir -p {mnt_pt}")
-+        self.assertRunOk(f"mount {lv_dev} {mnt_pt}")
-+
-+        # We create a data file in our new filesystem. Note: this file
-+        # is slightly larger than a single PV. This data file should
-+        # span over the two PVs in the VG.
-+        data_size = storage_size + 4
-+        cmd = f"dd if=/dev/urandom of={data_file} bs=1M count={data_size}"
-+        self.assertRunOk(cmd)
-+
-+        # We compute the hash of our data, and save it for later.
-+        hash_cmd = f"sha256sum {data_file}"
-+        out, ret = self.emulator.run(hash_cmd)
-+        self.assertEqual(ret, 0)
-+        data_sha256 = out[0]
-+
-+        # We compute the free space of the mount point.
-+        fs_free_space = self.get_free_disk_space(mnt_pt)
-+
-+        # We extend of VG with our third PV.
-+        self.assertRunOk(f"vgextend {lvm_vg} {storage_devs[2]}")
-+
-+        # We grow the LV to use all the space of the VG.
-+        self.assertRunOk(f"lvresize -l +100%FREE {lvm_vg}/{lvm_lv}")
-+
-+        # We resize the filesystem to use all the LV space.
-+        self.assertRunOk(f"resize2fs {lv_dev}")
-+
-+        # Now we grew the LV and resized the filesystem, we recompute
-+        # the free space and check we have more.
-+        fs2_free_space = self.get_free_disk_space(mnt_pt)
-+        self.assertGreater(fs2_free_space, fs_free_space)
-+
-+        # With all those on-the-fly operations on the mounted
-+        # filesystem, the data file should be intact. We should
-+        # recompute the same data checksum as before.
-+        out, ret = self.emulator.run(hash_cmd)
-+        self.assertEqual(ret, 0)
-+        self.assertEqual(out[0], data_sha256)
-+
-+        # Finally, we unmount the filesystem. It should not contain
-+        # any error.
-+        self.assertRunOk(f"umount {mnt_pt}")
-+        self.assertRunOk(f"e2fsck -f -n {lv_dev}")
-diff --git a/support/testing/tests/package/test_lvm2/linux-lvm2.fragment b/support/testing/tests/package/test_lvm2/linux-lvm2.fragment
-new file mode 100644
-index 0000000000..0fade167a3
---- /dev/null
-+++ b/support/testing/tests/package/test_lvm2/linux-lvm2.fragment
-@@ -0,0 +1,2 @@
-+CONFIG_MD=y
-+CONFIG_BLK_DEV_DM=y
+diff --git a/package/tinycompress/tinycompress.hash b/package/tinycompress/tinycompress.hash
+index 164f3a36c3..f86b75f346 100644
+--- a/package/tinycompress/tinycompress.hash
++++ b/package/tinycompress/tinycompress.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256  2f897e5112cd3bca6790b5cecfda6e0662c8bc5ee0fbab972b247a0cc620d66c  tinycompress-1.2.8.tar.bz2
++sha256  ebbe788c28328e7cca245aaf9194a5ad0dc91e9e0dc883c2cf9feb6d42c9f3fc  tinycompress-1.2.11.tar.bz2
+ 
+ # Locally calculated
+ sha256  912ea37a4435594a3b3c35f04efa4b5b7af2e68a05f5319c16c881711a31e4b7  COPYING
+diff --git a/package/tinycompress/tinycompress.mk b/package/tinycompress/tinycompress.mk
+index c9cfbb574b..fabd5884b2 100644
+--- a/package/tinycompress/tinycompress.mk
++++ b/package/tinycompress/tinycompress.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TINYCOMPRESS_VERSION = 1.2.8
++TINYCOMPRESS_VERSION = 1.2.11
+ TINYCOMPRESS_SOURCE = tinycompress-$(TINYCOMPRESS_VERSION).tar.bz2
+ TINYCOMPRESS_SITE = https://www.alsa-project.org/files/pub/tinycompress
+ TINYCOMPRESS_LICENSE = BSD-3-Clause and LGPL-2.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
