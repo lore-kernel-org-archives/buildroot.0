@@ -1,77 +1,97 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6283FCD1284
-	for <buildroot@archiver.kernel.org>; Tue,  2 Apr 2024 21:28:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F8CDC6FD1F
+	for <buildroot@archiver.kernel.org>; Tue,  2 Apr 2024 22:55:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 342F96058F;
-	Tue,  2 Apr 2024 21:28:39 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id haDeKM1Oiygc; Tue,  2 Apr 2024 21:28:38 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 34D02607A8
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 34D02607A8;
-	Tue,  2 Apr 2024 21:28:38 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 53A7A1BF295
- for <buildroot@lists.busybox.net>; Tue,  2 Apr 2024 21:28:36 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4D6E640570
- for <buildroot@lists.busybox.net>; Tue,  2 Apr 2024 21:28:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 221EB406FC;
+	Tue,  2 Apr 2024 22:55:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2b3pbTIhBehz for <buildroot@lists.busybox.net>;
- Tue,  2 Apr 2024 21:28:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E9DD940544
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E9DD940544
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E9DD940544
- for <buildroot@buildroot.org>; Tue,  2 Apr 2024 21:28:34 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 11B8513F81D;
- Tue,  2 Apr 2024 23:28:27 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 02 Apr 2024 23:28:26 +0200
-Date: Tue, 2 Apr 2024 23:28:26 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <Zgx4emXI7NgZPSBI@landeda>
-References: <20240401234013.3570820-1-james.hilliard1@gmail.com>
- <20240401234013.3570820-2-james.hilliard1@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240401234013.3570820-2-james.hilliard1@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1712093313;
- bh=M6A3V8/zUvbDgCCLjXc6ZEGmJ7iytGA+m93Fzpcv5sU=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=N90VVA/GZhmVYdGxFvjMmGFuR/Z2pZveJBDZkcJW+H6WOSo+BvlD95AoMUdX89XnC
- AEbxbV1xMDkRUW8WgVl1Cp3ezzlnziOjUzdgWXJOPZZrTgu0KNPdOB05G/x4+uPfH8
- GVXDwtivPdg9jaGYREfMhC+IF7WA61Lvu0z2XhcTryuAUAks+J4Jd6NMA5pcVMTH9e
- 4gZVf0Tkq3EECz9rrR8eQjV2DPpLrmxcTinlfUdPfujQES1pRxoJwy69eSDlbhpy2n
- OA8OfWy/WYQZVl7y18V+6/r++Q/cv2DGfSAbs7mCUud0Lkmza7xQ4ms0i3l5vi9B33
- WnXQqUJLpI1OA==
+ id tynHNv2z8oFD; Tue,  2 Apr 2024 22:55:01 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E8E8B408DE
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id E8E8B408DE;
+	Tue,  2 Apr 2024 22:55:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0D7DE1BF5DE
+ for <buildroot@lists.busybox.net>; Tue,  2 Apr 2024 22:54:58 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id EDDD3408DE
+ for <buildroot@lists.busybox.net>; Tue,  2 Apr 2024 22:54:57 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id V6iRmnpznp_6 for <buildroot@lists.busybox.net>;
+ Tue,  2 Apr 2024 22:54:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::632; helo=mail-pl1-x632.google.com;
+ envelope-from=bleemayer@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4CE22406FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4CE22406FC
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com
+ [IPv6:2607:f8b0:4864:20::632])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4CE22406FC
+ for <buildroot@buildroot.org>; Tue,  2 Apr 2024 22:54:56 +0000 (UTC)
+Received: by mail-pl1-x632.google.com with SMTP id
+ d9443c01a7336-1def3340682so49895165ad.1
+ for <buildroot@buildroot.org>; Tue, 02 Apr 2024 15:54:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1712098496; x=1712703296;
+ h=to:in-reply-to:references:message-id:date:subject:mime-version:from
+ :content-transfer-encoding:x-gm-message-state:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=1VWY6EWkkeZgqbvpsgcb+uXXHJ9HAgKSYDI1MS2MDr8=;
+ b=mHe1LSGUBsjW7Al6aoyvGlu4RDh2WX9Gm9xt2e8SxyrYuyoudjcOahNCW2Hfbg0Nmi
+ /AAt03ZU9FiWAPMXDqN4SDY1Euy0bh6LBczppYmSPK0sKmHJpF9LYo/pOWGja1NkIJD/
+ 99aan8COsA3CvzoDsaJz7qc7J3/TwdhryqaACG4KnH5XgBosr/SbM0WzAUm8ymwKnz6t
+ MNwzPhVULg0+aW1N6sKi3B0yomgkTUM4pa+0Wc7QRkKfMxE9tKQeo1EGs8lVgQp3KyAd
+ vIDPMV50TUKf/BHDIxP/+iXDZrzY9dLjJsKN9gcmRRY7tT1TmpefDMcPW+f+tt1OVJd9
+ jX8g==
+X-Gm-Message-State: AOJu0YwxoV4moWourIOndNXtWAmQwNkQoi4boNZ41WLYon7/8a8702DH
+ tX9vgG8uF/LySteQrpPNkC0gDkPsuijiHXxwFdZDS5QEv3nhxqydA0+zxnjr
+X-Google-Smtp-Source: AGHT+IEfJHs2eHaVEdw+WZen9kEu8GceAYMkuc71wq5E1eDqJgmo+IH4lJjkBwlnJpYaOAsgEjsrLw==
+X-Received: by 2002:a17:902:e543:b0:1e0:e8b7:1fa2 with SMTP id
+ n3-20020a170902e54300b001e0e8b71fa2mr18340390plf.21.1712098495853; 
+ Tue, 02 Apr 2024 15:54:55 -0700 (PDT)
+Received: from smtpclient.apple ([2804:38a:a32e:ea31:91f6:bea6:3c82:51b7])
+ by smtp.gmail.com with ESMTPSA id
+ f19-20020a170902e99300b001e27c7ecd24sm1828492plb.283.2024.04.02.15.54.54
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 02 Apr 2024 15:54:55 -0700 (PDT)
+From: Brian Mayer <bleemayer@gmail.com>
+Mime-Version: 1.0 (1.0)
+Date: Tue, 2 Apr 2024 19:54:53 -0300
+Message-Id: <429BA1D7-0EF2-4E96-99B6-1C1BE9F68BB5@gmail.com>
+References: <CAB3eKoDnuOTufkdsMMA2CWnq4=Z=CbZKo+qY-ULPw_houqU_CQ@mail.gmail.com>
+In-Reply-To: <CAB3eKoDnuOTufkdsMMA2CWnq4=Z=CbZKo+qY-ULPw_houqU_CQ@mail.gmail.com>
+To: buildroot@buildroot.org
+X-Mailer: iPhone Mail (19H384)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1712098496; x=1712703296; darn=buildroot.org;
+ h=to:in-reply-to:references:message-id:date:subject:mime-version:from
+ :content-transfer-encoding:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=1VWY6EWkkeZgqbvpsgcb+uXXHJ9HAgKSYDI1MS2MDr8=;
+ b=f/BcEmFyb21V7Hl1O2nBKqWbA8mjp3IFpPEVmBeavQj3ipAtG5dlLbY/SfkIg5hSEd
+ RPYvKniC2lTYIMWtxPFZEppWXtYyeWhTykdQ070bVG2RYQS1qVKlvMgryKBo/ydvO1/d
+ ++sLWGd6B2MUmH86Khz2+WaQnnH/RRnIDxnkZPflZvz6pacfHhY7dD948Gkp9EwLwAdQ
+ qfgUjME8EsSOft/xQBk57+bULYQ3B9umHAq9XjhWv57xJM3f/C5WhLgf4ZIYZPgIFud/
+ UB1WJ3Q77WZRKhrPZTvtEOGsFRL29ICZkT0zbtjjQwIVKVhfE4kUYFZKqiLz3LzesE99
+ 52Xw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=N90VVA/G
-Subject: Re: [Buildroot] [PATCH 2/2] package/systemd: fix build with glibc
- 2.39
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=f/BcEmFy
+Subject: Re: [Buildroot] [PATCH v2] package/sbase: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,93 +103,14 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Guillaume William Brs <guillaume.bressaix@gmail.com>,
- Norbert Lange <nolange79@gmail.com>, Sen Hastings <sen@hastings.org>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-James, All,
+My email from brian@myr.sh is being graylisted. So I'm not being able to contribute. Can someone help me debug this? There is no detailed response from your server.
 
-On 2024-04-01 17:40 -0600, James Hilliard spake thusly:
-> When glibc was bumped to version 2.39 in commit
-> b5680f53d60acf8ff6010082f873438a39bd5d97 it removed the deprecated
-> libcrypt support.
-> 
-> As glibc's libcrypt was providing systemd's libcrypt dependency this
-> broke any systemd build using glibc version 2.39.
-> 
-> To fix this add the libxcrypt dependency to systemd which is the
-> preferred way of providing libcrypt support in systemd as the glibc
-> variant is only used as a fallback due to being deprecated.
-> 
-> We should also have host-systemd depend on host-libxcrypt in case
-> the host system does not provide glibc with libcrypt support.
-> 
-> Fixes:
->  - http://autobuild.buildroot.net/results/36e/36efcfc76c015c9b4c955c13afa0f81a98b529f4
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/systemd/Config.in  | 1 +
->  package/systemd/systemd.mk | 2 ++
->  2 files changed, 3 insertions(+)
-> 
-> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-> index aa5143d484..a94e9b73b8 100644
-> --- a/package/systemd/Config.in
-> +++ b/package/systemd/Config.in
-> @@ -28,6 +28,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
->  	select BR2_PACKAGE_HAS_UDEV
->  	select BR2_PACKAGE_DBUS if !BR2_PACKAGE_DBUS_BROKER # runtime
->  	select BR2_PACKAGE_LIBCAP
-> +	select BR2_PACKAGE_LIBXCRYPT
->  	select BR2_PACKAGE_UTIL_LINUX
->  	select BR2_PACKAGE_UTIL_LINUX_LIBS
->  	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index c6b006d1fb..8987dc19a6 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -55,6 +55,7 @@ SYSTEMD_DEPENDENCIES = \
->  	host-python-jinja2 \
->  	kmod \
->  	libcap \
-> +	libxcrypt \
->  	util-linux-libs \
->  	$(TARGET_NLS_DEPENDENCIES)
->  
-> @@ -882,6 +883,7 @@ HOST_SYSTEMD_DEPENDENCIES = \
->  	host-util-linux \
->  	host-patchelf \
->  	host-libcap \
-> +	host-libxcrypt \
->  	host-gperf \
->  	host-python-jinja2
->  
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thanks
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
