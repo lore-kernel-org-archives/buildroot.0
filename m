@@ -4,48 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F19CCD1288
-	for <buildroot@archiver.kernel.org>; Wed,  3 Apr 2024 21:09:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DBD8CD1288
+	for <buildroot@archiver.kernel.org>; Wed,  3 Apr 2024 21:12:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D42BB418EE;
-	Wed,  3 Apr 2024 21:09:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 40A50417D4;
+	Wed,  3 Apr 2024 21:12:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DJ944gqFGZ1B; Wed,  3 Apr 2024 21:09:54 +0000 (UTC)
+ id gcmMoI7XyAnR; Wed,  3 Apr 2024 21:12:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 23C1C418E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C422641880
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 23C1C418E7;
-	Wed,  3 Apr 2024 21:09:54 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AFC091BF982
- for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 21:09:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C422641880;
+	Wed,  3 Apr 2024 21:12:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9998A1BF3D4
+ for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 21:12:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9613C4042B
- for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 21:09:40 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 83B3182268
+ for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 21:12:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9sA9bIKkqk1A for <buildroot@lists.busybox.net>;
- Wed,  3 Apr 2024 21:09:39 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7y5S4VzphhDf for <buildroot@lists.busybox.net>;
+ Wed,  3 Apr 2024 21:12:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 96C5040543
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 96C5040543
- for <buildroot@buildroot.org>; Wed,  3 Apr 2024 21:09:39 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 828C2848D4; Wed,  3 Apr 2024 21:09:39 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 3 Apr 2024 23:09:12 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a26701a0dbe2654f4a1e2a53c709ac12077e18f4
-X-Git-Newrev: 146498d13c487e8f43d6725e343eae4474147695
-X-Patchwork-Hint: ignore
-Message-Id: <20240403210939.828C2848D4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/bcc: new package
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 84E1D82267
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 84E1D82267
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 84E1D82267
+ for <buildroot@busybox.net>; Wed,  3 Apr 2024 21:12:07 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id B43F613F86A;
+ Wed,  3 Apr 2024 23:12:03 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Wed, 03 Apr 2024 23:12:03 +0200
+Date: Wed, 3 Apr 2024 23:12:03 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Francois Perrad <francois.perrad@gadz.org>
+Message-ID: <Zg3GI3q2nTcbBIPM@landeda>
+References: <20240403085424.1650628-1-francois.perrad@gadz.org>
+ <20240403085424.1650628-3-francois.perrad@gadz.org>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20240403085424.1650628-3-francois.perrad@gadz.org>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1712178725;
+ bh=vZtm3ZQoq+oF84gwQZvubUrOH5fPQ7HS1uHPq07OVB4=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=slzc+reUUUUZr0fjhWi//5AuyXkouUPQlsfh4w8BROGro883FvnXJplG9llyAEW9Y
+ qULPfr5GrXS7Lhkh9MJ1fqpXb7tLB2sW4VwfVCpnO23v7JGuclOWZ8KSwSf1UsgPxp
+ R5LeVJ910Q+Y3kJ8+CSSdfNHtCKfH52lbBdD7i5fuF5ekjYbNAO/B1ciH/Ra1W/dvn
+ HMUvfXQco/+7hmqPxM3IYJQxiW9R+/V3w5kXCBa2Jogtwj9NxPh/sL4UJmrY53VXaY
+ PrVcc+nTp3lqH0BtnUKe4BIrEWtpj6Gb1fdiQOqHpCl9/9hB50+683QK1HyXNhZoHu
+ NhzWWeWbtBnQw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=slzc+reU
+Subject: Re: [Buildroot] [PATCH 3/3] package/lua-lgdbm: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,201 +81,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@busybox.net
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=146498d13c487e8f43d6725e343eae4474147695
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-bcc is a front-end tool for eBPF:
-https://github.com/iovisor/bcc/blob/master/README.md
-eBPF is the most powerful Linux tracer, and bcc allows writing eBPF
-scripts in C and PYTHON3.
-
-bcc can help to troubleshoot issues quickly on embedded systems (as long
-as Linux kernel version >= 4.1).
-
-bcc can also make it easy to create observabilty tools, SDN
-configuration, ddos mitigation, intrusion detection and secure
-containers. More information is available at: https://ebpf.io/
-
-BCC can be tested on the target :
-$ mount -t debugfs none /sys/kernel/debug
-$ cd /usr/share/bcc/tools
-$ ./execsnoop
-
-Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Tested-by: Qais Yousef <qais.yousef@arm.com>
-Reviewed-by: Qais Yousef <qais.yousef@arm.com>
-Cc: Qais Yousef <qyousef@layalina.io>
-Signed-off-by: Mat Martineau <martineau@kernel.org>
-[Arnout: order dependencies alphabetically, fix Config.in comment]
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
----
- DEVELOPERS            |  2 ++
- package/Config.in     |  1 +
- package/bcc/Config.in | 45 ++++++++++++++++++++++++++++++++++++++++++++
- package/bcc/bcc.hash  |  3 +++
- package/bcc/bcc.mk    | 52 +++++++++++++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 103 insertions(+)
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 7dca6a441a..3a6b06bcbf 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1682,6 +1682,7 @@ N:	Joshua Henderson <joshua.henderson@microchip.com>
- F:	package/qt5/qt5wayland/
- 
- N:	Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-+F:	package/bcc/
- F:	package/python-aiofiles/
- F:	package/python-crayons/
- F:	package/python-cycler/
-@@ -2683,6 +2684,7 @@ F:	configs/qemu_*
- F:	configs/am574x_idk_defconfig
- F:	package/alure/
- F:	package/aubio/
-+F:	package/bcc/
- F:	package/binutils/
- F:	package/bullet/
- F:	package/clinfo/
-diff --git a/package/Config.in b/package/Config.in
-index b1237e5d6d..84c9aff51f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -87,6 +87,7 @@ endmenu
- 
- menu "Debugging, profiling and benchmark"
- 	source "package/babeltrace2/Config.in"
-+	source "package/bcc/Config.in"
- 	source "package/blktrace/Config.in"
- 	source "package/bonnie/Config.in"
- 	source "package/bpftool/Config.in"
-diff --git a/package/bcc/Config.in b/package/bcc/Config.in
-new file mode 100644
-index 0000000000..b91e0e5ee3
---- /dev/null
-+++ b/package/bcc/Config.in
-@@ -0,0 +1,45 @@
-+config BR2_PACKAGE_BCC
-+	bool "bcc"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	depends on BR2_USE_MMU # python3
-+	depends on BR2_TOOLCHAIN_USES_GLIBC # hardcode GNU tuple (x86_64-unknown-linux-gnu)
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # clang
-+	depends on BR2_INSTALL_LIBSTDCPP # clang
-+	depends on BR2_HOST_GCC_AT_LEAST_7 # clang
-+	depends on BR2_USE_WCHAR # clang, python3
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # clang, python3
-+	depends on !BR2_STATIC_LIBS # clang, python3
-+	select BR2_PACKAGE_CLANG
-+	select BR2_PACKAGE_ELFUTILS
-+	select BR2_PACKAGE_FLEX # needs FlexLexer.h
-+	select BR2_PACKAGE_HOST_ZIP
-+	select BR2_PACKAGE_LLVM
-+	select BR2_PACKAGE_LLVM_BPF
-+	select BR2_PACKAGE_PYTHON3
-+	help
-+	  BPF Compiler Collection (BCC)
-+
-+	  BCC is a toolkit for creating efficient kernel tracing and
-+	  manipulation programs, and includes several useful tools and
-+	  examples. It makes use of extended BPF (Berkeley Packet
-+	  Filters), formally known as eBPF, a new feature that was
-+	  first added to Linux 3.15. Much of what BCC uses requires
-+	  Linux 4.1 and above.
-+
-+	  Note: Before using bcc, you need either need to :
-+	  - For kernel_ver = [4.1, 5.2) : Copy kernel source code
-+	  to target folder /lib/module/<kernel_ver>/build.
-+	  - Or kernel_ver >= 5.2 : Compile kernel with CONFIG_IKHEADERS
-+	  and use generated headers under /sys/kernel/kheaders.tar.xz
-+	  to populate /lib/module/<kernel_ver>/build.
-+
-+	  That's because the clang frontend build eBPF code at runtime.
-+
-+	  https://github.com/iovisor/bcc
-+	  http://www.ebpf.io
-+
-+comment "bcc needs a glibc toolchain, C++, gcc >= 7, host gcc >= 7"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_INSTALL_LIBSTDCPP \
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || !BR2_HOST_GCC_AT_LEAST_7
-diff --git a/package/bcc/bcc.hash b/package/bcc/bcc.hash
-new file mode 100644
-index 0000000000..b37e125b1a
---- /dev/null
-+++ b/package/bcc/bcc.hash
-@@ -0,0 +1,3 @@
-+# locally calculated
-+sha256  321575fa94f3274040379dd2d4535217f45099f4240b58a4dfc171aa8c78402f  bcc-src-with-submodule.tar.gz
-+sha256  b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE.txt
-diff --git a/package/bcc/bcc.mk b/package/bcc/bcc.mk
-new file mode 100644
-index 0000000000..e496c4b344
---- /dev/null
-+++ b/package/bcc/bcc.mk
-@@ -0,0 +1,52 @@
-+################################################################################
-+#
-+# bcc
-+#
-+################################################################################
-+
-+BCC_VERSION = 0.29.1
-+BCC_SITE = https://github.com/iovisor/bcc/releases/download/v$(BCC_VERSION)
-+BCC_SOURCE = bcc-src-with-submodule.tar.gz
-+BCC_LICENSE = Apache-2.0
-+BCC_LICENSE_FILES = LICENSE.txt
-+BCC_INSTALL_STAGING = YES
-+BCC_DEPENDENCIES = \
-+	clang \
-+	elfutils \
-+	flex \
-+	host-bison \
-+	host-flex \
-+	host-python-setuptools \
-+	host-zip \
-+	llvm \
-+	python3
-+
-+# ENABLE_LLVM_SHARED=ON to use llvm.so - we only support shared libs
-+# Force REVISION otherwise bcc will use git describe to generate a version number.
-+BCC_CONF_OPTS = \
-+	-DENABLE_LLVM_SHARED:BOOL=ON \
-+	-DREVISION:STRING=$(BCC_VERSION) \
-+	-DENABLE_CLANG_JIT:BOOL=ON \
-+	-DENABLE_MAN:BOOL=OFF \
-+	-DENABLE_EXAMPLES:BOOL=OFF \
-+	-DPY_SKIP_DEB_LAYOUT:BOOL=ON
-+
-+define BCC_LINUX_CONFIG_FIXUPS
-+	# Enable kernel support for eBPF
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_BPF)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_BPF_SYSCALL)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_CLS_BPF)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_ACT_BPF)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_BPF_JIT)
-+	# [for Linux kernel versions 4.1 through 4.6]
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_HAVE_BPF_JIT)
-+	# [for Linux kernel versions 4.7 and later]
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_HAVE_EBPF_JIT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_BPF_EVENTS)
-+	# [for Linux kernel versions 5.2 and later]
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IKHEADERS)
-+	# bcc needs debugfs at runtime
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_DEBUG_FS)
-+endef
-+
-+$(eval $(cmake-package))
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+RnJhw6dvaXMsIEFsbAoKT24gMjAyNC0wNC0wMyAxMDo1NCArMDIwMCwgRnJhbmNvaXMgUGVycmFk
+IHNwYWtlIHRodXNseToKPiBTaWduZWQtb2ZmLWJ5OiBGcmFuY29pcyBQZXJyYWQgPGZyYW5jb2lz
+LnBlcnJhZEBnYWR6Lm9yZz4KPiAtLS0KWy0tU05JUC0tXQo+IGRpZmYgLS1naXQgYS9wYWNrYWdl
+L2x1YS1sZ2RibS9Db25maWcuaW4gYi9wYWNrYWdlL2x1YS1sZ2RibS9Db25maWcuaW4KPiBuZXcg
+ZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAuLmFjNWM2NGNjNzkKPiAtLS0gL2Rl
+di9udWxsCj4gKysrIGIvcGFja2FnZS9sdWEtbGdkYm0vQ29uZmlnLmluCj4gQEAgLTAsMCArMSwx
+MiBAQAo+ICtjb25maWcgQlIyX1BBQ0tBR0VfTFVBX0xHREJNCj4gKwlib29sICJsdWEtbGdkYm0i
+Cj4gKwlkZXBlbmRzIG9uIEJSMl9QQUNLQUdFX0xVQV81XzMgfHwgQlIyX1BBQ0tBR0VfTFVBXzVf
+NAo+ICsJc2VsZWN0IEJSMl9QQUNLQUdFX0dEQk0KCllvdSBuZWVkIHRvIHByb3BhZ2F0ZSB0aGUg
+ZGVwZW5kZW5jaWVzIG9mIGdkYm0gaGVyZTogTU1VIGFuZCBXQ0hBUi4KCj4gbmV3IGZpbGUgbW9k
+ZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwMDAwLi5iMjE1NjVmYjZlCj4gLS0tIC9kZXYvbnVsbAo+
+ICsrKyBiL3N1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfbHVhX2xnZGJtLnB5Cj4g
+QEAgLTAsMCArMSwxNCBAQAo+ICtmcm9tIHRlc3RzLnBhY2thZ2UudGVzdF9sdWEgaW1wb3J0IFRl
+c3RMdWFCYXNlCj4gKwo+ICsKPiArY2xhc3MgVGVzdEx1YUxnZGJtKFRlc3RMdWFCYXNlKToKPiAr
+ICAgIGNvbmZpZyA9IFRlc3RMdWFCYXNlLmNvbmZpZyArIFwKPiArICAgICAgICAiIiIKPiArICAg
+ICAgICBCUjJfUEFDS0FHRV9MVUE9eQo+ICsgICAgICAgIEJSMl9QQUNLQUdFX0xVQV9MR0RCTT15
+Cj4gKyAgICAgICAgIiIiCj4gKwo+ICsgICAgZGVmIHRlc3RfcnVuKHNlbGYpOgo+ICsgICAgICAg
+IHNlbGYubG9naW4oKQo+ICsgICAgICAgIHNlbGYubW9kdWxlX3Rlc3QoImdkYm0iKQo+ICsKClJ1
+bnRpbWUgdGVzdCwgd2VlISA6LSkKCkJ1dDoKCiAgICAkIC4vdXRpbHMvZG9ja2VyLXJ1biBtYWtl
+IGNoZWNrLXBhY2thZ2UKICAgIHN1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfbHVh
+X2xnZGJtLnB5OjA6IHJ1biAnZmxha2U4JyBhbmQgZml4IHRoZSB3YXJuaW5ncwoKICAgICQgLi91
+dGlscy9kb2NrZXItcnVuIHB5dGhvbjMgLW0gZmxha2U4IHN1cHBvcnQvdGVzdGluZy90ZXN0cy9w
+YWNrYWdlL3Rlc3RfbHVhX2xnZGJtLnB5CiAgICBzdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2Fn
+ZS90ZXN0X2x1YV9sZ2RibS5weToxNDoxOiBXMzkxIGJsYW5rIGxpbmUgYXQgZW5kIG9mIGZpbGUK
+CkFwcGxpZWQgdG8gbWFzdGVyLCB3aXRoIHRoZSBnZGJtIGRlcGVuZGVuY2llcyBwcm9wYWdhdGVk
+IGFuZCB0aGUKY2hlY2stcGFja2FnZS9mbGFrZTggaXNzdWUgZml4ZWQsIHRoYW5rcyEKClJlZ2Fy
+ZHMsCllhbm4gRS4gTU9SSU4uCgo+IC0tIAo+IDIuMzkuMgo+IAo+IF9fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+
+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21h
+aWxtYW4vbGlzdGluZm8vYnVpbGRyb290CgotLSAKLi0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0t
+LS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4KfCAg
+WWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9OIHwg
+RXJpY3MnIGNvbnNwaXJhY3k6IHwKfCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWdu
+ZXIgfCBcIC8gQ0FNUEFJR04gICAgIHwgIF9fXyAgICAgICAgICAgICAgIHwKfCArMzMgNTYxIDA5
+OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAgQUdBSU5TVCAgICAgIHwgIFxlLyAgVGhl
+cmUgaXMgbm8gIHwKfCBodHRwOi8veW1vcmluLmlzLWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAvIFwg
+SFRNTCBNQUlMICAgIHwgICB2ICAgY29uc3BpcmFjeS4gIHwKJy0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0t
+LScKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRy
+b290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1
+aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
