@@ -4,52 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58865CD128A
-	for <buildroot@archiver.kernel.org>; Wed,  3 Apr 2024 21:18:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE85BCD1288
+	for <buildroot@archiver.kernel.org>; Wed,  3 Apr 2024 21:25:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 186F6418B7;
-	Wed,  3 Apr 2024 21:18:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 58F1D41800;
+	Wed,  3 Apr 2024 21:25:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mdFoBCmdXgOz; Wed,  3 Apr 2024 21:18:11 +0000 (UTC)
+ id MyGaTL8BAYnF; Wed,  3 Apr 2024 21:25:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8CA5F41899
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CFD0141805
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8CA5F41899;
-	Wed,  3 Apr 2024 21:18:11 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 149FD1BF3D4
- for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 21:18:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CFD0141805;
+	Wed,  3 Apr 2024 21:25:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 827711BF3D4
+ for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 21:25:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0D77040543
- for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 21:18:10 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7C87682214
+ for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 21:25:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fJpPmYc5Y18L for <buildroot@lists.busybox.net>;
- Wed,  3 Apr 2024 21:18:09 +0000 (UTC)
-Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=162.248.234.2;
- helo=mail.xes-mad.com; envelope-from=vfazio@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org CF1614042B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CF1614042B
-Received: from mail.xes-mad.com (mail.xes-mad.com [162.248.234.2])
- by smtp2.osuosl.org (Postfix) with ESMTPS id CF1614042B
- for <buildroot@buildroot.org>; Wed,  3 Apr 2024 21:18:08 +0000 (UTC)
-Received: from vfazio4.xes-mad.com (vfazio4.xes-mad.com [10.52.19.201])
- by mail.xes-mad.com (Postfix) with ESMTP id 8ED3820283;
- Wed,  3 Apr 2024 16:18:07 -0500 (CDT)
-From: Vincent Fazio <vfazio@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed,  3 Apr 2024 16:18:05 -0500
-Message-Id: <20240403211805.3100506-1-vfazio@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id To1jULNDFoft for <buildroot@lists.busybox.net>;
+ Wed,  3 Apr 2024 21:25:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 49500821F8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 49500821F8
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 49500821F8
+ for <buildroot@busybox.net>; Wed,  3 Apr 2024 21:25:51 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 1CE6713F88E;
+ Wed,  3 Apr 2024 23:25:46 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Wed, 03 Apr 2024 23:25:45 +0200
+Date: Wed, 3 Apr 2024 23:25:45 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Emile Cormier <emile.cormier.jr@gmail.com>
+Message-ID: <Zg3JWXYjMjM1jNjQ@landeda>
+References: <20240403085424.1650628-1-francois.perrad@gadz.org>
+ <Zg3Ct67Am5lo_rh-@landeda>
+ <CAM70yxB0ApbHut9Bc=uKyY96zX+yvuoA2wUCbf-xBtE6UQ_N=g@mail.gmail.com>
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=fail (p=none dis=none)
- header.from=gmail.com
-Subject: [Buildroot] [PATCH 1/1] package/python3: fix cross builds when host
- and target use the same SOABI
+Content-Disposition: inline
+In-Reply-To: <CAM70yxB0ApbHut9Bc=uKyY96zX+yvuoA2wUCbf-xBtE6UQ_N=g@mail.gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1712179549;
+ bh=59Kl6f/lBIj9uN6Tqr16ykUncb/Z3ASdiwRB6rVfQYI=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=daXC2cFrKdU1XqESwxFRPc9ZVdTbr1KZF9h9grUogRroh+xaGXhl4UaMxju+geQh/
+ GO0NsuSR7w/rMGtuhMNVMQPfKNW2Gzk4PkO+mZjqbriSAmFOyibyh026Rbp9cCOAY6
+ 5fYwF04SGRGDhSWCjrwSYIaNU9UYXKwiKqL/SoUmc8C1uZS5tDn9wqure1iLarMmqw
+ JSBX0KrdnTIteJ6aTwsnyU4xVQNnmS7/MjuXM5AvO7NmzFspBb/lITuXIOsuz80GF/
+ I6i6acch6mFZR5o6vGwQjb4h8GRzOmksUBIhBmvBr1ReeMD933aGtHpuderh+C0K3Y
+ /0VtPcEP53i1A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=daXC2cFr
+Subject: Re: [Buildroot] [PATCH 1/3] package/lmdb: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,188 +82,122 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Vincent Fazio <vfazio@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@busybox.net, i Mauro Condarelli <mc5686@mclink.it>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-When python performs a cross compile, it uses a host interpreter to run
-steps on behalf of the foreign architecture to finalize the build.
-
-When performing these steps, foreign modules may be loaded if the SOABI
-matches that of the host. This can lead to issues if the modules are
-linked against a libc not available on the host or if the binaries
-include instructions unsupported by the host.
-
-For now, patch the foreign libraries out of PYTHONPATH and explicitly
-define the path to sysconfigdata so builds can complete without error.
-
-This method currently passes all upstream CI pipelines [0] and should
-also work (with some modifications) for the migration to 3.12 [1].
-
-Fixes: http://autobuild.buildroot.net/results/c854080e003e9a7d525325073190b472a8f982aa/
-[0]: https://github.com/python/cpython/pull/116294
-[1]: https://lists.buildroot.org/pipermail/buildroot/2024-February/685369.html
-
-Signed-off-by: Vincent Fazio <vfazio@gmail.com>
----
- ...oss-compiles-when-host-and-target-us.patch | 140 ++++++++++++++++++
- 1 file changed, 140 insertions(+)
- create mode 100644 package/python3/0032-gh-115382-Fix-cross-compiles-when-host-and-target-us.patch
-
-diff --git a/package/python3/0032-gh-115382-Fix-cross-compiles-when-host-and-target-us.patch b/package/python3/0032-gh-115382-Fix-cross-compiles-when-host-and-target-us.patch
-new file mode 100644
-index 0000000000..4d5afeb3cb
---- /dev/null
-+++ b/package/python3/0032-gh-115382-Fix-cross-compiles-when-host-and-target-us.patch
-@@ -0,0 +1,140 @@
-+From 8d8cc9087fd44c097775ca0a9ebb6c877605baec Mon Sep 17 00:00:00 2001
-+From: Vincent Fazio <5265893+vfazio@users.noreply.github.com>
-+Date: Wed, 28 Feb 2024 13:55:04 -0600
-+Subject: [PATCH] gh-115382: Fix cross compiles when host and target use same
-+ SOABI
-+
-+Previously, when a build was configured to use a host interpreter via
-+--with-build-python, the PYTHON_FOR_BUILD config value included a path
-+in PYTHONPATH that pointed to the target's built external modules.
-+
-+For "normal" foreign architecture cross compiles, when loading compiled
-+external libraries, the target libraries were processed first due to
-+their precedence in sys.path. These libraries were then ruled out due to
-+a mismatch in the SOABI so the import mechanism continued searching
-+until it found the host's native modules.
-+
-+However, if the host interpreter and the target python were on the same
-+version + SOABI combination, the host interpreter would attempt to load
-+the target's external modules due to their precedence in sys.path.
-+
-+Despite the "match", the target build may have been linked against a
-+different libc or may include unsupported instructions so loading or
-+executing the target's external modules can lead to crashes.
-+
-+Now, the path to the target's external modules is no longer defined in
-+PYTHONPATH to prevent accidentally loading these foreign modules.
-+
-+One caveat is that during certain build stages, the target's sysconfig
-+module requires higher precedence than the host's version in order to
-+accurately query the target build's configuration.
-+
-+This worked previously due to the target's sysconfig data module having
-+precedence over the host's (see above). In order to keep this desired
-+behavior, a new environment variable, _PYTHON_SYSCONFIGDATA_PATH, has
-+been defined so sysconfig can search this directory for the target's
-+sysconfig data.
-+
-+Signed-off-by: Vincent Fazio <vfazio@gmail.com>
-+Upstream-issue: https://github.com/python/cpython/issues/115382
-+Upstream: https://github.com/python/cpython/pull/116294
-+---
-+ Lib/sysconfig.py             | 15 ++++++++++++++-
-+ Lib/test/libregrtest/main.py |  1 +
-+ Lib/test/pythoninfo.py       |  1 +
-+ Tools/scripts/run_tests.py   |  1 +
-+ configure                    |  2 +-
-+ configure.ac                 |  2 +-
-+ 6 files changed, 19 insertions(+), 3 deletions(-)
-+
-+diff --git a/Lib/sysconfig.py b/Lib/sysconfig.py
-+index 6328ec41af..744f715fe2 100644
-+--- a/Lib/sysconfig.py
-++++ b/Lib/sysconfig.py
-+@@ -535,7 +535,20 @@ def _init_posix(vars):
-+     """Initialize the module as appropriate for POSIX systems."""
-+     # _sysconfigdata is generated at build time, see _generate_posix_vars()
-+     name = _get_sysconfigdata_name()
-+-    _temp = __import__(name, globals(), locals(), ['build_time_vars'], 0)
-++
-++    # For cross builds, the path to the target's sysconfigdata must be specified
-++    # so it can be imported. It cannot be in PYTHONPATH, as foreign modules in
-++    # sys.path can cause crashes when loaded by the host interpreter.
-++    # Rely on truthiness as a valueless env variable is still an empty string.
-++    # See OS X note in _generate_posix_vars re _sysconfigdata.
-++    if (path := os.environ.get('_PYTHON_SYSCONFIGDATA_PATH')):
-++        from importlib.machinery import FileFinder, SourceFileLoader, SOURCE_SUFFIXES
-++        from importlib.util import module_from_spec
-++        spec = FileFinder(path, (SourceFileLoader, SOURCE_SUFFIXES)).find_spec(name)
-++        _temp = module_from_spec(spec)
-++        spec.loader.exec_module(_temp)
-++    else:
-++        _temp = __import__(name, globals(), locals(), ['build_time_vars'], 0)
-+     build_time_vars = _temp.build_time_vars
-+     vars.update(build_time_vars)
-+ 
-+diff --git a/Lib/test/libregrtest/main.py b/Lib/test/libregrtest/main.py
-+index a9725fa967..121e2e7393 100644
-+--- a/Lib/test/libregrtest/main.py
-++++ b/Lib/test/libregrtest/main.py
-+@@ -519,6 +519,7 @@ def _add_cross_compile_opts(self, regrtest_opts):
-+                 '_PYTHON_PROJECT_BASE',
-+                 '_PYTHON_HOST_PLATFORM',
-+                 '_PYTHON_SYSCONFIGDATA_NAME',
-++                "_PYTHON_SYSCONFIGDATA_PATH",
-+                 'PYTHONPATH'
-+             }
-+             old_environ = os.environ
-+diff --git a/Lib/test/pythoninfo.py b/Lib/test/pythoninfo.py
-+index 74ebb5e5b8..fa7fbca34e 100644
-+--- a/Lib/test/pythoninfo.py
-++++ b/Lib/test/pythoninfo.py
-+@@ -326,6 +326,7 @@ def format_groups(groups):
-+         "_PYTHON_HOST_PLATFORM",
-+         "_PYTHON_PROJECT_BASE",
-+         "_PYTHON_SYSCONFIGDATA_NAME",
-++        "_PYTHON_SYSCONFIGDATA_PATH",
-+         "__PYVENV_LAUNCHER__",
-+ 
-+         # Sanitizer options
-+diff --git a/Tools/scripts/run_tests.py b/Tools/scripts/run_tests.py
-+index 445a34ae3e..4077a83424 100644
-+--- a/Tools/scripts/run_tests.py
-++++ b/Tools/scripts/run_tests.py
-+@@ -42,6 +42,7 @@ def main(regrtest_args):
-+             '_PYTHON_PROJECT_BASE',
-+             '_PYTHON_HOST_PLATFORM',
-+             '_PYTHON_SYSCONFIGDATA_NAME',
-++            "_PYTHON_SYSCONFIGDATA_PATH",
-+             'PYTHONPATH'
-+         }
-+         environ = {
-+diff --git a/configure b/configure
-+index a1ad0ae251..0657162d1a 100755
-+--- a/configure
-++++ b/configure
-+@@ -3262,7 +3262,7 @@ fi
-+     fi
-+         ac_cv_prog_PYTHON_FOR_REGEN=$with_build_python
-+     PYTHON_FOR_FREEZE="$with_build_python"
-+-    PYTHON_FOR_BUILD='_PYTHON_PROJECT_BASE=$(abs_builddir) _PYTHON_HOST_PLATFORM=$(_PYTHON_HOST_PLATFORM) PYTHONPATH=$(shell test -f pybuilddir.txt && echo $(abs_builddir)/`cat pybuilddir.txt`:)$(srcdir)/Lib _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata_$(ABIFLAGS)_$(MACHDEP)_$(MULTIARCH) '$with_build_python
-++    PYTHON_FOR_BUILD='_PYTHON_PROJECT_BASE=$(abs_builddir) _PYTHON_HOST_PLATFORM=$(_PYTHON_HOST_PLATFORM) PYTHONPATH=$(srcdir)/Lib _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata_$(ABIFLAGS)_$(MACHDEP)_$(MULTIARCH) _PYTHON_SYSCONFIGDATA_PATH=$(shell test -f pybuilddir.txt && echo $(abs_builddir)/`cat pybuilddir.txt`) '$with_build_python
-+     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $with_build_python" >&5
-+ $as_echo "$with_build_python" >&6; }
-+ 
-+diff --git a/configure.ac b/configure.ac
-+index e5fb8bd99e..d444f5ec09 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -162,7 +162,7 @@ AC_ARG_WITH(
-+     dnl Build Python interpreter is used for regeneration and freezing.
-+     ac_cv_prog_PYTHON_FOR_REGEN=$with_build_python
-+     PYTHON_FOR_FREEZE="$with_build_python"
-+-    PYTHON_FOR_BUILD='_PYTHON_PROJECT_BASE=$(abs_builddir) _PYTHON_HOST_PLATFORM=$(_PYTHON_HOST_PLATFORM) PYTHONPATH=$(shell test -f pybuilddir.txt && echo $(abs_builddir)/`cat pybuilddir.txt`:)$(srcdir)/Lib _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata_$(ABIFLAGS)_$(MACHDEP)_$(MULTIARCH) '$with_build_python
-++    PYTHON_FOR_BUILD='_PYTHON_PROJECT_BASE=$(abs_builddir) _PYTHON_HOST_PLATFORM=$(_PYTHON_HOST_PLATFORM) PYTHONPATH=$(srcdir)/Lib _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata_$(ABIFLAGS)_$(MACHDEP)_$(MULTIARCH) _PYTHON_SYSCONFIGDATA_PATH=$(shell test -f pybuilddir.txt && echo $(abs_builddir)/`cat pybuilddir.txt`) '$with_build_python
-+     AC_MSG_RESULT([$with_build_python])
-+   ], [
-+     AS_VAR_IF([cross_compiling], [yes],
-+-- 
-+2.34.1
-+
--- 
-2.34.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+RW1pbGUsIEFsbCwKCk9uIDIwMjQtMDQtMDMgMTg6MTcgLTAzMDAsIEVtaWxlIENvcm1pZXIgc3Bh
+a2UgdGh1c2x5Ogo+IE15IG9ubHkgaW50ZXJlc3QgaW4gcHl0aG9uLXpsbWRiIHdhcyB0byBiZSBh
+YmxlIHRvIGJ1aWxkIGEgbW9yZSByZWNlbnQgdmVyc2lvbgo+IG9mIENyb3NzYmFyLCBhbmQgSSBk
+aWRuJ3QgZXZlbiB1c2UgdGhhdCBkYXRhYmFzZSBjb21wb25lbnQgb2YgQ3Jvc3NiYXIgdGhhdAo+
+IGRlcGVuZGVkIG9uIFpMTURCLgpbLS1TTklQLS1dCj4gVW5sZXNzIHNvbWVvbmUgaXMgc3RpbGwg
+YWN0aXZlbHkgdXNpbmcgaXQsIHlvdSBtYXkgd2FudCB0byBjb25zaWRlciBkcm9wcGluZwo+IENy
+b3NzYmFyIHN1cHBvcnQgaW4gQnVpbGRyb290IGJlY2F1c2UgdGhlIGFtb3VudCBvZiB3b3JrIG5l
+ZWRlZCB0byBiZSBhYmxlIHRvCj4gYnVpbGQgdGhlIGxhdGVzdCB2ZXJzaW9uIGluIEJ1aWxkcm9v
+dCBpcyBtb251bWVudGFsLgoKV2UndmUgYWxyZWFkeSByZW1vdmVkIGNyb3NzYmFyIGEgbGl0dGxl
+IHdoaWxlIGFnbywgYXMgaXQgaXMgbm90CnB5dGhvbi0zLjEyIGNvbXBhdGlibGUsIGFuZCBpdCBk
+aWQgbm90IHNlZW0gdG8gYmUgb24gdGhlIHJhZGFyCnVwc3RyZWFtLi4uCgpBcyBmb3IgcHl0aG9u
+LXpsbWRiLCB1bmxlc3MgaXQgZ2V0cyBicm9rZW4sIHRoZXJlIGlzIG5vIHJlYXNvbiB0byBkcm9w
+Cml0IGZvciBub3cuCgpUaGFua3MgZm9yIHlvdXIgcXVpY2sgcmVwbHkgcHJvdmlkaW5nIHNvbWUg
+dXNlZnVsIGNvbnRleHQhIDotKQoKUmVnYXJkcywKWWFubiBFLiBNT1JJTi4KCj4gQ2hlZXJzLAo+
+IEVtaWxlIENvcm1pZXIKPiAKPiBPbiBXZWQsIEFwciAzLCAyMDI0IGF0IDU6NTfigK9QTSBZYW5u
+IEUuIE1PUklOIDxbMV15YW5uLm1vcmluLjE5OThAZnJlZS5mcj4KPiB3cm90ZToKPiAKPiAgICAg
+RnJhbsOnb2lzLCBBbGwsCj4gCj4gICAgICtNYXVybyBmb3IgcHlob24tbG1kYgo+ICAgICArRW1p
+bGUgZm9yIHB5dGhvbi16bG1kYgo+IAo+ICAgICBPbiAyMDI0LTA0LTAzIDEwOjU0ICswMjAwLCBG
+cmFuY29pcyBQZXJyYWQgc3Bha2UgdGh1c2x5Ogo+ICAgICA+IFNpZ25lZC1vZmYtYnk6IEZyYW5j
+b2lzIFBlcnJhZCA8WzJdZnJhbmNvaXMucGVycmFkQGdhZHoub3JnPgo+ICAgICBbLS1TTklQLS1d
+Cj4gICAgID4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvbG1kYi9Db25maWcuaW4gYi9wYWNrYWdlL2xt
+ZGIvQ29uZmlnLmluCj4gICAgID4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiAgICAgPiBpbmRleCAw
+MDAwMDAwMDAwLi5mNGFlOWYzMTAzCj4gICAgID4gLS0tIC9kZXYvbnVsbAo+ICAgICA+ICsrKyBi
+L3BhY2thZ2UvbG1kYi9Db25maWcuaW4KPiAgICAgPiBAQCAtMCwwICsxLDEzIEBACj4gICAgID4g
+K2NvbmZpZyBCUjJfUEFDS0FHRV9MTURCCj4gICAgID4gK8KgIMKgIMKgYm9vbCAibG1kYiIKPiAg
+ICAgPiArwqAgwqAgwqBkZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFMKPiAgICAg
+PiArwqAgwqAgwqBoZWxwCj4gICAgID4gK8KgIMKgIMKgIMKgT3BlbkxEQVAgTGlnaHRuaW5nIE1l
+bW9yeS1NYXBwZWQgRGF0YWJhc2UKPiAgICAgPiArCj4gICAgID4gK8KgIMKgIMKgIMKgTE1EQiBp
+cyBjb21wYWN0LCBmYXN0LCBwb3dlcmZ1bCwgYW5kIHJvYnVzdCBhbmQgaW1wbGVtZW50cwo+ICAg
+ICA+ICvCoCDCoCDCoCDCoGEgc2ltcGxpZmllZCB2YXJpYW50IG9mIHRoZSBCZXJrZWxleURCIChC
+REIpIEFQSS4KPiAgICAgPiArCj4gICAgID4gK8KgIMKgIMKgIMKgWzNdaHR0cHM6Ly9zeW1hcy5j
+b20vbG1kYi8KPiAgICAgPiArCj4gICAgID4gK2NvbW1lbnQgImxtZGIgbmVlZHMgYSB0b29sY2hh
+aW4gdy8gdGhyZWFkcyIKPiAgICAgPiArwqAgwqAgwqBkZXBlbmRzIG9uICFCUjJfVE9PTENIQUlO
+X0hBU19USFJFQURTCj4gCj4gICAgIE1hdXJvLCBFbWlsZTogcHl0aG9uLWxtZGIgYnVuZGxlcyBh
+IGNvcHkgb2YgbG1kYiwgYnV0IGl0IGlzIHBvc3NpYmxlIHRvCj4gICAgIGNvbmZpZ3VyZSBpdCB0
+byB1c2UgdGhlIHN5c3RlbS1wcm92aWRlZCBsaWJyYXJ5IGluc3RlYWQgWzBdLiBEbyB5b3Uga25v
+dwo+ICAgICBpZiB0aGVyZSB3b3VsZCBiZSBhZHZlcnNlIGVmZmVjdHMgdG8gZG8gc28gaW4gQnVp
+bGRyb290PyBJbmRlZWQsIHdlCj4gICAgIHByZWZlciB0byBjb25maWd1cmUgcGFja2FnZXMgdG8g
+dXNlIHN5c3RlbSBsaWJyYXJpZXMgcmF0aGVyIHRoYW4gdXNlCj4gICAgIHRoZXJlIGJ1bmRsZWQg
+Y29weSB3aGVuZXZlciBwb3NzaWJsZS4uLgo+IAo+ICAgICBbMF0gWzRdaHR0cHM6Ly9sbWRiLnJl
+YWR0aGVkb2NzLmlvL2VuL3JlbGVhc2UvI2luc3RhbGxhdGlvbi11bml4Cj4gCj4gICAgIEkgaGF2
+ZW4ndCBsb29rZWQgYXQgcHl0aG9uLXpsbWRiLCB0aG91Z2guLi4KPiAKPiAgICAgWy0tU05JUC0t
+XQo+ICAgICA+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2xtZGIvWzVdbG1kYi5tayBiL3BhY2thZ2Uv
+bG1kYi9bNl1sbWRiLm1rCj4gICAgID4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiAgICAgPiBpbmRl
+eCAwMDAwMDAwMDAwLi41ZTJhZDJkMDVhCj4gICAgID4gLS0tIC9kZXYvbnVsbAo+ICAgICA+ICsr
+KyBiL3BhY2thZ2UvbG1kYi9bN11sbWRiLm1rCj4gICAgID4gQEAgLTAsMCArMSwzNSBAQAo+ICAg
+ICA+ICsjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMKPiAgICAgIyMjIyMjIyMKPiAgICAgPiArIwo+ICAgICA+ICsj
+IGxtZGIKPiAgICAgPiArIwo+ICAgICA+ICsjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKPiAgICAgIyMjIyMjIyMK
+PiAgICAgPiArCj4gICAgID4gK0xNREJfVkVSU0lPTiA9IDAuOS4zMQo+ICAgICA+ICtMTURCX1NJ
+VEUgPSAkKGNhbGwgZ2l0aHViLExNREIsbG1kYixMTURCXyQoTE1EQl9WRVJTSU9OKSkKPiAgICAg
+PiArTE1EQl9MSUNFTlNFID0gT3BlbkxEQVAgUHVibGljIExpY2Vuc2UKPiAKPiAgICAgSSB0aGlu
+ayB3ZSB3YW50IHRvIHVzZSB0aGUgU1BEWCBzaG9ydCB0YWcgaGVyZTogT0xEQVAtMi44LiBJbmNp
+ZGVudGFsbHksCj4gICAgIHRoaXMgaXMgYWxzbyB3aGF0IGlzIGFscmVhZHkgdXNlZCBmb3IgcHl0
+aG9uLWxtZGIuCj4gCj4gICAgID4gK0xNREJfTElDRU5TRV9GSUxFUyA9IGxpYnJhcmllcy9saWJs
+bWRiL0xJQ0VOU0UKPiAgICAgPiArTE1EQl9JTlNUQUxMX1NUQUdJTkcgPSBZRVMKPiAgICAgPiAr
+Cj4gICAgID4gK2RlZmluZSBMTURCX0JVSUxEX0NNRFMKPiAgICAgPiArwqAgwqAgwqAkKFRBUkdF
+VF9NQUtFX0VOVikgJChNQUtFKSAtQyAkKEBEKS9saWJyYXJpZXMvbGlibG1kYiBcCj4gICAgID4g
+K8KgIMKgIMKgIMKgIMKgIMKgIMKgQ0M9IiQoVEFSR0VUX0NDKSIgXAo+ICAgICA+ICvCoCDCoCDC
+oCDCoCDCoCDCoCDCoFhDRkxBR1M9IiQoVEFSR0VUX0NGTEFHUykiIFwKPiAgICAgPiArwqAgwqAg
+wqAgwqAgwqAgwqAgwqBBUj0iJChUQVJHRVRfQ1JPU1MpYXIiIFwKPiAKPiAgICAgV2h5IG5vdCB1
+c2UgJChUQVJHRVRfQ09ORklHVVJFX09QVFMpIGFuZCBqdXN0IGFkZCB0aGUgc3BlY2lhbCBYQ0ZM
+QUdTPwo+IAo+ICAgICA+ICvCoCDCoCDCoCDCoCDCoCDCoCDCoGFsbAo+IAo+ICAgICAnYWxsJyBp
+cyB1c3VhbGx5IHRoZSBkZWZhdWx0IHRhcmdldCwgZm9yIGJlaW5nIHRoZSBmaXJzdCBpbiB0aGUK
+PiAgICAgTWFrZWZpbGUsIHdoaWNoIGlzIGFsc28gdGhlIGNhZSBoZXJlLCBzbyB0aGVyZSBpcyBu
+byByZWFzb24gdG8gc3BlY2lmeQo+ICAgICBpdC4KPiAKPiAgICAgPiArZW5kZWYKPiAgICAgPiAr
+Cj4gICAgID4gK2RlZmluZSBMTURCX0lOU1RBTExfU1RBR0lOR19DTURTCj4gICAgID4gK8KgIMKg
+IMKgJChUQVJHRVRfTUFLRV9FTlYpICQoTUFLRSkgLUMgJChARCkvbGlicmFyaWVzL2xpYmxtZGIg
+XAo+ICAgICA+ICvCoCDCoCDCoCDCoCDCoCDCoCDCoERFU1RESVI9IiQoU1RBR0lOR19ESVIpIiBc
+Cj4gICAgID4gK8KgIMKgIMKgIMKgIMKgIMKgIMKgcHJlZml4PS91c3IgXAo+ICAgICA+ICvCoCDC
+oCDCoCDCoCDCoCDCoCDCoGluc3RhbGwKPiAgICAgPiArZW5kZWYKPiAgICAgPiArCj4gICAgID4g
+K2RlZmluZSBMTURCX0lOU1RBTExfVEFSR0VUX0NNRFMKPiAgICAgPiArwqAgwqAgwqAkKFRBUkdF
+VF9NQUtFX0VOVikgJChNQUtFKSAtQyAkKEBEKS9saWJyYXJpZXMvbGlibG1kYiBcCj4gICAgID4g
+K8KgIMKgIMKgIMKgIMKgIMKgIMKgREVTVERJUj0iJChUQVJHRVRfRElSKSIgXAo+ICAgICA+ICvC
+oCDCoCDCoCDCoCDCoCDCoCDCoHByZWZpeD0vdXNyIFwKPiAgICAgPiArwqAgwqAgwqAgwqAgwqAg
+wqAgwqBpbnN0YWxsCj4gICAgID4gK2VuZGVmCj4gICAgID4gKwo+ICAgICA+ICskKGV2YWwgJChn
+ZW5lcmljLXBhY2thZ2UpKQo+ICAgICA+IC0tCj4gICAgID4gMi4zOS4yCj4gICAgID4KPiAgICAg
+PiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+ICAgICA+
+IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKPiAgICAgPiBbOF1idWlsZHJvb3RAYnVpbGRyb290Lm9y
+Zwo+ICAgICA+IFs5XWh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZv
+L2J1aWxkcm9vdAo+IAo+ICAgICAtLQo+ICAgICAuLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0t
+LS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLgo+ICAg
+ICB8wqAgWWFubiBFLiBNT1JJTsKgIHwgUmVhbC1UaW1lIEVtYmVkZGVkIHwgLyJcIEFTQ0lJIFJJ
+QkJPTiB8IEVyaWNzJwo+ICAgICBjb25zcGlyYWN5OiB8Cj4gICAgIHwgKzMzIDY2MiAzNzYgMDU2
+IHwgU29mdHdhcmXCoCBEZXNpZ25lciB8IFwgLyBDQU1QQUlHTsKgIMKgIMKgfMKgIF9fX8KgIMKg
+IMKgIMKgIMKgIMKgCj4gICAgIMKgIMKgfAo+ICAgICB8ICszMyA1NjEgMDk5IDQyNyBgLS0tLS0t
+LS0tLS0tLi0tLS0tLS06wqAgWMKgIEFHQUlOU1TCoCDCoCDCoCB8wqAgXGUvwqAgVGhlcmUgaXMK
+PiAgICAgbm/CoCB8Cj4gICAgIHwgWzEwXWh0dHA6Ly95bW9yaW4uaXMtYS1nZWVrLm9yZy8gfCBf
+LypcXyB8IC8gXCBIVE1MIE1BSUzCoCDCoCB8wqAgwqB2wqAKPiAgICAgwqBjb25zcGlyYWN5LsKg
+IHwKPiAgICAgJy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0tLS0t
+LS0tLS0tLS0tLV4KPiAgICAgLS0tLS0tLS0tLS0tLS0tLS0tLS0nCj4gCj4gCj4gUmVmZXJlbmNl
+czoKPiAKPiBbMV0gbWFpbHRvOnlhbm4ubW9yaW4uMTk5OEBmcmVlLmZyCj4gWzJdIG1haWx0bzpm
+cmFuY29pcy5wZXJyYWRAZ2Fkei5vcmcKPiBbM10gaHR0cHM6Ly9zeW1hcy5jb20vbG1kYi8KPiBb
+NF0gaHR0cHM6Ly9sbWRiLnJlYWR0aGVkb2NzLmlvL2VuL3JlbGVhc2UvI2luc3RhbGxhdGlvbi11
+bml4Cj4gWzVdIGh0dHA6Ly9sbWRiLm1rLwo+IFs2XSBodHRwOi8vbG1kYi5tay8KPiBbN10gaHR0
+cDovL2xtZGIubWsvCj4gWzhdIG1haWx0bzpidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+IFs5XSBo
+dHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKPiBb
+MTBdIGh0dHA6Ly95bW9yaW4uaXMtYS1nZWVrLm9yZy8KCj4gX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4gYnVp
+bGRyb290QGJ1aWxkcm9vdC5vcmcKPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
+bi9saXN0aW5mby9idWlsZHJvb3QKCgotLSAKLi0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0t
+LS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4KfCAgWWFu
+biBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9OIHwgRXJp
+Y3MnIGNvbnNwaXJhY3k6IHwKfCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWduZXIg
+fCBcIC8gQ0FNUEFJR04gICAgIHwgIF9fXyAgICAgICAgICAgICAgIHwKfCArMzMgNTYxIDA5OSA0
+MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAgQUdBSU5TVCAgICAgIHwgIFxlLyAgVGhlcmUg
+aXMgbm8gIHwKfCBodHRwOi8veW1vcmluLmlzLWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAvIFwgSFRN
+TCBNQUlMICAgIHwgICB2ICAgY29uc3BpcmFjeS4gIHwKJy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0tLScK
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290
+IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxk
+cm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
