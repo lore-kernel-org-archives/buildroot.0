@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 771EFCD128A
-	for <buildroot@archiver.kernel.org>; Wed,  3 Apr 2024 15:37:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0EADACD1292
+	for <buildroot@archiver.kernel.org>; Wed,  3 Apr 2024 15:37:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3BADF414C1;
-	Wed,  3 Apr 2024 15:37:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3ED17415EB;
+	Wed,  3 Apr 2024 15:37:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ih8V9WbxGtW9; Wed,  3 Apr 2024 15:37:27 +0000 (UTC)
+ id MvIdmKqcmG5i; Wed,  3 Apr 2024 15:37:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EDE29414CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C8A741488
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EDE29414CC;
-	Wed,  3 Apr 2024 15:37:26 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 99C641BF5A0
- for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 15:37:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5C8A741488;
+	Wed,  3 Apr 2024 15:37:40 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5DBBA1BF5A0
+ for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 15:37:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 85BFB416A5
- for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 15:37:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4B511400E4
+ for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 15:37:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cN8elxzSpJpr for <buildroot@lists.busybox.net>;
- Wed,  3 Apr 2024 15:37:24 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id s12SYbFy19pT for <buildroot@lists.busybox.net>;
+ Wed,  3 Apr 2024 15:37:37 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9375F414C1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9375F414C1
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org EC5DE4178C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EC5DE4178C
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9375F414C1
- for <buildroot@buildroot.org>; Wed,  3 Apr 2024 15:37:23 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EC5DE4178C
+ for <buildroot@buildroot.org>; Wed,  3 Apr 2024 15:37:36 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6cf33.dip0.t-ipconnect.de [79.214.207.51])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 7D946A4C2ABF
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 819B3A4C2ABC
  for <buildroot@buildroot.org>; Wed,  3 Apr 2024 17:36:42 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:35774)
  by fli4l.lan.fli4l with esmtp (Exim 4.97.1)
- (envelope-from <bernd@kuhls.net>) id 1rs2fJ-000000000Rn-3YGT
+ (envelope-from <bernd@kuhls.net>) id 1rs2fJ-000000000Rn-3m8S
  for buildroot@buildroot.org; Wed, 03 Apr 2024 15:36:42 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Wed,  3 Apr 2024 17:36:36 +0200
-Message-Id: <20240403153641.4122789-4-bernd@kuhls.net>
+Date: Wed,  3 Apr 2024 17:36:37 +0200
+Message-Id: <20240403153641.4122789-5-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240403153641.4122789-1-bernd@kuhls.net>
 References: <20240403153641.4122789-1-bernd@kuhls.net>
@@ -55,21 +55,22 @@ X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202312101026; t=1712158602;
- bh=ylabmsh4thU8Y3DKW2JI5ecNzLxyP3rqMMaEVwZJ8FE=;
+ bh=3bfcnDV8Wbv4U0QmAj2vGcNT3mZh6A+ZFYF6cmLxpz8=;
  h=From:To:Subject:Date:In-Reply-To:References:From;
- b=N6YgxOGQvFzgrGMVoFXDsksMyxLdP7l4yBj5DWcO0h28KAgiHhIw6EYQ3sn+eW5/w
- U5i5ySxGeNiS65om/YDG+JXvnNRSLcJ1sI5YGzMq9Gyq5BtXsDVgWToVSFv/F0YcqW
- azT1y/GY2378i3O1aTJRqCafe331NfCdQ3jWwS22sI10Kqnh53Sa+5SwWKRNt2T1TH
- r4ntZAaYyBeLzxTJvQQsR9EpTedluDWYZo1k/9D84EpwEcUwlo7t4wcXqAh0mlUDwj
- lqEterFceCMswB5KPKPG9/fUTu+BAAwVnqjzboFg0OQw4yXINp+/fE21GJUnJ3+TM2
- ShyAOscpw1BNA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=yJtsV/o1z3yeUYhOPQuWSSXucHp57bv9yOT/mNR88k2/HVCWHoyNQ2jF3W41GEgXw
+ L2cRdbQskj8yq90t8fncolFafxPCpYVB3zzBXialbjWc4ZJs1UQ3ZWlE64MxmTk7Oo
+ 4ROhFQIIIRnbiHIVbWts4CsORulDOhZRpkF//hR/ROMLwuxGr3vQGLMy3eehDL66W7
+ oIkSDjdT6Eib9fjpos+MN1Mx9yJDFOGpcBSfj57dw2OATdu8tz602/Hnzwp0o0UxLC
+ liCCe2oKyBsPzwuAB+5zaNWTwZ40bEPTwH9ZvGl/vv36J6LZD+2HzM9IoS0x3XXzTB
+ lFBwVpmoE1L7w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202312101026 header.b=N6YgxOGQ
-Subject: [Buildroot] [PATCH 4/9] package/freeswitch: add optional dependency
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202312101026 header.b=yJtsV/o1
+Subject: [Buildroot] [PATCH 5/9] package/leafnode2: add optional dependency
  to libxcrypt
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -91,45 +92,48 @@ When glibc was bumped to version 2.39 in commit
 b5680f53d60acf8ff6010082f873438a39bd5d97 it removed the deprecated
 libcrypt support.
 
-As glibc's libcrypt was providing freeswitch's libcrypt dependency this
-broke the freeswitch build using glibc version 2.39.
+As glibc's libcrypt was providing leafnode2's libcrypt dependency this
+broke the leafnode2 build using glibc version 2.39.
 
-To fix this select the libxcrypt dependency to freeswitch when using a
+To fix this select the libxcrypt dependency to leafnode2 when using a
 glibc toolchain and add the dependency if selected.
+
+Fixes:
+http://autobuild.buildroot.net/results/08f86ce128623105087cda0c5b32a1d0d0cfa166/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/freeswitch/Config.in     | 1 +
- package/freeswitch/freeswitch.mk | 4 ++++
+ package/leafnode2/Config.in    | 1 +
+ package/leafnode2/leafnode2.mk | 4 ++++
  2 files changed, 5 insertions(+)
 
-diff --git a/package/freeswitch/Config.in b/package/freeswitch/Config.in
-index 1ab624c33c..80d18e064d 100644
---- a/package/freeswitch/Config.in
-+++ b/package/freeswitch/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_FREESWITCH
- 	depends on BR2_USE_WCHAR # uses wchar_t
- 	select BR2_PACKAGE_FFMPEG_SWSCALE if BR2_PACKAGE_FFMPEG
- 	select BR2_PACKAGE_LIBCURL
+diff --git a/package/leafnode2/Config.in b/package/leafnode2/Config.in
+index 3700b6fb80..df9b246946 100644
+--- a/package/leafnode2/Config.in
++++ b/package/leafnode2/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LEAFNODE2
+ 	bool "leafnode2"
+ 	depends on BR2_USE_MMU # fork()
 +	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
- 	select BR2_PACKAGE_JPEG
- 	# src/mod/applications/mod_cv/mod_cv.cpp includes
- 	# highgui.h, imgproc.hpp & objdetect.hpp
-diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 5b9dc49c9b..6160fe5fcb 100644
---- a/package/freeswitch/freeswitch.mk
-+++ b/package/freeswitch/freeswitch.mk
-@@ -229,6 +229,10 @@ FREESWITCH_DEPENDENCIES += libpng
- FREESWITCH_ENABLED_MODULES += formats/mod_png
- endif
+ 	select BR2_PACKAGE_PCRE
+ 	help
+ 	  Leafnode-2 is a store-and-forward NNTP (or Usenet) proxy
+diff --git a/package/leafnode2/leafnode2.mk b/package/leafnode2/leafnode2.mk
+index 3ed2e20266..cba6b1f72a 100644
+--- a/package/leafnode2/leafnode2.mk
++++ b/package/leafnode2/leafnode2.mk
+@@ -14,6 +14,10 @@ LEAFNODE2_AUTORECONF = YES
+ LEAFNODE2_CONF_ENV = \
+ 	PCRECONFIG="$(STAGING_DIR)/usr/bin/pcre-config"
  
 +ifeq ($(BR2_PACKAGE_LIBXCRYPT),y)
-+FREESWITCH_DEPENDENCIES += libxcrypt
++LEAFNODE2_DEPENDENCIES += libxcrypt
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBYAML),y)
- FREESWITCH_DEPENDENCIES += libyaml
- FREESWITCH_ENABLED_MODULES += languages/mod_yaml
+ # --enable-runas-user use 'news' as default but the configure stop
+ # if news doesn't exist on the build host.
+ # Use 'root' while cross-compiling
 -- 
 2.39.2
 
