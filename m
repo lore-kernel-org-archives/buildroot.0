@@ -4,93 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1210C6FD1F
-	for <buildroot@archiver.kernel.org>; Wed,  3 Apr 2024 08:40:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7881ECD1288
+	for <buildroot@archiver.kernel.org>; Wed,  3 Apr 2024 08:40:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A5324416CB;
-	Wed,  3 Apr 2024 08:40:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4A8F341697;
+	Wed,  3 Apr 2024 08:40:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Zv86lud0Uraz; Wed,  3 Apr 2024 08:40:51 +0000 (UTC)
+ id xNmguhwyNdCT; Wed,  3 Apr 2024 08:40:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1D51C416D2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DD432416C3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1D51C416D2;
-	Wed,  3 Apr 2024 08:40:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DD432416C3;
+	Wed,  3 Apr 2024 08:40:54 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7A1CD1BF44A
- for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 08:40:44 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4AD3B1BF44A
+ for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 08:40:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DE50882023
+ by smtp1.osuosl.org (Postfix) with ESMTP id EC03E82027
  for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 08:40:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UqEKWJx-uplv for <buildroot@lists.busybox.net>;
+ id fyKyoo7pN0wd for <buildroot@lists.busybox.net>;
  Wed,  3 Apr 2024 08:40:43 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62b; helo=mail-ej1-x62b.google.com;
+ client-ip=2a00:1450:4864:20::235; helo=mail-lj1-x235.google.com;
  envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0205E82027
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0205E82027
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
- [IPv6:2a00:1450:4864:20::62b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0205E82027
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B651E8202C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B651E8202C
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com
+ [IPv6:2a00:1450:4864:20::235])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B651E8202C
  for <buildroot@busybox.net>; Wed,  3 Apr 2024 08:40:42 +0000 (UTC)
-Received: by mail-ej1-x62b.google.com with SMTP id
- a640c23a62f3a-a4e8904bd71so206659766b.1
+Received: by mail-lj1-x235.google.com with SMTP id
+ 38308e7fff4ca-2d485886545so100204591fa.2
  for <buildroot@busybox.net>; Wed, 03 Apr 2024 01:40:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1712133641; x=1712738441;
+ d=1e100.net; s=20230601; t=1712133640; x=1712738440;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=HYwHMbJbN/9VsghrbRL/cY3iu7egb/BMsn4X7A1xq2I=;
- b=ZqxYHJP8QGeD9b4SB4GNaUtEW9xhmbcjZYK9SmE+TwP0v4WVEPSHZfOieuGU23TvuQ
- vhFgkN3ykHQZITwjFbQ5ZLf0f2FuM63v64KE+5s0GCZjnQH/L2oUVo1dT2Er23RpzGw1
- 3y68AazS6hPUOgpM/x+uLaI52BtabcrUmQqYhDGdmjOhY1NmBuDRK8/I3effAKBjjcgi
- Z26Z/lbuXw7jOqaVigPTusi8mhTg3AaLa6qRdOP3ZkrtBnIWEMCoRE+qUj7rvoB8Y2lo
- sHEImfgKLF/V4hfyBe7NWMftxtGlfeu1BRYL0JpwUEhIOCDoy+/k95FiXn/R2+xAKm34
- kYaA==
-X-Gm-Message-State: AOJu0YziSMXnNlhYeoHYZp2RYwIYhtqDZA8r/yJLAj1bciYMHhSxuyrR
- PHzzBrHX8cxw18ca11FjJETp6fRFcTYaVkMMTkpLXv4TAfkI6vPNuWUx5Ur+rJ+xfobvMs0TqL0
+ bh=0CvW2T0kQ3UQlemAxR99wSdQOCy7UVI7PVONZ9v4ANk=;
+ b=Xa8Y8MZOk62Zssw2fIRAGLRqwy5plninNlthXwf20jgcFf7u/kDptWtv+v+zNtZGU7
+ C0P+DuqIOqBfxnv0q0LmDqb7Of50Hw0kMpzbZYeiIPalaNBsBR0n38mUB40SSqT58gKg
+ 0RueCl66LaDN4A7HfY6kkQ0vWR9UM3/ac4iwip0T1+1FYinXuD6Vi8y4p8vjXRIm9kyn
+ mcDjrqq2O/xlV4cK2rnRC+g5nZrKmOHRaf2EI1WqOrBqKAvjLJ6vXEY+PRTSq6HhRGna
+ L+PBJ7R4YUO+gQjNgAHPhlC35BliUiqQRDEyXZ54tHwjo/vdgY1qGTz0dWjfYfwhmWul
+ OLzw==
+X-Gm-Message-State: AOJu0YwNOoiHoPlcY+2tQcHHcBGY73ZYfl4NIMrFvloWLsw0tsf0utkF
+ Z/Y14CSAoXDZSwicaS/DIwPdbHftqjxWP49Vtm5UtlkLk1zQCJhUNiWUnyd9VSc2vJwLitPv6jA
  =
-X-Google-Smtp-Source: AGHT+IFNiJ23jAHTKv1yRMD1qOTuAlu9hpZgnDkIPBaUmkG5442zqQuMh8WMR1oIQpohGwsL6ZhzYw==
-X-Received: by 2002:a17:906:7f97:b0:a4e:89f2:c625 with SMTP id
- f23-20020a1709067f9700b00a4e89f2c625mr2875722ejr.26.1712133640906; 
+X-Google-Smtp-Source: AGHT+IH32aDWL3y5f1AvScpZo3nwMvvU/HjXzCZh88tvnHcTLKBGWT2TKOgc8it8XPG9Cku1cpwHMw==
+X-Received: by 2002:a05:651c:3c9:b0:2d4:5370:5e8a with SMTP id
+ f9-20020a05651c03c900b002d453705e8amr3176012ljp.22.1712133640041; 
  Wed, 03 Apr 2024 01:40:40 -0700 (PDT)
 Received: from xubuntu-23.. ([37.65.6.74]) by smtp.gmail.com with ESMTPSA id
- n9-20020a1709062bc900b00a469d3df3c1sm7510691ejg.96.2024.04.03.01.40.40
+ n9-20020a1709062bc900b00a469d3df3c1sm7510691ejg.96.2024.04.03.01.40.39
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 03 Apr 2024 01:40:40 -0700 (PDT)
+ Wed, 03 Apr 2024 01:40:39 -0700 (PDT)
 From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Wed,  3 Apr 2024 10:40:32 +0200
-Message-Id: <20240403084033.512286-4-francois.perrad@gadz.org>
+Date: Wed,  3 Apr 2024 10:40:31 +0200
+Message-Id: <20240403084033.512286-3-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20240403084033.512286-1-francois.perrad@gadz.org>
 References: <20240403084033.512286-1-francois.perrad@gadz.org>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gadz.org; s=google; t=1712133641; x=1712738441; darn=busybox.net;
+ d=gadz.org; s=google; t=1712133640; x=1712738440; darn=busybox.net;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=HYwHMbJbN/9VsghrbRL/cY3iu7egb/BMsn4X7A1xq2I=;
- b=fYib16Mxe3g+LGFaHF+PvbfauZlgMagrLKvAdsdhICx6AtUgx5NTTccUQMMuVhqbN2
- o1pIWnWOhviUEOMX//D7sYzu/ywOfeeSVCSZLOLWTYB4HEDnKolYXh+W8JuHB2uFOFwl
- SQTLrXECzcH1qxzgK+rPz+LLXcvHl1M/G13FQfwIZV0AnWjq0w68UD8p8lWFS80yxsG2
- Iw3zwEFjPFKrehdJWVKsVO2VafcZ8AmlWefa3XvSVwseTwVNzuyRpsRQBsDEiuAv4mb/
- bSH2hTiIn6PG+YmyWbQHn4d0BYM9Ai4CnScoke7ZihSMQgpyUGU72oLZ94VwfY5WMZwH
- gFpg==
+ bh=0CvW2T0kQ3UQlemAxR99wSdQOCy7UVI7PVONZ9v4ANk=;
+ b=kFVacZj6fHVr3YBckIsJmuOFepJrdcEwrq1xWxMevmC0MYcMV4ooWYo0FaNw8AwgNa
+ DIKUOi0lAnSQAQJ3Cja4roI4AH7npvTH5M852mfsEuP7p+0Qx1hB8fJMwE4YGYS6pZpx
+ lAdx9DpBA3x1zrgg/wSe8qf1oXGt86eI5J/b9TjunkTq+3OrBW/oMTaH3lwrdMahvBdO
+ w8xlwx+lGWTisOFt7NJFrf6NLtj/FvJWk2FuXIhi6dh9gHrBDVaSxwgqs/gQlkhfz98m
+ RIeUaVxW4XFhAe11rBNyg8c+cuZHCMDcnmkMfmZnZOK7aS/zg8hs4C8yVl9Xt7Sz6trH
+ OybQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gadz.org
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gadz.org header.i=@gadz.org
- header.a=rsa-sha256 header.s=google header.b=fYib16Mx
-Subject: [Buildroot] [PATCH 4/5] package/libnpth: bump to version 1.7
+ header.a=rsa-sha256 header.s=google header.b=kFVacZj6
+Subject: [Buildroot] [PATCH 3/5] package/libksba: bump to version 1.6.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -109,38 +109,36 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/libnpth/libnpth.hash | 7 +++----
- package/libnpth/libnpth.mk   | 2 +-
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ package/libksba/libksba.hash | 4 ++--
+ package/libksba/libksba.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libnpth/libnpth.hash b/package/libnpth/libnpth.hash
-index b9f72e077..a140a23f6 100644
---- a/package/libnpth/libnpth.hash
-+++ b/package/libnpth/libnpth.hash
-@@ -1,7 +1,6 @@
--# Locally calculated after checking signature
--# https://gnupg.org/ftp/gcrypt/npth/npth-1.6.tar.bz2.sig
--# using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
--sha256  1393abd9adcf0762d34798dc34fdcf4d0d22a8410721e76f1e3afcd1daa4e2d1  npth-1.6.tar.bz2
-+# From https://www.gnupg.org/download/integrity_check.html
-+sha1  a9f7adc1b1f6707071d29bfb3338c28b995ca1ce  npth-1.7.tar.bz2
-+sha256  8589f56937b75ce33b28d312fccbf302b3b71ec3f3945fde6aaa74027914ad05  npth-1.7.tar.bz2
+diff --git a/package/libksba/libksba.hash b/package/libksba/libksba.hash
+index 3ac36e19c..e74cde2cc 100644
+--- a/package/libksba/libksba.hash
++++ b/package/libksba/libksba.hash
+@@ -1,6 +1,6 @@
+ # From https://www.gnupg.org/download/integrity_check.html
+-sha1  0ada15ac00baa7df677a05bcb517621708f9c2f2  libksba-1.6.5.tar.bz2
+-sha256  a564628c574c99287998753f98d750babd91a4e9db451f46ad140466ef2a6d16  libksba-1.6.5.tar.bz2
++sha1  1db4222e052656700021a30d517f5aa2f882da4a  libksba-1.6.6.tar.bz2
++sha256  5dec033d211559338838c0c4957c73dfdc3ee86f73977d6279640c9cd08ce6a4  libksba-1.6.6.tar.bz2
  
- # Hash for license file:
- sha256  ce64d5f7b49ea6d80fdb6d4cdee6839d1a94274f7493dc797c3b55b65ec8e9ed  COPYING.LIB
-diff --git a/package/libnpth/libnpth.mk b/package/libnpth/libnpth.mk
-index ecfef863f..dc603b607 100644
---- a/package/libnpth/libnpth.mk
-+++ b/package/libnpth/libnpth.mk
+ # Hash for license files:
+ sha256  f9c59ea5a5e1dfdeebcd134e6a594c21eb088cc95f6653ee99ff2e187c105380  AUTHORS
+diff --git a/package/libksba/libksba.mk b/package/libksba/libksba.mk
+index 52ad5fbee..b87efda22 100644
+--- a/package/libksba/libksba.mk
++++ b/package/libksba/libksba.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBNPTH_VERSION = 1.6
-+LIBNPTH_VERSION = 1.7
- LIBNPTH_SOURCE = npth-$(LIBNPTH_VERSION).tar.bz2
- LIBNPTH_SITE = https://www.gnupg.org/ftp/gcrypt/npth
- LIBNPTH_LICENSE = LGPL-2.0+
+-LIBKSBA_VERSION = 1.6.5
++LIBKSBA_VERSION = 1.6.6
+ LIBKSBA_SOURCE = libksba-$(LIBKSBA_VERSION).tar.bz2
+ LIBKSBA_SITE = https://gnupg.org/ftp/gcrypt/libksba
+ LIBKSBA_LICENSE = LGPL-3.0+ or GPL-2.0+ (library, headers), GPL-3.0+ (manual, tests, build system)
 -- 
 2.40.1
 
