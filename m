@@ -1,93 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28B21CD1288
-	for <buildroot@archiver.kernel.org>; Wed,  3 Apr 2024 12:18:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E702CD1288
+	for <buildroot@archiver.kernel.org>; Wed,  3 Apr 2024 13:00:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A082B40110;
-	Wed,  3 Apr 2024 12:18:26 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BpFXqGHI46de; Wed,  3 Apr 2024 12:18:25 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56F32400B5
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 56F32400B5;
-	Wed,  3 Apr 2024 12:18:25 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 124DC1BF980
- for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 12:18:24 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0CA0A4017B
- for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 12:18:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AE4BF40AF9;
+	Wed,  3 Apr 2024 13:00:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9m44BZEoRa6s for <buildroot@lists.busybox.net>;
- Wed,  3 Apr 2024 12:18:21 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::635; helo=mail-ej1-x635.google.com;
- envelope-from=robimarko@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D78AA40159
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D78AA40159
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com
- [IPv6:2a00:1450:4864:20::635])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D78AA40159
- for <buildroot@buildroot.org>; Wed,  3 Apr 2024 12:18:20 +0000 (UTC)
-Received: by mail-ej1-x635.google.com with SMTP id
- a640c23a62f3a-a4e60a64abcso145387766b.1
- for <buildroot@buildroot.org>; Wed, 03 Apr 2024 05:18:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1712146698; x=1712751498;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=Q3iYuxLMM9SAjKMShHqTPQXSRDQ4lXCfV/H+0MUR6Us=;
- b=SGjfLvcWsIe87CRIJGWDhF3KgtrPMXKelRI+aa75tlxiQ0rf2AHjRxiTnm288LQ2/G
- TYlRQsnMcP4iMX2JR6qhBh+SUsVxtPTrN/UUNDIvsbuFzhnH+u/oNP0wyHBVgfXWJnVa
- vlxhfquOiQOBQJizphGNBTXL3ErHc5nrGsxkt0EPUQsbQWBXlXTs1ku0jhVjbOMkzKik
- J/rlw9mBekXtm1ufymmV6AOIF6yxUHliuUx6aGJYh05O0YpvRPU7CzkRidny2MWuw2LS
- eeKq1GiB7D39/s3PFbZoNS7r7zT5if6OJnMIYwhW0gEpl/nH3rGp9bH++QbVCbzf5ZNT
- Zs2w==
-X-Gm-Message-State: AOJu0YwkjtTpZNnp2+1vsPNlgIa5xktDi31Xf+OKszXwUozeGpAdBX7z
- aY9Gl+UhrHGkB4ilqF69bUssikX3NaSz7XPkJm87LlqNNSC8aRnluWUlD1qn
-X-Google-Smtp-Source: AGHT+IGTmqcjPt3Z6wnGl+5xBubJAAMdnA/d8AJ7x6AsYD2IA+iNKMywiag2bg0BIrhBXPCAS5GEwg==
-X-Received: by 2002:a17:906:46d0:b0:a4f:b398:2f44 with SMTP id
- k16-20020a17090646d000b00a4fb3982f44mr1132413ejs.19.1712146698141; 
- Wed, 03 Apr 2024 05:18:18 -0700 (PDT)
-Received: from fedora.. (cpe-188-129-45-234.dynamic.amis.hr. [188.129.45.234])
- by smtp.googlemail.com with ESMTPSA id
- t25-20020a170906269900b00a4c9b39b726sm7691853ejc.75.2024.04.03.05.18.17
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 03 Apr 2024 05:18:17 -0700 (PDT)
-From: Robert Marko <robimarko@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed,  3 Apr 2024 14:18:07 +0200
-Message-ID: <20240403121807.2087547-1-robimarko@gmail.com>
-X-Mailer: git-send-email 2.44.0
-MIME-Version: 1.0
+ id P91gX_8iwDL5; Wed,  3 Apr 2024 13:00:11 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A0FAB41710
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id A0FAB41710;
+	Wed,  3 Apr 2024 13:00:11 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 01B361BF28B
+ for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 13:00:10 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id ED1EE8179B
+ for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 13:00:09 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4b1dxs7tpWsb for <buildroot@lists.busybox.net>;
+ Wed,  3 Apr 2024 13:00:07 +0000 (UTC)
+X-Greylist: delayed 480 seconds by postgrey-1.37 at util1.osuosl.org;
+ Wed, 03 Apr 2024 13:00:06 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2BE888135C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2BE888135C
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:4f8:c0c:9d57::1;
+ helo=mail.3ffe.de; envelope-from=michael@walle.cc; receiver=<UNKNOWN> 
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2BE888135C
+ for <buildroot@buildroot.org>; Wed,  3 Apr 2024 13:00:06 +0000 (UTC)
+Received: from localhost (unknown [213.135.10.150])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits)
+ server-digest SHA256) (No client certificate requested)
+ by mail.3ffe.de (Postfix) with ESMTPSA id CB0F7957;
+ Wed,  3 Apr 2024 14:52:03 +0200 (CEST)
+Date: Wed, 03 Apr 2024 14:52:02 +0200
+Message-Id: <D0AI2GKZER72.370J2MVIQONWP@walle.cc>
+To: "Romain Naour" <romain.naour@smile.fr>, "Dario Binacchi"
+ <dario.binacchi@amarulasolutions.com>, <buildroot@buildroot.org>
+X-Mailer: aerc 0.16.0
+References: <20240330160244.3214733-1-dario.binacchi@amarulasolutions.com>
+ <37a25304-2bd9-4125-8031-da3857708294@smile.fr>
+In-Reply-To: <37a25304-2bd9-4125-8031-da3857708294@smile.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1712146698; x=1712751498; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Q3iYuxLMM9SAjKMShHqTPQXSRDQ4lXCfV/H+0MUR6Us=;
- b=Mc9SMSxS7jinEGnxF7NUC5XPduDeEjRnmJDV1EKa4LOuRaHr4yyU2Q8kwrknK0snFx
- 0Nyy1oGaKZojz4puvhPd+tEX2UpcuYNtLfraBxwnuhYs2C8cr01k/GGPVTYDLwZJGswf
- veNSYM5BNTzxdaG92GcoGtb0mv0JWP/6ZSM6IzCyd2Xs0/g3jZzKomZXZQY3RZ26UYFb
- tPZRymYOY6Lz2+npa6l22w1uO3fUq2CKiPElxTBHbkvYW9H1sDYJ+W+LuAULCXFl5KcP
- wjB7YkfzI3ES+oouRoYobxDSyN3hWyb4PsHlwJ5Go4mQh4VIBdX9VReoKaaDb8umeDGX
- 9maQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Mc9SMSxS
-Subject: [Buildroot] [PATCH 1/1] kconfig/lxdialog: fix check() with GCC14
+ d=walle.cc; s=mail2022082101; t=1712148723;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:content-type:content-type:in-reply-to:in-reply-to:
+ references:references; bh=nJaxxoJmYVABXH2leXvCUPRrxPkc6yVG8mnXSRwrct0=;
+ b=ff5PMKnKGLloscJWr+MUpUzT7Y72VWRBlUlG9JeNaeYWMfxM0whRUCPghH+kG0T8xBWLyi
+ Cfzg8ZopJ9HNAV1BZyB0phkJee5Ql8RAL60OZKkAxsZYYt64KItmooxnP0q+/8mG7F2NS6
+ NQnukMSTq9F0IKm7mZZTckrJyJiyuLQHc90a2jemMsxhpKrdoEeQgHFsRiFbYbf9Y5D5P3
+ IwU68oZINbWbc+ylEq55wrjZ2IbK7gLNDV1EeeFbN34XLR2S1UoB9l+z0tn/Rm1HzzPlYf
+ iz4kiILBJeVG8fLUYPcAixPhjnI8pKgFUMXgkMrIZK7BxZv+I4bLVrJ91casCQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=walle.cc
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=walle.cc header.i=@walle.cc header.a=rsa-sha256
+ header.s=mail2022082101 header.b=ff5PMKnK
+Subject: Re: [Buildroot] [PATCH v10 00/12] Add support for AM62x-SK HS-FS
+ devices
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,33 +82,111 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Petr Vorel <petr.vorel@gmail.com>, Robert Marko <robimarko@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Michael Walle via buildroot <buildroot@buildroot.org>
+Reply-To: Michael Walle <michael@walle.cc>
+Cc: Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+ Anand Gadiyar <gadiyar@ti.com>, Asaf Kahlon <asafka7@gmail.com>,
+ Xuanhao Shi <X15000177@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, michael@amarulasolutions.com,
+ linux-amarula@amarulasolutions.com, "Yann E . Morin" <yann.morin.1998@free.fr>,
+ bryce@redpinelabs.com, Andreas Dannenberg <dannenberg@ti.com>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============9185616359215962433=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-R0NDMTQgbm93IHRyZWF0cyBpbXBsaWNpdCBpbnQgdHlwZXMgYXMgZXJyb3Igc28gd2hlbiBjaGVj
-aygpIGZyb20KY2hlY2stbHhkaWFsb2cuc2ggaXMgY2FsbGVkIHRvIGNoZWNrIHdoZXRoZXIgd2Ug
-Y2FuIGxpbmsgYWdhaW5zdCBuY3Vyc2VzCml0IHdpbGwgZmFpbCBzaWxlbnRseSBhbmQgdGhlIGhl
-bHAgdGV4dCBpbmRpY2F0aW5nIHRvIGluc3RhbGwgbmN1cnNlcyBpcwpwcmludGVkLgoKSG93ZXZl
-ciwgdGhpcyBpcyBub3QgZHVlIHRvIG1pc3NpbmcgbmN1cnNlcyBidXQgb25jZSB0aGUgc3RkZXJy
-IHJlZGlyZWN0CnRvIC9kZXYvbnVsbCBpcyByZW1vdmVkIHdlIGNhbiBzZWUgdGhlIHJvb3QgY2F1
-c2U6CjxzdGRpbj46MjoxOiBlcnJvcjogcmV0dXJuIHR5cGUgZGVmYXVsdHMgdG8g4oCYaW504oCZ
-IFstV2ltcGxpY2l0LWludF0KClNvLCBpbiBvcmRlciBmb3IgbWVudWNvbmZpZyB0byB3b3JrIHdp
-dGggR0NDMTQgbGV0cyBqdXN0IHNwZWNpZnkgdGhlCnJldHVybiB0eXBlIG9mIG1haW4oKSBhcyBp
-bnQuCgpTaWduZWQtb2ZmLWJ5OiBSb2JlcnQgTWFya28gPHJvYmltYXJrb0BnbWFpbC5jb20+Ci0t
-LQogc3VwcG9ydC9rY29uZmlnL2x4ZGlhbG9nL2NoZWNrLWx4ZGlhbG9nLnNoIHwgMiArLQogMSBm
-aWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pCgpkaWZmIC0tZ2l0IGEv
-c3VwcG9ydC9rY29uZmlnL2x4ZGlhbG9nL2NoZWNrLWx4ZGlhbG9nLnNoIGIvc3VwcG9ydC9rY29u
-ZmlnL2x4ZGlhbG9nL2NoZWNrLWx4ZGlhbG9nLnNoCmluZGV4IDE2Y2Q5YTMxODYuLjI3ZDZjMzBh
-NTcgMTAwNzU1Ci0tLSBhL3N1cHBvcnQva2NvbmZpZy9seGRpYWxvZy9jaGVjay1seGRpYWxvZy5z
-aAorKysgYi9zdXBwb3J0L2tjb25maWcvbHhkaWFsb2cvY2hlY2stbHhkaWFsb2cuc2gKQEAgLTQ4
-LDcgKzQ4LDcgQEAgdHJhcCAicm0gLWYgJHRtcCIgMCAxIDIgMyAxNQogY2hlY2soKSB7CiAgICAg
-ICAgICRjYyAteCBjIC0gLW8gJHRtcCAyPi9kZXYvbnVsbCA8PCdFT0YnCiAjaW5jbHVkZSBDVVJT
-RVNfTE9DCi1tYWluKCkge30KK2ludCBtYWluKCkge30KIEVPRgogCWlmIFsgJD8gIT0gMCBdOyB0
-aGVuCiAJICAgIGVjaG8gIiAqKiogVW5hYmxlIHRvIGZpbmQgdGhlIG5jdXJzZXMgbGlicmFyaWVz
-IG9yIHRoZSIgICAgICAgMT4mMgotLSAKMi40NC4wCgpfX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBi
-dWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZv
-L2J1aWxkcm9vdAo=
+--===============9185616359215962433==
+Content-Type: multipart/signed;
+ boundary=e0118b7873c82132b4e72d8ca6e14d8bcfcea0330b009ae2f3db2bca23c1;
+ micalg=pgp-sha384; protocol="application/pgp-signature"
+
+--e0118b7873c82132b4e72d8ca6e14d8bcfcea0330b009ae2f3db2bca23c1
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+
+Hi Romain and all,
+
+On Wed Apr 3, 2024 at 11:17 AM CEST, Romain Naour wrote:
+> Le 30/03/2024 =C3=A0 17:02, Dario Binacchi a =C3=A9crit=C2=A0:
+> > The SK-AM62B-P1 is the newest version of SK-AM62 which includes
+> > high-security field-securable (HS-FS) silicon to optionally customize k=
+eys
+> > and encryption for security applications.
+> > This requires enabling the BR2_TARGET_TI_K3_IMAGE_GEN_SECTYPE_HS_FS opt=
+ion,
+> > which, however, was buggy. This series fixes the errors and bumps the L=
+inux
+> > kernel and U-Boot required for such a new device.
+> >=20
+> > Furthermore, this version complete the series by updating the
+> > ti_am64x_sk_defconfig as requested by Romain Naour:
+> > https://patchwork.ozlabs.org/project/buildroot/patch/20240224205654.154=
+6744-17-dario.binacchi@amarulasolutions.com/
+> > I have successfully executed compilation tests for all possible combina=
+tions of platform and security type:
+> > am62x -> GP, HS, HS-FS
+> > am64x -> GP, HS, HS-FS
+> >=20
+> > The AM62x HS-FS configuration has also been tested on the SK-AM62B-P1 b=
+oard.
+> >=20
+> > Version 9 has merged the first 10 patches into the mainline. This versi=
+on
+> > therefore contains the remaining patches to which the patch suggested b=
+y
+> > Yann E. Morin has been added ("boot/ti-k3-r5-loader: drop hash for vers=
+ion
+> > 2022.10" [1]), and has removed the patch "boot/ti-k3-image-gen: remove
+> > package", which is not strictly required by the series and does not cau=
+se
+> > regressions.
+>
+> Thanks for this new iteration (and thanks to all tester).
+>
+> I would like to rework this series to improve and complete the TI K3 SoC =
+support
+> post a V11.
+
+Great, thanks!
+
+> We are confident that the BSP (ti-k3-boot-firmware, u-boot 2024.01 with b=
+inman
+> and kernel 6.1.18) is working well on AM62, AM64 and even j721e (with ano=
+ther
+> series on top).
+
+FWIW, we are currently testing this on j722s (although there is no
+u-boot support in mainline yet) and it is working almost fine, with
+some minor issues for now, see my previous mail on 6/12.
+Of course we are using more up to date versions of all the involved
+components, but that seems to be just a version bump in the future.
+
+-michael
+
+--e0118b7873c82132b4e72d8ca6e14d8bcfcea0330b009ae2f3db2bca23c1
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iKcEABMJAC8WIQTIVZIcOo5wfU/AngkSJzzuPgIf+AUCZg1Q8hEcbWljaGFlbEB3
+YWxsZS5jYwAKCRASJzzuPgIf+E2QAX9E8B/8u9lQ54bR0apenijzBN7KFi+p5cpa
+Mo7VE8LvLfqgyrTxTIHDhJs8WDs0q1ABfiPs9hvjQ879z10LTP5ABZX25B6NzyZ8
+BVow2H5fyeSHU/xR8M0NmDYw+l0kb4BLWA==
+=f9vC
+-----END PGP SIGNATURE-----
+
+--e0118b7873c82132b4e72d8ca6e14d8bcfcea0330b009ae2f3db2bca23c1--
+
+--===============9185616359215962433==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============9185616359215962433==--
