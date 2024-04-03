@@ -1,78 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D619CD128A
-	for <buildroot@archiver.kernel.org>; Wed,  3 Apr 2024 14:07:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65E7FCD1288
+	for <buildroot@archiver.kernel.org>; Wed,  3 Apr 2024 15:36:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B806E605C5;
-	Wed,  3 Apr 2024 14:07:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F2AC741518;
+	Wed,  3 Apr 2024 15:36:51 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TEiCt8Qsz5MX; Wed,  3 Apr 2024 15:36:50 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BCC92410D1
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id BCC92410D1;
+	Wed,  3 Apr 2024 15:36:49 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 156FA1BF5A0
+ for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 15:36:48 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0247B60EA2
+ for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 15:36:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ilG9BCt7tDQy; Wed,  3 Apr 2024 14:07:05 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B486860784
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B486860784;
-	Wed,  3 Apr 2024 14:07:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E30B21BF426
- for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 14:07:03 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DD01A8214D
- for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 14:07:03 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q0UjjrOHKcZm for <buildroot@lists.busybox.net>;
- Wed,  3 Apr 2024 14:07:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2604:1380:4641:c500::1; helo=dfw.source.kernel.org;
- envelope-from=mwalle@kernel.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 104D9810D7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 104D9810D7
-Received: from dfw.source.kernel.org (dfw.source.kernel.org
- [IPv6:2604:1380:4641:c500::1])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 104D9810D7
- for <buildroot@buildroot.org>; Wed,  3 Apr 2024 14:07:02 +0000 (UTC)
-Received: from smtp.kernel.org (transwarp.subspace.kernel.org [100.75.92.58])
- by dfw.source.kernel.org (Postfix) with ESMTP id A613561453;
- Wed,  3 Apr 2024 14:07:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01256C433C7;
- Wed,  3 Apr 2024 14:07:00 +0000 (UTC)
-Date: Wed, 03 Apr 2024 16:06:57 +0200
-Message-Id: <D0AJNTSE9OEA.37E2DHFDD949H@kernel.org>
-From: "Michael Walle" <mwalle@kernel.org>
-To: "Michael Nazzareno Trimarchi" <michael@amarulasolutions.com>
-X-Mailer: aerc 0.16.0
-References: <20240330160244.3214733-1-dario.binacchi@amarulasolutions.com>
- <20240330160244.3214733-7-dario.binacchi@amarulasolutions.com>
- <D0AICZ7BOW8A.2PLPZEPK1YG2E@kernel.org>
- <CAOf5uwnWwPdcLC8DRcd5qa_DGkGqXUbb8EO8CNcafi0RwNQhxg@mail.gmail.com>
- <D0AIR4402RGT.1B7XIPV29012@kernel.org>
- <CAOf5uwmQGEd6vCgNsUQvmv3pN-xmCSaAk4VVR3e-tc0xuSTbLg@mail.gmail.com>
-In-Reply-To: <CAOf5uwmQGEd6vCgNsUQvmv3pN-xmCSaAk4VVR3e-tc0xuSTbLg@mail.gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=kernel.org; s=k20201202; t=1712153221;
- bh=rcLOsfAvo+QzaezwUGEYlIh6Zm0TANWpA8Hdr8nDZAc=;
- h=Date:Subject:Cc:From:To:References:In-Reply-To:From;
- b=mOT36r0B2QXtFDVWg3dSuNKavP+A+wApkntX04oncBOyzF+5hsHe4me59obSwrFKL
- /FiL4h1T/e+xowippJyPASCYtFdc5FvAgu5BG7WSzqrE0wImwcGzZRY9K0NTa9nIxD
- TcU3Z7mGkuU1QAZpDtAlbcYNwT1I0jXBszxKtqO0lYvEyh+0OBiqyrGtiwSFWOzENg
- w+QjfSLFiuk3jcs/1xKFCY7SPHz8XhQktW1hgdhj+id26royX2XRsoS3FKB5V+t083
- fLMsUD5BOx841Q9cNBL8udOVDxJ3iERzjAM83EyIrqfCS2mxmf5s4B5Upg2HEDypPO
- Iowv3JogfUCww==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ id M3FiTwY18vPF for <buildroot@lists.busybox.net>;
+ Wed,  3 Apr 2024 15:36:47 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A377860EBB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A377860EBB
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A377860EBB
+ for <buildroot@buildroot.org>; Wed,  3 Apr 2024 15:36:45 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6cf33.dip0.t-ipconnect.de [79.214.207.51])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 5AA82A4C18E8
+ for <buildroot@buildroot.org>; Wed,  3 Apr 2024 17:36:42 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:35774)
+ by fli4l.lan.fli4l with esmtp (Exim 4.97.1)
+ (envelope-from <bernd@kuhls.net>) id 1rs2fJ-000000000Rn-37Hr
+ for buildroot@buildroot.org; Wed, 03 Apr 2024 15:36:42 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Wed,  3 Apr 2024 17:36:34 +0200
+Message-Id: <20240403153641.4122789-2-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20240403153641.4122789-1-bernd@kuhls.net>
+References: <20240403153641.4122789-1-bernd@kuhls.net>
+MIME-Version: 1.0
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202312101026; t=1712158602;
+ bh=AqnlTGL6ldqyxL+bA0palTFLBiZ/E99D5/3BgNkce2A=;
+ h=From:To:Subject:Date:In-Reply-To:References:From;
+ b=QfyJcP70UuxyWZ7OXHzc4ue0+QQteuHWSrMLDQCVX6B7dZCj423QR5JTSJJeYmjYp
+ ZTLktLwLxCjGa07oe3/a6wc6d17pGclaXhtggMfw4j71VDifedSimPqiy19AfEq6dU
+ 4Si1Ia2tbzqE1xC7bqbkUUyiCMEncIR3rU/sOz+Sy6IBDu7Xd1N2fuM4MlEtrS84wx
+ VJEHLHZ+IECvaXFEl/36DZU4+q5h0yXj1Mm4Qkm+00uiEiEBNZom8qMnthNwinbz4y
+ wgh8ESNTjIMRYzZpoyG82vAGbj9qusU2SPcASW6DWQHCa3buxJaJZnyZgeXW/gWkPg
+ S65GowUR3Y+kw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=kernel.org
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org
- header.a=rsa-sha256 header.s=k20201202 header.b=mOT36r0B
-Subject: Re: [Buildroot] [PATCH v10 06/12] boot/ti-k3/ti-k3-r5-loader:
- install tiboot3.bin
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202312101026 header.b=QfyJcP70
+Subject: [Buildroot] [PATCH 2/9] package/apr: add optional dependency to
+ libxcrypt
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,126 +83,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Alexander Sverdlin <alexander.sverdlin@gmail.com>,
- Anand Gadiyar <gadiyar@ti.com>, heiko.thiery@gmail.com, Asaf
- Kahlon <asafka7@gmail.com>, Xuanhao Shi <X15000177@gmail.com>, James
- Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
- Romain Naour <romain.naour@smile.fr>,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- linux-amarula@amarulasolutions.com, "Yann E . Morin" <yann.morin.1998@free.fr>,
- bryce@redpinelabs.com, Andreas Dannenberg <dannenberg@ti.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1045577101883858484=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1045577101883858484==
-Content-Type: multipart/signed;
- boundary=45e5a602fe776cf0c23a6313a6e2d76ec725709f542a4336731c76708bac;
- micalg=pgp-sha384; protocol="application/pgp-signature"
+When glibc was bumped to version 2.39 in commit
+b5680f53d60acf8ff6010082f873438a39bd5d97 it removed the deprecated
+libcrypt support.
 
---45e5a602fe776cf0c23a6313a6e2d76ec725709f542a4336731c76708bac
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
+As glibc's libcrypt was providing apr's libcrypt dependency this broke
+the apache build using glibc version 2.39.
 
-Hi,
+To fix this select the libxcrypt dependency to apr when using a glibc
+toolchain and add the dependency if selected.
 
-On Wed Apr 3, 2024 at 3:49 PM CEST, Michael Nazzareno Trimarchi wrote:
-> > > > > +TI_K3_R5_LOADER_SECTYPE =3D $(call qstrip,$(BR2_PACKAGE_TI_K3_SE=
-CTYPE))
-> > > > > +TI_K3_R5_LOADER_SOC =3D $(call qstrip,$(BR2_PACKAGE_TI_K3_SOC))
-> > > > > +
-> > > > >  define TI_K3_R5_LOADER_INSTALL_IMAGES_CMDS
-> > > > >       cp $(@D)/spl/u-boot-spl.bin $(BINARIES_DIR)/r5-u-boot-spl.b=
-in
-> > > > > +     cd $(@D); find ./ -type f -regex "\.\/tiboot3-$(TI_K3_R5_LO=
-ADER_SOC)-$(TI_K3_R5_LOADER_SECTYPE)-[^-]*..bin" -exec cp {} $(BINARIES_DIR=
-)/tiboot3.bin \;
-> > > >
-> > > > The filename should *not* be hardcoded to look like
-> > > > <soc>-<sectype>.bin. This is just an artifact how TI is naming thei=
-r
-> > > > files in *their* u-boot binman files. Instead this should just be a
-> > > > Kconfig variable (maybe K3_R5_LOADER_FILENAME?) which can be set by
-> > > > the user/board config and which defaults to "tiboot3.bin".
-> > > > "tiboot3.bin" is the filename which is used by the ROM in filesyste=
-m
-> > > > boot mode and for which u-boot is already creating a symlink.
-> > > > So this will then just be another simple "cp".
-> > > >
-> > > > On a side node, we also found out that the "find . -regex" is rathe=
-r
-> > > > fragile in the sense that it might not copy anything at all without
-> > > > generating an error.
-> > > >
-> > >
-> > > The idea was to merge this series based on the series topic. I would
-> > > like to remind you that
-> > > the code in buildroot was not working and we sent a first series back
-> > > in November that was suppose
-> > > to fix something that was "merged" before and unfortunately broken.
-> > > We like all the suggestions and we would of course love
-> > > to improve the series but it would be nice to limit the series to the
-> > > subject and not continue to add a more generalist approach.
-> > > This is from you the first email and thank you for adding your
-> > > contribution and welcome on board too.
-> > > I think that we should now wait for V11
-> >
-> > Sorry, for being that late, but I don't think it is the way to go to
-> > introduce something "broken" (for a lack of a better wording) and
->
-> I just said that your suggestion is welcome but the code we have
-> already has been broken for
-> months.
->
-> > then fix it afterwards, Esp. because it means touching all the bits
-> > and defconfigs again. IOW, this is not an improvement but rather how
-> > to do it the correct way (in my opinion, others might disagree of
-> > course).
->
-> The proposal is not broken but it's better to say not consistent with
-> newer boards/soc. Am I wrong?
+Fixes:
+http://autobuild.buildroot.net/results/11ccf857a70ae9f44e8d3ae39fc01db68632ca64/
 
-I'd argue it makes wrong assumptions. The filename buildroot is
-picking up here comes from the u-boot binman device tree artifact
-and the author of this binman dtsi file is free to choose whatever
-filename they like:
-   filename =3D "tiboot3-am64x_sr2-hs-evm.bin";
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/apr/Config.in | 1 +
+ package/apr/apr.mk    | 4 ++++
+ 2 files changed, 5 insertions(+)
 
-Thus, buildroot should not assume that the filename has some kind of
-structure. And also, the binman already generates a link to the
-default tiboot3.bin.
-
-Anyway, you have my feedback and there should be enough information
-for everyone to form their own opinion on this topic.
-
--michael
-
---45e5a602fe776cf0c23a6313a6e2d76ec725709f542a4336731c76708bac
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iKgEABMJADAWIQTIVZIcOo5wfU/AngkSJzzuPgIf+AUCZg1ighIcbXdhbGxlQGtl
-cm5lbC5vcmcACgkQEic87j4CH/hXkAF9FS0IF60hUaEv2ReNEr98k6Rf0+s0HTVA
-8plagID22vX8wZA7B3X5T4eL3eO86vwpAX4gW4wPlIa6zgHpjgt9t/iyKJ3+dJd+
-pUyErf3UdY/Mo/uroX5QMktL3HPZDXwPAUs=
-=5dRe
------END PGP SIGNATURE-----
-
---45e5a602fe776cf0c23a6313a6e2d76ec725709f542a4336731c76708bac--
-
---===============1045577101883858484==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/apr/Config.in b/package/apr/Config.in
+index 4606fc5378..9427b7af2c 100644
+--- a/package/apr/Config.in
++++ b/package/apr/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_APR
+ 	# apr really needs shared library support
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_USE_MMU # fork() in apr_proc_fork()
++	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
+ 	help
+ 	  The mission of the Apache Portable Runtime (APR) project is to
+ 	  create and maintain software libraries that provide a
+diff --git a/package/apr/apr.mk b/package/apr/apr.mk
+index bdc5e915c6..cb8c12dd65 100644
+--- a/package/apr/apr.mk
++++ b/package/apr/apr.mk
+@@ -68,6 +68,10 @@ else
+ APR_CONF_OPTS += --disable-nonportable-atomics
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBXCRYPT),y)
++APR_DEPENDENCIES += libxcrypt
++endif
++
+ ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
+ APR_DEPENDENCIES += util-linux
+ endif
+-- 
+2.39.2
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1045577101883858484==--
