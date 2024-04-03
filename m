@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3034DCD128A
-	for <buildroot@archiver.kernel.org>; Wed,  3 Apr 2024 21:09:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95193CD128A
+	for <buildroot@archiver.kernel.org>; Wed,  3 Apr 2024 21:09:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0430C418B8;
-	Wed,  3 Apr 2024 21:09:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 68CFB418A6;
+	Wed,  3 Apr 2024 21:09:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6sOmuU4i8oqi; Wed,  3 Apr 2024 21:09:44 +0000 (UTC)
+ id 2ZDRKkPVizxL; Wed,  3 Apr 2024 21:09:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D72B417C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 01F85418CE
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9D72B417C6;
-	Wed,  3 Apr 2024 21:09:44 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7A12F1BF982
- for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 21:09:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 01F85418CE;
+	Wed,  3 Apr 2024 21:09:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 038B11BF3D4
+ for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 21:09:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6769F41713
+ by smtp4.osuosl.org (Postfix) with ESMTP id E401C41899
  for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 21:09:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HNfGtbDa7NQV for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dzXH5sJJeJbk for <buildroot@lists.busybox.net>;
  Wed,  3 Apr 2024 21:09:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C01E4042B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A5B541889
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6C01E4042B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9A5B541889
  for <buildroot@buildroot.org>; Wed,  3 Apr 2024 21:09:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 64D0B848D4; Wed,  3 Apr 2024 21:09:39 +0000 (UTC)
+ id 9392084A7C; Wed,  3 Apr 2024 21:09:39 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 3 Apr 2024 23:09:09 +0200
+Date: Wed, 3 Apr 2024 23:09:13 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 087115b96a6b053a333de2960aa75c6dd122f087
-X-Git-Newrev: 57391fad2e619395340b81957ddceab1b1df2e20
+X-Git-Oldrev: 146498d13c487e8f43d6725e343eae4474147695
+X-Git-Newrev: 338acb27ff3e07560290085d7c6a2feab633c869
 X-Patchwork-Hint: ignore
-Message-Id: <20240403210939.64D0B848D4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libgpiod2: new package
+Message-Id: <20240403210939.9392084A7C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/bpftrace: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,148 +65,178 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=57391fad2e619395340b81957ddceab1b1df2e20
+commit: https://git.buildroot.net/buildroot/commit/?id=338acb27ff3e07560290085d7c6a2feab633c869
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Due to a significant api change as well as more recent kernel version
-requirements, we introduce a separate package for version 2.0 and higher.
-The new package is incompatible to libgpiod 1.x. This allows for iteratively
-updating all dependent packages without breaking anything as a result.
+bpftrace is a high-level tracing language for Linux enhanced Berkeley
+Packet Filter (eBPF) available in recent Linux kernels (4.1 and later).
 
-For now we will have libgpiod2 depend on !libgpiod. However, in the
-future, it might be preferable to have it the other way around,
-such that packages, which select libgpiod2 don't have to also add the
-the !libgpiod dependency.
+Only tested on x86_64.
 
-Python bindings fail to build, so they are unconditionally disabled.
-setup.py when called from Makefile tries to do native compilation
-instead of cross-compilation, which fails at link time with
-/usr/bin/ld: skipping incompatible ../../lib/.libs//libgpiod.so when searching for -lgpiod
-
-Note that this package does not correspond to the debian libgpiod2 package,
-which currently uses only version 1.6.3
-
-Signed-off-by: Boerge Struempfel <bstruempfel@ultratronik.de>
+Signed-off-by: Qais Yousef <qais.yousef@arm.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+Cc: Qais Yousef <qyousef@layalina.io>
+Signed-off-by: Mat Martineau <martineau@kernel.org>
+[Arnout:
+ - Remove duplicate 'depends on BR2_TOOLCHAIN_HAS_THREADS'
+ - Fix Config.in comment text and dependencies
+ - Order dependencies alphabetically
+]
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- DEVELOPERS                       |  3 +++
- package/Config.in                |  1 +
- package/libgpiod2/Config.in      | 30 ++++++++++++++++++++++++++++++
- package/libgpiod2/libgpiod2.hash |  4 ++++
- package/libgpiod2/libgpiod2.mk   | 33 +++++++++++++++++++++++++++++++++
- 5 files changed, 71 insertions(+)
+ DEVELOPERS                     |  4 +++
+ package/Config.in              |  1 +
+ package/bpftrace/Config.in     | 56 ++++++++++++++++++++++++++++++++++++++++++
+ package/bpftrace/bpftrace.hash |  3 +++
+ package/bpftrace/bpftrace.mk   | 34 +++++++++++++++++++++++++
+ 5 files changed, 98 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 6b38db0857..7dca6a441a 100644
+index 3a6b06bcbf..8d7f8bcba5 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -531,6 +531,9 @@ N:	Bilal Wasim <bilalwasim676@gmail.com>
- F:	board/chromebook/elm/
- F:	configs/chromebook_elm_defconfig
+@@ -2583,6 +2583,9 @@ F:	package/synergy/
+ N:	Prabhu Sannachi <prabhu.sannachi@collins.com>
+ F:	package/redis-plus-plus/
  
-+N:	Boerge Struempfel <boerge.struempfel@gmail.com>
-+F:	package/libgpiod2/
++N:	Qais Yousef <qais.yousef@arm.com>
++F:	package/bpftrace/
 +
- N:	Bogdan Radulescu <bogdan@nimblex.net>
- F:	package/iftop/
- F:	package/ncdu/
+ N:	Rafal Susz <rafal.susz@gmail.com>
+ F:	board/avnet/s6lx9_microboard/
+ F:	configs/s6lx9_microboard_defconfig
+@@ -2686,6 +2689,7 @@ F:	package/alure/
+ F:	package/aubio/
+ F:	package/bcc/
+ F:	package/binutils/
++F:	package/bpftrace/
+ F:	package/bullet/
+ F:	package/clinfo/
+ F:	package/efl/
 diff --git a/package/Config.in b/package/Config.in
-index 410fe0f493..b1237e5d6d 100644
+index 84c9aff51f..60d8947778 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1751,6 +1751,7 @@ menu "Hardware handling"
- 	source "package/libftdi1/Config.in"
- 	source "package/libgphoto2/Config.in"
- 	source "package/libgpiod/Config.in"
-+	source "package/libgpiod2/Config.in"
- 	source "package/libgudev/Config.in"
- 	source "package/libhid/Config.in"
- 	source "package/libiio/Config.in"
-diff --git a/package/libgpiod2/Config.in b/package/libgpiod2/Config.in
+@@ -91,6 +91,7 @@ menu "Debugging, profiling and benchmark"
+ 	source "package/blktrace/Config.in"
+ 	source "package/bonnie/Config.in"
+ 	source "package/bpftool/Config.in"
++	source "package/bpftrace/Config.in"
+ 	source "package/cache-calibrator/Config.in"
+ 	source "package/clinfo/Config.in"
+ 	source "package/clpeak/Config.in"
+diff --git a/package/bpftrace/Config.in b/package/bpftrace/Config.in
 new file mode 100644
-index 0000000000..5a13bfc344
+index 0000000000..8af94443ab
 --- /dev/null
-+++ b/package/libgpiod2/Config.in
-@@ -0,0 +1,30 @@
-+config BR2_PACKAGE_LIBGPIOD2
-+	bool "libgpiod2"
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
-+	depends on !BR2_PACKAGE_LIBGPIOD
++++ b/package/bpftrace/Config.in
+@@ -0,0 +1,56 @@
++config BR2_PACKAGE_BPFTRACE_ARCH_SUPPORTS
++	bool
++	default y if BR2_aarch64 || BR2_aarch64_be
++	default y if BR2_x86_64
++	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
++
++config BR2_PACKAGE_BPFTRACE
++	bool "bpftrace"
++	depends on BR2_PACKAGE_BPFTRACE_ARCH_SUPPORTS
++	depends on BR2_USE_MMU # bcc -> python3
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libbpf
++	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS # bcc
++	depends on BR2_TOOLCHAIN_USES_GLIBC # bcc
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # bcc -> clang
++	depends on BR2_INSTALL_LIBSTDCPP # bcc -> clang
++	depends on BR2_HOST_GCC_AT_LEAST_7 # bcc -> clang
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13 # libbpf
++	depends on BR2_USE_WCHAR # bcc -> clang, bcc -> python3, libbpf
++	depends on BR2_TOOLCHAIN_HAS_THREADS # bcc -> clang, bcc -> python3, libbpf
++	depends on !BR2_STATIC_LIBS # bcc -> clang, bcc -> python3, libbpf
++	select BR2_PACKAGE_BCC
++	select BR2_PACKAGE_BZIP2
++	select BR2_PACKAGE_CEREAL
++	select BR2_PACKAGE_ELFUTILS
++	select BR2_PACKAGE_LIBBPF
++	select BR2_PACKAGE_LLVM
++	# LLVM RTTI mendatory: https://github.com/iovisor/bpftrace/issues/1156
++	select BR2_PACKAGE_LLVM_RTTI
++	select BR2_PACKAGE_XZ
 +	help
-+	  This is a C library that abstracts the GPIO character
-+	  device operations on linux.
++	  bpftrace is a high-level tracing language for Linux enhanced
++	  Berkeley Packet Filter (eBPF) available in recent Linux
++	  kernels (4.x).
 +
-+	  This package is the continuation of the libgpiod package
-+	  for versions 2.0 and above.
++	  bpftrace uses LLVM as a backend to compile scripts to
++	  BPF-bytecode and makes use of BCC for interacting with the
++	  Linux BPF system, as well as existing Linux tracing
++	  capabilities: kernel dynamic tracing (kprobes), user-level
++	  dynamic tracing (uprobes), and tracepoints. The bpftrace
++	  language is inspired by awk and C, and predecessor tracers
++	  such as DTrace and SystemTap.
 +
-+	  Note that a kernel of 5.10 or above is required for the
-+	  ioctls to work.
++	  It's highly recommended to NOT strip bpftrace binary.
++	  To do so, add "bpftrace" to BR2_STRIP_EXCLUDE_FILES.
++	  See:
++	    https://bugzilla.redhat.com/show_bug.cgi?id=1865787
 +
-+	  https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/
++	  https://www.github.com/iovisor/bpftrace
 +
-+if BR2_PACKAGE_LIBGPIOD2
-+
-+config BR2_PACKAGE_LIBGPIOD2_TOOLS
-+	bool "install tools"
-+	help
-+	  Include a set of command-line tools for managing GPIOs.
-+
-+endif
-+
-+comment "libgpiod2 needs kernel headers >= 5.10"
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
-+
-+comment "libgpiod2 is incompatible with libgpiod"
-+	depends on BR2_PACKAGE_LIBGPIOD
-diff --git a/package/libgpiod2/libgpiod2.hash b/package/libgpiod2/libgpiod2.hash
++comment "bpftrace needs a glibc toolchain w/ C++, gcc >= 7, host gcc >= 7, kernel headers >= 4.13"
++	depends on BR2_PACKAGE_BPFTRACE_ARCH_SUPPORTS
++	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
++	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_INSTALL_LIBSTDCPP \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || !BR2_HOST_GCC_AT_LEAST_7 \
++		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13
+diff --git a/package/bpftrace/bpftrace.hash b/package/bpftrace/bpftrace.hash
 new file mode 100644
-index 0000000000..b5488496b2
+index 0000000000..c2ecc927da
 --- /dev/null
-+++ b/package/libgpiod2/libgpiod2.hash
-@@ -0,0 +1,4 @@
-+# From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
-+sha256  fa4024a080121c958502f9a46a5bda44bea85e7a4dd7fcb3dead463b6fc4261c  libgpiod-2.1.tar.xz
-+# Hash for license file
-+sha256  eb17a56966db5d986bec449ee44ed61f01f9e3fafa952e527db67a8f9594fd11  COPYING
-diff --git a/package/libgpiod2/libgpiod2.mk b/package/libgpiod2/libgpiod2.mk
++++ b/package/bpftrace/bpftrace.hash
+@@ -0,0 +1,3 @@
++# locally calculated
++sha256  b520340f28ce4d6f2fb2355f1675b6801ff8498ed9e8bff14abbbf6baff5a08e  bpftrace-0.19.1.tar.gz
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/bpftrace/bpftrace.mk b/package/bpftrace/bpftrace.mk
 new file mode 100644
-index 0000000000..9c478f1ffb
+index 0000000000..dc4c9728cc
 --- /dev/null
-+++ b/package/libgpiod2/libgpiod2.mk
-@@ -0,0 +1,33 @@
++++ b/package/bpftrace/bpftrace.mk
+@@ -0,0 +1,34 @@
 +################################################################################
 +#
-+# libgpiod2
++# bpftrace
 +#
 +################################################################################
 +
-+# Be careful when bumping versions.
-+# Dependency on kernel header versions may change.
-+LIBGPIOD2_VERSION = 2.1
-+LIBGPIOD2_SOURCE = libgpiod-$(LIBGPIOD2_VERSION).tar.xz
-+LIBGPIOD2_SITE = https://www.kernel.org/pub/software/libs/libgpiod
-+LIBGPIOD2_LICENSE = LGPL-2.1+
-+LIBGPIOD2_LICENSE_FILES = COPYING
-+LIBGPIOD2_INSTALL_STAGING = YES
-+LIBGPIOD2_DEPENDENCIES = host-pkgconf host-autoconf-archive
-+LIBGPIOD2_CONF_OPTS = \
-+	--disable-bindings-python \
-+	--disable-examples \
-+	--disable-tests
++BPFTRACE_VERSION = 0.19.1
++BPFTRACE_SITE = $(call github,iovisor,bpftrace,v$(BPFTRACE_VERSION))
++BPFTRACE_LICENSE = Apache-2.0
++BPFTRACE_LICENSE_FILES = LICENSE
++BPFTRACE_DEPENDENCIES = \
++	bcc \
++	bzip2 \
++	cereal \
++	elfutils \
++	host-bison \
++	host-flex \
++	libbpf \
++	llvm \
++	xz
 +
-+ifeq ($(BR2_PACKAGE_LIBGPIOD2_TOOLS),y)
-+LIBGPIOD2_CONF_OPTS += --enable-tools
-+else
-+LIBGPIOD2_CONF_OPTS += --disable-tools
++# libbfd, libopcodes
++ifeq ($(BR2_PACKAGE_BINUTILS),y)
++BPFTRACE_DEPENDENCIES += binutils
 +endif
 +
-+ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
-+LIBGPIOD2_CONF_OPTS += --enable-bindings-cxx
-+else
-+LIBGPIOD2_CONF_OPTS += --disable-bindings-cxx
-+endif
++BPFTRACE_CONF_OPTS += \
++	-DBUILD_SHARED_LIBS:BOOL=OFF \
++	-DBUILD_TESTING:BOOL=OFF \
++	-DENABLE_MAN:BOOL=OFF \
++	-DINSTALL_TOOL_DOCS:BOOL=OFF \
++	-DUSE_SYSTEM_BPF_BCC:BOOL=ON
 +
-+$(eval $(autotools-package))
++$(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
