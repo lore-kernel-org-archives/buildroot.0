@@ -4,48 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AFDE0CD128A
-	for <buildroot@archiver.kernel.org>; Wed,  3 Apr 2024 19:54:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A241CD128A
+	for <buildroot@archiver.kernel.org>; Wed,  3 Apr 2024 19:54:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 78E8B409DF;
-	Wed,  3 Apr 2024 19:54:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E1759415AF;
+	Wed,  3 Apr 2024 19:54:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FZJfnjcwe9hW; Wed,  3 Apr 2024 19:54:01 +0000 (UTC)
+ id 8a-3I7DyA8qp; Wed,  3 Apr 2024 19:54:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 36E7C414A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E672A41839
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 36E7C414A1;
-	Wed,  3 Apr 2024 19:54:01 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D696A1BF4D5
- for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 19:53:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E672A41839;
+	Wed,  3 Apr 2024 19:54:04 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D07901BF4D5
+ for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 19:54:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D17E040437
- for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 19:53:58 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CAF8760751
+ for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 19:54:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bn5C5Gdqnjpx for <buildroot@lists.busybox.net>;
- Wed,  3 Apr 2024 19:53:58 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oJ04bFsyh-Rd for <buildroot@lists.busybox.net>;
+ Wed,  3 Apr 2024 19:54:02 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
+ helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 26F43402E6
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 26F43402E6
- for <buildroot@buildroot.org>; Wed,  3 Apr 2024 19:53:58 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 107E8846CD; Wed,  3 Apr 2024 19:53:58 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 3 Apr 2024 21:53:41 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: eab49e34af17048ca59fcc9ccdc7990fee269ab6
-X-Git-Newrev: f12c77442e1184427eee0960646833728a4c47db
-X-Patchwork-Hint: ignore
-Message-Id: <20240403195358.107E8846CD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] docs/manual: fix host-python-setuptools
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C30796073E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C30796073E
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C30796073E
+ for <buildroot@buildroot.org>; Wed,  3 Apr 2024 19:54:01 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D507FE0004;
+ Wed,  3 Apr 2024 19:53:59 +0000 (UTC)
+Date: Wed, 3 Apr 2024 21:53:59 +0200
+To: =?UTF-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= via buildroot
+ <buildroot@buildroot.org>
+Message-ID: <20240403215359.7674da99@windsurf>
+In-Reply-To: <20240329160400.66499-1-raphael.melotte@mind.be>
+References: <20240329160400.66499-1-raphael.melotte@mind.be>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1712174040;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=a39fWAtT0sB3cqucYM7PMnhzflX+SgLvhcnS0gwoDGo=;
+ b=RuIfO2EfAJJJboAiPvQqsL2umV4PSyFwxEYlbwWP8hV/It74qJm8zjeoA6B31UiVgKmDaW
+ OMsuWRkiIvB1zdszbaivOIcsh/fBVoIBBgy4TkI2UJxFGiHMC6momvPNPoCIYyCQFl0gwa
+ GcnqpsQ1sKoN2GOYsRFr/domBveG5s3i16I31Hpx2Q1p88lJQl4IDHam1is3597CJj1BIQ
+ JUzxubm1E5nseWNy5ZuGZw4zKbNWCFA1aW+XU2uq8bbXkDSUlel5QvIZS1VUdijrpL5L9q
+ uInN2pOXUr5esXbYfJ3hy/nTzsT42UbG/fBWR/of8UTN6x3tgXvEgkF+BAN+6g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=RuIfO2Ef
+Subject: Re: [Buildroot] [PATCH 1/1] doc/manual: fix host-python-setuptools
  typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -60,46 +84,20 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1122855612697011952=="
+Cc: =?UTF-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= <raphael.melotte@mind.be>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1122855612697011952==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=f12c77442e1184427eee0960646833728a4c47db
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- docs/manual/adding-packages-python.adoc | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/docs/manual/adding-packages-python.adoc b/docs/manual/adding-packages-python.adoc
-index 9953be6639..67f2f6081d 100644
---- a/docs/manual/adding-packages-python.adoc
-+++ b/docs/manual/adding-packages-python.adoc
-@@ -92,7 +92,7 @@ Note that:
-    dependencies are automatically added as needed by the Python
-    package infrastructure.
- 
-- * Similarly, it is not needed to add +host-setuptools+ to
-+ * Similarly, it is not needed to add +host-python-setuptools+ to
-    +PYTHON_FOO_DEPENDENCIES+ for setuptools-based packages, since it's
-    automatically added by the Python infrastructure as needed.
- 
-
---===============1122855612697011952==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1122855612697011952==--
+T24gRnJpLCAyOSBNYXIgMjAyNCAxNzowMzo1OCArMDEwMApSYXBoYcOrbCBNw6lsb3R0ZSB2aWEg
+YnVpbGRyb290IDxidWlsZHJvb3RAYnVpbGRyb290Lm9yZz4gd3JvdGU6Cgo+IFNpZ25lZC1vZmYt
+Ynk6IFJhcGhhw6tsIE3DqWxvdHRlIDxyYXBoYWVsLm1lbG90dGVAbWluZC5iZT4KPiAtLS0KPiAg
+ZG9jcy9tYW51YWwvYWRkaW5nLXBhY2thZ2VzLXB5dGhvbi5hZG9jIHwgMiArLQo+ICAxIGZpbGUg
+Y2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkKCldlbGwgc3BvdHRlZCEgQXBw
+bGllZCB0byBtYXN0ZXIsIHRoYW5rcy4KClRob21hcwotLSAKVGhvbWFzIFBldGF6em9uaSwgQ1RP
+LCBCb290bGluCkVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcKaHR0cHM6Ly9i
+b290bGluLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+XwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8v
+bGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
