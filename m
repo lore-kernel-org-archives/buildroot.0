@@ -4,72 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9279DCD1294
-	for <buildroot@archiver.kernel.org>; Wed,  3 Apr 2024 09:21:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA3CDCD1294
+	for <buildroot@archiver.kernel.org>; Wed,  3 Apr 2024 09:22:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5BC6D8208D;
-	Wed,  3 Apr 2024 09:21:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 87A79820AD;
+	Wed,  3 Apr 2024 09:22:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fi5t_fkE1o_O; Wed,  3 Apr 2024 09:21:57 +0000 (UTC)
+ id 8mK2sfVBIU8K; Wed,  3 Apr 2024 09:22:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E4018208F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DFB3C820BA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2E4018208F;
-	Wed,  3 Apr 2024 09:21:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9AD971BF271
+	by smtp1.osuosl.org (Postfix) with ESMTP id DFB3C820BA;
+	Wed,  3 Apr 2024 09:21:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D48921BF271
  for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 09:21:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 75A4A820A3
+ by smtp2.osuosl.org (Postfix) with ESMTP id C17CA41689
  for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 09:21:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MvBybOai1cbS for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3H0YR39UI0PD for <buildroot@lists.busybox.net>;
  Wed,  3 Apr 2024 09:21:54 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.178.240;
  helo=mslow1.mail.gandi.net; envelope-from=thomas.bonnefille@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 86D2C82087
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 86D2C82087
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DC56D4040D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC56D4040D
 Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 86D2C82087
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DC56D4040D
  for <buildroot@buildroot.org>; Wed,  3 Apr 2024 09:21:53 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::229])
- by mslow1.mail.gandi.net (Postfix) with ESMTP id 0E1CBC3F1A
+Received: from relay9-d.mail.gandi.net (unknown [217.70.183.199])
+ by mslow1.mail.gandi.net (Postfix) with ESMTP id 8B5A3C3F1B
  for <buildroot@buildroot.org>; Wed,  3 Apr 2024 09:21:51 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id F27D8FF808;
- Wed,  3 Apr 2024 09:21:45 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1390BFF805;
+ Wed,  3 Apr 2024 09:21:47 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed,  3 Apr 2024 11:14:39 +0200
-Message-ID: <20240403091952.653698-2-thomas.bonnefille@bootlin.com>
+Date: Wed,  3 Apr 2024 11:14:40 +0200
+Message-ID: <20240403091952.653698-3-thomas.bonnefille@bootlin.com>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <20240403091952.653698-1-thomas.bonnefille@bootlin.com>
 References: <20240403091952.653698-1-thomas.bonnefille@bootlin.com>
 MIME-Version: 1.0
 X-GND-Sasl: thomas.bonnefille@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1712136106;
+ d=bootlin.com; s=gm1; t=1712136107;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=01tybVtU5oT/hGzgeTAQ7NEQ2tJeH1L3IvlP4slTkJk=;
- b=nVlGj6chs7tDOb5TBmyyS0l5HN5CTxHnqkhGMByvDfv0FAxmLwhOuhMMCMpN8k9Z1u4Mvs
- lpQv2eymyNWPe4DewF6tA/d1oqIxG+VQwOMTNNh1zdqnrpAmJ0rIcx3eTTyqcAdKxRWj6C
- elz8qhxfcLW29w84I6eDleuNLAkubI74vWsoKEROdUYfWz/Yc+uJovO56YzBNXZWbWt7QX
- 4//W3s32twb2T4xS0mgy3+pl8BSkIFi/Xlc5zmTmnZpQUYHC6lDK+bdljyWnOdXZBayHYx
- UbFFNWh8uOOmMvE5Kd/2pUTCLhvOuBk9Jkpvh3ot/HJF/wBaXEQCODMVPc1hMQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=t+1t08bZyK3dmM00Q10HOu+8yvDGhUuhHNJoFSCPEIE=;
+ b=XIeX9PTHp1a+TiUfrVnCUSDzklwz4stJ7HXCc+RQ+RbLq5xWkfZkbzpJPjxtnoSWO9UPh0
+ SbHx+g5LmlGAKS3AwaGt9X+xxKMHDqG27WfLufqU4bfEEBK6Nx56HvdgyIzAAgeH+PTzQS
+ FsoWg44R+LzqNetGDQLS8mzNVf1HH5exc0AeTUbO6N7e6BiFoS253wq9DE/8ULt3ZjDAnN
+ 2Vp7WJ0vgwot7+LjEFI9orzabJV7vaGhfp+5fwPyrPy9eRMzEZ9UN7znSkVlumpYLg2wGV
+ MtDf5mOcW0gCHCNmx+Sqa5/G+964NEGnU4/H/T0IcfXue0MEiQ+UbT2C4bOzLQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=nVlGj6ch
-Subject: [Buildroot] [PATCH 1/2] package/starfive_spltool: new package
+ header.s=gm1 header.b=XIeX9PTH
+Subject: [Buildroot] [PATCH 2/2] configs/pine64-star64: new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,96 +91,215 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch adds a new package for the Starfive SPL tool. It is used to
-add header to the Secondary Program Loader for board based on the
-Starfive JH7110 SoC.
+This patch adds a new defconfig for the Star64 board made by Pine64. This
+board is based on the Starfive JH7110 RISC-V 64 bits SoC.
+https://wiki.pine64.org/wiki/STAR64
+This patch uses a custom Kernel and U-Boot made for this board. The SPL
+has to be signed with the Starfive SPL-Tool which is a software
+provided by the vendor to get the necessary headers on the SPL.
+The image configuration is based on the work done by Ivan Velickovic
+<i.velickovic@unsw.edu.au>.
 
 Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
 ---
- DEVELOPERS                                    |  3 +++
- package/Config.in.host                        |  1 +
- package/starfive-spltool/Config.in.host       |  8 ++++++++
- .../starfive-spltool.hash                     |  2 ++
- package/starfive-spltool/starfive-spltool.mk  | 20 +++++++++++++++++++
- 5 files changed, 34 insertions(+)
- create mode 100644 package/starfive-spltool/Config.in.host
- create mode 100644 package/starfive-spltool/JH7110_VF2_515_v5.11.3/starfive-spltool.hash
- create mode 100644 package/starfive-spltool/starfive-spltool.mk
+ DEVELOPERS                                    |  2 ++
+ board/pine64/star64/genimage.cfg              | 24 +++++++++++++
+ .../overlay/boot/extlinux/extlinux.conf       |  4 +++
+ board/pine64/star64/post-build.sh             |  9 +++++
+ board/pine64/star64/readme.txt                | 32 +++++++++++++++++
+ .../pine64/star64/star64-uboot-fit-image.its  | 29 +++++++++++++++
+ configs/pine64_star64_defconfig               | 36 +++++++++++++++++++
+ 7 files changed, 136 insertions(+)
+ create mode 100644 board/pine64/star64/genimage.cfg
+ create mode 100644 board/pine64/star64/overlay/boot/extlinux/extlinux.conf
+ create mode 100755 board/pine64/star64/post-build.sh
+ create mode 100644 board/pine64/star64/readme.txt
+ create mode 100644 board/pine64/star64/star64-uboot-fit-image.its
+ create mode 100644 configs/pine64_star64_defconfig
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 6b38db0857..b8ec27f623 100644
+index b8ec27f623..947aa58566 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2953,6 +2953,9 @@ N:	Thijs Vermeir <thijsvermeir@gmail.com>
- F:	package/ranger/
+@@ -2954,6 +2954,8 @@ F:	package/ranger/
  F:	package/x265/
  
-+N:	Thomas Bonnefille <thomas.bonnefille@bootlin.com>
-+F:	package/starfive-spltool/
-+
+ N:	Thomas Bonnefille <thomas.bonnefille@bootlin.com>
++F:	board/pine64/star64
++F:	configs/pine64_star64_defconfig
+ F:	package/starfive-spltool/
+ 
  N:	Thomas Claveirole <thomas.claveirole@green-communications.fr>
- F:	package/fcgiwrap/
- F:	package/openlayers/
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 9543a22ffc..986b2854d0 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -107,6 +107,7 @@ menu "Host utilities"
- 	source "package/sentry-cli/Config.in.host"
- 	source "package/sloci-image/Config.in.host"
- 	source "package/squashfs/Config.in.host"
-+	source "package/starfive-spltool/Config.in.host"
- 	source "package/sunxi-tools/Config.in.host"
- 	source "package/swig/Config.in.host"
- 	source "package/swugenerator/Config.in.host"
-diff --git a/package/starfive-spltool/Config.in.host b/package/starfive-spltool/Config.in.host
+diff --git a/board/pine64/star64/genimage.cfg b/board/pine64/star64/genimage.cfg
 new file mode 100644
-index 0000000000..afb2777ca6
+index 0000000000..74940016f4
 --- /dev/null
-+++ b/package/starfive-spltool/Config.in.host
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_HOST_STARFIVE_SPLTOOL
-+	bool "host starfive-spltool"
-+	depends on BR2_riscv
-+	help
-+	  Add header to the Secondary Program Loader with the 3rd party
-+	  software given by Starfive-Tech for their SoCs.
++++ b/board/pine64/star64/genimage.cfg
+@@ -0,0 +1,24 @@
++# SD card image for the Pine64 Star64 board
 +
-+	  https://github.com/starfive-tech/soft_3rdpart/tree/JH7110_VisionFive2_devel/spl_tool
-diff --git a/package/starfive-spltool/JH7110_VF2_515_v5.11.3/starfive-spltool.hash b/package/starfive-spltool/JH7110_VF2_515_v5.11.3/starfive-spltool.hash
++image sdcard.img {
++        hdimage {
++                partition-table-type = "gpt"
++        }
++
++        partition spl {
++                image = "u-boot-spl.bin.normal.out"
++                partition-type-uuid = 2E54B353-1271-4842-806F-E436D6AF6985
++                offset = 2M
++        }
++
++        partition uboot {
++                image = "opensbi_uboot_payload.img"
++                partition-type-uuid = 5B193300-FC78-40CD-8002-E86C45580B47
++                offset = 4M
++        }
++
++        partition rootfs {
++                image = "rootfs.ext4"
++                bootable = true
++        }
++}
+diff --git a/board/pine64/star64/overlay/boot/extlinux/extlinux.conf b/board/pine64/star64/overlay/boot/extlinux/extlinux.conf
 new file mode 100644
-index 0000000000..55835de310
+index 0000000000..db7cfb7b8b
 --- /dev/null
-+++ b/package/starfive-spltool/JH7110_VF2_515_v5.11.3/starfive-spltool.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256  f5466225021fbe4e983cc85f32ce11d92ad30689b18e0d1390d16f6bfab74477  starfive-spltool-JH7110_VF2_515_v5.11.3.tar.gz
-diff --git a/package/starfive-spltool/starfive-spltool.mk b/package/starfive-spltool/starfive-spltool.mk
++++ b/board/pine64/star64/overlay/boot/extlinux/extlinux.conf
+@@ -0,0 +1,4 @@
++label star64
++  kernel /boot/Image
++  devicetree /boot/jh7110-pine64-star64.dtb
++  append root=/dev/mmcblk1p3 earlycon=sbi
+diff --git a/board/pine64/star64/post-build.sh b/board/pine64/star64/post-build.sh
+new file mode 100755
+index 0000000000..ed0a6ebd52
+--- /dev/null
++++ b/board/pine64/star64/post-build.sh
+@@ -0,0 +1,9 @@
++#!/bin/bash
++BOARD_DIR="$CONFIG_DIR"/board/pine64/star64
++
++# Add header to the SPL
++"$HOST_DIR"/bin/spl_tool -c -f "$BINARIES_DIR"/u-boot-spl.bin
++
++# Create the u-boot FIT image
++cp "$BOARD_DIR"/star64-uboot-fit-image.its "$BINARIES_DIR"
++mkimage -f "$BINARIES_DIR"/star64-uboot-fit-image.its -A riscv -O u-boot -T firmware "$BINARIES_DIR"/opensbi_uboot_payload.img
+diff --git a/board/pine64/star64/readme.txt b/board/pine64/star64/readme.txt
 new file mode 100644
-index 0000000000..559df35074
+index 0000000000..5e6ce25108
 --- /dev/null
-+++ b/package/starfive-spltool/starfive-spltool.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# starfive-spltool
-+#
-+################################################################################
++++ b/board/pine64/star64/readme.txt
+@@ -0,0 +1,32 @@
++Pine64 Star64
++=============
 +
-+STARFIVE_SPLTOOL_VERSION = JH7110_VF2_515_v5.11.3
-+STARFIVE_SPLTOOL_SITE = $(call github,starfive-tech,soft_3rdpart,$(STARFIVE_SPLTOOL_VERSION))
-+STARFIVE_SPLTOOL_LICENSE = GPL-2.0+
-+STARFIVE_SPLTOOL_FILES = spl_tool/LICENSE
++The Star64 is a low-cost RISC-V 64-bit based platform, powered by a
++Starfive JH7110 processor.
 +
-+define HOST_STARFIVE_SPLTOOL_BUILD_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D)/spl_tool
-+endef
++https://wiki.pine64.org/wiki/STAR64
 +
-+define HOST_STARFIVE_SPLTOOL_INSTALL_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/spl_tool/spl_tool $(HOST_DIR)/bin/spl_tool
-+endef
++How to build
++============
 +
-+$(eval $(host-generic-package))
++$ make pine64_star64_defconfig
++$ make
++
++How to write the SD card
++========================
++
++Once the build process is finished you will have an image called "sdcard.img"
++in the output/images/ directory.
++
++Copy the bootable "sdcard.img" onto an SD card with "dd":
++
++  $ sudo dd if=output/images/sdcard.img of=/dev/sdX conv=fdatasync
++
++Preparing the board
++===================
++
++Connect a TTL UART cable to pin 6 (GND), 8 (TX) and 10 (RX).
++
++Insert your SD card.
++
++Power-up the board using a 12V power supply.
+diff --git a/board/pine64/star64/star64-uboot-fit-image.its b/board/pine64/star64/star64-uboot-fit-image.its
+new file mode 100644
+index 0000000000..08f603163a
+--- /dev/null
++++ b/board/pine64/star64/star64-uboot-fit-image.its
+@@ -0,0 +1,29 @@
++/dts-v1/;
++
++/ {
++	description = "U-boot-spl FIT image for JH7110 Pine64 Star64";
++	#address-cells = <2>;
++
++	images {
++		firmware {
++			description = "u-boot";
++			data = /incbin/("fw_payload.bin");
++			type = "firmware";
++			arch = "riscv";
++			os = "u-boot";
++			load = <0x0 0x40000000>;
++			entry = <0x0 0x40000000>;
++			compression = "none";
++		};
++	};
++
++	configurations {
++		default = "config-1";
++
++		config-1 {
++			description = "U-boot-spl FIT config for JH7110 Pine64 Star64";
++			firmware = "firmware";
++		};
++	};
++};
++
+diff --git a/configs/pine64_star64_defconfig b/configs/pine64_star64_defconfig
+new file mode 100644
+index 0000000000..5d5eec508c
+--- /dev/null
++++ b/configs/pine64_star64_defconfig
+@@ -0,0 +1,36 @@
++BR2_riscv=y
++
++# Kernel configuration
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Fishwaldo,Star64_linux,1456c984f15e21e28fb8a9ce96d0ca10e61a71c4)/linux-1456c984f15e21e28fb8a9ce96d0ca10e61a71c4.tar.gz"
++BR2_LINUX_KERNEL_DEFCONFIG="pine64_star64"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="starfive/jh7110-pine64-star64"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++
++# OpenSBI configuration
++BR2_TARGET_OPENSBI=y
++BR2_TARGET_OPENSBI_UBOOT_PAYLOAD=y
++BR2_TARGET_OPENSBI_PLAT="generic"
++
++# U-Boot configuration
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Fishwaldo,u-boot,172b47f62039605d6806fa96bd403c21cda28996)/u-boot-172b47f62039605d6806fa96bd403c21cda28996.tar.gz"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="pine64_star64"
++BR2_TARGET_UBOOT_SPL=y
++
++# Misc
++BR2_ROOTFS_OVERLAY="board/pine64/star64/overlay/"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
++BR2_PACKAGE_HOST_STARFIVE_SPLTOOL=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="100M"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pine64/star64/genimage.cfg"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/pine64/star64/post-build.sh"
++BR2_PACKAGE_HOST_GENIMAGE=y
 -- 
 2.44.0
 
