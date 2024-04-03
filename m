@@ -4,91 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC271C6FD1F
-	for <buildroot@archiver.kernel.org>; Wed,  3 Apr 2024 08:54:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95978CD1288
+	for <buildroot@archiver.kernel.org>; Wed,  3 Apr 2024 08:54:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8A8BF41689;
-	Wed,  3 Apr 2024 08:54:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3F2BF416D6;
+	Wed,  3 Apr 2024 08:54:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ymiS7FJ0WNPe; Wed,  3 Apr 2024 08:54:35 +0000 (UTC)
+ id A2ZQ8mWA2iWW; Wed,  3 Apr 2024 08:54:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7319A416B7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B371C416D7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7319A416B7;
-	Wed,  3 Apr 2024 08:54:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B371C416D7;
+	Wed,  3 Apr 2024 08:54:37 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 39B5B1BF44A
- for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 08:54:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 18AA21BF44A
+ for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 08:54:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 271CA810AC
- for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 08:54:34 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 05F92810AC
+ for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 08:54:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j6z2VtWSiyPI for <buildroot@lists.busybox.net>;
- Wed,  3 Apr 2024 08:54:33 +0000 (UTC)
+ id EnVZ9ZSsqIVw for <buildroot@lists.busybox.net>;
+ Wed,  3 Apr 2024 08:54:34 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::535; helo=mail-ed1-x535.google.com;
+ client-ip=2a00:1450:4864:20::52d; helo=mail-ed1-x52d.google.com;
  envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EF7A381098
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF7A381098
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
- [IPv6:2a00:1450:4864:20::535])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EF7A381098
- for <buildroot@busybox.net>; Wed,  3 Apr 2024 08:54:32 +0000 (UTC)
-Received: by mail-ed1-x535.google.com with SMTP id
- 4fb4d7f45d1cf-56e0acaf69aso337446a12.1
- for <buildroot@busybox.net>; Wed, 03 Apr 2024 01:54:32 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C648D80F53
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C648D80F53
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com
+ [IPv6:2a00:1450:4864:20::52d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C648D80F53
+ for <buildroot@busybox.net>; Wed,  3 Apr 2024 08:54:33 +0000 (UTC)
+Received: by mail-ed1-x52d.google.com with SMTP id
+ 4fb4d7f45d1cf-56829f41f81so8842944a12.2
+ for <buildroot@busybox.net>; Wed, 03 Apr 2024 01:54:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1712134471; x=1712739271;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=0qerrhoYKZlrWf7xQ4vIzqY73ajOnGuSnII+sNbVPQc=;
- b=TMey/4TAsCgFfos9Zsclm77p0mb7o1juXFikiZKrLMkyGre5icEty/V4/OrcFZgOya
- EtL2Ts/ygLUWTLiaXataKqAD8ZT8/2lFV2L8EBa93gHmK1/YkPPkiF1XaIG/CYCfo7TZ
- 8O3zeGmJk7hDO3aXyYdRLJiOKcKz+xqk3JFBMO4Qpt+quS+7+a+/XsPLQUuGcy6tClB4
- hdFGcpy8s4feciM2Z/gayW0mc33gn6o5uxfYunASs002zbZjrW1bsQwwVhxzcT7fOuAa
- oQFUKl97KaY5MyX8wcJk6+HQTnm+8sCFSSMLX4fOFQ81X44jjI58m+NObhYeM2f/2qeE
- XI3g==
-X-Gm-Message-State: AOJu0YwZOJOsl3Mb1kpI9Vu3uw5Tg4gfx0ammx4cSn+B6S2O7dA8z2ev
- WboZizfqcAF/+/qkeyBH6XRplCmuFu/kbcC42QZmP2DAnmLkYsCRyq0+xlDBbeXBrxbBqDoFC3k
+ d=1e100.net; s=20230601; t=1712134472; x=1712739272;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=gAR2JTJ20hx18+p7Fo82kgrey41DQV9Q/P/Y3469XIo=;
+ b=Z3zdqz34SKgmTXbgJmIhLqkMRl+14LmIIyqr7CNXUGH0KsiTmSLgI6EUgMwssOWGZK
+ 7VpM81oJcSfwJgsJIJgqLrVVSrKf1seTqJ6AsdHXoirrYCNuX0bR4TL/8PD9ypwfBx2H
+ lAl3qysWWvscfmKHEy74/yFgQeH2D+DpJRKKXgqyZDgJDrm+Y/tBNKClrPWetSPlOtm6
+ 2E/lAhsC4TF0hU8/Hn0DnKxDIuRj4pS5ar3E+CZ+a7355GzmPIxI117iC9H5q5Nat8yL
+ rjMnYRotmtCvF1j8H3VUXdIT7822yw3nJJPMwAa+zNPs4Tgvv86NO3uCKdM6pHvRa8Be
+ 7NiA==
+X-Gm-Message-State: AOJu0YyIjP0EBCXiKl76JDw52btH/1yOyI/ohLKaN7UsPDM1mDOZBUps
+ UmOY72+PXUzeSHJqVHEvyWgKbF+3tBKWai04SHhU8e5y0XzR37ef7kDPnj+9pbIbHdhfLvC2WYA
  =
-X-Google-Smtp-Source: AGHT+IFsbTuAH4s8tkO0d/7edfEttlwYNJN5YTXxHSGxlbJuTiMd2qZc7PqD/SMVdUQ69/tP7PHe/w==
-X-Received: by 2002:a05:6402:13c3:b0:56c:24e6:ca7e with SMTP id
- a3-20020a05640213c300b0056c24e6ca7emr12714079edx.2.1712134470829; 
- Wed, 03 Apr 2024 01:54:30 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEAs6rYb8CWzgdn0CFyYmmB7f0EI6A202fsoh7PEn0UyYcJXaEBPX786CCDToaOEY73m0kVbg==
+X-Received: by 2002:a50:9344:0:b0:56b:fd17:3522 with SMTP id
+ n4-20020a509344000000b0056bfd173522mr9422254eda.14.1712134471690; 
+ Wed, 03 Apr 2024 01:54:31 -0700 (PDT)
 Received: from vm.. ([37.65.6.74]) by smtp.gmail.com with ESMTPSA id
- dh26-20020a0564021d3a00b0056e0b358e86sm245178edb.97.2024.04.03.01.54.29
+ dh26-20020a0564021d3a00b0056e0b358e86sm245178edb.97.2024.04.03.01.54.30
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 03 Apr 2024 01:54:30 -0700 (PDT)
+ Wed, 03 Apr 2024 01:54:31 -0700 (PDT)
 From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Wed,  3 Apr 2024 10:54:22 +0200
-Message-Id: <20240403085424.1650628-1-francois.perrad@gadz.org>
+Date: Wed,  3 Apr 2024 10:54:23 +0200
+Message-Id: <20240403085424.1650628-2-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20240403085424.1650628-1-francois.perrad@gadz.org>
+References: <20240403085424.1650628-1-francois.perrad@gadz.org>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gadz.org; s=google; t=1712134471; x=1712739271; darn=busybox.net;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=0qerrhoYKZlrWf7xQ4vIzqY73ajOnGuSnII+sNbVPQc=;
- b=NCsZ6nHxFkQ7N01oXb1Z8YfYJGN1zchCBTltchJ5YwgK3MdJz57tVonJwQ1x3s+LKW
- juyWv+9jhiiTq9Vz0TOzHxQgVErnPEOBjwtCzx7lc0tE0etj0bgfrD2v+XXM14sDWPYU
- rFwbl2xe0obNKMdfW39euvouyJJV0DFz3Xgf1K8CG4DsCMI5BZyGKL3yCiAMN0yMJIPc
- cs1uzu35eNHfDbSQX1QwghBtty1OPf2lti5vF4NbCWs6qJwC/g13V0/ZZxn0ROWaKtQO
- wiDqYoCD6NKuKPF6ht9QnvWs8Hk4AdQQscZL9CPJqEufKUCV2+zCpnDQUHB5B08PM1Ia
- V7Fg==
+ d=gadz.org; s=google; t=1712134472; x=1712739272; darn=busybox.net;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=gAR2JTJ20hx18+p7Fo82kgrey41DQV9Q/P/Y3469XIo=;
+ b=jF0t3Es6/3v5aePuzx7DGW056OlyFL4uA2MDtVqcue5aEMUL/nBqpkDcP6egFpxmth
+ ZkSUnNp6XOlrYvyy/Cz4CFcyzo1HM6Cut3b6qp3qJhhzED8Ir18KGxu03fBm4zliNAOP
+ jDZzQVY0smS1zyRK2aK9dIYUR2C9uXRg4h/wy/f3KIG8HC+ch8mU4a72o7LCwew0JtJa
+ CeaIvBX0to4dtZlMcTY+WuDIuHUx7Rn9xfCC4cRaaN7FVBu22yBliKxByXQ+b0gRz38K
+ 11G9XD4WqQNUxYU8DftMBag8R8XO51FgJvLcK2fld1fmTJT7qxjFGKAfqX/7WQIR/mdw
+ xIug==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gadz.org
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gadz.org header.i=@gadz.org header.a=rsa-sha256
- header.s=google header.b=NCsZ6nHx
-Subject: [Buildroot] [PATCH 1/3] package/lmdb: new package
+ dkim=pass (2048-bit key) header.d=gadz.org header.i=@gadz.org
+ header.a=rsa-sha256 header.s=google header.b=jF0t3Es6
+Subject: [Buildroot] [PATCH 2/3] package/lua-lightningmdb: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -107,109 +109,97 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- DEVELOPERS             |  1 +
- package/Config.in      |  1 +
- package/lmdb/Config.in | 13 +++++++++++++
- package/lmdb/lmdb.hash |  3 +++
- package/lmdb/lmdb.mk   | 35 +++++++++++++++++++++++++++++++++++
- 5 files changed, 53 insertions(+)
- create mode 100644 package/lmdb/Config.in
- create mode 100644 package/lmdb/lmdb.hash
- create mode 100644 package/lmdb/lmdb.mk
+ package/Config.in                                  |  1 +
+ package/lua-lightningmdb/Config.in                 | 13 +++++++++++++
+ package/lua-lightningmdb/lua-lightningmdb.hash     |  3 +++
+ package/lua-lightningmdb/lua-lightningmdb.mk       | 14 ++++++++++++++
+ .../testing/tests/package/test_lua_lightningmdb.py | 14 ++++++++++++++
+ 5 files changed, 45 insertions(+)
+ create mode 100644 package/lua-lightningmdb/Config.in
+ create mode 100644 package/lua-lightningmdb/lua-lightningmdb.hash
+ create mode 100644 package/lua-lightningmdb/lua-lightningmdb.mk
+ create mode 100644 support/testing/tests/package/test_lua_lightningmdb.py
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 904c7ebf2d..5b47ee4e29 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1126,6 +1126,7 @@ F:	package/libwpe/
- F:	package/linenoise/
- F:	package/ljlinenoise/
- F:	package/lua-inotify/
-+F:	package/lmdb/
- F:	package/lpeg/
- F:	package/lpty/
- F:	package/lrandom/
 diff --git a/package/Config.in b/package/Config.in
-index 5a3410d758..4473169544 100644
+index 4473169544..e7032127cd 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1556,6 +1556,7 @@ menu "Database"
- 	source "package/libodb-mysql/Config.in"
- 	source "package/libodb-pgsql/Config.in"
- 	source "package/libpqxx/Config.in"
-+	source "package/lmdb/Config.in"
- 	source "package/mongodb/Config.in"
- 	source "package/mysql/Config.in"
- 	source "package/postgresql/Config.in"
-diff --git a/package/lmdb/Config.in b/package/lmdb/Config.in
+@@ -738,6 +738,7 @@ menu "Lua libraries/modules"
+ 	source "package/lua-http/Config.in"
+ 	source "package/lua-iconv/Config.in"
+ 	source "package/lua-inotify/Config.in"
++	source "package/lua-lightningmdb/Config.in"
+ 	source "package/lua-livr/Config.in"
+ 	source "package/lua-livr-extra/Config.in"
+ 	source "package/lua-lpeg-patterns/Config.in"
+diff --git a/package/lua-lightningmdb/Config.in b/package/lua-lightningmdb/Config.in
 new file mode 100644
-index 0000000000..f4ae9f3103
+index 0000000000..cd08cfbe79
 --- /dev/null
-+++ b/package/lmdb/Config.in
++++ b/package/lua-lightningmdb/Config.in
 @@ -0,0 +1,13 @@
-+config BR2_PACKAGE_LMDB
-+	bool "lmdb"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
++config BR2_PACKAGE_LUA_LIGHTNINGMDB
++	bool "lua-lightningmdb"
++	depends on !BR2_PACKAGE_LUAJIT
++	depends on BR2_TOOLCHAIN_HAS_THREADS # lmdb
++	select BR2_PACKAGE_LMDB
 +	help
-+	  OpenLDAP Lightning Memory-Mapped Database
++	  A thin wrapper around OpenLDAP Lightning Memory-Mapped
++	  Database (LMDB).
 +
-+	  LMDB is compact, fast, powerful, and robust and implements
-+	  a simplified variant of the BerkeleyDB (BDB) API.
++	  https://github.com/shmul/lightningmdb
 +
-+	  https://symas.com/lmdb/
-+
-+comment "lmdb needs a toolchain w/ threads"
++comment "lua-lightningmdb needs a toolchain w/ threads"
 +	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/lmdb/lmdb.hash b/package/lmdb/lmdb.hash
+diff --git a/package/lua-lightningmdb/lua-lightningmdb.hash b/package/lua-lightningmdb/lua-lightningmdb.hash
 new file mode 100644
-index 0000000000..d72c66aace
+index 0000000000..49ac7ea09c
 --- /dev/null
-+++ b/package/lmdb/lmdb.hash
++++ b/package/lua-lightningmdb/lua-lightningmdb.hash
 @@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  dd70a8c67807b3b8532b3e987b0a4e998962ecc28643e1af5ec77696b081c9b0  lmdb-0.9.31.tar.gz
-+sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  libraries/liblmdb/LICENSE
-diff --git a/package/lmdb/lmdb.mk b/package/lmdb/lmdb.mk
++# computed by luarocks/buildroot
++sha256  d836709e8a1374eb8913f0e9787bb3f0fc4d49b29e01112691b619f7d1355f8c  lightningmdb-0.9.22.1-1.src.rock
++sha256  3d0562e11bc52bf45a735e1d60c6f8522886927a8bcfbe7dee219a61ec30b07a  lightningmdb-0.9.22.1-1/LICENSE
+diff --git a/package/lua-lightningmdb/lua-lightningmdb.mk b/package/lua-lightningmdb/lua-lightningmdb.mk
 new file mode 100644
-index 0000000000..5e2ad2d05a
+index 0000000000..f70cbc4b06
 --- /dev/null
-+++ b/package/lmdb/lmdb.mk
-@@ -0,0 +1,35 @@
++++ b/package/lua-lightningmdb/lua-lightningmdb.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# lmdb
++# lua-lightningmdb
 +#
 +################################################################################
 +
-+LMDB_VERSION = 0.9.31
-+LMDB_SITE = $(call github,LMDB,lmdb,LMDB_$(LMDB_VERSION))
-+LMDB_LICENSE = OpenLDAP Public License
-+LMDB_LICENSE_FILES = libraries/liblmdb/LICENSE
-+LMDB_INSTALL_STAGING = YES
++LUA_LIGHTNINGMDB_VERSION = 0.9.22.1-1
++LUA_LIGHTNINGMDB_NAME_UPSTREAM = Lightningmdb
++LUA_LIGHTNINGMDB_SUBDIR = lightningmdb-$(LUA_LIGHTNINGMDB_VERSION)
++LUA_LIGHTNINGMDB_LICENSE = MIT
++LUA_LIGHTNINGMDB_LICENSE_FILES = $(LUA_LIGHTNINGMDB_SUBDIR)/LICENSE
++LUA_LIGHTNINGMDB_DEPENDENCIES = lmdb
 +
-+define LMDB_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libraries/liblmdb \
-+		CC="$(TARGET_CC)" \
-+		XCFLAGS="$(TARGET_CFLAGS)" \
-+		AR="$(TARGET_CROSS)ar" \
-+		all
-+endef
++$(eval $(luarocks-package))
+diff --git a/support/testing/tests/package/test_lua_lightningmdb.py b/support/testing/tests/package/test_lua_lightningmdb.py
+new file mode 100644
+index 0000000000..6c7a567e7a
+--- /dev/null
++++ b/support/testing/tests/package/test_lua_lightningmdb.py
+@@ -0,0 +1,14 @@
++from tests.package.test_lua import TestLuaBase
 +
-+define LMDB_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libraries/liblmdb \
-+		DESTDIR="$(STAGING_DIR)" \
-+		prefix=/usr \
-+		install
-+endef
 +
-+define LMDB_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libraries/liblmdb \
-+		DESTDIR="$(TARGET_DIR)" \
-+		prefix=/usr \
-+		install
-+endef
++class TestLuaLightningmdb(TestLuaBase):
++    config = TestLuaBase.config + \
++        """
++        BR2_PACKAGE_LUA=y
++        BR2_PACKAGE_LUA_LIGHTNINGMDB=y
++        """
 +
-+$(eval $(generic-package))
++    def test_run(self):
++        self.login()
++        self.module_test("lightningmdb")
++
 -- 
 2.39.2
 
