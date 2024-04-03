@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40993CD128A
-	for <buildroot@archiver.kernel.org>; Wed,  3 Apr 2024 19:56:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 919F5CD1288
+	for <buildroot@archiver.kernel.org>; Wed,  3 Apr 2024 19:56:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1072C418B7;
-	Wed,  3 Apr 2024 19:56:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5EFC34192C;
+	Wed,  3 Apr 2024 19:56:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s9bNqVnlZVCS; Wed,  3 Apr 2024 19:56:06 +0000 (UTC)
+ id TV6w6YtHWulc; Wed,  3 Apr 2024 19:56:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7472418BD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4861E41910
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D7472418BD;
-	Wed,  3 Apr 2024 19:56:05 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 35A2F1BF983
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4861E41910;
+	Wed,  3 Apr 2024 19:56:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 540611BF98E
  for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 19:55:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2278C40490
+ by smtp4.osuosl.org (Postfix) with ESMTP id 406ED417E5
  for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 19:55:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ywpHGd6Uu4Mg for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id raAXkJ3MII_K for <buildroot@lists.busybox.net>;
  Wed,  3 Apr 2024 19:55:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 50C5E40437
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46163415AF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 50C5E40437
+ by smtp4.osuosl.org (Postfix) with ESMTP id 46163415AF
  for <buildroot@buildroot.org>; Wed,  3 Apr 2024 19:55:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3CDB284776; Wed,  3 Apr 2024 19:55:57 +0000 (UTC)
+ id 31B0B84773; Wed,  3 Apr 2024 19:55:57 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 3 Apr 2024 21:54:24 +0200
+Date: Wed, 3 Apr 2024 21:54:23 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2402e0f1d31327806422692db6523120227bc5b0
-X-Git-Newrev: cbd22bacff2a1d08e9850cd272e3ca97815ce27a
+X-Git-Oldrev: 99abd6e406b0bd55a1bcff807a2ab7d89357c3d1
+X-Git-Newrev: 2402e0f1d31327806422692db6523120227bc5b0
 X-Patchwork-Hint: ignore
-Message-Id: <20240403195557.3CDB284776@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dovecot: add optional dependency
- to libxcrypt
+Message-Id: <20240403195557.31B0B84773@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/apr: add optional dependency to
+ libxcrypt
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,56 +65,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cbd22bacff2a1d08e9850cd272e3ca97815ce27a
+commit: https://git.buildroot.net/buildroot/commit/?id=2402e0f1d31327806422692db6523120227bc5b0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 When glibc was bumped to version 2.39 in commit
 b5680f53d60acf8ff6010082f873438a39bd5d97 it removed the deprecated
 libcrypt support.
 
-As glibc's libcrypt was providing dovecot's libcrypt dependency this
-broke the dovecot build using glibc version 2.39.
+As glibc's libcrypt was providing apr's libcrypt dependency this broke
+the apache build using glibc version 2.39.
 
-To fix this select the libxcrypt dependency to dovecot when using a
-glibc toolchain and add the dependency if selected.
+To fix this select the libxcrypt dependency to apr when using a glibc
+toolchain and add the dependency if selected.
 
 Fixes:
-http://autobuild.buildroot.net/results/99d816fb7a033ec73a958200041f0dcd728e0e87/
+http://autobuild.buildroot.net/results/11ccf857a70ae9f44e8d3ae39fc01db68632ca64/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/dovecot/Config.in  | 1 +
- package/dovecot/dovecot.mk | 4 ++++
+ package/apr/Config.in | 1 +
+ package/apr/apr.mk    | 4 ++++
  2 files changed, 5 insertions(+)
 
-diff --git a/package/dovecot/Config.in b/package/dovecot/Config.in
-index 20b08b62be..c94421526f 100644
---- a/package/dovecot/Config.in
-+++ b/package/dovecot/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_DOVECOT
- 	bool "dovecot"
+diff --git a/package/apr/Config.in b/package/apr/Config.in
+index 4606fc5378..9427b7af2c 100644
+--- a/package/apr/Config.in
++++ b/package/apr/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_APR
+ 	# apr really needs shared library support
  	depends on !BR2_STATIC_LIBS
- 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_USE_MMU # fork() in apr_proc_fork()
 +	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_ZLIB
  	help
-diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index f90996fdd7..b8652900d0 100644
---- a/package/dovecot/dovecot.mk
-+++ b/package/dovecot/dovecot.mk
-@@ -73,6 +73,10 @@ else
- DOVECOT_CONF_OPTS += --without-sodium
+ 	  The mission of the Apache Portable Runtime (APR) project is to
+ 	  create and maintain software libraries that provide a
+diff --git a/package/apr/apr.mk b/package/apr/apr.mk
+index bdc5e915c6..cb8c12dd65 100644
+--- a/package/apr/apr.mk
++++ b/package/apr/apr.mk
+@@ -68,6 +68,10 @@ else
+ APR_CONF_OPTS += --disable-nonportable-atomics
  endif
  
 +ifeq ($(BR2_PACKAGE_LIBXCRYPT),y)
-+DOVECOT_DEPENDENCIES += libxcrypt
++APR_DEPENDENCIES += libxcrypt
 +endif
 +
- ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
- DOVECOT_CONF_OPTS += --with-pam
- DOVECOT_DEPENDENCIES += linux-pam
+ ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
+ APR_DEPENDENCIES += util-linux
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
