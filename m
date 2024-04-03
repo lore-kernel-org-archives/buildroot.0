@@ -4,90 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5295ECD128A
-	for <buildroot@archiver.kernel.org>; Wed,  3 Apr 2024 21:17:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58865CD128A
+	for <buildroot@archiver.kernel.org>; Wed,  3 Apr 2024 21:18:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B54E7417F7;
-	Wed,  3 Apr 2024 21:17:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 186F6418B7;
+	Wed,  3 Apr 2024 21:18:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NCifipJVEr1K; Wed,  3 Apr 2024 21:17:41 +0000 (UTC)
+ id mdFoBCmdXgOz; Wed,  3 Apr 2024 21:18:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C826D41899
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8CA5F41899
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C826D41899;
-	Wed,  3 Apr 2024 21:17:40 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D54891BF3D4
- for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 21:17:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8CA5F41899;
+	Wed,  3 Apr 2024 21:18:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 149FD1BF3D4
+ for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 21:18:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CF1A082282
- for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 21:17:38 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0D77040543
+ for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 21:18:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JB-p67IAqSpq for <buildroot@lists.busybox.net>;
- Wed,  3 Apr 2024 21:17:37 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::112a; helo=mail-yw1-x112a.google.com;
- envelope-from=emile.cormier.jr@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3F12E821CB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F12E821CB
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com
- [IPv6:2607:f8b0:4864:20::112a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3F12E821CB
- for <buildroot@busybox.net>; Wed,  3 Apr 2024 21:17:36 +0000 (UTC)
-Received: by mail-yw1-x112a.google.com with SMTP id
- 00721157ae682-6098a20ab22so3081427b3.2
- for <buildroot@busybox.net>; Wed, 03 Apr 2024 14:17:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1712179055; x=1712783855;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=ppHAINQ06wTK8FB2mFAiYlARiOLaO4hGyfn/VRd0VCA=;
- b=IInMfXm6d5YDnNeNBYUskezK6V+/BpbCXSTMmJGYuU/MWWD6cql9BjkMEkvEgkbK3q
- DX4UVT5XhNTtdhJr55Jzff4/9anU4g6R+ju7ZhaVthsaiSkkFtufZ5IOoPeQJ2/g7413
- s8m6PZGX35AK3+u4QY61VJY1efMm9LuTuDaeoyLPiFh1PqOKH7Utj7922cxzlmdEeITE
- klK7uYdA1XEJYmJdhzNJRkciNHdP7gqiLZafVuQVvwNsHd52UNTsg3/NnxXSzTWU9btd
- n9v8wlN08XXEgiw7j+tbz7LVJ9zNeRPJ2U8yfvwiNl8EWloLwnMTVNJIbblQ/JnkdAi+
- yjbQ==
-X-Forwarded-Encrypted: i=1;
- AJvYcCVtG7wk/5cus3Hl8xTTSHnRff5+6MTR/db86qQMSV8VDcnnkh1MIkkvqHK/I8Z0pXMJfQYXJ3o7XYEetpib1izZscg9Nnc=
-X-Gm-Message-State: AOJu0Yw6HlpjsTmkKH4Ep8+ErNwgUz8mlNmsb4NVjQX0jF6gaePMdVCZ
- c+1WW9PscQzMjyon5I0uY7itg3MLj+VUTFmDNmX7QVpx3qA4lhc2Y97b+TVYY/zSMq/zSsUI1h1
- kiK+TI7+ctP5tE/NinZKE7JdclEI=
-X-Google-Smtp-Source: AGHT+IGRgkUJ5Rti8S6SOWElwQX+1tRC/BKOw6sHe755KbeKZvmZu9RGzhQbLBsbx2HqlWTqXirKmy/+5uYKNWOvOrk=
-X-Received: by 2002:a0d:ea04:0:b0:614:d22e:a5ec with SMTP id
- t4-20020a0dea04000000b00614d22ea5ecmr655500ywe.45.1712179055445; Wed, 03 Apr
- 2024 14:17:35 -0700 (PDT)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fJpPmYc5Y18L for <buildroot@lists.busybox.net>;
+ Wed,  3 Apr 2024 21:18:09 +0000 (UTC)
+Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=162.248.234.2;
+ helo=mail.xes-mad.com; envelope-from=vfazio@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org CF1614042B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CF1614042B
+Received: from mail.xes-mad.com (mail.xes-mad.com [162.248.234.2])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CF1614042B
+ for <buildroot@buildroot.org>; Wed,  3 Apr 2024 21:18:08 +0000 (UTC)
+Received: from vfazio4.xes-mad.com (vfazio4.xes-mad.com [10.52.19.201])
+ by mail.xes-mad.com (Postfix) with ESMTP id 8ED3820283;
+ Wed,  3 Apr 2024 16:18:07 -0500 (CDT)
+From: Vincent Fazio <vfazio@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed,  3 Apr 2024 16:18:05 -0500
+Message-Id: <20240403211805.3100506-1-vfazio@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20240403085424.1650628-1-francois.perrad@gadz.org>
- <Zg3Ct67Am5lo_rh-@landeda>
-In-Reply-To: <Zg3Ct67Am5lo_rh-@landeda>
-From: Emile Cormier <emile.cormier.jr@gmail.com>
-Date: Wed, 3 Apr 2024 18:17:24 -0300
-Message-ID: <CAM70yxB0ApbHut9Bc=uKyY96zX+yvuoA2wUCbf-xBtE6UQ_N=g@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1712179055; x=1712783855; darn=busybox.net;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=ppHAINQ06wTK8FB2mFAiYlARiOLaO4hGyfn/VRd0VCA=;
- b=eX2B+mDFslkhX30auCRAbqxDo511Y4/+f/8EjbqYQ4zDmEJF1qk7fW+/3MHEZTAvVP
- +w4rEsjUq1pNpSxy6Hd5UmP1zcXYs1/WFE2AZ1yB12PBO/vwKEg5rG33/I4rlMB4sWdc
- 8iOSFfwPvHkQD7vbVJVX6IpQ47dbVioUvSfuS/J/z1Vnr+WSBnS6lp+MHOfiwo/JHWxu
- LneP2VAnjvjZSTffMFi4qNRFB0w1kJm8MI4tCK28PKWw662Mk+1ayyPTibtBhd+Qq9NN
- YS9psabZQUes89EqWbRUIvEhkCU/nwUk92EZcFV+Oll38y8RtHuVrYlqNLs/KH105Tup
- ebjg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=fail (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=eX2B+mDF
-Subject: Re: [Buildroot] [PATCH 1/3] package/lmdb: new package
+Subject: [Buildroot] [PATCH 1/1] package/python3: fix cross builds when host
+ and target use the same SOABI
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,337 +61,188 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@busybox.net, i Mauro Condarelli <mc5686@mclink.it>
-Content-Type: multipart/mixed; boundary="===============5399217887238234107=="
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Vincent Fazio <vfazio@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5399217887238234107==
-Content-Type: multipart/alternative; boundary="000000000000645371061537c043"
+When python performs a cross compile, it uses a host interpreter to run
+steps on behalf of the foreign architecture to finalize the build.
 
---000000000000645371061537c043
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+When performing these steps, foreign modules may be loaded if the SOABI
+matches that of the host. This can lead to issues if the modules are
+linked against a libc not available on the host or if the binaries
+include instructions unsupported by the host.
 
-Hi,
+For now, patch the foreign libraries out of PYTHONPATH and explicitly
+define the path to sysconfigdata so builds can complete without error.
 
-My only interest in python-zlmdb was to be able to build a more recent
-version of Crossbar, and I didn't even use that database component of
-Crossbar that depended on ZLMDB.
+This method currently passes all upstream CI pipelines [0] and should
+also work (with some modifications) for the migration to 3.12 [1].
 
-I no longer use Crossbar (I'm developing my own C++ WAMP router), so I've
-lost interest in those packages long ago.
+Fixes: http://autobuild.buildroot.net/results/c854080e003e9a7d525325073190b472a8f982aa/
+[0]: https://github.com/python/cpython/pull/116294
+[1]: https://lists.buildroot.org/pipermail/buildroot/2024-February/685369.html
 
-Sorry, but I don't remember much about what I did concerning Crossbar and
-Buildroot. I can tell you that the philosophy behind Crossbar's build is
-not to rely too much on installed system packages.
+Signed-off-by: Vincent Fazio <vfazio@gmail.com>
+---
+ ...oss-compiles-when-host-and-target-us.patch | 140 ++++++++++++++++++
+ 1 file changed, 140 insertions(+)
+ create mode 100644 package/python3/0032-gh-115382-Fix-cross-compiles-when-host-and-target-us.patch
 
-Unless someone is still actively using it, you may want to consider
-dropping Crossbar support in Buildroot because the amount of work needed to
-be able to build the latest version in Buildroot is monumental.
-
-Cheers,
-Emile Cormier
-
-On Wed, Apr 3, 2024 at 5:57=E2=80=AFPM Yann E. MORIN <yann.morin.1998@free.=
-fr>
-wrote:
-
-> Fran=C3=A7ois, All,
->
-> +Mauro for pyhon-lmdb
-> +Emile for python-zlmdb
->
-> On 2024-04-03 10:54 +0200, Francois Perrad spake thusly:
-> > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> [--SNIP--]
-> > diff --git a/package/lmdb/Config.in b/package/lmdb/Config.in
-> > new file mode 100644
-> > index 0000000000..f4ae9f3103
-> > --- /dev/null
-> > +++ b/package/lmdb/Config.in
-> > @@ -0,0 +1,13 @@
-> > +config BR2_PACKAGE_LMDB
-> > +     bool "lmdb"
-> > +     depends on BR2_TOOLCHAIN_HAS_THREADS
-> > +     help
-> > +       OpenLDAP Lightning Memory-Mapped Database
-> > +
-> > +       LMDB is compact, fast, powerful, and robust and implements
-> > +       a simplified variant of the BerkeleyDB (BDB) API.
-> > +
-> > +       https://symas.com/lmdb/
-> > +
-> > +comment "lmdb needs a toolchain w/ threads"
-> > +     depends on !BR2_TOOLCHAIN_HAS_THREADS
->
-> Mauro, Emile: python-lmdb bundles a copy of lmdb, but it is possible to
-> configure it to use the system-provided library instead [0]. Do you know
-> if there would be adverse effects to do so in Buildroot? Indeed, we
-> prefer to configure packages to use system libraries rather than use
-> there bundled copy whenever possible...
->
-> [0] https://lmdb.readthedocs.io/en/release/#installation-unix
->
-> I haven't looked at python-zlmdb, though...
->
-> [--SNIP--]
-> > diff --git a/package/lmdb/lmdb.mk b/package/lmdb/lmdb.mk
-> > new file mode 100644
-> > index 0000000000..5e2ad2d05a
-> > --- /dev/null
-> > +++ b/package/lmdb/lmdb.mk
-> > @@ -0,0 +1,35 @@
-> >
-> +########################################################################=
-########
-> > +#
-> > +# lmdb
-> > +#
-> >
-> +########################################################################=
-########
-> > +
-> > +LMDB_VERSION =3D 0.9.31
-> > +LMDB_SITE =3D $(call github,LMDB,lmdb,LMDB_$(LMDB_VERSION))
-> > +LMDB_LICENSE =3D OpenLDAP Public License
->
-> I think we want to use the SPDX short tag here: OLDAP-2.8. Incidentally,
-> this is also what is already used for python-lmdb.
->
-> > +LMDB_LICENSE_FILES =3D libraries/liblmdb/LICENSE
-> > +LMDB_INSTALL_STAGING =3D YES
-> > +
-> > +define LMDB_BUILD_CMDS
-> > +     $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libraries/liblmdb \
-> > +             CC=3D"$(TARGET_CC)" \
-> > +             XCFLAGS=3D"$(TARGET_CFLAGS)" \
-> > +             AR=3D"$(TARGET_CROSS)ar" \
->
-> Why not use $(TARGET_CONFIGURE_OPTS) and just add the special XCFLAGS?
->
-> > +             all
->
-> 'all' is usually the default target, for being the first in the
-> Makefile, which is also the cae here, so there is no reason to specify
-> it.
->
-> > +endef
-> > +
-> > +define LMDB_INSTALL_STAGING_CMDS
-> > +     $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libraries/liblmdb \
-> > +             DESTDIR=3D"$(STAGING_DIR)" \
-> > +             prefix=3D/usr \
-> > +             install
-> > +endef
-> > +
-> > +define LMDB_INSTALL_TARGET_CMDS
-> > +     $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libraries/liblmdb \
-> > +             DESTDIR=3D"$(TARGET_DIR)" \
-> > +             prefix=3D/usr \
-> > +             install
-> > +endef
-> > +
-> > +$(eval $(generic-package))
-> > --
-> > 2.39.2
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot@buildroot.org
-> > https://lists.buildroot.org/mailman/listinfo/buildroot
->
-> --
->
-> .-----------------.--------------------.------------------.--------------=
-------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->      |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There i=
-s
-> no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->  conspiracy.  |
->
-> '------------------------------^-------^------------------^--------------=
-------'
->
-
---000000000000645371061537c043
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div>Hi,</div><div><br></div><div>My only interest in pyth=
-on-zlmdb was to be able to build a more recent version of Crossbar, and I d=
-idn&#39;t even use that database component of Crossbar that depended on ZLM=
-DB.</div><div><br></div><div>I no longer use Crossbar (I&#39;m developing m=
-y own C++ WAMP router), so I&#39;ve lost interest in those packages long ag=
-o.</div><div><br></div><div>Sorry, but I don&#39;t remember much about what=
- I did concerning Crossbar and Buildroot. I can tell you that the philosoph=
-y behind Crossbar&#39;s build is not to rely too much on installed system p=
-ackages.</div><div><br></div><div>Unless someone is still actively using it=
-, you may want to consider dropping Crossbar support in Buildroot because t=
-he amount of work needed to be able to build the latest version in Buildroo=
-t is monumental.</div><div><br></div><div>Cheers,</div><div>Emile Cormier<b=
-r></div></div><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmai=
-l_attr">On Wed, Apr 3, 2024 at 5:57=E2=80=AFPM Yann E. MORIN &lt;<a href=3D=
-"mailto:yann.morin.1998@free.fr">yann.morin.1998@free.fr</a>&gt; wrote:<br>=
-</div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;b=
-order-left:1px solid rgb(204,204,204);padding-left:1ex">Fran=C3=A7ois, All,=
-<br>
-<br>
-+Mauro for pyhon-lmdb<br>
-+Emile for python-zlmdb<br>
-<br>
-On 2024-04-03 10:54 +0200, Francois Perrad spake thusly:<br>
-&gt; Signed-off-by: Francois Perrad &lt;<a href=3D"mailto:francois.perrad@g=
-adz.org" target=3D"_blank">francois.perrad@gadz.org</a>&gt;<br>
-[--SNIP--]<br>
-&gt; diff --git a/package/lmdb/Config.in b/package/lmdb/Config.in<br>
-&gt; new file mode 100644<br>
-&gt; index 0000000000..f4ae9f3103<br>
-&gt; --- /dev/null<br>
-&gt; +++ b/package/lmdb/Config.in<br>
-&gt; @@ -0,0 +1,13 @@<br>
-&gt; +config BR2_PACKAGE_LMDB<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0bool &quot;lmdb&quot;<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0depends on BR2_TOOLCHAIN_HAS_THREADS<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0help<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0OpenLDAP Lightning Memory-Mapped Database<=
-br>
-&gt; +<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0LMDB is compact, fast, powerful, and robus=
-t and implements<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0a simplified variant of the BerkeleyDB (BD=
-B) API.<br>
-&gt; +<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0<a href=3D"https://symas.com/lmdb/" rel=3D=
-"noreferrer" target=3D"_blank">https://symas.com/lmdb/</a><br>
-&gt; +<br>
-&gt; +comment &quot;lmdb needs a toolchain w/ threads&quot;<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0depends on !BR2_TOOLCHAIN_HAS_THREADS<br>
-<br>
-Mauro, Emile: python-lmdb bundles a copy of lmdb, but it is possible to<br>
-configure it to use the system-provided library instead [0]. Do you know<br=
->
-if there would be adverse effects to do so in Buildroot? Indeed, we<br>
-prefer to configure packages to use system libraries rather than use<br>
-there bundled copy whenever possible...<br>
-<br>
-[0] <a href=3D"https://lmdb.readthedocs.io/en/release/#installation-unix" r=
-el=3D"noreferrer" target=3D"_blank">https://lmdb.readthedocs.io/en/release/=
-#installation-unix</a><br>
-<br>
-I haven&#39;t looked at python-zlmdb, though...<br>
-<br>
-[--SNIP--]<br>
-&gt; diff --git a/package/lmdb/<a href=3D"http://lmdb.mk" rel=3D"noreferrer=
-" target=3D"_blank">lmdb.mk</a> b/package/lmdb/<a href=3D"http://lmdb.mk" r=
-el=3D"noreferrer" target=3D"_blank">lmdb.mk</a><br>
-&gt; new file mode 100644<br>
-&gt; index 0000000000..5e2ad2d05a<br>
-&gt; --- /dev/null<br>
-&gt; +++ b/package/lmdb/<a href=3D"http://lmdb.mk" rel=3D"noreferrer" targe=
-t=3D"_blank">lmdb.mk</a><br>
-&gt; @@ -0,0 +1,35 @@<br>
-&gt; +#####################################################################=
-###########<br>
-&gt; +#<br>
-&gt; +# lmdb<br>
-&gt; +#<br>
-&gt; +#####################################################################=
-###########<br>
-&gt; +<br>
-&gt; +LMDB_VERSION =3D 0.9.31<br>
-&gt; +LMDB_SITE =3D $(call github,LMDB,lmdb,LMDB_$(LMDB_VERSION))<br>
-&gt; +LMDB_LICENSE =3D OpenLDAP Public License<br>
-<br>
-I think we want to use the SPDX short tag here: OLDAP-2.8. Incidentally,<br=
->
-this is also what is already used for python-lmdb.<br>
-<br>
-&gt; +LMDB_LICENSE_FILES =3D libraries/liblmdb/LICENSE<br>
-&gt; +LMDB_INSTALL_STAGING =3D YES<br>
-&gt; +<br>
-&gt; +define LMDB_BUILD_CMDS<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libraries/lib=
-lmdb \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0CC=3D&quot;$(TARGET_C=
-C)&quot; \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0XCFLAGS=3D&quot;$(TAR=
-GET_CFLAGS)&quot; \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0AR=3D&quot;$(TARGET_C=
-ROSS)ar&quot; \<br>
-<br>
-Why not use $(TARGET_CONFIGURE_OPTS) and just add the special XCFLAGS?<br>
-<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0all<br>
-<br>
-&#39;all&#39; is usually the default target, for being the first in the<br>
-Makefile, which is also the cae here, so there is no reason to specify<br>
-it.<br>
-<br>
-&gt; +endef<br>
-&gt; +<br>
-&gt; +define LMDB_INSTALL_STAGING_CMDS<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libraries/lib=
-lmdb \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0DESTDIR=3D&quot;$(STA=
-GING_DIR)&quot; \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0prefix=3D/usr \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0install<br>
-&gt; +endef<br>
-&gt; +<br>
-&gt; +define LMDB_INSTALL_TARGET_CMDS<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libraries/lib=
-lmdb \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0DESTDIR=3D&quot;$(TAR=
-GET_DIR)&quot; \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0prefix=3D/usr \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0install<br>
-&gt; +endef<br>
-&gt; +<br>
-&gt; +$(eval $(generic-package))<br>
-&gt; -- <br>
-&gt; 2.39.2<br>
-&gt; <br>
-&gt; _______________________________________________<br>
-&gt; buildroot mailing list<br>
-&gt; <a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot=
-@buildroot.org</a><br>
-&gt; <a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=
-=3D"noreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/listi=
-nfo/buildroot</a><br>
-<br>
--- <br>
-.-----------------.--------------------.------------------.----------------=
-----.<br>
-|=C2=A0 Yann E. MORIN=C2=A0 | Real-Time Embedded | /&quot;\ ASCII RIBBON | =
-Erics&#39; conspiracy: |<br>
-| +33 662 376 056 | Software=C2=A0 Designer | \ / CAMPAIGN=C2=A0 =C2=A0 =C2=
-=A0|=C2=A0 ___=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|<br>
-| +33 561 099 427 `------------.-------:=C2=A0 X=C2=A0 AGAINST=C2=A0 =C2=A0=
- =C2=A0 |=C2=A0 \e/=C2=A0 There is no=C2=A0 |<br>
-| <a href=3D"http://ymorin.is-a-geek.org/" rel=3D"noreferrer" target=3D"_bl=
-ank">http://ymorin.is-a-geek.org/</a> | _/*\_ | / \ HTML MAIL=C2=A0 =C2=A0 =
-|=C2=A0 =C2=A0v=C2=A0 =C2=A0conspiracy.=C2=A0 |<br>
-&#39;------------------------------^-------^------------------^------------=
---------&#39;<br>
-</blockquote></div>
-
---000000000000645371061537c043--
-
---===============5399217887238234107==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/python3/0032-gh-115382-Fix-cross-compiles-when-host-and-target-us.patch b/package/python3/0032-gh-115382-Fix-cross-compiles-when-host-and-target-us.patch
+new file mode 100644
+index 0000000000..4d5afeb3cb
+--- /dev/null
++++ b/package/python3/0032-gh-115382-Fix-cross-compiles-when-host-and-target-us.patch
+@@ -0,0 +1,140 @@
++From 8d8cc9087fd44c097775ca0a9ebb6c877605baec Mon Sep 17 00:00:00 2001
++From: Vincent Fazio <5265893+vfazio@users.noreply.github.com>
++Date: Wed, 28 Feb 2024 13:55:04 -0600
++Subject: [PATCH] gh-115382: Fix cross compiles when host and target use same
++ SOABI
++
++Previously, when a build was configured to use a host interpreter via
++--with-build-python, the PYTHON_FOR_BUILD config value included a path
++in PYTHONPATH that pointed to the target's built external modules.
++
++For "normal" foreign architecture cross compiles, when loading compiled
++external libraries, the target libraries were processed first due to
++their precedence in sys.path. These libraries were then ruled out due to
++a mismatch in the SOABI so the import mechanism continued searching
++until it found the host's native modules.
++
++However, if the host interpreter and the target python were on the same
++version + SOABI combination, the host interpreter would attempt to load
++the target's external modules due to their precedence in sys.path.
++
++Despite the "match", the target build may have been linked against a
++different libc or may include unsupported instructions so loading or
++executing the target's external modules can lead to crashes.
++
++Now, the path to the target's external modules is no longer defined in
++PYTHONPATH to prevent accidentally loading these foreign modules.
++
++One caveat is that during certain build stages, the target's sysconfig
++module requires higher precedence than the host's version in order to
++accurately query the target build's configuration.
++
++This worked previously due to the target's sysconfig data module having
++precedence over the host's (see above). In order to keep this desired
++behavior, a new environment variable, _PYTHON_SYSCONFIGDATA_PATH, has
++been defined so sysconfig can search this directory for the target's
++sysconfig data.
++
++Signed-off-by: Vincent Fazio <vfazio@gmail.com>
++Upstream-issue: https://github.com/python/cpython/issues/115382
++Upstream: https://github.com/python/cpython/pull/116294
++---
++ Lib/sysconfig.py             | 15 ++++++++++++++-
++ Lib/test/libregrtest/main.py |  1 +
++ Lib/test/pythoninfo.py       |  1 +
++ Tools/scripts/run_tests.py   |  1 +
++ configure                    |  2 +-
++ configure.ac                 |  2 +-
++ 6 files changed, 19 insertions(+), 3 deletions(-)
++
++diff --git a/Lib/sysconfig.py b/Lib/sysconfig.py
++index 6328ec41af..744f715fe2 100644
++--- a/Lib/sysconfig.py
+++++ b/Lib/sysconfig.py
++@@ -535,7 +535,20 @@ def _init_posix(vars):
++     """Initialize the module as appropriate for POSIX systems."""
++     # _sysconfigdata is generated at build time, see _generate_posix_vars()
++     name = _get_sysconfigdata_name()
++-    _temp = __import__(name, globals(), locals(), ['build_time_vars'], 0)
+++
+++    # For cross builds, the path to the target's sysconfigdata must be specified
+++    # so it can be imported. It cannot be in PYTHONPATH, as foreign modules in
+++    # sys.path can cause crashes when loaded by the host interpreter.
+++    # Rely on truthiness as a valueless env variable is still an empty string.
+++    # See OS X note in _generate_posix_vars re _sysconfigdata.
+++    if (path := os.environ.get('_PYTHON_SYSCONFIGDATA_PATH')):
+++        from importlib.machinery import FileFinder, SourceFileLoader, SOURCE_SUFFIXES
+++        from importlib.util import module_from_spec
+++        spec = FileFinder(path, (SourceFileLoader, SOURCE_SUFFIXES)).find_spec(name)
+++        _temp = module_from_spec(spec)
+++        spec.loader.exec_module(_temp)
+++    else:
+++        _temp = __import__(name, globals(), locals(), ['build_time_vars'], 0)
++     build_time_vars = _temp.build_time_vars
++     vars.update(build_time_vars)
++ 
++diff --git a/Lib/test/libregrtest/main.py b/Lib/test/libregrtest/main.py
++index a9725fa967..121e2e7393 100644
++--- a/Lib/test/libregrtest/main.py
+++++ b/Lib/test/libregrtest/main.py
++@@ -519,6 +519,7 @@ def _add_cross_compile_opts(self, regrtest_opts):
++                 '_PYTHON_PROJECT_BASE',
++                 '_PYTHON_HOST_PLATFORM',
++                 '_PYTHON_SYSCONFIGDATA_NAME',
+++                "_PYTHON_SYSCONFIGDATA_PATH",
++                 'PYTHONPATH'
++             }
++             old_environ = os.environ
++diff --git a/Lib/test/pythoninfo.py b/Lib/test/pythoninfo.py
++index 74ebb5e5b8..fa7fbca34e 100644
++--- a/Lib/test/pythoninfo.py
+++++ b/Lib/test/pythoninfo.py
++@@ -326,6 +326,7 @@ def format_groups(groups):
++         "_PYTHON_HOST_PLATFORM",
++         "_PYTHON_PROJECT_BASE",
++         "_PYTHON_SYSCONFIGDATA_NAME",
+++        "_PYTHON_SYSCONFIGDATA_PATH",
++         "__PYVENV_LAUNCHER__",
++ 
++         # Sanitizer options
++diff --git a/Tools/scripts/run_tests.py b/Tools/scripts/run_tests.py
++index 445a34ae3e..4077a83424 100644
++--- a/Tools/scripts/run_tests.py
+++++ b/Tools/scripts/run_tests.py
++@@ -42,6 +42,7 @@ def main(regrtest_args):
++             '_PYTHON_PROJECT_BASE',
++             '_PYTHON_HOST_PLATFORM',
++             '_PYTHON_SYSCONFIGDATA_NAME',
+++            "_PYTHON_SYSCONFIGDATA_PATH",
++             'PYTHONPATH'
++         }
++         environ = {
++diff --git a/configure b/configure
++index a1ad0ae251..0657162d1a 100755
++--- a/configure
+++++ b/configure
++@@ -3262,7 +3262,7 @@ fi
++     fi
++         ac_cv_prog_PYTHON_FOR_REGEN=$with_build_python
++     PYTHON_FOR_FREEZE="$with_build_python"
++-    PYTHON_FOR_BUILD='_PYTHON_PROJECT_BASE=$(abs_builddir) _PYTHON_HOST_PLATFORM=$(_PYTHON_HOST_PLATFORM) PYTHONPATH=$(shell test -f pybuilddir.txt && echo $(abs_builddir)/`cat pybuilddir.txt`:)$(srcdir)/Lib _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata_$(ABIFLAGS)_$(MACHDEP)_$(MULTIARCH) '$with_build_python
+++    PYTHON_FOR_BUILD='_PYTHON_PROJECT_BASE=$(abs_builddir) _PYTHON_HOST_PLATFORM=$(_PYTHON_HOST_PLATFORM) PYTHONPATH=$(srcdir)/Lib _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata_$(ABIFLAGS)_$(MACHDEP)_$(MULTIARCH) _PYTHON_SYSCONFIGDATA_PATH=$(shell test -f pybuilddir.txt && echo $(abs_builddir)/`cat pybuilddir.txt`) '$with_build_python
++     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $with_build_python" >&5
++ $as_echo "$with_build_python" >&6; }
++ 
++diff --git a/configure.ac b/configure.ac
++index e5fb8bd99e..d444f5ec09 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -162,7 +162,7 @@ AC_ARG_WITH(
++     dnl Build Python interpreter is used for regeneration and freezing.
++     ac_cv_prog_PYTHON_FOR_REGEN=$with_build_python
++     PYTHON_FOR_FREEZE="$with_build_python"
++-    PYTHON_FOR_BUILD='_PYTHON_PROJECT_BASE=$(abs_builddir) _PYTHON_HOST_PLATFORM=$(_PYTHON_HOST_PLATFORM) PYTHONPATH=$(shell test -f pybuilddir.txt && echo $(abs_builddir)/`cat pybuilddir.txt`:)$(srcdir)/Lib _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata_$(ABIFLAGS)_$(MACHDEP)_$(MULTIARCH) '$with_build_python
+++    PYTHON_FOR_BUILD='_PYTHON_PROJECT_BASE=$(abs_builddir) _PYTHON_HOST_PLATFORM=$(_PYTHON_HOST_PLATFORM) PYTHONPATH=$(srcdir)/Lib _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata_$(ABIFLAGS)_$(MACHDEP)_$(MULTIARCH) _PYTHON_SYSCONFIGDATA_PATH=$(shell test -f pybuilddir.txt && echo $(abs_builddir)/`cat pybuilddir.txt`) '$with_build_python
++     AC_MSG_RESULT([$with_build_python])
++   ], [
++     AS_VAR_IF([cross_compiling], [yes],
++-- 
++2.34.1
++
+-- 
+2.34.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5399217887238234107==--
