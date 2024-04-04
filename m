@@ -4,93 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FB51CD1292
-	for <buildroot@archiver.kernel.org>; Thu,  4 Apr 2024 16:30:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF817CD1284
+	for <buildroot@archiver.kernel.org>; Thu,  4 Apr 2024 17:56:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ED3A640223;
-	Thu,  4 Apr 2024 16:30:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 32E72400E2;
+	Thu,  4 Apr 2024 17:56:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q72A4RU_XWSN; Thu,  4 Apr 2024 16:30:01 +0000 (UTC)
+ id QWfM-HyZ1ITs; Thu,  4 Apr 2024 17:56:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D07A840A78
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 40FCE40489
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D07A840A78;
-	Thu,  4 Apr 2024 16:30:00 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 35B1E1BF366
- for <buildroot@lists.busybox.net>; Thu,  4 Apr 2024 16:29:56 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 40FCE40489;
+	Thu,  4 Apr 2024 17:56:12 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DE5981BF35E
+ for <buildroot@lists.busybox.net>; Thu,  4 Apr 2024 17:56:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 22EE582CFD
- for <buildroot@lists.busybox.net>; Thu,  4 Apr 2024 16:29:56 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C7BF26102B
+ for <buildroot@lists.busybox.net>; Thu,  4 Apr 2024 17:56:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c13eYb-nFihh for <buildroot@lists.busybox.net>;
- Thu,  4 Apr 2024 16:29:55 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ny9bauBH_fdp for <buildroot@lists.busybox.net>;
+ Thu,  4 Apr 2024 17:56:09 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::430; helo=mail-wr1-x430.google.com;
- envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8F47082D0F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F47082D0F
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8F47082D0F
- for <buildroot@busybox.net>; Thu,  4 Apr 2024 16:29:54 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id
- ffacd0b85a97d-34005b5927eso783959f8f.1
- for <buildroot@busybox.net>; Thu, 04 Apr 2024 09:29:54 -0700 (PDT)
+ client-ip=2607:f8b0:4864:20::530; helo=mail-pg1-x530.google.com;
+ envelope-from=festevam@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5580B61028
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5580B61028
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com
+ [IPv6:2607:f8b0:4864:20::530])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5580B61028
+ for <buildroot@buildroot.org>; Thu,  4 Apr 2024 17:56:08 +0000 (UTC)
+Received: by mail-pg1-x530.google.com with SMTP id
+ 41be03b00d2f7-5f0a485dab9so156833a12.1
+ for <buildroot@buildroot.org>; Thu, 04 Apr 2024 10:56:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1712248192; x=1712852992;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=0NRVDF4uZIP/AZo9tIKgZE4BZFKXgJNVsmVOmCU/lbE=;
- b=pi1JUbtXgpzZEtBvGwtR06+XXLkX9lLCTC7i0MRvHkdZRYw5lwEJtOETu4TsgkMj/j
- X/oIjetWXbh7IBPDztzQ+vMJkzgmPV37JD5pH9S7WEH0SKBIjYxT86F3qGnVYBXBvkg/
- 6R83n52iJ/LP1QvogvzVWSaqUBO6Dk3g2AC7zm4AD6JSY/MLdnu64jNly9ik5CMKvht+
- 7sPLGJengJkOI8ir+myNH6+chr1FwphGpElu+57Ods3OGlyY5BXYW5v2+zpX6bHf0D8x
- kQw42Q9KnLxtsnZQhYCd2snlsAxuUwrCnBrBOYQZD1v9nSNpuA/sOnCFFhVJzF3PN+WJ
- WsNg==
-X-Gm-Message-State: AOJu0YwA8spJOyEaEj594jOZyN9UNPKqt1eOtLFcMQthC+sKjD5amn09
- uwoLlk3gqNuv3KwOTPEpThURkomqnnjeMvYD79gB2EtNAFuPo6+xGSiTDCE2j/m4h0GxeQDMDJA
- =
-X-Google-Smtp-Source: AGHT+IEUfCbfCq3h6eRyfa5VXCARwKMxmkFDezBIaTBexeRXOD22NHS2lAV2r4sBpMxOArPrfPeqfg==
-X-Received: by 2002:a5d:59a8:0:b0:343:c697:7602 with SMTP id
- p8-20020a5d59a8000000b00343c6977602mr1889959wrr.6.1712248192228; 
- Thu, 04 Apr 2024 09:29:52 -0700 (PDT)
-Received: from xubuntu-23.. ([37.65.6.74]) by smtp.gmail.com with ESMTPSA id
- bo15-20020a056000068f00b00341e2146b53sm5395900wrb.106.2024.04.04.09.29.51
+ d=1e100.net; s=20230601; t=1712253368; x=1712858168;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=0C8XSq5VuekH2K5yidD9ol8fH44tHRKW3PIHz+NDDMQ=;
+ b=NfwfUpB/5z/g6EiBCcQnl6l9McrW4dXFmWcdU36kS1IVj+Dnv+EHNOKWSyzry6FVAH
+ gg3VWTjwD6uVAxl4e8tOfRrQcQHgkYtMDyaB9KHUA6BqDVdLQDi56mrH/AP47O/v75lH
+ lKgq+O1Ad//Kwc3U7Yost4tZ+lp+tz6LrVxfy4LKS1pIRdk0fipwzbNgdyVRNMK2BtIG
+ TTYBfzZJqq0j5sEyoyG9f2/WmlN4MO4d/RSvne3ehY4Q6yXHNVnyZFaE4PMbPN4w5xdz
+ VuBcuvdzxy+2Va8QQw9Bz41Yw9uwpr4wZwka6KCnu3WEU/YDXxGgaQTjiONy3ZSFKfCW
+ KgPg==
+X-Gm-Message-State: AOJu0YwL4+hCrjgCplOjvCdVbVUaoSe3SQeJ74EEQpTimt06PAVJlnTi
+ 5zuJWTpwGQQRbZ/vHYkEZFESU71NP6KqXDtD03XSPG0N4IpFowxg0rX3NF36
+X-Google-Smtp-Source: AGHT+IEZ5LghzVNnnRYBTlIT89G+tHj6gjRQP3CQtkXR2HlRVfKsCltAphDPrtjvC9GVBgWjEkQQvg==
+X-Received: by 2002:a05:6a21:7899:b0:1a7:2d42:7a8b with SMTP id
+ bf25-20020a056a21789900b001a72d427a8bmr3811719pzc.0.1712253367882; 
+ Thu, 04 Apr 2024 10:56:07 -0700 (PDT)
+Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:9c:998:79c7:d666])
+ by smtp.gmail.com with ESMTPSA id
+ h12-20020a63e14c000000b005f0bc6d04adsm9025613pgk.46.2024.04.04.10.56.05
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 04 Apr 2024 09:29:51 -0700 (PDT)
-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Thu,  4 Apr 2024 18:29:38 +0200
-Message-Id: <20240404162938.33317-2-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20240404162938.33317-1-francois.perrad@gadz.org>
-References: <20240404162938.33317-1-francois.perrad@gadz.org>
+ Thu, 04 Apr 2024 10:56:06 -0700 (PDT)
+From: Fabio Estevam <festevam@gmail.com>
+To: buildroot@buildroot.org
+Date: Thu,  4 Apr 2024 14:55:52 -0300
+Message-Id: <20240404175552.672410-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gadz.org; s=google; t=1712248192; x=1712852992; darn=busybox.net;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=0NRVDF4uZIP/AZo9tIKgZE4BZFKXgJNVsmVOmCU/lbE=;
- b=VuvzFEJIDXg2md5t+EoLwtGfnjZ6jwtltcho2CvUr+vfNL+Kk+v/fgXuZ4AJf3E0Iw
- Zoh/RoofVOAACDZxgDk9NDVadiJP/u377RlQO7/RFXkJjogT6fnWirXfSERF45Cesxzv
- ParTWFhQiA6DakfoL6qkQxQ85Z3T9jYJc+P0fibIRVdkhHZBYbHlTsqO7UNVuvWl81sF
- 1LocbWh5ENGy5u86Tfo+ebbnqCFpTWplDxEstrviqJp9YJGbUqd0FhvF00C3dlTiGwLW
- DDg9/2zbHse8fX5ObvKbUkgweeaq139Ca4OrdHTG1iIGp/tEnm9IPe29bAXVMmz7J4+c
- +w+w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=gmail.com; s=20230601; t=1712253368; x=1712858168; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=0C8XSq5VuekH2K5yidD9ol8fH44tHRKW3PIHz+NDDMQ=;
+ b=D0JCLBNkFszdLl+/qQ9zSGUh/l3MsQow6uWngnC7zvYOsD1LG4wayDSJy2b/laOvbh
+ 9fcHySbYUgMw0CmmD1KjSigkrgQu4K4iGwQdoomHmzNIYTnJ5ODU+myJKDLP3Xhu/PVA
+ tozWJrSfqnNScO7brIE4XRmRpc8rMKQrAy5Q5CUtxjX67+THmfq1ErqwtMFYHSOCBeg0
+ snd+AzZkeNuGHd+M9qVodtI+eZLM3kJjuIwgObNmfSQxkAhlK/iAQz6WSzlsDmAWan8A
+ zvsbOE6zhOZinw/to7MjwesNifiiK5fx5dh/9wtbyzrm93YKx2wipa9neJFBSjA5a4+I
+ a4Zg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gadz.org
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gadz.org header.i=@gadz.org
- header.a=rsa-sha256 header.s=google header.b=VuvzFEJI
-Subject: [Buildroot] [PATCH v2 2/2] package/lua-lightningmdb: new package
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=D0JCLBNk
+Subject: [Buildroot] [PATCH] package/crucible: update LICENSE information
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,105 +99,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Fabio Estevam <festevam@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/Config.in                                  |  1 +
- package/lua-lightningmdb/Config.in                 | 13 +++++++++++++
- package/lua-lightningmdb/lua-lightningmdb.hash     |  3 +++
- package/lua-lightningmdb/lua-lightningmdb.mk       | 14 ++++++++++++++
- .../testing/tests/package/test_lua_lightningmdb.py | 13 +++++++++++++
- 5 files changed, 44 insertions(+)
- create mode 100644 package/lua-lightningmdb/Config.in
- create mode 100644 package/lua-lightningmdb/lua-lightningmdb.hash
- create mode 100644 package/lua-lightningmdb/lua-lightningmdb.mk
- create mode 100644 support/testing/tests/package/test_lua_lightningmdb.py
+Since crucible commit 7fe0bb96da65 ("move to BSD style license") the
+license has been changed to BSD-3.
 
-diff --git a/package/Config.in b/package/Config.in
-index d8862c4cc..cc8102bda 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -744,6 +744,7 @@ menu "Lua libraries/modules"
- 	source "package/lua-http/Config.in"
- 	source "package/lua-iconv/Config.in"
- 	source "package/lua-inotify/Config.in"
-+	source "package/lua-lightningmdb/Config.in"
- 	source "package/lua-livr/Config.in"
- 	source "package/lua-livr-extra/Config.in"
- 	source "package/lua-lpeg-patterns/Config.in"
-diff --git a/package/lua-lightningmdb/Config.in b/package/lua-lightningmdb/Config.in
-new file mode 100644
-index 000000000..cd08cfbe7
---- /dev/null
-+++ b/package/lua-lightningmdb/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_LUA_LIGHTNINGMDB
-+	bool "lua-lightningmdb"
-+	depends on !BR2_PACKAGE_LUAJIT
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # lmdb
-+	select BR2_PACKAGE_LMDB
-+	help
-+	  A thin wrapper around OpenLDAP Lightning Memory-Mapped
-+	  Database (LMDB).
-+
-+	  https://github.com/shmul/lightningmdb
-+
-+comment "lua-lightningmdb needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/lua-lightningmdb/lua-lightningmdb.hash b/package/lua-lightningmdb/lua-lightningmdb.hash
-new file mode 100644
-index 000000000..49ac7ea09
---- /dev/null
-+++ b/package/lua-lightningmdb/lua-lightningmdb.hash
-@@ -0,0 +1,3 @@
-+# computed by luarocks/buildroot
-+sha256  d836709e8a1374eb8913f0e9787bb3f0fc4d49b29e01112691b619f7d1355f8c  lightningmdb-0.9.22.1-1.src.rock
-+sha256  3d0562e11bc52bf45a735e1d60c6f8522886927a8bcfbe7dee219a61ec30b07a  lightningmdb-0.9.22.1-1/LICENSE
-diff --git a/package/lua-lightningmdb/lua-lightningmdb.mk b/package/lua-lightningmdb/lua-lightningmdb.mk
-new file mode 100644
-index 000000000..f70cbc4b0
---- /dev/null
-+++ b/package/lua-lightningmdb/lua-lightningmdb.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# lua-lightningmdb
-+#
-+################################################################################
-+
-+LUA_LIGHTNINGMDB_VERSION = 0.9.22.1-1
-+LUA_LIGHTNINGMDB_NAME_UPSTREAM = Lightningmdb
-+LUA_LIGHTNINGMDB_SUBDIR = lightningmdb-$(LUA_LIGHTNINGMDB_VERSION)
-+LUA_LIGHTNINGMDB_LICENSE = MIT
-+LUA_LIGHTNINGMDB_LICENSE_FILES = $(LUA_LIGHTNINGMDB_SUBDIR)/LICENSE
-+LUA_LIGHTNINGMDB_DEPENDENCIES = lmdb
-+
-+$(eval $(luarocks-package))
-diff --git a/support/testing/tests/package/test_lua_lightningmdb.py b/support/testing/tests/package/test_lua_lightningmdb.py
-new file mode 100644
-index 000000000..cc5b82043
---- /dev/null
-+++ b/support/testing/tests/package/test_lua_lightningmdb.py
-@@ -0,0 +1,13 @@
-+from tests.package.test_lua import TestLuaBase
-+
-+
-+class TestLuaLightningmdb(TestLuaBase):
-+    config = TestLuaBase.config + \
-+        """
-+        BR2_PACKAGE_LUA=y
-+        BR2_PACKAGE_LUA_LIGHTNINGMDB=y
-+        """
-+
-+    def test_run(self):
-+        self.login()
-+        self.module_test("lightningmdb")
+Change the license type and hash accordingly.
+
+Fixes:
+  - http://autobuild.buildroot.net/results/14dfa0a47be54929c527c12fe9b95f34c1d8c7f5/
+
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ package/crucible/crucible.hash | 2 +-
+ package/crucible/crucible.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/crucible/crucible.hash b/package/crucible/crucible.hash
+index d5fee0068d8e..3a9a7167323a 100644
+--- a/package/crucible/crucible.hash
++++ b/package/crucible/crucible.hash
+@@ -1,2 +1,2 @@
+ sha256  d21842f050163765269290d72fe79d3f95005038e865138d94e247cb455098da  crucible-2023.11.02.tar.gz
+-sha256  d88514630470aec9fa7abdc990a1e0a8751a752321bffa868188c49009d64d59  LICENSE
++sha256  a89c50d83be30fe7ec75be69a07f6c1b5dfaae0a6b94a678d2394fff34acb69c  LICENSE
+diff --git a/package/crucible/crucible.mk b/package/crucible/crucible.mk
+index 2206663e248f..5eedbca8eeae 100644
+--- a/package/crucible/crucible.mk
++++ b/package/crucible/crucible.mk
+@@ -6,7 +6,7 @@
+ 
+ CRUCIBLE_VERSION = 2023.11.02
+ CRUCIBLE_SITE = $(call github,usbarmory,crucible,v$(CRUCIBLE_VERSION))
+-CRUCIBLE_LICENSE = GPL-3.0
++CRUCIBLE_LICENSE = BSD-3-Clause
+ CRUCIBLE_LICENSE_FILES = LICENSE
+ CRUCIBLE_GOMOD = ./cmd/crucible
+ 
 -- 
-2.40.1
+2.34.1
 
 _______________________________________________
 buildroot mailing list
