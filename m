@@ -1,69 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 932FEC54E60
-	for <buildroot@archiver.kernel.org>; Sun, 17 Mar 2024 09:44:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5432CD1292
+	for <buildroot@archiver.kernel.org>; Thu,  4 Apr 2024 14:25:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2F75A60705;
-	Sun, 17 Mar 2024 09:44:25 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qw6a_X2JkxO1; Sun, 17 Mar 2024 09:44:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B05F982284;
+	Thu,  4 Apr 2024 14:25:24 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YML6kWaRmLSN; Thu,  4 Apr 2024 14:25:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C8F860733
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5E0882CCA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3C8F860733;
-	Sun, 17 Mar 2024 09:44:24 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 22E5A1BF5DA
- for <buildroot@lists.busybox.net>; Sun, 17 Mar 2024 09:44:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B5E0882CCA;
+	Thu,  4 Apr 2024 14:25:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DF6891BF365
+ for <buildroot@lists.busybox.net>; Thu,  4 Apr 2024 14:25:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0F48C60733
- for <buildroot@lists.busybox.net>; Sun, 17 Mar 2024 09:44:22 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vDLMA0pqfPI5 for <buildroot@lists.busybox.net>;
- Sun, 17 Mar 2024 09:44:21 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CB91A4168F
+ for <buildroot@lists.busybox.net>; Thu,  4 Apr 2024 14:25:21 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zd6ZKy8wG_cz for <buildroot@lists.busybox.net>;
+ Thu,  4 Apr 2024 14:25:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=bugzilla@busybox.net;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5673C60705
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D61F8415AA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5673C60705
- for <buildroot@uclibc.org>; Sun, 17 Mar 2024 09:44:21 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 45D0281EE5; Sun, 17 Mar 2024 09:44:21 +0000 (UTC)
-From: bugzilla@busybox.net
-To: buildroot@uclibc.org
-Date: Sun, 17 Mar 2024 09:44:20 +0000
-X-Bugzilla-Reason: CC
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: buildroot
-X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2024.02
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: fli4l@franke-prem.de
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-16000-163-10clQv5Nt3@https.bugs.busybox.net/>
-In-Reply-To: <bug-16000-163@https.bugs.busybox.net/>
-References: <bug-16000-163@https.bugs.busybox.net/>
-X-Bugzilla-URL: https://bugs.busybox.net/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
-Subject: [Buildroot] [Bug 16000] GDB will not build
+ by smtp4.osuosl.org (Postfix) with ESMTP id D61F8415AA
+ for <buildroot@buildroot.org>; Thu,  4 Apr 2024 14:25:20 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C010884562; Thu,  4 Apr 2024 14:25:20 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Thu, 4 Apr 2024 16:23:46 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: aef5490fab26427cc3795fb76b396e5ea667f3b2
+X-Git-Newrev: 1a015540278ba742b5a77e90e80e2f858af14f04
+X-Patchwork-Hint: ignore
+Message-Id: <20240404142520.C010884562@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] DEVELOPERS: remove Thomas De Schampheleire
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,25 +58,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=16000
+commit: https://git.buildroot.net/buildroot/commit/?id=1a015540278ba742b5a77e90e80e2f858af14f04
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---- Comment #2 from Roland Franke <fli4l@franke-prem.de> ---
-Sorry for the latest information.
-Have just seen that i have for my x86(i586) used the GCC 13.2.0 and not the
-same version (GCC 12.3.0) as used for the x86_64 build.
-But this tell us, that also for GCC 13.2.0 the identical patch 
-0004-libgcc-Exclude-UCLIBC-from-GLIBC-thread-check.patch
-what is used for GCC 12.3.0 is need there also.
-Maybe by version GCC 11.4.0 also.
+No longer active in Buildroot. Keeping my name in the list sets the wrong
+expectation regarding package updates or support.
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ DEVELOPERS | 41 -----------------------------------------
+ 1 file changed, 41 deletions(-)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 8d7f8bcba5..d78661cd60 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2968,47 +2968,6 @@ F:	package/openlayers/
+ F:	package/vuejs/
+ F:	package/vuejs-router/
+ 
+-N:	Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+-F:	docs/manual/
+-F:	package/cereal/
+-F:	package/chartjs/
+-F:	package/datatables/
+-F:	package/datatables-buttons/
+-F:	package/datatables-fixedcolumns/
+-F:	package/datatables-responsive/
+-F:	package/jszip/
+-F:	package/libtelnet/
+-F:	package/opkg-utils/
+-F:	package/perl-convert-asn1/
+-F:	package/perl-crypt-blowfish/
+-F:	package/perl-crypt-cbc/
+-F:	package/perl-crypt-openssl-aes/
+-F:	package/perl-devel-cycle/
+-F:	package/perl-devel-size/
+-F:	package/perl-i18n/
+-F:	package/perl-locale-maketext-lexicon/
+-F:	package/perl-lwp-protocol-https/
+-F:	package/perl-math-int64/
+-F:	package/perl-math-prime-util/
+-F:	package/perl-mime-base64-urlsafe/
+-F:	package/perl-mojolicious-plugin-authentication/
+-F:	package/perl-mojolicious-plugin-authorization/
+-F:	package/perl-mojolicious-plugin-cspheader/
+-F:	package/perl-mojolicious-plugin-i18n/
+-F:	package/perl-mojolicious-plugin-securityheader/
+-F:	package/perl-mozilla-ca/
+-F:	package/perl-net-snmp/
+-F:	package/perl-net-ssh2/
+-F:	package/perl-net-telnet/
+-F:	package/perl-path-class/
+-F:	package/pigz/
+-F:	package/popperjs/
+-F:	package/xenomai/
+-F:	support/scripts/size-stats
+-F:	support/testing/tests/package/test_perl_lwp_protocol_https.py
+-F:	utils/size-stats-compare
+-F:	toolchain/
+-
+ N:	Thomas Devoogdt <thomas@devoogdt.com>
+ F:	package/fluent-bit/
+ F:	package/libsoup3/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
