@@ -4,91 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79072CD1288
-	for <buildroot@archiver.kernel.org>; Thu,  4 Apr 2024 20:43:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3E9ACD1292
+	for <buildroot@archiver.kernel.org>; Thu,  4 Apr 2024 20:50:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1EE7241E2E;
-	Thu,  4 Apr 2024 20:43:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2FE7941DE8;
+	Thu,  4 Apr 2024 20:50:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NLlSQM1xvwOz; Thu,  4 Apr 2024 20:43:16 +0000 (UTC)
+ id ymWW2oQvzOrp; Thu,  4 Apr 2024 20:50:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C558341E56
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B5B0341E0E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C558341E56;
-	Thu,  4 Apr 2024 20:43:15 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B001B1BF3C0
- for <buildroot@lists.busybox.net>; Thu,  4 Apr 2024 20:43:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B5B0341E0E;
+	Thu,  4 Apr 2024 20:50:17 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DF0BE1BF3C0
+ for <buildroot@lists.busybox.net>; Thu,  4 Apr 2024 20:50:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9D33A41CD2
- for <buildroot@lists.busybox.net>; Thu,  4 Apr 2024 20:43:13 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CBBA6835A3
+ for <buildroot@lists.busybox.net>; Thu,  4 Apr 2024 20:50:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h59YPZWcDrkf for <buildroot@lists.busybox.net>;
- Thu,  4 Apr 2024 20:43:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 89sTG7lAaBJR for <buildroot@lists.busybox.net>;
+ Thu,  4 Apr 2024 20:50:16 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::22e; helo=mail-lj1-x22e.google.com;
+ client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
  envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8F25040195
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8F25040195
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com
- [IPv6:2a00:1450:4864:20::22e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8F25040195
- for <buildroot@buildroot.org>; Thu,  4 Apr 2024 20:43:12 +0000 (UTC)
-Received: by mail-lj1-x22e.google.com with SMTP id
- 38308e7fff4ca-2d68651e253so18491221fa.0
- for <buildroot@buildroot.org>; Thu, 04 Apr 2024 13:43:12 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A968483474
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A968483474
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A968483474
+ for <buildroot@buildroot.org>; Thu,  4 Apr 2024 20:50:15 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id
+ ffacd0b85a97d-343d6b55c42so325718f8f.2
+ for <buildroot@buildroot.org>; Thu, 04 Apr 2024 13:50:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1712263389; x=1712868189;
+ d=1e100.net; s=20230601; t=1712263813; x=1712868613;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=kOf+zFVcA3yXbNR2Xuc4jjh8FzSMl3wOyK1fBO222FY=;
- b=CxJ2IDnXeh9/7Nasl8ep4mmrK6Hj9MpwvO5iEVOqQphAl3kro6J3gmzs0I64dqK3a5
- 2LnghgUYHvewMJO0C5e/w3Qot4MRcdx0Xsag9yRXffHqArHDZxl00nRiJqwySieMHuE1
- BiXI/cXAF/Ah27rZe5rVyQtVB/Qo1GHSkYF1PlsNI2tCo3+hYM2ALkPsE2q7JzI4OGqv
- 9KdLCFvi4Q63xRBShJo0n6wPPsPNgpeLlLqsDXsxjdfk+6mt+ZQ5y38jmvIK4d+xYbrD
- ZZcuTVht+EVXJsjGB/1mZFIjMGDEl5+FjcILrjqYcsE+eJRjqdx2Ou+oIUyNA7LhxhsP
- MsQQ==
-X-Gm-Message-State: AOJu0YwpmAivKnw2cHVGrlOnkkqsOrbY8OBCFna5ywwzHN00tCv7UHvG
- 1EvuyuRvMH4cn7LbsrjTOgUJ234hDKT4WENWT2B2swmQxGOlpd8/c/n3jpJz
-X-Google-Smtp-Source: AGHT+IEf50xjyeGVMCpTR16q4PL9K9xf5knwJWoxKEScdplZCWCLoQh3F4eXKy1cAelhugPsmG/FAg==
-X-Received: by 2002:a2e:8559:0:b0:2d7:8152:1ee5 with SMTP id
- u25-20020a2e8559000000b002d781521ee5mr2635186ljj.31.1712263389054; 
- Thu, 04 Apr 2024 13:43:09 -0700 (PDT)
+ bh=DR0aw+kMC3jhu4U7pH64Mh7ELgriOIvgLq5bdN8HYUw=;
+ b=jK6sNZIMkO72vBe5tEflX72J6P8gPxdxw2ONXvA8uKSz3ZL6OAggIIbYpdwp3ubbDK
+ X5Q1zRkSEMZKlvnoEz+OPUXV+9TViuaVlmAByGTMqVkSZjsLWL96Mujo5+S2ta78AFXi
+ l9fKkfUW/GnNbRw6vB0AIfe42LLHEOC1fd42NyMLAzWr9i0d43Bz3NKTUzU4oZ70ezjo
+ 7ZGPgApdEv6b6Hc92toJauLYiS/rehgwq7Jkn7hBTxAHFVeoRuMBcvtHOOiifRnOHRmG
+ RI5U5QUqzrM/8ZJHwmo9LiPp9UdwhMIeiCtAerkBNYtiHLfZFmCv0dNC0nf8SpbUlClS
+ 40WQ==
+X-Gm-Message-State: AOJu0YwEVGXY5KquznqfPQGUli6VRHiUpQUtMoKd3tcyPLrYBOQ5A5VB
+ J379jlnQCz+B7pHyifrEJlMP8sqfLkQdjr2FVpqcYD8BtceaOIbLpms0gwyu
+X-Google-Smtp-Source: AGHT+IHd19NIjrmAh63da9vMMqW5zUxiwLej/a1n6hCnWRL/+nVUYfnGXK7PGq4GhpZL+pgrEifhAg==
+X-Received: by 2002:a05:6000:1104:b0:343:b9e4:8b48 with SMTP id
+ z4-20020a056000110400b00343b9e48b48mr2453516wrw.10.1712263812708; 
+ Thu, 04 Apr 2024 13:50:12 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- i6-20020a05600c354600b0041488691eb1sm3863241wmq.17.2024.04.04.13.43.08
+ y14-20020a5d4ace000000b00341dbb4a3a7sm255178wrs.86.2024.04.04.13.50.12
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 04 Apr 2024 13:43:08 -0700 (PDT)
+ Thu, 04 Apr 2024 13:50:12 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu,  4 Apr 2024 22:42:41 +0200
-Message-ID: <20240404204241.1784136-1-fontaine.fabrice@gmail.com>
+Date: Thu,  4 Apr 2024 22:50:04 +0200
+Message-ID: <20240404205004.1797452-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1712263389; x=1712868189; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1712263813; x=1712868613; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=kOf+zFVcA3yXbNR2Xuc4jjh8FzSMl3wOyK1fBO222FY=;
- b=bvFVZpTl350MRIF/8NtBFbzJvVKb2fdjRqsIA7SnlI48qDqd0np7RoLfAdS1mg17Fl
- 8JqiM5/uvu1F8/YaLbrxjlsPXOzxGh/8MWsJ1hvgPApWwCUPxNE7GtI45SwlEZbbhiMS
- RUGj38PMVl1QAJhVXYX3b+sg5nQ11DP3i7dBsVOZlg0o2J8b+bEt//Tn7GOR98ceWO4e
- FwJJHX0PxmfMbp87iHXX0QkeeI/HTfZC5hC/IQLomkzZVGjHToXQOLqTaIg7ErBxS/i1
- jbjVHiDHIBuPpVr9vzwbQ8QHK3iU23Vgf6sg+r2RvB6BEn6BQfGyr2/1v/kPuL2polNv
- q5Dw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=DR0aw+kMC3jhu4U7pH64Mh7ELgriOIvgLq5bdN8HYUw=;
+ b=NF1jrb8UsdnK5Y8hZcGwrGi2OvHlLh99Bbp1dejo8HfYd5jMMRf/e/HOQeHgDg+c+u
+ xymz8K7+5jVjRlHr4Q9s3Vpc3HeAAMuP4r58fJQRog/PgAyRHI1BMPLGa7GdlgZ5p5KH
+ l/AUH7LS5tUTTvZo1M6JshXImiBfHaiqGySV9fPEQQ6jPjBsb8WZm+P8CNfXB2TOtdF0
+ tfeNxWEQnzoHbM/Yla6KY23ZsMAA3Qvor0T3pMhw9k3fHIvMHdWfYuNk5b71nOs8dlHx
+ rByIVGyaFe1cW8+P8vVXFECa0LybFn+zmbrz6yZtii06sudw/xKWnj8Uw2D1gR6HNVRR
+ XDPg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=bvFVZpTl
-Subject: [Buildroot] [PATCH 1/1] package/dante: add libxcrypt optional
+ header.s=20230601 header.b=NF1jrb8U
+Subject: [Buildroot] [PATCH 1/1] package/uhttpd: add libxcrypt optional
  dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -110,45 +110,45 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 Fix the following build failure raised since bump of glibc to version
 2.39 in commit b5680f53d60acf8ff6010082f873438a39bd5d97:
 
-/home/autobuild/autobuild/instance-5/output-1/per-package/dante/host/bin/../lib/gcc/sparc64-buildroot-linux-gnu/12.3.0/../../../../sparc64-buildroot-linux-gnu/bin/ld: auth_password.o: in function `passwordcheck':
-/home/autobuild/autobuild/instance-5/output-1/build/dante-1.4.3/sockd/auth_password.c:126:(.text+0xc4): undefined reference to `crypt'
+/home/autobuild/autobuild/instance-4/output-1/host/lib/gcc/armeb-buildroot-linux-gnueabi/12.3.0/../../../../armeb-buildroot-linux-gnueabi/bin/ld: CMakeFiles/uhttpd.dir/main.c.o: in function `main':
+/home/autobuild/autobuild/instance-4/output-1/build/uhttpd-15346de8d3ba422002496526ee24c62a3601ab8c/main.c:437:(.text.startup+0x628): undefined reference to `crypt'
 
 Fixes: b5680f53d60acf8ff6010082f873438a39bd5d97
- - http://autobuild.buildroot.org/results/c817caa1e9ad91a1c0f61d92f24d35612cc3a5d5
+ - http://autobuild.buildroot.org/results/ccd789b301b6ddcca1b29e26d5cc48d54427a001
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/dante/Config.in | 1 +
- package/dante/dante.mk  | 4 ++++
+ package/uhttpd/Config.in | 1 +
+ package/uhttpd/uhttpd.mk | 4 ++++
  2 files changed, 5 insertions(+)
 
-diff --git a/package/dante/Config.in b/package/dante/Config.in
-index 41a89990d2..bd0ddb236d 100644
---- a/package/dante/Config.in
-+++ b/package/dante/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_DANTE
- 	bool "dante"
+diff --git a/package/uhttpd/Config.in b/package/uhttpd/Config.in
+index 8d5d8bee13..eeb169a96d 100644
+--- a/package/uhttpd/Config.in
++++ b/package/uhttpd/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_UHTTPD
  	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_LIBUBOX
+ 	select BR2_PACKAGE_JSON_C
 +	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
  	help
- 	  Dante is a product developed by Inferno Nettverk A/S. It
- 	  consists of a SOCKS server and a SOCKS client, implementing
-diff --git a/package/dante/dante.mk b/package/dante/dante.mk
-index ae60252bed..bae46c5a71 100644
---- a/package/dante/dante.mk
-+++ b/package/dante/dante.mk
-@@ -22,6 +22,10 @@ else
- DANTE_CONF_OPTS += --without-upnp
- endif
+ 	  uHTTPd is a tiny single threaded HTTP server with TLS, CGI
+ 	  and Lua support. It is intended as a drop-in replacement for
+diff --git a/package/uhttpd/uhttpd.mk b/package/uhttpd/uhttpd.mk
+index ba8e13ccb8..f4fcccfa67 100644
+--- a/package/uhttpd/uhttpd.mk
++++ b/package/uhttpd/uhttpd.mk
+@@ -11,6 +11,10 @@ UHTTPD_LICENSE = ISC
+ UHTTPD_LICENSE_FILES = uhttpd.h
+ UHTTPD_DEPENDENCIES = libubox json-c
  
 +ifeq ($(BR2_PACKAGE_LIBXCRYPT),y)
-+DANTE_DEPENDENCIES += libxcrypt
++UHTTPD_DEPENDENCIES += libxcrypt
 +endif
 +
- ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
- DANTE_DEPENDENCIES += linux-pam
- DANTE_CONF_OPTS += --with-pam
+ ifeq ($(BR2_PACKAGE_LUA_5_1),y)
+ UHTTPD_DEPENDENCIES += lua
+ UHTTPD_CONF_OPTS += -DLUA_SUPPORT=ON
 -- 
 2.43.0
 
